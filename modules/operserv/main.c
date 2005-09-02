@@ -5,7 +5,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 2043 2005-09-02 05:31:43Z nenolod $
+ * $Id: main.c 2067 2005-09-02 06:55:32Z nenolod $
  */
 
 #include "atheme.h"
@@ -102,7 +102,7 @@ void _modinit(module_t *m)
         if (!cold_start)
         {
                 opersvs.me = add_service(opersvs.nick, opersvs.user,
-                        opersvs.host, opersvs.real, gservice);
+                        opersvs.host, opersvs.real, oservice);
                 opersvs.disp = opersvs.me->disp;
         }
 }
