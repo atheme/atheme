@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 2061 2005-09-02 06:44:01Z nenolod $
+ * $Id: module.c 2065 2005-09-02 06:47:59Z nenolod $
  */
 
 #include "atheme.h"
@@ -142,7 +142,7 @@ module_t *module_load(char *filespec)
 	{
 		char *errp = sstrdup(dlerror());
 		slog(LG_INFO, "module_load(): error: %s", errp);
-		wallops("Error while loading module %s: %s", modname, errp);
+		wallops("Error while loading module %s: %s", filespec, errp);
 		free(errp);
 		return NULL;
 	}
@@ -154,19 +154,19 @@ module_t *module_load(char *filespec)
 
 	if (h->atheme_mod != MAPI_ATHEME_MAGIC)
 	{
-		slog(LG_DEBUG, "module_load(): %s: Attempted to load an incompatible module. Aborting.", modname);
+		slog(LG_DEBUG, "module_load(): %s: Attempted to load an incompatible module. Aborting.", filespec);
 
 		if (me.connected)
-			wallops("Module %s is not a valid atheme module.", modname);
+			wallops("Module %s is not a valid atheme module.", filespec);
 
 		linker_close(handle);
 		return NULL;
 	}
 
-	slog(LG_DEBUG, "module_load(): loaded %s at [0x%lx; MAPI version %d]", modname, handle, h->abi_ver);
+	slog(LG_DEBUG, "module_load(): loaded %s at [0x%lx; MAPI version %d]", h->name, handle, h->abi_ver);
 
 	if (me.connected)
-		wallops("Module %s loaded at [0x%lx; MAPI version %d]", modname, handle, h->abi_ver);
+		wallops("Module %s loaded at [0x%lx; MAPI version %d]", h->name, handle, h->abi_ver);
 
 	m = BlockHeapAlloc(module_heap);
 
