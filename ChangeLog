@@ -1,3 +1,14 @@
+nenolod     2005/09/02 06:40:10 UTC	(20050902-2057)
+  Log:
+  More tweaks. :/
+  
+  
+
+  Modified:
+	trunk/modules/operserv/modunload.c (File Modified) 
+	trunk/src/module.c (File Modified) 
+
+
 nenolod     2005/09/02 06:05:31 UTC	(20050902-2055)
   Log:
   Surpress an error here.

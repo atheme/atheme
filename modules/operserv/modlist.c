@@ -4,7 +4,7 @@
  *
  * Module listing.
  *
- * $Id: modlist.c 2037 2005-09-02 05:13:29Z nenolod $
+ * $Id: modlist.c 2059 2005-09-02 06:43:22Z nenolod $
  */
 
 #include "atheme.h"
@@ -40,7 +40,8 @@ static void os_cmd_modlist(char *origin)
 	{
 		module_t *m = n->data;
 
-		notice(opersvs.nick, origin, "%2d: %-20s [loaded at 0x%lx]", ++i, m->name, m->address);
+		notice(opersvs.nick, origin, "%2d: %-20s [loaded at 0x%lx]",
+			++i, m->header->name, m->address);
 	}
 
 	notice(opersvs.nick, origin, "\2%d\2 modules loaded.", i);
