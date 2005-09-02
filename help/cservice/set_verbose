@@ -1,0 +1,9 @@
+Help for SET VERBOSE:
+
+SET VERBOSE sends a notice to the channel when someone
+makes changes to the access lists.
+
+Syntax: SET <#channel> VERBOSE ON|OFF
+
+Example:
+    /msg &nick& SET #foo VERBOSE ON

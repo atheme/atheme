@@ -1,0 +1,81 @@
+$Id: RELEASE 1462 2005-08-04 00:14:41Z alambert $
+
+Atheme devel Release Notes
+==========================
+- The way modules work has been changed almost entirely. Please try
+  loading bad modules especially on macintosh and AIX systems, thanks!
+  (Report any negative findings to the tracker.)
+- The way sockets work has also changed entirely. We'd love to know
+  how well the new poll and kqueue code is working, and if there
+  are any issues with it.
+- Support for poll() and kqueue() have been added, please comment on
+  performance differentials.
+- Most static object structures are now described as metadata, please
+  comment on how well this transition is working for you.
+- PostgreSQL support is starting to freeze. Please note schema changes
+  in SQL/atheme_init.sql.
+- The build system has been reworked. You may need to use gmake on
+  BSD systems. Please comment on any trouble you have had with building
+  Atheme (on the tracker, of course.)
+- protocol/hyperion supports login session tracking now, please comment
+  on how well it is working for you.
+- protocol/ratbox support for login sessions has also vastly improved.
+- dbtool is most likely broken right now. This is not likely to change
+  any time soon.
+- The configuration parser has been overhauled. Please report any crashes
+  when parsing configurations.
+- NickServ is now a required core service. Please update your configurations
+  if you are not using NickServ. ChanServ account support has been removed.
+- Channel passwords have been removed.
+- Most access checking has been simplified, please make sure it is working
+  properly on your network.
+- w00t has gone and entirely tokenized the Unreal protocol support. Please
+  report any issues with this that you find.
+- STATS is now abstracted instead of living in 15 different protocol modules.
+- Probably much more that we have missed :)
+
+Atheme 0.2 Release Notes
+========================
+- Way too many things to note.
+
+Atheme 0.2rc1 Release Notes
+========================
+- Protocol support has been modularized.
+- The configuration format has drastically changed. Please redo your config.
+- The core has been modularized. Please provide feedback if something is not
+  working as it should.
+- Module support has been added. To compile third party modules, add them to
+  the modules directory and rerun setup/configure. Any modules in your
+  installation's modules/ directory will be automatically loaded at startup.
+- Metadata support has been added. To experiment with it, see our wiki
+  information on the topic:
+
+  http://wiki.oscnet.org/index.php/Atheme:Experimenting_with_Metadata
+- Several NickServ-related bugs have been fixed.
+- IRCNet support is marked as experimental. If you run this ircd,
+  please give us feedback on how well it functions.
+
+Atheme 0.1 Release Notes
+========================
+
+- Dancer/Hyperion IRCd support is marked as experimental. If you run this ircd,
+  please give us feedback on how well it functions.
+- Chunky Monkey IRCd is also marked as experimental. If you run this ircd,
+  please give us feedback on how well it functions.
+- NickServ support is experimental. We would like suggestions on how to improve it.
+  If you would like to use it, you should use the example-traditional.conf file,
+  instead of the example.conf. This will set up a logical environment for NickServ to
+  operate in.
+- InspIRCd support passes our regression tests, however, we would like feedback
+  concerning how well it works. Features added by optional modules are not supported
+  at this time. You will need the m_services.so module loaded to make things work
+  100% properly.
+- UnrealIRCd support is implemented fairly well, but not all features are supported.
+- Bahamut 1.8 support has not been tested against 1.8.4, though it is expected that
+  1.8.4 should work fine.
+- TSora IRCd support (ratbox) does not support TS6, and probably never will.
+
+If you need help, drop by AthemeNet and ask:
+  irc.atheme.org #atheme
+
+Thanks!

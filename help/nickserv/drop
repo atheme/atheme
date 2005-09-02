@@ -1,0 +1,11 @@
+Command - DROP
+Usage   - DROP <nickname> <password>
+  
+Using this command makes NickServ stop watching your nick, and
+will remove it from services' database. If a nick is dropped,
+anyone else can register it. You must use the NickServ
+IDENTIFY command before doing this.  Use the command
+with the nickname as the only argument.  
+
+Examples:
+    /msg &nick& DROP foo bar

@@ -1,0 +1,11 @@
+Help for REHASH:
+
+REHASH updates the database and reloads
+the configuration file.  You can perform
+a rehash from system console with a kill -HUP
+command.
+
+Syntax: REHASH
+
+Example:
+    /msg &nick& REHASH

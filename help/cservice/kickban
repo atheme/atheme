@@ -1,0 +1,11 @@
+Help for KICKBAN:
+
+The KICKBAN command allows for the removal of an abusive user from
+a channel. Unlike the KICK command, a ban is placed on the abusive
+user after he is removed from the channel.
+
+Syntax: KICKBAN <#channel> <nick> [reason]
+
+Examples:
+    /msg &nick& KICKBAN #foo abuser
+    /msg &nick& KICKBAN #foo abuser go away

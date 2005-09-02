@@ -1,0 +1,9 @@
+Help for RESTART:
+
+RESTART shuts down services and restarts them
+in the time specified in the configuration file.
+
+Syntax: RESTART
+
+Example:
+    /msg &nick& RESTART

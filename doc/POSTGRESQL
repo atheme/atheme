@@ -1,0 +1,6 @@
+To use the PostgreSQL backend, you must initialize a database with the schema
+in SQL/atheme_init.sql first.
+
+To do so, use psql <database> < atheme_init.sql.
+
+More documentation concerning the PostgreSQL backend to come.

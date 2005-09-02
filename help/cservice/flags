@@ -1,0 +1,33 @@
+Help for FLAGS:
+
+The FLAGS command allows for channel privilege granting/removal
+on a more specific, non-generalized level. It supports both
+nicknames and hostmasks as targets.
+
+When given only the channel argument, a listing of permissions
+granted to users will be displayed.
+
+Syntax: FLAGS <#channel> [nickname|hostmask] [flags]
+
+Permissions:
+    +v - Enables use of the voice/devoice commands.
+    +V - Enables automatic voicing.
+    +o - Enables use of the op/deop commands.
+    +O - Enables automatic op.
+    +s - Enables use of the set command.
+    +i - Enables use of the invite command.
+    +r - Enables use of the kick, ban, akick and kickban commands.
+    +R - Enables use of the recover command.
+    +f - Enables use of the flags command.
+    +t - Enables use of the topic and topicappend commands.
+    +b - Enables automatic kickban.
+    +A - Enables viewing of channel access lists.
+    +* - All of the above.
+
+Examples:
+    /msg &nick& FLAGS #foo
+    /msg &nick& FLAGS #foo foo!*@bar.com +vV
+    /msg &nick& FLAGS #foo foo!*@bar.com -vV
+    /msg &nick& FLAGS #foo foo!*@bar.com -*
+    /msg &nick& FLAGS #foo foo +oOtsi
+    /msg &nick& FLAGS #foo TroubleUser!*@*.troubleisp.net +b

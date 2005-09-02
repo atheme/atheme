@@ -1,0 +1,55 @@
+# Copyright (c) 2003-2004 E. Will et al.
+# Rights to this code are documented in doc/LICENSE.
+#
+# This file contains build instructions.
+#
+# $Id: Makefile.in 1773 2005-08-18 19:37:23Z nenolod $
+#
+
+CC		= @CC@
+RM		= @RM@
+MV		= @MV@
+CP		= @CP@
+INSTALL		= @INSTALL@
+PREFIX		= @prefix@
+BIN		= atheme@EXEEXT@
+MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../include @PGINC@ @MYINC@
+PICFLAGS	= @PICFLAGS@
+CFLAGS		= @CFLAGS@ -I../include @PGINC@ @MYINC@
+
+VERSION		= 0.1
+
+LIBS		= @LIBS@ @PQLIB@ @MYLIB@
+LDFLAGS		= @LDFLAGS@
+CPPFLAGS	= @CPPFLAGS@
+
+default: all
+
+BASE_SRCS = 
+
+SRCS = ${BASE_SRCS}
+
+OBJS = ${SRCS:.c=.so}
+
+all: protocols
+
+build: all
+
+install: build
+	${INSTALL} -d ${PREFIX}/backend
+	${INSTALL} -m 755 *.so ${PREFIX}/backend
+
+protocols: $(OBJS)
+
+.SUFFIXES: .so
+
+.c.so:
+	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@
+
+.PHONY: clean distclean
+
+clean:
+	${RM} -f *.so
+
+distclean: clean
+	${RM} -f Makefile version.c.last

@@ -1,0 +1,8 @@
+Help for TOPIC:
+
+The TOPIC command allows for the changing of a topic on a channel.
+
+Syntax: TOPIC <#channel> <topic>
+
+Examples:
+    /msg &nick& TOPIC #foo bar

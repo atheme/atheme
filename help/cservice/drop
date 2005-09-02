@@ -1,0 +1,12 @@
+Help for DROP:
+
+DROP allows you to "unregister" a registered channel.
+
+Once you DROP a channel all of the data associated
+with it (access lists, etc) are removed and cannot
+be restored.
+
+Syntax: DROP <#channel>
+
+Examples:
+    /msg &nick& DROP #foo bar

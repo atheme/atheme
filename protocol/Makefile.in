@@ -1,0 +1,69 @@
+# Copyright (c) 2003-2004 E. Will et al.
+# Rights to this code are documented in doc/LICENSE.
+#
+# This file contains build instructions.
+#
+# $Id: Makefile.in 1781 2005-08-18 20:00:37Z nenolod $
+#
+
+CC		= @CC@
+RM		= @RM@
+MV		= @MV@
+CP		= @CP@
+INSTALL		= @INSTALL@
+PREFIX		= @prefix@
+BIN		= atheme@EXEEXT@
+MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../include
+PICFLAGS	= @PICFLAGS@
+CFLAGS		= @CFLAGS@ -I../include @PGINC@
+
+LIBS		= @LIBS@
+LDFLAGS		= @LDFLAGS@
+CPPFLAGS	= @CPPFLAGS@
+
+default: all
+
+BASE_SRCS = 		\
+	asuka.c         \
+	bahamut.c       \
+	bircd.c         \
+	dreamforge.c    \
+	hyperion.c      \
+	inspircd.c      \
+	ircnet.c        \
+	monkey.c        \
+	plexus.c        \
+	ptlink.c	\
+	ratbox.c        \
+	scylla.c        \
+	shadowircd.c    \
+	sorcery.c       \
+	undernet.c      \
+	unreal.c
+
+SRCS = ${BASE_SRCS}
+
+OBJS = ${SRCS:.c=.so}
+
+all: protocols
+
+build: all
+
+install: build
+	${INSTALL} -d ${PREFIX}/protocol
+	${INSTALL} -m 755 *.so ${PREFIX}/protocol
+
+protocols: $(OBJS)
+
+.SUFFIXES: .so
+
+.c.so:
+	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@
+
+.PHONY: clean distclean
+
+clean:
+	${RM} -f *.so
+
+distclean: clean
+	${RM} -f Makefile version.c.last

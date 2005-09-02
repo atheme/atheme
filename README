@@ -1,0 +1,88 @@
+Atheme -- a set of services for IRC networks
+============================================
+
+This program is free but copyrighted software; see the LICENSE file for
+details.
+
+Information about Atheme may be found at http://www.atheme.org/.
+
+TABLE OF CONTENTS
+-----------------
+  1. Credits
+  2. Presentation
+  3. Installation
+  4. Command line options
+  5. Getting support
+  6. Reporting bugs
+
+1. CREDITS
+----------
+
+Atheme was originally based on Shrike, however, this has almost all been
+rewritten now. Atheme has also borrowed some code from Cygnus and Sentinel.
+
+Information about Shrike can be found at http://shrike.malkier.net/.
+Information about Cygnus can be found at http://www.habber.net/services/.
+Information about Sentinel can be found at http://ircd.botbay.net/sentinel/.
+
+2. PRESENTATION
+---------------
+
+Atheme is a set of Services for IRC networks that allows users to
+manage their channels in a secure and efficient way and allows operators to
+manage various things about their networks. Unlike it's predecessor, Shrike,
+Atheme has a completely reworked form of channel management that feels somewhat
+like eggdrop and is somewhat more useful.
+
+Atheme currently works with many ircd's. More details are available in the
+config file.
+
+3. INSTALLATION
+---------------
+
+See the INSTALL file.
+
+4. COMMAND LINE OPTIONS
+-----------------------
+
+Normally, Atheme can be run simply by invoking the "atheme" executable.  Atheme
+will then use the defaults specified in the configuraiton file and connect
+to the specified uplink server. Alternatively, any of the following
+command-line options can be specified to change the default behavior:
+
+  -c </path/to/file> - specify the configuration file
+  -d                 - start in debugging mode
+  -h                 - print the help message and exit
+  -n                 - do not fork into the background
+  -v                 - print the version information and exit
+
+Atheme also handles the following signals:
+  HUP  - force a REHASH
+  INT  - force a RESTART
+  TERM - force a SHUTDOWN
+
+Upon starting, Atheme will parse its command-line arguments, open its log file,
+parse its configuration file, load its database, connect to the uplink,
+and (assuming -n is not specified) detach into the background.  If Atheme
+encounters an error while parsing the configuration or database files it will
+terminate immediately. Otherwise, it will run until killed or otherwise stopped.
+
+5. GETTING SUPPORT
+------------------
+
+If you are stuck, or services are doing something really weird, or you have
+some sort of brilliant idea, we have a channel on IRC! (Surprising, no?)
+To access this channel, connect to irc.atheme.org, and join #atheme.
+
+There are also community forums and a community-oriented module 
+repository located at http://www.atheme.net/. Please note that 
+atheme.net is not the official source for Atheme releases.
+
+6. REPORTING BUGS
+-----------------
+
+If you find a bug in Atheme, you must report it via the bugtracker; our
+developers have a tendency to forget things. Your bug is not actually a
+bug until it's reported.
+
+To report bugs, click on the 'tracker' link at http://www.atheme.org.

@@ -1,0 +1,20 @@
+Help for xOP:
+
+The xOP commands allow you to maintain channel
+access lists.  Users on the VOP list will be
+automatically set +v in the channel.  Users on
+the AOP list will be automatically set +o on the
+channel.  Users on the SOP list will be
+automatically set +o on the channel and be allowed
+to add users to the VOP and AOP lists.
+
+You may also specify a hostmask (nick!user@host)
+for the VOP and AOP lists.
+
+Syntax: VOP|HOP|AOP|SOP <#channel> ADD|DEL|LIST <nickname|hostmask>
+
+Examples:
+    /msg &nick& VOP #foo ADD bar
+    /msg &nick& VOP #foo ADD foo!*@bar.com
+    /msg &nick& AOP #foo DEL bar
+    /msg &nick& SOP #foo LIST

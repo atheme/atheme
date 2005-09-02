@@ -1,0 +1,9 @@
+Help for RECOVER:
+
+RECOVER allows you to regain control of your
+channel in the event of a takeover.
+
+Syntax: RECOVER <#channel>
+
+Example:
+    /msg &nick& RECOVER #foo

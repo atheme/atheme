@@ -1,0 +1,3852 @@
+nenolod     2005/09/02 05:32:06 UTC	(20050902-2045)
+  Log:
+  Fix compile warning.
+  
+
+  Modified:
+	branches/nenolod/modules/operserv/help.c (File Modified) 
+
+
+nenolod     2005/09/02 05:31:43 UTC	(20050902-2043)
+  Log:
+  Remove crap here that I forgot about.
+  
+
+  Modified:
+	branches/nenolod/modules/operserv/main.c (File Modified) 
+
+
+nenolod     2005/09/02 05:30:19 UTC	(20050902-2041)
+  Log:
+  Almost there!
+  
+
+  Modified:
+	branches/nenolod/backend/mysql.c (File Modified) 
+	branches/nenolod/backend/postgresql.c (File Modified) 
+	branches/nenolod/src/atheme.c (File Modified) 
+	branches/nenolod/src/services.c (File Modified) 
+
+
+nenolod     2005/09/02 05:23:10 UTC	(20050902-2039)
+  Log:
+  Documentation updates.
+  
+
+  Modified:
+	branches/nenolod/dist/example.conf (File Modified) 
+
+
+nenolod     2005/09/02 05:13:29 UTC	(20050902-2037)
+  Log:
+  Prepare the OperServ modules for being dynamically linked to a parent module.
+  
+
+  Modified:
+	branches/nenolod/modules/operserv/Makefile.in (File Modified) 
+	branches/nenolod/modules/operserv/akill.c (File Added) 
+	branches/nenolod/modules/operserv/help.c (File Modified) 
+	branches/nenolod/modules/operserv/inject.c (File Modified) 
+	branches/nenolod/modules/operserv/jupe.c (File Modified) 
+	branches/nenolod/modules/operserv/kline.c (File Deleted) 
+	branches/nenolod/modules/operserv/main.c (File Modified) 
+	branches/nenolod/modules/operserv/mode.c (File Modified) 
+	branches/nenolod/modules/operserv/modlist.c (File Modified) 
+	branches/nenolod/modules/operserv/modload.c (File Modified) 
+	branches/nenolod/modules/operserv/modrestart.c (File Modified) 
+	branches/nenolod/modules/operserv/modunload.c (File Modified) 
+	branches/nenolod/modules/operserv/noop.c (File Modified) 
+	branches/nenolod/modules/operserv/raw.c (File Modified) 
+	branches/nenolod/modules/operserv/rehash.c (File Modified) 
+	branches/nenolod/modules/operserv/restart.c (File Modified) 
+	branches/nenolod/modules/operserv/shutdown.c (File Modified) 
+	branches/nenolod/modules/operserv/update.c (File Modified) 
+
+
+nenolod     2005/09/02 04:47:59 UTC	(20050902-2035)
+  Log:
+  
+  operserv -> operserv/main
+  
+
+  Modified:
+	branches/nenolod/modules/operserv/main.c (File Added) 
+	branches/nenolod/src/Makefile.in (File Modified) 
+	branches/nenolod/src/oservice.c (File Deleted) 
+
+
+nenolod     2005/09/02 04:46:05 UTC	(20050902-2033)
+  Log:
+  Refresh configure script.
+  
+
+  Modified:
+	branches/nenolod/configure (File Modified) 
+	branches/nenolod/configure.ac (File Modified) 
+	branches/nenolod/modules/Makefile.in (File Modified) 
+	branches/nenolod/modules/operserv/Makefile.in (File Added) 
+
+
+nenolod     2005/09/02 04:41:57 UTC	(20050902-2031)
+  Log:
+  Reorganize operserv module structure.
+  
+
+  Modified:
+	branches/nenolod/modules/operserv/help.c (File Added) 
+	branches/nenolod/modules/operserv/inject.c (File Added) 
+	branches/nenolod/modules/operserv/jupe.c (File Added) 
+	branches/nenolod/modules/operserv/kline.c (File Added) 
+	branches/nenolod/modules/operserv/mode.c (File Added) 
+	branches/nenolod/modules/operserv/modlist.c (File Added) 
+	branches/nenolod/modules/operserv/modload.c (File Added) 
+	branches/nenolod/modules/operserv/modrestart.c (File Added) 
+	branches/nenolod/modules/operserv/modunload.c (File Added) 
+	branches/nenolod/modules/operserv/noop.c (File Added) 
+	branches/nenolod/modules/operserv/raw.c (File Added) 
+	branches/nenolod/modules/operserv/rehash.c (File Added) 
+	branches/nenolod/modules/operserv/restart.c (File Added) 
+	branches/nenolod/modules/operserv/shutdown.c (File Added) 
+	branches/nenolod/modules/operserv/update.c (File Added) 
+	branches/nenolod/modules/os_help.c (File Deleted) 
+	branches/nenolod/modules/os_inject.c (File Deleted) 
+	branches/nenolod/modules/os_jupe.c (File Deleted) 
+	branches/nenolod/modules/os_kline.c (File Deleted) 
+	branches/nenolod/modules/os_mode.c (File Deleted) 
+	branches/nenolod/modules/os_modlist.c (File Deleted) 
+	branches/nenolod/modules/os_modload.c (File Deleted) 
+	branches/nenolod/modules/os_modrestart.c (File Deleted) 
+	branches/nenolod/modules/os_modunload.c (File Deleted) 
+	branches/nenolod/modules/os_noop.c (File Deleted) 
+	branches/nenolod/modules/os_raw.c (File Deleted) 
+	branches/nenolod/modules/os_rehash.c (File Deleted) 
+	branches/nenolod/modules/os_restart.c (File Deleted) 
+	branches/nenolod/modules/os_shutdown.c (File Deleted) 
+	branches/nenolod/modules/os_update.c (File Deleted) 
+
+
+nenolod     2005/09/02 03:37:54 UTC	(20050902-2029)
+  Log:
+  Add Global to config file.
+  
+
+  Modified:
+	branches/nenolod/dist/example.conf (File Modified) 
+
+
+nenolod     2005/09/02 03:36:47 UTC	(20050902-2027)
+  Log:
+  Global is now a bloody module in it's entirety.
+  
+
+  Modified:
+	branches/nenolod/configure (File Modified) 
+	branches/nenolod/configure.ac (File Modified) 
+	branches/nenolod/modules/global/main.c (File Modified) 
+	branches/nenolod/modules/gs_global.c (File Deleted) 
+	branches/nenolod/modules/gs_help.c (File Deleted) 
+
+
+nenolod     2005/09/02 02:52:48 UTC	(20050902-2025)
+  Log:
+  Add module initialization code to global/main.
+  
+
+  Modified:
+	branches/nenolod/modules/global/main.c (File Modified) 
+
+
+nenolod     2005/09/02 00:56:14 UTC	(20050902-2023)
+  Log:
+  src/gservice.c -> global/main
+  
+
+  Modified:
+	branches/nenolod/modules/global/main.c (File Added) 
+	branches/nenolod/src/Makefile.in (File Modified) 
+	branches/nenolod/src/gservice.c (File Deleted) 
+	branches/nenolod/src/services.c (File Modified) 
+
+
+nenolod     2005/09/02 00:54:34 UTC	(20050902-2021)
+  Log:
+  Add Makefile here
+  
+
+  Modified:
+	branches/nenolod/modules/global/Makefile.in (File Added) 
+
+
+nenolod     2005/09/01 23:53:13 UTC	(20050901-2019)
+  Log:
+  Fix compile error, typoed DECLARE_MODULE_V1()
+  
+
+  Modified:
+	branches/nenolod/protocol/sorcery.c (File Modified) 
+
+
+nenolod     2005/09/01 23:52:22 UTC	(20050901-2017)
+  Log:
+  Fix compile warning with nickserv/help.
+  
+
+  Modified:
+	branches/nenolod/modules/nickserv/help.c (File Modified) 
+
+
+nenolod     2005/09/01 23:51:09 UTC	(20050901-2015)
+  Log:
+  Add nickserv to SUBDIRS.
+  
+
+  Modified:
+	branches/nenolod/modules/Makefile.in (File Modified) 
+
+
+nenolod     2005/09/01 23:48:14 UTC	(20050901-2013)
+  Log:
+  Documentation updates.
+  
+
+  Modified:
+	branches/nenolod/dist/example.conf (File Modified) 
+
+
+nenolod     2005/09/01 23:31:07 UTC	(20050901-2011)
+  Log:
+  * Finish converting modules so that they meet the new spec, global and operserv remain.
+  * Make sure the right svn:keywords are set on the modules.
+  
+
+  Modified:
+	branches/nenolod/modules/nickserv/hold.c  (Property Modified)
+	branches/nenolod/modules/nickserv/info.c (File Modified) 
+	branches/nenolod/modules/nickserv/link.c (File Modified) 
+	branches/nenolod/modules/nickserv/list.c (File Modified) 
+	branches/nenolod/modules/nickserv/listmail.c (File Modified) (Property Modified)
+	branches/nenolod/modules/nickserv/logout.c (File Modified) 
+	branches/nenolod/modules/nickserv/mark.c (File Modified) 
+	branches/nenolod/modules/nickserv/myaccess.c (File Modified) (Property Modified)
+	branches/nenolod/modules/nickserv/register.c (File Modified) 
+	branches/nenolod/modules/nickserv/sendpass.c (File Modified) 
+	branches/nenolod/modules/nickserv/set.c (File Modified) 
+	branches/nenolod/modules/nickserv/status.c (File Modified) 
+	branches/nenolod/modules/nickserv/taxonomy.c (File Modified) 
+	branches/nenolod/modules/nickserv/verify.c (File Modified) (Property Modified)
+
+
+nenolod     2005/09/01 23:16:20 UTC	(20050901-2009)
+  Log:
+  Prepare some modules.
+  
+
+  Modified:
+	branches/nenolod/modules/nickserv/drop.c (File Modified) 
+	branches/nenolod/modules/nickserv/ghost.c (File Modified) 
+	branches/nenolod/modules/nickserv/help.c (File Modified) 
+	branches/nenolod/modules/nickserv/hold.c (File Modified) 
+	branches/nenolod/modules/nickserv/identify.c (File Modified) 
+
+
+nenolod     2005/09/01 23:10:42 UTC	(20050901-2007)
+  Log:
+  Add module shims.
+  
+
+  Modified:
+	branches/nenolod/modules/nickserv/main.c (File Modified) 
+
+
+nenolod     2005/09/01 23:06:54 UTC	(20050901-2005)
+  Log:
+  More fun
+  
+
+  Modified:
+	branches/nenolod/modules/nickserv/Makefile.in (File Modified) 
+	branches/nenolod/modules/nickserv/ns_set.c (File Deleted) 
+	branches/nenolod/modules/nickserv/ns_status.c (File Deleted) 
+	branches/nenolod/modules/nickserv/set.c (File Added) 
+	branches/nenolod/modules/nickserv/status.c (File Added) 
+
+
+nenolod     2005/09/01 23:04:21 UTC	(20050901-2003)
+  Log:
+  More fun!
+  
+
+  Modified:
+	branches/nenolod/modules/nickserv/drop.c (File Added) 
+	branches/nenolod/modules/nickserv/ghost.c (File Added) 
+	branches/nenolod/modules/nickserv/help.c (File Added) 
+	branches/nenolod/modules/nickserv/hold.c (File Added) 
+	branches/nenolod/modules/nickserv/identify.c (File Added) 
+	branches/nenolod/modules/nickserv/info.c (File Added) 
+	branches/nenolod/modules/nickserv/link.c (File Added) 
+	branches/nenolod/modules/nickserv/list.c (File Added) 
+	branches/nenolod/modules/nickserv/listmail.c (File Added) 
+	branches/nenolod/modules/nickserv/logout.c (File Added) 
+	branches/nenolod/modules/nickserv/mark.c (File Added) 
+	branches/nenolod/modules/nickserv/myaccess.c (File Added) 
+	branches/nenolod/modules/nickserv/ns_set.c (File Added) 
+	branches/nenolod/modules/nickserv/ns_status.c (File Added) 
+	branches/nenolod/modules/nickserv/register.c (File Added) 
+	branches/nenolod/modules/nickserv/sendpass.c (File Added) 
+	branches/nenolod/modules/nickserv/taxonomy.c (File Added) 
+	branches/nenolod/modules/nickserv/verify.c (File Added) 
+	branches/nenolod/modules/ns_drop.c (File Deleted) 
+	branches/nenolod/modules/ns_ghost.c (File Deleted) 
+	branches/nenolod/modules/ns_help.c (File Deleted) 
+	branches/nenolod/modules/ns_hold.c (File Deleted) 
+	branches/nenolod/modules/ns_identify.c (File Deleted) 
+	branches/nenolod/modules/ns_info.c (File Deleted) 
+	branches/nenolod/modules/ns_link.c (File Deleted) 
+	branches/nenolod/modules/ns_list.c (File Deleted) 
+	branches/nenolod/modules/ns_listmail.c (File Deleted) 
+	branches/nenolod/modules/ns_logout.c (File Deleted) 
+	branches/nenolod/modules/ns_mark.c (File Deleted) 
+	branches/nenolod/modules/ns_myaccess.c (File Deleted) 
+	branches/nenolod/modules/ns_register.c (File Deleted) 
+	branches/nenolod/modules/ns_sendpass.c (File Deleted) 
+	branches/nenolod/modules/ns_set.c (File Deleted) 
+	branches/nenolod/modules/ns_status.c (File Deleted) 
+	branches/nenolod/modules/ns_taxonomy.c (File Deleted) 
+	branches/nenolod/modules/ns_verify.c (File Deleted) 
+
+
+nenolod     2005/09/01 22:59:30 UTC	(20050901-2001)
+  Log:
+  Refresh configure scripts.
+  
+
+  Modified:
+	branches/nenolod/configure (File Modified) 
+	branches/nenolod/configure.ac (File Modified) 
+
+
+nenolod     2005/09/01 04:30:39 UTC	(20050901-1999)
+  Log:
+  src/nickserv.c -> modules/nickserv/main.c
+  
+
+  Modified:
+	branches/nenolod/modules/nickserv/Makefile.in (File Added) 
+	branches/nenolod/modules/nickserv/main.c (File Added) 
+	branches/nenolod/src/Makefile.in (File Modified) 
+	branches/nenolod/src/nickserv.c (File Deleted) 
+	branches/nenolod/src/services.c (File Modified) 
+
+
+nenolod     2005/09/01 04:28:13 UTC	(20050901-1997)
+  Log:
+  Finish up here.
+  
+
+  Modified:
+	branches/nenolod/protocol/bahamut.c (File Modified) 
+	branches/nenolod/protocol/hyperion.c (File Modified) 
+	branches/nenolod/protocol/inspircd.c (File Modified) 
+	branches/nenolod/protocol/ircnet.c (File Modified) 
+	branches/nenolod/protocol/monkey.c (File Modified) 
+	branches/nenolod/protocol/plexus.c (File Modified) 
+	branches/nenolod/protocol/ptlink.c (File Modified) 
+	branches/nenolod/protocol/ratbox.c (File Modified) 
+	branches/nenolod/protocol/scylla.c (File Modified) 
+	branches/nenolod/protocol/shadowircd.c (File Modified) 
+	branches/nenolod/protocol/sorcery.c (File Modified) 
+	branches/nenolod/protocol/undernet.c (File Modified) 
+
+
+nenolod     2005/09/01 04:23:22 UTC	(20050901-1995)
+  Log:
+  More protocol modules get a module header!
+  
+
+  Modified:
+	branches/nenolod/protocol/asuka.c (File Modified) 
+	branches/nenolod/protocol/bahamut.c (File Modified) 
+	branches/nenolod/protocol/bircd.c (File Modified) 
+	branches/nenolod/protocol/dreamforge.c (File Modified) 
+
+
+nenolod     2005/09/01 04:21:34 UTC	(20050901-1993)
+  Log:
+  More stuffness.
+  
+
+  Modified:
+	branches/nenolod/backend/flatfile.c (File Modified) 
+	branches/nenolod/modules/chanserv/close.c (File Modified) 
+	branches/nenolod/modules/chanserv/help.c (File Modified) 
+	branches/nenolod/modules/chanserv/main.c (File Modified) 
+	branches/nenolod/protocol/unreal.c (File Modified) 
+	branches/nenolod/src/module.c (File Modified) 
+
+
+nenolod     2005/09/01 03:37:21 UTC	(20050901-1991)
+  Log:
+  Well the core builds again. :)
+  
+
+  Modified:
+	branches/nenolod/src/module.c (File Modified) 
+
+
+nenolod     2005/09/01 03:26:45 UTC	(20050901-1989)
+  Log:
+  Finish up here. Make sure it works, and if so, merge with trunk.
+  
+
+  Modified:
+	branches/nenolod/modules/chanserv/Makefile.in (File Modified) 
+	branches/nenolod/modules/chanserv/register.c (File Modified) 
+	branches/nenolod/modules/chanserv/set.c (File Modified) 
+	branches/nenolod/modules/chanserv/status.c (File Modified) 
+	branches/nenolod/modules/chanserv/taxonomy.c (File Modified) 
+	branches/nenolod/modules/chanserv/topic.c (File Modified) 
+	branches/nenolod/modules/chanserv/voice.c (File Modified) 
+	branches/nenolod/modules/chanserv/xop.c (File Modified) 
+
+
+nenolod     2005/09/01 03:17:03 UTC	(20050901-1987)
+  Log:
+  Fix compile warnings/errors.
+  
+
+  Modified:
+	branches/nenolod/modules/chanserv/help.c (File Modified) 
+	branches/nenolod/modules/chanserv/info.c (File Modified) 
+	branches/nenolod/modules/chanserv/invite.c (File Modified) 
+	branches/nenolod/modules/chanserv/list.c (File Modified) 
+
+
+nenolod     2005/09/01 03:14:44 UTC	(20050901-1983)
+  Log:
+  Convert some more modules, whee!
+  
+
+  Modified:
+	branches/nenolod/modules/chanserv/Makefile.in (File Modified) 
+	branches/nenolod/modules/chanserv/hold.c (File Modified) 
+	branches/nenolod/modules/chanserv/info.c (File Modified) 
+	branches/nenolod/modules/chanserv/invite.c (File Modified) 
+	branches/nenolod/modules/chanserv/kick.c (File Modified) 
+	branches/nenolod/modules/chanserv/list.c (File Modified) 
+	branches/nenolod/modules/chanserv/mark.c (File Modified) 
+	branches/nenolod/modules/chanserv/op.c (File Modified) 
+	branches/nenolod/modules/chanserv/recover.c (File Modified) 
+
+
+nenolod     2005/09/01 03:03:36 UTC	(20050901-1981)
+  Log:
+  Alter makefile for modules/chanserv.
+  
+
+  Modified:
+	branches/nenolod/modules/chanserv/Makefile.in (File Modified) 
+
+
+nenolod     2005/09/01 03:02:53 UTC	(20050901-1979)
+  Log:
+  Sync properties, update some more modules
+  
+
+  Modified:
+	branches/nenolod/modules/chanserv/close.c  (Property Modified)
+	branches/nenolod/modules/chanserv/ftransfer.c (File Modified) (Property Modified)
+	branches/nenolod/modules/chanserv/halfop.c (File Modified) 
+	branches/nenolod/modules/chanserv/help.c (File Modified) 
+	branches/nenolod/modules/chanserv/hold.c (File Modified) (Property Modified)
+
+
+nenolod     2005/09/01 02:55:43 UTC	(20050901-1977)
+  Log:
+  Prepare some modules.
+  
+
+  Modified:
+	branches/nenolod/modules/chanserv/Makefile.in (File Modified) 
+	branches/nenolod/modules/chanserv/akick.c (File Modified) 
+	branches/nenolod/modules/chanserv/ban.c (File Modified) 
+	branches/nenolod/modules/chanserv/close.c (File Modified) 
+	branches/nenolod/modules/chanserv/drop.c (File Modified) 
+	branches/nenolod/modules/chanserv/flags.c (File Modified) 
+
+
+nenolod     2005/08/31 02:30:13 UTC	(20050831-1973)
+  Log:
+  Add chanserv modules section to example.conf.
+  
+
+  Modified:
+	branches/nenolod/dist/example.conf (File Modified) 
+
+
+nenolod     2005/08/30 19:18:35 UTC	(20050830-1971)
+  Log:
+  Progress.
+  
+
+  Modified:
+	branches/nenolod/include/module.h (File Modified) 
+	branches/nenolod/modules/chanserv/Makefile.in (File Modified) 
+	branches/nenolod/modules/chanserv/akick.c (File Modified) 
+
+
+nenolod     2005/08/30 19:07:40 UTC	(20050830-1969)
+  Log:
+  Add module_find_published() for searching by published module names.
+  
+
+  Modified:
+	branches/nenolod/include/module.h (File Modified) 
+	branches/nenolod/src/module.c (File Modified) 
+
+
+nenolod     2005/08/30 19:04:43 UTC	(20050830-1967)
+  Log:
+  Update our linker to work using the moduleheader_t stuff.
+  
+
+  Modified:
+	branches/nenolod/src/module.c (File Modified) 
+
+
+nenolod     2005/08/30 18:57:10 UTC	(20050830-1965)
+  Log:
+  More tweaks here.
+  
+
+  Modified:
+	branches/nenolod/include/module.h (File Modified) 
+
+
+nenolod     2005/08/30 17:35:36 UTC	(20050830-1963)
+  Log:
+  New module API, provide an example of it's use.
+  
+
+  Modified:
+	branches/nenolod/include/module.h (File Modified) 
+	branches/nenolod/modules/chanserv/main.c (File Modified) 
+
+
+nenolod     2005/08/30 17:08:23 UTC	(20050830-1961)
+  Log:
+  Sync with trunk fixes... psuedo code for modular bindings.
+  
+
+  Modified:
+	branches/nenolod/include/pmodule.h (File Modified) 
+	branches/nenolod/modules/chanserv/akick.c (File Modified) 
+	branches/nenolod/src/pmodule.c (File Modified) 
+
+
+nenolod     2005/08/30 07:32:35 UTC	(20050830-1953)
+  Log:
+  Move modules into their proper locations.
+  
+
+  Modified:
+	branches/nenolod/modules/chanserv/akick.c (File Added) 
+	branches/nenolod/modules/chanserv/ban.c (File Added) 
+	branches/nenolod/modules/chanserv/close.c (File Added) 
+	branches/nenolod/modules/chanserv/drop.c (File Added) 
+	branches/nenolod/modules/chanserv/flags.c (File Added) 
+	branches/nenolod/modules/chanserv/ftransfer.c (File Added) 
+	branches/nenolod/modules/chanserv/halfop.c (File Added) 
+	branches/nenolod/modules/chanserv/help.c (File Added) 
+	branches/nenolod/modules/chanserv/hold.c (File Added) 
+	branches/nenolod/modules/chanserv/info.c (File Added) 
+	branches/nenolod/modules/chanserv/invite.c (File Added) 
+	branches/nenolod/modules/chanserv/kick.c (File Added) 
+	branches/nenolod/modules/chanserv/list.c (File Added) 
+	branches/nenolod/modules/chanserv/mark.c (File Added) 
+	branches/nenolod/modules/chanserv/op.c (File Added) 
+	branches/nenolod/modules/chanserv/recover.c (File Added) 
+	branches/nenolod/modules/chanserv/register.c (File Added) 
+	branches/nenolod/modules/chanserv/set.c (File Added) 
+	branches/nenolod/modules/chanserv/status.c (File Added) 
+	branches/nenolod/modules/chanserv/taxonomy.c (File Added) 
+	branches/nenolod/modules/chanserv/topic.c (File Added) 
+	branches/nenolod/modules/chanserv/voice.c (File Added) 
+	branches/nenolod/modules/chanserv/xop.c (File Added) 
+	branches/nenolod/modules/cs_akick.c (File Deleted) 
+	branches/nenolod/modules/cs_ban.c (File Deleted) 
+	branches/nenolod/modules/cs_close.c (File Deleted) 
+	branches/nenolod/modules/cs_drop.c (File Deleted) 
+	branches/nenolod/modules/cs_flags.c (File Deleted) 
+	branches/nenolod/modules/cs_ftransfer.c (File Deleted) 
+	branches/nenolod/modules/cs_halfop.c (File Deleted) 
+	branches/nenolod/modules/cs_help.c (File Deleted) 
+	branches/nenolod/modules/cs_hold.c (File Deleted) 
+	branches/nenolod/modules/cs_info.c (File Deleted) 
+	branches/nenolod/modules/cs_invite.c (File Deleted) 
+	branches/nenolod/modules/cs_kick.c (File Deleted) 
+	branches/nenolod/modules/cs_list.c (File Deleted) 
+	branches/nenolod/modules/cs_mark.c (File Deleted) 
+	branches/nenolod/modules/cs_op.c (File Deleted) 
+	branches/nenolod/modules/cs_recover.c (File Deleted) 
+	branches/nenolod/modules/cs_register.c (File Deleted) 
+	branches/nenolod/modules/cs_set.c (File Deleted) 
+	branches/nenolod/modules/cs_status.c (File Deleted) 
+	branches/nenolod/modules/cs_taxonomy.c (File Deleted) 
+	branches/nenolod/modules/cs_topic.c (File Deleted) 
+	branches/nenolod/modules/cs_voice.c (File Deleted) 
+	branches/nenolod/modules/cs_xop.c (File Deleted) 
+
+
+nenolod     2005/08/30 07:28:42 UTC	(20050830-1951)
+  Log:
+  chanserv/main builds now.
+  
+
+  Modified:
+	branches/nenolod/modules/chanserv/main.c (File Modified) 
+
+
+nenolod     2005/08/30 07:27:53 UTC	(20050830-1949)
+  Log:
+  Buildsystem tweaks.
+  
+
+  Modified:
+	branches/nenolod/configure (File Modified) 
+	branches/nenolod/configure.ac (File Modified) 
+	branches/nenolod/modules/Makefile.in (File Modified) 
+	branches/nenolod/modules/chanserv/Makefile.in (File Modified) 
+
+
+nenolod     2005/08/30 07:21:13 UTC	(20050830-1947)
+  Log:
+  Sync unreal fix.
+  
+
+  Modified:
+	branches/nenolod/configure (File Modified) 
+	branches/nenolod/configure.ac (File Modified) 
+	branches/nenolod/modules/Makefile.in (File Modified) 
+	branches/nenolod/protocol/unreal.c (File Modified) 
+
+
+nenolod     2005/08/30 06:53:13 UTC	(20050830-1939)
+  Log:
+  Whee!
+  
+
+  Modified:
+	branches/nenolod/modules/chanserv/main.c (File Modified) 
+	branches/nenolod/src/Makefile.in (File Modified) 
+	branches/nenolod/src/cservice.c (File Deleted) 
+	branches/nenolod/src/services.c (File Modified) 
+
+
+nenolod     2005/08/30 06:48:03 UTC	(20050830-1937)
+  Log:
+  Branch off my own tree for working with modularizing core services in.
+  
+
+  Modified:
+	branches/nenolod/ (File Added) 
+
+
+pfish       2005/08/29 20:10:14 UTC	(20050829-1935)
+  Log:
+  shouldn't we show what the nonexistant server is instead of ..
+  
+
+  Modified:
+	trunk/protocol/unreal.c (File Modified) 
+
+
+nenolod     2005/08/29 19:43:17 UTC	(20050829-1933)
+  Log:
+  Use a block allocator to ensure that the message trie isn't allocated dirty memory.
+  
+
+  Modified:
+	trunk/src/pmodule.c (File Modified) 
+
+
+nenolod     2005/08/29 18:47:30 UTC	(20050829-1931)
+  Log:
+  UnrealIRCd protocol is about as sane as a meth addict on crack.
+  
+
+  Modified:
+	trunk/protocol/unreal.c (File Modified) 
+
+
+nenolod     2005/08/29 18:28:26 UTC	(20050829-1929)
+  Log:
+  s/messagetree_del/messagetree_delete/g;
+  
+
+  Modified:
+	trunk/src/pmodule.c (File Modified) 
+
+
+nenolod     2005/08/29 18:21:05 UTC	(20050829-1927)
+  Log:
+  Flashy radix trie stuff. Reviewed, and poked at with a stick by me.
+  
+
+  Modified:
+	trunk/include/pmodule.h (File Modified) 
+	trunk/src/pmodule.c (File Modified) 
+
+
+nenolod     2005/08/29 02:21:12 UTC	(20050829-1925)
+  Log:
+  Add backend/mysql to the example.conf.
+  
+
+  Modified:
+	trunk/dist/example.conf (File Modified) 
+
+
+nenolod     2005/08/29 02:18:20 UTC	(20050829-1923)
+  Log:
+  Set svn:keywords on mysql.c
+  
+
+  Modified:
+	trunk/backend/mysql.c  (Property Modified)
+
+
+beu         2005/08/29 02:13:48 UTC	(20050829-1921)
+  Log:
+  Add initial MySQL backend port (done mostly by zparta).
+  Reviewed by nenolod.
+  
+
+  Modified:
+	trunk/SQL/atheme_init.mysql (File Modified) 
+	trunk/backend/Makefile.in (File Modified) 
+	trunk/backend/mysql.c (File Added) 
+	trunk/configure (File Modified) 
+	trunk/configure.ac (File Modified) 
+	trunk/contrib/Makefile.in (File Modified) 
+	trunk/crypto/Makefile.in (File Modified) 
+	trunk/include/sysconf.h.in (File Modified) 
+	trunk/modules/Makefile.in (File Modified) 
+	trunk/src/Makefile.in (File Modified) 
+
+
+nenolod     2005/08/29 00:49:06 UTC	(20050829-1919)
+  Log:
+  s/cservice/chanserv/g;
+  
+
+  Modified:
+	trunk/modules/chanserv/main.c (File Modified) 
+
+
+nenolod     2005/08/29 00:44:59 UTC	(20050829-1917)
+  Log:
+  There's that.
+  
+
+  Modified:
+	trunk/modules/chanserv/main.c (File Modified) 
+
+
+nenolod     2005/08/29 00:40:21 UTC	(20050829-1915)
+  Log:
+  Add a hook_call_event() when config is done parsing.
+  
+
+  Modified:
+	trunk/src/conf.c (File Modified) 
+
+
+nenolod     2005/08/29 00:37:56 UTC	(20050829-1913)
+  Log:
+  Add a boolean for modules which depend on the config file being parsed.
+  
+
+  Modified:
+	trunk/include/extern.h (File Modified) 
+	trunk/src/atheme.c (File Modified) 
+
+
+nenolod     2005/08/29 00:32:53 UTC	(20050829-1911)
+  Log:
+  Add module initialization stuff to chanserv/main.c
+  
+
+  Modified:
+	trunk/modules/chanserv/main.c (File Modified) 
+
+
+nenolod     2005/08/29 00:28:42 UTC	(20050829-1909)
+  Log:
+  More stuff, not used yet -- but will be in the future.
+  
+
+  Modified:
+	trunk/modules/chanserv/Makefile.in (File Added) 
+	trunk/modules/chanserv/main.c (File Added) 
+
+
+nenolod     2005/08/29 00:21:49 UTC	(20050829-1907)
+  Log:
+  Start in on restructuring the modules a little bit.
+  
+
+  Modified:
+	trunk/modules/chanserv/ (File Added) 
+	trunk/modules/global/ (File Added) 
+	trunk/modules/nickserv/ (File Added) 
+	trunk/modules/operserv/ (File Added) 
+
+
+beu         2005/08/28 20:47:02 UTC	(20050828-1905)
+  Log:
+  Fix typo (test commit :D)
+
+  Modified:
+	trunk/README (File Modified) 
+
+
+nenolod     2005/08/28 20:14:18 UTC	(20050828-1903)
+  Log:
+  shash() enhancements
+
+  Modified:
+	trunk/src/function.c (File Modified) 
+
+
+nenolod     2005/08/28 19:17:56 UTC	(20050828-1901)
+  Log:
+  Add beu/zparta to AUTHORS, move trystan out of core (what was he doing there?),
+  remove brian from the authors list entirely.
+  
+
+  Modified:
+	trunk/src/version.sh (File Modified) 
+
+
+nenolod     2005/08/28 19:07:17 UTC	(20050828-1899)
+  Log:
+  Add MySQL schema.
+  
+  Contributed by zparta. <http://zparta.hispan.se>
+  Reviewed by nenolod.
+  
+
+  Modified:
+	trunk/SQL/atheme_init.mysql (File Added) 
+
+
+jilles      2005/08/28 18:33:40 UTC	(20050828-1897)
+  Log:
+  Test if svn write still works.
+  
+
+  Modified:
+	trunk/SVN-Access (File Modified) 
+
+
+nenolod     2005/08/28 18:11:25 UTC	(20050828-1895)
+  Log:
+  * Cleanup more changelog stuff from the SVN migration.
+  * Further sanity checking in libatheme/callback.c
+  
+
+  Modified:
+	trunk/ChangeLog (File Modified) 
+	trunk/libatheme/callback.c (File Modified) 
+
+
+nenolod     2005/08/28 18:08:29 UTC	(20050828-1891)
+  Log:
+  Add .execname to the state object.
+  
+
+  Modified:
+	trunk/include/atheme.h (File Modified) 
+	trunk/src/atheme.c (File Modified) 
+
+
+pfish       2005/08/27 23:32:09 UTC	(20050827-1889)
+  Log:
+  test svn write
+  
+
+  Modified:
+	trunk/SVN-Access (File Modified) 
+
+
+nenolod     2005/08/27 23:10:21 UTC	(20050827-1887)
+  Log:
+  Update README document.
+  
+
+  Modified:
+	trunk/README (File Modified) 
+
+
+nenolod     2005/08/27 21:55:33 UTC	(20050827-1883)
+  Log:
+  Remove more automake stuff.
+  
+
+  Modified:
+	trunk/autoconf/depcomp (File Deleted) 
+	trunk/autoconf/ltmain.sh (File Deleted) 
+	trunk/autoconf/missing (File Deleted) 
+
+
+nenolod     2005/08/27 21:45:04 UTC	(20050827-1881)
+  Log:
+  Clean up my mess from playing with Changelog.pl
+
+  Modified:
+	trunk/ChangeLog (File Modified) 
+
+
+nenolod     2005/08/27 21:33:42 UTC	(20050827-1879)
+  Log:
+  Test commit from new SVN server
+
+  Modified:
+	trunk/SVN-Access (File Added) 
+
+
+nenolod     2005/08/27 19:50:43 UTC	(20050827-1869)
+  Log:
+  Speedups for linked list management. Patch reviewed by jilles.
+  
+
+  Modified:
+	trunk/libatheme/dlink.c (File Modified) 
+
+
+jilles      2005/08/25 16:51:35 UTC	(20050825-1863)
+  Log:
+  Add some consts.
+  
+
+  Modified:
+	trunk/include/extern.h (File Modified) 
+	trunk/src/match.c (File Modified) 
+
+
+jilles      2005/08/25 16:42:47 UTC	(20050825-1861)
+  Log:
+  Unbreak the compile. Not sure if callback.c will work, though.
+  
+
+  Modified:
+	trunk/include/callback.h (File Modified) 
+	trunk/libatheme/callback.c (File Modified) 
+
+
+nenolod     2005/08/25 04:11:00 UTC	(20050825-1857)
+  Log:
+  Oops, forgot to add a check here. My bad.
+  
+
+  Modified:
+	trunk/modules/ns_identify.c (File Modified) 
+
+
+nenolod     2005/08/25 04:03:08 UTC	(20050825-1855)
+  Log:
+  Fix a minor bug with /ns identify.
+  
+
+  Modified:
+	trunk/modules/ns_identify.c (File Modified) 
+
+
+w00t        2005/08/24 10:26:27 UTC	(20050824-1853)
+  Log:
+  typos-- (special, you are a pedantic SOB :P but so am i so its all good.)
+
+  Modified:
+	trunk/src/parse.c (File Modified) 
+
+
+nenolod     2005/08/24 07:04:33 UTC	(20050824-1849)
+  Log:
+  Oops.
+  
+
+  Modified:
+	trunk/include/callback.h (File Modified) 
+
+
+nenolod     2005/08/24 07:00:42 UTC	(20050824-1847)
+  Log:
+  New callback stuff.
+  
+
+  Modified:
+	trunk/include/atheme.h (File Modified) 
+	trunk/include/callback.h (File Added) 
+	trunk/libatheme/Makefile.in (File Modified) 
+	trunk/libatheme/callback.c (File Modified) 
+	trunk/libatheme/libatheme.c (File Modified) 
+
+
+nenolod     2005/08/24 06:47:21 UTC	(20050824-1845)
+  Log:
+  Callback routines done.
+  
+
+  Modified:
+	trunk/libatheme/callback.c (File Modified) 
+
+
+nenolod     2005/08/24 05:55:45 UTC	(20050824-1843)
+  Log:
+  Add placeholder callback.c for later development.
+  
+
+  Modified:
+	trunk/libatheme/callback.c (File Added) 
+
+
+nenolod     2005/08/22 05:54:15 UTC	(20050822-1841)
+  Log:
+  WTF here.
+  
+
+  Modified:
+	trunk/protocol/shadowircd.c (File Modified) 
+
+
+nenolod     2005/08/22 03:52:50 UTC	(20050822-1839)
+  Log:
+  Change linker_open() to linker_open_ext() here.
+  
+
+  Modified:
+	trunk/src/module.c (File Modified) 
+
+
+nenolod     2005/08/22 03:50:47 UTC	(20050822-1837)
+  Log:
+  Add linker_open_ext() which brings back the behaviour of lt_dlopenext().
+  
+
+  Modified:
+	trunk/include/linker.h (File Modified) 
+	trunk/libatheme/linker.c (File Modified) 
+
+
+nenolod     2005/08/21 21:19:12 UTC	(20050821-1835)
+  Log:
+  Bail out when there's no origin. Discovered on some sort of UnrealIRCd-based server. :/
+  
+
+  Modified:
+	trunk/src/cservice.c (File Modified) 
+	trunk/src/gservice.c (File Modified) 
+	trunk/src/nickserv.c (File Modified) 
+	trunk/src/oservice.c (File Modified) 
+
+
+nenolod     2005/08/21 06:51:11 UTC	(20050821-1833)
+  Log:
+  Handle a crash where masks are deleted from the ACL.
+  
+
+  Modified:
+	trunk/modules/cs_xop.c (File Modified) 
+
+
+jilles      2005/08/20 23:18:02 UTC	(20050820-1831)
+  Log:
+  Fix display of nicks in access lists.
+  
+
+  Modified:
+	trunk/modules/cs_flags.c (File Modified) 
+
+
+nenolod     2005/08/20 04:42:00 UTC	(20050820-1829)
+  Log:
+  Clarify an error message.
+  
+
+  Modified:
+	trunk/modules/ns_link.c (File Modified) 
+
+
+nenolod     2005/08/20 04:38:35 UTC	(20050820-1827)
+  Log:
+  Remove an unnecessary block allocator here.
+  
+
+  Modified:
+	trunk/src/node.c (File Modified) 
+
+
+nenolod     2005/08/20 04:33:07 UTC	(20050820-1825)
+  Log:
+  DO NOT INSTALL CONTRIB MODULES TO $PREFIX/MODULES!*$(!*#(#(#@%%
+  
+
+  Modified:
+	trunk/contrib/Makefile.in (File Modified) 
+
+
+nenolod     2005/08/20 04:26:20 UTC	(20050820-1823)
+  Log:
+  Don't allow users to link to nicknames currently in use on the network.
+  
+
+  Modified:
+	trunk/modules/ns_link.c (File Modified) 
+
+
+nenolod     2005/08/20 04:24:51 UTC	(20050820-1821)
+  Log:
+  Add information concerning InspIRCd.
+  
+
+  Modified:
+	trunk/doc/IRCD (File Modified) 
+
+
+jilles      2005/08/19 21:24:08 UTC	(20050819-1817)
+  Log:
+  Do nothing explicitly on install in libatheme/Makefile.in.
+  
+
+  Modified:
+	trunk/libatheme/Makefile.in (File Modified) 
+
+
+jilles      2005/08/19 18:59:23 UTC	(20050819-1815)
+  Log:
+  Add SVSLOGIN support to hyperion, preserving users'
+  services logins regardless of their nick.
+  
+  There is no NOIDPREFIX ("tildenicks") support.
+  
+
+  Modified:
+	trunk/doc/IRCD (File Modified) 
+	trunk/protocol/hyperion.c (File Modified) 
+
+
+nenolod     2005/08/19 07:49:19 UTC	(20050819-1813)
+  Log:
+  Makefile fix.
+  
+
+  Modified:
+	trunk/libatheme/Makefile.in (File Modified) 
+
+
+nenolod     2005/08/19 07:47:56 UTC	(20050819-1811)
+  Log:
+  Documentation update, and remove content from ChangeLog that should not 
+  have been there.
+  
+
+  Modified:
+	trunk/ChangeLog (File Modified) 
+	trunk/README (File Modified) 
+
+
+nenolod     2005/08/18 21:52:30 UTC	(20050818-1809)
+  Log:
+  Fix ANOTHER crash with nickname linking, reported by hyperion.
+  
+
+  Modified:
+	trunk/modules/ns_link.c (File Modified) 
+
+
+nenolod     2005/08/18 21:39:34 UTC	(20050818-1807)
+  Log:
+  Safer handling of chanacs_t entries.
+  
+
+  Modified:
+	trunk/backend/flatfile.c (File Modified) 
+	trunk/backend/postgresql.c (File Modified) 
+
+
+nenolod     2005/08/18 21:35:05 UTC	(20050818-1805)
+  Log:
+  Fix a crash in ns_link, reported by brian.
+  
+
+  Modified:
+	trunk/modules/ns_link.c (File Modified) 
+
+
+nenolod     2005/08/18 21:29:33 UTC	(20050818-1803)
+  Log:
+  Implement SVID tracking for unreal (autologin), and remove some debug 
+  notices from Bahamut.
+  
+
+  Modified:
+	trunk/protocol/bahamut.c (File Modified) 
+	trunk/protocol/unreal.c (File Modified) 
+
+
+nenolod     2005/08/18 20:51:50 UTC	(20050818-1801)
+  Log:
+  Do not install example-traditional.conf.
+  
+
+  Modified:
+	trunk/src/Makefile.in (File Modified) 
+
+
+nenolod     2005/08/18 20:41:30 UTC	(20050818-1799)
+  Log:
+  Fix some crashes with nickname linking.
+  
+
+  Modified:
+	trunk/modules/ns_link.c (File Modified) 
+
+
+nenolod     2005/08/18 20:39:53 UTC	(20050818-1797)
+  Log:
+  because libdl sucks.
+  
+
+  Modified:
+	trunk/src/module.c (File Modified) 
+
+
+nenolod     2005/08/18 20:39:25 UTC	(20050818-1795)
+  Log:
+  module code updated to use libatheme's runtime linker.
+  
+
+  Modified:
+	trunk/src/module.c (File Modified) 
+
+
+nenolod     2005/08/18 20:33:21 UTC	(20050818-1793)
+  Log:
+  More fun.
+  
+
+  Modified:
+	trunk/include/linker.h (File Modified) 
+	trunk/libatheme/linker.c (File Modified) 
+
+
+nenolod     2005/08/18 20:32:05 UTC	(20050818-1791)
+  Log:
+  Linker++
+  
+
+  Modified:
+	trunk/include/atheme.h (File Modified) 
+	trunk/include/linker.h (File Added) 
+	trunk/libatheme/Makefile.in (File Modified) 
+	trunk/libatheme/linker.c (File Added) 
+
+
+nenolod     2005/08/18 20:08:26 UTC	(20050818-1789)
+  Log:
+  trunk builds again...
+  
+
+  Modified:
+	trunk/modules/ns_set.c (File Modified) 
+	trunk/modules/ns_verify.c (File Modified) 
+
+
+nenolod     2005/08/18 20:04:30 UTC	(20050818-1787)
+  Log:
+  Correct typo.
+  
+
+  Modified:
+	trunk/configure (File Modified) 
+	trunk/configure.ac (File Modified) 
+
+
+nenolod     2005/08/18 20:03:41 UTC	(20050818-1785)
+  Log:
+  Statically linked library stuff.
+  
+
+  Modified:
+	trunk/configure (File Modified) 
+	trunk/configure.ac (File Modified) 
+
+
+nenolod     2005/08/18 20:01:54 UTC	(20050818-1783)
+  Log:
+  ditto.
+  
+
+  Modified:
+	trunk/contrib/Makefile.am (File Deleted) 
+	trunk/contrib/Makefile.in (File Modified) 
+
+
+nenolod     2005/08/18 20:00:37 UTC	(20050818-1781)
+  Log:
+  More work here.
+  
+
+  Modified:
+	trunk/crypto/Makefile.am (File Deleted) 
+	trunk/crypto/Makefile.in (File Modified) 
+	trunk/protocol/Makefile.am (File Deleted) 
+	trunk/protocol/Makefile.in (File Modified) 
+
+
+nenolod     2005/08/18 19:57:47 UTC	(20050818-1779)
+  Log:
+  Remove ltdl stuff from our dynamic linker, linker restored back to 0.2-style behaviour.
+  
+
+  Modified:
+	trunk/src/module.c (File Modified) 
+
+
+nenolod     2005/08/18 19:52:37 UTC	(20050818-1777)
+  Log:
+  Again, cleanups.
+  
+
+  Modified:
+	trunk/src/Makefile.am (File Deleted) 
+	trunk/src/Makefile.in (File Modified) 
+
+
+nenolod     2005/08/18 19:50:01 UTC	(20050818-1775)
+  Log:
+  More buildsystem de-automake action!
+  
+
+  Modified:
+	trunk/dbtool/Makefile.am (File Deleted) 
+	trunk/dbtool/Makefile.in (File Modified) 
+	trunk/libatheme/Makefile.am (File Deleted) 
+	trunk/libatheme/Makefile.in (File Modified) 
+	trunk/modules/Makefile.am (File Deleted) 
+	trunk/modules/Makefile.in (File Modified) 
+
+
+nenolod     2005/08/18 19:37:23 UTC	(20050818-1773)
+  Log:
+  ditto.
+  
+
+  Modified:
+	trunk/backend/Makefile.am (File Deleted) 
+	trunk/backend/Makefile.in (File Modified) 
+
+
+nenolod     2005/08/18 19:35:56 UTC	(20050818-1771)
+  Log:
+  Death to automake.
+  
+
+  Modified:
+	trunk/Makefile.am (File Deleted) 
+	trunk/Makefile.in (File Modified) 
+	trunk/configure (File Modified) 
+	trunk/configure.ac (File Modified) 
+
+
+nenolod     2005/08/18 19:26:05 UTC	(20050818-1769)
+  Log:
+  Screw libltdl.
+  
+
+  Modified:
+	trunk/libltdl/ (File Deleted) 
+
+
+nenolod     2005/08/18 19:20:32 UTC	(20050818-1767)
+  Log:
+  more ltdl cleanups.
+  
+
+  Modified:
+	trunk/libltdl/Makefile.am (File Modified) 
+	trunk/libltdl/config-h.in (File Deleted) 
+	trunk/libltdl/config.guess (File Deleted) 
+	trunk/libltdl/config.sub (File Deleted) 
+
+
+nenolod     2005/08/18 19:16:51 UTC	(20050818-1765)
+  Log:
+  Clean up the way libltdl works... grr.
+  
+
+  Modified:
+	trunk/Makefile.in (File Modified) 
+	trunk/backend/Makefile.in (File Modified) 
+	trunk/configure (File Modified) 
+	trunk/configure.ac (File Modified) 
+	trunk/contrib/Makefile.in (File Modified) 
+	trunk/crypto/Makefile.in (File Modified) 
+	trunk/dbtool/Makefile.in (File Modified) 
+	trunk/libatheme/Makefile.in (File Modified) 
+	trunk/libltdl/Makefile.am (File Modified) 
+	trunk/libltdl/Makefile.in (File Modified) 
+	trunk/libltdl/configure (File Deleted) 
+	trunk/libltdl/configure.ac (File Deleted) 
+	trunk/modules/Makefile.in (File Modified) 
+	trunk/protocol/Makefile.in (File Modified) 
+	trunk/src/Makefile.in (File Modified) 
+
+
+nenolod     2005/08/18 18:45:28 UTC	(20050818-1763)
+  Log:
+  More crypto stuff.
+  
+
+  Modified:
+	trunk/include/atheme.h (File Modified) 
+	trunk/include/crypto.h (File Added) 
+	trunk/src/crypto.c (File Modified) 
+
+
+nenolod     2005/08/18 18:34:41 UTC	(20050818-1761)
+  Log:
+  Add basefile crypto.c, nothing there yet.
+  
+
+  Modified:
+	trunk/src/crypto.c (File Added) 
+
+
+nenolod     2005/08/18 15:50:30 UTC	(20050818-1759)
+  Log:
+  Fix protocol modules, since they broke in our move to preallocated buffers.
+  
+
+  Modified:
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bahamut.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/dreamforge.c (File Modified) 
+	trunk/protocol/hyperion.c (File Modified) 
+	trunk/protocol/inspircd.c (File Modified) 
+	trunk/protocol/ircnet.c (File Modified) 
+	trunk/protocol/monkey.c (File Modified) 
+	trunk/protocol/plexus.c (File Modified) 
+	trunk/protocol/ptlink.c (File Modified) 
+	trunk/protocol/ratbox.c (File Modified) 
+	trunk/protocol/scylla.c (File Modified) 
+	trunk/protocol/shadowircd.c (File Modified) 
+	trunk/protocol/sorcery.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+	trunk/protocol/unreal.c (File Modified) 
+
+
+jilles      2005/08/18 12:41:46 UTC	(20050818-1757)
+  Log:
+  Move various LEN defines from users.h to atheme.h; they
+  are also needed in account.h.
+  
+
+  Modified:
+	trunk/include/atheme.h (File Modified) 
+	trunk/include/users.h (File Modified) 
+
+
+jilles      2005/08/18 12:40:55 UTC	(20050818-1755)
+  Log:
+  Make sure it doesn't break the build right now;
+  add Makefile.in to svn.
+  
+
+  Modified:
+	trunk/crypto/Makefile.am (File Modified) 
+	trunk/crypto/Makefile.in (File Added) 
+
+
+nenolod     2005/08/18 06:59:41 UTC	(20050818-1753)
+  Log:
+  Prepare for crypto modules.
+  
+
+  Modified:
+	trunk/Makefile.am (File Modified) 
+	trunk/Makefile.in (File Modified) 
+	trunk/configure (File Modified) 
+	trunk/configure.ac (File Modified) 
+	trunk/crypto/ (File Added) 
+	trunk/crypto/Makefile.am (File Added) 
+
+
+nenolod     2005/08/18 00:28:59 UTC	(20050818-1751)
+  Log:
+  same for mychan/myuser/chanacs.
+  
+
+  Modified:
+	trunk/include/account.h (File Modified) 
+	trunk/src/node.c (File Modified) 
+
+
+nenolod     2005/08/18 00:21:17 UTC	(20050818-1749)
+  Log:
+  Same with modules, again, using block allocation makes our life better.
+  
+
+  Modified:
+	trunk/include/module.h (File Modified) 
+	trunk/src/module.c (File Modified) 
+
+
+nenolod     2005/08/18 00:13:59 UTC	(20050818-1747)
+  Log:
+  Convert user_t from sstrdup'd strings to static buffers. Should enhance performance a little bit.
+  
+
+  Modified:
+	trunk/include/users.h (File Modified) 
+	trunk/src/node.c (File Modified) 
+
+
+nenolod     2005/08/17 21:24:17 UTC	(20050817-1745)
+  Log:
+  First go at SVID stuff on bahamut.
+  
+
+  Modified:
+	trunk/protocol/bahamut.c (File Modified) 
+
+
+jilles      2005/08/17 16:46:05 UTC	(20050817-1743)
+  Log:
+  Add support for receiving the SIGNON command.
+  
+
+  Modified:
+	trunk/protocol/hyperion.c (File Modified) 
+
+
+jilles      2005/08/17 01:43:32 UTC	(20050817-1741)
+  Log:
+  Fix vhost support. Also add support for applying
+  any received SETHOST, SETIDENT and SETNAME.
+  
+
+  Modified:
+	trunk/protocol/hyperion.c (File Modified) 
+
+
+jilles      2005/08/17 01:03:04 UTC	(20050817-1739)
+  Log:
+  opersvs, not klinesvs
+  
+
+  Modified:
+	trunk/protocol/inspircd.c (File Modified) 
+
+
+w00t        2005/08/16 12:12:17 UTC	(20050816-1737)
+  Log:
+  Editing protocol modules really sucks. All gline activity should now be sent by operserv.
+
+  Modified:
+	trunk/protocol/bahamut.c (File Modified) 
+	trunk/protocol/dreamforge.c (File Modified) 
+	trunk/protocol/inspircd.c (File Modified) 
+	trunk/protocol/monkey.c (File Modified) 
+	trunk/protocol/sorcery.c (File Modified) 
+
+
+w00t        2005/08/16 12:07:57 UTC	(20050816-1735)
+  Log:
+  fixed chanserv setting/removing glines in unreal protocol mod. one down, 15 to go..
+
+  Modified:
+	trunk/protocol/unreal.c (File Modified) 
+
+
+jilles      2005/08/15 16:25:24 UTC	(20050815-1732)
+  Log:
+  Properly reset umode +r when a user changes to their
+  registered nick.
+  
+  Not tested other than that it compiles.
+  
+
+  Modified:
+	trunk/protocol/bahamut.c (File Modified) 
+	trunk/protocol/unreal.c (File Modified) 
+
+
+jilles      2005/08/15 01:05:56 UTC	(20050815-1730)
+  Log:
+  Do not devoice voiced logged in users who do not have access
+  to that.
+  
+
+  Modified:
+	trunk/src/node.c (File Modified) 
+
+
+nenolod     2005/08/15 00:06:50 UTC	(20050815-1728)
+  Log:
+  make channel_find() use the hashtable.
+  
+
+  Modified:
+	trunk/src/node.c (File Modified) 
+
+
+nenolod     2005/08/15 00:03:45 UTC	(20050815-1726)
+  Log:
+  make mychan_find() use the hash.
+  
+
+  Modified:
+	trunk/src/node.c (File Modified) 
+
+
+jilles      2005/08/14 23:48:22 UTC	(20050814-1724)
+  Log:
+  Remove superfluous user lookups in chanuser_add().
+  Just strip the prefixes and then look up that
+  nick and no other.
+  
+
+  Modified:
+	trunk/src/node.c (File Modified) 
+
+
+nenolod     2005/08/14 20:43:58 UTC	(20050814-1722)
+  Log:
+  linked list -> hashtable
+  
+
+  Modified:
+	trunk/include/pmodule.h (File Modified) 
+	trunk/src/pmodule.c (File Modified) 
+
+
+nenolod     2005/08/14 20:37:18 UTC	(20050814-1720)
+  Log:
+  put the usleep() back in, ugh.
+  
+
+  Modified:
+	trunk/libatheme/poll.c (File Modified) 
+
+
+nenolod     2005/08/14 20:28:49 UTC	(20050814-1718)
+  Log:
+  Possibly faster polling engine.
+  
+
+  Modified:
+	trunk/libatheme/poll.c (File Modified) 
+
+
+nenolod     2005/08/14 20:22:37 UTC	(20050814-1716)
+  Log:
+  Add connection.pollslot for better FD tracking in the poll loop.
+  
+
+  Modified:
+	trunk/include/connection.h (File Modified) 
+
+
+nenolod     2005/08/14 10:14:20 UTC	(20050814-1714)
+  Log:
+  hackish fix for poll, but it appears to work.
+  
+
+  Modified:
+	trunk/configure (File Modified) 
+	trunk/configure.ac (File Modified) 
+	trunk/libatheme/poll.c (File Modified) 
+
+
+nenolod     2005/08/14 10:06:40 UTC	(20050814-1712)
+  Log:
+  bugfixes for select.c, fixes a libatheme bug that wasn't reported on the tracker.
+  
+
+  Modified:
+	trunk/libatheme/select.c (File Modified) 
+
+
+nenolod     2005/08/14 09:49:38 UTC	(20050814-1710)
+  Log:
+  For some reason, the poll-based socket engine appears to be broken. 
+  We will want to fix this some day. But for now, we should merely
+  disable it.
+  
+
+  Modified:
+	trunk/configure (File Modified) 
+	trunk/configure.ac (File Modified) 
+
+
+nenolod     2005/08/14 09:40:58 UTC	(20050814-1708)
+  Log:
+  should fix the problem, hopefully.
+  
+
+  Modified:
+	trunk/src/atheme.c (File Modified) 
+
+
+nenolod     2005/08/14 09:27:00 UTC	(20050814-1706)
+  Log:
+  fix a potential issue here.
+  
+
+  Modified:
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bahamut.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/dreamforge.c (File Modified) 
+	trunk/protocol/hyperion.c (File Modified) 
+	trunk/protocol/ircnet.c (File Modified) 
+	trunk/protocol/monkey.c (File Modified) 
+	trunk/protocol/plexus.c (File Modified) 
+	trunk/protocol/ptlink.c (File Modified) 
+	trunk/protocol/ratbox.c (File Modified) 
+	trunk/protocol/shadowircd.c (File Modified) 
+	trunk/protocol/sorcery.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+	trunk/protocol/unreal.c (File Modified) 
+
+
+nenolod     2005/08/14 08:12:20 UTC	(20050814-1704)
+  Log:
+  New stream parsing stuff!!!!!
+  
+
+  Modified:
+	trunk/include/extern.h (File Modified) 
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+	trunk/src/packet.c (File Modified) 
+	trunk/src/parse.c (File Modified) 
+
+
+nenolod     2005/08/13 21:40:44 UTC	(20050813-1702)
+  Log:
+  fix a potential crash here.
+  
+
+  Modified:
+	trunk/modules/ns_link.c (File Modified) 
+
+
+nenolod     2005/08/13 21:20:26 UTC	(20050813-1700)
+  Log:
+  Add help for link.
+  
+
+  Modified:
+	trunk/help/nickserv/link (File Added) 
+	trunk/modules/ns_help.c (File Modified) 
+
+
+nenolod     2005/08/13 21:06:21 UTC	(20050813-1698)
+  Log:
+  some windows related stuff leaked into the main tree :/
+  
+
+  Modified:
+	trunk/include/extern.h (File Modified) 
+	trunk/src/function.c (File Modified) 
+
+
+nenolod     2005/08/12 21:17:57 UTC	(20050812-1696)
+  Log:
+  Allow users to take ownership via link if they have the nickname password.
+  
+
+  Modified:
+	trunk/modules/ns_link.c (File Modified) 
+
+
+nenolod     2005/08/12 21:14:47 UTC	(20050812-1694)
+  Log:
+  
+  
+  k, linking should basically work.
+  
+  
+
+  Modified:
+	trunk/modules/ns_link.c (File Modified) 
+
+
+nenolod     2005/08/12 19:34:45 UTC	(20050812-1692)
+  Log:
+  fix some compile errors, oops.
+  
+
+  Modified:
+	trunk/include/phandler.h (File Modified) 
+	trunk/modules/ns_identify.c (File Modified) 
+	trunk/protocol/sorcery.c (File Modified) 
+	trunk/protocol/unreal.c (File Modified) 
+	trunk/src/phandler.c (File Modified) 
+
+
+nenolod     2005/08/12 19:24:22 UTC	(20050812-1690)
+  Log:
+  Handle notices as messages sent to Services.
+  
+
+  Modified:
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/dreamforge.c (File Modified) 
+	trunk/protocol/hyperion.c (File Modified) 
+	trunk/protocol/inspircd.c (File Modified) 
+	trunk/protocol/ircnet.c (File Modified) 
+	trunk/protocol/monkey.c (File Modified) 
+	trunk/protocol/plexus.c (File Modified) 
+	trunk/protocol/ptlink.c (File Modified) 
+	trunk/protocol/ratbox.c (File Modified) 
+	trunk/protocol/shadowircd.c (File Modified) 
+	trunk/protocol/sorcery.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+	trunk/protocol/unreal.c (File Modified) 
+
+
+nenolod     2005/08/12 19:14:20 UTC	(20050812-1688)
+  Log:
+  If a user identifies to a new session, nuke the old session.
+  
+
+  Modified:
+	trunk/modules/ns_identify.c (File Modified) 
+
+
+nenolod     2005/08/12 19:10:06 UTC	(20050812-1686)
+  Log:
+  don't worry about changing to linked nicknames.
+  
+
+  Modified:
+	trunk/src/services.c (File Modified) 
+
+
+pfish       2005/08/12 10:46:47 UTC	(20050812-1684)
+  Log:
+  snoop denied messages
+  
+
+  Modified:
+	trunk/src/commandtree.c (File Modified) 
+	trunk/src/services.c (File Modified) 
+
+
+pfish       2005/08/12 10:03:09 UTC	(20050812-1678)
+  Log:
+  add ban/unban help files to close bug #49
+  
+
+  Modified:
+	trunk/help/cservice/ban (File Added) 
+	trunk/help/cservice/unban (File Added) 
+
+
+nenolod     2005/08/12 09:41:45 UTC	(20050812-1674)
+  Log:
+  change behaviour relating to snoop chan
+  
+
+  Modified:
+	trunk/src/node.c (File Modified) 
+	trunk/src/services.c (File Modified) 
+
+
+pfish       2005/08/12 09:40:59 UTC	(20050812-1672)
+  Log:
+  make services aware of unreal's +j
+  
+
+  Modified:
+	trunk/include/protocol/unreal.h (File Modified) 
+	trunk/protocol/unreal.c (File Modified) 
+
+
+nenolod     2005/08/12 09:35:15 UTC	(20050812-1670)
+  Log:
+  blah check to make sure automatic shit is still working.
+  
+
+  Modified:
+	trunk/TODO (File Modified) 
+
+
+pfish       2005/08/12 09:30:33 UTC	(20050812-1666)
+  Log:
+  if a nickname is linked, be sure to let you know when you query 
+  
+
+  Modified:
+	trunk/modules/ns_list.c (File Modified) 
+
+
+pfish       2005/08/12 09:12:34 UTC	(20050812-1664)
+  Log:
+  fix small snoop spacing
+
+  Modified:
+	trunk/modules/cs_taxonomy.c (File Modified) 
+
+
+nenolod     2005/08/12 08:56:03 UTC	(20050812-1662)
+  Log:
+  this is much better.
+  
+
+  Modified:
+	trunk/src/function.c (File Modified) 
+
+
+nenolod     2005/08/12 08:54:15 UTC	(20050812-1660)
+  Log:
+  the hashing macros did not actually work, now they do.
+  
+
+  Modified:
+	trunk/include/atheme.h (File Modified) 
+
+
+nenolod     2005/08/12 08:45:05 UTC	(20050812-1658)
+  Log:
+  msg() now supports any source target and doesn't implicitly send from ChanServ.
+  
+
+  Modified:
+	trunk/include/phandler.h (File Modified) 
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bahamut.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/dreamforge.c (File Modified) 
+	trunk/protocol/hyperion.c (File Modified) 
+	trunk/protocol/inspircd.c (File Modified) 
+	trunk/protocol/ircnet.c (File Modified) 
+	trunk/protocol/monkey.c (File Modified) 
+	trunk/protocol/plexus.c (File Modified) 
+	trunk/protocol/ptlink.c (File Modified) 
+	trunk/protocol/ratbox.c (File Modified) 
+	trunk/protocol/scylla.c (File Modified) 
+	trunk/protocol/shadowircd.c (File Modified) 
+	trunk/protocol/sorcery.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+	trunk/protocol/unreal.c (File Modified) 
+	trunk/src/node.c (File Modified) 
+	trunk/src/phandler.c (File Modified) 
+	trunk/src/services.c (File Modified) 
+
+
+nenolod     2005/08/12 07:56:24 UTC	(20050812-1656)
+  Log:
+  with this much breakage, Dianora would be proud!
+  
+
+  Modified:
+	trunk/modules/ns_link.c (File Modified) 
+
+
+nenolod     2005/08/12 07:53:15 UTC	(20050812-1654)
+  Log:
+  breaking things chowns!
+  
+
+  Modified:
+	trunk/src/function.c (File Modified) 
+
+
+nenolod     2005/08/12 07:49:25 UTC	(20050812-1652)
+  Log:
+  goddamnit, i should really quit assuming that things are where they need to be.
+  
+
+  Modified:
+	trunk/modules/cs_xop.c (File Modified) 
+
+
+nenolod     2005/08/12 07:45:28 UTC	(20050812-1650)
+  Log:
+  fix again!
+  
+
+  Modified:
+	trunk/modules/cs_flags.c (File Modified) 
+
+
+nenolod     2005/08/12 07:41:47 UTC	(20050812-1648)
+  Log:
+  fix postgresql backend. bah.
+  
+
+  Modified:
+	trunk/backend/postgresql.c (File Modified) 
+
+
+nenolod     2005/08/12 00:31:12 UTC	(20050812-1646)
+  Log:
+  Same for CS FLAGS
+  
+
+  Modified:
+	trunk/modules/cs_flags.c (File Modified) 
+
+
+nenolod     2005/08/12 00:29:16 UTC	(20050812-1644)
+  Log:
+  Ditto for XOP DEL
+  
+
+  Modified:
+	trunk/modules/cs_xop.c (File Modified) 
+
+
+nenolod     2005/08/12 00:27:10 UTC	(20050812-1642)
+  Log:
+  Make sure *all* channel access is applied to the MASTER nickname.
+  
+
+  Modified:
+	trunk/modules/cs_xop.c (File Modified) 
+
+
+nenolod     2005/08/12 00:19:35 UTC	(20050812-1640)
+  Log:
+  Add /ns link command.
+  
+
+  Modified:
+	trunk/modules/ns_link.c (File Added) 
+
+
+nenolod     2005/08/12 00:11:22 UTC	(20050812-1638)
+  Log:
+  add those same checks to is_xop()
+  
+
+  Modified:
+	trunk/src/function.c (File Modified) 
+
+
+nenolod     2005/08/12 00:09:22 UTC	(20050812-1636)
+  Log:
+  follow aliases in is_xop()
+  
+
+  Modified:
+	trunk/src/function.c (File Modified) 
+
+
+nenolod     2005/08/11 23:42:55 UTC	(20050811-1634)
+  Log:
+  If an account is an "Alias", and the proper metadata is set, display the master account in NS INFO.
+  
+
+  Modified:
+	trunk/modules/ns_info.c (File Modified) 
+
+
+nenolod     2005/08/11 23:19:59 UTC	(20050811-1632)
+  Log:
+  Remove unnecessary is_founder/is_successor checks
+  
+
+  Modified:
+	trunk/modules/cs_akick.c (File Modified) 
+	trunk/modules/cs_flags.c (File Modified) 
+	trunk/modules/cs_invite.c (File Modified) 
+	trunk/modules/cs_recover.c (File Modified) 
+	trunk/modules/cs_set.c (File Modified) 
+	trunk/modules/cs_xop.c (File Modified) 
+
+
+nenolod     2005/08/11 22:38:15 UTC	(20050811-1630)
+  Log:
+  just check for CA_FLAGS in XOP add.
+  
+
+  Modified:
+	trunk/modules/cs_xop.c (File Modified) 
+
+
+nenolod     2005/08/11 22:35:22 UTC	(20050811-1628)
+  Log:
+  - fix runtime linking on Windows
+  - add MU_ALIAS to designate that an account is an alias of something else
+  
+
+  Modified:
+	trunk/include/account.h (File Modified) 
+	trunk/libltdl/ltdl.c (File Modified) 
+
+
+nenolod     2005/08/11 21:56:39 UTC	(20050811-1626)
+  Log:
+  fix a mistake in trunk's socket abstraction layer.
+  
+
+  Modified:
+	trunk/libatheme/sockio.c (File Modified) 
+
+
+nenolod     2005/08/11 07:06:06 UTC	(20050811-1622)
+  Log:
+  fix a bug here :p
+  
+
+  Modified:
+	trunk/src/module.c (File Modified) 
+
+
+nenolod     2005/08/10 21:26:55 UTC	(20050810-1620)
+  Log:
+  windows cant possibly have gettimeofday() so enforce that
+  
+
+  Modified:
+	trunk/src/function.c (File Modified) 
+
+
+nenolod     2005/08/10 21:19:48 UTC	(20050810-1618)
+  Log:
+  add process.c as a placeholder for windows fork() shims.
+  
+
+  Modified:
+	trunk/libatheme/process.c (File Added) 
+
+
+nenolod     2005/08/10 19:16:53 UTC	(20050810-1614)
+  Log:
+  reflect new module extension detection in the example config
+  
+
+  Modified:
+	trunk/dist/example.conf (File Modified) 
+
+
+nenolod     2005/08/10 19:13:45 UTC	(20050810-1612)
+  Log:
+  fun with microsoft windows =)
+  
+
+  Modified:
+	trunk/src/atheme.c (File Modified) 
+
+
+nenolod     2005/08/10 19:11:23 UTC	(20050810-1610)
+  Log:
+  Almost ready to go.
+  
+
+  Modified:
+	trunk/src/module.c (File Modified) 
+
+
+nenolod     2005/08/10 18:51:05 UTC	(20050810-1608)
+  Log:
+  more windows porting fun
+  
+
+  Modified:
+	trunk/include/extern.h (File Modified) 
+	trunk/src/function.c (File Modified) 
+
+
+nenolod     2005/08/10 17:40:35 UTC	(20050810-1606)
+  Log:
+  snprintf() is _snprintf() in windows, what is up with that.
+  
+
+  Modified:
+	trunk/include/stdinc.h (File Modified) 
+	trunk/libatheme/connection.c (File Modified) 
+	trunk/libatheme/sockio.c (File Modified) 
+
+
+nenolod     2005/08/10 17:28:24 UTC	(20050810-1604)
+  Log:
+  regenerate makefiles
+  
+
+  Modified:
+	trunk/Makefile.in (File Modified) 
+	trunk/libatheme/Makefile.in (File Modified) 
+
+
+nenolod     2005/08/10 17:26:26 UTC	(20050810-1602)
+  Log:
+  more windows porting goodness here
+  
+
+  Modified:
+	trunk/src/atheme.c (File Modified) 
+
+
+nenolod     2005/08/10 17:22:58 UTC	(20050810-1600)
+  Log:
+  We are very close to having native windows builds now.
+  
+
+  Modified:
+	trunk/include/atheme.h (File Modified) 
+	trunk/include/extern.h (File Modified) 
+	trunk/include/sockio.h (File Added) 
+	trunk/include/stdinc.h (File Modified) 
+	trunk/libatheme/Makefile.am (File Modified) 
+	trunk/libatheme/balloc.c (File Modified) 
+	trunk/libatheme/sockio.c (File Added) 
+
+
+nenolod     2005/08/10 16:34:50 UTC	(20050810-1598)
+  Log:
+  more windows porting action!
+  
+
+  Modified:
+	trunk/include/stdinc.h (File Modified) 
+
+
+nenolod     2005/08/10 16:25:05 UTC	(20050810-1596)
+  Log:
+  Apply some niceities for MingW.
+  
+
+  Modified:
+	trunk/include/stdinc.h (File Modified) 
+
+
+nenolod     2005/08/10 16:11:40 UTC	(20050810-1594)
+  Log:
+  Use dlopenext() instead of dlopen(), as this will improve our chances of
+  locating the module on AIX, HP-UX and Windows.
+  
+
+  Modified:
+	trunk/src/module.c (File Modified) 
+
+
+nenolod     2005/08/10 05:45:54 UTC	(20050810-1590)
+  Log:
+  Add channel access entry metadata, and new chanacs search function, chanacs_find_by_mask().
+  
+
+  Modified:
+	trunk/backend/flatfile.c (File Modified) 
+	trunk/backend/postgresql.c (File Modified) 
+	trunk/include/account.h (File Modified) 
+	trunk/include/extern.h (File Modified) 
+	trunk/include/metadata.h (File Modified) 
+	trunk/src/node.c (File Modified) 
+
+
+nenolod     2005/08/10 05:11:32 UTC	(20050810-1588)
+  Log:
+  add experimental code which works with va_list
+  
+
+  Modified:
+	trunk/libatheme/hook.c (File Modified) 
+
+
+nenolod     2005/08/10 03:52:37 UTC	(20050810-1586)
+  Log:
+  Update PostgreSQL schema in expectation for channel access entry 
+  metadata.
+  
+
+  Modified:
+	trunk/SQL/atheme_init.sql (File Modified) 
+
+
+nenolod     2005/08/09 03:04:21 UTC	(20050809-1584)
+  Log:
+  we want to be able to ban unregistered users too, i think.
+  
+
+  Modified:
+	trunk/modules/os_kline.c (File Modified) 
+
+
+nenolod     2005/08/09 03:01:29 UTC	(20050809-1582)
+  Log:
+  lets spend less CPU polling sockets please, kthx.
+  
+
+  Modified:
+	trunk/src/send.c (File Modified) 
+
+
+nenolod     2005/08/08 23:14:18 UTC	(20050808-1578)
+  Log:
+  clean up the emergency hack earlier.
+  
+
+  Modified:
+	trunk/src/cmode.c (File Modified) 
+
+
+nenolod     2005/08/08 23:07:40 UTC	(20050808-1576)
+  Log:
+  this is a total shot in the dark...
+  
+
+  Modified:
+	trunk/src/cmode.c (File Modified) 
+
+
+nenolod     2005/08/08 23:05:25 UTC	(20050808-1574)
+  Log:
+  don't set +k 0, ever. don't even *allow* it.
+  
+
+  Modified:
+	trunk/src/cmode.c (File Modified) 
+
+
+nenolod     2005/08/08 06:50:43 UTC	(20050808-1572)
+  Log:
+  remove redundant code in m_burst, if it works port to other P10's.
+  
+
+  Modified:
+	trunk/protocol/undernet.c (File Modified) 
+
+
+jilles      2005/08/08 00:12:10 UTC	(20050808-1570)
+  Log:
+  Reop services on TS deop.
+  Use PART/SJOIN to avoid anything getting angry at us which we
+  cannot handle well with bahamut.
+  
+
+  Modified:
+	trunk/protocol/bahamut.c (File Modified) 
+
+
+alambert    2005/08/07 22:58:16 UTC	(20050807-1568)
+  Log:
+  Give more feedback in OS MODUNLOAD
+
+  Modified:
+	trunk/modules/os_modunload.c (File Modified) 
+
+
+alambert    2005/08/07 22:51:37 UTC	(20050807-1566)
+  Log:
+  Add help for OS RAW (it was already in the tables, but it didn't exist)
+
+  Modified:
+	trunk/help/oservice/raw (File Added) 
+
+
+pfish       2005/08/07 22:45:36 UTC	(20050807-1564)
+  Log:
+  ...
+  
+
+  Modified:
+	trunk/modules/ns_help.c (File Modified) 
+
+
+pfish       2005/08/07 22:43:54 UTC	(20050807-1562)
+  Log:
+  add logout to ns help table
+
+  Modified:
+	trunk/modules/ns_help.c (File Modified) 
+
+
+pfish       2005/08/07 22:41:33 UTC	(20050807-1560)
+  Log:
+  +that
+
+  Modified:
+	trunk/help/nickserv/logout (File Modified) 
+
+
+alambert    2005/08/07 22:41:26 UTC	(20050807-1558)
+  Log:
+  Add information on deleting metadata to NS HELP SET PROPERTY
+
+  Modified:
+	trunk/help/nickserv/set_property (File Modified) 
+
+
+pfish       2005/08/07 22:41:04 UTC	(20050807-1556)
+  Log:
+  add NS LOGOUT help
+
+  Modified:
+	trunk/help/nickserv/logout (File Added) 
+
+
+alambert    2005/08/07 22:39:49 UTC	(20050807-1554)
+  Log:
+  Add help for NS SET PROPERTY
+
+  Modified:
+	trunk/help/nickserv/set_property (File Added) 
+
+
+alambert    2005/08/07 22:35:32 UTC	(20050807-1552)
+  Log:
+  Oops -- fix copy/paste error in NS HELP SET EMAIL
+
+  Modified:
+	trunk/help/nickserv/set_email (File Modified) 
+
+
+pfish       2005/08/07 22:33:04 UTC	(20050807-1550)
+  Log:
+  add nickserv SET neverop/noop help
+  
+
+  Modified:
+	trunk/help/nickserv/set_neverop (File Added) 
+	trunk/help/nickserv/set_noop (File Added) 
+
+
+alambert    2005/08/07 22:29:11 UTC	(20050807-1548)
+  Log:
+  Add help for NS SET EMAIL
+
+  Modified:
+	trunk/help/nickserv/set_email (File Added) 
+
+
+alambert    2005/08/07 19:59:47 UTC	(20050807-1546)
+  Log:
+  Add help for SET HIDEMAIL, SET PASSWORD in NickServ
+
+  Modified:
+	trunk/help/nickserv/set_hidemail (File Added) 
+	trunk/help/nickserv/set_password (File Added) 
+
+
+nenolod     2005/08/07 03:28:48 UTC	(20050807-1544)
+  Log:
+  add command_add_many() to add an array cf commands to a list.
+  
+
+  Modified:
+	trunk/include/commandtree.h (File Modified) 
+	trunk/src/commandtree.c (File Modified) 
+
+
+nenolod     2005/08/06 20:08:43 UTC	(20050806-1542)
+  Log:
+  untested fix to bug #34.
+  
+
+  Modified:
+	trunk/modules/cs_xop.c (File Modified) 
+
+
+pfish       2005/08/06 01:22:38 UTC	(20050806-1540)
+  Log:
+  fix bugid #32
+  
+
+  Modified:
+	trunk/protocol/unreal.c (File Modified) 
+
+
+nenolod     2005/08/06 01:09:59 UTC	(20050806-1538)
+  Log:
+  grr, va_list was not where it should have been.
+  
+
+  Modified:
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+
+
+nenolod     2005/08/05 20:51:01 UTC	(20050805-1536)
+  Log:
+  Enable tagging of $Id$ on example.conf, was not being tagged.
+  
+
+  Modified:
+	trunk/dist/example.conf  (Property Modified)
+
+
+jilles      2005/08/05 20:37:12 UTC	(20050805-1534)
+  Log:
+  atheme-ratbox-services.patch was integrated and improved long ago.
+  
+
+  Modified:
+	trunk/patches/README (File Modified) 
+	trunk/patches/atheme-ratbox-services.patch (File Deleted) 
+
+
+nenolod     2005/08/05 20:30:42 UTC	(20050805-1532)
+  Log:
+  from should be me.numeric in numeric_sts(), oops.
+  
+
+  Modified:
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+
+
+nenolod     2005/08/05 20:10:23 UTC	(20050805-1530)
+  Log:
+  handle numerics more intelligently.
+  
+
+  Modified:
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+
+
+nenolod     2005/08/05 20:02:10 UTC	(20050805-1528)
+  Log:
+  in ircu based ircds, convert the UID into a regular nick before sending out numerics, for now.
+  
+
+  Modified:
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+
+
+nenolod     2005/08/05 19:57:34 UTC	(20050805-1526)
+  Log:
+  abstractionalize m_info
+  
+
+  Modified:
+	trunk/include/extern.h (File Modified) 
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bahamut.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/dreamforge.c (File Modified) 
+	trunk/protocol/hyperion.c (File Modified) 
+	trunk/protocol/ircnet.c (File Modified) 
+	trunk/protocol/monkey.c (File Modified) 
+	trunk/protocol/plexus.c (File Modified) 
+	trunk/protocol/ptlink.c (File Modified) 
+	trunk/protocol/ratbox.c (File Modified) 
+	trunk/protocol/scylla.c (File Modified) 
+	trunk/protocol/shadowircd.c (File Modified) 
+	trunk/protocol/sorcery.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+	trunk/protocol/unreal.c (File Modified) 
+	trunk/src/ptasks.c (File Modified) 
+
+
+nenolod     2005/08/05 07:22:23 UTC	(20050805-1524)
+  Log:
+  same for m_version
+  
+
+  Modified:
+	trunk/include/extern.h (File Modified) 
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bahamut.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/dreamforge.c (File Modified) 
+	trunk/protocol/hyperion.c (File Modified) 
+	trunk/protocol/ircnet.c (File Modified) 
+	trunk/protocol/monkey.c (File Modified) 
+	trunk/protocol/plexus.c (File Modified) 
+	trunk/protocol/ptlink.c (File Modified) 
+	trunk/protocol/ratbox.c (File Modified) 
+	trunk/protocol/scylla.c (File Modified) 
+	trunk/protocol/shadowircd.c (File Modified) 
+	trunk/protocol/sorcery.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+	trunk/protocol/unreal.c (File Modified) 
+	trunk/src/ptasks.c (File Modified) 
+
+
+nenolod     2005/08/05 07:15:53 UTC	(20050805-1522)
+  Log:
+  Abstractionalize m_admin in the ircd protocol support.
+  
+
+  Modified:
+	trunk/include/extern.h (File Modified) 
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bahamut.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/dreamforge.c (File Modified) 
+	trunk/protocol/hyperion.c (File Modified) 
+	trunk/protocol/ircnet.c (File Modified) 
+	trunk/protocol/monkey.c (File Modified) 
+	trunk/protocol/plexus.c (File Modified) 
+	trunk/protocol/ptlink.c (File Modified) 
+	trunk/protocol/ratbox.c (File Modified) 
+	trunk/protocol/scylla.c (File Modified) 
+	trunk/protocol/shadowircd.c (File Modified) 
+	trunk/protocol/sorcery.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+	trunk/protocol/unreal.c (File Modified) 
+	trunk/src/ptasks.c (File Modified) 
+
+
+alambert    2005/08/05 07:03:34 UTC	(20050805-1520)
+  Log:
+  Sanity-check me.name before accepting the config
+
+  Modified:
+	trunk/src/conf.c (File Modified) 
+
+
+alambert    2005/08/05 01:35:22 UTC	(20050805-1518)
+  Log:
+  Revert 1516 (backwards compatibility)
+
+  Modified:
+	trunk/contrib/ircd_catserv.c (File Modified) 
+	trunk/include/servtree.h (File Modified) 
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bahamut.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/dreamforge.c (File Modified) 
+	trunk/protocol/hyperion.c (File Modified) 
+	trunk/protocol/inspircd.c (File Modified) 
+	trunk/protocol/ircnet.c (File Modified) 
+	trunk/protocol/monkey.c (File Modified) 
+	trunk/protocol/plexus.c (File Modified) 
+	trunk/protocol/ptlink.c (File Modified) 
+	trunk/protocol/ratbox.c (File Modified) 
+	trunk/protocol/shadowircd.c (File Modified) 
+	trunk/protocol/sorcery.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+	trunk/protocol/unreal.c (File Modified) 
+	trunk/src/services.c (File Modified) 
+	trunk/src/servtree.c (File Modified) 
+
+
+alambert    2005/08/05 01:31:29 UTC	(20050805-1516)
+  Log:
+  Rename service management functions to match others: del_service -> service_delete; add_service -> service_add; find_service -> service_find
+
+  Modified:
+	trunk/contrib/ircd_catserv.c (File Modified) 
+	trunk/include/servtree.h (File Modified) 
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bahamut.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/dreamforge.c (File Modified) 
+	trunk/protocol/hyperion.c (File Modified) 
+	trunk/protocol/inspircd.c (File Modified) 
+	trunk/protocol/ircnet.c (File Modified) 
+	trunk/protocol/monkey.c (File Modified) 
+	trunk/protocol/plexus.c (File Modified) 
+	trunk/protocol/ptlink.c (File Modified) 
+	trunk/protocol/ratbox.c (File Modified) 
+	trunk/protocol/shadowircd.c (File Modified) 
+	trunk/protocol/sorcery.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+	trunk/protocol/unreal.c (File Modified) 
+	trunk/src/services.c (File Modified) 
+	trunk/src/servtree.c (File Modified) 
+
+
+alambert    2005/08/05 01:10:53 UTC	(20050805-1514)
+  Log:
+  Remember to free() what we allocate
+
+  Modified:
+	trunk/src/conf.c (File Modified) 
+	trunk/src/servtree.c (File Modified) 
+
+
+alambert    2005/08/05 01:02:46 UTC	(20050805-1512)
+  Log:
+  Release m->modpath when we finish with it
+
+  Modified:
+	trunk/src/module.c (File Modified) 
+
+
+jilles      2005/08/04 17:02:22 UTC	(20050804-1510)
+  Log:
+  Note that atheme connects to IRCd, not the other way around.
+  
+
+  Modified:
+	trunk/INSTALL (File Modified) 
+
+
+pfish       2005/08/04 10:48:04 UTC	(20050804-1506)
+  Log:
+  Reorder if statements to work/fix notice origin
+
+  Modified:
+	trunk/modules/os_kline.c (File Modified) 
+
+
+pfish       2005/08/04 10:44:06 UTC	(20050804-1504)
+  Log:
+  add myuser_t/fix name -> target paste error
+
+  Modified:
+	trunk/modules/os_kline.c (File Modified) 
+
+
+pfish       2005/08/04 10:40:51 UTC	(20050804-1502)
+  Log:
+  Fix error where if user wasnt logged on /
+  OperServ would not target was unregistered. Now says target is not online
+  if user is registered and not registered if target is not registered.
+
+  Modified:
+	trunk/modules/os_kline.c (File Modified) 
+
+
+pfish       2005/08/04 10:05:37 UTC	(20050804-1498)
+  Log:
+  Fix 2 MORE crashes with OS NOOP
+
+  Modified:
+	trunk/modules/os_noop.c (File Modified) 
+
+
+pfish       2005/08/04 09:46:42 UTC	(20050804-1494)
+  Log:
+  remove visual debug identifier
+
+  Modified:
+	trunk/modules/os_noop.c (File Modified) 
+
+
+pfish       2005/08/04 09:44:41 UTC	(20050804-1492)
+  Log:
+  Fix crash where removing a noop entry without a param
+
+  Modified:
+	trunk/modules/os_noop.c (File Modified) 
+
+
+pfish       2005/08/04 08:43:12 UTC	(20050804-1488)
+  Log:
+  Fix a crash when !T wasnt supplied
+
+  Modified:
+	trunk/modules/os_kline.c (File Modified) 
+
+
+alambert    2005/08/04 05:00:50 UTC	(20050804-1484)
+  Log:
+  Add CS HOLD and NS HOLD (to replace SET HOLD commands)
+
+  Modified:
+	trunk/help/cservice/hold (File Added) 
+	trunk/help/cservice/set_hold (File Deleted) 
+	trunk/help/nickserv/hold (File Added) 
+	trunk/modules/cs_help.c (File Modified) 
+	trunk/modules/cs_hold.c (File Added) 
+	trunk/modules/cs_set.c (File Modified) 
+	trunk/modules/ns_help.c (File Modified) 
+	trunk/modules/ns_hold.c (File Added) 
+	trunk/modules/ns_set.c (File Modified) 
+
+
+alambert    2005/08/04 04:49:00 UTC	(20050804-1482)
+  Log:
+  Copy/paste cleanups in CS MARK
+
+  Modified:
+	trunk/modules/cs_mark.c (File Modified) 
+
+
+alambert    2005/08/04 04:37:01 UTC	(20050804-1480)
+  Log:
+  MARK: 'insufficient parameters' -> 'invalid parameters'
+
+  Modified:
+	trunk/modules/cs_mark.c (File Modified) 
+	trunk/modules/ns_mark.c (File Modified) 
+
+
+jilles      2005/08/04 01:28:33 UTC	(20050804-1478)
+  Log:
+  REMOVE is a form of KICK that emits different messages,
+  be sure to handle it.
+  
+
+  Modified:
+	trunk/protocol/hyperion.c (File Modified) 
+
+
+jilles      2005/08/04 01:16:58 UTC	(20050804-1476)
+  Log:
+  Add a file with ircd-specific information for each supported ircd.
+  There's not much information about ircds other than hyperion and
+  ratbox yet.
+  
+
+  Modified:
+	trunk/INSTALL (File Modified) 
+	trunk/doc/IRCD (File Added) 
+
+
+alambert    2005/08/04 01:05:56 UTC	(20050804-1472)
+  Log:
+  Add help for NS INFO. Reported by <neo@liveharmony.org.
+
+  Modified:
+	trunk/help/nickserv/info (File Added) 
+	trunk/modules/ns_help.c (File Modified) 
+
+
+alambert    2005/08/04 01:01:41 UTC	(20050804-1468)
+  Log:
+  Add help to NS STATUS; revise help for CS STATUS. Reported by <neo@liveharmony.org>.
+
+  Modified:
+	trunk/help/cservice/status (File Modified) 
+	trunk/help/nickserv/status (File Added) 
+	trunk/modules/ns_help.c (File Modified) 
+
+
+alambert    2005/08/04 00:50:42 UTC	(20050804-1464)
+  Log:
+  Add help for NS LIST, CS LIST. Reported by <neo@liveharmony.org.
+
+  Modified:
+	trunk/help/cservice/list (File Added) 
+	trunk/help/nickserv/list (File Added) 
+	trunk/modules/cs_help.c (File Modified) 
+	trunk/modules/ns_help.c (File Modified) 
+
+
+alambert    2005/08/04 00:14:41 UTC	(20050804-1462)
+  Log:
+  Add notes about account support and channel passwords being removed
+
+  Modified:
+	trunk/doc/RELEASE (File Modified) 
+
+
+jilles      2005/08/04 00:13:04 UTC	(20050804-1460)
+  Log:
+  - Remove mentions of oscnet
+  - Enhance join_chans/leave_chans explanation
+  - Remove secure from default channel flags
+  
+
+  Modified:
+	trunk/dist/example.conf (File Modified) 
+
+
+jilles      2005/08/03 23:24:08 UTC	(20050803-1458)
+  Log:
+  Fix crashes with mlock +lk; still doesn't work properly though.
+  
+
+  Modified:
+	trunk/src/cmode.c (File Modified) 
+
+
+nenolod     2005/08/03 22:54:57 UTC	(20050803-1456)
+  Log:
+  remove libatheme_sleep() yay
+  
+
+  Modified:
+	trunk/libatheme/poll.c (File Modified) 
+
+
+nenolod     2005/08/03 22:49:36 UTC	(20050803-1454)
+  Log:
+  same for epoll support.
+  
+
+  Modified:
+	trunk/libatheme/epoll.c (File Deleted) 
+
+
+nenolod     2005/08/03 22:48:52 UTC	(20050803-1452)
+  Log:
+  we don't *really* need kqueue support. removing.
+  
+
+  Modified:
+	trunk/configure (File Modified) 
+	trunk/configure.ac (File Modified) 
+	trunk/libatheme/kqueue.c (File Deleted) 
+
+
+alambert    2005/08/03 21:26:26 UTC	(20050803-1446)
+  Log:
+  Add help for CS HOP. Reported by <neo@liveharmony.org>
+
+  Modified:
+	trunk/modules/cs_help.c (File Modified) 
+
+
+alambert    2005/08/03 21:03:26 UTC	(20050803-1442)
+  Log:
+  command_help(): Only show the commands that the user has access to.
+
+  Modified:
+	trunk/src/commandtree.c (File Modified) 
+
+
+alambert    2005/08/03 20:18:50 UTC	(20050803-1438)
+  Log:
+  Forward port 1434: Add safety checks to chanuser_delete(): bail if chan or user are NULL
+
+  Modified:
+	trunk/src/node.c (File Modified) 
+
+
+alambert    2005/08/03 20:15:08 UTC	(20050803-1436)
+  Log:
+  Remove redundant chanuser_delete() -- kick() handles it. Fixes a crash when an op and CS are the only users in the channel and the op runs /CS KICKBAN against himself. Reported by <neo@liveharmony.org>.
+
+  Modified:
+	trunk/modules/cs_kick.c (File Modified) 
+
+
+alambert    2005/08/03 19:03:34 UTC	(20050803-1426)
+  Log:
+  Fix fantasy command access checking. Resolves bug 26 in trunk. Opened bug 48 to track separate issue of vanilla '!op' not working.
+
+  Modified:
+	trunk/modules/cs_halfop.c (File Modified) 
+	trunk/modules/cs_op.c (File Modified) 
+	trunk/modules/cs_voice.c (File Modified) 
+
+
+nenolod     2005/08/03 10:27:33 UTC	(20050803-1424)
+  Log:
+  Update release notes in anticipation of 0.3beta1 upcoming.
+  
+
+  Modified:
+	trunk/doc/RELEASE (File Modified) 
+
+
+nenolod     2005/08/03 10:12:24 UTC	(20050803-1422)
+  Log:
+  update version from 0.3-CURRENT to 0.3beta1 in preparation for a beta release of 0.3
+  
+
+  Modified:
+	trunk/configure (File Modified) 
+	trunk/configure.ac (File Modified) 
+
+
+w00t        2005/08/03 05:34:15 UTC	(20050803-1418)
+  Log:
+  Hopefully saved prae's sanity
+
+  Modified:
+	trunk/modules/os_modlist.c (File Modified) 
+
+
+alambert    2005/08/02 20:50:52 UTC	(20050802-1416)
+  Log:
+  Comment updates: safe_query() doesn't handle escaping; transactions make writes safer; failure logging columns moved to metadata.
+
+  Modified:
+	trunk/backend/postgresql.c (File Modified) 
+
+
+alambert    2005/08/02 20:45:31 UTC	(20050802-1414)
+  Log:
+  Fix CS SET FOUNDER: now, we use metadata to store the new founder.
+
+  Modified:
+	trunk/modules/cs_ftransfer.c (File Modified) 
+	trunk/modules/cs_set.c (File Modified) 
+
+
+alambert    2005/08/02 18:07:45 UTC	(20050802-1412)
+  Log:
+  Remember to free gecos in user_delete()
+
+  Modified:
+	trunk/src/node.c (File Modified) 
+
+
+nenolod     2005/08/02 09:03:42 UTC	(20050802-1410)
+  Log:
+  i think i got it this time.
+  
+
+  Modified:
+	trunk/backend/Makefile.in (File Modified) 
+	trunk/contrib/Makefile.am (File Modified) 
+	trunk/contrib/Makefile.in (File Modified) 
+	trunk/dbtool/Makefile.in (File Modified) 
+	trunk/libatheme/Makefile.in (File Modified) 
+	trunk/modules/Makefile.in (File Modified) 
+	trunk/protocol/Makefile.in (File Modified) 
+	trunk/src/Makefile.in (File Modified) 
+
+
+nenolod     2005/08/02 09:02:11 UTC	(20050802-1408)
+  Log:
+  have configure generate a module list in contrib as well. sigh
+  
+
+  Modified:
+	trunk/configure (File Modified) 
+	trunk/configure.ac (File Modified) 
+	trunk/contrib/Makefile.am (File Modified) 
+	trunk/contrib/Makefile.in (File Modified) 
+
+
+nenolod     2005/08/02 08:51:48 UTC	(20050802-1406)
+  Log:
+  forgot includes on that force instruction
+  
+
+  Modified:
+	trunk/src/Makefile.am (File Modified) 
+	trunk/src/Makefile.in (File Modified) 
+
+
+nenolod     2005/08/02 08:49:50 UTC	(20050802-1404)
+  Log:
+  make sure version.c is regenerated on every build.
+  
+
+  Modified:
+	trunk/src/Makefile.am (File Modified) 
+	trunk/src/Makefile.in (File Modified) 
+
+
+nenolod     2005/08/02 08:46:13 UTC	(20050802-1402)
+  Log:
+  actually, dont use libtool to compile custom modules
+  
+
+  Modified:
+	trunk/contrib/Makefile.am (File Modified) 
+	trunk/contrib/Makefile.in (File Modified) 
+
+
+nenolod     2005/08/02 08:45:16 UTC	(20050802-1400)
+  Log:
+  re-enable compilation of custom modules in contrib/
+  
+
+  Modified:
+	trunk/contrib/Makefile.am (File Modified) 
+	trunk/contrib/Makefile.in (File Modified) 
+
+
+nenolod     2005/08/02 08:40:36 UTC	(20050802-1398)
+  Log:
+  adding gecos tracking to user_t for security related modules. please look that way, thanks.
+  
+
+  Modified:
+	trunk/include/extern.h (File Modified) 
+	trunk/include/users.h (File Modified) 
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bahamut.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/dreamforge.c (File Modified) 
+	trunk/protocol/hyperion.c (File Modified) 
+	trunk/protocol/inspircd.c (File Modified) 
+	trunk/protocol/ircnet.c (File Modified) 
+	trunk/protocol/monkey.c (File Modified) 
+	trunk/protocol/plexus.c (File Modified) 
+	trunk/protocol/ptlink.c (File Modified) 
+	trunk/protocol/ratbox.c (File Modified) 
+	trunk/protocol/scylla.c (File Modified) 
+	trunk/protocol/shadowircd.c (File Modified) 
+	trunk/protocol/sorcery.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+	trunk/protocol/unreal.c (File Modified) 
+	trunk/src/node.c (File Modified) 
+
+
+w00t        2005/08/02 08:16:25 UTC	(20050802-1396)
+  Log:
+  Copyright reassignment to ADG
+
+  Modified:
+	trunk/backend/flatfile.c (File Modified) 
+	trunk/backend/postgresql.c (File Modified) 
+
+
+w00t        2005/08/02 07:12:44 UTC	(20050802-1394)
+  Log:
+  Gone are the dank days of having TS5 in the version replies.. I take it that was another shrike relic
+
+  Modified:
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bahamut.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/dreamforge.c (File Modified) 
+	trunk/protocol/hyperion.c (File Modified) 
+	trunk/protocol/ircnet.c (File Modified) 
+	trunk/protocol/monkey.c (File Modified) 
+	trunk/protocol/plexus.c (File Modified) 
+	trunk/protocol/ptlink.c (File Modified) 
+	trunk/protocol/ratbox.c (File Modified) 
+	trunk/protocol/scylla.c (File Modified) 
+	trunk/protocol/shadowircd.c (File Modified) 
+	trunk/protocol/sorcery.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+	trunk/protocol/unreal.c (File Modified) 
+
+
+alambert    2005/08/02 04:40:09 UTC	(20050802-1392)
+  Log:
+  Move login failure tracking into metadata. Flatfile: fields are now zeroed, backwards compatible. PostgreSQL: ignored, removed from schema.
+
+  Modified:
+	trunk/SQL/atheme_init.sql (File Modified) 
+	trunk/backend/flatfile.c (File Modified) 
+	trunk/backend/postgresql.c (File Modified) 
+	trunk/include/account.h (File Modified) 
+	trunk/modules/ns_identify.c (File Modified) 
+
+
+alambert    2005/08/02 02:44:43 UTC	(20050802-1390)
+  Log:
+  Remove 'key' column from 'accounts' table
+
+  Modified:
+	trunk/SQL/atheme_init.sql (File Modified) 
+
+
+pfish       2005/08/02 00:38:53 UTC	(20050802-1388)
+  Log:
+  add Insufficient parameters for unknown commands
+
+  Modified:
+	trunk/modules/os_kline.c (File Modified) 
+
+
+alambert    2005/08/02 00:32:07 UTC	(20050802-1384)
+  Log:
+  Strip the key before putting it into metadata. Fully closes bug introduced in r1300. Sorry folks.
+
+  Modified:
+	trunk/backend/flatfile.c (File Modified) 
+
+
+nenolod     2005/08/02 00:30:11 UTC	(20050802-1382)
+  Log:
+  really fix bug 44 this time.
+  
+
+  Modified:
+	trunk/modules/os_kline.c (File Modified) 
+
+
+alambert    2005/08/02 00:13:12 UTC	(20050802-1380)
+  Log:
+  Don't forget to insert a newline after a myuser line in flatfile.c. SVN >= 1300 did not save databases correctly -- manually insert newlines where needed. Metadata has an extra newline that I'm looking at but I wanted to get this in the trunk ASAP.
+
+  Modified:
+	trunk/backend/flatfile.c (File Modified) 
+
+
+nenolod     2005/08/02 00:09:28 UTC	(20050802-1378)
+  Log:
+  possibly fix bug 44. not sure if it does or not yet.
+  
+
+  Modified:
+	trunk/modules/os_kline.c (File Modified) 
+
+
+alambert    2005/08/02 00:03:35 UTC	(20050802-1376)
+  Log:
+  Readd support for legacy verification keys in flatfile
+
+  Modified:
+	trunk/backend/flatfile.c (File Modified) 
+
+
+nenolod     2005/08/01 08:57:17 UTC	(20050801-1374)
+  Log:
+  oops.
+  
+
+  Modified:
+	trunk/include/culture.h (File Modified) 
+
+
+nenolod     2005/08/01 07:28:56 UTC	(20050801-1372)
+  Log:
+  Add an example translation file outlining the proposed format.
+  
+
+  Modified:
+	trunk/translations/sample.language (File Added) 
+
+
+nenolod     2005/08/01 07:23:07 UTC	(20050801-1370)
+  Log:
+  Add culture.h for defining structures/methods used for storing translations. (to be used in the future.)
+  
+
+  Modified:
+	trunk/include/atheme.h (File Modified) 
+	trunk/include/culture.h (File Added) 
+
+
+nenolod     2005/08/01 07:13:48 UTC	(20050801-1368)
+  Log:
+  remove quotes from AS IS so that slashkernel will shut up.
+  
+
+  Modified:
+	trunk/src/version.sh (File Modified) 
+
+
+nenolod     2005/08/01 07:09:25 UTC	(20050801-1366)
+  Log:
+  shut up a config issue here.
+  
+
+  Modified:
+	trunk/src/conf.c (File Modified) 
+
+
+nenolod     2005/08/01 07:07:10 UTC	(20050801-1364)
+  Log:
+  clean up some compiler warnings here. yay for --enable-warnings (paranoia)
+  
+
+  Modified:
+	trunk/modules/cs_xop.c (File Modified) 
+
+
+nenolod     2005/08/01 07:03:43 UTC	(20050801-1362)
+  Log:
+  remove some compiler warnings in libatheme
+  
+
+  Modified:
+	trunk/include/libatheme.h (File Modified) 
+	trunk/libatheme/connection.c (File Modified) 
+
+
+nenolod     2005/08/01 05:58:34 UTC	(20050801-1356)
+  Log:
+  copy poll.c to epoll.c for implementing linux 2.6 epoll() support.
+  
+
+  Modified:
+	trunk/libatheme/epoll.c (File Added) 
+
+
+nenolod     2005/08/01 05:50:08 UTC	(20050801-1354)
+  Log:
+  tell old freebsd 4.x headers to stfu about redefining LIST_FOREACH
+  
+
+  Modified:
+	trunk/libatheme/kqueue.c (File Modified) 
+
+
+nenolod     2005/08/01 05:49:13 UTC	(20050801-1352)
+  Log:
+  reenable kqueue as it is working properly now as of r1350
+  
+
+  Modified:
+	trunk/configure (File Modified) 
+	trunk/configure.ac (File Modified) 
+
+
+nenolod     2005/08/01 05:44:47 UTC	(20050801-1350)
+  Log:
+  I smoke crack! Yes I most certaintly do! -- struct kqueue != struct kevent!
+  
+
+  Modified:
+	trunk/libatheme/kqueue.c (File Modified) 
+
+
+nenolod     2005/08/01 05:37:52 UTC	(20050801-1348)
+  Log:
+  fixes to the automatic changelog system.
+  
+
+  Modified:
+	trunk/ChangeLog (File Modified) 
+
+
+nenolod     2005/08/01 04:58:11 UTC	(20050801-1334)
+  Log:
+  disable kqueue for now.
+  
+
+  Modified:
+	trunk/configure (File Modified) 
+	trunk/configure.ac (File Modified) 
+
+
+nenolod     2005/08/01 03:44:41 UTC	(20050801-1332)
+  Log:
+  blah someone fix those two EV_SET() warnings.
+  
+
+  Modified:
+	trunk/libatheme/kqueue.c (File Modified) 
+
+
+nenolod     2005/08/01 03:33:42 UTC	(20050801-1330)
+  Log:
+  oops.
+  
+
+  Modified:
+	trunk/libatheme/kqueue.c (File Modified) 
+
+
+nenolod     2005/08/01 03:32:32 UTC	(20050801-1328)
+  Log:
+  The function kevent is in kqueue.c, not kevent.c, oops.
+  
+
+  Modified:
+	trunk/configure (File Modified) 
+	trunk/configure.ac (File Modified) 
+
+
+nenolod     2005/08/01 03:25:59 UTC	(20050801-1326)
+  Log:
+  Automatically choose the best available socket engine.
+  
+
+  Modified:
+	trunk/Makefile.in (File Modified) 
+	trunk/backend/Makefile.in (File Modified) 
+	trunk/configure (File Modified) 
+	trunk/configure.ac (File Modified) 
+	trunk/contrib/Makefile.in (File Modified) 
+	trunk/dbtool/Makefile.in (File Modified) 
+	trunk/libatheme/Makefile.am (File Modified) 
+	trunk/libatheme/Makefile.in (File Modified) 
+	trunk/modules/Makefile.in (File Modified) 
+	trunk/protocol/Makefile.in (File Modified) 
+	trunk/src/Makefile.in (File Modified) 
+
+
+nenolod     2005/08/01 02:19:38 UTC	(20050801-1324)
+  Log:
+  add translations directory for later use.
+  
+
+  Modified:
+	trunk/translations/ (File Added) 
+
+
+nenolod     2005/08/01 02:17:14 UTC	(20050801-1322)
+  Log:
+  fixes in poll, new kqueue engine.
+  
+
+  Modified:
+	trunk/libatheme/kqueue.c (File Added) 
+	trunk/libatheme/poll.c (File Modified) 
+
+
+alambert    2005/08/01 01:43:15 UTC	(20050801-1320)
+  Log:
+  Move NS VERIFY to its own module
+
+  Modified:
+	trunk/modules/ns_register.c (File Modified) 
+	trunk/modules/ns_verify.c (File Added) 
+
+
+nenolod     2005/07/31 23:27:22 UTC	(20050731-1318)
+  Log:
+  typo fix
+  
+
+  Modified:
+	trunk/libatheme/poll.c (File Modified) 
+
+
+nenolod     2005/07/31 23:26:03 UTC	(20050731-1316)
+  Log:
+  provisional support for poll(). read: craq++.
+  
+
+  Modified:
+	trunk/libatheme/poll.c (File Modified) 
+
+
+nenolod     2005/07/31 22:55:13 UTC	(20050731-1314)
+  Log:
+  copy select.c for later implementation of poll socketengine.
+  
+
+  Modified:
+	trunk/libatheme/poll.c (File Added) 
+
+
+alambert    2005/07/31 21:53:58 UTC	(20050731-1312)
+  Log:
+  Remove channel passwords from help for CS FTRANSFER
+
+  Modified:
+	trunk/help/cservice/ftransfer (File Modified) 
+
+
+alambert    2005/07/31 21:52:32 UTC	(20050731-1310)
+  Log:
+  Use the parameter we're given, not mu->pass, in the NS SENDPASS e-mail
+
+  Modified:
+	trunk/src/function.c (File Modified) 
+
+
+alambert    2005/07/31 20:10:08 UTC	(20050731-1308)
+  Log:
+  Use strcasecmp() sine metadata are strings anyway. Improves support for future alphanumeric keys.
+
+  Modified:
+	trunk/modules/ns_register.c (File Modified) 
+
+
+alambert    2005/07/31 20:05:46 UTC	(20050731-1306)
+  Log:
+  Remove extra parameter on INSERT statement
+
+  Modified:
+	trunk/backend/postgresql.c (File Modified) 
+
+
+alambert    2005/07/31 19:55:09 UTC	(20050731-1304)
+  Log:
+  Improve sanity checking on e-mail addresses and passwords
+
+  Modified:
+	trunk/modules/ns_register.c (File Modified) 
+	trunk/modules/ns_set.c (File Modified) 
+	trunk/src/function.c (File Modified) 
+
+
+nenolod     2005/07/31 19:44:08 UTC	(20050731-1302)
+  Log:
+  Move our string functions into libatheme.
+  
+
+  Modified:
+	trunk/libatheme/Makefile.am (File Modified) 
+	trunk/libatheme/Makefile.in (File Modified) 
+	trunk/libatheme/string.c (File Added) 
+	trunk/src/function.c (File Modified) 
+
+
+alambert    2005/07/31 19:40:27 UTC	(20050731-1300)
+  Log:
+  Remove obsolete verification key references in backend
+
+  Modified:
+	trunk/backend/flatfile.c (File Modified) 
+	trunk/backend/postgresql.c (File Modified) 
+
+
+nenolod     2005/07/31 19:38:21 UTC	(20050731-1298)
+  Log:
+  PTlink CMODE's have been added, where appropriate.
+  
+
+  Modified:
+	trunk/include/protocol/ptlink.h (File Modified) 
+	trunk/protocol/ptlink.c (File Modified) 
+
+
+alambert    2005/07/31 19:30:01 UTC	(20050731-1296)
+  Log:
+  Move initial e-mail verification data into metadata.
+
+  Modified:
+	trunk/include/account.h (File Modified) 
+	trunk/modules/ns_register.c (File Modified) 
+	trunk/src/function.c (File Modified) 
+
+
+nenolod     2005/07/31 19:29:12 UTC	(20050731-1294)
+  Log:
+  All the protocol stuff specific to PTlink is now working, now I just need to worry about modes. :)
+  
+
+  Modified:
+	trunk/protocol/ptlink.c (File Modified) 
+
+
+jilles      2005/07/31 19:10:34 UTC	(20050731-1292)
+  Log:
+  Set topic via STOPIC instead of TOPIC; leave off "(setter)",
+  instead make the topic appear to have been set by the setter
+  later.
+  
+
+  Modified:
+	trunk/protocol/hyperion.c (File Modified) 
+
+
+alambert    2005/07/31 19:09:28 UTC	(20050731-1290)
+  Log:
+  Move e-mail change temporary storage to metadata. Founder change and initial verification will follow shortly.
+
+  Modified:
+	trunk/include/account.h (File Modified) 
+	trunk/modules/ns_register.c (File Modified) 
+	trunk/modules/ns_set.c (File Modified) 
+	trunk/src/function.c (File Modified) 
+
+
+nenolod     2005/07/31 18:42:25 UTC	(20050731-1288)
+  Log:
+  fix ptlink build errors :P
+  
+
+  Modified:
+	trunk/protocol/ptlink.c (File Modified) 
+
+
+jilles      2005/07/31 17:48:06 UTC	(20050731-1286)
+  Log:
+  - Send channel notices from the server instead of from chanserv if
+    chanserv is not on channel, in order that they won't be blocked
+  - If chanserv is not on channel, join briefly to set the topic.
+    This is annoying but there is really no other way.
+  
+
+  Modified:
+	trunk/protocol/ratbox.c (File Modified) 
+
+
+nenolod     2005/07/31 09:21:47 UTC	(20050731-1284)
+  Log:
+  provisional (skeletal) support for PTLink IRCd.
+  
+
+  Modified:
+	trunk/include/protocol/ptlink.h (File Added) 
+	trunk/protocol/Makefile.am (File Modified) 
+	trunk/protocol/Makefile.in (File Modified) 
+	trunk/protocol/ptlink.c (File Added) 
+
+
+nenolod     2005/07/31 08:53:32 UTC	(20050731-1282)
+  Log:
+  fix an issue here.
+  
+
+  Modified:
+	trunk/src/version.sh (File Modified) 
+
+
+nenolod     2005/07/31 05:10:35 UTC	(20050731-1280)
+  Log:
+  we now have an abstraction layer for select loops.
+  
+
+  Modified:
+	trunk/include/connection.h (File Modified) 
+	trunk/libatheme/Makefile.am (File Modified) 
+	trunk/libatheme/Makefile.in (File Modified) 
+	trunk/libatheme/libatheme.c (File Modified) 
+	trunk/libatheme/select.c (File Added) 
+	trunk/src/send.c (File Modified) 
+
+
+alambert    2005/07/31 05:06:59 UTC	(20050731-1278)
+  Log:
+  Force users to log in before using NS VERIFY. This is not strictly necessary but helps avoid leaking information about pending authorizations (for example, a user can't see that another user's registration has not been verified or that they have a pending e-mail change).
+
+  Modified:
+	trunk/modules/ns_register.c (File Modified) 
+
+
+nenolod     2005/07/31 04:43:34 UTC	(20050731-1276)
+  Log:
+  rename socket.c to send.c as that is more descriptive of what we do there now.
+  
+
+  Modified:
+	trunk/src/Makefile.am (File Modified) 
+	trunk/src/Makefile.in (File Modified) 
+	trunk/src/send.c (File Added) 
+	trunk/src/socket.c (File Deleted) 
+
+
+alambert    2005/07/31 04:10:59 UTC	(20050731-1274)
+  Log:
+  Don't let users change their e-mail address before they perform the initial verification. Prevents the following attack: malicious user registers evil1 with e-mail address innocent@user.com, uses /NS SET EMAIL evil@evil.com, and then uses the key to verify the initial registration (instead of the subsequent e-mail change). If we add more verification points in the future, we may want to have a 'key type' property.
+
+  Modified:
+	trunk/modules/ns_register.c (File Modified) 
+	trunk/modules/ns_set.c (File Modified) 
+
+
+nenolod     2005/07/31 03:59:34 UTC	(20050731-1272)
+  Log:
+  finish up m_stats conversion.
+  
+
+  Modified:
+	trunk/protocol/hyperion.c (File Modified) 
+	trunk/protocol/ircnet.c (File Modified) 
+	trunk/protocol/monkey.c (File Modified) 
+	trunk/protocol/plexus.c (File Modified) 
+	trunk/protocol/scylla.c (File Modified) 
+	trunk/protocol/shadowircd.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+
+
+nenolod     2005/07/31 03:55:28 UTC	(20050731-1270)
+  Log:
+  more ircd's are using handle_stats() now...
+  
+
+  Modified:
+	trunk/protocol/dreamforge.c (File Modified) 
+	trunk/protocol/sorcery.c (File Modified) 
+	trunk/protocol/unreal.c (File Modified) 
+
+
+nenolod     2005/07/31 03:51:22 UTC	(20050731-1268)
+  Log:
+  all the P10 ircd's now use handle_stats()...
+  
+
+  Modified:
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+
+
+nenolod     2005/07/31 03:43:51 UTC	(20050731-1266)
+  Log:
+  oops.
+  
+
+  Modified:
+	trunk/src/ptasks.c (File Modified) 
+
+
+nenolod     2005/07/31 03:42:10 UTC	(20050731-1264)
+  Log:
+  implement handle_stats() to handle stats requests.
+  
+
+  Modified:
+	trunk/include/extern.h (File Modified) 
+	trunk/protocol/bahamut.c (File Modified) 
+	trunk/protocol/ratbox.c (File Modified) 
+	trunk/src/Makefile.am (File Modified) 
+	trunk/src/Makefile.in (File Modified) 
+	trunk/src/ptasks.c (File Added) 
+
+
+alambert    2005/07/31 03:36:43 UTC	(20050731-1262)
+  Log:
+  Unset MU_WAITAUTH when an e-mail address is verified
+
+  Modified:
+	trunk/modules/ns_register.c (File Modified) 
+
+
+alambert    2005/07/31 03:30:49 UTC	(20050731-1260)
+  Log:
+  Move NS SET EMAIL verification into NS VERIFY
+
+  Modified:
+	trunk/modules/ns_register.c (File Modified) 
+	trunk/modules/ns_set.c (File Modified) 
+
+
+alambert    2005/07/31 03:18:05 UTC	(20050731-1258)
+  Log:
+  Add HOP to CS HELP XOP
+
+  Modified:
+	trunk/help/cservice/xop (File Modified) 
+
+
+alambert    2005/07/31 03:15:53 UTC	(20050731-1256)
+  Log:
+  Clean up old ChanServ reference and change 'e-mail change' message to use VERIFY EMAILCHG
+
+  Modified:
+	trunk/src/function.c (File Modified) 
+
+
+alambert    2005/07/31 03:13:56 UTC	(20050731-1254)
+  Log:
+  Scaffolding for NS VERIFY EMAILCHG
+
+  Modified:
+	trunk/help/nickserv/verify (File Modified) 
+	trunk/modules/ns_register.c (File Modified) 
+	trunk/src/function.c (File Modified) 
+
+
+alambert    2005/07/31 03:02:35 UTC	(20050731-1252)
+  Log:
+  Don't let users choose their nickname as a password
+
+  Modified:
+	trunk/modules/ns_register.c (File Modified) 
+	trunk/modules/ns_set.c (File Modified) 
+
+
+alambert    2005/07/31 02:54:43 UTC	(20050731-1250)
+  Log:
+  Get the right parameter for e-mail address
+
+  Modified:
+	trunk/modules/ns_set.c (File Modified) 
+
+
+alambert    2005/07/31 02:47:26 UTC	(20050731-1248)
+  Log:
+  Better sanity checking for e-mail addresses: disallow spaces, single/double quotes, commas
+
+  Modified:
+	trunk/modules/ns_set.c (File Modified) 
+	trunk/src/function.c (File Modified) 
+
+
+alambert    2005/07/31 02:38:56 UTC	(20050731-1246)
+  Log:
+  First try for NS REGISTER verification fix (bug 39). Adds a new top-level command: NS VERIFY.
+
+  Modified:
+	trunk/help/nickserv/verify (File Added) 
+	trunk/modules/ns_help.c (File Modified) 
+	trunk/modules/ns_register.c (File Modified) 
+	trunk/src/function.c (File Modified) 
+
+
+nenolod     2005/07/31 02:27:48 UTC	(20050731-1244)
+  Log:
+  trying again here.
+  
+
+  Modified:
+	trunk/src/version.sh (File Modified) 
+
+
+nenolod     2005/07/31 02:23:46 UTC	(20050731-1241)
+  Log:
+  testing to make sure...
+  
+
+  Modified:
+	trunk/src/version.sh (File Modified) 
+
+
+nenolod     2005/07/31 02:20:39 UTC	(20050731-1239)
+  Log:
+  test fix
+  
+
+  Modified:
+	trunk/libatheme/memory.c (File Modified) 
+
+
+alambert    2005/07/31 01:20:23 UTC	(20050731-1235)
+  Log:
+  More CS HELP fixes for username drop
+
+  Modified:
+	trunk/help/cservice/drop (File Modified) 
+	trunk/help/cservice/info (File Modified) 
+	trunk/help/cservice/logout (File Deleted) 
+	trunk/help/cservice/mark (File Modified) 
+	trunk/help/cservice/sendpass (File Modified) 
+	trunk/help/cservice/set_email (File Deleted) 
+	trunk/help/cservice/set_hidemail (File Deleted) 
+	trunk/help/cservice/set_hold (File Modified) 
+	trunk/modules/cs_help.c (File Modified) 
+
+
+alambert    2005/07/31 01:11:35 UTC	(20050731-1233)
+  Log:
+  Split NS HELP SET; use the NickServ help files now
+
+  Modified:
+	trunk/modules/ns_help.c (File Modified) 
+
+
+nenolod     2005/07/31 01:06:35 UTC	(20050731-1231)
+  Log:
+  build-id is now automatically incremented ala genserial.pl
+  
+
+  Modified:
+	trunk/include/atheme.h (File Modified) 
+	trunk/src/version.sh (File Modified) 
+
+
+alambert    2005/07/31 01:04:41 UTC	(20050731-1229)
+  Log:
+  Continue username -> nickname switchover in help files
+
+  Modified:
+	trunk/help/cservice/akick (File Modified) 
+	trunk/help/cservice/flags (File Modified) 
+	trunk/help/cservice/login (File Deleted) 
+	trunk/help/cservice/set_successor (File Modified) 
+	trunk/help/cservice/xop (File Modified) 
+
+
+nenolod     2005/07/31 01:03:58 UTC	(20050731-1227)
+  Log:
+  add serno.h
+  
+
+  Modified:
+	trunk/include/serno.h (File Added) 
+
+
+alambert    2005/07/31 00:57:38 UTC	(1225)
+  Log:
+  E-mail verification: username -> nickname
+
+  Modified:
+	trunk/src/function.c (File Modified) 
+
+
+nenolod     2005/07/31 00:54:10 UTC	(1223)
+  Log:
+  trying again
+  
+
+  Modified:
+	trunk/include/libatheme.h (File Modified) 
+
+
+nenolod     2005/07/31 00:48:51 UTC	(1219)
+  Log:
+  blank out the changelog.
+  
+
+  Modified:
+	trunk/ChangeLog (File Modified) 
+
+
+ 

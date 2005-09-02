@@ -1,0 +1,9 @@
+Help for SET URL:
+
+SET URL allows you to change or set the URL
+address associated with a channel.
+
+Syntax: SET <channel> URL <url>
+
+Example:
+    /msg &nick& SET #chat URL http://slashdot.org

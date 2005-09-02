@@ -1,0 +1,13 @@
+Help for GLOBAL:
+
+GLOBAL allows an IRCop to store multiple lines
+in a buffer and send them at one time to every user
+on the network.
+
+Syntax: GLOBAL <parameters>|SEND|CLEAR
+
+Examples:
+    /msg &nick& GLOBAL this is line 1
+    /msg &nick& GLOBAL this is line 2
+    /msg &nick& GLOBAL SEND
+    /msg &nick& GLOBAL CLEAR

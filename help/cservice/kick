@@ -1,0 +1,10 @@
+Help for KICK:
+
+The KICK command allows for the removal of an abusive user from
+a channel.
+
+Syntax: KICK <#channel> <nick> [reason]
+
+Examples:
+    /msg &nick& KICK #foo abuser
+    /msg &nick& KICK #foo abuser please stop

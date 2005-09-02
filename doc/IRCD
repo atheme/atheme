@@ -1,0 +1,104 @@
+IRCD-specific notes
+-------------------
+
+asuka
+-----
+
+You need U:lines for services on all servers on the network.
+
+bahamut
+-------
+
+You need U:lines for services on all servers on the network.
+
+bircd
+-----
+
+You need U:lines for services on all servers on the network.
+
+dreamforge
+----------
+
+hyperion
+--------
+
+The channel modes +dDfJjLPQ are not supported and will be ignored. Bans with
+forward channels will also not be recognized properly. This may lead to
+problems like users still being banned after a chanserv unban command.
+
+Atheme gives privilege to opers by virtue of their umode +o, which is not
+consistent with hyperion's tendency to remove as much privilege as possible
+from umode +o.
+
+There are two methods to allow services to remember users after a netsplit or
+restart and to enable things like channels only accessible for registered
+users. The traditional dancer method is umode +e; it only works if the user is
+logged in to the nick they are currently using. The new hyperion method using
+SVSLOGIN and SIGNON does not have this restriction. It also allows changing
+nick/ident/host at the same time, but Atheme does not use that yet.
+Consequently, NOIDPREFIX is not supported in a useful way. In either case the
+recognition is based on the login name only, so beware of dropping and
+recreating accounts during netsplits.
+
+Atheme will always set +e appropriately; if SVSLOGIN support is available, it
+will be used (this assumes the whole network has it). SVSLOGIN support can
+also be disabled with a simple source file change.
+
+The wallops option will report via +s server notices.
+
+inspircd
+--------
+
+At present, this module supports the meshing protocol support only. We are
+aware that the InspIRCd team is in progress of implementing acyclic
+(tree-based) linking, and when that is completed, we will add support for
+that protocol format.
+
+ircnet
+------
+
+monkey
+------
+
+plexus
+------
+
+ptlink
+------
+
+ratbox
+------
+
+If you want to use operserv kline, you need shared{} blocks or U:lines
+for services on all servers on the network. Note that only hybrid 7.1
+and ratbox support remote unkline, although it may appear to sort of
+work in hybrid 7.0.
+
+If you use ratbox 2.1.x or newer, it is recommended to compile with
+ratbox-services support as this will allow remembering logged-in state
+across netsplits and services restarts, prevent deopping/kicking chanserv,
+etc. You will need a service{} block on all servers. Logged-in state is
+based on name only, so beware of dropping and recreating accounts during
+netsplits.
+
+Hybrid 6.x or csircd should also work but they are not recommended; you
+must leave join_chans enabled for full functionality.
+
+scylla
+------
+
+shadowircd
+----------
+
+sorcery
+-------
+
+undernet
+--------
+
+You need U:lines for services on all servers on the network.
+
+unreal
+------
+
+You need ulines{} for services on all servers on the network.

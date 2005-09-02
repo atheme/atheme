@@ -1,0 +1,8 @@
+Help for HOLD:
+
+HOLD prevents a channel from expiring.
+
+Syntax: HOLD <#channel> ON|OFF
+
+Examples:
+    /msg &nick& HOLD #atheme ON

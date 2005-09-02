@@ -1,0 +1,55 @@
+#
+# $Id: Makefile.in 1847 2005-08-24 07:00:42Z nenolod $
+#
+
+CC		= @CC@
+INSTALL		= @INSTALL@
+RM		= @RM@
+CFLAGS		= @CFLAGS@
+LDFLAGS		= @LDFLAGS@
+MV		= @MV@
+AR		= @AR@
+RANLIB		= @RANLIB@
+
+INCLUDES = -I. -I../include
+CPPFLAGS = ${INCLUDES} @CPPFLAGS@
+SOCKET_ENGINE = @SOCKET_ENGINE@.c
+
+SOURCES = \
+	balloc.c	\
+	callback.c	\
+	connection.c	\
+	dlink.c		\
+	event.c		\
+	hook.c		\
+	libatheme.c	\
+	linker.c	\
+	memory.c	\
+	sockio.c	\
+	string.c	\
+	${SOCKET_ENGINE}
+
+OBJS=${SOURCES:.c=.o}
+
+all: libatheme.a
+build: all
+
+# This stuff is not installed for now.
+install: all
+	@:
+
+libatheme.a: ${OBJS}
+	rm -f $@
+	${AR} cqv $@ ${OBJS}
+	${RANLIB} $@
+
+.c.o:
+	${CC} ${CPPFLAGS} ${CFLAGS} -c $< -o $@
+
+clean:
+	${RM} -f *.o *.exe *~ libatheme.a
+
+distclean: clean
+	${RM} -f Makefile
+
+.PHONY: install depend

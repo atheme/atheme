@@ -1,0 +1,42 @@
+Help for AKILL:
+
+AKILL allows you to maintain network-wide bans a la DALnet AKILL.
+Services will keep your AKILL's stored and allow for easy management.
+
+Syntax: AKILL ADD <nick|hostmask> [!P|!T <minutes>] <reason>
+
+If the !P token is specified the AKILL will never expire (permanent).
+If the !T token is specified expire time in minutes must follow.
+
+Examples:
+    /msg &nick& AKILL ADD foo !T 5 bar reason
+    /msg &nick& AKILL ADD foo@bar.com !P foo reason
+    /msg &nick& AKILL ADD foo@bar.com foo reason
+
+The first example looks for the user with a nickname of "foo" and adds a 5
+minute AKILL for "bar reason."
+
+The second example adds a permanent AKILL on foo@bar.com for "foo reason."
+
+The third example adds a AKILL on foo@bar.com for the duration specified
+in the configuration file for "foo reason."
+
+Syntax: AKILL DEL <hostmask|number>
+
+If number is specified it correlates with the number on AKILL LIST.
+You may specify multiple numbers by seperating with commas.
+You may specify a range by using a colon.
+
+Examples:
+    /msg &nick& AKILL DEL foo@bar.com
+    /msg &nick& AKILL DEL 5
+    /msg &nick& AKILL DEL 1,2,5,10
+    /msg &nick& AKILL DEL 1:5,7,9:11
+
+Syntax: AKILL LIST [FULL]
+
+If FULL is specified the AKILL reasons will be shown.
+
+Examples:
+    /msg &nick& AKILL LIST
+    /msg &nick& AKILL LIST FULL

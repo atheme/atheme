@@ -1,0 +1,15 @@
+Help for CLOSE:
+
+CLOSE prevents a channel from being used. Anyone
+who enters is immediately kickbanned. The channel
+cannot be dropped and foundership cannot be
+transferred.
+
+Use CLOSE OFF to reopen a channel. While closed,
+channels will still expire.
+
+Syntax: CLOSE <#channel> <ON|OFF> [reason]
+
+Examples:
+    /msg &nick& CLOSE #lamers ON spamming
+    /msg &nick& CLOSE #spiderslair OFF

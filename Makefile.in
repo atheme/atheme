@@ -1,0 +1,71 @@
+# Copyright (c) 2005 Atheme Development Group.
+# Rights to this code are documented in doc/LICENSE.
+#
+# This file contains build instructions.
+#
+# $Id: Makefile.in 1771 2005-08-18 19:35:56Z nenolod $
+#
+
+CC		= @CC@
+RM		= @RM@
+MV		= @MV@
+CP		= @CP@
+INSTALL		= @INSTALL@
+PREFIX		= @PREFIX@
+BIN		= atheme@EXEEXT@
+
+SHELL=/bin/sh
+SUBDIRS=libatheme dbtool backend modules protocol src contrib
+CLEANDIRS = ${SUBDIRS}
+
+MAKE = make ${MFLAGS}
+
+all: build
+
+build:
+	-@if [ ! -f include/sysconf.h ] ; then \
+		echo "Hmm...doesn't look like you've run configure..."; \
+		echo "Doing so now."; \
+		sh configure; \
+	fi
+	@for i in $(SUBDIRS); do \
+		echo "build ==> $$i"; \
+		cd $$i; \
+		${MAKE} build || exit; cd ..; \
+	done
+
+clean:
+	${RM} -f *~ core atheme.core
+	@for i in $(CLEANDIRS); do \
+		echo "clean ==> $$i"; \
+		cd $$i; \
+		${MAKE} clean; cd ..; \
+	done
+	-@if [ -f include/sysconf.h ] ; then \
+		echo "To really restart installation, make distclean"; \
+	fi
+
+distclean:
+	${RM} -f Makefile *~ *.orig core atheme.core
+	${RM} -f config.status config.cache config.log
+	cd include; ${RM} -f sysconf.h *~ *.orig; cd ..
+	@for i in $(CLEANDIRS); do \
+		echo "distclean ==> $$i"; \
+		cd $$i; \
+		${MAKE} distclean; cd ..; \
+	done
+
+depend:
+	@for i in $(SUBDIRS); do \
+		echo "depend ==> $$i"; \
+		cd $$i; \
+		${MAKE} depend; cd ..; \
+	done
+
+install: all
+	@for i in $(SUBDIRS); do \
+		echo "install ==> $$i"; \
+		cd $$i; \
+		${MAKE} install; \
+		cd ..; \
+	done

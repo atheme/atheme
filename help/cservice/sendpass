@@ -1,0 +1,9 @@
+Help for SENDPASS:
+
+SENDPASS emails the password for the specified
+channel to the corresponding email address.
+
+Syntax: SENDPASS <#channel>
+
+Examples:
+    /msg &nick& SENDPASS #foo

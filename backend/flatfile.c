@@ -1,0 +1,513 @@
+/*
+ * Copyright (c) 2005 Atheme Development Group
+ * Rights to this code are as documented in doc/LICENSE.
+ *
+ * This file contains the implementation of the Atheme 0.1
+ * flatfile database format, with metadata extensions.
+ *
+ * $Id: flatfile.c 1993 2005-09-01 04:21:34Z nenolod $
+ */
+
+#include "atheme.h"
+
+DECLARE_MODULE_V1("backend/flatfile", TRUE, _modinit, NULL);
+
+/* write atheme.db */
+static void flatfile_db_save(void *arg)
+{
+	myuser_t *mu;
+	mychan_t *mc;
+	chanacs_t *ca;
+	kline_t *k;
+	node_t *n, *tn, *tn2;
+	FILE *f;
+	uint32_t i, muout = 0, mcout = 0, caout = 0, kout = 0;
+
+	/* write to a temporary file first */
+	if (!(f = fopen("etc/atheme.db.new", "w")))
+	{
+		slog(LG_ERROR, "db_save(): cannot write to atheme.db.new");
+		wallops("\2DATABASE ERROR\2: db_save(): cannot write to atheme.db.new");
+		return;
+	}
+
+	/* write the database version */
+	fprintf(f, "DBV 4\n");
+
+	slog(LG_DEBUG, "db_save(): saving myusers");
+
+	for (i = 0; i < HASHSIZE; i++)
+	{
+		LIST_FOREACH(n, mulist[i].head)
+		{
+			mu = (myuser_t *)n->data;
+
+			/* MU <name> <pass> <email> <registered> [lastlogin] [failnum*] [lastfail*]
+			 * [lastfailon*] [flags]
+			 *
+			 *  * failnum, lastfail, and lastfailon are deprecated (moved to metadata)
+			 */
+			fprintf(f, "MU %s %s %s %ld", mu->name, mu->pass, mu->email, (long)mu->registered);
+
+			if (mu->lastlogin)
+				fprintf(f, " %ld", (long)mu->lastlogin);
+			else
+				fprintf(f, " 0");
+
+			fprintf(f, " 0 0 0");
+
+			if (mu->flags)
+				fprintf(f, " %d\n", mu->flags);
+			else
+				fprintf(f, " 0\n");
+
+			muout++;
+
+			LIST_FOREACH(tn, mu->metadata.head)
+			{
+				metadata_t *md = (metadata_t *)tn->data;
+
+				fprintf(f, "MD U %s %s %s\n", mu->name, md->name, md->value);
+			}
+		}
+	}
+
+	slog(LG_DEBUG, "db_save(): saving mychans");
+
+	for (i = 0; i < HASHSIZE; i++)
+	{
+		LIST_FOREACH(n, mclist[i].head)
+		{
+			mc = (mychan_t *)n->data;
+
+			/* MC <name> <pass> <founder> <registered> [used] [flags]
+			 * [mlock_on] [mlock_off] [mlock_limit] [mlock_key]
+			 * PASS is now ignored -- replaced with a "0" to avoid having to special-case this version
+			 */
+			fprintf(f, "MC %s %s %s %ld %ld", mc->name, "0", mc->founder->name, (long)mc->registered, (long)mc->used);
+
+			if (mc->flags)
+				fprintf(f, " %d", mc->flags);
+			else
+				fprintf(f, " 0");
+
+			if (mc->mlock_on)
+				fprintf(f, " %d", mc->mlock_on);
+			else
+				fprintf(f, " 0");
+
+			if (mc->mlock_off)
+				fprintf(f, " %d", mc->mlock_off);
+			else
+				fprintf(f, " 0");
+
+			if (mc->mlock_limit)
+				fprintf(f, " %d", mc->mlock_limit);
+			else
+				fprintf(f, " 0");
+
+			if (mc->mlock_key)
+				fprintf(f, " %s\n", mc->mlock_key);
+			else
+				fprintf(f, "\n");
+
+			mcout++;
+
+			LIST_FOREACH(tn, mc->chanacs.head)
+			{
+				ca = (chanacs_t *)tn->data;
+
+				fprintf(f, "CA %s %s %s\n", ca->mychan->name, ca->myuser ? ca->myuser->name : ca->host,
+						bitmask_to_flags(ca->level, chanacs_flags));
+
+				LIST_FOREACH(tn2, ca->metadata.head)
+				{
+					metadata_t *md = (metadata_t *)tn2->data;
+
+					fprintf(f, "MD A %s:%s %s %s\n", ca->mychan->name,
+						(ca->host) ? ca->host : ca->myuser->name, md->name, md->value);
+				}
+
+				caout++;
+			}
+
+			LIST_FOREACH(tn, mc->metadata.head)
+			{
+				metadata_t *md = (metadata_t *)tn->data;
+
+				fprintf(f, "MD C %s %s %s\n", mc->name, md->name, md->value);
+			}
+		}
+	}
+
+	slog(LG_DEBUG, "db_save(): saving klines");
+
+	LIST_FOREACH(n, klnlist.head)
+	{
+		k = (kline_t *)n->data;
+
+		/* KL <user> <host> <duration> <settime> <setby> <reason> */
+		fprintf(f, "KL %s %s %ld %ld %s %s\n", k->user, k->host, k->duration, (long)k->settime, k->setby, k->reason);
+
+		kout++;
+	}
+
+	/* DE <muout> <mcout> <caout> <kout> */
+	fprintf(f, "DE %d %d %d %d\n", muout, mcout, caout, kout);
+
+	fclose(f);
+
+	/* now, replace the old database with the new one, using an atomic rename */
+	if ((rename("etc/atheme.db.new", "etc/atheme.db")) < 0)
+	{
+		slog(LG_ERROR, "db_save(): cannot rename atheme.db.new to atheme.db");
+		wallops("\2DATABASE ERROR\2: db_save(): cannot rename atheme.db.new to atheme.db");
+		return;
+	}
+}
+
+/* loads atheme.db */
+static void flatfile_db_load(void)
+{
+	sra_t *sra;
+	myuser_t *mu;
+	mychan_t *mc;
+	kline_t *k;
+	node_t *n;
+	uint32_t i = 0, linecnt = 0, muin = 0, mcin = 0, cain = 0, kin = 0;
+	FILE *f = fopen("etc/atheme.db", "r");
+	char *item, *s, dBuf[BUFSIZE];
+
+	if (!f)
+	{
+		slog(LG_ERROR, "db_load(): can't open atheme.db for reading");
+		return;
+	}
+
+	slog(LG_DEBUG, "db_load(): ----------------------- loading ------------------------");
+
+	/* start reading it, one line at a time */
+	while (fgets(dBuf, BUFSIZE, f))
+	{
+		linecnt++;
+
+		/* check for unimportant lines */
+		item = strtok(dBuf, " ");
+		strip(item);
+
+		if (*item == '#' || *item == '\n' || *item == '\t' || *item == ' ' || *item == '\0' || *item == '\r' || !*item)
+			continue;
+
+		/* database version */
+		if (!strcmp("DBV", item))
+		{
+			i = atoi(strtok(NULL, " "));
+			if (i > 4)
+			{
+				slog(LG_INFO, "db_load(): database version is %d; i only understand 4 (Atheme 0.2), 3 (Atheme 0.2 without CA_ACLVIEW), 2 (Atheme 0.1) or 1 (Shrike)", i);
+				exit(EXIT_FAILURE);
+			}
+		}
+
+		/* myusers */
+		if (!strcmp("MU", item))
+		{
+			char *muname, *mupass, *muemail;
+
+			if ((s = strtok(NULL, " ")))
+			{
+				if ((mu = myuser_find(s)))
+					continue;
+
+				muin++;
+
+				muname = s;
+				mupass = strtok(NULL, " ");
+				muemail = strtok(NULL, " ");
+
+				mu = myuser_add(muname, mupass, muemail);
+
+				mu->registered = atoi(strtok(NULL, " "));
+
+				mu->lastlogin = atoi(strtok(NULL, " "));
+
+				if ((s = strtok(NULL, " ")) && strcmp(s, "0"))
+					metadata_add(mu, METADATA_USER, "private:loginfail:failnum", s);
+				if ((s = strtok(NULL, " ")) && strcmp(s, "0"))
+					metadata_add(mu, METADATA_USER, "private:loginfail:lastfailaddr", s);
+				if ((s = strtok(NULL, " ")) && strcmp(s, "0"))
+					metadata_add(mu, METADATA_USER, "private:loginfail:lastfailtime", s);
+
+				mu->flags = atol(strtok(NULL, " "));
+
+				/* Verification keys were moved to metadata,
+				 * but we'll still accept them from legacy
+				 * databases. Note that we only transfer over
+				 * initial registration keys -- I don't think
+				 * we saved mu->temp, so we can't transition
+				 * e-mail change keys anyway.     --alambert
+				 */
+				if ((s = strtok(NULL, " ")))
+				{
+					strip(s);
+					metadata_add(mu, METADATA_USER, "private:verify:register:key", s);
+					metadata_add(mu, METADATA_USER, "private:verify:register:timestamp", "0");
+				}
+			}
+		}
+
+		/* mychans */
+		if (!strcmp("MC", item))
+		{
+			char *mcname, *mcpass;
+
+			if ((s = strtok(NULL, " ")))
+			{
+				if ((mc = mychan_find(s)))
+					continue;
+
+				mcin++;
+
+				mcname = s;
+				/* unused */
+				mcpass = strtok(NULL, " ");
+
+				mc = mychan_add(mcname);
+
+				mc->founder = myuser_find(strtok(NULL, " "));
+				mc->registered = atoi(strtok(NULL, " "));
+				mc->used = atoi(strtok(NULL, " "));
+				mc->flags = atoi(strtok(NULL, " "));
+
+				mc->mlock_on = atoi(strtok(NULL, " "));
+				mc->mlock_off = atoi(strtok(NULL, " "));
+				mc->mlock_limit = atoi(strtok(NULL, " "));
+
+				if ((s = strtok(NULL, " ")))
+				{
+					strip(s);
+					mc->mlock_key = sstrdup(s);
+				}
+			}
+		}
+
+		/* Metadata entry */
+		if (!strcmp("MD", item))
+		{
+			char *type = strtok(NULL, " ");
+			char *name = strtok(NULL, " ");
+			char *property = strtok(NULL, " ");
+			char *value = strtok(NULL, "");
+
+			if (!type || !name || !property || !value)
+				continue;
+
+			strip(value);
+
+			if (type[0] == 'U')
+			{
+				mu = myuser_find(name);
+				metadata_add(mu, METADATA_USER, property, value);
+			}
+			else if (type[0] == 'C')
+			{
+				mc = mychan_find(name);
+				metadata_add(mc, METADATA_CHANNEL, property, value);
+			}
+			else if (type[0] == 'A')
+			{
+				chanacs_t *ca;
+				char *chan = strtok(name, ":");
+				char *mask = strtok(NULL, " ");
+
+				ca = chanacs_find_by_mask(mychan_find(name), mask, CA_NONE);
+				metadata_add(ca, METADATA_CHANACS, property, value);
+			}
+		}
+
+		/* Channel URLs */
+		if (!strcmp("UR", item))
+		{
+			char *chan, *url;
+
+			chan = strtok(NULL, " ");
+			url = strtok(NULL, " ");
+
+			strip(url);
+
+			if (chan && url)
+			{
+				mc = mychan_find(chan);
+
+				if (mc)
+					metadata_add(mc, METADATA_CHANNEL, "url", url);
+			}
+		}
+
+		/* Channel entry messages */
+		if (!strcmp("EM", item))
+		{
+			char *chan, *message;
+
+			chan = strtok(NULL, " ");
+			message = strtok(NULL, "");
+
+			strip(message);
+
+			if (chan && message)
+			{
+				mc = mychan_find(chan);
+
+				if (mc)
+					metadata_add(mc, METADATA_CHANNEL, "private:entrymsg", message);
+			}
+		}
+
+		/* chanacs */
+		if (!strcmp("CA", item))
+		{
+			chanacs_t *ca;
+			char *cachan, *causer;
+
+			cachan = strtok(NULL, " ");
+			causer = strtok(NULL, " ");
+
+			if (cachan && causer)
+			{
+				mc = mychan_find(cachan);
+				mu = myuser_find(causer);
+
+				cain++;
+
+				if (i >= DB_ATHEME)
+				{
+					uint32_t fl = flags_to_bitmask(strtok(NULL, " "), chanacs_flags, 0x0);
+
+					/* Compatibility with oldworld Atheme db's. --nenolod */
+					if (fl == OLD_CA_AOP)
+						fl = CA_AOP;
+
+					/* previous to CA_ACLVIEW, everyone could view
+					 * access lists. If they aren't AKICKed, upgrade
+					 * them. This keeps us from breaking old XOPs.
+					 */
+					if (i < 4)
+						if (!(fl & CA_AKICK))
+							fl |= CA_ACLVIEW;
+
+					if ((!mu) && (validhostmask(causer)))
+						ca = chanacs_add_host(mc, causer, fl);
+					else
+						ca = chanacs_add(mc, mu, fl);
+
+					/* Do we have enough flags to be the successor? */
+					if (ca->level & CA_SUCCESSOR && !ca->mychan->successor)
+						ca->mychan->successor = ca->myuser;
+				}
+				else if (i == DB_SHRIKE)	/* DB_SHRIKE */
+				{
+					uint32_t fl = atol(strtok(NULL, " "));
+					uint32_t fl2 = 0x0;
+
+					switch (fl)
+					{
+					  case SHRIKE_CA_VOP:
+						  fl2 = CA_VOP;
+					  case SHRIKE_CA_AOP:
+						  fl2 = CA_AOP;
+					  case SHRIKE_CA_SOP:
+						  fl2 = CA_SOP;
+					  case SHRIKE_CA_SUCCESSOR:
+						  fl2 = CA_SUCCESSOR;
+					  case SHRIKE_CA_FOUNDER:
+						  fl2 = CA_FOUNDER;
+					}
+
+					if ((!mu) && (validhostmask(causer)))
+						ca = chanacs_add_host(mc, causer, fl2);
+					else
+						ca = chanacs_add(mc, mu, fl2);
+
+					if (ca->level & CA_SUCCESSOR)
+						ca->mychan->successor = ca->myuser;
+				}
+			}
+		}
+
+		/* klines */
+		if (!strcmp("KL", item))
+		{
+			char *user, *host, *reason, *setby, *tmp;
+			time_t settime;
+			long duration;
+
+			user = strtok(NULL, " ");
+			host = strtok(NULL, " ");
+			tmp = strtok(NULL, " ");
+			duration = atol(tmp);
+			tmp = strtok(NULL, " ");
+			settime = atol(tmp);
+			setby = strtok(NULL, " ");
+			reason = strtok(NULL, "");
+
+			strip(reason);
+
+			k = kline_add(user, host, reason, duration);
+			k->settime = settime;
+			k->setby = sstrdup(setby);
+
+			kin++;
+		}
+
+		/* end */
+		if (!strcmp("DE", item))
+		{
+			i = atoi(strtok(NULL, " "));
+			if (i != muin)
+				slog(LG_ERROR, "db_load(): got %d myusers; expected %d", muin, i);
+
+			i = atoi(strtok(NULL, " "));
+			if (i != mcin)
+				slog(LG_ERROR, "db_load(): got %d mychans; expected %d", mcin, i);
+
+			i = atoi(strtok(NULL, " "));
+			if (i != cain)
+				slog(LG_ERROR, "db_load(): got %d chanacs; expected %d", cain, i);
+
+			if ((s = strtok(NULL, " ")))
+				if ((i = atoi(s)) != kin)
+					slog(LG_ERROR, "db_load(): got %d klines; expected %d", kin, i);
+		}
+	}
+
+	/* now we update the sra list */
+	LIST_FOREACH(n, sralist.head)
+	{
+		sra = (sra_t *)n->data;
+
+		if (!sra->myuser)
+		{
+			sra->myuser = myuser_find(sra->name);
+
+			if (sra->myuser)
+			{
+				slog(LG_DEBUG, "db_load(): updating %s to SRA", sra->name);
+				sra->myuser->sra = sra;
+			}
+		}
+	}
+
+	fclose(f);
+
+	slog(LG_DEBUG, "db_load(): ------------------------- done -------------------------");
+}
+
+void _modinit(module_t *m)
+{
+	m->mflags = MODTYPE_CORE;
+
+	db_load = &flatfile_db_load;
+	db_save = &flatfile_db_save;
+
+	backend_loaded = TRUE;
+}

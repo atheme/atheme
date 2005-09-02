@@ -1,0 +1,12 @@
+Help for REGISTER:
+
+REGISTER allows you to register a channel
+so that you have better control. Registration
+allows you to maintain a channel access list
+and other functions that are normally
+provided by IRC bots.
+
+Syntax: REGISTER <#channel>
+
+Examples:
+    /msg &nick& REGISTER #atheme

@@ -1,0 +1,14 @@
+Help for INVITE:
+
+INVITE requests services to invite you to the
+specified channel. This is useful if you use
+the +i channel mode.
+
+If the last parameter is specified services
+invites the specified nickname.
+
+Syntax: INVITE <#channel> [nickname]
+
+Examples:
+    /msg &nick& INVITE #foo
+    /msg &nick& INVITE #foo bar

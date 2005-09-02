@@ -1,0 +1,10 @@
+Help for BAN:
+
+The BAN command allows you to ban a user or hostmask from
+a channel
+
+Syntax: BAN <#channel> <nickname|hostmask>
+
+Examples:
+    /msg &nick& BAN #chat carnell
+    /msg &nick& BAN #chat *!*@*.ipt.aol.com

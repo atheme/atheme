@@ -1,0 +1,10 @@
+Help for UNBAN:
+
+The UNBAN command allows you to unban a user or hostmask
+from a channel
+
+Syntax: UNBAN <#channel> <nickname|hostmask>
+
+Examples:
+    /msg &nick& UNBAN #chat pfish
+    /msg &nick& UNBAN #chat *!*@*.ucdavis.edu

@@ -1,0 +1,10 @@
+Help for SET STAFFONLY:
+
+SET STAFFONLY designates a channel as staff-only.
+Users who are not staff (either SRA or an IRCop) are
+kickbanned from the channel.
+
+Syntax: SET <#channel> STAFFONLY ON|OFF
+
+Example:
+    /msg &nick& SET #foo STAFFONLY ON

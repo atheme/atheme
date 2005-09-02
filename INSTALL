@@ -1,0 +1,125 @@
+Atheme -- a set of services for IRC networks
+============================================
+
+This program is free but copyrighted software; see the LICENSE file for
+details.
+
+Information about Atheme may be found at http://www.atheme.org/.
+
+TABLE OF CONTENTS
+-----------------
+  1. Installation
+  2. Upgrading
+  3. Setting up IRCd
+  4. Starting Atheme
+  5. Setting up crontab entry
+
+You should also read the README and FAQ files.
+
+1. INSTALLATION
+---------------
+
+IMPORTANT NOTE: it is not recommended to use (and therefore install) Atheme as
+root. Use an unprivileged user account.
+
+Atheme should compile and run on most POSIX compliant systems.  The list of
+platforms that Atheme has been tested on includes:
+  FreeBSD 4.[89]
+  FreeBSD 5.[012]
+  Linux (glibc) 2.4.x
+  Solaris 8
+  MacOS 10.3.3
+
+Other BSD-based systems will probably work. Other SysV-based systems *might*
+work provided they support BSD sockets and POSIX function calls.
+
+The easy way: run the "setup" script. This does it all for you:
+  $ ./setup
+
+Follow the instructions and you're good to go.
+
+The slightly less easy but more traditional way:
+
+Run the "configure" script:
+  $ ./configure --prefix=/path/to/install/
+
+If you're running a large network (more than 2000 users) I suggest passing the
+--enable-large-net switch to configure.
+
+If you are running an ircd other than one used on EFnet (ratbox, hybrid or
+csircd), you will need to check which ircd type you need to use. IRCd's known
+to be supported by Atheme are now listed in the example config, as IRCd
+support has moved to modules.
+
+The "configure" script will run several tests, write several files, and exit.
+Once this is done you will want to compile Atheme. To do this, simply type:
+  $ make
+
+Atheme will compile. To install, type:
+  $ make install
+
+The newly-compiled binary and several supporting files will be copied to the
+directory you specified in the "configure" script.
+
+Next, you'll want to go to the directory you specified in "configure" and edit
+etc/atheme.conf. You'll need to change every setting or Atheme will not work.
+
+2. UPGRADING
+------------
+
+IMPORTANT NOTE: backup your configuration file and database!
+
+Sometimes upgrading requires more than recompiling and reinstalling. Be sure to
+read doc/RELEASE for important notes concerning the release. This file will
+let you know if you need to change your configuration or convert your database
+to a new format.
+
+3. SETTING UP IRCD
+------------------
+
+Atheme acts as an IRC server with pseudo-clients on it. To link it to your
+network, you'll need to add some lines in your IRCd's configuration. Atheme
+connects to IRCd, not the other way around.
+
+This is where I can't help you. Every IRCd is different. Look for documentation
+for "connect{}" or "link{}" or "C/N lines" for your IRCd.
+
+To be perfectly honest, if you can't figure this out you should be running
+neither IRCd nor services.
+
+Additionally, some more configuration may need to be done, likely on all
+servers on the network; see doc/IRCD.
+
+4. STARTING ATHEME
+------------------
+
+Go into the directory where you installed Atheme (by default, ~/atheme/).
+Type ./bin/atheme to launch Atheme.
+
+Atheme will report any errors and/or detach into the background.
+
+If Atheme doesn't link and/or terminates without warning check the log
+file (var/atheme.log) to see what happened. If this tells you nothing try
+rerunning Atheme via ./bin/atheme -dn for more verbose information.
+
+5. SETTING UP A CRONTAB ENTRY
+-----------------------------
+
+A crontab entry will allow you to check periodically whether Atheme is still
+running, and restart it if not. You'll need to have Atheme binaries and data
+installed in the same directory for this to work without modification.
+
+First rename the dist/atheme.chk script that is in Atheme path (by default, 
+~/atheme/) and edit it. You'll need to modify the "cd" part of the file.
+Then ensure that the file is marked as executable by typing
+"chmod +x atheme.chk" and try to launch the script to see if it works.
+
+When this is done, you'll have to add the crontab entry. Type "crontab -e"
+This will open the default text editor with the crontab file. Enter the
+following (with correct path):
+
+*/5 * * * * /home/nenolod/atheme/etc/atheme.chk >/dev/null 2>&1
+
+The */5 at the beginning means "check every 5 minutes." You may replace
+the 5 with other another number if you want (but less than 60). Save and exit,
+and it's installed.

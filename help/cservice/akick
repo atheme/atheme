@@ -1,0 +1,16 @@
+Help for AKICK:
+
+The AKICK command allows you to maintain channel
+ban lists.  Users on the AKICK list will be
+automatically kickbanned when they join the channel.
+
+You may also specify a hostmask (nick!user@host)
+for the AKICK list.
+
+Syntax: AKICK <#channel> ADD|DEL|LIST <nickname|hostmask>
+
+Examples:
+    /msg &nick& AKICK #foo ADD bar
+    /msg &nick& AKICK #foo ADD foo!*@bar.com
+    /msg &nick& AKICK #foo DEL bar
+    /msg &nick& AKICK #foo LIST

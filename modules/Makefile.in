@@ -1,0 +1,67 @@
+# Copyright (c) 2003-2004 E. Will et al.
+# Rights to this code are documented in doc/LICENSE.
+#
+# This file contains build instructions.
+#
+# $Id: Makefile.in 2033 2005-09-02 04:46:05Z nenolod $
+#
+
+CC		= @CC@
+RM		= @RM@
+MV		= @MV@
+CP		= @CP@
+INSTALL		= @INSTALL@
+PREFIX		= @prefix@
+BIN		= atheme@EXEEXT@
+MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../include @PGINC@ @MYINC@
+PICFLAGS	= @PICFLAGS@
+CFLAGS		= @CFLAGS@ -I../include @PGINC@ @MYINC@
+
+VERSION		= 0.1
+
+LIBS		= @LIBS@ @PQLIB@ @MYLIB@
+LDFLAGS		= @LDFLAGS@
+CPPFLAGS	= @CPPFLAGS@
+
+default: all
+
+BASE_SRCS = @MODULES_LIST@
+
+SRCS = ${BASE_SRCS}
+
+OBJS = ${SRCS:.c=.so}
+
+SUBDIRS = chanserv nickserv global operserv
+
+all: modules
+
+build: all
+
+install: build
+	${INSTALL} -d ${PREFIX}/modules
+	${INSTALL} -m 755 *.so ${PREFIX}/modules
+	@for i in $(SUBDIRS); do \
+		echo "install ==> $$i"; \
+		cd $$i; \
+		${MAKE} install || exit; cd ..; \
+	done
+
+modules: $(OBJS)
+	@for i in $(SUBDIRS); do \
+		echo "build ==> $$i"; \
+		cd $$i; \
+		${MAKE} build || exit; cd ..; \
+	done
+
+.SUFFIXES: .so
+
+.c.so:
+	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@
+
+.PHONY: clean distclean
+
+clean:
+	${RM} -f *.so
+
+distclean: clean
+	${RM} -f Makefile version.c.last

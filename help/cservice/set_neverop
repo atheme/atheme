@@ -1,0 +1,11 @@
+Help for SET NEVEROP:
+
+SET NEVEROP prevents a username from being added
+to channel access lists.  This is useful if
+a user does not wish to be added to other channel's
+access lists.
+
+Syntax: SET <username> NEVEROP ON|OFF
+
+Example:
+    /msg &nick& SET foo NEVEROP ON

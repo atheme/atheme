@@ -1,0 +1,17 @@
+Help for OP|DEOP|VOICE|DEVOICE|HALFOP|DEHALFOP:
+
+These commands perform general status mode changes for
+a channel.  If you don't know what these do, it
+will take a lot more than this help file to
+explain them to you.
+
+If the last parameter is omitted the action is performed
+on the person requesting the command.
+
+Syntax: OP|DEOP <#channel> [nickname]
+        VOICE|DEVOICE <#channel> [nickname]
+        HALFOP|DEHALFOP <#channel> [nickname]
+
+Examples:
+    /msg &nick& OP #foo bar
+    /msg &nick& DEVOICE #foo

@@ -1,0 +1,8 @@
+;
+; Example translation
+; $Id: sample.language 1372 2005-08-01 07:28:56Z nenolod $
+;
+
+error.nickname_registered: Hey you! \2%s\2 is already registered, man!
+warning.nickname_is_registered: This nickname has been registered, ya hear?! So why don't you identify via \2/%s identify <password>\2, right now!
+

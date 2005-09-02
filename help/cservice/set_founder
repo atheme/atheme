@@ -1,0 +1,9 @@
+Help for SET FOUNDER:
+
+SET FOUNDER allows a channel founder to set
+a new founder of the channel.
+
+Syntax: SET <#channel> FOUNDER <nickname>
+
+Example:
+    /msg &nick& SET #foo FOUNDER bar
