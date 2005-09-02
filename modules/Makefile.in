@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2033 2005-09-02 04:46:05Z nenolod $
+# $Id: Makefile.in 2055 2005-09-02 06:05:31Z nenolod $
 #
 
 CC		= @CC@
@@ -38,8 +38,8 @@ all: modules
 build: all
 
 install: build
-	${INSTALL} -d ${PREFIX}/modules
-	${INSTALL} -m 755 *.so ${PREFIX}/modules
+	${INSTALL} -d ${PREFIX}/modules || exit 0
+	${INSTALL} -m 755 *.so ${PREFIX}/modules || exit 0
 	@for i in $(SUBDIRS); do \
 		echo "install ==> $$i"; \
 		cd $$i; \
