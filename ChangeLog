@@ -1,3 +1,12 @@
+nenolod     2005/09/02 06:43:22 UTC	(20050902-2059)
+  Log:
+  Display published names in modlist, vs internal ones.
+  
+
+  Modified:
+	trunk/modules/operserv/modlist.c (File Modified) 
+
+
 nenolod     2005/09/02 06:40:10 UTC	(20050902-2057)
   Log:
   More tweaks. :/

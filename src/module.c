@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 2057 2005-09-02 06:40:10Z nenolod $
+ * $Id: module.c 2061 2005-09-02 06:44:01Z nenolod $
  */
 
 #include "atheme.h"
@@ -132,7 +132,7 @@ module_t *module_load(char *filespec)
 	if ((m = module_find(filespec)))
 	{
 		slog(LG_INFO, "module_load(): module %s is already loaded at [0x%lx]",
-				modname, m->address);
+				filespec, m->address);
 		return NULL;
 	}
 
