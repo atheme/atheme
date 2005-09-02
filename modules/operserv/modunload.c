@@ -4,7 +4,7 @@
  *
  * Loads a new module in.
  *
- * $Id: modunload.c 2037 2005-09-02 05:13:29Z nenolod $
+ * $Id: modunload.c 2057 2005-09-02 06:40:10Z nenolod $
  */
 
 #include "atheme.h"
@@ -36,7 +36,7 @@ static void os_cmd_modunload(char *origin)
 
 	while((module = strtok(NULL, " ")))
 	{
-		module_t *m = module_find(module);
+		module_t *m = module_find_published(module);
 
 		if (!m)
 		{

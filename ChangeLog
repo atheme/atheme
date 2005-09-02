@@ -1,3 +1,12 @@
+nenolod     2005/09/02 06:05:31 UTC	(20050902-2055)
+  Log:
+  Surpress an error here.
+  
+
+  Modified:
+	trunk/modules/Makefile.in (File Modified) 
+
+
 nenolod     2005/09/02 05:49:31 UTC	(20050902-2051)
   Log:
   Ok, so we missed one thing in that merge. This puts it back.

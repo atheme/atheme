@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 1993 2005-09-01 04:21:34Z nenolod $
+ * $Id: module.c 2057 2005-09-02 06:40:10Z nenolod $
  */
 
 #include "atheme.h"
@@ -127,10 +127,9 @@ module_t *module_load(char *filespec)
 	node_t *n;
 	module_t *m;
 	moduleheader_t *h;
-	char *modname = basename(filespec);
 	void *handle = NULL;
 
-	if ((m = module_find(modname)))
+	if ((m = module_find(filespec)))
 	{
 		slog(LG_INFO, "module_load(): module %s is already loaded at [0x%lx]",
 				modname, m->address);
@@ -171,7 +170,6 @@ module_t *module_load(char *filespec)
 
 	m = BlockHeapAlloc(module_heap);
 
-	strlcpy(m->name, modname, BUFSIZE);
 	strlcpy(m->modpath, filespec, BUFSIZE);
 	m->address = handle;
 	m->mflags = MODTYPE_STANDARD;
@@ -345,7 +343,7 @@ module_t *module_find(char *name)
 	{
 		module_t *m = n->data;
 
-		if (!strcasecmp(m->name, name))
+		if (!strcasecmp(m->modpath, name))
 			return m;
 	}
 
