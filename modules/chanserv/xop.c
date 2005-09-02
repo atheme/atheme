@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 1989 2005-09-01 03:26:45Z nenolod $
+ * $Id: xop.c 2063 2005-09-02 06:46:31Z nenolod $
  */
 
 #include "atheme.h"
@@ -483,7 +483,7 @@ static void cs_xop_do_list(mychan_t *mc, char *origin, uint32_t level)
 		ca = (chanacs_t *)n->data;
 		if (ca->level == level)
 		{
-			if (ca->host)
+			if (!ca->myuser)
 				notice(chansvs.nick, origin, "%d: \2%s\2", ++i, ca->host);
 			else if (LIST_LENGTH(&ca->myuser->logins))
 				notice(chansvs.nick, origin, "%d: \2%s\2 (logged in)", ++i, ca->myuser->name);
