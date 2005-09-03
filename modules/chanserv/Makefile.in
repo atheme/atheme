@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 1989 2005-09-01 03:26:45Z nenolod $
+# $Id: Makefile.in 2069 2005-09-03 02:38:43Z nenolod $
 #
 
 CC		= @CC@
@@ -49,6 +49,7 @@ BASE_SRCS = 		\
 	taxonomy.c	\
 	topic.c		\
 	voice.c		\
+	why.c		\
 	xop.c
 
 SRCS = ${BASE_SRCS}

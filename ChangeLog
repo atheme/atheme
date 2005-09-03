@@ -1,3 +1,12 @@
+nenolod     2005/09/02 06:55:32 UTC	(20050902-2067)
+  Log:
+  Fix a load error, discovered by pfish. (We probably should have reviewed this instead of impulsively merged it... oh well *sigh*).
+  
+
+  Modified:
+	trunk/modules/operserv/main.c (File Modified) 
+
+
 nenolod     2005/09/02 06:47:59 UTC	(20050902-2065)
   Log:
   Fix compile issues. (Hotpatching is fun.)
