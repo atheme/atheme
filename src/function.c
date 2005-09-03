@@ -5,7 +5,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 1903 2005-08-28 20:14:18Z nenolod $
+ * $Id: function.c 2081 2005-09-03 18:48:48Z nenolod $
  */
 
 #include "atheme.h"
@@ -154,7 +154,7 @@ uint32_t shash(const unsigned char *p)
 	if (!strstr(me.execname, "atheme"))
 		return(rand() % HASHSIZE);
 
-	if (*p == '\0')
+	if (!p)
 		return(0);
 	for (; *p != '\0'; ++p)
 	{
