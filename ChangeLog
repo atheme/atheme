@@ -1,3 +1,12 @@
+nenolod     2005/09/03 03:51:56 UTC	(20050903-2077)
+  Log:
+  Remove race condition in ban(). Reported by many, over the last five months.
+  
+
+  Modified:
+	trunk/src/services.c (File Modified) 
+
+
 nenolod     2005/09/03 03:42:37 UTC	(20050903-2075)
   Log:
   Fix typo.

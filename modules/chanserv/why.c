@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ MYACCESS function.
  *
- * $Id: why.c 2075 2005-09-03 03:42:37Z nenolod $
+ * $Id: why.c 2079 2005-09-03 04:12:41Z nenolod $
  */
 
 #include "atheme.h"
@@ -41,7 +41,7 @@ static void cs_cmd_why(char *origin)
 	mychan_t *mc;
 	user_t *u;
 	user_t *ou = user_find(origin);
-	myuser_t *mu = u->myuser;
+	myuser_t *mu;
 	node_t *n;
 	chanacs_t *ca;
 	uint32_t i, matches = 0;
@@ -56,6 +56,15 @@ static void cs_cmd_why(char *origin)
 	mc = mychan_find(chan);
 	u = user_find(targ);
 
+	if (u == NULL)
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is not online.",
+			targ);
+		return;
+	}
+
+	mu = u->myuser;
+
 	if (mc == NULL)
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is not registered.",
@@ -66,7 +75,7 @@ static void cs_cmd_why(char *origin)
 	if (mu == NULL)
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is not registered.",
-			chan);
+			targ);
 		return;
 	}
 
