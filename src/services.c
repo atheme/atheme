@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 2041 2005-09-02 05:30:19Z nenolod $
+ * $Id: services.c 2077 2005-09-03 03:51:56Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@ extern list_t services[HASHSIZE];
 /* ban wrapper for cmode */
 void ban(char *sender, char *channel, user_t *user)
 {
-	char mask[128];
+	char mask[256];
 	channel_t *c = channel_find(channel);
 	chanban_t *cb;
 
@@ -23,8 +23,8 @@ void ban(char *sender, char *channel, user_t *user)
 
 	mask[0] = '\0';
 
-	strlcat(mask, "*!*@", 128);
-	strlcat(mask, user->vhost, 128);
+	strlcat(mask, "+b *!*@", 256);
+	strlcat(mask, user->vhost, 256);
 
 	cb = chanban_find(c, mask);
 
@@ -33,7 +33,7 @@ void ban(char *sender, char *channel, user_t *user)
 
 	chanban_add(c, mask);
 
-	cmode(sender, channel, "+b", mask);
+	mode_sts(sender, channel, mask);
 }
 
 /* bring on the services clients */

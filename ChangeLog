@@ -1,3 +1,11 @@
+nenolod     2005/09/03 03:42:37 UTC	(20050903-2075)
+  Log:
+  Fix typo.
+
+  Modified:
+	trunk/modules/chanserv/why.c (File Modified) 
+
+
 nenolod     2005/09/03 03:41:55 UTC	(20050903-2073)
   Log:
   Fix a crash when no parameters are provided.
