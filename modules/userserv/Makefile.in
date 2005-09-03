@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2005 2005-09-01 23:06:54Z nenolod $
+# $Id: Makefile.in 2091 2005-09-03 23:02:15Z nenolod $
 #
 
 CC		= @CC@
@@ -28,12 +28,10 @@ default: all
 BASE_SRCS = 		\
 	main.c		\
 	drop.c		\
-	ghost.c		\
 	help.c		\
 	hold.c		\
 	identify.c	\
 	info.c		\
-	link.c		\
 	list.c		\
 	listmail.c	\
 	logout.c	\
@@ -55,8 +53,8 @@ all: modules
 build: all
 
 install: build
-	${INSTALL} -d ${PREFIX}/modules/nickserv
-	${INSTALL} -m 755 *.so ${PREFIX}/modules/nickserv
+	${INSTALL} -d ${PREFIX}/modules/userserv
+	${INSTALL} -m 755 *.so ${PREFIX}/modules/userserv
 
 modules: $(OBJS)
 

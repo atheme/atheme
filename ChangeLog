@@ -1,3 +1,12 @@
+nenolod     2005/09/03 22:56:23 UTC	(20050903-2089)
+  Log:
+  Copy over nickserv directory as skeleton for UserServ.
+  
+
+  Modified:
+	trunk/modules/userserv/ (File Added) 
+
+
 nenolod     2005/09/03 20:42:14 UTC	(20050903-2083)
   Log:
   Fix beu's real name in /info... because i was an idiot and didn't get it down right. 
