@@ -1,3 +1,11 @@
+nenolod     2005/09/03 03:41:55 UTC	(20050903-2073)
+  Log:
+  Fix a crash when no parameters are provided.
+
+  Modified:
+	trunk/modules/chanserv/why.c (File Modified) 
+
+
 nenolod     2005/09/03 02:50:45 UTC	(20050903-2071)
   Log:
   Clean up build system issues.

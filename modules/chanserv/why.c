@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ MYACCESS function.
  *
- * $Id: why.c 2073 2005-09-03 03:41:55Z nenolod $
+ * $Id: why.c 2075 2005-09-03 03:42:37Z nenolod $
  */
 
 #include "atheme.h"
@@ -54,7 +54,7 @@ static void cs_cmd_why(char *origin)
 	}
 
 	mc = mychan_find(chan);
-	u = myuser_find(targ);
+	u = user_find(targ);
 
 	if (mc == NULL)
 	{
