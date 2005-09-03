@@ -1,3 +1,14 @@
+nenolod     2005/09/03 02:38:43 UTC	(20050903-2069)
+  Log:
+  Add /cs why <chan> <nick>. Explains why services is taking the onjoin actions it is taking.
+  
+
+  Modified:
+	trunk/dist/example.conf (File Modified) 
+	trunk/modules/chanserv/Makefile.in (File Modified) 
+	trunk/modules/chanserv/why.c (File Added) 
+
+
 nenolod     2005/09/02 06:55:32 UTC	(20050902-2067)
   Log:
   Fix a load error, discovered by pfish. (We probably should have reviewed this instead of impulsively merged it... oh well *sigh*).
