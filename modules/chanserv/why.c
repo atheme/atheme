@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ MYACCESS function.
  *
- * $Id: why.c 2069 2005-09-03 02:38:43Z nenolod $
+ * $Id: why.c 2073 2005-09-03 03:41:55Z nenolod $
  */
 
 #include "atheme.h"
@@ -38,13 +38,23 @@ static void cs_cmd_why(char *origin)
 	char *chan = strtok(NULL, " ");
 	char *targ = strtok(NULL, " ");
 	char host[BUFSIZE];
-	mychan_t *mc = mychan_find(chan);
-	user_t *u = user_find(targ);
+	mychan_t *mc;
+	user_t *u;
 	user_t *ou = user_find(origin);
 	myuser_t *mu = u->myuser;
 	node_t *n;
 	chanacs_t *ca;
 	uint32_t i, matches = 0;
+
+	if (!chan || !targ)
+	{
+		notice(chansvs.nick, origin, "Insufficient parameters for \2WHY\2");
+		notice(chansvs.nick, origin, "Syntax: WHY <channel> <user>");
+		return;
+	}
+
+	mc = mychan_find(chan);
+	u = myuser_find(targ);
 
 	if (mc == NULL)
 	{
