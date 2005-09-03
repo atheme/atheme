@@ -1,3 +1,13 @@
+nenolod     2005/09/03 18:48:48 UTC	(20050903-2081)
+  Log:
+  Fix a bug relating to hashtable lookups. Fixes several bugs reported by 
+  brian@notheme.org.
+  
+
+  Modified:
+	trunk/src/function.c (File Modified) 
+
+
 nenolod     2005/09/03 04:12:41 UTC	(20050903-2079)
   Log:
   Fix /cs why breakage.
