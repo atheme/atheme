@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 2093 2005-09-04 00:40:23Z jilles $
+ * $Id: flags.c 2115 2005-09-04 17:24:58Z jilles $
  */
 
 #include "atheme.h"
@@ -93,6 +93,12 @@ static void cs_cmd_flags(char *origin)
 		if (!u->myuser)
 		{
 			notice(chansvs.nick, origin, "You are not logged in.");
+			return;
+		}
+
+		if (!mc)
+		{
+			notice(chansvs.nick, origin, "\2%s\2 is not registered.", channel);
 			return;
 		}
 
