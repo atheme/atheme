@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 2011 2005-09-01 23:31:07Z nenolod $
+ * $Id: register.c 2105 2005-09-04 06:03:57Z nenolod $
  */
 
 #include "atheme.h"
@@ -114,16 +114,18 @@ static void ns_cmd_register(char *origin)
 
 	if (me.auth == AUTH_EMAIL)
 	{
-		unsigned long key = makekey();
+		char *key = gen_pw(12);
 		mu->flags |= MU_WAITAUTH;
 
-		metadata_add(mu, METADATA_USER, "private:verify:register:key", itoa(key));
+		metadata_add(mu, METADATA_USER, "private:verify:register:key", key);
 		metadata_add(mu, METADATA_USER, "private:verify:register:timestamp", itoa(time(NULL)));
 
 		notice(nicksvs.nick, origin, "An email containing nickname activiation instructions has been sent to \2%s\2.", mu->email);
 		notice(nicksvs.nick, origin, "If you do not complete registration within one day your nickname will expire.");
 
-		sendemail(mu->name, itoa(key), 1);
+		sendemail(mu->name, key, 1);
+
+		free(key);
 	}
 	else /* only grant ircd registered status if it's verified */
 		ircd_on_login(origin, mu->name, NULL);

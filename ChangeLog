@@ -1,3 +1,13 @@
+nenolod     2005/09/04 05:59:17 UTC	(20050904-2103)
+  Log:
+  Add gen_pw() which generates a random string, intended for passwords and keys.
+  
+
+  Modified:
+	trunk/include/extern.h (File Modified) 
+	trunk/src/function.c (File Modified) 
+
+
 pfish       2005/09/04 05:40:49 UTC	(20050904-2099)
   Log:
   propset
