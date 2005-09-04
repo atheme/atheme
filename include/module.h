@@ -4,7 +4,7 @@
  *
  * This file contains data structures concerning modules.
  *
- * $Id: module.h 1971 2005-08-30 19:18:35Z nenolod $
+ * $Id: module.h 2119 2005-09-04 21:06:11Z nenolod $
  */
 
 #ifndef MODULE_H
@@ -36,6 +36,8 @@ struct moduleheader_ {
 	boolean_t norestart;
 	void (*modinit)(module_t *m);
 	void (*deinit)(void);
+	char *vendor;
+	char *version;
 };
 
 #define DECLARE_MODULE_V1(name, norestart, modinit, deinit) \
