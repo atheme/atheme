@@ -1,3 +1,12 @@
+nenolod     2005/09/04 06:05:51 UTC	(20050904-2107)
+  Log:
+  Make sure clean recurses subdirectories.
+  
+
+  Modified:
+	trunk/modules/Makefile.in (File Modified) 
+
+
 nenolod     2005/09/04 06:03:57 UTC	(20050904-2105)
   Log:
   gen_pw() goodness.

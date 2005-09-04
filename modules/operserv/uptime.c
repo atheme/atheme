@@ -4,7 +4,7 @@
  *
  * This file contains code for OS UPTIME
  *
- * $Id: uptime.c 2099 2005-09-04 05:40:49Z pfish $
+ * $Id: uptime.c 2109 2005-09-04 06:14:39Z pfish $
  */
 
 #include "atheme.h"
@@ -40,7 +40,7 @@ static void os_cmd_uptime(char *origin)
         notice(opersvs.nick, origin, "Services have been up for %s", timediff(CURRTIME - me.start));
         notice(opersvs.nick, origin, "Registered nicknames: %d", cnt.myuser);
         notice(opersvs.nick, origin, "Registered channels: %d", cnt.mychan);
-        notice(opersvs.nick, origin, "Users currently online: %d (Max: n/a)", cnt.user);
+        notice(opersvs.nick, origin, "Users currently online: %d", cnt.user);
 
 }
 
