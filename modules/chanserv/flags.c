@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 1977 2005-09-01 02:55:43Z nenolod $
+ * $Id: flags.c 2093 2005-09-04 00:40:23Z jilles $
  */
 
 #include "atheme.h"
@@ -96,7 +96,8 @@ static void cs_cmd_flags(char *origin)
 			return;
 		}
 
-		if (!(ca = chanacs_find(mc, u->myuser, CA_FLAGS)))
+		/* founder may always set flags -- jilles */
+		if (u->myuser != mc->founder && !chanacs_find(mc, u->myuser, CA_FLAGS))
 		{
 			notice(chansvs.nick, origin, "You are not authorized to execute this command.");
 			return;
@@ -176,7 +177,8 @@ static void cs_fcmd_flags(char *origin, char *channel)
 		return;
 	}
 
-	if (!(ca = chanacs_find(mc, u->myuser, CA_FLAGS)))
+	/* founder may always set flags -- jilles */
+	if (u->myuser != mc->founder && !chanacs_find(mc, u->myuser, CA_FLAGS))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to execute this command.");
 		return;

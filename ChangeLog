@@ -1,3 +1,13 @@
+nenolod     2005/09/03 23:02:15 UTC	(20050903-2091)
+  Log:
+  Remove ghost module.
+  
+
+  Modified:
+	trunk/modules/userserv/Makefile.in (File Modified) 
+	trunk/modules/userserv/ghost.c (File Deleted) 
+
+
 nenolod     2005/09/03 22:56:23 UTC	(20050903-2089)
   Log:
   Copy over nickserv directory as skeleton for UserServ.
