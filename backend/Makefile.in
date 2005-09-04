@@ -3,8 +3,10 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 1921 2005-08-29 02:13:48Z beu $
+# $Id: Makefile.in 2111 2005-09-04 07:15:47Z beu $
 #
+
+DESTDIR		:= 
 
 CC		= @CC@
 RM		= @RM@
@@ -36,8 +38,8 @@ all: protocols
 build: all
 
 install: build
-	${INSTALL} -d ${PREFIX}/backend
-	${INSTALL} -m 755 *.so ${PREFIX}/backend
+	${INSTALL} -d $(DESTDIR)${PREFIX}/backend
+	${INSTALL} -m 755 *.so $(DESTDIR)${PREFIX}/backend
 
 protocols: $(OBJS)
 

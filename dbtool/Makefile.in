@@ -3,8 +3,10 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 1775 2005-08-18 19:50:01Z nenolod $
+# $Id: Makefile.in 2111 2005-09-04 07:15:47Z beu $
 #
+
+DESTDIR		:= 
 
 CC		= @CC@
 RM		= @RM@

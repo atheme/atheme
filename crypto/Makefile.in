@@ -6,6 +6,8 @@
 # $Id: Makefile.in 1773 2005-08-18 19:37:23Z nenolod $
 #
 
+DESTDIR		:= 
+
 CC		= @CC@
 RM		= @RM@
 MV		= @MV@
@@ -36,8 +38,8 @@ all: protocols
 build: all
 
 install: build
-	${INSTALL} -d ${PREFIX}/backend
-	${INSTALL} -m 755 *.so ${PREFIX}/backend
+	${INSTALL} -d $(DESTDIR)${PREFIX}/backend
+	${INSTALL} -m 755 *.so $(DESTDIR)${PREFIX}/backend
 
 protocols: $(OBJS)
 

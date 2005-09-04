@@ -3,8 +3,10 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2035 2005-09-02 04:47:59Z nenolod $
+# $Id: Makefile.in 2111 2005-09-04 07:15:47Z beu $
 #
+
+DESTDIR		:= 
 
 CC		= @CC@
 RM		= @RM@
@@ -66,26 +68,26 @@ atheme: $(OBJS)
 	$(MV) version.c version.c.last
 
 install: build
-	$(INSTALL) -m 755 -d $(PREFIX)
-	$(INSTALL) -m 755 -d $(PREFIX)/bin
-	$(INSTALL) -m 755 -d $(PREFIX)/etc
-	$(INSTALL) -m 755 -d $(PREFIX)/var
-	$(INSTALL) -m 755 -c $(BIN) $(PREFIX)/bin
-	$(INSTALL) -m 640 -c ../dist/example.conf $(PREFIX)/etc
-	if [ ! -r $(PREFIX)/etc/atheme.db ]; then \
-		$(INSTALL) -m 640 -c ../dist/atheme.db $(PREFIX)/etc ; \
+	$(INSTALL) -m 755 -d $(DESTDIR)$(PREFIX)
+	$(INSTALL) -m 755 -d $(DESTDIR)$(PREFIX)/bin
+	$(INSTALL) -m 755 -d $(DESTDIR)$(PREFIX)/etc
+	$(INSTALL) -m 755 -d $(DESTDIR)$(PREFIX)/var
+	$(INSTALL) -m 755 -c $(BIN) $(DESTDIR)$(PREFIX)/bin
+	$(INSTALL) -m 640 -c ../dist/example.conf $(DESTDIR)$(PREFIX)/etc
+	if [ ! -r $(DESTDIR)$(PREFIX)/etc/atheme.db ]; then \
+		$(INSTALL) -m 640 -c ../dist/atheme.db $(DESTDIR)$(PREFIX)/etc ; \
 	fi
-	if [ ! -r $(PREFIX)/etc/atheme.chk ]; then \
-		$(INSTALL) -m 640 -c ../dist/atheme.chk $(PREFIX)/etc ; \
+	if [ ! -r $(DESTDIR)$(PREFIX)/etc/atheme.chk ]; then \
+		$(INSTALL) -m 640 -c ../dist/atheme.chk $(DESTDIR)$(PREFIX)/etc ; \
 	fi
-	if [ -e $(PREFIX)/doc ]; then \
-		$(RM) -rf $(PREFIX)/doc ; \
+	if [ -e $(DESTDIR)$(PREFIX)/doc ]; then \
+		$(RM) -rf $(DESTDIR)$(PREFIX)/doc ; \
 	fi
-	if [ -e $(PREFIX)/help ]; then \
-		$(RM) -rf $(PREFIX)/help ; \
+	if [ -e $(DESTDIR)$(PREFIX)/help ]; then \
+		$(RM) -rf $(DESTDIR)$(PREFIX)/help ; \
 	fi
-	$(CP) -R ../doc $(PREFIX)
-	$(CP) -R ../help $(PREFIX)
+	$(CP) -R ../doc $(DESTDIR)$(PREFIX)
+	$(CP) -R ../help $(DESTDIR)$(PREFIX)
 
 	@echo "----------------------------------------------------------------"
 	@echo ">>> Remember to cd to ${PREFIX} and edit your config file.";
