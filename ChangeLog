@@ -1,3 +1,12 @@
+nenolod     2005/09/04 21:06:11 UTC	(20050904-2119)
+  Log:
+  Add version and vendor fields to the module header.
+  
+
+  Modified:
+	trunk/include/module.h (File Modified) 
+
+
 jilles      2005/09/04 17:24:58 UTC	(20050904-2115)
   Log:
   Give proper error message instead of coring on
