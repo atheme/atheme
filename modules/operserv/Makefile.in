@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2037 2005-09-02 05:13:29Z nenolod $
+# $Id: Makefile.in 2097 2005-09-04 05:35:28Z pfish $
 #
 
 CC		= @CC@
@@ -41,6 +41,7 @@ BASE_SRCS = 		\
 	rehash.c	\
 	restart.c	\
 	shutdown.c	\
+	uptime.c	\
 	update.c
 	
 SRCS = ${BASE_SRCS}
