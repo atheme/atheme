@@ -4,12 +4,17 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 1977 2005-09-01 02:55:43Z nenolod $
+ * $Id: ban.c 2125 2005-09-04 23:34:32Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("chanserv/ban", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"chanserv/ban", FALSE, _modinit, _moddeinit,
+	"$Id: ban.c 2125 2005-09-04 23:34:32Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 static void cs_cmd_ban(char *origin);
 static void cs_cmd_unban(char *origin);

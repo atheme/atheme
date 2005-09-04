@@ -4,12 +4,17 @@
  *
  * This file contains code for the CService DROP function.
  *
- * $Id: drop.c 1977 2005-09-01 02:55:43Z nenolod $
+ * $Id: drop.c 2125 2005-09-04 23:34:32Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("chanserv/drop", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"chanserv/drop", FALSE, _modinit, _moddeinit,
+	"$Id: drop.c 2125 2005-09-04 23:34:32Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 static void cs_cmd_drop(char *origin);
 

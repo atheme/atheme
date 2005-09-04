@@ -4,12 +4,17 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 2027 2005-09-02 03:36:47Z nenolod $
+ * $Id: main.c 2125 2005-09-04 23:34:32Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("global/main", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"global/main", FALSE, _modinit, _moddeinit,
+	"$Id: main.c 2125 2005-09-04 23:34:32Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 list_t gs_cmdtree;
 list_t *os_cmdtree;

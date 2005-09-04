@@ -4,12 +4,17 @@
  *
  * Closing for channels.
  *
- * $Id: close.c 1993 2005-09-01 04:21:34Z nenolod $
+ * $Id: close.c 2125 2005-09-04 23:34:32Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("chanserv/close", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"chanserv/close", FALSE, _modinit, _moddeinit,
+	"$Id: close.c 2125 2005-09-04 23:34:32Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 static void cs_cmd_close(char *origin);
 

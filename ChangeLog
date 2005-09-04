@@ -1,3 +1,13 @@
+nenolod     2005/09/04 23:25:05 UTC	(20050904-2123)
+  Log:
+  Add vendor and version fields to DECLARE_MODULE_V1().
+  Now I get to update 63 files. YAY FOR ME!#&$%(*&$(!@#@$%%!@
+  
+
+  Modified:
+	trunk/include/module.h (File Modified) 
+
+
 nenolod     2005/09/04 23:01:39 UTC	(20050904-2121)
   Log:
   Add a tools directory for developer tools/modules. I guess you would call this an SDK?
