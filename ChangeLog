@@ -1,3 +1,12 @@
+jilles      2005/09/04 00:40:23 UTC	(20050904-2093)
+  Log:
+  Always allow founder to set flags.
+  
+
+  Modified:
+	trunk/modules/chanserv/flags.c (File Modified) 
+
+
 nenolod     2005/09/03 23:02:15 UTC	(20050903-2091)
   Log:
   Remove ghost module.

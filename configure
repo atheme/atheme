@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# $Id: configure.ac 2027 2005-09-02 03:36:47Z nenolod $
+# $Id: configure.ac 2033 2005-09-02 04:46:05Z nenolod $
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -965,7 +965,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-$Id: configure.ac 2027 2005-09-02 03:36:47Z nenolod $
+$Id: configure.ac 2033 2005-09-02 04:46:05Z nenolod $
 _ACEOF
   exit 0
 fi
@@ -9367,7 +9367,7 @@ MODULES_LIST=`echo $MODULE_LIST | sed s:modules\/::g`;
 CONTRIB_MOD_LIST=`echo $CONTRIB_MOD_LIST | sed s:contrib\/::g`;
 
 
-                                                                                                                                  ac_config_files="$ac_config_files Makefile libatheme/Makefile backend/Makefile contrib/Makefile crypto/Makefile dbtool/Makefile modules/Makefile modules/chanserv/Makefile modules/global/Makefile modules/nickserv/Makefile modules/operserv/Makefile protocol/Makefile src/Makefile"
+                                                                                                                                            ac_config_files="$ac_config_files Makefile libatheme/Makefile backend/Makefile contrib/Makefile crypto/Makefile dbtool/Makefile modules/Makefile modules/chanserv/Makefile modules/global/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/userserv/Makefile protocol/Makefile src/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -9904,6 +9904,7 @@ do
   "modules/global/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/global/Makefile" ;;
   "modules/nickserv/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/nickserv/Makefile" ;;
   "modules/operserv/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/operserv/Makefile" ;;
+  "modules/userserv/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/userserv/Makefile" ;;
   "protocol/Makefile" ) CONFIG_FILES="$CONFIG_FILES protocol/Makefile" ;;
   "src/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
   "include/sysconf.h" ) CONFIG_HEADERS="$CONFIG_HEADERS include/sysconf.h" ;;
