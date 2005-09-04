@@ -4,7 +4,7 @@
  *
  * This file contains code for OS UPTIME
  *
- * $Id:$
+ * $Id: uptime.c 2099 2005-09-04 05:40:49Z pfish $
  */
 
 #include "atheme.h"

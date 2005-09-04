@@ -1,3 +1,13 @@
+pfish       2005/09/04 05:35:28 UTC	(20050904-2097)
+  Log:
+  add operserv/uptime module for network information
+  
+
+  Modified:
+	trunk/modules/operserv/Makefile.in (File Modified) 
+	trunk/modules/operserv/uptime.c (File Added) 
+
+
 nenolod     2005/09/04 00:56:04 UTC	(20050904-2095)
   Log:
   More userserv stuff.
