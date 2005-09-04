@@ -1,3 +1,13 @@
+nenolod     2005/09/04 06:03:57 UTC	(20050904-2105)
+  Log:
+  gen_pw() goodness.
+  
+
+  Modified:
+	trunk/modules/nickserv/register.c (File Modified) 
+	trunk/modules/userserv/register.c (File Modified) 
+
+
 nenolod     2005/09/04 05:59:17 UTC	(20050904-2103)
   Log:
   Add gen_pw() which generates a random string, intended for passwords and keys.

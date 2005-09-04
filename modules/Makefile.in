@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2095 2005-09-04 00:56:04Z nenolod $
+# $Id: Makefile.in 2107 2005-09-04 06:05:51Z nenolod $
 #
 
 CC		= @CC@
@@ -59,7 +59,11 @@ modules:
 .PHONY: clean distclean
 
 clean:
-	${RM} -f *.so
+	@for i in $(SUBDIRS); do \
+		echo "clean ==> $$i"; \
+		cd $$i; \
+		${MAKE} clean || exit; cd ..; \
+	done
 
 distclean: clean
 	${RM} -f Makefile version.c.last
