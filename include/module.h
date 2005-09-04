@@ -4,7 +4,7 @@
  *
  * This file contains data structures concerning modules.
  *
- * $Id: module.h 2119 2005-09-04 21:06:11Z nenolod $
+ * $Id: module.h 2123 2005-09-04 23:25:05Z nenolod $
  */
 
 #ifndef MODULE_H
@@ -40,10 +40,10 @@ struct moduleheader_ {
 	char *version;
 };
 
-#define DECLARE_MODULE_V1(name, norestart, modinit, deinit) \
+#define DECLARE_MODULE_V1(name, norestart, modinit, deinit, ven, ver) \
 	moduleheader_t _header = { \
 		MAPI_ATHEME_MAGIC, MAPI_ATHEME_V1, \
-		name, norestart, modinit, deinit \
+		name, norestart, modinit, deinit, ven, ver \
 	}
 
 extern void _modinit(module_t *m);
