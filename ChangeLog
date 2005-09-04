@@ -1,3 +1,12 @@
+pfish       2005/09/04 05:40:49 UTC	(20050904-2099)
+  Log:
+  propset
+  
+
+  Modified:
+	trunk/modules/operserv/uptime.c  (Property Modified)
+
+
 pfish       2005/09/04 05:35:28 UTC	(20050904-2097)
   Log:
   add operserv/uptime module for network information

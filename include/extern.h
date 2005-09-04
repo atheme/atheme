@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 1913 2005-08-29 00:37:56Z nenolod $
+ * $Id: extern.h 2103 2005-09-04 05:59:17Z nenolod $
  */
 
 #ifndef EXTERN_H
@@ -73,6 +73,8 @@ E size_t strlcat(char *dest, const char *src, size_t count);
 #ifndef HAVE_STRLCPY
 E size_t strlcpy(char *dest, const char *src, size_t count);
 #endif
+
+E char *gen_pw(int8_t sz);
 
 #if HAVE_GETTIMEOFDAY
 E void s_time(struct timeval *sttime);

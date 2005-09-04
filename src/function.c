@@ -1,11 +1,10 @@
 /*
  * Copyright (c) 2005 Atheme Development Group
- *
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains misc routines.
  *
- * $Id: function.c 2081 2005-09-03 18:48:48Z nenolod $
+ * $Id: function.c 2103 2005-09-04 05:59:17Z nenolod $
  */
 
 #include "atheme.h"
@@ -16,6 +15,23 @@ FILE *log_file;
 #ifdef _WIN32
 #undef HAVE_GETTIMEOFDAY
 #endif
+
+char ch[26] = "abcdefghijklmnopqrstuvwxyz";
+
+char *gen_pw(int8_t sz)
+{
+        int8_t i;
+        char *buf = malloc(sz);
+
+        for (i = 0; i < sz; i++)
+        {
+                buf[i] = ch[rand() % 26];
+        }
+
+        buf[sz] = 0;
+
+        return buf;
+}
 
 #ifdef HAVE_GETTIMEOFDAY
 /* starts a timer */
