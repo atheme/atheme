@@ -1,3 +1,25 @@
+jilles      2005/09/05 21:22:11 UTC	(20050905-2171)
+  Log:
+  - Move some *LEN defines to common.h
+  - Use separate define for email address length instead of
+    NICKLEN + HOSTLEN + 1
+  - Make clear that *LEN are the buffer lengths (including '\0')
+  - Shorten GECOSLEN to 51, add 1 to USERLEN, HOSTLEN (this breaks
+    binary compatibility, recompile all modules)
+  
+
+  Modified:
+	trunk/include/account.h (File Modified) 
+	trunk/include/atheme.h (File Modified) 
+	trunk/include/common.h (File Modified) 
+	trunk/include/connection.h (File Modified) 
+	trunk/modules/nickserv/set.c (File Modified) 
+	trunk/modules/nickserv/verify.c (File Modified) 
+	trunk/modules/userserv/set.c (File Modified) 
+	trunk/modules/userserv/verify.c (File Modified) 
+	trunk/src/node.c (File Modified) 
+
+
 pfish       2005/09/05 20:48:58 UTC	(20050905-2167)
   Log:
   warn on already loaded module

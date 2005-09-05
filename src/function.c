@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 2103 2005-09-04 05:59:17Z nenolod $
+ * $Id: function.c 2173 2005-09-05 21:32:17Z jilles $
  */
 
 #include "atheme.h"
@@ -356,7 +356,7 @@ int validemail(char *email)
 	int i, valid = 1, chars = 0;
 
 	/* sane length */
-	if (strlen(email) > 128)
+	if (strlen(email) >= EMAILLEN)
 		valid = 0;
 
 	/* make sure it has @ and . */
