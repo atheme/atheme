@@ -1,3 +1,14 @@
+nenolod     2005/09/05 01:32:47 UTC	(20050905-2143)
+  Log:
+  UserServ modifications.
+  
+
+  Modified:
+	trunk/modules/userserv/Makefile.in (File Modified) 
+	trunk/modules/userserv/ghost.c (File Deleted) 
+	trunk/modules/userserv/link.c (File Deleted) 
+
+
 nenolod     2005/09/05 01:32:13 UTC	(20050905-2141)
   Log:
   Put userserv back.

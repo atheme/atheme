@@ -5,13 +5,18 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 2041 2005-09-02 05:30:19Z nenolod $
+ * $Id: postgresql.c 2145 2005-09-05 01:40:07Z nenolod $
  */
 
 #include "atheme.h"
 #include <libpq-fe.h>
 
-DECLARE_MODULE_V1("backend/postgresql", TRUE, _modinit, NULL);
+DECLARE_MODULE_V1
+(
+	"backend/postgresql", TRUE, _modinit, NULL,
+	"$Id: postgresql.c 2145 2005-09-05 01:40:07Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 PGconn *pq;
 
