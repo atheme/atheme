@@ -1,3 +1,12 @@
+nenolod     2005/09/05 03:49:21 UTC	(20050905-2155)
+  Log:
+  Fix a minor error here, I fixed this a while ago but forgot to commit.
+  
+
+  Modified:
+	trunk/modules/operserv/modinspect.c (File Modified) 
+
+
 nenolod     2005/09/05 02:12:42 UTC	(20050905-2153)
   Log:
   Update documentation.
