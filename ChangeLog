@@ -1,3 +1,17 @@
+jilles      2005/09/05 21:32:17 UTC	(20050905-2173)
+  Log:
+  Use EMAILLEN (- 1) instead of hardcoded 128 to verify
+  email address length.
+  
+
+  Modified:
+	trunk/modules/nickserv/register.c (File Modified) 
+	trunk/modules/nickserv/set.c (File Modified) 
+	trunk/modules/userserv/register.c (File Modified) 
+	trunk/modules/userserv/set.c (File Modified) 
+	trunk/src/function.c (File Modified) 
+
+
 jilles      2005/09/05 21:22:11 UTC	(20050905-2171)
   Log:
   - Move some *LEN defines to common.h

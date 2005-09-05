@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 1915 2005-08-29 00:40:21Z nenolod $
+ * $Id: conf.c 2175 2005-09-05 23:18:00Z jilles $
  */
 
 #include "atheme.h"
@@ -38,6 +38,7 @@ static int c_si_adminname(CONFIGENTRY *);
 static int c_si_adminemail(CONFIGENTRY *);
 static int c_si_mta(CONFIGENTRY *);
 static int c_si_loglevel(CONFIGENTRY *);
+static int c_si_maxlogins(CONFIGENTRY *);
 static int c_si_maxusers(CONFIGENTRY *);
 static int c_si_maxchans(CONFIGENTRY *);
 static int c_si_auth(CONFIGENTRY *);
@@ -183,7 +184,7 @@ void conf_init(void)
 
 	me.netname = me.adminname = me.adminemail = me.mta = chansvs.nick = config_options.chan = config_options.global = NULL;
 
-	me.recontime = me.restarttime = me.maxusers = me.maxchans = config_options.flood_msgs = config_options.flood_time = config_options.kline_time = config_options.commit_interval = config_options.expire = 0;
+	me.recontime = me.restarttime = me.maxlogins = me.maxusers = me.maxchans = config_options.flood_msgs = config_options.flood_time = config_options.kline_time = config_options.commit_interval = config_options.expire = 0;
 
 	/* we don't reset loglevel because too much stuff uses it */
 	config_options.defuflags = config_options.defcflags = 0x00000000;
@@ -390,6 +391,7 @@ void init_newconf(void)
 	add_conf_item("ADMINEMAIL", &conf_si_table, c_si_adminemail);
 	add_conf_item("MTA", &conf_si_table, c_si_mta);
 	add_conf_item("LOGLEVEL", &conf_si_table, c_si_loglevel);
+	add_conf_item("MAXLOGINS", &conf_si_table, c_si_maxlogins);
 	add_conf_item("MAXUSERS", &conf_si_table, c_si_maxusers);
 	add_conf_item("MAXCHANS", &conf_si_table, c_si_maxchans);
 	add_conf_item("AUTH", &conf_si_table, c_si_auth);
@@ -722,6 +724,17 @@ static int c_si_loglevel(CONFIGENTRY *ce)
 		me.loglevel |= LG_ERROR;
 
 	return 0;
+}
+
+static int c_si_maxlogins(CONFIGENTRY *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	me.maxlogins = ce->ce_vardatanum;
+
+	return 0;
+
 }
 
 static int c_si_maxusers(CONFIGENTRY *ce)
@@ -1149,6 +1162,7 @@ static void copy_me(struct me *src, struct me *dst)
 	dst->adminemail = sstrdup(src->adminemail);
 	dst->mta = sstrdup(src->mta);
 	dst->loglevel = src->loglevel;
+	dst->maxlogins = src->maxlogins;
 	dst->maxusers = src->maxusers;
 	dst->maxchans = src->maxchans;
 	dst->auth = src->auth;
@@ -1266,6 +1280,12 @@ boolean_t conf_check(void)
 	{
 		slog(LG_INFO, "conf_check(): no `mta' set in %s (but `auth' is email)", config_file);
 		return FALSE;
+	}
+
+	if (!me.maxlogins)
+	{
+		slog(LG_INFO, "conf_check(): no `maxlogins' set in %s; " "defaulting to 5", config_file);
+		me.maxlogins = 5;
 	}
 
 	if (!me.maxusers)

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: identify.c 2133 2005-09-05 01:19:23Z nenolod $
+ * $Id: identify.c 2175 2005-09-05 23:18:00Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/identify", FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 2133 2005-09-05 01:19:23Z nenolod $",
+	"$Id: identify.c 2175 2005-09-05 23:18:00Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -77,7 +77,11 @@ static void ns_cmd_identify(char *origin)
 
 	if (!strcmp(password, mu->pass))
 	{
-		/* XXX check for too many logins (conf option) -- jilles */
+		if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
+		{
+			notice(nicksvs.nick, origin, "There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d).", LIST_LENGTH(&mu->logins), mu->name, me.maxlogins);
+			return;
+		}
 
 		/* if they are identified to another account, nuke their session first */
 		if (u->myuser && strcmp(u->myuser->name, target))
