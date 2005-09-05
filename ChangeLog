@@ -1,3 +1,12 @@
+nenolod     2005/09/05 17:38:57 UTC	(20050905-2163)
+  Log:
+  char *origin *only* in function declarations!!!!!!!!!!!
+  
+
+  Modified:
+	trunk/modules/operserv/modinspect.c (File Modified) 
+
+
 pfish       2005/09/05 09:59:21 UTC	(20050905-2161)
   Log:
   fix some errors here

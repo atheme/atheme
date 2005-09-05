@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 2079 2005-09-03 04:12:41Z nenolod $
+ * $Id: services.c 2165 2005-09-05 18:22:54Z jilles $
  */
 
 #include "atheme.h"
@@ -22,12 +22,10 @@ void ban(char *sender, char *channel, user_t *user)
 	if (!c)
 		return;
 
-	mask[0] = '\0';
-
-	strlcat(mask, "*!*@", 256);
+	strlcpy(mask, "*!*@", 256);
 	strlcat(mask, user->vhost, 256);
 
-	strlcat(modemask, "+b ", 256);
+	strlcpy(modemask, "+b ", 256);
 	strlcat(modemask, mask, 256);
 
 	cb = chanban_find(c, mask);
