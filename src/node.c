@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 1827 2005-08-20 04:38:35Z nenolod $
+ * $Id: node.c 2171 2005-09-05 21:22:11Z jilles $
  */
 
 #include "atheme.h"
@@ -1208,7 +1208,7 @@ myuser_t *myuser_add(char *name, char *pass, char *email)
 
 	strlcpy(mu->name, name, NICKLEN);
 	strlcpy(mu->pass, pass, NICKLEN);
-	strlcpy(mu->email, email, NICKLEN + HOSTLEN + 1);
+	strlcpy(mu->email, email, EMAILLEN);
         mu->registered = CURRTIME;
         mu->hash = MUHASH((unsigned char *)name);
 

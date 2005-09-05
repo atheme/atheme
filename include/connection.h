@@ -4,7 +4,7 @@
  *
  * This contains the connection_t structure.
  *
- * $Id: connection.h 1716 2005-08-14 20:22:37Z nenolod $
+ * $Id: connection.h 2171 2005-09-05 21:22:11Z jilles $
  */
 
 #ifndef CONNECTION_H
@@ -14,7 +14,7 @@ typedef struct connection_ connection_t;
 
 struct connection_
 {
-	char name[HOSTLEN + 1];
+	char name[HOSTLEN];
 	char hbuf[BUFSIZE + 1];
 
 	list_t recvq;

@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 1751 2005-08-18 00:28:59Z nenolod $
+ * $Id: account.h 2171 2005-09-05 21:22:11Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -25,7 +25,7 @@ struct myuser_
 {
   char name[NICKLEN];
   char pass[NICKLEN];
-  char email[NICKLEN + HOSTLEN + 1];
+  char email[EMAILLEN];
 
   list_t logins; /* user_t's currently logged in to this */
   time_t registered;

@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 2133 2005-09-05 01:19:23Z nenolod $
+ * $Id: set.c 2171 2005-09-05 21:22:11Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 2133 2005-09-05 01:19:23Z nenolod $",
+	"$Id: set.c 2171 2005-09-05 21:22:11Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -126,7 +126,7 @@ static void ns_set_email(char *origin, char *name, char *params)
 		return;
 	}
 
-	strlcpy(mu->email, email, NICKLEN + HOSTLEN + 1);
+	strlcpy(mu->email, email, EMAILLEN);
 
 	notice(nicksvs.nick, origin, "The email address for \2%s\2 has been changed to \2%s\2.", mu->name, mu->email);
 }

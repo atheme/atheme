@@ -1,3 +1,12 @@
+pfish       2005/09/05 20:48:58 UTC	(20050905-2167)
+  Log:
+  warn on already loaded module
+  
+
+  Modified:
+	trunk/modules/operserv/modload.c (File Modified) 
+
+
 jilles      2005/09/05 18:22:54 UTC	(20050905-2165)
   Log:
   Properly initialize mask and modemask in ban(), don't use old

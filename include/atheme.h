@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 1891 2005-08-28 18:08:29Z nenolod $
+ * $Id: atheme.h 2171 2005-09-05 21:22:11Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -261,12 +261,6 @@ int runflags;
 #if HAVE_GETTIMEOFDAY
 struct timeval burstime;
 #endif
-
-/* max lengths of fields */
-#define NICKLEN 50
-#define USERLEN 10
-#define GECOSLEN 255
-#define HOSTLEN 63
 
 /* *INDENT-OFF* */
 

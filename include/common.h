@@ -4,14 +4,13 @@
  *
  * Data structures for account information.
  *
- * $Id: common.h 1114 2005-07-24 20:55:40Z nenolod $
+ * $Id: common.h 2171 2005-09-05 21:22:11Z jilles $
  */
 
 #ifndef COMMON_H
 #define COMMON_H
 
 /* D E F I N E S */
-#define HOSTLEN 63
 #define BUFSIZE  1024            /* maximum size of a buffer */
 #define MODESTACK_WAIT 500
 #define MAXMODES 4
@@ -19,6 +18,13 @@
 #define MAX_EVENTS 25
 #define TOKEN_UNMATCHED -1
 #define TOKEN_ERROR -2
+
+/* lengths of buffers (string length is 1 less) */
+#define NICKLEN 50
+#define USERLEN 11
+#define HOSTLEN 64
+#define GECOSLEN 51
+#define EMAILLEN 120
 
 /* H A S H */
 #define HASHINIT 0x811c9dc5
