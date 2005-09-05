@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2097 2005-09-04 05:35:28Z pfish $
+# $Id: Makefile.in 2151 2005-09-05 02:10:48Z nenolod $
 #
 
 CC		= @CC@
@@ -32,6 +32,7 @@ BASE_SRCS = 		\
 	inject.c	\
 	jupe.c		\
 	mode.c		\
+	modinspect.c	\
 	modlist.c	\
 	modload.c	\
 	modrestart.c	\

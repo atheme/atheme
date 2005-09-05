@@ -1,3 +1,13 @@
+nenolod     2005/09/05 01:55:54 UTC	(20050905-2149)
+  Log:
+  Fix some warnings.
+  
+
+  Modified:
+	trunk/include/sockio.h (File Modified) 
+	trunk/libatheme/linker.c (File Modified) 
+
+
 nenolod     2005/09/05 01:46:10 UTC	(20050905-2147)
   Log:
   Update protocol components.
