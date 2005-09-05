@@ -4,12 +4,17 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: op.c 1983 2005-09-01 03:14:44Z nenolod $
+ * $Id: op.c 2129 2005-09-05 00:59:19Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("chanserv/op", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"chanserv/op", FALSE, _modinit, _moddeinit,
+	"$Id: op.c 2129 2005-09-05 00:59:19Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 static void cs_cmd_op(char *origin);
 static void cs_cmd_deop(char *origin);

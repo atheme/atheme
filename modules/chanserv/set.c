@@ -4,12 +4,17 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 1989 2005-09-01 03:26:45Z nenolod $
+ * $Id: set.c 2129 2005-09-05 00:59:19Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("chanserv/set", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"chanserv/set", FALSE, _modinit, _moddeinit,
+	"$Id: set.c 2129 2005-09-05 00:59:19Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 static void cs_cmd_set(char *origin);
 static void cs_join_entrymsg(chanuser_t *cu);

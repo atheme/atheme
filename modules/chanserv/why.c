@@ -4,12 +4,17 @@
  *
  * This file contains code for the NickServ MYACCESS function.
  *
- * $Id: why.c 2079 2005-09-03 04:12:41Z nenolod $
+ * $Id: why.c 2129 2005-09-05 00:59:19Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("chanserv/why", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"chanserv/why", FALSE, _modinit, _moddeinit,
+	"$Id: why.c 2129 2005-09-05 00:59:19Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 static void cs_cmd_why(char *origin);
 

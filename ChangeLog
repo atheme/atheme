@@ -1,3 +1,16 @@
+nenolod     2005/09/05 00:44:16 UTC	(20050905-2127)
+  Log:
+  Update some more modules.
+  
+
+  Modified:
+	trunk/modules/chanserv/flags.c (File Modified) 
+	trunk/modules/chanserv/ftransfer.c (File Modified) 
+	trunk/modules/chanserv/halfop.c (File Modified) 
+	trunk/modules/chanserv/help.c (File Modified) 
+	trunk/modules/chanserv/hold.c (File Modified) 
+
+
 nenolod     2005/09/04 23:34:32 UTC	(20050904-2125)
   Log:
   Update a set of module headers.

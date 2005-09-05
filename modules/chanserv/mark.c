@@ -4,12 +4,17 @@
  *
  * Marking for channels.
  *
- * $Id: mark.c 1983 2005-09-01 03:14:44Z nenolod $
+ * $Id: mark.c 2129 2005-09-05 00:59:19Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("chanserv/mark", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"chanserv/mark", FALSE, _modinit, _moddeinit,
+	"$Id: mark.c 2129 2005-09-05 00:59:19Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 static void cs_cmd_mark(char *origin);
 

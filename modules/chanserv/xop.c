@@ -4,12 +4,17 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 2063 2005-09-02 06:46:31Z nenolod $
+ * $Id: xop.c 2129 2005-09-05 00:59:19Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("chanserv/xop", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"chanserv/xop", FALSE, _modinit, _moddeinit,
+	"$Id: xop.c 2129 2005-09-05 00:59:19Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 /* the individual command stuff, now that we've reworked, hardcode ;) --w00t */
 static void cs_xop_do_list(mychan_t *mc, char *origin, uint32_t level);

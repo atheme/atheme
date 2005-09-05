@@ -4,12 +4,17 @@
  *
  * This file contains code for the CService INFO functions.
  *
- * $Id: info.c 1987 2005-09-01 03:17:03Z nenolod $
+ * $Id: info.c 2129 2005-09-05 00:59:19Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("chanserv/info", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"chanserv/info", FALSE, _modinit, _moddeinit,
+	"$Id: info.c 2129 2005-09-05 00:59:19Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 static void cs_cmd_info(char *origin);
 
