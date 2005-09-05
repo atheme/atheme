@@ -4,7 +4,7 @@
  *
  * Platform-independent network I/O layer.
  *
- * $Id: sockio.h 1600 2005-08-10 17:22:58Z nenolod $
+ * $Id: sockio.h 2149 2005-09-05 01:55:54Z nenolod $
  */
 
 #ifndef SOCKIO_H
@@ -27,9 +27,9 @@ typedef SOCKET socket_t;
 typedef int socket_t;
 #endif
 
-extern int socket_read(socket_t socket, char *buf, size_t len);
-extern int socket_write(socket_t socket, char *buf, size_t len);
-extern int socket_close(socket_t socket);
+extern int socket_read(socket_t sock, char *buf, size_t len);
+extern int socket_write(socket_t sock, char *buf, size_t len);
+extern int socket_close(socket_t sock);
 extern int socket_geterror(void);
 extern void socket_seterror(int eno);
 extern char *socket_strerror(int eno);

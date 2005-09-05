@@ -4,7 +4,7 @@
  *
  * Dynamic linker.
  *
- * $Id: linker.c 1837 2005-08-22 03:50:47Z nenolod $
+ * $Id: linker.c 2149 2005-09-05 01:55:54Z nenolod $
  */
 
 #include "atheme.h"
@@ -56,7 +56,7 @@ void *linker_open(char *path)
  */
 void *linker_open_ext(char *path)
 {
-	char buf[strlen(path) + 20];
+	char *buf = smalloc(strlen(path) + 20);
 
 	strlcpy(buf, path, strlen(path) + 20);
 
