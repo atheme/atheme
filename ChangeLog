@@ -1,3 +1,28 @@
+nenolod     2005/09/05 01:28:25 UTC	(20050905-2135)
+  Log:
+  Update OperServ modules.
+  
+
+  Modified:
+	trunk/modules/operserv/akill.c (File Modified) 
+	trunk/modules/operserv/help.c (File Modified) 
+	trunk/modules/operserv/inject.c (File Modified) 
+	trunk/modules/operserv/jupe.c (File Modified) 
+	trunk/modules/operserv/main.c (File Modified) 
+	trunk/modules/operserv/mode.c (File Modified) 
+	trunk/modules/operserv/modlist.c (File Modified) 
+	trunk/modules/operserv/modload.c (File Modified) 
+	trunk/modules/operserv/modrestart.c (File Modified) 
+	trunk/modules/operserv/modunload.c (File Modified) 
+	trunk/modules/operserv/noop.c (File Modified) 
+	trunk/modules/operserv/raw.c (File Modified) 
+	trunk/modules/operserv/rehash.c (File Modified) 
+	trunk/modules/operserv/restart.c (File Modified) 
+	trunk/modules/operserv/shutdown.c (File Modified) 
+	trunk/modules/operserv/update.c (File Modified) 
+	trunk/modules/operserv/uptime.c (File Modified) 
+
+
 nenolod     2005/09/05 01:19:23 UTC	(20050905-2133)
   Log:
   Nickserv modules.
