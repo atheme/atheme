@@ -1,3 +1,12 @@
+nenolod     2005/09/05 01:32:13 UTC	(20050905-2141)
+  Log:
+  Put userserv back.
+  
+
+  Modified:
+	trunk/modules/userserv/ (File Added) 
+
+
 nenolod     2005/09/05 01:31:54 UTC	(20050905-2139)
   Log:
   Remove userserv dir.
