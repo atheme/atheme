@@ -4,12 +4,17 @@
  *
  * This file contains code for the NickServ LISTMAIL function.
  *
- * $Id: listmail.c 2011 2005-09-01 23:31:07Z nenolod $
+ * $Id: listmail.c 2133 2005-09-05 01:19:23Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("nickserv/listmail", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"nickserv/listmail", FALSE, _modinit, _moddeinit,
+	"$Id: listmail.c 2133 2005-09-05 01:19:23Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 static void ns_cmd_listmail(char *origin);
 

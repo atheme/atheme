@@ -4,12 +4,17 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 2007 2005-09-01 23:10:42Z nenolod $
+ * $Id: main.c 2133 2005-09-05 01:19:23Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("nickserv/main", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"nickserv/main", FALSE, _modinit, _moddeinit,
+	"$Id: main.c 2133 2005-09-05 01:19:23Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 list_t ns_cmdtree;
 

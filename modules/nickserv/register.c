@@ -4,12 +4,17 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 2105 2005-09-04 06:03:57Z nenolod $
+ * $Id: register.c 2133 2005-09-05 01:19:23Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("nickserv/register", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"nickserv/register", FALSE, _modinit, _moddeinit,
+	"$Id: register.c 2133 2005-09-05 01:19:23Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 static void ns_cmd_register(char *origin);
 
