@@ -1,3 +1,12 @@
+nenolod     2005/09/05 02:12:42 UTC	(20050905-2153)
+  Log:
+  Update documentation.
+  
+
+  Modified:
+	trunk/dist/example.conf (File Modified) 
+
+
 nenolod     2005/09/05 02:10:48 UTC	(20050905-2151)
   Log:
   Add /os modinspect command.

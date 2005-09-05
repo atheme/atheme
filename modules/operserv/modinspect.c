@@ -60,7 +60,7 @@ static void os_cmd_modinspect(char *origin)
 		return;
 	}
 
-	notice(opersvs.nick, origin, "Information on \2%s\2:");
+	notice(opersvs.nick, origin, "Information on \2%s\2:", mname);
 	notice(opersvs.nick, origin, "Name       : %s", m->header->name);
 	notice(opersvs.nick, origin, "Address    : %p", m->address);
 	notice(opersvs.nick, origin, "Entry point: %p", m->header->modinit);
