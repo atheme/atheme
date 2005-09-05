@@ -4,12 +4,17 @@
  *
  * This file contains code for the CService FTRANSFER function.
  *
- * $Id: ftransfer.c 1979 2005-09-01 03:02:53Z nenolod $
+ * $Id: ftransfer.c 2127 2005-09-05 00:44:16Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("chanserv/ftransfer", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"chanserv/ftransfer", FALSE, _modinit, _moddeinit,
+	"$Id: ftransfer.c 2127 2005-09-05 00:44:16Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 static void cs_cmd_ftransfer(char *origin);
 

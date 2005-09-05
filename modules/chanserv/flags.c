@@ -4,15 +4,15 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 2125 2005-09-04 23:34:32Z nenolod $
+ * $Id: flags.c 2127 2005-09-05 00:44:16Z nenolod $
  */
 
 #include "atheme.h"
 
 DECLARE_MODULE_V1
 (
-	"chanserv/flags", FALSE, _modinit, _moddeinit
-	"$Id: flags.c 2125 2005-09-04 23:34:32Z nenolod $",
+	"chanserv/flags", FALSE, _modinit, _moddeinit,
+	"$Id: flags.c 2127 2005-09-05 00:44:16Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
