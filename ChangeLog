@@ -1,3 +1,15 @@
+nenolod     2005/09/05 01:40:07 UTC	(20050905-2145)
+  Log:
+  Update backend modules, module header.
+  
+
+  Modified:
+	trunk/backend/flatfile.c (File Modified) 
+	trunk/backend/mysql.c (File Modified) 
+	trunk/backend/postgresql.c (File Modified) 
+	trunk/include/module.h (File Modified) 
+
+
 nenolod     2005/09/05 01:32:47 UTC	(20050905-2143)
   Log:
   UserServ modifications.

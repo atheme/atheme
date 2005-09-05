@@ -4,13 +4,18 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 1993 2005-09-01 04:21:34Z nenolod $
+ * $Id: unreal.c 2147 2005-09-05 01:46:10Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", FALSE, _modinit, NULL);
+DECLARE_MODULE_V1
+(
+	"protocol/unreal", FALSE, _modinit, NULL,
+	"$Id: unreal.c 2147 2005-09-05 01:46:10Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 /* *INDENT-OFF* */
 

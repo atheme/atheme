@@ -4,13 +4,18 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: sorcery.c 2019 2005-09-01 23:53:13Z nenolod $
+ * $Id: sorcery.c 2147 2005-09-05 01:46:10Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/sorcery.h"
 
-DECLARE_MODULE_V1("protocol/sorcery", FALSE, _modinit, NULL);
+DECLARE_MODULE_V1
+(
+	"protocol/sorcery", FALSE, _modinit, NULL,
+	"$Id: sorcery.c 2147 2005-09-05 01:46:10Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 /* *INDENT-OFF* */
 

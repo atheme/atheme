@@ -6,13 +6,18 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: asuka.c 1995 2005-09-01 04:23:22Z nenolod $
+ * $Id: asuka.c 2147 2005-09-05 01:46:10Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", FALSE, _modinit, NULL);
+DECLARE_MODULE_V1
+(
+	"protocol/asuka", FALSE, _modinit, NULL,
+	"$Id: asuka.c 2147 2005-09-05 01:46:10Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 /* *INDENT-OFF* */
 

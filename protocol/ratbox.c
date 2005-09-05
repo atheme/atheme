@@ -4,13 +4,18 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 1997 2005-09-01 04:28:13Z nenolod $
+ * $Id: ratbox.c 2147 2005-09-05 01:46:10Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", FALSE, _modinit, NULL);
+DECLARE_MODULE_V1
+(
+	"protocol/ratbox", FALSE, _modinit, NULL,
+	"$Id: ratbox.c 2147 2005-09-05 01:46:10Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 /* *INDENT-OFF* */
 

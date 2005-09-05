@@ -4,13 +4,18 @@
  *
  * This file contains protocol support for shadowircd-based ircd.
  *
- * $Id: shadowircd.c 1997 2005-09-01 04:28:13Z nenolod $
+ * $Id: shadowircd.c 2147 2005-09-05 01:46:10Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/shadowircd.h"
 
-DECLARE_MODULE_V1("protocol/shadowircd", FALSE, _modinit, NULL);
+DECLARE_MODULE_V1
+(
+	"protocol/shadowircd", FALSE, _modinit, NULL,
+	"$Id: shadowircd.c 2147 2005-09-05 01:46:10Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 /* *INDENT-OFF* */
 
