@@ -1,3 +1,13 @@
+jilles      2005/09/05 18:22:54 UTC	(20050905-2165)
+  Log:
+  Properly initialize mask and modemask in ban(), don't use old
+  stack garbage.
+  
+
+  Modified:
+	trunk/src/services.c (File Modified) 
+
+
 nenolod     2005/09/05 17:38:57 UTC	(20050905-2163)
   Log:
   char *origin *only* in function declarations!!!!!!!!!!!
