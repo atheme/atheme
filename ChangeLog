@@ -1,3 +1,12 @@
+nenolod     2005/09/05 01:30:08 UTC	(20050905-2137)
+  Log:
+  Remove dead module.
+  
+
+  Modified:
+	trunk/modules/userserv/link.c (File Deleted) 
+
+
 nenolod     2005/09/05 01:28:25 UTC	(20050905-2135)
   Log:
   Update OperServ modules.
