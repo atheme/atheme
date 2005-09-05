@@ -4,12 +4,17 @@
  *
  * Loads a new module in.
  *
- * $Id: modunload.c 2057 2005-09-02 06:40:10Z nenolod $
+ * $Id: modunload.c 2135 2005-09-05 01:28:25Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("operserv/modunload", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"operserv/modunload", FALSE, _modinit, _moddeinit,
+	"$Id: modunload.c 2135 2005-09-05 01:28:25Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 static void os_cmd_modunload(char *origin);
 

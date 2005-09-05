@@ -4,12 +4,17 @@
  *
  * This file contains functionality which implements the OService RAW command.
  *
- * $Id: raw.c 2037 2005-09-02 05:13:29Z nenolod $
+ * $Id: raw.c 2135 2005-09-05 01:28:25Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("operserv/raw", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"operserv/raw", FALSE, _modinit, _moddeinit,
+	"$Id: raw.c 2135 2005-09-05 01:28:25Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 static void os_cmd_raw(char *origin);
 

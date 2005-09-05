@@ -1,16 +1,20 @@
 /*
  * Copyright (c) 2005 Atheme Development Group
- *
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 2067 2005-09-02 06:55:32Z nenolod $
+ * $Id: main.c 2135 2005-09-05 01:28:25Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("operserv/main", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"operserv/main", FALSE, _modinit, _moddeinit,
+	"$Id: main.c 2135 2005-09-05 01:28:25Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 list_t os_cmdtree;
 

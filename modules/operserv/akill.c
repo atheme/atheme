@@ -5,12 +5,17 @@
  * This file contains functionality which implements
  * the OService AKILL/KLINE command.
  *
- * $Id: akill.c 2037 2005-09-02 05:13:29Z nenolod $
+ * $Id: akill.c 2135 2005-09-05 01:28:25Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("operserv/akill", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"operserv/akill", FALSE, _modinit, _moddeinit,
+	"$Id: akill.c 2135 2005-09-05 01:28:25Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 static void os_cmd_akill(char *origin);
 

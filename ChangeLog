@@ -1,3 +1,30 @@
+nenolod     2005/09/05 01:19:23 UTC	(20050905-2133)
+  Log:
+  Nickserv modules.
+  
+
+  Modified:
+	trunk/modules/nickserv/drop.c (File Modified) 
+	trunk/modules/nickserv/ghost.c (File Modified) 
+	trunk/modules/nickserv/help.c (File Modified) 
+	trunk/modules/nickserv/hold.c (File Modified) 
+	trunk/modules/nickserv/identify.c (File Modified) 
+	trunk/modules/nickserv/info.c (File Modified) 
+	trunk/modules/nickserv/link.c (File Modified) 
+	trunk/modules/nickserv/list.c (File Modified) 
+	trunk/modules/nickserv/listmail.c (File Modified) 
+	trunk/modules/nickserv/logout.c (File Modified) 
+	trunk/modules/nickserv/main.c (File Modified) 
+	trunk/modules/nickserv/mark.c (File Modified) 
+	trunk/modules/nickserv/myaccess.c (File Modified) 
+	trunk/modules/nickserv/register.c (File Modified) 
+	trunk/modules/nickserv/sendpass.c (File Modified) 
+	trunk/modules/nickserv/set.c (File Modified) 
+	trunk/modules/nickserv/status.c (File Modified) 
+	trunk/modules/nickserv/taxonomy.c (File Modified) 
+	trunk/modules/nickserv/verify.c (File Modified) 
+
+
 beu         2005/09/05 01:08:12 UTC	(20050905-2131)
   Log:
   Backout make DESTDIR= patch 'til we have a portable solution.

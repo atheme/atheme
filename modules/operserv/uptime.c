@@ -4,12 +4,17 @@
  *
  * This file contains code for OS UPTIME
  *
- * $Id: uptime.c 2109 2005-09-04 06:14:39Z pfish $
+ * $Id: uptime.c 2135 2005-09-05 01:28:25Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("operserv/uptime", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"operserv/uptime", FALSE, _modinit, _moddeinit,
+	"$Id: uptime.c 2135 2005-09-05 01:28:25Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 static void os_cmd_uptime(char *origin);
 

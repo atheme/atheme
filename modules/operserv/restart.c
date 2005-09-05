@@ -4,12 +4,17 @@
  *
  * This file contains functionality which implements the OService RAW command.
  *
- * $Id: restart.c 2037 2005-09-02 05:13:29Z nenolod $
+ * $Id: restart.c 2135 2005-09-05 01:28:25Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("operserv/restart", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"operserv/restart", FALSE, _modinit, _moddeinit,
+	"$Id: restart.c 2135 2005-09-05 01:28:25Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 static void os_cmd_restart(char *origin);
 

@@ -4,12 +4,17 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 2045 2005-09-02 05:32:06Z nenolod $
+ * $Id: help.c 2135 2005-09-05 01:28:25Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("operserv/help", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"operserv/help", FALSE, _modinit, _moddeinit,
+	"$Id: help.c 2135 2005-09-05 01:28:25Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 /* *INDENT-OFF* */
 

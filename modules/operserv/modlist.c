@@ -4,12 +4,17 @@
  *
  * Module listing.
  *
- * $Id: modlist.c 2059 2005-09-02 06:43:22Z nenolod $
+ * $Id: modlist.c 2135 2005-09-05 01:28:25Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("operserv/modlist", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"operserv/modlist", FALSE, _modinit, _moddeinit,
+	"$Id: modlist.c 2135 2005-09-05 01:28:25Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 static void os_cmd_modlist(char *origin);
 

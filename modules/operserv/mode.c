@@ -4,12 +4,17 @@
  *
  * This file contains functionality which implements the OService MODE command.
  *
- * $Id: mode.c 2037 2005-09-02 05:13:29Z nenolod $
+ * $Id: mode.c 2135 2005-09-05 01:28:25Z nenolod $
  */
 
 #include "atheme.h"
 
-DECLARE_MODULE_V1("operserv/mode", FALSE, _modinit, _moddeinit);
+DECLARE_MODULE_V1
+(
+	"operserv/mode", FALSE, _modinit, _moddeinit,
+	"$Id: mode.c 2135 2005-09-05 01:28:25Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 static void os_cmd_mode(char *origin);
 
