@@ -16,7 +16,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void os_cmd_modinspect(char *origin, char *mname);
+static void os_cmd_modinspect(char *origin);
 
 list_t *os_cmdtree;
 
@@ -33,7 +33,7 @@ void _moddeinit(void)
 	command_delete(&os_modinspect, os_cmdtree);
 }
 
-static void os_cmd_modinspect(char *origin, char *mname)
+static void os_cmd_modinspect(char *origin)
 {
 	char *mname = strtok(NULL, " ");
 	module_t *m;
