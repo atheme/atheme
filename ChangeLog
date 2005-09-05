@@ -1,3 +1,13 @@
+nenolod     2005/09/05 02:10:48 UTC	(20050905-2151)
+  Log:
+  Add /os modinspect command.
+  
+
+  Modified:
+	trunk/modules/operserv/Makefile.in (File Modified) 
+	trunk/modules/operserv/modinspect.c (File Added) 
+
+
 nenolod     2005/09/05 01:55:54 UTC	(20050905-2149)
   Log:
   Fix some warnings.
