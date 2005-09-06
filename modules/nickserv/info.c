@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 2133 2005-09-05 01:19:23Z nenolod $
+ * $Id: info.c 2179 2005-09-06 09:17:45Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 2133 2005-09-05 01:19:23Z nenolod $",
+	"$Id: info.c 2179 2005-09-06 09:17:45Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -131,6 +131,24 @@ static void ns_cmd_info(char *origin)
 	}
 	else
 		notice(nicksvs.nick, origin, "Logins from: <hidden>");
+
+        if ((is_ircop(u) || is_sra(u->myuser)) && (md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
+        {
+                char *setter = md->value;
+                char *reason;
+                time_t ts;
+
+                md = metadata_find(mu, METADATA_USER, "private:freeze:reason");
+                reason = md->value;
+
+                md = metadata_find(mu, METADATA_USER, "private:freeze:timestamp");
+                ts = atoi(md->value);
+
+                tm = *localtime(&ts);
+                strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
+
+                notice(nicksvs.nick, origin, "%s was \2FROZEN\2 by %s on %s (%s)", mu->name, setter, strfbuf, reason);
+        }
 
 	if ((is_ircop(u) || is_sra(u->myuser)) && (md = metadata_find(mu, METADATA_USER, "private:mark:setter")))
 	{

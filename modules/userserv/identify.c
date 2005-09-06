@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: identify.c 2177 2005-09-06 00:10:02Z jilles $
+ * $Id: identify.c 2179 2005-09-06 09:17:45Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/identify", FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 2177 2005-09-06 00:10:02Z jilles $",
+	"$Id: identify.c 2179 2005-09-06 09:17:45Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -71,6 +71,12 @@ static void ns_cmd_identify(char *origin)
 		notice(nicksvs.nick, origin, "\2%s\2 is not a registered nickname.", target);
 		return;
 	}
+
+        if (metadata_find(mu->name, METADATA_USER, "private:freeze:freezer"))
+        {
+                notice(nicksvs.nick, origin, "This operation cannot be preformed on %s because the nickname has been frozen.", mu);
+                return;
+        }
 
 	if (u->myuser == mu)
 	{

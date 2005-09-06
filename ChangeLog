@@ -1,3 +1,13 @@
+jilles      2005/09/06 00:10:02 UTC	(20050906-2177)
+  Log:
+  Improve logic on identify when already logged in.
+  
+
+  Modified:
+	trunk/modules/nickserv/identify.c (File Modified) 
+	trunk/modules/userserv/identify.c (File Modified) 
+
+
 jilles      2005/09/05 23:18:00 UTC	(20050905-2175)
   Log:
   Implement limitation of number of sessions allowed to be
