@@ -1,3 +1,20 @@
+jilles      2005/09/05 23:18:00 UTC	(20050905-2175)
+  Log:
+  Implement limitation of number of sessions allowed to be
+  logged in to one nick, via serverinfo::maxlogins in
+  atheme.conf. This is checked on identify only.
+  Interaction with nickname linking is currently
+  doubtful.
+  
+
+  Modified:
+	trunk/dist/example.conf (File Modified) 
+	trunk/include/atheme.h (File Modified) 
+	trunk/modules/nickserv/identify.c (File Modified) 
+	trunk/modules/userserv/identify.c (File Modified) 
+	trunk/src/conf.c (File Modified) 
+
+
 jilles      2005/09/05 21:32:17 UTC	(20050905-2173)
   Log:
   Use EMAILLEN (- 1) instead of hardcoded 128 to verify

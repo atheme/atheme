@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: identify.c 2175 2005-09-05 23:18:00Z jilles $
+ * $Id: identify.c 2177 2005-09-06 00:10:02Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/identify", FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 2175 2005-09-05 23:18:00Z jilles $",
+	"$Id: identify.c 2177 2005-09-06 00:10:02Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -72,6 +72,12 @@ static void ns_cmd_identify(char *origin)
 		return;
 	}
 
+	if (u->myuser == mu)
+	{
+		notice(nicksvs.nick, origin, "You are already logged in as \2%s\2.", mu->name);
+		return;
+	}
+
 	/* we use this in both cases, so set it up here. may be NULL. */
 	md_failnum = metadata_find(mu, METADATA_USER, "private:loginfail:failnum");
 
@@ -84,7 +90,7 @@ static void ns_cmd_identify(char *origin)
 		}
 
 		/* if they are identified to another account, nuke their session first */
-		if (u->myuser && strcmp(u->myuser->name, target))
+		if (u->myuser)
 		{
 		        u->myuser->lastlogin = CURRTIME;
 		        LIST_FOREACH_SAFE(n, tn, u->myuser->logins.head)
@@ -97,12 +103,6 @@ static void ns_cmd_identify(char *origin)
 		                }
 		        }
 		        u->myuser = NULL;
-			return;
-		}
-		else if (u->myuser)
-		{
-			notice(nicksvs.nick, origin, "You are already logged in.");
-			return;
 		}
 
 		snoop("LOGIN:AS: \2%s\2 to \2%s\2", u->nick, mu->name);
