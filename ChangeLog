@@ -1,3 +1,12 @@
+pfish       2005/09/06 09:27:08 UTC	(20050906-2181)
+  Log:
+  update example conf/docs
+  
+
+  Modified:
+	trunk/dist/example.conf (File Modified) 
+
+
 pfish       2005/09/06 09:17:45 UTC	(20050906-2179)
   Log:
   Add NICKSERV FREEZE:
