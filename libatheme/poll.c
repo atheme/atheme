@@ -4,7 +4,7 @@
  *
  * Socketengine implementing poll().
  *
- * $Id: poll.c 2199 2005-09-07 18:12:20Z nenolod $
+ * $Id: poll.c 2201 2005-09-07 18:21:20Z nenolod $
  */
 
 #include "atheme.h"
@@ -150,6 +150,8 @@ void connection_select(uint32_t delay)
 				else
 					cptr->write_handler(cptr);
 			}
+
+			pollfds[cptr->pollslot].events = 0;
 		}
 	}
 }

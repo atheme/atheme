@@ -1,3 +1,15 @@
+nenolod     2005/09/07 18:12:20 UTC	(20050907-2199)
+  Log:
+  - Solve duplicate FD issue in poll.c.
+  - Remove usleep() hack that we shouldn't need anymore.
+  
+
+  Modified:
+	trunk/libatheme/connection.c (File Modified) 
+	trunk/libatheme/poll.c (File Modified) 
+	trunk/libatheme/select.c (File Modified) 
+
+
 pfish       2005/09/07 04:52:49 UTC	(20050907-2197)
   Log:
   fix notice origin
