@@ -5,7 +5,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 2041 2005-09-02 05:30:19Z nenolod $
+ * $Id: atheme.c 2189 2005-09-07 03:56:50Z nenolod $
  */
 
 #include "atheme.h"
@@ -302,7 +302,7 @@ int main(int argc, char *argv[])
 #ifndef _WIN32
 		sleep(me.restarttime);
 
-		execve(me.execname, argv, environ);
+		execve("bin/atheme", argv, environ);
 #endif
 	}
 
