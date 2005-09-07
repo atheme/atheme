@@ -1,3 +1,13 @@
+nenolod     2005/09/07 19:10:17 UTC	(20050907-2203)
+  Log:
+  Add --enable-profile option to enable use of a profiler.
+  
+
+  Modified:
+	trunk/configure (File Modified) 
+	trunk/configure.ac (File Modified) 
+
+
 nenolod     2005/09/07 18:21:20 UTC	(20050907-2201)
   Log:
   Clear out events on struct pollfd when we are through handling the poll. 

@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 2191 2005-09-07 04:30:03Z nenolod $
+ * $Id: node.c 2205 2005-09-07 19:26:37Z nenolod $
  */
 
 #include "atheme.h"
@@ -1290,22 +1290,18 @@ void myuser_delete(char *name)
 
 myuser_t *myuser_find(char *name)
 {
-        myuser_t *mu;
-        node_t *n;   
-        uint32_t i;  
-        
-        for (i = 0; i < HASHSIZE; i++)
-        {
-                LIST_FOREACH(n, mulist[i].head)
-                {
-                        mu = (myuser_t *)n->data;
+	myuser_t *mu;
+	node_t *n;   
+
+	LIST_FOREACH(n, mulist[shash(name)].head)
+	{
+		mu = (myuser_t *)n->data;
                         
-                        if (!irccasecmp(name, mu->name))
-                                return mu;
-                }
-        }
-         
-        return NULL;
+		if (!irccasecmp(name, mu->name))
+			return mu;
+	}
+
+	return NULL;
 }
 
 /***************
