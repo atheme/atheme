@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 2103 2005-09-04 05:59:17Z nenolod $
+ * $Id: extern.h 2185 2005-09-07 02:43:08Z nenolod $
  */
 
 #ifndef EXTERN_H
@@ -213,7 +213,7 @@ E chanban_t *chanban_add(channel_t *chan, char *mask);
 E void chanban_delete(chanban_t *c);
 E chanban_t *chanban_find(channel_t *chan, char *mask);
 
-E server_t *server_add(char *name, uint8_t hops, char *id, char *desc);
+E server_t *server_add(char *name, uint8_t hops, char *uplink, char *id, char *desc);
 E void server_delete(char *name);
 E server_t *server_find(char *name);
 

@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: asuka.c 2147 2005-09-05 01:46:10Z nenolod $
+ * $Id: asuka.c 2185 2005-09-07 02:43:08Z nenolod $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/asuka", FALSE, _modinit, NULL,
-	"$Id: asuka.c 2147 2005-09-05 01:46:10Z nenolod $",
+	"$Id: asuka.c 2185 2005-09-07 02:43:08Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -1031,7 +1031,8 @@ static void m_server(char *origin, uint8_t parc, char *parv[])
 	parv[5][2] = '\0';
 
 	slog(LG_DEBUG, "m_server(): new server: %s, id %s", parv[0], parv[5]);
-	server_add(parv[0], atoi(parv[1]), parv[5], parv[7]);
+	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, 
+		parv[5], parv[7]);
 
 	if (cnt.server == 2)
 		me.actual = sstrdup(parv[0]);

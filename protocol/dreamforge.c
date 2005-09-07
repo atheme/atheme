@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: dreamforge.c 2147 2005-09-05 01:46:10Z nenolod $
+ * $Id: dreamforge.c 2185 2005-09-07 02:43:08Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/dreamforge", FALSE, _modinit, NULL,
-	"$Id: dreamforge.c 2147 2005-09-05 01:46:10Z nenolod $",
+	"$Id: dreamforge.c 2185 2005-09-07 02:43:08Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -656,7 +656,8 @@ static void m_squit(char *origin, uint8_t parc, char *parv[])
 static void m_server(char *origin, uint8_t parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
-	server_add(parv[0], atoi(parv[1]), NULL, parv[2]);
+	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, 
+			NULL, parv[2]);
 
 	if (cnt.server == 2)
 		me.actual = sstrdup(parv[0]);

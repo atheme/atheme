@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2179 2005-09-06 09:17:45Z pfish $
+# $Id: Makefile.in 2185 2005-09-07 02:43:08Z nenolod $
 #
 
 CC		= @CC@
@@ -54,8 +54,8 @@ all: modules
 build: all
 
 install: build
-	${INSTALL} -d ${PREFIX}/modules/nickserv
-	${INSTALL} -m 755 *.so ${PREFIX}/modules/nickserv
+	${INSTALL} -d ${PREFIX}/modules/userserv
+	${INSTALL} -m 755 *.so ${PREFIX}/modules/userserv
 
 modules: $(OBJS)
 

@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 2171 2005-09-05 21:22:11Z jilles $
+ * $Id: node.c 2185 2005-09-07 02:43:08Z nenolod $
  */
 
 #include "atheme.h"
@@ -282,13 +282,20 @@ tld_t *tld_find(char *name)
  * S E R V E R S *
  *****************/
 
-server_t *server_add(char *name, uint8_t hops, char *id, char *desc)
+server_t *server_add(char *name, uint8_t hops, char *uplink, char *id, 
+	char *desc)
 {
-	server_t *s;
+	server_t *s, *u = NULL;
 	node_t *n = node_create();
 	char *tld;
 
-	slog(LG_DEBUG, "server_add(): %s", name);
+	if (uplink)
+	{
+		slog(LG_DEBUG, "server_add(): %s, uplink %s", name, uplink);
+		u = server_find(uplink);
+	}
+	else
+		slog(LG_DEBUG, "server_add(): %s, root", name);
 
 	s = BlockHeapAlloc(serv_heap);
 
@@ -309,8 +316,14 @@ server_t *server_add(char *name, uint8_t hops, char *id, char *desc)
 	s->connected_since = CURRTIME;
 
 	/* check to see if it's hidden */
-	if ((desc[0] == '(') && (desc[1] == 'H') && (desc[2] == ')'))
+	if (!strncmp(desc, "(H)", 3))
 		s->flags |= SF_HIDE;
+
+	if (u)
+	{
+		s->uplink = u;
+		node_add(s, n, &u->children);
+	}
 
 	/* tld list for global noticer */
 	tld = strrchr(name, '.');
@@ -355,6 +368,9 @@ void server_delete(char *name)
 	n = node_find(s, &servlist[s->hash]);
 	node_del(n, &servlist[s->hash]);
 	node_free(n);
+
+	if (s->uplink)
+		node_del(n, &s->uplink->children);
 
 	free(s->name);
 	free(s->desc);

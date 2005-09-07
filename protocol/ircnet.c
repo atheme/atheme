@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 2147 2005-09-05 01:46:10Z nenolod $
+ * $Id: ircnet.c 2185 2005-09-07 02:43:08Z nenolod $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/ircnet", FALSE, _modinit, NULL,
-	"$Id: ircnet.c 2147 2005-09-05 01:46:10Z nenolod $",
+	"$Id: ircnet.c 2185 2005-09-07 02:43:08Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -675,7 +675,8 @@ static void m_squit(char *origin, uint8_t parc, char *parv[])
 static void m_server(char *origin, uint8_t parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
-	server_add(parv[0], atoi(parv[1]), parv[2], parv[3]);
+	server_add(parv[0], atoi(parv[1]), origin ? origin : 
+		me.name, parv[2], parv[3]);
 
 	if (cnt.server == 2)
 		me.actual = sstrdup(parv[0]);
