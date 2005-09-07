@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the NickServ HELP command.
  *
- * $Id: help.c 2133 2005-09-05 01:19:23Z nenolod $
+ * $Id: help.c 2195 2005-09-07 04:37:04Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 2133 2005-09-05 01:19:23Z nenolod $",
+	"$Id: help.c 2195 2005-09-07 04:37:04Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -36,6 +36,7 @@ static struct help_command_ ns_help_commands[] = {
   { "SENDPASS", AC_IRCOP, "help/nickserv/sendpass" },
   { "LISTMAIL", AC_IRCOP, "help/nickserv/listmail" },
   { "MARK",     AC_IRCOP, "help/nickserv/mark"     },
+  { "FREEZE",	AC_IRCOP, "help/nickserv/freeze"   },
   { "LIST",     AC_IRCOP, "help/nickserv/list"     },
   { "HOLD",     AC_SRA,   "help/nickserv/hold"     },
   { "MYACCESS", AC_NONE,  "help/nickserv/myaccess" },
