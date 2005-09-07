@@ -4,7 +4,7 @@
  *
  * Socketengine implementing select().
  *
- * $Id: select.c 1712 2005-08-14 10:06:40Z nenolod $
+ * $Id: select.c 2199 2005-09-07 18:12:20Z nenolod $
  */
 
 #include "atheme.h"
@@ -52,8 +52,6 @@ static void update_select_sets(void)
 	LIST_FOREACH(n, connection_list.head)
 	{
 		cptr = n->data;
-
-//		slog(LG_DEBUG, "processing connection: %d [%s]", cptr->fd, cptr->name);
 
 		if (CF_IS_CONNECTING(cptr))
 			FD_SET(cptr->fd, &writefds);

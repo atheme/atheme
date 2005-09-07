@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 1606 2005-08-10 17:40:35Z nenolod $
+ * $Id: connection.c 2199 2005-09-07 18:12:20Z nenolod $
  */
 
 #include "atheme.h"
@@ -85,6 +85,7 @@ connection_t *connection_add(const char *name, int32_t fd, uint32_t flags,
 	cptr = BlockHeapAlloc(connection_heap);
 
 	cptr->fd = fd;
+	cptr->pollslot = -1;
 	cptr->flags = flags;
 	cptr->first_recv = CURRTIME;
 	cptr->last_recv = CURRTIME;

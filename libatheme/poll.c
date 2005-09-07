@@ -4,7 +4,7 @@
  *
  * Socketengine implementing poll().
  *
- * $Id: poll.c 1720 2005-08-14 20:37:18Z nenolod $
+ * $Id: poll.c 2199 2005-09-07 18:12:20Z nenolod $
  */
 
 #include "atheme.h"
@@ -88,7 +88,7 @@ static void update_poll_fds(void)
 	{
 		cptr = n->data;
 
-		if (!cptr->pollslot)
+		if (cptr->pollslot == -1)
 			cptr->pollslot = poll_findslot();
 
 		if (CF_IS_CONNECTING(cptr) || cptr->sendq.count != 0)
@@ -126,55 +126,30 @@ void connection_select(uint32_t delay)
 
 	update_poll_fds();
 
-	while (1)
+	if ((sr = poll(pollfds, me.maxfd + 1, delay)) > 0)
 	{
-		/* XXX for some reason poll refuses to play nice */
-		usleep(delay);
-
-		/* XXX we shouldn't need the maxfd + 1 */
-		sr = poll(pollfds, me.maxfd + 1, 0);
-
-		if (sr >= 0)
-			break;
-
-		if (sr == -1 && errno == EINTR)
-			continue;
-		else
+		LIST_FOREACH(n, connection_list.head)
 		{
-			/* Something horribly wrong has happened. */
-			hook_call_event("connection_dead", curr_uplink->conn);
-			return;
-		}
-	}
+			cptr = n->data;
 
-	/* update current time, just to be safe. */
-	CURRTIME = time(NULL);
+			if (pollfds[cptr->pollslot].revents == 0)
+				continue;
 
-	/* Nothing to do here. */
-	if (sr == 0)
-		return;
+			if (pollfds[cptr->pollslot].revents & (POLLRDNORM | POLLIN | POLLHUP | POLLERR))
+			{
+				if (CF_IS_LISTENING(cptr))
+					hook_call_event("listener_in", cptr);
+				else
+					cptr->read_handler(cptr);
+			}
 
-	LIST_FOREACH(n, connection_list.head)
-	{
-		cptr = n->data;
-
-		if (pollfds[cptr->pollslot].revents == 0)
-			continue;
-
-		if (pollfds[cptr->pollslot].revents & (POLLRDNORM | POLLIN | POLLHUP | POLLERR))
-		{
-			if (CF_IS_LISTENING(cptr))
-				hook_call_event("listener_in", cptr);
-			else
-				cptr->read_handler(cptr);
-		}
-
-		if (pollfds[cptr->pollslot].revents & (POLLWRNORM | POLLOUT | POLLHUP | POLLERR))
-		{
-			if (CF_IS_CONNECTING(cptr))
-				hook_call_event("connected", cptr);
-			else
-				cptr->write_handler(cptr);
+			if (pollfds[cptr->pollslot].revents & (POLLWRNORM | POLLOUT | POLLHUP | POLLERR))
+			{
+				if (CF_IS_CONNECTING(cptr))
+					hook_call_event("connected", cptr);
+				else
+					cptr->write_handler(cptr);
+			}
 		}
 	}
 }
