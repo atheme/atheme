@@ -1,3 +1,12 @@
+nenolod     2005/09/07 03:56:50 UTC	(20050907-2189)
+  Log:
+  Fix restart retardedness.
+  
+
+  Modified:
+	trunk/src/atheme.c (File Modified) 
+
+
 nenolod     2005/09/07 03:47:06 UTC	(20050907-2187)
   Log:
   Add tracking of oper and invisible users. (statistical information)

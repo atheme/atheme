@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 2185 2005-09-07 02:43:08Z nenolod $
+ * $Id: node.c 2191 2005-09-07 04:30:03Z nenolod $
  */
 
 #include "atheme.h"
@@ -322,7 +322,7 @@ server_t *server_add(char *name, uint8_t hops, char *uplink, char *id,
 	if (u)
 	{
 		s->uplink = u;
-		node_add(s, n, &u->children);
+		node_add(s, node_create(), &u->children);
 	}
 
 	/* tld list for global noticer */
@@ -370,7 +370,10 @@ void server_delete(char *name)
 	node_free(n);
 
 	if (s->uplink)
+	{
+		n = node_find(s, &s->uplink->children);
 		node_del(n, &s->uplink->children);
+	}
 
 	free(s->name);
 	free(s->desc);
