@@ -5,7 +5,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 2189 2005-09-07 03:56:50Z nenolod $
+ * $Id: atheme.c 2193 2005-09-07 04:33:09Z nenolod $
  */
 
 #include "atheme.h"
@@ -101,14 +101,7 @@ int main(int argc, char *argv[])
 
 	cold_start = TRUE;
 
-	/* we're starting up */
-	if (!(restart_file = fopen("var/atheme.restart", "r")))
-		runflags |= RF_STARTING;
-	else
-	{
-		fclose(restart_file);
-		remove("var/atheme.restart");
-	}
+	runflags |= RF_STARTING;
 
 	me.start = time(NULL);
 	CURRTIME = me.start;
@@ -142,9 +135,6 @@ int main(int argc, char *argv[])
 	me.loglevel |= LG_ERROR;
 
 	printf("atheme: version atheme-%s\n", version);
-
-	if (!(runflags & RF_STARTING))
-		slog(LG_INFO, "main(): restarted; not sending anything to stdout");
 
 	/* check for pid file */
 	if ((pid_file = fopen("var/atheme.pid", "r")))
@@ -296,8 +286,6 @@ int main(int argc, char *argv[])
 	if (runflags & RF_RESTART)
 	{
 		slog(LG_INFO, "main(): restarting in %d seconds", me.restarttime);
-		restart_file = fopen("var/atheme.restart", "w");
-		fclose(restart_file);
 
 #ifndef _WIN32
 		sleep(me.restarttime);
