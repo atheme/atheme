@@ -1,3 +1,32 @@
+nenolod     2005/09/07 02:43:08 UTC	(20050907-2185)
+  Log:
+  Add server uplink/child tracking.
+  
+
+  Modified:
+	trunk/include/extern.h (File Modified) 
+	trunk/include/servers.h (File Modified) 
+	trunk/modules/userserv/Makefile.in (File Modified) 
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bahamut.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/dreamforge.c (File Modified) 
+	trunk/protocol/hyperion.c (File Modified) 
+	trunk/protocol/inspircd.c (File Modified) 
+	trunk/protocol/ircnet.c (File Modified) 
+	trunk/protocol/monkey.c (File Modified) 
+	trunk/protocol/plexus.c (File Modified) 
+	trunk/protocol/ptlink.c (File Modified) 
+	trunk/protocol/ratbox.c (File Modified) 
+	trunk/protocol/scylla.c (File Modified) 
+	trunk/protocol/shadowircd.c (File Modified) 
+	trunk/protocol/sorcery.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+	trunk/protocol/unreal.c (File Modified) 
+	trunk/src/node.c (File Modified) 
+	trunk/src/packet.c (File Modified) 
+
+
 pfish       2005/09/06 22:37:58 UTC	(20050906-2183)
   Log:
   add help for freeze

@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 1578 2005-08-08 23:14:18Z nenolod $
+ * $Id: cmode.c 2187 2005-09-07 03:47:06Z nenolod $
  */
 
 #include "atheme.h"
@@ -234,6 +234,12 @@ void user_mode(user_t *user, char *modes)
 		  case '-':
 			  toadd = FALSE;
 			  break;
+		  case 'i':
+			  if (toadd)
+				  user->server->invis++;
+			  else
+				  user->server->invis--;
+			  break;
 		  case 'o':
 			  if (toadd)
 			  {
@@ -242,6 +248,7 @@ void user_mode(user_t *user, char *modes)
 					  user->flags |= UF_IRCOP;
 					  slog(LG_DEBUG, "user_mode(): %s is now an IRCop", user->nick);
 					  snoop("OPER: %s (%s)", user->nick, user->server->name);
+					  user->server->opers++;
 					  hook_call_event("user_oper", user);
 				  }
 			  }
@@ -252,6 +259,7 @@ void user_mode(user_t *user, char *modes)
 					  user->flags &= ~UF_IRCOP;
 					  slog(LG_DEBUG, "user_mode(): %s is no longer an IRCop", user->nick);
 					  snoop("DEOPER: %s (%s)", user->nick, user->server->name);
+					  user->server->opers--;
 					  hook_call_event("user_deoper", user);
 				  }
 			  }
