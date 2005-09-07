@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 2095 2005-09-04 00:56:04Z nenolod $
+dnl $Id: configure.ac 2203 2005-09-07 19:10:17Z nenolod $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, 0.3beta2, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 2095 2005-09-04 00:56:04Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 2203 2005-09-07 19:10:17Z nenolod $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -423,6 +423,18 @@ ATHEME_C_GCC_TRY_FLAGS([-fno-stack-protector-all], atheme_nspa)
 ATHEME_C_GCC_TRY_FLAGS([-fno-pie], atheme_npie)
 ATHEME_C_GCC_TRY_FLAGS([-nonow], atheme_nonow)
 ATHEME_C_GCC_TRY_FLAGS([-norelro], atheme_no_relro)
+])
+
+AC_ARG_ENABLE(profile,
+AC_HELP_STRING([--enable-profile],[ Enable profiling extensions]),
+[
+echo " "
+echo "Enabling profiling."
+echo " "
+
+ATHEME_C_GCC_TRY_FLAGS([-pg], atheme_pg)
+ac_save_LDFLAGS="${LDFLAGS} -pg"
+LDFLAGS=${ac_save_LDFLAGS}
 ])
 
 ac_save_CFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS}"

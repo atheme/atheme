@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# $Id: configure.ac 2033 2005-09-02 04:46:05Z nenolod $
+# $Id: configure.ac 2095 2005-09-04 00:56:04Z nenolod $
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -849,6 +849,7 @@ Optional Features:
   --enable-large-net      Enable large network support.
   --enable-warnings       Enable compiler warnings
   --disable-propolice     Disable propolice protections (for debugging.)
+  --enable-profile        Enable profiling extensions
 
 Some influential environment variables:
   CC          C compiler command
@@ -965,7 +966,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-$Id: configure.ac 2033 2005-09-02 04:46:05Z nenolod $
+$Id: configure.ac 2095 2005-09-04 00:56:04Z nenolod $
 _ACEOF
   exit 0
 fi
@@ -9343,6 +9344,98 @@ echo "${ECHO_T}no" >&6
 echo "${ECHO_T}no" >&6
  fi
 
+
+fi;
+
+# Check whether --enable-profile or --disable-profile was given.
+if test "${enable_profile+set}" = set; then
+  enableval="$enable_profile"
+
+echo " "
+echo "Enabling profiling."
+echo " "
+
+
+ echo "$as_me:$LINENO: checking GCC flag(s) -pg" >&5
+echo $ECHO_N "checking GCC flag(s) -pg... $ECHO_C" >&6
+ if test "${GCC-no}" = yes
+ then
+  if test "${atheme_pg+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+   oldcflags="${CFLAGS-}"
+   CFLAGS="${CFLAGS-} ${CWARNS} -pg -Werror"
+   cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+#include <string.h>
+#include <stdio.h>
+int main(void);
+
+int
+main ()
+{
+
+    strcmp("a","b"); fprintf(stdout,"test ok\n");
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  atheme_pg=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+atheme_pg=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+   CFLAGS="${oldcflags}"
+fi
+
+  if test "x$atheme_pg" = xyes; then
+   CWARNS="${CWARNS}-pg "
+   echo "$as_me:$LINENO: result: ok" >&5
+echo "${ECHO_T}ok" >&6
+  else
+   atheme_pg=''
+   echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+  fi
+ else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+ fi
+
+ac_save_LDFLAGS="${LDFLAGS} -pg"
+LDFLAGS=${ac_save_LDFLAGS}
 
 fi;
 

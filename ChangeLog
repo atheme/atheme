@@ -1,3 +1,13 @@
+nenolod     2005/09/07 18:21:20 UTC	(20050907-2201)
+  Log:
+  Clear out events on struct pollfd when we are through handling the poll. 
+  (This way we dont look to make a write if we have nothing to write.)
+  
+
+  Modified:
+	trunk/libatheme/poll.c (File Modified) 
+
+
 nenolod     2005/09/07 18:12:20 UTC	(20050907-2199)
   Log:
   - Solve duplicate FD issue in poll.c.
