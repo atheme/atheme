@@ -1,3 +1,13 @@
+jilles      2005/09/09 22:53:49 UTC	(20050909-2211)
+  Log:
+  Fix deletion of nick access entries on channel drop
+  (ca->host is never NULL now).
+  
+
+  Modified:
+	trunk/src/node.c (File Modified) 
+
+
 jilles      2005/09/09 22:29:47 UTC	(20050909-2209)
   Log:
   Remove snoop channel messages from /ns info and /cs info.

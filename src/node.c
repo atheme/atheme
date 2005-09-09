@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 2211 2005-09-09 22:53:49Z jilles $
+ * $Id: node.c 2213 2005-09-09 23:14:27Z jilles $
  */
 
 #include "atheme.h"
@@ -1489,7 +1489,7 @@ void chanacs_delete_host(mychan_t *mychan, char *host, uint32_t level)
         {
                 ca = (chanacs_t *)n->data;
                 
-                if ((ca->host) && (!irccasecmp(host, ca->host)) && (ca->level == level))
+                if ((ca->myuser == NULL) && (!irccasecmp(host, ca->host)) && (ca->level == level))
                 {
                         slog(LG_DEBUG, "chanacs_delete_host(): %s -> %s", ca->mychan->name, ca->host);
                         
@@ -1543,10 +1543,10 @@ chanacs_t *chanacs_find_host(mychan_t *mychan, char *host, uint32_t level)
                 
                 if (level != 0x0)
                 {
-                        if ((ca->host) && (!match(ca->host, host)) && ((ca->level & level) == level))
+                        if ((ca->myuser == NULL) && (!match(ca->host, host)) && ((ca->level & level) == level))
                                 return ca;
                 }
-                else if ((ca->host) && (!match(ca->host, host)))
+                else if ((ca->myuser == NULL) && (!match(ca->host, host)))
                         return ca;
         }
          
@@ -1567,10 +1567,10 @@ chanacs_t *chanacs_find_host_literal(mychan_t *mychan, char *host, uint32_t leve
                 
                 if (level != 0x0)
                 {
-                        if ((ca->host) && (!strcasecmp(ca->host, host)) && ((ca->level & level) == level))
+                        if ((ca->myuser == NULL) && (!strcasecmp(ca->host, host)) && ((ca->level & level) == level))
                                 return ca;
                 }
-                else if ((ca->host) && (!strcasecmp(ca->host, host)))
+                else if ((ca->myuser == NULL) && (!strcasecmp(ca->host, host)))
                         return ca;
         }
          
