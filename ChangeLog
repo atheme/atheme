@@ -1,3 +1,13 @@
+jilles      2005/09/09 22:29:47 UTC	(20050909-2209)
+  Log:
+  Remove snoop channel messages from /ns info and /cs info.
+  
+
+  Modified:
+	trunk/modules/chanserv/info.c (File Modified) 
+	trunk/modules/nickserv/info.c (File Modified) 
+
+
 nenolod     2005/09/09 04:28:48 UTC	(20050909-2207)
   Log:
   Fix a minor bug relating to polling sockets.

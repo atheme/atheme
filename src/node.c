@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 2205 2005-09-07 19:26:37Z nenolod $
+ * $Id: node.c 2211 2005-09-09 22:53:49Z jilles $
  */
 
 #include "atheme.h"
@@ -1359,10 +1359,10 @@ void mychan_delete(char *name)
         {
                 ca = (chanacs_t *)n->data;
          
-                if (ca->host)
-                        chanacs_delete_host(ca->mychan, ca->host, ca->level);
-                else
+                if (ca->myuser)
                         chanacs_delete(ca->mychan, ca->myuser, ca->level);
+                else
+                        chanacs_delete_host(ca->mychan, ca->host, ca->level);
         }
  
         n = node_find(mc, &mclist[mc->hash]);
