@@ -4,7 +4,7 @@
  *
  * Socketengine implementing poll().
  *
- * $Id: poll.c 2201 2005-09-07 18:21:20Z nenolod $
+ * $Id: poll.c 2207 2005-09-09 04:28:48Z nenolod $
  */
 
 #include "atheme.h"
@@ -126,7 +126,7 @@ void connection_select(uint32_t delay)
 
 	update_poll_fds();
 
-	if ((sr = poll(pollfds, me.maxfd + 1, delay)) > 0)
+	if ((sr = poll(pollfds, me.maxfd + 1, delay / 1000)) > 0)
 	{
 		LIST_FOREACH(n, connection_list.head)
 		{
