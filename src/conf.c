@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 2175 2005-09-05 23:18:00Z jilles $
+ * $Id: conf.c 2217 2005-09-11 18:44:19Z nenolod $
  */
 
 #include "atheme.h"
@@ -488,6 +488,9 @@ static int c_loadmodule(CONFIGENTRY *ce)
 {
 	char pathbuf[4096];
 	char *name;
+
+	if (cold_start == FALSE)
+		return 0;
 
 	if (ce->ce_vardata == NULL)
 		PARAM_ERROR(ce);
