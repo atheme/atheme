@@ -1,3 +1,12 @@
+nenolod     2005/09/11 18:51:54 UTC	(20050911-2219)
+  Log:
+  MySQL fixes? (until mysql-beu branch is ready for merge.)
+  
+
+  Modified:
+	trunk/backend/mysql.c (File Modified) 
+
+
 nenolod     2005/09/11 18:44:19 UTC	(20050911-2217)
   Log:
   Only load modules from the conf at startup.
