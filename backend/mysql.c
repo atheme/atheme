@@ -3,9 +3,9 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains the implementation of the database
- * using PostgreSQL.
+ * using MySQL.
  *
- * $Id: mysql.c 2145 2005-09-05 01:40:07Z nenolod $
+ * $Id: mysql.c 2219 2005-09-11 18:51:54Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/mysql", TRUE, _modinit, NULL,
-	"$Id: mysql.c 2145 2005-09-05 01:40:07Z nenolod $",
+	"$Id: mysql.c 2219 2005-09-11 18:51:54Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -369,8 +369,7 @@ static void mysql_db_load(void)
 		exit(1);
 	}
 
-	res = safe_query("SELECT ID, USERNAME, PASSWORD, EMAIL, REGISTERED, LASTLOGIN, "
-				"FLAGS FROM ACCOUNTS");
+	res = safe_query("SELECT * FROM ACCOUNTS");
 	muin = mysql_num_rows(res);
 
 	slog(LG_DEBUG, "db_load(): Got %d myusers from SQL.", muin);
@@ -388,7 +387,7 @@ static void mysql_db_load(void)
 		mu->lastlogin = atoi(row[5]);
 		mu->flags = atoi(row[6]);
 
-		res2 = safe_query("SELECT ID, PARENT, KEYNAME, VALUE FROM ACCOUNT_METADATA WHERE PARENT=%d", uid);
+		res2 = safe_query("SELECT * FROM ACCOUNT_METADATA WHERE PARENT=%d", uid);
 		umd = mysql_num_rows(res2);
 
 		while ((row = mysql_fetch_row(res)))
@@ -401,9 +400,7 @@ static void mysql_db_load(void)
 	mysql_free_result(res);
 	res = NULL;
 
-	res = safe_query("SELECT ID, NAME, FOUNDER, REGISTERED, LASTUSED, FLAGS, "
-				"MLOCK_ON, MLOCK_OFF, MLOCK_LIMIT, MLOCK_KEY, "
-				"URL, ENTRYMSG FROM CHANNELS");
+	res = safe_query("SELECT * FROM CHANNELS");
 	mcin = mysql_num_rows(res);
 
 	while ((row = mysql_fetch_row(res)))
@@ -439,8 +436,7 @@ static void mysql_db_load(void)
 
 
 		/* SELECT * FROM CHANNEL_ACCESS WHERE PARENT=21 */
-		res2 = safe_query("SELECT ID, PARENT, ACCOUNT, PERMISSIONS "
-					"FROM CHANNEL_ACCESS WHERE PARENT='%s'", row[0]);
+		res2 = safe_query("SELECT * WHERE PARENT='%s'", row[0]);
 
 		cain = mysql_num_rows(res2);
 
@@ -460,8 +456,7 @@ static void mysql_db_load(void)
 			else
 				ca = chanacs_add(mc, mu, fl);
 
-			res3 = safe_query("SELECT ID, PARENT, KEYNAME, VALUE "
-					"FROM CHANNEL_ACCESS_METADATA WHERE PARENT='%s'", row2[0]);
+			res3 = safe_query("SELECT * FROM CHANNEL_ACCESS_METADATA WHERE PARENT='%s'", row2[0]);
 
 			ca_mdin = mysql_num_rows(res3);
 			while ((row3 = mysql_fetch_row(res3)))
@@ -474,8 +469,7 @@ static void mysql_db_load(void)
 		res2 = NULL;
 
 		/* SELECT * FROM CHANNEL_METADATA WHERE PARENT=21 */
-		res2 = safe_query("SELECT ID, PARENT, KEYNAME, VALUE "
-					"FROM CHANNEL_METADATA WHERE PARENT='%s'", row[0]);
+		res2 = safe_query("SELECT * FROM CHANNEL_METADATA WHERE PARENT='%s'", row[0]);
 		mdin = mysql_num_rows(res2);
 
 		while ((row2 = mysql_fetch_row(res2)))
@@ -488,8 +482,7 @@ static void mysql_db_load(void)
 	mysql_free_result(res);
 	res = NULL;
 
-	res = safe_query("SELECT ID, USERNAME, HOSTNAME, DURATION, "
-				"SETTIME, SETTER, REASON FROM KLINES");
+	res = safe_query("SELECT * FROM KLINES");
 	kin = mysql_num_rows(res);
 
 	while ((row = mysql_fetch_row(res)))

@@ -1,3 +1,12 @@
+nenolod     2005/09/11 18:44:19 UTC	(20050911-2217)
+  Log:
+  Only load modules from the conf at startup.
+  
+
+  Modified:
+	trunk/src/conf.c (File Modified) 
+
+
 nenolod     2005/09/10 18:30:51 UTC	(20050910-2215)
   Log:
   - Add charybdis protocol module.
