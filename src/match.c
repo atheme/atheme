@@ -6,7 +6,7 @@
  * This file contains customized casemapping functions.
  * This code was mostly lifted from ircd 2.10.
  *
- * $Id: match.c 1863 2005-08-25 16:51:35Z jilles $
+ * $Id: match.c 2231 2005-09-12 23:51:10Z nenolod $
  */
 
 #include "atheme.h"
@@ -128,7 +128,7 @@ int match(const char *mask, const char *name)
 	const char *ma = mask, *na = name;
 	int wild = 0, q = 0, calls = 0;
 
-	if (!*mask)
+	if (!mask || !name)
 		return 1;
 
 	/* if the mask is "*", it matches everything */

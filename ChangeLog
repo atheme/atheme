@@ -1,3 +1,12 @@
+jilles      2005/09/12 20:56:14 UTC	(20050912-2229)
+  Log:
+  Fix a crash when config_options.chan is not set.
+  
+
+  Modified:
+	trunk/src/services.c (File Modified) 
+
+
 jilles      2005/09/12 18:37:45 UTC	(20050912-2227)
   Log:
   Allow unopered SRAs in staffonly channels.
