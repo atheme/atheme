@@ -5,7 +5,7 @@
  * Protocol handlers, both generic and the actual declarations themselves.
  * Declare NOTYET to use the function pointer voodoo.
  *
- * $Id: phandler.h 1692 2005-08-12 19:34:45Z nenolod $
+ * $Id: phandler.h 2225 2005-09-12 16:19:10Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -21,6 +21,7 @@ struct ircd_ {
 	boolean_t uses_halfops;
 	boolean_t uses_p10;		/* Parser hackhack. */
 	boolean_t uses_vhost;		/* Do we use vHosts? */
+	uint32_t oper_only_modes;
 	uint32_t owner_mode;
 	uint32_t protect_mode;
 	uint32_t halfops_mode;

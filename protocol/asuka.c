@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: asuka.c 2185 2005-09-07 02:43:08Z nenolod $
+ * $Id: asuka.c 2225 2005-09-12 16:19:10Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/asuka", FALSE, _modinit, NULL,
-	"$Id: asuka.c 2185 2005-09-07 02:43:08Z nenolod $",
+	"$Id: asuka.c 2225 2005-09-12 16:19:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -31,6 +31,7 @@ ircd_t Asuka = {
         FALSE,                          /* Whether or not we support halfops. */
 	TRUE,				/* Whether or not we use P10 */
 	TRUE,				/* Whether or not we use vhosts. */
+	0,				/* Oper-only cmodes */
         0,                              /* Integer flag for owner channel flag. */
         0,                              /* Integer flag for protect channel flag. */
         0,                              /* Integer flag for halfops. */

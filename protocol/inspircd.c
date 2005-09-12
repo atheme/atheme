@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: inspircd.c 2185 2005-09-07 02:43:08Z nenolod $
+ * $Id: inspircd.c 2225 2005-09-12 16:19:10Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/inspircd", FALSE, _modinit, NULL,
-	"$Id: inspircd.c 2185 2005-09-07 02:43:08Z nenolod $",
+	"$Id: inspircd.c 2225 2005-09-12 16:19:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -29,6 +29,7 @@ ircd_t InspIRCd = {
         TRUE,                           /* Whether or not we support halfops. */
 	FALSE,				/* Whether or not we use P10 */
 	TRUE,				/* Whether or not we use vHosts. */
+	CMODE_OPERONLY | CMODE_ADMONLY, /* Oper-only cmodes */
         CMODE_OWNER,                    /* Integer flag for owner channel flag. */
         CMODE_PROTECT,                  /* Integer flag for protect channel flag. */
         CMODE_HALFOP,                   /* Integer flag for halfops. */

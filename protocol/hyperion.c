@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 2185 2005-09-07 02:43:08Z nenolod $
+ * $Id: hyperion.c 2225 2005-09-12 16:19:10Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -18,7 +18,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/hyperion", FALSE, _modinit, NULL,
-	"$Id: hyperion.c 2185 2005-09-07 02:43:08Z nenolod $",
+	"$Id: hyperion.c 2225 2005-09-12 16:19:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -34,6 +34,7 @@ ircd_t Hyperion = {
         FALSE,                          /* Whether or not we support halfops. */
 	FALSE,				/* Whether or not we use P10 */
 	TRUE,				/* Whether or not we use vHosts. */
+	0, /*NOTYET*/			/* Oper-only cmodes */
         0,                              /* Integer flag for owner channel flag. */
         0,                              /* Integer flag for protect channel flag. */
         0,                              /* Integer flag for halfops. */

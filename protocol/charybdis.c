@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 2223 2005-09-12 14:29:54Z jilles $
+ * $Id: charybdis.c 2225 2005-09-12 16:19:10Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/charybdis", FALSE, _modinit, NULL,
-	"$Id: charybdis.c 2223 2005-09-12 14:29:54Z jilles $",
+	"$Id: charybdis.c 2225 2005-09-12 16:19:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -29,6 +29,7 @@ ircd_t Charybdis = {
         FALSE,                          /* Whether or not we support halfops. */
 	FALSE,				/* Whether or not we use P10 */
 	FALSE,				/* Whether or not we use vHosts. */
+	CMODE_EXLIMIT | CMODE_PERM,	/* Oper-only cmodes */
         0,                              /* Integer flag for owner channel flag. */
         0,                              /* Integer flag for protect channel flag. */
         0,                              /* Integer flag for halfops. */

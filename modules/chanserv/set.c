@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 2129 2005-09-05 00:59:19Z nenolod $
+ * $Id: set.c 2225 2005-09-12 16:19:10Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 2129 2005-09-05 00:59:19Z nenolod $",
+	"$Id: set.c 2225 2005-09-12 16:19:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -324,6 +324,7 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 	char modebuf[32], *end, c;
 	int add = -1;
 	int32_t newlock_on = 0, newlock_off = 0, newlock_limit = 0, flag = 0;
+	int32_t mask;
 	char *newlock_key = NULL;
 
 	if (*name != '#')
@@ -343,6 +344,8 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
 		return;
 	}
+
+	mask = is_ircop(u) ? 0 : ircd->oper_only_modes;
 
 	while (*params)
 	{
@@ -430,8 +433,9 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 	}
 
 	/* save it to mychan */
-	mc->mlock_on = newlock_on;
-	mc->mlock_off = newlock_off;
+	/* leave the modes in mask unchanged -- jilles */
+	mc->mlock_on = (newlock_on & ~mask) | (mc->mlock_on & mask);
+	mc->mlock_off = (newlock_off & ~mask) | (mc->mlock_off & mask);
 	mc->mlock_limit = newlock_limit;
 
 	if (mc->mlock_key)
