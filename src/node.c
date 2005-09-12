@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 2213 2005-09-09 23:14:27Z jilles $
+ * $Id: node.c 2227 2005-09-12 18:37:45Z jilles $
  */
 
 #include "atheme.h"
@@ -890,7 +890,8 @@ chanuser_t *chanuser_add(channel_t *chan, char *nick)
 		strlcat(hostbuf, "@", BUFSIZE);
 		strlcat(hostbuf, u->host, BUFSIZE);
 
-		if ((mc->flags & MC_STAFFONLY) && !is_ircop(u))
+		/* the case u->myuser != NULL was treated above */
+		if ((mc->flags & MC_STAFFONLY) && !is_ircop(u) && u->myuser == NULL)
 		{
 			ban(chansvs.nick, chan->name, u);
 			kick(chansvs.nick, chan->name, u->nick, "You are not authorized to be on this channel");

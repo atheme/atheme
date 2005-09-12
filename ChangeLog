@@ -1,3 +1,34 @@
+jilles      2005/09/12 16:19:10 UTC	(20050912-2225)
+  Log:
+  Add notion of oper-only cmodes. If a nonoper executes
+  /cs set mlock, these will remain unchanged.
+  Oper-only channel, admin-only channel, large ban list
+  and permanent cmodes have been marked oper-only if
+  atheme knows them.
+  
+
+  Modified:
+	trunk/include/phandler.h (File Modified) 
+	trunk/modules/chanserv/set.c (File Modified) 
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bahamut.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/charybdis.c (File Modified) 
+	trunk/protocol/dreamforge.c (File Modified) 
+	trunk/protocol/hyperion.c (File Modified) 
+	trunk/protocol/inspircd.c (File Modified) 
+	trunk/protocol/ircnet.c (File Modified) 
+	trunk/protocol/monkey.c (File Modified) 
+	trunk/protocol/plexus.c (File Modified) 
+	trunk/protocol/ptlink.c (File Modified) 
+	trunk/protocol/ratbox.c (File Modified) 
+	trunk/protocol/scylla.c (File Modified) 
+	trunk/protocol/shadowircd.c (File Modified) 
+	trunk/protocol/sorcery.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+	trunk/protocol/unreal.c (File Modified) 
+
+
 jilles      2005/09/12 14:29:54 UTC	(20050912-2223)
   Log:
   Add charybdis cmode +FQ support.
