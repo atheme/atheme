@@ -4,7 +4,7 @@
  *
  * This code contains the channel mode definitions for charybdis ircd.
  *
- * $Id: charybdis.h 2215 2005-09-10 18:30:51Z nenolod $
+ * $Id: charybdis.h 2223 2005-09-12 14:29:54Z jilles $
  */
 
 #ifndef RATBOX_H
@@ -23,5 +23,7 @@
 #define CMODE_FINVITE	0x00008000	/* hyperion +g */
 #define CMODE_EXLIMIT   0x00010000      /* charybdis +L */
 #define CMODE_PERM      0x00020000      /* charybdis +P */
+#define CMODE_FTARGET   0x00040000      /* charybdis +F */
+#define CMODE_DISFWD    0x00080000      /* charybdis +Q */
 
 #endif

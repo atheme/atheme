@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 2215 2005-09-10 18:30:51Z nenolod $
+ * $Id: charybdis.c 2223 2005-09-12 14:29:54Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/charybdis", FALSE, _modinit, NULL,
-	"$Id: charybdis.c 2215 2005-09-10 18:30:51Z nenolod $",
+	"$Id: charybdis.c 2223 2005-09-12 14:29:54Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -52,6 +52,8 @@ struct cmode_ charybdis_mode_list[] = {
   { 'g', CMODE_FINVITE},
   { 'L', CMODE_EXLIMIT},
   { 'P', CMODE_PERM   },
+  { 'F', CMODE_FTARGET},
+  { 'Q', CMODE_DISFWD },
   { '\0', 0 }
 };
 

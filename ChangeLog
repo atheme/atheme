@@ -1,3 +1,12 @@
+nenolod     2005/09/11 18:55:33 UTC	(20050911-2221)
+  Log:
+  Wallops when /os mode is used.
+  
+
+  Modified:
+	trunk/modules/operserv/mode.c (File Modified) 
+
+
 nenolod     2005/09/11 18:51:54 UTC	(20050911-2219)
   Log:
   MySQL fixes? (until mysql-beu branch is ready for merge.)
