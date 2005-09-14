@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 2065 2005-09-02 06:47:59Z nenolod $
+ * $Id: module.c 2233 2005-09-14 03:07:54Z pfish $
  */
 
 #include "atheme.h"
@@ -281,7 +281,9 @@ void module_unload(module_t *m)
 	if (!m)
 		return;
 
-	slog(LG_INFO, "module_unload(): unloaded %s", m->name);
+	slog(LG_INFO, "module_unload(): unloaded %s", m->header->name);
+	if (me.connected)
+		wallops("Module %s unloaded.", m->header->name);
 
 	n = node_find(m, &modules);
 

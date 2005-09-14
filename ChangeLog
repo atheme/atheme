@@ -1,3 +1,12 @@
+nenolod     2005/09/12 23:51:10 UTC	(20050912-2231)
+  Log:
+  - Because we can't check if the first byte of NULL is NULL or not.
+  
+
+  Modified:
+	trunk/src/match.c (File Modified) 
+
+
 jilles      2005/09/12 20:56:14 UTC	(20050912-2229)
   Log:
   Fix a crash when config_options.chan is not set.
