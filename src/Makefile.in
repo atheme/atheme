@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2131 2005-09-05 01:08:12Z beu $
+# $Id: Makefile.in 2235 2005-09-14 07:29:13Z nenolod $
 #
 
 CC		= @CC@
@@ -28,6 +28,7 @@ BASE_SRCS =		\
 	atheme.c	\
 	cmode.c		\
 	commandtree.c	\
+	compat.c	\
 	conf.c		\
 	confparse.c	\
 	crypto.c	\

@@ -1,3 +1,12 @@
+pfish       2005/09/14 03:07:54 UTC	(20050914-2233)
+  Log:
+  fix debug info not showing what module is being unloaded, and also be consistant by sending a wallops as module_load does.
+  
+
+  Modified:
+	trunk/src/module.c (File Modified) 
+
+
 nenolod     2005/09/12 23:51:10 UTC	(20050912-2231)
   Log:
   - Because we can't check if the first byte of NULL is NULL or not.

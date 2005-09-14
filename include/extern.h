@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 2185 2005-09-07 02:43:08Z nenolod $
+ * $Id: extern.h 2235 2005-09-14 07:29:13Z nenolod $
  */
 
 #ifndef EXTERN_H
@@ -23,7 +23,7 @@ E BlockHeap *BlockHeapCreate(size_t elemsize, int elemsperblock);
 E int BlockHeapDestroy(BlockHeap *bh);
 
 E void initBlockHeap(void);
-E void BlockHeapUsage(BlockHeap *bh, size_t * bused, size_t * bfree,
+E void BlockHeapUsage(BlockHeap *bh, size_t * bused, size_t * bfreem,
 		      size_t * bmemusage);
 
 E boolean_t cold_start;

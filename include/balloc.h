@@ -4,43 +4,47 @@
  *
  * Data structures for the block allocator.
  *
- * $Id: balloc.h 157 2005-05-29 06:54:27Z nenolod $
+ * $Id: balloc.h 2235 2005-09-14 07:29:13Z nenolod $
  */
 
 #ifndef BALLOC_H
 #define BALLOC_H
 
-struct Block
+struct block_
 {
-  size_t alloc_size;
-  struct Block *next;     /* Next in our chain of blocks */
-  void *elems;            /* Points to allocated memory */
-  list_t free_list;
-  list_t used_list;
+	size_t alloc_size;
+	node_t self;
+	void  *element;            /* Points to allocated memory */
+	list_t free_list;
+	list_t used_list;
 };
-typedef struct Block Block;
+typedef struct block_ block_t;
 
-struct MemBlock
+struct chunk_
 {
-#ifdef DEBUG_BALLOC
-  unsigned long magic;
-#endif
-  node_t self;
-  Block *block;           /* Which block we belong to */
+	node_t   self;
+	block_t *parent;           /* Which block we belong to */
 };
-
-typedef struct MemBlock MemBlock;
+typedef struct chunk_ chunk_t;
 
 /* information for the root node of the heap */
-struct BlockHeap
+struct heap_
 {
-  node_t hlist;
-  size_t elemSize;        /* Size of each element to be stored */
-  unsigned long elemsPerBlock;    /* Number of elements per block */
-  unsigned long blocksAllocated;  /* Number of blocks allocated */
-  unsigned long freeElems;                /* Number of free elements */
-  Block *base;            /* Pointer to first block */
+	node_t hlist;
+	char *name;
+	size_t chunk_size;        /* Size of each element to be stored */
+	unsigned long elements;   /* Number of elements per block */
+	unsigned long allocated;  /* Number of blocks allocated */
+	unsigned long freecount;  /* Number of free elements */
+	list_t blocks;            /* old blocks.head == base */
 };
-typedef struct BlockHeap BlockHeap;
+typedef struct heap_ heap_t;
+
+extern void init_balloc(void);
+extern heap_t *bcreate(char *name, size_t elemsize, int elemsperblock);
+extern void *balloc(heap_t *h);
+extern boolean_t bfree(heap_t *h, void *ptr);
+extern boolean_t bdelete(heap_t *h);
+extern void bstat(heap_t *h, size_t *bused, size_t *bavail, size_t *bmemusage);
 
 #endif
