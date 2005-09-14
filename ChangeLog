@@ -1,3 +1,23 @@
+nenolod     2005/09/14 08:09:20 UTC	(20050914-2237)
+  Log:
+  - Revert back to old block allocator.
+  - Place new block allocator in patches/ for bored people to play with on rainy days.
+  
+
+  Modified:
+	trunk/include/atheme.h (File Modified) 
+	trunk/include/balloc.h (File Modified) 
+	trunk/include/compat.h (File Deleted) 
+	trunk/include/extern.h (File Modified) 
+	trunk/libatheme/balloc.c (File Modified) 
+	trunk/libatheme/libatheme.c (File Modified) 
+	trunk/libatheme/string.c (File Modified) 
+	trunk/patches/README (File Modified) 
+	trunk/src/Makefile.in (File Modified) 
+	trunk/src/compat.c (File Deleted) 
+	trunk/src/function.c (File Modified) 
+
+
 nenolod     2005/09/14 07:29:13 UTC	(20050914-2235)
   Log:
   heavily renovated block allocator, with a spiffy new API.
