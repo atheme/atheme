@@ -4,47 +4,43 @@
  *
  * Data structures for the block allocator.
  *
- * $Id: balloc.h 2235 2005-09-14 07:29:13Z nenolod $
+ * $Id: balloc.h 2237 2005-09-14 08:09:20Z nenolod $
  */
 
 #ifndef BALLOC_H
 #define BALLOC_H
 
-struct block_
+struct Block
 {
-	size_t alloc_size;
-	node_t self;
-	void  *element;            /* Points to allocated memory */
-	list_t free_list;
-	list_t used_list;
+  size_t alloc_size;
+  struct Block *next;     /* Next in our chain of blocks */
+  void *elems;            /* Points to allocated memory */
+  list_t free_list;
+  list_t used_list;
 };
-typedef struct block_ block_t;
+typedef struct Block Block;
 
-struct chunk_
+struct MemBlock
 {
-	node_t   self;
-	block_t *parent;           /* Which block we belong to */
+#ifdef DEBUG_BALLOC
+  unsigned long magic;
+#endif
+  node_t self;
+  Block *block;           /* Which block we belong to */
 };
-typedef struct chunk_ chunk_t;
+
+typedef struct MemBlock MemBlock;
 
 /* information for the root node of the heap */
-struct heap_
+struct BlockHeap
 {
-	node_t hlist;
-	char *name;
-	size_t chunk_size;        /* Size of each element to be stored */
-	unsigned long elements;   /* Number of elements per block */
-	unsigned long allocated;  /* Number of blocks allocated */
-	unsigned long freecount;  /* Number of free elements */
-	list_t blocks;            /* old blocks.head == base */
+  node_t hlist;
+  size_t elemSize;        /* Size of each element to be stored */
+  unsigned long elemsPerBlock;    /* Number of elements per block */
+  unsigned long blocksAllocated;  /* Number of blocks allocated */
+  unsigned long freeElems;                /* Number of free elements */
+  Block *base;            /* Pointer to first block */
 };
-typedef struct heap_ heap_t;
-
-extern void init_balloc(void);
-extern heap_t *bcreate(char *name, size_t elemsize, int elemsperblock);
-extern void *balloc(heap_t *h);
-extern boolean_t bfree(heap_t *h, void *ptr);
-extern boolean_t bdelete(heap_t *h);
-extern void bstat(heap_t *h, size_t *bused, size_t *bavail, size_t *bmemusage);
+typedef struct BlockHeap BlockHeap;
 
 #endif

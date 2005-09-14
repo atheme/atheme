@@ -1,5 +1,5 @@
 /*
- * $Id: libatheme.c 2235 2005-09-14 07:29:13Z nenolod $
+ * $Id: libatheme.c 2237 2005-09-14 08:09:20Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@ void libatheme_init(void (*ilog)(int, char *format, ...))
 	slog(LG_DEBUG, "libatheme_init(): starting up...");
 
 	event_init();
-	init_balloc();
+	initBlockHeap();
 	init_dlink_nodes();
 	hooks_init();
 	callback_init();

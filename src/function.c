@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 2235 2005-09-14 07:29:13Z nenolod $
+ * $Id: function.c 2237 2005-09-14 08:09:20Z nenolod $
  */
 
 #include "atheme.h"
@@ -15,6 +15,23 @@ FILE *log_file;
 #ifdef _WIN32
 #undef HAVE_GETTIMEOFDAY
 #endif
+
+char ch[26] = "abcdefghijklmnopqrstuvwxyz";
+
+char *gen_pw(int8_t sz)
+{
+        int8_t i;
+        char *buf = malloc(sz);
+
+        for (i = 0; i < sz; i++)
+        {
+                buf[i] = ch[rand() % 26];
+        }
+
+        buf[sz] = 0;
+
+        return buf;
+}
 
 #ifdef HAVE_GETTIMEOFDAY
 /* starts a timer */

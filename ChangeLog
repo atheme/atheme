@@ -1,3 +1,25 @@
+nenolod     2005/09/14 07:29:13 UTC	(20050914-2235)
+  Log:
+  heavily renovated block allocator, with a spiffy new API.
+  compatibility shims have been added for use with older Atheme modules,
+  this is located in src/compat.c.
+  
+  reviewed by patrick.
+  
+
+  Modified:
+	trunk/include/atheme.h (File Modified) 
+	trunk/include/balloc.h (File Modified) 
+	trunk/include/compat.h (File Added) 
+	trunk/include/extern.h (File Modified) 
+	trunk/libatheme/balloc.c (File Modified) 
+	trunk/libatheme/libatheme.c (File Modified) 
+	trunk/libatheme/string.c (File Modified) 
+	trunk/src/Makefile.in (File Modified) 
+	trunk/src/compat.c (File Added) 
+	trunk/src/function.c (File Modified) 
+
+
 pfish       2005/09/14 03:07:54 UTC	(20050914-2233)
   Log:
   fix debug info not showing what module is being unloaded, and also be consistant by sending a wallops as module_load does.

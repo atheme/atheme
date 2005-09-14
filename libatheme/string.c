@@ -4,28 +4,10 @@
  *
  * String functions.
  *
- * $Id: string.c 2235 2005-09-14 07:29:13Z nenolod $
+ * $Id: string.c 2237 2005-09-14 08:09:20Z nenolod $
  */
 
 #include "atheme.h"
-
-/* generates a random password hash */
-char ch[26] = "abcdefghijklmnopqrstuvwxyz";
-
-char *gen_pw(int8_t sz)
-{
-        int8_t i;
-        char *buf = smalloc(sz);
-
-        for (i = 0; i < sz; i++)
-        {
-                buf[i] = ch[rand() % 26];
-        }
-
-        buf[sz] = 0;
-
-        return buf;
-}
 
 #ifndef HAVE_STRLCAT
 /* These functions are taken from Linux. */
