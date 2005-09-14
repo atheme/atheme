@@ -1,3 +1,12 @@
+nenolod     2005/09/14 16:07:45 UTC	(20050914-2239)
+  Log:
+  Add block allocator patch (it didnt get in there when I reverted back to wohali's algorithm :X)
+  
+
+  Modified:
+	trunk/patches/balloc.patch (File Added) 
+
+
 nenolod     2005/09/14 08:09:20 UTC	(20050914-2237)
   Log:
   - Revert back to old block allocator.
