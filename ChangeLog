@@ -1,3 +1,11 @@
+nenolod     2005/09/14 17:07:33 UTC	(20050914-2241)
+  Log:
+  Fix issue with CPU hogging
+
+  Modified:
+	trunk/libatheme/poll.c (File Modified) 
+
+
 nenolod     2005/09/14 16:07:45 UTC	(20050914-2239)
   Log:
   Add block allocator patch (it didnt get in there when I reverted back to wohali's algorithm :X)
