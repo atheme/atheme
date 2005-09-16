@@ -1,3 +1,12 @@
+nenolod     2005/09/16 07:47:34 UTC	(20050916-2253)
+  Log:
+  - Optimizations to sts() c/o Dianora.
+  
+
+  Modified:
+	trunk/src/send.c (File Modified) 
+
+
 nenolod     2005/09/16 07:46:02 UTC	(20050916-2251)
   Log:
   - more tokenize cleanups c/o Dianora
