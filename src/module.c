@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 2233 2005-09-14 03:07:54Z pfish $
+ * $Id: module.c 2247 2005-09-16 07:04:29Z nenolod $
  */
 
 #include "atheme.h"
@@ -41,10 +41,10 @@ static void closedir(DIR *entry)
 
 static DIR* opendir(const char *path)
 {
-	char filespec[2048];
+	char filespec[BUFISIZE * 2];
 	DIR *entry;
 
-	strncpy (filespec, path, 2048);
+	strlcpy (filespec, path, BUFSIZE * 2);
 	filespec[strlen(filespec)] = '\0';
 	strcat(filespec, "\\");
 	entry = malloc(sizeof(DIR));
@@ -86,8 +86,8 @@ static struct dirent *readdir(DIR *entry)
 	}
 
 	entry->firsttime = FALSE;
-	strncpy(entry->file_info.d_name,entry->Win32FindData.cFileName,
-		2048);
+	strlcpy(entry->file_info.d_name,entry->Win32FindData.cFileName,
+		BUFSIZE * 2);
 
 	entry->file_info.d_name[2048] = '\0';
 	entry->file_info.d_namlen = strlen(entry->file_info.d_name);
@@ -120,7 +120,7 @@ void modules_init(void)
  *       the respective module_t object of the module.
  *
  * side effects:
- *       a module is loaded and necessary initialization code is ran.
+ *       a module is loaded and necessary initialization code is run.
  */
 module_t *module_load(char *filespec)
 {
@@ -272,7 +272,7 @@ void module_load_dir_match(char *dirspec, char *pattern)
  *       none
  *
  * side effects:
- *       a module is unloaded and neccessary deinitalization code is ran.
+ *       a module is unloaded and neccessary deinitalization code is run.
  */
 void module_unload(module_t *m)
 {
