@@ -4,7 +4,7 @@
  *
  * This file contains IRC interaction routines.
  *
- * $Id: tokenize.c 2249 2005-09-16 07:27:49Z nenolod $
+ * $Id: tokenize.c 2251 2005-09-16 07:46:02Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@ int8_t sjtoken(char *message, char delimiter, char **parv)
 	char *next;
 	uint16_t count;
 
-	if (!message)
+	if (message == NULL)
 		return 0;
 
 	/* now we take the beginning of the message and find all the spaces...
@@ -68,33 +68,22 @@ int8_t tokenize(char *message, char **parv)
 	char *next;
 	uint8_t count = 0;
 
-	if (!message)
+	if (message == NULL)
 		return -1;
 
-	/* first we fid out of there's a : in the message, save that string
-	 * somewhere so we can set it to the last param in parv
-	 * also make sure there's a space before it... if not then we're screwed
-	 */
-	pos = message;
-	while (TRUE)
+	for (pos = strchr(message, ':'); pos != NULL; pos = strchr(pos, ':'))
 	{
-		if ((pos = strchr(pos, ':')))
+		pos--;
+		if (*pos != ' ')
 		{
-			pos--;
-			if (*pos != ' ')
-			{
-				pos += 2;
-				continue;
-			}
-
-			/* XXX why do we do this twice?! --nenolod */
-			*pos++ = '\0';
-			*pos++ = '\0';
-
-			break;
+			pos += 2;
 		}
 		else
-			break;
+		{
+			/* XXX why do we do this twice?! -- nenolod */
+			*pos++ = '\0';
+			*pos++ = '\0';
+		}
 	}
 
 	/* now we take the beginning of the message and find all the spaces...
@@ -113,8 +102,7 @@ int8_t tokenize(char *message, char **parv)
 		}
 		if (*next == ' ')
 		{
-			*next = '\0';
-			next++;
+			*next++ = '\0';
 			/* eat any additional spaces */
 			while (*next == ' ')
 				next++;
@@ -123,8 +111,7 @@ int8_t tokenize(char *message, char **parv)
 			 */
 			if (*next == '\0')
 				break;
-			parv[count] = next;
-			count++;
+			parv[count++] = next;
 		}
 		else
 			next++;
@@ -132,8 +119,7 @@ int8_t tokenize(char *message, char **parv)
 
 	if (pos)
 	{
-		parv[count] = pos;
-		count++;
+		parv[count++] = pos;
 	}
 
 	return count;
