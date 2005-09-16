@@ -1,3 +1,12 @@
+pfish       2005/09/16 21:08:37 UTC	(20050916-2259)
+  Log:
+  revert r2247 (confparse.c only), parser broke
+  
+
+  Modified:
+	trunk/src/confparse.c (File Modified) 
+
+
 nenolod     2005/09/16 07:58:28 UTC	(20050916-2257)
   Log:
   remove unnecessary memset()

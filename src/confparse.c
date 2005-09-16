@@ -6,7 +6,7 @@
  * This file contains config file parsing routines.
  * This code was taken from Sentinel: copyright W. Campbell.
  *
- * $Id: confparse.c 2259 2005-09-16 21:08:37Z pfish $
+ * $Id: confparse.c 2261 2005-09-16 21:22:34Z nenolod $
  */
 
 #include "atheme.h"
@@ -201,8 +201,7 @@ static CONFIGFILE *config_parse(char *filename, char *confdata)
 					  char *eptr;
 
 					  curce->ce_vardata = (char *)smalloc(ptr - start + 1);
-					  strncpy(curce->ce_vardata, start, ptr - start);
-					  curce->ce_vardata[ptr - start] = '\0';
+					  strlcpy(curce->ce_vardata, start, ptr - start + 1);
 					  curce->ce_vardatanum = strtol(curce->ce_vardata, &eptr, 0) & 0xffffffff;	/* we only want 32bits and long is 64bit on 64bit compiles */
 					  if (eptr != (curce->ce_vardata + (ptr - start)))
 					  {
@@ -215,8 +214,7 @@ static CONFIGFILE *config_parse(char *filename, char *confdata)
 				  curce = (CONFIGENTRY *)smalloc(sizeof(CONFIGENTRY));
 				  memset(curce, 0, sizeof(CONFIGENTRY));
 				  curce->ce_varname = (char *)smalloc(ptr - start + 1);
-				  strncpy(curce->ce_varname, start, ptr - start);
-				  curce->ce_varname[ptr - start] = '\0';
+				  strlcpy(curce->ce_varname, start, ptr - start + 1);
 				  curce->ce_varlinenum = linenumber;
 				  curce->ce_fileptr = curcf;
 				  curce->ce_prevlevel = cursection;
@@ -267,8 +265,7 @@ static CONFIGFILE *config_parse(char *filename, char *confdata)
 					  char *eptr;
 
 					  curce->ce_vardata = (char *)smalloc(ptr - start + 1);
-					  strncpy(curce->ce_vardata, start, ptr - start);
-					  curce->ce_vardata[ptr - start] = '\0';
+					  strlcpy(curce->ce_vardata, start, ptr - start + 1);
 					  curce->ce_vardatanum = strtol(curce->ce_vardata, &eptr, 0) & 0xffffffff;	/* we only want 32bits and long is 64bit on 64bit compiles */
 					  if (eptr != (curce->ce_vardata + (ptr - start)))
 					  {
@@ -281,8 +278,7 @@ static CONFIGFILE *config_parse(char *filename, char *confdata)
 				  curce = (CONFIGENTRY *)smalloc(sizeof(CONFIGENTRY));
 				  memset(curce, 0, sizeof(CONFIGENTRY));
 				  curce->ce_varname = (char *)smalloc(ptr - start + 1);
-				  strncpy(curce->ce_varname, start, ptr - start);
-				  curce->ce_varname[ptr - start] = '\0';
+				  strlcpy(curce->ce_varname, start, ptr - start + 1);
 				  curce->ce_varlinenum = linenumber;
 				  curce->ce_fileptr = curcf;
 				  curce->ce_prevlevel = cursection;
