@@ -80,7 +80,6 @@ char *bitmask_to_flags(uint32_t flags, struct flags_table table[])
 	char *bptr;
 	short i = 0;
 
-	memset(flags_buf, 0, sizeof(flags_buf));
 	bptr = flags_buf;
 
 	*bptr++ = '+';
