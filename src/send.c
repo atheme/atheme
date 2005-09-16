@@ -1,12 +1,11 @@
 /*
  * Copyright (c) 2005 Atheme Development Group
- *
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains socket routines.
  * Based off of W. Campbell's code.
  *
- * $Id: send.c 1582 2005-08-09 03:01:29Z nenolod $
+ * $Id: send.c 2253 2005-09-16 07:47:34Z nenolod $
  */
 
 #include "atheme.h"
@@ -30,8 +29,10 @@ int8_t sts(char *fmt, ...)
 
 	slog(LG_DEBUG, "<- %s", buf);
 
-	strlcat(buf, "\r\n", BUFSIZE);
 	len = strlen(buf);
+	buf[len++] = '\r';
+	buf[len++] = '\n';
+	buf[len] = '\0';
 
 	cnt.bout += len;
 

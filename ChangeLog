@@ -1,3 +1,12 @@
+nenolod     2005/09/16 07:46:02 UTC	(20050916-2251)
+  Log:
+  - more tokenize cleanups c/o Dianora
+  
+
+  Modified:
+	trunk/src/tokenize.c (File Modified) 
+
+
 nenolod     2005/09/16 07:27:49 UTC	(20050916-2249)
   Log:
   - tokenize cleanups c/o Dianora.
