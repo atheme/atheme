@@ -1,3 +1,17 @@
+nenolod     2005/09/16 07:04:29 UTC	(20050916-2247)
+  Log:
+  - Replace strncpy() instances with safer strlcpy().
+  - Grammatical comment fixes.
+  
+  Reported by Dianora.
+  
+
+  Modified:
+	trunk/src/confparse.c (File Modified) 
+	trunk/src/function.c (File Modified) 
+	trunk/src/module.c (File Modified) 
+
+
 nenolod     2005/09/16 06:46:13 UTC	(20050916-2245)
   Log:
   - Fix a buffer underrun vulnerability in irc_read().

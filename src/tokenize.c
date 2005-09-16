@@ -1,11 +1,10 @@
 /*
  * Copyright (c) 2005 Atheme Development Group
- *
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains IRC interaction routines.
  *
- * $Id: tokenize.c 908 2005-07-17 04:00:28Z w00t $
+ * $Id: tokenize.c 2249 2005-09-16 07:27:49Z nenolod $
  */
 
 #include "atheme.h"
@@ -27,10 +26,7 @@ int8_t sjtoken(char *message, char delimiter, char **parv)
 	while (*next == delimiter)
 		next++;
 
-	parv[0] = next;
-	count = 1;
-
-	while (*next)
+	for (count = 1, parv[0] = next; *next != '\0'; )
 	{
 		/* this is fine here, since we don't have a :delimited
 		 * parameter like tokenize
@@ -45,23 +41,18 @@ int8_t sjtoken(char *message, char delimiter, char **parv)
 
 		if (*next == delimiter)
 		{
-			*next = '\0';
-			next++;
+			*next++ = '\0';
 			/* eat any additional delimiters */
 			while (*next == delimiter)
 				next++;
 			/* if it's the end of the string, it's simply
-			 ** an extra space at the end.  here we break.
+			 * an extra space at the end.  here we break.
+			 * if it happens to be a stray \r, break too 
 			 */
-			if (*next == '\0')
+			if (*next == '\0' || *next == '\r')
 				break;
 
-			/* if it happens to be a stray \r, break too */
-			if (*next == '\r')
-				break;
-
-			parv[count] = next;
-			count++;
+			parv[count++] = next;
 		}
 		else
 			next++;
@@ -95,10 +86,11 @@ int8_t tokenize(char *message, char **parv)
 				pos += 2;
 				continue;
 			}
-			*pos = '\0';
-			pos++;
-			*pos = '\0';
-			pos++;
+
+			/* XXX why do we do this twice?! --nenolod */
+			*pos++ = '\0';
+			*pos++ = '\0';
+
 			break;
 		}
 		else
@@ -109,11 +101,7 @@ int8_t tokenize(char *message, char **parv)
 	 * set them to \0 and use 'next' to go through the string
 	 */
 
-	next = message;
-	parv[0] = message;
-	count = 1;
-
-	while (*next)
+	for (count = 1, parv[0] = next = message; *next != '\0'; )
 	{
 		if (count == 19)
 		{
