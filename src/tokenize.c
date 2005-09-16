@@ -1,10 +1,11 @@
 /*
  * Copyright (c) 2005 Atheme Development Group
+ *
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains IRC interaction routines.
  *
- * $Id: tokenize.c 2251 2005-09-16 07:46:02Z nenolod $
+ * $Id: tokenize.c 2263 2005-09-16 21:53:11Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +15,7 @@ int8_t sjtoken(char *message, char delimiter, char **parv)
 	char *next;
 	uint16_t count;
 
-	if (message == NULL)
+	if (!message)
 		return 0;
 
 	/* now we take the beginning of the message and find all the spaces...
@@ -26,7 +27,10 @@ int8_t sjtoken(char *message, char delimiter, char **parv)
 	while (*next == delimiter)
 		next++;
 
-	for (count = 1, parv[0] = next; *next != '\0'; )
+	parv[0] = next;
+	count = 1;
+
+	while (*next)
 	{
 		/* this is fine here, since we don't have a :delimited
 		 * parameter like tokenize
@@ -41,18 +45,23 @@ int8_t sjtoken(char *message, char delimiter, char **parv)
 
 		if (*next == delimiter)
 		{
-			*next++ = '\0';
+			*next = '\0';
+			next++;
 			/* eat any additional delimiters */
 			while (*next == delimiter)
 				next++;
 			/* if it's the end of the string, it's simply
-			 * an extra space at the end.  here we break.
-			 * if it happens to be a stray \r, break too 
+			 ** an extra space at the end.  here we break.
 			 */
-			if (*next == '\0' || *next == '\r')
+			if (*next == '\0')
 				break;
 
-			parv[count++] = next;
+			/* if it happens to be a stray \r, break too */
+			if (*next == '\r')
+				break;
+
+			parv[count] = next;
+			count++;
 		}
 		else
 			next++;
@@ -68,29 +77,43 @@ int8_t tokenize(char *message, char **parv)
 	char *next;
 	uint8_t count = 0;
 
-	if (message == NULL)
+	if (!message)
 		return -1;
 
-	for (pos = strchr(message, ':'); pos != NULL; pos = strchr(pos, ':'))
+	/* first we fid out of there's a : in the message, save that string
+	 * somewhere so we can set it to the last param in parv
+	 * also make sure there's a space before it... if not then we're screwed
+	 */
+	pos = message;
+	while (TRUE)
 	{
-		pos--;
-		if (*pos != ' ')
+		if ((pos = strchr(pos, ':')))
 		{
-			pos += 2;
+			pos--;
+			if (*pos != ' ')
+			{
+				pos += 2;
+				continue;
+			}
+			*pos = '\0';
+			pos++;
+			*pos = '\0';
+			pos++;
+			break;
 		}
 		else
-		{
-			/* XXX why do we do this twice?! -- nenolod */
-			*pos++ = '\0';
-			*pos++ = '\0';
-		}
+			break;
 	}
 
 	/* now we take the beginning of the message and find all the spaces...
 	 * set them to \0 and use 'next' to go through the string
 	 */
 
-	for (count = 1, parv[0] = next = message; *next != '\0'; )
+	next = message;
+	parv[0] = message;
+	count = 1;
+
+	while (*next)
 	{
 		if (count == 19)
 		{
@@ -102,7 +125,8 @@ int8_t tokenize(char *message, char **parv)
 		}
 		if (*next == ' ')
 		{
-			*next++ = '\0';
+			*next = '\0';
+			next++;
 			/* eat any additional spaces */
 			while (*next == ' ')
 				next++;
@@ -111,7 +135,8 @@ int8_t tokenize(char *message, char **parv)
 			 */
 			if (*next == '\0')
 				break;
-			parv[count++] = next;
+			parv[count] = next;
+			count++;
 		}
 		else
 			next++;
@@ -119,7 +144,8 @@ int8_t tokenize(char *message, char **parv)
 
 	if (pos)
 	{
-		parv[count++] = pos;
+		parv[count] = pos;
+		count++;
 	}
 
 	return count;

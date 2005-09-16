@@ -1,3 +1,12 @@
+nenolod     2005/09/16 21:22:34 UTC	(20050916-2261)
+  Log:
+  Change out strncpy() for strlcpy(). This time the string is properly terminated, instead of being null-terminated prematurely.
+  
+
+  Modified:
+	trunk/src/confparse.c (File Modified) 
+
+
 pfish       2005/09/16 21:08:37 UTC	(20050916-2259)
   Log:
   revert r2247 (confparse.c only), parser broke
