@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 2225 2005-09-12 16:19:10Z jilles $
+ * $Id: charybdis.c 2273 2005-09-18 19:50:18Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/charybdis", FALSE, _modinit, NULL,
-	"$Id: charybdis.c 2225 2005-09-12 16:19:10Z jilles $",
+	"$Id: charybdis.c 2273 2005-09-18 19:50:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -900,19 +900,11 @@ static void m_capab(char *origin, uint8_t parc, char *parv[])
 /* Server ended their burst: warn all their users if necessary -- jilles */
 static void server_eob(server_t *s)
 {
-	int i;
 	node_t *n;
-	user_t *u;
 
-	for (i = 0; i < HASHSIZE; i++)
+	LIST_FOREACH(n, s->userlist.head)
 	{
-		LIST_FOREACH(n, userlist[i].head)
-		{
-			u = (user_t *)n->data;
-
-			if (s == u->server)
-				handle_nickchange(u);
-		}
+		handle_nickchange((user_t *)n->data);
 	}
 }
 
