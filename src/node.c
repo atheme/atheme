@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 2227 2005-09-12 18:37:45Z jilles $
+ * $Id: node.c 2269 2005-09-18 19:35:52Z nenolod $
  */
 
 #include "atheme.h"
@@ -339,6 +339,7 @@ server_t *server_add(char *name, uint8_t hops, char *uplink, char *id,
 void server_delete(char *name)
 {
 	server_t *s = server_find(name);
+	server_t *child;
 	user_t *u;
 	node_t *n, *tn;
 	uint32_t i;
@@ -353,15 +354,10 @@ void server_delete(char *name)
 	slog(LG_DEBUG, "server_delete(): %s", s->name);
 
 	/* first go through it's users and kill all of them */
-	for (i = 0; i < HASHSIZE; i++)
+	LIST_FOREACH_SAFE(n, tn, s->userlist.head)
 	{
-		LIST_FOREACH_SAFE(n, tn, userlist[i].head)
-		{
-			u = (user_t *)n->data;
-
-			if (!strcasecmp(s->name, u->server->name))
-				user_delete(u->nick);
-		}
+		u = (user_t *)n->data;
+		user_delete(u->nick);
 	}
 
 	/* now remove the server */
@@ -373,6 +369,12 @@ void server_delete(char *name)
 	{
 		n = node_find(s, &s->uplink->children);
 		node_del(n, &s->uplink->children);
+	}
+
+	LIST_FOREACH_SAFE(n, tn, s->children.head)
+	{
+		child = n->data;
+		server_delete(child->name);
 	}
 
 	free(s->name);
@@ -447,8 +449,8 @@ user_t *user_add(char *nick, char *user, char *host, char *vhost, char *uid, cha
 		strlcpy(u->vhost, host, HOSTLEN);
 
 	u->server = server;
-
 	u->server->users++;
+	node_add(u, node_create(), &u->server->userlist);
 
 	cnt.user++;
 
@@ -490,6 +492,9 @@ void user_delete(char *nick)
 		node_del(n, &uidlist[u->uhash]);
 
 	node_free(n);
+
+	n = node_find(u, &u->server->userlist);
+	node_del(n, &u->server->userlist);
 
 	if (u->myuser)
 	{

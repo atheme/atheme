@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 2203 2005-09-07 19:10:17Z nenolod $
+dnl $Id: configure.ac 2269 2005-09-18 19:35:52Z nenolod $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, 0.3beta2, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 2203 2005-09-07 19:10:17Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 2269 2005-09-18 19:35:52Z nenolod $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -161,7 +161,7 @@ MYSQL_C=""
 
 AC_CHECK_PROG(MYSQL_CONFIG, mysql_config, yes, no)
 if test "x$MYSQL_CONFIG" = "xyes"; then
-	MYINC="`mysql_config --include`"
+	MYINC="`mysql_config --cflags`"
 	MYLIB="`mysql_config --libs`"
 	MYSQL_C="mysql.c"
 else
@@ -441,24 +441,9 @@ ac_save_CFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS}"
 CFLAGS=${ac_save_CFLAGS}
 dnl export CFLAGS
 
-dnl Generate a list of modules to compile.
-
-for i in modules/*.c; do
-	MODULE_LIST="$MODULE_LIST $i"
-done
-
-for i in contrib/*.c; do
-	CONTRIB_MOD_LIST="$CONTRIB_MOD_LIST $i"
-done
-
 echo " "
 echo "Makefile generation"
 echo " "
-
-MODULES_LIST=`echo $MODULE_LIST | sed s:modules\/::g`;
-AC_SUBST(MODULES_LIST)
-CONTRIB_MOD_LIST=`echo $CONTRIB_MOD_LIST | sed s:contrib\/::g`;
-AC_SUBST(CONTRIB_MOD_LIST)
 
 AC_OUTPUT(Makefile \
 	libatheme/Makefile \

@@ -4,7 +4,7 @@
  *
  * Data structures related to network servers.
  *
- * $Id: servers.h 2185 2005-09-07 02:43:08Z nenolod $
+ * $Id: servers.h 2269 2005-09-18 19:35:52Z nenolod $
  */
 
 #ifndef SERVERS_H
@@ -34,6 +34,7 @@ struct server_
 
 	server_t *uplink; /* uplink server */
 	list_t children;  /* children linked to me */
+	list_t userlist;  /* users attached to me */
 };
 
 #define SF_HIDE        0x00000001

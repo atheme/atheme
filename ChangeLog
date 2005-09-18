@@ -1,3 +1,12 @@
+nenolod     2005/09/18 18:38:26 UTC	(20050918-2267)
+  Log:
+  Fixes.
+  
+
+  Modified:
+	trunk/src/packet.c (File Modified) 
+
+
 nenolod     2005/09/16 21:53:11 UTC	(20050916-2263)
   Log:
   Revert tokenize stuff.

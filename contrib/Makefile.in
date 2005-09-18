@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2131 2005-09-05 01:08:12Z beu $
+# $Id: Makefile.in 2269 2005-09-18 19:35:52Z nenolod $
 #
 
 CC		= @CC@
@@ -25,21 +25,11 @@ CPPFLAGS	= @CPPFLAGS@
 
 default: all
 
-BASE_SRCS = @CONTRIB_MOD_LIST@
-
-SRCS = ${BASE_SRCS}
-
 OBJS = ${SRCS:.c=.so}
 
-all: modules
-
-build: all
-
-install: build
+install:
 	${INSTALL} -d ${PREFIX}/contrib
 	${INSTALL} -m 755 *.so ${PREFIX}/contrib
-
-modules: $(OBJS)
 
 .SUFFIXES: .so
 

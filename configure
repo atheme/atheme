@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# $Id: configure.ac 2095 2005-09-04 00:56:04Z nenolod $
+# $Id: configure.ac 2203 2005-09-07 19:10:17Z nenolod $
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -313,7 +313,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA RM MV CP AR RANLIB MKDEP CPP EGREP SOCKET_ENGINE POSTGRESQL_C PGINC PQLIB MYSQL_CONFIG MYSQL_C MYINC MYLIB PICFLAGS MODULES_LIST CONTRIB_MOD_LIST LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA RM MV CP AR RANLIB MKDEP CPP EGREP SOCKET_ENGINE POSTGRESQL_C PGINC PQLIB MYSQL_CONFIG MYSQL_C MYINC MYLIB PICFLAGS LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -966,7 +966,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-$Id: configure.ac 2095 2005-09-04 00:56:04Z nenolod $
+$Id: configure.ac 2203 2005-09-07 19:10:17Z nenolod $
 _ACEOF
   exit 0
 fi
@@ -5678,7 +5678,7 @@ echo "${ECHO_T}no" >&6
 fi
 
 if test "x$MYSQL_CONFIG" = "xyes"; then
-	MYINC="`mysql_config --include`"
+	MYINC="`mysql_config --cflags`"
 	MYLIB="`mysql_config --libs`"
 	MYSQL_C="mysql.c"
 else
@@ -9442,23 +9442,9 @@ fi;
 ac_save_CFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS}"
 CFLAGS=${ac_save_CFLAGS}
 
-
-for i in modules/*.c; do
-	MODULE_LIST="$MODULE_LIST $i"
-done
-
-for i in contrib/*.c; do
-	CONTRIB_MOD_LIST="$CONTRIB_MOD_LIST $i"
-done
-
 echo " "
 echo "Makefile generation"
 echo " "
-
-MODULES_LIST=`echo $MODULE_LIST | sed s:modules\/::g`;
-
-CONTRIB_MOD_LIST=`echo $CONTRIB_MOD_LIST | sed s:contrib\/::g`;
-
 
                                                                                                                                             ac_config_files="$ac_config_files Makefile libatheme/Makefile backend/Makefile contrib/Makefile crypto/Makefile dbtool/Makefile modules/Makefile modules/chanserv/Makefile modules/global/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/userserv/Makefile protocol/Makefile src/Makefile"
 cat >confcache <<\_ACEOF
@@ -10112,8 +10098,6 @@ s,@MYSQL_C@,$MYSQL_C,;t t
 s,@MYINC@,$MYINC,;t t
 s,@MYLIB@,$MYLIB,;t t
 s,@PICFLAGS@,$PICFLAGS,;t t
-s,@MODULES_LIST@,$MODULES_LIST,;t t
-s,@CONTRIB_MOD_LIST@,$CONTRIB_MOD_LIST,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
 CEOF
