@@ -1,3 +1,12 @@
+nenolod     2005/09/16 21:53:11 UTC	(20050916-2263)
+  Log:
+  Revert tokenize stuff.
+  
+
+  Modified:
+	trunk/src/tokenize.c (File Modified) 
+
+
 nenolod     2005/09/16 21:22:34 UTC	(20050916-2261)
   Log:
   Change out strncpy() for strlcpy(). This time the string is properly terminated, instead of being null-terminated prematurely.

@@ -4,7 +4,7 @@
  *
  * IRC packet handling.
  *
- * $Id: packet.c 2245 2005-09-16 06:46:13Z nenolod $
+ * $Id: packet.c 2267 2005-09-18 18:38:26Z nenolod $
  *
  * TODO: Take all the sendq stuff in node.c and put it here.
  * sendq_flush becomes irc_whandler, etc.
@@ -30,24 +30,25 @@ static void irc_packet(char *buf)
 	char *ptr, buf2[BUFSIZE * 2];
 	static char tmp[BUFSIZE * 2 + 1];
 
-	for ((ptr = strstr(buf, "\r\n")); ptr != NULL; buf = ptr)
+	while ((ptr = strchr(buf, '\n')))
 	{
 		*ptr = '\0';
-		ptr++;
 
-		if (*ptr == '\n')
-			ptr++;
+		if (*(ptr - 1) == '\r')
+			*(ptr - 1) = '\0';
 
 		snprintf(buf2, (BUFSIZE * 2), "%s%s", tmp, buf);
 		*tmp = '\0';
 
 		me.uplinkpong = CURRTIME;
 		parse(buf2);
+
+		buf = ptr + 1;
 	}
 
 	if (*buf)
 	{
-		strlcpy(tmp, buf, (BUFSIZE * 2) - strlen(tmp));
+		strlcpy(tmp, buf, BUFSIZE * 2);
 		tmp[BUFSIZE * 2] = '\0';
 	}
 }
