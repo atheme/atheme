@@ -1,3 +1,16 @@
+nenolod     2005/09/18 19:35:52 UTC	(20050918-2269)
+  Log:
+  Netsplit stuff and cruft removal from configure.
+  
+
+  Modified:
+	trunk/configure (File Modified) 
+	trunk/configure.ac (File Modified) 
+	trunk/contrib/Makefile.in (File Modified) 
+	trunk/include/servers.h (File Modified) 
+	trunk/src/node.c (File Modified) 
+
+
 nenolod     2005/09/18 18:38:26 UTC	(20050918-2267)
   Log:
   Fixes.

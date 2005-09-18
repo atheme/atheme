@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2131 2005-09-05 01:08:12Z beu $
+# $Id: Makefile.in 2271 2005-09-18 19:36:22Z nenolod $
 #
 
 CC		= @CC@
@@ -25,7 +25,7 @@ CPPFLAGS	= @CPPFLAGS@
 
 default: all
 
-BASE_SRCS = @MODULES_LIST@
+BASE_SRCS = 
 
 SRCS = ${BASE_SRCS}
 
