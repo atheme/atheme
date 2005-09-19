@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 2127 2005-09-05 00:44:16Z nenolod $
+ * $Id: help.c 2275 2005-09-19 07:23:37Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 2127 2005-09-05 00:44:16Z nenolod $",
+	"$Id: help.c 2275 2005-09-19 07:23:37Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -52,8 +52,6 @@ static struct help_command_ cs_help_commands[] = {
   { "HOLD",     AC_SRA,   "help/cservice/hold"     },
   { "SET FOUNDER",   AC_NONE, "help/cservice/set_founder"   },
   { "SET MLOCK",     AC_NONE, "help/cservice/set_mlock"     },
-  { "SET NEVEROP",   AC_NONE, "help/cservice/set_neverop"   },
-  { "SET NOOP",      AC_NONE, "help/cservice/set_noop"      },
   { "SET SECURE",    AC_NONE, "help/cservice/set_secure"    },
   { "SET SUCCESSOR", AC_NONE, "help/cservice/set_successor" },
   { "SET VERBOSE",   AC_NONE, "help/cservice/set_verbose"   },
@@ -126,7 +124,6 @@ static void cs_cmd_help(char *origin)
 		notice(chansvs.nick, origin, "The following commands are available.");
 		notice(chansvs.nick, origin, "\2FOUNDER\2       Sets you founder of a channel.");
 		notice(chansvs.nick, origin, "\2MLOCK\2         Sets channel mode lock.");
-		notice(chansvs.nick, origin, "\2NOOP\2          Prevents services from automatically " "setting modes associated with access lists.");
 		notice(chansvs.nick, origin, "\2SECURE\2        Prevents unauthorized people from " "gaining operator status.");
 		notice(chansvs.nick, origin, "\2SUCCESSOR\2     Sets a channel successor.");
 		notice(chansvs.nick, origin, "\2VERBOSE\2       Notifies channel about access list " "modifications.");

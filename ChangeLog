@@ -1,3 +1,13 @@
+jilles      2005/09/18 19:50:18 UTC	(20050918-2273)
+  Log:
+  Use server_t.userlist in server_eob().
+  
+
+  Modified:
+	trunk/protocol/charybdis.c (File Modified) 
+	trunk/protocol/ratbox.c (File Modified) 
+
+
 nenolod     2005/09/18 19:36:22 UTC	(20050918-2271)
   Log:
   ditto
