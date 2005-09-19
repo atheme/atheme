@@ -2,8 +2,8 @@ Help for MARK:
 
 MARK allows operators to attach a note to a channel.
 For example, an operator could mark the channel of a
-spammer so that others know the room has previously
-been warned.
+spammer so that others know it has previously been
+warned.
 
 MARK information will be displayed in INFO output.
 

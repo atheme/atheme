@@ -1,3 +1,14 @@
+pfish       2005/09/19 07:23:37 UTC	(20050919-2275)
+  Log:
+  remove old account stuff from help
+  
+
+  Modified:
+	trunk/help/cservice/set_neverop (File Deleted) 
+	trunk/help/cservice/set_noop (File Deleted) 
+	trunk/modules/chanserv/help.c (File Modified) 
+
+
 jilles      2005/09/18 19:50:18 UTC	(20050918-2273)
   Log:
   Use server_t.userlist in server_eob().

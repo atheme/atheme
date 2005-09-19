@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ MYACCESS function.
  *
- * $Id: myaccess.c 2133 2005-09-05 01:19:23Z nenolod $
+ * $Id: myaccess.c 2277 2005-09-19 19:23:33Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/myaccess", FALSE, _modinit, _moddeinit,
-	"$Id: myaccess.c 2133 2005-09-05 01:19:23Z nenolod $",
+	"$Id: myaccess.c 2277 2005-09-19 19:23:33Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -78,7 +78,7 @@ static void ns_cmd_myaccess(char *origin)
 				matches++;
 				break;
 			default:
-				/* a user may be AKICKed from a room he doesn't know about */
+				/* a user may be AKICKed from a channel he doesn't know about */
 				if (!(ca->level & CA_AKICK))
 				{
 					notice(nicksvs.nick, origin, "%s in %s", bitmask_to_flags(ca->level, chanacs_flags), ca->mychan->name);
