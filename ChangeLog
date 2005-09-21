@@ -1,3 +1,12 @@
+nenolod     2005/09/21 18:24:09 UTC	(20050921-2289)
+  Log:
+  Make charybdis TS6ish. Probably does not work. Should compile though.
+  
+
+  Modified:
+	trunk/protocol/charybdis.c (File Modified) 
+
+
 jilles      2005/09/21 16:34:48 UTC	(20050921-2287)
   Log:
   Make it look like a proper TS5/TS6 handshake.
