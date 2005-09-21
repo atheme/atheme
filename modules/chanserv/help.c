@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 2275 2005-09-19 07:23:37Z pfish $
+ * $Id: help.c 2281 2005-09-21 06:04:46Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 2275 2005-09-19 07:23:37Z pfish $",
+	"$Id: help.c 2281 2005-09-21 06:04:46Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -46,6 +46,7 @@ static struct help_command_ cs_help_commands[] = {
   { "TOPICAPPEND", AC_NONE, "help/cservice/topicappend" },
   { "BAN",      AC_NONE,  "help/cservice/ban"      },
   { "UNBAN",    AC_NONE,  "help/cservice/unban"    },
+  { "CLOSE",	AC_IRCOP, "help/cservice/close"	   },
   { "FTRANSFER", AC_IRCOP, "help/cservice/ftransfer" },
   { "MARK",     AC_IRCOP, "help/cservice/mark"     },
   { "LIST",     AC_IRCOP, "help/cservice/list"     },
