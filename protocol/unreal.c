@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 2225 2005-09-12 16:19:10Z jilles $
+ * $Id: unreal.c 2293 2005-09-21 22:13:03Z pfish $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/unreal", FALSE, _modinit, NULL,
-	"$Id: unreal.c 2225 2005-09-12 16:19:10Z jilles $",
+	"$Id: unreal.c 2293 2005-09-21 22:13:03Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -363,7 +363,7 @@ static void m_ping(char *origin, uint8_t parc, char *parv[])
 static void m_pong(char *origin, uint8_t parc, char *parv[])
 {
 	/* someone replied to our PING */
-	if ((!parv[0]) || (strcasecmp(me.name, parv[0])))
+	if ((!parv[0]) || (strcasecmp(me.actual, parv[0])))
 		return;
 
 	me.uplinkpong = CURRTIME;
