@@ -1,3 +1,15 @@
+nenolod     2005/09/21 06:40:15 UTC	(20050921-2283)
+  Log:
+  Some stuff for a future testsuite.
+  
+
+  Modified:
+	trunk/testsuite/ (File Added) 
+	trunk/testsuite/authenticate.t (File Added) 
+	trunk/testsuite/burstuser.t (File Added) 
+	trunk/testsuite/reguser.t (File Added) 
+
+
 pfish       2005/09/21 06:04:46 UTC	(20050921-2281)
   Log:
   add chanserv close help
