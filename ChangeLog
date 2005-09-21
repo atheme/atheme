@@ -1,3 +1,12 @@
+nenolod     2005/09/21 16:25:50 UTC	(20050921-2285)
+  Log:
+  Add a chanserv testsuite.
+  
+
+  Modified:
+	trunk/testsuite/regchan.t (File Added) 
+
+
 nenolod     2005/09/21 06:40:15 UTC	(20050921-2283)
   Log:
   Some stuff for a future testsuite.
