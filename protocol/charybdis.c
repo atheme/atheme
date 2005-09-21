@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 2273 2005-09-18 19:50:18Z jilles $
+ * $Id: charybdis.c 2289 2005-09-21 18:24:09Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/charybdis", FALSE, _modinit, NULL,
-	"$Id: charybdis.c 2273 2005-09-18 19:50:18Z jilles $",
+	"$Id: charybdis.c 2289 2005-09-21 18:24:09Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,7 +22,7 @@ DECLARE_MODULE_V1
 ircd_t Charybdis = {
         "Charybdis 1.0+pre4",		/* IRCd name */
         "$$",                           /* TLD Prefix, used by Global. */
-        FALSE,                          /* Whether or not we use IRCNet/TS6 UID */
+        TRUE,                           /* Whether or not we use IRCNet/TS6 UID */
         FALSE,                          /* Whether or not we use RCOMMAND */
         FALSE,                          /* Whether or not we support channel owners. */
         FALSE,                          /* Whether or not we support channel protection. */
@@ -88,7 +88,7 @@ static uint8_t charybdis_server_login(void)
 {
         int8_t ret;
 
-        ret = sts("PASS %s :TS", curr_uplink->pass);
+        ret = sts("PASS %s TS 6 :%s", curr_uplink->pass, curr_uplink->numeric);
         if (ret == 1)
                 return 1;
 
@@ -105,10 +105,11 @@ static uint8_t charybdis_server_login(void)
 static user_t *charybdis_introduce_nick(char *nick, char *user, char *host, char *real, char *modes)
 {
 	user_t *u;
+	char *uid = uid_get();
 
-	sts("NICK %s 1 %ld +%s%s %s %s %s :%s", nick, CURRTIME, modes, use_rserv_support ? "S" : "", user, host, me.name, real);
+	sts(":%s UID %s 1 %ld +%sS %s %s 0 %s :%s", nick, CURRTIME, modes, user, host, uid, real);
 
-	u = user_add(nick, user, host, NULL, NULL, real, me.me);
+	u = user_add(nick, user, host, NULL, uid, real, me.me);
 	if (strchr(modes, 'o'))
 		u->flags |= UF_IRCOP;
 
@@ -120,7 +121,7 @@ static void charybdis_quit_sts(user_t *u, char *reason)
 	if (!me.connected)
 		return;
 
-	sts(":%s QUIT :%s", u->nick, reason);
+	sts(":%s QUIT :%s", u->uid, reason);
 
 	user_delete(u->nick);
 }
@@ -138,7 +139,7 @@ static void charybdis_wallops(char *fmt, ...)
         vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-        sts(":%s WALLOPS :%s", me.name, buf);
+        sts(":%s WALLOPS :%s", curr_uplink->numeric, buf);
 }
 
 /* join a channel */
@@ -146,22 +147,26 @@ static void charybdis_join(char *chan, char *nick)
 {
 	channel_t *c = channel_find(chan);
 	chanuser_t *cu;
+	user_t *u = user_find(nick);
+
+	if (!u)
+		return;
 
 	if (!c)
 	{
-		sts(":%s SJOIN %ld %s +nt :@%s", me.name, CURRTIME, chan, nick);
+		sts(":%s SJOIN %ld %s +nt :@%s", curr_uplink->numeric, CURRTIME, chan, u->uid);
 
 		c = channel_add(chan, CURRTIME);
 	}
 	else
 	{
-		if ((cu = chanuser_find(c, user_find(nick))))
+		if ((cu = chanuser_find(c, u)))
 		{
 			slog(LG_DEBUG, "join(): i'm already in `%s'", c->name);
 			return;
 		}
 
-		sts(":%s SJOIN %ld %s + :@%s", me.name, c->ts, chan, nick);
+		sts(":%s SJOIN %ld %s + :@%s", me.name, c->ts, chan, u->uid);
 	}
 
 	cu = chanuser_add(c, nick);
@@ -173,11 +178,12 @@ static void charybdis_kick(char *from, char *channel, char *to, char *reason)
 {
         channel_t *chan = channel_find(channel);
         user_t *user = user_find(to);
+	user_t *from_p = user_find(from);
 
         if (!chan || !user)
                 return;
 
-        sts(":%s KICK %s %s :%s", from, channel, to, reason);
+        sts(":%s KICK %s %s :%s", from_p->uid, channel, user->uid, reason);
 
         chanuser_delete(chan, user);
 }
@@ -187,6 +193,11 @@ static void charybdis_msg(char *from, char *target, char *fmt, ...)
 {
         va_list ap;
         char buf[BUFSIZE];
+	user_t *u = user_find(from);
+	user_t *t = user_find(target);
+
+	if (!u)
+		return;
 
         va_start(ap, fmt);
         vsnprintf(buf, BUFSIZE, fmt, ap);
@@ -199,7 +210,7 @@ static void charybdis_msg(char *from, char *target, char *fmt, ...)
 	 * the source would be able to send to whatever target it is 
 	 * sending to. --nenolod
 	 */
-        sts(":%s PRIVMSG %s :%s", from, target, buf);
+        sts(":%s PRIVMSG %s :%s", u->uid, t ? t->uid : target, buf);
 }
 
 /* NOTICE wrapper */
@@ -207,19 +218,20 @@ static void charybdis_notice(char *from, char *target, char *fmt, ...)
 {
         va_list ap;
         char buf[BUFSIZE];
+	user_t *u = user_find(from);
+	user_t *t = user_find(target);
+
+	if (!u)
+		return;
 
         va_start(ap, fmt);
         vsnprintf(buf, BUFSIZE, fmt, ap);
         va_end(ap);
 
 	if (target[0] != '#' || chanuser_find(channel_find(target), user_find(from)))
-        	sts(":%s NOTICE %s :%s", from, target, buf);
+        	sts(":%s NOTICE %s :%s", u->uid, t ? t->uid : target, buf);
 	else
-		/* not on channel, let's send it from the server
-		 * hyb6 won't accept this, oh well, they'll have to
-	       	 * enable join_chans -- jilles
-		 */
-        	sts(":%s NOTICE %s :%s: %s", me.name, target, from, buf);
+        	sts(":%s NOTICE %s :%s: %s", curr_uplink->numeric, t ? t->uid : target, u->uid, buf);
 }
 
 /* numeric wrapper */
@@ -227,12 +239,13 @@ static void charybdis_numeric_sts(char *from, int numeric, char *target, char *f
 {
 	va_list ap;
 	char buf[BUFSIZE];
+	user_t *t = user_find(target);
 
 	va_start(ap, fmt);
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s %d %s %s", from, numeric, target, buf);
+	sts(":%s %d %s %s", curr_uplink->numeric, numeric, t->uid, buf);
 }
 
 /* KILL wrapper */
@@ -261,7 +274,7 @@ static void charybdis_part(char *chan, char *nick)
         if (!(cu = chanuser_find(c, u)))
                 return;
 
-        sts(":%s PART %s", u->nick, c->name);
+        sts(":%s PART %s", u->uid, c->name);
 
         chanuser_delete(c, u);
 }
@@ -272,7 +285,7 @@ static void charybdis_kline_sts(char *server, char *user, char *host, long durat
 	if (!me.connected)
 		return;
 
-	sts(":%s KLINE %s %ld %s %s :%s", opersvs.nick, server, duration, user, host, reason);
+	sts(":%s KLINE %s %ld %s %s :%s", opersvs.me->me->uid, server, duration, user, host, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
@@ -281,7 +294,7 @@ static void charybdis_unkline_sts(char *server, char *user, char *host)
 	if (!me.connected)
 		return;
 
-	sts(":%s UNKLINE %s %s %s", opersvs.nick, server, user, host);
+	sts(":%s UNKLINE %s %s %s", opersvs.me->me->uid, server, user, host);
 }
 
 /* topic wrapper */
@@ -298,25 +311,27 @@ static void charybdis_topic_sts(char *channel, char *setter, char *topic)
 	 * We cannot nicely change topic from the server:
 	 * :server.name TOPIC doesn't propagate and TB requires
 	 * us to specify an older topicts.
-	 * -- jilles */
+	 * -- jilles
+	 */
 	if (!chanuser_find(c, chansvs.me->me))
 	{
-		sts(":%s SJOIN %ld %s + :@%s", me.name, c->ts, channel,
-				chansvs.nick);
+		sts(":%s SJOIN %ld %s + :@%s", curr_uplink->numeric, c->ts, channel,
+				chansvs.me->me->uid);
 		joined = 1;
 	}
-	sts(":%s TOPIC %s :%s (%s)", chansvs.nick, channel, topic, setter);
+	sts(":%s TOPIC %s :%s (%s)", chansvs.me->me->uid, channel, topic, setter);
 	if (joined)
-		sts(":%s PART %s :Topic set", chansvs.nick, channel);
+		sts(":%s PART %s :Topic set", chansvs.me->me->uid, channel);
 }
 
 /* mode wrapper */
 static void charybdis_mode_sts(char *sender, char *target, char *modes)
 {
+	user_t *u = user_find(sender);
 	if (!me.connected)
 		return;
 
-	sts(":%s MODE %s %s", sender, target, modes);
+	sts(":%s MODE %s %s", u->uid, target, modes);
 }
 
 /* ping wrapper */
@@ -325,45 +340,54 @@ static void charybdis_ping_sts(void)
 	if (!me.connected)
 		return;
 
-	sts("PING :%s", me.name);
+	sts("PING :%s", curr_uplink->numeric);
 }
 
 /* protocol-specific stuff to do on login */
 static void charybdis_on_login(char *origin, char *user, char *wantedhost)
 {
-	if (!me.connected || !use_rserv_support)
+	user_t *u = user_find(origin);
+
+	if (!me.connected || !use_rserv_support || !u)
 		return;
 
-	sts(":%s ENCAP * SU %s %s", me.name, origin, user);
+	sts(":%s ENCAP * SU %s %s", curr_uplink->numeric, u->uid, user);
 }
 
 /* protocol-specific stuff to do on login */
 static void charybdis_on_logout(char *origin, char *user, char *wantedhost)
 {
-	if (!me.connected || !use_rserv_support)
+	user_t *u = user_find(origin);
+
+	if (!me.connected || !use_rserv_support || !u)
 		return;
 
-	sts(":%s ENCAP * SU %s", me.name, origin);
+	sts(":%s ENCAP * SU %s", me.name, u->uid);
 }
 
+/* XXX we don't have an appropriate API for this, what about making JUPE
+ * serverside like in P10?
+ *       --nenolod
+ */
 static void charybdis_jupe(char *server, char *reason)
 {
         if (!me.connected)
                 return;
 
-	sts(":%s SQUIT %s :%s", opersvs.nick, server, reason);
+	sts(":%s SQUIT %s :%s", opersvs.me->me->uid, server, reason);
         sts(":%s SERVER %s 2 :%s", me.name, server, reason);
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
+	user_t *u = user_find(origin);
 
 	if (!origin)
 		return;
 
 	c->topic = sstrdup(parv[1]);
-	c->topic_setter = sstrdup(origin);
+	c->topic_setter = sstrdup(u->nick);
 }
 
 static void m_ping(char *origin, uint8_t parc, char *parv[])
