@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 2247 2005-09-16 07:04:29Z nenolod $
+ * $Id: function.c 2279 2005-09-21 00:27:40Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@ FILE *log_file;
 
 /* there is no way windows has this command. */
 #ifdef _WIN32
-#undef HAVE_GETTIMEOFDAY
+# undef HAVE_GETTIMEOFDAY
 #endif
 
 char ch[26] = "abcdefghijklmnopqrstuvwxyz";
@@ -207,7 +207,7 @@ char *replace(char *s, int32_t size, const char *old, const char *new)
 		if (diff != 0)
 			memmove(ptr + oldlen + diff, ptr + oldlen, left + 1);
 
-		strlcpy(ptr, new, newlen);
+		strncpy(ptr, new, newlen);
 		ptr += newlen;
 		left -= oldlen;
 	}
