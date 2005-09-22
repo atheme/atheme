@@ -1,3 +1,12 @@
+pfish       2005/09/21 22:13:03 UTC	(20050921-2293)
+  Log:
+  use me.actual instead of me.name here (fixes synch timer wallops)
+  
+
+  Modified:
+	trunk/protocol/unreal.c (File Modified) 
+
+
 nenolod     2005/09/21 19:19:24 UTC	(20050921-2291)
   Log:
   Add a note about viewsvn.atheme.org.
