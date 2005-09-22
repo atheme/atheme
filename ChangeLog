@@ -1,3 +1,12 @@
+pfish       2005/09/22 22:26:32 UTC	(20050922-2295)
+  Log:
+  fix close help
+  
+
+  Modified:
+	trunk/modules/chanserv/help.c (File Modified) 
+
+
 pfish       2005/09/21 22:13:03 UTC	(20050921-2293)
   Log:
   use me.actual instead of me.name here (fixes synch timer wallops)
