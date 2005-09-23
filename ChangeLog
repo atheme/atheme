@@ -1,3 +1,11 @@
+nenolod     2005/09/23 04:36:58 UTC	(20050923-2305)
+  Log:
+  don't block channel messages... oops
+
+  Modified:
+	trunk/protocol/charybdis.c (File Modified) 
+
+
 nenolod     2005/09/23 04:30:02 UTC	(20050923-2303)
   Log:
   charybdis TS6 fixes

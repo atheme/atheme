@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 2305 2005-09-23 04:36:58Z nenolod $
+ * $Id: charybdis.c 2307 2005-09-23 04:38:01Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/charybdis", FALSE, _modinit, NULL,
-	"$Id: charybdis.c 2305 2005-09-23 04:36:58Z nenolod $",
+	"$Id: charybdis.c 2307 2005-09-23 04:38:01Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -533,7 +533,7 @@ static void m_privmsg(char *origin, uint8_t parc, char *parv[])
 		}
 	}
 
-	sptr = find_service(t->nick);
+	sptr = find_service(t ? t->nick : parv[0]);
 
 	if (sptr)
 		sptr->handler(u->nick, parc, parv);
