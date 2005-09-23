@@ -1,3 +1,33 @@
+nenolod     2005/09/23 04:10:02 UTC	(20050923-2299)
+  Log:
+  - TS6ify charybdis protocol support.
+  - Optimize m_nick() stuff in several protocol modules.
+  - Add IP tracking for IRCd's that we know how to handle it with.
+  
+
+  Modified:
+	trunk/include/extern.h (File Modified) 
+	trunk/include/users.h (File Modified) 
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bahamut.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/charybdis.c (File Modified) 
+	trunk/protocol/dreamforge.c (File Modified) 
+	trunk/protocol/hyperion.c (File Modified) 
+	trunk/protocol/inspircd.c (File Modified) 
+	trunk/protocol/ircnet.c (File Modified) 
+	trunk/protocol/monkey.c (File Modified) 
+	trunk/protocol/plexus.c (File Modified) 
+	trunk/protocol/ptlink.c (File Modified) 
+	trunk/protocol/ratbox.c (File Modified) 
+	trunk/protocol/scylla.c (File Modified) 
+	trunk/protocol/shadowircd.c (File Modified) 
+	trunk/protocol/sorcery.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+	trunk/protocol/unreal.c (File Modified) 
+	trunk/src/node.c (File Modified) 
+
+
 pfish       2005/09/22 22:30:59 UTC	(20050922-2297)
   Log:
   display a _channels_ metadata

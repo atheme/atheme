@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 2269 2005-09-18 19:35:52Z nenolod $
+dnl $Id: configure.ac 2301 2005-09-23 04:12:31Z nenolod $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, 0.3beta2, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 2269 2005-09-18 19:35:52Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 2301 2005-09-23 04:12:31Z nenolod $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -159,38 +159,31 @@ MYSQL="yes"
 MYINC=""
 MYSQL_C=""
 
-AC_CHECK_PROG(MYSQL_CONFIG, mysql_config, yes, no)
-if test "x$MYSQL_CONFIG" = "xyes"; then
-	MYINC="`mysql_config --cflags`"
-	MYLIB="`mysql_config --libs`"
-	MYSQL_C="mysql.c"
+AC_MSG_CHECKING(for MySQL include directory)
+if test -d /usr/include/mysql; then
+	my_inc_dir="/usr/include/mysql"
+elif test -d /usr/local/include/mysql; then
+	my_inc_dir="/usr/local/include/mysql"
+elif test -d /usr/local/mysql/include; then
+	my_inc_dir="/usr/local/mysql/include"
+elif test -d /opt/mysql/include; then
+	my_inc_dir="/opt/mysql/include"
 else
-	AC_MSG_CHECKING(for MySQL include directory)
-	if test -d /usr/include/mysql; then
-		my_inc_dir="/usr/include/mysql"
-	elif test -d /usr/local/include/mysql; then
-		my_inc_dir="/usr/local/include/mysql"
-	elif test -d /usr/local/mysql/include; then
-		my_inc_dir="/usr/local/mysql/include"
-	elif test -d /opt/mysql/include; then
-		my_inc_dir="/opt/mysql/include"
-	else
-		my_inc_dir="no"
-		MYLIB=""
-		MYSQL="no"
-	fi
+	my_inc_dir="no"
+	MYLIB=""
+	MYSQL="no"
+fi
 
-	AC_MSG_RESULT($my_inc_dir)
+AC_MSG_RESULT($my_inc_dir)
 
-	if test "$MYINC" != "no" || test "$my_inc_dir" != "no"; then
-		AC_CHECK_HEADER($my_inc_dir/mysql.h, [
-			MYINC="-I$my_inc_dir"
-			AC_CHECK_LIB(mysqlclient, mysql_real_connect, MYLIB="-lmysqlclient")
-			MYSQL_C="mysql.c"
-		])
-	else
-		MYSQL="no"
-	fi
+if test "$MYINC" != "no" || test "$my_inc_dir" != "no"; then
+	AC_CHECK_HEADER($my_inc_dir/mysql.h, [
+		MYINC="-I$my_inc_dir"
+		AC_CHECK_LIB(mysqlclient, mysql_real_connect, MYLIB="-lmysqlclient")
+		MYSQL_C="mysql.c"
+	])
+else
+	MYSQL="no"
 fi
 
 AC_SUBST(MYSQL_C)

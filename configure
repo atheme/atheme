@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# $Id: configure.ac 2203 2005-09-07 19:10:17Z nenolod $
+# $Id: configure.ac 2269 2005-09-18 19:35:52Z nenolod $
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -313,7 +313,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA RM MV CP AR RANLIB MKDEP CPP EGREP SOCKET_ENGINE POSTGRESQL_C PGINC PQLIB MYSQL_CONFIG MYSQL_C MYINC MYLIB PICFLAGS LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA RM MV CP AR RANLIB MKDEP CPP EGREP SOCKET_ENGINE POSTGRESQL_C PGINC PQLIB MYSQL_C MYINC MYLIB PICFLAGS LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -966,7 +966,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-$Id: configure.ac 2203 2005-09-07 19:10:17Z nenolod $
+$Id: configure.ac 2269 2005-09-18 19:35:52Z nenolod $
 _ACEOF
   exit 0
 fi
@@ -5641,68 +5641,27 @@ MYSQL="yes"
 MYINC=""
 MYSQL_C=""
 
-# Extract the first word of "mysql_config", so it can be a program name with args.
-set dummy mysql_config; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_prog_MYSQL_CONFIG+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  if test -n "$MYSQL_CONFIG"; then
-  ac_cv_prog_MYSQL_CONFIG="$MYSQL_CONFIG" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_MYSQL_CONFIG="yes"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-  test -z "$ac_cv_prog_MYSQL_CONFIG" && ac_cv_prog_MYSQL_CONFIG="no"
-fi
-fi
-MYSQL_CONFIG=$ac_cv_prog_MYSQL_CONFIG
-if test -n "$MYSQL_CONFIG"; then
-  echo "$as_me:$LINENO: result: $MYSQL_CONFIG" >&5
-echo "${ECHO_T}$MYSQL_CONFIG" >&6
-else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-
-if test "x$MYSQL_CONFIG" = "xyes"; then
-	MYINC="`mysql_config --cflags`"
-	MYLIB="`mysql_config --libs`"
-	MYSQL_C="mysql.c"
-else
-	echo "$as_me:$LINENO: checking for MySQL include directory" >&5
+echo "$as_me:$LINENO: checking for MySQL include directory" >&5
 echo $ECHO_N "checking for MySQL include directory... $ECHO_C" >&6
-	if test -d /usr/include/mysql; then
-		my_inc_dir="/usr/include/mysql"
-	elif test -d /usr/local/include/mysql; then
-		my_inc_dir="/usr/local/include/mysql"
-	elif test -d /usr/local/mysql/include; then
-		my_inc_dir="/usr/local/mysql/include"
-	elif test -d /opt/mysql/include; then
-		my_inc_dir="/opt/mysql/include"
-	else
-		my_inc_dir="no"
-		MYLIB=""
-		MYSQL="no"
-	fi
+if test -d /usr/include/mysql; then
+	my_inc_dir="/usr/include/mysql"
+elif test -d /usr/local/include/mysql; then
+	my_inc_dir="/usr/local/include/mysql"
+elif test -d /usr/local/mysql/include; then
+	my_inc_dir="/usr/local/mysql/include"
+elif test -d /opt/mysql/include; then
+	my_inc_dir="/opt/mysql/include"
+else
+	my_inc_dir="no"
+	MYLIB=""
+	MYSQL="no"
+fi
 
-	echo "$as_me:$LINENO: result: $my_inc_dir" >&5
+echo "$as_me:$LINENO: result: $my_inc_dir" >&5
 echo "${ECHO_T}$my_inc_dir" >&6
 
-	if test "$MYINC" != "no" || test "$my_inc_dir" != "no"; then
-		as_ac_Header=`echo "ac_cv_header_$my_inc_dir/mysql.h" | $as_tr_sh`
+if test "$MYINC" != "no" || test "$my_inc_dir" != "no"; then
+	as_ac_Header=`echo "ac_cv_header_$my_inc_dir/mysql.h" | $as_tr_sh`
 if eval "test \"\${$as_ac_Header+set}\" = set"; then
   echo "$as_me:$LINENO: checking for $my_inc_dir/mysql.h" >&5
 echo $ECHO_N "checking for $my_inc_dir/mysql.h... $ECHO_C" >&6
@@ -5842,8 +5801,8 @@ echo "${ECHO_T}`eval echo '${'$as_ac_Header'}'`" >&6
 fi
 if test `eval echo '${'$as_ac_Header'}'` = yes; then
 
-			MYINC="-I$my_inc_dir"
-			echo "$as_me:$LINENO: checking for mysql_real_connect in -lmysqlclient" >&5
+		MYINC="-I$my_inc_dir"
+		echo "$as_me:$LINENO: checking for mysql_real_connect in -lmysqlclient" >&5
 echo $ECHO_N "checking for mysql_real_connect in -lmysqlclient... $ECHO_C" >&6
 if test "${ac_cv_lib_mysqlclient_mysql_real_connect+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -5911,14 +5870,13 @@ if test $ac_cv_lib_mysqlclient_mysql_real_connect = yes; then
   MYLIB="-lmysqlclient"
 fi
 
-			MYSQL_C="mysql.c"
+		MYSQL_C="mysql.c"
 
 fi
 
 
-	else
-		MYSQL="no"
-	fi
+else
+	MYSQL="no"
 fi
 
 
@@ -10093,7 +10051,6 @@ s,@SOCKET_ENGINE@,$SOCKET_ENGINE,;t t
 s,@POSTGRESQL_C@,$POSTGRESQL_C,;t t
 s,@PGINC@,$PGINC,;t t
 s,@PQLIB@,$PQLIB,;t t
-s,@MYSQL_CONFIG@,$MYSQL_CONFIG,;t t
 s,@MYSQL_C@,$MYSQL_C,;t t
 s,@MYINC@,$MYINC,;t t
 s,@MYLIB@,$MYLIB,;t t
