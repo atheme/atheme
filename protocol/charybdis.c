@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 2311 2005-09-23 12:17:05Z jilles $
+ * $Id: charybdis.c 2313 2005-09-23 12:25:06Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/charybdis", FALSE, _modinit, NULL,
-	"$Id: charybdis.c 2311 2005-09-23 12:17:05Z jilles $",
+	"$Id: charybdis.c 2313 2005-09-23 12:25:06Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -633,7 +633,8 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 		return;
 
 	/* JOIN 0 is really a part from all channels */
-	if (parv[1][0] == '0' && parc == 1)
+	/* be sure to allow joins to TS 0 channels -- jilles */
+	if (parv[0][0] == '0' && parc <= 2)
 	{
 		LIST_FOREACH_SAFE(n, tn, u->channels.head)
 		{
@@ -643,7 +644,7 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 		return;
 	}
 
-	/* :user SJOIN ts chan modestr [key or limits] */
+	/* :user JOIN ts chan modestr [key or limits] */
 	modev[0] = parv[2];
 
 	if (parc > 4)

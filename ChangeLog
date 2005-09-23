@@ -1,3 +1,12 @@
+jilles      2005/09/23 12:17:05 UTC	(20050923-2311)
+  Log:
+  TS6 fixes.
+  
+
+  Modified:
+	trunk/protocol/charybdis.c (File Modified) 
+
+
 nenolod     2005/09/23 04:42:15 UTC	(20050923-2309)
   Log:
   chanuser_add() was in wrong place :/
