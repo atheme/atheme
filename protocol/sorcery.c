@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: sorcery.c 2225 2005-09-12 16:19:10Z jilles $
+ * $Id: sorcery.c 2299 2005-09-23 04:10:02Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/sorcery", FALSE, _modinit, NULL,
-	"$Id: sorcery.c 2225 2005-09-12 16:19:10Z jilles $",
+	"$Id: sorcery.c 2299 2005-09-23 04:10:02Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -100,7 +100,7 @@ static user_t *sorcery_introduce_nick(char *nick, char *user, char *host, char *
 	sts("NICK %s 1 %ld %s %s %s 0 :%s", nick, CURRTIME, user, host, me.name, real);
 	sts(":%s MODE %s +%s", nick, nick, modes);
 
-	u = user_add(nick, user, host, NULL, NULL, real, me.me);
+	u = user_add(nick, user, host, NULL, NULL, NULL, real, me.me);
 	if (strchr(modes, 'o'))
 		u->flags |= UF_IRCOP;
 
@@ -503,9 +503,9 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			return;
 		}
 
-		user_add(parv[0], parv[3], parv[4], NULL, NULL, parv[7], s);
+		u = user_add(parv[0], parv[3], parv[4], NULL, NULL, NULL, parv[7], s);
 
-		handle_nickchange(user_find(parv[0]));
+		handle_nickchange(u);
 	}
 
 	/* if it's only 2 then it's a nickname change */

@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 2225 2005-09-12 16:19:10Z jilles $
+ * $Id: ircnet.c 2299 2005-09-23 04:10:02Z nenolod $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/ircnet", FALSE, _modinit, NULL,
-	"$Id: ircnet.c 2225 2005-09-12 16:19:10Z jilles $",
+	"$Id: ircnet.c 2299 2005-09-23 04:10:02Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -98,7 +98,7 @@ static user_t *ircnet_introduce_nick(char *nick, char *user, char *host, char *r
 
 	sts(":%s UNICK %s %s %s %s 0.0.0.0 +%s :%s", me.numeric, nick, uid, user, host, modes, real);
 
-	u = user_add(nick, user, host, NULL, uid, real, me.me);
+	u = user_add(nick, user, host, NULL, NULL, uid, real, me.me);
 	if (strchr(modes, 'o'))
 		u->flags |= UF_IRCOP;
 
@@ -525,7 +525,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			return;
 		}
 
-		u = user_add(parv[0], parv[2], parv[3], NULL, parv[1], parv[6], s);
+		u = user_add(parv[0], parv[2], parv[3], NULL, NULL, parv[1], parv[6], s);
 
 		user_mode(u, parv[5]);
 

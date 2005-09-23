@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 2273 2005-09-18 19:50:18Z jilles $
+ * $Id: ratbox.c 2299 2005-09-23 04:10:02Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/ratbox", FALSE, _modinit, NULL,
-	"$Id: ratbox.c 2273 2005-09-18 19:50:18Z jilles $",
+	"$Id: ratbox.c 2299 2005-09-23 04:10:02Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -99,7 +99,7 @@ static user_t *ratbox_introduce_nick(char *nick, char *user, char *host, char *r
 
 	sts("NICK %s 1 %ld +%s%s %s %s %s :%s", nick, CURRTIME, modes, use_rserv_support ? "S" : "", user, host, me.name, real);
 
-	u = user_add(nick, user, host, NULL, NULL, real, me.me);
+	u = user_add(nick, user, host, NULL, NULL, NULL, real, me.me);
 	if (strchr(modes, 'o'))
 		u->flags |= UF_IRCOP;
 
@@ -611,7 +611,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			return;
 		}
 
-		user_add(parv[0], parv[4], parv[5], NULL, NULL, parv[7], s);
+		user_add(parv[0], parv[4], parv[5], NULL, NULL, NULL, parv[7], s);
 
 		user_mode(user_find(parv[0]), parv[3]);
 

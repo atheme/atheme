@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for chunky monkey ircd.
  *
- * $Id: monkey.c 2225 2005-09-12 16:19:10Z jilles $
+ * $Id: monkey.c 2299 2005-09-23 04:10:02Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/monkey", FALSE, _modinit, NULL,
-	"$Id: monkey.c 2225 2005-09-12 16:19:10Z jilles $",
+	"$Id: monkey.c 2299 2005-09-23 04:10:02Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -106,7 +106,7 @@ static user_t *monkey_introduce_nick(char *nick, char *user, char *host, char *r
 
 	sts("NICK %s 1 %ld +%s %s %s %s 0 0 :%s", nick, CURRTIME, modes, user, host, me.name, real);
 
-	u = user_add(nick, user, host, NULL, NULL, real, me.me);
+	u = user_add(nick, user, host, NULL, NULL, NULL, real, me.me);
 	if (strchr(modes, 'o'))
 		u->flags |= UF_IRCOP;
 
@@ -610,11 +610,11 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			return;
 		}
 
-		user_add(parv[0], parv[4], parv[5], NULL, NULL, parv[9], s);
+		u = user_add(parv[0], parv[4], parv[5], NULL, NULL, NULL, parv[9], s);
 
-		user_mode(user_find(parv[0]), parv[3]);
+		user_mode(u, parv[3]);
 
-		handle_nickchange(user_find(parv[0]));
+		handle_nickchange(u);
 	}
 
 	/* if it's only 2 then it's a nickname change */

@@ -1,3 +1,12 @@
+pfish       2005/09/22 22:30:59 UTC	(20050922-2297)
+  Log:
+  display a _channels_ metadata
+  
+
+  Modified:
+	trunk/modules/chanserv/taxonomy.c (File Modified) 
+
+
 pfish       2005/09/22 22:26:32 UTC	(20050922-2295)
   Log:
   fix close help

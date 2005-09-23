@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: inspircd.c 2225 2005-09-12 16:19:10Z jilles $
+ * $Id: inspircd.c 2299 2005-09-23 04:10:02Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/inspircd", FALSE, _modinit, NULL,
-	"$Id: inspircd.c 2225 2005-09-12 16:19:10Z jilles $",
+	"$Id: inspircd.c 2299 2005-09-23 04:10:02Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -121,7 +121,7 @@ static user_t *inspircd_introduce_nick(char *nick, char *user, char *host, char 
 	/*         ts  ni ho vh id mod ip      sv  rn */
 	sts(":%s N %ld %s %s %s %s +%s 0.0.0.0 %s :%s", CreateSum(), CURRTIME, nick, host, host, user, modes, me.name, real);
 
-	u = user_add(nick, user, host, NULL, NULL, real, me.me);
+	u = user_add(nick, user, host, NULL, NULL, NULL, real, me.me);
 	if (strchr(modes, 'o'))
 		u->flags |= UF_IRCOP;
 
@@ -558,11 +558,11 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			return;
 		}
 
-		user_add(parv[1], parv[4], parv[2], parv[3], NULL, parv[8], s);
+		u = user_add(parv[1], parv[4], parv[2], parv[3], parv[6], NULL, parv[8], s);
 
-		user_mode(user_find(parv[1]), parv[7]);
+		user_mode(u, parv[5]);
 
-		handle_nickchange(user_find(parv[1]));
+		handle_nickchange(u);
 	}
 
 	/* if it's only 2 then it's a nickname change */

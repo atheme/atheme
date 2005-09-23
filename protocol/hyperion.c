@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 2225 2005-09-12 16:19:10Z jilles $
+ * $Id: hyperion.c 2299 2005-09-23 04:10:02Z nenolod $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -18,7 +18,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/hyperion", FALSE, _modinit, NULL,
-	"$Id: hyperion.c 2225 2005-09-12 16:19:10Z jilles $",
+	"$Id: hyperion.c 2299 2005-09-23 04:10:02Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -120,7 +120,7 @@ static user_t *hyperion_introduce_nick(char *nick, char *user, char *host, char 
 
 	sts("NICK %s 1 %ld +FohmipeB %s %s %s 0.0.0.0 :%s", nick, CURRTIME, user, host, me.name, real);
 
-	u = user_add(nick, user, host, NULL, NULL, real, me.me);
+	u = user_add(nick, user, host, NULL, NULL, NULL, real, me.me);
 	u->flags |= UF_IRCOP;
 
 	return u;
@@ -623,18 +623,19 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			return;
 		}
 
-		user_add(parv[0], parv[4], parv[5], NULL, NULL, parv[8], s);
+		u = user_add(parv[0], parv[4], parv[5], NULL, parv[7], NULL, parv[8], s);
 
-		user_mode(user_find(parv[0]), parv[3]);
+		user_mode(u, parv[3]);
 
 		/* umode +e: identified to current nick */
 		if (!use_svslogin && strchr(parv[3], 'e'))
-			handle_burstlogin(user_find(parv[0]), parv[0]);
+			handle_burstlogin(u, parv[0]);
 
 		/* if the server supports SIGNON, we will get an SNICK
-		 * for this user, potentially with a login name */
+		 * for this user, potentially with a login name
+		 */
 		if (!use_svslogin)
-			handle_nickchange(user_find(parv[0]));
+			handle_nickchange(u);
 	}
 
 	/* if it's only 2 then it's a nickname change */

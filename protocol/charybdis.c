@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 2289 2005-09-21 18:24:09Z nenolod $
+ * $Id: charybdis.c 2299 2005-09-23 04:10:02Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/charybdis", FALSE, _modinit, NULL,
-	"$Id: charybdis.c 2289 2005-09-21 18:24:09Z nenolod $",
+	"$Id: charybdis.c 2299 2005-09-23 04:10:02Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -109,7 +109,7 @@ static user_t *charybdis_introduce_nick(char *nick, char *user, char *host, char
 
 	sts(":%s UID %s 1 %ld +%sS %s %s 0 %s :%s", nick, CURRTIME, modes, user, host, uid, real);
 
-	u = user_add(nick, user, host, NULL, uid, real, me.me);
+	u = user_add(nick, user, host, NULL, NULL, uid, real, me.me);
 	if (strchr(modes, 'o'))
 		u->flags |= UF_IRCOP;
 
@@ -393,7 +393,7 @@ static void m_topic(char *origin, uint8_t parc, char *parv[])
 static void m_ping(char *origin, uint8_t parc, char *parv[])
 {
 	/* reply to PING's */
-	sts(":%s PONG %s %s", me.name, me.name, parv[0]);
+	sts(":%s PONG %s %s", curr_uplink->numeric, curr_uplink->numeric, parv[0]);
 }
 
 static void m_pong(char *origin, uint8_t parc, char *parv[])
@@ -414,6 +414,7 @@ static void m_pong(char *origin, uint8_t parc, char *parv[])
 
 	if (irccasecmp(me.actual, parv[0]))
 		return;
+
 	me.uplinkpong = CURRTIME;
 
 	/* -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net */
@@ -437,6 +438,7 @@ static void m_pong(char *origin, uint8_t parc, char *parv[])
 static void m_privmsg(char *origin, uint8_t parc, char *parv[])
 {
 	user_t *u;
+	user_t *t;
 	service_t *sptr;
 
 	/* we should have no more and no less */
@@ -446,6 +448,12 @@ static void m_privmsg(char *origin, uint8_t parc, char *parv[])
 	if (!(u = user_find(origin)))
 	{
 		slog(LG_DEBUG, "m_privmsg(): got message from nonexistant user `%s'", origin);
+		return;
+	}
+
+	if (!(t = user_find(parv[0])))
+	{
+		slog(LG_DEBUG, "m_privmsg(): got message to nonexistant user `%s'", origin);
 		return;
 	}
 
@@ -485,8 +493,8 @@ static void m_privmsg(char *origin, uint8_t parc, char *parv[])
 				u->msgs = 0;
 				u->offenses = 11;
 
-				notice(parv[0], origin, "You have triggered services flood protection.");
-				notice(parv[0], origin, "This is your first offense. You will be ignored for " "30 seconds.");
+				notice(t->uid, u->uid, "You have triggered services flood protection.");
+				notice(t->uid, u->uid, "This is your first offense. You will be ignored for 30 seconds.");
 
 				snoop("FLOOD: \2%s\2", u->nick);
 
@@ -500,8 +508,8 @@ static void m_privmsg(char *origin, uint8_t parc, char *parv[])
 				u->msgs = 0;
 				u->offenses = 12;
 
-				notice(parv[0], origin, "You have triggered services flood protection.");
-				notice(parv[0], origin, "This is your last warning. You will be ignored for " "30 seconds.");
+				notice(t->uid, u->uid, "You have triggered services flood protection.");
+				notice(t->uid, u->uid, "This is your last warning. You will be ignored for 30 seconds.");
 
 				snoop("FLOOD: \2%s\2", u->nick);
 
@@ -523,10 +531,10 @@ static void m_privmsg(char *origin, uint8_t parc, char *parv[])
 		}
 	}
 
-	sptr = find_service(parv[0]);
+	sptr = find_service(t->nick);
 
 	if (sptr)
-		sptr->handler(origin, parc, parv);
+		sptr->handler(u->nick, parc, parv);
 }
 
 static void m_sjoin(char *origin, uint8_t parc, char *parv[])
@@ -605,6 +613,109 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 	}
 }
 
+static void m_join(char *origin, uint8_t parc, char *parv[])
+{
+	/* -> :proteus.malkier.net SJOIN 1073516550 #shrike +tn :@sycobuny @+rakaur */
+	user_t *u = user_find(origin);
+	node_t *n, *tn;
+	channel_t *c;
+	chanuser_t *cu;
+	uint8_t modec = 0;
+	char *modev[16];
+	uint8_t i;
+	time_t ts;
+
+	if (!u)
+		return;
+
+	/* JOIN 0 is really a part from all channels */
+	if (parv[0][0] == '0')
+	{
+		LIST_FOREACH_SAFE(n, tn, u->channels.head)
+		{
+			cu = (chanuser_t *)n->data;
+			chanuser_delete(cu->chan, u);
+		}
+	}
+
+	/* :origin SJOIN ts chan modestr [key or limits] :users */
+	modev[0] = parv[2];
+
+	if (parc > 4)
+		modev[++modec] = parv[3];
+	if (parc > 5)
+		modev[++modec] = parv[4];
+
+	c = channel_find(parv[1]);
+	ts = atol(parv[0]);
+
+	if (!c)
+	{
+		slog(LG_DEBUG, "m_sjoin(): new channel: %s", parv[1]);
+		c = channel_add(parv[1], ts);
+	}
+
+	if (ts < c->ts)
+	{
+		chanuser_t *cu;
+		node_t *n;
+
+		/* the TS changed.  a TS change requires the following things
+		 * to be done to the channel:  reset all modes to nothing, remove
+		 * all status modes on known users on the channel (including ours),
+		 * and set the new TS.
+		 */
+		c->modes = 0;
+		c->limit = 0;
+		if (c->key)
+			free(c->key);
+		c->key = NULL;
+
+		LIST_FOREACH(n, c->members.head)
+		{
+			cu = (chanuser_t *)n->data;
+			if (cu->user->server == me.me)
+			{
+				/* it's a service, reop */
+				sts(":%s PART %s :Reop", cu->user->uid, c->name);
+				sts(":%s SJOIN %ld %s + :@%s", curr_uplink->numeric, ts, c->name, cu->user->uid);
+				cu->modes = CMODE_OP;
+			}
+			else
+				cu->modes = 0;
+		}
+		slog(LG_INFO, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
+		c->ts = ts;
+
+		channel_mode(c, modec, modev);
+
+		chanuser_add(c, origin);
+	}
+}
+
+/* XXX: We should follow TS rules here, but i'm lazy. --nenolod */
+static void m_bmask(char *origin, uint8_t parc, char *parv[])
+{
+	uint8_t ac, i;
+	char *av[256];
+	channel_t *c = channel_find(parv[1]);
+
+	if (!c)
+	{
+		slog(LG_DEBUG, "m_bmask(): got bmask for unknown channel");
+		return;
+	}
+
+	/* if it isn't a ban, we don't care. */
+	if (*parv[2] != 'b')
+		return;
+
+	ac = sjtoken(parv[parc - 1], ' ', av);
+
+	for (i = 0; i < ac; i++)
+		chanban_add(c, av[i]);
+}
+
 static void m_part(char *origin, uint8_t parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_part(): user left channel: %s -> %s", origin, parv[0]);
@@ -645,12 +756,99 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			return;
 		}
 
-		user_add(parv[0], parv[4], parv[5], NULL, NULL, parv[7], s);
+		u = user_add(parv[0], parv[4], parv[5], NULL, NULL, NULL, parv[7], s);
 
-		user_mode(user_find(parv[0]), parv[3]);
+		user_mode(u, parv[3]);
 
 		/* If server is not yet EOB we will do this later.
 		 * This avoids useless "please identify" -- jilles */
+		if (s->flags & SF_EOB)
+			handle_nickchange(user_find(parv[0]));
+	}
+
+	/* if it's only 2 then it's a nickname change */
+	else if (parc == 2)
+	{
+		node_t *n;
+
+		u = user_find(origin);
+		if (!u)
+		{
+			slog(LG_DEBUG, "m_nick(): nickname change from nonexistant user: %s", origin);
+			return;
+		}
+
+		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", u->nick, parv[0]);
+
+		/* remove the current one from the list */
+		n = node_find(u, &userlist[u->hash]);
+		node_del(n, &userlist[u->hash]);
+		node_free(n);
+
+		/* change the nick */
+		strlcpy(u->nick, parv[0], NICKLEN);
+
+		/* readd with new nick (so the hash works) */
+		n = node_create();
+		u->hash = UHASH((unsigned char *)u->nick);
+		node_add(u, n, &userlist[u->hash]);
+
+		/* It could happen that our PING arrived late and the
+		 * server didn't acknowledge EOB yet even though it is
+		 * EOB; don't send double notices in that case -- jilles */
+		if (u->server->flags & SF_EOB)
+			handle_nickchange(u);
+	}
+	else
+	{
+		int i;
+		slog(LG_DEBUG, "m_nick(): got NICK with wrong number of params");
+
+		for (i = 0; i < parc; i++)
+			slog(LG_DEBUG, "m_nick():   parv[%d] = %s", i, parv[i]);
+	}
+}
+
+static void m_uid(char *origin, uint8_t parc, char *parv[])
+{
+	server_t *s;
+	user_t *u;
+	kline_t *k;
+
+	/* got the right number of args for an introduction? */
+	if (parc == 9)
+	{
+		s = server_find(origin);
+		if (!s)
+		{
+			slog(LG_DEBUG, "m_uid(): new user on nonexistant server: %s", origin);
+			return;
+		}
+
+		slog(LG_DEBUG, "m_uid(): new user on `%s': %s", s->name, parv[0]);
+
+		if ((k = kline_find(parv[4], parv[5])))
+		{
+			/* the new user matches a kline.
+			 * the server introducing the user probably wasn't around when
+			 * we added the kline or isn't accepting klines from us.
+			 * either way, we'll KILL the user and send the server
+			 * a new KLINE.
+			 */
+
+			skill(opersvs.nick, parv[0], k->reason);
+			kline_sts(parv[6], k->user, k->host, (k->expires - CURRTIME), k->reason);
+
+			return;
+		}
+
+		u = user_add(parv[0], parv[4], parv[5], NULL, parv[6], parv[7], parv[8], s);
+
+		user_mode(u, parv[3]);
+
+		/* If server is not yet EOB we will do this later.
+		 * This avoids useless "please identify" -- jilles
+		 */
 		if (s->flags & SF_EOB)
 			handle_nickchange(user_find(parv[0]));
 	}
@@ -726,6 +924,23 @@ static void m_mode(char *origin, uint8_t parc, char *parv[])
 		user_mode(user_find(parv[0]), parv[1]);
 }
 
+static void m_tmode(char *origin, uint8_t parc, char *parv[])
+{
+	if (!origin)
+	{
+		slog(LG_DEBUG, "m_mode(): received MODE without origin");
+		return;
+	}
+
+	if (parc < 2)
+	{
+		slog(LG_DEBUG, "m_mode(): missing parameters in MODE");
+		return;
+	}
+
+	channel_mode(channel_find(parv[0]), parc - 2, &parv[2]);
+}
+
 static void m_kick(char *origin, uint8_t parc, char *parv[])
 {
 	user_t *u = user_find(parv[1]);
@@ -755,7 +970,7 @@ static void m_kick(char *origin, uint8_t parc, char *parv[])
 	chanuser_delete(c, u);
 
 	/* if they kicked us, let's rejoin */
-	if (!irccasecmp(chansvs.nick, parv[1]))
+	if (!irccasecmp(chansvs.nick, parv[0]) || !irccasecmp(chansvs.me->me->uid, parv[0]))
 	{
 		slog(LG_DEBUG, "m_kick(): i got kicked from `%s'; rejoining", parv[0]);
 		join(parv[0], parv[1]);
@@ -771,7 +986,7 @@ static void m_kill(char *origin, uint8_t parc, char *parv[])
 	slog(LG_DEBUG, "m_kill(): killed user: %s", parv[0]);
 	user_delete(parv[0]);
 
-	if (!irccasecmp(chansvs.nick, parv[0]))
+	if (!irccasecmp(chansvs.nick, parv[0]) || !irccasecmp(chansvs.me->me->uid, parv[0]))
 	{
 		services_init();
 
@@ -838,26 +1053,6 @@ static void m_version(char *origin, uint8_t parc, char *parv[])
 static void m_info(char *origin, uint8_t parc, char *parv[])
 {
 	handle_info(origin);
-}
-
-static void m_join(char *origin, uint8_t parc, char *parv[])
-{
-	user_t *u = user_find(origin);
-	chanuser_t *cu;
-	node_t *n, *tn;
-
-	if (!u)
-		return;
-
-	/* JOIN 0 is really a part from all channels */
-	if (parv[0][0] == '0')
-	{
-		LIST_FOREACH_SAFE(n, tn, u->channels.head)
-		{
-			cu = (chanuser_t *)n->data;
-			chanuser_delete(cu->chan, u);
-		}
-	}
 }
 
 static void m_pass(char *origin, uint8_t parc, char *parv[])
@@ -985,6 +1180,8 @@ void _modinit(module_t *m)
 	pcommand_add("TOPIC", m_topic);
 	pcommand_add("ENCAP", m_encap);
 	pcommand_add("CAPAB", m_capab);
+	pcommand_add("UID", m_uid);
+	pcommand_add("BMASK", m_bmask);
 
 	m->mflags = MODTYPE_CORE;
 
