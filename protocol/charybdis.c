@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 2333 2005-09-23 22:32:01Z jilles $
+ * $Id: charybdis.c 2335 2005-09-23 22:36:23Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/charybdis", FALSE, _modinit, NULL,
-	"$Id: charybdis.c 2333 2005-09-23 22:32:01Z jilles $",
+	"$Id: charybdis.c 2335 2005-09-23 22:36:23Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -345,7 +345,7 @@ static void charybdis_ping_sts(void)
 	if (!me.connected)
 		return;
 
-	sts("PING :%s", ME);
+	sts("PING :%s", me.name);
 }
 
 /* protocol-specific stuff to do on login */
@@ -398,7 +398,7 @@ static void m_topic(char *origin, uint8_t parc, char *parv[])
 static void m_ping(char *origin, uint8_t parc, char *parv[])
 {
 	/* reply to PING's */
-	sts(":%s PONG %s %s", ME, ME, parv[0]);
+	sts(":%s PONG %s %s", ME, me.name, parv[0]);
 }
 
 static void m_pong(char *origin, uint8_t parc, char *parv[])
@@ -1041,7 +1041,7 @@ static void m_server(char *origin, uint8_t parc, char *parv[])
 		/* elicit PONG for EOB detection; pinging uplink is
 		 * already done elsewhere -- jilles
 		 */
-		sts(":%s PING %s %s", ME, ME, parv[0]);
+		sts(":%s PING %s %s", ME, me.name, parv[0]);
 	}
 }
 
@@ -1059,7 +1059,7 @@ static void m_sid(char *origin, uint8_t parc, char *parv[])
 		/* elicit PONG for EOB detection; pinging uplink is
 		 * already done elsewhere -- jilles
 		 */
-		sts(":%s PING %s %s", ME, ME, parv[2]);
+		sts(":%s PING %s %s", ME, me.name, parv[2]);
 	}
 }
 
