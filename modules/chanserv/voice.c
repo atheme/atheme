@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService VOICE functions.
  *
- * $Id: voice.c 2129 2005-09-05 00:59:19Z nenolod $
+ * $Id: voice.c 2317 2005-09-23 13:58:19Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/voice", FALSE, _modinit, _moddeinit,
-	"$Id: voice.c 2129 2005-09-05 00:59:19Z nenolod $",
+	"$Id: voice.c 2317 2005-09-23 13:58:19Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -85,7 +85,7 @@ static void cs_cmd_voice(char *origin)
 		tu = u;
 	else
 	{
-		if (!(tu = user_find(nick)))
+		if (!(tu = user_find_named(nick)))
 		{
 			notice(chansvs.nick, origin, "\2%s\2 is not online.", nick);
 			return;
@@ -147,7 +147,7 @@ static void cs_cmd_devoice(char *origin)
 		tu = u;
 	else
 	{
-		if (!(tu = user_find(nick)))
+		if (!(tu = user_find_named(nick)))
 		{
 			notice(chansvs.nick, origin, "\2%s\2 is not online.", nick);
 			return;
@@ -203,7 +203,7 @@ static void cs_fcmd_voice(char *origin, char *chan)
 			tu = u;
 		else
 		{
-			if (!(tu = user_find(nick)))
+			if (!(tu = user_find_named(nick)))
 			{
 				notice(chansvs.nick, origin, "\2%s\2 is not online.", nick);
 				continue;
@@ -259,7 +259,7 @@ static void cs_fcmd_devoice(char *origin, char *chan)
 			tu = u;
 		else
 		{
-			if (!(tu = user_find(nick)))
+			if (!(tu = user_find_named(nick)))
 			{
 				notice(chansvs.nick, origin, "\2%s\2 is not online.", nick);
 				continue;

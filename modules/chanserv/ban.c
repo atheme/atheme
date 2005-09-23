@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 2125 2005-09-04 23:34:32Z nenolod $
+ * $Id: ban.c 2317 2005-09-23 13:58:19Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", FALSE, _modinit, _moddeinit,
-	"$Id: ban.c 2125 2005-09-04 23:34:32Z nenolod $",
+	"$Id: ban.c 2317 2005-09-23 13:58:19Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -99,7 +99,7 @@ static void cs_cmd_ban (char *origin)
 		notice(chansvs.nick, origin, "Banned \2%s\2 on \2%s\2.", target, channel);
 		return;
 	}
-	else if ((tu = user_find(target)))
+	else if ((tu = user_find_named(target)))
 	{
 		char hostbuf[BUFSIZE];
 
@@ -175,7 +175,7 @@ static void cs_cmd_unban (char *origin)
 
 		return;
 	}
-	else if ((tu = user_find(target)))
+	else if ((tu = user_find_named(target)))
 	{
 		node_t *n;
 		char hostbuf[BUFSIZE], hostbuf2[BUFSIZE];
@@ -260,7 +260,7 @@ static void cs_fcmd_ban (char *origin, char *channel)
 		notice(chansvs.nick, origin, "Banned \2%s\2 on \2%s\2.", target, channel);
 		return;
 	}
-	else if ((tu = user_find(target)))
+	else if ((tu = user_find_named(target)))
 	{
 		char hostbuf[BUFSIZE];
 
@@ -335,7 +335,7 @@ static void cs_fcmd_unban (char *origin, char *channel)
 
 		return;
 	}
-	else if ((tu = user_find(target)))
+	else if ((tu = user_find_named(target)))
 	{
 		node_t *n;
 		char hostbuf[BUFSIZE], hostbuf2[BUFSIZE];

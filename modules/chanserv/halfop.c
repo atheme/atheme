@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: halfop.c 2127 2005-09-05 00:44:16Z nenolod $
+ * $Id: halfop.c 2317 2005-09-23 13:58:19Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/halfop", FALSE, _modinit, _moddeinit,
-	"$Id: halfop.c 2127 2005-09-05 00:44:16Z nenolod $",
+	"$Id: halfop.c 2317 2005-09-23 13:58:19Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -97,7 +97,7 @@ static void cs_cmd_halfop(char *origin)
 		tu = u;
 	else
 	{
-		if (!(tu = user_find(nick)))
+		if (!(tu = user_find_named(nick)))
 		{
 			notice(chansvs.nick, origin, "\2%s\2 is not online.", nick);
 			return;
@@ -173,7 +173,7 @@ static void cs_cmd_dehalfop(char *origin)
 		tu = u;
 	else
 	{
-		if (!(tu = user_find(nick)))
+		if (!(tu = user_find_named(nick)))
 		{
 			notice(chansvs.nick, origin, "\2%s\2 is not online.", nick);
 			return;
@@ -235,7 +235,7 @@ static void cs_fcmd_halfop(char *origin, char *chan)
 			tu = u;
 		else
 		{
-			if (!(tu = user_find(nick)))
+			if (!(tu = user_find_named(nick)))
 			{
 				notice(chansvs.nick, origin, "\2%s\2 is not online.", nick);
 				continue;
@@ -305,7 +305,7 @@ static void cs_fcmd_dehalfop(char *origin, char *chan)
 			tu = u;
 		else
 		{
-			if (!(tu = user_find(nick)))
+			if (!(tu = user_find_named(nick)))
 			{
 				notice(chansvs.nick, origin, "\2%s\2 is not online.", nick);
 				continue;

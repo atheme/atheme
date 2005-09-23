@@ -1,3 +1,15 @@
+jilles      2005/09/23 13:46:06 UTC	(20050923-2315)
+  Log:
+  Add user_find_named(), a la ratbox find_named_person().
+  This should be used to prevent users from chasing
+  people via UID.
+  
+
+  Modified:
+	trunk/include/extern.h (File Modified) 
+	trunk/src/node.c (File Modified) 
+
+
 jilles      2005/09/23 12:25:06 UTC	(20050923-2313)
   Log:
   Fix JOIN 0.

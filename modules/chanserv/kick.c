@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: kick.c 2129 2005-09-05 00:59:19Z nenolod $
+ * $Id: kick.c 2317 2005-09-23 13:58:19Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/kick", FALSE, _modinit, _moddeinit,
-	"$Id: kick.c 2129 2005-09-05 00:59:19Z nenolod $",
+	"$Id: kick.c 2317 2005-09-23 13:58:19Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -87,7 +87,7 @@ static void cs_cmd_kick(char *origin)
 	}
 
 	/* figure out who we're going to kick */
-	if (!(u = user_find(nick)))
+	if (!(u = user_find_named(nick)))
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is not online.", nick);
 		return;
@@ -142,7 +142,7 @@ static void cs_cmd_kickban(char *origin)
 	}
 
 	/* figure out who we're going to kick */
-	if (!(u = user_find(nick)))
+	if (!(u = user_find_named(nick)))
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is not online.", nick);
 		return;
@@ -197,7 +197,7 @@ static void cs_fcmd_kick(char *origin, char *chan)
 	}
 
 	/* figure out who we're going to kick */
-	if (!(u = user_find(nick)))
+	if (!(u = user_find_named(nick)))
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is not online.", nick);
 		return;
@@ -251,7 +251,7 @@ static void cs_fcmd_kickban(char *origin, char *chan)
 	}
 
 	/* figure out who we're going to kick */
-	if (!(u = user_find(nick)))
+	if (!(u = user_find_named(nick)))
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is not online.", nick);
 		return;

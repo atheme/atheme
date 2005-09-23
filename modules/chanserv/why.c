@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ MYACCESS function.
  *
- * $Id: why.c 2129 2005-09-05 00:59:19Z nenolod $
+ * $Id: why.c 2317 2005-09-23 13:58:19Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/why", FALSE, _modinit, _moddeinit,
-	"$Id: why.c 2129 2005-09-05 00:59:19Z nenolod $",
+	"$Id: why.c 2317 2005-09-23 13:58:19Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -59,7 +59,7 @@ static void cs_cmd_why(char *origin)
 	}
 
 	mc = mychan_find(chan);
-	u = user_find(targ);
+	u = user_find_named(targ);
 
 	if (u == NULL)
 	{
