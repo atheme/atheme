@@ -1,3 +1,11 @@
+nenolod     2005/09/23 04:38:01 UTC	(20050923-2307)
+  Log:
+  continuation of last commit...
+
+  Modified:
+	trunk/protocol/charybdis.c (File Modified) 
+
+
 nenolod     2005/09/23 04:36:58 UTC	(20050923-2305)
   Log:
   don't block channel messages... oops

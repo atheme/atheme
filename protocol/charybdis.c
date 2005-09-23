@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 2307 2005-09-23 04:38:01Z nenolod $
+ * $Id: charybdis.c 2309 2005-09-23 04:42:15Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/charybdis", FALSE, _modinit, NULL,
-	"$Id: charybdis.c 2307 2005-09-23 04:38:01Z nenolod $",
+	"$Id: charybdis.c 2309 2005-09-23 04:42:15Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -631,7 +631,7 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 		return;
 
 	/* JOIN 0 is really a part from all channels */
-	if (parv[0][0] == '0')
+	if (parv[1][0] == '0')
 	{
 		LIST_FOREACH_SAFE(n, tn, u->channels.head)
 		{
@@ -690,9 +690,9 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 		c->ts = ts;
 
 		channel_mode(c, modec, modev);
-
-		chanuser_add(c, origin);
 	}
+
+	chanuser_add(c, origin);
 }
 
 /* XXX: We should follow TS rules here, but i'm lazy. --nenolod */
