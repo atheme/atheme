@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 2299 2005-09-23 04:10:02Z nenolod $
+ * $Id: charybdis.c 2303 2005-09-23 04:30:02Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/charybdis", FALSE, _modinit, NULL,
-	"$Id: charybdis.c 2299 2005-09-23 04:10:02Z nenolod $",
+	"$Id: charybdis.c 2303 2005-09-23 04:30:02Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -81,6 +81,8 @@ static boolean_t use_rserv_support = FALSE;
 
 static void server_eob(server_t *s);
 
+static char *ts6sid = NULL;
+
 /* *INDENT-ON* */
 
 /* login to our uplink */
@@ -107,7 +109,7 @@ static user_t *charybdis_introduce_nick(char *nick, char *user, char *host, char
 	user_t *u;
 	char *uid = uid_get();
 
-	sts(":%s UID %s 1 %ld +%sS %s %s 0 %s :%s", nick, CURRTIME, modes, user, host, uid, real);
+	sts(":%s UID %s 1 %ld +%sS %s %s 0 %s :%s", curr_uplink->numeric, nick, CURRTIME, modes, user, host, uid, real);
 
 	u = user_add(nick, user, host, NULL, NULL, uid, real, me.me);
 	if (strchr(modes, 'o'))
@@ -1019,7 +1021,24 @@ static void m_server(char *origin, uint8_t parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
 	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, 
-		NULL, parv[2]);
+		origin ? NULL : ts6sid, parv[2]);
+
+	if (cnt.server == 2)
+		me.actual = sstrdup(parv[0]);
+	else
+	{
+		/* elicit PONG for EOB detection; pinging uplink is
+		 * already done elsewhere -- jilles
+		 */
+		sts(":%s PING %s %s", me.name, me.name, parv[0]);
+	}
+}
+
+static void m_sid(char *origin, uint8_t parc, char *parv[])
+{
+	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
+	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, 
+		parv[2], parv[3]);
 
 	if (cnt.server == 2)
 		me.actual = sstrdup(parv[0]);
@@ -1062,6 +1081,8 @@ static void m_pass(char *origin, uint8_t parc, char *parv[])
 		slog(LG_INFO, "m_pass(): password mismatch from uplink; aborting");
 		runflags |= RF_SHUTDOWN;
 	}
+
+	ts6sid = sstrdup(parv[3]);
 }
 
 static void m_error(char *origin, uint8_t parc, char *parv[])
@@ -1182,6 +1203,7 @@ void _modinit(module_t *m)
 	pcommand_add("CAPAB", m_capab);
 	pcommand_add("UID", m_uid);
 	pcommand_add("BMASK", m_bmask);
+	pcommand_add("SID", m_sid);
 
 	m->mflags = MODTYPE_CORE;
 

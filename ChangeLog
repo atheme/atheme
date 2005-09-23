@@ -1,3 +1,13 @@
+nenolod     2005/09/23 04:12:31 UTC	(20050923-2301)
+  Log:
+  MySQL detection fixes.
+  
+
+  Modified:
+	trunk/configure (File Modified) 
+	trunk/configure.ac (File Modified) 
+
+
 nenolod     2005/09/23 04:10:02 UTC	(20050923-2299)
   Log:
   - TS6ify charybdis protocol support.
