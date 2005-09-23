@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 2309 2005-09-23 04:42:15Z nenolod $
+ * $Id: charybdis.c 2311 2005-09-23 12:17:05Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/charybdis", FALSE, _modinit, NULL,
-	"$Id: charybdis.c 2309 2005-09-23 04:42:15Z nenolod $",
+	"$Id: charybdis.c 2311 2005-09-23 12:17:05Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -98,7 +98,7 @@ static uint8_t charybdis_server_login(void)
 
         sts("CAPAB :QS KLN UNKLN ENCAP SERVICES");
         sts("SERVER %s 1 :%s", me.name, me.desc);
-        sts("SVINFO 5 3 0 :%ld", CURRTIME);
+        sts("SVINFO 6 6 0 :%ld", CURRTIME); /* require TS6 */
 
         return 0;
 }
@@ -168,7 +168,7 @@ static void charybdis_join(char *chan, char *nick)
 			return;
 		}
 
-		sts(":%s SJOIN %ld %s + :@%s", me.name, c->ts, chan, u->uid);
+		sts(":%s SJOIN %ld %s + :@%s", curr_uplink->numeric, c->ts, chan, u->uid);
 	}
 
 	cu = chanuser_add(c, nick);
@@ -233,7 +233,7 @@ static void charybdis_notice(char *from, char *target, char *fmt, ...)
 	if (target[0] != '#' || chanuser_find(channel_find(target), user_find(from)))
         	sts(":%s NOTICE %s :%s", u->uid, t ? t->uid : target, buf);
 	else
-        	sts(":%s NOTICE %s :%s: %s", curr_uplink->numeric, t ? t->uid : target, u->uid, buf);
+        	sts(":%s NOTICE %s :%s: %s", curr_uplink->numeric, t ? t->uid : target, u->nick, buf);
 }
 
 /* numeric wrapper */
@@ -255,12 +255,14 @@ static void charybdis_skill(char *from, char *nick, char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
+	user_t *killer = user_find(from);
+	user_t *victim = user_find(nick);
 
 	va_start(ap, fmt);
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-        sts(":%s KILL %s :%s!%s!%s (%s)", from, nick, from, from, from, buf);
+        sts(":%s KILL %s :%s!%s!%s (%s)", killer ? killer->uid : curr_uplink->numeric, victim ? victim->uid : nick, from, from, from, buf);
 }
 
 /* PART wrapper */
@@ -593,8 +595,8 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 				if (cu->user->server == me.me)
 				{
 					/* it's a service, reop */
-					sts(":%s PART %s :Reop", cu->user->nick, c->name);
-					sts(":%s SJOIN %ld %s + :@%s", me.name, ts, c->name, cu->user->nick);
+					sts(":%s PART %s :Reop", cu->user->uid, c->name);
+					sts(":%s SJOIN %ld %s + :@%s", curr_uplink->numeric, ts, c->name, cu->user->uid);
 					cu->modes = CMODE_OP;
 				}
 				else
@@ -617,7 +619,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 
 static void m_join(char *origin, uint8_t parc, char *parv[])
 {
-	/* -> :proteus.malkier.net SJOIN 1073516550 #shrike +tn :@sycobuny @+rakaur */
+	/* -> :1JJAAAAAB JOIN 1127474195 #test +tn */
 	user_t *u = user_find(origin);
 	node_t *n, *tn;
 	channel_t *c;
@@ -631,16 +633,17 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 		return;
 
 	/* JOIN 0 is really a part from all channels */
-	if (parv[1][0] == '0')
+	if (parv[1][0] == '0' && parc == 1)
 	{
 		LIST_FOREACH_SAFE(n, tn, u->channels.head)
 		{
 			cu = (chanuser_t *)n->data;
 			chanuser_delete(cu->chan, u);
 		}
+		return;
 	}
 
-	/* :origin SJOIN ts chan modestr [key or limits] :users */
+	/* :user SJOIN ts chan modestr [key or limits] */
 	modev[0] = parv[2];
 
 	if (parc > 4)
@@ -653,7 +656,7 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 
 	if (!c)
 	{
-		slog(LG_DEBUG, "m_sjoin(): new channel: %s", parv[1]);
+		slog(LG_DEBUG, "m_join(): new channel: %s", parv[1]);
 		c = channel_add(parv[1], ts);
 	}
 
@@ -686,7 +689,7 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 			else
 				cu->modes = 0;
 		}
-		slog(LG_INFO, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
+		slog(LG_INFO, "m_join(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
 		c->ts = ts;
 
 		channel_mode(c, modec, modev);
@@ -702,6 +705,7 @@ static void m_bmask(char *origin, uint8_t parc, char *parv[])
 	char *av[256];
 	channel_t *c = channel_find(parv[1]);
 
+	/* :1JJ BMASK 1127474361 #services b :*!*@*evil* *!*eviluser1@* */
 	if (!c)
 	{
 		slog(LG_DEBUG, "m_bmask(): got bmask for unknown channel");
@@ -891,10 +895,10 @@ static void m_uid(char *origin, uint8_t parc, char *parv[])
 	else
 	{
 		int i;
-		slog(LG_DEBUG, "m_nick(): got NICK with wrong number of params");
+		slog(LG_DEBUG, "m_uid(): got UID with wrong number of params");
 
 		for (i = 0; i < parc; i++)
-			slog(LG_DEBUG, "m_nick():   parv[%d] = %s", i, parv[i]);
+			slog(LG_DEBUG, "m_uid():   parv[%d] = %s", i, parv[i]);
 	}
 }
 
@@ -1030,13 +1034,14 @@ static void m_server(char *origin, uint8_t parc, char *parv[])
 		/* elicit PONG for EOB detection; pinging uplink is
 		 * already done elsewhere -- jilles
 		 */
-		sts(":%s PING %s %s", me.name, me.name, parv[0]);
+		sts(":%s PING %s %s", curr_uplink->numeric, curr_uplink->numeric, parv[0]);
 	}
 }
 
 static void m_sid(char *origin, uint8_t parc, char *parv[])
 {
-	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
+	/* -> :1JJ SID file. 2 00F :telnet server */
+	slog(LG_DEBUG, "m_sid(): new server: %s", parv[0]);
 	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, 
 		parv[2], parv[3]);
 
@@ -1047,7 +1052,7 @@ static void m_sid(char *origin, uint8_t parc, char *parv[])
 		/* elicit PONG for EOB detection; pinging uplink is
 		 * already done elsewhere -- jilles
 		 */
-		sts(":%s PING %s %s", me.name, me.name, parv[0]);
+		sts(":%s PING %s %s", curr_uplink->numeric, curr_uplink->numeric, parv[2]);
 	}
 }
 
