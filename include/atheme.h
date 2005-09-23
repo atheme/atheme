@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 2331 2005-09-23 22:21:59Z jilles $
+ * $Id: atheme.h 2333 2005-09-23 22:32:01Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -53,6 +53,8 @@
 
 /* other stuff. */
 #define CLIENT_NAME(user)	((user)->uid[0] ? (user)->uid : (user)->nick)
+#define SERVER_NAME(serv)	((serv)->sid[0] ? (serv)->sid : (serv)->name)
+#define ME			(ircd->uses_uid ? curr_uplink->numeric : me.name)
 
 /* T Y P E D E F S */
 typedef struct sendq datastream_t;
