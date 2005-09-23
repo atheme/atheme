@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 2327 2005-09-23 14:46:11Z jilles $
+ * $Id: charybdis.c 2329 2005-09-23 21:45:42Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/charybdis", FALSE, _modinit, NULL,
-	"$Id: charybdis.c 2327 2005-09-23 14:46:11Z jilles $",
+	"$Id: charybdis.c 2329 2005-09-23 21:45:42Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -933,19 +933,22 @@ static void m_mode(char *origin, uint8_t parc, char *parv[])
 
 static void m_tmode(char *origin, uint8_t parc, char *parv[])
 {
+	/* -> :1JJAAAAAB TMODE 1127511579 #new +o 2JJAAAAAB */
 	if (!origin)
 	{
-		slog(LG_DEBUG, "m_mode(): received MODE without origin");
+		slog(LG_DEBUG, "m_tmode(): received TMODE without origin");
 		return;
 	}
 
-	if (parc < 2)
+	if (parc < 3)
 	{
-		slog(LG_DEBUG, "m_mode(): missing parameters in MODE");
+		slog(LG_DEBUG, "m_tmode(): missing parameters in TMODE");
 		return;
 	}
+	
+	/* Ignore TS as we do not lower TSes ourselves */
 
-	channel_mode(channel_find(parv[0]), parc - 2, &parv[2]);
+	channel_mode(channel_find(parv[1]), parc - 2, &parv[2]);
 }
 
 static void m_kick(char *origin, uint8_t parc, char *parv[])
@@ -1209,6 +1212,7 @@ void _modinit(module_t *m)
 	pcommand_add("CAPAB", m_capab);
 	pcommand_add("UID", m_uid);
 	pcommand_add("BMASK", m_bmask);
+	pcommand_add("TMODE", m_tmode);
 	pcommand_add("SID", m_sid);
 
 	m->mflags = MODTYPE_CORE;

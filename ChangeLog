@@ -1,3 +1,12 @@
+jilles      2005/09/23 14:46:11 UTC	(20050923-2327)
+  Log:
+  Use TS6 prefix in charybdis_on_logout().
+  
+
+  Modified:
+	trunk/protocol/charybdis.c (File Modified) 
+
+
 jilles      2005/09/23 14:24:21 UTC	(20050923-2325)
   Log:
   Disallow /os akill <uid>.
