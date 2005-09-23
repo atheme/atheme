@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 2313 2005-09-23 12:25:06Z jilles $
+ * $Id: charybdis.c 2327 2005-09-23 14:46:11Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/charybdis", FALSE, _modinit, NULL,
-	"$Id: charybdis.c 2313 2005-09-23 12:25:06Z jilles $",
+	"$Id: charybdis.c 2327 2005-09-23 14:46:11Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -366,7 +366,7 @@ static void charybdis_on_logout(char *origin, char *user, char *wantedhost)
 	if (!me.connected || !use_rserv_support || !u)
 		return;
 
-	sts(":%s ENCAP * SU %s", me.name, u->uid);
+	sts(":%s ENCAP * SU %s", curr_uplink->numeric, u->uid);
 }
 
 /* XXX we don't have an appropriate API for this, what about making JUPE
