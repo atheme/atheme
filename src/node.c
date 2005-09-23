@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 2315 2005-09-23 13:46:06Z jilles $
+ * $Id: node.c 2331 2005-09-23 22:21:59Z jilles $
  */
 
 #include "atheme.h"
@@ -301,7 +301,7 @@ server_t *server_add(char *name, uint8_t hops, char *uplink, char *id,
 
 	s->hash = SHASH((unsigned char *)name);
 
-	if (ircd->uses_uid == TRUE)
+	if (id != NULL)
 	{
 		s->sid = sstrdup(id);
 		s->shash = SHASH((unsigned char *)id);
@@ -379,7 +379,7 @@ void server_delete(char *name)
 
 	free(s->name);
 	free(s->desc);
-	if (ircd->uses_uid == TRUE)
+	if (s->sid)
 		free(s->sid);
 
 	BlockHeapFree(serv_heap, s);
@@ -429,7 +429,7 @@ user_t *user_add(char *nick, char *user, char *host, char *vhost, char *ip, char
 
 	u->hash  = UHASH((unsigned char *)nick);
 
-	if (ircd->uses_uid == TRUE)
+	if (uid != NULL)
 	{
 		strlcpy(u->uid, uid, NICKLEN);
 		u->uhash = UHASH((unsigned char *)uid);

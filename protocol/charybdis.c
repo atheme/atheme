@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 2329 2005-09-23 21:45:42Z jilles $
+ * $Id: charybdis.c 2331 2005-09-23 22:21:59Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/charybdis", FALSE, _modinit, NULL,
-	"$Id: charybdis.c 2329 2005-09-23 21:45:42Z jilles $",
+	"$Id: charybdis.c 2331 2005-09-23 22:21:59Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -123,7 +123,7 @@ static void charybdis_quit_sts(user_t *u, char *reason)
 	if (!me.connected)
 		return;
 
-	sts(":%s QUIT :%s", u->uid, reason);
+	sts(":%s QUIT :%s", CLIENT_NAME(u), reason);
 
 	user_delete(u->nick);
 }
@@ -156,7 +156,7 @@ static void charybdis_join(char *chan, char *nick)
 
 	if (!c)
 	{
-		sts(":%s SJOIN %ld %s +nt :@%s", curr_uplink->numeric, CURRTIME, chan, u->uid);
+		sts(":%s SJOIN %ld %s +nt :@%s", curr_uplink->numeric, CURRTIME, chan, CLIENT_NAME(u));
 
 		c = channel_add(chan, CURRTIME);
 	}
@@ -168,7 +168,7 @@ static void charybdis_join(char *chan, char *nick)
 			return;
 		}
 
-		sts(":%s SJOIN %ld %s + :@%s", curr_uplink->numeric, c->ts, chan, u->uid);
+		sts(":%s SJOIN %ld %s + :@%s", curr_uplink->numeric, c->ts, chan, CLIENT_NAME(u));
 	}
 
 	cu = chanuser_add(c, nick);
@@ -185,7 +185,8 @@ static void charybdis_kick(char *from, char *channel, char *to, char *reason)
         if (!chan || !user)
                 return;
 
-        sts(":%s KICK %s %s :%s", from_p->uid, channel, user->uid, reason);
+        sts(":%s KICK %s %s :%s", CLIENT_NAME(from_p), channel,
+			CLIENT_NAME(user), reason);
 
         chanuser_delete(chan, user);
 }
@@ -212,7 +213,7 @@ static void charybdis_msg(char *from, char *target, char *fmt, ...)
 	 * the source would be able to send to whatever target it is 
 	 * sending to. --nenolod
 	 */
-        sts(":%s PRIVMSG %s :%s", u->uid, t ? t->uid : target, buf);
+        sts(":%s PRIVMSG %s :%s", CLIENT_NAME(u), t ? CLIENT_NAME(t) : target, buf);
 }
 
 /* NOTICE wrapper */
@@ -231,9 +232,9 @@ static void charybdis_notice(char *from, char *target, char *fmt, ...)
         va_end(ap);
 
 	if (target[0] != '#' || chanuser_find(channel_find(target), user_find(from)))
-        	sts(":%s NOTICE %s :%s", u->uid, t ? t->uid : target, buf);
+		sts(":%s NOTICE %s :%s", CLIENT_NAME(u), t ? CLIENT_NAME(t) : target, buf);
 	else
-        	sts(":%s NOTICE %s :%s: %s", curr_uplink->numeric, t ? t->uid : target, u->nick, buf);
+		sts(":%s NOTICE %s :%s: %s", curr_uplink->numeric, target, u->nick, buf);
 }
 
 /* numeric wrapper */
@@ -247,7 +248,7 @@ static void charybdis_numeric_sts(char *from, int numeric, char *target, char *f
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s %d %s %s", curr_uplink->numeric, numeric, t->uid, buf);
+	sts(":%s %d %s %s", curr_uplink->numeric, numeric, CLIENT_NAME(t), buf);
 }
 
 /* KILL wrapper */
@@ -262,7 +263,7 @@ static void charybdis_skill(char *from, char *nick, char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-        sts(":%s KILL %s :%s!%s!%s (%s)", killer ? killer->uid : curr_uplink->numeric, victim ? victim->uid : nick, from, from, from, buf);
+        sts(":%s KILL %s :%s!%s!%s (%s)", killer ? CLIENT_NAME(killer) : curr_uplink->numeric, victim ? CLIENT_NAME(victim) : nick, from, from, from, buf);
 }
 
 /* PART wrapper */
@@ -278,7 +279,7 @@ static void charybdis_part(char *chan, char *nick)
         if (!(cu = chanuser_find(c, u)))
                 return;
 
-        sts(":%s PART %s", u->uid, c->name);
+        sts(":%s PART %s", CLIENT_NAME(u), c->name);
 
         chanuser_delete(c, u);
 }
@@ -289,7 +290,7 @@ static void charybdis_kline_sts(char *server, char *user, char *host, long durat
 	if (!me.connected)
 		return;
 
-	sts(":%s KLINE %s %ld %s %s :%s", opersvs.me->me->uid, server, duration, user, host, reason);
+	sts(":%s KLINE %s %ld %s %s :%s", CLIENT_NAME(opersvs.me->me), server, duration, user, host, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
@@ -298,7 +299,7 @@ static void charybdis_unkline_sts(char *server, char *user, char *host)
 	if (!me.connected)
 		return;
 
-	sts(":%s UNKLINE %s %s %s", opersvs.me->me->uid, server, user, host);
+	sts(":%s UNKLINE %s %s %s", CLIENT_NAME(opersvs.me->me), server, user, host);
 }
 
 /* topic wrapper */
@@ -320,12 +321,12 @@ static void charybdis_topic_sts(char *channel, char *setter, char *topic)
 	if (!chanuser_find(c, chansvs.me->me))
 	{
 		sts(":%s SJOIN %ld %s + :@%s", curr_uplink->numeric, c->ts, channel,
-				chansvs.me->me->uid);
+				CLIENT_NAME(chansvs.me->me));
 		joined = 1;
 	}
-	sts(":%s TOPIC %s :%s (%s)", chansvs.me->me->uid, channel, topic, setter);
+	sts(":%s TOPIC %s :%s (%s)", CLIENT_NAME(chansvs.me->me), channel, topic, setter);
 	if (joined)
-		sts(":%s PART %s :Topic set", chansvs.me->me->uid, channel);
+		sts(":%s PART %s :Topic set", CLIENT_NAME(chansvs.me->me), channel);
 }
 
 /* mode wrapper */
@@ -335,7 +336,7 @@ static void charybdis_mode_sts(char *sender, char *target, char *modes)
 	if (!me.connected)
 		return;
 
-	sts(":%s MODE %s %s", u->uid, target, modes);
+	sts(":%s MODE %s %s", CLIENT_NAME(u), target, modes);
 }
 
 /* ping wrapper */
@@ -355,7 +356,7 @@ static void charybdis_on_login(char *origin, char *user, char *wantedhost)
 	if (!me.connected || !use_rserv_support || !u)
 		return;
 
-	sts(":%s ENCAP * SU %s %s", curr_uplink->numeric, u->uid, user);
+	sts(":%s ENCAP * SU %s %s", curr_uplink->numeric, CLIENT_NAME(u), user);
 }
 
 /* protocol-specific stuff to do on login */
@@ -366,7 +367,7 @@ static void charybdis_on_logout(char *origin, char *user, char *wantedhost)
 	if (!me.connected || !use_rserv_support || !u)
 		return;
 
-	sts(":%s ENCAP * SU %s", curr_uplink->numeric, u->uid);
+	sts(":%s ENCAP * SU %s", curr_uplink->numeric, CLIENT_NAME(u));
 }
 
 /* XXX we don't have an appropriate API for this, what about making JUPE
@@ -378,7 +379,7 @@ static void charybdis_jupe(char *server, char *reason)
         if (!me.connected)
                 return;
 
-	sts(":%s SQUIT %s :%s", opersvs.me->me->uid, server, reason);
+	sts(":%s SQUIT %s :%s", CLIENT_NAME(opersvs.me->me), server, reason);
         sts(":%s SERVER %s 2 :%s", me.name, server, reason);
 }
 
@@ -497,8 +498,10 @@ static void m_privmsg(char *origin, uint8_t parc, char *parv[])
 				u->msgs = 0;
 				u->offenses = 11;
 
-				notice(t->uid, u->uid, "You have triggered services flood protection.");
-				notice(t->uid, u->uid, "This is your first offense. You will be ignored for 30 seconds.");
+				/* ok to use nick here, notice() will
+				 * change it to UID if necessary -- jilles */
+				notice(t->nick, u->nick, "You have triggered services flood protection.");
+				notice(t->nick, u->nick, "This is your first offense. You will be ignored for 30 seconds.");
 
 				snoop("FLOOD: \2%s\2", u->nick);
 
@@ -512,8 +515,8 @@ static void m_privmsg(char *origin, uint8_t parc, char *parv[])
 				u->msgs = 0;
 				u->offenses = 12;
 
-				notice(t->uid, u->uid, "You have triggered services flood protection.");
-				notice(t->uid, u->uid, "This is your last warning. You will be ignored for 30 seconds.");
+				notice(t->nick, u->nick, "You have triggered services flood protection.");
+				notice(t->nick, u->nick, "This is your last warning. You will be ignored for 30 seconds.");
 
 				snoop("FLOOD: \2%s\2", u->nick);
 
@@ -595,8 +598,8 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 				if (cu->user->server == me.me)
 				{
 					/* it's a service, reop */
-					sts(":%s PART %s :Reop", cu->user->uid, c->name);
-					sts(":%s SJOIN %ld %s + :@%s", curr_uplink->numeric, ts, c->name, cu->user->uid);
+					sts(":%s PART %s :Reop", CLIENT_NAME(cu->user), c->name);
+					sts(":%s SJOIN %ld %s + :@%s", curr_uplink->numeric, ts, c->name, CLIENT_NAME(cu->user));
 					cu->modes = CMODE_OP;
 				}
 				else
@@ -683,8 +686,8 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 			if (cu->user->server == me.me)
 			{
 				/* it's a service, reop */
-				sts(":%s PART %s :Reop", cu->user->uid, c->name);
-				sts(":%s SJOIN %ld %s + :@%s", curr_uplink->numeric, ts, c->name, cu->user->uid);
+				sts(":%s PART %s :Reop", CLIENT_NAME(cu->user), c->name);
+				sts(":%s SJOIN %ld %s + :@%s", curr_uplink->numeric, ts, c->name, CLIENT_NAME(cu->user));
 				cu->modes = CMODE_OP;
 			}
 			else

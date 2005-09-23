@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 2237 2005-09-14 08:09:20Z nenolod $
+ * $Id: atheme.h 2331 2005-09-23 22:21:59Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -52,7 +52,7 @@
 #define MCHASH(mychan) shash(mychan)
 
 /* other stuff. */
-#define CLIENT_NAME(user)	ircd->uses_uid ? (user)->uid : (user)->nick
+#define CLIENT_NAME(user)	((user)->uid[0] ? (user)->uid : (user)->nick)
 
 /* T Y P E D E F S */
 typedef struct sendq datastream_t;
