@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INVITE functions.
  *
- * $Id: invite.c 2317 2005-09-23 13:58:19Z jilles $
+ * $Id: invite.c 2319 2005-09-23 14:01:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/invite", FALSE, _modinit, _moddeinit,
-	"$Id: invite.c 2317 2005-09-23 13:58:19Z jilles $",
+	"$Id: invite.c 2319 2005-09-23 14:01:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -80,7 +80,7 @@ static void cs_cmd_invite(char *origin)
 	{
 		if (!(u = user_find_named(nick)))
 		{
-			notice(chansvs.nick, origin, "\2%s\2 is not registered.", nick);
+			notice(chansvs.nick, origin, "\2%s\2 is not online.", nick);
 			return;
 		}
 	}

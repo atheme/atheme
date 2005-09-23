@@ -1,3 +1,18 @@
+jilles      2005/09/23 13:58:19 UTC	(20050923-2317)
+  Log:
+  Use user_find_named() where appropriate in chanserv commands.
+  
+
+  Modified:
+	trunk/modules/chanserv/ban.c (File Modified) 
+	trunk/modules/chanserv/halfop.c (File Modified) 
+	trunk/modules/chanserv/invite.c (File Modified) 
+	trunk/modules/chanserv/kick.c (File Modified) 
+	trunk/modules/chanserv/op.c (File Modified) 
+	trunk/modules/chanserv/voice.c (File Modified) 
+	trunk/modules/chanserv/why.c (File Modified) 
+
+
 jilles      2005/09/23 13:46:06 UTC	(20050923-2315)
   Log:
   Add user_find_named(), a la ratbox find_named_person().
