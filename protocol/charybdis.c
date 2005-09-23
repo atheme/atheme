@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 2303 2005-09-23 04:30:02Z nenolod $
+ * $Id: charybdis.c 2305 2005-09-23 04:36:58Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/charybdis", FALSE, _modinit, NULL,
-	"$Id: charybdis.c 2303 2005-09-23 04:30:02Z nenolod $",
+	"$Id: charybdis.c 2305 2005-09-23 04:36:58Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -453,7 +453,7 @@ static void m_privmsg(char *origin, uint8_t parc, char *parv[])
 		return;
 	}
 
-	if (!(t = user_find(parv[0])))
+	if (!(t = user_find(parv[0])) && *parv[0] != '#')
 	{
 		slog(LG_DEBUG, "m_privmsg(): got message to nonexistant user `%s'", origin);
 		return;
