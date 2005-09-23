@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 2299 2005-09-23 04:10:02Z nenolod $
+ * $Id: node.c 2315 2005-09-23 13:46:06Z jilles $
  */
 
 #include "atheme.h"
@@ -533,6 +533,23 @@ user_t *user_find(char *nick)
 				return u;
 		}
 	}
+
+	LIST_FOREACH(n, userlist[SHASH((unsigned char *)nick)].head)
+	{
+		u = (user_t *)n->data;
+
+		if (!irccasecmp(nick, u->nick))
+			return u;
+	}
+
+	return NULL;
+}
+
+/* Use this for user input, to prevent users chasing users by UID -- jilles */
+user_t *user_find_named(char *nick)
+{
+	user_t *u;
+	node_t *n;
 
 	LIST_FOREACH(n, userlist[SHASH((unsigned char *)nick)].head)
 	{

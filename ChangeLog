@@ -1,3 +1,12 @@
+jilles      2005/09/23 12:25:06 UTC	(20050923-2313)
+  Log:
+  Fix JOIN 0.
+  
+
+  Modified:
+	trunk/protocol/charybdis.c (File Modified) 
+
+
 jilles      2005/09/23 12:17:05 UTC	(20050923-2311)
   Log:
   TS6 fixes.
