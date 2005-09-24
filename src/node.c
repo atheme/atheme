@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 2347 2005-09-24 02:47:05Z nenolod $
+ * $Id: node.c 2351 2005-09-24 20:49:53Z nenolod $
  */
 
 #include "atheme.h"
@@ -301,14 +301,14 @@ server_t *server_add(char *name, uint8_t hops, char *uplink, char *id,
 
 	s->hash = SHASH((unsigned char *)name);
 
+	node_add(s, n, &servlist[s->hash]);
+
 	if (id != NULL)
 	{
 		s->sid = sstrdup(id);
 		s->shash = SHASH((unsigned char *)id);
-		node_add(s, n, &sidlist[s->shash]);
+		node_add(s, node_create(), &sidlist[s->shash]);
 	}
-
-	node_add(s, n, &servlist[s->hash]);
 
 	s->name = sstrdup(name);
 	s->desc = sstrdup(desc);
@@ -364,6 +364,13 @@ void server_delete(char *name)
 	n = node_find(s, &servlist[s->hash]);
 	node_del(n, &servlist[s->hash]);
 	node_free(n);
+
+	if (s->sid)
+	{
+		n = node_find(s, &servlist[s->shash]);
+		node_del(n, &servlist[s->shash]);
+		node_free(n);
+	}
 
 	if (s->uplink)
 	{
