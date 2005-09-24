@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 2331 2005-09-23 22:21:59Z jilles $
+ * $Id: node.c 2347 2005-09-24 02:47:05Z nenolod $
  */
 
 #include "atheme.h"
@@ -433,7 +433,7 @@ user_t *user_add(char *nick, char *user, char *host, char *vhost, char *ip, char
 	{
 		strlcpy(u->uid, uid, NICKLEN);
 		u->uhash = UHASH((unsigned char *)uid);
-		node_add(u, n, &uidlist[u->uhash]);
+		node_add(u, node_create(), &uidlist[u->uhash]);
 	}
 
 	node_add(u, n, &userlist[u->hash]);
@@ -490,11 +490,14 @@ void user_delete(char *nick)
 
 	n = node_find(u, &userlist[u->hash]);
 	node_del(n, &userlist[u->hash]);
+	node_free(n);
 
 	if (ircd->uses_uid)
+	{
+		n = node_find(u, &userlist[u->uhash]);
 		node_del(n, &uidlist[u->uhash]);
-
-	node_free(n);
+		node_free(n);
+	}
 
 	n = node_find(u, &u->server->userlist);
 	node_del(n, &u->server->userlist);
