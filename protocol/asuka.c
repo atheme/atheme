@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: asuka.c 2299 2005-09-23 04:10:02Z nenolod $
+ * $Id: asuka.c 2337 2005-09-24 02:01:26Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/asuka", FALSE, _modinit, NULL,
-	"$Id: asuka.c 2299 2005-09-23 04:10:02Z nenolod $",
+	"$Id: asuka.c 2337 2005-09-24 02:01:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -1084,6 +1084,17 @@ static void m_info(char *origin, uint8_t parc, char *parv[])
 	handle_info(u->nick);
 }
 
+static void m_whois(char *origin, uint8_t parc, char *parv[])
+{
+	handle_whois(origin, parc >= 2 ? parv[1] : "*");
+}
+
+static void m_trace(char *origin, uint8_t parc, char *parv[])
+{
+	handle_trace(origin, parc >= 1 ? parv[0] : "*",
+			parc >= 2 ? parv[1] : NULL);
+}
+
 static void m_pass(char *origin, uint8_t parc, char *parv[])
 {
 	if (strcmp(curr_uplink->pass, parv[0]))
@@ -1156,6 +1167,8 @@ void _modinit(module_t *m)
         pcommand_add("AD", m_admin);
         pcommand_add("V", m_version);
         pcommand_add("F", m_info);
+        pcommand_add("W", m_whois);
+        pcommand_add("TR", m_trace);
         pcommand_add("PASS", m_pass);
         pcommand_add("ERROR", m_error);
         pcommand_add("T", m_topic);

@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 2315 2005-09-23 13:46:06Z jilles $
+ * $Id: extern.h 2337 2005-09-24 02:01:26Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -326,5 +326,7 @@ E void handle_version(char *);
 E void handle_admin(char *);
 E void handle_info(char *);
 E void handle_stats(char *, char);
+E void handle_whois(char *, char *);
+E void handle_trace(char *, char *, char *);
 
 #endif /* EXTERN_H */

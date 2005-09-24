@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 2299 2005-09-23 04:10:02Z nenolod $
+ * $Id: ircnet.c 2337 2005-09-24 02:01:26Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/ircnet", FALSE, _modinit, NULL,
-	"$Id: ircnet.c 2299 2005-09-23 04:10:02Z nenolod $",
+	"$Id: ircnet.c 2337 2005-09-24 02:01:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -706,6 +706,17 @@ static void m_info(char *origin, uint8_t parc, char *parv[])
 	handle_info(origin);
 }
 
+static void m_whois(char *origin, uint8_t parc, char *parv[])
+{
+	handle_whois(origin, parc >= 2 ? parv[1] : "*");
+}
+
+static void m_trace(char *origin, uint8_t parc, char *parv[])
+{
+	handle_trace(origin, parc >= 1 ? parv[0] : "*",
+			parc >= 2 ? parv[1] : NULL);
+}
+
 static void m_join(char *origin, uint8_t parc, char *parv[])
 {
 	user_t *u = user_find(origin);
@@ -788,6 +799,8 @@ void _modinit(module_t *m)
         pcommand_add("ADMIN", m_admin);
         pcommand_add("VERSION", m_version);
         pcommand_add("INFO", m_info);
+	pcommand_add("WHOIS", m_whois);
+	pcommand_add("TRACE", m_trace);
         pcommand_add("JOIN", m_join);
         pcommand_add("PASS", m_pass);
         pcommand_add("ERROR", m_error);

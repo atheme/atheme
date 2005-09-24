@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 1526 2005-08-05 19:57:34Z nenolod $
+ * $Id: ptasks.c 2337 2005-09-24 02:01:26Z jilles $
  */
 
 #include "atheme.h"
@@ -128,4 +128,77 @@ void handle_stats(char *origin, char req)
 	}
 
 	numeric_sts(me.name, 219, u->nick, "%c :End of /STATS report", req);
+}
+
+void handle_whois(char *origin, char *target)
+{
+	user_t *u = user_find(origin);
+	user_t *t = user_find_named(target);
+
+	if (u == NULL)
+		return;
+	if (t != NULL)
+	{
+		numeric_sts(me.name, 311, CLIENT_NAME(u), "%s %s %s * :%s",
+				t->nick, t->user, t->vhost, t->gecos);
+		/* channels purposely omitted */
+		numeric_sts(me.name, 312, CLIENT_NAME(u), "%s %s :%s", t->nick, t->server->name,
+				t->server->desc);
+		if (is_ircop(t))
+			numeric_sts(me.name, 313, CLIENT_NAME(u), "%s :is an IRC Operator",
+					t->nick);
+		if (t->myuser)
+			numeric_sts(me.name, 330, CLIENT_NAME(u), "%s %s :is logged in as",
+					t->nick, t->myuser->name);
+	}
+	else
+		numeric_sts(me.name, 401, CLIENT_NAME(u), "%s :No such nick", target);
+	numeric_sts(me.name, 318, CLIENT_NAME(u), "%s :End of WHOIS", target);
+}
+
+static void single_trace(user_t *u, user_t *t)
+{
+	if (is_ircop(t))
+		numeric_sts(me.name, 204, CLIENT_NAME(u), "Oper service %s[%s@%s] (255.255.255.255) 0 0",
+				t->nick, t->user, t->vhost);
+	else
+		numeric_sts(me.name, 205, CLIENT_NAME(u), "User service %s[%s@%s] (255.255.255.255) 0 0",
+				t->nick, t->user, t->vhost);
+}
+
+/* target -> object to trace
+ * dest -> server to execute command on
+ */
+void handle_trace(char *origin, char *target, char *dest)
+{
+	user_t *u = user_find(origin);
+	user_t *t;
+	node_t *n;
+	int nusers;
+
+	if (u == NULL)
+		return;
+	if (!match(target, me.name) || !irccasecmp(target, ME))
+	{
+		nusers = cnt.user;
+		LIST_FOREACH(n, me.me->userlist.head)
+		{
+			t = n->data;
+			single_trace(u, t);
+			nusers--;
+		}
+		if (is_ircop(u))
+			numeric_sts(me.name, 206, CLIENT_NAME(u), "Serv uplink %dS %dC %s *!*@%s 0", cnt.server - 1, nusers, me.actual, me.name);
+		target = me.name;
+	}
+	else
+	{
+		t = dest != NULL ? user_find_named(target) : user_find(target);
+		if (t != NULL && t->server == me.me)
+		{
+			single_trace(u, t);
+			target = t->nick;
+		}
+	}
+	numeric_sts(me.name, 262, CLIENT_NAME(u), "%s :End of TRACE", target);
 }
