@@ -1,3 +1,14 @@
+nenolod     2005/09/24 02:08:22 UTC	(20050924-2339)
+  Log:
+  Add clear command, extended by other plugin modules. I haven't written 
+  any yet. :P
+  
+
+  Modified:
+	trunk/modules/chanserv/Makefile.in (File Modified) 
+	trunk/modules/chanserv/clear.c (File Added) 
+
+
 jilles      2005/09/24 02:01:26 UTC	(20050924-2337)
   Log:
   Add support for remote WHOIS and TRACE requests,
