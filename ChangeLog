@@ -1,3 +1,12 @@
+nenolod     2005/09/24 02:12:20 UTC	(20050924-2341)
+  Log:
+  Err, yeah. A few mistakes :P.
+  
+
+  Modified:
+	trunk/modules/chanserv/clear.c (File Modified) 
+
+
 nenolod     2005/09/24 02:08:22 UTC	(20050924-2339)
   Log:
   Add clear command, extended by other plugin modules. I haven't written 
