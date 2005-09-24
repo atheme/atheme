@@ -1,3 +1,31 @@
+jilles      2005/09/24 02:01:26 UTC	(20050924-2337)
+  Log:
+  Add support for remote WHOIS and TRACE requests,
+  for all supported ircds except inspircd (which
+  already lacks several other special commands).
+  
+
+  Modified:
+	trunk/include/extern.h (File Modified) 
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bahamut.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/charybdis.c (File Modified) 
+	trunk/protocol/dreamforge.c (File Modified) 
+	trunk/protocol/hyperion.c (File Modified) 
+	trunk/protocol/ircnet.c (File Modified) 
+	trunk/protocol/monkey.c (File Modified) 
+	trunk/protocol/plexus.c (File Modified) 
+	trunk/protocol/ptlink.c (File Modified) 
+	trunk/protocol/ratbox.c (File Modified) 
+	trunk/protocol/scylla.c (File Modified) 
+	trunk/protocol/shadowircd.c (File Modified) 
+	trunk/protocol/sorcery.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+	trunk/protocol/unreal.c (File Modified) 
+	trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2005/09/23 22:36:23 UTC	(20050923-2335)
   Log:
   Change first argument of PING/PONG to a name. This is to
