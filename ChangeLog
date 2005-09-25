@@ -1,3 +1,12 @@
+nenolod     2005/09/25 02:28:25 UTC	(20050925-2355)
+  Log:
+  Config parsing stuff for UserServ.
+  
+
+  Modified:
+	trunk/src/conf.c (File Modified) 
+
+
 nenolod     2005/09/25 02:22:25 UTC	(20050925-2353)
   Log:
   Add a config structure to the core for UserServ, since I'm lazy and 
