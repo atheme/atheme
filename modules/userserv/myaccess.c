@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ MYACCESS function.
  *
- * $Id: myaccess.c 2359 2005-09-25 02:49:10Z nenolod $
+ * $Id: myaccess.c 2361 2005-09-25 03:05:34Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/myaccess", FALSE, _modinit, _moddeinit,
-	"$Id: myaccess.c 2359 2005-09-25 02:49:10Z nenolod $",
+	"$Id: myaccess.c 2361 2005-09-25 03:05:34Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -88,8 +88,8 @@ static void us_cmd_myaccess(char *origin)
 	}
 
 	if (matches == 0)
-		notice(usersvs.nick, origin, "No channel access was found for the nickname \2%s\2.", mu->name);
+		notice(usersvs.nick, origin, "No channel access was found for the account \2%s\2.", mu->name);
 	else
-		notice(usersvs.nick, origin, "\2%d\2 channel access match%s for the nickname \2%s\2",
+		notice(usersvs.nick, origin, "\2%d\2 channel access match%s for the account \2%s\2",
 							matches, (matches != 1) ? "es" : "", mu->name);
 }

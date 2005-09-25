@@ -1,3 +1,29 @@
+nenolod     2005/09/25 02:49:10 UTC	(20050925-2359)
+  Log:
+  UserServ modifications, part 1 of 2 (?).
+  
+
+  Modified:
+	trunk/modules/userserv/drop.c (File Modified) 
+	trunk/modules/userserv/freeze.c (File Modified) 
+	trunk/modules/userserv/help.c (File Modified) 
+	trunk/modules/userserv/hold.c (File Modified) 
+	trunk/modules/userserv/identify.c (File Modified) 
+	trunk/modules/userserv/info.c (File Modified) 
+	trunk/modules/userserv/list.c (File Modified) 
+	trunk/modules/userserv/listmail.c (File Modified) 
+	trunk/modules/userserv/logout.c (File Modified) 
+	trunk/modules/userserv/main.c (File Modified) 
+	trunk/modules/userserv/mark.c (File Modified) 
+	trunk/modules/userserv/myaccess.c (File Modified) 
+	trunk/modules/userserv/register.c (File Modified) 
+	trunk/modules/userserv/sendpass.c (File Modified) 
+	trunk/modules/userserv/set.c (File Modified) 
+	trunk/modules/userserv/status.c (File Modified) 
+	trunk/modules/userserv/taxonomy.c (File Modified) 
+	trunk/modules/userserv/verify.c (File Modified) 
+
+
 nenolod     2005/09/25 02:36:39 UTC	(20050925-2357)
   Log:
   Add userserv example.

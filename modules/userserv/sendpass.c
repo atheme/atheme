@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService SENDPASS function.
  *
- * $Id: sendpass.c 2359 2005-09-25 02:49:10Z nenolod $
+ * $Id: sendpass.c 2361 2005-09-25 03:05:34Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/sendpass", FALSE, _modinit, _moddeinit,
-	"$Id: sendpass.c 2359 2005-09-25 02:49:10Z nenolod $",
+	"$Id: sendpass.c 2361 2005-09-25 03:05:34Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -42,7 +42,7 @@ static void us_cmd_sendpass(char *origin)
 	if (!name)
 	{
 		notice(usersvs.nick, origin, "Insufficient parameters for \2SENDPASS\2.");
-		notice(usersvs.nick, origin, "Syntax: SENDPASS <nickname>");
+		notice(usersvs.nick, origin, "Syntax: SENDPASS <account>");
 		return;
 	}
 

@@ -1,0 +1,9 @@
+Help for SET NEVEROP:
+
+SET NOOP prevents others from adding you to
+channel access lists.
+
+Syntax: SET NEVEROP ON|OFF
+
+Example:
+    /msg &nick& SET NEVEROP on

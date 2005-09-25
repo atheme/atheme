@@ -2,9 +2,9 @@
  * Copyright (c) 2005 Patrick Fish, et al.
  * Rights to this code are as documented in doc/LICENSE.
  *
- * Gives services the ability to freeze nicknames
+ * Gives services the ability to freeze accounts
  *
- * $Id: freeze.c 2359 2005-09-25 02:49:10Z nenolod $
+ * $Id: freeze.c 2361 2005-09-25 03:05:34Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,14 +12,14 @@
 DECLARE_MODULE_V1
 (
 	"userserv/freeze", FALSE, _modinit, _moddeinit,
-	"$Id: freeze.c 2359 2005-09-25 02:49:10Z nenolod $",
+	"$Id: freeze.c 2361 2005-09-25 03:05:34Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void us_cmd_freeze(char *origin);
 
 /* FREEZE ON|OFF -- don't pollute the root with THAW */
-command_t us_freeze = { "FREEZE", "Freezes a nickname.",
+command_t us_freeze = { "FREEZE", "Freezes a account.",
 			AC_IRCOP, us_cmd_freeze };
 
 list_t *us_cmdtree;
@@ -54,7 +54,7 @@ static void us_cmd_freeze(char *origin)
 
 	if (!mu)
         {
-                notice(usersvs.nick, origin, "\2%s\2 is not a registered nickname.", target);
+                notice(usersvs.nick, origin, "\2%s\2 is not a registered account.", target);
                 return;
         }
 
@@ -83,7 +83,7 @@ static void us_cmd_freeze(char *origin)
 		metadata_add(mu, METADATA_USER, "private:freeze:reason", reason);
 		metadata_add(mu, METADATA_USER, "private:freeze:timestamp", itoa(CURRTIME));
 
-		wallops("%s froze the nickname \2%s\2 (%s).", origin, target, reason);
+		wallops("%s froze the account \2%s\2 (%s).", origin, target, reason);
 		notice(usersvs.nick, origin, "\2%s\2 is now frozen.", target);
 	}
 	else if (!strcasecmp(action, "OFF"))
@@ -98,7 +98,7 @@ static void us_cmd_freeze(char *origin)
 		metadata_delete(mu, METADATA_USER, "private:freeze:reason");
 		metadata_delete(mu, METADATA_USER, "private:freeze:timestamp");
 
-		wallops("%s thawed the nickname \2%s\2.", origin, target);
+		wallops("%s thawed the account \2%s\2.", origin, target);
 		notice(usersvs.nick, origin, "\2%s\2 has been thawed", target);
 	}
 	else

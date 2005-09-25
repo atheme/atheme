@@ -1,0 +1,14 @@
+Help for MARK:
+
+MARK allows operators to attach a note to a nickname
+or channel. For example, an operator could mark the
+nickname of a spammer so that others know the user
+has previously been warned.
+
+MARK information will be displayed in INFO output.
+
+Syntax: MARK <nickname> ON|OFF <reason>
+
+Examples:
+    /msg &nick& MARK game_boy ON Persistent spammer
+    /msg &nick& MARK nenolod OFF

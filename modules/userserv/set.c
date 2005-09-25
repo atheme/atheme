@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 2359 2005-09-25 02:49:10Z nenolod $
+ * $Id: set.c 2361 2005-09-25 03:05:34Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 2359 2005-09-25 02:49:10Z nenolod $",
+	"$Id: set.c 2361 2005-09-25 03:05:34Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -38,14 +38,15 @@ void _moddeinit()
 /* SET <setting> <parameters> */
 static void us_cmd_set(char *origin)
 {
+	char *target = strtok(NULL, " ");
 	char *setting = strtok(NULL, " ");
 	char *params = strtok(NULL, "");
 	struct set_command_ *c;
 
-	if (!setting || !params)
+	if (!target || !setting || !params)
 	{
 		notice(usersvs.nick, origin, "Insufficient parameters specified for \2SET\2.");
-		notice(usersvs.nick, origin, "Syntax: SET <setting> <parameters>");
+		notice(usersvs.nick, origin, "Syntax: SET <account> <setting> <parameters>");
 		return;
 	}
 
@@ -53,7 +54,7 @@ static void us_cmd_set(char *origin)
 	if ((c = us_set_cmd_find(origin, setting)))
 	{
 		if (c->func)
-			c->func(origin, origin, params);
+			c->func(origin, target, params);
 		else
 			notice(usersvs.nick, origin, "Invalid setting.  Please use \2HELP\2 for help.");
 	}
@@ -398,7 +399,7 @@ static void us_set_password(char *origin, char *name, char *params)
 
 	if (!strcasecmp(password, name))
 	{
-		notice(usersvs.nick, origin, "You cannot use your nickname as a password.");
+		notice(usersvs.nick, origin, "You cannot use your account name as a password.");
 		notice(usersvs.nick, origin, "Syntax: SET PASSWORD <new password>");
 		return;
 	}

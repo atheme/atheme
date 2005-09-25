@@ -5,7 +5,7 @@
  * This file contains code for the NickServ LIST function.
  * Based on Alex Lambert's LISTEMAIL.
  *
- * $Id: list.c 2359 2005-09-25 02:49:10Z nenolod $
+ * $Id: list.c 2361 2005-09-25 03:05:34Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,13 +13,13 @@
 DECLARE_MODULE_V1
 (
 	"userserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 2359 2005-09-25 02:49:10Z nenolod $",
+	"$Id: list.c 2361 2005-09-25 03:05:34Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void us_cmd_list(char *origin);
 
-command_t us_list = { "LIST", "Lists nicknames registered matching a given pattern.", AC_IRCOP, us_cmd_list };
+command_t us_list = { "LIST", "Lists accounts registered matching a given pattern.", AC_IRCOP, us_cmd_list };
 
 list_t *us_cmdtree;
 
@@ -45,11 +45,11 @@ static void us_cmd_list(char *origin)
 	if (!nickpattern)
 	{
 		notice(usersvs.nick, origin, "Insufficient parameters specified for \2LIST\2.");
-		notice(usersvs.nick, origin, "Syntax: LIST <nickname pattern>");
+		notice(usersvs.nick, origin, "Syntax: LIST <account pattern>");
 		return;
 	}
 
-	wallops("\2%s\2 is searching the nickname database for nicknames matching \2%s\2", origin, nickpattern);
+	wallops("\2%s\2 is searching the account database for accounts matching \2%s\2", origin, nickpattern);
 
 	for (i = 0; i < HASHSIZE; i++)
 	{
@@ -74,7 +74,7 @@ static void us_cmd_list(char *origin)
 	}
 
 	if (matches == 0)
-		notice(usersvs.nick, origin, "No nicknames matched pattern \2%s\2", nickpattern);
+		notice(usersvs.nick, origin, "No accounts matched pattern \2%s\2", nickpattern);
 	else
 		notice(usersvs.nick, origin, "\2%d\2 match%s for pattern \2%s\2", matches, matches != 1 ? "es" : "", nickpattern);
 }

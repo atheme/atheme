@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2237 2005-09-14 08:09:20Z nenolod $
+# $Id: Makefile.in 2361 2005-09-25 03:05:34Z nenolod $
 #
 
 CC		= @CC@
@@ -72,6 +72,7 @@ install: build
 	$(INSTALL) -m 755 -d $(PREFIX)/var
 	$(INSTALL) -m 755 -c $(BIN) $(PREFIX)/bin
 	$(INSTALL) -m 640 -c ../dist/example.conf $(PREFIX)/etc
+	$(INSTALL) -m 640 -c ../dist/example.userserv.conf $(PREFIX)/etc
 	if [ ! -r $(PREFIX)/etc/atheme.db ]; then \
 		$(INSTALL) -m 640 -c ../dist/atheme.db $(PREFIX)/etc ; \
 	fi

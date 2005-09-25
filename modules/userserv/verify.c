@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ VERIFY function.
  *
- * $Id: verify.c 2359 2005-09-25 02:49:10Z nenolod $
+ * $Id: verify.c 2361 2005-09-25 03:05:34Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"userserv/verify", FALSE, _modinit, _moddeinit,
-	"$Id: verify.c 2359 2005-09-25 02:49:10Z nenolod $",
+	"$Id: verify.c 2361 2005-09-25 03:05:34Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void us_cmd_verify(char *origin);
 
-command_t us_verify = { "VERIFY", "Verifies a nickname registration.", AC_NONE, us_cmd_verify };
+command_t us_verify = { "VERIFY", "Verifies an account registration.", AC_NONE, us_cmd_verify };
 
 list_t *us_cmdtree;
 
@@ -45,7 +45,7 @@ static void us_cmd_verify(char *origin)
 	if (!op || !nick || !key)
 	{
 		notice(usersvs.nick, origin, "Insufficient parameters specified for \2VERIFY\2.");
-		notice(usersvs.nick, origin, "Syntax: VERIFY <operation> <nickname> <key>");
+		notice(usersvs.nick, origin, "Syntax: VERIFY <operation> <account> <key>");
 		return;
 	}
 

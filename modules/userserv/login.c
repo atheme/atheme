@@ -4,41 +4,37 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: identify.c 2359 2005-09-25 02:49:10Z nenolod $
+ * $Id: login.c 2361 2005-09-25 03:05:34Z nenolod $
  */
 
 #include "atheme.h"
 
 DECLARE_MODULE_V1
 (
-	"userserv/identify", FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 2359 2005-09-25 02:49:10Z nenolod $",
+	"userserv/login", FALSE, _modinit, _moddeinit,
+	"$Id: login.c 2361 2005-09-25 03:05:34Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void us_cmd_identify(char *origin);
+static void us_cmd_login(char *origin);
 
-command_t us_identify = { "IDENTIFY", "Identifies to services for a nickname.",
-				AC_NONE, us_cmd_identify };
-command_t us_id = { "ID", "Alias for IDENTIFY",
-				AC_NONE, us_cmd_identify };
+command_t us_login = { "LOGIN", "Authenticates to a services account.",
+			AC_NONE, us_cmd_login };
 
 list_t *us_cmdtree;
 
 void _modinit(module_t *m)
 {
 	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
-	command_add(&us_identify, us_cmdtree);
-	command_add(&us_id, us_cmdtree);
+	command_add(&us_login, us_cmdtree);
 }
 
 void _moddeinit()
 {
-	command_delete(&us_identify, us_cmdtree);
-	command_delete(&us_id, us_cmdtree);
+	command_delete(&us_login, us_cmdtree);
 }
 
-static void us_cmd_identify(char *origin)
+static void us_cmd_login(char *origin)
 {
 	user_t *u = user_find(origin);
 	myuser_t *mu;
@@ -51,16 +47,10 @@ static void us_cmd_identify(char *origin)
 	struct tm tm;
 	metadata_t *md_failnum;
 
-	if (target && !password)
-	{
-		password = target;
-		target = origin;
-	}
-
 	if (!target && !password)
 	{
-		notice(usersvs.nick, origin, "Insufficient parameters for \2IDENTIFY\2.");
-		notice(usersvs.nick, origin, "Syntax: IDENTIFY [nick] <password>");
+		notice(usersvs.nick, origin, "Insufficient parameters for \2LOGIN\2.");
+		notice(usersvs.nick, origin, "Syntax: LOGIN <account> <password>");
 		return;
 	}
 
@@ -68,13 +58,13 @@ static void us_cmd_identify(char *origin)
 
 	if (!mu)
 	{
-		notice(usersvs.nick, origin, "\2%s\2 is not a registered nickname.", target);
+		notice(usersvs.nick, origin, "\2%s\2 is not a registered account.", target);
 		return;
 	}
 
         if (metadata_find(mu->name, METADATA_USER, "private:freeze:freezer"))
         {
-                notice(usersvs.nick, origin, "This operation cannot be preformed on %s because the nickname has been frozen.", mu);
+                notice(usersvs.nick, origin, "This operation cannot be performed on \2%s\2 because the account has been frozen.", mu->name);
                 return;
         }
 
@@ -123,7 +113,7 @@ static void us_cmd_identify(char *origin)
 		n = node_create();
 		node_add(u, n, &mu->logins);
 
-		notice(usersvs.nick, origin, "You are now identified for \2%s\2.", u->myuser->name);
+		notice(usersvs.nick, origin, "You are now logged in as \2%s\2.", u->myuser->name);
 
 		/* check for failed attempts and let them know */
 		if (md_failnum && (atoi(md_failnum->value) > 0))
@@ -202,7 +192,8 @@ static void us_cmd_identify(char *origin)
 
 		/* XXX: ircd_on_login supports hostmasking, we just dont have it yet. */
 		/* don't allow them to join regonly chans until their
-		 * email is verified */
+		 * email is verified
+		 */
 		if (!(mu->flags & MU_WAITAUTH))
 			ircd_on_login(origin, mu->name, NULL);
 

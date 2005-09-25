@@ -1,0 +1,11 @@
+Help for SET NOOP:
+
+SET NOOP prevents services from automatically
+opping you in channels you have access in.
+You can choose to op/voice yourself by using
+the &nick& OP and VOICE commands.
+
+Syntax: SET NOOP ON|OFF
+
+Example:
+    /msg &nick& SET NOOP ON

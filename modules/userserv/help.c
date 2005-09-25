@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the NickServ HELP command.
  *
- * $Id: help.c 2359 2005-09-25 02:49:10Z nenolod $
+ * $Id: help.c 2361 2005-09-25 03:05:34Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 2359 2005-09-25 02:49:10Z nenolod $",
+	"$Id: help.c 2361 2005-09-25 03:05:34Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -77,11 +77,9 @@ void us_cmd_help(char *origin)
 	if (!command)
 	{
 		notice(usersvs.nick, origin, "***** \2%s Help\2 *****", usersvs.nick);
-		notice(usersvs.nick, origin, "\2%s\2 allows users to \2'register'\2 a nickname, and stop", usersvs.nick);
-		notice(usersvs.nick, origin, "others from using that nick. \2%s\2 allows the owner of a", usersvs.nick);
-		notice(usersvs.nick, origin, "nickname to disconnect a user from the network that is using", usersvs.nick);
-		notice(usersvs.nick, origin, "their nickname. If a registered nick is not used by the owner for %d days,", (config_options.expire / 86400));
-		notice(usersvs.nick, origin, "\2%s\2 will drop the nickname, allowing it to be reregistered.", usersvs.nick);
+		notice(usersvs.nick, origin, "\2%s\2 allows users to \2'register'\2 an account for use with", usersvs.nick);
+		notice(usersvs.nick, origin, "\2%s\2. If a registered account is not used by the owner for %d days,", (config_options.expire / 86400), chansvs.nick);
+		notice(usersvs.nick, origin, "\2%s\2 will drop the account, allowing it to be reregistered.", usersvs.nick);
 		notice(usersvs.nick, origin, " ");
 		notice(usersvs.nick, origin, "For more information on a command, type:");
 		notice(usersvs.nick, origin, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", usersvs.disp);
@@ -99,23 +97,23 @@ void us_cmd_help(char *origin)
 		notice(usersvs.nick, origin, "Help for \2SET\2:");
 		notice(usersvs.nick, origin, " ");
 		notice(usersvs.nick, origin, "SET allows you to set various control flags");
-		notice(usersvs.nick, origin, "for nicknames that change the way certain operations");
+		notice(usersvs.nick, origin, "for accounts that change the way certain operations");
 		notice(usersvs.nick, origin, "are performed on them.");
 		notice(usersvs.nick, origin, " ");
 		notice(usersvs.nick, origin, "The following commands are available.");
-		notice(usersvs.nick, origin, "\2EMAIL\2         Changes the email address associated with a nickname.");
-		notice(usersvs.nick, origin, "\2HIDEMAIL\2      Hides a nickname's email address");
+		notice(usersvs.nick, origin, "\2EMAIL\2         Changes the email address associated with a account.");
+		notice(usersvs.nick, origin, "\2HIDEMAIL\2      Hides a account's email address");
 		notice(usersvs.nick, origin, "\2NOOP\2       Prevents services from automatically setting modes associated with access lists.");
 		notice(usersvs.nick, origin, "\2NEVEROP\2          Prevents you from being added to access lists.");
-		notice(usersvs.nick, origin, "\2PASSWORD\2      Change the password of a nickname.");
-		notice(usersvs.nick, origin, "\2PROPERTY\2      Manipulates metadata entries associated with a nickname.");
+		notice(usersvs.nick, origin, "\2PASSWORD\2      Change the password of a account.");
+		notice(usersvs.nick, origin, "\2PROPERTY\2      Manipulates metadata entries associated with a account.");
 		notice(usersvs.nick, origin, " ");
 
 #if 0		/* currently unused */
 		if (is_sra(u->myuser))
 		{
 			notice(usersvs.nick, origin, "The following SRA commands are available.");
-			notice(usersvs.nick, origin, "\2HOLD\2          Prevents services from expiring a nickname.");
+			notice(usersvs.nick, origin, "\2HOLD\2          Prevents services from expiring a account.");
 			notice(usersvs.nick, origin, " ");
 		}
 #endif

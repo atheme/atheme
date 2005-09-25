@@ -2,9 +2,9 @@
  * Copyright (c) 2005 William Pitcock
  * Rights to this code are as documented in doc/LICENSE.
  *
- * Marking for nicknames.
+ * Marking for accounts.
  *
- * $Id: mark.c 2359 2005-09-25 02:49:10Z nenolod $
+ * $Id: mark.c 2361 2005-09-25 03:05:34Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/mark", FALSE, _modinit, _moddeinit,
-	"$Id: mark.c 2359 2005-09-25 02:49:10Z nenolod $",
+	"$Id: mark.c 2361 2005-09-25 03:05:34Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -73,7 +73,7 @@ static void us_cmd_mark(char *origin)
 		metadata_add(mu, METADATA_USER, "private:mark:reason", info);
 		metadata_add(mu, METADATA_USER, "private:mark:timestamp", itoa(time(NULL)));
 
-		wallops("%s marked the nickname \2%s\2.", origin, target);
+		wallops("%s marked the account \2%s\2.", origin, target);
 		notice(usersvs.nick, origin, "\2%s\2 is now marked.", target);
 	}
 	else if (!strcasecmp(action, "OFF"))
@@ -88,7 +88,7 @@ static void us_cmd_mark(char *origin)
 		metadata_delete(mu, METADATA_USER, "private:mark:reason");
 		metadata_delete(mu, METADATA_USER, "private:mark:timestamp");
 
-		wallops("%s unmarked the nickname \2%s\2.", origin, target);
+		wallops("%s unmarked the account \2%s\2.", origin, target);
 		notice(usersvs.nick, origin, "\2%s\2 is now unmarked.", target);
 	}
 	else

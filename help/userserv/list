@@ -1,0 +1,10 @@
+Help for LIST:
+
+LIST shows nicknames that match a given
+pattern. Wildcards are allowed.
+
+Syntax: LIST <pattern>
+
+Examples:
+    /msg &nick& LIST james*
+    /msg &nick& LIST *a?ambert*

@@ -1,0 +1,7 @@
+Help for TAXONOMY:
+
+The taxonomy command lists metadata information associated
+with registered users.
+
+Examples:
+    /msg &nick& TAXONOMY foo

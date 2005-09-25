@@ -1,0 +1,8 @@
+Help for HOLD:
+
+HOLD prevents a nickname from expiring.
+
+Syntax: HOLD <nickname> ON|OFF
+
+Examples:
+    /msg &nick& HOLD jilles ON

@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ LISTMAIL function.
  *
- * $Id: listmail.c 2359 2005-09-25 02:49:10Z nenolod $
+ * $Id: listmail.c 2361 2005-09-25 03:05:34Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"userserv/listmail", FALSE, _modinit, _moddeinit,
-	"$Id: listmail.c 2359 2005-09-25 02:49:10Z nenolod $",
+	"$Id: listmail.c 2361 2005-09-25 03:05:34Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void us_cmd_listmail(char *origin);
 
-command_t us_listmail = { "LISTMAIL", "Lists nicknames registered to an e-mail address.", AC_IRCOP, us_cmd_listmail };
+command_t us_listmail = { "LISTMAIL", "Lists accounts registered to an e-mail address.", AC_IRCOP, us_cmd_listmail };
 
 list_t *us_cmdtree;
 
@@ -48,7 +48,7 @@ static void us_cmd_listmail(char *origin)
 		return;
 	}
 
-	wallops("\2%s\2 is searching the nickname database for e-mail address \2%s\2", origin, email);
+	wallops("\2%s\2 is searching the account database for e-mail address \2%s\2", origin, email);
 
 	for (i = 0; i < HASHSIZE; i++)
 	{
@@ -68,7 +68,7 @@ static void us_cmd_listmail(char *origin)
 	}
 
 	if (matches == 0)
-		notice(usersvs.nick, origin, "No nicknames matched e-mail address \2%s\2", email);
+		notice(usersvs.nick, origin, "No accounts matched e-mail address \2%s\2", email);
 	else
 		notice(usersvs.nick, origin, "\2%d\2 match%s for e-mail address \2%s\2", matches, matches != 1 ? "es" : "", email);
 }

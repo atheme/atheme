@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 2359 2005-09-25 02:49:10Z nenolod $
+ * $Id: register.c 2361 2005-09-25 03:05:34Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,13 +12,14 @@
 DECLARE_MODULE_V1
 (
 	"userserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 2359 2005-09-25 02:49:10Z nenolod $",
+	"$Id: register.c 2361 2005-09-25 03:05:34Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void us_cmd_register(char *origin);
 
-command_t us_register = { "REGISTER", "Registers a nickname.", AC_NONE, us_cmd_register };
+command_t us_register = { "REGISTER", "Registers a services account.", 
+			  AC_NONE, us_cmd_register };
 
 list_t *us_cmdtree;
 
@@ -38,6 +39,7 @@ static void us_cmd_register(char *origin)
 	user_t *u = user_find(origin);
 	myuser_t *mu, *tmu;
 	node_t *n;
+	char *account = strtok(NULL, " ");
 	char *pass = strtok(NULL, " ");
 	char *email = strtok(NULL, " ");
 	uint32_t i, tcnt;
@@ -48,10 +50,10 @@ static void us_cmd_register(char *origin)
 		return;
 	}
 
-	if (!pass || !email)
+	if (!account || !pass || !email)
 	{
 		notice(usersvs.nick, origin, "Insufficient parameters specified for \2REGISTER\2.");
-		notice(usersvs.nick, origin, "Syntax: REGISTER <password> <email>");
+		notice(usersvs.nick, origin, "Syntax: REGISTER <account> <password> <email>");
 		return;
 	}
 
@@ -61,10 +63,10 @@ static void us_cmd_register(char *origin)
 		return;
 	}
 
-	if (!strcasecmp(pass, origin))
+	if (!strcasecmp(pass, account))
 	{
-		notice(usersvs.nick, origin, "You cannot use your nickname as a password.");
-		notice(usersvs.nick, origin, "Syntax: REGISTER <password> <email>");
+		notice(usersvs.nick, origin, "You cannot use your account name as a password.");
+		notice(usersvs.nick, origin, "Syntax: REGISTER <account> <password> <email>");
 		return;
 	}
 
@@ -75,7 +77,7 @@ static void us_cmd_register(char *origin)
 	}
 
 	/* make sure it isn't registered already */
-	mu = myuser_find(origin);
+	mu = myuser_find(account);
 	if (mu != NULL)
 	{
 		/* should we reveal the e-mail address? (from us_info.c) */
@@ -102,13 +104,13 @@ static void us_cmd_register(char *origin)
 
 	if (tcnt >= me.maxusers)
 	{
-		notice(usersvs.nick, origin, "\2%s\2 has too many nicknames registered.", email);
+		notice(usersvs.nick, origin, "\2%s\2 has too many accounts registered.", email);
 		return;
 	}
 
-	snoop("REGISTER: \2%s\2 to \2%s\2", origin, email);
+	snoop("REGISTER: \2%s\2 to \2%s\2", account, email);
 
-	mu = myuser_add(origin, pass, email);
+	mu = myuser_add(account, pass, email);
 
 	u->myuser = mu;
 	n = node_create();
@@ -125,8 +127,8 @@ static void us_cmd_register(char *origin)
 		metadata_add(mu, METADATA_USER, "private:verify:register:key", key);
 		metadata_add(mu, METADATA_USER, "private:verify:register:timestamp", itoa(time(NULL)));
 
-		notice(usersvs.nick, origin, "An email containing nickname activiation instructions has been sent to \2%s\2.", mu->email);
-		notice(usersvs.nick, origin, "If you do not complete registration within one day your nickname will expire.");
+		notice(usersvs.nick, origin, "An email containing account activiation instructions has been sent to \2%s\2.", mu->email);
+		notice(usersvs.nick, origin, "If you do not complete registration within one day your account will expire.");
 
 		sendemail(mu->name, key, 1);
 
