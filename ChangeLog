@@ -1,3 +1,11 @@
+nenolod     2005/09/24 20:49:53 UTC	(20050924-2351)
+  Log:
+  shash fix
+
+  Modified:
+	trunk/src/node.c (File Modified) 
+
+
 nenolod     2005/09/24 05:43:12 UTC	(20050924-2349)
   Log:
   Add /cs clear <#chan> users, which allows users with CA_RECOVER to 
