@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: link.c 2133 2005-09-05 01:19:23Z nenolod $
+ * $Id: link.c 2373 2005-09-25 19:58:45Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/link", FALSE, _modinit, _moddeinit,
-	"$Id: link.c 2133 2005-09-05 01:19:23Z nenolod $",
+	"$Id: link.c 2373 2005-09-25 19:58:45Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -79,6 +79,10 @@ static void ns_cmd_link(char *origin)
 	}
 	else
 		muptr = u->myuser;
+
+	/* XXX this shouldn't happen, but it does */
+	if (muptr->pass == NULL)
+		return;
 
 	/* make sure it isn't registered already */
 	mu = myuser_find(nick);

@@ -1,3 +1,14 @@
+nenolod     2005/09/25 08:25:06 UTC	(20050925-2371)
+  Log:
+  Unbreak fantasy commands on P10. :P
+  
+
+  Modified:
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+
+
 nenolod     2005/09/25 04:31:48 UTC	(20050925-2369)
   Log:
   Fix a core with UserServ::HELP, reported by Cloppy.
