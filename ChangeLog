@@ -1,3 +1,12 @@
+nenolod     2005/09/25 20:24:31 UTC	(20050925-2377)
+  Log:
+  uhash/shash vulnerability fixes...
+  
+
+  Modified:
+	trunk/src/node.c (File Modified) 
+
+
 jilles      2005/09/25 20:03:04 UTC	(20050925-2375)
   Log:
   Don't reference invalid memory if the first character of
