@@ -1,3 +1,15 @@
+nenolod     2005/09/25 03:07:30 UTC	(20050925-2363)
+  Log:
+  UserServ modifications, part 3 of 3. It's ready for testing.
+  
+
+  Modified:
+	trunk/help/userserv/ghost (File Deleted) 
+	trunk/help/userserv/identify (File Deleted) 
+	trunk/help/userserv/link (File Deleted) 
+	trunk/help/userserv/login (File Added) 
+
+
 nenolod     2005/09/25 03:05:34 UTC	(20050925-2361)
   Log:
   UserServ modifications, part 2 of 3.
