@@ -1,3 +1,14 @@
+nenolod     2005/09/25 02:22:25 UTC	(20050925-2353)
+  Log:
+  Add a config structure to the core for UserServ, since I'm lazy and 
+  don't want to bother with ondemand linking for this. (memory is cheap, 
+  etc.)
+  
+
+  Modified:
+	trunk/include/services.h (File Modified) 
+
+
 nenolod     2005/09/24 20:49:53 UTC	(20050924-2351)
   Log:
   shash fix
