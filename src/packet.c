@@ -4,7 +4,7 @@
  *
  * IRC packet handling.
  *
- * $Id: packet.c 2267 2005-09-18 18:38:26Z nenolod $
+ * $Id: packet.c 2375 2005-09-25 20:03:04Z jilles $
  *
  * TODO: Take all the sendq stuff in node.c and put it here.
  * sendq_flush becomes irc_whandler, etc.
@@ -34,7 +34,7 @@ static void irc_packet(char *buf)
 	{
 		*ptr = '\0';
 
-		if (*(ptr - 1) == '\r')
+		if (ptr != buf && *(ptr - 1) == '\r')
 			*(ptr - 1) = '\0';
 
 		snprintf(buf2, (BUFSIZE * 2), "%s%s", tmp, buf);
