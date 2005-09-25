@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 2337 2005-09-24 02:01:26Z jilles $
+ * $Id: ratbox.c 2383 2005-09-25 23:59:54Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/ratbox", FALSE, _modinit, NULL,
-	"$Id: ratbox.c 2337 2005-09-24 02:01:26Z jilles $",
+	"$Id: ratbox.c 2383 2005-09-25 23:59:54Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -785,9 +785,6 @@ static void m_server(char *origin, uint8_t parc, char *parv[])
 
 static void m_stats(char *origin, uint8_t parc, char *parv[])
 {
-	if (irccasecmp(me.name, parv[1]))
-		return;
-
 	handle_stats(origin, parv[0][0]);
 }
 

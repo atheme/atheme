@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: bircd.c 2371 2005-09-25 08:25:06Z nenolod $
+ * $Id: bircd.c 2383 2005-09-25 23:59:54Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/asuka", FALSE, _modinit, NULL,
-	"$Id: bircd.c 2371 2005-09-25 08:25:06Z nenolod $",
+	"$Id: bircd.c 2383 2005-09-25 23:59:54Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -1043,15 +1043,7 @@ static void m_server(char *origin, uint8_t parc, char *parv[])
 
 static void m_stats(char *origin, uint8_t parc, char *parv[])
 {
-	user_t *u = user_find(origin);
-
-	if (!u)
-		return;
-
-	if (irccasecmp(curr_uplink->numeric, parv[1]))
-		return;
-
-	handle_stats(u->nick, parv[0][0]);
+	handle_stats(origin, parv[0][0]);
 }
 
 static void m_admin(char *origin, uint8_t parc, char *parv[])

@@ -1,3 +1,12 @@
+jilles      2005/09/25 23:48:30 UTC	(20050925-2381)
+  Log:
+  Use numeric_sts() with CLIENT_NAME for /admin, /info, /version, /stats.
+  
+
+  Modified:
+	trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2005/09/25 20:31:13 UTC	(20050925-2379)
   Log:
   - Move server->children removal up
