@@ -1,3 +1,15 @@
+jilles      2005/09/25 20:31:13 UTC	(20050925-2379)
+  Log:
+  - Move server->children removal up
+  - Free server->uplink->children node
+  - Only attempt to remove users with a uid from the uid hash (did remove/free
+    on NULL nodes before)
+  
+
+  Modified:
+	trunk/src/node.c (File Modified) 
+
+
 nenolod     2005/09/25 20:24:31 UTC	(20050925-2377)
   Log:
   uhash/shash vulnerability fixes...
