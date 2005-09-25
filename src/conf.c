@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 2355 2005-09-25 02:28:25Z nenolod $
+ * $Id: conf.c 2367 2005-09-25 04:19:04Z nenolod $
  */
 
 #include "atheme.h"
@@ -1368,12 +1368,6 @@ boolean_t conf_check(void)
 	{
 		slog(LG_INFO, "conf_check(): no `auth' set in %s; " "defaulting to NONE", config_file);
 		me.auth = AUTH_NONE;
-	}
-
-	if (!nicksvs.nick || !nicksvs.user || !nicksvs.host || !nicksvs.real)
-	{
-		slog(LG_INFO, "conf_check(): NickServ is now required; add a nickserv{} block in %s", config_file);
-		return FALSE;
 	}
 
 	if (!chansvs.nick || !chansvs.user || !chansvs.host || !chansvs.real)
