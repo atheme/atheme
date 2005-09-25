@@ -1,3 +1,30 @@
+nenolod     2005/09/25 03:05:34 UTC	(20050925-2361)
+  Log:
+  UserServ modifications, part 2 of 3.
+  
+
+  Modified:
+	trunk/help/userserv/ (File Added) 
+	trunk/modules/userserv/Makefile.in (File Modified) 
+	trunk/modules/userserv/drop.c (File Modified) 
+	trunk/modules/userserv/freeze.c (File Modified) 
+	trunk/modules/userserv/help.c (File Modified) 
+	trunk/modules/userserv/hold.c (File Modified) 
+	trunk/modules/userserv/identify.c (File Deleted) 
+	trunk/modules/userserv/info.c (File Modified) 
+	trunk/modules/userserv/list.c (File Modified) 
+	trunk/modules/userserv/listmail.c (File Modified) 
+	trunk/modules/userserv/login.c (File Added) 
+	trunk/modules/userserv/mark.c (File Modified) 
+	trunk/modules/userserv/myaccess.c (File Modified) 
+	trunk/modules/userserv/register.c (File Modified) 
+	trunk/modules/userserv/sendpass.c (File Modified) 
+	trunk/modules/userserv/set.c (File Modified) 
+	trunk/modules/userserv/taxonomy.c (File Modified) 
+	trunk/modules/userserv/verify.c (File Modified) 
+	trunk/src/Makefile.in (File Modified) 
+
+
 nenolod     2005/09/25 02:49:10 UTC	(20050925-2359)
   Log:
   UserServ modifications, part 1 of 2 (?).

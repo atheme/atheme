@@ -1,9 +1,0 @@
-Help for GHOST:
-
-GHOST disconnects an old user session, or somebody
-attempting to use your nickname without authorization.
-
-Syntax: GHOST <nick> <password>
-
-Example:
-    /msg &nick& GHOST foo bar
