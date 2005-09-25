@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the NickServ HELP command.
  *
- * $Id: help.c 2361 2005-09-25 03:05:34Z nenolod $
+ * $Id: help.c 2369 2005-09-25 04:31:48Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 2361 2005-09-25 03:05:34Z nenolod $",
+	"$Id: help.c 2369 2005-09-25 04:31:48Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -78,7 +78,7 @@ void us_cmd_help(char *origin)
 	{
 		notice(usersvs.nick, origin, "***** \2%s Help\2 *****", usersvs.nick);
 		notice(usersvs.nick, origin, "\2%s\2 allows users to \2'register'\2 an account for use with", usersvs.nick);
-		notice(usersvs.nick, origin, "\2%s\2. If a registered account is not used by the owner for %d days,", (config_options.expire / 86400), chansvs.nick);
+		notice(usersvs.nick, origin, "\2%s\2. If a registered account is not used by the owner for %d days,", chansvs.nick, (config_options.expire / 86400));
 		notice(usersvs.nick, origin, "\2%s\2 will drop the account, allowing it to be reregistered.", usersvs.nick);
 		notice(usersvs.nick, origin, " ");
 		notice(usersvs.nick, origin, "For more information on a command, type:");
