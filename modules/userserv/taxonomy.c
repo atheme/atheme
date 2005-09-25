@@ -4,36 +4,36 @@
  *
  * Lists object properties via their metadata table.
  *
- * $Id: taxonomy.c 2133 2005-09-05 01:19:23Z nenolod $
+ * $Id: taxonomy.c 2359 2005-09-25 02:49:10Z nenolod $
  */
 
 #include "atheme.h"
 
 DECLARE_MODULE_V1
 (
-	"nickserv/taxonomy", FALSE, _modinit, _moddeinit,
-	"$Id: taxonomy.c 2133 2005-09-05 01:19:23Z nenolod $",
+	"userserv/taxonomy", FALSE, _modinit, _moddeinit,
+	"$Id: taxonomy.c 2359 2005-09-25 02:49:10Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void ns_cmd_taxonomy(char *origin);
+static void us_cmd_taxonomy(char *origin);
 
-command_t ns_taxonomy = { "TAXONOMY", "Displays a user's metadata.", AC_NONE, ns_cmd_taxonomy };
+command_t us_taxonomy = { "TAXONOMY", "Displays a user's metadata.", AC_NONE, us_cmd_taxonomy };
 
-list_t *ns_cmdtree;
+list_t *us_cmdtree;
 
 void _modinit(module_t *m)
 {
-	ns_cmdtree = module_locate_symbol("nickserv/main", "ns_cmdtree");
-	command_add(&ns_taxonomy, ns_cmdtree);
+	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
+	command_add(&us_taxonomy, us_cmdtree);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_taxonomy, ns_cmdtree);
+	command_delete(&us_taxonomy, us_cmdtree);
 }
 
-static void ns_cmd_taxonomy(char *origin)
+static void us_cmd_taxonomy(char *origin)
 {
 	char *target = strtok(NULL, " ");
 	user_t *u = user_find(origin);
@@ -42,20 +42,20 @@ static void ns_cmd_taxonomy(char *origin)
 
 	if (!target)
 	{
-		notice(nicksvs.nick, origin, "Insufficient parameters for TAXONOMY.");
-		notice(nicksvs.nick, origin, "Syntax: TAXONOMY <nick>");
+		notice(usersvs.nick, origin, "Insufficient parameters for TAXONOMY.");
+		notice(usersvs.nick, origin, "Syntax: TAXONOMY <nick>");
 		return;
 	}
 
 	if (!(mu = myuser_find(target)))
 	{
-		notice(nicksvs.nick, origin, "\2%s\2 is not a registered nickname.", target);
+		notice(usersvs.nick, origin, "\2%s\2 is not a registered nickname.", target);
 		return;
 	}
 
 	snoop("TAXONOMY:\2%s\2", origin);
 
-	notice(nicksvs.nick, origin, "Taxonomy for \2%s\2:", target);
+	notice(usersvs.nick, origin, "Taxonomy for \2%s\2:", target);
 
 	LIST_FOREACH(n, mu->metadata.head)
 	{
@@ -64,8 +64,8 @@ static void ns_cmd_taxonomy(char *origin)
 		if (md->private == TRUE && !is_ircop(u) && !is_sra(u->myuser))
 			continue;
 
-		notice(nicksvs.nick, origin, "%-32s: %s", md->name, md->value);
+		notice(usersvs.nick, origin, "%-32s: %s", md->name, md->value);
 	}
 
-	notice(nicksvs.nick, origin, "End of \2%s\2 taxonomy.", target);
+	notice(usersvs.nick, origin, "End of \2%s\2 taxonomy.", target);
 }

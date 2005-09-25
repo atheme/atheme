@@ -4,37 +4,37 @@
  *
  * Controls noexpire options for nicknames.
  *
- * $Id: hold.c 2133 2005-09-05 01:19:23Z nenolod $
+ * $Id: hold.c 2359 2005-09-25 02:49:10Z nenolod $
  */
 
 #include "atheme.h"
 
 DECLARE_MODULE_V1
 (
-	"nickserv/hold", FALSE, _modinit, _moddeinit,
-	"$Id: hold.c 2133 2005-09-05 01:19:23Z nenolod $",
+	"userserv/hold", FALSE, _modinit, _moddeinit,
+	"$Id: hold.c 2359 2005-09-25 02:49:10Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void ns_cmd_hold(char *origin);
+static void us_cmd_hold(char *origin);
 
-command_t ns_hold = { "HOLD", "Prevents a nickname from expiring.",
-			AC_SRA, ns_cmd_hold };
+command_t us_hold = { "HOLD", "Prevents a nickname from expiring.",
+			AC_SRA, us_cmd_hold };
 
-list_t *ns_cmdtree;
+list_t *us_cmdtree;
 
 void _modinit(module_t *m)
 {
-	ns_cmdtree = module_locate_symbol("nickserv/main", "ns_cmdtree");
-	command_add(&ns_hold, ns_cmdtree);
+	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
+	command_add(&us_hold, us_cmdtree);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_hold, ns_cmdtree);
+	command_delete(&us_hold, us_cmdtree);
 }
 
-static void ns_cmd_hold(char *origin)
+static void us_cmd_hold(char *origin)
 {
 	char *target = strtok(NULL, " ");
 	char *action = strtok(NULL, " ");
@@ -42,14 +42,14 @@ static void ns_cmd_hold(char *origin)
 
 	if (!target || !action)
 	{
-		notice(nicksvs.nick, origin, "Insufficient parameters for \2HOLD\2.");
-		notice(nicksvs.nick, origin, "Usage: HOLD <nickname> <ON|OFF>");
+		notice(usersvs.nick, origin, "Insufficient parameters for \2HOLD\2.");
+		notice(usersvs.nick, origin, "Usage: HOLD <nickname> <ON|OFF>");
 		return;
 	}
 
 	if (!(mu = myuser_find(target)))
 	{
-		notice(nicksvs.nick, origin, "\2%s\2 is not registered.", target);
+		notice(usersvs.nick, origin, "\2%s\2 is not registered.", target);
 		return;
 	}
 
@@ -57,31 +57,31 @@ static void ns_cmd_hold(char *origin)
 	{
 		if (mu->flags & MU_HOLD)
 		{
-			notice(nicksvs.nick, origin, "\2%s\2 is already held.", target);
+			notice(usersvs.nick, origin, "\2%s\2 is already held.", target);
 			return;
 		}
 
 		mu->flags |= MU_HOLD;
 
 		wallops("%s set the HOLD option for the nickname \2%s\2.", origin, target);
-		notice(nicksvs.nick, origin, "\2%s\2 is now held.", target);
+		notice(usersvs.nick, origin, "\2%s\2 is now held.", target);
 	}
 	else if (!strcasecmp(action, "OFF"))
 	{
 		if (!(mu->flags & MU_HOLD))
 		{
-			notice(nicksvs.nick, origin, "\2%s\2 is not held.", target);
+			notice(usersvs.nick, origin, "\2%s\2 is not held.", target);
 			return;
 		}
 
 		mu->flags &= ~MU_HOLD;
 
 		wallops("%s removed the HOLD option on the nickname \2%s\2.", origin, target);
-		notice(nicksvs.nick, origin, "\2%s\2 is no longer held.", target);
+		notice(usersvs.nick, origin, "\2%s\2 is no longer held.", target);
 	}
 	else
 	{
-		notice(nicksvs.nick, origin, "Invalid parameters for \2HOLD\2.");
-		notice(nicksvs.nick, origin, "Usage: HOLD <nickname> <ON|OFF>");
+		notice(usersvs.nick, origin, "Invalid parameters for \2HOLD\2.");
+		notice(usersvs.nick, origin, "Usage: HOLD <nickname> <ON|OFF>");
 	}
 }

@@ -4,36 +4,36 @@
  *
  * This file contains code for the NickServ LISTMAIL function.
  *
- * $Id: listmail.c 2133 2005-09-05 01:19:23Z nenolod $
+ * $Id: listmail.c 2359 2005-09-25 02:49:10Z nenolod $
  */
 
 #include "atheme.h"
 
 DECLARE_MODULE_V1
 (
-	"nickserv/listmail", FALSE, _modinit, _moddeinit,
-	"$Id: listmail.c 2133 2005-09-05 01:19:23Z nenolod $",
+	"userserv/listmail", FALSE, _modinit, _moddeinit,
+	"$Id: listmail.c 2359 2005-09-25 02:49:10Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void ns_cmd_listmail(char *origin);
+static void us_cmd_listmail(char *origin);
 
-command_t ns_listmail = { "LISTMAIL", "Lists nicknames registered to an e-mail address.", AC_IRCOP, ns_cmd_listmail };
+command_t us_listmail = { "LISTMAIL", "Lists nicknames registered to an e-mail address.", AC_IRCOP, us_cmd_listmail };
 
-list_t *ns_cmdtree;
+list_t *us_cmdtree;
 
 void _modinit(module_t *m)
 {
-	ns_cmdtree = module_locate_symbol("nickserv/main", "ns_cmdtree");
-	command_add(&ns_listmail, ns_cmdtree);
+	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
+	command_add(&us_listmail, us_cmdtree);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_listmail, ns_cmdtree);
+	command_delete(&us_listmail, us_cmdtree);
 }
 
-static void ns_cmd_listmail(char *origin)
+static void us_cmd_listmail(char *origin)
 {
 	myuser_t *mu;
 	node_t *n;
@@ -43,8 +43,8 @@ static void ns_cmd_listmail(char *origin)
 
 	if (!email)
 	{
-		notice(nicksvs.nick, origin, "Insufficient parameters specified for \2LISTMAIL\2.");
-		notice(nicksvs.nick, origin, "Syntax: LISTMAIL <email>");
+		notice(usersvs.nick, origin, "Insufficient parameters specified for \2LISTMAIL\2.");
+		notice(usersvs.nick, origin, "Syntax: LISTMAIL <email>");
 		return;
 	}
 
@@ -60,15 +60,15 @@ static void ns_cmd_listmail(char *origin)
 			{
 				/* in the future we could add a LIMIT parameter */
 				if (matches == 0)
-					notice(nicksvs.nick, origin, "Nicknames matching e-mail address \2%s\2:", email);
-				notice(nicksvs.nick, origin, "- %s (%s)", mu->name, mu->email);
+					notice(usersvs.nick, origin, "Nicknames matching e-mail address \2%s\2:", email);
+				notice(usersvs.nick, origin, "- %s (%s)", mu->name, mu->email);
 				matches++;
 			}
 		}
 	}
 
 	if (matches == 0)
-		notice(nicksvs.nick, origin, "No nicknames matched e-mail address \2%s\2", email);
+		notice(usersvs.nick, origin, "No nicknames matched e-mail address \2%s\2", email);
 	else
-		notice(nicksvs.nick, origin, "\2%d\2 match%s for e-mail address \2%s\2", matches, matches != 1 ? "es" : "", email);
+		notice(usersvs.nick, origin, "\2%d\2 match%s for e-mail address \2%s\2", matches, matches != 1 ? "es" : "", email);
 }

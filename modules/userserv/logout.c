@@ -4,37 +4,37 @@
  *
  * This file contains code for the CService LOGOUT functions.
  *
- * $Id: logout.c 2133 2005-09-05 01:19:23Z nenolod $
+ * $Id: logout.c 2359 2005-09-25 02:49:10Z nenolod $
  */
 
 #include "atheme.h"
 
 DECLARE_MODULE_V1
 (
-	"nickserv/logout", FALSE, _modinit, _moddeinit,
-	"$Id: logout.c 2133 2005-09-05 01:19:23Z nenolod $",
+	"userserv/logout", FALSE, _modinit, _moddeinit,
+	"$Id: logout.c 2359 2005-09-25 02:49:10Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void ns_cmd_logout(char *origin);
+static void us_cmd_logout(char *origin);
 
-command_t ns_logout = { "LOGOUT", "Logs your services session out.",
-                        AC_NONE, ns_cmd_logout };
+command_t us_logout = { "LOGOUT", "Logs your services session out.",
+                        AC_NONE, us_cmd_logout };
                                                                                    
-list_t *ns_cmdtree;
+list_t *us_cmdtree;
 
 void _modinit(module_t *m)
 {
-	ns_cmdtree = module_locate_symbol("nickserv/main", "ns_cmdtree");
-        command_add(&ns_logout, ns_cmdtree);
+	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
+        command_add(&us_logout, us_cmdtree);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_logout, ns_cmdtree);
+	command_delete(&us_logout, us_cmdtree);
 }
 
-static void ns_cmd_logout(char *origin)
+static void us_cmd_logout(char *origin)
 {
 	user_t *u = user_find(origin);
 	node_t *n, *tn;
@@ -43,7 +43,7 @@ static void ns_cmd_logout(char *origin)
 
 	if ((!u->myuser) && (!user || !pass))
 	{
-		notice(nicksvs.nick, origin, "You are not logged in.");
+		notice(usersvs.nick, origin, "You are not logged in.");
 		return;
 	}
 
@@ -53,7 +53,7 @@ static void ns_cmd_logout(char *origin)
 
 		if (!mu)
 		{
-			notice(nicksvs.nick, origin, "\2%s\2 is not registered.", user);
+			notice(usersvs.nick, origin, "\2%s\2 is not registered.", user);
 			return;
 		}
 
@@ -65,12 +65,12 @@ static void ns_cmd_logout(char *origin)
 		}
 		else
 		{
-			notice(nicksvs.nick, origin, "Authentication failed. Invalid password for \2%s\2.", mu->name);
+			notice(usersvs.nick, origin, "Authentication failed. Invalid password for \2%s\2.", mu->name);
 			return;
 		}
 #endif
 		/* remove this for now -- jilles */
-		notice(nicksvs.nick, origin, "External logout is not yet implemented.");
+		notice(usersvs.nick, origin, "External logout is not yet implemented.");
 		return;
 	}
 
@@ -80,9 +80,9 @@ static void ns_cmd_logout(char *origin)
 	snoop("LOGOUT: \2%s\2 from \2%s\2", u->nick, u->myuser->name);
 
 	if (irccasecmp(origin, u->nick))
-		notice(nicksvs.nick, origin, "\2%s\2 has been logged out.", u->nick);
+		notice(usersvs.nick, origin, "\2%s\2 has been logged out.", u->nick);
 	else
-		notice(nicksvs.nick, origin, "You have been logged out.");
+		notice(usersvs.nick, origin, "You have been logged out.");
 
 	ircd_on_logout(u->nick, u->myuser->name, NULL);
 

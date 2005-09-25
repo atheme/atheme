@@ -1,3 +1,12 @@
+nenolod     2005/09/25 02:36:39 UTC	(20050925-2357)
+  Log:
+  Add userserv example.
+  
+
+  Modified:
+	trunk/dist/example.userserv.conf (File Added) 
+
+
 nenolod     2005/09/25 02:28:25 UTC	(20050925-2355)
   Log:
   Config parsing stuff for UserServ.

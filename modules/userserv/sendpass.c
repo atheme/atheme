@@ -4,55 +4,55 @@
  *
  * This file contains code for the CService SENDPASS function.
  *
- * $Id: sendpass.c 2133 2005-09-05 01:19:23Z nenolod $
+ * $Id: sendpass.c 2359 2005-09-25 02:49:10Z nenolod $
  */
 
 #include "atheme.h"
 
 DECLARE_MODULE_V1
 (
-	"nickserv/sendpass", FALSE, _modinit, _moddeinit,
-	"$Id: sendpass.c 2133 2005-09-05 01:19:23Z nenolod $",
+	"userserv/sendpass", FALSE, _modinit, _moddeinit,
+	"$Id: sendpass.c 2359 2005-09-25 02:49:10Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void ns_cmd_sendpass(char *origin);
+static void us_cmd_sendpass(char *origin);
 
-command_t ns_sendpass = { "SENDPASS", "Email registration passwords.",
-				AC_IRCOP, ns_cmd_sendpass };
+command_t us_sendpass = { "SENDPASS", "Email registration passwords.",
+				AC_IRCOP, us_cmd_sendpass };
 
-list_t *ns_cmdtree;
+list_t *us_cmdtree;
 
 void _modinit(module_t *m)
 {
-	ns_cmdtree = module_locate_symbol("nickserv/main", "ns_cmdtree");
-	command_add(&ns_sendpass, ns_cmdtree);
+	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
+	command_add(&us_sendpass, us_cmdtree);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_sendpass, ns_cmdtree);
+	command_delete(&us_sendpass, us_cmdtree);
 }
 
-static void ns_cmd_sendpass(char *origin)
+static void us_cmd_sendpass(char *origin)
 {
 	myuser_t *mu;
 	char *name = strtok(NULL, " ");
 
 	if (!name)
 	{
-		notice(nicksvs.nick, origin, "Insufficient parameters for \2SENDPASS\2.");
-		notice(nicksvs.nick, origin, "Syntax: SENDPASS <nickname>");
+		notice(usersvs.nick, origin, "Insufficient parameters for \2SENDPASS\2.");
+		notice(usersvs.nick, origin, "Syntax: SENDPASS <nickname>");
 		return;
 	}
 
 	if (!(mu = myuser_find(name)))
 	{
-		notice(nicksvs.nick, origin, "\2%s\2 is not registered.", name);
+		notice(usersvs.nick, origin, "\2%s\2 is not registered.", name);
 		return;
 	}
 
-	notice(nicksvs.nick, origin, "The password for \2%s\2 has been sent to \2%s\2.", mu->name, mu->email);
+	notice(usersvs.nick, origin, "The password for \2%s\2 has been sent to \2%s\2.", mu->name, mu->email);
 
 	sendemail(mu->name, mu->pass, 2);
 

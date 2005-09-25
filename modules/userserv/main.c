@@ -4,22 +4,22 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 2133 2005-09-05 01:19:23Z nenolod $
+ * $Id: main.c 2359 2005-09-25 02:49:10Z nenolod $
  */
 
 #include "atheme.h"
 
 DECLARE_MODULE_V1
 (
-	"nickserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 2133 2005-09-05 01:19:23Z nenolod $",
+	"userserv/main", FALSE, _modinit, _moddeinit,
+	"$Id: main.c 2359 2005-09-25 02:49:10Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t ns_cmdtree;
+list_t us_cmdtree;
 
 /* main services client routine */
-void nickserv(char *origin, uint8_t parc, char *parv[])
+void userserv(char *origin, uint8_t parc, char *parv[])
 {
 	char *cmd, *s;
 	char orig[BUFSIZE];
@@ -53,12 +53,12 @@ void nickserv(char *origin, uint8_t parc, char *parv[])
 			s = " 0 ";
 
 		strip(s);
-		notice(nicksvs.nick, origin, "\001PING %s\001", s);
+		notice(usersvs.nick, origin, "\001PING %s\001", s);
 		return;
 	}
 	else if (!strcmp(cmd, "\001VERSION\001"))
 	{
-		notice(nicksvs.nick, origin,
+		notice(usersvs.nick, origin,
 		       "\001VERSION atheme-%s. %s %s %s%s%s%s%s%s%s%s%s TS5ow\001",
 		       version, revision, me.name,
 		       (match_mapping) ? "A" : "",
@@ -74,7 +74,7 @@ void nickserv(char *origin, uint8_t parc, char *parv[])
 	else if (!strcmp(cmd, "\001CLIENTINFO\001"))
 	{
 		/* easter egg :X */
-		notice(nicksvs.nick, origin, "\001CLIENTINFO 114 97 107 97 117 114\001");
+		notice(usersvs.nick, origin, "\001CLIENTINFO 114 97 107 97 117 114\001");
 		return;
 	}
 
@@ -83,36 +83,36 @@ void nickserv(char *origin, uint8_t parc, char *parv[])
 		return;
 
 	/* take the command through the hash table */
-	command_exec(nicksvs.disp, origin, cmd, &ns_cmdtree);
+	command_exec(usersvs.disp, origin, cmd, &us_cmdtree);
 }
 
-static void nickserv_config_ready(void *unused)
+static void userserv_config_ready(void *unused)
 {
-        if (nicksvs.me)
-                del_service(nicksvs.me);
+	if (usersvs.me)
+		del_service(usersvs.me);
 
-        nicksvs.me = add_service(nicksvs.nick, nicksvs.user,
-                                 nicksvs.host, nicksvs.real, nickserv);
-        nicksvs.disp = nicksvs.me->disp;
+	usersvs.me = add_service(usersvs.nick, usersvs.user,
+				 usersvs.host, usersvs.real, userserv);
+	usersvs.disp = usersvs.me->disp;
 
-        hook_del_hook("config_ready", nickserv_config_ready);
+        hook_del_hook("config_ready", userserv_config_ready);
 }
 
 void _modinit(module_t *m)
 {
         hook_add_event("config_ready");
-        hook_add_hook("config_ready", nickserv_config_ready);
+        hook_add_hook("config_ready", userserv_config_ready);
 
         if (!cold_start)
         {
-                nicksvs.me = add_service(nicksvs.nick, nicksvs.user,
-			nicksvs.host, nicksvs.real, nickserv);
-                nicksvs.disp = nicksvs.me->disp;
+                usersvs.me = add_service(usersvs.nick, usersvs.user,
+			usersvs.host, usersvs.real, userserv);
+                usersvs.disp = usersvs.me->disp;
         }
 }
 
 void _moddeinit(void)
 {
-        if (nicksvs.me)
-                del_service(nicksvs.me);
+        if (usersvs.me)
+                del_service(usersvs.me);
 }

@@ -4,36 +4,36 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 2179 2005-09-06 09:17:45Z pfish $
+ * $Id: info.c 2359 2005-09-25 02:49:10Z nenolod $
  */
 
 #include "atheme.h"
 
 DECLARE_MODULE_V1
 (
-	"nickserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 2179 2005-09-06 09:17:45Z pfish $",
+	"userserv/info", FALSE, _modinit, _moddeinit,
+	"$Id: info.c 2359 2005-09-25 02:49:10Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void ns_cmd_info(char *origin);
+static void us_cmd_info(char *origin);
 
-command_t ns_info = { "INFO", "Displays information on registrations.", AC_NONE, ns_cmd_info };
+command_t us_info = { "INFO", "Displays information on registrations.", AC_NONE, us_cmd_info };
 
-list_t *ns_cmdtree;
+list_t *us_cmdtree;
 
 void _modinit(module_t *m)
 {
-	ns_cmdtree = module_locate_symbol("nickserv/main", "ns_cmdtree");
-	command_add(&ns_info, ns_cmdtree);
+	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
+	command_add(&us_info, us_cmdtree);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_info, ns_cmdtree);
+	command_delete(&us_info, us_cmdtree);
 }
 
-static void ns_cmd_info(char *origin)
+static void us_cmd_info(char *origin)
 {
 	user_t *u = user_find(origin);
 	myuser_t *mu;
@@ -45,14 +45,14 @@ static void ns_cmd_info(char *origin)
 
 	if (!name)
 	{
-		notice(nicksvs.nick, origin, "Insufficient parameters specified for \2INFO\2.");
-		notice(nicksvs.nick, origin, "Syntax: INFO <nickname>");
+		notice(usersvs.nick, origin, "Insufficient parameters specified for \2INFO\2.");
+		notice(usersvs.nick, origin, "Syntax: INFO <nickname>");
 		return;
 	}
 
 	if (!(mu = myuser_find(name)))
 	{
-		notice(nicksvs.nick, origin, "\2%s\2 is not registered.", name);
+		notice(usersvs.nick, origin, "\2%s\2 is not registered.", name);
 		return;
 	}
 
@@ -61,13 +61,13 @@ static void ns_cmd_info(char *origin)
 	tm = *localtime(&mu->registered);
 	strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-	notice(nicksvs.nick, origin, "Information on \2%s\2:", mu->name);
+	notice(usersvs.nick, origin, "Information on \2%s\2:", mu->name);
 
-	notice(nicksvs.nick, origin, "Registered : %s (%s ago)", strfbuf, time_ago(mu->registered));
+	notice(usersvs.nick, origin, "Registered : %s (%s ago)", strfbuf, time_ago(mu->registered));
 
 	if (!(mu->flags & MU_HIDEMAIL)
 		|| (is_sra(u->myuser) || is_ircop(u) || u->myuser == mu))
-		notice(nicksvs.nick, origin, "Email      : %s%s", mu->email,
+		notice(usersvs.nick, origin, "Email      : %s%s", mu->email,
 					(mu->flags & MU_HIDEMAIL) ? " (hidden)": "");
 
 	*buf = '\0';
@@ -105,13 +105,13 @@ static void ns_cmd_info(char *origin)
 	}
 
 	if (*buf)
-		notice(nicksvs.nick, origin, "Flags      : %s", buf);
+		notice(usersvs.nick, origin, "Flags      : %s", buf);
 
 	if ((mu->flags & MU_ALIAS) && (md = metadata_find(mu, METADATA_USER, "private:alias:parent")))
-		notice(nicksvs.nick, origin, "Parent     : %s", md->value);
+		notice(usersvs.nick, origin, "Parent     : %s", md->value);
 
 	if (LIST_LENGTH(&mu->logins) == 0)
-		notice(nicksvs.nick, origin, "Logins from: <none>");
+		notice(usersvs.nick, origin, "Logins from: <none>");
 	else if (mu == u->myuser || is_ircop(u) || is_sra(u->myuser))
 	{
 		buf[0] = '\0';
@@ -119,7 +119,7 @@ static void ns_cmd_info(char *origin)
 		{
 			if (strlen(buf) > 80)
 			{
-				notice(nicksvs.nick, origin, "Logins from: %s", buf);
+				notice(usersvs.nick, origin, "Logins from: %s", buf);
 				buf[0] = '\0';
 			}
 			if (buf[0])
@@ -127,10 +127,10 @@ static void ns_cmd_info(char *origin)
 			strcat(buf, ((user_t *)(n->data))->nick);
 		}
 		if (buf[0])
-			notice(nicksvs.nick, origin, "Logins from: %s", buf);
+			notice(usersvs.nick, origin, "Logins from: %s", buf);
 	}
 	else
-		notice(nicksvs.nick, origin, "Logins from: <hidden>");
+		notice(usersvs.nick, origin, "Logins from: <hidden>");
 
         if ((is_ircop(u) || is_sra(u->myuser)) && (md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
         {
@@ -147,7 +147,7 @@ static void ns_cmd_info(char *origin)
                 tm = *localtime(&ts);
                 strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-                notice(nicksvs.nick, origin, "%s was \2FROZEN\2 by %s on %s (%s)", mu->name, setter, strfbuf, reason);
+                notice(usersvs.nick, origin, "%s was \2FROZEN\2 by %s on %s (%s)", mu->name, setter, strfbuf, reason);
         }
 
 	if ((is_ircop(u) || is_sra(u->myuser)) && (md = metadata_find(mu, METADATA_USER, "private:mark:setter")))
@@ -165,11 +165,11 @@ static void ns_cmd_info(char *origin)
 		tm = *localtime(&ts);
 		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-		notice(nicksvs.nick, origin, "%s was \2MARKED\2 by %s on %s (%s)", mu->name, setter, strfbuf, reason);
+		notice(usersvs.nick, origin, "%s was \2MARKED\2 by %s on %s (%s)", mu->name, setter, strfbuf, reason);
 	}
 
 	if ((MU_WAITAUTH & mu->flags) && (is_ircop(u) || is_sra(u->myuser)))
-		notice(nicksvs.nick, origin, "%s has not completed registration verification", mu->name);
+		notice(usersvs.nick, origin, "%s has not completed registration verification", mu->name);
 
-	notice(nicksvs.nick, origin, "*** \2End of Info\2 ***");
+	notice(usersvs.nick, origin, "*** \2End of Info\2 ***");
 }

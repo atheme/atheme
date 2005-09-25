@@ -4,36 +4,36 @@
  *
  * This file contains code for the NickServ VERIFY function.
  *
- * $Id: verify.c 2171 2005-09-05 21:22:11Z jilles $
+ * $Id: verify.c 2359 2005-09-25 02:49:10Z nenolod $
  */
 
 #include "atheme.h"
 
 DECLARE_MODULE_V1
 (
-	"nickserv/verify", FALSE, _modinit, _moddeinit,
-	"$Id: verify.c 2171 2005-09-05 21:22:11Z jilles $",
+	"userserv/verify", FALSE, _modinit, _moddeinit,
+	"$Id: verify.c 2359 2005-09-25 02:49:10Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void ns_cmd_verify(char *origin);
+static void us_cmd_verify(char *origin);
 
-command_t ns_verify = { "VERIFY", "Verifies a nickname registration.", AC_NONE, ns_cmd_verify };
+command_t us_verify = { "VERIFY", "Verifies a nickname registration.", AC_NONE, us_cmd_verify };
 
-list_t *ns_cmdtree;
+list_t *us_cmdtree;
 
 void _modinit(module_t *m)
 {
-	ns_cmdtree = module_locate_symbol("nickserv/main", "ns_cmdtree");
-	command_add(&ns_verify, ns_cmdtree);
+	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
+	command_add(&us_verify, us_cmdtree);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_verify, ns_cmdtree);
+	command_delete(&us_verify, us_cmdtree);
 }
 
-static void ns_cmd_verify(char *origin)
+static void us_cmd_verify(char *origin)
 {
 	myuser_t *mu;
 	metadata_t *md;
@@ -44,14 +44,14 @@ static void ns_cmd_verify(char *origin)
 
 	if (!op || !nick || !key)
 	{
-		notice(nicksvs.nick, origin, "Insufficient parameters specified for \2VERIFY\2.");
-		notice(nicksvs.nick, origin, "Syntax: VERIFY <operation> <nickname> <key>");
+		notice(usersvs.nick, origin, "Insufficient parameters specified for \2VERIFY\2.");
+		notice(usersvs.nick, origin, "Syntax: VERIFY <operation> <nickname> <key>");
 		return;
 	}
 
 	if (!(mu = myuser_find(nick)))
 	{
-		notice(nicksvs.nick, origin, "\2%s\2 is not registered.", nick);
+		notice(usersvs.nick, origin, "\2%s\2 is not registered.", nick);
 		return;
 	}
 
@@ -60,7 +60,7 @@ static void ns_cmd_verify(char *origin)
 	 */
 	if (!(u->myuser == mu))
 	{
-		notice(nicksvs.nick, origin, "Please log in before attempting to verify your registration.");
+		notice(usersvs.nick, origin, "Please log in before attempting to verify your registration.");
 		return;
 	}
 
@@ -70,7 +70,7 @@ static void ns_cmd_verify(char *origin)
 
 		if (!(mu->flags & MU_WAITAUTH) || !(md = metadata_find(mu, METADATA_USER, "private:verify:register:key")))
 		{
-			notice(nicksvs.nick, origin, "\2%s\2 is not awaiting authorization.", nick);
+			notice(usersvs.nick, origin, "\2%s\2 is not awaiting authorization.", nick);
 			return;
 		}
 
@@ -83,8 +83,8 @@ static void ns_cmd_verify(char *origin)
 			metadata_delete(mu, METADATA_USER, "private:verify:register:key");
 			metadata_delete(mu, METADATA_USER, "private:verify:register:timestamp");
 
-			notice(nicksvs.nick, origin, "\2%s\2 has now been verified.", mu->name);
-			notice(nicksvs.nick, origin, "Thank you for verifying your e-mail address! You have taken steps in "
+			notice(usersvs.nick, origin, "\2%s\2 has now been verified.", mu->name);
+			notice(usersvs.nick, origin, "Thank you for verifying your e-mail address! You have taken steps in "
 				"ensuring that your registrations are not exploited.");
 			ircd_on_login(origin, mu->name, NULL);
 
@@ -92,7 +92,7 @@ static void ns_cmd_verify(char *origin)
 		}
 
 		snoop("REGISTER:VF: \2%s\2 by \2%s\2", mu->email, origin);
-		notice(nicksvs.nick, origin, "Verification failed. Invalid key for \2%s\2.", mu->name);
+		notice(usersvs.nick, origin, "Verification failed. Invalid key for \2%s\2.", mu->name);
 
 		return;
 	}
@@ -100,7 +100,7 @@ static void ns_cmd_verify(char *origin)
 	{
 		if (!(md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:key")))
 		{
-			notice(nicksvs.nick, origin, "\2%s\2 is not awaiting authorization.", nick);
+			notice(usersvs.nick, origin, "\2%s\2 is not awaiting authorization.", nick);
 			return;
 		}
 
@@ -116,20 +116,20 @@ static void ns_cmd_verify(char *origin)
 			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:newemail");
 			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:timestamp");
 
-			notice(nicksvs.nick, origin, "\2%s\2 has now been verified.", mu->email);
+			notice(usersvs.nick, origin, "\2%s\2 has now been verified.", mu->email);
 
 			return;
                 }
 
 		snoop("REGISTER:VF: \2%s\2 by \2%s\2", mu->email, origin);
-		notice(nicksvs.nick, origin, "Verification failed. Invalid key for \2%s\2.", mu->name);
+		notice(usersvs.nick, origin, "Verification failed. Invalid key for \2%s\2.", mu->name);
 
 		return;
 	}
 	else
 	{
-		notice(nicksvs.nick, origin, "Invalid operation specified for \2VERIFY\2.");
-		notice(nicksvs.nick, origin, "Please double-check your verification e-mail.");
+		notice(usersvs.nick, origin, "Invalid operation specified for \2VERIFY\2.");
+		notice(usersvs.nick, origin, "Please double-check your verification e-mail.");
 		return;
 	}
 }
