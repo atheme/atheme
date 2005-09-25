@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: bircd.c 2337 2005-09-24 02:01:26Z jilles $
+ * $Id: bircd.c 2371 2005-09-25 08:25:06Z nenolod $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/asuka", FALSE, _modinit, NULL,
-	"$Id: bircd.c 2337 2005-09-24 02:01:26Z jilles $",
+	"$Id: bircd.c 2371 2005-09-25 08:25:06Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -407,7 +407,7 @@ static void m_privmsg(char *origin, uint8_t parc, char *parv[])
 		return;
 	}
 
-	if (!(tu = user_find(parv[0])))
+	if (!(tu = user_find(parv[0])) && *parv[0] != '#')
 	{
 		slog(LG_DEBUG, "m_privmsg(): got message to nonexistant user `%s'", origin);
 		return;
@@ -487,7 +487,7 @@ static void m_privmsg(char *origin, uint8_t parc, char *parv[])
 		}
 	}
 
-	sptr = find_service(tu->nick);
+	sptr = find_service(tu ? tu->nick : parv[0]);
 
 	if (sptr)
 		sptr->handler(u->nick, parc, parv);
