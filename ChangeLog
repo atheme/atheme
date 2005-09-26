@@ -1,3 +1,12 @@
+nenolod     2005/09/26 02:25:29 UTC	(20050926-2391)
+  Log:
+  Add SET EMAIL to the help screen for /cs help set.
+  
+
+  Modified:
+	trunk/modules/chanserv/help.c (File Modified) 
+
+
 nenolod     2005/09/26 02:22:53 UTC	(20050926-2389)
   Log:
   Add documentation for /cs <#chan> set email.
