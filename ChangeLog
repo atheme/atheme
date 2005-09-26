@@ -1,3 +1,14 @@
+nenolod     2005/09/26 02:22:53 UTC	(20050926-2389)
+  Log:
+  Add documentation for /cs <#chan> set email.
+  Also contributed by Kong Somvannda <somvannda -at- yahoo.com>.
+  
+
+  Modified:
+	trunk/help/cservice/set_email (File Added) 
+	trunk/modules/chanserv/help.c (File Modified) 
+
+
 nenolod     2005/09/26 02:10:56 UTC	(20050926-2387)
   Log:
   Add /cs set <#chan> email, allowing for the setting of channel e-mail contact addresses.
