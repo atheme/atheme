@@ -1,3 +1,38 @@
+jilles      2005/09/26 23:01:54 UTC	(20050926-2395)
+  Log:
+  - Change channel_mode() to allow a new variant where the mode
+    change is also sent out
+  - Don't core in channel_mode() if there are too few parameters
+    to modes
+  - Improve services deop logic a bit; keep all services opped, not
+    just chanserv
+  - Use new channel_mode() in /os mode. It won't desync services
+    anymore but you can only use modes atheme knows about.
+  
+
+  Modified:
+	trunk/include/extern.h (File Modified) 
+	trunk/modules/operserv/mode.c (File Modified) 
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bahamut.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/charybdis.c (File Modified) 
+	trunk/protocol/dreamforge.c (File Modified) 
+	trunk/protocol/hyperion.c (File Modified) 
+	trunk/protocol/inspircd.c (File Modified) 
+	trunk/protocol/ircnet.c (File Modified) 
+	trunk/protocol/monkey.c (File Modified) 
+	trunk/protocol/plexus.c (File Modified) 
+	trunk/protocol/ptlink.c (File Modified) 
+	trunk/protocol/ratbox.c (File Modified) 
+	trunk/protocol/scylla.c (File Modified) 
+	trunk/protocol/shadowircd.c (File Modified) 
+	trunk/protocol/sorcery.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+	trunk/protocol/unreal.c (File Modified) 
+	trunk/src/cmode.c (File Modified) 
+
+
 nenolod     2005/09/26 17:12:47 UTC	(20050926-2393)
   Log:
   Fix a crash bug with /os mode. Reported by Jamie.

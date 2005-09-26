@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 2395 2005-09-26 23:01:54Z jilles $
+ * $Id: charybdis.c 2397 2005-09-26 23:32:10Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/charybdis", FALSE, _modinit, NULL,
-	"$Id: charybdis.c 2395 2005-09-26 23:01:54Z jilles $",
+	"$Id: charybdis.c 2397 2005-09-26 23:32:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -887,7 +887,7 @@ static void m_kick(char *origin, uint8_t parc, char *parv[])
 	chanuser_delete(c, u);
 
 	/* if they kicked us, let's rejoin */
-	if (!irccasecmp(chansvs.nick, parv[0]) || !irccasecmp(chansvs.me->me->uid, parv[0]))
+	if (!irccasecmp(chansvs.nick, parv[1]) || !irccasecmp(chansvs.me->me->uid, parv[1]))
 	{
 		slog(LG_DEBUG, "m_kick(): i got kicked from `%s'; rejoining", parv[0]);
 		join(parv[0], parv[1]);
