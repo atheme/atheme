@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 2383 2005-09-25 23:59:54Z jilles $
+ * $Id: charybdis.c 2385 2005-09-26 01:06:21Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/charybdis", FALSE, _modinit, NULL,
-	"$Id: charybdis.c 2383 2005-09-25 23:59:54Z jilles $",
+	"$Id: charybdis.c 2385 2005-09-26 01:06:21Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -442,106 +442,10 @@ static void m_pong(char *origin, uint8_t parc, char *parv[])
 
 static void m_privmsg(char *origin, uint8_t parc, char *parv[])
 {
-	user_t *u;
-	user_t *t;
-	service_t *sptr;
-
-	/* we should have no more and no less */
-	if (parc != 2 || !origin)
+	if (parc != 2)
 		return;
 
-	if (!(u = user_find(origin)))
-	{
-		slog(LG_DEBUG, "m_privmsg(): got message from nonexistant user `%s'", origin);
-		return;
-	}
-
-	if (!(t = user_find(parv[0])) && *parv[0] != '#')
-	{
-		slog(LG_DEBUG, "m_privmsg(): got message to nonexistant user `%s'", origin);
-		return;
-	}
-
-	/* run it through flood checks */
-	if ((config_options.flood_msgs) && (!is_sra(u->myuser)) && (!is_ircop(u)))
-	{
-		/* check if they're being ignored */
-		if (u->offenses > 10)
-		{
-			if ((CURRTIME - u->lastmsg) > 30)
-			{
-				u->offenses -= 10;
-				u->lastmsg = CURRTIME;
-				u->msgs = 0;
-			}
-			else
-				return;
-		}
-
-		if ((CURRTIME - u->lastmsg) > config_options.flood_time)
-		{
-			u->lastmsg = CURRTIME;
-			u->msgs = 0;
-		}
-
-		/* fix for 15: ignore channel messages. */
-		if (*parv[0] != '#')
-			u->msgs++;
-
-		if (u->msgs > config_options.flood_msgs)
-		{
-			/* they're flooding. */
-			if (!u->offenses)
-			{
-				/* ignore them the first time */
-				u->lastmsg = CURRTIME;
-				u->msgs = 0;
-				u->offenses = 11;
-
-				/* ok to use nick here, notice() will
-				 * change it to UID if necessary -- jilles */
-				notice(t->nick, u->nick, "You have triggered services flood protection.");
-				notice(t->nick, u->nick, "This is your first offense. You will be ignored for 30 seconds.");
-
-				snoop("FLOOD: \2%s\2", u->nick);
-
-				return;
-			}
-
-			if (u->offenses == 1)
-			{
-				/* ignore them the second time */
-				u->lastmsg = CURRTIME;
-				u->msgs = 0;
-				u->offenses = 12;
-
-				notice(t->nick, u->nick, "You have triggered services flood protection.");
-				notice(t->nick, u->nick, "This is your last warning. You will be ignored for 30 seconds.");
-
-				snoop("FLOOD: \2%s\2", u->nick);
-
-				return;
-			}
-
-			if (u->offenses == 2)
-			{
-				kline_t *k;
-
-				/* kline them the third time */
-				k = kline_add("*", u->host, "ten minute ban: flooding services", 600);
-				k->setby = sstrdup(chansvs.nick);
-
-				snoop("FLOOD:KLINE: \2%s\2", u->nick);
-
-				return;
-			}
-		}
-	}
-
-	sptr = find_service(t ? t->nick : parv[0]);
-
-	if (sptr)
-		sptr->handler(u->nick, parc, parv);
+	handle_privmsg(origin, parv[0], parv[1]);
 }
 
 static void m_sjoin(char *origin, uint8_t parc, char *parv[])

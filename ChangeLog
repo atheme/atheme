@@ -1,3 +1,31 @@
+jilles      2005/09/25 23:59:54 UTC	(20050926-2383)
+  Log:
+  - Ignore /stats target, unbreaking TS6 /stats and allowing stuff like
+    /stats u ChanServ. Stuff like /stats u juped.server will be replied
+    to as if it were targetted to services, too.
+  - Pass the UID to handle_stats() for P10, don't resolve it to a nick.
+    handle_stats() will call user_find(), not user_find_named().
+  
+
+  Modified:
+	trunk/protocol/asuka.c (File Modified) 
+	trunk/protocol/bahamut.c (File Modified) 
+	trunk/protocol/bircd.c (File Modified) 
+	trunk/protocol/charybdis.c (File Modified) 
+	trunk/protocol/dreamforge.c (File Modified) 
+	trunk/protocol/hyperion.c (File Modified) 
+	trunk/protocol/ircnet.c (File Modified) 
+	trunk/protocol/monkey.c (File Modified) 
+	trunk/protocol/plexus.c (File Modified) 
+	trunk/protocol/ptlink.c (File Modified) 
+	trunk/protocol/ratbox.c (File Modified) 
+	trunk/protocol/scylla.c (File Modified) 
+	trunk/protocol/shadowircd.c (File Modified) 
+	trunk/protocol/sorcery.c (File Modified) 
+	trunk/protocol/undernet.c (File Modified) 
+	trunk/protocol/unreal.c (File Modified) 
+
+
 jilles      2005/09/25 23:48:30 UTC	(20050925-2381)
   Log:
   Use numeric_sts() with CLIENT_NAME for /admin, /info, /version, /stats.

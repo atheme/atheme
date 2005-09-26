@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 2381 2005-09-25 23:48:30Z jilles $
+ * $Id: ptasks.c 2385 2005-09-26 01:06:21Z jilles $
  */
 
 #include "atheme.h"
@@ -215,4 +215,132 @@ void handle_trace(char *origin, char *target, char *dest)
 		}
 	}
 	numeric_sts(me.name, 262, CLIENT_NAME(u), "%s :End of TRACE", target);
+}
+
+void handle_privmsg(char *origin, char *target, char *message)
+{
+	user_t *u;
+	user_t *t;
+	service_t *sptr;
+	char *vec[3];
+
+	if (!origin)
+		return;
+
+	if (!(u = user_find(origin)))
+	{
+		slog(LG_DEBUG, "handle_privmsg(): got message from nonexistant user `%s'", origin);
+		return;
+	}
+
+	if (!(t = user_find(target)) && *target != '#')
+	{
+		slog(LG_DEBUG, "handle_privmsg(): got message to nonexistant user `%s'", target);
+		return;
+	}
+
+	/* Run it through flood checks. Channel commands are checked
+	 * separately. */
+	if (t != NULL && floodcheck(u, t))
+		return;
+
+	/* If target is a channel and fantasy commands are enabled,
+	 * this will return chanserv */
+	sptr = find_service(t ? t->nick : target);
+
+	if (sptr)
+	{
+		vec[0] = target;
+		vec[1] = message;
+		vec[2] = NULL;
+		sptr->handler(u->nick, 2, vec);
+	}
+}
+
+/* Received a message from a user, check if they are flooding
+ * Returns true if the message should be ignored.
+ * u - user sending the message
+ * t - target of the message (to be used in warning the user)
+ * */
+int floodcheck(user_t *u, user_t *t)
+{
+	if (t->server != me.me)
+	{
+		slog(LG_ERROR, "BUG: tried to floodcheck message to non-service %s", t->nick);
+		return 0;
+	}
+	if (config_options.flood_msgs && !is_sra(u->myuser) && !is_ircop(u))
+	{
+		/* check if they're being ignored */
+		if (u->offenses > 10)
+		{
+			if ((CURRTIME - u->lastmsg) > 30)
+			{
+				u->offenses -= 10;
+				u->lastmsg = CURRTIME;
+				u->msgs = 0;
+			}
+			else
+				return 1;
+		}
+
+		if ((CURRTIME - u->lastmsg) > config_options.flood_time)
+		{
+			u->lastmsg = CURRTIME;
+			u->msgs = 0;
+		}
+
+		u->msgs++;
+
+		if (u->msgs > config_options.flood_msgs)
+		{
+			/* they're flooding. */
+			if (!u->offenses)
+			{
+				/* ignore them the first time */
+				u->lastmsg = CURRTIME;
+				u->msgs = 0;
+				u->offenses = 11;
+
+				/* ok to use nick here, notice() will
+				 * change it to UID if necessary -- jilles */
+				notice(t->nick, u->nick, "You have triggered services flood protection.");
+				notice(t->nick, u->nick, "This is your first offense. You will be ignored for 30 seconds.");
+
+				snoop("FLOOD: \2%s\2", u->nick);
+
+				return 1;
+			}
+
+			if (u->offenses == 1)
+			{
+				/* ignore them the second time */
+				u->lastmsg = CURRTIME;
+				u->msgs = 0;
+				u->offenses = 12;
+
+				notice(t->nick, u->nick, "You have triggered services flood protection.");
+				notice(t->nick, u->nick, "This is your last warning. You will be ignored for 30 seconds.");
+
+				snoop("FLOOD: \2%s\2", u->nick);
+
+				return 1;
+			}
+
+			if (u->offenses == 2)
+			{
+				kline_t *k;
+
+				/* kline them the third time */
+				k = kline_add("*", u->host, "ten minute ban: flooding services", 600);
+				k->setby = sstrdup(chansvs.nick);
+
+				snoop("FLOOD:KLINE: \2%s\2", u->nick);
+
+				return 1;
+			}
+		}
+	}
+
+	return 0;
 }
