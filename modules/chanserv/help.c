@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 2295 2005-09-22 22:26:32Z pfish $
+ * $Id: help.c 2389 2005-09-26 02:22:53Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 2295 2005-09-22 22:26:32Z pfish $",
+	"$Id: help.c 2389 2005-09-26 02:22:53Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -57,6 +57,7 @@ static struct help_command_ cs_help_commands[] = {
   { "SET SUCCESSOR", AC_NONE, "help/cservice/set_successor" },
   { "SET VERBOSE",   AC_NONE, "help/cservice/set_verbose"   },
   { "SET URL",       AC_NONE, "help/cservice/set_url"       },
+  { "SET EMAIL",     AC_NONE, "help/cservice/set_email"     },
   { "SET ENTRYMSG",  AC_NONE, "help/cservice/set_entrymsg"  },
   { "SET PROPERTY",  AC_NONE, "help/cservice/set_property"  },
   { "SET STAFFONLY", AC_IRCOP, "help/cservice/set_staffonly" },

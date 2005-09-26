@@ -1,0 +1,9 @@
+Help for SET Email:
+
+SET Email allows you to change or set the Email
+address associated with a channel.
+
+Syntax: SET <channel> Email <email>
+
+Example:
+    /msg &nick& SET #chat Email spider@khmerportal.net
