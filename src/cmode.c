@@ -4,13 +4,16 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 2187 2005-09-07 03:47:06Z nenolod $
+ * $Id: cmode.c 2395 2005-09-26 23:01:54Z jilles $
  */
 
 #include "atheme.h"
 
 /* yeah, this should be fun. */
-void channel_mode(channel_t *chan, uint8_t parc, char *parv[])
+/* If source == NULL, apply a mode change from outside to our structures
+ * If source != NULL, apply the mode change and send it out from that user
+ */
+void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 {
 	boolean_t matched = FALSE;
 	boolean_t chanserv_reopped = FALSE;
@@ -18,6 +21,7 @@ void channel_mode(channel_t *chan, uint8_t parc, char *parv[])
 	char *pos = parv[0];
 	mychan_t *mc;
 	chanuser_t *cu = NULL;
+	char str[3];
 
 	if ((!pos) || (*pos == '\0'))
 		return;
@@ -29,7 +33,6 @@ void channel_mode(channel_t *chan, uint8_t parc, char *parv[])
 	if (*pos == '0')
 		return;
 
-	/* assumed that the parc is correct.  ircd does, too. */
 	for (; *pos != '\0'; pos++)
 	{
 		matched = FALSE;
@@ -55,6 +58,12 @@ void channel_mode(channel_t *chan, uint8_t parc, char *parv[])
 					chan->modes |= mode_list[i].value;
 				else
 					chan->modes &= ~mode_list[i].value;
+
+				str[0] = whatt == MTYPE_ADD ? '+' : '-';
+				str[1] = *pos;
+				str[2] = '\0';
+				if (source)
+					cmode(source->nick, chan->name, str);
 
 				break;
 			}
@@ -93,13 +102,19 @@ void channel_mode(channel_t *chan, uint8_t parc, char *parv[])
 		{
 			if (whatt == MTYPE_ADD)
 			{
+				if (++parpos >= parc)
+					continue;
 				chan->modes |= CMODE_LIMIT;
-				chan->limit = atoi(parv[++parpos]);
+				chan->limit = atoi(parv[parpos]);
+				if (source)
+					cmode(source->nick, chan->name, "+l", parv[parpos]);
 			}
 			else
 			{
 				chan->modes &= ~CMODE_LIMIT;
 				chan->limit = 0;
+				if (source)
+					cmode(source->nick, chan->name, "-l");
 			}
 			continue;
 		}
@@ -108,12 +123,20 @@ void channel_mode(channel_t *chan, uint8_t parc, char *parv[])
 		{
 			if (whatt == MTYPE_ADD)
 			{
+				if (++parpos >= parc)
+					continue;
 				chan->modes |= CMODE_KEY;
-				chan->key = sstrdup(parv[++parpos]);
+				if (chan->key)
+					free(chan->key);
+				chan->key = sstrdup(parv[parpos]);
+				if (source)
+					cmode(source->nick, chan->name, "+k", chan->key);
 			}
 			else
 			{
 				chan->modes &= ~CMODE_KEY;
+				if (source)
+					cmode(source->nick, chan->name, "-k", chan->key);
 				free(chan->key);
 				chan->key = NULL;
 				/* ratbox typically sends either the key or a `*' on -k, so you
@@ -126,12 +149,22 @@ void channel_mode(channel_t *chan, uint8_t parc, char *parv[])
 
 		if (*pos == 'b')
 		{
+			if (++parpos >= parc)
+				continue;
 			if (whatt == MTYPE_ADD)
-				chanban_add(chan, parv[++parpos]);
+			{
+				chanban_add(chan, parv[parpos]);
+				if (source)
+					cmode(source->nick, chan->name, "+b", parv[parpos]);
+			}
 			else
 			{
-				chanban_t *c = chanban_find(chan, parv[++parpos]);
+				chanban_t *c;
+				
+				c = chanban_find(chan, parv[parpos]);
 				chanban_delete(c);
+				if (source)
+					cmode(source->nick, chan->name, "-b", parv[parpos]);
 			}
 			continue;
 		}
@@ -140,7 +173,9 @@ void channel_mode(channel_t *chan, uint8_t parc, char *parv[])
 		{
 			if (*pos == status_mode_list[i].mode)
 			{
-				cu = chanuser_find(chan, user_find(parv[++parpos]));
+				if (++parpos >= parc)
+					break;
+				cu = chanuser_find(chan, source ? user_find_named(parv[parpos]) : user_find(parv[parpos]));
 
 				if (cu == NULL)
 				{
@@ -158,8 +193,14 @@ void channel_mode(channel_t *chan, uint8_t parc, char *parv[])
 				{
 					cu->modes |= status_mode_list[i].value;
 
+					str[0] = '+';
+					str[1] = *pos;
+					str[2] = '\0';
+					if (source)
+						cmode(source->nick, chan->name, str, CLIENT_NAME(cu->user));
+
 					/* see if they did something we have to undo */
-					if ((mc = mychan_find(cu->chan->name)))
+					if (source == NULL && (mc = mychan_find(cu->chan->name)))
 					{
 						myuser_t *mu = cu->user->myuser;
 
@@ -177,7 +218,8 @@ void channel_mode(channel_t *chan, uint8_t parc, char *parv[])
 								(!is_xop(mc, mu, (CA_OP | CA_AUTOOP))) && (!chanacs_find_host(mc, hostbuf, (CA_OP | CA_AUTOOP))))
 							{
 								/* they were opped and aren't on the list, deop them */
-								cmode(chansvs.nick, mc->name, "-o", cu->user->nick);
+								if (source)
+									cmode(chansvs.nick, mc->name, "-o", cu->user->nick);
 								cu->modes &= ~status_mode_list[i].value;
 							}
 						}
@@ -185,18 +227,28 @@ void channel_mode(channel_t *chan, uint8_t parc, char *parv[])
 				}
 				else
 				{
-					if (cu->user == chansvs.me->me && chanserv_reopped == FALSE &&
+					if (cu->user->server == me.me &&
 							status_mode_list[i].value == CMODE_OP)
 					{
-						slog(LG_DEBUG, "channel_mode(): deopped on %s, rejoining", cu->chan->name);
+						if (source == NULL && (cu->user != chansvs.me->me || chanserv_reopped == FALSE))
+						{
+							slog(LG_DEBUG, "channel_mode(): deopped on %s, rejoining", cu->chan->name);
 
-						part(cu->chan->name, chansvs.nick);
-						join(cu->chan->name, chansvs.nick);
+							part(cu->chan->name, cu->user->nick);
+							join(cu->chan->name, cu->user->nick);
 
-						chanserv_reopped = TRUE;
+							if (cu->user == chansvs.me->me)
+								chanserv_reopped = TRUE;
+						}
 
 						continue;
 					}
+
+					str[0] = '-';
+					str[1] = *pos;
+					str[2] = '\0';
+					if (source)
+						cmode(source->nick, chan->name, str, CLIENT_NAME(cu->user));
 
 					cu->modes &= ~status_mode_list[i].value;
 				}
@@ -210,7 +262,8 @@ void channel_mode(channel_t *chan, uint8_t parc, char *parv[])
 		slog(LG_DEBUG, "channel_mode(): mode %c not matched", *pos);
 	}
 
-	check_modes(mychan_find(chan->name));
+	if (source == NULL)
+		check_modes(mychan_find(chan->name));
 }
 
 /* i'm putting usermode in here too */

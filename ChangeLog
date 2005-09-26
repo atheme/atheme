@@ -1,3 +1,12 @@
+nenolod     2005/09/26 17:12:47 UTC	(20050926-2393)
+  Log:
+  Fix a crash bug with /os mode. Reported by Jamie.
+  
+
+  Modified:
+	trunk/modules/operserv/mode.c (File Modified) 
+
+
 nenolod     2005/09/26 02:25:29 UTC	(20050926-2391)
   Log:
   Add SET EMAIL to the help screen for /cs help set.

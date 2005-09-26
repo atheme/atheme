@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 2385 2005-09-26 01:06:21Z jilles $
+ * $Id: ircnet.c 2395 2005-09-26 23:01:54Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/ircnet", FALSE, _modinit, NULL,
-	"$Id: ircnet.c 2385 2005-09-26 01:06:21Z jilles $",
+	"$Id: ircnet.c 2395 2005-09-26 23:01:54Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -507,7 +507,7 @@ static void m_mode(char *origin, uint8_t parc, char *parv[])
 	}
 
 	if (*parv[0] == '#')
-		channel_mode(channel_find(parv[0]), parc - 1, &parv[1]);
+		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
 	else
 		user_mode(user_find(parv[0]), parv[1]);
 }

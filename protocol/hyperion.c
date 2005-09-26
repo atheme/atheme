@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 2385 2005-09-26 01:06:21Z jilles $
+ * $Id: hyperion.c 2395 2005-09-26 23:01:54Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -18,7 +18,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/hyperion", FALSE, _modinit, NULL,
-	"$Id: hyperion.c 2385 2005-09-26 01:06:21Z jilles $",
+	"$Id: hyperion.c 2395 2005-09-26 23:01:54Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -487,7 +487,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 			c->ts = ts;
 		}
 
-		channel_mode(c, modec, modev);
+		channel_mode(NULL, c, modec, modev);
 
 		userc = sjtoken(parv[parc - 1], ' ', userv);
 
@@ -619,7 +619,7 @@ static void m_mode(char *origin, uint8_t parc, char *parv[])
 	}
 
 	if (*parv[0] == '#')
-		channel_mode(channel_find(parv[0]), parc - 1, &parv[1]);
+		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
 	else
 		user_mode(user_find(parv[0]), parv[1]);
 }

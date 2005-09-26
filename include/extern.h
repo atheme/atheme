@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 2385 2005-09-26 01:06:21Z jilles $
+ * $Id: extern.h 2395 2005-09-26 23:01:54Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -29,7 +29,7 @@ E void BlockHeapUsage(BlockHeap *bh, size_t * bused, size_t * bfree,
 E boolean_t cold_start;
 
 /* cmode.c */
-E void channel_mode(channel_t *chan, uint8_t parc, char *parv[]);
+E void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[]);
 E void user_mode(user_t *user, char *modes);
 E void flush_cmode_callback(void *arg);
 E void cmode(char *sender, ...);

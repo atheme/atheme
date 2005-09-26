@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 2385 2005-09-26 01:06:21Z jilles $
+ * $Id: charybdis.c 2395 2005-09-26 23:01:54Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"protocol/charybdis", FALSE, _modinit, NULL,
-	"$Id: charybdis.c 2385 2005-09-26 01:06:21Z jilles $",
+	"$Id: charybdis.c 2395 2005-09-26 23:01:54Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -515,7 +515,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 			c->ts = ts;
 		}
 
-		channel_mode(c, modec, modev);
+		channel_mode(NULL, c, modec, modev);
 
 		userc = sjtoken(parv[parc - 1], ' ', userv);
 
@@ -600,7 +600,7 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 		slog(LG_INFO, "m_join(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
 		c->ts = ts;
 
-		channel_mode(c, modec, modev);
+		channel_mode(NULL, c, modec, modev);
 	}
 
 	chanuser_add(c, origin);
@@ -833,7 +833,7 @@ static void m_mode(char *origin, uint8_t parc, char *parv[])
 	}
 
 	if (*parv[0] == '#')
-		channel_mode(channel_find(parv[0]), parc - 1, &parv[1]);
+		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
 	else
 		user_mode(user_find(parv[0]), parv[1]);
 }
@@ -855,7 +855,7 @@ static void m_tmode(char *origin, uint8_t parc, char *parv[])
 	
 	/* Ignore TS as we do not lower TSes ourselves */
 
-	channel_mode(channel_find(parv[1]), parc - 2, &parv[2]);
+	channel_mode(NULL, channel_find(parv[1]), parc - 2, &parv[2]);
 }
 
 static void m_kick(char *origin, uint8_t parc, char *parv[])
