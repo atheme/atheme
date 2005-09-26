@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 2225 2005-09-12 16:19:10Z jilles $
+ * $Id: set.c 2387 2005-09-26 02:10:56Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 2225 2005-09-12 16:19:10Z jilles $",
+	"$Id: set.c 2387 2005-09-26 02:10:56Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -64,6 +64,64 @@ static void cs_cmd_set(char *origin)
 		else
 			notice(chansvs.nick, origin, "Invalid setting.  Please use \2HELP\2 for help.");
 	}
+}
+
+static void cs_set_email(char *origin, char *name, char *params)
+{
+        user_t *u = user_find(origin);
+        mychan_t *mc;
+        chanacs_t *ca;
+        char *mail = strtok(params, " ");
+
+        if (*name != '#')
+        {
+                notice(chansvs.nick, origin, "Invalid parameters specified for \2Email\2.");
+                return;
+        }
+
+        if (!(mc = mychan_find(name)))
+        {
+                notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
+                return;
+        }
+
+        if (!(ca = chanacs_find(mc, u->myuser, CA_FLAGS)))
+        {
+                notice(chansvs.nick, origin, "You are not authorized to execute this command.");
+                return;
+        }
+
+        if (!mail || !strcasecmp(mail, "NONE") || !strcasecmp(mail, "OFF"))
+        {
+                if (metadata_find(mc, METADATA_CHANNEL, "email"))
+                {
+                        metadata_delete(mc, METADATA_CHANNEL, "email");
+                        notice(chansvs.nick, origin, "The e-mail address for \2%s\2 was deleted.", mc->name);
+                        return;
+                }
+
+                notice(chansvs.nick, origin, "The e-mail address for \2%s\2 was not set.", mc->name);
+                return;
+        }
+
+        if (strlen(mail) >= EMAILLEN)
+        {
+                notice(chansvs.nick, origin, "Invalid parameters specified for \2EMAIL\2.");
+                return;
+        }
+
+        if (!validemail(mail))
+        {
+                notice(chansvs.nick, origin, "\2%s\2 is not a valid e-mail address.", mail);
+                return;
+        }
+
+        /* we'll overwrite any existing metadata */
+        metadata_add(mc, METADATA_CHANNEL, "email", mail);
+
+        snoop("SET:EMAIL \2%s\2 on \2%s\2.", mail, mc->name);
+
+        notice(chansvs.nick, origin, "The e-mail address for \2%s\2 has been set to \2%s\2.", name, mail);
 }
 
 static void cs_set_url(char *origin, char *name, char *params)
@@ -828,6 +886,7 @@ struct set_command_ set_commands[] = {
   { "URL",	  AC_NONE,  cs_set_url        },
   { "ENTRYMSG",	  AC_NONE,  cs_set_entrymsg   },
   { "PROPERTY",   AC_NONE,  cs_set_property   },
+  { "EMAIL",      AC_NONE,  cs_set_email      },
   { "STAFFONLY",  AC_IRCOP, cs_set_staffonly  },
   { NULL, 0, NULL }
 };
