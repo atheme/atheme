@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 2399 2005-09-27 06:12:23Z nenolod $
+ * $Id: connection.c 2403 2005-09-27 17:34:30Z nenolod $
  */
 
 #include "atheme.h"
@@ -15,6 +15,9 @@ static BlockHeap *connection_heap;
 list_t connection_list;
 
 static void connection_dead(void *);
+
+#undef LG_IOERROR
+#define LG_IOERROR LG_DEBUG
 
 void init_netio(void)
 {
@@ -331,11 +334,12 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 	}
 
 	in = (struct in_addr *)(hp->h_addr_list[0]);
+	sa.sin_family = AF_INET;
 	sa.sin_addr.s_addr = in->s_addr;
-	sa.sin_port = port;
+	sa.sin_port = htons(port);
 
 	optval = 1;
-	setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char *)&optval, sizeof(optval));
+//	setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char *)&optval, sizeof(optval));
 
 	if (bind(s, (struct sockaddr *)&sa, sizeof(sa)) < 0)
 	{
@@ -345,12 +349,17 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 		return NULL;
 	}
 
-	socket_setnonblocking(s);
+//	socket_setnonblocking(s);
 
 	/* XXX we need to have some sort of handling for SOMAXCONN */
-	listen(s, 5);
+	if (listen(s, 5) < 0)
+	{
+		close(s);
+		slog(LG_IOERROR, "connection_open_listener_tcp(): error: %s", strerror(errno));
+		return NULL;
+	}
 
-	cptr = connection_add(buf, s, CF_LISTENING, read_handler, NULL);
+	cptr = connection_add(buf, s, 0, read_handler, NULL);
 
 	return cptr;
 }
