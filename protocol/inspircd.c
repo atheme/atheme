@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: inspircd.c 2395 2005-09-26 23:01:54Z jilles $
+ * $Id: inspircd.c 2401 2005-09-27 08:55:25Z pfish $
  */
 
 #include "atheme.h"
@@ -12,8 +12,8 @@
 
 DECLARE_MODULE_V1
 (
-	"protocol/inspircd", FALSE, _modinit, NULL,
-	"$Id: inspircd.c 2395 2005-09-26 23:01:54Z jilles $",
+	"protocol/inspircd", TRUE, _modinit, NULL,
+	"$Id: inspircd.c 2401 2005-09-27 08:55:25Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

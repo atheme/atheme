@@ -1,3 +1,14 @@
+nenolod     2005/09/27 06:12:23 UTC	(20050927-2399)
+  Log:
+  Add connection_accept_tcp() for accepting a connection off of a 
+  listener.
+  
+
+  Modified:
+	trunk/include/connection.h (File Modified) 
+	trunk/libatheme/connection.c (File Modified) 
+
+
 jilles      2005/09/26 23:32:10 UTC	(20050926-2397)
   Log:
   Fix chanserv rejoining on kick.

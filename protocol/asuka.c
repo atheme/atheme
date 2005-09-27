@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: asuka.c 2395 2005-09-26 23:01:54Z jilles $
+ * $Id: asuka.c 2401 2005-09-27 08:55:25Z pfish $
  */
 
 #include "atheme.h"
@@ -14,8 +14,8 @@
 
 DECLARE_MODULE_V1
 (
-	"protocol/asuka", FALSE, _modinit, NULL,
-	"$Id: asuka.c 2395 2005-09-26 23:01:54Z jilles $",
+	"protocol/asuka", TRUE, _modinit, NULL,
+	"$Id: asuka.c 2401 2005-09-27 08:55:25Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

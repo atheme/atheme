@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 2397 2005-09-26 23:32:10Z jilles $
+ * $Id: charybdis.c 2401 2005-09-27 08:55:25Z pfish $
  */
 
 #include "atheme.h"
@@ -12,8 +12,8 @@
 
 DECLARE_MODULE_V1
 (
-	"protocol/charybdis", FALSE, _modinit, NULL,
-	"$Id: charybdis.c 2397 2005-09-26 23:32:10Z jilles $",
+	"protocol/charybdis", TRUE, _modinit, NULL,
+	"$Id: charybdis.c 2401 2005-09-27 08:55:25Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
