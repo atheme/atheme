@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 2199 2005-09-07 18:12:20Z nenolod $
+ * $Id: connection.c 2399 2005-09-27 06:12:23Z nenolod $
  */
 
 #include "atheme.h"
@@ -352,6 +352,42 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 
 	cptr = connection_add(buf, s, CF_LISTENING, read_handler, NULL);
 
+	return cptr;
+}
+
+/*
+ * connection_accept_tcp()
+ *
+ * inputs:
+ *       listener to accept from, read handler, write handler
+ *
+ * outputs:
+ *       the connection_t on success, NULL on failure.
+ *
+ * side effects:
+ *       a TCP/IP connection is accepted from the host,
+ *       and interest is registered in read/write events.
+ */
+connection_t *connection_accept_tcp(connection_t *cptr,
+	void (*read_handler)(connection_t *),
+	void (*write_handler)(connection_t *))
+{
+	char buf[BUFSIZE];
+	socket_t s;
+	uint32_t optval;
+
+	if (!(s = accept(cptr->fd, NULL, NULL)))
+	{
+		slog(LG_IOERROR, "connection_accept_tcp(): accept failed");
+		return NULL;
+	}
+
+	/* Has the highest fd gotten any higher yet? */
+	if (s > me.maxfd)
+		me.maxfd = s;
+
+	strlcpy(buf, "incoming connection", BUFSIZE);
+	cptr = connection_add(buf, s, 0, read_handler, write_handler);
 	return cptr;
 }
 
