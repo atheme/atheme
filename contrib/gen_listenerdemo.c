@@ -4,7 +4,7 @@
  *
  * Listener code demo.
  *
- * $Id: gen_listenerdemo.c 2409 2005-09-28 01:51:23Z nenolod $
+ * $Id: gen_listenerdemo.c 2411 2005-09-28 02:32:46Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"contrib/gen_listenerdemo", FALSE, _modinit, _moddeinit,
-	"$Id: gen_listenerdemo.c 2409 2005-09-28 01:51:23Z nenolod $",
+	"$Id: gen_listenerdemo.c 2411 2005-09-28 02:32:46Z nenolod $",
 	"William Pitcock <nenolod -at- nenolod.net>"
 );
 
@@ -65,7 +65,7 @@ static void my_rhandler(connection_t * cptr)
         if (!my_read(cptr, buf))
 		connection_close(cptr);
 
-        my_packet(buf);
+        do_packet(buf);
 }
 
 static void do_listen(connection_t *cptr)

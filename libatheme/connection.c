@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 2403 2005-09-27 17:34:30Z nenolod $
+ * $Id: connection.c 2411 2005-09-28 02:32:46Z nenolod $
  */
 
 #include "atheme.h"
@@ -148,12 +148,8 @@ void connection_close(connection_t *cptr)
 	datastream_t *sptr; 
 
 	if (errno)
-	{
 		slog(LG_IOERROR, "connection_close(): connection %s[%d] closed due to error %d (%s)",
 				cptr->name, cptr->fd, errno, strerror(errno));
-		wallops("connection_close(): connection %s[%d] closed due to error %d (%s)",
-				cptr->name, cptr->fd, errno, strerror(errno));
-	}
 
 	if (!cptr || cptr->fd <= 0)
 	{
@@ -339,7 +335,7 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 	sa.sin_port = htons(port);
 
 	optval = 1;
-//	setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char *)&optval, sizeof(optval));
+	setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (char *)&optval, sizeof(optval));
 
 	if (bind(s, (struct sockaddr *)&sa, sizeof(sa)) < 0)
 	{
@@ -349,7 +345,7 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 		return NULL;
 	}
 
-//	socket_setnonblocking(s);
+	socket_setnonblocking(s);
 
 	/* XXX we need to have some sort of handling for SOMAXCONN */
 	if (listen(s, 5) < 0)
@@ -419,4 +415,34 @@ void connection_setselect(connection_t *cptr,
 {
 	cptr->read_handler = read_handler;
 	cptr->write_handler = write_handler;
+}
+
+/*
+ * connection_write()
+ *
+ * inputs:
+ *       connection_t to write to, format string, parameters
+ *
+ * outputs:
+ *       none
+ *
+ * side effects:
+ *       data is added to the connection_t sendq cache.
+ */
+void connection_write(connection_t *to, char *format, ...)
+{
+	char buf[BUFSIZE * 12];
+	va_list args;
+	uint16_t len;
+
+	va_start(args, format);
+	vsnprintf(buf, BUFSIZE * 12, format, args);
+	va_end(args);
+
+	len = strlen(buf);
+	buf[len++] = '\r';
+	buf[len++] = '\n';
+	buf[len] = '\0';
+
+	sendq_add(to, buf, len, 0);
 }
