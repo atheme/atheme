@@ -4,7 +4,7 @@
  *
  * XMLRPC server code.
  *
- * $Id: main.c 2425 2005-09-28 05:00:36Z nenolod $
+ * $Id: main.c 2427 2005-09-28 05:25:28Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,13 +12,55 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 2425 2005-09-28 05:00:36Z nenolod $",
+	"$Id: main.c 2427 2005-09-28 05:25:28Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 connection_t *listener;
 
 static connection_t *request;
+
+list_t conf_xmlrpc_table;
+
+struct xmlrpc_configuration
+{
+	char *host;
+	int port;
+} xmlrpc_config;
+
+/***************************************************************************/
+
+static int conf_xmlrpc_host(CONFIGENTRY *ce)
+{
+	if (!ce->ce_vardata)
+		return -1;
+
+	xmlrpc_config.host = sstrdup(ce->ce_vardata);
+
+	return 0;
+}
+
+static int conf_xmlrpc_port(CONFIGENTRY *ce)
+{
+	if (!ce->ce_vardata)
+		return -1;
+
+	xmlrpc_config.port = ce->ce_vardatanum;
+
+	return 0;
+}
+
+static int conf_xmlrpc(CONFIGENTRY *ce)
+{
+	subblock_handler(ce, &conf_xmlrpc_table);
+}
+
+/***************************************************************************/
+
+static char *dump_buffer(char *buf, int length)
+{
+	connection_write_raw(request, buf);
+}
 
 static int my_read(connection_t *cptr, char *buf)
 {
@@ -58,12 +100,35 @@ static void do_listen(connection_t *cptr)
 	slog(LG_DEBUG, "do_listen(): accepted %d", cptr->fd);
 }
 
+static void xmlrpc_config_ready(void *vptr)
+{
+	listener = connection_open_listener_tcp(xmlrpc_config.host,
+		xmlrpc_config.port, do_listen);
+}
+
 void _modinit(module_t *m)
 {
-	listener = connection_open_listener_tcp("127.0.0.1", 7100, do_listen);
+	if (!cold_start)
+		listener = connection_open_listener_tcp(xmlrpc_config.host,
+			xmlrpc_config.port, do_listen);
+	else
+	{
+		hook_add_event("config_ready");
+		hook_add_hook("config_ready", xmlrpc_config_ready);
+	}
+
+	add_top_conf("XMLRPC", conf_xmlrpc);
+	add_conf_item("HOST", &conf_xmlrpc_table, conf_xmlrpc_host);
+	add_cont_item("PORT", &conf_xmlrpc_table, conf_xmlrpc_port);
+
+	xmlrpc_set_buffer(dump_buffer);
 }
 
 void _moddeinit(void)
 {
 	connection_close(listener);
+
+	del_conf_item("HOST", &conf_xmlrpc_table);
+	del_conf_item("PORT", &conf_xmlrpc_table);
+	del_top_conf("XMLRPC");
 }

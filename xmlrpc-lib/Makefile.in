@@ -36,7 +36,7 @@ libnomadxmlrpc.a: ${OBJS}
 	${CC} ${CPPFLAGS} ${CFLAGS} -c $< -o $@
 
 clean:
-	${RM} -f *.o *.exe *~ libatheme.a
+	${RM} -f *.o *.exe *~ libnomadxmlrpc.a
 
 distclean: clean
 	${RM} -f Makefile

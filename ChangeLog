@@ -1,3 +1,23 @@
+nenolod     2005/09/28 05:00:36 UTC	(20050928-2425)
+  Log:
+  Move some stuff around =)
+  
+
+  Modified:
+	trunk/configure (File Modified) 
+	trunk/configure.ac (File Modified) 
+	trunk/doc/XMLRPC (File Modified) 
+	trunk/include/atheme.h (File Modified) 
+	trunk/include/xmlrpc.h (File Added) 
+	trunk/modules/xmlrpc/ (File Added) 
+	trunk/modules/xmlrpc/Makefile.in (File Added) 
+	trunk/modules/xmlrpc/main.c (File Added) 
+	trunk/xmlrpc-lib/.indent.pro (File Added) 
+	trunk/xmlrpc-lib/base64.c (File Modified) 
+	trunk/xmlrpc-lib/xmlrpc.c (File Modified) 
+	trunk/xmlrpc-lib/xmlrpc.h (File Deleted) 
+
+
 nenolod     2005/09/28 04:48:23 UTC	(20050928-2423)
   Log:
   Link against tweaked libnomadxmlrpc.

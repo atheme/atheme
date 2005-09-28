@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2425 2005-09-28 05:00:36Z nenolod $
+# $Id: Makefile.in 2427 2005-09-28 05:25:28Z nenolod $
 #
 
 CC		= @CC@
@@ -13,9 +13,9 @@ CP		= @CP@
 INSTALL		= @INSTALL@
 PREFIX		= @prefix@
 BIN		= atheme@EXEEXT@
-MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include -I../../xmlrpc-lib @PGINC@ @MYINC@
+MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include @PGINC@ @MYINC@
 PICFLAGS	= @PICFLAGS@
-CFLAGS		= @CFLAGS@ -I../../include -I../../xmlrpc-lib @PGINC@ @MYINC@
+CFLAGS		= @CFLAGS@ -I../../include @PGINC@ @MYINC@
 
 VERSION		= 0.1
 
