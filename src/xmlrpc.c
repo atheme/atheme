@@ -487,13 +487,11 @@ char *xmlrpc_method(char *buffer)
 void xmlrpc_generic_error(int code, const char *string)
 {
 	char buf[XMLRPC_BUFSIZE];
-	char encoded[XMLRPC_BUFSIZE];
 	int len;
 
-	xmlrpc_char_encode(encoded, string);
 	snprintf(buf, XMLRPC_BUFSIZE,
 		 "<?xml version=\"1.0\"?>\r\n <methodResponse>\n\r  <fault>\n\r   <value>\n\r    <struct>\n\r     <member>\n\r      <name>faultCode</name>\n\r      <value><int>%d</int></value>\n\r     </member>\n\r     <member>\n\r      <name>faultString</name>\n\r      <value><string>%s</string></value>\n\r     </member>\n\r    </struct>\n\r   </value>\r\n  </fault>\r\n </methodResponse>",
-		 code, encoded);
+		 code, string);
 	len = strlen(buf);
 	xmlrpc.setbuffer(buf, len);
 }

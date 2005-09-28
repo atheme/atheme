@@ -1,3 +1,11 @@
+alambert    2005/09/28 06:21:50 UTC	(20050928-2435)
+  Log:
+  be sure to encode XMLRPC error reasons -- they're strings, after all
+
+  Modified:
+	trunk/src/xmlrpc.c (File Modified) 
+
+
 nenolod     2005/09/28 06:14:07 UTC	(20050928-2433)
   Log:
   - Finish up the XMLRPC server code.
