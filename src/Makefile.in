@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2361 2005-09-25 03:05:34Z nenolod $
+# $Id: Makefile.in 2423 2005-09-28 04:48:23Z nenolod $
 #
 
 CC		= @CC@
@@ -18,7 +18,7 @@ CFLAGS		= @CFLAGS@ -I../include @PGINC@ @MYINC@
 
 VERSION		= @PACKAGE_VERSION@
 
-LIBS		= @LIBS@ @PQLIB@ @MYLIB@ -L../libatheme -latheme
+LIBS		= @LIBS@ @PQLIB@ @MYLIB@ -L../libatheme -L../xmlrpc-lib -lnomadxmlrpc -latheme
 LDFLAGS		= @LDFLAGS@
 CPPFLAGS	= @CPPFLAGS@
 

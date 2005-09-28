@@ -1,3 +1,13 @@
+nenolod     2005/09/28 04:34:18 UTC	(20050928-2421)
+  Log:
+  XMLRPC library fixes. (buffer_st was missing.)
+  
+
+  Modified:
+	trunk/Makefile.in (File Modified) 
+	trunk/xmlrpc-lib/xmlrpc.h (File Modified) 
+
+
 nenolod     2005/09/28 04:24:54 UTC	(20050928-2419)
   Log:
   Import trystan's XMLRPC library with integration hacks.
