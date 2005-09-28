@@ -1,3 +1,14 @@
+nenolod     2005/09/28 06:14:07 UTC	(20050928-2433)
+  Log:
+  - Finish up the XMLRPC server code.
+  - Add a test method, test.method which echos back the first param. (echo server).
+  
+
+  Modified:
+	trunk/modules/xmlrpc/main.c (File Modified) 
+	trunk/src/xmlrpc.c (File Modified) 
+
+
 nenolod     2005/09/28 06:07:31 UTC	(20050928-2431)
   Log:
   Whoo! :P
