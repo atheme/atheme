@@ -1,3 +1,19 @@
+nenolod     2005/09/28 05:39:37 UTC	(20050928-2429)
+  Log:
+  More changes :/
+  
+
+  Modified:
+	trunk/Makefile.in (File Modified) 
+	trunk/configure (File Modified) 
+	trunk/configure.ac (File Modified) 
+	trunk/modules/xmlrpc/main.c (File Modified) 
+	trunk/src/Makefile.in (File Modified) 
+	trunk/src/base64.c (File Added) 
+	trunk/src/xmlrpc.c (File Added) 
+	trunk/xmlrpc-lib/ (File Deleted) 
+
+
 nenolod     2005/09/28 05:25:28 UTC	(20050928-2427)
   Log:
   - Add XMLRPC server module. Untested.

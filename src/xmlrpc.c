@@ -118,6 +118,7 @@ void xmlrpc_process(char *buffer)
 			else
 			{
 				xmlrpc_error_code = 4;
+				xmlrpc_generic_error(xmlrpc_error_code, "XMLRPC error: Unknown method requested.");
 			}
 		}
 		else

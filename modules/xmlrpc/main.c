@@ -4,7 +4,7 @@
  *
  * XMLRPC server code.
  *
- * $Id: main.c 2429 2005-09-28 05:39:37Z nenolod $
+ * $Id: main.c 2431 2005-09-28 06:07:31Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 2429 2005-09-28 05:39:37Z nenolod $",
+	"$Id: main.c 2431 2005-09-28 06:07:31Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -60,6 +60,8 @@ static int conf_xmlrpc(CONFIGENTRY *ce)
 static char *dump_buffer(char *buf, int length)
 {
 	connection_write_raw(request, buf);
+	sendq_flush(request);
+//	connection_close(request);
 }
 
 static int my_read(connection_t *cptr, char *buf)
@@ -81,6 +83,8 @@ static void do_packet(connection_t *cptr, char *buf)
 	request = cptr;
 
 	xmlrpc_process(buf);
+
+	*buf = '\0';
 }
 
 static void my_rhandler(connection_t * cptr)
@@ -122,6 +126,7 @@ void _modinit(module_t *m)
 	add_conf_item("PORT", &conf_xmlrpc_table, conf_xmlrpc_port);
 
 	xmlrpc_set_buffer(dump_buffer);
+	xmlrpc_set_options(XMLRPC_HTTP_HEADER, XMLRPC_ON);
 }
 
 void _moddeinit(void)
