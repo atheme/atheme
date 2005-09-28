@@ -4,7 +4,7 @@
  *
  * XMLRPC server code.
  *
- * $Id: main.c 2431 2005-09-28 06:07:31Z nenolod $
+ * $Id: main.c 2433 2005-09-28 06:14:07Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 2431 2005-09-28 06:07:31Z nenolod $",
+	"$Id: main.c 2433 2005-09-28 06:14:07Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -57,11 +57,18 @@ static int conf_xmlrpc(CONFIGENTRY *ce)
 
 /***************************************************************************/
 
+static char *testMethod(int parc, char *parv[])
+{
+	xmlrpc_send(2, "RETURN", parv[0]);
+}
+
+/***************************************************************************/
+
 static char *dump_buffer(char *buf, int length)
 {
 	connection_write_raw(request, buf);
 	sendq_flush(request);
-//	connection_close(request);
+	connection_close(request);
 }
 
 static int my_read(connection_t *cptr, char *buf)
@@ -127,12 +134,14 @@ void _modinit(module_t *m)
 
 	xmlrpc_set_buffer(dump_buffer);
 	xmlrpc_set_options(XMLRPC_HTTP_HEADER, XMLRPC_ON);
+	xmlrpc_register_method("test.method", testMethod);
 }
 
 void _moddeinit(void)
 {
 	connection_close(listener);
 
+	xmlrpc_unregister_method("test.method");
 	del_conf_item("HOST", &conf_xmlrpc_table);
 	del_conf_item("PORT", &conf_xmlrpc_table);
 	del_top_conf("XMLRPC");
