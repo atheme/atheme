@@ -1,3 +1,18 @@
+nenolod     2005/09/28 02:32:46 UTC	(20050928-2411)
+  Log:
+  This massive commit does the following:
+  
+  - Adds connection_write(connection_t *to, char *format, ...) for writing to connection_t's.
+  - Removes the debugging wallops from the libatheme code (which shouldn't be there)
+  - Fixes a missing symbol error in gen_listenerdemo.c
+  
+
+  Modified:
+	trunk/contrib/gen_listenerdemo.c (File Modified) 
+	trunk/include/connection.h (File Modified) 
+	trunk/libatheme/connection.c (File Modified) 
+
+
 nenolod     2005/09/28 01:51:23 UTC	(20050928-2409)
   Log:
   Add gen_listenerdemo.

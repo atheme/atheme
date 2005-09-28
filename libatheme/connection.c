@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 2411 2005-09-28 02:32:46Z nenolod $
+ * $Id: connection.c 2413 2005-09-28 02:40:36Z nenolod $
  */
 
 #include "atheme.h"
@@ -445,4 +445,21 @@ void connection_write(connection_t *to, char *format, ...)
 	buf[len] = '\0';
 
 	sendq_add(to, buf, len, 0);
+}
+
+/*
+ * connection_write_raw()
+ *
+ * inputs:
+ *       connection_t to write to, raw string to write
+ *
+ * outputs:
+ *       none
+ *
+ * side effects:
+ *       data is added to the connection_t sendq cache.
+ */
+void connection_write_raw(connection_t *to, char *data)
+{
+	sendq_add(to, data, strlen(data), 0);
 }
