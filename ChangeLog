@@ -1,3 +1,20 @@
+nenolod     2005/09/28 05:25:28 UTC	(20050928-2427)
+  Log:
+  - Add XMLRPC server module. Untested.
+  - Add configuration block to example.conf concerning the XMLRPC server.
+  - Remove unnecessary include -I../../xmlrpc-lib from the Makefiles.
+  - Add xmlrpc as a subdir in modules/Makefile.in.
+  
+
+  Modified:
+	trunk/dist/example.conf (File Modified) 
+	trunk/dist/example.userserv.conf (File Modified) 
+	trunk/modules/Makefile.in (File Modified) 
+	trunk/modules/xmlrpc/Makefile.in (File Modified) 
+	trunk/modules/xmlrpc/main.c (File Modified) 
+	trunk/xmlrpc-lib/Makefile.in (File Modified) 
+
+
 nenolod     2005/09/28 05:00:36 UTC	(20050928-2425)
   Log:
   Move some stuff around =)

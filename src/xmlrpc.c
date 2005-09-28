@@ -201,7 +201,7 @@ XMLRPCCmd *findXMLRPCCommand(XMLRPCCmdHash * hookEvtTable[], const char *name)
 
 	for (current = hookEvtTable[idx]; current; current = current->next)
 	{
-		if (stricmp(name, current->name) == 0)
+		if (strcasecmp(name, current->name) == 0)
 		{
 			return current->xml;
 		}
@@ -227,7 +227,7 @@ int addXMLCommand(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml)
 
 	for (current = hookEvtTable[idx]; current; current = current->next)
 	{
-		if (stricmp(xml->name, current->name) == 0)
+		if (strcasecmp(xml->name, current->name) == 0)
 		{
 			xml->next = current->xml;
 			current->xml = xml;
@@ -304,7 +304,7 @@ int delXMLRPCCommand(XMLRPCCmdHash * msgEvtTable[], XMLRPCCmd * xml, char *mod_n
 
 	for (current = msgEvtTable[idx]; current; current = current->next)
 	{
-		if (stricmp(xml->name, current->name) == 0)
+		if (strcasecmp(xml->name, current->name) == 0)
 		{
 			if (!lastHash)
 			{
@@ -313,7 +313,7 @@ int delXMLRPCCommand(XMLRPCCmdHash * msgEvtTable[], XMLRPCCmd * xml, char *mod_n
 				{
 					while (tail)
 					{
-						if (mod_name && tail->mod_name && (stricmp(mod_name, tail->mod_name) == 0))
+						if (mod_name && tail->mod_name && (strcasecmp(mod_name, tail->mod_name) == 0))
 						{
 							if (last)
 							{
@@ -343,7 +343,7 @@ int delXMLRPCCommand(XMLRPCCmdHash * msgEvtTable[], XMLRPCCmd * xml, char *mod_n
 				{
 					while (tail)
 					{
-						if (mod_name && tail->mod_name && (stricmp(mod_name, tail->mod_name) == 0))
+						if (mod_name && tail->mod_name && (strcasecmp(mod_name, tail->mod_name) == 0))
 						{
 							if (last)
 							{
@@ -1067,11 +1067,11 @@ int xmlrpc_set_options(int type, const char *value)
 {
 	if (type == XMLRPC_HTTP_HEADER)
 	{
-		if (!stricmp(value, XMLRPC_ON))
+		if (!strcasecmp(value, XMLRPC_ON))
 		{
 			xmlrpc.httpheader = 1;
 		}
-		if (!stricmp(value, XMLRPC_OFF))
+		if (!strcasecmp(value, XMLRPC_OFF))
 		{
 			xmlrpc.httpheader = 0;
 		}
@@ -1085,12 +1085,12 @@ int xmlrpc_set_options(int type, const char *value)
 	}
 	if (type == XMLRPC_INTTAG)
 	{
-		if (!stricmp(value, XMLRPC_I4))
+		if (!strcasecmp(value, XMLRPC_I4))
 		{
 			xmlrpc.inttagstart = xmlrpc_strdup("<i4>");
 			xmlrpc.inttagend = xmlrpc_strdup("</i4>");
 		}
-		if (!stricmp(value, XMLRPC_INT))
+		if (!strcasecmp(value, XMLRPC_INT))
 		{
 			xmlrpc.inttagstart = xmlrpc_strdup("<int>");
 			xmlrpc.inttagend = xmlrpc_strdup("</int>");

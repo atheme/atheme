@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2423 2005-09-28 04:48:23Z nenolod $
+# $Id: Makefile.in 2429 2005-09-28 05:39:37Z nenolod $
 #
 
 CC		= @CC@
@@ -18,7 +18,7 @@ CFLAGS		= @CFLAGS@ -I../include @PGINC@ @MYINC@
 
 VERSION		= @PACKAGE_VERSION@
 
-LIBS		= @LIBS@ @PQLIB@ @MYLIB@ -L../libatheme -L../xmlrpc-lib -lnomadxmlrpc -latheme
+LIBS		= @LIBS@ @PQLIB@ @MYLIB@ -L../libatheme -latheme
 LDFLAGS		= @LDFLAGS@
 CPPFLAGS	= @CPPFLAGS@
 
@@ -26,6 +26,7 @@ default: all
 
 BASE_SRCS =		\
 	atheme.c	\
+	base64.c	\
 	cmode.c		\
 	commandtree.c	\
 	conf.c		\
@@ -51,6 +52,7 @@ BASE_SRCS =		\
 	ubase64.c	\
 	uid.c		\
 	uplink.c	\
+	xmlrpc.c	\
 	version.c
 
 SRCS = ${BASE_SRCS}

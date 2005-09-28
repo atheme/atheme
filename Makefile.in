@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2421 2005-09-28 04:34:18Z nenolod $
+# $Id: Makefile.in 2429 2005-09-28 05:39:37Z nenolod $
 #
 
 CC		= @CC@
@@ -15,7 +15,7 @@ PREFIX		= @PREFIX@
 BIN		= atheme@EXEEXT@
 
 SHELL=/bin/sh
-SUBDIRS=libatheme xmlrpc-lib dbtool backend modules protocol src
+SUBDIRS=libatheme dbtool backend modules protocol src
 CLEANDIRS = ${SUBDIRS}
 
 MAKE = make ${MFLAGS}

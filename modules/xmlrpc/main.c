@@ -4,7 +4,7 @@
  *
  * XMLRPC server code.
  *
- * $Id: main.c 2427 2005-09-28 05:25:28Z nenolod $
+ * $Id: main.c 2429 2005-09-28 05:39:37Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 2427 2005-09-28 05:25:28Z nenolod $",
+	"$Id: main.c 2429 2005-09-28 05:39:37Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -119,7 +119,7 @@ void _modinit(module_t *m)
 
 	add_top_conf("XMLRPC", conf_xmlrpc);
 	add_conf_item("HOST", &conf_xmlrpc_table, conf_xmlrpc_host);
-	add_cont_item("PORT", &conf_xmlrpc_table, conf_xmlrpc_port);
+	add_conf_item("PORT", &conf_xmlrpc_table, conf_xmlrpc_port);
 
 	xmlrpc_set_buffer(dump_buffer);
 }
