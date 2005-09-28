@@ -1,3 +1,11 @@
+alambert    2005/09/28 06:27:03 UTC	(20050928-2437)
+  Log:
+  back out 2345...the one time I don't test and I screw it up :-) types don't match, will play tomorrow
+
+  Modified:
+	trunk/src/xmlrpc.c (File Modified) 
+
+
 alambert    2005/09/28 06:21:50 UTC	(20050928-2435)
   Log:
   be sure to encode XMLRPC error reasons -- they're strings, after all
