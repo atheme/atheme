@@ -1,0 +1,92 @@
+Nomad XML-RPC Library
+
+by Trystan Scott Lee
+
+==================================================================================
+
+The Nomad XML-RPC Library is a light weight, simple implentation of the XML-RPC
+specification (http://www.xmlrpc.com/spec), allowing developers to write applications
+that can process XML-RPC requests.
+
+The lib does not provide you with a socket listener it is up to the developer to
+handle the process of reading and writting to the sockets. 
+
+Type
+./configure
+make
+make sample
+
+==================================================================================
+
+xml_register_method : register a xml-rpc method and its function which will handle the
+                      data that is processed.
+
+xmlrpc_unregister_method : unregister a xml-rpc method, this will clean up the memory
+                           used to register the method
+
+xmlrpc_set_buffer : set the function to which the lib will pass its data when its done
+                    formatting the answer
+
+xmlrpc_set_options : Some options are define able for each method call these are
+       XMLRPC_HTTP_HEADER : in the spec http headers are required, however many implementations
+                            such as PHP do not send the http headers, use XMLRPC_ON, XMLRPC_OFF
+                            to enable
+       
+       XMLRPC_ENCODE : the spec allows you to set the text encoding, note that the default
+                       is off as defined by the spec
+      
+       XMLRPC_INTTAG : the xml tag for an integer data type is defined in two fashions <i4>
+                       and <int>, this option allows you to send the one you want, by default
+                       the lib sends <i4>, use XMLRPC_I4 for <i4> tags and XMLRPC_INT for <int>
+
+xmlrpc_generic_error : if you need to generate an error responce due to invalid information
+                       passed to your method you can call this function and it will generate
+                       a valid "fault" responce
+
+xmlrpc_process       : pass the received socket data to this function so that it can process the
+                       data, and pass it to the method handler
+
+xmlrpc_getlast_error : should the code error out it will set the error code you can check this
+                       by calling on this function.
+
+xmlrpc_send   : once your method call is done and you want to write data back to the client
+                call on this function so that the formatting can be done.
+
+xmlrpc_char_encode : encode the string to be xml compliant, the xml-rpc spec only states that
+                     < and & need to converted but xml itself says anything else is invalid
+
+xmlrpc_array : formats an <array> responce
+
+xmlrpc_double : formats a <double> responce
+
+xmlrpc_base64 : formats a <base64> encoded responce
+
+xmlrpc_boolean : formats a <boolean> responce
+
+xmlrpc_string  : formats a <string> responce
+
+xmlrpc_integer : formats a <i4> responce
+
+xmlrpc_time2date : formats a <dateTime.iso8601> responce
+
+xmlrpc_decode64 : decoded a base64 string
+
+=================================================================================
+TODO
+1. xmlrpc_integer : to make sure it does not overflow
+2. xmlrpc_integer : to ensure that we are passed digits
+3. add struct class member
+4. add more error codes
+
+=====================================================================================
+Error Codes
+
+1 : xmlrpc_process() was passed a NULL buffer
+2 : xmlrpc_parse() returned NULL, likely not a XML document
+3 : xmlrpc_method() returned NULL, likely XML document did not contain <methodname>
+4 : findXMLRPCCommand() returned NULL, able to find the method
+5 : xmlrpc_split_buf() returned an parameter count of 0
+6 : method has no registered function
+7 : function returned XMLRPC_STOP
+8 : xmlrpc_set_buffer() was passed a NULL variable
+

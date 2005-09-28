@@ -1,3 +1,13 @@
+nenolod     2005/09/28 04:06:09 UTC	(20050928-2417)
+  Log:
+  Version bump: 0.3beta3.
+  
+
+  Modified:
+	trunk/configure (File Modified) 
+	trunk/configure.ac (File Modified) 
+
+
 nenolod     2005/09/28 02:48:18 UTC	(20050928-2415)
   Log:
   - Add gen_echoserver which echos back incoming data, a demonstration of connection_write_raw().
