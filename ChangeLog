@@ -1,3 +1,12 @@
+nenolod     2005/09/28 01:18:00 UTC	(20050928-2407)
+  Log:
+  - Remove unused code from poll.c
+  
+
+  Modified:
+	trunk/libatheme/poll.c (File Modified) 
+
+
 jilles      2005/09/28 01:14:31 UTC	(20050928-2405)
   Log:
   Reassign slots in pollfds[] for each update_poll_fds().
