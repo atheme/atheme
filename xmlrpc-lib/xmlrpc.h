@@ -45,6 +45,13 @@ typedef struct XMLRPCCmdHash_ XMLRPCCmdHash;
 
 extern XMLRPCCmdHash *XMLRPCCMD[MAX_CMD_HASH];
 
+struct buffer_st {
+  char *data;
+  int length;
+  char *ptr;
+  int offset;
+};
+
 struct XMLRPCCmd_ {
     int (*func)(int ac, char **av);
 	char *name;

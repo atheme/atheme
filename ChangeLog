@@ -1,3 +1,19 @@
+nenolod     2005/09/28 04:24:54 UTC	(20050928-2419)
+  Log:
+  Import trystan's XMLRPC library with integration hacks.
+  
+
+  Modified:
+	trunk/doc/XMLRPC (File Added) 
+	trunk/testsuite/xmlrpc-lib.c (File Added) 
+	trunk/xmlrpc-lib/ (File Added) 
+	trunk/xmlrpc-lib/Makefile.in (File Added) 
+	trunk/xmlrpc-lib/README.Atheme (File Added) 
+	trunk/xmlrpc-lib/base64.c (File Added) 
+	trunk/xmlrpc-lib/xmlrpc.c (File Added) 
+	trunk/xmlrpc-lib/xmlrpc.h (File Added) 
+
+
 nenolod     2005/09/28 04:06:09 UTC	(20050928-2417)
   Log:
   Version bump: 0.3beta3.
