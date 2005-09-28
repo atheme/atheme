@@ -4,7 +4,7 @@
  *
  * XMLRPC server code.
  *
- * $Id: main.c 2439 2005-09-28 18:25:05Z nenolod $
+ * $Id: main.c 2441 2005-09-28 21:45:50Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 2439 2005-09-28 18:25:05Z nenolod $",
+	"$Id: main.c 2441 2005-09-28 21:45:50Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -59,7 +59,11 @@ static int conf_xmlrpc(CONFIGENTRY *ce)
 
 static int testMethod(int parc, char *parv[])
 {
-	xmlrpc_send(2, "RETURN", parv[0]);
+	char buf[XMLRPC_BUFSIZE];
+	char buf2[XMLRPC_BUFSIZE];
+	snprintf(buf2, XMLRPC_BUFSIZE, "return: %s", parv[0]);
+	xmlrpc_string(buf, buf2);
+	xmlrpc_send(1, buf);
 	return 0;
 }
 
@@ -134,7 +138,7 @@ void _modinit(module_t *m)
 	add_conf_item("PORT", &conf_xmlrpc_table, conf_xmlrpc_port);
 
 	xmlrpc_set_buffer(dump_buffer);
-	xmlrpc_set_options(XMLRPC_HTTP_HEADER, XMLRPC_ON);
+//	xmlrpc_set_options(XMLRPC_HTTP_HEADER, XMLRPC_ON);
 	xmlrpc_register_method("test.method", testMethod);
 }
 

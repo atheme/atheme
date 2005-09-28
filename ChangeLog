@@ -1,3 +1,17 @@
+nenolod     2005/09/28 18:25:05 UTC	(20050928-2439)
+  Log:
+  - Enable $Id$ stuff on xmlrpc.c, base64.c.
+  - Fix echoserver method.
+  - Add atheme.register_account (which works), and atheme.verify_account (/ns verify equivilant, not implemented yet.)
+  
+
+  Modified:
+	trunk/modules/xmlrpc/account.c (File Added) 
+	trunk/modules/xmlrpc/main.c (File Modified) 
+	trunk/src/base64.c  (Property Modified)
+	trunk/src/xmlrpc.c  (Property Modified)
+
+
 alambert    2005/09/28 06:27:03 UTC	(20050928-2437)
   Log:
   back out 2345...the one time I don't test and I screw it up :-) types don't match, will play tomorrow
