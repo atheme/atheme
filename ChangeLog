@@ -1,3 +1,12 @@
+nenolod     2005/09/28 21:45:50 UTC	(20050928-2441)
+  Log:
+  - fix a bug in test.method (echoserver.)
+  
+
+  Modified:
+	trunk/modules/xmlrpc/main.c (File Modified) 
+
+
 nenolod     2005/09/28 18:25:05 UTC	(20050928-2439)
   Log:
   - Enable $Id$ stuff on xmlrpc.c, base64.c.

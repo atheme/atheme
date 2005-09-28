@@ -5,7 +5,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 2193 2005-09-07 04:33:09Z nenolod $
+ * $Id: atheme.c 2443 2005-09-28 22:42:46Z jilles $
  */
 
 #include "atheme.h"
@@ -275,7 +275,8 @@ int main(int argc, char *argv[])
 
 	/* we're shutting down */
 	db_save(NULL);
-	quit_sts(chansvs.me->me, "shutting down");
+	if (chansvs.me != NULL && chansvs.me->me != NULL)
+		quit_sts(chansvs.me->me, "shutting down");
 
 	remove("var/atheme.pid");
 	connection_close(curr_uplink->conn);
