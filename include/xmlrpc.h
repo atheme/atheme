@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2005 Atheme Development Group
+ *                and Trystan Scott Lee <trystan@nomadirc.net>
+ *
+ * XMLRPC library header, hacked up for Atheme.
+ *
+ * $Id$
+ */
+#ifndef XMLRPC_H
+#define XMLRPC_H
+
 #include "atheme.h"
 
 #define XMLRPC_STOP 1
@@ -94,3 +105,5 @@ void xmlrpc_generic_error(int code, const char *string);
 void xmlrpc_send(int argc, ...);
 int xmlrpc_about(int ac, char **av);
 char *xmlrpc_char_encode(char *outbuffer, char *s1);
+
+#endif

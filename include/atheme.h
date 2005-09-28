@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 2333 2005-09-23 22:32:01Z jilles $
+ * $Id: atheme.h 2425 2005-09-28 05:00:36Z nenolod $
  */
 
 #ifndef ATHEME_H
@@ -31,6 +31,7 @@
 #include "linker.h"
 #include "culture.h"
 #include "callback.h"
+#include "xmlrpc.h"
 
 #ifndef timersub
 #define timersub(tvp, uvp, vvp)                                         \

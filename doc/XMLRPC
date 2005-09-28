@@ -1,6 +1,7 @@
 Nomad XML-RPC Library
-
 by Trystan Scott Lee
+
+Please note that the Atheme team has modified the original code a little bit.
 
 ==================================================================================
 
@@ -68,6 +69,10 @@ xmlrpc_string  : formats a <string> responce
 xmlrpc_integer : formats a <i4> responce
 
 xmlrpc_time2date : formats a <dateTime.iso8601> responce
+
+xmlrpc_struct_begin : formats a <struct> response
+
+xmlrpc_struct_end : formats a </struct> response
 
 xmlrpc_decode64 : decoded a base64 string
 
