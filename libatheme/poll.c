@@ -4,7 +4,7 @@
  *
  * Socketengine implementing poll().
  *
- * $Id: poll.c 2405 2005-09-28 01:14:31Z jilles $
+ * $Id: poll.c 2407 2005-09-28 01:18:00Z nenolod $
  */
 
 #include "atheme.h"
@@ -24,31 +24,6 @@ extern list_t connection_list; /* this lives in connection.c */
 #endif
 
 struct pollfd pollfds[FD_SETSIZE]; /* XXX We need a define indicating MAXCONN. */
-
-/*
- * poll_findslot()
- *
- * inputs:
- *       none
- *
- * outputs:
- *       slot for poll()
- *
- * side effects:
- *       none
- */
-int32_t poll_findslot(void)
-{
-	int32_t i;
-
-	for (i = 0; i < FD_SETSIZE; i++)
-	{
-		if (!pollfds[i].fd || pollfds[i].fd == -1)
-			return i;
-	}
-
-	return -1;
-}
 
 /*
  * init_socket_queues()

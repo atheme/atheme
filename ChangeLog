@@ -1,3 +1,12 @@
+jilles      2005/09/28 01:14:31 UTC	(20050928-2405)
+  Log:
+  Reassign slots in pollfds[] for each update_poll_fds().
+  
+
+  Modified:
+	trunk/libatheme/poll.c (File Modified) 
+
+
 nenolod     2005/09/27 17:34:30 UTC	(20050927-2403)
   Log:
   Listener code is working, almost.
