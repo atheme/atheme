@@ -4,7 +4,7 @@
  *
  * Socketengine implementing poll().
  *
- * $Id: poll.c 2243 2005-09-14 17:20:49Z nenolod $
+ * $Id: poll.c 2405 2005-09-28 01:14:31Z jilles $
  */
 
 #include "atheme.h"
@@ -83,26 +83,27 @@ static void update_poll_fds(void)
 {
 	node_t *n;
 	connection_t *cptr;
+	int slot = 0;
 
 	LIST_FOREACH(n, connection_list.head)
 	{
 		cptr = n->data;
 
-		if (cptr->pollslot == -1)
-			cptr->pollslot = poll_findslot();
+		cptr->pollslot = slot;
 
 		if (CF_IS_CONNECTING(cptr) || cptr->sendq.count != 0)
 		{
-			pollfds[cptr->pollslot].fd = cptr->fd;
-			pollfds[cptr->pollslot].events |= POLLWRNORM;
-			pollfds[cptr->pollslot].revents = 0;
+			pollfds[slot].fd = cptr->fd;
+			pollfds[slot].events |= POLLWRNORM;
+			pollfds[slot].revents = 0;
 		}
 		else
 		{
-			pollfds[cptr->pollslot].fd = cptr->fd;
-			pollfds[cptr->pollslot].events |= POLLRDNORM;
-			pollfds[cptr->pollslot].revents = 0;
+			pollfds[slot].fd = cptr->fd;
+			pollfds[slot].events |= POLLRDNORM;
+			pollfds[slot].revents = 0;
 		}
+		slot++;
 	}
 }
 
