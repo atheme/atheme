@@ -1,3 +1,12 @@
+nenolod     2005/09/28 02:48:18 UTC	(20050928-2415)
+  Log:
+  - Add gen_echoserver which echos back incoming data, a demonstration of connection_write_raw().
+  
+
+  Modified:
+	trunk/contrib/gen_echoserver.c (File Added) 
+
+
 nenolod     2005/09/28 02:40:36 UTC	(20050928-2413)
   Log:
   - Add connection_write_raw() which is the same thing as connection_write,
