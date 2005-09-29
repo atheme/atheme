@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2427 2005-09-28 05:25:28Z nenolod $
+# $Id: Makefile.in 2449 2005-09-29 18:37:16Z nenolod $
 #
 
 CC		= @CC@
@@ -25,7 +25,9 @@ CPPFLAGS	= @CPPFLAGS@
 
 default: all
 
-BASE_SRCS = main.c
+BASE_SRCS = 		\
+	main.c 		\
+	account.c
 	
 SRCS = ${BASE_SRCS}
 

@@ -1,3 +1,15 @@
+nenolod     2005/09/29 05:29:24 UTC	(20050929-2447)
+  Log:
+  - Don't allow users to register their UID as a nick.
+  - Remove unused node_t *n (reported by Trystan.)
+  
+
+  Modified:
+	trunk/modules/nickserv/register.c (File Modified) 
+	trunk/modules/operserv/uptime.c (File Modified) 
+	trunk/src/.indent.pro (File Modified) 
+
+
 jilles      2005/09/29 01:21:15 UTC	(20050929-2445)
   Log:
   Avoid quit_sts() crashes on SIGINT and SIGUSR1 as well.

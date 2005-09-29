@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 2439 2005-09-28 18:25:05Z nenolod $
+ * $Id: account.c 2449 2005-09-29 18:37:16Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 2439 2005-09-28 18:25:05Z nenolod $",
+	"$Id: account.c 2449 2005-09-29 18:37:16Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,19 +48,19 @@ static int register_account(int parc, char *parv[])
 
 	if (parc < 3)
 	{
-		xmlrpc_generic_error(4, "register_account: not enough parameters");
+		xmlrpc_generic_error(4, "Insufficient parameters.");
 		return 0;
 	}
 
 	if (using_nickserv == TRUE && (u = user_find(parv[0])) != NULL)
 	{
-		xmlrpc_generic_error(5, "a user matching this account is on IRC");
+		xmlrpc_generic_error(5, "A user matching this account is already on IRC.");
 		return 0;
 	}
 
 	if (!strcasecmp(parv[0], parv[1]))
 	{
-		xmlrpc_generic_error(2, "you cannot use your account name as a password.");
+		xmlrpc_generic_error(2, "You cannot use your account name as a password.");
 		return 0;
 	}
 
@@ -121,8 +121,106 @@ static int register_account(int parc, char *parv[])
 	return 0;
 }
 
+/*
+ * atheme.verify_account
+ *
+ * XML inputs:
+ *       requested operation, account name, key
+ *
+ * XML outputs:
+ *       fault 1 - the account is not registered
+ *       fault 2 - the operation has already been verified
+ *       fault 3 - invalid verification key for this operation
+ *       fault 4 - insufficient parameters
+ *       fault 5 - invalid operation requested
+ *       default - success
+ *
+ * Side Effects:
+ *       an account-related operation is verified.
+ */      
 static int verify_account(int parc, char *parv[])
 {
+	myuser_t *mu;
+	metadata_t *md;
+	char buf[XMLRPC_BUFSIZE];
+
+	if (parc < 3)
+	{
+		xmlrpc_generic_error(4, "Insufficient parameters.");
+		return 0;
+	}
+
+	if (!(mu = myuser_find(parv[1])))
+	{
+		xmlrpc_generic_error(1, "The account is not registered.");
+		return 0;
+	}
+
+	if (!strcasecmp(parv[0], "REGISTER"))
+	{
+		metadata_t *md;
+
+		if (!(mu->flags & MU_WAITAUTH) || !(md = metadata_find(mu, METADATA_USER, "private:verify:register:key")))
+		{
+			xmlrpc_generic_error(2, "The operation has already been verified.");
+			return 0;
+		}
+
+		if (!strcasecmp(key, md->value))
+		{
+			mu->flags &= ~MU_WAITAUTH;
+
+			snoop("REGISTER:VS: \2%s\2 via xmlrpc", mu->email);
+
+			metadata_delete(mu, METADATA_USER, "private:verify:register:key");
+			metadata_delete(mu, METADATA_USER, "private:verify:register:timestamp");
+
+			xmlrpc_string(buf, "Registration verification was successful.");
+			xmlrpc_send(1, buf);
+			return 0;
+		}
+
+		snoop("REGISTER:VF: \2%s\2 via xmlrpc", mu->email);
+		xmlrpc_generic_error(3, "Invalid key for this operation.");
+		return 0;
+	}
+	else if (!strcasecmp(op, "EMAILCHG"))
+	{
+		if (!(md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:key")))
+		{
+			xmlrpc_generic_error(2, "The operation has already been verified.");
+			return 0;
+		}
+
+		if (!strcasecmp(key, md->value))
+                {
+			md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:newemail");
+
+			strlcpy(mu->email, md->value, EMAILLEN);
+
+			snoop("SET:EMAIL:VS: \2%s\2 via xmlrpc", mu->email);
+
+			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:key");
+			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:newemail");
+			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:timestamp");
+
+			xmlrpc_string(buf, "E-Mail change verification was successful.");
+			xmlrpc_send(1, buf);
+
+			return 0;
+                }
+
+		snoop("REGISTER:VF: \2%s\2 by \2%s\2", mu->email, origin);
+		xmlrpc_generic_error(3, "Invalid key for this operation.");
+
+		return 0;
+	}
+	else
+	{
+		xmlrpc_generic_error(5, "Invalid verification operation requested.");
+		return 0;
+	}
+
 	return 0;
 }
 
