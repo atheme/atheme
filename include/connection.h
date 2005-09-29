@@ -4,7 +4,7 @@
  *
  * This contains the connection_t structure.
  *
- * $Id: connection.h 2413 2005-09-28 02:40:36Z nenolod $
+ * $Id: connection.h 2451 2005-09-29 19:05:29Z nenolod $
  */
 
 #ifndef CONNECTION_H
@@ -27,6 +27,8 @@ struct connection_
 	time_t last_recv;
 
 	struct sockaddr_in *sa;
+	struct sockaddr saddr;
+	uint32_t saddr_size;
 
 	void (*read_handler)(connection_t *);
 	void (*write_handler)(connection_t *);

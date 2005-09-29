@@ -1,3 +1,13 @@
+nenolod     2005/09/29 18:37:16 UTC	(20050929-2449)
+  Log:
+  - Add atheme.verify_account for account activity verification.
+  
+
+  Modified:
+	trunk/modules/xmlrpc/Makefile.in (File Modified) 
+	trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 nenolod     2005/09/29 05:29:24 UTC	(20050929-2447)
   Log:
   - Don't allow users to register their UID as a nick.

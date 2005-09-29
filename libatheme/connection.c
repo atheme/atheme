@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 2413 2005-09-28 02:40:36Z nenolod $
+ * $Id: connection.c 2451 2005-09-29 19:05:29Z nenolod $
  */
 
 #include "atheme.h"
@@ -92,10 +92,14 @@ connection_t *connection_add(const char *name, int32_t fd, uint32_t flags,
 	cptr->flags = flags;
 	cptr->first_recv = CURRTIME;
 	cptr->last_recv = CURRTIME;
-	cptr->sa = NULL;
 
 	cptr->read_handler = read_handler;
 	cptr->write_handler = write_handler;
+
+	getpeername(cptr->fd, &cptr->saddr, &cptr->saddr_size);
+	cptr->sa = (struct sockaddr_in *) &cptr->saddr;
+
+	inet_ntop(AF_INET, &cptr->sa->sin_addr, cptr->hbuf, BUFSIZE);
 
 	node_add(cptr, node_create(), &connection_list);
 
@@ -378,6 +382,7 @@ connection_t *connection_accept_tcp(connection_t *cptr,
 	void (*write_handler)(connection_t *))
 {
 	char buf[BUFSIZE];
+	connection_t *newptr;
 	socket_t s;
 	uint32_t optval;
 
@@ -391,9 +396,11 @@ connection_t *connection_accept_tcp(connection_t *cptr,
 	if (s > me.maxfd)
 		me.maxfd = s;
 
+	socket_setnonblocking(s);
+
 	strlcpy(buf, "incoming connection", BUFSIZE);
-	cptr = connection_add(buf, s, 0, read_handler, write_handler);
-	return cptr;
+	newptr = connection_add(buf, s, 0, read_handler, write_handler);
+	return newptr;
 }
 
 /*
