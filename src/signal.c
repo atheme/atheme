@@ -4,7 +4,7 @@
  *
  * This file contains the signal handling routines.
  *
- * $Id: signal.c 908 2005-07-17 04:00:28Z w00t $
+ * $Id: signal.c 2445 2005-09-29 01:21:15Z jilles $
  */
 
 #include "atheme.h"
@@ -36,7 +36,8 @@ void sighandler(int signum)
         else if (signum == SIGINT && (runflags & RF_LIVE))
         {
                 wallops("Exiting on signal %d.", signum);
-                quit_sts(chansvs.me->me, "caught interrupt");
+                if (chansvs.me != NULL && chansvs.me->me != NULL)
+                        quit_sts(chansvs.me->me, "caught interrupt");
                 me.connected = FALSE;
                 slog(LG_INFO, "sighandler(): caught interrupt; exiting...");
                 runflags |= RF_SHUTDOWN;
@@ -68,7 +69,8 @@ void sighandler(int signum)
         else if (signum == SIGUSR1)
         {
                 wallops("Panic! Out of memory.");
-                quit_sts(chansvs.me->me, "out of memory!");
+                if (chansvs.me != NULL && chansvs.me->me != NULL)
+                        quit_sts(chansvs.me->me, "out of memory!");
                 me.connected = FALSE;
                 slog(LG_INFO, "sighandler(): out of memory; exiting");
                 runflags |= RF_SHUTDOWN;

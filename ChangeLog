@@ -1,3 +1,12 @@
+jilles      2005/09/28 22:42:46 UTC	(20050928-2443)
+  Log:
+  Fix crash on shutdown if a connection with ircd was never established.
+  
+
+  Modified:
+	trunk/src/atheme.c (File Modified) 
+
+
 nenolod     2005/09/28 21:45:50 UTC	(20050928-2441)
   Log:
   - fix a bug in test.method (echoserver.)
