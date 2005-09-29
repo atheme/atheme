@@ -1,4 +1,4 @@
-/* $$Id: .indent.pro 2049 2005-09-02 05:45:25Z nenolod $ */
+/* $Id: .indent.pro 2447 2005-09-29 05:29:24Z nenolod $ */
 
 /* copy this file to the source dir then run indent file.c */
 

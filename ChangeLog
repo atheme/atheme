@@ -1,3 +1,12 @@
+jilles      2005/09/29 01:21:15 UTC	(20050929-2445)
+  Log:
+  Avoid quit_sts() crashes on SIGINT and SIGUSR1 as well.
+  
+
+  Modified:
+	trunk/src/signal.c (File Modified) 
+
+
 jilles      2005/09/28 22:42:46 UTC	(20050928-2443)
   Log:
   Fix crash on shutdown if a connection with ircd was never established.

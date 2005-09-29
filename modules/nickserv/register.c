@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 2173 2005-09-05 21:32:17Z jilles $
+ * $Id: register.c 2447 2005-09-29 05:29:24Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 2173 2005-09-05 21:32:17Z jilles $",
+	"$Id: register.c 2447 2005-09-29 05:29:24Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -58,6 +58,13 @@ static void ns_cmd_register(char *origin)
 	if ((strlen(pass) > 32) || (strlen(email) >= EMAILLEN))
 	{
 		notice(nicksvs.nick, origin, "Invalid parameters specified for \2REGISTER\2.");
+		return;
+	}
+
+	if (*u->uid && IsDigit(*u->uid))
+	{
+		notice(nicksvs.nick, origin, "For security reasons, you can't register your UID.");
+		notice(nicksvs.nick, origin, "Please change to a real nickname, and try again.");
 		return;
 	}
 
