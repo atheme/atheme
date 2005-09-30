@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 2455 2005-09-30 01:22:43Z nenolod $
+ * $Id: account.c 2463 2005-09-30 06:13:09Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 2455 2005-09-30 01:22:43Z nenolod $",
+	"$Id: account.c 2463 2005-09-30 06:13:09Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -166,7 +166,7 @@ static int verify_account(int parc, char *parv[])
 			return 0;
 		}
 
-		if (!strcasecmp(key, md->value))
+		if (!strcasecmp(parv[2], md->value))
 		{
 			mu->flags &= ~MU_WAITAUTH;
 
@@ -184,7 +184,7 @@ static int verify_account(int parc, char *parv[])
 		xmlrpc_generic_error(3, "Invalid key for this operation.");
 		return 0;
 	}
-	else if (!strcasecmp(op, "EMAILCHG"))
+	else if (!strcasecmp(parv[0], "EMAILCHG"))
 	{
 		if (!(md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:key")))
 		{
@@ -192,7 +192,7 @@ static int verify_account(int parc, char *parv[])
 			return 0;
 		}
 
-		if (!strcasecmp(key, md->value))
+		if (!strcasecmp(parv[2], md->value))
                 {
 			md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:newemail");
 
@@ -210,7 +210,7 @@ static int verify_account(int parc, char *parv[])
 			return 0;
                 }
 
-		snoop("REGISTER:VF: \2%s\2 by \2%s\2", mu->email, origin);
+		snoop("REGISTER:VF: \2%s\2 via xmlrpc", mu->email);
 		xmlrpc_generic_error(3, "Invalid key for this operation.");
 
 		return 0;
