@@ -1,3 +1,18 @@
+nenolod     2005/09/30 04:22:12 UTC	(20050930-2457)
+  Log:
+  - Add .indent.pro to protocol/
+  - Add ultimate3 protocol support.
+  
+  Contributed by Trystan.
+  
+
+  Modified:
+	trunk/include/protocol/ultimate3.h (File Added) 
+	trunk/protocol/.indent.pro (File Added) 
+	trunk/protocol/Makefile.in (File Modified) 
+	trunk/protocol/ultimate3.c (File Added) 
+
+
 nenolod     2005/09/30 01:22:43 UTC	(20050930-2455)
   Log:
   - Add atheme.login, which creates an authentication ticket.
