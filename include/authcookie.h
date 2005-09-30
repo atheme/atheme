@@ -4,7 +4,7 @@
  *
  * Remote authentication ticket management.
  *
- * $Id: authcookie.h 2453 2005-09-30 01:14:59Z nenolod $
+ * $Id: authcookie.h 2467 2005-09-30 06:21:15Z nenolod $
  */
 
 #ifndef AUTHCOOKIE_H
@@ -15,7 +15,7 @@ typedef struct authcookie_ authcookie_t;
 struct authcookie_ {
 	char *ticket;
 	myuser_t *myuser;
-	time_t expires;
+	time_t expire;
 	node_t node;
 };
 
