@@ -1,3 +1,13 @@
+nenolod     2005/09/30 04:24:55 UTC	(20050930-2459)
+  Log:
+  Use uplink-specific vhosts if available. 
+  Reported by Trystan.
+  
+
+  Modified:
+	trunk/src/uplink.c (File Modified) 
+
+
 nenolod     2005/09/30 04:22:12 UTC	(20050930-2457)
   Log:
   - Add .indent.pro to protocol/

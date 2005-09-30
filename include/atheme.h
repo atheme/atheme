@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 2453 2005-09-30 01:14:59Z nenolod $
+ * $Id: atheme.h 2461 2005-09-30 06:06:33Z nenolod $
  */
 
 #ifndef ATHEME_H
@@ -32,7 +32,6 @@
 #include "culture.h"
 #include "callback.h"
 #include "xmlrpc.h"
-#include "authcookie.h"
 
 #ifndef timersub
 #define timersub(tvp, uvp, vvp)                                         \
@@ -279,6 +278,7 @@ struct timeval burstime;
 #include "servtree.h"
 #include "services.h"
 #include "users.h"
+#include "authcookie.h"
 
 /* *INDENT-ON* */
 
