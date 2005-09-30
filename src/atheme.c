@@ -5,7 +5,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 2443 2005-09-28 22:42:46Z jilles $
+ * $Id: atheme.c 2469 2005-09-30 21:36:58Z nenolod $
  */
 
 #include "atheme.h"
@@ -17,23 +17,19 @@ boolean_t cold_start = FALSE;
 /* *INDENT-OFF* */
 static void print_help(void)
 {
-printf(
-"usage: atheme [-c config] [-dhnv]\n\n"
-
-"-c <file>    Specify the config file\n"
-"-d           Start in debugging mode\n"
-"-h           Print this message and exit\n"
-"-n           Don't fork into the background (log screen + log file)\n"
-"-v           Print version information and exit\n");
+  printf("usage: atheme [-c config] [-dhnv]\n\n"
+	 "-c <file>    Specify the config file\n"
+	 "-d           Start in debugging mode\n"
+	 "-h           Print this message and exit\n"
+	 "-n           Don't fork into the background (log screen + log file)\n"
+	 "-v           Print version information and exit\n");
 }
 
 static void print_version(void)
 {
-printf(
-"Atheme IRC Services (atheme-%s.%s)\n\n"
-"Copyright (c) 2005 Atheme Development Group\n"
-"Rights to this code are documented in doc/LICENSE.\n", version, generation
-);
+  printf("Atheme IRC Services (atheme-%s.%s)\n\n"
+	 "Copyright (c) 2005 Atheme Development Group\n"
+	 "Rights to this code are documented in doc/LICENSE.\n", version, generation);
 }
 /* *INDENT-ON* */
 
@@ -171,6 +167,8 @@ int main(int argc, char *argv[])
 
 	conf_init();
 	conf_parse();
+
+	authcookie_init();
 
 	if (!pmodule_loaded)
 	{
