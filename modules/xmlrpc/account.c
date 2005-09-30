@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 2449 2005-09-29 18:37:16Z nenolod $
+ * $Id: account.c 2455 2005-09-30 01:22:43Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 2449 2005-09-29 18:37:16Z nenolod $",
+	"$Id: account.c 2455 2005-09-30 01:22:43Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -224,6 +224,50 @@ static int verify_account(int parc, char *parv[])
 	return 0;
 }
 
+/*
+ * atheme.login
+ *
+ * XML Inputs:
+ *       account name and password
+ *
+ * XML Outputs:
+ *       fault 1 - account is not registered
+ *       fault 2 - invalid username and password
+ *       fault 4 - insufficient parameters
+ *       default - success (authcookie)
+ *
+ * Side Effects:
+ *       an authcookie ticket is created for the myuser_t.
+ */
+static int do_login(int parc, char *parv[])
+{
+	myuser_t *mu;
+	char buf[BUFSIZE];
+
+	if (parc < 2)
+	{
+		xmlrpc_generic_error(4, "Insufficient parameters.");
+		return 0;
+	}
+
+	if (!(mu = myuser_find(parv[0])))
+	{
+		xmlrpc_generic_error(1, "The account is not registered.");
+		return 0;
+	}
+
+	if (strcmp(mu->pass, parv[1]))
+	{
+		xmlrpc_generic_error(2, "The password is not valid for this account.");
+		return 0;
+	}
+
+	xmlrpc_string(buf, authcookie_create(mu));
+	xmlrpc_send(1, buf);
+
+	return 0;
+}
+
 void _modinit(module_t *m)
 {
 	if (module_find_published("nickserv/main"))
@@ -231,10 +275,12 @@ void _modinit(module_t *m)
 
 	xmlrpc_register_method("atheme.register_account", register_account);
 	xmlrpc_register_method("atheme.verify_account", verify_account);	
+	xmlrpc_register_method("atheme.login", do_login);
 }
 
 void _moddeinit(void)
 {
 	xmlrpc_unregister_method("atheme.register_account");
 	xmlrpc_unregister_method("atheme.verify_account");
+	xmlrpc_unregister_method("atheme.login");
 }

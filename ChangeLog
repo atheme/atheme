@@ -1,3 +1,17 @@
+nenolod     2005/09/30 01:14:59 UTC	(20050930-2453)
+  Log:
+  Add authcookie stuff. Some connection.c tweaks too.
+  
+
+  Modified:
+	trunk/include/atheme.h (File Modified) 
+	trunk/include/authcookie.h (File Added) 
+	trunk/libatheme/connection.c (File Modified) 
+	trunk/modules/xmlrpc/main.c (File Modified) 
+	trunk/src/Makefile.in (File Modified) 
+	trunk/src/authcookie.c (File Added) 
+
+
 nenolod     2005/09/29 19:05:29 UTC	(20050929-2451)
   Log:
   Populate cptr->hbuf with information.
