@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2215 2005-09-10 18:30:51Z nenolod $
+# $Id: Makefile.in 2457 2005-09-30 04:22:12Z nenolod $
 #
 
 CC		= @CC@
@@ -39,6 +39,7 @@ BASE_SRCS = 		\
 	scylla.c        \
 	shadowircd.c    \
 	sorcery.c       \
+	ultimate3.c	\
 	undernet.c      \
 	unreal.c
 
