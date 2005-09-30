@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 2451 2005-09-29 19:05:29Z nenolod $
+ * $Id: connection.c 2453 2005-09-30 01:14:59Z nenolod $
  */
 
 #include "atheme.h"
@@ -96,6 +96,8 @@ connection_t *connection_add(const char *name, int32_t fd, uint32_t flags,
 	cptr->read_handler = read_handler;
 	cptr->write_handler = write_handler;
 
+	/* XXX */
+	cptr->saddr_size = sizeof(&cptr->saddr);
 	getpeername(cptr->fd, &cptr->saddr, &cptr->saddr_size);
 	cptr->sa = (struct sockaddr_in *) &cptr->saddr;
 

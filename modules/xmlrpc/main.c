@@ -4,7 +4,7 @@
  *
  * XMLRPC server code.
  *
- * $Id: main.c 2441 2005-09-28 21:45:50Z nenolod $
+ * $Id: main.c 2453 2005-09-30 01:14:59Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 2441 2005-09-28 21:45:50Z nenolod $",
+	"$Id: main.c 2453 2005-09-30 01:14:59Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -113,7 +113,7 @@ static void do_listen(connection_t *cptr)
 {
 	connection_t *newptr = connection_accept_tcp(cptr,
 		my_rhandler, sendq_flush);
-	slog(LG_DEBUG, "do_listen(): accepted %d", cptr->fd);
+	slog(LG_DEBUG, "do_listen(): accepted %d [%s]", cptr->fd, cptr->hbuf);
 }
 
 static void xmlrpc_config_ready(void *vptr)

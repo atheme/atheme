@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2429 2005-09-28 05:39:37Z nenolod $
+# $Id: Makefile.in 2453 2005-09-30 01:14:59Z nenolod $
 #
 
 CC		= @CC@
@@ -26,6 +26,7 @@ default: all
 
 BASE_SRCS =		\
 	atheme.c	\
+	authcookie.c	\
 	base64.c	\
 	cmode.c		\
 	commandtree.c	\

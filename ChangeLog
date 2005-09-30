@@ -1,3 +1,13 @@
+nenolod     2005/09/29 19:05:29 UTC	(20050929-2451)
+  Log:
+  Populate cptr->hbuf with information.
+  
+
+  Modified:
+	trunk/include/connection.h (File Modified) 
+	trunk/libatheme/connection.c (File Modified) 
+
+
 nenolod     2005/09/29 18:37:16 UTC	(20050929-2449)
   Log:
   - Add atheme.verify_account for account activity verification.
