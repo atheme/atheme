@@ -1,3 +1,11 @@
+nenolod     2005/09/30 21:36:58 UTC	(20050930-2469)
+  Log:
+  Add authcookie_init() to startup procedure, fixes XMLRPC atheme.login crash
+
+  Modified:
+	trunk/src/atheme.c (File Modified) 
+
+
 nenolod     2005/09/30 06:21:15 UTC	(20050930-2467)
   Log:
   Forgot the header.

@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 2463 2005-09-30 06:13:09Z nenolod $
+ * $Id: account.c 2471 2005-10-01 00:47:40Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 2463 2005-09-30 06:13:09Z nenolod $",
+	"$Id: account.c 2471 2005-10-01 00:47:40Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -66,13 +66,13 @@ static int register_account(int parc, char *parv[])
 
 	if (!validemail(parv[2]))
 	{
-		xmlrpc_generic_error(3, "invalid email address");
+		xmlrpc_generic_error(3, "The E-Mail address you provided is invalid.");
 		return 0;
 	}
 
 	if ((mu = myuser_find(parv[0])) != NULL)
 	{
-		xmlrpc_generic_error(1, "account already exists");
+		xmlrpc_generic_error(1, "The account is already registered.");
 		return 0;
 	}
 
@@ -89,7 +89,7 @@ static int register_account(int parc, char *parv[])
 
 	if (tcnt >= me.maxusers)
 	{
-		xmlrpc_generic_error(6, "too many accounts registered for this email.");
+		xmlrpc_generic_error(6, "Too many accounts are associated with this e-mail address.");
 		return 0;
 	}
 
@@ -268,6 +268,54 @@ static int do_login(int parc, char *parv[])
 	return 0;
 }
 
+/*
+ * atheme.logout
+ *
+ * XML inputs:
+ *       authcookie, and account name.
+ *
+ * XML outputs:
+ *       fault 1 - validation failed
+ *       fault 2 - unknown authcookie
+ *       fault 3 - unknown user
+ *       fault 4 - insufficient parameters
+ *       default - success message
+ *
+ * Side Effects:
+ *       an authcookie ticket is destroyed.
+ */
+static int do_logout(int parc, char *parv[])
+{
+	authcookie_t *ac;
+	myuser_t *mu;
+
+        if (parc < 2)
+        {
+                xmlrpc_generic_error(4, "Insufficient parameters.");
+                return 0;
+        }
+
+        if ((ac = authcookie_find(parv[0], NULL)) == NULL)
+        {
+                xmlrpc_generic_error(2, "Unknown authcookie.");
+                return 0;
+        }
+
+        if ((mu = myuser_find(parv[1])) == NULL)
+        {
+                xmlrpc_generic_error(3, "Unknown user.");
+                return 0;
+        }
+
+        if (authcookie_validate(parv[0], mu) == FALSE)
+        {
+                xmlrpc_generic_error(1, "Invalid authcookie for this account.");
+                return 0;
+        }
+
+        authcookie_destroy(ac);
+}
+
 void _modinit(module_t *m)
 {
 	if (module_find_published("nickserv/main"))
@@ -276,6 +324,7 @@ void _modinit(module_t *m)
 	xmlrpc_register_method("atheme.register_account", register_account);
 	xmlrpc_register_method("atheme.verify_account", verify_account);	
 	xmlrpc_register_method("atheme.login", do_login);
+        xmlrpc_register_method("atheme.logout", do_logout);
 }
 
 void _moddeinit(void)
@@ -283,4 +332,5 @@ void _moddeinit(void)
 	xmlrpc_unregister_method("atheme.register_account");
 	xmlrpc_unregister_method("atheme.verify_account");
 	xmlrpc_unregister_method("atheme.login");
+        xmlrpc_unregister_method("atheme.logout");
 }
