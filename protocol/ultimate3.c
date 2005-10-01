@@ -4,18 +4,13 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 2457 2005-09-30 04:22:12Z nenolod $
+ * $Id: ultimate3.c 2491 2005-10-01 04:26:53Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1
-(
-	"protocol/ultimate3", TRUE, _modinit, NULL,
-	"$Id: ultimate3.c 2457 2005-09-30 04:22:12Z nenolod $",
-	"Atheme Development Group <http://www.atheme.org>"
-);
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 2491 2005-10-01 04:26:53Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -77,8 +72,7 @@ struct cmode_ ultimate3_prefix_mode_list[] = {
 /* *INDENT-ON* */
 
 /* login to our uplink */
-static uint8_t
-ultimate3_server_login(void)
+static uint8_t ultimate3_server_login(void)
 {
 	int8_t ret;
 
@@ -98,14 +92,11 @@ ultimate3_server_login(void)
 }
 
 /* introduce a client */
-static user_t *
-ultimate3_introduce_nick(char *nick, char *user, char *host, char *real,
-    char *modes)
+static user_t *ultimate3_introduce_nick(char *nick, char *user, char *host, char *real, char *modes)
 {
 	user_t *u;
 
-	sts("CLIENT %s 1 %ld %s + %s %s * %s 0 0 :%s", nick, CURRTIME, modes,
-	    user, host, me.name, real);
+	sts("CLIENT %s 1 %ld %s + %s %s * %s 0 0 :%s", nick, CURRTIME, modes, user, host, me.name, real);
 
 	u = user_add(nick, user, host, NULL, NULL, NULL, real, me.me);
 	if (strchr(modes, 'o'))
@@ -114,8 +105,7 @@ ultimate3_introduce_nick(char *nick, char *user, char *host, char *real,
 	return u;
 }
 
-static void
-ultimate3_quit_sts(user_t * u, char *reason)
+static void ultimate3_quit_sts(user_t *u, char *reason)
 {
 	if (!me.connected)
 		return;
@@ -126,8 +116,7 @@ ultimate3_quit_sts(user_t * u, char *reason)
 }
 
 /* WALLOPS wrapper */
-static void
-ultimate3_wallops(char *fmt, ...)
+static void ultimate3_wallops(char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -143,19 +132,21 @@ ultimate3_wallops(char *fmt, ...)
 }
 
 /* join a channel */
-static void
-ultimate3_join(char *chan, char *nick)
+static void ultimate3_join(char *chan, char *nick)
 {
 	channel_t *c = channel_find(chan);
 	chanuser_t *cu;
 
-	if (!c) {
-		sts(":%s SJOIN %ld %s +nt :@%s", me.name, CURRTIME, chan,
-		    nick);
+	if (!c)
+	{
+		sts(":%s SJOIN %ld %s +nt :@%s", me.name, CURRTIME, chan, nick);
 
 		c = channel_add(chan, CURRTIME);
-	} else {
-		if ((cu = chanuser_find(c, user_find(nick)))) {
+	}
+	else
+	{
+		if ((cu = chanuser_find(c, user_find(nick))))
+		{
 			slog(LG_DEBUG, "join(): i'm already in `%s'", c->name);
 			return;
 		}
@@ -168,8 +159,7 @@ ultimate3_join(char *chan, char *nick)
 }
 
 /* kicks a user from a channel */
-static void
-ultimate3_kick(char *from, char *channel, char *to, char *reason)
+static void ultimate3_kick(char *from, char *channel, char *to, char *reason)
 {
 	channel_t *chan = channel_find(channel);
 	user_t *user = user_find(to);
@@ -183,8 +173,7 @@ ultimate3_kick(char *from, char *channel, char *to, char *reason)
 }
 
 /* PRIVMSG wrapper */
-static void
-ultimate3_msg(char *from, char *target, char *fmt, ...)
+static void ultimate3_msg(char *from, char *target, char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -197,8 +186,7 @@ ultimate3_msg(char *from, char *target, char *fmt, ...)
 }
 
 /* NOTICE wrapper */
-static void
-ultimate3_notice(char *from, char *target, char *fmt, ...)
+static void ultimate3_notice(char *from, char *target, char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -217,8 +205,7 @@ ultimate3_notice(char *from, char *target, char *fmt, ...)
 	sts(":%s NOTICE %s :%s", from, target, buf);
 }
 
-static void
-ultimate3_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
+static void ultimate3_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -231,8 +218,7 @@ ultimate3_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
 }
 
 /* KILL wrapper */
-static void
-ultimate3_skill(char *from, char *nick, char *fmt, ...)
+static void ultimate3_skill(char *from, char *nick, char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -245,8 +231,7 @@ ultimate3_skill(char *from, char *nick, char *fmt, ...)
 }
 
 /* PART wrapper */
-static void
-ultimate3_part(char *chan, char *nick)
+static void ultimate3_part(char *chan, char *nick)
 {
 	user_t *u = user_find(nick);
 	channel_t *c = channel_find(chan);
@@ -264,20 +249,16 @@ ultimate3_part(char *chan, char *nick)
 }
 
 /* server-to-server KLINE wrapper */
-static void
-ultimate3_kline_sts(char *server, char *user, char *host, long duration,
-    char *reason)
+static void ultimate3_kline_sts(char *server, char *user, char *host, long duration, char *reason)
 {
 	if (!me.connected)
 		return;
 
-	sts(":%s AKILL %s %s %ld %s %ld :%s", me.name, host, user, duration,
-	    opersvs.nick, time(NULL), reason);
+	sts(":%s AKILL %s %s %ld %s %ld :%s", me.name, host, user, duration, opersvs.nick, time(NULL), reason);
 }
 
 /* server-to-server UNKLINE wrapper */
-static void
-ultimate3_unkline_sts(char *server, char *user, char *host)
+static void ultimate3_unkline_sts(char *server, char *user, char *host)
 {
 	if (!me.connected)
 		return;
@@ -286,19 +267,16 @@ ultimate3_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void
-ultimate3_topic_sts(char *channel, char *setter, char *topic)
+static void ultimate3_topic_sts(char *channel, char *setter, char *topic)
 {
 	if (!me.connected)
 		return;
 
-	sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, channel, setter, CURRTIME,
-	    topic);
+	sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, channel, setter, CURRTIME, topic);
 }
 
 /* mode wrapper */
-static void
-ultimate3_mode_sts(char *sender, char *target, char *modes)
+static void ultimate3_mode_sts(char *sender, char *target, char *modes)
 {
 	channel_t *c = channel_find(target);
 
@@ -309,8 +287,7 @@ ultimate3_mode_sts(char *sender, char *target, char *modes)
 }
 
 /* ping wrapper */
-static void
-ultimate3_ping_sts(void)
+static void ultimate3_ping_sts(void)
 {
 	if (!me.connected)
 		return;
@@ -319,8 +296,7 @@ ultimate3_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void
-ultimate3_on_login(char *origin, char *user, char *wantedhost)
+static void ultimate3_on_login(char *origin, char *user, char *wantedhost)
 {
 	if (!me.connected)
 		return;
@@ -336,8 +312,7 @@ ultimate3_on_login(char *origin, char *user, char *wantedhost)
 }
 
 /* protocol-specific stuff to do on login */
-static void
-ultimate3_on_logout(char *origin, char *user, char *wantedhost)
+static void ultimate3_on_logout(char *origin, char *user, char *wantedhost)
 {
 	if (!me.connected)
 		return;
@@ -348,8 +323,7 @@ ultimate3_on_logout(char *origin, char *user, char *wantedhost)
 	sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, origin, time(NULL));
 }
 
-static void
-ultimate3_jupe(char *server, char *reason)
+static void ultimate3_jupe(char *server, char *reason)
 {
 	if (!me.connected)
 		return;
@@ -358,8 +332,7 @@ ultimate3_jupe(char *server, char *reason)
 	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
 }
 
-static void
-m_topic(char *origin, uint8_t parc, char *parv[])
+static void m_topic(char *origin, uint8_t parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
 
@@ -370,8 +343,7 @@ m_topic(char *origin, uint8_t parc, char *parv[])
 	c->topic_setter = sstrdup(parv[1]);
 }
 
-static void
-m_ping(char *origin, uint8_t parc, char *parv[])
+static void m_ping(char *origin, uint8_t parc, char *parv[])
 {
 	/*
 	 * reply to PING's 
@@ -379,8 +351,7 @@ m_ping(char *origin, uint8_t parc, char *parv[])
 	sts(":%s PONG %s %s", me.name, me.name, parv[0]);
 }
 
-static void
-m_pong(char *origin, uint8_t parc, char *parv[])
+static void m_pong(char *origin, uint8_t parc, char *parv[])
 {
 	/*
 	 * someone replied to our PING 
@@ -393,20 +364,14 @@ m_pong(char *origin, uint8_t parc, char *parv[])
 	/*
 	 * -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net 
 	 */
-	if (me.bursting) {
+	if (me.bursting)
+	{
 #ifdef HAVE_GETTIMEOFDAY
 		e_time(burstime, &burstime);
 
-		slog(LG_INFO,
-		    "m_pong(): finished synching with uplink (%d %s)",
-		    (tv2ms(&burstime) >
-			1000) ? (tv2ms(&burstime) / 1000) : tv2ms(&burstime),
-		    (tv2ms(&burstime) > 1000) ? "s" : "ms");
+		slog(LG_INFO, "m_pong(): finished synching with uplink (%d %s)", (tv2ms(&burstime) > 1000) ? (tv2ms(&burstime) / 1000) : tv2ms(&burstime), (tv2ms(&burstime) > 1000) ? "s" : "ms");
 
-		wallops("Finished synching to network in %d %s.",
-		    (tv2ms(&burstime) >
-			1000) ? (tv2ms(&burstime) / 1000) : tv2ms(&burstime),
-		    (tv2ms(&burstime) > 1000) ? "s" : "ms");
+		wallops("Finished synching to network in %d %s.", (tv2ms(&burstime) > 1000) ? (tv2ms(&burstime) / 1000) : tv2ms(&burstime), (tv2ms(&burstime) > 1000) ? "s" : "ms");
 #else
 		slog(LG_INFO, "m_pong(): finished synching with uplink");
 		wallops("Finished synching to network.");
@@ -416,8 +381,7 @@ m_pong(char *origin, uint8_t parc, char *parv[])
 	}
 }
 
-static void
-m_privmsg(char *origin, uint8_t parc, char *parv[])
+static void m_privmsg(char *origin, uint8_t parc, char *parv[])
 {
 	if (parc != 2)
 		return;
@@ -425,8 +389,7 @@ m_privmsg(char *origin, uint8_t parc, char *parv[])
 	handle_privmsg(origin, parv[0], parv[1]);
 }
 
-static void
-m_sjoin(char *origin, uint8_t parc, char *parv[])
+static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 {
 	/*
 	 *  -> :proteus.malkier.net SJOIN 1073516550 #shrike +tn :@sycobuny @+rakaur
@@ -442,7 +405,8 @@ m_sjoin(char *origin, uint8_t parc, char *parv[])
 	uint8_t i;
 	time_t ts;
 
-	if (origin && parc >= 4) {
+	if (origin && parc >= 4)
+	{
 		/*
 		 * :origin SJOIN ts chan modestr [key or limits] :users 
 		 */
@@ -456,12 +420,14 @@ m_sjoin(char *origin, uint8_t parc, char *parv[])
 		c = channel_find(parv[1]);
 		ts = atol(parv[0]);
 
-		if (!c) {
+		if (!c)
+		{
 			slog(LG_DEBUG, "m_sjoin(): new channel: %s", parv[1]);
 			c = channel_add(parv[1], ts);
 		}
 
-		if (ts < c->ts) {
+		if (ts < c->ts)
+		{
 			chanuser_t *cu;
 			node_t *n;
 
@@ -478,24 +444,23 @@ m_sjoin(char *origin, uint8_t parc, char *parv[])
 				free(c->key);
 			c->key = NULL;
 
-			LIST_FOREACH(n, c->members.head) {
-				cu = (chanuser_t *) n->data;
-				if (cu->user->server == me.me) {
+			LIST_FOREACH(n, c->members.head)
+			{
+				cu = (chanuser_t *)n->data;
+				if (cu->user->server == me.me)
+				{
 					/*
 					 * it's a service, reop 
 					 */
-					sts(":%s PART %s :Reop",
-					    cu->user->nick, c->name);
-					sts(":%s SJOIN %ld %s + :@%s", me.name,
-					    ts, c->name, cu->user->nick);
+					sts(":%s PART %s :Reop", cu->user->nick, c->name);
+					sts(":%s SJOIN %ld %s + :@%s", me.name, ts, c->name, cu->user->nick);
 					cu->modes = CMODE_OP;
-				} else
+				}
+				else
 					cu->modes = 0;
 			}
 
-			slog(LG_INFO,
-			    "m_sjoin(): TS changed for %s (%ld -> %ld)",
-			    c->name, c->ts, ts);
+			slog(LG_INFO, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
 
 			c->ts = ts;
 		}
@@ -506,11 +471,14 @@ m_sjoin(char *origin, uint8_t parc, char *parv[])
 
 		for (i = 0; i < userc; i++)
 			chanuser_add(c, userv[i]);
-	} else {
+	}
+	else
+	{
 		c = channel_find(parv[1]);
 		ts = atol(parv[0]);
 
-		if (ts < c->ts) {
+		if (ts < c->ts)
+		{
 			chanuser_t *cu;
 			node_t *n;
 
@@ -527,24 +495,23 @@ m_sjoin(char *origin, uint8_t parc, char *parv[])
 				free(c->key);
 			c->key = NULL;
 
-			LIST_FOREACH(n, c->members.head) {
-				cu = (chanuser_t *) n->data;
-				if (cu->user->server == me.me) {
+			LIST_FOREACH(n, c->members.head)
+			{
+				cu = (chanuser_t *)n->data;
+				if (cu->user->server == me.me)
+				{
 					/*
 					 * it's a service, reop 
 					 */
-					sts(":%s PART %s :Reop",
-					    cu->user->nick, c->name);
-					sts(":%s SJOIN %ld %s + :@%s", me.name,
-					    ts, c->name, cu->user->nick);
+					sts(":%s PART %s :Reop", cu->user->nick, c->name);
+					sts(":%s SJOIN %ld %s + :@%s", me.name, ts, c->name, cu->user->nick);
 					cu->modes = CMODE_OP;
-				} else
+				}
+				else
 					cu->modes = 0;
 			}
 
-			slog(LG_INFO,
-			    "m_sjoin(): TS changed for %s (%ld -> %ld)",
-			    c->name, c->ts, ts);
+			slog(LG_INFO, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
 
 			c->ts = ts;
 		}
@@ -553,17 +520,14 @@ m_sjoin(char *origin, uint8_t parc, char *parv[])
 	}
 }
 
-static void
-m_part(char *origin, uint8_t parc, char *parv[])
+static void m_part(char *origin, uint8_t parc, char *parv[])
 {
-	slog(LG_DEBUG, "m_part(): user left channel: %s -> %s", origin,
-	    parv[0]);
+	slog(LG_DEBUG, "m_part(): user left channel: %s -> %s", origin, parv[0]);
 
 	chanuser_delete(channel_find(parv[0]), user_find(origin));
 }
 
-static void
-m_nick(char *origin, uint8_t parc, char *parv[])
+static void m_nick(char *origin, uint8_t parc, char *parv[])
 {
 	server_t *s;
 	user_t *u;
@@ -571,19 +535,19 @@ m_nick(char *origin, uint8_t parc, char *parv[])
 	char ipbuf[16];
 	struct in_addr addr;
 
-	if (parc == 12) {
+	if (parc == 12)
+	{
 		s = server_find(parv[8]);
-		if (!s) {
-			slog(LG_DEBUG,
-			    "m_nick(): new user on nonexistant server: %s",
-			    parv[6]);
+		if (!s)
+		{
+			slog(LG_DEBUG, "m_nick(): new user on nonexistant server: %s", parv[6]);
 			return;
 		}
 
-		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name,
-		    parv[0]);
+		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
 
-		if ((k = kline_find(parv[5], parv[6]))) {
+		if ((k = kline_find(parv[5], parv[6])))
+		{
 			/*
 			 * the new user matches a kline.
 			 * * the server introducing the user probably wasn't around when
@@ -593,8 +557,7 @@ m_nick(char *origin, uint8_t parc, char *parv[])
 			 */
 
 			skill(opersvs.nick, parv[0], k->reason);
-			kline_sts(parv[6], k->user, k->host,
-			    (k->expires - CURRTIME), k->reason);
+			kline_sts(parv[6], k->user, k->host, (k->expires - CURRTIME), k->reason);
 
 			return;
 		}
@@ -602,8 +565,7 @@ m_nick(char *origin, uint8_t parc, char *parv[])
 		addr.s_addr = htonl(strtoul(parv[10], NULL, 0));
 		inet_ntoa(addr, ipbuf, sizeof(ipbuf));
 
-		u = user_add(parv[0], parv[5], parv[6], parv[7], ipbuf, NULL,
-		    parv[11], s);
+		u = user_add(parv[0], parv[5], parv[6], parv[7], ipbuf, NULL, parv[11], s);
 
 		/*
 		 * user modes 
@@ -632,30 +594,27 @@ m_nick(char *origin, uint8_t parc, char *parv[])
 	/*
 	 * if it's only 2 then it's a nickname change 
 	 */
-	else if (parc == 2) {
+	else if (parc == 2)
+	{
 		node_t *n;
 
 		u = user_find(origin);
-		if (!u) {
-			slog(LG_DEBUG,
-			    "m_nick(): nickname change from nonexistant user: %s",
-			    origin);
+		if (!u)
+		{
+			slog(LG_DEBUG, "m_nick(): nickname change from nonexistant user: %s", origin);
 			return;
 		}
 
-		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s",
-		    u->nick, parv[0]);
+		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", u->nick, parv[0]);
 
 		/*
 		 * fix up +r if necessary -- jilles 
 		 */
-		if (u->myuser != NULL && irccasecmp(u->nick, parv[0]) &&
-		    !irccasecmp(parv[0], u->myuser->name))
+		if (u->myuser != NULL && irccasecmp(u->nick, parv[0]) && !irccasecmp(parv[0], u->myuser->name))
 			/*
 			 * changed nick to registered one, reset +r 
 			 */
-			sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, parv[0],
-			    time(NULL));
+			sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, parv[0], time(NULL));
 
 		/*
 		 * remove the current one from the list 
@@ -677,20 +636,19 @@ m_nick(char *origin, uint8_t parc, char *parv[])
 		node_add(u, n, &userlist[u->hash]);
 
 		handle_nickchange(u);
-	} else {
+	}
+	else
+	{
 		int i;
 
-		slog(LG_DEBUG,
-		    "m_nick(): got NICK with wrong number of params");
+		slog(LG_DEBUG, "m_nick(): got NICK with wrong number of params");
 
 		for (i = 0; i < parc; i++)
-			slog(LG_DEBUG, "m_nick():   parv[%d] = %s", i,
-			    parv[i]);
+			slog(LG_DEBUG, "m_nick():   parv[%d] = %s", i, parv[i]);
 	}
 }
 
-static void
-m_quit(char *origin, uint8_t parc, char *parv[])
+static void m_quit(char *origin, uint8_t parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", origin);
 
@@ -700,15 +658,16 @@ m_quit(char *origin, uint8_t parc, char *parv[])
 	user_delete(origin);
 }
 
-static void
-m_mode(char *origin, uint8_t parc, char *parv[])
+static void m_mode(char *origin, uint8_t parc, char *parv[])
 {
-	if (!origin) {
+	if (!origin)
+	{
 		slog(LG_DEBUG, "m_mode(): received MODE without origin");
 		return;
 	}
 
-	if (parc < 2) {
+	if (parc < 2)
+	{
 		slog(LG_DEBUG, "m_mode(): missing parameters in MODE");
 		return;
 	}
@@ -719,8 +678,7 @@ m_mode(char *origin, uint8_t parc, char *parv[])
 		user_mode(user_find(parv[0]), parv[1]);
 }
 
-static void
-m_kick(char *origin, uint8_t parc, char *parv[])
+static void m_kick(char *origin, uint8_t parc, char *parv[])
 {
 	user_t *u = user_find(parv[1]);
 	channel_t *c = channel_find(parv[0]);
@@ -728,24 +686,23 @@ m_kick(char *origin, uint8_t parc, char *parv[])
 	/*
 	 * -> :rakaur KICK #shrike rintaun :test 
 	 */
-	slog(LG_DEBUG, "m_kick(): user was kicked: %s -> %s", parv[1],
-	    parv[0]);
+	slog(LG_DEBUG, "m_kick(): user was kicked: %s -> %s", parv[1], parv[0]);
 
-	if (!u) {
-		slog(LG_DEBUG, "m_kick(): got kick for nonexistant user %s",
-		    parv[1]);
+	if (!u)
+	{
+		slog(LG_DEBUG, "m_kick(): got kick for nonexistant user %s", parv[1]);
 		return;
 	}
 
-	if (!c) {
-		slog(LG_DEBUG, "m_kick(): got kick in nonexistant channel: %s",
-		    parv[0]);
+	if (!c)
+	{
+		slog(LG_DEBUG, "m_kick(): got kick in nonexistant channel: %s", parv[0]);
 		return;
 	}
 
-	if (!chanuser_find(c, u)) {
-		slog(LG_DEBUG, "m_kick(): got kick for %s not in %s", u->nick,
-		    c->name);
+	if (!chanuser_find(c, u))
+	{
+		slog(LG_DEBUG, "m_kick(): got kick for %s not in %s", u->nick, c->name);
 		return;
 	}
 
@@ -754,15 +711,14 @@ m_kick(char *origin, uint8_t parc, char *parv[])
 	/*
 	 * if they kicked us, let's rejoin 
 	 */
-	if (!irccasecmp(chansvs.nick, parv[1])) {
-		slog(LG_DEBUG, "m_kick(): i got kicked from `%s'; rejoining",
-		    parv[0]);
+	if (!irccasecmp(chansvs.nick, parv[1]))
+	{
+		slog(LG_DEBUG, "m_kick(): i got kicked from `%s'; rejoining", parv[0]);
 		join(parv[0], parv[1]);
 	}
 }
 
-static void
-m_chghost(char *origin, uint8_t parc, char *parv[])
+static void m_chghost(char *origin, uint8_t parc, char *parv[])
 {
 	user_t *u = user_find(parv[0]);
 
@@ -772,8 +728,7 @@ m_chghost(char *origin, uint8_t parc, char *parv[])
 	strlcpy(u->vhost, parv[1], HOSTLEN);
 }
 
-static void
-m_kill(char *origin, uint8_t parc, char *parv[])
+static void m_kill(char *origin, uint8_t parc, char *parv[])
 {
 	mychan_t *mc;
 	node_t *n;
@@ -782,88 +737,75 @@ m_kill(char *origin, uint8_t parc, char *parv[])
 	slog(LG_DEBUG, "m_kill(): killed user: %s", parv[0]);
 	user_delete(parv[0]);
 
-	if (!irccasecmp(chansvs.nick, parv[0])) {
+	if (!irccasecmp(chansvs.nick, parv[0]))
+	{
 		services_init();
 
 		if (config_options.chan)
 			join(config_options.chan, chansvs.nick);
 
-		for (i = 0; i < HASHSIZE; i++) {
-			LIST_FOREACH(n, mclist[i].head) {
-				mc = (mychan_t *) n->data;
+		for (i = 0; i < HASHSIZE; i++)
+		{
+			LIST_FOREACH(n, mclist[i].head)
+			{
+				mc = (mychan_t *)n->data;
 
-				if ((config_options.join_chans) && (mc->chan)
-				    && (mc->chan->nummembers >= 1))
+				if ((config_options.join_chans) && (mc->chan) && (mc->chan->nummembers >= 1))
 					join(mc->name, chansvs.nick);
 
-				if ((config_options.join_chans)
-				    && (!config_options.leave_chans)
-				    && (mc->chan)
-				    && (mc->chan->nummembers == 0))
+				if ((config_options.join_chans) && (!config_options.leave_chans) && (mc->chan) && (mc->chan->nummembers == 0))
 					join(mc->name, chansvs.nick);
 			}
 		}
 	}
 }
 
-static void
-m_squit(char *origin, uint8_t parc, char *parv[])
+static void m_squit(char *origin, uint8_t parc, char *parv[])
 {
-	slog(LG_DEBUG, "m_squit(): server leaving: %s from %s", parv[0],
-	    parv[1]);
+	slog(LG_DEBUG, "m_squit(): server leaving: %s from %s", parv[0], parv[1]);
 	server_delete(parv[0]);
 }
 
-static void
-m_server(char *origin, uint8_t parc, char *parv[])
+static void m_server(char *origin, uint8_t parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
-	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name,
-	    NULL, parv[2]);
+	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, NULL, parv[2]);
 
 	if (cnt.server == 2)
 		me.actual = sstrdup(parv[0]);
 }
 
-static void
-m_stats(char *origin, uint8_t parc, char *parv[])
+static void m_stats(char *origin, uint8_t parc, char *parv[])
 {
 	handle_stats(origin, parv[0][0]);
 }
 
-static void
-m_admin(char *origin, uint8_t parc, char *parv[])
+static void m_admin(char *origin, uint8_t parc, char *parv[])
 {
 	handle_admin(origin);
 }
 
-static void
-m_version(char *origin, uint8_t parc, char *parv[])
+static void m_version(char *origin, uint8_t parc, char *parv[])
 {
 	handle_version(origin);
 }
 
-static void
-m_info(char *origin, uint8_t parc, char *parv[])
+static void m_info(char *origin, uint8_t parc, char *parv[])
 {
 	handle_info(origin);
 }
 
-static void
-m_whois(char *origin, uint8_t parc, char *parv[])
+static void m_whois(char *origin, uint8_t parc, char *parv[])
 {
 	handle_whois(origin, parc >= 2 ? parv[1] : "*");
 }
 
-static void
-m_trace(char *origin, uint8_t parc, char *parv[])
+static void m_trace(char *origin, uint8_t parc, char *parv[])
 {
-	handle_trace(origin, parc >= 1 ? parv[0] : "*",
-	    parc >= 2 ? parv[1] : NULL);
+	handle_trace(origin, parc >= 1 ? parv[0] : "*", parc >= 2 ? parv[1] : NULL);
 }
 
-static void
-m_join(char *origin, uint8_t parc, char *parv[])
+static void m_join(char *origin, uint8_t parc, char *parv[])
 {
 	user_t *u = user_find(origin);
 	chanuser_t *cu;
@@ -875,32 +817,31 @@ m_join(char *origin, uint8_t parc, char *parv[])
 	/*
 	 * JOIN 0 is really a part from all channels 
 	 */
-	if (parv[0][0] == '0') {
-		LIST_FOREACH_SAFE(n, tn, u->channels.head) {
-			cu = (chanuser_t *) n->data;
+	if (parv[0][0] == '0')
+	{
+		LIST_FOREACH_SAFE(n, tn, u->channels.head)
+		{
+			cu = (chanuser_t *)n->data;
 			chanuser_delete(cu->chan, u);
 		}
 	}
 }
 
-static void
-m_pass(char *origin, uint8_t parc, char *parv[])
+static void m_pass(char *origin, uint8_t parc, char *parv[])
 {
-	if (strcmp(curr_uplink->pass, parv[0])) {
-		slog(LG_INFO,
-		    "m_pass(): password mismatch from uplink; aborting");
+	if (strcmp(curr_uplink->pass, parv[0]))
+	{
+		slog(LG_INFO, "m_pass(): password mismatch from uplink; aborting");
 		runflags |= RF_SHUTDOWN;
 	}
 }
 
-static void
-m_error(char *origin, uint8_t parc, char *parv[])
+static void m_error(char *origin, uint8_t parc, char *parv[])
 {
 	slog(LG_INFO, "m_error(): error from server: %s", parv[0]);
 }
 
-void
-_modinit(module_t * m)
+void _modinit(module_t * m)
 {
 	/*
 	 * Symbol relocation voodoo. 

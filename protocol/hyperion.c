@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 2401 2005-09-27 08:55:25Z pfish $
+ * $Id: hyperion.c 2491 2005-10-01 04:26:53Z nenolod $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -15,12 +15,7 @@
 #include "atheme.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1
-(
-	"protocol/hyperion", TRUE, _modinit, NULL,
-	"$Id: hyperion.c 2401 2005-09-27 08:55:25Z pfish $",
-	"Atheme Development Group <http://www.atheme.org>"
-);
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 2491 2005-10-01 04:26:53Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -89,21 +84,21 @@ static boolean_t use_svslogin = FALSE;
 /* login to our uplink */
 static uint8_t hyperion_server_login(void)
 {
-        int8_t ret;
+	int8_t ret;
 
-        ret = sts("PASS %s :TS", curr_uplink->pass);
-        if (ret == 1)
-                return 1;
+	ret = sts("PASS %s :TS", curr_uplink->pass);
+	if (ret == 1)
+		return 1;
 
-        me.bursting = TRUE;
+	me.bursting = TRUE;
 
-        sts("CAPAB :QS KLN UNKLN QU DNCR SRV CHW SIGNON");
-        sts("SERVER %s 1 :%s", me.name, me.desc);
-        sts("SVINFO 5 3 0 :%ld", CURRTIME);
+	sts("CAPAB :QS KLN UNKLN QU DNCR SRV CHW SIGNON");
+	sts("SERVER %s 1 :%s", me.name, me.desc);
+	sts("SVINFO 5 3 0 :%ld", CURRTIME);
 
 	services_init();
 
-        return 0;
+	return 0;
 }
 
 /* introduce a nick.
@@ -139,18 +134,18 @@ static void hyperion_quit_sts(user_t *u, char *reason)
 /* WALLOPS wrapper */
 static void hyperion_wallops(char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 
-        if (config_options.silent)
-                return;
+	if (config_options.silent)
+		return;
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
 	/* Generate +s server notice -- jilles */
-        sts(":%s WALLOPS 1-0 :%s", me.name, buf);
+	sts(":%s WALLOPS 1-0 :%s", me.name, buf);
 }
 
 /* join a channel */
@@ -183,41 +178,41 @@ static void hyperion_join(char *chan, char *nick)
 /* kicks a user from a channel */
 static void hyperion_kick(char *from, char *channel, char *to, char *reason)
 {
-        channel_t *chan = channel_find(channel);
-        user_t *user = user_find(to);
+	channel_t *chan = channel_find(channel);
+	user_t *user = user_find(to);
 
-        if (!chan || !user)
-                return;
+	if (!chan || !user)
+		return;
 
-        sts(":%s KICK %s %s :%s", from, channel, to, reason);
+	sts(":%s KICK %s %s :%s", from, channel, to, reason);
 
-        chanuser_delete(chan, user);
+	chanuser_delete(chan, user);
 }
 
 /* PRIVMSG wrapper */
 static void hyperion_msg(char *from, char *target, char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
-        va_end(ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_end(ap);
 
-        sts(":%s PRIVMSG %s :%s", from, target, buf);
+	sts(":%s PRIVMSG %s :%s", from, target, buf);
 }
 
 /* NOTICE wrapper */
 static void hyperion_notice(char *from, char *target, char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
-        va_end(ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_end(ap);
 
-        sts(":%s NOTICE %s :%s", from, target, buf);
+	sts(":%s NOTICE %s :%s", from, target, buf);
 }
 
 /* numeric wrapper */
@@ -243,25 +238,25 @@ static void hyperion_skill(char *from, char *nick, char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-        sts(":%s KILL %s :%s!%s!%s (%s)", from, nick, from, from, from, buf);
+	sts(":%s KILL %s :%s!%s!%s (%s)", from, nick, from, from, from, buf);
 }
 
 /* PART wrapper */
 static void hyperion_part(char *chan, char *nick)
 {
-        user_t *u = user_find(nick);
-        channel_t *c = channel_find(chan);
-        chanuser_t *cu;
+	user_t *u = user_find(nick);
+	channel_t *c = channel_find(chan);
+	chanuser_t *cu;
 
-        if (!u || !c)
-                return;
+	if (!u || !c)
+		return;
 
-        if (!(cu = chanuser_find(c, u)))
-                return;
+	if (!(cu = chanuser_find(c, u)))
+		return;
 
-        sts(":%s PART %s", u->nick, c->name);
+	sts(":%s PART %s", u->nick, c->name);
 
-        chanuser_delete(c, u);
+	chanuser_delete(c, u);
 }
 
 /* server-to-server KLINE wrapper */
@@ -292,8 +287,7 @@ static void hyperion_topic_sts(char *channel, char *setter, char *topic)
 		return;
 
 	/* Send 0 channelts so this will always be accepted */
-	sts(":%s STOPIC %s %s %ld 0 :%s", chansvs.nick, channel, setter,
-			CURRTIME, topic);
+	sts(":%s STOPIC %s %s %ld 0 :%s", chansvs.nick, channel, setter, CURRTIME, topic);
 }
 
 /* mode wrapper */
@@ -326,9 +320,7 @@ static void hyperion_on_login(char *origin, char *user, char *wantedhost)
 	if (!u)
 		return;
 	if (use_svslogin)
-		sts(":%s SVSLOGIN %s %s %s %s %s %s", me.name,
-				u->server->name, origin, user, origin, u->user,
-				wantedhost ? wantedhost : u->vhost);
+		sts(":%s SVSLOGIN %s %s %s %s %s %s", me.name, u->server->name, origin, user, origin, u->user, wantedhost ? wantedhost : u->vhost);
 	/* we'll get a SIGNON confirming the changes later, no need
 	 * to change the fields yet */
 
@@ -351,9 +343,7 @@ static void hyperion_on_logout(char *origin, char *user, char *wantedhost)
 	if (!u)
 		return;
 	if (use_svslogin)
-		sts(":%s SVSLOGIN %s %s %s %s %s %s", me.name,
-				u->server->name, origin, "0", origin, u->user,
-				wantedhost ? u->host : u->vhost);
+		sts(":%s SVSLOGIN %s %s %s %s %s %s", me.name, u->server->name, origin, "0", origin, u->user, wantedhost ? u->host : u->vhost);
 
 	if (irccasecmp(origin, user))
 		return;
@@ -363,11 +353,11 @@ static void hyperion_on_logout(char *origin, char *user, char *wantedhost)
 
 static void hyperion_jupe(char *server, char *reason)
 {
-        if (!me.connected)
-                return;
+	if (!me.connected)
+		return;
 
 	sts(":%s SQUIT %s :%s", opersvs.nick, server, reason);
-        sts(":%s SERVER %s 2 :%s", me.name, server, reason);
+	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
@@ -566,8 +556,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", u->nick, parv[0]);
 
 		/* fix up +e if necessary -- jilles */
-		if (u->myuser != NULL && irccasecmp(u->nick, parv[0]) &&
-				!irccasecmp(parv[0], u->myuser->name))
+		if (u->myuser != NULL && irccasecmp(u->nick, parv[0]) && !irccasecmp(parv[0], u->myuser->name))
 			/* changed nick to registered one, reset +e */
 			sts(":%s MODE %s +e", me.name, parv[0]);
 
@@ -702,8 +691,7 @@ static void m_server(char *origin, uint8_t parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
 
-	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, 
-		NULL, parv[2]);
+	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, NULL, parv[2]);
 
 	if (cnt.server == 2)
 		me.actual = sstrdup(parv[0]);
@@ -736,8 +724,7 @@ static void m_whois(char *origin, uint8_t parc, char *parv[])
 
 static void m_trace(char *origin, uint8_t parc, char *parv[])
 {
-	handle_trace(origin, parc >= 1 ? parv[0] : "*",
-			parc >= 2 ? parv[1] : NULL);
+	handle_trace(origin, parc >= 1 ? parv[0] : "*", parc >= 2 ? parv[1] : NULL);
 }
 
 static void m_join(char *origin, uint8_t parc, char *parv[])
@@ -794,7 +781,7 @@ static void m_snick(char *origin, uint8_t parc, char *parv[])
 {
 	user_t *u;
 
-	/* SNICK <nick> <orignick> <spoofhost> <firsttime> <dnshost> <servlogin> */ 
+	/* SNICK <nick> <orignick> <spoofhost> <firsttime> <dnshost> <servlogin> */
 	if (parc < 5)
 		return;
 
@@ -803,7 +790,7 @@ static void m_snick(char *origin, uint8_t parc, char *parv[])
 	if (!u)
 		return;
 
-	if (strcmp(u->host, parv[2])) /* User is not using spoofhost, assume no I:line spoof */
+	if (strcmp(u->host, parv[2]))	/* User is not using spoofhost, assume no I:line spoof */
 	{
 		strlcpy(u->vhost, parv[4], HOSTLEN);
 	}
@@ -888,8 +875,7 @@ static void m_signon(char *origin, uint8_t parc, char *parv[])
 		slog(LG_DEBUG, "m_signon(): signon from nonexistant user: %s", origin);
 		return;
 	}
-	slog(LG_DEBUG, "m_signon(): signon %s -> %s!%s@%s (login %s)", origin,
-			parv[1], parv[2], parv[3], parv[0]);
+	slog(LG_DEBUG, "m_signon(): signon %s -> %s!%s@%s (login %s)", origin, parv[1], parv[2], parv[3], parv[0]);
 
 	strlcpy(u->user, parv[2], USERLEN);
 	strlcpy(u->vhost, parv[3], HOSTLEN);
@@ -900,27 +886,27 @@ static void m_signon(char *origin, uint8_t parc, char *parv[])
 	/* don't use login id, assume everyone signs in via atheme */
 }
 
-void _modinit(module_t *m)
+void _modinit(module_t * m)
 {
-        /* Symbol relocation voodoo. */
-        server_login = &hyperion_server_login;
-        introduce_nick = &hyperion_introduce_nick;
-        quit_sts = &hyperion_quit_sts;
-        wallops = &hyperion_wallops;
-        join = &hyperion_join;
-        kick = &hyperion_kick;
-        msg = &hyperion_msg;
-        notice = &hyperion_notice;
-        numeric_sts = &hyperion_numeric_sts;
-        skill = &hyperion_skill;
-        part = &hyperion_part;
-        kline_sts = &hyperion_kline_sts;
-        unkline_sts = &hyperion_unkline_sts;
-        topic_sts = &hyperion_topic_sts;
-        mode_sts = &hyperion_mode_sts;
-        ping_sts = &hyperion_ping_sts;
-        ircd_on_login = &hyperion_on_login;
-        ircd_on_logout = &hyperion_on_logout;
+	/* Symbol relocation voodoo. */
+	server_login = &hyperion_server_login;
+	introduce_nick = &hyperion_introduce_nick;
+	quit_sts = &hyperion_quit_sts;
+	wallops = &hyperion_wallops;
+	join = &hyperion_join;
+	kick = &hyperion_kick;
+	msg = &hyperion_msg;
+	notice = &hyperion_notice;
+	numeric_sts = &hyperion_numeric_sts;
+	skill = &hyperion_skill;
+	part = &hyperion_part;
+	kline_sts = &hyperion_kline_sts;
+	unkline_sts = &hyperion_unkline_sts;
+	topic_sts = &hyperion_topic_sts;
+	mode_sts = &hyperion_mode_sts;
+	ping_sts = &hyperion_ping_sts;
+	ircd_on_login = &hyperion_on_login;
+	ircd_on_logout = &hyperion_on_logout;
 	jupe = &hyperion_jupe;
 
 	mode_list = hyperion_mode_list;
@@ -930,30 +916,30 @@ void _modinit(module_t *m)
 
 	ircd = &Hyperion;
 
-        pcommand_add("PING", m_ping);
-        pcommand_add("PONG", m_pong);
-        pcommand_add("PRIVMSG", m_privmsg);
+	pcommand_add("PING", m_ping);
+	pcommand_add("PONG", m_pong);
+	pcommand_add("PRIVMSG", m_privmsg);
 	pcommand_add("NOTICE", m_privmsg);
-        pcommand_add("SJOIN", m_sjoin);
-        pcommand_add("PART", m_part);
-        pcommand_add("NICK", m_nick);
-        pcommand_add("QUIT", m_quit);
-        pcommand_add("MODE", m_mode);
-        pcommand_add("KICK", m_kick);
-        pcommand_add("REMOVE", m_kick); /* same net result */
-        pcommand_add("KILL", m_kill);
-        pcommand_add("SQUIT", m_squit);
-        pcommand_add("SERVER", m_server);
-        pcommand_add("STATS", m_stats);
-        pcommand_add("ADMIN", m_admin);
-        pcommand_add("VERSION", m_version);
-        pcommand_add("INFO", m_info);
+	pcommand_add("SJOIN", m_sjoin);
+	pcommand_add("PART", m_part);
+	pcommand_add("NICK", m_nick);
+	pcommand_add("QUIT", m_quit);
+	pcommand_add("MODE", m_mode);
+	pcommand_add("KICK", m_kick);
+	pcommand_add("REMOVE", m_kick);	/* same net result */
+	pcommand_add("KILL", m_kill);
+	pcommand_add("SQUIT", m_squit);
+	pcommand_add("SERVER", m_server);
+	pcommand_add("STATS", m_stats);
+	pcommand_add("ADMIN", m_admin);
+	pcommand_add("VERSION", m_version);
+	pcommand_add("INFO", m_info);
 	pcommand_add("WHOIS", m_whois);
 	pcommand_add("TRACE", m_trace);
-        pcommand_add("JOIN", m_join);
-        pcommand_add("PASS", m_pass);
-        pcommand_add("ERROR", m_error);
-        pcommand_add("TOPIC", m_topic);
+	pcommand_add("JOIN", m_join);
+	pcommand_add("PASS", m_pass);
+	pcommand_add("ERROR", m_error);
+	pcommand_add("TOPIC", m_topic);
 	pcommand_add("SNICK", m_snick);
 	pcommand_add("SETHOST", m_sethost);
 	pcommand_add("SETIDENT", m_setident);
@@ -965,4 +951,3 @@ void _modinit(module_t *m)
 
 	pmodule_loaded = TRUE;
 }
-

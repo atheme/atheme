@@ -4,18 +4,13 @@
  *
  * This file contains protocol support for ptlink-based ircd.
  *
- * $Id: ptlink.c 2401 2005-09-27 08:55:25Z pfish $
+ * $Id: ptlink.c 2491 2005-10-01 04:26:53Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/ptlink.h"
 
-DECLARE_MODULE_V1
-(
-	"protocol/ptlink", TRUE, _modinit, NULL,
-	"$Id: ptlink.c 2401 2005-09-27 08:55:25Z pfish $",
-	"Atheme Development Group <http://www.atheme.org>"
-);
+DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 2491 2005-10-01 04:26:53Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -83,21 +78,21 @@ struct cmode_ ptlink_prefix_mode_list[] = {
 /* login to our uplink */
 static uint8_t ptlink_server_login(void)
 {
-        int8_t ret;
+	int8_t ret;
 
-        ret = sts("PASS %s :TS", curr_uplink->pass);
-        if (ret == 1)
-                return 1;
+	ret = sts("PASS %s :TS", curr_uplink->pass);
+	if (ret == 1)
+		return 1;
 
-        me.bursting = TRUE;
+	me.bursting = TRUE;
 
-        sts("CAPAB :QS PTS4");
-        sts("SERVER %s 1 Atheme :%s", me.name, me.desc);
-        sts("SVINFO 6 3 0 :%ld", CURRTIME);
+	sts("CAPAB :QS PTS4");
+	sts("SERVER %s 1 Atheme :%s", me.name, me.desc);
+	sts("SVINFO 6 3 0 :%ld", CURRTIME);
 
 	services_init();
 
-        return 0;
+	return 0;
 }
 
 /* introduce a client */
@@ -127,17 +122,17 @@ static void ptlink_quit_sts(user_t *u, char *reason)
 /* WALLOPS wrapper */
 static void ptlink_wallops(char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 
-        if (config_options.silent)
-                return;
+	if (config_options.silent)
+		return;
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-        sts(":%s WALLOPS :%s", me.name, buf);
+	sts(":%s WALLOPS :%s", me.name, buf);
 }
 
 /* join a channel */
@@ -170,41 +165,41 @@ static void ptlink_join(char *chan, char *nick)
 /* kicks a user from a channel */
 static void ptlink_kick(char *from, char *channel, char *to, char *reason)
 {
-        channel_t *chan = channel_find(channel);
-        user_t *user = user_find(to);
+	channel_t *chan = channel_find(channel);
+	user_t *user = user_find(to);
 
-        if (!chan || !user)
-                return;
+	if (!chan || !user)
+		return;
 
-        sts(":%s KICK %s %s :%s", from, channel, to, reason);
+	sts(":%s KICK %s %s :%s", from, channel, to, reason);
 
-        chanuser_delete(chan, user);
+	chanuser_delete(chan, user);
 }
 
 /* PRIVMSG wrapper */
 static void ptlink_msg(char *from, char *target, char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
-        va_end(ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_end(ap);
 
-        sts(":%s PRIVMSG %s :%s", from, target, buf);
+	sts(":%s PRIVMSG %s :%s", from, target, buf);
 }
 
 /* NOTICE wrapper */
 static void ptlink_notice(char *from, char *target, char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
-        va_end(ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_end(ap);
 
-        sts(":%s NOTICE %s :%s", from, target, buf);
+	sts(":%s NOTICE %s :%s", from, target, buf);
 }
 
 /* numeric wrapper */
@@ -230,25 +225,25 @@ static void ptlink_skill(char *from, char *nick, char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-        sts(":%s KILL %s :%s!%s!%s (%s)", from, nick, from, from, from, buf);
+	sts(":%s KILL %s :%s!%s!%s (%s)", from, nick, from, from, from, buf);
 }
 
 /* PART wrapper */
 static void ptlink_part(char *chan, char *nick)
 {
-        user_t *u = user_find(nick);
-        channel_t *c = channel_find(chan);
-        chanuser_t *cu;
+	user_t *u = user_find(nick);
+	channel_t *c = channel_find(chan);
+	chanuser_t *cu;
 
-        if (!u || !c)
-                return;
+	if (!u || !c)
+		return;
 
-        if (!(cu = chanuser_find(c, u)))
-                return;
+	if (!(cu = chanuser_find(c, u)))
+		return;
 
-        sts(":%s PART %s", u->nick, c->name);
+	sts(":%s PART %s", u->nick, c->name);
 
-        chanuser_delete(c, u);
+	chanuser_delete(c, u);
 }
 
 /* server-to-server KLINE wrapper */
@@ -316,11 +311,11 @@ static void ptlink_on_logout(char *origin, char *user, char *wantedhost)
 
 static void ptlink_jupe(char *server, char *reason)
 {
-        if (!me.connected)
-                return;
+	if (!me.connected)
+		return;
 
 	sts(":%s SQUIT %s :%s", opersvs.nick, server, reason);
-        sts(":%s SERVER %s 2 Atheme :%s", me.name, server, reason);
+	sts(":%s SERVER %s 2 Atheme :%s", me.name, server, reason);
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
@@ -650,8 +645,7 @@ static void m_squit(char *origin, uint8_t parc, char *parv[])
 static void m_server(char *origin, uint8_t parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
-	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, 
-		NULL, parv[2]);
+	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, NULL, parv[2]);
 
 	if (cnt.server == 2)
 		me.actual = sstrdup(parv[0]);
@@ -691,8 +685,7 @@ static void m_whois(char *origin, uint8_t parc, char *parv[])
 
 static void m_trace(char *origin, uint8_t parc, char *parv[])
 {
-	handle_trace(origin, parc >= 1 ? parv[0] : "*",
-			parc >= 2 ? parv[1] : NULL);
+	handle_trace(origin, parc >= 1 ? parv[0] : "*", parc >= 2 ? parv[1] : NULL);
 }
 
 static void m_join(char *origin, uint8_t parc, char *parv[])
@@ -729,7 +722,7 @@ static void m_error(char *origin, uint8_t parc, char *parv[])
 	slog(LG_INFO, "m_error(): error from server: %s", parv[0]);
 }
 
-void _modinit(module_t *m)
+void _modinit(module_t * m)
 {
 	/* Symbol relocation voodoo. */
 	server_login = &ptlink_server_login;
@@ -787,4 +780,3 @@ void _modinit(module_t *m)
 
 	pmodule_loaded = TRUE;
 }
-

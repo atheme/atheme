@@ -4,18 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: inspircd.c 2401 2005-09-27 08:55:25Z pfish $
+ * $Id: inspircd.c 2491 2005-10-01 04:26:53Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1
-(
-	"protocol/inspircd", TRUE, _modinit, NULL,
-	"$Id: inspircd.c 2401 2005-09-27 08:55:25Z pfish $",
-	"Atheme Development Group <http://www.atheme.org>"
-);
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 2491 2005-10-01 04:26:53Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -94,11 +89,11 @@ static char *xsumtable = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 static char *CreateSum(void)
 {
 	int q = 0;
-        static char sum[8];
-        sum[7] = '\0';
-        for(q = 0; q < 7; q++)
-                sum[q] = xsumtable[rand()%52];
-        return sum;
+	static char sum[8];
+	sum[7] = '\0';
+	for (q = 0; q < 7; q++)
+		sum[q] = xsumtable[rand() % 52];
+	return sum;
 }
 
 /* login to our uplink */
@@ -106,11 +101,11 @@ static uint8_t inspircd_server_login(void)
 {
 	srand(time(NULL));
 
-        me.bursting = TRUE;
+	me.bursting = TRUE;
 
-        sts(":%s U %s %s :%s", CreateSum(), me.name, curr_uplink->pass, me.desc);
+	sts(":%s U %s %s :%s", CreateSum(), me.name, curr_uplink->pass, me.desc);
 
-        return 0;
+	return 0;
 }
 
 /* introduce a client */
@@ -130,28 +125,28 @@ static user_t *inspircd_introduce_nick(char *nick, char *user, char *host, char 
 
 static void inspircd_quit_sts(user_t *u, char *reason)
 {
-        if (!me.connected || !u)
-                return;
+	if (!me.connected || !u)
+		return;
 
-        sts(":%s Q %s %s", CreateSum(), u->nick, reason);
+	sts(":%s Q %s %s", CreateSum(), u->nick, reason);
 
-        user_delete(u->nick);
+	user_delete(u->nick);
 }
 
 /* WALLOPS wrapper */
 static void inspircd_wallops(char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 
-        if (config_options.silent)
-                return;
+	if (config_options.silent)
+		return;
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-        sts(":%s @ %s :%s", CreateSum(), chansvs.nick, buf);
+	sts(":%s @ %s :%s", CreateSum(), chansvs.nick, buf);
 }
 
 /* join a channel */
@@ -184,84 +179,84 @@ static void inspircd_join(char *chan, char *nick)
 /* kicks a user from a channel */
 static void inspircd_kick(char *from, char *channel, char *to, char *reason)
 {
-        channel_t *chan = channel_find(channel);
-        user_t *user = user_find(to);
+	channel_t *chan = channel_find(channel);
+	user_t *user = user_find(to);
 
-        if (!chan || !user)
-                return;
+	if (!chan || !user)
+		return;
 
-        sts(":%s K %s %s %s :%s", CreateSum(), from, channel, to, reason);
+	sts(":%s K %s %s %s :%s", CreateSum(), from, channel, to, reason);
 
-        chanuser_delete(chan, user);
+	chanuser_delete(chan, user);
 }
 
 /* PRIVMSG wrapper */
 static void inspircd_msg(char *from, char *target, char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
-        va_end(ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_end(ap);
 
-        sts(":%s P %s %s :%s", CreateSum(), from, target, buf);
+	sts(":%s P %s %s :%s", CreateSum(), from, target, buf);
 }
 
 /* NOTICE wrapper */
 static void inspircd_notice(char *from, char *target, char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
-        va_end(ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_end(ap);
 
-        sts(":%s V %s %s :%s", CreateSum(), from, target, buf);
+	sts(":%s V %s %s :%s", CreateSum(), from, target, buf);
 }
 
 static void inspircd_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
-        va_end(ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_end(ap);
 
-        sts(":%s * %s %d %s %s", CreateSum(), from, numeric, target, buf);
+	sts(":%s * %s %d %s %s", CreateSum(), from, numeric, target, buf);
 }
 
 /* KILL wrapper */
 static void inspircd_skill(char *from, char *nick, char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
-        va_end(ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_end(ap);
 
-        sts(":%s K %s %s :%s", CreateSum(), from, nick, buf);
+	sts(":%s K %s %s :%s", CreateSum(), from, nick, buf);
 }
 
 /* PART wrapper */
 static void inspircd_part(char *chan, char *nick)
 {
-        user_t *u = user_find(nick);
-        channel_t *c = channel_find(chan);
-        chanuser_t *cu;
+	user_t *u = user_find(nick);
+	channel_t *c = channel_find(chan);
+	chanuser_t *cu;
 
-        if (!u || !c)
-                return;
+	if (!u || !c)
+		return;
 
-        if (!(cu = chanuser_find(c, u)))
-                return;
+	if (!(cu = chanuser_find(c, u)))
+		return;
 
-        sts(":%s L %s %s", CreateSum(), u->nick, c->name);
+	sts(":%s L %s %s", CreateSum(), u->nick, c->name);
 
-        chanuser_delete(c, u);
+	chanuser_delete(c, u);
 }
 
 /* server-to-server KLINE wrapper */
@@ -270,8 +265,7 @@ static void inspircd_kline_sts(char *server, char *user, char *host, long durati
 	if (!me.connected)
 		return;
 
-	sts(":%s # %s@%s %s %ld 0 :%s", CreateSum(), user, host, opersvs.nick, time(NULL), 
-		reason);
+	sts(":%s # %s@%s %s %ld 0 :%s", CreateSum(), user, host, opersvs.nick, time(NULL), reason);
 }
 
 /* server-to-server UNKLINE wrapper */
@@ -286,28 +280,28 @@ static void inspircd_unkline_sts(char *server, char *user, char *host)
 /* topic wrapper */
 static void inspircd_topic_sts(char *channel, char *setter, char *topic)
 {
-        if (!me.connected)
-                return;
+	if (!me.connected)
+		return;
 
-        sts(":%s t %s %s :%s (%s)", CreateSum(), chansvs.nick, channel, topic, setter);
+	sts(":%s t %s %s :%s (%s)", CreateSum(), chansvs.nick, channel, topic, setter);
 }
 
 /* mode wrapper */
 static void inspircd_mode_sts(char *sender, char *target, char *modes)
 {
-        if (!me.connected)
-                return;
+	if (!me.connected)
+		return;
 
-        sts(":%s m %s %s %s", CreateSum(), sender, target, modes);
+	sts(":%s m %s %s %s", CreateSum(), sender, target, modes);
 }
 
 /* ping wrapper */
 static void inspircd_ping_sts(void)
 {
-        if (!me.connected)
-                return;
+	if (!me.connected)
+		return;
 
-        sts("?", CreateSum());
+	sts("?", CreateSum());
 }
 
 /* protocol-specific stuff to do on login */
@@ -316,11 +310,11 @@ static void inspircd_on_login(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return;
 
-        /* Can only record identified state if logged in to correct nick,
-         * sorry -- jilles
-         */
-        if (irccasecmp(origin, user))
-                return;
+	/* Can only record identified state if logged in to correct nick,
+	 * sorry -- jilles
+	 */
+	if (irccasecmp(origin, user))
+		return;
 
 	sts(":%s m %s %s +r", CreateSum(), nicksvs.nick, origin);
 }
@@ -331,8 +325,8 @@ static void inspircd_on_logout(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return;
 
-        if (irccasecmp(origin, user))
-                return;
+	if (irccasecmp(origin, user))
+		return;
 
 	sts(":%s m %s %s -r", CreateSum(), nicksvs.nick, origin);
 }
@@ -349,13 +343,13 @@ static void inspircd_jupe(char *server, char *reason)
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
 {
-        channel_t *c = channel_find(parv[0]);
+	channel_t *c = channel_find(parv[0]);
 
-        if (!origin)
-                return;   
+	if (!origin)
+		return;
 
-        c->topic = sstrdup(parv[3]);
-        c->topic_setter = sstrdup(parv[1]);
+	c->topic = sstrdup(parv[3]);
+	c->topic_setter = sstrdup(parv[1]);
 }
 
 static void m_ping(char *origin, uint8_t parc, char *parv[])
@@ -492,11 +486,10 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", u->nick, parv[0]);
 
-                /* fix up +e if necessary -- jilles */
-                if (u->myuser != NULL && irccasecmp(u->nick, parv[1]) &&
-                                !irccasecmp(parv[1], u->myuser->name))
-                        /* changed nick to registered one, reset +e */
-                        sts(":%s m %s %s +r", CreateSum(), me.name, parv[1]);
+		/* fix up +e if necessary -- jilles */
+		if (u->myuser != NULL && irccasecmp(u->nick, parv[1]) && !irccasecmp(parv[1], u->myuser->name))
+			/* changed nick to registered one, reset +e */
+			sts(":%s m %s %s +r", CreateSum(), me.name, parv[1]);
 
 		/* remove the current one from the list */
 		n = node_find(u, &userlist[u->hash]);
@@ -657,15 +650,15 @@ static void m_error(char *origin, uint8_t parc, char *parv[])
 
 static void m_eos(char *origin, uint8_t parc, char *parv[])
 {
-        sts(":%s H %s", CreateSum(), me.name);
+	sts(":%s H %s", CreateSum(), me.name);
 	sts(":%s / %s", CreateSum(), chansvs.nick);
 	sts(":%s v %s :atheme-%s. %s %s%s%s%s%s%s%s%s%s",
-            CreateSum(), me.name, version, me.name,
-            (match_mapping) ? "A" : "",
-            (me.loglevel & LG_DEBUG) ? "d" : "",
-            (me.auth) ? "e" : "",
-            (config_options.flood_msgs) ? "F" : "",
-            (config_options.leave_chans) ? "l" : "", (config_options.join_chans) ? "j" : "", (!match_mapping) ? "R" : "", (config_options.raw) ? "r" : "", (runflags & RF_LIVE) ? "n" : "");
+	    CreateSum(), me.name, version, me.name,
+	    (match_mapping) ? "A" : "",
+	    (me.loglevel & LG_DEBUG) ? "d" : "",
+	    (me.auth) ? "e" : "",
+	    (config_options.flood_msgs) ? "F" : "",
+	    (config_options.leave_chans) ? "l" : "", (config_options.join_chans) ? "j" : "", (!match_mapping) ? "R" : "", (config_options.raw) ? "r" : "", (runflags & RF_LIVE) ? "n" : "");
 }
 
 static void m_chghost(char *origin, uint8_t parc, char *parv[])
@@ -678,27 +671,27 @@ static void m_chghost(char *origin, uint8_t parc, char *parv[])
 	strlcpy(u->vhost, parv[1], HOSTLEN);
 }
 
-void _modinit(module_t *m)
+void _modinit(module_t * m)
 {
-        /* Symbol relocation voodoo. */
-        server_login = &inspircd_server_login;
-        introduce_nick = &inspircd_introduce_nick;
-        quit_sts = &inspircd_quit_sts;
-        wallops = &inspircd_wallops;
-        join = &inspircd_join;
-        kick = &inspircd_kick;
-        msg = &inspircd_msg;
-        notice = &inspircd_notice;
-        numeric_sts = &inspircd_numeric_sts;
-        skill = &inspircd_skill;
-        part = &inspircd_part;
-        kline_sts = &inspircd_kline_sts;
-        unkline_sts = &inspircd_unkline_sts;
-        topic_sts = &inspircd_topic_sts;
-        mode_sts = &inspircd_mode_sts;
-        ping_sts = &inspircd_ping_sts;
-        ircd_on_login = &inspircd_on_login;
-        ircd_on_logout = &inspircd_on_logout;
+	/* Symbol relocation voodoo. */
+	server_login = &inspircd_server_login;
+	introduce_nick = &inspircd_introduce_nick;
+	quit_sts = &inspircd_quit_sts;
+	wallops = &inspircd_wallops;
+	join = &inspircd_join;
+	kick = &inspircd_kick;
+	msg = &inspircd_msg;
+	notice = &inspircd_notice;
+	numeric_sts = &inspircd_numeric_sts;
+	skill = &inspircd_skill;
+	part = &inspircd_part;
+	kline_sts = &inspircd_kline_sts;
+	unkline_sts = &inspircd_unkline_sts;
+	topic_sts = &inspircd_topic_sts;
+	mode_sts = &inspircd_mode_sts;
+	ping_sts = &inspircd_ping_sts;
+	ircd_on_login = &inspircd_on_login;
+	ircd_on_logout = &inspircd_on_logout;
 	jupe = &inspircd_jupe;
 
 	mode_list = inspircd_mode_list;
@@ -733,4 +726,3 @@ void _modinit(module_t *m)
 
 	pmodule_loaded = TRUE;
 }
-

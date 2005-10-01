@@ -6,18 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: asuka.c 2401 2005-09-27 08:55:25Z pfish $
+ * $Id: asuka.c 2491 2005-10-01 04:26:53Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1
-(
-	"protocol/asuka", TRUE, _modinit, NULL,
-	"$Id: asuka.c 2401 2005-09-27 08:55:25Z pfish $",
-	"Atheme Development Group <http://www.atheme.org>"
-);
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 2491 2005-10-01 04:26:53Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -80,25 +75,25 @@ struct cmode_ asuka_prefix_mode_list[] = {
 /* login to our uplink */
 static uint8_t asuka_server_login(void)
 {
-        int8_t ret;
+	int8_t ret;
 
 	/* Override numeric choice here. */
 	curr_uplink->numeric = me.numeric;
 
-        ret = sts("PASS :%s", curr_uplink->pass);
-        if (ret == 1)
-                return 1;
+	ret = sts("PASS :%s", curr_uplink->pass);
+	if (ret == 1)
+		return 1;
 
-        me.bursting = TRUE;
+	me.bursting = TRUE;
 
 	/* SERVER irc.undernet.org 1 933022556 947908144 J10 AA]]] :[127.0.0.1] A Undernet Server */
-        sts("SERVER %s 1 %ld %ld J10 %s]]] :%s", me.name, me.start, CURRTIME, curr_uplink->numeric, me.desc);
+	sts("SERVER %s 1 %ld %ld J10 %s]]] :%s", me.name, me.start, CURRTIME, curr_uplink->numeric, me.desc);
 
 	services_init();
 
 	sts("%s EB", me.numeric);
 
-        return 0;
+	return 0;
 }
 
 /* introduce a client */
@@ -129,17 +124,17 @@ static void asuka_quit_sts(user_t *u, char *reason)
 /* WALLOPS wrapper */
 static void asuka_wallops(char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 
-        if (config_options.silent)
-                return;
+	if (config_options.silent)
+		return;
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-        sts("%s WA :%s", chansvs.me->me->uid, buf);
+	sts("%s WA :%s", chansvs.me->me->uid, buf);
 }
 
 /* join a channel */
@@ -178,70 +173,70 @@ static void asuka_join(char *chan, char *nick)
 /* kicks a user from a channel */
 static void asuka_kick(char *from, char *channel, char *to, char *reason)
 {
-        channel_t *chan = channel_find(channel);
+	channel_t *chan = channel_find(channel);
 	user_t *fptr = user_find(from);
-        user_t *user = user_find(to);
+	user_t *user = user_find(to);
 
-        if (!chan || !user || !fptr)
-                return;
+	if (!chan || !user || !fptr)
+		return;
 
-        sts("%s K %s %s :%s", fptr->uid, channel, user->uid, reason);
+	sts("%s K %s %s :%s", fptr->uid, channel, user->uid, reason);
 
-        chanuser_delete(chan, user);
+	chanuser_delete(chan, user);
 }
 
 /* PRIVMSG wrapper */
 static void asuka_msg(char *from, char *target, char *fmt, ...)
 {
-        va_list ap;
+	va_list ap;
 	user_t *u = user_find(from);
-        char buf[BUFSIZE];
+	char buf[BUFSIZE];
 
 	if (!u)
 		return;
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
-        va_end(ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_end(ap);
 
-        sts("%s P %s :%s", u->uid, target, buf);
+	sts("%s P %s :%s", u->uid, target, buf);
 }
 
 /* NOTICE wrapper */
 static void asuka_notice(char *from, char *target, char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 	user_t *fptr = user_find(from);
 	user_t *tptr = user_find(target);
 
 	if (!fptr || !tptr)
 		return;
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
-        va_end(ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_end(ap);
 
-        sts("%s O %s :%s", fptr->uid, tptr->uid, buf);
+	sts("%s O %s :%s", fptr->uid, tptr->uid, buf);
 }
 
 static void asuka_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
-        user_t *source_p, *target_p;
+	va_list ap;
+	char buf[BUFSIZE];
+	user_t *source_p, *target_p;
 
-        source_p = user_find(from);
-        target_p = user_find(target);
+	source_p = user_find(from);
+	target_p = user_find(target);
 
-        if (!target_p)
-                return;
+	if (!target_p)
+		return;
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
-        va_end(ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_end(ap);
 
-        sts("%s %d %s %s", source_p ? source_p->uid : me.numeric, numeric, target_p->uid, buf);
+	sts("%s %d %s %s", source_p ? source_p->uid : me.numeric, numeric, target_p->uid, buf);
 }
 
 /* KILL wrapper */
@@ -259,25 +254,25 @@ static void asuka_skill(char *from, char *nick, char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-        sts("%s D %s :%s!%s!%s (%s)", fptr->uid, tptr->uid, from, from, from, buf);
+	sts("%s D %s :%s!%s!%s (%s)", fptr->uid, tptr->uid, from, from, from, buf);
 }
 
 /* PART wrapper */
 static void asuka_part(char *chan, char *nick)
 {
-        user_t *u = user_find(nick);
-        channel_t *c = channel_find(chan);
-        chanuser_t *cu;
+	user_t *u = user_find(nick);
+	channel_t *c = channel_find(chan);
+	chanuser_t *cu;
 
-        if (!u || !c)
-                return;
+	if (!u || !c)
+		return;
 
-        if (!(cu = chanuser_find(c, u)))
-                return;
+	if (!(cu = chanuser_find(c, u)))
+		return;
 
-        sts("%s L %s", u->uid, c->name);
+	sts("%s L %s", u->uid, c->name);
 
-        chanuser_delete(c, u);
+	chanuser_delete(c, u);
 }
 
 /* server-to-server KLINE wrapper */
@@ -345,8 +340,8 @@ static void asuka_on_logout(char *origin, char *user, char *wantedhost)
 
 static void asuka_jupe(char *server, char *reason)
 {
-        if (!me.connected)
-                return;
+	if (!me.connected)
+		return;
 
 	sts("%s JU * !+%s %ld :%s", me.numeric, server, CURRTIME, reason);
 }
@@ -938,8 +933,7 @@ static void m_server(char *origin, uint8_t parc, char *parv[])
 	parv[5][2] = '\0';
 
 	slog(LG_DEBUG, "m_server(): new server: %s, id %s", parv[0], parv[5]);
-	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, 
-		parv[5], parv[7]);
+	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, parv[5], parv[7]);
 
 	if (cnt.server == 2)
 		me.actual = sstrdup(parv[0]);
@@ -989,8 +983,7 @@ static void m_whois(char *origin, uint8_t parc, char *parv[])
 
 static void m_trace(char *origin, uint8_t parc, char *parv[])
 {
-	handle_trace(origin, parc >= 1 ? parv[0] : "*",
-			parc >= 2 ? parv[1] : NULL);
+	handle_trace(origin, parc >= 1 ? parv[0] : "*", parc >= 2 ? parv[1] : NULL);
 }
 
 static void m_pass(char *origin, uint8_t parc, char *parv[])
@@ -1012,27 +1005,27 @@ static void m_eos(char *origin, uint8_t parc, char *parv[])
 	sts("%s EA", me.numeric);
 }
 
-void _modinit(module_t *m)
+void _modinit(module_t * m)
 {
-        /* Symbol relocation voodoo. */
-        server_login = &asuka_server_login;
-        introduce_nick = &asuka_introduce_nick;
-        quit_sts = &asuka_quit_sts;
-        wallops = &asuka_wallops;
-        join = &asuka_join;
-        kick = &asuka_kick;
-        msg = &asuka_msg;
-        notice = &asuka_notice;
-        numeric_sts = &asuka_numeric_sts;
-        skill = &asuka_skill;
-        part = &asuka_part;
-        kline_sts = &asuka_kline_sts;
-        unkline_sts = &asuka_unkline_sts;
-        topic_sts = &asuka_topic_sts;
-        mode_sts = &asuka_mode_sts;
-        ping_sts = &asuka_ping_sts;
-        ircd_on_login = &asuka_on_login;
-        ircd_on_logout = &asuka_on_logout;
+	/* Symbol relocation voodoo. */
+	server_login = &asuka_server_login;
+	introduce_nick = &asuka_introduce_nick;
+	quit_sts = &asuka_quit_sts;
+	wallops = &asuka_wallops;
+	join = &asuka_join;
+	kick = &asuka_kick;
+	msg = &asuka_msg;
+	notice = &asuka_notice;
+	numeric_sts = &asuka_numeric_sts;
+	skill = &asuka_skill;
+	part = &asuka_part;
+	kline_sts = &asuka_kline_sts;
+	unkline_sts = &asuka_unkline_sts;
+	topic_sts = &asuka_topic_sts;
+	mode_sts = &asuka_mode_sts;
+	ping_sts = &asuka_ping_sts;
+	ircd_on_login = &asuka_on_login;
+	ircd_on_logout = &asuka_on_logout;
 	jupe = &asuka_jupe;
 
 	parse = &p10_parse;
@@ -1044,35 +1037,34 @@ void _modinit(module_t *m)
 
 	ircd = &Asuka;
 
-        pcommand_add("G", m_ping);
-        pcommand_add("Z", m_pong);
-        pcommand_add("P", m_privmsg);
+	pcommand_add("G", m_ping);
+	pcommand_add("Z", m_pong);
+	pcommand_add("P", m_privmsg);
 	pcommand_add("O", m_privmsg);
 	pcommand_add("C", m_create);
 	pcommand_add("J", m_join);
 	pcommand_add("EB", m_eos);
-        pcommand_add("B", m_burst);
-        pcommand_add("L", m_part);
+	pcommand_add("B", m_burst);
+	pcommand_add("L", m_part);
 	pcommand_add("N", m_nick);
-        pcommand_add("Q", m_quit);
-        pcommand_add("M", m_mode);
-        pcommand_add("K", m_kick);
-        pcommand_add("D", m_kill);
-        pcommand_add("SQ", m_squit);
-        pcommand_add("S", m_server);
-        pcommand_add("SERVER", m_server);
-        pcommand_add("R", m_stats);
-        pcommand_add("AD", m_admin);
-        pcommand_add("V", m_version);
-        pcommand_add("F", m_info);
-        pcommand_add("W", m_whois);
-        pcommand_add("TR", m_trace);
-        pcommand_add("PASS", m_pass);
-        pcommand_add("ERROR", m_error);
-        pcommand_add("T", m_topic);
+	pcommand_add("Q", m_quit);
+	pcommand_add("M", m_mode);
+	pcommand_add("K", m_kick);
+	pcommand_add("D", m_kill);
+	pcommand_add("SQ", m_squit);
+	pcommand_add("S", m_server);
+	pcommand_add("SERVER", m_server);
+	pcommand_add("R", m_stats);
+	pcommand_add("AD", m_admin);
+	pcommand_add("V", m_version);
+	pcommand_add("F", m_info);
+	pcommand_add("W", m_whois);
+	pcommand_add("TR", m_trace);
+	pcommand_add("PASS", m_pass);
+	pcommand_add("ERROR", m_error);
+	pcommand_add("T", m_topic);
 
 	m->mflags = MODTYPE_CORE;
 
 	pmodule_loaded = TRUE;
 }
-

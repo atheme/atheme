@@ -4,18 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 2401 2005-09-27 08:55:25Z pfish $
+ * $Id: charybdis.c 2491 2005-10-01 04:26:53Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1
-(
-	"protocol/charybdis", TRUE, _modinit, NULL,
-	"$Id: charybdis.c 2401 2005-09-27 08:55:25Z pfish $",
-	"Atheme Development Group <http://www.atheme.org>"
-);
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 2491 2005-10-01 04:26:53Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -88,19 +83,19 @@ static char *ts6sid = NULL;
 /* login to our uplink */
 static uint8_t charybdis_server_login(void)
 {
-        int8_t ret;
+	int8_t ret;
 
-        ret = sts("PASS %s TS 6 :%s", curr_uplink->pass, curr_uplink->numeric);
-        if (ret == 1)
-                return 1;
+	ret = sts("PASS %s TS 6 :%s", curr_uplink->pass, curr_uplink->numeric);
+	if (ret == 1)
+		return 1;
 
-        me.bursting = TRUE;
+	me.bursting = TRUE;
 
-        sts("CAPAB :QS KLN UNKLN ENCAP SERVICES");
-        sts("SERVER %s 1 :%s", me.name, me.desc);
-        sts("SVINFO 6 6 0 :%ld", CURRTIME); /* require TS6 */
+	sts("CAPAB :QS KLN UNKLN ENCAP SERVICES");
+	sts("SERVER %s 1 :%s", me.name, me.desc);
+	sts("SVINFO 6 6 0 :%ld", CURRTIME);	/* require TS6 */
 
-        return 0;
+	return 0;
 }
 
 /* introduce a client */
@@ -131,17 +126,17 @@ static void charybdis_quit_sts(user_t *u, char *reason)
 /* WALLOPS wrapper */
 static void charybdis_wallops(char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 
-        if (config_options.silent)
-                return;
+	if (config_options.silent)
+		return;
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-        sts(":%s WALLOPS :%s", ME, buf);
+	sts(":%s WALLOPS :%s", ME, buf);
 }
 
 /* join a channel */
@@ -178,33 +173,32 @@ static void charybdis_join(char *chan, char *nick)
 /* kicks a user from a channel */
 static void charybdis_kick(char *from, char *channel, char *to, char *reason)
 {
-        channel_t *chan = channel_find(channel);
-        user_t *user = user_find(to);
+	channel_t *chan = channel_find(channel);
+	user_t *user = user_find(to);
 	user_t *from_p = user_find(from);
 
-        if (!chan || !user)
-                return;
+	if (!chan || !user)
+		return;
 
-        sts(":%s KICK %s %s :%s", CLIENT_NAME(from_p), channel,
-			CLIENT_NAME(user), reason);
+	sts(":%s KICK %s %s :%s", CLIENT_NAME(from_p), channel, CLIENT_NAME(user), reason);
 
-        chanuser_delete(chan, user);
+	chanuser_delete(chan, user);
 }
 
 /* PRIVMSG wrapper */
 static void charybdis_msg(char *from, char *target, char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 	user_t *u = user_find(from);
 	user_t *t = user_find(target);
 
 	if (!u)
 		return;
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
-        va_end(ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_end(ap);
 
 	/* If this is to a channel, it's the snoop channel so chanserv
 	 * is on it -- jilles
@@ -213,23 +207,23 @@ static void charybdis_msg(char *from, char *target, char *fmt, ...)
 	 * the source would be able to send to whatever target it is 
 	 * sending to. --nenolod
 	 */
-        sts(":%s PRIVMSG %s :%s", CLIENT_NAME(u), t ? CLIENT_NAME(t) : target, buf);
+	sts(":%s PRIVMSG %s :%s", CLIENT_NAME(u), t ? CLIENT_NAME(t) : target, buf);
 }
 
 /* NOTICE wrapper */
 static void charybdis_notice(char *from, char *target, char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 	user_t *u = user_find(from);
 	user_t *t = user_find(target);
 
 	if (!u)
 		return;
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
-        va_end(ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_end(ap);
 
 	if (target[0] != '#' || chanuser_find(channel_find(target), user_find(from)))
 		sts(":%s NOTICE %s :%s", CLIENT_NAME(u), t ? CLIENT_NAME(t) : target, buf);
@@ -263,25 +257,25 @@ static void charybdis_skill(char *from, char *nick, char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-        sts(":%s KILL %s :%s!%s!%s (%s)", killer ? CLIENT_NAME(killer) : ME, victim ? CLIENT_NAME(victim) : nick, from, from, from, buf);
+	sts(":%s KILL %s :%s!%s!%s (%s)", killer ? CLIENT_NAME(killer) : ME, victim ? CLIENT_NAME(victim) : nick, from, from, from, buf);
 }
 
 /* PART wrapper */
 static void charybdis_part(char *chan, char *nick)
 {
-        user_t *u = user_find(nick);
-        channel_t *c = channel_find(chan);
-        chanuser_t *cu;
+	user_t *u = user_find(nick);
+	channel_t *c = channel_find(chan);
+	chanuser_t *cu;
 
-        if (!u || !c)
-                return;
+	if (!u || !c)
+		return;
 
-        if (!(cu = chanuser_find(c, u)))
-                return;
+	if (!(cu = chanuser_find(c, u)))
+		return;
 
-        sts(":%s PART %s", CLIENT_NAME(u), c->name);
+	sts(":%s PART %s", CLIENT_NAME(u), c->name);
 
-        chanuser_delete(c, u);
+	chanuser_delete(c, u);
 }
 
 /* server-to-server KLINE wrapper */
@@ -320,8 +314,7 @@ static void charybdis_topic_sts(char *channel, char *setter, char *topic)
 	 */
 	if (!chanuser_find(c, chansvs.me->me))
 	{
-		sts(":%s SJOIN %ld %s + :@%s", ME, c->ts, channel,
-				CLIENT_NAME(chansvs.me->me));
+		sts(":%s SJOIN %ld %s + :@%s", ME, c->ts, channel, CLIENT_NAME(chansvs.me->me));
 		joined = 1;
 	}
 	sts(":%s TOPIC %s :%s (%s)", CLIENT_NAME(chansvs.me->me), channel, topic, setter);
@@ -376,11 +369,11 @@ static void charybdis_on_logout(char *origin, char *user, char *wantedhost)
  */
 static void charybdis_jupe(char *server, char *reason)
 {
-        if (!me.connected)
-                return;
+	if (!me.connected)
+		return;
 
 	sts(":%s SQUIT %s :%s", CLIENT_NAME(opersvs.me->me), server, reason);
-        sts(":%s SERVER %s 2 :%s", me.name, server, reason);
+	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
@@ -852,7 +845,7 @@ static void m_tmode(char *origin, uint8_t parc, char *parv[])
 		slog(LG_DEBUG, "m_tmode(): missing parameters in TMODE");
 		return;
 	}
-	
+
 	/* Ignore TS as we do not lower TSes ourselves */
 
 	channel_mode(NULL, channel_find(parv[1]), parc - 2, &parv[2]);
@@ -935,8 +928,7 @@ static void m_squit(char *origin, uint8_t parc, char *parv[])
 static void m_server(char *origin, uint8_t parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
-	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, 
-		origin ? NULL : ts6sid, parv[2]);
+	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, origin ? NULL : ts6sid, parv[2]);
 
 	if (cnt.server == 2)
 		me.actual = sstrdup(parv[0]);
@@ -953,8 +945,7 @@ static void m_sid(char *origin, uint8_t parc, char *parv[])
 {
 	/* -> :1JJ SID file. 2 00F :telnet server */
 	slog(LG_DEBUG, "m_sid(): new server: %s", parv[0]);
-	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, 
-		parv[2], parv[3]);
+	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, parv[2], parv[3]);
 
 	if (cnt.server == 2)
 		me.actual = sstrdup(parv[0]);
@@ -994,8 +985,7 @@ static void m_whois(char *origin, uint8_t parc, char *parv[])
 
 static void m_trace(char *origin, uint8_t parc, char *parv[])
 {
-	handle_trace(origin, parc >= 1 ? parv[0] : "*",
-			parc >= 2 ? parv[1] : NULL);
+	handle_trace(origin, parc >= 1 ? parv[0] : "*", parc >= 2 ? parv[1] : NULL);
 }
 
 static void m_pass(char *origin, uint8_t parc, char *parv[])
@@ -1055,9 +1045,9 @@ static void m_capab(char *origin, uint8_t parc, char *parv[])
 	}
 
 	/* Now we know whether or not we should enable services support,
-         * so burst the clients.
-         *       --nenolod
-         */
+	 * so burst the clients.
+	 *       --nenolod
+	 */
 	services_init();
 }
 
@@ -1072,7 +1062,7 @@ static void server_eob(server_t *s)
 	}
 }
 
-void _modinit(module_t *m)
+void _modinit(module_t * m)
 {
 	/* Symbol relocation voodoo. */
 	server_login = &charybdis_server_login;
@@ -1136,4 +1126,3 @@ void _modinit(module_t *m)
 
 	pmodule_loaded = TRUE;
 }
-

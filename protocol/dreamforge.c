@@ -4,18 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: dreamforge.c 2401 2005-09-27 08:55:25Z pfish $
+ * $Id: dreamforge.c 2491 2005-10-01 04:26:53Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/dreamforge.h"
 
-DECLARE_MODULE_V1
-(
-	"protocol/dreamforge", TRUE, _modinit, NULL,
-	"$Id: dreamforge.c 2401 2005-09-27 08:55:25Z pfish $",
-	"Atheme Development Group <http://www.atheme.org>"
-);
+DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 2491 2005-10-01 04:26:53Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -75,20 +70,20 @@ struct cmode_ dreamforge_prefix_mode_list[] = {
 /* login to our uplink */
 static uint8_t dreamforge_server_login(void)
 {
-        int8_t ret;
+	int8_t ret;
 
-        ret = sts("PASS %s", curr_uplink->pass);
-        if (ret == 1)
-                return 1;
+	ret = sts("PASS %s", curr_uplink->pass);
+	if (ret == 1)
+		return 1;
 
-        me.bursting = TRUE;
+	me.bursting = TRUE;
 
-        sts("PROTOCTL NOQUIT WATCH=128 SAFELIST");
-        sts("SERVER %s 1 :%s", me.name, me.desc);
+	sts("PROTOCTL NOQUIT WATCH=128 SAFELIST");
+	sts("SERVER %s 1 :%s", me.name, me.desc);
 
 	services_init();
 
-        return 0;
+	return 0;
 }
 
 /* introduce a client */
@@ -108,28 +103,28 @@ static user_t *dreamforge_introduce_nick(char *nick, char *user, char *host, cha
 
 static void dreamforge_quit_sts(user_t *u, char *reason)
 {
-        if (!me.connected)
-                return;
+	if (!me.connected)
+		return;
 
-        sts(":%s QUIT :%s", u->nick, reason);
+	sts(":%s QUIT :%s", u->nick, reason);
 
-        user_delete(u->nick);
+	user_delete(u->nick);
 }
 
 /* WALLOPS wrapper */
 static void dreamforge_wallops(char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 
-        if (config_options.silent)
-                return;
+	if (config_options.silent)
+		return;
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-        sts(":%s GLOBOPS :%s", chansvs.nick, buf);
+	sts(":%s GLOBOPS :%s", chansvs.nick, buf);
 }
 
 /* join a channel */
@@ -163,84 +158,84 @@ static void dreamforge_join(char *chan, char *nick)
 /* kicks a user from a channel */
 static void dreamforge_kick(char *from, char *channel, char *to, char *reason)
 {
-        channel_t *chan = channel_find(channel);
-        user_t *user = user_find(to);
+	channel_t *chan = channel_find(channel);
+	user_t *user = user_find(to);
 
-        if (!chan || !user)
-                return;
+	if (!chan || !user)
+		return;
 
-        sts(":%s KICK %s %s :%s", from, channel, to, reason);
+	sts(":%s KICK %s %s :%s", from, channel, to, reason);
 
-        chanuser_delete(chan, user);
+	chanuser_delete(chan, user);
 }
 
 /* PRIVMSG wrapper */
 static void dreamforge_msg(char *from, char *target, char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
-        va_end(ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_end(ap);
 
-        sts(":%s PRIVMSG %s :%s", from, target, buf);
+	sts(":%s PRIVMSG %s :%s", from, target, buf);
 }
 
 /* NOTICE wrapper */
 static void dreamforge_notice(char *from, char *target, char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
-        va_end(ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_end(ap);
 
-        sts(":%s NOTICE %s :%s", from, target, buf);
+	sts(":%s NOTICE %s :%s", from, target, buf);
 }
 
 static void dreamforge_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
-        va_end(ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_end(ap);
 
-        sts(":%s %d %s %s", from, numeric, target, buf);
+	sts(":%s %d %s %s", from, numeric, target, buf);
 }
 
 /* KILL wrapper */
 static void dreamforge_skill(char *from, char *nick, char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
-        va_end(ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_end(ap);
 
-        sts(":%s KILL %s :%s!%s!%s (%s)", from, nick, from, from, from, buf);
+	sts(":%s KILL %s :%s!%s!%s (%s)", from, nick, from, from, from, buf);
 }
 
 /* PART wrapper */
 static void dreamforge_part(char *chan, char *nick)
 {
-        user_t *u = user_find(nick);
-        channel_t *c = channel_find(chan);
-        chanuser_t *cu;
+	user_t *u = user_find(nick);
+	channel_t *c = channel_find(chan);
+	chanuser_t *cu;
 
-        if (!u || !c)
-                return;
+	if (!u || !c)
+		return;
 
-        if (!(cu = chanuser_find(c, u)))
-                return;
+	if (!(cu = chanuser_find(c, u)))
+		return;
 
-        sts(":%s PART %s", u->nick, c->name);
+	sts(":%s PART %s", u->nick, c->name);
 
-        chanuser_delete(c, u);
+	chanuser_delete(c, u);
 }
 
 /* server-to-server KLINE wrapper */
@@ -249,8 +244,7 @@ static void dreamforge_kline_sts(char *server, char *user, char *host, long dura
 	if (!me.connected)
 		return;
 
-        sts(":%s AKILL %s %s %ld %s %ld :%s", me.name, host, user, duration, opersvs.nick, time(NULL),
-                reason);
+	sts(":%s AKILL %s %s %ld %s %ld :%s", me.name, host, user, duration, opersvs.nick, time(NULL), reason);
 }
 
 /* server-to-server UNKLINE wrapper */
@@ -265,28 +259,28 @@ static void dreamforge_unkline_sts(char *server, char *user, char *host)
 /* topic wrapper */
 static void dreamforge_topic_sts(char *channel, char *setter, char *topic)
 {
-        if (!me.connected)
-                return;
+	if (!me.connected)
+		return;
 
-        sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, channel, setter, CURRTIME, topic);
+	sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, channel, setter, CURRTIME, topic);
 }
 
 /* mode wrapper */
 static void dreamforge_mode_sts(char *sender, char *target, char *modes)
 {
-        if (!me.connected)
-                return;
+	if (!me.connected)
+		return;
 
-        sts(":%s MODE %s %s", sender, target, modes);
+	sts(":%s MODE %s %s", sender, target, modes);
 }
 
 /* ping wrapper */
 static void dreamforge_ping_sts(void)
 {
-        if (!me.connected)
-                return;
+	if (!me.connected)
+		return;
 
-        sts("PING :%s", me.name);
+	sts("PING :%s", me.name);
 }
 
 /* protocol-specific stuff to do on login */
@@ -295,11 +289,11 @@ static void dreamforge_on_login(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return;
 
-        /* Can only record identified state if logged in to correct nick,
-         * sorry -- jilles
-         */
-        if (irccasecmp(origin, user))
-                return;
+	/* Can only record identified state if logged in to correct nick,
+	 * sorry -- jilles
+	 */
+	if (irccasecmp(origin, user))
+		return;
 
 	sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, origin, time(NULL));
 }
@@ -310,30 +304,30 @@ static void dreamforge_on_logout(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return;
 
-        if (irccasecmp(origin, user))
-                return;
+	if (irccasecmp(origin, user))
+		return;
 
 	sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, origin, time(NULL));
 }
 
 static void dreamforge_jupe(char *server, char *reason)
 {
-        if (!me.connected)
-                return;
+	if (!me.connected)
+		return;
 
 	sts(":%s SQUIT %s :%s", opersvs.nick, server, reason);
-        sts(":%s SERVER %s 2 :%s", me.name, server, reason);
+	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
 {
-        channel_t *c = channel_find(parv[0]);
+	channel_t *c = channel_find(parv[0]);
 
-        if (!origin)
-                return;   
+	if (!origin)
+		return;
 
-        c->topic = sstrdup(parv[3]);
-        c->topic_setter = sstrdup(parv[1]);
+	c->topic = sstrdup(parv[3]);
+	c->topic_setter = sstrdup(parv[1]);
 }
 
 static void m_ping(char *origin, uint8_t parc, char *parv[])
@@ -434,11 +428,10 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", u->nick, parv[0]);
 
-                /* fix up +e if necessary -- jilles */
-                if (u->myuser != NULL && irccasecmp(u->nick, parv[0]) &&
-                                !irccasecmp(parv[0], u->myuser->name))
-                        /* changed nick to registered one, reset +e */
-                        sts(":%s MODE %s +rd %ld", me.name, parv[0], CURRTIME);
+		/* fix up +e if necessary -- jilles */
+		if (u->myuser != NULL && irccasecmp(u->nick, parv[0]) && !irccasecmp(parv[0], u->myuser->name))
+			/* changed nick to registered one, reset +e */
+			sts(":%s MODE %s +rd %ld", me.name, parv[0], CURRTIME);
 
 		/* remove the current one from the list */
 		n = node_find(u, &userlist[u->hash]);
@@ -570,8 +563,7 @@ static void m_squit(char *origin, uint8_t parc, char *parv[])
 static void m_server(char *origin, uint8_t parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
-	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, 
-			NULL, parv[2]);
+	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, NULL, parv[2]);
 
 	if (cnt.server == 2)
 		me.actual = sstrdup(parv[0]);
@@ -604,8 +596,7 @@ static void m_whois(char *origin, uint8_t parc, char *parv[])
 
 static void m_trace(char *origin, uint8_t parc, char *parv[])
 {
-	handle_trace(origin, parc >= 1 ? parv[0] : "*",
-			parc >= 2 ? parv[1] : NULL);
+	handle_trace(origin, parc >= 1 ? parv[0] : "*", parc >= 2 ? parv[1] : NULL);
 }
 
 static void m_join(char *origin, uint8_t parc, char *parv[])
@@ -656,27 +647,27 @@ static void m_error(char *origin, uint8_t parc, char *parv[])
 	slog(LG_INFO, "m_error(): error from server: %s", parv[0]);
 }
 
-void _modinit(module_t *m)
+void _modinit(module_t * m)
 {
-        /* Symbol relocation voodoo. */
-        server_login = &dreamforge_server_login;
-        introduce_nick = &dreamforge_introduce_nick;
-        quit_sts = &dreamforge_quit_sts;
-        wallops = &dreamforge_wallops;
-        join = &dreamforge_join;
-        kick = &dreamforge_kick;
-        msg = &dreamforge_msg;
-        notice = &dreamforge_notice;
-        numeric_sts = &dreamforge_numeric_sts;
-        skill = &dreamforge_skill;
-        part = &dreamforge_part;
-        kline_sts = &dreamforge_kline_sts;
-        unkline_sts = &dreamforge_unkline_sts;
-        topic_sts = &dreamforge_topic_sts;
-        mode_sts = &dreamforge_mode_sts;
-        ping_sts = &dreamforge_ping_sts;
-        ircd_on_login = &dreamforge_on_login;   
-        ircd_on_logout = &dreamforge_on_logout;
+	/* Symbol relocation voodoo. */
+	server_login = &dreamforge_server_login;
+	introduce_nick = &dreamforge_introduce_nick;
+	quit_sts = &dreamforge_quit_sts;
+	wallops = &dreamforge_wallops;
+	join = &dreamforge_join;
+	kick = &dreamforge_kick;
+	msg = &dreamforge_msg;
+	notice = &dreamforge_notice;
+	numeric_sts = &dreamforge_numeric_sts;
+	skill = &dreamforge_skill;
+	part = &dreamforge_part;
+	kline_sts = &dreamforge_kline_sts;
+	unkline_sts = &dreamforge_unkline_sts;
+	topic_sts = &dreamforge_topic_sts;
+	mode_sts = &dreamforge_mode_sts;
+	ping_sts = &dreamforge_ping_sts;
+	ircd_on_login = &dreamforge_on_login;
+	ircd_on_logout = &dreamforge_on_logout;
 	jupe = &dreamforge_jupe;
 
 	mode_list = dreamforge_mode_list;
@@ -686,28 +677,28 @@ void _modinit(module_t *m)
 
 	ircd = &DreamForge;
 
-        pcommand_add("PING", m_ping);
-        pcommand_add("PONG", m_pong);
-        pcommand_add("PRIVMSG", m_privmsg);
+	pcommand_add("PING", m_ping);
+	pcommand_add("PONG", m_pong);
+	pcommand_add("PRIVMSG", m_privmsg);
 	pcommand_add("NOTICE", m_privmsg);
-        pcommand_add("PART", m_part);
-        pcommand_add("NICK", m_nick);
-        pcommand_add("QUIT", m_quit);
-        pcommand_add("MODE", m_mode);
-        pcommand_add("KICK", m_kick);
-        pcommand_add("KILL", m_kill);
-        pcommand_add("SQUIT", m_squit);
-        pcommand_add("SERVER", m_server);
-        pcommand_add("STATS", m_stats);
-        pcommand_add("ADMIN", m_admin);
-        pcommand_add("VERSION", m_version);
-        pcommand_add("INFO", m_info);
+	pcommand_add("PART", m_part);
+	pcommand_add("NICK", m_nick);
+	pcommand_add("QUIT", m_quit);
+	pcommand_add("MODE", m_mode);
+	pcommand_add("KICK", m_kick);
+	pcommand_add("KILL", m_kill);
+	pcommand_add("SQUIT", m_squit);
+	pcommand_add("SERVER", m_server);
+	pcommand_add("STATS", m_stats);
+	pcommand_add("ADMIN", m_admin);
+	pcommand_add("VERSION", m_version);
+	pcommand_add("INFO", m_info);
 	pcommand_add("WHOIS", m_whois);
 	pcommand_add("TRACE", m_trace);
-        pcommand_add("JOIN", m_join);
-        pcommand_add("PASS", m_pass);
-        pcommand_add("ERROR", m_error);
-        pcommand_add("TOPIC", m_topic);
+	pcommand_add("JOIN", m_join);
+	pcommand_add("PASS", m_pass);
+	pcommand_add("ERROR", m_error);
+	pcommand_add("TOPIC", m_topic);
 
 	m->mflags = MODTYPE_CORE;
 

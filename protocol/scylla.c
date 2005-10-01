@@ -4,18 +4,13 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: scylla.c 2401 2005-09-27 08:55:25Z pfish $
+ * $Id: scylla.c 2491 2005-10-01 04:26:53Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1
-(
-	"protocol/scylla", TRUE, _modinit, NULL,
-	"$Id: scylla.c 2401 2005-09-27 08:55:25Z pfish $",
-	"Atheme Development Group <http://www.atheme.org>"
-);
+DECLARE_MODULE_V1("protocol/scylla", TRUE, _modinit, NULL, "$Id: scylla.c 2491 2005-10-01 04:26:53Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -73,17 +68,17 @@ struct cmode_ scylla_prefix_mode_list[] = {
 /* login to our uplink */
 static uint8_t scylla_server_login(void)
 {
-        int8_t ret;
+	int8_t ret;
 
-        ret = sts("PASS %s :TS", curr_uplink->pass);
-        if (ret == 1)
-                return 1;
+	ret = sts("PASS %s :TS", curr_uplink->pass);
+	if (ret == 1)
+		return 1;
 
-        me.bursting = TRUE;
+	me.bursting = TRUE;
 
-        sts("CAPAB :QS KLN UNKLN");
-        sts("SERVER %s 1 :%s", me.name, me.desc);
-        sts("SVINFO 5 3 0 :%ld", CURRTIME);
+	sts("CAPAB :QS KLN UNKLN");
+	sts("SERVER %s 1 :%s", me.name, me.desc);
+	sts("SVINFO 5 3 0 :%ld", CURRTIME);
 
 	services_init();
 
@@ -91,7 +86,7 @@ static uint8_t scylla_server_login(void)
 	pcommand_add(chansvs.nick, cservice);
 	pcommand_add(opersvs.nick, oservice);
 
-        return 0;
+	return 0;
 }
 
 /* introduce a client */
@@ -104,57 +99,57 @@ static user_t *scylla_introduce_nick(char *nick, char *user, char *host, char *r
 /* WALLOPS wrapper */
 static void scylla_wallops(char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 
-        if (config_options.silent)
-                return;
+	if (config_options.silent)
+		return;
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-        sts(":%s WALLOPS :%s", me.name, buf);
+	sts(":%s WALLOPS :%s", me.name, buf);
 }
 
 /* kicks a user from a channel */
 static void scylla_kick(char *from, char *channel, char *to, char *reason)
 {
-        channel_t *chan = channel_find(channel);
-        user_t *user = user_find(to);
+	channel_t *chan = channel_find(channel);
+	user_t *user = user_find(to);
 
-        if (!chan || !user)
-                return;
+	if (!chan || !user)
+		return;
 
-        sts(":%s KICK %s %s :%s", me.name, channel, to, reason);
+	sts(":%s KICK %s %s :%s", me.name, channel, to, reason);
 
-        chanuser_delete(chan, user);
+	chanuser_delete(chan, user);
 }
 
 /* PRIVMSG wrapper */
 static void scylla_msg(char *from, char *target, char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
-        va_end(ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_end(ap);
 
-        sts(":%s PRIVMSG %s :%s", from, target, buf);
+	sts(":%s PRIVMSG %s :%s", from, target, buf);
 }
 
 /* NOTICE wrapper */
 static void scylla_notice(char *from, char *target, char *fmt, ...)
 {
-        va_list ap;
-        char buf[BUFSIZE];
+	va_list ap;
+	char buf[BUFSIZE];
 
-        va_start(ap, fmt);
-        vsnprintf(buf, BUFSIZE, fmt, ap);
-        va_end(ap);
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_end(ap);
 
-        sts(":%s 304 %s :%s", me.name, target, buf);
+	sts(":%s 304 %s :%s", me.name, target, buf);
 }
 
 /* numeric wrapper */
@@ -180,7 +175,7 @@ static void scylla_skill(char *from, char *nick, char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-        sts(":%s KILL %s :%s!%s!%s (%s)", me.name, nick, from, from, from, buf);
+	sts(":%s KILL %s :%s!%s!%s (%s)", me.name, nick, from, from, from, buf);
 }
 
 /* server-to-server KLINE wrapper */
@@ -244,11 +239,11 @@ static void scylla_on_logout(char *origin, char *user, char *wantedhost)
 
 static void scylla_jupe(char *server, char *reason)
 {
-        if (!me.connected)
-                return;
+	if (!me.connected)
+		return;
 
 	sts(":%s SQUIT %s :%s", opersvs.nick, server, reason);
-        sts(":%s SERVER %s 2 :%s", me.name, server, reason);
+	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
@@ -553,8 +548,7 @@ static void m_squit(char *origin, uint8_t parc, char *parv[])
 static void m_server(char *origin, uint8_t parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
-	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name,
-		NULL, parv[2]);
+	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, NULL, parv[2]);
 
 	if (cnt.server == 2)
 		me.actual = sstrdup(parv[0]);
@@ -587,8 +581,7 @@ static void m_whois(char *origin, uint8_t parc, char *parv[])
 
 static void m_trace(char *origin, uint8_t parc, char *parv[])
 {
-	handle_trace(origin, parc >= 1 ? parv[0] : "*",
-			parc >= 2 ? parv[1] : NULL);
+	handle_trace(origin, parc >= 1 ? parv[0] : "*", parc >= 2 ? parv[1] : NULL);
 }
 
 static void m_join(char *origin, uint8_t parc, char *parv[])
@@ -625,7 +618,7 @@ static void m_error(char *origin, uint8_t parc, char *parv[])
 	slog(LG_INFO, "m_error(): error from server: %s", parv[0]);
 }
 
-void _modinit(module_t *m)
+void _modinit(module_t * m)
 {
 	/* Symbol relocation voodoo. */
 	server_login = &scylla_server_login;
@@ -678,4 +671,3 @@ void _modinit(module_t *m)
 
 	pmodule_loaded = TRUE;
 }
-
