@@ -1,3 +1,32 @@
+nenolod     2005/10/01 04:35:25 UTC	(20051001-2497)
+  Log:
+  Indent sources.
+  
+  Changes:	Modified:
+  +1 -1		trunk/src/authcookie.c (File Modified) 
+  +4 -5		trunk/src/cmode.c (File Modified) 
+  +11 -19	trunk/src/commandtree.c (File Modified) 
+  +28 -30	trunk/src/conf.c (File Modified) 
+  +1 -1		trunk/src/crypto.c (File Modified) 
+  +2 -3		trunk/src/dbhandler.c (File Modified) 
+  +2 -2		trunk/src/flags.c (File Modified) 
+  +20 -28	trunk/src/function.c (File Modified) 
+  +1 -1		trunk/src/match.c (File Modified) 
+  +17 -20	trunk/src/module.c (File Modified) 
+  +526 -527	trunk/src/node.c (File Modified) 
+  +1 -2		trunk/src/parse.c (File Modified) 
+  +33 -35	trunk/src/phandler.c (File Modified) 
+  +3 -7		trunk/src/pmodule.c (File Modified) 
+  +23 -33	trunk/src/ptasks.c (File Modified) 
+  +8 -11	trunk/src/services.c (File Modified) 
+  +3 -6		trunk/src/servtree.c (File Modified) 
+  +64 -65	trunk/src/signal.c (File Modified) 
+  +2 -3		trunk/src/ubase64.c (File Modified) 
+  +9 -9		trunk/src/uid.c (File Modified) 
+  +1 -2		trunk/src/uplink.c (File Modified) 
+  +3 -2		trunk/src/xmlrpc.c (File Modified) 
+
+
 nenolod     2005/10/01 04:32:24 UTC	(20051001-2495)
   Log:
   Update config files.

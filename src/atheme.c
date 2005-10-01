@@ -1,11 +1,11 @@
-/*
+)/*
  * Copyright (c) 2005 Atheme Development Group.
  *
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 2469 2005-09-30 21:36:58Z nenolod $
+ * $Id: atheme.c 2499 2005-10-01 04:56:52Z nenolod $
  */
 
 #include "atheme.h"
