@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 2471 2005-10-01 00:47:40Z nenolod $
+ * $Id: account.c 2473 2005-10-01 00:50:38Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 2471 2005-10-01 00:47:40Z nenolod $",
+	"$Id: account.c 2473 2005-10-01 00:50:38Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -288,6 +288,7 @@ static int do_logout(int parc, char *parv[])
 {
 	authcookie_t *ac;
 	myuser_t *mu;
+        char buf[XMLRPC_BUFSIZE];
 
         if (parc < 2)
         {
@@ -314,6 +315,11 @@ static int do_logout(int parc, char *parv[])
         }
 
         authcookie_destroy(ac);
+
+        xmlrpc_string(buf, "You are now logged out.");
+        xmlrpc_send(1, buf);
+
+        return 0;
 }
 
 void _modinit(module_t *m)

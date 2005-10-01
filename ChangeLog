@@ -1,3 +1,11 @@
+nenolod     2005/10/01 00:47:40 UTC	(20051001-2471)
+  Log:
+  - Add atheme.logout, which destroys an authcookie ticket. Should be self explanatory. :P
+
+  Modified:
+	trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 nenolod     2005/09/30 21:36:58 UTC	(20050930-2469)
   Log:
   Add authcookie_init() to startup procedure, fixes XMLRPC atheme.login crash
