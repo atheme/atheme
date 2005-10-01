@@ -1,3 +1,10 @@
+nenolod     2005/10/01 04:56:52 UTC	(20051001-2499)
+  Log:
+  Test commit.
+  Changes:	Modified:
+  +1 -1		trunk/src/atheme.c (File Modified) 
+
+
 nenolod     2005/10/01 04:35:25 UTC	(20051001-2497)
   Log:
   Indent sources.
