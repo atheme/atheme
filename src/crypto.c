@@ -4,7 +4,7 @@
  *
  * Cryptographic module support.
  *
- * $Id: crypto.c 1763 2005-08-18 18:45:28Z nenolod $
+ * $Id: crypto.c 2497 2005-10-01 04:35:25Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
  * systems. Modules provide this function, otherwise
  * it returns the string unencrypted.
  */
-char *(*crypt_string)(char *str, char *salt) = &generic_crypt_string;
+char *(*crypt_string) (char *str, char *salt) = &generic_crypt_string;
 
 char *generic_crypt_string(char *str, char *salt)
 {

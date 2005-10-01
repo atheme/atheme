@@ -4,13 +4,13 @@
  *
  * This file contains IRC interaction routines.
  *
- * $Id: parse.c 1853 2005-08-24 10:26:27Z w00t $
+ * $Id: parse.c 2497 2005-10-01 04:35:25Z nenolod $
  */
 
 #include "atheme.h"
 
 /* by default, we want the 2.8.21 parser */
-void (*parse)(char *line) = &irc_parse;
+void (*parse) (char *line) = &irc_parse;
 
 /* parses a standard 2.8.21 style IRC stream */
 void irc_parse(char *line)
@@ -219,4 +219,3 @@ void p10_parse(char *line)
 			}
 	}
 }
-

@@ -4,7 +4,7 @@
  *
  * Services binary tree manipulation. (add_service, del_service, et al.)
  *
- * $Id: servtree.c 1518 2005-08-05 01:35:22Z alambert $
+ * $Id: servtree.c 2497 2005-10-01 04:35:25Z nenolod $
  */
 
 #include "atheme.h"
@@ -23,8 +23,7 @@ void servtree_init(void)
 	}
 }
 
-service_t *add_service(char *name, char *user, char *host, char *real,
-	void (*handler)(char *origin, uint8_t parc, char *parv[]))
+service_t *add_service(char *name, char *user, char *host, char *real, void (*handler) (char *origin, uint8_t parc, char *parv[]))
 {
 	service_t *sptr;
 
@@ -56,7 +55,7 @@ service_t *add_service(char *name, char *user, char *host, char *real,
 	return sptr;
 }
 
-void del_service(service_t *sptr)
+void del_service(service_t * sptr)
 {
 	node_del(sptr->node, &services[sptr->hash]);
 
@@ -102,9 +101,7 @@ char *service_name(char *name)
 {
 	char *buf = smalloc(BUFSIZE);
 
-	snprintf(buf, BUFSIZE, "%s%s%s",
-		 name, (config_options.secure) ? "@" : "",
-		 (config_options.secure) ? me.name : "");
+	snprintf(buf, BUFSIZE, "%s%s%s", name, (config_options.secure) ? "@" : "", (config_options.secure) ? me.name : "");
 
 	return buf;
 }

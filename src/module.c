@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 2247 2005-09-16 07:04:29Z nenolod $
+ * $Id: module.c 2497 2005-10-01 04:35:25Z nenolod $
  */
 
 #include "atheme.h"
@@ -22,7 +22,7 @@ list_t modules;
 struct dirent
 {
 	char d_name[2048];
-	int  d_namlen;
+	int d_namlen;
 };
 
 typedef struct _DIR
@@ -33,18 +33,18 @@ typedef struct _DIR
 	struct dirent file_info;
 } DIR;
 
-static void closedir(DIR *entry)
+static void closedir(DIR * entry)
 {
 	FindClose(entry->hSearch);
 	free(entry);
 }
 
-static DIR* opendir(const char *path)
+static DIR *opendir(const char *path)
 {
 	char filespec[BUFISIZE * 2];
 	DIR *entry;
 
-	strlcpy (filespec, path, BUFSIZE * 2);
+	strlcpy(filespec, path, BUFSIZE * 2);
 	filespec[strlen(filespec)] = '\0';
 	strcat(filespec, "\\");
 	entry = malloc(sizeof(DIR));
@@ -62,7 +62,7 @@ static DIR* opendir(const char *path)
 
 		if (entry->hSearch == INVALID_HANDLE_VALUE)
 		{
-			free (entry);
+			free(entry);
 			return NULL;
 		}
 	}
@@ -70,7 +70,7 @@ static DIR* opendir(const char *path)
 	return entry;
 }
 
-static struct dirent *readdir(DIR *entry)
+static struct dirent *readdir(DIR * entry)
 {
 	int status;
 
@@ -86,8 +86,7 @@ static struct dirent *readdir(DIR *entry)
 	}
 
 	entry->firsttime = FALSE;
-	strlcpy(entry->file_info.d_name,entry->Win32FindData.cFileName,
-		BUFSIZE * 2);
+	strlcpy(entry->file_info.d_name, entry->Win32FindData.cFileName, BUFSIZE * 2);
 
 	entry->file_info.d_name[2048] = '\0';
 	entry->file_info.d_namlen = strlen(entry->file_info.d_name);
@@ -131,8 +130,7 @@ module_t *module_load(char *filespec)
 
 	if ((m = module_find(filespec)))
 	{
-		slog(LG_INFO, "module_load(): module %s is already loaded at [0x%lx]",
-				filespec, m->address);
+		slog(LG_INFO, "module_load(): module %s is already loaded at [0x%lx]", filespec, m->address);
 		return NULL;
 	}
 
@@ -274,7 +272,7 @@ void module_load_dir_match(char *dirspec, char *pattern)
  * side effects:
  *       a module is unloaded and neccessary deinitalization code is run.
  */
-void module_unload(module_t *m)
+void module_unload(module_t * m)
 {
 	node_t *n;
 
@@ -366,16 +364,15 @@ module_t *module_find(char *name)
  */
 module_t *module_find_published(char *name)
 {
-        node_t *n;
+	node_t *n;
 
-        LIST_FOREACH(n, modules.head)
-        {
-                module_t *m = n->data;
+	LIST_FOREACH(n, modules.head)
+	{
+		module_t *m = n->data;
 
-                if (!strcasecmp(m->header->name, name))
-                        return m;
-        }
+		if (!strcasecmp(m->header->name, name))
+			return m;
+	}
 
-        return NULL;
+	return NULL;
 }
-

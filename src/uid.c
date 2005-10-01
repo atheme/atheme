@@ -4,12 +4,12 @@
  *
  * Hybrid's UID code, adopted to be as generic as possible.
  *
- * $Id: uid.c 908 2005-07-17 04:00:28Z w00t $
+ * $Id: uid.c 2497 2005-10-01 04:35:25Z nenolod $
  */
 
 #include "atheme.h"
 
-static char new_uid[9];	/* allow for \0 */
+static char new_uid[9];		/* allow for \0 */
 static uint32_t uindex = 0;
 
 void init_uid(void)
@@ -28,16 +28,16 @@ void init_uid(void)
 
 	memset(new_uid, 0, sizeof(new_uid));
 
-	if(me.numeric != NULL)
+	if (me.numeric != NULL)
 		memcpy(new_uid, me.numeric, strlen(me.numeric));
 	else
 		return;
 
-	for(i = 0; i < strlen(me.numeric); i++)
-		if(new_uid[i] == '\0')
+	for (i = 0; i < strlen(me.numeric); i++)
+		if (new_uid[i] == '\0')
 			new_uid[i] = 'A';
 
-	for(i = strlen(me.numeric); i < uindex; i++)
+	for (i = strlen(me.numeric); i < uindex; i++)
 		new_uid[i] = 'A';
 }
 
@@ -49,11 +49,11 @@ char *uid_get(void)
 
 void add_one_to_uid(uint32_t i)
 {
-	if(i != strlen(me.numeric))	/* Not reached server SID portion yet? */
+	if (i != strlen(me.numeric))	/* Not reached server SID portion yet? */
 	{
-		if(new_uid[i] == 'Z')
+		if (new_uid[i] == 'Z')
 			new_uid[i] = '0';
-		else if(new_uid[i] == '9')
+		else if (new_uid[i] == '9')
 		{
 			new_uid[i] = 'A';
 			add_one_to_uid(i - 1);
@@ -63,7 +63,7 @@ void add_one_to_uid(uint32_t i)
 	}
 	else
 	{
-		if(new_uid[i] == 'Z')
+		if (new_uid[i] == 'Z')
 			for (i = strlen(me.numeric); i < 9; i++)
 				new_uid[i] = 'A';
 		else

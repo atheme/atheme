@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 2395 2005-09-26 23:01:54Z jilles $
+ * $Id: cmode.c 2497 2005-10-01 04:35:25Z nenolod $
  */
 
 #include "atheme.h"
@@ -160,7 +160,7 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 			else
 			{
 				chanban_t *c;
-				
+
 				c = chanban_find(chan, parv[parpos]);
 				chanban_delete(c);
 				if (source)
@@ -214,8 +214,8 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 							strlcat(hostbuf, "@", BUFSIZE);
 							strlcat(hostbuf, cu->user->host, BUFSIZE);
 
-							if ((!is_founder(mc, mu)) && (cu->user != chansvs.me->me) && 
-								(!is_xop(mc, mu, (CA_OP | CA_AUTOOP))) && (!chanacs_find_host(mc, hostbuf, (CA_OP | CA_AUTOOP))))
+							if ((!is_founder(mc, mu)) && (cu->user != chansvs.me->me) &&
+							    (!is_xop(mc, mu, (CA_OP | CA_AUTOOP))) && (!chanacs_find_host(mc, hostbuf, (CA_OP | CA_AUTOOP))))
 							{
 								/* they were opped and aren't on the list, deop them */
 								if (source)
@@ -227,8 +227,7 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 				}
 				else
 				{
-					if (cu->user->server == me.me &&
-							status_mode_list[i].value == CMODE_OP)
+					if (cu->user->server == me.me && status_mode_list[i].value == CMODE_OP)
 					{
 						if (source == NULL && (cu->user != chansvs.me->me || chanserv_reopped == FALSE))
 						{

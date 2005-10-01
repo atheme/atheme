@@ -4,7 +4,7 @@
  *
  * Remote authentication cookie handling. (think kerberos.)
  *
- * $Id: authcookie.c 2465 2005-09-30 06:18:48Z nenolod $
+ * $Id: authcookie.c 2497 2005-10-01 04:35:25Z nenolod $
  */
 
 #include "atheme.h"
@@ -101,7 +101,7 @@ authcookie_t *authcookie_find(char *ticket, myuser_t *myuser)
  * Side Effects:
  *       an authcookie is destroyed
  */
-void authcookie_destroy(authcookie_t *ac)
+void authcookie_destroy(authcookie_t * ac)
 {
 	node_del(&ac->node, &authcookie_list);
 	free(ac->ticket);

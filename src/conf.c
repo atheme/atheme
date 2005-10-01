@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 2367 2005-09-25 04:19:04Z nenolod $
+ * $Id: conf.c 2497 2005-10-01 04:35:25Z nenolod $
  */
 
 #include "atheme.h"
@@ -192,7 +192,8 @@ void conf_init(void)
 
 	me.netname = me.adminname = me.adminemail = me.mta = chansvs.nick = config_options.chan = config_options.global = NULL;
 
-	me.recontime = me.restarttime = me.maxlogins = me.maxusers = me.maxchans = config_options.flood_msgs = config_options.flood_time = config_options.kline_time = config_options.commit_interval = config_options.expire = 0;
+	me.recontime = me.restarttime = me.maxlogins = me.maxusers = me.maxchans = config_options.flood_msgs = config_options.flood_time = config_options.kline_time = config_options.commit_interval =
+		config_options.expire = 0;
 
 	/* we don't reset loglevel because too much stuff uses it */
 	config_options.defuflags = config_options.defcflags = 0x00000000;
@@ -283,7 +284,7 @@ struct ConfTable *find_conf_item(char *name, list_t *conflist)
 	return NULL;
 }
 
-void add_top_conf(char *name, int (*handler)(CONFIGENTRY *ce))
+void add_top_conf(char *name, int (*handler) (CONFIGENTRY *ce))
 {
 	struct ConfTable *ct;
 
@@ -302,7 +303,7 @@ void add_top_conf(char *name, int (*handler)(CONFIGENTRY *ce))
 	node_add(ct, node_create(), &confblocks);
 }
 
-void add_conf_item(char *name, list_t *conflist, int(*handler)(CONFIGENTRY *ce))
+void add_conf_item(char *name, list_t *conflist, int (*handler) (CONFIGENTRY *ce))
 {
 	node_t *n;
 	struct ConfTable *ct;
@@ -552,37 +553,36 @@ static int c_uplink(CONFIGENTRY *ce)
 			host = sstrdup(ce->ce_vardata);
 		}
 		else if (!strcasecmp("VHOST", ce->ce_varname))
-                {
-                        if (ce->ce_vardata == NULL)
-                                PARAM_ERROR(ce);
+		{
+			if (ce->ce_vardata == NULL)
+				PARAM_ERROR(ce);
 
-                        vhost = sstrdup(ce->ce_vardata);
-                }
-                else if (!strcasecmp("NUMERIC", ce->ce_varname))
-                {
-                        if (ce->ce_vardata == NULL)
-                                PARAM_ERROR(ce);
+			vhost = sstrdup(ce->ce_vardata);
+		}
+		else if (!strcasecmp("NUMERIC", ce->ce_varname))
+		{
+			if (ce->ce_vardata == NULL)
+				PARAM_ERROR(ce);
 
-                        numeric = sstrdup(ce->ce_vardata);
-                }
-                else if (!strcasecmp("PASSWORD", ce->ce_varname))
-                {
-                        if (ce->ce_vardata == NULL)
-                                PARAM_ERROR(ce);
+			numeric = sstrdup(ce->ce_vardata);
+		}
+		else if (!strcasecmp("PASSWORD", ce->ce_varname))
+		{
+			if (ce->ce_vardata == NULL)
+				PARAM_ERROR(ce);
 
-                        password = sstrdup(ce->ce_vardata);
-                }
-                else if (!strcasecmp("PORT", ce->ce_varname))
-                {
-                        if (ce->ce_vardata == NULL)
-                                PARAM_ERROR(ce);
+			password = sstrdup(ce->ce_vardata);
+		}
+		else if (!strcasecmp("PORT", ce->ce_varname))
+		{
+			if (ce->ce_vardata == NULL)
+				PARAM_ERROR(ce);
 
 			port = ce->ce_vardatanum;
-                }
+		}
 		else
 		{
-			slog(LG_ERROR, "%s:%d: Invalid configuration option uplink::%s",
-				ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
+			slog(LG_ERROR, "%s:%d: Invalid configuration option uplink::%s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
 			continue;
 		}
 	}
@@ -1387,9 +1387,7 @@ boolean_t conf_check(void)
 
 
 	/* recall that commit_interval is in seconds */
-	if ((!config_options.commit_interval)
-		|| (config_options.commit_interval < 60)
-		|| (config_options.commit_interval > 3600))
+	if ((!config_options.commit_interval) || (config_options.commit_interval < 60) || (config_options.commit_interval > 3600))
 	{
 		slog(LG_INFO, "conf_check(): invalid `commit_interval' set in %s; " "defaulting to 5 minutes", config_file);
 		config_options.commit_interval = 300;

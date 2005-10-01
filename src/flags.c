@@ -52,8 +52,8 @@ uint32_t flags_to_bitmask(const char *string, struct flags_table table[], uint32
 
 				  /* If this is chanacs_flags[], remove the ban flag. */
 				  if (table == chanacs_flags)
-				  	bitmask &= ~CA_AKICK;
-			  }					
+					  bitmask &= ~CA_AKICK;
+			  }
 			  else if (status == FLAGS_DEL)
 				  bitmask &= ~0xFFFFFFFF;
 			  break;

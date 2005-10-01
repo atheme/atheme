@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 2255 2005-09-16 07:50:13Z nenolod $
+ * $Id: services.c 2497 2005-10-01 04:35:25Z nenolod $
  */
 
 #include "atheme.h"
@@ -25,10 +25,10 @@ void ban(char *sender, char *channel, user_t *user)
 		return;
 
 	snprintf(mask, MAX_BUF, "*!*@%s", user->vhost);
-	mask[MAX_BUF-1] = '\0';
+	mask[MAX_BUF - 1] = '\0';
 
 	snprintf(modemask, MAX_BUF, "+b %s", mask);
-	modemask[MAX_BUF-1] = '\0';
+	modemask[MAX_BUF - 1] = '\0';
 
 	cb = chanban_find(c, mask);
 
@@ -101,8 +101,7 @@ void handle_nickchange(user_t *u)
 	metadata_t *md;
 
 	if (me.loglevel & LG_DEBUG && runflags & RF_LIVE)
-		notice(globsvs.nick, u->nick, "Services are presently running in debug mode, attached to a console. "
-			"You should take extra caution when utilizing your services passwords.");
+		notice(globsvs.nick, u->nick, "Services are presently running in debug mode, attached to a console. " "You should take extra caution when utilizing your services passwords.");
 
 	/* They're logged in, don't send them spam -- jilles */
 	if (u->myuser)
@@ -116,9 +115,8 @@ void handle_nickchange(user_t *u)
 		if (!(u->flags & UF_SEENINFO))
 		{
 			notice(nicksvs.nick, u->nick, "Welcome to %s, %s! Here on %s, we provide services to enable the "
-				"registration of nicknames and channels! For details, type \2/%s%s help\2 and \2/%s%s help\2.",
-				me.netname, u->nick, me.netname, (ircd->uses_rcommand == FALSE) ? "msg " : "",
-				nicksvs.disp, (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
+			       "registration of nicknames and channels! For details, type \2/%s%s help\2 and \2/%s%s help\2.",
+			       me.netname, u->nick, me.netname, (ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.disp, (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
 
 			u->flags |= UF_SEENINFO;
 		}
@@ -129,12 +127,11 @@ void handle_nickchange(user_t *u)
 	if (u->myuser == mu)
 		return;
 
-	if ((mu->flags & MU_ALIAS) && (md = metadata_find(mu, METADATA_USER, "private:alias:parent")) &&
-		u->myuser == myuser_find(md->value))
+	if ((mu->flags & MU_ALIAS) && (md = metadata_find(mu, METADATA_USER, "private:alias:parent")) && u->myuser == myuser_find(md->value))
 		return;
 
 	notice(nicksvs.nick, u->nick, "This nickname is registered. Please choose a different nickname, or identify via \2/%s%s identify <password>\2.",
-			(ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.disp);
+	       (ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.disp);
 }
 
 /* User u is bursted as being logged in to login
@@ -161,7 +158,7 @@ void handle_burstlogin(user_t *u, char *login)
 		ircd_on_logout(u->nick, login, NULL);
 		return;
 	}
-	if (u->myuser != NULL) /* already logged in, hmm */
+	if (u->myuser != NULL)	/* already logged in, hmm */
 		return;
 	u->myuser = mu;
 	n = node_create();

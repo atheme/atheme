@@ -1,3 +1,12 @@
+nenolod     2005/10/01 04:32:24 UTC	(20051001-2495)
+  Log:
+  Update config files.
+  
+  Changes:	Modified:
+  +7 -1		trunk/dist/example.conf (File Modified) 
+  +6 -0		trunk/dist/example.userserv.conf (File Modified) 
+
+
 nenolod     2005/10/01 04:28:47 UTC	(20051001-2493)
   Log:
   Fix tabbing mess. :/

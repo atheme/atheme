@@ -4,7 +4,7 @@
  *
  * Protocol handling stuff.
  *
- * $Id: pmodule.c 1961 2005-08-30 17:08:23Z nenolod $
+ * $Id: pmodule.c 2497 2005-10-01 04:35:25Z nenolod $
  */
 
 #include "atheme.h"
@@ -31,16 +31,14 @@ void pcommand_init(void)
 	}
 }
 
-void pcommand_add(char *token,
-	void (*handler)(char *origin, uint8_t parc, char *parv[]))
+void pcommand_add(char *token, void (*handler) (char *origin, uint8_t parc, char *parv[]))
 {
 	node_t *n;
 	pcommand_t *pcmd;
 
 	if ((pcmd = pcommand_find(token)))
 	{
-		slog(LG_INFO, "pcommand_add(): token %s is already registered",
-				token);
+		slog(LG_INFO, "pcommand_add(): token %s is already registered", token);
 		return;
 	}
 
@@ -60,8 +58,7 @@ void pcommand_delete(char *token)
 
 	if (!(pcmd = pcommand_find(token)))
 	{
-		slog(LG_INFO, "pcommand_delete(): token %s is not registered",
-				token);
+		slog(LG_INFO, "pcommand_delete(): token %s is not registered", token);
 		return;
 	}
 
@@ -95,4 +92,3 @@ pcommand_t *pcommand_find(char *token)
 
 	return NULL;
 }
-

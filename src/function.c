@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 2279 2005-09-21 00:27:40Z nenolod $
+ * $Id: function.c 2497 2005-10-01 04:35:25Z nenolod $
  */
 
 #include "atheme.h"
@@ -20,17 +20,17 @@ char ch[26] = "abcdefghijklmnopqrstuvwxyz";
 
 char *gen_pw(int8_t sz)
 {
-        int8_t i;
-        char *buf = malloc(sz);
+	int8_t i;
+	char *buf = malloc(sz);
 
-        for (i = 0; i < sz; i++)
-        {
-                buf[i] = ch[rand() % 26];
-        }
+	for (i = 0; i < sz; i++)
+	{
+		buf[i] = ch[rand() % 26];
+	}
 
-        buf[sz] = 0;
+	buf[sz] = 0;
 
-        return buf;
+	return buf;
 }
 
 #ifdef HAVE_GETTIMEOFDAY
@@ -168,18 +168,17 @@ uint32_t shash(const unsigned char *p)
 	unsigned int hval = HASHINIT;
 
 	if (!strstr(me.execname, "atheme"))
-		return(rand() % HASHSIZE);
+		return (rand() % HASHSIZE);
 
 	if (!p)
-		return(0);
+		return (0);
 	for (; *p != '\0'; ++p)
 	{
-		hval += (hval << 1) + (hval <<  4) + (hval << 7) +
-			(hval << 8) + (hval << 24);
+		hval += (hval << 1) + (hval << 4) + (hval << 7) + (hval << 8) + (hval << 24);
 		hval ^= (ToLower(*p) ^ 16);
 	}
 
-	return((hval >> HASHBITS) ^ (hval & ((1 << HASHBITS) -1)) % HASHSIZE);
+	return ((hval >> HASHBITS) ^ (hval & ((1 << HASHBITS) - 1)) % HASHSIZE);
 }
 
 /* replace all occurances of 'old' with 'new' */
@@ -365,8 +364,7 @@ int validemail(char *email)
 
 	/* check for other bad things */
 	if (strchr(email, '\'') || strchr(email, ' ') || strchr(email, ',') || strchr(email, '$')
-		|| strchr(email, '/') || strchr(email, ';') || strchr(email, '<')
-		|| strchr(email, '>') || strchr(email, '&') || strchr(email, '"'))
+	    || strchr(email, '/') || strchr(email, ';') || strchr(email, '<') || strchr(email, '>') || strchr(email, '&') || strchr(email, '"'))
 		valid = 0;
 
 	/* make sure there are at least 6 characters besides the above
@@ -462,24 +460,18 @@ void sendemail(char *what, const char *param, int type)
 
 	if (type == 1)
 	{
-		fprintf(out, "In order to complete your registration, you must send "
-			     "the following command on IRC:\n");
+		fprintf(out, "In order to complete your registration, you must send " "the following command on IRC:\n");
 		fprintf(out, "/MSG %s VERIFY REGISTER %s %s\n\n", nicksvs.nick, what, param);
-		fprintf(out, "Thank you for registering your nickname on the %s IRC "
-			     "network!\n", me.netname);
+		fprintf(out, "Thank you for registering your nickname on the %s IRC " "network!\n", me.netname);
 	}
 	else if (type == 2)
 	{
-		fprintf(out, "Someone has requested the password for %s be sent to the "
-			     "corresponding email address. If you did not request this action "
-			     "please let us know.\n\n", what);
-		fprintf(out, "The password for %s is %s. Please write this down for "
-			     "future reference.\n", what, param);
+		fprintf(out, "Someone has requested the password for %s be sent to the " "corresponding email address. If you did not request this action " "please let us know.\n\n", what);
+		fprintf(out, "The password for %s is %s. Please write this down for " "future reference.\n", what, param);
 	}
 	else if (type == 3)
 	{
-		fprintf(out, "In order to complete your email change, you must send "
-			     "the following command on IRC:\n");
+		fprintf(out, "In order to complete your email change, you must send " "the following command on IRC:\n");
 		fprintf(out, "/MSG %s VERIFY EMAILCHG %s %s\n\n", nicksvs.nick, what, param);
 	}
 
@@ -572,7 +564,7 @@ boolean_t should_owner(mychan_t *mychan, myuser_t *myuser)
 		return TRUE;
 
 	return FALSE;
-}	
+}
 
 boolean_t should_protect(mychan_t *mychan, myuser_t *myuser)
 {
@@ -591,7 +583,7 @@ boolean_t should_protect(mychan_t *mychan, myuser_t *myuser)
 		return TRUE;
 
 	return FALSE;
-}	
+}
 
 boolean_t should_op(mychan_t *mychan, myuser_t *myuser)
 {

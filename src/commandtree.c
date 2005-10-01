@@ -4,19 +4,18 @@
  *
  * Commandtree manipulation routines.
  *
- * $Id: commandtree.c 1684 2005-08-12 10:46:47Z pfish $
+ * $Id: commandtree.c 2497 2005-10-01 04:35:25Z nenolod $
  */
 
 #include "atheme.h"
 
-void command_add(command_t *cmd, list_t *commandtree)
+void command_add(command_t * cmd, list_t *commandtree)
 {
 	node_t *n;
 
 	if ((n = node_find(cmd, commandtree)))
 	{
-		slog(LG_INFO, "command_add(): command %s already in the list",
-			cmd->name);
+		slog(LG_INFO, "command_add(): command %s already in the list", cmd->name);
 		return;
 	}
 
@@ -37,7 +36,7 @@ void command_add(command_t *cmd, list_t *commandtree)
  *       adds an array of commands to a command list,
  *       via command_add().
  */
-void command_add_many(command_t **cmd, list_t *commandtree)
+void command_add_many(command_t ** cmd, list_t *commandtree)
 {
 	command_t *cptr;
 
@@ -45,14 +44,13 @@ void command_add_many(command_t **cmd, list_t *commandtree)
 		command_add(cptr, commandtree);
 }
 
-void command_delete(command_t *cmd, list_t *commandtree)
+void command_delete(command_t * cmd, list_t *commandtree)
 {
 	node_t *n;
 
 	if (!(n = node_find(cmd, commandtree)))
 	{
-		slog(LG_INFO, "command_delete(): command %s was not registered.",
-			cmd->name);
+		slog(LG_INFO, "command_delete(): command %s was not registered.", cmd->name);
 		return;
 	}
 
@@ -95,8 +93,7 @@ void command_exec(char *mynick, char *origin, char *cmd, list_t *commandtree)
 		}
 	}
 
-	notice(mynick, origin, "Invalid command. Use \2/%s%s help\2 for a command listing.",
-		(ircd->uses_rcommand == FALSE) ? "msg " : "", mynick);
+	notice(mynick, origin, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", mynick);
 }
 
 /*
@@ -125,21 +122,18 @@ void command_help(char *mynick, char *origin, list_t *commandtree)
 		/* show only the commands we have access to
 		 * (taken from command_exec())
 		 */
-		if ((c->access == AC_NONE)
-			|| ((c->access == AC_SRA) && is_sra(u->myuser))
-			|| ((c->access == AC_IRCOP) && (is_sra(u->myuser) || is_ircop(u))))
+		if ((c->access == AC_NONE) || ((c->access == AC_SRA) && is_sra(u->myuser)) || ((c->access == AC_IRCOP) && (is_sra(u->myuser) || is_ircop(u))))
 			notice(mynick, origin, "\2%-16s\2 %s", c->name, c->desc);
 	}
 }
 
-void fcommand_add(fcommand_t *cmd, list_t *commandtree)
+void fcommand_add(fcommand_t * cmd, list_t *commandtree)
 {
 	node_t *n;
 
 	if ((n = node_find(cmd, commandtree)))
 	{
-		slog(LG_INFO, "fcommand_add(): command %s already in the list",
-			cmd->name);
+		slog(LG_INFO, "fcommand_add(): command %s already in the list", cmd->name);
 		return;
 	}
 
@@ -147,14 +141,13 @@ void fcommand_add(fcommand_t *cmd, list_t *commandtree)
 	node_add(cmd, n, commandtree);
 }
 
-void fcommand_delete(fcommand_t *cmd, list_t *commandtree)
+void fcommand_delete(fcommand_t * cmd, list_t *commandtree)
 {
 	node_t *n;
 
 	if (!(n = node_find(cmd, commandtree)))
 	{
-		slog(LG_INFO, "command_delete(): command %s was not registered.",
-			cmd->name);
+		slog(LG_INFO, "command_delete(): command %s was not registered.", cmd->name);
 		return;
 	}
 
@@ -196,4 +189,3 @@ void fcommand_exec(char *channel, char *origin, char *cmd, list_t *commandtree)
 		}
 	}
 }
-

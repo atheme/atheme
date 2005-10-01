@@ -4,7 +4,7 @@
  *
  * Undernet base64 routine.
  *
- * $Id: ubase64.c 917 2005-07-17 06:23:38Z nenolod $
+ * $Id: ubase64.c 2497 2005-10-01 04:35:25Z nenolod $
  */
 
 #include "atheme.h"
@@ -19,10 +19,9 @@
  * our implementation is faster and more secure...
  */
 
-static const char ub64_alphabet[64] =
-	 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789[]";
+static const char ub64_alphabet[64] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789[]";
 
-const char* uinttobase64(char* buf, uint64_t v, int64_t count)
+const char *uinttobase64(char *buf, uint64_t v, int64_t count)
 {
 	buf[count] = '\0';
 

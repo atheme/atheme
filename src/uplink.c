@@ -4,7 +4,7 @@
  *
  * Uplink management stuff.
  *
- * $Id: uplink.c 2459 2005-09-30 04:24:55Z nenolod $
+ * $Id: uplink.c 2497 2005-10-01 04:35:25Z nenolod $
  */
 
 #include "atheme.h"
@@ -27,8 +27,7 @@ void uplink_connect(void)
 		if (u == uplinks.tail->data)
 			u = uplinks.head->data;
 
-		slog(LG_DEBUG, "uplink_connect(): trying alternate uplink `%s'",
-			u->name);
+		slog(LG_DEBUG, "uplink_connect(): trying alternate uplink `%s'", u->name);
 
 		curr_uplink = u;
 	}
