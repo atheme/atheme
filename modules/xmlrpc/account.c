@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 2473 2005-10-01 00:50:38Z nenolod $
+ * $Id: account.c 2475 2005-10-01 03:22:41Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 2473 2005-10-01 00:50:38Z nenolod $",
+	"$Id: account.c 2475 2005-10-01 03:22:41Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -322,6 +322,51 @@ static int do_logout(int parc, char *parv[])
         return 0;
 }
 
+/*
+ * atheme.account.set_metadata
+ *
+ * XML inputs:
+ *       authcookie, account name, key, value
+ *
+ * XML outputs:
+ *       fault 1 - validation failed
+ *       fault 2 - unknown account
+ *       fault 4 - insufficient parameters
+ *       default - success message
+ *
+ * Side Effects:
+ *       metadata is added to an account.
+ */ 
+static int do_set_metadata(int parc, char *parv[])
+{
+	myuser_t *mu;
+	char buf[XMLRPC_BUFSIZE];
+
+	if (parc < 4)
+	{
+		xmlrpc_generic_error(4, "Insufficient parameters.");
+		return 0;
+	}
+
+	if ((mu = myuser_find(parv[1])) == NULL)
+	{
+		xmlrpc_generic_error(2, "Unknown account.");
+		return 0;
+	}
+
+	if (authcookie_validate(parv[0], mu) == FALSE)
+	{
+		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		return 0;
+	}
+
+	metadata_add(mu, METADATA_USER, parv[2], parv[3]);
+
+	xmlrpc_string(buf, "Operation was successful.");
+	xmlrpc_send(1, buf);
+	return 0;
+}
+
 void _modinit(module_t *m)
 {
 	if (module_find_published("nickserv/main"))
@@ -331,6 +376,7 @@ void _modinit(module_t *m)
 	xmlrpc_register_method("atheme.verify_account", verify_account);	
 	xmlrpc_register_method("atheme.login", do_login);
         xmlrpc_register_method("atheme.logout", do_logout);
+	xmlrpc_register_method("atheme.account.set_metadata", do_set_metadata);
 }
 
 void _moddeinit(void)
@@ -339,4 +385,6 @@ void _moddeinit(void)
 	xmlrpc_unregister_method("atheme.verify_account");
 	xmlrpc_unregister_method("atheme.login");
         xmlrpc_unregister_method("atheme.logout");
+	xmlrpc_unregister_method("atheme.account.set_metadata");
 }
+
