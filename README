@@ -34,8 +34,8 @@ manage various things about their networks. Unlike it's predecessor, Shrike,
 Atheme has a completely reworked form of channel management that feels somewhat
 like eggdrop and is somewhat more useful.
 
-Atheme currently works with many ircd's. More details are available in the
-config file.
+Atheme currently works with many irc daemons. More details are available
+in the config file.
 
 3. INSTALLATION
 ---------------
