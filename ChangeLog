@@ -1,3 +1,11 @@
+pfish       2005/10/02 23:10:24 UTC	(20051002-2507)
+  Log:
+  Add NICKSERV RESETPASS. Opers can generate a random password for a nickname.
+
+  Changes:	Modified:
+  + -		trunk/modules/nickserv/resetpass.c (File Added) 
+
+
 jilles      2005/10/02 16:24:17 UTC	(20051002-2505)
   Log:
   Stop redundant modes to be set on join.
