@@ -1,3 +1,12 @@
+nenolod     2005/10/02 23:20:26 UTC	(20051002-2511)
+  Log:
+  Remember to free what we allocate.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/nickserv/resetpass.c (File Modified) 
+
+
 pfish       2005/10/02 23:13:01 UTC	(20051002-2509)
   Log:
   add resetpass to makefile/remove unneeded comment
