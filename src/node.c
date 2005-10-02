@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 2497 2005-10-01 04:35:25Z nenolod $
+ * $Id: node.c 2505 2005-10-02 16:24:17Z jilles $
  */
 
 #include "atheme.h"
@@ -847,7 +847,7 @@ chanuser_t *chanuser_add(channel_t *chan, char *nick)
 
 		if (should_owner(mc, u->myuser))
 		{
-			if (ircd->uses_owner)
+			if (ircd->uses_owner && !(cu->modes & ircd->owner_mode))
 			{
 				cmode(chansvs.nick, chan->name, ircd->owner_mchar, CLIENT_NAME(u));
 				cu->modes |= ircd->owner_mode;
@@ -866,7 +866,7 @@ chanuser_t *chanuser_add(channel_t *chan, char *nick)
 
 		if (should_protect(mc, u->myuser))
 		{
-			if (ircd->uses_protect)
+			if (ircd->uses_protect && !(cu->modes & ircd->protect_mode))
 			{
 				cmode(chansvs.nick, chan->name, ircd->protect_mchar, CLIENT_NAME(u));
 				cu->modes |= ircd->protect_mode;
@@ -885,8 +885,11 @@ chanuser_t *chanuser_add(channel_t *chan, char *nick)
 
 		if (should_op(mc, u->myuser))
 		{
-			cmode(chansvs.nick, chan->name, "+o", CLIENT_NAME(u));
-			cu->modes |= CMODE_OP;
+			if (!(cu->modes & CMODE_OP))
+			{
+				cmode(chansvs.nick, chan->name, "+o", CLIENT_NAME(u));
+				cu->modes |= CMODE_OP;
+			}
 		}
 		else if ((mc->flags & MC_SECURE) && (cu->modes & CMODE_OP))
 		{
@@ -896,7 +899,7 @@ chanuser_t *chanuser_add(channel_t *chan, char *nick)
 
 		if (should_halfop(mc, u->myuser))
 		{
-			if (ircd->uses_halfops)
+			if (ircd->uses_halfops && !(cu->modes & ircd->halfops_mode))
 			{
 				cmode(chansvs.nick, chan->name, "+h", CLIENT_NAME(u));
 				cu->modes |= ircd->halfops_mode;
@@ -908,7 +911,7 @@ chanuser_t *chanuser_add(channel_t *chan, char *nick)
 			cu->modes &= ~ircd->halfops_mode;
 		}
 
-		if (should_voice(mc, u->myuser))
+		if (should_voice(mc, u->myuser) && !(cu->modes & CMODE_VOICE))
 		{
 			cmode(chansvs.nick, chan->name, "+v", CLIENT_NAME(u));
 			cu->modes |= CMODE_VOICE;
