@@ -1,3 +1,12 @@
+jilles      2005/10/02 16:24:17 UTC	(20051002-2505)
+  Log:
+  Stop redundant modes to be set on join.
+  
+
+  Changes:	Modified:
+  +9 -6		trunk/src/node.c (File Modified) 
+
+
 nenolod     2005/10/02 00:06:02 UTC	(20051002-2503)
   Log:
   Put in a missing newline here :/
