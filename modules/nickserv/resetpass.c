@@ -4,7 +4,7 @@
  *
  * This file contains code for NickServ RESETPASS
  *
- * $Id: resetpass.c 2513 2005-10-02 23:34:28Z pfish $
+ * $Id: resetpass.c 2517 2005-10-03 04:23:20Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/resetpass", FALSE, _modinit, _moddeinit,
-	"$Id: resetpass.c 2513 2005-10-02 23:34:28Z pfish $",
+	"$Id: resetpass.c 2517 2005-10-03 04:23:20Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -37,6 +37,7 @@ void _moddeinit()
 static void ns_cmd_resetpass(char *origin)
 {
 	myuser_t *mu;
+	user_t *u = user_find(origin);
 	metadata_t *md;
 	char *name = strtok(NULL, " ");
 	char *newpass = gen_pw(12);
@@ -54,11 +55,22 @@ static void ns_cmd_resetpass(char *origin)
 		return;
 	}
 
-	if (md = metadata_find(mu, METADATA_USER, "private:mark:setter"))
+	if ((md = metadata_find(mu, METADATA_USER, "private:mark:setter")) && is_sra(u->myuser))
+	{
+		notice(nicksvs.nick, origin, "Overriding MARK placed by %s on the nickname %s.", md->value, name);
+		notice(nicksvs.nick, origin, "The password for the nickname %s has been changed to %s.", name, newpass);
+		strlcpy(mu->pass, newpass, NICKLEN);
+		wallops("%s used the RESETPASS cmd on the \2MARKED\2 nickname %s.", origin, name);
+		return;
+	}
+
+	if ((md = metadata_find(mu, METADATA_USER, "private:mark:setter")) && !is_sra(u->myuser))
 	{
 		notice(nicksvs.nick, origin, "This operation cannot be performed on %s, because the nickname has been marked by %s.", name, md->value);
 		return;
 	}
+	
+
 
 	notice(nicksvs.nick, origin, "The password for the nickname %s has been changed to %s.", name, newpass);
 	strlcpy(mu->pass, newpass, NICKLEN);
