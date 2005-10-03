@@ -1,3 +1,17 @@
+nenolod     2005/10/03 17:40:09 UTC	(20051003-2527)
+  Log:
+  - Add /cs version to list what version of Atheme is running. (requested feature by many)
+  - Add !help which lists an overview of ChanServ helptopics (because SRVX and OtherSide services do so.)
+  - Add Kuja to contributors.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/chanserv/Makefile.in (File Modified) 
+  +63 -2	trunk/modules/chanserv/help.c (File Modified) 
+  + -		trunk/modules/chanserv/version.c (File Added) 
+  +1 -0		trunk/src/version.sh (File Modified) 
+
+
 pfish       2005/10/03 09:14:30 UTC	(20051003-2525)
   Log:
   update example configs with resetpass

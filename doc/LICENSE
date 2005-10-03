@@ -1,7 +1,7 @@
-$Id: LICENSE 59 2002-02-25 21:27:06Z nenolod $
+$Id: LICENSE 2529 2005-10-03 17:57:06Z nenolod $
 
-Copyright (c) 2005, William Pitcock et al.
-Copyright (c) 2003-2004, E. Will
+Copyright (c) 2005 Atheme Development Group (atheme.org)
+
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -17,6 +17,11 @@ are permitted provided that the following conditions are met:
       Neither the name of the author nor the names of its contributors may be
       used to endorse or promote products derived from this software without
       specific prior written permission.
+
+Rights granted to you under this license are immediately terminated if you
+make threats against atheme.org, legal or otherwise, or attempt to launch a
+denial of service attack against atheme.org, its infrastructure, or its
+volunteers.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
