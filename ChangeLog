@@ -1,3 +1,13 @@
+nenolod     2005/10/03 17:57:06 UTC	(20051003-2529)
+  Log:
+  Add terminus upon litigation clause, and terminus upon DDoS clause
+  
+
+  Changes:	Modified:
+  +6 -1		trunk/COPYING (File Modified) 
+  +7 -2		trunk/doc/LICENSE (File Modified) 
+
+
 nenolod     2005/10/03 17:40:09 UTC	(20051003-2527)
   Log:
   - Add /cs version to list what version of Atheme is running. (requested feature by many)
