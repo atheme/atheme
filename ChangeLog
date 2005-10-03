@@ -1,3 +1,11 @@
+pfish       2005/10/03 07:57:58 UTC	(20051003-2521)
+  Log:
+  forgot to add this
+
+  Changes:	Modified:
+  + -		trunk/help/nickserv/resetpass (File Added) 
+
+
 pfish       2005/10/03 07:57:21 UTC	(20051003-2519)
   Log:
   Add help for NICKSERV RESETPASS.

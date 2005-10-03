@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the NickServ HELP command.
  *
- * $Id: help.c 2369 2005-09-25 04:31:48Z nenolod $
+ * $Id: help.c 2523 2005-10-03 08:11:58Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 2369 2005-09-25 04:31:48Z nenolod $",
+	"$Id: help.c 2523 2005-10-03 08:11:58Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -33,6 +33,7 @@ static struct help_command_ us_help_commands[] = {
   { "STATUS",   AC_NONE,  "help/userserv/status"   },
   { "TAXONOMY", AC_NONE,  "help/userserv/taxonomy" },
   { "LINK",     AC_NONE,  "help/userserv/link"     },
+  { "RESETPASS",AC_IRCOP, "help/userserv/resetpass"},
   { "SENDPASS", AC_IRCOP, "help/userserv/sendpass" },
   { "LISTMAIL", AC_IRCOP, "help/userserv/listmail" },
   { "MARK",     AC_IRCOP, "help/userserv/mark"     },
