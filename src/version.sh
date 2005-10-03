@@ -6,7 +6,7 @@
 # This file generates version.c.
 # Stolen from ircd-ratbox.
 #
-# $Id: version.sh 2083 2005-09-03 20:42:14Z nenolod $
+# $Id: version.sh 2527 2005-10-03 17:40:09Z nenolod $
 #
 
 spitshell=cat
@@ -34,7 +34,7 @@ awk '{if (NF == 6) \
 else \
          { print $1 " "  $2 " " $3 " " $7 " at " $4 " " $5 " " $6 }}'`
 
-buildid=`echo "\$Revision: 2083 $" | \
+buildid=`echo "\$Revision: 2527 $" | \
 	awk '{ print $2 }'`;
 
 $spitshell >version.c <<!SUB!THIS!
@@ -97,6 +97,7 @@ const char *infotext[] =
   "The following people have contributed blood, sweat and tears to",
   "this Atheme release:",
   "  beu, Elfyn McBratney <beu@gentoo.org>",
+  "  Kuja, Jeff Katz <kraln@kraln.com>",
   "  zparta, Jens Holmqvist <zparta@hispan.se>",
   "  Trystan, Trystan Scott Lee <trystan@nomadirc.net>",
   " ",

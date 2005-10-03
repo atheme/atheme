@@ -1,3 +1,13 @@
+pfish       2005/10/03 09:14:30 UTC	(20051003-2525)
+  Log:
+  update example configs with resetpass
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/dist/example.conf (File Modified) 
+  +2 -0		trunk/dist/example.userserv.conf (File Modified) 
+
+
 pfish       2005/10/03 08:11:58 UTC	(20051003-2523)
   Log:
   Port NICKSERV/RESETPASS to UserServ, along with help files.

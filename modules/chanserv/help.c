@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 2391 2005-09-26 02:25:29Z nenolod $
+ * $Id: help.c 2527 2005-10-03 17:40:09Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 2391 2005-09-26 02:25:29Z nenolod $",
+	"$Id: help.c 2527 2005-10-03 17:40:09Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -67,21 +67,34 @@ static struct help_command_ cs_help_commands[] = {
 /* *INDENT-ON* */
 
 static void cs_cmd_help(char *origin);
+static void fc_cmd_help(char *origin, char *chan);
+
 
 command_t cs_help = { "HELP", "Displays contextual help information.",
                         AC_NONE, cs_cmd_help };
+fcommand_t fc_help = { "!help", AC_NONE, fc_cmd_help };
 
-list_t *cs_cmdtree;
+
+list_t *cs_cmdtree, *cs_fcmdtree;
 
 void _modinit(module_t *m)
 {
 	cs_cmdtree = module_locate_symbol("chanserv/main", "cs_cmdtree");
-        command_add(&cs_help, cs_cmdtree);
+        cs_fcmdtree = module_locate_symbol("chanserv/main", "cs_fcmdtree");
+	command_add(&cs_help, cs_cmdtree);
+	fcommand_add(&fc_help, cs_fcmdtree);
 }
 
 void _moddeinit()
 {
 	command_delete(&cs_help, cs_cmdtree);
+        fcommand_delete(&fc_help, cs_fcmdtree);
+}
+
+static void fc_cmd_help(char *origin, char *chan)
+{
+	cs_cmd_help(origin);
+	return;
 }
 
 /* HELP <command> [params] */
