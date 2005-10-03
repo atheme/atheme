@@ -5,7 +5,7 @@
  * Protocol handlers, both generic and the actual declarations themselves.
  * Declare NOTYET to use the function pointer voodoo.
  *
- * $Id: phandler.h 2225 2005-09-12 16:19:10Z jilles $
+ * $Id: phandler.h 2515 2005-10-03 03:06:55Z nenolod $
  */
 
 #ifndef PHANDLER_H
@@ -28,6 +28,7 @@ struct ircd_ {
 	char *owner_mchar;
 	char *protect_mchar;
 	char *halfops_mchar;
+	uint8_t type;
 };
 
 typedef struct ircd_ ircd_t;

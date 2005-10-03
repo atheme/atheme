@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 2491 2005-10-01 04:26:53Z nenolod $
+ * $Id: unreal.c 2515 2005-10-03 03:06:55Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 2491 2005-10-01 04:26:53Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 2515 2005-10-03 03:06:55Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -30,7 +30,8 @@ ircd_t Unreal = {
         CMODE_HALFOP,                   /* Integer flag for halfops. */
         "+q",                           /* Mode we set for owner. */
         "+a",                           /* Mode we set for protect. */
-        "+h"                            /* Mode we set for halfops. */
+        "+h",                           /* Mode we set for halfops. */
+	PROTOCOL_UNREAL			/* Protocol type */
 };
 
 struct cmode_ unreal_mode_list[] = {

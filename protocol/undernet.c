@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: undernet.c 2491 2005-10-01 04:26:53Z nenolod $
+ * $Id: undernet.c 2515 2005-10-03 03:06:55Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 2491 2005-10-01 04:26:53Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 2515 2005-10-03 03:06:55Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -32,7 +32,8 @@ ircd_t Undernet = {
         0,                              /* Integer flag for halfops. */
         "+",                            /* Mode we set for owner. */
         "+",                            /* Mode we set for protect. */
-        "+"                             /* Mode we set for halfops. */
+        "+",                            /* Mode we set for halfops. */
+	PROTOCOL_UNDERNET		/* Protocol type */
 };
 
 struct cmode_ undernet_mode_list[] = {

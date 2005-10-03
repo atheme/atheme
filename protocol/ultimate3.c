@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 2491 2005-10-01 04:26:53Z nenolod $
+ * $Id: ultimate3.c 2515 2005-10-03 03:06:55Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 2491 2005-10-01 04:26:53Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 2515 2005-10-03 03:06:55Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -30,7 +30,8 @@ ircd_t ultimate3 = {
         CMODE_HALFOP,                   /* Integer flag for halfops. */
         "+",                            /* Mode we set for owner. */
         "+a",                           /* Mode we set for protect. */
-        "+h"                            /* Mode we set for halfops. */
+        "+h",                           /* Mode we set for halfops. */
+	PROTOCOL_ULTIMATE3		/* Protocol type */
 };
 
 struct cmode_ ultimate3_mode_list[] = {
