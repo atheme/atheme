@@ -1,3 +1,11 @@
+pfish       2005/10/03 07:57:21 UTC	(20051003-2519)
+  Log:
+  Add help for NICKSERV RESETPASS.
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/nickserv/help.c (File Modified) 
+
+
 pfish       2005/10/03 04:23:20 UTC	(20051003-2517)
   Log:
   Allow a root to override a mark while resetting a password, thanks alambert for fixing that!

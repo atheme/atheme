@@ -1,0 +1,11 @@
+Help for RESETPASS:
+
+RESETPASS sets a random password for the specified
+nickname. A password cannot be reset if a nickname
+is marked by an oper.
+
+
+Syntax: RECOVER <nickname>
+
+Examples:
+    /msg &nick& RECOVER pfish
