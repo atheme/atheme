@@ -1,3 +1,11 @@
+pfish       2005/10/03 04:23:20 UTC	(20051003-2517)
+  Log:
+  Allow a root to override a mark while resetting a password, thanks alambert for fixing that!
+
+  Changes:	Modified:
+  +13 -1	trunk/modules/nickserv/resetpass.c (File Modified) 
+
+
 nenolod     2005/10/03 03:06:55 UTC	(20051003-2515)
   Log:
   - Add ircd->type, which is a hint for module coders to see what type of IRCd is being run on the network.
