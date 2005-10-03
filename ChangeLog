@@ -1,3 +1,14 @@
+pfish       2005/10/03 08:11:58 UTC	(20051003-2523)
+  Log:
+  Port NICKSERV/RESETPASS to UserServ, along with help files.
+
+  Changes:	Modified:
+  + -		trunk/help/userserv/resetpass (File Added) 
+  +1 -0		trunk/modules/userserv/Makefile.in (File Modified) 
+  +83 -0	trunk/modules/userserv/help.c (File Modified) 
+  + -		trunk/modules/userserv/resetpass.c (File Added) 
+
+
 pfish       2005/10/03 07:57:58 UTC	(20051003-2521)
   Log:
   forgot to add this
