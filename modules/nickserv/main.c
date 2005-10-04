@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 2133 2005-09-05 01:19:23Z nenolod $
+ * $Id: main.c 2547 2005-10-04 05:16:38Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,11 +12,12 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 2133 2005-09-05 01:19:23Z nenolod $",
+	"$Id: main.c 2547 2005-10-04 05:16:38Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 list_t ns_cmdtree;
+list_t ns_helptree;
 
 /* main services client routine */
 void nickserv(char *origin, uint8_t parc, char *parv[])

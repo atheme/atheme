@@ -1,3 +1,12 @@
+nenolod     2005/10/04 05:14:02 UTC	(20051004-2545)
+  Log:
+  Convert the Global module.
+  
+
+  Changes:	Modified:
+  +18 -8	trunk/modules/global/main.c (File Modified) 
+
+
 alambert    2005/10/04 05:11:51 UTC	(20051004-2543)
   Log:
   add naive sanity checking to atheme.account_register -- see comments
