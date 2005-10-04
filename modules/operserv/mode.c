@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService MODE command.
  *
- * $Id: mode.c 2395 2005-09-26 23:01:54Z jilles $
+ * $Id: mode.c 2559 2005-10-04 06:56:29Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/mode", FALSE, _modinit, _moddeinit,
-	"$Id: mode.c 2395 2005-09-26 23:01:54Z jilles $",
+	"$Id: mode.c 2559 2005-10-04 06:56:29Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,16 +22,21 @@ command_t os_mode = { "MODE", "Changes modes on channels.",
                         AC_IRCOP, os_cmd_mode };
 
 list_t *os_cmdtree;
+list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
 	os_cmdtree = module_locate_symbol("operserv/main", "os_cmdtree");
+	os_helptree = module_locate_symbol("operserv/main", "os_helptree");
+
         command_add(&os_mode, os_cmdtree);
+	help_addentry(os_helptree, "MODE", "help/oservice/mode", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&os_mode, os_cmdtree);
+	help_delentry(os_helptree, "MODE");
 }
 
 static void os_cmd_mode(char *origin)

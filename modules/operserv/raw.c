@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService RAW command.
  *
- * $Id: raw.c 2135 2005-09-05 01:28:25Z nenolod $
+ * $Id: raw.c 2559 2005-10-04 06:56:29Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/raw", FALSE, _modinit, _moddeinit,
-	"$Id: raw.c 2135 2005-09-05 01:28:25Z nenolod $",
+	"$Id: raw.c 2559 2005-10-04 06:56:29Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,16 +22,21 @@ command_t os_raw = { "RAW", "Sends data to the uplink.",
                         AC_SRA, os_cmd_raw };
 
 list_t *os_cmdtree;
+list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
 	os_cmdtree = module_locate_symbol("operserv/main", "os_cmdtree");
+	os_helptree = module_locate_symbol("operserv/main", "os_helptree");
+
         command_add(&os_raw, os_cmdtree);
+	help_addentry(os_helptree, "RAW", "help/oservice/raw", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&os_raw, os_cmdtree);
+	help_delentry(os_helptree, "RAW");
 }
 
 static void os_cmd_raw(char *origin)

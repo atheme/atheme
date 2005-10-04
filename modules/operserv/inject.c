@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService RAW command.
  *
- * $Id: inject.c 2135 2005-09-05 01:28:25Z nenolod $
+ * $Id: inject.c 2559 2005-10-04 06:56:29Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/inject", FALSE, _modinit, _moddeinit,
-	"$Id: inject.c 2135 2005-09-05 01:28:25Z nenolod $",
+	"$Id: inject.c 2559 2005-10-04 06:56:29Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,16 +22,21 @@ command_t os_inject = { "INJECT", "Fakes data from the uplink (debugging tool)."
                         AC_SRA, os_cmd_inject };
 
 list_t *os_cmdtree;
+list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
 	os_cmdtree = module_locate_symbol("operserv/main", "os_cmdtree");
+	os_helptree = module_locate_symbol("operserv/main", "os_helptree");
+
         command_add(&os_inject, os_cmdtree);
+	help_addentry(os_helptree, "INJECT", "help/oservice/inject", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&os_inject, os_cmdtree);
+	help_delentry(os_helptree, "INJECT");
 }
 
 static void os_cmd_inject(char *origin)

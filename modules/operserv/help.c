@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 2135 2005-09-05 01:28:25Z nenolod $
+ * $Id: help.c 2559 2005-10-04 06:56:29Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 2135 2005-09-05 01:28:25Z nenolod $",
+	"$Id: help.c 2559 2005-10-04 06:56:29Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,16 +20,6 @@ DECLARE_MODULE_V1
 
 /* help commands we understand */
 static struct help_command_ os_help_commands[] = {
-  { "HELP",     AC_IRCOP, "help/help"              },
-  { "GLOBAL",   AC_IRCOP, "help/gservice/global"   },
-  { "AKILL",    AC_IRCOP, "help/oservice/akill"    },
-  { "MODE",     AC_IRCOP, "help/oservice/mode"     },
-
-  { "UPDATE",   AC_SRA,   "help/oservice/update"   },
-  { "RESTART",  AC_SRA,   "help/oservice/restart"  },
-  { "SHUTDOWN", AC_SRA,   "help/oservice/shutdown" },
-  { "RAW",      AC_SRA,   "help/oservice/raw"      },
-  { "REHASH",   AC_SRA,   "help/oservice/rehash"   },
   { "INJECT",   AC_SRA,   "help/oservice/inject"   },
 
   { NULL, 0, NULL }
@@ -43,16 +33,21 @@ command_t os_help = { "HELP", "Displays contextual help information.",
 			AC_IRCOP, os_cmd_help };
 
 list_t *os_cmdtree;
+list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
 	os_cmdtree = module_locate_symbol("operserv/main", "os_cmdtree");
+	os_helptree = module_locate_symbol("operserv/main", "os_helptree");
+
 	command_add(&os_help, os_cmdtree);
+	help_addentry(os_helptree, "HELP", "help/help", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&os_help, os_cmdtree);
+	help_delentry(os_helptree, "HELP");
 }
 
 /* HELP <command> [params] */
@@ -81,7 +76,7 @@ static void os_cmd_help(char *origin)
 	}
 
 	/* take the command through the hash table */
-	if ((c = help_cmd_find(opersvs.nick, origin, command, os_help_commands)))
+	if ((c = help_cmd_find(opersvs.nick, origin, command, os_helptree)))
 	{
 		if (c->file)
 		{

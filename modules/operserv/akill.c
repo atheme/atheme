@@ -5,7 +5,7 @@
  * This file contains functionality which implements
  * the OService AKILL/KLINE command.
  *
- * $Id: akill.c 2325 2005-09-23 14:24:21Z jilles $
+ * $Id: akill.c 2559 2005-10-04 06:56:29Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 2325 2005-09-23 14:24:21Z jilles $",
+	"$Id: akill.c 2559 2005-10-04 06:56:29Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -23,18 +23,25 @@ command_t os_kline = { "KLINE", "Manages network bans. [deprecated, use OS AKILL
 command_t os_akill = { "AKILL", "Manages network bans.", AC_IRCOP, os_cmd_akill };
 
 list_t *os_cmdtree;
+list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
 	os_cmdtree = module_locate_symbol("operserv/main", "os_cmdtree");
+	os_helptree = module_locate_symbol("operserv/main", "os_helptree");
+
 	command_add(&os_kline, os_cmdtree);
         command_add(&os_akill, os_cmdtree);
+
+	help_addentry(os_helptree, "AKILL", "help/oservice/akill", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&os_kline, os_cmdtree);
 	command_delete(&os_akill, os_cmdtree);
+
+	help_delentry(os_helptree, "AKILL");
 }
 
 static void os_cmd_akill(char *origin)

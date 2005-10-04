@@ -1,3 +1,31 @@
+pfish       2005/10/04 06:44:30 UTC	(20051004-2557)
+  Log:
+  Phase 1 of help system change.
+  
+
+  Changes:	Modified:
+  +4 -1		trunk/modules/nickserv/drop.c (File Modified) 
+  +4 -2		trunk/modules/nickserv/freeze.c (File Modified) 
+  +4 -1		trunk/modules/nickserv/ghost.c (File Modified) 
+  +4 -1		trunk/modules/nickserv/help.c (File Modified) 
+  +4 -1		trunk/modules/nickserv/hold.c (File Modified) 
+  +6 -1		trunk/modules/nickserv/identify.c (File Modified) 
+  +4 -1		trunk/modules/nickserv/info.c (File Modified) 
+  +4 -1		trunk/modules/nickserv/link.c (File Modified) 
+  +4 -1		trunk/modules/nickserv/list.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/listmail.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/logout.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/mark.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/myaccess.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/register.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/resetpass.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/sendpass.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/set.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/status.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/taxonomy.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/verify.c (File Modified) 
+
+
 nenolod     2005/10/04 06:42:24 UTC	(20051004-2555)
   Log:
   - Finish up with ChanServ.
