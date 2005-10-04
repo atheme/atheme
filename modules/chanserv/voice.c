@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService VOICE functions.
  *
- * $Id: voice.c 2317 2005-09-23 13:58:19Z jilles $
+ * $Id: voice.c 2551 2005-10-04 06:14:07Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/voice", FALSE, _modinit, _moddeinit,
-	"$Id: voice.c 2317 2005-09-23 13:58:19Z jilles $",
+	"$Id: voice.c 2551 2005-10-04 06:14:07Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -31,16 +31,21 @@ fcommand_t fc_devoice = { "!devoice", AC_NONE, cs_fcmd_devoice };
 
 list_t *cs_cmdtree;
 list_t *cs_fcmdtree;
+list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
 	cs_cmdtree = module_locate_symbol("chanserv/main", "cs_cmdtree");
 	cs_fcmdtree = module_locate_symbol("chanserv/main", "cs_fcmdtree");
+	cs_helptree = module_locate_symbol("chanserv/main", "cs_helptree");
 
         command_add(&cs_voice, cs_cmdtree);
         command_add(&cs_devoice, cs_cmdtree);
 	fcommand_add(&fc_voice, cs_fcmdtree);
 	fcommand_add(&fc_devoice, cs_fcmdtree);
+
+	help_addentry(cs_helptree, "VOICE", "help/cservice/op_voice", NULL);
+	help_addentry(cs_helptree, "DEVOICE", "help/cservice/op_voice", NULL);
 }
 
 void _moddeinit()
@@ -49,6 +54,9 @@ void _moddeinit()
 	command_delete(&cs_devoice, cs_cmdtree);
 	fcommand_delete(&fc_voice, cs_fcmdtree);
 	fcommand_delete(&fc_devoice, cs_fcmdtree);
+
+	help_delentry(cs_helptree, "VOICE");
+	help_delentry(cs_helptree, "DEVOICE");
 }
 
 static void cs_cmd_voice(char *origin)

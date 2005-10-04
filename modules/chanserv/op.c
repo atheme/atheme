@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: op.c 2317 2005-09-23 13:58:19Z jilles $
+ * $Id: op.c 2551 2005-10-04 06:14:07Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/op", FALSE, _modinit, _moddeinit,
-	"$Id: op.c 2317 2005-09-23 13:58:19Z jilles $",
+	"$Id: op.c 2551 2005-10-04 06:14:07Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -31,16 +31,21 @@ fcommand_t fc_deop = { "!deop", AC_NONE, cs_fcmd_deop };
                                                                                    
 list_t *cs_cmdtree;
 list_t *cs_fcmdtree;
+list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
 	cs_cmdtree = module_locate_symbol("chanserv/main", "cs_cmdtree");
 	cs_fcmdtree = module_locate_symbol("chanserv/main", "cs_fcmdtree");
+	cs_helptree = module_locate_symbol("chanserv/main", "cs_helptree");
 
         command_add(&cs_op, cs_cmdtree);
         command_add(&cs_deop, cs_cmdtree);
 	fcommand_add(&fc_op, cs_fcmdtree);
 	fcommand_add(&fc_deop, cs_fcmdtree);
+
+	help_addentry(cs_helptree, "OP", "help/cservice/op_voice", NULL);
+	help_addentry(cs_helptree, "DEOP", "help/cservice/op_voice", NULL);
 }
 
 void _moddeinit()
@@ -49,6 +54,9 @@ void _moddeinit()
 	command_delete(&cs_deop, cs_cmdtree);
 	fcommand_delete(&fc_op, cs_fcmdtree);
 	fcommand_delete(&fc_deop, cs_fcmdtree);
+
+	help_delentry(cs_helptree, "OP");
+	help_delentry(cs_helptree, "DEOP");
 }
 
 static void cs_cmd_op(char *origin)

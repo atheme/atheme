@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 2527 2005-10-03 17:40:09Z nenolod $
+ * $Id: help.c 2551 2005-10-04 06:14:07Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 2527 2005-10-03 17:40:09Z nenolod $",
+	"$Id: help.c 2551 2005-10-04 06:14:07Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,32 +20,9 @@ DECLARE_MODULE_V1
 
 /* help commands we understand */
 static struct help_command_ cs_help_commands[] = {
-  { "HELP",     AC_NONE,  "help/help"              },
-  { "SOP",      AC_NONE,  "help/cservice/xop"      },
-  { "AOP",      AC_NONE,  "help/cservice/xop"      },
-  { "HOP",      AC_NONE,  "help/cservice/xop"      },
-  { "VOP",      AC_NONE,  "help/cservice/xop"      },
-  { "OP",       AC_NONE,  "help/cservice/op_voice" },
-  { "DEOP",     AC_NONE,  "help/cservice/op_voice" },
-  { "VOICE",    AC_NONE,  "help/cservice/op_voice" },
-  { "DEVOICE",  AC_NONE,  "help/cservice/op_voice" },
-  { "HALFOP",   AC_NONE,  "help/cservice/op_voice" },
-  { "DEHALFOP", AC_NONE,  "help/cservice/op_voice" },
-  { "INVITE",   AC_NONE,  "help/cservice/invite"   },
-  { "INFO",     AC_NONE,  "help/cservice/info"     },
-  { "RECOVER",  AC_NONE,  "help/cservice/recover"  },
-  { "REGISTER", AC_NONE,  "help/cservice/register" },
-  { "DROP",     AC_NONE,  "help/cservice/drop"     },
-  { "AKICK",    AC_NONE,  "help/cservice/akick"    },
   { "STATUS",   AC_NONE,  "help/cservice/status"   },
   { "FLAGS",    AC_NONE,  "help/cservice/flags"    },
-  { "KICK",     AC_NONE,  "help/cservice/kick"     },
-  { "KICKBAN",  AC_NONE,  "help/cservice/kickban"  },
   { "TAXONOMY", AC_NONE,  "help/cservice/taxonomy" },
-  { "TOPIC",    AC_NONE,  "help/cservice/topic"    },
-  { "TOPICAPPEND", AC_NONE, "help/cservice/topicappend" },
-  { "BAN",      AC_NONE,  "help/cservice/ban"      },
-  { "UNBAN",    AC_NONE,  "help/cservice/unban"    },
   { "FTRANSFER", AC_IRCOP, "help/cservice/ftransfer" },
   { "CLOSE",	AC_IRCOP, "help/cservice/close"	   },
   { "MARK",     AC_IRCOP, "help/cservice/mark"     },
@@ -75,20 +52,23 @@ command_t cs_help = { "HELP", "Displays contextual help information.",
 fcommand_t fc_help = { "!help", AC_NONE, fc_cmd_help };
 
 
-list_t *cs_cmdtree, *cs_fcmdtree;
+list_t *cs_cmdtree, *cs_fcmdtree, *cs_helptree;
 
 void _modinit(module_t *m)
 {
 	cs_cmdtree = module_locate_symbol("chanserv/main", "cs_cmdtree");
         cs_fcmdtree = module_locate_symbol("chanserv/main", "cs_fcmdtree");
+	cs_helptree = module_locate_symbol("chanserv/main", "cs_helptree");
 	command_add(&cs_help, cs_cmdtree);
 	fcommand_add(&fc_help, cs_fcmdtree);
+	help_addentry(cs_helptree, "HELP", "help/help", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&cs_help, cs_cmdtree);
         fcommand_delete(&fc_help, cs_fcmdtree);
+	help_delentry(cs_helptree, "HELP");
 }
 
 static void fc_cmd_help(char *origin, char *chan)
@@ -155,15 +135,6 @@ static void cs_cmd_help(char *origin)
 			notice(chansvs.nick, origin, " ");
 		}
 
-#if 0		/* currently unused */
-		if (is_sra(u->myuser))
-		{
-			notice(chansvs.nick, origin, "The following SRA commands are available.");
-			notice(chansvs.nick, origin, "\2HOLD\2          Prevents services from expiring a channel.");
-			notice(chansvs.nick, origin, " ");
-		}
-#endif
-
 		notice(chansvs.nick, origin, "For more specific help use \2HELP SET \37command\37\2.");
 
 		notice(chansvs.nick, origin, "***** \2End of Help\2 *****");
@@ -171,7 +142,7 @@ static void cs_cmd_help(char *origin)
 	}
 
 	/* take the command through the hash table */
-	if ((c = help_cmd_find(chansvs.nick, origin, command, cs_help_commands)))
+	if ((c = help_cmd_find(chansvs.nick, origin, command, cs_helptree)))
 	{
 		if (c->file)
 		{
@@ -201,6 +172,8 @@ static void cs_cmd_help(char *origin)
 
 			notice(chansvs.nick, origin, "***** \2End of Help\2 *****");
 		}
+		else if (c->func)
+			c->func(origin);
 		else
 			notice(chansvs.nick, origin, "No help available for \2%s\2.", command);
 	}

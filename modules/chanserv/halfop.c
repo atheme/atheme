@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: halfop.c 2317 2005-09-23 13:58:19Z jilles $
+ * $Id: halfop.c 2551 2005-10-04 06:14:07Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/halfop", FALSE, _modinit, _moddeinit,
-	"$Id: halfop.c 2317 2005-09-23 13:58:19Z jilles $",
+	"$Id: halfop.c 2551 2005-10-04 06:14:07Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -33,11 +33,13 @@ fcommand_t fc_dehop = { "!dehop", AC_NONE, cs_fcmd_dehalfop };
 
 list_t *cs_cmdtree;
 list_t *cs_fcmdtree;
+list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
 	cs_cmdtree = module_locate_symbol("chanserv/main", "cs_cmdtree");
 	cs_fcmdtree = module_locate_symbol("chanserv/main", "cs_fcmdtree");
+	cs_helptree = module_locate_symbol("chanserv/main", "cs_helptree");
 
         command_add(&cs_halfop, cs_cmdtree);
         command_add(&cs_dehalfop, cs_cmdtree);
@@ -45,6 +47,9 @@ void _modinit(module_t *m)
 	fcommand_add(&fc_hop, cs_fcmdtree);
 	fcommand_add(&fc_dehalfop, cs_fcmdtree);
 	fcommand_add(&fc_dehop, cs_fcmdtree);
+
+	help_addentry(cs_helptree, "HALFOP", "help/cservice/op_voice", NULL);
+	help_addentry(cs_helptree, "DEHALFOP", "help/cservice/op_voice", NULL);
 }
 
 void _moddeinit()
@@ -55,6 +60,9 @@ void _moddeinit()
 	fcommand_delete(&fc_hop, cs_fcmdtree);
 	fcommand_delete(&fc_dehalfop, cs_fcmdtree);
 	fcommand_delete(&fc_dehop, cs_fcmdtree);
+
+	help_delentry(cs_helptree, "HALFOP");
+	help_delentry(cs_helptree, "DEHALFOP");
 }
 
 static void cs_cmd_halfop(char *origin)

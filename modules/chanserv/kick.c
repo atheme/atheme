@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: kick.c 2317 2005-09-23 13:58:19Z jilles $
+ * $Id: kick.c 2551 2005-10-04 06:14:07Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/kick", FALSE, _modinit, _moddeinit,
-	"$Id: kick.c 2317 2005-09-23 13:58:19Z jilles $",
+	"$Id: kick.c 2551 2005-10-04 06:14:07Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -32,17 +32,22 @@ fcommand_t fc_kb = { "!kb", AC_NONE, cs_fcmd_kickban };
 
 list_t *cs_cmdtree;
 list_t *cs_fcmdtree;
+list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
 	cs_cmdtree = module_locate_symbol("chanserv/main", "cs_cmdtree");
 	cs_fcmdtree = module_locate_symbol("chanserv/main", "cs_fcmdtree");
+	cs_helptree = module_locate_symbol("chanserv/main", "cs_helptree");
 
         command_add(&cs_kick, cs_cmdtree);
 	command_add(&cs_kickban, cs_cmdtree);
 	fcommand_add(&fc_kick, cs_fcmdtree);
 	fcommand_add(&fc_kickban, cs_fcmdtree);
 	fcommand_add(&fc_kb, cs_fcmdtree);
+
+	help_addentry(cs_helptree, "KICK", "help/cservice/kick", NULL);
+	help_addentry(cs_helptree, "KICKBAN", "help/cservice/kickban", NULL);
 }
 
 void _moddeinit()
@@ -52,6 +57,9 @@ void _moddeinit()
 	fcommand_delete(&fc_kick, cs_fcmdtree);
 	fcommand_delete(&fc_kickban, cs_fcmdtree);
 	fcommand_delete(&fc_kb, cs_fcmdtree);
+
+	help_delentry(cs_helptree, "KICK");
+	help_delentry(cs_helptree, "KICKBAN");
 }
 
 static void cs_cmd_kick(char *origin)

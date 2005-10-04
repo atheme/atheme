@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TOPIC functions.
  *
- * $Id: topic.c 2129 2005-09-05 00:59:19Z nenolod $
+ * $Id: topic.c 2551 2005-10-04 06:14:07Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/topic", FALSE, _modinit, _moddeinit,
-	"$Id: topic.c 2129 2005-09-05 00:59:19Z nenolod $",
+	"$Id: topic.c 2551 2005-10-04 06:14:07Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -31,16 +31,21 @@ fcommand_t fc_topicappend = { "!topicappend", AC_NONE, cs_fcmd_topicappend };
 
 list_t *cs_cmdtree;
 list_t *cs_fcmdtree;
+list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
 	cs_cmdtree = module_locate_symbol("chanserv/main", "cs_cmdtree");
 	cs_fcmdtree = module_locate_symbol("chanserv/main", "cs_fcmdtree");
+	cs_helptree = module_locate_symbol("chanserv/main", "cs_helptree");
 
         command_add(&cs_topic, cs_cmdtree);
         command_add(&cs_topicappend, cs_cmdtree);
 	fcommand_add(&fc_topic, cs_fcmdtree);
 	fcommand_add(&fc_topicappend, cs_fcmdtree);
+
+	help_addentry(cs_helptree, "TOPIC", "help/cservice/topic", NULL);
+	help_addentry(cs_helptree, "TOPICAPPEND", "help/cservice/topicappend", NULL);
 }
 
 void _moddeinit()
@@ -49,6 +54,9 @@ void _moddeinit()
 	command_delete(&cs_topicappend, cs_cmdtree);
 	fcommand_delete(&fc_topic, cs_fcmdtree);
 	fcommand_delete(&fc_topicappend, cs_fcmdtree);
+
+	help_delentry(cs_helptree, "TOPIC");
+	help_delentry(cs_helptree, "TOPICAPPEND");
 }
 
 static void cs_cmd_topic(char *origin)

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 2129 2005-09-05 00:59:19Z nenolod $
+ * $Id: xop.c 2551 2005-10-04 06:14:07Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 2129 2005-09-05 00:59:19Z nenolod $",
+	"$Id: xop.c 2551 2005-10-04 06:14:07Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -35,16 +35,22 @@ command_t cs_hop = { "HOP", "Manipulates a channel's HOP list.",
 command_t cs_vop = { "VOP", "Manipulates a channel's VOP list.",
                         AC_NONE, cs_cmd_vop };
 
-list_t *cs_cmdtree;
+list_t *cs_cmdtree, *cs_helptree;
 
 void _modinit(module_t *m)
 {
 	cs_cmdtree = module_locate_symbol("chanserv/main", "cs_cmdtree");
+	cs_helptree = module_locate_symbol("chanserv/main", "cs_helptree");
 
         command_add(&cs_aop, cs_cmdtree);
         command_add(&cs_sop, cs_cmdtree);
 	command_add(&cs_hop, cs_cmdtree);
         command_add(&cs_vop, cs_cmdtree);
+
+	help_addentry(cs_helptree, "SOP", "help/cservice/xop", NULL);
+	help_addentry(cs_helptree, "AOP", "help/cservice/xop", NULL);
+	help_addentry(cs_helptree, "VOP", "help/cservice/xop", NULL);
+	help_addentry(cs_helptree, "HOP", "help/cservice/xop", NULL);
 }
 
 void _moddeinit()
@@ -53,6 +59,11 @@ void _moddeinit()
 	command_delete(&cs_sop, cs_cmdtree);
 	command_delete(&cs_hop, cs_cmdtree);
 	command_delete(&cs_vop, cs_cmdtree);
+
+	help_delentry(cs_helptree, "SOP");
+	help_delentry(cs_helptree, "AOP");
+	help_delentry(cs_helptree, "VOP");
+	help_delentry(cs_helptree, "HOP");
 }
 
 static void cs_xop(char *origin, uint32_t level)

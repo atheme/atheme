@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INFO functions.
  *
- * $Id: info.c 2209 2005-09-09 22:29:47Z jilles $
+ * $Id: info.c 2551 2005-10-04 06:14:07Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 2209 2005-09-09 22:29:47Z jilles $",
+	"$Id: info.c 2551 2005-10-04 06:14:07Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,16 +22,21 @@ command_t cs_info = { "INFO", "Displays information on registrations.",
                         AC_NONE, cs_cmd_info };
 
 list_t *cs_cmdtree;
+list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
 	cs_cmdtree = module_locate_symbol("chanserv/main", "cs_cmdtree");
+	cs_helptree = module_locate_symbol("chanserv/main", "cs_helptree");
+
         command_add(&cs_info, cs_cmdtree);
+	help_addentry(cs_helptree, "INFO", "help/cservice/info", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&cs_info, cs_cmdtree);
+	help_delentry(cs_helptree, "INFO");
 }
 
 static void cs_cmd_info(char *origin)

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 2317 2005-09-23 13:58:19Z jilles $
+ * $Id: ban.c 2551 2005-10-04 06:14:07Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", FALSE, _modinit, _moddeinit,
-	"$Id: ban.c 2317 2005-09-23 13:58:19Z jilles $",
+	"$Id: ban.c 2551 2005-10-04 06:14:07Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -31,16 +31,21 @@ fcommand_t fc_unban = { "!unban", AC_NONE, cs_fcmd_unban };
 
 list_t *cs_cmdtree;
 list_t *cs_fcmdtree;
+list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
 	cs_cmdtree = module_locate_symbol("chanserv/main", "cs_cmdtree");
 	cs_fcmdtree = module_locate_symbol("chanserv/main", "cs_fcmdtree");
+	cs_helptree = module_locate_symbol("chanserv/main", "cs_helptree");
 
         command_add(&cs_ban, cs_cmdtree);
 	command_add(&cs_unban, cs_cmdtree);
 	fcommand_add(&fc_ban, cs_fcmdtree);
 	fcommand_add(&fc_unban, cs_fcmdtree);
+
+	help_addentry(cs_helptree, "BAN", "help/cservice/ban", NULL);
+	help_addentry(cs_helptree, "UNBAN", "help/cservice/unban", NULL);
 }
 
 void _moddeinit()
@@ -49,6 +54,9 @@ void _moddeinit()
 	command_delete(&cs_unban, cs_cmdtree);
 	fcommand_delete(&fc_ban, cs_fcmdtree);
 	fcommand_delete(&fc_unban, cs_fcmdtree);
+
+	help_delentry(cs_helptree, "BAN");
+	help_delentry(cs_helptree, "UNBAN");
 }
 
 static void cs_cmd_ban (char *origin)
