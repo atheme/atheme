@@ -4,7 +4,7 @@
  *
  * Lists object properties via their metadata table.
  *
- * $Id: taxonomy.c 2297 2005-09-22 22:30:59Z pfish $
+ * $Id: taxonomy.c 2553 2005-10-04 06:33:01Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/taxonomy", FALSE, _modinit, _moddeinit,
-	"$Id: taxonomy.c 2297 2005-09-22 22:30:59Z pfish $",
+	"$Id: taxonomy.c 2553 2005-10-04 06:33:01Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,16 +22,21 @@ command_t cs_taxonomy = { "TAXONOMY", "Displays a channel's metadata.",
                         AC_NONE, cs_cmd_taxonomy };
                                                                                    
 list_t *cs_cmdtree;
+list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
         cs_cmdtree = module_locate_symbol("chanserv/main", "cs_cmdtree");
+	cs_helptree = module_locate_symbol("chanserv/main", "cs_helptree");
+
 	command_add(&cs_taxonomy, cs_cmdtree);
+	help_addentry(cs_helptree, "TAXONOMY", "help/cservice/taxonomy", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&cs_taxonomy, cs_cmdtree);
+	help_delentry(cs_helptree, "TAXONOMY");
 }
 
 void cs_cmd_taxonomy(char *origin)

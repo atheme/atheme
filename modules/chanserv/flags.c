@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 2127 2005-09-05 00:44:16Z nenolod $
+ * $Id: flags.c 2553 2005-10-04 06:33:01Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 2127 2005-09-05 00:44:16Z nenolod $",
+	"$Id: flags.c 2553 2005-10-04 06:33:01Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -25,20 +25,24 @@ fcommand_t cs_fantasy_flags = { ".flags", AC_NONE, cs_fcmd_flags };
 
 list_t *cs_cmdtree;
 list_t *cs_fcmdtree;
+list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
 	cs_cmdtree = module_locate_symbol("chanserv/main", "cs_cmdtree");
 	cs_fcmdtree = module_locate_symbol("chanserv/main", "cs_fcmdtree");
+	cs_helptree = module_locate_symbol("chanserv/main", "cs_helptree");
 
         command_add(&cs_flags, cs_cmdtree);
 	fcommand_add(&cs_fantasy_flags, cs_fcmdtree);
+	help_addentry(cs_helptree, "FLAGS", "help/cservice/flags", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&cs_flags, cs_cmdtree);
 	fcommand_delete(&cs_fantasy_flags, cs_fcmdtree);
+	help_delentry(cs_helptree, "FLAGS");
 }
 
 /* FLAGS <channel> [user] [flags] */

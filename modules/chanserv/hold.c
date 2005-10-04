@@ -4,7 +4,7 @@
  *
  * Controls noexpire options for channels.
  *
- * $Id: hold.c 2127 2005-09-05 00:44:16Z nenolod $
+ * $Id: hold.c 2553 2005-10-04 06:33:01Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/hold", FALSE, _modinit, _moddeinit,
-	"$Id: hold.c 2127 2005-09-05 00:44:16Z nenolod $",
+	"$Id: hold.c 2553 2005-10-04 06:33:01Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,16 +22,21 @@ command_t cs_hold = { "HOLD", "Prevents a channel from expiring.",
 			AC_SRA, cs_cmd_hold };
 
 list_t *cs_cmdtree;
+list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
 	cs_cmdtree = module_locate_symbol("chanserv/main", "cs_cmdtree");
+	cs_helptree = module_locate_symbol("chanserv/main", "cs_helptree");
+
 	command_add(&cs_hold, cs_cmdtree);
+	help_addentry(cs_helptree, "HOLD", "help/cservice/hold", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&cs_hold, cs_cmdtree);
+	help_delentry(cs_helptree, "HOLD");
 }
 
 static void cs_cmd_hold(char *origin)

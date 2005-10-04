@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService STATUS function.
  *
- * $Id: status.c 2129 2005-09-05 00:59:19Z nenolod $
+ * $Id: status.c 2553 2005-10-04 06:33:01Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/status", FALSE, _modinit, _moddeinit,
-	"$Id: status.c 2129 2005-09-05 00:59:19Z nenolod $",
+	"$Id: status.c 2553 2005-10-04 06:33:01Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,16 +22,21 @@ command_t cs_status = { "STATUS", "Displays your status in services.",
                          AC_NONE, cs_cmd_status };
 
 list_t *cs_cmdtree;
+list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
 	cs_cmdtree = module_locate_symbol("chanserv/main", "cs_cmdtree");
+	cs_helptree = module_locate_symbol("chanserv/main", "cs_helptree");
+
         command_add(&cs_status, cs_cmdtree);
+	help_addentry(cs_helptree, "STATUS", "help/cservice/status", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&cs_status, cs_cmdtree);
+	help_delentry(cs_helptree, "STATUS");
 }
 
 static void cs_cmd_status(char *origin)

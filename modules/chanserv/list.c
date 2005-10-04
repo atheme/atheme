@@ -4,7 +4,7 @@
  *
  * This file contains code for the ChanServ LIST function.
  *
- * $Id: list.c 2129 2005-09-05 00:59:19Z nenolod $
+ * $Id: list.c 2553 2005-10-04 06:33:01Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 2129 2005-09-05 00:59:19Z nenolod $",
+	"$Id: list.c 2553 2005-10-04 06:33:01Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -21,16 +21,21 @@ static void cs_cmd_list(char *origin);
 command_t cs_list = { "LIST", "Lists channels registered matching a given pattern.", AC_IRCOP, cs_cmd_list };
 
 list_t *cs_cmdtree;
+list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
 	cs_cmdtree = module_locate_symbol("chanserv/main", "cs_cmdtree");
+	cs_helptree = module_locate_symbol("chanserv/main", "cs_helptree");
+
 	command_add(&cs_list, cs_cmdtree);
+	help_addentry(cs_helptree, "LIST", "help/cservice/list", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&cs_list, cs_cmdtree);
+	help_delentry(cs_helptree, "LIST");
 }
 
 static void cs_cmd_list(char *origin)
