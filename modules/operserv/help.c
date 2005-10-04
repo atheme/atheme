@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 2559 2005-10-04 06:56:29Z nenolod $
+ * $Id: help.c 2561 2005-10-04 06:59:29Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,20 +12,9 @@
 DECLARE_MODULE_V1
 (
 	"operserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 2559 2005-10-04 06:56:29Z nenolod $",
+	"$Id: help.c 2561 2005-10-04 06:59:29Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
-
-/* *INDENT-OFF* */
-
-/* help commands we understand */
-static struct help_command_ os_help_commands[] = {
-  { "INJECT",   AC_SRA,   "help/oservice/inject"   },
-
-  { NULL, 0, NULL }
-};
-
-/* *INDENT-ON* */
 
 static void os_cmd_help(char *origin);
 

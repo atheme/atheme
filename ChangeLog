@@ -1,3 +1,20 @@
+nenolod     2005/10/04 06:56:29 UTC	(20051004-2559)
+  Log:
+  OperServ help system stuff.
+  
+
+  Changes:	Modified:
+  +7 -0		trunk/modules/operserv/akill.c (File Modified) 
+  +6 -11	trunk/modules/operserv/help.c (File Modified) 
+  +5 -0		trunk/modules/operserv/inject.c (File Modified) 
+  +5 -0		trunk/modules/operserv/mode.c (File Modified) 
+  +5 -0		trunk/modules/operserv/raw.c (File Modified) 
+  +5 -0		trunk/modules/operserv/rehash.c (File Modified) 
+  +5 -0		trunk/modules/operserv/restart.c (File Modified) 
+  +5 -0		trunk/modules/operserv/shutdown.c (File Modified) 
+  +5 -0		trunk/modules/operserv/update.c (File Modified) 
+
+
 pfish       2005/10/04 06:44:30 UTC	(20051004-2557)
   Log:
   Phase 1 of help system change.
