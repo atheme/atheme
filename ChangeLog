@@ -1,3 +1,14 @@
+nenolod     2005/10/04 20:20:12 UTC	(20051004-2569)
+  Log:
+  - Fix bug #48 (!op, et al requires a parameter). Contributed by Kuja.
+  
+
+  Changes:	Modified:
+  +6 -4		trunk/modules/chanserv/halfop.c (File Modified) 
+  +7 -4		trunk/modules/chanserv/op.c (File Modified) 
+  +7 -4		trunk/modules/chanserv/voice.c (File Modified) 
+
+
 nenolod     2005/10/04 07:34:23 UTC	(20051004-2567)
   Log:
   Mmm, hacks.

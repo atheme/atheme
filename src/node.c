@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 2505 2005-10-02 16:24:17Z jilles $
+ * $Id: node.c 2571 2005-10-04 20:37:47Z nenolod $
  */
 
 #include "atheme.h"
@@ -1003,6 +1003,8 @@ chanuser_t *chanuser_add(channel_t *chan, char *nick)
 	}
 
 	hook_call_event("channel_join", cu);
+
+	check_modes(mc);
 
 	return cu;
 }
