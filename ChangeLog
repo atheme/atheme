@@ -1,3 +1,13 @@
+nenolod     2005/10/04 05:16:38 UTC	(20051004-2547)
+  Log:
+  Add some ns_helptree/cs_helptree declarations.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/chanserv/main.c (File Modified) 
+  +1 -0		trunk/modules/nickserv/main.c (File Modified) 
+
+
 nenolod     2005/10/04 05:14:02 UTC	(20051004-2545)
   Log:
   Convert the Global module.
