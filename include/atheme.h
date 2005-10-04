@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 2461 2005-09-30 06:06:33Z nenolod $
+ * $Id: atheme.h 2541 2005-10-04 05:06:05Z nenolod $
  */
 
 #ifndef ATHEME_H
@@ -233,12 +233,15 @@ struct set_command_
   void (*func) (char *origin, char *name, char *params);
 };
 
+typedef struct help_command_ helpentry_t;
+
 /* struct for help command hash table */
 struct help_command_
 {
-  const char *name;
+  char *name;
   uint8_t access;
   char *file;
+  void (*func) (char *origin);
 };
 
 #define AC_NONE  0

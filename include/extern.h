@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 2395 2005-09-26 23:01:54Z jilles $
+ * $Id: extern.h 2541 2005-10-04 05:06:05Z nenolod $
  */
 
 #ifndef EXTERN_H
@@ -131,9 +131,8 @@ E int token_to_value(struct Token token_table[], char *token);
 E char *sbytes(float x);
 E float bytes(float x);
 
-E struct help_command_ help_commands[];
-E struct help_command_ *help_cmd_find(char *svs, char *origin, char *command,
-				      struct help_command_ table[]);
+E helpentry_t *help_cmd_find(char *svs, char *origin, char *command,
+			     list_t *list);
 
 E char *tldprefix;
 E boolean_t uses_uid;

@@ -1,3 +1,12 @@
+nenolod     2005/10/04 04:24:53 UTC	(20051004-2539)
+  Log:
+  - Add memoserv directory for memoserv stuff.
+  
+
+  Changes:	Modified:
+  + -		trunk/modules/memoserv/ (File Added) 
+
+
 nenolod     2005/10/04 04:16:15 UTC	(20051004-2537)
   Log:
   Fix spelling error.
