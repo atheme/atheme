@@ -1,4 +1,4 @@
-$Id: COPYING 2531 2005-10-03 18:26:49Z nenolod $
+$Id: COPYING 2533 2005-10-04 03:42:33Z nenolod $
 
 Copyright (c) 2005 Atheme Development Group (atheme.org)
 
@@ -17,11 +17,6 @@ are permitted provided that the following conditions are met:
       Neither the name of the author nor the names of its contributors may be
       used to endorse or promote products derived from this software without
       specific prior written permission.
-
-Rights granted to you under this license are immediately terminated if you
-enter into assault against atheme.org, legal or otherwise, or attempt to
-launch a denial of service attack against atheme.org, its infrastructure,
-or its volunteers.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
