@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 2125 2005-09-04 23:34:32Z nenolod $
+ * $Id: main.c 2545 2005-10-04 05:14:02Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,22 +12,17 @@
 DECLARE_MODULE_V1
 (
 	"global/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 2125 2005-09-04 23:34:32Z nenolod $",
+	"$Id: main.c 2545 2005-10-04 05:14:02Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 list_t gs_cmdtree;
 list_t *os_cmdtree;
+list_t gs_helptree;
+list_t *os_helptree;
 
 static void gs_cmd_global(char *origin);
 static void gs_cmd_help(char *origin);
-
-/* help commands we understand */
-static struct help_command_ gs_help_commands[] = {
-  { "HELP",     AC_IRCOP, "help/help"              },
-  { "GLOBAL",   AC_IRCOP, "help/gservice/global"   },
-  { NULL, 0, NULL }
-};
 
 command_t gs_help = { "HELP", "Displays contextual help information.",
                         AC_IRCOP, gs_cmd_help };
@@ -53,7 +48,7 @@ static void gs_cmd_help(char *origin)
 	}
 
 	/* take the command through the hash table */
-	if ((c = help_cmd_find(globsvs.nick, origin, command, gs_help_commands)))
+	if ((c = help_cmd_find(globsvs.nick, origin, command, &gs_helptree)))
 	{
 		if (c->file)
 		{
@@ -79,6 +74,8 @@ static void gs_cmd_help(char *origin)
 
 			fclose(help_file);
 		}
+		else if (c->func)
+			c->func(origin);
 		else
 			notice(globsvs.nick, origin, "No help available for \2%s\2.", command);
 	}
@@ -289,11 +286,18 @@ void _modinit(module_t *m)
         }
 
 	os_cmdtree = module_locate_symbol("operserv/main", "os_cmdtree");
+	os_helptree = module_locate_symbol("operserv/main", "os_helptree");
 
         command_add(&gs_global, &gs_cmdtree);
 
 	if (os_cmdtree)
 		command_add(&gs_global, os_cmdtree);
+
+	if (os_helptree)
+		help_addentry(os_helptree, "GLOBAL", "help/gservice/global", NULL);
+
+	help_addentry(&gs_helptree, "GLOBAL", "help/help", NULL);
+	help_addentry(&gs_helptree, "GLOBAL", "help/gservice/global", NULL);
 
         command_add(&gs_help, &gs_cmdtree);
 }
@@ -307,6 +311,12 @@ void _moddeinit(void)
 
 	if (os_cmdtree)
 		command_delete(&gs_global, os_cmdtree);
+
+	if (os_helptree)
+		help_delentry(os_helptree, "GLOBAL");
+
+	help_delentry(&gs_helptree, "GLOBAL");
+	help_delentry(&gs_helptree, "HELP");
 
         command_delete(&gs_help, &gs_cmdtree);
 }

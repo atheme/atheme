@@ -1,3 +1,11 @@
+alambert    2005/10/04 05:11:51 UTC	(20051004-2543)
+  Log:
+  add naive sanity checking to atheme.account_register -- see comments
+
+  Changes:	Modified:
+  +40 -1	trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 nenolod     2005/10/04 05:06:05 UTC	(20051004-2541)
   Log:
   Help system rewrite. Need to convert the modules next.
