@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: ghost.c 2133 2005-09-05 01:19:23Z nenolod $
+ * $Id: ghost.c 2557 2005-10-04 06:44:30Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/ghost", FALSE, _modinit, _moddeinit,
-	"$Id: ghost.c 2133 2005-09-05 01:19:23Z nenolod $",
+	"$Id: ghost.c 2557 2005-10-04 06:44:30Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,17 +20,20 @@ static void ns_cmd_ghost(char *origin);
 
 command_t ns_ghost = { "GHOST", "Reclaims use of a nickname.", AC_NONE, ns_cmd_ghost };
 
-list_t *ns_cmdtree;
+list_t *ns_cmdtree, *ns_helptree;
 
 void _modinit(module_t *m)
 {
 	ns_cmdtree = module_locate_symbol("nickserv/main", "ns_cmdtree");
+	ns_helptree = module_locate_symbol("nickserv/main", "ns_helptree");
 	command_add(&ns_ghost, ns_cmdtree);
+	help_addentry(ns_helptree, "GHOST", "help/nickserv/ghost", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&ns_ghost, ns_cmdtree);
+	help_delentry(ns_helptree, "GHOST");
 }
 
 void ns_cmd_ghost(char *origin)

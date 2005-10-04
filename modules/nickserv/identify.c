@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: identify.c 2179 2005-09-06 09:17:45Z pfish $
+ * $Id: identify.c 2557 2005-10-04 06:44:30Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/identify", FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 2179 2005-09-06 09:17:45Z pfish $",
+	"$Id: identify.c 2557 2005-10-04 06:44:30Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -23,19 +23,24 @@ command_t ns_identify = { "IDENTIFY", "Identifies to services for a nickname.",
 command_t ns_id = { "ID", "Alias for IDENTIFY",
 				AC_NONE, ns_cmd_identify };
 
-list_t *ns_cmdtree;
+list_t *ns_cmdtree, *ns_helptree;
 
 void _modinit(module_t *m)
 {
 	ns_cmdtree = module_locate_symbol("nickserv/main", "ns_cmdtree");
+	ns_helptree = module_locate_symbol("nickserv/main", "ns_helptree");
 	command_add(&ns_identify, ns_cmdtree);
 	command_add(&ns_id, ns_cmdtree);
+	help_addentry(ns_helptree, "IDENTIFY", "help/nickserv/identify", NULL);
+	help_addentry(ns_helptree, "ID", "help/nickserv/identify", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&ns_identify, ns_cmdtree);
 	command_delete(&ns_id, ns_cmdtree);
+	help_delentry(ns_helptree, "IDENTIFY");
+	help_delentry(ns_helptree, "ID");
 }
 
 static void ns_cmd_identify(char *origin)

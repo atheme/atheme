@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ DROP function.
  *
- * $Id: drop.c 2133 2005-09-05 01:19:23Z nenolod $
+ * $Id: drop.c 2557 2005-10-04 06:44:30Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 2133 2005-09-05 01:19:23Z nenolod $",
+	"$Id: drop.c 2557 2005-10-04 06:44:30Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,17 +20,20 @@ static void ns_cmd_drop(char *origin);
 
 command_t ns_drop = { "DROP", "Drops a nickname registration.", AC_NONE, ns_cmd_drop };
 
-list_t *ns_cmdtree;
+list_t *ns_cmdtree, *ns_helptree;
 
 void _modinit(module_t *m)
 {
 	ns_cmdtree = module_locate_symbol("nickserv/main", "ns_cmdtree");
+	ns_helptree = module_locate_symbol("nickserv/main", "ns_helptree");
 	command_add(&ns_drop, ns_cmdtree);
+	help_addentry(ns_helptree, "DROP", "help/nickserv/drop", NULL);
 }
 
 void _moddeinit()
 {
 	command_add(&ns_drop, ns_cmdtree);
+	help_delentry(ns_helptree, "DROP");
 }
 
 static void ns_cmd_drop(char *origin)

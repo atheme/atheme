@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 2173 2005-09-05 21:32:17Z jilles $
+ * $Id: set.c 2557 2005-10-04 06:44:30Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 2173 2005-09-05 21:32:17Z jilles $",
+	"$Id: set.c 2557 2005-10-04 06:44:30Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,7 +20,7 @@ static struct set_command_ *ns_set_cmd_find(char *origin, char *command);
 
 static void ns_cmd_set(char *origin);
 
-list_t *ns_cmdtree;
+list_t *ns_cmdtree, *ns_helptree;
 
 command_t ns_set = { "SET", "Sets various control flags.", AC_NONE, ns_cmd_set };
 

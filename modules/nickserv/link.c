@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: link.c 2373 2005-09-25 19:58:45Z nenolod $
+ * $Id: link.c 2557 2005-10-04 06:44:30Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/link", FALSE, _modinit, _moddeinit,
-	"$Id: link.c 2373 2005-09-25 19:58:45Z nenolod $",
+	"$Id: link.c 2557 2005-10-04 06:44:30Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,17 +20,20 @@ static void ns_cmd_link(char *origin);
 
 command_t ns_link = { "LINK", "Links an unregistered nickname to your account.", AC_NONE, ns_cmd_link };
 
-list_t *ns_cmdtree;
+list_t *ns_cmdtree, *ns_helptree;
 
 void _modinit(module_t *m)
 {
 	ns_cmdtree = module_locate_symbol("nickserv/main", "ns_cmdtree");
+	ns_helptree = module_locate_symbol("nickserv/main", "ns_helptree");
 	command_add(&ns_link, ns_cmdtree);
+	help_addentry(ns_helptree, "LINK", "help/nickserv/link", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&ns_link, ns_cmdtree);
+	help_delentry(ns_helptree, "LINK");
 }
 
 static void ns_cmd_link(char *origin)

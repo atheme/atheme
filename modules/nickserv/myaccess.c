@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ MYACCESS function.
  *
- * $Id: myaccess.c 2277 2005-09-19 19:23:33Z jilles $
+ * $Id: myaccess.c 2557 2005-10-04 06:44:30Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/myaccess", FALSE, _modinit, _moddeinit,
-	"$Id: myaccess.c 2277 2005-09-19 19:23:33Z jilles $",
+	"$Id: myaccess.c 2557 2005-10-04 06:44:30Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,7 +20,7 @@ static void ns_cmd_myaccess(char *origin);
 
 command_t ns_myaccess = { "MYACCESS", "Lists channels that you have access to.", AC_NONE, ns_cmd_myaccess };
 
-list_t *ns_cmdtree;
+list_t *ns_cmdtree, *ns_helptree;
 
 void _modinit(module_t *m)
 {

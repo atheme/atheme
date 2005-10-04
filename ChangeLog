@@ -1,3 +1,13 @@
+nenolod     2005/10/04 06:42:24 UTC	(20051004-2555)
+  Log:
+  - Finish up with ChanServ.
+  
+
+  Changes:	Modified:
+  +0 -21	trunk/modules/chanserv/help.c (File Modified) 
+  +25 -0	trunk/modules/chanserv/set.c (File Modified) 
+
+
 nenolod     2005/10/04 06:33:01 UTC	(20051004-2553)
   Log:
   On to set functions. 

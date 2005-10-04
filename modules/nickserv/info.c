@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 2209 2005-09-09 22:29:47Z jilles $
+ * $Id: info.c 2557 2005-10-04 06:44:30Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 2209 2005-09-09 22:29:47Z jilles $",
+	"$Id: info.c 2557 2005-10-04 06:44:30Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,17 +20,20 @@ static void ns_cmd_info(char *origin);
 
 command_t ns_info = { "INFO", "Displays information on registrations.", AC_NONE, ns_cmd_info };
 
-list_t *ns_cmdtree;
+list_t *ns_cmdtree, *ns_helptree;
 
 void _modinit(module_t *m)
 {
 	ns_cmdtree = module_locate_symbol("nickserv/main", "ns_cmdtree");
+	ns_helptree = module_locate_symbol("nickserv/main", "ns_helptree");
 	command_add(&ns_info, ns_cmdtree);
+	help_addentry(ns_helptree, "INFO", "help/nickserv/info", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&ns_info, ns_cmdtree);
+	help_delentry(ns_helptree, "INFO");
 }
 
 static void ns_cmd_info(char *origin)
