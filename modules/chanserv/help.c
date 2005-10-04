@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 2553 2005-10-04 06:33:01Z nenolod $
+ * $Id: help.c 2555 2005-10-04 06:42:24Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,37 +12,16 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 2553 2005-10-04 06:33:01Z nenolod $",
+	"$Id: help.c 2555 2005-10-04 06:42:24Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
-
-/* *INDENT-OFF* */
-
-/* help commands we understand */
-static struct help_command_ cs_help_commands[] = {
-  { "SET FOUNDER",   AC_NONE, "help/cservice/set_founder"   },
-  { "SET MLOCK",     AC_NONE, "help/cservice/set_mlock"     },
-  { "SET SECURE",    AC_NONE, "help/cservice/set_secure"    },
-  { "SET SUCCESSOR", AC_NONE, "help/cservice/set_successor" },
-  { "SET VERBOSE",   AC_NONE, "help/cservice/set_verbose"   },
-  { "SET URL",       AC_NONE, "help/cservice/set_url"       },
-  { "SET EMAIL",     AC_NONE, "help/cservice/set_email"     },
-  { "SET ENTRYMSG",  AC_NONE, "help/cservice/set_entrymsg"  },
-  { "SET PROPERTY",  AC_NONE, "help/cservice/set_property"  },
-  { "SET STAFFONLY", AC_IRCOP, "help/cservice/set_staffonly" },
-  { NULL, 0, NULL }
-};
-
-/* *INDENT-ON* */
 
 static void cs_cmd_help(char *origin);
 static void fc_cmd_help(char *origin, char *chan);
 
-
 command_t cs_help = { "HELP", "Displays contextual help information.",
                         AC_NONE, cs_cmd_help };
 fcommand_t fc_help = { "!help", AC_NONE, fc_cmd_help };
-
 
 list_t *cs_cmdtree, *cs_fcmdtree, *cs_helptree;
 

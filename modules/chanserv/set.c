@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 2387 2005-09-26 02:10:56Z nenolod $
+ * $Id: set.c 2555 2005-10-04 06:42:24Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 2387 2005-09-26 02:10:56Z nenolod $",
+	"$Id: set.c 2555 2005-10-04 06:42:24Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -24,14 +24,28 @@ command_t cs_set = { "SET", "Sets various control flags.",
                         AC_NONE, cs_cmd_set };
 
 list_t *cs_cmdtree;
+list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
 	cs_cmdtree = module_locate_symbol("chanserv/main", "cs_cmdtree");
+	cs_helptree = module_locate_symbol("chanserv/main", "cs_helptree");
+
         command_add(&cs_set, cs_cmdtree);
 	hook_add_event("channel_join");
 	hook_add_hook("channel_join", (void (*)(void *)) cs_join_entrymsg);
 	hook_add_hook("channel_join", (void (*)(void *)) cs_join_url);
+
+	help_addentry(cs_helptree, "SET FOUNDER", "help/cservice/set_founder", NULL);
+	help_addentry(cs_helptree, "SET MLOCK", "help/cservice/set_mlock", NULL);
+	help_addentry(cs_helptree, "SET SECURE", "help/cservice/set_secure", NULL);
+	help_addentry(cs_helptree, "SET VERBOSE", "help/cservice/set_verbose", NULL);
+	help_addentry(cs_helptree, "SET URL", "help/cservice/set_url", NULL);
+	help_addentry(cs_helptree, "SET EMAIL", "help/cservice/set_email", NULL);
+	help_addentry(cs_helptree, "SET ENTRYMSG", "help/cservice/set_entrymsg", NULL);
+	help_addentry(cs_helptree, "SET PROPERTY", "help/cservice/set_property", NULL);
+	help_addentry(cs_helptree, "SET STAFFONLY", "help/cservice/set_staffonly", NULL);
+	help_addentry(cs_helptree, "SET SUCCESSOR", "help/cservice/set_successor", NULL);
 }
 
 void _moddeinit()
@@ -39,6 +53,17 @@ void _moddeinit()
 	command_delete(&cs_set, cs_cmdtree);
 	hook_del_hook("channel_join", (void (*)(void *)) cs_join_entrymsg);
 	hook_del_hook("channel_join", (void (*)(void *)) cs_join_url);
+
+	help_delentry(cs_helptree, "SET FOUNDER");
+	help_delentry(cs_helptree, "SET MLOCK");
+	help_delentry(cs_helptree, "SET SECURE");
+	help_delentry(cs_helptree, "SET VERBOSE");
+	help_delentry(cs_helptree, "SET URL");
+	help_delentry(cs_helptree, "SET EMAIL");
+	help_delentry(cs_helptree, "SET ENTRYMSG");
+	help_delentry(cs_helptree, "SET PROPERTY");
+	help_delentry(cs_helptree, "SET STAFFONLY");
+	help_delentry(cs_helptree, "SET SUCCESSOR");
 }
 
 /* SET <#channel> <setting> <parameters> */
