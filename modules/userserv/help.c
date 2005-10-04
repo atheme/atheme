@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the NickServ HELP command.
  *
- * $Id: help.c 2523 2005-10-03 08:11:58Z pfish $
+ * $Id: help.c 2567 2005-10-04 07:34:23Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,11 +12,12 @@
 DECLARE_MODULE_V1
 (
 	"userserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 2523 2005-10-03 08:11:58Z pfish $",
+	"$Id: help.c 2567 2005-10-04 07:34:23Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 list_t *us_cmdtree;
+list_t *us_helptree;
 
 /* *INDENT-OFF* */
 
@@ -55,15 +56,36 @@ static void us_cmd_help(char *origin);
 
 command_t us_help = { "HELP", "Displays contextual help information.", AC_NONE, us_cmd_help };
 
+static void register_us_cmds(void)
+{
+	uint8_t i = 0;
+
+	for (i = 0; us_help_commands[i].name; i++)
+		help_addentry(us_helptree, us_help_commands[i].name,
+			us_help_commands[i].file, NULL);
+}
+
+static void deregister_us_cmds(void)
+{
+	uint8_t i = 0;
+
+	for (i = 0; us_help_commands[i].name; i++)
+		help_delentry(us_helptree, us_help_commands[i].name);
+}
+
 void _modinit(module_t *m)
 {
 	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
+	us_helptree = module_locate_symbol("userserv/main", "us_helptree");
+
 	command_add(&us_help, us_cmdtree);
+	register_us_cmds();
 }
 
 void _moddeinit()
 {
 	command_delete(&us_help, us_cmdtree);
+	deregister_us_cmds();
 }
 
 /* HELP <command> [params] */
@@ -126,7 +148,7 @@ void us_cmd_help(char *origin)
 	}
 
 	/* take the command through the hash table */
-	if ((c = help_cmd_find(usersvs.nick, origin, command, us_help_commands)))
+	if ((c = help_cmd_find(usersvs.nick, origin, command, us_helptree)))
 	{
 		if (c->file)
 		{

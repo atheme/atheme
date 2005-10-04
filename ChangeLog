@@ -1,3 +1,12 @@
+nenolod     2005/10/04 07:21:31 UTC	(20051004-2565)
+  Log:
+  Fix build error with /ns help.
+  
+
+  Changes:	Modified:
+  +2 -36	trunk/modules/nickserv/help.c (File Modified) 
+
+
 pfish       2005/10/04 07:09:30 UTC	(20051004-2563)
   Log:
   Phase 2/final of the NickServ help system changeover. 
