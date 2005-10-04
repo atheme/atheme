@@ -1,3 +1,12 @@
+nenolod     2005/10/04 06:59:29 UTC	(20051004-2561)
+  Log:
+  Remove unused table.
+  
+
+  Changes:	Modified:
+  +0 -11	trunk/modules/operserv/help.c (File Modified) 
+
+
 nenolod     2005/10/04 06:56:29 UTC	(20051004-2559)
   Log:
   OperServ help system stuff.

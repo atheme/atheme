@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGOUT functions.
  *
- * $Id: logout.c 2557 2005-10-04 06:44:30Z pfish $
+ * $Id: logout.c 2563 2005-10-04 07:09:30Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/logout", FALSE, _modinit, _moddeinit,
-	"$Id: logout.c 2557 2005-10-04 06:44:30Z pfish $",
+	"$Id: logout.c 2563 2005-10-04 07:09:30Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -26,12 +26,15 @@ list_t *ns_cmdtree, *ns_helptree;
 void _modinit(module_t *m)
 {
 	ns_cmdtree = module_locate_symbol("nickserv/main", "ns_cmdtree");
+	ns_helptree = module_locate_symbol("nickserv/main", "ns_helptree");
         command_add(&ns_logout, ns_cmdtree);
+	help_addentry(ns_helptree, "LOGOUT", "help/nickserv/logout", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&ns_logout, ns_cmdtree);
+	help_delentry(ns_helptree, "LOGOUT");
 }
 
 static void ns_cmd_logout(char *origin)

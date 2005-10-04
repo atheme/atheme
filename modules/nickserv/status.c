@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService STATUS function.
  *
- * $Id: status.c 2557 2005-10-04 06:44:30Z pfish $
+ * $Id: status.c 2563 2005-10-04 07:09:30Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/status", FALSE, _modinit, _moddeinit,
-	"$Id: status.c 2557 2005-10-04 06:44:30Z pfish $",
+	"$Id: status.c 2563 2005-10-04 07:09:30Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -38,14 +38,17 @@ list_t *ns_cmdtree, *ns_helptree;
 void _modinit(module_t *m)
 {
 	ns_cmdtree = module_locate_symbol("nickserv/main", "ns_cmdtree");
+	ns_helptree = module_locate_symbol("nickserv/main", "ns_helptree");
 	command_add(&ns_acc, ns_cmdtree);
 	command_add(&ns_status, ns_cmdtree);
+	help_addentry(ns_helptree, "STATUS", "help/nickserv/status", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&ns_acc, ns_cmdtree);
 	command_delete(&ns_status, ns_cmdtree);
+	help_delentry(ns_helptree, "STATUS");
 }
 
 static void ns_cmd_acc(char *origin)
