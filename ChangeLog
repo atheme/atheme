@@ -1,3 +1,14 @@
+nenolod     2005/10/04 05:06:05 UTC	(20051004-2541)
+  Log:
+  Help system rewrite. Need to convert the modules next.
+  
+
+  Changes:	Modified:
+  +4 -1		trunk/include/atheme.h (File Modified) 
+  +2 -3		trunk/include/extern.h (File Modified) 
+  +64 -12	trunk/src/help.c (File Modified) 
+
+
 nenolod     2005/10/04 04:24:53 UTC	(20051004-2539)
   Log:
   - Add memoserv directory for memoserv stuff.

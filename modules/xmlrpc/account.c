@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 2475 2005-10-01 03:22:41Z nenolod $
+ * $Id: account.c 2543 2005-10-04 05:11:51Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 2475 2005-10-01 03:22:41Z nenolod $",
+	"$Id: account.c 2543 2005-10-04 05:11:51Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -31,6 +31,8 @@ boolean_t using_nickserv = FALSE;
  *       fault 4 - not enough parameters
  *       fault 5 - user is on IRC (would be unfair to claim ownership)
  *       fault 6 - too many accounts associated with this email
+ *       fault 7 - invalid account name
+ *       fault 8 - invalid password
  *       default - success message
  *
  * Side Effects:
@@ -58,13 +60,50 @@ static int register_account(int parc, char *parv[])
 		return 0;
 	}
 
+	/* This only handles the most basic sanity checking.
+	 * We need something better here. Note that unreal has
+	 * customizable allowable nickname characters. Ugh.
+	 *
+	 * It would be great if we could move this into something
+	 * like isvalidnick() so it would be easier to reuse --
+	 * we'll need to perform a lot of sanity checking on
+	 * XML-RPC requests.
+	 *
+	 *    -- alambert
+	 */
+	if (using_nickserv == TRUE)
+	{
+		if (strchr(parv[0], '.') || strchr(parv[0], ' ') || strchr(parv[0], '\n')
+			|| strchr(parv[0], '\r') || strchr(parv[0], '$') || strchr(parv[0], ':'))
+		{
+			xmlrpc_generic_error(6, "The account name is invalid.");
+			return 0;
+		}
+	}
+	else	/* fewer restrictions for account names */
+	{
+		if (strchr(parv[0], ' ') || strchr(parv[0], '\n') || strchr(parv[0], '\r'))
+		{
+			xmlrpc_generic_error(6, "The account name is invalid.");
+			return 0;
+		}
+	}
+
 	if (!strcasecmp(parv[0], parv[1]))
 	{
 		xmlrpc_generic_error(2, "You cannot use your account name as a password.");
 		return 0;
 	}
 
-	if (!validemail(parv[2]))
+	if (strchr(parv[1], ' ') || strchr(parv[1], '\n') || strchr(parv[1], '\r'))
+	{
+		xmlrpc_generic_error(7, "The password is invalid.");
+		return 0;
+	}
+
+	/* see above comment on sanity-checking */
+	if (strchr(parv[2], ' ') || strchr(parv[2], '\n') || strchr(parv[2], '\r')
+		|| !validemail(parv[2]))
 	{
 		xmlrpc_generic_error(3, "The E-Mail address you provided is invalid.");
 		return 0;
