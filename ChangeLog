@@ -1,3 +1,21 @@
+pfish       2005/10/04 07:09:30 UTC	(20051004-2563)
+  Log:
+  Phase 2/final of the NickServ help system changeover. 
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/modules/nickserv/listmail.c (File Modified) 
+  +3 -0		trunk/modules/nickserv/logout.c (File Modified) 
+  +3 -0		trunk/modules/nickserv/mark.c (File Modified) 
+  +3 -0		trunk/modules/nickserv/myaccess.c (File Modified) 
+  +3 -0		trunk/modules/nickserv/register.c (File Modified) 
+  +3 -0		trunk/modules/nickserv/resetpass.c (File Modified) 
+  +3 -0		trunk/modules/nickserv/sendpass.c (File Modified) 
+  +3 -0		trunk/modules/nickserv/status.c (File Modified) 
+  +3 -0		trunk/modules/nickserv/taxonomy.c (File Modified) 
+  +3 -0		trunk/modules/nickserv/verify.c (File Modified) 
+
+
 nenolod     2005/10/04 06:59:29 UTC	(20051004-2561)
   Log:
   Remove unused table.

@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the NickServ HELP command.
  *
- * $Id: help.c 2557 2005-10-04 06:44:30Z pfish $
+ * $Id: help.c 2565 2005-10-04 07:21:31Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,45 +12,11 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 2557 2005-10-04 06:44:30Z pfish $",
+	"$Id: help.c 2565 2005-10-04 07:21:31Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 list_t *ns_cmdtree, *ns_helptree;
-
-/* *INDENT-OFF* */
-
-/* help commands we understand */
-static struct help_command_ ns_help_commands[] = {
-  { "REGISTER", AC_NONE,  "help/nickserv/register" },
-  { "VERIFY",   AC_NONE,  "help/nickserv/verify"   },
-  { "IDENTIFY", AC_NONE,  "help/nickserv/identify" },
-  { "LOGOUT",	AC_NONE,  "help/nickserv/logout"   },
-  { "HELP",     AC_NONE,  "help/help"              },
-  { "INFO",     AC_NONE,  "help/nickserv/info"     },
-  { "DROP",     AC_NONE,  "help/nickserv/drop"     },
-  { "GHOST",    AC_NONE,  "help/nickserv/ghost"    },
-  { "STATUS",   AC_NONE,  "help/nickserv/status"   },
-  { "TAXONOMY", AC_NONE,  "help/nickserv/taxonomy" },
-  { "LINK",     AC_NONE,  "help/nickserv/link"     },
-  { "RESETPASS",AC_IRCOP, "help/nickserv/resetpass"},
-  { "SENDPASS", AC_IRCOP, "help/nickserv/sendpass" },
-  { "LISTMAIL", AC_IRCOP, "help/nickserv/listmail" },
-  { "MARK",     AC_IRCOP, "help/nickserv/mark"     },
-  { "FREEZE",	AC_IRCOP, "help/nickserv/freeze"   },
-  { "LIST",     AC_IRCOP, "help/nickserv/list"     },
-  { "HOLD",     AC_SRA,   "help/nickserv/hold"     },
-  { "MYACCESS", AC_NONE,  "help/nickserv/myaccess" },
-  { "SET EMAIL",     AC_NONE, "help/nickserv/set_email"     },
-  { "SET HIDEMAIL",  AC_NONE, "help/nickserv/set_hidemail"  },
-  { "SET NEVEROP",   AC_NONE, "help/nickserv/set_neverop"   },
-  { "SET NOOP",      AC_NONE, "help/nickserv/set_noop"      },
-  { "SET PASSWORD",  AC_NONE, "help/nickserv/set_password"  },
-  { "SET PROPERTY",  AC_NONE, "help/nickserv/set_property"  },
-  { NULL, 0, NULL }
-};
-
-/* *INDENT-ON* */
 
 static void ns_cmd_help(char *origin);
 
@@ -61,7 +27,7 @@ void _modinit(module_t *m)
 	ns_cmdtree = module_locate_symbol("nickserv/main", "ns_cmdtree");
 	ns_helptree = module_locate_symbol("nickserv/main", "ns_helptree");
 	command_add(&ns_help, ns_cmdtree);
-	help_addentry(ns_helptree, "HELP", "help/nickserv/help", NULL);
+	help_addentry(ns_helptree, "HELP", "help/help", NULL);
 }
 
 void _moddeinit()
@@ -132,7 +98,7 @@ void ns_cmd_help(char *origin)
 	}
 
 	/* take the command through the hash table */
-	if ((c = help_cmd_find(nicksvs.nick, origin, command, ns_help_commands)))
+	if ((c = help_cmd_find(nicksvs.nick, origin, command, ns_helptree)))
 	{
 		if (c->file)
 		{
