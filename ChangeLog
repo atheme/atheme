@@ -1,3 +1,13 @@
+nenolod     2005/10/04 03:42:33 UTC	(20051004-2533)
+  Log:
+  Remove knee-jerk reaction anti-DDoS clause.
+  
+
+  Changes:	Modified:
+  +0 -5		trunk/COPYING (File Modified) 
+  +0 -5		trunk/doc/LICENSE (File Modified) 
+
+
 nenolod     2005/10/03 18:26:49 UTC	(20051003-2531)
   Log:
   s/make threats/enter into assault/g
