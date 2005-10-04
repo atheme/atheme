@@ -1,3 +1,12 @@
+nenolod     2005/10/04 07:34:23 UTC	(20051004-2567)
+  Log:
+  Mmm, hacks.
+  
+
+  Changes:	Modified:
+  +23 -1	trunk/modules/userserv/help.c (File Modified) 
+
+
 nenolod     2005/10/04 07:21:31 UTC	(20051004-2565)
   Log:
   Fix build error with /ns help.

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService VOICE functions.
  *
- * $Id: voice.c 2551 2005-10-04 06:14:07Z nenolod $
+ * $Id: voice.c 2569 2005-10-04 20:20:12Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/voice", FALSE, _modinit, _moddeinit,
-	"$Id: voice.c 2551 2005-10-04 06:14:07Z nenolod $",
+	"$Id: voice.c 2569 2005-10-04 20:20:12Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -205,7 +205,8 @@ static void cs_fcmd_voice(char *origin, char *chan)
 	}
 	
 	/* figure out who we're going to voice */
-	while ((nick = strtok(NULL, " ")))
+	nick = strtok(NULL, " ");
+	do
 	{
 		if (!nick)
 			tu = u;
@@ -236,7 +237,8 @@ static void cs_fcmd_voice(char *origin, char *chan)
 
 		cmode(chansvs.nick, chan, "+v", CLIENT_NAME(tu));
 		cu->modes |= CMODE_VOICE;
-	}
+	} while (nick = strtok(NULL, " "));
+
 }
 
 static void cs_fcmd_devoice(char *origin, char *chan)
@@ -261,7 +263,8 @@ static void cs_fcmd_devoice(char *origin, char *chan)
 	}
 
 	/* figure out who we're going to devoice */
-	while ((nick = strtok(NULL, " ")))
+	nick = strtok(NULL, " ");
+	do
 	{
 		if (!nick)
 			tu = u;
@@ -292,6 +295,6 @@ static void cs_fcmd_devoice(char *origin, char *chan)
 
 		cmode(chansvs.nick, chan, "-v", CLIENT_NAME(tu));
 		cu->modes &= ~CMODE_VOICE;
-	}
+	} while (nick = strtok(NULL, " "));
 }
 

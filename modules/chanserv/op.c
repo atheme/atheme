@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: op.c 2551 2005-10-04 06:14:07Z nenolod $
+ * $Id: op.c 2569 2005-10-04 20:20:12Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/op", FALSE, _modinit, _moddeinit,
-	"$Id: op.c 2551 2005-10-04 06:14:07Z nenolod $",
+	"$Id: op.c 2569 2005-10-04 20:20:12Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -214,7 +214,8 @@ static void cs_fcmd_op(char *origin, char *chan)
 	}
 
 	/* figure out who we're going to op */
-	while ((nick = strtok(NULL, " ")))
+	nick = strtok(NULL, " ");
+        do
 	{
 		if (!nick)
 			tu = u;
@@ -253,7 +254,7 @@ static void cs_fcmd_op(char *origin, char *chan)
 
 		cmode(chansvs.nick, chan, "+o", CLIENT_NAME(tu));
 		cu->modes |= CMODE_OP;
-	}
+	} while (nick = strtok(NULL, " "));
 }
 
 static void cs_fcmd_deop(char *origin, char *chan)
@@ -278,7 +279,8 @@ static void cs_fcmd_deop(char *origin, char *chan)
 	}
 
 	/* figure out who we're going to deop */
-	while ((nick = strtok(NULL, " ")))
+	nick = strtok(NULL, " ");
+	do
 	{
 		if (!nick)
 			tu = u;
@@ -309,6 +311,7 @@ static void cs_fcmd_deop(char *origin, char *chan)
 
 		cmode(chansvs.nick, chan, "-o", CLIENT_NAME(tu));
 		cu->modes &= ~CMODE_OP;
-	}
+	} while (nick = strtok(NULL, " "));
+
 }
 
