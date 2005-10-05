@@ -1,3 +1,12 @@
+nenolod     2005/10/05 06:10:31 UTC	(20051005-2593)
+  Log:
+  Updated infotext in preparation for the 0.3 release.
+  
+
+  Changes:	Modified:
+  +11 -10	trunk/src/version.sh (File Modified) 
+
+
 nenolod     2005/10/05 05:50:50 UTC	(20051005-2591)
   Log:
   More upstream patches for xmlrpc.c.
