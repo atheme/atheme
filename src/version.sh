@@ -6,7 +6,7 @@
 # This file generates version.c.
 # Stolen from ircd-ratbox.
 #
-# $Id: version.sh 2587 2005-10-05 04:48:41Z nenolod $
+# $Id: version.sh 2593 2005-10-05 06:10:31Z nenolod $
 #
 
 spitshell=cat
@@ -34,7 +34,7 @@ awk '{if (NF == 6) \
 else \
          { print $1 " "  $2 " " $3 " " $7 " at " $4 " " $5 " " $6 }}'`
 
-buildid=`echo "\$Revision: 2587 $" | \
+buildid=`echo "\$Revision: 2593 $" | \
 	awk '{ print $2 }'`;
 
 $spitshell >version.c <<!SUB!THIS!
@@ -102,23 +102,24 @@ const char *infotext[] =
   "(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS",
   "SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.",
   " ",
-  "Currently Atheme's core group consists of the following developers:",
-  "  nenolod, William Pitcock <nenolod@nenolod.net>",
-  "  jilles, Jilles Tjoelker <jilles@stack.nl>",
+  "Currently Atheme's core group consists of the following developers,",
+  "in nick-alphabetical order:",
   "  alambert, Alex Lambert <alambert@quickfire.org>",
-  "  w00t, Robin Burchell <w00t@staff.chatspike.net>",
+  "  jilles, Jilles Tjoelker <jilles@stack.nl>",
+  "  nenolod, William Pitcock <nenolod@nenolod.net>",
   "  pfish, Patrick Fish <pofish@gmail.com>",
+  "  w00t, Robin Burchell <w00t@staff.chatspike.net>",
   " ",
   "The following people have contributed blood, sweat and tears to",
   "this Atheme release:",
   "  beu, Elfyn McBratney <beu@gentoo.org>",
-  "  Kuja, Jeff Katz <kraln@kraln.com>",
-  "  zparta, Jens Holmqvist <zparta@hispan.se>",
+  "  Dianora, Diane Bruce <db@db.net>",
+  "  kog, Greg Feigenson <kog@epiphanic.org>",
+  "  kuja, John Katz <kuja@gamesnet.net>",
   "  Trystan, Trystan Scott Lee <trystan@nomadirc.net>",
-  " ",
-  "Thanks to testers and contributors of previous releases:",
-  "  nick125, ShadowGod, Lucifer7, Ashen, katsklaw, Trystan, jilles,",
-  "  and many others.",
+  "  zparta, Jens Holmqvist <zparta@hispan.se>",
+  " "
+  "Visit our website at http://services.atheme.org",
   0,
 };
 !SUB!THIS!
