@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 2575 2005-10-05 02:46:11Z alambert $
+ * $Id: set.c 2577 2005-10-05 03:44:48Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 2575 2005-10-05 02:46:11Z alambert $",
+	"$Id: set.c 2577 2005-10-05 03:44:48Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -27,12 +27,25 @@ command_t us_set = { "SET", "Sets various control flags.", AC_NONE, us_cmd_set }
 void _modinit(module_t *m)
 {
 	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
+	us_helptree = module_locate_symbol("userserv/main", "us_helptree");
 	command_add(&us_set, us_cmdtree);
+	help_addentry(us_helptree, "SET EMAIL", "help/userserv/set_email", NULL);
+	help_addentry(us_helptree, "SET HIDEMAIL", "help/userserv/set_hidemail", NULL);
+	help_addentry(us_helptree, "SET NEVEROP", "help/userserv/set_neverop", NULL);
+	help_addentry(us_helptree, "SET NOOP", "help/userserv/set_noop", NULL);
+	help_addentry(us_helptree, "SET PASSWORD", "help/userserv/set_password", NULL);
+	help_addentry(us_helptree, "SET PROPERTY", "help/userserv/set_property", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&us_set, us_cmdtree);
+	help_delentry(us_helptree, "SET EMAIL");
+	help_delentry(us_helptree, "SET HIDEMAIL");
+	help_delentry(us_helptree, "SET NEVEROP");
+	help_delentry(us_helptree, "SET NOOP");
+	help_delentry(us_helptree, "SET PASSWORD");
+	help_delentry(us_helptree, "SET PROPERTY");
 }
 
 /* SET <setting> <parameters> */

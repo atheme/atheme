@@ -1,3 +1,28 @@
+alambert    2005/10/05 02:46:11 UTC	(20051005-2575)
+  Log:
+  First shot at moving UserServ to new help system (SET needs work)
+
+  Changes:	Modified:
+  +4 -1		trunk/modules/userserv/drop.c (File Modified) 
+  +4 -2		trunk/modules/userserv/freeze.c (File Modified) 
+  +2 -53	trunk/modules/userserv/help.c (File Modified) 
+  +4 -1		trunk/modules/userserv/hold.c (File Modified) 
+  +4 -1		trunk/modules/userserv/info.c (File Modified) 
+  +4 -1		trunk/modules/userserv/list.c (File Modified) 
+  +4 -1		trunk/modules/userserv/listmail.c (File Modified) 
+  +4 -1		trunk/modules/userserv/login.c (File Modified) 
+  +4 -1		trunk/modules/userserv/logout.c (File Modified) 
+  +4 -1		trunk/modules/userserv/mark.c (File Modified) 
+  +4 -1		trunk/modules/userserv/myaccess.c (File Modified) 
+  +4 -1		trunk/modules/userserv/register.c (File Modified) 
+  +4 -1		trunk/modules/userserv/resetpass.c (File Modified) 
+  +4 -1		trunk/modules/userserv/sendpass.c (File Modified) 
+  +1 -1		trunk/modules/userserv/set.c (File Modified) 
+  +6 -1		trunk/modules/userserv/status.c (File Modified) 
+  +4 -1		trunk/modules/userserv/taxonomy.c (File Modified) 
+  +4 -1		trunk/modules/userserv/verify.c (File Modified) 
+
+
 alambert    2005/10/05 00:03:41 UTC	(20051005-2573)
   Log:
   US DROP: use command_delete() in _moddeinit() -- not command_add()\!
