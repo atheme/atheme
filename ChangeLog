@@ -1,3 +1,12 @@
+nenolod     2005/10/05 07:12:06 UTC	(20051005-2609)
+  Log:
+  Add ms_helptree.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/memoserv/main.c (File Modified) 
+
+
 nenolod     2005/10/05 07:02:32 UTC	(20051005-2607)
   Log:
   Add -lcrypt to libs if necessary.
