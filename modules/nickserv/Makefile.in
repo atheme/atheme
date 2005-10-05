@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2597 2005-10-05 06:37:06Z kog $
+# $Id: Makefile.in 2599 2005-10-05 06:40:04Z nenolod $
 #
 
 CC		= @CC@
@@ -29,7 +29,6 @@ BASE_SRCS = 		\
 	main.c		\
 	drop.c		\
 	freeze.c	\
-	generatepass.c	\
 	ghost.c		\
 	help.c		\
 	hold.c		\
