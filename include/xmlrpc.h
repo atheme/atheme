@@ -105,5 +105,6 @@ void xmlrpc_generic_error(int code, const char *string);
 void xmlrpc_send(int argc, ...);
 int xmlrpc_about(int ac, char **av);
 char *xmlrpc_char_encode(char *outbuffer, char *s1);
+char *xmlrpc_decode_string(char *buf);
 
 #endif

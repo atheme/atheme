@@ -1,3 +1,11 @@
+alambert    2005/10/05 03:44:48 UTC	(20051005-2577)
+  Log:
+  UserServ: add help for SET subcommands
+
+  Changes:	Modified:
+  +13 -0	trunk/modules/userserv/set.c (File Modified) 
+
+
 alambert    2005/10/05 02:46:11 UTC	(20051005-2575)
   Log:
   First shot at moving UserServ to new help system (SET needs work)
