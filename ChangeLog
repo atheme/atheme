@@ -1,3 +1,13 @@
+nenolod     2005/10/05 07:02:32 UTC	(20051005-2607)
+  Log:
+  Add -lcrypt to libs if necessary.
+  
+
+  Changes:	Modified:
+  +6 -3		trunk/configure (File Modified) 
+  +4 -1		trunk/configure.ac (File Modified) 
+
+
 nenolod     2005/10/05 06:59:36 UTC	(20051005-2605)
   Log:
   Atheme uses strcasecmp instead of stricmp, so use an override here.
