@@ -1,3 +1,12 @@
+kog         2005/10/05 23:03:24 UTC	(20051005-2627)
+  Log:
+  initial commit of read, should work - kog
+  
+
+  Changes:	Modified:
+  + -		trunk/modules/memoserv/read.c (File Added) 
+
+
 kog         2005/10/05 23:01:11 UTC	(20051005-2625)
   Log:
   Fixed lots of pointer issues, extra vars - should work, but needs some more checks on messagebox full/target
