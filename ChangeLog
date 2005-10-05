@@ -1,3 +1,13 @@
+nenolod     2005/10/05 04:13:41 UTC	(20051005-2579)
+  Log:
+  Synchronize atheme patches with upstream XMLRPC code.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/xmlrpc.h (File Modified) 
+  +752 -835	trunk/src/xmlrpc.c (File Modified) 
+
+
 alambert    2005/10/05 03:44:48 UTC	(20051005-2577)
   Log:
   UserServ: add help for SET subcommands
