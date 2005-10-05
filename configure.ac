@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 2607 2005-10-05 07:02:32Z nenolod $
+dnl $Id: configure.ac 2615 2005-10-05 18:18:41Z nenolod $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, 0.3beta3, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 2607 2005-10-05 07:02:32Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 2615 2005-10-05 18:18:41Z nenolod $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -147,8 +147,8 @@ AC_MSG_RESULT($pg_inc_dir)
 if test "$pg_inc_dir" != "no"; then
 	AC_CHECK_HEADER($pg_inc_dir/libpq-fe.h, [
 		PGINC="-I$pg_inc_dir"
-	AC_CHECK_LIB(pq, PQconnectdb, PQLIB="-lpq")
-	POSTGRESQL_C="postgresql.c"
+	AC_CHECK_LIB(pq, PQconnectdb, [PQLIB="-lpq"
+		POSTGRESQL_C="postgresql.c"])
 	])
 else
 	POSTGRESQL="no"
@@ -186,8 +186,8 @@ AC_MSG_RESULT($my_inc_dir)
 if test "$MYINC" != "no" || test "$my_inc_dir" != "no"; then
 	AC_CHECK_HEADER($my_inc_dir/mysql.h, [
 		MYINC="-I$my_inc_dir"
-		AC_CHECK_LIB(mysqlclient, mysql_real_connect, MYLIB="-lmysqlclient")
-		MYSQL_C="mysql.c"
+		AC_CHECK_LIB(mysqlclient, mysql_real_connect, [MYLIB="-lmysqlclient"
+			MYSQL_C="mysql.c"])
 	])
 else
 	MYSQL="no"

@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# $Id: configure.ac 2601 2005-10-05 06:51:04Z nenolod $
+# $Id: configure.ac 2607 2005-10-05 07:02:32Z nenolod $
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -966,7 +966,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-$Id: configure.ac 2601 2005-10-05 06:51:04Z nenolod $
+$Id: configure.ac 2607 2005-10-05 07:02:32Z nenolod $
 _ACEOF
   exit 0
 fi
@@ -5692,9 +5692,9 @@ echo "$as_me:$LINENO: result: $ac_cv_lib_pq_PQconnectdb" >&5
 echo "${ECHO_T}$ac_cv_lib_pq_PQconnectdb" >&6
 if test $ac_cv_lib_pq_PQconnectdb = yes; then
   PQLIB="-lpq"
+		POSTGRESQL_C="postgresql.c"
 fi
 
-	POSTGRESQL_C="postgresql.c"
 
 fi
 
@@ -5942,9 +5942,9 @@ echo "$as_me:$LINENO: result: $ac_cv_lib_mysqlclient_mysql_real_connect" >&5
 echo "${ECHO_T}$ac_cv_lib_mysqlclient_mysql_real_connect" >&6
 if test $ac_cv_lib_mysqlclient_mysql_real_connect = yes; then
   MYLIB="-lmysqlclient"
+			MYSQL_C="mysql.c"
 fi
 
-		MYSQL_C="mysql.c"
 
 fi
 

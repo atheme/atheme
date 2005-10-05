@@ -1,3 +1,16 @@
+nenolod     2005/10/05 17:58:34 UTC	(20051005-2613)
+  Log:
+  - Add hostserv skeleton dir.
+  - Add hostchange routines for charybdis, plexus and unrealircd.
+  
+
+  Changes:	Modified:
+  + -		trunk/modules/hostserv/ (File Added) 
+  +13 -0	trunk/protocol/charybdis.c (File Modified) 
+  +9 -0		trunk/protocol/plexus.c (File Modified) 
+  +9 -0		trunk/protocol/unreal.c (File Modified) 
+
+
 nenolod     2005/10/05 17:20:13 UTC	(20051005-2611)
   Log:
   - Add sethost_sts() handler. (Modules which support vhosts can use this. :P)
