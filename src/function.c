@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 2497 2005-10-01 04:35:25Z nenolod $
+ * $Id: function.c 2583 2005-10-05 04:22:13Z alambert $
  */
 
 #include "atheme.h"
@@ -395,6 +395,8 @@ boolean_t validhostmask(char *host)
  *
  * param is an extra parameter; email, key, etc.
  *
+ * assume that we are either using NickServ or UserServ
+ *
  * If type ==:
  *   1 - nickname REGISTER
  *   2 - nickname SENDPASS
@@ -436,11 +438,18 @@ void sendemail(char *what, const char *param, int type)
 
 	date = timebuf;
 
-	sprintf(from, "%s <%s@%s>", nicksvs.nick, nicksvs.user, nicksvs.host);
+	if (nicksvs.nick)
+		sprintf(from, "%s <%s@%s>", nicksvs.nick, nicksvs.user, nicksvs.host);
+	else
+		sprintf(from, "%s <%s@%s>", usersvs.nick, usersvs.user, usersvs.host);
+
 	sprintf(to, "%s <%s>", mu->name, email);
 
 	if (type == 1)
-		strlcpy(subject, "Nickname Registration", 128);
+		if (nicksvs.nick)
+			strlcpy(subject, "Nickname Registration", 128);
+		else
+			strlcpy(subject, "Account Registration", 128);
 	else if (type == 2)
 		strlcpy(subject, "Password Retrieval", 128);
 	else if (type == 3)
@@ -461,8 +470,9 @@ void sendemail(char *what, const char *param, int type)
 	if (type == 1)
 	{
 		fprintf(out, "In order to complete your registration, you must send " "the following command on IRC:\n");
-		fprintf(out, "/MSG %s VERIFY REGISTER %s %s\n\n", nicksvs.nick, what, param);
-		fprintf(out, "Thank you for registering your nickname on the %s IRC " "network!\n", me.netname);
+		fprintf(out, "/MSG %s VERIFY REGISTER %s %s\n\n", (nicksvs.nick ? nicksvs.nick : usersvs.nick), what, param);
+		fprintf(out, "Thank you for registering your %s on the %s IRC " "network!\n",
+				(nicksvs.nick ? nicksvs.nick : usersvs.nick), me.netname);
 	}
 	else if (type == 2)
 	{
@@ -472,7 +482,7 @@ void sendemail(char *what, const char *param, int type)
 	else if (type == 3)
 	{
 		fprintf(out, "In order to complete your email change, you must send " "the following command on IRC:\n");
-		fprintf(out, "/MSG %s VERIFY EMAILCHG %s %s\n\n", nicksvs.nick, what, param);
+		fprintf(out, "/MSG %s VERIFY EMAILCHG %s %s\n\n", (nicksvs.nick ? nicksvs.nick : usersvs.nick), what, param);
 	}
 
 	fprintf(out, ".\n");
