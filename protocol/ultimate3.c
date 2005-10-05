@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 2515 2005-10-03 03:06:55Z nenolod $
+ * $Id: ultimate3.c 2619 2005-10-05 19:02:20Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 2515 2005-10-03 03:06:55Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 2619 2005-10-05 19:02:20Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -331,6 +331,15 @@ static void ultimate3_jupe(char *server, char *reason)
 
 	sts(":%s SQUIT %s :%s", opersvs.nick, server, reason);
 	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
+}
+
+static void ultimate3_sethost_sts(char *source, char *target, char *host)
+{
+	if (!me.connected)
+		return;
+
+	sts(":%s SVSMODE %s +x", source, target);
+	sts(":%s SETHOST %s :%s", me.name, target, host);
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
@@ -866,6 +875,7 @@ void _modinit(module_t * m)
 	ircd_on_login = &ultimate3_on_login;
 	ircd_on_logout = &ultimate3_on_logout;
 	jupe = &ultimate3_jupe;
+	sethost_sts = &ultimate3_sethost_sts;
 
 	mode_list = ultimate3_mode_list;
 	ignore_mode_list = ultimate3_ignore_mode_list;

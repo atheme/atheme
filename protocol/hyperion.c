@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 2515 2005-10-03 03:06:55Z nenolod $
+ * $Id: hyperion.c 2619 2005-10-05 19:02:20Z nenolod $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -15,7 +15,7 @@
 #include "atheme.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 2515 2005-10-03 03:06:55Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 2619 2005-10-05 19:02:20Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -359,6 +359,14 @@ static void hyperion_jupe(char *server, char *reason)
 
 	sts(":%s SQUIT %s :%s", opersvs.nick, server, reason);
 	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
+}
+
+static void hyperion_sethost_sts(char *source, char *target, char *host)
+{
+	if (!me.connected)
+		return;
+
+	sts(":%s SETHOST %s :%s", source, target, host);
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
@@ -909,6 +917,7 @@ void _modinit(module_t * m)
 	ircd_on_login = &hyperion_on_login;
 	ircd_on_logout = &hyperion_on_logout;
 	jupe = &hyperion_jupe;
+	sethost_sts = &hyperion_sethost_sts;
 
 	mode_list = hyperion_mode_list;
 	ignore_mode_list = hyperion_ignore_mode_list;

@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 2613 2005-10-05 17:58:34Z nenolod $
+ * $Id: unreal.c 2619 2005-10-05 19:02:20Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 2613 2005-10-05 17:58:34Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 2619 2005-10-05 19:02:20Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -343,6 +343,7 @@ static void unreal_sethost_sts(char *source, char *target, char *host)
 	if (!me.connected)
 		return;
 
+	sts(":%s SVS2MODE %s +x", source, target, host);
 	sts(":%s CHGHOST %s :%s", source, target, host);
 }
 
