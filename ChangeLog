@@ -1,3 +1,12 @@
+nenolod     2005/10/05 05:10:45 UTC	(20051005-2589)
+  Log:
+  Mmm, tail recursion.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/node.h (File Modified) 
+
+
 nenolod     2005/10/05 04:48:41 UTC	(20051005-2587)
   Log:
   Jump from Atheme Public License 0.9 to final v1 draft.

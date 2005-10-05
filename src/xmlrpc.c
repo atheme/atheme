@@ -41,7 +41,7 @@ XMLRPCCmd *next_xmlrpccmd(void);
 XMLRPCCmdHash *first_xmlrpchash(void);
 XMLRPCCmdHash *next_xmlrpchash(void);
 int destroyxmlrpchash(XMLRPCCmdHash * mh);
-char *xmlrcp_strnrepl(char *s, int32 size, const char *old, const char *new);
+char *xmlrcp_strnrepl(char *s, int32_t size, const char *old, const char *new);
 int xmlrpc_myNumToken(const char *str, const char dilim);
 
 /*************************************************************************/
@@ -401,8 +401,7 @@ char *xmlrpc_write_header(int length)
 	tm = *localtime(&ts);
 	strftime(timebuf, XMLRPC_BUFSIZE - 1, "%Y-%m-%d %H:%M:%S", &tm);
 
-	snprintf(buf, XMLRPC_BUFSIZE, "HTTP/1.1 200 OK\n\rConnection: close\n\r"
-		 "Content-Length: %d\n\r" "Content-Type: text/xml\n\r" "Date: %s\n\r" "Server: Atheme %s\r\n", length, timebuf, version);
+	snprintf(buf, XMLRPC_BUFSIZE, "HTTP/1.1 200 OK\n\rConnection: close\n\r" "Content-Length: %d\n\r" "Content-Type: text/xml\n\r" "Date: %s\n\r" "Server: Atheme %s\r\n", length, timebuf, version);
 	return xmlrpc_strdup(buf);
 }
 
@@ -441,13 +440,31 @@ static int xmlrpc_split_buf(char *buffer, char ***argv)
 	int argvsize = 8;
 	char *data, *str;
 	char *str2 = NULL;
+	char *nexttag = NULL;
+	char *temp = NULL;
 	char *final;
+	int tagtype = 0;
 
 	*argv = calloc(sizeof(char *) * argvsize, 1);
 	while ((data = strstr(buffer, "<value>")))
 	{
 		if (data)
 		{
+			temp = xmlrpc_GetToken(data, '<', 2);
+			nexttag = xmlrpc_GetToken(temp, '>', 0);
+			/* strings */
+			if (!stricmp("string", nexttag))
+			{
+				tagtype = 1;
+			}
+			else if (!stricmp("base64", nexttag))
+			{
+				tagtype = 2;
+			}
+			else
+			{
+				tagtype = 0;
+			}
 			str = xmlrpc_GetToken(data, '>', 2);
 			str2 = xmlrpc_GetTokenRemainder(data, '>', 2);
 			if (str)
@@ -455,13 +472,24 @@ static int xmlrpc_split_buf(char *buffer, char ***argv)
 				final = xmlrpc_GetToken(str, '<', 0);
 				if (final)
 				{
-					(*argv)[ac++] = final;
+					if (tagtype == 1)
+					{
+						(*argv)[ac++] = xmlrpc_decode_string(final);
+					}
+					else if (tagtype == 2)
+					{
+						(*argv)[ac++] = xmlrpc_decode64(final);
+					}
+					else
+					{
+						(*argv)[ac++] = final;
+					}
 				}
 				free(str);
-			}
-			buffer = str2;
-		}
-	}
+			}	/* str */
+		}		/* data */
+		buffer = str2;
+	}			/* while */
 	free(str2);
 	return ac;
 }
@@ -1202,26 +1230,17 @@ char *xmlrpc_char_encode(char *outbuffer, char *s1)
 
 char *xmlrpc_decode_string(char *buf)
 {
-	regex_t preg;
-	int rc;
-	size_t nmatch = 10;
-	regmatch_t pmatch[2];
 	int count;
-	char *pattern = "\\#[1-9][0-9][0-9];";
 	int i;
 	char *token, *temp;
 	char *temptoken, *temptoken2;
 	char buf2[12];
 	char buf3[12];
 
-	printf("%s\n\r", buf);
-
 	xmlrcp_strnrepl(buf, XMLRPC_BUFSIZE, "&gt;", ">");
 	xmlrcp_strnrepl(buf, XMLRPC_BUFSIZE, "&lt;", "<");
 	xmlrcp_strnrepl(buf, XMLRPC_BUFSIZE, "&quot;", "\"");
 	xmlrcp_strnrepl(buf, XMLRPC_BUFSIZE, "&amp;", "&");
-
-	printf("%s\n\r", buf);
 
 	temp = xmlrpc_strdup(buf);
 	count = xmlrpc_myNumToken(temp, '&');
@@ -1237,18 +1256,17 @@ char *xmlrpc_decode_string(char *buf)
 		}
 	}
 	free(temp);
-	printf("%s\n\r", buf);
 	return buf;
 }
 
-char *xmlrcp_strnrepl(char *s, int32 size, const char *old, const char *new)
+char *xmlrcp_strnrepl(char *s, int32_t size, const char *old, const char *new)
 {
 	char *ptr = s;
-	int32 left = strlen(s);
-	int32 avail = size - (left + 1);
-	int32 oldlen = strlen(old);
-	int32 newlen = strlen(new);
-	int32 diff = newlen - oldlen;
+	int32_t left = strlen(s);
+	int32_t avail = size - (left + 1);
+	int32_t oldlen = strlen(old);
+	int32_t newlen = strlen(new);
+	int32_t diff = newlen - oldlen;
 
 	while (left >= oldlen)
 	{
