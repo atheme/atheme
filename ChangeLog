@@ -1,3 +1,12 @@
+nenolod     2005/10/05 06:27:52 UTC	(20051005-2595)
+  Log:
+  remove this :P
+  
+
+  Changes:	Modified:
+  + -		trunk/modules/memoserv/ (File Deleted) 
+
+
 nenolod     2005/10/05 06:10:31 UTC	(20051005-2593)
   Log:
   Updated infotext in preparation for the 0.3 release.

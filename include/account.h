@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2005 William Pitcock, et al.
+ * Copyright (c) 2005 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Data structures for account information.
  *
- * $Id: account.h 2171 2005-09-05 21:22:11Z jilles $
+ * $Id: account.h 2597 2005-10-05 06:37:06Z kog $
  */
 
 #ifndef ACCOUNT_H
@@ -14,6 +14,7 @@ typedef struct sra_ sra_t;
 typedef struct myuser_ myuser_t;
 typedef struct mychan_ mychan_t;
 typedef struct chanacs_ chanacs_t;
+typedef struct mymemo_ mymemo_t;
 
 /* sra list struct */
 struct sra_ {
@@ -38,6 +39,8 @@ struct myuser_
 
   uint32_t flags;
   int32_t hash;
+  
+  list_t memos; /* store memos */
 };
 
 #define MU_HOLD        0x00000001
@@ -124,5 +127,19 @@ struct chanacs_
 #define SHRIKE_CA_SOP           0x00000008
 #define SHRIKE_CA_FOUNDER       0x00000010
 #define SHRIKE_CA_SUCCESSOR     0x00000020
+
+/* struct for account memos */
+struct mymemo_ {
+	char	 sender[NICKLEN];
+	char 	 subject[30];
+	char 	 text[MEMOLEN];
+	time_t	 sent;
+	uint32_t status;
+	list_t	 metadata;
+};
+
+/* memo status flags */
+#define MEMO_NEW           0x00000000
+#define MEMO_READ          0x00000001
 
 #endif

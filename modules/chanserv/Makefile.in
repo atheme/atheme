@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2527 2005-10-03 17:40:09Z nenolod $
+# $Id: Makefile.in 2597 2005-10-05 06:37:06Z kog $
 #
 
 CC		= @CC@
@@ -54,7 +54,8 @@ BASE_SRCS = 		\
 	version.c	\
 	voice.c		\
 	why.c		\
-	xop.c
+	xop.c \
+	ping.c
 
 SRCS = ${BASE_SRCS}
 

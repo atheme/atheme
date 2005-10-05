@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2005 William Pitcock, et al.
+ * Copyright (c) 2005 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Data structures for account information.
  *
- * $Id: common.h 2171 2005-09-05 21:22:11Z jilles $
+ * $Id: common.h 2597 2005-10-05 06:37:06Z kog $
  */
 
 #ifndef COMMON_H
@@ -25,6 +25,7 @@
 #define HOSTLEN 64
 #define GECOSLEN 51
 #define EMAILLEN 120
+#define MEMOLEN 129
 
 /* H A S H */
 #define HASHINIT 0x811c9dc5

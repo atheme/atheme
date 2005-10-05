@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 2555 2005-10-04 06:42:24Z nenolod $
+ * $Id: help.c 2597 2005-10-05 06:37:06Z kog $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 2555 2005-10-04 06:42:24Z nenolod $",
+	"$Id: help.c 2597 2005-10-05 06:37:06Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -44,8 +44,27 @@ void _moddeinit()
 
 static void fc_cmd_help(char *origin, char *chan)
 {
-	cs_cmd_help(origin);
-	return;
+        node_t *n;
+
+        notice(chansvs.nick, origin, "***** \2%s Help\2 *****", chansvs.nick);
+        notice(chansvs.nick, origin, "%s provides the following in-channel commands:", chansvs.nick);
+        notice(chansvs.nick, origin, " ");
+
+	LIST_FOREACH(n, cs_fcmdtree->head)
+        {
+                fcommand_t *c = n->data;
+                notice(chansvs.nick, origin, "\2%-16s\2 %s", c->name);
+        }
+
+        notice(chansvs.nick, origin, " ");
+	notice(chansvs.nick, origin, "In addition, the following commands are supported via");
+        notice(chansvs.nick, origin, "\2/%s%s <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
+        notice(chansvs.nick, origin, " ");
+
+        command_help(chansvs.nick, origin, cs_cmdtree);
+
+        notice(chansvs.nick, origin, "***** \2End of Help\2 *****");
+        return;
 }
 
 /* HELP <command> [params] */

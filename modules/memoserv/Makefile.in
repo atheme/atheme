@@ -5,6 +5,11 @@
 #
 # $Id: Makefile.in 2597 2005-10-05 06:37:06Z kog $
 #
+#read.c		\
+#list.c		\
+#forward.c	\
+#ignore.c	\
+#delete.c	
 
 CC		= @CC@
 RM		= @RM@
@@ -13,43 +18,38 @@ CP		= @CP@
 INSTALL		= @INSTALL@
 PREFIX		= @prefix@
 BIN		= atheme@EXEEXT@
-MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../include @PGINC@ @MYINC@
+MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include @PGINC@ @MYINC@
 PICFLAGS	= @PICFLAGS@
-CFLAGS		= @CFLAGS@ -I../include @PGINC@ @MYINC@
+CFLAGS		= @CFLAGS@ -I../../include @PGINC@ @MYINC@
 
 VERSION		= 0.1
 
-LIBS		= @LIBS@ @PQLIB@ @MYLIB@
+LIBS		= @LIBS@ @PQLIB@
 LDFLAGS		= @LDFLAGS@
 CPPFLAGS	= @CPPFLAGS@
 
 default: all
 
-BASE_SRCS = 
-
+BASE_SRCS = 		\
+	main.c		\
+	help.c		\
+	send.c		\
+	list.c		\
+	
+	
 SRCS = ${BASE_SRCS}
 
 OBJS = ${SRCS:.c=.so}
-
-SUBDIRS = chanserv nickserv global operserv userserv xmlrpc memoserv 
 
 all: modules
 
 build: all
 
 install: build
-	@for i in $(SUBDIRS); do \
-		echo "install ==> $$i"; \
-		cd $$i; \
-		${MAKE} install || exit; cd ..; \
-	done
+	${INSTALL} -d ${PREFIX}/modules/memoserv
+	${INSTALL} -m 755 *.so ${PREFIX}/modules/memoserv
 
-modules:
-	@for i in $(SUBDIRS); do \
-		echo "build ==> $$i"; \
-		cd $$i; \
-		${MAKE} build || exit; cd ..; \
-	done
+modules: $(OBJS)
 
 .SUFFIXES: .so
 
@@ -59,11 +59,7 @@ modules:
 .PHONY: clean distclean
 
 clean:
-	@for i in $(SUBDIRS); do \
-		echo "clean ==> $$i"; \
-		cd $$i; \
-		${MAKE} clean || exit; cd ..; \
-	done
+	${RM} -f *.so
 
 distclean: clean
 	${RM} -f Makefile version.c.last

@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2523 2005-10-03 08:11:58Z pfish $
+# $Id: Makefile.in 2597 2005-10-05 06:37:06Z kog $
 #
 
 CC		= @CC@
@@ -28,6 +28,7 @@ default: all
 BASE_SRCS = 		\
 	main.c		\
 	drop.c		\
+	generatepass.c	\
 	freeze.c	\
 	help.c		\
 	hold.c		\
