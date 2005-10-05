@@ -1,3 +1,12 @@
+kog         2005/10/05 23:01:11 UTC	(20051005-2625)
+  Log:
+  Fixed lots of pointer issues, extra vars - should work, but needs some more checks on messagebox full/target
+  
+
+  Changes:	Modified:
+  +21 -21	trunk/modules/memoserv/send.c (File Modified) 
+
+
 nenolod     2005/10/05 22:53:57 UTC	(20051005-2623)
   Log:
   Remove old access check.
