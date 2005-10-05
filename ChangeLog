@@ -1,3 +1,15 @@
+nenolod     2005/10/05 06:51:04 UTC	(20051005-2601)
+  Log:
+  - Add crypto/posix module for crypt(3) encryption.
+  
+
+  Changes:	Modified:
+  +77 -4	trunk/configure (File Modified) 
+  +4 -0		trunk/configure.ac (File Modified) 
+  +33 -1	trunk/crypto/Makefile.in (File Modified) 
+  + -		trunk/crypto/posix.c (File Added) 
+
+
 nenolod     2005/10/05 06:40:04 UTC	(20051005-2599)
   Log:
   Clean up after the gnetdev branch import mess :P

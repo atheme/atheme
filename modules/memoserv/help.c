@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the MemoServ HELP command.
  *
- * $Id: help.c 2597 2005-10-05 06:37:06Z kog $
+ * $Id: help.c 2603 2005-10-05 06:57:45Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,20 +12,12 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 2597 2005-10-05 06:37:06Z kog $",
+	"$Id: help.c 2603 2005-10-05 06:57:45Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 list_t *ms_cmdtree;
-
-/* *INDENT-OFF* */
-
-/* help commands we understand */
-static struct help_command_ ms_help_commands[] = {
-  { NULL, 0, NULL }
-};
-
-/* *INDENT-ON* */
+list_t *ms_helptree;
 
 static void ms_cmd_help(char *origin);
 
@@ -34,12 +26,16 @@ command_t ms_help = { "HELP", "Displays contextual help information.", AC_NONE, 
 void _modinit(module_t *m)
 {
 	ms_cmdtree = module_locate_symbol("memoserv/main", "ms_cmdtree");
+	ms_helptree = module_locate_symbol("memoserv/main", "ms_helptree");
+
 	command_add(&ms_help, ms_cmdtree);
+	help_addentry(ms_helptree, "HELP", "help/help", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&ms_help, ms_cmdtree);
+	help_delentry(ms_helptree, "HELP");
 }
 
 /* HELP <command> [params] */
@@ -67,7 +63,7 @@ void ms_cmd_help(char *origin)
 	}
 
 	/* take the command through the hash table */
-	if ((c = help_cmd_find(memosvs.nick, origin, command, ms_help_commands)))
+	if ((c = help_cmd_find(memosvs.nick, origin, command, ms_helptree)))
 	{
 		if (c->file)
 		{
@@ -97,6 +93,8 @@ void ms_cmd_help(char *origin)
 
 			notice(memosvs.nick, origin, "***** \2End of Help\2 *****");
 		}
+		else if (c->func)
+			c->func(origin);
 		else
 			notice(memosvs.nick, origin, "No help available for \2%s\2.", command);
 	}
