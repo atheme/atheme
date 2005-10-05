@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv SEND function
  *
- * $Id: send.c 2597 2005-10-05 06:37:06Z kog $
+ * $Id: send.c 2625 2005-10-05 23:01:11Z kog $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/send", FALSE, _modinit, _moddeinit,
-	"$Id: send.c 2597 2005-10-05 06:37:06Z kog $",
+	"$Id: send.c 2625 2005-10-05 23:01:11Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,16 +22,21 @@ command_t ms_send = { "SEND", "Sends a memo to a user",
                         AC_NONE, ms_cmd_send };
 
 list_t *ms_cmdtree;
+list_t *ms_helptree;
 
 void _modinit(module_t *m)
 {
 	ms_cmdtree = module_locate_symbol("memoserv/main", "ms_cmdtree");
         command_add(&ms_send, ms_cmdtree);
+	
+	ms_helptree = module_locate_symbol("memoserv/main", "ms_helptree");
+	help_addentry(ms_helptree, "SEND", "help/memoserv/send", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&ms_send, ms_cmdtree);
+	help_delentry(ms_helptree, "SEND");
 }
 
 static void ms_cmd_send(char *origin)
@@ -40,16 +45,14 @@ static void ms_cmd_send(char *origin)
 	user_t *u = user_find(origin);
 	myuser_t *mu;
 	node_t *n;
-	list_t *memos;
-	mymemo_t memo;
+	mymemo_t *memo = smalloc(sizeof(mymemo_t));
 	
 	/* Grab args */
 	char *target = strtok(NULL, " ");
-	char *subject = strtok(NULL, " ");
-	char *m = strtok(NULL,"\0");
+	char *m = strtok(NULL,"");
 	
 	/* Arg validation */
-	if (!target || !subject || !m)
+	if (!target || !m)
 	{
 		notice(memosvs.nick, origin, 
 			"Insufficient parameters specified for \2SEND\2.");
@@ -68,15 +71,6 @@ static void ms_cmd_send(char *origin)
 		return;
 	}
 	
-	/* Check for memo subject length */
-	if (strlen(subject) > 30)
-	{
-		notice(memosvs.nick, origin, 
-			"Please use a shorter subject on your memo", target);
-		
-		return;
-	}
-	
 	/* Check for memo text length -- includes/common.h */
 	if (strlen(m) > MEMOLEN)
 	{
@@ -86,17 +80,23 @@ static void ms_cmd_send(char *origin)
 		return;
 	}
 	
-	/* Create a memo struct and populate */
-	memo.sent = CURRTIME;
-	memo.status = MEMO_NEW;
-	strlcpy(memo.sender,origin,strlen(origin));
-	strlcpy(memo.subject,subject,strlen(subject));
-	strlcpy(memo.text,m,strlen(m));
+	/* Check to make sure target inbox not full  - nenolod suggested
+	   config_options.metadata_limit, perhaps a conf var or conf.h? FIXME*/
+	if (mu->memos.count > 30)
+	{
+		notice(memosvs.nick, origin, "%s's inbox is full", target);
+		return;
+	}
+	
+	/* Populate struct */
+	memo->sent = CURRTIME;
+	memo->status = MEMO_NEW;
+	strlcpy(memo->sender,origin,NICKLEN);
+	strlcpy(memo->text,m,MEMOLEN);
 	
 	/* Create a linked list node and add to memos */
-	memos = &mu->memos;
 	n = node_create();
-	node_add(&memo, n, memos);
+	node_add(memo, n, &mu->memos);
 
 	/* Tell user memo sent, return */
 	notice(memosvs.nick, origin, "Memo sent.");

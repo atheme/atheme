@@ -1,3 +1,12 @@
+nenolod     2005/10/05 22:53:57 UTC	(20051005-2623)
+  Log:
+  Remove old access check.
+  
+
+  Changes:	Modified:
+  +1 -16	trunk/src/help.c (File Modified) 
+
+
 kog         2005/10/05 19:44:58 UTC	(20051005-2621)
   Log:
   updated fantasy command !help - Kuja
