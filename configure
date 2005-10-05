@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# $Id: configure.ac 2597 2005-10-05 06:37:06Z kog $
+# $Id: configure.ac 2601 2005-10-05 06:51:04Z nenolod $
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -966,7 +966,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-$Id: configure.ac 2597 2005-10-05 06:37:06Z kog $
+$Id: configure.ac 2601 2005-10-05 06:51:04Z nenolod $
 _ACEOF
   exit 0
 fi
@@ -5408,7 +5408,10 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_crypt_crypt" >&5
 echo "${ECHO_T}$ac_cv_lib_crypt_crypt" >&6
 if test $ac_cv_lib_crypt_crypt = yes; then
-  POSIX_CRYPTC="posix.c"
+
+	POSIX_CRYPTC="posix.c"
+	LIBS="$LIBS -lcrypt"
+
 fi
 
 
