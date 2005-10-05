@@ -3,13 +3,10 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2597 2005-10-05 06:37:06Z kog $
+# $Id: Makefile.in 2631 2005-10-05 23:46:16Z kog $
 #
 #read.c		\
-#list.c		\
 #forward.c	\
-#ignore.c	\
-#delete.c	
 
 CC		= @CC@
 RM		= @RM@
@@ -35,6 +32,9 @@ BASE_SRCS = 		\
 	help.c		\
 	send.c		\
 	list.c		\
+	delete.c	\
+	forward.c	\
+	read.c		
 	
 	
 SRCS = ${BASE_SRCS}

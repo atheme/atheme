@@ -1,3 +1,12 @@
+kog         2005/10/05 23:04:53 UTC	(20051005-2629)
+  Log:
+  Fixed various pointer issues, time display fixed
+  
+
+  Changes:	Modified:
+  +17 -18	trunk/modules/memoserv/list.c (File Modified) 
+
+
 kog         2005/10/05 23:03:24 UTC	(20051005-2627)
   Log:
   initial commit of read, should work - kog
