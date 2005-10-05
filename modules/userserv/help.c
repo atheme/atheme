@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the NickServ HELP command.
  *
- * $Id: help.c 2567 2005-10-04 07:34:23Z nenolod $
+ * $Id: help.c 2575 2005-10-05 02:46:11Z alambert $
  */
 
 #include "atheme.h"
@@ -12,80 +12,29 @@
 DECLARE_MODULE_V1
 (
 	"userserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 2567 2005-10-04 07:34:23Z nenolod $",
+	"$Id: help.c 2575 2005-10-05 02:46:11Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 list_t *us_cmdtree;
 list_t *us_helptree;
 
-/* *INDENT-OFF* */
-
-/* help commands we understand */
-static struct help_command_ us_help_commands[] = {
-  { "REGISTER", AC_NONE,  "help/userserv/register" },
-  { "VERIFY",   AC_NONE,  "help/userserv/verify"   },
-  { "IDENTIFY", AC_NONE,  "help/userserv/identify" },
-  { "LOGOUT",	AC_NONE,  "help/userserv/logout"   },
-  { "HELP",     AC_NONE,  "help/help"              },
-  { "INFO",     AC_NONE,  "help/userserv/info"     },
-  { "DROP",     AC_NONE,  "help/userserv/drop"     },
-  { "GHOST",    AC_NONE,  "help/userserv/ghost"    },
-  { "STATUS",   AC_NONE,  "help/userserv/status"   },
-  { "TAXONOMY", AC_NONE,  "help/userserv/taxonomy" },
-  { "LINK",     AC_NONE,  "help/userserv/link"     },
-  { "RESETPASS",AC_IRCOP, "help/userserv/resetpass"},
-  { "SENDPASS", AC_IRCOP, "help/userserv/sendpass" },
-  { "LISTMAIL", AC_IRCOP, "help/userserv/listmail" },
-  { "MARK",     AC_IRCOP, "help/userserv/mark"     },
-  { "LIST",     AC_IRCOP, "help/userserv/list"     },
-  { "HOLD",     AC_SRA,   "help/userserv/hold"     },
-  { "MYACCESS", AC_NONE,  "help/userserv/myaccess" },
-  { "SET EMAIL",     AC_NONE, "help/userserv/set_email"     },
-  { "SET HIDEMAIL",  AC_NONE, "help/userserv/set_hidemail"  },
-  { "SET NEVEROP",   AC_NONE, "help/userserv/set_neverop"   },
-  { "SET NOOP",      AC_NONE, "help/userserv/set_noop"      },
-  { "SET PASSWORD",  AC_NONE, "help/userserv/set_password"  },
-  { "SET PROPERTY",  AC_NONE, "help/userserv/set_property"  },
-  { NULL, 0, NULL }
-};
-
-/* *INDENT-ON* */
-
 static void us_cmd_help(char *origin);
 
 command_t us_help = { "HELP", "Displays contextual help information.", AC_NONE, us_cmd_help };
-
-static void register_us_cmds(void)
-{
-	uint8_t i = 0;
-
-	for (i = 0; us_help_commands[i].name; i++)
-		help_addentry(us_helptree, us_help_commands[i].name,
-			us_help_commands[i].file, NULL);
-}
-
-static void deregister_us_cmds(void)
-{
-	uint8_t i = 0;
-
-	for (i = 0; us_help_commands[i].name; i++)
-		help_delentry(us_helptree, us_help_commands[i].name);
-}
 
 void _modinit(module_t *m)
 {
 	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
 	us_helptree = module_locate_symbol("userserv/main", "us_helptree");
-
 	command_add(&us_help, us_cmdtree);
-	register_us_cmds();
+	help_addentry(us_helptree, "HELP", "help/help", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&us_help, us_cmdtree);
-	deregister_us_cmds();
+	help_delentry(us_helptree, "HELP");
 }
 
 /* HELP <command> [params] */

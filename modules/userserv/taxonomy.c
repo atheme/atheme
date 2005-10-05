@@ -4,7 +4,7 @@
  *
  * Lists object properties via their metadata table.
  *
- * $Id: taxonomy.c 2361 2005-09-25 03:05:34Z nenolod $
+ * $Id: taxonomy.c 2575 2005-10-05 02:46:11Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/taxonomy", FALSE, _modinit, _moddeinit,
-	"$Id: taxonomy.c 2361 2005-09-25 03:05:34Z nenolod $",
+	"$Id: taxonomy.c 2575 2005-10-05 02:46:11Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,17 +20,20 @@ static void us_cmd_taxonomy(char *origin);
 
 command_t us_taxonomy = { "TAXONOMY", "Displays a user's metadata.", AC_NONE, us_cmd_taxonomy };
 
-list_t *us_cmdtree;
+list_t *us_cmdtree, *us_helptree;
 
 void _modinit(module_t *m)
 {
 	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
+	us_helptree = module_locate_symbol("userserv/main", "us_helptree");
 	command_add(&us_taxonomy, us_cmdtree);
+	help_addentry(us_helptree, "TAXONOMY", "help/userserv/taxonomy", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&us_taxonomy, us_cmdtree);
+	help_delentry(us_helptree, "TAXONOMY");
 }
 
 static void us_cmd_taxonomy(char *origin)

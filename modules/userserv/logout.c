@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGOUT functions.
  *
- * $Id: logout.c 2359 2005-09-25 02:49:10Z nenolod $
+ * $Id: logout.c 2575 2005-10-05 02:46:11Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/logout", FALSE, _modinit, _moddeinit,
-	"$Id: logout.c 2359 2005-09-25 02:49:10Z nenolod $",
+	"$Id: logout.c 2575 2005-10-05 02:46:11Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -21,17 +21,20 @@ static void us_cmd_logout(char *origin);
 command_t us_logout = { "LOGOUT", "Logs your services session out.",
                         AC_NONE, us_cmd_logout };
                                                                                    
-list_t *us_cmdtree;
+list_t *us_cmdtree, *us_helptree;
 
 void _modinit(module_t *m)
 {
 	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
+	us_helptree = module_locate_symbol("userserv/main", "us_helptree");
         command_add(&us_logout, us_cmdtree);
+	help_addentry(us_helptree, "LOGOUT", "help/userserv/logout", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&us_logout, us_cmdtree);
+	help_delentry(us_helptree, "LOGOUT");
 }
 
 static void us_cmd_logout(char *origin)

@@ -4,7 +4,7 @@
  *
  * This file contains code for UserServ RESETPASS
  *
- * $Id: resetpass.c 2523 2005-10-03 08:11:58Z pfish $
+ * $Id: resetpass.c 2575 2005-10-05 02:46:11Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/resetpass", FALSE, _modinit, _moddeinit,
-	"$Id: resetpass.c 2523 2005-10-03 08:11:58Z pfish $",
+	"$Id: resetpass.c 2575 2005-10-05 02:46:11Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -21,17 +21,20 @@ static void us_cmd_resetpass(char *origin);
 command_t us_resetpass = { "RESETPASS", "Resets a nickname password.",
                         AC_IRCOP, us_cmd_resetpass };
                                                                                    
-list_t *us_cmdtree;
+list_t *us_cmdtree, *us_helptree;
 
 void _modinit(module_t *m)
 {
 	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
+	us_helptree = module_locate_symbol("userserv/main", "us_helptree");
         command_add(&us_resetpass, us_cmdtree);
+	help_addentry(us_helptree, "RESETPASS", "help/userserv/resetpass", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&us_resetpass, us_cmdtree);
+	help_delentry(us_helptree, "RESETPASS");
 }
 
 static void us_cmd_resetpass(char *origin)

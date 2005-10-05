@@ -1,3 +1,11 @@
+alambert    2005/10/05 00:03:41 UTC	(20051005-2573)
+  Log:
+  US DROP: use command_delete() in _moddeinit() -- not command_add()\!
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/userserv/drop.c (File Modified) 
+
+
 nenolod     2005/10/04 20:37:47 UTC	(20051004-2571)
   Log:
   Fix bug #55 -- mode retention. Reported by Lauren.

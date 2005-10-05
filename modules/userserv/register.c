@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 2361 2005-09-25 03:05:34Z nenolod $
+ * $Id: register.c 2575 2005-10-05 02:46:11Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 2361 2005-09-25 03:05:34Z nenolod $",
+	"$Id: register.c 2575 2005-10-05 02:46:11Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -21,17 +21,20 @@ static void us_cmd_register(char *origin);
 command_t us_register = { "REGISTER", "Registers a services account.", 
 			  AC_NONE, us_cmd_register };
 
-list_t *us_cmdtree;
+list_t *us_cmdtree, *us_helptree;
 
 void _modinit(module_t *m)
 {
 	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
+	us_helptree = module_locate_symbol("userserv/main", "us_helptree");
 	command_add(&us_register, us_cmdtree);
+	help_addentry(us_helptree, "REGISTER", "help/userserv/register", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&us_register, us_cmdtree);
+	help_delentry(us_helptree, "REGISTER");
 }
 
 static void us_cmd_register(char *origin)

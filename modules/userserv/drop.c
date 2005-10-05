@@ -4,7 +4,7 @@
  *
  * This file contains code for the UserServ DROP function.
  *
- * $Id: drop.c 2573 2005-10-05 00:03:41Z alambert $
+ * $Id: drop.c 2575 2005-10-05 02:46:11Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 2573 2005-10-05 00:03:41Z alambert $",
+	"$Id: drop.c 2575 2005-10-05 02:46:11Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,17 +20,20 @@ static void us_cmd_drop(char *origin);
 
 command_t us_drop = { "DROP", "Drops a account registration.", AC_NONE, us_cmd_drop };
 
-list_t *us_cmdtree;
+list_t *us_cmdtree, *us_helptree;
 
 void _modinit(module_t *m)
 {
 	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
+	us_helptree = module_locate_symbol("userserv/main", "us_helptree");
 	command_add(&us_drop, us_cmdtree);
+	help_addentry(us_helptree, "DROP", "help/userserv/drop", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&us_drop, us_cmdtree);
+	help_delentry(us_helptree, "DROP");
 }
 
 static void us_cmd_drop(char *origin)

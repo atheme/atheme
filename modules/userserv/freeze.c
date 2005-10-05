@@ -4,7 +4,7 @@
  *
  * Gives services the ability to freeze accounts
  *
- * $Id: freeze.c 2361 2005-09-25 03:05:34Z nenolod $
+ * $Id: freeze.c 2575 2005-10-05 02:46:11Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/freeze", FALSE, _modinit, _moddeinit,
-	"$Id: freeze.c 2361 2005-09-25 03:05:34Z nenolod $",
+	"$Id: freeze.c 2575 2005-10-05 02:46:11Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,18 +22,20 @@ static void us_cmd_freeze(char *origin);
 command_t us_freeze = { "FREEZE", "Freezes a account.",
 			AC_IRCOP, us_cmd_freeze };
 
-list_t *us_cmdtree;
+list_t *us_cmdtree, *us_helptree;
 
 void _modinit(module_t *m)
 {
 	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
-
+	us_helptree = module_locate_symbol("userserv/main", "us_helptree");
 	command_add(&us_freeze, us_cmdtree);
+	help_addentry(us_helptree, "FREEZE", "help/userserv/freeze", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&us_freeze, us_cmdtree);
+	help_delentry(us_helptree, "FREEZE");
 }
 
 static void us_cmd_freeze(char *origin)

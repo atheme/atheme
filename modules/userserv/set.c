@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 2361 2005-09-25 03:05:34Z nenolod $
+ * $Id: set.c 2575 2005-10-05 02:46:11Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 2361 2005-09-25 03:05:34Z nenolod $",
+	"$Id: set.c 2575 2005-10-05 02:46:11Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,7 +20,7 @@ static struct set_command_ *us_set_cmd_find(char *origin, char *command);
 
 static void us_cmd_set(char *origin);
 
-list_t *us_cmdtree;
+list_t *us_cmdtree, *us_helptree;
 
 command_t us_set = { "SET", "Sets various control flags.", AC_NONE, us_cmd_set };
 

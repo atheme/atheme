@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: login.c 2361 2005-09-25 03:05:34Z nenolod $
+ * $Id: login.c 2575 2005-10-05 02:46:11Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/login", FALSE, _modinit, _moddeinit,
-	"$Id: login.c 2361 2005-09-25 03:05:34Z nenolod $",
+	"$Id: login.c 2575 2005-10-05 02:46:11Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -21,17 +21,20 @@ static void us_cmd_login(char *origin);
 command_t us_login = { "LOGIN", "Authenticates to a services account.",
 			AC_NONE, us_cmd_login };
 
-list_t *us_cmdtree;
+list_t *us_cmdtree, *us_helptree;
 
 void _modinit(module_t *m)
 {
 	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
+	us_helptree = module_locate_symbol("userserv/main", "us_helptree");
 	command_add(&us_login, us_cmdtree);
+	help_addentry(us_helptree, "LOGIN", "help/userserv/login", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&us_login, us_cmdtree);
+	help_delentry(us_helptree, "LOGIN");
 }
 
 static void us_cmd_login(char *origin)
