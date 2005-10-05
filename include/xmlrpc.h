@@ -11,6 +11,8 @@
 
 #include "atheme.h"
 
+#define stricmp strcasecmp
+
 #define XMLRPC_STOP 1
 #define XMLRPC_CONT 0
 
