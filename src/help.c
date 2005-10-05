@@ -1,11 +1,10 @@
 /*
  * Copyright (c) 2005 Atheme Development Group
- *
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains a generic help system implementation.
  *
- * $Id: help.c 2541 2005-10-04 05:06:05Z nenolod $
+ * $Id: help.c 2623 2005-10-05 22:53:57Z nenolod $
  */
 
 #include "atheme.h"
@@ -21,21 +20,7 @@ helpentry_t *help_cmd_find(char *svs, char *origin, char *cmd, list_t *list)
 		c = n->data;
 
 		if (!strcasecmp(c->name, cmd))
-		{
-			if (c->access == AC_NONE)
-				return c;
-
-			if (c->access == AC_SRA && is_sra(u->myuser))
-				return c;
-
-			if ((c->access == AC_IRCOP) && (is_sra(u->myuser) || (is_ircop(u))))
-				return c;
-			else
-			{
-				notice(svs, origin, "You are not authorized to perform this operation.");
-				return NULL;
-			}
-		}
+			return c;
 	}
 
 	notice(svs, origin, "No help available for \2%s\2.", cmd);
