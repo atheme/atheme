@@ -1,3 +1,12 @@
+pfish       2005/10/05 04:29:35 UTC	(20051005-2585)
+  Log:
+  new help system for nickserv/set
+  
+
+  Changes:	Modified:
+  +15 -0	trunk/modules/nickserv/set.c (File Modified) 
+
+
 alambert    2005/10/05 04:22:13 UTC	(20051005-2583)
   Log:
   Fix verification e-mails with UserServ. Reported by Kuja.

@@ -6,7 +6,7 @@
 # This file generates version.c.
 # Stolen from ircd-ratbox.
 #
-# $Id: version.sh 2527 2005-10-03 17:40:09Z nenolod $
+# $Id: version.sh 2587 2005-10-05 04:48:41Z nenolod $
 #
 
 spitshell=cat
@@ -34,7 +34,7 @@ awk '{if (NF == 6) \
 else \
          { print $1 " "  $2 " " $3 " " $7 " at " $4 " " $5 " " $6 }}'`
 
-buildid=`echo "\$Revision: 2527 $" | \
+buildid=`echo "\$Revision: 2587 $" | \
 	awk '{ print $2 }'`;
 
 $spitshell >version.c <<!SUB!THIS!
@@ -75,6 +75,21 @@ const char *infotext[] =
   "      Neither the name of the author nor the names of its contributors may be",
   "      used to endorse or promote products derived from this software without",
   "      specific prior written permission.",
+  " ",
+  "Any derived works must guarantee the same basic freedom that this license",
+  "does; it is essential for the open source community to grow through the",
+  "open exchange of information. Therefore, all derived works are granted through",
+  "THIS license a guarantee of no further restrictions, and any further",
+  "restrictions on derived works can be considered null and void.",
+  " ",
+  "As an exception to the above rule, you may utilize any GPL-compatible license,",
+  "including the GPL itself, as a substitution to the Atheme license. A list of",
+  "GPL-compatible licenses can be viewed at http://www.fsf.org/licensing.",
+  " ",
+  "You may also jump to a newer revision of this license at your option, if",
+  "such a license becomes available, or downgrade to an older version at your",
+  "choosing; however this is not recommended as newer versions are designed",
+  "to guarantee more software freedom.",
   " ",
   "THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS AS IS AND",
   "ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED",
