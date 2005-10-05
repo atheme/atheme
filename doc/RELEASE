@@ -1,7 +1,11 @@
-$Id: RELEASE 1462 2005-08-04 00:14:41Z alambert $
+$Id: RELEASE 2617 2005-10-05 18:49:33Z nenolod $
 
 Atheme devel Release Notes
 ==========================
+- All services have been entirely modularized. You will need to
+  redo your configuration. An authentication service has been
+  added (choose from either NickServ or UserServ,) for
+  UserServ you should use example.userserv.conf.
 - The way modules work has been changed almost entirely. Please try
   loading bad modules especially on macintosh and AIX systems, thanks!
   (Report any negative findings to the tracker.)
@@ -24,8 +28,6 @@ Atheme devel Release Notes
   any time soon.
 - The configuration parser has been overhauled. Please report any crashes
   when parsing configurations.
-- NickServ is now a required core service. Please update your configurations
-  if you are not using NickServ. ChanServ account support has been removed.
 - Channel passwords have been removed.
 - Most access checking has been simplified, please make sure it is working
   properly on your network.

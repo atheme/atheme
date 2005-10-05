@@ -1,3 +1,13 @@
+nenolod     2005/10/05 18:18:41 UTC	(20051005-2615)
+  Log:
+  Smarter SQL backend detection.
+  
+
+  Changes:	Modified:
+  +4 -4		trunk/configure (File Modified) 
+  +4 -4		trunk/configure.ac (File Modified) 
+
+
 nenolod     2005/10/05 17:58:34 UTC	(20051005-2613)
   Log:
   - Add hostserv skeleton dir.
