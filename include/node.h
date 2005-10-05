@@ -4,7 +4,7 @@
  *
  * Data structures and macros for manipulating linked lists.
  *
- * $Id: node.h 707 2005-07-10 02:26:04Z nenolod $
+ * $Id: node.h 2589 2005-10-05 05:10:45Z nenolod $
  */
 
 #ifndef NODE_H
@@ -16,6 +16,7 @@ typedef struct list_ list_t;
 /* macros for linked lists */
 #define LIST_FOREACH(n, head) for (n = (head); n; n = n->next)  
 #define LIST_FOREACH_NEXT(n, head) for (n = (head); n->next; n = n->next)
+#define LIST_FOREACH_PREV(n, tail) for (n = (tail); n; n = n->prev)
 
 #define LIST_LENGTH(list) (list)->count
 

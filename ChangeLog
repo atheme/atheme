@@ -1,3 +1,14 @@
+nenolod     2005/10/05 04:48:41 UTC	(20051005-2587)
+  Log:
+  Jump from Atheme Public License 0.9 to final v1 draft.
+  
+
+  Changes:	Modified:
+  +9 -0		trunk/COPYING (File Modified) 
+  +9 -0		trunk/doc/LICENSE (File Modified) 
+  +15 -0	trunk/src/version.sh (File Modified) 
+
+
 pfish       2005/10/05 04:29:35 UTC	(20051005-2585)
   Log:
   new help system for nickserv/set
