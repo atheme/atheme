@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 2515 2005-10-03 03:06:55Z nenolod $
+ * $Id: unreal.c 2613 2005-10-05 17:58:34Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 2515 2005-10-03 03:06:55Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 2613 2005-10-05 17:58:34Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -336,6 +336,14 @@ static void unreal_jupe(char *server, char *reason)
 
 	sts(":%s SQUIT %s :%s", opersvs.nick, server, reason);
 	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
+}
+
+static void unreal_sethost_sts(char *source, char *target, char *host)
+{
+	if (!me.connected)
+		return;
+
+	sts(":%s CHGHOST %s :%s", source, target, host);
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
@@ -857,6 +865,7 @@ void _modinit(module_t * m)
 	ircd_on_login = &unreal_on_login;
 	ircd_on_logout = &unreal_on_logout;
 	jupe = &unreal_jupe;
+	sethost_sts = &unreal_sethost_sts;
 
 	mode_list = unreal_mode_list;
 	ignore_mode_list = unreal_ignore_mode_list;

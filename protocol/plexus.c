@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 2515 2005-10-03 03:06:55Z nenolod $
+ * $Id: plexus.c 2613 2005-10-05 17:58:34Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 2515 2005-10-03 03:06:55Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 2613 2005-10-05 17:58:34Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -309,6 +309,14 @@ static void plexus_jupe(char *server, char *reason)
 
 	sts(":%s SQUIT %s :%s", opersvs.nick, server, reason);
 	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
+}
+
+static void plexus_sethost_sts(char *source, char *target, char *host)
+{
+	if (!me.connected)
+		return;
+
+	sts(":%s SVSHOST %s :%s", source, target, host);
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
@@ -728,6 +736,7 @@ void _modinit(module_t * m)
 	ircd_on_login = &plexus_on_login;
 	ircd_on_logout = &plexus_on_logout;
 	jupe = &plexus_jupe;
+	sethost_sts = &plexus_sethost_sts;
 
 	mode_list = plexus_mode_list;
 	ignore_mode_list = plexus_ignore_mode_list;

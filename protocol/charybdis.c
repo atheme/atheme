@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 2515 2005-10-03 03:06:55Z nenolod $
+ * $Id: charybdis.c 2613 2005-10-05 17:58:34Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 2515 2005-10-03 03:06:55Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 2613 2005-10-05 17:58:34Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -375,6 +375,18 @@ static void charybdis_jupe(char *server, char *reason)
 
 	sts(":%s SQUIT %s :%s", CLIENT_NAME(opersvs.me->me), server, reason);
 	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
+}
+
+static void charybdis_sethost_sts(char *source, char *target, char *host)
+{
+	user_t *u = user_find(source);
+	user_t *tu = user_find(target);
+
+	if (!u || !tu)
+		return;
+
+	sts(":%s ENCAP * CHGHOST %s :%s", CLIENT_NAME(u), CLIENT_NAME(tu),
+		host);
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
@@ -1085,6 +1097,7 @@ void _modinit(module_t * m)
 	ircd_on_login = &charybdis_on_login;
 	ircd_on_logout = &charybdis_on_logout;
 	jupe = &charybdis_jupe;
+	sethost_sts = &charybdis_sethost_sts;
 
 	mode_list = charybdis_mode_list;
 	ignore_mode_list = charybdis_ignore_mode_list;
