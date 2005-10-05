@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# $Id: configure.ac 2425 2005-09-28 05:00:36Z nenolod $
+# $Id: configure.ac 2597 2005-10-05 06:37:06Z kog $
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -313,7 +313,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA RM MV CP AR RANLIB MKDEP CPP EGREP SOCKET_ENGINE POSTGRESQL_C PGINC PQLIB MYSQL_C MYINC MYLIB PICFLAGS LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA RM MV CP AR RANLIB MKDEP CPP EGREP SOCKET_ENGINE POSIX_CRYPTC POSTGRESQL_C PGINC PQLIB MYSQL_C MYINC MYLIB PICFLAGS LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -966,7 +966,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-$Id: configure.ac 2425 2005-09-28 05:00:36Z nenolod $
+$Id: configure.ac 2597 2005-10-05 06:37:06Z kog $
 _ACEOF
   exit 0
 fi
@@ -5342,6 +5342,77 @@ if test $ac_cv_func_poll = yes; then
 fi
 
 
+POSIX_CRYPTC=""
+echo "$as_me:$LINENO: checking for crypt in -lcrypt" >&5
+echo $ECHO_N "checking for crypt in -lcrypt... $ECHO_C" >&6
+if test "${ac_cv_lib_crypt_crypt+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lcrypt  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char crypt ();
+int
+main ()
+{
+crypt ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_crypt_crypt=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_crypt_crypt=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_crypt_crypt" >&5
+echo "${ECHO_T}$ac_cv_lib_crypt_crypt" >&6
+if test $ac_cv_lib_crypt_crypt = yes; then
+  POSIX_CRYPTC="posix.c"
+fi
+
+
+
 
 
 echo " "
@@ -9404,7 +9475,7 @@ echo " "
 echo "Makefile generation"
 echo " "
 
-                                                                                                                                                      ac_config_files="$ac_config_files Makefile libatheme/Makefile backend/Makefile contrib/Makefile crypto/Makefile dbtool/Makefile modules/Makefile modules/chanserv/Makefile modules/global/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/userserv/Makefile modules/xmlrpc/Makefile protocol/Makefile src/Makefile"
+                                                                                                                                                                ac_config_files="$ac_config_files Makefile libatheme/Makefile backend/Makefile contrib/Makefile crypto/Makefile dbtool/Makefile modules/Makefile modules/chanserv/Makefile modules/global/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/userserv/Makefile modules/xmlrpc/Makefile modules/memoserv/Makefile protocol/Makefile src/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -9943,6 +10014,7 @@ do
   "modules/operserv/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/operserv/Makefile" ;;
   "modules/userserv/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/userserv/Makefile" ;;
   "modules/xmlrpc/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/xmlrpc/Makefile" ;;
+  "modules/memoserv/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/memoserv/Makefile" ;;
   "protocol/Makefile" ) CONFIG_FILES="$CONFIG_FILES protocol/Makefile" ;;
   "src/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
   "include/sysconf.h" ) CONFIG_HEADERS="$CONFIG_HEADERS include/sysconf.h" ;;
@@ -10049,6 +10121,7 @@ s,@MKDEP@,$MKDEP,;t t
 s,@CPP@,$CPP,;t t
 s,@EGREP@,$EGREP,;t t
 s,@SOCKET_ENGINE@,$SOCKET_ENGINE,;t t
+s,@POSIX_CRYPTC@,$POSIX_CRYPTC,;t t
 s,@POSTGRESQL_C@,$POSTGRESQL_C,;t t
 s,@PGINC@,$PGINC,;t t
 s,@PQLIB@,$PQLIB,;t t

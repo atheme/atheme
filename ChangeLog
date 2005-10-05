@@ -1,3 +1,21 @@
+nenolod     2005/10/05 06:40:04 UTC	(20051005-2599)
+  Log:
+  Clean up after the gnetdev branch import mess :P
+  
+
+  Changes:	Modified:
+  + -		trunk/contrib/cs_ping.c (File Added) 
+  +1 -114	trunk/modules/chanserv/Makefile.in (File Modified) 
+  + -		trunk/modules/chanserv/ping.c (File Deleted) 
+  + -		trunk/modules/memoserv/Makefile (File Deleted) 
+  + -		trunk/modules/memoserv/help.so (File Deleted) 
+  + -		trunk/modules/memoserv/list.so (File Deleted) 
+  + -		trunk/modules/memoserv/main.so (File Deleted) 
+  + -		trunk/modules/memoserv/send.so (File Deleted) 
+  +0 -1		trunk/modules/nickserv/Makefile.in (File Modified) 
+  +0 -1		trunk/modules/userserv/Makefile.in (File Modified) 
+
+
 kog         2005/10/05 06:37:06 UTC	(20051005-2597)
   Log:
   initial commit - kog

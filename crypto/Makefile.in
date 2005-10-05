@@ -25,7 +25,7 @@ CPPFLAGS	= @CPPFLAGS@
 
 default: all
 
-BASE_SRCS = 
+BASE_SRCS = @POSIX_CRYPTC@
 
 SRCS = ${BASE_SRCS}
 
