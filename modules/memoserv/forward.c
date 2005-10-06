@@ -101,6 +101,14 @@ static void ms_cmd_forward(char *origin)
 		return;
 	}
 	
+	/* Make sure target isn't sender */
+	if (!(strcasecmp(origin,target)))
+	{
+		notice(memosvs.nick, origin, "You cannot send yourself a memo.");
+		free(memo);
+		return;
+	}
+	
 	/* Check to see if memo n exists */
 	if (memonum > mu->memos.count)
 	{
@@ -110,7 +118,7 @@ static void ms_cmd_forward(char *origin)
 	}
 	
 	/* Check to make sure target inbox not full */
-	if (them->memos.count > me.mdlimit)
+	if (them->memos.count >= me.mdlimit)
 	{
 		notice(memosvs.nick, origin, "Target inbox is full.");
 		free(newmemo);

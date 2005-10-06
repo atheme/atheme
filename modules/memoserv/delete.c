@@ -76,7 +76,7 @@ static void ms_cmd_delete(char *origin)
 	}
 	
 	/* Check to see if int or str - strncasecmp for buffer issues*/
-        if (!strncasecmp("all",arg1,3))
+        if (!strcasecmp("all",arg1))
 	{
 		delcount = mu->memos.count;
 		

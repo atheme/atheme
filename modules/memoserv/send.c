@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv SEND function
  *
- * $Id: send.c 2651 2005-10-06 01:27:38Z pfish $
+ * $Id: send.c 2657 2005-10-06 01:58:46Z kog $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/send", FALSE, _modinit, _moddeinit,
-	"$Id: send.c 2651 2005-10-06 01:27:38Z pfish $",
+	"$Id: send.c 2657 2005-10-06 01:58:46Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -81,6 +81,14 @@ static void ms_cmd_send(char *origin)
 		free(memo);
 		return;
 	}
+	
+	/* Make sure target is not sender */
+	if (!(strcasecmp(origin,target)))
+	{
+		notice(memosvs.nick, origin, "You cannot send yourself a memo.");
+		free(memo);
+		return;
+	}
 
 	/* Does the user allow memos? --pfish */
 	if (mu->flags & MU_NOMEMO)
@@ -102,9 +110,8 @@ static void ms_cmd_send(char *origin)
 		return;
 	}
 	
-	/* Check to make sure target inbox not full  - nenolod suggested
-	   config_options.metadata_limit, perhaps a conf var or conf.h? FIXME*/
-	if (mu->memos.count > me.mdlimit)
+	/* Check to make sure target inbox not full */
+	if (mu->memos.count >= me.mdlimit)
 	{
 		notice(memosvs.nick, origin, "%s's inbox is full", target);
 		free(memo);

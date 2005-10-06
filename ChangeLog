@@ -1,3 +1,12 @@
+pfish       2005/10/06 01:44:50 UTC	(20051006-2655)
+  Log:
+  fix module header (this is not memoserv/read)
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/memoserv/forward.c (File Modified) 
+
+
 pfish       2005/10/06 01:41:35 UTC	(20051006-2653)
   Log:
   don't allow a user to forward to another user with nomemo enabled
