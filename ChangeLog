@@ -1,3 +1,11 @@
+nenolod     2005/10/06 00:10:11 UTC	(20051006-2635)
+  Log:
+  Corrections.
+
+  Changes:	Modified:
+  +5 -9		trunk/modules/memoserv/delete.c (File Modified) 
+
+
 nenolod     2005/10/06 00:07:05 UTC	(20051006-2633)
   Log:
   Death to MS-DOS.

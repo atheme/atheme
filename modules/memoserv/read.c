@@ -91,7 +91,7 @@ static void ms_cmd_read(char *origin)
 				"%b %d %H:%M:%S %Y", &tm);
 		
 			notice(memosvs.nick, origin, 
-				"\2Memo %d - Sent by %s, %s\2",i,memo->sender, strfbuf);
+				"\2Memo %d - Sent by %s, %s\2", i, memo->sender, strfbuf);
 			
 			notice(memosvs.nick, origin, 
 				"------------------------------------------");
