@@ -1,3 +1,12 @@
+pfish       2005/10/06 01:27:38 UTC	(20051006-2651)
+  Log:
+  Don't allow memos to be sent to users with the NOMEMO flag set.
+  
+
+  Changes:	Modified:
+  +10 -0	trunk/modules/memoserv/send.c (File Modified) 
+
+
 pfish       2005/10/06 01:21:00 UTC	(20051006-2649)
   Log:
   Add NOMEMO flag to NickServ/SET --

@@ -67,6 +67,16 @@ static void ms_cmd_forward(char *origin)
 	else
 		memonum = atoi(arg);
 	
+	/* check if user has nomemo set */
+	if (mu->flags & MU_NOMEMO)
+	{
+		notice(memosvs.nick, origin,
+			"\2%s\2 does not wish to receive memos.", target);
+
+		free(newmemo);
+		return;
+	}
+
 	/* user logged in? */
 	if (mu == NULL)
 	{
