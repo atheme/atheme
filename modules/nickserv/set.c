@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 2683 2005-10-06 07:27:18Z pfish $
+ * $Id: set.c 2697 2005-10-06 08:46:50Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 2683 2005-10-06 07:27:18Z pfish $",
+	"$Id: set.c 2697 2005-10-06 08:46:50Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -206,6 +206,59 @@ static void ns_set_hidemail(char *origin, char *name, char *params)
 		return;
 	}
 }
+
+static void ns_set_emailmemos(char *origin, char *name, char *params)
+{
+	user_t *u = user_find(origin));
+	myuser_t *mu;
+
+	if (!(mu = myuser_find(name)))
+	{
+		notice(nicksvs.nick,origin, "\2%s\2 is not registered.");
+		return;
+	}
+
+	if (u->myuser != mu)
+		notice(nicksvs.nick, origin, "You are not authorized to perform this command.");
+		return;
+	}
+
+	if (!strcasecmp("ON", params))
+	{
+		if (MU_EMAILMEMOS & mu->flags)
+		{
+			notice(nicksvs.nick, origin, "The \2EMAILMEMOS\2 flag is already set for \2%s\2.", mu->name);
+			return;
+		}
+
+		snoop("SET:EMAILMEMOS:ON: for \2%s\2 by \2%s\2", mu->name, origin);
+		mu->flags |= MU_EMAILMEMOS;
+		notice(nicksvs.nick, origin, "The \2EMAILMEMOS\2 flag has been set for \2%s\2.", mu->name);
+		return;
+	}
+
+        else if (!strcasecmp("OFF", params))
+        {
+                if (!(MU_EMAILMEMOS & mu->flags))
+                {
+                        notice(nicksvs.nick, origin, "The \2EMAILMEMOS\2 flag is not set for \2%s\2.", mu->name);
+                        return;
+                }
+
+                snoop("SET:EMAILMEMOS:OFF: for \2%s\2 by \2%s\2", mu->name, origin);
+                mu->flags &= ~MU_EMAILMEMOS;
+                notice(nicksvs.nick, origin, "The \2EMAILMEMOS\2 flag has been removed for \2%s\2.", mu->name);
+                return;
+        }
+
+        else
+        {
+                notice(nicksvs.nick, origin, "Invalid parameters specified for \2EMAILMEMOS\2.");
+                return;
+        }
+}
+
+	
 
 static void ns_set_nomemo(char *origin, char *name, char *params)
 {
