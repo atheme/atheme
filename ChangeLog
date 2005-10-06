@@ -1,3 +1,15 @@
+pfish       2005/10/06 07:27:18 UTC	(20051006-2683)
+  Log:
+  add help for nickserv set nomemo (new feature)
+  
+  
+
+  Changes:	Modified:
+  + -		trunk/help/nickserv/set_nomemo (File Added) 
+  +1 -0		trunk/modules/nickserv/help.c (File Modified) 
+  +2 -0		trunk/modules/nickserv/set.c (File Modified) 
+
+
 pfish       2005/10/06 06:40:24 UTC	(20051006-2681)
   Log:
   change notice() output to match everything else.

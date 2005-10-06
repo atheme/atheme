@@ -99,6 +99,13 @@ static void ms_cmd_forward(char *origin)
 		return;
 	}
 	
+	/* Make sure arg is an int */
+	if (memonum == NULL)
+	{
+		notice(memosvs.nick, origin, "Invalid message index.");
+		return;
+	}
+	
 	/* check if targetuser has nomemo set */
 	if (tmu->flags & MU_NOMEMO)
 	{

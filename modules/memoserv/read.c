@@ -79,10 +79,17 @@ static void ms_cmd_read(char *origin)
 		return;
 	}
 	
+	/* Is arg1 an int? */
+	if (memonum == NULL)
+	{
+		notice(memosvs.nick, origin, "Invalid message index.");
+		return;
+	}
+	
 	/* Check to see if memonum is greater than memocount */
 	if (memonum > mu->memos.count)
 	{
-		notice(memosvs.nick, origin, "Invalid message index");
+		notice(memosvs.nick, origin, "Invalid message index.");
 		return;
 	}
 

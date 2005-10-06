@@ -91,6 +91,12 @@ static void ms_cmd_delete(char *origin)
 		memonum = atoi(arg1);
 	}
 	
+	if (memonum == NULL)
+	{
+		notice(memosvs.nick,origin,"Invalid message index.");
+		return;
+	}
+	
 	/* If int, does that index exist? And do we have something to delete? */
 	if ((memonum && (memonum > mu->memos.count)) || (!memonum && !delcount))
 	{
