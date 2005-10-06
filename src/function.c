@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 2583 2005-10-05 04:22:13Z alambert $
+ * $Id: function.c 2711 2005-10-06 09:53:48Z pfish $
  */
 
 #include "atheme.h"
@@ -401,6 +401,7 @@ boolean_t validhostmask(char *host)
  *   1 - nickname REGISTER
  *   2 - nickname SENDPASS
  *   3 - nickname SET:EMAIL
+ *   4 - nickname EMAILMEMOS
  */
 void sendemail(char *what, const char *param, int type)
 {
@@ -454,7 +455,9 @@ void sendemail(char *what, const char *param, int type)
 		strlcpy(subject, "Password Retrieval", 128);
 	else if (type == 3)
 		strlcpy(subject, "Change Email Confirmation", 128);
-
+	else if (type == 4)
+		strlcpy(subject, "New memo notification", 128);
+	
 	/* now set up the email */
 	sprintf(cmdbuf, "%s %s", me.mta, email);
 	out = popen(cmdbuf, "w");
@@ -483,6 +486,11 @@ void sendemail(char *what, const char *param, int type)
 	{
 		fprintf(out, "In order to complete your email change, you must send " "the following command on IRC:\n");
 		fprintf(out, "/MSG %s VERIFY EMAILCHG %s %s\n\n", (nicksvs.nick ? nicksvs.nick : usersvs.nick), what, param);
+	}
+	if (type == 4)
+	{
+		fprintf(out,"You have a new memo from %s.\n\n", what);
+		fprintf(out,"%s", param);
 	}
 
 	fprintf(out, ".\n");

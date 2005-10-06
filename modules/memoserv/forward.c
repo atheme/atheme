@@ -5,7 +5,7 @@
  *
  * This file contains code for the Memoserv FORWARD function
  *
- * $Id: forward.c 2703 2005-10-06 08:56:07Z kog $
+ * $Id: forward.c 2711 2005-10-06 09:53:48Z pfish $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/forward", FALSE, _modinit, _moddeinit,
-	"$Id: forward.c 2703 2005-10-06 08:56:07Z kog $",
+	"$Id: forward.c 2711 2005-10-06 09:53:48Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -150,6 +150,14 @@ static void ms_cmd_forward(char *origin)
 		i++;
 	}
 	
+	/* Should we email this? */
+	if (mu->flags & MU_EMAILMEMOS)
+	{
+		sendemail(mu->name, memo->text, 4);
+		notice(memosvs.nick, origin, "Your memo has been emailed to %s.", target);
+		return;
+	}
+
 	u = user_find_named(target);
 	if (u->myuser)
 	{
