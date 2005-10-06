@@ -1,3 +1,12 @@
+pfish       2005/10/06 09:02:13 UTC	(20051006-2705)
+  Log:
+  make info aware of emailmemos
+  
+
+  Changes:	Modified:
+  +7 -0		trunk/modules/nickserv/info.c (File Modified) 
+
+
 kog         2005/10/06 08:56:07 UTC	(20051006-2703)
   Log:
   keeps track of new memo count via memoct_new in myuser_t. List will display new memo count 

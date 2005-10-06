@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: login.c 2575 2005-10-05 02:46:11Z alambert $
+ * $Id: login.c 2707 2005-10-06 09:33:43Z kog $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/login", FALSE, _modinit, _moddeinit,
-	"$Id: login.c 2575 2005-10-05 02:46:11Z alambert $",
+	"$Id: login.c 2707 2005-10-06 09:33:43Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -21,7 +21,7 @@ static void us_cmd_login(char *origin);
 command_t us_login = { "LOGIN", "Authenticates to a services account.",
 			AC_NONE, us_cmd_login };
 
-list_t *us_cmdtree, *us_helptree;
+list_t *us_cmdtree, *us_helptree, *ms_cmdtree;
 
 void _modinit(module_t *m)
 {
@@ -201,6 +201,12 @@ static void us_cmd_login(char *origin)
 			ircd_on_login(origin, mu->name, NULL);
 
 		hook_call_event("user_identify", mu);
+		
+		/* Notify users of any new memos - should be a hook somehow - Kog */
+		ms_cmdtree = module_locate_symbol("memoserv/main", "ms_cmdtree");
+		
+		if (ms_cmdtree != NULL && mu->memoct_new > 0)
+			notice(memosvs.nick, origin, "You have %d new memos.", mu->memoct_new);
 
 		return;
 	}
