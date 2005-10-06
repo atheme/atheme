@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv SEND function
  *
- * $Id: send.c 2715 2005-10-06 10:28:21Z jilles $
+ * $Id: send.c 2723 2005-10-06 11:40:01Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/send", FALSE, _modinit, _moddeinit,
-	"$Id: send.c 2715 2005-10-06 10:28:21Z jilles $",
+	"$Id: send.c 2723 2005-10-06 11:40:01Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -42,8 +42,8 @@ void _moddeinit()
 static void ms_cmd_send(char *origin)
 {
 	/* misc structs etc */
-	user_t *u = user_find(origin);
-	myuser_t *mu;
+	user_t *u = user_find(origin), *tu;
+	myuser_t *tmu;
 	node_t *n;
 	mymemo_t *memo;
 	
@@ -71,7 +71,7 @@ static void ms_cmd_send(char *origin)
 	}
 	
 	/* See if target is valid */
-	if (!(mu = myuser_find(target))) 
+	if (!(tmu = myuser_find(target))) 
 	{
 		notice(memosvs.nick, origin, 
 			"\2%s\2 is not a registered account", target);
@@ -80,14 +80,14 @@ static void ms_cmd_send(char *origin)
 	}
 	
 	/* Make sure target is not sender */
-	if (mu == u->myuser)
+	if (tmu == u->myuser)
 	{
 		notice(memosvs.nick, origin, "You cannot send yourself a memo.");
 		return;
 	}
 
 	/* Does the user allow memos? --pfish */
-	if (mu->flags & MU_NOMEMO)
+	if (tmu->flags & MU_NOMEMO)
 	{
 		notice(memosvs.nick,origin,
 			"\2%s\2 does not wish to receive memos.", target);
@@ -105,7 +105,7 @@ static void ms_cmd_send(char *origin)
 	}
 	
 	/* Check to make sure target inbox not full */
-	if (mu->memos.count >= me.mdlimit)
+	if (tmu->memos.count >= me.mdlimit)
 	{
 		notice(memosvs.nick, origin, "%s's inbox is full", target);
 		free(memo);
@@ -116,31 +116,34 @@ static void ms_cmd_send(char *origin)
 	memo = smalloc(sizeof(mymemo_t));
 	memo->sent = CURRTIME;
 	memo->status = MEMO_NEW;
-	strlcpy(memo->sender,origin,NICKLEN);
+	strlcpy(memo->sender,u->myuser->name,NICKLEN);
 	strlcpy(memo->text,m,MEMOLEN);
 	
 	/* Create a linked list node and add to memos */
 	n = node_create();
-	node_add(memo, n, &mu->memos);
-	mu->memoct_new++;
+	node_add(memo, n, &tmu->memos);
+	tmu->memoct_new++;
 
 	/* Should we email this? */
-        if (mu->flags & MU_EMAILMEMOS)
+        if (tmu->flags & MU_EMAILMEMOS)
         {
-		sendemail(mu->name, memo->text, 4);
+		sendemail(tmu->name, memo->text, 4);
 		notice(memosvs.nick, origin, "Your memo has been emailed to %s.", target);
                 return;
         }
-
 	
 	/* Is the user online? If so, tell them about the new memo. */
-	/* XXX use sendto_account() (to be made still) */
-	u = user_find_named(target);
-	if (u != NULL && u->myuser == mu)
+	/* Note: do not disclose other nicks they're logged in with
+	 * -- jilles */
+	tu = user_find_named(target);
+	if (tu != NULL && tu->myuser == tmu)
 	{
 		notice(memosvs.nick, origin, "%s is currently online, and you may talk directly, by sending a private message.", target);
-		notice(memosvs.nick, target, "You have a new memo from %s.", origin);
 	}
+	if (!irccmp(origin, u->myuser->name))
+		myuser_notice(memosvs.nick, tmu, "You have a new memo from %s.", u->myuser->name);
+	else
+		myuser_notice(memosvs.nick, tmu, "You have a new memo from %s (nick: %s).", u->myuser->name, origin);
 
 	/* Tell user memo sent, return */
 	notice(memosvs.nick, origin, "The memo has been successfully sent to %s.", target);

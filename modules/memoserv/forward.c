@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv FORWARD function
  *
- * $Id: forward.c 2713 2005-10-06 10:26:04Z jilles $
+ * $Id: forward.c 2723 2005-10-06 11:40:01Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/forward", FALSE, _modinit, _moddeinit,
-	"$Id: forward.c 2713 2005-10-06 10:26:04Z jilles $",
+	"$Id: forward.c 2723 2005-10-06 11:40:01Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -42,7 +42,7 @@ void _moddeinit()
 static void ms_cmd_forward(char *origin)
 {
 	/* Misc structs etc */
-	user_t *u = user_find(origin);
+	user_t *u = user_find(origin), *tu;
 	myuser_t *mu = u->myuser, *tmu;
 	mymemo_t *memo, *newmemo;
 	node_t *n, *temp;
@@ -137,7 +137,7 @@ static void ms_cmd_forward(char *origin)
 			/* Create memo */
 			newmemo->sent = CURRTIME;
 			newmemo->status = MEMO_NEW;
-			strlcpy(newmemo->sender,origin,NICKLEN);
+			strlcpy(newmemo->sender,mu->name,NICKLEN);
 			strlcpy(newmemo->text,memo->text,MEMOLEN);
 			
 			/* Create node, add to their linked list of memos */
@@ -150,20 +150,24 @@ static void ms_cmd_forward(char *origin)
 	}
 	
 	/* Should we email this? */
-	if (mu->flags & MU_EMAILMEMOS)
+	if (tmu->flags & MU_EMAILMEMOS)
 	{
-		sendemail(mu->name, memo->text, 4);
+		sendemail(tmu->name, memo->text, 4);
 		notice(memosvs.nick, origin, "Your memo has been emailed to %s.", target);
 		return;
 	}
 
-	/* XXX use sendto_account() */
-	u = user_find_named(target);
-	if (u != NULL && u->myuser == tmu)
+	/* Note: do not disclose other nicks they're logged in with
+	 * -- jilles */
+	tu = user_find_named(target);
+	if (tu != NULL && tu->myuser == tmu)
 	{
 		notice(memosvs.nick, origin, "%s is currently online, and you may talk directly, by sending a private message.", target);
-		notice(memosvs.nick, target, "You have a new forwarded memo from %s.", origin);
 	}
+	if (!irccmp(origin, mu->name))
+		myuser_notice(memosvs.nick, tmu, "You have a new forwarded memo from %s.", mu->name);
+	else
+		myuser_notice(memosvs.nick, tmu, "You have a new forwarded memo from %s (nick: %s).", mu->name, origin);
 
 	notice(memosvs.nick, origin, "The memo has been successfully forwarded to %s.", target);
 	return;

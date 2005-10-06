@@ -1,3 +1,13 @@
+kog         2005/10/06 10:56:35 UTC	(20051006-2721)
+  Log:
+  third party contrib for random password generation (nickserv and userserv modules include) -- Kog
+  
+
+  Changes:	Modified:
+  + -		trunk/contrib/ns_generatepass.c (File Added) 
+  + -		trunk/contrib/us_generatepass.c (File Added) 
+
+
 jilles      2005/10/06 10:52:54 UTC	(20051006-2719)
   Log:
   Send a notice to all users already logged in to an account
