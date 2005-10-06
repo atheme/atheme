@@ -1,3 +1,19 @@
+jilles      2005/10/06 11:40:01 UTC	(20051006-2723)
+  Log:
+  - Use myuser->name for the sender field, not their current nick
+  - Fix MU_EMAILMEMOS check in forward
+  - Use myuser_notice() for notifying target user (if logged in)
+    giving both nick and myuser->name of sender (sender is still
+    only notified about logged in recipient if it is with the
+    registered nick)
+  - Make the send and forward code a bit more similar
+  
+
+  Changes:	Modified:
+  +12 -8	trunk/modules/memoserv/forward.c (File Modified) 
+  +19 -16	trunk/modules/memoserv/send.c (File Modified) 
+
+
 kog         2005/10/06 10:56:35 UTC	(20051006-2721)
   Log:
   third party contrib for random password generation (nickserv and userserv modules include) -- Kog
