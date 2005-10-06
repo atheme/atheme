@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv SEND function
  *
- * $Id: send.c 2657 2005-10-06 01:58:46Z kog $
+ * $Id: send.c 2661 2005-10-06 02:38:29Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/send", FALSE, _modinit, _moddeinit,
-	"$Id: send.c 2657 2005-10-06 01:58:46Z kog $",
+	"$Id: send.c 2661 2005-10-06 02:38:29Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -128,7 +128,15 @@ static void ms_cmd_send(char *origin)
 	n = node_create();
 	node_add(memo, n, &mu->memos);
 
+	/* Is the user online? If so, tell them about the new memo. */
+
+	u = user_find_named(target);
+	if (u->myuser)
+	{
+		notice(memosvs.nick, target, "You have a new memo from %s.", origin);
+	}
+
 	/* Tell user memo sent, return */
 	notice(memosvs.nick, origin, "Memo sent.");
 	return;
-}
+}	
