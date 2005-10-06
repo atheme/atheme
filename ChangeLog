@@ -1,3 +1,14 @@
+kog         2005/10/06 01:58:46 UTC	(20051006-2657)
+  Log:
+  fixed strncasecmp in delete, make sure target isn't sender on forward/send, inbox full equality test fix
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/memoserv/delete.c (File Modified) 
+  +9 -1		trunk/modules/memoserv/forward.c (File Modified) 
+  +10 -3	trunk/modules/memoserv/send.c (File Modified) 
+
+
 pfish       2005/10/06 01:44:50 UTC	(20051006-2655)
   Log:
   fix module header (this is not memoserv/read)
