@@ -43,7 +43,7 @@ static void ms_cmd_forward(char *origin)
 {
 	/* Misc structs etc */
 	user_t *u = user_find(origin);
-	myuser_t *mu = u->myuser, *them;
+	myuser_t *mu = u->myuser, *tmu;
 	mymemo_t *memo, *newmemo = smalloc(sizeof(mymemo_t));
 	node_t *n, *temp;
 	uint8_t i = 1, memonum = 0;
@@ -84,7 +84,7 @@ static void ms_cmd_forward(char *origin)
 	}
 
 	/* Check to see if target user exists */
-	if (!(them = myuser_find(target)))
+	if (!(tmu = myuser_find(target)))
 	{
 		notice(memosvs.nick, origin, "User %s does not exist.", target);
 		free(newmemo);
@@ -100,7 +100,7 @@ static void ms_cmd_forward(char *origin)
 	}
 	
 	/* check if targetuser has nomemo set */
-	if (them->flags & MU_NOMEMO)
+	if (tmu->flags & MU_NOMEMO)
 	{
 		notice(memosvs.nick, origin,
 			"\2%s\2 does not wish to receive memos.", target);
@@ -118,7 +118,7 @@ static void ms_cmd_forward(char *origin)
 	}
 	
 	/* Check to make sure target inbox not full */
-	if (them->memos.count >= me.mdlimit)
+	if (tmu->memos.count >= me.mdlimit)
 	{
 		notice(memosvs.nick, origin, "Target inbox is full.");
 		free(newmemo);
@@ -142,7 +142,7 @@ static void ms_cmd_forward(char *origin)
 			
 			/* Create node, add to their linked list of memos */
 			temp = node_create();
-			node_add(newmemo, temp, &them->memos);
+			node_add(newmemo, temp, &tmu->memos);
 		}
 		
 		i++;

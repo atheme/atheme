@@ -1,3 +1,11 @@
+alambert    2005/10/06 04:09:41 UTC	(20051006-2673)
+  Log:
+  MS FORWARD: move NOMEMO check for pfish
+
+  Changes:	Modified:
+  +10 -9	trunk/modules/memoserv/forward.c (File Modified) 
+
+
 nenolod     2005/10/06 04:03:49 UTC	(20051006-2671)
   Log:
   Prepare for libatheme => claro.base/claro.net/claro.string
