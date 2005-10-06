@@ -4,27 +4,27 @@
  *
  * Initialization functions.
  *
- * $Id: libatheme.c 2671 2005-10-06 04:03:49Z nenolod $
+ * $Id: libatheme.c 2677 2005-10-06 04:22:32Z nenolod $
  */
 
 #include "atheme.h"
 
-static void generic_claro_log(int, char *format, ...);
-void (*clog)(int, char *format, ...) = generic_claro_log;
+static void generic_claro_log(uint32_t, const char *format, ...);
+void (*clog)(uint32_t, const char *format, ...) = generic_claro_log;
 
-static void generic_claro_log(int level, char *format, ...)
+static void generic_claro_log(uint32_t level, const char *format, ...)
 {
 	char buf[BUFSIZE];
 	va_list args;
 
 	va_start(args, format);
-	vsnprintf(buf, BUFSIZE, args, format);
+	vsnprintf(buf, BUFSIZE, format, args);
 	va_end(args);
 
 	puts(buf);
 }
 
-void libclaro_init(void (*ilog)(int, char *format, ...))
+void libclaro_init(void (*ilog)(uint32_t, const char *format, ...))
 {
 	if (ilog)
 		clog = ilog;

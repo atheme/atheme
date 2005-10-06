@@ -4,7 +4,7 @@
  *
  * libatheme stuff.
  *
- * $Id: libatheme.h 2671 2005-10-06 04:03:49Z nenolod $
+ * $Id: libatheme.h 2677 2005-10-06 04:22:32Z nenolod $
  */
 
 #ifndef LIBATHEME_H
@@ -17,7 +17,7 @@ typedef u_int32_t uint32_t;
 typedef u_int64_t uint64_t;
 #endif
 
-extern void (*clog)(int, char *, ...);
+extern void (*clog)(uint32_t, const char *, ...);
 extern void libclaro_init(void (*ilog)(uint32_t, const char *, ...));
 extern void init_dlink_nodes(void);
 extern void init_socket_queues(void);

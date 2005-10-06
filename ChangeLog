@@ -1,3 +1,12 @@
+pfish       2005/10/06 04:13:56 UTC	(20051006-2675)
+  Log:
+  change them -> tmu to be more consistent
+  
+
+  Changes:	Modified:
+  +5 -5		trunk/modules/memoserv/forward.c (File Modified) 
+
+
 alambert    2005/10/06 04:09:41 UTC	(20051006-2673)
   Log:
   MS FORWARD: move NOMEMO check for pfish
