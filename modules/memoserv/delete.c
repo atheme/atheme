@@ -20,6 +20,8 @@ static void ms_cmd_delete(char *origin);
 
 command_t ms_delete = { "DELETE", "Deletes memos",
                         AC_NONE, ms_cmd_delete };
+command_t ms_del = { "DEL", "Alias for DELETE",
+			AC_NONE, ms_cmd_delete };
 
 list_t *ms_cmdtree;
 list_t *ms_helptree;
@@ -28,7 +30,7 @@ void _modinit(module_t *m)
 {
 	ms_cmdtree = module_locate_symbol("memoserv/main", "ms_cmdtree");
         command_add(&ms_delete, ms_cmdtree);
-	
+	command_add(&ms_del, ms_cmdtree);
 	ms_helptree = module_locate_symbol("memoserv/main", "ms_helptree");
 	help_addentry(ms_helptree, "DELETE", "help/memoserv/delete", NULL);
 }
@@ -36,6 +38,7 @@ void _modinit(module_t *m)
 void _moddeinit()
 {
 	command_delete(&ms_delete, ms_cmdtree);
+	command_delete(&ms_del, ms_cmdtree);
 	help_delentry(ms_helptree, "DELETE");
 }
 

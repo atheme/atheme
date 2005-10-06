@@ -1,3 +1,12 @@
+kog         2005/10/06 07:52:28 UTC	(20051006-2689)
+  Log:
+  moved memo_newcount out of mymemo_ and added memoct_new to myuser_
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/account.h (File Modified) 
+
+
 kog         2005/10/06 07:46:22 UTC	(20051006-2687)
   Log:
   moved struct smalloc until after checks to avoid extra free() calls, changed NULL check to (!memonum) to prevent compiler complaints about pointers 
