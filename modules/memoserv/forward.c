@@ -5,7 +5,7 @@
  *
  * This file contains code for the Memoserv FORWARD function
  *
- * $Id: forward.c 2695 2005-10-06 08:15:56Z pfish $
+ * $Id: forward.c 2703 2005-10-06 08:56:07Z kog $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/forward", FALSE, _modinit, _moddeinit,
-	"$Id: forward.c 2695 2005-10-06 08:15:56Z pfish $",
+	"$Id: forward.c 2703 2005-10-06 08:56:07Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -144,6 +144,7 @@ static void ms_cmd_forward(char *origin)
 			/* Create node, add to their linked list of memos */
 			temp = node_create();
 			node_add(newmemo, temp, &tmu->memos);
+			tmu->memoct_new++;
 		}
 		
 		i++;

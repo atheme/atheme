@@ -1,3 +1,12 @@
+pfish       2005/10/06 08:54:12 UTC	(20051006-2701)
+  Log:
+  add emailmemos to the table
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/nickserv/set.c (File Modified) 
+
+
 pfish       2005/10/06 08:50:49 UTC	(20051006-2699)
   Log:
   fix errors
