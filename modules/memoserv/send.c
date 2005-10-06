@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv SEND function
  *
- * $Id: send.c 2713 2005-10-06 10:26:04Z jilles $
+ * $Id: send.c 2715 2005-10-06 10:28:21Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/send", FALSE, _modinit, _moddeinit,
-	"$Id: send.c 2713 2005-10-06 10:26:04Z jilles $",
+	"$Id: send.c 2715 2005-10-06 10:28:21Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -99,7 +99,7 @@ static void ms_cmd_send(char *origin)
 	if (strlen(m) >= MEMOLEN)
 	{
 		notice(memosvs.nick, origin, 
-			"Please make sure your memo is less than %d characters", MEMOLEN - 1);
+			"Please make sure your memo is less than %d characters", MEMOLEN);
 		
 		return;
 	}

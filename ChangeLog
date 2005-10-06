@@ -1,3 +1,16 @@
+jilles      2005/10/06 10:26:04 UTC	(20051006-2713)
+  Log:
+  - Fix send to self check with identify as
+  - Correct MEMOLEN check
+  - Improve "is target online" check a bit, not fully correct yet,
+    but shouldn't crash anymore
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/modules/memoserv/forward.c (File Modified) 
+  +5 -4		trunk/modules/memoserv/send.c (File Modified) 
+
+
 pfish       2005/10/06 09:53:48 UTC	(20051006-2711)
   Log:
   Allow users to forward memos to the e-mail address listed on their registration.
