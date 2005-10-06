@@ -1,3 +1,12 @@
+pfish       2005/10/06 02:46:19 UTC	(20051006-2663)
+  Log:
+  tell a user whos online when another user forwards them a memo
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/memoserv/forward.c (File Modified) 
+
+
 pfish       2005/10/06 02:38:29 UTC	(20051006-2661)
   Log:
   Tell a user thats online when they get a new memo.
