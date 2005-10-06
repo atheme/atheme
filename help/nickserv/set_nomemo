@@ -1,0 +1,10 @@
+Help for SET NOMEMO:
+
+This prevents people from being able to memo you.
+If you do not want to get memos from chatting,
+you can just turn them off for your nick.
+
+Syntax: SET NOMEMO [ON|OFF]
+
+Example:
+    /msg &nick& SET NOMEMO ON

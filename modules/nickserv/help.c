@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the NickServ HELP command.
  *
- * $Id: help.c 2565 2005-10-04 07:21:31Z nenolod $
+ * $Id: help.c 2683 2005-10-06 07:27:18Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 2565 2005-10-04 07:21:31Z nenolod $",
+	"$Id: help.c 2683 2005-10-06 07:27:18Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -76,6 +76,7 @@ void ns_cmd_help(char *origin)
 		notice(nicksvs.nick, origin, "The following commands are available.");
 		notice(nicksvs.nick, origin, "\2EMAIL\2         Changes the email address associated with a nickname.");
 		notice(nicksvs.nick, origin, "\2HIDEMAIL\2      Hides a nickname's email address");
+		notice(nicksvs.nick, origin, "\2NOMEMO\2	Disable memo receive service.");
 		notice(nicksvs.nick, origin, "\2NOOP\2       Prevents services from automatically setting modes associated with access lists.");
 		notice(nicksvs.nick, origin, "\2NEVEROP\2          Prevents you from being added to access lists.");
 		notice(nicksvs.nick, origin, "\2PASSWORD\2      Change the password of a nickname.");
