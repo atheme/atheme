@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 2541 2005-10-04 05:06:05Z nenolod $
+ * $Id: atheme.h 2671 2005-10-06 04:03:49Z nenolod $
  */
 
 #ifndef ATHEME_H
@@ -12,9 +12,9 @@
 
 /* *INDENT-OFF* */
 
-#include "libatheme.h"
 #include "sysconf.h"
 #include "stdinc.h"
+#include "libatheme.h"
 #include "sockio.h"
 #include "common.h"
 #include "node.h"

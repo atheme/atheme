@@ -4,7 +4,7 @@
  *
  * Callback functions. (Inspired from many sources)
  *
- * $Id: callback.c 1895 2005-08-28 18:11:25Z nenolod $
+ * $Id: callback.c 2671 2005-10-06 04:03:49Z nenolod $
  */
 
 #include "atheme.h"
@@ -18,7 +18,7 @@ void callback_init(void)
 
 	if (!callback_heap)
 	{
-		slog(LG_INFO, "callback_init(): block allocator failure.");
+		clog(LG_INFO, "callback_init(): block allocator failure.");
 		exit(EXIT_FAILURE);
 	}
 }

@@ -6,7 +6,7 @@
  * This file contains routines that interface the event system.
  * This code is based on ircd-ratbox's event.c with modifications.
  *
- * $Id: event.c 1166 2005-07-29 08:18:03Z nenolod $
+ * $Id: event.c 2671 2005-10-06 04:03:49Z nenolod $
  */
 
 #include "atheme.h"
@@ -35,7 +35,7 @@ uint32_t event_add(const char *name, EVH *func, void *arg, time_t when)
 			if ((event_table[i].when < event_time_min) || (event_time_min == -1))
 				event_time_min = event_table[i].when;
 
-			slog(LG_DEBUG, "event_add(): \"%s\"", name);
+			clog(LG_DEBUG, "event_add(): \"%s\"", name);
 
 			cnt.event++;
 
@@ -44,7 +44,7 @@ uint32_t event_add(const char *name, EVH *func, void *arg, time_t when)
 	}
 
 	/* failed to add it... */
-	slog(LG_DEBUG, "event_add(): failed to add \"%s\" to event table", name);
+	clog(LG_DEBUG, "event_add(): failed to add \"%s\" to event table", name);
 
 	return -1;
 }
@@ -69,7 +69,7 @@ uint32_t event_add_once(const char *name, EVH *func, void *arg, time_t when)
 			if ((event_table[i].when < event_time_min) || (event_time_min == -1))
 				event_time_min = event_table[i].when;
 
-			slog(LG_DEBUG, "event_add_once(): \"%s\"", name);
+			clog(LG_DEBUG, "event_add_once(): \"%s\"", name);
 
 			cnt.event++;
 
@@ -78,7 +78,7 @@ uint32_t event_add_once(const char *name, EVH *func, void *arg, time_t when)
 	}
 
 	/* failed to add it... */
-	slog(LG_DEBUG, "event_add(): failed to add \"%s\" to event table", name);
+	clog(LG_DEBUG, "event_add(): failed to add \"%s\" to event table", name);
 
 	return -1;
 }
@@ -91,7 +91,7 @@ void event_delete(EVH *func, void *arg)
 	if (i == -1)
 		return;
 
-	slog(LG_DEBUG, "event_delete(): removing \"%s\"", event_table[i].name);
+	clog(LG_DEBUG, "event_delete(): removing \"%s\"", event_table[i].name);
 
 	event_table[i].name = NULL;
 	event_table[i].func = NULL;

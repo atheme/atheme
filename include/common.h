@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: common.h 2597 2005-10-05 06:37:06Z kog $
+ * $Id: common.h 2671 2005-10-06 04:03:49Z nenolod $
  */
 
 #ifndef COMMON_H
@@ -56,12 +56,5 @@
 
 #define CACHEFILE_HEAP_SIZE     32
 #define CACHELINE_HEAP_SIZE     64
-
-#ifndef uint8_t
-#define uint8_t u_int8_t
-#define uint16_t u_int16_t
-#define uint32_t u_int32_t
-#define uint64_t u_int64_t
-#endif
 
 #endif

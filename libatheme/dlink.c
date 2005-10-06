@@ -4,7 +4,7 @@
  *
  * Linked list stuff.
  *
- * $Id: dlink.c 1869 2005-08-27 19:50:43Z nenolod $
+ * $Id: dlink.c 2671 2005-10-06 04:03:49Z nenolod $
  */
 
 #include "atheme.h"
@@ -17,7 +17,7 @@ void init_dlink_nodes(void)
 
 	if (!node_heap)
 	{
-		slog(LG_INFO, "init_dlink_nodes(): block allocator failure.");
+		clog(LG_INFO, "init_dlink_nodes(): block allocator failure.");
 		exit(EXIT_FAILURE);
 	}
 }
@@ -96,7 +96,7 @@ void node_del(node_t *n, list_t *l)
         /* do we even have a node? */
         if (!n)
         {
-                slog(LG_DEBUG, "node_del(): called with NULL node");
+                clog(LG_DEBUG, "node_del(): called with NULL node");
                 return;
         }
 

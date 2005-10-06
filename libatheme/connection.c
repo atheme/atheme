@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 2453 2005-09-30 01:14:59Z nenolod $
+ * $Id: connection.c 2671 2005-10-06 04:03:49Z nenolod $
  */
 
 #include "atheme.h"
@@ -26,7 +26,7 @@ void init_netio(void)
 
 	if (!connection_heap || !sa_heap)
 	{
-		slog(LG_INFO, "init_netio(): blockheap failure");
+		clog(LG_INFO, "init_netio(): blockheap failure");
 		exit(EXIT_FAILURE);
 	}
 
@@ -78,12 +78,12 @@ connection_t *connection_add(const char *name, int32_t fd, uint32_t flags,
 
 	if ((cptr = connection_find(fd)))
 	{
-		slog(LG_DEBUG, "connection_add(): connection %d is already registered as %s",
+		clog(LG_DEBUG, "connection_add(): connection %d is already registered as %s",
 				fd, cptr->name);
 		return NULL;
 	}
 
-	slog(LG_DEBUG, "connection_add(): adding connection '%s', fd=%d", name, fd);
+	clog(LG_DEBUG, "connection_add(): adding connection '%s', fd=%d", name, fd);
 
 	cptr = BlockHeapAlloc(connection_heap);
 
@@ -154,12 +154,12 @@ void connection_close(connection_t *cptr)
 	datastream_t *sptr; 
 
 	if (errno)
-		slog(LG_IOERROR, "connection_close(): connection %s[%d] closed due to error %d (%s)",
+		clog(LG_IOERROR, "connection_close(): connection %s[%d] closed due to error %d (%s)",
 				cptr->name, cptr->fd, errno, strerror(errno));
 
 	if (!cptr || cptr->fd <= 0)
 	{
-		slog(LG_DEBUG, "connection_close(): no connection to close!");
+		clog(LG_DEBUG, "connection_close(): no connection to close!");
 		return;
 	}
 
@@ -170,7 +170,7 @@ void connection_close(connection_t *cptr)
 
 	if (!nptr)
 	{
-		slog(LG_DEBUG, "connection_close(): connection %s (fd %d) is not registered!",
+		clog(LG_DEBUG, "connection_close(): connection %s (fd %d) is not registered!",
 			cptr->name, cptr->fd);
 		return;
 	}
@@ -229,7 +229,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 
 	if (!(s = socket(AF_INET, SOCK_STREAM, 0)))
 	{
-		slog(LG_IOERROR, "connection_open_tcp(): unable to create socket.");
+		clog(LG_IOERROR, "connection_open_tcp(): unable to create socket.");
 		return NULL;
 	}
 
@@ -246,7 +246,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 
 		if ((hp = gethostbyname(vhost)) == NULL)
 		{
-			slog(LG_IOERROR, "connection_open_tcp(): cant resolve vhost %s", vhost);
+			clog(LG_IOERROR, "connection_open_tcp(): cant resolve vhost %s", vhost);
 			close(s);
 			return NULL;
 		}
@@ -261,7 +261,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 		if (bind(s, (struct sockaddr *)&sa, sizeof(sa)) < 0)
 		{
 			close(s);
-			slog(LG_IOERROR, "connection_open_tcp(): unable to bind to vhost %s", vhost);
+			clog(LG_IOERROR, "connection_open_tcp(): unable to bind to vhost %s", vhost);
 			return NULL;
 		}
 	}
@@ -269,7 +269,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 	/* resolve it */
 	if ((hp = gethostbyname(host)) == NULL)
 	{
-		slog(LG_IOERROR, "connection_open_tcp(): Unable to resolve %s", vhost);
+		clog(LG_IOERROR, "connection_open_tcp(): Unable to resolve %s", vhost);
 		close(s);
 		return NULL;
 	}
@@ -315,7 +315,7 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 
 	if (!(s = socket(AF_INET, SOCK_STREAM, 0)))
 	{
-		slog(LG_IOERROR, "connection_open_listener_tcp(): unable to create socket.");
+		clog(LG_IOERROR, "connection_open_listener_tcp(): unable to create socket.");
 		return NULL;
 	}
 
@@ -330,7 +330,7 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 
 	if ((hp = gethostbyname(host)) == NULL)
 	{
-		slog(LG_IOERROR, "connection_open_listener_tcp(): cant resolve host %s", host);
+		clog(LG_IOERROR, "connection_open_listener_tcp(): cant resolve host %s", host);
 		close(s);
 		return NULL;
 	}
@@ -346,7 +346,7 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 	if (bind(s, (struct sockaddr *)&sa, sizeof(sa)) < 0)
 	{
 		close(s);
-		slog(LG_IOERROR, "connection_open_listener_tcp(): unable to bind listener %s[%d], errno [%d]", host, port,
+		clog(LG_IOERROR, "connection_open_listener_tcp(): unable to bind listener %s[%d], errno [%d]", host, port,
 			errno);
 		return NULL;
 	}
@@ -357,7 +357,7 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 	if (listen(s, 5) < 0)
 	{
 		close(s);
-		slog(LG_IOERROR, "connection_open_listener_tcp(): error: %s", strerror(errno));
+		clog(LG_IOERROR, "connection_open_listener_tcp(): error: %s", strerror(errno));
 		return NULL;
 	}
 
@@ -390,7 +390,7 @@ connection_t *connection_accept_tcp(connection_t *cptr,
 
 	if (!(s = accept(cptr->fd, NULL, NULL)))
 	{
-		slog(LG_IOERROR, "connection_accept_tcp(): accept failed");
+		clog(LG_IOERROR, "connection_accept_tcp(): accept failed");
 		return NULL;
 	}
 

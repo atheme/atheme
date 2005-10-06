@@ -1,17 +1,35 @@
 /*
- * $Id: libatheme.c 2237 2005-09-14 08:09:20Z nenolod $
+ * Copyright (c) 2005 atheme.org
+ * Rights to this code are as documented in doc/LICENSE.
+ *
+ * Initialization functions.
+ *
+ * $Id: libatheme.c 2671 2005-10-06 04:03:49Z nenolod $
  */
 
 #include "atheme.h"
 
-void (*libatheme_log)(int, char *format, ...) = NULL;
+static void generic_claro_log(int, char *format, ...);
+void (*clog)(int, char *format, ...) = generic_claro_log;
 
-void libatheme_init(void (*ilog)(int, char *format, ...))
+static void generic_claro_log(int level, char *format, ...)
+{
+	char buf[BUFSIZE];
+	va_list args;
+
+	va_start(args, format);
+	vsnprintf(buf, BUFSIZE, args, format);
+	va_end(args);
+
+	puts(buf);
+}
+
+void libclaro_init(void (*ilog)(int, char *format, ...))
 {
 	if (ilog)
-		libatheme_log = ilog;
+		clog = ilog;
 
-	slog(LG_DEBUG, "libatheme_init(): starting up...");
+	clog(LG_DEBUG, "claro: starting up base code...");
 
 	event_init();
 	initBlockHeap();
@@ -21,6 +39,6 @@ void libatheme_init(void (*ilog)(int, char *format, ...))
 	init_netio();
 	init_socket_queues();
 
-	slog(LG_DEBUG, "libatheme_init(): ready to go.");
+	clog(LG_DEBUG, "claro: .. done");
 }
 	

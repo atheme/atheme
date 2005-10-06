@@ -3,8 +3,9 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Dynamic linker.
+ * XXX: No windows code yet.
  *
- * $Id: linker.c 2149 2005-09-05 01:55:54Z nenolod $
+ * $Id: linker.c 2671 2005-10-06 04:03:49Z nenolod $
  */
 
 #include "atheme.h"

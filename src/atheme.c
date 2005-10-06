@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 2501 2005-10-01 04:58:28Z nenolod $
+ * $Id: atheme.c 2671 2005-10-06 04:03:49Z nenolod $
  */
 
 #include "atheme.h"
@@ -153,8 +153,7 @@ int main(int argc, char *argv[])
 	umask(077);
 #endif
 
-	/* XXX someday i should really fix this NULL --nenolod */
-	libatheme_init(NULL);
+	libclaro_init(slog);
 
 	init_nodes();
 	init_newconf();

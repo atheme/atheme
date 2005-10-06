@@ -1,3 +1,12 @@
+pfish       2005/10/06 03:44:13 UTC	(20051006-2669)
+  Log:
+  lets try nomemo again
+  
+
+  Changes:	Modified:
+  +7 -0		trunk/modules/nickserv/info.c (File Modified) 
+
+
 pfish       2005/10/06 02:58:01 UTC	(20051006-2667)
   Log:
   Also warn user when sending memo to online user, but still send memo anyways.
