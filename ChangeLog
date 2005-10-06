@@ -1,3 +1,14 @@
+pfish       2005/10/06 01:21:00 UTC	(20051006-2649)
+  Log:
+  Add NOMEMO flag to NickServ/SET --
+  MemoServ will not allow users to send memos to users with nomemo enabled.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/account.h (File Modified) 
+  +54 -0	trunk/modules/nickserv/set.c (File Modified) 
+
+
 kog         2005/10/06 01:20:29 UTC	(20051006-2647)
   Log:
   login check on functions, should be unix formatted, free memo struct on send/delete if returning, hardcoded memo limit changed to me.mdlimit

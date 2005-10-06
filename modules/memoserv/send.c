@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv SEND function
  *
- * $Id: send.c 2647 2005-10-06 01:20:29Z kog $
+ * $Id: send.c 2651 2005-10-06 01:27:38Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/send", FALSE, _modinit, _moddeinit,
-	"$Id: send.c 2647 2005-10-06 01:20:29Z kog $",
+	"$Id: send.c 2651 2005-10-06 01:27:38Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -78,6 +78,16 @@ static void ms_cmd_send(char *origin)
 		notice(memosvs.nick, origin, 
 			"\2%s\2 is not a registered account", target);
 		
+		free(memo);
+		return;
+	}
+
+	/* Does the user allow memos? --pfish */
+	if (mu->flags & MU_NOMEMO)
+	{
+		notice(memosvs.nick,origin,
+			"\2%s\2 does not wish to receive memos.", target);
+
 		free(memo);
 		return;
 	}
