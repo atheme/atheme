@@ -1,3 +1,16 @@
+kog         2005/10/06 01:20:29 UTC	(20051006-2647)
+  Log:
+  login check on functions, should be unix formatted, free memo struct on send/delete if returning, hardcoded memo limit changed to me.mdlimit
+  
+
+  Changes:	Modified:
+  +16 -5	trunk/modules/memoserv/delete.c (File Modified) 
+  +14 -3	trunk/modules/memoserv/forward.c (File Modified) 
+  +8 -0		trunk/modules/memoserv/list.c (File Modified) 
+  +8 -1		trunk/modules/memoserv/read.c (File Modified) 
+  +14 -1	trunk/modules/memoserv/send.c (File Modified) 
+
+
 pfish       2005/10/06 00:37:55 UTC	(20051006-2645)
   Log:
   we need to start a comment here

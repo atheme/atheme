@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 2585 2005-10-05 04:29:35Z pfish $
+ * $Id: set.c 2649 2005-10-06 01:21:00Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 2585 2005-10-05 04:29:35Z pfish $",
+	"$Id: set.c 2649 2005-10-06 01:21:00Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -204,6 +204,59 @@ static void ns_set_hidemail(char *origin, char *name, char *params)
 		return;
 	}
 }
+
+static void ns_set_nomemo(char *origin, char *name, char *params)
+{
+	user_t *u = user_find(origin);
+	myuser_t *mu;
+
+	if (!(mu = myuser_find(name)))
+	{
+		notice(nicksvs.nick,origin, "\2%s\2 is not registered.");
+		return;
+	}
+
+	if (u->myuser != mu)
+	{
+		notice(nicksvs.nick, origin, "You are not authorized to perform this command.");
+		return;
+	}
+
+	if (!strcasecmp("ON", params))
+	{
+		if (MU_NOMEMO & mu->flags)
+		{
+			notice(nicksvs.nick, origin, "The \2NOMEMO\2 flag is already set for \2%s\2.", mu->name);
+			return;
+                }
+
+		snoop("SET:NOMEMO:ON: for \2%s\2 by \2%s\2", mu->name, origin);
+                mu->flags |= MU_NOMEMO;
+                notice(nicksvs.nick, origin, "The \2NOMEMO\2 flag has been set for \2%s\2.", mu->name);
+                return;
+	}
+
+	else if (!strcasecmp("OFF", params))
+	{
+		if (!(MU_NOMEMO & mu->flags))
+		{
+			notice(nicksvs.nick, origin, "The \2NOMEMO\2 flag is not set for \2%s\2.", mu->name);
+			return;
+		}
+
+		snoop("SET:NOMEMO:OFF: for \2%s\2 by \2%s\2", mu->name, origin);
+		mu->flags &= ~MU_NOMEMO;
+		notice(nicksvs.nick, origin, "The \2NOMEMO\2 flag has been removed for \2%s\2.", mu->name);
+		return;
+        }
+	
+	else
+	{
+		notice(nicksvs.nick, origin, "Invalid parameters specified for \2NOMEMO\2.");
+		return;
+	}
+}
+
 
 static void ns_set_neverop(char *origin, char *name, char *params)
 {
@@ -437,6 +490,7 @@ static struct set_command_ ns_set_commands[] = {
   { "NOOP",       AC_NONE,  ns_set_noop       },
   { "PASSWORD",   AC_NONE,  ns_set_password   },
   { "PROPERTY",   AC_NONE,  ns_set_property   },
+  { "NOMEMO",	  AC_NONE,  ns_set_nomemo     },
   { NULL, 0, NULL }
 };
 
