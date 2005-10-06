@@ -1,3 +1,12 @@
+kog         2005/10/06 00:36:32 UTC	(20051006-2641)
+  Log:
+  removed jEdit artifact from head of file
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/dist/example.conf (File Modified) 
+
+
 kog         2005/10/06 00:32:10 UTC	(20051006-2639)
   Log:
   added memoserv modloads, memoserv block for config - Kog 
