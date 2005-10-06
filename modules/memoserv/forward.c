@@ -11,7 +11,7 @@
 
 DECLARE_MODULE_V1
 (
-	"memoserv/read", FALSE, _modinit, _moddeinit,
+	"memoserv/forward", FALSE, _modinit, _moddeinit,
 	"$Id: forward.c 2597 2005-10-05 06:37:06Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
