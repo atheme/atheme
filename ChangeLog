@@ -1,3 +1,12 @@
+nenolod     2005/10/06 17:17:52 UTC	(20051006-2725)
+  Log:
+  free(n->data) is incorrect, use free(memo) instead.
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/modules/memoserv/delete.c (File Modified) 
+
+
 jilles      2005/10/06 11:40:01 UTC	(20051006-2723)
   Log:
   - Use myuser->name for the sender field, not their current nick
