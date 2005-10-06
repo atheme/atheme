@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 2571 2005-10-04 20:37:47Z nenolod $
+ * $Id: node.c 2717 2005-10-06 10:50:45Z jilles $
  */
 
 #include "atheme.h"
@@ -1343,6 +1343,30 @@ myuser_t *myuser_find(char *name)
 	}
 
 	return NULL;
+}
+
+void
+myuser_notice(char *from, myuser_t *target, char *fmt, ...)
+{
+	va_list ap;
+	char buf[BUFSIZE];
+	node_t *n;
+	user_t *u;
+
+	if (target == NULL)
+		return;
+
+	/* have to reformat it here, can't give a va_list to notice() :(
+	 * -- jilles */
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_end(ap);
+
+	LIST_FOREACH(n, target->logins.head)
+	{
+		u = (user_t *)n->data;
+		notice(from, u->nick, "%s", buf);
+	}
 }
 
 /***************
