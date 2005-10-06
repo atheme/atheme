@@ -1,3 +1,14 @@
+nenolod     2005/10/06 00:07:05 UTC	(20051006-2633)
+  Log:
+  Death to MS-DOS.
+
+  Changes:	Modified:
+  +112 -112	trunk/modules/memoserv/delete.c (File Modified) 
+  +124 -124	trunk/modules/memoserv/forward.c (File Modified) 
+  +76 -76	trunk/modules/memoserv/list.c (File Modified) 
+  +105 -105	trunk/modules/memoserv/read.c (File Modified) 
+
+
 kog         2005/10/05 23:46:16 UTC	(20051005-2631)
   Log:
   delete uses SAFE list iterator, has boundary for all param and 1 memo, no pointer voodoo badness, forward initial commit, Makefile should include new files - Kog
