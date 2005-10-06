@@ -1,3 +1,13 @@
+pfish       2005/10/06 02:58:01 UTC	(20051006-2667)
+  Log:
+  Also warn user when sending memo to online user, but still send memo anyways.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/memoserv/forward.c (File Modified) 
+  +1 -0		trunk/modules/memoserv/send.c (File Modified) 
+
+
 pfish       2005/10/06 02:52:48 UTC	(20051006-2665)
   Log:
   small format fix on the memo list making it a bit easier to parse
