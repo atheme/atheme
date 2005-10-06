@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 2697 2005-10-06 08:46:50Z pfish $
+ * $Id: set.c 2699 2005-10-06 08:50:49Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 2697 2005-10-06 08:46:50Z pfish $",
+	"$Id: set.c 2699 2005-10-06 08:50:49Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -209,7 +209,7 @@ static void ns_set_hidemail(char *origin, char *name, char *params)
 
 static void ns_set_emailmemos(char *origin, char *name, char *params)
 {
-	user_t *u = user_find(origin));
+	user_t *u = user_find(origin);
 	myuser_t *mu;
 
 	if (!(mu = myuser_find(name)))
@@ -219,6 +219,7 @@ static void ns_set_emailmemos(char *origin, char *name, char *params)
 	}
 
 	if (u->myuser != mu)
+	{
 		notice(nicksvs.nick, origin, "You are not authorized to perform this command.");
 		return;
 	}
