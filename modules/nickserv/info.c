@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 2669 2005-10-06 03:44:13Z pfish $
+ * $Id: info.c 2705 2005-10-06 09:02:13Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 2669 2005-10-06 03:44:13Z pfish $",
+	"$Id: info.c 2705 2005-10-06 09:02:13Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -103,6 +103,13 @@ static void ns_cmd_info(char *origin)
 			strcat(buf, ", ");
 
 		strcat(buf, "NoMemo");
+	}
+	if (MU_EMAILMEMOS & mu->flags)
+	{
+		if (*buf)
+			strcat(buf, ", ");
+
+		strcat(buf, "EMailMemos");
 	}
 	if (MU_ALIAS & mu->flags)
 	{

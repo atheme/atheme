@@ -1,3 +1,16 @@
+kog         2005/10/06 08:56:07 UTC	(20051006-2703)
+  Log:
+  keeps track of new memo count via memoct_new in myuser_t. List will display new memo count 
+  
+
+  Changes:	Modified:
+  +7 -2		trunk/modules/memoserv/delete.c (File Modified) 
+  +3 -2		trunk/modules/memoserv/forward.c (File Modified) 
+  +2 -2		trunk/modules/memoserv/list.c (File Modified) 
+  +8 -2		trunk/modules/memoserv/read.c (File Modified) 
+  +1 -0		trunk/modules/memoserv/send.c (File Modified) 
+
+
 pfish       2005/10/06 08:54:12 UTC	(20051006-2701)
   Log:
   add emailmemos to the table
