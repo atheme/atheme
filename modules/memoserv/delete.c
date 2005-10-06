@@ -47,6 +47,8 @@ static void ms_cmd_delete(char *origin)
 	node_t *n, *link;
 	uint8_t i = 0, delcount = 0, memonum = 0;
 	mymemo_t *memo;
+	
+	/* We only take 1 arg, and we ignore all others */
 	char *arg1 = strtok(NULL, " ");
 	
 	/* Does the arg exist? */
@@ -59,21 +61,30 @@ static void ms_cmd_delete(char *origin)
 		return;
 	}
 	
-	/* Do we have any memos? */
-	if (!mu->memos.count)
+	/* user logged in? */
+	if (mu == NULL)
 	{
-		notice(memosvs.nick, origin, "You have no memos to delete.");
+		notice(memosvs.nick, origin, "You are not logged in.");
 		return;
 	}
 	
-        if (!strcasecmp("ALL", arg1))
+	/* Do we have any memos? */
+	if (!mu->memos.count)
+	{
+		notice(memosvs.nick,origin,"You have no memos to delete.");
+		return;
+	}
+	
+	/* Check to see if int or str - strncasecmp for buffer issues*/
+        if (!strncasecmp("all",arg1,3))
 	{
 		delcount = mu->memos.count;
 		
 		/* boundary case - all called on 1 memo */
-		if (mu->memos.count == 1)
+		if (mu->memos.count < 2)
 			memonum = 1;
 	}
+
 	else
 	{
 		delcount = 1;
@@ -94,10 +105,10 @@ static void ms_cmd_delete(char *origin)
 		
 		if ((i == memonum) || delcount > 1)
 		{			
-			free(n->data);
-
+			/* Free to node pool, remove from chain */
 			node_del(n,&mu->memos);
 			node_free(n);
+			free(n->data);
 		}
 		
 	}

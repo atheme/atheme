@@ -61,15 +61,25 @@ static void ms_cmd_forward(char *origin)
 		notice(memosvs.nick, origin, 
 			"Syntax: FORWARD <account> <memo number>");
 		
+		free(newmemo);
 		return;
 	}
 	else
 		memonum = atoi(arg);
 	
+	/* user logged in? */
+	if (mu == NULL)
+	{
+		notice(memosvs.nick, origin, "You are not logged in.");
+		free(newmemo);
+		return;
+	}
+	
 	/* Check to see if any memos */
 	if (!mu->memos.count)
 	{
 		notice(memosvs.nick, origin, "You have no memos to forward.");
+		free(newmemo);
 		return;
 	}
 	
@@ -77,6 +87,7 @@ static void ms_cmd_forward(char *origin)
 	if (!(them = myuser_find(target)))
 	{
 		notice(memosvs.nick, origin, "User %s does not exist.", target);
+		free(newmemo);
 		return;
 	}
 	
@@ -84,20 +95,20 @@ static void ms_cmd_forward(char *origin)
 	if (memonum > mu->memos.count)
 	{
 		notice(memosvs.nick, origin, "Invalid memo number.");
+		free(newmemo);
 		return;
 	}
 	
 	/* Check to make sure target inbox not full */
-	if (them->memos.count > 30)
+	if (them->memos.count > me.mdlimit)
 	{
 		notice(memosvs.nick, origin, "Target inbox is full.");
+		free(newmemo);
 		return;
 	}
 
 	
 	/* Go to forwarding memos */
-	notice(memosvs.nick, origin, "");
-	
 	LIST_FOREACH(n, mu->memos.head)
 	{
 		if (i == memonum)

@@ -65,6 +65,13 @@ static void ms_cmd_read(char *origin)
 	else
 		memonum = atoi(arg1);
 	
+	/* user logged in? */
+	if (mu == NULL)
+	{
+		notice(memosvs.nick, origin, "You are not logged in.");
+		return;
+	}
+	
 	/* Check to see if any memos */
 	if (!mu->memos.count)
 	{
@@ -91,7 +98,7 @@ static void ms_cmd_read(char *origin)
 				"%b %d %H:%M:%S %Y", &tm);
 		
 			notice(memosvs.nick, origin, 
-				"\2Memo %d - Sent by %s, %s\2", i, memo->sender, strfbuf);
+				"\2Memo %d - Sent by %s, %s\2",i,memo->sender, strfbuf);
 			
 			notice(memosvs.nick, origin, 
 				"------------------------------------------");

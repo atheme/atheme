@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv SEND function
  *
- * $Id: send.c 2625 2005-10-05 23:01:11Z kog $
+ * $Id: send.c 2647 2005-10-06 01:20:29Z kog $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/send", FALSE, _modinit, _moddeinit,
-	"$Id: send.c 2625 2005-10-05 23:01:11Z kog $",
+	"$Id: send.c 2647 2005-10-06 01:20:29Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -59,6 +59,16 @@ static void ms_cmd_send(char *origin)
 		
 		notice(memosvs.nick, origin, 
 			"Syntax: SEND <user> <subject> <memo>");
+		
+		free(memo);
+		return;
+	}
+	
+	/* user logged in? */
+	if (!u->myuser)
+	{
+		notice(memosvs.nick, origin, "You are not logged in.");
+		free(memo);
 		return;
 	}
 	
@@ -68,6 +78,7 @@ static void ms_cmd_send(char *origin)
 		notice(memosvs.nick, origin, 
 			"\2%s\2 is not a registered account", target);
 		
+		free(memo);
 		return;
 	}
 	
@@ -77,14 +88,16 @@ static void ms_cmd_send(char *origin)
 		notice(memosvs.nick, origin, 
 			"Please make sure your memo is less than 128 characters");
 		
+		free(memo);
 		return;
 	}
 	
 	/* Check to make sure target inbox not full  - nenolod suggested
 	   config_options.metadata_limit, perhaps a conf var or conf.h? FIXME*/
-	if (mu->memos.count > 30)
+	if (mu->memos.count > me.mdlimit)
 	{
 		notice(memosvs.nick, origin, "%s's inbox is full", target);
+		free(memo);
 		return;
 	}
 	
