@@ -150,6 +150,7 @@ static void ms_cmd_forward(char *origin)
 	u = user_find_named(target);
 	if (u->myuser)
 	{
+		notice(memosvs.nick, origin, "%s is currently online, and you may talk directly, by sending a private message.", target);
 		notice(memosvs.nick, target, "You have a new forwarded memo from %s.", origin);
 	}
 
