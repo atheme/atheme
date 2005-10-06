@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv SEND function
  *
- * $Id: send.c 2711 2005-10-06 09:53:48Z pfish $
+ * $Id: send.c 2713 2005-10-06 10:26:04Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/send", FALSE, _modinit, _moddeinit,
-	"$Id: send.c 2711 2005-10-06 09:53:48Z pfish $",
+	"$Id: send.c 2713 2005-10-06 10:26:04Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -80,7 +80,7 @@ static void ms_cmd_send(char *origin)
 	}
 	
 	/* Make sure target is not sender */
-	if (!(strcasecmp(origin,target)))
+	if (mu == u->myuser)
 	{
 		notice(memosvs.nick, origin, "You cannot send yourself a memo.");
 		return;
@@ -96,10 +96,10 @@ static void ms_cmd_send(char *origin)
 	}
 	
 	/* Check for memo text length -- includes/common.h */
-	if (strlen(m) > MEMOLEN)
+	if (strlen(m) >= MEMOLEN)
 	{
 		notice(memosvs.nick, origin, 
-			"Please make sure your memo is less than 128 characters");
+			"Please make sure your memo is less than %d characters", MEMOLEN - 1);
 		
 		return;
 	}
@@ -134,8 +134,9 @@ static void ms_cmd_send(char *origin)
 
 	
 	/* Is the user online? If so, tell them about the new memo. */
+	/* XXX use sendto_account() (to be made still) */
 	u = user_find_named(target);
-	if (u->myuser)
+	if (u != NULL && u->myuser == mu)
 	{
 		notice(memosvs.nick, origin, "%s is currently online, and you may talk directly, by sending a private message.", target);
 		notice(memosvs.nick, target, "You have a new memo from %s.", origin);

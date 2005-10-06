@@ -1,11 +1,10 @@
-
 /*
  * Copyright (c) 2005 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the Memoserv FORWARD function
  *
- * $Id: forward.c 2711 2005-10-06 09:53:48Z pfish $
+ * $Id: forward.c 2713 2005-10-06 10:26:04Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/forward", FALSE, _modinit, _moddeinit,
-	"$Id: forward.c 2711 2005-10-06 09:53:48Z pfish $",
+	"$Id: forward.c 2713 2005-10-06 10:26:04Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -89,7 +88,7 @@ static void ms_cmd_forward(char *origin)
 	}
 	
 	/* Make sure target isn't sender */
-	if (!(strcasecmp(origin,target)))
+	if (mu == tmu)
 	{
 		notice(memosvs.nick, origin, "You cannot send yourself a memo.");
 		return;
@@ -158,8 +157,9 @@ static void ms_cmd_forward(char *origin)
 		return;
 	}
 
+	/* XXX use sendto_account() */
 	u = user_find_named(target);
-	if (u->myuser)
+	if (u != NULL && u->myuser == tmu)
 	{
 		notice(memosvs.nick, origin, "%s is currently online, and you may talk directly, by sending a private message.", target);
 		notice(memosvs.nick, target, "You have a new forwarded memo from %s.", origin);

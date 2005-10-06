@@ -1,3 +1,16 @@
+pfish       2005/10/06 09:53:48 UTC	(20051006-2711)
+  Log:
+  Allow users to forward memos to the e-mail address listed on their registration.
+  - Usage: NickServ SET EMAILMEMOS [ON|OFF]
+  - The default is off.
+  
+
+  Changes:	Modified:
+  +8 -0		trunk/modules/memoserv/forward.c (File Modified) 
+  +9 -1		trunk/modules/memoserv/send.c (File Modified) 
+  +9 -1		trunk/src/function.c (File Modified) 
+
+
 kog         2005/10/06 09:36:45 UTC	(20051006-2709)
   Log:
   added notification of new memos - should probably be hook? - Kog
