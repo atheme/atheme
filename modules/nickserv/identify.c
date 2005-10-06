@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: identify.c 2709 2005-10-06 09:36:45Z kog $
+ * $Id: identify.c 2719 2005-10-06 10:52:54Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/identify", FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 2709 2005-10-06 09:36:45Z kog $",
+	"$Id: identify.c 2719 2005-10-06 10:52:54Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -125,6 +125,8 @@ static void ns_cmd_identify(char *origin)
 			snoop("SRA: \2%s\2 as \2%s\2", u->nick, mu->name);
 			wallops("\2%s\2 is now an SRA.", u->nick);
 		}
+
+		myuser_notice(nicksvs.nick, mu, "%s!%s@%s has just authenticated as you (%s)", u->nick, u->user, u->vhost, mu->name);
 
 		u->myuser = mu;
 		n = node_create();

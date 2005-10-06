@@ -1,3 +1,14 @@
+jilles      2005/10/06 10:50:45 UTC	(20051006-2717)
+  Log:
+  Add myuser_notice() to send a notice to all users
+  logged in to a certain myuser.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/extern.h (File Modified) 
+  +24 -0	trunk/src/node.c (File Modified) 
+
+
 jilles      2005/10/06 10:28:21 UTC	(20051006-2715)
   Log:
   Correct "too long" error message.
