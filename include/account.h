@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 2649 2005-10-06 01:21:00Z pfish $
+ * $Id: account.h 2689 2005-10-06 07:52:28Z kog $
  */
 
 #ifndef ACCOUNT_H
@@ -41,6 +41,7 @@ struct myuser_
   int32_t hash;
   
   list_t memos; /* store memos */
+  uint8_t memoct_new;
 };
 
 #define MU_HOLD        0x00000001
@@ -132,7 +133,6 @@ struct chanacs_
 /* struct for account memos */
 struct mymemo_ {
 	char	 sender[NICKLEN];
-	char 	 subject[30];
 	char 	 text[MEMOLEN];
 	time_t	 sent;
 	uint32_t status;

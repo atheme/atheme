@@ -1,3 +1,15 @@
+kog         2005/10/06 07:46:22 UTC	(20051006-2687)
+  Log:
+  moved struct smalloc until after checks to avoid extra free() calls, changed NULL check to (!memonum) to prevent compiler complaints about pointers 
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/memoserv/delete.c (File Modified) 
+  +4 -10	trunk/modules/memoserv/forward.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/read.c (File Modified) 
+  +3 -8		trunk/modules/memoserv/send.c (File Modified) 
+
+
 kog         2005/10/06 07:31:53 UTC	(20051006-2685)
   Log:
   makes sure arg is a valid int via atoi == NULL check 
