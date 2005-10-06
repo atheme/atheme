@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: identify.c 2557 2005-10-04 06:44:30Z pfish $
+ * $Id: identify.c 2709 2005-10-06 09:36:45Z kog $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/identify", FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 2557 2005-10-04 06:44:30Z pfish $",
+	"$Id: identify.c 2709 2005-10-06 09:36:45Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -23,7 +23,7 @@ command_t ns_identify = { "IDENTIFY", "Identifies to services for a nickname.",
 command_t ns_id = { "ID", "Alias for IDENTIFY",
 				AC_NONE, ns_cmd_identify };
 
-list_t *ns_cmdtree, *ns_helptree;
+list_t *ns_cmdtree, *ns_helptree, *ms_cmdtree;
 
 void _modinit(module_t *m)
 {
@@ -214,6 +214,12 @@ static void ns_cmd_identify(char *origin)
 			ircd_on_login(origin, mu->name, NULL);
 
 		hook_call_event("user_identify", mu);
+		
+		/* Notify users of any new memos - should be a hook somehow - Kog */
+		ms_cmdtree = module_locate_symbol("memoserv/main", "ms_cmdtree");
+		
+		if (ms_cmdtree != NULL && mu->memoct_new > 0)
+			notice(memosvs.nick, origin, "You have %d new memos.", mu->memoct_new);
 
 		return;
 	}

@@ -1,3 +1,12 @@
+kog         2005/10/06 09:33:43 UTC	(20051006-2707)
+  Log:
+  added notification of new memos - should probably be hook? - Kog
+  
+
+  Changes:	Modified:
+  +7 -1		trunk/modules/userserv/login.c (File Modified) 
+
+
 pfish       2005/10/06 09:02:13 UTC	(20051006-2705)
   Log:
   make info aware of emailmemos
