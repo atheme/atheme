@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 2701 2005-10-06 08:54:12Z pfish $
+ * $Id: set.c 2733 2005-10-06 22:52:39Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 2701 2005-10-06 08:54:12Z pfish $",
+	"$Id: set.c 2733 2005-10-06 22:52:39Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -30,6 +30,7 @@ void _modinit(module_t *m)
 	ns_helptree = module_locate_symbol("nickserv/main", "ns_helptree");
 	command_add(&ns_set, ns_cmdtree);
 	help_addentry(ns_helptree, "SET EMAIL", "help/nickserv/set_email", NULL);
+	help_addentry(ns_helptree, "SET EMAILMEMOS", "help/nickserv/set_emailmemos, NULL);
 	help_addentry(ns_helptree, "SET HIDEMAIL", "help/nickserv/set_hidemail", NULL);
 	help_addentry(ns_helptree, "SET NOMEMO", "help/nickserv/set_nomemo", NULL);
 	help_addentry(ns_helptree, "SET NEVEROP", "help/nickserv/set_neverop", NULL);
@@ -43,6 +44,7 @@ void _moddeinit()
 {
 	command_delete(&ns_set, ns_cmdtree);
 	help_delentry(ns_helptree, "SET EMAIL");
+	help_delentry(ns_helptree, "SET EMAILMEMOS");
 	help_delentry(ns_helptree, "SET HIDEMAIL");
 	help_delentry(ns_helptree, "SET NOMEMO");
 	help_delentry(ns_helptree, "SET NEVEROP");

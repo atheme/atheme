@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 2577 2005-10-05 03:44:48Z alambert $
+ * $Id: set.c 2733 2005-10-06 22:52:39Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 2577 2005-10-05 03:44:48Z alambert $",
+	"$Id: set.c 2733 2005-10-06 22:52:39Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -30,7 +30,9 @@ void _modinit(module_t *m)
 	us_helptree = module_locate_symbol("userserv/main", "us_helptree");
 	command_add(&us_set, us_cmdtree);
 	help_addentry(us_helptree, "SET EMAIL", "help/userserv/set_email", NULL);
+	help_addentry(us_helptree, "SET EMAILMEMOS", "help/userserv/set_emailmemos", NULL);
 	help_addentry(us_helptree, "SET HIDEMAIL", "help/userserv/set_hidemail", NULL);
+	help_addentry(us_helptree, "SET NOMEMO", "help/userserv/set_nomemo", NULL);
 	help_addentry(us_helptree, "SET NEVEROP", "help/userserv/set_neverop", NULL);
 	help_addentry(us_helptree, "SET NOOP", "help/userserv/set_noop", NULL);
 	help_addentry(us_helptree, "SET PASSWORD", "help/userserv/set_password", NULL);
@@ -41,7 +43,9 @@ void _moddeinit()
 {
 	command_delete(&us_set, us_cmdtree);
 	help_delentry(us_helptree, "SET EMAIL");
+	help_delentry(us_helptree, "SET EMAILMEMOS");
 	help_delentry(us_helptree, "SET HIDEMAIL");
+	help_delentry(us_helptree, "SET NOMEMO");
 	help_delentry(us_helptree, "SET NEVEROP");
 	help_delentry(us_helptree, "SET NOOP");
 	help_delentry(us_helptree, "SET PASSWORD");
@@ -143,6 +147,108 @@ static void us_set_email(char *origin, char *name, char *params)
 	strlcpy(mu->email, email, EMAILLEN);
 
 	notice(usersvs.nick, origin, "The email address for \2%s\2 has been changed to \2%s\2.", mu->name, mu->email);
+}
+
+static void us_set_nomemo(char *origin, char *name, char *params)
+{
+        user_t *u = user_find(origin);
+        myuser_t *mu;
+
+        if (!(mu = myuser_find(name)))
+        {
+                notice(usersvs.nick,origin, "\2%s\2 is not registered.");
+                return;
+        }
+
+        if (u->myuser != mu)
+        {
+                notice(usersvs.nick, origin, "You are not authorized to perform this command.");
+                return;
+        }
+        if (!strcasecmp("ON", params))
+        {
+                if (MU_NOMEMO & mu->flags)
+                {
+                        notice(usersvs.nick, origin, "The \2NOMEMO\2 flag is already set for \2%s\2.", mu->name);
+                        return;
+                }
+
+                snoop("SET:NOMEMO:ON: for \2%s\2 by \2%s\2", mu->name, origin);
+                mu->flags |= MU_NOMEMO;
+                notice(usersvs.nick, origin, "The \2NOMEMO\2 flag has been set for \2%s\2.", mu->name);
+                return;
+        }
+
+        else if (!strcasecmp("OFF", params))
+        {
+                if (!(MU_NOMEMO & mu->flags))
+                {
+                        notice(usersvs.nick, origin, "The \2NOMEMO\2 flag is not set for \2%s\2.", mu->name);
+                        return;
+                }
+
+                snoop("SET:NOMEMO:OFF: for \2%s\2 by \2%s\2", mu->name, origin);
+                mu->flags &= ~MU_NOMEMO;
+                notice(usersvs.nick, origin, "The \2NOMEMO\2 flag has been removed for \2%s\2.", mu->name);
+                return;
+        }
+
+        else
+
+                notice(usersvs.nick, origin, "Invalid parameters specified for \2NOMEMO\2.");
+                return;
+        }
+}
+
+static void us_set_emailmemos(char *origin, char *name, char *params)
+{
+        user_t *u = user_find(origin);
+        myuser_t *mu;
+
+        if (!(mu = myuser_find(name)))
+        {
+                notice(usersvs.nick,origin, "\2%s\2 is not registered.");
+                return;
+        }
+
+        if (u->myuser != mu)
+        {
+                notice(usersvs.nick, origin, "You are not authorized to perform this command.");
+                return;
+        }
+
+        if (!strcasecmp("ON", params))
+        {
+                if (MU_EMAILMEMOS & mu->flags)
+                {
+                        notice(usersvs.nick, origin, "The \2EMAILMEMOS\2 flag is already set for \2%s\2.", mu->name);
+                        return;
+                }
+
+                snoop("SET:EMAILMEMOS:ON: for \2%s\2 by \2%s\2", mu->name, origin);
+                mu->flags |= MU_EMAILMEMOS;
+                notice(usersvs.nick, origin, "The \2EMAILMEMOS\2 flag has been set for \2%s\2.", mu->name);
+                return;
+        }
+        else if (!strcasecmp("OFF", params))
+        {
+                if (!(MU_EMAILMEMOS & mu->flags))
+                {
+                        notice(usersvs.nick, origin, "The \2EMAILMEMOS\2 flag is not set for \2%s\2.", mu->name);
+                        return;
+                }
+
+                snoop("SET:EMAILMEMOS:OFF: for \2%s\2 by \2%s\2", mu->name, origin);
+                mu->flags &= ~MU_EMAILMEMOS;
+                notice(usersvs.nick, origin, "The \2EMAILMEMOS\2 flag has been removed for \2%s\2.", mu->name);
+                return;
+        }
+
+        else
+        {
+                notice(usersvs.nick, origin, "Invalid parameters specified for \2EMAILMEMOS\2.");
+                return;
+        }
 }
 
 static void us_set_hidemail(char *origin, char *name, char *params)
@@ -431,7 +537,9 @@ static void us_set_password(char *origin, char *name, char *params)
 /* commands we understand */
 static struct set_command_ us_set_commands[] = {
   { "EMAIL",      AC_NONE,  us_set_email      },
+  { "EMAILMEMOS,  AC_NONE,  us_set_emailmemos },
   { "HIDEMAIL",   AC_NONE,  us_set_hidemail   },
+  { "NOMEMO",     AC_NONE,  us_set_nomemo     },
   { "NEVEROP",    AC_NONE,  us_set_neverop    },
   { "NOOP",       AC_NONE,  us_set_noop       },
   { "PASSWORD",   AC_NONE,  us_set_password   },

@@ -1,0 +1,9 @@
+Help for SET EMAILMEMOS:
+
+This will forward memos sent to your account
+to the email address listed on your registration.
+
+Syntax: SET EMAILMEMOS [ON|OFF]
+
+Example:
+    /msg &nick& SET EMAILMEMOS ON

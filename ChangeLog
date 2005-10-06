@@ -1,3 +1,12 @@
+kog         2005/10/06 21:21:25 UTC	(20051006-2731)
+  Log:
+  hooks user_identify
+  
+
+  Changes:	Modified:
+  +20 -1	trunk/modules/memoserv/main.c (File Modified) 
+
+
 pfish       2005/10/06 21:13:13 UTC	(20051006-2729)
   Log:
   fix formatting for nomemo/add set emailmemos to help
