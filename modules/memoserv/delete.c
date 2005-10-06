@@ -91,7 +91,7 @@ static void ms_cmd_delete(char *origin)
 		memonum = atoi(arg1);
 	}
 	
-	if (memonum == NULL)
+	if (!memonum)
 	{
 		notice(memosvs.nick,origin,"Invalid message index.");
 		return;

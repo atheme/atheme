@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv SEND function
  *
- * $Id: send.c 2681 2005-10-06 06:40:24Z pfish $
+ * $Id: send.c 2687 2005-10-06 07:46:22Z kog $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/send", FALSE, _modinit, _moddeinit,
-	"$Id: send.c 2681 2005-10-06 06:40:24Z pfish $",
+	"$Id: send.c 2687 2005-10-06 07:46:22Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -45,7 +45,7 @@ static void ms_cmd_send(char *origin)
 	user_t *u = user_find(origin);
 	myuser_t *mu;
 	node_t *n;
-	mymemo_t *memo = smalloc(sizeof(mymemo_t));
+	mymemo_t *memo;
 	
 	/* Grab args */
 	char *target = strtok(NULL, " ");
@@ -60,7 +60,6 @@ static void ms_cmd_send(char *origin)
 		notice(memosvs.nick, origin, 
 			"Syntax: SEND <user> <subject> <memo>");
 		
-		free(memo);
 		return;
 	}
 	
@@ -68,7 +67,6 @@ static void ms_cmd_send(char *origin)
 	if (!u->myuser)
 	{
 		notice(memosvs.nick, origin, "You are not logged in.");
-		free(memo);
 		return;
 	}
 	
@@ -78,7 +76,6 @@ static void ms_cmd_send(char *origin)
 		notice(memosvs.nick, origin, 
 			"\2%s\2 is not a registered account", target);
 		
-		free(memo);
 		return;
 	}
 	
@@ -86,7 +83,6 @@ static void ms_cmd_send(char *origin)
 	if (!(strcasecmp(origin,target)))
 	{
 		notice(memosvs.nick, origin, "You cannot send yourself a memo.");
-		free(memo);
 		return;
 	}
 
@@ -96,7 +92,6 @@ static void ms_cmd_send(char *origin)
 		notice(memosvs.nick,origin,
 			"\2%s\2 does not wish to receive memos.", target);
 
-		free(memo);
 		return;
 	}
 	
@@ -106,7 +101,6 @@ static void ms_cmd_send(char *origin)
 		notice(memosvs.nick, origin, 
 			"Please make sure your memo is less than 128 characters");
 		
-		free(memo);
 		return;
 	}
 	
@@ -118,7 +112,8 @@ static void ms_cmd_send(char *origin)
 		return;
 	}
 	
-	/* Populate struct */
+	/* Malloc and populate struct */
+	memo = smalloc(sizeof(mymemo_t));
 	memo->sent = CURRTIME;
 	memo->status = MEMO_NEW;
 	strlcpy(memo->sender,origin,NICKLEN);

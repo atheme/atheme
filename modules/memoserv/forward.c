@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2005 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
@@ -44,7 +45,7 @@ static void ms_cmd_forward(char *origin)
 	/* Misc structs etc */
 	user_t *u = user_find(origin);
 	myuser_t *mu = u->myuser, *tmu;
-	mymemo_t *memo, *newmemo = smalloc(sizeof(mymemo_t));
+	mymemo_t *memo, *newmemo;
 	node_t *n, *temp;
 	uint8_t i = 1, memonum = 0;
 	
@@ -61,7 +62,6 @@ static void ms_cmd_forward(char *origin)
 		notice(memosvs.nick, origin, 
 			"Syntax: FORWARD <account> <memo number>");
 		
-		free(newmemo);
 		return;
 	}
 	else
@@ -71,7 +71,6 @@ static void ms_cmd_forward(char *origin)
 	if (mu == NULL)
 	{
 		notice(memosvs.nick, origin, "You are not logged in.");
-		free(newmemo);
 		return;
 	}
 	
@@ -79,7 +78,6 @@ static void ms_cmd_forward(char *origin)
 	if (!mu->memos.count)
 	{
 		notice(memosvs.nick, origin, "You have no memos to forward.");
-		free(newmemo);
 		return;
 	}
 
@@ -87,7 +85,6 @@ static void ms_cmd_forward(char *origin)
 	if (!(tmu = myuser_find(target)))
 	{
 		notice(memosvs.nick, origin, "%s is not registered.", target);
-		free(newmemo);
 		return;
 	}
 	
@@ -95,12 +92,11 @@ static void ms_cmd_forward(char *origin)
 	if (!(strcasecmp(origin,target)))
 	{
 		notice(memosvs.nick, origin, "You cannot send yourself a memo.");
-		free(memo);
 		return;
 	}
 	
 	/* Make sure arg is an int */
-	if (memonum == NULL)
+	if (!memonum)
 	{
 		notice(memosvs.nick, origin, "Invalid message index.");
 		return;
@@ -112,7 +108,6 @@ static void ms_cmd_forward(char *origin)
 		notice(memosvs.nick, origin,
 			"\2%s\2 does not wish to receive memos.", target);
 
-		free(newmemo);
 		return;
 	}
 
@@ -120,7 +115,6 @@ static void ms_cmd_forward(char *origin)
 	if (memonum > mu->memos.count)
 	{
 		notice(memosvs.nick, origin, "Invalid memo number.");
-		free(newmemo);
 		return;
 	}
 	
@@ -128,7 +122,6 @@ static void ms_cmd_forward(char *origin)
 	if (tmu->memos.count >= me.mdlimit)
 	{
 		notice(memosvs.nick, origin, "Target inbox is full.");
-		free(newmemo);
 		return;
 	}
 
@@ -140,6 +133,7 @@ static void ms_cmd_forward(char *origin)
 		{
 			/* should have some function for send here...  ask nenolod*/
 			memo = (mymemo_t *)n->data;
+			newmemo = smalloc(sizeof(mymemo_t));
 			
 			/* Create memo */
 			newmemo->sent = CURRTIME;

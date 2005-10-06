@@ -80,7 +80,7 @@ static void ms_cmd_read(char *origin)
 	}
 	
 	/* Is arg1 an int? */
-	if (memonum == NULL)
+	if (!memonum)
 	{
 		notice(memosvs.nick, origin, "Invalid message index.");
 		return;

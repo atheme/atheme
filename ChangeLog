@@ -1,3 +1,15 @@
+kog         2005/10/06 07:31:53 UTC	(20051006-2685)
+  Log:
+  makes sure arg is a valid int via atoi == NULL check 
+  
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/memoserv/delete.c (File Modified) 
+  +7 -0		trunk/modules/memoserv/forward.c (File Modified) 
+  +8 -1		trunk/modules/memoserv/read.c (File Modified) 
+
+
 pfish       2005/10/06 07:27:18 UTC	(20051006-2683)
   Log:
   add help for nickserv set nomemo (new feature)
