@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 2609 2005-10-05 07:12:06Z nenolod $
+ * $Id: main.c 2731 2005-10-06 21:21:25Z kog $
  */
 
 #include "atheme.h"
@@ -12,9 +12,11 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 2609 2005-10-05 07:12:06Z nenolod $",
+	"$Id: main.c 2731 2005-10-06 21:21:25Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
+
+static void on_user_identify(void *vptr);
 
 list_t ms_cmdtree;
 list_t ms_helptree;
@@ -68,7 +70,11 @@ static void memoserv(char *origin, uint8_t parc, char *parv[])
 		       (config_options.flood_msgs) ? "F" : "",
 		       (config_options.leave_chans) ? "l" : "",
 		       (config_options.join_chans) ? "j" : "",
-		       (config_options.leave_chans) ? "l" : "", (config_options.join_chans) ? "j" : "", (!match_mapping) ? "R" : "", (config_options.raw) ? "r" : "", (runflags & RF_LIVE) ? "n" : "");
+		       (config_options.leave_chans) ? "l" : "", 
+		       (config_options.join_chans) ? "j" : "", 
+		       (!match_mapping) ? "R" : "", 
+		       (config_options.raw) ? "r" : "", 
+		       (runflags & RF_LIVE) ? "n" : "");
 
 		return;
 	}
@@ -102,6 +108,9 @@ void _modinit(module_t *m)
 {
         hook_add_event("config_ready");
         hook_add_hook("config_ready", memoserv_config_ready);
+	
+	hook_add_event("user_identify");
+	hook_add_hook("user_identify", on_user_identify);
 
         if (!cold_start)
         {
@@ -115,4 +124,14 @@ void _moddeinit(void)
 {
         if (memosvs.me)
                 del_service(memosvs.me);
+}
+
+static void on_user_identify(void *vptr)
+{
+	myuser_t *mu = vptr;
+	if (mu->memoct_new > 0)
+	{
+		myuser_notice(memosvs.nick, mu, "You have %d new memo%s.",
+			mu->memoct_new, (mu->memoct_new > 1) ? "s" : "");
+	}
 }

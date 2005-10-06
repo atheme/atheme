@@ -1,3 +1,12 @@
+pfish       2005/10/06 21:13:13 UTC	(20051006-2729)
+  Log:
+  fix formatting for nomemo/add set emailmemos to help
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/modules/nickserv/help.c (File Modified) 
+
+
 kog         2005/10/06 21:10:27 UTC	(20051006-2727)
   Log:
   moved new memo notice into modules/memoserv/main.c 
