@@ -1,3 +1,13 @@
+nenolod     2005/10/06 04:22:32 UTC	(20051006-2677)
+  Log:
+  Fixes. :/
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/libatheme.h (File Modified) 
+  +5 -5		trunk/libatheme/libatheme.c (File Modified) 
+
+
 pfish       2005/10/06 04:13:56 UTC	(20051006-2675)
   Log:
   change them -> tmu to be more consistent

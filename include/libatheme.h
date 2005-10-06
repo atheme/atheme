@@ -4,17 +4,17 @@
  *
  * libatheme stuff.
  *
- * $Id: libatheme.h 2677 2005-10-06 04:22:32Z nenolod $
+ * $Id: libatheme.h 2679 2005-10-06 04:27:44Z nenolod $
  */
 
 #ifndef LIBATHEME_H
 #define LIBATHEME_H
 
 #ifndef uint8_t
-typedef u_int8_t uint8_t;
-typedef u_int16_t uint16_t;
-typedef u_int32_t uint32_t;
-typedef u_int64_t uint64_t;
+#define uint8_t u_int8_t
+#define uint16_t u_int16_t
+#define uint32_t u_int32_t
+#define uint64_t u_int64_t
 #endif
 
 extern void (*clog)(uint32_t, const char *, ...);
