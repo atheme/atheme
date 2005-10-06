@@ -147,6 +147,12 @@ static void ms_cmd_forward(char *origin)
 		i++;
 	}
 	
+	u = user_find_named(target);
+	if (u->myuser)
+	{
+		notice(memosvs.nick, target, "You have a new forwarded memo from %s.", origin);
+	}
+
 	notice(memosvs.nick, origin, "Memo forwarded.");
 	return;
 }
