@@ -1,3 +1,11 @@
+nenolod     2005/10/06 04:27:44 UTC	(20051006-2679)
+  Log:
+  I hate glibc.
+
+  Changes:	Modified:
+  +4 -4		trunk/include/libatheme.h (File Modified) 
+
+
 nenolod     2005/10/06 04:22:32 UTC	(20051006-2677)
   Log:
   Fixes. :/

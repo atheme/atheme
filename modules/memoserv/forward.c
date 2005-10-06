@@ -86,7 +86,7 @@ static void ms_cmd_forward(char *origin)
 	/* Check to see if target user exists */
 	if (!(tmu = myuser_find(target)))
 	{
-		notice(memosvs.nick, origin, "User %s does not exist.", target);
+		notice(memosvs.nick, origin, "%s is not registered.", target);
 		free(newmemo);
 		return;
 	}
@@ -155,6 +155,6 @@ static void ms_cmd_forward(char *origin)
 		notice(memosvs.nick, target, "You have a new forwarded memo from %s.", origin);
 	}
 
-	notice(memosvs.nick, origin, "Memo forwarded.");
+	notice(memosvs.nick, origin, "The memo has been successfully forwarded to %s.", target);
 	return;
 }
