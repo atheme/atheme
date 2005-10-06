@@ -1,3 +1,13 @@
+kog         2005/10/06 21:10:27 UTC	(20051006-2727)
+  Log:
+  moved new memo notice into modules/memoserv/main.c 
+  
+
+  Changes:	Modified:
+  +0 -6		trunk/modules/nickserv/identify.c (File Modified) 
+  +0 -6		trunk/modules/userserv/login.c (File Modified) 
+
+
 nenolod     2005/10/06 17:17:52 UTC	(20051006-2725)
   Log:
   free(n->data) is incorrect, use free(memo) instead.
