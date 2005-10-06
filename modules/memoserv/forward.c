@@ -82,15 +82,6 @@ static void ms_cmd_forward(char *origin)
 		free(newmemo);
 		return;
 	}
-	/* check if user has nomemo set */
-	if (mu->flags & MU_NOMEMO)
-	{
-		notice(memosvs.nick, origin,
-			"\2%s\2 does not wish to receive memos.", target);
-
-		free(newmemo);
-		return;
-	}
 
 	/* Check to see if target user exists */
 	if (!(them = myuser_find(target)))
@@ -108,6 +99,16 @@ static void ms_cmd_forward(char *origin)
 		return;
 	}
 	
+	/* check if targetuser has nomemo set */
+	if (them->flags & MU_NOMEMO)
+	{
+		notice(memosvs.nick, origin,
+			"\2%s\2 does not wish to receive memos.", target);
+
+		free(newmemo);
+		return;
+	}
+
 	/* Check to see if memo n exists */
 	if (memonum > mu->memos.count)
 	{
