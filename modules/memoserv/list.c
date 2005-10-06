@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv LIST function
  *
- * $Id: list.c 2629 2005-10-05 23:04:53Z kog $
+ * $Id: list.c 2633 2005-10-06 00:07:05Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 2629 2005-10-05 23:04:53Z kog $",
+	"$Id: list.c 2633 2005-10-06 00:07:05Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

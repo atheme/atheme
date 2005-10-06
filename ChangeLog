@@ -1,3 +1,14 @@
+kog         2005/10/05 23:46:16 UTC	(20051005-2631)
+  Log:
+  delete uses SAFE list iterator, has boundary for all param and 1 memo, no pointer voodoo badness, forward initial commit, Makefile should include new files - Kog
+  
+
+  Changes:	Modified:
+  +240 -4	trunk/modules/memoserv/Makefile.in (File Modified) 
+  + -		trunk/modules/memoserv/delete.c (File Added) 
+  + -		trunk/modules/memoserv/forward.c (File Added) 
+
+
 kog         2005/10/05 23:04:53 UTC	(20051005-2629)
   Log:
   Fixed various pointer issues, time display fixed
