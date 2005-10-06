@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: identify.c 2727 2005-10-06 21:10:27Z kog $
+ * $Id: identify.c 2735 2005-10-06 23:07:28Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/identify", FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 2727 2005-10-06 21:10:27Z kog $",
+	"$Id: identify.c 2735 2005-10-06 23:07:28Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -215,7 +215,7 @@ static void ns_cmd_identify(char *origin)
 		if (!(mu->flags & MU_WAITAUTH))
 			ircd_on_login(origin, mu->name, NULL);
 
-		hook_call_event("user_identify", mu);
+		hook_call_event("user_identify", u);
 
 		return;
 	}

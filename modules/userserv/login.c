@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: login.c 2727 2005-10-06 21:10:27Z kog $
+ * $Id: login.c 2735 2005-10-06 23:07:28Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/login", FALSE, _modinit, _moddeinit,
-	"$Id: login.c 2727 2005-10-06 21:10:27Z kog $",
+	"$Id: login.c 2735 2005-10-06 23:07:28Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -202,7 +202,7 @@ static void us_cmd_login(char *origin)
 		if (!(mu->flags & MU_WAITAUTH))
 			ircd_on_login(origin, mu->name, NULL);
 
-		hook_call_event("user_identify", mu);
+		hook_call_event("user_identify", u);
 
 		return;
 	}

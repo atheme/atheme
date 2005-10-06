@@ -1,3 +1,16 @@
+pfish       2005/10/06 22:52:39 UTC	(20051006-2733)
+  Log:
+  - Port NickServ/SET additions (emailmemos, nomemo) over to UserServ.
+  - Add help for NS/US SET emailmemos
+  
+
+  Changes:	Modified:
+  + -		trunk/help/nickserv/set_emailmemos (File Added) 
+  + -		trunk/help/userserv/set_emailmemos (File Added) 
+  +2 -0		trunk/modules/nickserv/set.c (File Modified) 
+  +108 -0	trunk/modules/userserv/set.c (File Modified) 
+
+
 kog         2005/10/06 21:21:25 UTC	(20051006-2731)
   Log:
   hooks user_identify
