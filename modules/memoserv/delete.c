@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv DELETE function
  *
- * $Id: list.c 2597 2005-10-05 06:37:06Z kog $
+ * $Id: delete.c 2695 2005-10-06 08:15:56Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/delete", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 2597 2005-10-05 06:37:06Z kog $",
+	"$Id: delete.c 2695 2005-10-06 08:15:56Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

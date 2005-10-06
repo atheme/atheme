@@ -5,7 +5,7 @@
  *
  * This file contains code for the Memoserv FORWARD function
  *
- * $Id: forward.c 2597 2005-10-05 06:37:06Z kog $
+ * $Id: forward.c 2695 2005-10-06 08:15:56Z pfish $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/forward", FALSE, _modinit, _moddeinit,
-	"$Id: forward.c 2597 2005-10-05 06:37:06Z kog $",
+	"$Id: forward.c 2695 2005-10-06 08:15:56Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
