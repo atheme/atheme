@@ -94,7 +94,8 @@ static void ms_cmd_delete(char *origin)
 		memonum = atoi(arg1);
 	}
 	
-	if (!memonum)
+	/* Make sure they didn't slip us an alphabetic index */
+	if (!memonum && !delcount)
 	{
 		notice(memosvs.nick,origin,"Invalid message index.");
 		return;

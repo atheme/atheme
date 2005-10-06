@@ -1,3 +1,12 @@
+pfish       2005/10/06 07:58:54 UTC	(20051006-2691)
+  Log:
+  add DEL as an alias for DELETE
+  
+
+  Changes:	Modified:
+  +4 -1		trunk/modules/memoserv/delete.c (File Modified) 
+
+
 kog         2005/10/06 07:52:28 UTC	(20051006-2689)
   Log:
   moved memo_newcount out of mymemo_ and added memoct_new to myuser_
