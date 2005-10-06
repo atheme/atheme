@@ -1,3 +1,11 @@
+nenolod     2005/10/06 00:11:24 UTC	(20051006-2637)
+  Log:
+  M-: (indent-c) (save-buffer)
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/memoserv/read.c (File Modified) 
+
+
 nenolod     2005/10/06 00:10:11 UTC	(20051006-2635)
   Log:
   Corrections.
