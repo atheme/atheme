@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 2733 2005-10-06 22:52:39Z pfish $
+ * $Id: set.c 2739 2005-10-07 00:49:45Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 2733 2005-10-06 22:52:39Z pfish $",
+	"$Id: set.c 2739 2005-10-07 00:49:45Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -192,9 +192,8 @@ static void us_set_nomemo(char *origin, char *name, char *params)
                 notice(usersvs.nick, origin, "The \2NOMEMO\2 flag has been removed for \2%s\2.", mu->name);
                 return;
         }
-
         else
-
+        {
                 notice(usersvs.nick, origin, "Invalid parameters specified for \2NOMEMO\2.");
                 return;
         }
@@ -537,7 +536,7 @@ static void us_set_password(char *origin, char *name, char *params)
 /* commands we understand */
 static struct set_command_ us_set_commands[] = {
   { "EMAIL",      AC_NONE,  us_set_email      },
-  { "EMAILMEMOS,  AC_NONE,  us_set_emailmemos },
+  { "EMAILMEMOS", AC_NONE,  us_set_emailmemos },
   { "HIDEMAIL",   AC_NONE,  us_set_hidemail   },
   { "NOMEMO",     AC_NONE,  us_set_nomemo     },
   { "NEVEROP",    AC_NONE,  us_set_neverop    },

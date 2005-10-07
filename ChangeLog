@@ -1,3 +1,12 @@
+pfish       2005/10/07 00:28:21 UTC	(20051007-2737)
+  Log:
+  remove subject from syntax
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/memoserv/send.c (File Modified) 
+
+
 jilles      2005/10/06 23:07:28 UTC	(20051006-2735)
   Log:
   Change user_identify hook to take user_t instead of myuser_t.
