@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv READ function
  *
- * $Id: read.c 2703 2005-10-06 08:56:07Z kog $
+ * $Id: read.c 2749 2005-10-07 19:24:57Z kog $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/read", FALSE, _modinit, _moddeinit,
-	"$Id: read.c 2703 2005-10-06 08:56:07Z kog $",
+	"$Id: read.c 2749 2005-10-07 19:24:57Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -42,16 +42,16 @@ void _moddeinit()
 static void ms_cmd_read(char *origin)
 {
 	/* Misc structs etc */
-	user_t *u = user_find(origin);
-	myuser_t *mu = u->myuser;
-	mymemo_t *memo;
+	user_t *u = user_find(origin), *tu;
+	myuser_t *mu = u->myuser, *tmu;
+	mymemo_t *memo, *receipt;
 	node_t *n;
 	int i = 1, memonum = 0;
 	char strfbuf[32];
 	struct tm tm;
 	
 	/* Grab arg */
-	char *arg1 = strtok(NULL, " ");
+	char *arg1 = strtok(NULL, " "), strbuf;
 	
 	/* Bad/missing arg -- how do I make sure it's a digit they fed me? */
 	if (!arg1)
@@ -100,15 +100,42 @@ static void ms_cmd_read(char *origin)
 		{
 			memo = (mymemo_t*) n->data;
 			tm = *localtime(&memo->sent);
+			strftime(strfbuf, sizeof(strfbuf) - 1, 
+				"%b %d %H:%M:%S %Y", &tm);
 			
 			if (memo->status == MEMO_NEW)
 			{
 				memo->status = MEMO_READ;
 				mu->memoct_new--;
+				tu = user_find(memo->sender);
+				tmu = tu->myuser;
+				
+				/* If the sender is logged in, tell them the memo's been read */
+				if ( strcasecmp(memosvs.nick,memo->sender) && (tmu != NULL) )
+					myuser_notice(memosvs.nick, tmu, "%s has read a memo from you sent at %s", origin, strfbuf);
+			
+				else
+				{	
+					tmu = myuser_find(memo->sender);
+					
+					/* If they have an account, their inbox is not full and they aren't memoserv */
+					if ( (tmu != NULL) && (tmu->memos.count < me.mdlimit) && strcasecmp(memosvs.nick,memo->sender))
+					{
+						/* Malloc and populate memo struct */
+						receipt = smalloc(sizeof(mymemo_t));
+						memo->sent = CURRTIME;
+						memo->status = MEMO_NEW;
+						strlcpy(memo->sender,memosvs.nick,NICKLEN);
+						snprintf(&strbuf, BUFSIZE, "%s has read a memo from you sent at %s", origin, strfbuf);
+						strlcpy(memo->text,&strbuf,MEMOLEN);
+						
+						/* Attach to their linked list */
+						n = node_create();
+						node_add(memo, n, &tmu->memos);
+						tmu->memoct_new++;
+					}
+				}
 			}
-		
-			strftime(strfbuf, sizeof(strfbuf) - 1, 
-				"%b %d %H:%M:%S %Y", &tm);
 		
 			notice(memosvs.nick, origin, 
 				"\2Memo %d - Sent by %s, %s\2",i,memo->sender, strfbuf);
@@ -117,6 +144,7 @@ static void ms_cmd_read(char *origin)
 				"------------------------------------------");
 			
 			notice(memosvs.nick, origin, "%s", memo->text);
+			
 			return;
 		}
 		

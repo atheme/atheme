@@ -1,3 +1,11 @@
+alambert    2005/10/07 18:18:19 UTC	(20051007-2747)
+  Log:
+  OS MODE: Make sure we specify which channel doesn't exist. Reported by pi.
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/operserv/mode.c (File Modified) 
+
+
 nenolod     2005/10/07 03:45:59 UTC	(20051007-2745)
   Log:
   glibc sucks.
