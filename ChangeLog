@@ -1,3 +1,13 @@
+jilles      2005/10/07 00:49:45 UTC	(20051007-2739)
+  Log:
+  Quotes need to be used in pairs.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/set.c (File Modified) 
+  +2 -3		trunk/modules/userserv/set.c (File Modified) 
+
+
 pfish       2005/10/07 00:28:21 UTC	(20051007-2737)
   Log:
   remove subject from syntax

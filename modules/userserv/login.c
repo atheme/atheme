@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: login.c 2735 2005-10-06 23:07:28Z jilles $
+ * $Id: login.c 2741 2005-10-07 00:50:12Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/login", FALSE, _modinit, _moddeinit,
-	"$Id: login.c 2735 2005-10-06 23:07:28Z jilles $",
+	"$Id: login.c 2741 2005-10-07 00:50:12Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -67,7 +67,7 @@ static void us_cmd_login(char *origin)
 
         if (metadata_find(mu->name, METADATA_USER, "private:freeze:freezer"))
         {
-                notice(usersvs.nick, origin, "This operation cannot be performed on \2%s\2 because the account has been frozen.", mu->name);
+		notice(nicksvs.nick, origin, "You cannot login as \2%s\2 because the account has been frozen.", mu->name);
                 return;
         }
 
