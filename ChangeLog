@@ -1,3 +1,12 @@
+kog         2005/10/07 19:24:57 UTC	(20051007-2749)
+  Log:
+  read now gives notice of receipt if sender online, memo if sender offline 
+  
+
+  Changes:	Modified:
+  +35 -7	trunk/modules/memoserv/read.c (File Modified) 
+
+
 alambert    2005/10/07 18:18:19 UTC	(20051007-2747)
   Log:
   OS MODE: Make sure we specify which channel doesn't exist. Reported by pi.
