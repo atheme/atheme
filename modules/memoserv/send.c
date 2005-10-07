@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv SEND function
  *
- * $Id: send.c 2723 2005-10-06 11:40:01Z jilles $
+ * $Id: send.c 2737 2005-10-07 00:28:21Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/send", FALSE, _modinit, _moddeinit,
-	"$Id: send.c 2723 2005-10-06 11:40:01Z jilles $",
+	"$Id: send.c 2737 2005-10-07 00:28:21Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -58,7 +58,7 @@ static void ms_cmd_send(char *origin)
 			"Insufficient parameters specified for \2SEND\2.");
 		
 		notice(memosvs.nick, origin, 
-			"Syntax: SEND <user> <subject> <memo>");
+			"Syntax: SEND <user> <memo>");
 		
 		return;
 	}
