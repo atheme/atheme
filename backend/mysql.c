@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using MySQL.
  *
- * $Id: mysql.c 2219 2005-09-11 18:51:54Z nenolod $
+ * $Id: mysql.c 2775 2005-10-08 20:49:21Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/mysql", TRUE, _modinit, NULL,
-	"$Id: mysql.c 2219 2005-09-11 18:51:54Z nenolod $",
+	"$Id: mysql.c 2775 2005-10-08 20:49:21Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -189,6 +189,24 @@ static void mysql_db_save(void *arg)
 
 				res = safe_query("INSERT INTO ACCOUNT_METADATA(ID, PARENT, KEYNAME, VALUE) VALUES ("
 						"DEFAULT, %d, '%s', '%s')", ii, key, keyval);
+
+				free(key);
+				free(keyval);
+			}
+
+			LIST_FOREACH(tn, mu->memos.head)
+			{
+				char *sender, *text;
+				mymemo_t *md = (mymemo_t *)tn->data;
+
+				escape_string(&sender, md->sender, strlen(md->sender));
+				escape_string(&text, md->text, strlen(md->text));
+
+				res = safe_query("INSERT INTO ACCOUNT_MEMOS(ID, PARENT, SENDER, TIME, STATUS, TEXT) VALUES ("
+						"DEFAULT, %d, '%s', %ld, %ld, '%s')", ii, sender, md->sent, md->status, text);
+
+				free(sender);
+				free(text);
 			}
 
 			ii++;
@@ -390,11 +408,40 @@ static void mysql_db_load(void)
 		res2 = safe_query("SELECT * FROM ACCOUNT_METADATA WHERE PARENT=%d", uid);
 		umd = mysql_num_rows(res2);
 
-		while ((row = mysql_fetch_row(res)))
+		while ((row2 = mysql_fetch_row(res2)))
 			metadata_add(mu, METADATA_USER, row2[2], row2[3]);
 
 		mysql_free_result(res2);
-		res2 = NULL;
+
+		res2 = safe_query("SELECT * FROM ACCOUNT_MEMOS WHERE PARENT=%d", uid);
+		umd = mysql_num_rows(res2);
+
+		while ((row2 = mysql_fetch_row(res2)))
+		{
+                        char *sender = row2[2];
+                        time_t time = atoi(row2[3]);
+                        uint32_t status = atoi(row2[4]);
+                        char *text = row2[5];
+                        mymemo_t *mz;
+
+                        if (!mu)
+                        {
+                                slog(LG_DEBUG, "db_load(): WTF -- memo for unknown account");
+                                continue;
+                        }
+
+                        if (!sender || !time || !status || !text)
+                                continue;
+
+                        mz = smalloc(sizeof(mymemo_t));
+
+                        strlcpy(mz->sender, sender, NICKLEN);
+                        strlcpy(mz->text, text, MEMOLEN);
+                        mz->sent = time;
+                        mz->status = status;
+
+                        node_add(mz, node_create(), &mu->memos);
+		}
 	}
 
 	mysql_free_result(res);

@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 2145 2005-09-05 01:40:07Z nenolod $
+ * $Id: postgresql.c 2775 2005-10-08 20:49:21Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 2145 2005-09-05 01:40:07Z nenolod $",
+	"$Id: postgresql.c 2775 2005-10-08 20:49:21Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -111,6 +111,18 @@ static void postgresql_db_save(void *arg)
 
 				res = safe_query("INSERT INTO ACCOUNT_METADATA(ID, PARENT, KEYNAME, VALUE) VALUES ("
 						"DEFAULT, %d, '%s', '%s');", ii, key, keyval);
+			}
+
+			LIST_FOREACH(tn, mu->memos.head)
+			{
+				char sender[BUFSIZE], text[BUFSIZE];
+				mymemo_t *mz = (mymemo_t *)tn->data;
+
+				PQescapeString(sender, mz->sender, BUFSIZE);
+				PQescapeString(text, mz->text, BUFSIZE);
+
+				res = safe_query("INSERT INTO ACCOUNT_MEMOS(ID, PARENT, SENDER, TIME, STATUS, TEXT) VALUES ("
+						"DEFAULT, %d, '%s', %ld, %ld, '%s');", ii, sender, mz->sent, mz->status, text);
 			}
 
 			ii++;
@@ -283,6 +295,36 @@ static void postgresql_db_load(void)
 			metadata_add(mu, METADATA_USER, PQgetvalue(res2, ii, 2), PQgetvalue(res2, ii, 3));
 
 		PQclear(res2);
+
+		res2 = safe_query("SELECT ID, PARENT, SENDER, TIME, STATUS, TEXT FROM ACCOUNT_MEMOS WHERE PARENT=%d;", uid);
+		umd = PQntuples(res2);
+
+		for (ii = 0; ii < umd; ii++)
+		{
+                        char *sender = PQgetvalue(res2, ii, 2);
+                        time_t time = atoi(PQgetvalue(res2, ii, 3));
+                        uint32_t status = atoi(PQgetvalue(res2, ii, 4));
+                        char *text = PQgetvalue(res2, ii, 5);
+                        mymemo_t *mz;
+
+                        if (!mu)
+                        {
+                                slog(LG_DEBUG, "db_load(): WTF -- memo for unknown account");
+                                continue;
+                        }
+
+                        if (!sender || !time || !status || !text)
+                                continue;
+
+                        mz = smalloc(sizeof(mymemo_t));
+
+                        strlcpy(mz->sender, sender, NICKLEN);
+                        strlcpy(mz->text, text, MEMOLEN);
+                        mz->sent = time;
+                        mz->status = status;
+
+                        node_add(mz, node_create(), &mu->memos);
+		}
 	}
 
 	PQclear(res);
