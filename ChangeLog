@@ -1,3 +1,13 @@
+pfish       2005/10/07 21:25:08 UTC	(20051007-2751)
+  Log:
+  - Fix empty notice
+  - Display [unread] on new memos on MS LIST
+  
+
+  Changes:	Modified:
+  +4 -1		trunk/modules/memoserv/list.c (File Modified) 
+
+
 kog         2005/10/07 19:24:57 UTC	(20051007-2749)
   Log:
   read now gives notice of receipt if sender online, memo if sender offline 
