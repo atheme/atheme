@@ -1,3 +1,11 @@
+nenolod     2005/10/08 19:34:46 UTC	(20051008-2757)
+  Log:
+  Fix error(s) in userserv/vhost.
+
+  Changes:	Modified:
+  +5 -5		trunk/modules/userserv/vhost.c (File Modified) 
+
+
 nenolod     2005/10/08 19:10:25 UTC	(20051008-2755)
   Log:
   Place MemoServ section below OperServ.
