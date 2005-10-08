@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService DROP function.
  *
- * $Id: drop.c 2551 2005-10-04 06:14:07Z nenolod $
+ * $Id: drop.c 2763 2005-10-08 20:02:35Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 2551 2005-10-04 06:14:07Z nenolod $",
+	"$Id: drop.c 2763 2005-10-08 20:02:35Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -68,13 +68,13 @@ static void cs_cmd_drop(char *origin)
 		return;
 	}
 
-	if (!is_founder(mc, u->myuser))
+	if (!is_founder(mc, u->myuser) && !is_sra(u->myuser))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 		return;
 	}
 
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && !is_sra(u->myuser))
 	{
                	notice(chansvs.nick, origin, "The channel \2%s\2 is closed; it cannot be dropped.", mc->name);
 		return;
