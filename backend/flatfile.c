@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 2145 2005-09-05 01:40:07Z nenolod $
+ * $Id: flatfile.c 2769 2005-10-08 20:21:38Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 2145 2005-09-05 01:40:07Z nenolod $",
+	"$Id: flatfile.c 2769 2005-10-08 20:21:38Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -73,6 +73,13 @@ static void flatfile_db_save(void *arg)
 				metadata_t *md = (metadata_t *)tn->data;
 
 				fprintf(f, "MD U %s %s %s\n", mu->name, md->name, md->value);
+			}
+
+			LIST_FOREACH(tn, mu->memos.head)
+			{
+				mymemo_t *mz = (mymemo_t *)tn->data;
+
+				fprintf(f, "ME %s %s %ld %ld %s\n", mu->name, mz->sender, mz->sent, mz->status, mz->text);
 			}
 		}
 	}
@@ -259,6 +266,34 @@ static void flatfile_db_load(void)
 					metadata_add(mu, METADATA_USER, "private:verify:register:timestamp", "0");
 				}
 			}
+		}
+
+		if (!strcmp("ME", item))
+		{
+			myuser_t *mu = myuser_find(strtok(NULL, " "));
+			char *sender = strtok(NULL, " ");
+			time_t time = atoi(strtok(NULL, " "));
+			uint32_t status = atoi(strtok(NULL, " "));
+			char *text = strtok(NULL, "");
+			mymemo_t *mz;
+
+			if (!mu)
+			{
+				slog(LG_DEBUG, "db_load(): WTF -- memo for unknown account");
+				continue;
+			}
+
+			if (!sender || !time || !status || !text)
+				continue;
+
+			mz = smalloc(sizeof(mymemo_t));
+
+			strlcpy(mz->sender, sender, NICKLEN);
+			strlcpy(mz->text, text, MEMOLEN);
+			mz->sent = time;
+			mz->status = status;
+
+			node_add(mz, node_create(), &mu->memos);
 		}
 
 		/* mychans */
