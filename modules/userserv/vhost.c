@@ -4,7 +4,7 @@
  *
  * VHost management! (ratbox only right now.)
  *
- * $Id: vhost.c 2753 2005-10-08 19:06:11Z nenolod $
+ * $Id: vhost.c 2757 2005-10-08 19:34:46Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 2753 2005-10-08 19:06:11Z nenolod $",
+	"$Id: vhost.c 2757 2005-10-08 19:34:46Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -21,21 +21,21 @@ list_t *us_cmdtree;
 static void vhost_on_identify(void *vptr);
 static void us_cmd_vhost(char *origin);
 
-command_t ns_vhost = { "VHOST", "Manages user virtualhosts.",
-			AC_IRCOP, ns_cmd_vhost };
+command_t us_vhost = { "VHOST", "Manages user virtualhosts.",
+			AC_IRCOP, us_cmd_vhost };
 
 void _modinit(module_t *m)
 {
-	us_cmdtree = module_locate_symbol("userserv/main", "ns_cmdtree");
+	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
 	hook_add_event("user_identify");
 	hook_add_hook("user_identify", vhost_on_identify);
-	command_add(&us_vhost, ns_cmdtree);
+	command_add(&us_vhost, us_cmdtree);
 }
 
 void _moddeinit(void)
 {
 	hook_del_hook("user_identify", vhost_on_identify);
-	command_delete(&us_vhost, ns_cmdtree);
+	command_delete(&us_vhost, us_cmdtree);
 }
 
 static void do_sethost_all(myuser_t *mu, char *host)
