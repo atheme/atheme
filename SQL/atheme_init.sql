@@ -3,7 +3,7 @@
 ---
 --- Use of this code is permitted under the terms presented in doc/LICENSE.
 ---
---- $Id: atheme_init.sql 2771 2005-10-08 20:28:51Z nenolod $
+--- $Id: atheme_init.sql 2779 2005-10-08 22:41:47Z pfish $
 
 CREATE SEQUENCE accounts_id_seq;
 CREATE SEQUENCE account_metadata_id_seq;
@@ -22,7 +22,7 @@ CREATE TABLE ACCOUNTS
 	EMAIL		VARCHAR(255)	NOT NULL,
 	REGISTERED	INT		NOT NULL,
 	LASTLOGIN	INT,
-	FLAGS		INT,
+	FLAGS		INT
 );
 
 CREATE TABLE ACCOUNT_METADATA
