@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ DROP function.
  *
- * $Id: drop.c 2557 2005-10-04 06:44:30Z pfish $
+ * $Id: drop.c 2761 2005-10-08 20:01:48Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 2557 2005-10-04 06:44:30Z pfish $",
+	"$Id: drop.c 2761 2005-10-08 20:01:48Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -43,22 +43,23 @@ static void ns_cmd_drop(char *origin)
 	myuser_t *mu;
 	mychan_t *tmc;
 	node_t *n;
+	char *nick = strtok(NULL, " ");
 	char *pass = strtok(NULL, " ");
 
-	if (!pass)
+	if (!nick)
 	{
 		notice(nicksvs.nick, origin, "Insufficient parameters specified for \2DROP\2.");
-		notice(nicksvs.nick, origin, "Syntax: DROP <password>");
+		notice(nicksvs.nick, origin, "Syntax: DROP <nickname> <password>");
 		return;
 	}
 
-	if (!(mu = myuser_find(origin)))
+	if (!(mu = myuser_find(nick)))
 	{
 		notice(nicksvs.nick, origin, "\2%s\2 is not registered.", origin);
 		return;
 	}
 
-	if (strcmp(pass, mu->pass))
+	if (!is_sra(u->myuser) && (!pass || strcmp(pass, mu->pass)))
 	{
 		notice(nicksvs.nick, origin, "Authentication failed. Invalid password for \2%s\2.", mu->name);
 		return;
