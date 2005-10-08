@@ -41,6 +41,27 @@ CREATE TABLE ACCOUNT_METADATA (
 -- --------------------------------------------------------
 
 -- 
+-- Struktur för tabell `ACCOUNT_MEMOS`
+-- 
+
+CREATE TABLE ACCOUNT_MEMOS (
+  ID int(11) NOT NULL auto_increment,
+  PARENT int(11) NOT NULL default '0',
+  SENDER varchar(255) NOT NULL default '',
+  STATUS int(11) NOT NULL default '0',
+  TIME int(11) NOT NULL default '0',
+  TEXT varchar(255) NOT NULL default '',
+  PRIMARY KEY  (ID)
+) ENGINE=MyISAM;
+
+-- 
+-- Data i tabell `ACCOUNT_METADATA`
+-- 
+
+
+-- --------------------------------------------------------
+
+-- 
 -- Struktur för tabell `CHANNELS`
 -- 
 

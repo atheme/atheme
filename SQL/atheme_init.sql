@@ -3,7 +3,7 @@
 ---
 --- Use of this code is permitted under the terms presented in doc/LICENSE.
 ---
---- $Id: atheme_init.sql 1586 2005-08-10 03:52:37Z nenolod $
+--- $Id: atheme_init.sql 2771 2005-10-08 20:28:51Z nenolod $
 
 CREATE SEQUENCE accounts_id_seq;
 CREATE SEQUENCE account_metadata_id_seq;
@@ -31,6 +31,16 @@ CREATE TABLE ACCOUNT_METADATA
 	PARENT		INT		NOT NULL,
 	KEYNAME		VARCHAR(255)	NOT NULL,
 	VALUE		VARCHAR(255)	NOT NULL
+);
+
+CREATE TABLE ACCOUNT_MEMOS
+(
+	ID		INT		DEFAULT nextval('account_memos_seq')	NOT NULL,
+	PARENT		INT		NOT NULL,
+	SENDER		VARCHAR(255)	NOT NULL,
+	TIME		INT		NOT NULL,
+	STATUS		INT,
+	TEXT		VARCHAR(255)	NOT NULL
 );
 
 --- MC equivilant
