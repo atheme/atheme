@@ -3,10 +3,11 @@
 ---
 --- Use of this code is permitted under the terms presented in doc/LICENSE.
 ---
---- $Id: atheme_init.sql 2779 2005-10-08 22:41:47Z pfish $
+--- $Id: atheme_init.sql 2781 2005-10-08 22:55:21Z pfish $
 
 CREATE SEQUENCE accounts_id_seq;
 CREATE SEQUENCE account_metadata_id_seq;
+CREATE SEQUENCE account_memos_seq;
 CREATE SEQUENCE channels_id_seq;
 CREATE SEQUENCE channel_metadata_id_seq;
 CREATE SEQUENCE channel_access_id_seq;

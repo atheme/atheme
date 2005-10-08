@@ -1,3 +1,12 @@
+pfish       2005/10/08 22:41:47 UTC	(20051008-2779)
+  Log:
+  Fix pgsql schema.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/SQL/atheme_init.sql (File Modified) 
+
+
 nenolod     2005/10/08 21:01:27 UTC	(20051008-2777)
   Log:
   WTF was that there for :/
