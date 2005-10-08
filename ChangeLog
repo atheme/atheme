@@ -1,3 +1,17 @@
+nenolod     2005/10/08 19:06:11 UTC	(20051008-2753)
+  Log:
+  - integrate vhost system into the core.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/dist/example.conf (File Modified) 
+  +2 -0		trunk/dist/example.userserv.conf (File Modified) 
+  +155 -1	trunk/modules/nickserv/Makefile.in (File Modified) 
+  + -		trunk/modules/nickserv/vhost.c (File Added) 
+  +155 -1	trunk/modules/userserv/Makefile.in (File Modified) 
+  + -		trunk/modules/userserv/vhost.c (File Added) 
+
+
 pfish       2005/10/07 21:25:08 UTC	(20051007-2751)
   Log:
   - Fix empty notice
