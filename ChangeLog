@@ -1,3 +1,12 @@
+pfish       2005/10/08 22:55:21 UTC	(20051008-2781)
+  Log:
+  Fix another error with pgsql memo storage
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/SQL/atheme_init.sql (File Modified) 
+
+
 pfish       2005/10/08 22:41:47 UTC	(20051008-2779)
   Log:
   Fix pgsql schema.
