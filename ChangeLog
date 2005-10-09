@@ -1,3 +1,11 @@
+terminal    2005/10/09 01:35:38 UTC	(20051009-2803)
+  Log:
+  adding myself to core listing thingey
+
+  Changes:	Modified:
+  +1 -0		trunk/src/version.sh (File Modified) 
+
+
 terminal    2005/10/09 01:29:49 UTC	(20051009-2801)
   Log:
   fixes for 0/string delete index
