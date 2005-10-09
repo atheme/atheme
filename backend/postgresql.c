@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 2793 2005-10-09 00:48:55Z nenolod $
+ * $Id: postgresql.c 2799 2005-10-09 01:14:40Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 2793 2005-10-09 00:48:55Z nenolod $",
+	"$Id: postgresql.c 2799 2005-10-09 01:14:40Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -323,6 +323,9 @@ static void postgresql_db_load(void)
                         strlcpy(mz->text, text, MEMOLEN);
                         mz->sent = time;
                         mz->status = status;
+
+			if (mz->status == MEMO_NEW)
+				mu->memoct_new++;
 
                         node_add(mz, node_create(), &mu->memos);
 		}
