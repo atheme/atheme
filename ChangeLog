@@ -1,3 +1,12 @@
+pfish       2005/10/09 23:50:38 UTC	(20051009-2815)
+  Log:
+  Bugfix /NS DROP
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/drop.c (File Modified) 
+
+
 kuja        2005/10/09 10:10:07 UTC	(20051009-2813)
   Log:
   My name is Jeff, not John. And the email was @gamesnet.com, not .net

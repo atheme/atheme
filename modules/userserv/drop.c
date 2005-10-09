@@ -4,7 +4,7 @@
  *
  * This file contains code for the UserServ DROP function.
  *
- * $Id: drop.c 2761 2005-10-08 20:01:48Z nenolod $
+ * $Id: drop.c 2817 2005-10-09 23:51:15Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 2761 2005-10-08 20:01:48Z nenolod $",
+	"$Id: drop.c 2817 2005-10-09 23:51:15Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -55,7 +55,7 @@ static void us_cmd_drop(char *origin)
 
 	if (!(mu = myuser_find(acc)))
 	{
-		notice(usersvs.nick, origin, "\2%s\2 is not registered.", origin);
+		notice(usersvs.nick, origin, "\2%s\2 is not registered.", acc);
 		return;
 	}
 
