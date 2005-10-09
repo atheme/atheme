@@ -1,3 +1,11 @@
+terminal    2005/10/09 01:29:49 UTC	(20051009-2801)
+  Log:
+  fixes for 0/string delete index
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/memoserv/delete.c (File Modified) 
+
+
 nenolod     2005/10/09 01:14:40 UTC	(20051009-2799)
   Log:
   memoct_new stuff

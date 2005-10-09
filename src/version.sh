@@ -6,7 +6,7 @@
 # This file generates version.c.
 # Stolen from ircd-ratbox.
 #
-# $Id: version.sh 2593 2005-10-05 06:10:31Z nenolod $
+# $Id: version.sh 2803 2005-10-09 01:35:38Z terminal $
 #
 
 spitshell=cat
@@ -34,7 +34,7 @@ awk '{if (NF == 6) \
 else \
          { print $1 " "  $2 " " $3 " " $7 " at " $4 " " $5 " " $6 }}'`
 
-buildid=`echo "\$Revision: 2593 $" | \
+buildid=`echo "\$Revision: 2803 $" | \
 	awk '{ print $2 }'`;
 
 $spitshell >version.c <<!SUB!THIS!
@@ -108,6 +108,7 @@ const char *infotext[] =
   "  jilles, Jilles Tjoelker <jilles@stack.nl>",
   "  nenolod, William Pitcock <nenolod@nenolod.net>",
   "  pfish, Patrick Fish <pofish@gmail.com>",
+  "  terminal, Theo Julienne <admin@ozweb.nu>",
   "  w00t, Robin Burchell <w00t@staff.chatspike.net>",
   " ",
   "The following people have contributed blood, sweat and tears to",
