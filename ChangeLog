@@ -1,3 +1,11 @@
+nenolod     2005/10/09 00:07:16 UTC	(20051009-2785)
+  Log:
+  Bugfix /ns register.
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/register.c (File Modified) 
+
+
 nenolod     2005/10/09 00:04:02 UTC	(20051009-2783)
   Log:
   Fix hostsetting on charybdis.
