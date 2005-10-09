@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv DELETE function
  *
- * $Id: delete.c 2801 2005-10-09 01:29:49Z terminal $
+ * $Id: delete.c 2807 2005-10-09 02:25:13Z terminal $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/delete", FALSE, _modinit, _moddeinit,
-	"$Id: delete.c 2801 2005-10-09 01:29:49Z terminal $",
+	"$Id: delete.c 2807 2005-10-09 02:25:13Z terminal $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,7 +48,7 @@ static void ms_cmd_delete(char *origin)
 	user_t *u = user_find(origin);
 	myuser_t *mu = u->myuser;
 	node_t *n, *link;
-	uint8_t i = 0, delcount = 0, memonum = 0;
+	uint8_t i = 0, delcount = 0, memonum = 0, deleteall = 0;
 	mymemo_t *memo;
 	
 	/* We only take 1 arg, and we ignore all others */
@@ -78,43 +78,42 @@ static void ms_cmd_delete(char *origin)
 		return;
 	}
 	
-	/* Check to see if int or str - strncasecmp for buffer issues*/
-        if (!strcasecmp("all",arg1))
+	/* Do we want to delete all memos? */
+	if (!strcasecmp("all",arg1))
 	{
-		delcount = mu->memos.count;
-		
-		/* boundary case - all called on 1 memo */
-		if (mu->memos.count < 2)
-			memonum = 1;
+		deleteall = 1;
 	}
-
+	
 	else
 	{
-		delcount = 1;
 		memonum = atoi(arg1);
+		
+		/* Make sure they didn't slip us an alphabetic index */
+		if (!memonum)
+		{
+			notice(memosvs.nick,origin,"Invalid message index.");
+			return;
+		}
+		
+		/* If int, does that index exist? And do we have something to delete? */
+		if (memonum > mu->memos.count)
+		{
+			notice(memosvs.nick,origin,"The specified memo doesn't exist.");
+			return;
+		}
 	}
 	
-	/* Make sure they didn't slip us an alphabetic index */
-	if (!memonum)
-	{
-		notice(memosvs.nick,origin,"Invalid message index.");
-		return;
-	}
-	
-	/* If int, does that index exist? And do we have something to delete? */
-	if (memonum > mu->memos.count)
-	{
-		notice(memosvs.nick,origin,"The specified memo doesn't exist.");
-		return;
-	}
+	delcount = 0;
 	
 	/* Iterate through memos, doing deletion */
 	LIST_FOREACH_SAFE(n, link, mu->memos.head)
 	{
 		i++;
 		
-		if ((i == memonum) || delcount > 1)
-		{			
+		if ((i == memonum) || (deleteall == 1))
+		{
+			delcount++;
+			
 			memo = (mymemo_t*) n->data;
 			
 			if (memo->status == MEMO_NEW)
@@ -131,5 +130,6 @@ static void ms_cmd_delete(char *origin)
 	
 	notice(memosvs.nick, origin, "%d memo%s deleted.",delcount, 
 		(delcount == 1) ? "":"s");
+	
 	return;
 }

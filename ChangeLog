@@ -1,3 +1,12 @@
+nenolod     2005/10/09 01:39:26 UTC	(20051009-2805)
+  Log:
+  Fix whitespace issue in /info
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/version.sh (File Modified) 
+
+
 terminal    2005/10/09 01:35:38 UTC	(20051009-2803)
   Log:
   adding myself to core listing thingey
