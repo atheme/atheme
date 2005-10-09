@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv READ function
  *
- * $Id: read.c 2793 2005-10-09 00:48:55Z nenolod $
+ * $Id: read.c 2795 2005-10-09 00:59:11Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/read", FALSE, _modinit, _moddeinit,
-	"$Id: read.c 2793 2005-10-09 00:48:55Z nenolod $",
+	"$Id: read.c 2795 2005-10-09 00:59:11Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,10 +48,11 @@ static void ms_cmd_read(char *origin)
 	node_t *n;
 	int i = 1, memonum = 0;
 	char strfbuf[32];
+	char strbuf[BUFSIZE];
 	struct tm tm;
 	
 	/* Grab arg */
-	char *arg1 = strtok(NULL, " "), strbuf;
+	char *arg1 = strtok(NULL, " ");
 	
 	/* Bad/missing arg -- how do I make sure it's a digit they fed me? */
 	if (!arg1)
@@ -119,15 +120,14 @@ static void ms_cmd_read(char *origin)
 					{
 						/* Malloc and populate memo struct */
 						receipt = smalloc(sizeof(mymemo_t));
-						memo->sent = CURRTIME;
-						memo->status = MEMO_NEW;
-						strlcpy(memo->sender,memosvs.nick,NICKLEN);
-						snprintf(&strbuf, BUFSIZE, "%s has read a memo from you sent at %s", origin, strfbuf);
-						strlcpy(memo->text,&strbuf,MEMOLEN);
+						receipt->sent = CURRTIME;
+						receipt->status = MEMO_NEW;
+						strlcpy(receipt->sender,memosvs.nick,NICKLEN);
+						snprintf(receipt->text, MEMOLEN, "%s has read a memo from you sent at %s", origin, strfbuf);
 						
 						/* Attach to their linked list */
 						n = node_create();
-						node_add(memo, n, &tmu->memos);
+						node_add(receipt, n, &tmu->memos);
 						tmu->memoct_new++;
 					}
 				}
