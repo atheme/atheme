@@ -1,3 +1,11 @@
+kuja        2005/10/09 10:10:07 UTC	(20051009-2813)
+  Log:
+  My name is Jeff, not John. And the email was @gamesnet.com, not .net
+
+  Changes:	Modified:
+  +1 -1		trunk/src/version.sh (File Modified) 
+
+
 terminal    2005/10/09 09:04:54 UTC	(20051009-2811)
   Log:
   dlX() win32 hack
