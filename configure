@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# $Id: configure.ac 2615 2005-10-05 18:18:41Z nenolod $
+# $Id: configure.ac 2791 2005-10-09 00:40:33Z nenolod $
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -966,7 +966,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-$Id: configure.ac 2615 2005-10-05 18:18:41Z nenolod $
+$Id: configure.ac 2791 2005-10-09 00:40:33Z nenolod $
 _ACEOF
   exit 0
 fi
@@ -6662,6 +6662,19 @@ echo "${ECHO_T}$found" >&6
 
 	if test "$found" = yes; then
 		LDFLAGS="${LDFLAGS} -Wl,-export-dynamic"
+	fi
+
+	if test "$ac_cv_c_compiler_gnu" = yes; then
+		echo "$as_me:$LINENO: checking if $CC is Apple GCC" >&5
+echo $ECHO_N "checking if $CC is Apple GCC... $ECHO_C" >&6
+		if expr "`$CC -v 2>&1 | tail -n 1`" : ".*Apple" >/dev/null; then
+			AppleGCC=yes
+		else
+			AppleGCC=no
+		fi
+
+		echo "$as_me:$LINENO: result: $AppleGCC" >&5
+echo "${ECHO_T}$AppleGCC" >&6
 	fi
 
 	echo "$as_me:$LINENO: checking for compiler option to produce PIC" >&5

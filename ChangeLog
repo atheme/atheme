@@ -1,3 +1,11 @@
+terminal    2005/10/09 02:25:13 UTC	(20051009-2807)
+  Log:
+  oops, fixed delete all case again (untested)
+
+  Changes:	Modified:
+  +25 -25	trunk/modules/memoserv/delete.c (File Modified) 
+
+
 nenolod     2005/10/09 01:39:26 UTC	(20051009-2805)
   Log:
   Fix whitespace issue in /info

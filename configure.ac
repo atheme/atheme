@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 2791 2005-10-09 00:40:33Z nenolod $
+dnl $Id: configure.ac 2809 2005-10-09 03:00:52Z terminal $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, 0.3beta4, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 2791 2005-10-09 00:40:33Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 2809 2005-10-09 03:00:52Z terminal $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -253,6 +253,17 @@ if test "$shared_modules" = yes; then
 
 	if test "$found" = yes; then
 		LDFLAGS="${LDFLAGS} -Wl,-export-dynamic"
+	fi
+
+	if test "$ac_cv_c_compiler_gnu" = yes; then
+		AC_MSG_CHECKING(if $CC is Apple GCC)
+		if expr "`$CC -v 2>&1 | tail -n 1`" : ".*Apple" >/dev/null; then
+			AppleGCC=yes
+		else
+			AppleGCC=no
+		fi
+	
+		AC_MSG_RESULT($AppleGCC)
 	fi
 
 	AC_MSG_CHECKING(for compiler option to produce PIC)
