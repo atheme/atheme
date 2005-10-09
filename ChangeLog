@@ -1,3 +1,14 @@
+nenolod     2005/10/09 00:27:33 UTC	(20051009-2787)
+  Log:
+  Possible MemoServ storage fix, untested.
+
+  Changes:	Modified:
+  +1 -1		trunk/backend/flatfile.c (File Modified) 
+  +1 -1		trunk/backend/mysql.c (File Modified) 
+  +1 -1		trunk/backend/postgresql.c (File Modified) 
+  +1 -1		trunk/protocol/charybdis.c (File Modified) 
+
+
 nenolod     2005/10/09 00:07:16 UTC	(20051009-2785)
   Log:
   Bugfix /ns register.
