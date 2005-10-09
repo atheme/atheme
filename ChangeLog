@@ -1,3 +1,11 @@
+nenolod     2005/10/09 00:04:02 UTC	(20051009-2783)
+  Log:
+  Fix hostsetting on charybdis.
+
+  Changes:	Modified:
+  +2 -3		trunk/protocol/charybdis.c (File Modified) 
+
+
 pfish       2005/10/08 22:55:21 UTC	(20051008-2781)
   Log:
   Fix another error with pgsql memo storage
