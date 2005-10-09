@@ -3,16 +3,16 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 2615 2005-10-05 18:18:41Z nenolod $
+dnl $Id: configure.ac 2791 2005-10-09 00:40:33Z nenolod $
 
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.57)
 
-AC_INIT(atheme, 0.3beta3, bugs@atheme.org)
+AC_INIT(atheme, 0.3beta4, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 2615 2005-10-05 18:18:41Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 2791 2005-10-09 00:40:33Z nenolod $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
