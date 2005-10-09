@@ -1,3 +1,12 @@
+nenolod     2005/10/09 00:59:11 UTC	(20051009-2795)
+  Log:
+  /me fwaps Kog x3
+  
+
+  Changes:	Modified:
+  +7 -7		trunk/modules/memoserv/read.c (File Modified) 
+
+
 nenolod     2005/10/09 00:48:55 UTC	(20051009-2793)
   Log:
   - Truncate the ACCOUNT_MEMOS table before dumping to it. (duncecap goes to me on that one.)
