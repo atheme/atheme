@@ -5,11 +5,14 @@
  * Dynamic linker.
  * XXX: No windows code yet.
  *
- * $Id: linker.c 2671 2005-10-06 04:03:49Z nenolod $
+ * $Id: linker.c 2811 2005-10-09 09:04:54Z terminal $
  */
 
 #include "atheme.h"
+
+#ifndef _WIN32
 #include <dlfcn.h>
+#endif
 
 #ifdef __OpenBSD__
 # define RTLD_NOW RTLD_LAZY
@@ -23,6 +26,13 @@
 # endif
 #else
 # define PLATFORM_SUFFIX ".dll"
+#endif
+
+/* Simple hack to make dl*() work on Windows */
+#ifdef _WIN32
+#define dlopen(f,n) LoadLibrary(f)
+#define dlsym GetProcAddress
+#define dlclose FreeLibrary
 #endif
 
 /*

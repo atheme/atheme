@@ -1,3 +1,13 @@
+terminal    2005/10/09 03:00:52 UTC	(20051009-2809)
+  Log:
+  fix compile on Apple GCC - run not tested
+  
+
+  Changes:	Modified:
+  +15 -2	trunk/configure (File Modified) 
+  +11 -0	trunk/configure.ac (File Modified) 
+
+
 terminal    2005/10/09 02:25:13 UTC	(20051009-2807)
   Log:
   oops, fixed delete all case again (untested)
