@@ -1,3 +1,11 @@
+terminal    2005/10/09 09:04:54 UTC	(20051009-2811)
+  Log:
+  dlX() win32 hack
+
+  Changes:	Modified:
+  +10 -0	trunk/libatheme/linker.c (File Modified) 
+
+
 terminal    2005/10/09 03:00:52 UTC	(20051009-2809)
   Log:
   fix compile on Apple GCC - run not tested
