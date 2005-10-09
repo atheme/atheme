@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using MySQL.
  *
- * $Id: mysql.c 2787 2005-10-09 00:27:33Z nenolod $
+ * $Id: mysql.c 2793 2005-10-09 00:48:55Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/mysql", TRUE, _modinit, NULL,
-	"$Id: mysql.c 2787 2005-10-09 00:27:33Z nenolod $",
+	"$Id: mysql.c 2793 2005-10-09 00:48:55Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -154,6 +154,7 @@ static void mysql_db_save(void *arg)
 	/* clear everything out. */
 	safe_query("TRUNCATE TABLE ACCOUNTS");
 	safe_query("TRUNCATE TABLE ACCOUNT_METADATA");
+	safe_query("TRUNCATE TABLE ACCOUNT_MEMOS");
 	safe_query("TRUNCATE TABLE CHANNELS");
 	safe_query("TRUNCATE TABLE CHANNEL_METADATA");
 	safe_query("TRUNCATE TABLE CHANNEL_ACCESS");

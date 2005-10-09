@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv READ function
  *
- * $Id: read.c 2789 2005-10-09 00:34:59Z nenolod $
+ * $Id: read.c 2793 2005-10-09 00:48:55Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/read", FALSE, _modinit, _moddeinit,
-	"$Id: read.c 2789 2005-10-09 00:34:59Z nenolod $",
+	"$Id: read.c 2793 2005-10-09 00:48:55Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -107,16 +107,13 @@ static void ms_cmd_read(char *origin)
 			{
 				memo->status = MEMO_READ;
 				mu->memoct_new--;
-				tu = user_find(memo->sender);
-				tmu = tu->myuser;
+				tmu = myuser_find(memo->sender);
 				
 				/* If the sender is logged in, tell them the memo's been read */
-				if (strcasecmp(memosvs.nick,memo->sender) && (tu != NULL) && (tmu != NULL))
+				if (strcasecmp(memosvs.nick,memo->sender) && (tmu != NULL) && (tmu->logins.count > 0))
 					myuser_notice(memosvs.nick, tmu, "%s has read your memo, which was sent at %s", origin, strfbuf);			
 				else
 				{	
-					tmu = myuser_find(memo->sender);
-					
 					/* If they have an account, their inbox is not full and they aren't memoserv */
 					if ( (tmu != NULL) && (tmu->memos.count < me.mdlimit) && strcasecmp(memosvs.nick,memo->sender))
 					{
