@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv DELETE function
  *
- * $Id: delete.c 2725 2005-10-06 17:17:52Z nenolod $
+ * $Id: delete.c 2801 2005-10-09 01:29:49Z terminal $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/delete", FALSE, _modinit, _moddeinit,
-	"$Id: delete.c 2725 2005-10-06 17:17:52Z nenolod $",
+	"$Id: delete.c 2801 2005-10-09 01:29:49Z terminal $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -95,14 +95,14 @@ static void ms_cmd_delete(char *origin)
 	}
 	
 	/* Make sure they didn't slip us an alphabetic index */
-	if (!memonum && !delcount)
+	if (!memonum)
 	{
 		notice(memosvs.nick,origin,"Invalid message index.");
 		return;
 	}
 	
 	/* If int, does that index exist? And do we have something to delete? */
-	if ((memonum && (memonum > mu->memos.count)) || (!memonum && !delcount))
+	if (memonum > mu->memos.count)
 	{
 		notice(memosvs.nick,origin,"The specified memo doesn't exist.");
 		return;
