@@ -1,3 +1,12 @@
+pfish       2005/10/09 23:51:15 UTC	(20051009-2817)
+  Log:
+  Bugfix /US DROP
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/userserv/drop.c (File Modified) 
+
+
 pfish       2005/10/09 23:50:38 UTC	(20051009-2815)
   Log:
   Bugfix /NS DROP

@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ DROP function.
  *
- * $Id: drop.c 2815 2005-10-09 23:50:38Z pfish $
+ * $Id: drop.c 2819 2005-10-10 00:15:26Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 2815 2005-10-09 23:50:38Z pfish $",
+	"$Id: drop.c 2819 2005-10-10 00:15:26Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -64,6 +64,10 @@ static void ns_cmd_drop(char *origin)
 		notice(nicksvs.nick, origin, "Authentication failed. Invalid password for \2%s\2.", mu->name);
 		return;
 	}
+
+
+	if (is_sra(u->myuser) && !pass)
+		wallops("%s used the \2DROP\2 cmd on the nickname %s", origin, mu->name);
 
 	/* find all channels that are theirs and drop them */
 	for (i = 1; i < HASHSIZE; i++)
