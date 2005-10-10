@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 2717 2005-10-06 10:50:45Z jilles $
+ * $Id: extern.h 2821 2005-10-10 04:12:13Z terminal $
  */
 
 #ifndef EXTERN_H
@@ -99,7 +99,9 @@ E uint8_t regex_match(regex_t * preg, char *pattern, char *string,
 E uint32_t shash(const unsigned char *text);
 E char *replace(char *s, int32_t size, const char *old, const char *new);
 
+#ifndef _WIN32
 E char *itoa(int num);
+#endif
 
 E char *flags_to_string(int32_t flags);
 E int32_t mode_to_flag(char c);

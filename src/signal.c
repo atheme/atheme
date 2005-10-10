@@ -4,10 +4,16 @@
  *
  * This file contains the signal handling routines.
  *
- * $Id: signal.c 2497 2005-10-01 04:35:25Z nenolod $
+ * $Id: signal.c 2821 2005-10-10 04:12:13Z terminal $
  */
 
 #include "atheme.h"
+
+#ifdef _WIN32
+#define SIGHUP 0
+#define SIGUSR1 0
+#define SIGUSR2 0
+#endif
 
 void sighandler(int signum)
 {

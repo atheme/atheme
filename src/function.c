@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 2745 2005-10-07 03:45:59Z nenolod $
+ * $Id: function.c 2821 2005-10-10 04:12:13Z terminal $
  */
 
 #include "atheme.h"
@@ -215,12 +215,21 @@ char *replace(char *s, int32_t size, const char *old, const char *new)
 }
 
 /* reverse of atoi() */
+#ifndef _WIN32
 char *itoa(int num)
 {
 	static char ret[32];
 	sprintf(ret, "%d", num);
 	return ret;
 }
+#else
+char *r_itoa(int num)
+{
+	static char ret[32];
+	sprintf(ret, "%d", num);
+	return ret;
+}
+#endif
 
 /* channel modes we support */
 struct flag

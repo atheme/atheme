@@ -4,11 +4,14 @@
  *
  * Module management.
  *
- * $Id: module.c 2497 2005-10-01 04:35:25Z nenolod $
+ * $Id: module.c 2821 2005-10-10 04:12:13Z terminal $
  */
 
 #include "atheme.h"
+
+#ifndef _WIN32
 #include <dlfcn.h>
+#endif
 
 static BlockHeap *module_heap;
 list_t modules;
@@ -16,6 +19,9 @@ list_t modules;
 /* Microsoft's POSIX API is a joke. */
 #ifdef _WIN32
 
+#define dlerror() ""
+
+/*
 #define dirent dirent
 #define DIR lt_DIR
 
@@ -93,7 +99,7 @@ static struct dirent *readdir(DIR * entry)
 
 	return &entry->file_info;
 }
-
+*/
 #endif
 
 void modules_init(void)

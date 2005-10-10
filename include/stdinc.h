@@ -4,7 +4,7 @@
  *
  * This is the header which includes all of the system stuff.
  *
- * $Id: stdinc.h 1606 2005-08-10 17:40:35Z nenolod $
+ * $Id: stdinc.h 2821 2005-10-10 04:12:13Z terminal $
  */
 
 #ifndef STDINC_H
@@ -39,8 +39,8 @@
 # include <sys/socket.h>
 # include <fcntl.h>
 #else
-# include <winsock.h>
 # include <windows.h>
+# include <winsock.h>
 # include <sys/timeb.h>
 # include <direct.h>
 # include <io.h>
@@ -49,7 +49,9 @@
 
 #include <sys/types.h>
 
+#ifndef _WIN32
 #include <libgen.h>
+#endif
 #include <dirent.h>
 
 #ifndef _WIN32
@@ -65,16 +67,21 @@ typedef int l_boolean_t;
 
 /* XXX these are all 32-bit types, not that I care. */
 #ifdef _WIN32
-typedef int int8_t;
-typedef int int16_t;
+//typedef char int8_t;
+//typedef short int16_t;
 typedef int int24_t;
 typedef int int32_t;
 typedef long long int64_t;
-typedef unsigned int u_int8_t;
-typedef unsigned int u_int16_t;
+typedef unsigned char u_int8_t;
+typedef unsigned short u_int16_t;
 typedef unsigned int u_int24_t;
 typedef unsigned int u_int32_t;
 typedef unsigned long long u_int64_t;
+
+#define itoa(num) r_itoa(num)
+#define kill(n,m) 0
+
+#define inet_ntop(a,b,c,d) strncpy( c, inet_ntoa( *((struct in_addr*)b) ), d);
 
 /* XXX Microsoft headers are broken */
 #define snprintf _snprintf

@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 2671 2005-10-06 04:03:49Z nenolod $
+ * $Id: atheme.c 2821 2005-10-10 04:12:13Z terminal $
  */
 
 #include "atheme.h"
@@ -107,6 +107,7 @@ int main(int argc, char *argv[])
 	signal(SIGTERM, sighandler);
 	signal(SIGFPE, sighandler);
 	signal(SIGILL, sighandler);
+#ifndef _WIN32
 	signal(SIGPIPE, SIG_IGN);
 	signal(SIGQUIT, sighandler);
 	signal(SIGHUP, sighandler);
@@ -120,6 +121,7 @@ int main(int argc, char *argv[])
 	signal(SIGTTOU, SIG_IGN);
 	signal(SIGTSTP, SIG_IGN);
 	signal(SIGUSR1, sighandler);
+#endif
 
 	/* open log */
 	log_open();
