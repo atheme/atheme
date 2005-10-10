@@ -4,7 +4,7 @@
  *
  * Data structures for flags to bitmask processing routines.
  *
- * $Id: confparse.h 1150 2005-07-26 21:13:21Z nenolod $
+ * $Id: confparse.h 2825 2005-10-10 21:53:24Z nenolod $
  */
 
 #ifndef CONFPARSE_H
@@ -50,6 +50,8 @@ struct ConfTable
         char *name;
         int rehashable;
         int (*handler) (CONFIGENTRY *);
+	char *str_val;
+	int *int_val;
 };
 
 extern void init_newconf(void);

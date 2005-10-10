@@ -1,3 +1,13 @@
+nenolod     2005/10/10 21:03:25 UTC	(20051010-2823)
+  Log:
+  - bump us up to 0.3beta5.
+  
+
+  Changes:	Modified:
+  +11 -11	trunk/configure (File Modified) 
+  +1 -1		trunk/configure.ac (File Modified) 
+
+
 terminal    2005/10/10 04:12:13 UTC	(20051010-2821)
   Log:
   Some fixes to get closer to a compile on Win32/MinGW.
