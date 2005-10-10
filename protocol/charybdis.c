@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 2787 2005-10-09 00:27:33Z nenolod $
+ * $Id: charybdis.c 2827 2005-10-10 23:55:34Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 2787 2005-10-09 00:27:33Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 2827 2005-10-10 23:55:34Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -77,16 +77,29 @@ static boolean_t use_rserv_support = FALSE;
 
 static void server_eob(server_t *s);
 
-static char *ts6sid = NULL;
+static char ts6sid[3 + 1] = "";
 
 /* *INDENT-ON* */
 
 /* login to our uplink */
 static uint8_t charybdis_server_login(void)
 {
-	int8_t ret;
+	int8_t ret = 1;
 
-	ret = sts("PASS %s TS 6 :%s", curr_uplink->pass, curr_uplink->numeric);
+	if (!curr_uplink->numeric)
+	{
+		ircd->uses_uid = FALSE;
+		ret = sts("PASS %s :TS", curr_uplink->pass);
+	}
+	else if (strlen(curr_uplink->numeric) == 3 && isdigit(*curr_uplink->numeric))
+	{
+		ircd->uses_uid = TRUE;
+		ret = sts("PASS %s TS 6 :%s", curr_uplink->pass, curr_uplink->numeric);
+	}
+	else
+	{
+		slog(LG_ERROR, "Invalid numeric (SID) %s", curr_uplink->numeric);
+	}
 	if (ret == 1)
 		return 1;
 
@@ -94,7 +107,7 @@ static uint8_t charybdis_server_login(void)
 
 	sts("CAPAB :QS KLN UNKLN ENCAP SERVICES");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
-	sts("SVINFO 6 6 0 :%ld", CURRTIME);	/* require TS6 */
+	sts("SVINFO %d 3 0 :%ld", ircd->uses_uid ? 6 : 5, CURRTIME);
 
 	return 0;
 }
@@ -103,9 +116,17 @@ static uint8_t charybdis_server_login(void)
 static user_t *charybdis_introduce_nick(char *nick, char *user, char *host, char *real, char *modes)
 {
 	user_t *u;
-	char *uid = uid_get();
+	char *uid = NULL;
 
-	sts(":%s UID %s 1 %ld +%sS %s %s 0 %s :%s", curr_uplink->numeric, nick, CURRTIME, modes, user, host, uid, real);
+	if (ircd->uses_uid)
+	{
+		uid = uid_get();
+		sts(":%s UID %s 1 %ld +%sS %s %s 0 %s :%s", curr_uplink->numeric, nick, CURRTIME, modes, user, host, uid, real);
+	}
+	else
+	{
+		sts("NICK %s 1 %ld +%sS %s %s %s :%s", nick, CURRTIME, modes, user, host, me.name, real);
+	}
 
 	u = user_add(nick, user, host, NULL, NULL, uid, real, me.me);
 	if (strchr(modes, 'o'))
@@ -940,7 +961,7 @@ static void m_squit(char *origin, uint8_t parc, char *parv[])
 static void m_server(char *origin, uint8_t parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
-	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, origin ? NULL : ts6sid, parv[2]);
+	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, origin != NULL || !ircd->uses_uid ? NULL : ts6sid, parv[2]);
 
 	if (cnt.server == 2)
 		me.actual = sstrdup(parv[0]);
@@ -1002,13 +1023,25 @@ static void m_trace(char *origin, uint8_t parc, char *parv[])
 
 static void m_pass(char *origin, uint8_t parc, char *parv[])
 {
+	/* TS5: PASS mypassword :TS
+	 * TS6: PASS mypassword TS 6 :sid */
 	if (strcmp(curr_uplink->pass, parv[0]))
 	{
 		slog(LG_INFO, "m_pass(): password mismatch from uplink; aborting");
 		runflags |= RF_SHUTDOWN;
 	}
 
-	ts6sid = sstrdup(parv[3]);
+	if (ircd->uses_uid && parc > 3 && atoi(parv[2]) >= 6)
+		strlcpy(ts6sid, parv[3], sizeof(ts6sid));
+	else
+	{
+		if (ircd->uses_uid)
+		{
+			slog(LG_INFO, "m_pass(): uplink does not support TS6, falling back to TS5");
+			ircd->uses_uid = FALSE;
+		}
+		ts6sid[0] = '\0';
+	}
 }
 
 static void m_error(char *origin, uint8_t parc, char *parv[])
