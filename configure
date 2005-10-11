@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# $Id: configure.ac 2809 2005-10-09 03:00:52Z terminal $
+# $Id: configure.ac 2839 2005-10-11 12:35:07Z kog $
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -966,7 +966,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-$Id: configure.ac 2809 2005-10-09 03:00:52Z terminal $
+$Id: configure.ac 2839 2005-10-11 12:35:07Z kog $
 _ACEOF
   exit 0
 fi
@@ -9491,7 +9491,7 @@ echo " "
 echo "Makefile generation"
 echo " "
 
-                                                                                                                                                                ac_config_files="$ac_config_files Makefile libatheme/Makefile backend/Makefile contrib/Makefile crypto/Makefile dbtool/Makefile modules/Makefile modules/chanserv/Makefile modules/global/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/userserv/Makefile modules/xmlrpc/Makefile modules/memoserv/Makefile protocol/Makefile src/Makefile"
+                                                                                                                                                                          ac_config_files="$ac_config_files Makefile libatheme/Makefile backend/Makefile contrib/Makefile crypto/Makefile dbtool/Makefile modules/Makefile modules/chanserv/Makefile modules/global/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/userserv/Makefile modules/xmlrpc/Makefile modules/memoserv/Makefile modules/helpserv/Makefile protocol/Makefile src/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -10031,6 +10031,7 @@ do
   "modules/userserv/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/userserv/Makefile" ;;
   "modules/xmlrpc/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/xmlrpc/Makefile" ;;
   "modules/memoserv/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/memoserv/Makefile" ;;
+  "modules/helpserv/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/helpserv/Makefile" ;;
   "protocol/Makefile" ) CONFIG_FILES="$CONFIG_FILES protocol/Makefile" ;;
   "src/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
   "include/sysconf.h" ) CONFIG_HEADERS="$CONFIG_HEADERS include/sysconf.h" ;;

@@ -1,3 +1,12 @@
+kog         2005/10/11 12:45:45 UTC	(20051011-2845)
+  Log:
+  added help dir for helpserv
+  
+
+  Changes:	Modified:
+  + -		trunk/help/helpserv/ (File Added) 
+
+
 kog         2005/10/11 12:44:34 UTC	(20051011-2843)
   Log:
   added version tracking... forgot to set
