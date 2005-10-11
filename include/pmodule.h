@@ -4,7 +4,7 @@
  *
  * Protocol module stuff.
  *
- * $Id: pmodule.h 2515 2005-10-03 03:06:55Z nenolod $
+ * $Id: pmodule.h 2835 2005-10-11 05:27:26Z terminal $
  */
 
 #ifndef PMODULE_H
@@ -17,16 +17,16 @@ struct pcommand_ {
 	void	(*handler)(char *origin, uint8_t parc, char *parv[]);
 };
 
-extern list_t pcommands[HASHSIZE];
+E list_t pcommands[HASHSIZE];
 
-extern void pcommand_init(void);
-extern void pcommand_add(char *token,
+E void pcommand_init(void);
+E void pcommand_add(char *token,
         void (*handler)(char *origin, uint8_t parc, char *parv[]));
-extern void pcommand_delete(char *token);
-extern pcommand_t *pcommand_find(char *token);
+E void pcommand_delete(char *token);
+E pcommand_t *pcommand_find(char *token);
 
-extern boolean_t pmodule_loaded;
-extern boolean_t backend_loaded;
+E boolean_t pmodule_loaded;
+E boolean_t backend_loaded;
 
 #define PROTOCOL_ASUKA			1
 #define PROTOCOL_BAHAMUT		2

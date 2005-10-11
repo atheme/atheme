@@ -4,7 +4,7 @@
  *
  * Module listing.
  *
- * $Id: modrestart.c 2135 2005-09-05 01:28:25Z nenolod $
+ * $Id: modrestart.c 2835 2005-10-11 05:27:26Z terminal $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modrestart", TRUE, _modinit, _moddeinit,
-	"$Id: modrestart.c 2135 2005-09-05 01:28:25Z nenolod $",
+	"$Id: modrestart.c 2835 2005-10-11 05:27:26Z terminal $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,7 +22,11 @@ command_t os_modrestart = { "MODRESTART", "Restarts loaded modules.",
 			    AC_SRA, os_cmd_modrestart };
 
 list_t *os_cmdtree;
+#ifdef _WIN32
+extern __declspec (dllimport) list_t modules;
+#else
 extern list_t modules;
+#endif
 
 void _modinit(module_t *m)
 {

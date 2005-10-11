@@ -4,7 +4,7 @@
  *
  * Data structures related to network servers.
  *
- * $Id: servers.h 2269 2005-09-18 19:35:52Z nenolod $
+ * $Id: servers.h 2835 2005-10-11 05:27:26Z terminal $
  */
 
 #ifndef SERVERS_H
@@ -56,11 +56,11 @@ struct uplink_
 	connection_t *conn;
 };
 
-extern uplink_t *uplink_add(char *name, char *host, char *password, char *vhost, char *numeric, int port);
-extern void uplink_delete(uplink_t *u);
-extern uplink_t *uplink_find(char *name);
-extern list_t uplinks;
-extern uplink_t *curr_uplink;
-extern void uplink_connect(void);
+E uplink_t *uplink_add(char *name, char *host, char *password, char *vhost, char *numeric, int port);
+E void uplink_delete(uplink_t *u);
+E uplink_t *uplink_find(char *name);
+E list_t uplinks;
+E uplink_t *curr_uplink;
+E void uplink_connect(void);
 
 #endif

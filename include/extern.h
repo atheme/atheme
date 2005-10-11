@@ -4,14 +4,14 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 2821 2005-10-10 04:12:13Z terminal $
+ * $Id: extern.h 2835 2005-10-11 05:27:26Z terminal $
  */
 
 #ifndef EXTERN_H
 #define EXTERN_H
 
 /* save some space/typing */
-#define E extern
+/* -> moved to atheme.h */
 
 /* balloc.c */
 E BlockHeap *strdup_heap;
@@ -332,5 +332,10 @@ E void handle_whois(char *, char *);
 E void handle_trace(char *, char *, char *);
 E void handle_privmsg(char *, char *, char *);
 E int floodcheck(user_t *, user_t *);
+
+/* help.c */
+E void help_addentry(list_t *list, char *topic, char *fname,
+	void (*func)(char *origin));
+E void help_delentry(list_t *list, char *name);
 
 #endif /* EXTERN_H */

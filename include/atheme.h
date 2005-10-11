@@ -4,13 +4,24 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 2671 2005-10-06 04:03:49Z nenolod $
+ * $Id: atheme.h 2835 2005-10-11 05:27:26Z terminal $
  */
 
 #ifndef ATHEME_H
 #define ATHEME_H
 
 /* *INDENT-OFF* */
+
+/* Extern type definition */
+#ifdef _WIN32
+#ifdef I_AM_A_MODULE
+#define E extern
+#else
+#define E extern __declspec (dllexport)
+#endif
+#else
+#define E extern
+#endif
 
 #include "sysconf.h"
 #include "stdinc.h"

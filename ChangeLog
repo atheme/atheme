@@ -1,3 +1,11 @@
+terminal    2005/10/11 03:43:19 UTC	(20051011-2833)
+  Log:
+  changed config_load() to use fopen() instead of open() for windows compatibility
+
+  Changes:	Modified:
+  +9 -9		trunk/src/confparse.c (File Modified) 
+
+
 terminal    2005/10/11 03:27:03 UTC	(20051011-2831)
   Log:
   remove a debug printf that managed to stay in

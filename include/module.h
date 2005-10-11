@@ -4,7 +4,7 @@
  *
  * This file contains data structures concerning modules.
  *
- * $Id: module.h 2145 2005-09-05 01:40:07Z nenolod $
+ * $Id: module.h 2835 2005-10-11 05:27:26Z terminal $
  */
 
 #ifndef MODULE_H
@@ -46,16 +46,16 @@ struct moduleheader_ {
 		name, norestart, modinit, deinit, ven, ver \
 	}
 
-extern void _modinit(module_t *m);
-extern void _moddeinit(void);
+E void _modinit(module_t *m);
+E void _moddeinit(void);
 
-extern void modules_init(void);
-extern module_t *module_load(char *filespec);
-extern void module_load_dir(char *dirspec);
-extern void module_load_dir_match(char *dirspec, char *pattern);
-extern void *module_locate_symbol(char *modname, char *sym);
-extern void module_unload(module_t *m);
-extern module_t *module_find(char *name);
-extern module_t *module_find_published(char *name);
+E void modules_init(void);
+E module_t *module_load(char *filespec);
+E void module_load_dir(char *dirspec);
+E void module_load_dir_match(char *dirspec, char *pattern);
+E void *module_locate_symbol(char *modname, char *sym);
+E void module_unload(module_t *m);
+E module_t *module_find(char *name);
+E module_t *module_find_published(char *name);
 
 #endif

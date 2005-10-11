@@ -4,7 +4,7 @@
  *
  * A hook system.
  *
- * $Id: hook.h 841 2005-07-16 07:59:13Z nenolod $
+ * $Id: hook.h 2835 2005-10-11 05:27:26Z terminal $
  */
 #ifndef HOOK_H
 #define HOOK_H
@@ -21,11 +21,11 @@ typedef struct {
 	char *msg;
 } hook_cmessage_data_t;
 
-extern void hooks_init(void);
-extern void hook_add_event(const char *);
-extern void hook_del_event(const char *);
-extern void hook_del_hook(const char *, void (*)(void *));
-extern void hook_add_hook(const char *, void (*)(void *));
-extern void hook_call_event(const char *, void *);
+E void hooks_init(void);
+E void hook_add_event(const char *);
+E void hook_del_event(const char *);
+E void hook_del_hook(const char *, void (*)(void *));
+E void hook_add_hook(const char *, void (*)(void *));
+E void hook_call_event(const char *, void *);
 
 #endif

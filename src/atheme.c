@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 2821 2005-10-10 04:12:13Z terminal $
+ * $Id: atheme.c 2835 2005-10-11 05:27:26Z terminal $
  */
 
 #include "atheme.h"
@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 		setrlimit(RLIMIT_CORE, &rlim);
 	}
 #endif
-
+	
 	/* do command-line options */
 	while ((r = getopt(argc, argv, "c:dhnv")) != -1)
 	{

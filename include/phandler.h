@@ -5,7 +5,7 @@
  * Protocol handlers, both generic and the actual declarations themselves.
  * Declare NOTYET to use the function pointer voodoo.
  *
- * $Id: phandler.h 2611 2005-10-05 17:20:13Z nenolod $
+ * $Id: phandler.h 2835 2005-10-11 05:27:26Z terminal $
  */
 
 #ifndef PHANDLER_H
@@ -33,58 +33,58 @@ struct ircd_ {
 
 typedef struct ircd_ ircd_t;
 
-extern uint8_t (*server_login)(void);
-extern user_t *(*introduce_nick)(char *nick, char *user, char *host, char *real, char *modes);
-extern void (*wallops)(char *fmt, ...);
-extern void (*join)(char *chan, char *nick);
-extern void (*kick)(char *from, char *channel, char *to, char *reason);
-extern void (*msg)(char *from, char *target, char *fmt, ...);
-extern void (*notice)(char *from, char *target, char *fmt, ...);
-extern void (*numeric_sts)(char *from, int numeric, char *target, char *fmt, ...);
-extern void (*skill)(char *from, char *nick, char *fmt, ...);
-extern void (*part)(char *chan, char *nick);
-extern void (*kline_sts)(char *server, char *user, char *host, long duration, char *reason);
-extern void (*unkline_sts)(char *server, char *user, char *host);
-extern void (*topic_sts)(char *channel, char *setter, char *topic);
-extern void (*mode_sts)(char *sender, char *target, char *modes);
-extern void (*ping_sts)(void);
-extern void (*quit_sts)(user_t *u, char *reason);
-extern void (*ircd_on_login)(char *origin, char *user, char *wantedhost);
-extern void (*ircd_on_logout)(char *origin, char *user, char *wantedhost);
-extern void (*jupe)(char *server, char *reason);
-extern void (*sethost_sts)(char *source, char *target, char *host);
+E uint8_t (*server_login)(void);
+E user_t *(*introduce_nick)(char *nick, char *user, char *host, char *real, char *modes);
+E void (*wallops)(char *fmt, ...);
+E void (*join)(char *chan, char *nick);
+E void (*kick)(char *from, char *channel, char *to, char *reason);
+E void (*msg)(char *from, char *target, char *fmt, ...);
+E void (*notice)(char *from, char *target, char *fmt, ...);
+E void (*numeric_sts)(char *from, int numeric, char *target, char *fmt, ...);
+E void (*skill)(char *from, char *nick, char *fmt, ...);
+E void (*part)(char *chan, char *nick);
+E void (*kline_sts)(char *server, char *user, char *host, long duration, char *reason);
+E void (*unkline_sts)(char *server, char *user, char *host);
+E void (*topic_sts)(char *channel, char *setter, char *topic);
+E void (*mode_sts)(char *sender, char *target, char *modes);
+E void (*ping_sts)(void);
+E void (*quit_sts)(user_t *u, char *reason);
+E void (*ircd_on_login)(char *origin, char *user, char *wantedhost);
+E void (*ircd_on_logout)(char *origin, char *user, char *wantedhost);
+E void (*jupe)(char *server, char *reason);
+E void (*sethost_sts)(char *source, char *target, char *host);
 
-extern uint8_t generic_server_login(void);
-extern user_t *generic_introduce_nick(char *nick, char *ser, char *host, char *real, char *modes);
-extern void generic_wallops(char *fmt, ...);
-extern void generic_join(char *chan, char *nick);
-extern void generic_kick(char *from, char *channel, char *to, char *reason);
-extern void generic_msg(char *from, char *target, char *fmt, ...);
-extern void generic_notice(char *from, char *target, char *fmt, ...);
-extern void generic_numeric_sts(char *from, int numeric, char *target, char *fmt, ...);
-extern void generic_skill(char *from, char *nick, char *fmt, ...);
-extern void generic_part(char *chan, char *nick);
-extern void generic_kline_sts(char *server, char *user, char *host, long duration, char *reason);
-extern void generic_unkline_sts(char *server, char *user, char *host);
-extern void generic_topic_sts(char *channel, char *setter, char *topic);
-extern void generic_mode_sts(char *sender, char *target, char *modes);
-extern void generic_ping_sts(void);
-extern void generic_quit_sts(user_t *u, char *reason);
-extern void generic_on_login(char *origin, char *user, char *wantedhost);
-extern void generic_on_logout(char *origin, char *user, char *wantedhost);
-extern void generic_jupe(char *server, char *reason);
-extern void generic_sethost_sts(char *source, char *target, char *host);
+E uint8_t generic_server_login(void);
+E user_t *generic_introduce_nick(char *nick, char *ser, char *host, char *real, char *modes);
+E void generic_wallops(char *fmt, ...);
+E void generic_join(char *chan, char *nick);
+E void generic_kick(char *from, char *channel, char *to, char *reason);
+E void generic_msg(char *from, char *target, char *fmt, ...);
+E void generic_notice(char *from, char *target, char *fmt, ...);
+E void generic_numeric_sts(char *from, int numeric, char *target, char *fmt, ...);
+E void generic_skill(char *from, char *nick, char *fmt, ...);
+E void generic_part(char *chan, char *nick);
+E void generic_kline_sts(char *server, char *user, char *host, long duration, char *reason);
+E void generic_unkline_sts(char *server, char *user, char *host);
+E void generic_topic_sts(char *channel, char *setter, char *topic);
+E void generic_mode_sts(char *sender, char *target, char *modes);
+E void generic_ping_sts(void);
+E void generic_quit_sts(user_t *u, char *reason);
+E void generic_on_login(char *origin, char *user, char *wantedhost);
+E void generic_on_logout(char *origin, char *user, char *wantedhost);
+E void generic_jupe(char *server, char *reason);
+E void generic_sethost_sts(char *source, char *target, char *host);
 
-extern struct cmode_ *mode_list;
-extern struct cmode_ *ignore_mode_list;
-extern struct cmode_ *status_mode_list;
-extern struct cmode_ *prefix_mode_list;
+E struct cmode_ *mode_list;
+E struct cmode_ *ignore_mode_list;
+E struct cmode_ *status_mode_list;
+E struct cmode_ *prefix_mode_list;
 
-extern ircd_t *ircd;
+E ircd_t *ircd;
 
 /* This stuff is for databases, but it's the same sort of concept. */
-extern void (*db_save)(void *arg);
-extern void (*db_load)(void);
+E void (*db_save)(void *arg);
+E void (*db_load)(void);
 
 #endif
 

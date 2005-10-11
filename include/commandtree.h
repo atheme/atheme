@@ -4,7 +4,7 @@
  *
  * Commandlist manipulation routines.
  *
- * $Id: commandtree.h 1544 2005-08-07 03:28:48Z nenolod $
+ * $Id: commandtree.h 2835 2005-10-11 05:27:26Z terminal $
  */
 
 #ifndef COMMANDLIST_H
@@ -26,14 +26,14 @@ struct fcommandentry_ {
 	void (*cmd)(char *, char *);
 };
 
-extern void command_add(command_t *cmd, list_t *commandtree);
-extern void command_add_many(command_t **cmd, list_t *commandtree);
-extern void command_delete(command_t *cmd, list_t *commandtree);
-extern void command_exec(char *mynick, char *origin, char *cmd, list_t *commandtree);
-extern void command_help(char *mynick, char *origin, list_t *commandtree);
+E void command_add(command_t *cmd, list_t *commandtree);
+E void command_add_many(command_t **cmd, list_t *commandtree);
+E void command_delete(command_t *cmd, list_t *commandtree);
+E void command_exec(char *mynick, char *origin, char *cmd, list_t *commandtree);
+E void command_help(char *mynick, char *origin, list_t *commandtree);
 
-extern void fcommand_add(fcommand_t *cmd, list_t *commandtree);
-extern void fcommand_delete(fcommand_t *cmd, list_t *commandtree);
-extern void fcommand_exec(char *mynick, char *origin, char *cmd, list_t *commandtree);
+E void fcommand_add(fcommand_t *cmd, list_t *commandtree);
+E void fcommand_delete(fcommand_t *cmd, list_t *commandtree);
+E void fcommand_exec(char *mynick, char *origin, char *cmd, list_t *commandtree);
 
 #endif
