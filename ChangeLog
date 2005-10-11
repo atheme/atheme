@@ -1,3 +1,11 @@
+terminal    2005/10/11 03:24:28 UTC	(20051011-2829)
+  Log:
+  zeroing memory in local mmap implementation for windows compatibility
+
+  Changes:	Modified:
+  +7 -3		trunk/libatheme/balloc.c (File Modified) 
+
+
 jilles      2005/10/10 23:55:34 UTC	(20051010-2827)
   Log:
   Fall back to TS5 if no numeric was specified or our uplink

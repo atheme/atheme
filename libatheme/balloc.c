@@ -4,7 +4,7 @@
  *
  * This file contains the block allocator.
  *
- * $Id: balloc.c 2829 2005-10-11 03:24:28Z terminal $
+ * $Id: balloc.c 2831 2005-10-11 03:27:03Z terminal $
  */
 
 #include "atheme.h"
@@ -223,7 +223,7 @@ BlockHeap *BlockHeapCreate(size_t elemsize, int elemsperblock)
 
 	/* Allocate our new BlockHeap */
 	bh = (BlockHeap *)scalloc(1, sizeof(BlockHeap));
-	printf( "return: %p\n", bh );
+	
 	if (bh == NULL)
 	{
 		clog(LG_INFO, "Attempt to calloc() failed: (%s:%d)", __FILE__, __LINE__);
