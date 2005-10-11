@@ -1,3 +1,26 @@
+terminal    2005/10/11 05:27:26 UTC	(20051011-2835)
+  Log:
+   - lots of Win32-related fixes
+   - externs used by modules are now "E" and use dllexport on Windows
+   - help_addentry/delentry were not defined in headers, nickserv mark/list referenced them with an incorrect argument count
+
+  Changes:	Modified:
+  +11 -0	trunk/include/atheme.h (File Modified) 
+  +8 -8		trunk/include/commandtree.h (File Modified) 
+  +6 -1		trunk/include/extern.h (File Modified) 
+  +6 -6		trunk/include/hook.h (File Modified) 
+  +10 -10	trunk/include/module.h (File Modified) 
+  +47 -47	trunk/include/phandler.h (File Modified) 
+  +7 -7		trunk/include/pmodule.h (File Modified) 
+  +6 -6		trunk/include/servers.h (File Modified) 
+  +5 -5		trunk/include/servtree.h (File Modified) 
+  +5 -1		trunk/libatheme/memory.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/list.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/mark.c (File Modified) 
+  +4 -0		trunk/modules/operserv/modrestart.c (File Modified) 
+  +1 -1		trunk/src/atheme.c (File Modified) 
+
+
 terminal    2005/10/11 03:43:19 UTC	(20051011-2833)
   Log:
   changed config_load() to use fopen() instead of open() for windows compatibility
