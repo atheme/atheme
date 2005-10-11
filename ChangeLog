@@ -1,3 +1,15 @@
+kog         2005/10/11 12:42:06 UTC	(20051011-2841)
+  Log:
+  initial helpserv commit - Kog
+  
+
+  Changes:	Modified:
+  + -		trunk/modules/helpserv/ (File Added) 
+  +58 -0	trunk/modules/helpserv/Makefile.in (File Added) 
+  +101 -0	trunk/modules/helpserv/help.c (File Added) 
+  +121 -0	trunk/modules/helpserv/main.c (File Added) 
+
+
 kog         2005/10/11 12:35:07 UTC	(20051011-2839)
   Log:
   helpserv skeleton add (requested by Kuja) 

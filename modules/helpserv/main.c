@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 2743 2005-10-07 01:43:55Z kog $
+ * $Id: main.c 2843 2005-10-11 12:44:34Z kog $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"helpserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 2743 2005-10-07 01:43:55Z kog $",
+	"$Id: main.c 2843 2005-10-11 12:44:34Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

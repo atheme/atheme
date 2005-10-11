@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the helpserv HELP command.
  *
- * $Id: help.c 2603 2005-10-05 06:57:45Z nenolod $
+ * $Id: help.c 2843 2005-10-11 12:44:34Z kog $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"helpserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 2603 2005-10-05 06:57:45Z nenolod $",
+	"$Id: help.c 2843 2005-10-11 12:44:34Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
