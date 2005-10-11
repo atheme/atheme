@@ -1,0 +1,58 @@
+# Copyright (c) 2005 Atheme Development Group
+# Rights to this code are documented in doc/LICENSE.
+#
+# This file contains build instructions.
+#
+# $Id: Makefile.in 2631 2005-10-05 23:46:16Z kog $
+#
+
+CC		= @CC@
+RM		= @RM@
+MV		= @MV@
+CP		= @CP@
+INSTALL		= @INSTALL@
+PREFIX		= @prefix@
+BIN		= atheme@EXEEXT@
+MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include @PGINC@ @MYINC@
+PICFLAGS	= @PICFLAGS@
+CFLAGS		= @CFLAGS@ -I../../include @PGINC@ @MYINC@
+
+VERSION		= 0.1
+
+LIBS		= @LIBS@ @PQLIB@
+LDFLAGS		= @LDFLAGS@
+CPPFLAGS	= @CPPFLAGS@
+
+default: all
+
+BASE_SRCS = 		\
+	main.c		\
+	help.c		
+	
+	
+SRCS = ${BASE_SRCS}
+
+OBJS = ${SRCS:.c=.so}
+
+all: modules
+
+build: all
+
+install: build
+	${INSTALL} -d ${PREFIX}/modules/helpserv
+	${INSTALL} -m 755 *.so ${PREFIX}/modules/helpserv
+
+modules: $(OBJS)
+
+.SUFFIXES: .so
+
+.c.so:
+	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@
+
+.PHONY: clean distclean
+
+clean:
+	${RM} -f *.so
+
+distclean: clean
+	${RM} -f Makefile version.c.last

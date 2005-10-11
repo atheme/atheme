@@ -1,3 +1,18 @@
+kog         2005/10/11 12:35:07 UTC	(20051011-2839)
+  Log:
+  helpserv skeleton add (requested by Kuja) 
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/configure.ac (File Modified) 
+  +38 -0	trunk/dist/example.conf (File Modified) 
+  +37 -0	trunk/dist/example.userserv.conf (File Modified) 
+  +1 -0		trunk/include/account.h (File Modified) 
+  +20 -10	trunk/include/services.h (File Modified) 
+  +1 -1		trunk/modules/Makefile.in (File Modified) 
+  +61 -0	trunk/src/conf.c (File Modified) 
+
+
 kog         2005/10/11 07:53:30 UTC	(20051011-2837)
   Log:
   removed comments from top that didn't need to be there
