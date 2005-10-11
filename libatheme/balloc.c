@@ -4,7 +4,7 @@
  *
  * This file contains the block allocator.
  *
- * $Id: balloc.c 2671 2005-10-06 04:03:49Z nenolod $
+ * $Id: balloc.c 2829 2005-10-11 03:24:28Z terminal $
  */
 
 #include "atheme.h"
@@ -60,7 +60,10 @@ static void *mmap(void *hint, size_t len, uint32_t prot,
 
 	if (!ptr)
 		blockheap_fail("smalloc() failed.");
-
+	
+	// no 0xbaadf00d PLEASE!
+	memset( ptr, 0, len );
+	
 	return ptr;
 }
 
@@ -117,10 +120,10 @@ static void *get_block(size_t size)
 {
 	void *ptr;
 	ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-
+	
 	if (ptr == MAP_FAILED)
 		ptr = NULL;
-
+	
 	return (ptr);
 }
 
@@ -220,6 +223,7 @@ BlockHeap *BlockHeapCreate(size_t elemsize, int elemsperblock)
 
 	/* Allocate our new BlockHeap */
 	bh = (BlockHeap *)scalloc(1, sizeof(BlockHeap));
+	printf( "return: %p\n", bh );
 	if (bh == NULL)
 	{
 		clog(LG_INFO, "Attempt to calloc() failed: (%s:%d)", __FILE__, __LINE__);

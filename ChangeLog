@@ -1,3 +1,14 @@
+jilles      2005/10/10 23:55:34 UTC	(20051010-2827)
+  Log:
+  Fall back to TS5 if no numeric was specified or our uplink
+  does not support TS6. Do some crude validation on the
+  configured numeric (sid).
+  
+
+  Changes:	Modified:
+  +41 -8	trunk/protocol/charybdis.c (File Modified) 
+
+
 nenolod     2005/10/10 21:53:24 UTC	(20051010-2825)
   Log:
   - ConfTable changes for later fun.
