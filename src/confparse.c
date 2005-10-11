@@ -6,7 +6,7 @@
  * This file contains config file parsing routines.
  * This code was taken from Sentinel: copyright W. Campbell.
  *
- * $Id: confparse.c 2261 2005-09-16 21:22:34Z nenolod $
+ * $Id: confparse.c 2833 2005-10-11 03:43:19Z terminal $
  */
 
 #include "atheme.h"
@@ -340,45 +340,45 @@ void config_free(CONFIGFILE *cfptr)
 CONFIGFILE *config_load(char *filename)
 {
 	struct stat sb;
-	int fd;
+	FILE *fd;
 	int ret;
 	char *buf = NULL;
 	CONFIGFILE *cfptr;
 
-	fd = open(filename, O_RDONLY);
+	fd = fopen(filename, "rb");
 	if (fd == -1)
 	{
 		config_error("Couldn't open \"%s\": %s\n", filename, strerror(errno));
 		return NULL;
 	}
-	if (fstat(fd, &sb) == -1)
+	if (stat(filename, &sb) == -1)
 	{
 		config_error("Couldn't fstat \"%s\": %s\n", filename, strerror(errno));
-		close(fd);
+		fclose(fd);
 		return NULL;
 	}
 	if (!sb.st_size)
 	{
-		close(fd);
+		fclose(fd);
 		return NULL;
 	}
 	buf = (char *)smalloc(sb.st_size + 1);
 	if (buf == NULL)
 	{
 		config_error("Out of memory trying to load \"%s\"\n", filename);
-		close(fd);
+		fclose(fd);
 		return NULL;
 	}
-	ret = read(fd, buf, sb.st_size);
+	ret = fread(buf, 1, sb.st_size, fd);
 	if (ret != sb.st_size)
 	{
 		config_error("Error reading \"%s\": %s\n", filename, ret == -1 ? strerror(errno) : strerror(EFAULT));
 		free(buf);
-		close(fd);
+		fclose(fd);
 		return NULL;
 	}
 	buf[ret] = '\0';
-	close(fd);
+	fclose(fd);
 	cfptr = config_parse(filename, buf);
 	free(buf);
 	return cfptr;

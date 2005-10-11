@@ -1,3 +1,11 @@
+terminal    2005/10/11 03:27:03 UTC	(20051011-2831)
+  Log:
+  remove a debug printf that managed to stay in
+
+  Changes:	Modified:
+  +1 -1		trunk/libatheme/balloc.c (File Modified) 
+
+
 terminal    2005/10/11 03:24:28 UTC	(20051011-2829)
   Log:
   zeroing memory in local mmap implementation for windows compatibility
