@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 2597 2005-10-05 06:37:06Z kog $
+ * $Id: conf.c 2839 2005-10-11 12:35:07Z kog $
  */
 
 #include "atheme.h"
@@ -25,6 +25,7 @@ static int c_uplink(CONFIGENTRY *);
 static int c_nickserv(CONFIGENTRY *);
 static int c_userserv(CONFIGENTRY *);
 static int c_memoserv(CONFIGENTRY *);
+static int c_helpserv(CONFIGENTRY *);
 static int c_loadmodule(CONFIGENTRY *);
 
 static int c_si_name(CONFIGENTRY *);
@@ -85,6 +86,12 @@ static int c_ms_user(CONFIGENTRY *);
 static int c_ms_host(CONFIGENTRY *);
 static int c_ms_real(CONFIGENTRY *);
 
+/* HelpServ client information. */
+static int c_hs_nick(CONFIGENTRY *);
+static int c_hs_user(CONFIGENTRY *);
+static int c_hs_host(CONFIGENTRY *);
+static int c_hs_real(CONFIGENTRY *);
+
 /* Database information. */
 static int c_db_user(CONFIGENTRY *);
 static int c_db_host(CONFIGENTRY *);
@@ -138,6 +145,7 @@ list_t conf_db_table;
 list_t conf_gi_table;
 list_t conf_ui_table;
 list_t conf_ms_table;
+list_t conf_hs_table;
 
 /* *INDENT-ON* */
 
@@ -390,6 +398,7 @@ void init_newconf(void)
 	add_top_conf("NICKSERV", c_nickserv);
 	add_top_conf("USERSERV", c_userserv);
 	add_top_conf("MEMOSERV", c_memoserv);
+	add_top_conf("HELPSERV", c_helpserv);
 	add_top_conf("UPLINK", c_uplink);
 	add_top_conf("GENERAL", c_general);
 	add_top_conf("DATABASE", c_database);
@@ -470,6 +479,12 @@ void init_newconf(void)
 	add_conf_item("USER", &conf_ms_table, c_ms_user);
 	add_conf_item("HOST", &conf_ms_table, c_ms_host);
 	add_conf_item("REAL", &conf_ms_table, c_ms_real);
+	
+	/* memoserv{} block */
+	add_conf_item("NICK", &conf_hs_table, c_hs_nick);
+	add_conf_item("USER", &conf_hs_table, c_hs_user);
+	add_conf_item("HOST", &conf_hs_table, c_hs_host);
+	add_conf_item("REAL", &conf_hs_table, c_hs_real);
 
 	/* database{} block */
 	add_conf_item("USER", &conf_db_table, c_db_user);
@@ -518,6 +533,12 @@ static int c_userserv(CONFIGENTRY *ce)
 static int c_memoserv(CONFIGENTRY *ce)
 {
 	subblock_handler(ce, &conf_ms_table);
+	return 0;
+}
+
+static int c_helpserv(CONFIGENTRY *ce)
+{
+	subblock_handler(ce, &conf_hs_table);
 	return 0;
 }
 
@@ -1174,6 +1195,46 @@ static int c_ms_real(CONFIGENTRY *ce)
 		PARAM_ERROR(ce);
 
 	memosvs.real = sstrdup(ce->ce_vardata);
+
+	return 0;
+}
+
+static int c_hs_nick(CONFIGENTRY *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	helpsvs.nick = sstrdup(ce->ce_vardata);
+
+	return 0;
+}
+
+static int c_hs_user(CONFIGENTRY *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	helpsvs.user = sstrdup(ce->ce_vardata);
+
+	return 0;
+}
+
+static int c_hs_host(CONFIGENTRY *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	helpsvs.host = sstrdup(ce->ce_vardata);
+
+	return 0;
+}
+
+static int c_hs_real(CONFIGENTRY *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	helpsvs.real = sstrdup(ce->ce_vardata);
 
 	return 0;
 }

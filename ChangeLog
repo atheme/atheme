@@ -1,3 +1,12 @@
+kog         2005/10/11 07:53:30 UTC	(20051011-2837)
+  Log:
+  removed comments from top that didn't need to be there
+  
+
+  Changes:	Modified:
+  +2 -3		trunk/modules/memoserv/Makefile.in (File Modified) 
+
+
 terminal    2005/10/11 05:27:26 UTC	(20051011-2835)
   Log:
    - lots of Win32-related fixes
