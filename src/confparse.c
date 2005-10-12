@@ -6,7 +6,7 @@
  * This file contains config file parsing routines.
  * This code was taken from Sentinel: copyright W. Campbell.
  *
- * $Id: confparse.c 2833 2005-10-11 03:43:19Z terminal $
+ * $Id: confparse.c 2859 2005-10-12 21:40:43Z nenolod $
  */
 
 #include "atheme.h"
@@ -346,7 +346,7 @@ CONFIGFILE *config_load(char *filename)
 	CONFIGFILE *cfptr;
 
 	fd = fopen(filename, "rb");
-	if (fd == -1)
+	if (!fd)
 	{
 		config_error("Couldn't open \"%s\": %s\n", filename, strerror(errno));
 		return NULL;

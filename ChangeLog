@@ -1,3 +1,13 @@
+jilles      2005/10/12 21:37:34 UTC	(20051012-2857)
+  Log:
+  Bail out of chanuser_add() if channel is NULL. This avoids
+  crashes with !channels with ircnet ircd, for example.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/src/node.c (File Modified) 
+
+
 jilles      2005/10/12 21:19:57 UTC	(20051012-2855)
   Log:
   Fix chanserv rejoining on kick, as in protocol/charybdis.c 2397
