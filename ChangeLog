@@ -1,3 +1,12 @@
+jilles      2005/10/12 11:05:25 UTC	(20051012-2853)
+  Log:
+  Show origin of CLEAR USERS command in kick reason.
+  
+
+  Changes:	Modified:
+  +6 -3		trunk/modules/chanserv/clear_users.c (File Modified) 
+
+
 jilles      2005/10/12 10:16:33 UTC	(20051012-2851)
   Log:
   Avoid kicking any services on /cs clear users, not just chanserv.
