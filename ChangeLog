@@ -1,3 +1,12 @@
+jilles      2005/10/12 21:19:57 UTC	(20051012-2855)
+  Log:
+  Fix chanserv rejoining on kick, as in protocol/charybdis.c 2397
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/ircnet.c (File Modified) 
+
+
 jilles      2005/10/12 11:05:25 UTC	(20051012-2853)
   Log:
   Show origin of CLEAR USERS command in kick reason.

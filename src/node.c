@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 2717 2005-10-06 10:50:45Z jilles $
+ * $Id: node.c 2857 2005-10-12 21:37:34Z jilles $
  */
 
 #include "atheme.h"
@@ -761,6 +761,9 @@ chanuser_t *chanuser_add(channel_t *chan, char *nick)
 	uint32_t flags = 0;
 	char hostbuf[BUFSIZE];
 	int i = 0;
+
+	if (chan == NULL)
+		return;
 
 	if (*chan->name != '#')
 	{
