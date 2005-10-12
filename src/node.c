@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 2857 2005-10-12 21:37:34Z jilles $
+ * $Id: node.c 2863 2005-10-12 23:09:06Z nenolod $
  */
 
 #include "atheme.h"
@@ -1177,6 +1177,7 @@ void kline_delete(char *user, char *host)
 	}
 
 	slog(LG_DEBUG, "kline_delete(): %s@%s -> %s", k->user, k->host, k->reason);
+	unkline_sts("*", k->user, k->host);
 
 	n = node_find(k, &klnlist);
 	node_del(n, &klnlist);
@@ -1188,8 +1189,6 @@ void kline_delete(char *user, char *host)
 	free(k->setby);
 
 	BlockHeapFree(kline_heap, k);
-
-	unkline_sts("*", user, host);
 
 	cnt.kline--;
 }
