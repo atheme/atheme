@@ -57,6 +57,20 @@ that protocol format.
 ircnet
 ------
 
+Atheme links as a server (C:, N:, H: lines), not as a service. IRCnet-style
+services cannot do enough (like manipulating channel modes).
+
+Nick delay will lock any nicks killed, so /ns ghost is worthless; it is
+probably best to use userserv instead of nickserv.
+
+Only # channels are supported.
+
+Tklines are used for /os akill but this only works on the server
+Atheme is directly linked to.
+
+Jupes will use SIDs numerically following services's SID, make sure to
+leave plenty of space.
+
 monkey
 ------
 

@@ -1,3 +1,12 @@
+jilles      2005/10/12 23:10:04 UTC	(20051012-2865)
+  Log:
+  Lots of ircnet fixes, including ugly ones.
+  
+
+  Changes:	Modified:
+  +72 -18	trunk/protocol/ircnet.c (File Modified) 
+
+
 nenolod     2005/10/12 23:09:06 UTC	(20051012-2863)
   Log:
   Fix a memory corruption error in akill deletion.
