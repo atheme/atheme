@@ -1,3 +1,11 @@
+nenolod     2005/10/12 23:09:06 UTC	(20051012-2863)
+  Log:
+  Fix a memory corruption error in akill deletion.
+
+  Changes:	Modified:
+  +1 -2		trunk/src/node.c (File Modified) 
+
+
 nenolod     2005/10/12 22:53:56 UTC	(20051012-2861)
   Log:
   Make sure there's a hostbuf in AKILL.

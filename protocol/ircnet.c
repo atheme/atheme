@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 2855 2005-10-12 21:19:57Z jilles $
+ * $Id: ircnet.c 2865 2005-10-12 23:10:04Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 2855 2005-10-12 21:19:57Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 2865 2005-10-12 23:10:04Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -152,8 +152,6 @@ static void ircnet_join(char *chan, char *nick)
 		}
 
 		sts(":%s NJOIN %s :@%s", me.numeric, chan, u->uid);
-
-		c = channel_add(chan, CURRTIME);
 	}
 
 	cu = chanuser_add(c, nick);
@@ -165,11 +163,14 @@ static void ircnet_kick(char *from, char *channel, char *to, char *reason)
 {
 	channel_t *chan = channel_find(channel);
 	user_t *user = user_find(to);
+	user_t *from_p = user_find(from);
 
 	if (!chan || !user)
 		return;
 
-	sts(":%s KICK %s %s :%s", from, channel, to, reason);
+	/* sigh server kicks will generate snotes
+	 * but let's avoid joining N times for N kicks */
+	sts(":%s KICK %s %s :%s", from_p != NULL && chanuser_find(chan, from_p) ? CLIENT_NAME(from_p) : ME, channel, CLIENT_NAME(user), reason);
 
 	chanuser_delete(chan, user);
 }
@@ -192,12 +193,20 @@ static void ircnet_notice(char *from, char *target, char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
+	user_t *u = user_find(from);
+	user_t *t = user_find(target);
+
+	if (!u)
+		return;
 
 	va_start(ap, fmt);
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s NOTICE %s :%s", from, target, buf);
+	if (target[0] != '#' || chanuser_find(channel_find(target), user_find(from)))
+		sts(":%s NOTICE %s :%s", CLIENT_NAME(u), t ? CLIENT_NAME(t) : target, buf);
+	else
+		sts(":%s NOTICE %s :%s: %s", ME, target, u->nick, buf);
 }
 
 /* numeric wrapper */
@@ -250,7 +259,11 @@ static void ircnet_kline_sts(char *server, char *user, char *host, long duration
 	if (!me.connected)
 		return;
 
-	sts(":%s KLINE %s %ld %s %s :%s", me.name, server, duration, user, host, reason);
+	/* this won't propagate!
+	 * you'll need some bot/service on each server to do that */
+	if (irccasecmp(server, me.actual) && cnt.server > 2)
+		wallops("Missed a tkline");
+	sts(":%s TKLINE %lds %s@%s :%s", opersvs.nick, duration, user, host, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
@@ -259,32 +272,45 @@ static void ircnet_unkline_sts(char *server, char *user, char *host)
 	if (!me.connected)
 		return;
 
-	sts(":%s UNKLINE %s %s %s", me.name, server, user, host);
+	if (irccasecmp(server, me.actual) && cnt.server > 2)
+		wallops("Missed an untkline");
+	sts(":%s UNTKLINE %s@%s", opersvs.nick, user, host);
 }
 
 /* topic wrapper */
 static void ircnet_topic_sts(char *channel, char *setter, char *topic)
 {
-	if (!me.connected)
+	channel_t *c;
+	int joined = 0;
+
+	c = channel_find(channel);
+	if (!me.connected || !c)
 		return;
 
-	sts(":%s TOPIC %s :%s (%s)", chansvs.nick, channel, topic, setter);
+	/* Need to join to set topic -- jilles */
+	if (!chanuser_find(c, chansvs.me->me))
+	{
+		sts(":%s NJOIN %s :@%s", ME, channel, CLIENT_NAME(chansvs.me->me));
+		joined = 1;
+	}
+	sts(":%s TOPIC %s :%s (%s)", CLIENT_NAME(chansvs.me->me), channel, topic, setter);
+	if (joined)
+		sts(":%s PART %s :Topic set", CLIENT_NAME(chansvs.me->me), channel);
 }
 
 /* mode wrapper */
 static void ircnet_mode_sts(char *sender, char *target, char *modes)
 {
+	user_t *u;
+
 	if (!me.connected)
 		return;
 
-	/* On IRCNet ircd's, we must join the channel to set a mode. */
-	if (strcasecmp(sender, chansvs.nick))
-		join(target, sender);
+	u = user_find(sender);
 
-	sts(":%s MODE %s %s", sender, target, modes);
-
-	if (strcasecmp(sender, chansvs.nick))
-		part(target, sender);
+	/* send it from the server if that service isn't on channel
+	 * -- jilles */
+	sts(":%s MODE %s %s", chanuser_find(channel_find(target), u) ? CLIENT_NAME(u) : ME, target, modes);
 }
 
 /* ping wrapper */
@@ -312,11 +338,39 @@ static void ircnet_on_logout(char *origin, char *user, char *wantedhost)
 
 static void ircnet_jupe(char *server, char *reason)
 {
+	static char sid[4+1];
+	int i;
+
 	if (!me.connected)
 		return;
 
 	sts(":%s SQUIT %s :%s", opersvs.nick, server, reason);
-	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
+
+	/* dirty dirty make up some sid */
+	if (sid[0] == '\0')
+		strlcpy(sid, curr_uplink->numeric, sizeof sid);
+	do
+	{
+		i = 3;
+		for (;;)
+		{
+			if (sid[i] == 'Z')
+			{
+				sid[i] = '0';
+				i--;
+				/* eek, no more sids */
+				if (i < 0)
+					return;
+				continue;
+			}
+			else if (sid[i] == '9')
+				sid[i] = 'A';
+			else sid[i]++;
+			break;
+		}
+	} while (server_find(sid));
+
+	sts(":%s SERVER %s 2 %s 0211010000 :%s", me.name, server, sid, reason);
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
@@ -441,8 +495,8 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 		handle_nickchange(u);
 	}
 
-	/* if it's only 2 then it's a nickname change */
-	else if (parc == 2)
+	/* if it's only 1 then it's a nickname change */
+	else if (parc == 1)
 	{
 		node_t *n;
 
