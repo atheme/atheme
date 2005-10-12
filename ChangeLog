@@ -1,3 +1,12 @@
+pfish       2005/10/12 09:49:01 UTC	(20051012-2849)
+  Log:
+  bugfix
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/modules/chanserv/clear_users.c (File Modified) 
+
+
 nenolod     2005/10/11 22:17:11 UTC	(20051011-2847)
   Log:
   Unbreak. >_<.
