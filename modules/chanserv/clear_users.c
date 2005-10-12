@@ -4,7 +4,7 @@
  *
  * This file contains code for the ChanServ CLEAR USERS function.
  *
- * $Id: clear_users.c 2851 2005-10-12 10:16:33Z jilles $
+ * $Id: clear_users.c 2853 2005-10-12 11:05:25Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/clear_users", FALSE, _modinit, _moddeinit,
-	"$Id: clear_users.c 2851 2005-10-12 10:16:33Z jilles $",
+	"$Id: clear_users.c 2853 2005-10-12 11:05:25Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -36,6 +36,7 @@ void _moddeinit()
 static void cs_cmd_clear_users(char *origin, char *channel)
 {
 	char *reason = strtok(NULL, "");
+	char fullreason[200];
 	user_t *u = user_find(origin);
 	channel_t *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
@@ -43,8 +44,10 @@ static void cs_cmd_clear_users(char *origin, char *channel)
 	chanuser_t *cu;
 	node_t *n, *tn;
 
-	if (!reason)
-		reason = "No reason given.";
+	if (reason)
+		snprintf(fullreason, sizeof fullreason, "CLEAR USERS used by %s: %s", origin, reason);
+	else
+		snprintf(fullreason, sizeof fullreason, "CLEAR USERS used by %s", origin);
 
 	if (!u->myuser)
 	{
@@ -75,7 +78,7 @@ static void cs_cmd_clear_users(char *origin, char *channel)
 		if (!irccasecmp(cu->user->nick, origin) || cu->user->server == me.me)
 			continue;
 
-		kick(chansvs.nick, c->name, cu->user->nick, reason);
+		kick(chansvs.nick, c->name, cu->user->nick, fullreason);
 		chanuser_delete(c, cu->user);
 	}
 
