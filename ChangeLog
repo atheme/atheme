@@ -1,3 +1,12 @@
+nenolod     2005/10/12 21:40:43 UTC	(20051012-2859)
+  Log:
+  - Fix a compile warning here.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/confparse.c (File Modified) 
+
+
 jilles      2005/10/12 21:37:34 UTC	(20051012-2857)
   Log:
   Bail out of chanuser_add() if channel is NULL. This avoids

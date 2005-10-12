@@ -5,7 +5,7 @@
  * This file contains functionality which implements
  * the OService AKILL/KLINE command.
  *
- * $Id: akill.c 2559 2005-10-04 06:56:29Z nenolod $
+ * $Id: akill.c 2861 2005-10-12 22:53:56Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 2559 2005-10-04 06:56:29Z nenolod $",
+	"$Id: akill.c 2861 2005-10-12 22:53:56Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -132,9 +132,16 @@ static void os_cmd_akill(char *origin)
 		else
 		{
 			char *userbuf = strtok(target, "@");
-			char *hostbuf = strtok(NULL, "@");
+			char *hostbuf = strtok(NULL, "");
 			char *tmphost;
 			int i = 0;
+
+			if (!userbuf || !hostbuf)
+			{
+				notice(opersvs.nick, origin, "Insufficient parameters to \2AKILL ADD\2.");
+				notice(opersvs.nick, origin, "Syntax: AKILL ADD <user>@<host> [options] <reason>");
+				return;
+			}
 
 			/* make sure there's at least 5 non-wildcards */
 			for (tmphost = hostbuf; *tmphost; tmphost++)
