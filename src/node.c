@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 2863 2005-10-12 23:09:06Z nenolod $
+ * $Id: node.c 2869 2005-10-13 00:19:38Z nenolod $
  */
 
 #include "atheme.h"
@@ -1035,6 +1035,8 @@ void chanuser_delete(channel_t *chan, user_t *user)
 
 		if (cu->user == user)
 		{
+			hook_call_event("channel_part", cu);
+
 			slog(LG_DEBUG, "chanuser_delete(): %s -> %s (%d)", cu->chan->name, cu->user->nick, cu->chan->nummembers - 1);
 			node_del(n, &chan->members);
 			node_free(n);
