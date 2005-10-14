@@ -1,3 +1,12 @@
+nenolod     2005/10/13 00:19:38 UTC	(20051013-2869)
+  Log:
+  Add channel_part hook.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/src/node.c (File Modified) 
+
+
 jilles      2005/10/12 23:26:38 UTC	(20051012-2867)
   Log:
   ircnet ircd notes
