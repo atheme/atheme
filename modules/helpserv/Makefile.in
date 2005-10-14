@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2843 2005-10-11 12:44:34Z kog $
+# $Id: Makefile.in 2881 2005-10-14 04:53:40Z kuja $
 #
 
 CC		= @CC@
@@ -27,7 +27,9 @@ default: all
 
 BASE_SRCS = 		\
 	main.c		\
-	help.c		
+	help.c		\
+	helper.c	\
+	override.c
 	
 	
 SRCS = ${BASE_SRCS}

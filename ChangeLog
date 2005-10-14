@@ -1,3 +1,11 @@
+kuja        2005/10/14 04:52:44 UTC	(20051014-2879)
+  Log:
+  Added OVERRIDE (add or remove override metadata, helpers only) command
+
+  Changes:	Modified:
+  +70 -0	trunk/modules/helpserv/override.c (File Added) 
+
+
 kuja        2005/10/14 04:11:59 UTC	(20051014-2877)
   Log:
   Added HELPER (add or remove helpers, SRA only) command
