@@ -1,3 +1,11 @@
+kuja        2005/10/14 04:53:40 UTC	(20051014-2881)
+  Log:
+  Added helper.c and override.c to the compilation
+
+  Changes:	Modified:
+  +4 -2		trunk/modules/helpserv/Makefile.in (File Modified) 
+
+
 kuja        2005/10/14 04:52:44 UTC	(20051014-2879)
   Log:
   Added OVERRIDE (add or remove override metadata, helpers only) command

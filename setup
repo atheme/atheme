@@ -1,20 +1,24 @@
 #!/bin/sh
 #
-# Copyright (c) 2003-2004 E. Will et al.
+# Copyright (c) 2005 Atheme Development Group
 # Rights to this code are documented in doc/LICENSE.
 #
 # This file is a simple setup script.
 #
-# $Id: setup 522 2005-06-13 01:09:48Z nenolod $
+# $Id: setup 2883 2005-10-14 21:50:46Z nenolod $
 
 PREFIX="$HOME/atheme"
 LARGENET="no"
+VERSION=`grep AC_INIT configure.ac | awk '{print \$2}' | sed s:\,::g`
 
 export ok INPUT
 
-echo "----------------------------------------------------------------"
-echo ">>> Atheme setup started on `date`"
-echo "----------------------------------------------------------------"
+clear
+
+cat .logo
+echo "                     version $VERSION"
+
+echo ""
 
 if [ -f doc/RELEASE ] ; then
   ok=0
@@ -73,11 +77,6 @@ while [ $ok -eq 0 ] ; do
   fi
 done
 LARGENET=$INPUT
-
-echo ""
-echo "Press enter to begin configuration."
-echo -n ""
-if read INPUT ; then : ; else echo "" ; exit 1 ; fi
 
 ARGS="--prefix=$PREFIX"
 
