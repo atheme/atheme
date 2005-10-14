@@ -1,3 +1,11 @@
+kuja        2005/10/14 03:37:41 UTC	(20051014-2875)
+  Log:
+  Added support for MU_HELPER flag
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/nickserv/info.c (File Modified) 
+
+
 kuja        2005/10/14 03:29:26 UTC	(20051014-2873)
   Log:
   Added MU_HELPER flag
