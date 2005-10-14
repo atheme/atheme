@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 2839 2005-10-11 12:35:07Z kog $
+dnl $Id: configure.ac 2885 2005-10-14 22:42:00Z nenolod $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, 0.3beta5, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 2839 2005-10-11 12:35:07Z kog $])
+AC_COPYRIGHT([$Id: configure.ac 2885 2005-10-14 22:42:00Z nenolod $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -87,6 +87,55 @@ AC_CHECK_LIB(crypt, crypt, [
 
 AC_SUBST(SOCKET_ENGINE)
 AC_SUBST(POSIX_CRYPTC)
+
+echo " "
+echo "Type workarounds"
+echo " "
+
+AC_CHECK_SIZEOF(char)
+AC_CHECK_SIZEOF(short)
+AC_CHECK_SIZEOF(int)
+AC_CHECK_SIZEOF(long)
+AC_CHECK_SIZEOF(void *)
+AC_CHECK_SIZEOF(int64_t)
+AC_CHECK_SIZEOF(long long)
+
+dnl These are pretty straight forward.
+AC_CHECK_TYPE(int8_t, char)
+AC_CHECK_TYPE(uint8_t, unsigned char)
+
+if test "$ac_cv_sizeof_int" = 2 ; then
+  AC_CHECK_TYPE(int16_t, int)
+  AC_CHECK_TYPE(uint16_t, unsigned int)
+elif test "$ac_cv_sizeof_short" = 2 ; then
+  AC_CHECK_TYPE(int16_t, short)
+  AC_CHECK_TYPE(uint16_t, unsigned short)
+else
+  AC_MSG_ERROR([Cannot find a type with size of 16 bits])
+fi
+
+if test "$ac_cv_sizeof_int" = 4 ; then
+  AC_CHECK_TYPE(int32_t, int)
+  AC_CHECK_TYPE(uint32_t, unsigned int)
+elif test "$ac_cv_sizeof_short" = 4 ; then
+  AC_CHECK_TYPE(int32_t, short)
+  AC_CHECK_TYPE(uint32_t, unsigned short)
+elif test "$ac_cv_sizeof_long" = 4 ; then
+  AC_CHECK_TYPE(int32_t, long)
+  AC_CHECK_TYPE(uint32_t, unsigned long)
+else
+  AC_MSG_ERROR([Cannot find a type with size of 32 bits])
+fi
+
+if test "$ac_cv_sizeof_int64_t" = 8 ; then
+  AC_CHECK_TYPE(int64_t)
+  AC_CHECK_TYPE(uint64_t)
+elif test "$ac_cv_sizeof_long_long" = 8 ; then
+  AC_CHECK_TYPE(int64_t, long long)
+  AC_CHECK_TYPE(uint64_t, unsigned long long)
+else
+  AC_MSG_ERROR([Cannot find a type with size of 64 bits])
+fi
 
 echo " "
 echo "Tweaks"

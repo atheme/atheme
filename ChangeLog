@@ -1,3 +1,13 @@
+nenolod     2005/10/14 21:50:46 UTC	(20051014-2883)
+  Log:
+  Improved setup script. :P
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/.logo (File Added) 
+  +8 -9		trunk/setup (File Modified) 
+
+
 kuja        2005/10/14 04:53:40 UTC	(20051014-2881)
   Log:
   Added helper.c and override.c to the compilation
