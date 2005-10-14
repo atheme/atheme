@@ -1,3 +1,11 @@
+nenolod     2005/10/14 01:46:33 UTC	(20051014-2871)
+  Log:
+  Hide IRCop commands in \!help.
+
+  Changes:	Modified:
+  +4 -0		trunk/modules/chanserv/help.c (File Modified) 
+
+
 nenolod     2005/10/13 00:19:38 UTC	(20051013-2869)
   Log:
   Add channel_part hook.
