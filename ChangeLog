@@ -1,3 +1,11 @@
+kuja        2005/10/14 03:29:26 UTC	(20051014-2873)
+  Log:
+  Added MU_HELPER flag
+
+  Changes:	Modified:
+  +1 -0		trunk/include/account.h (File Modified) 
+
+
 nenolod     2005/10/14 01:46:33 UTC	(20051014-2871)
   Log:
   Hide IRCop commands in \!help.
