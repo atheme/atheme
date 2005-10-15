@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2453 2005-09-30 01:14:59Z nenolod $
+# $Id: Makefile.in 2887 2005-10-15 04:34:36Z nenolod $
 #
 
 CC		= @CC@
@@ -60,7 +60,7 @@ SRCS = ${BASE_SRCS}
 
 OBJS = ${SRCS:.c=.o}
 
-all: version atheme
+all: atheme
 
 build: all
 
@@ -100,7 +100,7 @@ deinstall:
 		$(RM) -rf ${PREFIX}; \
 	fi
 
-version:
+version.c:
 	/bin/sh ./version.sh $(VERSION)
 
 .c.o:

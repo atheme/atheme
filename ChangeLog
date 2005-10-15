@@ -1,3 +1,15 @@
+nenolod     2005/10/14 22:42:00 UTC	(20051014-2885)
+  Log:
+  Apply some niceities for sun boxes.
+  
+
+  Changes:	Modified:
+  +3967 -0	trunk/configure (File Modified) 
+  +49 -0	trunk/configure.ac (File Modified) 
+  +0 -7		trunk/include/libatheme.h (File Modified) 
+  +45 -0	trunk/include/sysconf.h.in (File Modified) 
+
+
 nenolod     2005/10/14 21:50:46 UTC	(20051014-2883)
   Log:
   Improved setup script. :P
