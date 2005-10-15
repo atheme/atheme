@@ -24,24 +24,36 @@ root. Use an unprivileged user account.
 
 Atheme should compile and run on most POSIX compliant systems.  The list of
 platforms that Atheme has been tested on includes:
-  FreeBSD 4.[89]
-  FreeBSD 5.[012]
-  Linux (glibc) 2.4.x
-  Solaris 8
-  MacOS 10.3.3
+	FreeBSD 4.[8,9,10,11]
+	FreeBSD 5.[0,1,2,3,4]
+	FreeBSD 6.[0]
+	FreeBSD 7.[0]
+	OpenBSD 3.[5,6,7,8]      (i386, amd64, sparc)
+	NetBSD 1.[5,6]           (i386, amd64, sparc)
+	NetBSD 2.[0]             (i386, amd64, sparc, mips)
+	NetBSD 3.[0]             (i386)
+	DragonFly 1.[0,2,5]
+	Linux (glibc) 2.6.x      (i386, amd64)
+	Solaris [7,8,9,10]       (i86pc, sun4u)
+	Solaris Express 10       (i86pc, sun4u)
+	MacOS 10.[3.5,4.1]       (intel, powerpc)
 
 Other BSD-based systems will probably work. Other SysV-based systems *might*
 work provided they support BSD sockets and POSIX function calls.
 
+Atheme requires a runtime linker. Systems which do not have a runtime linker
+will not be able to run Atheme. However, most systems include a runtime
+linker these days, so compilation and installation should be a breeze.
+
 The easy way: run the "setup" script. This does it all for you:
-  $ ./setup
+	$ ./setup
 
 Follow the instructions and you're good to go.
 
 The slightly less easy but more traditional way:
 
 Run the "configure" script:
-  $ ./configure --prefix=/path/to/install/
+	$ ./configure --prefix=/path/to/install/
 
 If you're running a large network (more than 2000 users) I suggest passing the
 --enable-large-net switch to configure.
@@ -53,10 +65,10 @@ support has moved to modules.
 
 The "configure" script will run several tests, write several files, and exit.
 Once this is done you will want to compile Atheme. To do this, simply type:
-  $ make
+	$ make
 
 Atheme will compile. To install, type:
-  $ make install
+	$ make install
 
 The newly-compiled binary and several supporting files will be copied to the
 directory you specified in the "configure" script.
