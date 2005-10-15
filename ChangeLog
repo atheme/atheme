@@ -1,3 +1,13 @@
+nenolod     2005/10/15 22:23:05 UTC	(20051015-2891)
+  Log:
+  Apply more niceities for sun boxes.
+
+  Changes:	Modified:
+  +0 -2		trunk/Makefile.in (File Modified) 
+  +33 -3	trunk/configure (File Modified) 
+  +1 -0		trunk/configure.ac (File Modified) 
+
+
 nenolod     2005/10/15 07:22:36 UTC	(20051015-2889)
   Log:
   Update install document :p
