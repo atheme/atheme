@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 2885 2005-10-14 22:42:00Z nenolod $
+dnl $Id: configure.ac 2891 2005-10-15 22:23:05Z nenolod $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, 0.3beta5, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 2885 2005-10-14 22:42:00Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 2891 2005-10-15 22:23:05Z nenolod $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -38,6 +38,7 @@ AC_PATH_PROG(CP, cp)
 AC_PATH_PROG(AR, ar)
 AC_PATH_PROG(RANLIB, ranlib)
 AC_C_INLINE
+AC_PROG_MAKE_SET
 
 AC_MSG_CHECKING(how to generate dependancy info)
 if test "$SunWorkShop" = "yes"; then
