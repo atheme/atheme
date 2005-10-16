@@ -1,3 +1,13 @@
+kog         2005/10/16 06:27:47 UTC	(20051016-2931)
+  Log:
+  realname for helpserv now says help services
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/dist/example.conf (File Modified) 
+  +1 -1		trunk/dist/example.userserv.conf (File Modified) 
+
+
 nenolod     2005/10/16 06:00:27 UTC	(20051016-2929)
   Log:
   Add win32 setup stuff.

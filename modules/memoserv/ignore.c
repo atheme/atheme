@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv IGNORE function
  *
- * $Id: ignore.c 2913 2005-10-16 04:45:08Z kog $
+ * $Id: ignore.c 2933 2005-10-16 07:03:56Z kog $
  */
 
 #include "atheme.h"
@@ -19,7 +19,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 2913 2005-10-16 04:45:08Z kog $",
+	"$Id: ignore.c 2933 2005-10-16 07:03:56Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -170,7 +170,7 @@ static void ms_cmd_ignore(char *origin)
 	if (cmd == CASE_ADD && i < MAXMSIGNORES)
 	{
 		temp = malloc(sizeof(char[NICKLEN]));
-		strlcpy(temp,arg2,NICKLEN);
+		strlcpy(temp,arg2,NICKLEN-1);
 		
 		node = node_create();
 		node_add(temp, node, &mu->memo_ignores);

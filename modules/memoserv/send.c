@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv SEND function
  *
- * $Id: send.c 2923 2005-10-16 05:07:06Z kog $
+ * $Id: send.c 2933 2005-10-16 07:03:56Z kog $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/send", FALSE, _modinit, _moddeinit,
-	"$Id: send.c 2923 2005-10-16 05:07:06Z kog $",
+	"$Id: send.c 2933 2005-10-16 07:03:56Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -43,7 +43,7 @@ static void ms_cmd_send(char *origin)
 {
 	/* misc structs etc */
 	user_t *u = user_find(origin), *tu;
-	myuser_t *tmu;
+	myuser_t *tmu, *mu = u->myuser;
 	node_t *n;
 	mymemo_t *memo;
 	
@@ -115,7 +115,7 @@ static void ms_cmd_send(char *origin)
 	/* Make sure we're not on ignore */
 	LIST_FOREACH(n, tmu->memo_ignores.head)
 	{
-		if (!strcasecmp((char *)n->data, origin))
+		if (!strcasecmp((char *)n->data, mu->name))
 		{
 			/* Lie... change this if you want it to fail silent */
 			notice(memosvs.nick, origin, "The memo has been successfully forwarded to %s.", target);
