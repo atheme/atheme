@@ -58,7 +58,7 @@ protocols: $(OBJS)
 .SUFFIXES: .dll
 
 .c.dll:
-	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< ../src/libathemecore.a -o $@
+	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< ../src/libathemecore.a ${LDFLAGS} ${LIBS} -o $@
 
 .PHONY: clean distclean
 

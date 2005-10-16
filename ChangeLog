@@ -1,3 +1,12 @@
+nenolod     2005/10/16 20:07:33 UTC	(20051016-2955)
+  Log:
+  - Fix ultimate3 support on windows.
+  
+
+  Changes:	Modified:
+  +4 -2		trunk/protocol/ultimate3.c (File Modified) 
+
+
 nenolod     2005/10/16 19:31:11 UTC	(20051016-2953)
   Log:
   Windows support cleanups, and remove sleep(5) from monkey.c, monkeyircd 1.1 does not require it
