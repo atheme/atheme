@@ -1,3 +1,25 @@
+nenolod     2005/10/16 19:31:11 UTC	(20051016-2953)
+  Log:
+  Windows support cleanups, and remove sleep(5) from monkey.c, monkeyircd 1.1 does not require it
+
+  Changes:	Modified:
+  +5 -0		trunk/Makefile.win32 (File Modified) 
+  +0 -2		trunk/backend/Makefile.win32 (File Modified) 
+  +0 -2		trunk/dbtool/Makefile.win32 (File Modified) 
+  +1 -7		trunk/modules/Makefile.win32 (File Modified) 
+  +0 -3		trunk/modules/chanserv/Makefile.win32 (File Modified) 
+  +0 -3		trunk/modules/global/Makefile.win32 (File Modified) 
+  +56 -0	trunk/modules/helpserv/Makefile.win32 (File Added) 
+  +0 -2		trunk/modules/memoserv/Makefile.win32 (File Modified) 
+  +1 -4		trunk/modules/nickserv/Makefile.win32 (File Modified) 
+  +0 -3		trunk/modules/operserv/Makefile.win32 (File Modified) 
+  +0 -3		trunk/modules/userserv/Makefile.win32 (File Modified) 
+  +0 -2		trunk/modules/xmlrpc/Makefile.win32 (File Modified) 
+  +1 -3		trunk/protocol/Makefile.win32 (File Modified) 
+  +0 -3		trunk/protocol/monkey.c (File Modified) 
+  +0 -6		trunk/src/Makefile.win32 (File Modified) 
+
+
 kog         2005/10/16 12:25:02 UTC	(20051016-2951)
   Log:
   flushes sendq before disconnecting
