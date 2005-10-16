@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 2899 2005-10-16 01:22:18Z terminal $
+ * $Id: node.c 2907 2005-10-16 01:35:02Z nenolod $
  */
 
 #include "atheme.h"
@@ -1711,6 +1711,9 @@ metadata_t *metadata_add(void *target, int32_t type, char *name, char *value)
 	chanacs_t *ca = NULL;
 	metadata_t *md;
 	node_t *n;
+
+	if (!name || !value)
+		return NULL;
 
 	if (type == METADATA_USER)
 		mu = target;
