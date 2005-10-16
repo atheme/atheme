@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 2897 2005-10-16 00:21:57Z nenolod $
+ * $Id: postgresql.c 2939 2005-10-16 08:49:56Z kog $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 2897 2005-10-16 00:21:57Z nenolod $",
+	"$Id: postgresql.c 2939 2005-10-16 08:49:56Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -79,6 +79,7 @@ static void postgresql_db_save(void *arg)
 	safe_query("DELETE FROM ACCOUNTS;");
 	safe_query("DELETE FROM ACCOUNT_METADATA;");
 	safe_query("DELETE FROM ACCOUNT_MEMOS;");
+	safe_query("DELETE FROM ACCOUNT_MEMO_IGNORES;");
 	safe_query("DELETE FROM CHANNELS;");
 	safe_query("DELETE FROM CHANNEL_METADATA;");
 	safe_query("DELETE FROM CHANNEL_ACCESS;");
@@ -124,6 +125,17 @@ static void postgresql_db_save(void *arg)
 
 				res = safe_query("INSERT INTO ACCOUNT_MEMOS(ID, PARENT, SENDER, TIME, STATUS, TEXT) VALUES ("
 						"DEFAULT, %d, '%s', %ld, %ld, '%s');", ii, sender, mz->sent, mz->status, text);
+			}
+			
+			LIST_FOREACH(tn, mu->memo_ignores.head)
+			{
+				char target[BUFSIZE], *temp = (char *)tn->data;
+				PQescapeString(target, temp, strlen(temp));
+				
+				res = safe_query("INSERT INTO ACCOUNT_MEMO_IGNORES(ID, PARENT, TARGET"
+						"VALUES(DEFAULT, %d, '%s')", ii, target);
+						
+				free(target);
 			}
 
 			ii++;
@@ -306,6 +318,8 @@ static void postgresql_db_load(void)
 			metadata_add(mu, METADATA_USER, key, keyval);
 		}
 
+		/* Memos */
+		
 		PQclear(res2);
 
 		res2 = safe_query("SELECT ID, PARENT, SENDER, TIME, STATUS, TEXT FROM ACCOUNT_MEMOS WHERE PARENT=%d;", uid);
@@ -340,6 +354,35 @@ static void postgresql_db_load(void)
 
                         node_add(mz, node_create(), &mu->memos);
 		}
+		
+		/* MemoServ ignores */
+		
+		PQclear(res2);
+
+		res2 = safe_query("SELECT * FROM ACCOUNT_MEMO_IGNORES WHERE PARENT=%d;", uid);
+		umd = PQntuples(res2);
+
+		for (ii = 0; ii < umd; ii++)
+		{
+			char *target = PQgetvalue(res2, ii, 2);
+			char *strbuf;
+			
+			if (!mu)
+			{
+				slog(LG_DEBUG, "db_load(): invalid ignore");
+				continue;
+			}
+			
+			if (!target)
+				continue;
+			
+			strbuf = smalloc(sizeof(char[NICKLEN]));
+			strlcpy(strbuf,target,NICKLEN-1);
+			
+			node_add(strbuf, node_create(), &mu->memo_ignores);
+		}
+		
+		PQclear(res2);
 	}
 
 	PQclear(res);

@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using MySQL.
  *
- * $Id: mysql.c 2799 2005-10-09 01:14:40Z nenolod $
+ * $Id: mysql.c 2939 2005-10-16 08:49:56Z kog $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/mysql", TRUE, _modinit, NULL,
-	"$Id: mysql.c 2799 2005-10-09 01:14:40Z nenolod $",
+	"$Id: mysql.c 2939 2005-10-16 08:49:56Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -155,6 +155,7 @@ static void mysql_db_save(void *arg)
 	safe_query("TRUNCATE TABLE ACCOUNTS");
 	safe_query("TRUNCATE TABLE ACCOUNT_METADATA");
 	safe_query("TRUNCATE TABLE ACCOUNT_MEMOS");
+	safe_query("TRUNCATE TABLE ACCOUNT_MEMO_IGNORES");
 	safe_query("TRUNCATE TABLE CHANNELS");
 	safe_query("TRUNCATE TABLE CHANNEL_METADATA");
 	safe_query("TRUNCATE TABLE CHANNEL_ACCESS");
@@ -208,6 +209,17 @@ static void mysql_db_save(void *arg)
 
 				free(sender);
 				free(text);
+			}
+			
+			LIST_FOREACH(tn, mu->memo_ignores.head)
+			{
+				char target[BUFSIZE], *temp = (char *)tn->data;
+				escape_string(&target, temp, strlen(temp));
+				
+				res = safe_query("INSERT INTO ACCOUNT_MEMO_IGNORES(ID, PARENT, TARGET"
+						"VALUES(DEFAULT, %d, '%s')", ii, target);
+						
+				free(target);
 			}
 
 			ii++;
@@ -414,6 +426,8 @@ static void mysql_db_load(void)
 
 		mysql_free_result(res2);
 
+		/* Memos */
+		
 		res2 = safe_query("SELECT * FROM ACCOUNT_MEMOS WHERE PARENT=%d", uid);
 		umd = mysql_num_rows(res2);
 
@@ -446,6 +460,35 @@ static void mysql_db_load(void)
 
                         node_add(mz, node_create(), &mu->memos);
 		}
+		
+		mysql_free_result(res2);
+		
+		/* MemoServ ignores */
+		
+		res2 = safe_query("SELECT * FROM ACCOUNT_MEMO_IGNORES WHERE PARENT=%d", uid);
+		umd = mysql_num_rows(res2);
+		
+		while ((row2 = mysql_fetch_row(res2)))
+		{
+			char *target = row2[2];
+			char *strbuf;
+			
+			if (!mu)
+			{
+				slog(LG_DEBUG, "db_load(): invalid ignore");
+				continue;
+			}
+			
+			if (!target)
+				continue;
+			
+			strbuf = smalloc(sizeof(char[NICKLEN]));
+			strlcpy(strbuf,target,NICKLEN-1);
+			
+			node_add(strbuf, node_create(), &mu->memo_ignores);
+		}
+		
+		mysql_free_result(res2);
 	}
 
 	mysql_free_result(res);
