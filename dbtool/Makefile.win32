@@ -47,5 +47,3 @@ dbtool: $(OBJS)
 clean:
 	${RM} *.o *.exe *~ version.c dbtool.core core dbtool
 
-distclean: clean
-	${RM} Makefile version.c.last

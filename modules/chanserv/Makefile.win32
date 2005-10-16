@@ -79,6 +79,3 @@ modules: $(OBJS)
 
 clean:
 	${RM} *.dll
-
-distclean: clean
-	${RM} Makefile version.c.last

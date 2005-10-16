@@ -1,3 +1,12 @@
+kog         2005/10/16 12:25:02 UTC	(20051016-2951)
+  Log:
+  flushes sendq before disconnecting
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/src/atheme.c (File Modified) 
+
+
 pfish       2005/10/16 10:12:49 UTC	(20051016-2949)
   Log:
   show marked/frozen nicks in LIST

@@ -97,9 +97,6 @@ install: build
 		$(RM) -rf ${PREFIX}; \
 	fi
 
-version:
-	/bin/sh ./version.sh $(VERSION)
-
 .c.o:
 	${CC} ${CPPFLAGS} ${CFLAGS} -c $< -o $@
 
@@ -109,8 +106,5 @@ depend:
 
 clean:
 	${RM} *.o *.exe *~ version.c atheme.core core atheme
-
-distclean: clean
-	${RM} Makefile version.c.last
 
 include .depend

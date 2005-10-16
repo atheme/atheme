@@ -51,11 +51,14 @@ install: all
 	-copy modules\userserv\*.dll C:\atheme\modules\userserv
 	-copy modules\xmlrpc\*.dll C:\atheme\modules\xmlrpc
 	-copy src\atheme.exe c:\atheme\bin
+	-copy dbtool\dbtool.exe c:\atheme\bin
 
 clean:
 	del src\*.o libatheme\*.o
 	del src\*.a libatheme\*.a
 	del src\*.exe
+	del dbtool\*.o
+	del dbtool\*.exe
 	del protocol\*.dll
 	del backend\*.dll
 	del modules\chanserv\*.dll
@@ -64,4 +67,6 @@ clean:
 	del modules\nickserv\*.dll
 	del modules\operserv\*.dll
 	del modules\userserv\*.dll
+	del modules\helpserv\*.dll
 	del modules\xmlrpc\*.dll
+

@@ -31,8 +31,6 @@ SRCS = ${BASE_SRCS}
 
 OBJS = ${SRCS:.c=.so}
 
-SUBDIRS = chanserv nickserv global operserv userserv xmlrpc memoserv 
-
 all:
 	mingw32-make -f Makefile.win32 -C chanserv
 	mingw32-make -f Makefile.win32 -C nickserv
@@ -41,6 +39,7 @@ all:
 	mingw32-make -f Makefile.win32 -C userserv
 	mingw32-make -f Makefile.win32 -C xmlrpc
 	mingw32-make -f Makefile.win32 -C memoserv
+	mingw32-make -f Makefile.win32 -C helpserv
 
 build: all
 
@@ -51,8 +50,3 @@ install: build
 .c.so:
 	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@
 
-.PHONY: clean distclean
-
-clean:
-	@: clean
-	${RM} Makefile version.c.last
