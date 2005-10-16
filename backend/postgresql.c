@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 2799 2005-10-09 01:14:40Z nenolod $
+ * $Id: postgresql.c 2895 2005-10-16 00:13:08Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 2799 2005-10-09 01:14:40Z nenolod $",
+	"$Id: postgresql.c 2895 2005-10-16 00:13:08Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -293,7 +293,18 @@ static void postgresql_db_load(void)
 		umd = PQntuples(res2);
 
 		for (ii = 0; ii < umd; ii++)
-			metadata_add(mu, METADATA_USER, PQgetvalue(res2, ii, 2), PQgetvalue(res2, ii, 3));
+		{
+			char *key = PQgetvalue(res2, ii, 2);
+			char *keyval = PQgetvalue(res2, ii, 3);
+
+			if (!key !! !keyval)
+			{
+				slog(LG_DEBUG, "db_load(): ignoring invalid user metadata entry.");
+				continue;
+			}
+
+			metadata_add(mu, METADATA_USER, key, keyval);
+		}
 
 		PQclear(res2);
 
@@ -398,7 +409,18 @@ static void postgresql_db_load(void)
 			ca_mdin = PQntuples(res3);
 
 			for (iii = 0; iii < ca_mdin; iii++)
-				metadata_add(ca, METADATA_CHANACS, PQgetvalue(res3, iii, 2), PQgetvalue(res3, iii, 3));
+			{
+				char *key = PQgetvalue(res3, iii, 2);
+				char *keyval = PQgetvalue(res3, iii, 3);
+
+				if (!key || !keyval)
+				{
+					slog(LG_DEBUG, "db_load(): ignoring invalid channel access metadata entry.");
+					continue;
+				}
+
+				metadata_add(ca, METADATA_CHANACS, key, keyval);
+			}
 
 			PQclear(res3);
 		}
@@ -411,7 +433,18 @@ static void postgresql_db_load(void)
 		mdin = PQntuples(res2);
 
 		for (ii = 0; ii < mdin; ii++)
-			metadata_add(mc, METADATA_CHANNEL, PQgetvalue(res2, ii, 2), PQgetvalue(res2, ii, 3));
+		{
+			char *key = PQgetvalue(res2, ii, 2);
+			char *keyval = PQgetvalue(res2, ii, 3);
+
+			if (!key || !keyval)
+			{
+				slog(LG_DEBUG, "db_load(): ignoring invalid channel metadata entry.");
+				continue;
+			}
+
+			metadata_add(mc, METADATA_CHANNEL, key, keyval);
+		}
 
 		PQclear(res2);
 	}

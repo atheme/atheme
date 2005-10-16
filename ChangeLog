@@ -1,3 +1,12 @@
+pfish       2005/10/15 23:51:27 UTC	(20051015-2893)
+  Log:
+  fix help_addentry
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/listmail.c (File Modified) 
+
+
 nenolod     2005/10/15 22:23:05 UTC	(20051015-2891)
   Log:
   Apply more niceities for sun boxes.
