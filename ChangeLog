@@ -1,3 +1,11 @@
+terminal    2005/10/16 01:45:05 UTC	(20051016-2909)
+  Log:
+  Removed accidental debug message.
+
+  Changes:	Modified:
+  +0 -1		trunk/protocol/unreal.c (File Modified) 
+
+
 nenolod     2005/10/16 01:35:02 UTC	(20051016-2907)
   Log:
   Really lets don't allow blank metadata. :p

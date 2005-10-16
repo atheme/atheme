@@ -64,4 +64,4 @@ clean:
 	del modules\nickserv\*.dll
 	del modules\operserv\*.dll
 	del modules\userserv\*.dll
-	del modules\xpmrpc\*.dll
+	del modules\xmlrpc\*.dll
