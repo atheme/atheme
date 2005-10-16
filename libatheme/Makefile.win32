@@ -40,7 +40,6 @@ install: all
 	@:
 
 libatheme.a: ${OBJS}
-	$(RM) $@
 	${AR} cqv $@ ${OBJS}
 	${RANLIB} $@
 
