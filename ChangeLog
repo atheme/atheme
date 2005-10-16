@@ -1,3 +1,11 @@
+nenolod     2005/10/16 04:47:12 UTC	(20051016-2915)
+  Log:
+  Cope with W32API brokenness.
+
+  Changes:	Modified:
+  +164 -136	trunk/win32/sysconf.h (File Modified) 
+
+
 kog         2005/10/16 04:45:08 UTC	(20051016-2913)
   Log:
   memoserv ignore - first installment 
