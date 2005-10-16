@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 2939 2005-10-16 08:49:56Z kog $
+ * $Id: postgresql.c 2943 2005-10-16 09:04:43Z kog $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 2939 2005-10-16 08:49:56Z kog $",
+	"$Id: postgresql.c 2943 2005-10-16 09:04:43Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -132,8 +132,7 @@ static void postgresql_db_save(void *arg)
 				char target[BUFSIZE], *temp = (char *)tn->data;
 				PQescapeString(target, temp, strlen(temp));
 				
-				res = safe_query("INSERT INTO ACCOUNT_MEMO_IGNORES(ID, PARENT, TARGET"
-						"VALUES(DEFAULT, %d, '%s')", ii, target);
+				res = safe_query("INSERT INTO ACCOUNT_MEMO_IGNORES(ID, PARENT, TARGET) VALUES(DEFAULT, %d, '%s')", ii, target);
 						
 				free(target);
 			}
