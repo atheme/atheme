@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 2899 2005-10-16 01:22:18Z terminal $
+ * $Id: flatfile.c 2935 2005-10-16 07:06:22Z kog $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 2899 2005-10-16 01:22:18Z terminal $",
+	"$Id: flatfile.c 2935 2005-10-16 07:06:22Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -80,6 +80,11 @@ static void flatfile_db_save(void *arg)
 				mymemo_t *mz = (mymemo_t *)tn->data;
 
 				fprintf(f, "ME %s %s %ld %ld %s\n", mu->name, mz->sender, mz->sent, mz->status, mz->text);
+			}
+			
+			LIST_FOREACH(tn, mu->memo_ignores.head)
+			{
+				fprintf(f, "MI %s %s\n", mu->name, (char *)tn->data);
 			}
 		}
 	}
@@ -302,6 +307,26 @@ static void flatfile_db_load(void)
 				mu->memoct_new++;
 
 			node_add(mz, node_create(), &mu->memos);
+		}
+		
+		if (!strcmp("MI", item))
+		{
+			char *user = strtok(NULL, " ");
+			char *target = strtok(NULL, "\n");
+			myuser_t *mu = myuser_find(user);
+			myuser_t *tmu = myuser_find(target);
+			char *strbuf;
+			
+			if (!mu)
+			{
+				slog(LG_DEBUG, "db_load(): invalid ignore (MI %s %s)",user,target);
+				continue;
+			}
+			
+			strbuf = smalloc(sizeof(char[NICKLEN]));
+			strlcpy(strbuf,target,NICKLEN-1);
+			
+			node_add(strbuf, node_create(), &mu->memo_ignores);
 		}
 
 		/* mychans */

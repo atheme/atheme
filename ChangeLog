@@ -1,3 +1,15 @@
+kog         2005/10/16 07:03:56 UTC	(20051016-2933)
+  Log:
+  ignore checks proper buffer length (-1),
+  forward and send now look at myuser->name and not origin for ignores
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/memoserv/forward.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/ignore.c (File Modified) 
+  +2 -2		trunk/modules/memoserv/send.c (File Modified) 
+
+
 kog         2005/10/16 06:27:47 UTC	(20051016-2931)
   Log:
   realname for helpserv now says help services
