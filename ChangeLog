@@ -1,3 +1,12 @@
+nenolod     2005/10/16 01:35:02 UTC	(20051016-2907)
+  Log:
+  Really lets don't allow blank metadata. :p
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/src/node.c (File Modified) 
+
+
 terminal    2005/10/16 01:31:54 UTC	(20051016-2905)
   Log:
   install atheme.exe binary too
