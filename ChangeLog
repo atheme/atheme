@@ -1,3 +1,12 @@
+pfish       2005/10/16 10:12:49 UTC	(20051016-2949)
+  Log:
+  show marked/frozen nicks in LIST
+  
+
+  Changes:	Modified:
+  +4 -2		trunk/modules/nickserv/list.c (File Modified) 
+
+
 kog         2005/10/16 09:27:02 UTC	(20051016-2947)
   Log:
   pointer issues on line 217... this is probably broken

@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 2899 2005-10-16 01:22:18Z terminal $
+ * $Id: atheme.c 2951 2005-10-16 12:25:02Z kog $
  */
 
 #include "atheme.h"
@@ -288,6 +288,7 @@ int main(int argc, char *argv[])
 		quit_sts(chansvs.me->me, "shutting down");
 
 	remove("var/atheme.pid");
+	sendq_flush(curr_uplink->conn);
 	connection_close(curr_uplink->conn);
 
 	me.connected = FALSE;
