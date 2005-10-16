@@ -1,0 +1,12 @@
+Help for FORWARD:
+
+FORWARD allows you to forward a memo to another
+account. Useful for a variety of reasons.
+
+You can also SEND, DELETE, LIST or READ memos.
+
+Syntax: FORWARD <user|nick> <memo number>
+
+Examples:
+    /msg &nick& FORWARD kog 1
+

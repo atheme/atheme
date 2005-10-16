@@ -1,0 +1,16 @@
+Help for IGNORE:
+
+IGNORE allows you to ignore memos from another
+user. Possible reasons include inbox spamming,
+annoying users, bots that have figured out how
+to register etc.
+
+You can add up to 40 users to your ignore list
+
+Syntax: IGNORE ADD|DEL|LIST|CLEAR <account>
+
+Examples:
+    /msg &nick& IGNORE ADD kog
+    /msg &nick& IGNORE DEL kog
+    /msg &nick& IGNORE LIST
+    /msg &nick& IGNORE CLEAR

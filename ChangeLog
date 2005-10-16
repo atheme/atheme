@@ -1,3 +1,11 @@
+nenolod     2005/10/16 05:08:16 UTC	(20051016-2925)
+  Log:
+  windows is stupid and wont delete something that doesn't exist
+
+  Changes:	Modified:
+  +0 -1		trunk/libatheme/Makefile.win32 (File Modified) 
+
+
 kog         2005/10/16 05:07:06 UTC	(20051016-2923)
   Log:
   checks to see if sender is in target's ignore list. if so, pretend memo is sent

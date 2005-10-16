@@ -1,0 +1,16 @@
+Help for DELETE:
+
+DELETE allows you to delete memos from your
+account. You can either delete all memos with
+the all parameter, or specify a memo number.
+You can obtain a memo number by using the LIST
+command.
+
+You can also SEND, READ, LIST and FORWARD memos.
+
+Syntax: DELETE all|<memo number>
+
+Examples:
+    /msg &nick& DELETE all
+    /msg &nick& DELETE 1
+
