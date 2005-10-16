@@ -1,3 +1,18 @@
+kog         2005/10/16 05:19:25 UTC	(20051016-2927)
+  Log:
+  help files for memoserv
+  
+
+  Changes:	Modified:
+  + -		trunk/help/memoserv/ (File Added) 
+  +16 -0	trunk/help/memoserv/delete (File Added) 
+  +12 -0	trunk/help/memoserv/forward (File Added) 
+  +16 -0	trunk/help/memoserv/ignore (File Added) 
+  +12 -0	trunk/help/memoserv/list (File Added) 
+  +12 -0	trunk/help/memoserv/read (File Added) 
+  +15 -0	trunk/help/memoserv/send (File Added) 
+
+
 nenolod     2005/10/16 05:08:16 UTC	(20051016-2925)
   Log:
   windows is stupid and wont delete something that doesn't exist
