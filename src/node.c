@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 2869 2005-10-13 00:19:38Z nenolod $
+ * $Id: node.c 2899 2005-10-16 01:22:18Z terminal $
  */
 
 #include "atheme.h"
@@ -1110,8 +1110,12 @@ void sendq_flush(connection_t * cptr)
 	LIST_FOREACH_SAFE(n, tn, cptr->sendq.head)
 	{
 		sq = (struct sendq *)n->data;
-
+		
+#ifdef _WIN32
+		if ((l = send(cptr->fd, sq->buf + sq->pos, sq->len, 0)) == -1)
+#else
 		if ((l = write(cptr->fd, sq->buf + sq->pos, sq->len)) == -1)
+#endif
 		{
 			if (errno != EAGAIN)
 			{

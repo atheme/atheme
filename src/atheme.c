@@ -4,10 +4,21 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 2835 2005-10-11 05:27:26Z terminal $
+ * $Id: atheme.c 2899 2005-10-16 01:22:18Z terminal $
  */
 
 #include "atheme.h"
+
+chansvs_t chansvs;
+globsvs_t globsvs;
+opersvs_t opersvs;
+memosvs_t memosvs;
+helpsvs_t helpsvs;
+nicksvs_t nicksvs;
+usersvs_t usersvs;
+
+me_t me;
+cnt_t cnt;
 
 extern char **environ;
 char *config_file;

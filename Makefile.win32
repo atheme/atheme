@@ -1,0 +1,66 @@
+# Copyright (c) 2005 Atheme Development Group.
+# Rights to this code are documented in doc/LICENSE.
+#
+# This file contains build instructions.
+#
+# $Id$
+#
+
+SUBDIRS=libatheme dbtool backend modules protocol src
+MAKE=mingw32-make -f Makefile.win32
+
+all: build
+
+build:
+	copy win32\sysconf.h include\sysconf.h
+	copy win32\version.c src\version.c
+	$(MAKE) -C libatheme
+	$(MAKE) -C dbtool
+	$(MAKE) -C src
+	$(MAKE) -C modules
+	$(MAKE) -C backend
+	$(MAKE) -C protocol
+
+install: all
+	-mkdir c:\atheme
+	-mkdir c:\atheme\var
+	-mkdir c:\atheme\etc
+	-mkdir c:\atheme\doc
+	-mkdir c:\atheme\backend
+	-mkdir c:\atheme\help
+	-mkdir c:\atheme\protocol
+	-mkdir c:\atheme\bin
+	-mkdir c:\atheme\modules
+	-mkdir c:\atheme\modules\chanserv
+	-mkdir c:\atheme\modules\global
+	-mkdir c:\atheme\modules\helpserv
+	-mkdir c:\atheme\modules\memoserv
+	-mkdir c:\atheme\modules\nickserv
+	-mkdir c:\atheme\modules\operserv
+	-mkdir c:\atheme\modules\userserv
+	-mkdir c:\atheme\modules\xmlrpc
+	-copy backend\*.dll c:\atheme\backend
+	-copy dist\* c:\atheme\etc
+	-copy protocol\*.dll C:\atheme\protocol
+	-copy modules\chanserv\*.dll C:\atheme\modules\chanserv
+	-copy modules\global\*.dll C:\atheme\modules\global
+	-copy modules\helpserv\*.dll C:\atheme\modules\helpserv
+	-copy modules\memoserv\*.dll C:\atheme\modules\memoserv
+	-copy modules\nickserv\*.dll C:\atheme\modules\nickserv
+	-copy modules\operserv\*.dll C:\atheme\modules\operserv
+	-copy modules\userserv\*.dll C:\atheme\modules\userserv
+	-copy modules\xmlrpc\*.dll C:\atheme\modules\xmlrpc
+
+clean:
+	del src\*.o libatheme\*.o
+	del src\*.a libatheme\*.a
+	del src\*.exe
+	del protocol\*.dll
+	del backend\*.dll
+	del modules\chanserv\*.dll
+	del modules\global\*.dll
+	del modules\memoserv\*.dll
+	del modules\nickserv\*.dll
+	del modules\operserv\*.dll
+	del modules\userserv\*.dll
+	del modules\xpmrpc\*.dll

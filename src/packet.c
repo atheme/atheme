@@ -4,7 +4,7 @@
  *
  * IRC packet handling.
  *
- * $Id: packet.c 2375 2005-09-25 20:03:04Z jilles $
+ * $Id: packet.c 2899 2005-10-16 01:22:18Z terminal $
  *
  * TODO: Take all the sendq stuff in node.c and put it here.
  * sendq_flush becomes irc_whandler, etc.
@@ -16,7 +16,11 @@ static int irc_read(connection_t * cptr, char *buf)
 {
 	int n;
 
+#ifdef _WIN32
+	if ((n = recv(cptr->fd, buf, BUFSIZE, 0)) > 0)
+#else
 	if ((n = read(cptr->fd, buf, BUFSIZE)) > 0)
+#endif
 	{
 		buf[n] = '\0';
 		cnt.bin += n;

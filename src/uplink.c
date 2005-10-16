@@ -4,7 +4,7 @@
  *
  * Uplink management stuff.
  *
- * $Id: uplink.c 2497 2005-10-01 04:35:25Z nenolod $
+ * $Id: uplink.c 2899 2005-10-16 01:22:18Z terminal $
  */
 
 #include "atheme.h"
@@ -33,6 +33,6 @@ void uplink_connect(void)
 	}
 
 	u = curr_uplink;
-
+	
 	curr_uplink->conn = connection_open_tcp(u->host, u->vhost, u->port, irc_rhandler, sendq_flush);
 }

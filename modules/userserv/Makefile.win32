@@ -1,0 +1,75 @@
+# Copyright (c) 2003-2004 E. Will et al.
+# Rights to this code are documented in doc/LICENSE.
+#
+# This file contains build instructions.
+#
+# $Id: Makefile.in 2753 2005-10-08 19:06:11Z nenolod $
+#
+
+CC		= gcc
+RM		= del
+MV		= ren
+CP		= CP
+INSTALL		= 
+PREFIX		= prefix
+BIN		= athemeEXEEXT
+MKDEP		= MKDEP -DPREFIX=\"prefix\" -I../../include  
+PICFLAGS	= -DPIC -shared -enable-auto-import
+CFLAGS		= -DI_AM_A_MODULE -static -mno-cygwin -Wall -I../win32 -I../../win32 -I../../include -g
+
+VERSION		= 0.1
+
+LIBS		= -lwsock32 
+LDFLAGS		= ../win32/regex.c
+CPPFLAGS	= 
+
+default: all
+
+BASE_SRCS = 		\
+	main.c		\
+	drop.c		\
+	freeze.c	\
+	help.c		\
+	hold.c		\
+	info.c		\
+	list.c		\
+	listmail.c	\
+	login.c		\
+	logout.c	\
+	mark.c		\
+	myaccess.c	\
+	register.c	\
+	sendpass.c	\
+	resetpass.c	\
+	set.c		\
+	status.c	\
+	taxonomy.c	\
+	verify.c	\
+	vhost.c
+	
+SRCS = ${BASE_SRCS}
+
+OBJS = ${SRCS:.c=.dll}
+
+all: modules
+
+build: all
+
+install: build
+	${INSTALL} -d ${PREFIX}/modules/userserv
+	${INSTALL} -m 755 *.dll ${PREFIX}/modules/userserv
+
+modules: $(OBJS)
+
+.SUFFIXES: .dll
+
+.c.dll:
+	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< ../../src/libathemecore.a -o $@
+
+.PHONY: clean distclean
+
+clean:
+	${RM} -f *.dll
+
+distclean: clean
+	${RM} -f Makefile version.c.last

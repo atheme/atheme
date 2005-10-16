@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 2835 2005-10-11 05:27:26Z terminal $
+ * $Id: extern.h 2899 2005-10-16 01:22:18Z terminal $
  */
 
 #ifndef EXTERN_H
@@ -262,9 +262,6 @@ E void expire_check(void *arg);
 E void sendq_add(connection_t *cptr, char *buf, int len, int pos);
 E void sendq_flush(connection_t *cptr);
 
-E struct set_command_ set_commands[];
-E struct set_command_ *set_cmd_find(char *origin, char *command);
-
 /* services.c */
 E void ban(char *sender, char *channel, user_t *user);
 E void initialize_services(void);
@@ -337,5 +334,9 @@ E int floodcheck(user_t *, user_t *);
 E void help_addentry(list_t *list, char *topic, char *fname,
 	void (*func)(char *origin));
 E void help_delentry(list_t *list, char *name);
+
+/* pmodule.c */
+E BlockHeap *pcommand_heap;
+E BlockHeap *messagetree_heap;
 
 #endif /* EXTERN_H */

@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 2619 2005-10-05 19:02:20Z nenolod $
+ * $Id: unreal.c 2899 2005-10-16 01:22:18Z terminal $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 2619 2005-10-05 19:02:20Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 2899 2005-10-16 01:22:18Z terminal $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -112,7 +112,7 @@ static user_t *unreal_introduce_nick(char *nick, char *user, char *host, char *r
 	user_t *u;
 
 	sts("NICK %s 1 %ld %s %s %s 0 +%s * :%s", nick, CURRTIME, user, host, me.name, modes, real);
-
+	
 	u = user_add(nick, user, host, NULL, "0.0.0.0", NULL, real, me.me);
 	if (strchr(modes, 'o'))
 		u->flags |= UF_IRCOP;
@@ -366,6 +366,7 @@ static void m_ping(char *origin, uint8_t parc, char *parv[])
 
 static void m_pong(char *origin, uint8_t parc, char *parv[])
 {
+	printf( "PONG! %s ~= %s\n", parv[0], me.actual );
 	/* someone replied to our PING */
 	if ((!parv[0]) || (strcasecmp(me.actual, parv[0])))
 		return;

@@ -1,0 +1,51 @@
+# Copyright (c) 2003-2004 E. Will et al.
+# Rights to this code are documented in doc/LICENSE.
+#
+# This file contains build instructions.
+#
+# $Id: Makefile.in 2131 2005-09-05 01:08:12Z beu $
+#
+
+CC		= gcc
+RM		= del
+MV		= ren
+CP		= CP
+INSTALL		= 
+PREFIX		= prefix
+BIN		= athemeEXEEXT
+MKDEP		= MKDEP -DPREFIX=\"prefix\" -I../include
+CFLAGS		= -static -mno-cygwin -Wall -I../win32 -I../include -g
+
+VERSION		= 0.1
+
+LIBS		= -lwsock32
+LDFLAGS		= ../win32/regex.c
+CPPFLAGS	= 
+
+default: all
+
+BASE_SRCS = dbtool.c
+
+SRCS = ${BASE_SRCS}
+
+OBJS = ${SRCS:.c=.o}
+
+all: dbtool
+
+build: all
+
+install: build
+
+dbtool: $(OBJS)
+	${CC} ${CFLAGS} ${LDFLAGS} -o $@ ${OBJS} ${LIBS}
+
+.c.o:
+	${CC} ${CPPFLAGS} ${CFLAGS} -c $< -o $@
+
+.PHONY: clean distclean
+
+clean:
+	${RM} -f *.o *.exe *~ version.c dbtool.core core dbtool
+
+distclean: clean
+	${RM} -f Makefile version.c.last

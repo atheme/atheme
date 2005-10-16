@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 2835 2005-10-11 05:27:26Z terminal $
+ * $Id: atheme.h 2899 2005-10-16 01:22:18Z terminal $
  */
 
 #ifndef ATHEME_H
@@ -14,13 +14,16 @@
 
 /* Extern type definition */
 #ifdef _WIN32
-#ifdef I_AM_A_MODULE
-#define E extern
+#	ifdef I_AM_A_MODULE
+#		define DLE __declspec (dllimport)
+#		define E extern DLE
+#	else
+#		define DLE __declspec (dllexport)
+#		define E extern DLE
+#	endif
 #else
-#define E extern __declspec (dllexport)
-#endif
-#else
-#define E extern
+#	define E extern
+#	define DLE 
 #endif
 
 #include "sysconf.h"
@@ -75,6 +78,8 @@ typedef struct tld_ tld_t;
 typedef struct kline_ kline_t;
 typedef void EVH(void *);
 
+typedef struct me me_t;
+
 /* S T R U C T U R E S */
 struct me
 {
@@ -109,7 +114,9 @@ struct me
   time_t uplinkpong;            /* when the uplink last sent a PONG   */
 
   char *execname;		/* executable name                    */
-} me;
+};
+
+E me_t me;
 
 #define AUTH_NONE  0
 #define AUTH_EMAIL 1
@@ -147,6 +154,8 @@ struct Database
 } database_options;
 
 /* keep track of how many of what we have */
+typedef struct cnt cnt_t;
+
 struct cnt
 {
   uint32_t event;
@@ -164,7 +173,9 @@ struct cnt
   uint32_t bin;
   uint32_t bout;
   uint32_t uplink;
-} cnt;
+};
+
+E cnt_t cnt;
 
 #define MTYPE_NUL 0
 #define MTYPE_ADD 1
@@ -296,4 +307,17 @@ struct timeval burstime;
 
 /* *INDENT-ON* */
 
-#endif /* SHRIKE_H */
+#ifdef _WIN32
+
+/* Windows + Module -> needs these to be declared before using them */
+#ifdef I_AM_A_MODULE
+void _modinit(module_t *m);
+void _moddeinit(void);
+#endif
+
+/* Windows has an extremely stupid gethostbyname() function. Oof! */
+#define gethostbyname(a) gethostbyname_layer(a)
+
+#endif
+
+#endif /* ATHEME_H */

@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 2839 2005-10-11 12:35:07Z kog $
+ * $Id: conf.c 2899 2005-10-16 01:22:18Z terminal $
  */
 
 #include "atheme.h"
@@ -1354,7 +1354,7 @@ static void copy_me(struct me *src, struct me *dst)
 	dst->auth = src->auth;
 }
 
-static void free_cstructs(struct me *mesrc, struct chansvs *svssrc)
+static void free_cstructs(struct me *mesrc, chansvs_t *svssrc)
 {
 	free(mesrc->netname);
 	free(mesrc->adminname);

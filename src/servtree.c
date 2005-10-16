@@ -4,7 +4,7 @@
  *
  * Services binary tree manipulation. (add_service, del_service, et al.)
  *
- * $Id: servtree.c 2497 2005-10-01 04:35:25Z nenolod $
+ * $Id: servtree.c 2899 2005-10-16 01:22:18Z terminal $
  */
 
 #include "atheme.h"
@@ -26,6 +26,12 @@ void servtree_init(void)
 service_t *add_service(char *name, char *user, char *host, char *real, void (*handler) (char *origin, uint8_t parc, char *parv[]))
 {
 	service_t *sptr;
+	
+	if ( name == NULL )
+	{
+		slog(LG_INFO, "add_service(): Bad error! We were given a NULL pointer for service name!");
+		return NULL;
+	}
 
 	if ((sptr = find_service(name)))
 	{

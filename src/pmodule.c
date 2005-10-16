@@ -4,14 +4,14 @@
  *
  * Protocol handling stuff.
  *
- * $Id: pmodule.c 2497 2005-10-01 04:35:25Z nenolod $
+ * $Id: pmodule.c 2899 2005-10-16 01:22:18Z terminal $
  */
 
 #include "atheme.h"
 
 list_t pcommands[HASHSIZE];
-static BlockHeap *pcommand_heap;
-static BlockHeap *messagetree_heap;
+BlockHeap *pcommand_heap;
+BlockHeap *messagetree_heap;
 struct cmode_ *mode_list;
 struct cmode_ *ignore_mode_list;
 struct cmode_ *status_mode_list;
@@ -41,7 +41,7 @@ void pcommand_add(char *token, void (*handler) (char *origin, uint8_t parc, char
 		slog(LG_INFO, "pcommand_add(): token %s is already registered", token);
 		return;
 	}
-
+	
 	pcmd = BlockHeapAlloc(pcommand_heap);
 	pcmd->token = sstrdup(token);
 	pcmd->handler = handler;

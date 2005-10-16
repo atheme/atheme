@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 2821 2005-10-10 04:12:13Z terminal $
+ * $Id: function.c 2899 2005-10-16 01:22:18Z terminal $
  */
 
 #include "atheme.h"
@@ -167,8 +167,10 @@ uint32_t shash(const unsigned char *p)
 {
 	unsigned int hval = HASHINIT;
 
+#ifndef _WIN32
 	if (!strstr(me.execname, "atheme"))
 		return (rand() % HASHSIZE);
+#endif
 
 	if (!p)
 		return (0);

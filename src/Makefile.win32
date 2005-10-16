@@ -1,0 +1,116 @@
+# Copyright (c) 2005 Atheme Development Group
+# Rights to this code are documented in doc/LICENSE.
+#
+# This file contains build instructions.
+#
+# $Id: Makefile.in 2453 2005-09-30 01:14:59Z nenolod $
+#
+ 
+CC		= gcc
+RM		= del
+MV		= ren
+CP		= CP
+INSTALL		= 
+PREFIX		= prefix
+BIN		= athemeEXEEXT
+MKDEP		= MKDEP -DPREFIX=\"prefix\" -I../include  
+CFLAGS		= -mno-cygwin -Wall -I../win32 -I../include -g
+
+VERSION		= PACKAGE_VERSION
+
+LIBS		=   -lwsock32
+LDFLAGS		= ../win32/regex.c
+CPPFLAGS	= 
+
+default: all
+
+BASE_SRCS =		\
+	atheme.c	\
+	authcookie.c	\
+	base64.c	\
+	cmode.c		\
+	commandtree.c	\
+	conf.c		\
+	confparse.c	\
+	crypto.c	\
+	dbhandler.c	\
+	flags.c		\
+	function.c	\
+	help.c		\
+	match.c		\
+	module.c	\
+	node.c		\
+	packet.c	\
+	parse.c		\
+	phandler.c	\
+	pmodule.c	\
+	ptasks.c	\
+	services.c	\
+	servtree.c	\
+	send.c		\
+	signal.c	\
+	tokenize.c	\
+	ubase64.c	\
+	uid.c		\
+	uplink.c	\
+	xmlrpc.c	\
+	version.c
+
+SRCS = ${BASE_SRCS}
+
+OBJS = ${SRCS:.c=.o}
+
+all: atheme
+
+build: all
+
+atheme: $(OBJS)
+	gcc -static -Wl,-export-all-symbols,--out-implib,libathemecore.a -mno-cygwin -Wall -I../win32 -I../include -o atheme.exe ../libatheme/*.o ../win32/regex.c ${OBJS} -lwsock32
+
+install: build
+	$(INSTALL) -m 755 -d $(PREFIX)
+	$(INSTALL) -m 755 -d $(PREFIX)/bin
+	$(INSTALL) -m 755 -d $(PREFIX)/etc
+	$(INSTALL) -m 755 -d $(PREFIX)/var
+	$(INSTALL) -m 755 -c $(BIN) $(PREFIX)/bin
+	$(INSTALL) -m 640 -c ../dist/example.conf $(PREFIX)/etc
+	$(INSTALL) -m 640 -c ../dist/example.userserv.conf $(PREFIX)/etc
+	if [ ! -r $(PREFIX)/etc/atheme.db ]; then \
+		$(INSTALL) -m 640 -c ../dist/atheme.db $(PREFIX)/etc ; \
+	fi
+	if [ ! -r $(PREFIX)/etc/atheme.chk ]; then \
+		$(INSTALL) -m 640 -c ../dist/atheme.chk $(PREFIX)/etc ; \
+	fi
+	if [ -e $(PREFIX)/doc ]; then \
+		$(RM) -rf $(PREFIX)/doc ; \
+	fi
+	if [ -e $(PREFIX)/help ]; then \
+		$(RM) -rf $(PREFIX)/help ; \
+	fi
+	$(CP) -R ../doc $(PREFIX)
+	$(CP) -R ../help $(PREFIX)
+
+	echo "----------------------------------------------------------------"
+	echo ">>> Remember to cd to ${PREFIX} and edit your config file.";
+	@:
+	if [ -d ${PREFIX} ] ; then \
+		$(RM) -rf ${PREFIX}; \
+	fi
+
+version:
+	/bin/sh ./version.sh $(VERSION)
+
+.c.o:
+	${CC} ${CPPFLAGS} ${CFLAGS} -c $< -o $@
+
+.PHONY: depend clean distclean
+depend:
+	${MKDEP} ${CPPFLAGS} ${BASE_SRCS} > .depend
+
+clean:
+	${RM} -f *.o *.exe *~ version.c atheme.core core atheme
+
+distclean: clean
+	${RM} -f Makefile version.c.last
+
+include .depend

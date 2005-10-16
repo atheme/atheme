@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 2671 2005-10-06 04:03:49Z nenolod $
+ * $Id: connection.c 2899 2005-10-16 01:22:18Z terminal $
  */
 
 #include "atheme.h"
@@ -21,6 +21,13 @@ static void connection_dead(void *);
 
 void init_netio(void)
 {
+#ifdef _WIN32
+	WORD sockVersion = MAKEWORD( 1, 1 );
+	WSADATA wsaData;
+
+	WSAStartup( sockVersion, &wsaData );
+#endif
+
 	connection_heap = BlockHeapCreate(sizeof(connection_t), 16);
 	sa_heap = BlockHeapCreate(sizeof(struct sockaddr_in), 16);
 
@@ -239,6 +246,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 
 	snprintf(buf, BUFSIZE, "tcp connection: %s", host);
 
+#ifndef _WIN32
 	if (vhost)
 	{
 		memset(&sa, 0, sizeof(sa));
@@ -265,11 +273,12 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 			return NULL;
 		}
 	}
+#endif
 
 	/* resolve it */
 	if ((hp = gethostbyname(host)) == NULL)
 	{
-		clog(LG_IOERROR, "connection_open_tcp(): Unable to resolve %s", vhost);
+		clog(LG_IOERROR, "connection_open_tcp(): Unable to resolve %s", host);
 		close(s);
 		return NULL;
 	}

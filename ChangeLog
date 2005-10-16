@@ -1,3 +1,11 @@
+nenolod     2005/10/16 00:21:57 UTC	(20051016-2897)
+  Log:
+  fix typo :p
+
+  Changes:	Modified:
+  +1 -1		trunk/backend/postgresql.c (File Modified) 
+
+
 nenolod     2005/10/16 00:13:08 UTC	(20051016-2895)
   Log:
   - Ignore invalid metadata entries on postgresql. I'll port this over to mysql and flatfile soon.
