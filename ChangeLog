@@ -1,3 +1,11 @@
+nenolod     2005/10/16 04:10:42 UTC	(20051016-2911)
+  Log:
+  typo fix in Win32 build instructions
+
+  Changes:	Modified:
+  +67 -67	trunk/Makefile.win32 (File Modified) 
+
+
 terminal    2005/10/16 01:45:05 UTC	(20051016-2909)
   Log:
   Removed accidental debug message.
