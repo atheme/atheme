@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 2895 2005-10-16 00:13:08Z nenolod $
+ * $Id: postgresql.c 2897 2005-10-16 00:21:57Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 2895 2005-10-16 00:13:08Z nenolod $",
+	"$Id: postgresql.c 2897 2005-10-16 00:21:57Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -297,7 +297,7 @@ static void postgresql_db_load(void)
 			char *key = PQgetvalue(res2, ii, 2);
 			char *keyval = PQgetvalue(res2, ii, 3);
 
-			if (!key !! !keyval)
+			if (!key || !keyval)
 			{
 				slog(LG_DEBUG, "db_load(): ignoring invalid user metadata entry.");
 				continue;

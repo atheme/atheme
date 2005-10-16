@@ -1,3 +1,12 @@
+nenolod     2005/10/16 00:13:08 UTC	(20051016-2895)
+  Log:
+  - Ignore invalid metadata entries on postgresql. I'll port this over to mysql and flatfile soon.
+  
+
+  Changes:	Modified:
+  +36 -3	trunk/backend/postgresql.c (File Modified) 
+
+
 pfish       2005/10/15 23:51:27 UTC	(20051015-2893)
   Log:
   fix help_addentry
