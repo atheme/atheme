@@ -1,3 +1,12 @@
+kog         2005/10/16 09:11:04 UTC	(20051016-2945)
+  Log:
+  incompatible pointer type on escape_string for ignores
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/backend/mysql.c (File Modified) 
+
+
 kog         2005/10/16 09:04:43 UTC	(20051016-2943)
   Log:
   fixed broken ignore list query
