@@ -4,7 +4,7 @@
  *
  * This is the header which includes all of the system stuff.
  *
- * $Id: stdinc.h 2821 2005-10-10 04:12:13Z terminal $
+ * $Id: stdinc.h 2919 2005-10-16 04:52:32Z nenolod $
  */
 
 #ifndef STDINC_H
@@ -67,16 +67,6 @@ typedef int l_boolean_t;
 
 /* XXX these are all 32-bit types, not that I care. */
 #ifdef _WIN32
-//typedef char int8_t;
-//typedef short int16_t;
-typedef int int24_t;
-typedef int int32_t;
-typedef long long int64_t;
-typedef unsigned char u_int8_t;
-typedef unsigned short u_int16_t;
-typedef unsigned int u_int24_t;
-typedef unsigned int u_int32_t;
-typedef unsigned long long u_int64_t;
 
 #define itoa(num) r_itoa(num)
 #define kill(n,m) 0
