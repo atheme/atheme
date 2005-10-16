@@ -1,3 +1,13 @@
+kog         2005/10/16 08:49:56 UTC	(20051016-2939)
+  Log:
+  memoserv ignore DB additions
+  
+
+  Changes:	Modified:
+  +43 -0	trunk/backend/mysql.c (File Modified) 
+  +43 -0	trunk/backend/postgresql.c (File Modified) 
+
+
 kog         2005/10/16 07:27:04 UTC	(20051016-2937)
   Log:
   added memoserv ignore tables
