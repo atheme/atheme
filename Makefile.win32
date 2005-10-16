@@ -50,6 +50,7 @@ install: all
 	-copy modules\operserv\*.dll C:\atheme\modules\operserv
 	-copy modules\userserv\*.dll C:\atheme\modules\userserv
 	-copy modules\xmlrpc\*.dll C:\atheme\modules\xmlrpc
+	-copy src\atheme.exe c:\atheme\bin
 
 clean:
 	del src\*.o libatheme\*.o

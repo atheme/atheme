@@ -1,3 +1,11 @@
+terminal    2005/10/16 01:30:22 UTC	(20051016-2903)
+  Log:
+  another whoops
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/xmlrpc/Makefile.win32 (File Modified) 
+
+
 terminal    2005/10/16 01:26:55 UTC	(20051016-2901)
   Log:
   00pz win32 :)
