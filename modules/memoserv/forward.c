@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv FORWARD function
  *
- * $Id: forward.c 2723 2005-10-06 11:40:01Z jilles $
+ * $Id: forward.c 2923 2005-10-16 05:07:06Z kog $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/forward", FALSE, _modinit, _moddeinit,
-	"$Id: forward.c 2723 2005-10-06 11:40:01Z jilles $",
+	"$Id: forward.c 2923 2005-10-16 05:07:06Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -124,6 +124,16 @@ static void ms_cmd_forward(char *origin)
 		return;
 	}
 
+	/* Make sure we're not on ignore */
+	LIST_FOREACH(n, tmu->memo_ignores.head)
+	{
+		if (!strcasecmp((char *)n->data, origin))
+		{
+			/* Lie... change this if you want it to fail silent */
+			notice(memosvs.nick, origin, "The memo has been successfully forwarded to %s.", target);
+			return;
+		}
+	}
 	
 	/* Go to forwarding memos */
 	LIST_FOREACH(n, mu->memos.head)

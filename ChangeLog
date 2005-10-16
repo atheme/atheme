@@ -1,3 +1,23 @@
+nenolod     2005/10/16 04:57:20 UTC	(20051016-2921)
+  Log:
+  Update buildsystem.
+
+  Changes:	Modified:
+  +55 -55	trunk/backend/Makefile.win32 (File Modified) 
+  +51 -51	trunk/dbtool/Makefile.win32 (File Modified) 
+  +56 -56	trunk/libatheme/Makefile.win32 (File Modified) 
+  +58 -58	trunk/modules/Makefile.win32 (File Modified) 
+  +84 -84	trunk/modules/chanserv/Makefile.win32 (File Modified) 
+  +55 -55	trunk/modules/global/Makefile.win32 (File Modified) 
+  +65 -65	trunk/modules/memoserv/Makefile.win32 (File Modified) 
+  +77 -77	trunk/modules/nickserv/Makefile.win32 (File Modified) 
+  +73 -73	trunk/modules/operserv/Makefile.win32 (File Modified) 
+  +75 -75	trunk/modules/userserv/Makefile.win32 (File Modified) 
+  +57 -57	trunk/modules/xmlrpc/Makefile.win32 (File Modified) 
+  +69 -69	trunk/protocol/Makefile.win32 (File Modified) 
+  +116 -116	trunk/src/Makefile.win32 (File Modified) 
+
+
 nenolod     2005/10/16 04:52:32 UTC	(20051016-2919)
   Log:
   less win32 retardation here
