@@ -58,10 +58,10 @@
 #define HAVE_STRING_H 1
 
 /* Define to 1 if you have the `strlcat' function. */
-//#define HAVE_STRLCAT 0
+#undef HAVE_STRLCAT 0
 
 /* Define to 1 if you have the `strlcpy' function. */
-//#define HAVE_STRLCPY 0
+#undef HAVE_STRLCPY 0
 
 /* Define to 1 if you have the <sys/select.h> header file. */
 #define HAVE_SYS_SELECT_H 1
@@ -134,3 +134,31 @@
 
 /* Define to `unsigned' if <sys/types.h> does not define. */
 /* #undef size_t */
+
+/* Define to `short' if <sys/types.h> does not define. */
+/* #undef int16_t */
+
+/* Define to `long' if <sys/types.h> does not define. */
+/* #undef int32_t */
+
+/* Define to `long long' if <sys/types.h> does not define. */
+/* #undef int64_t */
+
+/* Define to `char' if <sys/types.h> does not define. */
+/* #undef int8_t */
+
+/* Define to `unsigned' if <sys/types.h> does not define. */
+/* #undef size_t */
+
+/* Define to `unsigned short' if <sys/types.h> does not define. */
+#define uint16_t unsigned short
+
+/* Define to `unsigned long' if <sys/types.h> does not define. */
+#define uint32_t unsigned long
+
+/* Define to `unsigned long long' if <sys/types.h> does not define. */
+#define uint64_t unsigned long long
+
+/* Define to `unsigned char' if <sys/types.h> does not define. */
+#define uint8_t unsigned char
+

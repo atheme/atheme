@@ -1,3 +1,15 @@
+kog         2005/10/16 04:45:08 UTC	(20051016-2913)
+  Log:
+  memoserv ignore - first installment 
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/dist/example.userserv.conf (File Modified) 
+  +1 -0		trunk/include/common.h (File Modified) 
+  +2 -1		trunk/modules/memoserv/Makefile.in (File Modified) 
+  +204 -0	trunk/modules/memoserv/ignore.c (File Added) 
+
+
 nenolod     2005/10/16 04:10:42 UTC	(20051016-2911)
   Log:
   typo fix in Win32 build instructions
