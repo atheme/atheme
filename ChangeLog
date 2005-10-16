@@ -1,3 +1,12 @@
+kog         2005/10/16 09:04:43 UTC	(20051016-2943)
+  Log:
+  fixed broken ignore list query
+  
+
+  Changes:	Modified:
+  +1 -2		trunk/backend/postgresql.c (File Modified) 
+
+
 kog         2005/10/16 09:00:26 UTC	(20051016-2941)
   Log:
   fixed broken SELECT for memo ignores

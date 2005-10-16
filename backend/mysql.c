@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using MySQL.
  *
- * $Id: mysql.c 2941 2005-10-16 09:00:26Z kog $
+ * $Id: mysql.c 2945 2005-10-16 09:11:04Z kog $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/mysql", TRUE, _modinit, NULL,
-	"$Id: mysql.c 2941 2005-10-16 09:00:26Z kog $",
+	"$Id: mysql.c 2945 2005-10-16 09:11:04Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -214,7 +214,7 @@ static void mysql_db_save(void *arg)
 			LIST_FOREACH(tn, mu->memo_ignores.head)
 			{
 				char target[BUFSIZE], *temp = (char *)tn->data;
-				escape_string(&target, temp, strlen(temp));
+				escape_string(target, temp, strlen(temp));
 				
 				res = safe_query("INSERT INTO ACCOUNT_MEMO_IGNORES(ID, PARENT, TARGET) VALUES(DEFAULT, %d, '%s')", ii, target);
 						
