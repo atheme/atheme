@@ -1,3 +1,47 @@
+terminal    2005/10/16 01:22:18 UTC	(20051016-2899)
+  Log:
+  Win32 support! At least it appears to work.
+  Worth a note, many global structs have been converted to real typedef definitions and have an extern definition in the header (and are actually declared in atheme.c)
+
+  Changes:	Modified:
+  +66 -0	trunk/Makefile.win32 (File Added) 
+  +55 -0	trunk/backend/Makefile.win32 (File Added) 
+  +5 -0		trunk/backend/flatfile.c (File Modified) 
+  +51 -0	trunk/dbtool/Makefile.win32 (File Added) 
+  +33 -9	trunk/include/atheme.h (File Modified) 
+  +4 -3		trunk/include/extern.h (File Modified) 
+  +3 -3		trunk/include/metadata.h (File Modified) 
+  +35 -14	trunk/include/services.h (File Modified) 
+  +56 -0	trunk/libatheme/Makefile.win32 (File Added) 
+  +10 -1	trunk/libatheme/connection.c (File Modified) 
+  +62 -0	trunk/libatheme/win32.c (File Added) 
+  +58 -0	trunk/modules/Makefile.win32 (File Added) 
+  +84 -0	trunk/modules/chanserv/Makefile.win32 (File Added) 
+  +2 -0		trunk/modules/chanserv/set.c (File Modified) 
+  +55 -0	trunk/modules/global/Makefile.win32 (File Added) 
+  +65 -0	trunk/modules/memoserv/Makefile.win32 (File Added) 
+  +77 -0	trunk/modules/nickserv/Makefile.win32 (File Added) 
+  +73 -0	trunk/modules/operserv/Makefile.win32 (File Added) 
+  +75 -0	trunk/modules/userserv/Makefile.win32 (File Added) 
+  +57 -0	trunk/modules/xmlrpc/Makefile.win32 (File Added) 
+  +69 -0	trunk/protocol/Makefile.win32 (File Added) 
+  +2 -1		trunk/protocol/unreal.c (File Modified) 
+  +116 -0	trunk/src/Makefile.win32 (File Added) 
+  +11 -0	trunk/src/atheme.c (File Modified) 
+  +1 -1		trunk/src/conf.c (File Modified) 
+  +2 -0		trunk/src/function.c (File Modified) 
+  +5 -1		trunk/src/node.c (File Modified) 
+  +4 -0		trunk/src/packet.c (File Modified) 
+  +3 -3		trunk/src/pmodule.c (File Modified) 
+  +6 -0		trunk/src/servtree.c (File Modified) 
+  +1 -1		trunk/src/uplink.c (File Modified) 
+  + -		trunk/win32/ (File Added) 
+  +4951 -0	trunk/win32/regex.c (File Added) 
+  +490 -0	trunk/win32/regex.h (File Added) 
+  +136 -0	trunk/win32/sysconf.h (File Added) 
+  +85 -0	trunk/win32/version.c (File Added) 
+
+
 nenolod     2005/10/16 00:21:57 UTC	(20051016-2897)
   Log:
   fix typo :p

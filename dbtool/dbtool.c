@@ -9,6 +9,10 @@
 
 #include "atheme.h"
 
+#ifdef _WIN32
+#define SIGUSR1 0
+#endif
+
 /* these two macros stolen from anope */
 #define READ_BUFFER(buf,f)      { READ_DB((f),(buf),sizeof(buf)); }
 #define READ_DB(f,buf,len)      (fread((buf),1,(len),(f)))
