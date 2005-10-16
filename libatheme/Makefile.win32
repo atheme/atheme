@@ -40,7 +40,7 @@ install: all
 	@:
 
 libatheme.a: ${OBJS}
-	$(RM) -f $@
+	$(RM) $@
 	${AR} cqv $@ ${OBJS}
 	${RANLIB} $@
 
@@ -48,9 +48,9 @@ libatheme.a: ${OBJS}
 	${CC} ${CPPFLAGS} ${CFLAGS} -c $< -o $@
 
 clean:
-	${RM} -f *.o *.exe *~ libatheme.a
+	${RM} *.o *.exe *~ libatheme.a
 
 distclean: clean
-	${RM} -f Makefile
+	${RM} Makefile
 
 .PHONY: install depend

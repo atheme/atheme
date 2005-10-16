@@ -108,9 +108,9 @@ depend:
 	${MKDEP} ${CPPFLAGS} ${BASE_SRCS} > .depend
 
 clean:
-	${RM} -f *.o *.exe *~ version.c atheme.core core atheme
+	${RM} *.o *.exe *~ version.c atheme.core core atheme
 
 distclean: clean
-	${RM} -f Makefile version.c.last
+	${RM} Makefile version.c.last
 
 include .depend

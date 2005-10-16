@@ -45,7 +45,7 @@ dbtool: $(OBJS)
 .PHONY: clean distclean
 
 clean:
-	${RM} -f *.o *.exe *~ version.c dbtool.core core dbtool
+	${RM} *.o *.exe *~ version.c dbtool.core core dbtool
 
 distclean: clean
-	${RM} -f Makefile version.c.last
+	${RM} Makefile version.c.last

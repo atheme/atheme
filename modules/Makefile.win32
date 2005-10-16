@@ -55,4 +55,4 @@ install: build
 
 clean:
 	@: clean
-	${RM} -f Makefile version.c.last
+	${RM} Makefile version.c.last

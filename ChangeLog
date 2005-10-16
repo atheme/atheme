@@ -1,3 +1,11 @@
+nenolod     2005/10/16 04:52:32 UTC	(20051016-2919)
+  Log:
+  less win32 retardation here
+
+  Changes:	Modified:
+  +0 -10	trunk/include/stdinc.h (File Modified) 
+
+
 nenolod     2005/10/16 04:49:49 UTC	(20051016-2917)
   Log:
   Cope with W32API brokenness, again.

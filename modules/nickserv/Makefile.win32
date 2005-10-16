@@ -71,7 +71,7 @@ modules: $(OBJS)
 .PHONY: clean distclean
 
 clean:
-	${RM} -f *.dll
+	${RM} *.dll
 
 distclean: clean
-	${RM} -f Makefile version.c.last
+	${RM} Makefile version.c.last
