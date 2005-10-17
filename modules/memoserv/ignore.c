@@ -2,84 +2,73 @@
  * Copyright (c) 2005 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
- * This file contains code for the Memoserv IGNORE function
+ * This file contains code for the Memoserv IGNORE functions
  *
- * $Id: ignore.c 2965 2005-10-17 06:09:03Z pfish $
+ * $Id: ignore.c 2975 2005-10-17 11:55:05Z kog $
  */
 
 #include "atheme.h"
 
-/* Defines local to this file - is this a bad practice? */
-#define CASE_NONE 0
-#define CASE_ADD 1
-#define CASE_DEL 2
-#define CASE_LIST 3
-#define CASE_CLEAR 4
-
 DECLARE_MODULE_V1
 (
 	"memoserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 2965 2005-10-17 06:09:03Z pfish $",
+	"$Id: ignore.c 2975 2005-10-17 11:55:05Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void ms_cmd_ignore(char *origin);
+static void ms_cmd_ignore_add(char *origin, char *target);
+static void ms_cmd_ignore_del(char *origin, char *target);
+static void ms_cmd_ignore_clear(char *origin, char *arg);
+static void ms_cmd_ignore_list(char *origin, char *arg);
 
-command_t ms_ignore = { "IGNORE", "Ignores a memo",
-                        AC_NONE, ms_cmd_ignore };
+command_t ms_ignore = { "IGNORE", "Ignores a memo", AC_NONE, ms_cmd_ignore };
+fcommand_t ms_ignore_add = { "ADD", AC_NONE, ms_cmd_ignore_add };
+fcommand_t ms_ignore_del = { "DEL", AC_NONE, ms_cmd_ignore_del };
+fcommand_t ms_ignore_ignore = { "CLEAR", AC_NONE, ms_cmd_ignore_clear };
+fcommand_t ms_ignore_list = { "LIST", AC_NONE, ms_cmd_ignore_list };
 
 list_t *ms_cmdtree;
 list_t *ms_helptree;
+list_t ms_ignore_cmds;
 
 void _modinit(module_t *m)
 {
 	ms_cmdtree = module_locate_symbol("memoserv/main", "ms_cmdtree");
-        command_add(&ms_ignore, ms_cmdtree);
+       command_add(&ms_ignore, ms_cmdtree);
 	
 	ms_helptree = module_locate_symbol("memoserv/main", "ms_helptree");
 	help_addentry(ms_helptree, "IGNORE", "help/memoserv/ignore", NULL);
+	
+	/* Add sub-commands */
+	fcommand_add(&ms_ignore_add, &ms_ignore_cmds);
+	fcommand_add(&ms_ignore_del, &ms_ignore_cmds);
+	fcommand_add(&ms_ignore_ignore, &ms_ignore_cmds);
+	fcommand_add(&ms_ignore_list, &ms_ignore_cmds);
 }
 
 void _moddeinit()
 {
 	command_delete(&ms_ignore, ms_cmdtree);
 	help_delentry(ms_helptree, "IGNORE");
+	
+	/* Delete sub-commands */
+	fcommand_delete(&ms_ignore_add, &ms_ignore_cmds);
+	fcommand_delete(&ms_ignore_del, &ms_ignore_cmds);
+	fcommand_delete(&ms_ignore_ignore, &ms_ignore_cmds);
+	fcommand_delete(&ms_ignore_list, &ms_ignore_cmds);
 }
 
 static void ms_cmd_ignore(char *origin)
-{
-	/* Misc structs etc */
-	user_t *u = user_find(origin);
-	myuser_t *mu = u->myuser, *tmu;
-	node_t *n, *link, *node;
-	uint8_t cmd = CASE_NONE, i = 1;
-	char *temp;
-	
+{	
 	/* Grab args */
-	char *arg1 = strtok(NULL, " ");
-	char *arg2 = strtok(NULL, " ");
+	user_t *u = user_find(origin);
+	myuser_t *mu = u->myuser;
+	char *cmd = strtok(NULL, " ");
+	char *arg = strtok(NULL, " ");
 	
 	/* Bad/missing arg */
-	if (!arg1)
-	{
-		notice(memosvs.nick, origin, 
-			"Insufficient parameters specified for \2IGNORE\2.");
-		
-		notice(memosvs.nick, origin, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <account>");
-		return;
-	}
-	
-	/* Command check */
-	if (!strcasecmp("ADD",arg1) && arg2 != NULL)
-		cmd = CASE_ADD;
-	else if (!strcasecmp("DEL",arg1) && arg2 != NULL)
-		cmd = CASE_DEL;
-	else if (!strcasecmp("LIST",arg1))
-		cmd = CASE_LIST;
-	else if (!strcasecmp("CLEAR",arg1))
-		cmd = CASE_CLEAR;
-	
-	if (cmd == CASE_NONE)
+	if (!cmd)
 	{
 		notice(memosvs.nick, origin, 
 			"Insufficient parameters specified for \2IGNORE\2.");
@@ -95,110 +84,152 @@ static void ms_cmd_ignore(char *origin)
 		return;
 	}
 	
+	fcommand_exec(arg, origin, cmd, &ms_ignore_cmds);
+}
+
+static void ms_cmd_ignore_add(char *origin, char *target)
+{
+	/* Misc structs etc */
+	user_t *u = user_find(origin);
+	myuser_t *mu = u->myuser, *tmu;
+	node_t *n,*node;
+	char *temp;
+	
+	/* Arg check*/
+	if (target == NULL)
+	{
+		notice(memosvs.nick, origin, 
+			"Insufficient parameters specified for \2IGNORE\2.");
+		
+		notice(memosvs.nick, origin, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <account>");
+		return;
+	}
+	
 	/* User attempting to ignore themself? */
-	if (cmd != CASE_LIST && cmd != CASE_CLEAR && !strcasecmp(arg2,origin))
+	if (!strcasecmp(target,mu->name))
 	{
 		notice(memosvs.nick, origin, "Silly wabbit, you can't ignore yourself.");
 		return;
 	}
 	
 	/* Does the target account exist? */
-	if ((cmd != CASE_LIST && cmd != CASE_CLEAR)  && !(tmu = myuser_find(arg2)))
+	if (!(tmu = myuser_find(target)))
 	{
-		notice(memosvs.nick, origin, "%s is not registered.", arg2);
+		notice(memosvs.nick, origin, "%s is not registered.", target);
 		return;
 	}
 	
 	/* Ignore list is full */
-	if (cmd == CASE_ADD && mu->memo_ignores.count >= MAXMSIGNORES)
+	if (mu->memo_ignores.count >= MAXMSIGNORES)
 	{
 		notice(memosvs.nick, origin, "Your ignore list is full, please DEL an account.");
 		return;
 	}
-
-	/* Throw in list header */
-	if (cmd == CASE_LIST)
-	{
-		notice(memosvs.nick, origin, "");
-		notice(memosvs.nick, origin, "Ignore list:");
-		notice(memosvs.nick, origin, "-------------------------");
-		notice(memosvs.nick, origin, "");
-	}
 		
+	/* Iterate through list, make sure target not in it, if last node append */
+	LIST_FOREACH(n, mu->memo_ignores.head)
+	{
+		temp = (char *)n->data;
+		
+		/* Already in the list */
+		if (!strcasecmp(temp,target))
+		{
+			notice(memosvs.nick, origin, "Account %s is already in your ignore list.", temp);
+			return;
+		}
+	}
+	
+	/* Add to ignore list */
+	temp = sstrdup(target);
+	
+	node = node_create();
+	node_add(temp, node, &mu->memo_ignores);
+	notice(memosvs.nick, origin, "Account %s added to your ignore list.", target);
+	return;
+}
+
+static void ms_cmd_ignore_del(char *origin, char *target)
+{
+	user_t *u = user_find(origin);
+	myuser_t *mu = u->myuser;
+	node_t *n, *link;
+	char *temp;
+	
+	/* Arg check*/
+	if (target == NULL)
+	{
+		notice(memosvs.nick, origin, 
+			"Insufficient parameters specified for \2IGNORE\2.");
+		
+		notice(memosvs.nick, origin, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <account>");
+		return;
+	}
+	
 	/* Iterate through list, make sure they're not in it, if last node append */
 	LIST_FOREACH_SAFE(n, link, mu->memo_ignores.head)
 	{
 		temp = (char *)n->data;
 		
-		if (cmd == CASE_LIST)
-			notice(memosvs.nick, origin, "%d - %s ", i, temp);
-		
-		if (cmd == CASE_CLEAR)
+		/* Not using list or clear, but we've found our target in the ignore list */
+		if (!strcasecmp(temp,target))
 		{
+			notice(memosvs.nick, origin, "Account %s removed from ignore list.", temp);
 			node_del(n,&mu->memo_ignores);
 			node_free(n);
-			free(temp);
-		}
-		
-		/* Not using list or clear, but we've found our target in the ignore list */
-		if (cmd != CASE_LIST  && cmd != CASE_CLEAR && !strcasecmp(temp,arg2))
-		{
-			/* Add only needs to see if account is unique */
-			if (cmd == CASE_ADD)
-			{
-				notice(memosvs.nick, origin, "Account %s is already in your ignore list.", temp);
-				return;
-			}
 			
-			/* Delete the node */
-			if (cmd == CASE_DEL)
-			{
-				notice(memosvs.nick, origin, "Account %s removed from ignore list.", temp);
-				node_del(n,&mu->memo_ignores);
-				node_free(n);
-				
-				free(temp);
-				
-				return;
-			}
+			free(temp);
+			
+			return;
 		}
-		
-		i++;
 	}
 	
-	/* Add to ignore list */
-	if (cmd == CASE_ADD && i < MAXMSIGNORES)
-	{
-		temp = malloc(sizeof(char[NICKLEN]));
-		strlcpy(temp,arg2,NICKLEN-1);
-		
-		node = node_create();
-		node_add(temp, node, &mu->memo_ignores);
-		notice(memosvs.nick, origin, "Account %s added to your ignore list.", arg2);
-		return;
-	}
-	
-	/* Deletion notice if they weren't in your list */
-	if (cmd == CASE_DEL)
-	{
-		notice(memosvs.nick, origin, "%s is not in your ignore list.", arg2);
-		return;
-	}
-	
-	/* Ignore list footer */
-	if (cmd == CASE_LIST)
-	{
-		if (i == 1)
-			notice(memosvs.nick, origin, "list empty");
+	notice(memosvs.nick, origin, "%s is not in your ignore list.", target);
+	return;
+}
 
-		notice(memosvs.nick, origin, "-------------------------");
-		return;
+static void ms_cmd_ignore_clear(char *origin, char *arg)
+{
+	user_t *u = user_find(origin);
+	myuser_t *mu = u->myuser;
+	node_t *n, *link;
+	
+	/* Iterate through list, make sure they're not in it, if last node append */
+	LIST_FOREACH_SAFE(n, link, mu->memo_ignores.head)
+	{
+		free(n->data);
+		node_del(n,&mu->memo_ignores);
+		node_free(n);
 	}
 	
 	/* Let them know list is clear */
-	if (cmd == CASE_CLEAR)
+	notice(memosvs.nick, origin, "Ignore list cleared.");
+	return;
+}
+
+static void ms_cmd_ignore_list(char *origin, char *arg)
+{
+	user_t *u = user_find(origin);
+	myuser_t *mu = u->myuser;
+	node_t *n;
+	uint8_t i = 1;
+	
+	/* Throw in list header */
+	notice(memosvs.nick, origin, "");
+	notice(memosvs.nick, origin, "Ignore list:");
+	notice(memosvs.nick, origin, "-------------------------");
+	notice(memosvs.nick, origin, "");
+	
+	/* Iterate through list, make sure they're not in it, if last node append */
+	LIST_FOREACH(n, mu->memo_ignores.head)
 	{
-		notice(memosvs.nick, origin, "Ignore list cleared.");
-		return;
+		notice(memosvs.nick, origin, "%d - %s ", i, (char *)n->data);
+		i++;
 	}
+	
+	/* Ignore list footer */
+	if (i == 1)
+		notice(memosvs.nick, origin, "list empty");
+
+	notice(memosvs.nick, origin, "-------------------------");
+	return;
 }

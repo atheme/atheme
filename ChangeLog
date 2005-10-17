@@ -1,3 +1,12 @@
+pfish       2005/10/17 09:57:25 UTC	(20051017-2973)
+  Log:
+  allow ircop override
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/modules/chanserv/count.c (File Modified) 
+
+
 pfish       2005/10/17 09:52:19 UTC	(20051017-2971)
   Log:
   Add ChanServ/COUNT:
