@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv IGNORE function
  *
- * $Id: ignore.c 2933 2005-10-16 07:03:56Z kog $
+ * $Id: ignore.c 2965 2005-10-17 06:09:03Z pfish $
  */
 
 #include "atheme.h"
@@ -19,7 +19,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 2933 2005-10-16 07:03:56Z kog $",
+	"$Id: ignore.c 2965 2005-10-17 06:09:03Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -105,7 +105,7 @@ static void ms_cmd_ignore(char *origin)
 	/* Does the target account exist? */
 	if ((cmd != CASE_LIST && cmd != CASE_CLEAR)  && !(tmu = myuser_find(arg2)))
 	{
-		notice(memosvs.nick, origin, "%s is not a registered account.", arg2);
+		notice(memosvs.nick, origin, "%s is not registered.", arg2);
 		return;
 	}
 	

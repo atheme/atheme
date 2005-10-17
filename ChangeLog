@@ -1,3 +1,13 @@
+jilles      2005/10/17 01:18:59 UTC	(20051017-2963)
+  Log:
+  Make find_service() a bit more efficient (no more 64k hash
+  table traversals).
+  
+
+  Changes:	Modified:
+  +44 -17	trunk/src/servtree.c (File Modified) 
+
+
 jilles      2005/10/17 00:56:02 UTC	(20051017-2961)
   Log:
   Fix up /msg service@server. Clean up handle_privmsg() at the cost
