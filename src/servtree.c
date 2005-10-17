@@ -4,7 +4,7 @@
  *
  * Services binary tree manipulation. (add_service, del_service, et al.)
  *
- * $Id: servtree.c 2961 2005-10-17 00:56:02Z jilles $
+ * $Id: servtree.c 2963 2005-10-17 01:18:59Z jilles $
  */
 
 #include "atheme.h"
@@ -78,40 +78,67 @@ void del_service(service_t * sptr)
 	BlockHeapFree(service_heap, sptr);
 }
 
+static service_t *find_named_service(char *name)
+{
+	node_t *n;
+	service_t *sptr;
+
+	LIST_FOREACH(n, services[SHASH((unsigned char *)name)].head)
+	{
+		sptr = n->data;
+
+		if (!strcasecmp(name, sptr->name))
+			return sptr;
+	}
+	return NULL;
+}
+
 service_t *find_service(char *name)
 {
 	service_t *sptr;
 	node_t *n;
-	char *svs;
-	int i;
+	user_t *u;
+	char *p;
+	char name2[NICKLEN];
 
-	if (name[0] == '#' && chansvs.fantasy)
-		return chansvs.me;
+	if (name[0] == '#')
+		return chansvs.fantasy ? chansvs.me : NULL;
 
 	if (strchr(name, '@'))
-		svs = strtok(name, "@");
-	else
-		svs = name;
-
-	LIST_FOREACH(n, services[SHASH((unsigned char *)svs)].head)
 	{
-		sptr = n->data;
-
-		if (!strcasecmp(svs, sptr->name))
+		strlcpy(name2, name, sizeof name2);
+		p = strchr(name2, '@');
+		if (p != NULL)
+			*p = '\0';
+		sptr = find_named_service(name2);
+		if (sptr != NULL)
 			return sptr;
-	}
-
-	if (ircd->uses_uid)
-	{
-		/* XXX this sucks -- jilles */
+		/* XXX not really nice with a 64k hashtable, so don't do
+		 * it for now -- jilles */
+#if 0
 		for (i = 0; i < HASHSIZE; i++)
 			LIST_FOREACH(n, services[i].head)
 			{
 				sptr = n->data;
 
-				if (sptr->me && !strcasecmp(svs, sptr->me->uid))
+				if (sptr->me && !strcasecmp(name2, sptr->user))
 					return sptr;
 			}
+#endif
+	}
+	else
+	{
+		sptr = find_named_service(name);
+		if (sptr != NULL)
+			return sptr;
+
+		if (ircd->uses_uid)
+		{
+			/* yuck yuck -- but quite efficient -- jilles */
+			u = user_find(name);
+			if (u != NULL && u->server == me.me)
+				return find_named_service(u->nick);
+		}
 	}
 
 	return NULL;

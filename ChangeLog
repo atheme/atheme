@@ -1,3 +1,15 @@
+jilles      2005/10/17 00:56:02 UTC	(20051017-2961)
+  Log:
+  Fix up /msg service@server. Clean up handle_privmsg() at the cost
+  of find_service() which has become massively inefficient for
+  UIDs.
+  
+
+  Changes:	Modified:
+  +13 -11	trunk/src/ptasks.c (File Modified) 
+  +14 -0	trunk/src/servtree.c (File Modified) 
+
+
 nenolod     2005/10/16 20:27:20 UTC	(20051016-2959)
   Log:
   Clean up win32.c
