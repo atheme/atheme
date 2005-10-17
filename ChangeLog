@@ -1,3 +1,13 @@
+nenolod     2005/10/17 15:10:27 UTC	(20051017-2977)
+  Log:
+  Death to restart delay.
+
+  Changes:	Modified:
+  +0 -2		trunk/src/atheme.c (File Modified) 
+  +0 -6		trunk/src/conf.c (File Modified) 
+  +4 -4		trunk/src/signal.c (File Modified) 
+
+
 kog         2005/10/17 11:55:05 UTC	(20051017-2975)
   Log:
   uses fcommand for lookups, cleaner and better working code. Now actually works! 

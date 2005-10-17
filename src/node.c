@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 2907 2005-10-16 01:35:02Z nenolod $
+ * $Id: node.c 2979 2005-10-17 23:58:46Z alambert $
  */
 
 #include "atheme.h"
@@ -757,9 +757,7 @@ chanuser_t *chanuser_add(channel_t *chan, char *nick)
 	node_t *n1;
 	node_t *n2;
 	chanuser_t *cu, *tcu;
-	mychan_t *mc;
 	uint32_t flags = 0;
-	char hostbuf[BUFSIZE];
 	int i = 0;
 
 	if (chan == NULL)
@@ -815,15 +813,6 @@ chanuser_t *chanuser_add(channel_t *chan, char *nick)
 
 	chan->nummembers++;
 
-	if ((chan->nummembers == 1) && (irccasecmp(config_options.chan, chan->name)))
-	{
-		if ((mc = mychan_find(chan->name)) && (config_options.join_chans))
-		{
-			join(chan->name, chansvs.nick);
-			mc->used = CURRTIME;
-		}
-	}
-
 	node_add(cu, n1, &chan->members);
 	node_add(cu, n2, &u->channels);
 
@@ -833,181 +822,7 @@ chanuser_t *chanuser_add(channel_t *chan, char *nick)
 	if (u->server == me.me || u->server == NULL)
 		return cu;
 
-	/* auto stuff */
-	if (((mc = mychan_find(chan->name))) && (u->myuser))
-	{
-		if ((mc->flags & MC_STAFFONLY) && !is_ircop(u) && !is_sra(u->myuser))
-		{
-			ban(chansvs.nick, chan->name, u);
-			kick(chansvs.nick, chan->name, u->nick, "You are not authorized to be on this channel");
-		}
-
-		if (should_kick(mc, u->myuser))
-		{
-			ban(chansvs.nick, chan->name, u);
-			kick(chansvs.nick, chan->name, u->nick, "User is banned from this channel");
-		}
-
-		if (should_owner(mc, u->myuser))
-		{
-			if (ircd->uses_owner && !(cu->modes & ircd->owner_mode))
-			{
-				cmode(chansvs.nick, chan->name, ircd->owner_mchar, CLIENT_NAME(u));
-				cu->modes |= ircd->owner_mode;
-			}
-		}
-		else if ((mc->flags & MC_SECURE) && (cu->modes & ircd->owner_mode) && ircd->uses_owner)
-		{
-			char *mbuf = sstrdup(ircd->owner_mchar);
-			*mbuf = '-';
-
-			cmode(chansvs.nick, chan->name, mbuf, CLIENT_NAME(u));
-			cu->modes &= ~ircd->owner_mode;
-
-			free(mbuf);
-		}
-
-		if (should_protect(mc, u->myuser))
-		{
-			if (ircd->uses_protect && !(cu->modes & ircd->protect_mode))
-			{
-				cmode(chansvs.nick, chan->name, ircd->protect_mchar, CLIENT_NAME(u));
-				cu->modes |= ircd->protect_mode;
-			}
-		}
-		else if ((mc->flags & MC_SECURE) && (cu->modes & ircd->protect_mode) && ircd->uses_protect)
-		{
-			char *mbuf = sstrdup(ircd->protect_mchar);
-			*mbuf = '-';
-
-			cmode(chansvs.nick, chan->name, mbuf, CLIENT_NAME(u));
-			cu->modes &= ~ircd->protect_mode;
-
-			free(mbuf);
-		}
-
-		if (should_op(mc, u->myuser))
-		{
-			if (!(cu->modes & CMODE_OP))
-			{
-				cmode(chansvs.nick, chan->name, "+o", CLIENT_NAME(u));
-				cu->modes |= CMODE_OP;
-			}
-		}
-		else if ((mc->flags & MC_SECURE) && (cu->modes & CMODE_OP))
-		{
-			cmode(chansvs.nick, chan->name, "-o", CLIENT_NAME(u));
-			cu->modes &= ~CMODE_OP;
-		}
-
-		if (should_halfop(mc, u->myuser))
-		{
-			if (ircd->uses_halfops && !(cu->modes & ircd->halfops_mode))
-			{
-				cmode(chansvs.nick, chan->name, "+h", CLIENT_NAME(u));
-				cu->modes |= ircd->halfops_mode;
-			}
-		}
-		else if ((mc->flags & MC_SECURE) && (cu->modes & ircd->halfops_mode) && ircd->uses_halfops)
-		{
-			cmode(chansvs.nick, chan->name, "-h", CLIENT_NAME(u));
-			cu->modes &= ~ircd->halfops_mode;
-		}
-
-		if (should_voice(mc, u->myuser) && !(cu->modes & CMODE_VOICE))
-		{
-			cmode(chansvs.nick, chan->name, "+v", CLIENT_NAME(u));
-			cu->modes |= CMODE_VOICE;
-		}
-	}
-
-	if (mc)
-	{
-		hostbuf[0] = '\0';
-
-		strlcat(hostbuf, u->nick, BUFSIZE);
-		strlcat(hostbuf, "!", BUFSIZE);
-		strlcat(hostbuf, u->user, BUFSIZE);
-		strlcat(hostbuf, "@", BUFSIZE);
-		strlcat(hostbuf, u->host, BUFSIZE);
-
-		/* the case u->myuser != NULL was treated above */
-		if ((mc->flags & MC_STAFFONLY) && !is_ircop(u) && u->myuser == NULL)
-		{
-			ban(chansvs.nick, chan->name, u);
-			kick(chansvs.nick, chan->name, u->nick, "You are not authorized to be on this channel");
-		}
-
-
-		if (should_kick_host(mc, hostbuf))
-		{
-			ban(chansvs.nick, chan->name, u);
-			kick(chansvs.nick, chan->name, u->nick, "User is banned from this channel");
-		}
-
-		if (!should_owner(mc, u->myuser) && (cu->modes & ircd->owner_mode))
-		{
-			char *mbuf = sstrdup(ircd->owner_mchar);
-			*mbuf = '-';
-
-			cmode(chansvs.nick, chan->name, mbuf, CLIENT_NAME(u));
-			cu->modes &= ~ircd->owner_mode;
-
-			free(mbuf);
-		}
-
-		if (!should_protect(mc, u->myuser) && (cu->modes & ircd->protect_mode))
-		{
-			char *mbuf = sstrdup(ircd->protect_mchar);
-			*mbuf = '-';
-
-			cmode(chansvs.nick, chan->name, mbuf, CLIENT_NAME(u));
-			cu->modes &= ~ircd->protect_mode;
-
-			free(mbuf);
-		}
-
-		if (should_op_host(mc, hostbuf))
-		{
-			if (!(cu->modes & CMODE_OP))
-			{
-				cmode(chansvs.nick, chan->name, "+o", CLIENT_NAME(u));
-				cu->modes |= CMODE_OP;
-			}
-		}
-		else if ((mc->flags & MC_SECURE) && !should_op(mc, u->myuser) && (cu->modes & CMODE_OP))
-		{
-			cmode(chansvs.nick, chan->name, "-o", CLIENT_NAME(u));
-			cu->modes &= ~CMODE_OP;
-		}
-
-		if (should_halfop_host(mc, hostbuf))
-		{
-			if (ircd->uses_halfops && !(cu->modes & ircd->halfops_mode))
-			{
-				cmode(chansvs.nick, chan->name, "+h", CLIENT_NAME(u));
-				cu->modes |= ircd->halfops_mode;
-			}
-		}
-		else if ((mc->flags & MC_SECURE) && ircd->uses_halfops && !should_halfop(mc, u->myuser) && (cu->modes & ircd->halfops_mode))
-		{
-			cmode(chansvs.nick, chan->name, "-h", CLIENT_NAME(u));
-			cu->modes &= ~ircd->halfops_mode;
-		}
-
-		if (should_voice_host(mc, hostbuf))
-		{
-			if (!(cu->modes & CMODE_VOICE))
-			{
-				cmode(chansvs.nick, chan->name, "+v", CLIENT_NAME(u));
-				cu->modes |= CMODE_VOICE;
-			}
-		}
-	}
-
 	hook_call_event("channel_join", cu);
-
-	check_modes(mc);
 
 	return cu;
 }
@@ -1048,13 +863,7 @@ void chanuser_delete(channel_t *chan, user_t *user)
 			chan->nummembers--;
 			cnt.chanuser--;
 
-			if (chan->nummembers == 1)
-			{
-				if (config_options.leave_chans)
-					part(chan->name, chansvs.nick);
-			}
-
-			else if (chan->nummembers == 0)
+			if (chan->nummembers == 0)
 			{
 				/* empty channels die */
 				slog(LG_DEBUG, "chanuser_delete(): `%s' is empty, removing", chan->name);
