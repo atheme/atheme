@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 2497 2005-10-01 04:35:25Z nenolod $
+ * $Id: ptasks.c 2961 2005-10-17 00:56:02Z jilles $
  */
 
 #include "atheme.h"
@@ -223,23 +223,25 @@ void handle_privmsg(char *origin, char *target, char *message)
 		return;
 	}
 
-	if (!(t = user_find(target)) && *target != '#')
+	/* If target is a channel and fantasy commands are enabled,
+	 * this will return chanserv */
+	sptr = find_service(target);
+	if (sptr == NULL)
 	{
-		slog(LG_DEBUG, "handle_privmsg(): got message to nonexistant user `%s'", target);
+		if (*target != '#')
+			slog(LG_DEBUG, "handle_privmsg(): got message to nonexistant user `%s'", target);
 		return;
 	}
 
-	/* Run it through flood checks. Channel commands are checked
-	 * separately. */
-	if (t != NULL && floodcheck(u, t))
-		return;
-
-	/* If target is a channel and fantasy commands are enabled,
-	 * this will return chanserv */
-	sptr = find_service(t ? t->nick : target);
-
 	if (sptr)
 	{
+		t = sptr->me;
+
+		/* Run it through flood checks. Channel commands are checked
+		 * separately. (XXX they aren't) */
+		if (t != NULL && floodcheck(u, t))
+			return;
+
 		vec[0] = target;
 		vec[1] = message;
 		vec[2] = NULL;

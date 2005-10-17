@@ -4,7 +4,7 @@
  *
  * Services binary tree manipulation. (add_service, del_service, et al.)
  *
- * $Id: servtree.c 2899 2005-10-16 01:22:18Z terminal $
+ * $Id: servtree.c 2961 2005-10-17 00:56:02Z jilles $
  */
 
 #include "atheme.h"
@@ -83,6 +83,7 @@ service_t *find_service(char *name)
 	service_t *sptr;
 	node_t *n;
 	char *svs;
+	int i;
 
 	if (name[0] == '#' && chansvs.fantasy)
 		return chansvs.me;
@@ -98,6 +99,19 @@ service_t *find_service(char *name)
 
 		if (!strcasecmp(svs, sptr->name))
 			return sptr;
+	}
+
+	if (ircd->uses_uid)
+	{
+		/* XXX this sucks -- jilles */
+		for (i = 0; i < HASHSIZE; i++)
+			LIST_FOREACH(n, services[i].head)
+			{
+				sptr = n->data;
+
+				if (sptr->me && !strcasecmp(svs, sptr->me->uid))
+					return sptr;
+			}
 	}
 
 	return NULL;

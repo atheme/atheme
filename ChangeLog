@@ -1,3 +1,11 @@
+nenolod     2005/10/16 20:27:20 UTC	(20051016-2959)
+  Log:
+  Clean up win32.c
+
+  Changes:	Modified:
+  +44 -62	trunk/libatheme/win32.c (File Modified) 
+
+
 nenolod     2005/10/16 20:19:59 UTC	(20051016-2957)
   Log:
   protocol fixes for win32
