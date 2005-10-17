@@ -3,9 +3,8 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Dynamic linker.
- * XXX: No windows code yet.
  *
- * $Id: linker.c 2811 2005-10-09 09:04:54Z terminal $
+ * $Id: linker.c 2967 2005-10-17 07:52:19Z nenolod $
  */
 
 #include "atheme.h"
@@ -18,7 +17,7 @@
 # define RTLD_NOW RTLD_LAZY
 #endif
 
-#ifndef _WIN32
+#if !defined(_WIN32) || !defined(__OS2__)
 # ifndef __HPUX__
 #  define PLATFORM_SUFFIX ".so"
 # else

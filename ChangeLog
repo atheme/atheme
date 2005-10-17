@@ -1,3 +1,13 @@
+pfish       2005/10/17 06:09:03 UTC	(20051017-2965)
+  Log:
+  make notice()'s more consistent 
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/memoserv/ignore.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/send.c (File Modified) 
+
+
 jilles      2005/10/17 01:18:59 UTC	(20051017-2963)
   Log:
   Make find_service() a bit more efficient (no more 64k hash
