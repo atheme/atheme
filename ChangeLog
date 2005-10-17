@@ -1,3 +1,19 @@
+pfish       2005/10/17 09:52:19 UTC	(20051017-2971)
+  Log:
+  Add ChanServ/COUNT:
+  -ChanServ- #support: VOp: 0, HOp: 0, AOp: 7, SOp: 4
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/dist/example.conf (File Modified) 
+  +2 -0		trunk/dist/example.userserv.conf (File Modified) 
+  +8 -0		trunk/help/cservice/count (File Added) 
+  +0 -11	trunk/help/cservice/raw (File Deleted) 
+  +1 -0		trunk/modules/chanserv/Makefile.in (File Modified) 
+  +1 -0		trunk/modules/chanserv/Makefile.win32 (File Modified) 
+  +84 -0	trunk/modules/chanserv/count.c (File Added) 
+
+
 nenolod     2005/10/17 07:54:35 UTC	(20051017-2969)
   Log:
   - Update .depend for org.atheme.services.binary.
