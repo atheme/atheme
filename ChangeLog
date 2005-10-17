@@ -1,3 +1,15 @@
+nenolod     2005/10/17 07:52:19 UTC	(20051017-2967)
+  Log:
+  - Add memoserv/ignore to win32 makefile.
+  - Initial work on an OS/2 port. Because I can, you see.
+  
+
+  Changes:	Modified:
+  +10 -2	trunk/include/atheme.h (File Modified) 
+  +1 -2		trunk/libatheme/linker.c (File Modified) 
+  +1 -0		trunk/modules/memoserv/Makefile.win32 (File Modified) 
+
+
 pfish       2005/10/17 06:09:03 UTC	(20051017-2965)
   Log:
   make notice()'s more consistent 

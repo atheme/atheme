@@ -1,1 +1,319 @@
-version.o: version.c
+atheme.o: atheme.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+authcookie.o: authcookie.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+base64.o: base64.c ../include/xmlrpc.h ../include/atheme.h \
+  ../include/sysconf.h ../include/stdinc.h ../include/libatheme.h \
+  ../include/sockio.h ../include/common.h ../include/node.h \
+  ../include/balloc.h ../include/connection.h ../include/servers.h \
+  ../include/channels.h ../include/module.h ../include/commandtree.h \
+  ../include/pmodule.h ../include/hook.h ../include/serno.h \
+  ../include/crypto.h ../include/linker.h ../include/culture.h \
+  ../include/callback.h ../include/xmlrpc.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+cmode.o: cmode.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+commandtree.o: commandtree.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+conf.o: conf.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+confparse.o: confparse.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+crypto.o: crypto.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+dbhandler.o: dbhandler.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+flags.o: flags.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+function.o: function.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+help.o: help.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+match.o: match.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+module.o: module.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+node.o: node.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+packet.o: packet.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+parse.o: parse.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+phandler.o: phandler.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+pmodule.o: pmodule.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+ptasks.o: ptasks.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+services.o: services.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+servtree.o: servtree.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+send.o: send.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+signal.o: signal.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+tokenize.o: tokenize.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+ubase64.o: ubase64.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+uid.o: uid.c ../include/atheme.h ../include/sysconf.h ../include/stdinc.h \
+  ../include/libatheme.h ../include/sockio.h ../include/common.h \
+  ../include/node.h ../include/balloc.h ../include/connection.h \
+  ../include/servers.h ../include/channels.h ../include/module.h \
+  ../include/commandtree.h ../include/pmodule.h ../include/hook.h \
+  ../include/serno.h ../include/crypto.h ../include/linker.h \
+  ../include/culture.h ../include/callback.h ../include/xmlrpc.h \
+  ../include/atheme.h ../include/account.h ../include/confparse.h \
+  ../include/flags.h ../include/extern.h ../include/metadata.h \
+  ../include/phandler.h ../include/servtree.h ../include/services.h \
+  ../include/users.h ../include/authcookie.h
+uplink.o: uplink.c ../include/atheme.h ../include/sysconf.h \
+  ../include/stdinc.h ../include/libatheme.h ../include/sockio.h \
+  ../include/common.h ../include/node.h ../include/balloc.h \
+  ../include/connection.h ../include/servers.h ../include/channels.h \
+  ../include/module.h ../include/commandtree.h ../include/pmodule.h \
+  ../include/hook.h ../include/serno.h ../include/crypto.h \
+  ../include/linker.h ../include/culture.h ../include/callback.h \
+  ../include/xmlrpc.h ../include/atheme.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
+xmlrpc.o: xmlrpc.c ../include/xmlrpc.h ../include/atheme.h \
+  ../include/sysconf.h ../include/stdinc.h ../include/libatheme.h \
+  ../include/sockio.h ../include/common.h ../include/node.h \
+  ../include/balloc.h ../include/connection.h ../include/servers.h \
+  ../include/channels.h ../include/module.h ../include/commandtree.h \
+  ../include/pmodule.h ../include/hook.h ../include/serno.h \
+  ../include/crypto.h ../include/linker.h ../include/culture.h \
+  ../include/callback.h ../include/xmlrpc.h ../include/account.h \
+  ../include/confparse.h ../include/flags.h ../include/extern.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/users.h ../include/authcookie.h
