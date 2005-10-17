@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 2899 2005-10-16 01:22:18Z terminal $
+ * $Id: conf.c 2977 2005-10-17 15:10:27Z nenolod $
  */
 
 #include "atheme.h"
@@ -1436,12 +1436,6 @@ boolean_t conf_check(void)
 	{
 		slog(LG_INFO, "conf_check(): invalid `recontime' set in %s; " "defaulting to 10", config_file);
 		me.recontime = 10;
-	}
-
-	if ((!me.restarttime) || (me.restarttime < 10))
-	{
-		slog(LG_INFO, "conf_check(): invalid `restarttime' set in %s; " "defaulting to 10", config_file);
-		me.restarttime = 10;
 	}
 
 	if (!me.netname)

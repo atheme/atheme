@@ -4,7 +4,7 @@
  *
  * This file contains the signal handling routines.
  *
- * $Id: signal.c 2821 2005-10-10 04:12:13Z terminal $
+ * $Id: signal.c 2977 2005-10-17 15:10:27Z nenolod $
  */
 
 #include "atheme.h"
@@ -51,7 +51,7 @@ void sighandler(int signum)
 
 	else if (signum == SIGINT && !(runflags & RF_LIVE))
 	{
-		wallops("Got SIGINT; restarting in \2%d\2 seconds.", me.restarttime);
+		wallops("Got SIGINT; restarting.");
 
 		snoop("UPDATE: \2%s\2", "system console");
 		wallops("Updating database by request of \2%s\2.", "system console");
@@ -59,7 +59,7 @@ void sighandler(int signum)
 		db_save(NULL);
 
 		snoop("RESTART: \2%s\2", "system console");
-		wallops("Restarting in \2%d\2 seconds by request of \2%s\2.", me.restarttime, "system console");
+		wallops("Restarting by request of \2%s\2.", "system console");
 
 		slog(LG_INFO, "sighandler(): restarting...");
 		runflags |= RF_RESTART;
@@ -84,7 +84,7 @@ void sighandler(int signum)
 
 	else if (signum == SIGUSR2)
 	{
-		wallops("Got SIGUSER2; restarting in \2%d\2 seconds.", me.restarttime);
+		wallops("Got SIGUSER2; restarting.");
 
 		snoop("UPDATE: \2%s\2", "system console");
 		wallops("Updating database by request of \2%s\2.", "system console");
@@ -92,7 +92,7 @@ void sighandler(int signum)
 		db_save(NULL);
 
 		snoop("RESTART: \2%s\2", "system console");
-		wallops("Restarting in \2%d\2 seconds by request of \2%s\2.", me.restarttime, "system console");
+		wallops("Restarting by request of \2%s\2.", "system console");
 
 		slog(LG_INFO, "sighandler(): restarting...");
 		runflags |= RF_RESTART;

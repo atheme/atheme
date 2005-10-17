@@ -1,3 +1,12 @@
+kog         2005/10/17 11:55:05 UTC	(20051017-2975)
+  Log:
+  uses fcommand for lookups, cleaner and better working code. Now actually works! 
+  
+
+  Changes:	Modified:
+  +136 -105	trunk/modules/memoserv/ignore.c (File Modified) 
+
+
 pfish       2005/10/17 09:57:25 UTC	(20051017-2973)
   Log:
   allow ircop override

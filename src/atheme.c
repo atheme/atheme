@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 2951 2005-10-16 12:25:02Z kog $
+ * $Id: atheme.c 2977 2005-10-17 15:10:27Z nenolod $
  */
 
 #include "atheme.h"
@@ -299,8 +299,6 @@ int main(int argc, char *argv[])
 		slog(LG_INFO, "main(): restarting in %d seconds", me.restarttime);
 
 #ifndef _WIN32
-		sleep(me.restarttime);
-
 		execve("bin/atheme", argv, environ);
 #endif
 	}
