@@ -1,0 +1,8 @@
+Help for COUNT:
+
+This will give a count of how many entries are in each of the room's lists.
+
+Syntax: COUNT <#channel>
+
+Examples:
+    /msg &nick& COUNT #teenconnection

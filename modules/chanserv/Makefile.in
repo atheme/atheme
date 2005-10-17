@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2599 2005-10-05 06:40:04Z nenolod $
+# $Id: Makefile.in 2971 2005-10-17 09:52:19Z pfish $
 #
 
 CC		= @CC@
@@ -33,6 +33,7 @@ BASE_SRCS = 		\
 	clear_bans.c	\
 	clear_users.c	\
 	close.c		\
+	count.c		\
 	drop.c		\
 	flags.c		\
 	ftransfer.c	\
