@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 2979 2005-10-17 23:58:46Z alambert $
+ * $Id: node.c 2987 2005-10-18 23:14:57Z alambert $
  */
 
 #include "atheme.h"
@@ -850,7 +850,11 @@ void chanuser_delete(channel_t *chan, user_t *user)
 
 		if (cu->user == user)
 		{
-			hook_call_event("channel_part", cu);
+			/* We don't fire channel_join for internal clients,
+			 * so don't fire channel_part, either.  --alambert
+			 */
+			if (!(user->server == me.me || user->server == NULL))
+				hook_call_event("channel_part", cu);
 
 			slog(LG_DEBUG, "chanuser_delete(): %s -> %s (%d)", cu->chan->name, cu->user->nick, cu->chan->nummembers - 1);
 			node_del(n, &chan->members);

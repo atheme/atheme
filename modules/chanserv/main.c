@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 2983 2005-10-18 18:21:56Z nenolod $
+ * $Id: main.c 2987 2005-10-18 23:14:57Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 2983 2005-10-18 18:21:56Z nenolod $",
+	"$Id: main.c 2987 2005-10-18 23:14:57Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -345,6 +345,15 @@ static void cs_join(chanuser_t *cu)
 
 static void cs_part(chanuser_t *cu)
 {
-	if (config_options.leave_chans && (cu->chan->nummembers == 1))
+	/*
+	 * When channel_part is fired, we haven't yet removed the
+	 * user from the room. So, the channel will have two members
+	 * if ChanServ is joining channels: the triggering user and
+	 * itself.
+	 */
+	if (config_options.join_chans
+		&& config_options.leave_chans
+		&& (cu->chan->nummembers <= 2)
+		&& (cu->user != chansvs.me->me))
 		part(cu->chan->name, chansvs.nick);
 }
