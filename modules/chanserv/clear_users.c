@@ -4,7 +4,7 @@
  *
  * This file contains code for the ChanServ CLEAR USERS function.
  *
- * $Id: clear_users.c 2853 2005-10-12 11:05:25Z jilles $
+ * $Id: clear_users.c 2991 2005-10-18 23:55:43Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/clear_users", FALSE, _modinit, _moddeinit,
-	"$Id: clear_users.c 2853 2005-10-12 11:05:25Z jilles $",
+	"$Id: clear_users.c 2991 2005-10-18 23:55:43Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -49,19 +49,13 @@ static void cs_cmd_clear_users(char *origin, char *channel)
 	else
 		snprintf(fullreason, sizeof fullreason, "CLEAR USERS used by %s", origin);
 
-	if (!u->myuser)
-	{
-		notice(chansvs.nick, origin, "You are not logged in.");
-		return;
-	}
-
 	if (!mc)
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is not registered.", c->name);
 		return;
 	}
 
-	if ((ca = chanacs_find(mc, u->myuser, CA_RECOVER)) == NULL)
+	if (!chanacs_user_has_flag(mc, u, CA_RECOVER))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 		return;

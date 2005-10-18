@@ -1,3 +1,13 @@
+alambert    2005/10/18 23:44:17 UTC	(20051018-2989)
+  Log:
+  file headers
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/ghost.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/identify.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/link.c (File Modified) 
+
+
 alambert    2005/10/18 23:14:57 UTC	(20051018-2987)
   Log:
   Fix problem with ChanServ not properly parting after cleanup
