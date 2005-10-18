@@ -4,7 +4,7 @@
  *
  * Commandtree manipulation routines.
  *
- * $Id: commandtree.c 2497 2005-10-01 04:35:25Z nenolod $
+ * $Id: commandtree.c 2983 2005-10-18 18:21:56Z nenolod $
  */
 
 #include "atheme.h"
@@ -154,7 +154,7 @@ void fcommand_delete(fcommand_t * cmd, list_t *commandtree)
 	node_del(n, commandtree);
 }
 
-void fcommand_exec(char *channel, char *origin, char *cmd, list_t *commandtree)
+void fcommand_exec(char *mynick, char *channel, char *origin, char *cmd, list_t *commandtree)
 {
 	node_t *n;
 
@@ -184,8 +184,11 @@ void fcommand_exec(char *channel, char *origin, char *cmd, list_t *commandtree)
 				return;
 			}
 
-			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+			notice(mynick, origin, "You are not authorized to perform this operation.");
 			return;
 		}
 	}
+
+	if (*channel != '#')
+		notice(mynick, origin, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", mynick);
 }

@@ -1,3 +1,12 @@
+nenolod     2005/10/18 17:33:53 UTC	(20051018-2981)
+  Log:
+  *grumble*
+  
+
+  Changes:	Modified:
+  +1 -9		trunk/include/atheme.h (File Modified) 
+
+
 alambert    2005/10/17 23:58:46 UTC	(20051017-2979)
   Log:
   move ChanServ functions out of chanuser_add() and into ChanServ itself. still needs cleanup but much better than having them in node.c

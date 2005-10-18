@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 2979 2005-10-17 23:58:46Z alambert $
+ * $Id: main.c 2983 2005-10-18 18:21:56Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 2979 2005-10-17 23:58:46Z alambert $",
+	"$Id: main.c 2983 2005-10-18 18:21:56Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -97,10 +97,10 @@ static void chanserv(char *origin, uint8_t parc, char *parv[])
 
 	/* take the command through the hash table */
 	if (!is_fcommand)
-		command_exec(chansvs.disp, origin, cmd, &cs_cmdtree);
+		command_exec(chansvs.nick, origin, cmd, &cs_cmdtree);
 	else
 	{
-		fcommand_exec(parv[parc - 2], origin, cmd, &cs_fcmdtree);
+		fcommand_exec(chansvs.nick, parv[parc - 2], origin, cmd, &cs_fcmdtree);
 
 		cdata.c = channel_find(parv[parc - 2]);
 		cdata.msg = parv[parc - 1];
