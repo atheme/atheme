@@ -2,9 +2,9 @@
  * Copyright (c) 2005 William Pitcock, et al.
  * Rights to this code are as documented in doc/LICENSE.
  *
- * This file contains code for the CService LOGIN functions.
+ * This file contains code for the NickServ GHOST function.
  *
- * $Id: ghost.c 2557 2005-10-04 06:44:30Z pfish $
+ * $Id: ghost.c 2989 2005-10-18 23:44:17Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/ghost", FALSE, _modinit, _moddeinit,
-	"$Id: ghost.c 2557 2005-10-04 06:44:30Z pfish $",
+	"$Id: ghost.c 2989 2005-10-18 23:44:17Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

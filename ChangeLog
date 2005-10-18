@@ -1,3 +1,12 @@
+alambert    2005/10/18 23:14:57 UTC	(20051018-2987)
+  Log:
+  Fix problem with ChanServ not properly parting after cleanup
+
+  Changes:	Modified:
+  +10 -1	trunk/modules/chanserv/main.c (File Modified) 
+  +5 -1		trunk/src/node.c (File Modified) 
+
+
 nenolod     2005/10/18 19:00:21 UTC	(20051018-2985)
   Log:
   Fix bug #57:

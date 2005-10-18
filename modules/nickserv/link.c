@@ -2,9 +2,9 @@
  * Copyright (c) 2005 William Pitcock, et al.
  * Rights to this code are as documented in doc/LICENSE.
  *
- * This file contains code for the NickServ REGISTER function.
+ * This file contains code for the NickServ LINK function.
  *
- * $Id: link.c 2557 2005-10-04 06:44:30Z pfish $
+ * $Id: link.c 2989 2005-10-18 23:44:17Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/link", FALSE, _modinit, _moddeinit,
-	"$Id: link.c 2557 2005-10-04 06:44:30Z pfish $",
+	"$Id: link.c 2989 2005-10-18 23:44:17Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

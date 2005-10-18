@@ -2,9 +2,9 @@
  * Copyright (c) 2005 William Pitcock, et al.
  * Rights to this code are as documented in doc/LICENSE.
  *
- * This file contains code for the CService LOGIN functions.
+ * This file contains code for the NickServ IDENTIFY function.
  *
- * $Id: identify.c 2741 2005-10-07 00:50:12Z jilles $
+ * $Id: identify.c 2989 2005-10-18 23:44:17Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/identify", FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 2741 2005-10-07 00:50:12Z jilles $",
+	"$Id: identify.c 2989 2005-10-18 23:44:17Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
