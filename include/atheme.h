@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 2967 2005-10-17 07:52:19Z nenolod $
+ * $Id: atheme.h 2981 2005-10-18 17:33:53Z nenolod $
  */
 
 #ifndef ATHEME_H
@@ -13,20 +13,12 @@
 /* *INDENT-OFF* */
 
 /* Extern type definition */
-#if defined(_WIN32)		/* Windows */
+#ifdef _WIN32			/* Windows */
 #	ifdef I_AM_A_MODULE
 #		define DLE __declspec (dllimport)
 #		define E extern DLE
 #	else
 #		define DLE __declspec (dllexport)
-#		define E extern DLE
-#	endif
-#elif defined (__OS2__)		/* OS/2 */
-#	ifdef I_AM_A_MODULE
-#		define DLE __import __syscall
-#		define E extern DLE
-#	else
-#		define DLE __export __syscall
 #		define E extern DLE
 #	endif
 #else				/* POSIX */

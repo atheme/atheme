@@ -1,3 +1,12 @@
+alambert    2005/10/17 23:58:46 UTC	(20051017-2979)
+  Log:
+  move ChanServ functions out of chanuser_add() and into ChanServ itself. still needs cleanup but much better than having them in node.c
+
+  Changes:	Modified:
+  +214 -0	trunk/modules/chanserv/main.c (File Modified) 
+  +1 -192	trunk/src/node.c (File Modified) 
+
+
 nenolod     2005/10/17 15:10:27 UTC	(20051017-2977)
   Log:
   Death to restart delay.
