@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 2899 2005-10-16 01:22:18Z terminal $
+ * $Id: set.c 3009 2005-10-19 05:02:21Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 2899 2005-10-16 01:22:18Z terminal $",
+	"$Id: set.c 3009 2005-10-19 05:02:21Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -960,6 +960,9 @@ static void cs_join_entrymsg(chanuser_t *cu)
 	mychan_t *mc;
 	metadata_t *md;
 
+	if (is_internal_client(cu->user))
+		return;
+	
 	if (!(mc = mychan_find(cu->chan->name)))
 		return;
 
@@ -971,6 +974,9 @@ static void cs_join_url(chanuser_t *cu)
 {
 	mychan_t *mc;
 	metadata_t *md;
+
+	if (is_internal_client(cu->user))
+		return;
 
 	if (!(mc = mychan_find(cu->chan->name)))
 		return;

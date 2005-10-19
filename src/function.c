@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 2985 2005-10-18 19:00:21Z nenolod $
+ * $Id: function.c 3009 2005-10-19 05:02:21Z alambert $
  */
 
 #include "atheme.h"
@@ -359,6 +359,11 @@ unsigned long makekey(void)
 		k = k + 100000000;
 
 	return k;
+}
+
+boolean_t is_internal_client(user_t *u)
+{
+	return (u && (!u->server || u->server == me.me));
 }
 
 int validemail(char *email)

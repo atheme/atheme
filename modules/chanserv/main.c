@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 2987 2005-10-18 23:14:57Z alambert $
+ * $Id: main.c 3009 2005-10-19 05:02:21Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 2987 2005-10-18 23:14:57Z alambert $",
+	"$Id: main.c 3009 2005-10-19 05:02:21Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -157,6 +157,9 @@ static void cs_join(chanuser_t *cu)
 	 * it here than in node.c. It still needs a massive cleanup. Use the
 	 * utility function chanacs_user_has_flag().              --alambert
 	 */
+
+	if (is_internal_client(cu->user))
+		return;
 
 	if ((chan->nummembers == 1) && (irccasecmp(config_options.chan, chan->name)))
 	{
@@ -354,6 +357,6 @@ static void cs_part(chanuser_t *cu)
 	if (config_options.join_chans
 		&& config_options.leave_chans
 		&& (cu->chan->nummembers <= 2)
-		&& (cu->user != chansvs.me->me))
+		&& !is_internal_client(cu->user))
 		part(cu->chan->name, chansvs.nick);
 }
