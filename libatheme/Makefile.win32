@@ -32,14 +32,14 @@ SOURCES = \
 
 OBJS=${SOURCES:.c=.o}
 
-all: libatheme.a
+all: liborg.atheme.claro.base.a
 build: all
 
 # This stuff is not installed for now.
 install: all
 	@:
 
-libatheme.a: ${OBJS}
+liborg.atheme.claro.base.a: ${OBJS}
 	${AR} cqv $@ ${OBJS}
 	${RANLIB} $@
 

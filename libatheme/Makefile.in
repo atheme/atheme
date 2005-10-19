@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in 1847 2005-08-24 07:00:42Z nenolod $
+# $Id: Makefile.in 3007 2005-10-19 05:01:00Z nenolod $
 #
 
 CC		= @CC@
@@ -31,14 +31,14 @@ SOURCES = \
 
 OBJS=${SOURCES:.c=.o}
 
-all: libatheme.a
+all: liborg.atheme.claro.base.a
 build: all
 
 # This stuff is not installed for now.
 install: all
 	@:
 
-libatheme.a: ${OBJS}
+liborg.atheme.claro.base.a: ${OBJS}
 	rm -f $@
 	${AR} cqv $@ ${OBJS}
 	${RANLIB} $@

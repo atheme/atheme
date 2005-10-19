@@ -1,3 +1,19 @@
+nenolod     2005/10/19 04:53:56 UTC	(20051019-3005)
+  Log:
+  We're almost self hosting! :)
+  
+
+  Changes:	Modified:
+  +5 -23	trunk/include/atheme.h (File Modified) 
+  +0 -1		trunk/include/common.h (File Modified) 
+  +0 -31	trunk/include/hook.h (File Deleted) 
+  +0 -38	trunk/include/sockio.h (File Deleted) 
+  +28 -0	trunk/libatheme/event.h (File Modified) 
+  + -		trunk/libatheme/hook.h (File Added) 
+  +30 -6	trunk/libatheme/org.atheme.claro.base (File Modified) 
+  + -		trunk/libatheme/sockio.h (File Added) 
+
+
 nenolod     2005/10/19 04:42:55 UTC	(20051019-3003)
   Log:
   More moving around :)
