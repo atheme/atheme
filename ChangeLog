@@ -1,3 +1,13 @@
+nenolod     2005/10/19 05:11:16 UTC	(20051019-3011)
+  Log:
+  org.atheme.claro.base will want sysconf regardless, so yeah!
+  
+
+  Changes:	Modified:
+  +0 -3		trunk/include/atheme.h (File Modified) 
+  +1 -0		trunk/libatheme/org.atheme.claro.base (File Modified) 
+
+
 alambert    2005/10/19 05:02:21 UTC	(20051019-3009)
   Log:
   chanuser_add(), chanuser_delete(): make joins and parts trigger for internal clients, too. Add is_internal_client() to help modules differentiate between user actions and internal client actions.

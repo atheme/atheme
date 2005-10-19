@@ -4,7 +4,7 @@
  *
  * Data structures for the block allocator.
  *
- * $Id: balloc.h 3001 2005-10-19 04:40:25Z nenolod $
+ * $Id: balloc.h 3013 2005-10-19 05:14:23Z nenolod $
  */
 
 #ifndef BALLOC_H
@@ -42,5 +42,15 @@ struct BlockHeap
   Block *base;            /* Pointer to first block */
 };
 typedef struct BlockHeap BlockHeap;
+
+E int BlockHeapFree(BlockHeap *bh, void *ptr);
+E void *BlockHeapAlloc(BlockHeap *bh);
+
+E BlockHeap *BlockHeapCreate(size_t elemsize, int elemsperblock);
+E int BlockHeapDestroy(BlockHeap *bh);
+
+E void initBlockHeap(void);
+E void BlockHeapUsage(BlockHeap *bh, size_t * bused, size_t * bfree,
+                      size_t * bmemusage);
 
 #endif

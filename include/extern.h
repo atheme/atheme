@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 2899 2005-10-16 01:22:18Z terminal $
+ * $Id: extern.h 3013 2005-10-19 05:14:23Z nenolod $
  */
 
 #ifndef EXTERN_H
@@ -12,19 +12,6 @@
 
 /* save some space/typing */
 /* -> moved to atheme.h */
-
-/* balloc.c */
-E BlockHeap *strdup_heap;
-
-E int BlockHeapFree(BlockHeap *bh, void *ptr);
-E void *BlockHeapAlloc(BlockHeap *bh);
-
-E BlockHeap *BlockHeapCreate(size_t elemsize, int elemsperblock);
-E int BlockHeapDestroy(BlockHeap *bh);
-
-E void initBlockHeap(void);
-E void BlockHeapUsage(BlockHeap *bh, size_t * bused, size_t * bfree,
-		      size_t * bmemusage);
 
 E boolean_t cold_start;
 
