@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 3017 2005-10-19 05:18:49Z nenolod $
+ * $Id: extern.h 3021 2005-10-19 05:23:38Z nenolod $
  */
 
 #ifndef EXTERN_H
@@ -52,10 +52,6 @@ E int32_t tv2ms(struct timeval *tv);
 E void tb2sp(char *line);
 
 E char *strscpy(char *d, const char *s, size_t len);
-E void *smalloc(size_t size);
-E void *scalloc(size_t elsize, size_t els);
-E void *srealloc(void *oldptr, size_t newsize);
-E char *sstrdup(const char *s);
 E void strip(char *line);
 
 E void log_open(void);

@@ -1,3 +1,14 @@
+nenolod     2005/10/19 05:19:40 UTC	(20051019-3019)
+  Log:
+  Lets avoid a collision here.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/libatheme/org.atheme.claro.base (File Modified) 
+  + -		trunk/libatheme/org.atheme.claro.base.string (File Added) 
+  +0 -20	trunk/libatheme/string.h (File Deleted) 
+
+
 nenolod     2005/10/19 05:18:49 UTC	(20051019-3017)
   Log:
   !*($(&$(*@!
