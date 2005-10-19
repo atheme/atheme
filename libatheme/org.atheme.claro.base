@@ -4,7 +4,7 @@
  *
  * libatheme stuff.
  *
- * $Id: org.atheme.claro.base 3017 2005-10-19 05:18:49Z nenolod $
+ * $Id: org.atheme.claro.base 3019 2005-10-19 05:19:40Z nenolod $
  */
 
 #ifndef __CLAROBASE
@@ -38,7 +38,7 @@
 #include "hook.h"
 #include "linker.h"
 #include "callback.h"
-#include "string.h"
+#include <org.atheme.claro.base.string>
 
 E void (*clog)(uint32_t, const char *, ...);
 E void libclaro_init(void (*ilog)(uint32_t, const char *, ...));

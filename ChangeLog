@@ -1,3 +1,17 @@
+nenolod     2005/10/19 05:18:49 UTC	(20051019-3017)
+  Log:
+  !*($(&$(*@!
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/include/common.h (File Modified) 
+  +0 -20	trunk/include/extern.h (File Modified) 
+  +12 -0	trunk/libatheme/event.h (File Modified) 
+  +2 -0		trunk/libatheme/org.atheme.claro.base (File Modified) 
+  +1 -1		trunk/libatheme/sockio.c (File Modified) 
+  +20 -0	trunk/libatheme/string.h (File Added) 
+
+
 alambert    2005/10/19 05:14:59 UTC	(20051019-3015)
   Log:
   Rename atheme_init.sql to atheme_init.pgsql, now that we have MySQL support
