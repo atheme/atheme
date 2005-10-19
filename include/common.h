@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: common.h 3005 2005-10-19 04:53:56Z nenolod $
+ * $Id: common.h 3017 2005-10-19 05:18:49Z nenolod $
  */
 
 #ifndef COMMON_H
@@ -15,7 +15,6 @@
 #define MODESTACK_WAIT 500
 #define MAXMODES 4
 #define MAXPARAMSLEN (510-32-64-34-(7+MAXMODES))
-#define MAX_EVENTS 25
 #define TOKEN_UNMATCHED -1
 #define TOKEN_ERROR -2
 

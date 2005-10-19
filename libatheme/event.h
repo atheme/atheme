@@ -23,4 +23,16 @@ struct ev_entry
   boolean_t active;
 };
 
+E struct ev_entry event_table[MAX_EVENTS];
+E const char *last_event_ran;
+
+E uint32_t event_add(const char *name, EVH *func, void *arg, time_t when);
+E uint32_t event_add_once(const char *name, EVH *func, void *arg,
+                          time_t when);
+E void event_run(void);
+E time_t event_next_time(void);
+E void event_init(void);
+E void event_delete(EVH *func, void *arg);
+E uint32_t event_find(EVH *func, void *arg);
+
 #endif

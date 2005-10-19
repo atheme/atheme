@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 3013 2005-10-19 05:14:23Z nenolod $
+ * $Id: extern.h 3017 2005-10-19 05:18:49Z nenolod $
  */
 
 #ifndef EXTERN_H
@@ -33,19 +33,6 @@ E void config_free(CONFIGFILE *cfptr);
 E CONFIGFILE *config_load(char *filename);
 E CONFIGENTRY *config_find(CONFIGENTRY *ceptr, char *name);
 
-/* event.c */
-E struct ev_entry event_table[MAX_EVENTS];
-E const char *last_event_ran;
-
-E uint32_t event_add(const char *name, EVH *func, void *arg, time_t when);
-E uint32_t event_add_once(const char *name, EVH *func, void *arg,
-			  time_t when);
-E void event_run(void);
-E time_t event_next_time(void);
-E void event_init(void);
-E void event_delete(EVH *func, void *arg);
-E uint32_t event_find(EVH *func, void *arg);
-
 /* flags.c */
 E uint32_t flags_to_bitmask(const char *, struct flags_table[], uint32_t flags);
 E char *bitmask_to_flags(uint32_t, struct flags_table[]);
@@ -53,13 +40,6 @@ E struct flags_table chanacs_flags[];
 
 /* function.c */
 E FILE *log_file;
-
-#ifndef HAVE_STRLCAT
-E size_t strlcat(char *dest, const char *src, size_t count);
-#endif
-#ifndef HAVE_STRLCPY
-E size_t strlcpy(char *dest, const char *src, size_t count);
-#endif
 
 E char *gen_pw(int8_t sz);
 

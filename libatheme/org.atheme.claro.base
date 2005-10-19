@@ -4,7 +4,7 @@
  *
  * libatheme stuff.
  *
- * $Id: org.atheme.claro.base 3011 2005-10-19 05:11:16Z nenolod $
+ * $Id: org.atheme.claro.base 3017 2005-10-19 05:18:49Z nenolod $
  */
 
 #ifndef __CLAROBASE
@@ -26,6 +26,7 @@
 
 #define BUFSIZE  1024            /* maximum size of a buffer */
 #define HOSTLEN  64		 /* seems good enough */
+#define MAX_EVENTS	1024	 /* that's enough events, really! */
 
 #include "sysconf.h"
 #include "stdinc.h"
@@ -37,6 +38,7 @@
 #include "hook.h"
 #include "linker.h"
 #include "callback.h"
+#include "string.h"
 
 E void (*clog)(uint32_t, const char *, ...);
 E void libclaro_init(void (*ilog)(uint32_t, const char *, ...));

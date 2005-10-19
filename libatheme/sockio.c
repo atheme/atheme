@@ -4,7 +4,7 @@
  *
  * Platform-independent Network I/O layer.
  *
- * $Id: sockio.c 1626 2005-08-11 21:56:39Z nenolod $
+ * $Id: sockio.c 3017 2005-10-19 05:18:49Z nenolod $
  */
 
 #include "atheme.h"
@@ -38,7 +38,7 @@ void socket_seterror(int eno)
 
 char *socket_strerror(int eno)
 {
-	return strerror(eno);
+	return (char *) strerror(eno);
 }
 
 int socket_setnonblocking(socket_t socket)
