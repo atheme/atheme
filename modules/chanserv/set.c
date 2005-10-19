@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3031 2005-10-19 06:06:53Z pfish $
+ * $Id: set.c 3033 2005-10-19 23:36:17Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3031 2005-10-19 06:06:53Z pfish $",
+	"$Id: set.c 3033 2005-10-19 23:36:17Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -1054,30 +1054,52 @@ static void cs_join_url(chanuser_t *cu)
 		numeric_sts(me.name, 328, cu->user->nick, "%s :%s", mc->name, md->value);
 }
 
-
+/* Called on creation of a channel */
 static void cs_keeptopic(channel_t *c)
 {
 	mychan_t *mc;
 	metadata_t *md;
-
+	char *setter;
+	char *text;
+	time_t channelts;
+	time_t topicts;
 
 	if (!(mc = mychan_find(c->name)))
 		return;
 
-	if ((MC_KEEPTOPIC & mc->flags) && (md = metadata_find(mc, METADATA_CHANNEL, "private:topic:setter")))
+	if (!(MC_KEEPTOPIC & mc->flags))
+		return;
+
+	md = metadata_find(mc, METADATA_CHANNEL, "private:channelts");
+	if (md == NULL)
+		return;
+	channelts = atol(md->value);
+	if (channelts == c->ts)
 	{
-		char *setter = md->value;
-		char *text;
-		char *ts;	
-
-		md = metadata_find(mc, METADATA_CHANNEL, "private:topic:text");
-		text = md->value;
-
-		md = metadata_find(mc, METADATA_CHANNEL, "private:mark:ts");
-		ts = md->value;
-
-//		slog(LG_DEBUG, "[DEBUG] chan name: %s setter: %s ts: %d text: %s", c->name, setter, ts, text);
-
-		topic_sts(c->name, setter, text);
+		/* Same channel, let's assume ircd has kept it.
+		 * Probably not a good assumption if the ircd doesn't do
+		 * topic bursting.
+		 * -- jilles */
+		slog(LG_DEBUG, "Not doing keeptopic for %s because of equal channelTS", c->name);
+		return;
 	}
+
+	md = metadata_find(mc, METADATA_CHANNEL, "private:topic:setter");
+	if (md == NULL)
+		return;
+	setter = md->value;
+
+	md = metadata_find(mc, METADATA_CHANNEL, "private:topic:text");
+	if (md == NULL)
+		return;
+	text = md->value;
+
+	md = metadata_find(mc, METADATA_CHANNEL, "private:topic:ts");
+	if (md == NULL)
+		return;
+	topicts = atol(md->value);
+
+//	slog(LG_DEBUG, "[DEBUG] chan name: %s setter: %s ts: %ld text: %s", c->name, setter, (long)topicts, text);
+
+	topic_sts(c->name, setter, text);
 }

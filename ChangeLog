@@ -1,3 +1,14 @@
+pfish       2005/10/19 06:06:53 UTC	(20051019-3031)
+  Log:
+  Initial keeptopic stuff, not live yet. But it works.
+  
+
+  Changes:	Modified:
+  +1 -2		trunk/help/oservice/restart (File Modified) 
+  +1 -0		trunk/include/account.h (File Modified) 
+  +98 -1	trunk/modules/chanserv/set.c (File Modified) 
+
+
 nenolod     2005/10/19 05:55:21 UTC	(20051019-3029)
   Log:
   Whee!
