@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 2981 2005-10-18 17:33:53Z nenolod $
+ * $Id: atheme.h 2999 2005-10-19 04:40:11Z nenolod $
  */
 
 #ifndef ATHEME_H
@@ -31,7 +31,7 @@
 #include "libatheme.h"
 #include "sockio.h"
 #include "common.h"
-#include "node.h"
+#include "dlink.h"
 #include "balloc.h"
 #include "connection.h"
 #include "servers.h"
@@ -185,17 +185,6 @@ struct cmode_
 {
         char mode;
         uint32_t value;
-};
-
-/* event list struct */
-struct ev_entry
-{
-  EVH *func;
-  void *arg;
-  const char *name;
-  time_t frequency;
-  time_t when;
-  boolean_t active;
 };
 
 /* tld list struct */
