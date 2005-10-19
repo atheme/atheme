@@ -1,3 +1,39 @@
+nenolod     2005/10/19 04:01:49 UTC	(20051019-2995)
+  Log:
+  Add libatheme/ to includes.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/backend/Makefile.in (File Modified) 
+  +1 -1		trunk/backend/Makefile.win32 (File Modified) 
+  +1 -1		trunk/contrib/Makefile.in (File Modified) 
+  +1 -1		trunk/crypto/Makefile.in (File Modified) 
+  +1 -1		trunk/dbtool/Makefile.in (File Modified) 
+  +1 -1		trunk/dbtool/Makefile.win32 (File Modified) 
+  +1 -1		trunk/modules/Makefile.in (File Modified) 
+  +1 -1		trunk/modules/Makefile.win32 (File Modified) 
+  +2 -2		trunk/modules/chanserv/Makefile.in (File Modified) 
+  +1 -1		trunk/modules/chanserv/Makefile.win32 (File Modified) 
+  +2 -2		trunk/modules/global/Makefile.in (File Modified) 
+  +1 -1		trunk/modules/global/Makefile.win32 (File Modified) 
+  +1 -1		trunk/modules/helpserv/Makefile.in (File Modified) 
+  +1 -1		trunk/modules/helpserv/Makefile.win32 (File Modified) 
+  +1 -1		trunk/modules/memoserv/Makefile.in (File Modified) 
+  +1 -1		trunk/modules/memoserv/Makefile.win32 (File Modified) 
+  +1 -1		trunk/modules/nickserv/Makefile.in (File Modified) 
+  +1 -1		trunk/modules/nickserv/Makefile.win32 (File Modified) 
+  +1 -1		trunk/modules/operserv/Makefile.in (File Modified) 
+  +1 -1		trunk/modules/operserv/Makefile.win32 (File Modified) 
+  +1 -1		trunk/modules/userserv/Makefile.in (File Modified) 
+  +1 -1		trunk/modules/userserv/Makefile.win32 (File Modified) 
+  +1 -1		trunk/modules/xmlrpc/Makefile.in (File Modified) 
+  +1 -1		trunk/modules/xmlrpc/Makefile.win32 (File Modified) 
+  +1 -1		trunk/protocol/Makefile.in (File Modified) 
+  +1 -1		trunk/protocol/Makefile.win32 (File Modified) 
+  +1 -1		trunk/src/Makefile.in (File Modified) 
+  +1 -1		trunk/src/Makefile.win32 (File Modified) 
+
+
 alambert    2005/10/19 00:04:39 UTC	(20051019-2993)
   Log:
   CS CLEAR:

@@ -1,0 +1,20 @@
+/*
+ * This is a claro package manifest file.
+ * Copyright (c) 2005 atheme.org.
+ *
+ * Visit the claro website at http://claro.atheme.org
+ *
+ * $Id$
+ */
+dependency "org.atheme.claro.base";
+dependency "org.atheme.claro.net";
+dependency "org.atheme.claro.net.listener";
+dependency "org.atheme.claro.net.event";
+
+package "org.atheme.services" {
+	serno_header = "serno.h"; // alternatively use serial
+	version = "0.3";
+	human_name = "Atheme IRC Services";
+	human_copyright = "Copyright (c) 2005 Atheme Development Group (atheme.org)";	
+};
+	
