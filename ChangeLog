@@ -1,3 +1,14 @@
+nenolod     2005/10/19 04:42:55 UTC	(20051019-3003)
+  Log:
+  More moving around :)
+  
+
+  Changes:	Modified:
+  +4 -1		trunk/include/atheme.h (File Modified) 
+  +21 -18	trunk/include/libatheme.h (File Deleted) 
+  + -		trunk/libatheme/org.atheme.claro.base (File Added) 
+
+
 nenolod     2005/10/19 04:40:25 UTC	(20051019-3001)
   Log:
   Finish move. :p

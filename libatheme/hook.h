@@ -4,7 +4,7 @@
  *
  * A hook system.
  *
- * $Id: hook.h 2835 2005-10-11 05:27:26Z terminal $
+ * $Id: hook.h 3005 2005-10-19 04:53:56Z nenolod $
  */
 #ifndef HOOK_H
 #define HOOK_H
@@ -15,11 +15,6 @@ struct hook_ {
 	char *name;
 	list_t hooks;
 };
-
-typedef struct {
-	channel_t *c;
-	char *msg;
-} hook_cmessage_data_t;
 
 E void hooks_init(void);
 E void hook_add_event(const char *);

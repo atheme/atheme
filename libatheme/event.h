@@ -10,6 +10,8 @@
 #ifndef EVENT_H
 #define EVENT_H
 
+typedef void EVH(void *);
+
 /* event list struct */
 struct ev_entry
 {

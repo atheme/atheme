@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 3003 2005-10-19 04:42:55Z nenolod $
+ * $Id: atheme.h 3005 2005-10-19 04:53:56Z nenolod $
  */
 
 #ifndef ATHEME_H
@@ -12,42 +12,20 @@
 
 /* *INDENT-OFF* */
 
-/* Extern type definition */
-#ifdef _WIN32			/* Windows */
-#	ifdef I_AM_A_MODULE
-#		define DLE __declspec (dllimport)
-#		define E extern DLE
-#	else
-#		define DLE __declspec (dllexport)
-#		define E extern DLE
-#	endif
-#else				/* POSIX */
-#	define E extern
-#	define DLE 
-#endif
-
 /* load in system configuration code */
 #include "sysconf.h"
 
 #include <org.atheme.claro.base>
 
-#include "stdinc.h"
-#include "sockio.h"
 #include "common.h"
-#include "dlink.h"
-#include "balloc.h"
-#include "connection.h"
 #include "servers.h"
 #include "channels.h"
 #include "module.h"
 #include "commandtree.h"
 #include "pmodule.h"
-#include "hook.h"
 #include "serno.h"
 #include "crypto.h"
-#include "linker.h"
 #include "culture.h"
-#include "callback.h"
 #include "xmlrpc.h"
 
 #ifndef timersub
@@ -74,12 +52,16 @@
 #define SERVER_NAME(serv)	((serv)->sid[0] ? (serv)->sid : (serv)->name)
 #define ME			(ircd->uses_uid ? curr_uplink->numeric : me.name)
 
+typedef struct {
+        channel_t *c;
+        char *msg;
+} hook_cmessage_data_t;
+
 /* T Y P E D E F S */
 typedef struct sendq datastream_t;
 
 typedef struct tld_ tld_t;
 typedef struct kline_ kline_t;
-typedef void EVH(void *);
 
 typedef struct me me_t;
 

@@ -4,18 +4,42 @@
  *
  * libatheme stuff.
  *
- * $Id: org.atheme.claro.base 3003 2005-10-19 04:42:55Z nenolod $
+ * $Id: org.atheme.claro.base 3005 2005-10-19 04:53:56Z nenolod $
  */
 
-#ifndef LIBATHEME_H
-#define LIBATHEME_H
+#ifndef __CLAROBASE
+#define __CLAROBASE
+
+/* hints for claro compile-assembly */
+#ifdef _WIN32                   /* Windows */
+#       ifdef I_AM_A_MODULE
+#               define DLE __declspec (dllimport)
+#               define E extern DLE
+#       else
+#               define DLE __declspec (dllexport)
+#               define E extern DLE
+#       endif
+#else                           /* POSIX */
+#       define E extern
+#       define DLE
+#endif
+
+#define BUFSIZE  1024            /* maximum size of a buffer */
+#define HOSTLEN  64		 /* seems good enough */
 
 #include "stdinc.h"
+#include "dlink.h"
 #include "event.h"
+#include "balloc.h"
+#include "connection.h"
+#include "sockio.h"
+#include "hook.h"
+#include "linker.h"
+#include "callback.h"
 
-extern void (*clog)(uint32_t, const char *, ...);
-extern void libclaro_init(void (*ilog)(uint32_t, const char *, ...));
-extern void init_dlink_nodes(void);
-extern void init_socket_queues(void);
+E void (*clog)(uint32_t, const char *, ...);
+E void libclaro_init(void (*ilog)(uint32_t, const char *, ...));
+E void init_dlink_nodes(void);
+E void init_socket_queues(void);
 
 #endif
