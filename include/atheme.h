@@ -4,16 +4,13 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 3005 2005-10-19 04:53:56Z nenolod $
+ * $Id: atheme.h 3011 2005-10-19 05:11:16Z nenolod $
  */
 
 #ifndef ATHEME_H
 #define ATHEME_H
 
 /* *INDENT-OFF* */
-
-/* load in system configuration code */
-#include "sysconf.h"
 
 #include <org.atheme.claro.base>
 

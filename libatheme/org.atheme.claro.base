@@ -4,7 +4,7 @@
  *
  * libatheme stuff.
  *
- * $Id: org.atheme.claro.base 3005 2005-10-19 04:53:56Z nenolod $
+ * $Id: org.atheme.claro.base 3011 2005-10-19 05:11:16Z nenolod $
  */
 
 #ifndef __CLAROBASE
@@ -27,6 +27,7 @@
 #define BUFSIZE  1024            /* maximum size of a buffer */
 #define HOSTLEN  64		 /* seems good enough */
 
+#include "sysconf.h"
 #include "stdinc.h"
 #include "dlink.h"
 #include "event.h"
