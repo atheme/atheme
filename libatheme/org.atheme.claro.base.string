@@ -17,4 +17,7 @@ E size_t strlcat(char *dest, const char *src, size_t count);
 E size_t strlcpy(char *dest, const char *src, size_t count);
 #endif
 
+E char *strscpy(char *d, const char *s, size_t len);
+E void strip(char *line);
+
 #endif

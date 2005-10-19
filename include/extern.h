@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 3021 2005-10-19 05:23:38Z nenolod $
+ * $Id: extern.h 3023 2005-10-19 05:26:32Z nenolod $
  */
 
 #ifndef EXTERN_H
@@ -50,9 +50,6 @@ E int32_t tv2ms(struct timeval *tv);
 #endif
 
 E void tb2sp(char *line);
-
-E char *strscpy(char *d, const char *s, size_t len);
-E void strip(char *line);
 
 E void log_open(void);
 E void slog(uint32_t level, const char *fmt, ...);
@@ -158,12 +155,6 @@ E list_t sendq;
 
 E void init_ircpacket(void);
 E void init_nodes(void);
-E node_t *node_create(void);
-E void node_free(node_t *n);
-E void node_add(void *data, node_t *n, list_t *l);
-E void node_del(node_t *n, list_t *l);
-E node_t *node_find(void *data, list_t *l);
-E void node_move(node_t *m, list_t *oldlist, list_t *newlist);
 
 E sra_t *sra_add(char *name);
 E void sra_delete(myuser_t *myuser);

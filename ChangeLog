@@ -1,3 +1,14 @@
+nenolod     2005/10/19 05:23:38 UTC	(20051019-3021)
+  Log:
+  woohoo!
+  
+
+  Changes:	Modified:
+  +0 -4		trunk/include/extern.h (File Modified) 
+  +1 -0		trunk/libatheme/org.atheme.claro.base (File Modified) 
+  +18 -0	trunk/libatheme/org.atheme.claro.base.memory (File Added) 
+
+
 nenolod     2005/10/19 05:19:40 UTC	(20051019-3019)
   Log:
   Lets avoid a collision here.
