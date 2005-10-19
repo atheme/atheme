@@ -1,3 +1,12 @@
+alambert    2005/10/18 23:55:43 UTC	(20051018-2991)
+  Log:
+  CS CLEAR: use chanacs_user_has_flag() so users with access via masks can still use the commands.
+
+  Changes:	Modified:
+  +1 -8		trunk/modules/chanserv/clear_bans.c (File Modified) 
+  +1 -7		trunk/modules/chanserv/clear_users.c (File Modified) 
+
+
 alambert    2005/10/18 23:44:17 UTC	(20051018-2989)
   Log:
   file headers
