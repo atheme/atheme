@@ -1,0 +1,17 @@
+/*
+ * Copyright (c) 2005 Atheme Development Group
+ * Rights to this code are as documented in doc/LICENSE.
+ *
+ * Datastream query stuff.
+ *
+ * $Id: org.atheme.claro.base.datastream 3025 2005-10-19 05:35:22Z nenolod $
+ */
+#ifndef __CLARODATASTREAM
+#define __CLARODATASTREAM
+
+E list_t sendq;
+
+E void sendq_add(connection_t *cptr, char *buf, int len, int pos);
+E void sendq_flush(connection_t *cptr);
+
+#endif

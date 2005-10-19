@@ -19,6 +19,7 @@ SOURCES = \
 	balloc.c	\
 	callback.c	\
 	connection.c	\
+	datastream.c	\
 	dlink.c		\
 	event.c		\
 	hook.c		\

@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 3023 2005-10-19 05:26:32Z nenolod $
+ * $Id: extern.h 3025 2005-10-19 05:35:22Z nenolod $
  */
 
 #ifndef EXTERN_H
@@ -151,8 +151,6 @@ E list_t chanlist[HASHSIZE];
 E list_t mulist[HASHSIZE];
 E list_t mclist[HASHSIZE];
 
-E list_t sendq;
-
 E void init_ircpacket(void);
 E void init_nodes(void);
 
@@ -212,9 +210,6 @@ E chanacs_t *chanacs_find_by_mask(mychan_t *mychan, char *mask, uint32_t level);
 E boolean_t chanacs_user_has_flag(mychan_t *mychan, user_t *u, uint32_t level);
 
 E void expire_check(void *arg);
-
-E void sendq_add(connection_t *cptr, char *buf, int len, int pos);
-E void sendq_flush(connection_t *cptr);
 
 /* services.c */
 E void ban(char *sender, char *channel, user_t *user);

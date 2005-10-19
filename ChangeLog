@@ -1,3 +1,14 @@
+nenolod     2005/10/19 05:26:32 UTC	(20051019-3023)
+  Log:
+  node creation stuff to libatheme
+  
+
+  Changes:	Modified:
+  +0 -9		trunk/include/extern.h (File Modified) 
+  +7 -0		trunk/libatheme/dlink.h (File Modified) 
+  +3 -0		trunk/libatheme/org.atheme.claro.base.string (File Modified) 
+
+
 nenolod     2005/10/19 05:23:38 UTC	(20051019-3021)
   Log:
   woohoo!

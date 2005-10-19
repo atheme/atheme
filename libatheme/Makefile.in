@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in 3007 2005-10-19 05:01:00Z nenolod $
+# $Id: Makefile.in 3025 2005-10-19 05:35:22Z nenolod $
 #
 
 CC		= @CC@
@@ -19,6 +19,7 @@ SOURCES = \
 	balloc.c	\
 	callback.c	\
 	connection.c	\
+	datastream.c	\
 	dlink.c		\
 	event.c		\
 	hook.c		\
