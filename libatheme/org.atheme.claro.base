@@ -4,11 +4,14 @@
  *
  * libatheme stuff.
  *
- * $Id: libatheme.h 2885 2005-10-14 22:42:00Z nenolod $
+ * $Id: org.atheme.claro.base 3003 2005-10-19 04:42:55Z nenolod $
  */
 
 #ifndef LIBATHEME_H
 #define LIBATHEME_H
+
+#include "stdinc.h"
+#include "event.h"
 
 extern void (*clog)(uint32_t, const char *, ...);
 extern void libclaro_init(void (*ilog)(uint32_t, const char *, ...));

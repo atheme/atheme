@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 2999 2005-10-19 04:40:11Z nenolod $
+ * $Id: atheme.h 3003 2005-10-19 04:42:55Z nenolod $
  */
 
 #ifndef ATHEME_H
@@ -26,9 +26,12 @@
 #	define DLE 
 #endif
 
+/* load in system configuration code */
 #include "sysconf.h"
+
+#include <org.atheme.claro.base>
+
 #include "stdinc.h"
-#include "libatheme.h"
 #include "sockio.h"
 #include "common.h"
 #include "dlink.h"
