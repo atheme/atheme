@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3009 2005-10-19 05:02:21Z alambert $
+ * $Id: set.c 3031 2005-10-19 06:06:53Z pfish $
  */
 
 #include "atheme.h"
@@ -12,13 +12,14 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3009 2005-10-19 05:02:21Z alambert $",
+	"$Id: set.c 3031 2005-10-19 06:06:53Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_cmd_set(char *origin);
 static void cs_join_entrymsg(chanuser_t *cu);
 static void cs_join_url(chanuser_t *cu);
+static void cs_keeptopic(channel_t *c);
 
 command_t cs_set = { "SET", "Sets various control flags.",
                         AC_NONE, cs_cmd_set };
@@ -33,8 +34,10 @@ void _modinit(module_t *m)
 
         command_add(&cs_set, cs_cmdtree);
 	hook_add_event("channel_join");
+	hook_add_event("channel_add");
 	hook_add_hook("channel_join", (void (*)(void *)) cs_join_entrymsg);
 	hook_add_hook("channel_join", (void (*)(void *)) cs_join_url);
+	hook_add_hook("channel_add", (void (*)(void *)) cs_keeptopic);
 
 	help_addentry(cs_helptree, "SET FOUNDER", "help/cservice/set_founder", NULL);
 	help_addentry(cs_helptree, "SET MLOCK", "help/cservice/set_mlock", NULL);
@@ -53,6 +56,7 @@ void _moddeinit()
 	command_delete(&cs_set, cs_cmdtree);
 	hook_del_hook("channel_join", (void (*)(void *)) cs_join_entrymsg);
 	hook_del_hook("channel_join", (void (*)(void *)) cs_join_url);
+	hook_del_hook("channel_add", (void (*)(void *)) cs_keeptopic);
 
 	help_delentry(cs_helptree, "SET FOUNDER");
 	help_delentry(cs_helptree, "SET MLOCK");
@@ -553,6 +557,70 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 	return;
 }
 
+static void cs_set_keeptopic(char *origin, char *name, char *params)
+{
+	user_t *u = user_find(origin);
+	mychan_t *mc;
+
+	if (*name != '#')
+	{
+		notice(chansvs.nick, origin, "Invalid parameters specified for \2KEEPTOPIC\2");
+		return;
+	}
+
+	if (!(mc = mychan_find(name)))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
+		return;
+	}
+
+	if ((!is_founder(mc, u->myuser)) && (!is_successor(mc, u->myuser)))
+	{
+		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
+		return;
+	}
+
+	if (!strcasecmp("ON", params))
+	{
+		if (MC_KEEPTOPIC & mc->flags)
+                {
+                        notice(chansvs.nick, origin, "The \2KEEPTOPIC\2 flag is already set for \2%s\2.", mc->name);
+                        return;
+                }
+
+                snoop("SET:KEEPTOPIC:ON: for \2%s\2 by \2%s\2", mc->name, origin);
+
+                mc->flags |= MC_KEEPTOPIC;
+
+                notice(chansvs.nick, origin, "The \2KEEPTOPIC\2 flag has been set for \2%s\2.", mc->name);
+
+                return;
+        }
+
+        else if (!strcasecmp("OFF", params))
+        {
+                if (!(MC_KEEPTOPIC & mc->flags))
+                {
+                        notice(chansvs.nick, origin, "The \2KEEPTOPIC\2 flag is not set for \2%s\2.", mc->name);
+                        return;
+                }
+
+                snoop("SET:KEEPTOPIC:OFF: for \2%s\2 by \2%s\2", mc->name, origin);
+
+                mc->flags &= ~MC_KEEPTOPIC;
+
+                notice(chansvs.nick, origin, "The \2KEEPTOPIC\2 flag has been removed for \2%s\2.", mc->name);
+
+                return;
+        }
+
+        else
+        {
+                notice(chansvs.nick, origin, "Invalid parameters specified for \2KEEPTOPIC\2.");
+                return;
+        }
+}
+
 static void cs_set_secure(char *origin, char *name, char *params)
 {
 	user_t *u = user_find(origin);
@@ -742,7 +810,7 @@ static void cs_set_verbose(char *origin, char *name, char *params)
 
 		snoop("SET:VERBOSE:ON: for \2%s\2 by \2%s\2", mc->name, origin);
 
-		mc->flags |= MC_VERBOSE;
+ 		mc->flags |= MC_VERBOSE;
 
 		notice(chansvs.nick, origin, "The \2VERBOSE\2 flag has been set for \2%s\2.", mc->name);
 
@@ -915,6 +983,7 @@ struct set_command_ set_commands[] = {
   { "PROPERTY",   AC_NONE,  cs_set_property   },
   { "EMAIL",      AC_NONE,  cs_set_email      },
   { "STAFFONLY",  AC_IRCOP, cs_set_staffonly  },
+  { "KEEPTOPIC",  AC_IRCOP, cs_set_keeptopic  },
   { NULL, 0, NULL }
 };
 
@@ -983,4 +1052,32 @@ static void cs_join_url(chanuser_t *cu)
 
 	if ((md = metadata_find(mc, METADATA_CHANNEL, "url")))
 		numeric_sts(me.name, 328, cu->user->nick, "%s :%s", mc->name, md->value);
+}
+
+
+static void cs_keeptopic(channel_t *c)
+{
+	mychan_t *mc;
+	metadata_t *md;
+
+
+	if (!(mc = mychan_find(c->name)))
+		return;
+
+	if ((MC_KEEPTOPIC & mc->flags) && (md = metadata_find(mc, METADATA_CHANNEL, "private:topic:setter")))
+	{
+		char *setter = md->value;
+		char *text;
+		char *ts;	
+
+		md = metadata_find(mc, METADATA_CHANNEL, "private:topic:text");
+		text = md->value;
+
+		md = metadata_find(mc, METADATA_CHANNEL, "private:mark:ts");
+		ts = md->value;
+
+//		slog(LG_DEBUG, "[DEBUG] chan name: %s setter: %s ts: %d text: %s", c->name, setter, ts, text);
+
+		topic_sts(c->name, setter, text);
+	}
 }

@@ -1,7 +1,6 @@
 Help for RESTART:
 
-RESTART shuts down services and restarts them
-in the time specified in the configuration file.
+RESTART shuts down services and restarts them.
 
 Syntax: RESTART
 
