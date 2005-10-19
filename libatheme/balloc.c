@@ -4,10 +4,10 @@
  *
  * This file contains the block allocator.
  *
- * $Id: balloc.c 2831 2005-10-11 03:27:03Z terminal $
+ * $Id: balloc.c 3029 2005-10-19 05:55:21Z nenolod $
  */
 
-#include "atheme.h"
+#include <org.atheme.claro.base>
 
 /* please no IOCCC entries --nenolod */
 #ifndef _WIN32

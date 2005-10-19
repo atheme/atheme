@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: common.h 3017 2005-10-19 05:18:49Z nenolod $
+ * $Id: common.h 3029 2005-10-19 05:55:21Z nenolod $
  */
 
 #ifndef COMMON_H
@@ -42,14 +42,12 @@
 #define HEAP_CHANUSER   1024
 #define HEAP_USER       1024
 #define HEAP_SERVER     16
-#define HEAP_NODE       1024  
 #define HEAP_CHANACS    1024
 #else
 #define HEAP_CHANNEL    64
 #define HEAP_CHANUSER   128
 #define HEAP_USER       128
 #define HEAP_SERVER     8
-#define HEAP_NODE       128
 #define HEAP_CHANACS    128
 #endif
 

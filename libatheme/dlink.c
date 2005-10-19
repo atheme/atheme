@@ -4,10 +4,10 @@
  *
  * Linked list stuff.
  *
- * $Id: dlink.c 2671 2005-10-06 04:03:49Z nenolod $
+ * $Id: dlink.c 3029 2005-10-19 05:55:21Z nenolod $
  */
 
-#include "atheme.h"
+#include <org.atheme.claro.base>
 
 static BlockHeap *node_heap;
 
@@ -33,8 +33,10 @@ node_t *node_create(void)
         /* initialize */
         n->next = n->prev = n->data = NULL;
 
+#if 0
         /* up the count */
         cnt.node++;
+#endif
 
         /* return a pointer to the new node */
         return n;
@@ -46,8 +48,10 @@ void node_free(node_t *n)
         /* free it */
         BlockHeapFree(node_heap, n);
 
+#if 0
         /* down the count */
         cnt.node--;
+#endif
 }
 
 /* adds a node to the end of a list */

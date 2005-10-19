@@ -4,7 +4,7 @@
  *
  * libatheme stuff.
  *
- * $Id: org.atheme.claro.base 3025 2005-10-19 05:35:22Z nenolod $
+ * $Id: org.atheme.claro.base 3029 2005-10-19 05:55:21Z nenolod $
  */
 
 #ifndef __CLAROBASE
@@ -24,9 +24,24 @@
 #       define DLE
 #endif
 
+#define RF_LIVE         0x00000001      /* don't fork  */
+#define RF_SHUTDOWN     0x00000002      /* shut down   */
+#define RF_STARTING     0x00000004      /* starting up */
+#define RF_RESTART      0x00000008      /* restart     */
+#define RF_REHASHING    0x00000010      /* rehashing   */
+
+/* log levels */
+#define LG_NONE         0x00000001      /* don't log                */
+#define LG_INFO         0x00000002      /* log general info         */
+#define LG_ERROR        0x00000004      /* log real important stuff */
+#define LG_IOERROR      0x00000008      /* log I/O errors. */
+#define LG_DEBUG        0x00000010      /* log debugging stuff      */
+
 #define BUFSIZE  1024            /* maximum size of a buffer */
 #define HOSTLEN  64		 /* seems good enough */
 #define MAX_EVENTS	1024	 /* that's enough events, really! */
+
+#define HEAP_NODE       1024
 
 #include "sysconf.h"
 #include "stdinc.h"
@@ -41,6 +56,8 @@
 #include <org.atheme.claro.base.string>
 #include <org.atheme.claro.base.memory>
 #include <org.atheme.claro.base.datastream>
+
+E int runflags;
 
 E void (*clog)(uint32_t, const char *, ...);
 E void libclaro_init(void (*ilog)(uint32_t, const char *, ...));

@@ -4,10 +4,10 @@
  *
  * Callback functions. (Inspired from many sources)
  *
- * $Id: callback.c 2671 2005-10-06 04:03:49Z nenolod $
+ * $Id: callback.c 3029 2005-10-19 05:55:21Z nenolod $
  */
 
-#include "atheme.h"
+#include <org.atheme.claro.base>
 
 list_t callback_list;
 static BlockHeap *callback_heap;
