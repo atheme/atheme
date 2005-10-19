@@ -1,3 +1,13 @@
+nenolod     2005/10/19 05:14:23 UTC	(20051019-3013)
+  Log:
+  balloc stuff out of extern.h
+  
+
+  Changes:	Modified:
+  +0 -13	trunk/include/extern.h (File Modified) 
+  +10 -0	trunk/libatheme/balloc.h (File Modified) 
+
+
 nenolod     2005/10/19 05:11:16 UTC	(20051019-3011)
   Log:
   org.atheme.claro.base will want sysconf regardless, so yeah!

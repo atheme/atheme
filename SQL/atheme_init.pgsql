@@ -3,7 +3,7 @@
 ---
 --- Use of this code is permitted under the terms presented in doc/LICENSE.
 ---
---- $Id: atheme_init.sql 2937 2005-10-16 07:27:04Z kog $
+--- $Id: atheme_init.pgsql 3015 2005-10-19 05:14:59Z alambert $
 
 CREATE SEQUENCE accounts_id_seq;
 CREATE SEQUENCE account_metadata_id_seq;
