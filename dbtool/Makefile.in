@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2995 2005-10-19 04:01:49Z nenolod $
+# $Id: Makefile.in 3001 2005-10-19 04:40:25Z nenolod $
 #
 
 CC		= @CC@
@@ -14,7 +14,7 @@ INSTALL		= @INSTALL@
 PREFIX		= @prefix@
 BIN		= atheme@EXEEXT@
 MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../include -I../libatheme
-CFLAGS		= @CFLAGS@ -I../include @PGINC@
+CFLAGS		= @CFLAGS@ -I../include -I../libatheme @PGINC@
 
 VERSION		= 0.1
 

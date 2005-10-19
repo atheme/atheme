@@ -1,3 +1,18 @@
+nenolod     2005/10/19 04:40:11 UTC	(20051019-2999)
+  Log:
+  Move some stuff around.
+  
+
+  Changes:	Modified:
+  +1 -12	trunk/include/atheme.h (File Modified) 
+  +0 -46	trunk/include/balloc.h (File Deleted) 
+  +0 -34	trunk/include/callback.h (File Deleted) 
+  +0 -76	trunk/include/connection.h (File Deleted) 
+  +0 -18	trunk/include/linker.h (File Deleted) 
+  +0 -39	trunk/include/node.h (File Deleted) 
+  +0 -80	trunk/include/stdinc.h (File Deleted) 
+
+
 nenolod     2005/10/19 04:20:33 UTC	(20051019-2997)
   Log:
   Add claro package Manifest file for when we eventually get claro split off into it's own beast.
