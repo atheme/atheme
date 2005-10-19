@@ -1,3 +1,15 @@
+alambert    2005/10/19 00:04:39 UTC	(20051019-2993)
+  Log:
+  CS CLEAR:
+  - Avoid crashing if the channel does not exist
+  - Avoid using possibly-bogus pointer after users kicked
+  
+
+  Changes:	Modified:
+  +7 -1		trunk/modules/chanserv/clear_bans.c (File Modified) 
+  +11 -3	trunk/modules/chanserv/clear_users.c (File Modified) 
+
+
 alambert    2005/10/18 23:55:43 UTC	(20051018-2991)
   Log:
   CS CLEAR: use chanacs_user_has_flag() so users with access via masks can still use the commands.

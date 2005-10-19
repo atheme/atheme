@@ -13,7 +13,7 @@ CP		= @CP@
 INSTALL		= @INSTALL@
 PREFIX		= @prefix@
 BIN		= atheme@EXEEXT@
-MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../include @PGINC@ @MYINC@
+MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../include -I../libatheme @PGINC@ @MYINC@
 PICFLAGS	= @PICFLAGS@
 CFLAGS		= @CFLAGS@ -I../include @PGINC@ @MYINC@
 

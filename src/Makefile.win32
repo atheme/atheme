@@ -14,7 +14,7 @@ INSTALL		=
 PREFIX		= prefix
 BIN		= athemeEXEEXT
 MKDEP		= MKDEP -DPREFIX=\"prefix\" -I../include  
-CFLAGS		= -mno-cygwin -Wall -I../win32 -I../include -g
+CFLAGS		= -mno-cygwin -Wall -I../win32 -I../libatheme -I../include -g
 
 VERSION		= PACKAGE_VERSION
 

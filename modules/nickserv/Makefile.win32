@@ -15,7 +15,7 @@ PREFIX		= prefix
 BIN		= athemeEXEEXT
 MKDEP		= MKDEP -DPREFIX=\"prefix\" -I../../include  
 PICFLAGS	= -DPIC -shared -enable-auto-import ../../src/libathemecore.a
-CFLAGS		= -DI_AM_A_MODULE -static -mno-cygwin -Wall -I../win32 -I../../win32 -I../../include -g
+CFLAGS		= -DI_AM_A_MODULE -static -mno-cygwin -Wall -I../win32 -I../../win32 -I../../include -I../../libatheme -g
 
 VERSION		= 0.1
 
