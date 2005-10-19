@@ -4,10 +4,19 @@
  *
  * Datastream query stuff.
  *
- * $Id: org.atheme.claro.base.datastream 3025 2005-10-19 05:35:22Z nenolod $
+ * $Id: org.atheme.claro.base.datastream 3027 2005-10-19 05:37:42Z nenolod $
  */
 #ifndef __CLARODATASTREAM
 #define __CLARODATASTREAM
+
+typedef struct sendq datastream_t;
+
+/* sendq struct */
+struct sendq {
+	char *buf;
+	int len;
+	int pos;
+};
 
 E list_t sendq;
 

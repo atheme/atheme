@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 3011 2005-10-19 05:11:16Z nenolod $
+ * $Id: atheme.h 3027 2005-10-19 05:37:42Z nenolod $
  */
 
 #ifndef ATHEME_H
@@ -53,9 +53,6 @@ typedef struct {
         channel_t *c;
         char *msg;
 } hook_cmessage_data_t;
-
-/* T Y P E D E F S */
-typedef struct sendq datastream_t;
 
 typedef struct tld_ tld_t;
 typedef struct kline_ kline_t;
@@ -190,13 +187,6 @@ struct kline_ {
 /* global list struct */
 struct global_ {
   char *text;
-};
-
-/* sendq struct */
-struct sendq {
-  char *buf;
-  int len;
-  int pos;
 };
 
 /* database versions */
