@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in 3025 2005-10-19 05:35:22Z nenolod $
+# $Id: Makefile.in 3059 2005-10-20 18:22:38Z nenolod $
 #
 
 CC		= @CC@
@@ -18,12 +18,12 @@ SOCKET_ENGINE = @SOCKET_ENGINE@.c
 SOURCES = \
 	balloc.c	\
 	callback.c	\
+	claro.c		\
 	connection.c	\
 	datastream.c	\
 	dlink.c		\
 	event.c		\
 	hook.c		\
-	libatheme.c	\
 	linker.c	\
 	memory.c	\
 	sockio.c	\

@@ -4,7 +4,7 @@
  *
  * Initialization functions.
  *
- * $Id: libatheme.c 3057 2005-10-20 18:21:33Z nenolod $
+ * $Id: claro.c 3059 2005-10-20 18:22:38Z nenolod $
  */
 
 #include <org.atheme.claro.base>
@@ -13,7 +13,7 @@ DECLARE_CLARO_ASSEMBLY_V1
 (
 	"org.atheme.claro.base",
 	"Atheme Development Group <http://www.libclaro.org>",
-	"$Id: libatheme.c 3057 2005-10-20 18:21:33Z nenolod $",
+	"$Id: claro.c 3059 2005-10-20 18:22:38Z nenolod $",
 	"20051020"
 );
 

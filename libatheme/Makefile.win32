@@ -18,12 +18,12 @@ SOCKET_ENGINE = select.c
 SOURCES = \
 	balloc.c	\
 	callback.c	\
+	claro.c		\
 	connection.c	\
 	datastream.c	\
 	dlink.c		\
 	event.c		\
 	hook.c		\
-	libatheme.c	\
 	linker.c	\
 	memory.c	\
 	sockio.c	\

@@ -1,3 +1,13 @@
+nenolod     2005/10/20 18:21:33 UTC	(20051020-3057)
+  Log:
+  - Add DECLARE_CLARO_ASSEMBLY_V1 for creating an assembly header without 'claro generate-assembly'.
+  
+
+  Changes:	Modified:
+  +8 -0		trunk/libatheme/libatheme.c (File Modified) 
+  +14 -0	trunk/libatheme/org.atheme.claro.base (File Modified) 
+
+
 nenolod     2005/10/20 18:07:29 UTC	(20051020-3055)
   Log:
   Get rid of unused code here :p
