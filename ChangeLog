@@ -1,3 +1,14 @@
+jilles      2005/10/19 23:36:17 UTC	(20051019-3033)
+  Log:
+  Don't do keeptopic topic restore if channelTS is equal
+  to stored value (private:channelts). Avoid crashes if
+  certain metadata doesn't exist.
+  
+
+  Changes:	Modified:
+  +35 -13	trunk/modules/chanserv/set.c (File Modified) 
+
+
 pfish       2005/10/19 06:06:53 UTC	(20051019-3031)
   Log:
   Initial keeptopic stuff, not live yet. But it works.

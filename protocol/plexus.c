@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 2613 2005-10-05 17:58:34Z nenolod $
+ * $Id: plexus.c 3035 2005-10-20 00:00:13Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 2613 2005-10-05 17:58:34Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 3035 2005-10-20 00:00:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -322,12 +322,12 @@ static void plexus_sethost_sts(char *source, char *target, char *host)
 static void m_topic(char *origin, uint8_t parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
+	user_t *u = user_find(origin);
 
-	if (!origin)
+	if (!c || !u)
 		return;
 
-	c->topic = sstrdup(parv[1]);
-	c->topic_setter = sstrdup(origin);
+	handle_topic(c, u->nick, CURRTIME, parv[1]);
 }
 
 static void m_ping(char *origin, uint8_t parc, char *parv[])

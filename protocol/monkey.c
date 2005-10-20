@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for chunky monkey ircd.
  *
- * $Id: monkey.c 2953 2005-10-16 19:31:11Z nenolod $
+ * $Id: monkey.c 3035 2005-10-20 00:00:13Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/monkey.h"
 
-DECLARE_MODULE_V1("protocol/monkey", TRUE, _modinit, NULL, "$Id: monkey.c 2953 2005-10-16 19:31:11Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/monkey", TRUE, _modinit, NULL, "$Id: monkey.c 3035 2005-10-20 00:00:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -320,11 +320,10 @@ static void m_topic(char *origin, uint8_t parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
 
-	if (!origin)
+	if (!c)
 		return;
 
-	c->topic = sstrdup(parv[3]);
-	c->topic_setter = sstrdup(parv[1]);
+	handle_topic(c, parv[1], atol(parv[2]), parv[3]);
 }
 
 static void m_ping(char *origin, uint8_t parc, char *parv[])

@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 2619 2005-10-05 19:02:20Z nenolod $
+ * $Id: hyperion.c 3035 2005-10-20 00:00:13Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -15,7 +15,7 @@
 #include "atheme.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 2619 2005-10-05 19:02:20Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 3035 2005-10-20 00:00:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -372,12 +372,12 @@ static void hyperion_sethost_sts(char *source, char *target, char *host)
 static void m_topic(char *origin, uint8_t parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
+	user_t *u = user_find(origin);
 
-	if (!origin)
+	if (!c || !u)
 		return;
 
-	c->topic = sstrdup(parv[1]);
-	c->topic_setter = sstrdup(origin);
+	handle_topic(c, u->nick, CURRTIME, parv[1]);
 }
 
 static void m_ping(char *origin, uint8_t parc, char *parv[])

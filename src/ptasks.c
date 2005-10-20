@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 2961 2005-10-17 00:56:02Z jilles $
+ * $Id: ptasks.c 3035 2005-10-20 00:00:13Z jilles $
  */
 
 #include "atheme.h"
@@ -247,6 +247,25 @@ void handle_privmsg(char *origin, char *target, char *message)
 		vec[2] = NULL;
 		sptr->handler(u->nick, 2, vec);
 	}
+}
+
+void handle_topic(channel_t *c, char *setter, time_t ts, char *topic)
+{
+	char newsetter[HOSTLEN], *p;
+
+	/* setter can be a nick, nick!user@host or server.
+	 * strip off !user@host part if it's there
+	 * (do we really want this?) */
+	strlcpy(newsetter, setter, sizeof newsetter);
+	p = strchr(newsetter, '!');
+	if (p != NULL)
+		*p = '\0';
+	if (c->topic != NULL)
+		free(c->topic);
+	if (c->topic_setter != NULL)
+		free(c->topic_setter);
+	c->topic = sstrdup(topic);
+	c->topic_setter = sstrdup(newsetter);
 }
 
 /* Received a message from a user, check if they are flooding

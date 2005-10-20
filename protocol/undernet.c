@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: undernet.c 2515 2005-10-03 03:06:55Z nenolod $
+ * $Id: undernet.c 3035 2005-10-20 00:00:13Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 2515 2005-10-03 03:06:55Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 3035 2005-10-20 00:00:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -346,12 +346,12 @@ static void undernet_jupe(char *server, char *reason)
 static void m_topic(char *origin, uint8_t parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
+	user_t *u = user_find(origin);
 
-	if (!origin)
+	if (!c || !u)
 		return;
 
-	c->topic = sstrdup(parv[1]);
-	c->topic_setter = sstrdup(origin);
+	handle_topic(c, u->nick, CURRTIME, parv[1]);
 }
 
 /* AB G !1119920789.573932 services.atheme.org 1119920789.573932 */
