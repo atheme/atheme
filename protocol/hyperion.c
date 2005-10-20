@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 3039 2005-10-20 00:57:26Z jilles $
+ * $Id: hyperion.c 3043 2005-10-20 01:22:37Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -15,7 +15,7 @@
 #include "atheme.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 3039 2005-10-20 00:57:26Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 3043 2005-10-20 01:22:37Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -29,7 +29,7 @@ ircd_t Hyperion = {
         FALSE,                          /* Whether or not we support halfops. */
 	FALSE,				/* Whether or not we use P10 */
 	TRUE,				/* Whether or not we use vHosts. */
-	0, /*NOTYET*/			/* Oper-only cmodes */
+	CMODE_EXLIMIT | CMODE_PERM | CMODE_JUPED,	/* Oper-only cmodes */
         0,                              /* Integer flag for owner channel flag. */
         0,                              /* Integer flag for protect channel flag. */
         0,                              /* Integer flag for halfops. */
@@ -53,9 +53,12 @@ struct cmode_ hyperion_mode_list[] = {
   { 'R', CMODE_MODREG },
   { 'z', CMODE_OPMOD  },
   { 'g', CMODE_FINVITE},
+  { 'L', CMODE_EXLIMIT},
+  { 'P', CMODE_PERM   },
+  { 'j', CMODE_JUPED  },
+  { 'Q', CMODE_DISFWD },
   { '\0', 0 }
 };
-/* missing +jLP (oper-only), +Q (we don't do forwarding) */
 
 struct cmode_ hyperion_ignore_mode_list[] = {
   { 'e', CMODE_EXEMPT },

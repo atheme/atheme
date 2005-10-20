@@ -1,3 +1,12 @@
+pfish       2005/10/20 01:21:42 UTC	(20051020-3041)
+  Log:
+  be aware of MC_KEEPTOPIC
+  
+
+  Changes:	Modified:
+  +8 -0		trunk/modules/chanserv/info.c (File Modified) 
+
+
 jilles      2005/10/20 00:57:26 UTC	(20051020-3039)
   Log:
   Add STOPIC support (most topic setting uses this).
