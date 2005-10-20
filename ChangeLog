@@ -1,3 +1,25 @@
+nenolod     2005/10/20 18:04:13 UTC	(20051020-3053)
+  Log:
+  This massive commit brings us a self-hosting claro-base, ready to be split off into it's own product.
+  A few atheme-specific routines were dumped in src/uplink.c. Seemed like a good place for them.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/servers.h (File Modified) 
+  +7 -35	trunk/libatheme/connection.c (File Modified) 
+  +1 -1		trunk/libatheme/hook.c (File Modified) 
+  +1 -1		trunk/libatheme/libatheme.c (File Modified) 
+  +1 -1		trunk/libatheme/linker.c (File Modified) 
+  +1 -1		trunk/libatheme/memory.c (File Modified) 
+  +1 -0		trunk/libatheme/org.atheme.claro.base (File Modified) 
+  +1 -1		trunk/libatheme/poll.c (File Modified) 
+  +2 -2		trunk/libatheme/select.c (File Modified) 
+  +1 -1		trunk/libatheme/sockio.c (File Modified) 
+  +1 -1		trunk/libatheme/string.c (File Modified) 
+  +3 -0		trunk/src/packet.c (File Modified) 
+  +24 -0	trunk/src/uplink.c (File Modified) 
+
+
 nenolod     2005/10/20 17:53:05 UTC	(20051020-3051)
   Log:
   Oof!
