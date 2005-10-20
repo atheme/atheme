@@ -4,7 +4,7 @@
  *
  * libatheme stuff.
  *
- * $Id: org.atheme.claro.base 3049 2005-10-20 04:39:14Z nenolod $
+ * $Id: org.atheme.claro.base 3051 2005-10-20 17:53:05Z nenolod $
  */
 
 #ifndef __CLAROBASE
@@ -22,6 +22,13 @@
 #else                           /* POSIX */
 #       define E extern
 #       define DLE
+#endif
+
+#ifdef _WIN32
+
+/* Windows has an extremely stupid gethostbyname() function. Oof! */
+#define gethostbyname(a) gethostbyname_layer(a)
+
 #endif
 
 #define RF_LIVE         0x00000001      /* don't fork  */

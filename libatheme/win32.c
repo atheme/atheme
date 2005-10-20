@@ -7,7 +7,7 @@
  * $Id$
  */
 
-#include "atheme.h"
+#include <org.atheme.claro.base>
 
 /* Undefine our gethostbyname() macro to stop a likely horrible death */
 #undef gethostbyname
@@ -32,12 +32,12 @@ struct hostent *FAR gethostbyname_layer( const char* name )
 	printf( "Attempting to resolve %s\n", name );
 	
 	/* We might have an IP address that Windows couldn't handle -- try. */	
-	addr = inet_addr( name );
-	hp = gethostbyaddr( (char *)&addr, 4, AF_INET );
+	addr = inet_addr(name);
+	hp = gethostbyaddr((char *)&addr, 4, AF_INET);
 	
 	if (hp == NULL)
 	{
-		printf( "Windows sucks because: %d\n", WSAGetLastError( ) );
+		printf("Windows sucks because: %d\n", WSAGetLastError());
 	}
 	
 	return hp;

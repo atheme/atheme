@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 3029 2005-10-19 05:55:21Z nenolod $
+ * $Id: atheme.h 3051 2005-10-20 17:53:05Z nenolod $
  */
 
 #ifndef ATHEME_H
@@ -259,9 +259,6 @@ struct timeval burstime;
 void _modinit(module_t *m);
 void _moddeinit(void);
 #endif
-
-/* Windows has an extremely stupid gethostbyname() function. Oof! */
-#define gethostbyname(a) gethostbyname_layer(a)
 
 #endif
 
