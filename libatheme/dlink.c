@@ -4,7 +4,7 @@
  *
  * Linked list stuff.
  *
- * $Id: dlink.c 3029 2005-10-19 05:55:21Z nenolod $
+ * $Id: dlink.c 3047 2005-10-20 04:37:13Z nenolod $
  */
 
 #include <org.atheme.claro.base>
@@ -33,10 +33,8 @@ node_t *node_create(void)
         /* initialize */
         n->next = n->prev = n->data = NULL;
 
-#if 0
         /* up the count */
-        cnt.node++;
-#endif
+        claro_state.node++;
 
         /* return a pointer to the new node */
         return n;
@@ -48,10 +46,8 @@ void node_free(node_t *n)
         /* free it */
         BlockHeapFree(node_heap, n);
 
-#if 0
         /* down the count */
-        cnt.node--;
-#endif
+        claro_state.node--;
 }
 
 /* adds a node to the end of a list */

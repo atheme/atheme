@@ -1,3 +1,14 @@
+jilles      2005/10/20 01:38:37 UTC	(20051020-3045)
+  Log:
+  Change umodes for services clients, removing +h (affects
+  local clients only) and adding +6@PX (receive/send from 
+  everyone, SETHOST, set cmode +L)
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/hyperion.c (File Modified) 
+
+
 jilles      2005/10/20 01:22:37 UTC	(20051020-3043)
   Log:
   - Add +LPjQ cmodes

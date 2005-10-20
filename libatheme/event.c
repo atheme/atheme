@@ -1,15 +1,14 @@
 /*
  * Copyright (c) 2005 Atheme Development Group
- *
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains routines that interface the event system.
  * This code is based on ircd-ratbox's event.c with modifications.
  *
- * $Id: event.c 2671 2005-10-06 04:03:49Z nenolod $
+ * $Id: event.c 3047 2005-10-20 04:37:13Z nenolod $
  */
 
-#include "atheme.h"
+#include <org.atheme.claro.base>
 
 const char *last_event_ran = NULL;
 struct ev_entry event_table[MAX_EVENTS];
@@ -37,7 +36,7 @@ uint32_t event_add(const char *name, EVH *func, void *arg, time_t when)
 
 			clog(LG_DEBUG, "event_add(): \"%s\"", name);
 
-			cnt.event++;
+			claro_state.event++;
 
 			return i;
 		}
@@ -71,7 +70,7 @@ uint32_t event_add_once(const char *name, EVH *func, void *arg, time_t when)
 
 			clog(LG_DEBUG, "event_add_once(): \"%s\"", name);
 
-			cnt.event++;
+			claro_state.event++;
 
 			return i;
 		}
@@ -98,7 +97,7 @@ void event_delete(EVH *func, void *arg)
 	event_table[i].arg = NULL;
 	event_table[i].active = FALSE;
 
-	cnt.event--;
+	claro_state.event--;
 }
 
 /* checks all pending events */
@@ -125,7 +124,7 @@ void event_run(void)
 				event_table[i].arg = NULL;
 				event_table[i].active = FALSE;
 
-				cnt.event--;
+				claro_state.event--;
 			}
 		}
 	}

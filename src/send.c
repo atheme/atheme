@@ -5,12 +5,10 @@
  * This file contains socket routines.
  * Based off of W. Campbell's code.
  *
- * $Id: send.c 2253 2005-09-16 07:47:34Z nenolod $
+ * $Id: send.c 3047 2005-10-20 04:37:13Z nenolod $
  */
 
 #include "atheme.h"
-
-time_t CURRTIME;
 
 /* send a line to the server, append the \r\n */
 int8_t sts(char *fmt, ...)

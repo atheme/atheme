@@ -4,7 +4,7 @@
  *
  * libatheme stuff.
  *
- * $Id: org.atheme.claro.base 3029 2005-10-19 05:55:21Z nenolod $
+ * $Id: org.atheme.claro.base 3047 2005-10-20 04:37:13Z nenolod $
  */
 
 #ifndef __CLAROBASE
@@ -56,6 +56,16 @@
 #include <org.atheme.claro.base.string>
 #include <org.atheme.claro.base.memory>
 #include <org.atheme.claro.base.datastream>
+
+#define CURRTIME claro_state.currtime
+
+typedef struct claro_state_ {
+	uint32_t node;
+	uint32_t events;
+	time_t currtime;
+} claro_state_t;
+
+E claro_state_t claro_state;
 
 E int runflags;
 

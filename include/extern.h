@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 3035 2005-10-20 00:00:13Z jilles $
+ * $Id: extern.h 3047 2005-10-20 04:37:13Z nenolod $
  */
 
 #ifndef EXTERN_H
@@ -236,7 +236,6 @@ E void add_one_to_uid(uint32_t i);
 
 /* socket.c */
 E int servsock;
-E time_t CURRTIME;
 
 E void irc_rhandler(connection_t *cptr);
 E int8_t sts(char *fmt, ...);

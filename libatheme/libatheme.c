@@ -4,12 +4,13 @@
  *
  * Initialization functions.
  *
- * $Id: libatheme.c 3029 2005-10-19 05:55:21Z nenolod $
+ * $Id: libatheme.c 3047 2005-10-20 04:37:13Z nenolod $
  */
 
 #include "atheme.h"
 
 int runflags;
+claro_state_t claro_state;
 
 static void generic_claro_log(uint32_t, const char *format, ...);
 void (*clog)(uint32_t, const char *format, ...) = generic_claro_log;
