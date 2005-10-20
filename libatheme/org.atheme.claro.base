@@ -4,7 +4,7 @@
  *
  * libatheme stuff.
  *
- * $Id: org.atheme.claro.base 3053 2005-10-20 18:04:13Z nenolod $
+ * $Id: org.atheme.claro.base 3057 2005-10-20 18:21:33Z nenolod $
  */
 
 #ifndef __CLAROBASE
@@ -72,6 +72,20 @@ typedef struct claro_state_ {
 	time_t currtime;
 	uint16_t maxfd;
 } claro_state_t;
+
+#define CLARO_ASM_MAGIC_V1		0x38a37cfb
+
+typedef struct claro_assembly_ {
+	uint32_t claro_asm_magic;
+	char *claro_assembly_name;
+	char *claro_assembly_vendor;
+	char *claro_assembly_revision;
+	char *claro_serial;
+} claro_assembly_t;
+
+#define DECLARE_CLARO_ASSEMBLY_V1(name, vendor, revision, serial)	\
+	claro_assembly_t __claro_asmheader = { CLARO_ASM_MAGIC_V1, \
+		name, vendor, revision, serial };
 
 E claro_state_t claro_state;
 

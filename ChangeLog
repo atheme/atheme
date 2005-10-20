@@ -1,3 +1,12 @@
+nenolod     2005/10/20 18:07:29 UTC	(20051020-3055)
+  Log:
+  Get rid of unused code here :p
+  
+
+  Changes:	Modified:
+  +0 -10	trunk/libatheme/process.c (File Deleted) 
+
+
 nenolod     2005/10/20 18:04:13 UTC	(20051020-3053)
   Log:
   This massive commit brings us a self-hosting claro-base, ready to be split off into it's own product.
