@@ -4,7 +4,7 @@
  *
  * libatheme stuff.
  *
- * $Id: org.atheme.claro.base 3051 2005-10-20 17:53:05Z nenolod $
+ * $Id: org.atheme.claro.base 3053 2005-10-20 18:04:13Z nenolod $
  */
 
 #ifndef __CLAROBASE
@@ -70,6 +70,7 @@ typedef struct claro_state_ {
 	uint32_t node;
 	uint32_t event;
 	time_t currtime;
+	uint16_t maxfd;
 } claro_state_t;
 
 E claro_state_t claro_state;

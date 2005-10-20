@@ -4,7 +4,7 @@
  *
  * IRC packet handling.
  *
- * $Id: packet.c 2899 2005-10-16 01:22:18Z terminal $
+ * $Id: packet.c 3053 2005-10-20 18:04:13Z nenolod $
  *
  * TODO: Take all the sendq stuff in node.c and put it here.
  * sendq_flush becomes irc_whandler, etc.
@@ -127,4 +127,7 @@ void init_ircpacket(void)
 {
 	hook_add_event("connected");
 	hook_add_hook("connected", irc_handle_connect);
+
+	hook_add_event("connection_dead");
+	hook_add_hook("connection_dead", connection_dead);
 }

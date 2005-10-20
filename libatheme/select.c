@@ -4,10 +4,10 @@
  *
  * Socketengine implementing select().
  *
- * $Id: select.c 2199 2005-09-07 18:12:20Z nenolod $
+ * $Id: select.c 3053 2005-10-20 18:04:13Z nenolod $
  */
 
-#include "atheme.h"
+#include <org.atheme.claro.base>
 
 extern list_t connection_list; /* this lives in connection.c */
 fd_set readfds, writefds;
@@ -90,7 +90,7 @@ void connection_select(uint32_t delay)
 	to.tv_sec = 0;
 	to.tv_usec = delay;
 
-	if ((sr = select(me.maxfd + 1, &readfds, &writefds, NULL, &to)) > 0)
+	if ((sr = select(claro_state.maxfd + 1, &readfds, &writefds, NULL, &to)) > 0)
 	{
 		LIST_FOREACH(n, connection_list.head)
 		{

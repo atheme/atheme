@@ -1,3 +1,14 @@
+nenolod     2005/10/20 17:53:05 UTC	(20051020-3051)
+  Log:
+  Oof!
+  
+
+  Changes:	Modified:
+  +0 -3		trunk/include/atheme.h (File Modified) 
+  +7 -0		trunk/libatheme/org.atheme.claro.base (File Modified) 
+  +4 -4		trunk/libatheme/win32.c (File Modified) 
+
+
 nenolod     2005/10/20 04:39:14 UTC	(20051020-3049)
   Log:
   Almost ready to split out claro-base. :)

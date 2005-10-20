@@ -4,7 +4,7 @@
  *
  * Uplink management stuff.
  *
- * $Id: uplink.c 2899 2005-10-16 01:22:18Z terminal $
+ * $Id: uplink.c 3053 2005-10-20 18:04:13Z nenolod $
  */
 
 #include "atheme.h"
@@ -36,3 +36,27 @@ void uplink_connect(void)
 	
 	curr_uplink->conn = connection_open_tcp(u->host, u->vhost, u->port, irc_rhandler, sendq_flush);
 }
+
+/*
+ * connection_dead()
+ * 
+ * inputs:
+ *       void pointer pointing to connection nodelet,
+ *       triggered by event connection_dead.
+ *
+ * outputs:
+ *       none
+ *
+ * side effects:
+ *       the connection is closed and shut down.
+ */
+void connection_dead(void *vptr)
+{
+        connection_t *cptr = vptr;
+
+        if (cptr == curr_uplink->conn)
+                event_add_once("reconn", reconn, NULL, me.recontime);
+
+        connection_close(cptr);
+}
+

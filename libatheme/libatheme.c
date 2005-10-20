@@ -4,10 +4,10 @@
  *
  * Initialization functions.
  *
- * $Id: libatheme.c 3047 2005-10-20 04:37:13Z nenolod $
+ * $Id: libatheme.c 3053 2005-10-20 18:04:13Z nenolod $
  */
 
-#include "atheme.h"
+#include <org.atheme.claro.base>
 
 int runflags;
 claro_state_t claro_state;

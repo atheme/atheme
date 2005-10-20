@@ -4,10 +4,10 @@
  *
  * Platform-independent Network I/O layer.
  *
- * $Id: sockio.c 3017 2005-10-19 05:18:49Z nenolod $
+ * $Id: sockio.c 3053 2005-10-20 18:04:13Z nenolod $
  */
 
-#include "atheme.h"
+#include <org.atheme.claro.base>
 
 #if !defined(_WIN32)
 

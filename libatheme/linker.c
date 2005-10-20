@@ -4,10 +4,10 @@
  *
  * Dynamic linker.
  *
- * $Id: linker.c 2967 2005-10-17 07:52:19Z nenolod $
+ * $Id: linker.c 3053 2005-10-20 18:04:13Z nenolod $
  */
 
-#include "atheme.h"
+#include <org.atheme.claro.base>
 
 #ifndef _WIN32
 #include <dlfcn.h>

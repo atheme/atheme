@@ -4,10 +4,10 @@
  *
  * String functions.
  *
- * $Id: string.c 2237 2005-09-14 08:09:20Z nenolod $
+ * $Id: string.c 3053 2005-10-20 18:04:13Z nenolod $
  */
 
-#include "atheme.h"
+#include <org.atheme.claro.base>
 
 #ifndef HAVE_STRLCAT
 /* These functions are taken from Linux. */

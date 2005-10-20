@@ -4,10 +4,10 @@
  *
  * Memory functions.
  *
- * $Id: memory.c 2835 2005-10-11 05:27:26Z terminal $
+ * $Id: memory.c 3053 2005-10-20 18:04:13Z nenolod $
  */
 
-#include "atheme.h"
+#include <org.atheme.claro.base>
 
 #ifdef _WIN32
 #define SIGUSR1 0

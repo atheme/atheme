@@ -4,10 +4,10 @@
  *
  * A hook system. Idea taken from hybrid.
  *
- * $Id: hook.c 2671 2005-10-06 04:03:49Z nenolod $
+ * $Id: hook.c 3053 2005-10-20 18:04:13Z nenolod $
  */
 
-#include "atheme.h"
+#include <org.atheme.claro.base>
 
 list_t hooks;
 static BlockHeap *hook_heap;

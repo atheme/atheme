@@ -4,17 +4,15 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 2899 2005-10-16 01:22:18Z terminal $
+ * $Id: connection.c 3053 2005-10-20 18:04:13Z nenolod $
  */
 
-#include "atheme.h"
+#include <org.atheme.claro.base>
 
 static BlockHeap *sa_heap;
 static BlockHeap *connection_heap;
 
 list_t connection_list;
-
-static void connection_dead(void *);
 
 #undef LG_IOERROR
 #define LG_IOERROR LG_DEBUG
@@ -36,32 +34,6 @@ void init_netio(void)
 		clog(LG_INFO, "init_netio(): blockheap failure");
 		exit(EXIT_FAILURE);
 	}
-
-	hook_add_event("connection_dead");
-	hook_add_hook("connection_dead", connection_dead);
-}
-
-/*
- * connection_dead()
- *
- * inputs:
- *       void pointer pointing to connection nodelet,
- *       triggered by event connection_dead.
- *
- * outputs:
- *       none
- *
- * side effects:
- *       the connection is closed and shut down.
- */
-static void connection_dead(void *vptr)
-{
-	connection_t *cptr = vptr;
-
-	if (cptr == curr_uplink->conn)
-		event_add_once("reconn", reconn, NULL, me.recontime);
-
-	connection_close(cptr);
 }
 
 /*
@@ -241,8 +213,8 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 	}
 
 	/* Has the highest fd gotten any higher yet? */
-	if (s > me.maxfd)
-		me.maxfd = s;
+	if (s > claro_state.maxfd)
+		claro_state.maxfd = s;
 
 	snprintf(buf, BUFSIZE, "tcp connection: %s", host);
 
@@ -329,8 +301,8 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 	}
 
 	/* Has the highest fd gotten any higher yet? */
-	if (s > me.maxfd)
-		me.maxfd = s;
+	if (s > claro_state.maxfd)
+		claro_state.maxfd = s;
 
 	snprintf(buf, BUFSIZE, "listener: %s[%d]", host, port);
 
@@ -404,8 +376,8 @@ connection_t *connection_accept_tcp(connection_t *cptr,
 	}
 
 	/* Has the highest fd gotten any higher yet? */
-	if (s > me.maxfd)
-		me.maxfd = s;
+	if (s > claro_state.maxfd)
+		claro_state.maxfd = s;
 
 	socket_setnonblocking(s);
 
