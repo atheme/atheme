@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 3035 2005-10-20 00:00:13Z jilles $
+ * $Id: hyperion.c 3039 2005-10-20 00:57:26Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -15,7 +15,7 @@
 #include "atheme.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 3035 2005-10-20 00:00:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 3039 2005-10-20 00:57:26Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -378,6 +378,21 @@ static void m_topic(char *origin, uint8_t parc, char *parv[])
 		return;
 
 	handle_topic(c, u->nick, CURRTIME, parv[1]);
+}
+
+static void m_stopic(char *origin, uint8_t parc, char *parv[])
+{
+	channel_t *c = channel_find(parv[0]);
+	time_t channelts;
+	time_t topicts;
+
+	/* hyperion will propagate an STOPIC even if it's not applied
+	 * locally :( */
+	topicts = atol(parv[2]);
+	channelts = atol(parv[3]);
+	/*if (channelts < c->ts || (channelts == c->ts && topicts > */
+	if (channelts <= c->ts)
+		handle_topic(c, parv[1], topicts, parv[parc - 1]);
 }
 
 static void m_ping(char *origin, uint8_t parc, char *parv[])
@@ -950,6 +965,7 @@ void _modinit(module_t * m)
 	pcommand_add("PASS", m_pass);
 	pcommand_add("ERROR", m_error);
 	pcommand_add("TOPIC", m_topic);
+	pcommand_add("STOPIC", m_stopic);
 	pcommand_add("SNICK", m_snick);
 	pcommand_add("SETHOST", m_sethost);
 	pcommand_add("SETIDENT", m_setident);

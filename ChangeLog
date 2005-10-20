@@ -1,3 +1,13 @@
+jilles      2005/10/20 00:15:34 UTC	(20051020-3037)
+  Log:
+  Add support for receiving TB (topic bursting).
+  
+
+  Changes:	Modified:
+  +16 -1	trunk/protocol/charybdis.c (File Modified) 
+  +16 -1	trunk/protocol/ratbox.c (File Modified) 
+
+
 jilles      2005/10/20 00:00:13 UTC	(20051020-3035)
   Log:
   Move the core of m_topic() to src/ptasks.c handle_topic().
