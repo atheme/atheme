@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 3035 2005-10-20 00:00:13Z jilles $
+ * $Id: charybdis.c 3037 2005-10-20 00:15:34Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3035 2005-10-20 00:00:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3037 2005-10-20 00:15:34Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -105,7 +105,7 @@ static uint8_t charybdis_server_login(void)
 
 	me.bursting = TRUE;
 
-	sts("CAPAB :QS KLN UNKLN ENCAP SERVICES");
+	sts("CAPAB :QS KLN UNKLN ENCAP TB SERVICES");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
 	sts("SVINFO %d 3 0 :%ld", ircd->uses_uid ? 6 : 5, CURRTIME);
 
@@ -418,6 +418,20 @@ static void m_topic(char *origin, uint8_t parc, char *parv[])
 		return;
 
 	handle_topic(c, u->nick, CURRTIME, parv[1]);
+}
+
+static void m_tb(char *origin, uint8_t parc, char *parv[])
+{
+	channel_t *c = channel_find(parv[0]);
+	time_t ts = atol(parv[1]);
+	server_t *source = server_find(origin);
+
+	if (source == NULL)
+		source = server_find(me.actual);
+	if (source == NULL)
+		source = me.me;
+
+	handle_topic(c, parc > 3 ? parv[2] : source->name, ts, parv[parc - 1]);
 }
 
 static void m_ping(char *origin, uint8_t parc, char *parv[])
@@ -1160,6 +1174,7 @@ void _modinit(module_t * m)
 	pcommand_add("PASS", m_pass);
 	pcommand_add("ERROR", m_error);
 	pcommand_add("TOPIC", m_topic);
+	pcommand_add("TB", m_tb);
 	pcommand_add("ENCAP", m_encap);
 	pcommand_add("CAPAB", m_capab);
 	pcommand_add("UID", m_uid);
