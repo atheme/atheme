@@ -1,3 +1,17 @@
+nenolod     2005/10/20 04:37:13 UTC	(20051020-3047)
+  Log:
+  changes here :p
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/include/extern.h (File Modified) 
+  +2 -6		trunk/libatheme/dlink.c (File Modified) 
+  +5 -6		trunk/libatheme/event.c (File Modified) 
+  +1 -0		trunk/libatheme/libatheme.c (File Modified) 
+  +10 -0	trunk/libatheme/org.atheme.claro.base (File Modified) 
+  +0 -2		trunk/src/send.c (File Modified) 
+
+
 jilles      2005/10/20 01:38:37 UTC	(20051020-3045)
   Log:
   Change umodes for services clients, removing +h (affects

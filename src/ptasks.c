@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 3035 2005-10-20 00:00:13Z jilles $
+ * $Id: ptasks.c 3049 2005-10-20 04:39:14Z nenolod $
  */
 
 #include "atheme.h"
@@ -113,7 +113,8 @@ void handle_stats(char *origin, char req)
 		  if (!is_ircop(u))
 			  break;
 
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":event      %7d", cnt.event);
+		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":event      %7d", claro_state.event);
+		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":node       %7d", claro_state.node);
 		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":sra        %7d", cnt.sra);
 		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":tld        %7d", cnt.tld);
 		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":kline      %7d", cnt.kline);
@@ -123,7 +124,6 @@ void handle_stats(char *origin, char req)
 		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":myuser     %7d", cnt.myuser);
 		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":mychan     %7d", cnt.mychan);
 		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":chanacs    %7d", cnt.chanacs);
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":node       %7d", cnt.node);
 
 		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":bytes sent %7.2f%s", bytes(cnt.bout), sbytes(cnt.bout));
 		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":bytes recv %7.2f%s", bytes(cnt.bin), sbytes(cnt.bin));
