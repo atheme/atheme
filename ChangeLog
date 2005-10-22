@@ -1,3 +1,12 @@
+pfish       2005/10/22 22:55:45 UTC	(20051022-3133)
+  Log:
+  Remove MU_HELPER from info
+  
+
+  Changes:	Modified:
+  +0 -6		trunk/modules/nickserv/info.c (File Modified) 
+
+
 jilles      2005/10/22 22:10:35 UTC	(20051022-3131)
   Log:
   Add user_changeuid() to dynamically change/set/remove

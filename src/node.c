@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3131 2005-10-22 22:10:35Z jilles $
+ * $Id: node.c 3135 2005-10-22 22:58:37Z jilles $
  */
 
 #include "atheme.h"
@@ -659,7 +659,9 @@ void channel_delete(char *name)
 {
 	channel_t *c = channel_find(name);
 	mychan_t *mc;
-	node_t *n;
+	node_t *n, *tn, *n2;
+	user_t *u;
+	chanuser_t *cu;
 
 	if (!c)
 	{
@@ -668,6 +670,21 @@ void channel_delete(char *name)
 	}
 
 	slog(LG_DEBUG, "channel_delete(): %s", c->name);
+
+	/* channels with services may not be empty, kick them out -- jilles */
+	LIST_FOREACH_SAFE(n, tn, c->members.head)
+	{
+		cu = n->data;
+		u = cu->user;
+		node_del(n, &c->members);
+		node_free(n);
+		n2 = node_find(cu, &u->channels);
+		node_del(n2, &u->channels);
+		node_free(n2);
+		BlockHeapFree(chanuser_heap, cu);
+		cnt.chanuser--;
+	}
+	c->nummembers = 0;
 
 	hook_call_event("channel_delete", c);
 
@@ -887,6 +904,8 @@ void chanuser_delete(channel_t *chan, user_t *user)
 			n2 = node_find(cu, &user->channels);
 			node_del(n2, &user->channels);
 			node_free(n2);
+
+			BlockHeapFree(chanuser_heap, cu);
 
 			chan->nummembers--;
 			cnt.chanuser--;
