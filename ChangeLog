@@ -1,3 +1,14 @@
+nenolod     2005/10/22 08:00:29 UTC	(20051022-3083)
+  Log:
+  Remove old #if 0'ed code for the new sexy myuser_notice() routine which jilles wrote.
+  
+  Reviewed by everyone who was in #atheme.coders at 3 AM. :P
+  
+
+  Changes:	Modified:
+  +1 -4		trunk/src/node.c (File Modified) 
+
+
 pfish       2005/10/22 07:58:46 UTC	(20051022-3081)
   Log:
   Make config file aware of KEEPTOPIC cflag.

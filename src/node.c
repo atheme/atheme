@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3083 2005-10-22 08:00:29Z nenolod $
+ * $Id: node.c 3085 2005-10-22 08:08:57Z alambert $
  */
 
 #include "atheme.h"
@@ -1043,10 +1043,11 @@ myuser_t *myuser_add(char *name, char *pass, char *email)
 void myuser_delete(char *name)
 {
 	sra_t *sra;
-	myuser_t *mu = myuser_find(name);
+	myuser_t *mu = myuser_find(name), *tmu;
 	mychan_t *mc;
 	chanacs_t *ca;
 	node_t *n, *tn;
+	metadata_t *md;
 	uint32_t i;
 
 	if (!mu)
@@ -1080,6 +1081,19 @@ void myuser_delete(char *name)
 	/* remove them from the sra list */
 	if ((sra = sra_find(mu)))
 		sra_delete(mu);
+
+	/* orphan any nicknames pointing to them */
+	for (i = 0; i < HASHSIZE; i++)
+	{
+		LIST_FOREACH(tn, mulist[i].head)
+		{
+			tmu = (myuser_t *)tn->data;
+
+			if ((md = metadata_find(tmu, METADATA_USER, "private:link:parent"))
+				&& !irccasecmp(mu->name, md->value))
+				metadata_delete(tmu, METADATA_USER, "private:link:parent");
+		}
+	}
 
 	n = node_find(mu, &mulist[mu->hash]);
 	node_del(n, &mulist[mu->hash]);
