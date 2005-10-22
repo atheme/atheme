@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3105 2005-10-22 14:37:17Z jilles $
+ * $Id: set.c 3107 2005-10-22 14:50:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3105 2005-10-22 14:37:17Z jilles $",
+	"$Id: set.c 3107 2005-10-22 14:50:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -1081,7 +1081,7 @@ static void cs_keeptopic_topicset(channel_t *c)
 	metadata_add(mc, METADATA_CHANNEL, "private:topic:setter", c->topic_setter);
 	metadata_add(mc, METADATA_CHANNEL, "private:topic:text", c->topic);
 
-	metadata_add(mc, METADATA_CHANNEL, "private:topic:ts", c->topicts);
+	metadata_add(mc, METADATA_CHANNEL, "private:topic:ts", itoa(c->topicts));
 }
 
 /* Called on creation of a channel */
