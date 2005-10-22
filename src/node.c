@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3085 2005-10-22 08:08:57Z alambert $
+ * $Id: node.c 3089 2005-10-22 08:17:12Z alambert $
  */
 
 #include "atheme.h"
@@ -1042,7 +1042,6 @@ myuser_t *myuser_add(char *name, char *pass, char *email)
 
 void myuser_delete(char *name)
 {
-	sra_t *sra;
 	myuser_t *mu = myuser_find(name), *tmu;
 	mychan_t *mc;
 	chanacs_t *ca;
@@ -1079,7 +1078,7 @@ void myuser_delete(char *name)
 	}
 
 	/* remove them from the sra list */
-	if ((sra = sra_find(mu)))
+	if (sra_find(mu))
 		sra_delete(mu);
 
 	/* orphan any nicknames pointing to them */

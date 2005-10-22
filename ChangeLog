@@ -1,3 +1,12 @@
+pfish       2005/10/22 08:14:18 UTC	(20051022-3087)
+  Log:
+  Finish up KEEPTOPIC support. Should work now, enjoy.
+  
+
+  Changes:	Modified:
+  +28 -69	trunk/modules/chanserv/set.c (File Modified) 
+
+
 alambert    2005/10/22 08:08:57 UTC	(20051022-3085)
   Log:
   myuser_delete(): When removing a myuser, remove any linked nicknames that point to them. Committing so pfish can test.

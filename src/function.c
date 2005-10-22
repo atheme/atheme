@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 3061 2005-10-22 05:09:13Z nenolod $
+ * $Id: function.c 3089 2005-10-22 08:17:12Z alambert $
  */
 
 #include "atheme.h"
@@ -640,7 +640,6 @@ boolean_t should_op(mychan_t *mychan, myuser_t *myuser)
 
 boolean_t should_op_host(mychan_t *mychan, char *host)
 {
-	chanacs_t *ca;
 	char hostbuf[BUFSIZE];
 
 	hostbuf[0] = '\0';
@@ -654,7 +653,7 @@ boolean_t should_op_host(mychan_t *mychan, char *host)
 	if (!match(host, hostbuf))
 		return FALSE;
 
-	if ((ca = chanacs_find_host(mychan, host, (CA_AUTOOP))))
+	if (chanacs_find_host(mychan, host, CA_AUTOOP))
 		return TRUE;
 
 	return FALSE;
@@ -672,7 +671,6 @@ boolean_t should_kick(mychan_t *mychan, myuser_t *myuser)
 
 boolean_t should_kick_host(mychan_t *mychan, char *host)
 {
-	chanacs_t *ca;
 	char hostbuf[BUFSIZE];
 
 	hostbuf[0] = '\0';
@@ -686,7 +684,7 @@ boolean_t should_kick_host(mychan_t *mychan, char *host)
 	if (!match(host, hostbuf))
 		return FALSE;
 
-	if ((ca = chanacs_find_host(mychan, host, (CA_AKICK))))
+	if (chanacs_find_host(mychan, host, CA_AKICK))
 		return TRUE;
 
 	return FALSE;
@@ -713,7 +711,6 @@ boolean_t should_halfop(mychan_t *mychan, myuser_t *myuser)
 
 boolean_t should_halfop_host(mychan_t *mychan, char *host)
 {
-	chanacs_t *ca;
 	char hostbuf[BUFSIZE];
 
 	hostbuf[0] = '\0';
@@ -727,7 +724,7 @@ boolean_t should_halfop_host(mychan_t *mychan, char *host)
 	if (!match(host, hostbuf))
 		return FALSE;
 
-	if ((ca = chanacs_find_host(mychan, host, CA_AUTOHALFOP)))
+	if (chanacs_find_host(mychan, host, CA_AUTOHALFOP))
 		return TRUE;
 
 	return FALSE;
@@ -754,7 +751,6 @@ boolean_t should_voice(mychan_t *mychan, myuser_t *myuser)
 
 boolean_t should_voice_host(mychan_t *mychan, char *host)
 {
-	chanacs_t *ca;
 	char hostbuf[BUFSIZE];
 
 	hostbuf[0] = '\0';
@@ -768,7 +764,7 @@ boolean_t should_voice_host(mychan_t *mychan, char *host)
 	if (!match(host, hostbuf))
 		return FALSE;
 
-	if ((ca = chanacs_find_host(mychan, host, CA_AUTOVOICE)))
+	if (chanacs_find_host(mychan, host, CA_AUTOVOICE))
 		return TRUE;
 
 	return FALSE;
