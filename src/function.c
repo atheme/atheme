@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 3009 2005-10-19 05:02:21Z alambert $
+ * $Id: function.c 3061 2005-10-22 05:09:13Z nenolod $
  */
 
 #include "atheme.h"
@@ -491,7 +491,7 @@ void sendemail(char *what, const char *param, int type)
 		fprintf(out, "In order to complete your registration, you must send " "the following command on IRC:\n");
 		fprintf(out, "/MSG %s VERIFY REGISTER %s %s\n\n", (nicksvs.nick ? nicksvs.nick : usersvs.nick), what, param);
 		fprintf(out, "Thank you for registering your %s on the %s IRC " "network!\n",
-				(nicksvs.nick ? nicksvs.nick : usersvs.nick), me.netname);
+				(nicksvs.nick ? "nickname" : "account"), me.netname);
 	}
 	else if (type == 2)
 	{

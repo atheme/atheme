@@ -1,3 +1,15 @@
+nenolod     2005/10/20 18:22:38 UTC	(20051020-3059)
+  Log:
+  Rename libatheme.c to claro.c.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/libatheme/Makefile.in (File Modified) 
+  +1 -1		trunk/libatheme/Makefile.win32 (File Modified) 
+  + -		trunk/libatheme/claro.c (File Added) 
+  +0 -55	trunk/libatheme/libatheme.c (File Deleted) 
+
+
 nenolod     2005/10/20 18:21:33 UTC	(20051020-3057)
   Log:
   - Add DECLARE_CLARO_ASSEMBLY_V1 for creating an assembly header without 'claro generate-assembly'.
