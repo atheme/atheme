@@ -1,3 +1,19 @@
+nenolod     2005/10/22 08:57:37 UTC	(20051022-3097)
+  Log:
+  - Tie SRA into myuser_add(), so that rehashes arent required to gain SRA. Useful for initial setups.
+  - Typo fixes to ns/us drop.c (oops)
+  
+
+  Changes:	Modified:
+  +0 -18	trunk/backend/flatfile.c (File Modified) 
+  +0 -17	trunk/backend/mysql.c (File Modified) 
+  +0 -17	trunk/backend/postgresql.c (File Modified) 
+  +1 -0		trunk/include/extern.h (File Modified) 
+  +1 -1		trunk/modules/nickserv/drop.c (File Modified) 
+  +1 -1		trunk/modules/userserv/drop.c (File Modified) 
+  +25 -0	trunk/src/node.c (File Modified) 
+
+
 nenolod     2005/10/22 08:41:31 UTC	(20051022-3095)
   Log:
   Fix the /ns drop bug as described in bug #5.

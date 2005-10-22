@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3097 2005-10-22 08:57:37Z nenolod $
+ * $Id: node.c 3099 2005-10-22 09:06:31Z pfish $
  */
 
 #include "atheme.h"
@@ -1109,10 +1109,11 @@ void myuser_delete(char *name)
 	/* orphan any nicknames pointing to them */
 	for (i = 0; i < HASHSIZE; i++)
 	{
-		LIST_FOREACH(tn, mulist[i].head)
+		LIST_FOREACH(n, mulist[i].head)
 		{
-			tmu = (myuser_t *)tn->data;
+			tmu = (myuser_t *)n->data;
 
+			slog(LG_DEBUG, "myuser_delete(%s): link: trying %s", mu->name, tmu->name);
 			if ((md = metadata_find(tmu, METADATA_USER, "private:link:parent"))
 				&& !irccasecmp(mu->name, md->value))
 				metadata_delete(tmu, METADATA_USER, "private:link:parent");
