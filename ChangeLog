@@ -1,3 +1,11 @@
+alambert    2005/10/22 19:50:44 UTC	(20051022-3117)
+  Log:
+  myuser_delete(): add more debug scaffolding so pfish can test.
+
+  Changes:	Modified:
+  +13 -0	trunk/src/node.c (File Modified) 
+
+
 jilles      2005/10/22 18:48:52 UTC	(20051022-3115)
   Log:
   Setting an empty topic is clearing the topic.
