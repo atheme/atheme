@@ -5,7 +5,7 @@
  * Protocol handlers, both generic and the actual declarations themselves.
  * Declare NOTYET to use the function pointer voodoo.
  *
- * $Id: phandler.h 2835 2005-10-11 05:27:26Z terminal $
+ * $Id: phandler.h 3105 2005-10-22 14:37:17Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -45,7 +45,7 @@ E void (*skill)(char *from, char *nick, char *fmt, ...);
 E void (*part)(char *chan, char *nick);
 E void (*kline_sts)(char *server, char *user, char *host, long duration, char *reason);
 E void (*unkline_sts)(char *server, char *user, char *host);
-E void (*topic_sts)(char *channel, char *setter, char *topic);
+E void (*topic_sts)(char *channel, char *setter, time_t ts, char *topic);
 E void (*mode_sts)(char *sender, char *target, char *modes);
 E void (*ping_sts)(void);
 E void (*quit_sts)(user_t *u, char *reason);
@@ -66,7 +66,7 @@ E void generic_skill(char *from, char *nick, char *fmt, ...);
 E void generic_part(char *chan, char *nick);
 E void generic_kline_sts(char *server, char *user, char *host, long duration, char *reason);
 E void generic_unkline_sts(char *server, char *user, char *host);
-E void generic_topic_sts(char *channel, char *setter, char *topic);
+E void generic_topic_sts(char *channel, char *setter, time_t ts, char *topic);
 E void generic_mode_sts(char *sender, char *target, char *modes);
 E void generic_ping_sts(void);
 E void generic_quit_sts(user_t *u, char *reason);

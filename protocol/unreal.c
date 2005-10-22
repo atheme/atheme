@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 3035 2005-10-20 00:00:13Z jilles $
+ * $Id: unreal.c 3105 2005-10-22 14:37:17Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 3035 2005-10-20 00:00:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 3105 2005-10-22 14:37:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -275,12 +275,12 @@ static void unreal_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void unreal_topic_sts(char *channel, char *setter, char *topic)
+static void unreal_topic_sts(char *channel, char *setter, time_t ts, char *topic)
 {
 	if (!me.connected)
 		return;
 
-	sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, channel, setter, CURRTIME, topic);
+	sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, channel, setter, ts, topic);
 }
 
 /* mode wrapper */

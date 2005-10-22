@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 3037 2005-10-20 00:15:34Z jilles $
+ * $Id: charybdis.c 3105 2005-10-22 14:37:17Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3037 2005-10-20 00:15:34Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3105 2005-10-22 14:37:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -319,7 +319,7 @@ static void charybdis_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void charybdis_topic_sts(char *channel, char *setter, char *topic)
+static void charybdis_topic_sts(char *channel, char *setter, time_t ts, char *topic)
 {
 	channel_t *c;
 	int joined = 0;

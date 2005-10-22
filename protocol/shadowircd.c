@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for shadowircd-based ircd.
  *
- * $Id: shadowircd.c 3035 2005-10-20 00:00:13Z jilles $
+ * $Id: shadowircd.c 3105 2005-10-22 14:37:17Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/shadowircd.h"
 
-DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 3035 2005-10-20 00:00:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 3105 2005-10-22 14:37:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -269,7 +269,7 @@ static void shadowircd_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void shadowircd_topic_sts(char *channel, char *setter, char *topic)
+static void shadowircd_topic_sts(char *channel, char *setter, time_t ts, char *topic)
 {
 	if (!me.connected)
 		return;

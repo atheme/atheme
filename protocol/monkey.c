@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for chunky monkey ircd.
  *
- * $Id: monkey.c 3035 2005-10-20 00:00:13Z jilles $
+ * $Id: monkey.c 3105 2005-10-22 14:37:17Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/monkey.h"
 
-DECLARE_MODULE_V1("protocol/monkey", TRUE, _modinit, NULL, "$Id: monkey.c 3035 2005-10-20 00:00:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/monkey", TRUE, _modinit, NULL, "$Id: monkey.c 3105 2005-10-22 14:37:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -261,12 +261,12 @@ static void monkey_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void monkey_topic_sts(char *channel, char *setter, char *topic)
+static void monkey_topic_sts(char *channel, char *setter, time_t ts, char *topic)
 {
 	if (!me.connected)
 		return;
 
-	sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, channel, setter, CURRTIME, topic);
+	sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, channel, setter, ts, topic);
 }
 
 /* mode wrapper */

@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 3035 2005-10-20 00:00:13Z jilles $
+ * $Id: plexus.c 3105 2005-10-22 14:37:17Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 3035 2005-10-20 00:00:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 3105 2005-10-22 14:37:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -264,7 +264,7 @@ static void plexus_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void plexus_topic_sts(char *channel, char *setter, char *topic)
+static void plexus_topic_sts(char *channel, char *setter, time_t ts, char *topic)
 {
 	if (!me.connected)
 		return;
