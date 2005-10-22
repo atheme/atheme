@@ -1,3 +1,11 @@
+alambert    2005/10/22 08:08:57 UTC	(20051022-3085)
+  Log:
+  myuser_delete(): When removing a myuser, remove any linked nicknames that point to them. Committing so pfish can test.
+
+  Changes:	Modified:
+  +15 -1	trunk/src/node.c (File Modified) 
+
+
 nenolod     2005/10/22 08:00:29 UTC	(20051022-3083)
   Log:
   Remove old #if 0'ed code for the new sexy myuser_notice() routine which jilles wrote.

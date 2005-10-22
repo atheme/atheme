@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3079 2005-10-22 07:03:47Z terminal $
+ * $Id: set.c 3087 2005-10-22 08:14:18Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3079 2005-10-22 07:03:47Z terminal $",
+	"$Id: set.c 3087 2005-10-22 08:14:18Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -118,12 +118,6 @@ static void cs_set_email(char *origin, char *name, char *params)
                 notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
                 return;
         }
-        
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
-		return;
-	}
 
         if (!(ca = chanacs_find(mc, u->myuser, CA_FLAGS)))
         {
@@ -188,12 +182,6 @@ static void cs_set_url(char *origin, char *name, char *params)
 		notice(chansvs.nick, origin, "You are not authorized to execute this command.");
 		return;
 	}
-	
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
-		return;
-	}
 
 	/* XXX: I'd like to be able to use /CS SET #channel URL to clear but CS SET won't let me... */
 	if (!url || !strcasecmp("OFF", url) || !strcasecmp("NONE", url))
@@ -235,12 +223,6 @@ static void cs_set_entrymsg(char *origin, char *name, char *params)
 	if (!(ca = chanacs_find(mc, u->myuser, CA_FLAGS)))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to execute this command.");
-		return;
-	}
-	
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
 		return;
 	}
 
@@ -320,12 +302,6 @@ static void cs_set_founder(char *origin, char *name, char *params)
 	if (!(mc = mychan_find(name)))
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
-		return;
-	}
-	
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
 		return;
 	}
 
@@ -458,12 +434,6 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 	if (!chanacs_user_has_flag(mc, u, CA_SET))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
-		return;
-	}
-	
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
 		return;
 	}
 
@@ -612,12 +582,6 @@ static void cs_set_keeptopic(char *origin, char *name, char *params)
 		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
 		return;
 	}
-	
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
-		return;
-	}
 
 	if (!strcasecmp("ON", params))
 	{
@@ -680,12 +644,6 @@ static void cs_set_secure(char *origin, char *name, char *params)
 	if ((!is_founder(mc, u->myuser)) && (!is_successor(mc, u->myuser)))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
-		return;
-	}
-	
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
 		return;
 	}
 
@@ -759,12 +717,6 @@ static void cs_set_successor(char *origin, char *name, char *params)
 	if (!is_founder(mc, u->myuser))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
-		return;
-	}
-	
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
 		return;
 	}
 
@@ -850,12 +802,6 @@ static void cs_set_verbose(char *origin, char *name, char *params)
 		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
 		return;
 	}
-	
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
-		return;
-	}
 
 	if (!strcasecmp("ON", params))
 	{
@@ -911,12 +857,6 @@ static void cs_set_staffonly(char *origin, char *name, char *params)
 	if (!(mc = mychan_find(name)))
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
-		return;
-	}
-	
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
 		return;
 	}
 
@@ -995,12 +935,6 @@ static void cs_set_property(char *origin, char *name, char *params)
 	if ((!is_founder(mc, u->myuser)) && (!is_successor(mc, u->myuser)))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
-		return;
-	}
-	
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
 		return;
 	}
 
@@ -1126,8 +1060,29 @@ static void cs_join_url(chanuser_t *cu)
 /* Called on set of a topic */
 static void cs_keeptopic_topicset(channel_t *c)
 {
+	mychan_t *mc;
+	mc = mychan_find(c->name);
+
 	slog(LG_DEBUG, "KeepTopic: topic set for %s by %s: %s", c->name,
 			c->topic_setter, c->topic);
+
+	if (metadata_find(mc, METADATA_CHANNEL, "private:topic:setter"))
+		metadata_delete(mc, METADATA_CHANNEL, "private:topic:setter");
+
+	if (metadata_find(mc, METADATA_CHANNEL, "private:topic:ts"))
+		metadata_delete(mc, METADATA_CHANNEL, "private:topic:ts");
+
+	if (metadata_find(mc, METADATA_CHANNEL, "private:topic:text"));
+		metadata_delete(mc, METADATA_CHANNEL, "private:topic:text");
+
+	metadata_add(mc, METADATA_CHANNEL, "private:topic:setter", c->topic_setter);
+	metadata_add(mc, METADATA_CHANNEL, "private:topic:text", c->topic);
+
+	/* Leave out TS for now
+	 * -- pfish
+	 * metadata_add(mc, METADATA_CHANNEL, "private:topic:ts", c->topic_ts);
+	 * 
+	 */
 }
 
 /* Called on creation of a channel */
@@ -1140,12 +1095,14 @@ static void cs_keeptopic_newchan(channel_t *c)
 	time_t channelts;
 	time_t topicts;
 
+
 	if (!(mc = mychan_find(c->name)))
 		return;
 
 	if (!(MC_KEEPTOPIC & mc->flags))
 		return;
 
+/*
 	md = metadata_find(mc, METADATA_CHANNEL, "private:channelts");
 	if (md == NULL)
 		return;
@@ -1156,9 +1113,12 @@ static void cs_keeptopic_newchan(channel_t *c)
 		 * Probably not a good assumption if the ircd doesn't do
 		 * topic bursting.
 		 * -- jilles */
+	/*
 		slog(LG_DEBUG, "Not doing keeptopic for %s because of equal channelTS", c->name);
 		return;
 	}
+
+ */
 
 	md = metadata_find(mc, METADATA_CHANNEL, "private:topic:setter");
 	if (md == NULL)
@@ -1170,12 +1130,11 @@ static void cs_keeptopic_newchan(channel_t *c)
 		return;
 	text = md->value;
 
-	md = metadata_find(mc, METADATA_CHANNEL, "private:topic:ts");
+/*	md = metadata_find(mc, METADATA_CHANNEL, "private:topic:ts");
 	if (md == NULL)
 		return;
 	topicts = atol(md->value);
-
-//	slog(LG_DEBUG, "[DEBUG] chan name: %s setter: %s ts: %ld text: %s", c->name, setter, (long)topicts, text);
+*/
 
 	topic_sts(c->name, setter, text);
 }
