@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 2935 2005-10-16 07:06:22Z kog $
+ * $Id: flatfile.c 3097 2005-10-22 08:57:37Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 2935 2005-10-16 07:06:22Z kog $",
+	"$Id: flatfile.c 3097 2005-10-22 08:57:37Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -191,7 +191,6 @@ static void flatfile_db_save(void *arg)
 /* loads atheme.db */
 static void flatfile_db_load(void)
 {
-	sra_t *sra;
 	myuser_t *mu;
 	mychan_t *mc;
 	kline_t *k;
@@ -550,23 +549,6 @@ static void flatfile_db_load(void)
 			if ((s = strtok(NULL, " ")))
 				if ((i = atoi(s)) != kin)
 					slog(LG_ERROR, "db_load(): got %d klines; expected %d", kin, i);
-		}
-	}
-
-	/* now we update the sra list */
-	LIST_FOREACH(n, sralist.head)
-	{
-		sra = (sra_t *)n->data;
-
-		if (!sra->myuser)
-		{
-			sra->myuser = myuser_find(sra->name);
-
-			if (sra->myuser)
-			{
-				slog(LG_DEBUG, "db_load(): updating %s to SRA", sra->name);
-				sra->myuser->sra = sra;
-			}
 		}
 	}
 

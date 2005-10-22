@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3091 2005-10-22 08:19:50Z nenolod $
+ * $Id: node.c 3097 2005-10-22 08:57:37Z nenolod $
  */
 
 #include "atheme.h"
@@ -211,6 +211,22 @@ sra_t *sra_find(myuser_t *myuser)
 		sra = (sra_t *)n->data;
 
 		if (sra->myuser == myuser)
+			return sra;
+	}
+
+	return NULL;
+}
+
+sra_t *sra_find_named(char *name)
+{
+	sra_t *sra;
+	node_t *n;
+
+	LIST_FOREACH(n, sralist.head)
+	{
+		sra = (sra_t *)n->data;
+
+		if (!strcasecmp(sra->name, name))
 			return sra;
 	}
 
@@ -1013,6 +1029,7 @@ myuser_t *myuser_add(char *name, char *pass, char *email)
 {
 	myuser_t *mu;
 	node_t *n;
+	sra_t *sra;
 
 	mu = myuser_find(name);
 
@@ -1034,6 +1051,14 @@ myuser_t *myuser_add(char *name, char *pass, char *email)
 	mu->hash = MUHASH((unsigned char *)name);
 
 	node_add(mu, n, &mulist[mu->hash]);
+
+	if ((sra = sra_find_named(mu->name)) != NULL)
+	{
+		slog(LG_DEBUG, "myuser_add(): user `%s' has been declared as SRA, activating privileges.",
+			mu->name);
+		sra->myuser = mu;
+		mu->sra = sra;
+	}
 
 	cnt.myuser++;
 

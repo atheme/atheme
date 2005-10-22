@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 2943 2005-10-16 09:04:43Z kog $
+ * $Id: postgresql.c 3097 2005-10-22 08:57:37Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 2943 2005-10-16 09:04:43Z kog $",
+	"$Id: postgresql.c 3097 2005-10-22 08:57:37Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -256,7 +256,6 @@ static void postgresql_db_load(void)
 	myuser_t *mu;
 	chanacs_t *ca;
 	node_t *n;
-	sra_t *sra;
 	mychan_t *mc;
 	kline_t *k;
 	uint32_t i = 0, muin = 0, mcin = 0, kin = 0;
@@ -516,22 +515,6 @@ static void postgresql_db_load(void)
 	}
 
 	PQclear(res);
-
-        LIST_FOREACH(n, sralist.head)
-        {
-                sra = (sra_t *)n->data;
-
-                if (!sra->myuser)
-                {
-                        sra->myuser = myuser_find(sra->name);
-
-                        if (sra->myuser)
-                        {
-                                slog(LG_DEBUG, "db_load(): updating %s to SRA", sra->name);
-                                sra->myuser->sra = sra;
-                        }
-                }
-        }
 }
 
 void _modinit(module_t *m)

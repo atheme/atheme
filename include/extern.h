@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 3047 2005-10-20 04:37:13Z nenolod $
+ * $Id: extern.h 3097 2005-10-22 08:57:37Z nenolod $
  */
 
 #ifndef EXTERN_H
@@ -157,6 +157,7 @@ E void init_nodes(void);
 E sra_t *sra_add(char *name);
 E void sra_delete(myuser_t *myuser);
 E sra_t *sra_find(myuser_t *myuser);
+E sra_t *sra_find_named(char *name);
 
 E tld_t *tld_add(char *name);
 E void tld_delete(char *name);

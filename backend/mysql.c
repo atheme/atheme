@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using MySQL.
  *
- * $Id: mysql.c 2947 2005-10-16 09:27:02Z kog $
+ * $Id: mysql.c 3097 2005-10-22 08:57:37Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/mysql", TRUE, _modinit, NULL,
-	"$Id: mysql.c 2947 2005-10-16 09:27:02Z kog $",
+	"$Id: mysql.c 3097 2005-10-22 08:57:37Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -358,7 +358,6 @@ static void mysql_db_load(void)
 	myuser_t *mu;
 	chanacs_t *ca;
 	node_t *n;
-	sra_t *sra;
 	mychan_t *mc;
 	kline_t *k;
 	int retval;
@@ -591,22 +590,6 @@ static void mysql_db_load(void)
 
 	mysql_free_result(res);
 	res = NULL;
-
-	LIST_FOREACH(n, sralist.head)
-	{
-	    sra = (sra_t *)n->data;
-
-		if (!sra->myuser)
-		{
-			sra->myuser = myuser_find(sra->name);
-
-			if (sra->myuser)
-			{
-				slog(LG_DEBUG, "db_load(): updating %s to SRA", sra->name);
-				sra->myuser->sra = sra;
-			}
-		}
-	}
 
 	mysql_close(mysql);
 }

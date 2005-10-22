@@ -1,3 +1,15 @@
+nenolod     2005/10/22 08:41:31 UTC	(20051022-3095)
+  Log:
+  Fix the /ns drop bug as described in bug #5.
+  
+  Reviewed by pfish.
+  
+
+  Changes:	Modified:
+  +13 -1	trunk/modules/nickserv/drop.c (File Modified) 
+  +13 -1	trunk/modules/userserv/drop.c (File Modified) 
+
+
 pfish       2005/10/22 08:31:48 UTC	(20051022-3093)
   Log:
   Bail out if mc == null

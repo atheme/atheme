@@ -4,7 +4,7 @@
  *
  * This file contains code for the UserServ DROP function.
  *
- * $Id: drop.c 3095 2005-10-22 08:41:31Z nenolod $
+ * $Id: drop.c 3097 2005-10-22 08:57:37Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 3095 2005-10-22 08:41:31Z nenolod $",
+	"$Id: drop.c 3097 2005-10-22 08:57:37Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -74,7 +74,7 @@ static void us_cmd_drop(char *origin)
 		LIST_FOREACH(n, mclist[i].head)
 		{
 			tmc = (mychan_t *)n->data;
-			if ((tmc->founder == mu && tmc->successor == tmu->founder) ||
+			if ((tmc->founder == mu && tmc->successor == tmc->founder) ||
 			    (tmc->founder == mu && tmc->successor == NULL))
 			{
 				snoop("DROP: \2%s\2 by \2%s\2 as \2%s\2", tmc->name, u->nick, u->myuser->name);
