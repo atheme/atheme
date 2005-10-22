@@ -1,3 +1,11 @@
+alambert    2005/10/22 06:21:38 UTC	(20051022-3067)
+  Log:
+  Fix crash when RECOVER used on a bogus channel. Reported by kyle -- thanks.
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/chanserv/recover.c (File Modified) 
+
+
 alambert    2005/10/22 06:14:22 UTC	(20051022-3065)
   Log:
   keeptopic: topic_set skeleton
