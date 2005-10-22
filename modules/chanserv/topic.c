@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TOPIC functions.
  *
- * $Id: topic.c 3079 2005-10-22 07:03:47Z terminal $
+ * $Id: topic.c 3101 2005-10-22 13:59:52Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/topic", FALSE, _modinit, _moddeinit,
-	"$Id: topic.c 3079 2005-10-22 07:03:47Z terminal $",
+	"$Id: topic.c 3101 2005-10-22 13:59:52Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -110,6 +110,7 @@ static void cs_cmd_topic(char *origin)
 
 	c->topic = sstrdup(topic);
 	c->topic_setter = sstrdup(origin);
+	c->topicts = CURRTIME;
 
 	topic_sts(chan, origin, topic);
 	notice(chansvs.nick, origin, "Topic set to \2%s\2 on \2%s\2.", topic, chan);
@@ -170,12 +171,14 @@ static void cs_cmd_topicappend(char *origin)
 		free(c->topic_setter);
 		c->topic = sstrdup(topicbuf);
 		c->topic_setter = sstrdup(origin);
+		c->topicts = CURRTIME;
 	}
 	else
 	{
 		strlcpy(topicbuf, topic, BUFSIZE);
 		c->topic = sstrdup(topicbuf);
 		c->topic_setter = sstrdup(origin);
+		c->topicts = CURRTIME;
 	}
 
 	topic_sts(chan, origin, topicbuf);
@@ -234,6 +237,7 @@ static void cs_fcmd_topic(char *origin, char *chan)
 
         c->topic = sstrdup(topic);
         c->topic_setter = sstrdup(origin);
+	c->topicts = CURRTIME;
 
         topic_sts(chan, origin, topic);
 }
@@ -290,12 +294,14 @@ static void cs_fcmd_topicappend(char *origin, char *chan)
 		free(c->topic_setter);
                 c->topic = sstrdup(topicbuf);
                 c->topic_setter = sstrdup(origin);
+		c->topicts = CURRTIME;
         }
         else
         {
                 strlcpy(topicbuf, topic, BUFSIZE);
                 c->topic = sstrdup(topicbuf);
                 c->topic_setter = sstrdup(origin);
+		c->topicts = CURRTIME;
         }
 
         topic_sts(chan, origin, topicbuf);

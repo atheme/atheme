@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 3063 2005-10-22 06:07:58Z alambert $
+ * $Id: ptasks.c 3101 2005-10-22 13:59:52Z jilles $
  */
 
 #include "atheme.h"
@@ -266,6 +266,7 @@ void handle_topic(channel_t *c, char *setter, time_t ts, char *topic)
 		free(c->topic_setter);
 	c->topic = sstrdup(topic);
 	c->topic_setter = sstrdup(newsetter);
+	c->topicts = ts;
 
 	hook_call_event("topic_set", c);
 }

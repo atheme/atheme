@@ -1,3 +1,13 @@
+pfish       2005/10/22 09:06:31 UTC	(20051022-3099)
+  Log:
+  
+  Code review for alambert's patch that drops linked nicknames when the parent nick is dropped.
+  
+
+  Changes:	Modified:
+  +3 -2		trunk/src/node.c (File Modified) 
+
+
 nenolod     2005/10/22 08:57:37 UTC	(20051022-3097)
   Log:
   - Tie SRA into myuser_add(), so that rehashes arent required to gain SRA. Useful for initial setups.
