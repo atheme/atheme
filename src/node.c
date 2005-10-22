@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3025 2005-10-19 05:35:22Z nenolod $
+ * $Id: node.c 3083 2005-10-22 08:00:29Z nenolod $
  */
 
 #include "atheme.h"
@@ -1645,10 +1645,7 @@ void expire_check(void *arg)
 							mc->founder = mc->successor;
 							mc->successor = NULL;
 
-#if 0				/* remove this for now until this is cleaned up -- jilles */
-							if (mc->founder->user)
-								notice(chansvs.nick, mc->founder->user->nick, "You are now founder on \2%s\2.", mc->name);
-#endif
+							myuser_notice(chansvs.nick, mc->founder, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, mc->founder->name);
 
 							return;
 						}
