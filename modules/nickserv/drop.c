@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ DROP function.
  *
- * $Id: drop.c 2819 2005-10-10 00:15:26Z pfish $
+ * $Id: drop.c 3095 2005-10-22 08:41:31Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 2819 2005-10-10 00:15:26Z pfish $",
+	"$Id: drop.c 3095 2005-10-22 08:41:31Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -75,7 +75,8 @@ static void ns_cmd_drop(char *origin)
 		LIST_FOREACH(n, mclist[i].head)
 		{
 			tmc = (mychan_t *)n->data;
-			if (tmc->founder == mu)
+			if ((tmc->founder == mu && tmc->successor == tmu->founder) ||
+			    (tmc->founder == mu && tmc->successor == NULL))
 			{
 				snoop("DROP: \2%s\2 by \2%s\2 as \2%s\2", tmc->name, u->nick, u->myuser->name);
 
@@ -83,6 +84,17 @@ static void ns_cmd_drop(char *origin)
 
 				part(tmc->name, chansvs.nick);
 				mychan_delete(tmc->name);
+			}
+			else if (tmc->founder == mu && tmc->successor != mu)
+			{
+				snoop("SUCCESSION: \2%s\2 -> \2%s\2", tmc->name, tmc->successor->name);
+				chanacs_delete(tmc, tmc->successor, CA_SUCCESSOR);
+				chanacs_add(tmc, tmc->successor, CA_FOUNDER);
+				tmc->founder = tmc->successor;
+				tmc->successor = NULL;
+
+				myuser_notice(chansvs.nick, tmc->founder, "You are now the founder of \2%s\2 (as \2%s\2).",
+					      tmc->name, tmc->founder->name);
 			}
 		}
 	}

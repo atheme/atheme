@@ -1,3 +1,12 @@
+pfish       2005/10/22 08:31:48 UTC	(20051022-3093)
+  Log:
+  Bail out if mc == null
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/modules/chanserv/set.c (File Modified) 
+
+
 nenolod     2005/10/22 08:19:50 UTC	(20051022-3091)
   Log:
   Updates to expire_check(), as noted by terminal.
