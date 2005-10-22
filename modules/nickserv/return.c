@@ -4,7 +4,7 @@
  *
  * Implements NICKSERV RETURN.
  *
- * $Id$
+ * $Id: return.c 3139 2005-10-22 23:50:56Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/return", FALSE, _modinit, _moddeinit,
-	"$Id$",
+	"$Id: return.c 3139 2005-10-22 23:50:56Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
