@@ -1,3 +1,16 @@
+alambert    2005/10/22 06:40:32 UTC	(20051022-3073)
+  Log:
+  Prefer chanacs_user_has_flag() to is_xop(): the former checks host-based access; identifying is not necessary
+
+  Changes:	Modified:
+  +6 -6		trunk/modules/chanserv/akick.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/flags.c (File Modified) 
+  +2 -9		trunk/modules/chanserv/invite.c (File Modified) 
+  +1 -7		trunk/modules/chanserv/recover.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/set.c (File Modified) 
+  +3 -3		trunk/modules/chanserv/xop.c (File Modified) 
+
+
 alambert    2005/10/22 06:28:52 UTC	(20051022-3069)
   Log:
   fix typo
