@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 2871 2005-10-14 01:46:33Z nenolod $
+ * $Id: help.c 3113 2005-10-22 18:25:46Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 2871 2005-10-14 01:46:33Z nenolod $",
+	"$Id: help.c 3113 2005-10-22 18:25:46Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -126,7 +126,7 @@ static void cs_cmd_help(char *origin)
 		notice(chansvs.nick, origin, "operations are performed on them.");
 		notice(chansvs.nick, origin, " ");
 		notice(chansvs.nick, origin, "The following commands are available.");
-		notice(chansvs.nick, origin, "\2FOUNDER\2       Sets you founder of a channel.");
+		notice(chansvs.nick, origin, "\2FOUNDER\2       Transfers foundership of a channel.");
 		notice(chansvs.nick, origin, "\2MLOCK\2         Sets channel mode lock.");
 		notice(chansvs.nick, origin, "\2SECURE\2        Prevents unauthorized people from " "gaining operator status.");
 		notice(chansvs.nick, origin, "\2SUCCESSOR\2     Sets a channel successor.");
@@ -134,6 +134,7 @@ static void cs_cmd_help(char *origin)
 		notice(chansvs.nick, origin, "\2URL\2           Sets the channel URL.");
 		notice(chansvs.nick, origin, "\2EMAIL\2         Sets the channel e-mail address.");
 		notice(chansvs.nick, origin, "\2ENTRYMSG\2      Sets the channel's entry message.");
+		notice(chansvs.nick, origin, "\2KEEPTOPIC\2     Enables topic retention.");
 		notice(chansvs.nick, origin, "\2PROPERTY\2      Manipulates channel metadata.");
 		notice(chansvs.nick, origin, " ");
 

@@ -1,0 +1,13 @@
+Help for SET KEEPTOPIC:
+
+SET KEEPTOPIC enables restoration of the old
+topic after the channel has become empty. In
+some cases, it may revert topic changes
+after netsplits or services outages, so it
+is not recommended to turn this on if your
+channel tends to never empty.
+
+Syntax: SET <#channel> KEEPTOPIC <on/off>
+
+Example:
+    /msg &nick& SET #foo KEEPTOPIC ON

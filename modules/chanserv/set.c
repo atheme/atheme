@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3107 2005-10-22 14:50:38Z jilles $
+ * $Id: set.c 3113 2005-10-22 18:25:46Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3107 2005-10-22 14:50:38Z jilles $",
+	"$Id: set.c 3113 2005-10-22 18:25:46Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -52,6 +52,7 @@ void _modinit(module_t *m)
 	help_addentry(cs_helptree, "SET PROPERTY", "help/cservice/set_property", NULL);
 	help_addentry(cs_helptree, "SET STAFFONLY", "help/cservice/set_staffonly", NULL);
 	help_addentry(cs_helptree, "SET SUCCESSOR", "help/cservice/set_successor", NULL);
+	help_addentry(cs_helptree, "SET KEEPTOPIC", "help/cservice/set_keeptopic", NULL);
 }
 
 void _moddeinit()
@@ -71,6 +72,7 @@ void _moddeinit()
 	help_delentry(cs_helptree, "SET PROPERTY");
 	help_delentry(cs_helptree, "SET STAFFONLY");
 	help_delentry(cs_helptree, "SET SUCCESSOR");
+	help_delentry(cs_helptree, "SET KEEPTOPIC");
 }
 
 struct set_command_ *set_cmd_find(char *origin, char *command);
