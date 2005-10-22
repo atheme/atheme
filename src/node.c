@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3123 2005-10-22 20:31:22Z alambert $
+ * $Id: node.c 3125 2005-10-22 20:32:14Z pfish $
  */
 
 #include "atheme.h"
@@ -1119,7 +1119,7 @@ void myuser_delete(char *name)
 				&& !irccasecmp(mu->name, md->value))
 			{
 				slog(LG_DEBUG, "myuser_delete(): deleting %s; removing alias from %s to %s",
-					mu->name, tmu->name, mu->name)
+					mu->name, tmu->name, mu->name);
 				metadata_delete(tmu, METADATA_USER, "private:alias:parent");
 			}
 		}
@@ -1214,7 +1214,7 @@ void mychan_delete(char *name)
 {
 	mychan_t *mc = mychan_find(name);
 	chanacs_t *ca;
-	node_t *n, *tn;
+	node_t *n;
 
 	if (!mc)
 	{
@@ -1225,7 +1225,7 @@ void mychan_delete(char *name)
 	slog(LG_DEBUG, "mychan_delete(): %s", mc->name);
 
 	/* remove the chanacs shiz */
-	LIST_FOREACH_SAFE(n, tn, mc->chanacs.head)
+	LIST_FOREACH_SAFE(n, n, mc->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
 

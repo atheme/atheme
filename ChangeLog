@@ -1,3 +1,11 @@
+alambert    2005/10/22 20:31:22 UTC	(20051022-3123)
+  Log:
+  myuser_delete(): Remove scaffolding and finish up stale link removal. This should work. Many thanks to pfish for testing.
+
+  Changes:	Modified:
+  +7 -15	trunk/src/node.c (File Modified) 
+
+
 alambert    2005/10/22 20:23:55 UTC	(20051022-3121)
   Log:
   myuser_delete(): private:link:parent should be private:alias:parent. I will not commit at 3AM anymore.
