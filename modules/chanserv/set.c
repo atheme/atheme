@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3033 2005-10-19 23:36:17Z jilles $
+ * $Id: set.c 3063 2005-10-22 06:07:58Z alambert $
  */
 
 #include "atheme.h"
@@ -12,14 +12,14 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3033 2005-10-19 23:36:17Z jilles $",
+	"$Id: set.c 3063 2005-10-22 06:07:58Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_cmd_set(char *origin);
 static void cs_join_entrymsg(chanuser_t *cu);
 static void cs_join_url(chanuser_t *cu);
-static void cs_keeptopic(channel_t *c);
+static void cs_keeptopic_newchan(channel_t *c);
 
 command_t cs_set = { "SET", "Sets various control flags.",
                         AC_NONE, cs_cmd_set };
@@ -37,7 +37,7 @@ void _modinit(module_t *m)
 	hook_add_event("channel_add");
 	hook_add_hook("channel_join", (void (*)(void *)) cs_join_entrymsg);
 	hook_add_hook("channel_join", (void (*)(void *)) cs_join_url);
-	hook_add_hook("channel_add", (void (*)(void *)) cs_keeptopic);
+	hook_add_hook("channel_add", (void (*)(void *)) cs_keeptopic_newchan);
 
 	help_addentry(cs_helptree, "SET FOUNDER", "help/cservice/set_founder", NULL);
 	help_addentry(cs_helptree, "SET MLOCK", "help/cservice/set_mlock", NULL);
@@ -56,7 +56,7 @@ void _moddeinit()
 	command_delete(&cs_set, cs_cmdtree);
 	hook_del_hook("channel_join", (void (*)(void *)) cs_join_entrymsg);
 	hook_del_hook("channel_join", (void (*)(void *)) cs_join_url);
-	hook_del_hook("channel_add", (void (*)(void *)) cs_keeptopic);
+	hook_del_hook("channel_add", (void (*)(void *)) cs_keeptopic_newchan);
 
 	help_delentry(cs_helptree, "SET FOUNDER");
 	help_delentry(cs_helptree, "SET MLOCK");
@@ -1055,7 +1055,7 @@ static void cs_join_url(chanuser_t *cu)
 }
 
 /* Called on creation of a channel */
-static void cs_keeptopic(channel_t *c)
+static void cs_keeptopic_newchan(channel_t *c)
 {
 	mychan_t *mc;
 	metadata_t *md;

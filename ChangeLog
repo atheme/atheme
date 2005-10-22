@@ -1,3 +1,12 @@
+nenolod     2005/10/22 05:09:13 UTC	(20051022-3061)
+  Log:
+  Grammatical change to registration email.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/function.c (File Modified) 
+
+
 nenolod     2005/10/20 18:22:38 UTC	(20051020-3059)
   Log:
   Rename libatheme.c to claro.c.
