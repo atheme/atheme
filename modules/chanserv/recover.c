@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService RECOVER functions.
  *
- * $Id: recover.c 2551 2005-10-04 06:14:07Z nenolod $
+ * $Id: recover.c 3067 2005-10-22 06:21:38Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/recover", FALSE, _modinit, _moddeinit,
-	"$Id: recover.c 2551 2005-10-04 06:14:07Z nenolod $",
+	"$Id: recover.c 3067 2005-10-22 06:21:38Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -65,6 +65,12 @@ static void cs_cmd_recover(char *origin)
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
 		return;
+	}
+
+	if (!mc->chan)
+	{
+		notice(chansvs.nick, origin, "\2%s\2 does not exist.", name);
+		reteurn;
 	}
 
 	if (!is_xop(mc, u->myuser, CA_RECOVER))
