@@ -1,3 +1,12 @@
+alambert    2005/10/22 08:17:12 UTC	(20051022-3089)
+  Log:
+  various: If we don't care about the return value, don't bother storing it.
+
+  Changes:	Modified:
+  +4 -8		trunk/src/function.c (File Modified) 
+  +1 -2		trunk/src/node.c (File Modified) 
+
+
 pfish       2005/10/22 08:14:18 UTC	(20051022-3087)
   Log:
   Finish up KEEPTOPIC support. Should work now, enjoy.
