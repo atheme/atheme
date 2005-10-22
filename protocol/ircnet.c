@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 3109 2005-10-22 14:51:17Z jilles $
+ * $Id: ircnet.c 3129 2005-10-22 21:49:56Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 3109 2005-10-22 14:51:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 3129 2005-10-22 21:49:56Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -79,7 +79,7 @@ static uint8_t ircnet_server_login(void)
 
 	me.bursting = TRUE;
 
-	sts("SERVER %s 1 %s :%s", me.name, curr_uplink->numeric, me.desc);
+	sts("SERVER %s 1 %s :%s", me.name, me.numeric, me.desc);
 
 	services_init();
 
@@ -348,7 +348,7 @@ static void ircnet_jupe(char *server, char *reason)
 
 	/* dirty dirty make up some sid */
 	if (sid[0] == '\0')
-		strlcpy(sid, curr_uplink->numeric, sizeof sid);
+		strlcpy(sid, me.numeric, sizeof sid);
 	do
 	{
 		i = 3;

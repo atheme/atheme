@@ -1,3 +1,12 @@
+pfish       2005/10/22 21:37:12 UTC	(20051022-3127)
+  Log:
+  Kill MU_HELPER flag
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/include/account.h (File Modified) 
+
+
 pfish       2005/10/22 20:32:14 UTC	(20051022-3125)
   Log:
   Fix typo. :P

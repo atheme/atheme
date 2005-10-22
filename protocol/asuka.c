@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: asuka.c 3105 2005-10-22 14:37:17Z jilles $
+ * $Id: asuka.c 3129 2005-10-22 21:49:56Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 3105 2005-10-22 14:37:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 3129 2005-10-22 21:49:56Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -78,9 +78,6 @@ static uint8_t asuka_server_login(void)
 {
 	int8_t ret;
 
-	/* Override numeric choice here. */
-	curr_uplink->numeric = me.numeric;
-
 	ret = sts("PASS :%s", curr_uplink->pass);
 	if (ret == 1)
 		return 1;
@@ -88,7 +85,7 @@ static uint8_t asuka_server_login(void)
 	me.bursting = TRUE;
 
 	/* SERVER irc.undernet.org 1 933022556 947908144 J10 AA]]] :[127.0.0.1] A Undernet Server */
-	sts("SERVER %s 1 %ld %ld J10 %s]]] :%s", me.name, me.start, CURRTIME, curr_uplink->numeric, me.desc);
+	sts("SERVER %s 1 %ld %ld J10 %s]]] :%s", me.name, me.start, CURRTIME, me.numeric, me.desc);
 
 	services_init();
 
@@ -103,7 +100,7 @@ static user_t *asuka_introduce_nick(char *nick, char *user, char *host, char *re
 	user_t *u;
 	char *uid = uid_get();
 
-	sts("%s N %s 1 %ld %s %s +%sk A %s :%s", curr_uplink->numeric, nick, CURRTIME, user, host, modes, uid, real);
+	sts("%s N %s 1 %ld %s %s +%sk A %s :%s", me.numeric, nick, CURRTIME, user, host, modes, uid, real);
 
 	u = user_add(nick, user, host, NULL, NULL, uid, real, me.me);
 	if (strchr(modes, 'o'))
@@ -362,7 +359,7 @@ static void m_topic(char *origin, uint8_t parc, char *parv[])
 static void m_ping(char *origin, uint8_t parc, char *parv[])
 {
 	/* reply to PING's */
-	sts("%s Z %s %s %s", curr_uplink->numeric, parv[0], parv[1], parv[2]);
+	sts("%s Z %s %s %s", me.numeric, parv[0], parv[1], parv[2]);
 }
 
 static void m_pong(char *origin, uint8_t parc, char *parv[])

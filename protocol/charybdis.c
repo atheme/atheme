@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 3111 2005-10-22 15:16:24Z jilles $
+ * $Id: charybdis.c 3129 2005-10-22 21:49:56Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3111 2005-10-22 15:16:24Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3129 2005-10-22 21:49:56Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -87,19 +87,19 @@ static uint8_t charybdis_server_login(void)
 {
 	int8_t ret = 1;
 
-	if (!curr_uplink->numeric)
+	if (!me.numeric)
 	{
 		ircd->uses_uid = FALSE;
 		ret = sts("PASS %s :TS", curr_uplink->pass);
 	}
-	else if (strlen(curr_uplink->numeric) == 3 && isdigit(*curr_uplink->numeric))
+	else if (strlen(me.numeric) == 3 && isdigit(*me.numeric))
 	{
 		ircd->uses_uid = TRUE;
-		ret = sts("PASS %s TS 6 :%s", curr_uplink->pass, curr_uplink->numeric);
+		ret = sts("PASS %s TS 6 :%s", curr_uplink->pass, me.numeric);
 	}
 	else
 	{
-		slog(LG_ERROR, "Invalid numeric (SID) %s", curr_uplink->numeric);
+		slog(LG_ERROR, "Invalid numeric (SID) %s", me.numeric);
 	}
 	if (ret == 1)
 		return 1;
@@ -122,7 +122,7 @@ static user_t *charybdis_introduce_nick(char *nick, char *user, char *host, char
 	if (ircd->uses_uid)
 	{
 		uid = uid_get();
-		sts(":%s UID %s 1 %ld +%sS %s %s 0 %s :%s", curr_uplink->numeric, nick, CURRTIME, modes, user, host, uid, real);
+		sts(":%s UID %s 1 %ld +%sS %s %s 0 %s :%s", me.numeric, nick, CURRTIME, modes, user, host, uid, real);
 	}
 	else
 	{

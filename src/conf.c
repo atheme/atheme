@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 3081 2005-10-22 07:58:46Z pfish $
+ * $Id: conf.c 3129 2005-10-22 21:49:56Z jilles $
  */
 
 #include "atheme.h"
@@ -578,7 +578,7 @@ static int c_loadmodule(CONFIGENTRY *ce)
 static int c_uplink(CONFIGENTRY *ce)
 {
 	char *name;
-	char *host = NULL, *vhost = NULL, *password = NULL, *numeric = NULL;
+	char *host = NULL, *vhost = NULL, *password = NULL;
 	uint32_t port = 0;
 
 	if (ce->ce_vardata == NULL)
@@ -602,13 +602,6 @@ static int c_uplink(CONFIGENTRY *ce)
 
 			vhost = sstrdup(ce->ce_vardata);
 		}
-		else if (!strcasecmp("NUMERIC", ce->ce_varname))
-		{
-			if (ce->ce_vardata == NULL)
-				PARAM_ERROR(ce);
-
-			numeric = sstrdup(ce->ce_vardata);
-		}
 		else if (!strcasecmp("PASSWORD", ce->ce_varname))
 		{
 			if (ce->ce_vardata == NULL)
@@ -630,7 +623,7 @@ static int c_uplink(CONFIGENTRY *ce)
 		}
 	}
 
-	uplink_add(name, host, password, vhost, numeric, port);
+	uplink_add(name, host, password, vhost, port);
 	return 0;
 }
 

@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 3051 2005-10-20 17:53:05Z nenolod $
+ * $Id: atheme.h 3129 2005-10-22 21:49:56Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -47,7 +47,7 @@
 /* other stuff. */
 #define CLIENT_NAME(user)	((user)->uid[0] ? (user)->uid : (user)->nick)
 #define SERVER_NAME(serv)	((serv)->sid[0] ? (serv)->sid : (serv)->name)
-#define ME			(ircd->uses_uid ? curr_uplink->numeric : me.name)
+#define ME			(ircd->uses_uid ? me.numeric : me.name)
 
 typedef struct {
         channel_t *c;

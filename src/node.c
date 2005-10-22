@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3125 2005-10-22 20:32:14Z pfish $
+ * $Id: node.c 3129 2005-10-22 21:49:56Z jilles $
  */
 
 #include "atheme.h"
@@ -72,7 +72,7 @@ void init_nodes(void)
  * U P L I N K S *
  *****************/
 
-uplink_t *uplink_add(char *name, char *host, char *password, char *vhost, char *numeric, int port)
+uplink_t *uplink_add(char *name, char *host, char *password, char *vhost, int port)
 {
 	uplink_t *u;
 	node_t *n;
@@ -95,11 +95,6 @@ uplink_t *uplink_add(char *name, char *host, char *password, char *vhost, char *
 	else
 		u->vhost = sstrdup("0.0.0.0");
 
-	if (numeric)
-		u->numeric = sstrdup(numeric);
-	else if (me.numeric)
-		u->numeric = sstrdup(me.numeric);
-
 	u->port = port;
 
 	n = node_create();
@@ -121,7 +116,6 @@ void uplink_delete(uplink_t * u)
 	free(u->host);
 	free(u->pass);
 	free(u->vhost);
-	free(u->numeric);
 
 	node_del(n, &uplinks);
 
