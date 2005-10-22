@@ -1,3 +1,15 @@
+jilles      2005/10/22 22:58:37 UTC	(20051022-3135)
+  Log:
+  - Remove all chanusers in channel_delete() (this will happen
+    if we keep services user_t's but still want to wipe all
+    channels)
+  - Free chanuser on chanuser_delete()
+  
+
+  Changes:	Modified:
+  +20 -1	trunk/src/node.c (File Modified) 
+
+
 pfish       2005/10/22 22:55:45 UTC	(20051022-3133)
   Log:
   Remove MU_HELPER from info
