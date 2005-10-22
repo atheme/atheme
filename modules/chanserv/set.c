@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3113 2005-10-22 18:25:46Z jilles $
+ * $Id: set.c 3115 2005-10-22 18:48:52Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3113 2005-10-22 18:25:46Z jilles $",
+	"$Id: set.c 3115 2005-10-22 18:48:52Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -1068,9 +1068,6 @@ static void cs_keeptopic_topicset(channel_t *c)
 	if (mc == NULL)
 		return;
 
-	slog(LG_DEBUG, "KeepTopic: topic set for %s by %s: %s", c->name,
-			c->topic_setter, c->topic);
-
 	if (metadata_find(mc, METADATA_CHANNEL, "private:topic:setter"))
 		metadata_delete(mc, METADATA_CHANNEL, "private:topic:setter");
 
@@ -1080,10 +1077,19 @@ static void cs_keeptopic_topicset(channel_t *c)
 	if (metadata_find(mc, METADATA_CHANNEL, "private:topic:text"));
 		metadata_delete(mc, METADATA_CHANNEL, "private:topic:text");
 
-	metadata_add(mc, METADATA_CHANNEL, "private:topic:setter", c->topic_setter);
-	metadata_add(mc, METADATA_CHANNEL, "private:topic:text", c->topic);
-
-	metadata_add(mc, METADATA_CHANNEL, "private:topic:ts", itoa(c->topicts));
+	if (c->topic && c->topic_setter)
+	{
+		slog(LG_DEBUG, "KeepTopic: topic set for %s by %s: %s", c->name,
+			c->topic_setter, c->topic);
+		metadata_add(mc, METADATA_CHANNEL, "private:topic:setter",
+			c->topic_setter);
+		metadata_add(mc, METADATA_CHANNEL, "private:topic:text",
+			c->topic);
+		metadata_add(mc, METADATA_CHANNEL, "private:topic:ts",
+			itoa(c->topicts));
+	}
+	else
+		slog(LG_DEBUG, "KeepTopic: topic cleared for %s", c->name);
 }
 
 /* Called on creation of a channel */

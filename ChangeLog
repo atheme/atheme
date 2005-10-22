@@ -1,3 +1,15 @@
+jilles      2005/10/22 18:25:46 UTC	(20051022-3113)
+  Log:
+  Add help for /cs set keeptopic, improve help for /cs set founder.
+  
+
+  Changes:	Modified:
+  +12 -3	trunk/help/cservice/set_founder (File Modified) 
+  +13 -0	trunk/help/cservice/set_keeptopic (File Added) 
+  +2 -1		trunk/modules/chanserv/help.c (File Modified) 
+  +2 -0		trunk/modules/chanserv/set.c (File Modified) 
+
+
 jilles      2005/10/22 15:16:24 UTC	(20051022-3111)
   Log:
   In ratbox and charybdis, use TB to restore old topics.
