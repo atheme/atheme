@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 2553 2005-10-04 06:33:01Z nenolod $
+ * $Id: flags.c 3073 2005-10-22 06:40:32Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 2553 2005-10-04 06:33:01Z nenolod $",
+	"$Id: flags.c 3073 2005-10-22 06:40:32Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -74,7 +74,7 @@ static void cs_cmd_flags(char *origin)
 			return;
 		}
 
-		if (!is_xop(mc, u->myuser, CA_ACLVIEW))
+		if (!chanacs_user_has_flag(mc, u, CA_ACLVIEW))
 		{
 			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 			return;

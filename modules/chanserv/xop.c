@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 2551 2005-10-04 06:14:07Z nenolod $
+ * $Id: xop.c 3073 2005-10-22 06:40:32Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 2551 2005-10-04 06:14:07Z nenolod $",
+	"$Id: xop.c 3073 2005-10-22 06:40:32Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -123,7 +123,7 @@ static void cs_xop(char *origin, uint32_t level)
 				return;
 			}
 		}
-		if (!is_xop(mc, u->myuser, CA_FLAGS))
+		if (!chanacs_user_has_flag(mc, u, CA_FLAGS))
 		{
 			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 			return;
@@ -133,7 +133,7 @@ static void cs_xop(char *origin, uint32_t level)
 
 	else if (!strcasecmp("DEL", cmd))
 	{
-		if (!is_xop(mc, u->myuser, CA_FLAGS))
+		if (!chanacs_user_has_flag(mc, u, CA_FLAGS))
 		{
 			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 			return;
@@ -143,7 +143,7 @@ static void cs_xop(char *origin, uint32_t level)
 
 	else if (!strcasecmp("LIST", cmd))
 	{
-		if (!is_xop(mc, u->myuser, CA_ACLVIEW))
+		if (!chanacs_user_has_flag(mc, u, CA_ACLVIEW))
 		{
 			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 			return;

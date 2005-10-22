@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INVITE functions.
  *
- * $Id: invite.c 2551 2005-10-04 06:14:07Z nenolod $
+ * $Id: invite.c 3073 2005-10-22 06:40:32Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/invite", FALSE, _modinit, _moddeinit,
-	"$Id: invite.c 2551 2005-10-04 06:14:07Z nenolod $",
+	"$Id: invite.c 3073 2005-10-22 06:40:32Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -44,7 +44,7 @@ static void cs_cmd_invite(char *origin)
 	char *chan = strtok(NULL, " ");
 	char *nick = strtok(NULL, " ");
 	mychan_t *mc;
-	user_t *u;
+	user_t *u = user_find(origin);
 	chanuser_t *cu;
 
 	if (!chan)
@@ -67,14 +67,7 @@ static void cs_cmd_invite(char *origin)
 		return;
 	}
 
-	u = user_find(origin);
-	if (!u->myuser)
-	{
-		notice(chansvs.nick, origin, "You are not logged in.");
-		return;
-	}
-
-	if (!is_xop(mc, u->myuser, CA_INVITE))
+	if (!chanacs_user_has_flag(mc, u, CA_INVITE))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 		return;

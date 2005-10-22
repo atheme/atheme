@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 2551 2005-10-04 06:14:07Z nenolod $
+ * $Id: akick.c 3073 2005-10-22 06:40:32Z alambert $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@ static void cs_fcmd_akick(char *origin, char *chan);
 DECLARE_MODULE_V1
 (
 	"chanserv/akick", FALSE, _modinit, _moddeinit,
-	"$Id: akick.c 2551 2005-10-04 06:14:07Z nenolod $",
+	"$Id: akick.c 3073 2005-10-22 06:40:32Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -91,7 +91,7 @@ void cs_cmd_akick(char *origin)
 	/* ADD */
 	if (!strcasecmp("ADD", cmd))
 	{
-		if (!is_xop(mc, u->myuser, CA_FLAGS))
+		if (!chanacs_user_has_flag(mc, u, CA_FLAGS))
 		{
 			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 			return;
@@ -148,7 +148,7 @@ void cs_cmd_akick(char *origin)
 	}
 	else if (!strcasecmp("DEL", cmd))
 	{
-		if (!is_xop(mc, u->myuser, CA_FLAGS))
+		if (!chanacs_user_has_flag(mc, u, CA_FLAGS))
 		{
 			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 			return;
@@ -197,7 +197,7 @@ void cs_cmd_akick(char *origin)
 	{
 		uint8_t i = 0;
 
-		if (!is_xop(mc, u->myuser, CA_ACLVIEW))
+		if (!chanacs_user_has_flag(mc, u, CA_ACLVIEW))
 		{
 			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 			return;
@@ -270,7 +270,7 @@ void cs_fcmd_akick(char *origin, char *chan)
 	/* ADD */
 	if (!strcasecmp("ADD", cmd))
 	{
-		if (!is_xop(mc, u->myuser, CA_FLAGS))
+		if (!chanacs_user_has_flag(mc, u, CA_FLAGS))
 		{
 			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 			return;
@@ -327,7 +327,7 @@ void cs_fcmd_akick(char *origin, char *chan)
 	}
 	else if (!strcasecmp("DEL", cmd))
 	{
-		if (!is_xop(mc, u->myuser, CA_FLAGS))
+		if (!chanacs_user_has_flag(mc, u, CA_FLAGS))
 		{
 			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 			return;
@@ -376,7 +376,7 @@ void cs_fcmd_akick(char *origin, char *chan)
 	{
 		uint8_t i = 0;
 
-		if (!is_xop(mc, u->myuser, CA_ACLVIEW))
+		if (!chanacs_user_has_flag(mc, u, CA_ACLVIEW))
 		{
 			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 			return;

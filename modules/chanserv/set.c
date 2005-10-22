@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3065 2005-10-22 06:14:22Z alambert $
+ * $Id: set.c 3073 2005-10-22 06:40:32Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3065 2005-10-22 06:14:22Z alambert $",
+	"$Id: set.c 3073 2005-10-22 06:40:32Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -431,7 +431,7 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 		return;
 	}
 
-	if (!is_xop(mc, u->myuser, CA_SET))
+	if (!chanacs_user_has_flag(mc, u, CA_SET))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
 		return;
