@@ -1,3 +1,11 @@
+alambert    2005/10/22 20:23:55 UTC	(20051022-3121)
+  Log:
+  myuser_delete(): private:link:parent should be private:alias:parent. I will not commit at 3AM anymore.
+
+  Changes:	Modified:
+  +3 -3		trunk/src/node.c (File Modified) 
+
+
 jilles      2005/10/22 20:00:08 UTC	(20051022-3119)
   Log:
   Better STOPIC checking using new channel_t.topicts.
