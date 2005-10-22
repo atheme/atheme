@@ -1,3 +1,31 @@
+terminal    2005/10/22 07:03:47 UTC	(20051022-3079)
+  Log:
+  Bail out of most functions when a channel is closed
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/chanserv/akick.c (File Modified) 
+  +6 -0		trunk/modules/chanserv/ban.c (File Modified) 
+  +6 -0		trunk/modules/chanserv/clear_bans.c (File Modified) 
+  +6 -0		trunk/modules/chanserv/clear_users.c (File Modified) 
+  +6 -0		trunk/modules/chanserv/count.c (File Modified) 
+  +10 -0	trunk/modules/chanserv/drop.c (File Modified) 
+  +18 -0	trunk/modules/chanserv/flags.c (File Modified) 
+  +6 -0		trunk/modules/chanserv/ftransfer.c (File Modified) 
+  +24 -0	trunk/modules/chanserv/halfop.c (File Modified) 
+  +6 -0		trunk/modules/chanserv/hold.c (File Modified) 
+  +6 -0		trunk/modules/chanserv/kick.c (File Modified) 
+  +6 -0		trunk/modules/chanserv/mark.c (File Modified) 
+  +24 -0	trunk/modules/chanserv/op.c (File Modified) 
+  +6 -0		trunk/modules/chanserv/recover.c (File Modified) 
+  +66 -0	trunk/modules/chanserv/set.c (File Modified) 
+  +6 -0		trunk/modules/chanserv/status.c (File Modified) 
+  +24 -0	trunk/modules/chanserv/topic.c (File Modified) 
+  +6 -0		trunk/modules/chanserv/voice.c (File Modified) 
+  +6 -0		trunk/modules/chanserv/why.c (File Modified) 
+  +6 -0		trunk/modules/chanserv/xop.c (File Modified) 
+
+
 pfish       2005/10/22 06:42:29 UTC	(20051022-3077)
   Log:
   Oops. KEEPTOPIC should be AC_NONE, not AC_IRCOP

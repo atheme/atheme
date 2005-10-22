@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 2977 2005-10-17 15:10:27Z nenolod $
+ * $Id: conf.c 3081 2005-10-22 07:58:46Z pfish $
  */
 
 #include "atheme.h"
@@ -128,10 +128,11 @@ static struct Token uflags[] = {
 };
 
 static struct Token cflags[] = {
-  { "HOLD",    MC_HOLD    },
-  { "SECURE",  MC_SECURE  },
-  { "VERBOSE", MC_VERBOSE },
-  { "NONE",    0          },
+  { "HOLD",      MC_HOLD      },
+  { "SECURE",    MC_SECURE    },
+  { "VERBOSE",   MC_VERBOSE   },
+  { "KEEPTOPIC", MC_KEEPTOPIC },
+  { "NONE",      0            },
   { NULL, 0 }
 };
 
