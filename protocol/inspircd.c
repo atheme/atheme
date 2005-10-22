@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: inspircd.c 3105 2005-10-22 14:37:17Z jilles $
+ * $Id: inspircd.c 3109 2005-10-22 14:51:17Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 3105 2005-10-22 14:37:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 3109 2005-10-22 14:51:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -284,7 +284,7 @@ static void inspircd_topic_sts(char *channel, char *setter, time_t ts, char *top
 	if (!me.connected)
 		return;
 
-	sts(":%s t %s %s :%s (%s)", CreateSum(), chansvs.nick, channel, topic, setter);
+	sts(":%s t %s %s :%s", CreateSum(), chansvs.nick, channel, topic);
 }
 
 /* mode wrapper */

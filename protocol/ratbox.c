@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 3105 2005-10-22 14:37:17Z jilles $
+ * $Id: ratbox.c 3109 2005-10-22 14:51:17Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 3105 2005-10-22 14:37:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 3109 2005-10-22 14:51:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -290,7 +290,7 @@ static void ratbox_topic_sts(char *channel, char *setter, time_t ts, char *topic
 		sts(":%s SJOIN %ld %s + :@%s", me.name, c->ts, channel, chansvs.nick);
 		joined = 1;
 	}
-	sts(":%s TOPIC %s :%s (%s)", chansvs.nick, channel, topic, setter);
+	sts(":%s TOPIC %s :%s", chansvs.nick, channel, topic);
 	if (joined)
 		sts(":%s PART %s :Topic set", chansvs.nick, channel);
 }

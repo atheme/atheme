@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 3105 2005-10-22 14:37:17Z jilles $
+ * $Id: charybdis.c 3109 2005-10-22 14:51:17Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3105 2005-10-22 14:37:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3109 2005-10-22 14:51:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -339,7 +339,7 @@ static void charybdis_topic_sts(char *channel, char *setter, time_t ts, char *to
 		sts(":%s SJOIN %ld %s + :@%s", ME, c->ts, channel, CLIENT_NAME(chansvs.me->me));
 		joined = 1;
 	}
-	sts(":%s TOPIC %s :%s (%s)", CLIENT_NAME(chansvs.me->me), channel, topic, setter);
+	sts(":%s TOPIC %s :%s", CLIENT_NAME(chansvs.me->me), channel, topic);
 	if (joined)
 		sts(":%s PART %s :Topic set", CLIENT_NAME(chansvs.me->me), channel);
 }
