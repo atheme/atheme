@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3099 2005-10-22 09:06:31Z pfish $
+ * $Id: node.c 3117 2005-10-22 19:50:44Z alambert $
  */
 
 #include "atheme.h"
@@ -1114,9 +1114,22 @@ void myuser_delete(char *name)
 			tmu = (myuser_t *)n->data;
 
 			slog(LG_DEBUG, "myuser_delete(%s): link: trying %s", mu->name, tmu->name);
+
+			if (!(md = metadata_find(tmu, METADATA_USER, "private:link:parent")))
+				slog(LG_DEBUG, "myuser_delete(%s): link: link metadata for %s doesn't exist", mu->name, tmu->name);
+			else
+			{
+				slog(LG_DEBUG, "myuser_delete(%s): link: link metadata for %s exists: %s", mu->name, tmu->name, md->value);
+
+				if (!irccasecmp(mu->name, md->value))
+					slog(LG_DEBUG, "myuser_delete(%s): link: found match; should remove link %s->%s", tmu->name, mu->name);
+			}
+
+#if 0
 			if ((md = metadata_find(tmu, METADATA_USER, "private:link:parent"))
 				&& !irccasecmp(mu->name, md->value))
 				metadata_delete(tmu, METADATA_USER, "private:link:parent");
+#endif
 		}
 	}
 

@@ -1,3 +1,13 @@
+jilles      2005/10/22 18:48:52 UTC	(20051022-3115)
+  Log:
+  Setting an empty topic is clearing the topic.
+  
+
+  Changes:	Modified:
+  +13 -7	trunk/modules/chanserv/set.c (File Modified) 
+  +7 -2		trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2005/10/22 18:25:46 UTC	(20051022-3113)
   Log:
   Add help for /cs set keeptopic, improve help for /cs set founder.
