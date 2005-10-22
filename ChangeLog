@@ -1,3 +1,13 @@
+nenolod     2005/10/22 08:19:50 UTC	(20051022-3091)
+  Log:
+  Updates to expire_check(), as noted by terminal.
+  Reviewed by me!
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/node.c (File Modified) 
+
+
 alambert    2005/10/22 08:17:12 UTC	(20051022-3089)
   Log:
   various: If we don't care about the return value, don't bother storing it.

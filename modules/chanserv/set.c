@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3087 2005-10-22 08:14:18Z pfish $
+ * $Id: set.c 3093 2005-10-22 08:31:48Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3087 2005-10-22 08:14:18Z pfish $",
+	"$Id: set.c 3093 2005-10-22 08:31:48Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -1062,6 +1062,9 @@ static void cs_keeptopic_topicset(channel_t *c)
 {
 	mychan_t *mc;
 	mc = mychan_find(c->name);
+
+	if (mc == NULL)
+		return;
 
 	slog(LG_DEBUG, "KeepTopic: topic set for %s by %s: %s", c->name,
 			c->topic_setter, c->topic);
