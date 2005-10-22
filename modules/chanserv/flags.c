@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 3073 2005-10-22 06:40:32Z alambert $
+ * $Id: flags.c 3079 2005-10-22 07:03:47Z terminal $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 3073 2005-10-22 06:40:32Z alambert $",
+	"$Id: flags.c 3079 2005-10-22 07:03:47Z terminal $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -79,6 +79,12 @@ static void cs_cmd_flags(char *origin)
 			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 			return;
 		}
+		
+		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+		{
+			notice(chansvs.nick, origin, "\2%s\2 is closed.", channel);
+			return;
+		}
 
 		notice(chansvs.nick, origin, "Entry Nickname/Host          Flags");
 		notice(chansvs.nick, origin, "----- ---------------------- -----");
@@ -115,6 +121,12 @@ static void cs_cmd_flags(char *origin)
 		if (u->myuser != mc->founder && !chanacs_find(mc, u->myuser, CA_FLAGS))
 		{
 			notice(chansvs.nick, origin, "You are not authorized to execute this command.");
+			return;
+		}
+		
+		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+		{
+			notice(chansvs.nick, origin, "\2%s\2 is closed.", channel);
 			return;
 		}
 
@@ -196,6 +208,12 @@ static void cs_fcmd_flags(char *origin, char *channel)
 	if (u->myuser != mc->founder && !chanacs_find(mc, u->myuser, CA_FLAGS))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to execute this command.");
+		return;
+	}
+	
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", channel);
 		return;
 	}
 

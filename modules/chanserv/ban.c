@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 2551 2005-10-04 06:14:07Z nenolod $
+ * $Id: ban.c 3079 2005-10-22 07:03:47Z terminal $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", FALSE, _modinit, _moddeinit,
-	"$Id: ban.c 2551 2005-10-04 06:14:07Z nenolod $",
+	"$Id: ban.c 3079 2005-10-22 07:03:47Z terminal $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -97,6 +97,12 @@ static void cs_cmd_ban (char *origin)
 	if (!(ca = chanacs_find(mc, u->myuser, CA_REMOVE)) && !(ca = chanacs_find(mc, u->myuser, CA_FLAGS)))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+		return;
+	}
+	
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", channel);
 		return;
 	}
 

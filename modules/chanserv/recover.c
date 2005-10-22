@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService RECOVER functions.
  *
- * $Id: recover.c 3073 2005-10-22 06:40:32Z alambert $
+ * $Id: recover.c 3079 2005-10-22 07:03:47Z terminal $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/recover", FALSE, _modinit, _moddeinit,
-	"$Id: recover.c 3073 2005-10-22 06:40:32Z alambert $",
+	"$Id: recover.c 3079 2005-10-22 07:03:47Z terminal $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -58,6 +58,12 @@ static void cs_cmd_recover(char *origin)
 	if (!(mc = mychan_find(name)))
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
+		return;
+	}
+	
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
 		return;
 	}
 

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TOPIC functions.
  *
- * $Id: topic.c 2551 2005-10-04 06:14:07Z nenolod $
+ * $Id: topic.c 3079 2005-10-22 07:03:47Z terminal $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/topic", FALSE, _modinit, _moddeinit,
-	"$Id: topic.c 2551 2005-10-04 06:14:07Z nenolod $",
+	"$Id: topic.c 3079 2005-10-22 07:03:47Z terminal $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -87,6 +87,12 @@ static void cs_cmd_topic(char *origin)
 		notice(chansvs.nick, origin, "Channel \2%s\2 is not registered.", chan);
 		return;
 	}
+	
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", chan);
+		return;
+	}
 
 	u = user_find(origin);
 
@@ -146,6 +152,12 @@ static void cs_cmd_topicappend(char *origin)
                 notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
                 return;
         }
+        
+        if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", chan);
+		return;
+	}
 
 	topicbuf[0] = '\0';
 
@@ -207,6 +219,12 @@ static void cs_fcmd_topic(char *origin, char *chan)
                 notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
                 return;
         }
+        
+        if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", chan);
+		return;
+	}
 
         if (c->topic)
         {
@@ -254,6 +272,12 @@ static void cs_fcmd_topicappend(char *origin, char *chan)
                 notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
                 return;
         }
+        
+        if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", chan);
+		return;
+	}
 
         topicbuf[0] = '\0';
 

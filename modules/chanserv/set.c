@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3077 2005-10-22 06:42:29Z pfish $
+ * $Id: set.c 3079 2005-10-22 07:03:47Z terminal $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3077 2005-10-22 06:42:29Z pfish $",
+	"$Id: set.c 3079 2005-10-22 07:03:47Z terminal $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -118,6 +118,12 @@ static void cs_set_email(char *origin, char *name, char *params)
                 notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
                 return;
         }
+        
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
+		return;
+	}
 
         if (!(ca = chanacs_find(mc, u->myuser, CA_FLAGS)))
         {
@@ -182,6 +188,12 @@ static void cs_set_url(char *origin, char *name, char *params)
 		notice(chansvs.nick, origin, "You are not authorized to execute this command.");
 		return;
 	}
+	
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
+		return;
+	}
 
 	/* XXX: I'd like to be able to use /CS SET #channel URL to clear but CS SET won't let me... */
 	if (!url || !strcasecmp("OFF", url) || !strcasecmp("NONE", url))
@@ -223,6 +235,12 @@ static void cs_set_entrymsg(char *origin, char *name, char *params)
 	if (!(ca = chanacs_find(mc, u->myuser, CA_FLAGS)))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to execute this command.");
+		return;
+	}
+	
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
 		return;
 	}
 
@@ -302,6 +320,12 @@ static void cs_set_founder(char *origin, char *name, char *params)
 	if (!(mc = mychan_find(name)))
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
+		return;
+	}
+	
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
 		return;
 	}
 
@@ -434,6 +458,12 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 	if (!chanacs_user_has_flag(mc, u, CA_SET))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
+		return;
+	}
+	
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
 		return;
 	}
 
@@ -582,6 +612,12 @@ static void cs_set_keeptopic(char *origin, char *name, char *params)
 		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
 		return;
 	}
+	
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
+		return;
+	}
 
 	if (!strcasecmp("ON", params))
 	{
@@ -644,6 +680,12 @@ static void cs_set_secure(char *origin, char *name, char *params)
 	if ((!is_founder(mc, u->myuser)) && (!is_successor(mc, u->myuser)))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
+		return;
+	}
+	
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
 		return;
 	}
 
@@ -717,6 +759,12 @@ static void cs_set_successor(char *origin, char *name, char *params)
 	if (!is_founder(mc, u->myuser))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+		return;
+	}
+	
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
 		return;
 	}
 
@@ -802,6 +850,12 @@ static void cs_set_verbose(char *origin, char *name, char *params)
 		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
 		return;
 	}
+	
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
+		return;
+	}
 
 	if (!strcasecmp("ON", params))
 	{
@@ -857,6 +911,12 @@ static void cs_set_staffonly(char *origin, char *name, char *params)
 	if (!(mc = mychan_find(name)))
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
+		return;
+	}
+	
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
 		return;
 	}
 
@@ -935,6 +995,12 @@ static void cs_set_property(char *origin, char *name, char *params)
 	if ((!is_founder(mc, u->myuser)) && (!is_successor(mc, u->myuser)))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
+		return;
+	}
+	
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
 		return;
 	}
 

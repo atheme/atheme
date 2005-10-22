@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: halfop.c 2569 2005-10-04 20:20:12Z nenolod $
+ * $Id: halfop.c 3079 2005-10-22 07:03:47Z terminal $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/halfop", FALSE, _modinit, _moddeinit,
-	"$Id: halfop.c 2569 2005-10-04 20:20:12Z nenolod $",
+	"$Id: halfop.c 3079 2005-10-22 07:03:47Z terminal $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -99,6 +99,12 @@ static void cs_cmd_halfop(char *origin)
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 		return;
 	}
+	
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", chan);
+		return;
+	}
 
 	/* figure out who we're going to halfop */
 	if (!nick)
@@ -175,6 +181,12 @@ static void cs_cmd_dehalfop(char *origin)
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 		return;
 	}
+	
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", chan);
+		return;
+	}
 
 	/* figure out who we're going to dehalfop */
 	if (!nick)
@@ -233,6 +245,12 @@ static void cs_fcmd_halfop(char *origin, char *chan)
 	if (!chanacs_user_has_flag(mc, u, CA_HALFOP))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+		return;
+	}
+	
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", chan);
 		return;
 	}
 
@@ -304,6 +322,12 @@ static void cs_fcmd_dehalfop(char *origin, char *chan)
 	if (!chanacs_user_has_flag(mc, u, CA_HALFOP))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+		return;
+	}
+	
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", chan);
 		return;
 	}
 

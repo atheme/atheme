@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService VOICE functions.
  *
- * $Id: voice.c 2569 2005-10-04 20:20:12Z nenolod $
+ * $Id: voice.c 3079 2005-10-22 07:03:47Z terminal $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/voice", FALSE, _modinit, _moddeinit,
-	"$Id: voice.c 2569 2005-10-04 20:20:12Z nenolod $",
+	"$Id: voice.c 3079 2005-10-22 07:03:47Z terminal $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -78,6 +78,12 @@ static void cs_cmd_voice(char *origin)
 	if (!mc)
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is not registered.", chan);
+		return;
+	}
+	
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", chan);
 		return;
 	}
 

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService COUNT functions.
  *
- * $Id: count.c 2973 2005-10-17 09:57:25Z pfish $
+ * $Id: count.c 3079 2005-10-22 07:03:47Z terminal $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/count", FALSE, _modinit, _moddeinit,
-	"$Id: count.c 2973 2005-10-17 09:57:25Z pfish $",
+	"$Id: count.c 3079 2005-10-22 07:03:47Z terminal $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -63,6 +63,12 @@ static void cs_cmd_count(char *origin)
 	if (!chanacs_user_has_flag(mc, u, CA_ACLVIEW) && !is_ircop(u))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+		return;
+	}
+	
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", chan);
 		return;
 	}
 
