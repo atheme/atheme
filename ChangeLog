@@ -1,3 +1,12 @@
+jilles      2005/10/22 20:00:08 UTC	(20051022-3119)
+  Log:
+  Better STOPIC checking using new channel_t.topicts.
+  
+
+  Changes:	Modified:
+  +1 -2		trunk/protocol/hyperion.c (File Modified) 
+
+
 alambert    2005/10/22 19:50:44 UTC	(20051022-3117)
   Log:
   myuser_delete(): add more debug scaffolding so pfish can test.
