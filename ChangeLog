@@ -1,3 +1,14 @@
+jilles      2005/10/22 22:10:35 UTC	(20051022-3131)
+  Log:
+  Add user_changeuid() to dynamically change/set/remove
+  a user_t's UID, for use in persistent services user_t's.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/extern.h (File Modified) 
+  +21 -0	trunk/src/node.c (File Modified) 
+
+
 jilles      2005/10/22 21:49:56 UTC	(20051022-3129)
   Log:
   Remove per-uplink numerics. This feature is not useful, ircds do
