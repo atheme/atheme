@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 3109 2005-10-22 14:51:17Z jilles $
+ * $Id: charybdis.c 3111 2005-10-22 15:16:24Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3109 2005-10-22 14:51:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3111 2005-10-22 15:16:24Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -74,6 +74,7 @@ struct cmode_ charybdis_prefix_mode_list[] = {
 };
 
 static boolean_t use_rserv_support = FALSE;
+static boolean_t use_tb = FALSE;
 
 static void server_eob(server_t *s);
 
@@ -328,6 +329,12 @@ static void charybdis_topic_sts(char *channel, char *setter, time_t ts, char *to
 	if (!me.connected || !c)
 		return;
 
+	/* If restoring an older topic, try to use TB -- jilles */
+	if (use_tb && ts < CURRTIME)
+	{
+		sts(":%s TB %s %ld %s :%s", ME, channel, ts, setter, topic);
+		return;
+	}
 	/* We have to be on channel to change topic.
 	 * We cannot nicely change topic from the server:
 	 * :server.name TOPIC doesn't propagate and TB requires
@@ -1093,12 +1100,19 @@ static void m_capab(char *origin, uint8_t parc, char *parv[])
 {
 	char *p;
 
+	use_rserv_support = FALSE;
+	use_tb = FALSE;
 	for (p = strtok(parv[0], " "); p != NULL; p = strtok(NULL, " "))
 	{
 		if (!irccasecmp(p, "SERVICES"))
 		{
 			slog(LG_DEBUG, "m_capab(): uplink has rserv extensions, enabling support.");
 			use_rserv_support = TRUE;
+		}
+		if (!irccasecmp(p, "TB"))
+		{
+			slog(LG_DEBUG, "m_capab(): uplink does topic bursting, using if appropriate.");
+			use_tb = TRUE;
 		}
 	}
 
