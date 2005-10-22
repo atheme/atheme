@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3129 2005-10-22 21:49:56Z jilles $
+ * $Id: node.c 3131 2005-10-22 22:10:35Z jilles $
  */
 
 #include "atheme.h"
@@ -581,6 +581,27 @@ user_t *user_find_named(char *nick)
 	}
 
 	return NULL;
+}
+
+/* Change a UID, for services */
+void user_changeuid(user_t *u, char *uid)
+{
+	node_t *n;
+
+	if (*u->uid)
+	{
+		n = node_find(u, &uidlist[u->uhash]);
+		node_del(n, &uidlist[u->uhash]);
+		node_free(n);
+	}
+
+	strlcpy(u->uid, uid ? uid : "", NICKLEN);
+
+	if (*u->uid)
+	{
+		u->uhash = UHASH((unsigned char *)uid);
+		node_add(u, node_create(), &uidlist[u->uhash]);
+	}
 }
 
 /*******************
