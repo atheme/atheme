@@ -1,3 +1,13 @@
+nenolod     2005/10/23 08:56:09 UTC	(20051023-3157)
+  Log:
+  Win32 fixes.
+
+  Changes:	Modified:
+  +7 -7		trunk/libatheme/org.atheme.claro.base (File Modified) 
+  +0 -1		trunk/libatheme/select.c (File Modified) 
+  +1 -1		trunk/modules/Makefile.win32 (File Modified) 
+
+
 nenolod     2005/10/23 06:06:27 UTC	(20051023-3155)
   Log:
   Fix crash when someone uses UserServ without a password. Reported by xi@gamesnet.org.
