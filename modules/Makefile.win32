@@ -39,7 +39,7 @@ all:
 	mingw32-make -f Makefile.win32 -C userserv
 	mingw32-make -f Makefile.win32 -C xmlrpc
 	mingw32-make -f Makefile.win32 -C memoserv
-	mingw32-make -f Makefile.win32 -C helpserv
+#	mingw32-make -f Makefile.win32 -C helpserv
 
 build: all
 

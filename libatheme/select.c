@@ -4,7 +4,7 @@
  *
  * Socketengine implementing select().
  *
- * $Id: select.c 3053 2005-10-20 18:04:13Z nenolod $
+ * $Id: select.c 3157 2005-10-23 08:56:09Z nenolod $
  */
 
 #include <org.atheme.claro.base>
@@ -125,7 +125,6 @@ void connection_select(uint32_t delay)
 		}
 		else if (sr == -1)
 		{
-			hook_call_event("connection_dead", curr_uplink->conn);
 			return;
 		}
 	}

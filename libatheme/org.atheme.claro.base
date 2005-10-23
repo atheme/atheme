@@ -4,7 +4,7 @@
  *
  * libatheme stuff.
  *
- * $Id: org.atheme.claro.base 3057 2005-10-20 18:21:33Z nenolod $
+ * $Id: org.atheme.claro.base 3157 2005-10-23 08:56:09Z nenolod $
  */
 
 #ifndef __CLAROBASE
@@ -22,13 +22,6 @@
 #else                           /* POSIX */
 #       define E extern
 #       define DLE
-#endif
-
-#ifdef _WIN32
-
-/* Windows has an extremely stupid gethostbyname() function. Oof! */
-#define gethostbyname(a) gethostbyname_layer(a)
-
 #endif
 
 #define RF_LIVE         0x00000001      /* don't fork  */
@@ -95,5 +88,12 @@ E void (*clog)(uint32_t, const char *, ...);
 E void libclaro_init(void (*ilog)(uint32_t, const char *, ...));
 E void init_dlink_nodes(void);
 E void init_socket_queues(void);
+
+#ifdef _WIN32
+
+/* Windows has an extremely stupid gethostbyname() function. Oof! */
+#define gethostbyname(a) gethostbyname_layer(a)
+
+#endif
 
 #endif
