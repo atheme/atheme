@@ -1,3 +1,16 @@
+jilles      2005/10/23 01:24:11 UTC	(20051023-3147)
+  Log:
+  - In handle_topic(), drop identical topics from servers or
+    chanserv, and ones with identical topicts
+  - Don't update keeptopic at all for identical topics
+  - Call handle_topic() when restoring a keeptopic topic
+  
+
+  Changes:	Modified:
+  +12 -3	trunk/modules/chanserv/set.c (File Modified) 
+  +7 -0		trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2005/10/23 00:52:06 UTC	(20051023-3145)
   Log:
   Remove redundant and potentially harmful
