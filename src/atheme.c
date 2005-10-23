@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 2977 2005-10-17 15:10:27Z nenolod $
+ * $Id: atheme.c 3145 2005-10-23 00:52:06Z jilles $
  */
 
 #include "atheme.h"
@@ -259,10 +259,6 @@ int main(int argc, char *argv[])
 
 	/* no longer starting */
 	runflags &= ~RF_STARTING;
-
-	/* If we are using numeric, and the ircd protocol uses it too, fire up the uid system. */
-	if (me.numeric && ircd->uses_uid)
-		init_uid();
 
 	/* we probably have a few open already... */
 	me.maxfd = 3;
