@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 3171 2005-10-23 21:55:39Z jilles $
+ * $Id: hyperion.c 3173 2005-10-23 22:49:41Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -15,7 +15,7 @@
 #include "atheme.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 3171 2005-10-23 21:55:39Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 3173 2005-10-23 22:49:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -46,8 +46,6 @@ struct cmode_ hyperion_mode_list[] = {
   { 'p', CMODE_PRIV   },
   { 's', CMODE_SEC    },
   { 't', CMODE_TOPIC  },
-  { 'k', CMODE_KEY    },
-  { 'l', CMODE_LIMIT  },
   { 'c', CMODE_NOCOLOR},
   { 'r', CMODE_REGONLY},
   { 'R', CMODE_MODREG },

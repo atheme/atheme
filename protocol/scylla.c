@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: scylla.c 3143 2005-10-23 00:45:16Z jilles $
+ * $Id: scylla.c 3173 2005-10-23 22:49:41Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/scylla", TRUE, _modinit, NULL, "$Id: scylla.c 3143 2005-10-23 00:45:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/scylla", TRUE, _modinit, NULL, "$Id: scylla.c 3173 2005-10-23 22:49:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -41,8 +41,6 @@ struct cmode_ scylla_mode_list[] = {
   { 'p', CMODE_PRIV   },
   { 's', CMODE_SEC    },
   { 't', CMODE_TOPIC  },
-  { 'k', CMODE_KEY    },
-  { 'l', CMODE_LIMIT  },
   { '\0', 0 }
 };
 
