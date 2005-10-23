@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3147 2005-10-23 01:24:11Z jilles $
+ * $Id: set.c 3175 2005-10-23 23:14:41Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3147 2005-10-23 01:24:11Z jilles $",
+	"$Id: set.c 3175 2005-10-23 23:14:41Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -420,8 +420,10 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 	int32_t newlock_on = 0, newlock_off = 0, newlock_limit = 0, flag = 0;
 	int32_t mask;
 	char *newlock_key = NULL;
+	char *letters = strtok(params, " ");
+	char *arg;
 
-	if (*name != '#')
+	if (*name != '#' || !letters)
 	{
 		notice(chansvs.nick, origin, "Invalid parameters specified for \2MLOCK\2.");
 		return;
@@ -441,15 +443,15 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 
 	mask = is_ircop(u) ? 0 : ircd->oper_only_modes;
 
-	while (*params)
+	while (*letters)
 	{
-		if (*params != '+' && *params != '-' && add < 0)
+		if (*letters != '+' && *letters != '-' && add < 0)
 		{
-			params++;
+			letters++;
 			continue;
 		}
 
-		switch ((c = *params++))
+		switch ((c = *letters++))
 		{
 		  case '+':
 			  add = 1;
@@ -462,7 +464,8 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 		  case 'k':
 			  if (add)
 			  {
-				  if (!params)
+				  arg = strtok(NULL, " ");
+				  if (!arg)
 				  {
 					  notice(chansvs.nick, origin, "You need to specify which key to MLOCK.");
 					  return;
@@ -471,7 +474,7 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 				  if (newlock_key)
 					  free(newlock_key);
 
-				  newlock_key = sstrdup(params);
+				  newlock_key = sstrdup(arg);
 				  newlock_off &= ~CMODE_KEY;
 			  }
 			  else
@@ -490,19 +493,20 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 		  case 'l':
 			  if (add)
 			  {
-				  if(!params)
+				  arg = strtok(NULL, " ");
+				  if(!arg)
 				  {
 					  notice(chansvs.nick, origin, "You need to specify what limit to MLOCK.");
 					  return;
 				  }
 
-				  if (atol(params) <= 0)
+				  if (atol(arg) <= 0)
 				  {
 					  notice(chansvs.nick, origin, "You must specify a positive integer for limit.");
 					  return;
 				  }
 
-				  newlock_limit = atol(params);
+				  newlock_limit = atol(arg);
 				  newlock_off &= ~CMODE_LIMIT;
 			  }
 			  else
@@ -544,7 +548,7 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 		end += snprintf(end, sizeof(modebuf) - (end - modebuf), "+%s%s%s", flags_to_string(mc->mlock_on), mc->mlock_key ? "k" : "", mc->mlock_limit ? "l" : "");
 
 	if (mc->mlock_off)
-		end += snprintf(end, sizeof(modebuf) - (end - modebuf), "-%s", flags_to_string(mc->mlock_off));
+		end += snprintf(end, sizeof(modebuf) - (end - modebuf), "-%s%s%s", flags_to_string(mc->mlock_off), mc->mlock_off & CMODE_KEY ? "k" : "", mc->mlock_off & CMODE_LIMIT ? "l" : "");
 
 	if (*modebuf)
 	{

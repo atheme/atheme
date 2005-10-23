@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INFO functions.
  *
- * $Id: info.c 3041 2005-10-20 01:21:42Z pfish $
+ * $Id: info.c 3175 2005-10-23 23:14:41Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 3041 2005-10-20 01:21:42Z pfish $",
+	"$Id: info.c 3175 2005-10-23 23:14:41Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -89,7 +89,7 @@ static void cs_cmd_info(char *origin)
 
 	notice(chansvs.nick, origin, "Registered : %s (%s ago)", strfbuf, time_ago(mc->registered));
 
-	if (mc->mlock_on || mc->mlock_off)
+	if (mc->mlock_on || mc->mlock_off || mc->mlock_limit || mc->mlock_key)
 	{
 		char params[BUFSIZE];
 
@@ -101,26 +101,36 @@ static void cs_cmd_info(char *origin)
 			strcat(buf, "+");
 			strcat(buf, flags_to_string(mc->mlock_on));
 
-			/* add these in manually */
-			if (mc->mlock_limit)
-			{
-				strcat(buf, "l");
-				strcat(params, " ");
-				strcat(params, itoa(mc->mlock_limit));
-			}
+		}
 
-			if (mc->mlock_key)
-				strcat(buf, "k");
+		if (mc->mlock_limit)
+		{
+			if (*buf == '\0')
+				strcat(buf, "+");
+			strcat(buf, "l");
+			strcat(params, " ");
+			strcat(params, itoa(mc->mlock_limit));
+		}
+
+		if (mc->mlock_key)
+		{
+			if (*buf == '\0')
+				strcat(buf, "+");
+			strcat(buf, "k");
 		}
 
 		if (mc->mlock_off)
 		{
 			strcat(buf, "-");
 			strcat(buf, flags_to_string(mc->mlock_off));
+			if (mc->mlock_off & CMODE_LIMIT)
+				strcat(buf, "l");
+			if (mc->mlock_off & CMODE_KEY)
+				strcat(buf, "k");
 		}
 
 		if (*buf)
-			notice(chansvs.nick, origin, "Mode lock  : %s %s", buf, (params) ? params : "");
+			notice(chansvs.nick, origin, "Mode lock  : %s%s", buf, (params) ? params : "");
 	}
 
 
