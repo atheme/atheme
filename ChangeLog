@@ -1,3 +1,12 @@
+pfish       2005/10/23 02:44:01 UTC	(20051023-3149)
+  Log:
+  Wallops when SRA drops channel.
+  
+
+  Changes:	Modified:
+  +5 -0		trunk/modules/chanserv/drop.c (File Modified) 
+
+
 jilles      2005/10/23 01:24:11 UTC	(20051023-3147)
   Log:
   - In handle_topic(), drop identical topics from servers or

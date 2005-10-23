@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 3147 2005-10-23 01:24:11Z jilles $
+ * $Id: ptasks.c 3151 2005-10-23 03:17:38Z nenolod $
  */
 
 #include "atheme.h"
@@ -238,8 +238,12 @@ void handle_privmsg(char *origin, char *target, char *message)
 		t = sptr->me;
 
 		/* Run it through flood checks. Channel commands are checked
-		 * separately. (XXX they aren't) */
-		if (t != NULL && floodcheck(u, t))
+		 * separately. (XXX they aren't)
+		 *
+		 * XXX we have to ignore channel messages for now, otherwise people
+		 * could get akilled.
+		 */
+		if (t != NULL && *target != '#' && floodcheck(u, t))
 			return;
 
 		vec[0] = target;
