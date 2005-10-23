@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 3143 2005-10-23 00:45:16Z jilles $
+ * $Id: charybdis.c 3163 2005-10-23 13:31:46Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3143 2005-10-23 00:45:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3163 2005-10-23 13:31:46Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -795,40 +795,6 @@ static void m_uid(char *origin, uint8_t parc, char *parv[])
 		 */
 		if (s->flags & SF_EOB)
 			handle_nickchange(user_find(parv[0]));
-	}
-
-	/* if it's only 2 then it's a nickname change */
-	else if (parc == 2)
-	{
-		node_t *n;
-
-		u = user_find(origin);
-		if (!u)
-		{
-			slog(LG_DEBUG, "m_nick(): nickname change from nonexistant user: %s", origin);
-			return;
-		}
-
-		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", u->nick, parv[0]);
-
-		/* remove the current one from the list */
-		n = node_find(u, &userlist[u->hash]);
-		node_del(n, &userlist[u->hash]);
-		node_free(n);
-
-		/* change the nick */
-		strlcpy(u->nick, parv[0], NICKLEN);
-
-		/* readd with new nick (so the hash works) */
-		n = node_create();
-		u->hash = UHASH((unsigned char *)u->nick);
-		node_add(u, n, &userlist[u->hash]);
-
-		/* It could happen that our PING arrived late and the
-		 * server didn't acknowledge EOB yet even though it is
-		 * EOB; don't send double notices in that case -- jilles */
-		if (u->server->flags & SF_EOB)
-			handle_nickchange(u);
 	}
 	else
 	{

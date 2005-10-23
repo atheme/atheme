@@ -1,3 +1,11 @@
+nenolod     2005/10/23 09:13:42 UTC	(20051023-3161)
+  Log:
+  Add our .nsi script for NSIS.
+
+  Changes:	Modified:
+  +374 -0	trunk/win32/atheme.nsi (File Added) 
+
+
 nenolod     2005/10/23 09:13:10 UTC	(20051023-3159)
   Log:
   byebye :P
