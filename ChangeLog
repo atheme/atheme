@@ -1,3 +1,13 @@
+jilles      2005/10/23 23:14:41 UTC	(20051023-3175)
+  Log:
+  Fixes to mlock +kl.
+  
+
+  Changes:	Modified:
+  +21 -11	trunk/modules/chanserv/info.c (File Modified) 
+  +15 -11	trunk/modules/chanserv/set.c (File Modified) 
+
+
 jilles      2005/10/23 22:49:41 UTC	(20051023-3173)
   Log:
   Remove +kl from mode_list, fixing lots of issues with them

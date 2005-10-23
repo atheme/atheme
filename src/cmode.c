@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 2497 2005-10-01 04:35:25Z nenolod $
+ * $Id: cmode.c 3177 2005-10-23 23:22:20Z jilles $
  */
 
 #include "atheme.h"
@@ -263,6 +263,49 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 
 	if (source == NULL)
 		check_modes(mychan_find(chan->name));
+}
+
+char *channel_modes(channel_t *c, boolean_t doparams)
+{
+	static char fullmode[512];
+	char params[512];
+	int i;
+	char *p;
+	char *q;
+
+	if (c == NULL)
+		return NULL;
+
+	p = fullmode;
+	q = params;
+	*p++ = '+';
+	*q = '\0';
+	for (i = 0; mode_list[i].mode != '\0'; i++)
+	{
+		if (c->modes & mode_list[i].value)
+			*p++ = mode_list[i].mode;
+	}
+	if (c->limit)
+	{
+		*p++ = 'l';
+		if (doparams)
+		{
+			snprintf(q, params + sizeof params - q, " %d", c->limit);
+			q += strlen(q);
+		}
+	}
+	if (c->key)
+	{
+		*p++ = 'k';
+		if (doparams)
+		{
+			*q++ = ' ';
+			strlcpy(q, c->key, params + sizeof params - q);
+			q += strlen(q);
+		}
+	}
+	strlcpy(p, params, fullmode + sizeof fullmode - p);
+	return fullmode;
 }
 
 /* i'm putting usermode in here too */
