@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3115 2005-10-22 18:48:52Z jilles $
+ * $Id: set.c 3147 2005-10-23 01:24:11Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3115 2005-10-22 18:48:52Z jilles $",
+	"$Id: set.c 3147 2005-10-23 01:24:11Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -1063,19 +1063,27 @@ static void cs_join_url(chanuser_t *cu)
 static void cs_keeptopic_topicset(channel_t *c)
 {
 	mychan_t *mc;
+	metadata_t *md;
+	char *text;
+
 	mc = mychan_find(c->name);
 
 	if (mc == NULL)
 		return;
+
+	md = metadata_find(mc, METADATA_CHANNEL, "private:topic:text");
+	if (md != NULL)
+	{
+		if (c->topic != NULL && !strcmp(md->value, c->topic))
+			return;
+		metadata_delete(mc, METADATA_CHANNEL, "private:topic:text");
+	}
 
 	if (metadata_find(mc, METADATA_CHANNEL, "private:topic:setter"))
 		metadata_delete(mc, METADATA_CHANNEL, "private:topic:setter");
 
 	if (metadata_find(mc, METADATA_CHANNEL, "private:topic:ts"))
 		metadata_delete(mc, METADATA_CHANNEL, "private:topic:ts");
-
-	if (metadata_find(mc, METADATA_CHANNEL, "private:topic:text"));
-		metadata_delete(mc, METADATA_CHANNEL, "private:topic:text");
 
 	if (c->topic && c->topic_setter)
 	{
@@ -1142,5 +1150,6 @@ static void cs_keeptopic_newchan(channel_t *c)
 		return;
 	topicts = atol(md->value);
 
+	handle_topic(c, setter, topicts, text);
 	topic_sts(c->name, setter, topicts, text);
 }

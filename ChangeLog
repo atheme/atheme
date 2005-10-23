@@ -1,3 +1,13 @@
+jilles      2005/10/23 00:52:06 UTC	(20051023-3145)
+  Log:
+  Remove redundant and potentially harmful
+  init_uid() call from src/atheme.c.
+  
+
+  Changes:	Modified:
+  +0 -4		trunk/src/atheme.c (File Modified) 
+
+
 jilles      2005/10/23 00:45:16 UTC	(20051023-3143)
   Log:
   Change handling of server_t and user_t for our stuff.

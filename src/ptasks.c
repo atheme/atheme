@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 3115 2005-10-22 18:48:52Z jilles $
+ * $Id: ptasks.c 3147 2005-10-23 01:24:11Z jilles $
  */
 
 #include "atheme.h"
@@ -260,6 +260,13 @@ void handle_topic(channel_t *c, char *setter, time_t ts, char *topic)
 	p = strchr(newsetter, '!');
 	if (p != NULL)
 		*p = '\0';
+	/* drop identical topics from servers or chanserv, and ones with
+	 * identical topicts */
+	if (topic != NULL && c->topic != NULL && !strcmp(topic, c->topic)
+			&& (strchr(newsetter, '.') ||
+				(chansvs.nick && !irccasecmp(newsetter, chansvs.nick)) ||
+				ts == c->topicts))
+		return;
 	if (c->topic != NULL)
 		free(c->topic);
 	if (c->topic_setter != NULL)
