@@ -1,3 +1,11 @@
+nenolod     2005/10/23 19:14:21 UTC	(20051023-3165)
+  Log:
+  Use solid compression in the Win32 installer.
+
+  Changes:	Modified:
+  +1 -1		trunk/win32/atheme.nsi (File Modified) 
+
+
 jilles      2005/10/23 13:31:46 UTC	(20051023-3163)
   Log:
   UID is only used for user introductions, not nick changes.
