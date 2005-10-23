@@ -10,6 +10,7 @@ bahamut
 -------
 
 You need U:lines for services on all servers on the network.
+NICKIP is not yet supported.
 
 bircd
 -----
@@ -18,6 +19,11 @@ You need U:lines for services on all servers on the network.
 
 dreamforge
 ----------
+
+You need U:lines for services on all servers on the network.
+
+Dreamforge is a dated IRCd, you should probably upgrade to a more
+modern one.
 
 hyperion
 --------
@@ -106,6 +112,14 @@ shadowircd
 
 sorcery
 -------
+
+You will need U:lines for services on all services on the network.
+
+ultimate3
+---------
+
+You will need U:lines for services on all services on the network.
+
 
 undernet
 --------
