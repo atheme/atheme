@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 3177 2005-10-23 23:22:20Z jilles $
+ * $Id: cmode.c 3181 2005-10-23 23:55:19Z jilles $
  */
 
 #include "atheme.h"
@@ -594,6 +594,7 @@ void check_modes(mychan_t *mychan)
 		return;
 
 	modes = ~mychan->chan->modes & mychan->mlock_on;
+	modes &= ~(CMODE_KEY | CMODE_LIMIT);
 
 	end += snprintf(end, sizeof(newmodes) - (end - newmodes) - 2, "+%s", flags_to_string(modes));
 
@@ -601,7 +602,6 @@ void check_modes(mychan_t *mychan)
 
 	if (mychan->mlock_limit && mychan->mlock_limit != mychan->chan->limit)
 	{
-		*end++ = 'l';
 		newlimit = mychan->mlock_limit;
 		mychan->chan->limit = newlimit;
 		cmode(chansvs.nick, mychan->name, "+l", itoa(newlimit));
@@ -609,25 +609,17 @@ void check_modes(mychan_t *mychan)
 
 	if (mychan->mlock_key)
 	{
-		if (mychan->chan->key && strcmp(mychan->chan->key, mychan->mlock_key) && mychan->mlock_on & CMODE_KEY)
+		if (mychan->chan->key && strcmp(mychan->chan->key, mychan->mlock_key))
 		{
+			/* some ircds still need this... :\ -- jilles */
 			cmode(chansvs.nick, mychan->name, "-k", mychan->chan->key);
 			free(mychan->chan->key);
 			mychan->chan->key = NULL;
 		}
 
-		if (!mychan->chan->key && mychan->mlock_on & CMODE_KEY)
-		{
-			newkey = mychan->mlock_key;
-			mychan->chan->key = sstrdup(newkey);
-			cmode(chansvs.nick, mychan->name, "+k", newkey);
-		}
-	}
-	else if (mychan->chan->key && mychan->mlock_off & CMODE_KEY)
-	{
-		free(mychan->chan->key);
-		mychan->chan->key = NULL;
-		cmode(chansvs.nick, mychan->name, "-k", mychan->chan->key);
+		newkey = mychan->mlock_key;
+		mychan->chan->key = sstrdup(newkey);
+		cmode(chansvs.nick, mychan->name, "+k", newkey);
 	}
 
 	if (end[-1] == '+')
