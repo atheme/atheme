@@ -5,7 +5,7 @@
  * This file contains socket routines.
  * Based off of W. Campbell's code.
  *
- * $Id: send.c 3047 2005-10-20 04:37:13Z nenolod $
+ * $Id: send.c 3143 2005-10-23 00:45:16Z jilles $
  */
 
 #include "atheme.h"
@@ -43,6 +43,7 @@ void reconn(void *arg)
 {
 	uint32_t i;
 	server_t *s;
+	channel_t *c;
 	node_t *n, *tn;
 
 	if (me.connected)
@@ -51,18 +52,28 @@ void reconn(void *arg)
 	slog(LG_DEBUG, "reconn(): ----------------------- clearing -----------------------");
 
 	/* we have to kill everything.
-	 * we only clear servers here because when you delete a server,
-	 * it deletes its users, which removes them from the channels, which
-	 * deletes the channels.
+	 * we do not clear users here because when you delete a server,
+	 * it deletes its users
 	 */
 	for (i = 0; i < HASHSIZE; i++)
 	{
 		LIST_FOREACH_SAFE(n, tn, servlist[i].head)
 		{
 			s = (server_t *)n->data;
-			server_delete(s->name);
+			if (s != me.me)
+				server_delete(s->name);
 		}
 	}
+	/* remove all the channels left */
+	for (i = 0; i < HASHSIZE; i++)
+	{
+		LIST_FOREACH_SAFE(n, tn, chanlist[i].head)
+		{
+			c = (channel_t *)n->data;
+			channel_delete(c->name);
+		}
+	}
+	/* this leaves me.me and all users on it (i.e. services) */
 
 	slog(LG_DEBUG, "reconn(): ------------------------- done -------------------------");
 

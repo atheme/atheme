@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 3105 2005-10-22 14:37:17Z jilles $
+ * $Id: unreal.c 3143 2005-10-23 00:45:16Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 3105 2005-10-22 14:37:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 3143 2005-10-23 00:45:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -107,17 +107,9 @@ static uint8_t unreal_server_login(void)
 }
 
 /* introduce a client */
-static user_t *unreal_introduce_nick(char *nick, char *user, char *host, char *real, char *modes)
+static void unreal_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
-	user_t *u;
-
-	sts("NICK %s 1 %ld %s %s %s 0 +%s * :%s", nick, CURRTIME, user, host, me.name, modes, real);
-	
-	u = user_add(nick, user, host, NULL, "0.0.0.0", NULL, real, me.me);
-	if (strchr(modes, 'o'))
-		u->flags |= UF_IRCOP;
-
-	return u;
+	sts("NICK %s 1 %ld %s %s %s 0 +%s * :%s", nick, CURRTIME, user, host, me.name, "io", real);
 }
 
 static void unreal_quit_sts(user_t *u, char *reason)
@@ -126,8 +118,6 @@ static void unreal_quit_sts(user_t *u, char *reason)
 		return;
 
 	sts(":%s QUIT :%s", u->nick, reason);
-
-	user_delete(u->nick);
 }
 
 /* WALLOPS wrapper */

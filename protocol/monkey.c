@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for chunky monkey ircd.
  *
- * $Id: monkey.c 3105 2005-10-22 14:37:17Z jilles $
+ * $Id: monkey.c 3143 2005-10-23 00:45:16Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/monkey.h"
 
-DECLARE_MODULE_V1("protocol/monkey", TRUE, _modinit, NULL, "$Id: monkey.c 3105 2005-10-22 14:37:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/monkey", TRUE, _modinit, NULL, "$Id: monkey.c 3143 2005-10-23 00:45:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -93,17 +93,9 @@ static uint8_t monkey_server_login(void)
 }
 
 /* introduce a client */
-static user_t *monkey_introduce_nick(char *nick, char *user, char *host, char *real, char *modes)
+static void monkey_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
-	user_t *u;
-
-	sts("NICK %s 1 %ld +%s %s %s %s 0 0 :%s", nick, CURRTIME, modes, user, host, me.name, real);
-
-	u = user_add(nick, user, host, NULL, NULL, NULL, real, me.me);
-	if (strchr(modes, 'o'))
-		u->flags |= UF_IRCOP;
-
-	return u;
+	sts("NICK %s 1 %ld +%s %s %s %s 0 0 :%s", nick, CURRTIME, "io", user, host, me.name, real);
 }
 
 static void monkey_quit_sts(user_t *u, char *reason)
@@ -112,8 +104,6 @@ static void monkey_quit_sts(user_t *u, char *reason)
 		return;
 
 	sts(":%s QUIT :%s", u->nick, reason);
-
-	user_delete(u->nick);
 }
 
 /* WALLOPS wrapper */

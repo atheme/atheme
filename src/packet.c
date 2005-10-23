@@ -4,7 +4,7 @@
  *
  * IRC packet handling.
  *
- * $Id: packet.c 3053 2005-10-20 18:04:13Z nenolod $
+ * $Id: packet.c 3143 2005-10-23 00:45:16Z jilles $
  *
  * TODO: Take all the sendq stuff in node.c and put it here.
  * sendq_flush becomes irc_whandler, etc.
@@ -102,7 +102,6 @@ static void irc_handle_connect(void *vptr)
 	if (cptr == curr_uplink->conn)
 	{
 		cptr->flags = CF_UPLINK;
-		me.me = server_add(me.name, 0, NULL, me.numeric ? me.numeric : NULL, me.desc);
 		me.connected = TRUE;
 
 		slog(LG_INFO, "irc_handle_connect(): connection to uplink established");

@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 3109 2005-10-22 14:51:17Z jilles $
+ * $Id: plexus.c 3143 2005-10-23 00:45:16Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 3109 2005-10-22 14:51:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 3143 2005-10-23 00:45:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -95,17 +95,9 @@ static uint8_t plexus_server_login(void)
 }
 
 /* introduce a client */
-static user_t *plexus_introduce_nick(char *nick, char *user, char *host, char *real, char *modes)
+static void plexus_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
-	user_t *u;
-
-	sts("NICK %s 1 %ld +%sS %s %s %s %s 0 0 :%s", nick, CURRTIME, modes, user, host, host, me.name, real);
-
-	u = user_add(nick, user, host, NULL, NULL, NULL, real, me.me);
-	if (strchr(modes, 'o'))
-		u->flags |= UF_IRCOP;
-
-	return u;
+	sts("NICK %s 1 %ld +%sS %s %s %s %s 0 0 :%s", nick, CURRTIME, "io", user, host, host, me.name, real);
 }
 
 static void plexus_quit_sts(user_t *u, char *reason)
@@ -114,8 +106,6 @@ static void plexus_quit_sts(user_t *u, char *reason)
 		return;
 
 	sts(":%s QUIT :%s", u->nick, reason);
-
-	user_delete(u->nick);
 }
 
 /* WALLOPS wrapper */

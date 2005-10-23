@@ -4,7 +4,7 @@
  *
  * Services binary tree manipulation. (add_service, del_service, et al.)
  *
- * $Id: servtree.c 2963 2005-10-17 01:18:59Z jilles $
+ * $Id: servtree.c 3143 2005-10-23 00:45:16Z jilles $
  */
 
 #include "atheme.h"
@@ -23,9 +23,19 @@ void servtree_init(void)
 	}
 }
 
+static void me_me_init(void)
+{
+	if (me.numeric)
+		init_uid();
+	me.me = server_add(me.name, 0, NULL, me.numeric ? me.numeric : NULL, me.desc);
+}
+
 service_t *add_service(char *name, char *user, char *host, char *real, void (*handler) (char *origin, uint8_t parc, char *parv[]))
 {
 	service_t *sptr;
+
+	if (me.me == NULL)
+		me_me_init();
 	
 	if ( name == NULL )
 	{
@@ -49,12 +59,18 @@ service_t *add_service(char *name, char *user, char *host, char *real, void (*ha
 	/* Display name, either <Service> or <Service>@<Server> */
 	sptr->disp = service_name(name);
 
+	if (me.numeric && *me.numeric)
+		sptr->uid = sstrdup(uid_get());
+
 	sptr->hash = SHASH((unsigned char *)sptr->name);
 	sptr->node = node_create();
 	sptr->handler = handler;
 
+	sptr->me = user_add(name, user, host, NULL, NULL, sptr->uid, real, me.me);
+	sptr->me->flags |= UF_IRCOP;
+
 	if (me.connected)
-		sptr->me = introduce_nick(name, user, host, real, "io");
+		introduce_nick(name, user, host, real, sptr->uid);
 
 	node_add(sptr, sptr->node, &services[sptr->hash]);
 
@@ -74,6 +90,7 @@ void del_service(service_t * sptr)
 	free(sptr->user);
 	free(sptr->host);
 	free(sptr->real);
+	free(sptr->uid);
 
 	BlockHeapFree(service_heap, sptr);
 }

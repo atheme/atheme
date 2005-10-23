@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 3129 2005-10-22 21:49:56Z jilles $
+ * $Id: ircnet.c 3143 2005-10-23 00:45:16Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 3129 2005-10-22 21:49:56Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 3143 2005-10-23 00:45:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -87,18 +87,9 @@ static uint8_t ircnet_server_login(void)
 }
 
 /* introduce a client */
-static user_t *ircnet_introduce_nick(char *nick, char *user, char *host, char *real, char *modes)
+static void ircnet_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
-	user_t *u;
-	char *uid = uid_get();
-
-	sts(":%s UNICK %s %s %s %s 0.0.0.0 +%s :%s", me.numeric, nick, uid, user, host, modes, real);
-
-	u = user_add(nick, user, host, NULL, NULL, uid, real, me.me);
-	if (strchr(modes, 'o'))
-		u->flags |= UF_IRCOP;
-
-	return u;
+	sts(":%s UNICK %s %s %s %s 0.0.0.0 +%s :%s", me.numeric, nick, uid, user, host, "io", real);
 }
 
 static void ircnet_quit_sts(user_t *u, char *reason)
@@ -107,8 +98,6 @@ static void ircnet_quit_sts(user_t *u, char *reason)
 		return;
 
 	sts(":%s QUIT :%s", u->nick, reason);
-
-	user_delete(u->nick);
 }
 
 /* WALLOPS wrapper */

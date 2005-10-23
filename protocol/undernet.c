@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: undernet.c 3129 2005-10-22 21:49:56Z jilles $
+ * $Id: undernet.c 3143 2005-10-23 00:45:16Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 3129 2005-10-22 21:49:56Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 3143 2005-10-23 00:45:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -90,18 +90,9 @@ static uint8_t undernet_server_login(void)
 }
 
 /* introduce a client */
-static user_t *undernet_introduce_nick(char *nick, char *user, char *host, char *real, char *modes)
+static void undernet_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
-	user_t *u;
-	char *uid = uid_get();
-
-	sts("%s N %s 1 %ld %s %s +%sk A %s :%s", me.numeric, nick, CURRTIME, user, host, modes, uid, real);
-
-	u = user_add(nick, user, host, NULL, NULL, uid, real, me.me);
-	if (strchr(modes, 'o'))
-		u->flags |= UF_IRCOP;
-
-	return u;
+	sts("%s N %s 1 %ld %s %s +%sk A %s :%s", me.numeric, nick, CURRTIME, user, host, "io", uid, real);
 }
 
 static void undernet_quit_sts(user_t *u, char *reason)
@@ -110,8 +101,6 @@ static void undernet_quit_sts(user_t *u, char *reason)
 		return;
 
 	sts("%s Q :%s", u->uid, reason);
-
-	user_delete(u->nick);
 }
 
 /* WALLOPS wrapper */

@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ptlink-based ircd.
  *
- * $Id: ptlink.c 3105 2005-10-22 14:37:17Z jilles $
+ * $Id: ptlink.c 3143 2005-10-23 00:45:16Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ptlink.h"
 
-DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 3105 2005-10-22 14:37:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 3143 2005-10-23 00:45:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -97,17 +97,9 @@ static uint8_t ptlink_server_login(void)
 }
 
 /* introduce a client */
-static user_t *ptlink_introduce_nick(char *nick, char *user, char *host, char *real, char *modes)
+static void ptlink_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
-	user_t *u;
-
-	sts("NICK %s 1 %ld +%s %s %s %s :%s", nick, CURRTIME, modes, user, host, me.name, real);
-
-	u = user_add(nick, user, host, NULL, NULL, NULL, real, me.me);
-	if (strchr(modes, 'o'))
-		u->flags |= UF_IRCOP;
-
-	return u;
+	sts("NICK %s 1 %ld +%s %s %s %s :%s", nick, CURRTIME, "io", user, host, me.name, real);
 }
 
 static void ptlink_quit_sts(user_t *u, char *reason)
@@ -116,8 +108,6 @@ static void ptlink_quit_sts(user_t *u, char *reason)
 		return;
 
 	sts(":%s QUIT :%s", u->nick, reason);
-
-	user_delete(u->nick);
 }
 
 /* WALLOPS wrapper */

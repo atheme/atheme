@@ -4,13 +4,13 @@
  *
  * Generic protocol event handlers.
  *
- * $Id: phandler.c 3105 2005-10-22 14:37:17Z jilles $
+ * $Id: phandler.c 3143 2005-10-23 00:45:16Z jilles $
  */
 
 #include "atheme.h"
 
 uint8_t(*server_login) (void) = generic_server_login;
-user_t *(*introduce_nick) (char *nick, char *user, char *host, char *real, char *modes) = generic_introduce_nick;
+void (*introduce_nick) (char *nick, char *user, char *host, char *real, char *uid) = generic_introduce_nick;
 void (*wallops) (char *fmt, ...) = generic_wallops;
 void (*join) (char *chan, char *nick) = generic_join;
 void (*kick) (char *from, char *channel, char *to, char *reason) = generic_kick;
@@ -36,10 +36,9 @@ uint8_t generic_server_login(void)
 	return 0;
 }
 
-user_t *generic_introduce_nick(char *nick, char *ser, char *host, char *real, char *modes)
+void generic_introduce_nick(char *nick, char *ser, char *host, char *real, char *uid)
 {
 	/* Nothing to do here. */
-	return NULL;
 }
 
 void generic_wallops(char *fmt, ...)

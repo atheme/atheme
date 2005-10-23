@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 2497 2005-10-01 04:35:25Z nenolod $
+ * $Id: services.c 3143 2005-10-23 00:45:16Z jilles $
  */
 
 #include "atheme.h"
@@ -53,7 +53,11 @@ void services_init(void)
 		{
 			svs = n->data;
 
-			svs->me = introduce_nick(svs->name, svs->user, svs->host, svs->real, "io");
+			if (ircd->uses_uid && svs->me->uid[0] == '\0')
+				user_changeuid(svs->me, svs->uid);
+			else if (!ircd->uses_uid && svs->me->uid[0] != '\0')
+				user_changeuid(svs->me, NULL);
+			introduce_nick(svs->name, svs->user, svs->host, svs->real, svs->uid);
 			if (config_options.chan != NULL)
 				join(config_options.chan, svs->name);
 		}

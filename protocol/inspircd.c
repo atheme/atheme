@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: inspircd.c 3109 2005-10-22 14:51:17Z jilles $
+ * $Id: inspircd.c 3143 2005-10-23 00:45:16Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 3109 2005-10-22 14:51:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 3143 2005-10-23 00:45:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -110,18 +110,10 @@ static uint8_t inspircd_server_login(void)
 }
 
 /* introduce a client */
-static user_t *inspircd_introduce_nick(char *nick, char *user, char *host, char *real, char *modes)
+static void inspircd_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
-	user_t *u;
-
 	/*         ts  ni ho vh id mod ip      sv  rn */
-	sts(":%s N %ld %s %s %s %s +%s 0.0.0.0 %s :%s", CreateSum(), CURRTIME, nick, host, host, user, modes, me.name, real);
-
-	u = user_add(nick, user, host, NULL, NULL, NULL, real, me.me);
-	if (strchr(modes, 'o'))
-		u->flags |= UF_IRCOP;
-
-	return u;
+	sts(":%s N %ld %s %s %s %s +%s 0.0.0.0 %s :%s", CreateSum(), CURRTIME, nick, host, host, user, "io", me.name, real);
 }
 
 static void inspircd_quit_sts(user_t *u, char *reason)
@@ -130,8 +122,6 @@ static void inspircd_quit_sts(user_t *u, char *reason)
 		return;
 
 	sts(":%s Q %s %s", CreateSum(), u->nick, reason);
-
-	user_delete(u->nick);
 }
 
 /* WALLOPS wrapper */

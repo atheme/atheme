@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 3129 2005-10-22 21:49:56Z jilles $
+ * $Id: charybdis.c 3143 2005-10-23 00:45:16Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3129 2005-10-22 21:49:56Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3143 2005-10-23 00:45:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -114,26 +114,12 @@ static uint8_t charybdis_server_login(void)
 }
 
 /* introduce a client */
-static user_t *charybdis_introduce_nick(char *nick, char *user, char *host, char *real, char *modes)
+static void charybdis_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
-	user_t *u;
-	char *uid = NULL;
-
 	if (ircd->uses_uid)
-	{
-		uid = uid_get();
-		sts(":%s UID %s 1 %ld +%sS %s %s 0 %s :%s", me.numeric, nick, CURRTIME, modes, user, host, uid, real);
-	}
+		sts(":%s UID %s 1 %ld +%sS %s %s 0 %s :%s", me.numeric, nick, CURRTIME, "io", user, host, uid, real);
 	else
-	{
-		sts("NICK %s 1 %ld +%sS %s %s %s :%s", nick, CURRTIME, modes, user, host, me.name, real);
-	}
-
-	u = user_add(nick, user, host, NULL, NULL, uid, real, me.me);
-	if (strchr(modes, 'o'))
-		u->flags |= UF_IRCOP;
-
-	return u;
+		sts("NICK %s 1 %ld +%sS %s %s %s :%s", nick, CURRTIME, "io", user, host, me.name, real);
 }
 
 static void charybdis_quit_sts(user_t *u, char *reason)
@@ -142,8 +128,6 @@ static void charybdis_quit_sts(user_t *u, char *reason)
 		return;
 
 	sts(":%s QUIT :%s", CLIENT_NAME(u), reason);
-
-	user_delete(u->nick);
 }
 
 /* WALLOPS wrapper */
