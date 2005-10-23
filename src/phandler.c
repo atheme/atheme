@@ -4,7 +4,7 @@
  *
  * Generic protocol event handlers.
  *
- * $Id: phandler.c 3143 2005-10-23 00:45:16Z jilles $
+ * $Id: phandler.c 3171 2005-10-23 21:55:39Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 uint8_t(*server_login) (void) = generic_server_login;
 void (*introduce_nick) (char *nick, char *user, char *host, char *real, char *uid) = generic_introduce_nick;
 void (*wallops) (char *fmt, ...) = generic_wallops;
-void (*join) (char *chan, char *nick) = generic_join;
+void (*join_sts) (channel_t *c, user_t *u, boolean_t isnew, char *modes) = generic_join_sts;
 void (*kick) (char *from, char *channel, char *to, char *reason) = generic_kick;
 void (*msg) (char *from, char *target, char *fmt, ...) = generic_msg;
 void (*notice) (char *from, char *target, char *fmt, ...) = generic_notice;
@@ -56,7 +56,7 @@ void generic_wallops(char *fmt, ...)
 	slog(LG_INFO, "Don't know how to send wallops: %s", buf);
 }
 
-void generic_join(char *chan, char *nick)
+void generic_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
 {
 	/* We can't do anything here. Bail. */
 }

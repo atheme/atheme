@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 3143 2005-10-23 00:45:16Z jilles $
+ * $Id: hyperion.c 3171 2005-10-23 21:55:39Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -15,7 +15,7 @@
 #include "atheme.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 3143 2005-10-23 00:45:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 3171 2005-10-23 21:55:39Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -144,30 +144,14 @@ static void hyperion_wallops(char *fmt, ...)
 }
 
 /* join a channel */
-static void hyperion_join(char *chan, char *nick)
+static void hyperion_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
 {
-	channel_t *c = channel_find(chan);
-	chanuser_t *cu;
-
-	if (!c)
-	{
-		sts(":%s SJOIN %ld %s +nt :@%s", me.name, CURRTIME, chan, nick);
-
-		c = channel_add(chan, CURRTIME);
-	}
+	if (isnew)
+		sts(":%s SJOIN %ld %s %s :@%s", me.name, c->ts, c->name,
+				modes, u->nick);
 	else
-	{
-		if ((cu = chanuser_find(c, user_find(nick))))
-		{
-			slog(LG_DEBUG, "join(): i'm already in `%s'", c->name);
-			return;
-		}
-
-		sts(":%s SJOIN %ld %s + :@%s", me.name, c->ts, chan, nick);
-	}
-
-	cu = chanuser_add(c, nick);
-	cu->modes |= CMODE_OP;
+		sts(":%s SJOIN %ld %s + :@%s", me.name, c->ts, c->name,
+				u->nick);
 }
 
 /* kicks a user from a channel */
@@ -910,7 +894,7 @@ void _modinit(module_t * m)
 	introduce_nick = &hyperion_introduce_nick;
 	quit_sts = &hyperion_quit_sts;
 	wallops = &hyperion_wallops;
-	join = &hyperion_join;
+	join_sts = &hyperion_join_sts;
 	kick = &hyperion_kick;
 	msg = &hyperion_msg;
 	notice = &hyperion_notice;

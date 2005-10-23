@@ -1,3 +1,13 @@
+jilles      2005/10/23 20:16:30 UTC	(20051023-3169)
+  Log:
+  Place topicts in the logical place, I'm going to break
+  binary compatibility anyway ;p
+  
+
+  Changes:	Modified:
+  +1 -2		trunk/include/channels.h (File Modified) 
+
+
 jilles      2005/10/23 19:31:18 UTC	(20051023-3167)
   Log:
   Add TS6 support to the ratbox module.

@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 3167 2005-10-23 19:31:18Z jilles $
+ * $Id: ratbox.c 3171 2005-10-23 21:55:39Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 3167 2005-10-23 19:31:18Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 3171 2005-10-23 21:55:39Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -142,34 +142,14 @@ static void ratbox_wallops(char *fmt, ...)
 }
 
 /* join a channel */
-static void ratbox_join(char *chan, char *nick)
+static void ratbox_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
 {
-	channel_t *c = channel_find(chan);
-	chanuser_t *cu;
-	user_t *u = user_find(nick);
-
-	if (!u)
-		return;
-
-	if (!c)
-	{
-		sts(":%s SJOIN %ld %s +nt :@%s", ME, CURRTIME, chan, CLIENT_NAME(u));
-
-		c = channel_add(chan, CURRTIME);
-	}
+	if (isnew)
+		sts(":%s SJOIN %ld %s %s :@%s", ME, c->ts, c->name,
+				modes, CLIENT_NAME(u));
 	else
-	{
-		if ((cu = chanuser_find(c, u)))
-		{
-			slog(LG_DEBUG, "join(): i'm already in `%s'", c->name);
-			return;
-		}
-
-		sts(":%s SJOIN %ld %s + :@%s", ME, c->ts, chan, CLIENT_NAME(u));
-	}
-
-	cu = chanuser_add(c, nick);
-	cu->modes |= CMODE_OP;
+		sts(":%s SJOIN %ld %s + :@%s", ME, c->ts, c->name,
+				CLIENT_NAME(u));
 }
 
 /* kicks a user from a channel */
@@ -1074,7 +1054,7 @@ void _modinit(module_t * m)
 	introduce_nick = &ratbox_introduce_nick;
 	quit_sts = &ratbox_quit_sts;
 	wallops = &ratbox_wallops;
-	join = &ratbox_join;
+	join_sts = &ratbox_join_sts;
 	kick = &ratbox_kick;
 	msg = &ratbox_msg;
 	notice = &ratbox_notice;

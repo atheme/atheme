@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for chunky monkey ircd.
  *
- * $Id: monkey.c 3143 2005-10-23 00:45:16Z jilles $
+ * $Id: monkey.c 3171 2005-10-23 21:55:39Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/monkey.h"
 
-DECLARE_MODULE_V1("protocol/monkey", TRUE, _modinit, NULL, "$Id: monkey.c 3143 2005-10-23 00:45:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/monkey", TRUE, _modinit, NULL, "$Id: monkey.c 3171 2005-10-23 21:55:39Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -123,30 +123,14 @@ static void monkey_wallops(char *fmt, ...)
 }
 
 /* join a channel */
-static void monkey_join(char *chan, char *nick)
+static void monkey_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
 {
-	channel_t *c = channel_find(chan);
-	chanuser_t *cu;
-
-	if (!c)
-	{
-		sts(":%s SJOIN %ld %s +nt :@%s", me.name, CURRTIME, chan, nick);
-
-		c = channel_add(chan, CURRTIME);
-	}
+	if (isnew)
+		sts(":%s SJOIN %ld %s %s :@%s", me.name, c->ts, c->name,
+				modes, u->nick);
 	else
-	{
-		if ((cu = chanuser_find(c, user_find(nick))))
-		{
-			slog(LG_DEBUG, "join(): i'm already in `%s'", c->name);
-			return;
-		}
-
-		sts(":%s SJOIN %ld %s + :@%s", me.name, c->ts, chan, nick);
-	}
-
-	cu = chanuser_add(c, nick);
-	cu->modes |= CMODE_OP;
+		sts(":%s SJOIN %ld %s + :@%s", me.name, c->ts, c->name,
+				u->nick);
 }
 
 /* kicks a user from a channel */
@@ -732,7 +716,7 @@ void _modinit(module_t * m)
 	introduce_nick = &monkey_introduce_nick;
 	quit_sts = &monkey_quit_sts;
 	wallops = &monkey_wallops;
-	join = &monkey_join;
+	join_sts = &monkey_join_sts;
 	kick = &monkey_kick;
 	msg = &monkey_msg;
 	notice = &monkey_notice;

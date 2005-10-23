@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 3143 2005-10-23 00:45:16Z jilles $
+ * $Id: services.c 3171 2005-10-23 21:55:39Z jilles $
  */
 
 #include "atheme.h"
@@ -38,6 +38,34 @@ void ban(char *sender, char *channel, user_t *user)
 	chanban_add(c, mask);
 
 	mode_sts(sender, channel, modemask);
+}
+
+/* join a channel, creating it if necessary */
+void join(char *chan, char *nick)
+{
+	channel_t *c;
+	user_t *u;
+	chanuser_t *cu;
+	boolean_t isnew = FALSE;
+
+	u = user_find(nick);
+	if (!u)
+		return;
+	c = channel_find(chan);
+	if (c == NULL)
+	{
+		c = channel_add(chan, CURRTIME);
+		c->modes |= CMODE_NOEXT | CMODE_TOPIC; /* XXX use mlock */
+		isnew = TRUE;
+	}
+	else if ((cu = chanuser_find(c, u)))
+	{
+		slog(LG_DEBUG, "join(): i'm already in `%s'", c->name);
+		return;
+	}
+	cu = chanuser_add(c, nick);
+	cu->modes |= CMODE_OP;
+	join_sts(c, u, isnew, "+nt"); /* XXX modestring */
 }
 
 /* bring on the services clients */

@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 3163 2005-10-23 13:31:46Z jilles $
+ * $Id: charybdis.c 3171 2005-10-23 21:55:39Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3163 2005-10-23 13:31:46Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3171 2005-10-23 21:55:39Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -147,34 +147,14 @@ static void charybdis_wallops(char *fmt, ...)
 }
 
 /* join a channel */
-static void charybdis_join(char *chan, char *nick)
+static void charybdis_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
 {
-	channel_t *c = channel_find(chan);
-	chanuser_t *cu;
-	user_t *u = user_find(nick);
-
-	if (!u)
-		return;
-
-	if (!c)
-	{
-		sts(":%s SJOIN %ld %s +nt :@%s", ME, CURRTIME, chan, CLIENT_NAME(u));
-
-		c = channel_add(chan, CURRTIME);
-	}
+	if (isnew)
+		sts(":%s SJOIN %ld %s %s :@%s", ME, c->ts, c->name,
+				modes, CLIENT_NAME(u));
 	else
-	{
-		if ((cu = chanuser_find(c, u)))
-		{
-			slog(LG_DEBUG, "join(): i'm already in `%s'", c->name);
-			return;
-		}
-
-		sts(":%s SJOIN %ld %s + :@%s", ME, c->ts, chan, CLIENT_NAME(u));
-	}
-
-	cu = chanuser_add(c, nick);
-	cu->modes |= CMODE_OP;
+		sts(":%s SJOIN %ld %s + :@%s", ME, c->ts, c->name,
+				CLIENT_NAME(u));
 }
 
 /* kicks a user from a channel */
@@ -1091,7 +1071,7 @@ void _modinit(module_t * m)
 	introduce_nick = &charybdis_introduce_nick;
 	quit_sts = &charybdis_quit_sts;
 	wallops = &charybdis_wallops;
-	join = &charybdis_join;
+	join_sts = &charybdis_join_sts;
 	kick = &charybdis_kick;
 	msg = &charybdis_msg;
 	notice = &charybdis_notice;

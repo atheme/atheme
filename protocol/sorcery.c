@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: sorcery.c 3143 2005-10-23 00:45:16Z jilles $
+ * $Id: sorcery.c 3171 2005-10-23 21:55:39Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/sorcery.h"
 
-DECLARE_MODULE_V1("protocol/sorcery", TRUE, _modinit, NULL, "$Id: sorcery.c 3143 2005-10-23 00:45:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/sorcery", TRUE, _modinit, NULL, "$Id: sorcery.c 3171 2005-10-23 21:55:39Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -120,31 +120,19 @@ static void sorcery_wallops(char *fmt, ...)
 }
 
 /* join a channel */
-static void sorcery_join(char *chan, char *nick)
+static void sorcery_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
 {
-	channel_t *c = channel_find(chan);
-	chanuser_t *cu;
-
-	if (!c)
+	if (isnew)
 	{
-		sts(":%s JOIN %s", nick, chan);
-
-		c = channel_add(chan, CURRTIME);
+		sts(":%s JOIN %s", u->nick, c->name);
+		if (modes[0] && modes[1])
+			sts(":%s MODE %s %s", u->nick, c->name, modes);
 	}
 	else
 	{
-		if ((cu = chanuser_find(c, user_find(nick))))
-		{
-			slog(LG_DEBUG, "join(): i'm already in `%s'", c->name);
-			return;
-		}
-
-		sts(":%s JOIN %s", nick, chan);
-		sts(":%s MODE %s +o %s %ld", nick, chan, nick, c->ts);
+		sts(":%s JOIN %s", u->nick, c->name);
+		sts(":%s MODE %s +o %s %ld", u->nick, c->name, u->nick, c->ts);
 	}
-
-	cu = chanuser_add(c, nick);
-	cu->modes |= CMODE_OP;
 }
 
 /* kicks a user from a channel */
@@ -645,7 +633,7 @@ void _modinit(module_t * m)
 	introduce_nick = &sorcery_introduce_nick;
 	quit_sts = &sorcery_quit_sts;
 	wallops = &sorcery_wallops;
-	join = &sorcery_join;
+	join_sts = &sorcery_join_sts;
 	kick = &sorcery_kick;
 	msg = &sorcery_msg;
 	notice = &sorcery_notice;

@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: undernet.c 3143 2005-10-23 00:45:16Z jilles $
+ * $Id: undernet.c 3171 2005-10-23 21:55:39Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 3143 2005-10-23 00:45:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 3171 2005-10-23 21:55:39Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -120,36 +120,20 @@ static void undernet_wallops(char *fmt, ...)
 }
 
 /* join a channel */
-static void undernet_join(char *chan, char *nick)
+static void undernet_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
 {
-	channel_t *c = channel_find(chan);
-	user_t *u = user_find(nick);
-	chanuser_t *cu;
-
-	if (!u)
-		return;
-
 	/* If the channel doesn't exist, we need to create it. */
-	if (!c)
+	if (isnew)
 	{
-		sts("%s C %s %ld", u->uid, chan, CURRTIME);
-
-		c = channel_add(chan, CURRTIME);
+		sts("%s C %s %ld", u->uid, c->name, c->ts);
+		if (modes[0] && modes[1])
+			sts("%s M %s %s %ld", u->uid, c->name, modes, c->ts);
 	}
 	else
 	{
-		if ((cu = chanuser_find(c, user_find(nick))))
-		{
-			slog(LG_DEBUG, "join(): i'm already in `%s'", c->name);
-			return;
-		}
-
-		sts("%s J %s %ld", u->uid, chan, c->ts);
-		sts("%s M %s +o %s %ld", me.numeric, chan, u->uid, c->ts);
+		sts("%s J %s %ld", u->uid, c->name, c->ts);
+		sts("%s M %s +o %s %ld", me.numeric, c->name, u->uid, c->ts);
 	}
-
-	cu = chanuser_add(c, nick);
-	cu->modes |= CMODE_OP;
 }
 
 /* kicks a user from a channel */
@@ -832,7 +816,7 @@ void _modinit(module_t * m)
 	introduce_nick = &undernet_introduce_nick;
 	quit_sts = &undernet_quit_sts;
 	wallops = &undernet_wallops;
-	join = &undernet_join;
+	join_sts = &undernet_join_sts;
 	kick = &undernet_kick;
 	msg = &undernet_msg;
 	notice = &undernet_notice;

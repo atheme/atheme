@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: dreamforge.c 3143 2005-10-23 00:45:16Z jilles $
+ * $Id: dreamforge.c 3171 2005-10-23 21:55:39Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/dreamforge.h"
 
-DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 3143 2005-10-23 00:45:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 3171 2005-10-23 21:55:39Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -119,31 +119,19 @@ static void dreamforge_wallops(char *fmt, ...)
 }
 
 /* join a channel */
-static void dreamforge_join(char *chan, char *nick)
+static void dreamforge_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
 {
-	channel_t *c = channel_find(chan);
-	chanuser_t *cu;
-
-	if (!c)
+	if (isnew)
 	{
-		sts(":%s JOIN %s", nick, chan);
-
-		c = channel_add(chan, CURRTIME);
+		sts(":%s JOIN %s", u->nick, c->name);
+		if (modes[0] && modes[1])
+			sts(":%s MODE %s %s", u->nick, c->name, modes);
 	}
 	else
 	{
-		if ((cu = chanuser_find(c, user_find(nick))))
-		{
-			slog(LG_DEBUG, "join(): i'm already in `%s'", c->name);
-			return;
-		}
-
-		sts(":%s JOIN %s", nick, chan);
-		sts(":%s MODE %s +o %s %ld", nick, chan, nick, c->ts);
+		sts(":%s JOIN %s", u->nick, c->name);
+		sts(":%s MODE %s +o %s %ld", u->nick, c->name, u->nick, c->ts);
 	}
-
-	cu = chanuser_add(c, nick);
-	cu->modes |= CMODE_OP;
 }
 
 /* kicks a user from a channel */
@@ -644,7 +632,7 @@ void _modinit(module_t * m)
 	introduce_nick = &dreamforge_introduce_nick;
 	quit_sts = &dreamforge_quit_sts;
 	wallops = &dreamforge_wallops;
-	join = &dreamforge_join;
+	join_sts = &dreamforge_join_sts;
 	kick = &dreamforge_kick;
 	msg = &dreamforge_msg;
 	notice = &dreamforge_notice;

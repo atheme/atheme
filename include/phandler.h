@@ -5,7 +5,7 @@
  * Protocol handlers, both generic and the actual declarations themselves.
  * Declare NOTYET to use the function pointer voodoo.
  *
- * $Id: phandler.h 3143 2005-10-23 00:45:16Z jilles $
+ * $Id: phandler.h 3171 2005-10-23 21:55:39Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -36,7 +36,7 @@ typedef struct ircd_ ircd_t;
 E uint8_t (*server_login)(void);
 E void (*introduce_nick)(char *nick, char *user, char *host, char *real, char *uid);
 E void (*wallops)(char *fmt, ...);
-E void (*join)(char *chan, char *nick);
+E void (*join_sts)(channel_t *c, user_t *u, boolean_t isnew, char *modes);
 E void (*kick)(char *from, char *channel, char *to, char *reason);
 E void (*msg)(char *from, char *target, char *fmt, ...);
 E void (*notice)(char *from, char *target, char *fmt, ...);
@@ -57,7 +57,7 @@ E void (*sethost_sts)(char *source, char *target, char *host);
 E uint8_t generic_server_login(void);
 E void generic_introduce_nick(char *nick, char *ser, char *host, char *real, char *uid);
 E void generic_wallops(char *fmt, ...);
-E void generic_join(char *chan, char *nick);
+E void generic_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes);
 E void generic_kick(char *from, char *channel, char *to, char *reason);
 E void generic_msg(char *from, char *target, char *fmt, ...);
 E void generic_notice(char *from, char *target, char *fmt, ...);

@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: inspircd.c 3143 2005-10-23 00:45:16Z jilles $
+ * $Id: inspircd.c 3171 2005-10-23 21:55:39Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 3143 2005-10-23 00:45:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 3171 2005-10-23 21:55:39Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -141,30 +141,13 @@ static void inspircd_wallops(char *fmt, ...)
 }
 
 /* join a channel */
-static void inspircd_join(char *chan, char *nick)
+static void inspircd_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
 {
-	channel_t *c = channel_find(chan);
-	chanuser_t *cu;
-
-	if (!c)
+	sts(":%s J %s @%s", CreateSum(), u->nick, c->name);
+	if (isnew && modes[0] && modes[1])
 	{
-		sts(":%s J %s @%s", CreateSum(), nick, chan);
-
-		c = channel_add(chan, CURRTIME);
+		sts(":%s m %s %s %s", CreateSum(), u->nick, c->name, modes);
 	}
-	else
-	{
-		if ((cu = chanuser_find(c, user_find(nick))))
-		{
-			slog(LG_DEBUG, "join(): i'm already in `%s'", c->name);
-			return;
-		}
-
-		sts(":%s J %s @%s", CreateSum(), nick, chan);
-	}
-
-	cu = chanuser_add(c, nick);
-	cu->modes |= CMODE_OP;
 }
 
 /* kicks a user from a channel */
@@ -668,7 +651,7 @@ void _modinit(module_t * m)
 	introduce_nick = &inspircd_introduce_nick;
 	quit_sts = &inspircd_quit_sts;
 	wallops = &inspircd_wallops;
-	join = &inspircd_join;
+	join_sts = &inspircd_join_sts;
 	kick = &inspircd_kick;
 	msg = &inspircd_msg;
 	notice = &inspircd_notice;
