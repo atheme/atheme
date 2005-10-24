@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 3171 2005-10-23 21:55:39Z jilles $
+ * $Id: services.c 3185 2005-10-24 00:25:23Z jilles $
  */
 
 #include "atheme.h"
@@ -47,6 +47,7 @@ void join(char *chan, char *nick)
 	user_t *u;
 	chanuser_t *cu;
 	boolean_t isnew = FALSE;
+	mychan_t *mc;
 
 	u = user_find(nick);
 	if (!u)
@@ -55,7 +56,10 @@ void join(char *chan, char *nick)
 	if (c == NULL)
 	{
 		c = channel_add(chan, CURRTIME);
-		c->modes |= CMODE_NOEXT | CMODE_TOPIC; /* XXX use mlock */
+		c->modes |= CMODE_NOEXT | CMODE_TOPIC;
+		mc = mychan_find(c->name);
+		if (mc != NULL)
+			check_modes(mc, FALSE);
 		isnew = TRUE;
 	}
 	else if ((cu = chanuser_find(c, u)))
@@ -65,7 +69,7 @@ void join(char *chan, char *nick)
 	}
 	cu = chanuser_add(c, nick);
 	cu->modes |= CMODE_OP;
-	join_sts(c, u, isnew, "+nt"); /* XXX modestring */
+	join_sts(c, u, isnew, channel_modes(c, TRUE));
 }
 
 /* bring on the services clients */

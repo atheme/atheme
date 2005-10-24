@@ -1,3 +1,17 @@
+jilles      2005/10/24 00:09:09 UTC	(20051024-3183)
+  Log:
+  Add parameter 'sendnow' to check_modes(), to optionally
+  avoid doing cmodes (for use in join() creating a
+  channel).
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/extern.h (File Modified) 
+  +1 -1		trunk/modules/chanserv/main.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/set.c (File Modified) 
+  +17 -9	trunk/src/cmode.c (File Modified) 
+
+
 jilles      2005/10/23 23:55:19 UTC	(20051023-3181)
   Log:
   More mlock +kl fixes.
