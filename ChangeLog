@@ -1,3 +1,12 @@
+jilles      2005/10/24 00:25:23 UTC	(20051024-3185)
+  Log:
+  Create new channels with modes +nt modified by mlock.
+  
+
+  Changes:	Modified:
+  +6 -2		trunk/src/services.c (File Modified) 
+
+
 jilles      2005/10/24 00:09:09 UTC	(20051024-3183)
   Log:
   Add parameter 'sendnow' to check_modes(), to optionally

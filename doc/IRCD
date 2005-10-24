@@ -28,7 +28,7 @@ modern one.
 hyperion
 --------
 
-The channel modes +dDfJjLPQ are not supported and will be ignored. Bans with
+The channel modes +dDfJ are not supported and will be ignored. Bans with
 forward channels will also not be recognized properly. This may lead to
 problems like users still being banned after a chanserv unban command.
 
