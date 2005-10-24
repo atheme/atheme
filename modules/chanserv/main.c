@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 3009 2005-10-19 05:02:21Z alambert $
+ * $Id: main.c 3183 2005-10-24 00:09:09Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 3009 2005-10-19 05:02:21Z alambert $",
+	"$Id: main.c 3183 2005-10-24 00:09:09Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -343,7 +343,7 @@ static void cs_join(chanuser_t *cu)
 	}
 
 	if (mc)
-		check_modes(mc);
+		check_modes(mc, TRUE);
 }
 
 static void cs_part(chanuser_t *cu)

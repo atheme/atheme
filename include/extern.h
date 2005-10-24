@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 3177 2005-10-23 23:22:20Z jilles $
+ * $Id: extern.h 3183 2005-10-24 00:09:09Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -21,7 +21,7 @@ E char *channel_modes(channel_t *c, boolean_t doparams);
 E void user_mode(user_t *user, char *modes);
 E void flush_cmode_callback(void *arg);
 E void cmode(char *sender, ...);
-E void check_modes(mychan_t *mychan);
+E void check_modes(mychan_t *mychan, boolean_t sendnow);
 
 /* conf.c */
 E void conf_parse(void);

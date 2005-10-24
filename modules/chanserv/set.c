@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3175 2005-10-23 23:14:41Z jilles $
+ * $Id: set.c 3183 2005-10-24 00:09:09Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3175 2005-10-23 23:14:41Z jilles $",
+	"$Id: set.c 3183 2005-10-24 00:09:09Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -561,7 +561,7 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 		snoop("SET:MLOCK:OFF: \2%s\2 by \2%s\2", mc->name, origin);
 	}
 
-	check_modes(mc);
+	check_modes(mc, TRUE);
 
 	return;
 }

@@ -1,3 +1,12 @@
+jilles      2005/10/23 23:55:19 UTC	(20051023-3181)
+  Log:
+  More mlock +kl fixes.
+  
+
+  Changes:	Modified:
+  +6 -14	trunk/src/cmode.c (File Modified) 
+
+
 nenolod     2005/10/23 23:36:50 UTC	(20051023-3179)
   Log:
   Some updates to doc/IRCD.

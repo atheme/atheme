@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 3181 2005-10-23 23:55:19Z jilles $
+ * $Id: cmode.c 3183 2005-10-24 00:09:09Z jilles $
  */
 
 #include "atheme.h"
@@ -262,7 +262,7 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 	}
 
 	if (source == NULL)
-		check_modes(mychan_find(chan->name));
+		check_modes(mychan_find(chan->name), TRUE);
 }
 
 char *channel_modes(channel_t *c, boolean_t doparams)
@@ -583,7 +583,7 @@ void cmode(char *sender, ...)
 		md->event = event_add_once("flush_cmode_callback", flush_cmode_callback, md, 1);
 }
 
-void check_modes(mychan_t *mychan)
+void check_modes(mychan_t *mychan, boolean_t sendnow)
 {
 	char newmodes[40], *newkey = NULL;
 	char *end = newmodes;
@@ -604,7 +604,8 @@ void check_modes(mychan_t *mychan)
 	{
 		newlimit = mychan->mlock_limit;
 		mychan->chan->limit = newlimit;
-		cmode(chansvs.nick, mychan->name, "+l", itoa(newlimit));
+		if (sendnow)
+			cmode(chansvs.nick, mychan->name, "+l", itoa(newlimit));
 	}
 
 	if (mychan->mlock_key)
@@ -617,9 +618,13 @@ void check_modes(mychan_t *mychan)
 			mychan->chan->key = NULL;
 		}
 
-		newkey = mychan->mlock_key;
-		mychan->chan->key = sstrdup(newkey);
-		cmode(chansvs.nick, mychan->name, "+k", newkey);
+		if (mychan->chan->key == NULL)
+		{
+			newkey = mychan->mlock_key;
+			mychan->chan->key = sstrdup(newkey);
+			if (sendnow)
+				cmode(chansvs.nick, mychan->name, "+k", newkey);
+		}
 	}
 
 	if (end[-1] == '+')
@@ -634,13 +639,15 @@ void check_modes(mychan_t *mychan)
 
 	if (mychan->chan->limit && (mychan->mlock_off & CMODE_LIMIT))
 	{
-		cmode(chansvs.nick, mychan->name, "-l");
+		if (sendnow)
+			cmode(chansvs.nick, mychan->name, "-l");
 		mychan->chan->limit = 0;
 	}
 
 	if (mychan->chan->key && (mychan->mlock_off & CMODE_KEY))
 	{
-		cmode(chansvs.nick, mychan->name, "-k", mychan->chan->key);
+		if (sendnow)
+			cmode(chansvs.nick, mychan->name, "-k", mychan->chan->key);
 		free(mychan->chan->key);
 		mychan->chan->key = NULL;
 	}
@@ -653,5 +660,6 @@ void check_modes(mychan_t *mychan)
 
 	*end = 0;
 
-	cmode(chansvs.nick, mychan->name, newmodes);
+	if (sendnow)
+		cmode(chansvs.nick, mychan->name, newmodes);
 }
