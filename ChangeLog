@@ -1,3 +1,14 @@
+jilles      2005/10/25 16:35:26 UTC	(20051025-3195)
+  Log:
+  Add reintroduce_user() to reintroduce a service,
+  e.g. after it has been killed.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/extern.h (File Modified) 
+  +34 -0	trunk/src/services.c (File Modified) 
+
+
 jilles      2005/10/25 15:34:52 UTC	(20051025-3193)
   Log:
   Add a check whether mychan and myuser are found when
