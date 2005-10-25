@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 3151 2005-10-23 03:17:38Z nenolod $
+ * $Id: ptasks.c 3199 2005-10-25 17:57:14Z alambert $
  */
 
 #include "atheme.h"
@@ -284,7 +284,7 @@ void handle_topic(channel_t *c, char *setter, time_t ts, char *topic)
 		c->topic = c->topic_setter = NULL;
 	c->topicts = ts;
 
-	hook_call_event("topic_set", c);
+	hook_call_event("channel_topic", c);
 }
 
 /* Received a message from a user, check if they are flooding

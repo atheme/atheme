@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3183 2005-10-24 00:09:09Z jilles $
+ * $Id: set.c 3199 2005-10-25 17:57:14Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3183 2005-10-24 00:09:09Z jilles $",
+	"$Id: set.c 3199 2005-10-25 17:57:14Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -36,11 +36,11 @@ void _modinit(module_t *m)
         command_add(&cs_set, cs_cmdtree);
 	hook_add_event("channel_join");
 	hook_add_event("channel_add");
-	hook_add_event("topic_set");
+	hook_add_event("channel_topic");
 	hook_add_hook("channel_join", (void (*)(void *)) cs_join_entrymsg);
 	hook_add_hook("channel_join", (void (*)(void *)) cs_join_url);
 	hook_add_hook("channel_add", (void (*)(void *)) cs_keeptopic_newchan);
-	hook_add_hook("topic_set", (void (*)(void *)) cs_keeptopic_topicset);
+	hook_add_hook("channel_topic", (void (*)(void *)) cs_keeptopic_topicset);
 
 	help_addentry(cs_helptree, "SET FOUNDER", "help/cservice/set_founder", NULL);
 	help_addentry(cs_helptree, "SET MLOCK", "help/cservice/set_mlock", NULL);
