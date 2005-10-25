@@ -1,3 +1,12 @@
+jilles      2005/10/24 00:38:37 UTC	(20051024-3187)
+  Log:
+  The hyperion module now support +jLPQ.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/doc/IRCD (File Modified) 
+
+
 jilles      2005/10/24 00:25:23 UTC	(20051024-3185)
   Log:
   Create new channels with modes +nt modified by mlock.
