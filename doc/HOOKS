@@ -1,0 +1,36 @@
+$Id: HOOKS 3191 2005-10-25 14:22:07Z jilles $
+
+Atheme hooks system
+
+hook_add_event("name")
+hook_call_event("name", argument)
+hook_add_hook("name", handler)
+hook_del_hook("name", handler)
+
+Current list of hooks
+
+Name               Argument type                         
+(claro)
+connected          connection_t *
+listener_in        connection_t *
+connection_dead    connection_t *
+(main)
+config_ready       <none>
+(ircd)
+channel_add        channel_t *
+channel_delete     channel_t *
+channel_join       chanuser_t *
+channel_part       chanuser_t *
+topic_set          channel_t *
+user_add           user_t *
+user_delete        user_t *
+user_deoper        user_t *
+user_oper          user_t *
+(services)
+channel_akick_add  chanacs_t *
+channel_drop       mychan_t *
+channel_message    hook_cmessage_data_t *
+channel_register   mychan_t *
+user_drop          myuser_t *
+user_identify      user_t *
+user_register      myuser_t *

@@ -1,3 +1,12 @@
+jilles      2005/10/25 13:55:01 UTC	(20051025-3189)
+  Log:
+  Add Id tag.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/doc/IRCD (File Modified) (Property Modified)
+
+
 jilles      2005/10/24 00:38:37 UTC	(20051024-3187)
   Log:
   The hyperion module now support +jLPQ.
