@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 3203 2005-10-25 22:22:40Z jilles $
+ * $Id: hyperion.c 3205 2005-10-25 22:48:47Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -15,7 +15,7 @@
 #include "atheme.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 3203 2005-10-25 22:22:40Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 3205 2005-10-25 22:48:47Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -650,6 +650,10 @@ static void m_kick(char *origin, uint8_t parc, char *parv[])
 
 static void m_kill(char *origin, uint8_t parc, char *parv[])
 {
+	/* serves for both KILL and COLLIDE
+	 * COLLIDE only originates from servers and may not have
+	 * a reason field, but the net effect is identical
+	 * -- jilles */
 	if (parc < 1)
 		return;
 	handle_kill(origin, parv[0], parc > 1 ? parv[1] : "<No reason given>");
@@ -903,6 +907,7 @@ void _modinit(module_t * m)
 	pcommand_add("KICK", m_kick);
 	pcommand_add("REMOVE", m_kick);	/* same net result */
 	pcommand_add("KILL", m_kill);
+	pcommand_add("COLLIDE", m_kill); /* same net result */
 	pcommand_add("SQUIT", m_squit);
 	pcommand_add("SERVER", m_server);
 	pcommand_add("STATS", m_stats);
