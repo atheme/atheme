@@ -1,3 +1,12 @@
+jilles      2005/10/25 14:22:07 UTC	(20051025-3191)
+  Log:
+  Add a small overview of the hook system.
+  
+
+  Changes:	Modified:
+  +36 -0	trunk/doc/HOOKS (File Added) 
+
+
 jilles      2005/10/25 13:55:01 UTC	(20051025-3189)
   Log:
   Add Id tag.
