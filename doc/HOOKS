@@ -1,4 +1,4 @@
-$Id: HOOKS 3191 2005-10-25 14:22:07Z jilles $
+$Id: HOOKS 3201 2005-10-25 17:57:42Z alambert $
 
 Atheme hooks system
 
@@ -21,7 +21,7 @@ channel_add        channel_t *
 channel_delete     channel_t *
 channel_join       chanuser_t *
 channel_part       chanuser_t *
-topic_set          channel_t *
+channel_topic      channel_t *
 user_add           user_t *
 user_delete        user_t *
 user_deoper        user_t *
