@@ -1,3 +1,14 @@
+jilles      2005/10/25 22:48:47 UTC	(20051025-3205)
+  Log:
+  Support COLLIDE (some kind of quieter form of kill
+  designed for services) by treating it as KILL (with
+  optional reason field).
+  
+
+  Changes:	Modified:
+  +5 -0		trunk/protocol/hyperion.c (File Modified) 
+
+
 jilles      2005/10/25 22:22:40 UTC	(20051025-3203)
   Log:
   Make services be reintroduced and rejoin all channels they

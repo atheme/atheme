@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3135 2005-10-22 22:58:37Z jilles $
+ * $Id: node.c 3207 2005-10-25 23:44:23Z jilles $
  */
 
 #include "atheme.h"
@@ -781,6 +781,17 @@ chanban_t *chanban_find(channel_t *chan, char *mask)
 	}
 
 	return NULL;
+}
+
+void chanban_clear(channel_t *chan)
+{
+	node_t *n, *tn;
+
+	LIST_FOREACH_SAFE(n, tn, chan->bans.head)
+	{
+		/* inefficient but avoids code duplication -- jilles */
+		chanban_delete(n->data);
+	}
 }
 
 /**********************
