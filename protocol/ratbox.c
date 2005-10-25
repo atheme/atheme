@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 3203 2005-10-25 22:22:40Z jilles $
+ * $Id: ratbox.c 3209 2005-10-25 23:48:54Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 3203 2005-10-25 22:22:40Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 3209 2005-10-25 23:48:54Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -450,10 +450,15 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 	char *userv[256];
 	uint8_t i;
 	time_t ts;
+	server_t *source_server;
 
 	if (origin)
 	{
 		/* :origin SJOIN ts chan modestr [key or limits] :users */
+		source_server = server_find(origin);
+		if (source_server == NULL)
+			return;
+
 		modev[0] = parv[2];
 
 		if (parc > 4)
@@ -479,6 +484,9 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 			 * to be done to the channel:  reset all modes to nothing, remove
 			 * all status modes on known users on the channel (including ours),
 			 * and set the new TS.
+			 *
+			 * if the source does TS6, also remove all bans
+			 * note that JOIN does not do this
 			 */
 
 			c->modes = 0;
@@ -486,6 +494,9 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 			if (c->key)
 				free(c->key);
 			c->key = NULL;
+
+			if (source_server->sid != NULL)
+				chanban_clear(c);
 
 			LIST_FOREACH(n, c->members.head)
 			{

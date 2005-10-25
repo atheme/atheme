@@ -1,3 +1,14 @@
+jilles      2005/10/25 23:44:23 UTC	(20051025-3207)
+  Log:
+  Add void chanban_clear(channel_t *chan) to clear
+  a channel's ban list.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/extern.h (File Modified) 
+  +11 -0	trunk/src/node.c (File Modified) 
+
+
 jilles      2005/10/25 22:48:47 UTC	(20051025-3205)
   Log:
   Support COLLIDE (some kind of quieter form of kill
