@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 3199 2005-10-25 17:57:14Z alambert $
+ * $Id: ptasks.c 3203 2005-10-25 22:22:40Z jilles $
  */
 
 #include "atheme.h"
@@ -285,6 +285,37 @@ void handle_topic(channel_t *c, char *setter, time_t ts, char *topic)
 	c->topicts = ts;
 
 	hook_call_event("channel_topic", c);
+}
+
+void handle_kill(char *origin, char *victim, char *reason)
+{
+	char *source;
+	server_t *source_server;
+	user_t *source_user;
+	user_t *u;
+
+	if (origin == NULL)
+		source = me.actual;
+	else if ((source_server = server_find(origin)) != NULL)
+		source = source_server->name;
+	else if ((source_user = user_find(origin)) != NULL)
+		source = source_user->nick;
+	else
+		source = origin;
+
+	u = user_find(victim);
+	if (u == NULL)
+		slog(LG_DEBUG, "handle_kill(): %s killed unknown user %s (%s)", origin, victim, reason);
+	else if (u->server == me.me)
+	{
+		slog(LG_INFO, "handle_kill(): %s killed service %s (%s)", source, u->nick, reason);
+		reintroduce_user(u);
+	}
+	else
+	{
+		slog(LG_DEBUG, "handle_kill(): %s killed user %s (%s)", source, u->nick, reason);
+		user_delete(victim);
+	}
 }
 
 /* Received a message from a user, check if they are flooding

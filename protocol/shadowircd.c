@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for shadowircd-based ircd.
  *
- * $Id: shadowircd.c 3173 2005-10-23 22:49:41Z jilles $
+ * $Id: shadowircd.c 3203 2005-10-25 22:22:40Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/shadowircd.h"
 
-DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 3173 2005-10-23 22:49:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 3203 2005-10-25 22:22:40Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -559,34 +559,9 @@ static void m_kick(char *origin, uint8_t parc, char *parv[])
 
 static void m_kill(char *origin, uint8_t parc, char *parv[])
 {
-	mychan_t *mc;
-	node_t *n;
-	int i;
-
-	slog(LG_DEBUG, "m_kill(): killed user: %s", parv[0]);
-	user_delete(parv[0]);
-
-	if (!irccasecmp(chansvs.nick, parv[0]))
-	{
-		services_init();
-
-		if (config_options.chan)
-			join(config_options.chan, chansvs.nick);
-
-		for (i = 0; i < HASHSIZE; i++)
-		{
-			LIST_FOREACH(n, mclist[i].head)
-			{
-				mc = (mychan_t *)n->data;
-
-				if ((config_options.join_chans) && (mc->chan) && (mc->chan->nummembers >= 1))
-					join(mc->name, chansvs.nick);
-
-				if ((config_options.join_chans) && (!config_options.leave_chans) && (mc->chan) && (mc->chan->nummembers == 0))
-					join(mc->name, chansvs.nick);
-			}
-		}
-	}
+	if (parc < 1)
+		return;
+	handle_kill(origin, parv[0], parc > 1 ? parv[1] : "<No reason given>");
 }
 
 static void m_squit(char *origin, uint8_t parc, char *parv[])

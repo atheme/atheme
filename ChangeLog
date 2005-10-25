@@ -1,3 +1,11 @@
+alambert    2005/10/25 17:57:42 UTC	(20051025-3201)
+  Log:
+  rename topic_set to channel_topic
+
+  Changes:	Modified:
+  +1 -1		trunk/doc/HOOKS (File Modified) 
+
+
 alambert    2005/10/25 17:57:14 UTC	(20051025-3199)
   Log:
   rename topic_set to channel_topic
