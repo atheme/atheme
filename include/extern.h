@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 3183 2005-10-24 00:09:09Z jilles $
+ * $Id: extern.h 3195 2005-10-25 16:35:26Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -218,6 +218,7 @@ E void expire_check(void *arg);
 E void ban(char *sender, char *channel, user_t *user);
 E void join(char *chan, char *nick);
 E void initialize_services(void);
+E void reintroduce_user(user_t *u);
 E void services_init(void);
 E void verbose(mychan_t *mychan, char *fmt, ...);
 E void snoop(char *fmt, ...);

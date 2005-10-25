@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 3185 2005-10-24 00:25:23Z jilles $
+ * $Id: services.c 3195 2005-10-25 16:35:26Z jilles $
  */
 
 #include "atheme.h"
@@ -92,6 +92,40 @@ void services_init(void)
 			introduce_nick(svs->name, svs->user, svs->host, svs->real, svs->uid);
 			if (config_options.chan != NULL)
 				join(config_options.chan, svs->name);
+		}
+	}
+}
+
+/* reintroduce a service e.g. after it's been killed -- jilles */
+void reintroduce_user(user_t *u)
+{
+	node_t *n;
+	channel_t *c;
+	/*char chname[256];*/
+	service_t *svs;
+
+	svs = find_service(u->nick);
+	if (svs == NULL)
+	{
+		slog(LG_DEBUG, "tried to reintroduce_user non-service %s", u->nick);
+		return;
+	}
+	introduce_nick(u->nick, u->user, u->host, svs->real, u->uid);
+	LIST_FOREACH(n, u->channels.head)
+	{
+		c = ((chanuser_t *)n->data)->chan;
+		if (LIST_LENGTH(&c->members) > 1)
+			join_sts(c, u, 0, channel_modes(c, TRUE));
+		else
+		{
+			/* channel will have been destroyed... */
+			/* XXX ban desync between services and ircd */
+			join_sts(c, u, 1, channel_modes(c, TRUE));
+#if 0
+			strlcpy(chname, c->name, sizeof chname);
+			chanuser_delete(c, u);
+			join(chname, u->nick);
+#endif
 		}
 	}
 }

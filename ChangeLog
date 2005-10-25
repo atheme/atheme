@@ -1,3 +1,13 @@
+jilles      2005/10/25 15:34:52 UTC	(20051025-3193)
+  Log:
+  Add a check whether mychan and myuser are found when
+  reading a chanacs entry.
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/backend/flatfile.c (File Modified) 
+
+
 jilles      2005/10/25 14:22:07 UTC	(20051025-3191)
   Log:
   Add a small overview of the hook system.
