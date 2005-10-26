@@ -1,3 +1,12 @@
+jilles      2005/10/26 10:36:26 UTC	(20051026-3217)
+  Log:
+  Add forgotten snprintf buffer length argument.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/identify.c (File Modified) 
+
+
 jilles      2005/10/26 00:56:59 UTC	(20051026-3215)
   Log:
   Send GLOBOPS from the server instead of from

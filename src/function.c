@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 3089 2005-10-22 08:17:12Z alambert $
+ * $Id: function.c 3219 2005-10-26 19:43:46Z jilles $
  */
 
 #include "atheme.h"
@@ -428,6 +428,9 @@ void sendemail(char *what, const char *param, int type)
 	FILE *out;
 	time_t t;
 	struct tm tm;
+	int pipfds[2];
+	pid_t pid;
+	int status;
 
 	if (!(mu = myuser_find(what)))
 		return;
@@ -476,7 +479,30 @@ void sendemail(char *what, const char *param, int type)
 	
 	/* now set up the email */
 	sprintf(cmdbuf, "%s %s", me.mta, email);
-	out = popen(cmdbuf, "w");
+	if (pipe(pipfds) < 0)
+		return;
+	switch (pid = fork())
+	{
+		case -1:
+			return;
+		case 0:
+			close(pipfds[1]);
+			dup2(pipfds[0], 0);
+			switch (fork())
+			{
+				/* fork again to avoid zombies -- jilles */
+				case -1:
+					_exit(255);
+				case 0:
+					execl("/bin/sh", "sh", "-c", cmdbuf, NULL);
+					_exit(255);
+				default:
+					_exit(0);
+			}
+	}
+	close(pipfds[0]);
+	waitpid(pid, &status, 0);
+	out = fdopen(pipfds[1], "w");
 
 	fprintf(out, "From: %s\n", from);
 	fprintf(out, "To: %s\n", to);
@@ -510,7 +536,10 @@ void sendemail(char *what, const char *param, int type)
 	}
 
 	fprintf(out, ".\n");
-	pclose(out);
+	if (ferror(out))
+		slog(LG_ERROR, "sendemail(): mta failure");
+	if (fclose(out) < 0)
+		slog(LG_ERROR, "sendemail(): mta failure");
 }
 
 /* various access level checkers */
