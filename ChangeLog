@@ -1,3 +1,14 @@
+jilles      2005/10/26 00:56:59 UTC	(20051026-3215)
+  Log:
+  Send GLOBOPS from the server instead of from
+  chanserv for dreamforge and sorcery.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/dreamforge.c (File Modified) 
+  +1 -1		trunk/protocol/sorcery.c (File Modified) 
+
+
 jilles      2005/10/26 00:52:29 UTC	(20051026-3213)
   Log:
   Bahamut accepts GLOBOPS from U:lined servers

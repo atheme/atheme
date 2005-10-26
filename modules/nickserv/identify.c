@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY function.
  *
- * $Id: identify.c 3197 2005-10-25 17:55:04Z nenolod $
+ * $Id: identify.c 3217 2005-10-26 10:36:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/identify", FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 3197 2005-10-25 17:55:04Z nenolod $",
+	"$Id: identify.c 3217 2005-10-26 10:36:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -226,7 +226,7 @@ static void ns_cmd_identify(char *origin)
 
 	/* record the failed attempts */
 	/* note that we reuse this buffer later when warning opers about failed logins */
-	snprintf(buf, "%s!%s@%s", u->nick, u->user, u->vhost);
+	snprintf(buf, sizeof buf, "%s!%s@%s", u->nick, u->user, u->vhost);
 
 	/* increment fail count */
 	if (md_failnum && (atoi(md_failnum->value) > 0))
