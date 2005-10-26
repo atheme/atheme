@@ -1,3 +1,12 @@
+jilles      2005/10/26 00:47:49 UTC	(20051026-3211)
+  Log:
+  Bahamut clears bans and topic on lowerTS SJOIN.
+  
+
+  Changes:	Modified:
+  +4 -0		trunk/protocol/bahamut.c (File Modified) 
+
+
 jilles      2005/10/25 23:48:54 UTC	(20051025-3209)
   Log:
   Clear the channel ban list on a lowerTS SJOIN from

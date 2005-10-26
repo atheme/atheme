@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: bahamut.c 3211 2005-10-26 00:47:49Z jilles $
+ * $Id: bahamut.c 3213 2005-10-26 00:52:29Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/bahamut.h"
 
-DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 3211 2005-10-26 00:47:49Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 3213 2005-10-26 00:52:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -115,7 +115,7 @@ static void bahamut_wallops(char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s GLOBOPS :%s", chansvs.nick, buf);
+	sts(":%s GLOBOPS :%s", me.name, buf);
 }
 
 /* join a channel */
