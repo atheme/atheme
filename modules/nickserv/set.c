@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 2739 2005-10-07 00:49:45Z jilles $
+ * $Id: set.c 3221 2005-10-26 20:20:32Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 2739 2005-10-07 00:49:45Z jilles $",
+	"$Id: set.c 3221 2005-10-26 20:20:32Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -223,6 +223,12 @@ static void ns_set_emailmemos(char *origin, char *name, char *params)
 	if (u->myuser != mu)
 	{
 		notice(nicksvs.nick, origin, "You are not authorized to perform this command.");
+		return;
+	}
+
+	if (mu->flags & MU_WAITAUTH)
+	{
+		notice(nicksvs.nick, origin, "You have to verify your email address before you can enable emailing memos.");
 		return;
 	}
 
