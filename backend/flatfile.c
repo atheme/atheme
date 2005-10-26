@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 3193 2005-10-25 15:34:52Z jilles $
+ * $Id: flatfile.c 3223 2005-10-26 23:31:08Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 3193 2005-10-25 15:34:52Z jilles $",
+	"$Id: flatfile.c 3223 2005-10-26 23:31:08Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -449,7 +449,7 @@ static void flatfile_db_load(void)
 				mc = mychan_find(cachan);
 				mu = myuser_find(causer);
 
-				if (mc == NULL || mu == NULL)
+				if (mc == NULL && mu == NULL && !validhostmask(causer))
 				{
 					slog(LG_ERROR, "db_load(): invalid chanacs (line %d)",linecnt);
 					continue;

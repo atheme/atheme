@@ -1,3 +1,13 @@
+jilles      2005/10/26 20:20:32 UTC	(20051026-3221)
+  Log:
+  Don't allow enabling EMAILMEMOS if they have not verified
+  their email address yet (if that is required).
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/nickserv/set.c (File Modified) 
+
+
 jilles      2005/10/26 19:43:46 UTC	(20051026-3219)
   Log:
   Make the call to the MTA more asynchronous.
