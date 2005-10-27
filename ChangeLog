@@ -1,3 +1,11 @@
+nenolod     2005/10/26 23:31:08 UTC	(20051026-3223)
+  Log:
+  Someone forgot that we have host entires in chanacs too.
+
+  Changes:	Modified:
+  +1 -1		trunk/backend/flatfile.c (File Modified) 
+
+
 jilles      2005/10/26 20:20:32 UTC	(20051026-3221)
   Log:
   Don't allow enabling EMAILMEMOS if they have not verified
