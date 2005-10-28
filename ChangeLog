@@ -1,3 +1,17 @@
+jilles      2005/10/28 23:17:27 UTC	(20051028-3231)
+  Log:
+  Make email rate limiting configurable via
+  emaillimit and emailtime in serverinfo{}.
+  
+
+  Changes:	Modified:
+  +8 -0		trunk/dist/example.conf (File Modified) 
+  +8 -0		trunk/dist/example.userserv.conf (File Modified) 
+  +2 -0		trunk/include/atheme.h (File Modified) 
+  +39 -1	trunk/src/conf.c (File Modified) 
+  +2 -2		trunk/src/function.c (File Modified) 
+
+
 jilles      2005/10/28 21:17:04 UTC	(20051028-3229)
   Log:
   - Considerably clean up the email sending code

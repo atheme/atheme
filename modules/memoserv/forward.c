@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv FORWARD function
  *
- * $Id: forward.c 3229 2005-10-28 21:17:04Z jilles $
+ * $Id: forward.c 3233 2005-10-28 23:39:01Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/forward", FALSE, _modinit, _moddeinit,
-	"$Id: forward.c 3229 2005-10-28 21:17:04Z jilles $",
+	"$Id: forward.c 3233 2005-10-28 23:39:01Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -73,6 +73,12 @@ static void ms_cmd_forward(char *origin)
 		return;
 	}
 	
+	if (mu->flags & MU_WAITAUTH)
+	{
+		notice(memosvs.nick, origin, "You need to verify your email address before you may send memos.");
+		return;
+	}
+
 	/* Check to see if any memos */
 	if (!mu->memos.count)
 	{
