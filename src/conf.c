@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 3129 2005-10-22 21:49:56Z jilles $
+ * $Id: conf.c 3231 2005-10-28 23:17:27Z jilles $
  */
 
 #include "atheme.h"
@@ -44,6 +44,8 @@ static int c_si_loglevel(CONFIGENTRY *);
 static int c_si_maxlogins(CONFIGENTRY *);
 static int c_si_maxusers(CONFIGENTRY *);
 static int c_si_maxchans(CONFIGENTRY *);
+static int c_si_emaillimit(CONFIGENTRY *);
+static int c_si_emailtime(CONFIGENTRY *);
 static int c_si_auth(CONFIGENTRY *);
 static int c_si_mdlimit(CONFIGENTRY *);
 static int c_si_casemapping(CONFIGENTRY *);
@@ -209,7 +211,7 @@ void conf_init(void)
 
 	me.netname = me.adminname = me.adminemail = me.mta = chansvs.nick = config_options.chan = config_options.global = NULL;
 
-	me.recontime = me.restarttime = me.maxlogins = me.maxusers = me.maxchans = config_options.flood_msgs = config_options.flood_time = config_options.kline_time = config_options.commit_interval =
+	me.recontime = me.restarttime = me.maxlogins = me.maxusers = me.maxchans = me.emaillimit = me.emailtime = config_options.flood_msgs = config_options.flood_time = config_options.kline_time = config_options.commit_interval =
 		config_options.expire = 0;
 
 	/* we don't reset loglevel because too much stuff uses it */
@@ -423,6 +425,8 @@ void init_newconf(void)
 	add_conf_item("MAXLOGINS", &conf_si_table, c_si_maxlogins);
 	add_conf_item("MAXUSERS", &conf_si_table, c_si_maxusers);
 	add_conf_item("MAXCHANS", &conf_si_table, c_si_maxchans);
+	add_conf_item("EMAILLIMIT", &conf_si_table, c_si_emaillimit);
+	add_conf_item("EMAILTIME", &conf_si_table, c_si_emailtime);
 	add_conf_item("AUTH", &conf_si_table, c_si_auth);
 	add_conf_item("MDLIMIT", &conf_si_table, c_si_mdlimit);
 	add_conf_item("CASEMAPPING", &conf_si_table, c_si_casemapping);
@@ -814,6 +818,26 @@ static int c_si_maxchans(CONFIGENTRY *ce)
 		PARAM_ERROR(ce);
 
 	me.maxchans = ce->ce_vardatanum;
+
+	return 0;
+}
+
+static int c_si_emaillimit(CONFIGENTRY *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	me.emaillimit = ce->ce_vardatanum;
+
+	return 0;
+}
+
+static int c_si_emailtime(CONFIGENTRY *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	me.emailtime = ce->ce_vardatanum;
 
 	return 0;
 }
@@ -1345,6 +1369,8 @@ static void copy_me(struct me *src, struct me *dst)
 	dst->maxlogins = src->maxlogins;
 	dst->maxusers = src->maxusers;
 	dst->maxchans = src->maxchans;
+	dst->emaillimit = src->emaillimit;
+	dst->emailtime = src->emailtime;
 	dst->auth = src->auth;
 }
 
@@ -1472,6 +1498,18 @@ boolean_t conf_check(void)
 	{
 		slog(LG_INFO, "conf_check(): no `maxchans' set in %s; " "defaulting to 5", config_file);
 		me.maxchans = 5;
+	}
+
+	if (!me.emaillimit)
+	{
+		slog(LG_INFO, "conf_check(): no `emaillimit' set in %s; " "defaulting to 10", config_file);
+		me.emaillimit = 10;
+	}
+
+	if (!me.emailtime)
+	{
+		slog(LG_INFO, "conf_check(): no `emailtime' set in %s; " "defaulting to 300", config_file);
+		me.emailtime = 300;
 	}
 
 	if (me.auth != 0 && me.auth != 1)

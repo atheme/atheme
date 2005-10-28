@@ -1,3 +1,28 @@
+jilles      2005/10/28 21:17:04 UTC	(20051028-3229)
+  Log:
+  - Considerably clean up the email sending code
+  - Rate limit emails, currently to a hard coded 10 messages
+    per 5 minutes
+  - Log all emails sent (sender, type, destination)
+  - Include more tracking information in emails
+  
+
+  Changes:	Modified:
+  +7 -0		trunk/include/atheme.h (File Modified) 
+  +1 -1		trunk/include/extern.h (File Modified) 
+  +5 -3		trunk/modules/memoserv/forward.c (File Modified) 
+  +6 -4		trunk/modules/memoserv/send.c (File Modified) 
+  +17 -9	trunk/modules/nickserv/register.c (File Modified) 
+  +14 -5	trunk/modules/nickserv/return.c (File Modified) 
+  +8 -2		trunk/modules/nickserv/sendpass.c (File Modified) 
+  +9 -2		trunk/modules/nickserv/set.c (File Modified) 
+  +17 -9	trunk/modules/userserv/register.c (File Modified) 
+  +8 -3		trunk/modules/userserv/sendpass.c (File Modified) 
+  +9 -2		trunk/modules/userserv/set.c (File Modified) 
+  +8 -2		trunk/modules/xmlrpc/account.c (File Modified) 
+  +83 -44	trunk/src/function.c (File Modified) 
+
+
 jilles      2005/10/28 10:11:56 UTC	(20051028-3227)
   Log:
   Mention join_chans considerations for more ircds.

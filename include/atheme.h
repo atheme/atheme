@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 3229 2005-10-28 21:17:04Z jilles $
+ * $Id: atheme.h 3231 2005-10-28 23:17:27Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -89,6 +89,8 @@ struct me
   uint16_t maxusers;            /* maximum usernames from one email   */
   uint16_t maxchans;            /* maximum chans from one username    */
   uint8_t auth;                 /* registration auth type             */
+  uint16_t emaillimit;          /* maximum number of emails sent      */
+  uint16_t emailtime;           /* ... in this amount of time         */
 
   time_t uplinkpong;            /* when the uplink last sent a PONG   */
 

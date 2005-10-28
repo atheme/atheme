@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 3229 2005-10-28 21:17:04Z jilles $
+ * $Id: function.c 3231 2005-10-28 23:17:27Z jilles $
  */
 
 #include "atheme.h"
@@ -453,13 +453,13 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	else
 		email = mu->email;
 
-	if (CURRTIME - period_start > 300)
+	if (CURRTIME - period_start > me.emailtime)
 	{
 		emailcount = 0;
 		period_start = CURRTIME;
 	}
 	emailcount++;
-	if (emailcount > 10)
+	if (emailcount > me.emaillimit)
 	{
 		if (CURRTIME - lastwallops > 60)
 		{
