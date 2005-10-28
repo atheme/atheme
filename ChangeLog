@@ -1,3 +1,11 @@
+nenolod     2005/10/27 18:55:47 UTC	(20051027-3225)
+  Log:
+  Fix contrib/ build environment.
+
+  Changes:	Modified:
+  +1 -1		trunk/contrib/Makefile.in (File Modified) 
+
+
 nenolod     2005/10/26 23:31:08 UTC	(20051026-3223)
   Log:
   Someone forgot that we have host entires in chanacs too.

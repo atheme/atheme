@@ -1,4 +1,4 @@
-$Id: IRCD 3189 2005-10-25 13:55:01Z jilles $
+$Id: IRCD 3227 2005-10-28 10:11:56Z jilles $
 
 IRCD-specific notes
 -------------------
@@ -8,16 +8,25 @@ asuka
 
 You need U:lines for services on all servers on the network.
 
+You must enable join_chans as P10 is designed for services to work that way.
+
 bahamut
 -------
 
-You need U:lines for services on all servers on the network.
+You need U:lines/super{} entries for services on all servers on the network.
 NICKIP is not yet supported.
+
+Bahamut is designed for services not joining channels, not having the ability
+to prevent services being kicked/deopped and the like. If you want to use
+fantasy commands, you will have to enable join_chans anyway; beware of bots
+fighting with chanserv.
 
 bircd
 -----
 
 You need U:lines for services on all servers on the network.
+
+You must enable join_chans as P10 is designed for services to work that way.
 
 dreamforge
 ----------
@@ -76,6 +85,10 @@ Only # channels are supported.
 Tklines are used for /os akill but this only works on the server
 Atheme is directly linked to.
 
+It is recommended to enable join_chans, otherwise many things will be sent
+from the server (possibly generating nasty server notices) or chanserv will
+join and part to do the action.
+
 Jupes will use SIDs numerically following services's SID, make sure to
 leave plenty of space.
 
@@ -122,11 +135,12 @@ ultimate3
 
 You will need U:lines for services on all services on the network.
 
-
 undernet
 --------
 
 You need U:lines for services on all servers on the network.
+
+You must enable join_chans as P10 is designed for services to work that way.
 
 unreal
 ------
