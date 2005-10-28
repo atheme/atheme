@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3221 2005-10-26 20:20:32Z jilles $
+ * $Id: set.c 3229 2005-10-28 21:17:04Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3221 2005-10-26 20:20:32Z jilles $",
+	"$Id: set.c 3229 2005-10-28 21:17:04Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -137,10 +137,17 @@ static void ns_set_email(char *origin, char *name, char *params)
 		metadata_add(mu, METADATA_USER, "private:verify:emailchg:newemail", email);
 		metadata_add(mu, METADATA_USER, "private:verify:emailchg:timestamp", itoa(time(NULL)));
 
+		if (!sendemail(u, EMAIL_SETEMAIL, mu, itoa(key)))
+		{
+			notice(nicksvs.nick, origin, "Sending email failed, sorry! Your email address is unchanged.");
+			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:key");
+			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:newemail");
+			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:timestamp");
+			return;
+		}
+
 		notice(nicksvs.nick, origin, "An email containing email changing instructions " "has been sent to \2%s\2.", email);
 		notice(nicksvs.nick, origin, "Your email address will not be changed until you follow " "these instructions.");
-
-		sendemail(mu->name, itoa(key), 3);
 
 		return;
 	}

@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 2543 2005-10-04 05:11:51Z alambert $
+ * $Id: account.c 3229 2005-10-28 21:17:04Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 2543 2005-10-04 05:11:51Z alambert $",
+	"$Id: account.c 3229 2005-10-28 21:17:04Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -33,6 +33,7 @@ boolean_t using_nickserv = FALSE;
  *       fault 6 - too many accounts associated with this email
  *       fault 7 - invalid account name
  *       fault 8 - invalid password
+ *       fault 9 - sending email failed
  *       default - success message
  *
  * Side Effects:
@@ -144,13 +145,18 @@ static int register_account(int parc, char *parv[])
 		char *key = gen_pw(12);
 		mu->flags |= MU_WAITAUTH;
 
+		if (!sendemail(using_nickserv ? nicksvs.me->me : usersvs.me->me, EMAIL_REGISTER, mu, key))
+		{
+			xmlrpc_generic_error(9, "Sending email failed.");
+			myuser_delete(mu->name);
+			return 0;
+		}
+
 		metadata_add(mu, METADATA_USER, "private:verify:register:key", key);
 		metadata_add(mu, METADATA_USER, "private:verify:register:timestamp", itoa(time(NULL)));
 
 		xmlrpc_string(buf, "An email containing nickname activiation instructions has been sent to your email address.");
 		xmlrpc_string(buf, "If you do not complete registration within one day your nickname will expire.");
-
-		sendemail(mu->name, key, 1);
 
 		free(key);
 	}

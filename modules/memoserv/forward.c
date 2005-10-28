@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv FORWARD function
  *
- * $Id: forward.c 2933 2005-10-16 07:03:56Z kog $
+ * $Id: forward.c 3229 2005-10-28 21:17:04Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/forward", FALSE, _modinit, _moddeinit,
-	"$Id: forward.c 2933 2005-10-16 07:03:56Z kog $",
+	"$Id: forward.c 3229 2005-10-28 21:17:04Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -162,9 +162,11 @@ static void ms_cmd_forward(char *origin)
 	/* Should we email this? */
 	if (tmu->flags & MU_EMAILMEMOS)
 	{
-		sendemail(tmu->name, memo->text, 4);
-		notice(memosvs.nick, origin, "Your memo has been emailed to %s.", target);
-		return;
+		if (sendemail(u, EMAIL_MEMO, tmu, memo->text))
+		{
+			notice(memosvs.nick, origin, "Your memo has been emailed to %s.", target);
+			return;
+		}
 	}
 
 	/* Note: do not disclose other nicks they're logged in with

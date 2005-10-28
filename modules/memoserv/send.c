@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv SEND function
  *
- * $Id: send.c 2965 2005-10-17 06:09:03Z pfish $
+ * $Id: send.c 3229 2005-10-28 21:17:04Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/send", FALSE, _modinit, _moddeinit,
-	"$Id: send.c 2965 2005-10-17 06:09:03Z pfish $",
+	"$Id: send.c 3229 2005-10-28 21:17:04Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -137,10 +137,12 @@ static void ms_cmd_send(char *origin)
 
 	/* Should we email this? */
         if (tmu->flags & MU_EMAILMEMOS)
-        {
-		sendemail(tmu->name, memo->text, 4);
-		notice(memosvs.nick, origin, "Your memo has been emailed to %s.", target);
-                return;
+	{
+		if (sendemail(u, EMAIL_MEMO, tmu, memo->text))
+		{
+			notice(memosvs.nick, origin, "Your memo has been emailed to %s.", target);
+                	return;
+		}
         }
 	
 	/* Is the user online? If so, tell them about the new memo. */

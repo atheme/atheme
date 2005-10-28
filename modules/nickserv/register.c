@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 2785 2005-10-09 00:07:16Z nenolod $
+ * $Id: register.c 3229 2005-10-28 21:17:04Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 2785 2005-10-09 00:07:16Z nenolod $",
+	"$Id: register.c 3229 2005-10-28 21:17:04Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -116,13 +116,7 @@ static void ns_cmd_register(char *origin)
 		return;
 	}
 
-	snoop("REGISTER: \2%s\2 to \2%s\2", origin, email);
-
 	mu = myuser_add(origin, pass, email);
-
-	u->myuser = mu;
-	n = node_create();
-	node_add(u, n, &mu->logins);
 	mu->registered = CURRTIME;
 	mu->lastlogin = CURRTIME;
 	mu->flags |= config_options.defuflags;
@@ -135,15 +129,29 @@ static void ns_cmd_register(char *origin)
 		metadata_add(mu, METADATA_USER, "private:verify:register:key", key);
 		metadata_add(mu, METADATA_USER, "private:verify:register:timestamp", itoa(time(NULL)));
 
+		if (!sendemail(u, EMAIL_REGISTER, mu, key))
+		{
+			notice(nicksvs.nick, origin, "Sending email failed, sorry! Registration aborted.");
+			myuser_delete(mu->name);
+			free(key);
+			return;
+		}
+
 		notice(nicksvs.nick, origin, "An email containing nickname activiation instructions has been sent to \2%s\2.", mu->email);
 		notice(nicksvs.nick, origin, "If you do not complete registration within one day your nickname will expire.");
 
-		sendemail(mu->name, key, 1);
-
 		free(key);
 	}
-	else /* only grant ircd registered status if it's verified */
+
+	u->myuser = mu;
+	n = node_create();
+	node_add(u, n, &mu->logins);
+
+	if (!(mu->flags & MU_WAITAUTH))
+		/* only grant ircd registered status if it's verified */
 		ircd_on_login(origin, mu->name, NULL);
+
+	snoop("REGISTER: \2%s\2 to \2%s\2", origin, email);
 
 	notice(nicksvs.nick, origin, "\2%s\2 is now registered to \2%s\2.", mu->name, mu->email);
 	notice(nicksvs.nick, origin, "The password is \2%s\2. Please write this down for future reference.", mu->pass);

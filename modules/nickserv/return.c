@@ -4,7 +4,7 @@
  *
  * Implements NICKSERV RETURN.
  *
- * $Id: return.c 3139 2005-10-22 23:50:56Z pfish $
+ * $Id: return.c 3229 2005-10-28 21:17:04Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/return", FALSE, _modinit, _moddeinit,
-	"$Id: return.c 3139 2005-10-22 23:50:56Z pfish $",
+	"$Id: return.c 3229 2005-10-28 21:17:04Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -39,11 +39,15 @@ void _moddeinit()
 
 static void ns_cmd_return(char *origin)
 {
+	user_t *u = user_find(origin);
 	char *target = strtok(NULL, " ");
 	char *newmail = strtok(NULL, " ");
 	char *newpass = gen_pw(12);
-
+	char oldmail[EMAILLEN];
 	myuser_t *mu;
+
+	if (u == NULL)
+		return;
 
 	if (!target || !newmail)
 	{
@@ -64,11 +68,16 @@ static void ns_cmd_return(char *origin)
 		return;
 	}
 
-	free(mu->email);
-	strlcpy(mu->email, newmail, NICKLEN);
-	free(mu->pass);
+	strlcpy(oldmail, mu->email, EMAILLEN);
+	strlcpy(mu->email, newmail, EMAILLEN);
+	if (!sendemail(u, EMAIL_SENDPASS, mu, newpass))
+	{
+		strlcpy(mu->email, oldmail, EMAILLEN);
+		notice(nicksvs.nick, origin, "Sending email failed, nickname \2%s\2 remains with \2%s\2.",
+				mu->name, mu->email);
+		return;
+	}
 	strlcpy(mu->pass, newpass, NICKLEN);
-	sendemail(mu->name, mu->pass, 2);
 
 	/* prevents users from "stealing it back" in the event of a takeover */
 	metadata_delete(mu, METADATA_USER, "private:verify:emailchg:key");

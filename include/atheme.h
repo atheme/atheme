@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 3129 2005-10-22 21:49:56Z jilles $
+ * $Id: atheme.h 3229 2005-10-28 21:17:04Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -227,9 +227,16 @@ struct help_command_
   void (*func) (char *origin);
 };
 
+/* access levels for commands */
 #define AC_NONE  0
 #define AC_IRCOP 1
 #define AC_SRA   2
+
+/* email types (meaning of param argument) */
+#define EMAIL_REGISTER 1 /* register an account/nick (verification code) */
+#define EMAIL_SENDPASS 2 /* send a password to a user (password) */
+#define EMAIL_SETEMAIL 3 /* change email address (verification code) */
+#define EMAIL_MEMO     4 /* emailed memos (memo text) */
 
 /* bursting timer */
 #if HAVE_GETTIMEOFDAY

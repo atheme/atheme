@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 3219 2005-10-26 19:43:46Z jilles $
+ * $Id: function.c 3229 2005-10-28 21:17:04Z jilles $
  */
 
 #include "atheme.h"
@@ -413,15 +413,14 @@ boolean_t validhostmask(char *host)
  *
  * assume that we are either using NickServ or UserServ
  *
- * If type ==:
- *   1 - nickname REGISTER
- *   2 - nickname SENDPASS
- *   3 - nickname SET:EMAIL
- *   4 - nickname EMAILMEMOS
+ * u is whoever caused this to be called, the corresponding service
+ *   in case of xmlrpc
+ * type is EMAIL_*, see include/atheme.h
+ * mu is the recipient user
+ * param depends on type, also see include/atheme.h
  */
-void sendemail(char *what, const char *param, int type)
+int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 {
-	myuser_t *mu;
 	mychan_t *mc;
 	char *email, *date = NULL;
 	char cmdbuf[512], timebuf[256], to[128], from[128], subject[128];
@@ -431,11 +430,14 @@ void sendemail(char *what, const char *param, int type)
 	int pipfds[2];
 	pid_t pid;
 	int status;
+	int rc;
+	static time_t period_start = 0, lastwallops = 0;
+	static int emailcount = 0;
 
-	if (!(mu = myuser_find(what)))
-		return;
+	if (u == NULL || mu == NULL)
+		return 0;
 
-	if (type == 3)
+	if (type == EMAIL_SETEMAIL)
 	{
 		/* special case for e-mail change */
 		metadata_t *md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:newemail");
@@ -445,46 +447,71 @@ void sendemail(char *what, const char *param, int type)
 		else		/* should NEVER happen */
 		{
 			slog(LG_ERROR, "sendemail(): got email change request, but newemail unset!");
-			return;
+			return 0;
 		}
 	}
 	else
 		email = mu->email;
 
+	if (CURRTIME - period_start > 300)
+	{
+		emailcount = 0;
+		period_start = CURRTIME;
+	}
+	emailcount++;
+	if (emailcount > 10)
+	{
+		if (CURRTIME - lastwallops > 60)
+		{
+			wallops("Rejecting email for %s[%s@%s] due to too high load (type %d to %s <%s>)",
+					u->nick, u->user, u->vhost,
+					type, mu->name, email);
+			slog(LG_ERROR, "sendemail(): rejecting email for %s[%s@%s] (%s) due to too high load (type %d to %s <%s>)",
+					u->nick, u->user, u->vhost,
+					u->ip[0] ? u->ip : u->host,
+					type, mu->name, email);
+			lastwallops = CURRTIME;
+		}
+		return 0;
+	}
+
+	slog(LG_INFO, "sendemail(): email for %s[%s@%s] (%s) type %d to %s <%s>",
+			u->nick, u->user, u->vhost, u->ip[0] ? u->ip : u->host,
+			type, mu->name, email);
+
 	/* set up the email headers */
 	time(&t);
 	tm = *gmtime(&t);
-	strftime(timebuf, sizeof(timebuf) - 1, "%a, %d %b %Y %H:%M:%S", &tm);
+	strftime(timebuf, sizeof(timebuf) - 1, "%a, %d %b %Y %H:%M:%S +0000", &tm);
 
 	date = timebuf;
 
-	if (nicksvs.nick)
-		sprintf(from, "%s <%s@%s>", nicksvs.nick, nicksvs.user, nicksvs.host);
-	else
-		sprintf(from, "%s <%s@%s>", usersvs.nick, usersvs.user, usersvs.host);
+	snprintf(from, sizeof from, "%s automailer <noreply.%s>",
+			me.netname, me.adminemail);
+	snprintf(to, sizeof to, "%s <%s>", mu->name, email);
 
-	sprintf(to, "%s <%s>", mu->name, email);
-
-	if (type == 1)
+	strlcpy(subject, me.netname, sizeof subject);
+	strlcat(subject, " ", sizeof subject);
+	if (type == EMAIL_REGISTER)
 		if (nicksvs.nick)
-			strlcpy(subject, "Nickname Registration", 128);
+			strlcat(subject, "Nickname Registration", sizeof subject);
 		else
-			strlcpy(subject, "Account Registration", 128);
-	else if (type == 2)
-		strlcpy(subject, "Password Retrieval", 128);
-	else if (type == 3)
-		strlcpy(subject, "Change Email Confirmation", 128);
-	else if (type == 4)
-		strlcpy(subject, "New memo notification", 128);
+			strlcat(subject, "Account Registration", sizeof subject);
+	else if (type == EMAIL_SENDPASS)
+		strlcat(subject, "Password Retrieval", sizeof subject);
+	else if (type == EMAIL_SETEMAIL)
+		strlcat(subject, "Change Email Confirmation", sizeof subject);
+	else if (type == EMAIL_MEMO)
+		strlcat(subject, "New memo", sizeof subject);
 	
 	/* now set up the email */
 	sprintf(cmdbuf, "%s %s", me.mta, email);
 	if (pipe(pipfds) < 0)
-		return;
+		return 0;
 	switch (pid = fork())
 	{
 		case -1:
-			return;
+			return 0;
 		case 0:
 			close(pipfds[1]);
 			dup2(pipfds[0], 0);
@@ -510,36 +537,48 @@ void sendemail(char *what, const char *param, int type)
 	fprintf(out, "Date: %s\n\n", date);
 
 	fprintf(out, "%s,\n\n", mu->name);
-	fprintf(out, "Thank you for your interest in the %s IRC network.\n\n", me.netname);
 
-	if (type == 1)
+	if (type == EMAIL_REGISTER)
 	{
-		fprintf(out, "In order to complete your registration, you must send " "the following command on IRC:\n");
-		fprintf(out, "/MSG %s VERIFY REGISTER %s %s\n\n", (nicksvs.nick ? nicksvs.nick : usersvs.nick), what, param);
-		fprintf(out, "Thank you for registering your %s on the %s IRC " "network!\n",
+		fprintf(out, "In order to complete your registration, you must send the following\ncommand on IRC:\n");
+		fprintf(out, "/MSG %s VERIFY REGISTER %s %s\n\n", (nicksvs.nick ? nicksvs.nick : usersvs.nick), mu->name, param);
+		fprintf(out, "Thank you for registering your %s on the %s IRC " "network!\n\n",
 				(nicksvs.nick ? "nickname" : "account"), me.netname);
 	}
-	else if (type == 2)
+	else if (type == EMAIL_SENDPASS)
 	{
-		fprintf(out, "Someone has requested the password for %s be sent to the " "corresponding email address. If you did not request this action " "please let us know.\n\n", what);
-		fprintf(out, "The password for %s is %s. Please write this down for " "future reference.\n", what, param);
+		fprintf(out, "Someone has requested the password for %s be sent to the\n" "corresponding email address. If you did not request this action\n" "please let us know.\n\n", mu->name);
+		fprintf(out, "The password for %s is %s. Please write this down for " "future reference.\n\n", mu->name, param);
 	}
-	else if (type == 3)
+	else if (type == EMAIL_SETEMAIL)
 	{
-		fprintf(out, "In order to complete your email change, you must send " "the following command on IRC:\n");
-		fprintf(out, "/MSG %s VERIFY EMAILCHG %s %s\n\n", (nicksvs.nick ? nicksvs.nick : usersvs.nick), what, param);
+		fprintf(out, "In order to complete your email change, you must send\n" "the following command on IRC:\n");
+		fprintf(out, "/MSG %s VERIFY EMAILCHG %s %s\n\n", (nicksvs.nick ? nicksvs.nick : usersvs.nick), mu->name, param);
 	}
-	if (type == 4)
+	if (type == EMAIL_MEMO)
 	{
-		fprintf(out,"You have a new memo from %s.\n\n", what);
-		fprintf(out,"%s", param);
+		if (u->myuser != NULL)
+			fprintf(out,"You have a new memo from %s.\n\n", u->myuser->name);
+		else
+			/* shouldn't happen */
+			fprintf(out,"You have a new memo from %s (unregistered?).\n\n", u->nick);
+		fprintf(out,"%s\n\n", param);
 	}
 
+	fprintf(out, "Thank you for your interest in the %s IRC network.\n", me.netname);
+	if (u->server != me.me)
+		fprintf(out, "\nThis email was sent due to a command from %s[%s@%s]\nat %s.\n", u->nick, u->user, u->vhost, date);
+	fprintf(out, "If this message is spam, please contact %s\nwith a full copy.\n",
+			me.adminemail);
 	fprintf(out, ".\n");
+	rc = 1;
 	if (ferror(out))
-		slog(LG_ERROR, "sendemail(): mta failure");
+		rc = 0;
 	if (fclose(out) < 0)
+		rc = 0;
+	if (rc == 0)
 		slog(LG_ERROR, "sendemail(): mta failure");
+	return rc;
 }
 
 /* various access level checkers */

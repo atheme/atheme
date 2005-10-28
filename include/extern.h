@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 3207 2005-10-25 23:44:23Z jilles $
+ * $Id: extern.h 3229 2005-10-28 21:17:04Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -71,7 +71,7 @@ E char *timediff(time_t seconds);
 E unsigned long makekey(void);
 E int validemail(char *email);
 E boolean_t validhostmask(char *host);
-E void sendemail(char *what, const char *param, int type);
+E int sendemail(user_t *from, int type, myuser_t *mu, const char *param);
 
 E boolean_t is_founder(mychan_t *mychan, myuser_t *myuser);
 E boolean_t is_successor(mychan_t *mychan, myuser_t *myuser);
