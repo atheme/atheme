@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using MySQL.
  *
- * $Id: mysql.c 3241 2005-10-29 20:48:51Z alambert $
+ * $Id: mysql.c 3243 2005-10-29 20:57:23Z alambert $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/mysql", TRUE, _modinit, NULL,
-	"$Id: mysql.c 3241 2005-10-29 20:48:51Z alambert $",
+	"$Id: mysql.c 3243 2005-10-29 20:57:23Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -149,7 +149,7 @@ static void mysql_db_save(void *arg)
 	}
 
 	/* safety */
-	/*safe_query("BEGIN");*/
+	safe_query("BEGIN");
 
 	/* clear everything out. */
 	safe_query("TRUNCATE TABLE ACCOUNTS");
@@ -342,7 +342,7 @@ static void mysql_db_save(void *arg)
 	}
 
 	/* done, commit */
-	/*safe_query("COMMIT");*/
+	safe_query("COMMIT");
 }
 
 /* loads atheme.db */

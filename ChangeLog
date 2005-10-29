@@ -1,3 +1,14 @@
+alambert    2005/10/29 20:48:51 UTC	(20051029-3241)
+  Log:
+  remove ENTRYMSG, URL columns from CHANNELS; ensure MySQL uses transaction-safe InnoDB tables; change some VARCHARs to TEXT
+
+  Changes:	Modified:
+  +17 -19	trunk/SQL/atheme_init.mysql (File Modified) 
+  +9 -11	trunk/SQL/atheme_init.pgsql (File Modified) 
+  +2 -9		trunk/backend/mysql.c (File Modified) 
+  +2 -9		trunk/backend/postgresql.c (File Modified) 
+
+
 alambert    2005/10/29 20:45:56 UTC	(20051029-3239)
   Log:
   add information on changing column types
