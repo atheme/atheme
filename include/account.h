@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 3127 2005-10-22 21:37:12Z pfish $
+ * $Id: account.h 3235 2005-10-29 00:21:03Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -42,6 +42,8 @@ struct myuser_
   
   list_t memos; /* store memos */
   uint8_t memoct_new;
+  uint8_t memo_ratelimit_num; /* memos sent recently */
+  time_t memo_ratelimit_time; /* last time a memo was sent */
   list_t memo_ignores;
 };
 
@@ -56,6 +58,10 @@ struct myuser_
 
 #define MU_IRCOP       0x00001000
 #define MU_SRA         0x00002000
+
+/* memoserv rate limiting parameters */
+#define MEMO_MAX_NUM   5
+#define MEMO_MAX_TIME  180
 
 struct mychan_
 {

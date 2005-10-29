@@ -1,3 +1,13 @@
+jilles      2005/10/28 23:39:01 UTC	(20051028-3233)
+  Log:
+  Require verified email address to send memos.
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/memoserv/forward.c (File Modified) 
+  +6 -0		trunk/modules/memoserv/send.c (File Modified) 
+
+
 jilles      2005/10/28 23:17:27 UTC	(20051028-3231)
   Log:
   Make email rate limiting configurable via
