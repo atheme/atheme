@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 3241 2005-10-29 20:48:51Z alambert $
+ * $Id: postgresql.c 3245 2005-10-29 21:44:39Z alambert $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 3241 2005-10-29 20:48:51Z alambert $",
+	"$Id: postgresql.c 3245 2005-10-29 21:44:39Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -377,9 +377,8 @@ static void postgresql_db_load(void)
 	}
 
 	PQclear(res);
-	res = safe_query("SELECT ID, NAME, FOUNDER, REGISTERED, LASTUSED, FLAGS, "
-				"MLOCK_ON, MLOCK_OFF, MLOCK_LIMIT, MLOCK_KEY, "
-				"URL, ENTRYMSG FROM CHANNELS;");
+	res = safe_query("SELECT ID, NAME, FOUNDER, REGISTERED, LASTUSED, FLAGS, MLOCK_ON, "
+				"MLOCK_OFF, MLOCK_LIMIT, MLOCK_KEY, FROM CHANNELS;");
 	mcin = PQntuples(res);
 
 	for (i = 0; i < mcin; i++)
@@ -408,12 +407,6 @@ static void postgresql_db_load(void)
 		mc->mlock_off = atoi(PQgetvalue(res, i, 7));
 		mc->mlock_limit = atoi(PQgetvalue(res, i, 8));
 		mc->mlock_key = sstrdup(PQgetvalue(res, i, 9));
-
-		if (PQgetvalue(res, i, 10) && (*PQgetvalue(res, i, 10) != '\0'))
-			metadata_add(mc, METADATA_CHANNEL, "url", PQgetvalue(res, i, 10));
-		if (PQgetvalue(res, i, 11) && (*PQgetvalue(res, i, 11) != '\0'))
-			metadata_add(mc, METADATA_CHANNEL, "private:entrymsg", PQgetvalue(res, i, 11));
-
 
 		/* SELECT * FROM CHANNEL_ACCESS WHERE PARENT=21 */
 		res2 = safe_query("SELECT ID, PARENT, ACCOUNT, PERMISSIONS "

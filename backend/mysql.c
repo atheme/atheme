@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using MySQL.
  *
- * $Id: mysql.c 3243 2005-10-29 20:57:23Z alambert $
+ * $Id: mysql.c 3245 2005-10-29 21:44:39Z alambert $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/mysql", TRUE, _modinit, NULL,
-	"$Id: mysql.c 3243 2005-10-29 20:57:23Z alambert $",
+	"$Id: mysql.c 3245 2005-10-29 21:44:39Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -513,12 +513,6 @@ static void mysql_db_load(void)
 		mc->mlock_off = atoi(row[7]);
 		mc->mlock_limit = atoi(row[8]);
 		mc->mlock_key = sstrdup(row[9]);
-
-		if (row[10] && (*row[10] != '\0'))
-			metadata_add(mc, METADATA_CHANNEL, "url", row[10]);
-		if (row[11] && (*row[11] != '\0'))
-			metadata_add(mc, METADATA_CHANNEL, "private:entrymsg", row[11]);
-
 
 		/* SELECT * FROM CHANNEL_ACCESS WHERE PARENT=21 */
 		res2 = safe_query("SELECT * WHERE PARENT='%s'", row[0]);

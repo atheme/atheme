@@ -1,3 +1,11 @@
+alambert    2005/10/29 20:57:23 UTC	(20051029-3243)
+  Log:
+  make MySQL use transactions
+
+  Changes:	Modified:
+  +2 -2		trunk/backend/mysql.c (File Modified) 
+
+
 alambert    2005/10/29 20:48:51 UTC	(20051029-3241)
   Log:
   remove ENTRYMSG, URL columns from CHANNELS; ensure MySQL uses transaction-safe InnoDB tables; change some VARCHARs to TEXT
