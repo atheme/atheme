@@ -29,6 +29,23 @@ converted to metadata. Then, it is safe to drop those columns.
 Note also that the FAILNUM, LASTFAIL, and LASTFAILON columns in the
 ACCOUNTS table have been removed.
 
+The PostgreSQL FAQ has this to say on changing a column's data type:
+
+	Changing the data type of a column can be done easily in 8.0
+	and later with ALTER TABLE ALTER COLUMN TYPE.
+
+	In earlier releases, do this:
+
+	BEGIN;
+	 ALTER TABLE tab ADD COLUMN new_col new_data_type;
+	 UPDATE tab SET new_col = CAST(old_col AS new_data_type);
+	 ALTER TABLE tab DROP COLUMN old_col;
+	COMMIT;
+
+	You might then want to do VACUUM FULL tab to reclaim
+	the disk space used by the expired rows.
+
+(http://www.postgresql.org/docs/faqs.FAQ.html#4.3)
 
 MySQL
 -----

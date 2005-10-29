@@ -1,3 +1,12 @@
+alambert    2005/10/29 20:39:09 UTC	(20051029-3237)
+  Log:
+  add notes on SQL support
+
+  Changes:	Modified:
+  +0 -6		trunk/doc/POSTGRESQL (File Deleted) 
+  +41 -0	trunk/doc/SQL (File Added) 
+
+
 jilles      2005/10/29 00:21:03 UTC	(20051029-3235)
   Log:
   Rate limit sending memos. Rate limit is currently hardcoded
