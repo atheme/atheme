@@ -12,7 +12,7 @@ CREATE TABLE ACCOUNTS (
   LASTLOGIN int(11) default '0',
   FLAGS int(11) default '0',
   PRIMARY KEY  (ID)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB;
 
 -- 
 -- Data i tabell `ACCOUNTS`
@@ -28,10 +28,10 @@ CREATE TABLE ACCOUNTS (
 CREATE TABLE ACCOUNT_METADATA (
   ID int(11) NOT NULL auto_increment,
   PARENT int(11) NOT NULL default '0',
-  KEYNAME varchar(255) NOT NULL default '',
-  `VALUE` varchar(255) NOT NULL default '',
+  KEYNAME text NOT NULL default '',
+  `VALUE` text NOT NULL default '',
   PRIMARY KEY  (ID)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB;
 
 -- 
 -- Data i tabell `ACCOUNT_METADATA`
@@ -50,9 +50,9 @@ CREATE TABLE ACCOUNT_MEMOS (
   SENDER varchar(255) NOT NULL default '',
   STATUS int(11) NOT NULL default '0',
   TIME int(11) NOT NULL default '0',
-  TEXT varchar(255) NOT NULL default '',
+  TEXT text NOT NULL default '',
   PRIMARY KEY  (ID)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB;
 
 -- 
 -- Data i tabell `ACCOUNT_MEMOS`
@@ -70,7 +70,7 @@ CREATE TABLE ACCOUNT_MEMO_IGNORES (
   PARENT int(11) NOT NULL default '0',
   TARGET varchar(255) NOT NULL default '',
   PRIMARY KEY  (ID)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB;
 
 -- --------------------------------------------------------
 
@@ -89,10 +89,8 @@ CREATE TABLE CHANNELS (
   MLOCK_OFF int(11) NOT NULL default '0',
   MLOCK_LIMIT int(11) NOT NULL default '0',
   MLOCK_KEY varchar(255) NOT NULL default '',
-  URL varchar(255) default NULL,
-  ENTRYMSG varchar(255) default NULL,
   PRIMARY KEY  (ID)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB;
 
 -- 
 -- Data i tabell `CHANNELS`
@@ -111,7 +109,7 @@ CREATE TABLE CHANNEL_ACCESS (
   ACCOUNT varchar(255) NOT NULL default '',
   PERMISSIONS varchar(255) NOT NULL default '',
   PRIMARY KEY  (ID)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB;
 
 -- 
 -- Data i tabell `CHANNEL_ACCESS`
@@ -127,10 +125,10 @@ CREATE TABLE CHANNEL_ACCESS (
 CREATE TABLE CHANNEL_ACCESS_METADATA (
   ID int(11) NOT NULL auto_increment,
   PARENT int(11) NOT NULL default '0',
-  KEYNAME varchar(255) NOT NULL default '',
-  `VALUE` varchar(255) NOT NULL default '',
+  KEYNAME text NOT NULL default '',
+  `VALUE` text NOT NULL default '',
   PRIMARY KEY  (ID)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB;
 
 -- 
 -- Data i tabell `CHANNEL_ACCESS_METADATA`
@@ -146,10 +144,10 @@ CREATE TABLE CHANNEL_ACCESS_METADATA (
 CREATE TABLE CHANNEL_METADATA (
   ID int(11) NOT NULL auto_increment,
   PARENT int(11) NOT NULL default '0',
-  KEYNAME varchar(255) NOT NULL default '',
-  `VALUE` varchar(255) NOT NULL default '',
+  KEYNAME text NOT NULL default '',
+  `VALUE` text NOT NULL default '',
   PRIMARY KEY  (ID)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB;
 
 -- 
 -- Data i tabell `CHANNEL_METADATA`
@@ -169,9 +167,9 @@ CREATE TABLE KLINES (
   DURATION int(11) default NULL,
   SETTIME int(11) NOT NULL default '0',
   SETTER varchar(255) NOT NULL default '',
-  REASON varchar(255) NOT NULL default '',
+  REASON text NOT NULL default '',
   PRIMARY KEY  (ID)
-) ENGINE=MyISAM;
+) ENGINE=InnoDB;
 
 -- 
 -- Data i tabell `KLINES`

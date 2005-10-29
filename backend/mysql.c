@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using MySQL.
  *
- * $Id: mysql.c 3097 2005-10-22 08:57:37Z nenolod $
+ * $Id: mysql.c 3241 2005-10-29 20:48:51Z alambert $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/mysql", TRUE, _modinit, NULL,
-	"$Id: mysql.c 3097 2005-10-22 08:57:37Z nenolod $",
+	"$Id: mysql.c 3241 2005-10-29 20:48:51Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -246,16 +246,9 @@ static void mysql_db_save(void *arg)
 			if (mc->mlock_key)
 				escape_string(&ckey, mc->mlock_key, strlen(mc->mlock_key));
 
-			/* OK to clear out legacy "ENTRYMSG" column; it's saved in metadata.
-			 * right now we don't have versioning for postgres. eventually we can
-			 * drop the "ENTRYMSG" column. not too concerned about backwards
-			 * compatibility since this backend is still experimental.  --alambert
-			 *
-			 * ditto for "URL" column and failure logging columns in "ACCOUNTS".
-			 */
 			res = safe_query("INSERT INTO CHANNELS(ID, NAME, FOUNDER, REGISTERED, LASTUSED, "
-					"FLAGS, MLOCK_ON, MLOCK_OFF, MLOCK_LIMIT, MLOCK_KEY, URL, ENTRYMSG) VALUES ("
-					"%d, '%s', '%s', %ld, %ld, %ld, %ld, %ld, %ld, '%s', '', '')", ii,
+					"FLAGS, MLOCK_ON, MLOCK_OFF, MLOCK_LIMIT, MLOCK_KEY) VALUES ("
+					"%d, '%s', '%s', %ld, %ld, %ld, %ld, %ld, %ld, '%s')", ii,
 					cname, cfounder, (long)mc->registered, (long)mc->used, (long)mc->flags,
 					(long)mc->mlock_on, (long)mc->mlock_off, (long)mc->mlock_limit,
 					mc->mlock_key ? ckey : "");

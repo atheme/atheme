@@ -1,3 +1,11 @@
+alambert    2005/10/29 20:45:56 UTC	(20051029-3239)
+  Log:
+  add information on changing column types
+
+  Changes:	Modified:
+  +17 -0	trunk/doc/SQL (File Modified) 
+
+
 alambert    2005/10/29 20:39:09 UTC	(20051029-3237)
   Log:
   add notes on SQL support
