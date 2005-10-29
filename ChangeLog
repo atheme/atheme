@@ -1,3 +1,16 @@
+jilles      2005/10/29 00:21:03 UTC	(20051029-3235)
+  Log:
+  Rate limit sending memos. Rate limit is currently hardcoded
+  to 5 memos in 3 minutes; one needs to not send a memo for
+  that time for the count to reset.
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/include/account.h (File Modified) 
+  +11 -0	trunk/modules/memoserv/forward.c (File Modified) 
+  +11 -0	trunk/modules/memoserv/send.c (File Modified) 
+
+
 jilles      2005/10/28 23:39:01 UTC	(20051028-3233)
   Log:
   Require verified email address to send memos.

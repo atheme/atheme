@@ -1,0 +1,41 @@
+SQL Notes
+---------
+
+Atheme supports SQL databases. SQL is not "live" for a number of
+reasons. Most significantly, better, more portable, and safer
+functionality is provided by Atheme's XML-RPC interface.
+
+Schema files are available in the SQL/ directory.
+
+Note that during 0.3 development, several columns changed from
+VARCHAR to TEXT.
+
+PostgreSQL
+----------
+
+To initialize the database, use:
+
+	psql <database> < atheme_init.sql
+
+
+Upgrade information:
+
+Note that the several aspects of the schema have changed. Some
+information was moved to metadata. The only major issue with this is
+with the ENTRYMSG and URL columns in the CHANNELS table. Run
+0.3beta2 against your database and the values will be automatically
+converted to metadata. Then, it is safe to drop those columns.
+
+Note also that the FAILNUM, LASTFAIL, and LASTFAILON columns in the
+ACCOUNTS table have been removed.
+
+
+MySQL
+-----
+
+The MySQL backend is considered experimental. It has not been
+well-tested.
+
+It is critical that the database engine used supports transactions.
+Specifically, one *cannot* use MyISAM safely; instead, use InnoDB or
+BDB.
