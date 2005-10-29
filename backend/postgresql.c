@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 3245 2005-10-29 21:44:39Z alambert $
+ * $Id: postgresql.c 3247 2005-10-29 21:48:29Z alambert $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 3245 2005-10-29 21:44:39Z alambert $",
+	"$Id: postgresql.c 3247 2005-10-29 21:48:29Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -378,7 +378,7 @@ static void postgresql_db_load(void)
 
 	PQclear(res);
 	res = safe_query("SELECT ID, NAME, FOUNDER, REGISTERED, LASTUSED, FLAGS, MLOCK_ON, "
-				"MLOCK_OFF, MLOCK_LIMIT, MLOCK_KEY, FROM CHANNELS;");
+				"MLOCK_OFF, MLOCK_LIMIT, MLOCK_KEY FROM CHANNELS;");
 	mcin = PQntuples(res);
 
 	for (i = 0; i < mcin; i++)

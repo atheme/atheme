@@ -1,3 +1,12 @@
+alambert    2005/10/29 21:44:39 UTC	(20051029-3245)
+  Log:
+  remove url/entrymsg queries -- thanks pfish
+
+  Changes:	Modified:
+  +0 -6		trunk/backend/mysql.c (File Modified) 
+  +2 -9		trunk/backend/postgresql.c (File Modified) 
+
+
 alambert    2005/10/29 20:57:23 UTC	(20051029-3243)
   Log:
   make MySQL use transactions
