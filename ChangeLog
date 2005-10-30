@@ -1,3 +1,12 @@
+jilles      2005/10/30 22:25:26 UTC	(20051030-3299)
+  Log:
+  Show all uplinks in /stats c (ircops only and no ips).
+  
+
+  Changes:	Modified:
+  +9 -1		trunk/src/ptasks.c (File Modified) 
+
+
 alambert    2005/10/30 21:54:45 UTC	(20051030-3297)
   Log:
   XMLRPC: rename register_account to account.register; same with verify_account

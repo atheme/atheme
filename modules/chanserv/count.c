@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService COUNT functions.
  *
- * $Id: count.c 3251 2005-10-30 04:12:45Z alambert $
+ * $Id: count.c 3301 2005-10-30 23:35:51Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/count", FALSE, _modinit, _moddeinit,
-	"$Id: count.c 3251 2005-10-30 04:12:45Z alambert $",
+	"$Id: count.c 3301 2005-10-30 23:35:51Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -44,7 +44,7 @@ static void cs_cmd_count(char *origin)
 	chanacs_t *ca;
 	mychan_t *mc = mychan_find(chan);
 	user_t *u = user_find(origin);
-	uint8_t vopcnt = 0, aopcnt = 0, hopcnt = 0, sopcnt = 0;
+	uint8_t vopcnt = 0, aopcnt = 0, hopcnt = 0, sopcnt = 0, akickcnt = 0;
 	node_t *n;
 
 	if (!chan)
@@ -75,16 +75,27 @@ static void cs_cmd_count(char *origin)
 	LIST_FOREACH(n, mc->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
-		if (ca->level == CA_VOP)
-			vopcnt++;
-		if (ca->level == CA_HOP)
-			hopcnt++;
-		if (ca->level == CA_AOP)
-			aopcnt++;
-		if (ca->level == CA_SOP)
-			sopcnt++;
-	}
-	notice(chansvs.nick, origin, "%s: VOp: %d, HOp: %d, AOp: %d, SOp: %d", chan, vopcnt, hopcnt, aopcnt, sopcnt);
 
+		switch (ca->level)
+		{
+			case CA_VOP:
+				vopcnt++;
+				break;
+			case CA_HOP:
+				hopcnt++;
+				break;
+			case CA_AOP:
+				aopcnt++;
+				break;
+			case CA_SOP:
+				aopcnt++;
+				break;
+			case CA_AKICK:
+				akickcnt++;
+				break;
+		}
+	}
+	notice(chansvs.nick, origin, "%s: VOp: %d, HOp: %d, AOp: %d, SOp: %d, AKick: %d",
+			chan, vopcnt, hopcnt, aopcnt, sopcnt, akickcnt);
 }
 
