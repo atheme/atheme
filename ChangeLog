@@ -1,3 +1,11 @@
+alambert    2005/10/30 04:21:02 UTC	(20051030-3257)
+  Log:
+  CS WHY: grammar. thanks <matt@stormirc.net>
+
+  Changes:	Modified:
+  +4 -4		trunk/modules/chanserv/why.c (File Modified) 
+
+
 alambert    2005/10/30 04:18:05 UTC	(20051030-3255)
   Log:
   CS FLAGS: remove check -- doesn't work for deleting access
