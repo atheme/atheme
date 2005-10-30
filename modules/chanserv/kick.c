@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: kick.c 3079 2005-10-22 07:03:47Z terminal $
+ * $Id: kick.c 3271 2005-10-30 05:22:09Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/kick", FALSE, _modinit, _moddeinit,
-	"$Id: kick.c 3079 2005-10-22 07:03:47Z terminal $",
+	"$Id: kick.c 3271 2005-10-30 05:22:09Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -108,7 +108,7 @@ static void cs_cmd_kick(char *origin)
 	}
 
 	/* if target is a service, bail. --nenolod */
-	if (u->server == me.me)
+	if (is_internal_client(u))
 		return;
 
 	cu = chanuser_find(mc->chan, u);
@@ -163,8 +163,8 @@ static void cs_cmd_kickban(char *origin)
 	}
 
         /* if target is a service, bail. --nenolod */
-        if (u->server == me.me)
-                return;
+	if (is_internal_client(u))
+		return;
 
 	cu = chanuser_find(mc->chan, u);
 	if (!cu)
@@ -218,7 +218,7 @@ static void cs_fcmd_kick(char *origin, char *chan)
 	}
 
         /* if target is a service, bail. --nenolod */
-        if (u->server == me.me)
+	if (is_internal_client(u))
                 return;
 
 	cu = chanuser_find(mc->chan, u);
@@ -272,7 +272,7 @@ static void cs_fcmd_kickban(char *origin, char *chan)
 	}
 
         /* if target is a service, bail. --nenolod */
-        if (u->server == me.me)
+        if (is_internal_client(u))
                 return;
 
 	cu = chanuser_find(mc->chan, u);

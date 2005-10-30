@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: halfop.c 3079 2005-10-22 07:03:47Z terminal $
+ * $Id: halfop.c 3271 2005-10-30 05:22:09Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/halfop", FALSE, _modinit, _moddeinit,
-	"$Id: halfop.c 3079 2005-10-22 07:03:47Z terminal $",
+	"$Id: halfop.c 3271 2005-10-30 05:22:09Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -118,7 +118,7 @@ static void cs_cmd_halfop(char *origin)
 		}
 	}
 
-	if (tu->server == me.me)
+	if (is_internal_client(tu))
 		return;
 
 	/* SECURE check; we can skip this if sender == target, because we already verified */
@@ -200,7 +200,7 @@ static void cs_cmd_dehalfop(char *origin)
 		}
 	}
 
-	if (tu->server == me.me)
+	if (is_internal_client(tu))
 		return;
 
 	cu = chanuser_find(mc->chan, tu);
@@ -269,7 +269,7 @@ static void cs_fcmd_halfop(char *origin, char *chan)
 			}
 		}
 
-		if (tu->server == me.me)
+		if (is_internal_client(tu))
 			continue;
 
 		/* SECURE check; we can skip this if sender == target, because we already verified */
@@ -346,7 +346,7 @@ static void cs_fcmd_dehalfop(char *origin, char *chan)
 			}
 		}
 
-		if (tu->server == me.me)
+		if (is_internal_client(tu))
 			continue;
 
 		cu = chanuser_find(mc->chan, tu);

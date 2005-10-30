@@ -1,3 +1,11 @@
+alambert    2005/10/30 05:03:13 UTC	(20051030-3269)
+  Log:
+  CS MARK: we don't care if the channel is closed.
+
+  Changes:	Modified:
+  +0 -6		trunk/modules/chanserv/mark.c (File Modified) 
+
+
 alambert    2005/10/30 04:53:03 UTC	(20051030-3267)
   Log:
   CS HOLD: HOLD is an SRA command -- we don't care if the channel is closed
