@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3207 2005-10-25 23:44:23Z jilles $
+ * $Id: node.c 3283 2005-10-30 06:31:44Z alambert $
  */
 
 #include "atheme.h"
@@ -157,9 +157,13 @@ sra_t *sra_add(char *name)
 	{
 		sra->myuser = mu;
 		mu->sra = sra;
+		sra->name = NULL;
 	}
 	else
+	{
 		sra->name = sstrdup(name);
+		sra->myuser = NULL;
+	}
 
 	cnt.sra++;
 
@@ -204,7 +208,7 @@ sra_t *sra_find(myuser_t *myuser)
 	{
 		sra = (sra_t *)n->data;
 
-		if (sra->myuser == myuser)
+		if (sra->myuser && sra->myuser == myuser)
 			return sra;
 	}
 
@@ -220,7 +224,7 @@ sra_t *sra_find_named(char *name)
 	{
 		sra = (sra_t *)n->data;
 
-		if (!strcasecmp(sra->name, name))
+		if (sra->name && !irccasecmp(sra->name, name))
 			return sra;
 	}
 
