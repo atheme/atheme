@@ -1,3 +1,11 @@
+alambert    2005/10/30 23:35:51 UTC	(20051030-3301)
+  Log:
+  CS COUNT: add AKICK; use switch instead of if
+
+  Changes:	Modified:
+  +22 -11	trunk/modules/chanserv/count.c (File Modified) 
+
+
 jilles      2005/10/30 22:25:26 UTC	(20051030-3299)
   Log:
   Show all uplinks in /stats c (ircops only and no ips).
