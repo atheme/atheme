@@ -4,7 +4,7 @@
  *
  * Closing for channels.
  *
- * $Id: close.c 3249 2005-10-30 04:10:57Z alambert $
+ * $Id: close.c 3251 2005-10-30 04:12:45Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/close", FALSE, _modinit, _moddeinit,
-	"$Id: close.c 3249 2005-10-30 04:10:57Z alambert $",
+	"$Id: close.c 3251 2005-10-30 04:12:45Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -207,6 +207,6 @@ static void cs_cmd_close(char *origin)
 	else
 	{
 		notice(chansvs.nick, origin, "Insufficient parameters for \2CLOSE\2.");
-		notice(chansvs.nick, origin, "Usage: CLOSE <#channel> <ON|OFF> [reason]");
+		notice(chansvs.nick, origin, "Usage: CLOSE <#channel> <ON|OFF> [note]");
 	}
 }

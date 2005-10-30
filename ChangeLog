@@ -1,3 +1,15 @@
+alambert    2005/10/30 04:10:57 UTC	(20051030-3249)
+  Log:
+  CS FLAGS: don't allow users to try a _completely_ bogus flag string. Thanks Matt <matt@stormirc.net>.
+
+  Changes:	Modified:
+  +2 -0		trunk/modules/chanserv/akick.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/close.c (File Modified) 
+  +10 -5	trunk/modules/chanserv/count.c (File Modified) 
+  +12 -0	trunk/modules/chanserv/flags.c (File Modified) 
+  +1 -0		trunk/modules/chanserv/xop.c (File Modified) 
+
+
 alambert    2005/10/29 21:48:29 UTC	(20051029-3247)
   Log:
   remove extra comma
