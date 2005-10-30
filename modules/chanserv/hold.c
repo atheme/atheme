@@ -4,7 +4,7 @@
  *
  * Controls noexpire options for channels.
  *
- * $Id: hold.c 3079 2005-10-22 07:03:47Z terminal $
+ * $Id: hold.c 3267 2005-10-30 04:53:03Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/hold", FALSE, _modinit, _moddeinit,
-	"$Id: hold.c 3079 2005-10-22 07:03:47Z terminal $",
+	"$Id: hold.c 3267 2005-10-30 04:53:03Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -64,12 +64,6 @@ static void cs_cmd_hold(char *origin)
 		return;
 	}
 	
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is closed.", target);
-		return;
-	}
-
 	if (!strcasecmp(action, "ON"))
 	{
 		if (mc->flags & MC_HOLD)
