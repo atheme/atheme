@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 3203 2005-10-25 22:22:40Z jilles $
+ * $Id: ptasks.c 3299 2005-10-30 22:25:26Z jilles $
  */
 
 #include "atheme.h"
@@ -58,6 +58,7 @@ void handle_stats(char *origin, char req)
 	user_t *u = user_find(origin);
 	kline_t *k;
 	node_t *n;
+	uplink_t *uplink;
 	int i;
 
 	snoop("STATS:%c: \2%s\2", req, u->nick);
@@ -66,7 +67,14 @@ void handle_stats(char *origin, char req)
 	{
 	  case 'C':
 	  case 'c':
-		  numeric_sts(me.name, 213, CLIENT_NAME(u), "C *@127.0.0.1 A %s %d uplink", (is_ircop(u)) ? curr_uplink->name : "127.0.0.1", curr_uplink->port);
+		  if (!is_ircop(u))
+			  break;
+
+		  LIST_FOREACH(n, uplinks.head)
+		  {
+			  uplink = (uplink_t *)n->data;
+			  numeric_sts(me.name, 213, CLIENT_NAME(u), "C *@127.0.0.1 A %s %d uplink", uplink->name, uplink->port);
+		  }
 		  break;
 
 	  case 'E':

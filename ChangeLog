@@ -1,3 +1,11 @@
+alambert    2005/10/30 21:54:45 UTC	(20051030-3297)
+  Log:
+  XMLRPC: rename register_account to account.register; same with verify_account
+
+  Changes:	Modified:
+  +8 -8		trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 alambert    2005/10/30 21:51:26 UTC	(20051030-3295)
   Log:
   atheme.account.set_metadata: add length checking
