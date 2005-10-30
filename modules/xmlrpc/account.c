@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 3229 2005-10-28 21:17:04Z jilles $
+ * $Id: account.c 3291 2005-10-30 21:23:32Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 3229 2005-10-28 21:17:04Z jilles $",
+	"$Id: account.c 3291 2005-10-30 21:23:32Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -377,6 +377,8 @@ static int do_logout(int parc, char *parv[])
  *       fault 1 - validation failed
  *       fault 2 - unknown account
  *       fault 4 - insufficient parameters
+ *       fault 5 - invalid parameters
+ *       fault 6 - too many entries
  *       default - success message
  *
  * Side Effects:
@@ -402,6 +404,18 @@ static int do_set_metadata(int parc, char *parv[])
 	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
 		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		return 0;
+	}
+
+	if (strchr(parv[2], ':'))
+	{
+		xmlrpc_generic_error(5, "Invalid parameters.");
+		return 0;
+	}
+
+	if (mu->metadata.count >= me.mdlimit)
+	{
+		xmlrpc_generic_error(6, "Metadata table full.");
 		return 0;
 	}
 

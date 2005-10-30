@@ -1,3 +1,19 @@
+jilles      2005/10/30 20:37:14 UTC	(20051030-3289)
+  Log:
+  Change handling of the snoop channel. Join it with all
+  services when it's created on the ircd side, and also
+  with newly added services. Make changing general::chan
+  and rehashing work.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/include/extern.h (File Modified) 
+  +20 -4	trunk/src/conf.c (File Modified) 
+  +3 -0		trunk/src/node.c (File Modified) 
+  +45 -2	trunk/src/services.c (File Modified) 
+  +5 -0		trunk/src/servtree.c (File Modified) 
+
+
 alambert    2005/10/30 07:48:59 UTC	(20051030-3287)
   Log:
   add note to gen_pw() reminding users to free()
