@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 3291 2005-10-30 21:23:32Z alambert $
+ * $Id: account.c 3295 2005-10-30 21:51:26Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 3291 2005-10-30 21:23:32Z alambert $",
+	"$Id: account.c 3295 2005-10-30 21:51:26Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -407,7 +407,8 @@ static int do_set_metadata(int parc, char *parv[])
 		return 0;
 	}
 
-	if (strchr(parv[2], ':'))
+	if (strchr(parv[2], ':')
+		|| (strlen(parv[2]) > 32) || (strlen(parv[3]) > 300))
 	{
 		xmlrpc_generic_error(5, "Invalid parameters.");
 		return 0;

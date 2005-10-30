@@ -1,3 +1,12 @@
+alambert    2005/10/30 21:25:29 UTC	(20051030-3293)
+  Log:
+  SET PROPERTY: fix off-by-one in mdlimit
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/set.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/set.c (File Modified) 
+
+
 alambert    2005/10/30 21:23:32 UTC	(20051030-3291)
   Log:
   XMLRPC atheme.account.set_metadata: don't let users set metadata with keys containing ':'; enforce metadata limit.
