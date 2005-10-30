@@ -1,3 +1,11 @@
+alambert    2005/10/30 04:25:14 UTC	(20051030-3259)
+  Log:
+  CS CLOSE: fix error message
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/close.c (File Modified) 
+
+
 alambert    2005/10/30 04:21:02 UTC	(20051030-3257)
   Log:
   CS WHY: grammar. thanks <matt@stormirc.net>
