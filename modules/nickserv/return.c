@@ -4,7 +4,7 @@
  *
  * Implements NICKSERV RETURN.
  *
- * $Id: return.c 3229 2005-10-28 21:17:04Z jilles $
+ * $Id: return.c 3285 2005-10-30 07:45:20Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/return", FALSE, _modinit, _moddeinit,
-	"$Id: return.c 3229 2005-10-28 21:17:04Z jilles $",
+	"$Id: return.c 3285 2005-10-30 07:45:20Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -42,7 +42,7 @@ static void ns_cmd_return(char *origin)
 	user_t *u = user_find(origin);
 	char *target = strtok(NULL, " ");
 	char *newmail = strtok(NULL, " ");
-	char *newpass = gen_pw(12);
+	char *newpass;
 	char oldmail[EMAILLEN];
 	myuser_t *mu;
 
@@ -68,8 +68,10 @@ static void ns_cmd_return(char *origin)
 		return;
 	}
 
+	newpass = gen_pw(12);
 	strlcpy(oldmail, mu->email, EMAILLEN);
 	strlcpy(mu->email, newmail, EMAILLEN);
+
 	if (!sendemail(u, EMAIL_SENDPASS, mu, newpass))
 	{
 		strlcpy(mu->email, oldmail, EMAILLEN);
@@ -77,7 +79,9 @@ static void ns_cmd_return(char *origin)
 				mu->name, mu->email);
 		return;
 	}
+
 	strlcpy(mu->pass, newpass, NICKLEN);
+	free(newpass);
 
 	/* prevents users from "stealing it back" in the event of a takeover */
 	metadata_delete(mu, METADATA_USER, "private:verify:emailchg:key");

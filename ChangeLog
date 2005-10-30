@@ -1,3 +1,11 @@
+alambert    2005/10/30 06:31:44 UTC	(20051030-3283)
+  Log:
+  SRA: Make sure we know whether to look at sra->myuser or sra->name! Crash reported by <matt@stormirc.net>.
+
+  Changes:	Modified:
+  +6 -2		trunk/src/node.c (File Modified) 
+
+
 alambert    2005/10/30 05:44:02 UTC	(20051030-3281)
   Log:
   ChanServ: minor cleanups
