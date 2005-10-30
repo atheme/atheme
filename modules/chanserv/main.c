@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 3277 2005-10-30 05:35:38Z alambert $
+ * $Id: main.c 3279 2005-10-30 05:41:37Z alambert $
  */
 
 #include "atheme.h"
@@ -12,13 +12,15 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 3277 2005-10-30 05:35:38Z alambert $",
+	"$Id: main.c 3279 2005-10-30 05:41:37Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_join(chanuser_t *cu);
 static void cs_part(chanuser_t *cu);
 static void cs_register(mychan_t *mc);
+static void cs_keeptopic_newchan(channel_t *c);
+static void cs_keeptopic_topicset(channel_t *c);
 
 list_t cs_cmdtree;
 list_t cs_fcmdtree;
@@ -135,9 +137,13 @@ void _modinit(module_t *m)
 	hook_add_event("channel_join");
 	hook_add_event("channel_part");
 	hook_add_event("channel_register");
+	hook_add_event("channel_add");
+	hook_add_event("channel_topic");
 	hook_add_hook("channel_join", (void (*)(void *)) cs_join);
 	hook_add_hook("channel_part", (void (*)(void *)) cs_part);
 	hook_add_hook("channel_register", (void (*)(void *)) cs_register);
+	hook_add_hook("channel_add", (void (*)(void *)) cs_keeptopic_newchan);
+	hook_add_hook("channel_topic", (void (*)(void *)) cs_keeptopic_topicset);
 }
 
 void _moddeinit(void)
@@ -147,6 +153,7 @@ void _moddeinit(void)
 
 	hook_del_hook("channel_join", (void (*)(void *)) cs_join);
 	hook_del_hook("channel_part", (void (*)(void *)) cs_part);
+	hook_del_hook("channel_add", (void (*)(void *)) cs_keeptopic_newchan);
 }
 
 static void cs_join(chanuser_t *cu)
@@ -383,4 +390,99 @@ static void cs_register(mychan_t *mc)
 
 		check_modes(mc, TRUE);
 	}
+}
+
+/* Called on set of a topic */
+static void cs_keeptopic_topicset(channel_t *c)
+{
+	mychan_t *mc;
+	metadata_t *md;
+	char *text;
+
+	mc = mychan_find(c->name);
+
+	if (mc == NULL)
+		return;
+
+	md = metadata_find(mc, METADATA_CHANNEL, "private:topic:text");
+	if (md != NULL)
+	{
+		if (c->topic != NULL && !strcmp(md->value, c->topic))
+			return;
+		metadata_delete(mc, METADATA_CHANNEL, "private:topic:text");
+	}
+
+	if (metadata_find(mc, METADATA_CHANNEL, "private:topic:setter"))
+		metadata_delete(mc, METADATA_CHANNEL, "private:topic:setter");
+
+	if (metadata_find(mc, METADATA_CHANNEL, "private:topic:ts"))
+		metadata_delete(mc, METADATA_CHANNEL, "private:topic:ts");
+
+	if (c->topic && c->topic_setter)
+	{
+		slog(LG_DEBUG, "KeepTopic: topic set for %s by %s: %s", c->name,
+			c->topic_setter, c->topic);
+		metadata_add(mc, METADATA_CHANNEL, "private:topic:setter",
+			c->topic_setter);
+		metadata_add(mc, METADATA_CHANNEL, "private:topic:text",
+			c->topic);
+		metadata_add(mc, METADATA_CHANNEL, "private:topic:ts",
+			itoa(c->topicts));
+	}
+	else
+		slog(LG_DEBUG, "KeepTopic: topic cleared for %s", c->name);
+}
+
+/* Called on creation of a channel */
+static void cs_keeptopic_newchan(channel_t *c)
+{
+	mychan_t *mc;
+	metadata_t *md;
+	char *setter;
+	char *text;
+	time_t channelts;
+	time_t topicts;
+
+
+	if (!(mc = mychan_find(c->name)))
+		return;
+
+	if (!(MC_KEEPTOPIC & mc->flags))
+		return;
+
+/*
+	md = metadata_find(mc, METADATA_CHANNEL, "private:channelts");
+	if (md == NULL)
+		return;
+	channelts = atol(md->value);
+	if (channelts == c->ts)
+	{
+		/* Same channel, let's assume ircd has kept it.
+		 * Probably not a good assumption if the ircd doesn't do
+		 * topic bursting.
+		 * -- jilles */
+	/*
+		slog(LG_DEBUG, "Not doing keeptopic for %s because of equal channelTS", c->name);
+		return;
+	}
+
+ */
+
+	md = metadata_find(mc, METADATA_CHANNEL, "private:topic:setter");
+	if (md == NULL)
+		return;
+	setter = md->value;
+
+	md = metadata_find(mc, METADATA_CHANNEL, "private:topic:text");
+	if (md == NULL)
+		return;
+	text = md->value;
+
+	md = metadata_find(mc, METADATA_CHANNEL, "private:topic:ts");
+	if (md == NULL)
+		return;
+	topicts = atol(md->value);
+
+	handle_topic(c, setter, topicts, text);
+	topic_sts(c->name, setter, topicts, text);
 }

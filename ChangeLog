@@ -1,3 +1,12 @@
+alambert    2005/10/30 05:35:38 UTC	(20051030-3277)
+  Log:
+  ChanServ: move entrymsg, url to main.c to live with our other join activities
+
+  Changes:	Modified:
+  +10 -0	trunk/modules/chanserv/main.c (File Modified) 
+  +0 -37	trunk/modules/chanserv/set.c (File Modified) 
+
+
 alambert    2005/10/30 05:26:34 UTC	(20051030-3275)
   Log:
   CS REGISTER: move joining, checking modes out of register.c (so we won't have to duplicate for XML-RPC registration)

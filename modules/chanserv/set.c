@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3277 2005-10-30 05:35:38Z alambert $
+ * $Id: set.c 3279 2005-10-30 05:41:37Z alambert $
  */
 
 #include "atheme.h"
@@ -12,13 +12,11 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3277 2005-10-30 05:35:38Z alambert $",
+	"$Id: set.c 3279 2005-10-30 05:41:37Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_cmd_set(char *origin);
-static void cs_keeptopic_newchan(channel_t *c);
-static void cs_keeptopic_topicset(channel_t *c);
 
 command_t cs_set = { "SET", "Sets various control flags.",
                         AC_NONE, cs_cmd_set };
@@ -32,10 +30,6 @@ void _modinit(module_t *m)
 	cs_helptree = module_locate_symbol("chanserv/main", "cs_helptree");
 
         command_add(&cs_set, cs_cmdtree);
-	hook_add_event("channel_add");
-	hook_add_event("channel_topic");
-	hook_add_hook("channel_add", (void (*)(void *)) cs_keeptopic_newchan);
-	hook_add_hook("channel_topic", (void (*)(void *)) cs_keeptopic_topicset);
 
 	help_addentry(cs_helptree, "SET FOUNDER", "help/cservice/set_founder", NULL);
 	help_addentry(cs_helptree, "SET MLOCK", "help/cservice/set_mlock", NULL);
@@ -53,7 +47,6 @@ void _modinit(module_t *m)
 void _moddeinit()
 {
 	command_delete(&cs_set, cs_cmdtree);
-	hook_del_hook("channel_add", (void (*)(void *)) cs_keeptopic_newchan);
 
 	help_delentry(cs_helptree, "SET FOUNDER");
 	help_delentry(cs_helptree, "SET MLOCK");
@@ -1024,99 +1017,4 @@ struct set_command_ *set_cmd_find(char *origin, char *command)
 	/* it's a command we don't understand */
 	notice(chansvs.nick, origin, "Invalid command. Please use \2HELP\2 for help.");
 	return NULL;
-}
-
-/* Called on set of a topic */
-static void cs_keeptopic_topicset(channel_t *c)
-{
-	mychan_t *mc;
-	metadata_t *md;
-	char *text;
-
-	mc = mychan_find(c->name);
-
-	if (mc == NULL)
-		return;
-
-	md = metadata_find(mc, METADATA_CHANNEL, "private:topic:text");
-	if (md != NULL)
-	{
-		if (c->topic != NULL && !strcmp(md->value, c->topic))
-			return;
-		metadata_delete(mc, METADATA_CHANNEL, "private:topic:text");
-	}
-
-	if (metadata_find(mc, METADATA_CHANNEL, "private:topic:setter"))
-		metadata_delete(mc, METADATA_CHANNEL, "private:topic:setter");
-
-	if (metadata_find(mc, METADATA_CHANNEL, "private:topic:ts"))
-		metadata_delete(mc, METADATA_CHANNEL, "private:topic:ts");
-
-	if (c->topic && c->topic_setter)
-	{
-		slog(LG_DEBUG, "KeepTopic: topic set for %s by %s: %s", c->name,
-			c->topic_setter, c->topic);
-		metadata_add(mc, METADATA_CHANNEL, "private:topic:setter",
-			c->topic_setter);
-		metadata_add(mc, METADATA_CHANNEL, "private:topic:text",
-			c->topic);
-		metadata_add(mc, METADATA_CHANNEL, "private:topic:ts",
-			itoa(c->topicts));
-	}
-	else
-		slog(LG_DEBUG, "KeepTopic: topic cleared for %s", c->name);
-}
-
-/* Called on creation of a channel */
-static void cs_keeptopic_newchan(channel_t *c)
-{
-	mychan_t *mc;
-	metadata_t *md;
-	char *setter;
-	char *text;
-	time_t channelts;
-	time_t topicts;
-
-
-	if (!(mc = mychan_find(c->name)))
-		return;
-
-	if (!(MC_KEEPTOPIC & mc->flags))
-		return;
-
-/*
-	md = metadata_find(mc, METADATA_CHANNEL, "private:channelts");
-	if (md == NULL)
-		return;
-	channelts = atol(md->value);
-	if (channelts == c->ts)
-	{
-		/* Same channel, let's assume ircd has kept it.
-		 * Probably not a good assumption if the ircd doesn't do
-		 * topic bursting.
-		 * -- jilles */
-	/*
-		slog(LG_DEBUG, "Not doing keeptopic for %s because of equal channelTS", c->name);
-		return;
-	}
-
- */
-
-	md = metadata_find(mc, METADATA_CHANNEL, "private:topic:setter");
-	if (md == NULL)
-		return;
-	setter = md->value;
-
-	md = metadata_find(mc, METADATA_CHANNEL, "private:topic:text");
-	if (md == NULL)
-		return;
-	text = md->value;
-
-	md = metadata_find(mc, METADATA_CHANNEL, "private:topic:ts");
-	if (md == NULL)
-		return;
-	topicts = atol(md->value);
-
-	handle_topic(c, setter, topicts, text);
-	topic_sts(c->name, setter, topicts, text);
 }
