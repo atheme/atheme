@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 3231 2005-10-28 23:17:27Z jilles $
+ * $Id: function.c 3287 2005-10-30 07:48:59Z alambert $
  */
 
 #include "atheme.h"
@@ -18,6 +18,9 @@ FILE *log_file;
 
 char ch[26] = "abcdefghijklmnopqrstuvwxyz";
 
+/* This function uses smalloc() to allocate memory.
+ * You MUST free the result when you are done with it!
+ */
 char *gen_pw(int8_t sz)
 {
 	int8_t i;

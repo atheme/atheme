@@ -1,3 +1,11 @@
+alambert    2005/10/30 07:45:20 UTC	(20051030-3285)
+  Log:
+  NS RETURN: fix memory leak
+
+  Changes:	Modified:
+  +5 -1		trunk/modules/nickserv/return.c (File Modified) 
+
+
 alambert    2005/10/30 06:31:44 UTC	(20051030-3283)
   Log:
   SRA: Make sure we know whether to look at sra->myuser or sra->name! Crash reported by <matt@stormirc.net>.
