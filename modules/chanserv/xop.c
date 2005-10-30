@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 3079 2005-10-22 07:03:47Z terminal $
+ * $Id: xop.c 3249 2005-10-30 04:10:57Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 3079 2005-10-22 07:03:47Z terminal $",
+	"$Id: xop.c 3249 2005-10-30 04:10:57Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -231,6 +231,7 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 			return;
 		}
 
+		/* XXX check if target is too long */
 		target = collapse(target);
 		chanacs_add_host(mc, target, level);
 		verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", origin, target, leveldesc);

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 3079 2005-10-22 07:03:47Z terminal $
+ * $Id: flags.c 3249 2005-10-30 04:10:57Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 3079 2005-10-22 07:03:47Z terminal $",
+	"$Id: flags.c 3249 2005-10-30 04:10:57Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -136,6 +136,12 @@ static void cs_cmd_flags(char *origin)
 			return;
 		}
 
+		if (flags_to_bitmask(flagstr, chanacs_flags, 0x0) == 0x0)
+		{
+			notice(chansvs.nick, origin, "The flag string \2%s\2 is not valid.", flagstr);
+			return;
+		}
+
 		if (!validhostmask(target))
 		{
 			if (!(tmu = myuser_find(target)))
@@ -214,6 +220,12 @@ static void cs_fcmd_flags(char *origin, char *channel)
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is closed.", channel);
+		return;
+	}
+
+	if (flags_to_bitmask(flagstr, chanacs_flags, 0x0) == 0x0)
+	{
+		notice(chansvs.nick, origin, "The flag string \2%s\2 is not valid.", flagstr);
 		return;
 	}
 

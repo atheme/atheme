@@ -1,3 +1,11 @@
+alambert    2005/10/29 21:48:29 UTC	(20051029-3247)
+  Log:
+  remove extra comma
+
+  Changes:	Modified:
+  +1 -1		trunk/backend/postgresql.c (File Modified) 
+
+
 alambert    2005/10/29 21:44:39 UTC	(20051029-3245)
   Log:
   remove url/entrymsg queries -- thanks pfish

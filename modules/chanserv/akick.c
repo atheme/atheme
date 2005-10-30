@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 3079 2005-10-22 07:03:47Z terminal $
+ * $Id: akick.c 3249 2005-10-30 04:10:57Z alambert $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@ static void cs_fcmd_akick(char *origin, char *chan);
 DECLARE_MODULE_V1
 (
 	"chanserv/akick", FALSE, _modinit, _moddeinit,
-	"$Id: akick.c 3079 2005-10-22 07:03:47Z terminal $",
+	"$Id: akick.c 3249 2005-10-30 04:10:57Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -121,6 +121,7 @@ void cs_cmd_akick(char *origin)
 
 			uname = collapse(uname);
 
+			/* XXX */
 			ca2 = chanacs_add_host(mc, uname, CA_AKICK);
 
 			hook_call_event("channel_akick_add", ca2);
@@ -300,6 +301,7 @@ void cs_fcmd_akick(char *origin, char *chan)
 
 			uname = collapse(uname);
 
+			/* XXX */
 			ca2 = chanacs_add_host(mc, uname, CA_AKICK);
 
 			hook_call_event("channel_akick_add", ca2);
