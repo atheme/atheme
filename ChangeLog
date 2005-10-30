@@ -1,3 +1,11 @@
+alambert    2005/10/30 04:41:32 UTC	(20051030-3263)
+  Log:
+  CS xOP: avoid using posessive form of channel
+
+  Changes:	Modified:
+  +5 -5		trunk/modules/chanserv/xop.c (File Modified) 
+
+
 alambert    2005/10/30 04:36:22 UTC	(20051030-3261)
   Log:
   CS REGISTER: check modes immediately on registration

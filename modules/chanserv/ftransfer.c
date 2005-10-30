@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FTRANSFER function.
  *
- * $Id: ftransfer.c 3079 2005-10-22 07:03:47Z terminal $
+ * $Id: ftransfer.c 3265 2005-10-30 04:44:15Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ftransfer", FALSE, _modinit, _moddeinit,
-	"$Id: ftransfer.c 3079 2005-10-22 07:03:47Z terminal $",
+	"$Id: ftransfer.c 3265 2005-10-30 04:44:15Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -65,12 +65,6 @@ static void cs_cmd_ftransfer(char *origin)
 		return;
 	}
 	
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is closed.", name);
-		return;
-	}
-
 	if (tmu == mc->founder)
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is already the founder of \2%s\2.", newfndr, name);
