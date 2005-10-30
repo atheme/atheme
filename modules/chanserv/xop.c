@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 3263 2005-10-30 04:41:32Z alambert $
+ * $Id: xop.c 3273 2005-10-30 05:25:32Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 3263 2005-10-30 04:41:32Z alambert $",
+	"$Id: xop.c 3273 2005-10-30 05:25:32Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -513,5 +513,6 @@ static void cs_xop_do_list(mychan_t *mc, char *origin, uint32_t level)
 				notice(chansvs.nick, origin, "%d: \2%s\2 (not logged in)", ++i, ca->myuser->name);
 		}
 	}
-	notice(chansvs.nick, origin, "Total of \2%d\2 %s in %s list of \2%s\2 list.", i, (i == 1) ? "entry" : "entries", leveldesc, mc->name)
+	/* XXX */
+	notice(chansvs.nick, origin, "Total of \2%d\2 %s in %s list of \2%s\2.", i, (i == 1) ? "entry" : "entries", leveldesc, mc->name);
 }

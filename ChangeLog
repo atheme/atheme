@@ -1,3 +1,15 @@
+alambert    2005/10/30 05:22:09 UTC	(20051030-3271)
+  Log:
+  Use is_internal_client() instead of u->server == me.me
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/clear_users.c (File Modified) 
+  +4 -4		trunk/modules/chanserv/halfop.c (File Modified) 
+  +5 -5		trunk/modules/chanserv/kick.c (File Modified) 
+  +4 -4		trunk/modules/chanserv/op.c (File Modified) 
+  +5 -5		trunk/modules/chanserv/voice.c (File Modified) 
+
+
 alambert    2005/10/30 05:03:13 UTC	(20051030-3269)
   Log:
   CS MARK: we don't care if the channel is closed.
