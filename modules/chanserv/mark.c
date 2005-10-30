@@ -4,7 +4,7 @@
  *
  * Marking for channels.
  *
- * $Id: mark.c 3079 2005-10-22 07:03:47Z terminal $
+ * $Id: mark.c 3269 2005-10-30 05:03:13Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/mark", FALSE, _modinit, _moddeinit,
-	"$Id: mark.c 3079 2005-10-22 07:03:47Z terminal $",
+	"$Id: mark.c 3269 2005-10-30 05:03:13Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -65,12 +65,6 @@ static void cs_cmd_mark(char *origin)
 		return;
 	}
 	
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is closed.", target);
-		return;
-	}
-
 	if (!strcasecmp(action, "ON"))
 	{
 		if (!info)
