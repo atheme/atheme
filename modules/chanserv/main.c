@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 3183 2005-10-24 00:09:09Z jilles $
+ * $Id: main.c 3275 2005-10-30 05:26:34Z alambert $
  */
 
 #include "atheme.h"
@@ -12,12 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 3183 2005-10-24 00:09:09Z jilles $",
+	"$Id: main.c 3275 2005-10-30 05:26:34Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_join(chanuser_t *cu);
 static void cs_part(chanuser_t *cu);
+static void cs_register(mychan_t *mc);
 
 list_t cs_cmdtree;
 list_t cs_fcmdtree;
@@ -133,8 +134,10 @@ void _modinit(module_t *m)
 
 	hook_add_event("channel_join");
 	hook_add_event("channel_part");
+	hook_add_event("channel_register");
 	hook_add_hook("channel_join", (void (*)(void *)) cs_join);
 	hook_add_hook("channel_part", (void (*)(void *)) cs_part);
+	hook_add_hook("channel_register", (void (*)(void *)) cs_register);
 }
 
 void _moddeinit(void)
@@ -359,4 +362,15 @@ static void cs_part(chanuser_t *cu)
 		&& (cu->chan->nummembers <= 2)
 		&& !is_internal_client(cu->user))
 		part(cu->chan->name, chansvs.nick);
+}
+
+static void cs_register(mychan_t *mc)
+{
+	if (mc->chan)
+	{
+		if (config_options.join_chans)
+			join(mc->name, chansvs.nick);
+
+		check_modes(mc, TRUE);
+	}
 }

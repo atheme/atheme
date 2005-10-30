@@ -1,3 +1,11 @@
+alambert    2005/10/30 05:25:32 UTC	(20051030-3273)
+  Log:
+  CS XOP: grammar
+
+  Changes:	Modified:
+  +2 -1		trunk/modules/chanserv/xop.c (File Modified) 
+
+
 alambert    2005/10/30 05:22:09 UTC	(20051030-3271)
   Log:
   Use is_internal_client() instead of u->server == me.me
