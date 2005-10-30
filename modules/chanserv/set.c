@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3281 2005-10-30 05:44:02Z alambert $
+ * $Id: set.c 3293 2005-10-30 21:25:29Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3281 2005-10-30 05:44:02Z alambert $",
+	"$Id: set.c 3293 2005-10-30 21:25:29Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -932,7 +932,7 @@ static void cs_set_property(char *origin, char *name, char *params)
 
         snoop("SET:PROPERTY: \2%s\2: \2%s\2/\2%s\2", mc->name, property, value);
 
-	if (mc->metadata.count > me.mdlimit)
+	if (mc->metadata.count >= me.mdlimit)
 	{
 		notice(chansvs.nick, origin, "Cannot add \2%s\2 to \2%s\2 metadata table, it is full.",
 						property, name);

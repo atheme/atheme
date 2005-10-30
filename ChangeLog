@@ -1,3 +1,11 @@
+alambert    2005/10/30 21:23:32 UTC	(20051030-3291)
+  Log:
+  XMLRPC atheme.account.set_metadata: don't let users set metadata with keys containing ':'; enforce metadata limit.
+
+  Changes:	Modified:
+  +14 -0	trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 jilles      2005/10/30 20:37:14 UTC	(20051030-3289)
   Log:
   Change handling of the snoop channel. Join it with all

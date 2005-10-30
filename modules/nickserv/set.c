@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3229 2005-10-28 21:17:04Z jilles $
+ * $Id: set.c 3293 2005-10-30 21:25:29Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3229 2005-10-28 21:17:04Z jilles $",
+	"$Id: set.c 3293 2005-10-30 21:25:29Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -479,7 +479,7 @@ static void ns_set_property(char *origin, char *name, char *params)
 
 	snoop("SET:PROPERTY: \2%s\2: \2%s\2/\2%s\2", mu->name, property, value);
 
-	if (mu->metadata.count > me.mdlimit)
+	if (mu->metadata.count >= me.mdlimit)
 	{
 		notice(nicksvs.nick, origin, "Cannot add \2%s\2 to \2%s\2 metadata table, it is full.",
 					property, name);
