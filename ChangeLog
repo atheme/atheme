@@ -1,3 +1,11 @@
+alambert    2005/10/30 21:51:26 UTC	(20051030-3295)
+  Log:
+  atheme.account.set_metadata: add length checking
+
+  Changes:	Modified:
+  +2 -1		trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 alambert    2005/10/30 21:25:29 UTC	(20051030-3293)
   Log:
   SET PROPERTY: fix off-by-one in mdlimit

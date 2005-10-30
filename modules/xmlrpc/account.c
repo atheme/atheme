@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 3295 2005-10-30 21:51:26Z alambert $
+ * $Id: account.c 3297 2005-10-30 21:54:45Z alambert $
  */
 
 #include "atheme.h"
@@ -12,14 +12,14 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 3295 2005-10-30 21:51:26Z alambert $",
+	"$Id: account.c 3297 2005-10-30 21:54:45Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 boolean_t using_nickserv = FALSE;
 
 /*
- * atheme.register_account
+ * atheme.account.register
  *
  * XML inputs:
  *       account to register, password, email.
@@ -39,7 +39,7 @@ boolean_t using_nickserv = FALSE;
  * Side Effects:
  *       an account is registered in the system
  */
-static int register_account(int parc, char *parv[])
+static int account_register(int parc, char *parv[])
 {
 	user_t *u;
 	myuser_t *mu, *tmu;
@@ -167,7 +167,7 @@ static int register_account(int parc, char *parv[])
 }
 
 /*
- * atheme.verify_account
+ * atheme.account.verify
  *
  * XML inputs:
  *       requested operation, account name, key
@@ -183,7 +183,7 @@ static int register_account(int parc, char *parv[])
  * Side Effects:
  *       an account-related operation is verified.
  */      
-static int verify_account(int parc, char *parv[])
+static int account_verify(int parc, char *parv[])
 {
 	myuser_t *mu;
 	metadata_t *md;
@@ -432,8 +432,8 @@ void _modinit(module_t *m)
 	if (module_find_published("nickserv/main"))
 		using_nickserv = TRUE;
 
-	xmlrpc_register_method("atheme.register_account", register_account);
-	xmlrpc_register_method("atheme.verify_account", verify_account);	
+	xmlrpc_register_method("atheme.account.register", account_register);
+	xmlrpc_register_method("atheme.account.verify", account_verify);	
 	xmlrpc_register_method("atheme.login", do_login);
         xmlrpc_register_method("atheme.logout", do_logout);
 	xmlrpc_register_method("atheme.account.set_metadata", do_set_metadata);
@@ -441,8 +441,8 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
-	xmlrpc_unregister_method("atheme.register_account");
-	xmlrpc_unregister_method("atheme.verify_account");
+	xmlrpc_unregister_method("atheme.account.register");
+	xmlrpc_unregister_method("atheme.account.verify");
 	xmlrpc_unregister_method("atheme.login");
         xmlrpc_unregister_method("atheme.logout");
 	xmlrpc_unregister_method("atheme.account.set_metadata");
