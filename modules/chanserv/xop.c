@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 3251 2005-10-30 04:12:45Z alambert $
+ * $Id: xop.c 3263 2005-10-30 04:41:32Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 3251 2005-10-30 04:12:45Z alambert $",
+	"$Id: xop.c 3263 2005-10-30 04:41:32Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -26,13 +26,13 @@ static void cs_cmd_aop(char *origin);
 static void cs_cmd_hop(char *origin);
 static void cs_cmd_vop(char *origin);
 
-command_t cs_sop = { "SOP", "Manipulates a channel's SOP list.",
+command_t cs_sop = { "SOP", "Manipulates a channel SOP list.",
                         AC_NONE, cs_cmd_sop };
-command_t cs_aop = { "AOP", "Manipulates a channel's AOP list.",
+command_t cs_aop = { "AOP", "Manipulates a channel AOP list.",
                         AC_NONE, cs_cmd_aop };
-command_t cs_hop = { "HOP", "Manipulates a channel's HOP list.",
+command_t cs_hop = { "HOP", "Manipulates a channel HOP list.",
 			AC_NONE, cs_cmd_hop };
-command_t cs_vop = { "VOP", "Manipulates a channel's VOP list.",
+command_t cs_vop = { "VOP", "Manipulates a channel VOP list.",
                         AC_NONE, cs_cmd_vop };
 
 list_t *cs_cmdtree, *cs_helptree;
@@ -513,5 +513,5 @@ static void cs_xop_do_list(mychan_t *mc, char *origin, uint32_t level)
 				notice(chansvs.nick, origin, "%d: \2%s\2 (not logged in)", ++i, ca->myuser->name);
 		}
 	}
-	notice(chansvs.nick, origin, "Total of \2%d\2 %s in \2%s\2's %s list.", i, (i == 1) ? "entry" : "entries", mc->name, leveldesc);
+	notice(chansvs.nick, origin, "Total of \2%d\2 %s in %s list of \2%s\2 list.", i, (i == 1) ? "entry" : "entries", leveldesc, mc->name)
 }

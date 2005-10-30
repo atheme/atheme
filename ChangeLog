@@ -1,3 +1,11 @@
+alambert    2005/10/30 04:36:22 UTC	(20051030-3261)
+  Log:
+  CS REGISTER: check modes immediately on registration
+
+  Changes:	Modified:
+  +2 -0		trunk/modules/chanserv/register.c (File Modified) 
+
+
 alambert    2005/10/30 04:25:14 UTC	(20051030-3259)
   Log:
   CS CLOSE: fix error message
