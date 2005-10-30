@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ MYACCESS function.
  *
- * $Id: why.c 3079 2005-10-22 07:03:47Z terminal $
+ * $Id: why.c 3257 2005-10-30 04:21:02Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/why", FALSE, _modinit, _moddeinit,
-	"$Id: why.c 3079 2005-10-22 07:03:47Z terminal $",
+	"$Id: why.c 3257 2005-10-30 04:21:02Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -101,22 +101,22 @@ static void cs_cmd_why(char *origin)
 
 		if ((ca->level & CA_AUTOVOICE) == CA_AUTOVOICE)
 			notice(chansvs.nick, origin,
-				"\2%s\2 was granted voice in \2%s\2, because they have the autovoice privilege.", 
+				"\2%s\2 was granted voice in \2%s\2 because they have the autovoice privilege.", 
 				targ, chan);
 
 		if ((ca->level & CA_AUTOHALFOP) == CA_AUTOHALFOP)
 			notice(chansvs.nick, origin,
-				"\2%s\2 was granted halfops in \2%s\2, because they have the autohalfop privilege.",
+				"\2%s\2 was granted halfops in \2%s\2 because they have the autohalfop privilege.",
 				targ, chan);
 
 		if ((ca->level & CA_AUTOOP) == CA_AUTOOP)
 			notice(chansvs.nick, origin,
-				"\2%s\2 was granted channel ops in \2%s\2, because they have the autoop privilege.",
+				"\2%s\2 was granted channel ops in \2%s\2 because they have the autoop privilege.",
 				targ, chan);
 
 		if ((ca->level & CA_AKICK) == CA_AKICK)
 			notice(chansvs.nick, origin,
-				"\2%s\2 was kicked from \2%s\2, because they are on the channel autokick list.",
+				"\2%s\2 was kicked from \2%s\2 because they are on the channel autokick list.",
 				targ, chan);
 	}
 }

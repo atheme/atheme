@@ -1,3 +1,11 @@
+alambert    2005/10/30 04:18:05 UTC	(20051030-3255)
+  Log:
+  CS FLAGS: remove check -- doesn't work for deleting access
+
+  Changes:	Modified:
+  +0 -12	trunk/modules/chanserv/flags.c (File Modified) 
+
+
 alambert    2005/10/30 04:14:02 UTC	(20051030-3253)
   Log:
   CS FLAGS: don't allow users to try a _completely_ bogus flag string. Thanks Matt <matt@stormirc.net>.
