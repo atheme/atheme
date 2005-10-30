@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 3279 2005-10-30 05:41:37Z alambert $
+ * $Id: main.c 3281 2005-10-30 05:44:02Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 3279 2005-10-30 05:41:37Z alambert $",
+	"$Id: main.c 3281 2005-10-30 05:44:02Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -153,7 +153,9 @@ void _moddeinit(void)
 
 	hook_del_hook("channel_join", (void (*)(void *)) cs_join);
 	hook_del_hook("channel_part", (void (*)(void *)) cs_part);
+	hook_del_hook("channel_register", (void (*)(void *)) cs_register);
 	hook_del_hook("channel_add", (void (*)(void *)) cs_keeptopic_newchan);
+	hook_del_hook("channel_topic", (void (*)(void *)) cs_keeptopic_topicset);
 }
 
 static void cs_join(chanuser_t *cu)
@@ -450,7 +452,7 @@ static void cs_keeptopic_newchan(channel_t *c)
 	if (!(MC_KEEPTOPIC & mc->flags))
 		return;
 
-/*
+#if 0
 	md = metadata_find(mc, METADATA_CHANNEL, "private:channelts");
 	if (md == NULL)
 		return;
@@ -461,12 +463,11 @@ static void cs_keeptopic_newchan(channel_t *c)
 		 * Probably not a good assumption if the ircd doesn't do
 		 * topic bursting.
 		 * -- jilles */
-	/*
+
 		slog(LG_DEBUG, "Not doing keeptopic for %s because of equal channelTS", c->name);
 		return;
 	}
-
- */
+#endif
 
 	md = metadata_find(mc, METADATA_CHANNEL, "private:topic:setter");
 	if (md == NULL)

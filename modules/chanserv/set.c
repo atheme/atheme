@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3279 2005-10-30 05:41:37Z alambert $
+ * $Id: set.c 3281 2005-10-30 05:44:02Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3279 2005-10-30 05:41:37Z alambert $",
+	"$Id: set.c 3281 2005-10-30 05:44:02Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -977,7 +977,7 @@ struct set_command_ set_commands[] = {
   { "ENTRYMSG",	  AC_NONE,  cs_set_entrymsg   },
   { "PROPERTY",   AC_NONE,  cs_set_property   },
   { "EMAIL",      AC_NONE,  cs_set_email      },
-  { "KEEPTOPIC",  AC_NONE, cs_set_keeptopic   },
+  { "KEEPTOPIC",  AC_NONE,  cs_set_keeptopic  },
   { "STAFFONLY",  AC_IRCOP, cs_set_staffonly  },
   { NULL, 0, NULL }
 };

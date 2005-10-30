@@ -1,3 +1,12 @@
+alambert    2005/10/30 05:41:37 UTC	(20051030-3279)
+  Log:
+  ChanServ: move keeptopic support to main.c
+
+  Changes:	Modified:
+  +102 -0	trunk/modules/chanserv/main.c (File Modified) 
+  +0 -102	trunk/modules/chanserv/set.c (File Modified) 
+
+
 alambert    2005/10/30 05:35:38 UTC	(20051030-3277)
   Log:
   ChanServ: move entrymsg, url to main.c to live with our other join activities
