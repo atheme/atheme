@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 3195 2005-10-25 16:35:26Z jilles $
+ * $Id: services.c 3289 2005-10-30 20:37:14Z jilles $
  */
 
 #include "atheme.h"
@@ -90,8 +90,51 @@ void services_init(void)
 			else if (!ircd->uses_uid && svs->me->uid[0] != '\0')
 				user_changeuid(svs->me, NULL);
 			introduce_nick(svs->name, svs->user, svs->host, svs->real, svs->uid);
-			if (config_options.chan != NULL)
-				join(config_options.chan, svs->name);
+			/* we'll join config_options.chan later -- jilles */
+		}
+	}
+}
+
+void joinall(char *name)
+{
+	node_t *n;
+	uint32_t i;
+	service_t *svs;
+
+	if (name == NULL)
+		return;
+	for (i = 0; i < HASHSIZE; i++)
+	{
+		LIST_FOREACH(n, services[i].head)
+		{
+			svs = n->data;
+			join(name, svs->name);
+		}
+	}
+}
+
+void partall(char *name)
+{
+	node_t *n;
+	uint32_t i;
+	service_t *svs;
+	mychan_t *mc;
+
+	if (name == NULL)
+		return;
+	mc = mychan_find(name);
+	for (i = 0; i < HASHSIZE; i++)
+	{
+		LIST_FOREACH(n, services[i].head)
+		{
+			svs = n->data;
+			if (svs == chansvs.me && mc != NULL && config_options.join_chans)
+				continue;
+			/* Do not cache this channel_find(), the
+			 * channel may disappear under our feet
+			 * -- jilles */
+			if (chanuser_find(channel_find(name), svs->me))
+				part(name, svs->name);
 		}
 	}
 }

@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3283 2005-10-30 06:31:44Z alambert $
+ * $Id: node.c 3289 2005-10-30 20:37:14Z jilles $
  */
 
 #include "atheme.h"
@@ -655,6 +655,9 @@ channel_t *channel_add(char *name, uint32_t ts)
 	cnt.chan++;
 
 	hook_call_event("channel_add", c);
+
+	if (config_options.chan != NULL && !irccmp(config_options.chan, name))
+		joinall(config_options.chan);
 
 	return c;
 }

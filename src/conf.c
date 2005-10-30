@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 3231 2005-10-28 23:17:27Z jilles $
+ * $Id: conf.c 3289 2005-10-30 20:37:14Z jilles $
  */
 
 #include "atheme.h"
@@ -1389,12 +1389,16 @@ boolean_t conf_rehash(void)
 	struct me *hold_me = scalloc(sizeof(struct me), 1);	/* and keep_me_warm; */
 	sra_t *sra;
 	node_t *n, *tn;
+	char *oldsnoop;
 
 	/* we're rehashing */
 	slog(LG_INFO, "conf_rehash(): rehashing");
 	runflags |= RF_REHASHING;
 
 	copy_me(&me, hold_me);
+
+	oldsnoop = config_options.chan != NULL ? sstrdup(config_options.chan) :
+		NULL;
 
 	/* reset everything */
 	conf_init();
@@ -1409,8 +1413,6 @@ boolean_t conf_rehash(void)
 	/* now reload */
 	conf_parse();
 
-	part(config_options.chan, chansvs.nick);
-
 	/* now recheck */
 	if (!conf_check())
 	{
@@ -1423,12 +1425,26 @@ boolean_t conf_rehash(void)
 		copy_me(hold_me, &me);
 
 		free(hold_me);
+		free(oldsnoop);
 
 		return FALSE;
 	}
 
-	if (config_options.chan)
-		join(config_options.chan, chansvs.nick);
+	if (oldsnoop != NULL || config_options.chan != NULL)
+	{
+		if (config_options.chan == NULL)
+			partall(oldsnoop);
+		else if (oldsnoop == NULL)
+			joinall(config_options.chan);
+		else if (strcmp(oldsnoop, config_options.chan))
+		{
+			partall(oldsnoop);
+			joinall(config_options.chan);
+		}
+	}
+
+	free(hold_me);
+	free(oldsnoop);
 
 	runflags &= ~RF_REHASHING;
 
