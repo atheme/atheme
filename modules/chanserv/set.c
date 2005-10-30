@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3199 2005-10-25 17:57:14Z alambert $
+ * $Id: set.c 3277 2005-10-30 05:35:38Z alambert $
  */
 
 #include "atheme.h"
@@ -12,13 +12,11 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3199 2005-10-25 17:57:14Z alambert $",
+	"$Id: set.c 3277 2005-10-30 05:35:38Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_cmd_set(char *origin);
-static void cs_join_entrymsg(chanuser_t *cu);
-static void cs_join_url(chanuser_t *cu);
 static void cs_keeptopic_newchan(channel_t *c);
 static void cs_keeptopic_topicset(channel_t *c);
 
@@ -34,11 +32,8 @@ void _modinit(module_t *m)
 	cs_helptree = module_locate_symbol("chanserv/main", "cs_helptree");
 
         command_add(&cs_set, cs_cmdtree);
-	hook_add_event("channel_join");
 	hook_add_event("channel_add");
 	hook_add_event("channel_topic");
-	hook_add_hook("channel_join", (void (*)(void *)) cs_join_entrymsg);
-	hook_add_hook("channel_join", (void (*)(void *)) cs_join_url);
 	hook_add_hook("channel_add", (void (*)(void *)) cs_keeptopic_newchan);
 	hook_add_hook("channel_topic", (void (*)(void *)) cs_keeptopic_topicset);
 
@@ -58,8 +53,6 @@ void _modinit(module_t *m)
 void _moddeinit()
 {
 	command_delete(&cs_set, cs_cmdtree);
-	hook_del_hook("channel_join", (void (*)(void *)) cs_join_entrymsg);
-	hook_del_hook("channel_join", (void (*)(void *)) cs_join_url);
 	hook_del_hook("channel_add", (void (*)(void *)) cs_keeptopic_newchan);
 
 	help_delentry(cs_helptree, "SET FOUNDER");
@@ -1031,36 +1024,6 @@ struct set_command_ *set_cmd_find(char *origin, char *command)
 	/* it's a command we don't understand */
 	notice(chansvs.nick, origin, "Invalid command. Please use \2HELP\2 for help.");
 	return NULL;
-}
-
-static void cs_join_entrymsg(chanuser_t *cu)
-{
-	mychan_t *mc;
-	metadata_t *md;
-
-	if (is_internal_client(cu->user))
-		return;
-	
-	if (!(mc = mychan_find(cu->chan->name)))
-		return;
-
-	if ((md = metadata_find(mc, METADATA_CHANNEL, "private:entrymsg")))
-		notice(chansvs.nick, cu->user->nick, "[%s] %s", mc->name, md->value);
-}
-
-static void cs_join_url(chanuser_t *cu)
-{
-	mychan_t *mc;
-	metadata_t *md;
-
-	if (is_internal_client(cu->user))
-		return;
-
-	if (!(mc = mychan_find(cu->chan->name)))
-		return;
-
-	if ((md = metadata_find(mc, METADATA_CHANNEL, "url")))
-		numeric_sts(me.name, 328, cu->user->nick, "%s :%s", mc->name, md->value);
 }
 
 /* Called on set of a topic */

@@ -1,3 +1,12 @@
+alambert    2005/10/30 05:26:34 UTC	(20051030-3275)
+  Log:
+  CS REGISTER: move joining, checking modes out of register.c (so we won't have to duplicate for XML-RPC registration)
+
+  Changes:	Modified:
+  +14 -0	trunk/modules/chanserv/main.c (File Modified) 
+  +0 -5		trunk/modules/chanserv/register.c (File Modified) 
+
+
 alambert    2005/10/30 05:25:32 UTC	(20051030-3273)
   Log:
   CS XOP: grammar
