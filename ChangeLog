@@ -1,3 +1,14 @@
+nenolod     2005/10/31 03:18:47 UTC	(20051031-3323)
+  Log:
+  Remove the callback API. We don't use it.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/libatheme/Makefile.in (File Modified) 
+  +0 -180	trunk/libatheme/callback.c (File Deleted) 
+  +0 -34	trunk/libatheme/callback.h (File Deleted) 
+
+
 jilles      2005/10/31 02:01:47 UTC	(20051031-3321)
   Log:
   In sendq_flush() do not try further chunks if write()

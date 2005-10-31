@@ -4,7 +4,7 @@
  *
  * This file contains the block allocator.
  *
- * $Id: balloc.c 3029 2005-10-19 05:55:21Z nenolod $
+ * $Id: balloc.c 3325 2005-10-31 03:27:49Z nenolod $
  */
 
 #include <org.atheme.claro.base>
@@ -61,8 +61,7 @@ static void *mmap(void *hint, size_t len, uint32_t prot,
 	if (!ptr)
 		blockheap_fail("smalloc() failed.");
 	
-	// no 0xbaadf00d PLEASE!
-	memset( ptr, 0, len );
+	memset(ptr, 0, len);
 	
 	return ptr;
 }

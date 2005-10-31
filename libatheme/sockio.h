@@ -4,7 +4,7 @@
  *
  * Platform-independent network I/O layer.
  *
- * $Id: sockio.h 3005 2005-10-19 04:53:56Z nenolod $
+ * $Id: sockio.h 3325 2005-10-31 03:27:49Z nenolod $
  */
 
 #ifndef SOCKIO_H
@@ -33,6 +33,6 @@ extern int socket_close(socket_t sock);
 extern int socket_geterror(void);
 extern void socket_seterror(int eno);
 extern char *socket_strerror(int eno);
-extern int socket_setnonblocking(socket_t socket);
+extern int socket_setnonblocking(socket_t sock);
 
 #endif

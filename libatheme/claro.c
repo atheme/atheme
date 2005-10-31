@@ -4,7 +4,7 @@
  *
  * Initialization functions.
  *
- * $Id: claro.c 3059 2005-10-20 18:22:38Z nenolod $
+ * $Id: claro.c 3325 2005-10-31 03:27:49Z nenolod $
  */
 
 #include <org.atheme.claro.base>
@@ -13,7 +13,7 @@ DECLARE_CLARO_ASSEMBLY_V1
 (
 	"org.atheme.claro.base",
 	"Atheme Development Group <http://www.libclaro.org>",
-	"$Id: claro.c 3059 2005-10-20 18:22:38Z nenolod $",
+	"$Id: claro.c 3325 2005-10-31 03:27:49Z nenolod $",
 	"20051020"
 );
 
@@ -46,7 +46,6 @@ void libclaro_init(void (*ilog)(uint32_t, const char *format, ...))
 	initBlockHeap();
 	init_dlink_nodes();
 	hooks_init();
-	callback_init();
 	init_netio();
 	init_socket_queues();
 

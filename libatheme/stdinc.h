@@ -4,7 +4,7 @@
  *
  * This is the header which includes all of the system stuff.
  *
- * $Id: stdinc.h 3001 2005-10-19 04:40:25Z nenolod $
+ * $Id: stdinc.h 3325 2005-10-31 03:27:49Z nenolod $
  */
 
 #ifndef STDINC_H
@@ -38,6 +38,7 @@
 # include <sys/resource.h>
 # include <sys/socket.h>
 # include <fcntl.h>
+# include <arpa/inet.h>
 #else
 # include <windows.h>
 # include <winsock.h>
