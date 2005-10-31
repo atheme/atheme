@@ -1,3 +1,12 @@
+nenolod     2005/10/31 03:56:31 UTC	(20051031-3345)
+  Log:
+  Update .depend
+  
+
+  Changes:	Modified:
+  +225 -153	trunk/src/.depend (File Modified) 
+
+
 nenolod     2005/10/31 03:55:46 UTC	(20051031-3343)
   Log:
   protocol/ultimate3: fix a mistake i made with the previous fix

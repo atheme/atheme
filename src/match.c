@@ -6,7 +6,7 @@
  * This file contains customized casemapping functions.
  * This code was mostly lifted from ircd 2.10.
  *
- * $Id: match.c 2497 2005-10-01 04:35:25Z nenolod $
+ * $Id: match.c 3347 2005-10-31 04:04:34Z nenolod $
  */
 
 #include "atheme.h"
@@ -122,10 +122,10 @@ void set_match_mapping(int type)
 ** Written by Douglas A Lewis (dalewis@acsu.buffalo.edu)
 */
 
-int match(const char *mask, const char *name)
+int match(char *mask, char *name)
 {
-	const u_char *m = (const u_char *)mask, *n = (const u_char *)name;
-	const char *ma = mask, *na = name;
+	u_char *m = (u_char *)mask, *n = (u_char *)name;
+	char *ma = mask, *na = name;
 	int wild = 0, q = 0, calls = 0;
 
 	if (!mask || !name)
