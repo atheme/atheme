@@ -4,7 +4,7 @@
  *
  * Datastream stuff.
  *
- * $Id: datastream.c 3025 2005-10-19 05:35:22Z nenolod $
+ * $Id: datastream.c 3321 2005-10-31 02:01:47Z jilles $
  */
 #include <org.atheme.claro.base>
 
@@ -36,10 +36,8 @@ void sendq_flush(connection_t * cptr)
 #endif
                 {
                         if (errno != EAGAIN)
-                        {
                                 hook_call_event("connection_dead", cptr);
-                                return;
-                        }
+                        return;
                 }
 
                 if (l == sq->len)
@@ -53,6 +51,7 @@ void sendq_flush(connection_t * cptr)
                 {
                         sq->pos += l;
                         sq->len -= l;
+                        return;
                 }
         }
 }

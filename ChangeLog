@@ -1,3 +1,11 @@
+alambert    2005/10/31 01:27:58 UTC	(20051031-3319)
+  Log:
+  authcookie_find(): fix typo -- thanks nenolod
+
+  Changes:	Modified:
+  +2 -2		trunk/src/authcookie.c (File Modified) 
+
+
 alambert    2005/10/31 01:16:53 UTC	(20051031-3317)
   Log:
   authcookie_find(): allow locating by *both* myuser and ticket
