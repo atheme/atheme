@@ -4,7 +4,7 @@
  *
  * Remote authentication cookie handling. (think kerberos.)
  *
- * $Id: authcookie.c 3305 2005-10-31 00:19:14Z alambert $
+ * $Id: authcookie.c 3317 2005-10-31 01:16:53Z alambert $
  */
 
 #include "atheme.h"
@@ -52,7 +52,7 @@ authcookie_t *authcookie_create(myuser_t *mu)
  * authcookie_find()
  *
  * Inputs:
- *       either the ticket string or the myuser_t it is associated with
+ *       either the ticket string, the myuser_t it is associated with, or both
  *
  * Outputs:
  *       the authcookie ticket for this object, if any
@@ -65,7 +65,11 @@ authcookie_t *authcookie_find(char *ticket, myuser_t *myuser)
 	node_t *n;
 	authcookie_t *ac;
 
-	if (ticket != NULL)
+	/* at least one must be specified */
+	if (!ticket && !myuser)
+		return NULL;
+
+	if (!myuser)		/* must have ticket */
 	{
 		LIST_FOREACH(n, authcookie_list.head)
 		{
@@ -75,13 +79,24 @@ authcookie_t *authcookie_find(char *ticket, myuser_t *myuser)
 				return ac;
 		}
 	}
-	else if (myuser != NULL)
+	else if (!ticket)	/* must have myuser */
 	{
 		LIST_FOREACH(n, authcookie_list.head)
 		{
 			ac = n->data;
 
-			if (ac->myuser == myuser)
+			if (ac->user == myuser)
+				return ac;
+		}
+	}
+	else			/* must have both */
+	{
+		LIST_FOREACH(n, authcookie_list.head)
+		{
+			ac = n->data;
+
+			if (ac->user == myuser
+				&& !strcmp(ac->ticket, ticket))
 				return ac;
 		}
 	}

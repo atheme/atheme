@@ -1,3 +1,12 @@
+jilles      2005/10/31 01:04:26 UTC	(20051031-3315)
+  Log:
+  I know count has to go away here.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/modules/chanserv/Makefile.win32 (File Modified) 
+
+
 jilles      2005/10/31 00:55:58 UTC	(20051031-3313)
   Log:
   Better one-line description (for /cs help).
