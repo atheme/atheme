@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 3309 2005-10-31 00:28:57Z alambert $
+ * $Id: account.c 3333 2005-10-31 03:41:33Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 3309 2005-10-31 00:28:57Z alambert $",
+	"$Id: account.c 3333 2005-10-31 03:41:33Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -203,8 +203,6 @@ static int account_verify(int parc, char *parv[])
 
 	if (!strcasecmp(parv[0], "REGISTER"))
 	{
-		metadata_t *md;
-
 		if (!(mu->flags & MU_WAITAUTH) || !(md = metadata_find(mu, METADATA_USER, "private:verify:register:key")))
 		{
 			xmlrpc_generic_error(2, "The operation has already been verified.");
