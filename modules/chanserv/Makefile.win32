@@ -33,7 +33,6 @@ BASE_SRCS = 		\
 	clear_bans.c	\
 	clear_users.c	\
 	close.c		\
-	count.c		\
 	drop.c		\
 	flags.c		\
 	ftransfer.c	\

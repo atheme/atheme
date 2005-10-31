@@ -1,3 +1,12 @@
+jilles      2005/10/31 00:55:58 UTC	(20051031-3313)
+  Log:
+  Better one-line description (for /cs help).
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/contrib/cs_count.c (File Modified) 
+
+
 jilles      2005/10/31 00:50:59 UTC	(20051031-3311)
   Log:
   Move /cs count to contrib.
