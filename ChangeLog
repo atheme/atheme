@@ -1,3 +1,20 @@
+nenolod     2005/10/31 03:48:14 UTC	(20051031-3335)
+  Log:
+  MemoServ: Various cleanups --
+  - don't use link as a variable name, it's a POSIX reserved word
+  - fix comparisons between signed and unsigned values
+  - fix invalid usage of free()
+  - fix improper use of uninitialized objects
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/memoserv/delete.c (File Modified) 
+  +10 -11	trunk/modules/memoserv/forward.c (File Modified) 
+  +4 -4		trunk/modules/memoserv/ignore.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/read.c (File Modified) 
+  +0 -1		trunk/modules/memoserv/send.c (File Modified) 
+
+
 nenolod     2005/10/31 03:41:33 UTC	(20051031-3333)
   Log:
   XMLRPC: remove redundant metadata_t *md declaration which was nested
