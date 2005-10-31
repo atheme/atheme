@@ -1,3 +1,12 @@
+nenolod     2005/10/31 03:55:46 UTC	(20051031-3343)
+  Log:
+  protocol/ultimate3: fix a mistake i made with the previous fix
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/ultimate3.c (File Modified) 
+
+
 nenolod     2005/10/31 03:54:48 UTC	(20051031-3341)
   Log:
   protocol/ultimate3: fix build error -- seems like someone started doing something but forgot to finish
