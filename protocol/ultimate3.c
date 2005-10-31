@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 3203 2005-10-25 22:22:40Z jilles $
+ * $Id: ultimate3.c 3341 2005-10-31 03:54:48Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 3203 2005-10-25 22:22:40Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 3341 2005-10-31 03:54:48Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -545,7 +545,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 
 		addr.s_addr = htonl(strtoul(parv[10], NULL, 0));
 #ifndef _WIN32
-		inet_ntoa(addr, ipbuf, sizeof(ipbuf));
+		ipbuf = inet_ntoa(addr);
 		u = user_add(parv[0], parv[5], parv[6], parv[7], ipbuf, NULL, parv[11], s);
 #else
 		u = user_add(parv[0], parv[5], parv[6], parv[7], inet_ntoa(addr), NULL, parv[11], s);

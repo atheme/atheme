@@ -1,3 +1,12 @@
+nenolod     2005/10/31 03:52:12 UTC	(20051031-3339)
+  Log:
+  protocol/ratbox: fix nested declarations
+  
+
+  Changes:	Modified:
+  +0 -3		trunk/protocol/ratbox.c (File Modified) 
+
+
 nenolod     2005/10/31 03:51:25 UTC	(20051031-3337)
   Log:
   protocol/charybdis: fix nested declarations
