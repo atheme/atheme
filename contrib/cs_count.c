@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService COUNT functions.
  *
- * $Id: cs_count.c 3311 2005-10-31 00:50:59Z jilles $
+ * $Id: cs_count.c 3313 2005-10-31 00:55:58Z jilles $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/count", FALSE, _modinit, _moddeinit,
-	"$Id: cs_count.c 3311 2005-10-31 00:50:59Z jilles $",
+	"$Id: cs_count.c 3313 2005-10-31 00:55:58Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_cmd_count(char *origin);
 
-command_t cs_count = { "COUNT", "Show number of entries in room lists.",
+command_t cs_count = { "COUNT", "Shows number of entries in xOP lists.",
                          AC_NONE, cs_cmd_count };
 
 list_t *cs_cmdtree;

@@ -1,3 +1,16 @@
+jilles      2005/10/31 00:50:59 UTC	(20051031-3311)
+  Log:
+  Move /cs count to contrib.
+  
+
+  Changes:	Modified:
+  + -		trunk/contrib/cs_count.c (File Added) 
+  +0 -2		trunk/dist/example.conf (File Modified) 
+  +0 -2		trunk/dist/example.userserv.conf (File Modified) 
+  +0 -1		trunk/modules/chanserv/Makefile.in (File Modified) 
+  +0 -101	trunk/modules/chanserv/count.c (File Deleted) 
+
+
 alambert    2005/10/31 00:28:57 UTC	(20051031-3309)
   Log:
   atheme.login: update mu->lastlogin on XML-RPC login
