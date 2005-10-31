@@ -174,7 +174,9 @@ static int do_set_metadata(int parc, char *parv[])
 	}
 
 	if (strchr(parv[3], ':')
-		|| (strlen(parv[3]) > 32) || (strlen(parv[4]) > 300))
+		|| (strlen(parv[3]) > 32) || (strlen(parv[4]) > 300)
+		|| strchr(parv[3], '\r') || strchr(parv[3], '\n') || strchr(parv[3], ' ')
+		|| strchr(parv[4], '\r') || strchr(parv[4], '\n') || strchr(parv[4], ' '))
 	{
 		xmlrpc_generic_error(7, "Bad parameters.");
 		return 0;

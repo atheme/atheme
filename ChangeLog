@@ -1,3 +1,13 @@
+alambert    2005/10/31 06:10:32 UTC	(20051031-3351)
+  Log:
+  XMLRPC: add channel management
+
+  Changes:	Modified:
+  +2 -1		trunk/modules/xmlrpc/Makefile.in (File Modified) 
+  +2 -1		trunk/modules/xmlrpc/Makefile.win32 (File Modified) 
+  +206 -0	trunk/modules/xmlrpc/channel.c (File Added) 
+
+
 nenolod     2005/10/31 04:04:44 UTC	(20051031-3349)
   Log:
   Include updates.

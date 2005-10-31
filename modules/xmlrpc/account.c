@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 3333 2005-10-31 03:41:33Z nenolod $
+ * $Id: account.c 3353 2005-10-31 09:04:23Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 3333 2005-10-31 03:41:33Z nenolod $",
+	"$Id: account.c 3353 2005-10-31 09:04:23Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -75,7 +75,8 @@ static int account_register(int parc, char *parv[])
 	if (using_nickserv == TRUE)
 	{
 		if (strchr(parv[0], '.') || strchr(parv[0], ' ') || strchr(parv[0], '\n')
-			|| strchr(parv[0], '\r') || strchr(parv[0], '$') || strchr(parv[0], ':'))
+			|| strchr(parv[0], '\r') || strchr(parv[0], '$') || strchr(parv[0], ':')
+			|| !(strlen(parv[0]) <= (NICKLEN - 1)))
 		{
 			xmlrpc_generic_error(6, "The account name is invalid.");
 			return 0;
@@ -96,7 +97,8 @@ static int account_register(int parc, char *parv[])
 		return 0;
 	}
 
-	if (strchr(parv[1], ' ') || strchr(parv[1], '\n') || strchr(parv[1], '\r'))
+	if (strchr(parv[1], ' ') || strchr(parv[1], '\n') || strchr(parv[1], '\r')
+		|| !(strlen(parv[1]) <= (NICKLEN - 1)))
 	{
 		xmlrpc_generic_error(7, "The password is invalid.");
 		return 0;
@@ -104,7 +106,7 @@ static int account_register(int parc, char *parv[])
 
 	/* see above comment on sanity-checking */
 	if (strchr(parv[2], ' ') || strchr(parv[2], '\n') || strchr(parv[2], '\r')
-		|| !validemail(parv[2]))
+		|| !validemail(parv[2]) || !(strlen(parv[2]) <= (EMAILLEN - 1)))
 	{
 		xmlrpc_generic_error(3, "The E-Mail address you provided is invalid.");
 		return 0;
@@ -411,8 +413,9 @@ static int do_set_metadata(int parc, char *parv[])
 		return 0;
 	}
 
-	if (strchr(parv[2], ':')
-		|| (strlen(parv[2]) > 32) || (strlen(parv[3]) > 300))
+	if (strchr(parv[2], ':') || (strlen(parv[2]) > 32) || (strlen(parv[3]) > 300)
+		|| strchr(parv[2], '\r') || strchr(parv[2], '\n') || strchr(parv[2], ' ')
+		|| strchr(parv[3], '\r') || strchr(parv[3], '\n') || strchr(parv[3], ' '))
 	{
 		xmlrpc_generic_error(5, "Invalid parameters.");
 		return 0;
