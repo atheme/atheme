@@ -1,3 +1,11 @@
+alambert    2005/10/31 09:07:21 UTC	(20051031-3355)
+  Log:
+  account.register: we don't care which user; don't bother storing it
+
+  Changes:	Modified:
+  +1 -2		trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 alambert    2005/10/31 09:04:23 UTC	(20051031-3353)
   Log:
   XMLRPC: slightly better input sanity-checking. This really needs to be improved...
