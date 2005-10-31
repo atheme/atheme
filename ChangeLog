@@ -1,3 +1,14 @@
+nenolod     2005/10/31 04:04:44 UTC	(20051031-3349)
+  Log:
+  Include updates.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/extern.h (File Modified) 
+  +2 -2		trunk/include/module.h (File Modified) 
+  +26 -19	trunk/include/xmlrpc.h (File Modified) 
+
+
 nenolod     2005/10/31 04:04:34 UTC	(20051031-3347)
   Log:
   src/match.c: Remove the const restriction as it was ignored anyway.

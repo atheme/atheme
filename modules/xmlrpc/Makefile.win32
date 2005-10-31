@@ -27,7 +27,8 @@ default: all
 
 BASE_SRCS = 		\
 	main.c 		\
-	account.c
+	account.c	\
+	channel.c
 	
 SRCS = ${BASE_SRCS}
 
