@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INFO functions.
  *
- * $Id: info.c 3175 2005-10-23 23:14:41Z jilles $
+ * $Id: info.c 3363 2005-10-31 09:43:23Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 3175 2005-10-23 23:14:41Z jilles $",
+	"$Id: info.c 3363 2005-10-31 09:43:23Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -174,6 +174,9 @@ static void cs_cmd_info(char *origin)
 		strcat(buf, "KEEPTOPIC");
 	}
 
+	if (*buf)
+		notice(chansvs.nick, origin, "Flags      : %s", buf);
+
 	if ((is_ircop(u) || is_sra(u->myuser)) && (md = metadata_find(mc, METADATA_CHANNEL, "private:mark:setter")))
 	{
 		char *setter = md->value;
@@ -210,6 +213,5 @@ static void cs_cmd_info(char *origin)
 		notice(chansvs.nick, origin, "%s was \2CLOSED\2 by %s on %s (%s)", mc->name, setter, strfbuf, reason);
 	}
 
-	if (*buf)
-		notice(chansvs.nick, origin, "Flags      : %s", buf);
+	notice(chansvs.nick,origin, "\2*** End of Info ***\2");
 }

@@ -1,3 +1,14 @@
+pfish       2005/10/31 09:26:19 UTC	(20051031-3361)
+  Log:
+  NickServ LIST: Many logic improvments/bugfixes:
+  Fix match count
+  Show all properties of a nickname instead of just one 
+  
+
+  Changes:	Modified:
+  +24 -11	trunk/modules/nickserv/list.c (File Modified) 
+
+
 alambert    2005/10/31 09:19:01 UTC	(20051031-3359)
   Log:
   account.register: a little more sanity checking
