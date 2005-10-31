@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 3223 2005-10-26 23:31:08Z nenolod $
+ * $Id: flatfile.c 3327 2005-10-31 03:36:11Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 3223 2005-10-26 23:31:08Z nenolod $",
+	"$Id: flatfile.c 3327 2005-10-31 03:36:11Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -79,7 +79,7 @@ static void flatfile_db_save(void *arg)
 			{
 				mymemo_t *mz = (mymemo_t *)tn->data;
 
-				fprintf(f, "ME %s %s %ld %ld %s\n", mu->name, mz->sender, mz->sent, mz->status, mz->text);
+				fprintf(f, "ME %s %s %u %u %s\n", mu->name, mz->sender, mz->sent, mz->status, mz->text);
 			}
 			
 			LIST_FOREACH(tn, mu->memo_ignores.head)
@@ -279,12 +279,16 @@ static void flatfile_db_load(void)
 
 		if (!strcmp("ME", item))
 		{
-			myuser_t *mu = myuser_find(strtok(NULL, " "));
-			char *sender = strtok(NULL, " ");
-			time_t time = atoi(strtok(NULL, " "));
-			uint32_t status = atoi(strtok(NULL, " "));
-			char *text = strtok(NULL, "");
+			char *sender, *text;
+			time_t mtime;
+			uint32_t status;
 			mymemo_t *mz;
+
+			mu = myuser_find(strtok(NULL, " "));
+			sender = strtok(NULL, " ");
+			mtime = atoi(strtok(NULL, " "));
+			status = atoi(strtok(NULL, " "));
+			text = strtok(NULL, "");
 
 			if (!mu)
 			{
@@ -292,14 +296,14 @@ static void flatfile_db_load(void)
 				continue;
 			}
 
-			if (!sender || !time || !text)
+			if (!sender || !mtime || !text)
 				continue;
 
 			mz = smalloc(sizeof(mymemo_t));
 
 			strlcpy(mz->sender, sender, NICKLEN);
 			strlcpy(mz->text, text, MEMOLEN);
-			mz->sent = time;
+			mz->sent = mtime;
 			mz->status = status;
 
 			if (mz->status == MEMO_NEW)
@@ -310,11 +314,14 @@ static void flatfile_db_load(void)
 		
 		if (!strcmp("MI", item))
 		{
-			char *user = strtok(NULL, " ");
-			char *target = strtok(NULL, "\n");
-			myuser_t *mu = myuser_find(user);
-			myuser_t *tmu = myuser_find(target);
-			char *strbuf;
+			char *user, *target, *strbuf;
+			myuser_t *tmu;
+
+			user = strtok(NULL, " ");
+			target = strtok(NULL, "\n");
+
+			mu = myuser_find(user);
+			tmu = myuser_find(target);
 			
 			if (!mu)
 			{

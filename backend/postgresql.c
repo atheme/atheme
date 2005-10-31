@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 3247 2005-10-29 21:48:29Z alambert $
+ * $Id: postgresql.c 3327 2005-10-31 03:36:11Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 3247 2005-10-29 21:48:29Z alambert $",
+	"$Id: postgresql.c 3327 2005-10-31 03:36:11Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -318,11 +318,15 @@ static void postgresql_db_load(void)
 
 		for (ii = 0; ii < umd; ii++)
 		{
-                        char *sender = PQgetvalue(res2, ii, 2);
-                        time_t time = atoi(PQgetvalue(res2, ii, 3));
-                        uint32_t status = atoi(PQgetvalue(res2, ii, 4));
-                        char *text = PQgetvalue(res2, ii, 5);
+                        char *sender, *text;
+                        time_t mtime; 
+                        uint32_t status;
                         mymemo_t *mz;
+
+			sender = PQgetvalue(res2, ii, 2);
+			mtime = atoi(PQgetvalue(res2, ii, 3));
+			status = atoi(PQgetvalue(res2, ii, 4));
+                        text = PQgetvalue(res2, ii, 5);
 
                         if (!mu)
                         {
@@ -330,14 +334,14 @@ static void postgresql_db_load(void)
                                 continue;
                         }
 
-                        if (!sender || !time || !text)
+                        if (!sender || !mtime || !text)
                                 continue;
 
                         mz = smalloc(sizeof(mymemo_t));
 
                         strlcpy(mz->sender, sender, NICKLEN);
                         strlcpy(mz->text, text, MEMOLEN);
-                        mz->sent = time;
+                        mz->sent = mtime;
                         mz->status = status;
 
 			if (mz->status == MEMO_NEW)
@@ -355,8 +359,10 @@ static void postgresql_db_load(void)
 
 		for (ii = 0; ii < umd; ii++)
 		{
-			char *target = PQgetvalue(res2, ii, 2);
+			char *target;
 			char *strbuf;
+
+			target = PQgetvalue(res2, ii, 2);
 			
 			if (!mu)
 			{
