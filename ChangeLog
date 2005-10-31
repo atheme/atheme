@@ -1,3 +1,13 @@
+pfish       2005/10/31 09:55:10 UTC	(20051031-3365)
+  Log:
+  ChanServ LIST:
+  - Show marked and frozen channels.
+  
+
+  Changes:	Modified:
+  +15 -3	trunk/modules/chanserv/list.c (File Modified) 
+
+
 pfish       2005/10/31 09:43:23 UTC	(20051031-3363)
   Log:
   Put operinfo (freeze/mark) data below flags, and add end of info notice.

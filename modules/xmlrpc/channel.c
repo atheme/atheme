@@ -4,7 +4,7 @@
  *
  * XMLRPC channel management functions.
  *
- * $Id: account.c 3229 2005-10-28 21:17:04Z jilles $
+ * $Id: channel.c 3367 2005-10-31 10:05:05Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/channel", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 3229 2005-10-28 21:17:04Z jilles $",
+	"$Id: channel.c 3367 2005-10-31 10:05:05Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
