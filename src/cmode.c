@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 3183 2005-10-24 00:09:09Z jilles $
+ * $Id: cmode.c 3369 2005-10-31 10:36:48Z jilles $
  */
 
 #include "atheme.h"
@@ -218,7 +218,7 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 							    (!is_xop(mc, mu, (CA_OP | CA_AUTOOP))) && (!chanacs_find_host(mc, hostbuf, (CA_OP | CA_AUTOOP))))
 							{
 								/* they were opped and aren't on the list, deop them */
-								if (source)
+								if (source == NULL)
 									cmode(chansvs.nick, mc->name, "-o", cu->user->nick);
 								cu->modes &= ~status_mode_list[i].value;
 							}

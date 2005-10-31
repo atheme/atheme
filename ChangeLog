@@ -1,3 +1,12 @@
+jilles      2005/10/31 10:05:05 UTC	(20051031-3367)
+  Log:
+  Expand Id keyword.
+  
+
+  Changes:	Modified:
+  + -		trunk/modules/xmlrpc/channel.c  (Property Modified)
+
+
 pfish       2005/10/31 09:55:10 UTC	(20051031-3365)
   Log:
   ChanServ LIST:
