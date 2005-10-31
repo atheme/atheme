@@ -1,3 +1,12 @@
+nenolod     2005/10/31 03:38:12 UTC	(20051031-3329)
+  Log:
+  Missing extern declaration for is_internal_client().
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/extern.h (File Modified) 
+
+
 nenolod     2005/10/31 03:36:11 UTC	(20051031-3327)
   Log:
   pedanticy fixes

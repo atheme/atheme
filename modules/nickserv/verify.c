@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ VERIFY function.
  *
- * $Id: verify.c 2563 2005-10-04 07:09:30Z pfish $
+ * $Id: verify.c 3331 2005-10-31 03:40:31Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/verify", FALSE, _modinit, _moddeinit,
-	"$Id: verify.c 2563 2005-10-04 07:09:30Z pfish $",
+	"$Id: verify.c 3331 2005-10-31 03:40:31Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -69,8 +69,6 @@ static void ns_cmd_verify(char *origin)
 
 	if (!strcasecmp(op, "REGISTER"))
 	{
-		metadata_t *md;
-
 		if (!(mu->flags & MU_WAITAUTH) || !(md = metadata_find(mu, METADATA_USER, "private:verify:register:key")))
 		{
 			notice(nicksvs.nick, origin, "\2%s\2 is not awaiting authorization.", nick);
