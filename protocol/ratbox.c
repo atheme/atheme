@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 3209 2005-10-25 23:48:54Z jilles $
+ * $Id: ratbox.c 3339 2005-10-31 03:52:12Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 3209 2005-10-25 23:48:54Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 3339 2005-10-31 03:52:12Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -572,9 +572,6 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 
 	if (ts < c->ts)
 	{
-		chanuser_t *cu;
-		node_t *n;
-
 		/* the TS changed.  a TS change requires the following things
 		 * to be done to the channel:  reset all modes to nothing, remove
 		 * all status modes on known users on the channel (including ours),
