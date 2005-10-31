@@ -1,3 +1,13 @@
+alambert    2005/10/31 00:19:14 UTC	(20051031-3305)
+  Log:
+  authcookie: Make authcookie_create() return an authcookie_t pointer
+
+  Changes:	Modified:
+  +1 -1		trunk/include/authcookie.h (File Modified) 
+  +4 -1		trunk/modules/xmlrpc/account.c (File Modified) 
+  +3 -3		trunk/src/authcookie.c (File Modified) 
+
+
 alambert    2005/10/30 23:36:28 UTC	(20051030-3303)
   Log:
   CS COUNT: always require ACLVIEW privilege -- don't let opers override (consistent with XOP LIST)

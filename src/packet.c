@@ -4,7 +4,7 @@
  *
  * IRC packet handling.
  *
- * $Id: packet.c 3153 2005-10-23 05:56:12Z db $
+ * $Id: packet.c 3307 2005-10-31 00:24:06Z jilles $
  *
  * TODO: Take all the sendq stuff in node.c and put it here.
  * sendq_flush becomes irc_whandler, etc.
@@ -70,21 +70,27 @@ static void ping_uplink(void *arg)
 {
 	uint32_t diff;
 
-	ping_sts();
-
 	if (me.connected)
 	{
+		ping_sts();
+
 		diff = CURRTIME - me.uplinkpong;
 
-		if (diff > 600)
+		if (diff >= 600)
 		{
-			slog(LG_INFO, "ping_uplink(): uplink appears to be dead");
-
-			me.connected = FALSE;
-
-			event_delete(ping_uplink, NULL);
+			slog(LG_INFO, "ping_uplink(): uplink appears to be dead, disconnecting");
+			sts("ERROR :Closing Link: 127.0.0.1 (Ping timeout: %d seconds)", diff);
+			sendq_flush(curr_uplink->conn);
+			if (me.connected)
+			{
+				errno = 0;
+				hook_call_event("connection_dead", curr_uplink->conn);
+			}
 		}
 	}
+
+	if (!me.connected)
+		event_delete(ping_uplink, NULL);
 }
 
 static void irc_handle_connect(void *vptr)
@@ -112,6 +118,7 @@ static void irc_handle_connect(void *vptr)
 		ping_sts();
 
 		/* ping our uplink every 5 minutes */
+		event_delete(ping_uplink, NULL);
 		event_add("ping_uplink", ping_uplink, NULL, 300);
 		me.uplinkpong = time(NULL);
 	}
