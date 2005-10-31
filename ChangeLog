@@ -1,3 +1,11 @@
+alambert    2005/10/31 09:13:23 UTC	(20051031-3357)
+  Log:
+  account.register: Fix activation required message.
+
+  Changes:	Modified:
+  +3 -3		trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 alambert    2005/10/31 09:07:21 UTC	(20051031-3355)
   Log:
   account.register: we don't care which user; don't bother storing it
