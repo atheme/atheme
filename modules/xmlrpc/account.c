@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 3297 2005-10-30 21:54:45Z alambert $
+ * $Id: account.c 3305 2005-10-31 00:19:14Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 3297 2005-10-30 21:54:45Z alambert $",
+	"$Id: account.c 3305 2005-10-31 00:19:14Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -287,6 +287,7 @@ static int account_verify(int parc, char *parv[])
 static int do_login(int parc, char *parv[])
 {
 	myuser_t *mu;
+	authcookie_t *ac;
 	char buf[BUFSIZE];
 
 	if (parc < 2)
@@ -307,7 +308,9 @@ static int do_login(int parc, char *parv[])
 		return 0;
 	}
 
-	xmlrpc_string(buf, authcookie_create(mu));
+	ac = authcookie_create(mu);
+
+	xmlrpc_string(buf, ac->ticket);
 	xmlrpc_send(1, buf);
 
 	return 0;

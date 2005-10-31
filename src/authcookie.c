@@ -4,7 +4,7 @@
  *
  * Remote authentication cookie handling. (think kerberos.)
  *
- * $Id: authcookie.c 2497 2005-10-01 04:35:25Z nenolod $
+ * $Id: authcookie.c 3305 2005-10-31 00:19:14Z alambert $
  */
 
 #include "atheme.h"
@@ -30,12 +30,12 @@ void authcookie_init(void)
  *       account associated with the authcookie
  *
  * Outputs:
- *       authcookie ticket
+ *       pointer to new authcookie
  *
  * Side Effects:
  *       an authcookie ticket is created, and validated.
  */
-char *authcookie_create(myuser_t *mu)
+authcookie_t *authcookie_create(myuser_t *mu)
 {
 	authcookie_t *au = BlockHeapAlloc(authcookie_heap);
 
@@ -45,7 +45,7 @@ char *authcookie_create(myuser_t *mu)
 
 	node_add(au, &au->node, &authcookie_list);
 
-	return au->ticket;
+	return au;
 }
 
 /*

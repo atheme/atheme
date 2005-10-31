@@ -4,7 +4,7 @@
  *
  * Remote authentication ticket management.
  *
- * $Id: authcookie.h 2467 2005-09-30 06:21:15Z nenolod $
+ * $Id: authcookie.h 3305 2005-10-31 00:19:14Z alambert $
  */
 
 #ifndef AUTHCOOKIE_H
@@ -20,7 +20,7 @@ struct authcookie_ {
 };
 
 extern void authcookie_init(void);
-extern char *authcookie_create(myuser_t *mu);
+extern authcookie_t *authcookie_create(myuser_t *mu);
 extern authcookie_t *authcookie_find(char *ticket, myuser_t *myuser);
 extern void authcookie_destroy(authcookie_t *ac);
 extern boolean_t authcookie_validate(char *ticket, myuser_t *myuser);

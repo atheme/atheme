@@ -1,3 +1,11 @@
+alambert    2005/10/30 23:36:28 UTC	(20051030-3303)
+  Log:
+  CS COUNT: always require ACLVIEW privilege -- don't let opers override (consistent with XOP LIST)
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/count.c (File Modified) 
+
+
 alambert    2005/10/30 23:35:51 UTC	(20051030-3301)
   Log:
   CS COUNT: add AKICK; use switch instead of if
