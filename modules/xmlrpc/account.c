@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 3305 2005-10-31 00:19:14Z alambert $
+ * $Id: account.c 3309 2005-10-31 00:28:57Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 3305 2005-10-31 00:19:14Z alambert $",
+	"$Id: account.c 3309 2005-10-31 00:28:57Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -283,6 +283,7 @@ static int account_verify(int parc, char *parv[])
  *
  * Side Effects:
  *       an authcookie ticket is created for the myuser_t.
+ *       the user's lastlogin is updated
  */
 static int do_login(int parc, char *parv[])
 {
@@ -307,6 +308,8 @@ static int do_login(int parc, char *parv[])
 		xmlrpc_generic_error(2, "The password is not valid for this account.");
 		return 0;
 	}
+
+	mu->lastlogin = CURRTIME;
 
 	ac = authcookie_create(mu);
 

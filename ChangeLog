@@ -1,3 +1,15 @@
+jilles      2005/10/31 00:24:06 UTC	(20051031-3307)
+  Log:
+  - Properly cycle through all the uplinks
+  - Make uplink ping timeouts work
+  - Make uplink reconnection work better
+  
+
+  Changes:	Modified:
+  +15 -8	trunk/src/packet.c (File Modified) 
+  +9 -6		trunk/src/uplink.c (File Modified) 
+
+
 alambert    2005/10/31 00:19:14 UTC	(20051031-3305)
   Log:
   authcookie: Make authcookie_create() return an authcookie_t pointer
