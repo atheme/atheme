@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 3289 2005-10-30 20:37:14Z jilles $
+ * $Id: extern.h 3329 2005-10-31 03:38:12Z nenolod $
  */
 
 #ifndef EXTERN_H
@@ -89,6 +89,7 @@ E boolean_t should_kick_host(mychan_t *mychan, char *host);
 E boolean_t is_sra(myuser_t *myuser);
 E boolean_t is_ircop(user_t *user);
 E boolean_t is_admin(user_t *user);
+E boolean_t is_internal_client(user_t *user);
 
 E int token_to_value(struct Token token_table[], char *token);
 E char *sbytes(float x);

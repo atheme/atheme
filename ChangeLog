@@ -1,3 +1,13 @@
+nenolod     2005/10/31 03:36:11 UTC	(20051031-3327)
+  Log:
+  pedanticy fixes
+  
+
+  Changes:	Modified:
+  +20 -13	trunk/backend/flatfile.c (File Modified) 
+  +13 -7	trunk/backend/postgresql.c (File Modified) 
+
+
 nenolod     2005/10/31 03:27:49 UTC	(20051031-3325)
   Log:
   Code cleanups to claro-base.
