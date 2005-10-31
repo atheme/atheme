@@ -1,3 +1,11 @@
+alambert    2005/10/31 01:16:53 UTC	(20051031-3317)
+  Log:
+  authcookie_find(): allow locating by *both* myuser and ticket
+
+  Changes:	Modified:
+  +19 -4	trunk/src/authcookie.c (File Modified) 
+
+
 jilles      2005/10/31 01:04:26 UTC	(20051031-3315)
   Log:
   I know count has to go away here.
