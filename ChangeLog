@@ -1,3 +1,12 @@
+pfish       2005/10/31 09:43:23 UTC	(20051031-3363)
+  Log:
+  Put operinfo (freeze/mark) data below flags, and add end of info notice.
+  
+
+  Changes:	Modified:
+  +4 -2		trunk/modules/chanserv/info.c (File Modified) 
+
+
 pfish       2005/10/31 09:26:19 UTC	(20051031-3361)
   Log:
   NickServ LIST: Many logic improvments/bugfixes:

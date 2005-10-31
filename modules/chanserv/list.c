@@ -4,7 +4,7 @@
  *
  * This file contains code for the ChanServ LIST function.
  *
- * $Id: list.c 2553 2005-10-04 06:33:01Z nenolod $
+ * $Id: list.c 3365 2005-10-31 09:55:10Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 2553 2005-10-04 06:33:01Z nenolod $",
+	"$Id: list.c 3365 2005-10-31 09:55:10Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -43,6 +43,7 @@ static void cs_cmd_list(char *origin)
 	mychan_t *mc;
 	node_t *n;
 	char *chanpattern = strtok(NULL, " ");
+	char buf[BUFSIZE];
 	uint32_t i;
 	uint32_t matches = 0;
 
@@ -54,6 +55,7 @@ static void cs_cmd_list(char *origin)
 	}
 
 	wallops("\2%s\2 is searching the channels database for channels matching \2%s\2", origin, chanpattern);
+	notice(chansvs.nick, origin, "Channels matching pattern \2%s\2:", chanpattern);
 
 	for (i = 0; i < HASHSIZE; i++)
 	{
@@ -64,9 +66,19 @@ static void cs_cmd_list(char *origin)
 			if (!match(chanpattern, mc->name))
 			{
 				/* in the future we could add a LIMIT parameter */
-				if (matches == 0)
-					notice(chansvs.nick, origin, "Channels matching pattern \2%s\2:", chanpattern);
-				notice(chansvs.nick, origin, "- %s (%s)", mc->name, mc->founder->name);
+				*buf = '\0';
+
+				if (metadata_find(mc, METADATA_CHANNEL, "private:mark:setter")) {
+					strlcat(buf, "\2[marked]\2", BUFSIZE);
+				}
+				if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer")) {
+					if (*buf)
+						strlcat(buf, " ", BUFSIZE);
+
+					strlcat(buf, "\2[closed]\2", BUFSIZE);
+				}
+
+				notice(chansvs.nick, origin, "- %s (%s) %s", mc->name, mc->founder->name, buf);
 				matches++;
 			}
 		}
