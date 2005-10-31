@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv SEND function
  *
- * $Id: send.c 3235 2005-10-29 00:21:03Z jilles $
+ * $Id: send.c 3335 2005-10-31 03:48:14Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/send", FALSE, _modinit, _moddeinit,
-	"$Id: send.c 3235 2005-10-29 00:21:03Z jilles $",
+	"$Id: send.c 3335 2005-10-31 03:48:14Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -114,7 +114,6 @@ static void ms_cmd_send(char *origin)
 	if (tmu->memos.count >= me.mdlimit)
 	{
 		notice(memosvs.nick, origin, "%s's inbox is full", target);
-		free(memo);
 		return;
 	}
 

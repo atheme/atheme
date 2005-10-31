@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv IGNORE functions
  *
- * $Id: ignore.c 2983 2005-10-18 18:21:56Z nenolod $
+ * $Id: ignore.c 3335 2005-10-31 03:48:14Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 2983 2005-10-18 18:21:56Z nenolod $",
+	"$Id: ignore.c 3335 2005-10-31 03:48:14Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -152,7 +152,7 @@ static void ms_cmd_ignore_del(char *origin, char *target)
 {
 	user_t *u = user_find(origin);
 	myuser_t *mu = u->myuser;
-	node_t *n, *link;
+	node_t *n, *tn;
 	char *temp;
 	
 	/* Arg check*/
@@ -166,7 +166,7 @@ static void ms_cmd_ignore_del(char *origin, char *target)
 	}
 	
 	/* Iterate through list, make sure they're not in it, if last node append */
-	LIST_FOREACH_SAFE(n, link, mu->memo_ignores.head)
+	LIST_FOREACH_SAFE(n, tn, mu->memo_ignores.head)
 	{
 		temp = (char *)n->data;
 		
@@ -191,10 +191,10 @@ static void ms_cmd_ignore_clear(char *origin, char *arg)
 {
 	user_t *u = user_find(origin);
 	myuser_t *mu = u->myuser;
-	node_t *n, *link;
+	node_t *n, *tn;
 	
 	/* Iterate through list, make sure they're not in it, if last node append */
-	LIST_FOREACH_SAFE(n, link, mu->memo_ignores.head)
+	LIST_FOREACH_SAFE(n, tn, mu->memo_ignores.head)
 	{
 		free(n->data);
 		node_del(n,&mu->memo_ignores);

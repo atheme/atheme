@@ -1,3 +1,12 @@
+nenolod     2005/10/31 03:41:33 UTC	(20051031-3333)
+  Log:
+  XMLRPC: remove redundant metadata_t *md declaration which was nested
+  
+
+  Changes:	Modified:
+  +0 -2		trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 nenolod     2005/10/31 03:40:31 UTC	(20051031-3331)
   Log:
   Duplicate declaration metadata_t *md in (NS|US)::Verify
