@@ -1,3 +1,13 @@
+jilles      2005/10/31 02:01:47 UTC	(20051031-3321)
+  Log:
+  In sendq_flush() do not try further chunks if write()
+  returns an incomplete or error result.
+  
+
+  Changes:	Modified:
+  +2 -3		trunk/libatheme/datastream.c (File Modified) 
+
+
 alambert    2005/10/31 01:27:58 UTC	(20051031-3319)
   Log:
   authcookie_find(): fix typo -- thanks nenolod
