@@ -1,3 +1,11 @@
+alambert    2005/10/31 09:19:01 UTC	(20051031-3359)
+  Log:
+  account.register: a little more sanity checking
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 alambert    2005/10/31 09:13:23 UTC	(20051031-3357)
   Log:
   account.register: Fix activation required message.

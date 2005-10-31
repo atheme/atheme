@@ -5,7 +5,7 @@
  * This file contains code for the NickServ LIST function.
  * Based on Alex Lambert's LISTEMAIL.
  *
- * $Id: list.c 2949 2005-10-16 10:12:49Z pfish $
+ * $Id: list.c 3361 2005-10-31 09:26:19Z pfish $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 2949 2005-10-16 10:12:49Z pfish $",
+	"$Id: list.c 3361 2005-10-31 09:26:19Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -42,6 +42,7 @@ static void ns_cmd_list(char *origin)
 	myuser_t *mu;
 	node_t *n;
 	char *nickpattern = strtok(NULL, " ");
+	char buf[BUFSIZE];
 	uint32_t i;
 	uint32_t matches = 0;
 
@@ -53,6 +54,8 @@ static void ns_cmd_list(char *origin)
 	}
 
 	wallops("\2%s\2 is searching the nickname database for nicknames matching \2%s\2", origin, nickpattern);
+	notice(nicksvs.nick, origin, "Nicknames matching pattern \2%s\2:", nickpattern);
+
 
 	for (i = 0; i < HASHSIZE; i++)
 	{
@@ -60,20 +63,30 @@ static void ns_cmd_list(char *origin)
 		{
 			mu = (myuser_t *)n->data;
 
+
 			if (!match(nickpattern, mu->name))
 			{
 				/* in the future we could add a LIMIT parameter */
-				if (matches == 0)
-					notice(nicksvs.nick, origin, "Nicknames matching pattern \2%s\2:", nickpattern);
-				if (metadata_find(mu, METADATA_USER, "private:alias:parent"))
-					notice(nicksvs.nick, origin, "- %s (%s) [Child]", mu->name, mu->email);
-				if (metadata_find(mu, METADATA_USER, "private:freeze:freezer"))
-					notice(nicksvs.nick, origin, "- %s (%s) [Frozen]", mu->name, mu->email);
-				if (metadata_find(mu, METADATA_USER, "private:mark:setter"))
-					notice(nicksvs.nick, origin, "- %s (%s) [Marked]", mu->name, mu->email);
-				else
-				notice(nicksvs.nick, origin, "- %s (%s)", mu->name, mu->email);
-				matches++;
+				*buf = '\0';
+
+				if (metadata_find(mu, METADATA_USER, "private:alias:parent")) {
+					strlcat(buf, "\2[child]\2", BUFSIZE);
+				}
+				if (metadata_find(mu, METADATA_USER, "private:freeze:freezer")) {
+					if (*buf)
+						strlcat(buf, " ", BUFSIZE);
+
+					strlcat(buf, "\2[frozen]\2", BUFSIZE);
+				}
+				if (metadata_find(mu, METADATA_USER, "private:mark:setter")) {
+					if (*buf)
+						strlcat(buf, " ", BUFSIZE);
+
+					strlcat(buf, "\2[marked]\2", BUFSIZE);
+				}
+				
+					notice(nicksvs.nick, origin, "- %s (%s) %s", mu->name, mu->email, buf);
+					matches++;
 			}
 		}
 	}
