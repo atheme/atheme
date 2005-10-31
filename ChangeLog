@@ -1,3 +1,12 @@
+nenolod     2005/10/31 04:04:34 UTC	(20051031-3347)
+  Log:
+  src/match.c: Remove the const restriction as it was ignored anyway.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/src/match.c (File Modified) 
+
+
 nenolod     2005/10/31 03:56:31 UTC	(20051031-3345)
   Log:
   Update .depend

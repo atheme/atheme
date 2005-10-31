@@ -87,26 +87,33 @@ typedef struct xmlrpc_settings {
 	char *inttagend;
 } XMLRPCSet;
 
-int xmlrpc_getlast_error(void);
-void xmlrpc_process(char *buffer);
-int xmlrpc_register_method(const char *name, int (*func) (int ac, char **av));
-int xmlrpc_unregister_method(const char *method);
+E int xmlrpc_getlast_error(void);
+E void xmlrpc_process(char *buffer);
+E int xmlrpc_register_method(const char *name, int (*func) (int ac, char **av));
+E int xmlrpc_unregister_method(const char *method);
 
-char *xmlrpc_array(int argc, ...);
-char *xmlrpc_double(char *buf, double value);
-char *xmlrpc_base64(char *buf, char *value);
-char *xmlrpc_boolean(char *buf, int value);
-char *xmlrpc_string(char *buf, char *value);
-char *xmlrpc_integer(char *buf, int value);
-char *xmlrpc_decode64(char *value);
-char *xmlrpc_time2date(char *buf, time_t t);
+E char *xmlrpc_array(int argc, ...);
+E char *xmlrpc_double(char *buf, double value);
+E char *xmlrpc_base64(char *buf, char *value);
+E char *xmlrpc_boolean(char *buf, int value);
+E char *xmlrpc_string(char *buf, char *value);
+E char *xmlrpc_integer(char *buf, int value);
+E char *xmlrpc_decode64(char *value);
+E char *xmlrpc_time2date(char *buf, time_t t);
 
-int xmlrpc_set_options(int type, const char *value);
-void xmlrpc_set_buffer(char *(*func)(char *buffer, int len));
-void xmlrpc_generic_error(int code, const char *string);
-void xmlrpc_send(int argc, ...);
-int xmlrpc_about(int ac, char **av);
-char *xmlrpc_char_encode(char *outbuffer, char *s1);
-char *xmlrpc_decode_string(char *buf);
+E int xmlrpc_set_options(int type, const char *value);
+E void xmlrpc_set_buffer(char *(*func)(char *buffer, int len));
+E void xmlrpc_generic_error(int code, const char *string);
+E void xmlrpc_send(int argc, ...);
+E int xmlrpc_about(int ac, char **av);
+E char *xmlrpc_char_encode(char *outbuffer, char *s1);
+E char *xmlrpc_decode_string(char *buf);
+
+/* base64.c */
+E void base64_encode(struct buffer_st *b, const char *source, int length);
+E void base64_decode(struct buffer_st *bfr, const char *source, int length);
+E void buffer_new(struct buffer_st *b);
+E void buffer_add(struct buffer_st *b, char c);
+E void buffer_delete(struct buffer_st *b);
 
 #endif

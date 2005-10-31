@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 3329 2005-10-31 03:38:12Z nenolod $
+ * $Id: extern.h 3349 2005-10-31 04:04:44Z nenolod $
  */
 
 #ifndef EXTERN_H
@@ -140,7 +140,7 @@ E int irccasecmp(const char *, const char *);
 E int ircncmp(const char *, const char *, int);
 E int ircncasecmp(const char *, const char *, int);
 
-E int match(const char *, const char *);
+E int match(char *, char *);
 E char *collapse(char *);
 
 /* node.c */
