@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 3341 2005-10-31 03:54:48Z nenolod $
+ * $Id: ultimate3.c 3343 2005-10-31 03:55:46Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 3341 2005-10-31 03:54:48Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 3343 2005-10-31 03:55:46Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -513,7 +513,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 	server_t *s;
 	user_t *u;
 	kline_t *k;
-	char ipbuf[16];
+	char *ipbuf;
 	struct in_addr addr;
 
 	if (parc == 12)
