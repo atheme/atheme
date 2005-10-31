@@ -1,3 +1,12 @@
+alambert    2005/10/31 09:04:23 UTC	(20051031-3353)
+  Log:
+  XMLRPC: slightly better input sanity-checking. This really needs to be improved...
+
+  Changes:	Modified:
+  +8 -5		trunk/modules/xmlrpc/account.c (File Modified) 
+  +3 -1		trunk/modules/xmlrpc/channel.c (File Modified) 
+
+
 alambert    2005/10/31 06:10:32 UTC	(20051031-3351)
   Log:
   XMLRPC: add channel management
