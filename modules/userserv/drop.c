@@ -4,7 +4,7 @@
  *
  * This file contains code for the UserServ DROP function.
  *
- * $Id: drop.c 3379 2005-11-01 08:58:37Z pfish $
+ * $Id: drop.c 3383 2005-11-01 09:16:16Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 3379 2005-11-01 08:58:37Z pfish $",
+	"$Id: drop.c 3383 2005-11-01 09:16:16Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -67,7 +67,7 @@ static void us_cmd_drop(char *origin)
 
 	if (is_sra(mu))
 	{
-		notice(nicksvs.nick, origin, "The nickname \2%s\2 belongs to a services root administrator; it cannot be dropped.", acc);
+		notice(usersvs.nick, origin, "The nickname \2%s\2 belongs to a services root administrator; it cannot be dropped.", acc);
 		return;
 	}
 

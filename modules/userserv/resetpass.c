@@ -4,7 +4,7 @@
  *
  * This file contains code for UserServ RESETPASS
  *
- * $Id: resetpass.c 2575 2005-10-05 02:46:11Z alambert $
+ * $Id: resetpass.c 3383 2005-11-01 09:16:16Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/resetpass", FALSE, _modinit, _moddeinit,
-	"$Id: resetpass.c 2575 2005-10-05 02:46:11Z alambert $",
+	"$Id: resetpass.c 3383 2005-11-01 09:16:16Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -55,6 +55,12 @@ static void us_cmd_resetpass(char *origin)
 	if (!(mu = myuser_find(name)))
 	{
 		notice(usersvs.nick, origin, "\2%s\2 is not registered.", name);
+		return;
+	}
+
+	if (is_sra(mu) && !is_sra(u->myuser))
+	{
+		notice(usersvs.nick, origin, "\2%s\2 belongs to a services root administrator; you must be a services root administrator to reset the password.", name);
 		return;
 	}
 
