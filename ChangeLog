@@ -1,3 +1,14 @@
+pfish       2005/11/01 09:21:18 UTC	(20051101-3385)
+  Log:
+  Port NickServ RETURN to UserServ.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/userserv/Makefile.in (File Modified) 
+  +1 -0		trunk/modules/userserv/Makefile.win32 (File Modified) 
+  +102 -0	trunk/modules/userserv/return.c (File Added) 
+
+
 pfish       2005/11/01 09:16:16 UTC	(20051101-3383)
   Log:
   Bring SRA protection over to UserServ, also fix some crashes when nicksvs was used in UserServ.
