@@ -41,6 +41,7 @@ BASE_SRCS = 		\
 	register.c	\
 	sendpass.c	\
 	resetpass.c	\
+	return.c	\
 	set.c		\
 	status.c	\
 	taxonomy.c	\

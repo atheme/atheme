@@ -1,3 +1,15 @@
+pfish       2005/11/01 09:16:16 UTC	(20051101-3383)
+  Log:
+  Bring SRA protection over to UserServ, also fix some crashes when nicksvs was used in UserServ.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/userserv/drop.c (File Modified) 
+  +1 -1		trunk/modules/userserv/login.c (File Modified) 
+  +6 -0		trunk/modules/userserv/resetpass.c (File Modified) 
+  +6 -0		trunk/modules/userserv/sendpass.c (File Modified) 
+
+
 pfish       2005/11/01 09:10:19 UTC	(20051101-3381)
   Log:
   More services root protection: Only SRA's can reset/sendpass another roots nickname.

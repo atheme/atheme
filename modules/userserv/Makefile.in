@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2995 2005-10-19 04:01:49Z nenolod $
+# $Id: Makefile.in 3385 2005-11-01 09:21:18Z pfish $
 #
 
 CC		= @CC@
@@ -41,6 +41,7 @@ BASE_SRCS = 		\
 	register.c	\
 	sendpass.c	\
 	resetpass.c	\
+	return.c	\
 	set.c		\
 	status.c	\
 	taxonomy.c	\
