@@ -1,3 +1,12 @@
+pfish       2005/11/01 08:58:37 UTC	(20051101-3379)
+  Log:
+  Bugfix: Fix invalid param
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/userserv/drop.c (File Modified) 
+
+
 nenolod     2005/11/01 03:45:37 UTC	(20051101-3377)
   Log:
   Sync athemenet patches with trunk, new features:

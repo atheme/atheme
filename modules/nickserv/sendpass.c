@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService SENDPASS function.
  *
- * $Id: sendpass.c 3229 2005-10-28 21:17:04Z jilles $
+ * $Id: sendpass.c 3381 2005-11-01 09:10:19Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/sendpass", FALSE, _modinit, _moddeinit,
-	"$Id: sendpass.c 3229 2005-10-28 21:17:04Z jilles $",
+	"$Id: sendpass.c 3381 2005-11-01 09:10:19Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -56,6 +56,12 @@ static void ns_cmd_sendpass(char *origin)
 	if (!(mu = myuser_find(name)))
 	{
 		notice(nicksvs.nick, origin, "\2%s\2 is not registered.", name);
+		return;
+	}
+
+	if (is_sra(mu) && !is_sra(u->myuser))
+	{
+		notice(nicksvs.nick, origin, "\2%s\2 belongs to a services root administrator; you must be a services root to send the password.", name);
 		return;
 	}
 
