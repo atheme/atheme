@@ -4,7 +4,7 @@
  *
  * This is the header which includes all of the system stuff.
  *
- * $Id: stdinc.h 3325 2005-10-31 03:27:49Z nenolod $
+ * $Id: stdinc.h 3377 2005-11-01 03:45:37Z nenolod $
  */
 
 #ifndef STDINC_H
@@ -25,6 +25,10 @@
 
 #ifdef HAVE_GETOPT_H
 #include <getopt.h>
+#endif
+
+#ifdef HAVE_LINK_H
+#include <link.h>
 #endif
 
 /* socket stuff */

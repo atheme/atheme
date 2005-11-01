@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService RAW command.
  *
- * $Id: restart.c 2559 2005-10-04 06:56:29Z nenolod $
+ * $Id: restart.c 3377 2005-11-01 03:45:37Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/restart", FALSE, _modinit, _moddeinit,
-	"$Id: restart.c 2559 2005-10-04 06:56:29Z nenolod $",
+	"$Id: restart.c 3377 2005-11-01 03:45:37Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -47,7 +47,7 @@ static void os_cmd_restart(char *origin)
 	db_save(NULL);
 
 	snoop("RESTART: \2%s\2", origin);
-	wallops("Restarting in \2%d\2 seconds by request of \2%s\2.", me.restarttime, origin);
+	wallops("Restarting by request of \2%s\2.", origin);
 
 	runflags |= RF_RESTART;
 }

@@ -6,6 +6,9 @@
 /* Define to 1 if you have the `dlfunc' function. */
 #undef HAVE_DLFUNC
 
+/* Define to 1 if you have the `dlinfo' function. */
+#undef HAVE_DLINFO
+
 /* Define if the dlopen function is available. */
 #undef HAVE_DLOPEN
 
@@ -29,6 +32,9 @@
 
 /* Define to 1 if you have the `socket' library (-lsocket). */
 #undef HAVE_LIBSOCKET
+
+/* Define to 1 if you have the <link.h> header file. */
+#undef HAVE_LINK_H
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H

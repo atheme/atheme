@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 2821 2005-10-10 04:12:13Z terminal $
+ * $Id: module.c 3377 2005-11-01 03:45:37Z nenolod $
  */
 
 #include "atheme.h"
@@ -133,6 +133,9 @@ module_t *module_load(char *filespec)
 	module_t *m;
 	moduleheader_t *h;
 	void *handle = NULL;
+#ifdef HAVE_DLINFO
+	struct link_map *map;
+#endif
 
 	if ((m = module_find(filespec)))
 	{
@@ -167,17 +170,23 @@ module_t *module_load(char *filespec)
 		return NULL;
 	}
 
-	slog(LG_DEBUG, "module_load(): loaded %s at [0x%lx; MAPI version %d]", h->name, handle, h->abi_ver);
-
-	if (me.connected)
-		wallops("Module %s loaded at [0x%lx; MAPI version %d]", h->name, handle, h->abi_ver);
-
 	m = BlockHeapAlloc(module_heap);
 
 	strlcpy(m->modpath, filespec, BUFSIZE);
-	m->address = handle;
+	m->handle = handle;
 	m->mflags = MODTYPE_STANDARD;
 	m->header = h;
+
+#ifdef HAVE_DLINFO
+	dlinfo(handle, RTLD_DI_LINKMAP, &map);
+	if (map != NULL)
+		m->address = map->l_addr;
+	else
+		m->address = handle;
+#else
+	/* best we can do here without dlinfo() --nenolod */
+	m->address = handle;
+#endif
 
 	n = node_create();
 
@@ -185,6 +194,11 @@ module_t *module_load(char *filespec)
 
 	if (h->modinit)
 		h->modinit(m);
+
+	slog(LG_DEBUG, "module_load(): loaded %s at [0x%lx; MAPI version %d]", h->name, m->address, h->abi_ver);
+
+	if (me.connected)
+		wallops("Module %s loaded at [0x%lx; MAPI version %d]", h->name, m->address, h->abi_ver);
 
 	return m;
 }
@@ -294,7 +308,7 @@ void module_unload(module_t * m)
 	if (m->header->deinit)
 		m->header->deinit();
 
-	linker_close(m->address);
+	linker_close(m->handle);
 
 	node_del(n, &modules);
 

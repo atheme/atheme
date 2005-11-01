@@ -1,3 +1,12 @@
+nenolod     2005/11/01 03:22:07 UTC	(20051101-3375)
+  Log:
+  - Do not change a channel from a founder to a successor if they are the same. Drop it instead.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/node.c (File Modified) 
+
+
 nenolod     2005/11/01 02:55:57 UTC	(20051101-3373)
   Log:
   - Change name of the SQL database schema for PostgreSQL.

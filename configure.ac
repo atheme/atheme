@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 2891 2005-10-15 22:23:05Z nenolod $
+dnl $Id: configure.ac 3377 2005-11-01 03:45:37Z nenolod $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, 0.3beta5, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 2891 2005-10-15 22:23:05Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 3377 2005-11-01 03:45:37Z nenolod $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -58,7 +58,7 @@ AC_SUBST(MKDEP)
 
 dnl Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS(sys/time.h sys/select.h getopt.h)
+AC_CHECK_HEADERS(sys/time.h sys/select.h getopt.h link.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -277,6 +277,7 @@ if test "$shared_modules" = yes; then
 	      AC_ERROR([shared modules unavailable, Atheme will not work on your system])
 	    ])
 	    AC_CHECK_FUNCS(dlfunc)
+	    AC_CHECK_FUNCS(dlinfo)
 	  ],
 	  [
 	    AC_ERROR([shared modules unavailable, Atheme will not work on your system])
