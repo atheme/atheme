@@ -1,3 +1,13 @@
+nenolod     2005/11/01 02:55:57 UTC	(20051101-3373)
+  Log:
+  - Change name of the SQL database schema for PostgreSQL.
+  - Also add an $Id$ tag there.
+  
+
+  Changes:	Modified:
+  +3 -1		trunk/doc/SQL (File Modified) (Property Modified)
+
+
 pfish       2005/11/01 00:33:18 UTC	(20051101-3371)
   Log:
   - Don't allow a SRA nickname to be dropped.

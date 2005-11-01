@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3289 2005-10-30 20:37:14Z jilles $
+ * $Id: node.c 3375 2005-11-01 03:22:07Z nenolod $
  */
 
 #include "atheme.h"
@@ -1717,7 +1717,7 @@ void expire_check(void *arg)
 					{
 						mc = (mychan_t *)tn->data;
 
-						if (mc->founder == mu && mc->successor)
+						if (mc->founder == mu && mc->successor && mc->successor != mu)
 						{
 							/* make sure they're within limits */
 							for (w = 0, tcnt = 0; w < HASHSIZE; w++)
