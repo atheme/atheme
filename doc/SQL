@@ -1,3 +1,5 @@
+$Id: SQL 3373 2005-11-01 02:55:57Z nenolod $
+
 SQL Notes
 ---------
 
@@ -15,7 +17,7 @@ PostgreSQL
 
 To initialize the database, use:
 
-	psql <database> < atheme_init.sql
+	psql <database> < atheme_init.pgsql
 
 
 Upgrade information:

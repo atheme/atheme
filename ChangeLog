@@ -1,3 +1,16 @@
+pfish       2005/11/01 00:33:18 UTC	(20051101-3371)
+  Log:
+  - Don't allow a SRA nickname to be dropped.
+  - Update freeze SRA return message.
+  
+
+  Changes:	Modified:
+  +5 -0		trunk/modules/nickserv/drop.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/freeze.c (File Modified) 
+  +6 -0		trunk/modules/userserv/drop.c (File Modified) 
+  +1 -1		trunk/modules/userserv/freeze.c (File Modified) 
+
+
 jilles      2005/10/31 10:36:48 UTC	(20051031-3369)
   Log:
   Oops, make sure MODE +o changes are properly reversed
