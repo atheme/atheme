@@ -401,7 +401,7 @@ char *xmlrpc_write_header(int length)
 	tm = *localtime(&ts);
 	strftime(timebuf, XMLRPC_BUFSIZE - 1, "%Y-%m-%d %H:%M:%S", &tm);
 
-	snprintf(buf, XMLRPC_BUFSIZE, "HTTP/1.1 200 OK\n\rConnection: close\n\r" "Content-Length: %d\n\r" "Content-Type: text/xml\n\r" "Date: %s\n\r" "Server: Atheme %s\r\n", length, timebuf, version);
+	snprintf(buf, XMLRPC_BUFSIZE, "HTTP/1.1 200 OK\n\rConnection: close\n\r" "Content-Length: %d\n\r" "Content-Type: text/xml\n\r" "Date: %s\n\r" "Server: Atheme %s\r\n\r\n", length, timebuf, version);
 	return xmlrpc_strdup(buf);
 }
 
@@ -516,14 +516,24 @@ char *xmlrpc_method(char *buffer)
 
 void xmlrpc_generic_error(int code, const char *string)
 {
-	char buf[XMLRPC_BUFSIZE];
+	char buf[XMLRPC_BUFSIZE], buf2[XMLRPC_BUFSIZE];
 	int len;
 
 	snprintf(buf, XMLRPC_BUFSIZE,
 		 "<?xml version=\"1.0\"?>\r\n <methodResponse>\n\r  <fault>\n\r   <value>\n\r    <struct>\n\r     <member>\n\r      <name>faultCode</name>\n\r      <value><int>%d</int></value>\n\r     </member>\n\r     <member>\n\r      <name>faultString</name>\n\r      <value><string>%s</string></value>\n\r     </member>\n\r    </struct>\n\r   </value>\r\n  </fault>\r\n </methodResponse>",
 		 code, string);
 	len = strlen(buf);
-	xmlrpc.setbuffer(buf, len);
+
+	if (xmlrpc.httpheader)
+	{
+		char *header = xmlrpc_write_header(len);
+		strlcpy(buf2, header, XMLRPC_BUFSIZE);
+		strlcat(buf2, buf, XMLRPC_BUFSIZE);
+		len += strlen(header);
+		free(header);
+	}
+
+	xmlrpc.setbuffer(buf2, len);
 }
 
 /*************************************************************************/

@@ -1,3 +1,13 @@
+nenolod     2005/11/02 19:34:33 UTC	(20051102-3405)
+  Log:
+  XMLRPC fixes
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/xmlrpc/main.c (File Modified) 
+  +1 -1		trunk/src/xmlrpc.c (File Modified) 
+
+
 nenolod     2005/11/02 19:09:20 UTC	(20051102-3403)
   Log:
   Crypto API support for RETURN.
