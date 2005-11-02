@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 3377 2005-11-01 03:45:37Z nenolod $
+ * $Id: module.c 3393 2005-11-02 17:54:21Z nenolod $
  */
 
 #include "atheme.h"
@@ -338,7 +338,7 @@ void *module_locate_symbol(char *modname, char *sym)
 		return NULL;
 	}
 
-	symptr = linker_getsym(m->address, sym);
+	symptr = linker_getsym(m->handle, sym);
 
 	return symptr;
 }

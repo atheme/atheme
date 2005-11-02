@@ -1,3 +1,13 @@
+jilles      2005/11/02 01:58:18 UTC	(20051102-3391)
+  Log:
+  Treat IPs of users of "0", "0.0.0.0" and "255.255.255.255"
+  as if no IP were specified. ("0" is used by TS6 for this.)
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/node.c (File Modified) 
+
+
 nenolod     2005/11/02 01:01:37 UTC	(20051102-3389)
   Log:
   Add MU_CRYPTPASS, to designate an encrypted password.
