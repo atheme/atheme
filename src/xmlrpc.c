@@ -598,7 +598,7 @@ void xmlrpc_send(int argc, ...)
 		free(header);
 		len = strlen(buf2);
 		xmlrpc.setbuffer(buf2, len);
-		xmlrpc.httpheader = 0;
+		xmlrpc.httpheader = 1;
 	}
 	else
 	{

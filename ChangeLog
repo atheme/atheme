@@ -1,3 +1,13 @@
+nenolod     2005/11/02 19:09:20 UTC	(20051102-3403)
+  Log:
+  Crypto API support for RETURN.
+  
+
+  Changes:	Modified:
+  +10 -2	trunk/modules/nickserv/return.c (File Modified) 
+  +10 -2	trunk/modules/userserv/return.c (File Modified) 
+
+
 nenolod     2005/11/02 18:52:35 UTC	(20051102-3401)
   Log:
   Compile crypto modules on *nix. On windows, we don't care at the moment. Perhaps in 1.0.
