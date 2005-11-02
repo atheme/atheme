@@ -4,7 +4,7 @@
  *
  * Implements NICKSERV RETURN.
  *
- * $Id: return.c 3381 2005-11-01 09:10:19Z pfish $
+ * $Id: return.c 3403 2005-11-02 19:09:20Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/return", FALSE, _modinit, _moddeinit,
-	"$Id: return.c 3381 2005-11-01 09:10:19Z pfish $",
+	"$Id: return.c 3403 2005-11-02 19:09:20Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -42,7 +42,7 @@ static void ns_cmd_return(char *origin)
 	user_t *u = user_find(origin);
 	char *target = strtok(NULL, " ");
 	char *newmail = strtok(NULL, " ");
-	char *newpass;
+	char *newpass, *newnpass;
 	char oldmail[EMAILLEN];
 	myuser_t *mu;
 
@@ -75,6 +75,7 @@ static void ns_cmd_return(char *origin)
 	}
 
 	newpass = gen_pw(12);
+	newnpass = crypt_string(newpass, gen_salt());
 	strlcpy(oldmail, mu->email, EMAILLEN);
 	strlcpy(mu->email, newmail, EMAILLEN);
 
@@ -86,7 +87,14 @@ static void ns_cmd_return(char *origin)
 		return;
 	}
 
-	strlcpy(mu->pass, newpass, NICKLEN);
+	if (crypto_module_loaded == TRUE)
+	{
+		mu->flags |= MU_CRYPTPASS;
+		strlcpy(mu->pass, newnpass, NICKLEN);
+	}
+	else
+		strlcpy(mu->pass, newpass, NICKLEN);
+
 	free(newpass);
 
 	/* prevents users from "stealing it back" in the event of a takeover */
