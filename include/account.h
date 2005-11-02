@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 3235 2005-10-29 00:21:03Z jilles $
+ * $Id: account.h 3389 2005-11-02 01:01:37Z nenolod $
  */
 
 #ifndef ACCOUNT_H
@@ -55,6 +55,7 @@ struct myuser_
 #define MU_ALIAS       0x00000020
 #define MU_NOMEMO      0x00000040
 #define MU_EMAILMEMOS  0x00000080
+#define MU_CRYPTPASS   0x00000100
 
 #define MU_IRCOP       0x00001000
 #define MU_SRA         0x00002000
