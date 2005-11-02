@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3375 2005-11-01 03:22:07Z nenolod $
+ * $Id: node.c 3391 2005-11-02 01:58:18Z jilles $
  */
 
 #include "atheme.h"
@@ -470,7 +470,7 @@ user_t *user_add(char *nick, char *user, char *host, char *vhost, char *ip, char
 	else
 		strlcpy(u->vhost, host, HOSTLEN);
 
-	if (ip)
+	if (ip && strcmp(ip, "0") && strcmp(ip, "0.0.0.0") && strcmp(ip, "255.255.255.255"))
 		strlcpy(u->ip, ip, HOSTLEN);
 
 	u->server = server;

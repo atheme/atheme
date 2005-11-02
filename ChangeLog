@@ -1,3 +1,12 @@
+nenolod     2005/11/02 01:01:37 UTC	(20051102-3389)
+  Log:
+  Add MU_CRYPTPASS, to designate an encrypted password.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/account.h (File Modified) 
+
+
 pfish       2005/11/01 09:26:18 UTC	(20051101-3387)
   Log:
   Update both example configs with RETURN.
