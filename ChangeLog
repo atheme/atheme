@@ -1,3 +1,12 @@
+nenolod     2005/11/02 17:54:21 UTC	(20051102-3393)
+  Log:
+  Use m->handle in module_locate_symbol().
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/module.c (File Modified) 
+
+
 jilles      2005/11/02 01:58:18 UTC	(20051102-3391)
   Log:
   Treat IPs of users of "0", "0.0.0.0" and "255.255.255.255"

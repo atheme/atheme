@@ -4,13 +4,15 @@
  *
  * Cryptographic module support.
  *
- * $Id: crypto.h 1763 2005-08-18 18:45:28Z nenolod $
+ * $Id: crypto.h 3395 2005-11-02 18:32:36Z nenolod $
  */
 
 #ifndef CRYPTO_H
 #define CRYPTO_H
 
-extern char *(*crypt_string)(char *str, char *salt);
-extern char *generic_crypt_string(char *str, char *salt);
+E char *(*crypt_string)(char *str, char *salt);
+E char *generic_crypt_string(char *str, char *salt);
+E boolean_t verify_password(char *uinput, char *pass);
+E char *gen_salt(void);
 
 #endif
