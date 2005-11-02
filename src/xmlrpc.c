@@ -120,11 +120,13 @@ void xmlrpc_process(char *buffer)
 			else
 			{
 				xmlrpc_error_code = 4;
+				xmlrpc_generic_error(xmlrpc_error_code, "XMLRPC error: Unknown routine called");
 			}
 		}
 		else
 		{
 			xmlrpc_error_code = 3;
+			xmlrpc_generic_error(xmlrpc_error_code, "XMLRPC error: Missing methodRequest or methodName.");
 		}
 	}
 	else
