@@ -4,12 +4,13 @@
  *
  * Cryptographic module support.
  *
- * $Id: crypto.c 3395 2005-11-02 18:32:36Z nenolod $
+ * $Id: crypto.c 3399 2005-11-02 18:51:40Z nenolod $
  */
 
 #include "atheme.h"
 
 static char saltbuf[BUFSIZE];
+boolean_t crypto_module_loaded = FALSE;
 
 /*
  * crypt_string is just like crypt(3) under UNIX

@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 3145 2005-10-23 00:52:06Z jilles $
+ * $Id: atheme.c 3399 2005-11-02 18:51:40Z nenolod $
  */
 
 #include "atheme.h"
@@ -205,6 +205,7 @@ int main(int argc, char *argv[])
 		db_load();
 	else
 	{
+		/* XXX: We should have bailed by now! --nenolod */
 		fprintf(stderr, "atheme: no backend modules loaded, see your configuration file.\n");
 		exit(EXIT_FAILURE);
 	}

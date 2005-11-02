@@ -4,7 +4,7 @@
  *
  * Cryptographic module support.
  *
- * $Id: crypto.h 3395 2005-11-02 18:32:36Z nenolod $
+ * $Id: crypto.h 3399 2005-11-02 18:51:40Z nenolod $
  */
 
 #ifndef CRYPTO_H
@@ -14,5 +14,6 @@ E char *(*crypt_string)(char *str, char *salt);
 E char *generic_crypt_string(char *str, char *salt);
 E boolean_t verify_password(char *uinput, char *pass);
 E char *gen_salt(void);
+E boolean_t crypto_module_loaded;
 
 #endif
