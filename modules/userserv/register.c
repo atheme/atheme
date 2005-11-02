@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 3229 2005-10-28 21:17:04Z jilles $
+ * $Id: register.c 3397 2005-11-02 18:50:19Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 3229 2005-10-28 21:17:04Z jilles $",
+	"$Id: register.c 3397 2005-11-02 18:50:19Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -45,6 +45,7 @@ static void us_cmd_register(char *origin)
 	char *account = strtok(NULL, " ");
 	char *pass = strtok(NULL, " ");
 	char *email = strtok(NULL, " ");
+	char *npass;
 	uint32_t i, tcnt;
 
 	if (u->myuser)
@@ -111,10 +112,18 @@ static void us_cmd_register(char *origin)
 		return;
 	}
 
-	mu = myuser_add(account, pass, email);
+	if (crypto_module_loaded == TRUE)
+		npass = crypt_string(pass, gen_salt());
+	else
+		npass = pass;
+
+	mu = myuser_add(origin, npass, email);
 	mu->registered = CURRTIME;
 	mu->lastlogin = CURRTIME;
 	mu->flags |= config_options.defuflags;
+
+	if (crypto_module_loaded == TRUE)
+		mu->flags |= MU_CRYPTPASS;
 
 	if (me.auth == AUTH_EMAIL)
 	{

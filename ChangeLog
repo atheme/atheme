@@ -1,3 +1,13 @@
+nenolod     2005/11/02 18:32:36 UTC	(20051102-3395)
+  Log:
+  Add more crypto library routines.
+  
+
+  Changes:	Modified:
+  +4 -2		trunk/include/crypto.h (File Modified) 
+  +26 -0	trunk/src/crypto.c (File Modified) 
+
+
 nenolod     2005/11/02 17:54:21 UTC	(20051102-3393)
   Log:
   Use m->handle in module_locate_symbol().
