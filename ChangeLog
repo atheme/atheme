@@ -1,3 +1,12 @@
+nenolod     2005/11/02 22:51:12 UTC	(20051102-3407)
+  Log:
+  More accurate handling of the HTTP 1.1 specification here.
+  
+
+  Changes:	Modified:
+  +13 -3	trunk/src/xmlrpc.c (File Modified) 
+
+
 nenolod     2005/11/02 19:34:33 UTC	(20051102-3405)
   Log:
   XMLRPC fixes
