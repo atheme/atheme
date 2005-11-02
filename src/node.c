@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3391 2005-11-02 01:58:18Z jilles $
+ * $Id: node.c 3413 2005-11-02 23:23:21Z jilles $
  */
 
 #include "atheme.h"
@@ -1704,6 +1704,17 @@ void expire_check(void *arg)
 		LIST_FOREACH(n1, mulist[i].head)
 		{
 			mu = (myuser_t *)n1->data;
+
+			/* If they're logged in, update lastlogin time.
+			 * To decrease db traffic, may want to only do
+			 * this if the account would otherwise be
+			 * deleted. -- jilles 
+			 */
+			if (LIST_LENGTH(&mu->logins) > 0)
+			{
+				mu->lastlogin = CURRTIME;
+				continue;
+			}
 
 			if (MU_HOLD & mu->flags)
 				continue;
