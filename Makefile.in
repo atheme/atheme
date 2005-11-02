@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 2891 2005-10-15 22:23:05Z nenolod $
+# $Id: Makefile.in 3401 2005-11-02 18:52:35Z nenolod $
 #
 
 CC		= @CC@
@@ -15,7 +15,7 @@ PREFIX		= @PREFIX@
 BIN		= atheme@EXEEXT@
 
 SHELL=/bin/sh
-SUBDIRS=libatheme dbtool backend modules protocol src
+SUBDIRS=libatheme crypto dbtool backend modules protocol src
 CLEANDIRS = ${SUBDIRS}
 
 all: build
