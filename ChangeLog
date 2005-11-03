@@ -1,3 +1,26 @@
+jilles      2005/11/03 22:17:00 UTC	(20051103-3433)
+  Log:
+  - Change command_exec() and fcommand_exec() first parameter to service_t,
+    so they also work properly with general::secure enabled.
+  - Add service name to "denied command" snoop channel message.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/contrib/ircd_catserv.c (File Modified) 
+  +1 -1		trunk/include/atheme.h (File Modified) 
+  +2 -2		trunk/include/commandtree.h (File Modified) 
+  +1 -1		trunk/modules/chanserv/clear.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/main.c (File Modified) 
+  +1 -1		trunk/modules/global/main.c (File Modified) 
+  +3 -3		trunk/modules/helpserv/main.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/ignore.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/main.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/main.c (File Modified) 
+  +1 -1		trunk/modules/operserv/main.c (File Modified) 
+  +1 -1		trunk/modules/userserv/main.c (File Modified) 
+  +7 -7		trunk/src/commandtree.c (File Modified) 
+
+
 jilles      2005/11/03 12:11:14 UTC	(20051103-3431)
   Log:
   Free u->server->userlist node in user_delete().
