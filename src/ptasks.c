@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 3423 2005-11-03 02:47:40Z jilles $
+ * $Id: ptasks.c 3441 2005-11-03 23:37:46Z jilles $
  */
 
 #include "atheme.h"
@@ -348,11 +348,18 @@ void handle_kill(char *origin, char *victim, char *reason)
 /* Received a message from a user, check if they are flooding
  * Returns true if the message should be ignored.
  * u - user sending the message
- * t - target of the message (to be used in warning the user)
- * */
+ * t - target of the message (to be used in warning the user, may be NULL
+ *     to use the server name)
+ */
 int floodcheck(user_t *u, user_t *t)
 {
-	if (t->server != me.me)
+	char *from;
+
+	if (t == NULL)
+		from = me.name;
+	else if (t->server == me.me)
+		from = t->nick;
+	else
 	{
 		slog(LG_ERROR, "BUG: tried to floodcheck message to non-service %s", t->nick);
 		return 0;
@@ -392,8 +399,8 @@ int floodcheck(user_t *u, user_t *t)
 
 				/* ok to use nick here, notice() will
 				 * change it to UID if necessary -- jilles */
-				notice(t->nick, u->nick, "You have triggered services flood protection.");
-				notice(t->nick, u->nick, "This is your first offense. You will be ignored for 30 seconds.");
+				notice(from, u->nick, "You have triggered services flood protection.");
+				notice(from, u->nick, "This is your first offense. You will be ignored for 30 seconds.");
 
 				snoop("FLOOD: \2%s\2", u->nick);
 
@@ -407,8 +414,8 @@ int floodcheck(user_t *u, user_t *t)
 				u->msgs = 0;
 				u->offenses = 12;
 
-				notice(t->nick, u->nick, "You have triggered services flood protection.");
-				notice(t->nick, u->nick, "This is your last warning. You will be ignored for 30 seconds.");
+				notice(from, u->nick, "You have triggered services flood protection.");
+				notice(from, u->nick, "This is your last warning. You will be ignored for 30 seconds.");
 
 				snoop("FLOOD: \2%s\2", u->nick);
 

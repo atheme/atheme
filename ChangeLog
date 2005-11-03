@@ -1,3 +1,14 @@
+jilles      2005/11/03 23:24:58 UTC	(20051103-3439)
+  Log:
+  Make notice(me.name, ...) work again for ratbox, charybdis and ircnet.
+  
+
+  Changes:	Modified:
+  +6 -3		trunk/protocol/charybdis.c (File Modified) 
+  +6 -3		trunk/protocol/ircnet.c (File Modified) 
+  +6 -3		trunk/protocol/ratbox.c (File Modified) 
+
+
 nenolod     2005/11/03 23:01:23 UTC	(20051103-3437)
   Log:
   Seed the random number generator so that systems with shitty hardware 
