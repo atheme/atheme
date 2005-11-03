@@ -1,3 +1,13 @@
+jilles      2005/11/03 22:25:35 UTC	(20051103-3435)
+  Log:
+  general::secure can't be changed on rehash for now
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/dist/example.conf (File Modified) 
+  +1 -1		trunk/dist/example.userserv.conf (File Modified) 
+
+
 jilles      2005/11/03 22:17:00 UTC	(20051103-3433)
   Log:
   - Change command_exec() and fcommand_exec() first parameter to service_t,
