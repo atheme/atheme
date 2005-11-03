@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY function.
  *
- * $Id: identify.c 3217 2005-10-26 10:36:26Z jilles $
+ * $Id: identify.c 3425 2005-11-03 07:00:06Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/identify", FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 3217 2005-10-26 10:36:26Z jilles $",
+	"$Id: identify.c 3425 2005-11-03 07:00:06Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -55,6 +55,7 @@ static void ns_cmd_identify(char *origin)
 	char *target = strtok(NULL, " ");
 	char *password = strtok(NULL, " ");
 	char buf[BUFSIZE], strfbuf[32];
+	char lau[BUFSIZE], lao[BUFSIZE];
 	struct tm tm;
 	metadata_t *md_failnum;
 
@@ -131,6 +132,19 @@ static void ns_cmd_identify(char *origin)
 		u->myuser = mu;
 		n = node_create();
 		node_add(u, n, &mu->logins);
+
+		/* keep track of login address for users */
+		strlcpy(lau, u->user, BUFSIZE);
+		strlcat(lau, "@", BUFSIZE);
+		strlcat(lau, u->vhost, BUFSIZE);
+		metadata_add(mu, METADATA_USER, "private:host:vhost", lau);
+
+		/* and for opers */
+		strlcpy(lao, u->user, BUFSIZE);
+		strlcat(lao, "@", BUFSIZE);
+		strlcat(lao, u->host, BUFSIZE);
+		metadata_add(mu, METADATA_USER, "private:host:actual", lao);
+
 
 		notice(nicksvs.nick, origin, "You are now identified for \2%s\2.", u->myuser->name);
 

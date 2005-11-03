@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 3397 2005-11-02 18:50:19Z nenolod $
+ * $Id: register.c 3425 2005-11-03 07:00:06Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 3397 2005-11-02 18:50:19Z nenolod $",
+	"$Id: register.c 3425 2005-11-03 07:00:06Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -44,6 +44,7 @@ static void ns_cmd_register(char *origin)
 	char *pass = strtok(NULL, " ");
 	char *email = strtok(NULL, " ");
 	char *npass;
+	char lau[BUFSIZE], lao[BUFSIZE];
 	uint32_t i, tcnt;
 
 	if (u->myuser)
@@ -168,4 +169,17 @@ static void ns_cmd_register(char *origin)
 	notice(nicksvs.nick, origin, "\2%s\2 is now registered to \2%s\2.", mu->name, mu->email);
 	notice(nicksvs.nick, origin, "The password is \2%s\2. Please write this down for future reference.", mu->pass);
 	hook_call_event("user_register", mu);
+
+	/* keep track of login address for users */
+	strlcpy(lau, u->user, BUFSIZE);
+	strlcat(lau, "@", BUFSIZE);
+	strlcat(lau, u->vhost, BUFSIZE);
+	metadata_add(mu, METADATA_USER, "private:host:vhost", lau);
+	/* and for opers */
+	strlcpy(lao, u->user, BUFSIZE);
+	strlcat(lao, "@", BUFSIZE);
+	strlcat(lao, u->host, BUFSIZE);
+	metadata_add(mu, METADATA_USER, "private:host:actual", lao);
+
+
 }

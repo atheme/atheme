@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: login.c 3383 2005-11-01 09:16:16Z pfish $
+ * $Id: login.c 3425 2005-11-03 07:00:06Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/login", FALSE, _modinit, _moddeinit,
-	"$Id: login.c 3383 2005-11-01 09:16:16Z pfish $",
+	"$Id: login.c 3425 2005-11-03 07:00:06Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -47,6 +47,7 @@ static void us_cmd_login(char *origin)
 	char *target = strtok(NULL, " ");
 	char *password = strtok(NULL, " ");
 	char buf[BUFSIZE], strfbuf[32];
+	char lau[BUFSIZE], lao[BUFSIZE];
 	struct tm tm;
 	metadata_t *md_failnum;
 
@@ -117,6 +118,18 @@ static void us_cmd_login(char *origin)
 		u->myuser = mu;
 		n = node_create();
 		node_add(u, n, &mu->logins);
+
+		/* keep track of login address for users */
+		strlcpy(lau, u->user, BUFSIZE);
+		strlcat(lau, "@", BUFSIZE);
+		strlcat(lau, u->vhost, BUFSIZE);
+		metadata_add(mu, METADATA_USER, "private:host:vhost", lau);
+
+		/* and for opers.. */
+		strlcpy(lao, u->user, BUFSIZE);
+		strlcat(lao, "@", BUFSIZE);
+		strlcat(lao, u->host, BUFSIZE);
+		metadata_add(mu, METADATA_USER, "private:host:actual", lao);
 
 		notice(usersvs.nick, origin, "You are now logged in as \2%s\2.", u->myuser->name);
 

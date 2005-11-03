@@ -1,3 +1,16 @@
+jilles      2005/11/03 02:47:40 UTC	(20051103-3423)
+  Log:
+  - /stats h shows all possible uplinks (similar to /stats c)
+  - /stats t includes 'T' before each RPL_STATSDEBUG data item
+  - add /stats v, shows ircops current uplink and connection
+    duration (no sendq info yet as that'd need tweaks to or deep
+    grovelling in claro)
+  
+
+  Changes:	Modified:
+  +33 -14	trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2005/11/03 01:45:06 UTC	(20051103-3421)
   Log:
   Free the metadata in myuser_delete().
