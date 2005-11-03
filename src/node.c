@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3413 2005-11-02 23:23:21Z jilles $
+ * $Id: node.c 3415 2005-11-03 01:14:14Z jilles $
  */
 
 #include "atheme.h"
@@ -1122,6 +1122,7 @@ void myuser_delete(char *name)
 	myuser_t *mu = myuser_find(name), *tmu;
 	mychan_t *mc;
 	chanacs_t *ca;
+	user_t *u;
 	node_t *n, *tn;
 	metadata_t *md;
 	uint32_t i;
@@ -1133,6 +1134,16 @@ void myuser_delete(char *name)
 	}
 
 	slog(LG_DEBUG, "myuser_delete(): %s", mu->name);
+
+	/* log them out */
+	LIST_FOREACH_SAFE(n, tn, mu->logins.head)
+	{
+		u = n->data;
+		ircd_on_logout(u->nick, mu->name, NULL);
+		u->myuser = NULL;
+		node_del(n, &mu->logins);
+		node_free(n);
+	}
 
 	/* remove their chanacs shiz */
 	LIST_FOREACH_SAFE(n, tn, mu->chanacs.head)

@@ -1,3 +1,13 @@
+jilles      2005/11/02 23:23:21 UTC	(20051102-3413)
+  Log:
+  Update lastlogin time in expire check if they
+  are logged in.
+  
+
+  Changes:	Modified:
+  +11 -0	trunk/src/node.c (File Modified) 
+
+
 nenolod     2005/11/02 23:08:29 UTC	(20051102-3411)
   Log:
   Fix some more bugs and issues with the XMLRPC implementation.

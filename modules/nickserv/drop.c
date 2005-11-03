@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ DROP function.
  *
- * $Id: drop.c 3371 2005-11-01 00:33:18Z pfish $
+ * $Id: drop.c 3415 2005-11-03 01:14:14Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 3371 2005-11-01 00:33:18Z pfish $",
+	"$Id: drop.c 3415 2005-11-03 01:14:14Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -106,9 +106,6 @@ static void ns_cmd_drop(char *origin)
 
 	snoop("DROP: \2%s\2 by \2%s\2", mu->name, u->nick);
 	hook_call_event("user_drop", mu);
-	ircd_on_logout(origin, u->myuser->name, NULL);
-	if (u->myuser == mu)
-		u->myuser = NULL;
 	notice(nicksvs.nick, origin, "The nickname \2%s\2 has been dropped.", mu->name);
 	myuser_delete(mu->name);
 }
