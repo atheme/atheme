@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 3299 2005-10-30 22:25:26Z jilles $
+ * $Id: ptasks.c 3423 2005-11-03 02:47:40Z jilles $
  */
 
 #include "atheme.h"
@@ -94,7 +94,14 @@ void handle_stats(char *origin, char req)
 
 	  case 'H':
 	  case 'h':
-		  numeric_sts(me.name, 244, CLIENT_NAME(u), "H * * %s", (is_ircop(u)) ? curr_uplink->name : "127.0.0.1");
+		  if (!is_ircop(u))
+			  break;
+
+		  LIST_FOREACH(n, uplinks.head)
+		  {
+			  uplink = (uplink_t *)n->data;
+			  numeric_sts(me.name, 244, CLIENT_NAME(u), "H * * %s", uplink->name);
+		  }
 		  break;
 
 	  case 'I':
@@ -121,24 +128,36 @@ void handle_stats(char *origin, char req)
 		  if (!is_ircop(u))
 			  break;
 
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":event      %7d", claro_state.event);
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":node       %7d", claro_state.node);
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":sra        %7d", cnt.sra);
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":tld        %7d", cnt.tld);
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":kline      %7d", cnt.kline);
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":server     %7d", cnt.server);
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":user       %7d", cnt.user);
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":chan       %7d", cnt.chan);
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":myuser     %7d", cnt.myuser);
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":mychan     %7d", cnt.mychan);
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":chanacs    %7d", cnt.chanacs);
+		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :event      %7d", claro_state.event);
+		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :node       %7d", claro_state.node);
+		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :sra        %7d", cnt.sra);
+		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :tld        %7d", cnt.tld);
+		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :kline      %7d", cnt.kline);
+		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :server     %7d", cnt.server);
+		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :user       %7d", cnt.user);
+		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :chan       %7d", cnt.chan);
+		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :myuser     %7d", cnt.myuser);
+		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :mychan     %7d", cnt.mychan);
+		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :chanacs    %7d", cnt.chanacs);
 
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":bytes sent %7.2f%s", bytes(cnt.bout), sbytes(cnt.bout));
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), ":bytes recv %7.2f%s", bytes(cnt.bin), sbytes(cnt.bin));
+		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :bytes sent %7.2f%s", bytes(cnt.bout), sbytes(cnt.bout));
+		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :bytes recv %7.2f%s", bytes(cnt.bin), sbytes(cnt.bin));
 		  break;
 
 	  case 'u':
 		  numeric_sts(me.name, 242, CLIENT_NAME(u), ":Services Uptime: %s", timediff(CURRTIME - me.start));
+		  break;
+
+	  case 'V':
+	  case 'v':
+		  if (!is_ircop(u))
+			  break;
+
+		  /* we received this command from the uplink, so,
+		   * hmm, it is not idle */
+		  numeric_sts(me.name, 249, CLIENT_NAME(u), "V :%s (AutoConn.!*@*) Idle: 0 SendQ: ? Connected: %s",
+				  curr_uplink->name,
+				  timediff(CURRTIME - curr_uplink->conn->first_recv));
 		  break;
 
 	  default:
