@@ -1,3 +1,13 @@
+pfish       2005/11/03 07:06:37 UTC	(20051103-3427)
+  Log:
+  Shorten up notice (Last seen address now becomes Last login from)
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/nickserv/info.c (File Modified) 
+  +2 -2		trunk/modules/userserv/info.c (File Modified) 
+
+
 pfish       2005/11/03 07:00:06 UTC	(20051103-3425)
   Log:
   NickServ/UserServ: Keep track of last seen vhosts for users to be displayed in INFO, and actual hosts for opers.

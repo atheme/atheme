@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 3053 2005-10-20 18:04:13Z nenolod $
+ * $Id: connection.c 3429 2005-11-03 12:06:45Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -162,6 +162,7 @@ void connection_close(connection_t *cptr)
 		sptr = nptr->data;
 
 		node_del(nptr, &cptr->recvq);
+		node_free(nptr);
 
 		free(sptr->buf);
 		free(sptr);
@@ -172,6 +173,7 @@ void connection_close(connection_t *cptr)
 		sptr = nptr->data;
 
 		node_del(nptr, &cptr->sendq);
+		node_free(nptr);
 
 		free(sptr->buf);
 		free(sptr);
