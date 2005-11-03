@@ -1,3 +1,13 @@
+jilles      2005/11/03 23:37:46 UTC	(20051103-3441)
+  Log:
+  Allow NULL target for floodcheck(). This will cause
+  any warnings to be sent from services's server name.
+  
+
+  Changes:	Modified:
+  +14 -7	trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2005/11/03 23:24:58 UTC	(20051103-3439)
   Log:
   Make notice(me.name, ...) work again for ratbox, charybdis and ircnet.

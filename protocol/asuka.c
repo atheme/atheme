@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: asuka.c 3203 2005-10-25 22:22:40Z jilles $
+ * $Id: asuka.c 3443 2005-11-03 23:52:38Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 3203 2005-10-25 22:22:40Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 3443 2005-11-03 23:52:38Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -176,17 +176,20 @@ static void asuka_notice(char *from, char *target, char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
-	user_t *fptr = user_find(from);
-	user_t *tptr = user_find(target);
+	user_t *u = user_find(from);
+	user_t *t = user_find(target);
 
-	if (!fptr || !tptr)
+	if (u == NULL && (from == NULL || (irccasecmp(from, me.name) && irccasecmp(from, ME))))
+	{
+		slog(LG_DEBUG, "asuka_notice(): unknown source %s for notice to %s", from, target);
 		return;
+	}
 
 	va_start(ap, fmt);
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts("%s O %s :%s", fptr->uid, tptr->uid, buf);
+	sts("%s O %s :%s", u ? u->uid : me.numeric, t ? t->uid : target, buf);
 }
 
 static void asuka_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
