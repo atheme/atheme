@@ -1,3 +1,15 @@
+jilles      2005/11/03 01:14:14 UTC	(20051103-3415)
+  Log:
+  Clear out all mu->logins (including ircd_on_logout())
+  on myuser_delete().
+  
+
+  Changes:	Modified:
+  +0 -3		trunk/modules/nickserv/drop.c (File Modified) 
+  +0 -3		trunk/modules/userserv/drop.c (File Modified) 
+  +11 -0	trunk/src/node.c (File Modified) 
+
+
 jilles      2005/11/02 23:23:21 UTC	(20051102-3413)
   Log:
   Update lastlogin time in expire check if they

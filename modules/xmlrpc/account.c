@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 3359 2005-10-31 09:19:01Z alambert $
+ * $Id: account.c 3417 2005-11-03 01:15:02Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 3359 2005-10-31 09:19:01Z alambert $",
+	"$Id: account.c 3417 2005-11-03 01:15:02Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -433,6 +433,67 @@ static int do_set_metadata(int parc, char *parv[])
 	return 0;
 }
 
+/*
+ * atheme.account.delete_metadata
+ *
+ * XML inputs:
+ *       authcookie, account name, key
+ *
+ * XML outputs:
+ *       fault 1 - validation failed
+ *       fault 2 - unknown account
+ *       fault 4 - insufficient parameters
+ *       fault 5 - invalid parameters
+ *       fault 6 - key never existed
+ *       default - success message
+ *
+ * Side Effects:
+ *       metadata is deleted from an account.
+ */ 
+static int do_delete_metadata(int parc, char *parv[])
+{
+	myuser_t *mu;
+	char buf[XMLRPC_BUFSIZE];
+
+	if (parc < 3)
+	{
+		xmlrpc_generic_error(4, "Insufficient parameters.");
+		return 0;
+	}
+
+	if ((mu = myuser_find(parv[1])) == NULL)
+	{
+		xmlrpc_generic_error(2, "Unknown account.");
+		return 0;
+	}
+
+	if (authcookie_validate(parv[0], mu) == FALSE)
+	{
+		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		return 0;
+	}
+
+	/* don't let them delete private:mark or the like :) */
+	if (strchr(parv[2], ':') || (strlen(parv[2]) > 32)
+		|| strchr(parv[2], '\r') || strchr(parv[2], '\n') || strchr(parv[2], ' '))
+	{
+		xmlrpc_generic_error(5, "Invalid parameters.");
+		return 0;
+	}
+
+	if (!metadata_find(mu, METADATA_USER, parv[2]))
+	{
+		xmlrpc_generic_error(6, "Key does not exist.");
+		return 0;
+	}
+
+	metadata_delete(mu, METADATA_USER, parv[2]);
+
+	xmlrpc_string(buf, "Operation was successful.");
+	xmlrpc_send(1, buf);
+	return 0;
+}
+
 void _modinit(module_t *m)
 {
 	if (module_find_published("nickserv/main"))
@@ -443,6 +504,7 @@ void _modinit(module_t *m)
 	xmlrpc_register_method("atheme.login", do_login);
         xmlrpc_register_method("atheme.logout", do_logout);
 	xmlrpc_register_method("atheme.account.set_metadata", do_set_metadata);
+	xmlrpc_register_method("atheme.account.delete_metadata", do_delete_metadata);
 }
 
 void _moddeinit(void)
@@ -452,5 +514,6 @@ void _moddeinit(void)
 	xmlrpc_unregister_method("atheme.login");
         xmlrpc_unregister_method("atheme.logout");
 	xmlrpc_unregister_method("atheme.account.set_metadata");
+	xmlrpc_unregister_method("atheme.account.delete_metadata");
 }
 

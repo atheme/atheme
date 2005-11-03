@@ -4,7 +4,7 @@
  *
  * XMLRPC channel management functions.
  *
- * $Id: channel.c 3367 2005-10-31 10:05:05Z jilles $
+ * $Id: channel.c 3417 2005-11-03 01:15:02Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/channel", FALSE, _modinit, _moddeinit,
-	"$Id: channel.c 3367 2005-10-31 10:05:05Z jilles $",
+	"$Id: channel.c 3417 2005-11-03 01:15:02Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -132,6 +132,7 @@ static int channel_register(int parc, char *parv[])
  *       fault 5 - unknown channel
  *       fault 6 - no access
  *       fault 7 - bad parameters
+ *       fault 8 - table full
  *       default - success message
  *
  * Side Effects:
@@ -195,14 +196,91 @@ static int do_set_metadata(int parc, char *parv[])
 	return 0;
 }
 
+/*
+ * atheme.channel.delete_metadata
+ *
+ * XML inputs:
+ *       authcookie, account name, channel name, key, value
+ *
+ * XML outputs:
+ *       fault 1 - validation failed
+ *       fault 2 - unknown account
+ *       fault 4 - insufficient parameters
+ *       fault 5 - unknown channel
+ *       fault 6 - no access
+ *       fault 7 - bad parameters
+ *       fault 8 - key never existed
+ *       default - success message
+ *
+ * Side Effects:
+ *       metadata is added to a channel.
+ */ 
+static int do_delete_metadata(int parc, char *parv[])
+{
+	myuser_t *mu;
+	mychan_t *mc;
+	char buf[XMLRPC_BUFSIZE];
+
+	if (parc < 5)
+	{
+		xmlrpc_generic_error(4, "Insufficient parameters.");
+		return 0;
+	}
+
+	if (!(mu = myuser_find(parv[1])))
+	{
+		xmlrpc_generic_error(2, "Unknown account.");
+		return 0;
+	}
+
+	if (authcookie_validate(parv[0], mu) == FALSE)
+	{
+		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		return 0;
+	}
+
+	if (!(mc = mychan_find(parv[2])))
+	{
+		xmlrpc_generic_error(5, "Unknown channel.");
+		return 0;
+	}
+
+	if (!is_founder(mc, mu) && !is_successor(mc, mu))
+	{
+		xmlrpc_generic_error(6, "No access.");
+		return 0;
+	}
+
+	if (strchr(parv[3], ':') || (strlen(parv[3]) > 32)
+		|| strchr(parv[3], '\r') || strchr(parv[3], '\n') || strchr(parv[3], ' '))
+	{
+		xmlrpc_generic_error(7, "Bad parameters.");
+		return 0;
+	}
+
+	if (!metadata_find(mc, METADATA_CHANNEL, parv[3]))
+	{
+		xmlrpc_generic_error(8, "Key does not exist.");
+		return 0;
+	}
+
+	metadata_delete(mc, METADATA_CHANNEL, parv[3]);
+
+	xmlrpc_string(buf, "Operation was successful.");
+	xmlrpc_send(1, buf);
+	return 0;
+}
+
 void _modinit(module_t *m)
 {
 	xmlrpc_register_method("atheme.channel.register", channel_register);
 	xmlrpc_register_method("atheme.channel.set_metadata", do_set_metadata);
+	xmlrpc_register_method("atheme.channel.delete_metadata", do_delete_metadata);
 }
 
 void _moddeinit(void)
 {
 	xmlrpc_unregister_method("atheme.channel.register");
 	xmlrpc_unregister_method("atheme.channel.set_metadata");
+	xmlrpc_unregister_method("atheme.channel.delete_metadata");
 }
