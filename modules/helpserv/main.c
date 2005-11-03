@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 2843 2005-10-11 12:44:34Z kog $
+ * $Id: main.c 3433 2005-11-03 22:17:00Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"helpserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 2843 2005-10-11 12:44:34Z kog $",
+	"$Id: main.c 3433 2005-11-03 22:17:00Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -87,7 +87,7 @@ static void helpserv(char *origin, uint8_t parc, char *parv[])
 		return;
 
 	/* take the command through the hash table */
-	command_exec(helpsvs.disp, origin, cmd, &hs_cmdtree);
+	command_exec(helpsvs.me, origin, cmd, &hs_cmdtree);
 }
 
 static void helpserv_config_ready(void *unused)

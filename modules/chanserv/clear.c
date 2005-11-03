@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: clear.c 2983 2005-10-18 18:21:56Z nenolod $
+ * $Id: clear.c 3433 2005-11-03 22:17:00Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/clear", FALSE, _modinit, _moddeinit,
-	"$Id: clear.c 2983 2005-10-18 18:21:56Z nenolod $",
+	"$Id: clear.c 3433 2005-11-03 22:17:00Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,5 +48,5 @@ static void cs_cmd_clear(char *origin)
 		return;
 	}
 
-	fcommand_exec(chansvs.nick, chan, origin, cmd, &cs_clear_cmds);
+	fcommand_exec(chansvs.me, chan, origin, cmd, &cs_clear_cmds);
 }

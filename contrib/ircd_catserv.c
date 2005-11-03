@@ -4,7 +4,7 @@
  *
  * Meow!
  *
- * $Id: ircd_catserv.c 1518 2005-08-05 01:35:22Z alambert $
+ * $Id: ircd_catserv.c 3433 2005-11-03 22:17:00Z jilles $
  */
 
 #include "atheme.h"
@@ -69,5 +69,5 @@ static void catserv_handler(char *origin, uint8_t parc, char *parv[])
                 return;
 
         /* take the command through the hash table */
-        command_exec(catserv->name, origin, cmd, &catserv_cmdtree);
+        command_exec(catserv, origin, cmd, &catserv_cmdtree);
 }

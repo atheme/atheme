@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 3231 2005-10-28 23:17:27Z jilles $
+ * $Id: atheme.h 3433 2005-11-03 22:17:00Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -18,7 +18,6 @@
 #include "servers.h"
 #include "channels.h"
 #include "module.h"
-#include "commandtree.h"
 #include "pmodule.h"
 #include "serno.h"
 #include "crypto.h"
@@ -256,6 +255,7 @@ struct timeval burstime;
 #include "phandler.h"
 #include "servtree.h"
 #include "services.h"
+#include "commandtree.h"
 #include "users.h"
 #include "authcookie.h"
 

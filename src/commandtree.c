@@ -4,7 +4,7 @@
  *
  * Commandtree manipulation routines.
  *
- * $Id: commandtree.c 2983 2005-10-18 18:21:56Z nenolod $
+ * $Id: commandtree.c 3433 2005-11-03 22:17:00Z jilles $
  */
 
 #include "atheme.h"
@@ -57,7 +57,7 @@ void command_delete(command_t * cmd, list_t *commandtree)
 	node_del(n, commandtree);
 }
 
-void command_exec(char *mynick, char *origin, char *cmd, list_t *commandtree)
+void command_exec(service_t *svs, char *origin, char *cmd, list_t *commandtree)
 {
 	node_t *n;
 
@@ -87,13 +87,13 @@ void command_exec(char *mynick, char *origin, char *cmd, list_t *commandtree)
 				return;
 			}
 
-			notice(mynick, origin, "You are not authorized to perform this operation.");
-			snoop("DENIED CMD: \2%s\2 used %s", origin, cmd);
+			notice(svs->name, origin, "You are not authorized to perform this operation.");
+			snoop("DENIED CMD: \2%s\2 used %s %s", origin, svs->name, cmd);
 			return;
 		}
 	}
 
-	notice(mynick, origin, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", mynick);
+	notice(svs->name, origin, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", svs->disp);
 }
 
 /*
@@ -154,7 +154,7 @@ void fcommand_delete(fcommand_t * cmd, list_t *commandtree)
 	node_del(n, commandtree);
 }
 
-void fcommand_exec(char *mynick, char *channel, char *origin, char *cmd, list_t *commandtree)
+void fcommand_exec(service_t *svs, char *channel, char *origin, char *cmd, list_t *commandtree)
 {
 	node_t *n;
 
@@ -184,11 +184,11 @@ void fcommand_exec(char *mynick, char *channel, char *origin, char *cmd, list_t 
 				return;
 			}
 
-			notice(mynick, origin, "You are not authorized to perform this operation.");
+			notice(svs->name, origin, "You are not authorized to perform this operation.");
 			return;
 		}
 	}
 
 	if (*channel != '#')
-		notice(mynick, origin, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", mynick);
+		notice(svs->name, origin, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", svs->disp);
 }
