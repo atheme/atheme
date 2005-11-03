@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 3425 2005-11-03 07:00:06Z pfish $
+ * $Id: info.c 3427 2005-11-03 07:06:37Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 3425 2005-11-03 07:00:06Z pfish $",
+	"$Id: info.c 3427 2005-11-03 07:06:37Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -65,9 +65,9 @@ static void ns_cmd_info(char *origin)
 	notice(nicksvs.nick, origin, "Information on \2%s\2:", mu->name);
 
 	if ((is_ircop(u) || is_sra(u->myuser)) && (md = metadata_find(mu, METADATA_USER, "private:host:actual")))
-		notice(nicksvs.nick, origin, "Last seen address: %s", md->value);
+		notice(nicksvs.nick, origin, "Last login from: %s", md->value);
 	else if (md = metadata_find(mu, METADATA_USER, "private:host:vhost"))
-		notice(nicksvs.nick, origin, "Last seen address: %s", md->value);
+		notice(nicksvs.nick, origin, "Last login from: %s", md->value);
 
 	notice(nicksvs.nick, origin, "Registered : %s (%s ago)", strfbuf, time_ago(mu->registered));
 

@@ -1,3 +1,17 @@
+pfish       2005/11/03 07:00:06 UTC	(20051103-3425)
+  Log:
+  NickServ/UserServ: Keep track of last seen vhosts for users to be displayed in INFO, and actual hosts for opers.
+  
+
+  Changes:	Modified:
+  +14 -0	trunk/modules/nickserv/identify.c (File Modified) 
+  +5 -0		trunk/modules/nickserv/info.c (File Modified) 
+  +14 -0	trunk/modules/nickserv/register.c (File Modified) 
+  +5 -0		trunk/modules/userserv/info.c (File Modified) 
+  +13 -0	trunk/modules/userserv/login.c (File Modified) 
+  +13 -0	trunk/modules/userserv/register.c (File Modified) 
+
+
 jilles      2005/11/03 02:47:40 UTC	(20051103-3423)
   Log:
   - /stats h shows all possible uplinks (similar to /stats c)
