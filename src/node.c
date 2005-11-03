@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3419 2005-11-03 01:35:02Z jilles $
+ * $Id: node.c 3421 2005-11-03 01:45:06Z jilles $
  */
 
 #include "atheme.h"
@@ -1186,6 +1186,13 @@ void myuser_delete(char *name)
 				metadata_delete(tmu, METADATA_USER, "private:alias:parent");
 			}
 		}
+	}
+
+	/* delete the metadata */
+	LIST_FOREACH_SAFE(n, tn, mu->metadata.head)
+	{
+		md = n->data;
+		metadata_delete(mu, METADATA_USER, md->name);
 	}
 
 	n = node_find(mu, &mulist[mu->hash]);

@@ -1,3 +1,12 @@
+jilles      2005/11/03 01:35:02 UTC	(20051103-3419)
+  Log:
+  Free the nodes in metadata_delete().
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/src/node.c (File Modified) 
+
+
 alambert    2005/11/03 01:15:02 UTC	(20051103-3417)
   Log:
   Add atheme.{account,channel}.delete_metadata
