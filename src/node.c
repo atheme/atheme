@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3415 2005-11-03 01:14:14Z jilles $
+ * $Id: node.c 3419 2005-11-03 01:35:02Z jilles $
  */
 
 #include "atheme.h"
@@ -1636,18 +1636,21 @@ void metadata_delete(void *target, int32_t type, char *name)
 		mu = target;
 		n = node_find(md, &mu->metadata);
 		node_del(n, &mu->metadata);
+		node_free(n);
 	}
 	else if (type == METADATA_CHANNEL)
 	{
 		mc = target;
 		n = node_find(md, &mc->metadata);
 		node_del(n, &mc->metadata);
+		node_free(n);
 	}
 	else if (type == METADATA_CHANACS)
 	{
 		ca = target;
 		n = node_find(md, &ca->metadata);
 		node_del(n, &ca->metadata);
+		node_free(n);
 	}
 	else
 	{

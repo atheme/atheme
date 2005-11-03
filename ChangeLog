@@ -1,3 +1,12 @@
+alambert    2005/11/03 01:15:02 UTC	(20051103-3417)
+  Log:
+  Add atheme.{account,channel}.delete_metadata
+
+  Changes:	Modified:
+  +63 -0	trunk/modules/xmlrpc/account.c (File Modified) 
+  +80 -2	trunk/modules/xmlrpc/channel.c (File Modified) 
+
+
 jilles      2005/11/03 01:14:14 UTC	(20051103-3415)
   Log:
   Clear out all mu->logins (including ircd_on_logout())
