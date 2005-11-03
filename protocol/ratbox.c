@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 3339 2005-10-31 03:52:12Z nenolod $
+ * $Id: ratbox.c 3439 2005-11-03 23:24:58Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 3339 2005-10-31 03:52:12Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 3439 2005-11-03 23:24:58Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -198,15 +198,18 @@ static void ratbox_notice(char *from, char *target, char *fmt, ...)
 	user_t *u = user_find(from);
 	user_t *t = user_find(target);
 
-	if (!u)
+	if (u == NULL && (from == NULL || (irccasecmp(from, me.name) && irccasecmp(from, ME))))
+	{
+		slog(LG_DEBUG, "ratbox_notice(): unknown source %s for notice to %s", from, target);
 		return;
+	}
 
 	va_start(ap, fmt);
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	if (target[0] != '#' || chanuser_find(channel_find(target), user_find(from)))
-		sts(":%s NOTICE %s :%s", CLIENT_NAME(u), t ? CLIENT_NAME(t) : target, buf);
+	if (u == NULL || target[0] != '#' || chanuser_find(channel_find(target), u))
+		sts(":%s NOTICE %s :%s", u ? CLIENT_NAME(u) : ME, t ? CLIENT_NAME(t) : target, buf);
 	else
 		/* not on channel, let's send it from the server
 		 * hyb6 won't accept this, oh well, they'll have to

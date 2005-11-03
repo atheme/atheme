@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 3337 2005-10-31 03:51:25Z nenolod $
+ * $Id: charybdis.c 3439 2005-11-03 23:24:58Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3337 2005-10-31 03:51:25Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3439 2005-11-03 23:24:58Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -203,15 +203,18 @@ static void charybdis_notice(char *from, char *target, char *fmt, ...)
 	user_t *u = user_find(from);
 	user_t *t = user_find(target);
 
-	if (!u)
+	if (u == NULL && (from == NULL || (irccasecmp(from, me.name) && irccasecmp(from, ME))))
+	{
+		slog(LG_DEBUG, "charybdis_notice(): unknown source %s for notice to %s", from, target);
 		return;
+	}
 
 	va_start(ap, fmt);
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	if (target[0] != '#' || chanuser_find(channel_find(target), user_find(from)))
-		sts(":%s NOTICE %s :%s", CLIENT_NAME(u), t ? CLIENT_NAME(t) : target, buf);
+	if (u == NULL || target[0] != '#' || chanuser_find(channel_find(target), u))
+		sts(":%s NOTICE %s :%s", u ? CLIENT_NAME(u) : ME, t ? CLIENT_NAME(t) : target, buf);
 	else
 		sts(":%s NOTICE %s :%s: %s", ME, target, u->nick, buf);
 }
