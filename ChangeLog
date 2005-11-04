@@ -1,3 +1,11 @@
+alambert    2005/11/04 06:56:15 UTC	(20051104-3451)
+  Log:
+  XMLRPC: a lot of folks are using the explorer script, add it to contrib/
+
+  Changes:	Modified:
+  +99 -0	trunk/contrib/xmlrpc_explorer.php (File Added) 
+
+
 alambert    2005/11/04 06:47:38 UTC	(20051104-3449)
   Log:
   XMLRPC: rename atheme.x.y_metadata to atheme.x.metadata.y
