@@ -4,7 +4,7 @@
  *
  * This file contains code for UserServ RESETPASS
  *
- * $Id: resetpass.c 3383 2005-11-01 09:16:16Z pfish $
+ * $Id: resetpass.c 3445 2005-11-04 00:55:48Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/resetpass", FALSE, _modinit, _moddeinit,
-	"$Id: resetpass.c 3383 2005-11-01 09:16:16Z pfish $",
+	"$Id: resetpass.c 3445 2005-11-04 00:55:48Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -69,7 +69,7 @@ static void us_cmd_resetpass(char *origin)
 		notice(usersvs.nick, origin, "Overriding MARK placed by %s on the nickname %s.", md->value, name);
 		notice(usersvs.nick, origin, "The password for the nickname %s has been changed to %s.", name, newpass);
 		strlcpy(mu->pass, newpass, NICKLEN);
-		wallops("%s used the RESETPASS cmd on the \2MARKED\2 nickname %s.", origin, name);
+		wallops("%s reset the password for the \2MARKED\2 nickname %s.", origin, name);
 		return;
 	}
 
@@ -84,7 +84,7 @@ static void us_cmd_resetpass(char *origin)
 	notice(usersvs.nick, origin, "The password for the nickname %s has been changed to %s.", name, newpass);
 	strlcpy(mu->pass, newpass, NICKLEN);
 
-	wallops("%s used the RESETPASS cmd on the nickname %s", origin, name);
+	wallops("%s reset the password for the nickname %s", origin, name);
 	snoop("RESETPASS: \2%s\2 reset the password for \2%s\2", origin, name);
 
 	free(newpass);
