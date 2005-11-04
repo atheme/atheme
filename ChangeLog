@@ -1,3 +1,12 @@
+pfish       2005/11/04 06:57:27 UTC	(20051104-3453)
+  Log:
+  Update private:host:vhost metadata when a vhost is assigned/restored
+  
+
+  Changes:	Modified:
+  +22 -0	trunk/modules/nickserv/vhost.c (File Modified) 
+
+
 alambert    2005/11/04 06:56:15 UTC	(20051104-3451)
   Log:
   XMLRPC: a lot of folks are using the explorer script, add it to contrib/
