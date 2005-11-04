@@ -4,7 +4,7 @@
  *
  * VHost management! (ratbox only right now.)
  *
- * $Id: vhost.c 2773 2005-10-08 20:32:23Z nenolod $
+ * $Id: vhost.c 3457 2005-11-04 07:04:27Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 2773 2005-10-08 20:32:23Z nenolod $",
+	"$Id: vhost.c 3457 2005-11-04 07:04:27Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -42,6 +42,7 @@ static void do_sethost_all(myuser_t *mu, char *host)
 {
 	node_t *n;
 	user_t *u;
+	char luhost[BUFSIZE];
 
 	LIST_FOREACH(n, mu->logins.head)
 	{
@@ -51,21 +52,32 @@ static void do_sethost_all(myuser_t *mu, char *host)
 		notice(usersvs.nick, u->nick, "Setting your host to \2%s\2.",
 			host);
 		sethost_sts(usersvs.nick, u->nick, host);
+		strlcpy(luhost, u->user, BUFSIZE);
+		strlcat(luhost, "@", BUFSIZE);
+		strlcat(luhost, host, BUFSIZE);
+		metadata_add(mu, METADATA_USER, "private:host:vhost", luhost);
 	}
 }
 
 static void do_sethost(user_t *u, char *host)
 {
+	char luhost[BUFSIZE];
+
 	strlcpy(u->vhost, host, HOSTLEN);
 	notice(usersvs.nick, u->nick, "Setting your host to \2%s\2.",
 		host);
 	sethost_sts(usersvs.nick, u->nick, host);
+	strlcpy(luhost, u->user, BUFSIZE);
+	strlcat(luhost, "@", BUFSIZE);
+	strlcat(luhost, host, BUFSIZE);
+	metadata_add(u->myuser, METADATA_USER, "private:host:vhost", luhost);
 }
 
 static void do_restorehost_all(myuser_t *mu)
 {
 	node_t *n;
 	user_t *u;
+	char luhost[BUFSIZE];
 
 	LIST_FOREACH(n, mu->logins.head)
 	{
@@ -75,15 +87,25 @@ static void do_restorehost_all(myuser_t *mu)
 		notice(usersvs.nick, u->nick, "Setting your host to \2%s\2.",
 			u->host);
 		sethost_sts(usersvs.nick, u->nick, u->host);
+		strlcpy(luhost, u->user, BUFSIZE);
+		strlcat(luhost, "@", BUFSIZE);
+		strlcat(luhost, u->host, BUFSIZE);
+		metadata_add(mu, METADATA_USER, "private:host:vhost", luhost);
 	}
 }
 
 static void do_restorehost(user_t *u)
 {
+	char luhost[BUFSIZE];
+
 	strlcpy(u->vhost, u->host, HOSTLEN);
 	notice(usersvs.nick, u->nick, "Setting your host to \2%s\2.",
 		u->host);
 	sethost_sts(usersvs.nick, u->nick, u->host);
+	strlcpy(luhost, u->user, BUFSIZE);
+	strlcat(luhost, "@", BUFSIZE);
+	strlcat(luhost, u->host, BUFSIZE);
+	metadata_add(u->myuser, METADATA_USER, "private:host:vhost", luhost);
 }
 
 /* VHOST <nick> [host] */
