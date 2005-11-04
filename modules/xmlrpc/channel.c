@@ -4,7 +4,7 @@
  *
  * XMLRPC channel management functions.
  *
- * $Id: channel.c 3417 2005-11-03 01:15:02Z alambert $
+ * $Id: channel.c 3447 2005-11-04 06:41:27Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/channel", FALSE, _modinit, _moddeinit,
-	"$Id: channel.c 3417 2005-11-03 01:15:02Z alambert $",
+	"$Id: channel.c 3447 2005-11-04 06:41:27Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -271,11 +271,58 @@ static int do_delete_metadata(int parc, char *parv[])
 	return 0;
 }
 
+/*
+ * atheme.channel.get_metadata
+ *
+ * XML inputs:
+ *       channel name, key
+ *
+ * XML outputs:
+ *       fault 1 - unknown channel
+ *       fault 2 - insufficient parameters
+ *       fault 3 - invalid parameters
+ *       fault 4 - key doesn't exist
+ *       default - value
+ *
+ * Side Effects:
+ *       none.
+ */ 
+static int do_get_metadata(int parc, char *parv[])
+{
+	mychan_t *mc;
+	metadata_t *md;
+	char buf[XMLRPC_BUFSIZE];
+
+	if (parc < 2)
+	{
+		xmlrpc_generic_error(2, "Insufficient parameters.");
+		return 0;
+	}
+
+	if (!(mc = mychan_find(parv[2])))
+	{
+		xmlrpc_generic_error(1, "Unknown channel.");
+		return 0;
+	}
+
+	/* if private, pretend it doesn't exist */
+	if (!(md = metadata_find(mc, METADATA_CHANNEL, parv[1])) || md->private)
+	{
+		xmlrpc_generic_error(4, "Key does not exist.");
+		return 0;
+	}
+
+	xmlrpc_string(buf, md->value);
+	xmlrpc_send(1, buf);
+	return 0;
+}
+
 void _modinit(module_t *m)
 {
 	xmlrpc_register_method("atheme.channel.register", channel_register);
 	xmlrpc_register_method("atheme.channel.set_metadata", do_set_metadata);
 	xmlrpc_register_method("atheme.channel.delete_metadata", do_delete_metadata);
+	xmlrpc_register_method("atheme.channel.get_metadata", do_get_metadata);
 }
 
 void _moddeinit(void)
@@ -283,4 +330,5 @@ void _moddeinit(void)
 	xmlrpc_unregister_method("atheme.channel.register");
 	xmlrpc_unregister_method("atheme.channel.set_metadata");
 	xmlrpc_unregister_method("atheme.channel.delete_metadata");
+	xmlrpc_unregister_method("atheme.channel.get_metadata");
 }

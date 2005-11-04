@@ -1,3 +1,16 @@
+pfish       2005/11/04 00:55:48 UTC	(20051104-3445)
+  Log:
+  Let's be consistent with our wallops notifications.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/drop.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/drop.c (File Modified) 
+  +2 -2		trunk/modules/nickserv/resetpass.c (File Modified) 
+  +1 -1		trunk/modules/userserv/drop.c (File Modified) 
+  +2 -2		trunk/modules/userserv/resetpass.c (File Modified) 
+
+
 jilles      2005/11/03 23:52:38 UTC	(20051103-3443)
   Log:
   Allow server notices and notices to channels in P10 protocol modules.
