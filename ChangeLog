@@ -1,3 +1,12 @@
+pfish       2005/11/04 07:04:27 UTC	(20051104-3457)
+  Log:
+  UserServ: Update private:host:vhost metadata when a vhost is assigned/restored
+  
+
+  Changes:	Modified:
+  +22 -0	trunk/modules/userserv/vhost.c (File Modified) 
+
+
 alambert    2005/11/04 06:58:08 UTC	(20051104-3455)
   Log:
   XMLRPC: fix up some method arguments
