@@ -4,7 +4,7 @@
  *
  * XMLRPC channel management functions.
  *
- * $Id: channel.c 3447 2005-11-04 06:41:27Z alambert $
+ * $Id: channel.c 3449 2005-11-04 06:47:38Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/channel", FALSE, _modinit, _moddeinit,
-	"$Id: channel.c 3447 2005-11-04 06:41:27Z alambert $",
+	"$Id: channel.c 3449 2005-11-04 06:47:38Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -120,7 +120,7 @@ static int channel_register(int parc, char *parv[])
 }
 
 /*
- * atheme.channel.set_metadata
+ * atheme.channel.metadata.set
  *
  * XML inputs:
  *       authcookie, account name, channel name, key, value
@@ -138,7 +138,7 @@ static int channel_register(int parc, char *parv[])
  * Side Effects:
  *       metadata is added to a channel.
  */ 
-static int do_set_metadata(int parc, char *parv[])
+static int do_metadata_set(int parc, char *parv[])
 {
 	myuser_t *mu;
 	mychan_t *mc;
@@ -197,7 +197,7 @@ static int do_set_metadata(int parc, char *parv[])
 }
 
 /*
- * atheme.channel.delete_metadata
+ * atheme.channel.metadata.delete
  *
  * XML inputs:
  *       authcookie, account name, channel name, key, value
@@ -215,7 +215,7 @@ static int do_set_metadata(int parc, char *parv[])
  * Side Effects:
  *       metadata is added to a channel.
  */ 
-static int do_delete_metadata(int parc, char *parv[])
+static int do_metadata_delete(int parc, char *parv[])
 {
 	myuser_t *mu;
 	mychan_t *mc;
@@ -272,7 +272,7 @@ static int do_delete_metadata(int parc, char *parv[])
 }
 
 /*
- * atheme.channel.get_metadata
+ * atheme.channel.metadata.get
  *
  * XML inputs:
  *       channel name, key
@@ -287,7 +287,7 @@ static int do_delete_metadata(int parc, char *parv[])
  * Side Effects:
  *       none.
  */ 
-static int do_get_metadata(int parc, char *parv[])
+static int do_metadata_get(int parc, char *parv[])
 {
 	mychan_t *mc;
 	metadata_t *md;
@@ -320,15 +320,15 @@ static int do_get_metadata(int parc, char *parv[])
 void _modinit(module_t *m)
 {
 	xmlrpc_register_method("atheme.channel.register", channel_register);
-	xmlrpc_register_method("atheme.channel.set_metadata", do_set_metadata);
-	xmlrpc_register_method("atheme.channel.delete_metadata", do_delete_metadata);
-	xmlrpc_register_method("atheme.channel.get_metadata", do_get_metadata);
+	xmlrpc_register_method("atheme.channel.metadata.set", do_metadata_set);
+	xmlrpc_register_method("atheme.channel.metadata.delete", do_metadata_delete);
+	xmlrpc_register_method("atheme.channel.metadata.get", do_metadata_get);
 }
 
 void _moddeinit(void)
 {
 	xmlrpc_unregister_method("atheme.channel.register");
-	xmlrpc_unregister_method("atheme.channel.set_metadata");
-	xmlrpc_unregister_method("atheme.channel.delete_metadata");
-	xmlrpc_unregister_method("atheme.channel.get_metadata");
+	xmlrpc_unregister_method("atheme.channel.metadata.set");
+	xmlrpc_unregister_method("atheme.channel.metadata.delete");
+	xmlrpc_unregister_method("atheme.channel.metadata.get");
 }

@@ -1,3 +1,12 @@
+alambert    2005/11/04 06:41:27 UTC	(20051104-3447)
+  Log:
+  XMLRPC: add atheme.account.get_metadata. not yet tested.
+
+  Changes:	Modified:
+  +48 -0	trunk/modules/xmlrpc/account.c (File Modified) 
+  +48 -0	trunk/modules/xmlrpc/channel.c (File Modified) 
+
+
 pfish       2005/11/04 00:55:48 UTC	(20051104-3445)
   Log:
   Let's be consistent with our wallops notifications.

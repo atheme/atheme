@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 3447 2005-11-04 06:41:27Z alambert $
+ * $Id: account.c 3449 2005-11-04 06:47:38Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 3447 2005-11-04 06:41:27Z alambert $",
+	"$Id: account.c 3449 2005-11-04 06:47:38Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -373,7 +373,7 @@ static int do_logout(int parc, char *parv[])
 }
 
 /*
- * atheme.account.set_metadata
+ * atheme.account.metadata.set
  *
  * XML inputs:
  *       authcookie, account name, key, value
@@ -389,7 +389,7 @@ static int do_logout(int parc, char *parv[])
  * Side Effects:
  *       metadata is added to an account.
  */ 
-static int do_set_metadata(int parc, char *parv[])
+static int do_metadata_set(int parc, char *parv[])
 {
 	myuser_t *mu;
 	char buf[XMLRPC_BUFSIZE];
@@ -434,7 +434,7 @@ static int do_set_metadata(int parc, char *parv[])
 }
 
 /*
- * atheme.account.delete_metadata
+ * atheme.account.metadata.delete
  *
  * XML inputs:
  *       authcookie, account name, key
@@ -450,7 +450,7 @@ static int do_set_metadata(int parc, char *parv[])
  * Side Effects:
  *       metadata is deleted from an account.
  */ 
-static int do_delete_metadata(int parc, char *parv[])
+static int do_metadata_delete(int parc, char *parv[])
 {
 	myuser_t *mu;
 	char buf[XMLRPC_BUFSIZE];
@@ -495,7 +495,7 @@ static int do_delete_metadata(int parc, char *parv[])
 }
 
 /*
- * atheme.account.get_metadata
+ * atheme.account.metadata.get
  *
  * XML inputs:
  *       account name, key
@@ -510,7 +510,7 @@ static int do_delete_metadata(int parc, char *parv[])
  * Side Effects:
  *       none.
  */ 
-static int do_get_metadata(int parc, char *parv[])
+static int do_metadata_get(int parc, char *parv[])
 {
 	myuser_t *mu;
 	metadata_t *md;
@@ -549,9 +549,9 @@ void _modinit(module_t *m)
 	xmlrpc_register_method("atheme.account.verify", account_verify);	
 	xmlrpc_register_method("atheme.login", do_login);
         xmlrpc_register_method("atheme.logout", do_logout);
-	xmlrpc_register_method("atheme.account.set_metadata", do_set_metadata);
-	xmlrpc_register_method("atheme.account.delete_metadata", do_delete_metadata);
-	xmlrpc_register_method("atheme.account.get_metadata", do_get_metadata);
+	xmlrpc_register_method("atheme.account.metadata.set", do_metadata_set);
+	xmlrpc_register_method("atheme.account.metadata.delete", do_metadata_delete);
+	xmlrpc_register_method("atheme.account.metadata.get", do_metadata_get);
 }
 
 void _moddeinit(void)
@@ -560,8 +560,8 @@ void _moddeinit(void)
 	xmlrpc_unregister_method("atheme.account.verify");
 	xmlrpc_unregister_method("atheme.login");
         xmlrpc_unregister_method("atheme.logout");
-	xmlrpc_unregister_method("atheme.account.set_metadata");
-	xmlrpc_unregister_method("atheme.account.delete_metadata");
-	xmlrpc_unregister_method("atheme.account.get_metadata");
+	xmlrpc_unregister_method("atheme.account.metadata.set");
+	xmlrpc_unregister_method("atheme.account.metadata.delete");
+	xmlrpc_unregister_method("atheme.account.metadata.get");
 }
 
