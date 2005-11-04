@@ -1,3 +1,12 @@
+alambert    2005/11/04 06:47:38 UTC	(20051104-3449)
+  Log:
+  XMLRPC: rename atheme.x.y_metadata to atheme.x.metadata.y
+
+  Changes:	Modified:
+  +12 -12	trunk/modules/xmlrpc/account.c (File Modified) 
+  +12 -12	trunk/modules/xmlrpc/channel.c (File Modified) 
+
+
 alambert    2005/11/04 06:41:27 UTC	(20051104-3447)
   Log:
   XMLRPC: add atheme.account.get_metadata. not yet tested.
