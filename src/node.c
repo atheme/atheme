@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3493 2005-11-05 23:06:49Z alambert $
+ * $Id: node.c 3505 2005-11-05 23:30:32Z alambert $
  */
 
 #include "atheme.h"
@@ -1527,8 +1527,7 @@ chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, uint32_t level
 		return NULL;
 
 	/* construct buffer for user's host */
-	host[0] = '\0';
-	strlcat(host, u->nick, BUFSIZE);
+	strlcpy(host, u->nick, BUFSIZE);
 	strlcat(host, "!", BUFSIZE);
 	strlcat(host, u->user, BUFSIZE);
 	strlcat(host, "@", BUFSIZE);
