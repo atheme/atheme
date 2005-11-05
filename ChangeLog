@@ -1,3 +1,11 @@
+alambert    2005/11/05 23:06:49 UTC	(20051105-3493)
+  Log:
+  uplink_delete(): remember to node_free()
+
+  Changes:	Modified:
+  +1 -0		trunk/src/node.c (File Modified) 
+
+
 alambert    2005/11/05 23:04:55 UTC	(20051105-3491)
   Log:
   OS NOOP: remember to node_free() and BlockHeapFree()

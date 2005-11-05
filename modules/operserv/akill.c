@@ -5,7 +5,7 @@
  * This file contains functionality which implements
  * the OService AKILL/KLINE command.
  *
- * $Id: akill.c 3489 2005-11-05 21:39:15Z pfish $
+ * $Id: akill.c 3495 2005-11-05 23:07:34Z pfish $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 3489 2005-11-05 21:39:15Z pfish $",
+	"$Id: akill.c 3495 2005-11-05 23:07:34Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -144,6 +144,9 @@ static void os_cmd_akill_add(char *origin, char *target)
 			notice(opersvs.nick, origin, "\2%s\2 is not on IRC.", target);
 			return;
 		}
+
+		if (is_internal_client(u))
+			return;
 
 		if ((k = kline_find(u->user, u->host)))
 		{
