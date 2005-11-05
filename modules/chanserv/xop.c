@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 3273 2005-10-30 05:25:32Z alambert $
+ * $Id: xop.c 3469 2005-11-05 06:23:46Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 3273 2005-10-30 05:25:32Z alambert $",
+	"$Id: xop.c 3469 2005-11-05 06:23:46Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -334,6 +334,23 @@ static void cs_xop_do_del(mychan_t *mc, myuser_t *mu, char *origin, char *target
 {
 	chanacs_t *ca;
 	metadata_t *md;
+	char *leveldesc = NULL;
+	
+	switch (level)
+	{
+		case CA_VOP:
+			leveldesc = "VOP";
+			break;
+		case CA_HOP:
+			leveldesc = "HOP";
+			break;
+		case CA_AOP:
+			leveldesc = "AOP";
+			break;
+		case CA_SOP:		
+			leveldesc = "SOP";
+			break;
+	}
 
 	if (mu && (mu->flags & MU_ALIAS) && (md = metadata_find(mu, METADATA_USER, "private:alias:parent")))
 	{
@@ -344,134 +361,37 @@ static void cs_xop_do_del(mychan_t *mc, myuser_t *mu, char *origin, char *target
 		notice(chansvs.nick, origin, "\2%s\2 is an alias for \2%s\2. Deleting entry under \2%s\2.", target, md->value, mu->name);
 	}
 
-	/* VOP */
-	if (level == CA_VOP)
+	/* let's finally make this sane.. --w00t */
+	if (!mu)
 	{
-		if (!mu)
+		/* we might be deleting a hostmask */
+		if (!validhostmask(target))
 		{
-			/* we might be deleting a hostmask */
-			if (!validhostmask(target))
-			{
-				notice(chansvs.nick, origin, "\2%s\2 is neither a nickname nor a hostmask.", target);
-				return;
-			}
-
-			if (!chanacs_find_host_literal(mc, target, CA_VOP))
-			{
-				notice(chansvs.nick, origin, "\2%s\2 is not on the VOP list for \2%s\2.", target, mc->name);
-				return;
-			}
-
-			chanacs_delete_host(mc, target, CA_VOP);
-			verbose(mc, "\2%s\2 removed \2%s\2 from the VOP list.", origin, target);
-			notice(chansvs.nick, origin, "\2%s\2 has been removed from the VOP list for \2%s\2.", target, mc->name);
+			notice(chansvs.nick, origin, "\2%s\2 is neither a nickname nor a hostmask.", target);
 			return;
 		}
 
-		if (!(ca = chanacs_find(mc, mu, CA_VOP)))
+		if (!chanacs_find_host_literal(mc, target, level))
 		{
-			notice(chansvs.nick, origin, "\2%s\2 is not on the VOP list for \2%s\2.", mu->name, mc->name);
+			notice(chansvs.nick, origin, "\2%s\2 is not on the %s list for \2%s\2.", target, leveldesc, mc->name);
 			return;
 		}
 
-		chanacs_delete(mc, mu, CA_VOP);
-		notice(chansvs.nick, origin, "\2%s\2 has been removed from the VOP list for \2%s\2.", mu->name, mc->name);
-		verbose(mc, "\2%s\2 removed \2%s\2 from the VOP list.", origin, mu->name);
+		chanacs_delete_host(mc, target, level);
+		verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", origin, target, leveldesc);
+		notice(chansvs.nick, origin, "\2%s\2 has been removed from the %s list for \2%s\2.", target, leveldesc, mc->name);
 		return;
 	}
 
-	/* HOP */
-	if (level == CA_HOP)
+	if (!(ca = chanacs_find(mc, mu, level)))
 	{
-		if (!mu)
-		{
-			/* we might be deleting a hostmask */
-			if (!validhostmask(target))
-			{
-				notice(chansvs.nick, origin, "\2%s\2 is neither a nickname nor a hostmask.", target);
-				return;
-			}
-
-			if (!chanacs_find_host_literal(mc, target, CA_HOP))
-			{
-				notice(chansvs.nick, origin, "\2%s\2 is not on the HOP list for \2%s\2.", target, mc->name);
-				return;
-			}
-
-			chanacs_delete_host(mc, target, CA_HOP);
-			verbose(mc, "\2%s\2 removed \2%s\2 from the HOP list.", origin, target);
-			notice(chansvs.nick, origin, "\2%s\2 has been removed from the HOP list for \2%s\2.", target, mc->name);
-			return;
-		}
-
-		if (!(ca = chanacs_find(mc, mu, CA_HOP)))
-		{
-			notice(chansvs.nick, origin, "\2%s\2 is not on the HOP list for \2%s\2.", mu->name, mc->name);
-			return;
-		}
-
-		chanacs_delete(mc, mu, CA_HOP);
-		notice(chansvs.nick, origin, "\2%s\2 has been removed from the HOP list for \2%s\2.", mu->name, mc->name);
-		verbose(mc, "\2%s\2 removed \2%s\2 from the HOP list.", origin, mu->name);
+		notice(chansvs.nick, origin, "\2%s\2 is not on the %s list for \2%s\2.", mu->name, leveldesc, mc->name);
 		return;
 	}
 
-	/* AOP */
-	if (level == CA_AOP)
-	{
-		if (!mu)
-		{
-			/* we might be deleting a hostmask */
-			if (!validhostmask(target))
-			{
-				notice(chansvs.nick, origin, "\2%s\2 is neither a nickname nor a hostmask.", target);
-				return;
-			}
-
-			if (!chanacs_find_host_literal(mc, target, CA_AOP))
-			{
-				notice(chansvs.nick, origin, "\2%s\2 is not on the AOP list for \2%s\2.", target, mc->name);
-				return;
-			}
-
-			chanacs_delete_host(mc, target, CA_AOP);
-			verbose(mc, "\2%s\2 removed \2%s\2 from the AOP list.", origin, target);
-			notice(chansvs.nick, origin, "\2%s\2 has been removed from the AOP list for \2%s\2.", target, mc->name);
-			return;
-		}
-
-		if (!(ca = chanacs_find(mc, mu, CA_AOP)))
-		{
-			notice(chansvs.nick, origin, "\2%s\2 is not on the AOP list for \2%s\2.", mu->name, mc->name);
-			return;
-		}
-
-		chanacs_delete(mc, mu, CA_AOP);
-		notice(chansvs.nick, origin, "\2%s\2 has been removed from the AOP list for \2%s\2.", mu->name, mc->name);
-		verbose(mc, "\2%s\2 removed \2%s\2 from the AOP list.", origin, mu->name);
-		return;
-	}
-
-	/* SOP */
-	if (level == CA_SOP)
-	{
-		if (!mu)
-		{
-			notice(chansvs.nick, origin, "\2%s\2 is not registered.", target);
-			return;
-		}
-
-		if (!(ca = chanacs_find(mc, mu, CA_SOP)))
-		{
-			notice(chansvs.nick, origin, "\2%s\2 is not on the SOP list for \2%s\2.", mu->name, mc->name);
-			return;
-		}
-
-		chanacs_delete(mc, mu, CA_SOP);
-		notice(chansvs.nick, origin, "\2%s\2 has been removed from the SOP list for \2%s\2.", mu->name, mc->name);
-		verbose(mc, "\2%s\2 removed \2%s\2 from the SOP list.", origin, mu->name);
-		return;
-	}
+	chanacs_delete(mc, mu, level);
+	notice(chansvs.nick, origin, "\2%s\2 has been removed from the %s list for \2%s\2.", mu->name, leveldesc, mc->name);
+	verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", origin, mu->name, leveldesc);
 }
 
 

@@ -1,3 +1,11 @@
+nenolod     2005/11/05 05:45:31 UTC	(20051105-3467)
+  Log:
+  Formatting niceities.
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/chanserv/main.c (File Modified) 
+
+
 nenolod     2005/11/05 05:43:49 UTC	(20051105-3465)
   Log:
   Perhaps this will make the service come back.
