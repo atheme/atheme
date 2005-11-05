@@ -4,7 +4,7 @@
  *
  * Commandtree manipulation routines.
  *
- * $Id: commandtree.c 3479 2005-11-05 07:54:22Z w00t $
+ * $Id: commandtree.c 3481 2005-11-05 08:03:39Z w00t $
  */
 
 #include "atheme.h"
@@ -189,6 +189,6 @@ void fcommand_exec(service_t *svs, char *channel, char *origin, char *cmd, list_
 		}
 	}
 
-	if (channel != NULL && *channel != '#')
+	if (!channel || *channel != '#')
 		notice(svs->name, origin, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", svs->disp);
 }

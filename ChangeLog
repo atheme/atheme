@@ -1,3 +1,11 @@
+w00t        2005/11/05 07:54:22 UTC	(20051105-3479)
+  Log:
+  Fix a NICE fcommand segfault if fcommand doesn't exist, etc.
+
+  Changes:	Modified:
+  +1 -1		trunk/src/commandtree.c (File Modified) 
+
+
 w00t        2005/11/05 07:24:34 UTC	(20051105-3477)
   Log:
   AKILL now split into seperate functions and using fcommand.
