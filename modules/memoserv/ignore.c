@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv IGNORE functions
  *
- * $Id: ignore.c 3433 2005-11-03 22:17:00Z jilles $
+ * $Id: ignore.c 3471 2005-11-05 06:40:44Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 3433 2005-11-03 22:17:00Z jilles $",
+	"$Id: ignore.c 3471 2005-11-05 06:40:44Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -25,7 +25,7 @@ static void ms_cmd_ignore_list(char *origin, char *arg);
 command_t ms_ignore = { "IGNORE", "Ignores a memo", AC_NONE, ms_cmd_ignore };
 fcommand_t ms_ignore_add = { "ADD", AC_NONE, ms_cmd_ignore_add };
 fcommand_t ms_ignore_del = { "DEL", AC_NONE, ms_cmd_ignore_del };
-fcommand_t ms_ignore_ignore = { "CLEAR", AC_NONE, ms_cmd_ignore_clear };
+fcommand_t ms_ignore_clear = { "CLEAR", AC_NONE, ms_cmd_ignore_clear };
 fcommand_t ms_ignore_list = { "LIST", AC_NONE, ms_cmd_ignore_list };
 
 list_t *ms_cmdtree;
@@ -43,7 +43,7 @@ void _modinit(module_t *m)
 	/* Add sub-commands */
 	fcommand_add(&ms_ignore_add, &ms_ignore_cmds);
 	fcommand_add(&ms_ignore_del, &ms_ignore_cmds);
-	fcommand_add(&ms_ignore_ignore, &ms_ignore_cmds);
+	fcommand_add(&ms_ignore_clear, &ms_ignore_cmds);
 	fcommand_add(&ms_ignore_list, &ms_ignore_cmds);
 }
 
@@ -55,7 +55,7 @@ void _moddeinit()
 	/* Delete sub-commands */
 	fcommand_delete(&ms_ignore_add, &ms_ignore_cmds);
 	fcommand_delete(&ms_ignore_del, &ms_ignore_cmds);
-	fcommand_delete(&ms_ignore_ignore, &ms_ignore_cmds);
+	fcommand_delete(&ms_ignore_clear, &ms_ignore_cmds);
 	fcommand_delete(&ms_ignore_list, &ms_ignore_cmds);
 }
 
