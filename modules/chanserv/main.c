@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 3433 2005-11-03 22:17:00Z jilles $
+ * $Id: main.c 3465 2005-11-05 05:43:49Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 3433 2005-11-03 22:17:00Z jilles $",
+	"$Id: main.c 3465 2005-11-05 05:43:49Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -26,6 +26,32 @@ list_t cs_cmdtree;
 list_t cs_fcmdtree;
 list_t cs_helptree;
 
+E list_t mychan;
+
+static void join_registered(boolean_t all)
+{
+	node_t *n;
+	uint32_t i;
+
+	for (i = 0; i < HASHSIZE; i++)
+	{
+		LIST_FOREACH(n, mclist[i].head)
+		{
+			mychan_t *mc = n->data;
+
+			if (all == TRUE)
+			{
+				join(chansvs.nick, mc->name);
+				continue;
+			}
+			else if (mc->chan != NULL && mc->chan->members.count != 0)
+			{
+				join(chansvs.nick, mc->name);
+				continue;
+			}
+		}
+	}
+}
 /* main services client routine */
 static void chanserv(char *origin, uint8_t parc, char *parv[])
 {
@@ -132,6 +158,14 @@ void _modinit(module_t *m)
 	{
 		chansvs.me = add_service(chansvs.nick, chansvs.user, chansvs.host, chansvs.real, chanserv);
 		chansvs.disp = chansvs.me->disp;
+
+		if (config_options.join_chans)
+		{
+			if (config_options.leave_chans)
+				join_registered(FALSE);
+			else
+				join_registered(TRUE);
+		}
 	}
 
 	hook_add_event("channel_join");
@@ -462,8 +496,8 @@ static void cs_keeptopic_newchan(channel_t *c)
 		/* Same channel, let's assume ircd has kept it.
 		 * Probably not a good assumption if the ircd doesn't do
 		 * topic bursting.
-		 * -- jilles */
-
+		 * -- jilles
+		 */
 		slog(LG_DEBUG, "Not doing keeptopic for %s because of equal channelTS", c->name);
 		return;
 	}

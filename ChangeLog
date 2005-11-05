@@ -1,3 +1,11 @@
+nenolod     2005/11/05 04:59:56 UTC	(20051105-3463)
+  Log:
+  Warning fix.
+
+  Changes:	Modified:
+  +1 -1		trunk/src/module.c (File Modified) 
+
+
 nenolod     2005/11/05 04:29:26 UTC	(20051105-3461)
   Log:
   Remove the 0.2 ROADMAP from our documentation bin.
