@@ -1,3 +1,11 @@
+alambert    2005/11/05 09:45:42 UTC	(20051105-3483)
+  Log:
+  CS INVITE: now, you can only invite yourself. Fixes spamming abuse issue.
+
+  Changes:	Modified:
+  +4 -17	trunk/modules/chanserv/invite.c (File Modified) 
+
+
 w00t        2005/11/05 08:03:39 UTC	(20051105-3481)
   Log:
   Err, try again?
