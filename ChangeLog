@@ -1,3 +1,12 @@
+nenolod     2005/11/05 04:29:26 UTC	(20051105-3461)
+  Log:
+  Remove the 0.2 ROADMAP from our documentation bin.
+  
+
+  Changes:	Modified:
+  +0 -37	trunk/doc/ROADMAP (File Deleted) 
+
+
 pfish       2005/11/04 08:30:57 UTC	(20051104-3459)
   Log:
   UserServ: Use a help file in userserv/ instead of nickserv.

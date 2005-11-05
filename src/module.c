@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 3393 2005-11-02 17:54:21Z nenolod $
+ * $Id: module.c 3463 2005-11-05 04:59:56Z nenolod $
  */
 
 #include "atheme.h"
@@ -180,7 +180,7 @@ module_t *module_load(char *filespec)
 #ifdef HAVE_DLINFO
 	dlinfo(handle, RTLD_DI_LINKMAP, &map);
 	if (map != NULL)
-		m->address = map->l_addr;
+		m->address = (void *) map->l_addr;
 	else
 		m->address = handle;
 #else
