@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3431 2005-11-03 12:11:14Z jilles $
+ * $Id: node.c 3493 2005-11-05 23:06:49Z alambert $
  */
 
 #include "atheme.h"
@@ -118,6 +118,7 @@ void uplink_delete(uplink_t * u)
 	free(u->vhost);
 
 	node_del(n, &uplinks);
+	node_free(n);
 
 	BlockHeapFree(uplink_heap, u);
 }
