@@ -5,7 +5,7 @@
  * This file contains functionality which implements
  * the OService AKILL/KLINE command.
  *
- * $Id: akill.c 3477 2005-11-05 07:24:34Z w00t $
+ * $Id: akill.c 3489 2005-11-05 21:39:15Z pfish $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 3477 2005-11-05 07:24:34Z w00t $",
+	"$Id: akill.c 3489 2005-11-05 21:39:15Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -84,14 +84,13 @@ static void os_cmd_akill(char *origin)
 static void os_cmd_akill_add(char *origin, char *target)
 {
 	user_t *u;
-	char *atarget = strtok(NULL, " ");
 	char *token = strtok(NULL, " ");
 	char *treason, reason[BUFSIZE];
 	long duration;
 	char *s;
 	kline_t *k;
 
-	if (!atarget || !token)
+	if (!target || !token)
 	{
 		notice(opersvs.nick, origin, "Insufficient parameters for \2AKILL ADD\2.");
 		notice(opersvs.nick, origin, "Syntax: AKILL ADD <nick|hostmask> [!P|!T <minutes>] " "<reason>");
@@ -138,11 +137,11 @@ static void os_cmd_akill_add(char *origin, char *target)
 		}			
 	}
 
-	if (!(strchr(atarget, '@')))
+	if (!(strchr(target, '@')))
 	{
-		if (!(u = user_find_named(atarget)))
+		if (!(u = user_find_named(target)))
 		{
-			notice(opersvs.nick, origin, "\2%s\2 is not on IRC.", atarget);
+			notice(opersvs.nick, origin, "\2%s\2 is not on IRC.", target);
 			return;
 		}
 
@@ -157,7 +156,7 @@ static void os_cmd_akill_add(char *origin, char *target)
 	}
 	else
 	{
-		char *userbuf = strtok(atarget, "@");
+		char *userbuf = strtok(target, "@");
 		char *hostbuf = strtok(NULL, "");
 		char *tmphost;
 		int i = 0;
@@ -202,25 +201,25 @@ static void os_cmd_akill_add(char *origin, char *target)
 
 static void os_cmd_akill_del(char *origin, char *target)
 {
-	char *atarget = strtok(NULL, " ");
+//	char *atarget = strtok(NULL, " ");
 	char *userbuf, *hostbuf;
 	uint32_t number;
 	char *s;
 	kline_t *k;
 
-	if (!atarget)
+	if (!target)
 	{
 		notice(opersvs.nick, origin, "Insuccicient parameters for \2AKILL DEL\2.");
 		notice(opersvs.nick, origin, "Syntax: AKILL DEL <hostmask>");
 		return;
 	}
 
-	if (strchr(atarget, ','))
+	if (strchr(target, ','))
 	{
 		uint32_t start = 0, end = 0, i;
 		char t[16];
 
-		s = strtok(atarget, ",");
+		s = strtok(target, ",");
 
 		do
 		{
@@ -272,23 +271,23 @@ static void os_cmd_akill_del(char *origin, char *target)
 		return;
 	}
 
-	if (!strchr(atarget, '@'))
+	if (!strchr(target, '@'))
 	{
 		uint32_t start = 0, end = 0, i;
 		char t[16];
 
-		if (strchr(atarget, ':'))
+		if (strchr(target, ':'))
 		{
-			for (i = 0; *atarget != ':'; atarget++, i++)
-				t[i] = *atarget;
+			for (i = 0; *target != ':'; target++, i++)
+				t[i] = *target;
 
 			t[++i] = '\0';
 			start = atoi(t);
 
-			atarget++;	/* skip past the : */
+			target++;	/* skip past the : */
 
-			for (i = 0; *atarget != '\0'; atarget++, i++)
-				t[i] = *atarget;
+			for (i = 0; *target != '\0'; target++, i++)
+				t[i] = *target;
 
 			t[++i] = '\0';
 			end = atoi(t);
@@ -309,7 +308,7 @@ static void os_cmd_akill_del(char *origin, char *target)
 			return;
 		}
 
-		number = atoi(atarget);
+		number = atoi(target);
 
 		if (!(k = kline_find_num(number)))
 		{
@@ -323,7 +322,7 @@ static void os_cmd_akill_del(char *origin, char *target)
 		return;
 	}
 
-	userbuf = strtok(atarget, "@");
+	userbuf = strtok(target, "@");
 	hostbuf = strtok(NULL, "@");
 
 	if (!(k = kline_find(userbuf, hostbuf)))
