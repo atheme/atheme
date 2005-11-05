@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INVITE functions.
  *
- * $Id: invite.c 3073 2005-10-22 06:40:32Z alambert $
+ * $Id: invite.c 3483 2005-11-05 09:45:42Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/invite", FALSE, _modinit, _moddeinit,
-	"$Id: invite.c 3073 2005-10-22 06:40:32Z alambert $",
+	"$Id: invite.c 3483 2005-11-05 09:45:42Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -42,15 +42,13 @@ void _moddeinit()
 static void cs_cmd_invite(char *origin)
 {
 	char *chan = strtok(NULL, " ");
-	char *nick = strtok(NULL, " ");
 	mychan_t *mc;
 	user_t *u = user_find(origin);
-	chanuser_t *cu;
 
 	if (!chan)
 	{
 		notice(chansvs.nick, origin, "Insufficient parameters specified for \2INVITE\2.");
-		notice(chansvs.nick, origin, "Syntax: INVITE <#channel> [nickname]");
+		notice(chansvs.nick, origin, "Syntax: INVITE <#channel>");
 		return;
 	}
 
@@ -73,23 +71,12 @@ static void cs_cmd_invite(char *origin)
 		return;
 	}
 
-	/* figure out who we're going to invite */
-	if (nick)
+	if (chanuser_find(mc->chan, u))
 	{
-		if (!(u = user_find_named(nick)))
-		{
-			notice(chansvs.nick, origin, "\2%s\2 is not online.", nick);
-			return;
-		}
-	}
-
-	cu = chanuser_find(mc->chan, u);
-	if (cu)
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is already on \2%s\2.", u->nick, mc->name);
+		notice(chansvs.nick, origin, "You're already on \2%s\2.", mc->name);
 		return;
 	}
 
 	sts(":%s INVITE %s :%s", chansvs.nick, u->nick, chan);
-	notice(chansvs.nick, origin, "\2%s\2 has been invited to \2%s\2.", u->nick, mc->name);
+	notice(chansvs.nick, origin, "You have been invited to \2%s\2.", mc->name);
 }
