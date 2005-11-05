@@ -1,3 +1,12 @@
+pfish       2005/11/05 23:07:34 UTC	(20051105-3495)
+  Log:
+  OperServ AKILL: Check if target is a internal client.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/modules/operserv/akill.c (File Modified) 
+
+
 alambert    2005/11/05 23:06:49 UTC	(20051105-3493)
   Log:
   uplink_delete(): remember to node_free()
