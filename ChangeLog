@@ -1,3 +1,11 @@
+alambert    2005/11/05 23:21:07 UTC	(20051105-3501)
+  Log:
+  authcookie_destroy(): remove extra free
+
+  Changes:	Modified:
+  +0 -1		trunk/src/authcookie.c (File Modified) 
+
+
 alambert    2005/11/05 23:09:17 UTC	(20051105-3499)
   Log:
   authcookie_validate(): don't take the first cookie matching myuser; take the first that works.

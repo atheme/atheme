@@ -86,12 +86,12 @@ TODO
 =====================================================================================
 Error Codes
 
-1 : xmlrpc_process() was passed a NULL buffer
-2 : xmlrpc_parse() returned NULL, likely not a XML document
-3 : xmlrpc_method() returned NULL, likely XML document did not contain <methodname>
-4 : findXMLRPCCommand() returned NULL, able to find the method
-5 : xmlrpc_split_buf() returned an parameter count of 0
-6 : method has no registered function
-7 : function returned XMLRPC_STOP
-8 : xmlrpc_set_buffer() was passed a NULL variable
+-1 : xmlrpc_process() was passed a NULL buffer
+-2 : xmlrpc_parse() returned NULL, likely not a XML document
+-3 : xmlrpc_method() returned NULL, likely XML document did not contain <methodname>
+-4 : findXMLRPCCommand() returned NULL, able to find the method
+-5 : xmlrpc_split_buf() returned an parameter count of 0
+-6 : method has no registered function
+-7 : function returned XMLRPC_STOP
+-8 : xmlrpc_set_buffer() was passed a NULL variable
 

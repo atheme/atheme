@@ -74,7 +74,7 @@ void xmlrpc_process(char *buffer)
 
 	if (!buffer)
 	{
-		xmlrpc_error_code = 1;
+		xmlrpc_error_code = -1;
 		return;
 	}
 
@@ -104,34 +104,34 @@ void xmlrpc_process(char *buffer)
 						}
 						else
 						{
-							xmlrpc_error_code = 7;
+							xmlrpc_error_code = -7;
 						}
 					}
 					else
 					{
-						xmlrpc_error_code = 6;
+						xmlrpc_error_code = -6;
 					}
 				}
 				else
 				{
-					xmlrpc_error_code = 5;
+					xmlrpc_error_code = -5;
 				}
 			}
 			else
 			{
-				xmlrpc_error_code = 4;
+				xmlrpc_error_code = -4;
 				xmlrpc_generic_error(xmlrpc_error_code, "XMLRPC error: Unknown routine called");
 			}
 		}
 		else
 		{
-			xmlrpc_error_code = 3;
+			xmlrpc_error_code = -3;
 			xmlrpc_generic_error(xmlrpc_error_code, "XMLRPC error: Missing methodRequest or methodName.");
 		}
 	}
 	else
 	{
-		xmlrpc_error_code = 2;
+		xmlrpc_error_code = -2;
 		xmlrpc_generic_error(xmlrpc_error_code, "XMLRPC error: Invalid document end at line 1");
 	}
 	if (ac)
@@ -159,7 +159,7 @@ void xmlrpc_set_buffer(char *(*func) (char *buffer, int len))
 	}
 	else
 	{
-		xmlrpc_error_code = 8;
+		xmlrpc_error_code = -8;
 	}
 }
 
