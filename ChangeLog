@@ -1,3 +1,11 @@
+w00t        2005/11/05 07:24:34 UTC	(20051105-3477)
+  Log:
+  AKILL now split into seperate functions and using fcommand.
+
+  Changes:	Modified:
+  +225 -217	trunk/modules/operserv/akill.c (File Modified) 
+
+
 alambert    2005/11/05 06:54:57 UTC	(20051105-3475)
   Log:
   XMLRPC: fixes for atheme.*.metadata.get
