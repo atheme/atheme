@@ -1,3 +1,13 @@
+pfish       2005/11/05 21:39:15 UTC	(20051105-3489)
+  Log:
+  Clean up the AKILL code that w00t converted to fcommands.
+  This should work now..
+  
+
+  Changes:	Modified:
+  +18 -19	trunk/modules/operserv/akill.c (File Modified) 
+
+
 w00t        2005/11/05 15:03:55 UTC	(20051105-3487)
   Log:
   Note to self: Update this.

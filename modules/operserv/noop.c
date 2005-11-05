@@ -4,7 +4,7 @@
  *
  * OperServ NOOP command.
  *
- * $Id: noop.c 2135 2005-09-05 01:28:25Z nenolod $
+ * $Id: noop.c 3491 2005-11-05 23:04:55Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/noop", TRUE, _modinit, _moddeinit,
-	"$Id: noop.c 2135 2005-09-05 01:28:25Z nenolod $",
+	"$Id: noop.c 3491 2005-11-05 23:04:55Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -218,6 +218,8 @@ static void os_cmd_noop(char *origin)
 			free(np->reason);
 
 			node_del(n, &noop_hostmask_list);
+			node_free(n);
+			BlockHeapFree(noop_heap, np);
 
 			notice(opersvs.nick, origin, "Removed \2%s\2 from the hostmask NOOP list.", mask);
 
@@ -238,6 +240,8 @@ static void os_cmd_noop(char *origin)
 			free(np->reason);
 
 			node_del(n, &noop_server_list);
+			node_free(n);
+			BlockHeapFree(noop_heap, np);
 
 			notice(opersvs.nick, origin, "Removed \2%s\2 from the server NOOP list.", mask);
 
