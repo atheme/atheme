@@ -4,7 +4,7 @@
  *
  * XMLRPC channel management functions.
  *
- * $Id: channel.c 3449 2005-11-04 06:47:38Z alambert $
+ * $Id: channel.c 3475 2005-11-05 06:54:57Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/channel", FALSE, _modinit, _moddeinit,
-	"$Id: channel.c 3449 2005-11-04 06:47:38Z alambert $",
+	"$Id: channel.c 3475 2005-11-05 06:54:57Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -299,9 +299,16 @@ static int do_metadata_get(int parc, char *parv[])
 		return 0;
 	}
 
-	if (!(mc = mychan_find(parv[2])))
+	if (!(mc = mychan_find(parv[0])))
 	{
 		xmlrpc_generic_error(1, "Unknown channel.");
+		return 0;
+	}
+
+	if ((strlen(parv[1]) > 32)
+		|| strchr(parv[1], '\r') || strchr(parv[1], '\n') || strchr(parv[1], ' '))
+	{
+		xmlrpc_generic_error(3, "Invalid parameters.");
 		return 0;
 	}
 

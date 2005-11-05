@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 3449 2005-11-04 06:47:38Z alambert $
+ * $Id: account.c 3475 2005-11-05 06:54:57Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 3449 2005-11-04 06:47:38Z alambert $",
+	"$Id: account.c 3475 2005-11-05 06:54:57Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -528,8 +528,15 @@ static int do_metadata_get(int parc, char *parv[])
 		return 0;
 	}
 
+	if ((strlen(parv[1]) > 32)
+		|| strchr(parv[1], '\r') || strchr(parv[1], '\n') || strchr(parv[1], ' '))
+	{
+		xmlrpc_generic_error(3, "Invalid parameters.");
+		return 0;
+	}
+
 	/* if private, pretend it doesn't exist */
-	if (!(md = metadata_find(mu, METADATA_USER, parv[2])) || md->private)
+	if (!(md = metadata_find(mu, METADATA_USER, parv[1])) || md->private)
 	{
 		xmlrpc_generic_error(4, "Key does not exist.");
 		return 0;
