@@ -1,3 +1,13 @@
+pfish       2005/11/04 08:30:57 UTC	(20051104-3459)
+  Log:
+  UserServ: Use a help file in userserv/ instead of nickserv.
+  
+
+  Changes:	Modified:
+  +10 -0	trunk/help/userserv/return (File Added) 
+  +1 -1		trunk/modules/userserv/return.c (File Modified) 
+
+
 pfish       2005/11/04 07:04:27 UTC	(20051104-3457)
   Log:
   UserServ: Update private:host:vhost metadata when a vhost is assigned/restored
