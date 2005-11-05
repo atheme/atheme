@@ -1,3 +1,12 @@
+alambert    2005/11/05 06:54:57 UTC	(20051105-3475)
+  Log:
+  XMLRPC: fixes for atheme.*.metadata.get
+
+  Changes:	Modified:
+  +8 -1		trunk/modules/xmlrpc/account.c (File Modified) 
+  +8 -1		trunk/modules/xmlrpc/channel.c (File Modified) 
+
+
 alambert    2005/11/05 06:46:13 UTC	(20051105-3473)
   Log:
   authcookie_destroy(): remember to node_free()
