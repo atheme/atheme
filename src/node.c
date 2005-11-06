@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3575 2005-11-06 20:09:38Z alambert $
+ * $Id: node.c 3591 2005-11-06 22:45:31Z nenolod $
  */
 
 #include "atheme.h"
@@ -1771,49 +1771,44 @@ void expire_check(void *arg)
 			if (((CURRTIME - mu->lastlogin) >= config_options.expire) || ((mu->flags & MU_WAITAUTH) && (CURRTIME - mu->registered >= 86400)))
 			{
 				/* kill all their channels */
-				for (j = 0; j < HASHSIZE; j++)
+				LIST_FOREACH(tn, mu->chanacs.head)
 				{
-					LIST_FOREACH(tn, mclist[j].head)
+					mc = (mychan_t *)tn->data;
+
+					if (mc->founder == mu && mc->successor && mc->successor != mu)
 					{
-						mc = (mychan_t *)tn->data;
+						tcnt = 0;
 
-						if (mc->founder == mu && mc->successor && mc->successor != mu)
+						LIST_FOREACH(n3, mc->successor->chanacs.head)
 						{
-							/* make sure they're within limits */
-							for (w = 0, tcnt = 0; w < HASHSIZE; w++)
-							{
-								LIST_FOREACH(n3, mclist[w].head)
-								{
-									tmc = (mychan_t *)n3->data;
+							tmc = (mychan_t *)n3->data;
 
-									if (is_founder(tmc, mc->successor))
-										tcnt++;
-								}
-							}
-
-							if ((tcnt >= me.maxchans) && (!is_sra(mc->successor)))
-								continue;
-
-							snoop("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2", mc->successor->name, mc->name, mc->founder->name);
-
-							chanacs_delete(mc, mc->successor, CA_SUCCESSOR);
-							chanacs_add(mc, mc->successor, CA_FOUNDER);
-							mc->founder = mc->successor;
-							mc->successor = NULL;
-
-							myuser_notice(chansvs.nick, mc->founder, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, mc->founder->name);
-
-							return;
+							if (is_founder(tmc, mc->successor))
+								tcnt++;
 						}
-						else if (mc->founder == mu)
-						{
-							snoop("EXPIRE: \2%s\2 from \2%s\2", mc->name, mu->name);
 
-							if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
-								part(mc->name, chansvs.nick);
+						if ((tcnt >= me.maxchans) && (!is_sra(mc->successor)))
+							continue;
 
-							mychan_delete(mc->name);
-						}
+						snoop("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2", mc->successor->name, mc->name, mc->founder->name);
+
+						chanacs_delete(mc, mc->successor, CA_SUCCESSOR);
+						chanacs_add(mc, mc->successor, CA_FOUNDER);
+						mc->founder = mc->successor;
+						mc->successor = NULL;
+
+						myuser_notice(chansvs.nick, mc->founder, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, mc->founder->name);
+
+						return;
+					}
+					else if (mc->founder == mu)
+					{
+						snoop("EXPIRE: \2%s\2 from \2%s\2", mc->name, mu->name);
+
+						if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
+							part(mc->name, chansvs.nick);
+
+						mychan_delete(mc->name);
 					}
 				}
 

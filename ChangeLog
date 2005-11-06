@@ -1,3 +1,11 @@
+alambert    2005/11/06 21:58:38 UTC	(20051106-3589)
+  Log:
+  atheme.logout: Find match for both ticket and user
+
+  Changes:	Modified:
+  +6 -6		trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 alambert    2005/11/06 21:56:43 UTC	(20051106-3587)
   Log:
   atheme.account.register: use user_find_named()
