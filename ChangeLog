@@ -1,3 +1,11 @@
+nenolod     2005/11/06 02:04:17 UTC	(20051106-3515)
+  Log:
+  Don't use TRUNCATE under MySQL -- it's not transaction safe.
+
+  Changes:	Modified:
+  +8 -10	trunk/backend/mysql.c (File Modified) 
+
+
 alambert    2005/11/06 01:58:47 UTC	(20051106-3513)
   Log:
   XMLRPC: test.method improvement

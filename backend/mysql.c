@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using MySQL.
  *
- * $Id: mysql.c 3515 2005-11-06 02:04:17Z nenolod $
+ * $Id: mysql.c 3517 2005-11-06 02:07:44Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/mysql", TRUE, _modinit, NULL,
-	"$Id: mysql.c 3515 2005-11-06 02:04:17Z nenolod $",
+	"$Id: mysql.c 3517 2005-11-06 02:07:44Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -513,7 +513,7 @@ static void mysql_db_load(void)
 		mc->mlock_key = sstrdup(row[9]);
 
 		/* SELECT * FROM CHANNEL_ACCESS WHERE PARENT=21 */
-		res2 = safe_query("SELECT * WHERE PARENT='%s'", row[0]);
+		res2 = safe_query("SELECT * FROM CHANNEL_ACCESS WHERE PARENT='%s'", row[0]);
 
 		cain = mysql_num_rows(res2);
 
