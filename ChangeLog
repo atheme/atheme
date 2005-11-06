@@ -1,3 +1,11 @@
+nenolod     2005/11/06 08:33:31 UTC	(20051106-3549)
+  Log:
+  We can't use sendemail() on Windows, so surround it in an #ifndef _WIN32.
+
+  Changes:	Modified:
+  +6 -0		trunk/src/function.c (File Modified) 
+
+
 nenolod     2005/11/06 08:28:03 UTC	(20051106-3547)
   Log:
   Update a few makefiles.

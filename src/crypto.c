@@ -4,7 +4,7 @@
  *
  * Cryptographic module support.
  *
- * $Id: crypto.c 3399 2005-11-02 18:51:40Z nenolod $
+ * $Id: crypto.c 3551 2005-11-06 09:11:45Z alambert $
  */
 
 #include "atheme.h"
@@ -44,6 +44,8 @@ char *gen_salt(void)
 	strlcpy(saltbuf, "$1$", BUFSIZE);
 	strlcat(saltbuf, ht, BUFSIZE);
 	strlcat(saltbuf, "$", BUFSIZE);
+
+	free(ht);
 
 	return saltbuf;
 }
