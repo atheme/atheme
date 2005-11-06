@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3573 2005-11-06 20:01:31Z alambert $
+ * $Id: node.c 3575 2005-11-06 20:09:38Z alambert $
  */
 
 #include "atheme.h"
@@ -1378,6 +1378,12 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, char *host, uint32_t level)
 	chanacs_t *ca;
 	node_t *n;
 
+	if (!mychan || !host)
+	{
+		slog(LG_DEBUG, "chanacs_add_host(): got mychan == NULL or host == NULL, ignoring");
+		return NULL;
+	}
+
 	if (*mychan->name != '#')
 	{
 		slog(LG_DEBUG, "chanacs_add_host(): got non #channel: %s", mychan->name);
@@ -1407,6 +1413,12 @@ void chanacs_delete(mychan_t *mychan, myuser_t *myuser, uint32_t level)
 	chanacs_t *ca;
 	node_t *n, *tn, *n2;
 
+	if (!mychan || !myuser)
+	{
+		slog(LG_DEBUG, "chanacs_delete(): got mychan == NULL or myuser == NULL, ignoring");
+		return;
+	}
+
 	LIST_FOREACH_SAFE(n, tn, mychan->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
@@ -1432,6 +1444,12 @@ void chanacs_delete_host(mychan_t *mychan, char *host, uint32_t level)
 {
 	chanacs_t *ca;
 	node_t *n, *tn;
+
+	if (!mychan || !host)
+	{
+		slog(LG_DEBUG, "chanacs_delete_host(): got mychan == NULL or myuser == NULL, ignoring");
+		return;
+	}
 
 	LIST_FOREACH_SAFE(n, tn, mychan->chanacs.head)
 	{
@@ -1686,6 +1704,9 @@ metadata_t *metadata_find(void *target, int32_t type, char *name)
 	chanacs_t *ca;
 	list_t *l = NULL;
 	metadata_t *md;
+
+	if (!name)
+		return NULL;
 
 	if (type == METADATA_USER)
 	{
