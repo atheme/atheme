@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using MySQL.
  *
- * $Id: mysql.c 3567 2005-11-06 19:36:39Z jilles $
+ * $Id: mysql.c 3577 2005-11-06 20:37:21Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/mysql", TRUE, _modinit, NULL,
-	"$Id: mysql.c 3567 2005-11-06 19:36:39Z jilles $",
+	"$Id: mysql.c 3577 2005-11-06 20:37:21Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -360,6 +360,9 @@ static void mysql_db_save(void *arg)
 
 	/* done, commit */
 	safe_query("COMMIT");
+
+	/* close the connection, we cannot persist like with postgre. */
+	mysql_close(mysql);
 }
 
 /* loads atheme.db */
@@ -568,6 +571,7 @@ static void mysql_db_load(void)
 	mysql_free_result(res);
 	res = NULL;
 
+	/* close the connection, we cannot persist like with postgre. */
 	mysql_close(mysql);
 }
 

@@ -1,3 +1,11 @@
+alambert    2005/11/06 20:09:38 UTC	(20051106-3575)
+  Log:
+  chanacs, metadata: improve handling of NULL parameters. another extension of brian's report.
+
+  Changes:	Modified:
+  +21 -0	trunk/src/node.c (File Modified) 
+
+
 alambert    2005/11/06 20:01:31 UTC	(20051106-3573)
   Log:
   chanacs_add(): bail if mychan or myuser is NULL. Based on brian's bugreport against flatfile.
