@@ -1,3 +1,13 @@
+pfish       2005/11/06 10:08:24 UTC	(20051106-3561)
+  Log:
+  Use is_ircop instead of is_sra
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/listchans.c (File Modified) 
+  +1 -1		trunk/modules/userserv/listchans.c (File Modified) 
+
+
 pfish       2005/11/06 10:03:16 UTC	(20051106-3559)
   Log:
   fix formatting here

@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 3541 2005-11-06 06:48:05Z nenolod $
+ * $Id: postgresql.c 3563 2005-11-06 10:13:36Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 3541 2005-11-06 06:48:05Z nenolod $",
+	"$Id: postgresql.c 3563 2005-11-06 10:13:36Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,6 +22,8 @@ PGconn *pq = NULL;
 
 static void db_connect(boolean_t startup)
 {
+	char dbcredentials[BUFSIZE];	
+
 	if (pq == NULL)
 	{
 		if (!database_options.port)
@@ -280,7 +282,6 @@ static void postgresql_db_load(void)
 	mychan_t *mc;
 	kline_t *k;
 	uint32_t i = 0, muin = 0, mcin = 0, kin = 0;
-	char dbcredentials[BUFSIZE];
 	PGresult *res;
 
 	db_connect(TRUE);
