@@ -1,3 +1,11 @@
+alambert    2005/11/06 01:49:43 UTC	(20051106-3511)
+  Log:
+  XMLRPC: be sure we error out.
+
+  Changes:	Modified:
+  +2 -1		trunk/src/xmlrpc.c (File Modified) 
+
+
 alambert    2005/11/06 01:40:16 UTC	(20051106-3509)
   Log:
   XMLRPC: allow functions to be called without arguments, per spec
