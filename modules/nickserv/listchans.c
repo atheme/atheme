@@ -2,22 +2,23 @@
  * Copyright (c) 2005 Alex Lambert
  * Rights to this code are as documented in doc/LICENSE.
  *
- * This file contains code for the NickServ MYACCESS function.
+ * This file contains code for the NickServ LISTCHANS function.
  *
- * $Id: myaccess.c 2563 2005-10-04 07:09:30Z pfish $
+ * $Id: listchans.c 3553 2005-11-06 09:30:37Z pfish $
  */
 
 #include "atheme.h"
 
 DECLARE_MODULE_V1
 (
-	"nickserv/myaccess", FALSE, _modinit, _moddeinit,
-	"$Id: myaccess.c 2563 2005-10-04 07:09:30Z pfish $",
+	"nickserv/listchans", FALSE, _modinit, _moddeinit,
+	"$Id: listchans.c 3553 2005-11-06 09:30:37Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void ns_cmd_myaccess(char *origin);
+static void ns_cmd_listchans(char *origin);
 
+command_t ns_listchans = { "LISTCHANS", "Lists channels that you have access to.", AC_NONE, ns_cmd_listchans };
 command_t ns_myaccess = { "MYACCESS", "Lists channels that you have access to.", AC_NONE, ns_cmd_myaccess };
 
 list_t *ns_cmdtree, *ns_helptree;
@@ -26,17 +27,19 @@ void _modinit(module_t *m)
 {
 	ns_cmdtree = module_locate_symbol("nickserv/main", "ns_cmdtree");
 	ns_helptree = module_locate_symbol("nickserv/main", "ns_helptree");
+	command_add(&ns_listchans, ns_cmdtree);
 	command_add(&ns_myaccess, ns_cmdtree);
-	help_addentry(ns_helptree, "MYACCESS", "help/nickserv/myaccess", NULL);
+	help_addentry(ns_helptree, "LISTCHANS", "help/nickserv/listchans", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_myaccess, ns_cmdtree);
-	help_delentry(ns_helptree, "MYACCESS");
+	command_delete(&ns_listchans, ns_cmdtree);
+	command_delete(&ns_listchans, ns_cmdtree);
+	help_delentry(ns_helptree, "LISTCHANS");
 }
 
-static void ns_cmd_myaccess(char *origin)
+static void ns_cmd_listchans(char *origin)
 {
 	user_t *u = user_find(origin);
 	myuser_t *mu = u->myuser;

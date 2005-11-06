@@ -1,3 +1,11 @@
+alambert    2005/11/06 09:11:45 UTC	(20051106-3551)
+  Log:
+  gen_salt(): remember to free() the result of gen_pw()
+
+  Changes:	Modified:
+  +2 -0		trunk/src/crypto.c (File Modified) 
+
+
 nenolod     2005/11/06 08:33:31 UTC	(20051106-3549)
   Log:
   We can't use sendemail() on Windows, so surround it in an #ifndef _WIN32.
