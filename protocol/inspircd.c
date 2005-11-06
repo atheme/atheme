@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: inspircd.c 3203 2005-10-25 22:22:40Z jilles $
+ * $Id: inspircd.c 3565 2005-11-06 14:17:51Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 3203 2005-10-25 22:22:40Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 3565 2005-11-06 14:17:51Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -510,7 +510,7 @@ static void m_mode(char *origin, uint8_t parc, char *parv[])
 	}
 
 	if (*parv[1] == '#')
-		channel_mode(NULL, channel_find(parv[1]), parc - 1, &parv[3]);
+		channel_mode(NULL, channel_find(parv[1]), parc - 3, &parv[3]);
 	else
 		user_mode(user_find(parv[1]), parv[2]);
 }
@@ -524,7 +524,7 @@ static void m_smode(char *origin, uint8_t parc, char *parv[])
 	}
 
 	if (*parv[0] == '#')
-		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[2]);
+		channel_mode(NULL, channel_find(parv[0]), parc - 2, &parv[2]);
 	else
 		user_mode(user_find(parv[0]), parv[1]);
 }

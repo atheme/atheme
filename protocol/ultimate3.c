@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 3343 2005-10-31 03:55:46Z nenolod $
+ * $Id: ultimate3.c 3565 2005-11-06 14:17:51Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 3343 2005-10-31 03:55:46Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 3565 2005-11-06 14:17:51Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -391,12 +391,12 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 		/*
 		 * :origin SJOIN ts chan modestr [key or limits] :users 
 		 */
-		modev[0] = parv[2];
+		modev[modec++] = parv[2];
 
 		if (parc > 4)
-			modev[++modec] = parv[3];
+			modev[modec++] = parv[3];
 		if (parc > 5)
-			modev[++modec] = parv[4];
+			modev[modec++] = parv[4];
 
 		c = channel_find(parv[1]);
 		ts = atol(parv[0]);
@@ -656,7 +656,7 @@ static void m_mode(char *origin, uint8_t parc, char *parv[])
 	}
 
 	if (*parv[0] == '#')
-		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[2]);
+		channel_mode(NULL, channel_find(parv[0]), parc - 2, &parv[2]);
 	else
 		user_mode(user_find(parv[0]), parv[1]);
 }

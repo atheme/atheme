@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: bircd.c 3443 2005-11-03 23:52:38Z jilles $
+ * $Id: bircd.c 3565 2005-11-06 14:17:51Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 3443 2005-11-03 23:52:38Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 3565 2005-11-06 14:17:51Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -426,9 +426,9 @@ static void m_burst(char *origin, uint8_t parc, char *parv[])
 	{
 		c = channel_find(parv[0]);
 
-		modev[0] = parv[2];
-		modev[++modec] = parv[3];
-		modev[++modec] = parv[4];
+		modev[modec++] = parv[2];
+		modev[modec++] = parv[3];
+		modev[modec++] = parv[4];
 
 		if (!c)
 		{
@@ -483,8 +483,8 @@ static void m_burst(char *origin, uint8_t parc, char *parv[])
 	{
 		c = channel_find(parv[0]);
 
-		modev[0] = parv[2];
-		modev[++modec] = parv[3];
+		modev[modec++] = parv[2];
+		modev[modec++] = parv[3];
 
 		if (parv[parc - 1][0] != '%')
 			modev[++modec] = parv[4];
@@ -542,9 +542,9 @@ static void m_burst(char *origin, uint8_t parc, char *parv[])
 	{
 		c = channel_find(parv[0]);
 
-		modev[0] = parv[2];
+		modev[modec++] = parv[2];
 		if (parv[parc - 1][0] != '%')
-			modev[++modec] = parv[3];
+			modev[modec++] = parv[3];
 
 		if (!c)
 		{

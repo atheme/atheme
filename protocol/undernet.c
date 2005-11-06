@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: undernet.c 3443 2005-11-03 23:52:38Z jilles $
+ * $Id: undernet.c 3565 2005-11-06 14:17:51Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 3443 2005-11-03 23:52:38Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 3565 2005-11-06 14:17:51Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -423,11 +423,11 @@ static void m_burst(char *origin, uint8_t parc, char *parv[])
 		c = channel_find(parv[0]);
 
 		if (parc >= 4)
-			modev[0] = parv[2];
+			modev[modec++] = parv[2];
 		if (parc >= 5)
-			modev[++modec] = parv[3];
+			modev[modec++] = parv[3];
 		if (parc >= 6)
-			modev[++modec] = parv[4];
+			modev[modec++] = parv[4];
 
 		if (!c)
 		{

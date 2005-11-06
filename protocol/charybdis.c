@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 3439 2005-11-03 23:24:58Z jilles $
+ * $Id: charybdis.c 3565 2005-11-06 14:17:51Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3439 2005-11-03 23:24:58Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3565 2005-11-06 14:17:51Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -479,12 +479,12 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 		if (source_server == NULL)
 			return;
 
-		modev[0] = parv[2];
+		modev[modec++] = parv[2];
 
 		if (parc > 4)
-			modev[++modec] = parv[3];
+			modev[modec++] = parv[3];
 		if (parc > 5)
-			modev[++modec] = parv[4];
+			modev[modec++] = parv[4];
 
 		c = channel_find(parv[1]);
 		ts = atol(parv[0]);
@@ -574,12 +574,12 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 	}
 
 	/* :user JOIN ts chan modestr [key or limits] */
-	modev[0] = parv[2];
+	modev[modec++] = parv[2];
 
+	if (parc > 3)
+		modev[modec++] = parv[3];
 	if (parc > 4)
-		modev[++modec] = parv[3];
-	if (parc > 5)
-		modev[++modec] = parv[4];
+		modev[modec++] = parv[4];
 
 	c = channel_find(parv[1]);
 	ts = atol(parv[0]);
