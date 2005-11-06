@@ -1,3 +1,11 @@
+nenolod     2005/11/06 23:14:26 UTC	(20051106-3597)
+  Log:
+  Remove code that we shouldn't be executing here.
+
+  Changes:	Modified:
+  +0 -4		trunk/src/authcookie.c (File Modified) 
+
+
 jilles      2005/11/06 23:09:32 UTC	(20051106-3595)
   Log:
   Add +U to services umodes to make unkline possible.

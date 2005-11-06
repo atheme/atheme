@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 3595 2005-11-06 23:09:32Z jilles $
+ * $Id: hyperion.c 3599 2005-11-06 23:34:16Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -15,7 +15,7 @@
 #include "atheme.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 3595 2005-11-06 23:09:32Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 3599 2005-11-06 23:34:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -113,7 +113,9 @@ static uint8_t hyperion_server_login(void)
  */
 static void hyperion_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
-	sts("NICK %s 1 %ld +6@BeFimopPUX %s %s %s 0.0.0.0 :%s", nick, CURRTIME, user, host, me.name, real);
+	const char *privs = "6@BFmopPRUX";
+	sts("NICK %s 1 %ld +ei%s %s %s %s 0.0.0.0 :%s", nick, CURRTIME, privs, user, host, me.name, real);
+	sts(":%s OPER %s +%s", me.name, nick, privs);
 }
 
 static void hyperion_quit_sts(user_t *u, char *reason)
