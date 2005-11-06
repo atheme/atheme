@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using MySQL.
  *
- * $Id: mysql.c 3529 2005-11-06 05:38:06Z nenolod $
+ * $Id: mysql.c 3531 2005-11-06 05:46:07Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/mysql", TRUE, _modinit, NULL,
-	"$Id: mysql.c 3529 2005-11-06 05:38:06Z nenolod $",
+	"$Id: mysql.c 3531 2005-11-06 05:46:07Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -570,5 +570,6 @@ void _modinit(module_t *m)
 
 	backend_loaded = TRUE;
 
-	mysql_library_init(0, NULL, NULL);
+	/* for compatibility --nenolod */
+	mysql_server_init(0, NULL, NULL);
 }

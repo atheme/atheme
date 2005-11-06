@@ -1,3 +1,11 @@
+nenolod     2005/11/06 05:38:06 UTC	(20051106-3529)
+  Log:
+  stability fix
+
+  Changes:	Modified:
+  +2 -4		trunk/backend/mysql.c (File Modified) 
+
+
 nenolod     2005/11/06 05:26:53 UTC	(20051106-3527)
   Log:
   use mysql_library_init() to make sure we are coming up properly
