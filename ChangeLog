@@ -1,3 +1,12 @@
+pfish       2005/11/06 06:17:44 UTC	(20051106-3537)
+  Log:
+  Oops. Typo fix.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/backend/mysql.c (File Modified) 
+
+
 pfish       2005/11/06 06:13:39 UTC	(20051106-3535)
   Log:
   Enhance. Enhance. Enhance..
