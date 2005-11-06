@@ -1,3 +1,11 @@
+nenolod     2005/11/06 05:26:53 UTC	(20051106-3527)
+  Log:
+  use mysql_library_init() to make sure we are coming up properly
+
+  Changes:	Modified:
+  +51 -64	trunk/backend/mysql.c (File Modified) 
+
+
 alambert    2005/11/06 04:14:43 UTC	(20051106-3525)
   Log:
   XMLRPC: change e-mail error message
