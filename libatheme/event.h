@@ -4,7 +4,7 @@
  *
  * Event stuff.
  *
- * $Id$
+ * $Id: event.h 3607 2005-11-06 23:57:17Z jilles $
  */
 
 #ifndef EVENT_H

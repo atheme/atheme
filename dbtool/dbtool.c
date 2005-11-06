@@ -4,7 +4,7 @@
  * 
  * IRCServices datafile manipulation routines.
  * 
- * $Id$
+ * $Id: dbtool.c 3607 2005-11-06 23:57:17Z jilles $
  */
 
 #include "atheme.h"

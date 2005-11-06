@@ -4,7 +4,7 @@
  *
  * POSIX-style crypt(3) wrapper.
  *
- * $Id$
+ * $Id: posix.c 3607 2005-11-06 23:57:17Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"crypto/posix", FALSE, _modinit, _moddeinit,
-	"$Id$",
+	"$Id: posix.c 3607 2005-11-06 23:57:17Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

@@ -4,7 +4,7 @@
  *
  * Visit the claro website at http://claro.atheme.org
  *
- * $Id$
+ * $Id: Manifest 3607 2005-11-06 23:57:17Z jilles $
  */
 dependency "org.atheme.claro.base";
 dependency "org.atheme.claro.net";

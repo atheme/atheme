@@ -4,7 +4,7 @@
  *
  * A simple module inspector.
  *
- * $Id$
+ * $Id: modinspect.c 3607 2005-11-06 23:57:17Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modinspect", FALSE, _modinit, _moddeinit,
-	"$Id$",
+	"$Id: modinspect.c 3607 2005-11-06 23:57:17Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

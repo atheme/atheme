@@ -4,7 +4,7 @@
  *
  * Win32 special functions
  *
- * $Id$
+ * $Id: win32.c 3607 2005-11-06 23:57:17Z jilles $
  */
 
 #include <org.atheme.claro.base>

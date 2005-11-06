@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id$
+# $Id: Makefile.win32 3607 2005-11-06 23:57:17Z jilles $
 #
 
 SUBDIRS=libatheme dbtool backend modules protocol src

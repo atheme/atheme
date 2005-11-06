@@ -3,7 +3,7 @@ dnl Rights to this code are as documented in doc/LICENSE.
 dnl
 dnl This file contains autoconf macros used in configure.
 dnl
-dnl $Id$
+dnl $Id: atheme-c.m4 3607 2005-11-06 23:57:17Z jilles $
 
 dnl Stolen from hyperion.
 

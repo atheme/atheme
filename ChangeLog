@@ -1,3 +1,12 @@
+jilles      2005/11/06 23:52:07 UTC	(20051106-3605)
+  Log:
+  Add command logging to Global.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/modules/global/main.c (File Modified) 
+
+
 jilles      2005/11/06 23:50:41 UTC	(20051106-3603)
   Log:
   Add +M umode to allow global notices.
