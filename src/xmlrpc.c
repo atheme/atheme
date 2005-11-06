@@ -115,6 +115,7 @@ void xmlrpc_process(char *buffer)
 				else
 				{
 					xmlrpc_error_code = -5;
+					xmlrpc_generic_error(xmlrpc_error_code, "XMLRPC error: No arguments provided");
 				}
 			}
 			else

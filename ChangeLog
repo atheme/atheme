@@ -1,3 +1,11 @@
+alambert    2005/11/05 23:30:32 UTC	(20051105-3505)
+  Log:
+  chanacs_find_by_user: use strlcpy
+
+  Changes:	Modified:
+  +1 -2		trunk/src/node.c (File Modified) 
+
+
 alambert    2005/11/05 23:25:35 UTC	(20051105-3503)
   Log:
   XMLRPC: library errors are now < 0; our errors >= 0
