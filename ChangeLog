@@ -1,3 +1,30 @@
+jilles      2005/11/06 23:36:34 UTC	(20051106-3601)
+  Log:
+  Add command logging to operserv.
+  Most commands are CMDLOG_ADMIN; commands that only
+  request information are CMDLOG_GET; jupe/akill are
+  CMDLOG_SET.
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/operserv/akill.c (File Modified) 
+  +2 -0		trunk/modules/operserv/inject.c (File Modified) 
+  +2 -0		trunk/modules/operserv/jupe.c (File Modified) 
+  +1 -0		trunk/modules/operserv/mode.c (File Modified) 
+  +2 -0		trunk/modules/operserv/modinspect.c (File Modified) 
+  +1 -0		trunk/modules/operserv/modlist.c (File Modified) 
+  +1 -0		trunk/modules/operserv/modload.c (File Modified) 
+  +1 -0		trunk/modules/operserv/modrestart.c (File Modified) 
+  +1 -0		trunk/modules/operserv/modunload.c (File Modified) 
+  +10 -4	trunk/modules/operserv/noop.c (File Modified) 
+  +1 -0		trunk/modules/operserv/raw.c (File Modified) 
+  +1 -0		trunk/modules/operserv/rehash.c (File Modified) 
+  +1 -0		trunk/modules/operserv/restart.c (File Modified) 
+  +1 -0		trunk/modules/operserv/shutdown.c (File Modified) 
+  +1 -0		trunk/modules/operserv/update.c (File Modified) 
+  +1 -0		trunk/modules/operserv/uptime.c (File Modified) 
+
+
 jilles      2005/11/06 23:34:16 UTC	(20051106-3599)
   Log:
   - Add another umode, +R (for squit)
