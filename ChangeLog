@@ -1,3 +1,11 @@
+nenolod     2005/11/06 22:45:31 UTC	(20051106-3591)
+  Log:
+  Don't go on wild hashtable traverse operations in expire_check(). This may fix brian's crash, I do not know.
+
+  Changes:	Modified:
+  +26 -31	trunk/src/node.c (File Modified) 
+
+
 alambert    2005/11/06 21:58:38 UTC	(20051106-3589)
   Log:
   atheme.logout: Find match for both ticket and user
