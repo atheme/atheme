@@ -1,3 +1,11 @@
+nenolod     2005/11/06 22:50:16 UTC	(20051106-3593)
+  Log:
+  Add missing stuff.
+
+  Changes:	Modified:
+  +6 -5		trunk/include/authcookie.h (File Modified) 
+
+
 nenolod     2005/11/06 22:45:31 UTC	(20051106-3591)
   Log:
   Don't go on wild hashtable traverse operations in expire_check(). This may fix brian's crash, I do not know.
