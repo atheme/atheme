@@ -101,8 +101,9 @@ void xmlrpc_process(char *buffer)
 						}
 					}
 					else
-					{	/* XXX should we xmlrpc_generic_error() here? */
+					{	/* we assume that XMLRPC_STOP means the handler has given no output */
 						xmlrpc_error_code = -7;
+						xmlrpc_generic_error(xmlrpc_error_code, "XMLRPC error: First eligible function returned XMLRPC_STOP");
 					}
 				}
 				else

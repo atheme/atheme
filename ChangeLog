@@ -1,3 +1,11 @@
+nenolod     2005/11/06 03:05:01 UTC	(20051106-3521)
+  Log:
+  beu's escape_string() routine was the reason why mysql did not work properly
+
+  Changes:	Modified:
+  +38 -39	trunk/backend/mysql.c (File Modified) 
+
+
 alambert    2005/11/06 03:02:04 UTC	(20051106-3519)
   Log:
   Honor the SECURE option
