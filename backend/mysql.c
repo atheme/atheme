@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using MySQL.
  *
- * $Id: mysql.c 3535 2005-11-06 06:13:39Z pfish $
+ * $Id: mysql.c 3537 2005-11-06 06:17:44Z pfish $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/mysql", TRUE, _modinit, NULL,
-	"$Id: mysql.c 3535 2005-11-06 06:13:39Z pfish $",
+	"$Id: mysql.c 3537 2005-11-06 06:17:44Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -466,7 +466,7 @@ static void mysql_db_load(void)
 	mysql_free_result(res);
 	res = NULL;
 
-	res = safe_query("SELECT ID, NAME, FOUDNER, REGISTERED, LASTUSED, FLAGS, MLOCK_ON, "
+	res = safe_query("SELECT ID, NAME, FOUNDER, REGISTERED, LASTUSED, FLAGS, MLOCK_ON, "
 				"MLOCK_OFF, MLOCK_LIMIT, MLOCK_KEY FROM CHANNELS");
 	mcin = mysql_num_rows(res);
 

@@ -1,3 +1,12 @@
+pfish       2005/11/06 06:13:39 UTC	(20051106-3535)
+  Log:
+  Enhance. Enhance. Enhance..
+  
+
+  Changes:	Modified:
+  +10 -8	trunk/backend/mysql.c (File Modified) 
+
+
 alambert    2005/11/06 05:48:20 UTC	(20051106-3533)
   Log:
   Adjust NICKLEN, introduce CHANNELLEN as temporary fix
