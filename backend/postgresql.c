@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 3327 2005-10-31 03:36:11Z nenolod $
+ * $Id: postgresql.c 3541 2005-11-06 06:48:05Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,11 +14,37 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 3327 2005-10-31 03:36:11Z nenolod $",
+	"$Id: postgresql.c 3541 2005-11-06 06:48:05Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-PGconn *pq;
+PGconn *pq = NULL;
+
+static void db_connect(boolean_t startup)
+{
+	if (pq == NULL)
+	{
+		if (!database_options.port)
+			snprintf(dbcredentials, BUFSIZE, "host=%s dbname=%s user=%s password=%s",
+					database_options.host, database_options.database, database_options.user, database_options.pass);
+		else
+			snprintf(dbcredentials, BUFSIZE, "host=%s dbname=%s user=%s password=%s port=%d",
+					database_options.host, database_options.database, database_options.user, database_options.pass,
+					database_options.port);
+
+		slog(LG_DEBUG, "Connecting to PostgreSQL provider using these credentials:");
+		slog(LG_DEBUG, "      %s", dbcredentials); 
+
+		/* Open the db connection up. */
+		pq = PQconnectdb(dbcredentials);
+
+		slog(LG_DEBUG, "There was an error connecting to the database system:");
+		slog(LG_DEBUG, "      %s", PQerrorMessage(pq));
+
+		if (startup == TRUE)
+			exit(EXIT_FAILURE);
+	}
+}
 
 /*
  * Returns a PGresult on success.
@@ -71,6 +97,8 @@ static void postgresql_db_save(void *arg)
 	slog(LG_DEBUG, "db_save(): saving myusers");
 
 	ii = 0;
+
+	db_connect(FALSE);
 
 	/* safety */
 	safe_query("BEGIN TRANSACTION;");
@@ -255,19 +283,7 @@ static void postgresql_db_load(void)
 	char dbcredentials[BUFSIZE];
 	PGresult *res;
 
-	if (!database_options.port)
-		snprintf(dbcredentials, BUFSIZE, "host=%s dbname=%s user=%s password=%s",
-				database_options.host, database_options.database, database_options.user, database_options.pass);
-	else
-		snprintf(dbcredentials, BUFSIZE, "host=%s dbname=%s user=%s password=%s port=%d",
-				database_options.host, database_options.database, database_options.user, database_options.pass,
-				database_options.port);
-
-	slog(LG_DEBUG, "Connecting to PostgreSQL provider using these credentials:");
-	slog(LG_DEBUG, "      %s", dbcredentials); 
-
-	/* Open the db connection up. */
-	pq = PQconnectdb(dbcredentials);
+	db_connect(TRUE);
 
 	res = safe_query("SELECT ID, USERNAME, PASSWORD, EMAIL, REGISTERED, LASTLOGIN, "
 				"FLAGS FROM ACCOUNTS;");
