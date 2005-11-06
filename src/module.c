@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 3463 2005-11-05 04:59:56Z nenolod $
+ * $Id: module.c 3579 2005-11-06 21:28:05Z jilles $
  */
 
 #include "atheme.h"
@@ -149,7 +149,8 @@ module_t *module_load(char *filespec)
 	{
 		char *errp = sstrdup(dlerror());
 		slog(LG_INFO, "module_load(): error: %s", errp);
-		wallops("Error while loading module %s: %s", filespec, errp);
+		if (me.connected)
+			wallops("Error while loading module %s: %s", filespec, errp);
 		free(errp);
 		return NULL;
 	}

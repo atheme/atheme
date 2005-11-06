@@ -1,3 +1,11 @@
+nenolod     2005/11/06 20:37:21 UTC	(20051106-3577)
+  Log:
+  Close the connection after doing the write operation -- we cant persist like with PostgreSQL.
+
+  Changes:	Modified:
+  +4 -0		trunk/backend/mysql.c (File Modified) 
+
+
 alambert    2005/11/06 20:09:38 UTC	(20051106-3575)
   Log:
   chanacs, metadata: improve handling of NULL parameters. another extension of brian's report.
