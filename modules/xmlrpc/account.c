@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 3587 2005-11-06 21:56:43Z alambert $
+ * $Id: account.c 3589 2005-11-06 21:58:38Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 3587 2005-11-06 21:56:43Z alambert $",
+	"$Id: account.c 3589 2005-11-06 21:58:38Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -346,17 +346,17 @@ static int do_logout(int parc, char *parv[])
                 return 0;
         }
 
-        if ((ac = authcookie_find(parv[0], NULL)) == NULL)
-        {
-                xmlrpc_generic_error(2, "Unknown authcookie.");
-                return 0;
-        }
-
         if ((mu = myuser_find(parv[1])) == NULL)
         {
                 xmlrpc_generic_error(3, "Unknown user.");
                 return 0;
         }
+
+	if ((ac = authcookie_find(parv[0], mu)) == NULL)
+	{
+		xmlrpc_generic_error(2, "Unknown authcookie.");
+		return 0;
+	}
 
         if (authcookie_validate(parv[0], mu) == FALSE)
         {

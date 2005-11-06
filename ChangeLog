@@ -1,3 +1,11 @@
+alambert    2005/11/06 21:56:43 UTC	(20051106-3587)
+  Log:
+  atheme.account.register: use user_find_named()
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 alambert    2005/11/06 21:52:51 UTC	(20051106-3585)
   Log:
   authcookie: clean stale authcookies every ten minutes
