@@ -4,7 +4,7 @@
  *
  * Controls noexpire options for nicknames.
  *
- * $Id: hold.c 2557 2005-10-04 06:44:30Z pfish $
+ * $Id: hold.c 3583 2005-11-06 21:48:28Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/hold", FALSE, _modinit, _moddeinit,
-	"$Id: hold.c 2557 2005-10-04 06:44:30Z pfish $",
+	"$Id: hold.c 3583 2005-11-06 21:48:28Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -42,6 +42,10 @@ static void ns_cmd_hold(char *origin)
 	char *target = strtok(NULL, " ");
 	char *action = strtok(NULL, " ");
 	myuser_t *mu;
+	user_t *source = user_find(origin);
+
+	if (source == NULL)
+		return;
 
 	if (!target || !action)
 	{
@@ -67,6 +71,7 @@ static void ns_cmd_hold(char *origin)
 		mu->flags |= MU_HOLD;
 
 		wallops("%s set the HOLD option for the nickname \2%s\2.", origin, target);
+		logcommand(nicksvs.me, source, CMDLOG_ADMIN, "HOLD %s ON", target);
 		notice(nicksvs.nick, origin, "\2%s\2 is now held.", target);
 	}
 	else if (!strcasecmp(action, "OFF"))
@@ -80,6 +85,7 @@ static void ns_cmd_hold(char *origin)
 		mu->flags &= ~MU_HOLD;
 
 		wallops("%s removed the HOLD option on the nickname \2%s\2.", origin, target);
+		logcommand(nicksvs.me, source, CMDLOG_ADMIN, "HOLD %s OFF", target);
 		notice(nicksvs.nick, origin, "\2%s\2 is no longer held.", target);
 	}
 	else

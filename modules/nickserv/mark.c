@@ -4,7 +4,7 @@
  *
  * Marking for nicknames.
  *
- * $Id: mark.c 2835 2005-10-11 05:27:26Z terminal $
+ * $Id: mark.c 3583 2005-11-06 21:48:28Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/mark", FALSE, _modinit, _moddeinit,
-	"$Id: mark.c 2835 2005-10-11 05:27:26Z terminal $",
+	"$Id: mark.c 3583 2005-11-06 21:48:28Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -39,10 +39,14 @@ void _moddeinit()
 
 static void ns_cmd_mark(char *origin)
 {
+	user_t *source = user_find(origin);
 	char *target = strtok(NULL, " ");
 	char *action = strtok(NULL, " ");
 	char *info = strtok(NULL, "");
 	myuser_t *mu;
+
+	if (source == NULL)
+		return;
 
 	if (!target || !action)
 	{
@@ -77,6 +81,7 @@ static void ns_cmd_mark(char *origin)
 		metadata_add(mu, METADATA_USER, "private:mark:timestamp", itoa(time(NULL)));
 
 		wallops("%s marked the nickname \2%s\2.", origin, target);
+		logcommand(nicksvs.me, source, CMDLOG_ADMIN, "MARK %s ON (reason: %s)", target, info);
 		notice(nicksvs.nick, origin, "\2%s\2 is now marked.", target);
 	}
 	else if (!strcasecmp(action, "OFF"))
@@ -92,6 +97,7 @@ static void ns_cmd_mark(char *origin)
 		metadata_delete(mu, METADATA_USER, "private:mark:timestamp");
 
 		wallops("%s unmarked the nickname \2%s\2.", origin, target);
+		logcommand(nicksvs.me, source, CMDLOG_ADMIN, "MARK %s OFF", target);
 		notice(nicksvs.nick, origin, "\2%s\2 is now unmarked.", target);
 	}
 	else

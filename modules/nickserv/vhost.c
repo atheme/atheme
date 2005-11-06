@@ -4,7 +4,7 @@
  *
  * VHost management! (ratbox only right now.)
  *
- * $Id: vhost.c 3453 2005-11-04 06:57:27Z pfish $
+ * $Id: vhost.c 3583 2005-11-06 21:48:28Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 3453 2005-11-04 06:57:27Z pfish $",
+	"$Id: vhost.c 3583 2005-11-06 21:48:28Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -114,8 +114,11 @@ static void ns_cmd_vhost(char *origin)
 	char *target = strtok(NULL, " ");
 	char *host = strtok(NULL, " ");
 	node_t *n;
-	user_t *u;
+	user_t *source = user_find(origin);
 	myuser_t *mu;
+
+	if (source == NULL)
+		return;
 
 	if (!target)
 	{
@@ -137,6 +140,8 @@ static void ns_cmd_vhost(char *origin)
 		metadata_delete(mu, METADATA_USER, "private:usercloak");
 		notice(nicksvs.nick, origin, "Deleted vhost for \2%s\2.", target);
 		snoop("VHOST:REMOVE: \2%s\2 by \2%s\2", target, origin);
+		logcommand(nicksvs.me, source, CMDLOG_ADMIN, "VHOST REMOVE %s",
+				target);
 		do_restorehost_all(mu);
 		return;
 	}
@@ -145,6 +150,8 @@ static void ns_cmd_vhost(char *origin)
 	notice(nicksvs.nick, origin, "Assigned vhost \2%s\2 to \2%s\2.", 
 		host, target);
 	snoop("VHOST:ASSIGN: \2%s\2 to \2%s\2 by \2%s\2", host, target, origin);
+	logcommand(nicksvs.me, source, CMDLOG_ADMIN, "VHOST ASSIGN %s %s",
+			target, host);
 	do_sethost_all(mu, host);
 	return;
 }

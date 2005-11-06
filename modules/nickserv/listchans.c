@@ -5,7 +5,7 @@
  * This file contains code for the NickServ LISTCHANS function.
  *   -- Contains an alias "MYACCESS" for legacy users
  *
- * $Id: listchans.c 3561 2005-11-06 10:08:24Z pfish $
+ * $Id: listchans.c 3583 2005-11-06 21:48:28Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/listchans", FALSE, _modinit, _moddeinit,
-	"$Id: listchans.c 3561 2005-11-06 10:08:24Z pfish $",
+	"$Id: listchans.c 3583 2005-11-06 21:48:28Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -52,6 +52,7 @@ static void ns_cmd_listchans(char *origin)
 	node_t *n;
 	chanacs_t *ca;
 	uint32_t akicks = 0, i;
+	int isadmin = 0;
 
 	/* Optional target */
 	char *target = strtok(NULL, " ");
@@ -62,8 +63,14 @@ static void ns_cmd_listchans(char *origin)
 		return;
 	}
 
-	if (target != NULL && is_ircop(u))
+	if (target != NULL)
 	{
+		if (!is_ircop(u) && !is_sra(u->myuser))
+		{
+			notice(nicksvs.nick, origin, "You are not authorized to perform this operation.");
+			return;
+		}
+
 		if (!(mu = myuser_find(target)))
 		{
   	              notice(nicksvs.nick, origin, "\2%s\2 is not registered.", target);
@@ -71,10 +78,18 @@ static void ns_cmd_listchans(char *origin)
 		}
 
                 /* snoop if not calling on themselves */
-                if (strcasecmp(mu->name,target) != 0)
-                        snoop("LISTCHANS: \2%s\2 on  \2%s\2", u->myuser->name, target);
+                if (mu != u->myuser)
+		{
+			isadmin = 1;
+                        snoop("LISTCHANS: \2%s\2 on \2%s\2", u->myuser->name, target);
+		}
 	}
-	
+
+	if (isadmin)
+		logcommand(nicksvs.me, u, CMDLOG_ADMIN, "LISTCHANS %s", target);
+	else
+		logcommand(nicksvs.me, u, CMDLOG_GET, "MYACCESS");
+
 	if (mu->chanacs.count == 0)
   {
   	notice(nicksvs.nick, origin, "No channel access was found for the nick \2%s\2.", mu->name);

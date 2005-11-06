@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY function.
  *
- * $Id: identify.c 3425 2005-11-03 07:00:06Z pfish $
+ * $Id: identify.c 3583 2005-11-06 21:48:28Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/identify", FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 3425 2005-11-03 07:00:06Z pfish $",
+	"$Id: identify.c 3583 2005-11-06 21:48:28Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -83,6 +83,7 @@ static void ns_cmd_identify(char *origin)
 	if (md = metadata_find(mu, METADATA_USER, "private:freeze:freezer"))
 	{
 		notice(nicksvs.nick, origin, "You cannot identify to \2%s\2 because the nickname has been frozen.", mu->name);
+		logcommand(nicksvs.me, u, CMDLOG_LOGIN, "failed IDENTIFY to %s (frozen)", mu->name);
 		return;
 	}
 
@@ -100,6 +101,7 @@ static void ns_cmd_identify(char *origin)
 		if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
 		{
 			notice(nicksvs.nick, origin, "There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d).", LIST_LENGTH(&mu->logins), mu->name, me.maxlogins);
+			logcommand(nicksvs.me, u, CMDLOG_LOGIN, "failed IDENTIFY to %s (too many logins)", mu->name);
 			return;
 		}
 
@@ -145,6 +147,7 @@ static void ns_cmd_identify(char *origin)
 		strlcat(lao, u->host, BUFSIZE);
 		metadata_add(mu, METADATA_USER, "private:host:actual", lao);
 
+		logcommand(nicksvs.me, u, CMDLOG_LOGIN, "IDENTIFY");
 
 		notice(nicksvs.nick, origin, "You are now identified for \2%s\2.", u->myuser->name);
 
@@ -235,6 +238,7 @@ static void ns_cmd_identify(char *origin)
 	}
 
 	snoop("LOGIN:AF: \2%s\2 to \2%s\2", u->nick, mu->name);
+	logcommand(nicksvs.me, u, CMDLOG_LOGIN, "failed IDENTIFY to %s (bad password)", mu->name);
 
 	notice(nicksvs.nick, origin, "Invalid password for \2%s\2.", mu->name);
 

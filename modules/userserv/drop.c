@@ -4,7 +4,7 @@
  *
  * This file contains code for the UserServ DROP function.
  *
- * $Id: drop.c 3445 2005-11-04 00:55:48Z pfish $
+ * $Id: drop.c 3583 2005-11-06 21:48:28Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 3445 2005-11-04 00:55:48Z pfish $",
+	"$Id: drop.c 3583 2005-11-06 21:48:28Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -105,6 +105,7 @@ static void us_cmd_drop(char *origin)
 	}
 
 	snoop("DROP: \2%s\2 by \2%s\2", mu->name, u->nick);
+	logcommand(usersvs.me, u, CMDLOG_REGISTER, "DROP %s", mu->name);
 	hook_call_event("user_drop", mu);
 	notice(usersvs.nick, origin, "The account \2%s\2 has been dropped.", mu->name);
 	myuser_delete(mu->name);

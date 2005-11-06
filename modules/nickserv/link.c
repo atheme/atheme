@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ LINK function.
  *
- * $Id: link.c 2989 2005-10-18 23:44:17Z alambert $
+ * $Id: link.c 3583 2005-11-06 21:48:28Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/link", FALSE, _modinit, _moddeinit,
-	"$Id: link.c 2989 2005-10-18 23:44:17Z alambert $",
+	"$Id: link.c 3583 2005-11-06 21:48:28Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -91,6 +91,7 @@ static void ns_cmd_link(char *origin)
 	mu = myuser_find(nick);
 	if (mu && (!pass || (pass && (strcmp(mu->pass, pass)))))
 	{
+		logcommand(nicksvs.me, u, CMDLOG_REGISTER, "failed LINK %s (bad password)", nick);
 		/* should we reveal the e-mail address? (from ns_info.c) */
 		if (!(mu->flags & MU_HIDEMAIL)
 			|| (is_sra(u->myuser) || is_ircop(u) || u->myuser == mu))
@@ -118,6 +119,7 @@ static void ns_cmd_link(char *origin)
 	if (tcnt >= me.maxusers)
 	{
 		notice(nicksvs.nick, origin, "You have too many nicknames registered.", u->myuser->email);
+		logcommand(nicksvs.me, u, CMDLOG_REGISTER, "failed LINK %s (too many for %s)", nick, u->myuser->email);
 		return;
 	}
 
@@ -131,6 +133,8 @@ static void ns_cmd_link(char *origin)
 	/* mark it as an alias */
 	mu->flags |= MU_ALIAS;
 	metadata_add(mu, METADATA_USER, "private:alias:parent", muptr->name);
+
+	logcommand(nicksvs.me, u, CMDLOG_REGISTER, "LINK %s", nick);
 
 	notice(nicksvs.nick, origin, "\2%s\2 is now linked to \2%s\2.", mu->name, muptr->name);
 	hook_call_event("user_register", mu);
