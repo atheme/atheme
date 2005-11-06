@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 3437 2005-11-03 23:01:23Z nenolod $
+ * $Id: function.c 3549 2005-11-06 08:33:31Z nenolod $
  */
 
 #include "atheme.h"
@@ -423,9 +423,12 @@ boolean_t validhostmask(char *host)
  * type is EMAIL_*, see include/atheme.h
  * mu is the recipient user
  * param depends on type, also see include/atheme.h
+ *
+ * XXX -- sendemail() is broken on Windows.
  */
 int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 {
+#ifndef _WIN32
 	mychan_t *mc;
 	char *email, *date = NULL;
 	char cmdbuf[512], timebuf[256], to[128], from[128], subject[128];
@@ -584,6 +587,9 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	if (rc == 0)
 		slog(LG_ERROR, "sendemail(): mta failure");
 	return rc;
+#else
+	return 1;
+#endif
 }
 
 /* various access level checkers */
