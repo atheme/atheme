@@ -1,3 +1,11 @@
+pfish       2005/11/06 09:32:40 UTC	(20051106-3555)
+  Log:
+  blah
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/Makefile.win32 (File Modified) 
+
+
 pfish       2005/11/06 09:30:37 UTC	(20051106-3553)
   Log:
   NickServ: Initial MYACCESS->LISTCHANS convert.

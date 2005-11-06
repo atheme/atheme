@@ -1,10 +1,11 @@
 /*
- * Copyright (c) 2005 Alex Lambert
+ * Copyright (c) 2005 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the NickServ LISTCHANS function.
+ *   -- Contains an alias "MYACCESS" for legacy users
  *
- * $Id: listchans.c 3553 2005-11-06 09:30:37Z pfish $
+ * $Id: listchans.c 3557 2005-11-06 09:54:37Z kog $
  */
 
 #include "atheme.h"
@@ -12,14 +13,14 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/listchans", FALSE, _modinit, _moddeinit,
-	"$Id: listchans.c 3553 2005-11-06 09:30:37Z pfish $",
+	"$Id: listchans.c 3557 2005-11-06 09:54:37Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void ns_cmd_listchans(char *origin);
 
+command_t ns_myaccess = { "MYACCESS", "Alias for LISTCHANS", AC_NONE, ns_cmd_listchans };
 command_t ns_listchans = { "LISTCHANS", "Lists channels that you have access to.", AC_NONE, ns_cmd_listchans };
-command_t ns_myaccess = { "MYACCESS", "Lists channels that you have access to.", AC_NONE, ns_cmd_myaccess };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -27,15 +28,20 @@ void _modinit(module_t *m)
 {
 	ns_cmdtree = module_locate_symbol("nickserv/main", "ns_cmdtree");
 	ns_helptree = module_locate_symbol("nickserv/main", "ns_helptree");
-	command_add(&ns_listchans, ns_cmdtree);
+	
 	command_add(&ns_myaccess, ns_cmdtree);
+	help_addentry(ns_helptree, "MYACCESS", "help/nickserv/listchans", NULL);
+	
+	command_add(&ns_listchans, ns_cmdtree);
 	help_addentry(ns_helptree, "LISTCHANS", "help/nickserv/listchans", NULL);
 }
 
 void _moddeinit()
 {
-	command_delete(&ns_listchans, ns_cmdtree);
-	command_delete(&ns_listchans, ns_cmdtree);
+	command_delete(&ns_myaccess, ns_cmdtree);
+	help_delentry(ns_helptree, "MYACCESS");
+	
+  command_delete(&ns_listchans, ns_cmdtree);
 	help_delentry(ns_helptree, "LISTCHANS");
 }
 
@@ -45,7 +51,10 @@ static void ns_cmd_listchans(char *origin)
 	myuser_t *mu = u->myuser;
 	node_t *n;
 	chanacs_t *ca;
-	uint32_t i, matches = 0;
+	uint32_t akicks = 0, i;
+
+	/* Optional target */
+	char *target = strtok(NULL, " ");
 
 	if (mu == NULL)
 	{
@@ -53,49 +62,63 @@ static void ns_cmd_listchans(char *origin)
 		return;
 	}
 
+	if (target != NULL && is_sra(mu))
+	{
+		if (!(mu = myuser_find(target)))
+		{
+  	              notice(nicksvs.nick, origin, "\2Nickname %s is not registered\2.", target);
+  	              return;
+		}
+
+                /* snoop if not calling on themselves */
+                if (strcasecmp(mu->name,target) != 0)
+                        snoop("LISTCHANS: \2%s\2 on  \2%s\2", u->myuser->name, target);
+	}
+	
+	if (mu->chanacs.count == 0)
+  {
+  	notice(nicksvs.nick, origin, "No channel access was found for the nick \2%s\2.", mu->name);
+  	return;
+  }
+  
 	LIST_FOREACH(n, mu->chanacs.head)
 	{
-       	        ca = (chanacs_t *)n->data;
+    		ca = (chanacs_t *)n->data;
 
 		switch (ca->level)
 		{
 			case CA_VOP:
 				notice(nicksvs.nick, origin, "VOP in %s", ca->mychan->name);
-				matches++;
 				break;
 			case CA_HOP:
 				notice(nicksvs.nick, origin, "HOP in %s", ca->mychan->name);
-				matches++;
 				break;
 			case CA_AOP:
 				notice(nicksvs.nick, origin, "AOP in %s", ca->mychan->name);
-				matches++;
 				break;
 			case CA_SOP:
 				notice(nicksvs.nick, origin, "SOP in %s", ca->mychan->name);
-				matches++;
 				break;
 			case CA_SUCCESSOR:
 				notice(nicksvs.nick, origin, "Successor of %s", ca->mychan->name);
-				matches++;
 				break;
 			case CA_FOUNDER:	/* equiv to is_founder() */
 				notice(nicksvs.nick, origin, "Founder of %s", ca->mychan->name);
-				matches++;
 				break;
 			default:
-				/* a user may be AKICKed from a channel he doesn't know about */
+				/* don't tell users they're akicked (flag +b) */
 				if (!(ca->level & CA_AKICK))
-				{
-					notice(nicksvs.nick, origin, "%s in %s", bitmask_to_flags(ca->level, chanacs_flags), ca->mychan->name);
-					matches++;
-				}
+					notice(nicksvs.nick, origin, "Access flag(s) %s in %s", bitmask_to_flags(ca->level, chanacs_flags), ca->mychan->name);
+				else
+					akicks++;	
 		}
 	}
 
-	if (matches == 0)
-		notice(nicksvs.nick, origin, "No channel access was found for the nickname \2%s\2.", mu->name);
-	else
-		notice(nicksvs.nick, origin, "\2%d\2 channel access match%s for the nickname \2%s\2",
-							matches, (matches != 1) ? "es" : "", mu->name);
+    i = mu->chanacs.count - akicks;
+
+    if (i == 0)
+        notice(nicksvs.nick, origin, "No channel access was found for the nick \2%s\2.", mu->name);
+    else
+	notice(nicksvs.nick, origin, "\2%d\2 channel access match%s for the nick \2%s\2",
+							i, (akicks > 1) ? "es" : "", mu->name);
 }

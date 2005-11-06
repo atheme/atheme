@@ -33,11 +33,11 @@ BASE_SRCS = 		\
 	hold.c		\
 	info.c		\
 	list.c		\
+	listchans.c	\	
 	listmail.c	\
 	login.c		\
 	logout.c	\
 	mark.c		\
-	myaccess.c	\
 	register.c	\
 	sendpass.c	\
 	resetpass.c	\

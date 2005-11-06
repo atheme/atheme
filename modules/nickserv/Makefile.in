@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 3553 2005-11-06 09:30:37Z pfish $
+# $Id: Makefile.in 3557 2005-11-06 09:54:37Z kog $
 #
 
 CC		= @CC@
@@ -76,3 +76,4 @@ clean:
 
 distclean: clean
 	${RM} -f Makefile version.c.last
+

@@ -1,0 +1,11 @@
+Help for LISTCHANS:
+
+LISTCHANS shows the channels that you have access
+to, including those that you own.
+
+AKICKs and host-based access are not shown.
+
+Syntax: LISTCHANS
+
+Example:
+    /msg &nick& LISTCHANS

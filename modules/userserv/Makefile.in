@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 3385 2005-11-01 09:21:18Z pfish $
+# $Id: Makefile.in 3557 2005-11-06 09:54:37Z kog $
 #
 
 CC		= @CC@
@@ -34,10 +34,10 @@ BASE_SRCS = 		\
 	info.c		\
 	list.c		\
 	listmail.c	\
+	listchans.c	\
 	login.c		\
 	logout.c	\
 	mark.c		\
-	myaccess.c	\
 	register.c	\
 	sendpass.c	\
 	resetpass.c	\
@@ -74,3 +74,4 @@ clean:
 
 distclean: clean
 	${RM} -f Makefile version.c.last
+
