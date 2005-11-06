@@ -1,3 +1,11 @@
+alambert    2005/11/06 04:10:33 UTC	(20051106-3523)
+  Log:
+  XMLRPC: properly quit on error -7 (if first eligible function returns XMLRPC_STOP
+
+  Changes:	Modified:
+  +2 -1		trunk/src/xmlrpc.c (File Modified) 
+
+
 nenolod     2005/11/06 03:05:01 UTC	(20051106-3521)
   Log:
   beu's escape_string() routine was the reason why mysql did not work properly

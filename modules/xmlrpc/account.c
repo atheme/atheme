@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 3475 2005-11-05 06:54:57Z alambert $
+ * $Id: account.c 3525 2005-11-06 04:14:43Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 3475 2005-11-05 06:54:57Z alambert $",
+	"$Id: account.c 3525 2005-11-06 04:14:43Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -107,7 +107,7 @@ static int account_register(int parc, char *parv[])
 	if (strchr(parv[2], ' ') || strchr(parv[2], '\n') || strchr(parv[2], '\r')
 		|| !validemail(parv[2]) || !(strlen(parv[2]) <= (EMAILLEN - 1)))
 	{
-		xmlrpc_generic_error(3, "The E-Mail address you provided is invalid.");
+		xmlrpc_generic_error(3, "The e-mail address is invalid.");
 		return 0;
 	}
 
