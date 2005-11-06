@@ -4,7 +4,7 @@
  *
  * Jupiters a server.
  *
- * $Id: jupe.c 2135 2005-09-05 01:28:25Z nenolod $
+ * $Id: jupe.c 3601 2005-11-06 23:36:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/jupe", FALSE, _modinit, _moddeinit,
-	"$Id: jupe.c 2135 2005-09-05 01:28:25Z nenolod $",
+	"$Id: jupe.c 3601 2005-11-06 23:36:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -62,6 +62,8 @@ static void os_cmd_jupe(char *origin)
 		notice(opersvs.nick, origin, "\2%s\2 is the current uplink; it cannot be jupitered!", server);
 		return;
 	}
+
+	logcommand(opersvs.me, user_find(origin), CMDLOG_SET, "JUPE %s %s", server, reason);
 
 	server_delete(server);
 	jupe(server, reason);

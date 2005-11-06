@@ -4,7 +4,7 @@
  *
  * OperServ NOOP command.
  *
- * $Id: noop.c 3491 2005-11-05 23:04:55Z alambert $
+ * $Id: noop.c 3601 2005-11-06 23:36:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/noop", TRUE, _modinit, _moddeinit,
-	"$Id: noop.c 3491 2005-11-05 23:04:55Z alambert $",
+	"$Id: noop.c 3601 2005-11-06 23:36:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -154,6 +154,7 @@ static void os_cmd_noop(char *origin)
 			n = node_create();
 			node_add(np, n, &noop_hostmask_list);
 
+			logcommand(opersvs.me, user_find(origin), CMDLOG_ADMIN, "NOOP ADD HOSTMASK %s %s", np->target, np->reason);
 			notice(opersvs.nick, origin, "Added \2%s\2 to the hostmask NOOP list.", mask);
 
 			return;
@@ -185,6 +186,7 @@ static void os_cmd_noop(char *origin)
 			n = node_create();
 			node_add(np, n, &noop_server_list);
 
+			logcommand(opersvs.me, user_find(origin), CMDLOG_ADMIN, "NOOP ADD SERVER %s %s", np->target, np->reason);
 			notice(opersvs.nick, origin, "Added \2%s\2 to the server NOOP list.", mask);
 
 			return;
@@ -211,6 +213,9 @@ static void os_cmd_noop(char *origin)
 				return;
 			}
 
+			logcommand(opersvs.me, user_find(origin), CMDLOG_ADMIN, "NOOP DEL HOSTMASK %s", np->target);
+			notice(opersvs.nick, origin, "Removed \2%s\2 from the hostmask NOOP list.", np->target);
+
 			n = node_find(np, &noop_hostmask_list);
 
 			free(np->target);
@@ -220,8 +225,6 @@ static void os_cmd_noop(char *origin)
 			node_del(n, &noop_hostmask_list);
 			node_free(n);
 			BlockHeapFree(noop_heap, np);
-
-			notice(opersvs.nick, origin, "Removed \2%s\2 from the hostmask NOOP list.", mask);
 
 			return;
 		}
@@ -233,6 +236,9 @@ static void os_cmd_noop(char *origin)
 				return;
 			}
 
+			logcommand(opersvs.me, user_find(origin), CMDLOG_ADMIN, "NOOP DEL SERVER %s", np->target);
+			notice(opersvs.nick, origin, "Removed \2%s\2 from the server NOOP list.", np->target);
+
 			n = node_find(np, &noop_server_list);
 
 			free(np->target);
@@ -242,8 +248,6 @@ static void os_cmd_noop(char *origin)
 			node_del(n, &noop_server_list);
 			node_free(n);
 			BlockHeapFree(noop_heap, np);
-
-			notice(opersvs.nick, origin, "Removed \2%s\2 from the server NOOP list.", mask);
 
 			return;
 		}
@@ -258,6 +262,7 @@ static void os_cmd_noop(char *origin)
 		if (!strcasecmp(type, "HOSTMASK"))
 		{
 			uint16_t i = 1;
+			logcommand(opersvs.me, user_find(origin), CMDLOG_GET, "NOOP LIST HOSTMASK");
 			notice(opersvs.nick, origin, "Hostmask NOOP list (%d entries):", noop_hostmask_list.count);
 			notice(opersvs.nick, origin, " ");
 			notice(opersvs.nick, origin, "Entry Hostmask                        Adder                 Reason");
@@ -277,6 +282,7 @@ static void os_cmd_noop(char *origin)
 		else if (!strcasecmp(type, "SERVER"))
 		{
 			uint16_t i = 1;
+			logcommand(opersvs.me, user_find(origin), CMDLOG_GET, "NOOP LIST SERVER");
 			notice(opersvs.nick, origin, "Server NOOP list (%d entries):", noop_server_list.count);
 			notice(opersvs.nick, origin, " ");
 			notice(opersvs.nick, origin, "Entry Hostmask                        Adder                 Reason");

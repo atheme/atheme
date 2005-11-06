@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService MODE command.
  *
- * $Id: mode.c 2747 2005-10-07 18:18:19Z alambert $
+ * $Id: mode.c 3601 2005-11-06 23:36:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/mode", FALSE, _modinit, _moddeinit,
-	"$Id: mode.c 2747 2005-10-07 18:18:19Z alambert $",
+	"$Id: mode.c 3601 2005-11-06 23:36:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -63,6 +63,7 @@ static void os_cmd_mode(char *origin)
 
 	wallops("\2%s\2 is using MODE on \2%s\2 (set: \2%s\2)",
 		origin, channel, mode);
+	logcommand(opersvs.me, user_find(origin), CMDLOG_SET, "MODE %s %s", channel, mode);
 
 	parc = sjtoken(mode, ' ', parv);
 

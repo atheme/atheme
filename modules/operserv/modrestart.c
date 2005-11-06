@@ -4,7 +4,7 @@
  *
  * Module listing.
  *
- * $Id: modrestart.c 2835 2005-10-11 05:27:26Z terminal $
+ * $Id: modrestart.c 3601 2005-11-06 23:36:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modrestart", TRUE, _modinit, _moddeinit,
-	"$Id: modrestart.c 2835 2005-10-11 05:27:26Z terminal $",
+	"$Id: modrestart.c 3601 2005-11-06 23:36:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -46,6 +46,7 @@ static void os_cmd_modrestart(char *origin)
 	uint32_t reloaded = 0;
 
 	snoop("MODRESTART: \2%s\2", origin);
+	logcommand(opersvs.me, user_find(origin), CMDLOG_ADMIN, "MODRESTART");
 	wallops("Restarting modules by request of \2%s\2", origin);
 
 	LIST_FOREACH(n, modules.head)

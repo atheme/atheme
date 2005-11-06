@@ -45,6 +45,8 @@ static void os_cmd_modinspect(char *origin)
 		return;
 	}
 
+	logcommand(opersvs.me, user_find(origin), CMDLOG_GET, "MODINSPECT %s", mname);
+
 	m = module_find_published(mname);
 
 	if (!m)

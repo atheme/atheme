@@ -1,3 +1,14 @@
+jilles      2005/11/06 23:34:16 UTC	(20051106-3599)
+  Log:
+  - Add another umode, +R (for squit)
+  - Send an OPER for services so the oper privs show
+    up in whois done by a +v user
+  
+
+  Changes:	Modified:
+  +3 -1		trunk/protocol/hyperion.c (File Modified) 
+
+
 nenolod     2005/11/06 23:14:26 UTC	(20051106-3597)
   Log:
   Remove code that we shouldn't be executing here.
