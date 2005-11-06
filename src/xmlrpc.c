@@ -101,13 +101,14 @@ void xmlrpc_process(char *buffer)
 						}
 					}
 					else
-					{
+					{	/* XXX should we xmlrpc_generic_error() here? */
 						xmlrpc_error_code = -7;
 					}
 				}
 				else
 				{
 					xmlrpc_error_code = -6;
+					xmlrpc_generic_error(xmlrpc_error_code, "XMLRPC error: Method has no registered function");
 				}
 			}
 			else

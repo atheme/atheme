@@ -1,3 +1,12 @@
+alambert    2005/11/06 01:40:16 UTC	(20051106-3509)
+  Log:
+  XMLRPC: allow functions to be called without arguments, per spec
+
+  Changes:	Modified:
+  +0 -1		trunk/doc/XMLRPC (File Modified) 
+  +9 -17	trunk/src/xmlrpc.c (File Modified) 
+
+
 alambert    2005/11/06 01:33:33 UTC	(20051106-3507)
   Log:
   XMLRPC: error if no arguments are provided. Technically, we should accept no-argument commands...
