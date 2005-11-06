@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using MySQL.
  *
- * $Id: mysql.c 3537 2005-11-06 06:17:44Z pfish $
+ * $Id: mysql.c 3567 2005-11-06 19:36:39Z jilles $
  */
 
 #include "atheme.h"
@@ -14,19 +14,22 @@
 DECLARE_MODULE_V1
 (
 	"backend/mysql", TRUE, _modinit, NULL,
-	"$Id: mysql.c 3537 2005-11-06 06:17:44Z pfish $",
+	"$Id: mysql.c 3567 2005-11-06 19:36:39Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 #define SQL_BUFSIZE (BUFSIZE * 3)
 
 static MYSQL     *mysql = NULL;
+static int       db_errored = 0;
 
 static void db_connect(boolean_t startup)
 {
 	char dbcredentials[SQL_BUFSIZE];
 	uint32_t dbo_port;
 	int32_t retval;
+
+	db_errored = 0;
 
 	/* Open the db connection up. */
 	mysql = mysql_init(NULL);
@@ -72,6 +75,9 @@ static MYSQL_RES *safe_query(const char *string, ...)
 	char buf[SQL_BUFSIZE];
 	MYSQL_RES *res = NULL;
 
+	if (db_errored)
+		return NULL;
+
 	va_start(args, string);
 	vsnprintf(buf, SQL_BUFSIZE, string, args);
 	va_end(args);
@@ -86,6 +92,7 @@ static MYSQL_RES *safe_query(const char *string, ...)
 		slog(LG_DEBUG, "    query error: %s", mysql_error(mysql));
 
 		wallops("\2DATABASE ERROR\2: database error: %s", mysql_error(mysql));
+		db_errored = 1;
 
 		return NULL;
 	}
@@ -102,6 +109,7 @@ static MYSQL_RES *safe_query(const char *string, ...)
 			slog(LG_DEBUG, "    query error: %s", mysql_error(mysql));
 
 			wallops("\2DATABASE ERROR\2: database error: %s", mysql_error(mysql));
+			db_errored = 1;
 
 			return NULL;
 		}

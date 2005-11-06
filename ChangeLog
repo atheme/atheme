@@ -1,3 +1,31 @@
+jilles      2005/11/06 14:17:51 UTC	(20051106-3565)
+  Log:
+  - Fix some too low parc for channel_mode() for
+    JOIN/SJOIN/BURST
+  - monkey/ultimate3/inspircd: fix too high parc
+    for channel_mode() for MODE
+  - unreal: don't do channel_mode() for an SJOIN
+    that doesn't contain simple modes
+  
+
+  Changes:	Modified:
+  +7 -7		trunk/protocol/asuka.c (File Modified) 
+  +4 -4		trunk/protocol/bahamut.c (File Modified) 
+  +7 -7		trunk/protocol/bircd.c (File Modified) 
+  +7 -7		trunk/protocol/charybdis.c (File Modified) 
+  +3 -3		trunk/protocol/hyperion.c (File Modified) 
+  +2 -2		trunk/protocol/inspircd.c (File Modified) 
+  +4 -4		trunk/protocol/monkey.c (File Modified) 
+  +3 -3		trunk/protocol/plexus.c (File Modified) 
+  +3 -3		trunk/protocol/ptlink.c (File Modified) 
+  +7 -7		trunk/protocol/ratbox.c (File Modified) 
+  +3 -3		trunk/protocol/scylla.c (File Modified) 
+  +3 -3		trunk/protocol/shadowircd.c (File Modified) 
+  +4 -4		trunk/protocol/ultimate3.c (File Modified) 
+  +3 -3		trunk/protocol/undernet.c (File Modified) 
+  +5 -4		trunk/protocol/unreal.c (File Modified) 
+
+
 nenolod     2005/11/06 10:13:36 UTC	(20051106-3563)
   Log:
   Forgot something when I applied the patch.

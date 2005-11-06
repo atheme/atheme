@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 3563 2005-11-06 10:13:36Z nenolod $
+ * $Id: postgresql.c 3567 2005-11-06 19:36:39Z jilles $
  */
 
 #include "atheme.h"
@@ -14,15 +14,18 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 3563 2005-11-06 10:13:36Z nenolod $",
+	"$Id: postgresql.c 3567 2005-11-06 19:36:39Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 PGconn *pq = NULL;
+static int db_errored = 0;
 
 static void db_connect(boolean_t startup)
 {
 	char dbcredentials[BUFSIZE];	
+
+	db_errored = 0;
 
 	if (pq == NULL)
 	{
@@ -58,6 +61,9 @@ static PGresult *safe_query(const char *string, ...)
 	char buf[BUFSIZE * 3];
 	PGresult *res;
 
+	if (db_errored)
+		return NULL;
+
 	va_start(args, string);
 	vsnprintf(buf, BUFSIZE * 3, string, args);
 	va_end(args);
@@ -75,6 +81,7 @@ static PGresult *safe_query(const char *string, ...)
 		wallops("\2DATABASE ERROR\2: query error: %s", PQresultErrorMessage(res));
 		wallops("\2DATABASE ERROR\2: database error: %s", PQerrorMessage(pq));
 
+		db_errored = 1;
 		return NULL;
 	}
 
