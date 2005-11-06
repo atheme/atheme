@@ -1,3 +1,11 @@
+alambert    2005/11/06 01:33:33 UTC	(20051106-3507)
+  Log:
+  XMLRPC: error if no arguments are provided. Technically, we should accept no-argument commands...
+
+  Changes:	Modified:
+  +1 -0		trunk/src/xmlrpc.c (File Modified) 
+
+
 alambert    2005/11/05 23:30:32 UTC	(20051105-3505)
   Log:
   chanacs_find_by_user: use strlcpy

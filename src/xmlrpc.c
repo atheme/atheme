@@ -88,34 +88,26 @@ void xmlrpc_process(char *buffer)
 			if (xml)
 			{
 				ac = xmlrpc_split_buf(tmp, &av);
-				if (ac >= 1)
+				if (xml->func)
 				{
-					if (xml->func)
+					retVal = xml->func(ac, av);
+					if (retVal == XMLRPC_CONT)
 					{
-						retVal = xml->func(ac, av);
-						if (retVal == XMLRPC_CONT)
+						current = xml->next;
+						while (current && current->func && retVal == XMLRPC_CONT)
 						{
-							current = xml->next;
-							while (current && current->func && retVal == XMLRPC_CONT)
-							{
-								retVal = current->func(ac, av);
-								current = current->next;
-							}
-						}
-						else
-						{
-							xmlrpc_error_code = -7;
+							retVal = current->func(ac, av);
+							current = current->next;
 						}
 					}
 					else
 					{
-						xmlrpc_error_code = -6;
+						xmlrpc_error_code = -7;
 					}
 				}
 				else
 				{
-					xmlrpc_error_code = -5;
-					xmlrpc_generic_error(xmlrpc_error_code, "XMLRPC error: No arguments provided");
+					xmlrpc_error_code = -6;
 				}
 			}
 			else
