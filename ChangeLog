@@ -1,3 +1,11 @@
+nenolod     2005/11/06 02:07:44 UTC	(20051106-3517)
+  Log:
+  Malformed query caused memory corruption here.
+
+  Changes:	Modified:
+  +1 -1		trunk/backend/mysql.c (File Modified) 
+
+
 nenolod     2005/11/06 02:04:17 UTC	(20051106-3515)
   Log:
   Don't use TRUNCATE under MySQL -- it's not transaction safe.
