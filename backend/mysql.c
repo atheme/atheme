@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using MySQL.
  *
- * $Id: mysql.c 3517 2005-11-06 02:07:44Z nenolod $
+ * $Id: mysql.c 3521 2005-11-06 03:05:01Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/mysql", TRUE, _modinit, NULL,
-	"$Id: mysql.c 3517 2005-11-06 02:07:44Z nenolod $",
+	"$Id: mysql.c 3521 2005-11-06 03:05:01Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -74,26 +74,28 @@ static MYSQL_RES *safe_query(const char *string, ...)
  *
  * NOTE: This function will smalloc() memory to hold the escaped string,
  * and must be free()'d when no-longer needed.
+ *
+ * Rewritten 20 hours before the 0.3 tree was set to freeze by nenolod.
  */
-static uint32_t escape_string(char **buf, char *str, uint32_t str_len)
+static char *escape_string(char *str)
 {
-	if (!buf || !*buf) {
-		slog(LG_DEBUG, "buf argument escape_string() is NULL ! o.0");
-		return 0;
-	}
-	if (!str || !*str) {
-		slog(LG_DEBUG, "str argument to escape_string() is NULL or of zero-length ! o.0");
-		return 0;
-	}
-	if (!str_len) {
-		slog(LG_DEBUG, "str_len argument to escape_string() is zero ! o.0");
-		return 0;
+	char *buf;
+	uint32_t str_len;
+
+	if (!str)
+	{
+		slog(LG_DEBUG, "escape_string(): no string given to escape!");
+		return NULL;
 	}
 
-	*buf = smalloc((str_len * 2) + 1);
-	memset(*buf, 0, (str_len * 2) + 1);
+	str_len = strlen(str);
 
-	return mysql_real_escape_string(mysql, *buf, str, str_len);
+	buf = smalloc((str_len * 2) + 1);
+	memset(buf, 0, (str_len * 2) + 1);
+
+	mysql_real_escape_string(mysql, buf, str, str_len);
+
+	return buf;
 }
 
 /*
@@ -167,9 +169,9 @@ static void mysql_db_save(void *arg)
 
 			mu = (myuser_t *)n->data;
 
-			escape_string(&user, mu->name, strlen(mu->name));
-			escape_string(&pass, mu->pass, strlen(mu->pass));
-			escape_string(&email, mu->email, strlen(mu->email));
+			user = escape_string(mu->name);
+			pass = escape_string(mu->pass);
+			email = escape_string(mu->email);
 
 			res = safe_query("INSERT INTO ACCOUNTS(ID, USERNAME, PASSWORD, EMAIL, REGISTERED, LASTLOGIN, FLAGS) "
 					"VALUES (%d, '%s', '%s', '%s', %ld, %ld, %ld)", ii, user, pass, email,
@@ -184,8 +186,8 @@ static void mysql_db_save(void *arg)
 				char *key, *keyval;
 				metadata_t *md = (metadata_t *)tn->data;
 
-				escape_string(&key, md->name, strlen(md->name));
-				escape_string(&keyval, md->value, strlen(md->value));
+				key = escape_string(md->name);
+				keyval = escape_string(md->value);
 
 				res = safe_query("INSERT INTO ACCOUNT_METADATA(ID, PARENT, KEYNAME, VALUE) VALUES ("
 						"DEFAULT, %d, '%s', '%s')", ii, key, keyval);
@@ -199,8 +201,8 @@ static void mysql_db_save(void *arg)
 				char *sender, *text;
 				mymemo_t *md = (mymemo_t *)tn->data;
 
-				escape_string(&sender, md->sender, strlen(md->sender));
-				escape_string(&text, md->text, strlen(md->text));
+				sender = escape_string(md->sender);
+				text = escape_string(md->text);
 
 				res = safe_query("INSERT INTO ACCOUNT_MEMOS(ID, PARENT, SENDER, TIME, STATUS, TEXT) VALUES ("
 						"DEFAULT, %d, '%s', %ld, %ld, '%s')", ii, sender, md->sent, md->status, text);
@@ -212,7 +214,7 @@ static void mysql_db_save(void *arg)
 			LIST_FOREACH(tn, mu->memo_ignores.head)
 			{
 				char *target, *temp = (char *)tn->data;
-				escape_string(&target, temp, strlen(temp));
+				target = escape_string(temp);
 				
 				res = safe_query("INSERT INTO ACCOUNT_MEMO_IGNORES(ID, PARENT, TARGET) VALUES(DEFAULT, %d, '%s')", ii, target);
 						
@@ -237,12 +239,11 @@ static void mysql_db_save(void *arg)
 
 			mc = (mychan_t *)n->data;
 
-			escape_string(&cname, mc->name, strlen(mc->name));
-			/* founder shouldn't contain anything bad, but be safe anyway */
-			escape_string(&cfounder, mc->founder->name, strlen(mc->founder->name));
+			cname = escape_string(mc->name);
+			cfounder = escape_string(mc->founder->name);
 
 			if (mc->mlock_key)
-				escape_string(&ckey, mc->mlock_key, strlen(mc->mlock_key));
+				ckey = escape_string(mc->mlock_key);
 
 			res = safe_query("INSERT INTO CHANNELS(ID, NAME, FOUNDER, REGISTERED, LASTUSED, "
 					"FLAGS, MLOCK_ON, MLOCK_OFF, MLOCK_LIMIT, MLOCK_KEY) VALUES ("
@@ -263,9 +264,9 @@ static void mysql_db_save(void *arg)
 				ca = (chanacs_t *)tn->data;
 
 				if (!ca->myuser)
-					escape_string(&caaccount, ca->host, strlen(ca->host));
+					caaccount = escape_string(ca->host);
 				else
-					escape_string(&caaccount, ca->myuser->name, strlen(ca->myuser->name));
+					caaccount = escape_string(ca->myuser->name);
 
 				res = safe_query("INSERT INTO CHANNEL_ACCESS(ID, PARENT, ACCOUNT, PERMISSIONS) VALUES ("
 						"%d, %d, '%s', '%s')", iii, ii, caaccount,
@@ -278,8 +279,8 @@ static void mysql_db_save(void *arg)
 					char *key, *keyval;
 					metadata_t *md = (metadata_t *)tn2->data;
 
-					escape_string(&key, md->name, strlen(md->name));
-					escape_string(&keyval, md->value, strlen(md->value));
+					key = escape_string(md->name);
+					keyval = escape_string(md->value);
 
 					res = safe_query("INSERT INTO CHANNEL_ACCESS_METADATA(ID, PARENT, KEYNAME, VALUE) VALUES("
 						"DEFAULT, %d, '%s', '%s')", iii, key, keyval);
@@ -296,8 +297,8 @@ static void mysql_db_save(void *arg)
 				char *key, *keyval;
 				metadata_t *md = (metadata_t *)tn->data;
 
-				escape_string(&key, md->name, strlen(md->name));
-				escape_string(&keyval, md->value, strlen(md->value));
+				key = escape_string(md->name);
+				keyval = escape_string(md->value);
 
 				res = safe_query("INSERT INTO CHANNEL_METADATA(ID, PARENT, KEYNAME, VALUE) VALUES ("
 						"DEFAULT, %d, '%s', '%s')", ii, key, keyval);
@@ -318,14 +319,12 @@ static void mysql_db_save(void *arg)
 	{
 		char *kuser, *khost;
 		char *ksetby, *kreason;
-		metadata_t *md = (metadata_t *)tn->data;
-
 		k = (kline_t *)n->data;
 
-		escape_string(&kuser, k->user, strlen(k->user));
-		escape_string(&khost, k->host, strlen(k->host));
-		escape_string(&ksetby, k->setby, strlen(k->setby));
-		escape_string(&kreason, k->reason, strlen(k->reason));
+		kuser = escape_string(k->user);
+		khost = escape_string(k->host);
+		ksetby = escape_string(k->setby);
+		kreason = escape_string(k->reason);
 
 		res = safe_query("INSERT INTO KLINES(ID, USERNAME, HOSTNAME, DURATION, SETTIME, SETTER, REASON) VALUES ("
 				"%d, '%s', '%s', %ld, %ld, '%s', '%s')", ii, kuser, khost, k->duration, (long) k->settime,
