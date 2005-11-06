@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 3349 2005-10-31 04:04:44Z nenolod $
+ * $Id: extern.h 3571 2005-11-06 19:54:01Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -54,6 +54,7 @@ E void tb2sp(char *line);
 
 E void log_open(void);
 E void slog(uint32_t level, const char *fmt, ...);
+E void logcommand(void *svs, user_t *source, int level, const char *fmt, ...);
 E uint32_t time_msec(void);
 E uint8_t regex_match(regex_t * preg, char *pattern, char *string,
 		      size_t nmatch, regmatch_t pmatch[], int eflags);

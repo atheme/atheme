@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 3549 2005-11-06 08:33:31Z nenolod $
+ * $Id: function.c 3571 2005-11-06 19:54:01Z jilles $
  */
 
 #include "atheme.h"
@@ -116,6 +116,49 @@ void slog(uint32_t level, const char *fmt, ...)
 
 	if ((runflags & (RF_LIVE | RF_STARTING)))
 		fprintf(stderr, "%s %s\n", buf, lbuf);
+
+	va_end(args);
+}
+
+/* svs is really service_t * but that's not available in extern.h */
+void logcommand(void *svs, user_t *source, int level, const char *fmt, ...)
+{
+	va_list args;
+	time_t t;
+	struct tm tm;
+	char datetime[64];
+	char lbuf[BUFSIZE];
+
+	/* XXX use level */
+
+	va_start(args, fmt);
+
+	time(&t);
+	tm = *localtime(&t);
+	strftime(datetime, sizeof(datetime) - 1, "[%d/%m/%Y %H:%M:%S]", &tm);
+
+	vsnprintf(lbuf, BUFSIZE, fmt, args);
+
+	if (!log_file)
+		log_open();
+
+	if (log_file)
+	{
+		fprintf(log_file, "%s %s %s:%s!%s@%s[%s] %s\n",
+				datetime,
+				svs != NULL ? ((service_t *)svs)->name : me.name,
+				source->myuser != NULL ? source->myuser->name : "",
+				source->nick, source->user, source->vhost,
+				source->ip[0] != '\0' ? source->ip : source->host,
+				lbuf);
+
+		fflush(log_file);
+	}
+
+#if 0
+	if ((runflags & (RF_LIVE | RF_STARTING)))
+		fprintf(stderr, "%s %s\n", buf, lbuf);
+#endif
 
 	va_end(args);
 }

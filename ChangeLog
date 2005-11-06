@@ -1,3 +1,11 @@
+alambert    2005/11/06 19:51:50 UTC	(20051106-3569)
+  Log:
+  flatfile: Fix crash when mc is null when adding chanacs. Reported by brian.
+
+  Changes:	Modified:
+  +1 -1		trunk/backend/flatfile.c (File Modified) 
+
+
 jilles      2005/11/06 19:36:39 UTC	(20051106-3567)
   Log:
   Stop querying the database (mysql or postgresql)

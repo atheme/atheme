@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 3433 2005-11-03 22:17:00Z jilles $
+ * $Id: atheme.h 3571 2005-11-06 19:54:01Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -238,6 +238,14 @@ struct help_command_
 #define EMAIL_SENDPASS 2 /* send a password to a user (password) */
 #define EMAIL_SETEMAIL 3 /* change email address (verification code) */
 #define EMAIL_MEMO     4 /* emailed memos (memo text) */
+
+/* command log levels */
+#define CMDLOG_ADMIN    1 /* oper/sra only commands */
+#define CMDLOG_REGISTER 2 /* register/drop */
+#define CMDLOG_SET      3 /* change properties of static data */
+#define CMDLOG_DO       4 /* change properties of dynamic data */
+#define CMDLOG_LOGIN    5 /* login/logout */
+#define CMDLOG_GET      6 /* query information */
 
 /* bursting timer */
 #if HAVE_GETTIMEOFDAY
