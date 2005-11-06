@@ -1,3 +1,17 @@
+jilles      2005/11/06 19:36:39 UTC	(20051106-3567)
+  Log:
+  Stop querying the database (mysql or postgresql)
+  if a query fails, until the end of the current
+  operation.
+  
+  This stops wallops floods.
+  
+
+  Changes:	Modified:
+  +8 -0		trunk/backend/mysql.c (File Modified) 
+  +7 -0		trunk/backend/postgresql.c (File Modified) 
+
+
 jilles      2005/11/06 14:17:51 UTC	(20051106-3565)
   Log:
   - Fix some too low parc for channel_mode() for
