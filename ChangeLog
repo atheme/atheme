@@ -1,3 +1,11 @@
+nenolod     2005/11/06 06:48:05 UTC	(20051106-3541)
+  Log:
+  Merge othernet-SQL-transition patch for postgresql.
+
+  Changes:	Modified:
+  +30 -14	trunk/backend/postgresql.c (File Modified) 
+
+
 nenolod     2005/11/06 06:21:35 UTC	(20051106-3539)
   Log:
   Fix a crash when sts() is called with no active connection

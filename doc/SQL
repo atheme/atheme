@@ -1,4 +1,4 @@
-$Id: SQL 3373 2005-11-01 02:55:57Z nenolod $
+$Id: SQL 3543 2005-11-06 07:09:41Z nenolod $
 
 SQL Notes
 ---------
@@ -58,3 +58,24 @@ well-tested.
 It is critical that the database engine used supports transactions.
 Specifically, one *cannot* use MyISAM safely; instead, use InnoDB or
 BDB.
+
+Switching to a SQL backend
+--------------------------
+
+Switching to a SQL backend is relatively painless; just make sure
+that your database {} block is configured properly.
+  Hint: /msg operserv rehash
+
+Once you have a properly configured database{} block, you can simply
+load the replacement backend via:
+  /msg operserv modload ../backend/<replacement backend>
+
+After the backend is loaded, you can export your data by using
+OperServ's UPDATE command.
+
+Once you have loaded the replacement backend, you are now on
+SQL. You will probably want to switch your backend module out in
+the configuration file, as your flatfile database will no longer
+be updated. You may want to restart Services to ensure that the
+transition was successful after updating the config file.
+
