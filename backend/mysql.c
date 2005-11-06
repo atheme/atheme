@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using MySQL.
  *
- * $Id: mysql.c 3521 2005-11-06 03:05:01Z nenolod $
+ * $Id: mysql.c 3527 2005-11-06 05:26:53Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,13 +14,53 @@
 DECLARE_MODULE_V1
 (
 	"backend/mysql", TRUE, _modinit, NULL,
-	"$Id: mysql.c 3521 2005-11-06 03:05:01Z nenolod $",
+	"$Id: mysql.c 3527 2005-11-06 05:26:53Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 #define SQL_BUFSIZE (BUFSIZE * 3)
 
 static MYSQL     *mysql = NULL;
+
+static void db_connect(boolean_t startup)
+{
+	char dbcredentials[SQL_BUFSIZE];
+	uint32_t dbo_port;
+	int32_t retval;
+
+	/* Open the db connection up. */
+	mysql = mysql_init(NULL);
+
+	if (!database_options.port)
+		dbo_port = mysql->port;
+	else
+		dbo_port = database_options.port;
+
+	snprintf(dbcredentials, BUFSIZE, "host=%s dbname=%s user=%s password=%s port=%d",
+			database_options.host, database_options.database, database_options.user, database_options.pass,
+			dbo_port);
+
+	slog(LG_DEBUG, "Connecting to MySQL provider using these credentials:");
+	slog(LG_DEBUG, "      %s", dbcredentials); 
+
+	if (mysql_real_connect(mysql, database_options.host, database_options.user, database_options.pass, NULL, mysql->port, 0, 0)==NULL)
+	{
+		slog(LG_DEBUG, "There was an error connecting to the database:");
+		slog(LG_DEBUG, "    %s", mysql_error(mysql));
+
+		if (startup == TRUE)
+			exit(1);
+	}
+
+	if((retval = mysql_select_db(mysql, database_options.database)))
+	{
+		slog(LG_DEBUG, "There was an error selecting the database:");
+		slog(LG_DEBUG, "    %s", mysql_error(mysql));
+
+		if (startup == TRUE)
+			exit(1);
+	}
+}
 
 /*
  * Returns a MYSQL_RES on success.
@@ -38,7 +78,9 @@ static MYSQL_RES *safe_query(const char *string, ...)
 
 	slog(LG_DEBUG, "executing: %s", buf);
 
-	if (mysql_real_query(mysql, buf, sizeof(buf)))
+	mysql_ping(mysql);
+
+	if (mysql_query(mysql, buf))
 	{
 		slog(LG_DEBUG, "There was an error executing the query:");
 		slog(LG_DEBUG, "    query error: %s", mysql_error(mysql));
@@ -109,44 +151,15 @@ static void mysql_db_save(void *arg)
 	kline_t *k;
 	node_t *n, *tn, *tn2;
 	int retval;
-	uint32_t i, ii, iii, dbo_port;
+	uint32_t i, ii, iii;
 	MYSQL_RES *res = NULL;
+
+	if (!mysql)
+		db_connect(FALSE);
 
 	slog(LG_DEBUG, "db_save(): saving myusers");
 
 	ii = 0;
-
-	/* insert connect */
-	mysql = mysql_init(NULL);
-	if (!mysql) {
-		/* might not get there, but hey, it's worth a try (: */
-		slog(LG_DEBUG, "mysql_init() failed (out of memory condition)");
-		exit(1);
-	}
-
-	if (!database_options.port)
-		dbo_port = mysql->port;
-	else
-		dbo_port = database_options.port;
-
-	if (mysql_real_connect(mysql, database_options.host, database_options.user,
-	                       database_options.pass, NULL, dbo_port, 0, 0) == NULL)
-	{
-		slog(LG_DEBUG, "There was an error connecting to the database:");
-		slog(LG_DEBUG, "    %s", mysql_error(mysql));
-
-		wallops("\2DATABASE ERROR\2: connection error: %s", mysql_error(mysql));
-		exit(1);
-	}
-
-	if((retval = mysql_select_db(mysql, database_options.database)))
-	{
-		slog(LG_DEBUG, "There was an error selecting the database:");
-		slog(LG_DEBUG, "    %s", mysql_error(mysql));
-
-		wallops("\2DATABASE ERROR\2: database selection error: %s", mysql_error(mysql));
-		exit(1);
-	}
 
 	/* safety */
 	safe_query("BEGIN");
@@ -357,36 +370,8 @@ static void mysql_db_load(void)
 	MYSQL_RES *res = NULL;
 	MYSQL_ROW row = NULL;
 
-	/* Open the db connection up. */
-	mysql = mysql_init(NULL);
-
-	if (!database_options.port)
-		dbo_port = mysql->port;
-	else
-		dbo_port = database_options.port;
-
-	snprintf(dbcredentials, BUFSIZE, "host=%s dbname=%s user=%s password=%s port=%d",
-			database_options.host, database_options.database, database_options.user, database_options.pass,
-			dbo_port);
-
-	slog(LG_DEBUG, "Connecting to MySQL provider using these credentials:");
-	slog(LG_DEBUG, "      %s", dbcredentials); 
-
-	if (mysql_real_connect(mysql, database_options.host, database_options.user, database_options.pass, NULL, mysql->port, 0, 0)==NULL)
-	{
-		slog(LG_DEBUG, "There was an error connecting to the database:");
-		slog(LG_DEBUG, "    %s", mysql_error(mysql));
-
-		exit(1);
-	}
-
-	if((retval = mysql_select_db(mysql, database_options.database)))
-	{
-		slog(LG_DEBUG, "There was an error selecting the database:");
-		slog(LG_DEBUG, "    %s", mysql_error(mysql));
-
-		exit(1);
-	}
+	if (!mysql)
+		db_connect(TRUE);
 
 	res = safe_query("SELECT * FROM ACCOUNTS");
 	muin = mysql_num_rows(res);
@@ -586,4 +571,6 @@ void _modinit(module_t *m)
 	db_save = &mysql_db_save;
 
 	backend_loaded = TRUE;
+
+	mysql_library_init(0, NULL, NULL);
 }

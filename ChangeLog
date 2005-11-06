@@ -1,3 +1,11 @@
+alambert    2005/11/06 04:14:43 UTC	(20051106-3525)
+  Log:
+  XMLRPC: change e-mail error message
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 alambert    2005/11/06 04:10:33 UTC	(20051106-3523)
   Log:
   XMLRPC: properly quit on error -7 (if first eligible function returns XMLRPC_STOP
