@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3505 2005-11-05 23:30:32Z alambert $
+ * $Id: node.c 3533 2005-11-06 05:48:20Z alambert $
  */
 
 #include "atheme.h"
@@ -1268,7 +1268,7 @@ mychan_t *mychan_add(char *name)
 	n = node_create();
 	mc = BlockHeapAlloc(mychan_heap);
 
-	strlcpy(mc->name, name, NICKLEN);
+	strlcpy(mc->name, name, CHANNELLEN);
 	mc->founder = NULL;
 	mc->successor = NULL;
 	mc->registered = CURRTIME;

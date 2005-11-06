@@ -1,3 +1,11 @@
+nenolod     2005/11/06 05:46:07 UTC	(20051106-3531)
+  Log:
+  use mysql_server_init instead so we can work with mysql < 4.1
+
+  Changes:	Modified:
+  +2 -1		trunk/backend/mysql.c (File Modified) 
+
+
 nenolod     2005/11/06 05:38:06 UTC	(20051106-3529)
   Log:
   stability fix

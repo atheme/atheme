@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: common.h 3029 2005-10-19 05:55:21Z nenolod $
+ * $Id: common.h 3533 2005-11-06 05:48:20Z alambert $
  */
 
 #ifndef COMMON_H
@@ -19,7 +19,8 @@
 #define TOKEN_ERROR -2
 
 /* lengths of buffers (string length is 1 less) */
-#define NICKLEN 50
+#define NICKLEN 51
+#define CHANNELLEN 201
 #define USERLEN 11
 #define GECOSLEN 51
 #define EMAILLEN 120
