@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 3399 2005-11-02 18:51:40Z nenolod $
+ * $Id: atheme.c 3585 2005-11-06 21:52:51Z alambert $
  */
 
 #include "atheme.h"
@@ -272,6 +272,9 @@ int main(int argc, char *argv[])
 
 	/* check kline expires every minute */
 	event_add("kline_expire", kline_expire, NULL, 60);
+
+	/* check authcookie expires every ten minutes */
+	event_add("authcookie_expire", authcookie_expire, NULL, 600);
 
 	uplink_connect();
 	me.connected = FALSE;

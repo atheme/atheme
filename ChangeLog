@@ -1,3 +1,34 @@
+jilles      2005/11/06 21:48:28 UTC	(20051106-3583)
+  Log:
+  Add command logging to nickserv.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/nickserv/drop.c (File Modified) 
+  +6 -0		trunk/modules/nickserv/freeze.c (File Modified) 
+  +3 -0		trunk/modules/nickserv/ghost.c (File Modified) 
+  +6 -0		trunk/modules/nickserv/hold.c (File Modified) 
+  +4 -0		trunk/modules/nickserv/identify.c (File Modified) 
+  +2 -0		trunk/modules/nickserv/info.c (File Modified) 
+  +4 -0		trunk/modules/nickserv/link.c (File Modified) 
+  +5 -0		trunk/modules/nickserv/list.c (File Modified) 
+  +19 -4	trunk/modules/nickserv/listchans.c (File Modified) 
+  +5 -0		trunk/modules/nickserv/listmail.c (File Modified) 
+  +7 -0		trunk/modules/nickserv/logout.c (File Modified) 
+  +6 -0		trunk/modules/nickserv/mark.c (File Modified) 
+  +1 -0		trunk/modules/nickserv/register.c (File Modified) 
+  +4 -2		trunk/modules/nickserv/resetpass.c (File Modified) 
+  +2 -0		trunk/modules/nickserv/return.c (File Modified) 
+  +4 -0		trunk/modules/nickserv/sendpass.c (File Modified) 
+  +15 -0	trunk/modules/nickserv/set.c (File Modified) 
+  +4 -0		trunk/modules/nickserv/status.c (File Modified) 
+  +2 -1		trunk/modules/nickserv/taxonomy.c (File Modified) 
+  +4 -0		trunk/modules/nickserv/verify.c (File Modified) 
+  +8 -1		trunk/modules/nickserv/vhost.c (File Modified) 
+  +1 -0		trunk/modules/userserv/drop.c (File Modified) 
+  +1 -0		trunk/modules/userserv/register.c (File Modified) 
+
+
 alambert    2005/11/06 21:40:08 UTC	(20051106-3581)
   Log:
   XMLRPC Explorer: fix a typo
