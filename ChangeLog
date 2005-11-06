@@ -1,3 +1,13 @@
+jilles      2005/11/06 21:28:05 UTC	(20051106-3579)
+  Log:
+  Don't segfault on startup if a module in
+  atheme.conf can't be found.
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/src/module.c (File Modified) 
+
+
 nenolod     2005/11/06 20:37:21 UTC	(20051106-3577)
   Log:
   Close the connection after doing the write operation -- we cant persist like with PostgreSQL.
