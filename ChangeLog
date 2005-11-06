@@ -1,3 +1,12 @@
+jilles      2005/11/06 23:50:41 UTC	(20051106-3603)
+  Log:
+  Add +M umode to allow global notices.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/hyperion.c (File Modified) 
+
+
 jilles      2005/11/06 23:36:34 UTC	(20051106-3601)
   Log:
   Add command logging to operserv.
