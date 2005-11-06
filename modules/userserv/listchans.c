@@ -62,7 +62,7 @@ static void us_cmd_listchans(char *origin)
 		return;
 	}
 
-	if (target != NULL && is_sra(mu))
+	if (target != NULL && is_ircop(u))
 	{
 		if (!(mu = myuser_find(target)))
 		{
