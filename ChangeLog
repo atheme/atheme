@@ -1,3 +1,28 @@
+kog         2005/11/06 09:54:37 UTC	(20051106-3557)
+  Log:
+  MYACCESS -> LISTCHANS.
+   - Allows SRAs to get access information about other users.
+   - Edited comments to be more clear
+   - Module load changes to confs
+   - makefile updates
+  
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/dist/example.conf (File Modified) 
+  +2 -2		trunk/dist/example.userserv.conf (File Modified) 
+  +11 -0	trunk/help/nickserv/listchans (File Added) 
+  +0 -11	trunk/help/nickserv/myaccess (File Deleted) 
+  +11 -0	trunk/help/userserv/listchans (File Added) 
+  +0 -11	trunk/help/userserv/myaccess (File Deleted) 
+  +1 -0		trunk/modules/nickserv/Makefile.in (File Modified) 
+  +46 -23	trunk/modules/nickserv/listchans.c (File Modified) 
+  +2 -1		trunk/modules/userserv/Makefile.in (File Modified) 
+  +1 -1		trunk/modules/userserv/Makefile.win32 (File Modified) 
+  +124 -0	trunk/modules/userserv/listchans.c (File Added) 
+  +0 -98	trunk/modules/userserv/myaccess.c (File Deleted) 
+
+
 pfish       2005/11/06 09:32:40 UTC	(20051106-3555)
   Log:
   blah
