@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3533 2005-11-06 05:48:20Z alambert $
+ * $Id: node.c 3573 2005-11-06 20:01:31Z alambert $
  */
 
 #include "atheme.h"
@@ -1341,6 +1341,12 @@ chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, uint32_t level)
 	chanacs_t *ca;
 	node_t *n1;
 	node_t *n2;
+
+	if (!mychan || !myuser)
+	{
+		slog(LG_DEBUG, "chanacs_add(): got mychan == NULL or myuser == NULL, ignoring");
+		return NULL;
+	}
 
 	if (*mychan->name != '#')
 	{
