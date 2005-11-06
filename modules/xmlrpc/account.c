@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 3525 2005-11-06 04:14:43Z alambert $
+ * $Id: account.c 3587 2005-11-06 21:56:43Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 3525 2005-11-06 04:14:43Z alambert $",
+	"$Id: account.c 3587 2005-11-06 21:56:43Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -54,7 +54,7 @@ static int account_register(int parc, char *parv[])
 		return 0;
 	}
 
-	if (using_nickserv == TRUE && user_find(parv[0]))
+	if (using_nickserv == TRUE && user_find_named(parv[0]))
 	{
 		xmlrpc_generic_error(5, "A user matching this account is already on IRC.");
 		return 0;

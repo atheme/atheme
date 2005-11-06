@@ -1,3 +1,12 @@
+alambert    2005/11/06 21:52:51 UTC	(20051106-3585)
+  Log:
+  authcookie: clean stale authcookies every ten minutes
+
+  Changes:	Modified:
+  +3 -0		trunk/src/atheme.c (File Modified) 
+  +31 -1	trunk/src/authcookie.c (File Modified) 
+
+
 jilles      2005/11/06 21:48:28 UTC	(20051106-3583)
   Log:
   Add command logging to nickserv.
