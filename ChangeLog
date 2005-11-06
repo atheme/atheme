@@ -1,3 +1,11 @@
+alambert    2005/11/06 01:58:47 UTC	(20051106-3513)
+  Log:
+  XMLRPC: test.method improvement
+
+  Changes:	Modified:
+  +6 -1		trunk/modules/xmlrpc/main.c (File Modified) 
+
+
 alambert    2005/11/06 01:49:43 UTC	(20051106-3511)
   Log:
   XMLRPC: be sure we error out.

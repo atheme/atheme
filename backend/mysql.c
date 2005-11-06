@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using MySQL.
  *
- * $Id: mysql.c 3245 2005-10-29 21:44:39Z alambert $
+ * $Id: mysql.c 3515 2005-11-06 02:04:17Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/mysql", TRUE, _modinit, NULL,
-	"$Id: mysql.c 3245 2005-10-29 21:44:39Z alambert $",
+	"$Id: mysql.c 3515 2005-11-06 02:04:17Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -98,8 +98,6 @@ static uint32_t escape_string(char **buf, char *str, uint32_t str_len)
 
 /*
  * Writes a clean snapshot of Atheme's state to the SQL database.
- *
- * This uses transactions, so writes are safe.
  */
 static void mysql_db_save(void *arg)
 {
@@ -152,14 +150,14 @@ static void mysql_db_save(void *arg)
 	safe_query("BEGIN");
 
 	/* clear everything out. */
-	safe_query("TRUNCATE TABLE ACCOUNTS");
-	safe_query("TRUNCATE TABLE ACCOUNT_METADATA");
-	safe_query("TRUNCATE TABLE ACCOUNT_MEMOS");
-	safe_query("TRUNCATE TABLE ACCOUNT_MEMO_IGNORES");
-	safe_query("TRUNCATE TABLE CHANNELS");
-	safe_query("TRUNCATE TABLE CHANNEL_METADATA");
-	safe_query("TRUNCATE TABLE CHANNEL_ACCESS");
-	safe_query("TRUNCATE TABLE KLINES");
+	safe_query("DELETE FROM ACCOUNTS");
+	safe_query("DELETE FROM ACCOUNT_METADATA");
+	safe_query("DELETE FROM ACCOUNT_MEMOS");
+	safe_query("DELETE FROM ACCOUNT_MEMO_IGNORES");
+	safe_query("DELETE FROM CHANNELS");
+	safe_query("DELETE FROM CHANNEL_METADATA");
+	safe_query("DELETE FROM CHANNEL_ACCESS");
+	safe_query("DELETE FROM KLINES");
 
 	for (i = 0; i < HASHSIZE; i++)
 	{
