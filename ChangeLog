@@ -1,3 +1,11 @@
+nenolod     2005/11/06 07:09:41 UTC	(20051106-3543)
+  Log:
+  Add advanced tip on switching from flatfile to SQL
+
+  Changes:	Modified:
+  +21 -0	trunk/doc/SQL (File Modified) 
+
+
 nenolod     2005/11/06 06:48:05 UTC	(20051106-3541)
   Log:
   Merge othernet-SQL-transition patch for postgresql.
