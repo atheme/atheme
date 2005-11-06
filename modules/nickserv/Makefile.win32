@@ -36,10 +36,10 @@ BASE_SRCS = 		\
 	info.c		\
 	link.c		\
 	list.c		\
+	listchans.c	\
 	listmail.c	\
 	logout.c	\
 	mark.c		\
-	myaccess.c	\
 	register.c	\
 	resetpass.c	\
 	sendpass.c	\

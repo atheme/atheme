@@ -1,3 +1,14 @@
+pfish       2005/11/06 09:30:37 UTC	(20051106-3553)
+  Log:
+  NickServ: Initial MYACCESS->LISTCHANS convert.
+  
+
+  Changes:	Modified:
+  +102 -1	trunk/modules/nickserv/Makefile.in (File Modified) 
+  + -		trunk/modules/nickserv/listchans.c (File Added) 
+  +0 -98	trunk/modules/nickserv/myaccess.c (File Deleted) 
+
+
 alambert    2005/11/06 09:11:45 UTC	(20051106-3551)
   Log:
   gen_salt(): remember to free() the result of gen_pw()
