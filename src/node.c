@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3617 2005-11-07 01:30:17Z nenolod $
+ * $Id: node.c 3625 2005-11-07 07:17:10Z pfish $
  */
 
 #include "atheme.h"
@@ -1821,6 +1821,9 @@ void expire_check(void *arg)
 		LIST_FOREACH_SAFE(n2, tn, mclist[i].head)
 		{
 			mc = (mychan_t *)n2->data;
+
+			if (!mc == NULL) /* this should never happen */
+				continue;
 
 			if (MU_HOLD & mc->founder->flags)
 				continue;
