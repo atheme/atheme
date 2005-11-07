@@ -1,3 +1,12 @@
+kog         2005/11/07 22:27:03 UTC	(20051107-3635)
+  Log:
+  iterator removing chanacs: now being passed two distinct node_ts for the LIST_FOREACH_SAFE
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/src/node.c (File Modified) 
+
+
 alambert    2005/11/07 22:25:53 UTC	(20051107-3633)
   Log:
   NS DROP: use index 0 to go through the hash...how the hell did we miss this for so long?
