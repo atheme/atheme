@@ -1,3 +1,12 @@
+pfish       2005/11/07 07:17:10 UTC	(20051107-3625)
+  Log:
+  Prevent a crash if mc is NULL.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/src/node.c (File Modified) 
+
+
 pfish       2005/11/07 07:01:03 UTC	(20051107-3623)
   Log:
   Add xmlrpc/channel to example configs

@@ -4,7 +4,7 @@
  *
  * Remote authentication ticket management.
  *
- * $Id: authcookie.h 3593 2005-11-06 22:50:16Z nenolod $
+ * $Id: authcookie.h 3627 2005-11-07 07:54:35Z alambert $
  */
 
 #ifndef AUTHCOOKIE_H
@@ -24,6 +24,6 @@ E authcookie_t *authcookie_create(myuser_t *mu);
 E authcookie_t *authcookie_find(char *ticket, myuser_t *myuser);
 E void authcookie_destroy(authcookie_t *ac);
 E boolean_t authcookie_validate(char *ticket, myuser_t *myuser);
-E void authcookie_expire(void);
+E void authcookie_expire();
 
 #endif
