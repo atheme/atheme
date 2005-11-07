@@ -1,3 +1,13 @@
+jilles      2005/11/07 00:04:17 UTC	(20051107-3609)
+  Log:
+  Change database errors from LG_DEBUG to LG_ERROR.
+  
+
+  Changes:	Modified:
+  +8 -8		trunk/backend/mysql.c (File Modified) 
+  +5 -5		trunk/backend/postgresql.c (File Modified) 
+
+
 jilles      2005/11/06 23:57:17 UTC	(20051106-3607)
   Log:
   Enable $Id$ expansion.
