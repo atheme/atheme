@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using MySQL.
  *
- * $Id: mysql.c 3577 2005-11-06 20:37:21Z nenolod $
+ * $Id: mysql.c 3609 2005-11-07 00:04:17Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/mysql", TRUE, _modinit, NULL,
-	"$Id: mysql.c 3577 2005-11-06 20:37:21Z nenolod $",
+	"$Id: mysql.c 3609 2005-11-07 00:04:17Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,8 +48,8 @@ static void db_connect(boolean_t startup)
 
 	if (mysql_real_connect(mysql, database_options.host, database_options.user, database_options.pass, NULL, mysql->port, 0, 0)==NULL)
 	{
-		slog(LG_DEBUG, "There was an error connecting to the database:");
-		slog(LG_DEBUG, "    %s", mysql_error(mysql));
+		slog(LG_ERROR, "There was an error connecting to the database:");
+		slog(LG_ERROR, "    %s", mysql_error(mysql));
 
 		if (startup == TRUE)
 			exit(1);
@@ -57,8 +57,8 @@ static void db_connect(boolean_t startup)
 
 	if((retval = mysql_select_db(mysql, database_options.database)))
 	{
-		slog(LG_DEBUG, "There was an error selecting the database:");
-		slog(LG_DEBUG, "    %s", mysql_error(mysql));
+		slog(LG_ERROR, "There was an error selecting the database:");
+		slog(LG_ERROR, "    %s", mysql_error(mysql));
 
 		if (startup == TRUE)
 			exit(1);
@@ -88,8 +88,8 @@ static MYSQL_RES *safe_query(const char *string, ...)
 
 	if (mysql_query(mysql, buf))
 	{
-		slog(LG_DEBUG, "There was an error executing the query:");
-		slog(LG_DEBUG, "    query error: %s", mysql_error(mysql));
+		slog(LG_ERROR, "There was an error executing the query:");
+		slog(LG_ERROR, "    query error: %s", mysql_error(mysql));
 
 		wallops("\2DATABASE ERROR\2: database error: %s", mysql_error(mysql));
 		db_errored = 1;
@@ -105,8 +105,8 @@ static MYSQL_RES *safe_query(const char *string, ...)
 		}
 		else
 		{
-			slog(LG_DEBUG, "There was an error executing the query:");
-			slog(LG_DEBUG, "    query error: %s", mysql_error(mysql));
+			slog(LG_ERROR, "There was an error executing the query:");
+			slog(LG_ERROR, "    query error: %s", mysql_error(mysql));
 
 			wallops("\2DATABASE ERROR\2: database error: %s", mysql_error(mysql));
 			db_errored = 1;

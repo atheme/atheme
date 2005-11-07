@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 3567 2005-11-06 19:36:39Z jilles $
+ * $Id: postgresql.c 3609 2005-11-07 00:04:17Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 3567 2005-11-06 19:36:39Z jilles $",
+	"$Id: postgresql.c 3609 2005-11-07 00:04:17Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -43,8 +43,8 @@ static void db_connect(boolean_t startup)
 		/* Open the db connection up. */
 		pq = PQconnectdb(dbcredentials);
 
-		slog(LG_DEBUG, "There was an error connecting to the database system:");
-		slog(LG_DEBUG, "      %s", PQerrorMessage(pq));
+		slog(LG_ERROR, "There was an error connecting to the database system:");
+		slog(LG_ERROR, "      %s", PQerrorMessage(pq));
 
 		if (startup == TRUE)
 			exit(EXIT_FAILURE);
@@ -74,9 +74,9 @@ static PGresult *safe_query(const char *string, ...)
 
 	if (PQresultStatus(res) != PGRES_COMMAND_OK && PQresultStatus(res) != PGRES_TUPLES_OK)
 	{
-		slog(LG_DEBUG, "There was an error executing the query:");
-		slog(LG_DEBUG, "       query error: %s", PQresultErrorMessage(res));
-		slog(LG_DEBUG, "    database error: %s", PQerrorMessage(pq));
+		slog(LG_ERROR, "There was an error executing the query:");
+		slog(LG_ERROR, "       query error: %s", PQresultErrorMessage(res));
+		slog(LG_ERROR, "    database error: %s", PQerrorMessage(pq));
 
 		wallops("\2DATABASE ERROR\2: query error: %s", PQresultErrorMessage(res));
 		wallops("\2DATABASE ERROR\2: database error: %s", PQerrorMessage(pq));

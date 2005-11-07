@@ -1,3 +1,21 @@
+jilles      2005/11/06 23:57:17 UTC	(20051106-3607)
+  Log:
+  Enable $Id$ expansion.
+  
+
+  Changes:	Modified:
+  + -		trunk/Makefile.win32  (Property Modified)
+  + -		trunk/autoconf/atheme-c.m4  (Property Modified)
+  + -		trunk/crypto/posix.c  (Property Modified)
+  + -		trunk/dbtool/dbtool.c  (Property Modified)
+  + -		trunk/include/xmlrpc.h  (Property Modified)
+  + -		trunk/libatheme/event.h  (Property Modified)
+  + -		trunk/libatheme/org.atheme.claro.base.string  (Property Modified)
+  + -		trunk/libatheme/win32.c  (Property Modified)
+  + -		trunk/modules/operserv/modinspect.c  (Property Modified)
+  + -		trunk/src/Manifest  (Property Modified)
+
+
 jilles      2005/11/06 23:52:07 UTC	(20051106-3605)
   Log:
   Add command logging to Global.
