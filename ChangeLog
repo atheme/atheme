@@ -1,3 +1,13 @@
+terminal    2005/11/07 23:11:40 UTC	(20051107-3643)
+  Log:
+  missed some commented vars i left for a compile check
+  
+
+  Changes:	Modified:
+  +0 -3		trunk/modules/nickserv/drop.c (File Modified) 
+  +0 -3		trunk/modules/userserv/drop.c (File Modified) 
+
+
 terminal    2005/11/07 23:06:19 UTC	(20051107-3641)
   Log:
   move succession to myuser_delete and out of *s/drop.c.. also reworked it a bit.. (not tested)
