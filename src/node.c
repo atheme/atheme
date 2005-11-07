@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3613 2005-11-07 01:24:50Z nenolod $
+ * $Id: node.c 3615 2005-11-07 01:27:16Z nenolod $
  */
 
 #include "atheme.h"
@@ -1746,7 +1746,7 @@ void expire_check(void *arg)
 	uint32_t i, j, w, tcnt;
 	myuser_t *mu;
 	mychan_t *mc, *tmc;
-	node_t *n1, *n2, *tn, *n3;
+	node_t *n1, *n2, *tn, *ttn, *n3;
 
 	for (i = 0; i < HASHSIZE; i++)
 	{
@@ -1771,9 +1771,9 @@ void expire_check(void *arg)
 			if (((CURRTIME - mu->lastlogin) >= config_options.expire) || ((mu->flags & MU_WAITAUTH) && (CURRTIME - mu->registered >= 86400)))
 			{
 				/* kill all their channels */
-				LIST_FOREACH(tn, mu->chanacs.head)
+				LIST_FOREACH(ttn, mu->chanacs.head)
 				{
-					mc = (mychan_t *)tn->data;
+					mc = (mychan_t *)ttn->data;
 
 					if (mc->founder == mu && mc->successor && mc->successor != mu)
 					{

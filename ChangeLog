@@ -1,3 +1,12 @@
+nenolod     2005/11/07 01:24:50 UTC	(20051107-3613)
+  Log:
+  We should use LIST_FOREACH_SAFE here, as we're getting fucked up dereferences and whatnot. Whoever wrote this code must have been stoned.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/src/node.c (File Modified) 
+
+
 alambert    2005/11/07 01:15:30 UTC	(20051107-3611)
   Log:
   expire_check(): we don't want to return here...
