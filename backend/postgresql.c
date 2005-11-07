@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 3619 2005-11-07 06:45:30Z pfish $
+ * $Id: postgresql.c 3621 2005-11-07 06:50:31Z pfish $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 3619 2005-11-07 06:45:30Z pfish $",
+	"$Id: postgresql.c 3621 2005-11-07 06:50:31Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -49,6 +49,7 @@ static void db_connect(boolean_t startup)
 			slog(LG_ERROR, "      %s", PQerrorMessage(pq));
 			if (startup == TRUE)
 				exit(EXIT_FAILURE);
+			wallops("\2DATABASE ERROR\2: %s", PQerrorMessage(pq));
 		}
 	}
 }
