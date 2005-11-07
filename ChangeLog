@@ -1,3 +1,11 @@
+nenolod     2005/11/07 01:27:16 UTC	(20051107-3615)
+  Log:
+  Whoops.
+
+  Changes:	Modified:
+  +3 -3		trunk/src/node.c (File Modified) 
+
+
 nenolod     2005/11/07 01:24:50 UTC	(20051107-3613)
   Log:
   We should use LIST_FOREACH_SAFE here, as we're getting fucked up dereferences and whatnot. Whoever wrote this code must have been stoned.
