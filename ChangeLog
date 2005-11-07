@@ -1,3 +1,12 @@
+pfish       2005/11/07 06:50:31 UTC	(20051107-3621)
+  Log:
+  PostgreSQL: Wallops if we can't db_connect and we're connected so we don't fail silently.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/backend/postgresql.c (File Modified) 
+
+
 pfish       2005/11/07 06:45:30 UTC	(20051107-3619)
   Log:
   Fix postgresql support.
