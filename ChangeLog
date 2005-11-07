@@ -1,3 +1,11 @@
+alambert    2005/11/07 22:25:53 UTC	(20051107-3633)
+  Log:
+  NS DROP: use index 0 to go through the hash...how the hell did we miss this for so long?
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/drop.c (File Modified) 
+
+
 kog         2005/11/07 21:24:11 UTC	(20051107-3631)
   Log:
   propset ID

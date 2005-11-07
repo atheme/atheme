@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3629 2005-11-07 14:47:19Z jilles $
+ * $Id: node.c 3635 2005-11-07 22:27:03Z kog $
  */
 
 #include "atheme.h"
@@ -1286,7 +1286,7 @@ void mychan_delete(char *name)
 {
 	mychan_t *mc = mychan_find(name);
 	chanacs_t *ca;
-	node_t *n;
+	node_t *n, *tn;
 
 	if (!mc)
 	{
@@ -1297,7 +1297,7 @@ void mychan_delete(char *name)
 	slog(LG_DEBUG, "mychan_delete(): %s", mc->name);
 
 	/* remove the chanacs shiz */
-	LIST_FOREACH_SAFE(n, n, mc->chanacs.head)
+	LIST_FOREACH_SAFE(n, tn, mc->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
 
