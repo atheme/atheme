@@ -1,3 +1,18 @@
+jilles      2005/11/07 14:47:19 UTC	(20051107-3629)
+  Log:
+  Revert check that was supposed to skip nodes with NULL
+  mychan in mclist on expire_check. The logic of the check
+  was reversed, causing it to skip all channels, and if a
+  data structure is obviously corrupted it's not a good
+  idea to silently continue (please tell me if there is
+  a legitimate reason for a node in mclist to have a NULL
+  mychan).
+  
+
+  Changes:	Modified:
+  +0 -3		trunk/src/node.c (File Modified) 
+
+
 alambert    2005/11/07 07:54:35 UTC	(20051107-3627)
   Log:
   authcookie_expire

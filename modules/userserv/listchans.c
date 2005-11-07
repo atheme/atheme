@@ -5,7 +5,7 @@
  * This file contains code for the UserServ LISTCHANS function.
  *   -- Contains an alias "MYACCESS" for legacy users
  *
- * $Id: myaccess.c 2575 2005-10-05 02:46:11Z alambert $
+ * $Id: listchans.c 3631 2005-11-07 21:24:11Z kog $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/listchans", FALSE, _modinit, _moddeinit,
-	"$Id: myaccess.c 2575 2005-10-05 02:46:11Z alambert $",
+	"$Id: listchans.c 3631 2005-11-07 21:24:11Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
