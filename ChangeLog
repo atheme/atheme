@@ -1,3 +1,14 @@
+terminal    2005/11/07 23:06:19 UTC	(20051107-3641)
+  Log:
+  move succession to myuser_delete and out of *s/drop.c.. also reworked it a bit.. (not tested)
+  
+
+  Changes:	Modified:
+  +3 -33	trunk/modules/nickserv/drop.c (File Modified) 
+  +3 -33	trunk/modules/userserv/drop.c (File Modified) 
+  +57 -52	trunk/src/node.c (File Modified) 
+
+
 alambert    2005/11/07 22:57:22 UTC	(20051107-3639)
   Log:
   When a channel has no founder, STOP -- don't play with possibly-bogus memory!

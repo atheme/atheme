@@ -4,7 +4,7 @@
  *
  * This file contains code for the UserServ DROP function.
  *
- * $Id: drop.c 3641 2005-11-07 23:06:19Z terminal $
+ * $Id: drop.c 3643 2005-11-07 23:11:40Z terminal $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 3641 2005-11-07 23:06:19Z terminal $",
+	"$Id: drop.c 3643 2005-11-07 23:11:40Z terminal $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -38,11 +38,8 @@ void _moddeinit()
 
 static void us_cmd_drop(char *origin)
 {
-	/*uint32_t i;*/
 	user_t *u = user_find(origin);
 	myuser_t *mu;
-	/*mychan_t *tmc;
-	node_t *n;*/
 	char *acc = strtok(NULL, " ");
 	char *pass = strtok(NULL, " ");
 
