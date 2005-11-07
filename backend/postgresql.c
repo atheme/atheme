@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 3621 2005-11-07 06:50:31Z pfish $
+ * $Id: postgresql.c 3639 2005-11-07 22:57:22Z alambert $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 3621 2005-11-07 06:50:31Z pfish $",
+	"$Id: postgresql.c 3639 2005-11-07 22:57:22Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -430,6 +430,7 @@ static void postgresql_db_load(void)
 		{
 			slog(LG_DEBUG, "db_load(): channel %s has no founder, dropping.", mc->name);
 			mychan_delete(mc->name);
+			continue;
 		}
 
 		mc->registered = atoi(PQgetvalue(res, i, 3));

@@ -1,3 +1,11 @@
+nenolod     2005/11/07 22:27:34 UTC	(20051107-3637)
+  Log:
+  fix drop in userserv too.
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/userserv/drop.c (File Modified) 
+
+
 kog         2005/11/07 22:27:03 UTC	(20051107-3635)
   Log:
   iterator removing chanacs: now being passed two distinct node_ts for the LIST_FOREACH_SAFE

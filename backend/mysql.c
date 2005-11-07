@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using MySQL.
  *
- * $Id: mysql.c 3609 2005-11-07 00:04:17Z jilles $
+ * $Id: mysql.c 3639 2005-11-07 22:57:22Z alambert $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/mysql", TRUE, _modinit, NULL,
-	"$Id: mysql.c 3609 2005-11-07 00:04:17Z jilles $",
+	"$Id: mysql.c 3639 2005-11-07 22:57:22Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -496,6 +496,7 @@ static void mysql_db_load(void)
 		{
 			slog(LG_DEBUG, "db_load(): channel %s has no founder, dropping.", mc->name);
 			mychan_delete(mc->name);
+			continue;
 		}
 
 		mc->registered = atoi(row[3]);
