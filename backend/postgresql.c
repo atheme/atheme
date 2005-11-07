@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 3609 2005-11-07 00:04:17Z jilles $
+ * $Id: postgresql.c 3619 2005-11-07 06:45:30Z pfish $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 3609 2005-11-07 00:04:17Z jilles $",
+	"$Id: postgresql.c 3619 2005-11-07 06:45:30Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -43,11 +43,13 @@ static void db_connect(boolean_t startup)
 		/* Open the db connection up. */
 		pq = PQconnectdb(dbcredentials);
 
-		slog(LG_ERROR, "There was an error connecting to the database system:");
-		slog(LG_ERROR, "      %s", PQerrorMessage(pq));
-
-		if (startup == TRUE)
-			exit(EXIT_FAILURE);
+		if (PQstatus(pq) != CONNECTION_OK)
+		{
+			slog(LG_ERROR, "There was an error connecting to the database system:");
+			slog(LG_ERROR, "      %s", PQerrorMessage(pq));
+			if (startup == TRUE)
+				exit(EXIT_FAILURE);
+		}
 	}
 }
 

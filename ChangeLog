@@ -1,3 +1,12 @@
+nenolod     2005/11/07 01:30:17 UTC	(20051107-3617)
+  Log:
+  Fix another issue here.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/src/node.c (File Modified) 
+
+
 nenolod     2005/11/07 01:27:16 UTC	(20051107-3615)
   Log:
   Whoops.
