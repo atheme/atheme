@@ -1,3 +1,12 @@
+kog         2005/11/07 21:24:11 UTC	(20051107-3631)
+  Log:
+  propset ID
+  
+
+  Changes:	Modified:
+  + -		trunk/modules/userserv/listchans.c  (Property Modified)
+
+
 jilles      2005/11/07 14:47:19 UTC	(20051107-3629)
   Log:
   Revert check that was supposed to skip nodes with NULL
