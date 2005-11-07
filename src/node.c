@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3635 2005-11-07 22:27:03Z kog $
+ * $Id: node.c 3641 2005-11-07 23:06:19Z terminal $
  */
 
 #include "atheme.h"
@@ -1122,12 +1122,12 @@ myuser_t *myuser_add(char *name, char *pass, char *email)
 void myuser_delete(char *name)
 {
 	myuser_t *mu = myuser_find(name), *tmu;
-	mychan_t *mc;
+	mychan_t *mc, *tmc;
 	chanacs_t *ca;
 	user_t *u;
-	node_t *n, *tn;
+	node_t *n, *tn, *n2;
 	metadata_t *md;
-	uint32_t i;
+	uint32_t i, tcnt;
 
 	if (!mu)
 	{
@@ -1140,11 +1140,56 @@ void myuser_delete(char *name)
 	/* log them out */
 	LIST_FOREACH_SAFE(n, tn, mu->logins.head)
 	{
-		u = n->data;
+		u = (user_t *)n->data;
 		ircd_on_logout(u->nick, mu->name, NULL);
 		u->myuser = NULL;
 		node_del(n, &mu->logins);
 		node_free(n);
+	}
+	
+	/* kill all their channels */
+	LIST_FOREACH_SAFE(n, tn, mu->chanacs.head)
+	{
+		mc = (mychan_t *)n->data;
+
+		/* attempt succession */
+		if (mc->founder == mu && mc->successor && mc->successor != mu)
+		{
+			tcnt = 0;
+			
+			LIST_FOREACH(n2, mc->successor->chanacs.head)
+			{
+				tmc = (mychan_t *)n2->data;
+
+				if (is_founder(tmc, mc->successor))
+					tcnt++;
+			}
+			
+			if ( (tcnt < me.maxchans) || is_sra(mc->successor) )
+			{
+				snoop("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2", mc->successor->name, mc->name, mc->founder->name);
+	
+				chanacs_delete(mc, mc->successor, CA_SUCCESSOR);
+				chanacs_add(mc, mc->successor, CA_FOUNDER);
+				mc->founder = mc->successor;
+				mc->successor = NULL;
+	
+				myuser_notice(chansvs.nick, mc->founder, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, mc->founder->name);
+				
+				continue;
+			}
+		}
+		
+		/* no successor or it failed */
+		if (mc->founder == mu)
+		{
+			snoop("DELETE: \2%s\2 from \2%s\2", mc->name, mu->name);
+
+			if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
+				part(mc->name, chansvs.nick);
+
+			mychan_delete(mc->name);
+		}
 	}
 
 	/* remove their chanacs shiz */
@@ -1193,7 +1238,7 @@ void myuser_delete(char *name)
 	/* delete the metadata */
 	LIST_FOREACH_SAFE(n, tn, mu->metadata.head)
 	{
-		md = n->data;
+		md = (metadata_t *)n->data;
 		metadata_delete(mu, METADATA_USER, md->name);
 	}
 
@@ -1743,16 +1788,16 @@ metadata_t *metadata_find(void *target, int32_t type, char *name)
 /* XXX This routine does NOT work right. */
 void expire_check(void *arg)
 {
-	uint32_t i, j, w, tcnt;
+	uint32_t i;
 	myuser_t *mu;
-	mychan_t *mc, *tmc;
-	node_t *n1, *n2, *tn, *ttn, *ttn2, *n3;
+	mychan_t *mc;
+	node_t *n, *tn;
 
 	for (i = 0; i < HASHSIZE; i++)
 	{
-		LIST_FOREACH_SAFE(n1, tn, mulist[i].head)
+		LIST_FOREACH_SAFE(n, tn, mulist[i].head)
 		{
-			mu = (myuser_t *)n1->data;
+			mu = (myuser_t *)n->data;
 
 			/* If they're logged in, update lastlogin time.
 			 * To decrease db traffic, may want to only do
@@ -1770,46 +1815,6 @@ void expire_check(void *arg)
 
 			if (((CURRTIME - mu->lastlogin) >= config_options.expire) || ((mu->flags & MU_WAITAUTH) && (CURRTIME - mu->registered >= 86400)))
 			{
-				/* kill all their channels */
-				LIST_FOREACH_SAFE(ttn, ttn2, mu->chanacs.head)
-				{
-					mc = (mychan_t *)ttn->data;
-
-					if (mc->founder == mu && mc->successor && mc->successor != mu)
-					{
-						tcnt = 0;
-
-						LIST_FOREACH(n3, mc->successor->chanacs.head)
-						{
-							tmc = (mychan_t *)n3->data;
-
-							if (is_founder(tmc, mc->successor))
-								tcnt++;
-						}
-
-						if ((tcnt >= me.maxchans) && (!is_sra(mc->successor)))
-							continue;
-
-						snoop("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2", mc->successor->name, mc->name, mc->founder->name);
-
-						chanacs_delete(mc, mc->successor, CA_SUCCESSOR);
-						chanacs_add(mc, mc->successor, CA_FOUNDER);
-						mc->founder = mc->successor;
-						mc->successor = NULL;
-
-						myuser_notice(chansvs.nick, mc->founder, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, mc->founder->name);
-					}
-					else if (mc->founder == mu)
-					{
-						snoop("EXPIRE: \2%s\2 from \2%s\2", mc->name, mu->name);
-
-						if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
-							part(mc->name, chansvs.nick);
-
-						mychan_delete(mc->name);
-					}
-				}
-
 				snoop("EXPIRE: \2%s\2 from \2%s\2 ", mu->name, mu->email);
 				myuser_delete(mu->name);
 			}
@@ -1818,9 +1823,9 @@ void expire_check(void *arg)
 
 	for (i = 0; i < HASHSIZE; i++)
 	{
-		LIST_FOREACH_SAFE(n2, tn, mclist[i].head)
+		LIST_FOREACH_SAFE(n, tn, mclist[i].head)
 		{
-			mc = (mychan_t *)n2->data;
+			mc = (mychan_t *)n->data;
 
 			if (MU_HOLD & mc->founder->flags)
 				continue;

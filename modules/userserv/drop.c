@@ -4,7 +4,7 @@
  *
  * This file contains code for the UserServ DROP function.
  *
- * $Id: drop.c 3637 2005-11-07 22:27:34Z nenolod $
+ * $Id: drop.c 3641 2005-11-07 23:06:19Z terminal $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 3637 2005-11-07 22:27:34Z nenolod $",
+	"$Id: drop.c 3641 2005-11-07 23:06:19Z terminal $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -38,11 +38,11 @@ void _moddeinit()
 
 static void us_cmd_drop(char *origin)
 {
-	uint32_t i;
+	/*uint32_t i;*/
 	user_t *u = user_find(origin);
 	myuser_t *mu;
-	mychan_t *tmc;
-	node_t *n;
+	/*mychan_t *tmc;
+	node_t *n;*/
 	char *acc = strtok(NULL, " ");
 	char *pass = strtok(NULL, " ");
 
@@ -73,36 +73,6 @@ static void us_cmd_drop(char *origin)
 
 	if (is_sra(u->myuser) && !pass)
 		wallops("%s dropped the nickname \2%s\2", origin, mu->name);
-
-	/* find all channels that are theirs and drop them */
-	for (i = 0; i < HASHSIZE; i++)
-	{
-		LIST_FOREACH(n, mclist[i].head)
-		{
-			tmc = (mychan_t *)n->data;
-			if ((tmc->founder == mu && tmc->successor == tmc->founder) ||
-			    (tmc->founder == mu && tmc->successor == NULL))
-			{
-				snoop("DROP: \2%s\2 by \2%s\2 as \2%s\2", tmc->name, u->nick, u->myuser->name);
-
-				notice(usersvs.nick, origin, "The channel \2%s\2 has been dropped.", tmc->name);
-
-				part(tmc->name, chansvs.nick);
-				mychan_delete(tmc->name);
-			}
-			else if (tmc->founder == mu && tmc->successor != mu)
-			{
-				snoop("SUCCESSION: \2%s\2 -> \2%s\2", tmc->name, tmc->successor->name);
-				chanacs_delete(tmc, tmc->successor, CA_SUCCESSOR);
-				chanacs_add(tmc, tmc->successor, CA_FOUNDER);
-				tmc->founder = tmc->successor;
-				tmc->successor = NULL;
-
-				myuser_notice(chansvs.nick, tmc->founder, "You are now the founder of \2%s\2 (as \2%s\2).",
-					      tmc->name, tmc->founder->name);
-			}
-		}
-	}
 
 	snoop("DROP: \2%s\2 by \2%s\2", mu->name, u->nick);
 	logcommand(usersvs.me, u, CMDLOG_REGISTER, "DROP %s", mu->name);
