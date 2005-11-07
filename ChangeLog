@@ -1,3 +1,12 @@
+terminal    2005/11/07 23:20:12 UTC	(20051107-3645)
+  Log:
+  removed redundant channel closed check
+  
+
+  Changes:	Modified:
+  +1 -11	trunk/modules/chanserv/drop.c (File Modified) 
+
+
 terminal    2005/11/07 23:11:40 UTC	(20051107-3643)
   Log:
   missed some commented vars i left for a compile check

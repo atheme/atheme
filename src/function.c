@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 3571 2005-11-06 19:54:01Z jilles $
+ * $Id: function.c 3647 2005-11-07 23:41:39Z terminal $
  */
 
 #include "atheme.h"
@@ -639,12 +639,18 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 boolean_t is_founder(mychan_t *mychan, myuser_t *myuser)
 {
 	metadata_t *md;
+	myuser_t *myparent;
 
 	if (!myuser)
 		return FALSE;
 
 	if ((myuser->flags & MU_ALIAS) && (md = metadata_find(myuser, METADATA_USER, "private:alias:parent")))
-		myuser = myuser_find(md->value);
+	{
+		myparent = myuser_find(md->value);
+		
+		if ( myparent && myparent != myuser && is_founder( mychan, myparent ) )
+			return TRUE;
+	}
 
 	/* master account doesn't exist anymore */
 	if (!myuser)
