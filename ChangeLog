@@ -1,3 +1,11 @@
+alambert    2005/11/07 01:15:30 UTC	(20051107-3611)
+  Log:
+  expire_check(): we don't want to return here...
+
+  Changes:	Modified:
+  +0 -2		trunk/src/node.c (File Modified) 
+
+
 jilles      2005/11/07 00:04:17 UTC	(20051107-3609)
   Log:
   Change database errors from LG_DEBUG to LG_ERROR.

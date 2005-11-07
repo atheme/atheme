@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3611 2005-11-07 01:15:30Z alambert $
+ * $Id: node.c 3613 2005-11-07 01:24:50Z nenolod $
  */
 
 #include "atheme.h"
@@ -1750,7 +1750,7 @@ void expire_check(void *arg)
 
 	for (i = 0; i < HASHSIZE; i++)
 	{
-		LIST_FOREACH(n1, mulist[i].head)
+		LIST_FOREACH_SAFE(n1, tn, mulist[i].head)
 		{
 			mu = (myuser_t *)n1->data;
 
@@ -1818,7 +1818,7 @@ void expire_check(void *arg)
 
 	for (i = 0; i < HASHSIZE; i++)
 	{
-		LIST_FOREACH(n2, mclist[i].head)
+		LIST_FOREACH_SAFE(n2, tn, mclist[i].head)
 		{
 			mc = (mychan_t *)n2->data;
 
