@@ -1,3 +1,11 @@
+alambert    2005/11/07 07:54:35 UTC	(20051107-3627)
+  Log:
+  authcookie_expire
+
+  Changes:	Modified:
+  +1 -1		trunk/include/authcookie.h (File Modified) 
+
+
 pfish       2005/11/07 07:17:10 UTC	(20051107-3625)
   Log:
   Prevent a crash if mc is NULL.
