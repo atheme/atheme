@@ -4,7 +4,7 @@
  *
  * Implements USERSERV RETURN.
  *
- * $Id: return.c 3653 2005-11-08 00:49:36Z jilles $
+ * $Id: return.c 3655 2005-11-08 00:54:23Z jilles $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"userserv/return", FALSE, _modinit, _moddeinit,
-	"$Id: return.c 3653 2005-11-08 00:49:36Z jilles $",
+	"$Id: return.c 3655 2005-11-08 00:54:23Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void us_cmd_return(char *origin);
 
-command_t us_return = { "RETURN", "Returns a nickname to its owner.",
+command_t us_return = { "RETURN", "Returns an account to its owner.",
 			AC_IRCOP, us_cmd_return };
 
 list_t *us_cmdtree, *us_helptree;
@@ -52,7 +52,7 @@ static void us_cmd_return(char *origin)
 	if (!target || !newmail)
 	{
 		notice(usersvs.nick, origin, "Insufficient parameters for \2RETURN\2.");
-		notice(usersvs.nick, origin, "Usage: RETURN <nickname> <e-mail address>");
+		notice(usersvs.nick, origin, "Usage: RETURN <account> <e-mail address>");
 		return;
 	}
 
@@ -83,7 +83,7 @@ static void us_cmd_return(char *origin)
 	if (!sendemail(u, EMAIL_SENDPASS, mu, newpass))
 	{
 		strlcpy(mu->email, oldmail, EMAILLEN);
-		notice(usersvs.nick, origin, "Sending email failed, nickname \2%s\2 remains with \2%s\2.",
+		notice(usersvs.nick, origin, "Sending email failed, account \2%s\2 remains with \2%s\2.",
 				mu->name, mu->email);
 		return;
 	}
@@ -103,7 +103,7 @@ static void us_cmd_return(char *origin)
 	metadata_delete(mu, METADATA_USER, "private:verify:emailchg:newemail");
 	metadata_delete(mu, METADATA_USER, "private:verify:emailchg:timestamp");
 
-	wallops("%s returned the nickname \2%s\2 to \2%s\2", origin, target, newmail);
+	wallops("%s returned the account \2%s\2 to \2%s\2", origin, target, newmail);
 	logcommand(usersvs.me, u, CMDLOG_ADMIN, "RETURN %s to %s", target, newmail);
 	notice(usersvs.nick, origin, "The e-mail address for \2%s\2 has been set to \2%s\2",
 						target, newmail);

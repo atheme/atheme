@@ -1,3 +1,28 @@
+jilles      2005/11/08 00:49:36 UTC	(20051108-3653)
+  Log:
+  Port command logging from nickserv to userserv.
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/userserv/freeze.c (File Modified) 
+  +6 -0		trunk/modules/userserv/hold.c (File Modified) 
+  +2 -0		trunk/modules/userserv/info.c (File Modified) 
+  +5 -0		trunk/modules/userserv/list.c (File Modified) 
+  +20 -5	trunk/modules/userserv/listchans.c (File Modified) 
+  +5 -0		trunk/modules/userserv/listmail.c (File Modified) 
+  +5 -0		trunk/modules/userserv/login.c (File Modified) 
+  +7 -0		trunk/modules/userserv/logout.c (File Modified) 
+  +6 -0		trunk/modules/userserv/mark.c (File Modified) 
+  +4 -2		trunk/modules/userserv/resetpass.c (File Modified) 
+  +2 -0		trunk/modules/userserv/return.c (File Modified) 
+  +4 -0		trunk/modules/userserv/sendpass.c (File Modified) 
+  +15 -0	trunk/modules/userserv/set.c (File Modified) 
+  +4 -0		trunk/modules/userserv/status.c (File Modified) 
+  +2 -1		trunk/modules/userserv/taxonomy.c (File Modified) 
+  +4 -0		trunk/modules/userserv/verify.c (File Modified) 
+  +8 -1		trunk/modules/userserv/vhost.c (File Modified) 
+
+
 terminal    2005/11/08 00:16:57 UTC	(20051108-3651)
   Log:
   only wallops on drop if user is SRA but is NOT a founder
