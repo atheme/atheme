@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 3255 2005-10-30 04:18:05Z alambert $
+ * $Id: flags.c 3663 2005-11-08 02:10:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 3255 2005-10-30 04:18:05Z alambert $",
+	"$Id: flags.c 3663 2005-11-08 02:10:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -98,6 +98,7 @@ static void cs_cmd_flags(char *origin)
 
 		notice(chansvs.nick, origin, "----- ---------------------- -----");
 		notice(chansvs.nick, origin, "End of \2%s\2 FLAGS listing.", channel);
+		logcommand(chansvs.me, u, CMDLOG_GET, "%s FLAGS", mc->name);
 	}
 	else
 	{
@@ -177,6 +178,7 @@ static void cs_cmd_flags(char *origin)
 		}
 
 		notice(chansvs.nick, origin, "Flags \2%s\2 were set on \2%s\2 in \2%s\2.", flagstr, target, channel);
+		logcommand(chansvs.me, u, CMDLOG_SET, "%s FLAGS %s %s", mc->name, target, flagstr);
 		verbose(mc, "Flags \2%s\2 were set on \2%s\2 in \2%s\2.", flagstr, target, channel);
 	}
 }
@@ -249,6 +251,7 @@ static void cs_fcmd_flags(char *origin, char *channel)
 	}
 
 	notice(chansvs.nick, origin, "Flags \2%s\2 were set on \2%s\2 in \2%s\2.", flagstr, target, channel);
+	logcommand(chansvs.me, u, CMDLOG_SET, "%s FLAGS %s %s", mc->name, target, flagstr);
 	verbose(mc, "Flags \2%s\2 were set on \2%s\2 in \2%s\2.", flagstr, target, channel);
 }
 

@@ -4,7 +4,7 @@
  *
  * Closing for channels.
  *
- * $Id: close.c 3259 2005-10-30 04:25:14Z alambert $
+ * $Id: close.c 3663 2005-11-08 02:10:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/close", FALSE, _modinit, _moddeinit,
-	"$Id: close.c 3259 2005-10-30 04:25:14Z alambert $",
+	"$Id: close.c 3663 2005-11-08 02:10:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -181,6 +181,7 @@ static void cs_cmd_close(char *origin)
 		}
 
 		wallops("%s closed the channel \2%s\2 (%s).", origin, target, reason);
+		logcommand(chansvs.me, user_find(origin), CMDLOG_ADMIN, "%s CLOSE ON %s", target, reason);
 		notice(chansvs.nick, origin, "\2%s\2 is now closed.", target);
 	}
 	else if (!strcasecmp(action, "OFF"))
@@ -202,6 +203,7 @@ static void cs_cmd_close(char *origin)
 		event_delete(close_can_leave, mc->name);
 
 		wallops("%s reopened the channel \2%s\2.", origin, target);
+		logcommand(chansvs.me, user_find(origin), CMDLOG_ADMIN, "%s CLOSE OFF", target);
 		notice(chansvs.nick, origin, "\2%s\2 has been reopened.", target);
 	}
 	else
