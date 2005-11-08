@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService DROP function.
  *
- * $Id: drop.c 3645 2005-11-07 23:20:12Z terminal $
+ * $Id: drop.c 3651 2005-11-08 00:16:57Z terminal $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 3645 2005-11-07 23:20:12Z terminal $",
+	"$Id: drop.c 3651 2005-11-08 00:16:57Z terminal $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -80,7 +80,7 @@ static void cs_cmd_drop(char *origin)
 		return;
 	}
 
-	if (is_sra(u->myuser))
+	if (is_sra(u->myuser) && !is_founder(mc, u->myuser))
 	{
 		wallops("%s dropped the channel \2%s\2", origin, name);
 	}

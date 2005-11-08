@@ -1,3 +1,11 @@
+nenolod     2005/11/08 00:01:07 UTC	(20051108-3649)
+  Log:
+  fix that fucking memory bug.
+
+  Changes:	Modified:
+  +1 -1		trunk/include/account.h (File Modified) 
+
+
 terminal    2005/11/07 23:41:39 UTC	(20051107-3647)
   Log:
   allow both parent and child nicknames to own a channel (compiles, not tested)
