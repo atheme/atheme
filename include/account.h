@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 3389 2005-11-02 01:01:37Z nenolod $
+ * $Id: account.h 3649 2005-11-08 00:01:07Z nenolod $
  */
 
 #ifndef ACCOUNT_H
@@ -66,7 +66,7 @@ struct myuser_
 
 struct mychan_
 {
-  char name[NICKLEN];
+  char name[CHANNELLEN];
 
   myuser_t *founder;
   myuser_t *successor;

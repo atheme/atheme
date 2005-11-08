@@ -1,3 +1,12 @@
+terminal    2005/11/07 23:41:39 UTC	(20051107-3647)
+  Log:
+  allow both parent and child nicknames to own a channel (compiles, not tested)
+  
+
+  Changes:	Modified:
+  +7 -1		trunk/src/function.c (File Modified) 
+
+
 terminal    2005/11/07 23:20:12 UTC	(20051107-3645)
   Log:
   removed redundant channel closed check
