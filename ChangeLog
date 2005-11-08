@@ -1,3 +1,11 @@
+alambert    2005/11/08 03:58:28 UTC	(20051108-3667)
+  Log:
+  crypto: Make it go to PREFIX/crypto, not PREFIX/backend
+
+  Changes:	Modified:
+  +3 -3		trunk/crypto/Makefile.in (File Modified) 
+
+
 alambert    2005/11/08 03:09:32 UTC	(20051108-3665)
   Log:
   Rename verify_password() to crypt_verify_password()

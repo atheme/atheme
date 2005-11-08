@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 3589 2005-11-06 21:58:38Z alambert $
+ * $Id: account.c 3669 2005-11-08 06:31:01Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 3589 2005-11-06 21:58:38Z alambert $",
+	"$Id: account.c 3669 2005-11-08 06:31:01Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -171,7 +171,7 @@ static int account_register(int parc, char *parv[])
  * atheme.account.verify
  *
  * XML inputs:
- *       requested operation, account name, key
+ *       authcookie, account name, requested operation, key
  *
  * XML outputs:
  *       fault 1 - the account is not registered
@@ -179,6 +179,7 @@ static int account_register(int parc, char *parv[])
  *       fault 3 - invalid verification key for this operation
  *       fault 4 - insufficient parameters
  *       fault 5 - invalid operation requested
+ *       fault 6 - invalid authcookie
  *       default - success
  *
  * Side Effects:
@@ -190,7 +191,7 @@ static int account_verify(int parc, char *parv[])
 	metadata_t *md;
 	char buf[XMLRPC_BUFSIZE];
 
-	if (parc < 3)
+	if (parc < 4)
 	{
 		xmlrpc_generic_error(4, "Insufficient parameters.");
 		return 0;
@@ -202,7 +203,14 @@ static int account_verify(int parc, char *parv[])
 		return 0;
 	}
 
-	if (!strcasecmp(parv[0], "REGISTER"))
+	/* avoid information leaks */
+	if (authcookie_validate(parv[0], mu) == FALSE)
+	{
+		xmlrpc_generic_error(6, "Authcookie validation failed.");
+		return 0;
+	}
+
+	if (!strcasecmp(parv[2], "REGISTER"))
 	{
 		if (!(mu->flags & MU_WAITAUTH) || !(md = metadata_find(mu, METADATA_USER, "private:verify:register:key")))
 		{
@@ -210,7 +218,7 @@ static int account_verify(int parc, char *parv[])
 			return 0;
 		}
 
-		if (!strcasecmp(parv[2], md->value))
+		if (!strcasecmp(parv[3], md->value))
 		{
 			mu->flags &= ~MU_WAITAUTH;
 
@@ -228,7 +236,7 @@ static int account_verify(int parc, char *parv[])
 		xmlrpc_generic_error(3, "Invalid key for this operation.");
 		return 0;
 	}
-	else if (!strcasecmp(parv[0], "EMAILCHG"))
+	else if (!strcasecmp(parv[2], "EMAILCHG"))
 	{
 		if (!(md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:key")))
 		{
@@ -236,7 +244,7 @@ static int account_verify(int parc, char *parv[])
 			return 0;
 		}
 
-		if (!strcasecmp(parv[2], md->value))
+		if (!strcasecmp(parv[3], md->value))
                 {
 			md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:newemail");
 
@@ -302,7 +310,7 @@ static int do_login(int parc, char *parv[])
 		return 0;
 	}
 
-	if (strcmp(mu->pass, parv[1]))
+	if (!verify_password(mu, parv[1]))
 	{
 		xmlrpc_generic_error(2, "The password is not valid for this account.");
 		return 0;
