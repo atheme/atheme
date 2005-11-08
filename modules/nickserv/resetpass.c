@@ -4,7 +4,7 @@
  *
  * This file contains code for NickServ RESETPASS
  *
- * $Id: resetpass.c 3675 2005-11-08 22:54:00Z pfish $
+ * $Id: resetpass.c 3677 2005-11-08 23:32:49Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/resetpass", FALSE, _modinit, _moddeinit,
-	"$Id: resetpass.c 3675 2005-11-08 22:54:00Z pfish $",
+	"$Id: resetpass.c 3677 2005-11-08 23:32:49Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -43,7 +43,6 @@ static void ns_cmd_resetpass(char *origin)
 	user_t *u = user_find(origin);
 	metadata_t *md;
 	char *name = strtok(NULL, " ");
-	char *newpass = gen_pw(12);
 
 	if (!name)
 	{
@@ -67,6 +66,7 @@ static void ns_cmd_resetpass(char *origin)
 
 	if ((md = metadata_find(mu, METADATA_USER, "private:mark:setter")) && is_sra(u->myuser))
 	{
+		char *newpass = gen_pw(12);
 		logcommand(nicksvs.me, u, CMDLOG_ADMIN, "RESETPASS %s (overriding mark by %s)", name, md->value);
 		notice(nicksvs.nick, origin, "Overriding MARK placed by %s on the nickname %s.", md->value, name);
 		notice(nicksvs.nick, origin, "The password for the nickname %s has been changed to %s.", name, newpass);
@@ -83,6 +83,7 @@ static void ns_cmd_resetpass(char *origin)
 		return;
 	}
 
+	char *newpass = gen_pw(12);	
 	notice(nicksvs.nick, origin, "The password for the nickname %s has been changed to %s.", name, newpass);
 	strlcpy(mu->pass, newpass, NICKLEN);
 

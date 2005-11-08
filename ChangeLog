@@ -1,3 +1,13 @@
+pfish       2005/11/08 22:54:00 UTC	(20051108-3675)
+  Log:
+  Fix a minor memory leak when a SRA resets a pass.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/nickserv/resetpass.c (File Modified) 
+  +1 -0		trunk/modules/userserv/resetpass.c (File Modified) 
+
+
 alambert    2005/11/08 18:19:46 UTC	(20051108-3673)
   Log:
   OS MODUNLOAD: fix grammar problem
