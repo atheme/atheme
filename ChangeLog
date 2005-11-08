@@ -1,3 +1,14 @@
+jilles      2005/11/08 01:19:42 UTC	(20051108-3657)
+  Log:
+  Revert this change that allows ircops/sras to
+  cause stack overflows and is otherwise suspect
+  for now.
+  
+
+  Changes:	Modified:
+  +1 -7		trunk/src/function.c (File Modified) 
+
+
 jilles      2005/11/08 00:54:23 UTC	(20051108-3655)
   Log:
   nickname -> account
