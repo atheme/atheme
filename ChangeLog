@@ -1,3 +1,12 @@
+alambert    2005/11/08 06:31:01 UTC	(20051108-3669)
+  Log:
+  XMLRPC: require login prior to atheme.account.verify -- stops information leaks. Now matches NickServ code.
+
+  Changes:	Modified:
+  +1 -1		trunk/contrib/xmlrpc_explorer.php (File Modified) 
+  +15 -7	trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 alambert    2005/11/08 03:58:28 UTC	(20051108-3667)
   Log:
   crypto: Make it go to PREFIX/crypto, not PREFIX/backend
