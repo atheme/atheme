@@ -1,3 +1,13 @@
+jilles      2005/11/08 01:40:15 UTC	(20051108-3659)
+  Log:
+  Add command logging to chanserv akick/ban/unban.
+  
+
+  Changes:	Modified:
+  +10 -0	trunk/modules/chanserv/akick.c (File Modified) 
+  +8 -0		trunk/modules/chanserv/ban.c (File Modified) 
+
+
 jilles      2005/11/08 01:19:42 UTC	(20051108-3657)
   Log:
   Revert this change that allows ircops/sras to

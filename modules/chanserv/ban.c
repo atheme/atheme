@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 3659 2005-11-08 01:40:15Z jilles $
+ * $Id: ban.c 3661 2005-11-08 01:42:47Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", FALSE, _modinit, _moddeinit,
-	"$Id: ban.c 3659 2005-11-08 01:40:15Z jilles $",
+	"$Id: ban.c 3661 2005-11-08 01:42:47Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -197,12 +197,12 @@ static void cs_cmd_unban (char *origin)
 		node_t *n;
 		char hostbuf[BUFSIZE], hostbuf2[BUFSIZE];
 
-		strlcat(hostbuf, tu->nick, BUFSIZE);
+		strlcpy(hostbuf, tu->nick, BUFSIZE);
 		strlcat(hostbuf, "!", BUFSIZE);
 		strlcat(hostbuf, tu->user, BUFSIZE);
 		strlcat(hostbuf, "@", BUFSIZE);
 
-		strlcat(hostbuf2, hostbuf, BUFSIZE);
+		strlcpy(hostbuf2, hostbuf, BUFSIZE);
 
 		strlcat(hostbuf, tu->host, BUFSIZE);
 		strlcat(hostbuf2, tu->vhost, BUFSIZE);
@@ -361,12 +361,12 @@ static void cs_fcmd_unban (char *origin, char *channel)
 		node_t *n;
 		char hostbuf[BUFSIZE], hostbuf2[BUFSIZE];
 
-		strlcat(hostbuf, tu->nick, BUFSIZE);
+		strlcpy(hostbuf, tu->nick, BUFSIZE);
 		strlcat(hostbuf, "!", BUFSIZE);
 		strlcat(hostbuf, tu->user, BUFSIZE);
 		strlcat(hostbuf, "@", BUFSIZE);
 
-		strlcat(hostbuf2, hostbuf, BUFSIZE);
+		strlcpy(hostbuf2, hostbuf, BUFSIZE);
 
 		strlcat(hostbuf, tu->host, BUFSIZE);
 		strlcat(hostbuf2, tu->vhost, BUFSIZE);
