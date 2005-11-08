@@ -1,3 +1,12 @@
+terminal    2005/11/08 00:16:57 UTC	(20051108-3651)
+  Log:
+  only wallops on drop if user is SRA but is NOT a founder
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/drop.c (File Modified) 
+
+
 nenolod     2005/11/08 00:01:07 UTC	(20051108-3649)
   Log:
   fix that fucking memory bug.

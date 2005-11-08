@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService STATUS function.
  *
- * $Id: status.c 2575 2005-10-05 02:46:11Z alambert $
+ * $Id: status.c 3653 2005-11-08 00:49:36Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/status", FALSE, _modinit, _moddeinit,
-	"$Id: status.c 2575 2005-10-05 02:46:11Z alambert $",
+	"$Id: status.c 3653 2005-11-08 00:49:36Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -63,6 +63,8 @@ static void us_cmd_acc(char *origin)
 	else
 		u = user_find_named(targ);
 
+	logcommand(usersvs.me, user_find(origin), CMDLOG_GET, "ACC %s", u->nick);
+
 	if (!u->myuser)
 	{
 		notice(usersvs.nick, origin, "%s ACC 0", u->nick);
@@ -75,6 +77,8 @@ static void us_cmd_acc(char *origin)
 static void us_cmd_status(char *origin)
 {
 	user_t *u = user_find(origin);
+
+	logcommand(usersvs.me, u, CMDLOG_GET, "STATUS");
 
 	if (!u->myuser)
 	{

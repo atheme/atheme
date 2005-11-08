@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 3427 2005-11-03 07:06:37Z pfish $
+ * $Id: info.c 3653 2005-11-08 00:49:36Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 3427 2005-11-03 07:06:37Z pfish $",
+	"$Id: info.c 3653 2005-11-08 00:49:36Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -180,4 +180,6 @@ static void us_cmd_info(char *origin)
 		notice(usersvs.nick, origin, "%s has not completed registration verification", mu->name);
 
 	notice(usersvs.nick, origin, "*** \2End of Info\2 ***");
+
+	logcommand(usersvs.me, u, CMDLOG_GET, "INFO %s", mu->name);
 }

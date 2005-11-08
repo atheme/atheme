@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService SENDPASS function.
  *
- * $Id: sendpass.c 3383 2005-11-01 09:16:16Z pfish $
+ * $Id: sendpass.c 3653 2005-11-08 00:49:36Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/sendpass", FALSE, _modinit, _moddeinit,
-	"$Id: sendpass.c 3383 2005-11-01 09:16:16Z pfish $",
+	"$Id: sendpass.c 3653 2005-11-08 00:49:36Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -61,12 +61,16 @@ static void us_cmd_sendpass(char *origin)
 
 	if (is_sra(mu) && !is_sra(u->myuser))
 	{
+		logcommand(usersvs.me, u, CMDLOG_ADMIN, "failed SENDPASS %s (is SRA)", name);
 		notice(usersvs.nick, origin, "\2%s\2 belongs to a services root administrator; you must be a services root to send the password.", name);
 		return;
 	}
 
 	if (sendemail(u, EMAIL_SENDPASS, mu, mu->pass))
+	{
+		logcommand(usersvs.me, u, CMDLOG_ADMIN, "SENDPASS %s", name);
 		notice(usersvs.nick, origin, "The password for \2%s\2 has been sent to \2%s\2.", mu->name, mu->email);
+	}
 	else
 		notice(usersvs.nick, origin, "Email send failed.");
 

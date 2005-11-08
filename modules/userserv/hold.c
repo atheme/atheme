@@ -4,7 +4,7 @@
  *
  * Controls noexpire options for accounts.
  *
- * $Id: hold.c 2575 2005-10-05 02:46:11Z alambert $
+ * $Id: hold.c 3653 2005-11-08 00:49:36Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/hold", FALSE, _modinit, _moddeinit,
-	"$Id: hold.c 2575 2005-10-05 02:46:11Z alambert $",
+	"$Id: hold.c 3653 2005-11-08 00:49:36Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -42,6 +42,10 @@ static void us_cmd_hold(char *origin)
 	char *target = strtok(NULL, " ");
 	char *action = strtok(NULL, " ");
 	myuser_t *mu;
+	user_t *source = user_find(origin);
+
+	if (source == NULL)
+		return;
 
 	if (!target || !action)
 	{
@@ -67,6 +71,7 @@ static void us_cmd_hold(char *origin)
 		mu->flags |= MU_HOLD;
 
 		wallops("%s set the HOLD option for the account \2%s\2.", origin, target);
+		logcommand(usersvs.me, source, CMDLOG_ADMIN, "HOLD %s ON", target);
 		notice(usersvs.nick, origin, "\2%s\2 is now held.", target);
 	}
 	else if (!strcasecmp(action, "OFF"))
@@ -80,6 +85,7 @@ static void us_cmd_hold(char *origin)
 		mu->flags &= ~MU_HOLD;
 
 		wallops("%s removed the HOLD option on the account \2%s\2.", origin, target);
+		logcommand(usersvs.me, source, CMDLOG_ADMIN, "HOLD %s OFF", target);
 		notice(usersvs.nick, origin, "\2%s\2 is no longer held.", target);
 	}
 	else

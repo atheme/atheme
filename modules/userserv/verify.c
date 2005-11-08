@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ VERIFY function.
  *
- * $Id: verify.c 3331 2005-10-31 03:40:31Z nenolod $
+ * $Id: verify.c 3653 2005-11-08 00:49:36Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/verify", FALSE, _modinit, _moddeinit,
-	"$Id: verify.c 3331 2005-10-31 03:40:31Z nenolod $",
+	"$Id: verify.c 3653 2005-11-08 00:49:36Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -80,6 +80,7 @@ static void us_cmd_verify(char *origin)
 			mu->flags &= ~MU_WAITAUTH;
 
 			snoop("REGISTER:VS: \2%s\2 by \2%s\2", mu->email, origin);
+			logcommand(usersvs.me, u, CMDLOG_SET, "VERIFY REGISTER (email: %s)", mu->email);
 
 			metadata_delete(mu, METADATA_USER, "private:verify:register:key");
 			metadata_delete(mu, METADATA_USER, "private:verify:register:timestamp");
@@ -93,6 +94,7 @@ static void us_cmd_verify(char *origin)
 		}
 
 		snoop("REGISTER:VF: \2%s\2 by \2%s\2", mu->email, origin);
+		logcommand(usersvs.me, u, CMDLOG_SET, "failed VERIFY REGISTER (invalid key)");
 		notice(usersvs.nick, origin, "Verification failed. Invalid key for \2%s\2.", mu->name);
 
 		return;
@@ -112,6 +114,7 @@ static void us_cmd_verify(char *origin)
 			strlcpy(mu->email, md->value, EMAILLEN);
 
 			snoop("SET:EMAIL:VS: \2%s\2 by \2%s\2", mu->email, origin);
+			logcommand(usersvs.me, u, CMDLOG_SET, "VERIFY EMAILCHG (email: %s)", mu->email);
 
 			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:key");
 			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:newemail");
@@ -123,6 +126,7 @@ static void us_cmd_verify(char *origin)
                 }
 
 		snoop("REGISTER:VF: \2%s\2 by \2%s\2", mu->email, origin);
+		logcommand(usersvs.me, u, CMDLOG_SET, "failed VERIFY EMAILCHG (invalid key)");
 		notice(usersvs.nick, origin, "Verification failed. Invalid key for \2%s\2.", mu->name);
 
 		return;

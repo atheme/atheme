@@ -4,7 +4,7 @@
  *
  * Implements USERSERV RETURN.
  *
- * $Id: return.c 3459 2005-11-04 08:30:57Z pfish $
+ * $Id: return.c 3653 2005-11-08 00:49:36Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/return", FALSE, _modinit, _moddeinit,
-	"$Id: return.c 3459 2005-11-04 08:30:57Z pfish $",
+	"$Id: return.c 3653 2005-11-08 00:49:36Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -64,6 +64,7 @@ static void us_cmd_return(char *origin)
 
 	if (is_sra(mu))
 	{
+		logcommand(usersvs.me, u, CMDLOG_ADMIN, "failed RETURN %s to %s (is SRA)", target, newmail);
 		notice(usersvs.nick, origin, "\2%s\2 belongs to a services root administrator; it cannot be returned.", target);
 		return;
 	}
@@ -103,6 +104,7 @@ static void us_cmd_return(char *origin)
 	metadata_delete(mu, METADATA_USER, "private:verify:emailchg:timestamp");
 
 	wallops("%s returned the nickname \2%s\2 to \2%s\2", origin, target, newmail);
+	logcommand(usersvs.me, u, CMDLOG_ADMIN, "RETURN %s to %s", target, newmail);
 	notice(usersvs.nick, origin, "The e-mail address for \2%s\2 has been set to \2%s\2",
 						target, newmail);
 	notice(usersvs.nick, origin, "A random password has been set; it has been sent to \2%s\2.",

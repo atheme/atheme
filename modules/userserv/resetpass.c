@@ -4,7 +4,7 @@
  *
  * This file contains code for UserServ RESETPASS
  *
- * $Id: resetpass.c 3445 2005-11-04 00:55:48Z pfish $
+ * $Id: resetpass.c 3653 2005-11-08 00:49:36Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/resetpass", FALSE, _modinit, _moddeinit,
-	"$Id: resetpass.c 3445 2005-11-04 00:55:48Z pfish $",
+	"$Id: resetpass.c 3653 2005-11-08 00:49:36Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -60,12 +60,14 @@ static void us_cmd_resetpass(char *origin)
 
 	if (is_sra(mu) && !is_sra(u->myuser))
 	{
+		logcommand(usersvs.me, u, CMDLOG_ADMIN, "failed RESETPASS %s (is SRA)", name);
 		notice(usersvs.nick, origin, "\2%s\2 belongs to a services root administrator; you must be a services root administrator to reset the password.", name);
 		return;
 	}
 
 	if ((md = metadata_find(mu, METADATA_USER, "private:mark:setter")) && is_sra(u->myuser))
 	{
+		logcommand(usersvs.me, u, CMDLOG_ADMIN, "RESETPASS %s (overriding mark by %s)", name, md->value);
 		notice(usersvs.nick, origin, "Overriding MARK placed by %s on the nickname %s.", md->value, name);
 		notice(usersvs.nick, origin, "The password for the nickname %s has been changed to %s.", name, newpass);
 		strlcpy(mu->pass, newpass, NICKLEN);
@@ -75,17 +77,17 @@ static void us_cmd_resetpass(char *origin)
 
 	if ((md = metadata_find(mu, METADATA_USER, "private:mark:setter")) && !is_sra(u->myuser))
 	{
+		logcommand(usersvs.me, u, CMDLOG_ADMIN, "failed RESETPASS %s (marked by %s)", name, md->value);
 		notice(usersvs.nick, origin, "This operation cannot be performed on %s, because the nickname has been marked by %s.", name, md->value);
 		return;
 	}
-	
-
 
 	notice(usersvs.nick, origin, "The password for the nickname %s has been changed to %s.", name, newpass);
 	strlcpy(mu->pass, newpass, NICKLEN);
 
 	wallops("%s reset the password for the nickname %s", origin, name);
 	snoop("RESETPASS: \2%s\2 reset the password for \2%s\2", origin, name);
+	logcommand(usersvs.me, u, CMDLOG_ADMIN, "RESETPASS %s", name);
 
 	free(newpass);
 }

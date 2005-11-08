@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: login.c 3425 2005-11-03 07:00:06Z pfish $
+ * $Id: login.c 3653 2005-11-08 00:49:36Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/login", FALSE, _modinit, _moddeinit,
-	"$Id: login.c 3425 2005-11-03 07:00:06Z pfish $",
+	"$Id: login.c 3653 2005-11-08 00:49:36Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -69,6 +69,7 @@ static void us_cmd_login(char *origin)
         if (metadata_find(mu->name, METADATA_USER, "private:freeze:freezer"))
         {
 		notice(usersvs.nick, origin, "You cannot login as \2%s\2 because the account has been frozen.", mu->name);
+		logcommand(usersvs.me, u, CMDLOG_LOGIN, "failed LOGIN to %s (frozen)", mu->name);
                 return;
         }
 
@@ -86,6 +87,7 @@ static void us_cmd_login(char *origin)
 		if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
 		{
 			notice(usersvs.nick, origin, "There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d).", LIST_LENGTH(&mu->logins), mu->name, me.maxlogins);
+			logcommand(usersvs.me, u, CMDLOG_LOGIN, "failed LOGIN to %s (too many logins)", mu->name);
 			return;
 		}
 
@@ -130,6 +132,8 @@ static void us_cmd_login(char *origin)
 		strlcat(lao, "@", BUFSIZE);
 		strlcat(lao, u->host, BUFSIZE);
 		metadata_add(mu, METADATA_USER, "private:host:actual", lao);
+
+		logcommand(usersvs.me, u, CMDLOG_LOGIN, "LOGIN");
 
 		notice(usersvs.nick, origin, "You are now logged in as \2%s\2.", u->myuser->name);
 
@@ -221,6 +225,7 @@ static void us_cmd_login(char *origin)
 	}
 
 	snoop("LOGIN:AF: \2%s\2 to \2%s\2", u->nick, mu->name);
+	logcommand(usersvs.me, u, CMDLOG_LOGIN, "failed LOGIN to %s (bad password)", mu->name);
 
 	notice(usersvs.nick, origin, "Invalid password for \2%s\2.", mu->name);
 

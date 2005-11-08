@@ -4,7 +4,7 @@
  *
  * Gives services the ability to freeze accounts
  *
- * $Id: freeze.c 3371 2005-11-01 00:33:18Z pfish $
+ * $Id: freeze.c 3653 2005-11-08 00:49:36Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/freeze", FALSE, _modinit, _moddeinit,
-	"$Id: freeze.c 3371 2005-11-01 00:33:18Z pfish $",
+	"$Id: freeze.c 3653 2005-11-08 00:49:36Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -41,9 +41,13 @@ void _moddeinit()
 static void us_cmd_freeze(char *origin)
 {
 	myuser_t *mu;
+	user_t *source = user_find(origin);
 	char *target = strtok(NULL, " ");
 	char *action = strtok(NULL, " ");
 	char *reason = strtok(NULL, "");
+
+	if (source == NULL)
+		return;
 
 	if (!target || !action)
 	{
@@ -86,6 +90,7 @@ static void us_cmd_freeze(char *origin)
 		metadata_add(mu, METADATA_USER, "private:freeze:timestamp", itoa(CURRTIME));
 
 		wallops("%s froze the account \2%s\2 (%s).", origin, target, reason);
+		logcommand(usersvs.me, source, CMDLOG_ADMIN, "FREEZE %s ON", target);
 		notice(usersvs.nick, origin, "\2%s\2 is now frozen.", target);
 	}
 	else if (!strcasecmp(action, "OFF"))
@@ -101,6 +106,7 @@ static void us_cmd_freeze(char *origin)
 		metadata_delete(mu, METADATA_USER, "private:freeze:timestamp");
 
 		wallops("%s thawed the account \2%s\2.", origin, target);
+		logcommand(usersvs.me, source, CMDLOG_ADMIN, "FREEZE %s OFF", target);
 		notice(usersvs.nick, origin, "\2%s\2 has been thawed", target);
 	}
 	else
