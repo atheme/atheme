@@ -1,3 +1,11 @@
+alambert    2005/11/08 18:19:46 UTC	(20051108-3673)
+  Log:
+  OS MODUNLOAD: fix grammar problem
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/operserv/modunload.c (File Modified) 
+
+
 alambert    2005/11/08 18:17:40 UTC	(20051108-3671)
   Log:
   OS MODLOAD: let the user know if the module was loaded or not
