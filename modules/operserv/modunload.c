@@ -4,7 +4,7 @@
  *
  * Loads a new module in.
  *
- * $Id: modunload.c 3601 2005-11-06 23:36:34Z jilles $
+ * $Id: modunload.c 3673 2005-11-08 18:19:46Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modunload", FALSE, _modinit, _moddeinit,
-	"$Id: modunload.c 3601 2005-11-06 23:36:34Z jilles $",
+	"$Id: modunload.c 3673 2005-11-08 18:19:46Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -52,9 +52,9 @@ static void os_cmd_modunload(char *origin)
 
 		if (m->header->norestart)
 		{
-			slog(LG_INFO, "%s tried to unload an unloadable module",
+			slog(LG_INFO, "%s tried to unload a permanent module",
 				origin);
-			notice(opersvs.nick, origin, "\2%s\2 is an unloadable module; "
+			notice(opersvs.nick, origin, "\2%s\2 is an permanent module; "
 					"it cannot be unloaded.", module);
 			continue;
 		}
