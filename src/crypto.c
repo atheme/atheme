@@ -4,7 +4,7 @@
  *
  * Cryptographic module support.
  *
- * $Id: crypto.c 3551 2005-11-06 09:11:45Z alambert $
+ * $Id: crypto.c 3665 2005-11-08 03:09:32Z alambert $
  */
 
 #include "atheme.h"
@@ -25,9 +25,9 @@ char *generic_crypt_string(char *str, char *salt)
 }
 
 /*
- * verify_password is a frontend to crypt_string().
+ * crypt_verify_password is a frontend to crypt_string().
  */
-boolean_t verify_password(char *uinput, char *pass)
+boolean_t crypt_verify_password(char *uinput, char *pass)
 {
 	char *cstr = crypt_string(uinput, pass);
 
