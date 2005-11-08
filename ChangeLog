@@ -1,3 +1,13 @@
+pfish       2005/11/08 23:38:36 UTC	(20051108-3679)
+  Log:
+  oops, reuse newpass
+  
+
+  Changes:	Modified:
+  +5 -4		trunk/modules/nickserv/resetpass.c (File Modified) 
+  +5 -4		trunk/modules/userserv/resetpass.c (File Modified) 
+
+
 pfish       2005/11/08 23:32:49 UTC	(20051108-3677)
   Log:
   Only use gen_pw when we need to to avoid leaking memory.
