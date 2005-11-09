@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INFO functions.
  *
- * $Id: info.c 3731 2005-11-09 11:27:14Z jilles $
+ * $Id: info.c 3733 2005-11-09 11:35:37Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 3731 2005-11-09 11:27:14Z jilles $",
+	"$Id: info.c 3733 2005-11-09 11:35:37Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -66,6 +66,12 @@ static void cs_cmd_info(char *origin)
 	if (!(mc = mychan_find(name)))
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
+		return;
+	}
+
+	if (!(is_ircop(u) || is_sra(u->myuser)) && (md = metadata_find(mc, METADATA_CHANNEL, "private:close:closer")))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 has been closed down by the %s administration.", mc->name, me.netname);
 		return;
 	}
 

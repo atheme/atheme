@@ -1,3 +1,14 @@
+jilles      2005/11/09 11:27:14 UTC	(20051109-3731)
+  Log:
+  Some more chanserv command logging.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/modules/chanserv/hold.c (File Modified) 
+  +1 -0		trunk/modules/chanserv/info.c (File Modified) 
+  +1 -0		trunk/modules/chanserv/invite.c (File Modified) 
+
+
 pfish       2005/11/09 11:18:48 UTC	(20051109-3729)
   Log:
   Lets show a working link to atheme in /INFO (services.atheme.org is no longer valid?)
