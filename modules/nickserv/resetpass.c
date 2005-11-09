@@ -4,7 +4,7 @@
  *
  * This file contains code for NickServ RESETPASS
  *
- * $Id: resetpass.c 3679 2005-11-08 23:38:36Z pfish $
+ * $Id: resetpass.c 3683 2005-11-09 00:59:39Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/resetpass", FALSE, _modinit, _moddeinit,
-	"$Id: resetpass.c 3679 2005-11-08 23:38:36Z pfish $",
+	"$Id: resetpass.c 3683 2005-11-09 00:59:39Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -69,8 +69,8 @@ static void ns_cmd_resetpass(char *origin)
 	{
 		logcommand(nicksvs.me, u, CMDLOG_ADMIN, "RESETPASS %s (overriding mark by %s)", name, md->value);
 		notice(nicksvs.nick, origin, "Overriding MARK placed by %s on the nickname %s.", md->value, name);
-		notice(nicksvs.nick, origin, "The password for the nickname %s has been changed to %s.", name, newpass);
 		newpass = gen_pw(12);
+		notice(nicksvs.nick, origin, "The password for the nickname %s has been changed to %s.", name, newpass);
 		strlcpy(mu->pass, newpass, NICKLEN);
 		free(newpass);
 		wallops("%s reset the password for the \2MARKED\2 nickname %s.", origin, name);
@@ -84,8 +84,8 @@ static void ns_cmd_resetpass(char *origin)
 		return;
 	}
 
-	notice(nicksvs.nick, origin, "The password for the nickname %s has been changed to %s.", name, newpass);
 	newpass = gen_pw(12);	
+	notice(nicksvs.nick, origin, "The password for the nickname %s has been changed to %s.", name, newpass);
 	strlcpy(mu->pass, newpass, NICKLEN);
 	free(newpass);
 
