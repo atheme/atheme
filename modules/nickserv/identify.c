@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY function.
  *
- * $Id: identify.c 3685 2005-11-09 01:07:04Z alambert $
+ * $Id: identify.c 3741 2005-11-09 13:02:50Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/identify", FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 3685 2005-11-09 01:07:04Z alambert $",
+	"$Id: identify.c 3741 2005-11-09 13:02:50Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -121,7 +121,7 @@ static void ns_cmd_identify(char *origin)
 		        u->myuser = NULL;
 		}
 
-		snoop("LOGIN:AS: \2%s\2 to \2%s\2", u->nick, mu->name);
+		/*snoop("LOGIN:AS: \2%s\2 to \2%s\2", u->nick, mu->name);*/
 
 		if (is_sra(mu))
 		{

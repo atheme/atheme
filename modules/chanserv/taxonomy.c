@@ -4,7 +4,7 @@
  *
  * Lists object properties via their metadata table.
  *
- * $Id: taxonomy.c 3735 2005-11-09 12:23:51Z jilles $
+ * $Id: taxonomy.c 3741 2005-11-09 13:02:50Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/taxonomy", FALSE, _modinit, _moddeinit,
-	"$Id: taxonomy.c 3735 2005-11-09 12:23:51Z jilles $",
+	"$Id: taxonomy.c 3741 2005-11-09 13:02:50Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -60,7 +60,7 @@ void cs_cmd_taxonomy(char *origin)
 		return;
 	}
 
-	snoop("TAXONOMY: \2%s\2", origin);
+	/*snoop("TAXONOMY: \2%s\2", origin);*/
 	logcommand(chansvs.me, u, CMDLOG_GET, "%s TAXONOMY", mc->name);
 	notice(chansvs.nick, origin, "Taxonomy for \2%s\2:", target);
 

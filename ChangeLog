@@ -1,3 +1,13 @@
+jilles      2005/11/09 12:52:23 UTC	(20051109-3739)
+  Log:
+  If SECURE is set, allow opping (halfopping) +O-o (+H-h) users.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/chanserv/halfop.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/op.c (File Modified) 
+
+
 jilles      2005/11/09 12:43:44 UTC	(20051109-3737)
   Log:
   Add command logging to memoserv. Logged are changes to ignore lists,

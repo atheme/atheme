@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGOUT functions.
  *
- * $Id: logout.c 3685 2005-11-09 01:07:04Z alambert $
+ * $Id: logout.c 3741 2005-11-09 13:02:50Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/logout", FALSE, _modinit, _moddeinit,
-	"$Id: logout.c 3685 2005-11-09 01:07:04Z alambert $",
+	"$Id: logout.c 3741 2005-11-09 13:02:50Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -81,7 +81,7 @@ static void us_cmd_logout(char *origin)
 	if (is_sra(u->myuser))
 		snoop("DESRA: \2%s\2 as \2%s\2", u->nick, u->myuser->name);
 
-	snoop("LOGOUT: \2%s\2 from \2%s\2", u->nick, u->myuser->name);
+	/*snoop("LOGOUT: \2%s\2 from \2%s\2", u->nick, u->myuser->name);*/
 
 	if (irccasecmp(origin, u->nick))
 	{
