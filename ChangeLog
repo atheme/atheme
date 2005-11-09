@@ -1,3 +1,16 @@
+jilles      2005/11/09 11:10:58 UTC	(20051109-3727)
+  Log:
+  LISTCHANS:
+  - Do not snoop on listchans on self
+  - Make the log message for listchans on self clearly different
+    from listchans on another user
+  
+
+  Changes:	Modified:
+  +1 -2		trunk/modules/nickserv/listchans.c (File Modified) 
+  +1 -2		trunk/modules/userserv/listchans.c (File Modified) 
+
+
 jilles      2005/11/09 11:09:39 UTC	(20051109-3725)
   Log:
   Unbreak compile.

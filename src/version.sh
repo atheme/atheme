@@ -6,7 +6,7 @@
 # This file generates version.c.
 # Stolen from ircd-ratbox.
 #
-# $Id: version.sh 2813 2005-10-09 10:10:07Z kuja $
+# $Id: version.sh 3729 2005-11-09 11:18:48Z pfish $
 #
 
 spitshell=cat
@@ -34,7 +34,7 @@ awk '{if (NF == 6) \
 else \
          { print $1 " "  $2 " " $3 " " $7 " at " $4 " " $5 " " $6 }}'`
 
-buildid=`echo "\$Revision: 2813 $" | \
+buildid=`echo "\$Revision: 3729 $" | \
 	awk '{ print $2 }'`;
 
 $spitshell >version.c <<!SUB!THIS!
@@ -120,7 +120,7 @@ const char *infotext[] =
   "  Trystan, Trystan Scott Lee <trystan@nomadirc.net>",
   "  zparta, Jens Holmqvist <zparta@hispan.se>",
   " ",
-  "Visit our website at http://services.atheme.org",
+  "Visit our website at http://www.atheme.org",
   0,
 };
 !SUB!THIS!
