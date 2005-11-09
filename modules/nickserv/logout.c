@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGOUT functions.
  *
- * $Id: logout.c 3583 2005-11-06 21:48:28Z jilles $
+ * $Id: logout.c 3685 2005-11-09 01:07:04Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/logout", FALSE, _modinit, _moddeinit,
-	"$Id: logout.c 3583 2005-11-06 21:48:28Z jilles $",
+	"$Id: logout.c 3685 2005-11-09 01:07:04Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -62,7 +62,7 @@ static void ns_cmd_logout(char *origin)
 		}
 
 #if 0
-		if ((!strcmp(mu->pass, pass)) && (mu->user))
+		if ((verify_password(mu, pass)) && (mu->user))
 		{
 			u = mu->user;
 			notice(u->nick, "You were logged out by \2%s\2.", origin);

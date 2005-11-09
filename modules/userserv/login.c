@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: login.c 3653 2005-11-08 00:49:36Z jilles $
+ * $Id: login.c 3685 2005-11-09 01:07:04Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/login", FALSE, _modinit, _moddeinit,
-	"$Id: login.c 3653 2005-11-08 00:49:36Z jilles $",
+	"$Id: login.c 3685 2005-11-09 01:07:04Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -82,7 +82,7 @@ static void us_cmd_login(char *origin)
 	/* we use this in both cases, so set it up here. may be NULL. */
 	md_failnum = metadata_find(mu, METADATA_USER, "private:loginfail:failnum");
 
-	if (!strcmp(password, mu->pass))
+	if (verify_password(mu, password))
 	{
 		if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
 		{

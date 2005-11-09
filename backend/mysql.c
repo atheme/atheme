@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using MySQL.
  *
- * $Id: mysql.c 3639 2005-11-07 22:57:22Z alambert $
+ * $Id: mysql.c 3685 2005-11-09 01:07:04Z alambert $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/mysql", TRUE, _modinit, NULL,
-	"$Id: mysql.c 3639 2005-11-07 22:57:22Z alambert $",
+	"$Id: mysql.c 3685 2005-11-09 01:07:04Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -395,11 +395,10 @@ static void mysql_db_load(void)
 		MYSQL_ROW row2 = NULL;
 
 		uid = atoi(row[0]);
-		mu = myuser_add(row[1], row[2], row[3]);
+		mu = myuser_add(row[1], row[2], row[3], atoi(row[6]));
 
 		mu->registered = atoi(row[4]);
 		mu->lastlogin = atoi(row[5]);
-		mu->flags = atoi(row[6]);
 
 		res2 = safe_query("SELECT ID, PARENT, KEYNAME, VALUE FROM ACCOUNT_METADATA WHERE PARENT=%d", uid);
 		umd = mysql_num_rows(res2);

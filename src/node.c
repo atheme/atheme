@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3641 2005-11-07 23:06:19Z terminal $
+ * $Id: node.c 3685 2005-11-09 01:07:04Z alambert $
  */
 
 #include "atheme.h"
@@ -1079,7 +1079,7 @@ void kline_expire(void *arg)
  * M Y U S E R *
  ***************/
 
-myuser_t *myuser_add(char *name, char *pass, char *email)
+myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags)
 {
 	myuser_t *mu;
 	node_t *n;
@@ -1098,11 +1098,23 @@ myuser_t *myuser_add(char *name, char *pass, char *email)
 	n = node_create();
 	mu = BlockHeapAlloc(myuser_heap);
 
+	/* set the password later */
 	strlcpy(mu->name, name, NICKLEN);
-	strlcpy(mu->pass, pass, NICKLEN);
 	strlcpy(mu->email, email, EMAILLEN);
 	mu->registered = CURRTIME;
 	mu->hash = MUHASH((unsigned char *)name);
+	mu->flags = flags;
+
+	/* If it's already crypted, don't touch the password. Otherwise,
+	 * use set_password() to initialize it. Why? Because set_password
+	 * will move the user to encrypted passwords if possible. That way,
+	 * new registers are immediately protected and the database is
+	 * immediately converted the first time we start up with crypto.
+	 */
+	if (flags & MU_CRYPTPASS)
+		strlcpy(mu->pass, pass, NICKLEN);
+	else
+		set_password(mu, pass);
 
 	node_add(mu, n, &mulist[mu->hash]);
 

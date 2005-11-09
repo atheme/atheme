@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ LINK function.
  *
- * $Id: link.c 3583 2005-11-06 21:48:28Z jilles $
+ * $Id: link.c 3685 2005-11-09 01:07:04Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/link", FALSE, _modinit, _moddeinit,
-	"$Id: link.c 3583 2005-11-06 21:48:28Z jilles $",
+	"$Id: link.c 3685 2005-11-09 01:07:04Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -89,7 +89,7 @@ static void ns_cmd_link(char *origin)
 
 	/* make sure it isn't registered already */
 	mu = myuser_find(nick);
-	if (mu && (!pass || (pass && (strcmp(mu->pass, pass)))))
+	if (mu && (!pass || (pass && !verify_password(mu, pass))))
 	{
 		logcommand(nicksvs.me, u, CMDLOG_REGISTER, "failed LINK %s (bad password)", nick);
 		/* should we reveal the e-mail address? (from ns_info.c) */
@@ -101,7 +101,7 @@ static void ns_cmd_link(char *origin)
 
 		return;
 	}
-	else if (mu != NULL && pass && !strcmp(mu->pass, pass))
+	else if (mu != NULL && pass && verify_password(mu, pass))
 		myuser_delete(mu->name);
 
 	/* make sure they're within limits */
@@ -125,10 +125,13 @@ static void ns_cmd_link(char *origin)
 
 	snoop("LINK: %s to %s", nick, muptr->name);
 
-	mu = myuser_add(nick, muptr->pass, muptr->email);
+	/* if the original nickname had CRYPTPASS, pass it in so that
+	 * myuser_add() knows that this password is already done
+	 */
+	mu = myuser_add(nick, muptr->pass, muptr->email,
+		config_options.defuflags | (mu->flags & MU_CRYPTPASS));
 	mu->registered = CURRTIME;
 	mu->lastlogin = CURRTIME;
-	mu->flags |= config_options.defuflags;
 
 	/* mark it as an alias */
 	mu->flags |= MU_ALIAS;

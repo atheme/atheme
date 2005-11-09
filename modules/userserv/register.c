@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 3583 2005-11-06 21:48:28Z jilles $
+ * $Id: register.c 3685 2005-11-09 01:07:04Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 3583 2005-11-06 21:48:28Z jilles $",
+	"$Id: register.c 3685 2005-11-09 01:07:04Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -45,7 +45,6 @@ static void us_cmd_register(char *origin)
 	char *account = strtok(NULL, " ");
 	char *pass = strtok(NULL, " ");
 	char *email = strtok(NULL, " ");
-	char *npass;
 	char lau[BUFSIZE], lao[BUFSIZE];
 	uint32_t i, tcnt;
 
@@ -113,18 +112,9 @@ static void us_cmd_register(char *origin)
 		return;
 	}
 
-	if (crypto_module_loaded == TRUE)
-		npass = crypt_string(pass, gen_salt());
-	else
-		npass = pass;
-
-	mu = myuser_add(origin, npass, email);
+	mu = myuser_add(origin, pass, email, config_options.defuflags);
 	mu->registered = CURRTIME;
 	mu->lastlogin = CURRTIME;
-	mu->flags |= config_options.defuflags;
-
-	if (crypto_module_loaded == TRUE)
-		mu->flags |= MU_CRYPTPASS;
 
 	if (me.auth == AUTH_EMAIL)
 	{
@@ -160,7 +150,7 @@ static void us_cmd_register(char *origin)
 	logcommand(usersvs.me, u, CMDLOG_REGISTER, "REGISTER to %s", email);
 
 	notice(usersvs.nick, origin, "\2%s\2 is now registered to \2%s\2.", mu->name, mu->email);
-	notice(usersvs.nick, origin, "The password is \2%s\2. Please write this down for future reference.", mu->pass);
+	notice(usersvs.nick, origin, "The password is \2%s\2. Please write this down for future reference.", pass);
 	hook_call_event("user_register", mu);
 
 	/* keep track of login address for users */

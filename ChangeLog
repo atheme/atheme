@@ -1,3 +1,13 @@
+pfish       2005/11/09 00:59:39 UTC	(20051109-3683)
+  Log:
+  Bugfix RESETPASS. We need to figure out what newpass is before we notice the user. duh
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/nickserv/resetpass.c (File Modified) 
+  +2 -2		trunk/modules/userserv/resetpass.c (File Modified) 
+
+
 alambert    2005/11/08 23:53:56 UTC	(20051108-3681)
   Log:
   XMLRPC: atheme.account.register: move gen_pw() closer to where we actually use it so people who add new code won't forget to free() it

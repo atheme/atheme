@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 3639 2005-11-07 22:57:22Z alambert $
+ * $Id: postgresql.c 3685 2005-11-09 01:07:04Z alambert $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 3639 2005-11-07 22:57:22Z alambert $",
+	"$Id: postgresql.c 3685 2005-11-09 01:07:04Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -313,11 +313,10 @@ static void postgresql_db_load(void)
 		mupass = PQgetvalue(res, i, 2);
 		muemail = PQgetvalue(res, i, 3);
 
-		mu = myuser_add(muname, mupass, muemail);
+		mu = myuser_add(muname, mupass, muemail, atoi(PQgetvalue(res, i, 6)));
 
 		mu->registered = atoi(PQgetvalue(res, i, 4));
 		mu->lastlogin = atoi(PQgetvalue(res, i, 5));
-		mu->flags = atoi(PQgetvalue(res, i, 6));
 
 		res2 = safe_query("SELECT ID, PARENT, KEYNAME, VALUE FROM ACCOUNT_METADATA WHERE PARENT=%d;", uid);
 		umd = PQntuples(res2);

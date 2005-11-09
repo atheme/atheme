@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 3657 2005-11-08 01:19:42Z jilles $
+ * $Id: function.c 3685 2005-11-09 01:07:04Z alambert $
  */
 
 #include "atheme.h"
@@ -917,6 +917,41 @@ boolean_t is_admin(user_t *user)
 		return TRUE;
 
 	return FALSE;
+}
+
+void set_password(myuser_t *mu, char *newpassword)
+{
+	if (mu == NULL || newpassword == NULL)
+		return;
+
+	/* if we can, try to crypt it */
+	if (crypto_module_loaded == TRUE)
+	{
+		mu->flags |= MU_CRYPTPASS;
+		strlcpy(mu->pass, crypt_string(newpassword, gen_salt()), NICKLEN);
+	}
+	else
+	{
+		mu->flags &= ~MU_CRYPTPASS;			/* just in case */
+		strlcpy(mu->pass, newpassword, NICKLEN);
+	}
+}
+
+boolean_t verify_password(myuser_t *mu, char *password)
+{
+	if (mu == NULL || password == NULL)
+		return FALSE;
+
+	if (mu->flags & MU_CRYPTPASS)
+		if (crypto_module_loaded == TRUE)
+			return crypt_verify_password(password, mu->pass);
+		else
+		{	/* not good! */
+			slog(LG_ERROR, "check_password(): can't check crypted password -- no crypto module!");
+			return FALSE;
+		}
+	else
+		return (strcmp(mu->pass, password) == 0);
 }
 
 /* stolen from Sentinel */

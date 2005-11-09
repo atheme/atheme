@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3653 2005-11-08 00:49:36Z jilles $
+ * $Id: set.c 3685 2005-11-09 01:07:04Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3653 2005-11-08 00:49:36Z jilles $",
+	"$Id: set.c 3685 2005-11-09 01:07:04Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -546,9 +546,9 @@ static void us_set_password(char *origin, char *name, char *params)
 	snoop("SET:PASSWORD: \2%s\2 as \2%s\2 for \2%s\2", u->nick, mu->name, mu->name);
 	logcommand(usersvs.me, u, CMDLOG_SET, "SET PASSWORD");
 
-	strlcpy(mu->pass, password, NICKLEN);
+	set_password(mu, password);
 
-	notice(usersvs.nick, origin, "The password for \2%s\2 has been changed to \2%s\2. " "Please write this down for future reference.", mu->name, mu->pass);
+	notice(usersvs.nick, origin, "The password for \2%s\2 has been changed to \2%s\2. " "Please write this down for future reference.", mu->name, password);
 
 	return;
 }

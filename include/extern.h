@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 3571 2005-11-06 19:54:01Z jilles $
+ * $Id: extern.h 3685 2005-11-09 01:07:04Z alambert $
  */
 
 #ifndef EXTERN_H
@@ -91,6 +91,9 @@ E boolean_t is_sra(myuser_t *myuser);
 E boolean_t is_ircop(user_t *user);
 E boolean_t is_admin(user_t *user);
 E boolean_t is_internal_client(user_t *user);
+
+E void set_password(myuser_t *mu, char *newpassword);
+E boolean_t verify_password(myuser_t *mu, char *password);
 
 E int token_to_value(struct Token token_table[], char *token);
 E char *sbytes(float x);
@@ -195,7 +198,7 @@ E kline_t *kline_find(char *user, char *host);
 E kline_t *kline_find_num(uint32_t number);
 E void kline_expire(void *arg);
 
-E myuser_t *myuser_add(char *name, char *pass, char *email);
+E myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags);
 E void myuser_delete(char *name);
 E myuser_t *myuser_find(char *name);
 E void myuser_notice(char *from, myuser_t *target, char *fmt, ...);

@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ GHOST function.
  *
- * $Id: ghost.c 3583 2005-11-06 21:48:28Z jilles $
+ * $Id: ghost.c 3685 2005-11-09 01:07:04Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/ghost", FALSE, _modinit, _moddeinit,
-	"$Id: ghost.c 3583 2005-11-06 21:48:28Z jilles $",
+	"$Id: ghost.c 3685 2005-11-09 01:07:04Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -71,7 +71,7 @@ void ns_cmd_ghost(char *origin)
 		return;
 	}
 
-	if (mu == u->myuser || (password && !strcmp(password, mu->pass)))
+	if (mu == u->myuser || (password && verify_password(mu, password)))
 	{
 		snoop("GHOST: \2%s\2 by \2%s\2", mu->name, u->nick);
 

@@ -4,7 +4,7 @@
  *
  * Implements USERSERV RETURN.
  *
- * $Id: return.c 3655 2005-11-08 00:54:23Z jilles $
+ * $Id: return.c 3685 2005-11-09 01:07:04Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/return", FALSE, _modinit, _moddeinit,
-	"$Id: return.c 3655 2005-11-08 00:54:23Z jilles $",
+	"$Id: return.c 3685 2005-11-09 01:07:04Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -42,7 +42,7 @@ static void us_cmd_return(char *origin)
 	user_t *u = user_find(origin);
 	char *target = strtok(NULL, " ");
 	char *newmail = strtok(NULL, " ");
-	char *newpass, *newnpass;
+	char *newpass;
 	char oldmail[EMAILLEN];
 	myuser_t *mu;
 
@@ -76,7 +76,6 @@ static void us_cmd_return(char *origin)
 	}
 
 	newpass = gen_pw(12);
-	newnpass = crypt_string(newpass, gen_salt());
 	strlcpy(oldmail, mu->email, EMAILLEN);
 	strlcpy(mu->email, newmail, EMAILLEN);
 
@@ -88,13 +87,7 @@ static void us_cmd_return(char *origin)
 		return;
 	}
 
-	if (crypto_module_loaded == TRUE)
-	{
-		mu->flags |= MU_CRYPTPASS;
-		strlcpy(mu->pass, newnpass, NICKLEN);
-	}
-	else
-		strlcpy(mu->pass, newpass, NICKLEN);
+	set_password(mu, newpass);
 
 	free(newpass);
 

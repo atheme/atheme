@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 3569 2005-11-06 19:51:50Z alambert $
+ * $Id: flatfile.c 3685 2005-11-09 01:07:04Z alambert $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 3569 2005-11-06 19:51:50Z alambert $",
+	"$Id: flatfile.c 3685 2005-11-09 01:07:04Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -237,6 +237,12 @@ static void flatfile_db_load(void)
 
 			if ((s = strtok(NULL, " ")))
 			{
+				/* We need to know the flags before we myuser_add,
+				 * so we need a few temporary places to put stuff.
+				 */
+				uint32_t registered, lastlogin;
+				char *failnum, *lastfailaddr, *lastfailtime;
+
 				if ((mu = myuser_find(s)))
 					continue;
 
@@ -246,20 +252,23 @@ static void flatfile_db_load(void)
 				mupass = strtok(NULL, " ");
 				muemail = strtok(NULL, " ");
 
-				mu = myuser_add(muname, mupass, muemail);
+				registered = atoi(strtok(NULL, " "));
+				lastlogin = atoi(strtok(NULL, " "));
+				failnum = strtok(NULL, " ");
+				lastfailaddr = strtok(NULL, " ");
+				lastfailtime = strtok(NULL, " ");
 
-				mu->registered = atoi(strtok(NULL, " "));
+				mu = myuser_add(muname, mupass, muemail, atol(strtok(NULL, " ")));
 
-				mu->lastlogin = atoi(strtok(NULL, " "));
+				mu->registered = registered;
+				mu->lastlogin = lastlogin;
 
-				if ((s = strtok(NULL, " ")) && strcmp(s, "0"))
+				if (strcmp(failnum, "0"))
 					metadata_add(mu, METADATA_USER, "private:loginfail:failnum", s);
-				if ((s = strtok(NULL, " ")) && strcmp(s, "0"))
+				if (strcmp(lastfailaddr, "0"))
 					metadata_add(mu, METADATA_USER, "private:loginfail:lastfailaddr", s);
-				if ((s = strtok(NULL, " ")) && strcmp(s, "0"))
+				if (strcmp(lastfailtime, "0"))
 					metadata_add(mu, METADATA_USER, "private:loginfail:lastfailtime", s);
-
-				mu->flags = atol(strtok(NULL, " "));
 
 				/* Verification keys were moved to metadata,
 				 * but we'll still accept them from legacy

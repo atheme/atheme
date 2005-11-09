@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY function.
  *
- * $Id: identify.c 3583 2005-11-06 21:48:28Z jilles $
+ * $Id: identify.c 3685 2005-11-09 01:07:04Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/identify", FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 3583 2005-11-06 21:48:28Z jilles $",
+	"$Id: identify.c 3685 2005-11-09 01:07:04Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -96,7 +96,7 @@ static void ns_cmd_identify(char *origin)
 	/* we use this in both cases, so set it up here. may be NULL. */
 	md_failnum = metadata_find(mu, METADATA_USER, "private:loginfail:failnum");
 
-	if (!strcmp(password, mu->pass))
+	if (verify_password(mu, password))
 	{
 		if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
 		{
