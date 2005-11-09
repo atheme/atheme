@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 3469 2005-11-05 06:23:46Z w00t $
+ * $Id: xop.c 3707 2005-11-09 04:47:53Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 3469 2005-11-05 06:23:46Z w00t $",
+	"$Id: xop.c 3707 2005-11-09 04:47:53Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -98,8 +98,12 @@ static void cs_xop(char *origin, uint32_t level)
 	 */
 	if (!u->myuser)
 	{
-		notice(chansvs.nick, origin, "You are not logged in.");
-		return;
+		/* if they're opers and just want to LIST, they don't have to log in */
+		if (!(is_ircop(u) && !strcasecmp("LIST", cmd)))
+		{
+			notice(chansvs.nick, origin, "You are not logged in.");
+			return;
+		}
 	}
 
 	mc = mychan_find(chan);
@@ -109,7 +113,7 @@ static void cs_xop(char *origin, uint32_t level)
 		return;
 	}
 	
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && !is_ircop(u))
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is closed.", chan);
 		return;
@@ -151,8 +155,13 @@ static void cs_xop(char *origin, uint32_t level)
 	{
 		if (!chanacs_user_has_flag(mc, u, CA_ACLVIEW))
 		{
-			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
-			return;
+			if (is_ircop(u))
+				;				/* XXX log this */
+			else
+			{
+				notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+				return;
+			}
 		}
 		cs_xop_do_list(mc, origin, level);
 	}

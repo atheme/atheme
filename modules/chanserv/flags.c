@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 3663 2005-11-08 02:10:26Z jilles $
+ * $Id: flags.c 3707 2005-11-09 04:47:53Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 3663 2005-11-08 02:10:26Z jilles $",
+	"$Id: flags.c 3707 2005-11-09 04:47:53Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -76,11 +76,16 @@ static void cs_cmd_flags(char *origin)
 
 		if (!chanacs_user_has_flag(mc, u, CA_ACLVIEW))
 		{
-			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
-			return;
+			if (is_ircop(u))
+				;				/* XXX log this */
+			else
+			{
+				notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+				return;
+			}
 		}
 		
-		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && !is_ircop(u))
 		{
 			notice(chansvs.nick, origin, "\2%s\2 is closed.", channel);
 			return;

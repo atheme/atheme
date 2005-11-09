@@ -1,3 +1,11 @@
+alambert    2005/11/09 04:12:28 UTC	(20051109-3705)
+  Log:
+  should_*_host: use strlcpy
+
+  Changes:	Modified:
+  +4 -12	trunk/src/function.c (File Modified) 
+
+
 alambert    2005/11/09 04:05:31 UTC	(20051109-3703)
   Log:
   example configs: sra restrictions removed

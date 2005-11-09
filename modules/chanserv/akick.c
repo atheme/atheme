@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 3659 2005-11-08 01:40:15Z jilles $
+ * $Id: akick.c 3707 2005-11-09 04:47:53Z alambert $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@ static void cs_fcmd_akick(char *origin, char *chan);
 DECLARE_MODULE_V1
 (
 	"chanserv/akick", FALSE, _modinit, _moddeinit,
-	"$Id: akick.c 3659 2005-11-08 01:40:15Z jilles $",
+	"$Id: akick.c 3707 2005-11-09 04:47:53Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -77,8 +77,12 @@ void cs_cmd_akick(char *origin)
 	 */
 	if (!u->myuser)
 	{
-		notice(chansvs.nick, origin, "You are not logged in.");
-		return;
+		/* if they're opers and just want to LIST, they don't have to log in */
+		if (!(is_ircop(u) && !strcasecmp("LIST", cmd)))
+		{
+			notice(chansvs.nick, origin, "You are not logged in.");
+			return;
+		}
 	}
 
 	mc = mychan_find(chan);
@@ -209,8 +213,13 @@ void cs_cmd_akick(char *origin)
 
 		if (!chanacs_user_has_flag(mc, u, CA_ACLVIEW))
 		{
-			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
-			return;
+			if (is_ircop(u))
+				;				/* XXX log this */
+			else
+			{
+				notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+				return;
+			}
 		}
 		notice(chansvs.nick, origin, "AKICK list for \2%s\2:", mc->name);
 
