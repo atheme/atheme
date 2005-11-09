@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv SEND function
  *
- * $Id: send.c 3335 2005-10-31 03:48:14Z nenolod $
+ * $Id: send.c 3737 2005-11-09 12:43:44Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/send", FALSE, _modinit, _moddeinit,
-	"$Id: send.c 3335 2005-10-31 03:48:14Z nenolod $",
+	"$Id: send.c 3737 2005-11-09 12:43:44Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -114,6 +114,7 @@ static void ms_cmd_send(char *origin)
 	if (tmu->memos.count >= me.mdlimit)
 	{
 		notice(memosvs.nick, origin, "%s's inbox is full", target);
+		logcommand(memosvs.me, u, CMDLOG_SET, "failed SEND to %s (target inbox full)", tmu->name);
 		return;
 	}
 
@@ -134,10 +135,12 @@ static void ms_cmd_send(char *origin)
 		if (!strcasecmp((char *)n->data, mu->name))
 		{
 			/* Lie... change this if you want it to fail silent */
+			logcommand(memosvs.me, u, CMDLOG_SET, "failed SEND to %s (on ignore list)", tmu->name);
 			notice(memosvs.nick, origin, "The memo has been successfully forwarded to %s.", target);
 			return;
 		}
 	}
+	logcommand(memosvs.me, u, CMDLOG_SET, "SEND to %s", tmu->name);
 	
 	/* Malloc and populate struct */
 	memo = smalloc(sizeof(mymemo_t));

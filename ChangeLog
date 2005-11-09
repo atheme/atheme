@@ -1,3 +1,25 @@
+jilles      2005/11/09 12:23:51 UTC	(20051109-3735)
+  Log:
+  Complete chanserv command logging.
+  
+
+  Changes:	Modified:
+  +4 -0		trunk/modules/chanserv/halfop.c (File Modified) 
+  +4 -0		trunk/modules/chanserv/kick.c (File Modified) 
+  +1 -0		trunk/modules/chanserv/list.c (File Modified) 
+  +2 -0		trunk/modules/chanserv/mark.c (File Modified) 
+  +4 -0		trunk/modules/chanserv/op.c (File Modified) 
+  +1 -0		trunk/modules/chanserv/recover.c (File Modified) 
+  +1 -0		trunk/modules/chanserv/register.c (File Modified) 
+  +30 -2	trunk/modules/chanserv/set.c (File Modified) 
+  +3 -0		trunk/modules/chanserv/status.c (File Modified) 
+  +1 -0		trunk/modules/chanserv/taxonomy.c (File Modified) 
+  +4 -0		trunk/modules/chanserv/topic.c (File Modified) 
+  +4 -0		trunk/modules/chanserv/voice.c (File Modified) 
+  +2 -0		trunk/modules/chanserv/why.c (File Modified) 
+  +6 -0		trunk/modules/chanserv/xop.c (File Modified) 
+
+
 pfish       2005/11/09 11:35:37 UTC	(20051109-3733)
   Log:
   ChanServ INFO: Notify a user that a channel is closed and display no further info. Let SRA/IRCop override this and display full info.

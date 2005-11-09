@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv FORWARD function
  *
- * $Id: forward.c 3335 2005-10-31 03:48:14Z nenolod $
+ * $Id: forward.c 3737 2005-11-09 12:43:44Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/forward", FALSE, _modinit, _moddeinit,
-	"$Id: forward.c 3335 2005-10-31 03:48:14Z nenolod $",
+	"$Id: forward.c 3737 2005-11-09 12:43:44Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -127,6 +127,7 @@ static void ms_cmd_forward(char *origin)
 	if (tmu->memos.count >= me.mdlimit)
 	{
 		notice(memosvs.nick, origin, "Target inbox is full.");
+		logcommand(memosvs.me, u, CMDLOG_SET, "failed FORWARD to %s (target inbox full)", tmu->name);
 		return;
 	}
 
@@ -140,17 +141,19 @@ static void ms_cmd_forward(char *origin)
 	}
 	mu->memo_ratelimit_num++;
 	mu->memo_ratelimit_time = CURRTIME;
-	
+
 	/* Make sure we're not on ignore */
 	LIST_FOREACH(n, tmu->memo_ignores.head)
 	{
 		if (!strcasecmp((char *)n->data, mu->name))
 		{
 			/* Lie... change this if you want it to fail silent */
+			logcommand(memosvs.me, u, CMDLOG_SET, "failed FORWARD to %s (on ignore list)", tmu->name);
 			notice(memosvs.nick, origin, "The memo has been successfully forwarded to %s.", target);
 			return;
 		}
 	}
+	logcommand(memosvs.me, u, CMDLOG_SET, "FORWARD to %s", tmu->name);
 	
 	/* Go to forwarding memos */
 	LIST_FOREACH(n, mu->memos.head)
