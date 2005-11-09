@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: halfop.c 3735 2005-11-09 12:23:51Z jilles $
+ * $Id: halfop.c 3739 2005-11-09 12:52:23Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/halfop", FALSE, _modinit, _moddeinit,
-	"$Id: halfop.c 3735 2005-11-09 12:23:51Z jilles $",
+	"$Id: halfop.c 3739 2005-11-09 12:52:23Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -122,7 +122,7 @@ static void cs_cmd_halfop(char *origin)
 		return;
 
 	/* SECURE check; we can skip this if sender == target, because we already verified */
-	if ((u != tu) && (mc->flags & MC_SECURE) && !chanacs_user_has_flag(mc, tu, CA_HALFOP))
+	if ((u != tu) && (mc->flags & MC_SECURE) && !chanacs_user_has_flag(mc, tu, CA_HALFOP) && !chanacs_user_has_flag(mc, tu, CA_AUTOHALFOP))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.", mc->name);
 		notice(chansvs.nick, origin, "\2%s\2 has the SECURE option enabled, and \2%s\2 does not have appropriate access.", mc->name, tu->nick);
@@ -275,7 +275,7 @@ static void cs_fcmd_halfop(char *origin, char *chan)
 			continue;
 
 		/* SECURE check; we can skip this if sender == target, because we already verified */
-		if ((u != tu) && (mc->flags & MC_SECURE) && !chanacs_user_has_flag(mc, tu, CA_HALFOP))
+		if ((u != tu) && (mc->flags & MC_SECURE) && !chanacs_user_has_flag(mc, tu, CA_HALFOP) && !chanacs_user_has_flag(mc, tu, CA_AUTOHALFOP))
 		{
 			notice(chansvs.nick, origin, "You are not authorized to perform this operation.", mc->name);
 			notice(chansvs.nick, origin, "\2%s\2 has the SECURE option enabled, and \2%s\2 does not have appropriate access.", mc->name, tu->nick);

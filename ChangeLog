@@ -1,3 +1,16 @@
+jilles      2005/11/09 12:43:44 UTC	(20051109-3737)
+  Log:
+  Add command logging to memoserv. Logged are changes to ignore lists,
+  successful memos, ignored memos and memos rejected because the target
+  inbox was full. The text of the memos is not logged.
+  
+
+  Changes:	Modified:
+  +4 -1		trunk/modules/memoserv/forward.c (File Modified) 
+  +9 -1		trunk/modules/memoserv/ignore.c (File Modified) 
+  +3 -0		trunk/modules/memoserv/send.c (File Modified) 
+
+
 jilles      2005/11/09 12:23:51 UTC	(20051109-3735)
   Log:
   Complete chanserv command logging.
