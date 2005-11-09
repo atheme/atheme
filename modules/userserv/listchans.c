@@ -5,7 +5,7 @@
  * This file contains code for the UserServ LISTCHANS function.
  *   -- Contains an alias "MYACCESS" for legacy users
  *
- * $Id: listchans.c 3713 2005-11-09 05:50:17Z pfish $
+ * $Id: listchans.c 3727 2005-11-09 11:10:58Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/listchans", FALSE, _modinit, _moddeinit,
-	"$Id: listchans.c 3713 2005-11-09 05:50:17Z pfish $",
+	"$Id: listchans.c 3727 2005-11-09 11:10:58Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -90,8 +90,7 @@ static void us_cmd_listchans(char *origin)
 	}
 	else
 	{	/* just a user, or oper is listing himself */
-		snoop("LISTCHANS: \2%s\2 on \2%s\2", u->nick, mu->name);
-		logcommand(usersvs.me, u, CMDLOG_GET, "LISTCHANS %s", mu->name);
+		logcommand(usersvs.me, u, CMDLOG_GET, "LISTCHANS");
 	}
 
 	if (mu->chanacs.count == 0)

@@ -1,3 +1,12 @@
+jilles      2005/11/09 11:09:39 UTC	(20051109-3725)
+  Log:
+  Unbreak compile.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/userserv/info.c (File Modified) 
+
+
 alambert    2005/11/09 06:14:38 UTC	(20051109-3723)
   Log:
   HelpServ: send CTCP replies from the right nick
