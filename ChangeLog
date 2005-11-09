@@ -1,3 +1,38 @@
+alambert    2005/11/09 01:07:04 UTC	(20051109-3685)
+  Log:
+  crypto: Add password encryption support. (SENDPASS is temporarily broken)
+
+  Changes:	Modified:
+  +17 -8	trunk/backend/flatfile.c (File Modified) 
+  +1 -2		trunk/backend/mysql.c (File Modified) 
+  +1 -2		trunk/backend/postgresql.c (File Modified) 
+  +4 -0		trunk/crypto/posix.c (File Modified) 
+  +13 -0	trunk/dist/example.conf (File Modified) 
+  +13 -0	trunk/dist/example.userserv.conf (File Modified) 
+  +4 -1		trunk/include/extern.h (File Modified) 
+  +1 -1		trunk/modules/nickserv/drop.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/ghost.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/identify.c (File Modified) 
+  +7 -4		trunk/modules/nickserv/link.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/logout.c (File Modified) 
+  +2 -15	trunk/modules/nickserv/register.c (File Modified) 
+  +2 -2		trunk/modules/nickserv/resetpass.c (File Modified) 
+  +1 -10	trunk/modules/nickserv/return.c (File Modified) 
+  +1 -0		trunk/modules/nickserv/sendpass.c (File Modified) 
+  +2 -2		trunk/modules/nickserv/set.c (File Modified) 
+  +1 -1		trunk/modules/userserv/drop.c (File Modified) 
+  +1 -1		trunk/modules/userserv/login.c (File Modified) 
+  +1 -1		trunk/modules/userserv/logout.c (File Modified) 
+  +2 -12	trunk/modules/userserv/register.c (File Modified) 
+  +2 -2		trunk/modules/userserv/resetpass.c (File Modified) 
+  +2 -9		trunk/modules/userserv/return.c (File Modified) 
+  +1 -0		trunk/modules/userserv/sendpass.c (File Modified) 
+  +2 -2		trunk/modules/userserv/set.c (File Modified) 
+  +1 -2		trunk/modules/xmlrpc/account.c (File Modified) 
+  +35 -0	trunk/src/function.c (File Modified) 
+  +14 -2	trunk/src/node.c (File Modified) 
+
+
 pfish       2005/11/09 00:59:39 UTC	(20051109-3683)
   Log:
   Bugfix RESETPASS. We need to figure out what newpass is before we notice the user. duh
