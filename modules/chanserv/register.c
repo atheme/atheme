@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService REGISTER function.
  *
- * $Id: register.c 3275 2005-10-30 05:26:34Z alambert $
+ * $Id: register.c 3735 2005-11-09 12:23:51Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 3275 2005-10-30 05:26:34Z alambert $",
+	"$Id: register.c 3735 2005-11-09 12:23:51Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -117,6 +117,7 @@ static void cs_cmd_register(char *origin)
 		return;
 	}
 
+	logcommand(chansvs.me, u, CMDLOG_REGISTER, "%s REGISTER", name);
 	snoop("REGISTER: \2%s\2 to \2%s\2 as \2%s\2", name, u->nick, u->myuser->name);
 
 	mc = mychan_add(name);

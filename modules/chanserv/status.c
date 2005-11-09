@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService STATUS function.
  *
- * $Id: status.c 3079 2005-10-22 07:03:47Z terminal $
+ * $Id: status.c 3735 2005-11-09 12:23:51Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/status", FALSE, _modinit, _moddeinit,
-	"$Id: status.c 3079 2005-10-22 07:03:47Z terminal $",
+	"$Id: status.c 3735 2005-11-09 12:23:51Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -66,6 +66,8 @@ static void cs_cmd_status(char *origin)
 			notice(chansvs.nick, origin, "\2%s\2 is not registered.", chan);
 			return;
 		}
+
+		logcommand(chansvs.me, u, CMDLOG_GET, "%s STATUS", mc->name);
 		
 		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 		{
@@ -108,6 +110,7 @@ static void cs_cmd_status(char *origin)
 		return;
 	}
 
+	logcommand(chansvs.me, u, CMDLOG_GET, "STATUS");
 	notice(chansvs.nick, origin, "You are logged in as \2%s\2.", u->myuser->name);
 
 	if (is_sra(u->myuser))

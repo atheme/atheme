@@ -4,7 +4,7 @@
  *
  * Marking for channels.
  *
- * $Id: mark.c 3269 2005-10-30 05:03:13Z alambert $
+ * $Id: mark.c 3735 2005-11-09 12:23:51Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/mark", FALSE, _modinit, _moddeinit,
-	"$Id: mark.c 3269 2005-10-30 05:03:13Z alambert $",
+	"$Id: mark.c 3735 2005-11-09 12:23:51Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -85,6 +85,7 @@ static void cs_cmd_mark(char *origin)
 		metadata_add(mc, METADATA_CHANNEL, "private:mark:timestamp", itoa(CURRTIME));
 
 		wallops("%s marked the channel \2%s\2.", origin, target);
+		logcommand(chansvs.me, user_find(origin), CMDLOG_ADMIN, "%s MARK ON", mc->name);
 		notice(chansvs.nick, origin, "\2%s\2 is now marked.", target);
 	}
 	else if (!strcasecmp(action, "OFF"))
@@ -100,6 +101,7 @@ static void cs_cmd_mark(char *origin)
 		metadata_delete(mc, METADATA_CHANNEL, "private:mark:timestamp");
 
 		wallops("%s unmarked the channel \2%s\2.", origin, target);
+		logcommand(chansvs.me, user_find(origin), CMDLOG_ADMIN, "%s MARK OFF", mc->name);
 		notice(chansvs.nick, origin, "\2%s\2 is now unmarked.", target);
 	}
 	else

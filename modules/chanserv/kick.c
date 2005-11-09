@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: kick.c 3271 2005-10-30 05:22:09Z alambert $
+ * $Id: kick.c 3735 2005-11-09 12:23:51Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/kick", FALSE, _modinit, _moddeinit,
-	"$Id: kick.c 3271 2005-10-30 05:22:09Z alambert $",
+	"$Id: kick.c 3735 2005-11-09 12:23:51Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -120,6 +120,7 @@ static void cs_cmd_kick(char *origin)
 
 	snprintf(reasonbuf, BUFSIZE, "%s (%s)", reason ? reason : "No reason given", origin);
 	kick(chansvs.nick, chan, u->nick, reasonbuf);
+	logcommand(chansvs.me, user_find(origin), CMDLOG_SET, "%s KICK %s!%s@%s", mc->name, u->nick, u->user, u->vhost);
 	notice(chansvs.nick, origin, "\2%s\2 has been kicked from \2%s\2.", u->nick, mc->name);
 }
 
@@ -176,6 +177,7 @@ static void cs_cmd_kickban(char *origin)
 	snprintf(reasonbuf, BUFSIZE, "%s (%s)", reason ? reason : "No reason given", origin);
 	ban(chansvs.nick, chan, u);
 	kick(chansvs.nick, chan, u->nick, reasonbuf);
+	logcommand(chansvs.me, user_find(origin), CMDLOG_SET, "%s KICKBAN %s!%s@%s", mc->name, u->nick, u->user, u->vhost);
 	notice(chansvs.nick, origin, "\2%s\2 has been kickbanned from \2%s\2.", u->nick, mc->name);
 }
 
@@ -230,6 +232,7 @@ static void cs_fcmd_kick(char *origin, char *chan)
 
 	snprintf(reasonbuf, BUFSIZE, "%s (%s)", reason ? reason : "No reason given", origin);
 	kick(chansvs.nick, chan, u->nick, reasonbuf);
+	logcommand(chansvs.me, user_find(origin), CMDLOG_SET, "%s KICK %s!%s@%s", mc->name, u->nick, u->user, u->vhost);
 	notice(chansvs.nick, origin, "\2%s\2 has been kicked from \2%s\2.", u->nick, mc->name);
 }
 
@@ -285,6 +288,7 @@ static void cs_fcmd_kickban(char *origin, char *chan)
 	snprintf(reasonbuf, BUFSIZE, "%s (%s)", reason ? reason : "No reason given", origin);
 	ban(chansvs.nick, chan, u);
 	kick(chansvs.nick, chan, u->nick, reasonbuf);
+	logcommand(chansvs.me, user_find(origin), CMDLOG_SET, "%s KICKBAN %s!%s@%s", mc->name, u->nick, u->user, u->vhost);
 	notice(chansvs.nick, origin, "\2%s\2 has been kickbanned from \2%s\2.", u->nick, mc->name);
 }
 

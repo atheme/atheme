@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TOPIC functions.
  *
- * $Id: topic.c 3105 2005-10-22 14:37:17Z jilles $
+ * $Id: topic.c 3735 2005-11-09 12:23:51Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/topic", FALSE, _modinit, _moddeinit,
-	"$Id: topic.c 3105 2005-10-22 14:37:17Z jilles $",
+	"$Id: topic.c 3735 2005-11-09 12:23:51Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -105,6 +105,7 @@ static void cs_cmd_topic(char *origin)
 	handle_topic(c, origin, CURRTIME, topic);
 	topic_sts(chan, origin, CURRTIME, topic);
 
+	logcommand(chansvs.me, u, CMDLOG_SET, "%s TOPIC", mc->name);
 	notice(chansvs.nick, origin, "Topic set to \2%s\2 on \2%s\2.", topic, chan);
 }
 
@@ -166,6 +167,7 @@ static void cs_cmd_topicappend(char *origin)
 	handle_topic(c, origin, CURRTIME, topicbuf);
 	topic_sts(chan, origin, CURRTIME, topicbuf);
 
+	logcommand(chansvs.me, u, CMDLOG_SET, "%s TOPICAPPEND", mc->name);
         notice(chansvs.nick, origin, "Topic set to \2%s\2 on \2%s\2.", c->topic, chan);
 }
 
@@ -215,6 +217,7 @@ static void cs_fcmd_topic(char *origin, char *chan)
 
 	handle_topic(c, origin, CURRTIME, topic);
         topic_sts(chan, origin, CURRTIME, topic);
+	logcommand(chansvs.me, u, CMDLOG_SET, "%s TOPIC", mc->name);
 }
 
 static void cs_fcmd_topicappend(char *origin, char *chan)
@@ -272,5 +275,6 @@ static void cs_fcmd_topicappend(char *origin, char *chan)
 	handle_topic(c, origin, CURRTIME, topicbuf);
         topic_sts(chan, origin, CURRTIME, topicbuf);
 
+	logcommand(chansvs.me, u, CMDLOG_SET, "%s TOPICAPPEND", mc->name);
         notice(chansvs.nick, origin, "Topic set to \2%s\2 on \2%s\2.", c->topic, chan);
 }

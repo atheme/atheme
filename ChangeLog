@@ -1,3 +1,12 @@
+pfish       2005/11/09 11:35:37 UTC	(20051109-3733)
+  Log:
+  ChanServ INFO: Notify a user that a channel is closed and display no further info. Let SRA/IRCop override this and display full info.
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/chanserv/info.c (File Modified) 
+
+
 jilles      2005/11/09 11:27:14 UTC	(20051109-3731)
   Log:
   Some more chanserv command logging.

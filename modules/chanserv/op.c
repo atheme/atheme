@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: op.c 3271 2005-10-30 05:22:09Z alambert $
+ * $Id: op.c 3735 2005-11-09 12:23:51Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/op", FALSE, _modinit, _moddeinit,
-	"$Id: op.c 3271 2005-10-30 05:22:09Z alambert $",
+	"$Id: op.c 3735 2005-11-09 12:23:51Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -133,6 +133,7 @@ static void cs_cmd_op(char *origin)
 
 	cmode(chansvs.nick, chan, "+o", CLIENT_NAME(tu));
 	cu->modes |= CMODE_OP;
+	logcommand(chansvs.me, u, CMDLOG_SET, "%s OP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	notice(chansvs.nick, origin, "\2%s\2 has been opped on \2%s\2.", tu->nick, mc->name);
 }
 
@@ -201,6 +202,7 @@ static void cs_cmd_deop(char *origin)
 
 	cmode(chansvs.nick, chan, "-o", CLIENT_NAME(tu));
 	cu->modes &= ~CMODE_OP;
+	logcommand(chansvs.me, u, CMDLOG_SET, "%s DEOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	notice(chansvs.nick, origin, "\2%s\2 has been deopped on \2%s\2.", tu->nick, mc->name);
 }
 
@@ -272,6 +274,7 @@ static void cs_fcmd_op(char *origin, char *chan)
 
 		cmode(chansvs.nick, chan, "+o", CLIENT_NAME(tu));
 		cu->modes |= CMODE_OP;
+		logcommand(chansvs.me, u, CMDLOG_SET, "%s OP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	} while (nick = strtok(NULL, " "));
 }
 
@@ -335,6 +338,7 @@ static void cs_fcmd_deop(char *origin, char *chan)
 
 		cmode(chansvs.nick, chan, "-o", CLIENT_NAME(tu));
 		cu->modes &= ~CMODE_OP;
+		logcommand(chansvs.me, u, CMDLOG_SET, "%s DEOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	} while (nick = strtok(NULL, " "));
 
 }
