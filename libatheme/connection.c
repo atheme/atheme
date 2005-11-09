@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 3429 2005-11-03 12:06:45Z jilles $
+ * $Id: connection.c 3751 2005-11-09 22:59:37Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -76,7 +76,7 @@ connection_t *connection_add(const char *name, int32_t fd, uint32_t flags,
 	cptr->write_handler = write_handler;
 
 	/* XXX */
-	cptr->saddr_size = sizeof(&cptr->saddr);
+	cptr->saddr_size = sizeof(cptr->saddr);
 	getpeername(cptr->fd, &cptr->saddr, &cptr->saddr_size);
 	cptr->sa = (struct sockaddr_in *) &cptr->saddr;
 

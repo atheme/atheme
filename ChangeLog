@@ -1,3 +1,16 @@
+jilles      2005/11/09 13:52:45 UTC	(20051109-3749)
+  Log:
+  - Log oper override in /cs akick list, /cs flags and /cs xop list
+    (with CMDLOG_ADMIN and a parenthesized remark)
+  - Remove !akick list oper override
+  
+
+  Changes:	Modified:
+  +6 -2		trunk/modules/chanserv/akick.c (File Modified) 
+  +6 -3		trunk/modules/chanserv/flags.c (File Modified) 
+  +9 -5		trunk/modules/chanserv/xop.c (File Modified) 
+
+
 jilles      2005/11/09 13:42:32 UTC	(20051109-3747)
   Log:
   Hmm, verbose() takes a mychan_t not a name.
