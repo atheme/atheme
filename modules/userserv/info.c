@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 3653 2005-11-08 00:49:36Z jilles $
+ * $Id: info.c 3721 2005-11-09 06:13:52Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 3653 2005-11-08 00:49:36Z jilles $",
+	"$Id: info.c 3721 2005-11-09 06:13:52Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -67,9 +67,9 @@ static void us_cmd_info(char *origin)
 	notice(usersvs.nick, origin, "Information on \2%s\2:", mu->name);
 
 	if ((is_ircop(u) || is_sra(u->myuser)) && (md = metadata_find(mu, METADATA_USER, "private:host:actual")))
-		notice(nicksvs.nick, origin, "Last login from: %s", md->value);
+		notice(usersvs.nick, origin, "Last login from: %s", md->value);
 	else if (md = metadata_find(mu, METADATA_USER, "private:host:vhost"))
-		notice(nicksvs.nick, origin, "Last login from: %s", md->value);
+		notice(usersvs.nick, origin, "Last login from: %s", md->value);
 
 	notice(usersvs.nick, origin, "Registered : %s (%s ago)", strfbuf, time_ago(mu->registered));
 
@@ -103,6 +103,19 @@ static void us_cmd_info(char *origin)
 			strcat(buf, ", ");
 
 		strcat(buf, "NoOp");
+	}
+	if (MU_NOMEMO & mu->flags)
+	{
+		if (*buf)
+			strcat(buf, ", ");
+
+		strcat(buf, "NoMemo");
+	}
+	if (MU_EMAILMEMOS & mu->flags)
+		if (*buf)
+			strcat(buf, ", ");
+
+		strcat(buf, "EMailMemos");
 	}
 	if (MU_ALIAS & mu->flags)
 	{

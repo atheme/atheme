@@ -1,3 +1,11 @@
+alambert    2005/11/09 06:13:21 UTC	(20051109-3719)
+  Log:
+  US FREEZE: send messages from the right nickname
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/userserv/freeze.c (File Modified) 
+
+
 alambert    2005/11/09 06:11:55 UTC	(20051109-3717)
   Log:
   MemoServ: send CTCP responses from the right nick
