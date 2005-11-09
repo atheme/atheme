@@ -1,3 +1,11 @@
+alambert    2005/11/09 03:03:30 UTC	(20051109-3699)
+  Log:
+  Add UID checking for NS LINK. Thanks to nenolod ;p
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/nickserv/link.c (File Modified) 
+
+
 nenolod     2005/11/09 02:52:30 UTC	(20051109-3697)
   Log:
   switch user_find with user_find_named in a few places. Requested by alambert. Reviewed by me. :P

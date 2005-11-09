@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ LINK function.
  *
- * $Id: link.c 3699 2005-11-09 03:03:30Z alambert $
+ * $Id: link.c 3701 2005-11-09 03:14:37Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/link", FALSE, _modinit, _moddeinit,
-	"$Id: link.c 3699 2005-11-09 03:03:30Z alambert $",
+	"$Id: link.c 3701 2005-11-09 03:14:37Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -73,9 +73,12 @@ static void ns_cmd_link(char *origin)
 		return;
 	}
 
-	if (IsDigit(*nick))
+	/* see xmlrpc comments about sanity checking -- we need a better way to do this */
+	if (IsDigit(*nick) || strchr(nick, '!') || (*nick == '-') || strchr(nick, ',')
+		|| strchr(nick, '$') || strchr(nick, ':') || strchr(nick, '#')
+		|| strchr(nick, '.') || !(strlen(nick) <= (NICKLEN - 1)))
 	{
-		notice(nicksvs.nick, origin, "For security reasons, you can't register a UID.");
+		notice(nicksvs.nick, origin, "Sorry, the nickname \2%s\2 cannot be registered.", nick);
 		return;
 	}
 
