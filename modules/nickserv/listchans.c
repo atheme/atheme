@@ -5,7 +5,7 @@
  * This file contains code for the NickServ LISTCHANS function.
  *   -- Contains an alias "MYACCESS" for legacy users
  *
- * $Id: listchans.c 3709 2005-11-09 05:24:21Z pfish $
+ * $Id: listchans.c 3711 2005-11-09 05:35:19Z alambert $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/listchans", FALSE, _modinit, _moddeinit,
-	"$Id: listchans.c 3709 2005-11-09 05:24:21Z pfish $",
+	"$Id: listchans.c 3711 2005-11-09 05:35:19Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -71,11 +71,7 @@ static void ns_cmd_listchans(char *origin)
 			notice(nicksvs.nick, origin, "\2%s\2 is not a registered nickname.", target);
 			return;
 		}
-
-		snoop("LISTCHANS: \2%s\2 on \2%s\2", u->nick, target);
-		logcommand(nicksvs.me, u, CMDLOG_ADMIN, "LISTCHANS %s", target);
 	}
-
 	else
 	{
 		mu = u->myuser;
@@ -84,11 +80,19 @@ static void ns_cmd_listchans(char *origin)
 			notice(nicksvs.nick, origin, "You are not logged in.");
 			return;
 		}
-
 	}
 
-	snoop("LISTCHANS: \2%s\2 on \2%s\2", u->nick, u->nick);
-	logcommand(nicksvs.me, u, CMDLOG_GET, "LISTCHANS");
+
+	if (mu != u->myuser)
+	{	/* must have been an oper */
+		snoop("LISTCHANS: \2%s\2 on \2%s\2", u->nick, mu->name);
+		logcommand(nicksvs.me, u, CMDLOG_ADMIN, "LISTCHANS %s", mu->name);
+	}
+	else
+	{	/* just a user, or oper is listing himself */
+		snoop("LISTCHANS: \2%s\2 on \2%s\2", u->nick, mu->name);
+		logcommand(nicksvs.me, u, CMDLOG_GET, "LISTCHANS %s", mu->name);
+	}
 
 	if (mu->chanacs.count == 0)
 	{

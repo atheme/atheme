@@ -1,3 +1,12 @@
+pfish       2005/11/09 05:24:21 UTC	(20051109-3709)
+  Log:
+  LISTCHANS stuff.
+  
+
+  Changes:	Modified:
+  +34 -33	trunk/modules/nickserv/listchans.c (File Modified) 
+
+
 alambert    2005/11/09 04:47:53 UTC	(20051109-3707)
   Log:
   CS XOP, FLAGS, AKICK: allow opers to view channel access lists, consistent with LISTCHANS decision
