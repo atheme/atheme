@@ -1,3 +1,13 @@
+jilles      2005/11/09 22:59:37 UTC	(20051109-3751)
+  Log:
+  Pass sizeof(struct sockaddr) to getpeername(2),
+  not sizeof(struct sockaddr *).
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/libatheme/connection.c (File Modified) 
+
+
 jilles      2005/11/09 13:52:45 UTC	(20051109-3749)
   Log:
   - Log oper override in /cs akick list, /cs flags and /cs xop list
