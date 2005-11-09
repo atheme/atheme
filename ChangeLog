@@ -1,3 +1,11 @@
+alambert    2005/11/09 02:33:44 UTC	(20051109-3695)
+  Log:
+  NS LINK: bail out if the user has MU_WAITAUTH
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/nickserv/link.c (File Modified) 
+
+
 alambert    2005/11/09 02:30:48 UTC	(20051109-3693)
   Log:
   NS LINK: use the right pointer when determining flags

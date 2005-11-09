@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ GHOST function.
  *
- * $Id: ghost.c 3685 2005-11-09 01:07:04Z alambert $
+ * $Id: ghost.c 3697 2005-11-09 02:52:30Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/ghost", FALSE, _modinit, _moddeinit,
-	"$Id: ghost.c 3685 2005-11-09 01:07:04Z alambert $",
+	"$Id: ghost.c 3697 2005-11-09 02:52:30Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -59,7 +59,7 @@ void ns_cmd_ghost(char *origin)
 		return;
 	}
 
-	target_u = user_find(target);
+	target_u = user_find_named(target);
 	if (!target_u)
 	{
 		notice(nicksvs.nick, origin, "\2%s\2 is not online.", target);
