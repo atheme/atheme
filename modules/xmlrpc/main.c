@@ -4,7 +4,7 @@
  *
  * XMLRPC server code.
  *
- * $Id: main.c 3753 2005-11-09 23:01:43Z jilles $
+ * $Id: main.c 3755 2005-11-09 23:48:04Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 3753 2005-11-09 23:01:43Z jilles $",
+	"$Id: main.c 3755 2005-11-09 23:48:04Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -57,11 +57,12 @@ static int conf_xmlrpc(CONFIGENTRY *ce)
 
 /***************************************************************************/
 
-static int testMethod(int parc, char *parv[])
+static int testMethod(void *conn, int parc, char *parv[])
 {
 	char buf[XMLRPC_BUFSIZE];
 	char buf2[XMLRPC_BUFSIZE];
 
+	(void)conn;
 	if (parc > 0)
 		snprintf(buf2, XMLRPC_BUFSIZE, "return: %s", parv[0]);
 	else
@@ -99,7 +100,7 @@ static void do_packet(connection_t *cptr, char *buf)
 	/* so we can write our response back later */
 	request = cptr;
 
-	xmlrpc_process(buf);
+	xmlrpc_process(buf, cptr);
 
 	*buf = '\0';
 }

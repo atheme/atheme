@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 3701 2005-11-09 03:14:37Z alambert $
+ * $Id: account.c 3755 2005-11-09 23:48:04Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 3701 2005-11-09 03:14:37Z alambert $",
+	"$Id: account.c 3755 2005-11-09 23:48:04Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -39,7 +39,7 @@ boolean_t using_nickserv = FALSE;
  * Side Effects:
  *       an account is registered in the system
  */
-static int account_register(int parc, char *parv[])
+static int account_register(void *conn, int parc, char *parv[])
 {
 	myuser_t *mu, *tmu;
 	node_t *n;
@@ -187,7 +187,7 @@ static int account_register(int parc, char *parv[])
  * Side Effects:
  *       an account-related operation is verified.
  */      
-static int account_verify(int parc, char *parv[])
+static int account_verify(void *conn, int parc, char *parv[])
 {
 	myuser_t *mu;
 	metadata_t *md;
@@ -294,7 +294,7 @@ static int account_verify(int parc, char *parv[])
  *       an authcookie ticket is created for the myuser_t.
  *       the user's lastlogin is updated
  */
-static int do_login(int parc, char *parv[])
+static int do_login(void *conn, int parc, char *parv[])
 {
 	myuser_t *mu;
 	authcookie_t *ac;
@@ -344,7 +344,7 @@ static int do_login(int parc, char *parv[])
  * Side Effects:
  *       an authcookie ticket is destroyed.
  */
-static int do_logout(int parc, char *parv[])
+static int do_logout(void *conn, int parc, char *parv[])
 {
 	authcookie_t *ac;
 	myuser_t *mu;
@@ -399,7 +399,7 @@ static int do_logout(int parc, char *parv[])
  * Side Effects:
  *       metadata is added to an account.
  */ 
-static int do_metadata_set(int parc, char *parv[])
+static int do_metadata_set(void *conn, int parc, char *parv[])
 {
 	myuser_t *mu;
 	char buf[XMLRPC_BUFSIZE];
@@ -460,7 +460,7 @@ static int do_metadata_set(int parc, char *parv[])
  * Side Effects:
  *       metadata is deleted from an account.
  */ 
-static int do_metadata_delete(int parc, char *parv[])
+static int do_metadata_delete(void *conn, int parc, char *parv[])
 {
 	myuser_t *mu;
 	char buf[XMLRPC_BUFSIZE];
@@ -520,7 +520,7 @@ static int do_metadata_delete(int parc, char *parv[])
  * Side Effects:
  *       none.
  */ 
-static int do_metadata_get(int parc, char *parv[])
+static int do_metadata_get(void *conn, int parc, char *parv[])
 {
 	myuser_t *mu;
 	metadata_t *md;

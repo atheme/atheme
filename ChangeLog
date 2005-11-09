@@ -1,3 +1,12 @@
+jilles      2005/11/09 23:01:43 UTC	(20051109-3753)
+  Log:
+  Show source IP address of connection in debug notice.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/xmlrpc/main.c (File Modified) 
+
+
 jilles      2005/11/09 22:59:37 UTC	(20051109-3751)
   Log:
   Pass sizeof(struct sockaddr) to getpeername(2),

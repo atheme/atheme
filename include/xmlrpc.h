@@ -4,7 +4,7 @@
  *
  * XMLRPC library header, hacked up for Atheme.
  *
- * $Id: xmlrpc.h 3607 2005-11-06 23:57:17Z jilles $
+ * $Id: xmlrpc.h 3755 2005-11-09 23:48:04Z jilles $
  */
 #ifndef XMLRPC_H
 #define XMLRPC_H
@@ -53,6 +53,8 @@
 #define XMLRPC_ENCODE 2
 #define XMLRPC_INTTAG 3
 
+typedef int (*XMLRPCMethodFunc)(void *userdata, int ac, char **av);
+
 typedef struct XMLRPCCmd_ XMLRPCCmd;
 typedef struct XMLRPCCmdHash_ XMLRPCCmdHash;
 
@@ -66,7 +68,7 @@ struct buffer_st {
 };
 
 struct XMLRPCCmd_ {
-    int (*func)(int ac, char **av);
+    XMLRPCMethodFunc func;
 	char *name;
     int core;
     char *mod_name;
@@ -88,8 +90,8 @@ typedef struct xmlrpc_settings {
 } XMLRPCSet;
 
 E int xmlrpc_getlast_error(void);
-E void xmlrpc_process(char *buffer);
-E int xmlrpc_register_method(const char *name, int (*func) (int ac, char **av));
+E void xmlrpc_process(char *buffer, void *userdata);
+E int xmlrpc_register_method(const char *name, XMLRPCMethodFunc func);
 E int xmlrpc_unregister_method(const char *method);
 
 E char *xmlrpc_array(int argc, ...);
@@ -105,7 +107,7 @@ E int xmlrpc_set_options(int type, const char *value);
 E void xmlrpc_set_buffer(char *(*func)(char *buffer, int len));
 E void xmlrpc_generic_error(int code, const char *string);
 E void xmlrpc_send(int argc, ...);
-E int xmlrpc_about(int ac, char **av);
+E int xmlrpc_about(void *userdata, int ac, char **av);
 E char *xmlrpc_char_encode(char *outbuffer, char *s1);
 E char *xmlrpc_decode_string(char *buf);
 

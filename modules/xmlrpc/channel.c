@@ -4,7 +4,7 @@
  *
  * XMLRPC channel management functions.
  *
- * $Id: channel.c 3475 2005-11-05 06:54:57Z alambert $
+ * $Id: channel.c 3755 2005-11-09 23:48:04Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/channel", FALSE, _modinit, _moddeinit,
-	"$Id: channel.c 3475 2005-11-05 06:54:57Z alambert $",
+	"$Id: channel.c 3755 2005-11-09 23:48:04Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -35,7 +35,7 @@ DECLARE_MODULE_V1
  * Side Effects:
  *       a channel is registered in the system
  */
-static int channel_register(int parc, char *parv[])
+static int channel_register(void *conn, int parc, char *parv[])
 {
 	myuser_t *mu;
 	mychan_t *mc, *tmc;
@@ -138,7 +138,7 @@ static int channel_register(int parc, char *parv[])
  * Side Effects:
  *       metadata is added to a channel.
  */ 
-static int do_metadata_set(int parc, char *parv[])
+static int do_metadata_set(void *conn, int parc, char *parv[])
 {
 	myuser_t *mu;
 	mychan_t *mc;
@@ -215,7 +215,7 @@ static int do_metadata_set(int parc, char *parv[])
  * Side Effects:
  *       metadata is added to a channel.
  */ 
-static int do_metadata_delete(int parc, char *parv[])
+static int do_metadata_delete(void *conn, int parc, char *parv[])
 {
 	myuser_t *mu;
 	mychan_t *mc;
@@ -287,7 +287,7 @@ static int do_metadata_delete(int parc, char *parv[])
  * Side Effects:
  *       none.
  */ 
-static int do_metadata_get(int parc, char *parv[])
+static int do_metadata_get(void *conn, int parc, char *parv[])
 {
 	mychan_t *mc;
 	metadata_t *md;

@@ -29,7 +29,7 @@ static char *xmlrpc_normalizeBuffer(char *buf);
 static char *xmlrpc_stristr(char *s1, char *s2);
 static int xmlrpc_split_buf(char *buffer, char ***argv);
 
-XMLRPCCmd *createXMLCommand(const char *name, int (*func) (int ac, char **av));
+XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func);
 XMLRPCCmd *findXMLRPCCommand(XMLRPCCmdHash * hookEvtTable[], const char *name);
 int addXMLCommand(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml);
 int destroyXMLRPCCommand(XMLRPCCmd * xml);
@@ -60,7 +60,7 @@ int xmlrpc_getlast_error(void)
 
 /*************************************************************************/
 
-void xmlrpc_process(char *buffer)
+void xmlrpc_process(char *buffer, void *userdata)
 {
 	int retVal = 0;
 	XMLRPCCmd *current = NULL;
@@ -90,13 +90,13 @@ void xmlrpc_process(char *buffer)
 				ac = xmlrpc_split_buf(tmp, &av);
 				if (xml->func)
 				{
-					retVal = xml->func(ac, av);
+					retVal = xml->func(userdata, ac, av);
 					if (retVal == XMLRPC_CONT)
 					{
 						current = xml->next;
 						while (current && current->func && retVal == XMLRPC_CONT)
 						{
-							retVal = current->func(ac, av);
+							retVal = current->func(userdata, ac, av);
 							current = current->next;
 						}
 					}
@@ -160,7 +160,7 @@ void xmlrpc_set_buffer(char *(*func) (char *buffer, int len))
 
 /*************************************************************************/
 
-int xmlrpc_register_method(const char *name, int (*func) (int ac, char **av))
+int xmlrpc_register_method(const char *name, XMLRPCMethodFunc func)
 {
 	XMLRPCCmd *xml;
 	xml = createXMLCommand(name, func);
@@ -169,7 +169,7 @@ int xmlrpc_register_method(const char *name, int (*func) (int ac, char **av))
 
 /*************************************************************************/
 
-XMLRPCCmd *createXMLCommand(const char *name, int (*func) (int ac, char **av))
+XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func)
 {
 	XMLRPCCmd *xml = NULL;
 	if (!func)
@@ -535,7 +535,7 @@ void xmlrpc_generic_error(int code, const char *string)
 
 /*************************************************************************/
 
-int xmlrpc_about(int ac, char **av)
+int xmlrpc_about(void *userdata, int ac, char **av)
 {
 	char buf[XMLRPC_BUFSIZE];
 	char buf2[XMLRPC_BUFSIZE];
@@ -543,6 +543,7 @@ int xmlrpc_about(int ac, char **av)
 	char buf4[XMLRPC_BUFSIZE];
 	char *arraydata;
 
+	(void)userdata;
 	xmlrpc_integer(buf3, ac);
 	xmlrpc_string(buf4, av[0]);
 	xmlrpc_string(buf, (char *)XMLLIB_VERSION);
