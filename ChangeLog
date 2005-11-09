@@ -1,3 +1,12 @@
+pfish       2005/11/09 06:13:52 UTC	(20051109-3721)
+  Log:
+  Update flags for UserServ and fix a crash in the last seen code.
+  
+
+  Changes:	Modified:
+  +15 -2	trunk/modules/userserv/info.c (File Modified) 
+
+
 alambert    2005/11/09 06:13:21 UTC	(20051109-3719)
   Log:
   US FREEZE: send messages from the right nickname
