@@ -1,3 +1,12 @@
+alambert    2005/11/09 02:21:33 UTC	(20051109-3691)
+  Log:
+  SENDPASS: reset encrypted passwords instead. ...more controversial than Oolon Colluphid's trilogy of philosophical blockbusters 'Where God Went Wrong', 'Some More of God's Greatest Mistakes', and 'Who is this God Pesron, Anyway?'...
+
+  Changes:	Modified:
+  +8 -5		trunk/modules/nickserv/sendpass.c (File Modified) 
+  +9 -5		trunk/modules/userserv/sendpass.c (File Modified) 
+
+
 alambert    2005/11/09 02:00:31 UTC	(20051109-3689)
   Log:
   SENDPASS: notify the requester that encrypted passwords cannot be sent.

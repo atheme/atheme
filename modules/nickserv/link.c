@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ LINK function.
  *
- * $Id: link.c 3685 2005-11-09 01:07:04Z alambert $
+ * $Id: link.c 3693 2005-11-09 02:30:48Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/link", FALSE, _modinit, _moddeinit,
-	"$Id: link.c 3685 2005-11-09 01:07:04Z alambert $",
+	"$Id: link.c 3693 2005-11-09 02:30:48Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -129,7 +129,7 @@ static void ns_cmd_link(char *origin)
 	 * myuser_add() knows that this password is already done
 	 */
 	mu = myuser_add(nick, muptr->pass, muptr->email,
-		config_options.defuflags | (mu->flags & MU_CRYPTPASS));
+		config_options.defuflags | (muptr->flags & MU_CRYPTPASS));
 	mu->registered = CURRTIME;
 	mu->lastlogin = CURRTIME;
 
