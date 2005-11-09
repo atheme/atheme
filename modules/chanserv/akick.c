@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 3707 2005-11-09 04:47:53Z alambert $
+ * $Id: akick.c 3749 2005-11-09 13:52:45Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@ static void cs_fcmd_akick(char *origin, char *chan);
 DECLARE_MODULE_V1
 (
 	"chanserv/akick", FALSE, _modinit, _moddeinit,
-	"$Id: akick.c 3707 2005-11-09 04:47:53Z alambert $",
+	"$Id: akick.c 3749 2005-11-09 13:52:45Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -53,6 +53,7 @@ void cs_cmd_akick(char *origin)
 	mychan_t *mc;
 	chanacs_t *ca, *ca2;
 	node_t *n;
+	int operoverride = 0;
 	char *chan = strtok(NULL, " ");
 	char *cmd = strtok(NULL, " ");
 	char *uname = strtok(NULL, " ");
@@ -214,7 +215,7 @@ void cs_cmd_akick(char *origin)
 		if (!chanacs_user_has_flag(mc, u, CA_ACLVIEW))
 		{
 			if (is_ircop(u))
-				;				/* XXX log this */
+				operoverride = 1;
 			else
 			{
 				notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
@@ -241,7 +242,10 @@ void cs_cmd_akick(char *origin)
 		}
 
 		notice(chansvs.nick, origin, "Total of \2%d\2 %s in \2%s\2's AKICK list.", i, (i == 1) ? "entry" : "entries", mc->name);
-		logcommand(chansvs.me, u, CMDLOG_GET, "%s AKICK LIST", mc->name);
+		if (operoverride)
+			logcommand(chansvs.me, u, CMDLOG_ADMIN, "%s AKICK LIST (oper override)", mc->name);
+		else
+			logcommand(chansvs.me, u, CMDLOG_GET, "%s AKICK LIST", mc->name);
 	}
 }
 

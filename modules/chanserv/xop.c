@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 3735 2005-11-09 12:23:51Z jilles $
+ * $Id: xop.c 3749 2005-11-09 13:52:45Z jilles $
  */
 
 #include "atheme.h"
@@ -12,12 +12,12 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 3735 2005-11-09 12:23:51Z jilles $",
+	"$Id: xop.c 3749 2005-11-09 13:52:45Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 /* the individual command stuff, now that we've reworked, hardcode ;) --w00t */
-static void cs_xop_do_list(mychan_t *mc, char *origin, uint32_t level);
+static void cs_xop_do_list(mychan_t *mc, char *origin, uint32_t level, int operoverride);
 static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level);
 static void cs_xop_do_del(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level);
 
@@ -74,6 +74,7 @@ static void cs_xop(char *origin, uint32_t level)
 	chanacs_t *ca;
 	chanuser_t *cu;
 	node_t *n;
+	int operoverride = 0;
 	char *chan = strtok(NULL, " ");
 	char *cmd = strtok(NULL, " ");
 	char *uname = strtok(NULL, " ");
@@ -156,14 +157,14 @@ static void cs_xop(char *origin, uint32_t level)
 		if (!chanacs_user_has_flag(mc, u, CA_ACLVIEW))
 		{
 			if (is_ircop(u))
-				;				/* XXX log this */
+				operoverride = 1;
 			else
 			{
 				notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 				return;
 			}
 		}
-		cs_xop_do_list(mc, origin, level);
+		cs_xop_do_list(mc, origin, level, operoverride);
 	}
 }
 
@@ -409,7 +410,7 @@ static void cs_xop_do_del(mychan_t *mc, myuser_t *mu, char *origin, char *target
 }
 
 
-static void cs_xop_do_list(mychan_t *mc, char *origin, uint32_t level)
+static void cs_xop_do_list(mychan_t *mc, char *origin, uint32_t level, int operoverride)
 {
 	chanacs_t *ca;
 	uint8_t i = 0;
@@ -449,5 +450,8 @@ static void cs_xop_do_list(mychan_t *mc, char *origin, uint32_t level)
 	}
 	/* XXX */
 	notice(chansvs.nick, origin, "Total of \2%d\2 %s in %s list of \2%s\2.", i, (i == 1) ? "entry" : "entries", leveldesc, mc->name);
-	logcommand(chansvs.me, user_find(origin), CMDLOG_GET, "%s %s LIST", mc->name, leveldesc);
+	if (operoverride)
+		logcommand(chansvs.me, user_find(origin), CMDLOG_ADMIN, "%s %s LIST (oper override)", mc->name, leveldesc);
+	else
+		logcommand(chansvs.me, user_find(origin), CMDLOG_GET, "%s %s LIST", mc->name, leveldesc);
 }

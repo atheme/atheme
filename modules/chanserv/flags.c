@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 3707 2005-11-09 04:47:53Z alambert $
+ * $Id: flags.c 3749 2005-11-09 13:52:45Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 3707 2005-11-09 04:47:53Z alambert $",
+	"$Id: flags.c 3749 2005-11-09 13:52:45Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -52,7 +52,7 @@ static void cs_cmd_flags(char *origin)
 	metadata_t *md;
 	chanacs_t *ca;
 	node_t *n;
-
+	int operoverride = 0;
 	char *channel = strtok(NULL, " ");
 	char *target = strtok(NULL, " ");
 
@@ -77,7 +77,7 @@ static void cs_cmd_flags(char *origin)
 		if (!chanacs_user_has_flag(mc, u, CA_ACLVIEW))
 		{
 			if (is_ircop(u))
-				;				/* XXX log this */
+				operoverride = 1;
 			else
 			{
 				notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
@@ -103,7 +103,10 @@ static void cs_cmd_flags(char *origin)
 
 		notice(chansvs.nick, origin, "----- ---------------------- -----");
 		notice(chansvs.nick, origin, "End of \2%s\2 FLAGS listing.", channel);
-		logcommand(chansvs.me, u, CMDLOG_GET, "%s FLAGS", mc->name);
+		if (operoverride)
+			logcommand(chansvs.me, u, CMDLOG_ADMIN, "%s FLAGS (oper override)", mc->name);
+		else
+			logcommand(chansvs.me, u, CMDLOG_GET, "%s FLAGS", mc->name);
 	}
 	else
 	{

@@ -1,3 +1,12 @@
+jilles      2005/11/09 13:42:32 UTC	(20051109-3747)
+  Log:
+  Hmm, verbose() takes a mychan_t not a name.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/chanserv/set.c (File Modified) 
+
+
 jilles      2005/11/09 13:27:39 UTC	(20051109-3745)
   Log:
   /cs set verbose: notify channel
