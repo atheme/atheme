@@ -1,3 +1,11 @@
+alambert    2005/11/09 06:14:38 UTC	(20051109-3723)
+  Log:
+  HelpServ: send CTCP replies from the right nick
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/helpserv/main.c (File Modified) 
+
+
 pfish       2005/11/09 06:13:52 UTC	(20051109-3721)
   Log:
   Update flags for UserServ and fix a crash in the last seen code.
