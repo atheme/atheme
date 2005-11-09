@@ -1,3 +1,13 @@
+alambert    2005/11/09 04:47:53 UTC	(20051109-3707)
+  Log:
+  CS XOP, FLAGS, AKICK: allow opers to view channel access lists, consistent with LISTCHANS decision
+
+  Changes:	Modified:
+  +13 -4	trunk/modules/chanserv/akick.c (File Modified) 
+  +8 -3		trunk/modules/chanserv/flags.c (File Modified) 
+  +14 -5	trunk/modules/chanserv/xop.c (File Modified) 
+
+
 alambert    2005/11/09 04:12:28 UTC	(20051109-3705)
   Log:
   should_*_host: use strlcpy

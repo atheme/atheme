@@ -5,7 +5,7 @@
  * This file contains code for the NickServ LISTCHANS function.
  *   -- Contains an alias "MYACCESS" for legacy users
  *
- * $Id: listchans.c 3583 2005-11-06 21:48:28Z jilles $
+ * $Id: listchans.c 3709 2005-11-09 05:24:21Z pfish $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/listchans", FALSE, _modinit, _moddeinit,
-	"$Id: listchans.c 3583 2005-11-06 21:48:28Z jilles $",
+	"$Id: listchans.c 3709 2005-11-09 05:24:21Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -41,64 +41,64 @@ void _moddeinit()
 	command_delete(&ns_myaccess, ns_cmdtree);
 	help_delentry(ns_helptree, "MYACCESS");
 	
-  command_delete(&ns_listchans, ns_cmdtree);
+	command_delete(&ns_listchans, ns_cmdtree);
 	help_delentry(ns_helptree, "LISTCHANS");
 }
 
 static void ns_cmd_listchans(char *origin)
 {
 	user_t *u = user_find(origin);
-	myuser_t *mu = u->myuser;
+	myuser_t *mu;
 	node_t *n;
 	chanacs_t *ca;
 	uint32_t akicks = 0, i;
-	int isadmin = 0;
 
 	/* Optional target */
 	char *target = strtok(NULL, " ");
 
-	if (mu == NULL)
+	if (target)
 	{
-		notice(nicksvs.nick, origin, "You are not logged in.");
-		return;
-	}
-
-	if (target != NULL)
-	{
-		if (!is_ircop(u) && !is_sra(u->myuser))
+		if (!is_ircop(u))
 		{
-			notice(nicksvs.nick, origin, "You are not authorized to perform this operation.");
+			notice(nicksvs.nick, origin, "The target argument is only available to IRC operators.");
 			return;
 		}
 
-		if (!(mu = myuser_find(target)))
+		mu = myuser_find(target);
+
+		if (mu == NULL)
 		{
-  	              notice(nicksvs.nick, origin, "\2%s\2 is not registered.", target);
-  	              return;
+			notice(nicksvs.nick, origin, "\2%s\2 is not a registered nickname.", target);
+			return;
 		}
 
-                /* snoop if not calling on themselves */
-                if (mu != u->myuser)
-		{
-			isadmin = 1;
-                        snoop("LISTCHANS: \2%s\2 on \2%s\2", u->myuser->name, target);
-		}
+		snoop("LISTCHANS: \2%s\2 on \2%s\2", u->nick, target);
+		logcommand(nicksvs.me, u, CMDLOG_ADMIN, "LISTCHANS %s", target);
 	}
 
-	if (isadmin)
-		logcommand(nicksvs.me, u, CMDLOG_ADMIN, "LISTCHANS %s", target);
 	else
-		logcommand(nicksvs.me, u, CMDLOG_GET, "MYACCESS");
+	{
+		mu = u->myuser;
+		if (mu == NULL)
+		{
+			notice(nicksvs.nick, origin, "You are not logged in.");
+			return;
+		}
+
+	}
+
+	snoop("LISTCHANS: \2%s\2 on \2%s\2", u->nick, u->nick);
+	logcommand(nicksvs.me, u, CMDLOG_GET, "LISTCHANS");
 
 	if (mu->chanacs.count == 0)
-  {
-  	notice(nicksvs.nick, origin, "No channel access was found for the nick \2%s\2.", mu->name);
-  	return;
-  }
+	{
+		notice(nicksvs.nick, origin, "No channel access was found for the nick \2%s\2.", mu->name);
+		return;
+	}
   
 	LIST_FOREACH(n, mu->chanacs.head)
 	{
-    		ca = (chanacs_t *)n->data;
+		ca = (chanacs_t *)n->data;
 
 		switch (ca->level)
 		{
@@ -129,11 +129,12 @@ static void ns_cmd_listchans(char *origin)
 		}
 	}
 
-    i = mu->chanacs.count - akicks;
+	i = mu->chanacs.count - akicks;
 
-    if (i == 0)
-        notice(nicksvs.nick, origin, "No channel access was found for the nick \2%s\2.", mu->name);
-    else
-	notice(nicksvs.nick, origin, "\2%d\2 channel access match%s for the nick \2%s\2",
+	if (i == 0)
+		notice(nicksvs.nick, origin, "No channel access was found for the nick \2%s\2.", mu->name);
+	else
+		notice(nicksvs.nick, origin, "\2%d\2 channel access match%s for the nick \2%s\2",
 							i, (akicks > 1) ? "es" : "", mu->name);
+
 }
