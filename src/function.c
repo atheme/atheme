@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 3685 2005-11-09 01:07:04Z alambert $
+ * $Id: function.c 3705 2005-11-09 04:12:28Z alambert $
  */
 
 #include "atheme.h"
@@ -764,9 +764,7 @@ boolean_t should_op_host(mychan_t *mychan, char *host)
 {
 	char hostbuf[BUFSIZE];
 
-	hostbuf[0] = '\0';
-
-	strlcat(hostbuf, chansvs.nick, BUFSIZE);
+	strlcpy(hostbuf, chansvs.nick, BUFSIZE);
 	strlcat(hostbuf, "!", BUFSIZE);
 	strlcat(hostbuf, chansvs.user, BUFSIZE);
 	strlcat(hostbuf, "@", BUFSIZE);
@@ -795,9 +793,7 @@ boolean_t should_kick_host(mychan_t *mychan, char *host)
 {
 	char hostbuf[BUFSIZE];
 
-	hostbuf[0] = '\0';
-
-	strlcat(hostbuf, chansvs.nick, BUFSIZE);
+	strlcpy(hostbuf, chansvs.nick, BUFSIZE);
 	strlcat(hostbuf, "!", BUFSIZE);
 	strlcat(hostbuf, chansvs.user, BUFSIZE);
 	strlcat(hostbuf, "@", BUFSIZE);
@@ -835,9 +831,7 @@ boolean_t should_halfop_host(mychan_t *mychan, char *host)
 {
 	char hostbuf[BUFSIZE];
 
-	hostbuf[0] = '\0';
-
-	strlcat(hostbuf, chansvs.nick, BUFSIZE);
+	strlcpy(hostbuf, chansvs.nick, BUFSIZE);
 	strlcat(hostbuf, "!", BUFSIZE);
 	strlcat(hostbuf, chansvs.user, BUFSIZE);
 	strlcat(hostbuf, "@", BUFSIZE);
@@ -875,9 +869,7 @@ boolean_t should_voice_host(mychan_t *mychan, char *host)
 {
 	char hostbuf[BUFSIZE];
 
-	hostbuf[0] = '\0';
-
-	strlcat(hostbuf, chansvs.nick, BUFSIZE);
+	strlcpy(hostbuf, chansvs.nick, BUFSIZE);
 	strlcat(hostbuf, "!", BUFSIZE);
 	strlcat(hostbuf, chansvs.user, BUFSIZE);
 	strlcat(hostbuf, "@", BUFSIZE);
