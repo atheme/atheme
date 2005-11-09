@@ -1,3 +1,12 @@
+nenolod     2005/11/09 02:52:30 UTC	(20051109-3697)
+  Log:
+  switch user_find with user_find_named in a few places. Requested by alambert. Reviewed by me. :P
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/ghost.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/link.c (File Modified) 
+
+
 alambert    2005/11/09 02:33:44 UTC	(20051109-3695)
   Log:
   NS LINK: bail out if the user has MU_WAITAUTH

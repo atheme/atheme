@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ LINK function.
  *
- * $Id: link.c 3697 2005-11-09 02:52:30Z nenolod $
+ * $Id: link.c 3699 2005-11-09 03:03:30Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/link", FALSE, _modinit, _moddeinit,
-	"$Id: link.c 3697 2005-11-09 02:52:30Z nenolod $",
+	"$Id: link.c 3699 2005-11-09 03:03:30Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -70,6 +70,12 @@ static void ns_cmd_link(char *origin)
 		notice(nicksvs.nick, origin, "\2%s\2 is presently in use. "
 			"For security reasons, you cannot link to nicknames "
 			"that are presently in use.", nick);
+		return;
+	}
+
+	if (IsDigit(*nick))
+	{
+		notice(nicksvs.nick, origin, "For security reasons, you can't register a UID.");
 		return;
 	}
 
