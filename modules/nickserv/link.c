@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ LINK function.
  *
- * $Id: link.c 3693 2005-11-09 02:30:48Z alambert $
+ * $Id: link.c 3695 2005-11-09 02:33:44Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/link", FALSE, _modinit, _moddeinit,
-	"$Id: link.c 3693 2005-11-09 02:30:48Z alambert $",
+	"$Id: link.c 3695 2005-11-09 02:33:44Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -56,6 +56,12 @@ static void ns_cmd_link(char *origin)
 	if (!u->myuser)
 	{
 		notice(nicksvs.nick, origin, "You are not identified.");
+		return;
+	}
+
+	if (u->myuser->flags & MU_WAITAUTH)
+	{
+		notice(nicksvs.nick, origin, "You must verify your registration before using the LINK command.");
 		return;
 	}
 

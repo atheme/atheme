@@ -1,3 +1,11 @@
+alambert    2005/11/09 02:30:48 UTC	(20051109-3693)
+  Log:
+  NS LINK: use the right pointer when determining flags
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/link.c (File Modified) 
+
+
 alambert    2005/11/09 02:21:33 UTC	(20051109-3691)
   Log:
   SENDPASS: reset encrypted passwords instead. ...more controversial than Oolon Colluphid's trilogy of philosophical blockbusters 'Where God Went Wrong', 'Some More of God's Greatest Mistakes', and 'Who is this God Pesron, Anyway?'...
