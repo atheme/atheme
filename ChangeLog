@@ -1,3 +1,13 @@
+jilles      2005/11/09 13:24:44 UTC	(20051109-3743)
+  Log:
+  Move /cs set entrymsg from +f to +s, and keeptopic, secure
+  and verbose from successor to +s.
+  
+
+  Changes:	Modified:
+  +4 -4		trunk/modules/chanserv/set.c (File Modified) 
+
+
 jilles      2005/11/09 13:02:50 UTC	(20051109-3741)
   Log:
   Comment out some of the most noisy snoops:

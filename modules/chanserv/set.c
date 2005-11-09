@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3743 2005-11-09 13:24:44Z jilles $
+ * $Id: set.c 3745 2005-11-09 13:27:39Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3743 2005-11-09 13:24:44Z jilles $",
+	"$Id: set.c 3745 2005-11-09 13:27:39Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -830,6 +830,7 @@ static void cs_set_verbose(char *origin, char *name, char *params)
 
  		mc->flags |= MC_VERBOSE;
 
+		verbose(mc->name, "\2%s\2 enabled the VERBOSE flag", u->nick);
 		notice(chansvs.nick, origin, "The \2VERBOSE\2 flag has been set for \2%s\2.", mc->name);
 
 		return;
@@ -846,6 +847,7 @@ static void cs_set_verbose(char *origin, char *name, char *params)
 		snoop("SET:VERBOSE:OFF: for \2%s\2 by \2%s\2", mc->name, origin);
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET VERBOSE OFF", mc->name);
 
+		verbose(mc->name, "\2%s\2 disabled the VERBOSE flag", u->nick);
 		mc->flags &= ~MC_VERBOSE;
 
 		notice(chansvs.nick, origin, "The \2VERBOSE\2 flag has been removed for \2%s\2.", mc->name);
