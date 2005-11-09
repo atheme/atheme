@@ -4,7 +4,7 @@
  *
  * Controls noexpire options for channels.
  *
- * $Id: hold.c 3267 2005-10-30 04:53:03Z alambert $
+ * $Id: hold.c 3731 2005-11-09 11:27:14Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/hold", FALSE, _modinit, _moddeinit,
-	"$Id: hold.c 3267 2005-10-30 04:53:03Z alambert $",
+	"$Id: hold.c 3731 2005-11-09 11:27:14Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -75,6 +75,7 @@ static void cs_cmd_hold(char *origin)
 		mc->flags |= MC_HOLD;
 
 		wallops("%s set the HOLD option for the channel \2%s\2.", origin, target);
+		logcommand(chansvs.me, user_find(origin), CMDLOG_ADMIN, "%s HOLD ON", mc->name);
 		notice(chansvs.nick, origin, "\2%s\2 is now held.", target);
 	}
 	else if (!strcasecmp(action, "OFF"))
@@ -88,6 +89,7 @@ static void cs_cmd_hold(char *origin)
 		mc->flags &= ~MC_HOLD;
 
 		wallops("%s removed the HOLD option on the channel \2%s\2.", origin, target);
+		logcommand(chansvs.me, user_find(origin), CMDLOG_ADMIN, "%s HOLD OFF", mc->name);
 		notice(chansvs.nick, origin, "\2%s\2 is no longer held.", target);
 	}
 	else

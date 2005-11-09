@@ -1,3 +1,12 @@
+pfish       2005/11/09 11:18:48 UTC	(20051109-3729)
+  Log:
+  Lets show a working link to atheme in /INFO (services.atheme.org is no longer valid?)
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/version.sh (File Modified) 
+
+
 jilles      2005/11/09 11:10:58 UTC	(20051109-3727)
   Log:
   LISTCHANS:
