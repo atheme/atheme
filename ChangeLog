@@ -1,3 +1,11 @@
+alambert    2005/11/09 05:52:16 UTC	(20051109-3715)
+  Log:
+  chanacs_user_has_flag(): if we're an alias, only ask about the parent nickname (per w00t)
+
+  Changes:	Modified:
+  +28 -2	trunk/src/node.c (File Modified) 
+
+
 pfish       2005/11/09 05:50:17 UTC	(20051109-3713)
   Log:
   LISTCHANS: Port new version over to UserServ, and some minor improvments for both.

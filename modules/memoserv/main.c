@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 3433 2005-11-03 22:17:00Z jilles $
+ * $Id: main.c 3717 2005-11-09 06:11:55Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 3433 2005-11-03 22:17:00Z jilles $",
+	"$Id: main.c 3717 2005-11-09 06:11:55Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -61,7 +61,7 @@ static void memoserv(char *origin, uint8_t parc, char *parv[])
 	}
 	else if (!strcmp(cmd, "\001VERSION\001"))
 	{
-		notice(chansvs.nick, origin,
+		notice(memosvs.nick, origin,
 		       "\001VERSION atheme-%s. %s %s %s%s%s%s%s%s%s%s%s TS5ow\001",
 		       version, revision, me.name,
 		       (match_mapping) ? "A" : "",
