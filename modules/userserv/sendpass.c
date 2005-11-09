@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService SENDPASS function.
  *
- * $Id: sendpass.c 3685 2005-11-09 01:07:04Z alambert $
+ * $Id: sendpass.c 3689 2005-11-09 02:00:31Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/sendpass", FALSE, _modinit, _moddeinit,
-	"$Id: sendpass.c 3685 2005-11-09 01:07:04Z alambert $",
+	"$Id: sendpass.c 3689 2005-11-09 02:00:31Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -67,6 +67,14 @@ static void us_cmd_sendpass(char *origin)
 	}
 
 	/* XXX broken with crypto */
+	if (mu->flags & MU_CRYPTPASS)
+	{
+		notice(usersvs.nick, origin, "The password for the account \2%s\2 is encrypted; "
+						"SENDPASS cannot be used.");
+		notice(nicksvs.nick, origin, "Use the RESETPASS or RETURN commands to change the password.");
+		return;
+	}
+
 	if (sendemail(u, EMAIL_SENDPASS, mu, mu->pass))
 	{
 		logcommand(usersvs.me, u, CMDLOG_ADMIN, "SENDPASS %s", name);

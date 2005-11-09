@@ -1,3 +1,11 @@
+alambert    2005/11/09 01:51:22 UTC	(20051109-3687)
+  Log:
+  NS RETURN: (crypto) remember to set password
+
+  Changes:	Modified:
+  +2 -0		trunk/modules/nickserv/return.c (File Modified) 
+
+
 alambert    2005/11/09 01:07:04 UTC	(20051109-3685)
   Log:
   crypto: Add password encryption support. (SENDPASS is temporarily broken)
