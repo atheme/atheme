@@ -1,3 +1,19 @@
+jilles      2005/11/09 13:02:50 UTC	(20051109-3741)
+  Log:
+  Comment out some of the most noisy snoops:
+  taxonomy and successful non-SRA login and logout
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/taxonomy.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/identify.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/logout.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/taxonomy.c (File Modified) 
+  +1 -1		trunk/modules/userserv/login.c (File Modified) 
+  +1 -1		trunk/modules/userserv/logout.c (File Modified) 
+  +1 -1		trunk/modules/userserv/taxonomy.c (File Modified) 
+
+
 jilles      2005/11/09 12:52:23 UTC	(20051109-3739)
   Log:
   If SECURE is set, allow opping (halfopping) +O-o (+H-h) users.

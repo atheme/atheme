@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3735 2005-11-09 12:23:51Z jilles $
+ * $Id: set.c 3743 2005-11-09 13:24:44Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3735 2005-11-09 12:23:51Z jilles $",
+	"$Id: set.c 3743 2005-11-09 13:24:44Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -212,7 +212,7 @@ static void cs_set_entrymsg(char *origin, char *name, char *params)
 		return;
 	}
 
-	if (!(ca = chanacs_find(mc, u->myuser, CA_FLAGS)))
+	if (!(ca = chanacs_find(mc, u->myuser, CA_SET)))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to execute this command.");
 		return;
@@ -585,7 +585,7 @@ static void cs_set_keeptopic(char *origin, char *name, char *params)
 		return;
 	}
 
-	if ((!is_founder(mc, u->myuser)) && (!is_successor(mc, u->myuser)))
+	if (!chanacs_user_has_flag(mc, u, CA_SET))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
 		return;
@@ -651,7 +651,7 @@ static void cs_set_secure(char *origin, char *name, char *params)
 		return;
 	}
 
-	if ((!is_founder(mc, u->myuser)) && (!is_successor(mc, u->myuser)))
+	if (!chanacs_user_has_flag(mc, u, CA_SET))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
 		return;
@@ -811,7 +811,7 @@ static void cs_set_verbose(char *origin, char *name, char *params)
 		return;
 	}
 
-	if ((!is_founder(mc, u->myuser)) && (!is_successor(mc, u->myuser)))
+	if (!chanacs_user_has_flag(mc, u, CA_SET))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
 		return;
