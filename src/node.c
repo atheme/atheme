@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3685 2005-11-09 01:07:04Z alambert $
+ * $Id: node.c 3715 2005-11-09 05:52:16Z alambert $
  */
 
 #include "atheme.h"
@@ -1637,11 +1637,37 @@ chanacs_t *chanacs_find_by_mask(mychan_t *mychan, char *mask, uint32_t level)
 
 boolean_t chanacs_user_has_flag(mychan_t *mychan, user_t *u, uint32_t level)
 {
+	myuser_t *mu;
+
 	if (!mychan || !u)
 		return FALSE;
 
-	if (u->myuser && chanacs_find(mychan, u->myuser, level))
-		return TRUE;
+	if (u->myuser != NULL)
+	{
+		/* Be very careful to make sure we get the right
+		 * myuser. w00t says to check only the parent's
+		 * access. If we can't get it, we'll try u->myuser.
+		 */
+		if (u->myuser->flags & MU_ALIAS)
+		{
+			metadata_t *md;
+
+			if ((md = metadata_find(mu, METADATA_USER, "private:alias:parent")) != NULL)
+			{
+				mu = myuser_find(md->value);
+
+				if (mu == NULL)		/* bad! */
+					mu = u->myuser;
+			}
+			else
+				mu = u->myuser;
+		}
+		else
+			mu = u->myuser;
+
+		if (chanacs_find(mychan, mu, level))
+			return TRUE;
+	}
 
 	if (chanacs_find_host_by_user(mychan, u, level))
 		return TRUE;
