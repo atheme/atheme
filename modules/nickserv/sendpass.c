@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService SENDPASS function.
  *
- * $Id: sendpass.c 3689 2005-11-09 02:00:31Z alambert $
+ * $Id: sendpass.c 3691 2005-11-09 02:21:33Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/sendpass", FALSE, _modinit, _moddeinit,
-	"$Id: sendpass.c 3689 2005-11-09 02:00:31Z alambert $",
+	"$Id: sendpass.c 3691 2005-11-09 02:21:33Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -42,6 +42,7 @@ static void ns_cmd_sendpass(char *origin)
 	user_t *u = user_find(origin);
 	myuser_t *mu;
 	char *name = strtok(NULL, " ");
+	char *newpass = NULL;
 
 	if (u == NULL)
 		return;
@@ -66,16 +67,16 @@ static void ns_cmd_sendpass(char *origin)
 		return;
 	}
 
-	/* XXX broken with crypto */
+	/* this is not without controversy... :) */
 	if (mu->flags & MU_CRYPTPASS)
 	{
 		notice(nicksvs.nick, origin, "The password for the nickname \2%s\2 is encrypted; "
-						"SENDPASS cannot be used.");
-		notice(nicksvs.nick, origin, "Use the RESETPASS or RETURN command to change the password.");
-		return;
+						"a new password will be assigned and sent.", name);
+		newpass = gen_pw(12);
+		set_password(mu, newpass);
 	}
 
-	if (sendemail(u, EMAIL_SENDPASS, mu, mu->pass))
+	if (sendemail(u, EMAIL_SENDPASS, mu, (newpass == NULL) ? mu->pass : newpass))
 	{
 		logcommand(nicksvs.me, u, CMDLOG_ADMIN, "SENDPASS %s", name);
 		notice(nicksvs.nick, origin, "The password for \2%s\2 has been sent to \2%s\2.", mu->name, mu->email);
@@ -83,6 +84,8 @@ static void ns_cmd_sendpass(char *origin)
 	else
 		notice(nicksvs.nick, origin, "Email send failed.");
 
+	if (newpass != NULL)
+		free(newpass);
 
 	return;
 }

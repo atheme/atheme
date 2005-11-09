@@ -1,3 +1,12 @@
+alambert    2005/11/09 02:00:31 UTC	(20051109-3689)
+  Log:
+  SENDPASS: notify the requester that encrypted passwords cannot be sent.
+
+  Changes:	Modified:
+  +8 -0		trunk/modules/nickserv/sendpass.c (File Modified) 
+  +8 -0		trunk/modules/userserv/sendpass.c (File Modified) 
+
+
 alambert    2005/11/09 01:51:22 UTC	(20051109-3687)
   Log:
   NS RETURN: (crypto) remember to set password
