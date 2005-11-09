@@ -1,3 +1,11 @@
+alambert    2005/11/09 06:11:55 UTC	(20051109-3717)
+  Log:
+  MemoServ: send CTCP responses from the right nick
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/memoserv/main.c (File Modified) 
+
+
 alambert    2005/11/09 05:52:16 UTC	(20051109-3715)
   Log:
   chanacs_user_has_flag(): if we're an alias, only ask about the parent nickname (per w00t)
