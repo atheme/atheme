@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3781 2005-11-10 22:14:54Z jilles $
+ * $Id: set.c 3785 2005-11-10 22:42:24Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3781 2005-11-10 22:14:54Z jilles $",
+	"$Id: set.c 3785 2005-11-10 22:42:24Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -345,7 +345,7 @@ static void cs_set_founder(char *origin, char *name, char *params)
 
 			/* add target as founder... */
 			mc->founder = tmu;
-			chanacs_add(mc, tmu, CA_FOUNDER_0);
+			chanacs_change_simple(mc, tmu, NULL, CA_FOUNDER_0, 0, CA_ALL);
 
 			/* delete transfer metadata */
 			metadata_delete(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder");

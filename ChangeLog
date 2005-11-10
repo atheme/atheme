@@ -1,3 +1,16 @@
+jilles      2005/11/10 22:30:54 UTC	(20051110-3783)
+  Log:
+  Add chanacs_change_simple() which doesn't return the
+  changes made, making it possible to pass in the
+  desired changes as constants. Most uses of chanacs*add*()
+  and chanacs*del*() should be replaced with this.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/extern.h (File Modified) 
+  +10 -0	trunk/src/node.c (File Modified) 
+
+
 jilles      2005/11/10 22:14:54 UTC	(20051110-3781)
   Log:
   - remove CA_SUCCESSOR and CA_FOUNDER flag sets granting

@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3783 2005-11-10 22:30:54Z jilles $
+ * $Id: node.c 3785 2005-11-10 22:42:24Z jilles $
  */
 
 #include "atheme.h"
@@ -1189,12 +1189,9 @@ void myuser_delete(char *name)
 			
 				if ( (tcnt < me.maxchans) || is_sra(mc->successor) )
 				{
-					uint32_t addflags, removeflags;
 					snoop("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2", mc->successor->name, mc->name, mc->founder->name);
 
-					addflags = CA_FOUNDER_0;
-					removeflags = 0;
-					chanacs_change(mc, mc->successor, NULL, &addflags, &removeflags, CA_ALL);
+					chanacs_change_simple(mc, mc->successor, NULL, CA_FOUNDER_0, 0, CA_ALL);
 					mc->founder = mc->successor;
 					mc->successor = NULL;
 	
