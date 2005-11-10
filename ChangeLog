@@ -1,3 +1,15 @@
+jilles      2005/11/10 22:42:24 UTC	(20051110-3785)
+  Log:
+  Use chanacs_change_simple() in succession, /cs ftransfer
+  and /cs set founder.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/ftransfer.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/set.c (File Modified) 
+  +1 -4		trunk/src/node.c (File Modified) 
+
+
 jilles      2005/11/10 22:30:54 UTC	(20051110-3783)
   Log:
   Add chanacs_change_simple() which doesn't return the

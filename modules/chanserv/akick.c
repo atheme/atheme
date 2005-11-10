@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 3749 2005-11-09 13:52:45Z jilles $
+ * $Id: akick.c 3787 2005-11-10 22:59:00Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@ static void cs_fcmd_akick(char *origin, char *chan);
 DECLARE_MODULE_V1
 (
 	"chanserv/akick", FALSE, _modinit, _moddeinit,
-	"$Id: akick.c 3749 2005-11-09 13:52:45Z jilles $",
+	"$Id: akick.c 3787 2005-11-10 22:59:00Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -102,7 +102,7 @@ void cs_cmd_akick(char *origin)
 	/* ADD */
 	if (!strcasecmp("ADD", cmd))
 	{
-		if (!chanacs_user_has_flag(mc, u, CA_FLAGS))
+		if ((chanacs_user_flags(mc, u) & (CA_FLAGS | CA_REMOVE)) != (CA_FLAGS | CA_REMOVE))
 		{
 			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 			return;
@@ -161,7 +161,7 @@ void cs_cmd_akick(char *origin)
 	}
 	else if (!strcasecmp("DEL", cmd))
 	{
-		if (!chanacs_user_has_flag(mc, u, CA_FLAGS))
+		if ((chanacs_user_flags(mc, u) & (CA_FLAGS | CA_REMOVE)) != (CA_FLAGS | CA_REMOVE))
 		{
 			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 			return;
@@ -294,7 +294,7 @@ void cs_fcmd_akick(char *origin, char *chan)
 	/* ADD */
 	if (!strcasecmp("ADD", cmd))
 	{
-		if (!chanacs_user_has_flag(mc, u, CA_FLAGS))
+		if ((chanacs_user_flags(mc, u) & (CA_FLAGS | CA_REMOVE)) != (CA_FLAGS | CA_REMOVE))
 		{
 			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 			return;
@@ -353,7 +353,7 @@ void cs_fcmd_akick(char *origin, char *chan)
 	}
 	else if (!strcasecmp("DEL", cmd))
 	{
-		if (!chanacs_user_has_flag(mc, u, CA_FLAGS))
+		if ((chanacs_user_flags(mc, u) & (CA_FLAGS | CA_REMOVE)) != (CA_FLAGS | CA_REMOVE))
 		{
 			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 			return;
