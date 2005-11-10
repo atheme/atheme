@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 3685 2005-11-09 01:07:04Z alambert $
+ * $Id: register.c 3779 2005-11-10 21:49:28Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 3685 2005-11-09 01:07:04Z alambert $",
+	"$Id: register.c 3779 2005-11-10 21:49:28Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -153,15 +153,10 @@ static void us_cmd_register(char *origin)
 	notice(usersvs.nick, origin, "The password is \2%s\2. Please write this down for future reference.", pass);
 	hook_call_event("user_register", mu);
 
-	/* keep track of login address for users */
-	strlcpy(lau, u->user, BUFSIZE);
-	strlcat(lau, "@", BUFSIZE);
-	strlcat(lau, u->vhost, BUFSIZE);
+	snprintf(lau, BUFSIZE, "%s@%s", u->user, u->vhost);
 	metadata_add(mu, METADATA_USER, "private:host:vhost", lau);
-	/* and for opers */
-	strlcpy(lao, u->user, BUFSIZE);
-	strlcat(lao, "@", BUFSIZE);
-	strlcat(lao, u->host, BUFSIZE);
+
+	snprintf(lao, BUFSIZE, "%s@%s", u->user, u->host);
 	metadata_add(mu, METADATA_USER, "private:host:actual", lao);
 
 }
