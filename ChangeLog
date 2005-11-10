@@ -1,3 +1,11 @@
+alambert    2005/11/10 03:33:30 UTC	(20051110-3773)
+  Log:
+  myuser_delete(): Right now, chanacs is NOT a reliable indicator of whether or not a user is the founder. So do it the old, nasty way of searching through all channels. pfish will test.
+
+  Changes:	Modified:
+  +43 -32	trunk/src/node.c (File Modified) 
+
+
 alambert    2005/11/10 03:23:33 UTC	(20051110-3771)
   Log:
   myuser_delete(): actually run the for loop...
