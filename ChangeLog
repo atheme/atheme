@@ -1,3 +1,14 @@
+jilles      2005/11/10 00:39:39 UTC	(20051110-3759)
+  Log:
+  Add logging to xmlrpc, much in the same style
+  as the existing logging for IRC-given commands.
+  
+
+  Changes:	Modified:
+  +17 -0	trunk/modules/xmlrpc/account.c (File Modified) 
+  +8 -0		trunk/modules/xmlrpc/channel.c (File Modified) 
+
+
 jilles      2005/11/10 00:34:19 UTC	(20051110-3757)
   Log:
   Add void logcommand_external(void *svs, char *type,

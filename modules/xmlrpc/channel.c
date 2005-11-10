@@ -4,7 +4,7 @@
  *
  * XMLRPC channel management functions.
  *
- * $Id: channel.c 3759 2005-11-10 00:39:39Z jilles $
+ * $Id: channel.c 3761 2005-11-10 00:47:19Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/channel", FALSE, _modinit, _moddeinit,
-	"$Id: channel.c 3759 2005-11-10 00:39:39Z jilles $",
+	"$Id: channel.c 3761 2005-11-10 00:47:19Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -45,7 +45,7 @@ static int channel_register(void *conn, int parc, char *parv[])
 
 	*buf = '\0';
 
-	if (parc < 2)
+	if (parc < 3)
 	{
 		xmlrpc_generic_error(4, "Insufficient parameters.");
 		return 0;
@@ -204,7 +204,7 @@ static int do_metadata_set(void *conn, int parc, char *parv[])
  * atheme.channel.metadata.delete
  *
  * XML inputs:
- *       authcookie, account name, channel name, key, value
+ *       authcookie, account name, channel name, key
  *
  * XML outputs:
  *       fault 1 - validation failed
@@ -225,7 +225,7 @@ static int do_metadata_delete(void *conn, int parc, char *parv[])
 	mychan_t *mc;
 	char buf[XMLRPC_BUFSIZE];
 
-	if (parc < 5)
+	if (parc < 4)
 	{
 		xmlrpc_generic_error(4, "Insufficient parameters.");
 		return 0;

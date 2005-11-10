@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 3759 2005-11-10 00:39:39Z jilles $
+ * $Id: account.c 3761 2005-11-10 00:47:19Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 3759 2005-11-10 00:39:39Z jilles $",
+	"$Id: account.c 3761 2005-11-10 00:47:19Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -541,7 +541,7 @@ static int do_metadata_get(void *conn, int parc, char *parv[])
 	metadata_t *md;
 	char buf[XMLRPC_BUFSIZE];
 
-	if (parc < 1)
+	if (parc < 2)
 	{
 		xmlrpc_generic_error(2, "Insufficient parameters.");
 		return 0;
