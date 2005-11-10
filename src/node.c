@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3773 2005-11-10 03:33:30Z alambert $
+ * $Id: node.c 3781 2005-11-10 22:14:54Z jilles $
  */
 
 #include "atheme.h"
@@ -1189,10 +1189,12 @@ void myuser_delete(char *name)
 			
 				if ( (tcnt < me.maxchans) || is_sra(mc->successor) )
 				{
+					uint32_t addflags, removeflags;
 					snoop("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2", mc->successor->name, mc->name, mc->founder->name);
-	
-					chanacs_delete(mc, mc->successor, CA_SUCCESSOR);
-					chanacs_add(mc, mc->successor, CA_FOUNDER);
+
+					addflags = CA_FOUNDER_0;
+					removeflags = 0;
+					chanacs_change(mc, mc->successor, NULL, &addflags, &removeflags, CA_ALL);
 					mc->founder = mc->successor;
 					mc->successor = NULL;
 	
@@ -1431,7 +1433,7 @@ chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, uint32_t level)
 
 	ca->mychan = mychan;
 	ca->myuser = myuser;
-	ca->level |= level;
+	ca->level = level & CA_ALL;
 
 	node_add(ca, n1, &mychan->chanacs);
 	node_add(ca, n2, &myuser->chanacs);
@@ -1587,6 +1589,26 @@ chanacs_t *chanacs_find_host(mychan_t *mychan, char *host, uint32_t level)
 	return NULL;
 }
 
+uint32_t chanacs_host_flags(mychan_t *mychan, char *host)
+{
+	node_t *n;
+	chanacs_t *ca;
+	uint32_t result = 0;
+
+	if ((!mychan) || (!host))
+		return 0;
+
+	LIST_FOREACH(n, mychan->chanacs.head)
+	{
+		ca = (chanacs_t *)n->data;
+
+		if (ca->myuser == NULL && !match(ca->host, host))
+			result |= ca->level;
+	}
+
+	return result;
+}
+
 chanacs_t *chanacs_find_host_literal(mychan_t *mychan, char *host, uint32_t level)
 {
 	node_t *n;
@@ -1626,6 +1648,23 @@ chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, uint32_t level
 	strlcat(host, u->host, BUFSIZE);
 
 	return chanacs_find_host(mychan, host, level);
+}
+
+uint32_t chanacs_host_flags_by_user(mychan_t *mychan, user_t *u)
+{
+	char host[BUFSIZE];
+
+	if ((!mychan) || (!u))
+		return 0;
+
+	/* construct buffer for user's host */
+	strlcpy(host, u->nick, BUFSIZE);
+	strlcat(host, "!", BUFSIZE);
+	strlcat(host, u->user, BUFSIZE);
+	strlcat(host, "@", BUFSIZE);
+	strlcat(host, u->host, BUFSIZE);
+
+	return chanacs_host_flags(mychan, host);
 }
 
 chanacs_t *chanacs_find_by_mask(mychan_t *mychan, char *mask, uint32_t level)
@@ -1684,6 +1723,144 @@ boolean_t chanacs_user_has_flag(mychan_t *mychan, user_t *u, uint32_t level)
 		return TRUE;
 
 	return FALSE;
+}
+
+uint32_t chanacs_user_flags(mychan_t *mychan, user_t *u)
+{
+	myuser_t *mu;
+	chanacs_t *ca;
+	uint32_t result = 0;
+
+	if (!mychan || !u)
+		return FALSE;
+
+	if (u->myuser != NULL)
+	{
+		/* Be very careful to make sure we get the right
+		 * myuser. w00t says to check only the parent's
+		 * access. If we can't get it, we'll try u->myuser.
+		 */
+		if (u->myuser->flags & MU_ALIAS)
+		{
+			metadata_t *md;
+
+			if ((md = metadata_find(mu, METADATA_USER, "private:alias:parent")) != NULL)
+			{
+				mu = myuser_find(md->value);
+
+				if (mu == NULL)		/* bad! */
+					mu = u->myuser;
+			}
+			else
+				mu = u->myuser;
+		}
+		else
+			mu = u->myuser;
+
+		ca = chanacs_find(mychan, mu, 0);
+		if (ca != NULL)
+			result |= ca->level;
+	}
+
+	result |= chanacs_host_flags_by_user(mychan, u);
+
+	return result;
+}
+
+/* Change channel access
+ *
+ * Either mu or hostmask must be specified.
+ * Add the flags in *addflags and remove the flags in *removeflags, updating
+ * these to reflect the actual change. Only allow changes to restrictflags.
+ * Returns true if successful, false if an unallowed change was attempted.
+ * -- jilles */
+boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_t *addflags, uint32_t *removeflags, uint32_t restrictflags)
+{
+	chanacs_t *ca;
+
+	if (mychan == NULL)
+		return;
+	if (mu == NULL && hostmask == NULL)
+	{
+		slog(LG_DEBUG, "chanacs_change(): [%s] mu and hostmask both NULL", mychan->name);
+		return;
+	}
+	if (mu != NULL && hostmask != NULL)
+	{
+		slog(LG_DEBUG, "chanacs_change(): [%s] mu and hostmask both not NULL", mychan->name);
+		return;
+	}
+	if (mu != NULL)
+	{
+		ca = chanacs_find(mychan, mu, 0);
+		if (ca == NULL)
+		{
+			*removeflags = 0;
+			/* no change? */
+			if ((*addflags | *removeflags) == 0)
+				return TRUE;
+			/* attempting to add bad flag? */
+			if (~restrictflags & *addflags)
+				return FALSE;
+			chanacs_add(mychan, mu, *addflags);
+		}
+		else
+		{
+			*addflags &= ~ca->level;
+			*removeflags &= ca->level & ~*addflags;
+			/* no change? */
+			if ((*addflags | *removeflags) == 0)
+				return TRUE;
+			/* attempting to add bad flag? */
+			if (~restrictflags & *addflags)
+				return FALSE;
+			/* attempting to remove bad flag? */
+			if (~restrictflags & *removeflags)
+				return FALSE;
+			/* attempting to manipulate user with more privs? */
+			if (~restrictflags & ca->level)
+				return FALSE;
+			ca->level = (ca->level | *addflags) & ~*removeflags;
+			if (ca->level == 0)
+				chanacs_delete(mychan, mu, ca->level);
+		}
+	}
+	else /* hostmask != NULL */
+	{
+		ca = chanacs_find_host_literal(mychan, hostmask, 0);
+		if (ca == NULL)
+		{
+			*removeflags = 0;
+			/* no change? */
+			if ((*addflags | *removeflags) == 0)
+				return TRUE;
+			/* attempting to add bad flag? */
+			if (~restrictflags & *addflags)
+				return FALSE;
+			chanacs_add_host(mychan, hostmask, *addflags);
+		}
+		else
+		{
+			*addflags &= ~ca->level;
+			*removeflags &= ca->level & ~*addflags;
+			/* no change? */
+			if ((*addflags | *removeflags) == 0)
+				return TRUE;
+			/* attempting to add bad flag? */
+			if (~restrictflags & *addflags)
+				return FALSE;
+			/* attempting to remove bad flag? */
+			if (~restrictflags & *removeflags)
+				return FALSE;
+			/* attempting to manipulate user with more privs? */
+			if (~restrictflags & ca->level)
+				return FALSE;
+			ca->level = (ca->level | *addflags) & ~*removeflags;
+			if (ca->level == 0)
+				chanacs_delete_host(mychan, hostmask, ca->level);
+		}
+	}
+	return TRUE;
 }
 
 /*******************

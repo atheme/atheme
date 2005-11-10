@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FTRANSFER function.
  *
- * $Id: ftransfer.c 3663 2005-11-08 02:10:26Z jilles $
+ * $Id: ftransfer.c 3781 2005-11-10 22:14:54Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ftransfer", FALSE, _modinit, _moddeinit,
-	"$Id: ftransfer.c 3663 2005-11-08 02:10:26Z jilles $",
+	"$Id: ftransfer.c 3781 2005-11-10 22:14:54Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -79,15 +79,9 @@ static void cs_cmd_ftransfer(char *origin)
 	notice(chansvs.nick, origin, "Foundership of \2%s\2 has been transferred from \2%s\2 to \2%s\2.",
 		name, mc->founder->name, newfndr);
 
-	/* from cs_set_founder */
-	chanacs_delete(mc, mc->founder, CA_FOUNDER);
-	chanacs_delete(mc, tmu, CA_VOP);
-	chanacs_delete(mc, tmu, CA_HOP);
-	chanacs_delete(mc, tmu, CA_AOP);
-	chanacs_delete(mc, tmu, CA_SOP);
 	mc->founder = tmu;
 	mc->used = CURRTIME;
-	chanacs_add(mc, tmu, CA_FOUNDER);
+	chanacs_add(mc, tmu, CA_FOUNDER_0);
 
 	/* delete transfer metadata -- prevents a user from stealing it back */
 	metadata_delete(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder");

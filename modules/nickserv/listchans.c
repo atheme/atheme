@@ -5,7 +5,7 @@
  * This file contains code for the NickServ LISTCHANS function.
  *   -- Contains an alias "MYACCESS" for legacy users
  *
- * $Id: listchans.c 3769 2005-11-10 01:50:36Z alambert $
+ * $Id: listchans.c 3781 2005-11-10 22:14:54Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/listchans", FALSE, _modinit, _moddeinit,
-	"$Id: listchans.c 3769 2005-11-10 01:50:36Z alambert $",
+	"$Id: listchans.c 3781 2005-11-10 22:14:54Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -103,6 +103,11 @@ static void ns_cmd_listchans(char *origin)
 	{
 		ca = (chanacs_t *)n->data;
 
+		if (is_founder(ca->mychan, mu))
+			notice(nicksvs.nick, origin, "Founder of %s", ca->mychan->name);
+		if (is_successor(ca->mychan, mu))
+			notice(nicksvs.nick, origin, "Successor of %s", ca->mychan->name);
+
 		switch (ca->level)
 		{
 			case CA_VOP:
@@ -116,12 +121,6 @@ static void ns_cmd_listchans(char *origin)
 				break;
 			case CA_SOP:
 				notice(nicksvs.nick, origin, "SOP in %s", ca->mychan->name);
-				break;
-			case CA_SUCCESSOR:
-				notice(nicksvs.nick, origin, "Successor of %s", ca->mychan->name);
-				break;
-			case CA_FOUNDER:	/* technically not equiv to is_founder() */
-				notice(nicksvs.nick, origin, "Founder of %s", ca->mychan->name);
 				break;
 			default:
 				/* don't tell users they're akicked (flag +b) */

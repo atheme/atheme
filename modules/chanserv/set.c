@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3747 2005-11-09 13:42:32Z jilles $
+ * $Id: set.c 3781 2005-11-10 22:14:54Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3747 2005-11-09 13:42:32Z jilles $",
+	"$Id: set.c 3781 2005-11-10 22:14:54Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -343,16 +343,9 @@ static void cs_set_founder(char *origin, char *name, char *params)
 
 			logcommand(chansvs.me, u, CMDLOG_SET, "%s SET FOUNDER %s (completing transfer from %s)", mc->name, tmu->name, mc->founder->name);
 
-			/* delete all access of self... */
-			chanacs_delete(mc, mc->founder, CA_FOUNDER);
-			chanacs_delete(mc, tmu, CA_VOP);
-			chanacs_delete(mc, tmu, CA_HOP);
-			chanacs_delete(mc, tmu, CA_AOP);
-			chanacs_delete(mc, tmu, CA_SOP);
-
 			/* add target as founder... */
 			mc->founder = tmu;
-			chanacs_add(mc, tmu, CA_FOUNDER);
+			chanacs_add(mc, tmu, CA_FOUNDER_0);
 
 			/* delete transfer metadata */
 			metadata_delete(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder");
@@ -743,8 +736,6 @@ static void cs_set_successor(char *origin, char *name, char *params)
 		snoop("SET:SUCCESSOR:NONE: \2%s\2", mc->name);
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET SUCCESSOR NONE (was: %s)", mc->name, mc->successor->name);
 
-		chanacs_delete(mc, mc->successor, CA_SUCCESSOR);
-
 		notice(chansvs.nick, origin, "\2%s\2 is no longer the successor of \2%s\2.", mc->successor->name, mc->name);
 		LIST_FOREACH(n, mc->successor->logins.head)
 		{
@@ -775,11 +766,7 @@ static void cs_set_successor(char *origin, char *name, char *params)
 		return;
 	}
 
-	chanacs_delete(mc, mu, CA_VOP);
-	chanacs_delete(mc, mu, CA_AOP);
-	chanacs_delete(mc, mu, CA_SOP);
 	mc->successor = mu;
-	chanacs_add(mc, mu, CA_SUCCESSOR);
 
 	snoop("SET:SUCCESSOR: \2%s\2 -> \2%s\2", mc->name, mu->name);
 	logcommand(chansvs.me, u, CMDLOG_SET, "%s SET SUCCESSOR %s", mc->name, mc->successor->name);

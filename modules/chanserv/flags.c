@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 3749 2005-11-09 13:52:45Z jilles $
+ * $Id: flags.c 3781 2005-11-10 22:14:54Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 3749 2005-11-09 13:52:45Z jilles $",
+	"$Id: flags.c 3781 2005-11-10 22:14:54Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -55,6 +55,7 @@ static void cs_cmd_flags(char *origin)
 	int operoverride = 0;
 	char *channel = strtok(NULL, " ");
 	char *target = strtok(NULL, " ");
+	uint32_t addflags, removeflags, restrictflags;
 
 	if (!channel)
 	{
@@ -127,10 +128,19 @@ static void cs_cmd_flags(char *origin)
 		}
 
 		/* founder may always set flags -- jilles */
-		if (u->myuser != mc->founder && !chanacs_find(mc, u->myuser, CA_FLAGS))
+		if (is_founder(mc, u->myuser))
+			restrictflags = CA_ALL;
+		else
 		{
-			notice(chansvs.nick, origin, "You are not authorized to execute this command.");
-			return;
+			restrictflags = chanacs_user_flags(mc, u);
+			if (!(restrictflags & CA_FLAGS))
+			{
+				/* XXX may want to allow a user to
+				 * remove their own access even without +f */
+				notice(chansvs.nick, origin, "You are not authorized to execute this command.");
+				return;
+			}
+			restrictflags = allow_flags(restrictflags);
 		}
 		
 		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
@@ -142,6 +152,13 @@ static void cs_cmd_flags(char *origin)
 		if (!target || !flagstr)
 		{
 			notice(chansvs.nick, origin, "Usage: FLAGS %s [target] [flags]", channel);
+			return;
+		}
+
+		flags_make_bitmasks(flagstr, chanacs_flags, &addflags, &removeflags);
+		if (addflags == 0 && removeflags == 0)
+		{
+			notice(chansvs.nick, origin, "No valid flags given, use /%s%s HELP FLAGS for a list", ircd->uses_rcommand ? "" : "msg ", chansvs.disp);
 			return;
 		}
 
@@ -162,29 +179,27 @@ static void cs_cmd_flags(char *origin)
 		                notice(chansvs.nick, origin, "\2%s\2 is an alias for \2%s\2. Editing entry under \2%s\2.", target, md->value, tmu->name);
 		        }
 
-			if (!(ca = chanacs_find(mc, tmu, 0x0)))
-				chanacs_add(mc, tmu, flags_to_bitmask(flagstr, chanacs_flags, 0x0));
-			else
+			if (!chanacs_change(mc, tmu, NULL, &addflags, &removeflags, restrictflags))
 			{
-				ca->level = flags_to_bitmask(flagstr, chanacs_flags, ca->level);
-
-				if (ca->level == 0x0)
-					chanacs_delete(mc, tmu, ca->level);
+		                notice(chansvs.nick, origin, "You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2.", bitmask_to_flags2(addflags, removeflags, chanacs_flags), tmu->name, mc->name);
+				return;
 			}
 		}
 		else
 		{
-			if (!(ca = chanacs_find_host_literal(mc, target, 0x0)))
-				chanacs_add_host(mc, target, flags_to_bitmask(flagstr, chanacs_flags, 0x0));
-			else
+			if (!chanacs_change(mc, NULL, target, &addflags, &removeflags, restrictflags))
 			{
-				ca->level = flags_to_bitmask(flagstr, chanacs_flags, ca->level);
-
-				if (ca->level == 0x0)
-					chanacs_delete_host(mc, target, ca->level);
+		                notice(chansvs.nick, origin, "You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2.", bitmask_to_flags2(addflags, removeflags, chanacs_flags), target, mc->name);
+				return;
 			}
 		}
 
+		if ((addflags | removeflags) == 0)
+		{
+			notice(chansvs.nick, origin, "Channel access to \2%s\2 for \2%s\2 unchanged.", channel, target);
+			return;
+		}
+		flagstr = bitmask_to_flags2(addflags, removeflags, chanacs_flags);
 		notice(chansvs.nick, origin, "Flags \2%s\2 were set on \2%s\2 in \2%s\2.", flagstr, target, channel);
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s FLAGS %s %s", mc->name, target, flagstr);
 		verbose(mc, "Flags \2%s\2 were set on \2%s\2 in \2%s\2.", flagstr, target, channel);
@@ -200,6 +215,8 @@ static void cs_fcmd_flags(char *origin, char *channel)
 	myuser_t *tmu;
 	char *target = strtok(NULL, " ");
 	char *flagstr = strtok(NULL, " ");
+	uint32_t addflags, removeflags, restrictflags;
+	metadata_t *md;
 
 	if (!target || !flagstr)
 	{
@@ -215,15 +232,31 @@ static void cs_fcmd_flags(char *origin, char *channel)
 	}
 
 	/* founder may always set flags -- jilles */
-	if (u->myuser != mc->founder && !chanacs_find(mc, u->myuser, CA_FLAGS))
+	if (is_founder(mc, u->myuser))
+		restrictflags = CA_ALL;
+	else
 	{
-		notice(chansvs.nick, origin, "You are not authorized to execute this command.");
-		return;
+		restrictflags = chanacs_user_flags(mc, u);
+		if (!(restrictflags & CA_FLAGS))
+		{
+			/* XXX may want to allow a user to
+			 * remove their own access even without +f */
+			notice(chansvs.nick, origin, "You are not authorized to execute this command.");
+			return;
+		}
+		restrictflags = allow_flags(restrictflags);
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is closed.", channel);
+		return;
+	}
+
+	flags_make_bitmasks(flagstr, chanacs_flags, &addflags, &removeflags);
+	if (addflags == 0 && removeflags == 0)
+	{
+		notice(chansvs.nick, origin, "No valid flags given, use /%s%s HELP FLAGS for a list", ircd->uses_rcommand ? "" : "msg ", chansvs.disp);
 		return;
 	}
 
@@ -235,31 +268,37 @@ static void cs_fcmd_flags(char *origin, char *channel)
 			return;
 		}
 
-		if (!(ca = chanacs_find(mc, tmu, 0x0)))
-			chanacs_add(mc, tmu, flags_to_bitmask(flagstr, chanacs_flags, 0x0));
-		else
+		if ((tmu->flags & MU_ALIAS) && (md = metadata_find(tmu, METADATA_USER, "private:alias:parent")))
 		{
-			ca->level = flags_to_bitmask(flagstr, chanacs_flags, ca->level);
+			/* This shouldn't ever happen, but just in case it does... */
+			if (!(tmu = myuser_find(md->value)))
+				return;
 
-			if (ca->level == 0x0)
-				chanacs_delete(mc, tmu, ca->level);
+			notice(chansvs.nick, origin, "\2%s\2 is an alias for \2%s\2. Editing entry under \2%s\2.", target, md->value, tmu->name);
+		}
+
+		if (!chanacs_change(mc, tmu, NULL, &addflags, &removeflags, restrictflags))
+		{
+			notice(chansvs.nick, origin, "You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2.", bitmask_to_flags2(addflags, removeflags, chanacs_flags), tmu->name, mc->name);
+			return;
 		}
 	}
 	else
 	{
-		if (!(ca = chanacs_find_host_literal(mc, target, 0x0)))
-			chanacs_add_host(mc, target, flags_to_bitmask(flagstr, chanacs_flags, 0x0));
-		else
+		if (!chanacs_change(mc, NULL, target, &addflags, &removeflags, restrictflags))
 		{
-			ca->level = flags_to_bitmask(flagstr, chanacs_flags, ca->level);
-
-			if (ca->level == 0x0)
-				chanacs_delete_host(mc, target, ca->level);
+			notice(chansvs.nick, origin, "You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2.", bitmask_to_flags2(addflags, removeflags, chanacs_flags), target, mc->name);
+			return;
 		}
 	}
 
+	if ((addflags | removeflags) == 0)
+	{
+		notice(chansvs.nick, origin, "Channel access to \2%s\2 for \2%s\2 unchanged.", channel, target);
+		return;
+	}
+	flagstr = bitmask_to_flags2(addflags, removeflags, chanacs_flags);
 	notice(chansvs.nick, origin, "Flags \2%s\2 were set on \2%s\2 in \2%s\2.", flagstr, target, channel);
 	logcommand(chansvs.me, u, CMDLOG_SET, "%s FLAGS %s %s", mc->name, target, flagstr);
-	verbose(mc, "Flags \2%s\2 were set on \2%s\2 in \2%s\2.", flagstr, target, channel);
+	notice(chansvs.nick, channel, "Flags \2%s\2 were set on \2%s\2 in \2%s\2.", flagstr, target, channel);
 }
-

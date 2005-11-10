@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 3685 2005-11-09 01:07:04Z alambert $
+ * $Id: flatfile.c 3781 2005-11-10 22:14:54Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 3685 2005-11-09 01:07:04Z alambert $",
+	"$Id: flatfile.c 3781 2005-11-10 22:14:54Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -495,7 +495,8 @@ static void flatfile_db_load(void)
 						ca = chanacs_add(mc, mu, fl);
 
 					/* Do we have enough flags to be the successor? */
-					if (ca->level & CA_SUCCESSOR && !ca->mychan->successor)
+					/* XXX */
+					if ((ca->level & CA_SUCCESSOR_0) == CA_SUCCESSOR_0 && !ca->mychan->successor && ca->myuser != ca->mychan->founder)
 						ca->mychan->successor = ca->myuser;
 				}
 				else if (i == DB_SHRIKE)	/* DB_SHRIKE */
@@ -512,9 +513,9 @@ static void flatfile_db_load(void)
 					  case SHRIKE_CA_SOP:
 						  fl2 = CA_SOP;
 					  case SHRIKE_CA_SUCCESSOR:
-						  fl2 = CA_SUCCESSOR;
+						  fl2 = CA_SUCCESSOR_0;
 					  case SHRIKE_CA_FOUNDER:
-						  fl2 = CA_FOUNDER;
+						  fl2 = CA_FOUNDER_0;
 					}
 
 					if ((!mu) && (validhostmask(causer)))
@@ -522,7 +523,7 @@ static void flatfile_db_load(void)
 					else
 						ca = chanacs_add(mc, mu, fl2);
 
-					if (ca->level & CA_SUCCESSOR)
+					if ((ca->level & CA_SUCCESSOR_0) == CA_SUCCESSOR_0 && !ca->mychan->successor && ca->myuser != ca->mychan->founder)
 						ca->mychan->successor = ca->myuser;
 				}
 			}

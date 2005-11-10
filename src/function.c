@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 3757 2005-11-10 00:34:19Z jilles $
+ * $Id: function.c 3781 2005-11-10 22:14:54Z jilles $
  */
 
 #include "atheme.h"
@@ -694,9 +694,6 @@ boolean_t is_founder(mychan_t *mychan, myuser_t *myuser)
 	if (mychan->founder == myuser)
 		return TRUE;
 
-	if ((chanacs_find(mychan, myuser, CA_FOUNDER)))
-		return TRUE;
-
 	return FALSE;
 }
 
@@ -715,9 +712,6 @@ boolean_t is_successor(mychan_t *mychan, myuser_t *myuser)
 		return FALSE;
 
 	if (mychan->successor == myuser)
-		return TRUE;
-
-	if ((chanacs_find(mychan, myuser, CA_SUCCESSOR)))
 		return TRUE;
 
 	return FALSE;

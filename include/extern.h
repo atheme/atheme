@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 3767 2005-11-10 01:28:36Z jilles $
+ * $Id: extern.h 3781 2005-11-10 22:14:54Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -35,9 +35,12 @@ E CONFIGFILE *config_load(char *filename);
 E CONFIGENTRY *config_find(CONFIGENTRY *ceptr, char *name);
 
 /* flags.c */
+E void flags_make_bitmasks(const char *string, struct flags_table table[], uint32_t *addflags, uint32_t *removeflags);
 E uint32_t flags_to_bitmask(const char *, struct flags_table[], uint32_t flags);
 E char *bitmask_to_flags(uint32_t, struct flags_table[]);
+E char *bitmask_to_flags2(uint32_t, uint32_t, struct flags_table[]);
 E struct flags_table chanacs_flags[];
+E uint32_t allow_flags(uint32_t flags);
 
 /* function.c */
 E FILE *log_file;
@@ -214,10 +217,14 @@ E void chanacs_delete(mychan_t *mychan, myuser_t *myuser, uint32_t level);
 E void chanacs_delete_host(mychan_t *mychan, char *host, uint32_t level);
 E chanacs_t *chanacs_find(mychan_t *mychan, myuser_t *myuser, uint32_t level);
 E chanacs_t *chanacs_find_host(mychan_t *mychan, char *host, uint32_t level);
+E uint32_t chanacs_host_flags(mychan_t *mychan, char *host);
 E chanacs_t *chanacs_find_host_literal(mychan_t *mychan, char *host, uint32_t level);
 E chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, uint32_t level);
+E uint32_t chanacs_host_flags_by_user(mychan_t *mychan, user_t *u);
 E chanacs_t *chanacs_find_by_mask(mychan_t *mychan, char *mask, uint32_t level);
 E boolean_t chanacs_user_has_flag(mychan_t *mychan, user_t *u, uint32_t level);
+E uint32_t chanacs_user_flags(mychan_t *mychan, user_t *u);
+E boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_t *addflags, uint32_t *removeflags, uint32_t restrictflags);
 
 E void expire_check(void *arg);
 

@@ -1,3 +1,11 @@
+pfish       2005/11/10 21:49:28 UTC	(20051110-3779)
+  Log:
+  When you change something in NickServ, you change it in UserServ
+
+  Changes:	Modified:
+  +3 -8		trunk/modules/userserv/register.c (File Modified) 
+
+
 pfish       2005/11/10 20:36:06 UTC	(20051110-3777)
   Log:
   private:host:actual uses lao, not lau.

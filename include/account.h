@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 3649 2005-11-08 00:01:07Z nenolod $
+ * $Id: account.h 3781 2005-11-10 22:14:54Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -127,8 +127,18 @@ struct chanacs_
 #define CA_HOP		 (CA_VOICE | CA_HALFOP | CA_AUTOHALFOP | CA_TOPIC | CA_ACLVIEW)
 #define CA_AOP           (CA_VOICE | CA_HALFOP | CA_OP | CA_AUTOOP | CA_TOPIC | CA_ACLVIEW)
 #define CA_SOP           (CA_AOP | CA_SET | CA_REMOVE | CA_INVITE)
-#define CA_SUCCESSOR     (CA_SOP | CA_RECOVER)
-#define CA_FOUNDER       (CA_SUCCESSOR | CA_FLAGS)
+
+/* special values for founder/successor -- jilles */
+/* used to find a successor in flatfile (XXX) and in shrike
+ * flatfile conversion: */
+#define CA_SUCCESSOR_0   (CA_VOICE | CA_OP | CA_TOPIC | CA_SET | CA_REMOVE | CA_INVITE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_ACLVIEW)
+/* granted to new founder on transfer etc: */
+#define CA_FOUNDER_0     (CA_SUCCESSOR_0 | CA_FLAGS)
+/* granted to founder on new channel: */
+#define CA_INITIAL       (CA_FOUNDER_0 | CA_AUTOOP)
+
+#define CA_ALLPRIVS      (CA_VOICE | CA_AUTOVOICE | CA_OP | CA_AUTOOP | CA_TOPIC | CA_SET | CA_REMOVE | CA_INVITE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_AUTOHALFOP | CA_ACLVIEW)
+#define CA_ALL           (CA_ALLPRIVS | CA_AKICK)
 
 /* old CA_ flags */
 #define OLD_CA_AOP           (CA_VOICE | CA_OP | CA_AUTOOP | CA_TOPIC)
