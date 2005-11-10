@@ -4,7 +4,7 @@
  *
  * XMLRPC channel management functions.
  *
- * $Id: channel.c 3755 2005-11-09 23:48:04Z jilles $
+ * $Id: channel.c 3759 2005-11-10 00:39:39Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/channel", FALSE, _modinit, _moddeinit,
-	"$Id: channel.c 3755 2005-11-09 23:48:04Z jilles $",
+	"$Id: channel.c 3759 2005-11-10 00:39:39Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -114,6 +114,8 @@ static int channel_register(void *conn, int parc, char *parv[])
 	xmlrpc_string(buf, "Registration successful.");
 	xmlrpc_send(1, buf);
 
+	logcommand_external(chansvs.me, "xmlrpc", conn, mu, CMDLOG_REGISTER, "%s REGISTER", mc->name);
+
 	hook_call_event("channel_register", mc);
 
 	return 0;
@@ -191,6 +193,8 @@ static int do_metadata_set(void *conn, int parc, char *parv[])
 
 	metadata_add(mc, METADATA_CHANNEL, parv[3], parv[4]);
 
+	logcommand_external(chansvs.me, "xmlrpc", conn, mu, CMDLOG_SET, "%s SET PROPERTY %s to %s", mc->name, parv[3], parv[4]);
+
 	xmlrpc_string(buf, "Operation was successful.");
 	xmlrpc_send(1, buf);
 	return 0;
@@ -266,6 +270,8 @@ static int do_metadata_delete(void *conn, int parc, char *parv[])
 
 	metadata_delete(mc, METADATA_CHANNEL, parv[3]);
 
+	logcommand_external(chansvs.me, "xmlrpc", conn, mu, CMDLOG_SET, "%s SET PROPERTY %s (deleted)", mc->name, parv[3]);
+
 	xmlrpc_string(buf, "Operation was successful.");
 	xmlrpc_send(1, buf);
 	return 0;
@@ -318,6 +324,8 @@ static int do_metadata_get(void *conn, int parc, char *parv[])
 		xmlrpc_generic_error(4, "Key does not exist.");
 		return 0;
 	}
+
+	logcommand_external(chansvs.me, "xmlrpc", conn, NULL, CMDLOG_GET, "%s GET PROPERTY %s", mc->name, parv[3]);
 
 	xmlrpc_string(buf, md->value);
 	xmlrpc_send(1, buf);

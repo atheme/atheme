@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 3755 2005-11-09 23:48:04Z jilles $
+ * $Id: account.c 3759 2005-11-10 00:39:39Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 3755 2005-11-09 23:48:04Z jilles $",
+	"$Id: account.c 3759 2005-11-10 00:39:39Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -165,6 +165,8 @@ static int account_register(void *conn, int parc, char *parv[])
 	else
 		xmlrpc_string(buf, "Registration successful.");
 
+	logcommand_external(using_nickserv ? nicksvs.me : usersvs.me, "xmlrpc", conn, mu, CMDLOG_REGISTER, "REGISTER to %s", mu->email);
+
 	xmlrpc_send(1, buf);
 	return 0;
 }
@@ -229,12 +231,14 @@ static int account_verify(void *conn, int parc, char *parv[])
 			metadata_delete(mu, METADATA_USER, "private:verify:register:key");
 			metadata_delete(mu, METADATA_USER, "private:verify:register:timestamp");
 
+			logcommand_external(using_nickserv ? nicksvs.me : usersvs.me, "xmlrpc", conn, mu, CMDLOG_SET, "VERIFY REGISTER (email: %s)", mu->email);
 			xmlrpc_string(buf, "Registration verification was successful.");
 			xmlrpc_send(1, buf);
 			return 0;
 		}
 
 		snoop("REGISTER:VF: \2%s\2 via xmlrpc", mu->email);
+		logcommand_external(using_nickserv ? nicksvs.me : usersvs.me, "xmlrpc", conn, mu, CMDLOG_SET, "failed VERIFY REGISTER (invalid key)");
 		xmlrpc_generic_error(3, "Invalid key for this operation.");
 		return 0;
 	}
@@ -253,6 +257,7 @@ static int account_verify(void *conn, int parc, char *parv[])
 			strlcpy(mu->email, md->value, EMAILLEN);
 
 			snoop("SET:EMAIL:VS: \2%s\2 via xmlrpc", mu->email);
+			logcommand_external(using_nickserv ? nicksvs.me : usersvs.me, "xmlrpc", conn, mu, CMDLOG_SET, "VERIFY EMAILCHG (email: %s)", mu->email);
 
 			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:key");
 			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:newemail");
@@ -265,6 +270,7 @@ static int account_verify(void *conn, int parc, char *parv[])
                 }
 
 		snoop("REGISTER:VF: \2%s\2 via xmlrpc", mu->email);
+		logcommand_external(using_nickserv ? nicksvs.me : usersvs.me, "xmlrpc", conn, mu, CMDLOG_SET, "failed VERIFY EMAILCHG (invalid key)");
 		xmlrpc_generic_error(3, "Invalid key for this operation.");
 
 		return 0;
@@ -314,6 +320,7 @@ static int do_login(void *conn, int parc, char *parv[])
 
 	if (!verify_password(mu, parv[1]))
 	{
+		logcommand_external(using_nickserv ? nicksvs.me : usersvs.me, "xmlrpc", conn, NULL, CMDLOG_LOGIN, "failed LOGIN to %s (bad password)", mu->name);
 		xmlrpc_generic_error(2, "The password is not valid for this account.");
 		return 0;
 	}
@@ -321,6 +328,8 @@ static int do_login(void *conn, int parc, char *parv[])
 	mu->lastlogin = CURRTIME;
 
 	ac = authcookie_create(mu);
+
+	logcommand_external(using_nickserv ? nicksvs.me : usersvs.me, "xmlrpc", conn, mu, CMDLOG_LOGIN, "LOGIN");
 
 	xmlrpc_string(buf, ac->ticket);
 	xmlrpc_send(1, buf);
@@ -373,6 +382,8 @@ static int do_logout(void *conn, int parc, char *parv[])
                 xmlrpc_generic_error(1, "Invalid authcookie for this account.");
                 return 0;
         }
+
+	logcommand_external(using_nickserv ? nicksvs.me : usersvs.me, "xmlrpc", conn, mu, CMDLOG_LOGIN, "LOGOUT");
 
         authcookie_destroy(ac);
 
@@ -438,6 +449,8 @@ static int do_metadata_set(void *conn, int parc, char *parv[])
 
 	metadata_add(mu, METADATA_USER, parv[2], parv[3]);
 
+	logcommand_external(using_nickserv ? nicksvs.me : usersvs.me, "xmlrpc", conn, mu, CMDLOG_SET, "SET PROPERTY %s to %s", parv[2], parv[3]);
+
 	xmlrpc_string(buf, "Operation was successful.");
 	xmlrpc_send(1, buf);
 	return 0;
@@ -499,6 +512,8 @@ static int do_metadata_delete(void *conn, int parc, char *parv[])
 
 	metadata_delete(mu, METADATA_USER, parv[2]);
 
+	logcommand_external(using_nickserv ? nicksvs.me : usersvs.me, "xmlrpc", conn, mu, CMDLOG_SET, "SET PROPERTY %s (deleted)", parv[2]);
+
 	xmlrpc_string(buf, "Operation was successful.");
 	xmlrpc_send(1, buf);
 	return 0;
@@ -551,6 +566,8 @@ static int do_metadata_get(void *conn, int parc, char *parv[])
 		xmlrpc_generic_error(4, "Key does not exist.");
 		return 0;
 	}
+
+	logcommand_external(using_nickserv ? nicksvs.me : usersvs.me, "xmlrpc", conn, NULL, CMDLOG_GET, "%s GET PROPERTY %s", mu->name, parv[1]);
 
 	xmlrpc_string(buf, md->value);
 	xmlrpc_send(1, buf);
