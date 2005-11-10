@@ -1,3 +1,15 @@
+jilles      2005/11/10 00:47:19 UTC	(20051110-3761)
+  Log:
+  Fix too few arguments being required in
+  atheme.account.metadata.get and atheme.channel.register
+  and too many in atheme.channel.metadata.delete.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/xmlrpc/account.c (File Modified) 
+  +3 -3		trunk/modules/xmlrpc/channel.c (File Modified) 
+
+
 jilles      2005/11/10 00:39:39 UTC	(20051110-3759)
   Log:
   Add logging to xmlrpc, much in the same style
