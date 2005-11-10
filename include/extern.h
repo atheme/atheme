@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 3781 2005-11-10 22:14:54Z jilles $
+ * $Id: extern.h 3783 2005-11-10 22:30:54Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -225,6 +225,7 @@ E chanacs_t *chanacs_find_by_mask(mychan_t *mychan, char *mask, uint32_t level);
 E boolean_t chanacs_user_has_flag(mychan_t *mychan, user_t *u, uint32_t level);
 E uint32_t chanacs_user_flags(mychan_t *mychan, user_t *u);
 E boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_t *addflags, uint32_t *removeflags, uint32_t restrictflags);
+E boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_t addflags, uint32_t removeflags, uint32_t restrictflags);
 
 E void expire_check(void *arg);
 

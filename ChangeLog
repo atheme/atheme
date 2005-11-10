@@ -1,3 +1,41 @@
+jilles      2005/11/10 22:14:54 UTC	(20051110-3781)
+  Log:
+  - remove CA_SUCCESSOR and CA_FOUNDER flag sets granting
+    successor/founder privs
+  - overhaul /cs flags, now denies non-founders with +f
+    setting/clearing flags they don't have themselves or
+    messing with more privileged people, and shows the
+    exact changes done
+  - add boolean_t chanacs_change() to change channel access,
+    adding/removing certain flags to a user or hostmask
+    while not trespassing outside given flags and returning
+    the actual change
+  - add chanacs_host_flags(), chanacs_host_flags_by_user()
+    and chanacs_user_flags() to get all flags set on a
+    hostmask or user. (chanacs_user_flags() checks both
+    account and hostmask access.)
+  - use is_founder()/is_successor() in ns/us listchans
+    still broken if they have no flags at all
+  - don't remove any flags on founder transfer; don't grant
+    the new founder autoop if they didn't have it already
+  
+
+  Changes:	Modified:
+  +5 -4		trunk/backend/flatfile.c (File Modified) 
+  +12 -2	trunk/include/account.h (File Modified) 
+  +7 -0		trunk/include/extern.h (File Modified) 
+  +74 -35	trunk/modules/chanserv/flags.c (File Modified) 
+  +1 -7		trunk/modules/chanserv/ftransfer.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/register.c (File Modified) 
+  +1 -14	trunk/modules/chanserv/set.c (File Modified) 
+  +5 -6		trunk/modules/nickserv/listchans.c (File Modified) 
+  +5 -6		trunk/modules/userserv/listchans.c (File Modified) 
+  +1 -1		trunk/modules/xmlrpc/channel.c (File Modified) 
+  +109 -4	trunk/src/flags.c (File Modified) 
+  +0 -6		trunk/src/function.c (File Modified) 
+  +181 -4	trunk/src/node.c (File Modified) 
+
+
 pfish       2005/11/10 21:49:28 UTC	(20051110-3779)
   Log:
   When you change something in NickServ, you change it in UserServ

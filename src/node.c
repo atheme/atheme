@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3781 2005-11-10 22:14:54Z jilles $
+ * $Id: node.c 3783 2005-11-10 22:30:54Z jilles $
  */
 
 #include "atheme.h"
@@ -1861,6 +1861,16 @@ boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_
 		}
 	}
 	return TRUE;
+}
+
+/* version that doesn't return the changes made */
+boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_t addflags, uint32_t removeflags, uint32_t restrictflags)
+{
+	uint32_t a, r;
+
+	a = addflags;
+	r = removeflags;
+	return chanacs_change(mychan, mu, hostmask, &a, &r, restrictflags);
 }
 
 /*******************
