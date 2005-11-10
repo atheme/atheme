@@ -1,3 +1,12 @@
+jilles      2005/11/10 23:43:13 UTC	(20051110-3791)
+  Log:
+  Update /cs flags help file.
+  
+
+  Changes:	Modified:
+  +14 -5	trunk/help/cservice/flags (File Modified) 
+
+
 jilles      2005/11/10 23:33:27 UTC	(20051110-3789)
   Log:
   - Refuse akick add if the given account or hostmask

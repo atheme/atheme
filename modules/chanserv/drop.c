@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService DROP function.
  *
- * $Id: drop.c 3663 2005-11-08 02:10:26Z jilles $
+ * $Id: drop.c 3793 2005-11-10 23:45:29Z jilles $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 3663 2005-11-08 02:10:26Z jilles $",
+	"$Id: drop.c 3793 2005-11-10 23:45:29Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_cmd_drop(char *origin);
 
-command_t cs_drop = { "DROP", "Drops a services registration.",
+command_t cs_drop = { "DROP", "Drops a channel registration.",
                         AC_NONE, cs_cmd_drop };
 
 list_t *cs_cmdtree;
