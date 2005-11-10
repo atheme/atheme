@@ -1,3 +1,11 @@
+alambert    2005/11/10 03:23:33 UTC	(20051110-3771)
+  Log:
+  myuser_delete(): actually run the for loop...
+
+  Changes:	Modified:
+  +1 -1		trunk/src/node.c (File Modified) 
+
+
 alambert    2005/11/10 01:50:36 UTC	(20051110-3769)
   Log:
   LISTCHANS: note it's not *really* equiv to is_founder() as we don't check mc->founder

@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3771 2005-11-10 03:23:33Z alambert $
+ * $Id: node.c 3773 2005-11-10 03:33:30Z alambert $
  */
 
 #include "atheme.h"
@@ -1139,7 +1139,7 @@ void myuser_delete(char *name)
 	user_t *u;
 	node_t *n, *tn, *n2;
 	metadata_t *md;
-	uint32_t i, tcnt;
+	uint32_t i, j, tcnt;
 
 	if (!mu)
 	{
@@ -1159,51 +1159,62 @@ void myuser_delete(char *name)
 		node_free(n);
 	}
 	
-	/* kill all their channels */
-	LIST_FOREACH_SAFE(n, tn, mu->chanacs.head)
+	/* kill all their channels
+	 *
+	 * We CANNOT do this based soley on chanacs!
+	 * A founder could remove all of his flags.
+	 */
+	for (i = 0; i < HASHSIZE; i++)
 	{
-		mc = (mychan_t *)n->data;
-
-		/* attempt succession */
-		if (mc->founder == mu && mc->successor && mc->successor != mu)
+		LIST_FOREACH_SAFE(n, tn, mclist[i].head)
 		{
-			tcnt = 0;
-			
-			LIST_FOREACH(n2, mc->successor->chanacs.head)
-			{
-				tmc = (mychan_t *)n2->data;
+			mc = (mychan_t *)n->data;
 
-				if (is_founder(tmc, mc->successor))
-					tcnt++;
-			}
-			
-			if ( (tcnt < me.maxchans) || is_sra(mc->successor) )
+			/* attempt succession */
+			if (mc->founder == mu && mc->successor && mc->successor != mu)
 			{
-				snoop("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2", mc->successor->name, mc->name, mc->founder->name);
+				tcnt = 0;
+
+				/* AARGH can't do this based on chanacs either */
+				for (j = 0; j < HASHSIZE; j++)
+				{
+					LIST_FOREACH(n2, mclist[j].head)
+					{
+						tmc = (mychan_t *)n2->data;
+
+						if (is_founder(tmc, mc->successor))
+							tcnt++;
+					}
+				}
+			
+				if ( (tcnt < me.maxchans) || is_sra(mc->successor) )
+				{
+					snoop("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2", mc->successor->name, mc->name, mc->founder->name);
 	
-				chanacs_delete(mc, mc->successor, CA_SUCCESSOR);
-				chanacs_add(mc, mc->successor, CA_FOUNDER);
-				mc->founder = mc->successor;
-				mc->successor = NULL;
+					chanacs_delete(mc, mc->successor, CA_SUCCESSOR);
+					chanacs_add(mc, mc->successor, CA_FOUNDER);
+					mc->founder = mc->successor;
+					mc->successor = NULL;
 	
-				myuser_notice(chansvs.nick, mc->founder, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, mc->founder->name);
+					myuser_notice(chansvs.nick, mc->founder, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, mc->founder->name);
 				
-				continue;
+					continue;
+				}
 			}
-		}
 		
-		/* no successor or it failed */
-		if (mc->founder == mu)
-		{
-			snoop("DELETE: \2%s\2 from \2%s\2", mc->name, mu->name);
+			/* no successor or it failed */
+			if (mc->founder == mu)
+			{
+				snoop("DELETE: \2%s\2 from \2%s\2", mc->name, mu->name);
 
-			if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
-				part(mc->name, chansvs.nick);
+				if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
+					part(mc->name, chansvs.nick);
 
-			mychan_delete(mc->name);
+				mychan_delete(mc->name);
+			}
 		}
 	}
-
+	
 	/* remove their chanacs shiz */
 	LIST_FOREACH_SAFE(n, tn, mu->chanacs.head)
 	{
