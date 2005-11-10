@@ -1,3 +1,14 @@
+jilles      2005/11/10 23:33:27 UTC	(20051110-3789)
+  Log:
+  - Refuse akick add if the given account or hostmask
+    already has flags.
+  - Make akick more helpful in case of existing entries
+  
+
+  Changes:	Modified:
+  +57 -21	trunk/modules/chanserv/akick.c (File Modified) 
+
+
 jilles      2005/11/10 22:59:00 UTC	(20051110-3787)
   Log:
   Require +rf instead of just +f to use akick add/del,

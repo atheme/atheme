@@ -4,30 +4,39 @@ The FLAGS command allows for channel privilege granting/removal
 on a more specific, non-generalized level. It supports both
 nicknames and hostmasks as targets.
 
+If you are not the founder, you may only manipulate flags you
+have yourself, and may not edit users that have flags you
+don't have. For this purpose, +v grants +V, +h grants +H,
++o grants +O and +r grants +b.
+
 When given only the channel argument, a listing of permissions
 granted to users will be displayed.
 
-Syntax: FLAGS <#channel> [nickname|hostmask] [flags]
+Syntax: FLAGS <#channel> [nickname|hostmask flags]
 
 Permissions:
     +v - Enables use of the voice/devoice commands.
     +V - Enables automatic voicing.
+    +h - Enables use of the halfop/dehalfop commands.
+    +H - Enables automatic halfop.
     +o - Enables use of the op/deop commands.
     +O - Enables automatic op.
     +s - Enables use of the set command.
     +i - Enables use of the invite command.
-    +r - Enables use of the kick, ban, akick and kickban commands.
+    +r - Enables use of the kick, ban, and kickban commands.
     +R - Enables use of the recover command.
     +f - Enables use of the flags command.
     +t - Enables use of the topic and topicappend commands.
-    +b - Enables automatic kickban.
     +A - Enables viewing of channel access lists.
-    +* - All of the above.
+    +b - Enables automatic kickban.
+
+The special permission +* adds all permissions except +b.
+The special permission -* removes all permissions including +b.
 
 Examples:
     /msg &nick& FLAGS #foo
     /msg &nick& FLAGS #foo foo!*@bar.com +vV
-    /msg &nick& FLAGS #foo foo!*@bar.com -vV
+    /msg &nick& FLAGS #foo foo!*@bar.com -V+oO
     /msg &nick& FLAGS #foo foo!*@bar.com -*
     /msg &nick& FLAGS #foo foo +oOtsi
     /msg &nick& FLAGS #foo TroubleUser!*@*.troubleisp.net +b
