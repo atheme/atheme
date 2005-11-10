@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 3787 2005-11-10 22:59:00Z jilles $
+ * $Id: akick.c 3789 2005-11-10 23:33:27Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@ static void cs_fcmd_akick(char *origin, char *chan);
 DECLARE_MODULE_V1
 (
 	"chanserv/akick", FALSE, _modinit, _moddeinit,
-	"$Id: akick.c 3787 2005-11-10 22:59:00Z jilles $",
+	"$Id: akick.c 3789 2005-11-10 23:33:27Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -118,14 +118,27 @@ void cs_cmd_akick(char *origin)
 				return;
 			}
 
-			if (chanacs_find_host(mc, uname, CA_AKICK))
+			uname = collapse(uname);
+
+			ca = chanacs_find_host_literal(mc, uname, 0);
+			if (ca != NULL)
 			{
-				notice(chansvs.nick, origin, "\2%s\2 is already on the AKICK list for \2%s\2", uname, mc->name);
+				if (ca->level & CA_AKICK)
+					notice(chansvs.nick, origin, "\2%s\2 is already on the AKICK list for \2%s\2", uname, mc->name);
+				else
+					notice(chansvs.nick, origin, "\2%s\2 already has flags \2%s\2 on \2%s\2", uname, bitmask_to_flags(ca->level, chanacs_flags), mc->name);
 				return;
 			}
 
-			uname = collapse(uname);
+			ca = chanacs_find_host(mc, uname, CA_AKICK);
+			if (ca != NULL)
+			{
+				notice(chansvs.nick, origin, "The more general mask \2%s\2 is already on the AKICK list for \2%s\2", ca->host, mc->name);
+				return;
+			}
 
+			/* ok to use chanacs_add_host() here, already
+			 * verified it doesn't exist yet */
 			ca2 = chanacs_add_host(mc, uname, CA_AKICK);
 
 			hook_call_event("channel_akick_add", ca2);
@@ -141,9 +154,10 @@ void cs_cmd_akick(char *origin)
 		{
 			if ((ca = chanacs_find(mc, mu, 0x0)))
 			{
-				ca->level = CA_AKICK;
-				notice(chansvs.nick, origin, "\2%s\2 has been added to the AKICK list for \2%s\2.", mu->name, mc->name);
-				verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", u->nick, mu->name);
+				if (ca->level & CA_AKICK)
+					notice(chansvs.nick, origin, "\2%s\2 is already on the AKICK list for \2%s\2", mu->name, mc->name);
+				else
+					notice(chansvs.nick, origin, "\2%s\2 already has flags \2%s\2 on \2%s\2", mu->name, bitmask_to_flags(ca->level, chanacs_flags), mc->name);
 				return;
 			}
 
@@ -177,9 +191,13 @@ void cs_cmd_akick(char *origin)
 				return;
 			}
 
-			if (!chanacs_find_host(mc, uname, CA_AKICK))
+			if (!chanacs_find_host_literal(mc, uname, CA_AKICK))
 			{
-				notice(chansvs.nick, origin, "\2%s\2 is not on the AKICK list for \2%s\2.", uname, mc->name);
+				ca = chanacs_find_host(mc, uname, CA_AKICK);
+				if (ca != NULL)
+					notice(chansvs.nick, origin, "\2%s\2 is not on the AKICK list for \2%s\2, however \2%s\2 is.", uname, mc->name, ca->host);
+				else
+					notice(chansvs.nick, origin, "\2%s\2 is not on the AKICK list for \2%s\2.", uname, mc->name);
 				return;
 			}
 
@@ -310,19 +328,32 @@ void cs_fcmd_akick(char *origin, char *chan)
 				return;
 			}
 
-			if (chanacs_find_host(mc, uname, CA_AKICK))
+			uname = collapse(uname);
+
+			ca = chanacs_find_host_literal(mc, uname, 0);
+			if (ca != NULL)
 			{
-				notice(chansvs.nick, origin, "\2%s\2 is already on the AKICK list for \2%s\2", uname, mc->name);
+				if (ca->level & CA_AKICK)
+					notice(chansvs.nick, origin, "\2%s\2 is already on the AKICK list for \2%s\2", uname, mc->name);
+				else
+					notice(chansvs.nick, origin, "\2%s\2 already has flags \2%s\2 on \2%s\2", uname, bitmask_to_flags(ca->level, chanacs_flags), mc->name);
 				return;
 			}
 
-			uname = collapse(uname);
+			ca = chanacs_find_host(mc, uname, CA_AKICK);
+			if (ca != NULL)
+			{
+				notice(chansvs.nick, origin, "The more general mask \2%s\2 is already on the AKICK list for \2%s\2", ca->host, mc->name);
+				return;
+			}
 
+			/* ok to use chanacs_add_host() here, already
+			 * verified it doesn't exist yet */
 			ca2 = chanacs_add_host(mc, uname, CA_AKICK);
 
 			hook_call_event("channel_akick_add", ca2);
 
-			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", u->nick, uname);
+			notice(chansvs.nick, mc->name, "\2%s\2 added \2%s\2 to the AKICK list.", u->nick, uname);
 			logcommand(chansvs.me, u, CMDLOG_SET, "%s AKICK ADD %s", mc->name, uname);
 
 			notice(chansvs.nick, origin, "\2%s\2 has been added to the AKICK list for \2%s\2.", uname, mc->name);
@@ -333,9 +364,10 @@ void cs_fcmd_akick(char *origin, char *chan)
 		{
 			if ((ca = chanacs_find(mc, mu, 0x0)))
 			{
-				ca->level = CA_AKICK;
-				notice(chansvs.nick, origin, "\2%s\2 has been added to the AKICK list for \2%s\2.", mu->name, mc->name);
-				verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", u->nick, mu->name);
+				if (ca->level & CA_AKICK)
+					notice(chansvs.nick, origin, "\2%s\2 is already on the AKICK list for \2%s\2", mu->name, mc->name);
+				else
+					notice(chansvs.nick, origin, "\2%s\2 already has flags \2%s\2 on \2%s\2", mu->name, bitmask_to_flags(ca->level, chanacs_flags), mc->name);
 				return;
 			}
 
@@ -344,9 +376,9 @@ void cs_fcmd_akick(char *origin, char *chan)
 			hook_call_event("channel_akick_add", ca2);
 
 			notice(chansvs.nick, origin, "\2%s\2 has been added to the AKICK list for \2%s\2.", mu->name, mc->name);
-			logcommand(chansvs.me, u, CMDLOG_SET, "%s AKICK ADD %s", mc->name, mu->name);
 
-			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", u->nick, mu->name);
+			notice(chansvs.nick, mc->name, "\2%s\2 added \2%s\2 to the AKICK list.", u->nick, mu->name);
+			logcommand(chansvs.me, u, CMDLOG_SET, "%s AKICK ADD %s", mc->name, mu->name);
 
 			return;
 		}
@@ -369,15 +401,19 @@ void cs_fcmd_akick(char *origin, char *chan)
 				return;
 			}
 
-			if (!chanacs_find_host(mc, uname, CA_AKICK))
+			if (!chanacs_find_host_literal(mc, uname, CA_AKICK))
 			{
-				notice(chansvs.nick, origin, "\2%s\2 is not on the AKICK list for \2%s\2.", uname, mc->name);
+				ca = chanacs_find_host(mc, uname, CA_AKICK);
+				if (ca != NULL)
+					notice(chansvs.nick, origin, "\2%s\2 is not on the AKICK list for \2%s\2, however \2%s\2 is.", uname, mc->name, ca->host);
+				else
+					notice(chansvs.nick, origin, "\2%s\2 is not on the AKICK list for \2%s\2.", uname, mc->name);
 				return;
 			}
 
 			chanacs_delete_host(mc, uname, CA_AKICK);
 
-			verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", u->nick, uname);
+			notice(chansvs.nick, mc->name, "\2%s\2 removed \2%s\2 from the AKICK list.", u->nick, uname);
 			logcommand(chansvs.me, u, CMDLOG_SET, "%s AKICK DEL %s", mc->name, uname);
 
 			notice(chansvs.nick, origin, "\2%s\2 has been removed from the AKICK list for \2%s\2.", uname, mc->name);
@@ -396,7 +432,7 @@ void cs_fcmd_akick(char *origin, char *chan)
 		notice(chansvs.nick, origin, "\2%s\2 has been removed from the AKICK list for \2%s\2.", mu->name, mc->name);
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s AKICK DEL %s", mc->name, mu->name);
 
-		verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", u->nick, mu->name);
+		notice(chansvs.nick, mc->name, "\2%s\2 removed \2%s\2 from the AKICK list.", u->nick, mu->name);
 
 		return;
 	}
