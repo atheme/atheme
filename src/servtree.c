@@ -4,13 +4,19 @@
  *
  * Services binary tree manipulation. (add_service, del_service, et al.)
  *
- * $Id: servtree.c 3289 2005-10-30 20:37:14Z jilles $
+ * $Id: servtree.c 3767 2005-11-10 01:28:36Z jilles $
  */
 
 #include "atheme.h"
 
 list_t services[HASHSIZE];
 static BlockHeap *service_heap;
+
+static void dummy_handler(char *origin, uint8_t parc, char **parv);
+
+static void dummy_handler(char *origin, uint8_t parc, char **parv)
+{
+}
 
 void servtree_init(void)
 {
@@ -65,6 +71,7 @@ service_t *add_service(char *name, char *user, char *host, char *real, void (*ha
 	sptr->hash = SHASH((unsigned char *)sptr->name);
 	sptr->node = node_create();
 	sptr->handler = handler;
+	sptr->notice_handler = dummy_handler;
 
 	sptr->me = user_add(name, user, host, NULL, NULL, sptr->uid, real, me.me);
 	sptr->me->flags |= UF_IRCOP;

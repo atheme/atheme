@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: asuka.c 3565 2005-11-06 14:17:51Z jilles $
+ * $Id: asuka.c 3767 2005-11-10 01:28:36Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 3565 2005-11-06 14:17:51Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 3767 2005-11-10 01:28:36Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -363,7 +363,15 @@ static void m_privmsg(char *origin, uint8_t parc, char *parv[])
 	if (parc != 2)
 		return;
 
-	handle_privmsg(origin, parv[0], parv[1]);
+	handle_message(origin, parv[0], FALSE, parv[1]);
+}
+
+static void m_notice(char *origin, uint8_t parc, char *parv[])
+{
+	if (parc != 2)
+		return;
+
+	handle_message(origin, parv[0], TRUE, parv[1]);
 }
 
 static void m_create(char *origin, uint8_t parc, char *parv[])
@@ -987,7 +995,7 @@ void _modinit(module_t * m)
 	pcommand_add("G", m_ping);
 	pcommand_add("Z", m_pong);
 	pcommand_add("P", m_privmsg);
-	pcommand_add("O", m_privmsg);
+	pcommand_add("O", m_notice);
 	pcommand_add("C", m_create);
 	pcommand_add("J", m_join);
 	pcommand_add("EB", m_eos);

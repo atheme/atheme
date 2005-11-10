@@ -4,7 +4,7 @@
  *
  * Headers for service selection tree.
  *
- * $Id: servtree.h 3143 2005-10-23 00:45:16Z jilles $
+ * $Id: servtree.h 3767 2005-11-10 01:28:36Z jilles $
  */
 
 #ifndef SERVTREE_H
@@ -23,6 +23,7 @@ struct service_ {
 	user_t *me;
 
 	void (*handler)(char *, uint8_t, char **);
+	void (*notice_handler)(char *, uint8_t, char **);
 };
 
 typedef struct service_ service_t;

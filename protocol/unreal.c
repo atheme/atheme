@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 3565 2005-11-06 14:17:51Z jilles $
+ * $Id: unreal.c 3767 2005-11-10 01:28:36Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 3565 2005-11-06 14:17:51Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 3767 2005-11-10 01:28:36Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -366,7 +366,15 @@ static void m_privmsg(char *origin, uint8_t parc, char *parv[])
 	if (parc != 2)
 		return;
 
-	handle_privmsg(origin, parv[0], parv[1]);
+	handle_message(origin, parv[0], FALSE, parv[1]);
+}
+
+static void m_notice(char *origin, uint8_t parc, char *parv[])
+{
+	if (parc != 2)
+		return;
+
+	handle_message(origin, parv[0], TRUE, parv[1]);
 }
 
 static void m_sjoin(char *origin, uint8_t parc, char *parv[])
@@ -825,7 +833,7 @@ void _modinit(module_t * m)
 	pcommand_add("PING", m_ping);
 	pcommand_add("PONG", m_pong);
 	pcommand_add("PRIVMSG", m_privmsg);
-	pcommand_add("NOTICE", m_privmsg);
+	pcommand_add("NOTICE", m_notice);
 	pcommand_add("SJOIN", m_sjoin);
 	pcommand_add("PART", m_part);
 	pcommand_add("NICK", m_nick);
@@ -861,7 +869,7 @@ void _modinit(module_t * m)
 	pcommand_add("8", m_ping);
 	pcommand_add("9", m_pong);
 	pcommand_add("!", m_privmsg);
-	pcommand_add("B", m_privmsg);	/* same net result */
+	pcommand_add("B", m_notice);
 	pcommand_add("~", m_sjoin);
 	pcommand_add("D", m_part);
 	pcommand_add("&", m_nick);

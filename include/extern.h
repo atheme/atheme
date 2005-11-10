@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 3757 2005-11-10 00:34:19Z jilles $
+ * $Id: extern.h 3767 2005-11-10 01:28:36Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -289,7 +289,7 @@ E void handle_info(char *);
 E void handle_stats(char *, char);
 E void handle_whois(char *, char *);
 E void handle_trace(char *, char *, char *);
-E void handle_privmsg(char *, char *, char *);
+E void handle_message(char *, char *, boolean_t, char *);
 E void handle_topic(channel_t *, char *, time_t, char *);
 E void handle_kill(char *, char *, char *);
 E int floodcheck(user_t *, user_t *);

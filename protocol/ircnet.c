@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 3439 2005-11-03 23:24:58Z jilles $
+ * $Id: ircnet.c 3767 2005-11-10 01:28:36Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 3439 2005-11-03 23:24:58Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 3767 2005-11-10 01:28:36Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -388,7 +388,15 @@ static void m_privmsg(char *origin, uint8_t parc, char *parv[])
 	if (parc != 2)
 		return;
 
-	handle_privmsg(origin, parv[0], parv[1]);
+	handle_message(origin, parv[0], FALSE, parv[1]);
+}
+
+static void m_notice(char *origin, uint8_t parc, char *parv[])
+{
+	if (parc != 2)
+		return;
+
+	handle_message(origin, parv[0], TRUE, parv[1]);
 }
 
 static void m_njoin(char *origin, uint8_t parc, char *parv[])
@@ -684,7 +692,7 @@ void _modinit(module_t * m)
 	pcommand_add("PING", m_ping);
 	pcommand_add("PONG", m_pong);
 	pcommand_add("PRIVMSG", m_privmsg);
-	pcommand_add("NOTICE", m_privmsg);
+	pcommand_add("NOTICE", m_notice);
 	pcommand_add("NJOIN", m_njoin);
 	pcommand_add("PART", m_part);
 	pcommand_add("NICK", m_nick);

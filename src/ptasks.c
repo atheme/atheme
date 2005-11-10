@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 3519 2005-11-06 03:02:04Z alambert $
+ * $Id: ptasks.c 3767 2005-11-10 01:28:36Z jilles $
  */
 
 #include "atheme.h"
@@ -234,7 +234,7 @@ void handle_trace(char *origin, char *target, char *dest)
 	numeric_sts(me.name, 262, CLIENT_NAME(u), "%s :End of TRACE", target);
 }
 
-void handle_privmsg(char *origin, char *target, char *message)
+void handle_message(char *origin, char *target, boolean_t is_notice, char *message)
 {
 	user_t *u;
 	user_t *t;
@@ -273,7 +273,7 @@ void handle_privmsg(char *origin, char *target, char *message)
 		if (t != NULL && *target != '#' && floodcheck(u, t))
 			return;
 
-		if (config_options.secure && irccasecmp(target, sptr->disp))
+		if (!is_notice && config_options.secure && irccasecmp(target, sptr->disp))
 		{
 			notice(t->nick, u->nick, "For security reasons, \2/msg %s\2 has been disabled."
 					" Use \2/%s%s <command>\2 to send a command.",
@@ -284,7 +284,10 @@ void handle_privmsg(char *origin, char *target, char *message)
 		vec[0] = target;
 		vec[1] = message;
 		vec[2] = NULL;
-		sptr->handler(u->nick, 2, vec);
+		if (is_notice)
+			sptr->notice_handler(u->nick, 2, vec);
+		else
+			sptr->handler(u->nick, 2, vec);
 	}
 }
 

@@ -1,3 +1,11 @@
+alambert    2005/11/10 00:58:37 UTC	(20051110-3765)
+  Log:
+  XMLRPC account.login: bail if the account is frozen. Reported by jilles.
+
+  Changes:	Modified:
+  +8 -0		trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 alambert    2005/11/10 00:55:02 UTC	(20051110-3763)
   Log:
   DROP: alert the user if password is not specified. reported by matt.

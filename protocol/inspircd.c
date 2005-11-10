@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: inspircd.c 3565 2005-11-06 14:17:51Z jilles $
+ * $Id: inspircd.c 3767 2005-11-10 01:28:36Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 3565 2005-11-06 14:17:51Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 3767 2005-11-10 01:28:36Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -360,7 +360,15 @@ static void m_privmsg(char *origin, uint8_t parc, char *parv[])
 	if (parc != 3)
 		return;
 
-	handle_privmsg(parv[0], parv[1], parv[2]);
+	handle_privmsg(parv[0], parv[1], FALSE, parv[2]);
+}
+
+static void m_notice(char *origin, uint8_t parc, char *parv[])
+{
+	if (parc != 3)
+		return;
+
+	handle_privmsg(parv[0], parv[1], TRUE, parv[2]);
 }
 
 static void m_sjoin(char *origin, uint8_t parc, char *parv[])
@@ -650,7 +658,7 @@ void _modinit(module_t * m)
 	pcommand_add("?", m_ping);
 	pcommand_add("!", m_pong);
 	pcommand_add("P", m_privmsg);
-	pcommand_add("V", m_privmsg);
+	pcommand_add("V", m_notice);
 	pcommand_add("J", m_sjoin);
 	pcommand_add("L", m_part);
 	pcommand_add("N", m_nick);
