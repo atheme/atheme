@@ -2,7 +2,6 @@ Help for SENDPASS:
 
 SENDPASS emails the password for the specified
 nickname to the corresponding email address.
-This command is useful for retrieving passwords.
 
 Syntax: SENDPASS <nickname>
 

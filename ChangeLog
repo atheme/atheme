@@ -1,3 +1,20 @@
+jilles      2005/11/10 23:52:43 UTC	(20051110-3795)
+  Log:
+  ChanServ helpfile updates.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/help/cservice/ban (File Modified) 
+  +1 -1		trunk/help/cservice/drop (File Modified) 
+  +4 -2		trunk/help/cservice/kick (File Modified) 
+  +2 -3		trunk/help/cservice/kickban (File Modified) 
+  +2 -2		trunk/help/cservice/set_email (File Modified) 
+  +1 -2		trunk/help/cservice/set_founder (File Modified) 
+  +3 -2		trunk/help/cservice/set_mlock (File Modified) 
+  +2 -2		trunk/help/cservice/set_secure (File Modified) 
+  +2 -0		trunk/help/cservice/set_successor (File Modified) 
+
+
 jilles      2005/11/10 23:45:29 UTC	(20051110-3793)
   Log:
   Clearer one-line description.

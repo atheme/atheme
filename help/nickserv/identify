@@ -6,5 +6,11 @@ require you to be logged in.
 
 Syntax: IDENTIFY <password>
 
+You can also identify for another nick than you
+are currently using.
+
+Syntax: IDENTIFY <nick> <password>
+
 Example:
     /msg &nick& IDENTIFY foo
+    /msg &nick& IDENTIFY jilles foo

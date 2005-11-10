@@ -3,7 +3,10 @@ Help for GHOST:
 GHOST disconnects an old user session, or somebody
 attempting to use your nickname without authorization.
 
-Syntax: GHOST <nick> <password>
+If you are logged in to the nick, you need not specify
+a password, otherwise you have to.
+
+Syntax: GHOST <nick> [password]
 
 Example:
     /msg &nick& GHOST foo bar
