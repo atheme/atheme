@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 3761 2005-11-10 00:47:19Z jilles $
+ * $Id: account.c 3765 2005-11-10 00:58:37Z alambert $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 3761 2005-11-10 00:47:19Z jilles $",
+	"$Id: account.c 3765 2005-11-10 00:58:37Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -294,6 +294,7 @@ static int account_verify(void *conn, int parc, char *parv[])
  *       fault 1 - account is not registered
  *       fault 2 - invalid username and password
  *       fault 4 - insufficient parameters
+ *       fault 6 - account is frozen
  *       default - success (authcookie)
  *
  * Side Effects:
@@ -315,6 +316,13 @@ static int do_login(void *conn, int parc, char *parv[])
 	if (!(mu = myuser_find(parv[0])))
 	{
 		xmlrpc_generic_error(1, "The account is not registered.");
+		return 0;
+	}
+
+	if (metadata_find(mu, METADATA_USER, "private:freeze:freezer") != NULL)
+	{
+		logcommand_external(using_nickserv ? nicksvs.me : usersvs.me, "xmlrpc", conn, NULL, CMDLOG_LOGIN, "failed LOGIN to %s (frozen)", mu->name);
+		xmlrpc_generic_error(6, "The account has been frozen.");
 		return 0;
 	}
 

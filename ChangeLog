@@ -1,3 +1,12 @@
+alambert    2005/11/10 00:55:02 UTC	(20051110-3763)
+  Log:
+  DROP: alert the user if password is not specified. reported by matt.
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/nickserv/drop.c (File Modified) 
+  +2 -2		trunk/modules/userserv/drop.c (File Modified) 
+
+
 jilles      2005/11/10 00:47:19 UTC	(20051110-3761)
   Log:
   Fix too few arguments being required in
