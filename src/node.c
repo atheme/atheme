@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3715 2005-11-09 05:52:16Z alambert $
+ * $Id: node.c 3771 2005-11-10 03:23:33Z alambert $
  */
 
 #include "atheme.h"
@@ -1213,7 +1213,7 @@ void myuser_delete(char *name)
 	}
 
 	/* remove them as successors */
-	for (i = 0; i < HASHSIZE; i++);
+	for (i = 0; i < HASHSIZE; i++)
 	{
 		LIST_FOREACH(n, mclist[i].head)
 		{

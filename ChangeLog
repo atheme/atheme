@@ -1,3 +1,12 @@
+alambert    2005/11/10 01:50:36 UTC	(20051110-3769)
+  Log:
+  LISTCHANS: note it's not *really* equiv to is_founder() as we don't check mc->founder
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/listchans.c (File Modified) 
+  +1 -1		trunk/modules/userserv/listchans.c (File Modified) 
+
+
 jilles      2005/11/10 01:28:36 UTC	(20051110-3767)
   Log:
   Use a separate handler (service_t.notice_handler) for notices.
