@@ -1,7 +1,7 @@
 Help for BAN:
 
 The BAN command allows you to ban a user or hostmask from
-a channel
+a channel.
 
 Syntax: BAN <#channel> <nickname|hostmask>
 

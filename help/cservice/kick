@@ -1,7 +1,9 @@
 Help for KICK:
 
-The KICK command allows for the removal of an abusive user from
-a channel.
+The KICK command allows for the removal of a user from
+a channel. The user can immediately rejoin.
+
+Your nick will be added to the kick reason.
 
 Syntax: KICK <#channel> <nick> [reason]
 

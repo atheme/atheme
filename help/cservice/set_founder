@@ -3,8 +3,7 @@ Help for SET FOUNDER:
 SET FOUNDER allows you to set a new founder
 of the channel. The new founder has to
 execute the same command to confirm the
-transfer. After the transfer you lose all
-your access.
+transfer.
 
 Syntax: SET <#channel> FOUNDER <newnick>
 

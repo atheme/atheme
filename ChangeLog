@@ -1,3 +1,12 @@
+jilles      2005/11/10 23:45:29 UTC	(20051110-3793)
+  Log:
+  Clearer one-line description.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/drop.c (File Modified) 
+
+
 jilles      2005/11/10 23:43:13 UTC	(20051110-3791)
   Log:
   Update /cs flags help file.

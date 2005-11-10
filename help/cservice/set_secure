@@ -2,8 +2,8 @@ Help for SET SECURE:
 
 SET SECURE prevents anyone that's not on the
 channel's access lists from gaining operator
-status on the channel.  This is useful if you're
-paranoid.
+or halfop status on the channel.  This is
+useful if you're paranoid.
 
 Syntax: SET <#channel> SECURE ON|OFF
 

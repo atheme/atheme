@@ -5,6 +5,8 @@ successor for his channel. Successors can manipulate
 most channel settings and will become the founder should
 the founder's nickname expire.
 
+This is currently broken.
+
 Syntax: SET <#channel> SUCCESSOR <nickname>|NONE
 
 Example:

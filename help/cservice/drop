@@ -9,4 +9,4 @@ be restored.
 Syntax: DROP <#channel>
 
 Examples:
-    /msg &nick& DROP #foo bar
+    /msg &nick& DROP #foo
