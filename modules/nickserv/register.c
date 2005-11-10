@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 3775 2005-11-10 18:17:03Z nenolod $
+ * $Id: register.c 3777 2005-11-10 20:36:06Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 3775 2005-11-10 18:17:03Z nenolod $",
+	"$Id: register.c 3777 2005-11-10 20:36:06Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -161,6 +161,6 @@ static void ns_cmd_register(char *origin)
 	snprintf(lau, BUFSIZE, "%s@%s", u->user, u->vhost);
 	metadata_add(mu, METADATA_USER, "private:host:vhost", lau);
 
-	snprintf(lau, BUFSIZE, "%s@%s", u->user, u->host);
+	snprintf(lao, BUFSIZE, "%s@%s", u->user, u->host);
 	metadata_add(mu, METADATA_USER, "private:host:actual", lao);
 }

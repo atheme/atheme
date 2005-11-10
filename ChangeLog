@@ -1,3 +1,12 @@
+nenolod     2005/11/10 18:17:03 UTC	(20051110-3775)
+  Log:
+  Fix a typo, and use snprintf instead of strlcpy in the last seen address code.
+  
+
+  Changes:	Modified:
+  +4 -11	trunk/modules/nickserv/register.c (File Modified) 
+
+
 alambert    2005/11/10 03:33:30 UTC	(20051110-3773)
   Log:
   myuser_delete(): Right now, chanacs is NOT a reliable indicator of whether or not a user is the founder. So do it the old, nasty way of searching through all channels. pfish will test.
