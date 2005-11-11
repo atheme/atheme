@@ -1,3 +1,13 @@
+alambert    2005/11/11 04:24:57 UTC	(20051111-3813)
+  Log:
+  add authcookie_destroy_all() -- kills all authcookies for a given myuser
+
+  Changes:	Modified:
+  +1 -0		trunk/include/authcookie.h (File Modified) 
+  +26 -0	trunk/src/authcookie.c (File Modified) 
+  +3 -0		trunk/src/node.c (File Modified) 
+
+
 jilles      2005/11/11 02:18:59 UTC	(20051111-3811)
   Log:
   Add a comment why mychan_pick_successor() shouldn't

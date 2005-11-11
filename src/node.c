@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3813 2005-11-11 04:24:57Z alambert $
+ * $Id: node.c 3815 2005-11-11 04:33:03Z nenolod $
  */
 
 #include "atheme.h"
@@ -444,7 +444,7 @@ server_t *server_find(char *name)
  * U S E R S *
  *************/
 
-user_t *user_add(char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server)
+user_t *user_add(char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, uint32_t ts)
 {
 	user_t *u;
 	node_t *n = node_create();
@@ -480,6 +480,11 @@ user_t *user_add(char *nick, char *user, char *host, char *vhost, char *ip, char
 	u->server = server;
 	u->server->users++;
 	node_add(u, node_create(), &u->server->userlist);
+
+	if (ts)
+		u->ts = ts;
+	else
+		u->ts = CURRTIME;
 
 	cnt.user++;
 
