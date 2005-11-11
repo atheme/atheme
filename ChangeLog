@@ -1,3 +1,32 @@
+jilles      2005/11/11 11:31:28 UTC	(20051111-3835)
+  Log:
+  protocol/*.c: nickTS changes on a nick change
+  protocol/ircnet.c: remove wrong comment that "nickTS is signon time", leave
+  user_t.ts equal to 0 (e.g. TSora ircds treat a nickTS of 0 as "no TS",
+  kill both on collision)
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/protocol/asuka.c (File Modified) 
+  +1 -0		trunk/protocol/bahamut.c (File Modified) 
+  +1 -0		trunk/protocol/bircd.c (File Modified) 
+  +1 -0		trunk/protocol/charybdis.c (File Modified) 
+  +1 -0		trunk/protocol/dreamforge.c (File Modified) 
+  +1 -0		trunk/protocol/hyperion.c (File Modified) 
+  +1 -0		trunk/protocol/inspircd.c (File Modified) 
+  +0 -1		trunk/protocol/ircnet.c (File Modified) 
+  +1 -0		trunk/protocol/monkey.c (File Modified) 
+  +1 -0		trunk/protocol/plexus.c (File Modified) 
+  +1 -0		trunk/protocol/ptlink.c (File Modified) 
+  +1 -0		trunk/protocol/ratbox.c (File Modified) 
+  +1 -0		trunk/protocol/scylla.c (File Modified) 
+  +1 -0		trunk/protocol/shadowircd.c (File Modified) 
+  +1 -0		trunk/protocol/sorcery.c (File Modified) 
+  +1 -0		trunk/protocol/ultimate3.c (File Modified) 
+  +1 -0		trunk/protocol/undernet.c (File Modified) 
+  +1 -0		trunk/protocol/unreal.c (File Modified) 
+
+
 nenolod     2005/11/11 05:14:48 UTC	(20051111-3831)
   Log:
   Regenerate configure.

@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: bahamut.c 3835 2005-11-11 11:31:28Z jilles $
+ * $Id: bahamut.c 3839 2005-11-11 11:48:36Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/bahamut.h"
 
-DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 3835 2005-11-11 11:31:28Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 3839 2005-11-11 11:48:36Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -537,7 +537,8 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 		 * If it IS registered, deal with that accordingly,
 		 * via handle_burstlogin(). --nenolod
 		 */
-		if (atoi(parv[7]) != 0 && atoi(parv[7]) <= me.start)
+		/* Changed to just check umode +r for now -- jilles */
+		if (strchr(parv[3], 'r'))
 			handle_burstlogin(u, parv[0]);
 
 		handle_nickchange(u);
