@@ -2,7 +2,7 @@ Help for LIST:
 
 LIST shows you your messages in your inbox,
 including who sent them and when. To read a
-memo, try READ. You can also DELETE or SEND
+memo, try READ. You can also DELETE or FORWARD
 a memo.
 
 Syntax: LIST

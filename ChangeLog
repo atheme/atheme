@@ -1,3 +1,28 @@
+jilles      2005/11/11 00:07:19 UTC	(20051111-3799)
+  Log:
+  UserServ helpfile updates: many s/nickname/account, the
+  previous nickserv updates and a few more.
+  
+
+  Changes:	Modified:
+  +3 -5		trunk/help/userserv/drop (File Modified) 
+  +4 -4		trunk/help/userserv/freeze (File Modified) 
+  +2 -2		trunk/help/userserv/hold (File Modified) 
+  +2 -2		trunk/help/userserv/info (File Modified) 
+  +1 -1		trunk/help/userserv/list (File Modified) 
+  +1 -1		trunk/help/userserv/listmail (File Modified) 
+  +4 -4		trunk/help/userserv/login (File Modified) 
+  +2 -2		trunk/help/userserv/mark (File Modified) 
+  +7 -7		trunk/help/userserv/register (File Modified) 
+  +2 -2		trunk/help/userserv/resetpass (File Modified) 
+  +2 -2		trunk/help/userserv/return (File Modified) 
+  +2 -3		trunk/help/userserv/sendpass (File Modified) 
+  +1 -1		trunk/help/userserv/set_email (File Modified) 
+  +1 -1		trunk/help/userserv/set_hidemail (File Modified) 
+  +1 -2		trunk/help/userserv/set_password (File Modified) 
+  +2 -2		trunk/help/userserv/verify (File Modified) 
+
+
 jilles      2005/11/10 23:59:53 UTC	(20051111-3797)
   Log:
   NickServ helpfile updates.
