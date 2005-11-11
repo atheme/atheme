@@ -1,3 +1,12 @@
+jilles      2005/11/11 00:09:06 UTC	(20051111-3801)
+  Log:
+  Forward is more obvious than send here.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/help/memoserv/list (File Modified) 
+
+
 jilles      2005/11/11 00:07:19 UTC	(20051111-3799)
   Log:
   UserServ helpfile updates: many s/nickname/account, the

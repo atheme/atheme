@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 3781 2005-11-10 22:14:54Z jilles $
+ * $Id: flags.c 3803 2005-11-11 00:25:48Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 3781 2005-11-10 22:14:54Z jilles $",
+	"$Id: flags.c 3803 2005-11-11 00:25:48Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -179,6 +179,12 @@ static void cs_cmd_flags(char *origin)
 		                notice(chansvs.nick, origin, "\2%s\2 is an alias for \2%s\2. Editing entry under \2%s\2.", target, md->value, tmu->name);
 		        }
 
+			if (tmu == mc->founder && removeflags & CA_FLAGS)
+			{
+				notice(chansvs.nick, origin, "You may not remove the founder's +f access.");
+				return;
+			}
+
 			if (!chanacs_change(mc, tmu, NULL, &addflags, &removeflags, restrictflags))
 			{
 		                notice(chansvs.nick, origin, "You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2.", bitmask_to_flags2(addflags, removeflags, chanacs_flags), tmu->name, mc->name);
@@ -275,6 +281,12 @@ static void cs_fcmd_flags(char *origin, char *channel)
 				return;
 
 			notice(chansvs.nick, origin, "\2%s\2 is an alias for \2%s\2. Editing entry under \2%s\2.", target, md->value, tmu->name);
+		}
+
+		if (tmu == mc->founder && removeflags & CA_FLAGS)
+		{
+			notice(chansvs.nick, origin, "You may not remove the founder's +f access.");
+			return;
 		}
 
 		if (!chanacs_change(mc, tmu, NULL, &addflags, &removeflags, restrictflags))
