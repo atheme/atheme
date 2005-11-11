@@ -1,3 +1,11 @@
+nenolod     2005/11/11 05:14:35 UTC	(20051111-3829)
+  Log:
+  Version bump on trunk -> 1.0beta1
+
+  Changes:	Modified:
+  +1 -1		trunk/configure.ac (File Modified) 
+
+
 alambert    2005/11/11 05:08:05 UTC	(20051111-3825)
   Log:
   CS SET: remove stale successor help entry
