@@ -1,3 +1,12 @@
+nenolod     2005/11/11 05:07:21 UTC	(20051111-3823)
+  Log:
+  version bump in preparation for handoff to QA team
+
+  Changes:	Modified:
+  +11 -11	trunk/configure (File Modified) 
+  +1 -1		trunk/configure.ac (File Modified) 
+
+
 pfish       2005/11/11 05:05:24 UTC	(20051111-3821)
   Log:
   NickServ/UserServ: Display mu->lastlogin on INFO.
