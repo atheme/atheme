@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3785 2005-11-10 22:42:24Z jilles $
+ * $Id: set.c 3807 2005-11-11 02:02:22Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3785 2005-11-10 22:42:24Z jilles $",
+	"$Id: set.c 3807 2005-11-11 02:02:22Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -40,7 +40,6 @@ void _modinit(module_t *m)
 	help_addentry(cs_helptree, "SET ENTRYMSG", "help/cservice/set_entrymsg", NULL);
 	help_addentry(cs_helptree, "SET PROPERTY", "help/cservice/set_property", NULL);
 	help_addentry(cs_helptree, "SET STAFFONLY", "help/cservice/set_staffonly", NULL);
-	help_addentry(cs_helptree, "SET SUCCESSOR", "help/cservice/set_successor", NULL);
 	help_addentry(cs_helptree, "SET KEEPTOPIC", "help/cservice/set_keeptopic", NULL);
 }
 
@@ -693,94 +692,6 @@ static void cs_set_secure(char *origin, char *name, char *params)
 	}
 }
 
-static void cs_set_successor(char *origin, char *name, char *params)
-{
-	user_t *u = user_find(origin);
-	node_t *n;
-	user_t *succ_u;
-	myuser_t *mu;
-	mychan_t *mc;
-
-	if (*name != '#')
-	{
-		notice(chansvs.nick, origin, "Invalid parameters specified for \2SUCCESSOR\2.");
-		return;
-	}
-
-	if (!u->myuser)
-	{
-		notice(chansvs.nick, origin, "You are not logged in.");
-		return;
-	}
-
-	if (!(mc = mychan_find(name)))
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
-		return;
-	}
-
-	if (!is_founder(mc, u->myuser))
-	{
-		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
-		return;
-	}
-
-	if (!strcasecmp("OFF", params) || !strcasecmp("NONE", params))
-	{
-		if (!mc->successor)
-		{
-			notice(chansvs.nick, origin, "There is no successor set for \2%s\2.", mc->name);
-			return;
-		}
-
-		snoop("SET:SUCCESSOR:NONE: \2%s\2", mc->name);
-		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET SUCCESSOR NONE (was: %s)", mc->name, mc->successor->name);
-
-		notice(chansvs.nick, origin, "\2%s\2 is no longer the successor of \2%s\2.", mc->successor->name, mc->name);
-		LIST_FOREACH(n, mc->successor->logins.head)
-		{
-			succ_u = n->data;
-			notice(succ_u->nick, "You (%s) are no longer the successor of \2%s\2.", mc->successor->name, mc->name);
-		}
-
-		mc->successor = NULL;
-
-		return;
-	}
-
-	if (!(mu = myuser_find(params)))
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is not registered.", params);
-		return;
-	}
-
-	if (mu->flags & MU_NOOP)
-	{
-		notice(chansvs.nick, origin, "\2%s\2 does not wish to be added to access lists.", mu->name);
-		return;
-	}
-
-	if (is_successor(mc, mu))
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is already the successor of \2%s\2.", mu->name, mc->name);
-		return;
-	}
-
-	mc->successor = mu;
-
-	snoop("SET:SUCCESSOR: \2%s\2 -> \2%s\2", mc->name, mu->name);
-	logcommand(chansvs.me, u, CMDLOG_SET, "%s SET SUCCESSOR %s", mc->name, mc->successor->name);
-
-	notice(chansvs.nick, origin, "\2%s\2 is now the successor of \2%s\2.", mu->name, mc->name);
-
-	/* if they're online, let them know about it */
-	LIST_FOREACH(n, mc->successor->logins.head)
-	{
-		succ_u = n->data;
-		notice(succ_u->nick, "\2%s\2 has set you (%s) as the successor of \2%s\2.", u->myuser->name, mc->successor->name, mc->name);
-	}
-}
-
 static void cs_set_verbose(char *origin, char *name, char *params)
 {
 	user_t *u = user_find(origin);
@@ -939,7 +850,7 @@ static void cs_set_property(char *origin, char *name, char *params)
 		return;
 	}
 
-	if ((!is_founder(mc, u->myuser)) && (!is_successor(mc, u->myuser)))
+	if (!is_founder(mc, u->myuser))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
 		return;
@@ -988,7 +899,6 @@ struct set_command_ set_commands[] = {
   { "FOUNDER",    AC_NONE,  cs_set_founder    },
   { "MLOCK",      AC_NONE,  cs_set_mlock      },
   { "SECURE",     AC_NONE,  cs_set_secure     },
-  { "SUCCESSOR",  AC_NONE,  cs_set_successor  }, 
   { "VERBOSE",    AC_NONE,  cs_set_verbose    },
   { "URL",	  AC_NONE,  cs_set_url        },
   { "ENTRYMSG",	  AC_NONE,  cs_set_entrymsg   },

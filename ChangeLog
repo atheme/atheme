@@ -1,3 +1,16 @@
+jilles      2005/11/11 01:17:46 UTC	(20051111-3805)
+  Log:
+  Add dynamic successor finding. When the founder
+  nick drops, try to find someone reasonably active
+  with good privs. It has preferences for +*-OHV,
+  +R and +o, but will eventually accept anyone
+  not akicked.
+  
+
+  Changes:	Modified:
+  +84 -27	trunk/src/node.c (File Modified) 
+
+
 jilles      2005/11/11 00:25:48 UTC	(20051111-3803)
   Log:
   Disallow setting -f on the founder in /cs flags.

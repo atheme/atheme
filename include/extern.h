@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 3783 2005-11-10 22:30:54Z jilles $
+ * $Id: extern.h 3807 2005-11-11 02:02:22Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -79,7 +79,6 @@ E boolean_t validhostmask(char *host);
 E int sendemail(user_t *from, int type, myuser_t *mu, const char *param);
 
 E boolean_t is_founder(mychan_t *mychan, myuser_t *myuser);
-E boolean_t is_successor(mychan_t *mychan, myuser_t *myuser);
 E boolean_t is_xop(mychan_t *mychan, myuser_t *myuser, uint32_t level);
 E boolean_t should_owner(mychan_t *mychan, myuser_t *myuser);
 E boolean_t should_protect(mychan_t *mychan, myuser_t *myuser);

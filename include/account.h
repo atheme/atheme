@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 3781 2005-11-10 22:14:54Z jilles $
+ * $Id: account.h 3807 2005-11-11 02:02:22Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -69,7 +69,6 @@ struct mychan_
   char name[CHANNELLEN];
 
   myuser_t *founder;
-  myuser_t *successor;
   channel_t *chan;
   list_t chanacs;
   time_t registered;
@@ -129,9 +128,8 @@ struct chanacs_
 #define CA_SOP           (CA_AOP | CA_SET | CA_REMOVE | CA_INVITE)
 
 /* special values for founder/successor -- jilles */
-/* used to find a successor in flatfile (XXX) and in shrike
- * flatfile conversion: */
-#define CA_SUCCESSOR_0   (CA_VOICE | CA_OP | CA_TOPIC | CA_SET | CA_REMOVE | CA_INVITE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_ACLVIEW)
+/* used in shrike flatfile conversion: */
+#define CA_SUCCESSOR_0   (CA_VOICE | CA_OP | CA_AUTOOP | CA_TOPIC | CA_SET | CA_REMOVE | CA_INVITE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_ACLVIEW)
 /* granted to new founder on transfer etc: */
 #define CA_FOUNDER_0     (CA_SUCCESSOR_0 | CA_FLAGS)
 /* granted to founder on new channel: */

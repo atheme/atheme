@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3805 2005-11-11 01:17:46Z jilles $
+ * $Id: node.c 3807 2005-11-11 02:02:22Z jilles $
  */
 
 #include "atheme.h"
@@ -1205,18 +1205,6 @@ void myuser_delete(char *name)
 		chanacs_delete(ca->mychan, ca->myuser, ca->level);
 	}
 
-	/* remove them as successors */
-	for (i = 0; i < HASHSIZE; i++)
-	{
-		LIST_FOREACH(n, mclist[i].head)
-		{
-			mc = (mychan_t *)n->data;
-
-			if ((mc->successor) && (mc->successor == mu))
-				mc->successor = NULL;
-		}
-	}
-
 	/* remove them from the sra list */
 	if (sra_find(mu))
 		sra_delete(mu);
@@ -1320,7 +1308,6 @@ mychan_t *mychan_add(char *name)
 
 	strlcpy(mc->name, name, CHANNELLEN);
 	mc->founder = NULL;
-	mc->successor = NULL;
 	mc->registered = CURRTIME;
 	mc->chan = channel_find(name);
 	mc->hash = MCHASH((unsigned char *)name);

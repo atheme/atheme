@@ -4,7 +4,7 @@
  *
  * XMLRPC channel management functions.
  *
- * $Id: channel.c 3781 2005-11-10 22:14:54Z jilles $
+ * $Id: channel.c 3807 2005-11-11 02:02:22Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/channel", FALSE, _modinit, _moddeinit,
-	"$Id: channel.c 3781 2005-11-10 22:14:54Z jilles $",
+	"$Id: channel.c 3807 2005-11-11 02:02:22Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -170,7 +170,7 @@ static int do_metadata_set(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (!is_founder(mc, mu) && !is_successor(mc, mu))
+	if (!is_founder(mc, mu))
 	{
 		xmlrpc_generic_error(6, "No access.");
 		return 0;
@@ -249,7 +249,7 @@ static int do_metadata_delete(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (!is_founder(mc, mu) && !is_successor(mc, mu))
+	if (!is_founder(mc, mu))
 	{
 		xmlrpc_generic_error(6, "No access.");
 		return 0;
