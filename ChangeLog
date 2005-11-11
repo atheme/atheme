@@ -1,3 +1,13 @@
+jilles      2005/11/11 13:04:22 UTC	(20051111-3855)
+  Log:
+  Change mychan_pick_candidate() parameter names to avoid
+  shadowing of access() and time().
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/src/node.c (File Modified) 
+
+
 jilles      2005/11/11 12:55:45 UTC	(20051111-3851)
   Log:
   Don't put a semicolon in DECLARE_CLARO_ASSEMBLY_V1, this

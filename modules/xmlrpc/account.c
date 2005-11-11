@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 3765 2005-11-10 00:58:37Z alambert $
+ * $Id: account.c 3857 2005-11-11 13:07:49Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 3765 2005-11-10 00:58:37Z alambert $",
+	"$Id: account.c 3857 2005-11-11 13:07:49Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -146,14 +146,15 @@ static int account_register(void *conn, int parc, char *parv[])
 		char *key;
 		mu->flags |= MU_WAITAUTH;
 
+		key = gen_pw(12);
 		if (!sendemail(using_nickserv ? nicksvs.me->me : usersvs.me->me, EMAIL_REGISTER, mu, key))
 		{
 			xmlrpc_generic_error(9, "Sending email failed.");
 			myuser_delete(mu->name);
+			free(key);
 			return 0;
 		}
 
-		key = gen_pw(12);
 		metadata_add(mu, METADATA_USER, "private:verify:register:key", key);
 		free(key);
 		metadata_add(mu, METADATA_USER, "private:verify:register:timestamp", itoa(time(NULL)));
