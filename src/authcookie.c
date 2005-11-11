@@ -4,7 +4,7 @@
  *
  * Remote authentication cookie handling. (think kerberos.)
  *
- * $Id: authcookie.c 3813 2005-11-11 04:24:57Z alambert $
+ * $Id: authcookie.c 3847 2005-11-11 12:39:20Z jilles $
  */
 
 #include "atheme.h"
@@ -153,7 +153,7 @@ void authcookie_destroy_all(myuser_t *mu)
  * authcookie_expire()
  *
  * Inputs:
- *       none
+ *       unused arg because this is an event function
  *
  * Outputs:
  *       none
@@ -161,11 +161,12 @@ void authcookie_destroy_all(myuser_t *mu)
  * Side Effects:
  *       expired authcookies are destroyed
  */
-void authcookie_expire()
+void authcookie_expire(void *arg)
 {
 	authcookie_t *ac;
 	node_t *n, *tn;
 
+	(void)arg;
         LIST_FOREACH_SAFE(n, tn, authcookie_list.head)
 	{
 		ac = n->data;

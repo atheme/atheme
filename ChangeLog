@@ -1,3 +1,17 @@
+jilles      2005/11/11 11:48:36 UTC	(20051111-3839)
+  Log:
+  Change bahamut/ultimate3/unreal login tracking to use umode +r
+  instead of checking if the service stamp was set before atheme
+  was started (which could easily lead to users stealing accounts
+  and didn't work for netsplits).
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/protocol/bahamut.c (File Modified) 
+  +2 -1		trunk/protocol/ultimate3.c (File Modified) 
+  +10 -1	trunk/protocol/unreal.c (File Modified) 
+
+
 jilles      2005/11/11 11:31:28 UTC	(20051111-3835)
   Log:
   protocol/*.c: nickTS changes on a nick change
