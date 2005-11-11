@@ -1,3 +1,11 @@
+nenolod     2005/11/11 19:59:11 UTC	(20051111-3875)
+  Log:
+  Change strlcpy use to snprintf in /cs ban.
+
+  Changes:	Modified:
+  +4 -18	trunk/modules/chanserv/ban.c (File Modified) 
+
+
 jilles      2005/11/11 14:46:49 UTC	(20051111-3871)
   Log:
   Describe resv/shared/service configuration in a little
