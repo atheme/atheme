@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: bircd.c 3767 2005-11-10 01:28:36Z jilles $
+ * $Id: bircd.c 3817 2005-11-11 04:50:39Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 3767 2005-11-10 01:28:36Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 3817 2005-11-11 04:50:39Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -181,7 +181,7 @@ static void asuka_notice(char *from, char *target, char *fmt, ...)
 
 	if (u == NULL && (from == NULL || (irccasecmp(from, me.name) && irccasecmp(from, ME))))
 	{
-		slog(LG_DEBUG, "bircd_notice(): unknown source %s for notice to %s", from, target);
+		slog(LG_DEBUG, "asuka_notice(): unknown source %s for notice to %s", from, target);
 		return;
 	}
 
@@ -696,7 +696,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			return;
 		}
 
-		u = user_add(parv[0], parv[3], parv[4], NULL, NULL, parv[8], parv[9], s);
+		u = user_add(parv[0], parv[3], parv[4], NULL, NULL, parv[8], parv[9], s, atoi(parv[2]));
 
 		user_mode(u, parv[5]);
 
@@ -728,7 +728,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			return;
 		}
 
-		u = user_add(parv[0], parv[3], parv[4], NULL, NULL, parv[7], parv[8], s);
+		u = user_add(parv[0], parv[3], parv[4], NULL, NULL, parv[7], parv[8], s, atoi(parv[2]));
 
 		user_mode(u, parv[5]);
 
@@ -760,7 +760,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			return;
 		}
 
-		u = user_add(parv[0], parv[3], parv[4], NULL, NULL, parv[6], parv[7], s);
+		u = user_add(parv[0], parv[3], parv[4], NULL, NULL, parv[6], parv[7], s, atoi(parv[2]));
 
 		handle_nickchange(u);
 	}

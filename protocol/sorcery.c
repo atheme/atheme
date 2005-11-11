@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: sorcery.c 3767 2005-11-10 01:28:36Z jilles $
+ * $Id: sorcery.c 3817 2005-11-11 04:50:39Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/sorcery.h"
 
-DECLARE_MODULE_V1("protocol/sorcery", TRUE, _modinit, NULL, "$Id: sorcery.c 3767 2005-11-10 01:28:36Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/sorcery", TRUE, _modinit, NULL, "$Id: sorcery.c 3817 2005-11-11 04:50:39Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -394,7 +394,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			return;
 		}
 
-		u = user_add(parv[0], parv[3], parv[4], NULL, NULL, NULL, parv[7], s);
+		u = user_add(parv[0], parv[3], parv[4], NULL, NULL, NULL, parv[7], s, atoi(parv[2]));
 
 		handle_nickchange(u);
 	}

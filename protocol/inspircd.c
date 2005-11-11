@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: inspircd.c 3767 2005-11-10 01:28:36Z jilles $
+ * $Id: inspircd.c 3817 2005-11-11 04:50:39Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 3767 2005-11-10 01:28:36Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 3817 2005-11-11 04:50:39Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -360,7 +360,7 @@ static void m_privmsg(char *origin, uint8_t parc, char *parv[])
 	if (parc != 3)
 		return;
 
-	handle_privmsg(parv[0], parv[1], FALSE, parv[2]);
+	handle_message(parv[0], parv[1], FALSE, parv[2]);
 }
 
 static void m_notice(char *origin, uint8_t parc, char *parv[])
@@ -368,7 +368,7 @@ static void m_notice(char *origin, uint8_t parc, char *parv[])
 	if (parc != 3)
 		return;
 
-	handle_privmsg(parv[0], parv[1], TRUE, parv[2]);
+	handle_message(parv[0], parv[1], TRUE, parv[2]);
 }
 
 static void m_sjoin(char *origin, uint8_t parc, char *parv[])
@@ -444,7 +444,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			return;
 		}
 
-		u = user_add(parv[1], parv[4], parv[2], parv[3], parv[6], NULL, parv[8], s);
+		u = user_add(parv[1], parv[4], parv[2], parv[3], parv[6], NULL, parv[8], s, atoi(parv[0]));
 
 		user_mode(u, parv[5]);
 

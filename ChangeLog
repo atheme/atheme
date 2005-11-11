@@ -1,3 +1,13 @@
+nenolod     2005/11/11 04:33:03 UTC	(20051111-3815)
+  Log:
+  Core API changes for NickTS. Not implemented protocol-side yet.
+
+  Changes:	Modified:
+  +1 -1		trunk/include/extern.h (File Modified) 
+  +18 -16	trunk/include/users.h (File Modified) 
+  +6 -1		trunk/src/node.c (File Modified) 
+
+
 alambert    2005/11/11 04:24:57 UTC	(20051111-3813)
   Log:
   add authcookie_destroy_all() -- kills all authcookies for a given myuser

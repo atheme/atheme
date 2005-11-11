@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 3767 2005-11-10 01:28:36Z jilles $
+ * $Id: ratbox.c 3817 2005-11-11 04:50:39Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 3767 2005-11-10 01:28:36Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 3817 2005-11-11 04:50:39Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -680,7 +680,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			return;
 		}
 
-		u = user_add(parv[0], parv[4], parv[5], NULL, NULL, NULL, parv[7], s);
+		u = user_add(parv[0], parv[4], parv[5], NULL, NULL, NULL, parv[7], s, atoi(parv[2]));
 
 		user_mode(u, parv[3]);
 
@@ -766,7 +766,7 @@ static void m_uid(char *origin, uint8_t parc, char *parv[])
 			return;
 		}
 
-		u = user_add(parv[0], parv[4], parv[5], NULL, parv[6], parv[7], parv[8], s);
+		u = user_add(parv[0], parv[4], parv[5], NULL, parv[6], parv[7], parv[8], s, atoi(parv[2]));
 
 		user_mode(u, parv[3]);
 

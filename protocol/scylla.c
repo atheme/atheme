@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: scylla.c 3565 2005-11-06 14:17:51Z jilles $
+ * $Id: scylla.c 3817 2005-11-11 04:50:39Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/scylla", TRUE, _modinit, NULL, "$Id: scylla.c 3565 2005-11-06 14:17:51Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/scylla", TRUE, _modinit, NULL, "$Id: scylla.c 3817 2005-11-11 04:50:39Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -395,7 +395,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			return;
 		}
 
-		u = user_add(parv[0], parv[4], parv[5], NULL, NULL, NULL, parv[7], s);
+		u = user_add(parv[0], parv[4], parv[5], NULL, NULL, NULL, parv[7], s, atoi(parv[2]));
 
 		user_mode(u, parv[3]);
 
