@@ -1,3 +1,13 @@
+jilles      2005/11/11 02:18:59 UTC	(20051111-3811)
+  Log:
+  Add a comment why mychan_pick_successor() shouldn't
+  depend on a user being in the channel or not.
+  
+
+  Changes:	Modified:
+  +5 -1		trunk/src/node.c (File Modified) 
+
+
 jilles      2005/11/11 02:13:22 UTC	(20051111-3809)
   Log:
   Say something vague about the successor selection algorithm.
