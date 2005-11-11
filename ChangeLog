@@ -1,3 +1,13 @@
+jilles      2005/11/11 13:07:49 UTC	(20051111-3857)
+  Log:
+  Send correct key in verification email. Yes, the code
+  needs to contain free(key) twice.
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 jilles      2005/11/11 13:04:22 UTC	(20051111-3855)
   Log:
   Change mychan_pick_candidate() parameter names to avoid

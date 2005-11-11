@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3855 2005-11-11 13:04:22Z jilles $
+ * $Id: node.c 3861 2005-11-11 13:26:04Z jilles $
  */
 
 #include "atheme.h"
@@ -837,7 +837,7 @@ chanuser_t *chanuser_add(channel_t *chan, char *nick)
 	int i = 0;
 
 	if (chan == NULL)
-		return;
+		return NULL;
 
 	if (*chan->name != '#')
 	{
@@ -1745,13 +1745,14 @@ boolean_t chanacs_user_has_flag(mychan_t *mychan, user_t *u, uint32_t level)
 	if (!mychan || !u)
 		return FALSE;
 
-	if (u->myuser != NULL)
+	mu = u->myuser;
+	if (mu != NULL)
 	{
 		/* Be very careful to make sure we get the right
 		 * myuser. w00t says to check only the parent's
 		 * access. If we can't get it, we'll try u->myuser.
 		 */
-		if (u->myuser->flags & MU_ALIAS)
+		if (mu->flags & MU_ALIAS)
 		{
 			metadata_t *md;
 
@@ -1765,8 +1766,6 @@ boolean_t chanacs_user_has_flag(mychan_t *mychan, user_t *u, uint32_t level)
 			else
 				mu = u->myuser;
 		}
-		else
-			mu = u->myuser;
 
 		if (chanacs_find(mychan, mu, level))
 			return TRUE;
@@ -1787,13 +1786,14 @@ uint32_t chanacs_user_flags(mychan_t *mychan, user_t *u)
 	if (!mychan || !u)
 		return FALSE;
 
-	if (u->myuser != NULL)
+	mu = u->myuser;
+	if (mu != NULL)
 	{
 		/* Be very careful to make sure we get the right
 		 * myuser. w00t says to check only the parent's
 		 * access. If we can't get it, we'll try u->myuser.
 		 */
-		if (u->myuser->flags & MU_ALIAS)
+		if (mu->flags & MU_ALIAS)
 		{
 			metadata_t *md;
 
@@ -1807,8 +1807,6 @@ uint32_t chanacs_user_flags(mychan_t *mychan, user_t *u)
 			else
 				mu = u->myuser;
 		}
-		else
-			mu = u->myuser;
 
 		ca = chanacs_find(mychan, mu, 0);
 		if (ca != NULL)
@@ -1832,16 +1830,16 @@ boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_
 	chanacs_t *ca;
 
 	if (mychan == NULL)
-		return;
+		return FALSE;
 	if (mu == NULL && hostmask == NULL)
 	{
 		slog(LG_DEBUG, "chanacs_change(): [%s] mu and hostmask both NULL", mychan->name);
-		return;
+		return FALSE;
 	}
 	if (mu != NULL && hostmask != NULL)
 	{
 		slog(LG_DEBUG, "chanacs_change(): [%s] mu and hostmask both not NULL", mychan->name);
-		return;
+		return FALSE;
 	}
 	if (mu != NULL)
 	{
@@ -2055,7 +2053,7 @@ metadata_t *metadata_find(void *target, int32_t type, char *name)
 	else if (type == METADATA_CHANACS)
 	{
 		ca = target;
-		l = &mc->metadata;
+		l = &ca->metadata;
 	}
 	else
 	{
