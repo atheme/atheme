@@ -1,3 +1,15 @@
+jilles      2005/11/11 00:25:48 UTC	(20051111-3803)
+  Log:
+  Disallow setting -f on the founder in /cs flags.
+  This makes it much harder to remove the founder
+  from chanacs; besides, the founder may always edit
+  flags without restriction regardless of +f anyway.
+  
+
+  Changes:	Modified:
+  +12 -0	trunk/modules/chanserv/flags.c (File Modified) 
+
+
 jilles      2005/11/11 00:09:06 UTC	(20051111-3801)
   Log:
   Forward is more obvious than send here.

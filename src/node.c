@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3785 2005-11-10 22:42:24Z jilles $
+ * $Id: node.c 3805 2005-11-11 01:17:46Z jilles $
  */
 
 #include "atheme.h"
@@ -39,6 +39,9 @@ static BlockHeap *myuser_heap;	/* HEAP_USER */
 static BlockHeap *mychan_heap;	/* HEAP_CHANNEL */
 static BlockHeap *chanacs_heap;	/* HEAP_CHANACS */
 static BlockHeap *metadata_heap;	/* HEAP_CHANUSER */
+
+static myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t access, int time);
+static myuser_t *mychan_pick_successor(mychan_t *mc);
 
 /*************
  * L I S T S *
@@ -1133,7 +1136,7 @@ myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags)
 
 void myuser_delete(char *name)
 {
-	myuser_t *mu = myuser_find(name), *tmu;
+	myuser_t *mu = myuser_find(name), *tmu, *successor;
 	mychan_t *mc, *tmc;
 	chanacs_t *ca;
 	user_t *u;
@@ -1171,37 +1174,17 @@ void myuser_delete(char *name)
 			mc = (mychan_t *)n->data;
 
 			/* attempt succession */
-			if (mc->founder == mu && mc->successor && mc->successor != mu)
+			if (mc->founder == mu && (successor = mychan_pick_successor(mc)) != NULL)
 			{
-				tcnt = 0;
+				snoop("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2", successor->name, mc->name, mc->founder->name);
 
-				/* AARGH can't do this based on chanacs either */
-				for (j = 0; j < HASHSIZE; j++)
-				{
-					LIST_FOREACH(n2, mclist[j].head)
-					{
-						tmc = (mychan_t *)n2->data;
-
-						if (is_founder(tmc, mc->successor))
-							tcnt++;
-					}
-				}
-			
-				if ( (tcnt < me.maxchans) || is_sra(mc->successor) )
-				{
-					snoop("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2", mc->successor->name, mc->name, mc->founder->name);
-
-					chanacs_change_simple(mc, mc->successor, NULL, CA_FOUNDER_0, 0, CA_ALL);
-					mc->founder = mc->successor;
-					mc->successor = NULL;
+				chanacs_change_simple(mc, successor, NULL, CA_FOUNDER_0, 0, CA_ALL);
+				mc->founder = successor;
 	
-					myuser_notice(chansvs.nick, mc->founder, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, mc->founder->name);
-				
-					continue;
-				}
+				myuser_notice(chansvs.nick, mc->founder, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, mc->founder->name);
 			}
 		
-			/* no successor or it failed */
+			/* no successor found */
 			if (mc->founder == mu)
 			{
 				snoop("DELETE: \2%s\2 from \2%s\2", mc->name, mu->name);
@@ -1397,6 +1380,80 @@ mychan_t *mychan_find(char *name)
 	}
 
 	return NULL;
+}
+
+/* Find a user fulfilling the conditions who can take another channel */
+static myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t access, int time)
+{
+	int j, tcnt;
+	node_t *n, *n2;
+	chanacs_t *ca;
+	mychan_t *tmc;
+	myuser_t *mu;
+
+	LIST_FOREACH(n, mc->chanacs.head)
+	{
+		ca = n->data;
+		if (ca->level & CA_AKICK)
+			continue;
+		mu = ca->myuser;
+		if (mu == NULL || mu == mc->founder)
+			continue;
+		if ((ca->level & access) == access && (time == 0 || LIST_LENGTH(&mu->logins) > 0 || CURRTIME - mu->lastlogin < time))
+		{
+			if (is_sra(mu))
+				return mu;
+			tcnt = 0;
+			for (j = 0; j < HASHSIZE; j++)
+			{
+				LIST_FOREACH(n2, mclist[j].head)
+				{
+					tmc = (mychan_t *)n2->data;
+
+					if (is_founder(tmc, mu))
+						tcnt++;
+				}
+			}
+		
+			if (tcnt < me.maxchans)
+				return mu;
+		}
+	}
+	return NULL;
+}
+
+/* Pick a suitable successor -- jilles */
+static myuser_t *mychan_pick_successor(mychan_t *mc)
+{
+	myuser_t *mu;
+
+	/* full privs? */
+	mu = mychan_pick_candidate(mc, CA_FOUNDER_0, 7*86400);
+	if (mu != NULL)
+		return mu;
+	mu = mychan_pick_candidate(mc, CA_FOUNDER_0, 0);
+	if (mu != NULL)
+		return mu;
+	/* someone with +R then? (old successor has this, but not sop) */
+	mu = mychan_pick_candidate(mc, CA_RECOVER, 7*86400);
+	if (mu != NULL)
+		return mu;
+	mu = mychan_pick_candidate(mc, CA_RECOVER, 0);
+	if (mu != NULL)
+		return mu;
+	/* an op perhaps? */
+	mu = mychan_pick_candidate(mc, CA_OP, 7*86400);
+	if (mu != NULL)
+		return mu;
+	mu = mychan_pick_candidate(mc, CA_OP, 0);
+	if (mu != NULL)
+		return mu;
+	/* just an active user with access */
+	mu = mychan_pick_candidate(mc, 0, 7*86400);
+	if (mu != NULL)
+		return mu;
+	/* ok you can't say we didn't try */
+	return mychan_pick_candidate(mc, 0, 0);
 }
 
 /*****************
