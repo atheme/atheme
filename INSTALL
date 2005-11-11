@@ -99,8 +99,11 @@ for "connect{}" or "link{}" or "C/N lines" for your IRCd.
 To be perfectly honest, if you can't figure this out you should be running
 neither IRCd nor services.
 
-Additionally, some more configuration may need to be done, likely on all
-servers on the network; see doc/IRCD.
+Additionally, you need to do some configuration on all servers on the network.
+You need to reserve ("resv{}", "/resv", "Q line", etc) all nicks Atheme uses
+to avoid normal users taking those nicks and causing trouble. Also, many IRCds
+need to be configured to grant special privileges to Atheme ("service{}",
+"shared{}", "ulines{}", "U lines", etc). See doc/IRCD for more details.
 
 4. STARTING ATHEME
 ------------------
