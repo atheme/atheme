@@ -1,3 +1,13 @@
+jilles      2005/11/11 22:54:29 UTC	(20051111-3879)
+  Log:
+  Remove -i from default mode lock for new channels.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/register.c (File Modified) 
+  +1 -1		trunk/modules/xmlrpc/channel.c (File Modified) 
+
+
 nenolod     2005/11/11 19:59:11 UTC	(20051111-3875)
   Log:
   Change strlcpy use to snprintf in /cs ban.

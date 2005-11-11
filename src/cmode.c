@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 3369 2005-10-31 10:36:48Z jilles $
+ * $Id: cmode.c 3883 2005-11-11 23:14:55Z jilles $
  */
 
 #include "atheme.h"
@@ -450,6 +450,7 @@ void cmode(char *sender, ...)
 			if (modedata[i].used)
 				flush_cmode(&modedata[i]);
 		}
+		return;
 	}
 
 	va_start(args, sender);
