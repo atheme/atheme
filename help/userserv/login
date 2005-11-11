@@ -1,10 +1,10 @@
-Help for IDENTIFY:
+Help for LOGIN:
 
-IDENTIFY identifies you with services so that you
+LOGIN identifies you with services so that you
 can perform general maintenance and commands that
 require you to be logged in.
 
-Syntax: IDENTIFY <password>
+Syntax: LOGIN <account> <password>
 
 Example:
-    /msg &nick& IDENTIFY foo
+    /msg &nick& LOGIN smith sesame

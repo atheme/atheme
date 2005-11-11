@@ -1,6 +1,6 @@
 Help for LIST:
 
-LIST shows nicknames that match a given
+LIST shows accounts that match a given
 pattern. Wildcards are allowed.
 
 Syntax: LIST <pattern>

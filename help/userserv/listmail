@@ -1,6 +1,6 @@
 Help for LISTMAIL:
 
-LISTMAIL shows nicknames registered to a
+LISTMAIL shows accounts registered to a
 given e-mail address. Wildcards are allowed.
 
 Syntax: LISTMAIL <email>

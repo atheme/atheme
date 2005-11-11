@@ -1,10 +1,9 @@
 Help for SENDPASS:
 
 SENDPASS emails the password for the specified
-nickname to the corresponding email address.
-This command is useful for retrieving passwords.
+account to the corresponding email address.
 
-Syntax: SENDPASS <nickname>
+Syntax: SENDPASS <account>
 
 Examples:
     /msg &nick& SENDPASS foo

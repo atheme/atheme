@@ -1,9 +1,9 @@
 Help for INFO:
 
-INFO displays nickname information such as
+INFO displays account information such as
 registration time, flags, and other details.
 
-Syntax: INFO <nickname>
+Syntax: INFO <account>
 
 Examples:
     /msg &nick& INFO w00t

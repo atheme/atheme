@@ -1,8 +1,8 @@
 Help for MARK:
 
-MARK allows operators to attach a note to a nickname
+MARK allows operators to attach a note to a account
 or channel. For example, an operator could mark the
-nickname of a spammer so that others know the user
+account of a spammer so that others know the user
 has previously been warned.
 
 MARK information will be displayed in INFO output.

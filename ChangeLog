@@ -1,3 +1,17 @@
+jilles      2005/11/10 23:59:53 UTC	(20051111-3797)
+  Log:
+  NickServ helpfile updates.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/help/nickserv/drop (File Modified) 
+  +4 -1		trunk/help/nickserv/ghost (File Modified) 
+  +6 -0		trunk/help/nickserv/identify (File Modified) 
+  +5 -1		trunk/help/nickserv/register (File Modified) 
+  +1 -2		trunk/help/nickserv/resetpass (File Modified) 
+  +0 -1		trunk/help/nickserv/sendpass (File Modified) 
+
+
 jilles      2005/11/10 23:52:43 UTC	(20051110-3795)
   Log:
   ChanServ helpfile updates.

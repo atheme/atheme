@@ -1,12 +1,12 @@
 Command - REGISTER
-Usage   - REGISTER <password> <email-address>
+Usage   - REGISTER <account> <password> <email-address>
   
-This will register your current nickname with NickServ. This
-means that only you can have access to this nickname, unless
-you give access to others. The password is a case-sensitive
-password that you make up. Please write down or memorize
-your password! You will need it later to change settings.
+This will register an account with UserServ. This allows
+you to get access to channels more easily and use memos
+(if enabled). The password is a case-sensitive password
+that you make up. Please write down or memorize your
+password! You will need it later to change settings.
   
 Examples:
-    /msg &nick& REGISTER bar foo@bar.com
+    /msg &nick& REGISTER foo sesame foo@bar.com
 

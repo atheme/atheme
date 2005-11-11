@@ -1,9 +1,9 @@
 Help for VERIFY:
 
 VERIFY confirms a change associated with
-your nickname registration.
+your account registration.
 
-Syntax: VERIFY <operation> <nickname> <key>
+Syntax: VERIFY <operation> <account> <key>
 
 Example:
     /msg &nick& VERIFY REGISTER jenny 161803399
