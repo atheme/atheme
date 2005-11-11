@@ -1,3 +1,13 @@
+jilles      2005/11/11 14:46:49 UTC	(20051111-3871)
+  Log:
+  Describe resv/shared/service configuration in a little
+  bit more detail.
+  
+
+  Changes:	Modified:
+  +5 -2		trunk/INSTALL (File Modified) 
+
+
 jilles      2005/11/11 13:44:28 UTC	(20051111-3867)
   Log:
   Repoint target to the parent nick when using /cs flags on an alias.
