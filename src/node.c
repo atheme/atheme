@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3807 2005-11-11 02:02:22Z jilles $
+ * $Id: node.c 3811 2005-11-11 02:18:59Z jilles $
  */
 
 #include "atheme.h"
@@ -1409,7 +1409,11 @@ static myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t access, int time)
 	return NULL;
 }
 
-/* Pick a suitable successor -- jilles */
+/* Pick a suitable successor
+ * Note: please do not make this dependent on currently being in
+ * the channel or on IRC; this would give an unfair advantage to
+ * 24*7 clients and bots.
+ * -- jilles */
 static myuser_t *mychan_pick_successor(mychan_t *mc)
 {
 	myuser_t *mu;
