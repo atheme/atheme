@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 3803 2005-11-11 00:25:48Z jilles $
+ * $Id: flags.c 3867 2005-11-11 13:44:28Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 3803 2005-11-11 00:25:48Z jilles $",
+	"$Id: flags.c 3867 2005-11-11 13:44:28Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -177,6 +177,7 @@ static void cs_cmd_flags(char *origin)
 		                        return;
 
 		                notice(chansvs.nick, origin, "\2%s\2 is an alias for \2%s\2. Editing entry under \2%s\2.", target, md->value, tmu->name);
+				target = tmu->name;
 		        }
 
 			if (tmu == mc->founder && removeflags & CA_FLAGS)
@@ -281,6 +282,7 @@ static void cs_fcmd_flags(char *origin, char *channel)
 				return;
 
 			notice(chansvs.nick, origin, "\2%s\2 is an alias for \2%s\2. Editing entry under \2%s\2.", target, md->value, tmu->name);
+			target = tmu->name;
 		}
 
 		if (tmu == mc->founder && removeflags & CA_FLAGS)

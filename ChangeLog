@@ -1,3 +1,15 @@
+jilles      2005/11/11 13:26:04 UTC	(20051111-3861)
+  Log:
+  - Always return a value in non-void functions
+  - Don't use uninitialized mu in checking linked nicks
+  - Fix bug in METADATA_CHANACS (this still hasn't been
+    tested at all)
+  
+
+  Changes:	Modified:
+  +11 -13	trunk/src/node.c (File Modified) 
+
+
 jilles      2005/11/11 13:07:49 UTC	(20051111-3857)
   Log:
   Send correct key in verification email. Yes, the code
