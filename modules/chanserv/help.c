@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 3807 2005-11-11 02:02:22Z jilles $
+ * $Id: help.c 3809 2005-11-11 02:13:22Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 3807 2005-11-11 02:02:22Z jilles $",
+	"$Id: help.c 3809 2005-11-11 02:13:22Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -101,10 +101,13 @@ static void cs_cmd_help(char *origin)
 		notice(chansvs.nick, origin, "\2%s\2 gives normal users the ability to maintain control", chansvs.nick);
 		notice(chansvs.nick, origin, "of a channel, without the need of a bot. Channel takeovers are");
 		notice(chansvs.nick, origin, "virtually impossible when a channel is registered with \2%s\2.", chansvs.nick);
-		notice(chansvs.nick, origin, "Registration is a quick and painless process. Once registered,", chansvs.nick);
+		notice(chansvs.nick, origin, "Registration is a quick and painless process. Once registered,");
 		notice(chansvs.nick, origin, "the founder can maintain complete and total control over the channel.");
 		notice(chansvs.nick, origin, "Please note that channels will expire after %d days of inactivity,", (config_options.expire / 86400));
-		notice(chansvs.nick, origin, "or if there are no eligible channel successors.");
+		notice(chansvs.nick, origin, "or if there are no eligible channel successors. Successors are");
+		notice(chansvs.nick, origin, "primarily those who have the +R flag set on their account in");
+		notice(chansvs.nick, origin, "the channel, although other people may be chosen depending on");
+		notice(chansvs.nick, origin, "their access level and activity.");
 		notice(chansvs.nick, origin, " ");
 		notice(chansvs.nick, origin, "For more information on a command, type:");
 		notice(chansvs.nick, origin, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
