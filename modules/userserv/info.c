@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 3725 2005-11-09 11:09:39Z jilles $
+ * $Id: info.c 3821 2005-11-11 05:05:24Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 3725 2005-11-09 11:09:39Z jilles $",
+	"$Id: info.c 3821 2005-11-11 05:05:24Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -41,8 +41,8 @@ static void us_cmd_info(char *origin)
 	user_t *u = user_find(origin);
 	myuser_t *mu;
 	char *name = strtok(NULL, " ");
-	char buf[BUFSIZE], strfbuf[32];
-	struct tm tm;
+	char buf[BUFSIZE], strfbuf[32], lastlogin[32];
+	struct tm tm, tm2;
 	metadata_t *md;
 	node_t *n;
 
@@ -63,6 +63,9 @@ static void us_cmd_info(char *origin)
 
 	tm = *localtime(&mu->registered);
 	strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
+	tm2 = *localtime(&mu->lastlogin);
+	strftime(lastlogin, sizeof(lastlogin) -1, "%b %d %H:%M:%S %Y", &tm2);
+
 
 	notice(usersvs.nick, origin, "Information on \2%s\2:", mu->name);
 
@@ -72,6 +75,7 @@ static void us_cmd_info(char *origin)
 		notice(usersvs.nick, origin, "Last login from: %s", md->value);
 
 	notice(usersvs.nick, origin, "Registered : %s (%s ago)", strfbuf, time_ago(mu->registered));
+	notice(usersvs.nick, origin, "Last seen  : %s (%s ago)", lastlogin, time_ago(mu->lastlogin));
 
 	if (!(mu->flags & MU_HIDEMAIL)
 		|| (is_sra(u->myuser) || is_ircop(u) || u->myuser == mu))

@@ -1,3 +1,12 @@
+nenolod     2005/11/11 04:53:59 UTC	(20051111-3819)
+  Log:
+  Implement core-side of the nickTS implementation.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/servtree.c (File Modified) 
+
+
 nenolod     2005/11/11 04:50:39 UTC	(20051111-3817)
   Log:
   authcookie.h: fix a fucked up prototype declaration.
