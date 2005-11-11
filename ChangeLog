@@ -1,3 +1,13 @@
+jilles      2005/11/11 12:39:20 UTC	(20051111-3847)
+  Log:
+  Make authcookie_expire() comply to the prototype for event functions.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/authcookie.h (File Modified) 
+  +3 -2		trunk/src/authcookie.c (File Modified) 
+
+
 jilles      2005/11/11 11:48:36 UTC	(20051111-3839)
   Log:
   Change bahamut/ultimate3/unreal login tracking to use umode +r
