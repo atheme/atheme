@@ -1,3 +1,13 @@
+jilles      2005/11/11 12:55:45 UTC	(20051111-3851)
+  Log:
+  Don't put a semicolon in DECLARE_CLARO_ASSEMBLY_V1, this
+  is supplied by the macro invocation.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/libatheme/org.atheme.claro.base (File Modified) 
+
+
 jilles      2005/11/11 12:39:20 UTC	(20051111-3847)
   Log:
   Make authcookie_expire() comply to the prototype for event functions.

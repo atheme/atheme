@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3815 2005-11-11 04:33:03Z nenolod $
+ * $Id: node.c 3855 2005-11-11 13:04:22Z jilles $
  */
 
 #include "atheme.h"
@@ -40,7 +40,7 @@ static BlockHeap *mychan_heap;	/* HEAP_CHANNEL */
 static BlockHeap *chanacs_heap;	/* HEAP_CHANACS */
 static BlockHeap *metadata_heap;	/* HEAP_CHANUSER */
 
-static myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t access, int time);
+static myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t minlevel, int maxtime);
 static myuser_t *mychan_pick_successor(mychan_t *mc);
 
 /*************
@@ -1378,7 +1378,7 @@ mychan_t *mychan_find(char *name)
 }
 
 /* Find a user fulfilling the conditions who can take another channel */
-static myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t access, int time)
+static myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t minlevel, int maxtime)
 {
 	int j, tcnt;
 	node_t *n, *n2;
@@ -1394,7 +1394,7 @@ static myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t access, int time)
 		mu = ca->myuser;
 		if (mu == NULL || mu == mc->founder)
 			continue;
-		if ((ca->level & access) == access && (time == 0 || LIST_LENGTH(&mu->logins) > 0 || CURRTIME - mu->lastlogin < time))
+		if ((ca->level & minlevel) == minlevel && (maxtime == 0 || LIST_LENGTH(&mu->logins) > 0 || CURRTIME - mu->lastlogin < maxtime))
 		{
 			if (is_sra(mu))
 				return mu;
