@@ -1,3 +1,11 @@
+nenolod     2005/11/11 05:14:48 UTC	(20051111-3831)
+  Log:
+  Regenerate configure.
+
+  Changes:	Modified:
+  +11 -11	trunk/configure (File Modified) 
+
+
 nenolod     2005/11/11 05:14:35 UTC	(20051111-3829)
   Log:
   Version bump on trunk -> 1.0beta1

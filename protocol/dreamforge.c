@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: dreamforge.c 3817 2005-11-11 04:50:39Z nenolod $
+ * $Id: dreamforge.c 3835 2005-11-11 11:31:28Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/dreamforge.h"
 
-DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 3817 2005-11-11 04:50:39Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 3835 2005-11-11 11:31:28Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -424,6 +424,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 
 		/* change the nick */
 		strlcpy(u->nick, parv[0], NICKLEN);
+		u->ts = atoi(parv[1]);
 
 		/* readd with new nick (so the hash works) */
 		n = node_create();

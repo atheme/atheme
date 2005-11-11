@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: inspircd.c 3817 2005-11-11 04:50:39Z nenolod $
+ * $Id: inspircd.c 3835 2005-11-11 11:31:28Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 3817 2005-11-11 04:50:39Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 3835 2005-11-11 11:31:28Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -477,6 +477,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 
 		/* change the nick */
 		strlcpy(u->nick, parv[1], NICKLEN);
+		u->ts = atoi(parv[1]);
 
 		/* readd with new nick (so the hash works) */
 		n = node_create();
