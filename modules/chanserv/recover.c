@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService RECOVER functions.
  *
- * $Id: recover.c 3735 2005-11-09 12:23:51Z jilles $
+ * $Id: recover.c 3891 2005-11-12 02:16:49Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/recover", FALSE, _modinit, _moddeinit,
-	"$Id: recover.c 3735 2005-11-09 12:23:51Z jilles $",
+	"$Id: recover.c 3891 2005-11-12 02:16:49Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -42,11 +42,11 @@ void _moddeinit()
 static void cs_cmd_recover(char *origin)
 {
 	user_t *u = user_find(origin);
-	chanuser_t *cu;
+	chanuser_t *cu, *origin_cu = NULL;
 	mychan_t *mc;
 	node_t *n;
 	char *name = strtok(NULL, " ");
-	char hostbuf[BUFSIZE];
+	char hostbuf[BUFSIZE], hostbuf2[BUFSIZE];
 
 	if (!name)
 	{
@@ -87,10 +87,25 @@ static void cs_cmd_recover(char *origin)
 	{
 		cu = (chanuser_t *)n->data;
 
-		if ((CMODE_OP & cu->modes) && (irccasecmp(chansvs.nick, cu->user->nick)))
+		if (cu->user == u)
+			origin_cu = cu;
+		else if (is_internal_client(cu->user))
+			;
+		else
 		{
-			cmode(chansvs.nick, mc->chan->name, "-o", CLIENT_NAME(cu->user));
-			cu->modes &= ~CMODE_OP;
+			if ((CMODE_OP & cu->modes))
+			{
+				cmode(chansvs.nick, mc->chan->name, "-o", CLIENT_NAME(cu->user));
+				cu->modes &= ~CMODE_OP;
+			}
+			if (ircd->uses_halfops && (ircd->halfops_mode & cu->modes))
+			{
+				char minush[3];
+				strlcpy(minush, ircd->halfops_mchar, 3);
+				minush[0] = '-';
+				cmode(chansvs.nick, mc->chan->name, minush, CLIENT_NAME(cu->user));
+				cu->modes &= ~ircd->halfops_mode;
+			}
 		}
 	}
 
@@ -102,12 +117,6 @@ static void cs_cmd_recover(char *origin)
 		mc->chan->limit = 0;
 	}
 
-	if (CMODE_INVITE & mc->chan->modes)
-	{
-		cmode(chansvs.nick, mc->chan->name, "-i", NULL);
-		mc->chan->modes &= ~CMODE_INVITE;
-	}
-
 	if (CMODE_KEY & mc->chan->modes)
 	{
 		cmode(chansvs.nick, mc->chan->name, "-k", mc->chan->key);
@@ -116,22 +125,55 @@ static void cs_cmd_recover(char *origin)
 		mc->chan->key = NULL;
 	}
 
-	/* set an exempt on the user calling this */
-	hostbuf[0] = '\0';
+	if (origin_cu != NULL)
+	{
+		if (!(CMODE_OP & origin_cu->modes))
+			cmode(chansvs.nick, mc->chan->name, "+o", CLIENT_NAME(u));
+		origin_cu->modes |= CMODE_OP;
+	}
 
-	strlcat(hostbuf, u->nick, BUFSIZE);
-	strlcat(hostbuf, "!", BUFSIZE);
-	strlcat(hostbuf, u->user, BUFSIZE);
-	strlcat(hostbuf, "@", BUFSIZE);
-	strlcat(hostbuf, u->vhost, BUFSIZE);
+	if (origin_cu != NULL || (chanacs_user_flags(mc, u) & (CA_OP | CA_AUTOOP)))
+	{
 
-	/* no exception list structure right now */
-	/* XXX check to see if the ircd even does +e */
-	cmode(chansvs.nick, mc->chan->name, "+e", hostbuf);
+		cmode(chansvs.nick, mc->chan->name, "+im", NULL);
+		mc->chan->modes |= CMODE_INVITE | CMODE_MOD;
+	}
+	else if (CMODE_INVITE & mc->chan->modes)
+	{
+		cmode(chansvs.nick, mc->chan->name, "-i", NULL);
+		mc->chan->modes &= ~CMODE_INVITE;
+	}
 
-	/* invite them back. */
-	/* XXX need to wrap this, same with CS INVITE */
-	sts(":%s INVITE %s %s", chansvs.nick, u->nick, mc->chan->name);
+	/* unban the user */
+	snprintf(hostbuf, BUFSIZE, "%s!%s@%s", u->nick, u->user, u->host);
+	snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", u->nick, u->user, u->vhost);
 
-	notice(chansvs.nick, origin, "Recover complete for \2%s\2.", mc->chan->name);
+	LIST_FOREACH(n, mc->chan->bans.head)
+	{
+		chanban_t *cb = n->data;
+
+		if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2))
+		{
+			cmode(chansvs.nick, mc->chan->name, "-b", cb->mask);
+			chanban_delete(cb);
+		}
+	}
+
+	cmode(NULL); /* flush stacker */
+
+	if (origin_cu == NULL)
+	{
+		/* set an exempt on the user calling this */
+		/* no exception list structure right now */
+		/* XXX check to see if the ircd even does +e */
+		snprintf(hostbuf, BUFSIZE, "+e %s", hostbuf2);
+		mode_sts(chansvs.nick, mc->chan->name, hostbuf);
+
+		/* invite them back. */
+		/* XXX need to wrap this, same with CS INVITE */
+		sts(":%s INVITE %s %s", chansvs.nick, u->nick, mc->chan->name);
+		notice(chansvs.nick, origin, "Recover complete for \2%s\2, ban exception \2%s\2 added.", mc->chan->name, hostbuf2);
+	}
+	else
+		notice(chansvs.nick, origin, "Recover complete for \2%s\2.", mc->chan->name);
 }

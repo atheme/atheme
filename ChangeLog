@@ -1,3 +1,13 @@
+jilles      2005/11/12 01:44:01 UTC	(20051112-3887)
+  Log:
+  When using a nick with /cs unban and !unban, show the 
+  number of bans removed.
+  
+
+  Changes:	Modified:
+  +12 -2	trunk/modules/chanserv/ban.c (File Modified) 
+
+
 jilles      2005/11/11 23:14:55 UTC	(20051111-3883)
   Log:
   Make cmode(NULL) to flush the stacker work instead of crash.

@@ -3,6 +3,16 @@ Help for RECOVER:
 RECOVER allows you to regain control of your
 channel in the event of a takeover.
 
+More precisely, everyone will be deopped,
+limit and key will be cleared, all bans
+matching you are removed, a ban exception
+matching you is added (in case of bans Atheme
+can't see), the channel is set invite-only
+and moderated and you are invited.
+
+If you are on channel, you will be opped and
+no ban exception will be added.
+
 Syntax: RECOVER <#channel>
 
 Example:
