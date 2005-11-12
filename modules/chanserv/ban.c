@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 3875 2005-11-11 19:59:11Z nenolod $
+ * $Id: ban.c 3887 2005-11-12 01:44:01Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", FALSE, _modinit, _moddeinit,
-	"$Id: ban.c 3875 2005-11-11 19:59:11Z nenolod $",
+	"$Id: ban.c 3887 2005-11-12 01:44:01Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -196,6 +196,7 @@ static void cs_cmd_unban (char *origin)
 	{
 		node_t *n;
 		char hostbuf[BUFSIZE], hostbuf2[BUFSIZE];
+		int count = 0;
 
 		snprintf(hostbuf, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->host);
 		snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->vhost);
@@ -211,9 +212,13 @@ static void cs_cmd_unban (char *origin)
 				logcommand(chansvs.me, u, CMDLOG_DO, "%s UNBAN %s (for user %s)", mc->name, cb->mask, hostbuf2);
 				cmode(chansvs.nick, c->name, "-b", cb->mask);
 				chanban_delete(cb);
+				count++;
 			}
 		}
-		notice(chansvs.nick, origin, "Unbanned \2%s\2 on \2%s\2.", target, channel);
+		if (count > 0)
+			notice(chansvs.nick, origin, "Unbanned \2%s\2 on \2%s\2 (%d bans removed).", target, channel, count);
+		else
+			notice(chansvs.nick, origin, "No bans found matching \2%s\2 on \2%s\2.", target, channel);
 		return;
 	}
         else
@@ -353,6 +358,7 @@ static void cs_fcmd_unban (char *origin, char *channel)
 	{
 		node_t *n;
 		char hostbuf[BUFSIZE], hostbuf2[BUFSIZE];
+		int count = 0;
 
 		snprintf(hostbuf, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->host);
 		snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->vhost);
@@ -368,9 +374,13 @@ static void cs_fcmd_unban (char *origin, char *channel)
 				logcommand(chansvs.me, u, CMDLOG_DO, "%s UNBAN %s (for user %s)", mc->name, cb->mask, hostbuf2);
 				cmode(chansvs.nick, c->name, "-b", cb->mask);
 				chanban_delete(cb);
+				count++;
 			}
 		}
-		notice(chansvs.nick, origin, "Unbanned \2%s\2 on \2%s\2.", target, channel);
+		if (count > 0)
+			notice(chansvs.nick, origin, "Unbanned \2%s\2 on \2%s\2 (%d bans removed).", target, channel, count);
+		else
+			notice(chansvs.nick, origin, "No bans found matching \2%s\2 on \2%s\2.", target, channel);
 		return;
 	}
         else

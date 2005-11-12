@@ -1,3 +1,12 @@
+jilles      2005/11/11 23:14:55 UTC	(20051111-3883)
+  Log:
+  Make cmode(NULL) to flush the stacker work instead of crash.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/src/cmode.c (File Modified) 
+
+
 jilles      2005/11/11 22:54:29 UTC	(20051111-3879)
   Log:
   Remove -i from default mode lock for new channels.
