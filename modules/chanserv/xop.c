@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 3749 2005-11-09 13:52:45Z jilles $
+ * $Id: xop.c 3895 2005-11-13 00:39:14Z jilles $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 3749 2005-11-09 13:52:45Z jilles $",
+	"$Id: xop.c 3895 2005-11-13 00:39:14Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 /* the individual command stuff, now that we've reworked, hardcode ;) --w00t */
 static void cs_xop_do_list(mychan_t *mc, char *origin, uint32_t level, int operoverride);
-static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level);
+static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level, uint32_t restrictflags);
 static void cs_xop_do_del(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level);
 
 static void cs_cmd_sop(char *origin);
@@ -75,6 +75,7 @@ static void cs_xop(char *origin, uint32_t level)
 	chanuser_t *cu;
 	node_t *n;
 	int operoverride = 0;
+	uint32_t restrictflags;
 	char *chan = strtok(NULL, " ");
 	char *cmd = strtok(NULL, " ");
 	char *uname = strtok(NULL, " ");
@@ -134,17 +135,43 @@ static void cs_xop(char *origin, uint32_t level)
 				return;
 			}
 		}
-		if (!chanacs_user_has_flag(mc, u, CA_FLAGS))
+		/* As in /cs flags, allow founder to do anything */
+		if (is_founder(mc, u->myuser))
+			restrictflags = CA_ALL;
+		else
+			restrictflags = chanacs_user_flags(mc, u);
+		/* The following is a bit complicated, to allow for
+		 * possible future denial of granting +f */
+		if (!(restrictflags & CA_FLAGS))
 		{
 			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 			return;
 		}
-		cs_xop_do_add(mc, mu, origin, uname, level);
+		restrictflags = allow_flags(restrictflags);
+		if ((restrictflags & level) != level)
+		{
+			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+			return;
+		}
+		cs_xop_do_add(mc, mu, origin, uname, level, restrictflags);
 	}
 
 	else if (!strcasecmp("DEL", cmd))
 	{
-		if (!chanacs_user_has_flag(mc, u, CA_FLAGS))
+		/* As in /cs flags, allow founder to do anything */
+		if (is_founder(mc, u->myuser))
+			restrictflags = CA_ALL;
+		else
+			restrictflags = chanacs_user_flags(mc, u);
+		/* The following is a bit complicated, to allow for
+		 * possible future denial of granting +f */
+		if (!(restrictflags & CA_FLAGS))
+		{
+			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+			return;
+		}
+		restrictflags = allow_flags(restrictflags);
+		if ((restrictflags & level) != level)
 		{
 			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 			return;
@@ -196,7 +223,7 @@ static void cs_cmd_hop(char *origin)
 }
 
 
-static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level)
+static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level, uint32_t restrictflags)
 {
 	uint32_t modetoset = 0;
 	char *leveldesc = NULL;
@@ -235,17 +262,34 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 			return;
 		}
 
-		if (chanacs_find_host_literal(mc, target, level))
+		target = collapse(target);
+		ca = chanacs_find_host_literal(mc, target, CA_NONE);
+		if (ca != NULL && ca->level == level)
 		{
 			notice(chansvs.nick, origin, "\2%s\2 is already on the %s list for \2%s\2", target, leveldesc, mc->name);
 			return;
 		}
 
-		target = collapse(target);
-		chanacs_add_host(mc, target, level);
-		verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", origin, target, leveldesc);
-		logcommand(chansvs.me, user_find(origin), CMDLOG_SET, "%s %s ADD %s", mc->name, leveldesc, target);
-		notice(chansvs.nick, origin, "\2%s\2 has been added to the %s list for \2%s\2.", target, leveldesc, mc->name);
+		if (ca != NULL)
+		{
+			if (ca->level & ~restrictflags)
+			{
+				notice(chansvs.nick, origin, "You are not authorized to modify the access entry for \2%s\2 on \2%s\2.", target, mc->name);
+				return;
+			}
+			/* they have access? change it! */
+			logcommand(chansvs.me, user_find(origin), CMDLOG_SET, "%s %s ADD %s (changed access)", mc->name, leveldesc, target);
+			notice(chansvs.nick, origin, "\2%s\2's access on \2%s\2 has been changed to \2%s\2.", target, mc->name, leveldesc);
+			verbose(mc, "\2%s\2 changed \2%s\2's access to \2%s\2.", origin, target, leveldesc);
+			ca->level = level;
+		}
+		else
+		{
+			logcommand(chansvs.me, user_find(origin), CMDLOG_SET, "%s %s ADD %s", mc->name, leveldesc, target);
+			notice(chansvs.nick, origin, "\2%s\2 has been added to the %s list for \2%s\2.", target, leveldesc, mc->name);
+			verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", origin, target, leveldesc);
+			chanacs_add_host(mc, target, level);
+		}
 
 		/* run through the channel's user list and do it */
 		LIST_FOREACH(n, mc->chan->members.head)
@@ -301,35 +345,38 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 		notice(chansvs.nick, origin, "\2%s\2 is an alias for \2%s\2. Adding entry under \2%s\2.", target, md->value, mu->name);
 	}
 
-	if (ca = chanacs_find(mc, mu, level))
+	if (mu == mc->founder)
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is the founder for \2%s\2 and may not be added to the %s list.", mu->name, mc->name, leveldesc);
+		return;
+	}
+
+	ca = chanacs_find(mc, mu, CA_NONE);
+	if (ca != NULL && ca->level == level)
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is already on the %s list for \2%s\2.", mu->name, leveldesc, mc->name);
 		return;
 	}
-
 
 	/*
 	 * this is a little more cryptic than it used to be, but much cleaner. Functionally should be
 	 * the same, with the exception that if they had access before, now it doesn't tell what it got
 	 * changed from (I considered the effort to put an extra lookup in not worth it. --w00t
 	 */
+	/* just assume there's just one entry for that user -- jilles */
 
-	if (ca = chanacs_find(mc, mu, CA_NONE))
+	if (ca != NULL)
 	{
-		/* they have access? remove it! */
-		LIST_FOREACH(n, mc->chanacs.head)
+		if (ca->level & ~restrictflags)
 		{
-			/* seek! */
-			ca = (chanacs_t *)n->data;
-			if (ca->myuser->name == mu->name)
-			{
-				/* found an entry? kill it! */
-				chanacs_delete(mc, mu, ca->level);
-			}
-                }
+			notice(chansvs.nick, origin, "You are not authorized to modify the access entry for \2%s\2 on \2%s\2.", mu->name, mc->name);
+			return;
+		}
+		/* they have access? change it! */
 		logcommand(chansvs.me, user_find(origin), CMDLOG_SET, "%s %s ADD %s (changed access)", mc->name, leveldesc, mu->name);
 		notice(chansvs.nick, origin, "\2%s\2's access on \2%s\2 has been changed to \2%s\2.", mu->name, mc->name, leveldesc);
 		verbose(mc, "\2%s\2 changed \2%s\2's access to \2%s\2.", origin, mu->name, leveldesc);
+		ca->level = level;
 	}
 	else
 	{
@@ -337,10 +384,8 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 		logcommand(chansvs.me, user_find(origin), CMDLOG_SET, "%s %s ADD %s", mc->name, leveldesc, mu->name);
 		notice(chansvs.nick, origin, "\2%s\2 has been added to the %s list for \2%s\2.", mu->name, leveldesc, mc->name);
 		verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", origin, mu->name, leveldesc);
+		chanacs_add(mc, mu, level);
 	}
-
-	/* add here to save a line */
-	chanacs_add(mc, mu, level);
 }
 
 static void cs_xop_do_del(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level)
@@ -397,9 +442,16 @@ static void cs_xop_do_del(mychan_t *mc, myuser_t *mu, char *origin, char *target
 		return;
 	}
 
-	if (!(ca = chanacs_find(mc, mu, level)))
+	if (!(ca = chanacs_find(mc, mu, level)) || ca->level != level)
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is not on the %s list for \2%s\2.", mu->name, leveldesc, mc->name);
+		return;
+	}
+
+	/* just in case... -- jilles */
+	if (mu == mc->founder)
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is the founder for \2%s\2 and may not be removed from the %s list.", mu->name, mc->name, leveldesc);
 		return;
 	}
 

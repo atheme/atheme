@@ -1,3 +1,17 @@
+jilles      2005/11/12 02:16:49 UTC	(20051112-3891)
+  Log:
+  /cs recover:
+  - Also deop all halfops
+  - Set +im to help if there's both takeover and flooding
+  - Unban the source of the command
+  - Make +e setting work
+  
+
+  Changes:	Modified:
+  +10 -0	trunk/help/cservice/recover (File Modified) 
+  +67 -25	trunk/modules/chanserv/recover.c (File Modified) 
+
+
 jilles      2005/11/12 01:44:01 UTC	(20051112-3887)
   Log:
   When using a nick with /cs unban and !unban, show the 
