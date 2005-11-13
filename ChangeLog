@@ -1,3 +1,11 @@
+nenolod     2005/11/13 06:07:08 UTC	(20051113-3897)
+  Log:
+  Better dice module. :P
+
+  Changes:	Modified:
+  +16 -5	trunk/contrib/fc_dice.c (File Modified) 
+
+
 jilles      2005/11/13 00:39:14 UTC	(20051113-3895)
   Log:
   - Apply new +f restrictions to xOP

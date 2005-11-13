@@ -4,7 +4,7 @@
  *
  * Dice generator fantasy command.
  *
- * $Id: fc_dice.c 3897 2005-11-13 06:07:08Z nenolod $
+ * $Id: fc_dice.c 3899 2005-11-13 06:20:50Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"contrib/fc_dice", FALSE, _modinit, _moddeinit,
-	"$Id: fc_dice.c 3897 2005-11-13 06:07:08Z nenolod $",
+	"$Id: fc_dice.c 3899 2005-11-13 06:20:50Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -51,6 +51,12 @@ static void fcommand_dice(char *origin, char *channel)
 
 	if (dice > 256)
 		dice = 256;
+
+	if (!dice || !sides)
+	{
+		dice = 1;
+		sides = 1;
+	}
 
 	srand(time(0));
 
