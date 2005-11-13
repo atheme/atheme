@@ -4,25 +4,33 @@
  *
  * Dice generator fantasy command.
  *
- * $Id: fc_dice.c 814 2005-07-16 03:37:24Z nenolod $
+ * $Id: fc_dice.c 3897 2005-11-13 06:07:08Z nenolod $
  */
 
 #include "atheme.h"
+
+DECLARE_MODULE_V1
+(
+	"contrib/fc_dice", FALSE, _modinit, _moddeinit,
+	"$Id: fc_dice.c 3897 2005-11-13 06:07:08Z nenolod $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 static void fcommand_dice(char *origin, char *channel);
 
 fcommand_t fc_dice = { "!roll", AC_NONE, fcommand_dice };
 
-extern list_t cs_fcmdtree;
+list_t *cs_fcmdtree;
 
 void _modinit(module_t * m)
 {
-	fcommand_add(&fc_dice, &cs_fcmdtree);
+	cs_fcmdtree = module_locate_symbol("chanserv/main", "cs_fcmdtree");
+	fcommand_add(&fc_dice, cs_fcmdtree);
 }
 
 void _moddeinit()
 {
-	fcommand_delete(&fc_dice, &cs_fcmdtree);
+	fcommand_delete(&fc_dice, cs_fcmdtree);
 }
 
 static void fcommand_dice(char *origin, char *channel)
@@ -35,16 +43,19 @@ static void fcommand_dice(char *origin, char *channel)
 
 	sscanf(arg, "%dd%d", &dice, &sides);
 
-	if (dice < 0)
+	if (dice <= 0)
 	{
 		dice = 1;
 		sscanf(arg, "d%d", &sides);
 	}
+
+	if (dice > 256)
+		dice = 256;
 
 	srand(time(0));
 
 	for (i = 0; i < dice; i++)
 		roll += (rand() % sides);
 
-	notice(chansvs.nick, channel, "%d", roll);
+	msg(chansvs.nick, channel, "Your roll: \2%d\2", roll);
 }
