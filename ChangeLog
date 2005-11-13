@@ -1,3 +1,11 @@
+nenolod     2005/11/13 06:20:50 UTC	(20051113-3899)
+  Log:
+  Prevent infinite loop (divide by 0).
+
+  Changes:	Modified:
+  +6 -0		trunk/contrib/fc_dice.c (File Modified) 
+
+
 nenolod     2005/11/13 06:07:08 UTC	(20051113-3897)
   Log:
   Better dice module. :P

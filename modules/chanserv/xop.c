@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 3895 2005-11-13 00:39:14Z jilles $
+ * $Id: xop.c 3901 2005-11-13 15:16:55Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 3895 2005-11-13 00:39:14Z jilles $",
+	"$Id: xop.c 3901 2005-11-13 15:16:55Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -292,6 +292,9 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 		}
 
 		/* run through the channel's user list and do it */
+		/* make sure the channel exists */
+		if (mc->chan == NULL)
+			return;
 		LIST_FOREACH(n, mc->chan->members.head)
 		{
 			cu = (chanuser_t *)n->data;
