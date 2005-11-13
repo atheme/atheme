@@ -1,3 +1,12 @@
+jilles      2005/11/13 15:16:55 UTC	(20051113-3901)
+  Log:
+  Don't crash on XOP ADD <hostmask> if the channel doesn't exist.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/modules/chanserv/xop.c (File Modified) 
+
+
 nenolod     2005/11/13 06:20:50 UTC	(20051113-3899)
   Log:
   Prevent infinite loop (divide by 0).

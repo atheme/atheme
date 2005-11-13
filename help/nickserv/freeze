@@ -1,9 +1,10 @@
 Help for FREEZE:
 
-FREEZE allows operators to "freeze" an abusive users
-nickname. When an operator freezes a nickname, the user
-can no longer identify to the nickname. This prevents
-any access to be gained.
+
+FREEZE allows operators to "freeze" an abusive user's
+nickname. Users cannot log into a frozen nickname.
+Thus, users cannot obtain the access associated with
+the nickname.
 
 FREEZE information will be displayed in INFO output.
 

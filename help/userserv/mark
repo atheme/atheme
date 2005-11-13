@@ -1,13 +1,13 @@
 Help for MARK:
 
-MARK allows operators to attach a note to a account
+MARK allows operators to attach a note to an account
 or channel. For example, an operator could mark the
 account of a spammer so that others know the user
 has previously been warned.
 
 MARK information will be displayed in INFO output.
 
-Syntax: MARK <nickname> ON|OFF <reason>
+Syntax: MARK <account> ON|OFF <reason>
 
 Examples:
     /msg &nick& MARK game_boy ON Persistent spammer

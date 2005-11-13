@@ -2,7 +2,7 @@ Help for STATUS:
 
 STATUS returns information about your current
 state. It will show information about your
-nickname, IRC operator, and SRA status.
+account, IRC operator, and SRA status.
 
 Syntax: STATUS
 
