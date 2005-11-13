@@ -1,3 +1,16 @@
+alambert    2005/11/13 20:06:02 UTC	(20051113-3903)
+  Log:
+  reconcile userserv and nickserv help files
+
+  Changes:	Modified:
+  +5 -4		trunk/help/nickserv/freeze (File Modified) 
+  +1 -1		trunk/help/userserv/drop (File Modified) 
+  +3 -3		trunk/help/userserv/freeze (File Modified) 
+  +2 -2		trunk/help/userserv/mark (File Modified) 
+  +1 -1		trunk/help/userserv/set_property (File Modified) 
+  +1 -1		trunk/help/userserv/status (File Modified) 
+
+
 jilles      2005/11/13 15:16:55 UTC	(20051113-3901)
   Log:
   Don't crash on XOP ADD <hostmask> if the channel doesn't exist.

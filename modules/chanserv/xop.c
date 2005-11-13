@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 3901 2005-11-13 15:16:55Z jilles $
+ * $Id: xop.c 3905 2005-11-13 20:55:37Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 3901 2005-11-13 15:16:55Z jilles $",
+	"$Id: xop.c 3905 2005-11-13 20:55:37Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -320,9 +320,9 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 					}
 					break;
 				case CA_HOP:
-					if (should_halfop_host(mc, hostbuf))
+					if (ircd->uses_halfops && should_halfop_host(mc, hostbuf))
 					{
-						cmode(chansvs.nick, mc->name, "+h", cu->user->nick);
+						cmode(chansvs.nick, mc->name, ircd->halfops_mode, cu->user->nick);
 						cu->modes |= ircd->halfops_mode;
 					}
 					break;
