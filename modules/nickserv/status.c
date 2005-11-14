@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService STATUS function.
  *
- * $Id: status.c 3583 2005-11-06 21:48:28Z jilles $
+ * $Id: status.c 3913 2005-11-14 23:46:56Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/status", FALSE, _modinit, _moddeinit,
-	"$Id: status.c 3583 2005-11-06 21:48:28Z jilles $",
+	"$Id: status.c 3913 2005-11-14 23:46:56Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -62,7 +62,10 @@ static void ns_cmd_acc(char *origin)
 		u = user_find_named(targ);
 
 	if (!u)
+	{
+		notice(nicksvs.nick, origin, "User not online, %s", u->nick);
 		return;
+	}
 
 	logcommand(nicksvs.me, user_find(origin), CMDLOG_GET, "ACC %s", u->nick);
 

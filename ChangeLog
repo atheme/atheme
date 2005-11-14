@@ -1,3 +1,15 @@
+jilles      2005/11/14 10:52:52 UTC	(20051114-3911)
+  Log:
+  Log ircop/sra use of ns/cs taxonomy as CMDLOG_ADMIN with an "(oper)" note.
+  
+  Tracker bug #73
+  
+
+  Changes:	Modified:
+  +7 -2		trunk/modules/chanserv/taxonomy.c (File Modified) 
+  +7 -2		trunk/modules/nickserv/taxonomy.c (File Modified) 
+
+
 pfish       2005/11/14 03:16:46 UTC	(20051114-3907)
   Log:
   Update example configs with proper uflags/clflags
