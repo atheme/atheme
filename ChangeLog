@@ -1,3 +1,12 @@
+pfish       2005/11/14 03:16:46 UTC	(20051114-3907)
+  Log:
+  Update example configs with proper uflags/clflags
+
+  Changes:	Modified:
+  +1 -1		trunk/dist/example.conf (File Modified) 
+  +1 -1		trunk/dist/example.userserv.conf (File Modified) 
+
+
 jilles      2005/11/13 20:55:37 UTC	(20051113-3905)
   Log:
   - Don't set halfops if the ircd doesn't support them
