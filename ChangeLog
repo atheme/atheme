@@ -1,3 +1,15 @@
+jilles      2005/11/13 20:55:37 UTC	(20051113-3905)
+  Log:
+  - Don't set halfops if the ircd doesn't support them
+  - Use ircd->halfops_mode instead of hardcoding +h
+  
+  Pointed out by: alambert
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/chanserv/xop.c (File Modified) 
+
+
 alambert    2005/11/13 20:06:02 UTC	(20051113-3903)
   Log:
   reconcile userserv and nickserv help files
