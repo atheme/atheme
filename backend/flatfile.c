@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 3807 2005-11-11 02:02:22Z jilles $
+ * $Id: flatfile.c 3927 2005-11-15 04:15:17Z alambert $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 3807 2005-11-11 02:02:22Z jilles $",
+	"$Id: flatfile.c 3927 2005-11-15 04:15:17Z alambert $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -264,11 +264,11 @@ static void flatfile_db_load(void)
 				mu->lastlogin = lastlogin;
 
 				if (strcmp(failnum, "0"))
-					metadata_add(mu, METADATA_USER, "private:loginfail:failnum", s);
+					metadata_add(mu, METADATA_USER, "private:loginfail:failnum", failnum);
 				if (strcmp(lastfailaddr, "0"))
-					metadata_add(mu, METADATA_USER, "private:loginfail:lastfailaddr", s);
+					metadata_add(mu, METADATA_USER, "private:loginfail:lastfailaddr", lastfailaddr);
 				if (strcmp(lastfailtime, "0"))
-					metadata_add(mu, METADATA_USER, "private:loginfail:lastfailtime", s);
+					metadata_add(mu, METADATA_USER, "private:loginfail:lastfailtime", lastfailtime);
 
 				/* Verification keys were moved to metadata,
 				 * but we'll still accept them from legacy
