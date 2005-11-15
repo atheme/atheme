@@ -9465,7 +9465,7 @@ elif test -d /usr/local/psql/include ; then
 elif test -d /usr/local/include/postgresql ; then
 	pg_inc_dir="/usr/local/include/postgresql"
 elif test -d /usr/local/pgsql/include ; then
-	pg_inc_dir="/usr/local/include/psql"
+	pg_inc_dir="/usr/local/pgsql/include"
 elif test -d /usr/local/include/psql ; then
 	pg_inc_dir="/usr/local/include/psql"
 elif test -d /opt/psql/include ; then

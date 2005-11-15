@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 3829 2005-11-11 05:14:35Z nenolod $
+dnl $Id: configure.ac 3921 2005-11-15 03:42:16Z alambert $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, 1.0beta1, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 3829 2005-11-11 05:14:35Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 3921 2005-11-15 03:42:16Z alambert $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -179,7 +179,7 @@ elif test -d /usr/local/psql/include ; then
 elif test -d /usr/local/include/postgresql ; then
 	pg_inc_dir="/usr/local/include/postgresql"
 elif test -d /usr/local/pgsql/include ; then
-	pg_inc_dir="/usr/local/include/psql"
+	pg_inc_dir="/usr/local/pgsql/include"
 elif test -d /usr/local/include/psql ; then
 	pg_inc_dir="/usr/local/include/psql"
 elif test -d /opt/psql/include ; then

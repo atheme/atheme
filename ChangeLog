@@ -1,3 +1,11 @@
+alambert    2005/11/15 03:28:41 UTC	(20051115-3917)
+  Log:
+  Don't let memos pretend to be CTCP replies
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/memoserv/send.c (File Modified) 
+
+
 pfish       2005/11/14 23:46:56 UTC	(20051114-3913)
   Log:
   NickServ: Notify a user when using ACC that a user is offline instead of just returning.
