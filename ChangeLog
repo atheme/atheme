@@ -1,3 +1,12 @@
+alambert    2005/11/15 03:42:16 UTC	(20051115-3921)
+  Log:
+  Use the right directory for pgsql headers. Reported by Matt.
+
+  Changes:	Modified:
+  +1 -1		trunk/configure (File Modified) 
+  +1 -1		trunk/configure.ac (File Modified) 
+
+
 alambert    2005/11/15 03:28:41 UTC	(20051115-3917)
   Log:
   Don't let memos pretend to be CTCP replies
