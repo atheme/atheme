@@ -1,3 +1,11 @@
+alambert    2005/11/15 04:15:17 UTC	(20051115-3927)
+  Log:
+  Legacy loginfail conversion: use the right variable. Reported by nenolod.
+
+  Changes:	Modified:
+  +3 -3		trunk/backend/flatfile.c (File Modified) 
+
+
 alambert    2005/11/15 03:42:16 UTC	(20051115-3921)
   Log:
   Use the right directory for pgsql headers. Reported by Matt.
