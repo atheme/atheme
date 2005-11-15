@@ -1,3 +1,14 @@
+pfish       2005/11/14 23:46:56 UTC	(20051114-3913)
+  Log:
+  NickServ: Notify a user when using ACC that a user is offline instead of just returning.
+  UserServ: Fix a crash where ACC is used on a offline user.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/modules/nickserv/status.c (File Modified) 
+  +7 -0		trunk/modules/userserv/status.c (File Modified) 
+
+
 jilles      2005/11/14 10:52:52 UTC	(20051114-3911)
   Log:
   Log ircop/sra use of ns/cs taxonomy as CMDLOG_ADMIN with an "(oper)" note.
