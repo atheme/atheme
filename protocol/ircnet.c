@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 3945 2005-11-17 17:17:28Z jilles $
+ * $Id: ircnet.c 3947 2005-11-17 17:38:40Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 3945 2005-11-17 17:17:28Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 3947 2005-11-17 17:38:40Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -501,7 +501,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			return;
 		}
 
-		u = user_add(parv[0], parv[2], parv[3], NULL, NULL, parv[1], parv[6], s, 0);
+		u = user_add(parv[0], parv[2], parv[3], NULL, parv[4], parv[1], parv[6], s, 0);
 
 		user_mode(u, parv[5]);
 
