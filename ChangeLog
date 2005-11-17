@@ -1,3 +1,15 @@
+jilles      2005/11/17 17:14:06 UTC	(20051117-3943)
+  Log:
+  - Use EOB and EOBACK commands (so we don't appear as bursting in
+    /stats ? and to detect the uplink's end of burst)
+  - Keep track of netwide EOB because we don't need to send anything
+    for it
+  
+
+  Changes:	Modified:
+  +41 -2	trunk/protocol/ircnet.c (File Modified) 
+
+
 alambert    2005/11/15 07:06:10 UTC	(20051115-3931)
   Log:
   flatfile: Mirror check in other backends -- don't blindly trust the result of myuser_find(). Abort if a channel has no founder.
