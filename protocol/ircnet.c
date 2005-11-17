@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 3835 2005-11-11 11:31:28Z jilles $
+ * $Id: ircnet.c 3943 2005-11-17 17:14:06Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 3835 2005-11-11 11:31:28Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 3943 2005-11-17 17:14:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -80,6 +80,8 @@ static uint8_t ircnet_server_login(void)
 	sts("SERVER %s 1 %s :%s", me.name, me.numeric, me.desc);
 
 	services_init();
+
+	sts(":%s EOB", me.numeric);
 
 	return 0;
 }
@@ -366,16 +368,52 @@ static void m_pong(char *origin, uint8_t parc, char *parv[])
 	me.uplinkpong = CURRTIME;
 
 	/* -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net */
+}
+
+static void m_eob(char *origin, uint8_t parc, char *parv[])
+{
+	server_t *source = server_find(origin), *serv;
+	char sidbuf[4+1], *p;
+
+	if (source == NULL)
+	{
+		slog(LG_DEBUG, "m_eob(): Got EOB from unknown server %s", origin);
+	}
+	if (!(source->flags & SF_EOB))
+	{
+		source->flags |= SF_EOB;
+		slog(LG_DEBUG, "m_eob(): End of burst from %s", source->name);
+	}
+	if (parc >= 1)
+	{
+		sidbuf[4] = '\0';
+		p = parv[0];
+		while (p[0] && p[1] && p[2] && p[3])
+		{
+			memcpy(sidbuf, p, 4);
+			serv = server_find(sidbuf);
+			if (serv != NULL && !(serv->flags & SF_EOB))
+			{
+				slog(LG_DEBUG, "m_eob(): End of burst from %s (mass, via %s)", serv->name, source->name);
+				serv->flags |= SF_EOB;
+			}
+			if (p[4] != ',')
+				break;
+			p += 5;
+		}
+	}
+
 	if (me.bursting)
 	{
+		sts(":%s EOBACK", me.numeric);
 #ifdef HAVE_GETTIMEOFDAY
 		e_time(burstime, &burstime);
 
-		slog(LG_INFO, "m_pong(): finished synching with uplink (%d %s)", (tv2ms(&burstime) > 1000) ? (tv2ms(&burstime) / 1000) : tv2ms(&burstime), (tv2ms(&burstime) > 1000) ? "s" : "ms");
+		slog(LG_INFO, "m_eob(): finished synching with uplink (%d %s)", (tv2ms(&burstime) > 1000) ? (tv2ms(&burstime) / 1000) : tv2ms(&burstime), (tv2ms(&burstime) > 1000) ? "s" : "ms");
 
 		wallops("Finished synching to network in %d %s.", (tv2ms(&burstime) > 1000) ? (tv2ms(&burstime) / 1000) : tv2ms(&burstime), (tv2ms(&burstime) > 1000) ? "s" : "ms");
 #else
-		slog(LG_INFO, "m_pong(): finished synching with uplink");
+		slog(LG_INFO, "m_eob(): finished synching with uplink");
 		wallops("Finished synching to network.");
 #endif
 
@@ -691,6 +729,7 @@ void _modinit(module_t * m)
 
 	pcommand_add("PING", m_ping);
 	pcommand_add("PONG", m_pong);
+	pcommand_add("EOB", m_eob);
 	pcommand_add("PRIVMSG", m_privmsg);
 	pcommand_add("NOTICE", m_notice);
 	pcommand_add("NJOIN", m_njoin);

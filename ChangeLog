@@ -1,3 +1,11 @@
+alambert    2005/11/15 07:06:10 UTC	(20051115-3931)
+  Log:
+  flatfile: Mirror check in other backends -- don't blindly trust the result of myuser_find(). Abort if a channel has no founder.
+
+  Changes:	Modified:
+  +8 -0		trunk/backend/flatfile.c (File Modified) 
+
+
 alambert    2005/11/15 04:15:17 UTC	(20051115-3927)
   Log:
   Legacy loginfail conversion: use the right variable. Reported by nenolod.
