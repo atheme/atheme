@@ -1,3 +1,12 @@
+jilles      2005/11/17 17:38:40 UTC	(20051117-3947)
+  Log:
+  Store user IP addresses.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/ircnet.c (File Modified) 
+
+
 jilles      2005/11/17 17:17:28 UTC	(20051117-3945)
   Log:
   Fix server descriptions for remote servers.
