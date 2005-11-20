@@ -4,7 +4,7 @@
  *
  * Dynamic linker.
  *
- * $Id: linker.c 3053 2005-10-20 18:04:13Z nenolod $
+ * $Id: linker.c 3951 2005-11-20 05:10:01Z terminal $
  */
 
 #include <org.atheme.claro.base>
@@ -17,7 +17,7 @@
 # define RTLD_NOW RTLD_LAZY
 #endif
 
-#if !defined(_WIN32) || !defined(__OS2__)
+#if !defined(_WIN32) && !defined(__OS2__)
 # ifndef __HPUX__
 #  define PLATFORM_SUFFIX ".so"
 # else
@@ -67,7 +67,7 @@ void *linker_open(char *path)
 void *linker_open_ext(char *path)
 {
 	char *buf = smalloc(strlen(path) + 20);
-
+	
 	strlcpy(buf, path, strlen(path) + 20);
 
 	if (!strstr(buf, PLATFORM_SUFFIX))

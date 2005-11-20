@@ -1,3 +1,11 @@
+terminal    2005/11/19 06:35:10 UTC	(20051119-3949)
+  Log:
+  remove tab from end of line, make doesn't like it.
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/userserv/Makefile.win32 (File Modified) 
+
+
 jilles      2005/11/17 17:38:40 UTC	(20051117-3947)
   Log:
   Store user IP addresses.
