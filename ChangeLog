@@ -1,3 +1,11 @@
+nenolod     2005/11/21 03:51:24 UTC	(20051121-3955)
+  Log:
+  Improve MySQL detection.
+
+  Changes:	Modified:
+  +3 -0		trunk/configure.ac (File Modified) 
+
+
 terminal    2005/11/20 05:10:01 UTC	(20051120-3951)
   Log:
   fix an oops where windows didn't get a .dll suffix

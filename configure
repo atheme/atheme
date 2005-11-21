@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# $Id: configure.ac 3829 2005-11-11 05:14:35Z nenolod $
+# $Id: configure.ac 3955 2005-11-21 03:51:24Z nenolod $
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -966,7 +966,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-$Id: configure.ac 3829 2005-11-11 05:14:35Z nenolod $
+$Id: configure.ac 3955 2005-11-21 03:51:24Z nenolod $
 _ACEOF
   exit 0
 fi
@@ -9718,10 +9718,13 @@ if test -d /usr/include/mysql; then
 	my_inc_dir="/usr/include/mysql"
 elif test -d /usr/local/include/mysql; then
 	my_inc_dir="/usr/local/include/mysql"
+	LDFLAGS="$LDFLAGS -L/usr/local/lib"
 elif test -d /usr/local/mysql/include; then
 	my_inc_dir="/usr/local/mysql/include"
+	LDFLAGS="$LDFLAGS -L/usr/local/mysql/lib"
 elif test -d /opt/mysql/include; then
 	my_inc_dir="/opt/mysql/include"
+	LDFLAGS="$LDFLAGS -L/opt/mysql/lib"
 else
 	my_inc_dir="no"
 	MYLIB=""
