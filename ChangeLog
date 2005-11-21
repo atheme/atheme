@@ -1,3 +1,11 @@
+terminal    2005/11/20 05:10:01 UTC	(20051120-3951)
+  Log:
+  fix an oops where windows didn't get a .dll suffix
+
+  Changes:	Modified:
+  +2 -2		trunk/libatheme/linker.c (File Modified) 
+
+
 terminal    2005/11/19 06:35:10 UTC	(20051119-3949)
   Log:
   remove tab from end of line, make doesn't like it.

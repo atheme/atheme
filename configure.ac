@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 3921 2005-11-15 03:42:16Z alambert $
+dnl $Id: configure.ac 3955 2005-11-21 03:51:24Z nenolod $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, 1.0beta1, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 3921 2005-11-15 03:42:16Z alambert $])
+AC_COPYRIGHT([$Id: configure.ac 3955 2005-11-21 03:51:24Z nenolod $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -221,10 +221,13 @@ if test -d /usr/include/mysql; then
 	my_inc_dir="/usr/include/mysql"
 elif test -d /usr/local/include/mysql; then
 	my_inc_dir="/usr/local/include/mysql"
+	LDFLAGS="$LDFLAGS -L/usr/local/lib"
 elif test -d /usr/local/mysql/include; then
 	my_inc_dir="/usr/local/mysql/include"
+	LDFLAGS="$LDFLAGS -L/usr/local/mysql/lib"
 elif test -d /opt/mysql/include; then
 	my_inc_dir="/opt/mysql/include"
+	LDFLAGS="$LDFLAGS -L/opt/mysql/lib"
 else
 	my_inc_dir="no"
 	MYLIB=""
