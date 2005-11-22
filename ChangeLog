@@ -1,3 +1,11 @@
+nenolod     2005/11/21 03:51:46 UTC	(20051121-3957)
+  Log:
+  Regenerate configure.
+
+  Changes:	Modified:
+  +5 -2		trunk/configure (File Modified) 
+
+
 nenolod     2005/11/21 03:51:24 UTC	(20051121-3955)
   Log:
   Improve MySQL detection.
