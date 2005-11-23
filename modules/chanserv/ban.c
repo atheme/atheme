@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 3887 2005-11-12 01:44:01Z jilles $
+ * $Id: ban.c 3963 2005-11-23 22:27:24Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", FALSE, _modinit, _moddeinit,
-	"$Id: ban.c 3887 2005-11-12 01:44:01Z jilles $",
+	"$Id: ban.c 3963 2005-11-23 22:27:24Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -216,7 +216,8 @@ static void cs_cmd_unban (char *origin)
 			}
 		}
 		if (count > 0)
-			notice(chansvs.nick, origin, "Unbanned \2%s\2 on \2%s\2 (%d bans removed).", target, channel, count);
+			notice(chansvs.nick, origin, "Unbanned \2%s\2 on \2%s\2 (%d ban%s removed).",
+				target, channel, count, (count != 1 ? "s" : ""));
 		else
 			notice(chansvs.nick, origin, "No bans found matching \2%s\2 on \2%s\2.", target, channel);
 		return;
@@ -378,7 +379,8 @@ static void cs_fcmd_unban (char *origin, char *channel)
 			}
 		}
 		if (count > 0)
-			notice(chansvs.nick, origin, "Unbanned \2%s\2 on \2%s\2 (%d bans removed).", target, channel, count);
+			notice(chansvs.nick, origin, "Unbanned \2%s\2 on \2%s\2 (%d ban%s removed).",
+				target, channel, count, (count != 1 ? "s" : ""));
 		else
 			notice(chansvs.nick, origin, "No bans found matching \2%s\2 on \2%s\2.", target, channel);
 		return;
