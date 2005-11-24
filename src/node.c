@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3861 2005-11-11 13:26:04Z jilles $
+ * $Id: node.c 3965 2005-11-24 00:01:42Z jilles $
  */
 
 #include "atheme.h"
@@ -366,6 +366,14 @@ void server_delete(char *name)
 	{
 		slog(LG_DEBUG, "server_delete(): called for nonexistant server: %s", name);
 
+		return;
+	}
+	if (s == me.me)
+	{
+		/* Deleting this would cause confusion, so let's not do it.
+		 * Some ircds send SQUIT <myname> when atheme is squitted.
+		 * -- jilles */
+		slog(LG_DEBUG, "server_delete(): tried to delete myself");
 		return;
 	}
 

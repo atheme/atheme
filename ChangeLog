@@ -1,3 +1,11 @@
+nenolod     2005/11/23 22:27:24 UTC	(20051123-3963)
+  Log:
+  Grammatical fix.
+
+  Changes:	Modified:
+  +4 -2		trunk/modules/chanserv/ban.c (File Modified) 
+
+
 jilles      2005/11/22 11:41:52 UTC	(20051122-3959)
   Log:
   New tracker URL.
