@@ -1,3 +1,13 @@
+jilles      2005/11/24 00:01:42 UTC	(20051124-3965)
+  Log:
+  Don't delete me.me, this causes confusion later.
+  This could happen if ircd sends SQUIT <our name>.
+  
+
+  Changes:	Modified:
+  +8 -0		trunk/src/node.c (File Modified) 
+
+
 nenolod     2005/11/23 22:27:24 UTC	(20051123-3963)
   Log:
   Grammatical fix.

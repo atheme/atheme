@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 3839 2005-11-11 11:48:36Z jilles $
+ * $Id: unreal.c 3973 2005-11-25 20:08:47Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 3839 2005-11-11 11:48:36Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 3973 2005-11-25 20:08:47Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -448,7 +448,10 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 
 		for (i = 0; i < userc; i++)
 			if ((*userv[i] != '\'') && (*userv[i] != '"'))	/* ignore cmodes +I, +e */
-				chanuser_add(c, userv[i]);
+				if (*userv[i] == '&')	/* channel ban */
+					chanban_add(c, userv[i] + 1);
+				else
+					chanuser_add(c, userv[i]);
 	}
 	else if (parc == 3)
 	{
