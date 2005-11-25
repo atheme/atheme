@@ -1,3 +1,11 @@
+nenolod     2005/11/25 20:08:47 UTC	(20051125-3973)
+  Log:
+  UnrealIRCd ban-burst fix.
+
+  Changes:	Modified:
+  +4 -1		trunk/protocol/unreal.c (File Modified) 
+
+
 jilles      2005/11/24 00:01:42 UTC	(20051124-3965)
   Log:
   Don't delete me.me, this causes confusion later.
