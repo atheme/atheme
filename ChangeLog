@@ -1,3 +1,21 @@
+jilles      2005/11/26 01:35:34 UTC	(20051126-3979)
+  Log:
+  Add FNC wrapper:
+  E void (*fnc_sts)(user_t *source, user_t *u, char *newnick, int type);
+  type is FNC_REGAIN for giving a user their registered nick back,
+  FNC_FORCE for forcing a user off their nick.
+  Only for charybdis, hyperion and bahamut for now.
+  
+
+  Changes:	Modified:
+  +4 -0		trunk/include/atheme.h (File Modified) 
+  +2 -0		trunk/include/phandler.h (File Modified) 
+  +7 -0		trunk/protocol/bahamut.c (File Modified) 
+  +11 -0	trunk/protocol/charybdis.c (File Modified) 
+  +8 -0		trunk/protocol/hyperion.c (File Modified) 
+  +7 -0		trunk/src/phandler.c (File Modified) 
+
+
 nenolod     2005/11/25 20:12:20 UTC	(20051125-3975)
   Log:
   Duplicate check for other SJOIN variant
