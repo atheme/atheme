@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 3571 2005-11-06 19:54:01Z jilles $
+ * $Id: atheme.h 3979 2005-11-26 01:35:34Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -246,6 +246,10 @@ struct help_command_
 #define CMDLOG_DO       4 /* change properties of dynamic data */
 #define CMDLOG_LOGIN    5 /* login/logout */
 #define CMDLOG_GET      6 /* query information */
+
+/* forced nick change types */
+#define FNC_REGAIN 0 /* give a registered user their nick back */
+#define FNC_FORCE  1 /* force a user off their nick (kill if unsupported) */
 
 /* bursting timer */
 #if HAVE_GETTIMEOFDAY

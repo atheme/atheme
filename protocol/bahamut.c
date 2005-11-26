@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: bahamut.c 3839 2005-11-11 11:48:36Z jilles $
+ * $Id: bahamut.c 3979 2005-11-26 01:35:34Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/bahamut.h"
 
-DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 3839 2005-11-11 11:48:36Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 3979 2005-11-26 01:35:34Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -299,6 +299,12 @@ static void bahamut_jupe(char *server, char *reason)
 
 	sts(":%s SQUIT %s :%s", opersvs.nick, server, reason);
 	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
+}
+
+static void bahamut_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
+{
+	sts(":%s SVSNICK %s %s %lu", source->nick, u->nick, newnick,
+			(unsigned long)(CURRTIME - 60));
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
@@ -761,6 +767,7 @@ void _modinit(module_t * m)
 	ircd_on_login = &bahamut_on_login;
 	ircd_on_logout = &bahamut_on_logout;
 	jupe = &bahamut_jupe;
+	fnc_sts = &bahamut_fnc_sts;
 
 	mode_list = bahamut_mode_list;
 	ignore_mode_list = bahamut_ignore_mode_list;

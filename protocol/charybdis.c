@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 3835 2005-11-11 11:31:28Z jilles $
+ * $Id: charybdis.c 3979 2005-11-26 01:35:34Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3835 2005-11-11 11:31:28Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3979 2005-11-26 01:35:34Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -379,6 +379,16 @@ static void charybdis_sethost_sts(char *source, char *target, char *host)
 
 	sts(":%s ENCAP * CHGHOST %s :%s", ME, tu->nick,
 		host);
+}
+
+static void charybdis_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
+{
+	/* XXX assumes the server will accept this -- jilles */
+	sts(":%s ENCAP %s RSFNC %s %s %lu %lu", ME,
+			u->server->name,
+			CLIENT_NAME(u), newnick,
+			(unsigned long)(CURRTIME - 60),
+			(unsigned long)u->ts);
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
@@ -1080,6 +1090,7 @@ void _modinit(module_t * m)
 	ircd_on_logout = &charybdis_on_logout;
 	jupe = &charybdis_jupe;
 	sethost_sts = &charybdis_sethost_sts;
+	fnc_sts = &charybdis_fnc_sts;
 
 	mode_list = charybdis_mode_list;
 	ignore_mode_list = charybdis_ignore_mode_list;

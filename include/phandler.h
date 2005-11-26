@@ -5,7 +5,7 @@
  * Protocol handlers, both generic and the actual declarations themselves.
  * Declare NOTYET to use the function pointer voodoo.
  *
- * $Id: phandler.h 3171 2005-10-23 21:55:39Z jilles $
+ * $Id: phandler.h 3979 2005-11-26 01:35:34Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -53,6 +53,7 @@ E void (*ircd_on_login)(char *origin, char *user, char *wantedhost);
 E void (*ircd_on_logout)(char *origin, char *user, char *wantedhost);
 E void (*jupe)(char *server, char *reason);
 E void (*sethost_sts)(char *source, char *target, char *host);
+E void (*fnc_sts)(user_t *source, user_t *u, char *newnick, int type);
 
 E uint8_t generic_server_login(void);
 E void generic_introduce_nick(char *nick, char *ser, char *host, char *real, char *uid);
@@ -74,6 +75,7 @@ E void generic_on_login(char *origin, char *user, char *wantedhost);
 E void generic_on_logout(char *origin, char *user, char *wantedhost);
 E void generic_jupe(char *server, char *reason);
 E void generic_sethost_sts(char *source, char *target, char *host);
+E void generic_fnc_sts(user_t *source, user_t *u, char *newnick, int type);
 
 E struct cmode_ *mode_list;
 E struct cmode_ *ignore_mode_list;

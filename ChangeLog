@@ -1,3 +1,11 @@
+nenolod     2005/11/25 20:12:20 UTC	(20051125-3975)
+  Log:
+  Duplicate check for other SJOIN variant
+
+  Changes:	Modified:
+  +11 -6	trunk/protocol/unreal.c (File Modified) 
+
+
 nenolod     2005/11/25 20:08:47 UTC	(20051125-3973)
   Log:
   UnrealIRCd ban-burst fix.
