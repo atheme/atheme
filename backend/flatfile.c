@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 3931 2005-11-15 07:06:10Z alambert $
+ * $Id: flatfile.c 3983 2005-11-27 21:37:09Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 3931 2005-11-15 07:06:10Z alambert $",
+	"$Id: flatfile.c 3983 2005-11-27 21:37:09Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -297,7 +297,7 @@ static void flatfile_db_load(void)
 			sender = strtok(NULL, " ");
 			mtime = atoi(strtok(NULL, " "));
 			status = atoi(strtok(NULL, " "));
-			text = strtok(NULL, "");
+			text = strtok(NULL, "\n");
 
 			if (!mu)
 			{

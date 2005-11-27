@@ -1,3 +1,12 @@
+jilles      2005/11/26 02:32:23 UTC	(20051126-3981)
+  Log:
+  Interpret ENCAP REALHOST as sent by charybdis 1.0.3.
+  
+
+  Changes:	Modified:
+  +10 -0	trunk/protocol/charybdis.c (File Modified) 
+
+
 jilles      2005/11/26 01:35:34 UTC	(20051126-3979)
   Log:
   Add FNC wrapper:
