@@ -1,3 +1,14 @@
+jilles      2005/11/27 21:37:09 UTC	(20051127-3983)
+  Log:
+  Don't add newlines on loaded memos.
+  
+  Tracker #80 (blank lines in flatfile db caused by memoserv).
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/backend/flatfile.c (File Modified) 
+
+
 jilles      2005/11/26 02:32:23 UTC	(20051126-3981)
   Log:
   Interpret ENCAP REALHOST as sent by charybdis 1.0.3.
