@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3965 2005-11-24 00:01:42Z jilles $
+ * $Id: node.c 3989 2005-11-29 00:42:00Z nenolod $
  */
 
 #include "atheme.h"
@@ -733,7 +733,7 @@ channel_t *channel_find(char *name)
 	channel_t *c;
 	node_t *n;
 
-	LIST_FOREACH(n, chanlist[shash(name)].head)
+	LIST_FOREACH(n, chanlist[shash((unsigned char *) name)].head)
 	{
 		c = (channel_t *)n->data;
 
@@ -1265,7 +1265,7 @@ myuser_t *myuser_find(char *name)
 	myuser_t *mu;
 	node_t *n;
 
-	LIST_FOREACH(n, mulist[shash(name)].head)
+	LIST_FOREACH(n, mulist[shash((unsigned char *) name)].head)
 	{
 		mu = (myuser_t *)n->data;
 
@@ -1374,7 +1374,7 @@ mychan_t *mychan_find(char *name)
 	mychan_t *mc;
 	node_t *n;
 
-	LIST_FOREACH(n, mclist[shash(name)].head)
+	LIST_FOREACH(n, mclist[shash((unsigned char *) name)].head)
 	{
 		mc = (mychan_t *)n->data;
 

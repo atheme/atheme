@@ -4,7 +4,7 @@
  *
  * Protocol handling stuff.
  *
- * $Id: pmodule.c 2899 2005-10-16 01:22:18Z terminal $
+ * $Id: pmodule.c 3989 2005-11-29 00:42:00Z nenolod $
  */
 
 #include "atheme.h"
@@ -48,7 +48,7 @@ void pcommand_add(char *token, void (*handler) (char *origin, uint8_t parc, char
 
 	n = node_create();
 
-	node_add(pcmd, n, &pcommands[shash(token)]);
+	node_add(pcmd, n, &pcommands[shash((unsigned char *) token)]);
 }
 
 void pcommand_delete(char *token)
@@ -62,8 +62,8 @@ void pcommand_delete(char *token)
 		return;
 	}
 
-	n = node_find(pcmd, &pcommands[shash(token)]);
-	node_del(n, &pcommands[shash(token)]);
+	n = node_find(pcmd, &pcommands[shash((unsigned char *)token)]);
+	node_del(n, &pcommands[shash((unsigned char *)token)]);
 
 	free(pcmd->token);
 	pcmd->handler = NULL;
@@ -82,7 +82,7 @@ pcommand_t *pcommand_find(char *token)
 		return NULL;
 	}
 
-	LIST_FOREACH(n, pcommands[shash(token)].head)
+	LIST_FOREACH(n, pcommands[shash((unsigned char *) token)].head)
 	{
 		pcmd = n->data;
 

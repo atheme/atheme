@@ -1,3 +1,13 @@
+nenolod     2005/11/29 00:13:48 UTC	(20051129-3987)
+  Log:
+  Deny use of invalid character '@' in a vhost. This needs to be tested and immediately backported to the release branch.
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/nickserv/vhost.c (File Modified) 
+  +6 -0		trunk/modules/userserv/vhost.c (File Modified) 
+
+
 jilles      2005/11/27 21:37:09 UTC	(20051127-3983)
   Log:
   Don't add newlines on loaded memos.
