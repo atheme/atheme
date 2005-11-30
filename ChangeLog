@@ -1,3 +1,12 @@
+nenolod     2005/11/29 00:42:00 UTC	(20051129-3989)
+  Log:
+  unsigned char fixes -- crazy bugged us about it.
+
+  Changes:	Modified:
+  +3 -3		trunk/src/node.c (File Modified) 
+  +4 -4		trunk/src/pmodule.c (File Modified) 
+
+
 nenolod     2005/11/29 00:13:48 UTC	(20051129-3987)
   Log:
   Deny use of invalid character '@' in a vhost. This needs to be tested and immediately backported to the release branch.
