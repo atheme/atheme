@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 3807 2005-11-11 02:02:22Z jilles $
+ * $Id: account.h 3997 2005-12-02 01:15:37Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -135,6 +135,8 @@ struct chanacs_
 /* granted to founder on new channel: */
 #define CA_INITIAL       (CA_FOUNDER_0 | CA_AUTOOP)
 
+/* joining with one of these flags updates used time */
+#define CA_USEDUPDATE    (CA_VOICE | CA_OP | CA_AUTOOP | CA_SET | CA_REMOVE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_AUTOHALFOP)
 #define CA_ALLPRIVS      (CA_VOICE | CA_AUTOVOICE | CA_OP | CA_AUTOOP | CA_TOPIC | CA_SET | CA_REMOVE | CA_INVITE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_AUTOHALFOP | CA_ACLVIEW)
 #define CA_ALL           (CA_ALLPRIVS | CA_AKICK)
 

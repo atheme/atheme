@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 3467 2005-11-05 05:45:31Z nenolod $
+ * $Id: main.c 3997 2005-12-02 01:15:37Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 3467 2005-11-05 05:45:31Z nenolod $",
+	"$Id: main.c 3997 2005-12-02 01:15:37Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -199,6 +199,7 @@ static void cs_join(chanuser_t *cu)
 	channel_t *chan = cu->chan;
 	mychan_t *mc;
 	char hostbuf[BUFSIZE];
+	uint32_t flags;
 
 	/* This crap is all moved in from chanuser_add(). It's better having
 	 * it here than in node.c. It still needs a massive cleanup. Use the
@@ -211,10 +212,7 @@ static void cs_join(chanuser_t *cu)
 	if ((chan->nummembers == 1) && (irccasecmp(config_options.chan, chan->name)))
 	{
 		if ((mc = mychan_find(chan->name)) && (config_options.join_chans))
-		{
 			join(chan->name, chansvs.nick);
-			mc->used = CURRTIME;	/* XXX this fires on non-op */
-		}
 	}
 
 	/* auto stuff */
@@ -400,6 +398,10 @@ static void cs_join(chanuser_t *cu)
 			numeric_sts(me.name, 328, cu->user->nick, "%s :%s", mc->name, md->value);
 
 		check_modes(mc, TRUE);
+	
+		flags = chanacs_user_flags(mc, u);
+		if (flags & CA_USEDUPDATE)
+			mc->used = CURRTIME;
 	}
 }
 
