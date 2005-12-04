@@ -1,3 +1,22 @@
+jilles      2005/12/02 01:15:37 UTC	(20051202-3997)
+  Log:
+  Update mychan->used when a user with CA_USEDUPDATE flags joins or a user
+  identifies while on channel and having CA_USEDUPDATE flags. CA_USEDUPDATE
+  means one or more of +voOsrRfhH.
+  
+  This solves #82 except for channels where people stay for weeks and noone
+  joins during that time.
+  
+  Needs to be merged to 0.3.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/include/account.h (File Modified) 
+  +5 -3		trunk/modules/chanserv/main.c (File Modified) 
+  +4 -0		trunk/modules/nickserv/identify.c (File Modified) 
+  +4 -0		trunk/modules/userserv/login.c (File Modified) 
+
+
 nenolod     2005/11/30 04:36:03 UTC	(20051130-3995)
   Log:
   Document the existance of our trac instance. (A test commit to see if trac picks it up)
