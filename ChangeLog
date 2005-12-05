@@ -1,3 +1,17 @@
+jilles      2005/12/04 22:58:55 UTC	(20051204-3999)
+  Log:
+  Add support for old ircservices password encryption as
+  used by anope. This needs to be stored as
+  $ircservices$<PASSWORD> where <PASSWORD> is the lowercase
+  hex representation of the first 8 bytes of the encryption
+  (the last 8 bytes are constant anyway).
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/crypto/Makefile.in (File Modified) 
+  +458 -0	trunk/crypto/ircservices.c (File Added) 
+
+
 jilles      2005/12/02 01:15:37 UTC	(20051202-3997)
   Log:
   Update mychan->used when a user with CA_USEDUPDATE flags joins or a user
