@@ -1,3 +1,13 @@
+jilles      2005/12/05 15:34:12 UTC	(20051205-4009)
+  Log:
+  Fix garbled expiry time display (0 days, 0:00:4294967261)
+  on akills that are expired but not yet removed.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/operserv/akill.c (File Modified) 
+
+
 jilles      2005/12/05 13:48:52 UTC	(20051205-4007)
   Log:
   Mention duration 0 for a perm kline.

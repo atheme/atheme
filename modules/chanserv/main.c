@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 3997 2005-12-02 01:15:37Z jilles $
+ * $Id: main.c 4011 2005-12-05 17:40:21Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 3997 2005-12-02 01:15:37Z jilles $",
+	"$Id: main.c 4011 2005-12-05 17:40:21Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -200,45 +200,49 @@ static void cs_join(chanuser_t *cu)
 	mychan_t *mc;
 	char hostbuf[BUFSIZE];
 	uint32_t flags;
-
-	/* This crap is all moved in from chanuser_add(). It's better having
-	 * it here than in node.c. It still needs a massive cleanup. Use the
-	 * utility function chanacs_user_has_flag().              --alambert
-	 */
+	metadata_t *md;
+	boolean_t noop;
 
 	if (is_internal_client(cu->user))
 		return;
 
-	if ((chan->nummembers == 1) && (irccasecmp(config_options.chan, chan->name)))
-	{
-		if ((mc = mychan_find(chan->name)) && (config_options.join_chans))
-			join(chan->name, chansvs.nick);
-	}
+	/* first check if this is a registered channel at all */
+	mc = mychan_find(chan->name);
+	if (mc == NULL)
+		return;
+
+	if (chan->nummembers == 1 && config_options.join_chans)
+		join(chan->name, chansvs.nick);
+
+	flags = chanacs_user_flags(mc, u);
+	noop = mc->flags & MC_NOOP || (u->myuser != NULL &&
+			u->myuser->flags & MU_NOOP);
 
 	/* auto stuff */
-	if (((mc = mychan_find(chan->name))) && (u->myuser))
+	if ((mc->flags & MC_STAFFONLY) && !is_ircop(u) && (u->myuser == NULL || !is_sra(u->myuser)))
 	{
-		if ((mc->flags & MC_STAFFONLY) && !is_ircop(u) && !is_sra(u->myuser))
-		{
-			ban(chansvs.nick, chan->name, u);
-			kick(chansvs.nick, chan->name, u->nick, "You are not authorized to be on this channel");
-		}
+		ban(chansvs.nick, chan->name, u);
+		kick(chansvs.nick, chan->name, u->nick, "You are not authorized to be on this channel");
+		return;
+	}
 
-		if (should_kick(mc, u->myuser))
-		{
-			ban(chansvs.nick, chan->name, u);
-			kick(chansvs.nick, chan->name, u->nick, "User is banned from this channel");
-		}
+	if (flags & CA_AKICK)
+	{
+		ban(chansvs.nick, chan->name, u);
+		kick(chansvs.nick, chan->name, u->nick, "User is banned from this channel");
+	}
 
-		if (should_owner(mc, u->myuser))
+	if (ircd->uses_owner)
+	{
+		if (u->myuser != NULL && is_founder(mc, u->myuser))
 		{
-			if (ircd->uses_owner && !(cu->modes & ircd->owner_mode))
+			if (!(noop || cu->modes & ircd->owner_mode))
 			{
 				cmode(chansvs.nick, chan->name, ircd->owner_mchar, CLIENT_NAME(u));
 				cu->modes |= ircd->owner_mode;
 			}
 		}
-		else if ((mc->flags & MC_SECURE) && (cu->modes & ircd->owner_mode) && ircd->uses_owner)
+		else if ((mc->flags & MC_SECURE) && (cu->modes & ircd->owner_mode))
 		{
 			char *mbuf = sstrdup(ircd->owner_mchar);
 			*mbuf = '-';
@@ -248,16 +252,20 @@ static void cs_join(chanuser_t *cu)
 
 			free(mbuf);
 		}
+	}
 
+	/* XXX still uses should_protect() */
+	if (ircd->uses_protect && u->myuser != NULL)
+	{
 		if (should_protect(mc, u->myuser))
 		{
-			if (ircd->uses_protect && !(cu->modes & ircd->protect_mode))
+			if (!(noop || cu->modes & ircd->protect_mode))
 			{
 				cmode(chansvs.nick, chan->name, ircd->protect_mchar, CLIENT_NAME(u));
 				cu->modes |= ircd->protect_mode;
 			}
 		}
-		else if ((mc->flags & MC_SECURE) && (cu->modes & ircd->protect_mode) && ircd->uses_protect)
+		else if ((mc->flags & MC_SECURE) && (cu->modes & ircd->protect_mode))
 		{
 			char *mbuf = sstrdup(ircd->protect_mchar);
 			*mbuf = '-';
@@ -267,142 +275,58 @@ static void cs_join(chanuser_t *cu)
 
 			free(mbuf);
 		}
+	}
 
-		if (should_op(mc, u->myuser))
+	if (flags & CA_AUTOOP)
+	{
+		if (!(noop || cu->modes & CMODE_OP))
 		{
-			if (!(cu->modes & CMODE_OP))
-			{
-				cmode(chansvs.nick, chan->name, "+o", CLIENT_NAME(u));
-				cu->modes |= CMODE_OP;
-			}
+			cmode(chansvs.nick, chan->name, "+o", CLIENT_NAME(u));
+			cu->modes |= CMODE_OP;
 		}
-		else if ((mc->flags & MC_SECURE) && (cu->modes & CMODE_OP))
-		{
-			cmode(chansvs.nick, chan->name, "-o", CLIENT_NAME(u));
-			cu->modes &= ~CMODE_OP;
-		}
+	}
+	else if ((mc->flags & MC_SECURE) && (cu->modes & CMODE_OP) && !(flags & CA_OP))
+	{
+		cmode(chansvs.nick, chan->name, "-o", CLIENT_NAME(u));
+		cu->modes &= ~CMODE_OP;
+	}
 
-		if (should_halfop(mc, u->myuser))
+	if (ircd->uses_halfops)
+	{
+		if (flags & CA_AUTOHALFOP)
 		{
-			if (ircd->uses_halfops && !(cu->modes & ircd->halfops_mode))
+			if (!(noop || cu->modes & (CMODE_OP | ircd->halfops_mode)))
 			{
 				cmode(chansvs.nick, chan->name, "+h", CLIENT_NAME(u));
 				cu->modes |= ircd->halfops_mode;
 			}
 		}
-		else if ((mc->flags & MC_SECURE) && (cu->modes & ircd->halfops_mode) && ircd->uses_halfops)
+		else if ((mc->flags & MC_SECURE) && (cu->modes & ircd->halfops_mode) && !(flags & CA_HALFOP))
 		{
 			cmode(chansvs.nick, chan->name, "-h", CLIENT_NAME(u));
 			cu->modes &= ~ircd->halfops_mode;
 		}
+	}
 
-		if (should_voice(mc, u->myuser) && !(cu->modes & CMODE_VOICE))
+	if (flags & CA_AUTOVOICE)
+	{
+		if (!(noop || cu->modes & (CMODE_OP | ircd->halfops_mode | CMODE_VOICE)))
 		{
 			cmode(chansvs.nick, chan->name, "+v", CLIENT_NAME(u));
 			cu->modes |= CMODE_VOICE;
 		}
 	}
 
-	if (mc)
-	{
-		hostbuf[0] = '\0';
+	if ((md = metadata_find(mc, METADATA_CHANNEL, "private:entrymsg")))
+		notice(chansvs.nick, cu->user->nick, "[%s] %s", mc->name, md->value);
 
-		strlcat(hostbuf, u->nick, BUFSIZE);
-		strlcat(hostbuf, "!", BUFSIZE);
-		strlcat(hostbuf, u->user, BUFSIZE);
-		strlcat(hostbuf, "@", BUFSIZE);
-		strlcat(hostbuf, u->host, BUFSIZE);
+	if ((md = metadata_find(mc, METADATA_CHANNEL, "url")))
+		numeric_sts(me.name, 328, cu->user->nick, "%s :%s", mc->name, md->value);
 
-		/* the case u->myuser != NULL was treated above */
-		if ((mc->flags & MC_STAFFONLY) && !is_ircop(u) && u->myuser == NULL)
-		{
-			ban(chansvs.nick, chan->name, u);
-			kick(chansvs.nick, chan->name, u->nick, "You are not authorized to be on this channel");
-		}
-
-
-		if (should_kick_host(mc, hostbuf))
-		{
-			ban(chansvs.nick, chan->name, u);
-			kick(chansvs.nick, chan->name, u->nick, "User is banned from this channel");
-		}
-
-		if (!should_owner(mc, u->myuser) && (cu->modes & ircd->owner_mode))
-		{
-			char *mbuf = sstrdup(ircd->owner_mchar);
-			*mbuf = '-';
-
-			cmode(chansvs.nick, chan->name, mbuf, CLIENT_NAME(u));
-			cu->modes &= ~ircd->owner_mode;
-
-			free(mbuf);
-		}
-
-		if (!should_protect(mc, u->myuser) && (cu->modes & ircd->protect_mode))
-		{
-			char *mbuf = sstrdup(ircd->protect_mchar);
-			*mbuf = '-';
-
-			cmode(chansvs.nick, chan->name, mbuf, CLIENT_NAME(u));
-			cu->modes &= ~ircd->protect_mode;
-
-			free(mbuf);
-		}
-
-		if (should_op_host(mc, hostbuf))
-		{
-			if (!(cu->modes & CMODE_OP))
-			{
-				cmode(chansvs.nick, chan->name, "+o", CLIENT_NAME(u));
-				cu->modes |= CMODE_OP;
-			}
-		}
-		else if ((mc->flags & MC_SECURE) && !should_op(mc, u->myuser) && (cu->modes & CMODE_OP))
-		{
-			cmode(chansvs.nick, chan->name, "-o", CLIENT_NAME(u));
-			cu->modes &= ~CMODE_OP;
-		}
-
-		if (should_halfop_host(mc, hostbuf))
-		{
-			if (ircd->uses_halfops && !(cu->modes & ircd->halfops_mode))
-			{
-				cmode(chansvs.nick, chan->name, "+h", CLIENT_NAME(u));
-				cu->modes |= ircd->halfops_mode;
-			}
-		}
-		else if ((mc->flags & MC_SECURE) && ircd->uses_halfops && !should_halfop(mc, u->myuser) && (cu->modes & ircd->halfops_mode))
-		{
-			cmode(chansvs.nick, chan->name, "-h", CLIENT_NAME(u));
-			cu->modes &= ~ircd->halfops_mode;
-		}
-
-		if (should_voice_host(mc, hostbuf))
-		{
-			if (!(cu->modes & CMODE_VOICE))
-			{
-				cmode(chansvs.nick, chan->name, "+v", CLIENT_NAME(u));
-				cu->modes |= CMODE_VOICE;
-			}
-		}
-	}
-
-	if (mc)
-	{
-		metadata_t *md;
-
-		if ((md = metadata_find(mc, METADATA_CHANNEL, "private:entrymsg")))
-			notice(chansvs.nick, cu->user->nick, "[%s] %s", mc->name, md->value);
-
-		if ((md = metadata_find(mc, METADATA_CHANNEL, "url")))
-			numeric_sts(me.name, 328, cu->user->nick, "%s :%s", mc->name, md->value);
-
-		check_modes(mc, TRUE);
+	check_modes(mc, TRUE);
 	
-		flags = chanacs_user_flags(mc, u);
-		if (flags & CA_USEDUPDATE)
-			mc->used = CURRTIME;
-	}
+	if (flags & CA_USEDUPDATE)
+		mc->used = CURRTIME;
 }
 
 static void cs_part(chanuser_t *cu)
