@@ -1,3 +1,12 @@
+jilles      2005/12/05 11:25:39 UTC	(20051205-4003)
+  Log:
+  Make /cs status conform to the flags system better.
+  
+
+  Changes:	Modified:
+  +8 -27	trunk/modules/chanserv/status.c (File Modified) 
+
+
 jilles      2005/12/05 00:57:18 UTC	(20051205-4001)
   Log:
   Add an anope module that dumps the currently loaded
