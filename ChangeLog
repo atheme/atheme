@@ -1,3 +1,14 @@
+jilles      2005/12/05 00:57:18 UTC	(20051205-4001)
+  Log:
+  Add an anope module that dumps the currently loaded
+  data as a flatfile. This is the old gen_convert.c,
+  improved quite a bit.
+  
+
+  Changes:	Modified:
+  +298 -0	trunk/contrib/anope_convert.c (File Added) 
+
+
 jilles      2005/12/04 22:58:55 UTC	(20051204-3999)
   Log:
   Add support for old ircservices password encryption as
