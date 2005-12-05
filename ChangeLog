@@ -1,3 +1,12 @@
+jilles      2005/12/05 13:43:45 UTC	(20051205-4005)
+  Log:
+  Documentation for protocol module functions.
+  
+
+  Changes:	Modified:
+  +57 -0	trunk/include/phandler.h (File Modified) 
+
+
 jilles      2005/12/05 11:25:39 UTC	(20051205-4003)
   Log:
   Make /cs status conform to the flags system better.

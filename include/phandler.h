@@ -5,7 +5,7 @@
  * Protocol handlers, both generic and the actual declarations themselves.
  * Declare NOTYET to use the function pointer voodoo.
  *
- * $Id: phandler.h 4005 2005-12-05 13:43:45Z jilles $
+ * $Id: phandler.h 4007 2005-12-05 13:48:52Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -75,7 +75,7 @@ E void (*skill)(char *from, char *nick, char *fmt, ...);
 /* part a channel with a client on the services server */
 E void (*part)(char *chan, char *nick);
 /* add a kline on the servers matching the given mask
- * duration is in seconds
+ * duration is in seconds, 0 for a permanent kline
  * if the ircd requires klines to be sent from users, use opersvs */
 E void (*kline_sts)(char *server, char *user, char *host, long duration, char *reason);
 /* remove a kline on the servers matching the given mask
