@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 3989 2005-11-29 00:42:00Z nenolod $
+ * $Id: node.c 4013 2005-12-05 17:40:52Z jilles $
  */
 
 #include "atheme.h"
@@ -1022,7 +1022,9 @@ void kline_delete(char *user, char *host)
 	}
 
 	slog(LG_DEBUG, "kline_delete(): %s@%s -> %s", k->user, k->host, k->reason);
-	unkline_sts("*", k->user, k->host);
+	/* only unkline if ircd has not already removed this -- jilles */
+	if (k->duration == 0 || k->expires > CURRTIME)
+		unkline_sts("*", k->user, k->host);
 
 	n = node_find(k, &klnlist);
 	node_del(n, &klnlist);

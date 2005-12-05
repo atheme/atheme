@@ -1,3 +1,12 @@
+jilles      2005/12/05 17:40:21 UTC	(20051205-4011)
+  Log:
+  Rewrite and simplify cs_join() using chanacs_user_flags().
+  
+
+  Changes:	Modified:
+  +62 -138	trunk/modules/chanserv/main.c (File Modified) 
+
+
 jilles      2005/12/05 15:34:12 UTC	(20051205-4009)
   Log:
   Fix garbled expiry time display (0 days, 0:00:4294967261)
