@@ -1,3 +1,19 @@
+jilles      2005/12/07 23:22:53 UTC	(20051207-4021)
+  Log:
+  Fix setting +ohv on xop add. Now works for account
+  entries as well as hostmask entries. Does not use
+  should_*() anymore.
+  
+  Setting protect is disabled.
+  
+  There is a hackish thing to voice HOP list on ircds
+  without halfops.
+  
+
+  Changes:	Modified:
+  +64 -34	trunk/modules/chanserv/xop.c (File Modified) 
+
+
 jilles      2005/12/07 22:42:40 UTC	(20051207-4019)
   Log:
   Simplify auto{owner,protect,op,halfop,voice} checks on

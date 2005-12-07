@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 3815 2005-11-11 04:33:03Z nenolod $
+ * $Id: extern.h 4023 2005-12-07 23:30:14Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -82,14 +82,6 @@ E boolean_t is_founder(mychan_t *mychan, myuser_t *myuser);
 E boolean_t is_xop(mychan_t *mychan, myuser_t *myuser, uint32_t level);
 E boolean_t should_owner(mychan_t *mychan, myuser_t *myuser);
 E boolean_t should_protect(mychan_t *mychan, myuser_t *myuser);
-E boolean_t should_op(mychan_t *mychan, myuser_t *myuser);
-E boolean_t should_op_host(mychan_t *mychan, char *host);
-E boolean_t should_halfop(mychan_t *mychan, myuser_t *myuser);
-E boolean_t should_halfop_host(mychan_t *mychan, char *host);
-E boolean_t should_voice(mychan_t *mychan, myuser_t *myuser);
-E boolean_t should_voice_host(mychan_t *mychan, char *host);
-E boolean_t should_kick(mychan_t *mychan, myuser_t *myuser);
-E boolean_t should_kick_host(mychan_t *mychan, char *host);
 E boolean_t is_sra(myuser_t *myuser);
 E boolean_t is_ircop(user_t *user);
 E boolean_t is_admin(user_t *user);
