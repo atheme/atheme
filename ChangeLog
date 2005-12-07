@@ -1,3 +1,15 @@
+jilles      2005/12/07 22:42:40 UTC	(20051207-4019)
+  Log:
+  Simplify auto{owner,protect,op,halfop,voice} checks on
+  identify/login. As before, only check access by account,
+  not hostmask. Don't set redundant modes.
+  
+
+  Changes:	Modified:
+  +8 -6		trunk/modules/nickserv/identify.c (File Modified) 
+  +8 -6		trunk/modules/userserv/login.c (File Modified) 
+
+
 jilles      2005/12/07 15:04:53 UTC	(20051207-4017)
   Log:
   Change wildcard checking to the ratbox (also charybdis) algorithm:

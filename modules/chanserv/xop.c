@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 3905 2005-11-13 20:55:37Z jilles $
+ * $Id: xop.c 4021 2005-12-07 23:22:53Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 3905 2005-11-13 20:55:37Z jilles $",
+	"$Id: xop.c 4021 2005-12-07 23:22:53Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -225,7 +225,6 @@ static void cs_cmd_hop(char *origin)
 
 static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level, uint32_t restrictflags)
 {
-	uint32_t modetoset = 0;
 	char *leveldesc = NULL;
 	char hostbuf[BUFSIZE];
 	metadata_t *md;
@@ -236,19 +235,15 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 	switch (level)
 	{
 		case CA_VOP:
-			modetoset = CMODE_VOICE;
 			leveldesc = "VOP";
 			break;
 		case CA_HOP:
-			modetoset = ircd->halfops_mode;
 			leveldesc = "HOP";
 			break;
 		case CA_AOP:
-			modetoset = CMODE_OP;
 			leveldesc = "AOP";
 			break;
 		case CA_SOP:		
-			modetoset = ircd->protect_mode;
 			leveldesc = "SOP";
 			break;
 	}
@@ -299,41 +294,39 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 		{
 			cu = (chanuser_t *)n->data;
 
-			if (cu->modes & modetoset)
-				return;
-
-			hostbuf[0] = '\0';
-			strlcat(hostbuf, cu->user->nick, BUFSIZE);
+			strlcpy(hostbuf, cu->user->nick, BUFSIZE);
 			strlcat(hostbuf, "!", BUFSIZE);
 			strlcat(hostbuf, cu->user->user, BUFSIZE);
 			strlcat(hostbuf, "@", BUFSIZE);
 			strlcat(hostbuf, cu->user->host, BUFSIZE);
 
-			/* this is ugly as sin. see bug #22 */
-			switch (level)
+			if (match(target, hostbuf))
+				continue;
+
+			if (level & CA_AUTOOP)
 			{
-				case CA_VOP:
-					if (should_voice_host(mc, hostbuf))
-					{
-						cmode(chansvs.nick, mc->name, "+v", cu->user->nick);
-						cu->modes |= CMODE_VOICE;
-					}
-					break;
-				case CA_HOP:
-					if (ircd->uses_halfops && should_halfop_host(mc, hostbuf))
-					{
-						cmode(chansvs.nick, mc->name, ircd->halfops_mode, cu->user->nick);
-						cu->modes |= ircd->halfops_mode;
-					}
-					break;
-				case CA_AOP:
-					/* fallthrough, temporary till #22 is fixed */
-				case CA_SOP:
-					if (should_op_host(mc, hostbuf))
-					{
-						cmode(chansvs.nick, mc->name, "+o", cu->user->nick);
-						cu->modes |= CMODE_OP;
-					}
+				if (!(cu->modes & CMODE_OP))
+				{
+					cmode(chansvs.nick, mc->name, "+o", cu->user->nick);
+					cu->modes |= CMODE_OP;
+				}
+			}
+			else if (ircd->uses_halfops && level & CA_AUTOHALFOP)
+			{
+				if (!(cu->modes & (CMODE_OP | ircd->halfops_mode)))
+				{
+					cmode(chansvs.nick, mc->name, ircd->halfops_mchar, cu->user->nick);
+					cu->modes |= ircd->halfops_mode;
+				}
+			}
+			else if (level & (CA_AUTOVOICE | CA_AUTOHALFOP))
+			{
+				/* XXX HOP should have +V */
+				if (!(cu->modes & (CMODE_OP | ircd->halfops_mode | CMODE_VOICE)))
+				{
+					cmode(chansvs.nick, mc->name, "+v", cu->user->nick);
+					cu->modes |= CMODE_VOICE;
+				}
 			}
 		}
 		return;
@@ -388,6 +381,43 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 		notice(chansvs.nick, origin, "\2%s\2 has been added to the %s list for \2%s\2.", mu->name, leveldesc, mc->name);
 		verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", origin, mu->name, leveldesc);
 		chanacs_add(mc, mu, level);
+	}
+	/* run through the channel's user list and do it */
+	/* make sure the channel exists */
+	if (mc->chan == NULL)
+		return;
+	LIST_FOREACH(n, mc->chan->members.head)
+	{
+		cu = (chanuser_t *)n->data;
+
+		if (cu->user->myuser != mu)
+			continue;
+
+		if (level & CA_AUTOOP)
+		{
+			if (!(cu->modes & CMODE_OP))
+			{
+				cmode(chansvs.nick, mc->name, "+o", cu->user->nick);
+				cu->modes |= CMODE_OP;
+			}
+		}
+		else if (ircd->uses_halfops && level & CA_AUTOHALFOP)
+		{
+			if (!(cu->modes & (CMODE_OP | ircd->halfops_mode)))
+			{
+				cmode(chansvs.nick, mc->name, ircd->halfops_mchar, cu->user->nick);
+				cu->modes |= ircd->halfops_mode;
+			}
+		}
+		else if (level & (CA_AUTOVOICE | CA_AUTOHALFOP))
+		{
+			/* XXX HOP should have +V */
+			if (!(cu->modes & (CMODE_OP | ircd->halfops_mode | CMODE_VOICE)))
+			{
+				cmode(chansvs.nick, mc->name, "+v", cu->user->nick);
+				cu->modes |= CMODE_VOICE;
+			}
+		}
 	}
 }
 
