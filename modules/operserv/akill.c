@@ -5,7 +5,7 @@
  * This file contains functionality which implements
  * the OService AKILL/KLINE command.
  *
- * $Id: akill.c 4009 2005-12-05 15:34:12Z jilles $
+ * $Id: akill.c 4017 2005-12-07 15:04:53Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 4009 2005-12-05 15:34:12Z jilles $",
+	"$Id: akill.c 4017 2005-12-07 15:04:53Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -161,7 +161,7 @@ static void os_cmd_akill_add(char *origin, char *target)
 	{
 		char *userbuf = strtok(target, "@");
 		char *hostbuf = strtok(NULL, "");
-		char *tmphost;
+		char *p;
 		int i = 0;
 
 		if (!userbuf || !hostbuf)
@@ -171,16 +171,21 @@ static void os_cmd_akill_add(char *origin, char *target)
 			return;
 		}
 
-		/* make sure there's at least 5 non-wildcards */
-		for (tmphost = hostbuf; *tmphost; tmphost++)
+		/* make sure there's at least 4 non-wildcards */
+		for (p = userbuf; *p; p++)
 		{
-			if (*tmphost != '*' && *tmphost != '?')
+			if (*p != '*' && *p != '?' && *p != '.')
+				i++;
+		}
+		for (p = hostbuf; *p; p++)
+		{
+			if (*p != '*' && *p != '?' && *p != '.')
 				i++;
 		}
 
-		if (i < 5)
+		if (i < 4)
 		{
-			notice(opersvs.nick, origin, "Invalid host: \2%s\2. At least five non-wildcard characters are required.", hostbuf);
+			notice(opersvs.nick, origin, "Invalid user@host: \2%s@%s\2. At least four non-wildcard characters are required.", userbuf, hostbuf);
 			return;
 		}
 
