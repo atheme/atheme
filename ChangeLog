@@ -1,3 +1,14 @@
+jilles      2005/12/07 15:04:53 UTC	(20051207-4017)
+  Log:
+  Change wildcard checking to the ratbox (also charybdis) algorithm:
+  count the characters other than '*', '?', '.' in both user and host,
+  and require at least 4.
+  
+
+  Changes:	Modified:
+  +11 -6	trunk/modules/operserv/akill.c (File Modified) 
+
+
 jilles      2005/12/05 17:40:52 UTC	(20051205-4013)
   Log:
   Don't unkline a temp akill if it has already expired.

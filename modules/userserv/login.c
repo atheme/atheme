@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: login.c 3997 2005-12-02 01:15:37Z jilles $
+ * $Id: login.c 4019 2005-12-07 22:42:40Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/login", FALSE, _modinit, _moddeinit,
-	"$Id: login.c 3997 2005-12-02 01:15:37Z jilles $",
+	"$Id: login.c 4019 2005-12-07 22:42:40Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -167,6 +167,8 @@ static void us_cmd_login(char *origin)
 		mu->lastlogin = CURRTIME;
 
 		/* now we get to check for xOP */
+		/* we don't check for host access yet (could match different
+		 * entries because of services cloaks) */
 		LIST_FOREACH(n, mu->chanacs.head)
 		{
 			ca = (chanacs_t *)n->data;
@@ -174,38 +176,38 @@ static void us_cmd_login(char *origin)
 			cu = chanuser_find(ca->mychan->chan, u);
 			if (cu)
 			{
-				if (should_kick(ca->mychan, ca->myuser))
+				if (ca->level & CA_AKICK)
 				{
 					ban(chansvs.nick, ca->mychan->name, u);
 					kick(chansvs.nick, ca->mychan->name, u->nick, "User is banned from this channel");
 					continue;
 				}
 
-				if (ircd->uses_owner && should_owner(ca->mychan, ca->myuser))
+				if (ircd->uses_owner && !(cu->modes & ircd->owner_mode) && should_owner(ca->mychan, ca->myuser))
 				{
 					cmode(chansvs.nick, ca->mychan->name, ircd->owner_mchar, CLIENT_NAME(u));
 					cu->modes |= ircd->owner_mode;
 				}
 
-				if (ircd->uses_protect && should_protect(ca->mychan, ca->myuser))
+				if (ircd->uses_protect && !(cu->modes & ircd->protect_mode) && should_protect(ca->mychan, ca->myuser))
 				{
 					cmode(chansvs.nick, ca->mychan->name, ircd->protect_mchar, CLIENT_NAME(u));
 					cu->modes |= ircd->protect_mode;
 				}
 
-				if (should_op(ca->mychan, ca->myuser))
+				if (!(cu->modes & CMODE_OP) && ca->level & CA_AUTOOP)
 				{
 					cmode(chansvs.nick, ca->mychan->name, "+o", CLIENT_NAME(u));
 					cu->modes |= CMODE_OP;
 				}
 
-				if (ircd->uses_halfops && should_halfop(ca->mychan, ca->myuser))
+				if (ircd->uses_halfops && !(cu->modes & (CMODE_OP | ircd->halfops_mode)) && ca->level & CA_AUTOHALFOP)
 				{
 					cmode(chansvs.nick, ca->mychan->name, "+h", CLIENT_NAME(u));
 					cu->modes |= ircd->halfops_mode;
 				}
 
-				if (should_voice(ca->mychan, ca->myuser))
+				if (!(cu->modes & (CMODE_OP | ircd->halfops_mode | CMODE_VOICE)) && ca->level & CA_AUTOVOICE)
 				{
 					cmode(chansvs.nick, ca->mychan->name, "+v", CLIENT_NAME(u));
 					cu->modes |= CMODE_VOICE;
