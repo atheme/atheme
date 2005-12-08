@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 2005 William Pitcock, et al.
+ * Copyright (C) 2005 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
- * This code contains the channel mode definitions for ratbox ircd.
+ * This code contains the channel mode definitions for InspIRCd.
  *
- * $Id: inspircd.h 560 2005-06-23 01:01:11Z nenolod $
+ * $Id: inspircd.h 4043 2005-12-08 12:39:26Z w00t $
  */
 
 #ifndef RATBOX_H
@@ -28,9 +28,10 @@
 #define CMODE_HIDING	0x00400000	/* unreal +u */
 #define CMODE_SSLONLY	0x00800000	/* unreal +z */
 #define CMODE_STICKY	0x01000000	/* unreal +N */
+#define CMODE_CENSOR	0x02000000	/* inspircd +g */
 
-#define CMODE_OWNER	0x10000000	/* unreal +q */
-#define CMODE_PROTECT	0x20000000	/* unreal +a */
-#define CMODE_HALFOP	0x40000000	/* unreal +h */
+#define CMODE_OWNER     0x10000000      /* unreal +q */
+#define CMODE_PROTECT   0x20000000      /* unreal +a */
+#define CMODE_HALFOP    0x40000000      /* unreal +h */
 
 #endif

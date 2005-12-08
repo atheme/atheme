@@ -1,3 +1,11 @@
+w00t        2005/12/08 10:54:25 UTC	(20051208-4041)
+  Log:
+  Some minor craq-- in unreal.c
+
+  Changes:	Modified:
+  +30 -68	trunk/protocol/unreal.c (File Modified) 
+
+
 w00t        2005/12/08 10:09:05 UTC	(20051208-4039)
   Log:
   InspIRCd comment removed, as we're working on a new module supporting b6 protocol, and added a 'wtf' comment.

@@ -1,22 +1,22 @@
 /*
- * Copyright (c) 2003-2004 E. Will et al.
+ * Copyright (c) 2005 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
- * This file contains protocol support for bahamut-based ircd.
+ * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 3835 2005-11-11 11:31:28Z jilles $
+ * $Id: inspircd.c 4043 2005-12-08 12:39:26Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 3835 2005-11-11 11:31:28Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4043 2005-12-08 12:39:26Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
 ircd_t InspIRCd = {
-        "InspIRCd 1.0b4 or later",      /* IRCd name */
-        "",                             /* TLD Prefix, used by Global. */
+        "InspIRCd 1.0 Beta 6 or later", /* IRCd name */
+        "$",                            /* TLD Prefix, used by Global. */
         FALSE,                          /* Whether or not we use IRCNet/TS6 UID */
         FALSE,                          /* Whether or not we use RCOMMAND */
         TRUE,                           /* Whether or not we support channel owners. */
@@ -24,7 +24,7 @@ ircd_t InspIRCd = {
         TRUE,                           /* Whether or not we support halfops. */
 	FALSE,				/* Whether or not we use P10 */
 	TRUE,				/* Whether or not we use vHosts. */
-	CMODE_OPERONLY | CMODE_ADMONLY, /* Oper-only cmodes */
+	CMODE_OPERONLY,			/* Oper-only cmodes */
         CMODE_OWNER,                    /* Integer flag for owner channel flag. */
         CMODE_PROTECT,                  /* Integer flag for protect channel flag. */
         CMODE_HALFOP,                   /* Integer flag for halfops. */
@@ -45,14 +45,10 @@ struct cmode_ inspircd_mode_list[] = {
   { 'M', CMODE_MODREG   },
   { 'R', CMODE_REGONLY  },
   { 'O', CMODE_OPERONLY },
-  { 'A', CMODE_ADMONLY  },
-  { 'Q', CMODE_PEACE    },
   { 'S', CMODE_STRIP    },
   { 'K', CMODE_NOKNOCK  },
   { 'V', CMODE_NOINVITE },
   { 'C', CMODE_NOCTCP   },
-  { 'u', CMODE_HIDING   },
-  { 'z', CMODE_SSLONLY  },
   { 'N', CMODE_STICKY   },
   { '\0', 0 }
 };
@@ -60,20 +56,22 @@ struct cmode_ inspircd_mode_list[] = {
 struct cmode_ inspircd_ignore_mode_list[] = {
   { 'e', CMODE_EXEMPT },
   { 'I', CMODE_INVEX  },
+  { 'g', CMODE_CENSOR },
   { '\0', 0 }
 };
 
 struct cmode_ inspircd_status_mode_list[] = {
   { 'q', CMODE_OWNER   },
   { 'a', CMODE_PROTECT },
-  { 'h', CMODE_HALFOP  },
   { 'o', CMODE_OP      },
+  { 'h', CMODE_HALFOP  },
   { 'v', CMODE_VOICE   },
   { '\0', 0 }
 };
 
 struct cmode_ inspircd_prefix_mode_list[] = {
   { '~', CMODE_OWNER   },
+  { '*', CMODE_PROTECT },
   { '&', CMODE_PROTECT },
   { '@', CMODE_OP      },
   { '%', CMODE_HALFOP  },
@@ -83,43 +81,47 @@ struct cmode_ inspircd_prefix_mode_list[] = {
 
 /* *INDENT-ON* */
 
-static char *xsumtable = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-static char *CreateSum(void)
-{
-	int q = 0;
-	static char sum[8];
-	sum[7] = '\0';
-	for (q = 0; q < 7; q++)
-		sum[q] = xsumtable[rand() % 52];
-	return sum;
-}
-
 /* login to our uplink */
 static uint8_t inspircd_server_login(void)
 {
-	srand(time(NULL));
+	int8_t ret;
+
+	ret = sts("PASS %s", curr_uplink->pass);
+	if (ret == 1)
+		return 1;
 
 	me.bursting = TRUE;
 
-	sts(":%s U %s %s :%s", CreateSum(), me.name, curr_uplink->pass, me.desc);
-
+	sts("SERVER %s %s 0 :%s", me.name, curr_uplink->pass, me.desc);
+	sts("BURST");
+	/* XXX: Being able to get this data as a char* would be nice - Brain */
+        sts(":%s VERSION :atheme-%s. %s %s%s%s%s%s%s%s%s%s",me.name, version, me.name, (match_mapping) ? "A" : "",
+								                      (me.loglevel & LG_DEBUG) ? "d" : "",
+							                              (me.auth) ? "e" : "",
+										      (config_options.flood_msgs) ? "F" : "",
+										      (config_options.leave_chans) ? "l" : "",
+										      (config_options.join_chans) ? "j" : "",
+										      (!match_mapping) ? "R" : "",
+										      (config_options.raw) ? "r" : "",
+										      (runflags & RF_LIVE) ? "n" : "");
+	services_init();
 	return 0;
 }
 
 /* introduce a client */
 static void inspircd_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
-	/*         ts  ni ho vh id mod ip      sv  rn */
-	sts(":%s N %ld %s %s %s %s +%s 0.0.0.0 %s :%s", CreateSum(), CURRTIME, nick, host, host, user, "io", me.name, real);
+	/* :services-dev.chatspike.net NICK 1133994664 OperServ chatspike.net chatspike.net services +oii 0.0.0.0 :Operator Server  */
+	sts(":%s NICK %ld %s %s %s %s +%s 0.0.0.0 :%s", me.name, CURRTIME, nick, host, host, user, "io", real);
+	sts(":%s OPERTYPE Services",nick);
 }
 
 static void inspircd_quit_sts(user_t *u, char *reason)
 {
-	if (!me.connected || !u)
+	if (!me.connected)
 		return;
 
-	sts(":%s Q %s %s", CreateSum(), u->nick, reason);
+	sts(":%s QUIT :%s", u->nick, reason);
 }
 
 /* WALLOPS wrapper */
@@ -135,17 +137,16 @@ static void inspircd_wallops(char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s @ %s :%s", CreateSum(), chansvs.nick, buf);
+	sts(":%s GLOBOPS :%s", me.name, buf);
 }
 
 /* join a channel */
 static void inspircd_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
 {
-	sts(":%s J %s @%s", CreateSum(), u->nick, c->name);
-	if (isnew && modes[0] && modes[1])
-	{
-		sts(":%s m %s %s %s", CreateSum(), u->nick, c->name, modes);
-	}
+	if (isnew)
+		sts(":%s FJOIN %s %ld @%s", me.name, c->name, c->ts, u->nick);
+	else
+		sts(":%s JOIN %s", u->nick, c->name);
 }
 
 /* kicks a user from a channel */
@@ -157,7 +158,7 @@ static void inspircd_kick(char *from, char *channel, char *to, char *reason)
 	if (!chan || !user)
 		return;
 
-	sts(":%s K %s %s %s :%s", CreateSum(), from, channel, to, reason);
+	sts(":%s KICK %s %s :%s", from, channel, to, reason);
 
 	chanuser_delete(chan, user);
 }
@@ -172,7 +173,7 @@ static void inspircd_msg(char *from, char *target, char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s P %s %s :%s", CreateSum(), from, target, buf);
+	sts(":%s PRIVMSG %s :%s", from, target, buf);
 }
 
 /* NOTICE wrapper */
@@ -185,7 +186,7 @@ static void inspircd_notice(char *from, char *target, char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s V %s %s :%s", CreateSum(), from, target, buf);
+	sts(":%s NOTICE %s :%s", from, target, buf);
 }
 
 static void inspircd_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
@@ -197,7 +198,7 @@ static void inspircd_numeric_sts(char *from, int numeric, char *target, char *fm
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s * %s %d %s %s", CreateSum(), from, numeric, target, buf);
+	/* InspIRCd doesnt pass numerics around */
 }
 
 /* KILL wrapper */
@@ -210,7 +211,7 @@ static void inspircd_skill(char *from, char *nick, char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s K %s %s :%s", CreateSum(), from, nick, buf);
+	sts(":%s KILL %s :[%s] Killed (%s (%s))", from, nick, me.name, from, buf);
 }
 
 /* PART wrapper */
@@ -226,7 +227,7 @@ static void inspircd_part(char *chan, char *nick)
 	if (!(cu = chanuser_find(c, u)))
 		return;
 
-	sts(":%s L %s %s", CreateSum(), u->nick, c->name);
+	sts(":%s PART %s :Leaving", u->nick, c->name);
 
 	chanuser_delete(c, u);
 }
@@ -237,7 +238,8 @@ static void inspircd_kline_sts(char *server, char *user, char *host, long durati
 	if (!me.connected)
 		return;
 
-	sts(":%s # %s@%s %s %ld 0 :%s", CreateSum(), user, host, opersvs.nick, time(NULL), reason);
+	/* :services-dev.chatspike.net ADDLINE G test@test.com Brain 1133994664 0 :You are banned from this network */
+	sts(":%s ADDLINE G %s@%s %s %ld 0 :%s", me.name, user, host, opersvs.nick, time(NULL), reason);
 }
 
 /* server-to-server UNKLINE wrapper */
@@ -246,7 +248,8 @@ static void inspircd_unkline_sts(char *server, char *user, char *host)
 	if (!me.connected)
 		return;
 
-	sts(":%s . %s@%s %s", CreateSum(), user, host, opersvs.nick);
+	/* I know this looks wrong, but it's really not. Trust me. --w00t */
+	sts(":%s GLINE %s@%s",opersvs.nick, user, host);
 }
 
 /* topic wrapper */
@@ -255,7 +258,7 @@ static void inspircd_topic_sts(char *channel, char *setter, time_t ts, char *top
 	if (!me.connected)
 		return;
 
-	sts(":%s t %s %s :%s", CreateSum(), chansvs.nick, channel, topic);
+	sts(":%s FTOPIC %s %ld %s :%s", me.name, channel, ts, setter, topic);
 }
 
 /* mode wrapper */
@@ -264,7 +267,7 @@ static void inspircd_mode_sts(char *sender, char *target, char *modes)
 	if (!me.connected)
 		return;
 
-	sts(":%s m %s %s %s", CreateSum(), sender, target, modes);
+	sts(":%s MODE %s %s", sender, target, modes);
 }
 
 /* ping wrapper */
@@ -273,7 +276,7 @@ static void inspircd_ping_sts(void)
 	if (!me.connected)
 		return;
 
-	sts("?", CreateSum());
+	sts(":%s PING :%s", me.name, me.name);
 }
 
 /* protocol-specific stuff to do on login */
@@ -288,10 +291,11 @@ static void inspircd_on_login(char *origin, char *user, char *wantedhost)
 	if (irccasecmp(origin, user))
 		return;
 
-	sts(":%s m %s %s +r", CreateSum(), nicksvs.nick, origin);
+	/* In InspIRCd, SVSMODE shows the +r if not already set */
+	sts(":%s SVSMODE %s +r", nicksvs.nick, origin);
 }
 
-/* protocol-specific stuff to do on login */
+/* protocol-specific stuff to do on logout */
 static void inspircd_on_logout(char *origin, char *user, char *wantedhost)
 {
 	if (!me.connected)
@@ -300,7 +304,7 @@ static void inspircd_on_logout(char *origin, char *user, char *wantedhost)
 	if (irccasecmp(origin, user))
 		return;
 
-	sts(":%s m %s %s -r", CreateSum(), nicksvs.nick, origin);
+	sts(":%s SVSMODE %s -r", nicksvs.nick, origin);
 }
 
 static void inspircd_jupe(char *server, char *reason)
@@ -308,9 +312,15 @@ static void inspircd_jupe(char *server, char *reason)
 	if (!me.connected)
 		return;
 
-	sts(":%s & %s", CreateSum(), server);
-	sts(":%s H %s", CreateSum(), server);
-	sts(":%s = %s :%s", CreateSum(), server, reason);
+	sts(":%s SERVER %s * 1 :%s", me.name, server, reason);
+}
+
+static void inspircd_sethost_sts(char *source, char *target, char *host)
+{
+	if (!me.connected)
+		return;
+
+	sts(":%s FHOST %s", target, host);
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
@@ -320,13 +330,23 @@ static void m_topic(char *origin, uint8_t parc, char *parv[])
 	if (!c)
 		return;
 
-	handle_topic(c, parv[1], atol(parv[2]), parv[3]);
+	handle_topic(c, origin, time(NULL), parv[1]);
+}
+
+static void m_ftopic(char *origin, uint8_t parc, char *parv[])
+{
+	channel_t *c = channel_find(parv[0]);
+
+	if (!c)
+		return;
+
+	handle_topic(c, parv[2], atol(parv[1]), parv[3]);
 }
 
 static void m_ping(char *origin, uint8_t parc, char *parv[])
 {
 	/* reply to PING's */
-	sts(":%s !", CreateSum());
+	sts(":%s PONG %s %s", me.name, me.name, parv[0]);
 }
 
 static void m_pong(char *origin, uint8_t parc, char *parv[])
@@ -337,6 +357,7 @@ static void m_pong(char *origin, uint8_t parc, char *parv[])
 
 	me.uplinkpong = CURRTIME;
 
+	/* -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net */
 	if (me.bursting)
 	{
 #ifdef HAVE_GETTIMEOFDAY
@@ -354,62 +375,86 @@ static void m_pong(char *origin, uint8_t parc, char *parv[])
 	}
 }
 
-/* inspircd is lame and puts the real origin as the first option */
 static void m_privmsg(char *origin, uint8_t parc, char *parv[])
 {
-	if (parc != 3)
+	if (parc != 2)
 		return;
 
-	handle_message(parv[0], parv[1], FALSE, parv[2]);
+	handle_message(origin, parv[0], FALSE, parv[1]);
 }
 
 static void m_notice(char *origin, uint8_t parc, char *parv[])
 {
-	if (parc != 3)
+	if (parc != 2)
 		return;
 
-	handle_message(parv[0], parv[1], TRUE, parv[2]);
+	handle_message(origin, parv[0], TRUE, parv[1]);
 }
 
-static void m_sjoin(char *origin, uint8_t parc, char *parv[])
+static void m_fjoin(char *origin, uint8_t parc, char *parv[])
 {
-	int8_t i;
+	/*
+	 *  -> :proteus.malkier.net SJOIN 1073516550 #shrike +tn :@sycobuny @+rakaur
+	 *      also:
+	 *  -> :nenolod_ SJOIN 1117334567 #chat
+	 *      also:
+	 *  -> SJOIN 1117334567 #chat :@nenolod
+	 */
 
-	for (i = 1; i < parc; i++)
+	channel_t *c;
+	uint8_t modec = 0;
+	char *modev[16];
+	uint8_t userc;
+	char *userv[256];
+	uint8_t i;
+	time_t ts;
+	char nicklist[512];
+
+	if (parc >= 3)
 	{
-		char buf[128];
-		channel_t *c;
-
-		memset(buf, 0, 128);
-
-		slog(LG_DEBUG, "m_sjoin(): Processing %s", parv[i]);
-
-		if (*parv[i] != '#')
-		{
-			buf[0] = *parv[i];
-			parv[i]++;
-		}
-
-		c = channel_find(parv[i]);
+		c = channel_find(parv[0]);
+		ts = atol(parv[1]);
 
 		if (!c)
 		{
-			slog(LG_DEBUG, "m_sjoin(): new channel %s", parv[i]);
-			c = channel_add(parv[i], CURRTIME);
+			slog(LG_DEBUG, "m_fjoin(): new channel: %s", parv[0]);
+			c = channel_add(parv[0], ts);
 		}
 
-		strlcat(buf, parv[0], 128);
+		if (ts < c->ts)
+		{
+			/* the TS changed.  a TS change requires us to do
+			 * bugger all except update the TS, because in InspIRCd,
+			 * remote servers enforce the TS change (this means that
+			 * rogue servers cant really get around it) - Brain
+			 */
+			c->ts = ts;
+		}
 
-		slog(LG_DEBUG, "m_sjoin(): converted into %s", buf);
-		chanuser_add(c, buf);
+		/* XXX: InspIRCd has no leading colon on the nick list,
+		 * so we must build one. This is a mess, someone pleaaaase
+		 * tidy it up for me - Brain
+		 */
+		*nicklist = '\0';
+		for (i = 2; i < parc; i++)
+		{
+			if (i != 2)
+				strncat(nicklist," ",512);
+			strncat(nicklist,parv[i],512);
+		}
+
+		userc = sjtoken(nicklist, ' ', userv);
+
+		for (i = 0; i < userc; i++)
+			chanuser_add(c, userv[i]);
 	}
 }
 
 static void m_part(char *origin, uint8_t parc, char *parv[])
 {
-	slog(LG_DEBUG, "m_part(): user left channel: %s -> %s", parv[0], parv[1]);
+	slog(LG_DEBUG, "m_part(): user left channel: %s -> %s", origin, parv[0]);
 
-	chanuser_delete(channel_find(parv[1]), user_find(parv[0]));
+	chanuser_delete(channel_find(parv[0]), user_find(origin));
 }
 
 static void m_nick(char *origin, uint8_t parc, char *parv[])
@@ -418,18 +463,19 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 	user_t *u;
 	kline_t *k;
 
-	if (parc == 9)
+	/* :services-dev.chatspike.net NICK 1133994664 DevNull chatspike.net chatspike.net services +i 0.0.0.0 :/dev/null -- message sink */
+	if (parc == 8)
 	{
-		s = server_find(parv[7]);
+		s = server_find(origin);
 		if (!s)
 		{
-			slog(LG_DEBUG, "m_nick(): new user on nonexistant server: %s", parv[7]);
+			slog(LG_DEBUG, "m_nick(): new user on nonexistant server: %s", origin);
 			return;
 		}
 
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[1]);
 
-		if ((k = kline_find(parv[3], parv[4])))
+		if ((k = kline_find(parv[4], parv[2])))
 		{
 			/* the new user matches a kline.
 			 * the server introducing the user probably wasn't around when
@@ -439,36 +485,40 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			 */
 
 			skill(opersvs.nick, parv[1], k->reason);
-			kline_sts(parv[7], k->user, k->host, (k->expires - CURRTIME), k->reason);
+			kline_sts(origin, k->user, k->host, (k->expires - CURRTIME), k->reason);
 
 			return;
 		}
 
-		u = user_add(parv[1], parv[4], parv[2], parv[3], parv[6], NULL, parv[8], s, atoi(parv[0]));
+		/* char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, uint32_t ts */
+		u = user_add(parv[1], parv[4], parv[2], parv[3], parv[6], NULL, parv[7], s, atol(parv[0]));
 
 		user_mode(u, parv[5]);
+
+		if (strchr(parv[7], 'r'))
+			handle_burstlogin(u, parv[0]);
 
 		handle_nickchange(u);
 	}
 
-	/* if it's only 2 then it's a nickname change */
-	else if (parc == 2)
+	/* if it's only 1 then it's a nickname change */
+	else if (parc == 1)
 	{
 		node_t *n;
 
-		u = user_find(parv[0]);
+		u = user_find(origin);
 		if (!u)
 		{
-			slog(LG_DEBUG, "m_nick(): nickname change from nonexistant user: %s", parv[0]);
+			slog(LG_DEBUG, "m_nick(): nickname change from nonexistant user: %s", origin);
 			return;
 		}
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", u->nick, parv[0]);
 
-		/* fix up +e if necessary -- jilles */
-		if (u->myuser != NULL && irccasecmp(u->nick, parv[1]) && !irccasecmp(parv[1], u->myuser->name))
-			/* changed nick to registered one, reset +e */
-			sts(":%s m %s %s +r", CreateSum(), me.name, parv[1]);
+		/* fix up +r if necessary -- jilles */
+		if (u->myuser != NULL && irccasecmp(u->nick, parv[0]) && !irccasecmp(parv[0], u->myuser->name))
+			/* changed nick to registered one, reset +r */
+			sts(":%s SVSMODE %s +r", nicksvs.nick, parv[0]);
 
 		/* remove the current one from the list */
 		n = node_find(u, &userlist[u->hash]);
@@ -476,8 +526,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 		node_free(n);
 
 		/* change the nick */
-		strlcpy(u->nick, parv[1], NICKLEN);
-		u->ts = atoi(parv[1]);
+		strlcpy(u->nick, parv[0], NICKLEN);
 
 		/* readd with new nick (so the hash works) */
 		n = node_create();
@@ -498,10 +547,10 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 
 static void m_quit(char *origin, uint8_t parc, char *parv[])
 {
-	slog(LG_DEBUG, "m_quit(): user leaving: %s", parv[0]);
+	slog(LG_DEBUG, "m_quit(): user leaving: %s", origin);
 
 	/* user_delete() takes care of removing channels and so forth */
-	user_delete(parv[0]);
+	user_delete(origin);
 }
 
 static void m_mode(char *origin, uint8_t parc, char *parv[])
@@ -518,22 +567,8 @@ static void m_mode(char *origin, uint8_t parc, char *parv[])
 		return;
 	}
 
-	if (*parv[1] == '#')
-		channel_mode(NULL, channel_find(parv[1]), parc - 3, &parv[3]);
-	else
-		user_mode(user_find(parv[1]), parv[2]);
-}
-
-static void m_smode(char *origin, uint8_t parc, char *parv[])
-{
-	if (parc < 2)
-	{
-		slog(LG_DEBUG, "m_mode(): missing parameters in MODE");
-		return;
-	}
-
 	if (*parv[0] == '#')
-		channel_mode(NULL, channel_find(parv[0]), parc - 2, &parv[2]);
+		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
 	else
 		user_mode(user_find(parv[0]), parv[1]);
 }
@@ -541,10 +576,10 @@ static void m_smode(char *origin, uint8_t parc, char *parv[])
 static void m_kick(char *origin, uint8_t parc, char *parv[])
 {
 	user_t *u = user_find(parv[1]);
-	channel_t *c = channel_find(parv[2]);
+	channel_t *c = channel_find(parv[0]);
 
 	/* -> :rakaur KICK #shrike rintaun :test */
-	slog(LG_DEBUG, "m_kick(): user was kicked: %s -> %s", parv[1], parv[2]);
+	slog(LG_DEBUG, "m_kick(): user was kicked: %s -> %s", parv[1], parv[0]);
 
 	if (!u)
 	{
@@ -554,7 +589,7 @@ static void m_kick(char *origin, uint8_t parc, char *parv[])
 
 	if (!c)
 	{
-		slog(LG_DEBUG, "m_kick(): got kick in nonexistant channel: %s", parv[2]);
+		slog(LG_DEBUG, "m_kick(): got kick in nonexistant channel: %s", parv[0]);
 		return;
 	}
 
@@ -569,33 +604,78 @@ static void m_kick(char *origin, uint8_t parc, char *parv[])
 	/* if they kicked us, let's rejoin */
 	if (!irccasecmp(chansvs.nick, parv[1]))
 	{
-		slog(LG_DEBUG, "m_kick(): i got kicked from `%s'; rejoining", parv[2]);
-		join(parv[2], parv[1]);
+		slog(LG_DEBUG, "m_kick(): i got kicked from `%s'; rejoining", parv[0]);
+		join(parv[0], parv[1]);
 	}
 }
 
 static void m_kill(char *origin, uint8_t parc, char *parv[])
 {
-	if (parc < 2)
+	if (parc < 1)
 		return;
-	handle_kill(parv[0], parv[1], parc > 2 ? parv[2] : "<No reason given>");
+	handle_kill(origin, parv[0], parc > 1 ? parv[1] : "<No reason given>");
 }
 
 static void m_squit(char *origin, uint8_t parc, char *parv[])
 {
-	slog(LG_DEBUG, "m_squit(): server leaving: %s from %s", parv[0], parv[1]);
+	slog(LG_DEBUG, "m_squit(): server leaving: %s from %s", parv[0], origin);
 	server_delete(parv[0]);
 }
 
 static void m_server(char *origin, uint8_t parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
-	server_add(parv[0], atoi(parv[1]), me.name, NULL, parv[2]);
+	server_add(parv[0], atoi(parv[2]), origin ? origin : me.name, NULL, parv[3]);
 
 	if (cnt.server == 2)
 		me.actual = sstrdup(parv[0]);
+}
 
-	services_init();
+static void m_join(char *origin, uint8_t parc, char *parv[])
+{
+	user_t *u = user_find(origin);
+	channel_t *c;
+	chanuser_t *cu;
+	node_t *n, *tn;
+	char* modev[] = { "+o", origin };
+
+	if (!u)
+		return;
+
+	c = channel_find(parv[0]);
+	if (!c)
+	{
+		slog(LG_DEBUG, "m_join(): new channel: %s", parv[0]);
+		c = channel_add(parv[0], CURRTIME);
+		chanuser_add(c, origin);
+		channel_mode(NULL, c, 2, modev);
+	}
+	else
+	{
+		chanuser_add(c, origin);
+	}
+
+		
+}
+
+static void m_sajoin(char *origin, uint8_t parc, char *parv[])
+{
+	m_join(parv[0], 1, &parv[1]);
+}
+
+static void m_sapart(char *origin, uint8_t parc, char *parv[])
+{
+	m_part(parv[0], 1, &parv[1]);
+}
+
+static void m_sanick(char *origin, uint8_t parc, char *parv[])
+{
+	m_nick(parv[0], 1, &parv[1]);
+}
+
+static void m_samode(char *origin, uint8_t parc, char *parv[])
+{
+	m_mode(me.name, parc - 1, &parv[1]);
 }
 
 static void m_error(char *origin, uint8_t parc, char *parv[])
@@ -603,27 +683,12 @@ static void m_error(char *origin, uint8_t parc, char *parv[])
 	slog(LG_INFO, "m_error(): error from server: %s", parv[0]);
 }
 
-static void m_eos(char *origin, uint8_t parc, char *parv[])
+static void m_fhost(char *origin, uint8_t parc, char *parv[])
 {
-	sts(":%s H %s", CreateSum(), me.name);
-	sts(":%s / %s", CreateSum(), chansvs.nick);
-	sts(":%s v %s :atheme-%s. %s %s%s%s%s%s%s%s%s%s",
-	    CreateSum(), me.name, version, me.name,
-	    (match_mapping) ? "A" : "",
-	    (me.loglevel & LG_DEBUG) ? "d" : "",
-	    (me.auth) ? "e" : "",
-	    (config_options.flood_msgs) ? "F" : "",
-	    (config_options.leave_chans) ? "l" : "", (config_options.join_chans) ? "j" : "", (!match_mapping) ? "R" : "", (config_options.raw) ? "r" : "", (runflags & RF_LIVE) ? "n" : "");
-}
-
-static void m_chghost(char *origin, uint8_t parc, char *parv[])
-{
-	user_t *u = user_find(parv[0]);
-
+	user_t *u = user_find(origin);
 	if (!u)
 		return;
-
-	strlcpy(u->vhost, parv[1], HOSTLEN);
+	strlcpy(u->vhost, parv[0], HOSTLEN);
 }
 
 void _modinit(module_t * m)
@@ -648,6 +713,7 @@ void _modinit(module_t * m)
 	ircd_on_login = &inspircd_on_login;
 	ircd_on_logout = &inspircd_on_logout;
 	jupe = &inspircd_jupe;
+	sethost_sts = &inspircd_sethost_sts;
 
 	mode_list = inspircd_mode_list;
 	ignore_mode_list = inspircd_ignore_mode_list;
@@ -656,26 +722,30 @@ void _modinit(module_t * m)
 
 	ircd = &InspIRCd;
 
-	pcommand_add("?", m_ping);
-	pcommand_add("!", m_pong);
-	pcommand_add("P", m_privmsg);
-	pcommand_add("V", m_notice);
-	pcommand_add("J", m_sjoin);
-	pcommand_add("L", m_part);
-	pcommand_add("N", m_nick);
-	pcommand_add("n", m_nick);
-	pcommand_add("Q", m_quit);
-	pcommand_add("M", m_smode);
-	pcommand_add("m", m_mode);
-	pcommand_add("k", m_kick);
-	pcommand_add("K", m_kill);
-	pcommand_add("&", m_squit);
-	pcommand_add("s", m_server);
-	pcommand_add("E", m_error);
-	pcommand_add("t", m_topic);
-	pcommand_add("T", m_topic);
-	pcommand_add("F", m_eos);
-	pcommand_add("b", m_chghost);
+	pcommand_add("PING", m_ping);
+	pcommand_add("PONG", m_pong);
+	pcommand_add("PRIVMSG", m_privmsg);
+	pcommand_add("NOTICE", m_notice);
+	pcommand_add("FJOIN", m_fjoin);
+	pcommand_add("PART", m_part);
+	pcommand_add("NICK", m_nick);
+	pcommand_add("QUIT", m_quit);
+	pcommand_add("MODE", m_mode);
+	pcommand_add("FMODE", m_mode);
+	pcommand_add("SAMODE", m_samode);
+	pcommand_add("SAJOIN", m_sajoin);
+	pcommand_add("SAPART", m_sapart);
+	pcommand_add("SANICK", m_sanick);
+	pcommand_add("KICK", m_kick);
+	pcommand_add("KILL", m_kill);
+	pcommand_add("SQUIT", m_squit);
+	pcommand_add("SERVER", m_server);
+	pcommand_add("FJOIN", m_fjoin);
+	pcommand_add("FTOPIC", m_ftopic);
+	pcommand_add("JOIN", m_join);
+	pcommand_add("ERROR", m_error);
+	pcommand_add("TOPIC", m_topic);
+	pcommand_add("FHOST", m_fhost);
 
 	m->mflags = MODTYPE_CORE;
 
