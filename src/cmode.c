@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 3883 2005-11-11 23:14:55Z jilles $
+ * $Id: cmode.c 4027 2005-12-08 00:05:46Z jilles $
  */
 
 #include "atheme.h"
@@ -200,28 +200,23 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 						cmode(source->nick, chan->name, str, CLIENT_NAME(cu->user));
 
 					/* see if they did something we have to undo */
-					if (source == NULL && (mc = mychan_find(cu->chan->name)))
+					if (source == NULL && cu->user->server != me.me && (mc = mychan_find(cu->chan->name)) && mc->flags & MC_SECURE)
 					{
-						myuser_t *mu = cu->user->myuser;
-
-						if ((MC_SECURE & mc->flags) && (status_mode_list[i].mode == 'o'))
+						if (status_mode_list[i].mode == 'o' && cu->user != chansvs.me->me && !(chanacs_user_flags(mc, cu->user) & (CA_OP | CA_AUTOOP)))
 						{
-							char hostbuf[BUFSIZE];
+							/* they were opped and aren't on the list, deop them */
+							cmode(chansvs.nick, mc->name, "-o", cu->user->nick);
+							cu->modes &= ~status_mode_list[i].value;
+						}
+						else if (ircd->uses_halfops && status_mode_list[i].mode == ircd->halfops_mchar[1] && !(chanacs_user_flags(mc, cu->user) & (CA_HALFOP | CA_AUTOHALFOP)))
+						{
+							/* same for halfops -- jilles */
+							char mchar[3];
 
-							strlcpy(hostbuf, cu->user->nick, BUFSIZE);
-							strlcat(hostbuf, "!", BUFSIZE);
-							strlcat(hostbuf, cu->user->user, BUFSIZE);
-							strlcat(hostbuf, "@", BUFSIZE);
-							strlcat(hostbuf, cu->user->host, BUFSIZE);
-
-							if ((!is_founder(mc, mu)) && (cu->user != chansvs.me->me) &&
-							    (!is_xop(mc, mu, (CA_OP | CA_AUTOOP))) && (!chanacs_find_host(mc, hostbuf, (CA_OP | CA_AUTOOP))))
-							{
-								/* they were opped and aren't on the list, deop them */
-								if (source == NULL)
-									cmode(chansvs.nick, mc->name, "-o", cu->user->nick);
-								cu->modes &= ~status_mode_list[i].value;
-							}
+							strlcpy(mchar, ircd->halfops_mchar, sizeof mchar);
+							mchar[0] = '-';
+							cmode(chansvs.nick, mc->name, mchar, cu->user->nick);
+							cu->modes &= ~status_mode_list[i].value;
 						}
 					}
 				}

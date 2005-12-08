@@ -1,3 +1,14 @@
+jilles      2005/12/07 23:40:46 UTC	(20051207-4025)
+  Log:
+  Don't allow setting +b if the user has +b, require +r.
+  This prevents +f-r users from adding akicks via
+  /cs flags by deliberately matching a +b hostmask entry.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/src/flags.c (File Modified) 
+
+
 jilles      2005/12/07 23:30:14 UTC	(20051207-4023)
   Log:
   Remove those stupid should_*() functions, except those
