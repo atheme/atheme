@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3825 2005-11-11 05:08:05Z alambert $
+ * $Id: set.c 4031 2005-12-08 00:24:15Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3825 2005-11-11 05:08:05Z alambert $",
+	"$Id: set.c 4031 2005-12-08 00:24:15Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -90,7 +90,6 @@ static void cs_set_email(char *origin, char *name, char *params)
 {
         user_t *u = user_find(origin);
         mychan_t *mc;
-        chanacs_t *ca;
         char *mail = strtok(params, " ");
 
         if (*name != '#')
@@ -105,7 +104,7 @@ static void cs_set_email(char *origin, char *name, char *params)
                 return;
         }
 
-        if (!(ca = chanacs_find(mc, u->myuser, CA_FLAGS)))
+        if (!chanacs_user_has_flag(mc, u, CA_SET))
         {
                 notice(chansvs.nick, origin, "You are not authorized to execute this command.");
                 return;
@@ -150,7 +149,6 @@ static void cs_set_url(char *origin, char *name, char *params)
 {
 	user_t *u = user_find(origin);
 	mychan_t *mc;
-	chanacs_t *ca;
 	char *url = strtok(params, " ");
 
 	if (*name != '#')
@@ -165,7 +163,7 @@ static void cs_set_url(char *origin, char *name, char *params)
 		return;
 	}
 
-	if (!(ca = chanacs_find(mc, u->myuser, CA_FLAGS)))
+	if (!chanacs_user_has_flag(mc, u, CA_SET))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to execute this command.");
 		return;
@@ -202,7 +200,6 @@ static void cs_set_entrymsg(char *origin, char *name, char *params)
 {
 	user_t *u = user_find(origin);
 	mychan_t *mc;
-	chanacs_t *ca;
 
 	if (!(mc = mychan_find(name)))
 	{
@@ -210,7 +207,7 @@ static void cs_set_entrymsg(char *origin, char *name, char *params)
 		return;
 	}
 
-	if (!(ca = chanacs_find(mc, u->myuser, CA_SET)))
+	if (!chanacs_user_has_flag(mc, u, CA_SET))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to execute this command.");
 		return;
