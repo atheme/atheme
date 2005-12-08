@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4013 2005-12-05 17:40:52Z jilles $
+ * $Id: node.c 4037 2005-12-08 01:18:01Z jilles $
  */
 
 #include "atheme.h"
@@ -1708,7 +1708,7 @@ chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, uint32_t level
 	strlcat(host, "!", BUFSIZE);
 	strlcat(host, u->user, BUFSIZE);
 	strlcat(host, "@", BUFSIZE);
-	strlcat(host, u->host, BUFSIZE);
+	strlcat(host, u->vhost, BUFSIZE);
 
 	return chanacs_find_host(mychan, host, level);
 }
@@ -1725,7 +1725,7 @@ uint32_t chanacs_host_flags_by_user(mychan_t *mychan, user_t *u)
 	strlcat(host, "!", BUFSIZE);
 	strlcat(host, u->user, BUFSIZE);
 	strlcat(host, "@", BUFSIZE);
-	strlcat(host, u->host, BUFSIZE);
+	strlcat(host, u->vhost, BUFSIZE);
 
 	return chanacs_host_flags(mychan, host);
 }
