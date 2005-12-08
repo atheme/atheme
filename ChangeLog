@@ -1,3 +1,16 @@
+jilles      2005/12/08 00:36:02 UTC	(20051208-4033)
+  Log:
+  /cs ban/unban:
+  - Change chanacs_find() to chanacs_user_has_flag(), allowing
+    hostmask access.
+  - Require +r, +f does not suffice (this is consistent with
+    akick requiring +rf).
+  
+
+  Changes:	Modified:
+  +4 -8		trunk/modules/chanserv/ban.c (File Modified) 
+
+
 jilles      2005/12/08 00:24:15 UTC	(20051208-4031)
   Log:
   - Change chanacs_find() to chanacs_user_has_flag() in a few places
