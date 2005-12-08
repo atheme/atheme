@@ -1,3 +1,13 @@
+jilles      2005/12/08 00:24:15 UTC	(20051208-4031)
+  Log:
+  - Change chanacs_find() to chanacs_user_has_flag() in a few places
+  - Move /cs set email and /cs set url from +f to +s
+  
+
+  Changes:	Modified:
+  +3 -6		trunk/modules/chanserv/set.c (File Modified) 
+
+
 jilles      2005/12/08 00:22:46 UTC	(20051208-4029)
   Log:
   Mention how to clear the URL.

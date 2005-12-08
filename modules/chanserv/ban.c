@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 3963 2005-11-23 22:27:24Z nenolod $
+ * $Id: ban.c 4033 2005-12-08 00:36:02Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", FALSE, _modinit, _moddeinit,
-	"$Id: ban.c 3963 2005-11-23 22:27:24Z nenolod $",
+	"$Id: ban.c 4033 2005-12-08 00:36:02Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -65,7 +65,6 @@ static void cs_cmd_ban (char *origin)
 	char *target = strtok(NULL, " ");
 	channel_t *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
-	chanacs_t *ca;
 	user_t *u = user_find(origin);
 	user_t *tu;
 
@@ -94,7 +93,7 @@ static void cs_cmd_ban (char *origin)
 		return;
 	}
 
-	if (!(ca = chanacs_find(mc, u->myuser, CA_REMOVE)) && !(ca = chanacs_find(mc, u->myuser, CA_FLAGS)))
+	if (!chanacs_user_has_flag(mc, u, CA_REMOVE))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 		return;
@@ -143,7 +142,6 @@ static void cs_cmd_unban (char *origin)
         char *target = strtok(NULL, " ");
         channel_t *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
-	chanacs_t *ca;
 	user_t *u = user_find(origin);
 	user_t *tu;
 
@@ -172,7 +170,7 @@ static void cs_cmd_unban (char *origin)
 		return;
 	}
 
-	if (!(ca = chanacs_find(mc, u->myuser, CA_REMOVE)) && !(ca = chanacs_find(mc, u->myuser, CA_FLAGS)))
+	if (!chanacs_user_has_flag(mc, u, CA_REMOVE))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 		return;
@@ -235,7 +233,6 @@ static void cs_fcmd_ban (char *origin, char *channel)
 	char *target = strtok(NULL, " ");
 	channel_t *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
-	chanacs_t *ca;
 	user_t *u = user_find(origin);
 	user_t *tu;
 
@@ -264,7 +261,7 @@ static void cs_fcmd_ban (char *origin, char *channel)
 		return;
 	}
 
-	if (!(ca = chanacs_find(mc, u->myuser, CA_REMOVE)) && !(ca = chanacs_find(mc, u->myuser, CA_FLAGS)))
+	if (!chanacs_user_has_flag(mc, u, CA_REMOVE))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 		return;
@@ -306,7 +303,6 @@ static void cs_fcmd_unban (char *origin, char *channel)
         char *target = strtok(NULL, " ");
         channel_t *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
-	chanacs_t *ca;
 	user_t *u = user_find(origin);
 	user_t *tu;
 
@@ -335,7 +331,7 @@ static void cs_fcmd_unban (char *origin, char *channel)
 		return;
 	}
 
-	if (!(ca = chanacs_find(mc, u->myuser, CA_REMOVE)) && !(ca = chanacs_find(mc, u->myuser, CA_FLAGS)))
+	if (!chanacs_user_has_flag(mc, u, CA_REMOVE))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 		return;
