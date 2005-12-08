@@ -4,7 +4,7 @@
  *
  * Protocol module stuff.
  *
- * $Id: pmodule.h 2835 2005-10-11 05:27:26Z terminal $
+ * $Id: pmodule.h 4039 2005-12-08 10:09:05Z w00t $
  */
 
 #ifndef PMODULE_H
@@ -28,12 +28,14 @@ E pcommand_t *pcommand_find(char *token);
 E boolean_t pmodule_loaded;
 E boolean_t backend_loaded;
 
+
+/* XXX - what the HELL are these used for? A grep reveals nothing.. --w00t */
 #define PROTOCOL_ASUKA			1
 #define PROTOCOL_BAHAMUT		2
 #define PROTOCOL_CHARYBDIS		3
 #define PROTOCOL_DREAMFORGE		4
 #define PROTOCOL_HYPERION		5
-#define PROTOCOL_INSPIRCD		6 /* XXX to be removed soon */
+#define PROTOCOL_INSPIRCD		6
 #define PROTOCOL_IRCNET			7
 #define PROTOCOL_MONKEY			8
 #define PROTOCOL_PLEXUS			9

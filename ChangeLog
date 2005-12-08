@@ -1,3 +1,17 @@
+jilles      2005/12/08 01:18:01 UTC	(20051208-4037)
+  Log:
+  Move channel access over from host to vhost.
+  This is probably less surprising and allows services cloaks
+  in access lists.
+  It could be useful to check hostmask-based channel access
+  after identify/login now.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/xop.c (File Modified) 
+  +2 -2		trunk/src/node.c (File Modified) 
+
+
 jilles      2005/12/08 00:43:30 UTC	(20051208-4035)
   Log:
   Clarify a little.
