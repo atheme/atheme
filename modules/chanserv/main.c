@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4011 2005-12-05 17:40:21Z jilles $
+ * $Id: main.c 4045 2005-12-08 17:06:31Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4011 2005-12-05 17:40:21Z jilles $",
+	"$Id: main.c 4045 2005-12-08 17:06:31Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -202,6 +202,7 @@ static void cs_join(chanuser_t *cu)
 	uint32_t flags;
 	metadata_t *md;
 	boolean_t noop;
+	chanacs_t *ca2;
 
 	if (is_internal_client(cu->user))
 		return;
@@ -228,7 +229,22 @@ static void cs_join(chanuser_t *cu)
 
 	if (flags & CA_AKICK)
 	{
-		ban(chansvs.nick, chan->name, u);
+		/* use a user-given ban mask if possible -- jilles */
+		ca2 = chanacs_find_host_by_user(mc, u, CA_AKICK);
+		if (ca2 != NULL)
+		{
+			if (chanban_find(chan, ca2->host) == NULL)
+			{
+				char str[512];
+
+				chanban_add(chan, ca2->host);
+				snprintf(str, sizeof str, "+b %s", ca2->host);
+				/* ban immediately */
+				mode_sts(chansvs.nick, chan->name, str);
+			}
+		}
+		else
+			ban(chansvs.nick, chan->name, u);
 		kick(chansvs.nick, chan->name, u->nick, "User is banned from this channel");
 	}
 

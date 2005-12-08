@@ -1,3 +1,12 @@
+w00t        2005/12/08 12:39:26 UTC	(20051208-4043)
+  Log:
+  [seemingly] working InspIRCd b6 and above support. Needs some review, but appears to work.
+
+  Changes:	Modified:
+  +6 -5		trunk/include/protocol/inspircd.h (File Modified) 
+  +230 -160	trunk/protocol/inspircd.c (File Modified) 
+
+
 w00t        2005/12/08 10:54:25 UTC	(20051208-4041)
   Log:
   Some minor craq-- in unreal.c
