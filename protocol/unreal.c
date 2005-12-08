@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 3975 2005-11-25 20:12:20Z nenolod $
+ * $Id: unreal.c 4041 2005-12-08 10:54:25Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 3975 2005-11-25 20:12:20Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 4041 2005-12-08 10:54:25Z w00t $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -387,6 +387,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 	 *  -> SJOIN 1117334567 #chat :@nenolod
 	 */
 
+	boolean_t removemodes = FALSE;
 	channel_t *c;
 	uint8_t modec = 0;
 	char *modev[16];
@@ -416,34 +417,12 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 
 		if (ts < c->ts)
 		{
-			chanuser_t *cu;
-			node_t *n;
-
-			/* the TS changed.  a TS change requires the following things
-			 * to be done to the channel:  reset all modes to nothing, remove
-			 * all status modes on known users on the channel (including ours),
-			 * and set the new TS.
-			 */
-
-			c->modes = 0;
-			c->limit = 0;
-			if (c->key)
-				free(c->key);
-			c->key = NULL;
-
-			LIST_FOREACH(n, c->members.head)
-			{
-				cu = (chanuser_t *)n->data;
-				cu->modes = 0;
-			}
-
+			removemodes = TRUE; /* TS change, see below for rules. */
 			slog(LG_INFO, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
-
 			c->ts = ts;
 		}
 
 		channel_mode(NULL, c, modec, modev);
-
 		userc = sjtoken(parv[parc - 1], ' ', userv);
 
 		for (i = 0; i < userc; i++)
@@ -468,29 +447,8 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 
 		if (ts < c->ts)
 		{
-			chanuser_t *cu;
-			node_t *n;
-
-			/* the TS changed.  a TS change requires the following things
-			 * to be done to the channel:  reset all modes to nothing, remove
-			 * all status modes on known users on the channel (including ours),
-			 * and set the new TS.
-			 */
-
-			c->modes = 0;
-			c->limit = 0;
-			if (c->key)
-				free(c->key);
-			c->key = NULL;
-
-			LIST_FOREACH(n, c->members.head)
-			{
-				cu = (chanuser_t *)n->data;
-				cu->modes = 0;
-			}
-
+			removemodes = TRUE; /* TS change, see below for rules. */
 			slog(LG_INFO, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
-
 			c->ts = ts;
 		}
 
@@ -507,39 +465,43 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 	else if (parc == 2)
 	{
 		c = channel_find(parv[1]);
-		/* XXX what if the channel doesn't exist? */
+		/* XXX what if the channel doesn't exist? -- XXX in which case, doesn't the ircd realise the chan doesn't exist...??*/
 		ts = atol(parv[0]);
 
 		if (ts < c->ts)
 		{
-			chanuser_t *cu;
-			node_t *n;
-
-			/* the TS changed.  a TS change requires the following things
-			 * to be done to the channel:  reset all modes to nothing, remove
-			 * all status modes on known users on the channel (including ours),
-			 * and set the new TS.
-			 */
-
-			c->modes = 0;
-			c->limit = 0;
-			if (c->key)
-				free(c->key);
-			c->key = NULL;
-
-			LIST_FOREACH(n, c->members.head)
-			{
-				cu = (chanuser_t *)n->data;
-				cu->modes = 0;
-			}
-
+			removemodes = TRUE; /* TS change, see below for rules. */
 			slog(LG_INFO, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
-
 			c->ts = ts;
-			/* XXX lost modes! */
+			/* XXX lost modes! -- XXX - pardon? why do we worry about this? TS reset requires modes reset.. */
 		}
 
 		chanuser_add(c, origin);
+	}
+
+	/* remove some duplication here, at the expense of a boolean_t.. --w00t */
+	if (removemodes == TRUE)
+	{
+		/* the TS changed.  a TS change requires the following things
+		 * to be done to the channel:  reset all modes to nothing, remove
+		 * all status modes on known users on the channel (including ours),
+		 * and set the new TS.
+		 */
+
+		chanuser_t *cu;
+		node_t *n;
+
+		c->modes = 0;
+		c->limit = 0;
+		if (c->key)
+			free(c->key);
+		c->key = NULL;
+
+		LIST_FOREACH(n, c->members.head)
+		{
+			cu = (chanuser_t *)n->data;
+			cu->modes = 0;
+		}
 	}
 }
 

@@ -1,3 +1,11 @@
+w00t        2005/12/08 10:09:05 UTC	(20051208-4039)
+  Log:
+  InspIRCd comment removed, as we're working on a new module supporting b6 protocol, and added a 'wtf' comment.
+
+  Changes:	Modified:
+  +3 -1		trunk/include/pmodule.h (File Modified) 
+
+
 jilles      2005/12/08 01:18:01 UTC	(20051208-4037)
   Log:
   Move channel access over from host to vhost.
