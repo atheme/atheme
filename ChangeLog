@@ -1,3 +1,15 @@
+jilles      2005/12/08 00:05:46 UTC	(20051208-4027)
+  Log:
+  /CS SET SECURE checks on mode changes:
+  - Replace is_xop()/chanacs_find_host() combination with
+    chanacs_user_flags()
+  - Make SECURE apply to halfops as well
+  
+
+  Changes:	Modified:
+  +14 -19	trunk/src/cmode.c (File Modified) 
+
+
 jilles      2005/12/07 23:40:46 UTC	(20051207-4025)
   Log:
   Don't allow setting +b if the user has +b, require +r.

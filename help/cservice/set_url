@@ -1,7 +1,8 @@
 Help for SET URL:
 
 SET URL allows you to change or set the URL
-address associated with a channel.
+address associated with a channel. Specify
+a <url> of NONE to clear the URL.
 
 Syntax: SET <channel> URL <url>
 
