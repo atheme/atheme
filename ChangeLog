@@ -1,3 +1,15 @@
+jilles      2005/12/09 17:19:42 UTC	(20051209-4053)
+  Log:
+  Add IDLE command to allow remote whois on services.
+  Does not show signon time (services startup time).
+  
+  Submitted by: brain
+  
+
+  Changes:	Modified:
+  +13 -0	trunk/protocol/inspircd.c (File Modified) 
+
+
 jilles      2005/12/09 13:32:26 UTC	(20051209-4051)
   Log:
   - Make sure services are opped when joining a channel (from brain)

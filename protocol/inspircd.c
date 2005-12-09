@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 4053 2005-12-09 17:19:42Z jilles $
+ * $Id: inspircd.c 4055 2005-12-09 17:42:11Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4053 2005-12-09 17:19:42Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4055 2005-12-09 17:42:11Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -646,11 +646,13 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 	channel_t *c;
 	chanuser_t *cu;
 	node_t *n, *tn;
-	char* modev[] = { "+o", origin };
+	char* modev[2];
 
 	if (!u)
 		return;
 
+	modev[0] = "+o";
+	modev[1] = origin;
 	c = channel_find(parv[0]);
 	if (!c)
 	{
