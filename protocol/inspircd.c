@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 4043 2005-12-08 12:39:26Z w00t $
+ * $Id: inspircd.c 4049 2005-12-09 13:07:18Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4043 2005-12-08 12:39:26Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4049 2005-12-09 13:07:18Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -285,10 +285,10 @@ static void inspircd_on_login(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return;
 
-	/* Can only record identified state if logged in to correct nick,
-	 * sorry -- jilles
+	/* Can only do this for nickserv, and can only record identified
+	 * state if logged in to correct nick, sorry -- jilles
 	 */
-	if (irccasecmp(origin, user))
+	if (nicksvs.me == NULL || irccasecmp(origin, user))
 		return;
 
 	/* In InspIRCd, SVSMODE shows the +r if not already set */
@@ -301,7 +301,7 @@ static void inspircd_on_logout(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return;
 
-	if (irccasecmp(origin, user))
+	if (nicksvs.me == NULL || irccasecmp(origin, user))
 		return;
 
 	sts(":%s SVSMODE %s -r", nicksvs.nick, origin);
@@ -516,7 +516,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", u->nick, parv[0]);
 
 		/* fix up +r if necessary -- jilles */
-		if (u->myuser != NULL && irccasecmp(u->nick, parv[0]) && !irccasecmp(parv[0], u->myuser->name))
+		if (nicksvs.me != NULL && u->myuser != NULL && irccasecmp(u->nick, parv[0]) && !irccasecmp(parv[0], u->myuser->name))
 			/* changed nick to registered one, reset +r */
 			sts(":%s SVSMODE %s +r", nicksvs.nick, parv[0]);
 

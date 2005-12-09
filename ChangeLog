@@ -1,3 +1,14 @@
+jilles      2005/12/09 12:43:28 UTC	(20051209-4047)
+  Log:
+  Complain if userserv is enabled but a nickserv{} block is present,
+  and vice versa.
+  
+
+  Changes:	Modified:
+  +7 -0		trunk/modules/nickserv/main.c (File Modified) 
+  +7 -0		trunk/modules/userserv/main.c (File Modified) 
+
+
 jilles      2005/12/08 17:06:31 UTC	(20051208-4045)
   Log:
   For akicked users, use a matching +b'ed hostmask if possible.

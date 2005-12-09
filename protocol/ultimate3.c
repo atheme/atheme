@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 3839 2005-11-11 11:48:36Z jilles $
+ * $Id: ultimate3.c 4049 2005-12-09 13:07:18Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 3839 2005-11-11 11:48:36Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 4049 2005-12-09 13:07:18Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -274,11 +274,10 @@ static void ultimate3_on_login(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return;
 
-	/*
-	 * Can only record identified state if logged in to correct nick,
-	 * * sorry -- jilles
+	/* Can only do this for nickserv, and can only record identified
+	 * state if logged in to correct nick, sorry -- jilles
 	 */
-	if (irccasecmp(origin, user))
+	if (nicksvs.me == NULL || irccasecmp(origin, user))
 		return;
 
 	sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, origin, time(NULL));
@@ -290,7 +289,7 @@ static void ultimate3_on_logout(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return;
 
-	if (irccasecmp(origin, user))
+	if (nicksvs.me == NULL || irccasecmp(origin, user))
 		return;
 
 	sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, origin, time(NULL));
@@ -602,7 +601,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 		/*
 		 * fix up +r if necessary -- jilles 
 		 */
-		if (u->myuser != NULL && irccasecmp(u->nick, parv[0]) && !irccasecmp(parv[0], u->myuser->name))
+		if (nicksvs.me != NULL && u->myuser != NULL && irccasecmp(u->nick, parv[0]) && !irccasecmp(parv[0], u->myuser->name))
 			/*
 			 * changed nick to registered one, reset +r 
 			 */

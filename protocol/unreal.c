@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 4041 2005-12-08 10:54:25Z w00t $
+ * $Id: unreal.c 4049 2005-12-09 13:07:18Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 4041 2005-12-08 10:54:25Z w00t $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 4049 2005-12-09 13:07:18Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -279,10 +279,10 @@ static void unreal_on_login(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return;
 
-	/* Can only record identified state if logged in to correct nick,
-	 * sorry -- jilles
+	/* Can only do this for nickserv, and can only record identified
+	 * state if logged in to correct nick, sorry -- jilles
 	 */
-	if (irccasecmp(origin, user))
+	if (nicksvs.me == NULL || irccasecmp(origin, user))
 		return;
 
 	/* imo, we should be using SVS2MODE to show the modechange here and on logout --w00t */
@@ -295,7 +295,7 @@ static void unreal_on_logout(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return;
 
-	if (irccasecmp(origin, user))
+	if (nicksvs.me == NULL || irccasecmp(origin, user))
 		return;
 
 	sts(":%s SVS2MODE %s -r+d %ld", nicksvs.nick, origin, time(NULL));
@@ -578,7 +578,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", u->nick, parv[0]);
 
 		/* fix up +r if necessary -- jilles */
-		if (u->myuser != NULL && irccasecmp(u->nick, parv[0]) && !irccasecmp(parv[0], u->myuser->name))
+		if (nicksvs.me != NULL && u->myuser != NULL && irccasecmp(u->nick, parv[0]) && !irccasecmp(parv[0], u->myuser->name))
 			/* changed nick to registered one, reset +r */
 			sts(":%s SVS2MODE %s +rd %ld", nicksvs.nick, parv[0], time(NULL));
 

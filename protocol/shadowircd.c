@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for shadowircd-based ircd.
  *
- * $Id: shadowircd.c 3835 2005-11-11 11:31:28Z jilles $
+ * $Id: shadowircd.c 4049 2005-12-09 13:07:18Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/shadowircd.h"
 
-DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 3835 2005-11-11 11:31:28Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 4049 2005-12-09 13:07:18Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -270,12 +270,27 @@ static void shadowircd_ping_sts(void)
 /* protocol-specific stuff to do on login */
 static void shadowircd_on_login(char *origin, char *user, char *wantedhost)
 {
+	if (!me.connected)
+		return;
+
+	/* Can only do this for nickserv, and can only record identified
+	 * state if logged in to correct nick, sorry -- jilles
+	 */
+	if (nicksvs.me == NULL || irccasecmp(origin, user))
+		return;
+
 	sts(":%s MODE %s +e", me.name, origin);
 }
 
 /* protocol-specific stuff to do on login */
 static void shadowircd_on_logout(char *origin, char *user, char *wantedhost)
 {
+	if (!me.connected)
+		return;
+
+	if (nicksvs.me == NULL || irccasecmp(origin, user))
+		return;
+
 	sts(":%s MODE %s -e", me.name, origin);
 }
 

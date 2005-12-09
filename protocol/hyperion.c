@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 3979 2005-11-26 01:35:34Z jilles $
+ * $Id: hyperion.c 4049 2005-12-09 13:07:18Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -15,7 +15,7 @@
 #include "atheme.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 3979 2005-11-26 01:35:34Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 4049 2005-12-09 13:07:18Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -304,7 +304,7 @@ static void hyperion_on_login(char *origin, char *user, char *wantedhost)
 	 * to change the fields yet */
 
 	/* set +e if they're identified to the nick they are using */
-	if (irccasecmp(origin, user))
+	if (nicksvs.me == NULL || irccasecmp(origin, user))
 		return;
 
 	sts(":%s MODE %s +e", me.name, origin);
@@ -324,7 +324,7 @@ static void hyperion_on_logout(char *origin, char *user, char *wantedhost)
 	if (use_svslogin)
 		sts(":%s SVSLOGIN %s %s %s %s %s %s", me.name, u->server->name, origin, "0", origin, u->user, wantedhost ? u->host : u->vhost);
 
-	if (irccasecmp(origin, user))
+	if (nicksvs.me == NULL || irccasecmp(origin, user))
 		return;
 
 	sts(":%s MODE %s -e", me.name, origin);
@@ -572,7 +572,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", u->nick, parv[0]);
 
 		/* fix up +e if necessary -- jilles */
-		if (u->myuser != NULL && irccasecmp(u->nick, parv[0]) && !irccasecmp(parv[0], u->myuser->name))
+		if (nicksvs.me != NULL && u->myuser != NULL && irccasecmp(u->nick, parv[0]) && !irccasecmp(parv[0], u->myuser->name))
 			/* changed nick to registered one, reset +e */
 			sts(":%s MODE %s +e", me.name, parv[0]);
 
