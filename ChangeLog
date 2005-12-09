@@ -1,3 +1,17 @@
+jilles      2005/12/08 17:06:31 UTC	(20051208-4045)
+  Log:
+  For akicked users, use a matching +b'ed hostmask if possible.
+  Otherwise use *!*@vhost as before.
+  Flags checks on identify use only account access entries currently
+  so I left those alone for now.
+  
+  Tracker #69.
+  
+
+  Changes:	Modified:
+  +17 -1	trunk/modules/chanserv/main.c (File Modified) 
+
+
 w00t        2005/12/08 12:39:26 UTC	(20051208-4043)
   Log:
   [seemingly] working InspIRCd b6 and above support. Needs some review, but appears to work.
