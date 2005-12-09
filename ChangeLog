@@ -1,3 +1,14 @@
+jilles      2005/12/09 13:32:26 UTC	(20051209-4051)
+  Log:
+  - Make sure services are opped when joining a channel (from brain)
+  - Set the initial channel mode on new channels, using a server MODE (myself)
+  - Fix up sethost_sts (from brain)
+  
+
+  Changes:	Modified:
+  +10 -1	trunk/protocol/inspircd.c (File Modified) 
+
+
 jilles      2005/12/09 13:07:18 UTC	(20051209-4049)
   Log:
   Don't mess with dalnet-like +r/+e if nickserv is not enabled.

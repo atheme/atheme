@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 4051 2005-12-09 13:32:26Z jilles $
+ * $Id: inspircd.c 4053 2005-12-09 17:19:42Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4051 2005-12-09 13:32:26Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4053 2005-12-09 17:19:42Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -692,6 +692,18 @@ static void m_error(char *origin, uint8_t parc, char *parv[])
 	slog(LG_INFO, "m_error(): error from server: %s", parv[0]);
 }
 
+static void m_idle(char* origin, uint8_t parc, char *parv[])
+{
+	if (parc == 1)
+	{
+		sts(":%s IDLE %s %ld 0",parv[0],origin,CURRTIME);
+	}
+	else
+	{
+		slog(LG_INFO, "m_idle(): Received an IDLE response but we didn't WHOIS anybody!");
+	}
+}
+
 static void m_fhost(char *origin, uint8_t parc, char *parv[])
 {
 	user_t *u = user_find(origin);
@@ -755,6 +767,7 @@ void _modinit(module_t * m)
 	pcommand_add("ERROR", m_error);
 	pcommand_add("TOPIC", m_topic);
 	pcommand_add("FHOST", m_fhost);
+	pcommand_add("IDLE", m_idle);
 
 	m->mflags = MODTYPE_CORE;
 
