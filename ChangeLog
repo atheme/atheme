@@ -1,3 +1,23 @@
+jilles      2005/12/09 13:07:18 UTC	(20051209-4049)
+  Log:
+  Don't mess with dalnet-like +r/+e if nickserv is not enabled.
+  These are only meaningful with nick registration.
+  
+
+  Changes:	Modified:
+  +5 -5		trunk/protocol/bahamut.c (File Modified) 
+  +5 -5		trunk/protocol/dreamforge.c (File Modified) 
+  +3 -3		trunk/protocol/hyperion.c (File Modified) 
+  +5 -5		trunk/protocol/inspircd.c (File Modified) 
+  +9 -0		trunk/protocol/monkey.c (File Modified) 
+  +15 -0	trunk/protocol/plexus.c (File Modified) 
+  +9 -0		trunk/protocol/ptlink.c (File Modified) 
+  +15 -0	trunk/protocol/shadowircd.c (File Modified) 
+  +5 -5		trunk/protocol/sorcery.c (File Modified) 
+  +5 -6		trunk/protocol/ultimate3.c (File Modified) 
+  +5 -5		trunk/protocol/unreal.c (File Modified) 
+
+
 jilles      2005/12/09 12:43:28 UTC	(20051209-4047)
   Log:
   Complain if userserv is enabled but a nickserv{} block is present,

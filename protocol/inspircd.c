@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 4049 2005-12-09 13:07:18Z jilles $
+ * $Id: inspircd.c 4051 2005-12-09 13:32:26Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4049 2005-12-09 13:07:18Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4051 2005-12-09 13:32:26Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -144,9 +144,18 @@ static void inspircd_wallops(char *fmt, ...)
 static void inspircd_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
 {
 	if (isnew)
+	{
 		sts(":%s FJOIN %s %ld @%s", me.name, c->name, c->ts, u->nick);
+		/* This FMODE is only for compatibility with old inspircd */
+		sts(":%s FMODE %s +o %s", me.name, c->name, u->nick);
+		if (modes[0] && modes[1])
+			sts(":%s MODE %s %s", me.name, c->name, modes);
+	}
 	else
+	{
 		sts(":%s JOIN %s", u->nick, c->name);
+		sts(":%s FMODE %s +o %s", me.name, c->name, u->nick);
+	}
 }
 
 /* kicks a user from a channel */
@@ -320,7 +329,7 @@ static void inspircd_sethost_sts(char *source, char *target, char *host)
 	if (!me.connected)
 		return;
 
-	sts(":%s FHOST %s", target, host);
+	sts(":%s CHGHOST %s %s", source, target, host);
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
