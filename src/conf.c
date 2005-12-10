@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 3289 2005-10-30 20:37:14Z jilles $
+ * $Id: conf.c 4057 2005-12-10 00:17:42Z jilles $
  */
 
 #include "atheme.h"
@@ -188,6 +188,12 @@ void conf_parse(void)
 	}
 
 	config_free(cfp);
+
+	if (!pmodule_loaded)
+	{
+		slog(LG_ERROR, "No protocol module loaded, aborting");
+		exit(EXIT_FAILURE);
+	}
 
 	hook_call_event("config_ready", NULL);
 }

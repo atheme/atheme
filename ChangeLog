@@ -1,3 +1,12 @@
+jilles      2005/12/09 17:42:11 UTC	(20051209-4055)
+  Log:
+  Fix a compiler warning.
+  
+
+  Changes:	Modified:
+  +3 -1		trunk/protocol/inspircd.c (File Modified) 
+
+
 jilles      2005/12/09 17:19:42 UTC	(20051209-4053)
   Log:
   Add IDLE command to allow remote whois on services.
