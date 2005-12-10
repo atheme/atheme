@@ -1,3 +1,14 @@
+jilles      2005/12/10 00:29:54 UTC	(20051210-4059)
+  Log:
+  No need to check if a protocol module is loaded another time.
+  (The issue is that config_ready hooks often really need
+  information defined in the protocol module.)
+  
+
+  Changes:	Modified:
+  +0 -6		trunk/src/atheme.c (File Modified) 
+
+
 jilles      2005/12/10 00:17:42 UTC	(20051210-4057)
   Log:
   Log a clear error message and exit cleanly if no protocol

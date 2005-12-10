@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 4049 2005-12-09 13:07:18Z jilles $
+ * $Id: ultimate3.c 4061 2005-12-10 01:18:08Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 4049 2005-12-09 13:07:18Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 4061 2005-12-10 01:18:08Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -20,8 +20,8 @@ ircd_t ultimate3 = {
         FALSE,                          /* Whether or not we use IRCNet/TS6 UID */
         FALSE,                          /* Whether or not we use RCOMMAND */
         FALSE,                          /* Whether or not we support channel owners. */
-        FALSE,                          /* Whether or not we support channel protection. */
-        FALSE,                          /* Whether or not we support halfops. */
+        TRUE,                           /* Whether or not we support channel protection. */
+        TRUE,                           /* Whether or not we support halfops. */
 	FALSE,				/* Whether or not we use P10 */
 	TRUE,				/* Whether or not we use vHosts. */
 	CMODE_OPERONLY,			/* Oper-only cmodes */
