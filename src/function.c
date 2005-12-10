@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 4023 2005-12-07 23:30:14Z jilles $
+ * $Id: function.c 4063 2005-12-10 01:22:24Z jilles $
  */
 
 #include "atheme.h"
@@ -750,7 +750,7 @@ boolean_t should_protect(mychan_t *mychan, myuser_t *myuser)
 	if (MU_NOOP & myuser->flags)
 		return FALSE;
 
-	if (is_xop(mychan, myuser, CA_REMOVE))
+	if (is_xop(mychan, myuser, CA_SET))
 		return TRUE;
 
 	return FALSE;
