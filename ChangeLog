@@ -1,3 +1,15 @@
+jilles      2005/12/10 00:17:42 UTC	(20051210-4057)
+  Log:
+  Log a clear error message and exit cleanly if no protocol
+  module was loaded in the config file.
+  
+  Tracker #76
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/src/conf.c (File Modified) 
+
+
 jilles      2005/12/09 17:42:11 UTC	(20051209-4055)
   Log:
   Fix a compiler warning.

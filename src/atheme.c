@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 3585 2005-11-06 21:52:51Z alambert $
+ * $Id: atheme.c 4059 2005-12-10 00:29:54Z jilles $
  */
 
 #include "atheme.h"
@@ -180,12 +180,6 @@ int main(int argc, char *argv[])
 	conf_parse();
 
 	authcookie_init();
-
-	if (!pmodule_loaded)
-	{
-		fprintf(stderr, "atheme: no protocol modules loaded, see your configuration file.\n");
-		exit(EXIT_FAILURE);
-	}
 
 	if (!backend_loaded)
 	{
