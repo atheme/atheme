@@ -1,3 +1,13 @@
+jilles      2005/12/10 01:22:24 UTC	(20051210-4063)
+  Log:
+  Move protect from +r to +s as +r is commonly granted
+  to normal ops.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/function.c (File Modified) 
+
+
 jilles      2005/12/10 01:18:08 UTC	(20051210-4061)
   Log:
   Enable protect and halfops in ultimate3. Untested.

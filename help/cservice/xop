@@ -11,6 +11,11 @@ to add users to the VOP and AOP lists.
 You may also specify a hostmask (nick!user@host)
 for the VOP and AOP lists.
 
+Not all channel access entries can be edited
+with these commands, see the FLAGS and FORCEXOP
+help entries for details. Note that use of
+FORCEXOP can destroy a lot of information.
+
 Syntax: VOP|HOP|AOP|SOP <#channel> ADD|DEL|LIST <nickname|hostmask>
 
 Examples:

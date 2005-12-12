@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 4037 2005-12-08 01:18:01Z jilles $
+ * $Id: xop.c 4079 2005-12-12 00:11:48Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 4037 2005-12-08 01:18:01Z jilles $",
+	"$Id: xop.c 4079 2005-12-12 00:11:48Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -25,6 +25,7 @@ static void cs_cmd_sop(char *origin);
 static void cs_cmd_aop(char *origin);
 static void cs_cmd_hop(char *origin);
 static void cs_cmd_vop(char *origin);
+static void cs_cmd_forcexop(char *origin);
 
 command_t cs_sop = { "SOP", "Manipulates a channel SOP list.",
                         AC_NONE, cs_cmd_sop };
@@ -34,6 +35,8 @@ command_t cs_hop = { "HOP", "Manipulates a channel HOP list.",
 			AC_NONE, cs_cmd_hop };
 command_t cs_vop = { "VOP", "Manipulates a channel VOP list.",
                         AC_NONE, cs_cmd_vop };
+command_t cs_forcexop = { "FORCEXOP", "Forces access levels to xOP levels",
+                         AC_NONE, cs_cmd_forcexop };
 
 list_t *cs_cmdtree, *cs_helptree;
 
@@ -46,11 +49,13 @@ void _modinit(module_t *m)
         command_add(&cs_sop, cs_cmdtree);
 	command_add(&cs_hop, cs_cmdtree);
         command_add(&cs_vop, cs_cmdtree);
+	command_add(&cs_forcexop, cs_cmdtree);
 
 	help_addentry(cs_helptree, "SOP", "help/cservice/xop", NULL);
 	help_addentry(cs_helptree, "AOP", "help/cservice/xop", NULL);
 	help_addentry(cs_helptree, "VOP", "help/cservice/xop", NULL);
 	help_addentry(cs_helptree, "HOP", "help/cservice/xop", NULL);
+	help_addentry(cs_helptree, "FORCEXOP", "help/cservice/forcexop", NULL);
 }
 
 void _moddeinit()
@@ -59,11 +64,13 @@ void _moddeinit()
 	command_delete(&cs_sop, cs_cmdtree);
 	command_delete(&cs_hop, cs_cmdtree);
 	command_delete(&cs_vop, cs_cmdtree);
+	command_delete(&cs_forcexop, cs_cmdtree);
 
 	help_delentry(cs_helptree, "SOP");
 	help_delentry(cs_helptree, "AOP");
 	help_delentry(cs_helptree, "VOP");
 	help_delentry(cs_helptree, "HOP");
+	help_delentry(cs_helptree, "FORCEXOP");
 }
 
 static void cs_xop(char *origin, uint32_t level)
@@ -539,4 +546,73 @@ static void cs_xop_do_list(mychan_t *mc, char *origin, uint32_t level, int opero
 		logcommand(chansvs.me, user_find(origin), CMDLOG_ADMIN, "%s %s LIST (oper override)", mc->name, leveldesc);
 	else
 		logcommand(chansvs.me, user_find(origin), CMDLOG_GET, "%s %s LIST", mc->name, leveldesc);
+}
+
+static void cs_cmd_forcexop(char *origin)
+{
+	char *chan = strtok(NULL, " ");
+	chanacs_t *ca;
+	mychan_t *mc = mychan_find(chan);
+	user_t *u = user_find(origin);
+	node_t *n;
+	int i, changes;
+	uint32_t newlevel;
+	char *desc;
+
+	if (!chan)
+	{
+		notice(chansvs.nick, origin, "Insufficient parameters specified for \2FORCEXOP\2.");
+		notice(chansvs.nick, origin, "Syntax: FORCEXOP <#channel>");
+		return;
+	}
+
+	if (!mc)
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is not registered.", chan);
+		return;
+	}
+
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is closed.", chan);
+		return;
+	}
+
+	if (!is_founder(mc, u->myuser))
+	{
+		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+		return;
+	}
+
+	changes = 0;
+	LIST_FOREACH(n, mc->chanacs.head)
+	{
+		ca = (chanacs_t *)n->data;
+
+		if (ca->level & CA_AKICK)
+			continue;
+		if (ca->myuser && is_founder(mc, ca->myuser))
+			newlevel = CA_INITIAL, desc = "Founder";
+		else if (ca->level & (CA_SET | CA_RECOVER | CA_FLAGS))
+			newlevel = CA_SOP, desc = "SOP";
+		else if (ca->level & (CA_OP | CA_AUTOOP | CA_REMOVE))
+			newlevel = CA_AOP, desc = "AOP";
+		else if (ca->level & (CA_HALFOP | CA_AUTOHALFOP | CA_TOPIC))
+			newlevel = CA_HOP, desc = "HOP";
+		else /*if (ca->level & CA_AUTOVOICE)*/
+			newlevel = CA_VOP, desc = "VOP";
+#if 0
+		else
+			newlevel = 0;
+#endif
+		if (newlevel == ca->level)
+			continue;
+		changes++;
+		notice(chansvs.nick, origin, "%s: %s -> %s", ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level, chanacs_flags), desc);
+		ca->level = newlevel;
+	}
+	notice(chansvs.nick, origin, "FORCEXOP \2%s\2 done (\2%d\2 changes)", mc->name, changes);
+	if (changes > 0)
+		verbose(mc, "\2%s\2 reset access levels to xOP (\2%d\2 changes)", u->nick, changes);
+	logcommand(chansvs.me, u, CMDLOG_SET, "%s FORCEXOP (%d changes)", mc->name, changes);
 }

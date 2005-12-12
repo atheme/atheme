@@ -1,0 +1,16 @@
+Help for FORCEXOP:
+
+FORCEXOP resets all channel access levels to
+xOP compatible values. That is, after the
+operation, the founder will have all permissions
+and autoop and everyone else on with flags
+will be on one of the xOP lists. This command
+is useful if the definitions for which flags
+each xOP level gives change and the founder
+wishes to use xOP commands only.
+
+Only the founder can execute this command.
+
+Syntax: FORCEXOP <#channel>
+
+See also: SOP, AOP, HOP, VOP
