@@ -5,7 +5,7 @@
  * This file contains code for the UserServ LISTCHANS function.
  *   -- Contains an alias "MYACCESS" for legacy users
  *
- * $Id: listchans.c 3807 2005-11-11 02:02:22Z jilles $
+ * $Id: listchans.c 4089 2005-12-13 23:09:23Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/listchans", FALSE, _modinit, _moddeinit,
-	"$Id: listchans.c 3807 2005-11-11 02:02:22Z jilles $",
+	"$Id: listchans.c 4089 2005-12-13 23:09:23Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -108,18 +108,6 @@ static void us_cmd_listchans(char *origin)
 
 		switch (ca->level)
 		{
-			case CA_VOP:
-				notice(usersvs.nick, origin, "VOP in %s", ca->mychan->name);
-				break;
-			case CA_HOP:
-				notice(usersvs.nick, origin, "HOP in %s", ca->mychan->name);
-				break;
-			case CA_AOP:
-				notice(usersvs.nick, origin, "AOP in %s", ca->mychan->name);
-				break;
-			case CA_SOP:
-				notice(usersvs.nick, origin, "SOP in %s", ca->mychan->name);
-				break;
 			default:
 				/* don't tell users they're akicked (flag +b) */
 				if (!(ca->level & CA_AKICK))

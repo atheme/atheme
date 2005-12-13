@@ -1,3 +1,14 @@
+jilles      2005/12/13 17:04:07 UTC	(20051213-4087)
+  Log:
+  Change mychan_t * to void * in hook_channel_req_t. This is an
+  ugly workaround for the fact that mychan_t may not be defined
+  yet.
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/include/atheme.h (File Modified) 
+
+
 nenolod     2005/12/13 16:50:37 UTC	(20051213-4085)
   Log:
   oops
