@@ -1,3 +1,15 @@
+jilles      2005/12/12 00:11:48 UTC	(20051212-4079)
+  Log:
+  Add /cs forcexop to reset access levels to xOP values.
+  Useful if CA_?OP are changed.
+  
+
+  Changes:	Modified:
+  +16 -0	trunk/help/cservice/forcexop (File Added) 
+  +5 -0		trunk/help/cservice/xop (File Modified) 
+  +76 -0	trunk/modules/chanserv/xop.c (File Modified) 
+
+
 jilles      2005/12/10 01:22:24 UTC	(20051210-4063)
   Log:
   Move protect from +r to +s as +r is commonly granted
