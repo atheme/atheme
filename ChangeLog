@@ -1,3 +1,12 @@
+nenolod     2005/12/13 16:24:31 UTC	(20051213-4083)
+  Log:
+  use a struct -- hook_channel_req_t. :)
+  
+
+  Changes:	Modified:
+  +4 -1		trunk/modules/chanserv/info.c (File Modified) 
+
+
 nenolod     2005/12/13 16:20:26 UTC	(20051213-4081)
   Log:
   Add hook for modules to attach to /cs info... channel_info.
