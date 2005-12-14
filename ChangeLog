@@ -1,3 +1,14 @@
+jilles      2005/12/13 23:09:23 UTC	(20051213-4089)
+  Log:
+  Disable xOP information in ns/us listchans for now, making it easier
+  to do changeable xOP levels. It may come back later.
+  
+
+  Changes:	Modified:
+  +0 -12	trunk/modules/nickserv/listchans.c (File Modified) 
+  +0 -12	trunk/modules/userserv/listchans.c (File Modified) 
+
+
 jilles      2005/12/13 17:04:07 UTC	(20051213-4087)
   Log:
   Change mychan_t * to void * in hook_channel_req_t. This is an

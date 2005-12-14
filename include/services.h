@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 2899 2005-10-16 01:22:18Z terminal $
+ * $Id: services.h 4091 2005-12-14 10:10:04Z jilles $
  */
 
 #ifndef SERVICES_H
@@ -31,6 +31,11 @@ struct chansvs_
   char *disp;			/* the IRC client's dispname  */
 
   boolean_t fantasy;		/* enable fantasy commands    */
+
+  uint32_t ca_vop;		/* xop access levels */
+  uint32_t ca_hop;
+  uint32_t ca_aop;
+  uint32_t ca_sop;
 
   service_t *me;                /* our user_t struct          */
 };

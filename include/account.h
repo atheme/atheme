@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 3997 2005-12-02 01:15:37Z jilles $
+ * $Id: account.h 4091 2005-12-14 10:10:04Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -120,12 +120,13 @@ struct chanacs_
 
 #define CA_AKICK         0x80000000 /* Automatic kick */
 
-/* compatibility shims for current shrike code. */
 #define CA_NONE          0x0
-#define CA_VOP           (CA_VOICE | CA_AUTOVOICE | CA_ACLVIEW)
-#define CA_HOP		 (CA_VOICE | CA_HALFOP | CA_AUTOHALFOP | CA_TOPIC | CA_ACLVIEW)
-#define CA_AOP           (CA_VOICE | CA_HALFOP | CA_OP | CA_AUTOOP | CA_TOPIC | CA_ACLVIEW)
-#define CA_SOP           (CA_AOP | CA_SET | CA_REMOVE | CA_INVITE)
+
+/* xOP defaults, compatible with Atheme 0.3 */
+#define CA_VOP_DEF       (CA_VOICE | CA_AUTOVOICE | CA_ACLVIEW)
+#define CA_HOP_DEF	 (CA_VOICE | CA_HALFOP | CA_AUTOHALFOP | CA_TOPIC | CA_ACLVIEW)
+#define CA_AOP_DEF       (CA_VOICE | CA_HALFOP | CA_OP | CA_AUTOOP | CA_TOPIC | CA_ACLVIEW)
+#define CA_SOP_DEF       (CA_AOP_DEF | CA_SET | CA_REMOVE | CA_INVITE)
 
 /* special values for founder/successor -- jilles */
 /* used in shrike flatfile conversion: */

@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4057 2005-12-10 00:17:42Z jilles $
+ * $Id: conf.c 4091 2005-12-14 10:10:04Z jilles $
  */
 
 #include "atheme.h"
@@ -56,6 +56,10 @@ static int c_ci_user(CONFIGENTRY *);
 static int c_ci_host(CONFIGENTRY *);
 static int c_ci_real(CONFIGENTRY *);
 static int c_ci_fantasy(CONFIGENTRY *);
+static int c_ci_vop(CONFIGENTRY *);
+static int c_ci_hop(CONFIGENTRY *);
+static int c_ci_aop(CONFIGENTRY *);
+static int c_ci_sop(CONFIGENTRY *);
 
 /* GService client information. */
 static int c_gl_nick(CONFIGENTRY *);
@@ -228,6 +232,12 @@ void conf_init(void)
 	me.auth = AUTH_NONE;
 
 	me.mdlimit = 30;
+
+	chansvs.fantasy = FALSE;
+	chansvs.ca_vop = CA_VOP_DEF;
+	chansvs.ca_hop = CA_HOP_DEF;
+	chansvs.ca_aop = CA_AOP_DEF;
+	chansvs.ca_sop = CA_SOP_DEF;
 
 	if (!(runflags & RF_REHASHING))
 	{
@@ -459,6 +469,10 @@ void init_newconf(void)
 	add_conf_item("HOST", &conf_ci_table, c_ci_host);
 	add_conf_item("REAL", &conf_ci_table, c_ci_real);
 	add_conf_item("FANTASY", &conf_ci_table, c_ci_fantasy);
+	add_conf_item("VOP", &conf_ci_table, c_ci_vop);
+	add_conf_item("HOP", &conf_ci_table, c_ci_hop);
+	add_conf_item("AOP", &conf_ci_table, c_ci_aop);
+	add_conf_item("SOP", &conf_ci_table, c_ci_sop);
 
 	/* global{} block */
 	add_conf_item("NICK", &conf_gl_table, c_gl_nick);
@@ -919,6 +933,46 @@ static int c_ci_real(CONFIGENTRY *ce)
 static int c_ci_fantasy(CONFIGENTRY *ce)
 {
 	chansvs.fantasy = TRUE;
+
+	return 0;
+}
+
+static int c_ci_vop(CONFIGENTRY *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	chansvs.ca_vop = flags_to_bitmask(ce->ce_vardata, chanacs_flags, 0);
+
+	return 0;
+}
+
+static int c_ci_hop(CONFIGENTRY *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	chansvs.ca_hop = flags_to_bitmask(ce->ce_vardata, chanacs_flags, 0);
+
+	return 0;
+}
+
+static int c_ci_aop(CONFIGENTRY *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	chansvs.ca_aop = flags_to_bitmask(ce->ce_vardata, chanacs_flags, 0);
+
+	return 0;
+}
+
+static int c_ci_sop(CONFIGENTRY *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	chansvs.ca_sop = flags_to_bitmask(ce->ce_vardata, chanacs_flags, 0);
 
 	return 0;
 }
@@ -1550,6 +1604,21 @@ boolean_t conf_check(void)
 	{
 		slog(LG_INFO, "conf_check(): invalid `clientinfo::user' in %s", config_file);
 		return FALSE;
+	}
+
+	if (!chansvs.ca_vop || !chansvs.ca_hop || !chansvs.ca_aop ||
+			!chansvs.ca_sop || chansvs.ca_vop == chansvs.ca_hop ||
+			chansvs.ca_vop == chansvs.ca_aop ||
+			chansvs.ca_vop == chansvs.ca_sop ||
+			chansvs.ca_hop == chansvs.ca_aop ||
+			chansvs.ca_hop == chansvs.ca_sop ||
+			chansvs.ca_aop == chansvs.ca_sop)
+	{
+		slog(LG_INFO, "conf_check(): invalid xop levels in %s, using defaults", config_file);
+		chansvs.ca_vop = CA_VOP_DEF;
+		chansvs.ca_hop = CA_HOP_DEF;
+		chansvs.ca_aop = CA_AOP_DEF;
+		chansvs.ca_sop = CA_SOP_DEF;
 	}
 
 	if (config_options.flood_msgs && !config_options.flood_time)

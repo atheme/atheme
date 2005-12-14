@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 3983 2005-11-27 21:37:09Z jilles $
+ * $Id: flatfile.c 4091 2005-12-14 10:10:04Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 3983 2005-11-27 21:37:09Z jilles $",
+	"$Id: flatfile.c 4091 2005-12-14 10:10:04Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -486,8 +486,9 @@ static void flatfile_db_load(void)
 					uint32_t fl = flags_to_bitmask(strtok(NULL, " "), chanacs_flags, 0x0);
 
 					/* Compatibility with oldworld Atheme db's. --nenolod */
-					if (fl == OLD_CA_AOP)
-						fl = CA_AOP;
+					/* arbitrary cutoff to avoid touching newer +voOt entries -- jilles */
+					if (fl == OLD_CA_AOP && i < 4)
+						fl = CA_AOP_DEF;
 
 					/* previous to CA_ACLVIEW, everyone could view
 					 * access lists. If they aren't AKICKed, upgrade
@@ -510,11 +511,11 @@ static void flatfile_db_load(void)
 					switch (fl)
 					{
 					  case SHRIKE_CA_VOP:
-						  fl2 = CA_VOP;
+						  fl2 = chansvs.ca_vop;
 					  case SHRIKE_CA_AOP:
-						  fl2 = CA_AOP;
+						  fl2 = chansvs.ca_hop;
 					  case SHRIKE_CA_SOP:
-						  fl2 = CA_SOP;
+						  fl2 = chansvs.ca_sop;
 					  case SHRIKE_CA_SUCCESSOR:
 						  fl2 = CA_SUCCESSOR_0;
 					  case SHRIKE_CA_FOUNDER:

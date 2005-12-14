@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 4079 2005-12-12 00:11:48Z jilles $
+ * $Id: xop.c 4091 2005-12-14 10:10:04Z jilles $
  */
 
 #include "atheme.h"
@@ -12,14 +12,14 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 4079 2005-12-12 00:11:48Z jilles $",
+	"$Id: xop.c 4091 2005-12-14 10:10:04Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 /* the individual command stuff, now that we've reworked, hardcode ;) --w00t */
-static void cs_xop_do_list(mychan_t *mc, char *origin, uint32_t level, int operoverride);
-static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level, uint32_t restrictflags);
-static void cs_xop_do_del(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level);
+static void cs_xop_do_list(mychan_t *mc, char *origin, uint32_t level, char *leveldesc, int operoverride);
+static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level, char *leveldesc, uint32_t restrictflags);
+static void cs_xop_do_del(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level, char *leveldesc);
 
 static void cs_cmd_sop(char *origin);
 static void cs_cmd_aop(char *origin);
@@ -73,7 +73,7 @@ void _moddeinit()
 	help_delentry(cs_helptree, "FORCEXOP");
 }
 
-static void cs_xop(char *origin, uint32_t level)
+static void cs_xop(char *origin, uint32_t level, char *leveldesc)
 {
 	user_t *u = user_find(origin);
 	myuser_t *mu;
@@ -160,7 +160,7 @@ static void cs_xop(char *origin, uint32_t level)
 			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 			return;
 		}
-		cs_xop_do_add(mc, mu, origin, uname, level, restrictflags);
+		cs_xop_do_add(mc, mu, origin, uname, level, leveldesc, restrictflags);
 	}
 
 	else if (!strcasecmp("DEL", cmd))
@@ -183,7 +183,7 @@ static void cs_xop(char *origin, uint32_t level)
 			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 			return;
 		}
-		cs_xop_do_del(mc, mu, origin, uname, level);
+		cs_xop_do_del(mc, mu, origin, uname, level, leveldesc);
 	}
 
 	else if (!strcasecmp("LIST", cmd))
@@ -198,23 +198,23 @@ static void cs_xop(char *origin, uint32_t level)
 				return;
 			}
 		}
-		cs_xop_do_list(mc, origin, level, operoverride);
+		cs_xop_do_list(mc, origin, level, leveldesc, operoverride);
 	}
 }
 
 static void cs_cmd_sop(char *origin)
 {
-	cs_xop(origin, CA_SOP);
+	cs_xop(origin, chansvs.ca_sop, "SOP");
 }
 
 static void cs_cmd_aop(char *origin)
 {
-	cs_xop(origin, CA_AOP);
+	cs_xop(origin, chansvs.ca_aop, "AOP");
 }
 
 static void cs_cmd_vop(char *origin)
 {
-	cs_xop(origin, CA_VOP);
+	cs_xop(origin, chansvs.ca_vop, "VOP");
 }
 
 static void cs_cmd_hop(char *origin)
@@ -226,34 +226,17 @@ static void cs_cmd_hop(char *origin)
 	if (!ircd->uses_halfops)
 		notice(chansvs.nick, origin, "Warning: Your IRC server does not support halfops.");
 
-	cs_xop(origin, CA_HOP);
+	cs_xop(origin, chansvs.ca_hop, "HOP");
 }
 
 
-static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level, uint32_t restrictflags)
+static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level, char *leveldesc, uint32_t restrictflags)
 {
-	char *leveldesc = NULL;
 	char hostbuf[BUFSIZE];
 	metadata_t *md;
 	chanuser_t *cu;
 	chanacs_t *ca;
 	node_t *n;
-
-	switch (level)
-	{
-		case CA_VOP:
-			leveldesc = "VOP";
-			break;
-		case CA_HOP:
-			leveldesc = "HOP";
-			break;
-		case CA_AOP:
-			leveldesc = "AOP";
-			break;
-		case CA_SOP:		
-			leveldesc = "SOP";
-			break;
-	}
 
 	if (!mu)
 	{
@@ -428,28 +411,11 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 	}
 }
 
-static void cs_xop_do_del(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level)
+static void cs_xop_do_del(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level, char *leveldesc)
 {
 	chanacs_t *ca;
 	metadata_t *md;
-	char *leveldesc = NULL;
 	
-	switch (level)
-	{
-		case CA_VOP:
-			leveldesc = "VOP";
-			break;
-		case CA_HOP:
-			leveldesc = "HOP";
-			break;
-		case CA_AOP:
-			leveldesc = "AOP";
-			break;
-		case CA_SOP:		
-			leveldesc = "SOP";
-			break;
-	}
-
 	if (mu && (mu->flags & MU_ALIAS) && (md = metadata_find(mu, METADATA_USER, "private:alias:parent")))
 	{
 		/* This shouldn't ever happen, but just in case it does... */
@@ -502,35 +468,18 @@ static void cs_xop_do_del(mychan_t *mc, myuser_t *mu, char *origin, char *target
 }
 
 
-static void cs_xop_do_list(mychan_t *mc, char *origin, uint32_t level, int operoverride)
+static void cs_xop_do_list(mychan_t *mc, char *origin, uint32_t level, char *leveldesc, int operoverride)
 {
 	chanacs_t *ca;
 	uint8_t i = 0;
 	node_t *n;
-	char *leveldesc = NULL;
-
-	switch (level)
-	{
-		case CA_VOP:
-			leveldesc = "VOP";
-			break;
-		case CA_HOP:
-			leveldesc = "HOP";
-			break;
-		case CA_AOP:
-			leveldesc = "AOP";
-			break;
-		case CA_SOP:
-			leveldesc = "SOP";
-			break;
-	}
-
 
 	notice(chansvs.nick, origin, "%s list for \2%s\2:", leveldesc ,mc->name);
 	LIST_FOREACH(n, mc->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
-		if (ca->level == level)
+		/* founder is never on any xop list -- jilles */
+		if (ca->myuser != mc->founder && ca->level == level)
 		{
 			if (!ca->myuser)
 				notice(chansvs.nick, origin, "%d: \2%s\2", ++i, ca->host);
@@ -593,14 +542,22 @@ static void cs_cmd_forcexop(char *origin)
 			continue;
 		if (ca->myuser && is_founder(mc, ca->myuser))
 			newlevel = CA_INITIAL, desc = "Founder";
+		else if (!(~ca->level & chansvs.ca_sop))
+			newlevel = chansvs.ca_sop, desc = "SOP";
+		else if (ca->level == chansvs.ca_aop)
+			newlevel = chansvs.ca_aop, desc = "AOP";
+		else if (ca->level == chansvs.ca_hop)
+			newlevel = chansvs.ca_hop, desc = "HOP";
+		else if (ca->level == chansvs.ca_vop)
+			newlevel = chansvs.ca_vop, desc = "VOP";
 		else if (ca->level & (CA_SET | CA_RECOVER | CA_FLAGS))
-			newlevel = CA_SOP, desc = "SOP";
+			newlevel = chansvs.ca_sop, desc = "SOP";
 		else if (ca->level & (CA_OP | CA_AUTOOP | CA_REMOVE))
-			newlevel = CA_AOP, desc = "AOP";
+			newlevel = chansvs.ca_aop, desc = "AOP";
 		else if (ca->level & (CA_HALFOP | CA_AUTOHALFOP | CA_TOPIC))
-			newlevel = CA_HOP, desc = "HOP";
+			newlevel = chansvs.ca_hop, desc = "HOP";
 		else /*if (ca->level & CA_AUTOVOICE)*/
-			newlevel = CA_VOP, desc = "VOP";
+			newlevel = chansvs.ca_vop, desc = "VOP";
 #if 0
 		else
 			newlevel = 0;
