@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4047 2005-12-09 12:43:28Z jilles $
+ * $Id: main.c 4093 2005-12-14 10:49:28Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4047 2005-12-09 12:43:28Z jilles $",
+	"$Id: main.c 4093 2005-12-14 10:49:28Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -66,8 +66,6 @@ void nickserv(char *origin, uint8_t parc, char *parv[])
 		       (me.loglevel & LG_DEBUG) ? "d" : "",
 		       (me.auth) ? "e" : "",
 		       (config_options.flood_msgs) ? "F" : "",
-		       (config_options.leave_chans) ? "l" : "",
-		       (config_options.join_chans) ? "j" : "",
 		       (config_options.leave_chans) ? "l" : "", (config_options.join_chans) ? "j" : "", (!match_mapping) ? "R" : "", (config_options.raw) ? "r" : "", (runflags & RF_LIVE) ? "n" : "");
 
 		return;

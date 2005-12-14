@@ -1,3 +1,21 @@
+jilles      2005/12/14 10:10:04 UTC	(20051214-4091)
+  Log:
+  Make xOP levels configurable, via vop/hop/aop/sop
+  in chanserv{}. Defaults are compatible with Atheme
+  0.3; the values in the example confs are more
+  useful.
+  
+
+  Changes:	Modified:
+  +6 -5		trunk/backend/flatfile.c (File Modified) 
+  +19 -0	trunk/dist/example.conf (File Modified) 
+  +19 -0	trunk/dist/example.userserv.conf (File Modified) 
+  +6 -5		trunk/include/account.h (File Modified) 
+  +5 -0		trunk/include/services.h (File Modified) 
+  +28 -71	trunk/modules/chanserv/xop.c (File Modified) 
+  +69 -0	trunk/src/conf.c (File Modified) 
+
+
 jilles      2005/12/13 23:09:23 UTC	(20051213-4089)
   Log:
   Disable xOP information in ns/us listchans for now, making it easier
