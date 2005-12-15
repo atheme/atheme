@@ -1,3 +1,17 @@
+pfish       2005/12/14 10:49:28 UTC	(20051214-4093)
+  Log:
+  Close out #77. In CTCP VERSION replies, the 'j' and 'l' flags were duplicated.
+  
+
+  Changes:	Modified:
+  +1 -2		trunk/modules/chanserv/main.c (File Modified) 
+  +0 -2		trunk/modules/global/main.c (File Modified) 
+  +0 -2		trunk/modules/memoserv/main.c (File Modified) 
+  +0 -2		trunk/modules/nickserv/main.c (File Modified) 
+  +1 -2		trunk/modules/operserv/main.c (File Modified) 
+  +0 -2		trunk/modules/userserv/main.c (File Modified) 
+
+
 jilles      2005/12/14 10:10:04 UTC	(20051214-4091)
   Log:
   Make xOP levels configurable, via vop/hop/aop/sop

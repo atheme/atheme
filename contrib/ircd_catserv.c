@@ -4,10 +4,17 @@
  *
  * Meow!
  *
- * $Id: ircd_catserv.c 3433 2005-11-03 22:17:00Z jilles $
+ * $Id: ircd_catserv.c 4095 2005-12-15 08:55:00Z w00t $
  */
 
 #include "atheme.h"
+
+DECLARE_MODULE_V1
+(
+	"contrib/ircd_catserv", FALSE, _modinit, _moddeinit,
+	"$Id: ircd_catserv.c 4095 2005-12-15 08:55:00Z w00t $",
+	"Atheme Development Group <http://www.atheme.org>"
+);
 
 service_t *catserv;
 list_t catserv_cmdtree;
