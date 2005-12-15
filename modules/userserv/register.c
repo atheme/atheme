@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 3779 2005-11-10 21:49:28Z pfish $
+ * $Id: register.c 4097 2005-12-15 21:34:25Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 3779 2005-11-10 21:49:28Z pfish $",
+	"$Id: register.c 4097 2005-12-15 21:34:25Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -112,7 +112,7 @@ static void us_cmd_register(char *origin)
 		return;
 	}
 
-	mu = myuser_add(origin, pass, email, config_options.defuflags);
+	mu = myuser_add(account, pass, email, config_options.defuflags);
 	mu->registered = CURRTIME;
 	mu->lastlogin = CURRTIME;
 

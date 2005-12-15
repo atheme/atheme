@@ -1,3 +1,11 @@
+w00t        2005/12/15 08:55:00 UTC	(20051215-4095)
+  Log:
+  Theoretically (?) updated to work with 0.3 modules stuff. IIRC, it just needed a header.
+
+  Changes:	Modified:
+  +7 -0		trunk/contrib/ircd_catserv.c (File Modified) 
+
+
 pfish       2005/12/14 10:49:28 UTC	(20051214-4093)
   Log:
   Close out #77. In CTCP VERSION replies, the 'j' and 'l' flags were duplicated.
