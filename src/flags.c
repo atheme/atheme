@@ -48,6 +48,12 @@ void flags_make_bitmasks(const char *string, struct flags_table table[], uint32_
 			  status = FLAGS_DEL;
 			  break;
 
+		  case '=':
+			  *addflags = 0;
+			  *removeflags = 0xFFFFFFFF;
+			  status = FLAGS_ADD;
+			  break;
+
 		  case '*':
 			  if (status == FLAGS_ADD)
 			  {
@@ -107,6 +113,11 @@ uint32_t flags_to_bitmask(const char *string, struct flags_table table[], uint32
 
 		  case '-':
 			  status = FLAGS_DEL;
+			  break;
+
+		  case '=':
+			  bitmask = 0;
+			  status = FLAGS_ADD;
 			  break;
 
 		  case '*':

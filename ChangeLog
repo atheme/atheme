@@ -1,3 +1,12 @@
+jilles      2005/12/16 11:56:51 UTC	(20051216-4105)
+  Log:
+  Clarification and slight reformatting.
+  
+
+  Changes:	Modified:
+  +15 -10	trunk/help/cservice/template (File Modified) 
+
+
 jilles      2005/12/16 11:48:45 UTC	(20051216-4103)
   Log:
   Mention the fact that xop meanings vary per network.
