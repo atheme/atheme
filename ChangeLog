@@ -1,3 +1,13 @@
+jilles      2005/12/16 11:48:45 UTC	(20051216-4103)
+  Log:
+  Mention the fact that xop meanings vary per network.
+  Mention TEMPLATE.
+  
+
+  Changes:	Modified:
+  +10 -8	trunk/help/cservice/xop (File Modified) 
+
+
 jilles      2005/12/16 11:38:32 UTC	(20051216-4101)
   Log:
   Add per-channel flags templates. Templates can be specified
