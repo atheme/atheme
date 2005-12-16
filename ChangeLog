@@ -1,3 +1,33 @@
+jilles      2005/12/16 11:38:32 UTC	(20051216-4101)
+  Log:
+  Add per-channel flags templates. Templates can be specified
+  in the flags command, avoiding the need to memorize
+  complicated flags strings. Templates are manipulated with
+  the TEMPLATE command which is similar to the FLAGS command.
+  The xOP levels can also be used as templates.
+  
+  For example: /msg chanserv flags #chan *!*@*.good.com VOP
+  
+  All template entries must fit in a single metadata entry,
+  private:templates. This is fairly ugly string manipulation.
+  
+  The TEMPLATE command module needs to be enabled in the
+  configuration file.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/dist/example.conf (File Modified) 
+  +2 -0		trunk/dist/example.userserv.conf (File Modified) 
+  +13 -5	trunk/help/cservice/flags (File Modified) 
+  +34 -0	trunk/help/cservice/template (File Added) 
+  +16 -0	trunk/include/template.h (File Added) 
+  +1 -0		trunk/modules/chanserv/Makefile.in (File Modified) 
+  +35 -8	trunk/modules/chanserv/flags.c (File Modified) 
+  +323 -0	trunk/modules/chanserv/template.c (File Added) 
+  +1 -0		trunk/src/Makefile.in (File Modified) 
+  +63 -0	trunk/src/template.c (File Added) 
+
+
 jilles      2005/12/15 22:18:39 UTC	(20051215-4099)
   Log:
   Do not try to send warnings about nicknames if nickserv is

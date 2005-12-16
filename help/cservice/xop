@@ -1,20 +1,22 @@
 Help for xOP:
 
 The xOP commands allow you to maintain channel
-access lists.  Users on the VOP list will be
-automatically set +v in the channel.  Users on
-the AOP list will be automatically set +o on the
-channel.  Users on the SOP list will be
-automatically set +o on the channel and be allowed
-to add users to the VOP and AOP lists.
+access lists. Channel access lists can contain
+registered accounts or hostmasks (nick!user@host).
 
-You may also specify a hostmask (nick!user@host)
-for the VOP and AOP lists.
+The exact meanings of the access levels may differ
+per network, use /msg &nick& TEMPLATE to check. As
+a hint, VOP stands for VOice People, HOP stands for
+HalfOP, AOP stands for AutoOP, SOP stands for
+SuperOP.
 
 Not all channel access entries can be edited
 with these commands, see the FLAGS and FORCEXOP
 help entries for details. Note that use of
 FORCEXOP can destroy a lot of information.
+The TEMPLATE system can provide most of the
+ease of use of these commands without the
+restrictions.
 
 Syntax: VOP|HOP|AOP|SOP <#channel> ADD|DEL|LIST <nickname|hostmask>
 
