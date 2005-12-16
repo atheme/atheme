@@ -4,15 +4,16 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 3867 2005-11-11 13:44:28Z jilles $
+ * $Id: flags.c 4101 2005-12-16 11:38:32Z jilles $
  */
 
 #include "atheme.h"
+#include "template.h"
 
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 3867 2005-11-11 13:44:28Z jilles $",
+	"$Id: flags.c 4101 2005-12-16 11:38:32Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -155,11 +156,24 @@ static void cs_cmd_flags(char *origin)
 			return;
 		}
 
-		flags_make_bitmasks(flagstr, chanacs_flags, &addflags, &removeflags);
-		if (addflags == 0 && removeflags == 0)
+		if (*flagstr == '+' || *flagstr == '-' || *flagstr == '=')
 		{
-			notice(chansvs.nick, origin, "No valid flags given, use /%s%s HELP FLAGS for a list", ircd->uses_rcommand ? "" : "msg ", chansvs.disp);
-			return;
+			flags_make_bitmasks(flagstr, chanacs_flags, &addflags, &removeflags);
+			if (addflags == 0 && removeflags == 0)
+			{
+				notice(chansvs.nick, origin, "No valid flags given, use /%s%s HELP FLAGS for a list", ircd->uses_rcommand ? "" : "msg ", chansvs.disp);
+				return;
+			}
+		}
+		else
+		{
+			addflags = get_template_flags(mc, flagstr);
+			if (addflags == 0)
+			{
+				notice(chansvs.nick, origin, "Invalid template name given, use /%s%s TEMPLATE %s for a list", ircd->uses_rcommand ? "" : "msg ", chansvs.disp, mc->name);
+				return;
+			}
+			removeflags = CA_ALL & ~addflags;
 		}
 
 		if (!validhostmask(target))
@@ -260,11 +274,24 @@ static void cs_fcmd_flags(char *origin, char *channel)
 		return;
 	}
 
-	flags_make_bitmasks(flagstr, chanacs_flags, &addflags, &removeflags);
-	if (addflags == 0 && removeflags == 0)
+	if (*flagstr == '+' || *flagstr == '-' || *flagstr == '=')
 	{
-		notice(chansvs.nick, origin, "No valid flags given, use /%s%s HELP FLAGS for a list", ircd->uses_rcommand ? "" : "msg ", chansvs.disp);
-		return;
+		flags_make_bitmasks(flagstr, chanacs_flags, &addflags, &removeflags);
+		if (addflags == 0 && removeflags == 0)
+		{
+			notice(chansvs.nick, origin, "No valid flags given, use /%s%s HELP FLAGS for a list", ircd->uses_rcommand ? "" : "msg ", chansvs.disp);
+			return;
+		}
+	}
+	else
+	{
+		addflags = get_template_flags(mc, flagstr);
+		if (addflags == 0)
+		{
+			notice(chansvs.nick, origin, "Invalid template name given, use /%s%s TEMPLATE %s for a list", ircd->uses_rcommand ? "" : "msg ", chansvs.disp, mc->name);
+			return;
+		}
+		removeflags = CA_ALL & ~addflags;
 	}
 
 	if (!validhostmask(target))

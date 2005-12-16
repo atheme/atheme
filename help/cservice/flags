@@ -4,15 +4,23 @@ The FLAGS command allows for channel privilege granting/removal
 on a more specific, non-generalized level. It supports both
 nicknames and hostmasks as targets.
 
+When given only the channel argument, a listing of permissions
+granted to users will be displayed.
+
+Syntax: FLAGS <#channel>
+
+Otherwise, an access entry is modified. A modification may be
+specified by a template name (changes the access to the
+template) or a flags change (starts with + or -). See the
+TEMPLATE help entry for more information about templates.
+
 If you are not the founder, you may only manipulate flags you
 have yourself, and may not edit users that have flags you
 don't have. For this purpose, +v grants +V, +h grants +H,
 +o grants +O and +r grants +b.
 
-When given only the channel argument, a listing of permissions
-granted to users will be displayed.
-
-Syntax: FLAGS <#channel> [nickname|hostmask flags]
+Syntax: FLAGS <#channel> [nickname|hostmask template]
+Syntax: FLAGS <#channel> [nickname|hostmask flag_changes]
 
 Permissions:
     +v - Enables use of the voice/devoice commands.
@@ -35,7 +43,7 @@ The special permission -* removes all permissions including +b.
 
 Examples:
     /msg &nick& FLAGS #foo
-    /msg &nick& FLAGS #foo foo!*@bar.com +vV
+    /msg &nick& FLAGS #foo foo!*@bar.com VOP
     /msg &nick& FLAGS #foo foo!*@bar.com -V+oO
     /msg &nick& FLAGS #foo foo!*@bar.com -*
     /msg &nick& FLAGS #foo foo +oOtsi

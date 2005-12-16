@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 3311 2005-10-31 00:50:59Z jilles $
+# $Id: Makefile.in 4101 2005-12-16 11:38:32Z jilles $
 #
 
 CC		= @CC@
@@ -50,6 +50,7 @@ BASE_SRCS = 		\
 	set.c		\
 	status.c	\
 	taxonomy.c	\
+	template.c	\
 	topic.c		\
 	version.c	\
 	voice.c		\

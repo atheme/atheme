@@ -1,3 +1,16 @@
+jilles      2005/12/15 22:18:39 UTC	(20051215-4099)
+  Log:
+  Do not try to send warnings about nicknames if nickserv is
+  not in use.
+  Fixes stuff like: [15/12/2005 22:22:03] <- :(null) NOTICE
+  jilles :This nickname is registered. Please choose a
+  different nickname, or identify via /msg (null) identify <password>.
+  
+
+  Changes:	Modified:
+  +4 -0		trunk/src/services.c (File Modified) 
+
+
 jilles      2005/12/15 21:34:25 UTC	(20051215-4097)
   Log:
   UserServ register: Register the requested account, not the user's nick.
