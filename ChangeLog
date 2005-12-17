@@ -1,3 +1,11 @@
+w00t        2005/12/17 11:12:36 UTC	(20051217-4131)
+  Log:
+  Partial fix for #64, CS FLAGS still needs review.
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/chanserv/xop.c (File Modified) 
+
+
 w00t        2005/12/17 10:22:03 UTC	(20051217-4129)
   Log:
   REALLY have per-channel fantasy disable now.
