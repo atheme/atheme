@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 4121 2005-12-17 04:44:46Z w00t $
+ * $Id: ratbox.c 4139 2005-12-17 15:59:42Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 4121 2005-12-17 04:44:46Z w00t $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 4139 2005-12-17 15:59:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -118,7 +118,10 @@ static void ratbox_introduce_nick(char *nick, char *user, char *host, char *real
 /* invite a user to a channel */
 static void ratbox_invite_sts(user_t *sender, user_t *target, channel_t *channel)
 {
-	sts(":%s INVITE %s %s", sender->nick, target->nick, channel->name);
+	/* some older TSora ircds require the sender to be
+	 * on the channel, but hyb7/ratbox don't
+	 * let's just assume it's not necessary -- jilles */
+	sts(":%s INVITE %s %s", CLIENT_NAME(sender), CLIENT_NAME(target), channel->name);
 }
 
 static void ratbox_quit_sts(user_t *u, char *reason)

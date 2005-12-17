@@ -1,3 +1,13 @@
+jilles      2005/12/17 14:49:24 UTC	(20051217-4137)
+  Log:
+  - Make order agree with protocol modules
+  - Note that invite_sts() source may not be on channel
+  
+
+  Changes:	Modified:
+  +7 -6		trunk/include/phandler.h (File Modified) 
+
+
 jilles      2005/12/17 14:39:23 UTC	(20051217-4135)
   Log:
   Make invite_sts() actually work (it's invite_sts not invite).

@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 4121 2005-12-17 04:44:46Z w00t $
+ * $Id: charybdis.c 4139 2005-12-17 15:59:42Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 4121 2005-12-17 04:44:46Z w00t $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 4139 2005-12-17 15:59:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -123,7 +123,7 @@ static void charybdis_introduce_nick(char *nick, char *user, char *host, char *r
 /* invite a user to a channel */
 static void charybdis_invite_sts(user_t *sender, user_t *target, channel_t *channel)
 {
-	sts(":%s INVITE %s %s", sender->nick, target->nick, channel->name);
+	sts(":%s INVITE %s %s", CLIENT_NAME(sender), CLIENT_NAME(target), channel->name);
 }
 
 static void charybdis_quit_sts(user_t *u, char *reason)

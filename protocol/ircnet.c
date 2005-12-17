@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 4121 2005-12-17 04:44:46Z w00t $
+ * $Id: ircnet.c 4139 2005-12-17 15:59:42Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 4121 2005-12-17 04:44:46Z w00t $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 4139 2005-12-17 15:59:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -95,7 +95,17 @@ static void ircnet_introduce_nick(char *nick, char *user, char *host, char *real
 /* invite a user to a channel */
 static void ircnet_invite_sts(user_t *sender, user_t *target, channel_t *channel)
 {
-	sts(":%s INVITE %s %s", sender->nick, target->nick, channel->name);
+	int joined = 0;
+
+	/* Need to join to invite -- jilles */
+	if (!chanuser_find(channel, sender))
+	{
+		sts(":%s NJOIN %s :@%s", ME, channel->name, CLIENT_NAME(sender));
+		joined = 1;
+	}
+	sts(":%s INVITE %s %s", CLIENT_NAME(sender), CLIENT_NAME(target), channel->name);
+	if (joined)
+		sts(":%s PART %s :Invited %s", CLIENT_NAME(sender), channel->name, target->nick);
 }
 
 static void ircnet_quit_sts(user_t *u, char *reason)
