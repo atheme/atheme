@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 4031 2005-12-08 00:24:15Z jilles $
+ * $Id: set.c 4127 2005-12-17 09:58:57Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 4031 2005-12-08 00:24:15Z jilles $",
+	"$Id: set.c 4127 2005-12-17 09:58:57Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -41,6 +41,7 @@ void _modinit(module_t *m)
 	help_addentry(cs_helptree, "SET PROPERTY", "help/cservice/set_property", NULL);
 	help_addentry(cs_helptree, "SET STAFFONLY", "help/cservice/set_staffonly", NULL);
 	help_addentry(cs_helptree, "SET KEEPTOPIC", "help/cservice/set_keeptopic", NULL);
+	help_addentry(cs_helptree, "SET FANTASY", "help/cservice/set_fantasy", NULL);
 }
 
 void _moddeinit()
@@ -57,6 +58,7 @@ void _moddeinit()
 	help_delentry(cs_helptree, "SET PROPERTY");
 	help_delentry(cs_helptree, "SET STAFFONLY");
 	help_delentry(cs_helptree, "SET KEEPTOPIC");
+	help_delentry(cs_helptree, "SET FANTASY");
 }
 
 struct set_command_ *set_cmd_find(char *origin, char *command);
@@ -756,6 +758,73 @@ static void cs_set_verbose(char *origin, char *name, char *params)
 	}
 }
 
+static void cs_set_fantasy(char *origin, char *name, char *params)
+{
+	user_t *u = user_find(origin);
+	mychan_t *mc;
+
+	if (*name != '#')
+	{
+		notice(chansvs.nick, origin, "Invalid parameters specified for \2FANTASY\2.");
+		return;
+	}
+
+	if (!(mc = mychan_find(name)))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
+		return;
+	}
+
+	if (!chanacs_user_has_flag(mc, u, CA_SET))
+	{
+		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
+		return;
+	}
+
+	if (!strcasecmp("ON", params))
+	{
+		metadata_t *md = metadata_find(mc, METADATA_CHANNEL, "disable_fantasy");
+
+		if (!md)
+		{
+			notice(chansvs.nick, origin, "Fantasy is already enabled on \2%s\2.", mc->name);
+			return;
+		}
+
+		metadata_delete(mc, METADATA_CHANNEL, "disable_fantasy");
+
+		snoop("SET:FANTASY:ON: for \2%s\2 by \2%s\2", mc->name, origin);
+		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET FANTASY ON", mc->name);
+		verbose(mc, "\2%s\2 enabled the FANTASY flag", u->nick);
+		notice(chansvs.nick, origin, "The \2FANTASY\2 flag has been set for \2%s\2.", mc->name);
+		return;
+	}
+	else if (!strcasecmp("OFF", params))
+	{
+		metadata_t *md = metadata_find(mc, METADATA_CHANNEL, "disable_fantasy");
+
+		if (md)
+		{
+			notice(chansvs.nick, origin, "Fantasy is already disabled on \2%s\2.", mc->name);
+			return;
+		}
+
+		metadata_add(mc, METADATA_CHANNEL, "disable_fantasy", "on");
+
+		snoop("SET:FANTASY:OFF: for \2%s\2 by \2%s\2", mc->name, origin);
+		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET FANTASY OFF", mc->name);
+		verbose(mc, "\2%s\2 disabled the FANTASY flag", u->nick);
+		notice(chansvs.nick, origin, "The \2FANTASY\2 flag has been removed for \2%s\2.", mc->name);
+		return;
+	}
+
+	else
+	{
+		notice(chansvs.nick, origin, "Invalid parameters specified for \2FANTASY\2.");
+		return;
+	}
+}
+
 static void cs_set_staffonly(char *origin, char *name, char *params)
 {
 	mychan_t *mc;
@@ -901,6 +970,7 @@ struct set_command_ set_commands[] = {
   { "PROPERTY",   AC_NONE,  cs_set_property   },
   { "EMAIL",      AC_NONE,  cs_set_email      },
   { "KEEPTOPIC",  AC_NONE,  cs_set_keeptopic  },
+  { "FANTASY",    AC_NONE,  cs_set_fantasy    },
   { "STAFFONLY",  AC_IRCOP, cs_set_staffonly  },
   { NULL, 0, NULL }
 };

@@ -1,0 +1,9 @@
+Help for SET FANTASY:
+
+SET FANTASY allows you to enable or disable ChanServ
+fantasy commands (!op, !deop, etc.) on your channel.
+
+Syntax: SET <channel> FANTASY <ON|OFF>
+
+Example:
+    /msg &nick& SET #chatspike FANTASY ON
