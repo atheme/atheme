@@ -1,3 +1,13 @@
+jilles      2005/12/17 23:02:44 UTC	(20051217-4149)
+  Log:
+  Change back to LF only instead of CRLF.
+  (Separate commit because this makes diffs worthless.)
+  
+
+  Changes:	Modified:
+  +155 -155	trunk/include/phandler.h (File Modified) 
+
+
 w00t        2005/12/17 22:57:48 UTC	(20051217-4147)
   Log:
   Implemented protocol handler wallchops(), co-authored by Drazak.
