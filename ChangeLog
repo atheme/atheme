@@ -1,3 +1,11 @@
+w00t        2005/12/17 03:00:02 UTC	(20051217-4111)
+  Log:
+  (Hopefully) a fix for Bricker's issue of opers not recieving Services permissions.
+
+  Changes:	Modified:
+  +11 -0	trunk/protocol/inspircd.c (File Modified) 
+
+
 w00t        2005/12/17 02:43:15 UTC	(20051217-4109)
   Log:
   Remove dual pcommand_add() on FJOIN, reported by Brain

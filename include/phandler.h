@@ -5,7 +5,7 @@
  * Protocol handlers, both generic and the actual declarations themselves.
  * Declare NOTYET to use the function pointer voodoo.
  *
- * $Id: phandler.h 4007 2005-12-05 13:48:52Z jilles $
+ * $Id: phandler.h 4113 2005-12-17 04:03:53Z w00t $
  */
 
 #ifndef PHANDLER_H
@@ -111,6 +111,8 @@ E void (*sethost_sts)(char *source, char *target, char *host);
  * FNC_FORCE:  force a user off their nick (kill if unsupported)
  */
 E void (*fnc_sts)(user_t *source, user_t *u, char *newnick, int type);
+/* send an invite for a given user to a channel */
+E void (*invite_sts)(user_t *source, user_t *target, channel_t *channel);
 
 E uint8_t generic_server_login(void);
 E void generic_introduce_nick(char *nick, char *ser, char *host, char *real, char *uid);
