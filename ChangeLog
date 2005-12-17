@@ -1,3 +1,19 @@
+jilles      2005/12/17 20:48:02 UTC	(20051217-4141)
+  Log:
+  In charybdis, ratbox and P10, mark services clients as
+  "deaf" (does not receive channel messages) if
+  fantasy commands are disabled. +D for charybdis/ratbox,
+  +d for asuka/bircd/undernet.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/asuka.c (File Modified) 
+  +1 -1		trunk/protocol/bircd.c (File Modified) 
+  +2 -2		trunk/protocol/charybdis.c (File Modified) 
+  +5 -3		trunk/protocol/ratbox.c (File Modified) 
+  +1 -1		trunk/protocol/undernet.c (File Modified) 
+
+
 jilles      2005/12/17 15:59:42 UTC	(20051217-4139)
   Log:
   invite_sts() fixes:
