@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: dreamforge.c 4119 2005-12-17 04:37:40Z w00t $
+ * $Id: dreamforge.c 4121 2005-12-17 04:44:46Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/dreamforge.h"
 
-DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 4119 2005-12-17 04:37:40Z w00t $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 4121 2005-12-17 04:44:46Z w00t $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -95,7 +95,7 @@ static void dreamforge_introduce_nick(char *nick, char *user, char *host, char *
 /* invite a user to a channel */
 static void dreamforge_invite_sts(user_t *sender, user_t *target, channel_t *channel)
 {
-	sts(":%s INVITE %s %s", sender->nick, target->nick, mc->chan->name);
+	sts(":%s INVITE %s %s", sender->nick, target->nick, channel->name);
 }
 
 static void dreamforge_quit_sts(user_t *u, char *reason)

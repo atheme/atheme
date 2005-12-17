@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 4119 2005-12-17 04:37:40Z w00t $
+ * $Id: hyperion.c 4121 2005-12-17 04:44:46Z w00t $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -15,7 +15,7 @@
 #include "atheme.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 4119 2005-12-17 04:37:40Z w00t $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 4121 2005-12-17 04:44:46Z w00t $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -121,7 +121,7 @@ static void hyperion_introduce_nick(char *nick, char *user, char *host, char *re
 /* invite a user to a channel */
 static void hyperion_invite_sts(user_t *sender, user_t *target, channel_t *channel)
 {
-	sts(":%s INVITE %s %s", sender->nick, target->nick, mc->chan->name);
+	sts(":%s INVITE %s %s", sender->nick, target->nick, channel->name);
 }
 
 static void hyperion_quit_sts(user_t *u, char *reason)
