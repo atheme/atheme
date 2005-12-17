@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: sorcery.c 4049 2005-12-09 13:07:18Z jilles $
+ * $Id: sorcery.c 4119 2005-12-17 04:37:40Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/sorcery.h"
 
-DECLARE_MODULE_V1("protocol/sorcery", TRUE, _modinit, NULL, "$Id: sorcery.c 4049 2005-12-09 13:07:18Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/sorcery", TRUE, _modinit, NULL, "$Id: sorcery.c 4119 2005-12-17 04:37:40Z w00t $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -91,6 +91,12 @@ static void sorcery_introduce_nick(char *nick, char *user, char *host, char *rea
 {
 	sts("NICK %s 1 %ld %s %s %s 0 :%s", nick, CURRTIME, user, host, me.name, real);
 	sts(":%s MODE %s +%s", nick, nick, "io");
+}
+
+/* invite a user to a channel */
+static void sorcery_invite_sts(user_t *sender, user_t *target, channel_t *channel)
+{
+	sts(":%s INVITE %s %s", sender->nick, target->nick, mc->chan->name);
 }
 
 static void sorcery_quit_sts(user_t *u, char *reason)
@@ -630,6 +636,7 @@ void _modinit(module_t * m)
 	ircd_on_login = &sorcery_on_login;
 	ircd_on_logout = &sorcery_on_logout;
 	jupe = &sorcery_jupe;
+	invite_sts = &sorcery_invite_sts;
 
 	mode_list = sorcery_mode_list;
 	ignore_mode_list = sorcery_ignore_mode_list;

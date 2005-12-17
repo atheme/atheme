@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: undernet.c 3835 2005-11-11 11:31:28Z jilles $
+ * $Id: undernet.c 4119 2005-12-17 04:37:40Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 3835 2005-11-11 11:31:28Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4119 2005-12-17 04:37:40Z w00t $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -91,6 +91,12 @@ static uint8_t undernet_server_login(void)
 static void undernet_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
 	sts("%s N %s 1 %ld %s %s +%sk A %s :%s", me.numeric, nick, CURRTIME, user, host, "io", uid, real);
+}
+
+/* invite a user to a channel */
+static void undernet_invite_sts(user_t *sender, user_t *target, channel_t *channel)
+{
+	sts(":%s INVITE %s %s", sender->nick, target->nick, mc->chan->name);
 }
 
 static void undernet_quit_sts(user_t *u, char *reason)
@@ -816,6 +822,7 @@ void _modinit(module_t * m)
 	ircd_on_login = &undernet_on_login;
 	ircd_on_logout = &undernet_on_logout;
 	jupe = &undernet_jupe;
+	invite_sts = &undernet_invite_sts;
 
 	parse = &p10_parse;
 

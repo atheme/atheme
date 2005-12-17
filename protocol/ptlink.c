@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ptlink-based ircd.
  *
- * $Id: ptlink.c 4049 2005-12-09 13:07:18Z jilles $
+ * $Id: ptlink.c 4119 2005-12-17 04:37:40Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/ptlink.h"
 
-DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 4049 2005-12-09 13:07:18Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 4119 2005-12-17 04:37:40Z w00t $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -98,6 +98,12 @@ static uint8_t ptlink_server_login(void)
 static void ptlink_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
 	sts("NICK %s 1 %ld +%s %s %s %s :%s", nick, CURRTIME, "io", user, host, me.name, real);
+}
+
+/* invite a user to a channel */
+static void ptlink_invite_sts(user_t *sender, user_t *target, channel_t *channel)
+{
+	sts(":%s INVITE %s %s", sender->nick, target->nick, mc->chan->name);
 }
 
 static void ptlink_quit_sts(user_t *u, char *reason)
@@ -710,6 +716,7 @@ void _modinit(module_t * m)
 	ircd_on_login = &ptlink_on_login;
 	ircd_on_logout = &ptlink_on_logout;
 	jupe = &ptlink_jupe;
+	invite_sts = &ptlink_invite_sts;
 
 	mode_list = ptlink_mode_list;
 	ignore_mode_list = ptlink_ignore_mode_list;

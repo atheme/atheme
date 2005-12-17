@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for shadowircd-based ircd.
  *
- * $Id: shadowircd.c 4049 2005-12-09 13:07:18Z jilles $
+ * $Id: shadowircd.c 4119 2005-12-17 04:37:40Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/shadowircd.h"
 
-DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 4049 2005-12-09 13:07:18Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 4119 2005-12-17 04:37:40Z w00t $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -101,6 +101,12 @@ static uint8_t shadowircd_server_login(void)
 static void shadowircd_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
 	sts("NICK %s 1 %ld +%sS %s %s %s :%s", nick, CURRTIME, "io", user, host, me.name, real);
+}
+
+/* invite a user to a channel */
+static void shadowircd_invite_sts(user_t *sender, user_t *target, channel_t *channel)
+{
+	sts(":%s INVITE %s %s", sender->nick, target->nick, mc->chan->name);
 }
 
 static void shadowircd_quit_sts(user_t *u, char *reason)
@@ -705,6 +711,7 @@ void _modinit(module_t * m)
 	ircd_on_login = &shadowircd_on_login;
 	ircd_on_logout = &shadowircd_on_logout;
 	jupe = &shadowircd_jupe;
+	invite_sts = &shadowircd_invite_sts;
 
 	mode_list = shadowircd_mode_list;
 	ignore_mode_list = shadowircd_ignore_mode_list;

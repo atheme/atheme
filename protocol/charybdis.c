@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 3981 2005-11-26 02:32:23Z jilles $
+ * $Id: charybdis.c 4119 2005-12-17 04:37:40Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 3981 2005-11-26 02:32:23Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 4119 2005-12-17 04:37:40Z w00t $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -118,6 +118,12 @@ static void charybdis_introduce_nick(char *nick, char *user, char *host, char *r
 		sts(":%s UID %s 1 %ld +%sS %s %s 0 %s :%s", me.numeric, nick, CURRTIME, "io", user, host, uid, real);
 	else
 		sts("NICK %s 1 %ld +%sS %s %s %s :%s", nick, CURRTIME, "io", user, host, me.name, real);
+}
+
+/* invite a user to a channel */
+static void charybdis_invite_sts(user_t *sender, user_t *target, channel_t *channel)
+{
+	sts(":%s INVITE %s %s", sender->nick, target->nick, mc->chan->name);
 }
 
 static void charybdis_quit_sts(user_t *u, char *reason)
@@ -1101,6 +1107,7 @@ void _modinit(module_t * m)
 	jupe = &charybdis_jupe;
 	sethost_sts = &charybdis_sethost_sts;
 	fnc_sts = &charybdis_fnc_sts;
+	invite_sts = &charybdis_invite_sts;
 
 	mode_list = charybdis_mode_list;
 	ignore_mode_list = charybdis_ignore_mode_list;

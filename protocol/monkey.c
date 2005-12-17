@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for chunky monkey ircd.
  *
- * $Id: monkey.c 4049 2005-12-09 13:07:18Z jilles $
+ * $Id: monkey.c 4119 2005-12-17 04:37:40Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/monkey.h"
 
-DECLARE_MODULE_V1("protocol/monkey", TRUE, _modinit, NULL, "$Id: monkey.c 4049 2005-12-09 13:07:18Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/monkey", TRUE, _modinit, NULL, "$Id: monkey.c 4119 2005-12-17 04:37:40Z w00t $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -94,6 +94,12 @@ static uint8_t monkey_server_login(void)
 static void monkey_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
 	sts("NICK %s 1 %ld +%s %s %s %s 0 0 :%s", nick, CURRTIME, "io", user, host, me.name, real);
+}
+
+/* invite a user to a channel */
+static void monkey_invite_sts(user_t *sender, user_t *target, channel_t *channel)
+{
+	sts(":%s INVITE %s %s", sender->nick, target->nick, mc->chan->name);
 }
 
 static void monkey_quit_sts(user_t *u, char *reason)
@@ -722,6 +728,7 @@ void _modinit(module_t * m)
 	ircd_on_login = &monkey_on_login;
 	ircd_on_logout = &monkey_on_logout;
 	jupe = &monkey_jupe;
+	invite_sts = &monkey_invite_sts;
 
 	mode_list = monkey_mode_list;
 	ignore_mode_list = monkey_ignore_mode_list;

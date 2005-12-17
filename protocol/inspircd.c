@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 4111 2005-12-17 03:00:02Z w00t $
+ * $Id: inspircd.c 4119 2005-12-17 04:37:40Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4111 2005-12-17 03:00:02Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4119 2005-12-17 04:37:40Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -330,6 +330,12 @@ static void inspircd_sethost_sts(char *source, char *target, char *host)
 		return;
 
 	sts(":%s CHGHOST %s %s", source, target, host);
+}
+
+/* invite a user to a channel */
+static void inspircd_invite_sts(user_t *sender, user_t *target, channel_t *channel)
+{
+	sts(":%s INVITE %s %s", sender->nick, target->nick, channel->name);
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
@@ -747,6 +753,7 @@ void _modinit(module_t * m)
 	ircd_on_logout = &inspircd_on_logout;
 	jupe = &inspircd_jupe;
 	sethost_sts = &inspircd_sethost_sts;
+	invite_sts = &inspircd_invite_sts;
 
 	mode_list = inspircd_mode_list;
 	ignore_mode_list = inspircd_ignore_mode_list;

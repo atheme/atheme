@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 4049 2005-12-09 13:07:18Z jilles $
+ * $Id: plexus.c 4119 2005-12-17 04:37:40Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 4049 2005-12-09 13:07:18Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 4119 2005-12-17 04:37:40Z w00t $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -96,6 +96,12 @@ static uint8_t plexus_server_login(void)
 static void plexus_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
 	sts("NICK %s 1 %ld +%sS %s %s %s %s 0 0 :%s", nick, CURRTIME, "io", user, host, host, me.name, real);
+}
+
+/* invite a user to a channel */
+static void plexus_invite_sts(user_t *sender, user_t *target, channel_t *channel)
+{
+	sts(":%s INVITE %s %s", sender->nick, target->nick, mc->chan->name);
 }
 
 static void plexus_quit_sts(user_t *u, char *reason)
@@ -708,6 +714,7 @@ void _modinit(module_t * m)
 	ircd_on_logout = &plexus_on_logout;
 	jupe = &plexus_jupe;
 	sethost_sts = &plexus_sethost_sts;
+	invite_sts = &plexus_invite_sts;
 
 	mode_list = plexus_mode_list;
 	ignore_mode_list = plexus_ignore_mode_list;

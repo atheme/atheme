@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 3835 2005-11-11 11:31:28Z jilles $
+ * $Id: ratbox.c 4119 2005-12-17 04:37:40Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 3835 2005-11-11 11:31:28Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 4119 2005-12-17 04:37:40Z w00t $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -113,6 +113,12 @@ static void ratbox_introduce_nick(char *nick, char *user, char *host, char *real
 		sts("NICK %s 1 %ld +%s%s %s %s %s :%s",
 			nick, CURRTIME, "io", use_rserv_support ? "S" : "",
 			user, host, me.name, real);
+}
+
+/* invite a user to a channel */
+static void ratbox_invite_sts(user_t *sender, user_t *target, channel_t *channel)
+{
+	sts(":%s INVITE %s %s", sender->nick, target->nick, mc->chan->name);
 }
 
 static void ratbox_quit_sts(user_t *u, char *reason)
@@ -1062,6 +1068,7 @@ void _modinit(module_t * m)
 	ircd_on_login = &ratbox_on_login;
 	ircd_on_logout = &ratbox_on_logout;
 	jupe = &ratbox_jupe;
+	invite_sts = &ratbox_invite_sts;
 
 	mode_list = ratbox_mode_list;
 	ignore_mode_list = ratbox_ignore_mode_list;

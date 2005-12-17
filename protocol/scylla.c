@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: scylla.c 3835 2005-11-11 11:31:28Z jilles $
+ * $Id: scylla.c 4119 2005-12-17 04:37:40Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/scylla", TRUE, _modinit, NULL, "$Id: scylla.c 3835 2005-11-11 11:31:28Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/scylla", TRUE, _modinit, NULL, "$Id: scylla.c 4119 2005-12-17 04:37:40Z w00t $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -92,6 +92,12 @@ static uint8_t scylla_server_login(void)
 static void scylla_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
 	sts("RCOMMAND %s %s", nick, me.name);
+}
+
+/* invite a user to a channel */
+static void scylla_invite_sts(user_t *sender, user_t *target, channel_t *channel)
+{
+	sts(":%s INVITE %s %s", sender->nick, target->nick, mc->chan->name);
 }
 
 /* WALLOPS wrapper */
@@ -611,6 +617,7 @@ void _modinit(module_t * m)
 	ircd_on_login = &scylla_on_login;
 	ircd_on_logout = &scylla_on_logout;
 	jupe = &scylla_jupe;
+	invite_sts = &scylla_invite_sts;
 
 	mode_list = scylla_mode_list;
 	ignore_mode_list = scylla_ignore_mode_list;

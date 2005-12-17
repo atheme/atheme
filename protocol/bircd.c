@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: bircd.c 3835 2005-11-11 11:31:28Z jilles $
+ * $Id: bircd.c 4119 2005-12-17 04:37:40Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 3835 2005-11-11 11:31:28Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 4119 2005-12-17 04:37:40Z w00t $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -96,6 +96,12 @@ static uint8_t asuka_server_login(void)
 static void asuka_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
 	sts("%s N %s 1 %ld %s %s +%sk A %s :%s", me.numeric, nick, CURRTIME, user, host, "io", uid, real);
+}
+
+/* invite a user to a channel */
+static void asuka_invite_sts(user_t *sender, user_t *target, channel_t *channel)
+{
+	sts(":%s INVITE %s %s", sender->nick, target->nick, mc->chan->name);
 }
 
 static void asuka_quit_sts(user_t *u, char *reason)
@@ -983,6 +989,7 @@ void _modinit(module_t * m)
 	ircd_on_login = &asuka_on_login;
 	ircd_on_logout = &asuka_on_logout;
 	jupe = &asuka_jupe;
+	invite_sts = &asuka_invite_sts;
 
 	parse = &p10_parse;
 

@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 3947 2005-11-17 17:38:40Z jilles $
+ * $Id: ircnet.c 4119 2005-12-17 04:37:40Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 3947 2005-11-17 17:38:40Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 4119 2005-12-17 04:37:40Z w00t $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -90,6 +90,12 @@ static uint8_t ircnet_server_login(void)
 static void ircnet_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
 	sts(":%s UNICK %s %s %s %s 0.0.0.0 +%s :%s", me.numeric, nick, uid, user, host, "io", real);
+}
+
+/* invite a user to a channel */
+static void ircnet_invite_sts(user_t *sender, user_t *target, channel_t *channel)
+{
+	sts(":%s INVITE %s %s", sender->nick, target->nick, mc->chan->name);
 }
 
 static void ircnet_quit_sts(user_t *u, char *reason)
@@ -719,6 +725,7 @@ void _modinit(module_t * m)
 	ircd_on_login = &ircnet_on_login;
 	ircd_on_logout = &ircnet_on_logout;
 	jupe = &ircnet_jupe;
+	invite_sts = &ircnet_invite_sts;
 
 	mode_list = ircnet_mode_list;
 	ignore_mode_list = ircnet_ignore_mode_list;

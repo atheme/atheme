@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 4049 2005-12-09 13:07:18Z jilles $
+ * $Id: hyperion.c 4119 2005-12-17 04:37:40Z w00t $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -15,7 +15,7 @@
 #include "atheme.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 4049 2005-12-09 13:07:18Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 4119 2005-12-17 04:37:40Z w00t $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -116,6 +116,12 @@ static void hyperion_introduce_nick(char *nick, char *user, char *host, char *re
 	const char *privs = "6@BFmMopPRUX";
 	sts("NICK %s 1 %ld +ei%s %s %s %s 0.0.0.0 :%s", nick, CURRTIME, privs, user, host, me.name, real);
 	sts(":%s OPER %s +%s", me.name, nick, privs);
+}
+
+/* invite a user to a channel */
+static void hyperion_invite_sts(user_t *sender, user_t *target, channel_t *channel)
+{
+	sts(":%s INVITE %s %s", sender->nick, target->nick, mc->chan->name);
 }
 
 static void hyperion_quit_sts(user_t *u, char *reason)
@@ -906,6 +912,7 @@ void _modinit(module_t * m)
 	jupe = &hyperion_jupe;
 	sethost_sts = &hyperion_sethost_sts;
 	fnc_sts = &hyperion_fnc_sts;
+	invite_sts = &hyperion_invite_sts;
 
 	mode_list = hyperion_mode_list;
 	ignore_mode_list = hyperion_ignore_mode_list;

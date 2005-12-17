@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: dreamforge.c 4049 2005-12-09 13:07:18Z jilles $
+ * $Id: dreamforge.c 4119 2005-12-17 04:37:40Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/dreamforge.h"
 
-DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 4049 2005-12-09 13:07:18Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 4119 2005-12-17 04:37:40Z w00t $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -90,6 +90,12 @@ static void dreamforge_introduce_nick(char *nick, char *user, char *host, char *
 {
 	sts("NICK %s 1 %ld %s %s %s 0 :%s", nick, CURRTIME, user, host, me.name, real);
 	sts(":%s MODE %s +%s", nick, nick, "io");
+}
+
+/* invite a user to a channel */
+static void dreamforge_invite_sts(user_t *sender, user_t *target, channel_t *channel)
+{
+	sts(":%s INVITE %s %s", sender->nick, target->nick, mc->chan->name);
 }
 
 static void dreamforge_quit_sts(user_t *u, char *reason)
@@ -629,6 +635,7 @@ void _modinit(module_t * m)
 	ircd_on_login = &dreamforge_on_login;
 	ircd_on_logout = &dreamforge_on_logout;
 	jupe = &dreamforge_jupe;
+	invite_sts = &dreamforge_invite_sts;
 
 	mode_list = dreamforge_mode_list;
 	ignore_mode_list = dreamforge_ignore_mode_list;
