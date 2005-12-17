@@ -1,3 +1,11 @@
+w00t        2005/12/17 02:43:15 UTC	(20051217-4109)
+  Log:
+  Remove dual pcommand_add() on FJOIN, reported by Brain
+
+  Changes:	Modified:
+  +0 -1		trunk/protocol/inspircd.c (File Modified) 
+
+
 jilles      2005/12/16 12:07:11 UTC	(20051216-4107)
   Log:
   Allow = in flag change strings, equivalent to -*+,

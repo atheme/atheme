@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 4109 2005-12-17 02:43:15Z w00t $
+ * $Id: inspircd.c 4111 2005-12-17 03:00:02Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4109 2005-12-17 02:43:15Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4111 2005-12-17 03:00:02Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -706,6 +706,16 @@ static void m_idle(char* origin, uint8_t parc, char *parv[])
 	}
 }
 
+static void m_opertype(char* origin, uint8_t parc, char *parv[])
+{
+	/*
+	 * Hope this works.. InspIRCd OPERTYPE means user is an oper, mark them so
+	 * Later, we may want to look at saving their OPERTYPE for informational
+	 * purposes, or not. --w00t
+	 */
+	user_mode(user_find(origin), "+o");
+}
+
 static void m_fhost(char *origin, uint8_t parc, char *parv[])
 {
 	user_t *u = user_find(origin);
@@ -769,6 +779,7 @@ void _modinit(module_t * m)
 	pcommand_add("TOPIC", m_topic);
 	pcommand_add("FHOST", m_fhost);
 	pcommand_add("IDLE", m_idle);
+	pcommand_add("OPERTYPE", m_opertype);
 
 	m->mflags = MODTYPE_CORE;
 
