@@ -1,3 +1,13 @@
+jilles      2005/12/16 12:07:11 UTC	(20051216-4107)
+  Log:
+  Allow = in flag change strings, equivalent to -*+,
+  replacing all flags by the given ones.
+  
+
+  Changes:	Modified:
+  +11 -0	trunk/src/flags.c (File Modified) 
+
+
 jilles      2005/12/16 11:56:51 UTC	(20051216-4105)
   Log:
   Clarification and slight reformatting.
