@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 4091 2005-12-14 10:10:04Z jilles $
+ * $Id: xop.c 4131 2005-12-17 11:12:36Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 4091 2005-12-14 10:10:04Z jilles $",
+	"$Id: xop.c 4131 2005-12-17 11:12:36Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -165,8 +165,8 @@ static void cs_xop(char *origin, uint32_t level, char *leveldesc)
 
 	else if (!strcasecmp("DEL", cmd))
 	{
-		/* As in /cs flags, allow founder to do anything */
-		if (is_founder(mc, u->myuser))
+		/* As in /cs flags, allow founder to do anything -- fix for #64: allow self removal. */
+		if (is_founder(mc, u->myuser) || mu == u)
 			restrictflags = CA_ALL;
 		else
 			restrictflags = chanacs_user_flags(mc, u);
