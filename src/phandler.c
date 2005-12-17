@@ -4,7 +4,7 @@
  *
  * Generic protocol event handlers.
  *
- * $Id: phandler.c 4113 2005-12-17 04:03:53Z w00t $
+ * $Id: phandler.c 4147 2005-12-17 22:57:48Z w00t $
  */
 
 #include "atheme.h"
@@ -16,6 +16,7 @@ void (*join_sts) (channel_t *c, user_t *u, boolean_t isnew, char *modes) = gener
 void (*kick) (char *from, char *channel, char *to, char *reason) = generic_kick;
 void (*msg) (char *from, char *target, char *fmt, ...) = generic_msg;
 void (*notice) (char *from, char *target, char *fmt, ...) = generic_notice;
+void (*wallchops)(user_t *source, channel_t *target, char *message) = generic_wallchops;
 void (*numeric_sts) (char *from, int numeric, char *target, char *fmt, ...) = generic_numeric_sts;
 void (*skill) (char *from, char *nick, char *fmt, ...) = generic_skill;
 void (*part) (char *chan, char *nick) = generic_part;
@@ -90,6 +91,11 @@ void generic_notice(char *from, char *target, char *fmt, ...)
 	va_end(ap);
 
 	slog(LG_INFO, "Cannot send notice to %s (%s): don't know how. Load a protocol module perhaps?", target, buf);
+}
+
+void generic_wallchops(user_t *sender, channel_t *channel, char *message)	
+{
+	/* What, you want to know what goes here? well you CAN'T */
 }
 
 void generic_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)

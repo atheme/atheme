@@ -1,3 +1,11 @@
+w00t        2005/12/17 21:13:52 UTC	(20051217-4145)
+  Log:
+  Added UnrealIRCd FNC support.
+
+  Changes:	Modified:
+  +7 -0		trunk/protocol/unreal.c (File Modified) 
+
+
 w00t        2005/12/17 21:12:23 UTC	(20051217-4143)
   Log:
   Removed unneeded +x on changing a users host in Unreal protocol module.
