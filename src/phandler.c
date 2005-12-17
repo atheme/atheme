@@ -4,7 +4,7 @@
  *
  * Generic protocol event handlers.
  *
- * $Id: phandler.c 4147 2005-12-17 22:57:48Z w00t $
+ * $Id: phandler.c 4153 2005-12-17 23:13:00Z jilles $
  */
 
 #include "atheme.h"
