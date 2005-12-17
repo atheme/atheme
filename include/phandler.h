@@ -5,7 +5,7 @@
  * Protocol handlers, both generic and the actual declarations themselves.
  * Declare NOTYET to use the function pointer voodoo.
  *
- * $Id: phandler.h 4147 2005-12-17 22:57:48Z w00t $
+ * $Id: phandler.h 4149 2005-12-17 23:02:44Z jilles $
  */
 
 #ifndef PHANDLER_H

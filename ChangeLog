@@ -1,3 +1,12 @@
+w00t        2005/12/17 22:57:48 UTC	(20051217-4147)
+  Log:
+  Implemented protocol handler wallchops(), co-authored by Drazak.
+
+  Changes:	Modified:
+  +155 -153	trunk/include/phandler.h (File Modified) 
+  +175 -169	trunk/src/phandler.c (File Modified) 
+
+
 w00t        2005/12/17 21:13:52 UTC	(20051217-4145)
   Log:
   Added UnrealIRCd FNC support.
