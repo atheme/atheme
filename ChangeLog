@@ -1,3 +1,12 @@
+kog         2005/12/17 08:31:39 UTC	(20051217-4123)
+  Log:
+  akill list now catches param FULL correctly
+  
+
+  Changes:	Modified:
+  +4 -8		trunk/modules/operserv/akill.c (File Modified) 
+
+
 w00t        2005/12/17 04:44:46 UTC	(20051217-4121)
   Log:
   Repeat after me, w00t is a retard..

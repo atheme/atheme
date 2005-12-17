@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService RECOVER functions.
  *
- * $Id: recover.c 3891 2005-11-12 02:16:49Z jilles $
+ * $Id: recover.c 4125 2005-12-17 09:18:53Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/recover", FALSE, _modinit, _moddeinit,
-	"$Id: recover.c 3891 2005-11-12 02:16:49Z jilles $",
+	"$Id: recover.c 4125 2005-12-17 09:18:53Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -170,8 +170,7 @@ static void cs_cmd_recover(char *origin)
 		mode_sts(chansvs.nick, mc->chan->name, hostbuf);
 
 		/* invite them back. */
-		/* XXX need to wrap this, same with CS INVITE */
-		sts(":%s INVITE %s %s", chansvs.nick, u->nick, mc->chan->name);
+		invite(chansvs.me, u, mc->chan);
 		notice(chansvs.nick, origin, "Recover complete for \2%s\2, ban exception \2%s\2 added.", mc->chan->name, hostbuf2);
 	}
 	else
