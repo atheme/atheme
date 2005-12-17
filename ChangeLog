@@ -1,3 +1,13 @@
+jilles      2005/12/17 14:39:23 UTC	(20051217-4135)
+  Log:
+  Make invite_sts() actually work (it's invite_sts not invite).
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/invite.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/recover.c (File Modified) 
+
+
 w00t        2005/12/17 11:17:30 UTC	(20051217-4133)
   Log:
   I really suck today, yes I do!

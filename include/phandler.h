@@ -5,7 +5,7 @@
  * Protocol handlers, both generic and the actual declarations themselves.
  * Declare NOTYET to use the function pointer voodoo.
  *
- * $Id: phandler.h 4117 2005-12-17 04:10:58Z w00t $
+ * $Id: phandler.h 4137 2005-12-17 14:49:24Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -40,6 +40,11 @@ typedef struct ircd_ ircd_t;
 E uint8_t (*server_login)(void);
 /* introduce a client on the services server */
 E void (*introduce_nick)(char *nick, char *user, char *host, char *real, char *uid);
+/* send an invite for a given user to a channel
+ * the source may not be on the channel */
+E void (*invite_sts)(user_t *source, user_t *target, channel_t *channel);
+/* quit a client on the services server with the given message */
+E void (*quit_sts)(user_t *u, char *reason);
 /* send wallops
  * check config_options.silent and do nothing if it's set
  * use something that only opers can see if easily possible */
@@ -91,8 +96,6 @@ E void (*mode_sts)(char *sender, char *target, char *modes);
 /* ping the uplink
  * first check if me.connected is true and bail if not */
 E void (*ping_sts)(void);
-/* quit a client on the services server with the given message */
-E void (*quit_sts)(user_t *u, char *reason);
 /* mark user 'origin' as logged in as 'user'
  * wantedhost is currently not used
  * first check if me.connected is true and bail if not */
@@ -111,11 +114,11 @@ E void (*sethost_sts)(char *source, char *target, char *host);
  * FNC_FORCE:  force a user off their nick (kill if unsupported)
  */
 E void (*fnc_sts)(user_t *source, user_t *u, char *newnick, int type);
-/* send an invite for a given user to a channel */
-E void (*invite_sts)(user_t *source, user_t *target, channel_t *channel);
 
 E uint8_t generic_server_login(void);
 E void generic_introduce_nick(char *nick, char *ser, char *host, char *real, char *uid);
+E void generic_invite_sts(user_t *source, user_t *target, channel_t *channel);
+E void generic_quit_sts(user_t *u, char *reason);
 E void generic_wallops(char *fmt, ...);
 E void generic_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes);
 E void generic_kick(char *from, char *channel, char *to, char *reason);
@@ -129,13 +132,11 @@ E void generic_unkline_sts(char *server, char *user, char *host);
 E void generic_topic_sts(char *channel, char *setter, time_t ts, char *topic);
 E void generic_mode_sts(char *sender, char *target, char *modes);
 E void generic_ping_sts(void);
-E void generic_quit_sts(user_t *u, char *reason);
 E void generic_on_login(char *origin, char *user, char *wantedhost);
 E void generic_on_logout(char *origin, char *user, char *wantedhost);
 E void generic_jupe(char *server, char *reason);
 E void generic_sethost_sts(char *source, char *target, char *host);
 E void generic_fnc_sts(user_t *source, user_t *u, char *newnick, int type);
-E void generic_invite_sts(user_t *source, user_t *target, channel_t *channel);
 
 E struct cmode_ *mode_list;
 E struct cmode_ *ignore_mode_list;
