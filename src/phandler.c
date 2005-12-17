@@ -4,7 +4,7 @@
  *
  * Generic protocol event handlers.
  *
- * $Id: phandler.c 4153 2005-12-17 23:13:00Z jilles $
+ * $Id: phandler.c 4155 2005-12-17 23:34:18Z jilles $
  */
 
 #include "atheme.h"
@@ -95,7 +95,16 @@ void generic_notice(char *from, char *target, char *fmt, ...)
 
 void generic_wallchops(user_t *sender, channel_t *channel, char *message)	
 {
-	/* What, you want to know what goes here? well you CAN'T */
+	/* ugly, but always works -- jilles */
+	node_t *n;
+	chanuser_t *cu;
+
+	LIST_FOREACH(n, channel->members.head)
+	{
+		cu = (chanuser_t *)n->data;
+		if (cu->user->server != me.me && cu->modes & CMODE_OP)
+			notice(sender->nick, cu->user->nick, "[@%s] %s", channel->name, message);
+	}
 }
 
 void generic_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)

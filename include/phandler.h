@@ -5,7 +5,7 @@
  * Protocol handlers, both generic and the actual declarations themselves.
  * Declare NOTYET to use the function pointer voodoo.
  *
- * $Id: phandler.h 4151 2005-12-17 23:11:59Z jilles $
+ * $Id: phandler.h 4155 2005-12-17 23:34:18Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -69,7 +69,9 @@ E void (*msg)(char *from, char *target, char *fmt, ...);
  * if the source cannot send because it is not on the channel, send the
  * notice from the server or join for a moment */
 E void (*notice)(char *from, char *target, char *fmt, ...);
-/* send a notice to ops in a channel  */
+/* send a notice to ops in a channel
+ * source may or may not be on channel
+ * generic_wallchops() sends an individual notice to each channel operator */
 E void (*wallchops)(user_t *source, channel_t *target, char *message);
 /* send a numeric from must be me.name or ME */
 E void (*numeric_sts)(char *from, int numeric, char *target, char *fmt, ...);
