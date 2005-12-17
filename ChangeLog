@@ -1,3 +1,11 @@
+w00t        2005/12/17 21:12:23 UTC	(20051217-4143)
+  Log:
+  Removed unneeded +x on changing a users host in Unreal protocol module.
+
+  Changes:	Modified:
+  +0 -1		trunk/protocol/unreal.c (File Modified) 
+
+
 jilles      2005/12/17 20:48:02 UTC	(20051217-4141)
   Log:
   In charybdis, ratbox and P10, mark services clients as

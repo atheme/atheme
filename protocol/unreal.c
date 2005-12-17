@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 4143 2005-12-17 21:12:23Z w00t $
+ * $Id: unreal.c 4145 2005-12-17 21:13:52Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 4143 2005-12-17 21:12:23Z w00t $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 4145 2005-12-17 21:13:52Z w00t $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -324,6 +324,12 @@ static void unreal_sethost_sts(char *source, char *target, char *host)
 	sts(":%s CHGHOST %s :%s", source, target, host);
 }
 
+static void unreal_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
+{
+	sts(":%s SVSNICK %s %s %lu", source->nick, u->nick, newnick,
+			(unsigned long)(CURRTIME - 60));
+}
+	
 static void m_topic(char *origin, uint8_t parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
@@ -807,6 +813,7 @@ void _modinit(module_t * m)
 	ircd_on_logout = &unreal_on_logout;
 	jupe = &unreal_jupe;
 	sethost_sts = &unreal_sethost_sts;
+	fnc_sts = &unreal_fnc_sts;
 	invite_sts = &unreal_invite_sts;
 
 	mode_list = unreal_mode_list;
