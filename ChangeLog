@@ -1,3 +1,12 @@
+w00t        2005/12/17 09:58:57 UTC	(20051217-4127)
+  Log:
+  CS SET FANTASY ON/OFF added, per ID 71
+
+  Changes:	Modified:
+  +9 -0		trunk/help/cservice/set_fantasy (File Added) 
+  +70 -0	trunk/modules/chanserv/set.c (File Modified) 
+
+
 w00t        2005/12/17 09:18:53 UTC	(20051217-4125)
   Log:
   Fix direct sts() of INVITE. Also fix CS INVITE on a nonexistant (empty) channel.

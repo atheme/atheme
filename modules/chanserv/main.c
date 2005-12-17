@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4093 2005-12-14 10:49:28Z pfish $
+ * $Id: main.c 4129 2005-12-17 10:22:03Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4093 2005-12-14 10:49:28Z pfish $",
+	"$Id: main.c 4129 2005-12-17 10:22:03Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -56,6 +56,7 @@ static void join_registered(boolean_t all)
 /* main services client routine */
 static void chanserv(char *origin, uint8_t parc, char *parv[])
 {
+	mychan_t *mc;
 	char *cmd, *s;
 	char orig[BUFSIZE];
 	boolean_t is_fcommand = FALSE;
@@ -75,10 +76,33 @@ static void chanserv(char *origin, uint8_t parc, char *parv[])
 	}
 
 	/* is this a fantasy command? */
-	if (parv[parc - 2][0] == '#' && chansvs.fantasy == TRUE)
+	if (parv[parc - 2][0] == '#')
+	{
+		metadata_t *md;
+
+		if (chansvs.fantasy == FALSE)
+		{
+			/* *all* fantasy disabled */
+			return;
+		}
+
+		mc = mychan_find(parv[parc - 2]);
+		if (!mc)
+		{
+			/* unregistered, NFI how we got this message, but let's leave it alone! */
+			return;
+		}
+
+		md = metadata_find(mc, METADATA_CHANNEL, "disable_fantasy");
+		if (md)
+		{
+			/* fantasy disabled on this channel. don't message them, just bail. */
+			return;
+		}
+
+		/* we're ok to go */
 		is_fcommand = TRUE;
-	else if (parv[parc - 2][0] == '#')
-		return;
+	}
 
 	/* make a copy of the original for debugging */
 	strlcpy(orig, parv[parc - 1], BUFSIZE);
