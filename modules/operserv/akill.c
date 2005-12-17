@@ -5,7 +5,7 @@
  * This file contains functionality which implements
  * the OService AKILL/KLINE command.
  *
- * $Id: akill.c 4017 2005-12-07 15:04:53Z jilles $
+ * $Id: akill.c 4123 2005-12-17 08:31:39Z kog $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 4017 2005-12-07 15:04:53Z jilles $",
+	"$Id: akill.c 4123 2005-12-17 08:31:39Z kog $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -348,17 +348,15 @@ static void os_cmd_akill_del(char *origin, char *target)
 	kline_delete(userbuf, hostbuf);
 }
 
-static void os_cmd_akill_list(char *origin, char *target)
+static void os_cmd_akill_list(char *origin, char *param)
 {
 	boolean_t full = FALSE;
 	node_t *n;
 	kline_t *k;
-	int i = 0;
-	char *s = strtok(NULL, " ");
 
-	if (s && !strcasecmp(s, "FULL"))
+	if (param != NULL && !strcasecmp(param, "FULL"))
 		full = TRUE;
-
+	
 	if (full)
 		notice(opersvs.nick, origin, "AKILL list (with reasons):");
 	else
@@ -367,8 +365,6 @@ static void os_cmd_akill_list(char *origin, char *target)
 	LIST_FOREACH(n, klnlist.head)
 	{
 		k = (kline_t *)n->data;
-
-		i++;
 
 		if (k->duration && full)
 			notice(opersvs.nick, origin, "%d: %s@%s - by \2%s\2 - expires in \2%s\2 - (%s)", k->number, k->user, k->host, k->setby, timediff(k->expires > CURRTIME ? k->expires - CURRTIME : 0), k->reason);
@@ -380,7 +376,7 @@ static void os_cmd_akill_list(char *origin, char *target)
 			notice(opersvs.nick, origin, "%d: %s@%s - by \2%s\2 - \2permanent\2", k->number, k->user, k->host, k->setby);
 	}
 
-	notice(opersvs.nick, origin, "Total of \2%d\2 %s in AKILL list.", i, (i == 1) ? "entry" : "entries");
+	notice(opersvs.nick, origin, "Total of \2%d\2 %s in AKILL list.", klnlist.count, (klnlist.count == 1) ? "entry" : "entries");
 	logcommand(opersvs.me, user_find(origin), CMDLOG_GET, "AKILL LIST%s", full ? " FULL" : "");
 }
 
