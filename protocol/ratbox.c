@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 4139 2005-12-17 15:59:42Z jilles $
+ * $Id: ratbox.c 4141 2005-12-17 20:48:02Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 4139 2005-12-17 15:59:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 4141 2005-12-17 20:48:02Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -106,12 +106,14 @@ static uint8_t ratbox_server_login(void)
 static void ratbox_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
 	if (ircd->uses_uid)
-		sts(":%s UID %s 1 %ld +%s%s %s %s 0 %s :%s",
+		sts(":%s UID %s 1 %ld +%s%s%s %s %s 0 %s :%s",
 			me.numeric, nick, CURRTIME, "io",
+			chansvs.fantasy ? "" : "D",
 			use_rserv_support ? "S" : "", user, host, uid, real);
 	else
-		sts("NICK %s 1 %ld +%s%s %s %s %s :%s",
-			nick, CURRTIME, "io", use_rserv_support ? "S" : "",
+		sts("NICK %s 1 %ld +%s%s%s %s %s %s :%s",
+			nick, CURRTIME, "io", chansvs.fantasy ? "" : "D",
+			use_rserv_support ? "S" : "",
 			user, host, me.name, real);
 }
 
