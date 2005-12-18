@@ -18,6 +18,10 @@ The TEMPLATE system can provide most of the
 ease of use of these commands without the
 restrictions.
 
+The privileges required to execute these commands are
+the same as those required for the corresponding
+FLAGS commands.
+
 Syntax: VOP|HOP|AOP|SOP <#channel> ADD|DEL|LIST <nickname|hostmask>
 
 Examples:

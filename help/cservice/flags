@@ -19,6 +19,9 @@ have yourself, and may not edit users that have flags you
 don't have. For this purpose, +v grants +V, +h grants +H,
 +o grants +O and +r grants +b.
 
+If you do not have +f you may still remove your own access
+with -*.
+
 Syntax: FLAGS <#channel> [nickname|hostmask template]
 Syntax: FLAGS <#channel> [nickname|hostmask flag_changes]
 
