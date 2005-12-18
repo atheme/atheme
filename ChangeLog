@@ -1,3 +1,15 @@
+jilles      2005/12/18 02:27:50 UTC	(20051218-4163)
+  Log:
+  - Remove any data from the previous connection on reconnect
+  - Improve handling of connection errors somewhat (still not great)
+  
+  Tracker #86
+  
+
+  Changes:	Modified:
+  +21 -4	trunk/src/packet.c (File Modified) 
+
+
 jilles      2005/12/18 01:50:04 UTC	(20051218-4161)
   Log:
   flags: mention <self> -* to remove own access

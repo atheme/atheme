@@ -5,7 +5,7 @@
  * This file contains socket routines.
  * Based off of W. Campbell's code.
  *
- * $Id: send.c 3143 2005-10-23 00:45:16Z jilles $
+ * $Id: send.c 4165 2005-12-18 02:54:01Z jilles $
  */
 
 #include "atheme.h"
@@ -76,8 +76,6 @@ void reconn(void *arg)
 	/* this leaves me.me and all users on it (i.e. services) */
 
 	slog(LG_DEBUG, "reconn(): ------------------------- done -------------------------");
-
-	slog(LG_INFO, "reconn(): connecting to an alternate server");
 
 	uplink_connect();
 }
