@@ -4,7 +4,7 @@
  *
  * IRC packet handling.
  *
- * $Id: packet.c 3307 2005-10-31 00:24:06Z jilles $
+ * $Id: packet.c 4163 2005-12-18 02:27:50Z jilles $
  *
  * TODO: Take all the sendq stuff in node.c and put it here.
  * sendq_flush becomes irc_whandler, etc.
@@ -33,7 +33,14 @@ static void irc_packet(char *buf)
 {
 	char *iptr;
 	static char parsebuf[BUFSIZE * 2 + 1];
-	static char *pptr = parsebuf;
+	static char *pptr;
+
+	if (buf == NULL)
+	{
+		/* connection established, remove any old crap */
+		pptr = parsebuf;
+		return;
+	}
 
 	for (iptr = buf; *iptr != '\0'; )
 	{
@@ -55,15 +62,23 @@ static void irc_packet(char *buf)
 void irc_rhandler(connection_t * cptr)
 {
 	char buf[BUFSIZE * 2];
+	int n;
 
-	if (!irc_read(cptr, buf))
+	errno = 0;
+	n = irc_read(cptr, buf);
+	if (n > 0)
+		irc_packet(buf);
+	else if (n == 0 || (n < 0 && errno != EWOULDBLOCK && errno != EAGAIN && errno != EALREADY && errno != EINTR && errno != ENOBUFS))
 	{
-		slog(LG_INFO, "io_loop(): lost connection to uplink.");
+		if (n == 0)
+			slog(LG_INFO, "io_loop(): server %s closed the connection", curr_uplink->name);
+		else
+			slog(LG_INFO, "io_loop(): lost connection to server %s", curr_uplink->name);
 		hook_call_event("connection_dead", cptr);
 		me.connected = FALSE;
+		return;
 	}
 
-	irc_packet(buf);
 }
 
 static void ping_uplink(void *arg)
@@ -104,6 +119,8 @@ static void irc_handle_connect(void *vptr)
 	{
 		cptr->flags = CF_UPLINK;
 		me.connected = TRUE;
+		/* remove any partial line from previous time */
+		irc_packet(NULL);
 
 		slog(LG_INFO, "irc_handle_connect(): connection to uplink established");
 

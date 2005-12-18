@@ -1,3 +1,14 @@
+jilles      2005/12/18 01:50:04 UTC	(20051218-4161)
+  Log:
+  flags: mention <self> -* to remove own access
+  xop: add some text about required privileges
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/help/cservice/flags (File Modified) 
+  +4 -0		trunk/help/cservice/xop (File Modified) 
+
+
 jilles      2005/12/18 01:43:55 UTC	(20051218-4159)
   Log:
   Allow users to remove their own access in /cs flags and .flags.
