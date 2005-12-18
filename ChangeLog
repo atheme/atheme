@@ -1,3 +1,14 @@
+jilles      2005/12/18 02:54:01 UTC	(20051218-4165)
+  Log:
+  Make uplink connection logging more helpful (show server
+  name and hostname/IP, also at LG_INFO level)
+  
+
+  Changes:	Modified:
+  +0 -2		trunk/src/send.c (File Modified) 
+  +3 -3		trunk/src/uplink.c (File Modified) 
+
+
 jilles      2005/12/18 02:27:50 UTC	(20051218-4163)
   Log:
   - Remove any data from the previous connection on reconnect

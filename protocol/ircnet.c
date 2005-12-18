@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 4157 2005-12-18 00:46:59Z jilles $
+ * $Id: ircnet.c 4167 2005-12-18 15:22:56Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 4157 2005-12-18 00:46:59Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 4167 2005-12-18 15:22:56Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -103,7 +103,9 @@ static void ircnet_invite_sts(user_t *sender, user_t *target, channel_t *channel
 		sts(":%s NJOIN %s :@%s", ME, channel->name, CLIENT_NAME(sender));
 		joined = 1;
 	}
-	sts(":%s INVITE %s %s", CLIENT_NAME(sender), CLIENT_NAME(target), channel->name);
+	/* ircnet's UID implementation is incomplete, in many places,
+	 * like this one, it does not accept UIDs -- jilles */
+	sts(":%s INVITE %s %s", CLIENT_NAME(sender), target->nick, channel->name);
 	if (joined)
 		sts(":%s PART %s :Invited %s", CLIENT_NAME(sender), channel->name, target->nick);
 }
