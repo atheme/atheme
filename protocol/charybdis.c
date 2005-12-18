@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 4141 2005-12-17 20:48:02Z jilles $
+ * $Id: charybdis.c 4157 2005-12-18 00:46:59Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 4141 2005-12-17 20:48:02Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 4157 2005-12-18 00:46:59Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -223,6 +223,15 @@ static void charybdis_notice(char *from, char *target, char *fmt, ...)
 		sts(":%s NOTICE %s :%s", u ? CLIENT_NAME(u) : ME, t ? CLIENT_NAME(t) : target, buf);
 	else
 		sts(":%s NOTICE %s :%s: %s", ME, target, u->nick, buf);
+}
+
+static void charybdis_wallchops(user_t *sender, channel_t *channel, char *message)
+{
+	if (chanuser_find(channel, sender))
+		sts(":%s NOTICE @%s :%s", CLIENT_NAME(sender), channel->name,
+				message);
+	else /* do not join for this, everyone would see -- jilles */
+		generic_wallchops(sender, channel, message);
 }
 
 /* numeric wrapper */
@@ -1094,6 +1103,7 @@ void _modinit(module_t * m)
 	kick = &charybdis_kick;
 	msg = &charybdis_msg;
 	notice = &charybdis_notice;
+	wallchops = &charybdis_wallchops;
 	numeric_sts = &charybdis_numeric_sts;
 	skill = &charybdis_skill;
 	part = &charybdis_part;

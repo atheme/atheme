@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 4121 2005-12-17 04:44:46Z w00t $
+ * $Id: plexus.c 4157 2005-12-18 00:46:59Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 4121 2005-12-17 04:44:46Z w00t $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 4157 2005-12-18 00:46:59Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -177,6 +177,16 @@ static void plexus_notice(char *from, char *target, char *fmt, ...)
 	va_end(ap);
 
 	sts(":%s NOTICE %s :%s", from, target, buf);
+}
+
+static void plexus_wallchops(user_t *sender, channel_t *channel, char *message)
+{
+	/* not sure if we need to be on channel, oh well */
+	if (chanuser_find(channel, sender))
+		sts(":%s NOTICE @%s :%s", CLIENT_NAME(sender), channel->name,
+				message);
+	else /* do not join for this, everyone would see -- jilles */
+		generic_wallchops(sender, channel, message);
 }
 
 /* numeric wrapper */
@@ -702,6 +712,7 @@ void _modinit(module_t * m)
 	kick = &plexus_kick;
 	msg = &plexus_msg;
 	notice = &plexus_notice;
+	wallchops = &plexus_wallchops;
 	numeric_sts = &plexus_numeric_sts;
 	skill = &plexus_skill;
 	part = &plexus_part;

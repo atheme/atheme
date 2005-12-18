@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 4141 2005-12-17 20:48:02Z jilles $
+ * $Id: ratbox.c 4157 2005-12-18 00:46:59Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 4141 2005-12-17 20:48:02Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 4157 2005-12-18 00:46:59Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -226,6 +226,15 @@ static void ratbox_notice(char *from, char *target, char *fmt, ...)
 		 * hyb6 won't accept this, oh well, they'll have to
 		 * enable join_chans -- jilles */
 		sts(":%s NOTICE %s :%s: %s", ME, target, u->nick, buf);
+}
+
+static void ratbox_wallchops(user_t *sender, channel_t *channel, char *message)
+{
+	if (chanuser_find(channel, sender))
+		sts(":%s NOTICE @%s :%s", CLIENT_NAME(sender), channel->name,
+				message);
+	else /* do not join for this, everyone would see -- jilles */
+		generic_wallchops(sender, channel, message);
 }
 
 /* numeric wrapper */
@@ -1062,6 +1071,7 @@ void _modinit(module_t * m)
 	kick = &ratbox_kick;
 	msg = &ratbox_msg;
 	notice = &ratbox_notice;
+	wallchops = &ratbox_wallchops;
 	numeric_sts = &ratbox_numeric_sts;
 	skill = &ratbox_skill;
 	part = &ratbox_part;

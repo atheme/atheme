@@ -1,3 +1,14 @@
+jilles      2005/12/17 23:34:18 UTC	(20051217-4155)
+  Log:
+  Make generic_wallchops() send an individual notice to each
+  channel operator.
+  
+
+  Changes:	Modified:
+  +3 -1		trunk/include/phandler.h (File Modified) 
+  +10 -1	trunk/src/phandler.c (File Modified) 
+
+
 jilles      2005/12/17 23:13:00 UTC	(20051217-4153)
   Log:
   Argh, more CRLF line terminators.

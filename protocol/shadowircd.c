@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for shadowircd-based ircd.
  *
- * $Id: shadowircd.c 4121 2005-12-17 04:44:46Z w00t $
+ * $Id: shadowircd.c 4157 2005-12-18 00:46:59Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/shadowircd.h"
 
-DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 4121 2005-12-17 04:44:46Z w00t $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 4157 2005-12-18 00:46:59Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -182,6 +182,15 @@ static void shadowircd_notice(char *from, char *target, char *fmt, ...)
 	va_end(ap);
 
 	sts(":%s NOTICE %s :%s", from, target, buf);
+}
+
+static void shadowircd_wallchops(user_t *sender, channel_t *channel, char *message)
+{
+	if (chanuser_find(channel, sender))
+		sts(":%s NOTICE @%s :%s", CLIENT_NAME(sender), channel->name,
+				message);
+	else /* do not join for this, everyone would see -- jilles */
+		generic_wallchops(sender, channel, message);
 }
 
 /* numeric wrapper */
@@ -700,6 +709,7 @@ void _modinit(module_t * m)
 	kick = &shadowircd_kick;
 	msg = &shadowircd_msg;
 	notice = &shadowircd_notice;
+	wallchops = &shadowircd_wallchops;
 	numeric_sts = &shadowircd_numeric_sts;
 	skill = &shadowircd_skill;
 	part = &shadowircd_part;

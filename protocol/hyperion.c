@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 4121 2005-12-17 04:44:46Z w00t $
+ * $Id: hyperion.c 4157 2005-12-18 00:46:59Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -15,7 +15,7 @@
 #include "atheme.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 4121 2005-12-17 04:44:46Z w00t $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 4157 2005-12-18 00:46:59Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -198,6 +198,16 @@ static void hyperion_notice(char *from, char *target, char *fmt, ...)
 	va_end(ap);
 
 	sts(":%s NOTICE %s :%s", from, target, buf);
+}
+
+static void hyperion_wallchops(user_t *sender, channel_t *channel, char *message)
+{
+	/* +p does not grant the ability to send to @#channel (!) */
+	if (chanuser_find(channel, sender))
+		sts(":%s NOTICE @%s :%s", CLIENT_NAME(sender), channel->name,
+				message);
+	else /* do not join for this, everyone would see -- jilles */
+		generic_wallchops(sender, channel, message);
 }
 
 /* numeric wrapper */
@@ -899,6 +909,7 @@ void _modinit(module_t * m)
 	kick = &hyperion_kick;
 	msg = &hyperion_msg;
 	notice = &hyperion_notice;
+	wallchops = &hyperion_wallchops;
 	numeric_sts = &hyperion_numeric_sts;
 	skill = &hyperion_skill;
 	part = &hyperion_part;

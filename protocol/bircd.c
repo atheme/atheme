@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: bircd.c 4141 2005-12-17 20:48:02Z jilles $
+ * $Id: bircd.c 4157 2005-12-18 00:46:59Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 4141 2005-12-17 20:48:02Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 4157 2005-12-18 00:46:59Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -196,6 +196,11 @@ static void asuka_notice(char *from, char *target, char *fmt, ...)
 	va_end(ap);
 
 	sts("%s O %s :%s", u ? u->uid : me.numeric, t ? t->uid : target, buf);
+}
+
+static void asuka_wallchops(user_t *sender, channel_t *channel, char *message)
+{
+	sts("%s WC %s :%s", sender->uid, channel->name, message);
 }
 
 static void asuka_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
@@ -978,6 +983,7 @@ void _modinit(module_t * m)
 	kick = &asuka_kick;
 	msg = &asuka_msg;
 	notice = &asuka_notice;
+	wallchops = &asuka_wallchops;
 	numeric_sts = &asuka_numeric_sts;
 	skill = &asuka_skill;
 	part = &asuka_part;

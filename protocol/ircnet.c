@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 4139 2005-12-17 15:59:42Z jilles $
+ * $Id: ircnet.c 4157 2005-12-18 00:46:59Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 4139 2005-12-17 15:59:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 4157 2005-12-18 00:46:59Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -724,6 +724,7 @@ void _modinit(module_t * m)
 	kick = &ircnet_kick;
 	msg = &ircnet_msg;
 	notice = &ircnet_notice;
+	/* no wallchops, ircnet ircd does not support this */
 	numeric_sts = &ircnet_numeric_sts;
 	skill = &ircnet_skill;
 	part = &ircnet_part;
