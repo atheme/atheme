@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 4101 2005-12-16 11:38:32Z jilles $
+ * $Id: flags.c 4159 2005-12-18 01:43:55Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 4101 2005-12-16 11:38:32Z jilles $",
+	"$Id: flags.c 4159 2005-12-18 01:43:55Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -127,22 +127,6 @@ static void cs_cmd_flags(char *origin)
 			notice(chansvs.nick, origin, "\2%s\2 is not registered.", channel);
 			return;
 		}
-
-		/* founder may always set flags -- jilles */
-		if (is_founder(mc, u->myuser))
-			restrictflags = CA_ALL;
-		else
-		{
-			restrictflags = chanacs_user_flags(mc, u);
-			if (!(restrictflags & CA_FLAGS))
-			{
-				/* XXX may want to allow a user to
-				 * remove their own access even without +f */
-				notice(chansvs.nick, origin, "You are not authorized to execute this command.");
-				return;
-			}
-			restrictflags = allow_flags(restrictflags);
-		}
 		
 		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 		{
@@ -154,6 +138,28 @@ static void cs_cmd_flags(char *origin)
 		{
 			notice(chansvs.nick, origin, "Usage: FLAGS %s [target] [flags]", channel);
 			return;
+		}
+
+		/* founder may always set flags -- jilles */
+		if (is_founder(mc, u->myuser))
+			restrictflags = CA_ALL;
+		else
+		{
+			restrictflags = chanacs_user_flags(mc, u);
+			if (!(restrictflags & CA_FLAGS))
+			{
+				/* allow a user to remove their own access
+				 * even without +f */
+				if (restrictflags & CA_AKICK ||
+						u->myuser == NULL ||
+						irccmp(target, u->myuser->name) ||
+						strcmp(flagstr, "-*"))
+				{
+					notice(chansvs.nick, origin, "You are not authorized to execute this command.");
+					return;
+				}
+			}
+			restrictflags = allow_flags(restrictflags);
 		}
 
 		if (*flagstr == '+' || *flagstr == '-' || *flagstr == '=')
@@ -260,10 +266,16 @@ static void cs_fcmd_flags(char *origin, char *channel)
 		restrictflags = chanacs_user_flags(mc, u);
 		if (!(restrictflags & CA_FLAGS))
 		{
-			/* XXX may want to allow a user to
-			 * remove their own access even without +f */
-			notice(chansvs.nick, origin, "You are not authorized to execute this command.");
-			return;
+			/* allow a user to remove their own access
+			 * even without +f */
+			if (restrictflags & CA_AKICK ||
+					u->myuser == NULL ||
+					irccmp(target, u->myuser->name) ||
+					strcmp(flagstr, "-*"))
+			{
+				notice(chansvs.nick, origin, "You are not authorized to execute this command.");
+				return;
+			}
 		}
 		restrictflags = allow_flags(restrictflags);
 	}
