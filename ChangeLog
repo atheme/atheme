@@ -1,3 +1,12 @@
+nenolod     2005/12/19 15:39:53 UTC	(20051219-4169)
+  Log:
+  remove unused variable from libatheme.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/libatheme/connection.c (File Modified) 
+
+
 jilles      2005/12/18 15:22:56 UTC	(20051218-4167)
   Log:
   Silly ircnet ircd doesn't accept UIDs in INVITE.
