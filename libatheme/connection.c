@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 3751 2005-11-09 22:59:37Z jilles $
+ * $Id: connection.c 4169 2005-12-19 15:39:53Z nenolod $
  */
 
 #include <org.atheme.claro.base>
@@ -369,7 +369,6 @@ connection_t *connection_accept_tcp(connection_t *cptr,
 	char buf[BUFSIZE];
 	connection_t *newptr;
 	socket_t s;
-	uint32_t optval;
 
 	if (!(s = accept(cptr->fd, NULL, NULL)))
 	{

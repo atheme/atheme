@@ -1,3 +1,12 @@
+jilles      2005/12/18 15:22:56 UTC	(20051218-4167)
+  Log:
+  Silly ircnet ircd doesn't accept UIDs in INVITE.
+  
+
+  Changes:	Modified:
+  +3 -1		trunk/protocol/ircnet.c (File Modified) 
+
+
 jilles      2005/12/18 02:54:01 UTC	(20051218-4165)
   Log:
   Make uplink connection logging more helpful (show server
