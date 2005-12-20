@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 4119 2005-12-17 04:37:40Z w00t $
+ * $Id: inspircd.c 4173 2005-12-20 21:25:31Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4119 2005-12-17 04:37:40Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4173 2005-12-20 21:25:31Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -86,13 +86,11 @@ static uint8_t inspircd_server_login(void)
 {
 	int8_t ret;
 
-	ret = sts("PASS %s", curr_uplink->pass);
+	ret = sts("SERVER %s %s 0 :%s", me.name, curr_uplink->pass, me.desc);
 	if (ret == 1)
 		return 1;
 
 	me.bursting = TRUE;
-
-	sts("SERVER %s %s 0 :%s", me.name, curr_uplink->pass, me.desc);
 	sts("BURST");
 	/* XXX: Being able to get this data as a char* would be nice - Brain */
         sts(":%s VERSION :atheme-%s. %s %s%s%s%s%s%s%s%s%s",me.name, version, me.name, (match_mapping) ? "A" : "",

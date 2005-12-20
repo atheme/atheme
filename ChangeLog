@@ -1,3 +1,12 @@
+nenolod     2005/12/19 15:44:35 UTC	(20051219-4171)
+  Log:
+  forward port cleanups from 0.3
+  
+
+  Changes:	Modified:
+  +12 -11	trunk/crypto/ircservices.c (File Modified) 
+
+
 nenolod     2005/12/19 15:39:53 UTC	(20051219-4169)
   Log:
   remove unused variable from libatheme.
