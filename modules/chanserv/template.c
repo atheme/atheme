@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TEMPLATE functions.
  *
- * $Id$
+ * $Id: template.c 4175 2005-12-21 19:23:17Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/template", FALSE, _modinit, _moddeinit,
-	"$Id$",
+	"$Id: template.c 4175 2005-12-21 19:23:17Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

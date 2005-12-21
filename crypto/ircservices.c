@@ -4,7 +4,7 @@
  *
  * IRCServices's weird password encryption thingy, taken from Anope 1.6.3.
  *
- * $Id$
+ * $Id: ircservices.c 4175 2005-12-21 19:23:17Z jilles $
  */
 /* Include file for high-level encryption routines.
  *
@@ -423,7 +423,7 @@ static int check_password(const char *plaintext, const char *password)
 DECLARE_MODULE_V1
 (
 	"crypto/ircservices", FALSE, _modinit, _moddeinit,
-	"$Id$",
+	"$Id: ircservices.c 4175 2005-12-21 19:23:17Z jilles $",
 	"Jilles Tjoelker <jilles@stack.nl>"
 );
 

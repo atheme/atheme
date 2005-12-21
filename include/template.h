@@ -4,7 +4,7 @@
  *
  * Predefined flags collections
  *
- * $Id$
+ * $Id: template.h 4175 2005-12-21 19:23:17Z jilles $
  */
 
 #ifndef TEMPLATE_H

@@ -3,6 +3,8 @@
  * template.c: Functions to work with predefined flags collections
  *
  * See doc/LICENSE for licensing information.
+ *
+ * $Id: template.c 4175 2005-12-21 19:23:17Z jilles $
  */
 
 #include "atheme.h"
