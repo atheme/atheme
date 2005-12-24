@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TEMPLATE functions.
  *
- * $Id: template.c 4175 2005-12-21 19:23:17Z jilles $
+ * $Id: template.c 4179 2005-12-24 23:30:07Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/template", FALSE, _modinit, _moddeinit,
-	"$Id: template.c 4175 2005-12-21 19:23:17Z jilles $",
+	"$Id: template.c 4179 2005-12-24 23:30:07Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -295,12 +295,6 @@ static void cs_cmd_template(char *origin)
 			notice(chansvs.nick, origin, "You are not allowed to set \2%s\2 on template \2%s\2 in \2%s\2.", bitmask_to_flags2(addflags, removeflags, chanacs_flags), target, mc->name);
 			return;
 		}
-		/* debug */
-		if (md != NULL)
-			notice(chansvs.nick, origin, "old string [%s]", md->value);
-		else
-			notice(chansvs.nick, origin, "old string <none>");
-		notice(chansvs.nick, origin, "new string [%s]", newstr);
 		if (strlen(newstr) >= 300)
 		{
 			notice(chansvs.nick, origin, "Sorry, too many templates on \2%s\2.", channel);

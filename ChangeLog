@@ -1,3 +1,15 @@
+nenolod     2005/12/24 08:42:47 UTC	(20051224-4177)
+  Log:
+  Allow services roots to drop accounts in UserServ without a password.
+  Expires feature request: 94 (Strike).
+  
+  (Atheme version: SVN)
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/userserv/drop.c (File Modified) 
+
+
 jilles      2005/12/21 19:23:17 UTC	(20051221-4175)
   Log:
   Enable $Id$ tracking.
