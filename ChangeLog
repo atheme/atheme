@@ -1,3 +1,15 @@
+jilles      2005/12/21 19:23:17 UTC	(20051221-4175)
+  Log:
+  Enable $Id$ tracking.
+  
+
+  Changes:	Modified:
+  + -		trunk/crypto/ircservices.c  (Property Modified)
+  + -		trunk/include/template.h  (Property Modified)
+  + -		trunk/modules/chanserv/template.c  (Property Modified)
+  +2 -0		trunk/src/template.c (File Modified) (Property Modified)
+
+
 jilles      2005/12/20 21:25:31 UTC	(20051220-4173)
   Log:
   As requested by Brain, don't send PASS anymore. Inspircd
