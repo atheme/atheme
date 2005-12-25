@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4093 2005-12-14 10:49:28Z pfish $
+ * $Id: main.c 4187 2005-12-25 21:41:36Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"global/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4093 2005-12-14 10:49:28Z pfish $",
+	"$Id: main.c 4187 2005-12-25 21:41:36Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,37 +48,7 @@ static void gs_cmd_help(char *origin)
 	}
 
 	/* take the command through the hash table */
-	if ((c = help_cmd_find(globsvs.nick, origin, command, &gs_helptree)))
-	{
-		if (c->file)
-		{
-			help_file = fopen(c->file, "r");
-
-			if (!help_file)
-			{
-				notice(globsvs.nick, origin, "No help available for \2%s\2.", command);
-				return;
-			}
-
-			while (fgets(buf, BUFSIZE, help_file))
-			{
-				strip(buf);
-
-				replace(buf, sizeof(buf), "&nick&", globsvs.disp);
-
-				if (buf[0])
-					notice(globsvs.nick, origin, "%s", buf);
-				else
-					notice(globsvs.nick, origin, " ");
-			}
-
-			fclose(help_file);
-		}
-		else if (c->func)
-			c->func(origin);
-		else
-			notice(globsvs.nick, origin, "No help available for \2%s\2.", command);
-	}
+	help_display(globsvs.nick, globsvs.disp, origin, command, &gs_helptree);
 }
 
 /* GLOBAL <parameters>|SEND|CLEAR */

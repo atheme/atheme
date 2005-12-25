@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 4023 2005-12-07 23:30:14Z jilles $
+ * $Id: extern.h 4187 2005-12-25 21:41:36Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -294,6 +294,7 @@ E void handle_kill(char *, char *, char *);
 E int floodcheck(user_t *, user_t *);
 
 /* help.c */
+E void help_display(char *svsnick, char *svsdisp, char *origin, char *command, list_t *list);
 E void help_addentry(list_t *list, char *topic, char *fname,
 	void (*func)(char *origin));
 E void help_delentry(list_t *list, char *name);

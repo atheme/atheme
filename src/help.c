@@ -4,7 +4,7 @@
  *
  * This file contains a generic help system implementation.
  *
- * $Id: help.c 2623 2005-10-05 22:53:57Z nenolod $
+ * $Id: help.c 4187 2005-12-25 21:41:36Z jilles $
  */
 
 #include "atheme.h"
@@ -25,6 +25,50 @@ helpentry_t *help_cmd_find(char *svs, char *origin, char *cmd, list_t *list)
 
 	notice(svs, origin, "No help available for \2%s\2.", cmd);
 	return NULL;
+}
+
+void help_display(char *svsnick, char *svsdisp, char *origin, char *command, list_t *list)
+{
+	helpentry_t *c;
+	FILE *help_file;
+	char buf[BUFSIZE];
+
+	/* take the command through the hash table */
+	if ((c = help_cmd_find(svsnick, origin, command, list)))
+	{
+		if (c->file)
+		{
+			help_file = fopen(c->file, "r");
+
+			if (!help_file)
+			{
+				notice(svsnick, origin, "Could not get help file for \2%s\2.", command);
+				return;
+			}
+
+			notice(svsnick, origin, "***** \2%s Help\2 *****", svsnick);
+
+			while (fgets(buf, BUFSIZE, help_file))
+			{
+				strip(buf);
+
+				replace(buf, sizeof(buf), "&nick&", svsdisp);
+
+				if (buf[0])
+					notice(svsnick, origin, "%s", buf);
+				else
+					notice(svsnick, origin, " ");
+			}
+
+			fclose(help_file);
+
+			notice(svsnick, origin, "***** \2End of Help\2 *****");
+		}
+		else if (c->func)
+			c->func(origin);
+		else
+			notice(svsnick, origin, "No help available for \2%s\2.", command);
+	}
 }
 
 void help_addentry(list_t *list, char *topic, char *fname,

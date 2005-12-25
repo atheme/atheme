@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the NickServ HELP command.
  *
- * $Id: help.c 2729 2005-10-06 21:13:13Z pfish $
+ * $Id: help.c 4187 2005-12-25 21:41:36Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 2729 2005-10-06 21:13:13Z pfish $",
+	"$Id: help.c 4187 2005-12-25 21:41:36Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -41,9 +41,6 @@ void ns_cmd_help(char *origin)
 {
 	user_t *u = user_find(origin);
 	char *command = strtok(NULL, "");
-	char buf[BUFSIZE];
-	struct help_command_ *c;
-	FILE *help_file;
 
 	if (!command)
 	{
@@ -100,37 +97,5 @@ void ns_cmd_help(char *origin)
 	}
 
 	/* take the command through the hash table */
-	if ((c = help_cmd_find(nicksvs.nick, origin, command, ns_helptree)))
-	{
-		if (c->file)
-		{
-			help_file = fopen(c->file, "r");
-
-			if (!help_file)
-			{
-				notice(nicksvs.nick, origin, "No help available for \2%s\2.", command);
-				return;
-			}
-
-			notice(nicksvs.nick, origin, "***** \2%s Help\2 *****", nicksvs.nick);
-
-			while (fgets(buf, BUFSIZE, help_file))
-			{
-				strip(buf);
-
-				replace(buf, sizeof(buf), "&nick&", nicksvs.disp);
-
-				if (buf[0])
-					notice(nicksvs.nick, origin, "%s", buf);
-				else
-					notice(nicksvs.nick, origin, " ");
-			}
-
-			fclose(help_file);
-
-			notice(nicksvs.nick, origin, "***** \2End of Help\2 *****");
-		}
-		else
-			notice(nicksvs.nick, origin, "No help available for \2%s\2.", command);
-	}
+	help_display(nicksvs.nick, nicksvs.disp, origin, command, ns_helptree);
 }
