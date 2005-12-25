@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 3351 2005-10-31 06:10:32Z alambert $
+# $Id: Makefile.in 4183 2005-12-25 21:01:34Z jilles $
 #
 
 CC		= @CC@
@@ -11,7 +11,10 @@ RM		= @RM@
 MV		= @MV@
 CP		= @CP@
 INSTALL		= @INSTALL@
-PREFIX		= @prefix@
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+libdir		= @libdir@
+MODDIR		= @MODDIR@
 BIN		= atheme@EXEEXT@
 MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include @PGINC@ @MYINC@
 PICFLAGS	= @PICFLAGS@
@@ -39,8 +42,8 @@ all: modules
 build: all
 
 install: build
-	${INSTALL} -d ${PREFIX}/modules/xmlrpc
-	${INSTALL} -m 755 *.so ${PREFIX}/modules/xmlrpc
+	${INSTALL} -d ${MODDIR}/modules/xmlrpc
+	${INSTALL} -m 755 *.so ${MODDIR}/modules/xmlrpc
 
 modules: $(OBJS)
 

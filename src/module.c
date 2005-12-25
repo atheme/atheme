@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 3579 2005-11-06 21:28:05Z jilles $
+ * $Id: module.c 4183 2005-12-25 21:01:34Z jilles $
  */
 
 #include "atheme.h"
@@ -112,7 +112,7 @@ void modules_init(void)
 		exit(EXIT_FAILURE);
 	}
 
-	module_load_dir(PREFIX "/modules");
+	module_load_dir(MODDIR "/modules");
 }
 
 /*

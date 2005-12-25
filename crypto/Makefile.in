@@ -11,7 +11,10 @@ RM		= @RM@
 MV		= @MV@
 CP		= @CP@
 INSTALL		= @INSTALL@
-PREFIX		= @prefix@
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+libdir		= @libdir@
+MODDIR		= @MODDIR@
 BIN		= atheme@EXEEXT@
 MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../include -I../libatheme @PGINC@ @MYINC@
 PICFLAGS	= @PICFLAGS@
@@ -36,8 +39,8 @@ all: protocols
 build: all
 
 install: build
-	${INSTALL} -d ${PREFIX}/crypto
-	${INSTALL} -m 755 *.so ${PREFIX}/crypto
+	${INSTALL} -d ${MODDIR}/crypto
+	${INSTALL} -m 755 *.so ${MODDIR}/crypto
 
 protocols: $(OBJS)
 

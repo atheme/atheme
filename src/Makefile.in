@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 4101 2005-12-16 11:38:32Z jilles $
+# $Id: Makefile.in 4183 2005-12-25 21:01:34Z jilles $
 #
 
 CC		= @CC@
@@ -11,7 +11,10 @@ RM		= @RM@
 MV		= @MV@
 CP		= @CP@
 INSTALL		= @INSTALL@
-PREFIX		= @prefix@
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+libdir		= @libdir@
+MODDIR		= @MODDIR@
 BIN		= atheme@EXEEXT@
 MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../include -I../libatheme @PGINC@ @MYINC@
 CFLAGS		= @CFLAGS@ -I../include -I../libatheme @PGINC@ @MYINC@
@@ -70,36 +73,36 @@ atheme: $(OBJS)
 	$(MV) version.c version.c.last
 
 install: build
-	$(INSTALL) -m 755 -d $(PREFIX)
-	$(INSTALL) -m 755 -d $(PREFIX)/bin
-	$(INSTALL) -m 755 -d $(PREFIX)/etc
-	$(INSTALL) -m 755 -d $(PREFIX)/var
-	$(INSTALL) -m 755 -c $(BIN) $(PREFIX)/bin
-	$(INSTALL) -m 640 -c ../dist/example.conf $(PREFIX)/etc
-	$(INSTALL) -m 640 -c ../dist/example.userserv.conf $(PREFIX)/etc
-	if [ ! -r $(PREFIX)/etc/atheme.db ]; then \
-		$(INSTALL) -m 640 -c ../dist/atheme.db $(PREFIX)/etc ; \
+	$(INSTALL) -m 755 -d $(prefix)
+	$(INSTALL) -m 755 -d $(prefix)/bin
+	$(INSTALL) -m 755 -d $(prefix)/etc
+	$(INSTALL) -m 755 -d $(prefix)/var
+	$(INSTALL) -m 755 -c $(BIN) $(prefix)/bin
+	$(INSTALL) -m 640 -c ../dist/example.conf $(prefix)/etc
+	$(INSTALL) -m 640 -c ../dist/example.userserv.conf $(prefix)/etc
+	if [ ! -r $(prefix)/etc/atheme.db ]; then \
+		$(INSTALL) -m 640 -c ../dist/atheme.db $(prefix)/etc ; \
 	fi
-	if [ ! -r $(PREFIX)/etc/atheme.chk ]; then \
-		$(INSTALL) -m 640 -c ../dist/atheme.chk $(PREFIX)/etc ; \
+	if [ ! -r $(prefix)/etc/atheme.chk ]; then \
+		$(INSTALL) -m 640 -c ../dist/atheme.chk $(prefix)/etc ; \
 	fi
-	if [ -e $(PREFIX)/doc ]; then \
-		$(RM) -rf $(PREFIX)/doc ; \
+	if [ -e $(prefix)/doc ]; then \
+		$(RM) -rf $(prefix)/doc ; \
 	fi
-	if [ -e $(PREFIX)/help ]; then \
-		$(RM) -rf $(PREFIX)/help ; \
+	if [ -e $(prefix)/help ]; then \
+		$(RM) -rf $(prefix)/help ; \
 	fi
-	$(CP) -R ../doc $(PREFIX)
-	$(CP) -R ../help $(PREFIX)
+	$(CP) -R ../doc $(prefix)
+	$(CP) -R ../help $(prefix)
 
 	@echo "----------------------------------------------------------------"
-	@echo ">>> Remember to cd to ${PREFIX} and edit your config file.";
+	@echo ">>> Remember to cd to ${prefix} and edit your config file.";
 	@echo "----------------------------------------------------------------"
 
-deinstall:
-	if [ -d ${PREFIX} ] ; then \
-		$(RM) -rf ${PREFIX}; \
-	fi
+#deinstall:
+#	if [ -d ${prefix} ] ; then \
+#		$(RM) -rf ${prefix}; \
+#	fi
 
 version.c:
 	/bin/sh ./version.sh $(VERSION)

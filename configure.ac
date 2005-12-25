@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 3955 2005-11-21 03:51:24Z nenolod $
+dnl $Id: configure.ac 4183 2005-12-25 21:01:34Z jilles $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, 1.0beta1, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 3955 2005-11-21 03:51:24Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 4183 2005-12-25 21:01:34Z jilles $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -25,7 +25,8 @@ if test "$prefix" = "NONE"; then
 	prefix="${ac_default_prefix}"
 fi
 
-AC_DEFINE_UNQUOTED([PREFIX], "${prefix}", [Installation prefix.])
+dnl the following is wrong! -- jilles
+dnl AC_DEFINE_UNQUOTED([PREFIX], "${prefix}", [Installation prefix.])
 
 dnl Checks for programs.
 AC_ISC_POSIX
@@ -141,6 +142,28 @@ fi
 echo " "
 echo "Tweaks"
 echo " "
+
+MODDIR='${exec_prefix}'
+
+FHSPATHS="no"
+AC_MSG_CHECKING(if you want FHS-like pathnames)
+AC_ARG_ENABLE(fhs-paths,
+AC_HELP_STRING([--enable-fhs-paths],[ Use more FHS-like pathnames.]),
+[
+  case "$enableval" in
+  yes)
+    FHSPATHS="yes"
+    MODDIR='${libdir}/atheme'
+    ;;
+  no)
+    FHSPATHS="no"
+    ;;
+  esac
+])
+AC_MSG_RESULT($FHSPATHS)
+AC_SUBST(MODDIR)
+dnl the following is wrong! -- jilles
+dnl AC_DEFINE_UNQUOTED([MODDIR], "${MODDIR}", [Module root directory.])
 
 LARGENET="no"
 AC_MSG_CHECKING(if you want large network support)
@@ -502,7 +525,7 @@ ac_save_LDFLAGS="${LDFLAGS} -pg"
 LDFLAGS=${ac_save_LDFLAGS}
 ])
 
-ac_save_CFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS}"
+ac_save_CFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS} -DPREFIX=\\\"\${prefix}\\\" -DMODDIR=\\\"\${MODDIR}\\\""
 CFLAGS=${ac_save_CFLAGS}
 dnl export CFLAGS
 
@@ -528,10 +551,13 @@ AC_OUTPUT(Makefile \
 	protocol/Makefile \
 	src/Makefile)
 
+d=`eval echo ${MODDIR}`
+d=`eval echo $d`
 echo "
 Configuration:
         Atheme version       : ${PACKAGE_VERSION}
         Installation prefix  : ${prefix}
+        Module root directory: `eval echo $d`
         Large network support: ${LARGENET}
         PostgreSQL support   : ${POSTGRESQL}
         MySQL support        : ${MYSQL}

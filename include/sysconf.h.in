@@ -105,9 +105,6 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
-/* Installation prefix. */
-#undef PREFIX
-
 /* Define as the return type of signal handlers (`int' or `void'). */
 #undef RETSIGTYPE
 

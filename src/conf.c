@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4091 2005-12-14 10:10:04Z jilles $
+ * $Id: conf.c 4183 2005-12-25 21:01:34Z jilles $
  */
 
 #include "atheme.h"
@@ -593,7 +593,7 @@ static int c_loadmodule(CONFIGENTRY *ce)
 	}
 	else
 	{
-		snprintf(pathbuf, 4096, "%s/%s", PREFIX, name);
+		snprintf(pathbuf, 4096, "%s/%s", MODDIR, name);
 		module_load(pathbuf);
 		return 0;
 	}
