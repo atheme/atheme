@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 4157 2005-12-18 00:46:59Z jilles $
+ * $Id: charybdis.c 4181 2005-12-25 00:26:15Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 4157 2005-12-18 00:46:59Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 4181 2005-12-25 00:26:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -31,7 +31,8 @@ ircd_t Charybdis = {
         "+",                            /* Mode we set for owner. */
         "+",                            /* Mode we set for protect. */
         "+",                            /* Mode we set for halfops. */
-	PROTOCOL_CHARYBDIS		/* Protocol type */
+	PROTOCOL_CHARYBDIS,		/* Protocol type */
+	CMODE_PERM                      /* Permanent cmodes */
 };
 
 struct cmode_ charybdis_mode_list[] = {

@@ -1,3 +1,12 @@
+jilles      2005/12/24 23:30:07 UTC	(20051224-4179)
+  Log:
+  /cs template: remove some debugging code.
+  
+
+  Changes:	Modified:
+  +0 -6		trunk/modules/chanserv/template.c (File Modified) 
+
+
 nenolod     2005/12/24 08:42:47 UTC	(20051224-4177)
   Log:
   Allow services roots to drop accounts in UserServ without a password.

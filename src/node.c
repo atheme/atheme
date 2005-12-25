@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4037 2005-12-08 01:18:01Z jilles $
+ * $Id: node.c 4181 2005-12-25 00:26:15Z jilles $
  */
 
 #include "atheme.h"
@@ -946,7 +946,7 @@ void chanuser_delete(channel_t *chan, user_t *user)
 			chan->nummembers--;
 			cnt.chanuser--;
 
-			if (chan->nummembers == 0)
+			if (chan->nummembers == 0 && !(chan->modes & ircd->perm_mode))
 			{
 				/* empty channels die */
 				slog(LG_DEBUG, "chanuser_delete(): `%s' is empty, removing", chan->name);

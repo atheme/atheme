@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 4157 2005-12-18 00:46:59Z jilles $
+ * $Id: plexus.c 4181 2005-12-25 00:26:15Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 4157 2005-12-18 00:46:59Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 4181 2005-12-25 00:26:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -31,7 +31,8 @@ ircd_t PleXusIRCd = {
         "+",                            /* Mode we set for owner. */
         "+",                            /* Mode we set for protect. */
         "+h",                           /* Mode we set for halfops. */
-	PROTOCOL_PLEXUS			/* Protocol type */
+	PROTOCOL_PLEXUS,		/* Protocol type */
+	0                               /* Permanent cmodes */
 };
 
 struct cmode_ plexus_mode_list[] = {

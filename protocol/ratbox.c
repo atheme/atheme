@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 4157 2005-12-18 00:46:59Z jilles $
+ * $Id: ratbox.c 4181 2005-12-25 00:26:15Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 4157 2005-12-18 00:46:59Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 4181 2005-12-25 00:26:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -31,7 +31,8 @@ ircd_t Ratbox = {
         "+",                            /* Mode we set for owner. */
         "+",                            /* Mode we set for protect. */
         "+",                            /* Mode we set for halfops. */
-	PROTOCOL_RATBOX			/* Protocol type */
+	PROTOCOL_RATBOX,		/* Protocol type */
+	0                               /* Permanent cmodes */
 };
 
 struct cmode_ ratbox_mode_list[] = {

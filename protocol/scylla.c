@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: scylla.c 4121 2005-12-17 04:44:46Z w00t $
+ * $Id: scylla.c 4181 2005-12-25 00:26:15Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/scylla", TRUE, _modinit, NULL, "$Id: scylla.c 4121 2005-12-17 04:44:46Z w00t $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/scylla", TRUE, _modinit, NULL, "$Id: scylla.c 4181 2005-12-25 00:26:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -31,7 +31,8 @@ ircd_t Scylla = {
 	"+",				/* Mode we set for owner. */
 	"+",				/* Mode we set for protect. */
 	"+",				/* Mode we set for halfops. */
-	PROTOCOL_SCYLLA			/* Protocol type */
+	PROTOCOL_SCYLLA,		/* Protocol type */
+	0                               /* Permanent cmodes */
 };
 
 struct cmode_ scylla_mode_list[] = {

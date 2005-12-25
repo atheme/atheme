@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for shadowircd-based ircd.
  *
- * $Id: shadowircd.c 4157 2005-12-18 00:46:59Z jilles $
+ * $Id: shadowircd.c 4181 2005-12-25 00:26:15Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/shadowircd.h"
 
-DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 4157 2005-12-18 00:46:59Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 4181 2005-12-25 00:26:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -31,7 +31,8 @@ ircd_t ShadowIRCd = {
         "+u",                           /* Mode we set for owner. */
         "+u",                           /* Mode we set for protect. */
         "+h",                           /* Mode we set for halfops. */
-	PROTOCOL_SHADOWIRCD		/* Protocol type */
+	PROTOCOL_SHADOWIRCD,		/* Protocol type */
+	CMODE_PERM                      /* Permanent cmodes */
 };
 
 struct cmode_ shadowircd_mode_list[] = {
