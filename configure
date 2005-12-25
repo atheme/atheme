@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# $Id: configure.ac 3955 2005-11-21 03:51:24Z nenolod $
+# $Id: configure.ac 4183 2005-12-25 21:01:34Z jilles $
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -313,7 +313,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA RM MV CP AR RANLIB SET_MAKE MKDEP CPP EGREP SOCKET_ENGINE POSIX_CRYPTC POSTGRESQL_C PGINC PQLIB MYSQL_C MYINC MYLIB PICFLAGS LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA RM MV CP AR RANLIB SET_MAKE MKDEP CPP EGREP SOCKET_ENGINE POSIX_CRYPTC MODDIR POSTGRESQL_C PGINC PQLIB MYSQL_C MYINC MYLIB PICFLAGS LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -846,6 +846,7 @@ if test -n "$ac_init_help"; then
 Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-fhs-paths      Use more FHS-like pathnames.
   --enable-large-net      Enable large network support.
   --enable-warnings       Enable compiler warnings
   --disable-propolice     Disable propolice protections (for debugging.)
@@ -966,7 +967,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-$Id: configure.ac 3955 2005-11-21 03:51:24Z nenolod $
+$Id: configure.ac 4183 2005-12-25 21:01:34Z jilles $
 _ACEOF
   exit 0
 fi
@@ -1354,11 +1355,6 @@ _ACEOF
 if test "$prefix" = "NONE"; then
 	prefix="${ac_default_prefix}"
 fi
-
-
-cat >>confdefs.h <<_ACEOF
-#define PREFIX "${prefix}"
-_ACEOF
 
 
 ac_ext=c
@@ -9419,6 +9415,30 @@ echo " "
 echo "Tweaks"
 echo " "
 
+MODDIR='${exec_prefix}'
+
+FHSPATHS="no"
+echo "$as_me:$LINENO: checking if you want FHS-like pathnames" >&5
+echo $ECHO_N "checking if you want FHS-like pathnames... $ECHO_C" >&6
+# Check whether --enable-fhs-paths or --disable-fhs-paths was given.
+if test "${enable_fhs_paths+set}" = set; then
+  enableval="$enable_fhs_paths"
+
+  case "$enableval" in
+  yes)
+    FHSPATHS="yes"
+    MODDIR='${libdir}/atheme'
+    ;;
+  no)
+    FHSPATHS="no"
+    ;;
+  esac
+
+fi;
+echo "$as_me:$LINENO: result: $FHSPATHS" >&5
+echo "${ECHO_T}$FHSPATHS" >&6
+
+
 LARGENET="no"
 echo "$as_me:$LINENO: checking if you want large network support" >&5
 echo $ECHO_N "checking if you want large network support... $ECHO_C" >&6
@@ -13586,7 +13606,7 @@ LDFLAGS=${ac_save_LDFLAGS}
 
 fi;
 
-ac_save_CFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS}"
+ac_save_CFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS} -DPREFIX=\\\"\${prefix}\\\" -DMODDIR=\\\"\${MODDIR}\\\""
 CFLAGS=${ac_save_CFLAGS}
 
 echo " "
@@ -14242,6 +14262,7 @@ s,@CPP@,$CPP,;t t
 s,@EGREP@,$EGREP,;t t
 s,@SOCKET_ENGINE@,$SOCKET_ENGINE,;t t
 s,@POSIX_CRYPTC@,$POSIX_CRYPTC,;t t
+s,@MODDIR@,$MODDIR,;t t
 s,@POSTGRESQL_C@,$POSTGRESQL_C,;t t
 s,@PGINC@,$PGINC,;t t
 s,@PQLIB@,$PQLIB,;t t
@@ -14765,10 +14786,13 @@ if test "$no_create" != yes; then
 fi
 
 
+d=`eval echo ${MODDIR}`
+d=`eval echo $d`
 echo "
 Configuration:
         Atheme version       : ${PACKAGE_VERSION}
         Installation prefix  : ${prefix}
+        Module root directory: `eval echo $d`
         Large network support: ${LARGENET}
         PostgreSQL support   : ${POSTGRESQL}
         MySQL support        : ${MYSQL}

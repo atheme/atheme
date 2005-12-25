@@ -1,3 +1,36 @@
+jilles      2005/12/25 21:01:34 UTC	(20051225-4183)
+  Log:
+  Add support to install all modules under lib/atheme
+  instead of directly under prefix, via
+  --enable-fhs-paths.
+  
+
+  Changes:	Modified:
+  +4 -1		trunk/Makefile.in (File Modified) 
+  +6 -3		trunk/backend/Makefile.in (File Modified) 
+  +28 -2	trunk/configure.ac (File Modified) 
+  +6 -3		trunk/contrib/Makefile.in (File Modified) 
+  +6 -3		trunk/crypto/Makefile.in (File Modified) 
+  +4 -1		trunk/dbtool/Makefile.in (File Modified) 
+  +0 -3		trunk/include/sysconf.h.in (File Modified) 
+  +5 -0		trunk/libatheme/Makefile.in (File Modified) 
+  +4 -1		trunk/modules/Makefile.in (File Modified) 
+  +6 -3		trunk/modules/chanserv/Makefile.in (File Modified) 
+  +6 -3		trunk/modules/global/Makefile.in (File Modified) 
+  +6 -3		trunk/modules/helpserv/Makefile.in (File Modified) 
+  +6 -3		trunk/modules/memoserv/Makefile.in (File Modified) 
+  +6 -3		trunk/modules/nickserv/Makefile.in (File Modified) 
+  +6 -3		trunk/modules/operserv/Makefile.in (File Modified) 
+  +1 -1		trunk/modules/operserv/modload.c (File Modified) 
+  +1 -1		trunk/modules/operserv/modrestart.c (File Modified) 
+  +6 -3		trunk/modules/userserv/Makefile.in (File Modified) 
+  +6 -3		trunk/modules/xmlrpc/Makefile.in (File Modified) 
+  +6 -3		trunk/protocol/Makefile.in (File Modified) 
+  +26 -23	trunk/src/Makefile.in (File Modified) 
+  +1 -1		trunk/src/conf.c (File Modified) 
+  +1 -1		trunk/src/module.c (File Modified) 
+
+
 jilles      2005/12/25 00:26:15 UTC	(20051225-4181)
   Log:
   Add support for permanent channels in charybdis/hyperion/shadowircd.
