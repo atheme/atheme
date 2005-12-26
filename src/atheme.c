@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 4195 2005-12-26 13:48:39Z jilles $
+ * $Id: atheme.c 4201 2005-12-26 15:06:58Z jilles $
  */
 
 #include "atheme.h"
@@ -118,19 +118,18 @@ int main(int argc, char *argv[])
 	CURRTIME = me.start;
 	me.execname = argv[0];
 
-	/* set signal handlers */
-	signal(SIGINT, sighandler);
-	signal(SIGTERM, sighandler);
+	/* set signal handlers, first part */
 	signal(SIGFPE, sighandler);
 	signal(SIGILL, sighandler);
 #ifndef _WIN32
 	signal(SIGPIPE, SIG_IGN);
 	signal(SIGQUIT, sighandler);
-	signal(SIGHUP, sighandler);
+	/* on daemonizing, we may get a SIGHUP if the parent exits,
+	 * and it's a controlling process -- jilles */
+	signal(SIGHUP, SIG_IGN);
 	signal(SIGTRAP, sighandler);
 	signal(SIGIOT, sighandler);
 	signal(SIGALRM, SIG_IGN);
-	signal(SIGUSR2, sighandler);
 	signal(SIGCHLD, SIG_IGN);
 	signal(SIGWINCH, SIG_IGN);
 	signal(SIGTTIN, SIG_IGN);
@@ -213,6 +212,12 @@ int main(int argc, char *argv[])
 	/* fork into the background */
 	if (!(runflags & RF_LIVE))
 	{
+		close(0);
+		if (open("/dev/null", O_RDWR) != 0)
+		{
+			fprintf(stderr, "atheme: unable to open /dev/null??\n");
+			exit(EXIT_FAILURE);
+		}
 		if ((i = fork()) < 0)
 		{
 			fprintf(stderr, "atheme: can't fork into the background\n");
@@ -228,11 +233,13 @@ int main(int argc, char *argv[])
 		}
 
 		/* parent is gone, just us now */
-		if (setpgid(0, 0) < 0)
+		if (setsid() < 0)
 		{
-			fprintf(stderr, "atheme: unable to set process group\n");
+			fprintf(stderr, "atheme: unable to create new session\n");
 			exit(EXIT_FAILURE);
 		}
+		dup2(0, 1);
+		dup2(0, 2);
 	}
 	else
 	{
@@ -255,6 +262,13 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "atheme: unable to write pid file\n");
 		exit(EXIT_FAILURE);
 	}
+#endif
+	/* rest of signal handlers now we're started more fully -- jilles */
+	signal(SIGINT, sighandler);
+	signal(SIGTERM, sighandler);
+#ifndef _WIN32
+	signal(SIGHUP, sighandler);
+	signal(SIGUSR2, sighandler);
 #endif
 
 	/* no longer starting */

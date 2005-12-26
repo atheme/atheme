@@ -1,3 +1,13 @@
+jilles      2005/12/26 14:59:33 UTC	(20051226-4199)
+  Log:
+  Set close-on-exec flag for the log file, to avoid
+  log file descriptors accumulating on restarts.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/src/function.c (File Modified) 
+
+
 jilles      2005/12/26 14:01:51 UTC	(20051226-4197)
   Log:
   - Install doc/help with proper permissions
