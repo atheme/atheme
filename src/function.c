@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 4063 2005-12-10 01:22:24Z jilles $
+ * $Id: function.c 4199 2005-12-26 14:59:33Z jilles $
  */
 
 #include "atheme.h"
@@ -82,6 +82,9 @@ void log_open(void)
 
 	if (!(log_file = fopen("var/atheme.log", "a")))
 		exit(EXIT_FAILURE);
+#ifndef _WIN32
+	fcntl(fileno(log_file), F_SETFD, FD_CLOEXEC);
+#endif
 }
 
 /* logs something to shrike.log */

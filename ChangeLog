@@ -1,3 +1,15 @@
+jilles      2005/12/26 14:01:51 UTC	(20051226-4197)
+  Log:
+  - Install doc/help with proper permissions
+  - Don't copy over .svn stuff
+  - Only install files under doc/, files under help/ and files
+    under subdirectories of help/
+  
+
+  Changes:	Modified:
+  +12 -2	trunk/src/Makefile.in (File Modified) 
+
+
 jilles      2005/12/26 13:48:39 UTC	(20051226-4195)
   Log:
   Allow specifying the pid file with -p <file>.
