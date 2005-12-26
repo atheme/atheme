@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 4205 2005-12-26 15:31:34Z jilles $
+ * $Id: ban.c 4209 2005-12-26 15:46:53Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", FALSE, _modinit, _moddeinit,
-	"$Id: ban.c 4205 2005-12-26 15:31:34Z jilles $",
+	"$Id: ban.c 4209 2005-12-26 15:46:53Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -196,11 +196,13 @@ static void cs_cmd_unban (char *origin)
 	else if ((tu = user_find_named(target)))
 	{
 		node_t *n, *tn;
-		char hostbuf[BUFSIZE], hostbuf2[BUFSIZE];
+		char hostbuf[BUFSIZE], hostbuf2[BUFSIZE], hostbuf3[BUFSIZE];
 		int count = 0;
 
 		snprintf(hostbuf, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->host);
 		snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->vhost);
+		/* will be nick!user@ if ip unknown, doesn't matter */
+		snprintf(hostbuf3, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->ip);
 
 		LIST_FOREACH_SAFE(n, tn, c->bans.head)
 		{
@@ -208,7 +210,8 @@ static void cs_cmd_unban (char *origin)
 
 			slog(LG_DEBUG, "cs_unban(): iterating %s on %s", cb->mask, c->name);
 
-			if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2))
+			/* XXX doesn't do CIDR bans */
+			if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2) || !match(cb->mask, hostbuf3))
 			{
 				logcommand(chansvs.me, u, CMDLOG_DO, "%s UNBAN %s (for user %s)", mc->name, cb->mask, hostbuf2);
 				cmode(chansvs.nick, c->name, "-b", cb->mask);
@@ -360,11 +363,13 @@ static void cs_fcmd_unban (char *origin, char *channel)
 	else if ((tu = user_find_named(target)))
 	{
 		node_t *n, *tn;
-		char hostbuf[BUFSIZE], hostbuf2[BUFSIZE];
+		char hostbuf[BUFSIZE], hostbuf2[BUFSIZE], hostbuf3[BUFSIZE];
 		int count = 0;
 
 		snprintf(hostbuf, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->host);
 		snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->vhost);
+		/* will be nick!user@ if ip unknown, doesn't matter */
+		snprintf(hostbuf3, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->ip);
 
 		LIST_FOREACH_SAFE(n, tn, c->bans.head)
 		{
@@ -372,7 +377,8 @@ static void cs_fcmd_unban (char *origin, char *channel)
 
 			slog(LG_DEBUG, "cs_unban(): iterating %s on %s", cb->mask, c->name);
 
-			if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2))
+			/* XXX doesn't do CIDR bans */
+			if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2) || !match(cb->mask, hostbuf3))
 			{
 				logcommand(chansvs.me, u, CMDLOG_DO, "%s UNBAN %s (for user %s)", mc->name, cb->mask, hostbuf2);
 				cmode(chansvs.nick, c->name, "-b", cb->mask);

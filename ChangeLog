@@ -1,3 +1,13 @@
+jilles      2005/12/26 15:37:20 UTC	(20051226-4207)
+  Log:
+  - Add charybdis section
+  - Update inspircd section
+  
+
+  Changes:	Modified:
+  +10 -4	trunk/doc/IRCD (File Modified) 
+
+
 jilles      2005/12/26 15:31:34 UTC	(20051226-4205)
   Log:
   ChanServ UNBAN: use LIST_FOREACH_SAFE -- we're removing nodes from the list
