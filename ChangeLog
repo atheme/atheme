@@ -1,3 +1,16 @@
+jilles      2005/12/26 15:06:58 UTC	(20051226-4201)
+  Log:
+  - Move some signal handler setting down to a point where
+    we are sufficiently started to handle the signal
+  - When detaching replace stdin/stdout/stderr with /dev/null
+    and create a new session instead of just a new
+    process group
+  
+
+  Changes:	Modified:
+  +21 -7	trunk/src/atheme.c (File Modified) 
+
+
 jilles      2005/12/26 14:59:33 UTC	(20051226-4199)
   Log:
   Set close-on-exec flag for the log file, to avoid

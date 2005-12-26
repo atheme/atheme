@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 4033 2005-12-08 00:36:02Z jilles $
+ * $Id: ban.c 4203 2005-12-26 15:27:43Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", FALSE, _modinit, _moddeinit,
-	"$Id: ban.c 4033 2005-12-08 00:36:02Z jilles $",
+	"$Id: ban.c 4203 2005-12-26 15:27:43Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -145,7 +145,10 @@ static void cs_cmd_unban (char *origin)
 	user_t *u = user_find(origin);
 	user_t *tu;
 
-	if (!channel || !target)
+	if (!target)
+		target = origin;
+
+	if (!channel)
 	{
 		notice(chansvs.nick, origin, "Insufficient parameters provided for \2UNBAN\2.");
 		notice(chansvs.nick, origin, "Syntax: UNBAN <#channel> <nickname|hostmask>");
@@ -223,7 +226,7 @@ static void cs_cmd_unban (char *origin)
         else
         {
 		notice(chansvs.nick, origin, "Invalid nickname/hostmask provided: \2%s\2", target);
-		notice(chansvs.nick, origin, "Syntax: UNBAN <#channel> <nickname|hostmask>");
+		notice(chansvs.nick, origin, "Syntax: UNBAN <#channel> [nickname|hostmask]");
 		return;
         }
 }
@@ -293,7 +296,7 @@ static void cs_fcmd_ban (char *origin, char *channel)
 	else
 	{
 		notice(chansvs.nick, origin, "Invalid nickname/hostmask provided: \2%s\2", target);
-		notice(chansvs.nick, origin, "Syntax: BAN <#channel> <nickname|hostmask>");
+		notice(chansvs.nick, origin, "Syntax: !BAN <nickname|hostmask>");
 		return;
 	}
 }
@@ -306,7 +309,10 @@ static void cs_fcmd_unban (char *origin, char *channel)
 	user_t *u = user_find(origin);
 	user_t *tu;
 
-	if (!channel || !target)
+	if (!target)
+		target = origin;
+
+	if (!channel)
 	{
 		notice(chansvs.nick, origin, "Insufficient parameters provided for \2!UNBAN\2.");
 		notice(chansvs.nick, origin, "Syntax: !UNBAN <nickname|hostmask>");
@@ -384,7 +390,7 @@ static void cs_fcmd_unban (char *origin, char *channel)
         else
         {
 		notice(chansvs.nick, origin, "Invalid nickname/hostmask provided: \2%s\2", target);
-		notice(chansvs.nick, origin, "Syntax: UNBAN <#channel> <nickname|hostmask>");
+		notice(chansvs.nick, origin, "Syntax: !UNBAN [nickname|hostmask]");
 		return;
         }
 }
