@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in 4183 2005-12-25 21:01:34Z jilles $
+# $Id: Makefile.in 4189 2005-12-26 00:02:24Z jilles $
 #
 
 CC		= @CC@
@@ -13,8 +13,14 @@ RANLIB		= @RANLIB@
 
 prefix		= @prefix@
 exec_prefix	= @exec_prefix@
+bindir		= @bindir@
+datadir		= @datadir@
+sysconfdir		= @sysconfdir@
 libdir		= @libdir@
+sbindir		= @sbindir@
+DOCDIR		= @DOCDIR@
 MODDIR		= @MODDIR@
+SHAREDIR	= @SHAREDIR@
 
 INCLUDES = -I. -I../include
 CPPFLAGS = ${INCLUDES} @CPPFLAGS@

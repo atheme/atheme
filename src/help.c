@@ -4,7 +4,7 @@
  *
  * This file contains a generic help system implementation.
  *
- * $Id: help.c 4187 2005-12-25 21:41:36Z jilles $
+ * $Id: help.c 4189 2005-12-26 00:02:24Z jilles $
  */
 
 #include "atheme.h"
@@ -38,7 +38,13 @@ void help_display(char *svsnick, char *svsdisp, char *origin, char *command, lis
 	{
 		if (c->file)
 		{
-			help_file = fopen(c->file, "r");
+			if (*c->file == '/')
+				help_file = fopen(c->file, "r");
+			else
+			{
+				snprintf(buf, sizeof buf, "%s/%s", SHAREDIR, c->file);
+				help_file = fopen(buf, "r");
+			}
 
 			if (!help_file)
 			{

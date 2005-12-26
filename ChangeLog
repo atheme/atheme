@@ -1,3 +1,23 @@
+jilles      2005/12/25 21:41:36 UTC	(20051225-4187)
+  Log:
+  Move a lot of the help displaying stuff to a new function
+  help_display() in src/help.c.
+  Help files that cannot be opened now give a different
+  message than help topics that do not exist at all.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/extern.h (File Modified) 
+  +1 -39	trunk/modules/chanserv/help.c (File Modified) 
+  +1 -31	trunk/modules/global/main.c (File Modified) 
+  +3 -41	trunk/modules/helpserv/help.c (File Modified) 
+  +1 -38	trunk/modules/memoserv/help.c (File Modified) 
+  +1 -36	trunk/modules/nickserv/help.c (File Modified) 
+  +1 -36	trunk/modules/operserv/help.c (File Modified) 
+  +1 -36	trunk/modules/userserv/help.c (File Modified) 
+  +44 -0	trunk/src/help.c (File Modified) 
+
+
 jilles      2005/12/25 21:04:04 UTC	(20051225-4185)
   Log:
   Regenerate configure (with correct Id string).

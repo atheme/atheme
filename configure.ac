@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 4183 2005-12-25 21:01:34Z jilles $
+dnl $Id: configure.ac 4189 2005-12-26 00:02:24Z jilles $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, 1.0beta1, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 4183 2005-12-25 21:01:34Z jilles $])
+AC_COPYRIGHT([$Id: configure.ac 4189 2005-12-26 00:02:24Z jilles $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -143,7 +143,9 @@ echo " "
 echo "Tweaks"
 echo " "
 
+DOCDIR='${prefix}/doc'
 MODDIR='${exec_prefix}'
+SHAREDIR='${prefix}'
 
 FHSPATHS="no"
 AC_MSG_CHECKING(if you want FHS-like pathnames)
@@ -153,7 +155,9 @@ AC_HELP_STRING([--enable-fhs-paths],[ Use more FHS-like pathnames.]),
   case "$enableval" in
   yes)
     FHSPATHS="yes"
+    DOCDIR='${datadir}/doc/atheme'
     MODDIR='${libdir}/atheme'
+    SHAREDIR='${datadir}/atheme'
     ;;
   no)
     FHSPATHS="no"
@@ -161,7 +165,9 @@ AC_HELP_STRING([--enable-fhs-paths],[ Use more FHS-like pathnames.]),
   esac
 ])
 AC_MSG_RESULT($FHSPATHS)
+AC_SUBST(DOCDIR)
 AC_SUBST(MODDIR)
+AC_SUBST(SHAREDIR)
 dnl the following is wrong! -- jilles
 dnl AC_DEFINE_UNQUOTED([MODDIR], "${MODDIR}", [Module root directory.])
 
@@ -525,7 +531,7 @@ ac_save_LDFLAGS="${LDFLAGS} -pg"
 LDFLAGS=${ac_save_LDFLAGS}
 ])
 
-ac_save_CFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS} -DPREFIX=\\\"\${prefix}\\\" -DMODDIR=\\\"\${MODDIR}\\\""
+ac_save_CFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS} -DPREFIX=\\\"\${prefix}\\\" -DMODDIR=\\\"\${MODDIR}\\\" -DSHAREDIR=\\\"${SHAREDIR}\\\""
 CFLAGS=${ac_save_CFLAGS}
 dnl export CFLAGS
 
