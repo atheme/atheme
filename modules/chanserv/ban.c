@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 4203 2005-12-26 15:27:43Z jilles $
+ * $Id: ban.c 4205 2005-12-26 15:31:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", FALSE, _modinit, _moddeinit,
-	"$Id: ban.c 4203 2005-12-26 15:27:43Z jilles $",
+	"$Id: ban.c 4205 2005-12-26 15:31:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -195,14 +195,14 @@ static void cs_cmd_unban (char *origin)
 	}
 	else if ((tu = user_find_named(target)))
 	{
-		node_t *n;
+		node_t *n, *tn;
 		char hostbuf[BUFSIZE], hostbuf2[BUFSIZE];
 		int count = 0;
 
 		snprintf(hostbuf, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->host);
 		snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->vhost);
 
-		LIST_FOREACH(n, c->bans.head)
+		LIST_FOREACH_SAFE(n, tn, c->bans.head)
 		{
 			chanban_t *cb = n->data;
 
@@ -359,14 +359,14 @@ static void cs_fcmd_unban (char *origin, char *channel)
 	}
 	else if ((tu = user_find_named(target)))
 	{
-		node_t *n;
+		node_t *n, *tn;
 		char hostbuf[BUFSIZE], hostbuf2[BUFSIZE];
 		int count = 0;
 
 		snprintf(hostbuf, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->host);
 		snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->vhost);
 
-		LIST_FOREACH(n, c->bans.head)
+		LIST_FOREACH_SAFE(n, tn, c->bans.head)
 		{
 			chanban_t *cb = n->data;
 

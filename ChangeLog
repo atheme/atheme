@@ -1,3 +1,13 @@
+jilles      2005/12/26 15:27:43 UTC	(20051226-4203)
+  Log:
+  ChanServ UNBAN: default to user giving the command
+  
+
+  Changes:	Modified:
+  +3 -2		trunk/help/cservice/unban (File Modified) 
+  +11 -5	trunk/modules/chanserv/ban.c (File Modified) 
+
+
 jilles      2005/12/26 15:06:58 UTC	(20051226-4201)
   Log:
   - Move some signal handler setting down to a point where
