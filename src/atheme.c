@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 4059 2005-12-10 00:29:54Z jilles $
+ * $Id: atheme.c 4195 2005-12-26 13:48:39Z jilles $
  */
 
 #include "atheme.h"
@@ -27,11 +27,12 @@ boolean_t cold_start = FALSE;
 /* *INDENT-OFF* */
 static void print_help(void)
 {
-	printf("usage: atheme [-c config] [-dhnv]\n\n"
+	printf("usage: atheme [-dhnv] [-c config] [-p pidfile]\n\n"
 	       "-c <file>    Specify the config file\n"
 	       "-d           Start in debugging mode\n"
 	       "-h           Print this message and exit\n"
 	       "-n           Don't fork into the background (log screen + log file)\n"
+	       "-p <file>    Specify the pid file (will be overwritten)\n"
 	       "-v           Print version information and exit\n");
 }
 
@@ -49,6 +50,7 @@ int main(int argc, char *argv[])
 	char buf[32];
 	int i, pid, r;
 	FILE *restart_file, *pid_file;
+	char *pidfilename = "var/atheme.pid";
 #ifndef _WIN32
 	struct rlimit rlim;
 #endif
@@ -73,7 +75,7 @@ int main(int argc, char *argv[])
 #endif
 	
 	/* do command-line options */
-	while ((r = getopt(argc, argv, "c:dhnv")) != -1)
+	while ((r = getopt(argc, argv, "c:dhnp:v")) != -1)
 	{
 		switch (r)
 		{
@@ -91,12 +93,15 @@ int main(int argc, char *argv[])
 		  case 'n':
 			  runflags |= RF_LIVE;
 			  break;
+		  case 'p':
+			  pidfilename = optarg;
+			  break;
 		  case 'v':
 			  print_version();
 			  exit(EXIT_SUCCESS);
 			  break;
 		  default:
-			  printf("usage: atheme [-c conf] [-dhnv]\n");
+			  printf("usage: atheme [-dhnv] [-c conf] [-p pidfile]\n");
 			  exit(EXIT_SUCCESS);
 			  break;
 		}
@@ -145,7 +150,7 @@ int main(int argc, char *argv[])
 	printf("atheme: version atheme-%s\n", version);
 
 	/* check for pid file */
-	if ((pid_file = fopen("var/atheme.pid", "r")))
+	if ((pid_file = fopen(pidfilename, "r")))
 	{
 		if (fgets(buf, 32, pid_file))
 		{
@@ -240,7 +245,7 @@ int main(int argc, char *argv[])
 
 #ifndef _WIN32
 	/* write pid */
-	if ((pid_file = fopen("var/atheme.pid", "w")))
+	if ((pid_file = fopen(pidfilename, "w")))
 	{
 		fprintf(pid_file, "%d\n", getpid());
 		fclose(pid_file);
@@ -281,7 +286,7 @@ int main(int argc, char *argv[])
 	if (chansvs.me != NULL && chansvs.me->me != NULL)
 		quit_sts(chansvs.me->me, "shutting down");
 
-	remove("var/atheme.pid");
+	remove(pidfilename);
 	sendq_flush(curr_uplink->conn);
 	connection_close(curr_uplink->conn);
 

@@ -1,3 +1,12 @@
+w00t        2005/12/26 08:41:30 UTC	(20051226-4193)
+  Log:
+  Actually, InspIRCd support is b6 and later
+
+  Changes:	Modified:
+  +1 -1		trunk/dist/example.conf (File Modified) 
+  +1 -1		trunk/dist/example.userserv.conf (File Modified) 
+
+
 jilles      2005/12/26 00:04:17 UTC	(20051226-4191)
   Log:
   Regenerate configure.

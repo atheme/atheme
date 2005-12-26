@@ -2,23 +2,29 @@
 #
 # crontab script for atheme
 #
-# $Id: atheme.chk 599 2005-06-26 20:43:27Z nenolod $
+# $Id: atheme.chk 4195 2005-12-26 13:48:39Z jilles $
 #
 
 # Change this to the directory where you installed it
-cd ~/atheme/
+prefix=$HOME/atheme/
+pidfile=var/atheme.pid
 
-if [ -f var/atheme.pid ] ; then
-  PID=`cat var/atheme.pid`
+cd "$prefix" || {
+	echo "$0: couldn't cd to $prefix"
+	exit 1
+}
 
-  if `kill -CHLD $PID >/dev/null 2>&1`; then
+if [ -f "$pidfile" ] ; then
+  PID=`cat "$pidfile"`
+
+  if kill -0 $PID >/dev/null 2>&1; then
     exit 0
   fi
 
-  rm -f var/atheme.pid
+  rm -f "$pidfile"
 fi
 
-echo "crontab: couldn't find atheme running, restarting..."
+echo "$0: couldn't find atheme running, restarting..."
 
 ./bin/atheme
 
