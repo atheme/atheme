@@ -1,4 +1,4 @@
-$Id: IRCD 3227 2005-10-28 10:11:56Z jilles $
+$Id: IRCD 4207 2005-12-26 15:37:20Z jilles $
 
 IRCD-specific notes
 -------------------
@@ -27,6 +27,15 @@ bircd
 You need U:lines for services on all servers on the network.
 
 You must enable join_chans as P10 is designed for services to work that way.
+
+charybdis
+---------
+
+You will need a service{} block on all servers. Logged-in state is based on
+name only, so beware of dropping and recreating accounts during netsplits.
+
+If you want to use operserv kline, you need shared{} blocks or U:lines for
+services on all servers on the network.
 
 dreamforge
 ----------
@@ -66,10 +75,7 @@ The wallops option will report via +s server notices.
 inspircd
 --------
 
-At present, this module supports the meshing protocol support only. We are
-aware that the InspIRCd team is in progress of implementing acyclic
-(tree-based) linking, and when that is completed, we will add support for
-that protocol format.
+This module supports inspircd beta6 or newer (tree linking) only.
 
 ircnet
 ------
