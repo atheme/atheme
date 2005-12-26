@@ -5,7 +5,7 @@
  * This file contains functionality which implements
  * the OService AKILL/KLINE command.
  *
- * $Id: akill.c 4123 2005-12-17 08:31:39Z kog $
+ * $Id: akill.c 4211 2005-12-26 23:05:34Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 4123 2005-12-17 08:31:39Z kog $",
+	"$Id: akill.c 4211 2005-12-26 23:05:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -135,6 +135,12 @@ static void os_cmd_akill_add(char *origin, char *target)
 			strlcat(reason, " ", BUFSIZE);
 			strlcat(reason, treason, BUFSIZE);
 		}			
+	}
+
+	if (strchr(target,'!'))
+	{
+		notice(opersvs.nick, origin, "Invalid character '!' in user@host.");
+		return;
 	}
 
 	if (!(strchr(target, '@')))
