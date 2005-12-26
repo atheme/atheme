@@ -1,3 +1,14 @@
+jilles      2005/12/26 13:48:39 UTC	(20051226-4195)
+  Log:
+  Allow specifying the pid file with -p <file>.
+  Default is var/atheme.pid (relative to prefix) as before.
+  
+
+  Changes:	Modified:
+  +12 -6	trunk/dist/atheme.chk (File Modified) 
+  +11 -6	trunk/src/atheme.c (File Modified) 
+
+
 w00t        2005/12/26 08:41:30 UTC	(20051226-4193)
   Log:
   Actually, InspIRCd support is b6 and later
