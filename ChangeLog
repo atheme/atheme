@@ -1,3 +1,12 @@
+nenolod     2005/12/27 03:10:48 UTC	(20051227-4215)
+  Log:
+  remove dead win32 posix-emulation code that hasn't been used in a long time
+  
+
+  Changes:	Modified:
+  +0 -79	trunk/src/module.c (File Modified) 
+
+
 jilles      2005/12/27 02:27:31 UTC	(20051227-4213)
   Log:
   Remove /ns link <nick> <password> which *destroyed* the

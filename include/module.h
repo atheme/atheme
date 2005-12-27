@@ -4,7 +4,7 @@
  *
  * This file contains data structures concerning modules.
  *
- * $Id: module.h 3377 2005-11-01 03:45:37Z nenolod $
+ * $Id: module.h 4217 2005-12-27 03:36:36Z nenolod $
  */
 
 #ifndef MODULE_H
@@ -22,6 +22,9 @@ struct module_ {
 
 	void *address;
 	void *handle;
+
+	list_t dephost;
+	list_t deplist;
 };
 
 #define MODTYPE_STANDARD	0

@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 4215 2005-12-27 03:10:48Z nenolod $
+ * $Id: module.c 4217 2005-12-27 03:36:36Z nenolod $
  */
 
 #include "atheme.h"
@@ -15,6 +15,8 @@
 
 static BlockHeap *module_heap;
 list_t modules;
+
+module_t *modtarget = NULL;
 
 /* Microsoft's POSIX API is a joke. */
 #ifdef _WIN32
@@ -114,8 +116,14 @@ module_t *module_load(char *filespec)
 
 	node_add(m, n, &modules);
 
+	/* set the module target for module dependencies */
+	modtarget = m;
+
 	if (h->modinit)
 		h->modinit(m);
+
+	/* we won't be loading symbols outside the init code */
+	modtarget = NULL;
 
 	slog(LG_DEBUG, "module_load(): loaded %s at [0x%lx; MAPI version %d]", h->name, m->address, h->abi_ver);
 
@@ -216,7 +224,7 @@ void module_load_dir_match(char *dirspec, char *pattern)
  */
 void module_unload(module_t * m)
 {
-	node_t *n;
+	node_t *n, *tn;
 
 	if (!m)
 		return;
@@ -224,6 +232,20 @@ void module_unload(module_t * m)
 	slog(LG_INFO, "module_unload(): unloaded %s", m->header->name);
 	if (me.connected)
 		wallops("Module %s unloaded.", m->header->name);
+
+	/* unload modules which depend on us */
+	LIST_FOREACH_SAFE(n, tn, m->dephost.head)
+		module_unload((module_t *) n->data);
+
+	/* let modules that we depend on know that we no longer exist */
+	LIST_FOREACH_SAFE(n, tn, m->deplist.head)
+	{
+		module_t *hm = (module_t *) n->data;
+		node_t *hn = node_find(m, &hm->dephost);
+
+		node_del(hn, &hm->dephost);		
+		node_del(n, &m->deplist);
+	}
 
 	n = node_find(m, &modules);
 
@@ -258,6 +280,14 @@ void *module_locate_symbol(char *modname, char *sym)
 	{
 		slog(LG_DEBUG, "module_locate_symbol(): %s is not loaded.", modname);
 		return NULL;
+	}
+
+	if (modtarget != NULL && !node_find(m, &modtarget->deplist))
+	{
+		slog(LG_DEBUG, "module_locate_symbol(): %s added as a dependency for %s (symbol: %s)",
+			m->header->name, modtarget->header->name, sym);
+		node_add(m, node_create(), &modtarget->deplist);
+		node_add(modtarget, node_create(), &m->dephost);
 	}
 
 	symptr = linker_getsym(m->handle, sym);
