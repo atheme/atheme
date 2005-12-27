@@ -1,3 +1,12 @@
+jilles      2005/12/27 19:45:10 UTC	(20051227-4227)
+  Log:
+  Require general:auspex instead of ircop to see server line in /trace.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2005/12/27 19:35:24 UTC	(20051227-4225)
   Log:
   ns/us hold help: note that this also prevents registered

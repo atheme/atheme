@@ -4,7 +4,7 @@
  *
  * Uplink management stuff.
  *
- * $Id: uplink.c 4165 2005-12-18 02:54:01Z jilles $
+ * $Id: uplink.c 4229 2005-12-27 22:15:57Z jilles $
  */
 
 #include "atheme.h"
@@ -17,6 +17,11 @@ void uplink_connect(void)
 
 	if (curr_uplink == NULL)
 	{
+		if (uplinks.head == NULL)
+		{
+			slog(LG_ERROR, "uplink_connect(): no uplinks configured, exiting. Make sure to have at least one uplink{} block in your configuration file.");
+			exit(EXIT_FAILURE);
+		}
 		curr_uplink = uplinks.head->data;
 		slog(LG_INFO, "uplink_connect(): connecting to first entry %s[%s].", curr_uplink->name, curr_uplink->host);
 	}
