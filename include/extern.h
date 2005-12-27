@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 4231 2005-12-27 22:36:56Z jilles $
+ * $Id: extern.h 4233 2005-12-27 23:06:18Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -164,7 +164,7 @@ E void operclass_delete(operclass_t *operclass);
 E operclass_t *operclass_find(char *name);
 
 E sra_t *sra_add(char *name);
-E void sra_delete(myuser_t *myuser);
+E void sra_delete(sra_t *sra);
 E sra_t *sra_find(myuser_t *myuser);
 E sra_t *sra_find_named(char *name);
 

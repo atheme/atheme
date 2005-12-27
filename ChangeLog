@@ -1,3 +1,26 @@
+jilles      2005/12/27 22:36:56 UTC	(20051227-4231)
+  Log:
+  Change uplink configuration handling a bit.
+  Before rehashing, mark everything "illegal".
+  If the rehash fails, remove the "illegal" marks and continue.
+  When adding uplinks, allow replacing an "illegal" one.
+  If the rehash succeeds, remove all uplinks marked "illegal"
+  except the current uplink.
+  When losing connection to the current uplink, if it is
+  marked "illegal", delete it. If that was the last uplink,
+  exit.
+  
+  Tracker #85
+  
+
+  Changes:	Modified:
+  +4 -0		trunk/include/extern.h (File Modified) 
+  +4 -0		trunk/include/servers.h (File Modified) 
+  +7 -0		trunk/src/conf.c (File Modified) 
+  +62 -13	trunk/src/node.c (File Modified) 
+  +16 -2	trunk/src/uplink.c (File Modified) 
+
+
 jilles      2005/12/27 22:15:57 UTC	(20051227-4229)
   Log:
   If there are no uplinks configured, complain and exit instead of crashing.

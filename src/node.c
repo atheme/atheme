@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4231 2005-12-27 22:36:56Z jilles $
+ * $Id: node.c 4233 2005-12-27 23:06:18Z jilles $
  */
 
 #include "atheme.h"
@@ -282,14 +282,13 @@ sra_t *sra_add(char *name)
 	return sra;
 }
 
-void sra_delete(myuser_t *myuser)
+void sra_delete(sra_t *sra)
 {
-	sra_t *sra = sra_find(myuser);
 	node_t *n;
 
 	if (!sra)
 	{
-		slog(LG_DEBUG, "sra_delete(): called for nonexistant sra: %s", myuser->name);
+		slog(LG_DEBUG, "sra_delete(): called for null sra");
 
 		return;
 	}
@@ -1330,7 +1329,7 @@ void myuser_delete(char *name)
 
 	/* remove them from the sra list */
 	if (sra_find(mu))
-		sra_delete(mu);
+		sra_delete(mu->sra);
 
 	/* orphan any nicknames pointing to them
 	 * this is slow -- we could fix by adding reverse lists
