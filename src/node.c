@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4233 2005-12-27 23:06:18Z jilles $
+ * $Id: node.c 4235 2005-12-27 23:42:54Z jilles $
  */
 
 #include "atheme.h"
@@ -77,13 +77,28 @@ void init_nodes(void)
 /* Mark everything illegal, to be called before a rehash -- jilles */
 void mark_all_illegal()
 {
-	node_t *n;
+	node_t *n, *tn;
 	uplink_t *u;
+	sra_t *sra;
+	operclass_t *operclass;
 
 	LIST_FOREACH(n, uplinks.head)
 	{
 		u = (uplink_t *)n->data;
 		u->flags |= UPF_ILLEGAL;
+	}
+
+	/* just delete these, we can survive without for a while */
+	LIST_FOREACH_SAFE(n, tn, sralist.head)
+	{
+		sra = (sra_t *)n->data;
+		sra_delete(sra);
+	}
+	/* no sras pointing to these anymore */
+	LIST_FOREACH_SAFE(n, tn, operclasslist.head)
+	{
+		operclass = (operclass_t *)n->data;
+		operclass_delete(operclass);
 	}
 }
 
@@ -204,9 +219,8 @@ operclass_t *operclass_add(char *name, char *privs)
 	operclass = operclass_find(name);
 	if (operclass != NULL)
 	{
-		slog(LG_DEBUG, "operclass_add(): deleting old %s first", name);
-		operclass_delete(operclass);
-		operclass = NULL;
+		slog(LG_DEBUG, "operclass_add(): duplicate class %s", name);
+		return NULL;
 	}
 	slog(LG_DEBUG, "operclass_add(): %s [%s]", name, privs);
 	operclass = BlockHeapAlloc(operclass_heap);

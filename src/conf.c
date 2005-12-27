@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4233 2005-12-27 23:06:18Z jilles $
+ * $Id: conf.c 4235 2005-12-27 23:42:54Z jilles $
  */
 
 #include "atheme.h"
@@ -1490,8 +1490,6 @@ static void free_cstructs(struct me *mesrc, chansvs_t *svssrc)
 boolean_t conf_rehash(void)
 {
 	struct me *hold_me = scalloc(sizeof(struct me), 1);	/* and keep_me_warm; */
-	sra_t *sra;
-	node_t *n, *tn;
 	char *oldsnoop;
 
 	/* we're rehashing */
@@ -1505,13 +1503,6 @@ boolean_t conf_rehash(void)
 
 	/* reset everything */
 	conf_init();
-
-	LIST_FOREACH_SAFE(n, tn, sralist.head)
-	{
-		sra = (sra_t *)n->data;
-
-		sra_delete(sra);
-	}
 
 	mark_all_illegal();
 
