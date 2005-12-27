@@ -15,6 +15,8 @@ static boolean_t string_in_list(const char *str, const char *name)
 	char *p;
 	int l;
 
+	if (str == NULL)
+		return FALSE;
 	l = strlen(name);
 	while (*str != '\0')
 	{
@@ -41,12 +43,18 @@ boolean_t has_any_privs(user_t *u)
 
 boolean_t has_priv(user_t *u, const char *priv)
 {
+	operclass_t *operclass;
+
 	if (priv == NULL)
 		return TRUE;
 	if (u == NULL)
 		return FALSE;
-	if (is_ircop(u) && string_in_list(DEFAULT_IRCOP_PRIVS, priv))
-		return TRUE;
+	if (is_ircop(u))
+	{
+		operclass = operclass_find("ircop");
+		if (operclass != NULL && string_in_list(operclass->privs, priv))
+			return TRUE;
+	}
 	return u->myuser && is_sra(u->myuser);
 }
 

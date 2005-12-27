@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 4219 2005-12-27 17:41:18Z jilles $
+ * $Id: atheme.h 4221 2005-12-27 19:06:48Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -159,6 +159,7 @@ struct cnt
   uint32_t bin;
   uint32_t bout;
   uint32_t uplink;
+  uint32_t operclass;
 };
 
 E cnt_t cnt;

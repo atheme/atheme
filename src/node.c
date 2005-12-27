@@ -5,11 +5,12 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4219 2005-12-27 17:41:18Z jilles $
+ * $Id: node.c 4221 2005-12-27 19:06:48Z jilles $
  */
 
 #include "atheme.h"
 
+list_t operclasslist;
 list_t sralist;
 list_t tldlist;
 list_t uplinks;
@@ -24,6 +25,7 @@ list_t mulist[HASHSIZE];
 
 list_t sendq;
 
+static BlockHeap *operclass_heap;
 static BlockHeap *sra_heap;
 static BlockHeap *tld_heap;
 static BlockHeap *serv_heap;
@@ -49,6 +51,7 @@ static myuser_t *mychan_pick_successor(mychan_t *mc);
 
 void init_nodes(void)
 {
+	operclass_heap = BlockHeapCreate(sizeof(operclass_t), 2);
 	sra_heap = BlockHeapCreate(sizeof(sra_t), 2);
 	tld_heap = BlockHeapCreate(sizeof(tld_t), 4);
 	serv_heap = BlockHeapCreate(sizeof(server_t), HEAP_SERVER);
@@ -136,6 +139,62 @@ uplink_t *uplink_find(char *name)
 
 		if (!strcasecmp(u->name, name))
 			return u;
+	}
+
+	return NULL;
+}
+
+/*************************
+ * O P E R C L A S S E S *
+ *************************/
+operclass_t *operclass_add(char *name, char *privs)
+{
+	operclass_t *operclass;
+	node_t *n = node_create();
+
+	operclass = operclass_find(name);
+	if (operclass != NULL)
+	{
+		slog(LG_DEBUG, "operclass_add(): deleting old %s first", name);
+		operclass_delete(operclass);
+		operclass = NULL;
+	}
+	slog(LG_DEBUG, "operclass_add(): %s [%s]", name, privs);
+	operclass = BlockHeapAlloc(operclass_heap);
+	node_add(operclass, n, &operclasslist);
+	operclass->name = sstrdup(name);
+	operclass->privs = sstrdup(privs);
+	cnt.operclass++;
+	return operclass;
+}
+
+void operclass_delete(operclass_t *operclass)
+{
+	node_t *n;
+
+	if (operclass == NULL)
+		return;
+	slog(LG_DEBUG, "operclass_delete(): %s", operclass->name);
+	n = node_find(operclass, &operclasslist);
+	node_del(n, &operclasslist);
+	node_free(n);
+	free(operclass->name);
+	free(operclass->privs);
+	BlockHeapFree(operclass_heap, operclass);
+	cnt.operclass--;
+}
+
+operclass_t *operclass_find(char *name)
+{
+	operclass_t *operclass;
+	node_t *n;
+
+	LIST_FOREACH(n, operclasslist.head)
+	{
+		operclass = (operclass_t *)n->data;
+
+		if (!strcasecmp(operclass->name, name))
+			return operclass;
 	}
 
 	return NULL;

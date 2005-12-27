@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 4187 2005-12-25 21:41:36Z jilles $
+ * $Id: extern.h 4221 2005-12-27 19:06:48Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -154,6 +154,10 @@ E list_t mclist[HASHSIZE];
 
 E void init_ircpacket(void);
 E void init_nodes(void);
+
+E operclass_t *operclass_add(char *name, char *privs);
+E void operclass_delete(operclass_t *operclass);
+E operclass_t *operclass_find(char *name);
 
 E sra_t *sra_add(char *name);
 E void sra_delete(myuser_t *myuser);
