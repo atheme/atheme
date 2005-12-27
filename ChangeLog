@@ -1,3 +1,14 @@
+jilles      2005/12/27 02:27:31 UTC	(20051227-4213)
+  Log:
+  Remove /ns link <nick> <password> which *destroyed* the
+  given nick before linking it.
+  
+
+  Changes:	Modified:
+  +3 -8		trunk/help/nickserv/link (File Modified) 
+  +2 -5		trunk/modules/nickserv/link.c (File Modified) 
+
+
 jilles      2005/12/26 23:05:34 UTC	(20051226-4211)
   Log:
   Refuse to add an akill with '!' in its mask.

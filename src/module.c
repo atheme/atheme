@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 4183 2005-12-25 21:01:34Z jilles $
+ * $Id: module.c 4215 2005-12-27 03:10:48Z nenolod $
  */
 
 #include "atheme.h"
@@ -21,85 +21,6 @@ list_t modules;
 
 #define dlerror() ""
 
-/*
-#define dirent dirent
-#define DIR lt_DIR
-
-struct dirent
-{
-	char d_name[2048];
-	int d_namlen;
-};
-
-typedef struct _DIR
-{
-	HANDLE hSearch;
-	WIN32_FIND_DATA Win32FindData;
-	BOOL firsttime;
-	struct dirent file_info;
-} DIR;
-
-static void closedir(DIR * entry)
-{
-	FindClose(entry->hSearch);
-	free(entry);
-}
-
-static DIR *opendir(const char *path)
-{
-	char filespec[BUFISIZE * 2];
-	DIR *entry;
-
-	strlcpy(filespec, path, BUFSIZE * 2);
-	filespec[strlen(filespec)] = '\0';
-	strcat(filespec, "\\");
-	entry = malloc(sizeof(DIR));
-
-	if (entry != NULL)
-	{
-		entry->firsttime = TRUE;
-		entry->hSearch = FindFirstFile(filespec, &entry->Win32FindData);
-	}
-
-	if (entry->hSearch == INVALID_HANDLE_VALUE)
-	{
-		strcat(filespec, "\\*.*");
-		entry->hSearch = FindFirstFile(filespec, &entry->Win32FindData);
-
-		if (entry->hSearch == INVALID_HANDLE_VALUE)
-		{
-			free(entry);
-			return NULL;
-		}
-	}
-
-	return entry;
-}
-
-static struct dirent *readdir(DIR * entry)
-{
-	int status;
-
-	if (!entry)
-		return NULL;
-
-	if (!entry->firsttime)
-	{
-		status = FindNextFile(entry->hSearch, &entry->Win32FindData);
-
-		if (status == 0)
-			return NULL;
-	}
-
-	entry->firsttime = FALSE;
-	strlcpy(entry->file_info.d_name, entry->Win32FindData.cFileName, BUFSIZE * 2);
-
-	entry->file_info.d_name[2048] = '\0';
-	entry->file_info.d_namlen = strlen(entry->file_info.d_name);
-
-	return &entry->file_info;
-}
-*/
 #endif
 
 void modules_init(void)
