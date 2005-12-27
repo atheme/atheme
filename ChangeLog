@@ -1,3 +1,12 @@
+jilles      2005/12/26 23:05:34 UTC	(20051226-4211)
+  Log:
+  Refuse to add an akill with '!' in its mask.
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/operserv/akill.c (File Modified) 
+
+
 jilles      2005/12/26 15:46:53 UTC	(20051226-4209)
   Log:
   ChanServ UNBAN: check for nick!user@ip bans as well;

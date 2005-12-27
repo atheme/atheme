@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ LINK function.
  *
- * $Id: link.c 3701 2005-11-09 03:14:37Z alambert $
+ * $Id: link.c 4213 2005-12-27 02:27:31Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/link", FALSE, _modinit, _moddeinit,
-	"$Id: link.c 3701 2005-11-09 03:14:37Z alambert $",
+	"$Id: link.c 4213 2005-12-27 02:27:31Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -49,7 +49,7 @@ static void ns_cmd_link(char *origin)
 	if (!nick)
 	{
 		notice(nicksvs.nick, origin, "Insufficient parameters specified for \2LINK\2.");
-		notice(nicksvs.nick, origin, "Syntax: LINK <target> [pass]");
+		notice(nicksvs.nick, origin, "Syntax: LINK <target>");
 		return;
 	}
 
@@ -104,9 +104,8 @@ static void ns_cmd_link(char *origin)
 
 	/* make sure it isn't registered already */
 	mu = myuser_find(nick);
-	if (mu && (!pass || (pass && !verify_password(mu, pass))))
+	if (mu != NULL)
 	{
-		logcommand(nicksvs.me, u, CMDLOG_REGISTER, "failed LINK %s (bad password)", nick);
 		/* should we reveal the e-mail address? (from ns_info.c) */
 		if (!(mu->flags & MU_HIDEMAIL)
 			|| (is_sra(u->myuser) || is_ircop(u) || u->myuser == mu))
@@ -116,8 +115,6 @@ static void ns_cmd_link(char *origin)
 
 		return;
 	}
-	else if (mu != NULL && pass && verify_password(mu, pass))
-		myuser_delete(mu->name);
 
 	/* make sure they're within limits */
 	for (i = 0, tcnt = 0; i < HASHSIZE; i++)
