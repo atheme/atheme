@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 4221 2005-12-27 19:06:48Z jilles $
+ * $Id: ptasks.c 4227 2005-12-27 19:45:10Z jilles $
  */
 
 #include "atheme.h"
@@ -219,7 +219,7 @@ void handle_trace(char *origin, char *target, char *dest)
 			single_trace(u, t);
 			nusers--;
 		}
-		if (is_ircop(u))
+		if (has_priv(u, PRIV_SERVER_AUSPEX))
 			numeric_sts(me.name, 206, CLIENT_NAME(u), "Serv uplink %dS %dC %s *!*@%s 0", cnt.server - 1, nusers, me.actual, me.name);
 		target = me.name;
 	}

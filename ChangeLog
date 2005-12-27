@@ -1,3 +1,14 @@
+jilles      2005/12/27 19:35:24 UTC	(20051227-4225)
+  Log:
+  ns/us hold help: note that this also prevents registered
+  channels from expiring.
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/help/nickserv/hold (File Modified) 
+  +2 -1		trunk/help/userserv/hold (File Modified) 
+
+
 jilles      2005/12/27 19:30:05 UTC	(20051227-4223)
   Log:
   Remove some is_sra() for privilege.
