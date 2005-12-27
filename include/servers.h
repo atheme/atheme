@@ -4,7 +4,7 @@
  *
  * Data structures related to network servers.
  *
- * $Id: servers.h 3129 2005-10-22 21:49:56Z jilles $
+ * $Id: servers.h 4231 2005-12-27 22:36:56Z jilles $
  */
 
 #ifndef SERVERS_H
@@ -53,7 +53,11 @@ struct uplink_
 	uint32_t port;
 
 	connection_t *conn;
+
+	uint32_t flags;
 };
+
+#define UPF_ILLEGAL 0x80000000 /* not in conf anymore, delete when disconnected */
 
 E uplink_t *uplink_add(char *name, char *host, char *password, char *vhost, int port);
 E void uplink_delete(uplink_t *u);

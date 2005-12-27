@@ -4,7 +4,7 @@
  *
  * Uplink management stuff.
  *
- * $Id: uplink.c 4229 2005-12-27 22:15:57Z jilles $
+ * $Id: uplink.c 4231 2005-12-27 22:36:56Z jilles $
  */
 
 #include "atheme.h"
@@ -61,10 +61,24 @@ void connection_dead(void *vptr)
         connection_t *cptr = vptr;
 
         if (cptr == curr_uplink->conn)
+	{
                 event_add_once("reconn", reconn, NULL, me.recontime);
 
-        connection_close(cptr);
+		me.connected = FALSE;
 
-	me.connected = FALSE;
+		if (curr_uplink->flags & UPF_ILLEGAL)
+		{
+			slog(LG_INFO, "connection_dead(): %s was removed from configuration, deleting", curr_uplink->name);
+			uplink_delete(curr_uplink);
+			if (uplinks.head == NULL)
+			{
+				slog(LG_ERROR, "connection_dead(): last uplink deleted, exiting.");
+				exit(EXIT_FAILURE);
+			}
+			curr_uplink = uplinks.head->data;
+		}
+	}
+
+        connection_close(cptr);
 }
 

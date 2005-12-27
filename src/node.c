@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4221 2005-12-27 19:06:48Z jilles $
+ * $Id: node.c 4231 2005-12-27 22:36:56Z jilles $
  */
 
 #include "atheme.h"
@@ -74,6 +74,46 @@ void init_nodes(void)
 	}
 }
 
+/* Mark everything illegal, to be called before a rehash -- jilles */
+void mark_all_illegal()
+{
+	node_t *n;
+	uplink_t *u;
+
+	LIST_FOREACH(n, uplinks.head)
+	{
+		u = (uplink_t *)n->data;
+		u->flags |= UPF_ILLEGAL;
+	}
+}
+
+/* Unmark everything illegal, to be called after a failed rehash -- jilles */
+void unmark_all_illegal()
+{
+	node_t *n;
+	uplink_t *u;
+
+	LIST_FOREACH(n, uplinks.head)
+	{
+		u = (uplink_t *)n->data;
+		u->flags &= ~UPF_ILLEGAL;
+	}
+}
+
+/* Remove illegal stuff, to be called after a successful rehash -- jilles */
+void remove_illegals()
+{
+	node_t *n, *tn;
+	uplink_t *u;
+
+	LIST_FOREACH_SAFE(n, tn, uplinks.head)
+	{
+		u = (uplink_t *)n->data;
+		if (u->flags & UPF_ILLEGAL && u != curr_uplink)
+			uplink_delete(u);
+	}
+}
+
 /*****************
  * U P L I N K S *
  *****************/
@@ -87,29 +127,37 @@ uplink_t *uplink_add(char *name, char *host, char *password, char *vhost, int po
 
 	if ((u = uplink_find(name)))
 	{
-		slog(LG_INFO, "Duplicate uplink %s.", name);
-		return NULL;
+		if (u->flags & UPF_ILLEGAL)
+		{
+			u->flags &= ~UPF_ILLEGAL;
+			free(u->name);
+			free(u->host);
+			free(u->pass);
+			free(u->vhost);
+		}
+		else
+		{
+			slog(LG_INFO, "Duplicate uplink %s.", name);
+			return NULL;
+		}
+	}
+	else
+	{
+		u = BlockHeapAlloc(uplink_heap);
+		n = node_create();
+		u->node = n;
+		node_add(u, n, &uplinks);
+		cnt.uplink++;
 	}
 
-	u = BlockHeapAlloc(uplink_heap);
 	u->name = sstrdup(name);
 	u->host = sstrdup(host);
 	u->pass = sstrdup(password);
-
 	if (vhost)
 		u->vhost = sstrdup(vhost);
 	else
 		u->vhost = sstrdup("0.0.0.0");
-
 	u->port = port;
-
-	n = node_create();
-
-	u->node = n;
-
-	node_add(u, n, &uplinks);
-
-	cnt.uplink++;
 
 	return u;
 }
@@ -127,6 +175,7 @@ void uplink_delete(uplink_t * u)
 	node_free(n);
 
 	BlockHeapFree(uplink_heap, u);
+	cnt.uplink--;
 }
 
 uplink_t *uplink_find(char *name)

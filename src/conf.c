@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4221 2005-12-27 19:06:48Z jilles $
+ * $Id: conf.c 4231 2005-12-27 22:36:56Z jilles $
  */
 
 #include "atheme.h"
@@ -1513,6 +1513,8 @@ boolean_t conf_rehash(void)
 		sra_delete(sra->myuser);
 	}
 
+	mark_all_illegal();
+
 	/* now reload */
 	conf_parse();
 
@@ -1526,6 +1528,9 @@ boolean_t conf_rehash(void)
 
 		/* return everything to the way it was before */
 		copy_me(hold_me, &me);
+
+		/* not fully ok, oh well */
+		unmark_all_illegal();
 
 		free(hold_me);
 		free(oldsnoop);
@@ -1545,6 +1550,8 @@ boolean_t conf_rehash(void)
 			joinall(config_options.chan);
 		}
 	}
+
+	remove_illegals();
 
 	free(hold_me);
 	free(oldsnoop);

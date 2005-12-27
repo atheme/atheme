@@ -1,3 +1,12 @@
+jilles      2005/12/27 22:15:57 UTC	(20051227-4229)
+  Log:
+  If there are no uplinks configured, complain and exit instead of crashing.
+  
+
+  Changes:	Modified:
+  +5 -0		trunk/src/uplink.c (File Modified) 
+
+
 jilles      2005/12/27 19:45:10 UTC	(20051227-4227)
   Log:
   Require general:auspex instead of ircop to see server line in /trace.

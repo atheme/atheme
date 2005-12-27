@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 4221 2005-12-27 19:06:48Z jilles $
+ * $Id: extern.h 4231 2005-12-27 22:36:56Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -154,6 +154,10 @@ E list_t mclist[HASHSIZE];
 
 E void init_ircpacket(void);
 E void init_nodes(void);
+/* The following currently only do uplinks -- jilles */
+E void mark_all_illegal(void);
+E void unmark_all_illegal(void);
+E void remove_illegals(void);
 
 E operclass_t *operclass_add(char *name, char *privs);
 E void operclass_delete(operclass_t *operclass);
