@@ -1,6 +1,7 @@
 Help for HOLD:
 
-HOLD prevents a nickname from expiring.
+HOLD prevents a nickname and all channels registered to
+it from expiring.
 
 Syntax: HOLD <nickname> ON|OFF
 

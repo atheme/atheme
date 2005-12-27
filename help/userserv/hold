@@ -1,6 +1,7 @@
 Help for HOLD:
 
-HOLD prevents an account from expiring.
+HOLD prevents an account and all channels registered to
+it from expiring.
 
 Syntax: HOLD <account> ON|OFF
 

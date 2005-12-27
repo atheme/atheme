@@ -1,3 +1,20 @@
+jilles      2005/12/27 19:30:05 UTC	(20051227-4223)
+  Log:
+  Remove some is_sra() for privilege.
+  ns/us drop: require just user:admin
+  ns/us resetpass/sendpass: require general:admin for operation on SRA
+  ns/us resetpass: require user:mark for operation on marked account
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/drop.c (File Modified) 
+  +4 -4		trunk/modules/nickserv/resetpass.c (File Modified) 
+  +2 -2		trunk/modules/nickserv/sendpass.c (File Modified) 
+  +1 -1		trunk/modules/userserv/drop.c (File Modified) 
+  +4 -4		trunk/modules/userserv/resetpass.c (File Modified) 
+  +2 -2		trunk/modules/userserv/sendpass.c (File Modified) 
+
+
 jilles      2005/12/27 19:06:48 UTC	(20051227-4221)
   Log:
   Add oper classes, operclass "name" { privs = "<privs>"; } in atheme.conf.
