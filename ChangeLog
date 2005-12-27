@@ -1,3 +1,22 @@
+jilles      2005/12/27 19:06:48 UTC	(20051227-4221)
+  Log:
+  Add oper classes, operclass "name" { privs = "<privs>"; } in atheme.conf.
+  The "ircop" operclass determines what privileges all ircops get.
+  sras are still almighty.
+  
+
+  Changes:	Modified:
+  +21 -0	trunk/dist/example.conf (File Modified) 
+  +21 -0	trunk/dist/example.userserv.conf (File Modified) 
+  +6 -0		trunk/include/account.h (File Modified) 
+  +1 -0		trunk/include/atheme.h (File Modified) 
+  +4 -0		trunk/include/extern.h (File Modified) 
+  +43 -0	trunk/src/conf.c (File Modified) 
+  +59 -0	trunk/src/node.c (File Modified) 
+  +10 -2	trunk/src/privs.c (File Modified) 
+  +1 -0		trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2005/12/27 17:41:18 UTC	(20051227-4219)
   Log:
   Add code for fine grained services operator privileges.
