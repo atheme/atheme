@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ LISTMAIL function.
  *
- * $Id: listmail.c 3653 2005-11-08 00:49:36Z jilles $
+ * $Id: listmail.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"userserv/listmail", FALSE, _modinit, _moddeinit,
-	"$Id: listmail.c 3653 2005-11-08 00:49:36Z jilles $",
+	"$Id: listmail.c 4219 2005-12-27 17:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void us_cmd_listmail(char *origin);
 
-command_t us_listmail = { "LISTMAIL", "Lists accounts registered to an e-mail address.", AC_IRCOP, us_cmd_listmail };
+command_t us_listmail = { "LISTMAIL", "Lists accounts registered to an e-mail address.", PRIV_USER_AUSPEX, us_cmd_listmail };
 
 list_t *us_cmdtree, *us_helptree;
 

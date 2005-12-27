@@ -4,7 +4,7 @@
  *
  * Gives services the ability to freeze nicknames
  *
- * $Id: freeze.c 3583 2005-11-06 21:48:28Z jilles $
+ * $Id: freeze.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/freeze", FALSE, _modinit, _moddeinit,
-	"$Id: freeze.c 3583 2005-11-06 21:48:28Z jilles $",
+	"$Id: freeze.c 4219 2005-12-27 17:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,7 +20,7 @@ static void ns_cmd_freeze(char *origin);
 
 /* FREEZE ON|OFF -- don't pollute the root with THAW */
 command_t ns_freeze = { "FREEZE", "Freezes a nickname.",
-			AC_IRCOP, ns_cmd_freeze };
+			PRIV_USER_ADMIN, ns_cmd_freeze };
 
 list_t *ns_cmdtree, *ns_helptree;
 

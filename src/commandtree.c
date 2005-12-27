@@ -4,7 +4,7 @@
  *
  * Commandtree manipulation routines.
  *
- * $Id: commandtree.c 3481 2005-11-05 08:03:39Z w00t $
+ * $Id: commandtree.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -69,25 +69,16 @@ void command_exec(service_t *svs, char *origin, char *cmd, list_t *commandtree)
 		{
 			user_t *u = user_find(origin);
 
-			if (c->access == AC_NONE)
+			if (has_priv(u, c->access))
 			{
 				c->cmd(origin);
 				return;
 			}
 
-			if ((c->access == AC_SRA) && (is_sra(u->myuser)))
-			{
-				c->cmd(origin);
-				return;
-			}
-
-			if ((c->access == AC_IRCOP) && (is_sra(u->myuser) || (is_ircop(u))))
-			{
-				c->cmd(origin);
-				return;
-			}
-
-			notice(svs->name, origin, "You are not authorized to perform this operation.");
+			if (has_any_privs(u))
+				notice(svs->name, origin, "You do not have %s privilege.", c->access);
+			else
+				notice(svs->name, origin, "You are not authorized to perform this operation.");
 			snoop("DENIED CMD: \2%s\2 used %s %s", origin, svs->name, cmd);
 			return;
 		}
@@ -122,7 +113,7 @@ void command_help(char *mynick, char *origin, list_t *commandtree)
 		/* show only the commands we have access to
 		 * (taken from command_exec())
 		 */
-		if ((c->access == AC_NONE) || ((c->access == AC_SRA) && is_sra(u->myuser)) || ((c->access == AC_IRCOP) && (is_sra(u->myuser) || is_ircop(u))))
+		if (has_priv(u, c->access))
 			notice(mynick, origin, "\2%-16s\2 %s", c->name, c->desc);
 	}
 }
@@ -166,25 +157,15 @@ void fcommand_exec(service_t *svs, char *channel, char *origin, char *cmd, list_
 		{
 			user_t *u = user_find(origin);
 
-			if (c->access == AC_NONE)
+			if (has_priv(u, c->access))
 			{
 				c->cmd(origin, channel);
 				return;
 			}
-
-			if ((c->access == AC_SRA) && (is_sra(u->myuser)))
-			{
-				c->cmd(origin, channel);
-				return;
-			}
-
-			if ((c->access == AC_IRCOP) && (is_sra(u->myuser) || (is_ircop(u))))
-			{
-				c->cmd(origin, channel);
-				return;
-			}
-
-			notice(svs->name, origin, "You are not authorized to perform this operation.");
+			if (has_any_privs(u))
+				notice(svs->name, origin, "You do not have %s privilege.", c->access);
+			else
+				notice(svs->name, origin, "You are not authorized to perform this operation.");
 			return;
 		}
 	}

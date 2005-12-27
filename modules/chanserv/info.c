@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INFO functions.
  *
- * $Id: info.c 4083 2005-12-13 16:24:31Z nenolod $
+ * $Id: info.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 4083 2005-12-13 16:24:31Z nenolod $",
+	"$Id: info.c 4219 2005-12-27 17:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -70,7 +70,7 @@ static void cs_cmd_info(char *origin)
 		return;
 	}
 
-	if (!(is_ircop(u) || is_sra(u->myuser)) && (md = metadata_find(mc, METADATA_CHANNEL, "private:close:closer")))
+	if (!has_priv(u, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, METADATA_CHANNEL, "private:close:closer")))
 	{
 		notice(chansvs.nick, origin, "\2%s\2 has been closed down by the %s administration.", mc->name, me.netname);
 		return;
@@ -176,7 +176,7 @@ static void cs_cmd_info(char *origin)
 	if (*buf)
 		notice(chansvs.nick, origin, "Flags      : %s", buf);
 
-	if ((is_ircop(u) || is_sra(u->myuser)) && (md = metadata_find(mc, METADATA_CHANNEL, "private:mark:setter")))
+	if (has_priv(u, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, METADATA_CHANNEL, "private:mark:setter")))
 	{
 		char *setter = md->value;
 		char *reason;
@@ -194,7 +194,7 @@ static void cs_cmd_info(char *origin)
 		notice(chansvs.nick, origin, "%s was \2MARKED\2 by %s on %s (%s)", mc->name, setter, strfbuf, reason);
 	}
 
-	if ((is_ircop(u) || is_sra(u->myuser)) && (md = metadata_find(mc, METADATA_CHANNEL, "private:close:closer")))
+	if (has_priv(u, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, METADATA_CHANNEL, "private:close:closer")))
 	{
 		char *setter = md->value;
 		char *reason;

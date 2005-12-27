@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 3767 2005-11-10 01:28:36Z jilles $
+ * $Id: ptasks.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -67,7 +67,7 @@ void handle_stats(char *origin, char req)
 	{
 	  case 'C':
 	  case 'c':
-		  if (!is_ircop(u))
+		  if (!has_priv(u, PRIV_SERVER_AUSPEX))
 			  break;
 
 		  LIST_FOREACH(n, uplinks.head)
@@ -79,7 +79,7 @@ void handle_stats(char *origin, char req)
 
 	  case 'E':
 	  case 'e':
-		  if (!is_ircop(u))
+		  if (!has_priv(u, PRIV_SERVER_AUSPEX))
 			  break;
 
 		  numeric_sts(me.name, 249, CLIENT_NAME(u), "E :Last event to run: %s", last_event_ran);
@@ -94,7 +94,7 @@ void handle_stats(char *origin, char req)
 
 	  case 'H':
 	  case 'h':
-		  if (!is_ircop(u))
+		  if (!has_priv(u, PRIV_SERVER_AUSPEX))
 			  break;
 
 		  LIST_FOREACH(n, uplinks.head)
@@ -111,7 +111,7 @@ void handle_stats(char *origin, char req)
 
 	  case 'K':
 	  case 'k':
-		  if (!is_ircop(u))
+		  if (!has_priv(u, PRIV_AKILL))
 			  break;
 
 		  LIST_FOREACH(n, klnlist.head)
@@ -125,7 +125,7 @@ void handle_stats(char *origin, char req)
 
 	  case 'T':
 	  case 't':
-		  if (!is_ircop(u))
+		  if (!has_priv(u, PRIV_SERVER_AUSPEX))
 			  break;
 
 		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :event      %7d", claro_state.event);
@@ -150,7 +150,7 @@ void handle_stats(char *origin, char req)
 
 	  case 'V':
 	  case 'v':
-		  if (!is_ircop(u))
+		  if (!has_priv(u, PRIV_SERVER_AUSPEX))
 			  break;
 
 		  /* we received this command from the uplink, so,

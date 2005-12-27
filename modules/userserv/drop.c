@@ -4,7 +4,7 @@
  *
  * This file contains code for the UserServ DROP function.
  *
- * $Id: drop.c 4177 2005-12-24 08:42:47Z nenolod $
+ * $Id: drop.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 4177 2005-12-24 08:42:47Z nenolod $",
+	"$Id: drop.c 4219 2005-12-27 17:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -56,7 +56,7 @@ static void us_cmd_drop(char *origin)
 		return;
 	}
 
-	if (!is_sra(u->myuser) && !verify_password(mu, pass))
+	if ((pass || !has_priv(u, PRIV_USER_ADMIN)) && !verify_password(mu, pass))
 	{
 		notice(usersvs.nick, origin, "Authentication failed. Invalid password for \2%s\2.", mu->name);
 		return;
@@ -68,11 +68,11 @@ static void us_cmd_drop(char *origin)
 		return;
 	}
 
-	if (is_sra(u->myuser) && !pass)
+	if (!pass)
 		wallops("%s dropped the account \2%s\2", origin, mu->name);
 
 	snoop("DROP: \2%s\2 by \2%s\2", mu->name, u->nick);
-	logcommand(usersvs.me, u, CMDLOG_REGISTER, "DROP %s", mu->name);
+	logcommand(usersvs.me, u, pass ? CMDLOG_REGISTER : CMDLOG_ADMIN, "DROP %s%s", mu->name, pass ? "" : " (admin)");
 	hook_call_event("user_drop", mu);
 	notice(usersvs.nick, origin, "The account \2%s\2 has been dropped.", mu->name);
 	myuser_delete(mu->name);

@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 4197 2005-12-26 14:01:51Z jilles $
+# $Id: Makefile.in 4219 2005-12-27 17:41:18Z jilles $
 #
 
 CC		= @CC@
@@ -53,6 +53,7 @@ BASE_SRCS =		\
 	parse.c		\
 	phandler.c	\
 	pmodule.c	\
+	privs.c		\
 	ptasks.c	\
 	services.c	\
 	servtree.c	\

@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 4099 2005-12-15 22:18:39Z jilles $
+ * $Id: services.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -292,22 +292,16 @@ struct command_ *cmd_find(char *svs, char *origin, char *command, struct command
 	{
 		if (!strcasecmp(command, c->name))
 		{
-			/* no special access required, so go ahead... */
-			if (c->access == AC_NONE)
-				return c;
-
-			/* sra? */
-			if ((c->access == AC_SRA) && (is_sra(u->myuser)))
-				return c;
-
-			/* ircop? */
-			if ((c->access == AC_IRCOP) && (is_sra(u->myuser) || (is_ircop(u))))
+			if (has_priv(u, c->access))
 				return c;
 
 			/* otherwise... */
 			else
 			{
-				notice(svs, origin, "You are not authorized to perform this operation.");
+				if (has_any_privs(u))
+					notice(svs, origin, "You do not have %s privilege.", c->access);
+				else
+					notice(svs, origin, "You are not authorized to perform this operation.");
 				snoop("DENIED CMD: \2%s\2 used %s", origin, command);
 				return NULL;
 			}

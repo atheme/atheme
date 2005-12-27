@@ -5,7 +5,7 @@
  * This file contains code for the NickServ LIST function.
  * Based on Alex Lambert's LISTEMAIL.
  *
- * $Id: list.c 3653 2005-11-08 00:49:36Z jilles $
+ * $Id: list.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -13,13 +13,13 @@
 DECLARE_MODULE_V1
 (
 	"userserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 3653 2005-11-08 00:49:36Z jilles $",
+	"$Id: list.c 4219 2005-12-27 17:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void us_cmd_list(char *origin);
 
-command_t us_list = { "LIST", "Lists accounts registered matching a given pattern.", AC_IRCOP, us_cmd_list };
+command_t us_list = { "LIST", "Lists accounts registered matching a given pattern.", PRIV_USER_AUSPEX, us_cmd_list };
 
 list_t *us_cmdtree, *us_helptree;
 

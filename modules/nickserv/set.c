@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 3685 2005-11-09 01:07:04Z alambert $
+ * $Id: set.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 3685 2005-11-09 01:07:04Z alambert $",
+	"$Id: set.c 4219 2005-12-27 17:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -483,7 +483,7 @@ static void ns_set_property(char *origin, char *name, char *params)
 		return;
 	}
 
-	if (strchr(property, ':') && !is_ircop(u) && !is_sra(mu))
+	if (strchr(property, ':') && !has_priv(u, PRIV_METADATA))
 	{
 		notice(nicksvs.nick, origin, "Invalid property name.");
 		return;
@@ -592,22 +592,16 @@ static struct set_command_ *ns_set_cmd_find(char *origin, char *command)
 	{
 		if (!strcasecmp(command, c->name))
 		{
-			/* no special access required, so go ahead... */
-			if (c->access == AC_NONE)
-				return c;
-
-			/* sra? */
-			if ((c->access == AC_SRA) && (is_sra(u->myuser)))
-				return c;
-
-			/* ircop? */
-			if ((c->access == AC_IRCOP) && (is_ircop(u)))
+			if (has_priv(u, c->access))
 				return c;
 
 			/* otherwise... */
 			else
 			{
-				notice(nicksvs.nick, origin, "You are not authorized to perform this operation.");
+				if (has_any_privs(u))
+					notice(nicksvs.nick, origin, "You do not have %s privilege.", c->access);
+				else
+					notice(nicksvs.nick, origin, "You are not authorized to perform this operation.");
 				return NULL;
 			}
 		}

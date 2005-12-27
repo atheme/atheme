@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 4087 2005-12-13 17:04:07Z jilles $
+ * $Id: atheme.h 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -211,7 +211,7 @@ struct message_
 struct command_
 {
   const char *name;
-  uint8_t access;
+  const char *access;
   void (*func) (char *nick);
 };
 
@@ -219,7 +219,7 @@ struct command_
 struct set_command_
 {
   const char *name;
-  uint8_t access;
+  const char *access;
   void (*func) (char *origin, char *name, char *params);
 };
 
@@ -229,15 +229,10 @@ typedef struct help_command_ helpentry_t;
 struct help_command_
 {
   char *name;
-  uint8_t access;
+  const char *access;
   char *file;
   void (*func) (char *origin);
 };
-
-/* access levels for commands */
-#define AC_NONE  0
-#define AC_IRCOP 1
-#define AC_SRA   2
 
 /* email types (meaning of param argument) */
 #define EMAIL_REGISTER 1 /* register an account/nick (verification code) */
@@ -276,6 +271,7 @@ struct timeval burstime;
 #include "commandtree.h"
 #include "users.h"
 #include "authcookie.h"
+#include "privs.h"
 
 /* *INDENT-ON* */
 

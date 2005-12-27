@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 4187 2005-12-25 21:41:36Z jilles $
+ * $Id: help.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 4187 2005-12-25 21:41:36Z jilles $",
+	"$Id: help.c 4219 2005-12-27 17:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -62,7 +62,7 @@ static void fc_cmd_help(char *origin, char *chan)
 		strlcat(buf, c->name, BUFSIZE);
 		strlcat(buf, delim, BUFSIZE);
 
-		if (c->access == AC_IRCOP)
+		if (c->access != NULL)
 			continue;
 
 		if (i==6)
@@ -137,7 +137,7 @@ static void cs_cmd_help(char *origin)
 		notice(chansvs.nick, origin, "\2PROPERTY\2      Manipulates channel metadata.");
 		notice(chansvs.nick, origin, " ");
 
-		if (is_sra(u->myuser) || is_ircop(u))
+		if (has_any_privs(u))
 		{
 			notice(chansvs.nick, origin, "The following IRCop commands are available.");
 			notice(chansvs.nick, origin, "\2STAFFONLY\2     Sets the channel as staff-only. (Non staff-members are kickbanned.)");

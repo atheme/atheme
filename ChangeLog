@@ -1,3 +1,13 @@
+nenolod     2005/12/27 03:36:36 UTC	(20051227-4217)
+  Log:
+  Module dependency tracking. (I offered a bounty for this, because I was too lazy to do it myself. :P)
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/include/module.h (File Modified) 
+  +31 -1	trunk/src/module.c (File Modified) 
+
+
 nenolod     2005/12/27 03:10:48 UTC	(20051227-4215)
   Log:
   remove dead win32 posix-emulation code that hasn't been used in a long time

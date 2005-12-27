@@ -4,7 +4,7 @@
  *
  * Lists object properties via their metadata table.
  *
- * $Id: taxonomy.c 3911 2005-11-14 10:52:52Z jilles $
+ * $Id: taxonomy.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/taxonomy", FALSE, _modinit, _moddeinit,
-	"$Id: taxonomy.c 3911 2005-11-14 10:52:52Z jilles $",
+	"$Id: taxonomy.c 4219 2005-12-27 17:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -61,7 +61,7 @@ void cs_cmd_taxonomy(char *origin)
 		return;
 	}
 
-	isoper = is_ircop(u) || is_sra(u->myuser);
+	isoper = has_priv(u, PRIV_CHAN_AUSPEX);
 	/*snoop("TAXONOMY: \2%s\2", origin);*/
 	if (isoper)
 		logcommand(chansvs.me, u, CMDLOG_ADMIN, "%s TAXONOMY (oper)", mc->name);

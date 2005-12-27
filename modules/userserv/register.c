@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 4097 2005-12-15 21:34:25Z jilles $
+ * $Id: register.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 4097 2005-12-15 21:34:25Z jilles $",
+	"$Id: register.c 4219 2005-12-27 17:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -84,12 +84,7 @@ static void us_cmd_register(char *origin)
 	mu = myuser_find(account);
 	if (mu != NULL)
 	{
-		/* should we reveal the e-mail address? (from us_info.c) */
-		if (!(mu->flags & MU_HIDEMAIL)
-			|| (is_sra(u->myuser) || is_ircop(u) || u->myuser == mu))
-			notice(usersvs.nick, origin, "\2%s\2 is already registered to \2%s\2.", mu->name, mu->email);
-		else
-			notice(usersvs.nick, origin, "\2%s\2 is already registered.", mu->name);
+		notice(usersvs.nick, origin, "\2%s\2 is already registered.", mu->name);
 
 		return;
 	}

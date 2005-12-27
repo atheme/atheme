@@ -4,7 +4,7 @@
  *
  * Controls noexpire options for accounts.
  *
- * $Id: hold.c 3653 2005-11-08 00:49:36Z jilles $
+ * $Id: hold.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,14 +12,14 @@
 DECLARE_MODULE_V1
 (
 	"userserv/hold", FALSE, _modinit, _moddeinit,
-	"$Id: hold.c 3653 2005-11-08 00:49:36Z jilles $",
+	"$Id: hold.c 4219 2005-12-27 17:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void us_cmd_hold(char *origin);
 
 command_t us_hold = { "HOLD", "Prevents a account from expiring.",
-			AC_SRA, us_cmd_hold };
+			PRIV_HOLD, us_cmd_hold };
 
 list_t *us_cmdtree, *us_helptree;
 

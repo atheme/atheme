@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ DROP function.
  *
- * $Id: drop.c 3763 2005-11-10 00:55:02Z alambert $
+ * $Id: drop.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 3763 2005-11-10 00:55:02Z alambert $",
+	"$Id: drop.c 4219 2005-12-27 17:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -56,7 +56,7 @@ static void ns_cmd_drop(char *origin)
 		return;
 	}
 
-	if (!is_sra(u->myuser) && !verify_password(mu, pass))
+	if ((pass || !has_priv(u, PRIV_USER_ADMIN)) && !verify_password(mu, pass))
 	{
 		notice(nicksvs.nick, origin, "Authentication failed. Invalid password for \2%s\2.", mu->name);
 		return;
@@ -68,11 +68,11 @@ static void ns_cmd_drop(char *origin)
 		return;
 	}
 
-	if (is_sra(u->myuser) && !pass)
+	if (!pass)
 		wallops("%s dropped the nickname \2%s\2", origin, mu->name);
 
 	snoop("DROP: \2%s\2 by \2%s\2", mu->name, u->nick);
-	logcommand(nicksvs.me, u, CMDLOG_REGISTER, "DROP %s", mu->name);
+	logcommand(nicksvs.me, u, pass ? CMDLOG_REGISTER : CMDLOG_ADMIN, "DROP %s%s", mu->name, pass ? "" : " (admin)");
 	hook_call_event("user_drop", mu);
 	notice(nicksvs.nick, origin, "The nickname \2%s\2 has been dropped.", mu->name);
 	myuser_delete(mu->name);

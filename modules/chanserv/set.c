@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 4127 2005-12-17 09:58:57Z w00t $
+ * $Id: set.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 4127 2005-12-17 09:58:57Z w00t $",
+	"$Id: set.c 4219 2005-12-27 17:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -326,7 +326,7 @@ static void cs_set_founder(char *origin, char *name, char *params)
 				}
 			}
 
-			if ((tcnt >= me.maxchans) && !is_sra(tmu))
+			if ((tcnt >= me.maxchans) && !has_priv_myuser(tmu, PRIV_REG_NOLIMIT))
 			{
 				notice(chansvs.nick, origin, "\2%s\2 has too many channels registered.", tmu->name);
 				return;
@@ -431,7 +431,7 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 		return;
 	}
 
-	mask = is_ircop(u) ? 0 : ircd->oper_only_modes;
+	mask = has_priv(u, PRIV_CHAN_ADMIN) ? 0 : ircd->oper_only_modes;
 
 	while (*letters)
 	{
@@ -903,7 +903,8 @@ static void cs_set_property(char *origin, char *name, char *params)
                 return;
         }
 
-        if (strchr(property, ':') && !is_ircop(u) && !is_sra(u->myuser))
+	/* do we really need to allow this? -- jilles */
+        if (strchr(property, ':') && !has_priv(u, PRIV_METADATA))
         {
                 notice(chansvs.nick, origin, "Invalid property name.");
                 return;
@@ -971,7 +972,7 @@ struct set_command_ set_commands[] = {
   { "EMAIL",      AC_NONE,  cs_set_email      },
   { "KEEPTOPIC",  AC_NONE,  cs_set_keeptopic  },
   { "FANTASY",    AC_NONE,  cs_set_fantasy    },
-  { "STAFFONLY",  AC_IRCOP, cs_set_staffonly  },
+  { "STAFFONLY",  PRIV_CHAN_ADMIN, cs_set_staffonly  },
   { NULL, 0, NULL }
 };
 
@@ -986,22 +987,16 @@ struct set_command_ *set_cmd_find(char *origin, char *command)
 	{
 		if (!strcasecmp(command, c->name))
 		{
-			/* no special access required, so go ahead... */
-			if (c->access == AC_NONE)
-				return c;
-
-			/* sra? */
-			if ((c->access == AC_SRA) && (is_sra(u->myuser)))
-				return c;
-
-			/* ircop? */
-			if ((c->access == AC_IRCOP) && (is_ircop(u)))
+			if (has_priv(u, c->access))
 				return c;
 
 			/* otherwise... */
 			else
 			{
-				notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+				if (has_any_privs(u))
+					notice(chansvs.nick, origin, "You do not have %s privilege.", c->access);
+				else
+					notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 				return NULL;
 			}
 		}

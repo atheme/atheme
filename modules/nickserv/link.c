@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ LINK function.
  *
- * $Id: link.c 4213 2005-12-27 02:27:31Z jilles $
+ * $Id: link.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/link", FALSE, _modinit, _moddeinit,
-	"$Id: link.c 4213 2005-12-27 02:27:31Z jilles $",
+	"$Id: link.c 4219 2005-12-27 17:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -106,13 +106,7 @@ static void ns_cmd_link(char *origin)
 	mu = myuser_find(nick);
 	if (mu != NULL)
 	{
-		/* should we reveal the e-mail address? (from ns_info.c) */
-		if (!(mu->flags & MU_HIDEMAIL)
-			|| (is_sra(u->myuser) || is_ircop(u) || u->myuser == mu))
-			notice(nicksvs.nick, origin, "\2%s\2 is already registered to \2%s\2.", mu->name, mu->email);
-		else
-			notice(nicksvs.nick, origin, "\2%s\2 is already registered.", mu->name);
-
+		notice(nicksvs.nick, origin, "\2%s\2 is already registered.", mu->name);
 		return;
 	}
 

@@ -4,7 +4,7 @@
  *
  * A simple module inspector.
  *
- * $Id: modinspect.c 3607 2005-11-06 23:57:17Z jilles $
+ * $Id: modinspect.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modinspect", FALSE, _modinit, _moddeinit,
-	"$Id: modinspect.c 3607 2005-11-06 23:57:17Z jilles $",
+	"$Id: modinspect.c 4219 2005-12-27 17:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,7 +20,7 @@ static void os_cmd_modinspect(char *origin);
 
 list_t *os_cmdtree;
 
-command_t os_modinspect = { "MODINSPECT", "Displays information about loaded modules.", AC_IRCOP, os_cmd_modinspect };
+command_t os_modinspect = { "MODINSPECT", "Displays information about loaded modules.", PRIV_SERVER_AUSPEX, os_cmd_modinspect };
 
 void _modinit(module_t *m)
 {

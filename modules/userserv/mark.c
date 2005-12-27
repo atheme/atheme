@@ -4,7 +4,7 @@
  *
  * Marking for accounts.
  *
- * $Id: mark.c 3653 2005-11-08 00:49:36Z jilles $
+ * $Id: mark.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,14 +12,14 @@
 DECLARE_MODULE_V1
 (
 	"userserv/mark", FALSE, _modinit, _moddeinit,
-	"$Id: mark.c 3653 2005-11-08 00:49:36Z jilles $",
+	"$Id: mark.c 4219 2005-12-27 17:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void us_cmd_mark(char *origin);
 
 command_t us_mark = { "MARK", "Adds a note to a user.",
-			AC_IRCOP, us_cmd_mark };
+			PRIV_MARK, us_cmd_mark };
 
 list_t *us_cmdtree, *us_helptree;
 

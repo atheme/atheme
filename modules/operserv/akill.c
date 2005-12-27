@@ -5,7 +5,7 @@
  * This file contains functionality which implements
  * the OService AKILL/KLINE command.
  *
- * $Id: akill.c 4211 2005-12-26 23:05:34Z jilles $
+ * $Id: akill.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 4211 2005-12-26 23:05:34Z jilles $",
+	"$Id: akill.c 4219 2005-12-27 17:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -23,12 +23,12 @@ static void os_cmd_akill_del(char *origin, char *target);
 static void os_cmd_akill_list(char *origin, char *target);
 
 
-command_t os_kline = { "KLINE", "Manages network bans. [deprecated, use OS AKILL in future.]", AC_IRCOP, os_cmd_akill };
-command_t os_akill = { "AKILL", "Manages network bans.", AC_IRCOP, os_cmd_akill };
+command_t os_kline = { "KLINE", "Manages network bans. [deprecated, use OS AKILL in future.]", PRIV_AKILL, os_cmd_akill };
+command_t os_akill = { "AKILL", "Manages network bans.", PRIV_AKILL, os_cmd_akill };
 
-fcommand_t os_akill_add = { "ADD", AC_IRCOP, os_cmd_akill_add };
-fcommand_t os_akill_del = { "DEL", AC_IRCOP, os_cmd_akill_del };
-fcommand_t os_akill_list = { "LIST", AC_IRCOP, os_cmd_akill_list };
+fcommand_t os_akill_add = { "ADD", AC_NONE, os_cmd_akill_add };
+fcommand_t os_akill_del = { "DEL", AC_NONE, os_cmd_akill_del };
+fcommand_t os_akill_list = { "LIST", AC_NONE, os_cmd_akill_list };
 
 list_t *os_cmdtree;
 list_t *os_helptree;

@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 3821 2005-11-11 05:05:24Z pfish $
+ * $Id: info.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 3821 2005-11-11 05:05:24Z pfish $",
+	"$Id: info.c 4219 2005-12-27 17:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -66,7 +66,7 @@ static void ns_cmd_info(char *origin)
 
 	notice(nicksvs.nick, origin, "Information on \2%s\2:", mu->name);
 
-	if ((is_ircop(u) || is_sra(u->myuser)) && (md = metadata_find(mu, METADATA_USER, "private:host:actual")))
+	if (has_priv(u, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:host:actual")))
 		notice(nicksvs.nick, origin, "Last login from: %s", md->value);
 	else if (md = metadata_find(mu, METADATA_USER, "private:host:vhost"))
 		notice(nicksvs.nick, origin, "Last login from: %s", md->value);
@@ -75,7 +75,7 @@ static void ns_cmd_info(char *origin)
 	notice(nicksvs.nick, origin, "Last seen  : %s (%s ago)", lastlogin, time_ago(mu->lastlogin));
 
 	if (!(mu->flags & MU_HIDEMAIL)
-		|| (is_sra(u->myuser) || is_ircop(u) || u->myuser == mu))
+		|| (u->myuser == mu || has_priv(u, PRIV_USER_AUSPEX)))
 		notice(nicksvs.nick, origin, "Email      : %s%s", mu->email,
 					(mu->flags & MU_HIDEMAIL) ? " (hidden)": "");
 
@@ -135,7 +135,7 @@ static void ns_cmd_info(char *origin)
 
 	if (LIST_LENGTH(&mu->logins) == 0)
 		notice(nicksvs.nick, origin, "Logins from: <none>");
-	else if (mu == u->myuser || is_ircop(u) || is_sra(u->myuser))
+	else if (mu == u->myuser || has_priv(u, PRIV_USER_AUSPEX))
 	{
 		buf[0] = '\0';
 		LIST_FOREACH(n, mu->logins.head)
@@ -155,7 +155,7 @@ static void ns_cmd_info(char *origin)
 	else
 		notice(nicksvs.nick, origin, "Logins from: <hidden>");
 
-        if ((is_ircop(u) || is_sra(u->myuser)) && (md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
+        if (has_priv(u, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
         {
                 char *setter = md->value;
                 char *reason;
@@ -173,7 +173,7 @@ static void ns_cmd_info(char *origin)
                 notice(nicksvs.nick, origin, "%s was \2FROZEN\2 by %s on %s (%s)", mu->name, setter, strfbuf, reason);
         }
 
-	if ((is_ircop(u) || is_sra(u->myuser)) && (md = metadata_find(mu, METADATA_USER, "private:mark:setter")))
+	if (has_priv(u, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:mark:setter")))
 	{
 		char *setter = md->value;
 		char *reason;
@@ -191,7 +191,7 @@ static void ns_cmd_info(char *origin)
 		notice(nicksvs.nick, origin, "%s was \2MARKED\2 by %s on %s (%s)", mu->name, setter, strfbuf, reason);
 	}
 
-	if ((MU_WAITAUTH & mu->flags) && (is_ircop(u) || is_sra(u->myuser)))
+	if ((MU_WAITAUTH & mu->flags) && has_priv(u, PRIV_USER_AUSPEX))
 		notice(nicksvs.nick, origin, "%s has not completed registration verification", mu->name);
 
 	notice(nicksvs.nick, origin, "*** \2End of Info\2 ***");

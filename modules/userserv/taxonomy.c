@@ -4,7 +4,7 @@
  *
  * Lists object properties via their metadata table.
  *
- * $Id: taxonomy.c 3741 2005-11-09 13:02:50Z jilles $
+ * $Id: taxonomy.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/taxonomy", FALSE, _modinit, _moddeinit,
-	"$Id: taxonomy.c 3741 2005-11-09 13:02:50Z jilles $",
+	"$Id: taxonomy.c 4219 2005-12-27 17:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -42,6 +42,7 @@ static void us_cmd_taxonomy(char *origin)
 	user_t *u = user_find(origin);
 	myuser_t *mu;
 	node_t *n;
+	boolean_t isoper;
 
 	if (!target)
 	{
@@ -56,8 +57,12 @@ static void us_cmd_taxonomy(char *origin)
 		return;
 	}
 
+	isoper = has_priv(u, PRIV_USER_AUSPEX);
 	/*snoop("TAXONOMY:\2%s\2 by \2%s\2", target, origin);*/
-	logcommand(usersvs.me, u, CMDLOG_GET, "TAXONOMY %s", target);
+	if (isoper)
+		logcommand(usersvs.me, u, CMDLOG_ADMIN, "TAXONOMY %s (oper)", target);
+	else
+		logcommand(usersvs.me, u, CMDLOG_GET, "TAXONOMY %s", target);
 
 	notice(usersvs.nick, origin, "Taxonomy for \2%s\2:", target);
 
@@ -65,7 +70,7 @@ static void us_cmd_taxonomy(char *origin)
 	{
 		metadata_t *md = n->data;
 
-		if (md->private == TRUE && !is_ircop(u) && !is_sra(u->myuser))
+		if (md->private == TRUE && !isoper)
 			continue;
 
 		notice(usersvs.nick, origin, "%-32s: %s", md->name, md->value);

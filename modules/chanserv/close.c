@@ -4,7 +4,7 @@
  *
  * Closing for channels.
  *
- * $Id: close.c 3663 2005-11-08 02:10:26Z jilles $
+ * $Id: close.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/close", FALSE, _modinit, _moddeinit,
-	"$Id: close.c 3663 2005-11-08 02:10:26Z jilles $",
+	"$Id: close.c 4219 2005-12-27 17:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,7 +20,7 @@ static void cs_cmd_close(char *origin);
 
 /* CLOSE ON|OFF -- don't pollute the root with REOPEN */
 command_t cs_close = { "CLOSE", "Closes a channel.",
-			AC_IRCOP, cs_cmd_close };
+			PRIV_CHAN_ADMIN, cs_cmd_close };
 
 static void close_can_leave(void *name);
 static void close_check_join(chanuser_t *cu);

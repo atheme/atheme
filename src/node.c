@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4181 2005-12-25 00:26:15Z jilles $
+ * $Id: node.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -1406,7 +1406,7 @@ static myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t minlevel, int maxt
 			continue;
 		if ((ca->level & minlevel) == minlevel && (maxtime == 0 || LIST_LENGTH(&mu->logins) > 0 || CURRTIME - mu->lastlogin < maxtime))
 		{
-			if (is_sra(mu))
+			if (has_priv_myuser(mu, PRIV_REG_NOLIMIT))
 				return mu;
 			tcnt = 0;
 			for (j = 0; j < HASHSIZE; j++)

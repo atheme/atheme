@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService DROP function.
  *
- * $Id: drop.c 3793 2005-11-10 23:45:29Z jilles $
+ * $Id: drop.c 4219 2005-12-27 17:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 3793 2005-11-10 23:45:29Z jilles $",
+	"$Id: drop.c 4219 2005-12-27 17:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -68,20 +68,20 @@ static void cs_cmd_drop(char *origin)
 		return;
 	}
 
-	if (!is_founder(mc, u->myuser) && !is_sra(u->myuser))
+	if (!is_founder(mc, u->myuser) && !has_priv(u, PRIV_CHAN_ADMIN))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 		return;
 	}
 
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && !is_sra(u->myuser))
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && !has_priv(u, PRIV_CHAN_ADMIN))
 	{
 		logcommand(chansvs.me, u, CMDLOG_REGISTER, "%s failed DROP (closed)", mc->name);
 		notice(chansvs.nick, origin, "The channel \2%s\2 is closed; it cannot be dropped.", mc->name);
 		return;
 	}
 
-	if (is_sra(u->myuser) && !is_founder(mc, u->myuser))
+	if (!is_founder(mc, u->myuser))
 	{
 		logcommand(chansvs.me, u, CMDLOG_ADMIN, "%s DROP", mc->name);
 		wallops("%s dropped the channel \2%s\2", origin, name);
