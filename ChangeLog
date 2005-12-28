@@ -1,3 +1,13 @@
+jilles      2005/12/28 21:02:02 UTC	(20051228-4251)
+  Log:
+  Mention crypto/ircservices module.
+  
+
+  Changes:	Modified:
+  +5 -0		trunk/dist/example.conf (File Modified) 
+  +5 -0		trunk/dist/example.userserv.conf (File Modified) 
+
+
 jilles      2005/12/28 19:43:11 UTC	(20051228-4249)
   Log:
   Correct fprintf() types for memos (ME lines)
