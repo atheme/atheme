@@ -1,3 +1,12 @@
+nenolod     2005/12/28 22:32:35 UTC	(20051228-4259)
+  Log:
+  update the culture.h header. :)
+  
+
+  Changes:	Modified:
+  +1 -3		trunk/include/culture.h (File Modified) 
+
+
 nenolod     2005/12/28 22:20:41 UTC	(20051228-4257)
   Log:
   new translation format proposal
