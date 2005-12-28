@@ -4,7 +4,7 @@
  *
  * Translation framework.
  *
- * $Id: culture.c 4261 2005-12-28 22:51:48Z nenolod $
+ * $Id: culture.c 4263 2005-12-28 22:56:31Z nenolod $
  */
 
 #include "atheme.h"
@@ -33,7 +33,7 @@ char *translation_get(char *str)
 		translation_t *t = (translation_t *) n->data;
 
 		if (!strcmp(str, t->name))
-			return t->translation;
+			return t->replacement;
 	}
 
 	return str;
@@ -56,7 +56,7 @@ void translation_create(char *str, char *trans)
 	translation_t *t = smalloc(sizeof(translation_t));
 
 	t->name = sstrdup(str);
-	t->translation = sstrdup(trans);
+	t->replacement = sstrdup(trans);
 
 	node_add(t, node_create(), &transhash[shash((unsigned char *) str)]);
 }
@@ -75,17 +75,17 @@ void translation_create(char *str, char *trans)
  */
 void translation_destroy(char *str)
 {
-	node_t *n;
+	node_t *n, *tn;
 	translation_t *t;
 
-	LIST_FOREACH_SAFE(n, transhash[shash((unsigned char *) str)].head)
+	LIST_FOREACH_SAFE(n, tn, transhash[shash((unsigned char *) str)].head)
 	{
 		if (!strcmp(str, t->name))
 		{
 			node_del(n, &transhash[shash((unsigned char *) str)]);
 
 			free(t->name);
-			free(t->translation);
+			free(t->replacement);
 			free(t);
 		}
 	}
