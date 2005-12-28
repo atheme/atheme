@@ -1,3 +1,13 @@
+jilles      2005/12/28 01:27:40 UTC	(20051228-4243)
+  Log:
+  Enable $Id$ substitution.
+  
+
+  Changes:	Modified:
+  + -		trunk/include/privs.h  (Property Modified)
+  + -		trunk/src/privs.c  (Property Modified)
+
+
 jilles      2005/12/28 01:26:38 UTC	(20051228-4241)
   Log:
   Add description of oper privileges.

@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4239 2005-12-28 01:10:58Z jilles $
+ * $Id: node.c 4245 2005-12-28 02:03:12Z jilles $
  */
 
 #include "atheme.h"
@@ -2240,6 +2240,12 @@ void expire_check(void *arg)
 
 			if (((CURRTIME - mu->lastlogin) >= config_options.expire) || ((mu->flags & MU_WAITAUTH) && (CURRTIME - mu->registered >= 86400)))
 			{
+				/* Don't expire accounts with privs on them,
+				 * otherwise someone can reregister
+				 * them and take the privs -- jilles */
+				if (is_sra(mu))
+					continue;
+
 				snoop("EXPIRE: \2%s\2 from \2%s\2 ", mu->name, mu->email);
 				myuser_delete(mu->name);
 			}
