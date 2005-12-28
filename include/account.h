@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 4221 2005-12-27 19:06:48Z jilles $
+ * $Id: account.h 4239 2005-12-28 01:10:58Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -26,6 +26,7 @@ struct operclass_ {
 struct sra_ {
   myuser_t *myuser;
   char *name;
+  operclass_t *operclass;
 };
 
 struct myuser_

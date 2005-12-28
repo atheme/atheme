@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4235 2005-12-27 23:42:54Z jilles $
+ * $Id: node.c 4239 2005-12-28 01:10:58Z jilles $
  */
 
 #include "atheme.h"
@@ -267,15 +267,21 @@ operclass_t *operclass_find(char *name)
  * S R A S *
  ***********/
 
-sra_t *sra_add(char *name)
+sra_t *sra_add(char *name, operclass_t *operclass)
 {
 	sra_t *sra;
 	myuser_t *mu = myuser_find(name);
-	node_t *n = node_create();
+	node_t *n;
 
-	slog(LG_DEBUG, "sra_add(): %s", (mu) ? mu->name : name);
+	if (mu ? sra_find(mu) : sra_find_named(name))
+	{
+		slog(LG_INFO, "sra_add(): duplicate SRA %s", name);
+		return;
+	}
+	slog(LG_DEBUG, "sra_add(): %s -> %s", (mu) ? mu->name : name, operclass ? operclass->name : "<null>");
 
 	sra = BlockHeapAlloc(sra_heap);
+	n = node_create();
 
 	node_add(sra, n, &sralist);
 
@@ -290,6 +296,7 @@ sra_t *sra_add(char *name)
 		sra->name = sstrdup(name);
 		sra->myuser = NULL;
 	}
+	sra->operclass = operclass;
 
 	cnt.sra++;
 

@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4237 2005-12-28 00:50:10Z jilles $
+ * $Id: conf.c 4239 2005-12-28 01:10:58Z jilles $
  */
 
 #include "atheme.h"
@@ -28,6 +28,7 @@ static int c_memoserv(CONFIGENTRY *);
 static int c_helpserv(CONFIGENTRY *);
 static int c_loadmodule(CONFIGENTRY *);
 static int c_operclass(CONFIGENTRY *);
+static int c_operator(CONFIGENTRY *);
 
 static int c_si_name(CONFIGENTRY *);
 static int c_si_desc(CONFIGENTRY *);
@@ -424,6 +425,7 @@ void init_newconf(void)
 	add_top_conf("DATABASE", c_database);
 	add_top_conf("LOADMODULE", c_loadmodule);
 	add_top_conf("OPERCLASS", c_operclass);
+	add_top_conf("OPERATOR", c_operator);
 
 	/* Now we fill in the information */
 	add_conf_item("NAME", &conf_si_table, c_si_name);
@@ -691,6 +693,45 @@ static int c_operclass(CONFIGENTRY *ce)
 
 	operclass_add(name, privs ? privs : "");
 	free(privs);
+	return 0;
+}
+
+static int c_operator(CONFIGENTRY *ce)
+{
+	char *name;
+	operclass_t *operclass = NULL;
+	CONFIGENTRY *topce;
+
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	topce = ce;
+	name = ce->ce_vardata;
+
+	for (ce = ce->ce_entries; ce; ce = ce->ce_next)
+	{
+		if (!strcasecmp("OPERCLASS", ce->ce_varname))
+		{
+			if (ce->ce_vardata == NULL)
+				PARAM_ERROR(ce);
+
+			operclass = operclass_find(ce->ce_vardata);
+			if (operclass == NULL)
+				slog(LG_ERROR, "%s:%d: invalid operclass %s for operator %s",
+						ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_vardata, name);
+		}
+		else
+		{
+			slog(LG_ERROR, "%s:%d: Invalid configuration option operator::%s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
+			continue;
+		}
+	}
+
+	if (operclass != NULL)
+		sra_add(name, operclass);
+	else
+		slog(LG_ERROR, "%s:%d: skipping operator %s because of bad/missing parameters",
+						topce->ce_fileptr->cf_filename, topce->ce_varlinenum, name);
 	return 0;
 }
 
@@ -1405,7 +1446,7 @@ static int c_gi_sras(CONFIGENTRY *ce)
 	CONFIGENTRY *flce;
 
 	for (flce = ce->ce_entries; flce; flce = flce->ce_next)
-		sra_add(flce->ce_varname);
+		sra_add(flce->ce_varname, NULL);
 
 	return 0;
 }

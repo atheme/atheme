@@ -55,14 +55,31 @@ boolean_t has_priv(user_t *u, const char *priv)
 		if (operclass != NULL && string_in_list(operclass->privs, priv))
 			return TRUE;
 	}
-	return u->myuser && is_sra(u->myuser);
+	if (u->myuser && is_sra(u->myuser))
+	{
+		operclass = u->myuser->sra->operclass;
+		if (operclass == NULL) /* old sras = {} */
+			return TRUE;
+		if (string_in_list(operclass->privs, priv))
+			return TRUE;
+	}
+	return FALSE;
 }
 
 boolean_t has_priv_myuser(myuser_t *mu, const char *priv)
 {
+	operclass_t *operclass;
+
 	if (priv == NULL)
 		return TRUE;
 	if (mu == NULL)
 		return FALSE;
-	return is_sra(mu);
+	if (!is_sra(mu))
+		return FALSE;
+	operclass = mu->sra->operclass;
+	if (operclass == NULL) /* old sras = {} */
+		return TRUE;
+	if (string_in_list(operclass->privs, priv))
+		return TRUE;
+	return FALSE;
 }
