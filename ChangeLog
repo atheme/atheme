@@ -1,3 +1,13 @@
+jilles      2005/12/28 02:03:12 UTC	(20051228-4245)
+  Log:
+  Don't expire accounts with privs on them, otherwise
+  someone can reregister them and take the privs.
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/src/node.c (File Modified) 
+
+
 jilles      2005/12/28 01:27:40 UTC	(20051228-4243)
   Log:
   Enable $Id$ substitution.

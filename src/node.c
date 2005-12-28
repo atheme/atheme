@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4245 2005-12-28 02:03:12Z jilles $
+ * $Id: node.c 4247 2005-12-28 18:03:12Z jilles $
  */
 
 #include "atheme.h"
@@ -276,7 +276,7 @@ sra_t *sra_add(char *name, operclass_t *operclass)
 	if (mu ? sra_find(mu) : sra_find_named(name))
 	{
 		slog(LG_INFO, "sra_add(): duplicate SRA %s", name);
-		return;
+		return NULL;
 	}
 	slog(LG_DEBUG, "sra_add(): %s -> %s", (mu) ? mu->name : name, operclass ? operclass->name : "<null>");
 
