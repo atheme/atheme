@@ -1,3 +1,12 @@
+jilles      2005/12/28 01:26:38 UTC	(20051228-4241)
+  Log:
+  Add description of oper privileges.
+  
+
+  Changes:	Modified:
+  +54 -0	trunk/doc/PRIVILEGES (File Added) 
+
+
 jilles      2005/12/28 01:10:58 UTC	(20051228-4239)
   Log:
   Add operator "<account>" { operclass = "<operclass>"; };

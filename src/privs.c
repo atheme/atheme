@@ -4,7 +4,7 @@
  *
  * See doc/LICENSE for licensing information.
  *
- * $Id$
+ * $Id: privs.c 4243 2005-12-28 01:27:40Z jilles $
  */
 
 #include "atheme.h"
