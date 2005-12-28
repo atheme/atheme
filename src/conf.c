@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4235 2005-12-27 23:42:54Z jilles $
+ * $Id: conf.c 4237 2005-12-28 00:50:10Z jilles $
  */
 
 #include "atheme.h"
@@ -684,7 +684,7 @@ static int c_operclass(CONFIGENTRY *ce)
 		}
 		else
 		{
-			slog(LG_ERROR, "%s:%d: Invalid configuration option uplink::%s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
+			slog(LG_ERROR, "%s:%d: Invalid configuration option operclass::%s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
 			continue;
 		}
 	}

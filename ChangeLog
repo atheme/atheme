@@ -1,3 +1,15 @@
+jilles      2005/12/27 23:42:54 UTC	(20051227-4235)
+  Log:
+  Move SRA deletion to mark_all_illegal().
+  Delete operclasses there as well.
+  Rehashing SRAs and operclasses should now work fully.
+  
+
+  Changes:	Modified:
+  +0 -9		trunk/src/conf.c (File Modified) 
+  +18 -4	trunk/src/node.c (File Modified) 
+
+
 jilles      2005/12/27 23:06:18 UTC	(20051227-4233)
   Log:
   Change sra_delete() argument from myuser_t * to sra_t *.
