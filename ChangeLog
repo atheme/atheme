@@ -1,3 +1,12 @@
+jilles      2005/12/28 18:03:12 UTC	(20051228-4247)
+  Log:
+  Always return a value in sra_add().
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/node.c (File Modified) 
+
+
 jilles      2005/12/28 02:03:12 UTC	(20051228-4245)
   Log:
   Don't expire accounts with privs on them, otherwise
