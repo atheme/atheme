@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 4219 2005-12-27 17:41:18Z jilles $
+ * $Id: info.c 4255 2005-12-28 22:08:06Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 4219 2005-12-27 17:41:18Z jilles $",
+	"$Id: info.c 4255 2005-12-28 22:08:06Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -69,13 +69,34 @@ static void us_cmd_info(char *origin)
 
 	notice(usersvs.nick, origin, "Information on \2%s\2:", mu->name);
 
+	notice(usersvs.nick, origin, "Registered : %s (%s ago)", strfbuf, time_ago(mu->registered));
 	if (has_priv(u, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:host:actual")))
 		notice(usersvs.nick, origin, "Last login from: %s", md->value);
 	else if (md = metadata_find(mu, METADATA_USER, "private:host:vhost"))
 		notice(usersvs.nick, origin, "Last login from: %s", md->value);
 
-	notice(usersvs.nick, origin, "Registered : %s (%s ago)", strfbuf, time_ago(mu->registered));
-	notice(usersvs.nick, origin, "Last seen  : %s (%s ago)", lastlogin, time_ago(mu->lastlogin));
+	if (LIST_LENGTH(&mu->logins) == 0)
+		notice(usersvs.nick, origin, "Last seen  : %s (%s ago)", lastlogin, time_ago(mu->lastlogin));
+	else if (mu == u->myuser || has_priv(u, PRIV_USER_AUSPEX))
+	{
+		buf[0] = '\0';
+		LIST_FOREACH(n, mu->logins.head)
+		{
+			if (strlen(buf) > 80)
+			{
+				notice(usersvs.nick, origin, "Logins from: %s", buf);
+				buf[0] = '\0';
+			}
+			if (buf[0])
+				strcat(buf, " ");
+			strcat(buf, ((user_t *)(n->data))->nick);
+		}
+		if (buf[0])
+			notice(usersvs.nick, origin, "Logins from: %s", buf);
+	}
+	else
+		notice(usersvs.nick, origin, "Logins from: <hidden>");
+
 
 	if (!(mu->flags & MU_HIDEMAIL)
 		|| (u->myuser == mu || has_priv(u, PRIV_USER_AUSPEX)))
@@ -135,28 +156,6 @@ static void us_cmd_info(char *origin)
 
 	if ((mu->flags & MU_ALIAS) && (md = metadata_find(mu, METADATA_USER, "private:alias:parent")))
 		notice(usersvs.nick, origin, "Parent     : %s", md->value);
-
-	if (LIST_LENGTH(&mu->logins) == 0)
-		notice(usersvs.nick, origin, "Logins from: <none>");
-	else if (mu == u->myuser || has_priv(u, PRIV_USER_AUSPEX))
-	{
-		buf[0] = '\0';
-		LIST_FOREACH(n, mu->logins.head)
-		{
-			if (strlen(buf) > 80)
-			{
-				notice(usersvs.nick, origin, "Logins from: %s", buf);
-				buf[0] = '\0';
-			}
-			if (buf[0])
-				strcat(buf, " ");
-			strcat(buf, ((user_t *)(n->data))->nick);
-		}
-		if (buf[0])
-			notice(usersvs.nick, origin, "Logins from: %s", buf);
-	}
-	else
-		notice(usersvs.nick, origin, "Logins from: <hidden>");
 
         if (has_priv(u, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
         {
