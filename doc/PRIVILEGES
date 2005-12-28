@@ -1,0 +1,54 @@
+Fine grained operator privileges
+--------------------------------
+
+Description of the available privileges
+
+special:ircop
+	bound to AC_IRCOP, if you still have modules using that
+
+user:auspex
+	see the invisible about user registrations,
+	ns/us info/list/listchans mainly
+user:admin
+	administer users
+user:vhost
+	set vhosts
+
+chan:auspex
+	see the invisible about channel registrations,
+	cs info/list/flags mainly
+chan:admin
+	administer channels
+chan:joinstaffonly
+	join channels set staffonly
+
+user:mark
+	use ns/us/cs mark and override marks
+user:hold
+	use ns/us/cs hold to prevent things from expiring
+user:regnolimit
+	exempt from limits on numbers of registrations (does not work
+	fully if set on the ircop operclass)
+
+general:auspex
+	see general information about services: most privileged /stats,
+	/trace, /os modinspect, /os modlist, /os uptime
+general:metadata
+	mess with private metadata (but only on own accounts and channels)
+general:admin
+	restart/shutdown/rehash services, load modules, use raw/inject (if
+	globally allowed in atheme.conf), resetpass/sendpass on accounts
+	with operator{} blocks
+
+operserv:omode
+	use /os mode
+operserv:akill
+	use /os akill and /stats k
+operserv:jupe
+	use /os jupe
+operserv:noop
+	use /os noop
+operserv:global
+	send global notices
+
+$Id: PRIVILEGES 4241 2005-12-28 01:26:38Z jilles $

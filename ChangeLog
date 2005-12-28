@@ -1,3 +1,22 @@
+jilles      2005/12/28 01:10:58 UTC	(20051228-4239)
+  Log:
+  Add operator "<account>" { operclass = "<operclass>"; };
+  Creates an sra_t with the given operclass (and thus
+  restrictions).
+  general::sras still works and creates god-like opers.
+  All operator{} opers are still called SRAs.
+  
+
+  Changes:	Modified:
+  +10 -8	trunk/dist/example.conf (File Modified) 
+  +6 -7		trunk/dist/example.userserv.conf (File Modified) 
+  +1 -0		trunk/include/account.h (File Modified) 
+  +1 -1		trunk/include/extern.h (File Modified) 
+  +42 -1	trunk/src/conf.c (File Modified) 
+  +10 -3	trunk/src/node.c (File Modified) 
+  +19 -2	trunk/src/privs.c (File Modified) 
+
+
 jilles      2005/12/28 00:50:10 UTC	(20051228-4237)
   Log:
   Correct "Invalid configuration option uplink::" error message
