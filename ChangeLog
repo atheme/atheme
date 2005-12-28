@@ -1,3 +1,16 @@
+jilles      2005/12/28 22:08:06 UTC	(20051228-4255)
+  Log:
+  ns/us info:
+  - Change "Last login from:" to "Last address:"
+  - Move "Logins from:" up a bit
+  - Don't show "Last seen" if the user is currently online
+  
+
+  Changes:	Modified:
+  +25 -26	trunk/modules/nickserv/info.c (File Modified) 
+  +23 -24	trunk/modules/userserv/info.c (File Modified) 
+
+
 jilles      2005/12/28 21:16:23 UTC	(20051228-4253)
   Log:
   HelpServ has been nonfunctional for a long time,
