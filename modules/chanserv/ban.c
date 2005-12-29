@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 4209 2005-12-26 15:46:53Z jilles $
+ * $Id: ban.c 4333 2005-12-29 18:10:37Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", FALSE, _modinit, _moddeinit,
-	"$Id: ban.c 4209 2005-12-26 15:46:53Z jilles $",
+	"$Id: ban.c 4333 2005-12-29 18:10:37Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -110,7 +110,8 @@ static void cs_cmd_ban (char *origin)
 		cmode(chansvs.nick, c->name, "+b", target);
 		chanban_add(c, target);
 		logcommand(chansvs.me, u, CMDLOG_DO, "%s BAN %s", mc->name, target);
-		notice(chansvs.nick, origin, "Banned \2%s\2 on \2%s\2.", target, channel);
+		if (!chanuser_find(mc->chan, u))
+			notice(chansvs.nick, origin, "Banned \2%s\2 on \2%s\2.", target, channel);
 		return;
 	}
 	else if ((tu = user_find_named(target)))
@@ -125,7 +126,8 @@ static void cs_cmd_ban (char *origin)
 		cmode(chansvs.nick, c->name, "+b", hostbuf);
 		chanban_add(c, hostbuf);
 		logcommand(chansvs.me, u, CMDLOG_DO, "%s BAN %s (for user %s!%s@%s)", mc->name, hostbuf, tu->nick, tu->user, tu->vhost);
-		notice(chansvs.nick, origin, "Banned \2%s\2 on \2%s\2.", target, channel);
+		if (!chanuser_find(mc->chan, u))
+			notice(chansvs.nick, origin, "Banned \2%s\2 on \2%s\2.", target, channel);
 		return;
 	}
 	else
@@ -188,7 +190,8 @@ static void cs_cmd_unban (char *origin)
 			cmode(chansvs.nick, c->name, "-b", target);
 			chanban_delete(cb);
 			logcommand(chansvs.me, u, CMDLOG_DO, "%s UNBAN %s", mc->name, target);
-			notice(chansvs.nick, origin, "Unbanned \2%s\2 on \2%s\2.", target, channel);
+			if (!chanuser_find(mc->chan, u))
+				notice(chansvs.nick, origin, "Unbanned \2%s\2 on \2%s\2.", target, channel);
 		}
 
 		return;
@@ -278,7 +281,6 @@ static void cs_fcmd_ban (char *origin, char *channel)
 		cmode(chansvs.nick, c->name, "+b", target);
 		chanban_add(c, target);
 		logcommand(chansvs.me, u, CMDLOG_DO, "%s BAN %s", mc->name, target);
-		notice(chansvs.nick, origin, "Banned \2%s\2 on \2%s\2.", target, channel);
 		return;
 	}
 	else if ((tu = user_find_named(target)))
@@ -293,7 +295,6 @@ static void cs_fcmd_ban (char *origin, char *channel)
 		cmode(chansvs.nick, c->name, "+b", hostbuf);
 		chanban_add(c, hostbuf);
 		logcommand(chansvs.me, u, CMDLOG_DO, "%s BAN %s (for user %s!%s@%s)", mc->name, hostbuf, tu->nick, tu->user, tu->vhost);
-		notice(chansvs.nick, origin, "Banned \2%s\2 on \2%s\2.", target, channel);
 		return;
 	}
 	else
@@ -355,7 +356,6 @@ static void cs_fcmd_unban (char *origin, char *channel)
 			cmode(chansvs.nick, c->name, "-b", target);
 			chanban_delete(cb);
 			logcommand(chansvs.me, u, CMDLOG_DO, "%s UNBAN %s", mc->name, target);
-			notice(chansvs.nick, origin, "Unbanned \2%s\2 on \2%s\2.", target, channel);
 		}
 
 		return;

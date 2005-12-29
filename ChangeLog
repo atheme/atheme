@@ -1,3 +1,13 @@
+jilles      2005/12/29 18:00:18 UTC	(20051229-4331)
+  Log:
+  ChanServ KICK/KICKBAN: Only confirm success in private
+  notice if the source is not on channel.
+  
+
+  Changes:	Modified:
+  +34 -34	trunk/modules/chanserv/kick.c (File Modified) 
+
+
 jilles      2005/12/29 17:36:02 UTC	(20051229-4329)
   Log:
   Only confirm successful non-fantasy cs op/halfop/voice
