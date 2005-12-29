@@ -1,0 +1,10 @@
+/* $Id$ */
+language {
+	name = "Galiege";
+	translator = "William Pitcock <nenolod@nenolod.net>";
+};
+
+string "Invalid command. Use \2/msg %s help\2 for a command listing." {
+	translation = "Bain triail as \2/msg %s help\2 chun tuilleadh eolais a fh il.";
+};
+

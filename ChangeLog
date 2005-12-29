@@ -1,3 +1,12 @@
+nenolod     2005/12/29 02:43:13 UTC	(20051229-4289)
+  Log:
+  load in the language file if one is specified.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/src/atheme.c (File Modified) 
+
+
 nenolod     2005/12/29 02:42:17 UTC	(20051229-4287)
   Log:
   - add constructs for language::name, language::translator.
