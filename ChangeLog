@@ -1,3 +1,14 @@
+jilles      2005/12/29 14:42:37 UTC	(20051229-4313)
+  Log:
+  Show operclass in ns/us info to user themselves and those
+  with general:viewprivs.
+  
+
+  Changes:	Modified:
+  +5 -0		trunk/modules/nickserv/info.c (File Modified) 
+  +5 -0		trunk/modules/userserv/info.c (File Modified) 
+
+
 jilles      2005/12/29 14:38:12 UTC	(20051229-4311)
   Log:
   Port r4301 and part of r4255 ("Last address") to userserv.
