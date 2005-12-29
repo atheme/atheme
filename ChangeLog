@@ -1,3 +1,16 @@
+jilles      2005/12/29 20:13:46 UTC	(20051229-4337)
+  Log:
+  ns/us/cs info: don't crash if close/freeze/mark metadata is inconsistent.
+  
+  Tracker #72
+  
+
+  Changes:	Modified:
+  +4 -4		trunk/modules/chanserv/info.c (File Modified) 
+  +4 -4		trunk/modules/nickserv/info.c (File Modified) 
+  +4 -4		trunk/modules/userserv/info.c (File Modified) 
+
+
 jilles      2005/12/29 18:18:48 UTC	(20051229-4335)
   Log:
   ChanServ TOPIC/TOPICAPPEND: only notice source of

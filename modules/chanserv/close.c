@@ -4,7 +4,7 @@
  *
  * Closing for channels.
  *
- * $Id: close.c 4219 2005-12-27 17:41:18Z jilles $
+ * $Id: close.c 4339 2005-12-29 20:19:39Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/close", FALSE, _modinit, _moddeinit,
-	"$Id: close.c 4219 2005-12-27 17:41:18Z jilles $",
+	"$Id: close.c 4339 2005-12-29 20:19:39Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -172,7 +172,8 @@ static void cs_cmd_close(char *origin)
 			{
 				cu = (chanuser_t *)n->data;
 
-				kick(chansvs.nick, target, cu->user->nick, "This channel has been closed");
+				if (!is_internal_client(cu->user))
+					kick(chansvs.nick, target, cu->user->nick, "This channel has been closed");
 			}
 
 			/* the agents should stay for a bit to stop rejoin floods */
