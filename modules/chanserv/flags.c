@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 4219 2005-12-27 17:41:18Z jilles $
+ * $Id: flags.c 4325 2005-12-29 17:08:41Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 4219 2005-12-27 17:41:18Z jilles $",
+	"$Id: flags.c 4325 2005-12-29 17:08:41Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -229,7 +229,7 @@ static void cs_cmd_flags(char *origin)
 		flagstr = bitmask_to_flags2(addflags, removeflags, chanacs_flags);
 		notice(chansvs.nick, origin, "Flags \2%s\2 were set on \2%s\2 in \2%s\2.", flagstr, target, channel);
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s FLAGS %s %s", mc->name, target, flagstr);
-		verbose(mc, "Flags \2%s\2 were set on \2%s\2 in \2%s\2.", flagstr, target, channel);
+		verbose(mc, "\2%s\2 set flags \2%s\2 on \2%s\2 in \2%s\2.", origin, flagstr, target, channel);
 	}
 }
 
@@ -353,5 +353,5 @@ static void cs_fcmd_flags(char *origin, char *channel)
 	flagstr = bitmask_to_flags2(addflags, removeflags, chanacs_flags);
 	notice(chansvs.nick, origin, "Flags \2%s\2 were set on \2%s\2 in \2%s\2.", flagstr, target, channel);
 	logcommand(chansvs.me, u, CMDLOG_SET, "%s FLAGS %s %s", mc->name, target, flagstr);
-	notice(chansvs.nick, channel, "Flags \2%s\2 were set on \2%s\2 in \2%s\2.", flagstr, target, channel);
+	notice(chansvs.nick, channel, "\2%s\2 set flags \2%s\2 on \2%s\2 in \2%s\2.", flagstr, target, channel);
 }
