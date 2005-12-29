@@ -1,3 +1,13 @@
+nenolod     2005/12/29 03:04:46 UTC	(20051229-4299)
+  Log:
+  proper hashtable lookups for translation_create().
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/src/atheme.c (File Modified) 
+  +1 -1		trunk/src/culture.c (File Modified) 
+
+
 jilles      2005/12/29 03:04:09 UTC	(20051229-4297)
   Log:
   DEFAULT_IRCOP_PRIVS is no longer necessary, remove it.

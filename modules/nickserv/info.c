@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 4255 2005-12-28 22:08:06Z jilles $
+ * $Id: info.c 4301 2005-12-29 10:33:17Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 4255 2005-12-28 22:08:06Z jilles $",
+	"$Id: info.c 4301 2005-12-29 10:33:17Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -66,14 +66,14 @@ static void ns_cmd_info(char *origin)
 
 	notice(nicksvs.nick, origin, "Information on \2%s\2:", mu->name);
 
-	notice(nicksvs.nick, origin, "Registered : %s (%s ago)", strfbuf, time_ago(mu->registered));
+	notice(nicksvs.nick, origin, "Registered: %s (%s ago)", strfbuf, time_ago(mu->registered));
 	if (has_priv(u, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:host:actual")))
 		notice(nicksvs.nick, origin, "Last address: %s", md->value);
 	else if (md = metadata_find(mu, METADATA_USER, "private:host:vhost"))
 		notice(nicksvs.nick, origin, "Last address: %s", md->value);
 
 	if (LIST_LENGTH(&mu->logins) == 0)
-		notice(nicksvs.nick, origin, "Last seen  : %s (%s ago)", lastlogin, time_ago(mu->lastlogin));
+		notice(nicksvs.nick, origin, "Last seen: %s (%s ago)", lastlogin, time_ago(mu->lastlogin));
 	else if (mu == u->myuser || has_priv(u, PRIV_USER_AUSPEX))
 	{
 		buf[0] = '\0';
@@ -97,7 +97,7 @@ static void ns_cmd_info(char *origin)
 
 	if (!(mu->flags & MU_HIDEMAIL)
 		|| (u->myuser == mu || has_priv(u, PRIV_USER_AUSPEX)))
-		notice(nicksvs.nick, origin, "Email      : %s%s", mu->email,
+		notice(nicksvs.nick, origin, "Email: %s%s", mu->email,
 					(mu->flags & MU_HIDEMAIL) ? " (hidden)": "");
 
 	*buf = '\0';
@@ -149,10 +149,10 @@ static void ns_cmd_info(char *origin)
 	}
 
 	if (*buf)
-		notice(nicksvs.nick, origin, "Flags      : %s", buf);
+		notice(nicksvs.nick, origin, "Flags: %s", buf);
 
 	if ((mu->flags & MU_ALIAS) && (md = metadata_find(mu, METADATA_USER, "private:alias:parent")))
-		notice(nicksvs.nick, origin, "Parent     : %s", md->value);
+		notice(nicksvs.nick, origin, "Parent: %s", md->value);
 
         if (has_priv(u, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
         {
