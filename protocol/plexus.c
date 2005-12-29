@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 4181 2005-12-25 00:26:15Z jilles $
+ * $Id: plexus.c 4269 2005-12-29 01:39:38Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 4181 2005-12-25 00:26:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 4269 2005-12-29 01:39:38Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -712,7 +712,7 @@ void _modinit(module_t * m)
 	join_sts = &plexus_join_sts;
 	kick = &plexus_kick;
 	msg = &plexus_msg;
-	notice = &plexus_notice;
+	notice_sts = &plexus_notice;
 	wallchops = &plexus_wallchops;
 	numeric_sts = &plexus_numeric_sts;
 	skill = &plexus_skill;

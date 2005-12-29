@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 4181 2005-12-25 00:26:15Z jilles $
+ * $Id: ultimate3.c 4269 2005-12-29 01:39:38Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 4181 2005-12-25 00:26:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 4269 2005-12-29 01:39:38Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -827,7 +827,7 @@ void _modinit(module_t * m)
 	join_sts = &ultimate3_join_sts;
 	kick = &ultimate3_kick;
 	msg = &ultimate3_msg;
-	notice = &ultimate3_notice;
+	notice_sts = &ultimate3_notice;
 	numeric_sts = &ultimate3_numeric_sts;
 	skill = &ultimate3_skill;
 	part = &ultimate3_part;

@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: bahamut.c 4181 2005-12-25 00:26:15Z jilles $
+ * $Id: bahamut.c 4269 2005-12-29 01:39:38Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/bahamut.h"
 
-DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 4181 2005-12-25 00:26:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 4269 2005-12-29 01:39:38Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -767,7 +767,7 @@ void _modinit(module_t * m)
 	join_sts = &bahamut_join_sts;
 	kick = &bahamut_kick;
 	msg = &bahamut_msg;
-	notice = &bahamut_notice;
+	notice_sts = &bahamut_notice;
 	wallchops = &bahamut_wallchops;
 	numeric_sts = &bahamut_numeric_sts;
 	skill = &bahamut_skill;

@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for shadowircd-based ircd.
  *
- * $Id: shadowircd.c 4181 2005-12-25 00:26:15Z jilles $
+ * $Id: shadowircd.c 4269 2005-12-29 01:39:38Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/shadowircd.h"
 
-DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 4181 2005-12-25 00:26:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 4269 2005-12-29 01:39:38Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -709,7 +709,7 @@ void _modinit(module_t * m)
 	join_sts = &shadowircd_join_sts;
 	kick = &shadowircd_kick;
 	msg = &shadowircd_msg;
-	notice = &shadowircd_notice;
+	notice_sts = &shadowircd_notice;
 	wallchops = &shadowircd_wallchops;
 	numeric_sts = &shadowircd_numeric_sts;
 	skill = &shadowircd_skill;

@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 4265 2005-12-29 01:15:10Z nenolod $
+ * $Id: services.c 4269 2005-12-29 01:39:38Z nenolod $
  */
 
 #include "atheme.h"
@@ -281,4 +281,18 @@ void handle_burstlogin(user_t *u, char *login)
 	n = node_create();
 	node_add(u, n, &mu->logins);
 	slog(LG_DEBUG, "handle_burstlogin(): automatically identified %s as %s", u->nick, login);
+}
+
+/* this could be done with more finesse, but hey! */
+void notice(char *from, char *to, char *msg, ...)
+{
+	va_list args;
+	char buf[BUFSIZE];
+	char *str = translation_get(msg);
+
+	va_start(args, msg);
+	vsnprintf(buf, BUFSIZE, str, args);
+	va_end(args);
+
+	notice_sts(from, to, buf);
 }

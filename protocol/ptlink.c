@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ptlink-based ircd.
  *
- * $Id: ptlink.c 4181 2005-12-25 00:26:15Z jilles $
+ * $Id: ptlink.c 4269 2005-12-29 01:39:38Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/ptlink.h"
 
-DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 4181 2005-12-25 00:26:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 4269 2005-12-29 01:39:38Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -705,7 +705,7 @@ void _modinit(module_t * m)
 	join_sts = &ptlink_join_sts;
 	kick = &ptlink_kick;
 	msg = &ptlink_msg;
-	notice = &ptlink_notice;
+	notice_sts = &ptlink_notice;
 	numeric_sts = &ptlink_numeric_sts;
 	skill = &ptlink_skill;
 	part = &ptlink_part;

@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 4181 2005-12-25 00:26:15Z jilles $
+ * $Id: unreal.c 4269 2005-12-29 01:39:38Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 4181 2005-12-25 00:26:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 4269 2005-12-29 01:39:38Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -801,7 +801,7 @@ void _modinit(module_t * m)
 	join_sts = &unreal_join_sts;
 	kick = &unreal_kick;
 	msg = &unreal_msg;
-	notice = &unreal_notice;
+	notice_sts = &unreal_notice;
 	numeric_sts = &unreal_numeric_sts;
 	skill = &unreal_skill;
 	part = &unreal_part;

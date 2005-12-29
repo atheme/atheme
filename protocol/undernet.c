@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: undernet.c 4181 2005-12-25 00:26:15Z jilles $
+ * $Id: undernet.c 4269 2005-12-29 01:39:38Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4181 2005-12-25 00:26:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4269 2005-12-29 01:39:38Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -816,7 +816,7 @@ void _modinit(module_t * m)
 	join_sts = &undernet_join_sts;
 	kick = &undernet_kick;
 	msg = &undernet_msg;
-	notice = &undernet_notice;
+	notice_sts = &undernet_notice;
 	wallchops = &undernet_wallchops;
 	numeric_sts = &undernet_numeric_sts;
 	skill = &undernet_skill;

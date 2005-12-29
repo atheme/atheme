@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 4181 2005-12-25 00:26:15Z jilles $
+ * $Id: ratbox.c 4269 2005-12-29 01:39:38Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 4181 2005-12-25 00:26:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 4269 2005-12-29 01:39:38Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -1071,7 +1071,7 @@ void _modinit(module_t * m)
 	join_sts = &ratbox_join_sts;
 	kick = &ratbox_kick;
 	msg = &ratbox_msg;
-	notice = &ratbox_notice;
+	notice_sts = &ratbox_notice;
 	wallchops = &ratbox_wallchops;
 	numeric_sts = &ratbox_numeric_sts;
 	skill = &ratbox_skill;

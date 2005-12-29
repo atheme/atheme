@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: asuka.c 4181 2005-12-25 00:26:15Z jilles $
+ * $Id: asuka.c 4269 2005-12-29 01:39:38Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4181 2005-12-25 00:26:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4269 2005-12-29 01:39:38Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -983,7 +983,7 @@ void _modinit(module_t * m)
 	join_sts = &asuka_join_sts;
 	kick = &asuka_kick;
 	msg = &asuka_msg;
-	notice = &asuka_notice;
+	notice_sts = &asuka_notice;
 	wallchops = &asuka_wallchops;
 	numeric_sts = &asuka_numeric_sts;
 	skill = &asuka_skill;

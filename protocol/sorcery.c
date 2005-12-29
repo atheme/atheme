@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: sorcery.c 4181 2005-12-25 00:26:15Z jilles $
+ * $Id: sorcery.c 4269 2005-12-29 01:39:38Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/sorcery.h"
 
-DECLARE_MODULE_V1("protocol/sorcery", TRUE, _modinit, NULL, "$Id: sorcery.c 4181 2005-12-25 00:26:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/sorcery", TRUE, _modinit, NULL, "$Id: sorcery.c 4269 2005-12-29 01:39:38Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -625,7 +625,7 @@ void _modinit(module_t * m)
 	join_sts = &sorcery_join_sts;
 	kick = &sorcery_kick;
 	msg = &sorcery_msg;
-	notice = &sorcery_notice;
+	notice_sts = &sorcery_notice;
 	numeric_sts = &sorcery_numeric_sts;
 	skill = &sorcery_skill;
 	part = &sorcery_part;

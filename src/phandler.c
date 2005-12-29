@@ -4,7 +4,7 @@
  *
  * Generic protocol event handlers.
  *
- * $Id: phandler.c 4155 2005-12-17 23:34:18Z jilles $
+ * $Id: phandler.c 4269 2005-12-29 01:39:38Z nenolod $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@ void (*wallops) (char *fmt, ...) = generic_wallops;
 void (*join_sts) (channel_t *c, user_t *u, boolean_t isnew, char *modes) = generic_join_sts;
 void (*kick) (char *from, char *channel, char *to, char *reason) = generic_kick;
 void (*msg) (char *from, char *target, char *fmt, ...) = generic_msg;
-void (*notice) (char *from, char *target, char *fmt, ...) = generic_notice;
+void (*notice_sts) (char *from, char *target, char *fmt, ...) = generic_notice;
 void (*wallchops)(user_t *source, channel_t *target, char *message) = generic_wallchops;
 void (*numeric_sts) (char *from, int numeric, char *target, char *fmt, ...) = generic_numeric_sts;
 void (*skill) (char *from, char *nick, char *fmt, ...) = generic_skill;

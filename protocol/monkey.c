@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for chunky monkey ircd.
  *
- * $Id: monkey.c 4181 2005-12-25 00:26:15Z jilles $
+ * $Id: monkey.c 4269 2005-12-29 01:39:38Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/monkey.h"
 
-DECLARE_MODULE_V1("protocol/monkey", TRUE, _modinit, NULL, "$Id: monkey.c 4181 2005-12-25 00:26:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/monkey", TRUE, _modinit, NULL, "$Id: monkey.c 4269 2005-12-29 01:39:38Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -717,7 +717,7 @@ void _modinit(module_t * m)
 	join_sts = &monkey_join_sts;
 	kick = &monkey_kick;
 	msg = &monkey_msg;
-	notice = &monkey_notice;
+	notice_sts = &monkey_notice;
 	numeric_sts = &monkey_numeric_sts;
 	skill = &monkey_skill;
 	part = &monkey_part;

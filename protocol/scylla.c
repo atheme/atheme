@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: scylla.c 4181 2005-12-25 00:26:15Z jilles $
+ * $Id: scylla.c 4269 2005-12-29 01:39:38Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/scylla", TRUE, _modinit, NULL, "$Id: scylla.c 4181 2005-12-25 00:26:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/scylla", TRUE, _modinit, NULL, "$Id: scylla.c 4269 2005-12-29 01:39:38Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -607,7 +607,7 @@ void _modinit(module_t * m)
 	wallops = &scylla_wallops;
 	kick = &scylla_kick;
 	msg = &scylla_msg;
-	notice = &scylla_notice;
+	notice_sts = &scylla_notice;
 	numeric_sts = &scylla_numeric_sts;
 	skill = &scylla_skill;
 	kline_sts = &scylla_kline_sts;

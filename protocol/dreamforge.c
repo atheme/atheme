@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: dreamforge.c 4181 2005-12-25 00:26:15Z jilles $
+ * $Id: dreamforge.c 4269 2005-12-29 01:39:38Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/dreamforge.h"
 
-DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 4181 2005-12-25 00:26:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 4269 2005-12-29 01:39:38Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -624,7 +624,7 @@ void _modinit(module_t * m)
 	join_sts = &dreamforge_join_sts;
 	kick = &dreamforge_kick;
 	msg = &dreamforge_msg;
-	notice = &dreamforge_notice;
+	notice_sts = &dreamforge_notice;
 	numeric_sts = &dreamforge_numeric_sts;
 	skill = &dreamforge_skill;
 	part = &dreamforge_part;

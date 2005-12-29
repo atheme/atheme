@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 4181 2005-12-25 00:26:15Z jilles $
+ * $Id: charybdis.c 4269 2005-12-29 01:39:38Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 4181 2005-12-25 00:26:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 4269 2005-12-29 01:39:38Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -1103,7 +1103,7 @@ void _modinit(module_t * m)
 	join_sts = &charybdis_join_sts;
 	kick = &charybdis_kick;
 	msg = &charybdis_msg;
-	notice = &charybdis_notice;
+	notice_sts = &charybdis_notice;
 	wallchops = &charybdis_wallchops;
 	numeric_sts = &charybdis_numeric_sts;
 	skill = &charybdis_skill;
