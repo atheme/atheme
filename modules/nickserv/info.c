@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 4301 2005-12-29 10:33:17Z w00t $
+ * $Id: info.c 4313 2005-12-29 14:42:37Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 4301 2005-12-29 10:33:17Z w00t $",
+	"$Id: info.c 4313 2005-12-29 14:42:37Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -153,6 +153,11 @@ static void ns_cmd_info(char *origin)
 
 	if ((mu->flags & MU_ALIAS) && (md = metadata_find(mu, METADATA_USER, "private:alias:parent")))
 		notice(nicksvs.nick, origin, "Parent: %s", md->value);
+
+	if (mu->soper && (mu == u->myuser || has_priv(u, PRIV_VIEWPRIVS)))
+	{
+		notice(nicksvs.nick, origin, "Oper class: %s", mu->soper->operclass ? mu->soper->operclass->name : "*");
+	}
 
         if (has_priv(u, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
         {

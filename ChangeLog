@@ -1,3 +1,12 @@
+jilles      2005/12/29 14:38:12 UTC	(20051229-4311)
+  Log:
+  Port r4301 and part of r4255 ("Last address") to userserv.
+  
+
+  Changes:	Modified:
+  +7 -7		trunk/modules/userserv/info.c (File Modified) 
+
+
 jilles      2005/12/29 14:24:15 UTC	(20051229-4309)
   Log:
   Add /stats o, shows operator{} blocks to those with
