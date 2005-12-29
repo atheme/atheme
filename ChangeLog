@@ -1,3 +1,12 @@
+jilles      2005/12/29 17:08:41 UTC	(20051229-4325)
+  Log:
+  ChanServ FLAGS: Mention the source of the command in VERBOSE notices
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/chanserv/flags.c (File Modified) 
+
+
 jilles      2005/12/29 16:45:59 UTC	(20051229-4323)
   Log:
   Add /cs set verbose ops, verbose_ops flag.
