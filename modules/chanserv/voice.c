@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService VOICE functions.
  *
- * $Id: voice.c 4319 2005-12-29 16:06:36Z jilles $
+ * $Id: voice.c 4329 2005-12-29 17:36:02Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/voice", FALSE, _modinit, _moddeinit,
-	"$Id: voice.c 4319 2005-12-29 16:06:36Z jilles $",
+	"$Id: voice.c 4329 2005-12-29 17:36:02Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -130,7 +130,8 @@ static void cs_cmd_voice(char *origin)
 		notice(chansvs.nick, tu->nick, "You have been voiced on %s by %s", mc->name, origin);
 
 	logcommand(chansvs.me, u, CMDLOG_SET, "%s VOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
-	notice(chansvs.nick, origin, "\2%s\2 has been voiced on \2%s\2.", tu->nick, mc->name);
+	if (!chanuser_find(mc->chan, u))
+		notice(chansvs.nick, origin, "\2%s\2 has been voiced on \2%s\2.", tu->nick, mc->name);
 }
 
 static void cs_cmd_devoice(char *origin)
@@ -198,7 +199,8 @@ static void cs_cmd_devoice(char *origin)
 		notice(chansvs.nick, tu->nick, "You have been devoiced on %s by %s", mc->name, origin);
 
 	logcommand(chansvs.me, u, CMDLOG_SET, "%s DEVOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
-	notice(chansvs.nick, origin, "\2%s\2 has been devoiced on \2%s\2.", tu->nick, mc->name);
+	if (!chanuser_find(mc->chan, u))
+		notice(chansvs.nick, origin, "\2%s\2 has been devoiced on \2%s\2.", tu->nick, mc->name);
 }
 
 static void cs_fcmd_voice(char *origin, char *chan)

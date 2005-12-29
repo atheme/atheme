@@ -1,3 +1,15 @@
+jilles      2005/12/29 17:27:54 UTC	(20051229-4327)
+  Log:
+  chanserv .flags (fantasy command only):
+  - no need to confirm successful operation in private notice
+    (unconditional channel notice)
+  - fix up mistake in channel notice
+  
+
+  Changes:	Modified:
+  +1 -2		trunk/modules/chanserv/flags.c (File Modified) 
+
+
 jilles      2005/12/29 17:08:41 UTC	(20051229-4325)
   Log:
   ChanServ FLAGS: Mention the source of the command in VERBOSE notices

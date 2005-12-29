@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: halfop.c 4319 2005-12-29 16:06:36Z jilles $
+ * $Id: halfop.c 4329 2005-12-29 17:36:02Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/halfop", FALSE, _modinit, _moddeinit,
-	"$Id: halfop.c 4319 2005-12-29 16:06:36Z jilles $",
+	"$Id: halfop.c 4329 2005-12-29 17:36:02Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -150,7 +150,8 @@ static void cs_cmd_halfop(char *origin)
 		notice(chansvs.nick, tu->nick, "You have been halfopped on %s by %s", mc->name, origin);
 
 	logcommand(chansvs.me, u, CMDLOG_SET, "%s HALFOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
-	notice(chansvs.nick, origin, "\2%s\2 has been halfopped on \2%s\2.", tu->nick, mc->name);
+	if (!chanuser_find(mc->chan, u))
+		notice(chansvs.nick, origin, "\2%s\2 has been halfopped on \2%s\2.", tu->nick, mc->name);
 }
 
 static void cs_cmd_dehalfop(char *origin)
@@ -230,7 +231,8 @@ static void cs_cmd_dehalfop(char *origin)
 		notice(chansvs.nick, tu->nick, "You have been dehalfopped on %s by %s", mc->name, origin);
 
 	logcommand(chansvs.me, u, CMDLOG_SET, "%s DEHALFOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
-	notice(chansvs.nick, origin, "\2%s\2 has been dehalfopped on \2%s\2.", tu->nick, mc->name);
+	if (!chanuser_find(mc->chan, u))
+		notice(chansvs.nick, origin, "\2%s\2 has been dehalfopped on \2%s\2.", tu->nick, mc->name);
 }
 
 static void cs_fcmd_halfop(char *origin, char *chan)
