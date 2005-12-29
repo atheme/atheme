@@ -1,3 +1,14 @@
+jilles      2005/12/29 18:10:37 UTC	(20051229-4333)
+  Log:
+  ChanServ BAN/UNBAN: only notice source of success if they
+  are not on channel, except for unban <nick> (where the
+  success message contains a little more information).
+  
+
+  Changes:	Modified:
+  +6 -6		trunk/modules/chanserv/ban.c (File Modified) 
+
+
 jilles      2005/12/29 18:00:18 UTC	(20051229-4331)
   Log:
   ChanServ KICK/KICKBAN: Only confirm success in private
