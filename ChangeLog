@@ -1,3 +1,13 @@
+jilles      2005/12/29 14:24:15 UTC	(20051229-4309)
+  Log:
+  Add /stats o, shows operator{} blocks to those with
+  general:viewprivs privilege.
+  
+
+  Changes:	Modified:
+  +16 -0	trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2005/12/29 14:16:39 UTC	(20051229-4307)
   Log:
   Add PRIV_VIEWPRIVS, general:viewprivs. Does not do anything yet.
