@@ -4,7 +4,7 @@
  *
  * This file contains code for NickServ RESETPASS
  *
- * $Id: resetpass.c 4283 2005-12-29 02:34:51Z jilles $
+ * $Id: resetpass.c 4303 2005-12-29 13:41:46Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/resetpass", FALSE, _modinit, _moddeinit,
-	"$Id: resetpass.c 4283 2005-12-29 02:34:51Z jilles $",
+	"$Id: resetpass.c 4303 2005-12-29 13:41:46Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -60,8 +60,8 @@ static void ns_cmd_resetpass(char *origin)
 
 	if (is_soper(mu) && !has_priv(u, PRIV_ADMIN))
 	{
-		logcommand(nicksvs.me, u, CMDLOG_ADMIN, "failed RESETPASS %s (is SRA)", name);
-		notice(nicksvs.nick, origin, "\2%s\2 belongs to a services root administrator; you need %s privilege to reset the password.", name, PRIV_ADMIN);
+		logcommand(nicksvs.me, u, CMDLOG_ADMIN, "failed RESETPASS %s (is SOPER)", name);
+		notice(nicksvs.nick, origin, "\2%s\2 belongs to a services operator; you need %s privilege to reset the password.", name, PRIV_ADMIN);
 		return;
 	}
 

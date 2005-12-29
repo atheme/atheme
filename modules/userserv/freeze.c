@@ -4,7 +4,7 @@
  *
  * Gives services the ability to freeze accounts
  *
- * $Id: freeze.c 4283 2005-12-29 02:34:51Z jilles $
+ * $Id: freeze.c 4303 2005-12-29 13:41:46Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/freeze", FALSE, _modinit, _moddeinit,
-	"$Id: freeze.c 4283 2005-12-29 02:34:51Z jilles $",
+	"$Id: freeze.c 4303 2005-12-29 13:41:46Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -75,7 +75,7 @@ static void us_cmd_freeze(char *origin)
 
 		if (is_soper(mu))
 		{
-	                notice(usersvs.nick, origin, "The account \2%s\2 belongs to a services root administrator; it cannot be frozen.", target);
+	                notice(usersvs.nick, origin, "The account \2%s\2 belongs to a services operator; it cannot be frozen.", target);
 			return;
 		}
 

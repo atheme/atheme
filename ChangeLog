@@ -1,3 +1,11 @@
+w00t        2005/12/29 10:33:17 UTC	(20051229-4301)
+  Log:
+  Minor cosmetic alterations.
+
+  Changes:	Modified:
+  +5 -5		trunk/modules/nickserv/info.c (File Modified) 
+
+
 nenolod     2005/12/29 03:04:46 UTC	(20051229-4299)
   Log:
   proper hashtable lookups for translation_create().
