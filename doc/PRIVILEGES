@@ -1,16 +1,30 @@
 Fine grained operator privileges
 --------------------------------
 
+Terminology:
+
+IRCop
+	user with user mode +o, usually obtained with /oper
+operclass
+	group of privileges defined in an operclass{} block in atheme.conf
+services operator
+	user logged into an account named in an operator{} block in
+	atheme.conf
+
 A few privileges are granted independently of operclasses:
 
-To all IRCops and users with operator{} blocks (has_any_priv()):
+To all IRCops and services operators (has_any_priv()):
 	more detailed "not authorized" messages telling which priv they are
 	missing, ability to use /os help
 
-To all users with operator{} blocks:
+To all services operators:
 	account does not expire (unlike HOLD, registered channels do);
 	this is to avoid someone else registering the account and taking
 	the privs
+
+All IRCops get the privileges in the "ircop" operclass. Services operators
+get the privileges in the operclass in their operator{} block. If both
+conditions apply, the union of the privileges is granted.
 
 Description of the privileges in operclasses:
 
@@ -68,4 +82,4 @@ operserv:noop
 operserv:global
 	send global notices
 
-$Id: PRIVILEGES 4307 2005-12-29 14:16:39Z jilles $
+$Id: PRIVILEGES 4317 2005-12-29 15:56:37Z jilles $

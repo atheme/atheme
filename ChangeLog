@@ -1,3 +1,14 @@
+jilles      2005/12/29 15:06:25 UTC	(20051229-4315)
+  Log:
+  Show exact privs in ns/us/cs status.
+  
+
+  Changes:	Modified:
+  +11 -0	trunk/modules/chanserv/status.c (File Modified) 
+  +11 -0	trunk/modules/nickserv/status.c (File Modified) 
+  +11 -0	trunk/modules/userserv/status.c (File Modified) 
+
+
 jilles      2005/12/29 14:42:37 UTC	(20051229-4313)
   Log:
   Show operclass in ns/us info to user themselves and those
