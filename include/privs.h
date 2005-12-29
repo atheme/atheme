@@ -4,7 +4,7 @@
  *
  * Fine grained services operator privileges
  *
- * $Id: privs.h 4283 2005-12-29 02:34:51Z jilles $
+ * $Id: privs.h 4297 2005-12-29 03:04:09Z jilles $
  */
 
 #ifndef PRIVS_H
@@ -44,9 +44,6 @@
 #define AC_IRCOP "special:ircop"
 #define AC_SRA "general:admin"
 #define is_sra(mu) (has_priv_myuser(mu, PRIV_ADMIN))
-
-/* Temp */
-#define DEFAULT_IRCOP_PRIVS ("special:ircop" " " PRIV_USER_AUSPEX " " PRIV_USER_ADMIN " " PRIV_USER_VHOST " " PRIV_CHAN_AUSPEX " " PRIV_CHAN_ADMIN " " PRIV_JOIN_STAFFONLY " " PRIV_MARK " " PRIV_SERVER_AUSPEX " " PRIV_METADATA " " PRIV_OMODE " " PRIV_AKILL " " PRIV_JUPE " " PRIV_GLOBAL)
 
 /* has_any_privs(): used to determine whether we should give detailed
  * messages about disallowed things

@@ -1,3 +1,13 @@
+jilles      2005/12/29 03:01:47 UTC	(20051229-4295)
+  Log:
+  Remove UF_SRA, MU_IRCOP and MU_SRA, they are not used.
+  
+
+  Changes:	Modified:
+  +0 -3		trunk/include/account.h (File Modified) 
+  +0 -1		trunk/include/users.h (File Modified) 
+
+
 jilles      2005/12/29 02:57:23 UTC	(20051229-4293)
   Log:
   Change 'sra' in sra_t, myuser_t.sra, sra_add(), etc to 'soper'.
