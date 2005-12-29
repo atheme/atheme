@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 4271 2005-12-29 01:44:00Z jilles $
+ * $Id: set.c 4321 2005-12-29 16:14:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 4271 2005-12-29 01:44:00Z jilles $",
+	"$Id: set.c 4321 2005-12-29 16:14:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -795,7 +795,6 @@ static void cs_set_fantasy(char *origin, char *name, char *params)
 
 		snoop("SET:FANTASY:ON: for \2%s\2 by \2%s\2", mc->name, origin);
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET FANTASY ON", mc->name);
-		verbose(mc, "\2%s\2 enabled the FANTASY flag", u->nick);
 		notice(chansvs.nick, origin, "The \2FANTASY\2 flag has been set for \2%s\2.", mc->name);
 		return;
 	}
@@ -813,7 +812,6 @@ static void cs_set_fantasy(char *origin, char *name, char *params)
 
 		snoop("SET:FANTASY:OFF: for \2%s\2 by \2%s\2", mc->name, origin);
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET FANTASY OFF", mc->name);
-		verbose(mc, "\2%s\2 disabled the FANTASY flag", u->nick);
 		notice(chansvs.nick, origin, "The \2FANTASY\2 flag has been removed for \2%s\2.", mc->name);
 		return;
 	}

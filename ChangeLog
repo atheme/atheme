@@ -1,3 +1,17 @@
+jilles      2005/12/29 16:06:36 UTC	(20051229-4319)
+  Log:
+  ChanServ voice/halfop/op: for non-fantasy applied to another user, notify
+  the target user who gave the command
+  
+  Submitted by: praetorian
+  
+
+  Changes:	Modified:
+  +10 -0	trunk/modules/chanserv/halfop.c (File Modified) 
+  +10 -0	trunk/modules/chanserv/op.c (File Modified) 
+  +10 -0	trunk/modules/chanserv/voice.c (File Modified) 
+
+
 jilles      2005/12/29 15:56:37 UTC	(20051229-4317)
   Log:
   Improve documentation of the oper privileges system.
