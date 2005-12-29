@@ -4,7 +4,7 @@
  *
  * Implements NICKSERV RETURN.
  *
- * $Id: return.c 4219 2005-12-27 17:41:18Z jilles $
+ * $Id: return.c 4283 2005-12-29 02:34:51Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/return", FALSE, _modinit, _moddeinit,
-	"$Id: return.c 4219 2005-12-27 17:41:18Z jilles $",
+	"$Id: return.c 4283 2005-12-29 02:34:51Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -62,7 +62,7 @@ static void ns_cmd_return(char *origin)
 		return;
 	}
 
-	if (is_sra(mu))
+	if (is_soper(mu))
 	{
 		logcommand(nicksvs.me, u, CMDLOG_ADMIN, "failed RETURN %s to %s (is SRA)", target, newmail);
 		notice(nicksvs.nick, origin, "\2%s\2 belongs to a services root administrator; it cannot be returned.", target);

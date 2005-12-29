@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the NickServ HELP command.
  *
- * $Id: help.c 4187 2005-12-25 21:41:36Z jilles $
+ * $Id: help.c 4283 2005-12-29 02:34:51Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 4187 2005-12-25 21:41:36Z jilles $",
+	"$Id: help.c 4283 2005-12-29 02:34:51Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -79,7 +79,7 @@ void us_cmd_help(char *origin)
 		notice(usersvs.nick, origin, " ");
 
 #if 0		/* currently unused */
-		if (is_sra(u->myuser))
+		if (is_soper(u->myuser))
 		{
 			notice(usersvs.nick, origin, "The following SRA commands are available.");
 			notice(usersvs.nick, origin, "\2HOLD\2          Prevents services from expiring a account.");

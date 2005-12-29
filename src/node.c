@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4247 2005-12-28 18:03:12Z jilles $
+ * $Id: node.c 4283 2005-12-29 02:34:51Z jilles $
  */
 
 #include "atheme.h"
@@ -2243,7 +2243,7 @@ void expire_check(void *arg)
 				/* Don't expire accounts with privs on them,
 				 * otherwise someone can reregister
 				 * them and take the privs -- jilles */
-				if (is_sra(mu))
+				if (is_soper(mu))
 					continue;
 
 				snoop("EXPIRE: \2%s\2 from \2%s\2 ", mu->name, mu->email);
