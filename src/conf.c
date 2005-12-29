@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4285 2005-12-29 02:37:23Z nenolod $
+ * $Id: conf.c 4287 2005-12-29 02:42:17Z nenolod $
  */
 
 #include "atheme.h"
@@ -108,6 +108,10 @@ static int c_db_host(CONFIGENTRY *);
 static int c_db_password(CONFIGENTRY *);
 static int c_db_database(CONFIGENTRY *);
 static int c_db_port(CONFIGENTRY *);
+
+/* language:: stuff */
+static int c_la_name(CONFIGENTRY *);
+static int c_la_translator(CONFIGENTRY *);
 
 static int c_gi_chan(CONFIGENTRY *);
 static int c_gi_silent(CONFIGENTRY *);
@@ -530,6 +534,10 @@ void init_newconf(void)
 	add_conf_item("PASSWORD", &conf_db_table, c_db_password);
 	add_conf_item("DATABASE", &conf_db_table, c_db_database);
 	add_conf_item("PORT", &conf_db_table, c_db_port);
+
+	/* language:: stuff */
+	add_conf_item("NAME", &conf_la_table, c_la_name);
+	add_conf_item("TRANSLATOR", &conf_la_table, c_la_translator);
 }
 
 static int c_serverinfo(CONFIGENTRY *ce)
@@ -805,6 +813,26 @@ static int c_string(CONFIGENTRY *ce)
 	}
 
 	translation_create(name, trans);
+	return 0;
+}
+
+static int c_la_name(CONFIGENTRY *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	me.language_name = sstrdup(ce->ce_vardata);
+
+	return 0;
+}
+
+static int c_la_translator(CONFIGENTRY *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	me.language_translator = sstrdup(ce->ce_vardata);
+
 	return 0;
 }
 

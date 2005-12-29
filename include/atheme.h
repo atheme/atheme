@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 4221 2005-12-27 19:06:48Z jilles $
+ * $Id: atheme.h 4287 2005-12-29 02:42:17Z nenolod $
  */
 
 #ifndef ATHEME_H
@@ -100,6 +100,9 @@ struct me
   time_t uplinkpong;            /* when the uplink last sent a PONG   */
 
   char *execname;		/* executable name                    */
+
+  char *language_name;		/* language file name		      */
+  char *language_translator;	/* translator name		      */
 };
 
 E me_t me;
@@ -128,6 +131,7 @@ struct ConfOption
   boolean_t raw;                /* enable raw/inject?         */
 
   char *global;                 /* nick for global noticer    */
+  char *languagefile;		/* path to language file (if any) */
 } config_options;
 
 struct Database
