@@ -1,9 +1,12 @@
 Help for SET VERBOSE:
 
-SET VERBOSE sends a notice to the channel when someone
+SET VERBOSE ON sends a notice to the channel when someone
 makes changes to the access lists.
 
-Syntax: SET <#channel> VERBOSE ON|OFF
+SET VERBOSE OPS sends a notice to the channel operators when
+someone makes changes to the access lists.
+
+Syntax: SET <#channel> VERBOSE ON|OPS|OFF
 
 Example:
     /msg &nick& SET #foo VERBOSE ON

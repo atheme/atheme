@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 4321 2005-12-29 16:14:18Z jilles $
+ * $Id: set.c 4323 2005-12-29 16:45:59Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 4321 2005-12-29 16:14:18Z jilles $",
+	"$Id: set.c 4323 2005-12-29 16:45:59Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -713,7 +713,7 @@ static void cs_set_verbose(char *origin, char *name, char *params)
 		return;
 	}
 
-	if (!strcasecmp("ON", params))
+	if (!strcasecmp("ON", params) || !strcasecmp("ALL", params))
 	{
 		if (MC_VERBOSE & mc->flags)
 		{
@@ -724,6 +724,7 @@ static void cs_set_verbose(char *origin, char *name, char *params)
 		snoop("SET:VERBOSE:ON: for \2%s\2 by \2%s\2", mc->name, origin);
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET VERBOSE ON", mc->name);
 
+ 		mc->flags &= ~MC_VERBOSE_OPS;
  		mc->flags |= MC_VERBOSE;
 
 		verbose(mc, "\2%s\2 enabled the VERBOSE flag", u->nick);
@@ -732,9 +733,36 @@ static void cs_set_verbose(char *origin, char *name, char *params)
 		return;
 	}
 
+	else if (!strcasecmp("OPS", params))
+	{
+		if (MC_VERBOSE_OPS & mc->flags)
+		{
+			notice(chansvs.nick, origin, "The \2VERBOSE_OPS\2 flag is already set for \2%s\2.", mc->name);
+			return;
+		}
+
+		snoop("SET:VERBOSE:OPS: for \2%s\2 by \2%s\2", mc->name, origin);
+		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET VERBOSE OPS", mc->name);
+
+		if (mc->flags & MC_VERBOSE)
+		{
+			verbose(mc, "\2%s\2 restricted VERBOSE to chanops", u->nick);
+ 			mc->flags &= ~MC_VERBOSE;
+ 			mc->flags |= MC_VERBOSE_OPS;
+		}
+		else
+		{
+ 			mc->flags |= MC_VERBOSE_OPS;
+			verbose(mc, "\2%s\2 enabled the VERBOSE_OPS flag", u->nick);
+		}
+
+		notice(chansvs.nick, origin, "The \2VERBOSE_OPS\2 flag has been set for \2%s\2.", mc->name);
+
+		return;
+	}
 	else if (!strcasecmp("OFF", params))
 	{
-		if (!(MC_VERBOSE & mc->flags))
+		if (!((MC_VERBOSE | MC_VERBOSE_OPS) & mc->flags))
 		{
 			notice(chansvs.nick, origin, "The \2VERBOSE\2 flag is not set for \2%s\2.", mc->name);
 			return;
@@ -743,8 +771,11 @@ static void cs_set_verbose(char *origin, char *name, char *params)
 		snoop("SET:VERBOSE:OFF: for \2%s\2 by \2%s\2", mc->name, origin);
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET VERBOSE OFF", mc->name);
 
-		verbose(mc, "\2%s\2 disabled the VERBOSE flag", u->nick);
-		mc->flags &= ~MC_VERBOSE;
+		if (mc->flags & MC_VERBOSE)
+			verbose(mc, "\2%s\2 disabled the VERBOSE flag", u->nick);
+		else
+			verbose(mc, "\2%s\2 disabled the VERBOSE_OPS flag", u->nick);
+		mc->flags &= ~(MC_VERBOSE | MC_VERBOSE_OPS);
 
 		notice(chansvs.nick, origin, "The \2VERBOSE\2 flag has been removed for \2%s\2.", mc->name);
 

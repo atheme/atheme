@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 4295 2005-12-29 03:01:47Z jilles $
+ * $Id: account.h 4323 2005-12-29 16:45:59Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -96,6 +96,7 @@ struct mychan_
 #define MC_VERBOSE     0x00000010
 #define MC_STAFFONLY   0x00000020
 #define MC_KEEPTOPIC   0x00000040
+#define MC_VERBOSE_OPS 0x00000080
 
 /* struct for channel access list */
 struct chanacs_

@@ -1,3 +1,12 @@
+jilles      2005/12/29 16:14:18 UTC	(20051229-4321)
+  Log:
+  No need to verbose() on /cs set fantasy.
+  
+
+  Changes:	Modified:
+  +0 -2		trunk/modules/chanserv/set.c (File Modified) 
+
+
 jilles      2005/12/29 16:06:36 UTC	(20051229-4319)
   Log:
   ChanServ voice/halfop/op: for non-fantasy applied to another user, notify
