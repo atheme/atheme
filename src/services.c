@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 4277 2005-12-29 02:05:02Z jilles $
+ * $Id: services.c 4279 2005-12-29 02:14:45Z jilles $
  */
 
 #include "atheme.h"
@@ -284,13 +284,13 @@ void handle_burstlogin(user_t *u, char *login)
 }
 
 /* this could be done with more finesse, but hey! */
-void notice(char *from, char *to, char *msg, ...)
+void notice(char *from, char *to, char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
-	char *str = translation_get(msg);
+	char *str = translation_get(fmt);
 
-	va_start(args, msg);
+	va_start(args, fmt);
 	vsnprintf(buf, BUFSIZE, str, args);
 	va_end(args);
 
