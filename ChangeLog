@@ -1,3 +1,12 @@
+jilles      2005/12/29 14:12:51 UTC	(20051229-4305)
+  Log:
+  Cosmetic fix.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/Makefile.in (File Modified) 
+
+
 jilles      2005/12/29 13:41:46 UTC	(20051229-4303)
   Log:
   Change SRA/services root operator to SOPER/services operator in messages.

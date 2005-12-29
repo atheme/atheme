@@ -46,6 +46,8 @@ user:regnolimit
 general:auspex
 	see general information about services: most privileged /stats,
 	/trace, /os modinspect, /os modlist, /os uptime
+general:viewprivs
+	see all operator{} blocks, see the privs operclasses have
 general:flood
 	exempt from services flood control (general::flood* in atheme.conf)
 general:metadata
@@ -66,4 +68,4 @@ operserv:noop
 operserv:global
 	send global notices
 
-$Id: PRIVILEGES 4275 2005-12-29 01:50:12Z jilles $
+$Id: PRIVILEGES 4307 2005-12-29 14:16:39Z jilles $

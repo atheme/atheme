@@ -4,7 +4,7 @@
  *
  * Fine grained services operator privileges
  *
- * $Id: privs.h 4297 2005-12-29 03:04:09Z jilles $
+ * $Id: privs.h 4307 2005-12-29 14:16:39Z jilles $
  */
 
 #ifndef PRIVS_H
@@ -27,6 +27,7 @@
 #define PRIV_REG_NOLIMIT     "user:regnolimit"
 /* generic */
 #define PRIV_SERVER_AUSPEX   "general:auspex"
+#define PRIV_VIEWPRIVS       "general:viewprivs"
 #define PRIV_FLOOD           "general:flood"
 #define PRIV_METADATA        "general:metadata"
 #define PRIV_ADMIN           "general:admin"
