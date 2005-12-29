@@ -1,3 +1,12 @@
+jilles      2005/12/29 03:04:09 UTC	(20051229-4297)
+  Log:
+  DEFAULT_IRCOP_PRIVS is no longer necessary, remove it.
+  
+
+  Changes:	Modified:
+  +0 -3		trunk/include/privs.h (File Modified) 
+
+
 jilles      2005/12/29 03:01:47 UTC	(20051229-4295)
   Log:
   Remove UF_SRA, MU_IRCOP and MU_SRA, they are not used.

@@ -4,7 +4,7 @@
  *
  * Translation framework.
  *
- * $Id: culture.c 4285 2005-12-29 02:37:23Z nenolod $
+ * $Id: culture.c 4299 2005-12-29 03:04:46Z nenolod $
  */
 
 #include "atheme.h"
@@ -66,7 +66,7 @@ void translation_create(char *str, char *trans)
 
 	t->replacement = sstrdup(buf);
 
-	node_add(t, node_create(), &transhash[shash((unsigned char *) str)]);
+	node_add(t, node_create(), &transhash[shash((unsigned char *) t->name)]);
 }
 
 /*
