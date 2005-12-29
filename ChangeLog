@@ -1,3 +1,13 @@
+nenolod     2005/12/29 01:15:10 UTC	(20051229-4265)
+  Log:
+  Remove dead code -- `cmd_find()'.
+  
+
+  Changes:	Modified:
+  +0 -4		trunk/include/extern.h (File Modified) 
+  +0 -30	trunk/src/services.c (File Modified) 
+
+
 nenolod     2005/12/28 22:56:31 UTC	(20051228-4263)
   Log:
   hook it into the build system
