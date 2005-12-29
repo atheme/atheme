@@ -4,7 +4,7 @@
  *
  * Translation framework.
  *
- * $Id: culture.c 4263 2005-12-28 22:56:31Z nenolod $
+ * $Id: culture.c 4281 2005-12-29 02:21:27Z jilles $
  */
 
 #include "atheme.h"
@@ -80,9 +80,11 @@ void translation_destroy(char *str)
 
 	LIST_FOREACH_SAFE(n, tn, transhash[shash((unsigned char *) str)].head)
 	{
+		t = n->data;
 		if (!strcmp(str, t->name))
 		{
 			node_del(n, &transhash[shash((unsigned char *) str)]);
+			node_free(n);
 
 			free(t->name);
 			free(t->replacement);

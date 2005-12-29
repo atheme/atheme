@@ -1,3 +1,12 @@
+jilles      2005/12/29 02:14:45 UTC	(20051229-4279)
+  Log:
+  Don't shadow global "msg" declaration.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/src/services.c (File Modified) 
+
+
 jilles      2005/12/29 02:05:02 UTC	(20051229-4277)
   Log:
   Avoid format string attack.
