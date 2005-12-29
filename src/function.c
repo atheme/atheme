@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 4283 2005-12-29 02:34:51Z jilles $
+ * $Id: function.c 4293 2005-12-29 02:57:23Z jilles $
  */
 
 #include "atheme.h"
@@ -764,7 +764,7 @@ boolean_t is_soper(myuser_t *myuser)
 	if (!myuser)
 		return FALSE;
 
-	if (myuser->sra)
+	if (myuser->soper)
 		return TRUE;
 
 	return FALSE;

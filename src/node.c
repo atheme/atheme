@@ -5,13 +5,13 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4283 2005-12-29 02:34:51Z jilles $
+ * $Id: node.c 4293 2005-12-29 02:57:23Z jilles $
  */
 
 #include "atheme.h"
 
 list_t operclasslist;
-list_t sralist;
+list_t soperlist;
 list_t tldlist;
 list_t uplinks;
 list_t klnlist;
@@ -26,7 +26,7 @@ list_t mulist[HASHSIZE];
 list_t sendq;
 
 static BlockHeap *operclass_heap;
-static BlockHeap *sra_heap;
+static BlockHeap *soper_heap;
 static BlockHeap *tld_heap;
 static BlockHeap *serv_heap;
 static BlockHeap *user_heap;
@@ -52,7 +52,7 @@ static myuser_t *mychan_pick_successor(mychan_t *mc);
 void init_nodes(void)
 {
 	operclass_heap = BlockHeapCreate(sizeof(operclass_t), 2);
-	sra_heap = BlockHeapCreate(sizeof(sra_t), 2);
+	soper_heap = BlockHeapCreate(sizeof(soper_t), 2);
 	tld_heap = BlockHeapCreate(sizeof(tld_t), 4);
 	serv_heap = BlockHeapCreate(sizeof(server_t), HEAP_SERVER);
 	user_heap = BlockHeapCreate(sizeof(user_t), HEAP_USER);
@@ -66,7 +66,7 @@ void init_nodes(void)
 	mychan_heap = BlockHeapCreate(sizeof(mychan_t), HEAP_CHANNEL);
 	chanacs_heap = BlockHeapCreate(sizeof(chanacs_t), HEAP_CHANUSER);
 
-	if (!tld_heap || !serv_heap || !user_heap || !chan_heap || !sra_heap || !chanuser_heap || !chanban_heap || !uplink_heap || !metadata_heap || !kline_heap || !myuser_heap || !mychan_heap
+	if (!tld_heap || !serv_heap || !user_heap || !chan_heap || !soper_heap || !chanuser_heap || !chanban_heap || !uplink_heap || !metadata_heap || !kline_heap || !myuser_heap || !mychan_heap
 	    || !chanacs_heap)
 	{
 		slog(LG_INFO, "init_nodes(): block allocator failed.");
@@ -79,7 +79,7 @@ void mark_all_illegal()
 {
 	node_t *n, *tn;
 	uplink_t *u;
-	sra_t *sra;
+	soper_t *soper;
 	operclass_t *operclass;
 
 	LIST_FOREACH(n, uplinks.head)
@@ -89,12 +89,12 @@ void mark_all_illegal()
 	}
 
 	/* just delete these, we can survive without for a while */
-	LIST_FOREACH_SAFE(n, tn, sralist.head)
+	LIST_FOREACH_SAFE(n, tn, soperlist.head)
 	{
-		sra = (sra_t *)n->data;
-		sra_delete(sra);
+		soper = (soper_t *)n->data;
+		soper_delete(soper);
 	}
-	/* no sras pointing to these anymore */
+	/* no sopers pointing to these anymore */
 	LIST_FOREACH_SAFE(n, tn, operclasslist.head)
 	{
 		operclass = (operclass_t *)n->data;
@@ -263,101 +263,101 @@ operclass_t *operclass_find(char *name)
 	return NULL;
 }
 
-/***********
- * S R A S *
- ***********/
+/***************
+ * S O P E R S *
+ ***************/
 
-sra_t *sra_add(char *name, operclass_t *operclass)
+soper_t *soper_add(char *name, operclass_t *operclass)
 {
-	sra_t *sra;
+	soper_t *soper;
 	myuser_t *mu = myuser_find(name);
 	node_t *n;
 
-	if (mu ? sra_find(mu) : sra_find_named(name))
+	if (mu ? soper_find(mu) : soper_find_named(name))
 	{
-		slog(LG_INFO, "sra_add(): duplicate SRA %s", name);
+		slog(LG_INFO, "soper_add(): duplicate soper %s", name);
 		return NULL;
 	}
-	slog(LG_DEBUG, "sra_add(): %s -> %s", (mu) ? mu->name : name, operclass ? operclass->name : "<null>");
+	slog(LG_DEBUG, "soper_add(): %s -> %s", (mu) ? mu->name : name, operclass ? operclass->name : "<null>");
 
-	sra = BlockHeapAlloc(sra_heap);
+	soper = BlockHeapAlloc(soper_heap);
 	n = node_create();
 
-	node_add(sra, n, &sralist);
+	node_add(soper, n, &soperlist);
 
 	if (mu)
 	{
-		sra->myuser = mu;
-		mu->sra = sra;
-		sra->name = NULL;
+		soper->myuser = mu;
+		mu->soper = soper;
+		soper->name = NULL;
 	}
 	else
 	{
-		sra->name = sstrdup(name);
-		sra->myuser = NULL;
+		soper->name = sstrdup(name);
+		soper->myuser = NULL;
 	}
-	sra->operclass = operclass;
+	soper->operclass = operclass;
 
-	cnt.sra++;
+	cnt.soper++;
 
-	return sra;
+	return soper;
 }
 
-void sra_delete(sra_t *sra)
+void soper_delete(soper_t *soper)
 {
 	node_t *n;
 
-	if (!sra)
+	if (!soper)
 	{
-		slog(LG_DEBUG, "sra_delete(): called for null sra");
+		slog(LG_DEBUG, "soper_delete(): called for null soper");
 
 		return;
 	}
 
-	slog(LG_DEBUG, "sra_delete(): %s", (sra->myuser) ? sra->myuser->name : sra->name);
+	slog(LG_DEBUG, "soper_delete(): %s", (soper->myuser) ? soper->myuser->name : soper->name);
 
-	n = node_find(sra, &sralist);
-	node_del(n, &sralist);
+	n = node_find(soper, &soperlist);
+	node_del(n, &soperlist);
 	node_free(n);
 
-	if (sra->myuser)
-		sra->myuser->sra = NULL;
+	if (soper->myuser)
+		soper->myuser->soper = NULL;
 
-	if (sra->name)
-		free(sra->name);
+	if (soper->name)
+		free(soper->name);
 
-	BlockHeapFree(sra_heap, sra);
+	BlockHeapFree(soper_heap, soper);
 
-	cnt.sra--;
+	cnt.soper--;
 }
 
-sra_t *sra_find(myuser_t *myuser)
+soper_t *soper_find(myuser_t *myuser)
 {
-	sra_t *sra;
+	soper_t *soper;
 	node_t *n;
 
-	LIST_FOREACH(n, sralist.head)
+	LIST_FOREACH(n, soperlist.head)
 	{
-		sra = (sra_t *)n->data;
+		soper = (soper_t *)n->data;
 
-		if (sra->myuser && sra->myuser == myuser)
-			return sra;
+		if (soper->myuser && soper->myuser == myuser)
+			return soper;
 	}
 
 	return NULL;
 }
 
-sra_t *sra_find_named(char *name)
+soper_t *soper_find_named(char *name)
 {
-	sra_t *sra;
+	soper_t *soper;
 	node_t *n;
 
-	LIST_FOREACH(n, sralist.head)
+	LIST_FOREACH(n, soperlist.head)
 	{
-		sra = (sra_t *)n->data;
+		soper = (soper_t *)n->data;
 
-		if (sra->name && !irccasecmp(sra->name, name))
-			return sra;
+		if (soper->name && !irccasecmp(soper->name, name))
+			return soper;
 	}
 
 	return NULL;
@@ -1229,7 +1229,7 @@ myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags)
 {
 	myuser_t *mu;
 	node_t *n;
-	sra_t *sra;
+	soper_t *soper;
 
 	mu = myuser_find(name);
 
@@ -1264,12 +1264,12 @@ myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags)
 
 	node_add(mu, n, &mulist[mu->hash]);
 
-	if ((sra = sra_find_named(mu->name)) != NULL)
+	if ((soper = soper_find_named(mu->name)) != NULL)
 	{
-		slog(LG_DEBUG, "myuser_add(): user `%s' has been declared as SRA, activating privileges.",
+		slog(LG_DEBUG, "myuser_add(): user `%s' has been declared as soper, activating privileges.",
 			mu->name);
-		sra->myuser = mu;
-		mu->sra = sra;
+		soper->myuser = mu;
+		mu->soper = soper;
 	}
 
 	cnt.myuser++;
@@ -1348,9 +1348,9 @@ void myuser_delete(char *name)
 		chanacs_delete(ca->mychan, ca->myuser, ca->level);
 	}
 
-	/* remove them from the sra list */
-	if (sra_find(mu))
-		sra_delete(mu->sra);
+	/* remove them from the soper list */
+	if (soper_find(mu))
+		soper_delete(mu->soper);
 
 	/* orphan any nicknames pointing to them
 	 * this is slow -- we could fix by adding reverse lists

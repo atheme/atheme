@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 4287 2005-12-29 02:42:17Z nenolod $
+ * $Id: atheme.h 4293 2005-12-29 02:57:23Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -149,7 +149,7 @@ typedef struct cnt cnt_t;
 struct cnt
 {
   uint32_t event;
-  uint32_t sra;
+  uint32_t soper;
   uint32_t tld;
   uint32_t kline;
   uint32_t server;
@@ -246,7 +246,7 @@ struct help_command_
 #define EMAIL_MEMO     4 /* emailed memos (memo text) */
 
 /* command log levels */
-#define CMDLOG_ADMIN    1 /* oper/sra only commands */
+#define CMDLOG_ADMIN    1 /* oper-only commands */
 #define CMDLOG_REGISTER 2 /* register/drop */
 #define CMDLOG_SET      3 /* change properties of static data */
 #define CMDLOG_DO       4 /* change properties of dynamic data */

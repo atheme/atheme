@@ -4,14 +4,14 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 4239 2005-12-28 01:10:58Z jilles $
+ * $Id: account.h 4293 2005-12-29 02:57:23Z jilles $
  */
 
 #ifndef ACCOUNT_H
 #define ACCOUNT_H
 
 typedef struct operclass_ operclass_t;
-typedef struct sra_ sra_t;
+typedef struct soper_ soper_t;
 typedef struct myuser_ myuser_t;
 typedef struct mychan_ mychan_t;
 typedef struct chanacs_ chanacs_t;
@@ -22,8 +22,8 @@ struct operclass_ {
   char *privs; /* priv1 priv2 priv3... */
 };
 
-/* sra list struct */
-struct sra_ {
+/* soper list struct */
+struct soper_ {
   myuser_t *myuser;
   char *name;
   operclass_t *operclass;
@@ -40,7 +40,7 @@ struct myuser_
   time_t lastlogin;
 
   list_t chanacs;
-  sra_t *sra;
+  soper_t *soper;
 
   list_t metadata;
 

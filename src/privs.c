@@ -4,7 +4,7 @@
  *
  * See doc/LICENSE for licensing information.
  *
- * $Id: privs.c 4283 2005-12-29 02:34:51Z jilles $
+ * $Id: privs.c 4293 2005-12-29 02:57:23Z jilles $
  */
 
 #include "atheme.h"
@@ -57,7 +57,7 @@ boolean_t has_priv(user_t *u, const char *priv)
 	}
 	if (u->myuser && is_soper(u->myuser))
 	{
-		operclass = u->myuser->sra->operclass;
+		operclass = u->myuser->soper->operclass;
 		if (operclass == NULL) /* old sras = {} */
 			return TRUE;
 		if (string_in_list(operclass->privs, priv))
@@ -76,7 +76,7 @@ boolean_t has_priv_myuser(myuser_t *mu, const char *priv)
 		return FALSE;
 	if (!is_soper(mu))
 		return FALSE;
-	operclass = mu->sra->operclass;
+	operclass = mu->soper->operclass;
 	if (operclass == NULL) /* old sras = {} */
 		return TRUE;
 	if (string_in_list(operclass->privs, priv))

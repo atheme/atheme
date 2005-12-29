@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4287 2005-12-29 02:42:17Z nenolod $
+ * $Id: conf.c 4293 2005-12-29 02:57:23Z jilles $
  */
 
 #include "atheme.h"
@@ -745,7 +745,7 @@ static int c_operator(CONFIGENTRY *ce)
 	}
 
 	if (operclass != NULL)
-		sra_add(name, operclass);
+		soper_add(name, operclass);
 	else
 		slog(LG_ERROR, "%s:%d: skipping operator %s because of bad/missing parameters",
 						topce->ce_fileptr->cf_filename, topce->ce_varlinenum, name);
@@ -1541,7 +1541,7 @@ static int c_gi_sras(CONFIGENTRY *ce)
 	CONFIGENTRY *flce;
 
 	for (flce = ce->ce_entries; flce; flce = flce->ce_next)
-		sra_add(flce->ce_varname, NULL);
+		soper_add(flce->ce_varname, NULL);
 
 	return 0;
 }

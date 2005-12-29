@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 4283 2005-12-29 02:34:51Z jilles $
+ * $Id: extern.h 4293 2005-12-29 02:57:23Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -143,7 +143,7 @@ E int match(char *, char *);
 E char *collapse(char *);
 
 /* node.c */
-E list_t sralist;
+E list_t soperlist;
 E list_t tldlist;
 E list_t klnlist;
 E list_t servlist[HASHSIZE];
@@ -163,10 +163,10 @@ E operclass_t *operclass_add(char *name, char *privs);
 E void operclass_delete(operclass_t *operclass);
 E operclass_t *operclass_find(char *name);
 
-E sra_t *sra_add(char *name, operclass_t *operclass);
-E void sra_delete(sra_t *sra);
-E sra_t *sra_find(myuser_t *myuser);
-E sra_t *sra_find_named(char *name);
+E soper_t *soper_add(char *name, operclass_t *operclass);
+E void soper_delete(soper_t *soper);
+E soper_t *soper_find(myuser_t *myuser);
+E soper_t *soper_find_named(char *name);
 
 E tld_t *tld_add(char *name);
 E void tld_delete(char *name);

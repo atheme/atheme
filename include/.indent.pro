@@ -1,4 +1,4 @@
-/* $$Id: .indent.pro 148 2005-05-29 06:26:16Z nenolod $ */
+/* $$Id: .indent.pro 4293 2005-12-29 02:57:23Z jilles $ */
 
 /* copy this file to the source dir then run indent file.c */
 
@@ -32,7 +32,7 @@
 -T tld_t
 -T kline_t
 -T EVH
--T sra_t
+-T soper_t
 -T server_t
 -T user_t
 -T channel_t
