@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: halfop.c 3739 2005-11-09 12:52:23Z jilles $
+ * $Id: halfop.c 4319 2005-12-29 16:06:36Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/halfop", FALSE, _modinit, _moddeinit,
-	"$Id: halfop.c 3739 2005-11-09 12:52:23Z jilles $",
+	"$Id: halfop.c 4319 2005-12-29 16:06:36Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -144,6 +144,11 @@ static void cs_cmd_halfop(char *origin)
 
 	cmode(chansvs.nick, chan, "+h", CLIENT_NAME(tu));
 	cu->modes |= ircd->halfops_mode;
+
+	/* TODO: Add which username had access to perform the command */
+	if (tu != u)
+		notice(chansvs.nick, tu->nick, "You have been halfopped on %s by %s", mc->name, origin);
+
 	logcommand(chansvs.me, u, CMDLOG_SET, "%s HALFOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	notice(chansvs.nick, origin, "\2%s\2 has been halfopped on \2%s\2.", tu->nick, mc->name);
 }
@@ -219,6 +224,11 @@ static void cs_cmd_dehalfop(char *origin)
 
 	cmode(chansvs.nick, chan, "-h", CLIENT_NAME(tu));
 	cu->modes &= ~ircd->halfops_mode;
+
+	/* TODO: Add which username had access to perform the command */
+	if (tu != u)
+		notice(chansvs.nick, tu->nick, "You have been dehalfopped on %s by %s", mc->name, origin);
+
 	logcommand(chansvs.me, u, CMDLOG_SET, "%s DEHALFOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	notice(chansvs.nick, origin, "\2%s\2 has been dehalfopped on \2%s\2.", tu->nick, mc->name);
 }

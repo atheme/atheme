@@ -1,3 +1,14 @@
+jilles      2005/12/29 15:56:37 UTC	(20051229-4317)
+  Log:
+  Improve documentation of the oper privileges system.
+  
+
+  Changes:	Modified:
+  +3 -1		trunk/dist/example.conf (File Modified) 
+  +7 -2		trunk/dist/example.userserv.conf (File Modified) 
+  +16 -2	trunk/doc/PRIVILEGES (File Modified) 
+
+
 jilles      2005/12/29 15:06:25 UTC	(20051229-4315)
   Log:
   Show exact privs in ns/us/cs status.
