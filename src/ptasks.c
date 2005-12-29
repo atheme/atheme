@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 4227 2005-12-27 19:45:10Z jilles $
+ * $Id: ptasks.c 4271 2005-12-29 01:44:00Z jilles $
  */
 
 #include "atheme.h"
@@ -376,7 +376,7 @@ int floodcheck(user_t *u, user_t *t)
 		slog(LG_ERROR, "BUG: tried to floodcheck message to non-service %s", t->nick);
 		return 0;
 	}
-	if (config_options.flood_msgs && !is_sra(u->myuser) && !is_ircop(u))
+	if (config_options.flood_msgs)
 	{
 		/* check if they're being ignored */
 		if (u->offenses > 10)
@@ -402,6 +402,12 @@ int floodcheck(user_t *u, user_t *t)
 		if (u->msgs > config_options.flood_msgs)
 		{
 			/* they're flooding. */
+			/* perhaps allowed to? -- jilles */
+			if (has_priv(u, PRIV_FLOOD))
+			{
+				u->msgs = 0;
+				return 0;
+			}
 			if (!u->offenses)
 			{
 				/* ignore them the first time */

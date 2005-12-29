@@ -4,7 +4,7 @@
  *
  * Fine grained services operator privileges
  *
- * $Id: privs.h 4243 2005-12-28 01:27:40Z jilles $
+ * $Id: privs.h 4271 2005-12-29 01:44:00Z jilles $
  */
 
 #ifndef PRIVS_H
@@ -19,6 +19,7 @@
 /* chanserv */
 #define PRIV_CHAN_AUSPEX     "chan:auspex"
 #define PRIV_CHAN_ADMIN      "chan:admin"
+#define PRIV_CHAN_CMODES     "chan:cmodes"
 #define PRIV_JOIN_STAFFONLY  "chan:joinstaffonly"
 /* nickserv/userserv+chanserv */
 #define PRIV_MARK            "user:mark"
@@ -26,6 +27,7 @@
 #define PRIV_REG_NOLIMIT     "user:regnolimit"
 /* generic */
 #define PRIV_SERVER_AUSPEX   "general:auspex"
+#define PRIV_FLOOD           "general:flood"
 #define PRIV_METADATA        "general:metadata"
 #define PRIV_ADMIN           "general:admin"
 /* operserv */

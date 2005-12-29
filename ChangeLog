@@ -1,3 +1,34 @@
+nenolod     2005/12/29 01:39:38 UTC	(20051229-4269)
+  Log:
+  strings passed to notice are now ran through the new translation cache.
+  if you want to bypass the translation cache, you must now use notice_sts().
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/extern.h (File Modified) 
+  +1 -1		trunk/include/phandler.h (File Modified) 
+  +1 -1		trunk/protocol/asuka.c (File Modified) 
+  +1 -1		trunk/protocol/bahamut.c (File Modified) 
+  +1 -1		trunk/protocol/bircd.c (File Modified) 
+  +1 -1		trunk/protocol/charybdis.c (File Modified) 
+  +1 -1		trunk/protocol/dreamforge.c (File Modified) 
+  +1 -1		trunk/protocol/hyperion.c (File Modified) 
+  +1 -1		trunk/protocol/inspircd.c (File Modified) 
+  +1 -1		trunk/protocol/ircnet.c (File Modified) 
+  +1 -1		trunk/protocol/monkey.c (File Modified) 
+  +1 -1		trunk/protocol/plexus.c (File Modified) 
+  +1 -1		trunk/protocol/ptlink.c (File Modified) 
+  +1 -1		trunk/protocol/ratbox.c (File Modified) 
+  +1 -1		trunk/protocol/scylla.c (File Modified) 
+  +1 -1		trunk/protocol/shadowircd.c (File Modified) 
+  +1 -1		trunk/protocol/sorcery.c (File Modified) 
+  +1 -1		trunk/protocol/ultimate3.c (File Modified) 
+  +1 -1		trunk/protocol/undernet.c (File Modified) 
+  +1 -1		trunk/protocol/unreal.c (File Modified) 
+  +1 -1		trunk/src/phandler.c (File Modified) 
+  +14 -0	trunk/src/services.c (File Modified) 
+
+
 nenolod     2005/12/29 01:26:21 UTC	(20051229-4267)
   Log:
   add missing prototypes

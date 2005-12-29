@@ -19,6 +19,8 @@ chan:auspex
 	cs info/list/flags mainly
 chan:admin
 	administer channels
+chan:cmodes
+	change oper-only cmodes in mode locks (but only on own channels)
 chan:joinstaffonly
 	join channels set staffonly
 
@@ -33,6 +35,8 @@ user:regnolimit
 general:auspex
 	see general information about services: most privileged /stats,
 	/trace, /os modinspect, /os modlist, /os uptime
+general:flood
+	exempt from services flood control (general::flood* in atheme.conf)
 general:metadata
 	mess with private metadata (but only on own accounts and channels)
 general:admin
@@ -51,4 +55,4 @@ operserv:noop
 operserv:global
 	send global notices
 
-$Id: PRIVILEGES 4241 2005-12-28 01:26:38Z jilles $
+$Id: PRIVILEGES 4271 2005-12-29 01:44:00Z jilles $
