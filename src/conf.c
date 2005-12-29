@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4239 2005-12-28 01:10:58Z jilles $
+ * $Id: conf.c 4273 2005-12-29 01:48:47Z nenolod $
  */
 
 #include "atheme.h"
@@ -158,14 +158,14 @@ list_t conf_hs_table;
 
 /* *INDENT-ON* */
 
-void conf_parse(void)
+void conf_parse(char *file)
 {
 	CONFIGFILE *cfptr, *cfp;
 	CONFIGENTRY *ce;
 	node_t *tn;
 	struct ConfTable *ct = NULL;
 
-	cfptr = cfp = config_load(config_file);
+	cfptr = cfp = config_load(file);
 
 	if (cfp == NULL)
 	{
@@ -1548,7 +1548,7 @@ boolean_t conf_rehash(void)
 	mark_all_illegal();
 
 	/* now reload */
-	conf_parse();
+	conf_parse(config_file);
 
 	/* now recheck */
 	if (!conf_check())

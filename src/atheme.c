@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 4201 2005-12-26 15:06:58Z jilles $
+ * $Id: atheme.c 4273 2005-12-29 01:48:47Z nenolod $
  */
 
 #include "atheme.h"
@@ -181,7 +181,7 @@ int main(int argc, char *argv[])
 	pcommand_init();
 
 	conf_init();
-	conf_parse();
+	conf_parse(config_file);
 
 	authcookie_init();
 

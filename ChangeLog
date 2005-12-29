@@ -1,3 +1,21 @@
+jilles      2005/12/29 01:44:00 UTC	(20051229-4271)
+  Log:
+  - Add general:flood priv (exempt from services flood control); moved
+    check for it down a bit to only check this when they're actually
+    flooding.
+  - Add chan:cmodes priv (allow mlocking oper-only cmodes), previously
+    under chan:admin
+  
+
+  Changes:	Modified:
+  +4 -4		trunk/dist/example.conf (File Modified) 
+  +4 -4		trunk/dist/example.userserv.conf (File Modified) 
+  +4 -0		trunk/doc/PRIVILEGES (File Modified) 
+  +2 -0		trunk/include/privs.h (File Modified) 
+  +1 -1		trunk/modules/chanserv/set.c (File Modified) 
+  +7 -1		trunk/src/ptasks.c (File Modified) 
+
+
 nenolod     2005/12/29 01:39:38 UTC	(20051229-4269)
   Log:
   strings passed to notice are now ran through the new translation cache.
