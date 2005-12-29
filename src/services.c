@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 4269 2005-12-29 01:39:38Z nenolod $
+ * $Id: services.c 4277 2005-12-29 02:05:02Z jilles $
  */
 
 #include "atheme.h"
@@ -294,5 +294,5 @@ void notice(char *from, char *to, char *msg, ...)
 	vsnprintf(buf, BUFSIZE, str, args);
 	va_end(args);
 
-	notice_sts(from, to, buf);
+	notice_sts(from, to, "%s", buf);
 }
