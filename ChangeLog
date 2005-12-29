@@ -1,3 +1,13 @@
+nenolod     2005/12/28 22:56:31 UTC	(20051228-4263)
+  Log:
+  hook it into the build system
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/src/Makefile.in (File Modified) 
+  +5 -5		trunk/src/culture.c (File Modified) 
+
+
 nenolod     2005/12/28 22:51:48 UTC	(20051228-4261)
   Log:
   add culture.c

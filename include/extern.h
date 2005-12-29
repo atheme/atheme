@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 4239 2005-12-28 01:10:58Z jilles $
+ * $Id: extern.h 4265 2005-12-29 01:15:10Z nenolod $
  */
 
 #ifndef EXTERN_H
@@ -242,10 +242,6 @@ E void cservice(char *origin, uint8_t parc, char *parv[]);
 E void gservice(char *origin, uint8_t parc, char *parv[]);
 E void oservice(char *origin, uint8_t parc, char *parv[]);
 E void nickserv(char *origin, uint8_t parc, char *parv[]);
-
-E struct command_ commands[];
-E struct command_ *cmd_find(char *svs, char *origin, char *command,
-			    struct command_ table[]);
 
 /* atheme.c */
 E char *config_file;

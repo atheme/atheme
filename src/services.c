@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 4219 2005-12-27 17:41:18Z jilles $
+ * $Id: services.c 4265 2005-12-29 01:15:10Z nenolod $
  */
 
 #include "atheme.h"
@@ -281,34 +281,4 @@ void handle_burstlogin(user_t *u, char *login)
 	n = node_create();
 	node_add(u, n, &mu->logins);
 	slog(LG_DEBUG, "handle_burstlogin(): automatically identified %s as %s", u->nick, login);
-}
-
-struct command_ *cmd_find(char *svs, char *origin, char *command, struct command_ table[])
-{
-	user_t *u = user_find(origin);
-	struct command_ *c;
-
-	for (c = table; c->name; c++)
-	{
-		if (!strcasecmp(command, c->name))
-		{
-			if (has_priv(u, c->access))
-				return c;
-
-			/* otherwise... */
-			else
-			{
-				if (has_any_privs(u))
-					notice(svs, origin, "You do not have %s privilege.", c->access);
-				else
-					notice(svs, origin, "You are not authorized to perform this operation.");
-				snoop("DENIED CMD: \2%s\2 used %s", origin, command);
-				return NULL;
-			}
-		}
-	}
-
-	/* it's a command we don't understand */
-	notice(svs, origin, "Invalid command. Please use \2HELP\2 for help.");
-	return NULL;
 }
