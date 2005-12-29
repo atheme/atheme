@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 4313 2005-12-29 14:42:37Z jilles $
+ * $Id: info.c 4337 2005-12-29 20:13:46Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 4313 2005-12-29 14:42:37Z jilles $",
+	"$Id: info.c 4337 2005-12-29 20:13:46Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -166,10 +166,10 @@ static void ns_cmd_info(char *origin)
                 time_t ts;
 
                 md = metadata_find(mu, METADATA_USER, "private:freeze:reason");
-                reason = md->value;
+		reason = md != NULL ? md->value : "unknown";
 
                 md = metadata_find(mu, METADATA_USER, "private:freeze:timestamp");
-                ts = atoi(md->value);
+                ts = md != NULL ? atoi(md->value) : 0;
 
                 tm = *localtime(&ts);
                 strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
@@ -184,10 +184,10 @@ static void ns_cmd_info(char *origin)
 		time_t ts;
 
 		md = metadata_find(mu, METADATA_USER, "private:mark:reason");
-		reason = md->value;
+		reason = md != NULL ? md->value : "unknown";
 
 		md = metadata_find(mu, METADATA_USER, "private:mark:timestamp");
-		ts = atoi(md->value);
+		ts = md != NULL ? atoi(md->value) : 0;
 
 		tm = *localtime(&ts);
 		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);

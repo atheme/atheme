@@ -1,3 +1,13 @@
+jilles      2005/12/29 18:18:48 UTC	(20051229-4335)
+  Log:
+  ChanServ TOPIC/TOPICAPPEND: only notice source of
+  success if they are not on channel.
+  
+
+  Changes:	Modified:
+  +4 -3		trunk/modules/chanserv/topic.c (File Modified) 
+
+
 jilles      2005/12/29 18:10:37 UTC	(20051229-4333)
   Log:
   ChanServ BAN/UNBAN: only notice source of success if they

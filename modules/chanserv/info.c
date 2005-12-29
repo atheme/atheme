@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INFO functions.
  *
- * $Id: info.c 4323 2005-12-29 16:45:59Z jilles $
+ * $Id: info.c 4337 2005-12-29 20:13:46Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 4323 2005-12-29 16:45:59Z jilles $",
+	"$Id: info.c 4337 2005-12-29 20:13:46Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -190,10 +190,10 @@ static void cs_cmd_info(char *origin)
 		time_t ts;
 
 		md = metadata_find(mc, METADATA_CHANNEL, "private:mark:reason");
-		reason = md->value;
+		reason = md != NULL ? md->value : "unknown";
 
 		md = metadata_find(mc, METADATA_CHANNEL, "private:mark:timestamp");
-		ts = atoi(md->value);
+		ts = md != NULL ? atoi(md->value) : 0;
 
 		tm = *localtime(&ts);
 		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
@@ -208,10 +208,10 @@ static void cs_cmd_info(char *origin)
 		time_t ts;
 
 		md = metadata_find(mc, METADATA_CHANNEL, "private:close:reason");
-		reason = md->value;
+		reason = md != NULL ? md->value : "unknown";
 
 		md = metadata_find(mc, METADATA_CHANNEL, "private:close:timestamp");
-		ts = atoi(md->value);
+		ts = md != NULL ? atoi(md->value) : 0;
 
 		tm = *localtime(&ts);
 		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
