@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 4273 2005-12-29 01:48:47Z nenolod $
+ * $Id: atheme.c 4289 2005-12-29 02:43:13Z nenolod $
  */
 
 #include "atheme.h"
@@ -182,6 +182,9 @@ int main(int argc, char *argv[])
 
 	conf_init();
 	conf_parse(config_file);
+
+	if (config_options.languagefile)
+		conf_parse(config_options.languagefile);
 
 	authcookie_init();
 

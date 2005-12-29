@@ -1,3 +1,13 @@
+nenolod     2005/12/29 02:42:17 UTC	(20051229-4287)
+  Log:
+  - add constructs for language::name, language::translator.
+  
+
+  Changes:	Modified:
+  +4 -0		trunk/include/atheme.h (File Modified) 
+  +28 -0	trunk/src/conf.c (File Modified) 
+
+
 nenolod     2005/12/29 02:37:23 UTC	(20051229-4285)
   Log:
   - Add constructs for: language, language::, string::, string::translation.
