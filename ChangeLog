@@ -1,3 +1,29 @@
+jilles      2005/12/29 13:41:46 UTC	(20051229-4303)
+  Log:
+  Change SRA/services root operator to SOPER/services operator in messages.
+  Show operclass in ns/us/cs status.
+  
+
+  Changes:	Modified:
+  +9 -1		trunk/modules/chanserv/status.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/drop.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/freeze.c (File Modified) 
+  +1 -2		trunk/modules/nickserv/identify.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/logout.c (File Modified) 
+  +2 -2		trunk/modules/nickserv/resetpass.c (File Modified) 
+  +2 -2		trunk/modules/nickserv/return.c (File Modified) 
+  +2 -2		trunk/modules/nickserv/sendpass.c (File Modified) 
+  +9 -1		trunk/modules/nickserv/status.c (File Modified) 
+  +1 -1		trunk/modules/userserv/drop.c (File Modified) 
+  +1 -1		trunk/modules/userserv/freeze.c (File Modified) 
+  +1 -2		trunk/modules/userserv/login.c (File Modified) 
+  +1 -1		trunk/modules/userserv/logout.c (File Modified) 
+  +2 -2		trunk/modules/userserv/resetpass.c (File Modified) 
+  +2 -2		trunk/modules/userserv/return.c (File Modified) 
+  +2 -2		trunk/modules/userserv/sendpass.c (File Modified) 
+  +9 -1		trunk/modules/userserv/status.c (File Modified) 
+
+
 w00t        2005/12/29 10:33:17 UTC	(20051229-4301)
   Log:
   Minor cosmetic alterations.
