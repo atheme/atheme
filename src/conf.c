@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4273 2005-12-29 01:48:47Z nenolod $
+ * $Id: conf.c 4285 2005-12-29 02:37:23Z nenolod $
  */
 
 #include "atheme.h"
@@ -29,6 +29,8 @@ static int c_helpserv(CONFIGENTRY *);
 static int c_loadmodule(CONFIGENTRY *);
 static int c_operclass(CONFIGENTRY *);
 static int c_operator(CONFIGENTRY *);
+static int c_language(CONFIGENTRY *);
+static int c_string(CONFIGENTRY *);
 
 static int c_si_name(CONFIGENTRY *);
 static int c_si_desc(CONFIGENTRY *);
@@ -155,6 +157,7 @@ list_t conf_gi_table;
 list_t conf_ui_table;
 list_t conf_ms_table;
 list_t conf_hs_table;
+list_t conf_la_table;
 
 /* *INDENT-ON* */
 
@@ -220,10 +223,14 @@ void conf_init(void)
 		free(config_options.chan);
 	if (config_options.global)
 		free(config_options.global);
+	if (config_options.languagefile)
+		free(config_options.languagefile);
 
-	me.netname = me.adminname = me.adminemail = me.mta = chansvs.nick = config_options.chan = config_options.global = NULL;
+	me.netname = me.adminname = me.adminemail = me.mta = chansvs.nick = config_options.chan = 
+		config_options.global = config_options.languagefile = NULL;
 
-	me.recontime = me.restarttime = me.maxlogins = me.maxusers = me.maxchans = me.emaillimit = me.emailtime = config_options.flood_msgs = config_options.flood_time = config_options.kline_time = config_options.commit_interval =
+	me.recontime = me.restarttime = me.maxlogins = me.maxusers = me.maxchans = me.emaillimit = me.emailtime = 
+		config_options.flood_msgs = config_options.flood_time = config_options.kline_time = config_options.commit_interval =
 		config_options.expire = 0;
 
 	/* we don't reset loglevel because too much stuff uses it */
@@ -426,6 +433,8 @@ void init_newconf(void)
 	add_top_conf("LOADMODULE", c_loadmodule);
 	add_top_conf("OPERCLASS", c_operclass);
 	add_top_conf("OPERATOR", c_operator);
+	add_top_conf("LANGUAGE", c_language);
+	add_top_conf("STRING", c_string);
 
 	/* Now we fill in the information */
 	add_conf_item("NAME", &conf_si_table, c_si_name);
@@ -738,6 +747,64 @@ static int c_operator(CONFIGENTRY *ce)
 static int c_general(CONFIGENTRY *ce)
 {
 	subblock_handler(ce, &conf_gi_table);
+	return 0;
+}
+
+/*
+ * Ok. This supports:
+ *
+ * language {
+ *         ...
+ * };
+ *
+ * and for the main config:
+ *
+ * language "translations/blah.language";
+ *
+ * to set the languagefile setting. So it's rather weird.
+ *    --nenolod
+ */
+static int c_language(CONFIGENTRY *ce)
+{
+	if (ce->ce_entries)
+	{
+		subblock_handler(ce, &conf_la_table);
+		return 0;
+	}
+	else
+		config_options.languagefile = sstrdup(ce->ce_vardata);
+
+	return 0;
+}
+
+static int c_string(CONFIGENTRY *ce)
+{
+	char *name, *trans;
+	CONFIGENTRY *topce;
+
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	topce = ce;
+	name = ce->ce_vardata;
+
+	for (ce = ce->ce_entries; ce; ce = ce->ce_next)
+	{
+		if (!strcasecmp("TRANSLATION", ce->ce_varname))
+		{
+			if (ce->ce_vardata == NULL)
+				PARAM_ERROR(ce);
+
+			trans = ce->ce_vardata;
+		}
+		else
+		{
+			slog(LG_ERROR, "%s:%d: Invalid configuration option operator::%s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
+			continue;
+		}
+	}
+
+	translation_create(name, trans);
 	return 0;
 }
 

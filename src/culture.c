@@ -4,7 +4,7 @@
  *
  * Translation framework.
  *
- * $Id: culture.c 4281 2005-12-29 02:21:27Z jilles $
+ * $Id: culture.c 4285 2005-12-29 02:37:23Z nenolod $
  */
 
 #include "atheme.h"
@@ -53,10 +53,18 @@ char *translation_get(char *str)
  */
 void translation_create(char *str, char *trans)
 {
+	char buf[BUFSIZE];
 	translation_t *t = smalloc(sizeof(translation_t));
 
-	t->name = sstrdup(str);
-	t->replacement = sstrdup(trans);
+	strlcpy(buf, str, BUFSIZE);
+	replace(buf, BUFSIZE, "\\2", "\2");
+
+	t->name = sstrdup(buf);
+
+	strlcpy(buf, trans, BUFSIZE);
+	replace(buf, BUFSIZE, "\\2", "\2");
+
+	t->replacement = sstrdup(buf);
 
 	node_add(t, node_create(), &transhash[shash((unsigned char *) str)]);
 }

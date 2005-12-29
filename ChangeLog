@@ -1,3 +1,36 @@
+jilles      2005/12/29 02:34:51 UTC	(20051229-4283)
+  Log:
+  Change is_sra() to is_soper() (has an operator{} block in atheme.conf).
+  Compatibility macro is_sra(mu) (has_priv_myuser(mu, PRIV_ADMIN)).
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/extern.h (File Modified) 
+  +2 -0		trunk/include/privs.h (File Modified) 
+  +1 -1		trunk/modules/chanserv/status.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/drop.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/freeze.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/help.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/identify.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/logout.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/resetpass.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/return.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/sendpass.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/status.c (File Modified) 
+  +1 -1		trunk/modules/userserv/drop.c (File Modified) 
+  +1 -1		trunk/modules/userserv/freeze.c (File Modified) 
+  +1 -1		trunk/modules/userserv/help.c (File Modified) 
+  +1 -1		trunk/modules/userserv/login.c (File Modified) 
+  +1 -1		trunk/modules/userserv/logout.c (File Modified) 
+  +1 -1		trunk/modules/userserv/resetpass.c (File Modified) 
+  +1 -1		trunk/modules/userserv/return.c (File Modified) 
+  +1 -1		trunk/modules/userserv/sendpass.c (File Modified) 
+  +1 -1		trunk/modules/userserv/status.c (File Modified) 
+  +1 -1		trunk/src/function.c (File Modified) 
+  +1 -1		trunk/src/node.c (File Modified) 
+  +3 -3		trunk/src/privs.c (File Modified) 
+
+
 jilles      2005/12/29 02:21:27 UTC	(20051229-4281)
   Log:
   Add some forgotten code in translation_destroy().
