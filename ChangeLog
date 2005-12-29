@@ -1,3 +1,22 @@
+jilles      2005/12/29 02:57:23 UTC	(20051229-4293)
+  Log:
+  Change 'sra' in sra_t, myuser_t.sra, sra_add(), etc to 'soper'.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/.indent.pro (File Modified) 
+  +4 -4		trunk/include/account.h (File Modified) 
+  +2 -2		trunk/include/atheme.h (File Modified) 
+  +5 -5		trunk/include/extern.h (File Modified) 
+  +1 -1		trunk/protocol/.indent.pro (File Modified) 
+  +1 -1		trunk/src/.indent.pro (File Modified) 
+  +2 -2		trunk/src/conf.c (File Modified) 
+  +1 -1		trunk/src/function.c (File Modified) 
+  +59 -59	trunk/src/node.c (File Modified) 
+  +2 -2		trunk/src/privs.c (File Modified) 
+  +1 -1		trunk/src/ptasks.c (File Modified) 
+
+
 nenolod     2005/12/29 02:52:45 UTC	(20051229-4291)
   Log:
   Add initial gaelic translation. (Only 1 message is translated for now.)

@@ -4,7 +4,7 @@
  *
  * Data structures for connected clients.
  *
- * $Id: users.h 3815 2005-11-11 04:33:03Z nenolod $
+ * $Id: users.h 4295 2005-12-29 03:01:47Z jilles $
  */
 
 #ifndef USERS_H
@@ -42,7 +42,6 @@ struct user_
 #define UF_LOGGEDIN    0x00000008
 #define UF_IRCOP       0x00000010
 #define UF_ADMIN       0x00000020
-#define UF_SRA         0x00000040
 #define UF_SEENINFO    0x00000080
 
 #endif
