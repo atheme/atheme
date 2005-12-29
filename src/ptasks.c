@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 4293 2005-12-29 02:57:23Z jilles $
+ * $Id: ptasks.c 4309 2005-12-29 14:24:15Z jilles $
  */
 
 #include "atheme.h"
@@ -59,6 +59,7 @@ void handle_stats(char *origin, char req)
 	kline_t *k;
 	node_t *n;
 	uplink_t *uplink;
+	soper_t *soper;
 	int i;
 
 	snoop("STATS:%c: \2%s\2", req, u->nick);
@@ -121,6 +122,21 @@ void handle_stats(char *origin, char req)
 			  numeric_sts(me.name, 216, CLIENT_NAME(u), "K %s * %s :%s", k->host, k->user, k->reason);
 		  }
 
+		  break;
+
+	  case 'o':
+	  case 'O':
+		  if (!has_priv(u, PRIV_VIEWPRIVS))
+			  break;
+
+		  LIST_FOREACH(n, soperlist.head)
+		  {
+			  soper = n->data;
+
+			  numeric_sts(me.name, 243, CLIENT_NAME(u), "O *@* * %s %s %s",
+					  soper->myuser ? soper->myuser->name : soper->name,
+					  soper->operclass ? soper->operclass->name : "*", "-1");
+		  }
 		  break;
 
 	  case 'T':
