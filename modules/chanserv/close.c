@@ -4,7 +4,7 @@
  *
  * Closing for channels.
  *
- * $Id: close.c 4339 2005-12-29 20:19:39Z jilles $
+ * $Id: close.c 4341 2005-12-29 22:20:40Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/close", FALSE, _modinit, _moddeinit,
-	"$Id: close.c 4339 2005-12-29 20:19:39Z jilles $",
+	"$Id: close.c 4341 2005-12-29 22:20:40Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,11 +22,13 @@ static void cs_cmd_close(char *origin);
 command_t cs_close = { "CLOSE", "Closes a channel.",
 			PRIV_CHAN_ADMIN, cs_cmd_close };
 
-static void close_can_leave(void *name);
-static void close_check_join(chanuser_t *cu);
+static void close_can_leave(void *unused);
+static void close_check_join(void *vcu);
 
 list_t *cs_cmdtree;
 list_t *cs_helptree;
+
+list_t can_leave_list;
 
 void _modinit(module_t *m)
 {
@@ -35,21 +37,26 @@ void _modinit(module_t *m)
 
 	command_add(&cs_close, cs_cmdtree);
 	hook_add_event("channel_join");
-	hook_add_hook("channel_join", (void (*)(void *)) close_check_join);
-
+	hook_add_hook("channel_join", close_check_join);
+	event_add("close_can_leave", close_can_leave, NULL, 180);
 	help_addentry(cs_helptree, "CLOSE", "help/cservice/close", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&cs_close, cs_cmdtree);
-	hook_del_hook("channel_join", (void (*)(void *)) close_check_join);
+	hook_del_hook("channel_join", close_check_join);
 	help_delentry(cs_helptree, "CLOSE");
+	event_delete(close_can_leave, NULL);
 }
 
-static void close_check_join(chanuser_t *cu)
+static void close_check_join(void *vcu)
 {
 	mychan_t *mc;
+	chanuser_t *cu;
+	node_t *n;
+
+	cu = vcu;
 
 	if (is_internal_client(cu->user))
 		return;
@@ -81,23 +88,65 @@ static void close_check_join(chanuser_t *cu)
 		kick(chansvs.nick, cu->chan->name, cu->user->nick, "This channel has been closed");
 
 		/* the agents should stay for a bit to stop rejoin floods */
-		snprintf(buf, BUFSIZE, "close_can_leave_%s", cu->chan->name);
-		event_add_once(buf, close_can_leave, cu->chan->name, 90);
+		LIST_FOREACH(n, can_leave_list.head)
+		{
+			if (!irccasecmp(n->data, mc->name))
+				return;
+		}
+		node_add(sstrdup(mc->name), node_create(), &can_leave_list);
 	}
 }
 
-static void close_can_leave(void *name)
+#if 0
+static void close_check_drop(void *vmc)
 {
+	mychan_t *mc;
+	node_t *n;
 	channel_t *c;
 
-	if ((c = channel_find((char *) name)))
+	mc = vmc;
+	n = node_find(mc, &can_leave_list);
+	if (n != NULL)
 	{
+		node_delete(n, &can_leave_list);
 		if (chanuser_find(c, user_find(chansvs.nick)))
-			part(name, chansvs.nick);
+			part(c->name, chansvs.nick);
 		if (chanuser_find(c, user_find(opersvs.nick)))
-			part(name, opersvs.nick);
+			part(c->name, opersvs.nick);
+	}
+}
+#endif
 
-		event_delete(close_can_leave, name);
+static void close_can_leave(void *unused)
+{
+	char *name;
+	node_t *n, *tn;
+	mychan_t *mc;
+	channel_t *c;
+
+	(void)unused;
+	LIST_FOREACH_SAFE(n, tn, can_leave_list.head)
+	{
+		name = n->data;
+		node_del(n, &can_leave_list);
+		node_free(n);
+		mc = mychan_find(name);
+		free(name);
+		if (mc == NULL)
+			continue;
+		c = mc->chan;
+		if (c == NULL)
+			continue;
+		if (!metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+		{
+			slog(LG_DEBUG, "close_can_leave(): channel %s is not closed but was on can_leave_list", c->name);
+			continue;
+		}
+		slog(LG_DEBUG, "close_can_leave(): leaving %s", c->name);
+		if (chanuser_find(c, user_find(chansvs.nick)))
+			part(c->name, chansvs.nick);
+		if (chanuser_find(c, user_find(opersvs.nick)))
+			part(c->name, opersvs.nick);
 	}
 }
 
@@ -109,7 +158,8 @@ static void cs_cmd_close(char *origin)
 	mychan_t *mc;
 	channel_t *c;
 	chanuser_t *cu;
-	node_t *n;
+	node_t *n, *tn;
+	boolean_t found;
 
 	if (!target || !action)
 	{
@@ -177,8 +227,17 @@ static void cs_cmd_close(char *origin)
 			}
 
 			/* the agents should stay for a bit to stop rejoin floods */
-			snprintf(buf, BUFSIZE, "close_can_leave_%s", target);
-			event_add_once(buf, close_can_leave, target, 90);
+			found = FALSE;
+			LIST_FOREACH(n, can_leave_list.head)
+			{
+				if (!irccasecmp(n->data, mc->name))
+				{
+					found = TRUE;
+					break;
+				}
+			}
+			if (!found)
+				node_add(sstrdup(mc->name), node_create(), &can_leave_list);
 		}
 
 		wallops("%s closed the channel \2%s\2 (%s).", origin, target, reason);
@@ -196,12 +255,40 @@ static void cs_cmd_close(char *origin)
 		metadata_delete(mc, METADATA_CHANNEL, "private:close:closer");
 		metadata_delete(mc, METADATA_CHANNEL, "private:close:reason");
 		metadata_delete(mc, METADATA_CHANNEL, "private:close:timestamp");
+		c = channel_find(target);
+		if (c != NULL)
+			if (chanuser_find(c, user_find(chansvs.nick)))
+				part(c->name, chansvs.nick);
+		c = channel_find(target);
+		if (c != NULL)
+			if (chanuser_find(c, user_find(opersvs.nick)))
+				part(c->name, opersvs.nick);
+		c = channel_find(target);
+		if (c != NULL)
+		{
+			chanban_t *cb;
 
-		/* we should be the only ones in the channel, so parting will reset */
-		close_can_leave(target);
+			/* hmm, channel still exists, probably permanent? */
+			cb = chanban_find(c, "*!*@*");
+			if (cb != NULL)
+			{
+				chanban_delete(cb);
+				cmode(chansvs.nick, target, "-b", "*!*@*");
+			}
+			cmode(chansvs.nick, target, "-isl");
+			c->modes &= ~(CMODE_INVITE | CMODE_SEC | CMODE_LIMIT);
+			c->limit = 0;
+			check_modes(mc, TRUE);
+		}
 
-		/* for paranoia --nenolod */
-		event_delete(close_can_leave, mc->name);
+		LIST_FOREACH_SAFE(n, tn, can_leave_list.head)
+		{
+			if (!irccasecmp(n->data, mc->name))
+			{
+				node_del(n, &can_leave_list);
+				node_free(n);
+			}
+		}
 
 		wallops("%s reopened the channel \2%s\2.", origin, target);
 		logcommand(chansvs.me, user_find(origin), CMDLOG_ADMIN, "%s CLOSE OFF", target);
