@@ -1,3 +1,12 @@
+pfish       2005/12/30 11:12:20 UTC	(20051230-4349)
+  Log:
+  Update.
+  
+
+  Changes:	Modified:
+  +10 -6	trunk/modules/operserv/specs.c (File Modified) 
+
+
 pfish       2005/12/30 08:45:01 UTC	(20051230-4347)
   Log:
   Import OperServ SPECS. This may not be finished yet. Will update configs when it works.
