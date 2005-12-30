@@ -1,3 +1,16 @@
+jilles      2005/12/30 16:38:56 UTC	(20051230-4379)
+  Log:
+  Also call channel_drop hook when deleting a channel
+  because the founder dropped and there was no successor
+  and when expiring a channel. Call it before parting
+  chanserv.
+  
+
+  Changes:	Modified:
+  +1 -2		trunk/modules/chanserv/drop.c (File Modified) 
+  +2 -1		trunk/src/node.c (File Modified) 
+
+
 jilles      2005/12/30 16:08:36 UTC	(20051230-4377)
   Log:
   Add RSFNC (services-induced forced nick change) support

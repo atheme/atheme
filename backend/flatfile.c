@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 4249 2005-12-28 19:43:11Z jilles $
+ * $Id: flatfile.c 4381 2005-12-30 23:12:54Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 4249 2005-12-28 19:43:11Z jilles $",
+	"$Id: flatfile.c 4381 2005-12-30 23:12:54Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -403,12 +403,14 @@ static void flatfile_db_load(void)
 			if (type[0] == 'U')
 			{
 				mu = myuser_find(name);
-				metadata_add(mu, METADATA_USER, property, value);
+				if (mu != NULL)
+					metadata_add(mu, METADATA_USER, property, value);
 			}
 			else if (type[0] == 'C')
 			{
 				mc = mychan_find(name);
-				metadata_add(mc, METADATA_CHANNEL, property, value);
+				if (mc != NULL)
+					metadata_add(mc, METADATA_CHANNEL, property, value);
 			}
 			else if (type[0] == 'A')
 			{
@@ -417,7 +419,8 @@ static void flatfile_db_load(void)
 				char *mask = strtok(NULL, " ");
 
 				ca = chanacs_find_by_mask(mychan_find(name), mask, CA_NONE);
-				metadata_add(ca, METADATA_CHANACS, property, value);
+				if (ca != NULL)
+					metadata_add(ca, METADATA_CHANACS, property, value);
 			}
 		}
 
