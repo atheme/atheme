@@ -1,3 +1,16 @@
+jilles      2005/12/30 14:45:24 UTC	(20051230-4369)
+  Log:
+  OperServ UPTIME:
+  - add help file
+  - remove snoop notice
+  - don't count services in the user count
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/help/oservice/uptime (File Added) 
+  +5 -2		trunk/modules/operserv/uptime.c (File Modified) 
+
+
 jilles      2005/12/30 14:35:08 UTC	(20051230-4367)
   Log:
   Don't call hook_del_event(), it causes trouble if

@@ -4,7 +4,7 @@
  *
  * OperServ NOOP command.
  *
- * $Id: noop.c 4367 2005-12-30 14:35:08Z jilles $
+ * $Id: noop.c 4371 2005-12-30 15:07:50Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/noop", TRUE, _modinit, _moddeinit,
-	"$Id: noop.c 4367 2005-12-30 14:35:08Z jilles $",
+	"$Id: noop.c 4371 2005-12-30 15:07:50Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -31,7 +31,7 @@ static void os_cmd_noop(char *origin);
 static void check_user(user_t *u);
 static BlockHeap *noop_heap;
 
-command_t os_noop = { "NOOP", "Handles NOOP lists.", PRIV_NOOP,
+command_t os_noop = { "NOOP", "Restricts IRCop access.", PRIV_NOOP,
 			os_cmd_noop };
 
 list_t *os_cmdtree;
