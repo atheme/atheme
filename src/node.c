@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4379 2005-12-30 16:38:56Z jilles $
+ * $Id: node.c 4383 2005-12-30 23:33:14Z jilles $
  */
 
 #include "atheme.h"
@@ -2217,6 +2217,9 @@ void expire_check(void *arg)
 	myuser_t *mu;
 	mychan_t *mc;
 	node_t *n, *tn;
+
+	if (config_options.expire == 0)
+		return;
 
 	for (i = 0; i < HASHSIZE; i++)
 	{
