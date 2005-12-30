@@ -4,7 +4,7 @@
  *
  * Loads a new module in.
  *
- * $Id: modload.c 4219 2005-12-27 17:41:18Z jilles $
+ * $Id: modload.c 4373 2005-12-30 15:22:48Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modload", FALSE, _modinit, _moddeinit,
-	"$Id: modload.c 4219 2005-12-27 17:41:18Z jilles $",
+	"$Id: modload.c 4373 2005-12-30 15:22:48Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,16 +22,20 @@ command_t os_modload = { "MODLOAD", "Loads a module.",
 			 PRIV_ADMIN, os_cmd_modload };
 
 list_t *os_cmdtree;
+list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
 	os_cmdtree = module_locate_symbol("operserv/main", "os_cmdtree");	
+	os_helptree = module_locate_symbol("operserv/main", "os_helptree");	
 	command_add(&os_modload, os_cmdtree);
+	help_addentry(os_helptree, "MODLOAD", "help/oservice/modload", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&os_modload, os_cmdtree);
+	help_delentry(os_helptree, "MODLOAD");
 }
 
 static void os_cmd_modload(char *origin)

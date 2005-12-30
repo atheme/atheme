@@ -1,3 +1,12 @@
+jilles      2005/12/30 15:07:50 UTC	(20051230-4371)
+  Log:
+  Better one-line description.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/operserv/noop.c (File Modified) 
+
+
 jilles      2005/12/30 14:45:24 UTC	(20051230-4369)
   Log:
   OperServ UPTIME:

@@ -1,0 +1,16 @@
+Help for MODUNLOAD:
+
+MODUNLOAD unloads one or more modules. Not all modules
+can be unloaded.
+
+The names can be gathered from the MODLIST command. They
+are not necessarily equal to the pathnames to load them
+with MODLOAD.
+
+Be careful with unloading MODLOAD and MODUNLOAD
+themselves.
+
+Syntax: MODUNLOAD <name...>
+
+Example:
+    /msg &nick& MODUNLOAD chanserv/register

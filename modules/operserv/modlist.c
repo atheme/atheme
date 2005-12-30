@@ -4,7 +4,7 @@
  *
  * Module listing.
  *
- * $Id: modlist.c 4219 2005-12-27 17:41:18Z jilles $
+ * $Id: modlist.c 4373 2005-12-30 15:22:48Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modlist", FALSE, _modinit, _moddeinit,
-	"$Id: modlist.c 4219 2005-12-27 17:41:18Z jilles $",
+	"$Id: modlist.c 4373 2005-12-30 15:22:48Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,17 +22,21 @@ command_t os_modlist = { "MODLIST", "Lists loaded modules.",
 			 PRIV_SERVER_AUSPEX, os_cmd_modlist };
 
 list_t *os_cmdtree;
+list_t *os_helptree;
 extern list_t modules;
 
 void _modinit(module_t *m)
 {
 	os_cmdtree = module_locate_symbol("operserv/main", "os_cmdtree");
+	os_helptree = module_locate_symbol("operserv/main", "os_helptree");
 	command_add(&os_modlist, os_cmdtree);
+	help_addentry(os_helptree, "MODLIST", "help/oservice/modlist", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&os_modlist, os_cmdtree);
+	help_delentry(os_helptree, "MODLIST");
 }
 
 static void os_cmd_modlist(char *origin)

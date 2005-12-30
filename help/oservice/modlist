@@ -1,0 +1,6 @@
+Help for MODLIST:
+
+MODLIST displays a listing of all loaded
+modules and their addresses.
+
+Syntax: MODLIST
