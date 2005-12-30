@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: bahamut.c 4269 2005-12-29 01:39:38Z nenolod $
+ * $Id: bahamut.c 4363 2005-12-30 14:24:03Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/bahamut.h"
 
-DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 4269 2005-12-29 01:39:38Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 4363 2005-12-30 14:24:03Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -80,7 +80,7 @@ static uint8_t bahamut_server_login(void)
 
 	me.bursting = TRUE;
 
-	sts("CAPAB SSJOIN NOQUIT BURST UNCONNECT ZIP NICKIP TSMODE");
+	sts("CAPAB SSJOIN NOQUIT BURST ZIP NICKIP TSMODE");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
 	sts("SVINFO 5 3 0 :%ld", CURRTIME);
 
