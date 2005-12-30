@@ -1,3 +1,15 @@
+jilles      2005/12/30 13:47:17 UTC	(20051230-4355)
+  Log:
+  operserv specs:
+  - general:admin does not give unrestricted access
+  - add general:* stuff
+  - remove snoop notice
+  
+
+  Changes:	Modified:
+  +47 -14	trunk/modules/operserv/specs.c (File Modified) 
+
+
 jilles      2005/12/30 13:15:03 UTC	(20051230-4353)
   Log:
   Update regarding privs.
