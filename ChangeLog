@@ -1,3 +1,15 @@
+nenolod     2005/12/30 07:47:39 UTC	(20051230-4345)
+  Log:
+  - update gaelic.language.
+  - version bump: 1.0-RC1 (in preparation for 1.0 branch freeze)
+  
+
+  Changes:	Modified:
+  +9 -9		trunk/configure (File Modified) 
+  +1 -1		trunk/configure.ac (File Modified) 
+  +2 -2		trunk/translations/gaelic.language (File Modified) 
+
+
 jilles      2005/12/30 01:31:02 UTC	(20051230-4343)
   Log:
   - Various clarifications
