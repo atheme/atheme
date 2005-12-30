@@ -4,7 +4,7 @@
  *
  * OperServ NOOP command.
  *
- * $Id: noop.c 4219 2005-12-27 17:41:18Z jilles $
+ * $Id: noop.c 4361 2005-12-30 14:21:19Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/noop", TRUE, _modinit, _moddeinit,
-	"$Id: noop.c 4219 2005-12-27 17:41:18Z jilles $",
+	"$Id: noop.c 4361 2005-12-30 14:21:19Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -35,11 +35,14 @@ command_t os_noop = { "NOOP", "Handles NOOP lists.", PRIV_NOOP,
 			os_cmd_noop };
 
 list_t *os_cmdtree;
+list_t *os_helptree;
 
 void _modinit(module_t *m)
 {
 	os_cmdtree = module_locate_symbol("operserv/main", "os_cmdtree");
+	os_helptree = module_locate_symbol("operserv/main", "os_helptree");
 	command_add(&os_noop, os_cmdtree);
+	help_addentry(os_helptree, "NOOP", "help/oservice/noop", NULL);
 	hook_add_event("user_oper");
 	hook_add_hook("user_oper", (void (*)(void *)) check_user);
 
@@ -55,6 +58,7 @@ void _modinit(module_t *m)
 void _moddeinit()
 {
 	command_delete(&os_noop, os_cmdtree);
+	help_delentry(os_helptree, "NOOP");
 	hook_del_hook("user_oper", (void (*)(void *)) check_user);
 	hook_del_event("user_oper");
 }

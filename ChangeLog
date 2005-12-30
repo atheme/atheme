@@ -1,3 +1,13 @@
+jilles      2005/12/30 14:09:05 UTC	(20051230-4359)
+  Log:
+  Add /os specs help file.
+  
+
+  Changes:	Modified:
+  +13 -0	trunk/help/oservice/specs (File Added) 
+  +1 -1		trunk/modules/operserv/specs.c (File Modified) 
+
+
 jilles      2005/12/30 14:05:28 UTC	(20051230-4357)
   Log:
   Allow those with general:viewprivs to do /os specs on other users:
