@@ -1,3 +1,13 @@
+jilles      2005/12/30 01:31:02 UTC	(20051230-4343)
+  Log:
+  - Various clarifications
+  - Mention r4319 (notification of target)
+  
+
+  Changes:	Modified:
+  +8 -6		trunk/help/cservice/op_voice (File Modified) 
+
+
 jilles      2005/12/29 22:20:40 UTC	(20051229-4341)
   Log:
   ChanServ CLOSE:
