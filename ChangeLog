@@ -1,3 +1,13 @@
+jilles      2005/12/30 14:31:51 UTC	(20051230-4365)
+  Log:
+  Add operserv jupe help file.
+  
+
+  Changes:	Modified:
+  +12 -0	trunk/help/oservice/jupe (File Added) 
+  +4 -0		trunk/modules/operserv/jupe.c (File Modified) 
+
+
 jilles      2005/12/30 14:24:03 UTC	(20051230-4363)
   Log:
   Remove UNCONNECT capab so squit on a jupe will destroy it in ircd.
