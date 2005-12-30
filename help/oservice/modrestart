@@ -1,0 +1,8 @@
+Help for MODRESTART:
+
+MODRESTART unloads and reloads all non-permanent modules,
+then loads all modules directly in modules/.
+
+This command appears to be currently disfunctional.
+
+Syntax: MODRESTART

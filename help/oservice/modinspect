@@ -1,0 +1,12 @@
+Help for MODINSPECT:
+
+MODINSPECT displays detailed information about a module.
+
+The names can be gathered from the MODLIST command. They
+are not necessarily equal to the pathnames to load them
+with MODLOAD.
+
+Syntax: MODINSPECT <name>
+
+Example:
+    /msg &nick& MODINSPECT protocol/charybdis
