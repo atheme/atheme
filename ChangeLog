@@ -1,3 +1,15 @@
+jilles      2005/12/30 16:08:36 UTC	(20051230-4377)
+  Log:
+  Add RSFNC (services-induced forced nick change) support
+  to the ratbox module. Use it if our uplink supports it
+  (a bit nasty if our uplink supports it but some other
+  servers do not).
+  
+
+  Changes:	Modified:
+  +21 -0	trunk/protocol/ratbox.c (File Modified) 
+
+
 jilles      2005/12/30 15:48:59 UTC	(20051230-4375)
   Log:
   Add help files for operserv modinspect/modrestart.

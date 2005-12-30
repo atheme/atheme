@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4293 2005-12-29 02:57:23Z jilles $
+ * $Id: node.c 4379 2005-12-30 16:38:56Z jilles $
  */
 
 #include "atheme.h"
@@ -1332,9 +1332,9 @@ void myuser_delete(char *name)
 			{
 				snoop("DELETE: \2%s\2 from \2%s\2", mc->name, mu->name);
 
+				hook_call_event("channel_drop", mc);
 				if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
 					part(mc->name, chansvs.nick);
-
 				mychan_delete(mc->name);
 			}
 		}
@@ -2268,6 +2268,7 @@ void expire_check(void *arg)
 			{
 				snoop("EXPIRE: \2%s\2 from \2%s\2", mc->name, mc->founder->name);
 
+				hook_call_event("channel_drop", mc);
 				if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
 					part(mc->name, chansvs.nick);
 
