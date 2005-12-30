@@ -1,3 +1,13 @@
+pfish       2005/12/30 11:23:42 UTC	(20051230-4351)
+  Log:
+  Update example configs with OperServ SPECS
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/dist/example.conf (File Modified) 
+  +2 -0		trunk/dist/example.userserv.conf (File Modified) 
+
+
 pfish       2005/12/30 11:12:20 UTC	(20051230-4349)
   Log:
   Update.
