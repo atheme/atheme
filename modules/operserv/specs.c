@@ -3,7 +3,7 @@
  *
  * This file contains functionality which implements the OService SPECS command.
  *
- * $Id: specs.c 4349 2005-12-30 11:12:20Z pfish $
+ * $Id: specs.c 4355 2005-12-30 13:47:17Z jilles $
  */
 
 #include "atheme.h"
@@ -11,7 +11,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/specs", FALSE, _modinit, _moddeinit,
-	"$Id: specs.c 4349 2005-12-30 11:12:20Z pfish $",
+	"$Id: specs.c 4355 2005-12-30 13:47:17Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -41,19 +41,11 @@ void _moddeinit()
 static void os_cmd_specs(char *origin)
 {
 	user_t *u = user_find(origin);
-	char nprivs[BUFSIZE], cprivs[BUFSIZE], oprivs[BUFSIZE];
+	char nprivs[BUFSIZE], cprivs[BUFSIZE], gprivs[BUFSIZE], oprivs[BUFSIZE];
 
 	if (!has_any_privs(u))
 	{
 		notice(opersvs.nick, origin, "You are not authorized to use %s.", opersvs.nick);
-		return;
-	}
-
-	/* If they have general:admin, don't waste their time */
-
-	if (has_priv(u, PRIV_ADMIN))
-	{
-		notice(opersvs.nick, origin, "You are a services root access user and have full access to all services commands.");
 		return;
 	}
 
@@ -134,7 +126,43 @@ static void os_cmd_specs(char *origin)
 		strcat(cprivs, "hold channels");
 	}
 
-	
+	/* general */
+	*gprivs = '\0';
+
+	if (has_priv(u, PRIV_SERVER_AUSPEX))
+		strcat(gprivs, "view concealed information");
+
+	if (has_priv(u, PRIV_VIEWPRIVS))
+	{
+		if (*gprivs)
+			strcat(gprivs, ", ");
+
+		strcat(gprivs, "view privileges of other users");
+	}
+
+	if (has_priv(u, PRIV_FLOOD))
+	{
+		if (*gprivs)
+			strcat(gprivs, ", ");
+
+		strcat(gprivs, "exempt from flood control");
+	}
+
+	if (has_priv(u, PRIV_METADATA))
+	{
+		if (*gprivs)
+			strcat(gprivs, ", ");
+
+		strcat(gprivs, "edit private metadata");
+	}
+
+	if (has_priv(u, PRIV_ADMIN))
+	{
+		if (*gprivs)
+			strcat(gprivs, ", ");
+
+		strcat(gprivs, "administer services");
+	}
 
 	/* OperServ */
 
@@ -175,10 +203,15 @@ static void os_cmd_specs(char *origin)
 		strcat(oprivs, "send global notices");
 	}
 
-	notice(opersvs.nick, origin, "\2Nicknames/accounts\2: %s", nprivs);
-	notice(opersvs.nick, origin, "\2Channels\2: %s", cprivs);
-	notice(opersvs.nick, origin, "\2OperServ\2: %s", oprivs);
+	notice(opersvs.nick, origin, "Privileges for \2%s\2:", u->nick);
+	if (*nprivs)
+		notice(opersvs.nick, origin, "\2Nicknames/accounts\2: %s", nprivs);
+	if (*cprivs)
+		notice(opersvs.nick, origin, "\2Channels\2: %s", cprivs);
+	if (*gprivs)
+		notice(opersvs.nick, origin, "\2General\2: %s", gprivs);
+	if (*oprivs)
+		notice(opersvs.nick, origin, "\2OperServ\2: %s", oprivs);
 
-	snoop("%s: SPECS", origin);
 	logcommand(opersvs.me, user_find(origin), CMDLOG_ADMIN, "SPECS");
 }
