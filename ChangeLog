@@ -1,3 +1,14 @@
+jilles      2005/12/30 14:05:28 UTC	(20051230-4357)
+  Log:
+  Allow those with general:viewprivs to do /os specs on other users:
+  /OS SPECS USER <nick>
+  This only works on online users which is a little unfortunate.
+  
+
+  Changes:	Modified:
+  +62 -24	trunk/modules/operserv/specs.c (File Modified) 
+
+
 jilles      2005/12/30 13:47:17 UTC	(20051230-4355)
   Log:
   operserv specs:

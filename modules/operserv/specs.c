@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService SPECS command.
  *
- * $Id: specs.c 4357 2005-12-30 14:05:28Z jilles $
+ * $Id: specs.c 4359 2005-12-30 14:09:05Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/specs", FALSE, _modinit, _moddeinit,
-	"$Id: specs.c 4357 2005-12-30 14:05:28Z jilles $",
+	"$Id: specs.c 4359 2005-12-30 14:09:05Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -30,7 +30,7 @@ void _modinit(module_t *m)
 	os_helptree = module_locate_symbol("operserv/main", "os_helptree");
 
         command_add(&os_specs, os_cmdtree);
-	help_addentry(os_helptree, "SPECS", "help/oservice/SPECS", NULL);
+	help_addentry(os_helptree, "SPECS", "help/oservice/specs", NULL);
 }
 
 void _moddeinit()
