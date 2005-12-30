@@ -1,3 +1,16 @@
+jilles      2005/12/29 22:20:40 UTC	(20051229-4341)
+  Log:
+  ChanServ CLOSE:
+  Use a single event to part from all closed channels we should leave.
+  Put copies of the channel names on a list to keep track of those
+  channels. Do not part a non-closed channel for this reason.
+  Stop casting function pointers.
+  
+
+  Changes:	Modified:
+  +107 -20	trunk/modules/chanserv/close.c (File Modified) 
+
+
 jilles      2005/12/29 20:19:39 UTC	(20051229-4339)
   Log:
   Don't kick internal clients on initial /cs close on.
