@@ -3,7 +3,7 @@
  *
  * This file contains functionality which implements the OService SPECS command.
  *
- * $Id: specs.c 4347 2005-12-30 08:45:01Z pfish $
+ * $Id: specs.c 4349 2005-12-30 11:12:20Z pfish $
  */
 
 #include "atheme.h"
@@ -11,7 +11,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/specs", FALSE, _modinit, _moddeinit,
-	"$Id: specs.c 4347 2005-12-30 08:45:01Z pfish $",
+	"$Id: specs.c 4349 2005-12-30 11:12:20Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -49,14 +49,20 @@ static void os_cmd_specs(char *origin)
 		return;
 	}
 
+	/* If they have general:admin, don't waste their time */
+
+	if (has_priv(u, PRIV_ADMIN))
+	{
+		notice(opersvs.nick, origin, "You are a services root access user and have full access to all services commands.");
+		return;
+	}
+
 	/* NickServ/UserServ */
 
 	*nprivs = '\0';
 
 	if (has_priv(u, PRIV_USER_AUSPEX))
-	{
 		strcat(nprivs, "view concealed information");
-	}
 
 	if (has_priv(u, PRIV_USER_ADMIN))
 	{
@@ -78,9 +84,7 @@ static void os_cmd_specs(char *origin)
 	*cprivs = '\0';
 
 	if (has_priv(u, PRIV_CHAN_AUSPEX))
-	{
 		strcpy(cprivs, "view concealed information");
-	}
 
 	if (has_priv(u, PRIV_CHAN_ADMIN))
 	{

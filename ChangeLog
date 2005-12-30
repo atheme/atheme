@@ -1,3 +1,13 @@
+pfish       2005/12/30 08:45:01 UTC	(20051230-4347)
+  Log:
+  Import OperServ SPECS. This may not be finished yet. Will update configs when it works.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/operserv/Makefile.in (File Modified) 
+  +180 -0	trunk/modules/operserv/specs.c (File Added) 
+
+
 nenolod     2005/12/30 07:47:39 UTC	(20051230-4345)
   Log:
   - update gaelic.language.
