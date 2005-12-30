@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 4269 2005-12-29 01:39:38Z nenolod $
+ * $Id: ratbox.c 4377 2005-12-30 16:08:36Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 4269 2005-12-29 01:39:38Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 4377 2005-12-30 16:08:36Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -65,6 +65,7 @@ struct cmode_ ratbox_prefix_mode_list[] = {
 
 static boolean_t use_rserv_support = FALSE;
 static boolean_t use_tb = FALSE;
+static boolean_t use_rsfnc = FALSE;
 
 static void server_eob(server_t *s);
 
@@ -383,6 +384,19 @@ static void ratbox_jupe(char *server, char *reason)
 
 	sts(":%s SQUIT %s :%s", CLIENT_NAME(opersvs.me->me), server, reason);
 	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
+}
+
+static void ratbox_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
+{
+	if (use_rsfnc)
+		/* XXX assumes whole net has it -- jilles */
+		sts(":%s ENCAP %s RSFNC %s %s %lu %lu", ME,
+			u->server->name,
+			CLIENT_NAME(u), newnick,
+			(unsigned long)(CURRTIME - 60),
+			(unsigned long)u->ts);
+	else
+		generic_fnc_sts(source, u, newnick, type);
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
@@ -1029,6 +1043,7 @@ static void m_capab(char *origin, uint8_t parc, char *parv[])
 
 	use_rserv_support = FALSE;
 	use_tb = FALSE;
+	use_rsfnc = FALSE;
 	for (p = strtok(parv[0], " "); p != NULL; p = strtok(NULL, " "))
 	{
 		if (!irccasecmp(p, "SERVICES"))
@@ -1040,6 +1055,11 @@ static void m_capab(char *origin, uint8_t parc, char *parv[])
 		{
 			slog(LG_DEBUG, "m_capab(): uplink does topic bursting, using if appropriate.");
 			use_tb = TRUE;
+		}
+		if (!irccasecmp(p, "RSFNC"))
+		{
+			slog(LG_DEBUG, "m_capab(): uplink does RSFNC, assuming whole net has it.");
+			use_rsfnc = TRUE;
 		}
 	}
 
@@ -1084,6 +1104,7 @@ void _modinit(module_t * m)
 	ircd_on_login = &ratbox_on_login;
 	ircd_on_logout = &ratbox_on_logout;
 	jupe = &ratbox_jupe;
+	fnc_sts = &ratbox_fnc_sts;
 	invite_sts = &ratbox_invite_sts;
 
 	mode_list = ratbox_mode_list;
