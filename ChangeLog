@@ -1,3 +1,13 @@
+w00t        2005/12/31 06:19:46 UTC	(20051231-4385)
+  Log:
+  Remove checking if a user has a mode -- this can help rectify desynch problems. [per nenolod]
+
+  Changes:	Modified:
+  +0 -24	trunk/modules/chanserv/halfop.c (File Modified) 
+  +0 -24	trunk/modules/chanserv/op.c (File Modified) 
+  +0 -24	trunk/modules/chanserv/voice.c (File Modified) 
+
+
 jilles      2005/12/30 23:33:14 UTC	(20051230-4383)
   Log:
   Skip expire check completely if expire is set to 0.

@@ -75,8 +75,7 @@ some sort of brilliant idea, we have a channel on IRC! (Surprising, no?)
 To access this channel, connect to irc.atheme.org, and join #atheme.
 
 There are also community forums and a community-oriented module 
-repository located at http://www.atheme.net/. Please note that 
-atheme.net is not the official source for Atheme releases.
+repository located at http://modules.atheme.org/.
 
 6. REPORTING BUGS
 -----------------
@@ -85,4 +84,4 @@ If you find a bug in Atheme, you must report it via the bugtracker; our
 developers have a tendency to forget things. Your bug is not actually a
 bug until it's reported.
 
-To report bugs, click on the 'tracker' link at http://www.atheme.org.
+Report bugs at http://bsdnerds.org/.
