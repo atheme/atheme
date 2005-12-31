@@ -1,3 +1,12 @@
+jilles      2005/12/30 23:33:14 UTC	(20051230-4383)
+  Log:
+  Skip expire check completely if expire is set to 0.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/src/node.c (File Modified) 
+
+
 jilles      2005/12/30 23:12:54 UTC	(20051230-4381)
   Log:
   flatfile backend: don't crash on MD lines referring to nonexistent stuff

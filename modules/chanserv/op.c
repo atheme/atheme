@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: op.c 4329 2005-12-29 17:36:02Z jilles $
+ * $Id: op.c 4385 2005-12-31 06:19:46Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/op", FALSE, _modinit, _moddeinit,
-	"$Id: op.c 4329 2005-12-29 17:36:02Z jilles $",
+	"$Id: op.c 4385 2005-12-31 06:19:46Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -125,12 +125,6 @@ static void cs_cmd_op(char *origin)
 		return;
 	}
 
-	if (CMODE_OP & cu->modes)
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is already opped on \2%s\2.", tu->nick, mc->name);
-		return;
-	}
-
 	cmode(chansvs.nick, chan, "+o", CLIENT_NAME(tu));
 	cu->modes |= CMODE_OP;
 
@@ -197,12 +191,6 @@ static void cs_cmd_deop(char *origin)
 	if (!cu)
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is not on \2%s\2.", tu->nick, mc->name);
-		return;
-	}
-
-	if (!(CMODE_OP & cu->modes))
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is not opped on \2%s\2.", tu->nick, mc->name);
 		return;
 	}
 
@@ -278,12 +266,6 @@ static void cs_fcmd_op(char *origin, char *chan)
 			continue;
 		}
 
-		if (CMODE_OP & cu->modes)
-		{
-			notice(chansvs.nick, origin, "\2%s\2 is already opped on \2%s\2.", tu->nick, mc->name);
-			continue;
-		}
-
 		cmode(chansvs.nick, chan, "+o", CLIENT_NAME(tu));
 		cu->modes |= CMODE_OP;
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s OP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
@@ -339,12 +321,6 @@ static void cs_fcmd_deop(char *origin, char *chan)
 		if (!cu)
 		{
 			notice(chansvs.nick, origin, "\2%s\2 is not on \2%s\2.", tu->nick, mc->name);
-			continue;
-		}
-
-		if (!(CMODE_OP & cu->modes))
-		{
-			notice(chansvs.nick, origin, "\2%s\2 is not opped on \2%s\2.", tu->nick, mc->name);
 			continue;
 		}
 

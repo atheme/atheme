@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: halfop.c 4329 2005-12-29 17:36:02Z jilles $
+ * $Id: halfop.c 4385 2005-12-31 06:19:46Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/halfop", FALSE, _modinit, _moddeinit,
-	"$Id: halfop.c 4329 2005-12-29 17:36:02Z jilles $",
+	"$Id: halfop.c 4385 2005-12-31 06:19:46Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -136,12 +136,6 @@ static void cs_cmd_halfop(char *origin)
 		return;
 	}
 
-	if (ircd->halfops_mode & cu->modes)
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is already halfopped on \2%s\2.", tu->nick, mc->name);
-		return;
-	}
-
 	cmode(chansvs.nick, chan, "+h", CLIENT_NAME(tu));
 	cu->modes |= ircd->halfops_mode;
 
@@ -214,12 +208,6 @@ static void cs_cmd_dehalfop(char *origin)
 	if (!cu)
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is not on \2%s\2.", tu->nick, mc->name);
-		return;
-	}
-
-	if (!(ircd->halfops_mode & cu->modes))
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is not halfopped on \2%s\2.", tu->nick, mc->name);
 		return;
 	}
 
@@ -301,12 +289,6 @@ static void cs_fcmd_halfop(char *origin, char *chan)
 			continue;
 		}
 
-		if (ircd->halfops_mode & cu->modes)
-		{
-			notice(chansvs.nick, origin, "\2%s\2 is already halfopped on \2%s\2.", tu->nick, mc->name);
-			continue;
-		}
-
 		cmode(chansvs.nick, chan, "+h", CLIENT_NAME(tu));
 		cu->modes |= ircd->halfops_mode;
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s HALFOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
@@ -368,12 +350,6 @@ static void cs_fcmd_dehalfop(char *origin, char *chan)
 		if (!cu)
 		{
 			notice(chansvs.nick, origin, "\2%s\2 is not on \2%s\2.", tu->nick, mc->name);
-			continue;
-		}
-
-		if (!(ircd->halfops_mode & cu->modes))
-		{
-			notice(chansvs.nick, origin, "\2%s\2 is not halfopped on \2%s\2.", tu->nick, mc->name);
 			continue;
 		}
 

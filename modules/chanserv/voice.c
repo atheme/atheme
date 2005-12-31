@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService VOICE functions.
  *
- * $Id: voice.c 4329 2005-12-29 17:36:02Z jilles $
+ * $Id: voice.c 4385 2005-12-31 06:19:46Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/voice", FALSE, _modinit, _moddeinit,
-	"$Id: voice.c 4329 2005-12-29 17:36:02Z jilles $",
+	"$Id: voice.c 4385 2005-12-31 06:19:46Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -116,12 +116,6 @@ static void cs_cmd_voice(char *origin)
 		return;
 	}
 
-	if (CMODE_VOICE & cu->modes)
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is already voiced on \2%s\2.", tu->nick, mc->name);
-		return;
-	}
-
 	cmode(chansvs.nick, chan, "+v", CLIENT_NAME(tu));
 	cu->modes |= CMODE_VOICE;
 
@@ -185,12 +179,6 @@ static void cs_cmd_devoice(char *origin)
 		return;
 	}
 
-	if (!(CMODE_VOICE & cu->modes))
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is not voiced on \2%s\2.", tu->nick, mc->name);
-		return;
-	}
-
 	cmode(chansvs.nick, chan, "-v", CLIENT_NAME(tu));
 	cu->modes &= ~CMODE_VOICE;
 
@@ -249,12 +237,6 @@ static void cs_fcmd_voice(char *origin, char *chan)
 			continue;
 		}
 
-		if (CMODE_VOICE & cu->modes)
-		{
-			notice(chansvs.nick, origin, "\2%s\2 is already voiced on \2%s\2.", tu->nick, mc->name);
-			continue;
-		}
-
 		cmode(chansvs.nick, chan, "+v", CLIENT_NAME(tu));
 		cu->modes |= CMODE_VOICE;
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s VOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
@@ -305,12 +287,6 @@ static void cs_fcmd_devoice(char *origin, char *chan)
 		if (!cu)
 		{
 			notice(chansvs.nick, origin, "\2%s\2 is not on \2%s\2.", tu->nick, mc->name);
-			continue;
-		}
-
-		if (!(CMODE_VOICE & cu->modes))
-		{
-			notice(chansvs.nick, origin, "\2%s\2 is not voiced on \2%s\2.", tu->nick, mc->name);
 			continue;
 		}
 
