@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 4327 2005-12-29 17:27:54Z jilles $
+ * $Id: flags.c 4389 2005-12-31 18:09:25Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 4327 2005-12-29 17:27:54Z jilles $",
+	"$Id: flags.c 4389 2005-12-31 18:09:25Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -206,6 +206,16 @@ static void cs_cmd_flags(char *origin)
 				return;
 			}
 
+			/* If NEVEROP is set, don't allow adding new entries
+			 * except sole +b. Adding flags if the current level
+			 * is +b counts as adding an entry.
+			 * -- jilles */
+			if (MU_NEVEROP & tmu->flags && addflags != CA_AKICK && addflags != 0 && ((ca = chanacs_find(mc, tmu, 0)) == NULL || ca->level == CA_AKICK))
+			{
+				notice(chansvs.nick, origin, "\2%s\2 does not wish to be added to access lists (NEVEROP set).", tmu->name);
+				return;
+			}
+
 			if (!chanacs_change(mc, tmu, NULL, &addflags, &removeflags, restrictflags))
 			{
 		                notice(chansvs.nick, origin, "You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2.", bitmask_to_flags2(addflags, removeflags, chanacs_flags), tmu->name, mc->name);
@@ -327,6 +337,16 @@ static void cs_fcmd_flags(char *origin, char *channel)
 		if (tmu == mc->founder && removeflags & CA_FLAGS)
 		{
 			notice(chansvs.nick, origin, "You may not remove the founder's +f access.");
+			return;
+		}
+
+		/* If NEVEROP is set, don't allow adding new entries
+		 * except sole +b. Adding flags if the current level
+		 * is +b counts as adding an entry.
+		 * -- jilles */
+		if (MU_NEVEROP & tmu->flags && addflags != CA_AKICK && addflags != 0 && ((ca = chanacs_find(mc, tmu, 0)) == NULL || ca->level == CA_AKICK))
+		{
+			notice(chansvs.nick, origin, "\2%s\2 does not wish to be added to access lists (NEVEROP set).", tmu->name);
 			return;
 		}
 

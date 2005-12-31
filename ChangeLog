@@ -1,3 +1,12 @@
+pfish       2005/12/31 11:13:03 UTC	(20051231-4387)
+  Log:
+  Update URLs in README
+  
+
+  Changes:	Modified:
+  +2 -3		trunk/README (File Modified) 
+
+
 w00t        2005/12/31 06:19:46 UTC	(20051231-4385)
   Log:
   Remove checking if a user has a mode -- this can help rectify desynch problems. [per nenolod]

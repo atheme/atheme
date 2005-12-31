@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 4219 2005-12-27 17:41:18Z jilles $
+ * $Id: xop.c 4389 2005-12-31 18:09:25Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 4219 2005-12-27 17:41:18Z jilles $",
+	"$Id: xop.c 4389 2005-12-31 18:09:25Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -133,15 +133,6 @@ static void cs_xop(char *origin, uint32_t level, char *leveldesc)
 	/* ADD */
 	if (!strcasecmp("ADD", cmd))
 	{
-		if (mu)
-		{
-			/* NEVEROP logic simplification and fix. Yes, this looks a little weird. --w00t */
-			if (MU_NEVEROP & mu->flags)
-			{
-				notice(chansvs.nick, origin, "\2%s\2 does not wish to be added to access lists.", mu->name);
-				return;
-			}
-		}
 		/* As in /cs flags, allow founder to do anything */
 		if (is_founder(mc, u->myuser))
 			restrictflags = CA_ALL;
@@ -344,6 +335,14 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 		return;
 	}
 
+	/* NEVEROP logic moved here
+	 * Allow changing access level, but not adding
+	 * -- jilles */
+	if (MU_NEVEROP & mu->flags && (ca == NULL || ca->level == CA_AKICK))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 does not wish to be added to access lists (NEVEROP set).", mu->name);
+		return;
+	}
 	/*
 	 * this is a little more cryptic than it used to be, but much cleaner. Functionally should be
 	 * the same, with the exception that if they had access before, now it doesn't tell what it got
