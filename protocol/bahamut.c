@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: bahamut.c 4363 2005-12-30 14:24:03Z jilles $
+ * $Id: bahamut.c 4391 2006-01-01 20:20:47Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/bahamut.h"
 
-DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 4363 2005-12-30 14:24:03Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 4391 2006-01-01 20:20:47Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -516,7 +516,10 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 	server_t *s;
 	user_t *u;
 	kline_t *k;
+	struct in_addr ip;
+	char ipstring[64];
 
+	/* -> NICK jilles 1 1136143909 +oi ~jilles 192.168.1.5 jaguar.test 0 3232235781 :Jilles Tjoelker */
 	if (parc == 10)
 	{
 		s = server_find(parv[6]);
@@ -543,7 +546,11 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			return;
 		}
 
-		u = user_add(parv[0], parv[4], parv[5], NULL, NULL, NULL, parv[9], s, atoi(parv[2]));
+		ip.s_addr = ntohl(strtoul(parv[8], NULL, 10));
+		ipstring[0] = '\0';
+		if (!inet_ntop(AF_INET, &ip, ipstring, sizeof ipstring))
+			ipstring[0] = '\0';
+		u = user_add(parv[0], parv[4], parv[5], NULL, ipstring, NULL, parv[9], s, atoi(parv[2]));
 
 		user_mode(u, parv[3]);
 

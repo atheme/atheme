@@ -1,3 +1,16 @@
+jilles      2005/12/31 18:09:25 UTC	(20051231-4389)
+  Log:
+  cs xop: change NEVEROP logic - allow all adds except if
+  the target had no access or +b access
+  cs flags: add NEVEROP logic - deny non-+b adds where the
+  target had no access or +b access
+  
+
+  Changes:	Modified:
+  +20 -0	trunk/modules/chanserv/flags.c (File Modified) 
+  +8 -9		trunk/modules/chanserv/xop.c (File Modified) 
+
+
 pfish       2005/12/31 11:13:03 UTC	(20051231-4387)
   Log:
   Update URLs in README

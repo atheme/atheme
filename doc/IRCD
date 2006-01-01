@@ -1,4 +1,4 @@
-$Id: IRCD 4207 2005-12-26 15:37:20Z jilles $
+$Id: IRCD 4391 2006-01-01 20:20:47Z jilles $
 
 IRCD-specific notes
 -------------------
@@ -14,7 +14,6 @@ bahamut
 -------
 
 You need U:lines/super{} entries for services on all servers on the network.
-NICKIP is not yet supported.
 
 Bahamut is designed for services not joining channels, not having the ability
 to prevent services being kicked/deopped and the like. If you want to use
