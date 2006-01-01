@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 4189 2005-12-26 00:02:24Z jilles $
+# $Id: Makefile.in 4405 2006-01-01 22:23:09Z jilles $
 #
 
 CC		= @CC@
@@ -34,7 +34,23 @@ CPPFLAGS	= @CPPFLAGS@
 
 default: all
 
+SRCS = \
+	cs_count.c		\
+	cs_ping.c		\
+	fc_dice.c		\
+	gen_echoserver.c	\
+	gen_listenerdemo.c	\
+	ircd_catserv.c		\
+	ns_generatepass.c	\
+	ns_enforce.c		\
+	us_generatepass.c
+# To compile your own modules, add them to SRCS or make blegh.so
+# Note: anope_convert.c cannot be compiled with this Makefile as it is
+# an anope module, not an atheme module.
+
 OBJS = ${SRCS:.c=.so}
+
+all: ${OBJS}
 
 install:
 	${INSTALL} -d ${MODDIR}/contrib

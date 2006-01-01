@@ -1,3 +1,13 @@
+jilles      2006/01/01 22:21:45 UTC	(20060101-4403)
+  Log:
+  Add nickserv enforcement to contrib. (Code is too ugly for base, also
+  the general philosophy behind it is doubtful.)
+  
+
+  Changes:	Modified:
+  +292 -0	trunk/contrib/ns_enforce.c (File Added) 
+
+
 jilles      2006/01/01 22:15:06 UTC	(20060101-4401)
   Log:
   Make this work again.
