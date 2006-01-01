@@ -1,3 +1,13 @@
+jilles      2006/01/01 20:20:47 UTC	(20060101-4391)
+  Log:
+  Add bahamut NICKIP support.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/doc/IRCD (File Modified) 
+  +8 -1		trunk/protocol/bahamut.c (File Modified) 
+
+
 jilles      2005/12/31 18:09:25 UTC	(20051231-4389)
   Log:
   cs xop: change NEVEROP logic - allow all adds except if

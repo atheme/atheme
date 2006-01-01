@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4219 2005-12-27 17:41:18Z jilles $
+ * $Id: main.c 4393 2006-01-01 20:29:11Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4219 2005-12-27 17:41:18Z jilles $",
+	"$Id: main.c 4393 2006-01-01 20:29:11Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -21,6 +21,7 @@ static void cs_part(chanuser_t *cu);
 static void cs_register(mychan_t *mc);
 static void cs_keeptopic_newchan(channel_t *c);
 static void cs_keeptopic_topicset(channel_t *c);
+static void cs_leave_empty(void *unused);
 
 list_t cs_cmdtree;
 list_t cs_fcmdtree;
@@ -202,6 +203,7 @@ void _modinit(module_t *m)
 	hook_add_hook("channel_register", (void (*)(void *)) cs_register);
 	hook_add_hook("channel_add", (void (*)(void *)) cs_keeptopic_newchan);
 	hook_add_hook("channel_topic", (void (*)(void *)) cs_keeptopic_topicset);
+	event_add("cs_leave_empty", cs_leave_empty, NULL, 300);
 }
 
 void _moddeinit(void)
@@ -214,6 +216,7 @@ void _moddeinit(void)
 	hook_del_hook("channel_register", (void (*)(void *)) cs_register);
 	hook_del_hook("channel_add", (void (*)(void *)) cs_keeptopic_newchan);
 	hook_del_hook("channel_topic", (void (*)(void *)) cs_keeptopic_topicset);
+	event_delete(cs_leave_empty, NULL);
 }
 
 static void cs_join(chanuser_t *cu)
@@ -245,6 +248,13 @@ static void cs_join(chanuser_t *cu)
 	/* auto stuff */
 	if ((mc->flags & MC_STAFFONLY) && !has_priv(u, PRIV_JOIN_STAFFONLY))
 	{
+		/* Stay on channel if this would empty it -- jilles */
+		if (chan->nummembers <= (config_options.join_chans ? 2 : 1))
+		{
+			mc->flags |= MC_INHABIT;
+			if (!config_options.join_chans)
+				join(chan->name, chansvs.nick);
+		}
 		ban(chansvs.nick, chan->name, u);
 		kick(chansvs.nick, chan->name, u->nick, "You are not authorized to be on this channel");
 		return;
@@ -252,6 +262,13 @@ static void cs_join(chanuser_t *cu)
 
 	if (flags & CA_AKICK)
 	{
+		/* Stay on channel if this would empty it -- jilles */
+		if (chan->nummembers <= (config_options.join_chans ? 2 : 1))
+		{
+			mc->flags |= MC_INHABIT;
+			if (!config_options.join_chans)
+				join(chan->name, chansvs.nick);
+		}
 		/* use a user-given ban mask if possible -- jilles */
 		ca2 = chanacs_find_host_by_user(mc, u, CA_AKICK);
 		if (ca2 != NULL)
@@ -269,6 +286,16 @@ static void cs_join(chanuser_t *cu)
 		else
 			ban(chansvs.nick, chan->name, u);
 		kick(chansvs.nick, chan->name, u->nick, "User is banned from this channel");
+		return;
+	}
+
+	/* A user joined and was not kicked; we do not need
+	 * to stay on the channel artificially. */
+	if (mc->flags & MC_INHABIT)
+	{
+		mc->flags &= ~MC_INHABIT;
+		if (!config_options.join_chans && chanuser_find(chan, chansvs.me->me))
+			part(chan->name, chansvs.nick);
 	}
 
 	if (ircd->uses_owner)
@@ -370,14 +397,23 @@ static void cs_join(chanuser_t *cu)
 
 static void cs_part(chanuser_t *cu)
 {
+	mychan_t *mc;
+
+	mc = mychan_find(cu->chan->name);
+	if (mc == NULL)
+		return;
 	/*
 	 * When channel_part is fired, we haven't yet removed the
 	 * user from the room. So, the channel will have two members
 	 * if ChanServ is joining channels: the triggering user and
 	 * itself.
+	 *
+	 * Do not part if we're enforcing an akick/close in an otherwise
+	 * empty channel (MC_INHABIT). -- jilles
 	 */
 	if (config_options.join_chans
 		&& config_options.leave_chans
+		&& !(mc->flags & MC_INHABIT)
 		&& (cu->chan->nummembers <= 2)
 		&& !is_internal_client(cu->user))
 		part(cu->chan->name, chansvs.nick);
@@ -486,4 +522,31 @@ static void cs_keeptopic_newchan(channel_t *c)
 
 	handle_topic(c, setter, topicts, text);
 	topic_sts(c->name, setter, topicts, text);
+}
+
+static void cs_leave_empty(void *unused)
+{
+	int i;
+	node_t *n;
+	mychan_t *mc;
+
+	(void)unused;
+	for (i = 0; i < HASHSIZE; i++)
+	{
+		LIST_FOREACH(n, mclist[i].head)
+		{
+			mc = n->data;
+			if (!(mc->flags & MC_INHABIT))
+				continue;
+			mc->flags &= ~MC_INHABIT;
+			if (mc->chan != NULL &&
+					(!config_options.join_chans ||
+					 (config_options.leave_chans && mc->chan->nummembers == 1)) &&
+					chanuser_find(mc->chan, chansvs.me->me))
+			{
+				slog(LG_DEBUG, "cs_leave_empty(): leaving %s", mc->chan->name);
+				part(mc->chan->name, chansvs.nick);
+			}
+		}
+	}
 }
