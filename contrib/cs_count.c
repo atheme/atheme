@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService COUNT functions.
  *
- * $Id: cs_count.c 3313 2005-10-31 00:55:58Z jilles $
+ * $Id: cs_count.c 4401 2006-01-01 22:15:06Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/count", FALSE, _modinit, _moddeinit,
-	"$Id: cs_count.c 3313 2005-10-31 00:55:58Z jilles $",
+	"$Id: cs_count.c 4401 2006-01-01 22:15:06Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -76,24 +76,16 @@ static void cs_cmd_count(char *origin)
 	{
 		ca = (chanacs_t *)n->data;
 
-		switch (ca->level)
-		{
-			case CA_VOP:
-				vopcnt++;
-				break;
-			case CA_HOP:
-				hopcnt++;
-				break;
-			case CA_AOP:
-				aopcnt++;
-				break;
-			case CA_SOP:
-				aopcnt++;
-				break;
-			case CA_AKICK:
-				akickcnt++;
-				break;
-		}
+		if (ca->level == chansvs.ca_vop)
+			vopcnt++;
+		else if (ca->level == chansvs.ca_hop)
+			hopcnt++;
+		else if (ca->level == chansvs.ca_aop)
+			aopcnt++;
+		else if (ca->level == chansvs.ca_sop)
+			sopcnt++;
+		else if (ca->level == CA_AKICK)
+			akickcnt++;
 	}
 	notice(chansvs.nick, origin, "%s: VOp: %d, HOp: %d, AOp: %d, SOp: %d, AKick: %d",
 			chan, vopcnt, hopcnt, aopcnt, sopcnt, akickcnt);
