@@ -1,12 +1,12 @@
 #!/bin/sh
 #
-# Copyright (c) 2005 Atheme Development Group
+# Copyright (c) 2005-2006 Atheme Development Group
 # Rights to this code are documented in doc/LICENSE.
 #
 # This file generates version.c.
 # Stolen from ircd-ratbox.
 #
-# $Id: version.sh 3729 2005-11-09 11:18:48Z pfish $
+# $Id: version.sh 4395 2006-01-01 20:37:51Z jilles $
 #
 
 spitshell=cat
@@ -34,12 +34,12 @@ awk '{if (NF == 6) \
 else \
          { print $1 " "  $2 " " $3 " " $7 " at " $4 " " $5 " " $6 }}'`
 
-buildid=`echo "\$Revision: 3729 $" | \
+buildid=`echo "\$Revision: 4395 $" | \
 	awk '{ print $2 }'`;
 
 $spitshell >version.c <<!SUB!THIS!
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains version information.
@@ -58,7 +58,7 @@ const char *osinfo = "$osinfo";
 const char *infotext[] =
 {
   "Atheme IRC Services --",
-  "Copyright (c) 2005 Atheme Development Group",
+  "Copyright (c) 2005-2006 Atheme Development Group",
   " ",
   "All rights reserved.",
   " ",

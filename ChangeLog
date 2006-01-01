@@ -1,3 +1,26 @@
+jilles      2006/01/01 20:29:11 UTC	(20060101-4393)
+  Log:
+  Regardless of join_chans/leave_chans, join chanserv
+  temporarily to channels which would otherwise be empty
+  to enforce akick or staffonly. Every five minutes part
+  all these (MC_INHABIT) channels.
+  
+  Tidbits:
+  - don't do mode-on-identify if chanserv is not loaded
+  - exit on-join hook if user is akicked
+  
+  Use of MC_INHABIT for /cs close in a later commit.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/dist/example.conf (File Modified) 
+  +3 -0		trunk/dist/example.userserv.conf (File Modified) 
+  +3 -0		trunk/include/account.h (File Modified) 
+  +63 -0	trunk/modules/chanserv/main.c (File Modified) 
+  +8 -1		trunk/modules/nickserv/identify.c (File Modified) 
+  +8 -1		trunk/modules/userserv/login.c (File Modified) 
+
+
 jilles      2006/01/01 20:20:47 UTC	(20060101-4391)
   Log:
   Add bahamut NICKIP support.
