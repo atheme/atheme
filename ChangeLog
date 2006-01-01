@@ -1,3 +1,14 @@
+jilles      2006/01/01 20:37:51 UTC	(20060101-4395)
+  Log:
+  Update a few copyright years.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/Manifest (File Modified) 
+  +2 -2		trunk/src/atheme.c (File Modified) 
+  +3 -3		trunk/src/version.sh (File Modified) 
+
+
 jilles      2006/01/01 20:29:11 UTC	(20060101-4393)
   Log:
   Regardless of join_chans/leave_chans, join chanserv
