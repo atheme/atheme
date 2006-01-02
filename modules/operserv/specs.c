@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 Patrick Fish, et al
+ * Copyright (c) 2005-2006 Patrick Fish, et al
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains functionality which implements the OService SPECS command.
  *
- * $Id: specs.c 4359 2005-12-30 14:09:05Z jilles $
+ * $Id: specs.c 4413 2006-01-02 11:33:51Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/specs", FALSE, _modinit, _moddeinit,
-	"$Id: specs.c 4359 2005-12-30 14:09:05Z jilles $",
+	"$Id: specs.c 4413 2006-01-02 11:33:51Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -199,6 +199,14 @@ static void os_cmd_specs(char *origin)
 			strcat(gprivs, ", ");
 
 		strcat(gprivs, "administer services");
+	}
+
+	if (has_priv(tu, PRIV_REG_NOLIMIT))
+	{
+		if (*gprivs)
+			strcat(gprivs, ", ");
+
+		strcat(gprivs, "bypass registration limits");
 	}
 
 	/* OperServ */

@@ -1,3 +1,16 @@
+jilles      2006/01/02 11:28:01 UTC	(20060102-4411)
+  Log:
+  Change /ns link, now only allows the user's current nick
+  to be linked (to the nick they are identified to).
+  
+  PRIV_REG_NOLIMIT now exempts from the per-email limit.
+  
+
+  Changes:	Modified:
+  +7 -5		trunk/help/nickserv/link (File Modified) 
+  +10 -27	trunk/modules/nickserv/link.c (File Modified) 
+
+
 nenolod     2006/01/02 11:27:23 UTC	(20060102-4409)
   Log:
   Extend our copyrights to 2006.
