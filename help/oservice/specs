@@ -5,9 +5,10 @@ SPECS shows the privileges you have in services.
 Syntax: SPECS
 
 It is also possible to see the privileges of other
-online users.
+online users or of oper classes.
 
 Syntax: SPECS USER <nick>
+Syntax: SPECS OPERCLASS <classname>
 
 Example:
     /msg &nick& SPECS USER w00t

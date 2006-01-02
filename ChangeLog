@@ -1,3 +1,13 @@
+jilles      2006/01/02 12:41:30 UTC	(20060102-4419)
+  Log:
+  Add has_priv_operclass().
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/include/privs.h (File Modified) 
+  +9 -0		trunk/src/privs.c (File Modified) 
+
+
 jilles      2006/01/02 12:28:05 UTC	(20060102-4417)
   Log:
   Rework a bit to be more flexible. Should be no

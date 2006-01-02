@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService SPECS command.
  *
- * $Id: specs.c 4417 2006-01-02 12:28:05Z jilles $
+ * $Id: specs.c 4421 2006-01-02 12:43:17Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/specs", FALSE, _modinit, _moddeinit,
-	"$Id: specs.c 4417 2006-01-02 12:28:05Z jilles $",
+	"$Id: specs.c 4421 2006-01-02 12:43:17Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -77,7 +77,8 @@ struct
 
 static void os_cmd_specs(char *origin)
 {
-	user_t *u = user_find(origin), *tu;
+	user_t *u = user_find(origin), *tu = NULL;
+	operclass_t *cl = NULL;
 	char *targettype = strtok(NULL, " ");
 	char *target = strtok(NULL, " ");
 	char nprivs[BUFSIZE], cprivs[BUFSIZE], gprivs[BUFSIZE], oprivs[BUFSIZE];
@@ -96,27 +97,39 @@ static void os_cmd_specs(char *origin)
 			notice(opersvs.nick, origin, "You do not have %s privilege.", PRIV_VIEWPRIVS);
 			return;
 		}
-		if (strcasecmp(targettype, "USER"))
-		{
-			notice(opersvs.nick, origin, "Only the USER type is currently supported.");
-			return;
-		}
 		if (target == NULL)
 			target = "?";
-		tu = user_find_named(target);
-		if (tu == NULL)
+		if (!strcasecmp(targettype, "USER"))
 		{
-			notice(opersvs.nick, origin, "\2%s\2 is not on IRC.", target);
-			return;
+			tu = user_find_named(target);
+			if (tu == NULL)
+			{
+				notice(opersvs.nick, origin, "\2%s\2 is not on IRC.", target);
+				return;
+			}
+			if (!has_any_privs(tu))
+			{
+				notice(opersvs.nick, origin, "\2%s\2 is unprivileged.", tu->nick);
+				return;
+			}
+			if (is_internal_client(tu))
+			{
+				notice(opersvs.nick, origin, "\2%s\2 is an internal client.", tu->nick);
+				return;
+			}
 		}
-		if (!has_any_privs(tu))
+		else if (!strcasecmp(targettype, "OPERCLASS") || !strcasecmp(targettype, "CLASS"))
 		{
-			notice(opersvs.nick, origin, "\2%s\2 is unprivileged.", tu->nick);
-			return;
+			cl = operclass_find(target);
+			if (cl == NULL)
+			{
+				notice(opersvs.nick, origin, "No such oper class \2%s\2.", target);
+				return;
+			}
 		}
-		if (is_internal_client(tu))
+		else
 		{
-			notice(opersvs.nick, origin, "\2%s\2 is an internal client.", tu->nick);
+			notice(opersvs.nick, origin, "Valid target types: USER, OPERCLASS.");
 			return;
 		}
 	}
@@ -127,7 +140,7 @@ static void os_cmd_specs(char *origin)
 	*nprivs = *cprivs = *gprivs = *oprivs = '\0';
 	while (privnames[i].priv != NULL)
 	{
-		if (has_priv(u, privnames[i].priv))
+		if (tu ? has_priv(tu, privnames[i].priv) : has_priv_operclass(cl, privnames[i].priv))
 		{
 			if (privnames[i].npriv != NULL)
 			{
@@ -157,7 +170,11 @@ static void os_cmd_specs(char *origin)
 		i++;
 	}
 
-	notice(opersvs.nick, origin, "Privileges for \2%s\2:", tu->nick);
+	if (tu)
+		notice(opersvs.nick, origin, "Privileges for \2%s\2:", tu->nick);
+	else
+		notice(opersvs.nick, origin, "Privileges for oper class \2%s\2:", cl->name);
+
 	if (*nprivs)
 		notice(opersvs.nick, origin, "\2Nicknames/accounts\2: %s", nprivs);
 	if (*cprivs)
@@ -168,5 +185,8 @@ static void os_cmd_specs(char *origin)
 		notice(opersvs.nick, origin, "\2OperServ\2: %s", oprivs);
 	notice(opersvs.nick, origin, "End of privileges");
 
-	logcommand(opersvs.me, user_find(origin), CMDLOG_ADMIN, "SPECS %s!%s@%s", tu->nick, tu->user, tu->vhost);
+	if (tu)
+		logcommand(opersvs.me, user_find(origin), CMDLOG_ADMIN, "SPECS USER %s!%s@%s", tu->nick, tu->user, tu->vhost);
+	else
+		logcommand(opersvs.me, user_find(origin), CMDLOG_ADMIN, "SPECS OPERCLASS %s", cl->name);
 }
