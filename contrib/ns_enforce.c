@@ -219,7 +219,7 @@ void reg_check(void *arg)
 						if (ircd->type == PROTOCOL_BAHAMUT)
 							sts(":%s SVSHOLD %s %d :Reserved by %s for nickname owner", nicksvs.nick, u->nick, 300, nicksvs.nick);
 						else if (ircd->type == PROTOCOL_RATBOX || ircd->type == PROTOCOL_CHARYBDIS)
-							sts(":%s ENCAP * RESV %d %s :Reserved by %s for nickname owner", CLIENT_NAME(nicksvs.me->me), 300, u->nick, nicksvs.nick);
+							sts(":%s ENCAP * RESV %d %s 0 :Reserved by %s for nickname owner", CLIENT_NAME(nicksvs.me->me), 300, u->nick, nicksvs.nick);
 #if 0 /* can't do this, need to wait for SVSNICK to complete! -- jilles */
 						uid = uid_get();
 						introduce_nick(u->nick, "enforcer", "services.hold", "Services Enforcer", uid);

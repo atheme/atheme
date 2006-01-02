@@ -1,3 +1,14 @@
+jilles      2006/01/02 13:45:47 UTC	(20060102-4433)
+  Log:
+  Make /stats E a bit more like ircd-ratbox's,
+  in particular show the time remaining for
+  each event.
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2006/01/02 13:34:52 UTC	(20060102-4431)
   Log:
   Dump out sendq before expire_check(). This makes it more
