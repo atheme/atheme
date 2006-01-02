@@ -1,7 +1,56 @@
-$Id: RELEASE 2617 2005-10-05 18:49:33Z nenolod $
+$Id: RELEASE 4439 2006-01-02 15:51:51Z jilles $
 
-Atheme devel Release Notes
-==========================
+Atheme 1.0 Release Notes
+========================
+- Add capabilities to protocol modules:
+  - forced nick change (aka SVSNICK)
+  - invite
+  - channel op notice (aka WALLCHOPS)
+- Don't unkline temp akills if they have already expired.
+- AKILL wildcard checking changed to ratbox algorithm.
+- Further simplification of access checking.
+- Hostmask access entries now check vhost, not host. This means services
+  cloaks now work in access lists.
+- InspIRCd module updated to beta6 and above (tree linking instead of mesh).
+- For akicks, use a matching +b'ed hostmask if possible.
+- For ircds with dalnet-like +r umodes, don't set it for userserv.
+- Add /cs forcexop to reset access levels to xOP values. Useful if CA_?OP
+  are changed.
+- Make CA_?OP configurable in atheme.conf.
+- Add channel_info hook on /cs info.
+- Add per-channel flags templates. Templates can be specified in the flags
+  command, avoiding the need to memorize complicated flags strings.
+  Templates are manipulated with the TEMPLATE command which is similar to the
+  FLAGS command.  The xOP levels can also be used as templates.
+- Add per-channel fantasy command disable.
+- Fix NEVEROP and NOOP options.
+- If fantasy commands are globally disabled, mark services clients as "deaf"
+  for some ircds.
+- Add /cs set verbose ops, works like /cs set verbose on but only shows to
+  channel ops.
+- Allow users to remove their own access from channels (except akicks of
+  course).
+- Some improvements to network I/O.
+- Add support for permanent (+P) channels in charybdis/hyperion/shadowircd.
+- Add support for more FHS-like paths (not really complete but should still
+  be helpful for packagers).
+- Add fine grained services operator privileges. IRCops get certain
+  privileges, and registered accounts can be granted privileges. This
+  works via atheme.conf. You will need to redo the operator part of your
+  configuration. See the new example.conf and doc/PRIVILEGES for more
+  information.
+- Add message translation support.
+- /cs voice/halfop/op now notifies the target user who did it.
+- /cs flags mentions who gave the command in the verbose notice.
+- Remove many redundant confirming notices.
+- Regardless of join_chans/leave_chans, join chanserv temporarily to
+  channels which would otherwise be empty to enforce akick or staffonly.
+- Add nickserv enforcement (FNC users who do not identify in time) to
+  contrib.
+- Various minor tweaks and bugfixes.
+
+Atheme 0.3 Release Notes
+========================
 - All services have been entirely modularized. You will need to
   redo your configuration. An authentication service has been
   added (choose from either NickServ or UserServ,) for
