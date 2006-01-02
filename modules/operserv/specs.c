@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService SPECS command.
  *
- * $Id: specs.c 4413 2006-01-02 11:33:51Z pfish $
+ * $Id: specs.c 4417 2006-01-02 12:28:05Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/specs", FALSE, _modinit, _moddeinit,
-	"$Id: specs.c 4413 2006-01-02 11:33:51Z pfish $",
+	"$Id: specs.c 4417 2006-01-02 12:28:05Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -39,12 +39,49 @@ void _moddeinit()
 	help_delentry(os_helptree, "SPECS");
 }
 
+struct
+{
+	char *priv;
+	char *npriv, *cpriv, *gpriv, *opriv;
+} privnames[] =
+{
+	/* NickServ/UserServ */
+	{ PRIV_USER_AUSPEX, "view concealed information", NULL, NULL, NULL },
+	{ PRIV_USER_ADMIN, "drop accounts, freeze accounts, reset passwords, send passwords", NULL, NULL, NULL },
+	{ PRIV_USER_VHOST, "set vhosts", NULL, NULL, NULL },
+	/* ChanServ */
+	{ PRIV_CHAN_AUSPEX, NULL, "view concealed information", NULL, NULL },
+	{ PRIV_CHAN_ADMIN, NULL, "drop channels, close channels, transfer ownership", NULL, NULL },
+	{ PRIV_CHAN_CMODES, NULL, "mlock operator modes", NULL, NULL },
+	{ PRIV_JOIN_STAFFONLY, NULL, "join staff channels", NULL, NULL },
+	/* NickServ/UserServ+ChanServ */
+	{ PRIV_MARK, "mark accounts", "mark channels", NULL, NULL },
+	{ PRIV_HOLD, "hold accounts", "hold channels", NULL, NULL },
+	{ PRIV_REG_NOLIMIT, NULL, "bypass registration limits", NULL, NULL },
+	/* general */
+	{ PRIV_SERVER_AUSPEX, NULL, NULL, "view concealed information", NULL },
+	{ PRIV_VIEWPRIVS, NULL, NULL, "view privileges of other users", NULL },
+	{ PRIV_FLOOD, NULL, NULL, "exempt from flood control", NULL },
+	{ PRIV_METADATA, NULL, NULL, "edit private metadata", NULL },
+	{ PRIV_ADMIN, NULL, NULL, "administer services", NULL },
+	{ PRIV_METADATA, NULL, NULL, "edit private metadata", NULL },
+	/* OperServ */
+	{ PRIV_OMODE, NULL, NULL, NULL, "set channel modes" },
+	{ PRIV_AKILL, NULL, NULL, NULL, "add and remove autokills" },
+	{ PRIV_JUPE, NULL, NULL, NULL, "jupe servers" },
+	{ PRIV_NOOP, NULL, NULL, NULL, "NOOP access" },
+	{ PRIV_GLOBAL, NULL, NULL, NULL, "send global notices" },
+	/* -- */
+	{ NULL, NULL, NULL, NULL, NULL }
+};
+
 static void os_cmd_specs(char *origin)
 {
 	user_t *u = user_find(origin), *tu;
 	char *targettype = strtok(NULL, " ");
 	char *target = strtok(NULL, " ");
 	char nprivs[BUFSIZE], cprivs[BUFSIZE], gprivs[BUFSIZE], oprivs[BUFSIZE];
+	int i;
 
 	if (!has_any_privs(u))
 	{
@@ -86,166 +123,38 @@ static void os_cmd_specs(char *origin)
 	else
 		tu = u;
 
-	/* NickServ/UserServ */
-
-	*nprivs = '\0';
-
-	if (has_priv(tu, PRIV_USER_AUSPEX))
-		strcat(nprivs, "view concealed information");
-
-	if (has_priv(tu, PRIV_USER_ADMIN))
+	i = 0;
+	*nprivs = *cprivs = *gprivs = *oprivs = '\0';
+	while (privnames[i].priv != NULL)
 	{
-		if (*nprivs)
-			strcat(nprivs, ", ");
-
-		strcpy(nprivs, "drop accounts, freeze accounts, reset passswords, send passwords");
-	}
-
-	if (has_priv(tu, PRIV_USER_VHOST))
-	{
-		if (*nprivs)
-			strcat(nprivs, ", ");
-
-		strcat(nprivs, "set vhosts");
-	}
-
-	/* ChanServ */
-	*cprivs = '\0';
-
-	if (has_priv(tu, PRIV_CHAN_AUSPEX))
-		strcpy(cprivs, "view concealed information");
-
-	if (has_priv(tu, PRIV_CHAN_ADMIN))
-	{
-		if (*cprivs)
-			strcat(cprivs, ", ");
-
-		strcat(cprivs, "drop channels, close channels, transfer ownership");
-	}
-
-	if (has_priv(tu, PRIV_CHAN_CMODES))
-	{
-		if (*cprivs)
-			strcat(cprivs, ", ");
-
-		strcat(cprivs, "mlock operator modes");
-	}
-
-	if (has_priv(tu, PRIV_JOIN_STAFFONLY))
-	{
-		if (*cprivs)
-			strcat(cprivs, ", ");
-
-		strcat(cprivs, "join staff channels");
-	}
-
-	/* NickServ/UserServ+ChanServ */
-
-	if (has_priv(tu, PRIV_MARK))
-	{
-		if (*nprivs)
-			strcat(nprivs, ", ");
-		if (*cprivs)
-			strcat(cprivs, ", ");
-
-		strcat(nprivs, "mark accounts");
-		strcat(cprivs, "mark channels");
-	}
-
-	if (has_priv(tu, PRIV_HOLD))
-	{
-		if (*nprivs)
-			strcat(nprivs, ", ");
-		if (*cprivs)
-			strcat(cprivs, ", ");
-
-		strcat(nprivs, "hold accounts");
-		strcat(cprivs, "hold channels");
-	}
-
-	/* general */
-	*gprivs = '\0';
-
-	if (has_priv(tu, PRIV_SERVER_AUSPEX))
-		strcat(gprivs, "view concealed information");
-
-	if (has_priv(tu, PRIV_VIEWPRIVS))
-	{
-		if (*gprivs)
-			strcat(gprivs, ", ");
-
-		strcat(gprivs, "view privileges of other users");
-	}
-
-	if (has_priv(tu, PRIV_FLOOD))
-	{
-		if (*gprivs)
-			strcat(gprivs, ", ");
-
-		strcat(gprivs, "exempt from flood control");
-	}
-
-	if (has_priv(tu, PRIV_METADATA))
-	{
-		if (*gprivs)
-			strcat(gprivs, ", ");
-
-		strcat(gprivs, "edit private metadata");
-	}
-
-	if (has_priv(tu, PRIV_ADMIN))
-	{
-		if (*gprivs)
-			strcat(gprivs, ", ");
-
-		strcat(gprivs, "administer services");
-	}
-
-	if (has_priv(tu, PRIV_REG_NOLIMIT))
-	{
-		if (*gprivs)
-			strcat(gprivs, ", ");
-
-		strcat(gprivs, "bypass registration limits");
-	}
-
-	/* OperServ */
-
-	*oprivs = '\0';
-
-	if (has_priv(tu, PRIV_OMODE))
-		strcpy(oprivs, "set channel modes");
-
-	if (has_priv(tu, PRIV_AKILL))
-	{
-		if (*oprivs)
-			strcat(oprivs, ", ");
-
-		strcat(oprivs, "add and remove autokills");
-	}
-
-	if (has_priv(tu, PRIV_JUPE))
-	{
-		if (*oprivs)
-			strcat(oprivs, ", ");
-
-		strcat(oprivs, "jupe servers");
-	}
-
-	if (has_priv(tu, PRIV_NOOP))
-	{
-		if (*oprivs)
-			strcat(oprivs, ", ");
-
-		strcat(oprivs, "NOOP access");
-	}
-
-	if (has_priv(tu, PRIV_GLOBAL))
-	{
-		if (*oprivs)
-			strcat(oprivs, ", ");
-
-		strcat(oprivs, "send global notices");
+		if (has_priv(u, privnames[i].priv))
+		{
+			if (privnames[i].npriv != NULL)
+			{
+				if (*nprivs)
+					strcat(nprivs, ", ");
+				strcat(nprivs, privnames[i].npriv);
+			}
+			if (privnames[i].cpriv != NULL)
+			{
+				if (*cprivs)
+					strcat(cprivs, ", ");
+				strcat(cprivs, privnames[i].cpriv);
+			}
+			if (privnames[i].gpriv != NULL)
+			{
+				if (*gprivs)
+					strcat(gprivs, ", ");
+				strcat(gprivs, privnames[i].gpriv);
+			}
+			if (privnames[i].opriv != NULL)
+			{
+				if (*oprivs)
+					strcat(oprivs, ", ");
+				strcat(oprivs, privnames[i].opriv);
+			}
+		}
+		i++;
 	}
 
 	notice(opersvs.nick, origin, "Privileges for \2%s\2:", tu->nick);

@@ -1,3 +1,13 @@
+jilles      2006/01/02 12:00:58 UTC	(20060102-4415)
+  Log:
+  ChanServ CLOSE: Use MC_INHABIT instead of rolling our own.
+  
+
+  Changes:	Modified:
+  +10 -100	trunk/modules/chanserv/close.c (File Modified) 
+  +2 -1		trunk/modules/chanserv/main.c (File Modified) 
+
+
 pfish       2006/01/02 11:33:51 UTC	(20060102-4413)
   Log:
   OperServ SPECS: Show when a user can bypass registration limits (PRIV_REG_NOLIMIT)
