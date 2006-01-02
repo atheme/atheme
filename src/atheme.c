@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 4395 2006-01-01 20:37:51Z jilles $
+ * $Id: atheme.c 4427 2006-01-02 13:14:54Z jilles $
  */
 
 #include "atheme.h"
@@ -315,14 +315,14 @@ int main(int argc, char *argv[])
 	/* should we restart? */
 	if (runflags & RF_RESTART)
 	{
-		slog(LG_INFO, "main(): restarting in %d seconds", me.restarttime);
+		slog(LG_INFO, "main(): restarting");
 
 #ifndef _WIN32
 		execve("bin/atheme", argv, environ);
 #endif
 	}
 
-	slog(LG_INFO, "main(): shutting down: io_loop() exited");
+	slog(LG_INFO, "main(): shutting down");
 
 	fclose(log_file);
 

@@ -1,3 +1,13 @@
+jilles      2006/01/02 13:13:10 UTC	(20060102-4425)
+  Log:
+  Repair ns/cs set noop for setting modes on login/identify.
+  
+
+  Changes:	Modified:
+  +6 -3		trunk/modules/nickserv/identify.c (File Modified) 
+  +6 -3		trunk/modules/userserv/login.c (File Modified) 
+
+
 jilles      2006/01/02 12:47:52 UTC	(20060102-4423)
   Log:
   Remove ugly Privs: display in ns/cs/us status.
