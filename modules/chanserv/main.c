@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4393 2006-01-01 20:29:11Z jilles $
+ * $Id: main.c 4415 2006-01-02 12:00:58Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4393 2006-01-01 20:29:11Z jilles $",
+	"$Id: main.c 4415 2006-01-02 12:00:58Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -541,7 +541,8 @@ static void cs_leave_empty(void *unused)
 			mc->flags &= ~MC_INHABIT;
 			if (mc->chan != NULL &&
 					(!config_options.join_chans ||
-					 (config_options.leave_chans && mc->chan->nummembers == 1)) &&
+					 (config_options.leave_chans && mc->chan->nummembers == 1) ||
+					 metadata_find(mc, METADATA_CHANNEL, "private:close:closer")) &&
 					chanuser_find(mc->chan, chansvs.me->me))
 			{
 				slog(LG_DEBUG, "cs_leave_empty(): leaving %s", mc->chan->name);

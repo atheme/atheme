@@ -1,3 +1,12 @@
+pfish       2006/01/02 11:33:51 UTC	(20060102-4413)
+  Log:
+  OperServ SPECS: Show when a user can bypass registration limits (PRIV_REG_NOLIMIT)
+  
+
+  Changes:	Modified:
+  +9 -1		trunk/modules/operserv/specs.c (File Modified) 
+
+
 jilles      2006/01/02 11:28:01 UTC	(20060102-4411)
   Log:
   Change /ns link, now only allows the user's current nick
