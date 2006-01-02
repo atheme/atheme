@@ -1,3 +1,13 @@
+jilles      2006/01/02 12:28:05 UTC	(20060102-4417)
+  Log:
+  Rework a bit to be more flexible. Should be no
+  functional changes.
+  
+
+  Changes:	Modified:
+  +68 -159	trunk/modules/operserv/specs.c (File Modified) 
+
+
 jilles      2006/01/02 12:00:58 UTC	(20060102-4415)
   Log:
   ChanServ CLOSE: Use MC_INHABIT instead of rolling our own.

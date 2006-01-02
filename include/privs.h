@@ -4,7 +4,7 @@
  *
  * Fine grained services operator privileges
  *
- * $Id: privs.h 4307 2005-12-29 14:16:39Z jilles $
+ * $Id: privs.h 4419 2006-01-02 12:41:30Z jilles $
  */
 
 #ifndef PRIVS_H
@@ -54,5 +54,7 @@ E boolean_t has_any_privs(user_t *);
 E boolean_t has_priv(user_t *, const char *);
 /* has_priv_myuser(): channel succession etc */
 E boolean_t has_priv_myuser(myuser_t *, const char *);
+/* has_priv_operclass(): /os specs etc */
+E boolean_t has_priv_operclass(operclass_t *, const char *);
 
 #endif /* PRIVS_H */
