@@ -1,3 +1,15 @@
+jilles      2006/01/02 11:00:37 UTC	(20060102-4407)
+  Log:
+  Send wallops and snoop notice if someone registers an account/nick
+  matching an operator{} block (thereby gaining services operator
+  privileges).
+  
+
+  Changes:	Modified:
+  +5 -0		trunk/modules/nickserv/register.c (File Modified) 
+  +5 -0		trunk/modules/userserv/register.c (File Modified) 
+
+
 jilles      2006/01/01 22:23:09 UTC	(20060101-4405)
   Log:
   Make it compile most of this stuff with 'make all'.
