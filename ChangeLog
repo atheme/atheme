@@ -1,3 +1,13 @@
+jilles      2006/01/02 13:22:57 UTC	(20060102-4429)
+  Log:
+  Remove me.port, it is no longer used.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/include/atheme.h (File Modified) 
+  +0 -14	trunk/src/conf.c (File Modified) 
+
+
 jilles      2006/01/02 13:14:54 UTC	(20060102-4427)
   Log:
   Restart delay is gone, don't mention it anymore.

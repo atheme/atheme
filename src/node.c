@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4383 2005-12-30 23:33:14Z jilles $
+ * $Id: node.c 4431 2006-01-02 13:34:52Z jilles $
  */
 
 #include "atheme.h"
@@ -2217,6 +2217,10 @@ void expire_check(void *arg)
 	myuser_t *mu;
 	mychan_t *mc;
 	node_t *n, *tn;
+
+	/* Let them know about this and the likely subsequent db_save()
+	 * right away -- jilles */
+	sendq_flush(curr_uplink->conn);
 
 	if (config_options.expire == 0)
 		return;
