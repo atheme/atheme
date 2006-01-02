@@ -1,3 +1,13 @@
+nenolod     2006/01/02 11:27:23 UTC	(20060102-4409)
+  Log:
+  Extend our copyrights to 2006.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/COPYING (File Modified) 
+  +1 -1		trunk/doc/LICENSE (File Modified) 
+
+
 jilles      2006/01/02 11:00:37 UTC	(20060102-4407)
   Log:
   Send wallops and snoop notice if someone registers an account/nick

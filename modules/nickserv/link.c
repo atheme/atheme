@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ LINK function.
  *
- * $Id: link.c 4219 2005-12-27 17:41:18Z jilles $
+ * $Id: link.c 4411 2006-01-02 11:28:01Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/link", FALSE, _modinit, _moddeinit,
-	"$Id: link.c 4219 2005-12-27 17:41:18Z jilles $",
+	"$Id: link.c 4411 2006-01-02 11:28:01Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -38,20 +38,14 @@ void _moddeinit()
 
 static void ns_cmd_link(char *origin)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find(origin), *tu;
 	metadata_t *md;
 	myuser_t *mu, *tmu, *muptr;
 	node_t *n;
-	char *nick = strtok(NULL, " ");
-	char *pass = strtok(NULL, " ");
+	char *nick;
 	uint32_t i, tcnt;
 
-	if (!nick)
-	{
-		notice(nicksvs.nick, origin, "Insufficient parameters specified for \2LINK\2.");
-		notice(nicksvs.nick, origin, "Syntax: LINK <target>");
-		return;
-	}
+	nick = u->nick;
 
 	if (!u->myuser)
 	{
@@ -62,23 +56,6 @@ static void ns_cmd_link(char *origin)
 	if (u->myuser->flags & MU_WAITAUTH)
 	{
 		notice(nicksvs.nick, origin, "You must verify your registration before using the LINK command.");
-		return;
-	}
-
-	if (user_find_named(nick))
-	{
-		notice(nicksvs.nick, origin, "\2%s\2 is presently in use. "
-			"For security reasons, you cannot link to nicknames "
-			"that are presently in use.", nick);
-		return;
-	}
-
-	/* see xmlrpc comments about sanity checking -- we need a better way to do this */
-	if (IsDigit(*nick) || strchr(nick, '!') || (*nick == '-') || strchr(nick, ',')
-		|| strchr(nick, '$') || strchr(nick, ':') || strchr(nick, '#')
-		|| strchr(nick, '.') || !(strlen(nick) <= (NICKLEN - 1)))
-	{
-		notice(nicksvs.nick, origin, "Sorry, the nickname \2%s\2 cannot be registered.", nick);
 		return;
 	}
 
@@ -110,6 +87,12 @@ static void ns_cmd_link(char *origin)
 		return;
 	}
 
+	if (soper_find_named(nick))
+	{
+		notice(nicksvs.nick, origin, "\2%s\2 cannot be registered.", mu->name);
+		return;
+	}
+
 	/* make sure they're within limits */
 	for (i = 0, tcnt = 0; i < HASHSIZE; i++)
 	{
@@ -122,7 +105,7 @@ static void ns_cmd_link(char *origin)
 		}
 	}
 
-	if (tcnt >= me.maxusers)
+	if (tcnt >= me.maxusers && !has_priv(u, PRIV_REG_NOLIMIT))
 	{
 		notice(nicksvs.nick, origin, "You have too many nicknames registered.", u->myuser->email);
 		logcommand(nicksvs.me, u, CMDLOG_REGISTER, "failed LINK %s (too many for %s)", nick, u->myuser->email);

@@ -1,8 +1,10 @@
-Syntax - LINK <nickname>
+Syntax - LINK
 
-Adds the target nickname as a child nickname of your
+Adds your current nickname as a child nickname of your
 primary account. The new nickname must not be
-registered or in use.
+registered yet.
 
-Examples:
-    /msg &nick& LINK moogle
+Example:
+    /msg &nick& IDENTIFY OldNick sesame
+    /nick NewNick
+    /msg &nick& LINK
