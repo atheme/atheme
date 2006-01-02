@@ -1,3 +1,14 @@
+jilles      2006/01/02 12:43:17 UTC	(20060102-4421)
+  Log:
+  Repair SPECS USER broken in r4417 and add SPECS OPERCLASS
+  to query privileges associated with oper classes.
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/help/oservice/specs (File Modified) 
+  +38 -18	trunk/modules/operserv/specs.c (File Modified) 
+
+
 jilles      2006/01/02 12:41:30 UTC	(20060102-4419)
   Log:
   Add has_priv_operclass().
