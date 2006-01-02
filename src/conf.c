@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4323 2005-12-29 16:45:59Z jilles $
+ * $Id: conf.c 4429 2006-01-02 13:22:57Z jilles $
  */
 
 #include "atheme.h"
@@ -36,7 +36,6 @@ static int c_si_name(CONFIGENTRY *);
 static int c_si_desc(CONFIGENTRY *);
 static int c_si_uplink(CONFIGENTRY *);
 static int c_si_numeric(CONFIGENTRY *);
-static int c_si_port(CONFIGENTRY *);
 static int c_si_vhost(CONFIGENTRY *);
 static int c_si_recontime(CONFIGENTRY *);
 static int c_si_restarttime(CONFIGENTRY *);
@@ -272,8 +271,6 @@ void conf_init(void)
 
 		me.name = me.desc = me.uplink = me.vhost = chansvs.user = chansvs.host = chansvs.real = NULL;
 
-		me.port = 0;
-
 		set_match_mapping(MATCH_RFC1459);	/* default to RFC compliancy */
 	}
 }
@@ -446,7 +443,6 @@ void init_newconf(void)
 	add_conf_item("DESC", &conf_si_table, c_si_desc);
 	add_conf_item("UPLINK", &conf_si_table, c_si_uplink);
 	add_conf_item("NUMERIC", &conf_si_table, c_si_numeric);
-	add_conf_item("PORT", &conf_si_table, c_si_port);
 	add_conf_item("VHOST", &conf_si_table, c_si_vhost);
 	add_conf_item("RECONTIME", &conf_si_table, c_si_recontime);
 	add_conf_item("RESTARTTIME", &conf_si_table, c_si_restarttime);
@@ -873,16 +869,6 @@ static int c_si_numeric(CONFIGENTRY *ce)
 		PARAM_ERROR(ce);
 
 	me.numeric = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_si_port(CONFIGENTRY *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	me.port = ce->ce_vardatanum;
 
 	return 0;
 }

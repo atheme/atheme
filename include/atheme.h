@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 4293 2005-12-29 02:57:23Z jilles $
+ * $Id: atheme.h 4429 2006-01-02 13:22:57Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -71,7 +71,6 @@ struct me
   char *desc;                   /* server's description               */
   char *uplink;                 /* the server we connect to           */
   char *actual;                 /* the reported name of the uplink    */
-  uint16_t port;                /* port we connect to our uplink on   */
   char *vhost;                  /* IP we bind outgoing stuff to       */
   uint16_t recontime;           /* time between reconnection attempts */
   uint16_t restarttime;         /* time before restarting             */

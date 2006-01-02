@@ -1,3 +1,13 @@
+jilles      2006/01/02 13:14:54 UTC	(20060102-4427)
+  Log:
+  Restart delay is gone, don't mention it anymore.
+  Also make shutdown log message more concise.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/src/atheme.c (File Modified) 
+
+
 jilles      2006/01/02 13:13:10 UTC	(20060102-4425)
   Log:
   Repair ns/cs set noop for setting modes on login/identify.
