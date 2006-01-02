@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: login.c 4393 2006-01-01 20:29:11Z jilles $
+ * $Id: login.c 4425 2006-01-02 13:13:10Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/login", FALSE, _modinit, _moddeinit,
-	"$Id: login.c 4393 2006-01-01 20:29:11Z jilles $",
+	"$Id: login.c 4425 2006-01-02 13:13:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -189,6 +189,12 @@ static void us_cmd_login(char *origin)
 					continue;
 				}
 
+				if (ca->level & CA_USEDUPDATE)
+					ca->mychan->used = CURRTIME;
+
+				if (ca->mychan->flags & MC_NOOP || mu->flags & MU_NOOP)
+					continue;
+
 				if (ircd->uses_owner && !(cu->modes & ircd->owner_mode) && should_owner(ca->mychan, ca->myuser))
 				{
 					cmode(chansvs.nick, ca->mychan->name, ircd->owner_mchar, CLIENT_NAME(u));
@@ -218,9 +224,6 @@ static void us_cmd_login(char *origin)
 					cmode(chansvs.nick, ca->mychan->name, "+v", CLIENT_NAME(u));
 					cu->modes |= CMODE_VOICE;
 				}
-
-				if (ca->level & CA_USEDUPDATE)
-					ca->mychan->used = CURRTIME;
 			}
 		}
 

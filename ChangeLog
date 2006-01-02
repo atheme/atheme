@@ -1,3 +1,14 @@
+jilles      2006/01/02 12:47:52 UTC	(20060102-4423)
+  Log:
+  Remove ugly Privs: display in ns/cs/us status.
+  
+
+  Changes:	Modified:
+  +0 -11	trunk/modules/chanserv/status.c (File Modified) 
+  +0 -11	trunk/modules/nickserv/status.c (File Modified) 
+  +0 -11	trunk/modules/userserv/status.c (File Modified) 
+
+
 jilles      2006/01/02 12:43:17 UTC	(20060102-4421)
   Log:
   Repair SPECS USER broken in r4417 and add SPECS OPERCLASS

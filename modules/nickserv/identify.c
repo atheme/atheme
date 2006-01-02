@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY function.
  *
- * $Id: identify.c 4393 2006-01-01 20:29:11Z jilles $
+ * $Id: identify.c 4425 2006-01-02 13:13:10Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/identify", FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 4393 2006-01-01 20:29:11Z jilles $",
+	"$Id: identify.c 4425 2006-01-02 13:13:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -203,6 +203,12 @@ static void ns_cmd_identify(char *origin)
 					continue;
 				}
 
+				if (ca->level & CA_USEDUPDATE)
+					ca->mychan->used = CURRTIME;
+
+				if (ca->mychan->flags & MC_NOOP || mu->flags & MU_NOOP)
+					continue;
+
 				if (ircd->uses_owner && !(cu->modes & ircd->owner_mode) && should_owner(ca->mychan, ca->myuser))
 				{
 					cmode(chansvs.nick, ca->mychan->name, ircd->owner_mchar, CLIENT_NAME(u));
@@ -232,9 +238,6 @@ static void ns_cmd_identify(char *origin)
 					cmode(chansvs.nick, ca->mychan->name, "+v", CLIENT_NAME(u));
 					cu->modes |= CMODE_VOICE;
 				}
-
-				if (ca->level & CA_USEDUPDATE)
-					ca->mychan->used = CURRTIME;
 			}
 		}
 
