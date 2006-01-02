@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 4219 2005-12-27 17:41:18Z jilles $
+ * $Id: register.c 4407 2006-01-02 11:00:37Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 4219 2005-12-27 17:41:18Z jilles $",
+	"$Id: register.c 4407 2006-01-02 11:00:37Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -143,6 +143,11 @@ static void us_cmd_register(char *origin)
 
 	snoop("REGISTER: \2%s\2 to \2%s\2", account, email);
 	logcommand(usersvs.me, u, CMDLOG_REGISTER, "REGISTER to %s", email);
+	if (is_soper(mu))
+	{
+		wallops("%s registered the account \2%s\2 and gained services operator privileges.", u->nick, mu->name);
+		snoop("SOPER: \2%s\2 as \2%s\2", u->nick, mu->name);
+	}
 
 	notice(usersvs.nick, origin, "\2%s\2 is now registered to \2%s\2.", mu->name, mu->email);
 	notice(usersvs.nick, origin, "The password is \2%s\2. Please write this down for future reference.", pass);

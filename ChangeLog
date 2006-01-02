@@ -1,3 +1,12 @@
+jilles      2006/01/01 22:23:09 UTC	(20060101-4405)
+  Log:
+  Make it compile most of this stuff with 'make all'.
+  
+
+  Changes:	Modified:
+  +16 -0	trunk/contrib/Makefile.in (File Modified) 
+
+
 jilles      2006/01/01 22:21:45 UTC	(20060101-4403)
   Log:
   Add nickserv enforcement to contrib. (Code is too ugly for base, also
