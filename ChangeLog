@@ -1,3 +1,14 @@
+jilles      2006/01/02 13:34:52 UTC	(20060102-4431)
+  Log:
+  Dump out sendq before expire_check(). This makes it more
+  likely that opers will get notification before instead
+  of after possibly slow expire_check() plus db_save().
+  
+
+  Changes:	Modified:
+  +4 -0		trunk/src/node.c (File Modified) 
+
+
 jilles      2006/01/02 13:22:57 UTC	(20060102-4429)
   Log:
   Remove me.port, it is no longer used.

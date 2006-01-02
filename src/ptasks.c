@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 4309 2005-12-29 14:24:15Z jilles $
+ * $Id: ptasks.c 4433 2006-01-02 13:45:47Z jilles $
  */
 
 #include "atheme.h"
@@ -85,10 +85,11 @@ void handle_stats(char *origin, char req)
 
 		  numeric_sts(me.name, 249, CLIENT_NAME(u), "E :Last event to run: %s", last_event_ran);
 
+		  numeric_sts(me.name, 249, CLIENT_NAME(u), "E :%-28s %s", "Operation", "Next Execution");
 		  for (i = 0; i < MAX_EVENTS; i++)
 		  {
 			  if (event_table[i].active)
-				  numeric_sts(me.name, 249, CLIENT_NAME(u), "E :%s (%d)", event_table[i].name, event_table[i].frequency);
+				  numeric_sts(me.name, 249, CLIENT_NAME(u), "E :%-28s %4d seconds (%d)", event_table[i].name, event_table[i].when - CURRTIME, event_table[i].frequency);
 		  }
 
 		  break;
