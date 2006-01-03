@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 4389 2005-12-31 18:09:25Z jilles $
+ * $Id: xop.c 4453 2006-01-03 23:59:20Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 4389 2005-12-31 18:09:25Z jilles $",
+	"$Id: xop.c 4453 2006-01-03 23:59:20Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -35,7 +35,7 @@ command_t cs_hop = { "HOP", "Manipulates a channel HOP list.",
 			AC_NONE, cs_cmd_hop };
 command_t cs_vop = { "VOP", "Manipulates a channel VOP list.",
                         AC_NONE, cs_cmd_vop };
-command_t cs_forcexop = { "FORCEXOP", "Forces access levels to xOP levels",
+command_t cs_forcexop = { "FORCEXOP", "Forces access levels to xOP levels.",
                          AC_NONE, cs_cmd_forcexop };
 
 list_t *cs_cmdtree, *cs_helptree;

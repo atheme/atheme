@@ -1,3 +1,15 @@
+jilles      2006/01/03 14:08:46 UTC	(20060103-4449)
+  Log:
+  Remove helpserv{} blocks.
+  They are potentially confusing, and easy enough to
+  put back if/when helpserv is revived.
+  
+
+  Changes:	Modified:
+  +0 -22	trunk/dist/example.conf (File Modified) 
+  +0 -22	trunk/dist/example.userserv.conf (File Modified) 
+
+
 jilles      2006/01/03 14:01:32 UTC	(20060103-4447)
   Log:
   Misc updates.
