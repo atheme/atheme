@@ -1,4 +1,4 @@
-$Id: HOOKS 3201 2005-10-25 17:57:42Z alambert $
+$Id: HOOKS 4445 2006-01-03 13:55:28Z jilles $
 
 Atheme hooks system
 
@@ -29,6 +29,7 @@ user_oper          user_t *
 (services)
 channel_akick_add  chanacs_t *
 channel_drop       mychan_t *
+channel_info       hook_channel_req_t *
 channel_message    hook_cmessage_data_t *
 channel_register   mychan_t *
 user_drop          myuser_t *

@@ -1,3 +1,12 @@
+jilles      2006/01/03 13:25:30 UTC	(20060103-4443)
+  Log:
+  Mention /os specs command.
+  
+
+  Changes:	Modified:
+  +5 -1		trunk/doc/PRIVILEGES (File Modified) 
+
+
 jilles      2006/01/03 13:13:34 UTC	(20060103-4441)
   Log:
   Change numeric to a ratbox/charybdis-compatible 3-char one,
