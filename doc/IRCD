@@ -1,4 +1,4 @@
-$Id: IRCD 4391 2006-01-01 20:20:47Z jilles $
+$Id: IRCD 4447 2006-01-03 14:01:32Z jilles $
 
 IRCD-specific notes
 -------------------
@@ -51,10 +51,6 @@ The channel modes +dDfJ are not supported and will be ignored. Bans with
 forward channels will also not be recognized properly. This may lead to
 problems like users still being banned after a chanserv unban command.
 
-Atheme gives privilege to opers by virtue of their umode +o, which is not
-consistent with hyperion's tendency to remove as much privilege as possible
-from umode +o.
-
 There are two methods to allow services to remember users after a netsplit or
 restart and to enable things like channels only accessible for registered
 users. The traditional dancer method is umode +e; it only works if the user is
@@ -92,7 +88,8 @@ Atheme is directly linked to.
 
 It is recommended to enable join_chans, otherwise many things will be sent
 from the server (possibly generating nasty server notices) or chanserv will
-join and part to do the action.
+join and part to do the action. Alternatively, disable it and avoid commands
+that cause Atheme to kick as much as possible.
 
 Jupes will use SIDs numerically following services's SID, make sure to
 leave plenty of space.

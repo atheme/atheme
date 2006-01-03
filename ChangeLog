@@ -1,3 +1,12 @@
+jilles      2006/01/03 13:55:28 UTC	(20060103-4445)
+  Log:
+  Add channel_info hook to HOOKS file.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/doc/HOOKS (File Modified) 
+
+
 jilles      2006/01/03 13:25:30 UTC	(20060103-4443)
   Log:
   Mention /os specs command.
