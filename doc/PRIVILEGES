@@ -26,6 +26,9 @@ All IRCops get the privileges in the "ircop" operclass. Services operators
 get the privileges in the operclass in their operator{} block. If both
 conditions apply, the union of the privileges is granted.
 
+The OperServ SPECS command shows the privileges granted to an online user
+or operclass, in a somewhat wordy format.
+
 Description of the privileges in operclasses:
 
 special:ircop
@@ -61,7 +64,8 @@ general:auspex
 	see general information about services: most privileged /stats,
 	/trace, /os modinspect, /os modlist, /os uptime
 general:viewprivs
-	see all operator{} blocks, see the privs operclasses have
+	see all operator{} blocks, see the privs users and operclasses have:
+	/stats o, /os specs
 general:flood
 	exempt from services flood control (general::flood* in atheme.conf)
 general:metadata
@@ -82,4 +86,4 @@ operserv:noop
 operserv:global
 	send global notices
 
-$Id: PRIVILEGES 4317 2005-12-29 15:56:37Z jilles $
+$Id: PRIVILEGES 4443 2006-01-03 13:25:30Z jilles $

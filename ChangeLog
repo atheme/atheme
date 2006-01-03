@@ -1,3 +1,15 @@
+jilles      2006/01/03 13:13:34 UTC	(20060103-4441)
+  Log:
+  Change numeric to a ratbox/charybdis-compatible 3-char one,
+  as more people will be running this with ratbox or charybdis
+  than with ircnet ircd.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/dist/example.conf (File Modified) 
+  +1 -1		trunk/dist/example.userserv.conf (File Modified) 
+
+
 jilles      2006/01/02 15:51:51 UTC	(20060102-4439)
   Log:
   Add some 1.0 release notes.
