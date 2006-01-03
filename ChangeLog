@@ -1,3 +1,12 @@
+jilles      2006/01/02 15:51:51 UTC	(20060102-4439)
+  Log:
+  Add some 1.0 release notes.
+  
+
+  Changes:	Modified:
+  +51 -2	trunk/doc/RELEASE (File Modified) 
+
+
 jilles      2006/01/02 13:56:55 UTC	(20060102-4435)
   Log:
   Oops, forgot about some "0" in ENCAP RESV.
