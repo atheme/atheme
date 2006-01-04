@@ -1,9 +1,13 @@
 Help for CLEAR USERS:
 
-Clear users will kick all users out of the channel.
-You must have the RECOVER flag to use this command.
+Clear users will kick all users out of the channel,
+except you. The channel will be cycled (recreated)
+if you are not on it.
 
-Syntax: CLEAR <#channel> USERS
+If a reason is specified, it will be included in the
+kick message.
+
+Syntax: CLEAR <#channel> USERS [reason]
 
 Examples:
     /msg &nick& CLEAR #ChatZone USERS

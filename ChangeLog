@@ -1,3 +1,18 @@
+jilles      2006/01/04 01:30:59 UTC	(20060104-4461)
+  Log:
+  - Use +l 1 instead of +b *!*@* to prevent users rejoining
+    during the masskick. Escapes to +l are generally rarer
+    than ban exceptions, also this avoids potential loss
+    of the banlist on P10.
+  - If the requester is not on channel, make sure the
+    channel is fully cleared out (so it is destroyed
+    if not marked with a permanent cmode).
+  
+
+  Changes:	Modified:
+  +30 -12	trunk/modules/chanserv/clear_users.c (File Modified) 
+
+
 pfish       2006/01/04 00:36:38 UTC	(20060104-4459)
   Log:
   update, don't need to tell people that we ban *@*
