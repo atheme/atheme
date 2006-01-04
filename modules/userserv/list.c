@@ -5,7 +5,7 @@
  * This file contains code for the NickServ LIST function.
  * Based on Alex Lambert's LISTEMAIL.
  *
- * $Id: list.c 4219 2005-12-27 17:41:18Z jilles $
+ * $Id: list.c 4475 2006-01-04 13:08:16Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 4219 2005-12-27 17:41:18Z jilles $",
+	"$Id: list.c 4475 2006-01-04 13:08:16Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -69,11 +69,6 @@ static void us_cmd_list(char *origin)
 				/* in the future we could add a LIMIT parameter */
 				if (matches == 0)
 					notice(usersvs.nick, origin, "Nicknames matching pattern \2%s\2:", nickpattern);
-				if (metadata_find(mu, METADATA_USER, "private:alias:parent"))
-				{
-					notice(usersvs.nick, origin, "- %s (%s) [Child]", mu->name, mu->email);
-				}
-				else
 				notice(usersvs.nick, origin, "- %s (%s)", mu->name, mu->email);
 				matches++;
 			}

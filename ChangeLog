@@ -1,3 +1,13 @@
+jilles      2006/01/04 12:32:07 UTC	(20060104-4473)
+  Log:
+  Show a special message when listing templates on a
+  channel that has none.
+  
+
+  Changes:	Modified:
+  +22 -17	trunk/modules/chanserv/template.c (File Modified) 
+
+
 pfish       2006/01/04 10:51:47 UTC	(20060104-4471)
   Log:
   remove debug wallops
