@@ -24,7 +24,7 @@ static void os_cmd_ignore_clear(char *origin, char *arg);
 
 static void check_svsignore(user_t *u);
 
-command_t os_raw = { "IGNORE", "Ignore a mask from services.",
+command_t os_ignore = { "IGNORE", "Ignore a mask from services.",
                         PRIV_ADMIN, os_cmd_ignore };
 fcommand_t os_ignore_add = { "ADD", PRIV_ADMIN, os_cmd_ignore_add };
 fcommand_t os_ignore_del = { "DEL", PRIV_ADMIN, os_cmd_ignore_del };
@@ -42,7 +42,7 @@ void _modinit(module_t *m)
 	os_cmdtree = module_locate_symbol("operserv/main", "os_cmdtree");
 	os_helptree = module_locate_symbol("operserv/main", "os_helptree");
 
-        command_add(&os_raw, os_cmdtree);
+        command_add(&os_ignore, os_cmdtree);
 	help_addentry(os_helptree, "IGNORE", "help/oservice/ignore", NULL);
 
 	/* Sub-commands */
@@ -54,7 +54,7 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
-	command_delete(&os_raw, os_cmdtree);
+	command_delete(&os_ignore, os_cmdtree);
 	help_delentry(os_helptree, "IGNORE");
 
 	/* Sub-commands */

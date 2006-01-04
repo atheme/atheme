@@ -1,3 +1,33 @@
+jilles      2006/01/04 23:40:23 UTC	(20060104-4487)
+  Log:
+  Make it such that "Invalid parameters specified for \2<command>\2."
+  only has to appear in language files once.
+  
+
+  Changes:	Modified:
+  +4 -0		trunk/include/atheme.h (File Modified) 
+  +1 -1		trunk/modules/chanserv/drop.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/hold.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/info.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/mark.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/register.c (File Modified) 
+  +16 -16	trunk/modules/chanserv/set.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/status.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/hold.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/mark.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/register.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/resetpass.c (File Modified) 
+  +7 -7		trunk/modules/nickserv/set.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/vhost.c (File Modified) 
+  +1 -1		trunk/modules/operserv/mode.c (File Modified) 
+  +1 -1		trunk/modules/userserv/hold.c (File Modified) 
+  +1 -1		trunk/modules/userserv/mark.c (File Modified) 
+  +1 -1		trunk/modules/userserv/register.c (File Modified) 
+  +1 -1		trunk/modules/userserv/resetpass.c (File Modified) 
+  +7 -7		trunk/modules/userserv/set.c (File Modified) 
+  +1 -1		trunk/modules/userserv/vhost.c (File Modified) 
+
+
 jilles      2006/01/04 15:45:29 UTC	(20060104-4485)
   Log:
   Make channel_mode() work without chanserv loaded.
