@@ -1,7 +1,6 @@
 Help for CLEAR BANS:
 
 Clear bans will remove all bans found in a specific channel.
-You must have the RECOVER flag to use this command.
 
 Syntax: CLEAR <#channel> BANS
 

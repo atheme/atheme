@@ -1,3 +1,14 @@
+jilles      2006/01/04 01:33:02 UTC	(20060104-4463)
+  Log:
+  - Don't mention required flag (already done in /cs help flags)
+  - Mention that the requester is not kicked
+  - Mention that the channel is cycled iff the requester is not on it
+  
+
+  Changes:	Modified:
+  +7 -3		trunk/help/cservice/clear_users (File Modified) 
+
+
 jilles      2006/01/04 01:30:59 UTC	(20060104-4461)
   Log:
   - Use +l 1 instead of +b *!*@* to prevent users rejoining
