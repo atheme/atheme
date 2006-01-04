@@ -5,13 +5,14 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4431 2006-01-02 13:34:52Z jilles $
+ * $Id: node.c 4469 2006-01-04 10:29:31Z pfish $
  */
 
 #include "atheme.h"
 
 list_t operclasslist;
 list_t soperlist;
+list_t svs_ignore_list;
 list_t tldlist;
 list_t uplinks;
 list_t klnlist;
@@ -27,6 +28,7 @@ list_t sendq;
 
 static BlockHeap *operclass_heap;
 static BlockHeap *soper_heap;
+static BlockHeap *svsignore_heap;
 static BlockHeap *tld_heap;
 static BlockHeap *serv_heap;
 static BlockHeap *user_heap;
@@ -362,6 +364,37 @@ soper_t *soper_find_named(char *name)
 
 	return NULL;
 }
+
+/*********************
+ * S V S I G N O R E *
+ *********************/
+
+svsignore_t *svsignore_find(user_t *source)
+{
+	svsignore_t *svsignore;
+	node_t *n;
+	char host[BUFSIZE];
+
+	*host = '\0';
+        strlcpy(host, source->nick, BUFSIZE);
+        strlcat(host, "!", BUFSIZE);
+        strlcat(host, source->user, BUFSIZE);
+        strlcat(host, "@", BUFSIZE);
+        strlcat(host, source->host, BUFSIZE);
+	wallops("host: %s", host);
+
+	LIST_FOREACH(n, svs_ignore_list.head)
+	{
+		svsignore = (svsignore_t *)n->data;
+
+		if (!match(svsignore, host))
+			return svsignore;
+	}
+
+	return NULL;
+
+}
+
 
 /***********
  * T L D S *

@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4415 2006-01-02 12:00:58Z jilles $
+ * $Id: main.c 4469 2006-01-04 10:29:31Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4415 2006-01-02 12:00:58Z jilles $",
+	"$Id: main.c 4469 2006-01-04 10:29:31Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -31,8 +31,7 @@ E list_t mychan;
 
 static void join_registered(boolean_t all)
 {
-	node_t *n;
-	uint32_t i;
+	node_t *n;	uint32_t i;
 
 	for (i = 0; i < HASHSIZE; i++)
 	{
@@ -148,6 +147,14 @@ static void chanserv(char *origin, uint8_t parc, char *parv[])
 	/* ctcps we don't care about are ignored */
 	else if (*cmd == '\001')
 		return;
+
+
+        /* Check if theres a services ignore */
+        if (*cmd && svsignore_find(origin))
+        {
+                return;
+        }
+
 
 	/* take the command through the hash table */
 	if (!is_fcommand)

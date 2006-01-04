@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 4293 2005-12-29 02:57:23Z jilles $
+ * $Id: extern.h 4469 2006-01-04 10:29:31Z pfish $
  */
 
 #ifndef EXTERN_H
@@ -86,6 +86,7 @@ E boolean_t is_soper(myuser_t *myuser);
 E boolean_t is_ircop(user_t *user);
 E boolean_t is_admin(user_t *user);
 E boolean_t is_internal_client(user_t *user);
+E boolean_t is_svsignore(user_t *user);
 
 E void set_password(myuser_t *mu, char *newpassword);
 E boolean_t verify_password(myuser_t *mu, char *password);
@@ -144,6 +145,7 @@ E char *collapse(char *);
 
 /* node.c */
 E list_t soperlist;
+E list_t svs_ignore_list;
 E list_t tldlist;
 E list_t klnlist;
 E list_t servlist[HASHSIZE];

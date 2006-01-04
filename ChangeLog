@@ -1,3 +1,17 @@
+pfish       2006/01/04 04:16:13 UTC	(20060104-4467)
+  Log:
+  consistent grammar with the rest of the help titles.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/memoserv/delete.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/forward.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/ignore.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/list.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/read.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/send.c (File Modified) 
+
+
 pfish       2006/01/04 03:28:00 UTC	(20060104-4465)
   Log:
   Remove flags info from CLEAR BANS helpfile.

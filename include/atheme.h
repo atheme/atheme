@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 4429 2006-01-02 13:22:57Z jilles $
+ * $Id: atheme.h 4469 2006-01-04 10:29:31Z pfish $
  */
 
 #ifndef ATHEME_H
@@ -149,6 +149,7 @@ struct cnt
 {
   uint32_t event;
   uint32_t soper;
+  uint32_t svsignore;
   uint32_t tld;
   uint32_t kline;
   uint32_t server;

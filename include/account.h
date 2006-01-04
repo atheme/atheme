@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 4393 2006-01-01 20:29:11Z jilles $
+ * $Id: account.h 4469 2006-01-04 10:29:31Z pfish $
  */
 
 #ifndef ACCOUNT_H
@@ -12,6 +12,7 @@
 
 typedef struct operclass_ operclass_t;
 typedef struct soper_ soper_t;
+typedef struct svsignore_ svsignore_t;
 typedef struct myuser_ myuser_t;
 typedef struct mychan_ mychan_t;
 typedef struct chanacs_ chanacs_t;
@@ -27,6 +28,11 @@ struct soper_ {
   myuser_t *myuser;
   char *name;
   operclass_t *operclass;
+};
+
+/* services ignore struct */
+struct svsignore_ {
+  user_t *user;
 };
 
 struct myuser_

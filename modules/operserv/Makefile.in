@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 4347 2005-12-30 08:45:01Z pfish $
+# $Id: Makefile.in 4469 2006-01-04 10:29:31Z pfish $
 #
 
 CC		= @CC@
@@ -38,6 +38,7 @@ BASE_SRCS = 		\
 	main.c		\
 	akill.c		\
 	help.c		\
+	ignore.c	\
 	inject.c	\
 	jupe.c		\
 	mode.c		\
