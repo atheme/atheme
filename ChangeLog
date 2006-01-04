@@ -1,3 +1,12 @@
+pfish       2006/01/03 23:59:20 UTC	(20060103-4453)
+  Log:
+  consistent grammar
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/xop.c (File Modified) 
+
+
 jilles      2006/01/03 14:08:46 UTC	(20060103-4449)
   Log:
   Remove helpserv{} blocks.

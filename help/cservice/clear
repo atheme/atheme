@@ -1,0 +1,15 @@
+Help for CLEAR:
+
+The CLEAR command allows channel operators to clear out the channel.
+
+The following uses are available:
+
+Clear all users:
+    /msg &nick& CLEAR #lobby USERS
+
+Clear all bans:
+    /msg &nick& CLEAR #lobby BANS
+
+More help:
+    /msg &nick& HELP CLEAR USERS
+    /msg &nick& HELP CLEAR BANS

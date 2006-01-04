@@ -1,0 +1,9 @@
+Help for CLEAR USERS:
+
+Clear users will ban *!*@* and kick all users out of the channel.
+You must have the RECOVER flag to use this command.
+
+Syntax: CLEAR <#channel> USERS
+
+Examples:
+    /msg &nick& CLEAR #ChatZone USERS
