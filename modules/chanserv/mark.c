@@ -4,7 +4,7 @@
  *
  * Marking for channels.
  *
- * $Id: mark.c 4219 2005-12-27 17:41:18Z jilles $
+ * $Id: mark.c 4487 2006-01-04 23:40:23Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/mark", FALSE, _modinit, _moddeinit,
-	"$Id: mark.c 4219 2005-12-27 17:41:18Z jilles $",
+	"$Id: mark.c 4487 2006-01-04 23:40:23Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -55,7 +55,7 @@ static void cs_cmd_mark(char *origin)
 
 	if (target[0] != '#')
 	{
-		notice(chansvs.nick, origin, "Invalid parameters specified for \2MARK\2.");
+		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "MARK");
 		return;
 	}
 
@@ -106,7 +106,7 @@ static void cs_cmd_mark(char *origin)
 	}
 	else
 	{
-		notice(chansvs.nick, origin, "Invalid parameters for \2MARK\2.");
+		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "MARK");
 		notice(chansvs.nick, origin, "Usage: MARK <#channel> <ON|OFF> [note]");
 	}
 }

@@ -4,7 +4,7 @@
  *
  * This file contains code for NickServ RESETPASS
  *
- * $Id: resetpass.c 4303 2005-12-29 13:41:46Z jilles $
+ * $Id: resetpass.c 4487 2006-01-04 23:40:23Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/resetpass", FALSE, _modinit, _moddeinit,
-	"$Id: resetpass.c 4303 2005-12-29 13:41:46Z jilles $",
+	"$Id: resetpass.c 4487 2006-01-04 23:40:23Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -47,7 +47,7 @@ static void ns_cmd_resetpass(char *origin)
 
 	if (!name)
 	{
-		notice(nicksvs.nick, origin, "Invalid parameters specified for \2RESETPASS\2.");
+		notice(nicksvs.nick, origin, STR_INSUFFICIENT_PARAMS, "RESETPASS");
 		notice(nicksvs.nick, origin, "Syntax: RESETPASS <nickname>");
 		return;
 	}

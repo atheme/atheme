@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 4219 2005-12-27 17:41:18Z jilles $
+ * $Id: set.c 4487 2006-01-04 23:40:23Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 4219 2005-12-27 17:41:18Z jilles $",
+	"$Id: set.c 4487 2006-01-04 23:40:23Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -104,7 +104,7 @@ static void us_set_email(char *origin, char *name, char *params)
 
 	if (strlen(email) >= EMAILLEN)
 	{
-		notice(usersvs.nick, origin, "Invalid parameters specified for \2EMAIL\2.");
+		notice(usersvs.nick, origin, STR_INVALID_PARAMS, "EMAIL");
 		return;
 	}
 
@@ -205,7 +205,7 @@ static void us_set_nomemo(char *origin, char *name, char *params)
         }
         else
         {
-                notice(usersvs.nick, origin, "Invalid parameters specified for \2NOMEMO\2.");
+                notice(usersvs.nick, origin, STR_INVALID_PARAMS, "NOMEMO");
                 return;
         }
 }
@@ -258,7 +258,7 @@ static void us_set_emailmemos(char *origin, char *name, char *params)
 
         else
         {
-                notice(usersvs.nick, origin, "Invalid parameters specified for \2EMAILMEMOS\2.");
+                notice(usersvs.nick, origin, STR_INVALID_PARAMS, "EMAILMEMOS");
                 return;
         }
 }
@@ -319,7 +319,7 @@ static void us_set_hidemail(char *origin, char *name, char *params)
 
 	else
 	{
-		notice(usersvs.nick, origin, "Invalid parameters specified for \2HIDEMAIL\2.");
+		notice(usersvs.nick, origin, STR_INVALID_PARAMS, "HIDEMAIL");
 		return;
 	}
 }
@@ -379,7 +379,7 @@ static void us_set_neverop(char *origin, char *name, char *params)
 
 	else
 	{
-		notice(usersvs.nick, origin, "Invalid parameters specified for \2NEVEROP\2.");
+		notice(usersvs.nick, origin, STR_INVALID_PARAMS, "NEVEROP");
 		return;
 	}
 }
@@ -440,7 +440,7 @@ static void us_set_noop(char *origin, char *name, char *params)
 
 	else
 	{
-		notice(usersvs.nick, origin, "Invalid parameters specified for \2NOOP\2.");
+		notice(usersvs.nick, origin, STR_INVALID_PARAMS, "NOOP");
 		return;
 	}
 }
@@ -532,7 +532,7 @@ static void us_set_password(char *origin, char *name, char *params)
 
 	if (strlen(password) > 32)
 	{
-		notice(usersvs.nick, origin, "Invalid parameters specified for \2PASSWORD\2.");
+		notice(usersvs.nick, origin, STR_INVALID_PARAMS, "PASSWORD");
 		return;
 	}
 

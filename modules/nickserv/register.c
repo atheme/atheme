@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 4407 2006-01-02 11:00:37Z jilles $
+ * $Id: register.c 4487 2006-01-04 23:40:23Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 4407 2006-01-02 11:00:37Z jilles $",
+	"$Id: register.c 4487 2006-01-04 23:40:23Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -61,7 +61,7 @@ static void ns_cmd_register(char *origin)
 
 	if ((strlen(pass) > 32) || (strlen(email) >= EMAILLEN))
 	{
-		notice(nicksvs.nick, origin, "Invalid parameters specified for \2REGISTER\2.");
+		notice(nicksvs.nick, origin, STR_INVALID_PARAMS, "REGISTER");
 		return;
 	}
 

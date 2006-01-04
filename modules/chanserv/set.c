@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 4323 2005-12-29 16:45:59Z jilles $
+ * $Id: set.c 4487 2006-01-04 23:40:23Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 4323 2005-12-29 16:45:59Z jilles $",
+	"$Id: set.c 4487 2006-01-04 23:40:23Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -96,7 +96,7 @@ static void cs_set_email(char *origin, char *name, char *params)
 
         if (*name != '#')
         {
-                notice(chansvs.nick, origin, "Invalid parameters specified for \2Email\2.");
+                notice(chansvs.nick, origin, STR_INVALID_PARAMS, "EMAIL");
                 return;
         }
 
@@ -128,7 +128,7 @@ static void cs_set_email(char *origin, char *name, char *params)
 
         if (strlen(mail) >= EMAILLEN)
         {
-                notice(chansvs.nick, origin, "Invalid parameters specified for \2EMAIL\2.");
+                notice(chansvs.nick, origin, STR_INVALID_PARAMS, "EMAIL");
                 return;
         }
 
@@ -155,7 +155,7 @@ static void cs_set_url(char *origin, char *name, char *params)
 
 	if (*name != '#')
 	{
-		notice(chansvs.nick, origin, "Invalid parameters specified for \2URL\2.");
+		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "URL");
 		return;
 	}
 
@@ -280,7 +280,7 @@ static void cs_set_founder(char *origin, char *name, char *params)
 
 	if (*name != '#')
 	{
-		notice(chansvs.nick, origin, "Invalid parameters specified for \2FOUNDER\2.");
+		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "FOUNDER");
 		return;
 	}
 
@@ -415,7 +415,7 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 
 	if (*name != '#' || !letters)
 	{
-		notice(chansvs.nick, origin, "Invalid parameters specified for \2MLOCK\2.");
+		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "MLOCK");
 		return;
 	}
 
@@ -565,7 +565,7 @@ static void cs_set_keeptopic(char *origin, char *name, char *params)
 
 	if (*name != '#')
 	{
-		notice(chansvs.nick, origin, "Invalid parameters specified for \2KEEPTOPIC\2");
+		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "KEEPTOPIC");
 		return;
 	}
 
@@ -619,7 +619,7 @@ static void cs_set_keeptopic(char *origin, char *name, char *params)
 
         else
         {
-                notice(chansvs.nick, origin, "Invalid parameters specified for \2KEEPTOPIC\2.");
+                notice(chansvs.nick, origin, STR_INVALID_PARAMS, "KEEPTOPIC");
                 return;
         }
 }
@@ -631,7 +631,7 @@ static void cs_set_secure(char *origin, char *name, char *params)
 
 	if (*name != '#')
 	{
-		notice(chansvs.nick, origin, "Invalid parameters specified for \2SECURE\2.");
+		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "SECURE");
 		return;
 	}
 
@@ -685,7 +685,7 @@ static void cs_set_secure(char *origin, char *name, char *params)
 
 	else
 	{
-		notice(chansvs.nick, origin, "Invalid parameters specified for \2SECURE\2.");
+		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "SECURE");
 		return;
 	}
 }
@@ -697,7 +697,7 @@ static void cs_set_verbose(char *origin, char *name, char *params)
 
 	if (*name != '#')
 	{
-		notice(chansvs.nick, origin, "Invalid parameters specified for \2VERBOSE\2.");
+		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "VERBOSE");
 		return;
 	}
 
@@ -784,7 +784,7 @@ static void cs_set_verbose(char *origin, char *name, char *params)
 
 	else
 	{
-		notice(chansvs.nick, origin, "Invalid parameters specified for \2VERBOSE\2.");
+		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "VERBOSE");
 		return;
 	}
 }
@@ -796,7 +796,7 @@ static void cs_set_fantasy(char *origin, char *name, char *params)
 
 	if (*name != '#')
 	{
-		notice(chansvs.nick, origin, "Invalid parameters specified for \2FANTASY\2.");
+		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "FANTASY");
 		return;
 	}
 
@@ -849,7 +849,7 @@ static void cs_set_fantasy(char *origin, char *name, char *params)
 
 	else
 	{
-		notice(chansvs.nick, origin, "Invalid parameters specified for \2FANTASY\2.");
+		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "FANTASY");
 		return;
 	}
 }
@@ -860,7 +860,7 @@ static void cs_set_staffonly(char *origin, char *name, char *params)
 
 	if (*name != '#')
 	{
-		notice(chansvs.nick, origin, "Invalid parameters specified for \2STAFFONLY\2.");
+		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "STAFFONLY");
 		return;
 	}
 
@@ -908,7 +908,7 @@ static void cs_set_staffonly(char *origin, char *name, char *params)
 
 	else
 	{
-		notice(chansvs.nick, origin, "Invalid parameters specified for \2STAFFONLY\2.");
+		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "STAFFONLY");
 		return;
 	}
 }
@@ -922,7 +922,7 @@ static void cs_set_property(char *origin, char *name, char *params)
 
 	if (*name != '#')
 	{
-		notice(chansvs.nick, origin, "Invalid parameters specified for \2PROPERTY\2.");
+		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "PROPERTY");
 		return;
 	}
 

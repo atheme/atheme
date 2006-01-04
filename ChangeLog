@@ -1,3 +1,12 @@
+jilles      2006/01/04 15:45:29 UTC	(20060104-4485)
+  Log:
+  Make channel_mode() work without chanserv loaded.
+  
+
+  Changes:	Modified:
+  +5 -5		trunk/src/cmode.c (File Modified) 
+
+
 jilles      2006/01/04 15:34:35 UTC	(20060104-4483)
   Log:
   Remove the Scylla protocol module.

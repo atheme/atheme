@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 4469 2006-01-04 10:29:31Z pfish $
+ * $Id: atheme.h 4487 2006-01-04 23:40:23Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -261,6 +261,10 @@ struct help_command_
 #if HAVE_GETTIMEOFDAY
 struct timeval burstime;
 #endif
+
+/* help us keep consistent messages */
+#define STR_INSUFFICIENT_PARAMS "Insufficient parameters for \2%s\2."
+#define STR_INVALID_PARAMS "Invalid parameters for \2%s\2."
 
 /* *INDENT-OFF* */
 
