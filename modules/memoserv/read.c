@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv READ function
  *
- * $Id: read.c 3335 2005-10-31 03:48:14Z nenolod $
+ * $Id: read.c 4467 2006-01-04 04:16:13Z pfish $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/read", FALSE, _modinit, _moddeinit,
-	"$Id: read.c 3335 2005-10-31 03:48:14Z nenolod $",
+	"$Id: read.c 4467 2006-01-04 04:16:13Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void ms_cmd_read(char *origin);
 
-command_t ms_read = { "READ", "Reads a memo",
+command_t ms_read = { "READ", "Reads a memo.",
                         AC_NONE, ms_cmd_read };
 
 list_t *ms_cmdtree;

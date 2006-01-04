@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv IGNORE functions
  *
- * $Id: ignore.c 3737 2005-11-09 12:43:44Z jilles $
+ * $Id: ignore.c 4467 2006-01-04 04:16:13Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 3737 2005-11-09 12:43:44Z jilles $",
+	"$Id: ignore.c 4467 2006-01-04 04:16:13Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,7 +22,7 @@ static void ms_cmd_ignore_del(char *origin, char *target);
 static void ms_cmd_ignore_clear(char *origin, char *arg);
 static void ms_cmd_ignore_list(char *origin, char *arg);
 
-command_t ms_ignore = { "IGNORE", "Ignores a memo", AC_NONE, ms_cmd_ignore };
+command_t ms_ignore = { "IGNORE", "Ignores memos.", AC_NONE, ms_cmd_ignore };
 fcommand_t ms_ignore_add = { "ADD", AC_NONE, ms_cmd_ignore_add };
 fcommand_t ms_ignore_del = { "DEL", AC_NONE, ms_cmd_ignore_del };
 fcommand_t ms_ignore_clear = { "CLEAR", AC_NONE, ms_cmd_ignore_clear };

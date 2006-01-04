@@ -1,3 +1,12 @@
+pfish       2006/01/04 03:28:00 UTC	(20060104-4465)
+  Log:
+  Remove flags info from CLEAR BANS helpfile.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/help/cservice/clear_bans (File Modified) 
+
+
 jilles      2006/01/04 01:33:02 UTC	(20060104-4463)
   Log:
   - Don't mention required flag (already done in /cs help flags)
