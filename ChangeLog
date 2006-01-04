@@ -1,3 +1,13 @@
+jilles      2006/01/04 14:37:57 UTC	(20060104-4479)
+  Log:
+  Check each channel's founder has +f after loading
+  (add +*-OHV if not).
+  
+
+  Changes:	Modified:
+  +14 -0	trunk/src/node.c (File Modified) 
+
+
 jilles      2006/01/04 14:35:38 UTC	(20060104-4477)
   Log:
   Remove the broken nickname linking system.
