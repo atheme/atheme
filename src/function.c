@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 4293 2005-12-29 02:57:23Z jilles $
+ * $Id: function.c 4477 2006-01-04 14:35:38Z jilles $
  */
 
 #include "atheme.h"
@@ -687,13 +687,6 @@ boolean_t is_founder(mychan_t *mychan, myuser_t *myuser)
 	if (!myuser)
 		return FALSE;
 
-	if ((myuser->flags & MU_ALIAS) && (md = metadata_find(myuser, METADATA_USER, "private:alias:parent")))
-		myuser = myuser_find(md->value);
-
-	/* master account doesn't exist anymore */
-	if (!myuser)
-		return FALSE;
-
 	if (mychan->founder == myuser)
 		return TRUE;
 
@@ -705,13 +698,6 @@ boolean_t is_xop(mychan_t *mychan, myuser_t *myuser, uint32_t level)
 	chanacs_t *ca;
 	metadata_t *md;
 
-	if (!myuser)
-		return FALSE;
-
-	if ((myuser->flags & MU_ALIAS) && (md = metadata_find(myuser, METADATA_USER, "private:alias:parent")))
-		myuser = myuser_find(md->value);
-
-	/* master account doesn't exist anymore */
 	if (!myuser)
 		return FALSE;
 

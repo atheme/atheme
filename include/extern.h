@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 4469 2006-01-04 10:29:31Z pfish $
+ * $Id: extern.h 4477 2006-01-04 14:35:38Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -229,6 +229,8 @@ E boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, uint3
 E boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_t addflags, uint32_t removeflags, uint32_t restrictflags);
 
 E void expire_check(void *arg);
+/* Check the database for (version) problems common to all backends */
+E void db_check(void);
 
 /* services.c */
 E void ban(char *sender, char *channel, user_t *user);

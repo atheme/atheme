@@ -1,3 +1,13 @@
+jilles      2006/01/04 13:08:16 UTC	(20060104-4475)
+  Log:
+  Whatever we do, we do not need nickname linking stuff in UserServ.
+  
+
+  Changes:	Modified:
+  +0 -10	trunk/modules/userserv/info.c (File Modified) 
+  +0 -5		trunk/modules/userserv/list.c (File Modified) 
+
+
 jilles      2006/01/04 12:32:07 UTC	(20060104-4473)
   Log:
   Show a special message when listing templates on a

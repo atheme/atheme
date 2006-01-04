@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4471 2006-01-04 10:51:47Z pfish $
+ * $Id: node.c 4477 2006-01-04 14:35:38Z jilles $
  */
 
 #include "atheme.h"
@@ -1384,25 +1384,6 @@ void myuser_delete(char *name)
 	if (soper_find(mu))
 		soper_delete(mu->soper);
 
-	/* orphan any nicknames pointing to them
-	 * this is slow -- we could fix by adding reverse lists
-	 */
-	for (i = 0; i < HASHSIZE; i++)
-	{
-		LIST_FOREACH(n, mulist[i].head)
-		{
-			tmu = (myuser_t *)n->data;
-
-			if ((md = metadata_find(tmu, METADATA_USER, "private:alias:parent"))
-				&& !irccasecmp(mu->name, md->value))
-			{
-				slog(LG_DEBUG, "myuser_delete(): deleting %s; removing alias from %s to %s",
-					mu->name, tmu->name, mu->name);
-				metadata_delete(tmu, METADATA_USER, "private:alias:parent");
-			}
-		}
-	}
-
 	/* delete the metadata */
 	LIST_FOREACH_SAFE(n, tn, mu->metadata.head)
 	{
@@ -1918,25 +1899,6 @@ boolean_t chanacs_user_has_flag(mychan_t *mychan, user_t *u, uint32_t level)
 	mu = u->myuser;
 	if (mu != NULL)
 	{
-		/* Be very careful to make sure we get the right
-		 * myuser. w00t says to check only the parent's
-		 * access. If we can't get it, we'll try u->myuser.
-		 */
-		if (mu->flags & MU_ALIAS)
-		{
-			metadata_t *md;
-
-			if ((md = metadata_find(mu, METADATA_USER, "private:alias:parent")) != NULL)
-			{
-				mu = myuser_find(md->value);
-
-				if (mu == NULL)		/* bad! */
-					mu = u->myuser;
-			}
-			else
-				mu = u->myuser;
-		}
-
 		if (chanacs_find(mychan, mu, level))
 			return TRUE;
 	}
@@ -1959,25 +1921,6 @@ uint32_t chanacs_user_flags(mychan_t *mychan, user_t *u)
 	mu = u->myuser;
 	if (mu != NULL)
 	{
-		/* Be very careful to make sure we get the right
-		 * myuser. w00t says to check only the parent's
-		 * access. If we can't get it, we'll try u->myuser.
-		 */
-		if (mu->flags & MU_ALIAS)
-		{
-			metadata_t *md;
-
-			if ((md = metadata_find(mu, METADATA_USER, "private:alias:parent")) != NULL)
-			{
-				mu = myuser_find(md->value);
-
-				if (mu == NULL)		/* bad! */
-					mu = u->myuser;
-			}
-			else
-				mu = u->myuser;
-		}
-
 		ca = chanacs_find(mychan, mu, 0);
 		if (ca != NULL)
 			result |= ca->level;
@@ -2312,6 +2255,29 @@ void expire_check(void *arg)
 					part(mc->name, chansvs.nick);
 
 				mychan_delete(mc->name);
+			}
+		}
+	}
+}
+
+void db_check()
+{
+	uint32_t i;
+	myuser_t *mu;
+	mychan_t *mc;
+	node_t *n;
+
+	for (i = 0; i < HASHSIZE; i++)
+	{
+		LIST_FOREACH(n, mulist[i].head)
+		{
+			mu = (myuser_t *)n->data;
+
+			if (MU_OLD_ALIAS & mu->flags)
+			{
+				slog(LG_INFO, "db_check(): converting previously linked nick %s to a standalone nick", mu->name);
+				mu->flags &= ~MU_OLD_ALIAS;
+				metadata_delete(mu, METADATA_USER, "private:alias:parent");
 			}
 		}
 	}

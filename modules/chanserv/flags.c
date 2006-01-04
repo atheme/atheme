@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 4389 2005-12-31 18:09:25Z jilles $
+ * $Id: flags.c 4477 2006-01-04 14:35:38Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 4389 2005-12-31 18:09:25Z jilles $",
+	"$Id: flags.c 4477 2006-01-04 14:35:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -190,16 +190,6 @@ static void cs_cmd_flags(char *origin)
 				return;
 			}
 
-		        if ((tmu->flags & MU_ALIAS) && (md = metadata_find(tmu, METADATA_USER, "private:alias:parent")))
-		        {
-		                /* This shouldn't ever happen, but just in case it does... */
-		                if (!(tmu = myuser_find(md->value)))
-		                        return;
-
-		                notice(chansvs.nick, origin, "\2%s\2 is an alias for \2%s\2. Editing entry under \2%s\2.", target, md->value, tmu->name);
-				target = tmu->name;
-		        }
-
 			if (tmu == mc->founder && removeflags & CA_FLAGS)
 			{
 				notice(chansvs.nick, origin, "You may not remove the founder's +f access.");
@@ -322,16 +312,6 @@ static void cs_fcmd_flags(char *origin, char *channel)
 		{
 			notice(chansvs.nick, origin, "The nickname \2%s\2 is not registered.", target);
 			return;
-		}
-
-		if ((tmu->flags & MU_ALIAS) && (md = metadata_find(tmu, METADATA_USER, "private:alias:parent")))
-		{
-			/* This shouldn't ever happen, but just in case it does... */
-			if (!(tmu = myuser_find(md->value)))
-				return;
-
-			notice(chansvs.nick, origin, "\2%s\2 is an alias for \2%s\2. Editing entry under \2%s\2.", target, md->value, tmu->name);
-			target = tmu->name;
 		}
 
 		if (tmu == mc->founder && removeflags & CA_FLAGS)

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 4453 2006-01-03 23:59:20Z pfish $
+ * $Id: xop.c 4477 2006-01-04 14:35:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 4453 2006-01-03 23:59:20Z pfish $",
+	"$Id: xop.c 4477 2006-01-04 14:35:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -313,15 +313,6 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 		return;
 	}
 
-	if ((mu->flags & MU_ALIAS) && (md = metadata_find(mu, METADATA_USER, "private:alias:parent")))
-	{
-		/* This shouldn't ever happen, but just in case it does... */
-		if (!(mu = myuser_find(md->value)))
-			return;
-
-		notice(chansvs.nick, origin, "\2%s\2 is an alias for \2%s\2. Adding entry under \2%s\2.", target, md->value, mu->name);
-	}
-
 	if (mu == mc->founder)
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is the founder for \2%s\2 and may not be added to the %s list.", mu->name, mc->name, leveldesc);
@@ -415,15 +406,6 @@ static void cs_xop_do_del(mychan_t *mc, myuser_t *mu, char *origin, char *target
 	chanacs_t *ca;
 	metadata_t *md;
 	
-	if (mu && (mu->flags & MU_ALIAS) && (md = metadata_find(mu, METADATA_USER, "private:alias:parent")))
-	{
-		/* This shouldn't ever happen, but just in case it does... */
-		if (!(mu = myuser_find(md->value)))
-			return;
-
-		notice(chansvs.nick, origin, "\2%s\2 is an alias for \2%s\2. Deleting entry under \2%s\2.", target, md->value, mu->name);
-	}
-
 	/* let's finally make this sane.. --w00t */
 	if (!mu)
 	{

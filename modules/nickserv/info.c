@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 4337 2005-12-29 20:13:46Z jilles $
+ * $Id: info.c 4477 2006-01-04 14:35:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 4337 2005-12-29 20:13:46Z jilles $",
+	"$Id: info.c 4477 2006-01-04 14:35:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -140,19 +140,9 @@ static void ns_cmd_info(char *origin)
 
 		strcat(buf, "EMailMemos");
 	}
-	if (MU_ALIAS & mu->flags)
-	{
-		if (*buf)
-			strcat(buf, ", ");
-
-		strcat(buf, "Alias");
-	}
 
 	if (*buf)
 		notice(nicksvs.nick, origin, "Flags: %s", buf);
-
-	if ((mu->flags & MU_ALIAS) && (md = metadata_find(mu, METADATA_USER, "private:alias:parent")))
-		notice(nicksvs.nick, origin, "Parent: %s", md->value);
 
 	if (mu->soper && (mu == u->myuser || has_priv(u, PRIV_VIEWPRIVS)))
 	{

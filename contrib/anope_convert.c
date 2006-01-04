@@ -34,11 +34,6 @@
  * (this requires using the ircservices crypto module) */
 #define CONVERT_CRYPTPASS
 
-/* define this if you want to convert groups to linked nicks instead
- * of separate nicks
- */
-#define CONVERT_LINKED
-
 extern NickAlias *nalists[1024];
 extern ChannelInfo *chanlists[256];
 extern SList akills;
@@ -86,10 +81,6 @@ void write_accounts(void)
 			}
 			else
 				passwd = na->nc->pass;
-#ifdef CONVERT_LINKED
-			if (strcmp(na->nc->display, na->nick))
-				athemeflags |= 0x20; /* MU_ALIAS */
-#endif
 			if (na->nc->memos.memomax == 0)
 				athemeflags |= 0x40; /* MU_NOMEMO */
 			fprintf(f, "MU %s %s %s %lu %lu 0 0 0 %d\n", na->nick,
@@ -106,8 +97,6 @@ void write_accounts(void)
 				fprintf(f, "MD U %s icq %u\n", na->nick, (unsigned int)na->nc->icq);
 			if (na->nc->url)
 				fprintf(f, "MD U %s url %s\n", na->nick, na->nc->url);
-			if (athemeflags & 0x20)
-				fprintf(f, "MD U %s private:alias:parent %s\n", na->nick, na->nc->display);
 						
 			muout++;
 		}

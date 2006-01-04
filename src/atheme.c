@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 4427 2006-01-02 13:14:54Z jilles $
+ * $Id: atheme.c 4477 2006-01-04 14:35:38Z jilles $
  */
 
 #include "atheme.h"
@@ -213,6 +213,7 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "atheme: no backend modules loaded, see your configuration file.\n");
 		exit(EXIT_FAILURE);
 	}
+	db_check();
 
 #ifndef _WIN32
 	/* fork into the background */

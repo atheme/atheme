@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 4323 2005-12-29 16:45:59Z jilles $
+ * $Id: services.c 4477 2006-01-04 14:35:38Z jilles $
  */
 
 #include "atheme.h"
@@ -244,9 +244,6 @@ void handle_nickchange(user_t *u)
 	}
 
 	if (u->myuser == mu)
-		return;
-
-	if ((mu->flags & MU_ALIAS) && (md = metadata_find(mu, METADATA_USER, "private:alias:parent")) && u->myuser == myuser_find(md->value))
 		return;
 
 	notice(nicksvs.nick, u->nick, "This nickname is registered. Please choose a different nickname, or identify via \2/%s%s identify <password>\2.",

@@ -199,8 +199,6 @@ void reg_check(void *arg)
 				{
 					if (u->myuser == mu)
 						continue;
-					else if ((mu->flags & MU_ALIAS) && (md = metadata_find(mu, METADATA_USER, "private:alias:parent")) && u->myuser == myuser_find(md->value))
-						continue;
 					else if (u->flags & UF_NICK_WARNED)
 					{
 						notice(nicksvs.nick, u->nick, "You failed to authenticate in time for the nickname %s", u->nick);
