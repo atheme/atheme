@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TEMPLATE functions.
  *
- * $Id: template.c 4219 2005-12-27 17:41:18Z jilles $
+ * $Id: template.c 4473 2006-01-04 12:32:07Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/template", FALSE, _modinit, _moddeinit,
-	"$Id: template.c 4219 2005-12-27 17:41:18Z jilles $",
+	"$Id: template.c 4473 2006-01-04 12:32:07Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -105,27 +105,32 @@ static void cs_cmd_template(char *origin)
 			return;
 		}
 
-		notice(chansvs.nick, origin, "%-20s %s", "Name", "Flags");
-		notice(chansvs.nick, origin, "%-20s %s", "--------------------", "-----");
-
 		md = metadata_find(mc, METADATA_CHANNEL, "private:templates");
-		p = md != NULL ? md->value : NULL;
 
-		while (p != NULL)
+		if (md != NULL)
 		{
-			while (*p == ' ')
-				p++;
-			q = strchr(p, '=');
-			if (q == NULL)
-				break;
-			r = strchr(q, ' ');
-			notice(chansvs.nick, origin, "%-20.*s %.*s", (int)(q - p), p, r != NULL ? (int)(r - q - 1) : (int)strlen(q + 1), q + 1);
-			i++;
-			p = r;
-		}
+			notice(chansvs.nick, origin, "%-20s %s", "Name", "Flags");
+			notice(chansvs.nick, origin, "%-20s %s", "--------------------", "-----");
 
-		notice(chansvs.nick, origin, "%-20s %s", "--------------------", "-----");
-		notice(chansvs.nick, origin, "End of \2%s\2 TEMPLATE listing.", mc->name);
+			p = md->value;
+			while (p != NULL)
+			{
+				while (*p == ' ')
+					p++;
+				q = strchr(p, '=');
+				if (q == NULL)
+					break;
+				r = strchr(q, ' ');
+				notice(chansvs.nick, origin, "%-20.*s %.*s", (int)(q - p), p, r != NULL ? (int)(r - q - 1) : (int)strlen(q + 1), q + 1);
+				i++;
+				p = r;
+			}
+
+			notice(chansvs.nick, origin, "%-20s %s", "--------------------", "-----");
+			notice(chansvs.nick, origin, "End of \2%s\2 TEMPLATE listing.", mc->name);
+		}
+		else
+			notice(chansvs.nick, origin, "No templates set on channel \2%s\2.", mc->name);
 		if (operoverride)
 			logcommand(chansvs.me, u, CMDLOG_ADMIN, "%s TEMPLATE (oper override)", mc->name);
 		else

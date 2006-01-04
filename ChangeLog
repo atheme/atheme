@@ -1,3 +1,12 @@
+pfish       2006/01/04 10:51:47 UTC	(20060104-4471)
+  Log:
+  remove debug wallops
+  
+
+  Changes:	Modified:
+  +5 -6		trunk/src/node.c (File Modified) 
+
+
 pfish       2006/01/04 10:29:31 UTC	(20060104-4469)
   Log:
   Initial import for services ignore support. It "works" but still needs improvement..
