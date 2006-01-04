@@ -1,3 +1,17 @@
+pfish       2006/01/04 00:18:37 UTC	(20060104-4455)
+  Log:
+  Add helpset for CLEAR commands.
+  
+
+  Changes:	Modified:
+  +15 -0	trunk/help/cservice/clear (File Added) 
+  +9 -0		trunk/help/cservice/clear_bans (File Added) 
+  +9 -0		trunk/help/cservice/clear_users (File Added) 
+  +5 -0		trunk/modules/chanserv/clear.c (File Modified) 
+  +6 -0		trunk/modules/chanserv/clear_bans.c (File Modified) 
+  +6 -0		trunk/modules/chanserv/clear_users.c (File Modified) 
+
+
 pfish       2006/01/03 23:59:20 UTC	(20060103-4453)
   Log:
   consistent grammar

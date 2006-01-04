@@ -4,7 +4,7 @@
  *
  * This file contains code for the ChanServ CLEAR USERS function.
  *
- * $Id: clear_users.c 4455 2006-01-04 00:18:37Z pfish $
+ * $Id: clear_users.c 4457 2006-01-04 00:35:11Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/clear_users", FALSE, _modinit, _moddeinit,
-	"$Id: clear_users.c 4455 2006-01-04 00:18:37Z pfish $",
+	"$Id: clear_users.c 4457 2006-01-04 00:35:11Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -49,6 +49,7 @@ static void cs_cmd_clear_users(char *origin, char *channel)
 	chanacs_t *ca;
 	chanuser_t *cu;
 	node_t *n, *tn;
+	boolean_t added_ban = FALSE;
 
 	if (!(c = channel_find(channel)))
 	{
@@ -80,7 +81,11 @@ static void cs_cmd_clear_users(char *origin, char *channel)
 	}
 
 	/* stop a race condition where users can rejoin */
-	mode_sts(chansvs.nick, c->name, "+b *!*@*");
+	if (!chanban_find(c, "*!*@*"))
+	{
+		mode_sts(chansvs.nick, c->name, "+b *!*@*");
+		added_ban = TRUE;
+	}
 
 	LIST_FOREACH_SAFE(n, tn, c->members.head)
 	{
@@ -100,6 +105,6 @@ static void cs_cmd_clear_users(char *origin, char *channel)
 	notice(chansvs.nick, origin, "Cleared users from \2%s\2.", channel);
 
 	/* the channel may be empty now, so our pointer may be bogus! */
-	if ((c = channel_find(channel)))
+	if (added_ban && (c = channel_find(channel)))
 		cmode(chansvs.nick, c->name, "-b", "*!*@*");
 }
