@@ -1,3 +1,12 @@
+jilles      2006/01/04 00:35:11 UTC	(20060104-4457)
+  Log:
+  Only unban *!*@* at the end if it was not initially banned.
+  
+
+  Changes:	Modified:
+  +7 -2		trunk/modules/chanserv/clear_users.c (File Modified) 
+
+
 pfish       2006/01/04 00:18:37 UTC	(20060104-4455)
   Log:
   Add helpset for CLEAR commands.
