@@ -1,3 +1,12 @@
+pfish       2006/01/04 00:36:38 UTC	(20060104-4459)
+  Log:
+  update, don't need to tell people that we ban *@*
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/help/cservice/clear_users (File Modified) 
+
+
 jilles      2006/01/04 00:35:11 UTC	(20060104-4457)
   Log:
   Only unban *!*@* at the end if it was not initially banned.
