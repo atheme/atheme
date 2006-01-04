@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 4027 2005-12-08 00:05:46Z jilles $
+ * $Id: cmode.c 4485 2006-01-04 15:45:29Z jilles $
  */
 
 #include "atheme.h"
@@ -200,9 +200,9 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 						cmode(source->nick, chan->name, str, CLIENT_NAME(cu->user));
 
 					/* see if they did something we have to undo */
-					if (source == NULL && cu->user->server != me.me && (mc = mychan_find(cu->chan->name)) && mc->flags & MC_SECURE)
+					if (source == NULL && cu->user->server != me.me && chansvs.me != NULL && (mc = mychan_find(cu->chan->name)) && mc->flags & MC_SECURE)
 					{
-						if (status_mode_list[i].mode == 'o' && cu->user != chansvs.me->me && !(chanacs_user_flags(mc, cu->user) & (CA_OP | CA_AUTOOP)))
+						if (status_mode_list[i].mode == 'o' && !(chanacs_user_flags(mc, cu->user) & (CA_OP | CA_AUTOOP)))
 						{
 							/* they were opped and aren't on the list, deop them */
 							cmode(chansvs.nick, mc->name, "-o", cu->user->nick);
@@ -224,14 +224,14 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 				{
 					if (cu->user->server == me.me && status_mode_list[i].value == CMODE_OP)
 					{
-						if (source == NULL && (cu->user != chansvs.me->me || chanserv_reopped == FALSE))
+						if (source == NULL && (chansvs.me == NULL || cu->user != chansvs.me->me || chanserv_reopped == FALSE))
 						{
 							slog(LG_DEBUG, "channel_mode(): deopped on %s, rejoining", cu->chan->name);
 
 							part(cu->chan->name, cu->user->nick);
 							join(cu->chan->name, cu->user->nick);
 
-							if (cu->user == chansvs.me->me)
+							if (chansvs.me != NULL && cu->user == chansvs.me->me)
 								chanserv_reopped = TRUE;
 						}
 
@@ -256,7 +256,7 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 		slog(LG_DEBUG, "channel_mode(): mode %c not matched", *pos);
 	}
 
-	if (source == NULL)
+	if (source == NULL && chansvs.me != NULL)
 		check_modes(mychan_find(chan->name), TRUE);
 }
 

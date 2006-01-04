@@ -1,3 +1,17 @@
+jilles      2006/01/04 15:34:35 UTC	(20060104-4483)
+  Log:
+  Remove the Scylla protocol module.
+  The Scylla project has long been abandoned.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/dist/example.conf (File Modified) 
+  +0 -1		trunk/dist/example.userserv.conf (File Modified) 
+  +0 -3		trunk/doc/IRCD (File Modified) 
+  +0 -1		trunk/protocol/Makefile.in (File Modified) 
+  +0 -655	trunk/protocol/scylla.c (File Deleted) 
+
+
 jilles      2006/01/04 15:24:07 UTC	(20060104-4481)
   Log:
   Extend rejoin on kick from chanserv to all internal clients.
