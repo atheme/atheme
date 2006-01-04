@@ -1,3 +1,47 @@
+jilles      2006/01/04 14:35:38 UTC	(20060104-4477)
+  Log:
+  Remove the broken nickname linking system.
+  
+  Rationale:
+  
+  The implementation doesn't really work right, links basically only
+  work for channel access and /ns ghost. Still it complicates things
+  quite a lot.
+  
+  Considering we have identify as, and changing nicks does not log you
+  out from services, the only use for nickname linking is allowing
+  people to /ns ghost multiple nicks under one account. For that, they
+  could also create multiple accounts instead (which requires keeping them
+  all in use).
+  
+  Another argument is that, in practice, many people do not understand how
+  linking works, so they don't use it.
+  
+  So I propose removing nickname linking.
+  
+  Multiple nicks per account might come back later with a
+  ratbox-services-style nickserv (account name has no relationship to
+  nicks, account has zero or more nicks associated with it).
+  
+
+  Changes:	Modified:
+  +0 -11	trunk/contrib/anope_convert.c (File Modified) 
+  +0 -2		trunk/contrib/ns_enforce.c (File Modified) 
+  +0 -2		trunk/dist/example.conf (File Modified) 
+  +1 -1		trunk/include/account.h (File Modified) 
+  +2 -0		trunk/include/extern.h (File Modified) 
+  +0 -20	trunk/modules/chanserv/flags.c (File Modified) 
+  +0 -18	trunk/modules/chanserv/xop.c (File Modified) 
+  +0 -1		trunk/modules/nickserv/Makefile.in (File Modified) 
+  +0 -10	trunk/modules/nickserv/info.c (File Modified) 
+  +0 -133	trunk/modules/nickserv/link.c (File Deleted) 
+  +0 -3		trunk/modules/nickserv/list.c (File Modified) 
+  +1 -0		trunk/src/atheme.c (File Modified) 
+  +0 -14	trunk/src/function.c (File Modified) 
+  +23 -57	trunk/src/node.c (File Modified) 
+  +0 -3		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/01/04 13:08:16 UTC	(20060104-4475)
   Log:
   Whatever we do, we do not need nickname linking stuff in UserServ.

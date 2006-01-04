@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4477 2006-01-04 14:35:38Z jilles $
+ * $Id: node.c 4479 2006-01-04 14:37:57Z jilles $
  */
 
 #include "atheme.h"
@@ -2278,6 +2278,20 @@ void db_check()
 				slog(LG_INFO, "db_check(): converting previously linked nick %s to a standalone nick", mu->name);
 				mu->flags &= ~MU_OLD_ALIAS;
 				metadata_delete(mu, METADATA_USER, "private:alias:parent");
+			}
+		}
+	}
+
+	for (i = 0; i < HASHSIZE; i++)
+	{
+		LIST_FOREACH(n, mclist[i].head)
+		{
+			mc = (mychan_t *)n->data;
+
+			if (!chanacs_find(mc, mc->founder, CA_FLAGS))
+			{
+				slog(LG_INFO, "db_check(): adding access for founder on channel %s", mc->name);
+				chanacs_change_simple(mc, mc->founder, NULL, CA_FOUNDER_0, 0, CA_ALL);
 			}
 		}
 	}
