@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4469 2006-01-04 10:29:31Z pfish $
+ * $Id: node.c 4471 2006-01-04 10:51:47Z pfish $
  */
 
 #include "atheme.h"
@@ -376,12 +376,11 @@ svsignore_t *svsignore_find(user_t *source)
 	char host[BUFSIZE];
 
 	*host = '\0';
-        strlcpy(host, source->nick, BUFSIZE);
-        strlcat(host, "!", BUFSIZE);
-        strlcat(host, source->user, BUFSIZE);
-        strlcat(host, "@", BUFSIZE);
-        strlcat(host, source->host, BUFSIZE);
-	wallops("host: %s", host);
+	strlcpy(host, source->nick, BUFSIZE);
+	strlcat(host, "!", BUFSIZE);
+	strlcat(host, source->user, BUFSIZE);
+	strlcat(host, "@", BUFSIZE);
+	strlcat(host, source->host, BUFSIZE);
 
 	LIST_FOREACH(n, svs_ignore_list.head)
 	{

@@ -1,3 +1,21 @@
+pfish       2006/01/04 10:29:31 UTC	(20060104-4469)
+  Log:
+  Initial import for services ignore support. It "works" but still needs improvement..
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/include/account.h (File Modified) 
+  +1 -0		trunk/include/atheme.h (File Modified) 
+  +2 -0		trunk/include/extern.h (File Modified) 
+  +9 -2		trunk/modules/chanserv/main.c (File Modified) 
+  +7 -0		trunk/modules/memoserv/main.c (File Modified) 
+  +6 -0		trunk/modules/nickserv/main.c (File Modified) 
+  +1 -0		trunk/modules/operserv/Makefile.in (File Modified) 
+  +233 -0	trunk/modules/operserv/ignore.c (File Added) 
+  +8 -0		trunk/modules/userserv/main.c (File Modified) 
+  +33 -0	trunk/src/node.c (File Modified) 
+
+
 pfish       2006/01/04 04:16:13 UTC	(20060104-4467)
   Log:
   consistent grammar with the rest of the help titles.
