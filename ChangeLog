@@ -1,3 +1,30 @@
+jilles      2006/01/04 15:24:07 UTC	(20060104-4481)
+  Log:
+  Extend rejoin on kick from chanserv to all internal clients.
+  This also avoids crashes if chanserv is not loaded.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/protocol/asuka.c (File Modified) 
+  +2 -2		trunk/protocol/bahamut.c (File Modified) 
+  +2 -2		trunk/protocol/bircd.c (File Modified) 
+  +2 -2		trunk/protocol/charybdis.c (File Modified) 
+  +2 -2		trunk/protocol/dreamforge.c (File Modified) 
+  +2 -2		trunk/protocol/hyperion.c (File Modified) 
+  +2 -2		trunk/protocol/inspircd.c (File Modified) 
+  +2 -2		trunk/protocol/ircnet.c (File Modified) 
+  +2 -2		trunk/protocol/monkey.c (File Modified) 
+  +2 -2		trunk/protocol/plexus.c (File Modified) 
+  +2 -2		trunk/protocol/ptlink.c (File Modified) 
+  +2 -2		trunk/protocol/ratbox.c (File Modified) 
+  +2 -2		trunk/protocol/scylla.c (File Modified) 
+  +2 -2		trunk/protocol/shadowircd.c (File Modified) 
+  +2 -2		trunk/protocol/sorcery.c (File Modified) 
+  +3 -5		trunk/protocol/ultimate3.c (File Modified) 
+  +2 -2		trunk/protocol/undernet.c (File Modified) 
+  +2 -2		trunk/protocol/unreal.c (File Modified) 
+
+
 jilles      2006/01/04 14:37:57 UTC	(20060104-4479)
   Log:
   Check each channel's founder has +f after loading

@@ -1,4 +1,4 @@
-$Id: IRCD 4447 2006-01-03 14:01:32Z jilles $
+$Id: IRCD 4483 2006-01-04 15:34:35Z jilles $
 
 IRCD-specific notes
 -------------------
@@ -120,9 +120,6 @@ netsplits.
 
 Hybrid 6.x or csircd should also work but they are not recommended; you
 must leave join_chans enabled for full functionality.
-
-scylla
-------
 
 shadowircd
 ----------
