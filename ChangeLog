@@ -1,3 +1,13 @@
+jilles      2006/01/05 00:36:09 UTC	(20060105-4495)
+  Log:
+  Two small message changes benefiting translations.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/info.c (File Modified) 
+  +1 -1		trunk/modules/operserv/akill.c (File Modified) 
+
+
 jilles      2006/01/05 00:27:26 UTC	(20060105-4493)
   Log:
   Add a simple script to extract message strings.

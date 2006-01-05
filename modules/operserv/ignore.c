@@ -22,8 +22,6 @@ static void os_cmd_ignore_del(char *origin, char *target);
 static void os_cmd_ignore_list(char *origin, char *arg);
 static void os_cmd_ignore_clear(char *origin, char *arg);
 
-static void check_svsignore(user_t *u);
-
 command_t os_ignore = { "IGNORE", "Ignore a mask from services.",
                         PRIV_ADMIN, os_cmd_ignore };
 fcommand_t os_ignore_add = { "ADD", PRIV_ADMIN, os_cmd_ignore_add };
@@ -65,25 +63,6 @@ void _moddeinit()
 
 }
 
-static void check_svsignore(user_t *u)
-{
-	node_t *n;
-	char hostbuf[BUFSIZE];
-	char *temp;
-
-	snprintf(hostbuf, BUFSIZE, "%s!%s@%s", u->nick, u->user, u->host);
-
-	LIST_FOREACH(n, svs_ignore_list.head)
-	{
-		temp = (char *)n->data;
-
-		if (match(temp, hostbuf))
-		{
-			wallops("should ignore user matching %s", temp);
-		}
-	}
-}
-
 static void os_cmd_ignore(char *origin)
 {
 	user_t *u = user_find(origin);
@@ -111,6 +90,12 @@ static void os_cmd_ignore_add(char *origin, char *target)
 	{
 		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "IGNORE");
 		notice(opersvs.nick, origin, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <mask>");
+		return;
+	}
+
+	if (!validhostmask(target))
+	{
+		notice(opersvs.nick, origin, "Invalid host mask, %s", target);
 		return;
 	}
 
