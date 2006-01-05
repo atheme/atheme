@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INFO functions.
  *
- * $Id: info.c 4491 2006-01-05 00:06:26Z jilles $
+ * $Id: info.c 4495 2006-01-05 00:36:09Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 4491 2006-01-05 00:06:26Z jilles $",
+	"$Id: info.c 4495 2006-01-05 00:36:09Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -79,7 +79,7 @@ static void cs_cmd_info(char *origin)
 	tm = *localtime(&mc->registered);
 	strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-	notice(chansvs.nick, origin, "Information on \2%s\2", mc->name);
+	notice(chansvs.nick, origin, "Information on \2%s\2:", mc->name);
 
 	if (LIST_LENGTH(&mc->founder->logins))
 		notice(chansvs.nick, origin, "Founder    : %s (logged in)", mc->founder->name);

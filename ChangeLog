@@ -1,3 +1,12 @@
+jilles      2006/01/05 00:27:26 UTC	(20060105-4493)
+  Log:
+  Add a simple script to extract message strings.
+  
+
+  Changes:	Modified:
+  +21 -0	trunk/translations/extract_strings.sh (File Added) 
+
+
 jilles      2006/01/05 00:06:26 UTC	(20060105-4491)
   Log:
   Make it such that "Insufficient parameters for \2<command>\2."
