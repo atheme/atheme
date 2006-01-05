@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv DELETE function
  *
- * $Id: delete.c 4467 2006-01-04 04:16:13Z pfish $
+ * $Id: delete.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/delete", FALSE, _modinit, _moddeinit,
-	"$Id: delete.c 4467 2006-01-04 04:16:13Z pfish $",
+	"$Id: delete.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -58,7 +58,7 @@ static void ms_cmd_delete(char *origin)
 	if (!arg1)
 	{
 		notice(memosvs.nick, origin, 
-			"Insufficient parameters specified for \2DELETE\2.");
+			STR_INSUFFICIENT_PARAMS, "DELETE");
 		
 		notice(memosvs.nick, origin, "Syntax: DELETE ALL|message id");
 		return;

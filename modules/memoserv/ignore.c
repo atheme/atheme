@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv IGNORE functions
  *
- * $Id: ignore.c 4467 2006-01-04 04:16:13Z pfish $
+ * $Id: ignore.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 4467 2006-01-04 04:16:13Z pfish $",
+	"$Id: ignore.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -71,7 +71,7 @@ static void ms_cmd_ignore(char *origin)
 	if (!cmd)
 	{
 		notice(memosvs.nick, origin, 
-			"Insufficient parameters specified for \2IGNORE\2.");
+			STR_INSUFFICIENT_PARAMS, "IGNORE");
 		
 		notice(memosvs.nick, origin, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <account>");
 		return;
@@ -99,7 +99,7 @@ static void ms_cmd_ignore_add(char *origin, char *target)
 	if (target == NULL)
 	{
 		notice(memosvs.nick, origin, 
-			"Insufficient parameters specified for \2IGNORE\2.");
+			STR_INSUFFICIENT_PARAMS, "IGNORE");
 		
 		notice(memosvs.nick, origin, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <account>");
 		return;
@@ -160,7 +160,7 @@ static void ms_cmd_ignore_del(char *origin, char *target)
 	if (target == NULL)
 	{
 		notice(memosvs.nick, origin, 
-			"Insufficient parameters specified for \2IGNORE\2.");
+			STR_INSUFFICIENT_PARAMS, "IGNORE");
 		
 		notice(memosvs.nick, origin, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <account>");
 		return;

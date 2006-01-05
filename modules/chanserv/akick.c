@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 4219 2005-12-27 17:41:18Z jilles $
+ * $Id: akick.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@ static void cs_fcmd_akick(char *origin, char *chan);
 DECLARE_MODULE_V1
 (
 	"chanserv/akick", FALSE, _modinit, _moddeinit,
-	"$Id: akick.c 4219 2005-12-27 17:41:18Z jilles $",
+	"$Id: akick.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -60,14 +60,14 @@ void cs_cmd_akick(char *origin)
 
 	if (!cmd || !chan)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2AKICK\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "AKICK");
 		notice(chansvs.nick, origin, "Syntax: AKICK <#channel> ADD|DEL|LIST <nickname|hostmask>");
 		return;
 	}
 
 	if ((strcasecmp("LIST", cmd)) && (!uname))
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2AKICK\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "AKICK");
 		notice(chansvs.nick, origin, "Syntax: AKICK <#channel> ADD|DEL|LIST <nickname|hostmask>");
 		return;
 	}
@@ -280,14 +280,14 @@ void cs_fcmd_akick(char *origin, char *chan)
 
 	if (!cmd || !chan)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2AKICK\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "AKICK");
 		notice(chansvs.nick, origin, "Syntax: AKICK <#channel> ADD|DEL|LIST <nickname|hostmask>");
 		return;
 	}
 
 	if ((strcasecmp("LIST", cmd)) && (!uname))
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2!AKICK\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "!AKICK");
 		notice(chansvs.nick, origin, "Syntax: !AKICK ADD|DEL|LIST <nickname|hostmask>");
 		return;
 	}

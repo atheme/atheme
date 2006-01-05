@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService MODE command.
  *
- * $Id: mode.c 4487 2006-01-04 23:40:23Z jilles $
+ * $Id: mode.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/mode", FALSE, _modinit, _moddeinit,
-	"$Id: mode.c 4487 2006-01-04 23:40:23Z jilles $",
+	"$Id: mode.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -49,7 +49,7 @@ static void os_cmd_mode(char *origin)
 
         if (!channel || !mode)
         {
-                notice(opersvs.nick, origin, "Insufficient parameters for \2MODE\2.");
+                notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "MODE");
                 notice(opersvs.nick, origin, "Syntax: MODE <parameters>");
                 return;
         }

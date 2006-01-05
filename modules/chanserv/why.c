@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ MYACCESS function.
  *
- * $Id: why.c 3735 2005-11-09 12:23:51Z jilles $
+ * $Id: why.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/why", FALSE, _modinit, _moddeinit,
-	"$Id: why.c 3735 2005-11-09 12:23:51Z jilles $",
+	"$Id: why.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -53,7 +53,7 @@ static void cs_cmd_why(char *origin)
 
 	if (!chan || !targ)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters for \2WHY\2");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "WHY");
 		notice(chansvs.nick, origin, "Syntax: WHY <channel> <user>");
 		return;
 	}

@@ -92,7 +92,7 @@ static void os_cmd_ignore(char *origin)
 
 	if (!cmd)
 	{
-		notice(opersvs.nick, origin, "Insufficient parameters specified for \2IGNORE\2.");
+		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "IGNORE");
 		notice(opersvs.nick, origin, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <mask>");
 		return;
 	}
@@ -109,7 +109,7 @@ static void os_cmd_ignore_add(char *origin, char *target)
 
 	if (target == NULL)
 	{
-		notice(opersvs.nick, origin, "Insufficient parameters specified for \2IGNORE\2.");
+		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "IGNORE");
 		notice(opersvs.nick, origin, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <mask>");
 		return;
 	}
@@ -148,7 +148,7 @@ static void os_cmd_ignore_del(char *origin, char *target)
 
 	if (target == NULL)
 	{
-		notice(opersvs.nick, origin, "Insufficient parameters specified for \2IGNORE\2.");
+		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "IGNORE");
 		notice(opersvs.nick, origin, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <mask>");
 		return;
 	}

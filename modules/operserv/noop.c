@@ -4,7 +4,7 @@
  *
  * OperServ NOOP command.
  *
- * $Id: noop.c 4371 2005-12-30 15:07:50Z jilles $
+ * $Id: noop.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/noop", TRUE, _modinit, _moddeinit,
-	"$Id: noop.c 4371 2005-12-30 15:07:50Z jilles $",
+	"$Id: noop.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -123,7 +123,7 @@ static void os_cmd_noop(char *origin)
 
 	if (!action || !type)
 	{
-		notice(opersvs.nick, origin, "Insufficient parameters provided for \2NOOP\2.");
+		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "NOOP");
 		notice(opersvs.nick, origin, "Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]");
 		return;
 	}
@@ -134,7 +134,7 @@ static void os_cmd_noop(char *origin)
 		{
 			if (!mask)
                         {
-				notice(opersvs.nick, origin, "Insufficient parameters provided for \2NOOP\2.");
+				notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "NOOP");
 				notice(opersvs.nick, origin, "Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]");
 				return;
 			}
@@ -166,7 +166,7 @@ static void os_cmd_noop(char *origin)
 		{
 			if (!mask)
 			{
-				notice(opersvs.nick, origin, "Insufficient parameters provided for \2NOOP\2.");
+				notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "NOOP");
 				notice(opersvs.nick, origin, "Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]");
 				return;
 			}
@@ -196,7 +196,7 @@ static void os_cmd_noop(char *origin)
 		}
 		else
 		{
-			notice(opersvs.nick, origin, "Insufficient parameters provided for \2NOOP\2.");
+			notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "NOOP");
 			notice(opersvs.nick, origin, "Syntax: NOOP ADD <HOSTMASK|SERVER> <mask> [reason]");
 		}			
 	}
@@ -206,7 +206,7 @@ static void os_cmd_noop(char *origin)
 		{
 			if (!mask)
 			{
-				notice(opersvs.nick, origin, "Insufficient parameters provided for \2NOOP\2.");
+				notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "NOOP");
 				notice(opersvs.nick, origin, "Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]");
 				return;
 			}
@@ -256,7 +256,7 @@ static void os_cmd_noop(char *origin)
 		}
 		else
 		{
-			notice(opersvs.nick, origin, "Insufficient parameters provided for \2NOOP\2.");
+			notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "NOOP");
 			notice(opersvs.nick, origin, "Syntax: NOOP DEL <HOSTMASK|SERVER> <mask>");
 		}			
 	}
@@ -304,7 +304,7 @@ static void os_cmd_noop(char *origin)
 		}
 		else
 		{
-			notice(opersvs.nick, origin, "Insufficient parameters provided for \2NOOP\2.");
+			notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "NOOP");
 			notice(opersvs.nick, origin, "Syntax: NOOP LIST <HOSTMASK|SERVER>");
 		}			
 	}

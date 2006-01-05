@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 4333 2005-12-29 18:10:37Z jilles $
+ * $Id: ban.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", FALSE, _modinit, _moddeinit,
-	"$Id: ban.c 4333 2005-12-29 18:10:37Z jilles $",
+	"$Id: ban.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -70,7 +70,7 @@ static void cs_cmd_ban (char *origin)
 
 	if (!channel || !target)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters provided for \2BAN\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "BAN");
 		notice(chansvs.nick, origin, "Syntax: BAN <#channel> <nickname|hostmask>");
 		return;
 	}
@@ -152,7 +152,7 @@ static void cs_cmd_unban (char *origin)
 
 	if (!channel)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters provided for \2UNBAN\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "UNBAN");
 		notice(chansvs.nick, origin, "Syntax: UNBAN <#channel> <nickname|hostmask>");
 		return;
 	}
@@ -247,7 +247,7 @@ static void cs_fcmd_ban (char *origin, char *channel)
 
 	if (!channel || !target)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters provided for \2!BAN\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "!BAN");
 		notice(chansvs.nick, origin, "Syntax: !BAN <nickname|hostmask>");
 		return;
 	}
@@ -318,7 +318,7 @@ static void cs_fcmd_unban (char *origin, char *channel)
 
 	if (!channel)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters provided for \2!UNBAN\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "!UNBAN");
 		notice(chansvs.nick, origin, "Syntax: !UNBAN <nickname|hostmask>");
 		return;
 	}

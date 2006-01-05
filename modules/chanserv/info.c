@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INFO functions.
  *
- * $Id: info.c 4487 2006-01-04 23:40:23Z jilles $
+ * $Id: info.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 4487 2006-01-04 23:40:23Z jilles $",
+	"$Id: info.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -52,7 +52,7 @@ static void cs_cmd_info(char *origin)
 
 	if (!name)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2INFO\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "INFO");
 		notice(chansvs.nick, origin, "Syntax: INFO <#channel>");
 		return;
 	}

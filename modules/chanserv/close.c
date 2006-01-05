@@ -4,7 +4,7 @@
  *
  * Closing for channels.
  *
- * $Id: close.c 4415 2006-01-02 12:00:58Z jilles $
+ * $Id: close.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/close", FALSE, _modinit, _moddeinit,
-	"$Id: close.c 4415 2006-01-02 12:00:58Z jilles $",
+	"$Id: close.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -97,7 +97,7 @@ static void cs_cmd_close(char *origin)
 
 	if (!target || !action)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters for \2CLOSE\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "CLOSE");
 		notice(chansvs.nick, origin, "Usage: CLOSE <#channel> <ON|OFF> [reason]");
 		return;
 	}
@@ -112,7 +112,7 @@ static void cs_cmd_close(char *origin)
 	{
 		if (!reason)
 		{
-			notice(chansvs.nick, origin, "Insufficient parameters for \2CLOSE\2.");
+			notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "CLOSE");
 			notice(chansvs.nick, origin, "Usage: CLOSE <#channel> ON <reason>");
 			return;
 		}
@@ -206,7 +206,7 @@ static void cs_cmd_close(char *origin)
 	}
 	else
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters for \2CLOSE\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "CLOSE");
 		notice(chansvs.nick, origin, "Usage: CLOSE <#channel> <ON|OFF> [reason]");
 	}
 }

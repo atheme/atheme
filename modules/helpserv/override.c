@@ -32,7 +32,7 @@ static void hs_cmd_override(char *origin)
 
 	if (!action)
 	{
-		notice(helpsvs.nick, origin, "Insufficient parameters for \2OVERRIDE\2.");
+		notice(helpsvs.nick, origin, STR_INSUFFICIENT_PARAMS, "OVERRIDE");
 		notice(helpsvs.nick, origin, "Usage: OVERRIDE <ON|OFF>");
 		return;
 	}

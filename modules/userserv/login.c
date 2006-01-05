@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: login.c 4425 2006-01-02 13:13:10Z jilles $
+ * $Id: login.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/login", FALSE, _modinit, _moddeinit,
-	"$Id: login.c 4425 2006-01-02 13:13:10Z jilles $",
+	"$Id: login.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -53,7 +53,7 @@ static void us_cmd_login(char *origin)
 
 	if (!target || !password)
 	{
-		notice(usersvs.nick, origin, "Insufficient parameters for \2LOGIN\2.");
+		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "LOGIN");
 		notice(usersvs.nick, origin, "Syntax: LOGIN <account> <password>");
 		return;
 	}

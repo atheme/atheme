@@ -4,7 +4,7 @@
  *
  * Marking for nicknames.
  *
- * $Id: mark.c 4487 2006-01-04 23:40:23Z jilles $
+ * $Id: mark.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/mark", FALSE, _modinit, _moddeinit,
-	"$Id: mark.c 4487 2006-01-04 23:40:23Z jilles $",
+	"$Id: mark.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -50,7 +50,7 @@ static void ns_cmd_mark(char *origin)
 
 	if (!target || !action)
 	{
-		notice(nicksvs.nick, origin, "Insufficient parameters for \2MARK\2.");
+		notice(nicksvs.nick, origin, STR_INSUFFICIENT_PARAMS, "MARK");
 		notice(nicksvs.nick, origin, "Usage: MARK <target> <ON|OFF> [note]");
 		return;
 	}
@@ -65,7 +65,7 @@ static void ns_cmd_mark(char *origin)
 	{
 		if (!info)
 		{
-			notice(nicksvs.nick, origin, "Insufficient parameters for \2MARK\2.");
+			notice(nicksvs.nick, origin, STR_INSUFFICIENT_PARAMS, "MARK");
 			notice(nicksvs.nick, origin, "Usage: MARK <target> ON <note>");
 			return;
 		}

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 4477 2006-01-04 14:35:38Z jilles $
+ * $Id: xop.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 4477 2006-01-04 14:35:38Z jilles $",
+	"$Id: xop.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -89,14 +89,14 @@ static void cs_xop(char *origin, uint32_t level, char *leveldesc)
 
 	if (!cmd || !chan)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2xOP\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "xOP");
 		notice(chansvs.nick, origin, "Syntax: SOP|AOP|HOP|VOP <#channel> ADD|DEL|LIST <nickname>");
 		return;
 	}
 
 	if ((strcasecmp("LIST", cmd)) && (!uname))
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2xOP\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "xOP");
 		notice(chansvs.nick, origin, "Syntax: SOP|AOP|HOP|VOP <#channel> ADD|DEL|LIST <nickname>");
 		return;
 	}
@@ -491,7 +491,7 @@ static void cs_cmd_forcexop(char *origin)
 
 	if (!chan)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2FORCEXOP\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "FORCEXOP");
 		notice(chansvs.nick, origin, "Syntax: FORCEXOP <#channel>");
 		return;
 	}

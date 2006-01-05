@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService RECOVER functions.
  *
- * $Id: recover.c 4135 2005-12-17 14:39:23Z jilles $
+ * $Id: recover.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/recover", FALSE, _modinit, _moddeinit,
-	"$Id: recover.c 4135 2005-12-17 14:39:23Z jilles $",
+	"$Id: recover.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -50,7 +50,7 @@ static void cs_cmd_recover(char *origin)
 
 	if (!name)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2RECOVER\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "RECOVER");
 		notice(chansvs.nick, origin, "Syntax: RECOVER <#channel>");
 		return;
 	}

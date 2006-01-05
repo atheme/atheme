@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4219 2005-12-27 17:41:18Z jilles $
+ * $Id: main.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"global/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4219 2005-12-27 17:41:18Z jilles $",
+	"$Id: main.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -64,7 +64,7 @@ static void gs_cmd_global(char *origin)
 
 	if (!params)
 	{
-		notice(globsvs.nick, origin, "Insufficient parameters for \2GLOBAL\2.");
+		notice(globsvs.nick, origin, STR_INSUFFICIENT_PARAMS, "GLOBAL");
 		notice(globsvs.nick, origin, "Syntax: GLOBAL <parameters>|SEND|CLEAR");
 		return;
 	}

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService VOICE functions.
  *
- * $Id: voice.c 4385 2005-12-31 06:19:46Z w00t $
+ * $Id: voice.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/voice", FALSE, _modinit, _moddeinit,
-	"$Id: voice.c 4385 2005-12-31 06:19:46Z w00t $",
+	"$Id: voice.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -69,7 +69,7 @@ static void cs_cmd_voice(char *origin)
 
 	if (!chan)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2VOICE\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "VOICE");
 		notice(chansvs.nick, origin, "Syntax: VOICE <#channel> [nickname]");
 		return;
 	}
@@ -138,7 +138,7 @@ static void cs_cmd_devoice(char *origin)
 
 	if (!chan)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2DEVOICE\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "DEVOICE");
 		notice(chansvs.nick, origin, "Syntax: DEVOICE <#channel> [nickname]");
 		return;
 	}

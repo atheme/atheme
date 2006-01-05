@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ DROP function.
  *
- * $Id: drop.c 4303 2005-12-29 13:41:46Z jilles $
+ * $Id: drop.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 4303 2005-12-29 13:41:46Z jilles $",
+	"$Id: drop.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -45,7 +45,7 @@ static void ns_cmd_drop(char *origin)
 
 	if (!nick)
 	{
-		notice(nicksvs.nick, origin, "Insufficient parameters specified for \2DROP\2.");
+		notice(nicksvs.nick, origin, STR_INSUFFICIENT_PARAMS, "DROP");
 		notice(nicksvs.nick, origin, "Syntax: DROP <nickname> <password>");
 		return;
 	}

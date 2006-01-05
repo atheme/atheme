@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TOPIC functions.
  *
- * $Id: topic.c 4335 2005-12-29 18:18:48Z jilles $
+ * $Id: topic.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/topic", FALSE, _modinit, _moddeinit,
-	"$Id: topic.c 4335 2005-12-29 18:18:48Z jilles $",
+	"$Id: topic.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -69,7 +69,7 @@ static void cs_cmd_topic(char *origin)
 
 	if (!chan || !topic)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2TOPIC\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "TOPIC");
 		notice(chansvs.nick, origin, "Syntax: TOPIC <#channel> <topic>");
 		return;
 	}
@@ -121,7 +121,7 @@ static void cs_cmd_topicappend(char *origin)
 
         if (!chan || !topic)
         {
-                notice(chansvs.nick, origin, "Insufficient parameters specified for \2TOPICAPPEND\2.");
+                notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "TOPICAPPEND");
                 notice(chansvs.nick, origin, "Syntax: TOPICAPPEND <#channel> <topic>");
                 return;
         }
@@ -183,7 +183,7 @@ static void cs_fcmd_topic(char *origin, char *chan)
 
         if (!topic)
         {
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2!TOPIC\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "!TOPIC");
 		notice(chansvs.nick, origin, "Syntax: !TOPIC <topic>");
                 return;
         }
@@ -232,7 +232,7 @@ static void cs_fcmd_topicappend(char *origin, char *chan)
 
         if (!topic)
         {
-                notice(chansvs.nick, origin, "Insufficient parameters specified for \2!TOPICAPPEND\2.");
+                notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "!TOPICAPPEND");
                 notice(chansvs.nick, origin, "Syntax: !TOPICAPPEND <topic>");
                 return;
         }

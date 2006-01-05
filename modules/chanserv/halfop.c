@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: halfop.c 4385 2005-12-31 06:19:46Z w00t $
+ * $Id: halfop.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/halfop", FALSE, _modinit, _moddeinit,
-	"$Id: halfop.c 4385 2005-12-31 06:19:46Z w00t $",
+	"$Id: halfop.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -81,7 +81,7 @@ static void cs_cmd_halfop(char *origin)
 
 	if (!chan)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2HALFOP\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "HALFOP");
 		notice(chansvs.nick, origin, "Syntax: HALFOP <#channel> [nickname]");
 		return;
 	}
@@ -164,7 +164,7 @@ static void cs_cmd_dehalfop(char *origin)
 
 	if (!chan)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2DEHALFOP\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "DEHALFOP");
 		notice(chansvs.nick, origin, "Syntax: DEHALFOP <#channel> [nickname]");
 		return;
 	}

@@ -5,7 +5,7 @@
  * This file contains code for the NickServ LIST function.
  * Based on Alex Lambert's LISTEMAIL.
  *
- * $Id: list.c 4475 2006-01-04 13:08:16Z jilles $
+ * $Id: list.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 4475 2006-01-04 13:08:16Z jilles $",
+	"$Id: list.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -51,7 +51,7 @@ static void us_cmd_list(char *origin)
 
 	if (!nickpattern)
 	{
-		notice(usersvs.nick, origin, "Insufficient parameters specified for \2LIST\2.");
+		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "LIST");
 		notice(usersvs.nick, origin, "Syntax: LIST <account pattern>");
 		return;
 	}

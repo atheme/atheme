@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv FORWARD function
  *
- * $Id: forward.c 4467 2006-01-04 04:16:13Z pfish $
+ * $Id: forward.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/forward", FALSE, _modinit, _moddeinit,
-	"$Id: forward.c 4467 2006-01-04 04:16:13Z pfish $",
+	"$Id: forward.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -56,7 +56,7 @@ static void ms_cmd_forward(char *origin)
 	if (!target || !arg)
 	{
 		notice(memosvs.nick, origin, 
-			"Insufficient parameters specified for \2FORWARD\2.");
+			STR_INSUFFICIENT_PARAMS, "FORWARD");
 		
 		notice(memosvs.nick, origin, 
 			"Syntax: FORWARD <account> <memo number>");

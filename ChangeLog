@@ -1,3 +1,13 @@
+pfish       2006/01/04 23:57:22 UTC	(20060104-4489)
+  Log:
+  ignore updates
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/account.h (File Modified) 
+  +3 -3		trunk/modules/operserv/ignore.c (File Modified) 
+
+
 jilles      2006/01/04 23:40:23 UTC	(20060104-4487)
   Log:
   Make it such that "Invalid parameters specified for \2<command>\2."

@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 4487 2006-01-04 23:40:23Z jilles $
+ * $Id: set.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 4487 2006-01-04 23:40:23Z jilles $",
+	"$Id: set.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -63,7 +63,7 @@ static void ns_cmd_set(char *origin)
 
 	if (!setting || !params)
 	{
-		notice(nicksvs.nick, origin, "Insufficient parameters specified for \2SET\2.");
+		notice(nicksvs.nick, origin, STR_INSUFFICIENT_PARAMS, "SET");
 		notice(nicksvs.nick, origin, "Syntax: SET <setting> <parameters>");
 		return;
 	}
@@ -98,7 +98,7 @@ static void ns_set_email(char *origin, char *name, char *params)
 
 	if (!email)
 	{
-		notice(nicksvs.nick, origin, "Insufficient parameters specified for \2EMAIL\2.");
+		notice(nicksvs.nick, origin, STR_INSUFFICIENT_PARAMS, "EMAIL");
 		notice(nicksvs.nick, origin, "Syntax: SET EMAIL <new e-mail>");
 		return;
 	}

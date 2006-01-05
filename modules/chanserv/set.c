@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 4487 2006-01-04 23:40:23Z jilles $
+ * $Id: set.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 4487 2006-01-04 23:40:23Z jilles $",
+	"$Id: set.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -73,7 +73,7 @@ static void cs_cmd_set(char *origin)
 
 	if (!name || !setting || !params)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2SET\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "SET");
 		notice(chansvs.nick, origin, "Syntax: SET <#channel> <setting> <parameters>");
 		return;
 	}
@@ -274,7 +274,7 @@ static void cs_set_founder(char *origin, char *name, char *params)
 
 	if (!name || !newfounder)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2FOUNDER\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "FOUNDER");
 		notice(chansvs.nick, origin, "Usage: SET <#channel> FOUNDER <new founder>");
 	}
 

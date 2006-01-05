@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService REGISTER function.
  *
- * $Id: register.c 4487 2006-01-04 23:40:23Z jilles $
+ * $Id: register.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 4487 2006-01-04 23:40:23Z jilles $",
+	"$Id: register.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -52,7 +52,7 @@ static void cs_cmd_register(char *origin)
 
 	if (!name)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2REGISTER\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "REGISTER");
 		notice(chansvs.nick, origin, "To register a channel: REGISTER <#channel>");
 		return;
 	}

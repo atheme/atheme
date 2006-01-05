@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: kick.c 4331 2005-12-29 18:00:18Z jilles $
+ * $Id: kick.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/kick", FALSE, _modinit, _moddeinit,
-	"$Id: kick.c 4331 2005-12-29 18:00:18Z jilles $",
+	"$Id: kick.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -74,7 +74,7 @@ static void cs_cmd_kick(char *origin)
 
 	if (!chan || !nick)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2KICK\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "KICK");
 		notice(chansvs.nick, origin, "Syntax: KICK <#channel> <nickname> [reason]");
 		return;
 	}
@@ -137,7 +137,7 @@ static void cs_cmd_kickban(char *origin)
 
 	if (!chan || !nick)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2KICKBAN\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "KICKBAN");
 		notice(chansvs.nick, origin, "Syntax: KICKBAN <#channel> <nickname> [reason]");
 		return;
 	}
@@ -194,7 +194,7 @@ static void cs_fcmd_kick(char *origin, char *chan)
 
 	if (!chan || !nick)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2KICK\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "KICK");
 		notice(chansvs.nick, origin, "Syntax: KICK <#channel> <nickname> [reason]");
 		return;
 	}
@@ -248,7 +248,7 @@ static void cs_fcmd_kickban(char *origin, char *chan)
 
 	if (!chan || !nick)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2KICKBAN\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "KICKBAN");
 		notice(chansvs.nick, origin, "Syntax: KICKBAN <#channel> <nickname> [reason]");
 		return;
 	}

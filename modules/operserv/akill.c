@@ -5,7 +5,7 @@
  * This file contains functionality which implements
  * the OService AKILL/KLINE command.
  *
- * $Id: akill.c 4219 2005-12-27 17:41:18Z jilles $
+ * $Id: akill.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 4219 2005-12-27 17:41:18Z jilles $",
+	"$Id: akill.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -73,7 +73,7 @@ static void os_cmd_akill(char *origin)
 	/* Bad/missing arg */
 	if (!cmd)
 	{
-		notice(opersvs.nick, origin, "Insufficient parameters for \2AKILL\2.");
+		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "AKILL");
 		notice(opersvs.nick, origin, "Syntax: AKILL ADD|DEL|LIST");
 		return;
 	}
@@ -92,7 +92,7 @@ static void os_cmd_akill_add(char *origin, char *target)
 
 	if (!target || !token)
 	{
-		notice(opersvs.nick, origin, "Insufficient parameters for \2AKILL ADD\2.");
+		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "AKILL ADD");
 		notice(opersvs.nick, origin, "Syntax: AKILL ADD <nick|hostmask> [!P|!T <minutes>] " "<reason>");
 		return;
 	}
@@ -118,7 +118,7 @@ static void os_cmd_akill_add(char *origin, char *target)
 		if (s)
 			duration = (atol(s) * 60);
 		else {
-			notice(opersvs.nick, origin, "Insufficient parameters for \2AKILL ADD\2.");
+			notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "AKILL ADD");
 			notice(opersvs.nick, origin, "Syntax: AKILL ADD <nick|hostmask> [!P|!T <minutes>] " "<reason>");
 			return;
 		}
@@ -172,7 +172,7 @@ static void os_cmd_akill_add(char *origin, char *target)
 
 		if (!userbuf || !hostbuf)
 		{
-			notice(opersvs.nick, origin, "Insufficient parameters to \2AKILL ADD\2.");
+			notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "AKILL ADD");
 			notice(opersvs.nick, origin, "Syntax: AKILL ADD <user>@<host> [options] <reason>");
 			return;
 		}
@@ -223,7 +223,7 @@ static void os_cmd_akill_del(char *origin, char *target)
 
 	if (!target)
 	{
-		notice(opersvs.nick, origin, "Insuccicient parameters for \2AKILL DEL\2.");
+		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "AKILL DEL");
 		notice(opersvs.nick, origin, "Syntax: AKILL DEL <hostmask>");
 		return;
 	}

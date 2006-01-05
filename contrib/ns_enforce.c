@@ -87,7 +87,7 @@ static void ns_cmd_release(char *origin)
 
 	if (!target)
 	{
-		notice(nicksvs.nick, origin, "Insufficient parameters for \2RELEASE\2.");
+		notice(nicksvs.nick, origin, STR_INSUFFICIENT_PARAMS, "RELEASE");
 		notice(nicksvs.nick, origin, "Syntax: RELEASE <nick> [password]");
 		return;
 	}
@@ -144,7 +144,7 @@ static void ns_cmd_release(char *origin)
 	}
 	if (!password)
 	{
-		notice(nicksvs.nick, origin, "Insufficient parameters specified for RELEASE");
+		notice(nicksvs.nick, origin, STR_INSUFFICIENT_PARAMS, "RELEASE");
 		notice(nicksvs.nick, origin, "Syntax: RELEASE <nickname> [password]");
 		return;
 	}

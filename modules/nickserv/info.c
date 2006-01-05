@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 4477 2006-01-04 14:35:38Z jilles $
+ * $Id: info.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 4477 2006-01-04 14:35:38Z jilles $",
+	"$Id: info.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,7 +48,7 @@ static void ns_cmd_info(char *origin)
 
 	if (!name)
 	{
-		notice(nicksvs.nick, origin, "Insufficient parameters specified for \2INFO\2.");
+		notice(nicksvs.nick, origin, STR_INSUFFICIENT_PARAMS, "INFO");
 		notice(nicksvs.nick, origin, "Syntax: INFO <nickname>");
 		return;
 	}

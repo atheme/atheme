@@ -4,7 +4,7 @@
  *
  * This file contains code for the UserServ DROP function.
  *
- * $Id: drop.c 4303 2005-12-29 13:41:46Z jilles $
+ * $Id: drop.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 4303 2005-12-29 13:41:46Z jilles $",
+	"$Id: drop.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -45,7 +45,7 @@ static void us_cmd_drop(char *origin)
 
 	if (!acc)
 	{
-		notice(usersvs.nick, origin, "Insufficient parameters specified for \2DROP\2.");
+		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "DROP");
 		notice(usersvs.nick, origin, "Syntax: DROP <account> <password>");
 		return;
 	}

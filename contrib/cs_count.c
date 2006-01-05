@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService COUNT functions.
  *
- * $Id: cs_count.c 4401 2006-01-01 22:15:06Z jilles $
+ * $Id: cs_count.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/count", FALSE, _modinit, _moddeinit,
-	"$Id: cs_count.c 4401 2006-01-01 22:15:06Z jilles $",
+	"$Id: cs_count.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -49,7 +49,7 @@ static void cs_cmd_count(char *origin)
 
 	if (!chan)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2COUNT\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "COUNT");
 		notice(chansvs.nick, origin, "Syntax: COUNT <#channel>");
 		return;
 	}

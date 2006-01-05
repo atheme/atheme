@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: op.c 4385 2005-12-31 06:19:46Z w00t $
+ * $Id: op.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/op", FALSE, _modinit, _moddeinit,
-	"$Id: op.c 4385 2005-12-31 06:19:46Z w00t $",
+	"$Id: op.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -70,7 +70,7 @@ static void cs_cmd_op(char *origin)
 
 	if (!chan)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2OP\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "OP");
 		notice(chansvs.nick, origin, "Syntax: OP <#channel> [nickname]");
 		return;
 	}
@@ -147,7 +147,7 @@ static void cs_cmd_deop(char *origin)
 
 	if (!chan)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters specified for \2DEOP\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "DEOP");
 		notice(chansvs.nick, origin, "Syntax: DEOP <#channel> [nickname]");
 		return;
 	}

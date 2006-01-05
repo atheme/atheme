@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 4477 2006-01-04 14:35:38Z jilles $
+ * $Id: flags.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 4477 2006-01-04 14:35:38Z jilles $",
+	"$Id: flags.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -60,7 +60,7 @@ static void cs_cmd_flags(char *origin)
 
 	if (!channel)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters for \2FLAGS\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "FLAGS");
 		notice(chansvs.nick, origin, "Syntax: FLAGS <channel> [target] [flags]");
 		return;
 	}
@@ -247,7 +247,7 @@ static void cs_fcmd_flags(char *origin, char *channel)
 
 	if (!target || !flagstr)
 	{
-		notice(chansvs.nick, origin, "Insufficient parameters for \2FLAGS\2.");
+		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "FLAGS");
 		notice(chansvs.nick, origin, "Syntax: .flags <target> <flags>");
 		return;
 	}

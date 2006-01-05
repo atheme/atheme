@@ -34,7 +34,7 @@ static void hs_cmd_helper(char *origin)
 
 	if (!target || !action)
 	{
-		notice(helpsvs.nick, origin, "Insufficient parameters for \2ADDHELPER\2.");
+		notice(helpsvs.nick, origin, STR_INSUFFICIENT_PARAMS, "ADDHELPER");
 		notice(helpsvs.nick, origin, "Usage: HELPER <nickname> <ON|OFF>");
 		return;
 	}
@@ -73,7 +73,7 @@ static void hs_cmd_helper(char *origin)
 	}
 	else
 	{
-		notice(helpsvs.nick, origin, "Invalid parameters for \2HELPER\2.");
+		notice(helpsvs.nick, origin, STR_INVALID_PARAMS, "HELPER");
 		notice(helpsvs.nick, origin, "Usage: HELPER <nickname> <ON|OFF>");
 	}
         return;

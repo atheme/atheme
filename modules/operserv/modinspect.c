@@ -4,7 +4,7 @@
  *
  * A simple module inspector.
  *
- * $Id: modinspect.c 4375 2005-12-30 15:48:59Z jilles $
+ * $Id: modinspect.c 4491 2006-01-05 00:06:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modinspect", FALSE, _modinit, _moddeinit,
-	"$Id: modinspect.c 4375 2005-12-30 15:48:59Z jilles $",
+	"$Id: modinspect.c 4491 2006-01-05 00:06:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -44,7 +44,7 @@ static void os_cmd_modinspect(char *origin)
 
 	if (!mname)
 	{
-		notice(opersvs.nick, origin, "Insufficient parameters for \2MODINSPECT\2.");
+		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "MODINSPECT");
 		notice(opersvs.nick, origin, "Syntax: MODINSPECT <module>");
 		return;
 	}
