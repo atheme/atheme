@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 4433 2006-01-02 13:45:47Z jilles $
+ * $Id: ptasks.c 4499 2006-01-05 01:36:50Z pfish $
  */
 
 #include "atheme.h"
@@ -393,6 +393,11 @@ int floodcheck(user_t *u, user_t *t)
 		slog(LG_ERROR, "BUG: tried to floodcheck message to non-service %s", t->nick);
 		return 0;
 	}
+
+	/* Check if we match a services ignore */
+	if (svsignore_find(u))
+		return 1;
+
 	if (config_options.flood_msgs)
 	{
 		/* check if they're being ignored */
