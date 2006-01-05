@@ -1,3 +1,12 @@
+jilles      2006/01/05 12:46:25 UTC	(20060105-4503)
+  Log:
+  Add a description of commands like /stats.
+  
+
+  Changes:	Modified:
+  +47 -0	trunk/doc/PCOMMANDS (File Added) 
+
+
 pfish       2006/01/05 04:40:09 UTC	(20060105-4501)
   Log:
   Save services ignores to flatfile.

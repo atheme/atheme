@@ -37,6 +37,14 @@ like eggdrop and is somewhat more useful.
 Atheme currently works with many irc daemons. More details are available
 in the config file.
 
+Internally, Atheme shares more similarities with ircd than it does with 
+IRCServices. Anope/Epona, Cygnus, OperStats, Hybserv, Theia, etc are all 
+based on IRCServices and as such have very old legacy code that none of 
+the authors, except Church truly understand. Atheme was written 
+completely from scratch with the more complex concepts taken from 
+various modern ircd packages, including ircu, ircd-ratbox, hybrid and 
+bahamut.
+
 3. INSTALLATION
 ---------------
 
