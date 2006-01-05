@@ -1,3 +1,12 @@
+pfish       2006/01/05 04:40:09 UTC	(20060105-4501)
+  Log:
+  Save services ignores to flatfile.
+  
+
+  Changes:	Modified:
+  +27 -0	trunk/backend/flatfile.c (File Modified) 
+
+
 pfish       2006/01/05 01:36:50 UTC	(20060105-4499)
   Log:
   Move placement of ignore checks from each module's main.c to ptasks.c in floodcheck()

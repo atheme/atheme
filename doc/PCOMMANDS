@@ -1,0 +1,47 @@
+Non-PRIVMSG commands to Atheme
+------------------------------
+
+Atheme supports several commands other than PRIVMSG.
+
+Listed are the command, the required Atheme privilege (the ircd may require
+specific ircop privileges as well) and the effect. Unfortunately, some ircds do
+not support all of these commands, and there is not always a /msg equivalent.
+
+<atheme> means Atheme's server name or a name of a service.
+
+/admin <atheme> (-) Show administrative information (adminname and adminemail
+from atheme.conf).
+
+/info <atheme> (-) Shows copyright information and a list of authors.
+
+/stats <letter> <atheme> (-) Shows various statistics and configuration
+information. The following letters are recognized:
+	C (general:auspex) Shows uplink blocks.
+	E (general:auspex) Shows events.
+	K (operserv:akill) Shows akills.
+	O (general:viewprivs) Shows operator blocks.
+	T (general:auspex) Shows various counts.
+	u (-) Shows services uptime.
+	V (general:auspex) Shows current uplink name and connect duration.
+
+/squit <jupe> (-) Removes a jupe. This does not work on ircds that always use
+"unconnect" semantics (e.g. ircnet) where /squit is merely a request to the
+target's direct connection; in that case you have to /squit services itself
+to remove a jupe.
+
+/trace <atheme> (-) Shows a listing of all services (with server name) or
+a single service. If listing all services, general:auspex also causes a line
+describing the uplink to be sent. Two-argument trace as in TSora ircds is
+also supported.
+
+/version <atheme> (-) Shows version information, slightly more detailed than
+a CTCP reply.
+
+/whois <atheme> <client> (-) Shows WHOIS information about <client>:
+nick, username, vhost, server, server description, ircop status, services
+login name. Note that this works for all clients on the network, not just
+services and no channel information is shown. It is assumed that networks
+that want to hide which server users are on do not allow remote whois other
+than /whois <nick> <nick>.
+
+$Id: PCOMMANDS 4503 2006-01-05 12:46:25Z jilles $
