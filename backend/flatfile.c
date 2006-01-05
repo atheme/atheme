@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 4381 2005-12-30 23:12:54Z jilles $
+ * $Id: flatfile.c 4501 2006-01-05 04:40:09Z pfish $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 4381 2005-12-30 23:12:54Z jilles $",
+	"$Id: flatfile.c 4501 2006-01-05 04:40:09Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -24,6 +24,7 @@ static void flatfile_db_save(void *arg)
 	mychan_t *mc;
 	chanacs_t *ca;
 	kline_t *k;
+	svsignore_t *svsignore;
 	node_t *n, *tn, *tn2;
 	FILE *f;
 	uint32_t i, muout = 0, mcout = 0, caout = 0, kout = 0;
@@ -156,6 +157,18 @@ static void flatfile_db_save(void *arg)
 			}
 		}
 	}
+
+	/* Services ignores */
+	slog(LG_DEBUG, "db_save(): saving svsignores");
+
+	LIST_FOREACH(tn, svs_ignore_list.head)
+	{
+		svsignore_t *svsignore = (svsignore_t *)tn->data;
+
+		/* SI <mask> <settime> <setby> <reason> */
+		fprintf(f, "SI %s\n", (char *)tn->data);
+	}
+
 
 	slog(LG_DEBUG, "db_save(): saving klines");
 
@@ -531,6 +544,20 @@ static void flatfile_db_load(void)
 						ca = chanacs_add(mc, mu, fl2);
 				}
 			}
+		}
+
+
+		/* Services ignores */
+		if (!strcmp("SI", item))
+		{
+			char *mask, *strbuf;
+
+			mask = strtok(NULL, "\n");
+			
+
+			strbuf = smalloc(sizeof(char[HOSTLEN]));
+			strlcpy(strbuf,mask,HOSTLEN-1);
+			node_add(strbuf, node_create(), &svs_ignore_list);
 		}
 
 		/* klines */
