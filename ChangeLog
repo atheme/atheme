@@ -1,3 +1,13 @@
+pfish       2006/01/06 08:50:07 UTC	(20060106-4515)
+  Log:
+  Remove some debugging info from node.c and update help file
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/help/oservice/ignore (File Modified) 
+  +0 -3		trunk/src/node.c (File Modified) 
+
+
 pfish       2006/01/06 08:44:26 UTC	(20060106-4513)
   Log:
   update example configs
