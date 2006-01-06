@@ -1,3 +1,20 @@
+pfish       2006/01/06 08:31:28 UTC	(20060106-4507)
+  Log:
+  Improve services ignore:
+  - Add reasons
+  - Keep track of who set it and when
+  - Display this info in the LIST.
+  
+  
+
+  Changes:	Modified:
+  +18 -9	trunk/backend/flatfile.c (File Modified) 
+  +5 -0		trunk/include/account.h (File Modified) 
+  +4 -1		trunk/include/extern.h (File Modified) 
+  +19 -15	trunk/modules/operserv/ignore.c (File Modified) 
+  +23 -2	trunk/src/node.c (File Modified) 
+
+
 nenolod     2006/01/05 15:14:42 UTC	(20060105-4505)
   Log:
   Explain that Atheme is not based on IRCServices/EsperNet code, and 

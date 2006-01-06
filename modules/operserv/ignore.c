@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService IGNORE command.
  *
- * $Id:$
+ * $Id: ignore.c 4509 2006-01-06 08:36:17Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id:$",
+	"$Id: ignore.c 4509 2006-01-06 08:36:17Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -167,6 +167,7 @@ static void os_cmd_ignore_clear(char *origin, char *arg)
 {
 	user_t *u = user_find(origin);
 	node_t *n, *tn;
+	svsignore_t *svsignore;
 
 	if (LIST_LENGTH(&svs_ignore_list) == 0)
 	{
@@ -176,9 +177,15 @@ static void os_cmd_ignore_clear(char *origin, char *arg)
 
 	LIST_FOREACH_SAFE(n, tn, svs_ignore_list.head)
 	{
-		free(n->data);
+		svsignore = (svsignore_t *)n->data;
+
+		notice(opersvs.nick, origin, "\2%s\2 has been removed from the services ignore list.", svsignore->mask);
 		node_del(n,&svs_ignore_list);
 		node_free(n);
+		free(svsignore->mask);
+		free(svsignore->setby);
+		free(svsignore->reason);
+
 	}
 
 	notice(opersvs.nick, origin, "Services ignore list has been wiped!");
