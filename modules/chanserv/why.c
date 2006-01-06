@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ MYACCESS function.
  *
- * $Id: why.c 4517 2006-01-06 09:51:50Z pfish $
+ * $Id: why.c 4523 2006-01-06 11:30:36Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/why", FALSE, _modinit, _moddeinit,
-	"$Id: why.c 4517 2006-01-06 09:51:50Z pfish $",
+	"$Id: why.c 4523 2006-01-06 11:30:36Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -44,12 +44,13 @@ static void cs_cmd_why(char *origin)
 	char *targ = strtok(NULL, " ");
 	char host[BUFSIZE];
 	mychan_t *mc;
-	user_t *u;
+	user_t *u, *tu;
 	user_t *ou = user_find(origin);
 	myuser_t *mu;
 	node_t *n;
 	chanacs_t *ca;
 	uint32_t i, matches = 0;
+	int operoverride = 0;
 
 	if (!chan || !targ)
 	{
@@ -59,16 +60,17 @@ static void cs_cmd_why(char *origin)
 	}
 
 	mc = mychan_find(chan);
-	u = user_find_named(targ);
+	u = user_find_named(origin);
+	tu = user_find_named(targ);
 
-	if (u == NULL)
+	if (tu == NULL)
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is not online.",
 			targ);
 		return;
 	}
 
-	mu = u->myuser;
+	mu = tu->myuser;
 
 	if (mc == NULL)
 	{
@@ -76,10 +78,20 @@ static void cs_cmd_why(char *origin)
 			chan);
 		return;
 	}
-	
-	logcommand(chansvs.me, ou, CMDLOG_GET, "%s WHY %s!%s@%s", mc->name, u->nick, u->user, u->vhost);
 
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
+	if (!chanacs_user_has_flag(mc, u, CA_ACLVIEW))
+	{
+		if (has_priv(u, PRIV_CHAN_AUSPEX))
+			operoverride = 1;
+
+		else
+		{
+			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+			return;
+		}
+	}
+
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && !has_priv(u, PRIV_CHAN_AUSPEX))
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is closed.", chan);
 		return;
@@ -91,6 +103,12 @@ static void cs_cmd_why(char *origin)
 			targ);
 		return;
 	}
+
+	if (operoverride)
+		logcommand(chansvs.me, ou, CMDLOG_ADMIN, "%s WHY %s!%s@%s", mc->name, u->nick, u->user, u->vhost);
+	else
+		logcommand(chansvs.me, ou, CMDLOG_GET, "%s WHY %s!%s@%s", mc->name, u->nick, u->user, u->vhost);
+
 
 	snprintf(host, BUFSIZE, "%s!%s@%s", u->nick, u->user, u->vhost);
 
