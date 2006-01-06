@@ -1,3 +1,13 @@
+pfish       2006/01/06 11:12:49 UTC	(20060106-4519)
+  Log:
+  fix some stuff
+  
+
+  Changes:	Modified:
+  +2 -3		trunk/backend/flatfile.c (File Modified) 
+  +1 -1		trunk/include/account.h (File Modified) 
+
+
 pfish       2006/01/06 09:51:50 UTC	(20060106-4517)
   Log:
   Expand WHY to show which nickname the user is using to gain the access:

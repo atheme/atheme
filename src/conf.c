@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4429 2006-01-02 13:22:57Z jilles $
+ * $Id: conf.c 4521 2006-01-06 11:22:48Z jilles $
  */
 
 #include "atheme.h"
@@ -784,7 +784,7 @@ static int c_language(CONFIGENTRY *ce)
 
 static int c_string(CONFIGENTRY *ce)
 {
-	char *name, *trans;
+	char *name, *trans = NULL;
 	CONFIGENTRY *topce;
 
 	if (ce->ce_vardata == NULL)
@@ -804,12 +804,15 @@ static int c_string(CONFIGENTRY *ce)
 		}
 		else
 		{
-			slog(LG_ERROR, "%s:%d: Invalid configuration option operator::%s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
+			slog(LG_ERROR, "%s:%d: Invalid configuration option string::%s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
 			continue;
 		}
 	}
 
-	translation_create(name, trans);
+	if (trans != NULL)
+		translation_create(name, trans);
+	else
+		slog(LG_ERROR, "%s:%d: missing translation for string", topce->ce_fileptr->cf_filename, topce->ce_varlinenum);
 	return 0;
 }
 
