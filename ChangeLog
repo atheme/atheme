@@ -1,3 +1,13 @@
+nenolod     2006/01/05 15:14:42 UTC	(20060105-4505)
+  Log:
+  Explain that Atheme is not based on IRCServices/EsperNet code, and 
+  explain why this is.
+  
+
+  Changes:	Modified:
+  +8 -0		trunk/README (File Modified) 
+
+
 jilles      2006/01/05 12:46:25 UTC	(20060105-4503)
   Log:
   Add a description of commands like /stats.

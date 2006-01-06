@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 4489 2006-01-04 23:57:22Z pfish $
+ * $Id: account.h 4507 2006-01-06 08:31:28Z pfish $
  */
 
 #ifndef ACCOUNT_H
@@ -32,7 +32,12 @@ struct soper_ {
 
 /* services ignore struct */
 struct svsignore_ {
+  svsignore_t *svsignore;
+
   char *mask;
+  time_t *settime;
+  char *setby;
+  char *reason;
 };
 
 struct myuser_

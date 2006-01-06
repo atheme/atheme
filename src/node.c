@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4479 2006-01-04 14:37:57Z jilles $
+ * $Id: node.c 4507 2006-01-06 08:31:28Z pfish $
  */
 
 #include "atheme.h"
@@ -55,6 +55,7 @@ void init_nodes(void)
 {
 	operclass_heap = BlockHeapCreate(sizeof(operclass_t), 2);
 	soper_heap = BlockHeapCreate(sizeof(soper_t), 2);
+	svsignore_heap = BlockHeapCreate(sizeof(svsignore_t), 2);
 	tld_heap = BlockHeapCreate(sizeof(tld_t), 4);
 	serv_heap = BlockHeapCreate(sizeof(server_t), HEAP_SERVER);
 	user_heap = BlockHeapCreate(sizeof(user_t), HEAP_USER);
@@ -69,7 +70,7 @@ void init_nodes(void)
 	chanacs_heap = BlockHeapCreate(sizeof(chanacs_t), HEAP_CHANUSER);
 
 	if (!tld_heap || !serv_heap || !user_heap || !chan_heap || !soper_heap || !chanuser_heap || !chanban_heap || !uplink_heap || !metadata_heap || !kline_heap || !myuser_heap || !mychan_heap
-	    || !chanacs_heap)
+	    || !chanacs_heap || !svsignore_heap)
 	{
 		slog(LG_INFO, "init_nodes(): block allocator failed.");
 		exit(EXIT_FAILURE);
@@ -369,6 +370,26 @@ soper_t *soper_find_named(char *name)
  * S V S I G N O R E *
  *********************/
 
+svsignore_t *svsignore_add(char *mask, char *reason)
+{
+	svsignore_t *svsignore;
+	node_t *n = node_create();
+
+	slog(LG_DEBUG, "svsignore_add(): mask: %s", mask);
+	slog(LG_DEBUG, "svsignore_add(): reason: %s", reason);
+
+	svsignore = BlockHeapAlloc(svsignore_heap);
+
+	node_add(svsignore, n, &svs_ignore_list);
+
+	svsignore->mask = sstrdup(mask);
+	svsignore->settime = CURRTIME;
+	svsignore->reason = sstrdup(reason);
+	cnt.svsignore++;
+
+	return svsignore;
+}
+
 svsignore_t *svsignore_find(user_t *source)
 {
 	svsignore_t *svsignore;
@@ -386,7 +407,7 @@ svsignore_t *svsignore_find(user_t *source)
 	{
 		svsignore = (svsignore_t *)n->data;
 
-		if (!match(svsignore, host))
+		if (!match(svsignore->mask, host))
 			return svsignore;
 	}
 

@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 4477 2006-01-04 14:35:38Z jilles $
+ * $Id: extern.h 4507 2006-01-06 08:31:28Z pfish $
  */
 
 #ifndef EXTERN_H
@@ -86,7 +86,6 @@ E boolean_t is_soper(myuser_t *myuser);
 E boolean_t is_ircop(user_t *user);
 E boolean_t is_admin(user_t *user);
 E boolean_t is_internal_client(user_t *user);
-E boolean_t is_svsignore(user_t *user);
 
 E void set_password(myuser_t *mu, char *newpassword);
 E boolean_t verify_password(myuser_t *mu, char *password);
@@ -170,6 +169,9 @@ E void soper_delete(soper_t *soper);
 E soper_t *soper_find(myuser_t *myuser);
 E soper_t *soper_find_named(char *name);
 
+E svsignore_t *svsignore_find(user_t *user);
+E svsignore_t *svsignore_add(char *mask, char *reason);
+
 E tld_t *tld_add(char *name);
 E void tld_delete(char *name);
 E tld_t *tld_find(char *name);
@@ -196,6 +198,7 @@ E channel_t *channel_find(char *name);
 E chanuser_t *chanuser_add(channel_t *chan, char *user);
 E void chanuser_delete(channel_t *chan, user_t *user);
 E chanuser_t *chanuser_find(channel_t *chan, user_t *user);
+
 
 E kline_t *kline_add(char *user, char *host, char *reason, long duration);
 E void kline_delete(char *user, char *host);

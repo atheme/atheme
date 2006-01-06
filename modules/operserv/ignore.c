@@ -84,7 +84,8 @@ static void os_cmd_ignore_add(char *origin, char *target)
 {
 	user_t *u = user_find(origin);
 	node_t *n,*node;
-	char *temp;
+	char *reason = strtok(NULL, "");
+	svsignore_t *svsignore, *s;
 
 	if (target == NULL)
 	{
@@ -102,21 +103,20 @@ static void os_cmd_ignore_add(char *origin, char *target)
 	/* Are we already ignoring this mask? */
 	LIST_FOREACH(n, svs_ignore_list.head)
 	{
-		temp = (char *)n->data;
+		svsignore = (svsignore_t *)n->data;
 
 		/* We're here */
-		if (!strcasecmp(temp, target))
+		if (!strcasecmp(svsignore->mask, target))
 		{
-			notice(opersvs.nick, origin, "The mask \2%s\2 already exists on the services ignore list.", temp);
+			notice(opersvs.nick, origin, "The mask \2%s\2 already exists on the services ignore list.", svsignore->mask);
 			return;
 		}
 	}
 
-	/* Continue to add */
-	temp = sstrdup(target);
+	svsignore = svsignore_add(target, reason);
+	svsignore->setby = sstrdup(origin);
+	svsignore->settime = CURRTIME;
 
-	node = node_create();
-	node_add(temp, node, &svs_ignore_list);
 	notice(opersvs.nick, origin, "\2%s\2 has been added to the services ignore list.", target);
 
 	logcommand(opersvs.me, u, CMDLOG_ADMIN, "IGNORE ADD %s");
@@ -129,7 +129,7 @@ static void os_cmd_ignore_del(char *origin, char *target)
 {
 	user_t *u = user_find(origin);
 	node_t *n, *tn;
-	char *temp;
+	svsignore_t *svsignore;
 
 	if (target == NULL)
 	{
@@ -140,19 +140,20 @@ static void os_cmd_ignore_del(char *origin, char *target)
 
 	LIST_FOREACH_SAFE(n, tn, svs_ignore_list.head)
 	{
-		temp = (char *)n->data;
+		svsignore = (svsignore_t *)n->data;
 
-		if (!strcasecmp(temp,target))
+		if (!strcasecmp(svsignore->mask,target))
 		{
-			notice(opersvs.nick, origin, "\2%s\2 has been removed from the services ignore list.", target);
+			notice(opersvs.nick, origin, "\2%s\2 has been removed from the services ignore list.", svsignore->mask);
 
 			node_del(n,&svs_ignore_list);
 			node_free(n);
+			free(svsignore->mask);
+			free(svsignore->setby);
+			free(svsignore->reason);
 
 			wallops("%s removed \2%s\2 from the services ignore list.", origin, target);
 			logcommand(opersvs.me, u, CMDLOG_ADMIN, "IGNORE DEL %s", target);
-
-			free(temp);
 
 			return;
 		}
@@ -194,6 +195,7 @@ static void os_cmd_ignore_list(char *origin, char *arg)
 	user_t *u = user_find(origin);
 	node_t *n;
 	uint8_t i = 1;
+	svsignore_t *svsignore;
 
 	if (LIST_LENGTH(&svs_ignore_list) == 0)
 	{
@@ -206,7 +208,9 @@ static void os_cmd_ignore_list(char *origin, char *arg)
 
 	LIST_FOREACH(n, svs_ignore_list.head)
 	{
-		notice(opersvs.nick, origin, "%d - %s ", i, (char *)n->data);
+		svsignore = (svsignore_t *)n->data;
+
+		notice(opersvs.nick, origin, "%d - %s by %s on %d (Reason: %s)", i, svsignore->mask, svsignore->setby, svsignore->settime, svsignore->reason);
 		i++;
 	}
 

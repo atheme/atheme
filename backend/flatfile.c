@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 4501 2006-01-05 04:40:09Z pfish $
+ * $Id: flatfile.c 4507 2006-01-06 08:31:28Z pfish $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 4501 2006-01-05 04:40:09Z pfish $",
+	"$Id: flatfile.c 4507 2006-01-06 08:31:28Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -161,12 +161,13 @@ static void flatfile_db_save(void *arg)
 	/* Services ignores */
 	slog(LG_DEBUG, "db_save(): saving svsignores");
 
-	LIST_FOREACH(tn, svs_ignore_list.head)
+	LIST_FOREACH(n, svs_ignore_list.head)
 	{
-		svsignore_t *svsignore = (svsignore_t *)tn->data;
+		svsignore_t *svsignore = (svsignore_t *)n->data;
 
 		/* SI <mask> <settime> <setby> <reason> */
-		fprintf(f, "SI %s\n", (char *)tn->data);
+		fprintf(f, "SI %s %d %s %s\n", svsignore->mask, (long)svsignore->settime, svsignore->setby, svsignore->reason);
+		// fprintf(f, "SI %s\n", svsignore->mask);
 	}
 
 
@@ -208,6 +209,7 @@ static void flatfile_db_load(void)
 	mychan_t *mc;
 	kline_t *k;
 	node_t *n;
+	svsignore_t *svsignore;
 	uint32_t i = 0, linecnt = 0, muin = 0, mcin = 0, cain = 0, kin = 0;
 	FILE *f = fopen("etc/atheme.db", "r");
 	char *item, *s, dBuf[BUFSIZE];
@@ -550,14 +552,21 @@ static void flatfile_db_load(void)
 		/* Services ignores */
 		if (!strcmp("SI", item))
 		{
-			char *mask, *strbuf;
+			char *mask, *setby, *reason, *tmp;
+			time_t settime;
 
-			mask = strtok(NULL, "\n");
-			
+			mask = strtok(NULL, " ");
+                        tmp = strtok(NULL, " ");
+			settime = atol(tmp);
+			setby = strtok(NULL, " ");
+			reason = strtok(NULL, "");
 
-			strbuf = smalloc(sizeof(char[HOSTLEN]));
-			strlcpy(strbuf,mask,HOSTLEN-1);
-			node_add(strbuf, node_create(), &svs_ignore_list);
+			strip(reason);
+
+			svsignore = svsignore_add(mask, reason);
+			svsignore->settime = settime;
+			svsignore->setby = sstrdup(setby);
+
 		}
 
 		/* klines */
