@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 4507 2006-01-06 08:31:28Z pfish $
+ * $Id: account.h 4519 2006-01-06 11:12:49Z pfish $
  */
 
 #ifndef ACCOUNT_H
@@ -35,7 +35,7 @@ struct svsignore_ {
   svsignore_t *svsignore;
 
   char *mask;
-  time_t *settime;
+  time_t settime;
   char *setby;
   char *reason;
 };
