@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4507 2006-01-06 08:31:28Z pfish $
+ * $Id: node.c 4515 2006-01-06 08:50:07Z pfish $
  */
 
 #include "atheme.h"
@@ -374,9 +374,6 @@ svsignore_t *svsignore_add(char *mask, char *reason)
 {
 	svsignore_t *svsignore;
 	node_t *n = node_create();
-
-	slog(LG_DEBUG, "svsignore_add(): mask: %s", mask);
-	slog(LG_DEBUG, "svsignore_add(): reason: %s", reason);
 
 	svsignore = BlockHeapAlloc(svsignore_heap);
 

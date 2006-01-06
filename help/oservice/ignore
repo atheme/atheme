@@ -1,6 +1,6 @@
 Help for IGNORE:
 
-Services has an ignore list which functions similarly to the way a user can ignore another user. If a user matches a mask in the ignore list and attempts to use services, he or she will not get a reply. Ignores do not affect IRC operators.
+Services has an ignore list which functions similarly to the way a user can ignore another user. If a user matches a mask in the ignore list and attempts to use services, he or she will not get a reply.
 
 ADD - Add a mask to the ignore list.
 DEL - Delete a mask from the ignore list.
