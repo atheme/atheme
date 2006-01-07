@@ -4,7 +4,7 @@
  *
  * This file contains a generic help system implementation.
  *
- * $Id: help.c 4189 2005-12-26 00:02:24Z jilles $
+ * $Id: help.c 4533 2006-01-07 17:24:23Z nenolod $
  */
 
 #include "atheme.h"
@@ -82,6 +82,8 @@ void help_addentry(list_t *list, char *topic, char *fname,
 {
 	helpentry_t *he = smalloc(sizeof(helpentry_t));
 	node_t *n;
+
+	memset(he, 0, sizeof(helpentry_t));
 
 	if (!list && !topic && !func && !fname)
 	{

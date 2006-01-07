@@ -1,3 +1,13 @@
+pfish       2006/01/07 10:05:23 UTC	(20060107-4531)
+  Log:
+  - Formatting change to match AKILL LIST
+  - Show the settime in a nice way instead of using epoch time
+  
+
+  Changes:	Modified:
+  +8 -3		trunk/modules/operserv/ignore.c (File Modified) 
+
+
 nenolod     2006/01/07 02:17:39 UTC	(20060107-4529)
   Log:
   SolidIRCd protocol support, provided by sheik@solid-ircd.com.
