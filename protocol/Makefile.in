@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 4483 2006-01-04 15:34:35Z jilles $
+# $Id: Makefile.in 4529 2006-01-07 02:17:39Z nenolod $
 #
 
 CC		= @CC@
@@ -46,6 +46,7 @@ BASE_SRCS = 		\
 	ptlink.c	\
 	ratbox.c        \
 	shadowircd.c    \
+	solidircd.c	\
 	sorcery.c       \
 	ultimate3.c	\
 	undernet.c      \

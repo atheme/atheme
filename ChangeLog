@@ -1,3 +1,13 @@
+pfish       2006/01/07 00:28:17 UTC	(20060107-4527)
+  Log:
+  - Grammar fix
+  - Expand AKILL why to show what mask is matching.
+  
+
+  Changes:	Modified:
+  +10 -26	trunk/modules/chanserv/why.c (File Modified) 
+
+
 pfish       2006/01/06 11:31:57 UTC	(20060106-4525)
   Log:
   Wait, what was I thinking? Don't allow if channel is closed.

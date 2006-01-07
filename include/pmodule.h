@@ -4,7 +4,7 @@
  *
  * Protocol module stuff.
  *
- * $Id: pmodule.h 4039 2005-12-08 10:09:05Z w00t $
+ * $Id: pmodule.h 4529 2006-01-07 02:17:39Z nenolod $
  */
 
 #ifndef PMODULE_H
@@ -28,8 +28,10 @@ E pcommand_t *pcommand_find(char *token);
 E boolean_t pmodule_loaded;
 E boolean_t backend_loaded;
 
-
-/* XXX - what the HELL are these used for? A grep reveals nothing.. --w00t */
+/*  -- what the HELL are these used for? A grep reveals nothing.. --w00t
+ *  -- they are used to provide a hint to third-party module coders about what
+ *     ircd they are working with. --nenolod
+ */
 #define PROTOCOL_ASUKA			1
 #define PROTOCOL_BAHAMUT		2
 #define PROTOCOL_CHARYBDIS		3
@@ -47,6 +49,7 @@ E boolean_t backend_loaded;
 #define PROTOCOL_ULTIMATE3		15
 #define PROTOCOL_UNDERNET		16
 #define PROTOCOL_UNREAL			17
+#define PROTOCOL_SOLIDIRCD		18
 
 #define PROTOCOL_OTHER			255
 
