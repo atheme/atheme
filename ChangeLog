@@ -1,3 +1,15 @@
+nenolod     2006/01/07 02:17:39 UTC	(20060107-4529)
+  Log:
+  SolidIRCd protocol support, provided by sheik@solid-ircd.com.
+  
+
+  Changes:	Modified:
+  +35 -2	trunk/include/pmodule.h (File Modified) 
+  + -		trunk/include/protocol/solidircd.h (File Added) 
+  +1 -0		trunk/protocol/Makefile.in (File Modified) 
+  +828 -0	trunk/protocol/solidircd.c (File Added) 
+
+
 pfish       2006/01/07 00:28:17 UTC	(20060107-4527)
   Log:
   - Grammar fix
