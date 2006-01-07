@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ MYACCESS function.
  *
- * $Id: why.c 4525 2006-01-06 11:31:57Z pfish $
+ * $Id: why.c 4527 2006-01-07 00:28:17Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/why", FALSE, _modinit, _moddeinit,
-	"$Id: why.c 4525 2006-01-06 11:31:57Z pfish $",
+	"$Id: why.c 4527 2006-01-07 00:28:17Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -44,7 +44,7 @@ static void cs_cmd_why(char *origin)
 	char *targ = strtok(NULL, " ");
 	char host[BUFSIZE];
 	mychan_t *mc;
-	user_t *u, *tu;
+	user_t *u;
 	user_t *ou = user_find(origin);
 	myuser_t *mu;
 	node_t *n;
@@ -60,17 +60,16 @@ static void cs_cmd_why(char *origin)
 	}
 
 	mc = mychan_find(chan);
-	u = user_find_named(origin);
-	tu = user_find_named(targ);
+	u = user_find_named(targ);
 
-	if (tu == NULL)
+	if (u == NULL)
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is not online.",
 			targ);
 		return;
 	}
 
-	mu = tu->myuser;
+	mu = u->myuser;
 
 	if (mc == NULL)
 	{
@@ -78,18 +77,8 @@ static void cs_cmd_why(char *origin)
 			chan);
 		return;
 	}
-
-	if (!chanacs_user_has_flag(mc, u, CA_ACLVIEW))
-	{
-		if (has_priv(u, PRIV_CHAN_AUSPEX))
-			operoverride = 1;
-
-		else
-		{
-			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
-			return;
-		}
-	}
+	
+	logcommand(chansvs.me, ou, CMDLOG_GET, "%s WHY %s!%s@%s", mc->name, u->nick, u->user, u->vhost);
 
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
@@ -104,12 +93,6 @@ static void cs_cmd_why(char *origin)
 		return;
 	}
 
-	if (operoverride)
-		logcommand(chansvs.me, ou, CMDLOG_ADMIN, "%s WHY %s!%s@%s", mc->name, u->nick, u->user, u->vhost);
-	else
-		logcommand(chansvs.me, ou, CMDLOG_GET, "%s WHY %s!%s@%s", mc->name, u->nick, u->user, u->vhost);
-
-
 	snprintf(host, BUFSIZE, "%s!%s@%s", u->nick, u->user, u->vhost);
 
 	LIST_FOREACH(n, mc->chanacs.head)
@@ -121,7 +104,7 @@ static void cs_cmd_why(char *origin)
 
 		if ((ca->level & CA_AUTOVOICE) == CA_AUTOVOICE)
 			notice(chansvs.nick, origin,
-				"\2%s\2 was granted voice in \2%s\2 because they have identified to the nickname %s which has the autovoice privilege", 
+				"\2%s\2 was granted voice in \2%s\2 because they have identified to the nickname %s which has the autovoice privilege.", 
 				targ, chan, ca->myuser);
 
 		if ((ca->level & CA_AUTOHALFOP) == CA_AUTOHALFOP)
@@ -136,7 +119,8 @@ static void cs_cmd_why(char *origin)
 
 		if ((ca->level & CA_AKICK) == CA_AKICK)
 			notice(chansvs.nick, origin,
-				"\2%s\2 was kicked from \2%s\2 because they are on the channel autokick list.",
-				targ, chan);
+				"\2%s\2 is autokicked from \2%s\2 because they match the mask \2%s\2 that is on the channel akick list.",
+				targ, chan, ca->host);
+
 	}
 }
