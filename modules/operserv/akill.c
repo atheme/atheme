@@ -5,7 +5,7 @@
  * This file contains functionality which implements
  * the OService AKILL/KLINE command.
  *
- * $Id: akill.c 4495 2006-01-05 00:36:09Z jilles $
+ * $Id: akill.c 4535 2006-01-08 22:33:36Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 4495 2006-01-05 00:36:09Z jilles $",
+	"$Id: akill.c 4535 2006-01-08 22:33:36Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -154,13 +154,13 @@ static void os_cmd_akill_add(char *origin, char *target)
 		if (is_internal_client(u))
 			return;
 
-		if ((k = kline_find(u->user, u->host)))
+		if ((k = kline_find("*", u->host)))
 		{
-			notice(opersvs.nick, origin, "AKILL \2%s@%s\2 is already matched in the database.", u->user, u->host);
+			notice(opersvs.nick, origin, "AKILL \2"*"@%s\2 is already matched in the database.", u->host);
 			return;
 		}
 
-		k = kline_add(u->user, u->host, reason, duration);
+		k = kline_add("*", u->host, reason, duration);
 		k->setby = sstrdup(origin);
 	}
 	else
@@ -206,7 +206,7 @@ static void os_cmd_akill_add(char *origin, char *target)
 	}
 
 	if (duration)
-		notice(opersvs.nick, origin, "Timed AKILL on \2%s@%s\2 was successfully added and will " "expire in %s.", k->user, k->host, timediff(duration));
+		notice(opersvs.nick, origin, "Timed AKILL on \2%s@%s\2 was successfully added and will expire in %s.", k->user, k->host, timediff(duration));
 	else
 		notice(opersvs.nick, origin, "AKILL on \2%s@%s\2 was successfully added.", k->user, k->host);
 
