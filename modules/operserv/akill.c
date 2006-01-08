@@ -5,7 +5,7 @@
  * This file contains functionality which implements
  * the OService AKILL/KLINE command.
  *
- * $Id: akill.c 4535 2006-01-08 22:33:36Z nenolod $
+ * $Id: akill.c 4537 2006-01-08 23:42:05Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 4535 2006-01-08 22:33:36Z nenolod $",
+	"$Id: akill.c 4537 2006-01-08 23:42:05Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -156,7 +156,7 @@ static void os_cmd_akill_add(char *origin, char *target)
 
 		if ((k = kline_find("*", u->host)))
 		{
-			notice(opersvs.nick, origin, "AKILL \2"*"@%s\2 is already matched in the database.", u->host);
+			notice(opersvs.nick, origin, "AKILL \2*@%s\2 is already matched in the database.", u->host);
 			return;
 		}
 
