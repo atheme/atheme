@@ -1,3 +1,12 @@
+jilles      2006/01/08 23:42:05 UTC	(20060108-4537)
+  Log:
+  Fix simple syntax error.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/operserv/akill.c (File Modified) 
+
+
 nenolod     2006/01/08 22:33:36 UTC	(20060108-4535)
   Log:
   Use *@host if given a nick, instead of user@host when AKILLing. It seems much more intutive this way...

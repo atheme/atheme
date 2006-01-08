@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 4477 2006-01-04 14:35:38Z jilles $
+ * $Id: function.c 4539 2006-01-08 23:46:58Z jilles $
  */
 
 #include "atheme.h"
@@ -77,11 +77,21 @@ void tb2sp(char *line)
 /* opens atheme.log */
 void log_open(void)
 {
+	static time_t lastfail = 0;
+
 	if (log_file)
 		return;
 
-	if (!(log_file = fopen("var/atheme.log", "a")))
-		exit(EXIT_FAILURE);
+	if ((log_file = fopen("var/atheme.log", "a")) == NULL)
+	{
+		/* At most one warning per hour */
+		if (me.connected && lastfail + 3600 < CURRTIME)
+		{
+			wallops("Could not open log file (%s), log entries will be missing!", strerror(errno)); 
+			lastfail = CURRTIME;
+		}
+		return;
+	}
 #ifndef _WIN32
 	fcntl(fileno(log_file), F_SETFD, FD_CLOEXEC);
 #endif

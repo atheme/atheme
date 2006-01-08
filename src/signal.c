@@ -4,7 +4,7 @@
  *
  * This file contains the signal handling routines.
  *
- * $Id: signal.c 2977 2005-10-17 15:10:27Z nenolod $
+ * $Id: signal.c 4539 2006-01-08 23:46:58Z jilles $
  */
 
 #include "atheme.h"
@@ -34,6 +34,12 @@ void sighandler(int signum)
 
 		if (!conf_rehash())
 			wallops("REHASH of \2%s\2 failed. Please corrrect any errors in the " "file and try again.", config_file);
+
+		/* reopen log file -- jilles */
+		if (log_file != NULL)
+			fclose(log_file);
+		log_file = NULL;
+		log_open();
 
 		return;
 	}

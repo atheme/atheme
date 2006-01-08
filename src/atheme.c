@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 4477 2006-01-04 14:35:38Z jilles $
+ * $Id: atheme.c 4539 2006-01-08 23:46:58Z jilles $
  */
 
 #include "atheme.h"
@@ -140,6 +140,8 @@ int main(int argc, char *argv[])
 
 	/* open log */
 	log_open();
+	if (log_file == NULL)
+		fprintf(stderr, "atheme: unable to open log file!\n");
 
 	/* since me.loglevel isn't there until after the
 	 * config routines run, we set the default here
@@ -325,7 +327,8 @@ int main(int argc, char *argv[])
 
 	slog(LG_INFO, "main(): shutting down");
 
-	fclose(log_file);
+	if (log_file != NULL)
+		fclose(log_file);
 
 	return 0;
 }
