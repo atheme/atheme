@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 4481 2006-01-04 15:24:07Z jilles $
+ * $Id: hyperion.c 4541 2006-01-09 00:23:52Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -15,7 +15,7 @@
 #include "atheme.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 4481 2006-01-04 15:24:07Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 4541 2006-01-09 00:23:52Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -262,7 +262,7 @@ static void hyperion_kline_sts(char *server, char *user, char *host, long durati
 		return;
 
 	if (duration)
-		sts(":%s KLINE %s %ld %s@%s :%s", me.name, me.name, (duration / 60), user, host, reason);
+		sts(":%s KLINE %s %ld %s@%s :%s", me.name, me.name, duration > 60 ? (duration / 60) : 1, user, host, reason);
 	else
 		sts(":%s KLINE %s %s@%s :%s", me.name, me.name, user, host, reason);
 }

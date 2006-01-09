@@ -1,3 +1,17 @@
+jilles      2006/01/08 23:46:58 UTC	(20060108-4539)
+  Log:
+  - Reopen log file on SIGHUP (but not on /os rehash)
+  - Don't silently exit if we can't open the log file.
+    Warn to stderr at startup and in wallops (at most
+    once per hour) and drop the log entries.
+  
+
+  Changes:	Modified:
+  +4 -1		trunk/src/atheme.c (File Modified) 
+  +12 -2	trunk/src/function.c (File Modified) 
+  +6 -0		trunk/src/signal.c (File Modified) 
+
+
 jilles      2006/01/08 23:42:05 UTC	(20060108-4537)
   Log:
   Fix simple syntax error.
