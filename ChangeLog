@@ -1,3 +1,26 @@
+jilles      2006/01/09 23:27:17 UTC	(20060109-4549)
+  Log:
+  Remove lots more snoops, the main ones left are usages
+  of oper privs, registrations, drops, expiries, transfers.
+  
+
+  Changes:	Modified:
+  +2 -18	trunk/modules/chanserv/set.c (File Modified) 
+  +0 -1		trunk/modules/chanserv/taxonomy.c (File Modified) 
+  +0 -3		trunk/modules/nickserv/ghost.c (File Modified) 
+  +0 -3		trunk/modules/nickserv/identify.c (File Modified) 
+  +0 -2		trunk/modules/nickserv/logout.c (File Modified) 
+  +3 -12	trunk/modules/nickserv/set.c (File Modified) 
+  +0 -1		trunk/modules/nickserv/taxonomy.c (File Modified) 
+  +0 -2		trunk/modules/userserv/info.c (File Modified) 
+  +0 -3		trunk/modules/userserv/login.c (File Modified) 
+  +0 -2		trunk/modules/userserv/logout.c (File Modified) 
+  +3 -12	trunk/modules/userserv/set.c (File Modified) 
+  +0 -1		trunk/modules/userserv/taxonomy.c (File Modified) 
+  +1 -1		trunk/src/commandtree.c (File Modified) 
+  +0 -2		trunk/src/ptasks.c (File Modified) 
+
+
 nenolod     2006/01/09 20:29:47 UTC	(20060109-4547)
   Log:
   verbose_wallops() on AKILL ADD/DEL/EXPIRE.

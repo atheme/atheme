@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 4549 2006-01-09 23:27:17Z jilles $
+ * $Id: ptasks.c 4551 2006-01-09 23:34:17Z jilles $
  */
 
 #include "atheme.h"
@@ -15,6 +15,8 @@ void handle_info(char *origin)
 	user_t *u = user_find(origin);
 
 	if (u == NULL)
+		return;
+	if (floodcheck(u, NULL))
 		return;
 
 	for (i = 0; infotext[i]; i++)
@@ -28,6 +30,8 @@ void handle_version(char *origin)
 	user_t *u = user_find(origin);
 
 	if (u == NULL)
+		return;
+	if (floodcheck(u, NULL))
 		return;
 
 	numeric_sts(me.name, 351, CLIENT_NAME(u), ":atheme-%s. %s %s%s%s%s%s%s%s%s%s",
@@ -47,6 +51,9 @@ void handle_admin(char *origin)
 	if (u == NULL)
 		return;
 
+	if (floodcheck(u, NULL))
+		return;
+
 	numeric_sts(me.name, 256, CLIENT_NAME(u), ":Administrative info about %s", me.name);
 	numeric_sts(me.name, 257, CLIENT_NAME(u), ":%s", me.adminname);
 	numeric_sts(me.name, 258, CLIENT_NAME(u), ":Atheme IRC Services (atheme-%s)", version);
@@ -61,6 +68,10 @@ void handle_stats(char *origin, char req)
 	uplink_t *uplink;
 	soper_t *soper;
 	int i;
+
+	if (floodcheck(u, NULL))
+		return;
+	logcommand(NULL, u, CMDLOG_GET, "STATS %c", req);
 
 	switch (req)
 	{
@@ -190,6 +201,9 @@ void handle_whois(char *origin, char *target)
 
 	if (u == NULL)
 		return;
+	if (floodcheck(u, NULL))
+		return;
+
 	if (t != NULL)
 	{
 		numeric_sts(me.name, 311, CLIENT_NAME(u), "%s %s %s * :%s", t->nick, t->user, t->vhost, t->gecos);
@@ -224,6 +238,8 @@ void handle_trace(char *origin, char *target, char *dest)
 	int nusers;
 
 	if (u == NULL)
+		return;
+	if (floodcheck(u, NULL))
 		return;
 	if (!match(target, me.name) || !irccasecmp(target, ME))
 	{
