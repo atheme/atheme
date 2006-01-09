@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4515 2006-01-06 08:50:07Z pfish $
+ * $Id: node.c 4547 2006-01-09 20:29:47Z nenolod $
  */
 
 #include "atheme.h"
@@ -1264,7 +1264,11 @@ void kline_expire(void *arg)
 
 		if (k->expires <= CURRTIME)
 		{
-			snoop("KLINE:EXPIRE: \2%s@%s\2 set \2%s\2 ago by \2%s\2", k->user, k->host, time_ago(k->settime), k->setby);
+			snoop("KLINE:EXPIRE: \2%s@%s\2 set \2%s\2 ago by \2%s\2",
+				k->user, k->host, time_ago(k->settime), k->setby);
+
+			verbose_wallops("AKILL expired on \2%s@%s\2, set by \2%s\2",
+				k->user, k->host, k->setby);
 
 			kline_delete(k->user, k->host);
 		}

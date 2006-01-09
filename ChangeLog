@@ -1,3 +1,19 @@
+nenolod     2006/01/09 20:23:25 UTC	(20060109-4545)
+  Log:
+  New option: verbose_wallops. This option will (soon) cause services to provide more information on things like AKILL 
+  expiry, AKILL add, AKILL delete, etcetera. YOU SHOULD TAKE GREAT CARE WITH ENABLING THIS OPTION AS IT MAY CREATE LARGE 
+  AMOUNTS OF FEEDBACK LATER ON.
+  
+
+  Changes:	Modified:
+  +9 -0		trunk/dist/example.conf (File Modified) 
+  +9 -0		trunk/dist/example.userserv.conf (File Modified) 
+  +2 -0		trunk/include/atheme.h (File Modified) 
+  +2 -0		trunk/include/extern.h (File Modified) 
+  +8 -0		trunk/src/conf.c (File Modified) 
+  +15 -0	trunk/src/services.c (File Modified) 
+
+
 jilles      2006/01/09 01:04:34 UTC	(20060109-4543)
   Log:
   Support inspircd's weird PING/PONG scheme, in such
