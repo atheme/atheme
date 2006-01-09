@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 4481 2006-01-04 15:24:07Z jilles $
+ * $Id: inspircd.c 4543 2006-01-09 01:04:34Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4481 2006-01-04 15:24:07Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4543 2006-01-09 01:04:34Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -284,7 +284,7 @@ static void inspircd_ping_sts(void)
 	if (!me.connected)
 		return;
 
-	sts(":%s PING :%s", me.name, me.name);
+	sts(":%s PING :%s", me.name, curr_uplink->name);
 }
 
 /* protocol-specific stuff to do on login */
@@ -360,13 +360,13 @@ static void m_ftopic(char *origin, uint8_t parc, char *parv[])
 static void m_ping(char *origin, uint8_t parc, char *parv[])
 {
 	/* reply to PING's */
-	sts(":%s PONG %s %s", me.name, me.name, parv[0]);
+	sts(":%s PONG %s", me.name, parv[0]);
 }
 
 static void m_pong(char *origin, uint8_t parc, char *parv[])
 {
 	/* someone replied to our PING */
-	if ((!parv[0]) || (strcasecmp(me.actual, parv[0])))
+	if (origin != NULL && strcasecmp(me.actual, origin))
 		return;
 
 	me.uplinkpong = CURRTIME;

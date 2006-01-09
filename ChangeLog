@@ -1,3 +1,12 @@
+jilles      2006/01/09 00:23:52 UTC	(20060109-4541)
+  Log:
+  This one needs some extra effort to avoid "0" durations.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/hyperion.c (File Modified) 
+
+
 jilles      2006/01/08 23:46:58 UTC	(20060108-4539)
   Log:
   - Reopen log file on SIGHUP (but not on /os rehash)
