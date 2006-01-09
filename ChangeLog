@@ -1,3 +1,13 @@
+nenolod     2006/01/09 20:29:47 UTC	(20060109-4547)
+  Log:
+  verbose_wallops() on AKILL ADD/DEL/EXPIRE.
+  
+
+  Changes:	Modified:
+  +7 -0		trunk/modules/operserv/akill.c (File Modified) 
+  +5 -1		trunk/src/node.c (File Modified) 
+
+
 nenolod     2006/01/09 20:23:25 UTC	(20060109-4545)
   Log:
   New option: verbose_wallops. This option will (soon) cause services to provide more information on things like AKILL 

@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 4491 2006-01-05 00:06:26Z jilles $
+ * $Id: set.c 4549 2006-01-09 23:27:17Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 4491 2006-01-05 00:06:26Z jilles $",
+	"$Id: set.c 4549 2006-01-09 23:27:17Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -182,7 +182,6 @@ static void us_set_nomemo(char *origin, char *name, char *params)
                         return;
                 }
 
-                snoop("SET:NOMEMO:ON: for \2%s\2 by \2%s\2", mu->name, origin);
 		logcommand(usersvs.me, u, CMDLOG_SET, "SET NOMEMO ON");
                 mu->flags |= MU_NOMEMO;
                 notice(usersvs.nick, origin, "The \2NOMEMO\2 flag has been set for \2%s\2.", mu->name);
@@ -197,7 +196,6 @@ static void us_set_nomemo(char *origin, char *name, char *params)
                         return;
                 }
 
-                snoop("SET:NOMEMO:OFF: for \2%s\2 by \2%s\2", mu->name, origin);
 		logcommand(usersvs.me, u, CMDLOG_SET, "SET NOMEMO OFF");
                 mu->flags &= ~MU_NOMEMO;
                 notice(usersvs.nick, origin, "The \2NOMEMO\2 flag has been removed for \2%s\2.", mu->name);
@@ -235,7 +233,6 @@ static void us_set_emailmemos(char *origin, char *name, char *params)
                         return;
                 }
 
-                snoop("SET:EMAILMEMOS:ON: for \2%s\2 by \2%s\2", mu->name, origin);
 		logcommand(usersvs.me, u, CMDLOG_SET, "SET EMAILMEMOS ON");
                 mu->flags |= MU_EMAILMEMOS;
                 notice(usersvs.nick, origin, "The \2EMAILMEMOS\2 flag has been set for \2%s\2.", mu->name);
@@ -249,7 +246,6 @@ static void us_set_emailmemos(char *origin, char *name, char *params)
                         return;
                 }
 
-                snoop("SET:EMAILMEMOS:OFF: for \2%s\2 by \2%s\2", mu->name, origin);
                 mu->flags &= ~MU_EMAILMEMOS;
 		logcommand(usersvs.me, u, CMDLOG_SET, "SET EMAILMEMOS OFF");
                 notice(usersvs.nick, origin, "The \2EMAILMEMOS\2 flag has been removed for \2%s\2.", mu->name);
@@ -289,7 +285,6 @@ static void us_set_hidemail(char *origin, char *name, char *params)
 			return;
 		}
 
-		snoop("SET:HIDEMAIL:ON: for \2%s\2", mu->name);
 		logcommand(usersvs.me, u, CMDLOG_SET, "SET HIDEMAIL ON");
 
 		mu->flags |= MU_HIDEMAIL;
@@ -307,7 +302,6 @@ static void us_set_hidemail(char *origin, char *name, char *params)
 			return;
 		}
 
-		snoop("SET:HIDEMAIL:OFF: for \2%s\2", mu->name);
 		logcommand(usersvs.me, u, CMDLOG_SET, "SET HIDEMAIL OFF");
 
 		mu->flags &= ~MU_HIDEMAIL;
@@ -349,7 +343,6 @@ static void us_set_neverop(char *origin, char *name, char *params)
 			return;
 		}
 
-		snoop("SET:NEVEROP:ON: for \2%s\2 by \2%s\2", mu->name, origin);
 		logcommand(usersvs.me, u, CMDLOG_SET, "SET NEVEROP ON");
 
 		mu->flags |= MU_NEVEROP;
@@ -367,7 +360,6 @@ static void us_set_neverop(char *origin, char *name, char *params)
 			return;
 		}
 
-		snoop("SET:NEVEROP:OFF: for \2%s\2 by \2%s\2", mu->name, origin);
 		logcommand(usersvs.me, u, CMDLOG_SET, "SET NEVEROP OFF");
 
 		mu->flags &= ~MU_NEVEROP;
@@ -410,7 +402,6 @@ static void us_set_noop(char *origin, char *name, char *params)
 			return;
 		}
 
-		snoop("SET:NOOP:ON: for \2%s\2", mu->name);
 		logcommand(usersvs.me, u, CMDLOG_SET, "SET NOOP ON");
 
 		mu->flags |= MU_NOOP;
@@ -428,7 +419,6 @@ static void us_set_noop(char *origin, char *name, char *params)
 			return;
 		}
 
-		snoop("SET:NOOP:OFF: for \2%s\2", mu->name);
 		logcommand(usersvs.me, u, CMDLOG_SET, "SET NOOP OFF");
 
 		mu->flags &= ~MU_NOOP;
@@ -476,7 +466,8 @@ static void us_set_property(char *origin, char *name, char *params)
 		return;
 	}
 
-	snoop("SET:PROPERTY: \2%s\2: \2%s\2/\2%s\2", mu->name, property, value);
+	if (strchr(property, ':'))
+		snoop("SET:PROPERTY: \2%s\2: \2%s\2/\2%s\2", mu->name, property, value);
 
 	if (mu->metadata.count > me.mdlimit)
 	{
@@ -543,7 +534,7 @@ static void us_set_password(char *origin, char *name, char *params)
 		return;
 	}
 
-	snoop("SET:PASSWORD: \2%s\2 as \2%s\2 for \2%s\2", u->nick, mu->name, mu->name);
+	/*snoop("SET:PASSWORD: \2%s\2 as \2%s\2 for \2%s\2", u->nick, mu->name, mu->name);*/
 	logcommand(usersvs.me, u, CMDLOG_SET, "SET PASSWORD");
 
 	set_password(mu, password);

@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 4491 2006-01-05 00:06:26Z jilles $
+ * $Id: set.c 4549 2006-01-09 23:27:17Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 4491 2006-01-05 00:06:26Z jilles $",
+	"$Id: set.c 4549 2006-01-09 23:27:17Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -141,8 +141,6 @@ static void cs_set_email(char *origin, char *name, char *params)
         /* we'll overwrite any existing metadata */
         metadata_add(mc, METADATA_CHANNEL, "email", mail);
 
-        snoop("SET:EMAIL \2%s\2 on \2%s\2.", mail, mc->name);
-
 	logcommand(chansvs.me, u, CMDLOG_SET, "%s SET EMAIL %s", mc->name, mail);
         notice(chansvs.nick, origin, "The e-mail address for \2%s\2 has been set to \2%s\2.", name, mail);
 }
@@ -192,8 +190,6 @@ static void cs_set_url(char *origin, char *name, char *params)
 	/* we'll overwrite any existing metadata */
 	metadata_add(mc, METADATA_CHANNEL, "url", url);
 
-	snoop("SET:URL \2%s\2 on \2%s\2.", url, mc->name);
-
 	logcommand(chansvs.me, u, CMDLOG_SET, "%s SET URL %s", mc->name, url);
 	notice(chansvs.nick, origin, "The URL of \2%s\2 has been set to \2%s\2.", name, url);
 }
@@ -235,8 +231,6 @@ static void cs_set_entrymsg(char *origin, char *name, char *params)
 
 	/* we'll overwrite any existing metadata */
 	metadata_add(mc, METADATA_CHANNEL, "private:entrymsg", params);
-
-	snoop("SET:ENTRYMSG \2%s\2 on \2%s\2.", params, mc->name);
 
 	logcommand(chansvs.me, u, CMDLOG_SET, "%s SET ENTRYMSG %s", mc->name, params);
 	notice(chansvs.nick, origin, "The entry message for \2%s\2 has been set to \2%s\2", name, params);
@@ -543,13 +537,11 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 	if (*modebuf)
 	{
 		notice(chansvs.nick, origin, "The MLOCK for \2%s\2 has been set to \2%s\2.", mc->name, modebuf);
-		snoop("SET:MLOCK: \2%s\2 to \2%s\2 by \2%s\2", mc->name, modebuf, origin);
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET MLOCK %s", mc->name, modebuf);
 	}
 	else
 	{
 		notice(chansvs.nick, origin, "The MLOCK for \2%s\2 has been removed.", mc->name);
-		snoop("SET:MLOCK:OFF: \2%s\2 by \2%s\2", mc->name, origin);
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET MLOCK NONE", mc->name);
 	}
 
@@ -589,7 +581,6 @@ static void cs_set_keeptopic(char *origin, char *name, char *params)
                         return;
                 }
 
-                snoop("SET:KEEPTOPIC:ON: for \2%s\2 by \2%s\2", mc->name, origin);
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET KEEPTOPIC ON", mc->name);
 
                 mc->flags |= MC_KEEPTOPIC;
@@ -607,7 +598,6 @@ static void cs_set_keeptopic(char *origin, char *name, char *params)
                         return;
                 }
 
-                snoop("SET:KEEPTOPIC:OFF: for \2%s\2 by \2%s\2", mc->name, origin);
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET KEEPTOPIC OFF", mc->name);
 
                 mc->flags &= ~MC_KEEPTOPIC;
@@ -655,7 +645,6 @@ static void cs_set_secure(char *origin, char *name, char *params)
 			return;
 		}
 
-		snoop("SET:SECURE:ON: for \2%s\2 by \2%s\2", mc->name, origin);
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET SECURE ON", mc->name);
 
 		mc->flags |= MC_SECURE;
@@ -673,7 +662,6 @@ static void cs_set_secure(char *origin, char *name, char *params)
 			return;
 		}
 
-		snoop("SET:SECURE:OFF: for \2%s\2 by \2%s\2", mc->name, origin);
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET SECURE OFF", mc->name);
 
 		mc->flags &= ~MC_SECURE;
@@ -721,7 +709,6 @@ static void cs_set_verbose(char *origin, char *name, char *params)
 			return;
 		}
 
-		snoop("SET:VERBOSE:ON: for \2%s\2 by \2%s\2", mc->name, origin);
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET VERBOSE ON", mc->name);
 
  		mc->flags &= ~MC_VERBOSE_OPS;
@@ -741,7 +728,6 @@ static void cs_set_verbose(char *origin, char *name, char *params)
 			return;
 		}
 
-		snoop("SET:VERBOSE:OPS: for \2%s\2 by \2%s\2", mc->name, origin);
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET VERBOSE OPS", mc->name);
 
 		if (mc->flags & MC_VERBOSE)
@@ -768,7 +754,6 @@ static void cs_set_verbose(char *origin, char *name, char *params)
 			return;
 		}
 
-		snoop("SET:VERBOSE:OFF: for \2%s\2 by \2%s\2", mc->name, origin);
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET VERBOSE OFF", mc->name);
 
 		if (mc->flags & MC_VERBOSE)
@@ -824,7 +809,6 @@ static void cs_set_fantasy(char *origin, char *name, char *params)
 
 		metadata_delete(mc, METADATA_CHANNEL, "disable_fantasy");
 
-		snoop("SET:FANTASY:ON: for \2%s\2 by \2%s\2", mc->name, origin);
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET FANTASY ON", mc->name);
 		notice(chansvs.nick, origin, "The \2FANTASY\2 flag has been set for \2%s\2.", mc->name);
 		return;
@@ -841,7 +825,6 @@ static void cs_set_fantasy(char *origin, char *name, char *params)
 
 		metadata_add(mc, METADATA_CHANNEL, "disable_fantasy", "on");
 
-		snoop("SET:FANTASY:OFF: for \2%s\2 by \2%s\2", mc->name, origin);
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET FANTASY OFF", mc->name);
 		notice(chansvs.nick, origin, "The \2FANTASY\2 flag has been removed for \2%s\2.", mc->name);
 		return;
@@ -958,7 +941,8 @@ static void cs_set_property(char *origin, char *name, char *params)
 		return;
 	}
 
-        snoop("SET:PROPERTY: \2%s\2: \2%s\2/\2%s\2", mc->name, property, value);
+        if (strchr(property, ':'))
+        	snoop("SET:PROPERTY: \2%s\2: \2%s\2/\2%s\2", mc->name, property, value);
 
 	if (!value)
 	{

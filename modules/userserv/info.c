@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 4491 2006-01-05 00:06:26Z jilles $
+ * $Id: info.c 4549 2006-01-09 23:27:17Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 4491 2006-01-05 00:06:26Z jilles $",
+	"$Id: info.c 4549 2006-01-09 23:27:17Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -58,8 +58,6 @@ static void us_cmd_info(char *origin)
 		notice(usersvs.nick, origin, "\2%s\2 is not registered.", name);
 		return;
 	}
-
-	snoop("INFO: \2%s\2 by \2%s\2", name, origin);
 
 	tm = *localtime(&mu->registered);
 	strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);

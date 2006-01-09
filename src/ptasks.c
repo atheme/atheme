@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 4499 2006-01-05 01:36:50Z pfish $
+ * $Id: ptasks.c 4549 2006-01-09 23:27:17Z jilles $
  */
 
 #include "atheme.h"
@@ -61,8 +61,6 @@ void handle_stats(char *origin, char req)
 	uplink_t *uplink;
 	soper_t *soper;
 	int i;
-
-	snoop("STATS:%c: \2%s\2", req, u->nick);
 
 	switch (req)
 	{

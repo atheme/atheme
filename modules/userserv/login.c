@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: login.c 4491 2006-01-05 00:06:26Z jilles $
+ * $Id: login.c 4549 2006-01-09 23:27:17Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/login", FALSE, _modinit, _moddeinit,
-	"$Id: login.c 4491 2006-01-05 00:06:26Z jilles $",
+	"$Id: login.c 4549 2006-01-09 23:27:17Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -106,8 +106,6 @@ static void us_cmd_login(char *origin)
 		        }
 		        u->myuser = NULL;
 		}
-
-		/*snoop("LOGIN:AS: \2%s\2 to \2%s\2", u->nick, mu->name);*/
 
 		if (is_soper(mu))
 		{
@@ -239,7 +237,6 @@ static void us_cmd_login(char *origin)
 		return;
 	}
 
-	snoop("LOGIN:AF: \2%s\2 to \2%s\2", u->nick, mu->name);
 	logcommand(usersvs.me, u, CMDLOG_LOGIN, "failed LOGIN to %s (bad password)", mu->name);
 
 	notice(usersvs.nick, origin, "Invalid password for \2%s\2.", mu->name);

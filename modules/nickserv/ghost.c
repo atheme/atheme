@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ GHOST function.
  *
- * $Id: ghost.c 4491 2006-01-05 00:06:26Z jilles $
+ * $Id: ghost.c 4549 2006-01-09 23:27:17Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/ghost", FALSE, _modinit, _moddeinit,
-	"$Id: ghost.c 4491 2006-01-05 00:06:26Z jilles $",
+	"$Id: ghost.c 4549 2006-01-09 23:27:17Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -73,8 +73,6 @@ void ns_cmd_ghost(char *origin)
 
 	if (mu == u->myuser || (password && verify_password(mu, password)))
 	{
-		snoop("GHOST: \2%s\2 by \2%s\2", mu->name, u->nick);
-
 		skill(nicksvs.nick, target, "GHOST command used by %s!%s@%s", u->nick, u->user, u->vhost);
 		user_delete(target);
 
@@ -87,7 +85,6 @@ void ns_cmd_ghost(char *origin)
 		return;
 	}
 
-	snoop("GHOST:AF: \2%s\2 to \2%s\2", u->nick, mu->name);
 	logcommand(nicksvs.me, u, CMDLOG_DO, "failed GHOST %s (bad password)", target);
 
 	notice(nicksvs.nick, origin, "Invalid password for \2%s\2.", mu->name);
