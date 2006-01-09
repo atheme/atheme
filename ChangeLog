@@ -1,3 +1,14 @@
+jilles      2006/01/09 01:04:34 UTC	(20060109-4543)
+  Log:
+  Support inspircd's weird PING/PONG scheme, in such
+  a way that remote pings will probably work with
+  this code unchanged.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/protocol/inspircd.c (File Modified) 
+
+
 jilles      2006/01/09 00:23:52 UTC	(20060109-4541)
   Log:
   This one needs some extra effort to avoid "0" durations.

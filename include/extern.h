@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 4507 2006-01-06 08:31:28Z pfish $
+ * $Id: extern.h 4545 2006-01-09 20:23:25Z nenolod $
  */
 
 #ifndef EXTERN_H
@@ -314,5 +314,7 @@ E void help_delentry(list_t *list, char *name);
 /* pmodule.c */
 E BlockHeap *pcommand_heap;
 E BlockHeap *messagetree_heap;
+
+E void verbose_wallops(char *, ...);
 
 #endif /* EXTERN_H */

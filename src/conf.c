@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4521 2006-01-06 11:22:48Z jilles $
+ * $Id: conf.c 4545 2006-01-09 20:23:25Z nenolod $
  */
 
 #include "atheme.h"
@@ -114,6 +114,7 @@ static int c_la_translator(CONFIGENTRY *);
 
 static int c_gi_chan(CONFIGENTRY *);
 static int c_gi_silent(CONFIGENTRY *);
+static int c_gi_verbose_wallops(CONFIGENTRY *);
 static int c_gi_join_chans(CONFIGENTRY *);
 static int c_gi_leave_chans(CONFIGENTRY *);
 static int c_gi_uflags(CONFIGENTRY *);
@@ -463,6 +464,7 @@ void init_newconf(void)
 
 	/* general{} block. */
 	add_conf_item("CHAN", &conf_gi_table, c_gi_chan);
+	add_conf_item("VERBOSE_WALLOPS", &conf_gi_table, c_gi_verbose_wallops);
 	add_conf_item("SILENT", &conf_gi_table, c_gi_silent);
 	add_conf_item("JOIN_CHANS", &conf_gi_table, c_gi_join_chans);
 	add_conf_item("LEAVE_CHANS", &conf_gi_table, c_gi_leave_chans);
@@ -1159,6 +1161,12 @@ static int c_gi_chan(CONFIGENTRY *ce)
 static int c_gi_silent(CONFIGENTRY *ce)
 {
 	config_options.silent = TRUE;
+	return 0;
+}
+
+static int c_gi_verbose_wallops(CONFIGENTRY *ce)
+{
+	config_options.verbose_wallops = TRUE;
 	return 0;
 }
 
