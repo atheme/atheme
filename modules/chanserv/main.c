@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4499 2006-01-05 01:36:50Z pfish $
+ * $Id: main.c 4555 2006-01-10 09:54:29Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4499 2006-01-05 01:36:50Z pfish $",
+	"$Id: main.c 4555 2006-01-10 09:54:29Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -79,6 +79,7 @@ static void chanserv(char *origin, uint8_t parc, char *parv[])
 	if (parv[parc - 2][0] == '#')
 	{
 		metadata_t *md;
+		user_t *u = user_find(origin);
 
 		if (chansvs.fantasy == FALSE)
 		{
@@ -99,6 +100,10 @@ static void chanserv(char *origin, uint8_t parc, char *parv[])
 			/* fantasy disabled on this channel. don't message them, just bail. */
 			return;
 		}
+
+		/* run it through floodcheck which also checks for services ignore */
+		if (floodcheck(u, NULL))
+			return;
 
 		/* we're ok to go */
 		is_fcommand = TRUE;

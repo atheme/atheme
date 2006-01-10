@@ -1,3 +1,12 @@
+pfish       2006/01/10 09:32:01 UTC	(20060110-4553)
+  Log:
+  Use verbose_wallops() when removing an akill any way
+  
+
+  Changes:	Modified:
+  +13 -0	trunk/modules/operserv/akill.c (File Modified) 
+
+
 jilles      2006/01/09 23:34:17 UTC	(20060109-4551)
   Log:
   - Flood check info/admin/version/stats/whois/trace
