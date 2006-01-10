@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4093 2005-12-14 10:49:28Z pfish $
+ * $Id: main.c 4559 2006-01-10 12:04:41Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4093 2005-12-14 10:49:28Z pfish $",
+	"$Id: main.c 4559 2006-01-10 12:04:41Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -114,6 +114,9 @@ void _modinit(module_t *m)
 void _moddeinit(void)
 {
 	if (opersvs.me)
+	{
 		del_service(opersvs.me);
+		opersvs.me = NULL;
+	}
 }
 

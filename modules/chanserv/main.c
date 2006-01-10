@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4557 2006-01-10 11:50:01Z jilles $
+ * $Id: main.c 4559 2006-01-10 12:04:41Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4557 2006-01-10 11:50:01Z jilles $",
+	"$Id: main.c 4559 2006-01-10 12:04:41Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -209,7 +209,10 @@ void _modinit(module_t *m)
 void _moddeinit(void)
 {
 	if (chansvs.me)
+	{
 		del_service(chansvs.me);
+		chansvs.me = NULL;
+	}
 
 	hook_del_hook("channel_join", (void (*)(void *)) cs_join);
 	hook_del_hook("channel_part", (void (*)(void *)) cs_part);

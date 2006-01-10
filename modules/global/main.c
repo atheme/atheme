@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4491 2006-01-05 00:06:26Z jilles $
+ * $Id: main.c 4559 2006-01-10 12:04:41Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"global/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4491 2006-01-05 00:06:26Z jilles $",
+	"$Id: main.c 4559 2006-01-10 12:04:41Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -276,7 +276,10 @@ void _modinit(module_t *m)
 void _moddeinit(void)
 {
 	if (globsvs.me)
+	{
 		del_service(globsvs.me);
+		globsvs.me = NULL;
+	}
 
 	command_delete(&gs_global, &gs_cmdtree);
 
