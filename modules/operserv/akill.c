@@ -5,7 +5,7 @@
  * This file contains functionality which implements
  * the OService AKILL/KLINE command.
  *
- * $Id: akill.c 4547 2006-01-09 20:29:47Z nenolod $
+ * $Id: akill.c 4553 2006-01-10 09:32:01Z pfish $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 4547 2006-01-09 20:29:47Z nenolod $",
+	"$Id: akill.c 4553 2006-01-10 09:32:01Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -265,6 +265,9 @@ static void os_cmd_akill_del(char *origin, char *target)
 					}
 
 					notice(opersvs.nick, origin, "AKILL on \2%s@%s\2 has been successfully removed.", k->user, k->host);
+					verbose_wallops("\2%s\2 is \2removing\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2",
+						origin, k->user, k->host, k->reason);
+
 					snoop("AKILL:DEL: \2%s@%s\2 by \2%s\2", k->user, k->host, origin);
 					logcommand(opersvs.me, user_find(origin), CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
 					kline_delete(k->user, k->host);
@@ -282,6 +285,9 @@ static void os_cmd_akill_del(char *origin, char *target)
 			}
 
 			notice(opersvs.nick, origin, "AKILL on \2%s@%s\2 has been successfully removed.", k->user, k->host);
+			verbose_wallops("\2%s\2 is \2removing\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2",
+				origin, k->user, k->host, k->reason);
+
 			snoop("AKILL:DEL: \2%s@%s\2 by \2%s\2", k->user, k->host, origin);
 			logcommand(opersvs.me, user_find(origin), CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
 			kline_delete(k->user, k->host);
@@ -320,6 +326,9 @@ static void os_cmd_akill_del(char *origin, char *target)
 				}
 
 				notice(opersvs.nick, origin, "AKILL on \2%s@%s\2 has been successfully removed.", k->user, k->host);
+				verbose_wallops("\2%s\2 is \2removing\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2",
+					origin, k->user, k->host, k->reason);
+
 				snoop("AKILL:DEL: \2%s@%s\2 by \2%s\2", k->user, k->host, origin);
 				kline_delete(k->user, k->host);
 			}
@@ -336,6 +345,10 @@ static void os_cmd_akill_del(char *origin, char *target)
 		}
 
 		notice(opersvs.nick, origin, "AKILL on \2%s@%s\2 has been successfully removed.", k->user, k->host);
+
+		verbose_wallops("\2%s\2 is \2removing\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2",
+			origin, k->user, k->host, k->reason);
+
 		snoop("AKILL:DEL: \2%s@%s\2 by \2%s\2", k->user, k->host, origin);
 		logcommand(opersvs.me, user_find(origin), CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
 		kline_delete(k->user, k->host);

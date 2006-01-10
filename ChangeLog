@@ -1,3 +1,13 @@
+jilles      2006/01/09 23:34:17 UTC	(20060109-4551)
+  Log:
+  - Flood check info/admin/version/stats/whois/trace
+  - Log /stats usage
+  
+
+  Changes:	Modified:
+  +16 -0	trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2006/01/09 23:27:17 UTC	(20060109-4549)
   Log:
   Remove lots more snoops, the main ones left are usages
