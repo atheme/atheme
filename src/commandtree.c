@@ -4,7 +4,7 @@
  *
  * Commandtree manipulation routines.
  *
- * $Id: commandtree.c 4549 2006-01-09 23:27:17Z jilles $
+ * $Id: commandtree.c 4557 2006-01-10 11:50:01Z jilles $
  */
 
 #include "atheme.h"
@@ -172,4 +172,40 @@ void fcommand_exec(service_t *svs, char *channel, char *origin, char *cmd, list_
 
 	if (!channel || *channel != '#')
 		notice(svs->name, origin, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", svs->disp);
+}
+
+void fcommand_exec_floodcheck(service_t *svs, char *channel, char *origin, char *cmd, list_t *commandtree)
+{
+	node_t *n;
+	user_t *u = user_find(origin); /* Yeah, silly */
+
+	LIST_FOREACH(n, commandtree->head)
+	{
+		fcommand_t *c = n->data;
+
+		if (!strcasecmp(cmd, c->name))
+		{
+			/* run it through floodcheck which also checks for services ignore */
+			if (floodcheck(u, NULL))
+				return;
+
+			if (has_priv(u, c->access))
+			{
+				c->cmd(origin, channel);
+				return;
+			}
+			if (has_any_privs(u))
+				notice(svs->name, origin, "You do not have %s privilege.", c->access);
+			else
+				notice(svs->name, origin, "You are not authorized to perform this operation.");
+			return;
+		}
+	}
+
+	if (!channel || *channel != '#')
+	{
+		if (floodcheck(u, NULL))
+			return;
+		notice(svs->name, origin, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", svs->disp);
+	}
 }

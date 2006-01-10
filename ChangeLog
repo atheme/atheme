@@ -1,3 +1,13 @@
+pfish       2006/01/10 09:54:29 UTC	(20060110-4555)
+  Log:
+  Run fantasy commands through floodcheck. Floodcheck runs it through svsignore.
+  This resolves bug#111
+  
+
+  Changes:	Modified:
+  +5 -0		trunk/modules/chanserv/main.c (File Modified) 
+
+
 pfish       2006/01/10 09:32:01 UTC	(20060110-4553)
   Log:
   Use verbose_wallops() when removing an akill any way
