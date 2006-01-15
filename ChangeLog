@@ -1,3 +1,18 @@
+jilles      2006/01/10 12:04:41 UTC	(20060110-4559)
+  Log:
+  Clear out *svs.me on module unload.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/modules/chanserv/main.c (File Modified) 
+  +3 -0		trunk/modules/global/main.c (File Modified) 
+  +3 -0		trunk/modules/helpserv/main.c (File Modified) 
+  +3 -0		trunk/modules/memoserv/main.c (File Modified) 
+  +3 -0		trunk/modules/nickserv/main.c (File Modified) 
+  +3 -0		trunk/modules/operserv/main.c (File Modified) 
+  +3 -0		trunk/modules/userserv/main.c (File Modified) 
+
+
 jilles      2006/01/10 11:50:01 UTC	(20060110-4557)
   Log:
   Floodcheck only actual fantasy commands, not all channel

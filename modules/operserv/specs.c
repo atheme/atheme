@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService SPECS command.
  *
- * $Id: specs.c 4421 2006-01-02 12:43:17Z jilles $
+ * $Id: specs.c 4561 2006-01-15 18:55:58Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/specs", FALSE, _modinit, _moddeinit,
-	"$Id: specs.c 4421 2006-01-02 12:43:17Z jilles $",
+	"$Id: specs.c 4561 2006-01-15 18:55:58Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -62,7 +62,6 @@ struct
 	{ PRIV_SERVER_AUSPEX, NULL, NULL, "view concealed information", NULL },
 	{ PRIV_VIEWPRIVS, NULL, NULL, "view privileges of other users", NULL },
 	{ PRIV_FLOOD, NULL, NULL, "exempt from flood control", NULL },
-	{ PRIV_METADATA, NULL, NULL, "edit private metadata", NULL },
 	{ PRIV_ADMIN, NULL, NULL, "administer services", NULL },
 	{ PRIV_METADATA, NULL, NULL, "edit private metadata", NULL },
 	/* OperServ */
