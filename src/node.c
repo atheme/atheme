@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4547 2006-01-09 20:29:47Z nenolod $
+ * $Id: node.c 4563 2006-01-18 23:38:54Z jilles $
  */
 
 #include "atheme.h"
@@ -44,6 +44,7 @@ static BlockHeap *mychan_heap;	/* HEAP_CHANNEL */
 static BlockHeap *chanacs_heap;	/* HEAP_CHANACS */
 static BlockHeap *metadata_heap;	/* HEAP_CHANUSER */
 
+static boolean_t mychan_isused(mychan_t *mc);
 static myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t minlevel, int maxtime);
 static myuser_t *mychan_pick_successor(mychan_t *mc);
 
@@ -1550,6 +1551,27 @@ mychan_t *mychan_find(char *name)
 	return NULL;
 }
 
+/* Check if there is anyone on the channel fulfilling the conditions.
+ * Fairly expensive, but this is sometimes necessary to avoid
+ * inappropriate drops. -- jilles */
+static boolean_t mychan_isused(mychan_t *mc)
+{
+	node_t *n;
+	channel_t *c;
+	chanuser_t *cu;
+
+	c = mc->chan;
+	if (c == NULL)
+		return FALSE;
+	LIST_FOREACH(n, c->members.head)
+	{
+		cu = n->data;
+		if (chanacs_user_flags(mc, cu->user) & CA_USEDUPDATE)
+			return TRUE;
+	}
+	return FALSE;
+}
+
 /* Find a user fulfilling the conditions who can take another channel */
 static myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t minlevel, int maxtime)
 {
@@ -2262,14 +2284,21 @@ void expire_check(void *arg)
 		{
 			mc = (mychan_t *)n->data;
 
-			if (MU_HOLD & mc->founder->flags)
-				continue;
-
-			if (MC_HOLD & mc->flags)
-				continue;
-
 			if ((CURRTIME - mc->used) >= config_options.expire)
 			{
+				if (mychan_isused(mc))
+				{
+					mc->used = CURRTIME;
+					slog(LG_DEBUG, "expire_check(): updating last used time on %s because it appears to be still in use", mc->name);
+					continue;
+				}
+
+				if (MU_HOLD & mc->founder->flags)
+					continue;
+
+				if (MC_HOLD & mc->flags)
+					continue;
+
 				snoop("EXPIRE: \2%s\2 from \2%s\2", mc->name, mc->founder->name);
 
 				hook_call_event("channel_drop", mc);

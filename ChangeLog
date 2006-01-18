@@ -1,3 +1,12 @@
+nenolod     2006/01/15 18:55:58 UTC	(20060115-4561)
+  Log:
+  Remove duplicate entry in specs.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/modules/operserv/specs.c (File Modified) 
+
+
 jilles      2006/01/10 12:04:41 UTC	(20060110-4559)
   Log:
   Clear out *svs.me on module unload.
