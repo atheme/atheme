@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: bircd.c 4603 2006-01-19 22:15:33Z jilles $
+ * $Id: bircd.c 4605 2006-01-19 22:18:04Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 4603 2006-01-19 22:15:33Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 4605 2006-01-19 22:18:04Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -825,7 +825,7 @@ static void m_mode(char *origin, uint8_t parc, char *parv[])
 	if (*parv[0] == '#')
 		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
 	else
-		user_mode(user_find(parv[0]), parv[1]);
+		user_mode(user_find_named(parv[0]), parv[1]);
 }
 
 static void m_kick(char *origin, uint8_t parc, char *parv[])

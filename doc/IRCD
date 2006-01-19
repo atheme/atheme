@@ -1,4 +1,4 @@
-$Id: IRCD 4483 2006-01-04 15:34:35Z jilles $
+$Id: IRCD 4605 2006-01-19 22:18:04Z jilles $
 
 IRCD-specific notes
 -------------------
@@ -9,6 +9,11 @@ asuka
 You need U:lines for services on all servers on the network.
 
 You must enable join_chans as P10 is designed for services to work that way.
+
+Asuka's +N (no notices/wallchops) mode is turned off whenever a
+notice/wallchops is to be sent to a channel (it should not block notices from
+remotes or wallchops, really). If you want a channel to be +N always, leave
+verbose disabled.
 
 bahamut
 -------
