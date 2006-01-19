@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 4581 2006-01-19 15:18:35Z jilles $
+ * $Id: ptasks.c 4583 2006-01-19 15:34:06Z jilles $
  */
 
 #include "atheme.h"
@@ -19,9 +19,9 @@ void handle_info(user_t *u)
 		return;
 
 	for (i = 0; infotext[i]; i++)
-		numeric_sts(me.name, 371, CLIENT_NAME(u), ":%s", infotext[i]);
+		numeric_sts(me.name, 371, u->nick, ":%s", infotext[i]);
 
-	numeric_sts(me.name, 374, CLIENT_NAME(u), ":End of /INFO list");
+	numeric_sts(me.name, 374, u->nick, ":End of /INFO list");
 }
 
 void handle_version(user_t *u)
@@ -32,14 +32,14 @@ void handle_version(user_t *u)
 	if (floodcheck(u, NULL))
 		return;
 
-	numeric_sts(me.name, 351, CLIENT_NAME(u), ":atheme-%s. %s %s%s%s%s%s%s%s%s%s",
+	numeric_sts(me.name, 351, u->nick, ":atheme-%s. %s %s%s%s%s%s%s%s%s%s",
 		    version, me.name,
 		    (match_mapping) ? "A" : "",
 		    (me.loglevel & LG_DEBUG) ? "d" : "",
 		    (me.auth) ? "e" : "",
 		    (config_options.flood_msgs) ? "F" : "",
 		    (config_options.leave_chans) ? "l" : "", (config_options.join_chans) ? "j" : "", (!match_mapping) ? "R" : "", (config_options.raw) ? "r" : "", (runflags & RF_LIVE) ? "n" : "");
-	numeric_sts(me.name, 351, CLIENT_NAME(u), ":Compile time: %s, build-id %s, build %s", creation, revision, generation);
+	numeric_sts(me.name, 351, u->nick, ":Compile time: %s, build-id %s, build %s", creation, revision, generation);
 }
 
 void handle_admin(user_t *u)
@@ -51,10 +51,10 @@ void handle_admin(user_t *u)
 	if (floodcheck(u, NULL))
 		return;
 
-	numeric_sts(me.name, 256, CLIENT_NAME(u), ":Administrative info about %s", me.name);
-	numeric_sts(me.name, 257, CLIENT_NAME(u), ":%s", me.adminname);
-	numeric_sts(me.name, 258, CLIENT_NAME(u), ":Atheme IRC Services (atheme-%s)", version);
-	numeric_sts(me.name, 259, CLIENT_NAME(u), ":<%s>", me.adminemail);
+	numeric_sts(me.name, 256, u->nick, ":Administrative info about %s", me.name);
+	numeric_sts(me.name, 257, u->nick, ":%s", me.adminname);
+	numeric_sts(me.name, 258, u->nick, ":Atheme IRC Services (atheme-%s)", version);
+	numeric_sts(me.name, 259, u->nick, ":<%s>", me.adminemail);
 }
 
 void handle_stats(user_t *u, char req)
@@ -79,7 +79,7 @@ void handle_stats(user_t *u, char req)
 		  LIST_FOREACH(n, uplinks.head)
 		  {
 			  uplink = (uplink_t *)n->data;
-			  numeric_sts(me.name, 213, CLIENT_NAME(u), "C *@127.0.0.1 A %s %d uplink", uplink->name, uplink->port);
+			  numeric_sts(me.name, 213, u->nick, "C *@127.0.0.1 A %s %d uplink", uplink->name, uplink->port);
 		  }
 		  break;
 
@@ -88,13 +88,13 @@ void handle_stats(user_t *u, char req)
 		  if (!has_priv(u, PRIV_SERVER_AUSPEX))
 			  break;
 
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), "E :Last event to run: %s", last_event_ran);
+		  numeric_sts(me.name, 249, u->nick, "E :Last event to run: %s", last_event_ran);
 
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), "E :%-28s %s", "Operation", "Next Execution");
+		  numeric_sts(me.name, 249, u->nick, "E :%-28s %s", "Operation", "Next Execution");
 		  for (i = 0; i < MAX_EVENTS; i++)
 		  {
 			  if (event_table[i].active)
-				  numeric_sts(me.name, 249, CLIENT_NAME(u), "E :%-28s %4d seconds (%d)", event_table[i].name, event_table[i].when - CURRTIME, event_table[i].frequency);
+				  numeric_sts(me.name, 249, u->nick, "E :%-28s %4d seconds (%d)", event_table[i].name, event_table[i].when - CURRTIME, event_table[i].frequency);
 		  }
 
 		  break;
@@ -107,13 +107,13 @@ void handle_stats(user_t *u, char req)
 		  LIST_FOREACH(n, uplinks.head)
 		  {
 			  uplink = (uplink_t *)n->data;
-			  numeric_sts(me.name, 244, CLIENT_NAME(u), "H * * %s", uplink->name);
+			  numeric_sts(me.name, 244, u->nick, "H * * %s", uplink->name);
 		  }
 		  break;
 
 	  case 'I':
 	  case 'i':
-		  numeric_sts(me.name, 215, CLIENT_NAME(u), "I * * *@%s 0 nonopered", me.name);
+		  numeric_sts(me.name, 215, u->nick, "I * * *@%s 0 nonopered", me.name);
 		  break;
 
 	  case 'K':
@@ -125,7 +125,7 @@ void handle_stats(user_t *u, char req)
 		  {
 			  k = (kline_t *)n->data;
 
-			  numeric_sts(me.name, 216, CLIENT_NAME(u), "K %s * %s :%s", k->host, k->user, k->reason);
+			  numeric_sts(me.name, 216, u->nick, "K %s * %s :%s", k->host, k->user, k->reason);
 		  }
 
 		  break;
@@ -139,7 +139,7 @@ void handle_stats(user_t *u, char req)
 		  {
 			  soper = n->data;
 
-			  numeric_sts(me.name, 243, CLIENT_NAME(u), "O *@* * %s %s %s",
+			  numeric_sts(me.name, 243, u->nick, "O *@* * %s %s %s",
 					  soper->myuser ? soper->myuser->name : soper->name,
 					  soper->operclass ? soper->operclass->name : "*", "-1");
 		  }
@@ -150,25 +150,25 @@ void handle_stats(user_t *u, char req)
 		  if (!has_priv(u, PRIV_SERVER_AUSPEX))
 			  break;
 
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :event      %7d", claro_state.event);
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :node       %7d", claro_state.node);
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :operclass  %7d", cnt.operclass);
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :soper      %7d", cnt.soper);
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :tld        %7d", cnt.tld);
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :kline      %7d", cnt.kline);
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :server     %7d", cnt.server);
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :user       %7d", cnt.user);
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :chan       %7d", cnt.chan);
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :myuser     %7d", cnt.myuser);
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :mychan     %7d", cnt.mychan);
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :chanacs    %7d", cnt.chanacs);
+		  numeric_sts(me.name, 249, u->nick, "T :event      %7d", claro_state.event);
+		  numeric_sts(me.name, 249, u->nick, "T :node       %7d", claro_state.node);
+		  numeric_sts(me.name, 249, u->nick, "T :operclass  %7d", cnt.operclass);
+		  numeric_sts(me.name, 249, u->nick, "T :soper      %7d", cnt.soper);
+		  numeric_sts(me.name, 249, u->nick, "T :tld        %7d", cnt.tld);
+		  numeric_sts(me.name, 249, u->nick, "T :kline      %7d", cnt.kline);
+		  numeric_sts(me.name, 249, u->nick, "T :server     %7d", cnt.server);
+		  numeric_sts(me.name, 249, u->nick, "T :user       %7d", cnt.user);
+		  numeric_sts(me.name, 249, u->nick, "T :chan       %7d", cnt.chan);
+		  numeric_sts(me.name, 249, u->nick, "T :myuser     %7d", cnt.myuser);
+		  numeric_sts(me.name, 249, u->nick, "T :mychan     %7d", cnt.mychan);
+		  numeric_sts(me.name, 249, u->nick, "T :chanacs    %7d", cnt.chanacs);
 
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :bytes sent %7.2f%s", bytes(cnt.bout), sbytes(cnt.bout));
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), "T :bytes recv %7.2f%s", bytes(cnt.bin), sbytes(cnt.bin));
+		  numeric_sts(me.name, 249, u->nick, "T :bytes sent %7.2f%s", bytes(cnt.bout), sbytes(cnt.bout));
+		  numeric_sts(me.name, 249, u->nick, "T :bytes recv %7.2f%s", bytes(cnt.bin), sbytes(cnt.bin));
 		  break;
 
 	  case 'u':
-		  numeric_sts(me.name, 242, CLIENT_NAME(u), ":Services Uptime: %s", timediff(CURRTIME - me.start));
+		  numeric_sts(me.name, 242, u->nick, ":Services Uptime: %s", timediff(CURRTIME - me.start));
 		  break;
 
 	  case 'V':
@@ -178,7 +178,7 @@ void handle_stats(user_t *u, char req)
 
 		  /* we received this command from the uplink, so,
 		   * hmm, it is not idle */
-		  numeric_sts(me.name, 249, CLIENT_NAME(u), "V :%s (AutoConn.!*@*) Idle: 0 SendQ: ? Connected: %s",
+		  numeric_sts(me.name, 249, u->nick, "V :%s (AutoConn.!*@*) Idle: 0 SendQ: ? Connected: %s",
 				  curr_uplink->name,
 				  timediff(CURRTIME - curr_uplink->conn->first_recv));
 		  break;
@@ -187,7 +187,7 @@ void handle_stats(user_t *u, char req)
 		  break;
 	}
 
-	numeric_sts(me.name, 219, CLIENT_NAME(u), "%c :End of /STATS report", req);
+	numeric_sts(me.name, 219, u->nick, "%c :End of /STATS report", req);
 }
 
 void handle_whois(user_t *u, char *target)
@@ -201,25 +201,25 @@ void handle_whois(user_t *u, char *target)
 
 	if (t != NULL)
 	{
-		numeric_sts(me.name, 311, CLIENT_NAME(u), "%s %s %s * :%s", t->nick, t->user, t->vhost, t->gecos);
+		numeric_sts(me.name, 311, u->nick, "%s %s %s * :%s", t->nick, t->user, t->vhost, t->gecos);
 		/* channels purposely omitted */
-		numeric_sts(me.name, 312, CLIENT_NAME(u), "%s %s :%s", t->nick, t->server->name, t->server->desc);
+		numeric_sts(me.name, 312, u->nick, "%s %s :%s", t->nick, t->server->name, t->server->desc);
 		if (is_ircop(t))
-			numeric_sts(me.name, 313, CLIENT_NAME(u), "%s :is an IRC Operator", t->nick);
+			numeric_sts(me.name, 313, u->nick, "%s :is an IRC Operator", t->nick);
 		if (t->myuser)
-			numeric_sts(me.name, 330, CLIENT_NAME(u), "%s %s :is logged in as", t->nick, t->myuser->name);
+			numeric_sts(me.name, 330, u->nick, "%s %s :is logged in as", t->nick, t->myuser->name);
 	}
 	else
-		numeric_sts(me.name, 401, CLIENT_NAME(u), "%s :No such nick", target);
-	numeric_sts(me.name, 318, CLIENT_NAME(u), "%s :End of WHOIS", target);
+		numeric_sts(me.name, 401, u->nick, "%s :No such nick", target);
+	numeric_sts(me.name, 318, u->nick, "%s :End of WHOIS", target);
 }
 
 static void single_trace(user_t *u, user_t *t)
 {
 	if (is_ircop(t))
-		numeric_sts(me.name, 204, CLIENT_NAME(u), "Oper service %s[%s@%s] (255.255.255.255) 0 0", t->nick, t->user, t->vhost);
+		numeric_sts(me.name, 204, u->nick, "Oper service %s[%s@%s] (255.255.255.255) 0 0", t->nick, t->user, t->vhost);
 	else
-		numeric_sts(me.name, 205, CLIENT_NAME(u), "User service %s[%s@%s] (255.255.255.255) 0 0", t->nick, t->user, t->vhost);
+		numeric_sts(me.name, 205, u->nick, "User service %s[%s@%s] (255.255.255.255) 0 0", t->nick, t->user, t->vhost);
 }
 
 /* target -> object to trace
@@ -245,7 +245,7 @@ void handle_trace(user_t *u, char *target, char *dest)
 			nusers--;
 		}
 		if (has_priv(u, PRIV_SERVER_AUSPEX))
-			numeric_sts(me.name, 206, CLIENT_NAME(u), "Serv uplink %dS %dC %s *!*@%s 0", cnt.server - 1, nusers, me.actual, me.name);
+			numeric_sts(me.name, 206, u->nick, "Serv uplink %dS %dC %s *!*@%s 0", cnt.server - 1, nusers, me.actual, me.name);
 		target = me.name;
 	}
 	else
@@ -257,7 +257,7 @@ void handle_trace(user_t *u, char *target, char *dest)
 			target = t->nick;
 		}
 	}
-	numeric_sts(me.name, 262, CLIENT_NAME(u), "%s :End of TRACE", target);
+	numeric_sts(me.name, 262, u->nick, "%s :End of TRACE", target);
 }
 
 void handle_message(char *origin, char *target, boolean_t is_notice, char *message)
