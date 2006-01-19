@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for chunky monkey ircd.
  *
- * $Id: monkey.c 4581 2006-01-19 15:18:35Z jilles $
+ * $Id: monkey.c 4585 2006-01-19 16:25:49Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/monkey.h"
 
-DECLARE_MODULE_V1("protocol/monkey", TRUE, _modinit, NULL, "$Id: monkey.c 4581 2006-01-19 15:18:35Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/monkey", TRUE, _modinit, NULL, "$Id: monkey.c 4585 2006-01-19 16:25:49Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -284,15 +284,16 @@ static void monkey_on_login(char *origin, char *user, char *wantedhost)
 }
 
 /* protocol-specific stuff to do on login */
-static void monkey_on_logout(char *origin, char *user, char *wantedhost)
+static boolean_t monkey_on_logout(char *origin, char *user, char *wantedhost)
 {
 	if (!me.connected)
-		return;
+		return FALSE;
 
 	if (nicksvs.me == NULL || irccasecmp(origin, user))
-		return;
+		return FALSE;
 
 	sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, origin, time(NULL));
+	return FALSE;
 }
 
 static void monkey_jupe(char *server, char *reason)

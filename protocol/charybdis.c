@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 4581 2006-01-19 15:18:35Z jilles $
+ * $Id: charybdis.c 4585 2006-01-19 16:25:49Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 4581 2006-01-19 15:18:35Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 4585 2006-01-19 16:25:49Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -363,14 +363,15 @@ static void charybdis_on_login(char *origin, char *user, char *wantedhost)
 }
 
 /* protocol-specific stuff to do on login */
-static void charybdis_on_logout(char *origin, char *user, char *wantedhost)
+static boolean_t charybdis_on_logout(char *origin, char *user, char *wantedhost)
 {
 	user_t *u = user_find(origin);
 
 	if (!me.connected || !use_rserv_support || !u)
-		return;
+		return FALSE;
 
 	sts(":%s ENCAP * SU %s", ME, CLIENT_NAME(u));
+	return FALSE;
 }
 
 /* XXX we don't have an appropriate API for this, what about making JUPE

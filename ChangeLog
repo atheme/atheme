@@ -1,3 +1,12 @@
+jilles      2006/01/19 15:34:06 UTC	(20060119-4583)
+  Log:
+  Like kick(), msg(), etc, numeric_sts() takes a nick.
+  
+
+  Changes:	Modified:
+  +43 -43	trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2006/01/19 15:18:35 UTC	(20060119-4581)
   Log:
   Change handle_version/admin/info/stats/trace() from char *nick

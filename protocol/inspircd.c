@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 4571 2006-01-19 13:37:54Z jilles $
+ * $Id: inspircd.c 4585 2006-01-19 16:25:49Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4571 2006-01-19 13:37:54Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4585 2006-01-19 16:25:49Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -309,15 +309,16 @@ static void inspircd_on_login(char *origin, char *user, char *wantedhost)
 }
 
 /* protocol-specific stuff to do on logout */
-static void inspircd_on_logout(char *origin, char *user, char *wantedhost)
+static boolean_t inspircd_on_logout(char *origin, char *user, char *wantedhost)
 {
 	if (!me.connected)
-		return;
+		return FALSE;
 
 	if (nicksvs.me == NULL || irccasecmp(origin, user))
-		return;
+		return FALSE;
 
 	sts(":%s SVSMODE %s -r", nicksvs.nick, origin);
+	return FALSE;
 }
 
 static void inspircd_jupe(char *server, char *reason)

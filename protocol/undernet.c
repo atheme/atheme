@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: undernet.c 4581 2006-01-19 15:18:35Z jilles $
+ * $Id: undernet.c 4585 2006-01-19 16:25:49Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4581 2006-01-19 15:18:35Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4585 2006-01-19 16:25:49Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -311,11 +311,23 @@ static void undernet_on_login(char *origin, char *user, char *wantedhost)
 	sts("%s AC %s %s", me.numeric, u->uid, u->myuser->name);
 }
 
-/* protocol-specific stuff to do on login */
-static void undernet_on_logout(char *origin, char *user, char *wantedhost)
+/* P10 does not support logout, so kill the user
+ * we can't keep track of which logins are stale and which aren't -- jilles */
+static boolean_t undernet_on_logout(char *origin, char *user, char *wantedhost)
 {
-	/* nothing to do on ratbox */
-	return;
+	user_t *u = user_find_named(origin);
+
+	if (!me.connected)
+		return FALSE;
+
+	if (u != NULL)
+	{
+		skill(me.name, u->nick, "Forcing logout %s -> %s", u->nick, user);
+		user_delete(u);
+		return TRUE;
+	}
+	else
+		return FALSE;
 }
 
 static void undernet_jupe(char *server, char *reason)

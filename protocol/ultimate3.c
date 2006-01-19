@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 4581 2006-01-19 15:18:35Z jilles $
+ * $Id: ultimate3.c 4585 2006-01-19 16:25:49Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 4581 2006-01-19 15:18:35Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 4585 2006-01-19 16:25:49Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -291,15 +291,16 @@ static void ultimate3_on_login(char *origin, char *user, char *wantedhost)
 }
 
 /* protocol-specific stuff to do on login */
-static void ultimate3_on_logout(char *origin, char *user, char *wantedhost)
+static boolean_t ultimate3_on_logout(char *origin, char *user, char *wantedhost)
 {
 	if (!me.connected)
-		return;
+		return FALSE;
 
 	if (nicksvs.me == NULL || irccasecmp(origin, user))
-		return;
+		return FALSE;
 
 	sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, origin, time(NULL));
+	return FALSE;
 }
 
 static void ultimate3_jupe(char *server, char *reason)

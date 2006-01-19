@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4577 2006-01-19 14:40:44Z jilles $
+ * $Id: node.c 4585 2006-01-19 16:25:49Z jilles $
  */
 
 #include "atheme.h"
@@ -1358,10 +1358,12 @@ void myuser_delete(myuser_t *mu)
 	LIST_FOREACH_SAFE(n, tn, mu->logins.head)
 	{
 		u = (user_t *)n->data;
-		ircd_on_logout(u->nick, mu->name, NULL);
-		u->myuser = NULL;
-		node_del(n, &mu->logins);
-		node_free(n);
+		if (!ircd_on_logout(u->nick, mu->name, NULL))
+		{
+			u->myuser = NULL;
+			node_del(n, &mu->logins);
+			node_free(n);
+		}
 	}
 	
 	/* kill all their channels

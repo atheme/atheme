@@ -286,15 +286,16 @@ static void solidircd_on_login(char *origin, char *user, char *wantedhost)
 }
 
 /* protocol-specific stuff to do on login */
-static void solidircd_on_logout(char *origin, char *user, char *wantedhost)
+static boolean_t solidircd_on_logout(char *origin, char *user, char *wantedhost)
 {
 	if (!me.connected)
-		return;
+		return FALSE;
 
 	if (irccasecmp(origin, user))
-		return;
+		return FALSE;
 
 	sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, origin, time(NULL));
+	return FALSE;
 }
 
 static void solidircd_jupe(char *server, char *reason)

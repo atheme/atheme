@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 4581 2006-01-19 15:18:35Z jilles $
+ * $Id: ircnet.c 4585 2006-01-19 16:25:49Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 4581 2006-01-19 15:18:35Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 4585 2006-01-19 16:25:49Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -318,10 +318,10 @@ static void ircnet_on_login(char *origin, char *user, char *wantedhost)
 }
 
 /* protocol-specific stuff to do on login */
-static void ircnet_on_logout(char *origin, char *user, char *wantedhost)
+static boolean_t ircnet_on_logout(char *origin, char *user, char *wantedhost)
 {
 	/* nothing to do on ratbox */
-	return;
+	return FALSE;
 }
 
 static void ircnet_jupe(char *server, char *reason)

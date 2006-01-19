@@ -4,7 +4,7 @@
  *
  * Generic protocol event handlers.
  *
- * $Id: phandler.c 4269 2005-12-29 01:39:38Z nenolod $
+ * $Id: phandler.c 4585 2006-01-19 16:25:49Z jilles $
  */
 
 #include "atheme.h"
@@ -27,7 +27,7 @@ void (*mode_sts) (char *sender, char *target, char *modes) = generic_mode_sts;
 void (*ping_sts) (void) = generic_ping_sts;
 void (*quit_sts) (user_t *u, char *reason) = generic_quit_sts;
 void (*ircd_on_login) (char *origin, char *user, char *wantedhost) = generic_on_login;
-void (*ircd_on_logout) (char *origin, char *user, char *wantedhost) = generic_on_logout;
+boolean_t (*ircd_on_logout) (char *origin, char *user, char *wantedhost) = generic_on_logout;
 void (*jupe) (char *server, char *reason) = generic_jupe;
 void (*sethost_sts) (char *source, char *target, char *host) = generic_sethost_sts;
 void (*fnc_sts) (user_t *source, user_t *u, char *newnick, int type) = generic_fnc_sts;
@@ -157,9 +157,10 @@ void generic_on_login(char *origin, char *user, char *wantedhost)
 	/* nothing to do here. */
 }
 
-void generic_on_logout(char *origin, char *user, char *wantedhost)
+boolean_t generic_on_logout(char *origin, char *user, char *wantedhost)
 {
 	/* nothing to do here. */
+	return FALSE;
 }
 
 void generic_jupe(char *server, char *reason)

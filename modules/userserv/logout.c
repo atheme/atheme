@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGOUT functions.
  *
- * $Id: logout.c 4549 2006-01-09 23:27:17Z jilles $
+ * $Id: logout.c 4585 2006-01-19 16:25:49Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/logout", FALSE, _modinit, _moddeinit,
-	"$Id: logout.c 4549 2006-01-09 23:27:17Z jilles $",
+	"$Id: logout.c 4585 2006-01-19 16:25:49Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -92,17 +92,18 @@ static void us_cmd_logout(char *origin)
 		notice(usersvs.nick, origin, "You have been logged out.");
 	}
 
-	ircd_on_logout(u->nick, u->myuser->name, NULL);
-
 	u->myuser->lastlogin = CURRTIME;
-	LIST_FOREACH_SAFE(n, tn, u->myuser->logins.head)
+	if (!ircd_on_logout(u->nick, u->myuser->name, NULL))
 	{
-		if (n->data == u)
+		LIST_FOREACH_SAFE(n, tn, u->myuser->logins.head)
 		{
-			node_del(n, &u->myuser->logins);
-			node_free(n);
-			break;
+			if (n->data == u)
+			{
+				node_del(n, &u->myuser->logins);
+				node_free(n);
+				break;
+			}
 		}
+		u->myuser = NULL;
 	}
-	u->myuser = NULL;
 }

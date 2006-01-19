@@ -5,7 +5,7 @@
  * Protocol handlers, both generic and the actual declarations themselves.
  * Declare NOTYET to use the function pointer voodoo.
  *
- * $Id: phandler.h 4269 2005-12-29 01:39:38Z nenolod $
+ * $Id: phandler.h 4585 2006-01-19 16:25:49Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -105,8 +105,10 @@ E void (*ping_sts)(void);
  * first check if me.connected is true and bail if not */
 E void (*ircd_on_login)(char *origin, char *user, char *wantedhost);
 /* mark user 'origin' as logged out
- * first check if me.connected is true and bail if not */
-E void (*ircd_on_logout)(char *origin, char *user, char *wantedhost);
+ * first check if me.connected is true and bail if not
+ * return FALSE if successful or logins are not supported
+ * return TRUE if the user was killed to force logout (P10) */
+E boolean_t (*ircd_on_logout)(char *origin, char *user, char *wantedhost);
 /* introduce a fake server
  * it is ok to use opersvs to squit the old server */
 E void (*jupe)(char *server, char *reason);
@@ -138,7 +140,7 @@ E void generic_topic_sts(char *channel, char *setter, time_t ts, char *topic);
 E void generic_mode_sts(char *sender, char *target, char *modes);
 E void generic_ping_sts(void);
 E void generic_on_login(char *origin, char *user, char *wantedhost);
-E void generic_on_logout(char *origin, char *user, char *wantedhost);
+E boolean_t generic_on_logout(char *origin, char *user, char *wantedhost);
 E void generic_jupe(char *server, char *reason);
 E void generic_sethost_sts(char *source, char *target, char *host);
 E void generic_fnc_sts(user_t *source, user_t *u, char *newnick, int type);
