@@ -4,15 +4,14 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 4571 2006-01-19 13:37:54Z jilles $
+ * $Id: ptasks.c 4581 2006-01-19 15:18:35Z jilles $
  */
 
 #include "atheme.h"
 
-void handle_info(char *origin)
+void handle_info(user_t *u)
 {
 	uint8_t i;
-	user_t *u = user_find(origin);
 
 	if (u == NULL)
 		return;
@@ -25,9 +24,8 @@ void handle_info(char *origin)
 	numeric_sts(me.name, 374, CLIENT_NAME(u), ":End of /INFO list");
 }
 
-void handle_version(char *origin)
+void handle_version(user_t *u)
 {
-	user_t *u = user_find(origin);
 
 	if (u == NULL)
 		return;
@@ -44,9 +42,8 @@ void handle_version(char *origin)
 	numeric_sts(me.name, 351, CLIENT_NAME(u), ":Compile time: %s, build-id %s, build %s", creation, revision, generation);
 }
 
-void handle_admin(char *origin)
+void handle_admin(user_t *u)
 {
-	user_t *u = user_find(origin);
 
 	if (u == NULL)
 		return;
@@ -60,9 +57,8 @@ void handle_admin(char *origin)
 	numeric_sts(me.name, 259, CLIENT_NAME(u), ":<%s>", me.adminemail);
 }
 
-void handle_stats(char *origin, char req)
+void handle_stats(user_t *u, char req)
 {
-	user_t *u = user_find(origin);
 	kline_t *k;
 	node_t *n;
 	uplink_t *uplink;
@@ -194,9 +190,8 @@ void handle_stats(char *origin, char req)
 	numeric_sts(me.name, 219, CLIENT_NAME(u), "%c :End of /STATS report", req);
 }
 
-void handle_whois(char *origin, char *target)
+void handle_whois(user_t *u, char *target)
 {
-	user_t *u = user_find(origin);
 	user_t *t = user_find_named(target);
 
 	if (u == NULL)
@@ -230,9 +225,8 @@ static void single_trace(user_t *u, user_t *t)
 /* target -> object to trace
  * dest -> server to execute command on
  */
-void handle_trace(char *origin, char *target, char *dest)
+void handle_trace(user_t *u, char *target, char *dest)
 {
-	user_t *u = user_find(origin);
 	user_t *t;
 	node_t *n;
 	int nusers;

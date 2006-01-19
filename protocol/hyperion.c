@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 4571 2006-01-19 13:37:54Z jilles $
+ * $Id: hyperion.c 4581 2006-01-19 15:18:35Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -15,7 +15,7 @@
 #include "atheme.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 4571 2006-01-19 13:37:54Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 4581 2006-01-19 15:18:35Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -712,32 +712,32 @@ static void m_server(char *origin, uint8_t parc, char *parv[])
 
 static void m_stats(char *origin, uint8_t parc, char *parv[])
 {
-	handle_stats(origin, parv[0][0]);
+	handle_stats(user_find(origin), parv[0][0]);
 }
 
 static void m_admin(char *origin, uint8_t parc, char *parv[])
 {
-	handle_admin(origin);
+	handle_admin(user_find(origin));
 }
 
 static void m_version(char *origin, uint8_t parc, char *parv[])
 {
-	handle_version(origin);
+	handle_version(user_find(origin));
 }
 
 static void m_info(char *origin, uint8_t parc, char *parv[])
 {
-	handle_info(origin);
+	handle_info(user_find(origin));
 }
 
 static void m_whois(char *origin, uint8_t parc, char *parv[])
 {
-	handle_whois(origin, parc >= 2 ? parv[1] : "*");
+	handle_whois(user_find(origin), parc >= 2 ? parv[1] : "*");
 }
 
 static void m_trace(char *origin, uint8_t parc, char *parv[])
 {
-	handle_trace(origin, parc >= 1 ? parv[0] : "*", parc >= 2 ? parv[1] : NULL);
+	handle_trace(user_find(origin), parc >= 1 ? parv[0] : "*", parc >= 2 ? parv[1] : NULL);
 }
 
 static void m_join(char *origin, uint8_t parc, char *parv[])

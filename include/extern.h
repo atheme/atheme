@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 4573 2006-01-19 13:44:42Z jilles $
+ * $Id: extern.h 4581 2006-01-19 15:18:35Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -294,12 +294,12 @@ E void protocol_init(void);
 E void sighandler(int signum);
 
 /* ptasks.c */
-E void handle_version(char *);
-E void handle_admin(char *);
-E void handle_info(char *);
-E void handle_stats(char *, char);
-E void handle_whois(char *, char *);
-E void handle_trace(char *, char *, char *);
+E void handle_version(user_t *);
+E void handle_admin(user_t *);
+E void handle_info(user_t *);
+E void handle_stats(user_t *, char);
+E void handle_whois(user_t *, char *);
+E void handle_trace(user_t *, char *, char *);
 E void handle_message(char *, char *, boolean_t, char *);
 E void handle_topic(channel_t *, char *, time_t, char *);
 E void handle_kill(char *, char *, char *);
