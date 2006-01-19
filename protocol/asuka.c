@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: asuka.c 4599 2006-01-19 21:43:00Z jilles $
+ * $Id: asuka.c 4601 2006-01-19 21:56:35Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4599 2006-01-19 21:43:00Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4601 2006-01-19 21:56:35Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -187,6 +187,7 @@ static void asuka_notice(char *from, char *target, char *fmt, ...)
 	char buf[BUFSIZE];
 	user_t *u = user_find_named(from);
 	user_t *t = user_find_named(target);
+	channel_t *channel;
 
 	if (u == NULL && (from == NULL || (irccasecmp(from, me.name) && irccasecmp(from, ME))))
 	{
@@ -198,11 +199,29 @@ static void asuka_notice(char *from, char *target, char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
+	if (target[0] == '#' && (channel = channel_find(target)) != NULL &&
+			channel->modes & CMODE_NONOTICE)
+	{
+		/* asuka sucks */
+		/* remove that stupid +N mode before it blocks our notice
+		 * -- jilles */
+		sts("%s M %s -N %ld", u ? u->uid : me.numeric, channel->name, channel->ts);
+		channel->modes &= ~CMODE_NONOTICE;
+	}
+
 	sts("%s O %s :%s", u ? u->uid : me.numeric, t ? t->uid : target, buf);
 }
 
 static void asuka_wallchops(user_t *sender, channel_t *channel, char *message)
 {
+	if (channel->modes & CMODE_NONOTICE)
+	{
+		/* asuka sucks */
+		/* remove that stupid +N mode before it blocks our notice
+		 * -- jilles */
+		sts("%s M %s -N %ld", sender->uid, channel->name, channel->ts);
+		channel->modes &= ~CMODE_NONOTICE;
+	}
 	sts("%s WC %s :%s", sender->uid, channel->name, message);
 }
 
