@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4607 2006-01-19 23:05:17Z jilles $
+ * $Id: main.c 4611 2006-01-19 23:41:14Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4607 2006-01-19 23:05:17Z jilles $",
+	"$Id: main.c 4611 2006-01-19 23:41:14Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -79,7 +79,7 @@ static void chanserv(char *origin, uint8_t parc, char *parv[])
 	if (parv[parc - 2][0] == '#')
 	{
 		metadata_t *md;
-		user_t *u = user_find(origin);
+		user_t *u = user_find_named(origin);
 
 		if (chansvs.fantasy == FALSE)
 		{

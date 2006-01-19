@@ -1,3 +1,12 @@
+jilles      2006/01/19 23:20:35 UTC	(20060119-4609)
+  Log:
+  Consistently call chanuser_add() with a UID (if known).
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/01/19 23:05:17 UTC	(20060119-4607)
   Log:
   Make join() consistently take a nick (not a uid).

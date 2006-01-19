@@ -4,7 +4,7 @@
  *
  * Commandtree manipulation routines.
  *
- * $Id: commandtree.c 4557 2006-01-10 11:50:01Z jilles $
+ * $Id: commandtree.c 4611 2006-01-19 23:41:14Z jilles $
  */
 
 #include "atheme.h"
@@ -67,7 +67,7 @@ void command_exec(service_t *svs, char *origin, char *cmd, list_t *commandtree)
 
 		if (!strcasecmp(cmd, c->name))
 		{
-			user_t *u = user_find(origin);
+			user_t *u = user_find_named(origin);
 
 			if (has_priv(u, c->access))
 			{
@@ -101,7 +101,7 @@ void command_exec(service_t *svs, char *origin, char *cmd, list_t *commandtree)
  */
 void command_help(char *mynick, char *origin, list_t *commandtree)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	node_t *n;
 
 	notice(mynick, origin, "The following commands are available:");
@@ -155,7 +155,7 @@ void fcommand_exec(service_t *svs, char *channel, char *origin, char *cmd, list_
 
 		if (!strcasecmp(cmd, c->name))
 		{
-			user_t *u = user_find(origin);
+			user_t *u = user_find_named(origin);
 
 			if (has_priv(u, c->access))
 			{
@@ -177,7 +177,7 @@ void fcommand_exec(service_t *svs, char *channel, char *origin, char *cmd, list_
 void fcommand_exec_floodcheck(service_t *svs, char *channel, char *origin, char *cmd, list_t *commandtree)
 {
 	node_t *n;
-	user_t *u = user_find(origin); /* Yeah, silly */
+	user_t *u = user_find_named(origin); /* Yeah, silly */
 
 	LIST_FOREACH(n, commandtree->head)
 	{
