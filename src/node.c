@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4571 2006-01-19 13:37:54Z jilles $
+ * $Id: node.c 4573 2006-01-19 13:44:42Z jilles $
  */
 
 #include "atheme.h"
@@ -1331,9 +1331,9 @@ myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags)
 	return mu;
 }
 
-void myuser_delete(char *name)
+void myuser_delete(myuser_t *mu)
 {
-	myuser_t *mu = myuser_find(name), *tmu, *successor;
+	myuser_t *tmu, *successor;
 	mychan_t *mc, *tmc;
 	chanacs_t *ca;
 	user_t *u;
@@ -1343,7 +1343,7 @@ void myuser_delete(char *name)
 
 	if (!mu)
 	{
-		slog(LG_DEBUG, "myuser_delete(): called for nonexistant myuser: %s", name);
+		slog(LG_DEBUG, "myuser_delete(): called for NULL myuser");
 		return;
 	}
 
@@ -2272,7 +2272,7 @@ void expire_check(void *arg)
 					continue;
 
 				snoop("EXPIRE: \2%s\2 from \2%s\2 ", mu->name, mu->email);
-				myuser_delete(mu->name);
+				myuser_delete(mu);
 			}
 		}
 	}

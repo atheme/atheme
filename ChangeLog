@@ -1,3 +1,35 @@
+jilles      2006/01/19 13:37:54 UTC	(20060119-4571)
+  Log:
+  Change user_delete to take a user_t * instead of a nick.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/extern.h (File Modified) 
+  +1 -1		trunk/modules/nickserv/ghost.c (File Modified) 
+  +2 -2		trunk/modules/operserv/noop.c (File Modified) 
+  +1 -1		trunk/protocol/asuka.c (File Modified) 
+  +1 -1		trunk/protocol/bahamut.c (File Modified) 
+  +1 -1		trunk/protocol/bircd.c (File Modified) 
+  +1 -1		trunk/protocol/charybdis.c (File Modified) 
+  +1 -1		trunk/protocol/dreamforge.c (File Modified) 
+  +1 -1		trunk/protocol/hyperion.c (File Modified) 
+  +1 -1		trunk/protocol/inspircd.c (File Modified) 
+  +1 -1		trunk/protocol/ircnet.c (File Modified) 
+  +1 -1		trunk/protocol/monkey.c (File Modified) 
+  +1 -1		trunk/protocol/plexus.c (File Modified) 
+  +1 -1		trunk/protocol/ptlink.c (File Modified) 
+  +1 -1		trunk/protocol/ratbox.c (File Modified) 
+  +1 -1		trunk/protocol/shadowircd.c (File Modified) 
+  +1 -1		trunk/protocol/solidircd.c (File Modified) 
+  +1 -1		trunk/protocol/sorcery.c (File Modified) 
+  +1 -1		trunk/protocol/ultimate3.c (File Modified) 
+  +1 -1		trunk/protocol/undernet.c (File Modified) 
+  +1 -1		trunk/protocol/unreal.c (File Modified) 
+  +3 -4		trunk/src/node.c (File Modified) 
+  +1 -1		trunk/src/ptasks.c (File Modified) 
+  +1 -1		trunk/src/servtree.c (File Modified) 
+
+
 jilles      2006/01/19 00:29:25 UTC	(20060119-4565)
   Log:
   After discussion with Brain, improve this to avoid topics
