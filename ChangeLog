@@ -1,3 +1,15 @@
+jilles      2006/01/19 00:29:25 UTC	(20060119-4565)
+  Log:
+  After discussion with Brain, improve this to avoid topics
+  being bounced. Similar to ratbox/charybdis, use FTOPIC
+  (ratbox: TB) from the server only to restore old topics
+  and use TOPIC from chanserv to set new ones.
+  
+
+  Changes:	Modified:
+  +6 -1		trunk/protocol/inspircd.c (File Modified) 
+
+
 jilles      2006/01/18 23:38:54 UTC	(20060118-4563)
   Log:
   Don't expire a channel if there's still a user with appropriate

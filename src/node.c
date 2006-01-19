@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4563 2006-01-18 23:38:54Z jilles $
+ * $Id: node.c 4571 2006-01-19 13:37:54Z jilles $
  */
 
 #include "atheme.h"
@@ -562,7 +562,7 @@ void server_delete(char *name)
 	LIST_FOREACH_SAFE(n, tn, s->userlist.head)
 	{
 		u = (user_t *)n->data;
-		user_delete(u->nick);
+		user_delete(u);
 	}
 
 	LIST_FOREACH_SAFE(n, tn, s->children.head)
@@ -680,15 +680,14 @@ user_t *user_add(char *nick, char *user, char *host, char *vhost, char *ip, char
 	return u;
 }
 
-void user_delete(char *nick)
+void user_delete(user_t *u)
 {
-	user_t *u = user_find(nick);
 	node_t *n, *tn;
 	chanuser_t *cu;
 
 	if (!u)
 	{
-		slog(LG_DEBUG, "user_delete(): called for nonexistant user: %s", nick);
+		slog(LG_DEBUG, "user_delete(): called for NULL user");
 		return;
 	}
 

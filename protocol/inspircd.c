@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 4565 2006-01-19 00:29:25Z jilles $
+ * $Id: inspircd.c 4571 2006-01-19 13:37:54Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4565 2006-01-19 00:29:25Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4571 2006-01-19 13:37:54Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -569,7 +569,7 @@ static void m_quit(char *origin, uint8_t parc, char *parv[])
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", origin);
 
 	/* user_delete() takes care of removing channels and so forth */
-	user_delete(origin);
+	user_delete(user_find(origin));
 }
 
 static void m_mode(char *origin, uint8_t parc, char *parv[])

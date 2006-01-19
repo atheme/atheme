@@ -4,7 +4,7 @@
  *
  * OperServ NOOP command.
  *
- * $Id: noop.c 4491 2006-01-05 00:06:26Z jilles $
+ * $Id: noop.c 4571 2006-01-19 13:37:54Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/noop", TRUE, _modinit, _moddeinit,
-	"$Id: noop.c 4491 2006-01-05 00:06:26Z jilles $",
+	"$Id: noop.c 4571 2006-01-19 13:37:54Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -77,7 +77,7 @@ static void check_user(user_t *u)
 		{
 			skill(opersvs.nick, u->nick, "Operator access denied to hostmask: %s [%s] <%s@%s>",
 				np->target, np->reason, np->added_by, opersvs.nick);
-			user_delete(u->nick);
+			user_delete(u);
 			return;
 		}
 	}
@@ -90,7 +90,7 @@ static void check_user(user_t *u)
 		{
 			skill(opersvs.nick, u->nick, "Operator access denied to server: %s [%s] <%s@%s>",
 				np->target, np->reason, np->added_by, opersvs.nick);
-			user_delete(u->nick);
+			user_delete(u);
 			return;
 		}
 	}

@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 4481 2006-01-04 15:24:07Z jilles $
+ * $Id: plexus.c 4571 2006-01-19 13:37:54Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 4481 2006-01-04 15:24:07Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 4571 2006-01-19 13:37:54Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -542,7 +542,7 @@ static void m_quit(char *origin, uint8_t parc, char *parv[])
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", origin);
 
 	/* user_delete() takes care of removing channels and so forth */
-	user_delete(origin);
+	user_delete(user_find(origin));
 }
 
 static void m_mode(char *origin, uint8_t parc, char *parv[])

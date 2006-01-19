@@ -4,7 +4,7 @@
  *
  * Services binary tree manipulation. (add_service, del_service, et al.)
  *
- * $Id: servtree.c 3819 2005-11-11 04:53:59Z nenolod $
+ * $Id: servtree.c 4571 2006-01-19 13:37:54Z jilles $
  */
 
 #include "atheme.h"
@@ -94,7 +94,7 @@ void del_service(service_t * sptr)
 	node_del(sptr->node, &services[sptr->hash]);
 
 	quit_sts(sptr->me, "Service unloaded.");
-	user_delete(sptr->name);
+	user_delete(sptr->me);
 	sptr->me = NULL;
 	sptr->handler = NULL;
 	free(sptr->disp);	/* service_name() does a malloc() */

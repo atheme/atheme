@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 4551 2006-01-09 23:34:17Z jilles $
+ * $Id: ptasks.c 4571 2006-01-19 13:37:54Z jilles $
  */
 
 #include "atheme.h"
@@ -384,7 +384,7 @@ void handle_kill(char *origin, char *victim, char *reason)
 	else
 	{
 		slog(LG_DEBUG, "handle_kill(): %s killed user %s (%s)", source, u->nick, reason);
-		user_delete(victim);
+		user_delete(u);
 	}
 }
 

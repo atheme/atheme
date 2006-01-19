@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 4541 2006-01-09 00:23:52Z jilles $
+ * $Id: hyperion.c 4571 2006-01-19 13:37:54Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -15,7 +15,7 @@
 #include "atheme.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 4541 2006-01-09 00:23:52Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 4571 2006-01-19 13:37:54Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -624,7 +624,7 @@ static void m_quit(char *origin, uint8_t parc, char *parv[])
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", origin);
 
 	/* user_delete() takes care of removing channels and so forth */
-	user_delete(origin);
+	user_delete(user_find(origin));
 }
 
 static void m_mode(char *origin, uint8_t parc, char *parv[])

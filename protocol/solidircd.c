@@ -611,7 +611,7 @@ static void m_quit(char *origin, uint8_t parc, char *parv[])
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", origin);
 
 	/* user_delete() takes care of removing channels and so forth */
-	user_delete(origin);
+	user_delete(user_find(origin));
 }
 
 static void m_mode(char *origin, uint8_t parc, char *parv[])

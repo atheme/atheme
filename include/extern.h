@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 4545 2006-01-09 20:23:25Z nenolod $
+ * $Id: extern.h 4571 2006-01-19 13:37:54Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -186,7 +186,7 @@ E void server_delete(char *name);
 E server_t *server_find(char *name);
 
 E user_t *user_add(char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, uint32_t ts);
-E void user_delete(char *nick);
+E void user_delete(user_t *u);
 E user_t *user_find(char *nick);
 E user_t *user_find_named(char *nick);
 E void user_changeuid(user_t *u, char *uid);
