@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4573 2006-01-19 13:44:42Z jilles $
+ * $Id: node.c 4577 2006-01-19 14:40:44Z jilles $
  */
 
 #include "atheme.h"
@@ -760,7 +760,12 @@ user_t *user_find(char *nick)
 		u = (user_t *)n->data;
 
 		if (!irccasecmp(nick, u->nick))
+		{
+			if (ircd->uses_p10)
+				wallops("user_find() found user %s by nick!",
+						nick);
 			return u;
+		}
 	}
 
 	return NULL;
