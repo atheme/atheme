@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: asuka.c 4595 2006-01-19 21:17:40Z jilles $
+ * $Id: asuka.c 4597 2006-01-19 21:35:55Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4595 2006-01-19 21:17:40Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4597 2006-01-19 21:35:55Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -49,6 +49,7 @@ struct cmode_ asuka_mode_list[] = {
   { 'D', CMODE_DELAYED },
   { 'd', CMODE_AUDITORIUM },
   { 'u', CMODE_NOQUIT },
+  { 'N', CMODE_NONOTICE },
   { '\0', 0 }
 };
 

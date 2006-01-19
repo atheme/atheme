@@ -4,7 +4,7 @@
  *
  * This code contains the channel mode definitions for ircnet ircd.
  *
- * $Id: asuka.h 634 2005-06-28 20:51:25Z nenolod $
+ * $Id: asuka.h 4597 2006-01-19 21:35:55Z jilles $
  */
 
 #ifndef RATBOX_H
@@ -20,5 +20,6 @@
 #define CMODE_DELAYED		0x00004000
 #define CMODE_AUDITORIUM	0x00008000
 #define CMODE_NOQUIT		0x00010000
+#define CMODE_NONOTICE		0x00020000
 
 #endif
