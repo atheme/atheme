@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: bircd.c 4587 2006-01-19 16:38:34Z jilles $
+ * $Id: bircd.c 4589 2006-01-19 17:22:13Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 4587 2006-01-19 16:38:34Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 4589 2006-01-19 17:22:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -690,8 +690,10 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 	kline_t *k;
 
 	/* got the right number of args for an introduction? */
-	if (parc == 10)
+	if (parc >= 8)
 	{
+		/* -> AB N jilles 1 1137687480 jilles jaguar.test +oiwgrx jilles B]AAAB ABAAE :Jilles Tjoelker */
+		/* -> AB N test4 1 1137690148 jilles jaguar.test +iw B]AAAB ABAAG :Jilles Tjoelker */
 		s = server_find(origin);
 		if (!s)
 		{
@@ -710,81 +712,31 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			 * a new KLINE.
 			 */
 
-			skill(opersvs.nick, parv[0], k->reason);
+			/* We *cannot* use skill() here -- jilles */
+			/* but why do we need to anyway? ircd will kill
+			 * the bastard */
+			/*sts("%s D %s :%s!%s!%s (%s)", opersvs.me ? opersvs.me->me->uid : me.numeric, parv[parc - 2], opersvs.nick, opersvs.nick, opersvs.nick, k->reason);*/
 			kline_sts(origin, k->user, k->host, (k->expires - CURRTIME), k->reason);
 
 			return;
 		}
 
-		u = user_add(parv[0], parv[3], parv[4], NULL, NULL, parv[8], parv[9], s, atoi(parv[2]));
+		u = user_add(parv[0], parv[3], parv[4], NULL, NULL, parv[parc - 2], parv[parc - 1], s, atoi(parv[2]));
 
-		user_mode(u, parv[5]);
+		if (parv[5][0] == '+')
+		{
+			user_mode(u, parv[5]);
+			if (strchr(parv[5], 'r'))
+			{
+				handle_burstlogin(u, parv[6]);
+				/* killed to force logout? */
+				if (user_find(parv[parc - 2]) == NULL)
+					return;
+			}
+		}
 
 		handle_nickchange(u);
 	}
-	else if (parc == 9)
-	{
-		s = server_find(origin);
-		if (!s)
-		{
-			slog(LG_DEBUG, "m_nick(): new user on nonexistant server: %s", origin);
-			return;
-		}
-
-		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
-
-		if ((k = kline_find(parv[3], parv[4])))
-		{
-			/* the new user matches a kline.
-			 * the server introducing the user probably wasn't around when
-			 * we added the kline or isn't accepting klines from us.
-			 * either way, we'll KILL the user and send the server
-			 * a new KLINE.
-			 */
-
-			skill(opersvs.nick, parv[0], k->reason);
-			kline_sts(origin, k->user, k->host, (k->expires - CURRTIME), k->reason);
-
-			return;
-		}
-
-		u = user_add(parv[0], parv[3], parv[4], NULL, NULL, parv[7], parv[8], s, atoi(parv[2]));
-
-		user_mode(u, parv[5]);
-
-		handle_nickchange(u);
-	}
-	else if (parc == 8)
-	{
-		s = server_find(origin);
-		if (!s)
-		{
-			slog(LG_DEBUG, "m_nick(): new user on nonexistant server: %s", origin);
-			return;
-		}
-
-		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
-
-		if ((k = kline_find(parv[3], parv[4])))
-		{
-			/* the new user matches a kline.
-			 * the server introducing the user probably wasn't around when
-			 * we added the kline or isn't accepting klines from us.
-			 * either way, we'll KILL the user and send the server
-			 * a new KLINE.
-			 */
-
-			skill(opersvs.nick, parv[0], k->reason);
-			kline_sts(origin, k->user, k->host, (k->expires - CURRTIME), k->reason);
-
-			return;
-		}
-
-		u = user_add(parv[0], parv[3], parv[4], NULL, NULL, parv[6], parv[7], s, atoi(parv[2]));
-
-		handle_nickchange(u);
-	}
-
 	/* if it's only 2 then it's a nickname change */
 	else if (parc == 2)
 	{
