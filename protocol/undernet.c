@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: undernet.c 4571 2006-01-19 13:37:54Z jilles $
+ * $Id: undernet.c 4575 2006-01-19 14:35:04Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4571 2006-01-19 13:37:54Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4575 2006-01-19 14:35:04Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -420,12 +420,7 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 		if (!c)
 			c = channel_add(chanv[i], atoi(parv[1]));
 
-		buf[0] = '@';
-		buf[1] = '\0';
-
-		strlcat(buf, origin, BUFSIZE);
-
-		chanuser_add(c, buf);
+		chanuser_add(c, origin);
 	}
 }
 

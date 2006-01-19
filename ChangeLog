@@ -1,3 +1,19 @@
+jilles      2006/01/19 13:44:42 UTC	(20060119-4573)
+  Log:
+  Change myuser_delete to take a myuser_t * instead
+  of a name.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/extern.h (File Modified) 
+  +1 -1		trunk/modules/nickserv/drop.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/register.c (File Modified) 
+  +1 -1		trunk/modules/userserv/drop.c (File Modified) 
+  +1 -1		trunk/modules/userserv/register.c (File Modified) 
+  +1 -1		trunk/modules/xmlrpc/account.c (File Modified) 
+  +4 -4		trunk/src/node.c (File Modified) 
+
+
 jilles      2006/01/19 13:37:54 UTC	(20060119-4571)
   Log:
   Change user_delete to take a user_t * instead of a nick.
