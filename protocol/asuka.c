@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: asuka.c 4585 2006-01-19 16:25:49Z jilles $
+ * $Id: asuka.c 4587 2006-01-19 16:38:34Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4585 2006-01-19 16:25:49Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4587 2006-01-19 16:38:34Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -77,6 +77,7 @@ static uint8_t asuka_server_login(void)
 {
 	int8_t ret;
 
+	me.recvsvr = FALSE;
 	ret = sts("PASS :%s", curr_uplink->pass);
 	if (ret == 1)
 		return 1;

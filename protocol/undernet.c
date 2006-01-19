@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: undernet.c 4585 2006-01-19 16:25:49Z jilles $
+ * $Id: undernet.c 4587 2006-01-19 16:38:34Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4585 2006-01-19 16:25:49Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4587 2006-01-19 16:38:34Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -72,6 +72,7 @@ static uint8_t undernet_server_login(void)
 {
 	int8_t ret;
 
+	me.recvsvr = FALSE;
 	ret = sts("PASS :%s", curr_uplink->pass);
 	if (ret == 1)
 		return 1;
