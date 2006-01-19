@@ -1,3 +1,16 @@
+jilles      2006/01/18 23:38:54 UTC	(20060118-4563)
+  Log:
+  Don't expire a channel if there's still a user with appropriate
+  (CA_USEDUPDATE) flags in it.
+  
+  Helps if there are no joins/netsplits/services restarts for
+  a long time.
+  
+
+  Changes:	Modified:
+  +35 -6	trunk/src/node.c (File Modified) 
+
+
 nenolod     2006/01/15 18:55:58 UTC	(20060115-4561)
   Log:
   Remove duplicate entry in specs.

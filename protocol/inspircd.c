@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 4543 2006-01-09 01:04:34Z jilles $
+ * $Id: inspircd.c 4565 2006-01-19 00:29:25Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4543 2006-01-09 01:04:34Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4565 2006-01-19 00:29:25Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -266,7 +266,12 @@ static void inspircd_topic_sts(char *channel, char *setter, time_t ts, char *top
 	if (!me.connected)
 		return;
 
-	sts(":%s FTOPIC %s %ld %s :%s", me.name, channel, ts, setter, topic);
+	if (ts < CURRTIME)
+		/* Restoring an old topic, can set proper setter/ts -- jilles */
+		sts(":%s FTOPIC %s %ld %s :%s", me.name, channel, ts, setter, topic);
+	else
+		/* FTOPIC would require us to set an older topicts */
+		sts(":%s TOPIC %s :%s", chansvs.nick, channel, topic);
 }
 
 /* mode wrapper */
