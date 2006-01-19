@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: login.c 4549 2006-01-09 23:27:17Z jilles $
+ * $Id: login.c 4591 2006-01-19 17:28:49Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/login", FALSE, _modinit, _moddeinit,
-	"$Id: login.c 4549 2006-01-09 23:27:17Z jilles $",
+	"$Id: login.c 4591 2006-01-19 17:28:49Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -78,6 +78,9 @@ static void us_cmd_login(char *origin)
 		notice(usersvs.nick, origin, "You are already logged in as \2%s\2.", mu->name);
 		return;
 	}
+	else if (u->myuser != NULL && ircd_on_logout(u->nick, u->myuser->name, NULL))
+		/* logout killed the user... */
+		return;
 
 	/* we use this in both cases, so set it up here. may be NULL. */
 	md_failnum = metadata_find(mu, METADATA_USER, "private:loginfail:failnum");
