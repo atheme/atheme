@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 4545 2006-01-09 20:23:25Z nenolod $
+ * $Id: services.c 4607 2006-01-19 23:05:17Z jilles $
  */
 
 #include "atheme.h"
@@ -49,7 +49,7 @@ void join(char *chan, char *nick)
 	boolean_t isnew = FALSE;
 	mychan_t *mc;
 
-	u = user_find(nick);
+	u = user_find_named(nick);
 	if (!u)
 		return;
 	c = channel_find(chan);

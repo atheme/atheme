@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for shadowircd-based ircd.
  *
- * $Id: shadowircd.c 4585 2006-01-19 16:25:49Z jilles $
+ * $Id: shadowircd.c 4607 2006-01-19 23:05:17Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/shadowircd.h"
 
-DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 4585 2006-01-19 16:25:49Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 4607 2006-01-19 23:05:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -594,7 +594,7 @@ static void m_kick(char *origin, uint8_t parc, char *parv[])
 	if (is_internal_client(u))
 	{
 		slog(LG_DEBUG, "m_kick(): %s got kicked from %s; rejoining", u->nick, parv[0]);
-		join(parv[0], parv[1]);
+		join(parv[0], u->nick);
 	}
 }
 

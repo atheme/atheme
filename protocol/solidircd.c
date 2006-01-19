@@ -667,7 +667,7 @@ static void m_kick(char *origin, uint8_t parc, char *parv[])
 	if (!irccasecmp(chansvs.nick, parv[1]))
 	{
 		slog(LG_DEBUG, "m_kick(): i got kicked from `%s'; rejoining", parv[0]);
-		join(parv[0], parv[1]);
+		join(parv[0], u->nick);
 	}
 }
 
