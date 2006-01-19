@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: undernet.c 4599 2006-01-19 21:43:00Z jilles $
+ * $Id: undernet.c 4603 2006-01-19 22:15:33Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4599 2006-01-19 21:43:00Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4603 2006-01-19 22:15:33Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -122,7 +122,7 @@ static void undernet_wallops(char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts("%s WA :%s", chansvs.me->me->uid, buf);
+	sts("%s WA :%s", me.numeric, buf);
 }
 
 /* join a channel */

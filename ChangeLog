@@ -1,3 +1,13 @@
+jilles      2006/01/19 21:56:35 UTC	(20060119-4601)
+  Log:
+  Remove asuka's stupid +N mode before it blocks our notices
+  and wallchops.
+  
+
+  Changes:	Modified:
+  +19 -0	trunk/protocol/asuka.c (File Modified) 
+
+
 jilles      2006/01/19 21:43:00 UTC	(20060119-4599)
   Log:
   Need to send mode changes from the server if the setter is
