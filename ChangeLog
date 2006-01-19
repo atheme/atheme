@@ -1,3 +1,14 @@
+jilles      2006/01/19 17:28:49 UTC	(20060119-4591)
+  Log:
+  If logging in as another user without logging out explicitly first,
+  still do an ircd_on_logout(). (In P10, this will kill the user.)
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/modules/nickserv/identify.c (File Modified) 
+  +3 -0		trunk/modules/userserv/login.c (File Modified) 
+
+
 jilles      2006/01/19 17:22:13 UTC	(20060119-4589)
   Log:
   P10: Rewrote m_nick(), now copes with the extensibility

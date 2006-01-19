@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: asuka.c 4589 2006-01-19 17:22:13Z jilles $
+ * $Id: asuka.c 4593 2006-01-19 21:04:30Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4589 2006-01-19 17:22:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4593 2006-01-19 21:04:30Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -346,12 +346,32 @@ static void asuka_jupe(char *server, char *reason)
 static void m_topic(char *origin, uint8_t parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
-	user_t *u = user_find(origin);
+	server_t *source_server;
+	user_t *source_user;
+	char *source;
+	time_t ts = 0;
 
-	if (!c || !u)
+	if (!c || parc < 2)
 		return;
 
-	handle_topic(c, u->nick, CURRTIME, parv[1]);
+	if (origin == NULL)
+		source = me.actual;
+	else if ((source_server = server_find(origin)) != NULL)
+		source = source_server->name;
+	else if ((source_user = user_find(origin)) != NULL)
+		source = source_user->nick;
+	else
+		source = origin;
+
+	/* Let's accept any topic
+	 * The criteria asuka uses for acceptance are broken,
+	 * and it will not propagate anything not accepted
+	 * -- jilles */
+	if (parc > 2)
+		ts = atoi(parv[parc - 2]);
+	if (ts == 0)
+		ts = CURRTIME;
+	handle_topic(c, source, ts, parv[parc - 1]);
 }
 
 /* AB G !1119920789.573932 services.atheme.org 1119920789.573932 */
