@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: asuka.c 4593 2006-01-19 21:04:30Z jilles $
+ * $Id: asuka.c 4595 2006-01-19 21:17:40Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4593 2006-01-19 21:04:30Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4595 2006-01-19 21:17:40Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -281,7 +281,7 @@ static void asuka_unkline_sts(char *server, char *user, char *host)
 /* topic wrapper */
 static void asuka_topic_sts(char *channel, char *setter, time_t ts, char *topic)
 {
-	/* ircu does not support remote topic propagation */
+	sts("%s T %s %ld :%s", chansvs.me->me->uid, channel, ts, topic);
 }
 
 /* mode wrapper */
