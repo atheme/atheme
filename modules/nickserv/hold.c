@@ -4,7 +4,7 @@
  *
  * Controls noexpire options for nicknames.
  *
- * $Id: hold.c 4491 2006-01-05 00:06:26Z jilles $
+ * $Id: hold.c 4613 2006-01-19 23:52:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/hold", FALSE, _modinit, _moddeinit,
-	"$Id: hold.c 4491 2006-01-05 00:06:26Z jilles $",
+	"$Id: hold.c 4613 2006-01-19 23:52:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -42,7 +42,7 @@ static void ns_cmd_hold(char *origin)
 	char *target = strtok(NULL, " ");
 	char *action = strtok(NULL, " ");
 	myuser_t *mu;
-	user_t *source = user_find(origin);
+	user_t *source = user_find_named(origin);
 
 	if (source == NULL)
 		return;

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TOPIC functions.
  *
- * $Id: topic.c 4491 2006-01-05 00:06:26Z jilles $
+ * $Id: topic.c 4613 2006-01-19 23:52:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/topic", FALSE, _modinit, _moddeinit,
-	"$Id: topic.c 4491 2006-01-05 00:06:26Z jilles $",
+	"$Id: topic.c 4613 2006-01-19 23:52:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -94,7 +94,7 @@ static void cs_cmd_topic(char *origin)
 		return;
 	}
 
-	u = user_find(origin);
+	u = user_find_named(origin);
 
 	if (!chanacs_user_has_flag(mc, u, CA_TOPIC))
 	{
@@ -140,7 +140,7 @@ static void cs_cmd_topicappend(char *origin)
                 return;
         }
 
-        u = user_find(origin);
+        u = user_find_named(origin);
 
         if (!chanacs_user_has_flag(mc, u, CA_TOPIC))
         {
@@ -203,7 +203,7 @@ static void cs_fcmd_topic(char *origin, char *chan)
                 return;
         }
 
-        u = user_find(origin);
+        u = user_find_named(origin);
 
         if (!chanacs_user_has_flag(mc, u, CA_TOPIC))
         {
@@ -226,7 +226,7 @@ static void cs_fcmd_topicappend(char *origin, char *chan)
 {
         char *topic = strtok(NULL, "");
         mychan_t *mc;
-        user_t *u = user_find(origin);
+        user_t *u = user_find_named(origin);
         char topicbuf[BUFSIZE];
         channel_t *c;
 

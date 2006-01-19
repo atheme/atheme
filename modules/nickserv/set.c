@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 4549 2006-01-09 23:27:17Z jilles $
+ * $Id: set.c 4613 2006-01-19 23:52:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 4549 2006-01-09 23:27:17Z jilles $",
+	"$Id: set.c 4613 2006-01-19 23:52:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -80,7 +80,7 @@ static void ns_cmd_set(char *origin)
 
 static void ns_set_email(char *origin, char *name, char *params)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	char *email = strtok(params, " ");
 	myuser_t *mu;
 
@@ -161,7 +161,7 @@ static void ns_set_email(char *origin, char *name, char *params)
 
 static void ns_set_hidemail(char *origin, char *name, char *params)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	myuser_t *mu;
 
 	if (!(mu = myuser_find(name)))
@@ -220,7 +220,7 @@ static void ns_set_hidemail(char *origin, char *name, char *params)
 
 static void ns_set_emailmemos(char *origin, char *name, char *params)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	myuser_t *mu;
 
 	if (!(mu = myuser_find(name)))
@@ -280,7 +280,7 @@ static void ns_set_emailmemos(char *origin, char *name, char *params)
 
 static void ns_set_nomemo(char *origin, char *name, char *params)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	myuser_t *mu;
 
 	if (!(mu = myuser_find(name)))
@@ -333,7 +333,7 @@ static void ns_set_nomemo(char *origin, char *name, char *params)
 
 static void ns_set_neverop(char *origin, char *name, char *params)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	myuser_t *mu;
 
 	if (!(mu = myuser_find(name)))
@@ -391,7 +391,7 @@ static void ns_set_neverop(char *origin, char *name, char *params)
 
 static void ns_set_noop(char *origin, char *name, char *params)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	myuser_t *mu;
 
 	if (!(mu = myuser_find(name)))
@@ -450,7 +450,7 @@ static void ns_set_noop(char *origin, char *name, char *params)
 
 static void ns_set_property(char *origin, char *name, char *params)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	myuser_t *mu;
 	char *property = strtok(params, " ");
 	char *value = strtok(NULL, "");
@@ -519,7 +519,7 @@ static void ns_set_property(char *origin, char *name, char *params)
 static void ns_set_password(char *origin, char *name, char *params)
 {
 	char *password = strtok(params, " ");
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	myuser_t *mu;
 
 	if (!(mu = myuser_find(name)))
@@ -576,7 +576,7 @@ static struct set_command_ ns_set_commands[] = {
 
 static struct set_command_ *ns_set_cmd_find(char *origin, char *command)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	struct set_command_ *c;
 
 	for (c = ns_set_commands; c->name; c++)

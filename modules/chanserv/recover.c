@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService RECOVER functions.
  *
- * $Id: recover.c 4491 2006-01-05 00:06:26Z jilles $
+ * $Id: recover.c 4613 2006-01-19 23:52:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/recover", FALSE, _modinit, _moddeinit,
-	"$Id: recover.c 4491 2006-01-05 00:06:26Z jilles $",
+	"$Id: recover.c 4613 2006-01-19 23:52:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -41,7 +41,7 @@ void _moddeinit()
 
 static void cs_cmd_recover(char *origin)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	chanuser_t *cu, *origin_cu = NULL;
 	mychan_t *mc;
 	node_t *n;

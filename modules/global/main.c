@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4559 2006-01-10 12:04:41Z jilles $
+ * $Id: main.c 4613 2006-01-19 23:52:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"global/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4559 2006-01-10 12:04:41Z jilles $",
+	"$Id: main.c 4613 2006-01-19 23:52:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -117,9 +117,9 @@ static void gs_cmd_global(char *origin)
 				sts(":%s NOTICE %s*%s :[Network Notice] %s", globsvs.nick, ircd->tldprefix, tld->name, global->text);
 			}
 			/* log everything */
-			logcommand(globsvs.me, user_find(origin), CMDLOG_ADMIN, "GLOBAL %s", global->text);
+			logcommand(globsvs.me, user_find_named(origin), CMDLOG_ADMIN, "GLOBAL %s", global->text);
 		}
-		logcommand(globsvs.me, user_find(origin), CMDLOG_ADMIN, "GLOBAL (%d lines sent)", LIST_LENGTH(&globlist));
+		logcommand(globsvs.me, user_find_named(origin), CMDLOG_ADMIN, "GLOBAL (%d lines sent)", LIST_LENGTH(&globlist));
 
 		/* destroy the list we made */
 		LIST_FOREACH_SAFE(n, tn, globlist.head)

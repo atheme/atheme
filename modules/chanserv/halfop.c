@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: halfop.c 4491 2006-01-05 00:06:26Z jilles $
+ * $Id: halfop.c 4613 2006-01-19 23:52:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/halfop", FALSE, _modinit, _moddeinit,
-	"$Id: halfop.c 4491 2006-01-05 00:06:26Z jilles $",
+	"$Id: halfop.c 4613 2006-01-19 23:52:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -93,7 +93,7 @@ static void cs_cmd_halfop(char *origin)
 		return;
 	}
 
-	u = user_find(origin);
+	u = user_find_named(origin);
 	if (!chanacs_user_has_flag(mc, u, CA_HALFOP))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
@@ -176,7 +176,7 @@ static void cs_cmd_dehalfop(char *origin)
 		return;
 	}
 
-	u = user_find(origin);
+	u = user_find_named(origin);
 	if (!chanacs_user_has_flag(mc, u, CA_HALFOP))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
@@ -243,7 +243,7 @@ static void cs_fcmd_halfop(char *origin, char *chan)
 		return;
 	}
 
-	u = user_find(origin);
+	u = user_find_named(origin);
 	if (!chanacs_user_has_flag(mc, u, CA_HALFOP))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
@@ -315,7 +315,7 @@ static void cs_fcmd_dehalfop(char *origin, char *chan)
 		return;
 	}
 
-	u = user_find(origin);
+	u = user_find_named(origin);
 	if (!chanacs_user_has_flag(mc, u, CA_HALFOP))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");

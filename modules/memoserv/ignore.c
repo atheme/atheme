@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv IGNORE functions
  *
- * $Id: ignore.c 4491 2006-01-05 00:06:26Z jilles $
+ * $Id: ignore.c 4613 2006-01-19 23:52:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 4491 2006-01-05 00:06:26Z jilles $",
+	"$Id: ignore.c 4613 2006-01-19 23:52:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -62,7 +62,7 @@ void _moddeinit()
 static void ms_cmd_ignore(char *origin)
 {	
 	/* Grab args */
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	myuser_t *mu = u->myuser;
 	char *cmd = strtok(NULL, " ");
 	char *arg = strtok(NULL, " ");
@@ -90,7 +90,7 @@ static void ms_cmd_ignore(char *origin)
 static void ms_cmd_ignore_add(char *origin, char *target)
 {
 	/* Misc structs etc */
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	myuser_t *mu = u->myuser, *tmu;
 	node_t *n,*node;
 	char *temp;
@@ -151,7 +151,7 @@ static void ms_cmd_ignore_add(char *origin, char *target)
 
 static void ms_cmd_ignore_del(char *origin, char *target)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	myuser_t *mu = u->myuser;
 	node_t *n, *tn;
 	char *temp;
@@ -191,7 +191,7 @@ static void ms_cmd_ignore_del(char *origin, char *target)
 
 static void ms_cmd_ignore_clear(char *origin, char *arg)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	myuser_t *mu = u->myuser;
 	node_t *n, *tn;
 
@@ -216,7 +216,7 @@ static void ms_cmd_ignore_clear(char *origin, char *arg)
 
 static void ms_cmd_ignore_list(char *origin, char *arg)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	myuser_t *mu = u->myuser;
 	node_t *n;
 	uint8_t i = 1;

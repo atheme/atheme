@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 4549 2006-01-09 23:27:17Z jilles $
+ * $Id: set.c 4613 2006-01-19 23:52:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 4549 2006-01-09 23:27:17Z jilles $",
+	"$Id: set.c 4613 2006-01-19 23:52:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -90,7 +90,7 @@ static void cs_cmd_set(char *origin)
 
 static void cs_set_email(char *origin, char *name, char *params)
 {
-        user_t *u = user_find(origin);
+        user_t *u = user_find_named(origin);
         mychan_t *mc;
         char *mail = strtok(params, " ");
 
@@ -147,7 +147,7 @@ static void cs_set_email(char *origin, char *name, char *params)
 
 static void cs_set_url(char *origin, char *name, char *params)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	mychan_t *mc;
 	char *url = strtok(params, " ");
 
@@ -196,7 +196,7 @@ static void cs_set_url(char *origin, char *name, char *params)
 
 static void cs_set_entrymsg(char *origin, char *name, char *params)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	mychan_t *mc;
 
 	if (!(mc = mychan_find(name)))
@@ -255,7 +255,7 @@ static void cs_set_entrymsg(char *origin, char *name, char *params)
  */
 static void cs_set_founder(char *origin, char *name, char *params)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	char *newfounder = strtok(params, " ");
 	myuser_t *tmu;
 	mychan_t *mc;
@@ -397,7 +397,7 @@ static void cs_set_founder(char *origin, char *name, char *params)
 
 static void cs_set_mlock(char *origin, char *name, char *params)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	mychan_t *mc;
 	char modebuf[32], *end, c;
 	int add = -1;
@@ -552,7 +552,7 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 
 static void cs_set_keeptopic(char *origin, char *name, char *params)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	mychan_t *mc;
 
 	if (*name != '#')
@@ -616,7 +616,7 @@ static void cs_set_keeptopic(char *origin, char *name, char *params)
 
 static void cs_set_secure(char *origin, char *name, char *params)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	mychan_t *mc;
 
 	if (*name != '#')
@@ -680,7 +680,7 @@ static void cs_set_secure(char *origin, char *name, char *params)
 
 static void cs_set_verbose(char *origin, char *name, char *params)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	mychan_t *mc;
 
 	if (*name != '#')
@@ -776,7 +776,7 @@ static void cs_set_verbose(char *origin, char *name, char *params)
 
 static void cs_set_fantasy(char *origin, char *name, char *params)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	mychan_t *mc;
 
 	if (*name != '#')
@@ -862,7 +862,7 @@ static void cs_set_staffonly(char *origin, char *name, char *params)
 		}
 
 		snoop("SET:STAFFONLY:ON: for \2%s\2 by \2%s\2", mc->name, origin);
-		logcommand(chansvs.me, user_find(origin), CMDLOG_SET, "%s SET STAFFONLY ON", mc->name);
+		logcommand(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s SET STAFFONLY ON", mc->name);
 
 		mc->flags |= MC_STAFFONLY;
 
@@ -880,7 +880,7 @@ static void cs_set_staffonly(char *origin, char *name, char *params)
 		}
 
 		snoop("SET:STAFFONLY:OFF: for \2%s\2 by \2%s\2", mc->name, origin);
-		logcommand(chansvs.me, user_find(origin), CMDLOG_SET, "%s SET STAFFONLY OFF", mc->name);
+		logcommand(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s SET STAFFONLY OFF", mc->name);
 
 		mc->flags &= ~MC_STAFFONLY;
 
@@ -898,7 +898,7 @@ static void cs_set_staffonly(char *origin, char *name, char *params)
 
 static void cs_set_property(char *origin, char *name, char *params)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	mychan_t *mc;
         char *property = strtok(params, " ");
         char *value = strtok(NULL, "");
@@ -993,7 +993,7 @@ struct set_command_ set_commands[] = {
 
 struct set_command_ *set_cmd_find(char *origin, char *command)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	struct set_command_ *c;
 
 	for (c = set_commands; c->name; c++)

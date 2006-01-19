@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService VOICE functions.
  *
- * $Id: voice.c 4491 2006-01-05 00:06:26Z jilles $
+ * $Id: voice.c 4613 2006-01-19 23:52:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/voice", FALSE, _modinit, _moddeinit,
-	"$Id: voice.c 4491 2006-01-05 00:06:26Z jilles $",
+	"$Id: voice.c 4613 2006-01-19 23:52:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -87,7 +87,7 @@ static void cs_cmd_voice(char *origin)
 		return;
 	}
 
-	u = user_find(origin);
+	u = user_find_named(origin);
 	if (!chanacs_user_has_flag(mc, u, CA_VOICE))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
@@ -150,7 +150,7 @@ static void cs_cmd_devoice(char *origin)
 		return;
 	}
 
-	u = user_find(origin);
+	u = user_find_named(origin);
 	if (!chanacs_user_has_flag(mc, u, CA_VOICE))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
@@ -205,7 +205,7 @@ static void cs_fcmd_voice(char *origin, char *chan)
 		return;
 	}
 
-	u = user_find(origin);
+	u = user_find_named(origin);
 	if (!chanacs_user_has_flag(mc, u, CA_VOICE))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
@@ -258,7 +258,7 @@ static void cs_fcmd_devoice(char *origin, char *chan)
 		return;
 	}
 
-	u = user_find(origin);
+	u = user_find_named(origin);
 	if (!chanacs_user_has_flag(mc, u, CA_VOICE))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");

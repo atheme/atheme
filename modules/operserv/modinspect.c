@@ -4,7 +4,7 @@
  *
  * A simple module inspector.
  *
- * $Id: modinspect.c 4491 2006-01-05 00:06:26Z jilles $
+ * $Id: modinspect.c 4613 2006-01-19 23:52:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modinspect", FALSE, _modinit, _moddeinit,
-	"$Id: modinspect.c 4491 2006-01-05 00:06:26Z jilles $",
+	"$Id: modinspect.c 4613 2006-01-19 23:52:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -49,7 +49,7 @@ static void os_cmd_modinspect(char *origin)
 		return;
 	}
 
-	logcommand(opersvs.me, user_find(origin), CMDLOG_GET, "MODINSPECT %s", mname);
+	logcommand(opersvs.me, user_find_named(origin), CMDLOG_GET, "MODINSPECT %s", mname);
 
 	m = module_find_published(mname);
 

@@ -4,7 +4,7 @@
  *
  * Implements USERSERV RETURN.
  *
- * $Id: return.c 4491 2006-01-05 00:06:26Z jilles $
+ * $Id: return.c 4613 2006-01-19 23:52:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/return", FALSE, _modinit, _moddeinit,
-	"$Id: return.c 4491 2006-01-05 00:06:26Z jilles $",
+	"$Id: return.c 4613 2006-01-19 23:52:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -39,7 +39,7 @@ void _moddeinit()
 
 static void us_cmd_return(char *origin)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	char *target = strtok(NULL, " ");
 	char *newmail = strtok(NULL, " ");
 	char *newpass;

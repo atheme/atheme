@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 4491 2006-01-05 00:06:26Z jilles $
+ * $Id: xop.c 4613 2006-01-19 23:52:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 4491 2006-01-05 00:06:26Z jilles $",
+	"$Id: xop.c 4613 2006-01-19 23:52:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -75,7 +75,7 @@ void _moddeinit()
 
 static void cs_xop(char *origin, uint32_t level, char *leveldesc)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	myuser_t *mu;
 	mychan_t *mc;
 	chanacs_t *ca;
@@ -254,14 +254,14 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 				return;
 			}
 			/* they have access? change it! */
-			logcommand(chansvs.me, user_find(origin), CMDLOG_SET, "%s %s ADD %s (changed access)", mc->name, leveldesc, target);
+			logcommand(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s %s ADD %s (changed access)", mc->name, leveldesc, target);
 			notice(chansvs.nick, origin, "\2%s\2's access on \2%s\2 has been changed to \2%s\2.", target, mc->name, leveldesc);
 			verbose(mc, "\2%s\2 changed \2%s\2's access to \2%s\2.", origin, target, leveldesc);
 			ca->level = level;
 		}
 		else
 		{
-			logcommand(chansvs.me, user_find(origin), CMDLOG_SET, "%s %s ADD %s", mc->name, leveldesc, target);
+			logcommand(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s %s ADD %s", mc->name, leveldesc, target);
 			notice(chansvs.nick, origin, "\2%s\2 has been added to the %s list for \2%s\2.", target, leveldesc, mc->name);
 			verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", origin, target, leveldesc);
 			chanacs_add_host(mc, target, level);
@@ -349,7 +349,7 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 			return;
 		}
 		/* they have access? change it! */
-		logcommand(chansvs.me, user_find(origin), CMDLOG_SET, "%s %s ADD %s (changed access)", mc->name, leveldesc, mu->name);
+		logcommand(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s %s ADD %s (changed access)", mc->name, leveldesc, mu->name);
 		notice(chansvs.nick, origin, "\2%s\2's access on \2%s\2 has been changed to \2%s\2.", mu->name, mc->name, leveldesc);
 		verbose(mc, "\2%s\2 changed \2%s\2's access to \2%s\2.", origin, mu->name, leveldesc);
 		ca->level = level;
@@ -357,7 +357,7 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 	else
 	{
 		/* they have no access, add */
-		logcommand(chansvs.me, user_find(origin), CMDLOG_SET, "%s %s ADD %s", mc->name, leveldesc, mu->name);
+		logcommand(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s %s ADD %s", mc->name, leveldesc, mu->name);
 		notice(chansvs.nick, origin, "\2%s\2 has been added to the %s list for \2%s\2.", mu->name, leveldesc, mc->name);
 		verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", origin, mu->name, leveldesc);
 		chanacs_add(mc, mu, level);
@@ -424,7 +424,7 @@ static void cs_xop_do_del(mychan_t *mc, myuser_t *mu, char *origin, char *target
 
 		chanacs_delete_host(mc, target, level);
 		verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", origin, target, leveldesc);
-		logcommand(chansvs.me, user_find(origin), CMDLOG_SET, "%s %s DEL %s", mc->name, leveldesc, target);
+		logcommand(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s %s DEL %s", mc->name, leveldesc, target);
 		notice(chansvs.nick, origin, "\2%s\2 has been removed from the %s list for \2%s\2.", target, leveldesc, mc->name);
 		return;
 	}
@@ -444,7 +444,7 @@ static void cs_xop_do_del(mychan_t *mc, myuser_t *mu, char *origin, char *target
 
 	chanacs_delete(mc, mu, level);
 	notice(chansvs.nick, origin, "\2%s\2 has been removed from the %s list for \2%s\2.", mu->name, leveldesc, mc->name);
-	logcommand(chansvs.me, user_find(origin), CMDLOG_SET, "%s %s DEL %s", mc->name, leveldesc, mu->name);
+	logcommand(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s %s DEL %s", mc->name, leveldesc, mu->name);
 	verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", origin, mu->name, leveldesc);
 }
 
@@ -473,9 +473,9 @@ static void cs_xop_do_list(mychan_t *mc, char *origin, uint32_t level, char *lev
 	/* XXX */
 	notice(chansvs.nick, origin, "Total of \2%d\2 %s in %s list of \2%s\2.", i, (i == 1) ? "entry" : "entries", leveldesc, mc->name);
 	if (operoverride)
-		logcommand(chansvs.me, user_find(origin), CMDLOG_ADMIN, "%s %s LIST (oper override)", mc->name, leveldesc);
+		logcommand(chansvs.me, user_find_named(origin), CMDLOG_ADMIN, "%s %s LIST (oper override)", mc->name, leveldesc);
 	else
-		logcommand(chansvs.me, user_find(origin), CMDLOG_GET, "%s %s LIST", mc->name, leveldesc);
+		logcommand(chansvs.me, user_find_named(origin), CMDLOG_GET, "%s %s LIST", mc->name, leveldesc);
 }
 
 static void cs_cmd_forcexop(char *origin)
@@ -483,7 +483,7 @@ static void cs_cmd_forcexop(char *origin)
 	char *chan = strtok(NULL, " ");
 	chanacs_t *ca;
 	mychan_t *mc = mychan_find(chan);
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	node_t *n;
 	int i, changes;
 	uint32_t newlevel;

@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ VERIFY function.
  *
- * $Id: verify.c 4491 2006-01-05 00:06:26Z jilles $
+ * $Id: verify.c 4613 2006-01-19 23:52:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/verify", FALSE, _modinit, _moddeinit,
-	"$Id: verify.c 4491 2006-01-05 00:06:26Z jilles $",
+	"$Id: verify.c 4613 2006-01-19 23:52:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -40,7 +40,7 @@ static void us_cmd_verify(char *origin)
 {
 	myuser_t *mu;
 	metadata_t *md;
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	char *op = strtok(NULL, " ");
 	char *nick = strtok(NULL, " ");
 	char *key = strtok(NULL, " ");

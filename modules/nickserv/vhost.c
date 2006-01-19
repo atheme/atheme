@@ -4,7 +4,7 @@
  *
  * VHost management! (ratbox only right now.)
  *
- * $Id: vhost.c 4487 2006-01-04 23:40:23Z jilles $
+ * $Id: vhost.c 4613 2006-01-19 23:52:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 4487 2006-01-04 23:40:23Z jilles $",
+	"$Id: vhost.c 4613 2006-01-19 23:52:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -114,7 +114,7 @@ static void ns_cmd_vhost(char *origin)
 	char *target = strtok(NULL, " ");
 	char *host = strtok(NULL, " ");
 	node_t *n;
-	user_t *source = user_find(origin);
+	user_t *source = user_find_named(origin);
 	myuser_t *mu;
 
 	if (source == NULL)

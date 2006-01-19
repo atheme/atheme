@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 4491 2006-01-05 00:06:26Z jilles $
+ * $Id: akick.c 4613 2006-01-19 23:52:30Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@ static void cs_fcmd_akick(char *origin, char *chan);
 DECLARE_MODULE_V1
 (
 	"chanserv/akick", FALSE, _modinit, _moddeinit,
-	"$Id: akick.c 4491 2006-01-05 00:06:26Z jilles $",
+	"$Id: akick.c 4613 2006-01-19 23:52:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,7 +48,7 @@ void _moddeinit()
 
 void cs_cmd_akick(char *origin)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	myuser_t *mu;
 	mychan_t *mc;
 	chanacs_t *ca, *ca2;
@@ -270,7 +270,7 @@ void cs_cmd_akick(char *origin)
 /* !akick add *!*@*.aol.com */
 void cs_fcmd_akick(char *origin, char *chan)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	myuser_t *mu;
 	mychan_t *mc;
 	chanacs_t *ca, *ca2;

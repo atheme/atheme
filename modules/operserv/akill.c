@@ -5,7 +5,7 @@
  * This file contains functionality which implements
  * the OService AKILL/KLINE command.
  *
- * $Id: akill.c 4553 2006-01-10 09:32:01Z pfish $
+ * $Id: akill.c 4613 2006-01-19 23:52:30Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 4553 2006-01-10 09:32:01Z pfish $",
+	"$Id: akill.c 4613 2006-01-19 23:52:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -66,7 +66,7 @@ void _moddeinit()
 static void os_cmd_akill(char *origin)
 {
 	/* Grab args */
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	char *cmd = strtok(NULL, " ");
 	char *arg = strtok(NULL, " ");
 	
@@ -214,7 +214,7 @@ static void os_cmd_akill_add(char *origin, char *target)
 
 	verbose_wallops("\2%s\2 is \2adding\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2", origin, k->user, k->host, 
 		k->reason);
-	logcommand(opersvs.me, user_find(origin), CMDLOG_SET, "AKILL ADD %s@%s %s", k->user, k->host, k->reason);
+	logcommand(opersvs.me, user_find_named(origin), CMDLOG_SET, "AKILL ADD %s@%s %s", k->user, k->host, k->reason);
 }
 
 static void os_cmd_akill_del(char *origin, char *target)
@@ -269,7 +269,7 @@ static void os_cmd_akill_del(char *origin, char *target)
 						origin, k->user, k->host, k->reason);
 
 					snoop("AKILL:DEL: \2%s@%s\2 by \2%s\2", k->user, k->host, origin);
-					logcommand(opersvs.me, user_find(origin), CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
+					logcommand(opersvs.me, user_find_named(origin), CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
 					kline_delete(k->user, k->host);
 				}
 
@@ -289,7 +289,7 @@ static void os_cmd_akill_del(char *origin, char *target)
 				origin, k->user, k->host, k->reason);
 
 			snoop("AKILL:DEL: \2%s@%s\2 by \2%s\2", k->user, k->host, origin);
-			logcommand(opersvs.me, user_find(origin), CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
+			logcommand(opersvs.me, user_find_named(origin), CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
 			kline_delete(k->user, k->host);
 		} while ((s = strtok(NULL, ",")));
 
@@ -350,7 +350,7 @@ static void os_cmd_akill_del(char *origin, char *target)
 			origin, k->user, k->host, k->reason);
 
 		snoop("AKILL:DEL: \2%s@%s\2 by \2%s\2", k->user, k->host, origin);
-		logcommand(opersvs.me, user_find(origin), CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
+		logcommand(opersvs.me, user_find_named(origin), CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
 		kline_delete(k->user, k->host);
 		return;
 	}
@@ -370,7 +370,7 @@ static void os_cmd_akill_del(char *origin, char *target)
 		origin, k->user, k->host, k->reason);
 
 	snoop("AKILL:DEL: \2%s@%s\2 by \2%s\2", k->user, k->host, origin);
-	logcommand(opersvs.me, user_find(origin), CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
+	logcommand(opersvs.me, user_find_named(origin), CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
 	kline_delete(userbuf, hostbuf);
 }
 
@@ -403,6 +403,6 @@ static void os_cmd_akill_list(char *origin, char *param)
 	}
 
 	notice(opersvs.nick, origin, "Total of \2%d\2 %s in AKILL list.", klnlist.count, (klnlist.count == 1) ? "entry" : "entries");
-	logcommand(opersvs.me, user_find(origin), CMDLOG_GET, "AKILL LIST%s", full ? " FULL" : "");
+	logcommand(opersvs.me, user_find_named(origin), CMDLOG_GET, "AKILL LIST%s", full ? " FULL" : "");
 }
 

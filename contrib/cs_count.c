@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService COUNT functions.
  *
- * $Id: cs_count.c 4491 2006-01-05 00:06:26Z jilles $
+ * $Id: cs_count.c 4613 2006-01-19 23:52:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/count", FALSE, _modinit, _moddeinit,
-	"$Id: cs_count.c 4491 2006-01-05 00:06:26Z jilles $",
+	"$Id: cs_count.c 4613 2006-01-19 23:52:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -43,7 +43,7 @@ static void cs_cmd_count(char *origin)
 	char *chan = strtok(NULL, " ");
 	chanacs_t *ca;
 	mychan_t *mc = mychan_find(chan);
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	uint8_t vopcnt = 0, aopcnt = 0, hopcnt = 0, sopcnt = 0, akickcnt = 0;
 	node_t *n;
 

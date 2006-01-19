@@ -1,3 +1,13 @@
+jilles      2006/01/19 23:41:14 UTC	(20060119-4611)
+  Log:
+  Change some frequently used user_find() to user_find_named().
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/main.c (File Modified) 
+  +4 -4		trunk/src/commandtree.c (File Modified) 
+
+
 jilles      2006/01/19 23:20:35 UTC	(20060119-4609)
   Log:
   Consistently call chanuser_add() with a UID (if known).

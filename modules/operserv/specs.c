@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService SPECS command.
  *
- * $Id: specs.c 4561 2006-01-15 18:55:58Z nenolod $
+ * $Id: specs.c 4613 2006-01-19 23:52:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/specs", FALSE, _modinit, _moddeinit,
-	"$Id: specs.c 4561 2006-01-15 18:55:58Z nenolod $",
+	"$Id: specs.c 4613 2006-01-19 23:52:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -76,7 +76,7 @@ struct
 
 static void os_cmd_specs(char *origin)
 {
-	user_t *u = user_find(origin), *tu = NULL;
+	user_t *u = user_find_named(origin), *tu = NULL;
 	operclass_t *cl = NULL;
 	char *targettype = strtok(NULL, " ");
 	char *target = strtok(NULL, " ");
@@ -185,7 +185,7 @@ static void os_cmd_specs(char *origin)
 	notice(opersvs.nick, origin, "End of privileges");
 
 	if (tu)
-		logcommand(opersvs.me, user_find(origin), CMDLOG_ADMIN, "SPECS USER %s!%s@%s", tu->nick, tu->user, tu->vhost);
+		logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "SPECS USER %s!%s@%s", tu->nick, tu->user, tu->vhost);
 	else
-		logcommand(opersvs.me, user_find(origin), CMDLOG_ADMIN, "SPECS OPERCLASS %s", cl->name);
+		logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "SPECS OPERCLASS %s", cl->name);
 }

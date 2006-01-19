@@ -82,7 +82,7 @@ static void ns_cmd_release(char *origin)
 	char *password = strtok(NULL, " ");
 	char *gnick;
 	int i;
-	user_t *u = user_find(target), *m = user_find(origin);
+	user_t *u = user_find(target), *m = user_find_named(origin);
 	char ign[BUFSIZE];
 
 	if (!target)

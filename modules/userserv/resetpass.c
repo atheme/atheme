@@ -4,7 +4,7 @@
  *
  * This file contains code for UserServ RESETPASS
  *
- * $Id: resetpass.c 4487 2006-01-04 23:40:23Z jilles $
+ * $Id: resetpass.c 4613 2006-01-19 23:52:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/resetpass", FALSE, _modinit, _moddeinit,
-	"$Id: resetpass.c 4487 2006-01-04 23:40:23Z jilles $",
+	"$Id: resetpass.c 4613 2006-01-19 23:52:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -40,7 +40,7 @@ void _moddeinit()
 static void us_cmd_resetpass(char *origin)
 {
 	myuser_t *mu;
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	metadata_t *md;
 	char *name = strtok(NULL, " ");
 	char *newpass;

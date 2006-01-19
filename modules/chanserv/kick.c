@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: kick.c 4491 2006-01-05 00:06:26Z jilles $
+ * $Id: kick.c 4613 2006-01-19 23:52:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/kick", FALSE, _modinit, _moddeinit,
-	"$Id: kick.c 4491 2006-01-05 00:06:26Z jilles $",
+	"$Id: kick.c 4613 2006-01-19 23:52:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -86,7 +86,7 @@ static void cs_cmd_kick(char *origin)
 		return;
 	}
 
-	u = user_find(origin);
+	u = user_find_named(origin);
 
 	if (!chanacs_user_has_flag(mc, u, CA_REMOVE))
 	{
@@ -149,7 +149,7 @@ static void cs_cmd_kickban(char *origin)
 		return;
 	}
 
-	u = user_find(origin);
+	u = user_find_named(origin);
 
 	if (!chanacs_user_has_flag(mc, u, CA_REMOVE))
 	{
@@ -178,7 +178,7 @@ static void cs_cmd_kickban(char *origin)
 	snprintf(reasonbuf, BUFSIZE, "%s (%s)", reason ? reason : "No reason given", origin);
 	ban(chansvs.nick, chan, tu);
 	kick(chansvs.nick, chan, tu->nick, reasonbuf);
-	logcommand(chansvs.me, user_find(origin), CMDLOG_SET, "%s KICKBAN %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
+	logcommand(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s KICKBAN %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (u != tu && !chanuser_find(mc->chan, u))
 		notice(chansvs.nick, origin, "\2%s\2 has been kickbanned from \2%s\2.", tu->nick, mc->name);
 }
@@ -206,7 +206,7 @@ static void cs_fcmd_kick(char *origin, char *chan)
 		return;
 	}
 
-	u = user_find(origin);
+	u = user_find_named(origin);
 
 	if (!chanacs_user_has_flag(mc, u, CA_REMOVE))
 	{
@@ -260,7 +260,7 @@ static void cs_fcmd_kickban(char *origin, char *chan)
 		return;
 	}
 
-	u = user_find(origin);
+	u = user_find_named(origin);
 
 	if (!chanacs_user_has_flag(mc, u, CA_REMOVE))
 	{
@@ -289,6 +289,6 @@ static void cs_fcmd_kickban(char *origin, char *chan)
 	snprintf(reasonbuf, BUFSIZE, "%s (%s)", reason ? reason : "No reason given", origin);
 	ban(chansvs.nick, chan, tu);
 	kick(chansvs.nick, chan, tu->nick, reasonbuf);
-	logcommand(chansvs.me, user_find(origin), CMDLOG_SET, "%s KICKBAN %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
+	logcommand(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s KICKBAN %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 }
 

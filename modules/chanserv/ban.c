@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 4491 2006-01-05 00:06:26Z jilles $
+ * $Id: ban.c 4613 2006-01-19 23:52:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", FALSE, _modinit, _moddeinit,
-	"$Id: ban.c 4491 2006-01-05 00:06:26Z jilles $",
+	"$Id: ban.c 4613 2006-01-19 23:52:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -65,7 +65,7 @@ static void cs_cmd_ban (char *origin)
 	char *target = strtok(NULL, " ");
 	channel_t *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	user_t *tu;
 
 	if (!channel || !target)
@@ -144,7 +144,7 @@ static void cs_cmd_unban (char *origin)
         char *target = strtok(NULL, " ");
         channel_t *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	user_t *tu;
 
 	if (!target)
@@ -242,7 +242,7 @@ static void cs_fcmd_ban (char *origin, char *channel)
 	char *target = strtok(NULL, " ");
 	channel_t *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	user_t *tu;
 
 	if (!channel || !target)
@@ -310,7 +310,7 @@ static void cs_fcmd_unban (char *origin, char *channel)
         char *target = strtok(NULL, " ");
         channel_t *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 	user_t *tu;
 
 	if (!target)
