@@ -1,3 +1,13 @@
+jilles      2006/01/19 14:40:44 UTC	(20060119-4577)
+  Log:
+  Debug scaffolding to find places where user_find() is used on nicks
+  in P10.
+  
+
+  Changes:	Modified:
+  +5 -0		trunk/src/node.c (File Modified) 
+
+
 jilles      2006/01/19 14:35:04 UTC	(20060119-4575)
   Log:
   Um, P10 JOIN introduces the new user unopped...

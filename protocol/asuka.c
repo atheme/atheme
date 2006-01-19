@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: asuka.c 4575 2006-01-19 14:35:04Z jilles $
+ * $Id: asuka.c 4579 2006-01-19 14:58:34Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4575 2006-01-19 14:35:04Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4579 2006-01-19 14:58:34Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -150,8 +150,8 @@ static void asuka_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes
 static void asuka_kick(char *from, char *channel, char *to, char *reason)
 {
 	channel_t *chan = channel_find(channel);
-	user_t *fptr = user_find(from);
-	user_t *user = user_find(to);
+	user_t *fptr = user_find_named(from);
+	user_t *user = user_find_named(to);
 
 	if (!chan || !user || !fptr)
 		return;
@@ -165,7 +165,7 @@ static void asuka_kick(char *from, char *channel, char *to, char *reason)
 static void asuka_msg(char *from, char *target, char *fmt, ...)
 {
 	va_list ap;
-	user_t *u = user_find(from);
+	user_t *u = user_find_named(from);
 	char buf[BUFSIZE];
 
 	if (!u)
@@ -183,8 +183,8 @@ static void asuka_notice(char *from, char *target, char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
-	user_t *u = user_find(from);
-	user_t *t = user_find(target);
+	user_t *u = user_find_named(from);
+	user_t *t = user_find_named(target);
 
 	if (u == NULL && (from == NULL || (irccasecmp(from, me.name) && irccasecmp(from, ME))))
 	{
@@ -210,8 +210,8 @@ static void asuka_numeric_sts(char *from, int numeric, char *target, char *fmt, 
 	char buf[BUFSIZE];
 	user_t *source_p, *target_p;
 
-	source_p = user_find(from);
-	target_p = user_find(target);
+	source_p = user_find_named(from);
+	target_p = user_find_named(target);
 
 	if (!target_p)
 		return;
@@ -228,23 +228,23 @@ static void asuka_skill(char *from, char *nick, char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
-	user_t *fptr = user_find(from);
-	user_t *tptr = user_find(nick);
+	user_t *fptr = user_find_named(from);
+	user_t *tptr = user_find_named(nick);
 
-	if (!fptr || !tptr)
+	if (!tptr)
 		return;
 
 	va_start(ap, fmt);
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts("%s D %s :%s!%s!%s (%s)", fptr->uid, tptr->uid, from, from, from, buf);
+	sts("%s D %s :%s!%s!%s (%s)", fptr ? fptr->uid : me.numeric, tptr->uid, from, from, from, buf);
 }
 
 /* PART wrapper */
 static void asuka_part(char *chan, char *nick)
 {
-	user_t *u = user_find(nick);
+	user_t *u = user_find_named(nick);
 	channel_t *c = channel_find(chan);
 	chanuser_t *cu;
 
@@ -286,7 +286,7 @@ static void asuka_topic_sts(char *channel, char *setter, time_t ts, char *topic)
 /* mode wrapper */
 static void asuka_mode_sts(char *sender, char *target, char *modes)
 {
-	user_t *fptr = user_find(sender);
+	user_t *fptr = user_find_named(sender);
 	channel_t *cptr = channel_find(target);
 
 	if (!fptr || !cptr)
