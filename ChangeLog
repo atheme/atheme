@@ -1,3 +1,13 @@
+jilles      2006/01/19 21:35:55 UTC	(20060119-4597)
+  Log:
+  Add cmode +N (no notices/wallchops).
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/protocol/asuka.h (File Modified) 
+  +1 -0		trunk/protocol/asuka.c (File Modified) 
+
+
 jilles      2006/01/19 21:17:40 UTC	(20060119-4595)
   Log:
   P10: Add topic_sts().

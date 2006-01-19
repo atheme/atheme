@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: bircd.c 4595 2006-01-19 21:17:40Z jilles $
+ * $Id: bircd.c 4599 2006-01-19 21:43:00Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 4595 2006-01-19 21:17:40Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 4599 2006-01-19 21:43:00Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -293,7 +293,10 @@ static void asuka_mode_sts(char *sender, char *target, char *modes)
 	if (!fptr || !cptr)
 		return;
 
-	sts("%s M %s %s %ld", fptr->uid, target, modes, cptr->ts);
+	if (chanuser_find(cptr, fptr))
+		sts("%s M %s %s %ld", fptr->uid, target, modes, cptr->ts);
+	else
+		sts("%s M %s %s %ld", me.numeric, target, modes, cptr->ts);
 }
 
 /* ping wrapper */

@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: undernet.c 4595 2006-01-19 21:17:40Z jilles $
+ * $Id: undernet.c 4599 2006-01-19 21:43:00Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4595 2006-01-19 21:17:40Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4599 2006-01-19 21:43:00Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -289,7 +289,10 @@ static void undernet_mode_sts(char *sender, char *target, char *modes)
 	if (!fptr || !cptr)
 		return;
 
-	sts("%s M %s %s %ld", fptr->uid, target, modes, cptr->ts);
+	if (chanuser_find(cptr, fptr))
+		sts("%s M %s %s %ld", fptr->uid, target, modes, cptr->ts);
+	else
+		sts("%s M %s %s %ld", me.numeric, target, modes, cptr->ts);
 }
 
 /* ping wrapper */
