@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: asuka.c 4621 2006-01-20 01:44:46Z jilles $
+ * $Id: asuka.c 4623 2006-01-20 01:57:35Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4621 2006-01-20 01:44:46Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4623 2006-01-20 01:57:35Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -331,7 +331,7 @@ static void asuka_ping_sts(void)
 /* protocol-specific stuff to do on login */
 static void asuka_on_login(char *origin, char *user, char *wantedhost)
 {
-	user_t *u = user_find(origin);
+	user_t *u = user_find_named(origin);
 
 	if (!u)
 		return;
