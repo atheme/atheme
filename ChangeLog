@@ -1,3 +1,14 @@
+jilles      2006/01/20 00:19:29 UTC	(20060120-4617)
+  Log:
+  Guess what? More user_find() to user_find_named().
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/contrib/ns_enforce.c (File Modified) 
+  +3 -3		trunk/modules/chanserv/close.c (File Modified) 
+  +1 -1		trunk/src/help.c (File Modified) 
+
+
 jilles      2006/01/20 00:09:52 UTC	(20060120-4615)
   Log:
   No idea why chanacs_find_by_mask() bothered with user_t's at all.
