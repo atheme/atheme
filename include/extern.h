@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 4581 2006-01-19 15:18:35Z jilles $
+ * $Id: extern.h 4621 2006-01-20 01:44:46Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -283,6 +283,7 @@ E const char *infotext[];
 
 /* ubase64.c */
 E const char* uinttobase64(char* buf, uint64_t v, int64_t count);
+E uint32_t base64touint(char* buf);
 
 /* protocol stuff */
 E void handle_nickchange(user_t *u);

@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: asuka.c 4619 2006-01-20 00:27:51Z jilles $
+ * $Id: asuka.c 4621 2006-01-20 01:44:46Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4619 2006-01-20 00:27:51Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4621 2006-01-20 01:44:46Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -731,6 +731,8 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 	server_t *s;
 	user_t *u;
 	kline_t *k;
+	struct in_addr ip;
+	char ipstring[64];
 
 	/* got the right number of args for an introduction? */
 	if (parc >= 8)
@@ -764,7 +766,11 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			return;
 		}
 
-		u = user_add(parv[0], parv[3], parv[4], NULL, NULL, parv[parc - 2], parv[parc - 1], s, atoi(parv[2]));
+		ip.s_addr = ntohl(base64touint(parv[parc - 3]));
+		ipstring[0] = '\0';
+		if (!inet_ntop(AF_INET, &ip, ipstring, sizeof ipstring))
+			ipstring[0] = '\0';
+		u = user_add(parv[0], parv[3], parv[4], NULL, ipstring, parv[parc - 2], parv[parc - 1], s, atoi(parv[2]));
 
 		if (parv[5][0] == '+')
 		{
