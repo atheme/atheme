@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: asuka.c 4627 2006-01-20 11:51:44Z jilles $
+ * $Id: asuka.c 4629 2006-01-20 12:23:21Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4627 2006-01-20 11:51:44Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4629 2006-01-20 12:23:21Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -854,6 +854,75 @@ static void m_mode(char *origin, uint8_t parc, char *parv[])
 		user_mode(user_find_named(parv[0]), parv[1]);
 }
 
+static void m_clearmode(char *origin, uint8_t parc, char *parv[])
+{
+	channel_t *chan;
+	char *p, c;
+	node_t *n;
+	chanuser_t *cu;
+	int i;
+
+	if (parc < 2)
+	{
+		slog(LG_DEBUG, "m_clearmode(): missing parameters in CLEARMODE");
+		return;
+	}
+
+	/* -> ABAAA CM # b */
+	/* Note: this is an IRCop command, do not enforce mode locks. */
+	chan = channel_find(parv[0]);
+	if (chan == NULL)
+	{
+		slog(LG_DEBUG, "m_clearmode(): unknown channel %s", parv[0]);
+		return;
+	}
+	p = parv[1];
+	while ((c = *p++))
+	{
+		if (c == 'b')
+			chanban_clear(chan);
+		else if (c == 'k')
+		{
+			if (chan->key)
+				free(chan->key);
+			chan->key = NULL;
+		}
+		else if (c == 'l')
+			chan->limit = 0;
+		else if (c == 'o')
+		{
+			LIST_FOREACH(n, chan->members.head)
+			{
+				cu = (chanuser_t *)n->data;
+				if (cu->user->server == me.me)
+				{
+					/* it's a service, reop */
+					sts("%s M %s +o %s %ld", me.numeric,
+							chan->name,
+							cu->user->uid,
+							chan->ts);
+				}
+				else
+					cu->modes &= ~CMODE_OP;
+			}
+		}
+		else if (c == 'v')
+		{
+			LIST_FOREACH(n, chan->members.head)
+			{
+				cu = (chanuser_t *)n->data;
+				cu->modes &= ~CMODE_VOICE;
+			}
+		}
+		else
+			for (i = 0; mode_list[i].mode != '\0'; i++)
+			{
+				if (c == mode_list[i].mode)
+					chan->modes &= ~mode_list[i].value;
+			}
+	}
+}
+
 static void m_kick(char *origin, uint8_t parc, char *parv[])
 {
 	user_t *u = user_find(parv[1]);
@@ -1013,6 +1082,8 @@ void _modinit(module_t * m)
 	pcommand_add("N", m_nick);
 	pcommand_add("Q", m_quit);
 	pcommand_add("M", m_mode);
+	pcommand_add("OM", m_mode); /* OPMODE, treat as MODE */
+	pcommand_add("CM", m_clearmode);
 	pcommand_add("K", m_kick);
 	pcommand_add("D", m_kill);
 	pcommand_add("SQ", m_squit);
