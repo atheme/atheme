@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 4539 2006-01-08 23:46:58Z jilles $
+ * $Id: function.c 4631 2006-01-20 16:38:15Z jilles $
  */
 
 #include "atheme.h"
@@ -542,6 +542,13 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	if (u == NULL || mu == NULL)
 		return 0;
 
+	if (me.mta == NULL)
+	{
+		if (type != EMAIL_MEMO && !is_internal_client(u))
+			notice(opersvs.me ? opersvs.nick : me.name, u->nick, "Sending email is administratively disabled.");
+		return 0;
+	}
+
 	if (type == EMAIL_SETEMAIL)
 	{
 		/* special case for e-mail change */
@@ -685,7 +692,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 		slog(LG_ERROR, "sendemail(): mta failure");
 	return rc;
 #else
-	return 1;
+	return 0;
 #endif
 }
 

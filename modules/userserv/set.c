@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: set.c 4631 2006-01-20 16:38:15Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: set.c 4631 2006-01-20 16:38:15Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -227,6 +227,11 @@ static void us_set_emailmemos(char *origin, char *name, char *params)
 
         if (!strcasecmp("ON", params))
         {
+		if (me.mta == NULL)
+		{
+			notice(usersvs.nick, origin, "Sending email is administratively disabled.");
+			return;
+		}
                 if (MU_EMAILMEMOS & mu->flags)
                 {
                         notice(usersvs.nick, origin, "The \2EMAILMEMOS\2 flag is already set for \2%s\2.", mu->name);

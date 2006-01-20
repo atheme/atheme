@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4545 2006-01-09 20:23:25Z nenolod $
+ * $Id: conf.c 4631 2006-01-20 16:38:15Z jilles $
  */
 
 #include "atheme.h"
@@ -1601,7 +1601,7 @@ static void copy_me(struct me *src, struct me *dst)
 	dst->netname = sstrdup(src->netname);
 	dst->adminname = sstrdup(src->adminname);
 	dst->adminemail = sstrdup(src->adminemail);
-	dst->mta = sstrdup(src->mta);
+	dst->mta = src->mta ? sstrdup(src->mta) : NULL;
 	dst->loglevel = src->loglevel;
 	dst->maxlogins = src->maxlogins;
 	dst->maxusers = src->maxusers;
