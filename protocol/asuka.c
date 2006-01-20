@@ -2,17 +2,17 @@
  * Copyright (c) 2005 William Pitcock, et al.
  * Rights to this code are documented in doc/LICENSE.
  *
- * This file contains protocol support for IRCnet ircd's.
- * Derived mainly from the documentation (or lack thereof)
- * in my protocol bridge.
+ * This file contains protocol support for P10 ircd's.
+ * Some sources used: Run's documentation, beware's description,
+ * raw data sent by asuka.
  *
- * $Id: asuka.c 4623 2006-01-20 01:57:35Z jilles $
+ * $Id: asuka.c 4627 2006-01-20 11:51:44Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4623 2006-01-20 01:57:35Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4627 2006-01-20 11:51:44Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 

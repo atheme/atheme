@@ -1,3 +1,12 @@
+jilles      2006/01/20 02:43:59 UTC	(20060120-4625)
+  Log:
+  Um, no such function myuser_find_named().
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/register.c (File Modified) 
+
+
 jilles      2006/01/20 01:57:35 UTC	(20060120-4623)
   Log:
   P10: ircd_on_login() takes nick not uid.
