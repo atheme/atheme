@@ -1,3 +1,13 @@
+jilles      2006/01/20 00:09:52 UTC	(20060120-4615)
+  Log:
+  No idea why chanacs_find_by_mask() bothered with user_t's at all.
+  Anyway, doesn't abuse user_find() anymore.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/src/node.c (File Modified) 
+
+
 jilles      2006/01/19 23:52:30 UTC	(20060119-4613)
   Log:
   sed -i.bak -e 's/user_find(origin)/user_find_named(origin)/' modules/*/*.c contrib/*.c

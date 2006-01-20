@@ -4,7 +4,7 @@
  *
  * Closing for channels.
  *
- * $Id: close.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: close.c 4617 2006-01-20 00:19:29Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/close", FALSE, _modinit, _moddeinit,
-	"$Id: close.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: close.c 4617 2006-01-20 00:19:29Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -64,7 +64,7 @@ static void close_check_join(void *vcu)
 	        char buf[BUFSIZE];
 
 		/* don't join if we're already in there */
-		if (!chanuser_find(cu->chan, user_find(chansvs.nick)))
+		if (!chanuser_find(cu->chan, user_find_named(chansvs.nick)))
 			join(cu->chan->name, chansvs.nick);
 
 		/* stay for a bit to stop rejoin floods */
@@ -137,7 +137,7 @@ static void cs_cmd_close(char *origin)
 		{
 		        char buf[BUFSIZE];
 
-			if (!chanuser_find(c, user_find(chansvs.nick)))
+			if (!chanuser_find(c, user_find_named(chansvs.nick)))
 				join(target, chansvs.nick);
 
 			/* stay for a bit to stop rejoin floods */
@@ -180,7 +180,7 @@ static void cs_cmd_close(char *origin)
 		mc->flags &= ~MC_INHABIT;
 		c = channel_find(target);
 		if (c != NULL)
-			if (chanuser_find(c, user_find(chansvs.nick)))
+			if (chanuser_find(c, user_find_named(chansvs.nick)))
 				part(c->name, chansvs.nick);
 		c = channel_find(target);
 		if (c != NULL)

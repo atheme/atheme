@@ -82,7 +82,7 @@ static void ns_cmd_release(char *origin)
 	char *password = strtok(NULL, " ");
 	char *gnick;
 	int i;
-	user_t *u = user_find(target), *m = user_find_named(origin);
+	user_t *u = user_find_named(target), *m = user_find_named(origin);
 	char ign[BUFSIZE];
 
 	if (!target)
@@ -132,7 +132,7 @@ static void ns_cmd_release(char *origin)
 			{
 				snprintf( ign, BUFSIZE, "Guest%d", rand( )%99999 );
 				gnick = ign;
-				if (!user_find(ign))
+				if (!user_find_named(ign))
 					break;
 			}
 			fnc_sts(nicksvs.me->me, u, gnick, FNC_FORCE);
@@ -210,7 +210,7 @@ void reg_check(void *arg)
 						{
 							snprintf( ign, BUFSIZE, "Guest%d", rand( )%99999 );
 							gnick = ign;
-							if (!user_find(ign))
+							if (!user_find_named(ign))
 								break;
 						}
 						fnc_sts(nicksvs.me->me, u, gnick, FNC_FORCE);
