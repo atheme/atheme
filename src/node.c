@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4585 2006-01-19 16:25:49Z jilles $
+ * $Id: node.c 4615 2006-01-20 00:09:52Z jilles $
  */
 
 #include "atheme.h"
@@ -1923,14 +1923,14 @@ uint32_t chanacs_host_flags_by_user(mychan_t *mychan, user_t *u)
 
 chanacs_t *chanacs_find_by_mask(mychan_t *mychan, char *mask, uint32_t level)
 {
-	user_t *u = user_find(mask);
+	myuser_t *mu = myuser_find(mask);
 
 	if (!mychan || !mask)
 		return NULL;
 
-	if (u && u->myuser)
+	if (mu)
 	{
-		chanacs_t *ca = chanacs_find(mychan, u->myuser, level);
+		chanacs_t *ca = chanacs_find(mychan, mu, level);
 
 		if (ca)
 			return ca;
