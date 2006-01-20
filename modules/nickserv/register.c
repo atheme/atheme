@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: register.c 4625 2006-01-20 02:43:59Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: register.c 4625 2006-01-20 02:43:59Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -86,7 +86,7 @@ static void ns_cmd_register(char *origin)
 	}
 
 	/* make sure it isn't registered already */
-	mu = myuser_find_named(origin);
+	mu = myuser_find(origin);
 	if (mu != NULL)
 	{
 		notice(nicksvs.nick, origin, "\2%s\2 is already registered.", mu->name);
