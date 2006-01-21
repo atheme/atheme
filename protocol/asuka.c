@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: asuka.c 4633 2006-01-21 14:44:45Z jilles $
+ * $Id: asuka.c 4635 2006-01-21 15:24:14Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4633 2006-01-21 14:44:45Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4635 2006-01-21 15:24:14Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -733,6 +733,8 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 	kline_t *k;
 	struct in_addr ip;
 	char ipstring[64];
+	char *p;
+	int i;
 
 	/* got the right number of args for an introduction? */
 	if (parc >= 8)
@@ -775,12 +777,29 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 		if (parv[5][0] == '+')
 		{
 			user_mode(u, parv[5]);
+			i = 1;
 			if (strchr(parv[5], 'r'))
 			{
-				handle_burstlogin(u, parv[6]);
+				handle_burstlogin(u, parv[5+i]);
 				/* killed to force logout? */
 				if (user_find(parv[parc - 2]) == NULL)
 					return;
+				i++;
+			}
+			if (strchr(parv[5], 'h'))
+			{
+				p = strchr(parv[5+i], '@');
+				if (p == NULL)
+					strlcpy(u->vhost, parv[5+i], sizeof u->vhost);
+				else
+				{
+					strlcpy(u->vhost, p + 1, sizeof u->vhost);
+					strlcpy(u->user, parv[5+i], sizeof u->user);
+					p = strchr(u->user, '@');
+					if (p != NULL)
+						*p = '\0';
+				}
+				i++;
 			}
 		}
 
