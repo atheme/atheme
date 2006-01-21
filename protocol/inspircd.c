@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 4639 2006-01-21 22:06:41Z jilles $
+ * $Id: inspircd.c 4641 2006-01-21 22:10:57Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4639 2006-01-21 22:06:41Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4641 2006-01-21 22:10:57Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -33,9 +33,9 @@ ircd_t InspIRCd = {
         "+h",                           /* Mode we set for halfops. */
 	PROTOCOL_INSPIRCD,		/* Protocol type */
 	0,                              /* Permanent cmodes */
-	"beIg",                         /* Ban-like cmodes */
-	'e',                            /* Except mchar */
-	'I'                             /* Invex mchar */
+	"bg",                           /* Ban-like cmodes */
+	0,                              /* Except mchar */
+	0                               /* Invex mchar */
 };
 
 struct cmode_ inspircd_mode_list[] = {
