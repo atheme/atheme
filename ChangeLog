@@ -1,3 +1,12 @@
+jilles      2006/01/21 22:10:57 UTC	(20060121-4641)
+  Log:
+  Hmm no +eI in inspircd, just +bg.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/protocol/inspircd.c (File Modified) 
+
+
 jilles      2006/01/21 22:06:41 UTC	(20060121-4639)
   Log:
   Add support for ban-like modes other than +b (e.g. +e, +I).
