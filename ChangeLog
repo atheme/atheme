@@ -1,3 +1,12 @@
+jilles      2006/01/21 22:50:25 UTC	(20060121-4645)
+  Log:
+  Clear bans should require +R, not +f.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/clear_bans.c (File Modified) 
+
+
 jilles      2006/01/21 22:47:09 UTC	(20060121-4643)
   Log:
   Extend /cs clear bans to all lists of a channel,
