@@ -1,3 +1,15 @@
+jilles      2006/01/21 22:47:09 UTC	(20060121-4643)
+  Log:
+  Extend /cs clear bans to all lists of a channel,
+  e.g. /msg chanserv clear # bans beI
+  
+
+  Changes:	Modified:
+  +3 -2		trunk/help/cservice/clear (File Modified) 
+  +21 -2	trunk/help/cservice/clear_bans (File Modified) 
+  +34 -4	trunk/modules/chanserv/clear_bans.c (File Modified) 
+
+
 jilles      2006/01/21 22:10:57 UTC	(20060121-4641)
   Log:
   Hmm no +eI in inspircd, just +bg.

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: clear_bans.c 4643 2006-01-21 22:47:09Z jilles $
+ * $Id: clear_bans.c 4645 2006-01-21 22:50:25Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/clear_bans", FALSE, _modinit, _moddeinit,
-	"$Id: clear_bans.c 4643 2006-01-21 22:47:09Z jilles $",
+	"$Id: clear_bans.c 4645 2006-01-21 22:50:25Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -82,7 +82,7 @@ static void cs_cmd_clear_bans(char *origin, char *channel)
 		return;
 	}
 
-	if (!chanacs_user_has_flag(mc, u, CA_FLAGS))
+	if (!chanacs_user_has_flag(mc, u, CA_RECOVER))
 	{
 		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
 		return;
