@@ -4,15 +4,12 @@
  *
  * This code contains the channel mode definitions for ratbox ircd.
  *
- * $Id: solidircd.h 4529 2006-01-07 02:17:39Z nenolod $
+ * $Id: solidircd.h 4639 2006-01-21 22:06:41Z jilles $
  */
 
 #ifndef RATBOX_H
 #define RATBOX_H
 
-#define CMODE_BAN       0x00000000      /* IGNORE */
-#define CMODE_EXEMPT    0x00000000      /* IGNORE */ 
-#define CMODE_INVEX     0x00000000      /* IGNORE */
 
 /* Extended channel modes will eventually go here. */
 #define CMODE_NOCOLOR	0x00001000	/* bahamut +c */

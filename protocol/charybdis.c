@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 4607 2006-01-19 23:05:17Z jilles $
+ * $Id: charybdis.c 4639 2006-01-21 22:06:41Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 4607 2006-01-19 23:05:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 4639 2006-01-21 22:06:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -32,7 +32,10 @@ ircd_t Charybdis = {
         "+",                            /* Mode we set for protect. */
         "+",                            /* Mode we set for halfops. */
 	PROTOCOL_CHARYBDIS,		/* Protocol type */
-	CMODE_PERM                      /* Permanent cmodes */
+	CMODE_PERM,                     /* Permanent cmodes */
+	"beIq",                         /* Ban-like cmodes */
+	'e',                            /* Except mchar */
+	'I'                             /* Invex mchar */
 };
 
 struct cmode_ charybdis_mode_list[] = {
@@ -54,9 +57,6 @@ struct cmode_ charybdis_mode_list[] = {
 };
 
 struct cmode_ charybdis_ignore_mode_list[] = {
-  { 'e', CMODE_EXEMPT },
-  { 'I', CMODE_INVEX  },
-  { 'q', CMODE_QUIET  },
   { '\0', 0 }
 };
 
@@ -105,7 +105,7 @@ static uint8_t charybdis_server_login(void)
 
 	me.bursting = TRUE;
 
-	sts("CAPAB :QS KLN UNKLN ENCAP TB SERVICES");
+	sts("CAPAB :QS EX IE KLN UNKLN ENCAP TB SERVICES");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
 	sts("SVINFO %d 3 0 :%ld", ircd->uses_uid ? 6 : 5, CURRTIME);
 
@@ -666,6 +666,7 @@ static void m_bmask(char *origin, uint8_t parc, char *parv[])
 	uint8_t ac, i;
 	char *av[256];
 	channel_t *c = channel_find(parv[1]);
+	int type;
 
 	/* :1JJ BMASK 1127474361 #services b :*!*@*evil* *!*eviluser1@* */
 	if (!c)
@@ -673,15 +674,18 @@ static void m_bmask(char *origin, uint8_t parc, char *parv[])
 		slog(LG_DEBUG, "m_bmask(): got bmask for unknown channel");
 		return;
 	}
-
-	/* if it isn't a ban, we don't care. */
-	if (*parv[2] != 'b')
+	
+	type = *parv[2];
+	if (!strchr(ircd->ban_like_modes, type))
+	{
+		slog(LG_DEBUG, "m_bmask(): got unknown type '%c'", type);
 		return;
+	}
 
 	ac = sjtoken(parv[parc - 1], ' ', av);
 
 	for (i = 0; i < ac; i++)
-		chanban_add(c, av[i]);
+		chanban_add(c, av[i], type);
 }
 
 static void m_part(char *origin, uint8_t parc, char *parv[])

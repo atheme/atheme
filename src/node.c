@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4615 2006-01-20 00:09:52Z jilles $
+ * $Id: node.c 4639 2006-01-21 22:06:41Z jilles $
  */
 
 #include "atheme.h"
@@ -931,12 +931,12 @@ channel_t *channel_find(char *name)
  * C H A N  B A N S *
  ********************/
 
-chanban_t *chanban_add(channel_t *chan, char *mask)
+chanban_t *chanban_add(channel_t *chan, char *mask, int type)
 {
 	chanban_t *c;
 	node_t *n;
 
-	c = chanban_find(chan, mask);
+	c = chanban_find(chan, mask, type);
 
 	if (c)
 	{
@@ -944,13 +944,14 @@ chanban_t *chanban_add(channel_t *chan, char *mask)
 		return NULL;
 	}
 
-	slog(LG_DEBUG, "chanban_add(): %s:%s", chan->name, mask);
+	slog(LG_DEBUG, "chanban_add(): %s +%c %s", chan->name, type, mask);
 
 	n = node_create();
 	c = BlockHeapAlloc(chanban_heap);
 
 	c->chan = chan;
 	c->mask = sstrdup(mask);
+	c->type = type;
 
 	node_add(c, n, &chan->bans);
 
@@ -975,7 +976,7 @@ void chanban_delete(chanban_t * c)
 	BlockHeapFree(chanban_heap, c);
 }
 
-chanban_t *chanban_find(channel_t *chan, char *mask)
+chanban_t *chanban_find(channel_t *chan, char *mask, int type)
 {
 	chanban_t *c;
 	node_t *n;
@@ -984,7 +985,7 @@ chanban_t *chanban_find(channel_t *chan, char *mask)
 	{
 		c = n->data;
 
-		if (!irccasecmp(c->mask, mask))
+		if (c->type == type && !irccasecmp(c->mask, mask))
 			return c;
 	}
 

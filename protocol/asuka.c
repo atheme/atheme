@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: asuka.c 4637 2006-01-21 15:47:45Z jilles $
+ * $Id: asuka.c 4639 2006-01-21 22:06:41Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4637 2006-01-21 15:47:45Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4639 2006-01-21 22:06:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -34,7 +34,10 @@ ircd_t Asuka = {
         "+",                            /* Mode we set for protect. */
         "+",                            /* Mode we set for halfops. */
 	PROTOCOL_ASUKA,			/* Protocol type */
-	0                               /* Permanent cmodes */
+	0,                              /* Permanent cmodes */
+	"b",                            /* Ban-like cmodes */
+	0,                              /* Except mchar */
+	0                               /* Invex mchar */
 };
 
 struct cmode_ asuka_mode_list[] = {
@@ -54,8 +57,6 @@ struct cmode_ asuka_mode_list[] = {
 };
 
 struct cmode_ asuka_ignore_mode_list[] = {
-  { 'e', CMODE_EXEMPT },
-  { 'I', CMODE_INVEX  },
   { '\0', 0 }
 };
 

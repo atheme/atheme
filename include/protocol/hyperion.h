@@ -4,17 +4,12 @@
  *
  * This code contains the channel mode definitions for ratbox ircd.
  *
- * $Id: hyperion.h 3043 2005-10-20 01:22:37Z jilles $
+ * $Id: hyperion.h 4639 2006-01-21 22:06:41Z jilles $
  */
 
 #ifndef RATBOX_H
 #define RATBOX_H
 
-#define CMODE_BAN       0x00000000      /* IGNORE */
-#define CMODE_EXEMPT    0x00000000      /* IGNORE */ 
-#define CMODE_INVEX     0x00000000      /* IGNORE */
-#define CMODE_QUIET     0x00000000	/* IGNORE */
-#define CMODE_DENY      0x00000000	/* IGNORE */
 
 /* Extended channel modes will eventually go here. */
 #define CMODE_NOCOLOR	0x00001000	/* hyperion +c */

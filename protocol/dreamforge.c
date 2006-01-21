@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: dreamforge.c 4607 2006-01-19 23:05:17Z jilles $
+ * $Id: dreamforge.c 4639 2006-01-21 22:06:41Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/dreamforge.h"
 
-DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 4607 2006-01-19 23:05:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 4639 2006-01-21 22:06:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -32,7 +32,10 @@ ircd_t DreamForge = {
         "+",                            /* Mode we set for protect. */
         "+",                            /* Mode we set for halfops. */
 	PROTOCOL_DREAMFORGE,		/* Protocol type */
-	0                               /* Permanent cmodes */
+	0,                              /* Permanent cmodes */
+	"b",                            /* Ban-like cmodes */
+	0,                              /* Except mchar */
+	0                               /* Invex mchar */
 };
 
 struct cmode_ dreamforge_mode_list[] = {
@@ -48,8 +51,6 @@ struct cmode_ dreamforge_mode_list[] = {
 };
 
 struct cmode_ dreamforge_ignore_mode_list[] = {
-  { 'e', CMODE_EXEMPT },
-  { 'I', CMODE_INVEX  },
   { '\0', 0 }
 };
 

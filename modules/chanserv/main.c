@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4611 2006-01-19 23:41:14Z jilles $
+ * $Id: main.c 4639 2006-01-21 22:06:41Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4611 2006-01-19 23:41:14Z jilles $",
+	"$Id: main.c 4639 2006-01-21 22:06:41Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -276,11 +276,11 @@ static void cs_join(chanuser_t *cu)
 		ca2 = chanacs_find_host_by_user(mc, u, CA_AKICK);
 		if (ca2 != NULL)
 		{
-			if (chanban_find(chan, ca2->host) == NULL)
+			if (chanban_find(chan, ca2->host, 'b') == NULL)
 			{
 				char str[512];
 
-				chanban_add(chan, ca2->host);
+				chanban_add(chan, ca2->host, 'b');
 				snprintf(str, sizeof str, "+b %s", ca2->host);
 				/* ban immediately */
 				mode_sts(chansvs.nick, chan->name, str);

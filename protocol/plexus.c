@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 4607 2006-01-19 23:05:17Z jilles $
+ * $Id: plexus.c 4639 2006-01-21 22:06:41Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 4607 2006-01-19 23:05:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 4639 2006-01-21 22:06:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -32,7 +32,10 @@ ircd_t PleXusIRCd = {
         "+",                            /* Mode we set for protect. */
         "+h",                           /* Mode we set for halfops. */
 	PROTOCOL_PLEXUS,		/* Protocol type */
-	0                               /* Permanent cmodes */
+	0,                              /* Permanent cmodes */
+	"beI",                          /* Ban-like cmodes */
+	'e',                            /* Except mchar */
+	'I'                             /* Invex mchar */
 };
 
 struct cmode_ plexus_mode_list[] = {
@@ -54,8 +57,6 @@ struct cmode_ plexus_mode_list[] = {
 };
 
 struct cmode_ plexus_ignore_mode_list[] = {
-  { 'e', CMODE_EXEMPT },
-  { 'I', CMODE_INVEX  },
   { '\0', 0 }
 };
 
@@ -86,7 +87,7 @@ static uint8_t plexus_server_login(void)
 
 	me.bursting = TRUE;
 
-	sts("CAPAB :QS KLN UNKLN ENCAP SERVICES");
+	sts("CAPAB :QS EX IE KLN UNKLN ENCAP SERVICES");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
 	sts("SVINFO 5 3 0 :%ld", CURRTIME);
 

@@ -4,7 +4,7 @@
  *
  * Data structures for channel information.
  *
- * $Id: channels.h 3169 2005-10-23 20:16:30Z jilles $
+ * $Id: channels.h 4639 2006-01-21 22:06:41Z jilles $
  */
 
 #ifndef CHANNELS_H
@@ -48,6 +48,7 @@ struct chanban_
 {
   channel_t *chan;
   char *mask;
+  int type; /* 'b', 'e', 'I', etc -- jilles */
 };
 
 #define CMODE_OP        0x00000020      /* SPECIAL */

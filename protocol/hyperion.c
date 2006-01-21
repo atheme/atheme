@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 4607 2006-01-19 23:05:17Z jilles $
+ * $Id: hyperion.c 4639 2006-01-21 22:06:41Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -15,7 +15,7 @@
 #include "atheme.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 4607 2006-01-19 23:05:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 4639 2006-01-21 22:06:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -37,7 +37,10 @@ ircd_t Hyperion = {
         "+",                            /* Mode we set for protect. */
         "+",                            /* Mode we set for halfops. */
 	PROTOCOL_HYPERION,		/* Protocol type */
-	CMODE_PERM | CMODE_JUPED        /* Permanent cmodes */
+	CMODE_PERM | CMODE_JUPED,       /* Permanent cmodes */
+	"beIqd",                        /* Ban-like cmodes */
+	'e',                            /* Except mchar */
+	'I'                             /* Invex mchar */
 };
 
 struct cmode_ hyperion_mode_list[] = {
@@ -60,10 +63,6 @@ struct cmode_ hyperion_mode_list[] = {
 };
 
 struct cmode_ hyperion_ignore_mode_list[] = {
-  { 'e', CMODE_EXEMPT },
-  { 'I', CMODE_INVEX  },
-  { 'q', CMODE_QUIET  },
-  { 'd', CMODE_DENY   },
   { '\0', 0 }
 };
 /* missing +D (oper-only, dubious), +f (we don't do forwarding), +J */
@@ -95,7 +94,7 @@ static uint8_t hyperion_server_login(void)
 
 	me.bursting = TRUE;
 
-	sts("CAPAB :QS KLN UNKLN QU DNCR SRV CHW SIGNON");
+	sts("CAPAB :QS EX DE CHW IE QU DNCR SRV SIGNON");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
 	sts("SVINFO 5 3 0 :%ld", CURRTIME);
 

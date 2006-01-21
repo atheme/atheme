@@ -4,14 +4,12 @@
  *
  * This code contains the channel mode definitions for ratbox ircd.
  *
- * $Id: ultimate3.h 2457 2005-09-30 04:22:12Z nenolod $
+ * $Id: ultimate3.h 4639 2006-01-21 22:06:41Z jilles $
  */
 
 #ifndef ULTIMATE3_H
 #define ULTIMATE3_H
 
-#define CMODE_BAN       0x00000000      /* IGNORE */
-#define CMODE_EXEMPT    0x00000000      /* IGNORE */ 
 
 /* Extended channel modes will eventually go here. */
 #define CMODE_NOCOLOR	0x00001000	/* bahamut +c */

@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for chunky monkey ircd.
  *
- * $Id: monkey.c 4607 2006-01-19 23:05:17Z jilles $
+ * $Id: monkey.c 4639 2006-01-21 22:06:41Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/monkey.h"
 
-DECLARE_MODULE_V1("protocol/monkey", TRUE, _modinit, NULL, "$Id: monkey.c 4607 2006-01-19 23:05:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/monkey", TRUE, _modinit, NULL, "$Id: monkey.c 4639 2006-01-21 22:06:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -32,7 +32,10 @@ ircd_t Monkey = {
         "+",                            /* Mode we set for protect. */
         "+h",                           /* Mode we set for halfops. */
 	PROTOCOL_MONKEY,		/* Protocol type */
-	0                               /* Permanent cmodes */
+	0,                              /* Permanent cmodes */
+	"beI",                          /* Ban-like cmodes */
+	'e',                            /* Except mchar */
+	'I'                             /* Invex mchar */
 };
 
 struct cmode_ monkey_mode_list[] = {
@@ -50,8 +53,6 @@ struct cmode_ monkey_mode_list[] = {
 };
 
 struct cmode_ monkey_ignore_mode_list[] = {
-  { 'e', CMODE_EXEMPT },
-  { 'I', CMODE_INVEX  },
   { '\0', 0 }
 };
 

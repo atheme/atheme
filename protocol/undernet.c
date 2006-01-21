@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: undernet.c 4633 2006-01-21 14:44:45Z jilles $
+ * $Id: undernet.c 4639 2006-01-21 22:06:41Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4633 2006-01-21 14:44:45Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4639 2006-01-21 22:06:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -34,7 +34,10 @@ ircd_t Undernet = {
         "+",                            /* Mode we set for protect. */
         "+",                            /* Mode we set for halfops. */
 	PROTOCOL_UNDERNET,		/* Protocol type */
-	0                               /* Permanent cmodes */
+	0,                              /* Permanent cmodes */
+	"b",                            /* Ban-like cmodes */
+	0,                              /* Except mchar */
+	0                               /* Invex mchar */
 };
 
 struct cmode_ undernet_mode_list[] = {
@@ -48,8 +51,6 @@ struct cmode_ undernet_mode_list[] = {
 };
 
 struct cmode_ undernet_ignore_mode_list[] = {
-  { 'e', CMODE_EXEMPT },
-  { 'I', CMODE_INVEX  },
   { '\0', 0 }
 };
 

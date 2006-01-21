@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 4609 2006-01-19 23:20:35Z jilles $
+ * $Id: services.c 4639 2006-01-21 22:06:41Z jilles $
  */
 
 #include "atheme.h"
@@ -30,12 +30,12 @@ void ban(char *sender, char *channel, user_t *user)
 	snprintf(modemask, MAX_BUF, "+b %s", mask);
 	modemask[MAX_BUF - 1] = '\0';
 
-	cb = chanban_find(c, mask);
+	cb = chanban_find(c, mask, 'b');
 
 	if (cb != NULL)
 		return;
 
-	chanban_add(c, mask);
+	chanban_add(c, mask, 'b');
 
 	mode_sts(sender, channel, modemask);
 }

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: ban.c 4639 2006-01-21 22:06:41Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", FALSE, _modinit, _moddeinit,
-	"$Id: ban.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: ban.c 4639 2006-01-21 22:06:41Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -108,7 +108,7 @@ static void cs_cmd_ban (char *origin)
 	if (validhostmask(target))
 	{
 		cmode(chansvs.nick, c->name, "+b", target);
-		chanban_add(c, target);
+		chanban_add(c, target, 'b');
 		logcommand(chansvs.me, u, CMDLOG_DO, "%s BAN %s", mc->name, target);
 		if (!chanuser_find(mc->chan, u))
 			notice(chansvs.nick, origin, "Banned \2%s\2 on \2%s\2.", target, channel);
@@ -124,7 +124,7 @@ static void cs_cmd_ban (char *origin)
 		strlcat(hostbuf, tu->vhost, BUFSIZE);
 
 		cmode(chansvs.nick, c->name, "+b", hostbuf);
-		chanban_add(c, hostbuf);
+		chanban_add(c, hostbuf, 'b');
 		logcommand(chansvs.me, u, CMDLOG_DO, "%s BAN %s (for user %s!%s@%s)", mc->name, hostbuf, tu->nick, tu->user, tu->vhost);
 		if (!chanuser_find(mc->chan, u))
 			notice(chansvs.nick, origin, "Banned \2%s\2 on \2%s\2.", target, channel);
@@ -183,7 +183,7 @@ static void cs_cmd_unban (char *origin)
 
 	if (validhostmask(target))
 	{
-		chanban_t *cb = chanban_find(c, target);
+		chanban_t *cb = chanban_find(c, target, 'b');
 
 		if (cb)
 		{
@@ -211,6 +211,8 @@ static void cs_cmd_unban (char *origin)
 		{
 			chanban_t *cb = n->data;
 
+			if (cb->type != 'b')
+				continue;
 			slog(LG_DEBUG, "cs_unban(): iterating %s on %s", cb->mask, c->name);
 
 			/* XXX doesn't do CIDR bans */
@@ -279,7 +281,7 @@ static void cs_fcmd_ban (char *origin, char *channel)
 	if (validhostmask(target))
 	{
 		cmode(chansvs.nick, c->name, "+b", target);
-		chanban_add(c, target);
+		chanban_add(c, target, 'b');
 		logcommand(chansvs.me, u, CMDLOG_DO, "%s BAN %s", mc->name, target);
 		return;
 	}
@@ -293,7 +295,7 @@ static void cs_fcmd_ban (char *origin, char *channel)
 		strlcat(hostbuf, tu->vhost, BUFSIZE);
 
 		cmode(chansvs.nick, c->name, "+b", hostbuf);
-		chanban_add(c, hostbuf);
+		chanban_add(c, hostbuf, 'b');
 		logcommand(chansvs.me, u, CMDLOG_DO, "%s BAN %s (for user %s!%s@%s)", mc->name, hostbuf, tu->nick, tu->user, tu->vhost);
 		return;
 	}
@@ -349,7 +351,7 @@ static void cs_fcmd_unban (char *origin, char *channel)
 
 	if (validhostmask(target))
 	{
-		chanban_t *cb = chanban_find(c, target);
+		chanban_t *cb = chanban_find(c, target, 'b');
 
 		if (cb)
 		{
@@ -375,6 +377,8 @@ static void cs_fcmd_unban (char *origin, char *channel)
 		{
 			chanban_t *cb = n->data;
 
+			if (cb->type != 'b')
+				continue;
 			slog(LG_DEBUG, "cs_unban(): iterating %s on %s", cb->mask, c->name);
 
 			/* XXX doesn't do CIDR bans */

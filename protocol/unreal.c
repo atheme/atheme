@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 4607 2006-01-19 23:05:17Z jilles $
+ * $Id: unreal.c 4639 2006-01-21 22:06:41Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 4607 2006-01-19 23:05:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 4639 2006-01-21 22:06:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -32,7 +32,10 @@ ircd_t Unreal = {
         "+a",                           /* Mode we set for protect. */
         "+h",                           /* Mode we set for halfops. */
 	PROTOCOL_UNREAL,		/* Protocol type */
-	0                               /* Permanent cmodes */
+	0,                              /* Permanent cmodes */
+	"beI",                          /* Ban-like cmodes */
+	'e',                            /* Except mchar */
+	'I'                             /* Invex mchar */
 };
 
 struct cmode_ unreal_mode_list[] = {
@@ -59,8 +62,6 @@ struct cmode_ unreal_mode_list[] = {
 };
 
 struct cmode_ unreal_ignore_mode_list[] = {
-  { 'e', CMODE_EXEMPT },
-  { 'I', CMODE_INVEX  },
   { 'j', CMODE_JTHROT },
   { '\0', 0 }
 };
@@ -442,7 +443,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 			if ((*userv[i] == '\'') || (*userv[i] == '"'))	/* ignore cmodes +I, +e */
 				;
 			else if (*userv[i] == '&')	/* channel ban */
-				chanban_add(c, userv[i] + 1);
+				chanban_add(c, userv[i] + 1, 'b');
 			else
 				chanuser_add(c, userv[i]);
 	}
@@ -471,7 +472,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 			if ((*userv[i] == '\'') || (*userv[i] == '"'))	/* ignore cmodes +I, +e */
 				;
 			else if (*userv[i] == '&')	/* channel ban */
-				chanban_add(c, userv[i] + 1);
+				chanban_add(c, userv[i] + 1, 'b');
 			else
 				chanuser_add(c, userv[i]);
 	}

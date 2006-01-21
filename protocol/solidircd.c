@@ -32,6 +32,10 @@ ircd_t solidircd = {
         "+",                            /* Mode we set for protect. */
         "+h",                           /* Mode we set for halfops. */
 	PROTOCOL_SOLIDIRCD		/* Protocol type */
+	0,                              /* Permanent cmodes */
+	"beI",                          /* Ban-like cmodes */
+	'e',                            /* Except mchar */
+	'I'                             /* Invex mchar */
 };
 
 struct cmode_ solidircd_mode_list[] = {
@@ -52,8 +56,6 @@ struct cmode_ solidircd_mode_list[] = {
 };
 
 struct cmode_ solidircd_ignore_mode_list[] = {
-  { 'e', CMODE_EXEMPT },
-  { 'I', CMODE_INVEX  },
   { '\0', 0 }
 };
 

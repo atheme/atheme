@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 4485 2006-01-04 15:45:29Z jilles $
+ * $Id: cmode.c 4639 2006-01-21 22:06:41Z jilles $
  */
 
 #include "atheme.h"
@@ -147,24 +147,32 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 			continue;
 		}
 
-		if (*pos == 'b')
+		if (strchr(ircd->ban_like_modes, *pos))
 		{
+			char mchar[3];
+
 			if (++parpos >= parc)
 				continue;
 			if (whatt == MTYPE_ADD)
 			{
-				chanban_add(chan, parv[parpos]);
+				chanban_add(chan, parv[parpos], *pos);
+				mchar[0] = '+';
+				mchar[1] = *pos;
+				mchar[2] = '\0';
 				if (source)
-					cmode(source->nick, chan->name, "+b", parv[parpos]);
+					cmode(source->nick, chan->name, mchar, parv[parpos]);
 			}
 			else
 			{
 				chanban_t *c;
 
-				c = chanban_find(chan, parv[parpos]);
+				c = chanban_find(chan, parv[parpos], *pos);
 				chanban_delete(c);
+				mchar[0] = '-';
+				mchar[1] = *pos;
+				mchar[2] = '\0';
 				if (source)
-					cmode(source->nick, chan->name, "-b", parv[parpos]);
+					cmode(source->nick, chan->name, mchar, parv[parpos]);
 			}
 			continue;
 		}
@@ -437,6 +445,7 @@ void cmode(char *sender, ...)
 	int32_t flag;
 	int i;
 	char c, *s;
+	int takesparams; /* 0->no, 1->only when set, 2->always */
 
 	if (!sender)
 	{
@@ -517,58 +526,68 @@ void cmode(char *sender, ...)
 		else if (add < 0)
 			continue;
 
-		switch (c)
+		if (c == 'k' || strchr(ircd->ban_like_modes, c))
+			takesparams = 2;
+		else if (c == 'l')
+			takesparams = 1;
+		else
 		{
-		  case 'l':
-		  case 'k':
-		  case 'o':
-		  case 'h':
-		  case 'v':
-		  case 'b':
-		  case 'q':
-		  case 'a':
-		  case 'u':
-			  if (md->nparams >= MAXMODES || md->paramslen >= MAXPARAMSLEN)
-			  {
-				  flush_cmode(&modedata[which]);
-				  strscpy(md->sender, sender, 32);
-				  strscpy(md->channel, channel, 64);
-				  md->used = CURRTIME;
-			  }
+			takesparams = 0;
+			for (i = 0; status_mode_list[i].mode != '\0'; i++)
+			{
+				if (c == status_mode_list[i].mode)
+					takesparams = 2;
+			}
+			for (i = 0; ignore_mode_list[i].mode != '\0'; i++)
+			{
+				if (c == ignore_mode_list[i].mode)
+					takesparams = 1; /* may not be true */
+			}
+		}
+		if (takesparams)
+		{
+			if (md->nparams >= MAXMODES || md->paramslen >= MAXPARAMSLEN)
+			{
+				flush_cmode(&modedata[which]);
+				strscpy(md->sender, sender, 32);
+				strscpy(md->channel, channel, 64);
+				md->used = CURRTIME;
+			}
 
-			  s = md->opmodes + strlen(md->opmodes);
+			s = md->opmodes + strlen(md->opmodes);
 
-			  if (add != md->last_add)
-			  {
-				  *s++ = add ? '+' : '-';
-				  md->last_add = add;
-			  }
+			if (add != md->last_add)
+			{
+				*s++ = add ? '+' : '-';
+				md->last_add = add;
+			}
 
-			  *s++ = c;
+			*s++ = c;
 
-			  if (!add && c == 'l')
-				  break;
+			if (!add && takesparams == 1)
+				break;
 
-			  s = va_arg(args, char *);
+			s = va_arg(args, char *);
 
-			  md->paramslen += snprintf(md->params + md->paramslen, MAXPARAMSLEN + 1 - md->paramslen, "%s%s", md->paramslen ? " " : "", s);
+			md->paramslen += snprintf(md->params + md->paramslen, MAXPARAMSLEN + 1 - md->paramslen, "%s%s", md->paramslen ? " " : "", s);
 
-			  md->nparams++;
-			  break;
+			md->nparams++;
 
-		  default:
-			  flag = mode_to_flag(c);
+		}
+		else
+		{
+			flag = mode_to_flag(c);
 
-			  if (add)
-			  {
-				  md->binmodes_on |= flag;
-				  md->binmodes_off &= ~flag;
-			  }
-			  else
-			  {
-				  md->binmodes_off |= flag;
-				  md->binmodes_on &= ~flag;
-			  }
+			if (add)
+			{
+				md->binmodes_on |= flag;
+				md->binmodes_off &= ~flag;
+			}
+			else
+			{
+				md->binmodes_off |= flag;
+				md->binmodes_on &= ~flag;
+			}
 		}
 	}
 
