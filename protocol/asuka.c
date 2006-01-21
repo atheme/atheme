@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: asuka.c 4635 2006-01-21 15:24:14Z jilles $
+ * $Id: asuka.c 4637 2006-01-21 15:47:45Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4635 2006-01-21 15:24:14Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4637 2006-01-21 15:47:45Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -837,7 +837,6 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 	}
 	else
 	{
-		int i;
 		slog(LG_DEBUG, "m_nick(): got NICK with wrong (%d) number of params", parc);
 
 		for (i = 0; i < parc; i++)

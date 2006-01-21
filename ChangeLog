@@ -1,3 +1,15 @@
+jilles      2006/01/21 15:24:14 UTC	(20060121-4635)
+  Log:
+  Asuka: add support for umode +h (SETHOST) on burst.
+  This means F:SETHOST_AUTO:TRUE is supported;
+  F:SETHOST:TRUE and F:SETHOST_USER:TRUE are not.
+  Umode +x is not supported either.
+  
+
+  Changes:	Modified:
+  +20 -1	trunk/protocol/asuka.c (File Modified) 
+
+
 jilles      2006/01/21 14:44:45 UTC	(20060121-4633)
   Log:
   P10: only acknowledge END_OF_BURST from our uplink, not from other servers.
