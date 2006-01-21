@@ -1,3 +1,18 @@
+jilles      2006/01/20 16:38:15 UTC	(20060120-4631)
+  Log:
+  - allow me::mta unspecified, this disables email support
+    (explicit error message, ns/us set emailmemos on denied;
+    this used to crash on rehash)
+  - return failure instead of success in sendemail() on windows
+  
+
+  Changes:	Modified:
+  +5 -0		trunk/modules/nickserv/set.c (File Modified) 
+  +5 -0		trunk/modules/userserv/set.c (File Modified) 
+  +1 -1		trunk/src/conf.c (File Modified) 
+  +8 -1		trunk/src/function.c (File Modified) 
+
+
 jilles      2006/01/20 12:23:21 UTC	(20060120-4629)
   Log:
   P10: Process received CLEARMODE and OPMODE.

@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: undernet.c 4629 2006-01-20 12:23:21Z jilles $
+ * $Id: undernet.c 4633 2006-01-21 14:44:45Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4629 2006-01-20 12:23:21Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4633 2006-01-21 14:44:45Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -846,7 +846,11 @@ static void m_error(char *origin, uint8_t parc, char *parv[])
 
 static void m_eos(char *origin, uint8_t parc, char *parv[])
 {
-	sts("%s EA", me.numeric);
+	server_t *source = server_find(origin);
+
+	/* acknowledge a local END_OF_BURST */
+	if (source->uplink == me.me)
+		sts("%s EA", me.numeric);
 }
 
 void _modinit(module_t * m)
