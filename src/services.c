@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 4639 2006-01-21 22:06:41Z jilles $
+ * $Id: services.c 4651 2006-01-21 23:37:16Z jilles $
  */
 
 #include "atheme.h"
@@ -38,6 +38,44 @@ void ban(char *sender, char *channel, user_t *user)
 	chanban_add(c, mask, 'b');
 
 	mode_sts(sender, channel, modemask);
+}
+
+/* returns number of exceptions removed -- jilles */
+int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target)
+{
+	char change[MAX_BUF];
+	char e;
+	char hostbuf[BUFSIZE], hostbuf2[BUFSIZE], hostbuf3[BUFSIZE];
+	int count = 0;
+	node_t *n, *tn;
+
+	e = ircd->except_mchar;
+	if (e == '\0')
+		return 0;
+	if (source == NULL || chan == NULL || target == NULL)
+		return 0;
+
+	snprintf(hostbuf, BUFSIZE, "%s!%s@%s", target->nick, target->user, target->host);
+	snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", target->nick, target->user, target->vhost);
+	/* will be nick!user@ if ip unknown, doesn't matter */
+	snprintf(hostbuf3, BUFSIZE, "%s!%s@%s", target->nick, target->user, target->ip);
+	LIST_FOREACH_SAFE(n, tn, chan->bans.head)
+	{
+		chanban_t *cb = n->data;
+
+		if (cb->type != e)
+			continue;
+
+		/* XXX doesn't do CIDR bans */
+		if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2) || !match(cb->mask, hostbuf3))
+		{
+			snprintf(change, sizeof change, "-%c %s", e, cb->mask);
+			mode_sts(source->nick, chan->name, change);
+			chanban_delete(cb);
+			count++;
+		}
+	}
+	return count;
 }
 
 /* join a channel, creating it if necessary */

@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 4639 2006-01-21 22:06:41Z jilles $
+ * $Id: extern.h 4651 2006-01-21 23:37:16Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -237,6 +237,7 @@ E void db_check(void);
 
 /* services.c */
 E void ban(char *sender, char *channel, user_t *user);
+E int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target);
 E void join(char *chan, char *nick);
 E void initialize_services(void);
 E void joinall(char *name);

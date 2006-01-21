@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: login.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: login.c 4651 2006-01-21 23:37:16Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/login", FALSE, _modinit, _moddeinit,
-	"$Id: login.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: login.c 4651 2006-01-21 23:37:16Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -176,7 +176,7 @@ static void us_cmd_login(char *origin)
 			cu = chanuser_find(ca->mychan->chan, u);
 			if (cu && chansvs.me != NULL)
 			{
-				if (ca->level & CA_AKICK)
+				if (ca->level & CA_AKICK && !(ca->level & CA_REMOVE))
 				{
 					/* Stay on channel if this would empty it -- jilles */
 					if (ca->mychan->chan->nummembers <= (config_options.join_chans ? 2 : 1))
@@ -186,6 +186,7 @@ static void us_cmd_login(char *origin)
 							join(cu->chan->name, chansvs.nick);
 					}
 					ban(chansvs.nick, ca->mychan->name, u);
+					remove_ban_exceptions(chansvs.me->me, channel_find(ca->mychan->name), u);
 					kick(chansvs.nick, ca->mychan->name, u->nick, "User is banned from this channel");
 					continue;
 				}

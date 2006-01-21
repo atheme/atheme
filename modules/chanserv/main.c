@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4639 2006-01-21 22:06:41Z jilles $
+ * $Id: main.c 4651 2006-01-21 23:37:16Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4639 2006-01-21 22:06:41Z jilles $",
+	"$Id: main.c 4651 2006-01-21 23:37:16Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -263,7 +263,7 @@ static void cs_join(chanuser_t *cu)
 		return;
 	}
 
-	if (flags & CA_AKICK)
+	if (flags & CA_AKICK && !(flags & CA_REMOVE))
 	{
 		/* Stay on channel if this would empty it -- jilles */
 		if (chan->nummembers <= (config_options.join_chans ? 2 : 1))
@@ -288,6 +288,7 @@ static void cs_join(chanuser_t *cu)
 		}
 		else
 			ban(chansvs.nick, chan->name, u);
+		remove_ban_exceptions(chansvs.me->me, chan, u);
 		kick(chansvs.nick, chan->name, u->nick, "User is banned from this channel");
 		return;
 	}
