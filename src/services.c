@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 4651 2006-01-21 23:37:16Z jilles $
+ * $Id: services.c 4659 2006-01-22 17:42:46Z jilles $
  */
 
 #include "atheme.h"
@@ -13,8 +13,8 @@ extern list_t services[HASHSIZE];
 
 #define MAX_BUF 256
 
-/* ban wrapper for cmode */
-void ban(char *sender, char *channel, user_t *user)
+/* ban wrapper for cmode, returns number of bans added (0 or 1) */
+int ban(char *sender, char *channel, user_t *user)
 {
 	char mask[MAX_BUF];
 	char modemask[MAX_BUF];
@@ -22,7 +22,7 @@ void ban(char *sender, char *channel, user_t *user)
 	chanban_t *cb;
 
 	if (!c)
-		return;
+		return 0;
 
 	snprintf(mask, MAX_BUF, "*!*@%s", user->vhost);
 	mask[MAX_BUF - 1] = '\0';
@@ -33,11 +33,12 @@ void ban(char *sender, char *channel, user_t *user)
 	cb = chanban_find(c, mask, 'b');
 
 	if (cb != NULL)
-		return;
+		return 0;
 
 	chanban_add(c, mask, 'b');
 
 	mode_sts(sender, channel, modemask);
+	return 1;
 }
 
 /* returns number of exceptions removed -- jilles */
