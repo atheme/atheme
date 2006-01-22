@@ -1,3 +1,18 @@
+jilles      2006/01/22 19:24:10 UTC	(20060122-4667)
+  Log:
+  Don't give back dalnet-style +r on nick change
+  if they are still MU_WAITAUTH.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/bahamut.c (File Modified) 
+  +1 -1		trunk/protocol/hyperion.c (File Modified) 
+  +1 -1		trunk/protocol/inspircd.c (File Modified) 
+  +1 -1		trunk/protocol/solidircd.c (File Modified) 
+  +3 -7		trunk/protocol/ultimate3.c (File Modified) 
+  +1 -1		trunk/protocol/unreal.c (File Modified) 
+
+
 nenolod     2006/01/22 18:19:57 UTC	(20060122-4665)
   Log:
   s/1.0-RC1/1.0rc1/i

@@ -1,4 +1,4 @@
-$Id: RELEASE 4661 2006-01-22 18:14:34Z nenolod $
+$Id: RELEASE 4669 2006-01-22 19:26:53Z jilles $
 
 Atheme 1.0 Release Notes
 ========================
@@ -47,9 +47,10 @@ Atheme 1.0 Release Notes
   channels which would otherwise be empty to enforce akick or staffonly.
 - Add nickserv enforcement (FNC users who do not identify in time) to
   contrib.
+- Drastically improve P10 support.
+- Add solidircd support.
+- Add support for ban exceptions and other ban-like modes.
 - Various minor tweaks and bugfixes.
-- Support for P10 has been drastically improved.
-- Support for extended bantypes have been added for many IRCD's.
 
 Atheme 0.3 Release Notes
 ========================
