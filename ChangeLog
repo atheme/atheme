@@ -1,3 +1,12 @@
+jilles      2006/01/22 15:06:48 UTC	(20060122-4653)
+  Log:
+  On /cs kickban <nick>, remove ban exceptions matching <nick>.
+  
+
+  Changes:	Modified:
+  +8 -0		trunk/modules/chanserv/kick.c (File Modified) 
+
+
 jilles      2006/01/21 23:37:16 UTC	(20060121-4651)
   Log:
   Add int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target);
