@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: kick.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: kick.c 4653 2006-01-22 15:06:48Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/kick", FALSE, _modinit, _moddeinit,
-	"$Id: kick.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: kick.c 4653 2006-01-22 15:06:48Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -134,6 +134,7 @@ static void cs_cmd_kickban(char *origin)
 	user_t *u, *tu;
 	chanuser_t *cu;
 	char reasonbuf[BUFSIZE];
+	int n;
 
 	if (!chan || !nick)
 	{
@@ -177,6 +178,9 @@ static void cs_cmd_kickban(char *origin)
 
 	snprintf(reasonbuf, BUFSIZE, "%s (%s)", reason ? reason : "No reason given", origin);
 	ban(chansvs.nick, chan, tu);
+	n = remove_ban_exceptions(chansvs.me->me, mc->chan, tu);
+	if (n > 0)
+		notice(chansvs.nick, origin, "To avoid rejoin, %d ban exception(s) matching \2%s\2 have been removed from \2%s\2.", n, tu->nick, mc->name);
 	kick(chansvs.nick, chan, tu->nick, reasonbuf);
 	logcommand(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s KICKBAN %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (u != tu && !chanuser_find(mc->chan, u))
@@ -245,6 +249,7 @@ static void cs_fcmd_kickban(char *origin, char *chan)
 	user_t *u, *tu;
 	chanuser_t *cu;
 	char reasonbuf[BUFSIZE];
+	int n;
 
 	if (!chan || !nick)
 	{
@@ -288,6 +293,9 @@ static void cs_fcmd_kickban(char *origin, char *chan)
 
 	snprintf(reasonbuf, BUFSIZE, "%s (%s)", reason ? reason : "No reason given", origin);
 	ban(chansvs.nick, chan, tu);
+	n = remove_ban_exceptions(chansvs.me->me, mc->chan, tu);
+	if (n > 0)
+		notice(chansvs.nick, origin, "To avoid rejoin, %d ban exception(s) matching \2%s\2 have been removed from \2%s\2.", n, tu->nick, mc->name);
 	kick(chansvs.nick, chan, tu->nick, reasonbuf);
 	logcommand(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s KICKBAN %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 }

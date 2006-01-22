@@ -1,3 +1,19 @@
+jilles      2006/01/21 23:37:16 UTC	(20060121-4651)
+  Log:
+  Add int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target);
+  and use it to remove matching ban exceptions when
+  activating an akick on a user.
+  For now flag +r exempts from flag +b, adding flag +e later.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/extern.h (File Modified) 
+  +2 -1		trunk/modules/chanserv/main.c (File Modified) 
+  +2 -1		trunk/modules/nickserv/identify.c (File Modified) 
+  +2 -1		trunk/modules/userserv/login.c (File Modified) 
+  +38 -0	trunk/src/services.c (File Modified) 
+
+
 jilles      2006/01/21 23:10:43 UTC	(20060121-4649)
   Log:
   charybdis/hyperion: allow non-standard simple
