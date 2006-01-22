@@ -1,3 +1,12 @@
+jilles      2006/01/22 22:31:21 UTC	(20060122-4681)
+  Log:
+  ChanServ RECOVER: Use the new framework to set the ban exception.
+  
+
+  Changes:	Modified:
+  +15 -5	trunk/modules/chanserv/recover.c (File Modified) 
+
+
 jilles      2006/01/22 22:28:16 UTC	(20060122-4679)
   Log:
   P10: for some strange reason, invite takes a nick and not a uid.

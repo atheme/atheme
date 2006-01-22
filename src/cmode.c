@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 4649 2006-01-21 23:10:43Z jilles $
+ * $Id: cmode.c 4683 2006-01-22 22:40:23Z jilles $
  */
 
 #include "atheme.h"
@@ -212,7 +212,7 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 						if (status_mode_list[i].mode == 'o' && !(chanacs_user_flags(mc, cu->user) & (CA_OP | CA_AUTOOP)))
 						{
 							/* they were opped and aren't on the list, deop them */
-							cmode(chansvs.nick, mc->name, "-o", cu->user->nick);
+							cmode(chansvs.nick, mc->name, "-o", CLIENT_NAME(cu->user));
 							cu->modes &= ~status_mode_list[i].value;
 						}
 						else if (ircd->uses_halfops && status_mode_list[i].mode == ircd->halfops_mchar[1] && !(chanacs_user_flags(mc, cu->user) & (CA_HALFOP | CA_AUTOHALFOP)))
@@ -222,7 +222,7 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 
 							strlcpy(mchar, ircd->halfops_mchar, sizeof mchar);
 							mchar[0] = '-';
-							cmode(chansvs.nick, mc->name, mchar, cu->user->nick);
+							cmode(chansvs.nick, mc->name, mchar, CLIENT_NAME(cu->user));
 							cu->modes &= ~status_mode_list[i].value;
 						}
 					}
