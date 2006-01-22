@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService RECOVER functions.
  *
- * $Id: recover.c 4639 2006-01-21 22:06:41Z jilles $
+ * $Id: recover.c 4681 2006-01-22 22:31:21Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/recover", FALSE, _modinit, _moddeinit,
-	"$Id: recover.c 4639 2006-01-21 22:06:41Z jilles $",
+	"$Id: recover.c 4681 2006-01-22 22:31:21Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -47,6 +47,8 @@ static void cs_cmd_recover(char *origin)
 	node_t *n;
 	char *name = strtok(NULL, " ");
 	char hostbuf[BUFSIZE], hostbuf2[BUFSIZE];
+	char e;
+	boolean_t added_exempt = FALSE;
 
 	if (!name)
 	{
@@ -166,15 +168,23 @@ static void cs_cmd_recover(char *origin)
 	if (origin_cu == NULL)
 	{
 		/* set an exempt on the user calling this */
-		/* no exception list structure right now */
-		/* XXX check to see if the ircd even does +e */
-		snprintf(hostbuf, BUFSIZE, "+e %s", hostbuf2);
-		mode_sts(chansvs.nick, mc->chan->name, hostbuf);
+		e = ircd->except_mchar;
+		if (e != '\0')
+		{
+			if (!chanban_find(mc->chan, hostbuf2, e))
+			{
+				chanban_add(mc->chan, hostbuf2, e);
+				snprintf(hostbuf, BUFSIZE, "+%c %s", e, hostbuf2);
+				mode_sts(chansvs.nick, mc->chan->name, hostbuf);
+				added_exempt = TRUE;
+			}
+		}
 
 		/* invite them back. */
 		invite_sts(chansvs.me->me, u, mc->chan);
-		notice(chansvs.nick, origin, "Recover complete for \2%s\2, ban exception \2%s\2 added.", mc->chan->name, hostbuf2);
 	}
+	if (added_exempt)
+		notice(chansvs.nick, origin, "Recover complete for \2%s\2, ban exception \2%s\2 added.", mc->chan->name, hostbuf2);
 	else
 		notice(chansvs.nick, origin, "Recover complete for \2%s\2.", mc->chan->name);
 }
