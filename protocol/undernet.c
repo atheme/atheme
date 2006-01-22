@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: undernet.c 4639 2006-01-21 22:06:41Z jilles $
+ * $Id: undernet.c 4677 2006-01-22 22:06:16Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4639 2006-01-21 22:06:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4677 2006-01-22 22:06:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -580,10 +580,13 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			return;
 		}
 
-		ip.s_addr = ntohl(base64touint(parv[parc - 3]));
 		ipstring[0] = '\0';
-		if (!inet_ntop(AF_INET, &ip, ipstring, sizeof ipstring))
-			ipstring[0] = '\0';
+		if (strlen(parv[parc - 3]) == 6)
+		{
+			ip.s_addr = ntohl(base64touint(parv[parc - 3]));
+			if (!inet_ntop(AF_INET, &ip, ipstring, sizeof ipstring))
+				ipstring[0] = '\0';
+		}
 		u = user_add(parv[0], parv[3], parv[4], NULL, ipstring, parv[parc - 2], parv[parc - 1], s, atoi(parv[2]));
 
 		if (parv[5][0] == '+')

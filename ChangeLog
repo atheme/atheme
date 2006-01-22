@@ -1,3 +1,12 @@
+jilles      2006/01/22 20:28:32 UTC	(20060122-4675)
+  Log:
+  Add forgotten comma.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/solidircd.c (File Modified) 
+
+
 jilles      2006/01/22 19:51:16 UTC	(20060122-4673)
   Log:
   solidircd and unreal can also do SVSHOLD
