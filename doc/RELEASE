@@ -1,4 +1,4 @@
-$Id: RELEASE 4439 2006-01-02 15:51:51Z jilles $
+$Id: RELEASE 4661 2006-01-22 18:14:34Z nenolod $
 
 Atheme 1.0 Release Notes
 ========================
@@ -48,6 +48,8 @@ Atheme 1.0 Release Notes
 - Add nickserv enforcement (FNC users who do not identify in time) to
   contrib.
 - Various minor tweaks and bugfixes.
+- Support for P10 has been drastically improved.
+- Support for extended bantypes have been added for many IRCD's.
 
 Atheme 0.3 Release Notes
 ========================

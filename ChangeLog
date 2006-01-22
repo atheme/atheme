@@ -1,3 +1,14 @@
+jilles      2006/01/22 17:42:46 UTC	(20060122-4659)
+  Log:
+  Add a return value for ban() indicating the
+  number of bans added (not present yet).
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/extern.h (File Modified) 
+  +5 -4		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/01/22 16:09:51 UTC	(20060122-4657)
   Log:
   Mention ban exception removal in some help files.
