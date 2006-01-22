@@ -1,3 +1,16 @@
+jilles      2006/01/22 22:06:16 UTC	(20060122-4677)
+  Log:
+  P10: only process IP addresses of the correct length
+  (e.g. don't store some bogus IPv4 address if something
+  sends IPv6 addresses like beware's document describes.)
+  
+
+  Changes:	Modified:
+  +6 -3		trunk/protocol/asuka.c (File Modified) 
+  +6 -3		trunk/protocol/bircd.c (File Modified) 
+  +6 -3		trunk/protocol/undernet.c (File Modified) 
+
+
 jilles      2006/01/22 20:28:32 UTC	(20060122-4675)
   Log:
   Add forgotten comma.

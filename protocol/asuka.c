@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: asuka.c 4677 2006-01-22 22:06:16Z jilles $
+ * $Id: asuka.c 4679 2006-01-22 22:28:16Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4677 2006-01-22 22:06:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4679 2006-01-22 22:28:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -105,7 +105,8 @@ static void asuka_introduce_nick(char *nick, char *user, char *host, char *real,
 /* invite a user to a channel */
 static void asuka_invite_sts(user_t *sender, user_t *target, channel_t *channel)
 {
-	sts("%s I %s %s", sender->uid, target->uid, channel->name);
+	/* target is a nick, weird eh? -- jilles */
+	sts("%s I %s %s", sender->uid, target->nick, channel->name);
 }
 
 static void asuka_quit_sts(user_t *u, char *reason)
