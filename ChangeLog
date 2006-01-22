@@ -1,3 +1,13 @@
+nenolod     2006/01/22 18:19:57 UTC	(20060122-4665)
+  Log:
+  s/1.0-RC1/1.0rc1/i
+  
+
+  Changes:	Modified:
+  +11 -11	trunk/configure (File Modified) 
+  +1 -1		trunk/configure.ac (File Modified) 
+
+
 nenolod     2006/01/22 18:18:31 UTC	(20060122-4663)
   Log:
   Some minor cleanups here.
