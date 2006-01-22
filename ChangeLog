@@ -1,3 +1,12 @@
+jilles      2006/01/22 19:26:53 UTC	(20060122-4669)
+  Log:
+  More updates/fixes to release notes.
+  
+
+  Changes:	Modified:
+  +3 -2		trunk/doc/RELEASE (File Modified) 
+
+
 jilles      2006/01/22 19:24:10 UTC	(20060122-4667)
   Log:
   Don't give back dalnet-style +r on nick change

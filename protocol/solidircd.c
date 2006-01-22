@@ -14,7 +14,7 @@ DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 
 
 /* *INDENT-OFF* */
 
-ircd_t solidircd = {
+ircd_t Solidircd = {
         "solid-ircd 3.4.x",             /* IRCd name */
         "$",                            /* TLD Prefix, used by Global. */
         FALSE,                          /* Whether or not we use IRCNet/TS6 UID */
@@ -86,7 +86,7 @@ static uint8_t solidircd_server_login(void)
 
 	me.bursting = TRUE;
 
-	sts("CAPAB SSJOIN NOQUIT BURST UNCONNECT ZIP NICKIP TSMODE");
+	sts("CAPAB SSJOIN NOQUIT BURST ZIP NICKIP TSMODE");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
 	sts("SVINFO 5 3 0 :%ld", CURRTIME);
 
@@ -99,6 +99,12 @@ static uint8_t solidircd_server_login(void)
 static void solidircd_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
 	sts("NICK %s 1 %ld +%s %s %s %s 0 0 :%s", nick, CURRTIME, "io", user, host, me.name, real);
+}
+
+/* invite a user to a channel */
+static void solidircd_invite_sts(user_t *sender, user_t *target, channel_t *channel)
+{
+	sts(":%s INVITE %s %s", sender->nick, target->nick, channel->name);
 }
 
 static void solidircd_quit_sts(user_t *u, char *reason)
@@ -164,7 +170,7 @@ static void solidircd_msg(char *from, char *target, char *fmt, ...)
 }
 
 /* NOTICE wrapper */
-static void solidircd_notice_sts(char *from, char *target, char *fmt, ...)
+static void solidircd_notice(char *from, char *target, char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -180,6 +186,11 @@ static void solidircd_notice_sts(char *from, char *target, char *fmt, ...)
 	va_end(ap);
 
 	sts(":%s NOTICE %s :%s", from, target, buf);
+}
+
+static void solidircd_wallchops(user_t *sender, channel_t *channel, char *message)
+{
+	sts(":%s NOTICE @%s :%s", sender->nick, channel->name, message);
 }
 
 static void solidircd_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
@@ -278,10 +289,10 @@ static void solidircd_on_login(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return;
 
-	/* Can only record identified state if logged in to correct nick,
-	 * sorry -- jilles
+	/* Can only do this for nickserv, and can only record identified
+	 * state if logged in to correct nick, sorry -- jilles
 	 */
-	if (irccasecmp(origin, user))
+	if (nicksvs.me == NULL || irccasecmp(origin, user))
 		return;
 
 	sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, origin, time(NULL));
@@ -293,7 +304,7 @@ static boolean_t solidircd_on_logout(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return FALSE;
 
-	if (irccasecmp(origin, user))
+	if (nicksvs.me == NULL || irccasecmp(origin, user))
 		return FALSE;
 
 	sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, origin, time(NULL));
@@ -319,7 +330,11 @@ static void solidircd_sethost_sts(char *source, char *target, char *host)
 	sts(":%s SVHOST %s :%s", me.name, target, host);
 }
 
-
+static void solidircd_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
+{
+	sts(":%s SVSNICK %s %s %lu", source->nick, u->nick, newnick,
+			(unsigned long)(CURRTIME - 60));
+}
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
 {
@@ -518,7 +533,10 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 	server_t *s;
 	user_t *u;
 	kline_t *k;
+	struct in_addr ip;
+	char ipstring[64];
 
+	/* -> NICK jilles 1 1136143909 +oi ~jilles 192.168.1.5 jaguar.test 0 3232235781 :Jilles Tjoelker */
 	if (parc == 10)
 	{
 		s = server_find(parv[6]);
@@ -545,7 +563,11 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			return;
 		}
 
-		u = user_add(parv[0], parv[4], parv[5], NULL, NULL, NULL, parv[9], s, atoi(parv[2]));
+		ip.s_addr = ntohl(strtoul(parv[8], NULL, 10));
+		ipstring[0] = '\0';
+		if (!inet_ntop(AF_INET, &ip, ipstring, sizeof ipstring))
+			ipstring[0] = '\0';
+		u = user_add(parv[0], parv[4], parv[5], NULL, ipstring, NULL, parv[9], s, atoi(parv[2]));
 
 		user_mode(u, parv[3]);
 
@@ -666,7 +688,7 @@ static void m_kick(char *origin, uint8_t parc, char *parv[])
 	chanuser_delete(c, u);
 
 	/* if they kicked us, let's rejoin */
-	if (!irccasecmp(chansvs.nick, parv[1]))
+	if (is_internal_client(u))
 	{
 		slog(LG_DEBUG, "m_kick(): i got kicked from `%s'; rejoining", parv[0]);
 		join(parv[0], u->nick);
@@ -779,7 +801,8 @@ void _modinit(module_t * m)
 	join_sts = &solidircd_join_sts;
 	kick = &solidircd_kick;
 	msg = &solidircd_msg;
-	notice_sts = &solidircd_notice_sts;
+	notice_sts = &solidircd_notice;
+	wallchops = &solidircd_wallchops;
 	numeric_sts = &solidircd_numeric_sts;
 	skill = &solidircd_skill;
 	part = &solidircd_part;
@@ -792,13 +815,15 @@ void _modinit(module_t * m)
 	ircd_on_logout = &solidircd_on_logout;
 	jupe = &solidircd_jupe;
 	sethost_sts = &solidircd_sethost_sts;
+	fnc_sts = &solidircd_fnc_sts;
+	invite_sts = &solidircd_invite_sts;
 
 	mode_list = solidircd_mode_list;
 	ignore_mode_list = solidircd_ignore_mode_list;
 	status_mode_list = solidircd_status_mode_list;
 	prefix_mode_list = solidircd_prefix_mode_list;
 
-	ircd = &solidircd;
+	ircd = &Solidircd;
 
 	pcommand_add("PING", m_ping);
 	pcommand_add("PONG", m_pong);
