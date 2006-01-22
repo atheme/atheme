@@ -1,3 +1,19 @@
+jilles      2006/01/22 19:48:38 UTC	(20060122-4671)
+  Log:
+  Incorporate changes to bahamut.c between the creation
+  of solidircd.c and its inclusion in Atheme SVN:
+  - don't send UNCONNECT in CAPAB
+  - add invite_sts, wallchops, fnc_sts
+  - don't set umode +r if nickserv is not enabled
+  - store user IP addresses
+  - rejoin all internal clients on kick, not just chanserv
+  - a few style nits
+  
+
+  Changes:	Modified:
+  +37 -12	trunk/protocol/solidircd.c (File Modified) 
+
+
 jilles      2006/01/22 19:26:53 UTC	(20060122-4669)
   Log:
   More updates/fixes to release notes.
