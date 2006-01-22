@@ -2,7 +2,8 @@ Help for SET STAFFONLY:
 
 SET STAFFONLY designates a channel as staff-only.
 Users who are not staff (no chan:joinstaffonly priv) are
-kickbanned from the channel.
+kickbanned from the channel, removing any ban exceptions
+matching them first.
 
 Syntax: SET <#channel> STAFFONLY ON|OFF
 

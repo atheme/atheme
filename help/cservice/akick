@@ -2,7 +2,8 @@ Help for AKICK:
 
 The AKICK command allows you to maintain channel
 ban lists.  Users on the AKICK list will be
-automatically kickbanned when they join the channel.
+automatically kickbanned when they join the channel,
+removing any matching ban exceptions first.
 
 You may also specify a hostmask (nick!user@host)
 for the AKICK list.

@@ -3,6 +3,8 @@ Help for KICKBAN:
 The KICKBAN command allows for the removal of a user from
 a channel while placing a ban on the user.
 
+Any matching ban exceptions will be removed.
+
 Syntax: KICKBAN <#channel> <nick> [reason]
 
 Examples:

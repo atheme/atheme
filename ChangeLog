@@ -1,3 +1,13 @@
+jilles      2006/01/22 15:22:29 UTC	(20060122-4655)
+  Log:
+  Remove ban exceptions when an unauthorized user
+  joins a staffonly channel.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/chanserv/main.c (File Modified) 
+
+
 jilles      2006/01/22 15:06:48 UTC	(20060122-4653)
   Log:
   On /cs kickban <nick>, remove ban exceptions matching <nick>.
