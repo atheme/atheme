@@ -31,7 +31,7 @@ ircd_t Solidircd = {
         "+",                            /* Mode we set for owner. */
         "+",                            /* Mode we set for protect. */
         "+h",                           /* Mode we set for halfops. */
-	PROTOCOL_SOLIDIRCD		/* Protocol type */
+	PROTOCOL_SOLIDIRCD,		/* Protocol type */
 	0,                              /* Permanent cmodes */
 	"beI",                          /* Ban-like cmodes */
 	'e',                            /* Except mchar */

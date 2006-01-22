@@ -1,3 +1,12 @@
+jilles      2006/01/22 19:51:16 UTC	(20060122-4673)
+  Log:
+  solidircd and unreal can also do SVSHOLD
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/contrib/ns_enforce.c (File Modified) 
+
+
 jilles      2006/01/22 19:48:38 UTC	(20060122-4671)
   Log:
   Incorporate changes to bahamut.c between the creation
