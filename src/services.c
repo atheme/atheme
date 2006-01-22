@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 4659 2006-01-22 17:42:46Z jilles $
+ * $Id: services.c 4663 2006-01-22 18:18:31Z nenolod $
  */
 
 #include "atheme.h"
@@ -255,7 +255,7 @@ void handle_nickchange(user_t *u)
 	metadata_t *md;
 
 	if (me.loglevel & LG_DEBUG && runflags & RF_LIVE)
-		notice(globsvs.nick, u->nick, "Services are presently running in debug mode, attached to a console. " "You should take extra caution when utilizing your services passwords.");
+		notice(globsvs.nick, u->nick, "Services are presently running in debug mode, attached to a console. You should take extra caution when utilizing your services passwords.");
 
 	/* Only do the following checks for nickserv, not userserv -- jilles */
 	if (nicksvs.me == NULL)
