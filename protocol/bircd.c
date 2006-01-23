@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: bircd.c 4685 2006-01-23 00:10:38Z jilles $
+ * $Id: bircd.c 4687 2006-01-23 00:21:25Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 4685 2006-01-23 00:10:38Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 4687 2006-01-23 00:21:25Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -452,6 +452,25 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 	uint8_t chanc;
 	char *chanv[256];
 	uint8_t i;
+	user_t *u;
+	node_t *n, *tn;
+	chanuser_t *cu;
+
+	/* JOIN 0 is really a part from all channels */
+	if (!strcmp(parv[0], "0"))
+	{
+		u = user_find(origin);
+		if (u == NULL)
+			return;
+		LIST_FOREACH_SAFE(n, tn, u->channels.head)
+		{
+			cu = (chanuser_t *)n->data;
+			chanuser_delete(cu->chan, u);
+		}
+		return;
+	}
+	if (parc < 2)
+		return;
 
 	chanc = sjtoken(parv[0], ',', chanv);
 
