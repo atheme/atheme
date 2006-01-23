@@ -1,3 +1,13 @@
+jilles      2006/01/22 22:40:23 UTC	(20060122-4683)
+  Log:
+  Send UID if possible when deopping (dehalfopping) a
+  user because of a mode change and /cs set secure.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/src/cmode.c (File Modified) 
+
+
 jilles      2006/01/22 22:31:21 UTC	(20060122-4681)
   Log:
   ChanServ RECOVER: Use the new framework to set the ban exception.

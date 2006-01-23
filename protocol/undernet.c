@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: undernet.c 4679 2006-01-22 22:28:16Z jilles $
+ * $Id: undernet.c 4685 2006-01-23 00:10:38Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4679 2006-01-22 22:28:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4685 2006-01-23 00:10:38Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -465,71 +465,114 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 static void m_burst(char *origin, uint8_t parc, char *parv[])
 {
 	channel_t *c;
-	uint8_t modec = 0;
+	uint8_t modec;
 	char *modev[16];
 	uint8_t userc;
 	char *userv[256];
 	uint8_t i;
+	int j;
+	char prefix[16];
+	char newnick[16+NICKLEN];
+	char *p;
+	time_t ts;
 
-	if (parc >= 3)
+	/* S BURST <channel> <ts> [parameters]
+	 * parameters can be:
+	 * +<simple mode>
+	 * %<bans separated with spaces>
+	 * <nicks>
+	 */
+	if (parc < 2)
 	{
-		c = channel_find(parv[0]);
+		slog(LG_DEBUG, "m_burst(): too few parameters");
+		return;
+	}
 
-		if (parc >= 4)
-			modev[modec++] = parv[2];
-		if (parc >= 5)
-			modev[modec++] = parv[3];
-		if (parc >= 6)
-			modev[modec++] = parv[4];
+	ts = atoi(parv[1]);
 
-		if (!c)
+	c = channel_find(parv[0]);
+
+	if (c == NULL)
+	{
+		slog(LG_DEBUG, "m_burst(): new channel: %s", parv[0]);
+		c = channel_add(parv[0], ts);
+	}
+	else if (ts < c->ts)
+	{
+		chanuser_t *cu;
+		node_t *n;
+
+		c->modes = 0;
+		c->limit = 0;
+		if (c->key)
+			free(c->key);
+		c->key = NULL;
+		chanban_clear(c);
+		handle_topic(c, "", 0, "");
+		LIST_FOREACH(n, c->members.head)
 		{
-			slog(LG_DEBUG, "m_burst(): new channel: %s", parv[0]);
-			c = channel_add(parv[0], atoi(parv[1]));
+			cu = (chanuser_t *)n->data;
+			if (cu->user->server == me.me)
+			{
+				/* it's a service, reop */
+				sts("%s M %s +o %s %ld", me.numeric, c->name, CLIENT_NAME(cu->user), ts);
+				cu->modes = CMODE_OP;
+			}
+			else
+				cu->modes = 0;
 		}
 
-		if (parc >= 4)
-			channel_mode(NULL, c, modec, modev);
+		slog(LG_INFO, "m_burst(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
+		c->ts = ts;
+	}
 
-		/* handle bans. */
-		if (parv[parc - 1][0] == '%')
-			userc = sjtoken(parv[parc - 2], ',', userv);
-		else
-			userc = sjtoken(parv[parc - 1], ',', userv);
-
-		for (i = 0; i < userc; i++)
+	j = 2;
+	while (j < parc)
+	{
+		if (parv[j][0] == '+')
 		{
-			slog(LG_DEBUG, "m_burst(): parsing %s", userv[i]);
+			modec = 0;
+			modev[modec++] = parv[j++];
+			if (strchr(modev[0], 'k') && j < parc)
+				modev[modec++] = parv[j++];
+			if (strchr(modev[0], 'l') && j < parc)
+				modev[modec++] = parv[j++];
+			channel_mode(NULL, c, modec, modev);
+		}
+		else if (parv[j][0] == '%')
+		{
+			userc = sjtoken(parv[j++] + 1, ' ', userv);
+			for (i = 0; i < userc; i++)
+				chanban_add(c, userv[i], 'b');
+		}
+		else
+		{
+			userc = sjtoken(parv[j++], ',', userv);
 
-			if (strchr(userv[i], ':'))
+			prefix[0] = '\0';
+			for (i = 0; i < userc; i++)
 			{
-				char buf[BUFSIZE];
-				char *nick = strtok(userv[i], ":");
-				char *status = strtok(NULL, ":");
-				char *bptr = buf;
-
-				memset(buf, 0, sizeof(buf));
-
-				while (*status)
+				p = strchr(userv[i], ':');
+				if (p != NULL)
 				{
-					if (*status == 'o')
-						*bptr = '@';
-					else if (*status == 'v')
-						*bptr = '+';
-					status++;
-					bptr++;
+					*p = '\0';
+					prefix[0] = '\0';
+					prefix[1] = '\0';
+					prefix[2] = '\0';
+					p++;
+					while (*p)
+					{
+						if (*p == 'o')
+							prefix[prefix[0] ? 1 : 0] = '@';
+						else if (*p == 'v')
+							prefix[prefix[0] ? 1 : 0] = '+';
+						p++;
+					}
 				}
-
-				strlcat(buf, nick, BUFSIZE);
-
-				slog(LG_DEBUG, "m_burst(): converted %s into %s.", userv[i], buf);
-
-				chanuser_add(c, buf);
-
-				continue;
+				strlcpy(newnick, prefix, sizeof newnick);
+				strlcat(newnick, userv[i], sizeof newnick);
+				chanuser_add(c, newnick);
 			}
-
-			chanuser_add(c, userv[i]);
 		}
 	}
 }
