@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 4667 2006-01-22 19:24:10Z jilles $
+ * $Id: unreal.c 4689 2006-01-23 00:54:35Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 4667 2006-01-22 19:24:10Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 4689 2006-01-23 00:54:35Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -391,6 +391,29 @@ static void m_notice(char *origin, uint8_t parc, char *parv[])
 	handle_message(origin, parv[0], TRUE, parv[1]);
 }
 
+static void remove_our_modes(channel_t *c)
+{
+	/* the TS changed.  a TS change requires the following things
+	 * to be done to the channel:  reset all modes to nothing, remove
+	 * all status modes on known users on the channel (including ours),
+	 * and set the new TS.
+	 */
+	chanuser_t *cu;
+	node_t *n;
+
+	c->modes = 0;
+	c->limit = 0;
+	if (c->key)
+		free(c->key);
+	c->key = NULL;
+
+	LIST_FOREACH(n, c->members.head)
+	{
+		cu = (chanuser_t *)n->data;
+		cu->modes = 0;
+	}
+}
+
 static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 {
 	/*
@@ -401,7 +424,6 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 	 *  -> SJOIN 1117334567 #chat :@nenolod
 	 */
 
-	boolean_t removemodes = FALSE;
 	channel_t *c;
 	uint8_t modec = 0;
 	char *modev[16];
@@ -431,7 +453,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 
 		if (ts < c->ts)
 		{
-			removemodes = TRUE; /* TS change, see below for rules. */
+			remove_our_modes(c);
 			slog(LG_INFO, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
 			c->ts = ts;
 		}
@@ -440,10 +462,12 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 		userc = sjtoken(parv[parc - 1], ' ', userv);
 
 		for (i = 0; i < userc; i++)
-			if ((*userv[i] == '\'') || (*userv[i] == '"'))	/* ignore cmodes +I, +e */
-				;
-			else if (*userv[i] == '&')	/* channel ban */
+			if (*userv[i] == '&')	/* channel ban */
 				chanban_add(c, userv[i] + 1, 'b');
+			else if (*userv[i] == '"')	/* exception */
+				chanban_add(c, userv[i] + 1, 'e');
+			else if (*userv[i] == '\'')	/* invex */
+				chanban_add(c, userv[i] + 1, 'I');
 			else
 				chanuser_add(c, userv[i]);
 	}
@@ -461,7 +485,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 
 		if (ts < c->ts)
 		{
-			removemodes = TRUE; /* TS change, see below for rules. */
+			remove_our_modes(c);
 			slog(LG_INFO, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
 			c->ts = ts;
 		}
@@ -469,10 +493,12 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 		userc = sjtoken(parv[parc - 1], ' ', userv);
 
 		for (i = 0; i < userc; i++)
-			if ((*userv[i] == '\'') || (*userv[i] == '"'))	/* ignore cmodes +I, +e */
-				;
-			else if (*userv[i] == '&')	/* channel ban */
+			if (*userv[i] == '&')	/* channel ban */
 				chanban_add(c, userv[i] + 1, 'b');
+			else if (*userv[i] == '"')	/* exception */
+				chanban_add(c, userv[i] + 1, 'e');
+			else if (*userv[i] == '\'')	/* invex */
+				chanban_add(c, userv[i] + 1, 'I');
 			else
 				chanuser_add(c, userv[i]);
 	}
@@ -484,38 +510,13 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 
 		if (ts < c->ts)
 		{
-			removemodes = TRUE; /* TS change, see below for rules. */
+			remove_our_modes(c);
 			slog(LG_INFO, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
 			c->ts = ts;
 			/* XXX lost modes! -- XXX - pardon? why do we worry about this? TS reset requires modes reset.. */
 		}
 
 		chanuser_add(c, origin);
-	}
-
-	/* remove some duplication here, at the expense of a boolean_t.. --w00t */
-	if (removemodes == TRUE)
-	{
-		/* the TS changed.  a TS change requires the following things
-		 * to be done to the channel:  reset all modes to nothing, remove
-		 * all status modes on known users on the channel (including ours),
-		 * and set the new TS.
-		 */
-
-		chanuser_t *cu;
-		node_t *n;
-
-		c->modes = 0;
-		c->limit = 0;
-		if (c->key)
-			free(c->key);
-		c->key = NULL;
-
-		LIST_FOREACH(n, c->members.head)
-		{
-			cu = (chanuser_t *)n->data;
-			cu->modes = 0;
-		}
 	}
 }
 
