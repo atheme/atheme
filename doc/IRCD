@@ -1,4 +1,4 @@
-$Id: IRCD 4605 2006-01-19 22:18:04Z jilles $
+$Id: IRCD 4697 2006-01-24 17:05:26Z nenolod $
 
 IRCD-specific notes
 -------------------
@@ -102,8 +102,20 @@ leave plenty of space.
 monkey
 ------
 
+You need U:lines/super{} entries for services on all servers on the network.
+
+MonkeyIRCd is designed for services not joining channels, not having the ability
+to prevent services being kicked/deopped and the like. If you want to use
+fantasy commands, you will have to enable join_chans anyway; beware of bots
+fighting with chanserv.
+
 plexus
 ------
+
+If you want to use operserv kline, you need shared{} blocks or U:lines
+for services on all servers on the network. Note that only plexus 2.0.x
+supports remote unkline, although it may appear to sort of work in
+earlier versions.
 
 ptlink
 ------
@@ -128,6 +140,14 @@ must leave join_chans enabled for full functionality.
 
 shadowircd
 ----------
+
+Atheme does not support the "modern" ShadowIRCd protocol,
+revisions 3400 and 4000. You will need to use compatibility mode
+with Atheme. Proper care has been taken to ensure that Atheme
+complies with all requirements necessary for compatibility mode.
+
+Note that only ShadowIRCd 3.2 and later properly support the removal
+of AKILLs, although it may appear to sort of work in earlier versions.
 
 sorcery
 -------

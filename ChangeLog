@@ -1,3 +1,16 @@
+jilles      2006/01/24 16:56:22 UTC	(20060124-4695)
+  Log:
+  ptlink:
+  - remove remainder of netwide EOB code
+  - reset +r if changing back to registered nick
+  - add comment that it's ok to rely on +r for identification,
+    since ptlink clears it on nick changes
+  
+
+  Changes:	Modified:
+  +20 -16	trunk/protocol/ptlink.c (File Modified) 
+
+
 jilles      2006/01/24 16:43:27 UTC	(20060124-4693)
   Log:
   Add comment that it's ok to rely on umode +r
