@@ -1,3 +1,16 @@
+jilles      2006/01/23 00:54:35 UTC	(20060123-4689)
+  Log:
+  Unreal: SJOIN:
+  - if the TS changed, only remove the old modes, not the ones in the SJOIN
+  - add +e, +I support
+  
+  This is not tested other than that it compiles.
+  
+
+  Changes:	Modified:
+  +36 -35	trunk/protocol/unreal.c (File Modified) 
+
+
 jilles      2006/01/23 00:21:25 UTC	(20060123-4687)
   Log:
   P10: OK P10 still does JOIN 0 server-server as well :)
