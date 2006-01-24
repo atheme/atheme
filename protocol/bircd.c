@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: bircd.c 4687 2006-01-23 00:21:25Z jilles $
+ * $Id: bircd.c 4707 2006-01-24 20:48:45Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 4687 2006-01-23 00:21:25Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 4707 2006-01-24 20:48:45Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -50,7 +50,6 @@ struct cmode_ asuka_mode_list[] = {
   { 'c', CMODE_NOCOLOR },
   { 'C', CMODE_NOCTCP },
   { 'D', CMODE_DELAYED },
-  { 'd', CMODE_AUDITORIUM },
   { 'u', CMODE_NOQUIT },
   { '\0', 0 }
 };

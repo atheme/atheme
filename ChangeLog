@@ -1,3 +1,18 @@
+jilles      2006/01/24 17:55:17 UTC	(20060124-4705)
+  Log:
+  inspircd:
+  - Add cmode +eI back (no problem if the module isn't loaded, we only
+    send these to remove them anyway)
+  - Add cmode +fj (submitted by Brain)
+  - Add cmode +L
+  - Inspircd r2882 clears umode +r on nick change, so we can use this.
+    Also fix it.
+  
+
+  Changes:	Modified:
+  +8 -6		trunk/protocol/inspircd.c (File Modified) 
+
+
 jilles      2006/01/24 17:44:39 UTC	(20060124-4703)
   Log:
   Add a warning about possible feedback loops (FLOOD)
