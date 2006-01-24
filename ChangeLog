@@ -1,3 +1,16 @@
+jilles      2006/01/24 20:48:45 UTC	(20060124-4707)
+  Log:
+  asuka/bircd: remove cmode +d, as this is a local-only cmode,
+  automatically set when -D is set and there are still hidden
+  users on that server. Asuka has some bugs where it sends out
+  +D-d or +d-D to servers, but that's ok.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/protocol/asuka.c (File Modified) 
+  +0 -1		trunk/protocol/bircd.c (File Modified) 
+
+
 jilles      2006/01/24 17:55:17 UTC	(20060124-4705)
   Log:
   inspircd:

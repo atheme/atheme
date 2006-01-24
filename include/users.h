@@ -4,7 +4,7 @@
  *
  * Data structures for connected clients.
  *
- * $Id: users.h 4399 2006-01-01 22:06:33Z jilles $
+ * $Id: users.h 4709 2006-01-24 23:02:59Z jilles $
  */
 
 #ifndef USERS_H
@@ -44,5 +44,6 @@ struct user_
 #define UF_ADMIN       0x00000020
 #define UF_SEENINFO    0x00000080
 #define UF_NICK_WARNED 0x00000100 /* warned about nickstealing, FNC next time */
+#define UF_HIDEHOSTREQ 0x00000200 /* host hiding requested */
 
 #endif

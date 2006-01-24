@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 4699 2006-01-24 17:22:41Z nenolod $
+ * $Id: atheme.h 4709 2006-01-24 23:02:59Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -75,9 +75,10 @@ struct me
   uint16_t recontime;           /* time between reconnection attempts */
   uint16_t restarttime;         /* time before restarting             */
   char *netname;                /* IRC network name                   */
+  char *hidehostsuffix;         /* host suffix for P10 +x etc         */
   char *adminname;              /* SRA's name (for ADMIN)             */
   char *adminemail;             /* SRA's email (for ADMIN             */
-  char *mta;                    /* path to mta program           */
+  char *mta;                    /* path to mta program                */
   char *numeric;		/* server numeric		      */
 
   uint8_t loglevel;             /* logging level                      */

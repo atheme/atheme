@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: bircd.c 4707 2006-01-24 20:48:45Z jilles $
+ * $Id: bircd.c 4709 2006-01-24 23:02:59Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 4707 2006-01-24 20:48:45Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 4709 2006-01-24 23:02:59Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -69,6 +69,8 @@ struct cmode_ asuka_prefix_mode_list[] = {
   { '+', CMODE_VOICE },
   { '\0', 0 }
 };
+
+static void check_hidehost(user_t *u);
 
 /* *INDENT-ON* */
 
@@ -318,6 +320,7 @@ static void asuka_on_login(char *origin, char *user, char *wantedhost)
 		return;
 
 	sts("%s AC %s %s", me.numeric, u->uid, u->myuser->name);
+	check_hidehost(u);
 }
 
 /* P10 does not support logout, so kill the user
@@ -665,6 +668,12 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 				if (user_find(parv[parc - 2]) == NULL)
 					return;
 			}
+			if (strchr(parv[5], 'x'))
+			{
+				u->flags |= UF_HIDEHOSTREQ;
+				/* this must be after setting the account name */
+				check_hidehost(u);
+			}
 		}
 
 		handle_nickchange(u);
@@ -719,6 +728,8 @@ static void m_quit(char *origin, uint8_t parc, char *parv[])
 
 static void m_mode(char *origin, uint8_t parc, char *parv[])
 {
+	user_t *u;
+
 	if (!origin)
 	{
 		slog(LG_DEBUG, "m_mode(): received MODE without origin");
@@ -734,7 +745,21 @@ static void m_mode(char *origin, uint8_t parc, char *parv[])
 	if (*parv[0] == '#')
 		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
 	else
-		user_mode(user_find_named(parv[0]), parv[1]);
+	{
+		/* Yes this is a nick and not a UID -- jilles */
+		u = user_find_named(parv[0]);
+		if (u == NULL)
+		{
+			slog(LG_DEBUG, "m_mode(): user mode for unknown user %s", parv[0]);
+			return;
+		}
+		user_mode(u, parv[1]);
+		if (strchr(parv[1], 'x'))
+		{
+			u->flags |= UF_HIDEHOSTREQ;
+			check_hidehost(u);
+		}
+	}
 }
 
 static void m_clearmode(char *origin, uint8_t parc, char *parv[])
@@ -921,6 +946,33 @@ static void m_eos(char *origin, uint8_t parc, char *parv[])
 	/* acknowledge a local END_OF_BURST */
 	if (source->uplink == me.me)
 		sts("%s EA", me.numeric);
+}
+
+static void check_hidehost(user_t *u)
+{
+	static boolean_t warned = FALSE;
+
+	/* do they qualify? */
+	if (!(u->flags & UF_HIDEHOSTREQ) || u->myuser == NULL)
+		return;
+	/* don't use this if they have some other kind of vhost */
+	if (strcmp(u->host, u->vhost))
+	{
+		slog(LG_DEBUG, "check_hidehost(): +x overruled by other vhost for %s", u->nick);
+		return;
+	}
+	if (me.hidehostsuffix == NULL)
+	{
+		if (!warned)
+		{
+			wallops("Misconfiguration: serverinfo::hidehostsuffix not set");
+			warned = TRUE;
+		}
+		return;
+	}
+	snprintf(u->vhost, sizeof u->vhost, "%s.%s", u->myuser->name,
+			me.hidehostsuffix);
+	slog(LG_DEBUG, "check_hidehost(): %s -> %s", u->nick, u->vhost);
 }
 
 void _modinit(module_t * m)

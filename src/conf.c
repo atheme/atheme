@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4699 2006-01-24 17:22:41Z nenolod $
+ * $Id: conf.c 4709 2006-01-24 23:02:59Z jilles $
  */
 
 #include "atheme.h"
@@ -40,6 +40,7 @@ static int c_si_vhost(CONFIGENTRY *);
 static int c_si_recontime(CONFIGENTRY *);
 static int c_si_restarttime(CONFIGENTRY *);
 static int c_si_netname(CONFIGENTRY *);
+static int c_si_hidehostsuffix(CONFIGENTRY *);
 static int c_si_adminname(CONFIGENTRY *);
 static int c_si_adminemail(CONFIGENTRY *);
 static int c_si_mta(CONFIGENTRY *);
@@ -217,6 +218,8 @@ void conf_init(void)
 {
 	if (me.netname)
 		free(me.netname);
+	if (me.hidehostsuffix)
+		free(me.hidehostsuffix);
 	if (me.adminname)
 		free(me.adminname);
 	if (me.adminemail)
@@ -232,7 +235,7 @@ void conf_init(void)
 	if (config_options.languagefile)
 		free(config_options.languagefile);
 
-	me.netname = me.adminname = me.adminemail = me.mta = chansvs.nick = config_options.chan = 
+	me.netname = me.hidehostsuffix = me.adminname = me.adminemail = me.mta = chansvs.nick = config_options.chan = 
 		config_options.global = config_options.languagefile = NULL;
 
 	me.recontime = me.restarttime = me.maxlogins = me.maxusers = me.maxchans = me.emaillimit = me.emailtime = 
@@ -450,6 +453,7 @@ void init_newconf(void)
 	add_conf_item("RESTARTTIME", &conf_si_table, c_si_restarttime);
 	add_conf_item("EXPIRE", &conf_si_table, c_gi_expire);
 	add_conf_item("NETNAME", &conf_si_table, c_si_netname);
+	add_conf_item("HIDEHOSTSUFFIX", &conf_si_table, c_si_hidehostsuffix);
 	add_conf_item("ADMINNAME", &conf_si_table, c_si_adminname);
 	add_conf_item("ADMINEMAIL", &conf_si_table, c_si_adminemail);
 	add_conf_item("MTA", &conf_si_table, c_si_mta);
@@ -926,6 +930,16 @@ static int c_si_netname(CONFIGENTRY *ce)
 		PARAM_ERROR(ce);
 
 	me.netname = sstrdup(ce->ce_vardata);
+
+	return 0;
+}
+
+static int c_si_hidehostsuffix(CONFIGENTRY *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	me.hidehostsuffix = sstrdup(ce->ce_vardata);
 
 	return 0;
 }
@@ -1607,6 +1621,7 @@ static void copy_me(struct me *src, struct me *dst)
 	dst->recontime = src->recontime;
 	dst->restarttime = src->restarttime;
 	dst->netname = sstrdup(src->netname);
+	dst->hidehostsuffix = sstrdup(src->hidehostsuffix);
 	dst->adminname = sstrdup(src->adminname);
 	dst->adminemail = sstrdup(src->adminemail);
 	dst->mta = src->mta ? sstrdup(src->mta) : NULL;
@@ -1622,6 +1637,7 @@ static void copy_me(struct me *src, struct me *dst)
 static void free_cstructs(struct me *mesrc, chansvs_t *svssrc)
 {
 	free(mesrc->netname);
+	free(mesrc->hidehostsuffix);
 	free(mesrc->adminname);
 	free(mesrc->adminemail);
 	free(mesrc->mta);
