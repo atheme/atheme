@@ -1,4 +1,4 @@
-$Id: IRCD 4697 2006-01-24 17:05:26Z nenolod $
+$Id: IRCD 4713 2006-01-24 23:26:04Z jilles $
 
 IRCD-specific notes
 -------------------
@@ -14,6 +14,14 @@ Asuka's +N (no notices/wallchops) mode is turned off whenever a
 notice/wallchops is to be sent to a channel (it should not block notices from
 remotes or wallchops, really). If you want a channel to be +N always, leave
 verbose disabled.
+
+For host hiding (umode +x, <account>.<suffix>) to work, the hosthidesuffix
+in serverinfo{} must be correct (same value as F:HIDDEN_HOST in ircd.conf).
+
+SETHOST (umode +h [ident@]host) is supported. When changing the ident via +h,
+atheme will not restore the ident on -h. This can be worked around by never
+changing ident with +h, never doing -h or doing a +h with the original ident@
+before -h.
 
 bahamut
 -------
@@ -31,6 +39,9 @@ bircd
 You need U:lines for services on all servers on the network.
 
 You must enable join_chans as P10 is designed for services to work that way.
+
+For host hiding (umode +x, <account>.<suffix>) to work, the hosthidesuffix
+in serverinfo{} must be correct.
 
 charybdis
 ---------
@@ -165,6 +176,9 @@ undernet
 You need U:lines for services on all servers on the network.
 
 You must enable join_chans as P10 is designed for services to work that way.
+
+For host hiding (umode +x, <account>.<suffix>) to work, the hosthidesuffix
+in serverinfo{} must be correct (same value as F:HIDDEN_HOST in ircd.conf).
 
 unreal
 ------
