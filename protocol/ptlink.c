@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ptlink-based ircd.
  *
- * $Id: ptlink.c 4639 2006-01-21 22:06:41Z jilles $
+ * $Id: ptlink.c 4695 2006-01-24 16:56:22Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ptlink.h"
 
-DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 4639 2006-01-21 22:06:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 4695 2006-01-24 16:56:22Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -489,11 +489,21 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 
 		user_mode(u, parv[3]);
 
-		/* If server is not yet EOB we will do this later.
-		 * This avoids useless "please identify" -- jilles
+		/* Ok, we have the user ready to go.
+		 * Here's the deal -- if the user's SVID is before
+		 * the start time, and not 0, then check to see
+		 * if it's a registered account or not.
+		 *
+		 * If it IS registered, deal with that accordingly,
+		 * via handle_burstlogin(). --nenolod
 		 */
-		if (s->flags & SF_EOB)
-			handle_nickchange(u);
+		/* Changed to just check umode +r for now -- jilles */
+		/* This is ok because this ircd clears +r on nick changes
+		 * -- jilles */
+		if (strchr(parv[3], 'r'))
+			handle_burstlogin(u, parv[0]);
+
+		handle_nickchange(u);
 	}
 
 	/* if it's only 2 then it's a nickname change */
@@ -510,6 +520,11 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", u->nick, parv[0]);
 
+		/* fix up +r if necessary -- jilles */
+		if (nicksvs.me != NULL && u->myuser != NULL && !(u->myuser->flags & MU_WAITAUTH) && irccasecmp(u->nick, parv[0]) && !irccasecmp(parv[0], u->myuser->name))
+			/* changed nick to registered one, reset +r */
+			sts(":%s SVSMODE %s +rd %ld", me.name, parv[0], time(NULL));
+
 		/* remove the current one from the list */
 		n = node_find(u, &userlist[u->hash]);
 		node_del(n, &userlist[u->hash]);
@@ -524,11 +539,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 		u->hash = UHASH((unsigned char *)u->nick);
 		node_add(u, n, &userlist[u->hash]);
 
-		/* It could happen that our PING arrived late and the
-		 * server didn't acknowledge EOB yet even though it is
-		 * EOB; don't send double notices in that case -- jilles */
-		if (u->server->flags & SF_EOB)
-			handle_nickchange(u);
+		handle_nickchange(u);
 	}
 	else
 	{
@@ -624,13 +635,6 @@ static void m_server(char *origin, uint8_t parc, char *parv[])
 
 	if (cnt.server == 2)
 		me.actual = sstrdup(parv[0]);
-	else
-	{
-		/* elicit PONG for EOB detection; pinging uplink is
-		 * already done elsewhere -- jilles
-		 */
-		sts(":%s PING %s %s", me.name, me.name, parv[0]);
-	}
 }
 
 static void m_stats(char *origin, uint8_t parc, char *parv[])
