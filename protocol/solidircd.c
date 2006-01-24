@@ -580,6 +580,8 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 		 * via handle_burstlogin(). --nenolod
 		 */
 		/* Changed to just check umode +r for now -- jilles */
+		/* This is ok because this ircd clears +r on nick changes
+		 * -- jilles */
 		if (strchr(parv[3], 'r'))
 			handle_burstlogin(u, parv[0]);
 
