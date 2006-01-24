@@ -1,3 +1,14 @@
+jilles      2006/01/24 17:44:39 UTC	(20060124-4703)
+  Log:
+  Add a warning about possible feedback loops (FLOOD)
+  with use_privmsg.
+  
+
+  Changes:	Modified:
+  +4 -1		trunk/dist/example.conf (File Modified) 
+  +4 -1		trunk/dist/example.userserv.conf (File Modified) 
+
+
 jilles      2006/01/24 17:31:20 UTC	(20060124-4701)
   Log:
   Unreal:

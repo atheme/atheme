@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 4691 2006-01-24 16:14:11Z jilles $
+ * $Id: inspircd.c 4705 2006-01-24 17:55:17Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4691 2006-01-24 16:14:11Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4705 2006-01-24 17:55:17Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -33,9 +33,9 @@ ircd_t InspIRCd = {
         "+h",                           /* Mode we set for halfops. */
 	PROTOCOL_INSPIRCD,		/* Protocol type */
 	0,                              /* Permanent cmodes */
-	"bg",                           /* Ban-like cmodes */
-	0,                              /* Except mchar */
-	0                               /* Invex mchar */
+	"beIg",                         /* Ban-like cmodes */
+	'e',                            /* Except mchar */
+	'I'                             /* Invex mchar */
 };
 
 struct cmode_ inspircd_mode_list[] = {
@@ -58,6 +58,9 @@ struct cmode_ inspircd_mode_list[] = {
 };
 
 struct cmode_ inspircd_ignore_mode_list[] = {
+  { 'f', 0 },
+  { 'j', 0 },
+  { 'L', 0 },
   { '\0', 0 }
 };
 
@@ -515,10 +518,9 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 
 		user_mode(u, parv[5]);
 
-#if 0 /* umode +r is currently unusable for us */
-		if (strchr(parv[7], 'r'))
+		/* Assumes ircd clears +r on nick changes (r2882 or newer) */
+		if (strchr(parv[5], 'r'))
 			handle_burstlogin(u, parv[0]);
-#endif
 
 		handle_nickchange(u);
 	}
