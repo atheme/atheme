@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: asuka.c 4709 2006-01-24 23:02:59Z jilles $
+ * $Id: asuka.c 4711 2006-01-24 23:17:40Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4709 2006-01-24 23:02:59Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4711 2006-01-24 23:17:40Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -767,6 +767,7 @@ static void m_quit(char *origin, uint8_t parc, char *parv[])
 static void m_mode(char *origin, uint8_t parc, char *parv[])
 {
 	user_t *u;
+	char *p;
 
 	if (!origin)
 	{
@@ -796,6 +797,34 @@ static void m_mode(char *origin, uint8_t parc, char *parv[])
 		{
 			u->flags |= UF_HIDEHOSTREQ;
 			check_hidehost(u);
+		}
+		if (strchr(parv[1], 'h'))
+		{
+			if (parc > 2)
+			{
+				/* assume +h */
+				p = strchr(parv[2], '@');
+				if (p == NULL)
+					strlcpy(u->vhost, parv[2], sizeof u->vhost);
+				else
+				{
+					strlcpy(u->vhost, p + 1, sizeof u->vhost);
+					strlcpy(u->user, parv[2], sizeof u->user);
+					p = strchr(u->user, '@');
+					if (p != NULL)
+						*p = '\0';
+				}
+				slog(LG_DEBUG, "m_mode(): user %s setting vhost %s@%s", u->nick, u->user, u->vhost);
+			}
+			else
+			{
+				/* must be -h */
+				/* XXX we don't know the original ident */
+				slog(LG_DEBUG, "m_mode(): user %s turning off vhost", u->nick);
+				strlcpy(u->vhost, u->host, sizeof u->vhost);
+				/* revert to +x vhost if applicable */
+				check_hidehost(u);
+			}
 		}
 	}
 }
