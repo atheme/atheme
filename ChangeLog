@@ -1,3 +1,18 @@
+jilles      2006/01/24 17:31:20 UTC	(20060124-4701)
+  Log:
+  Unreal:
+  - unset +r in services, as unreal doesn't do it automatically on nick
+    changes
+  - make it such that svsid == nickTS means identified to current nick
+    (for sanity, only if nickTS > 100)
+  
+  Not tested other than that it compiles.
+  
+
+  Changes:	Modified:
+  +20 -15	trunk/protocol/unreal.c (File Modified) 
+
+
 nenolod     2006/01/24 17:22:41 UTC	(20060124-4699)
   Log:
   Add option to make services use PRIVMSG instead of NOTICE.
