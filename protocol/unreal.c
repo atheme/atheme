@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 4689 2006-01-23 00:54:35Z jilles $
+ * $Id: unreal.c 4701 2006-01-24 17:31:20Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 4689 2006-01-23 00:54:35Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 4701 2006-01-24 17:31:20Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -284,6 +284,8 @@ static void unreal_ping_sts(void)
 /* protocol-specific stuff to do on login */
 static void unreal_on_login(char *origin, char *user, char *wantedhost)
 {
+	user_t *u;
+
 	if (!me.connected)
 		return;
 
@@ -293,8 +295,12 @@ static void unreal_on_login(char *origin, char *user, char *wantedhost)
 	if (nicksvs.me == NULL || irccasecmp(origin, user))
 		return;
 
+	u = user_find(origin);
+	if (u == NULL)
+		return;
+
 	/* imo, we should be using SVS2MODE to show the modechange here and on logout --w00t */
-	sts(":%s SVS2MODE %s +rd %ld", nicksvs.nick, origin, time(NULL));
+	sts(":%s SVS2MODE %s +rd %ld", nicksvs.nick, origin, u->ts);
 }
 
 /* protocol-specific stuff to do on logout */
@@ -306,7 +312,7 @@ static boolean_t unreal_on_logout(char *origin, char *user, char *wantedhost)
 	if (nicksvs.me == NULL || irccasecmp(origin, user))
 		return FALSE;
 
-	sts(":%s SVS2MODE %s -r+d %ld", nicksvs.nick, origin, time(NULL));
+	sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, origin);
 	return FALSE;
 }
 
@@ -563,16 +569,9 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 
 		user_mode(u, parv[7]);
 
-		/* Ok, we have the user ready to go.
-		 * Here's the deal -- if the user's SVID is before
-		 * the start time, and not 0, then check to see
-		 * if it's a registered account or not.
-		 *
-		 * If it IS registered, deal with that accordingly,
-		 * via handle_burstlogin(). --nenolod
-		 */
-		/* Changed to just check umode +r for now -- jilles */
-		if (strchr(parv[7], 'r'))
+		/* If the user's SVID is equal to their nick TS,
+		 * they're properly logged in -- jilles */
+		if (u->ts > 100 && (uint32_t)atoi(parv[6]) == u->ts)
 			handle_burstlogin(u, parv[0]);
 
 		handle_nickchange(u);
@@ -593,9 +592,15 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", u->nick, parv[0]);
 
 		/* fix up +r if necessary -- jilles */
-		if (nicksvs.me != NULL && u->myuser != NULL && !(u->myuser->flags & MU_WAITAUTH) && irccasecmp(u->nick, parv[0]) && !irccasecmp(parv[0], u->myuser->name))
-			/* changed nick to registered one, reset +r */
-			sts(":%s SVS2MODE %s +rd %ld", nicksvs.nick, parv[0], time(NULL));
+		if (nicksvs.me != NULL && u->myuser != NULL && !(u->myuser->flags & MU_WAITAUTH) && irccasecmp(u->nick, parv[0]))
+		{
+			if (!irccasecmp(parv[0], u->myuser->name))
+				/* changed nick to registered one, reset +r */
+				sts(":%s SVS2MODE %s +rd %ld", nicksvs.nick, parv[0], atoi(parv[1]));
+			else if (!irccasecmp(u->nick, u->myuser->name))
+				/* changed from registered nick, remove +r */
+				sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, parv[0]);
+		}
 
 		/* remove the current one from the list */
 		n = node_find(u, &userlist[u->hash]);
