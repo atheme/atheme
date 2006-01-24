@@ -1,4 +1,4 @@
-$Id: IRCD 4713 2006-01-24 23:26:04Z jilles $
+$Id: IRCD 4715 2006-01-24 23:31:42Z jilles $
 
 IRCD-specific notes
 -------------------
@@ -87,6 +87,16 @@ inspircd
 --------
 
 This module supports inspircd beta6 or newer (tree linking) only.
+
+Several of the modes supported by Atheme are in optional modules. It should
+usually not be a problem if those modules are not loaded.
+
+Inspircd prior to r2882 does not clear umode +r on nick changes; this can be
+abused by changing to a registered nick during a netsplit or while services
+are down.
+
+The inspircd support was developed in cooperation with the inspircd
+developers.
 
 ircnet
 ------

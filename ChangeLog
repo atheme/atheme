@@ -1,3 +1,12 @@
+jilles      2006/01/24 23:26:04 UTC	(20060124-4713)
+  Log:
+  Add information about P10 host hiding.
+  
+
+  Changes:	Modified:
+  +14 -0	trunk/doc/IRCD (File Modified) 
+
+
 jilles      2006/01/24 23:17:40 UTC	(20060124-4711)
   Log:
   Asuka: add support for dynamic vhosts (/mode <nick> +h aka SETHOST).
