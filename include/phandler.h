@@ -5,7 +5,7 @@
  * Protocol handlers, both generic and the actual declarations themselves.
  * Declare NOTYET to use the function pointer voodoo.
  *
- * $Id: phandler.h 4639 2006-01-21 22:06:41Z jilles $
+ * $Id: phandler.h 4717 2006-01-24 23:40:42Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -98,7 +98,7 @@ E void (*unkline_sts)(char *server, char *user, char *host);
  * with a given topicsetter and topicts; ts is not a channelts */
 E void (*topic_sts)(char *channel, char *setter, time_t ts, char *topic);
 /* set modes on a channel by the given sender; sender must be a client
- * on the services server */
+ * on the services server; sender may or may not be on channel */
 E void (*mode_sts)(char *sender, char *target, char *modes);
 /* ping the uplink
  * first check if me.connected is true and bail if not */
