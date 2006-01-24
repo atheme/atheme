@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4631 2006-01-20 16:38:15Z jilles $
+ * $Id: conf.c 4699 2006-01-24 17:22:41Z nenolod $
  */
 
 #include "atheme.h"
@@ -115,6 +115,7 @@ static int c_la_translator(CONFIGENTRY *);
 static int c_gi_chan(CONFIGENTRY *);
 static int c_gi_silent(CONFIGENTRY *);
 static int c_gi_verbose_wallops(CONFIGENTRY *);
+static int c_gi_use_privmsg(CONFIGENTRY *);
 static int c_gi_join_chans(CONFIGENTRY *);
 static int c_gi_leave_chans(CONFIGENTRY *);
 static int c_gi_uflags(CONFIGENTRY *);
@@ -465,6 +466,7 @@ void init_newconf(void)
 	/* general{} block. */
 	add_conf_item("CHAN", &conf_gi_table, c_gi_chan);
 	add_conf_item("VERBOSE_WALLOPS", &conf_gi_table, c_gi_verbose_wallops);
+	add_conf_item("USE_PRIVMSG", &conf_gi_table, c_gi_use_privmsg);
 	add_conf_item("SILENT", &conf_gi_table, c_gi_silent);
 	add_conf_item("JOIN_CHANS", &conf_gi_table, c_gi_join_chans);
 	add_conf_item("LEAVE_CHANS", &conf_gi_table, c_gi_leave_chans);
@@ -1167,6 +1169,12 @@ static int c_gi_silent(CONFIGENTRY *ce)
 static int c_gi_verbose_wallops(CONFIGENTRY *ce)
 {
 	config_options.verbose_wallops = TRUE;
+	return 0;
+}
+
+static int c_gi_use_privmsg(CONFIGENTRY *ce)
+{
+	config_options.use_privmsg = TRUE;
 	return 0;
 }
 

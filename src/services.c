@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 4663 2006-01-22 18:18:31Z nenolod $
+ * $Id: services.c 4699 2006-01-24 17:22:41Z nenolod $
  */
 
 #include "atheme.h"
@@ -332,7 +332,10 @@ void notice(char *from, char *to, char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, str, args);
 	va_end(args);
 
-	notice_sts(from, to, "%s", buf);
+	if (config_options.use_privmsg)
+		msg(from, to, "%s", buf);
+	else
+		notice_sts(from, to, "%s", buf);
 }
 
 void verbose_wallops(char *fmt, ...)

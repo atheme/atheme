@@ -1,3 +1,13 @@
+nenolod     2006/01/24 17:05:26 UTC	(20060124-4697)
+  Log:
+  - Add documentation concerning ShadowIRCd.
+  - Add documentation concerning PleXusIRCd.
+  
+
+  Changes:	Modified:
+  +20 -0	trunk/doc/IRCD (File Modified) 
+
+
 jilles      2006/01/24 16:56:22 UTC	(20060124-4695)
   Log:
   ptlink:

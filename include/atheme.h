@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 4545 2006-01-09 20:23:25Z nenolod $
+ * $Id: atheme.h 4699 2006-01-24 17:22:41Z nenolod $
  */
 
 #ifndef ATHEME_H
@@ -133,6 +133,7 @@ struct ConfOption
   char *languagefile;		/* path to language file (if any) */
 
   boolean_t verbose_wallops;	/* verbose wallops? :)        */
+  boolean_t use_privmsg;        /* use privmsg instead of notice */
 } config_options;
 
 struct Database
