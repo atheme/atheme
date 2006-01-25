@@ -1,4 +1,4 @@
-$Id: IRCD 4715 2006-01-24 23:31:42Z jilles $
+$Id: IRCD 4727 2006-01-25 12:58:31Z jilles $
 
 IRCD-specific notes
 -------------------
@@ -46,8 +46,7 @@ in serverinfo{} must be correct.
 charybdis
 ---------
 
-You will need a service{} block on all servers. Logged-in state is based on
-name only, so beware of dropping and recreating accounts during netsplits.
+You will need a service{} block on all servers.
 
 If you want to use operserv kline, you need shared{} blocks or U:lines for
 services on all servers on the network.
@@ -73,9 +72,7 @@ users. The traditional dancer method is umode +e; it only works if the user is
 logged in to the nick they are currently using. The new hyperion method using
 SVSLOGIN and SIGNON does not have this restriction. It also allows changing
 nick/ident/host at the same time, but Atheme does not use that yet.
-Consequently, NOIDPREFIX is not supported in a useful way. In either case the
-recognition is based on the login name only, so beware of dropping and
-recreating accounts during netsplits.
+Consequently, NOIDPREFIX is not supported in a useful way.
 
 Atheme will always set +e appropriately; if SVSLOGIN support is available, it
 will be used (this assumes the whole network has it). SVSLOGIN support can
@@ -152,9 +149,7 @@ work in hybrid 7.0.
 If you use ratbox 2.1.x or newer, it is recommended to compile with
 ratbox-services support as this will allow remembering logged-in state
 across netsplits and services restarts, prevent deopping/kicking chanserv,
-etc. You will need a service{} block on all servers. Logged-in state is
-based on name only, so beware of dropping and recreating accounts during
-netsplits.
+etc. You will need a service{} block on all servers.
 
 Hybrid 6.x or csircd should also work but they are not recommended; you
 must leave join_chans enabled for full functionality.

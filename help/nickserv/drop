@@ -7,5 +7,9 @@ anyone else can register it. You will also lose all your channel
 access and memos. You must use the NickServ IDENTIFY command
 before doing this.
 
+When dropping and reregistering a nick during a netsplit, users
+on the other side of the split may later be recognized as the
+new account.
+
 Examples:
     /msg &nick& DROP foo bar

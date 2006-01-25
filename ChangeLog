@@ -1,3 +1,13 @@
+jilles      2006/01/25 12:52:19 UTC	(20060125-4725)
+  Log:
+  - These are 1.0rc1 release notes.
+  - Add umode +r account hacking fix.
+  
+
+  Changes:	Modified:
+  +5 -2		trunk/doc/RELEASE (File Modified) 
+
+
 jilles      2006/01/25 12:44:18 UTC	(20060125-4723)
   Log:
   Dreamforge/sorcery: set +r/-r as in the unreal module; no svsid support for now.
