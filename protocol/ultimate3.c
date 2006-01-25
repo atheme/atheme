@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 4667 2006-01-22 19:24:10Z jilles $
+ * $Id: ultimate3.c 4721 2006-01-25 12:43:15Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 4667 2006-01-22 19:24:10Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 4721 2006-01-25 12:43:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -586,8 +586,14 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 		 * * via handle_burstlogin(). --nenolod
 		 */
 		/* Changed to just check umode +r for now -- jilles */
+#if 0
+		/* We can't be sure if this is safe, so disable it for now.
+		 * (If ircd unsets +r on nick changes, it is safe.)
+		 * If you know this is safe or want to port over the
+		 * svsid stuff from unreal.c, you're welcome -- jilles */
 		if (strchr(parv[3], 'r'))
 			handle_burstlogin(u, parv[0]);
+#endif
 
 		handle_nickchange(u);
 	}

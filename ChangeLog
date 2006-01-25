@@ -1,3 +1,13 @@
+jilles      2006/01/25 12:40:27 UTC	(20060125-4719)
+  Log:
+  Add comment that it's safe to rely on umode +e for identification
+  (hyperion clears this on nick changes).
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/protocol/hyperion.c (File Modified) 
+
+
 jilles      2006/01/24 23:40:42 UTC	(20060124-4717)
   Log:
   Explicitly specify that mode_sts() must also work if
