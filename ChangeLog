@@ -1,3 +1,16 @@
+jilles      2006/01/25 12:58:31 UTC	(20060125-4727)
+  Log:
+  Move netsplit/drop/reregister discussion from doc/IRCD to DROP help files,
+  as currently all protocol modules that recognize login state after
+  netsplits/services restarts have this issue.
+  
+
+  Changes:	Modified:
+  +3 -8		trunk/doc/IRCD (File Modified) 
+  +4 -0		trunk/help/nickserv/drop (File Modified) 
+  +4 -0		trunk/help/userserv/drop (File Modified) 
+
+
 jilles      2006/01/25 12:52:19 UTC	(20060125-4725)
   Log:
   - These are 1.0rc1 release notes.
