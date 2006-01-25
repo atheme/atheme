@@ -1,4 +1,9 @@
-$Id: RELEASE 4725 2006-01-25 12:52:19Z jilles $
+$Id: RELEASE 4733 2006-01-25 19:03:01Z jilles $
+
+Atheme 1.0rc2 Release Notes
+===========================
+- Remove the incomplete and cluttering nickname linking system (this was
+  actually done in 1.0rc1).
 
 Atheme 1.0rc1 Release Notes
 ===========================

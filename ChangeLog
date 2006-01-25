@@ -1,3 +1,12 @@
+jilles      2006/01/25 13:03:22 UTC	(20060125-4729)
+  Log:
+  P10 account caveats.
+  
+
+  Changes:	Modified:
+  +18 -0	trunk/doc/IRCD (File Modified) 
+
+
 jilles      2006/01/25 12:58:31 UTC	(20060125-4727)
   Log:
   Move netsplit/drop/reregister discussion from doc/IRCD to DROP help files,
