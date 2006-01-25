@@ -1,3 +1,15 @@
+jilles      2006/01/25 12:43:15 UTC	(20060125-4721)
+  Log:
+  Ultimate3: Disable the code that automatically logs in a user
+  if they have umode +r. I don't know if it's cleared on nick
+  change (if not, this would allow everyone to log in as
+  everyone without password).
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/protocol/ultimate3.c (File Modified) 
+
+
 jilles      2006/01/25 12:40:27 UTC	(20060125-4719)
   Log:
   Add comment that it's safe to rely on umode +e for identification

@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: sorcery.c 4639 2006-01-21 22:06:41Z jilles $
+ * $Id: sorcery.c 4723 2006-01-25 12:44:18Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/sorcery.h"
 
-DECLARE_MODULE_V1("protocol/sorcery", TRUE, _modinit, NULL, "$Id: sorcery.c 4639 2006-01-21 22:06:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/sorcery", TRUE, _modinit, NULL, "$Id: sorcery.c 4723 2006-01-25 12:44:18Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -405,6 +405,9 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 
 		u = user_add(parv[0], parv[3], parv[4], NULL, NULL, NULL, parv[7], s, atoi(parv[2]));
 
+		/* Note: cannot rely on umode +r to see if they're identified
+		 * -- jilles */
+
 		handle_nickchange(u);
 	}
 
@@ -422,10 +425,16 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", u->nick, parv[0]);
 
-		/* fix up +e if necessary -- jilles */
-		if (nicksvs.me != NULL && u->myuser != NULL && irccasecmp(u->nick, parv[0]) && !irccasecmp(parv[0], u->myuser->name))
-			/* changed nick to registered one, reset +e */
-			sts(":%s MODE %s +rd %ld", me.name, parv[0], CURRTIME);
+		/* fix up +r if necessary -- jilles */
+		if (nicksvs.me != NULL && u->myuser != NULL && !(u->myuser->flags & MU_WAITAUTH) && irccasecmp(u->nick, parv[0]))
+		{
+			if (!irccasecmp(parv[0], u->myuser->name))
+				/* changed nick to registered one, reset +r */
+				sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, parv[0], CURRTIME);
+			else if (!irccasecmp(u->nick, u->myuser->name))
+				/* changed from registered nick, remove +r */
+				sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, parv[0], CURRTIME);
+		}
 
 		/* remove the current one from the list */
 		n = node_find(u, &userlist[u->hash]);
