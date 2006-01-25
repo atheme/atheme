@@ -1,3 +1,13 @@
+jilles      2006/01/24 23:40:42 UTC	(20060124-4717)
+  Log:
+  Explicitly specify that mode_sts() must also work if
+  the sender is not on channel (/os mode!).
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/phandler.h (File Modified) 
+
+
 jilles      2006/01/24 23:31:42 UTC	(20060124-4715)
   Log:
   Add some inspircd stuff.

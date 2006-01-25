@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 4667 2006-01-22 19:24:10Z jilles $
+ * $Id: hyperion.c 4719 2006-01-25 12:40:27Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -15,7 +15,7 @@
 #include "atheme.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 4667 2006-01-22 19:24:10Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 4719 2006-01-25 12:40:27Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -566,6 +566,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 		user_mode(u, parv[3]);
 
 		/* umode +e: identified to current nick */
+		/* As hyperion clears +e on nick changes, this is safe. */
 		if (!use_svslogin && strchr(parv[3], 'e'))
 			handle_burstlogin(u, parv[0]);
 
