@@ -1,3 +1,12 @@
+jilles      2006/01/25 19:03:01 UTC	(20060125-4733)
+  Log:
+  Note removal of nickname linking.
+  
+
+  Changes:	Modified:
+  +5 -0		trunk/doc/RELEASE (File Modified) 
+
+
 jilles      2006/01/25 13:03:22 UTC	(20060125-4729)
   Log:
   P10 account caveats.
