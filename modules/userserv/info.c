@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: info.c 4743 2006-01-31 02:22:42Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: info.c 4743 2006-01-31 02:22:42Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -53,7 +53,7 @@ static void us_cmd_info(char *origin)
 		return;
 	}
 
-	if (!(mu = myuser_find(name)))
+	if (!(mu = myuser_find_ext(name)))
 	{
 		notice(usersvs.nick, origin, "\2%s\2 is not registered.", name);
 		return;

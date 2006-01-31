@@ -5,7 +5,7 @@
  * This file contains code for the NickServ LISTCHANS function.
  *   -- Contains an alias "MYACCESS" for legacy users
  *
- * $Id: listchans.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: listchans.c 4743 2006-01-31 02:22:42Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/listchans", FALSE, _modinit, _moddeinit,
-	"$Id: listchans.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: listchans.c 4743 2006-01-31 02:22:42Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -64,7 +64,7 @@ static void ns_cmd_listchans(char *origin)
 			return;
 		}
 
-		mu = myuser_find(target);
+		mu = myuser_find_ext(target);
 
 		if (mu == NULL)
 		{

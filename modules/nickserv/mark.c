@@ -4,7 +4,7 @@
  *
  * Marking for nicknames.
  *
- * $Id: mark.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: mark.c 4743 2006-01-31 02:22:42Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/mark", FALSE, _modinit, _moddeinit,
-	"$Id: mark.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: mark.c 4743 2006-01-31 02:22:42Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -55,7 +55,7 @@ static void ns_cmd_mark(char *origin)
 		return;
 	}
 
-	if (!(mu = myuser_find(target)))
+	if (!(mu = myuser_find_ext(target)))
 	{
 		notice(nicksvs.nick, origin, "\2%s\2 is not registered.", target);
 		return;

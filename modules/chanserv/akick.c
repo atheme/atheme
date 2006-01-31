@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: akick.c 4743 2006-01-31 02:22:42Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@ static void cs_fcmd_akick(char *origin, char *chan);
 DECLARE_MODULE_V1
 (
 	"chanserv/akick", FALSE, _modinit, _moddeinit,
-	"$Id: akick.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: akick.c 4743 2006-01-31 02:22:42Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -108,7 +108,7 @@ void cs_cmd_akick(char *origin)
 			return;
 		}
 
-		mu = myuser_find(uname);
+		mu = myuser_find_ext(uname);
 		if (!mu)
 		{
 			/* we might be adding a hostmask */
@@ -181,7 +181,7 @@ void cs_cmd_akick(char *origin)
 			return;
 		}
 
-		mu = myuser_find(uname);
+		mu = myuser_find_ext(uname);
 		if (!mu)
 		{
 			/* we might be deleting a hostmask */
@@ -318,7 +318,7 @@ void cs_fcmd_akick(char *origin, char *chan)
 			return;
 		}
 
-		mu = myuser_find(uname);
+		mu = myuser_find_ext(uname);
 		if (!mu)
 		{
 			/* we might be adding a hostmask */
@@ -391,7 +391,7 @@ void cs_fcmd_akick(char *origin, char *chan)
 			return;
 		}
 
-		mu = myuser_find(uname);
+		mu = myuser_find_ext(uname);
 		if (!mu)
 		{
 			/* we might be deleting a hostmask */

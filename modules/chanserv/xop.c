@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: xop.c 4743 2006-01-31 02:22:42Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: xop.c 4743 2006-01-31 02:22:42Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -128,7 +128,7 @@ static void cs_xop(char *origin, uint32_t level, char *leveldesc)
 		return;
 	}
 
-	mu = myuser_find(uname);
+	mu = myuser_find_ext(uname);
 
 	/* ADD */
 	if (!strcasecmp("ADD", cmd))

@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4639 2006-01-21 22:06:41Z jilles $
+ * $Id: node.c 4743 2006-01-31 02:22:42Z jilles $
  */
 
 #include "atheme.h"
@@ -1447,6 +1447,19 @@ myuser_t *myuser_find(char *name)
 	}
 
 	return NULL;
+}
+
+myuser_t *myuser_find_ext(char *name)
+{
+	user_t *u;
+
+	if (*name == '=')
+	{
+		u = user_find(name + 1);
+		return u != NULL ? u->myuser : NULL;
+	}
+	else
+		return myuser_find(name);
 }
 
 void

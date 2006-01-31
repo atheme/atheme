@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 4659 2006-01-22 17:42:46Z jilles $
+ * $Id: extern.h 4743 2006-01-31 02:22:42Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -209,6 +209,7 @@ E void kline_expire(void *arg);
 E myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags);
 E void myuser_delete(myuser_t *mu);
 E myuser_t *myuser_find(char *name);
+E myuser_t *myuser_find_ext(char *name);
 E void myuser_notice(char *from, myuser_t *target, char *fmt, ...);
 
 E mychan_t *mychan_add(char *name);

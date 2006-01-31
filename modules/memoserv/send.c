@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv SEND function
  *
- * $Id: send.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: send.c 4743 2006-01-31 02:22:42Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/send", FALSE, _modinit, _moddeinit,
-	"$Id: send.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: send.c 4743 2006-01-31 02:22:42Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -77,7 +77,7 @@ static void ms_cmd_send(char *origin)
 	}
 	
 	/* See if target is valid */
-	if (!(tmu = myuser_find(target))) 
+	if (!(tmu = myuser_find_ext(target))) 
 	{
 		notice(memosvs.nick, origin, 
 			"\2%s\2 is not registered.", target);

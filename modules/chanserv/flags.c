@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: flags.c 4743 2006-01-31 02:22:42Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: flags.c 4743 2006-01-31 02:22:42Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -184,7 +184,7 @@ static void cs_cmd_flags(char *origin)
 
 		if (!validhostmask(target))
 		{
-			if (!(tmu = myuser_find(target)))
+			if (!(tmu = myuser_find_ext(target)))
 			{
 				notice(chansvs.nick, origin, "The nickname \2%s\2 is not registered.", target);
 				return;
@@ -308,7 +308,7 @@ static void cs_fcmd_flags(char *origin, char *channel)
 
 	if (!validhostmask(target))
 	{
-		if (!(tmu = myuser_find(target)))
+		if (!(tmu = myuser_find_ext(target)))
 		{
 			notice(chansvs.nick, origin, "The nickname \2%s\2 is not registered.", target);
 			return;

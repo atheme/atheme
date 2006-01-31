@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: set.c 4743 2006-01-31 02:22:42Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: set.c 4743 2006-01-31 02:22:42Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -278,7 +278,7 @@ static void cs_set_founder(char *origin, char *name, char *params)
 		return;
 	}
 
-	if (!(tmu = myuser_find(newfounder)))
+	if (!(tmu = myuser_find_ext(newfounder)))
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is not registered.", newfounder);
 		return;

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FTRANSFER function.
  *
- * $Id: ftransfer.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: ftransfer.c 4743 2006-01-31 02:22:42Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ftransfer", FALSE, _modinit, _moddeinit,
-	"$Id: ftransfer.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: ftransfer.c 4743 2006-01-31 02:22:42Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -53,7 +53,7 @@ static void cs_cmd_ftransfer(char *origin)
 		return;
 	}
 
-	if (!(tmu = myuser_find(newfndr)))
+	if (!(tmu = myuser_find_ext(newfndr)))
 	{
 		notice(chansvs.nick, origin, "\2%s\2 is not registered.", newfndr);
 		return;

@@ -4,7 +4,7 @@
  *
  * VHost management! (ratbox only right now.)
  *
- * $Id: vhost.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: vhost.c 4743 2006-01-31 02:22:42Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: vhost.c 4743 2006-01-31 02:22:42Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -128,7 +128,7 @@ static void us_cmd_vhost(char *origin)
 	}
 
 	/* find the user... */
-	if (!(mu = myuser_find(target)))
+	if (!(mu = myuser_find_ext(target)))
 	{
 		notice(usersvs.nick, origin, "\2%s\2 is not a registered account.", target);
 		return;
