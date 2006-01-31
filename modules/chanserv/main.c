@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4655 2006-01-22 15:22:29Z jilles $
+ * $Id: main.c 4739 2006-01-31 02:02:59Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4655 2006-01-22 15:22:29Z jilles $",
+	"$Id: main.c 4739 2006-01-31 02:02:59Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -232,6 +232,7 @@ static void cs_join(chanuser_t *cu)
 	metadata_t *md;
 	boolean_t noop;
 	chanacs_t *ca2;
+	boolean_t secure = FALSE;
 
 	if (is_internal_client(cu->user))
 		return;
@@ -240,6 +241,9 @@ static void cs_join(chanuser_t *cu)
 	mc = mychan_find(chan->name);
 	if (mc == NULL)
 		return;
+
+	if (mc->flags & MC_SECURE || chan->nummembers == 1)
+		secure = TRUE;
 
 	if (chan->nummembers == 1 && config_options.join_chans)
 		join(chan->name, chansvs.nick);
@@ -313,7 +317,7 @@ static void cs_join(chanuser_t *cu)
 				cu->modes |= ircd->owner_mode;
 			}
 		}
-		else if ((mc->flags & MC_SECURE) && (cu->modes & ircd->owner_mode))
+		else if (secure == TRUE && (cu->modes & ircd->owner_mode))
 		{
 			char *mbuf = sstrdup(ircd->owner_mchar);
 			*mbuf = '-';
@@ -336,7 +340,7 @@ static void cs_join(chanuser_t *cu)
 				cu->modes |= ircd->protect_mode;
 			}
 		}
-		else if ((mc->flags & MC_SECURE) && (cu->modes & ircd->protect_mode))
+		else if (secure == TRUE && (cu->modes & ircd->protect_mode))
 		{
 			char *mbuf = sstrdup(ircd->protect_mchar);
 			*mbuf = '-';
@@ -356,7 +360,7 @@ static void cs_join(chanuser_t *cu)
 			cu->modes |= CMODE_OP;
 		}
 	}
-	else if ((mc->flags & MC_SECURE) && (cu->modes & CMODE_OP) && !(flags & CA_OP))
+	else if (secure == TRUE && (cu->modes & CMODE_OP) && !(flags & CA_OP))
 	{
 		cmode(chansvs.nick, chan->name, "-o", CLIENT_NAME(u));
 		cu->modes &= ~CMODE_OP;
@@ -372,7 +376,7 @@ static void cs_join(chanuser_t *cu)
 				cu->modes |= ircd->halfops_mode;
 			}
 		}
-		else if ((mc->flags & MC_SECURE) && (cu->modes & ircd->halfops_mode) && !(flags & CA_HALFOP))
+		else if (secure == TRUE && (cu->modes & ircd->halfops_mode) && !(flags & CA_HALFOP))
 		{
 			cmode(chansvs.nick, chan->name, "-h", CLIENT_NAME(u));
 			cu->modes &= ~ircd->halfops_mode;

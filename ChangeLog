@@ -1,3 +1,12 @@
+nenolod     2006/01/31 01:56:22 UTC	(20060131-4737)
+  Log:
+  Add notes about PTLink IRCd.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/doc/IRCD (File Modified) 
+
+
 jilles      2006/01/27 15:45:40 UTC	(20060127-4735)
   Log:
   ircnet: add +R (reop list) ban-like cmode.
