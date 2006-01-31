@@ -4,7 +4,7 @@
  *
  * Lists object properties via their metadata table.
  *
- * $Id: taxonomy.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: taxonomy.c 4745 2006-01-31 02:26:19Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/taxonomy", FALSE, _modinit, _moddeinit,
-	"$Id: taxonomy.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: taxonomy.c 4745 2006-01-31 02:26:19Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -43,7 +43,6 @@ void cs_cmd_taxonomy(char *origin)
 {
 	char *target = strtok(NULL, " ");
 	user_t *u = user_find_named(origin);
-	myuser_t *mu;
 	mychan_t *mc;
 	node_t *n;
 	boolean_t isoper;

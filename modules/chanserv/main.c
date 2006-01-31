@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4741 2006-01-31 02:14:11Z jilles $
+ * $Id: main.c 4745 2006-01-31 02:26:19Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4741 2006-01-31 02:14:11Z jilles $",
+	"$Id: main.c 4745 2006-01-31 02:26:19Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -79,7 +79,6 @@ static void chanserv(char *origin, uint8_t parc, char *parv[])
 	if (parv[parc - 2][0] == '#')
 	{
 		metadata_t *md;
-		user_t *u = user_find_named(origin);
 
 		if (chansvs.fantasy == FALSE)
 		{
@@ -227,7 +226,6 @@ static void cs_join(chanuser_t *cu)
 	user_t *u = cu->user;
 	channel_t *chan = cu->chan;
 	mychan_t *mc;
-	char hostbuf[BUFSIZE];
 	uint32_t flags;
 	metadata_t *md;
 	boolean_t noop;
@@ -446,7 +444,6 @@ static void cs_keeptopic_topicset(channel_t *c)
 {
 	mychan_t *mc;
 	metadata_t *md;
-	char *text;
 
 	mc = mychan_find(c->name);
 
@@ -489,7 +486,9 @@ static void cs_keeptopic_newchan(channel_t *c)
 	metadata_t *md;
 	char *setter;
 	char *text;
+#if 0
 	time_t channelts;
+#endif
 	time_t topicts;
 
 

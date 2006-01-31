@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService VOICE functions.
  *
- * $Id: voice.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: voice.c 4745 2006-01-31 02:26:19Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/voice", FALSE, _modinit, _moddeinit,
-	"$Id: voice.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: voice.c 4745 2006-01-31 02:26:19Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -240,7 +240,7 @@ static void cs_fcmd_voice(char *origin, char *chan)
 		cmode(chansvs.nick, chan, "+v", CLIENT_NAME(tu));
 		cu->modes |= CMODE_VOICE;
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s VOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
-	} while (nick = strtok(NULL, " "));
+	} while ((nick = strtok(NULL, " ")) != NULL);
 
 }
 
@@ -293,6 +293,6 @@ static void cs_fcmd_devoice(char *origin, char *chan)
 		cmode(chansvs.nick, chan, "-v", CLIENT_NAME(tu));
 		cu->modes &= ~CMODE_VOICE;
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s DEVOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
-	} while (nick = strtok(NULL, " "));
+	} while ((nick = strtok(NULL, " ")) != NULL);
 }
 

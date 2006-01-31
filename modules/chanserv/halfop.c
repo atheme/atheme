@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: halfop.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: halfop.c 4745 2006-01-31 02:26:19Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/halfop", FALSE, _modinit, _moddeinit,
-	"$Id: halfop.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: halfop.c 4745 2006-01-31 02:26:19Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -292,7 +292,7 @@ static void cs_fcmd_halfop(char *origin, char *chan)
 		cmode(chansvs.nick, chan, "+h", CLIENT_NAME(tu));
 		cu->modes |= ircd->halfops_mode;
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s HALFOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
-	} while (nick = strtok(NULL, " "));
+	} while ((nick = strtok(NULL, " ")) != NULL);
 }
 
 static void cs_fcmd_dehalfop(char *origin, char *chan)
@@ -356,5 +356,5 @@ static void cs_fcmd_dehalfop(char *origin, char *chan)
 		cmode(chansvs.nick, chan, "-h", CLIENT_NAME(tu));
 		cu->modes &= ~ircd->halfops_mode;
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s DEHALFOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
-	} while (nick = strtok(NULL, " "));
+	} while ((nick = strtok(NULL, " ")) != NULL);
 }

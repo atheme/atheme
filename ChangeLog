@@ -1,3 +1,36 @@
+jilles      2006/01/31 02:22:42 UTC	(20060131-4743)
+  Log:
+  Allow =<nick> instead of <account> in most commands.
+  This indicates the account the given nick is logged in to.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/extern.h (File Modified) 
+  +4 -4		trunk/modules/chanserv/akick.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/flags.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/ftransfer.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/set.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/xop.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/forward.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/ignore.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/send.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/freeze.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/hold.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/info.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/listchans.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/mark.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/taxonomy.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/vhost.c (File Modified) 
+  +1 -1		trunk/modules/userserv/freeze.c (File Modified) 
+  +1 -1		trunk/modules/userserv/hold.c (File Modified) 
+  +1 -1		trunk/modules/userserv/info.c (File Modified) 
+  +1 -1		trunk/modules/userserv/listchans.c (File Modified) 
+  +1 -1		trunk/modules/userserv/mark.c (File Modified) 
+  +1 -1		trunk/modules/userserv/taxonomy.c (File Modified) 
+  +1 -1		trunk/modules/userserv/vhost.c (File Modified) 
+  +13 -0	trunk/src/node.c (File Modified) 
+
+
 jilles      2006/01/31 02:14:11 UTC	(20060131-4741)
   Log:
   Try to avoid 'enforce channel access on initial creation'

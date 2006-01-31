@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 4519 2006-01-06 11:12:49Z pfish $
+ * $Id: flatfile.c 4745 2006-01-31 02:26:19Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 4519 2006-01-06 11:12:49Z pfish $",
+	"$Id: flatfile.c 4745 2006-01-31 02:26:19Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -166,7 +166,7 @@ static void flatfile_db_save(void *arg)
 		svsignore = (svsignore_t *)n->data;
 
 		/* SI <mask> <settime> <setby> <reason> */
-		fprintf(f, "SI %s %d %s %s\n", svsignore->mask, svsignore->settime, svsignore->setby, svsignore->reason);
+		fprintf(f, "SI %s %ld %s %s\n", svsignore->mask, svsignore->settime, svsignore->setby, svsignore->reason);
 	}
 
 
@@ -207,7 +207,6 @@ static void flatfile_db_load(void)
 	myuser_t *mu;
 	mychan_t *mc;
 	kline_t *k;
-	node_t *n;
 	svsignore_t *svsignore;
 	uint32_t i = 0, linecnt = 0, muin = 0, mcin = 0, cain = 0, kin = 0;
 	FILE *f = fopen("etc/atheme.db", "r");
@@ -432,7 +431,7 @@ static void flatfile_db_load(void)
 				char *chan = strtok(name, ":");
 				char *mask = strtok(NULL, " ");
 
-				ca = chanacs_find_by_mask(mychan_find(name), mask, CA_NONE);
+				ca = chanacs_find_by_mask(mychan_find(chan), mask, CA_NONE);
 				if (ca != NULL)
 					metadata_add(ca, METADATA_CHANACS, property, value);
 			}
