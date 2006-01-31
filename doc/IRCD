@@ -1,4 +1,4 @@
-$Id: IRCD 4729 2006-01-25 13:03:22Z jilles $
+$Id: IRCD 4737 2006-01-31 01:56:22Z nenolod $
 
 IRCD-specific notes
 -------------------
@@ -149,6 +149,8 @@ earlier versions.
 
 ptlink
 ------
+
+You will need U:lines for services on all services on the network.
 
 ratbox
 ------

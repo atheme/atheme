@@ -1,3 +1,12 @@
+jilles      2006/01/27 15:45:40 UTC	(20060127-4735)
+  Log:
+  ircnet: add +R (reop list) ban-like cmode.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/ircnet.c (File Modified) 
+
+
 jilles      2006/01/25 19:03:01 UTC	(20060125-4733)
   Log:
   Note removal of nickname linking.
