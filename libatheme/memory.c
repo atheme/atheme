@@ -4,7 +4,7 @@
  *
  * Memory functions.
  *
- * $Id: memory.c 3053 2005-10-20 18:04:13Z nenolod $
+ * $Id: memory.c 4757 2006-02-01 20:02:16Z nenolod $
  */
 
 #include <org.atheme.claro.base>
@@ -47,14 +47,14 @@ void *srealloc(void *oldptr, size_t newsize)
 /* does strdup()'s job, only with the above memory functions */
 char *sstrdup(const char *s)
 {
-        char *t;
+	char *t;
 
-        if (strlen(s) == 0)
-                return NULL;
+	if (!s || strlen(s) == 0)
+		return NULL;
 
-        t = smalloc(strlen(s) + 1);
+	t = smalloc(strlen(s) + 1);
 
-        strcpy(t, s);
-        return t;
+	strcpy(t, s);
+	return t;
 }
 
