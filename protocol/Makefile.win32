@@ -29,6 +29,7 @@ BASE_SRCS = 		\
 	bircd.c         \
 	charybdis.c	\
 	dreamforge.c    \
+	hybrid.c	\
 	hyperion.c      \
 	inspircd.c      \
 	ircnet.c        \
