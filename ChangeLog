@@ -1,3 +1,12 @@
+nenolod     2006/02/01 20:02:16 UTC	(20060201-4757)
+  Log:
+  sstrdup(): if a NULL parameter is given, return NULL instead of crashing ;)
+  
+
+  Changes:	Modified:
+  +6 -6		trunk/libatheme/memory.c (File Modified) 
+
+
 jilles      2006/02/01 15:02:08 UTC	(20060201-4755)
   Log:
   Add a description of the letters in /version and ctcp version.

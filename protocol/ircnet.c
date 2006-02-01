@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 4735 2006-01-27 15:45:40Z jilles $
+ * $Id: ircnet.c 4759 2006-02-01 23:47:43Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 4735 2006-01-27 15:45:40Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 4759 2006-02-01 23:47:43Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -463,15 +463,19 @@ static void m_njoin(char *origin, uint8_t parc, char *parv[])
 	uint8_t userc;
 	char *userv[256];
 	uint8_t i;
+	server_t *source;
 
-	if (origin)
+	source = server_find(origin);
+	if (source != NULL)
 	{
 		c = channel_find(parv[0]);
 
 		if (!c)
 		{
 			slog(LG_DEBUG, "m_njoin(): new channel: %s", parv[0]);
-			c = channel_add(parv[0], CURRTIME);
+			/* Give channels created during burst an older "TS"
+			 * so they won't be deopped -- jilles */
+			c = channel_add(parv[0], source->flags & SF_EOB ? CURRTIME : CURRTIME - 601);
 		}
 
 		userc = sjtoken(parv[parc - 1], ',', userv);
