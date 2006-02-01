@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 4573 2006-01-19 13:44:42Z jilles $
+ * $Id: account.c 4751 2006-02-01 14:47:45Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 4573 2006-01-19 13:44:42Z jilles $",
+	"$Id: account.c 4751 2006-02-01 14:47:45Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -583,6 +583,60 @@ static int do_metadata_get(void *conn, int parc, char *parv[])
 	return 0;
 }
 
+/*
+ * atheme.account.vhost
+ *
+ * XML inputs:
+ *       authcookie, account name, [vhost]
+ *
+ * XML outputs:
+ *       fault 1 - validation failed
+ *       fault 2 - unknown account
+ *       fault 4 - insufficient parameters
+ *       default - success message
+ *
+ * Side Effects:
+ *       a vhost is set or deleted from an account.
+ */ 
+static int do_set_vanity_host(void *conn, int parc, char *parv[])
+{
+	myuser_t *mu;
+	char buf[XMLRPC_BUFSIZE];
+
+	if (parc < 2)
+	{
+		xmlrpc_generic_error(4, "Insufficient parameters.");
+		return 0;
+	}
+
+	if ((mu = myuser_find(parv[1])) == NULL)
+	{
+		xmlrpc_generic_error(2, "Unknown account.");
+		return 0;
+	}
+
+	if (authcookie_validate(parv[0], mu) == FALSE)
+	{
+		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		return 0;
+	}
+
+	if (parc > 2)
+	{
+		metadata_add(mu, METADATA_USER, "private:usercloak", parv[2]);
+		logcommand_external(using_nickserv ? nicksvs.me : usersvs.me, "xmlrpc", conn, mu, CMDLOG_ADMIN, "VHOST ASSIGN %s", parv[2]);
+	}
+	else
+	{
+		metadata_delete(mu, METADATA_USER, "private:usercloak");
+		logcommand_external(using_nickserv ? nicksvs.me : usersvs.me, "xmlrpc", conn, mu, CMDLOG_ADMIN, "VHOST DELETE");
+	}
+
+	xmlrpc_string(buf, "Operation was successful.");
+	xmlrpc_send(1, buf);
+	return 0;
+}
+
 void _modinit(module_t *m)
 {
 	if (module_find_published("nickserv/main"))
@@ -595,6 +649,7 @@ void _modinit(module_t *m)
 	xmlrpc_register_method("atheme.account.metadata.set", do_metadata_set);
 	xmlrpc_register_method("atheme.account.metadata.delete", do_metadata_delete);
 	xmlrpc_register_method("atheme.account.metadata.get", do_metadata_get);
+	xmlrpc_register_method("atheme.account.vhost", do_set_vanity_host);
 }
 
 void _moddeinit(void)
@@ -606,5 +661,6 @@ void _moddeinit(void)
 	xmlrpc_unregister_method("atheme.account.metadata.set");
 	xmlrpc_unregister_method("atheme.account.metadata.delete");
 	xmlrpc_unregister_method("atheme.account.metadata.get");
+	xmlrpc_unregister_method("atheme.account.vhost");
 }
 
