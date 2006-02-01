@@ -1,3 +1,17 @@
+nenolod     2006/02/01 14:22:48 UTC	(20060201-4747)
+  Log:
+  Add hybrid-specific IRCd module
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/dist/example.conf (File Modified) 
+  +2 -1		trunk/dist/example.userserv.conf (File Modified) 
+  + -		trunk/include/protocol/hybrid.h (File Added) 
+  +1 -0		trunk/protocol/Makefile.in (File Modified) 
+  +1169 -0	trunk/protocol/Makefile.win32 (File Modified) 
+  + -		trunk/protocol/hybrid.c (File Added) 
+
+
 nenolod     2006/01/31 02:26:19 UTC	(20060131-4745)
   Log:
   kill off some warnings for fun.
