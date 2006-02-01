@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 4749 2006-02-01 14:35:58Z nenolod $
+ * $Id: ptasks.c 4753 2006-02-01 14:48:41Z nenolod $
  */
 
 #include "atheme.h"
@@ -34,15 +34,15 @@ void handle_version(user_t *u)
 
 	numeric_sts(me.name, 351, u->nick, ":atheme-%s. %s %s%s%s%s%s%s%s%s%s [%s]",
 		    version, me.name, 
-		    (match_mapping) ? "A" : "-",
-		    (me.loglevel & LG_DEBUG) ? "d" : "-",
-		    (me.auth) ? "e" : "-",
-		    (config_options.flood_msgs) ? "F" : "-",
-		    (config_options.leave_chans) ? "l" : "-", 
-		    (config_options.join_chans) ? "j" : "-", 
-		    (!match_mapping) ? "R" : "-",
-		    (config_options.raw) ? "r" : "-",
-		    (runflags & RF_LIVE) ? "n" : "-",
+		    (match_mapping) ? "A" : "",
+		    (me.loglevel & LG_DEBUG) ? "d" : "",
+		    (me.auth) ? "e" : "",
+		    (config_options.flood_msgs) ? "F" : "",
+		    (config_options.leave_chans) ? "l" : "", 
+		    (config_options.join_chans) ? "j" : "", 
+		    (!match_mapping) ? "R" : "",
+		    (config_options.raw) ? "r" : "",
+		    (runflags & RF_LIVE) ? "n" : "",
 		    ircd->ircdname);
 	numeric_sts(me.name, 351, u->nick, ":Compile time: %s, build-id %s, build %s", creation, revision, generation);
 }

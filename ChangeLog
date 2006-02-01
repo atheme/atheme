@@ -1,3 +1,13 @@
+nenolod     2006/02/01 14:47:45 UTC	(20060201-4751)
+  Log:
+  Add atheme.account.vhost for setting and removing vhosts. This command 
+  only affects the account and not any logged in users.
+  
+
+  Changes:	Modified:
+  +56 -0	trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 nenolod     2006/02/01 14:35:58 UTC	(20060201-4749)
   Log:
   add the ircd name onto version output
