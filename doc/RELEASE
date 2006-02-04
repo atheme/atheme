@@ -1,9 +1,11 @@
-$Id: RELEASE 4733 2006-01-25 19:03:01Z jilles $
+$Id: RELEASE 4771 2006-02-04 21:05:06Z nenolod $
 
-Atheme 1.0rc2 Release Notes
-===========================
+Atheme 1.0 Release Notes
+========================
+- Add ability to use =<nick> where accounts are used. (it aliases to the
+  User's account)
 - Remove the incomplete and cluttering nickname linking system (this was
-  actually done in 1.0rc1).
+  actually done in 1.0rc1, but we forgot to mention it).
 
 Atheme 1.0rc1 Release Notes
 ===========================
