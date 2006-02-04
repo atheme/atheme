@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4745 2006-01-31 02:26:19Z nenolod $
+ * $Id: main.c 4769 2006-02-04 21:01:03Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4745 2006-01-31 02:26:19Z nenolod $",
+	"$Id: main.c 4769 2006-02-04 21:01:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -242,7 +242,7 @@ static void cs_join(chanuser_t *cu)
 
 	/* attempt to deop people recreating channels, XXX this doesn't
 	 * really work properly */
-	if (mc->flags & MC_SECURE || (chan->nummembers == 1 && chan->ts > CURRTIME - 60))
+	if (mc->flags & MC_SECURE || (chan->nummembers == 1 && chan->ts > CURRTIME - 300))
 		secure = TRUE;
 
 	if (chan->nummembers == 1 && config_options.join_chans)
