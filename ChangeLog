@@ -1,3 +1,13 @@
+jilles      2006/02/04 21:12:58 UTC	(20060204-4773)
+  Log:
+  - Add the other changes since 1.0rc1.
+  - These are 1.0 release notes, not 1.0rc2.
+  
+
+  Changes:	Modified:
+  +8 -1		trunk/doc/RELEASE (File Modified) 
+
+
 nenolod     2006/02/04 21:05:06 UTC	(20060204-4771)
   Log:
   Add =<nick> to release notes.
