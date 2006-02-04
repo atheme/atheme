@@ -1,3 +1,12 @@
+nenolod     2006/02/04 02:57:30 UTC	(20060204-4761)
+  Log:
+  add 'atheme.account.vhost' to the example.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/contrib/xmlrpc_explorer.php (File Modified) 
+
+
 jilles      2006/02/01 23:47:43 UTC	(20060201-4759)
   Log:
   ircnet: hack: use an older faked TS for bursted channels,
