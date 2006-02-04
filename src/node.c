@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4743 2006-01-31 02:22:42Z jilles $
+ * $Id: node.c 4765 2006-02-04 20:52:34Z nenolod $
  */
 
 #include "atheme.h"
@@ -744,6 +744,9 @@ user_t *user_find(char *nick)
 	user_t *u;
 	node_t *n;
 
+	if (nick == NULL)
+		return NULL;
+
 	if (ircd->uses_uid == TRUE)
 	{
 		LIST_FOREACH(n, uidlist[SHASH((unsigned char *)nick)].head)
@@ -1438,6 +1441,9 @@ myuser_t *myuser_find(char *name)
 	myuser_t *mu;
 	node_t *n;
 
+	if (name == NULL)
+		return NULL;
+
 	LIST_FOREACH(n, mulist[shash((unsigned char *) name)].head)
 	{
 		mu = (myuser_t *)n->data;
@@ -1452,6 +1458,9 @@ myuser_t *myuser_find(char *name)
 myuser_t *myuser_find_ext(char *name)
 {
 	user_t *u;
+
+	if (name == NULL)
+		return NULL;
 
 	if (*name == '=')
 	{

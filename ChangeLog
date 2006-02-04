@@ -1,3 +1,12 @@
+nenolod     2006/02/04 17:15:15 UTC	(20060204-4763)
+  Log:
+  Don't just call myuser_find_ext() blindly! If you do /cs xop list, things crash :(
+  
+
+  Changes:	Modified:
+  +4 -2		trunk/modules/chanserv/xop.c (File Modified) 
+
+
 nenolod     2006/02/04 02:57:30 UTC	(20060204-4761)
   Log:
   add 'atheme.account.vhost' to the example.
