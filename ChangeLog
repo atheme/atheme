@@ -1,3 +1,13 @@
+nenolod     2006/02/04 21:15:19 UTC	(20060204-4775)
+  Log:
+  1.0 release
+  
+
+  Changes:	Modified:
+  +11 -11	trunk/configure (File Modified) 
+  +1 -1		trunk/configure.ac (File Modified) 
+
+
 jilles      2006/02/04 21:12:58 UTC	(20060204-4773)
   Log:
   - Add the other changes since 1.0rc1.

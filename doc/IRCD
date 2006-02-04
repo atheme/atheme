@@ -1,4 +1,4 @@
-$Id: IRCD 4737 2006-01-31 01:56:22Z nenolod $
+$Id: IRCD 4777 2006-02-04 23:11:00Z jilles $
 
 IRCD-specific notes
 -------------------
@@ -204,6 +204,11 @@ ACCOUNT messages.
 
 For host hiding (umode +x, <account>.<suffix>) to work, the hosthidesuffix
 in serverinfo{} must be correct (same value as F:HIDDEN_HOST in ircd.conf).
+
+Atheme does not support IPv6 (neither IPv6 connections nor IPv6 IPs in P10
+protocol).
+
+Atheme does not support oplevels; they should be disabled.
 
 unreal
 ------
