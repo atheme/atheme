@@ -3,7 +3,16 @@ Help for INFO:
 INFO displays nickname information such as
 registration time, flags, and other details.
 
+You can query the nick a user is logged in as
+by specifying an equals sign followed by their
+nick. This '=' convention works with most commands.
+
 Syntax: INFO <nickname>
+Syntax: INFO =<online user>
 
 Examples:
     /msg &nick& INFO w00t
+Shows information about the registered nick w00t.
+    /msg &nick& INFO =w00tie[home]
+Shows information about the registered nick the user w00tie[home] is
+logged in as.

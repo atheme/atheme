@@ -1,3 +1,12 @@
+nenolod     2006/02/04 20:52:34 UTC	(20060204-4765)
+  Log:
+  Add some paranoia checks to user_find(), myuser_find() and myuser_find_ext().
+  
+
+  Changes:	Modified:
+  +9 -0		trunk/src/node.c (File Modified) 
+
+
 nenolod     2006/02/04 17:15:15 UTC	(20060204-4763)
   Log:
   Don't just call myuser_find_ext() blindly! If you do /cs xop list, things crash :(
