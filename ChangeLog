@@ -1,3 +1,13 @@
+jilles      2006/02/01 23:47:43 UTC	(20060201-4759)
+  Log:
+  ircnet: hack: use an older faked TS for bursted channels,
+  so we won't deop them.
+  
+
+  Changes:	Modified:
+  +6 -2		trunk/protocol/ircnet.c (File Modified) 
+
+
 nenolod     2006/02/01 20:02:16 UTC	(20060201-4757)
   Log:
   sstrdup(): if a NULL parameter is given, return NULL instead of crashing ;)
