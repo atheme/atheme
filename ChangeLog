@@ -1,3 +1,12 @@
+nenolod     2006/02/04 21:05:06 UTC	(20060204-4771)
+  Log:
+  Add =<nick> to release notes.
+  
+
+  Changes:	Modified:
+  +5 -3		trunk/doc/RELEASE (File Modified) 
+
+
 jilles      2006/02/04 21:01:03 UTC	(20060204-4769)
   Log:
   Consider a channel 'new' (do as if SECURE is set even if it isn't)

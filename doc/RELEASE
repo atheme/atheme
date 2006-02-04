@@ -1,9 +1,16 @@
-$Id: RELEASE 4771 2006-02-04 21:05:06Z nenolod $
+$Id: RELEASE 4773 2006-02-04 21:12:58Z jilles $
 
 Atheme 1.0 Release Notes
 ========================
 - Add ability to use =<nick> where accounts are used. (it aliases to the
-  User's account)
+  User's account).
+- Deop users recreating registered channels if they do not have op flags.
+  This attempts not to affect channels created longer ago.
+- Add separate protocol module for ircd-hybrid, with CHGHOST support.
+- Add ircd name to /version output.
+- Add atheme.account.vhost XMLRPC for setting and removing vhosts. Note
+  that this, unlike the other XMLRPCs, allows things that the given
+  credentials would not normally (over IRC) be allowed to.
 - Remove the incomplete and cluttering nickname linking system (this was
   actually done in 1.0rc1, but we forgot to mention it).
 
