@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: undernet.c 4781 2006-02-05 00:05:03Z jilles $
+ * $Id: undernet.c 4783 2006-02-05 00:38:13Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4781 2006-02-05 00:05:03Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 4783 2006-02-05 00:38:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -282,7 +282,12 @@ static void undernet_unkline_sts(char *server, char *user, char *host)
 /* topic wrapper */
 static void undernet_topic_sts(char *channel, char *setter, time_t ts, char *topic)
 {
-	sts("%s T %s %ld :%s", chansvs.me->me->uid, channel, ts, topic);
+	channel_t *c;
+
+	c = channel_find(channel);
+	if (c == NULL)
+		return;
+	sts("%s T %s %ld %ld :%s", chansvs.me->me->uid, channel, c->ts, ts, topic);
 }
 
 /* mode wrapper */

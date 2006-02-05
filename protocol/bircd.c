@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: bircd.c 4709 2006-01-24 23:02:59Z jilles $
+ * $Id: bircd.c 4783 2006-02-05 00:38:13Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 4709 2006-01-24 23:02:59Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 4783 2006-02-05 00:38:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -284,7 +284,12 @@ static void asuka_unkline_sts(char *server, char *user, char *host)
 /* topic wrapper */
 static void asuka_topic_sts(char *channel, char *setter, time_t ts, char *topic)
 {
-	sts("%s T %s %ld :%s", chansvs.me->me->uid, channel, ts, topic);
+	channel_t *c;
+
+	c = channel_find(channel);
+	if (c == NULL)
+		return;
+	sts("%s T %s %ld %ld :%s", chansvs.me->me->uid, channel, c->ts, ts, topic);
 }
 
 /* mode wrapper */

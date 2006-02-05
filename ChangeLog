@@ -1,3 +1,13 @@
+jilles      2006/02/05 00:05:03 UTC	(20060205-4781)
+  Log:
+  ircu 2.12 has adopted asuka's cmode +D, so add it here as well.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/protocol/undernet.h (File Modified) 
+  +1 -0		trunk/protocol/undernet.c (File Modified) 
+
+
 jilles      2006/02/05 00:04:15 UTC	(20060205-4779)
   Log:
   Don't reallocate me.name/me.numeric on rehash.
