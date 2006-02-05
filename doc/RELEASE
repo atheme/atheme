@@ -1,4 +1,4 @@
-$Id: RELEASE 4773 2006-02-04 21:12:58Z jilles $
+$Id: RELEASE 4785 2006-02-05 04:22:25Z nenolod $
 
 Atheme 1.0 Release Notes
 ========================
@@ -13,6 +13,12 @@ Atheme 1.0 Release Notes
   credentials would not normally (over IRC) be allowed to.
 - Remove the incomplete and cluttering nickname linking system (this was
   actually done in 1.0rc1, but we forgot to mention it).
+- Don't allocate me.name/me.numeric on rehash. This fixes a known P10
+  issue.
+- Add support for ircu2.10.12's +D mode, which was already implemented
+  in Asuka.
+- Always send both the channel TS and the topic TS when setting a topic
+  under P10 ircd's.
 
 Atheme 1.0rc1 Release Notes
 ===========================
