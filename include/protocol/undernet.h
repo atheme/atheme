@@ -4,7 +4,7 @@
  *
  * This code contains the channel mode definitions for ircnet ircd.
  *
- * $Id: undernet.h 4639 2006-01-21 22:06:41Z jilles $
+ * $Id: undernet.h 4781 2006-02-05 00:05:03Z jilles $
  */
 
 #ifndef RATBOX_H
@@ -12,5 +12,6 @@
 
 
 /* Extended channel modes will eventually go here. */
+#define CMODE_DELAYED		0x00004000
 
 #endif
