@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4709 2006-01-24 23:02:59Z jilles $
+ * $Id: conf.c 4779 2006-02-05 00:04:15Z jilles $
  */
 
 #include "atheme.h"
@@ -849,7 +849,8 @@ static int c_si_name(CONFIGENTRY *ce)
 	if (ce->ce_vardata == NULL)
 		PARAM_ERROR(ce);
 
-	me.name = sstrdup(ce->ce_vardata);
+	if (!(runflags & RF_REHASHING))
+		me.name = sstrdup(ce->ce_vardata);
 
 	return 0;
 }
@@ -879,7 +880,8 @@ static int c_si_numeric(CONFIGENTRY *ce)
 	if (ce->ce_vardata == NULL)
 		PARAM_ERROR(ce);
 
-	me.numeric = sstrdup(ce->ce_vardata);
+	if (!(runflags & RF_REHASHING))
+		me.numeric = sstrdup(ce->ce_vardata);
 
 	return 0;
 }

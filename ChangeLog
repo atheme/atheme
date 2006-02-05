@@ -1,3 +1,12 @@
+jilles      2006/02/04 23:11:00 UTC	(20060204-4777)
+  Log:
+  undernet: we do not support ipv6 ips in P10; we do not support oplevels.
+  
+
+  Changes:	Modified:
+  +5 -0		trunk/doc/IRCD (File Modified) 
+
+
 nenolod     2006/02/04 21:15:19 UTC	(20060204-4775)
   Log:
   1.0 release
