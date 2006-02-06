@@ -4,7 +4,7 @@
  *
  * VHost management! (ratbox only right now.)
  *
- * $Id: vhost.c 4743 2006-01-31 02:22:42Z jilles $
+ * $Id: vhost.c 4789 2006-02-06 10:50:41Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 4743 2006-01-31 02:22:42Z jilles $",
+	"$Id: vhost.c 4789 2006-02-06 10:50:41Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -148,7 +148,7 @@ static void us_cmd_vhost(char *origin)
 
 	if (strchr(host, '@'))
 	{
-		notice(nicksvs.nick, origin, "The vhost provided contains invalid characters.");
+		notice(usersvs.nick, origin, "The vhost provided contains invalid characters.");
 		return;
 	}
 

@@ -1,3 +1,12 @@
+nenolod     2006/02/05 04:22:25 UTC	(20060205-4785)
+  Log:
+  Update RELEASE to reflect the latest changes.
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/doc/RELEASE (File Modified) 
+
+
 jilles      2006/02/05 00:38:13 UTC	(20060205-4783)
   Log:
   P10: if we send a single TS in a TOPIC message, asuka will
