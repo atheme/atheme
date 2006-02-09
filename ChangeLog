@@ -1,3 +1,13 @@
+pfish       2006/02/09 03:26:58 UTC	(20060209-4795)
+  Log:
+  config touchup
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/dist/example.conf (File Modified) 
+  +1 -0		trunk/dist/example.userserv.conf (File Modified) 
+
+
 pfish       2006/02/06 10:50:41 UTC	(20060206-4789)
   Log:
   Fix 2 crashes where nicksvs was used in UserServ code.

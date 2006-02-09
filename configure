@@ -271,8 +271,8 @@ SHELL=${CONFIG_SHELL-/bin/sh}
 # Identity of this package.
 PACKAGE_NAME='atheme'
 PACKAGE_TARNAME='atheme'
-PACKAGE_VERSION='1.0'
-PACKAGE_STRING='atheme 1.0'
+PACKAGE_VERSION='1.0.1'
+PACKAGE_STRING='atheme 1.0.1'
 PACKAGE_BUGREPORT='bugs@atheme.org'
 
 ac_default_prefix=~/atheme
