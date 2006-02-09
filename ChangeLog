@@ -1,3 +1,13 @@
+jilles      2006/02/09 14:11:53 UTC	(20060209-4801)
+  Log:
+  This should fix automatic login after a netsplit/services restart
+  (not tested).
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/inspircd.c (File Modified) 
+
+
 pfish       2006/02/09 04:10:20 UTC	(20060209-4799)
   Log:
   Atheme 1.0.1
