@@ -1,3 +1,14 @@
+jilles      2006/02/09 14:46:01 UTC	(20060209-4803)
+  Log:
+  - Make server names case insensitive
+  - Make UIDs case sensitive (required for P10; TS6/IRCnet don't care)
+  (nicks are case insensitive, SIDs are case sensitive)
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/src/node.c (File Modified) 
+
+
 jilles      2006/02/09 14:11:53 UTC	(20060209-4801)
   Log:
   This should fix automatic login after a netsplit/services restart

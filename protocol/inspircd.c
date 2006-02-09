@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 4801 2006-02-09 14:11:53Z jilles $
+ * $Id: inspircd.c 4805 2006-02-09 20:33:19Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4801 2006-02-09 14:11:53Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4805 2006-02-09 20:33:19Z nenolod $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -416,22 +416,9 @@ static void m_notice(char *origin, uint8_t parc, char *parv[])
 
 static void m_fjoin(char *origin, uint8_t parc, char *parv[])
 {
-	/*
-	 *  -> :proteus.malkier.net SJOIN 1073516550 #shrike +tn :@sycobuny @+rakaur
-	 *      also:
-	 *  -> :nenolod_ SJOIN 1117334567 #chat
-	 *      also:
-	 *  -> SJOIN 1117334567 #chat :@nenolod
-	 */
-
 	channel_t *c;
-	uint8_t modec = 0;
-	char *modev[16];
-	uint8_t userc;
-	char *userv[256];
 	uint8_t i;
 	time_t ts;
-	char nicklist[512];
 
 	if (parc >= 3)
 	{
@@ -454,22 +441,8 @@ static void m_fjoin(char *origin, uint8_t parc, char *parv[])
 			c->ts = ts;
 		}
 
-		/* XXX: InspIRCd has no leading colon on the nick list,
-		 * so we must build one. This is a mess, someone pleaaaase
-		 * tidy it up for me - Brain
-		 */
-		*nicklist = '\0';
 		for (i = 2; i < parc; i++)
-		{
-			if (i != 2)
-				strncat(nicklist," ",512);
-			strncat(nicklist,parv[i],512);
-		}
-
-		userc = sjtoken(nicklist, ' ', userv);
-
-		for (i = 0; i < userc; i++)
-			chanuser_add(c, userv[i]);
+			chanuser_add(c, parv[i]);
 	}
 }
 
