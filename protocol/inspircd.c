@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 4705 2006-01-24 17:55:17Z jilles $
+ * $Id: inspircd.c 4801 2006-02-09 14:11:53Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4705 2006-01-24 17:55:17Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4801 2006-02-09 14:11:53Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -520,7 +520,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 
 		/* Assumes ircd clears +r on nick changes (r2882 or newer) */
 		if (strchr(parv[5], 'r'))
-			handle_burstlogin(u, parv[0]);
+			handle_burstlogin(u, parv[1]);
 
 		handle_nickchange(u);
 	}

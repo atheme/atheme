@@ -1,3 +1,13 @@
+pfish       2006/02/09 04:10:20 UTC	(20060209-4799)
+  Log:
+  Atheme 1.0.1
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/configure (File Modified) 
+  +1 -1		trunk/configure.ac (File Modified) 
+
+
 pfish       2006/02/09 03:26:58 UTC	(20060209-4795)
   Log:
   config touchup
