@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
  *
- * $Id: nefarious.c 4813 2006-02-10 15:02:54Z nenolod $
+ * $Id: nefarious.c 4815 2006-02-10 17:33:05Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 4813 2006-02-10 15:02:54Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 4815 2006-02-10 17:33:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -23,20 +23,20 @@ ircd_t Nefarious = {
         FALSE,                          /* Whether or not we use RCOMMAND */
         FALSE,                          /* Whether or not we support channel owners. */
         FALSE,                          /* Whether or not we support channel protection. */
-        FALSE,                          /* Whether or not we support halfops. */
+        TRUE,                           /* Whether or not we support halfops. */
 	TRUE,				/* Whether or not we use P10 */
 	TRUE,				/* Whether or not we use vhosts. */
-	CMODE_ADMONLY,			/* Oper-only cmodes */
+	CMODE_PERM|CMODE_OPERONLY|CMODE_ADMONLY, /* Oper-only cmodes */
         0,                              /* Integer flag for owner channel flag. */
         0,                              /* Integer flag for protect channel flag. */
-        0,                              /* Integer flag for halfops. */
+        CMODE_HALFOP,                   /* Integer flag for halfops. */
         "+",                            /* Mode we set for owner. */
         "+",                            /* Mode we set for protect. */
         "+",                            /* Mode we set for halfops. */
 	PROTOCOL_NEFARIOUS,		/* Protocol type */
 	CMODE_PERM,                     /* Permanent cmodes */
-	"b",                            /* Ban-like cmodes */
-	0,                              /* Except mchar */
+	"be",                           /* Ban-like cmodes */
+	'e',                            /* Except mchar */
 	0                               /* Invex mchar */
 };
 
@@ -214,29 +214,11 @@ static void nefarious_notice(char *from, char *target, char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	if (target[0] == '#' && (channel = channel_find(target)) != NULL &&
-			channel->modes & CMODE_NONOTICE)
-	{
-		/* nefarious sucks */
-		/* remove that stupid +N mode before it blocks our notice
-		 * -- jilles */
-		sts("%s M %s -N %ld", u ? u->uid : me.numeric, channel->name, channel->ts);
-		channel->modes &= ~CMODE_NONOTICE;
-	}
-
 	sts("%s O %s :%s", u ? u->uid : me.numeric, t ? t->uid : target, buf);
 }
 
 static void nefarious_wallchops(user_t *sender, channel_t *channel, char *message)
 {
-	if (channel->modes & CMODE_NONOTICE)
-	{
-		/* nefarious sucks */
-		/* remove that stupid +N mode before it blocks our notice
-		 * -- jilles */
-		sts("%s M %s -N %ld", sender->uid, channel->name, channel->ts);
-		channel->modes &= ~CMODE_NONOTICE;
-	}
 	sts("%s WC %s :%s", sender->uid, channel->name, message);
 }
 
@@ -537,6 +519,7 @@ static void m_burst(char *origin, uint8_t parc, char *parv[])
 	char newnick[16+NICKLEN];
 	char *p;
 	time_t ts;
+	int bantype;
 
 	/* S BURST <channel> <ts> [parameters]
 	 * parameters can be:
@@ -588,6 +571,7 @@ static void m_burst(char *origin, uint8_t parc, char *parv[])
 		c->ts = ts;
 	}
 
+	bantype = 'b';
 	j = 2;
 	while (j < parc)
 	{
@@ -605,7 +589,12 @@ static void m_burst(char *origin, uint8_t parc, char *parv[])
 		{
 			userc = sjtoken(parv[j++] + 1, ' ', userv);
 			for (i = 0; i < userc; i++)
-				chanban_add(c, userv[i], 'b');
+				if (!strcmp(userv[i], "~"))
+					/* A ban "~" means exceptions are
+					 * following */
+					bantype = 'e';
+				else
+					chanban_add(c, userv[i], bantype);
 		}
 		else
 		{
@@ -852,7 +841,7 @@ static void m_clearmode(char *origin, uint8_t parc, char *parv[])
 {
 	channel_t *chan;
 	char *p, c;
-	node_t *n;
+	node_t *n, *tn;
 	chanuser_t *cu;
 	int i;
 
@@ -874,7 +863,21 @@ static void m_clearmode(char *origin, uint8_t parc, char *parv[])
 	while ((c = *p++))
 	{
 		if (c == 'b')
-			chanban_clear(chan);
+		{
+			LIST_FOREACH_SAFE(n, tn, chan->bans.head)
+			{
+				if (((chanban_t *)n->data)->type == 'b')
+					chanban_delete(n->data);
+			}
+		}
+		else if (c == 'e')
+		{
+			LIST_FOREACH_SAFE(n, tn, chan->bans.head)
+			{
+				if (((chanban_t *)n->data)->type == 'e')
+					chanban_delete(n->data);
+			}
+		}
 		else if (c == 'k')
 		{
 			if (chan->key)
@@ -898,6 +901,14 @@ static void m_clearmode(char *origin, uint8_t parc, char *parv[])
 				}
 				else
 					cu->modes &= ~CMODE_OP;
+			}
+		}
+		else if (c == 'h')
+		{
+			LIST_FOREACH(n, chan->members.head)
+			{
+				cu = (chanuser_t *)n->data;
+				cu->modes &= ~CMODE_HALFOP;
 			}
 		}
 		else if (c == 'v')

@@ -1,3 +1,17 @@
+nenolod     2006/02/10 15:02:54 UTC	(20060210-4813)
+  Log:
+  Add support for Nefarious IRCu 0.4.x or later
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/dist/example.conf (File Modified) 
+  +1 -0		trunk/dist/example.userserv.conf (File Modified) 
+  +34 -0	trunk/include/pmodule.h (File Modified) 
+  + -		trunk/include/protocol/nefarious.h (File Added) 
+  +1131 -0	trunk/protocol/Makefile.in (File Modified) 
+  + -		trunk/protocol/nefarious.c (File Added) 
+
+
 nenolod     2006/02/10 03:13:29 UTC	(20060210-4811)
   Log:
   1.0.1 -> Marsupial
