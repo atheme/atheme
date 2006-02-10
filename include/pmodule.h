@@ -4,7 +4,7 @@
  *
  * Protocol module stuff.
  *
- * $Id: pmodule.h 4529 2006-01-07 02:17:39Z nenolod $
+ * $Id: pmodule.h 4813 2006-02-10 15:02:54Z nenolod $
  */
 
 #ifndef PMODULE_H
@@ -50,6 +50,7 @@ E boolean_t backend_loaded;
 #define PROTOCOL_UNDERNET		16
 #define PROTOCOL_UNREAL			17
 #define PROTOCOL_SOLIDIRCD		18
+#define PROTOCOL_NEFARIOUS		19
 
 #define PROTOCOL_OTHER			255
 
