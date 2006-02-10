@@ -4,20 +4,11 @@
  *
  * Undernet base64 routine.
  *
- * $Id: ubase64.c 4621 2006-01-20 01:44:46Z jilles $
+ * $Id: ubase64.c 4807 2006-02-10 03:02:02Z nenolod $
  */
 
 #include "atheme.h"
 
-/*
- * Rewritten 07/17/05 by nenolod, due to legal concerns
- * of using GPL'ed ircu code in the main tree, raised
- * by Zoot (over at srvx, who have also rewritten their
- * base64 implementation for srvx version 2).
- *
- * Run may be a GPL zealot, that's really ok, because
- * our implementation is faster and more secure...
- */
 /*
  * base64touint() written 01/20/06 by jilles, for getting IP addresses.
  */
@@ -47,11 +38,11 @@ const char *uinttobase64(char *buf, uint64_t v, int64_t count)
 {
 	buf[count] = '\0';
 
-	do
+	while (count >= 0)
 	{
 		buf[--count] = ub64_alphabet[v & 63];
+		v >>= 6;
 	}
-	while (v >>= 6 && count >= 0);
 
 	return buf;
 }

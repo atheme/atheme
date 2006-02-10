@@ -1,3 +1,12 @@
+nenolod     2006/02/09 20:33:19 UTC	(20060209-4805)
+  Log:
+  Improve m_fjoin() quite a bit.
+  
+
+  Changes:	Modified:
+  +1 -28	trunk/protocol/inspircd.c (File Modified) 
+
+
 jilles      2006/02/09 14:46:01 UTC	(20060209-4803)
   Log:
   - Make server names case insensitive
