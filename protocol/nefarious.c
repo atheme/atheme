@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
  *
- * $Id: nefarious.c 4815 2006-02-10 17:33:05Z jilles $
+ * $Id: nefarious.c 4817 2006-02-10 17:49:03Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 4815 2006-02-10 17:33:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 4817 2006-02-10 17:49:03Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -303,7 +303,7 @@ static void nefarious_topic_sts(char *channel, char *setter, time_t ts, char *to
 	c = channel_find(channel);
 	if (c == NULL)
 		return;
-	sts("%s T %s %ld %ld :%s", chansvs.me->me->uid, channel, c->ts, ts, topic);
+	sts("%s T %s %s %ld %ld :%s", chansvs.me->me->uid, channel, setter, c->ts, ts, topic);
 }
 
 /* mode wrapper */
@@ -397,7 +397,7 @@ static void m_topic(char *origin, uint8_t parc, char *parv[])
 		ts = atoi(parv[parc - 2]);
 	if (ts == 0)
 		ts = CURRTIME;
-	handle_topic(c, source, ts, parv[parc - 1]);
+	handle_topic(c, parc > 4 ? parv[parc - 4] : source, ts, parv[parc - 1]);
 }
 
 /* AB G !1119920789.573932 services.atheme.org 1119920789.573932 */

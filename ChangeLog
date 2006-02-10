@@ -1,3 +1,16 @@
+jilles      2006/02/10 17:33:05 UTC	(20060210-4815)
+  Log:
+  Nefarious improvements, from reading the source code (not tested)
+  - complete halfops support
+  - ban exception support
+  - oper only cmodes
+  - apparently don't need to clear +N here (only applies to local clients)
+  
+
+  Changes:	Modified:
+  +37 -26	trunk/protocol/nefarious.c (File Modified) 
+
+
 nenolod     2006/02/10 15:02:54 UTC	(20060210-4813)
   Log:
   Add support for Nefarious IRCu 0.4.x or later
