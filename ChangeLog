@@ -1,3 +1,13 @@
+nenolod     2006/02/10 03:02:02 UTC	(20060210-4807)
+  Log:
+  Use ubase64toint() from ircu. It's public domain, as the same
+  basic algorithm is used in our base64 stuff too.
+  
+
+  Changes:	Modified:
+  +2 -11	trunk/src/ubase64.c (File Modified) 
+
+
 nenolod     2006/02/09 20:33:19 UTC	(20060209-4805)
   Log:
   Improve m_fjoin() quite a bit.
