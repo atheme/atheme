@@ -1,3 +1,12 @@
+pfish       2006/02/13 10:29:40 UTC	(20060213-4819)
+  Log:
+  PRIV_CHAN_AUSPEX will see when a channel is MC_INHABIT
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/modules/chanserv/info.c (File Modified) 
+
+
 jilles      2006/02/10 17:49:03 UTC	(20060210-4817)
   Log:
   Send and parse nefarious 0.5.x topic setter information.

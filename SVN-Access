@@ -2,7 +2,7 @@ The Atheme SVN repository can be checked out using the following command:
 	svn co http://svn.atheme.org/atheme/trunk atheme-current
 
 The stable version can be checked out using the following command:
-	svn co http://svn.atheme.org/atheme/branches/release-0.2 atheme-stable
+	svn co http://svn.atheme.org/atheme/branches/release-1.0 atheme-stable
 
 Atheme's SVN repository can be browsed over the internet at the 
 following address:
