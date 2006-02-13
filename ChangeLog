@@ -1,3 +1,12 @@
+pfish       2006/02/13 10:32:54 UTC	(20060213-4821)
+  Log:
+  outdated
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/SVN-Access (File Modified) 
+
+
 pfish       2006/02/13 10:29:40 UTC	(20060213-4819)
   Log:
   PRIV_CHAN_AUSPEX will see when a channel is MC_INHABIT
