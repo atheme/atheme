@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INFO functions.
  *
- * $Id: info.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: info.c 4819 2006-02-13 10:29:40Z pfish $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: info.c 4819 2006-02-13 10:29:40Z pfish $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -200,6 +200,9 @@ static void cs_cmd_info(char *origin)
 
 		notice(chansvs.nick, origin, "%s was \2MARKED\2 by %s on %s (%s)", mc->name, setter, strfbuf, reason);
 	}
+
+	if (has_priv(u, PRIV_CHAN_AUSPEX) && (MC_INHABIT & mc->flags))
+		notice(chansvs.nick, origin, "%s is temporally holding this channel.", chansvs.nick);
 
 	if (has_priv(u, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, METADATA_CHANNEL, "private:close:closer")))
 	{

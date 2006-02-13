@@ -1,3 +1,14 @@
+jilles      2006/02/10 17:49:03 UTC	(20060210-4817)
+  Log:
+  Send and parse nefarious 0.5.x topic setter information.
+  Should be ignored by 0.4.x.
+  Not tested.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/protocol/nefarious.c (File Modified) 
+
+
 jilles      2006/02/10 17:33:05 UTC	(20060210-4815)
   Log:
   Nefarious improvements, from reading the source code (not tested)
