@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 4751 2006-02-01 14:47:45Z nenolod $
+ * $Id: account.c 4827 2006-02-13 20:18:28Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 4751 2006-02-01 14:47:45Z nenolod $",
+	"$Id: account.c 4827 2006-02-13 20:18:28Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -637,6 +637,54 @@ static int do_set_vanity_host(void *conn, int parc, char *parv[])
 	return 0;
 }
 
+/*
+ * atheme.account.set_password
+ *
+ * XML inputs:
+ *       authcookie, account name, new password
+ *
+ * XML outputs:
+ *       fault 1 - validation failed
+ *       fault 2 - unknown account
+ *       fault 4 - insufficient parameters
+ *       fault 6 - passwords do not match
+ *       default - success message
+ *
+ * Side Effects:
+ *       an account password is changed.
+ */
+static int do_set_password(void *conn, int parc, char *parv[])
+{
+	myuser_t *mu;
+	char buf[XMLRPC_BUFSIZE];
+
+	if (parc < 3)
+	{
+		xmlrpc_generic_error(4, "Insufficient parameters.");
+		return 0;
+	}
+
+	if ((mu = myuser_find(parv[1])) == NULL)
+	{
+		xmlrpc_generic_error(2, "Unknown account.");
+		return 0;
+	}
+
+	if (authcookie_validate(parv[0], mu) == FALSE)
+	{
+		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		return 0;
+	}
+
+	set_password(mu, parv[2]);
+
+	logcommand_external(using_nickserv ? nicksvs.me : usersvs.me, "xmlrpc", conn, mu, CMDLOG_ADMIN, "SET PASSWORD");
+
+	xmlrpc_string(buf, "Operation was successful.");
+	xmlrpc_send(1, buf);
+	return 0;
+}
+
 void _modinit(module_t *m)
 {
 	if (module_find_published("nickserv/main"))
@@ -650,6 +698,7 @@ void _modinit(module_t *m)
 	xmlrpc_register_method("atheme.account.metadata.delete", do_metadata_delete);
 	xmlrpc_register_method("atheme.account.metadata.get", do_metadata_get);
 	xmlrpc_register_method("atheme.account.vhost", do_set_vanity_host);
+	xmlrpc_register_method("atheme.account.set_password", do_set_password);
 }
 
 void _moddeinit(void)
@@ -662,5 +711,6 @@ void _moddeinit(void)
 	xmlrpc_unregister_method("atheme.account.metadata.delete");
 	xmlrpc_unregister_method("atheme.account.metadata.get");
 	xmlrpc_unregister_method("atheme.account.vhost");
+	xmlrpc_unregister_method("atheme.account.set_password");
 }
 

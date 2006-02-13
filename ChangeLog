@@ -1,3 +1,12 @@
+pfish       2006/02/13 10:35:10 UTC	(20060213-4825)
+  Log:
+  fix a crash
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/userserv/listchans.c (File Modified) 
+
+
 pfish       2006/02/13 10:32:54 UTC	(20060213-4821)
   Log:
   outdated
