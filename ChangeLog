@@ -1,3 +1,12 @@
+nenolod     2006/02/13 20:18:28 UTC	(20060213-4827)
+  Log:
+  - Add atheme.account.set_password call.
+  
+
+  Changes:	Modified:
+  +50 -0	trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 pfish       2006/02/13 10:35:10 UTC	(20060213-4825)
   Log:
   fix a crash

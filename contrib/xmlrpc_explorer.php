@@ -5,7 +5,7 @@
  *
  * An XML-RPC testing script.
  *
- * $Id: xmlrpc_explorer.php 4761 2006-02-04 02:57:30Z nenolod $
+ * $Id: xmlrpc_explorer.php 4829 2006-02-13 20:37:34Z nenolod $
  */
 
 /* This script requires XML-RPC for PHP 1.1
@@ -35,6 +35,7 @@ $methods = array(
 	'atheme.logout' => array('authcookie', 'account'),
 	'atheme.account.register' => array('account', 'password', 'email'),
 	'atheme.account.verify' => array('authcookie', 'account', 'operation', 'key'),
+	'atheme.account.set_password' => array('authcookie', 'account', 'password'),
 	'atheme.account.metadata.set' => array('authcookie', 'account', 'key', 'value'),
 	'atheme.account.metadata.get' => array('account', 'key'),
 	'atheme.account.metadata.delete' => array('authcookie', 'account', 'key', 'value'),
@@ -97,4 +98,4 @@ switch ($_REQUEST['state'])
 
 ?>
 <hr>
-$Id: xmlrpc_explorer.php 4761 2006-02-04 02:57:30Z nenolod $
+$Id: xmlrpc_explorer.php 4829 2006-02-13 20:37:34Z nenolod $
