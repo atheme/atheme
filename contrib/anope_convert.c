@@ -17,6 +17,7 @@
 #define WHERE_TO "/home/jilles/atheme.db"
 
 /* define this if you use an anope that has everything in root, i.e. "pre CAPAB", 1.7.4 or lower. */
+/* anope 1.7.x before 1.7.13 will probably not work */
 #define ANOPE_16X
 
 #ifndef ANOPE_16X
@@ -103,6 +104,7 @@ void write_accounts(void)
 	}
 }
 
+#ifdef ANOPE_16X
 static int
 convert_mlock(int modes)
 {
@@ -119,6 +121,33 @@ convert_mlock(int modes)
 	/* the others differ per ircd in atheme :( -- jilles */
 	return amodes;
 }
+#else
+static int
+convert_mlock(int modes)
+{
+	int amodes = 0;
+	int i;
+
+	for (i = 0; cbmodeinfos[i].mode != '\0'; i++)
+	{
+		if (!(modes & cbmodeinfos[i].flag))
+			continue;
+		switch (cbmodeinfos[i].mode)
+		{
+			case 'i': amodes |= 0x1; break;
+			case 'm': amodes |= 0x8; break;
+			case 'n': amodes |= 0x10; break;
+			case 'p': amodes |= 0x40; break;
+			case 's': amodes |= 0x80; break;
+			case 't': amodes |= 0x100; break;
+			case 'k': amodes |= 0x2; break;
+			case 'l': amodes |= 0x4; break;
+			/* the others differ per ircd in atheme :( -- jilles */
+		}
+	}
+	return amodes;
+}
+#endif
 
 void write_channels(void)
 {
