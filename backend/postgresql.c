@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 3685 2005-11-09 01:07:04Z alambert $
+ * $Id: postgresql.c 4839 2006-02-17 23:37:21Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 3685 2005-11-09 01:07:04Z alambert $",
+	"$Id: postgresql.c 4839 2006-02-17 23:37:21Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -530,6 +530,8 @@ static void postgresql_db_load(void)
 
 		k = kline_add(user, host, reason, duration);
 		k->settime = settime;
+		/* XXX this is not nice, oh well -- jilles */
+		k->expires = k->settime + k->duration;
 		k->setby = sstrdup(setby);
 	}
 

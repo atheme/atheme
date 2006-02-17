@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using MySQL.
  *
- * $Id: mysql.c 3685 2005-11-09 01:07:04Z alambert $
+ * $Id: mysql.c 4839 2006-02-17 23:37:21Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/mysql", TRUE, _modinit, NULL,
-	"$Id: mysql.c 3685 2005-11-09 01:07:04Z alambert $",
+	"$Id: mysql.c 4839 2006-02-17 23:37:21Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -565,6 +565,8 @@ static void mysql_db_load(void)
 		settime = atoi(row[4]);
 		k = kline_add(row[1], row[2], row[6], duration);
 		k->settime = settime;
+		/* XXX this is not nice, oh well -- jilles */
+		k->expires = k->settime + k->duration;
 		k->setby = sstrdup(row[5]);
 	}
 

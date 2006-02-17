@@ -1,3 +1,13 @@
+jilles      2006/02/17 23:31:06 UTC	(20060217-4837)
+  Log:
+  Make this work with Anope 1.7.13.
+  It will also still work with Anope 1.6.x.
+  
+
+  Changes:	Modified:
+  +29 -0	trunk/contrib/anope_convert.c (File Modified) 
+
+
 nenolod     2006/02/13 20:37:34 UTC	(20060213-4829)
   Log:
   - Document atheme.account.set_password.
