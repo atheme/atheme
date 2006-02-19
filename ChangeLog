@@ -1,3 +1,15 @@
+jilles      2006/02/17 23:37:21 UTC	(20060217-4839)
+  Log:
+  Correct kline_t.expires manually on load instead of
+  keeping <load time> + duration.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/backend/flatfile.c (File Modified) 
+  +2 -0		trunk/backend/mysql.c (File Modified) 
+  +2 -0		trunk/backend/postgresql.c (File Modified) 
+
+
 jilles      2006/02/17 23:31:06 UTC	(20060217-4837)
   Log:
   Make this work with Anope 1.7.13.
