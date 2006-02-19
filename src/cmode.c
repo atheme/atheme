@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 4683 2006-01-22 22:40:23Z jilles $
+ * $Id: cmode.c 4845 2006-02-19 02:26:48Z nenolod $
  */
 
 #include "atheme.h"
@@ -593,8 +593,13 @@ void cmode(char *sender, ...)
 	va_end(args);
 	md->used = CURRTIME;
 
+	/*
+	 * We now schedule the stack to occur as soon as we return to io_loop. This makes
+	 * stacking 1:1 transactionally, but really, that's how it should work. Lag is
+	 * bad, people! --nenolod
+	 */
 	if (!md->event)
-		md->event = event_add_once("flush_cmode_callback", flush_cmode_callback, md, 1);
+		md->event = event_add_once("flush_cmode_callback", flush_cmode_callback, md, 0);
 }
 
 void check_modes(mychan_t *mychan, boolean_t sendnow)

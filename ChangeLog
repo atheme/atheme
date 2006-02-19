@@ -1,3 +1,12 @@
+jilles      2006/02/19 01:04:19 UTC	(20060219-4843)
+  Log:
+  Correct clientinfo{} -> chanserv{} in error message.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/src/conf.c (File Modified) 
+
+
 jilles      2006/02/19 01:03:42 UTC	(20060219-4841)
   Log:
   Ultimate3: add +S to services umodes.
