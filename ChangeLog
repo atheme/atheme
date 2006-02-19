@@ -1,3 +1,14 @@
+jilles      2006/02/19 01:03:42 UTC	(20060219-4841)
+  Log:
+  Ultimate3: add +S to services umodes.
+  
+  Submitted by: eggy
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/ultimate3.c (File Modified) 
+
+
 jilles      2006/02/17 23:37:21 UTC	(20060217-4839)
   Log:
   Correct kline_t.expires manually on load instead of

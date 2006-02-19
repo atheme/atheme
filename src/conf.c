@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4779 2006-02-05 00:04:15Z jilles $
+ * $Id: conf.c 4843 2006-02-19 01:04:19Z jilles $
  */
 
 #include "atheme.h"
@@ -1797,13 +1797,13 @@ boolean_t conf_check(void)
 
 	if (!chansvs.nick || !chansvs.user || !chansvs.host || !chansvs.real)
 	{
-		slog(LG_INFO, "conf_check(): invalid clientinfo{} block in %s", config_file);
+		slog(LG_INFO, "conf_check(): invalid chanserv{} block in %s", config_file);
 		return FALSE;
 	}
 
 	if ((strchr(chansvs.user, ' ')) || (strlen(chansvs.user) > 10))
 	{
-		slog(LG_INFO, "conf_check(): invalid `clientinfo::user' in %s", config_file);
+		slog(LG_INFO, "conf_check(): invalid `chanserv::user' in %s", config_file);
 		return FALSE;
 	}
 
