@@ -4,7 +4,7 @@
  *
  * VHost management! (ratbox only right now.)
  *
- * $Id: vhost.c 4743 2006-01-31 02:22:42Z jilles $
+ * $Id: vhost.c 4861 2006-02-23 02:36:49Z gxti $
  */
 
 #include "atheme.h"
@@ -12,11 +12,11 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 4743 2006-01-31 02:22:42Z jilles $",
+	"$Id: vhost.c 4861 2006-02-23 02:36:49Z gxti $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-list_t *ns_cmdtree;
+list_t *ns_cmdtree, *ns_helptree;
 
 static void vhost_on_identify(void *vptr);
 static void ns_cmd_vhost(char *origin);
@@ -30,12 +30,15 @@ void _modinit(module_t *m)
 	hook_add_event("user_identify");
 	hook_add_hook("user_identify", vhost_on_identify);
 	command_add(&ns_vhost, ns_cmdtree);
+	ns_helptree = module_locate_symbol("nickserv/main", "ns_helptree");
+	help_addentry(ns_helptree, "VHOST", "help/nickserv/vhost", NULL);
 }
 
 void _moddeinit(void)
 {
 	hook_del_hook("user_identify", vhost_on_identify);
 	command_delete(&ns_vhost, ns_cmdtree);
+	help_delentry(ns_helptree, "VHOST");
 }
 
 static void do_sethost_all(myuser_t *mu, char *host)

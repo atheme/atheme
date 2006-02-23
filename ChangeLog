@@ -1,3 +1,12 @@
+nenolod     2006/02/19 02:26:48 UTC	(20060219-4845)
+  Log:
+  Do the stack as soon as we get back to io_loop().
+  
+
+  Changes:	Modified:
+  +6 -1		trunk/src/cmode.c (File Modified) 
+
+
 jilles      2006/02/19 01:04:19 UTC	(20060219-4843)
   Log:
   Correct clientinfo{} -> chanserv{} in error message.
