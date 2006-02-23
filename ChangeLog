@@ -1,3 +1,13 @@
+gxti        2006/02/23 02:36:49 UTC	(20060223-4861)
+  Log:
+  Documented NS VHOST.
+  
+
+  Changes:	Modified:
+  +12 -0	trunk/help/nickserv/vhost (File Added) 
+  +4 -1		trunk/modules/nickserv/vhost.c (File Modified) 
+
+
 nenolod     2006/02/19 02:26:48 UTC	(20060219-4845)
   Log:
   Do the stack as soon as we get back to io_loop().
