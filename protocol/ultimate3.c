@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 4841 2006-02-19 01:03:42Z jilles $
+ * $Id: ultimate3.c 4865 2006-02-26 22:59:20Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 4841 2006-02-19 01:03:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 4865 2006-02-26 22:59:20Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -96,7 +96,7 @@ static uint8_t ultimate3_server_login(void)
 /* introduce a client */
 static void ultimate3_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
-	sts("CLIENT %s 1 %ld %sS + %s %s * %s 0 0 :%s", nick, CURRTIME, "io", user, host, me.name, real);
+	sts("CLIENT %s 1 %ld +%sS + %s %s * %s 0 0 :%s", nick, CURRTIME, "io", user, host, me.name, real);
 }
 
 /* invite a user to a channel */
