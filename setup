@@ -5,7 +5,7 @@
 #
 # This file is a simple setup script.
 #
-# $Id: setup 2883 2005-10-14 21:50:46Z nenolod $
+# $Id: setup 4869 2006-02-27 21:09:09Z jilles $
 
 PREFIX="$HOME/atheme"
 LARGENET="no"
@@ -93,6 +93,12 @@ case "$LARGENET" in
 esac
 
 sh configure $ARGS
+if [ $? != 0 ]; then
+	echo "Configure failed"
+	echo "Command was: sh configure $ARGS"
+	echo "Please fix this and try again"
+	exit 1
+fi
 
 echo ""
 echo "Press enter to begin compilation."
@@ -100,6 +106,12 @@ echo -n ""
 if read INPUT ; then : ; else echo "" ; exit 1 ; fi
 
 make
+if [ $? != 0 ]; then
+	echo "Compilation failed"
+	echo "Command was: make"
+	echo "Please fix this and try again"
+	exit 1
+fi
 
 echo ""
 echo "Press enter to begin installation."
@@ -107,6 +119,12 @@ echo -n ""
 if read INPUT ; then : ; else echo "" ; exit 1 ; fi
 
 make install
+if [ $? != 0 ]; then
+	echo "Installation failed"
+	echo "Command was: make install"
+	echo "Please fix this and try again"
+	exit 1
+fi
 
 echo "----------------------------------------------------------------"
 echo ">>> Atheme setup completed on `date`"
