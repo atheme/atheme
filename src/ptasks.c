@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 4753 2006-02-01 14:48:41Z nenolod $
+ * $Id: ptasks.c 4867 2006-02-27 03:28:52Z nenolod $
  */
 
 #include "atheme.h"
@@ -282,7 +282,8 @@ void handle_message(char *origin, char *target, boolean_t is_notice, char *messa
 	}
 
 	/* If target is a channel and fantasy commands are enabled,
-	 * this will return chanserv */
+	 * this will return chanserv
+	 */
 	sptr = find_service(target);
 	if (sptr == NULL)
 	{

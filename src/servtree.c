@@ -4,13 +4,15 @@
  *
  * Services binary tree manipulation. (add_service, del_service, et al.)
  *
- * $Id: servtree.c 4571 2006-01-19 13:37:54Z jilles $
+ * $Id: servtree.c 4867 2006-02-27 03:28:52Z nenolod $
  */
 
 #include "atheme.h"
 
 list_t services[HASHSIZE];
 static BlockHeap *service_heap;
+
+service_t *fcmd_agent = NULL;
 
 static void dummy_handler(char *origin, uint8_t parc, char **parv);
 
@@ -131,7 +133,7 @@ service_t *find_service(char *name)
 	char name2[NICKLEN];
 
 	if (name[0] == '#')
-		return chansvs.fantasy ? chansvs.me : NULL;
+		return fcmd_agent;
 
 	if (strchr(name, '@'))
 	{

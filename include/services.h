@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 4091 2005-12-14 10:10:04Z jilles $
+ * $Id: services.h 4867 2006-02-27 03:28:52Z nenolod $
  */
 
 #ifndef SERVICES_H
@@ -118,5 +118,7 @@ E memosvs_t memosvs;
 E helpsvs_t helpsvs;
 E nicksvs_t nicksvs;
 E usersvs_t usersvs;
+
+E service_t *fcmd_agent;
 
 #endif

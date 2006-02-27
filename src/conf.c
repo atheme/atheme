@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4843 2006-02-19 01:04:19Z jilles $
+ * $Id: conf.c 4867 2006-02-27 03:28:52Z nenolod $
  */
 
 #include "atheme.h"
@@ -1122,6 +1122,8 @@ static int c_ci_real(CONFIGENTRY *ce)
 static int c_ci_fantasy(CONFIGENTRY *ce)
 {
 	chansvs.fantasy = TRUE;
+
+	fcmd_agent = chansvs.me;
 
 	return 0;
 }
