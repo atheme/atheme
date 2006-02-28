@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 4805 2006-02-09 20:33:19Z nenolod $
+ * $Id: inspircd.c 4871 2006-02-28 01:10:05Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4805 2006-02-09 20:33:19Z nenolod $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4871 2006-02-28 01:10:05Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -476,14 +476,9 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			/* the new user matches a kline.
 			 * the server introducing the user probably wasn't around when
 			 * we added the kline or isn't accepting klines from us.
-			 * either way, we'll KILL the user and send the server
-			 * a new KLINE.
+			 * either way, we'll send the server a new KLINE.
 			 */
-
-			skill(opersvs.nick, parv[1], k->reason);
-			kline_sts(origin, k->user, k->host, (k->expires - CURRTIME), k->reason);
-
-			return;
+			kline_sts(s->name, k->user, k->host, (k->expires - CURRTIME), k->reason);
 		}
 
 		/* char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, uint32_t ts */

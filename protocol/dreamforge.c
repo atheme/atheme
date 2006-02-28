@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: dreamforge.c 4723 2006-01-25 12:44:18Z jilles $
+ * $Id: dreamforge.c 4871 2006-02-28 01:10:05Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/dreamforge.h"
 
-DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 4723 2006-01-25 12:44:18Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 4871 2006-02-28 01:10:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -392,14 +392,9 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			/* the new user matches a kline.
 			 * the server introducing the user probably wasn't around when
 			 * we added the kline or isn't accepting klines from us.
-			 * either way, we'll KILL the user and send the server
-			 * a new KLINE.
+			 * either way, we'll send the server a new KLINE.
 			 */
-
-			skill(opersvs.nick, parv[0], k->reason);
-			kline_sts(parv[5], k->user, k->host, (k->expires - CURRTIME), k->reason);
-
-			return;
+			kline_sts(s->name, k->user, k->host, (k->expires - CURRTIME), k->reason);
 		}
 
 		user_add(parv[0], parv[3], parv[4], NULL, NULL, NULL, parv[7], s, atoi(parv[2]));

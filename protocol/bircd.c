@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: bircd.c 4783 2006-02-05 00:38:13Z jilles $
+ * $Id: bircd.c 4871 2006-02-28 01:10:05Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 4783 2006-02-05 00:38:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 4871 2006-02-28 01:10:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -649,9 +649,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			/* but why do we need to anyway? ircd will kill
 			 * the bastard */
 			/*sts("%s D %s :%s!%s!%s (%s)", opersvs.me ? opersvs.me->me->uid : me.numeric, parv[parc - 2], opersvs.nick, opersvs.nick, opersvs.nick, k->reason);*/
-			kline_sts(origin, k->user, k->host, (k->expires - CURRTIME), k->reason);
-
-			return;
+			kline_sts(s->name, k->user, k->host, (k->expires - CURRTIME), k->reason);
 		}
 
 		ipstring[0] = '\0';

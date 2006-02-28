@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: bahamut.c 4693 2006-01-24 16:43:27Z jilles $
+ * $Id: bahamut.c 4871 2006-02-28 01:10:05Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/bahamut.h"
 
-DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 4693 2006-01-24 16:43:27Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 4871 2006-02-28 01:10:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -538,14 +538,9 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			/* the new user matches a kline.
 			 * the server introducing the user probably wasn't around when
 			 * we added the kline or isn't accepting klines from us.
-			 * either way, we'll KILL the user and send the server
-			 * a new KLINE.
+			 * either way, we'll send the server a new KLINE.
 			 */
-
-			skill(opersvs.nick, parv[0], k->reason);
-			kline_sts(parv[6], k->user, k->host, (k->expires - CURRTIME), k->reason);
-
-			return;
+			kline_sts(s->name, k->user, k->host, (k->expires - CURRTIME), k->reason);
 		}
 
 		ip.s_addr = ntohl(strtoul(parv[8], NULL, 10));

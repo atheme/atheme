@@ -1,3 +1,12 @@
+jilles      2006/02/27 21:09:09 UTC	(20060227-4869)
+  Log:
+  Bail out if configure, make or make install fail.
+  
+
+  Changes:	Modified:
+  +18 -0	trunk/setup (File Modified) 
+
+
 nenolod     2006/02/27 03:28:52 UTC	(20060227-4867)
   Log:
   - Allow services to override what normally processes fantasy commands.

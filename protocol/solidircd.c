@@ -553,14 +553,9 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			/* the new user matches a kline.
 			 * the server introducing the user probably wasn't around when
 			 * we added the kline or isn't accepting klines from us.
-			 * either way, we'll KILL the user and send the server
-			 * a new KLINE.
+			 * either way, we'll send the server a new KLINE.
 			 */
-
-			skill(opersvs.nick, parv[0], k->reason);
-			kline_sts(parv[6], k->user, k->host, (k->expires - CURRTIME), k->reason);
-
-			return;
+			kline_sts(s->name, k->user, k->host, (k->expires - CURRTIME), k->reason);
 		}
 
 		ip.s_addr = ntohl(strtoul(parv[8], NULL, 10));

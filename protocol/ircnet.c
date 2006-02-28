@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 4759 2006-02-01 23:47:43Z jilles $
+ * $Id: ircnet.c 4871 2006-02-28 01:10:05Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 4759 2006-02-01 23:47:43Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 4871 2006-02-28 01:10:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -515,13 +515,12 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			/* the new user matches a kline.
 			 * the server introducing the user probably wasn't around when
 			 * we added the kline or isn't accepting klines from us.
-			 * either way, we'll KILL the user and send the server
-			 * a new KLINE.
+			 * either way, we'll send the server a new KLINE.
 			 */
-
+			/* ircnet: kline doesn't work properly, so also do
+			 * a KILL here -- jilles */
 			skill(opersvs.nick, parv[0], k->reason);
-			kline_sts(parv[6], k->user, k->host, (k->expires - CURRTIME), k->reason);
-
+			kline_sts(s->name, k->user, k->host, (k->expires - CURRTIME), k->reason);
 			return;
 		}
 
