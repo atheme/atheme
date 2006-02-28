@@ -1,0 +1,12 @@
+Help for VHOST:
+
+VHOST allows operators to set a virtual host on an
+account. This vhost will be set on the user
+immediately and each time they connect. If no vhost
+is specified, clear any existing vhost.
+
+Syntax: VHOST <nickname> [<vhost>]
+
+Examples:
+    /msg &nick& VHOST spb may.explode.on.impact
+    /msg &nick& VHOST nenolod
