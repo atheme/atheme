@@ -548,16 +548,6 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
 
-		if ((k = kline_find(parv[4], parv[5])))
-		{
-			/* the new user matches a kline.
-			 * the server introducing the user probably wasn't around when
-			 * we added the kline or isn't accepting klines from us.
-			 * either way, we'll send the server a new KLINE.
-			 */
-			kline_sts(s->name, k->user, k->host, (k->expires - CURRTIME), k->reason);
-		}
-
 		ip.s_addr = ntohl(strtoul(parv[8], NULL, 10));
 		ipstring[0] = '\0';
 		if (!inet_ntop(AF_INET, &ip, ipstring, sizeof ipstring))

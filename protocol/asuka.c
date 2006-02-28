@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: asuka.c 4871 2006-02-28 01:10:05Z jilles $
+ * $Id: asuka.c 4881 2006-02-28 23:37:33Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4871 2006-02-28 01:10:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 4881 2006-02-28 23:37:33Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -657,22 +657,6 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 		}
 
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
-
-		if ((k = kline_find(parv[3], parv[4])))
-		{
-			/* the new user matches a kline.
-			 * the server introducing the user probably wasn't around when
-			 * we added the kline or isn't accepting klines from us.
-			 * either way, we'll KILL the user and send the server
-			 * a new KLINE.
-			 */
-
-			/* We *cannot* use skill() here -- jilles */
-			/* but why do we need to anyway? ircd will kill
-			 * the bastard */
-			/*sts("%s D %s :%s!%s!%s (%s)", opersvs.me ? opersvs.me->me->uid : me.numeric, parv[parc - 2], opersvs.nick, opersvs.nick, opersvs.nick, k->reason);*/
-			kline_sts(s->name, k->user, k->host, (k->expires - CURRTIME), k->reason);
-		}
 
 		ipstring[0] = '\0';
 		if (strlen(parv[parc - 3]) == 6)

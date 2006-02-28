@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 4871 2006-02-28 01:10:05Z jilles $
+ * $Id: inspircd.c 4881 2006-02-28 23:37:33Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4871 2006-02-28 01:10:05Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4881 2006-02-28 23:37:33Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -470,16 +470,6 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 		}
 
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[1]);
-
-		if ((k = kline_find(parv[4], parv[2])))
-		{
-			/* the new user matches a kline.
-			 * the server introducing the user probably wasn't around when
-			 * we added the kline or isn't accepting klines from us.
-			 * either way, we'll send the server a new KLINE.
-			 */
-			kline_sts(s->name, k->user, k->host, (k->expires - CURRTIME), k->reason);
-		}
 
 		/* char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, uint32_t ts */
 		u = user_add(parv[1], parv[4], parv[2], parv[3], parv[6], NULL, parv[7], s, atol(parv[0]));

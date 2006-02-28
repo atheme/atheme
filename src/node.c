@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4803 2006-02-09 14:46:01Z jilles $
+ * $Id: node.c 4881 2006-02-28 23:37:33Z jilles $
  */
 
 #include "atheme.h"
@@ -1253,6 +1253,24 @@ kline_t *kline_find_num(uint32_t number)
 		k = (kline_t *)n->data;
 
 		if (k->number == number)
+			return k;
+	}
+
+	return NULL;
+}
+
+kline_t *kline_find_user(user_t *u)
+{
+	kline_t *k;
+	node_t *n;
+
+	LIST_FOREACH(n, klnlist.head)
+	{
+		k = (kline_t *)n->data;
+
+		if (k->duration != 0 && k->expires <= CURRTIME)
+			continue;
+		if (!match(k->user, u->user) && (!match(k->host, u->host) || !match(k->host, u->ip)))
 			return k;
 	}
 

@@ -1,3 +1,13 @@
+jilles      2006/02/28 01:47:09 UTC	(20060228-4873)
+  Log:
+  Document userserv vhost (from r4861 nickserv).
+  
+
+  Changes:	Modified:
+  + -		trunk/help/userserv/vhost (File Added) 
+  +4 -1		trunk/modules/userserv/vhost.c (File Modified) 
+
+
 jilles      2006/02/28 01:10:05 UTC	(20060228-4871)
   Log:
   - Don't KILL akilled users, except on ircnet (where klines don't work

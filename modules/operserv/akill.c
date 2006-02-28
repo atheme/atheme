@@ -5,7 +5,7 @@
  * This file contains functionality which implements
  * the OService AKILL/KLINE command.
  *
- * $Id: akill.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: akill.c 4881 2006-02-28 23:37:33Z jilles $
  */
 
 #include "atheme.h"
@@ -13,9 +13,11 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: akill.c 4881 2006-02-28 23:37:33Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
+
+static void os_akill_newuser(void *vptr);
 
 static void os_cmd_akill(char *origin);
 static void os_cmd_akill_add(char *origin, char *target);
@@ -48,6 +50,9 @@ void _modinit(module_t *m)
 	fcommand_add(&os_akill_list, &os_akill_cmds);
 	
 	help_addentry(os_helptree, "AKILL", "help/oservice/akill", NULL);
+
+	hook_add_event("user_add");
+	hook_add_hook("user_add", os_akill_newuser);
 }
 
 void _moddeinit()
@@ -61,6 +66,26 @@ void _moddeinit()
 	fcommand_delete(&os_akill_list, &os_akill_cmds);
 	
 	help_delentry(os_helptree, "AKILL");
+
+	hook_del_hook("user_add", os_akill_newuser);
+}
+
+static void os_akill_newuser(void *vptr)
+{
+	user_t *u;
+	kline_t *k;
+
+	u = vptr;
+	if (is_internal_client(u))
+		return;
+	k = kline_find_user(u);
+	if (k != NULL)
+	{
+		/* Server didn't have that kline, send it again.
+		 * To ensure kline exempt works on akills too, do
+		 * not send a KILL. -- jilles */
+		kline_sts(u->server->name, k->user, k->host, k->duration ? k->expires - CURRTIME : 0, k->reason);
+	}
 }
 
 static void os_cmd_akill(char *origin)
