@@ -1,3 +1,15 @@
+jilles      2006/03/03 17:16:55 UTC	(20060303-4887)
+  Log:
+  Add /os akill sync, sends all akills to all servers.
+  This can be useful in case services will be down or
+  do not see a user as matching a certain akill.
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/help/oservice/akill (File Modified) 
+  +24 -0	trunk/modules/operserv/akill.c (File Modified) 
+
+
 jilles      2006/02/28 23:39:47 UTC	(20060228-4883)
   Log:
   Change "AKILL command" to "AKILL system" since akills

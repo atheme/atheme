@@ -6,19 +6,24 @@ Services will keep your AKILL's stored and allow for easy management.
 Syntax: AKILL ADD <nick|hostmask> [!P|!T <minutes>] <reason>
 
 If the !P token is specified the AKILL will never expire (permanent).
-If the !T token is specified expire time in minutes must follow.
+If the !T token is specified expire time must follow, in minutes,
+hours ("h"), days ("d") or weeks ("w").
 
 Examples:
     /msg &nick& AKILL ADD foo !T 5 bar reason
+    /msg &nick& AKILL ADD foo !T 3d bar reason
     /msg &nick& AKILL ADD foo@bar.com !P foo reason
     /msg &nick& AKILL ADD foo@bar.com foo reason
 
-The first example looks for the user with a nickname of "foo" and adds a 5
-minute AKILL for "bar reason."
+The first example looks for the user with a nickname of "foo" and adds
+a 5 minute AKILL for "bar reason."
 
-The second example adds a permanent AKILL on foo@bar.com for "foo reason."
+The second example is similar but adds the AKILL for 3 days instead of
+5 minutes.
 
-The third example adds a AKILL on foo@bar.com for the duration specified
+The third example adds a permanent AKILL on foo@bar.com for "foo reason."
+
+The fourth example adds a AKILL on foo@bar.com for the duration specified
 in the configuration file for "foo reason."
 
 Syntax: AKILL DEL <hostmask|number>

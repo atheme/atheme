@@ -5,7 +5,7 @@
  * This file contains functionality which implements
  * the OService AKILL/KLINE command.
  *
- * $Id: akill.c 4887 2006-03-03 17:16:55Z jilles $
+ * $Id: akill.c 4889 2006-03-03 17:34:10Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 4887 2006-03-03 17:16:55Z jilles $",
+	"$Id: akill.c 4889 2006-03-03 17:34:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -145,7 +145,27 @@ static void os_cmd_akill_add(char *origin, char *target)
 		else
 			strlcpy(reason, "No reason given", BUFSIZE);
 		if (s)
+		{
 			duration = (atol(s) * 60);
+			while (isdigit(*s))
+				s++;
+			if (*s == 'h' || *s == 'H')
+				duration *= 60;
+			else if (*s == 'd' || *s == 'D')
+				duration *= 1440;
+			else if (*s == 'w' || *s == 'W')
+				duration *= 10080;
+			else if (*s == '\0')
+				;
+			else
+				duration = 0;
+			if (duration == 0)
+			{
+				notice(opersvs.nick, origin, "Invalid duration given.");
+				notice(opersvs.nick, origin, "Syntax: AKILL ADD <nick|hostmask> [!P|!T <minutes>] " "<reason>");
+				return;
+			}
+		}
 		else {
 			notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "AKILL ADD");
 			notice(opersvs.nick, origin, "Syntax: AKILL ADD <nick|hostmask> [!P|!T <minutes>] " "<reason>");
