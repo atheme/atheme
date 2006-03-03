@@ -1,3 +1,15 @@
+jilles      2006/02/28 23:39:47 UTC	(20060228-4883)
+  Log:
+  Change "AKILL command" to "AKILL system" since akills
+  are now completely disabled if operserv/akill is not
+  loaded.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/dist/example.conf (File Modified) 
+  +1 -1		trunk/dist/example.userserv.conf (File Modified) 
+
+
 jilles      2006/02/28 23:37:33 UTC	(20060228-4881)
   Log:
   - Move akill checking into a user_add hook function in

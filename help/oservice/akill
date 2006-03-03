@@ -40,3 +40,9 @@ If FULL is specified the AKILL reasons will be shown.
 Examples:
     /msg &nick& AKILL LIST
     /msg &nick& AKILL LIST FULL
+
+Syntax: AKILL SYNC
+
+Sends all akills to all servers. This can be useful in case
+services will be down or do not see a user as matching a
+certain akill.

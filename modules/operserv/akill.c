@@ -5,7 +5,7 @@
  * This file contains functionality which implements
  * the OService AKILL/KLINE command.
  *
- * $Id: akill.c 4881 2006-02-28 23:37:33Z jilles $
+ * $Id: akill.c 4887 2006-03-03 17:16:55Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 4881 2006-02-28 23:37:33Z jilles $",
+	"$Id: akill.c 4887 2006-03-03 17:16:55Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -23,6 +23,7 @@ static void os_cmd_akill(char *origin);
 static void os_cmd_akill_add(char *origin, char *target);
 static void os_cmd_akill_del(char *origin, char *target);
 static void os_cmd_akill_list(char *origin, char *target);
+static void os_cmd_akill_sync(char *origin, char *target);
 
 
 command_t os_kline = { "KLINE", "Manages network bans. [deprecated, use OS AKILL in future.]", PRIV_AKILL, os_cmd_akill };
@@ -31,6 +32,7 @@ command_t os_akill = { "AKILL", "Manages network bans.", PRIV_AKILL, os_cmd_akil
 fcommand_t os_akill_add = { "ADD", AC_NONE, os_cmd_akill_add };
 fcommand_t os_akill_del = { "DEL", AC_NONE, os_cmd_akill_del };
 fcommand_t os_akill_list = { "LIST", AC_NONE, os_cmd_akill_list };
+fcommand_t os_akill_sync = { "SYNC", AC_NONE, os_cmd_akill_sync };
 
 list_t *os_cmdtree;
 list_t *os_helptree;
@@ -48,6 +50,7 @@ void _modinit(module_t *m)
 	fcommand_add(&os_akill_add, &os_akill_cmds);
 	fcommand_add(&os_akill_del, &os_akill_cmds);
 	fcommand_add(&os_akill_list, &os_akill_cmds);
+	fcommand_add(&os_akill_sync, &os_akill_cmds);
 	
 	help_addentry(os_helptree, "AKILL", "help/oservice/akill", NULL);
 
@@ -64,6 +67,7 @@ void _moddeinit()
 	fcommand_delete(&os_akill_add, &os_akill_cmds);
 	fcommand_delete(&os_akill_del, &os_akill_cmds);
 	fcommand_delete(&os_akill_list, &os_akill_cmds);
+	fcommand_delete(&os_akill_sync, &os_akill_cmds);
 	
 	help_delentry(os_helptree, "AKILL");
 
@@ -431,3 +435,23 @@ static void os_cmd_akill_list(char *origin, char *param)
 	logcommand(opersvs.me, user_find_named(origin), CMDLOG_GET, "AKILL LIST%s", full ? " FULL" : "");
 }
 
+static void os_cmd_akill_sync(char *origin, char *param)
+{
+	node_t *n;
+	kline_t *k;
+
+	logcommand(opersvs.me, user_find_named(origin), CMDLOG_DO, "AKILL SYNC");
+	snoop("AKILL:SYNC: \2%s\2", origin);
+
+	LIST_FOREACH(n, klnlist.head)
+	{
+		k = (kline_t *)n->data;
+
+		if (k->duration == 0)
+			kline_sts("*", k->user, k->host, 0, k->reason);
+		else if (k->expires > CURRTIME)
+			kline_sts("*", k->user, k->host, k->expires - CURRTIME, k->reason);
+	}
+
+	notice(opersvs.nick, origin, "AKILL list synchronized to servers.");
+}
