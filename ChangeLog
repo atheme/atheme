@@ -1,3 +1,15 @@
+jilles      2006/03/03 17:34:10 UTC	(20060303-4889)
+  Log:
+  Allow specification of akill duration in hours (h), days (d) and weeks (w).
+  Make the checks on durations more strict (no extraneous characters allowed,
+  no permanent akills via !T).
+  
+
+  Changes:	Modified:
+  +10 -5	trunk/help/oservice/akill (File Modified) 
+  +20 -0	trunk/modules/operserv/akill.c (File Modified) 
+
+
 jilles      2006/03/03 17:16:55 UTC	(20060303-4887)
   Log:
   Add /os akill sync, sends all akills to all servers.

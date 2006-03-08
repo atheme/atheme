@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4867 2006-02-27 03:28:52Z nenolod $
+ * $Id: conf.c 4893 2006-03-08 17:03:41Z jilles $
  */
 
 #include "atheme.h"
@@ -252,6 +252,8 @@ void conf_init(void)
 	me.mdlimit = 30;
 
 	chansvs.fantasy = FALSE;
+	if (chansvs.me != NULL && fcmd_agent == chansvs.me)
+		fcmd_agent = NULL;
 	chansvs.ca_vop = CA_VOP_DEF;
 	chansvs.ca_hop = CA_HOP_DEF;
 	chansvs.ca_aop = CA_AOP_DEF;
@@ -1122,8 +1124,9 @@ static int c_ci_real(CONFIGENTRY *ce)
 static int c_ci_fantasy(CONFIGENTRY *ce)
 {
 	chansvs.fantasy = TRUE;
-
-	fcmd_agent = chansvs.me;
+	
+	if (chansvs.me != NULL)
+		fcmd_agent = chansvs.me;
 
 	return 0;
 }
