@@ -1,3 +1,13 @@
+jilles      2006/03/08 17:03:41 UTC	(20060308-4893)
+  Log:
+  Make fantasy commands work again in the normal case with chanserv.
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/chanserv/main.c (File Modified) 
+  +5 -2		trunk/src/conf.c (File Modified) 
+
+
 jilles      2006/03/03 17:34:10 UTC	(20060303-4889)
   Log:
   Allow specification of akill duration in hours (h), days (d) and weeks (w).

@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 4881 2006-02-28 23:37:33Z jilles $
+ * $Id: unreal.c 4895 2006-03-09 17:39:13Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 4881 2006-02-28 23:37:33Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 4895 2006-03-09 17:39:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -109,7 +109,7 @@ static uint8_t unreal_server_login(void)
 /* introduce a client */
 static void unreal_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
-	sts("NICK %s 1 %ld %s %s %s 0 +%s * :%s", nick, CURRTIME, user, host, me.name, "io", real);
+	sts("NICK %s 1 %ld %s %s %s 0 +%sS * :%s", nick, CURRTIME, user, host, me.name, "io", real);
 }
 
 /* invite a user to a channel */
