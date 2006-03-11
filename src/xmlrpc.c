@@ -528,9 +528,10 @@ void xmlrpc_generic_error(int code, const char *string)
 		strlcat(buf2, buf, XMLRPC_BUFSIZE);
 		len += strlen(header);
 		free(header);
+		xmlrpc.setbuffer(buf2, len);
 	}
-
-	xmlrpc.setbuffer(buf2, len);
+	else
+		xmlrpc.setbuffer(buf, len);
 }
 
 /*************************************************************************/

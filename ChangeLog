@@ -1,3 +1,13 @@
+jilles      2006/03/09 17:39:13 UTC	(20060309-4895)
+  Log:
+  unreal: Introduce services with +S (network service,
+  prevents kick/deop on channels etc).
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/unreal.c (File Modified) 
+
+
 jilles      2006/03/08 17:03:41 UTC	(20060308-4893)
   Log:
   Make fantasy commands work again in the normal case with chanserv.
