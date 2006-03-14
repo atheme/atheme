@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 4881 2006-02-28 23:37:33Z jilles $
+ * $Id: charybdis.c 4899 2006-03-14 02:36:14Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 4881 2006-02-28 23:37:33Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 4899 2006-03-14 02:36:14Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -1049,6 +1049,14 @@ static void m_capab(char *origin, uint8_t parc, char *parv[])
 		{
 			slog(LG_DEBUG, "m_capab(): uplink does topic bursting, using if appropriate.");
 			use_tb = TRUE;
+		}
+		if (!irccasecmp(p, "HOPS"))
+		{
+			slog(LG_DEBUG, "m_capab(): uplink does halfops, enabling support.");
+
+			ircd->uses_halfops = TRUE;
+			ircd->halfops_mchar = "+h";
+			ircd->halfops_mode = CMODE_HALFOP;
 		}
 	}
 
