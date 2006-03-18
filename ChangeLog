@@ -1,3 +1,12 @@
+nenolod     2006/03/18 05:27:35 UTC	(20060318-4903)
+  Log:
+  - sanity checking
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/src/services.c (File Modified) 
+
+
 nenolod     2006/03/14 02:36:14 UTC	(20060314-4899)
   Log:
   - add support for charybdis +halfops patch
