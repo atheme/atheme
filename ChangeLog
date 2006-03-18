@@ -1,3 +1,13 @@
+nenolod     2006/03/14 02:36:14 UTC	(20060314-4899)
+  Log:
+  - add support for charybdis +halfops patch
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/include/protocol/charybdis.h (File Modified) 
+  +8 -0		trunk/protocol/charybdis.c (File Modified) 
+
+
 jilles      2006/03/11 20:59:53 UTC	(20060311-4897)
   Log:
   Make xmlrpc work with httpheader disabled.
