@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ GHOST function.
  *
- * $Id: ghost.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: ghost.c 4907 2006-03-20 02:40:44Z gxti $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/ghost", FALSE, _modinit, _moddeinit,
-	"$Id: ghost.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: ghost.c 4907 2006-03-20 02:40:44Z gxti $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -53,13 +53,13 @@ void ns_cmd_ghost(char *origin)
 	}
 
 	mu = myuser_find(target);
-	if (!mu)
+	target_u = user_find_named(target);
+	if (!mu && !target_u)
 	{
 		notice(nicksvs.nick, origin, "\2%s\2 is not a registered nickname.", target);
 		return;
 	}
 
-	target_u = user_find_named(target);
 	if (!target_u)
 	{
 		notice(nicksvs.nick, origin, "\2%s\2 is not online.", target);
@@ -71,8 +71,16 @@ void ns_cmd_ghost(char *origin)
 		return;
 	}
 
-	if (mu == u->myuser || (password && verify_password(mu, password)))
+	if ((target_u->myuser && target_u->myuser == u->myuser) || /* they're identified under our account */
+			(mu && mu == u->myuser) || /* we're identified under their account */
+			(password && mu && verify_password(mu, password))) /* we have their password */
 	{
+		/* If we're ghosting an unregistered nick, mu will be unset,
+		 * however if it _is_ registered, we still need to set it or
+		 * the wrong user will have their last seen time updated... */
+		if(target_u->myuser && target_u->myuser == u->myuser)
+			mu = target_u->myuser;
+
 		skill(nicksvs.nick, target, "GHOST command used by %s!%s@%s", u->nick, u->user, u->vhost);
 		user_delete(target_u);
 
