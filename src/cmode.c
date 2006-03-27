@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 4845 2006-02-19 02:26:48Z nenolod $
+ * $Id: cmode.c 4909 2006-03-27 12:26:46Z jilles $
  */
 
 #include "atheme.h"
@@ -186,7 +186,7 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 
 				if (cu == NULL)
 				{
-					slog(LG_ERROR, "channel_mode(): MODE %s %c%c %s", chan->name, (whatt == MTYPE_ADD) ? '+' : '-', status_mode_list[i].value, parv[parpos]);
+					slog(LG_ERROR, "channel_mode(): MODE %s %c%c %s", chan->name, (whatt == MTYPE_ADD) ? '+' : '-', status_mode_list[i].mode, parv[parpos]);
 
 					matched = TRUE;
 				}
