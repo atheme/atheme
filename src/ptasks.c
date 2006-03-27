@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 4867 2006-02-27 03:28:52Z nenolod $
+ * $Id: ptasks.c 4911 2006-03-27 12:28:18Z jilles $
  */
 
 #include "atheme.h"
@@ -305,7 +305,7 @@ void handle_message(char *origin, char *target, boolean_t is_notice, char *messa
 		if (t != NULL && *target != '#' && floodcheck(u, t))
 			return;
 
-		if (!is_notice && config_options.secure && irccasecmp(target, sptr->disp))
+		if (!is_notice && config_options.secure && *target != '#' && irccasecmp(target, sptr->disp))
 		{
 			notice(t->nick, u->nick, "For security reasons, \2/msg %s\2 has been disabled."
 					" Use \2/%s%s <command>\2 to send a command.",

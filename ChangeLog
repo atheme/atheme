@@ -1,3 +1,12 @@
+jilles      2006/03/27 12:26:46 UTC	(20060327-4909)
+  Log:
+  Fix log message if target of cmode +o etc cannot be found.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/cmode.c (File Modified) 
+
+
 gxti        2006/03/20 02:40:44 UTC	(20060320-4907)
   Log:
   Allow users to GHOST other nicks which are logged into their account.
