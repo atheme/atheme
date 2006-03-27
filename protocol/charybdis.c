@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 4899 2006-03-14 02:36:14Z nenolod $
+ * $Id: charybdis.c 4913 2006-03-27 13:16:56Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 4899 2006-03-14 02:36:14Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 4913 2006-03-27 13:16:56Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -1029,6 +1029,17 @@ static void m_encap(char *origin, uint8_t parc, char *parv[])
 		if (u == NULL)
 			return;
 		strlcpy(u->host, parv[2], HOSTLEN);
+	}
+	else if (!irccasecmp(parv[1], "CHGHOST"))
+	{
+		if (parc < 4)
+			return;
+		u = user_find(parv[2]);
+		if (u == NULL)
+			return;
+		strlcpy(u->vhost, parv[3], HOSTLEN);
+		slog(LG_DEBUG, "m_encap(): chghost %s -> %s", u->nick,
+				u->vhost);
 	}
 }
 
