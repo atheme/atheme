@@ -1,3 +1,13 @@
+jilles      2006/03/27 13:16:56 UTC	(20060327-4913)
+  Log:
+  Interpret received ENCAP CHGHOST, for umode +h
+  and other things that send it.
+  
+
+  Changes:	Modified:
+  +11 -0	trunk/protocol/charybdis.c (File Modified) 
+
+
 jilles      2006/03/27 12:28:18 UTC	(20060327-4911)
   Log:
   Don't complain about all channel messages if fantasy

@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 4881 2006-02-28 23:37:33Z jilles $
+ * $Id: hybrid.c 4915 2006-03-27 13:29:00Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 4881 2006-02-28 23:37:33Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 4915 2006-03-27 13:29:00Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -1057,6 +1057,16 @@ static void m_capab(char *origin, uint8_t parc, char *parv[])
 	services_init();
 }
 
+static void m_chghost(char *origin, uint8_t parc, char *parv[])
+{
+	user_t *u = user_find(parv[0]);
+
+	if (!u)
+		return;
+
+	strlcpy(u->vhost, parv[1], HOSTLEN);
+}
+
 /* Server ended their burst: warn all their users if necessary -- jilles */
 static void server_eob(server_t *s)
 {
@@ -1132,6 +1142,7 @@ void _modinit(module_t * m)
 	pcommand_add("BMASK", m_bmask);
 	pcommand_add("TMODE", m_tmode);
 	pcommand_add("SID", m_sid);
+	pcommand_add("CHGHOST", m_chghost);
 
 	m->mflags = MODTYPE_CORE;
 
