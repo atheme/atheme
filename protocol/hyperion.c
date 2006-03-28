@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 4881 2006-02-28 23:37:33Z jilles $
+ * $Id: hyperion.c 4923 2006-03-28 23:43:14Z nenolod $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -15,7 +15,7 @@
 #include "atheme.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 4881 2006-02-28 23:37:33Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 4923 2006-03-28 23:43:14Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -887,6 +887,11 @@ static void m_signon(char *origin, uint8_t parc, char *parv[])
 	/* don't use login id, assume everyone signs in via atheme */
 }
 
+static void m_motd(char *origin, uint8_t parc, char *parv[])
+{
+	handle_motd(origin);
+}
+
 void _modinit(module_t * m)
 {
 	/* Symbol relocation voodoo. */
@@ -953,6 +958,7 @@ void _modinit(module_t * m)
 	pcommand_add("SETNAME", m_setname);
 	pcommand_add("SIGNON", m_signon);
 	pcommand_add("CAPAB", m_capab);
+	pcommand_add("MOTD", m_motd);
 
 	m->mflags = MODTYPE_CORE;
 

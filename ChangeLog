@@ -1,3 +1,18 @@
+nenolod     2006/03/28 23:27:37 UTC	(20060328-4921)
+  Log:
+  - services MOTD support
+  
+
+  Changes:	Modified:
+  +5 -0		trunk/dist/example.motd (File Added) 
+  +1 -0		trunk/include/extern.h (File Modified) 
+  +6 -0		trunk/protocol/charybdis.c (File Modified) 
+  +6 -0		trunk/protocol/hybrid.c (File Modified) 
+  +6 -0		trunk/protocol/ratbox.c (File Modified) 
+  +1 -0		trunk/src/Makefile.in (File Modified) 
+  +31 -0	trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2006/03/27 13:29:00 UTC	(20060327-4915)
   Log:
   Interpret received CHGHOST, for umode +h etc.

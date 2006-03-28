@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 4895 2006-03-09 17:39:13Z jilles $
+ * $Id: unreal.c 4923 2006-03-28 23:43:14Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 4895 2006-03-09 17:39:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 4923 2006-03-28 23:43:14Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -784,6 +784,11 @@ static void m_chghost(char *origin, uint8_t parc, char *parv[])
 	strlcpy(u->vhost, parv[1], HOSTLEN);
 }
 
+static void m_motd(char *origin, uint8_t parc, char *parv[])
+{
+	handle_motd(origin);
+}
+
 void _modinit(module_t * m)
 {
 	/* Symbol relocation voodoo. */
@@ -842,6 +847,7 @@ void _modinit(module_t * m)
 	pcommand_add("ERROR", m_error);
 	pcommand_add("TOPIC", m_topic);
 	pcommand_add("CHGHOST", m_chghost);
+	pcommand_add("MOTD", m_motd);
 
 	/* 
 	 * for fun, and to give nenolod a heart attack
@@ -876,6 +882,7 @@ void _modinit(module_t * m)
 	pcommand_add("5", m_error);
 	pcommand_add(")", m_topic);
 	pcommand_add("AL", m_chghost);
+	pcommand_add("F", m_motd);
 
 	m->mflags = MODTYPE_CORE;
 
