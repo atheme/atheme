@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 4305 2005-12-29 14:12:51Z jilles $
+# $Id: Makefile.in 4921 2006-03-28 23:27:37Z nenolod $
 #
 
 CC		= @CC@
@@ -89,6 +89,7 @@ install: build
 	$(INSTALL) -m 755 -d $(SHAREDIR)/help
 	$(INSTALL) -m 755 -c $(BIN) $(prefix)/bin
 	$(INSTALL) -m 640 -c ../dist/example.conf $(prefix)/etc
+	$(INSTALL) -m 640 -c ../dist/example.motd $(prefix)/etc
 	$(INSTALL) -m 640 -c ../dist/example.userserv.conf $(prefix)/etc
 	$(INSTALL) -m 640 -c ../dist/atheme.chk $(prefix)/etc/atheme.chk.sample
 	(cd ../doc; for i in *; do install -m 644 $$i $(DOCDIR); done)

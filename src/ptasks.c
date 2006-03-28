@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 4911 2006-03-27 12:28:18Z jilles $
+ * $Id: ptasks.c 4921 2006-03-28 23:27:37Z nenolod $
  */
 
 #include "atheme.h"
@@ -386,6 +386,37 @@ void handle_kill(char *origin, char *victim, char *reason)
 		slog(LG_DEBUG, "handle_kill(): %s killed user %s (%s)", source, u->nick, reason);
 		user_delete(u);
 	}
+}
+
+void handle_motd(char *origin)
+{
+	FILE *f = fopen("etc/atheme.motd", "r");
+	char lbuf[BUFSIZE];
+	char ebuf[BUFSIZE];
+
+	if (!f)
+	{
+		numeric_sts(me.name, 422, origin, ":The MOTD file is unavailable.");
+		return;
+	}
+
+	snprintf(ebuf, BUFSIZE, "%d", config_options.expire / 86400);
+
+	numeric_sts(me.name, 375, origin, ":- %s Message of the Day -", me.name);
+
+	while (fgets(lbuf, BUFSIZE, f))
+	{
+		strip(lbuf);
+
+		replace(lbuf, BUFSIZE, "&network&", me.netname);
+		replace(lbuf, BUFSIZE, "&expiry&", ebuf);
+
+		numeric_sts(me.name, 372, origin, ":- %s", lbuf);
+	}
+
+	numeric_sts(me.name, 376, origin, ":End of the message of the day.");
+
+	fclose(f);
 }
 
 /* Received a message from a user, check if they are flooding

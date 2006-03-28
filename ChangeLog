@@ -1,3 +1,14 @@
+jilles      2006/03/27 13:29:00 UTC	(20060327-4915)
+  Log:
+  Interpret received CHGHOST, for umode +h etc.
+  
+  Tested by: acidic32@efnet
+  
+
+  Changes:	Modified:
+  +11 -0	trunk/protocol/hybrid.c (File Modified) 
+
+
 jilles      2006/03/27 13:16:56 UTC	(20060327-4913)
   Log:
   Interpret received ENCAP CHGHOST, for umode +h
