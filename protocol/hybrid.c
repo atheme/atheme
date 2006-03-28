@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 4921 2006-03-28 23:27:37Z nenolod $
+ * $Id: hybrid.c 4929 2006-03-28 23:59:23Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 4921 2006-03-28 23:27:37Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 4929 2006-03-28 23:59:23Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -1069,7 +1069,7 @@ static void m_chghost(char *origin, uint8_t parc, char *parv[])
 
 static void m_motd(char *origin, uint8_t parc, char *parv[])
 {
-	handle_motd(origin);
+	handle_motd(user_find(origin));
 }
 
 /* Server ended their burst: warn all their users if necessary -- jilles */

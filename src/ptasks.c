@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 4925 2006-03-28 23:56:47Z nenolod $
+ * $Id: ptasks.c 4929 2006-03-28 23:59:23Z jilles $
  */
 
 #include "atheme.h"
@@ -265,6 +265,49 @@ void handle_trace(user_t *u, char *target, char *dest)
 	numeric_sts(me.name, 262, u->nick, "%s :End of TRACE", target);
 }
 
+void handle_motd(user_t *u)
+{
+	FILE *f;
+	char lbuf[BUFSIZE];
+	char ebuf[BUFSIZE];
+	char nbuf[BUFSIZE];
+	char cbuf[BUFSIZE];
+
+	if (u == NULL)
+		return;
+	if (floodcheck(u, NULL))
+		return;
+
+	f = fopen("etc/atheme.motd", "r");
+	if (!f)
+	{
+		numeric_sts(me.name, 422, u->nick, ":The MOTD file is unavailable.");
+		return;
+	}
+
+	snprintf(ebuf, BUFSIZE, "%d", config_options.expire / 86400);
+	snprintf(nbuf, BUFSIZE, "%d", cnt.myuser);
+	snprintf(cbuf, BUFSIZE, "%d", cnt.mychan);
+
+	numeric_sts(me.name, 375, u->nick, ":- %s Message of the Day -", me.name);
+
+	while (fgets(lbuf, BUFSIZE, f))
+	{
+		strip(lbuf);
+
+		replace(lbuf, BUFSIZE, "&network&", me.netname);
+		replace(lbuf, BUFSIZE, "&expiry&", ebuf);
+		replace(lbuf, BUFSIZE, "&myusers&", nbuf);
+		replace(lbuf, BUFSIZE, "&mychans&", cbuf);
+
+		numeric_sts(me.name, 372, u->nick, ":- %s", lbuf);
+	}
+
+	numeric_sts(me.name, 376, u->nick, ":End of the message of the day.");
+
+	fclose(f);
+}
+
 void handle_message(char *origin, char *target, boolean_t is_notice, char *message)
 {
 	user_t *u;
@@ -386,43 +429,6 @@ void handle_kill(char *origin, char *victim, char *reason)
 		slog(LG_DEBUG, "handle_kill(): %s killed user %s (%s)", source, u->nick, reason);
 		user_delete(u);
 	}
-}
-
-void handle_motd(char *origin)
-{
-	FILE *f = fopen("etc/atheme.motd", "r");
-	char lbuf[BUFSIZE];
-	char ebuf[BUFSIZE];
-	char nbuf[BUFSIZE];
-	char cbuf[BUFSIZE];
-
-	if (!f)
-	{
-		numeric_sts(me.name, 422, origin, ":The MOTD file is unavailable.");
-		return;
-	}
-
-	snprintf(ebuf, BUFSIZE, "%d", config_options.expire / 86400);
-	snprintf(nbuf, BUFSIZE, "%d", cnt.myuser);
-	snprintf(cbuf, BUFSIZE, "%d", cnt.mychan);
-
-	numeric_sts(me.name, 375, origin, ":- %s Message of the Day -", me.name);
-
-	while (fgets(lbuf, BUFSIZE, f))
-	{
-		strip(lbuf);
-
-		replace(lbuf, BUFSIZE, "&network&", me.netname);
-		replace(lbuf, BUFSIZE, "&expiry&", ebuf);
-		replace(lbuf, BUFSIZE, "&myusers&", nbuf);
-		replace(lbuf, BUFSIZE, "&mychans&", cbuf);
-
-		numeric_sts(me.name, 372, origin, ":- %s", lbuf);
-	}
-
-	numeric_sts(me.name, 376, origin, ":End of the message of the day.");
-
-	fclose(f);
 }
 
 /* Received a message from a user, check if they are flooding

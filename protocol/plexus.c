@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 4923 2006-03-28 23:43:14Z nenolod $
+ * $Id: plexus.c 4929 2006-03-28 23:59:23Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 4923 2006-03-28 23:43:14Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 4929 2006-03-28 23:59:23Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -691,7 +691,7 @@ static void m_svshost(char *origin, uint8_t parc, char *parv[])
 
 static void m_motd(char *origin, uint8_t parc, char *parv[])
 {
-	handle_motd(origin);
+	handle_motd(user_find(origin));
 }
 
 void _modinit(module_t * m)
