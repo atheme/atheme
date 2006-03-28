@@ -2,4 +2,7 @@ This is the services daemon for &network&.
 
 Network registrations will expire after &expiry& days.
 
+Registered users: &myusers&
+Registered channels: &mychans&
+
 Please /join #services for help.

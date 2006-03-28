@@ -1,3 +1,13 @@
+nenolod     2006/03/28 23:56:47 UTC	(20060328-4925)
+  Log:
+  non-invasive change adding some extra replaceable keywords -- &myusers&
+  and &mychans&, amount of user records and channel records respectively.
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/src/ptasks.c (File Modified) 
+
+
 nenolod     2006/03/28 23:43:14 UTC	(20060328-4923)
   Log:
   - add MOTD support to more protocol modules
