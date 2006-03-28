@@ -1,3 +1,20 @@
+nenolod     2006/03/28 23:43:14 UTC	(20060328-4923)
+  Log:
+  - add MOTD support to more protocol modules
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/protocol/bahamut.c (File Modified) 
+  +6 -0		trunk/protocol/dreamforge.c (File Modified) 
+  +6 -0		trunk/protocol/hyperion.c (File Modified) 
+  +6 -0		trunk/protocol/ircnet.c (File Modified) 
+  +6 -0		trunk/protocol/monkey.c (File Modified) 
+  +6 -0		trunk/protocol/plexus.c (File Modified) 
+  +6 -0		trunk/protocol/ptlink.c (File Modified) 
+  +6 -0		trunk/protocol/shadowircd.c (File Modified) 
+  +7 -0		trunk/protocol/unreal.c (File Modified) 
+
+
 nenolod     2006/03/28 23:27:37 UTC	(20060328-4921)
   Log:
   - services MOTD support

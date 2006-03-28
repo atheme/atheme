@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 4921 2006-03-28 23:27:37Z nenolod $
+ * $Id: ptasks.c 4925 2006-03-28 23:56:47Z nenolod $
  */
 
 #include "atheme.h"
@@ -393,6 +393,8 @@ void handle_motd(char *origin)
 	FILE *f = fopen("etc/atheme.motd", "r");
 	char lbuf[BUFSIZE];
 	char ebuf[BUFSIZE];
+	char nbuf[BUFSIZE];
+	char cbuf[BUFSIZE];
 
 	if (!f)
 	{
@@ -401,6 +403,8 @@ void handle_motd(char *origin)
 	}
 
 	snprintf(ebuf, BUFSIZE, "%d", config_options.expire / 86400);
+	snprintf(nbuf, BUFSIZE, "%d", cnt.myuser);
+	snprintf(cbuf, BUFSIZE, "%d", cnt.mychan);
 
 	numeric_sts(me.name, 375, origin, ":- %s Message of the Day -", me.name);
 
@@ -410,6 +414,8 @@ void handle_motd(char *origin)
 
 		replace(lbuf, BUFSIZE, "&network&", me.netname);
 		replace(lbuf, BUFSIZE, "&expiry&", ebuf);
+		replace(lbuf, BUFSIZE, "&myusers&", nbuf);
+		replace(lbuf, BUFSIZE, "&mychans&", cbuf);
 
 		numeric_sts(me.name, 372, origin, ":- %s", lbuf);
 	}
