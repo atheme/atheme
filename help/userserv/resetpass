@@ -1,11 +1,9 @@
 Help for RESETPASS:
 
 RESETPASS sets a random password for the specified
-account. A password cannot be reset if a account
-is marked by an oper.
+account.
 
-
-Syntax: RECOVER <account>
+Syntax: RESETPASS <account>
 
 Examples:
-    /msg &nick& RECOVER pfish
+    /msg &nick& RESETPASS pfish
