@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# $Id: configure.ac 4799 2006-02-09 04:10:20Z pfish $
+# $Id: configure.ac 4811 2006-02-10 03:13:29Z nenolod $
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -313,7 +313,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA RM MV CP AR RANLIB SET_MAKE MKDEP CPP EGREP SOCKET_ENGINE POSIX_CRYPTC DOCDIR MODDIR SHAREDIR POSTGRESQL_C PGINC PQLIB MYSQL_C MYINC MYLIB PICFLAGS LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA RM MV CP AR RANLIB SET_MAKE MKDEP CPP EGREP SOCKET_ENGINE POSIX_CRYPTC DOCDIR MODDIR SHAREDIR POSTGRESQL_C PGINC PQLIB MYSQL_C MYINC MYLIB GSASL_LIBS SASL_C PICFLAGS LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -848,6 +848,7 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-fhs-paths      Use more FHS-like pathnames.
   --enable-large-net      Enable large network support.
+  --disable-gsasl         don't use GNU SASL
   --enable-warnings       Enable compiler warnings
   --disable-propolice     Disable propolice protections (for debugging.)
   --enable-profile        Enable profiling extensions
@@ -967,7 +968,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-$Id: configure.ac 4799 2006-02-09 04:10:20Z pfish $
+$Id: configure.ac 4811 2006-02-10 03:13:29Z nenolod $
 _ACEOF
   exit 0
 fi
@@ -9984,6 +9985,250 @@ fi
 
 
 echo " "
+echo "SASL support"
+echo " "
+
+if test "${ac_cv_header_gsasl_h+set}" = set; then
+  echo "$as_me:$LINENO: checking for gsasl.h" >&5
+echo $ECHO_N "checking for gsasl.h... $ECHO_C" >&6
+if test "${ac_cv_header_gsasl_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_gsasl_h" >&5
+echo "${ECHO_T}$ac_cv_header_gsasl_h" >&6
+else
+  # Is the header compilable?
+echo "$as_me:$LINENO: checking gsasl.h usability" >&5
+echo $ECHO_N "checking gsasl.h usability... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+#include <gsasl.h>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_header_compiler=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_header_compiler=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
+echo "${ECHO_T}$ac_header_compiler" >&6
+
+# Is the header present?
+echo "$as_me:$LINENO: checking gsasl.h presence" >&5
+echo $ECHO_N "checking gsasl.h presence... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <gsasl.h>
+_ACEOF
+if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
+  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null; then
+  if test -s conftest.err; then
+    ac_cpp_err=$ac_c_preproc_warn_flag
+    ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
+  else
+    ac_cpp_err=
+  fi
+else
+  ac_cpp_err=yes
+fi
+if test -z "$ac_cpp_err"; then
+  ac_header_preproc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  ac_header_preproc=no
+fi
+rm -f conftest.err conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
+echo "${ECHO_T}$ac_header_preproc" >&6
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
+  yes:no: )
+    { echo "$as_me:$LINENO: WARNING: gsasl.h: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: gsasl.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: gsasl.h: proceeding with the compiler's result" >&5
+echo "$as_me: WARNING: gsasl.h: proceeding with the compiler's result" >&2;}
+    ac_header_preproc=yes
+    ;;
+  no:yes:* )
+    { echo "$as_me:$LINENO: WARNING: gsasl.h: present but cannot be compiled" >&5
+echo "$as_me: WARNING: gsasl.h: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: gsasl.h:     check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: gsasl.h:     check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: gsasl.h: see the Autoconf documentation" >&5
+echo "$as_me: WARNING: gsasl.h: see the Autoconf documentation" >&2;}
+    { echo "$as_me:$LINENO: WARNING: gsasl.h:     section \"Present But Cannot Be Compiled\"" >&5
+echo "$as_me: WARNING: gsasl.h:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { echo "$as_me:$LINENO: WARNING: gsasl.h: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: gsasl.h: proceeding with the preprocessor's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: gsasl.h: in the future, the compiler will take precedence" >&5
+echo "$as_me: WARNING: gsasl.h: in the future, the compiler will take precedence" >&2;}
+    (
+      cat <<\_ASBOX
+## ------------------------------ ##
+## Report this to bugs@atheme.org ##
+## ------------------------------ ##
+_ASBOX
+    ) |
+      sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+esac
+echo "$as_me:$LINENO: checking for gsasl.h" >&5
+echo $ECHO_N "checking for gsasl.h... $ECHO_C" >&6
+if test "${ac_cv_header_gsasl_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_header_gsasl_h=$ac_header_preproc
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_gsasl_h" >&5
+echo "${ECHO_T}$ac_cv_header_gsasl_h" >&6
+
+fi
+if test $ac_cv_header_gsasl_h = yes; then
+  echo "$as_me:$LINENO: checking for gsasl_check_version in -lgsasl" >&5
+echo $ECHO_N "checking for gsasl_check_version in -lgsasl... $ECHO_C" >&6
+if test "${ac_cv_lib_gsasl_gsasl_check_version+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lgsasl  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char gsasl_check_version ();
+int
+main ()
+{
+gsasl_check_version ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_gsasl_gsasl_check_version=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_gsasl_gsasl_check_version=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_gsasl_gsasl_check_version" >&5
+echo "${ECHO_T}$ac_cv_lib_gsasl_gsasl_check_version" >&6
+if test $ac_cv_lib_gsasl_gsasl_check_version = yes; then
+  gsasl=yes GSASL_LIBS=-lgsasl
+
+else
+  gsasl=no
+fi
+
+else
+  gsasl=no
+fi
+
+
+# Check whether --enable-gsasl or --disable-gsasl was given.
+if test "${enable_gsasl+set}" = set; then
+  enableval="$enable_gsasl"
+  gsasl=$enableval
+fi;
+if test "$gsasl" != "no" ; then
+
+cat >>confdefs.h <<\_ACEOF
+#define USE_SASL 1
+_ACEOF
+
+    SASL=yes
+    SASL_C=sasl.c
+else
+    { echo "$as_me:$LINENO: WARNING: Cannot find GNU SASL, disabling" >&5
+echo "$as_me: WARNING: Cannot find GNU SASL, disabling" >&2;}
+    SASL=no
+    SASL_C=
+fi
+echo "$as_me:$LINENO: checking if GNU SASL should be used" >&5
+echo $ECHO_N "checking if GNU SASL should be used... $ECHO_C" >&6
+echo "$as_me:$LINENO: result: $gsasl" >&5
+echo "${ECHO_T}$gsasl" >&6
+
+
+
+echo " "
 echo "Module support"
 echo " "
 
@@ -13619,7 +13864,7 @@ echo " "
 echo "Makefile generation"
 echo " "
 
-                                                                                                                                                                          ac_config_files="$ac_config_files Makefile libatheme/Makefile backend/Makefile contrib/Makefile crypto/Makefile dbtool/Makefile modules/Makefile modules/chanserv/Makefile modules/global/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/userserv/Makefile modules/xmlrpc/Makefile modules/memoserv/Makefile modules/helpserv/Makefile protocol/Makefile src/Makefile"
+                                                                                                                                                                                    ac_config_files="$ac_config_files Makefile libatheme/Makefile backend/Makefile contrib/Makefile crypto/Makefile dbtool/Makefile modules/Makefile modules/chanserv/Makefile modules/global/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/userserv/Makefile modules/xmlrpc/Makefile modules/memoserv/Makefile modules/helpserv/Makefile modules/saslserv/Makefile protocol/Makefile src/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -14160,6 +14405,7 @@ do
   "modules/xmlrpc/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/xmlrpc/Makefile" ;;
   "modules/memoserv/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/memoserv/Makefile" ;;
   "modules/helpserv/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/helpserv/Makefile" ;;
+  "modules/saslserv/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/saslserv/Makefile" ;;
   "protocol/Makefile" ) CONFIG_FILES="$CONFIG_FILES protocol/Makefile" ;;
   "src/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
   "include/sysconf.h" ) CONFIG_HEADERS="$CONFIG_HEADERS include/sysconf.h" ;;
@@ -14277,6 +14523,8 @@ s,@PQLIB@,$PQLIB,;t t
 s,@MYSQL_C@,$MYSQL_C,;t t
 s,@MYINC@,$MYINC,;t t
 s,@MYLIB@,$MYLIB,;t t
+s,@GSASL_LIBS@,$GSASL_LIBS,;t t
+s,@SASL_C@,$SASL_C,;t t
 s,@PICFLAGS@,$PICFLAGS,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
@@ -14804,6 +15052,7 @@ Configuration:
         Large network support: ${LARGENET}
         PostgreSQL support   : ${POSTGRESQL}
         MySQL support        : ${MYSQL}
+        SASL support         : ${gsasl}
         Socket Engine        : ${SOCKET_ENGINE}
         CFLAGS               : ${CFLAGS}
 

@@ -1,3 +1,15 @@
+jilles      2006/03/29 00:14:26 UTC	(20060329-4931)
+  Log:
+  nickserv/userserv resetpass help files:
+  - RECOVER -> RESETPASS
+  - mark doesn't restrict as much anymore, don't mention
+  
+
+  Changes:	Modified:
+  +2 -3		trunk/help/nickserv/resetpass (File Modified) 
+  +3 -5		trunk/help/userserv/resetpass (File Modified) 
+
+
 jilles      2006/03/28 23:59:23 UTC	(20060328-4929)
   Log:
   - Move handle_motd() definition and declaration to a more logical place

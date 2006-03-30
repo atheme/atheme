@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 4811 2006-02-10 03:13:29Z nenolod $
+dnl $Id: configure.ac 4935 2006-03-30 16:13:33Z nenolod $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, Marsupial, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 4811 2006-02-10 03:13:29Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 4935 2006-03-30 16:13:33Z nenolod $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -278,6 +278,32 @@ fi
 AC_SUBST(MYSQL_C)
 AC_SUBST(MYINC)
 AC_SUBST(MYLIB)
+
+echo " "
+echo "SASL support"
+echo " "
+
+AC_CHECK_HEADER(gsasl.h,
+    AC_CHECK_LIB(gsasl, gsasl_check_version,
+        [gsasl=yes AC_SUBST(GSASL_LIBS, -lgsasl)],
+        gsasl=no),
+    gsasl=no)
+AC_ARG_ENABLE(gsasl,
+    AC_HELP_STRING([--disable-gsasl], [don't use GNU SASL]),
+    gsasl=$enableval)
+if test "$gsasl" != "no" ; then
+    AC_DEFINE(USE_SASL, 1, [Define to 1 if you want GNU SASL.])
+    SASL=yes
+    SASL_C=sasl.c
+else
+    AC_MSG_WARN([Cannot find GNU SASL, disabling])
+    SASL=no
+    SASL_C=
+fi
+AC_MSG_CHECKING([if GNU SASL should be used])
+AC_MSG_RESULT($gsasl)
+
+AC_SUBST(SASL_C)
 
 echo " "
 echo "Module support"
@@ -554,6 +580,7 @@ AC_OUTPUT(Makefile \
 	modules/xmlrpc/Makefile \
 	modules/memoserv/Makefile \
 	modules/helpserv/Makefile \
+	modules/saslserv/Makefile \
 	protocol/Makefile \
 	src/Makefile)
 
@@ -567,6 +594,7 @@ Configuration:
         Large network support: ${LARGENET}
         PostgreSQL support   : ${POSTGRESQL}
         MySQL support        : ${MYSQL}
+        SASL support         : ${gsasl}
         Socket Engine        : ${SOCKET_ENGINE}
         CFLAGS               : ${CFLAGS}
 

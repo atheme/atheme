@@ -5,7 +5,7 @@
  * Protocol handlers, both generic and the actual declarations themselves.
  * Declare NOTYET to use the function pointer voodoo.
  *
- * $Id: phandler.h 4717 2006-01-24 23:40:42Z jilles $
+ * $Id: phandler.h 4935 2006-03-30 16:13:33Z nenolod $
  */
 
 #ifndef PHANDLER_H
@@ -124,6 +124,9 @@ E void (*sethost_sts)(char *source, char *target, char *host);
  */
 E void (*fnc_sts)(user_t *source, user_t *u, char *newnick, int type);
 
+E void (*svslogin_sts)(char *target, char *nick, char *user, char *host, char *login);
+E void (*sasl_sts) (char *target, char mode, char *data);
+
 E uint8_t generic_server_login(void);
 E void generic_introduce_nick(char *nick, char *ser, char *host, char *real, char *uid);
 E void generic_invite_sts(user_t *source, user_t *target, channel_t *channel);
@@ -147,6 +150,8 @@ E boolean_t generic_on_logout(char *origin, char *user, char *wantedhost);
 E void generic_jupe(char *server, char *reason);
 E void generic_sethost_sts(char *source, char *target, char *host);
 E void generic_fnc_sts(user_t *source, user_t *u, char *newnick, int type);
+E void generic_svslogin_sts(char *target, char *nick, char *user, char *host, char *login);
+E void generic_sasl_sts(char *target, char mode, char *data);
 
 E struct cmode_ *mode_list;
 E struct cmode_ *ignore_mode_list;

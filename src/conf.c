@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4893 2006-03-08 17:03:41Z jilles $
+ * $Id: conf.c 4935 2006-03-30 16:13:33Z nenolod $
  */
 
 #include "atheme.h"
@@ -24,6 +24,7 @@ static int c_database(CONFIGENTRY *);
 static int c_uplink(CONFIGENTRY *);
 static int c_nickserv(CONFIGENTRY *);
 static int c_userserv(CONFIGENTRY *);
+static int c_saslserv(CONFIGENTRY *);
 static int c_memoserv(CONFIGENTRY *);
 static int c_helpserv(CONFIGENTRY *);
 static int c_loadmodule(CONFIGENTRY *);
@@ -89,6 +90,12 @@ static int c_ui_nick(CONFIGENTRY *);
 static int c_ui_user(CONFIGENTRY *);
 static int c_ui_host(CONFIGENTRY *);
 static int c_ui_real(CONFIGENTRY *);
+
+/* SaslServ client information. */
+static int c_ss_nick(CONFIGENTRY *);
+static int c_ss_user(CONFIGENTRY *);
+static int c_ss_host(CONFIGENTRY *);
+static int c_ss_real(CONFIGENTRY *);
 
 /* MemoServ client information. */
 static int c_ms_nick(CONFIGENTRY *);
@@ -165,6 +172,7 @@ list_t conf_ui_table;
 list_t conf_ms_table;
 list_t conf_hs_table;
 list_t conf_la_table;
+list_t conf_ss_table;
 
 /* *INDENT-ON* */
 
@@ -434,6 +442,7 @@ void init_newconf(void)
 	add_top_conf("OSERVICE", c_oservice);
 	add_top_conf("NICKSERV", c_nickserv);
 	add_top_conf("USERSERV", c_userserv);
+	add_top_conf("SASLSERV", c_saslserv);
 	add_top_conf("MEMOSERV", c_memoserv);
 	add_top_conf("HELPSERV", c_helpserv);
 	add_top_conf("UPLINK", c_uplink);
@@ -522,7 +531,13 @@ void init_newconf(void)
 	add_conf_item("USER", &conf_ui_table, c_ui_user);
 	add_conf_item("HOST", &conf_ui_table, c_ui_host);
 	add_conf_item("REAL", &conf_ui_table, c_ui_real);
-	
+
+	/* saslserv{} block */
+	add_conf_item("NICK", &conf_ss_table, c_ss_nick);
+	add_conf_item("USER", &conf_ss_table, c_ss_user);
+	add_conf_item("HOST", &conf_ss_table, c_ss_host);
+	add_conf_item("REAL", &conf_ss_table, c_ss_real);
+
 	/* memoserv{} block */
 	add_conf_item("NICK", &conf_ms_table, c_ms_nick);
 	add_conf_item("USER", &conf_ms_table, c_ms_user);
@@ -580,6 +595,12 @@ static int c_nickserv(CONFIGENTRY *ce)
 static int c_userserv(CONFIGENTRY *ce)
 {
 	subblock_handler(ce, &conf_ui_table);
+	return 0;
+}
+
+static int c_saslserv(CONFIGENTRY *ce)
+{
+	subblock_handler(ce, &conf_ss_table);
 	return 0;
 }
 
@@ -1439,6 +1460,46 @@ static int c_ui_real(CONFIGENTRY *ce)
 		PARAM_ERROR(ce);
 
 	usersvs.real = sstrdup(ce->ce_vardata);
+
+	return 0;
+}
+
+static int c_ss_nick(CONFIGENTRY *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	saslsvs.nick = sstrdup(ce->ce_vardata);
+
+	return 0;
+}
+
+static int c_ss_user(CONFIGENTRY *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	saslsvs.user = sstrdup(ce->ce_vardata);
+
+	return 0;
+}
+
+static int c_ss_host(CONFIGENTRY *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	saslsvs.host = sstrdup(ce->ce_vardata);
+
+	return 0;
+}
+
+static int c_ss_real(CONFIGENTRY *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	saslsvs.real = sstrdup(ce->ce_vardata);
 
 	return 0;
 }

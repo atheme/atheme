@@ -4,7 +4,7 @@
  *
  * Generic protocol event handlers.
  *
- * $Id: phandler.c 4585 2006-01-19 16:25:49Z jilles $
+ * $Id: phandler.c 4935 2006-03-30 16:13:33Z nenolod $
  */
 
 #include "atheme.h"
@@ -32,6 +32,8 @@ void (*jupe) (char *server, char *reason) = generic_jupe;
 void (*sethost_sts) (char *source, char *target, char *host) = generic_sethost_sts;
 void (*fnc_sts) (user_t *source, user_t *u, char *newnick, int type) = generic_fnc_sts;
 void (*invite_sts) (user_t *source, user_t *target, channel_t *channel) = generic_invite_sts;
+void (*svslogin_sts) (char *target, char *nick, char *user, char *host, char *login) = generic_svslogin_sts;
+void (*sasl_sts) (char *target, char mode, char *data) = generic_sasl_sts;
 
 uint8_t generic_server_login(void)
 {
@@ -182,4 +184,14 @@ void generic_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
 void generic_invite_sts(user_t *source, user_t *target, channel_t *channel)
 {
 	/* nothing to do here. */	
+}
+
+void generic_svslogin_sts(char *target, char *nick, char *user, char *host, char *login)
+{
+	/* nothing to do here. */
+}
+
+void generic_sasl_sts(char *target, char mode, char *data)
+{
+	/* nothing to do here. */
 }

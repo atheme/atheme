@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 4867 2006-02-27 03:28:52Z nenolod $
+ * $Id: services.h 4935 2006-03-30 16:13:33Z nenolod $
  */
 
 #ifndef SERVICES_H
@@ -17,6 +17,7 @@ typedef struct memosvs_ memosvs_t;
 typedef struct helpsvs_ helpsvs_t;
 typedef struct nicksvs_ nicksvs_t;
 typedef struct usersvs_ usersvs_t;
+typedef struct saslsvs_ saslsvs_t;
 
 /* don't forget to define the extern variables below,
    and then the real definitions in atheme.c ! */
@@ -109,6 +110,17 @@ struct usersvs_
   service_t *me;
 };
 
+struct saslsvs_
+{
+  char   *nick;
+  char   *user;
+  char   *host;
+  char   *real;
+  char   *disp;			/* the IRC client's dispname  */
+
+  service_t *me;
+};
+
 /* extern declarations */
 
 E chansvs_t chansvs;
@@ -118,6 +130,7 @@ E memosvs_t memosvs;
 E helpsvs_t helpsvs;
 E nicksvs_t nicksvs;
 E usersvs_t usersvs;
+E saslsvs_t saslsvs;
 
 E service_t *fcmd_agent;
 

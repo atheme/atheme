@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 4935 2006-03-30 16:13:33Z nenolod $
+# $Id: Makefile.in 4847 2006-02-19 03:57:57Z gxti $
 #
 
 CC		= @CC@
@@ -22,46 +22,39 @@ DOCDIR		= @DOCDIR@
 MODDIR		= @MODDIR@
 SHAREDIR	= @SHAREDIR@
 BIN		= atheme@EXEEXT@
-MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../include @PGINC@ @MYINC@
+MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include @PGINC@ @MYINC@
 PICFLAGS	= @PICFLAGS@
-CFLAGS		= @CFLAGS@ -I../include -I../libatheme @PGINC@ @MYINC@
+CFLAGS		= @CFLAGS@ -I../../include -I../../libatheme @PGINC@ @MYINC@
 
 VERSION		= 0.1
 
-LIBS		= @LIBS@ @PQLIB@ @MYLIB@
+LIBS		= @LIBS@ @PQLIB@
 LDFLAGS		= @LDFLAGS@
 CPPFLAGS	= @CPPFLAGS@
 
 default: all
 
-BASE_SRCS = 
-
-SRCS = ${BASE_SRCS}
+BASE_SRCS = 		\
+	main.c		
+	
+SRCS = ${BASE_SRCS} @SASL_C@
 
 OBJS = ${SRCS:.c=.so}
-
-SUBDIRS = chanserv nickserv global operserv userserv xmlrpc memoserv saslserv
-# helpserv
 
 all: modules
 
 build: all
 
 install: build
-	@for i in $(SUBDIRS); do \
-		echo "install ==> $$i"; \
-		cd $$i; \
-		${MAKE} install || exit; cd ..; \
-	done
+	${INSTALL} -d ${MODDIR}/modules/saslserv
+	${INSTALL} -m 755 *.so ${MODDIR}/modules/saslserv
 
-modules:
-	@for i in $(SUBDIRS); do \
-		echo "build ==> $$i"; \
-		cd $$i; \
-		${MAKE} build || exit; cd ..; \
-	done
+modules: $(OBJS)
 
 .SUFFIXES: .so
+
+sasl.so: sasl.c
+	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} -lgsasl $< -o $@
 
 .c.so:
 	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@
@@ -69,11 +62,8 @@ modules:
 .PHONY: clean distclean
 
 clean:
-	@for i in $(SUBDIRS); do \
-		echo "clean ==> $$i"; \
-		cd $$i; \
-		${MAKE} clean || exit; cd ..; \
-	done
+	${RM} -f *.so
 
 distclean: clean
 	${RM} -f Makefile version.c.last
+
