@@ -1,3 +1,26 @@
+nenolod     2006/03/30 16:13:33 UTC	(20060330-4935)
+  Log:
+  - merge GXTi's wacky atheme-sasl tree with trunk
+  
+
+  Changes:	Modified:
+  +253 -4	trunk/configure (File Modified) 
+  +28 -0	trunk/configure.ac (File Modified) 
+  +4 -0		trunk/include/atheme.h (File Modified) 
+  +5 -0		trunk/include/phandler.h (File Modified) 
+  + -		trunk/include/sasl.h (File Added) 
+  +13 -0	trunk/include/services.h (File Modified) 
+  +3 -0		trunk/include/sysconf.h.in (File Modified) 
+  +1 -1		trunk/modules/Makefile.in (File Modified) 
+  + -		trunk/modules/saslserv/ (File Added) 
+  +1 -5		trunk/modules/saslserv/sasl.c (File Modified) 
+  +129 -5	trunk/protocol/charybdis.c (File Modified) 
+  +1 -0		trunk/src/atheme.c (File Modified) 
+  +62 -1	trunk/src/conf.c (File Modified) 
+  +12 -0	trunk/src/phandler.c (File Modified) 
+  +2 -0		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/03/29 00:14:26 UTC	(20060329-4931)
   Log:
   nickserv/userserv resetpass help files:
