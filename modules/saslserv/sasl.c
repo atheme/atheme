@@ -185,6 +185,7 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 	int rc, i;
 	char *pt = buf;
 	int ol = len;
+	myuser_t *mu;
 
 	/* First piece of data in a session is the name of
 	 * the SASL mechanism that will be used.
@@ -238,8 +239,9 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 		myuser_t *mu = myuser_find(user_name);
 		if(mu && login_user(p, (char*)gsasl_property_fast(p->sctx, GSASL_AUTHID)))
 		{
-			sasl_sts(p->uid, 'D', "S");
+			mu->flags |= MU_SASL;
 			svslogin_sts(p->uid, "*", "*", "*", mu->name);
+			sasl_sts(p->uid, 'D', "S");
 		}
 		else
 			sasl_sts(p->uid, 'D', "F");

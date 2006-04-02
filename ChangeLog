@@ -1,3 +1,11 @@
+gxti        2006/04/02 08:48:03 UTC	(20060402-4939)
+  Log:
+  New example config for SASL-enabled networks.
+
+  Changes:	Modified:
+  +808 -0	trunk/dist/example.saslserv.conf (File Added) 
+
+
 jilles      2006/03/31 22:34:39 UTC	(20060331-4937)
   Log:
   chanserv set url help file: mention that the url is
