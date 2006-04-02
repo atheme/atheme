@@ -1,3 +1,13 @@
+jilles      2006/03/31 22:34:39 UTC	(20060331-4937)
+  Log:
+  chanserv set url help file: mention that the url is
+  shown to all users joining the channel
+  
+
+  Changes:	Modified:
+  +3 -2		trunk/help/cservice/set_url (File Modified) 
+
+
 nenolod     2006/03/30 16:13:33 UTC	(20060330-4935)
   Log:
   - merge GXTi's wacky atheme-sasl tree with trunk
