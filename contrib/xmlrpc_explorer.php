@@ -5,7 +5,7 @@
  *
  * An XML-RPC testing script.
  *
- * $Id: xmlrpc_explorer.php 4829 2006-02-13 20:37:34Z nenolod $
+ * $Id: xmlrpc_explorer.php 4943 2006-04-02 20:33:39Z gxti $
  */
 
 /* This script requires XML-RPC for PHP 1.1
@@ -44,6 +44,8 @@ $methods = array(
 	'atheme.channel.metadata.set' => array('authcookie', 'account', 'channel', 'key', 'value'),
 	'atheme.channel.metadata.get' => array('channel', 'key'),
 	'atheme.channel.metadata.delete' => array('authcookie', 'account', 'channel', 'key', 'value'),
+	'atheme.channel.topic.set' => array('authcookie', 'account', 'channel', 'topic'),
+	'atheme.channel.topic.append' => array('authcookie', 'account', 'channel', 'topic'),
 );
 
 switch ($_REQUEST['state'])
@@ -98,4 +100,4 @@ switch ($_REQUEST['state'])
 
 ?>
 <hr>
-$Id: xmlrpc_explorer.php 4829 2006-02-13 20:37:34Z nenolod $
+$Id: xmlrpc_explorer.php 4943 2006-04-02 20:33:39Z gxti $

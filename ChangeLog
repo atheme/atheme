@@ -1,3 +1,15 @@
+gxti        2006/04/02 18:31:04 UTC	(20060402-4941)
+  Log:
+  Send SVSLOGIN before finishing a SASL session so the user is introduced to the net correctly.
+  Suppress on-connect spam if a user seems to come from a SASL session.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/account.h (File Modified) 
+  +3 -1		trunk/modules/saslserv/sasl.c (File Modified) 
+  +14 -0	trunk/src/services.c (File Modified) 
+
+
 gxti        2006/04/02 08:48:03 UTC	(20060402-4939)
   Log:
   New example config for SASL-enabled networks.

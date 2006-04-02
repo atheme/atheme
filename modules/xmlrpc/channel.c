@@ -4,7 +4,7 @@
  *
  * XMLRPC channel management functions.
  *
- * $Id: channel.c 3879 2005-11-11 22:54:29Z jilles $
+ * $Id: channel.c 4943 2006-04-02 20:33:39Z gxti $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/channel", FALSE, _modinit, _moddeinit,
-	"$Id: channel.c 3879 2005-11-11 22:54:29Z jilles $",
+	"$Id: channel.c 4943 2006-04-02 20:33:39Z gxti $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -332,12 +332,175 @@ static int do_metadata_get(void *conn, int parc, char *parv[])
 	return 0;
 }
 
+/*
+ * atheme.channel.topic.set
+ *
+ * XML inputs:
+ *       authcookie, account name, channel name, topic
+ *
+ * XML outputs:
+ *       fault 1 - validation failed
+ *       fault 2 - unknown account
+ *       fault 4 - insufficient parameters
+ *       fault 5 - unknown channel
+ *       fault 6 - no access
+ *       fault 7 - bad parameters
+ *       default - success message
+ *
+ * Side Effects:
+ *       a channel's topic is set.
+ */ 
+static int do_topic_set(void *conn, int parc, char *parv[])
+{
+	char *chan = strtok(NULL, " ");
+	myuser_t *mu;
+	mychan_t *mc;
+	channel_t *c;
+	user_t *u;
+	char buf[XMLRPC_BUFSIZE];
+ 
+	if (parc < 4)
+	{
+		xmlrpc_generic_error(4, "Insufficient parameters.");
+		return 0;
+	}
+ 
+	if (!(mu = myuser_find(parv[1])))
+	{
+		xmlrpc_generic_error(2, "Unknown account.");
+		return 0;
+	}
+ 
+	if (authcookie_validate(parv[0], mu) == FALSE)
+	{
+		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		return 0;
+	}
+ 
+	if (!(mc = mychan_find(parv[2])))
+	{
+		xmlrpc_generic_error(5, "Unknown channel.");
+		return 0;
+	}
+	u = user_find_named(parv[1]);
+	if (!chanacs_user_has_flag(mc, u, CA_TOPIC))
+	{
+		xmlrpc_generic_error(6, "No access.");
+		return 0;
+	}
+ 
+	if (strlen(parv[3]) > 300 || strchr(parv[3], '\r') || strchr(parv[3], '\n'))
+	{
+		xmlrpc_generic_error(7, "Bad parameters.");
+		return 0;
+	}
+
+	if(!(c = channel_find(parv[2])))
+		return 0;
+
+	handle_topic(c, parv[1], CURRTIME, parv[3]);
+	topic_sts(parv[2], parv[1], CURRTIME, parv[3]);
+ 
+	logcommand_external(chansvs.me, "xmlrpc", conn, mu, CMDLOG_SET, "%s TOPIC %s", mc->name, parv[2]);
+ 
+	xmlrpc_string(buf, "Topic Changed.");
+	xmlrpc_send(1, buf);
+	return 0;
+}
+
+/*
+ * atheme.channel.topic.append
+ *
+ * XML inputs:
+ *       authcookie, account name, channel name, topic
+ *
+ * XML outputs:
+ *       fault 1 - validation failed
+ *       fault 2 - unknown account
+ *       fault 4 - insufficient parameters
+ *       fault 5 - unknown channel
+ *       fault 6 - no access
+ *       fault 7 - bad parameters
+ *       default - success message
+ *
+ * Side Effects:
+ *       a channel's topic is appended.
+ */ 
+static int do_topic_append(void *conn, int parc, char *parv[])
+{
+	char *chan = strtok(NULL, " ");
+	myuser_t *mu;
+	mychan_t *mc;
+	channel_t *c;
+	user_t *u;
+	char buf[XMLRPC_BUFSIZE], topicbuf[BUFSIZE];
+ 
+	if (parc < 4)
+	{
+		xmlrpc_generic_error(4, "Insufficient parameters.");
+		return 0;
+	}
+ 
+	if (!(mu = myuser_find(parv[1])))
+	{
+		xmlrpc_generic_error(2, "Unknown account.");
+		return 0;
+	}
+ 
+	if (authcookie_validate(parv[0], mu) == FALSE)
+	{
+		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		return 0;
+	}
+ 
+	if (!(mc = mychan_find(parv[2])))
+	{
+		xmlrpc_generic_error(5, "Unknown channel.");
+		return 0;
+	}
+	u = user_find_named(parv[1]);
+	if (!chanacs_user_has_flag(mc, u, CA_TOPIC))
+	{
+		xmlrpc_generic_error(6, "No access.");
+		return 0;
+	}
+ 
+	if(!(c = channel_find(parv[2])))
+		return 0;
+
+	if (c->topic)
+	{
+		strlcpy(topicbuf, c->topic, BUFSIZE);
+		strlcat(topicbuf, " | ", BUFSIZE);
+		strlcat(topicbuf, parv[3], BUFSIZE);
+	}
+	else
+		strlcpy(topicbuf, parv[3], BUFSIZE);
+
+	if (strlen(topicbuf) > 300 || strchr(topicbuf, '\r') || strchr(topicbuf, '\n'))
+	{
+		xmlrpc_generic_error(7, "Bad parameters.");
+		return 0;
+	}
+
+	handle_topic(c, parv[1], CURRTIME, topicbuf);
+	topic_sts(parv[2], parv[1], CURRTIME, topicbuf);
+ 
+	logcommand_external(chansvs.me, "xmlrpc", conn, mu, CMDLOG_SET, "%s TOPICAPPEND %s", mc->name, parv[2]);
+ 
+	xmlrpc_string(buf, "Topic Changed.");
+	xmlrpc_send(1, buf);
+	return 0;
+}
+
 void _modinit(module_t *m)
 {
 	xmlrpc_register_method("atheme.channel.register", channel_register);
 	xmlrpc_register_method("atheme.channel.metadata.set", do_metadata_set);
 	xmlrpc_register_method("atheme.channel.metadata.delete", do_metadata_delete);
 	xmlrpc_register_method("atheme.channel.metadata.get", do_metadata_get);
+	xmlrpc_register_method("atheme.channel.topic.set", do_topic_set);
+	xmlrpc_register_method("atheme.channel.topic.append", do_topic_append);
 }
 
 void _moddeinit(void)
@@ -346,4 +509,6 @@ void _moddeinit(void)
 	xmlrpc_unregister_method("atheme.channel.metadata.set");
 	xmlrpc_unregister_method("atheme.channel.metadata.delete");
 	xmlrpc_unregister_method("atheme.channel.metadata.get");
+	xmlrpc_unregister_method("atheme.channel.topic.set");
+	xmlrpc_unregister_method("atheme.channel.topic.append");
 }
