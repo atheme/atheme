@@ -185,6 +185,8 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 	int rc, i;
 	char *pt = buf;
 	int ol = len;
+	char *cloak;
+	metadata_t *md;
 	myuser_t *mu;
 
 	/* First piece of data in a session is the name of
@@ -240,7 +242,13 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 		if(mu && login_user(p, (char*)gsasl_property_fast(p->sctx, GSASL_AUTHID)))
 		{
 			mu->flags |= MU_SASL;
-			svslogin_sts(p->uid, "*", "*", "*", mu->name);
+
+			if ((md = metadata_find(mu, METADATA_USER, "private:usercloak")))
+				cloak = md->value;
+			else
+				cloak = "*";
+
+			svslogin_sts(p->uid, "*", "*", cloak, mu->name);
 			sasl_sts(p->uid, 'D', "S");
 		}
 		else

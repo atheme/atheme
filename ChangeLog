@@ -1,3 +1,13 @@
+gxti        2006/04/02 20:33:39 UTC	(20060402-4943)
+  Log:
+  New XMLRPC functions atheme.channel.topic.set and atheme.channel.topic.append
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/contrib/xmlrpc_explorer.php (File Modified) 
+  +165 -0	trunk/modules/xmlrpc/channel.c (File Modified) 
+
+
 gxti        2006/04/02 18:31:04 UTC	(20060402-4941)
   Log:
   Send SVSLOGIN before finishing a SASL session so the user is introduced to the net correctly.
