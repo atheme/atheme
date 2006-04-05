@@ -1,3 +1,15 @@
+jilles      2006/04/05 23:16:19 UTC	(20060405-4955)
+  Log:
+  Remove example.saslserv.conf and add the SASL stuff to
+  example.conf and example.userserv.conf, commented.
+  
+
+  Changes:	Modified:
+  +31 -0	trunk/dist/example.conf (File Modified) 
+  +0 -868	trunk/dist/example.saslserv.conf (File Deleted) 
+  +31 -0	trunk/dist/example.userserv.conf (File Modified) 
+
+
 nenolod     2006/04/05 02:10:11 UTC	(20060405-4953)
   Log:
   - symbol conflict, change base64_encode/base64_decode to _atheme_base64_(.*)
