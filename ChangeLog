@@ -1,3 +1,15 @@
+nenolod     2006/04/05 01:03:27 UTC	(20060405-4947)
+  Log:
+  - new parsing of operclass {} blocks. should be backwards compatible. I hope, anyway.
+  
+
+  Changes:	Modified:
+  +75 -15	trunk/dist/example.conf (File Modified) 
+  +75 -15	trunk/dist/example.saslserv.conf (File Modified) 
+  +75 -15	trunk/dist/example.userserv.conf (File Modified) 
+  +40 -9	trunk/src/conf.c (File Modified) 
+
+
 gxti        2006/04/04 23:43:43 UTC	(20060404-4945)
   Log:
   Implement vhost-setting for SASL clients.
