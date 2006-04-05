@@ -1,3 +1,12 @@
+gxti        2006/04/04 23:43:43 UTC	(20060404-4945)
+  Log:
+  Implement vhost-setting for SASL clients.
+  
+
+  Changes:	Modified:
+  +9 -1		trunk/modules/saslserv/sasl.c (File Modified) 
+
+
 gxti        2006/04/02 20:33:39 UTC	(20060402-4943)
   Log:
   New XMLRPC functions atheme.channel.topic.set and atheme.channel.topic.append

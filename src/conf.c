@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4935 2006-03-30 16:13:33Z nenolod $
+ * $Id: conf.c 4947 2006-04-05 01:03:27Z nenolod $
  */
 
 #include "atheme.h"
@@ -714,19 +714,50 @@ static int c_operclass(CONFIGENTRY *ce)
 	{
 		if (!strcasecmp("PRIVS", ce->ce_varname))
 		{
-			if (ce->ce_vardata == NULL)
+			if (ce->ce_vardata == NULL && ce->ce_entries == NULL)
 				PARAM_ERROR(ce);
 
-			if (privs == NULL)
-				privs = sstrdup(ce->ce_vardata);
+			if (ce->ce_entries == NULL)
+			{
+				if (privs == NULL)
+					privs = sstrdup(ce->ce_vardata);
+				else
+				{
+					newprivs = smalloc(strlen(privs) + 1 + strlen(ce->ce_vardata) + 1);
+					strcpy(newprivs, privs);
+					strcat(newprivs, " ");
+					strcat(newprivs, ce->ce_vardata);
+					free(privs);
+					privs = newprivs;
+				}
+			}
 			else
 			{
-				newprivs = smalloc(strlen(privs) + 1 + strlen(ce->ce_vardata) + 1);
-				strcpy(newprivs, privs);
-				strcat(newprivs, " ");
-				strcat(newprivs, ce->ce_vardata);
-				free(privs);
-				privs = newprivs;
+				/*
+				 * New definition format for operclasses.
+				 *
+				 * operclass "sra" {
+				 *     privs = {
+				 *         special:ircop;
+				 *     };
+				 * };
+				 *
+				 * - nenolod
+				 */
+				for (ce = ce->ce_entries; ce; ce = ce->ce_next)
+				{
+					if (privs == NULL)
+						privs = sstrdup(ce->ce_varname);
+					else
+					{
+						newprivs = smalloc(strlen(privs) + 1 + strlen(ce->ce_varname) + 1);
+						strcpy(newprivs, privs);
+						strcat(newprivs, " ");
+						strcat(newprivs, ce->ce_varname);
+						free(privs);
+						privs = newprivs;
+					}
+				}
 			}
 		}
 		else
