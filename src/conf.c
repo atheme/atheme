@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4947 2006-04-05 01:03:27Z nenolod $
+ * $Id: conf.c 4951 2006-04-05 01:42:55Z nenolod $
  */
 
 #include "atheme.h"
@@ -733,6 +733,7 @@ static int c_operclass(CONFIGENTRY *ce)
 			}
 			else
 			{
+				CONFIGENTRY *conf_p;
 				/*
 				 * New definition format for operclasses.
 				 *
@@ -744,16 +745,16 @@ static int c_operclass(CONFIGENTRY *ce)
 				 *
 				 * - nenolod
 				 */
-				for (ce = ce->ce_entries; ce; ce = ce->ce_next)
+				for (conf_p = ce->ce_entries; conf_p; conf_p = conf_p->ce_next)
 				{
 					if (privs == NULL)
-						privs = sstrdup(ce->ce_varname);
+						privs = sstrdup(conf_p->ce_varname);
 					else
 					{
-						newprivs = smalloc(strlen(privs) + 1 + strlen(ce->ce_varname) + 1);
+						newprivs = smalloc(strlen(privs) + 1 + strlen(conf_p->ce_varname) + 1);
 						strcpy(newprivs, privs);
 						strcat(newprivs, " ");
-						strcat(newprivs, ce->ce_varname);
+						strcat(newprivs, conf_p->ce_varname);
 						free(privs);
 						privs = newprivs;
 					}
