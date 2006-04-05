@@ -1,3 +1,12 @@
+nenolod     2006/04/05 01:42:55 UTC	(20060405-4951)
+  Log:
+  - do not overwrite *ce, use a different pointer instead for safety.
+  
+
+  Changes:	Modified:
+  +5 -4		trunk/src/conf.c (File Modified) 
+
+
 nenolod     2006/04/05 01:05:13 UTC	(20060405-4949)
   Log:
   - version bump: 1.1.0rc1

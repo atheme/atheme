@@ -49,7 +49,7 @@ void buffer_delete(struct buffer_st *b)
 	b->data = NULL;
 }
 
-void base64_encode(struct buffer_st *b, const char *source, int length)
+void _atheme_base64_encode(struct buffer_st *b, const char *source, int length)
 {
 	int i, hiteof = 0;
 	int offset = 0;
@@ -117,7 +117,7 @@ void base64_encode(struct buffer_st *b, const char *source, int length)
 	}
 }
 
-void base64_decode(struct buffer_st *bfr, const char *source, int length)
+void _atheme_base64_decode(struct buffer_st *bfr, const char *source, int length)
 {
 	int i;
 	int offset = 0;

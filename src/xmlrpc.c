@@ -687,7 +687,7 @@ char *xmlrpc_base64(char *buf, char *value)
 {
 	struct buffer_st b64buf;
 
-	base64_encode(&b64buf, value, strlen(value));
+	_atheme_base64_encode(&b64buf, value, strlen(value));
 	snprintf(buf, XMLRPC_BUFSIZE, "<base64>%s</base64>", b64buf.data);
 	buffer_delete(&b64buf);
 	return buf;
@@ -699,7 +699,7 @@ char *xmlrpc_decode64(char *value)
 {
 	char *retval;
 	struct buffer_st buf;
-	base64_decode(&buf, value, strlen(value));
+	_atheme_base64_decode(&buf, value, strlen(value));
 	retval = xmlrpc_strdup(buf.data);
 	buffer_delete(&buf);
 	return retval;

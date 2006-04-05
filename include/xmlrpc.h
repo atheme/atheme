@@ -4,7 +4,7 @@
  *
  * XMLRPC library header, hacked up for Atheme.
  *
- * $Id: xmlrpc.h 3755 2005-11-09 23:48:04Z jilles $
+ * $Id: xmlrpc.h 4953 2006-04-05 02:10:11Z nenolod $
  */
 #ifndef XMLRPC_H
 #define XMLRPC_H
@@ -112,8 +112,8 @@ E char *xmlrpc_char_encode(char *outbuffer, char *s1);
 E char *xmlrpc_decode_string(char *buf);
 
 /* base64.c */
-E void base64_encode(struct buffer_st *b, const char *source, int length);
-E void base64_decode(struct buffer_st *bfr, const char *source, int length);
+E void _atheme_base64_encode(struct buffer_st *b, const char *source, int length);
+E void _atheme_base64_decode(struct buffer_st *bfr, const char *source, int length);
 E void buffer_new(struct buffer_st *b);
 E void buffer_add(struct buffer_st *b, char c);
 E void buffer_delete(struct buffer_st *b);
