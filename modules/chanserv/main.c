@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4893 2006-03-08 17:03:41Z jilles $
+ * $Id: main.c 4961 2006-04-08 19:59:21Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4893 2006-03-08 17:03:41Z jilles $",
+	"$Id: main.c 4961 2006-04-08 19:59:21Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -155,6 +155,7 @@ static void chanserv(char *origin, uint8_t parc, char *parv[])
 	{
 		fcommand_exec_floodcheck(chansvs.me, parv[parc - 2], origin, cmd, &cs_fcmdtree);
 
+		cdata.u = user_find(origin);
 		cdata.c = channel_find(parv[parc - 2]);
 		cdata.msg = parv[parc - 1];
 		hook_call_event("channel_message", &cdata);

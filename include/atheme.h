@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 4935 2006-03-30 16:13:33Z nenolod $
+ * $Id: atheme.h 4961 2006-04-08 19:59:21Z nenolod $
  */
 
 #ifndef ATHEME_H
@@ -53,6 +53,7 @@
 #define ME			(ircd->uses_uid ? me.numeric : me.name)
 
 typedef struct {
+	user_t *u;
         channel_t *c;
         char *msg;
 } hook_cmessage_data_t;

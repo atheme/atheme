@@ -1,3 +1,13 @@
+jilles      2006/04/08 00:02:39 UTC	(20060408-4959)
+  Log:
+  ChanServ FLAGS: Better error message for the case .flags +flags nick.
+  Somewhat hackish.
+  
+
+  Changes:	Modified:
+  +10 -2	trunk/modules/chanserv/flags.c (File Modified) 
+
+
 jilles      2006/04/05 23:20:58 UTC	(20060405-4957)
   Log:
   Remove gratuitous differences between example.conf
