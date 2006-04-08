@@ -1,3 +1,14 @@
+jilles      2006/04/05 23:20:58 UTC	(20060405-4957)
+  Log:
+  Remove gratuitous differences between example.conf
+  and example.userserv.conf.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/dist/example.conf (File Modified) 
+  +11 -11	trunk/dist/example.userserv.conf (File Modified) 
+
+
 jilles      2006/04/05 23:16:19 UTC	(20060405-4955)
   Log:
   Remove example.saslserv.conf and add the SASL stuff to
