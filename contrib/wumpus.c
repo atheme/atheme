@@ -58,6 +58,7 @@ struct game_ {
 	room_t *rmemctx;	/* memory page context */
 	service_t *svs;
 	list_t cmdtree;
+	int speed;
 };
 
 typedef struct game_ game_t;
@@ -335,6 +336,7 @@ init_game(void)
 	msg(wumpus_cfg.nick, wumpus_cfg.chan, "The game has started!");
 
 	wumpus.running = TRUE;
+	wumpus.speed = 60;
 }
 
 /* starts the game */
@@ -452,24 +454,46 @@ shoot_player(player_t *p, int target_id)
 
 	p->arrows--;
 
-	if (!tp)
+	if (!tp && r->contents != E_WUMPUS)
 	{
 		notice(wumpus_cfg.nick, p->u->nick, "You shoot at nothing.");
 		return;
 	}
 
-	/* 50 percent chance of success */
-	if (rand() % 2 == 0)
+	if (tp)
 	{
-		msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has been killed by \2%s\2!",
-			tp->u->nick, p->u->nick);
-		resign_player(tp);
+		/* 50 percent chance of success */
+		if (rand() % 2 == 0)
+		{
+			msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has been killed by \2%s\2!",
+				tp->u->nick, p->u->nick);
+			resign_player(tp);
+		}
+		else
+		{
+			notice(wumpus_cfg.nick, tp->u->nick, "You have been shot at from room %d.",
+				p->location->id);
+			notice(wumpus_cfg.nick, p->u->nick, "You miss what you were shooting at.");
+		}
 	}
-	else
+	else if (r->contents == E_WUMPUS)	/* We are shooting at the wumpus. */
 	{
-		notice(wumpus_cfg.nick, tp->u->nick, "You have been shot at from room %d.",
-			p->location->id);
-		notice(wumpus_cfg.nick, p->u->nick, "You miss what you were shooting at.");
+		if (wumpus.speed != 0)
+		{
+			notice(wumpus_cfg.nick, p->u->nick, "You shoot at the wumpus, but it only makes him angrier.");
+			wumpus.speed /= 2;	/* concept: 60 -> 30 -> 15 -> 7 -> 3 -> 1 -> 0 (0.5) */
+
+			/* reschedule the move_wumpus event */
+			event_delete(move_wumpus, NULL);
+			event_add("move_wumpus", move_wumpus, NULL, wumpus.speed);
+		}
+		else	/* We killed the wumpus */
+		{
+			notice(wumpus_cfg.nick, p->u->nick, "You have killed the wumpus.");
+			msg(wumpus_cfg.nick, wumpus_cfg.chan, "The wumpus was killed by \2%s\2!", p->u->nick);
+
+			end_game();
+		}
 	}
 }
 

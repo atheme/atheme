@@ -1,3 +1,12 @@
+nenolod     2006/04/09 20:07:59 UTC	(20060409-5009)
+  Log:
+  - arrow regeneration (via Aerdan)
+  
+
+  Changes:	Modified:
+  +9 -0		trunk/contrib/wumpus.c (File Modified) 
+
+
 nenolod     2006/04/09 20:01:50 UTC	(20060409-5007)
   Log:
   - fix logic bug when reporting wumpus kills
