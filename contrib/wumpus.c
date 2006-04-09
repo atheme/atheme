@@ -150,13 +150,13 @@ create_player(user_t *u)
 	if (find_player(u))
 	{
 		notice(wumpus_cfg.nick, u->nick, "You are already playing the game!");
-		return;
+		return NULL;
 	}
 
 	if (wumpus.running)
 	{
 		notice(wumpus_cfg.nick, u->nick, "The game is already in progress. Sorry!");
-		return;
+		return NULL;
 	}
 
 	p = smalloc(sizeof(player_t));
@@ -230,24 +230,21 @@ build_maze(int size)
 	w->contents = E_WUMPUS;
 
 	/* pits */
-	for (i = 0; i < 5; i++)
+	for (j = 0; j < size; j++)
 	{
-		for (j = 0; j < size; j++)
+		/* 42 will do very nicely */
+		if (rand() % (42 * 2) == 0)
 		{
-			/* 42 will do very nicely */
-			if (rand() % 42 == 0)
-			{
-				room_t *r = &wumpus.rmemctx[j];
+			room_t *r = &wumpus.rmemctx[j];
 
-				r->contents = E_PIT;
+			r->contents = E_PIT;
 
-				slog(LG_DEBUG, "wumpus: added pit to chamber %d", j);
-			}
+			slog(LG_DEBUG, "wumpus: added pit to chamber %d", j);
 		}
 	}
 
 	/* bats */
-	for (i = 0; i < 5; i++)
+	for (i = 0; i < 2; i++)
 	{
 		for (j = 0; j < size; j++)
 		{
@@ -278,7 +275,7 @@ init_game(void)
 {
 	node_t *n;
 
-	build_maze(rand() % 1000);
+	build_maze(rand() % 100);
 
 	/* place players in random positions */
 	LIST_FOREACH(n, wumpus.players.head)
@@ -303,10 +300,11 @@ init_game(void)
 void
 start_game(void *unused)
 {
+	wumpus.starting = FALSE;
+
 	if (wumpus.players.count < 2)
 	{
 		msg(wumpus_cfg.nick, wumpus_cfg.chan, "Not enough players to play. :(");
-		wumpus.starting = FALSE;
 		return;
 	}
 
@@ -424,7 +422,7 @@ shoot_player(player_t *p, int target_id)
 	{
 		msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has been killed by \2%s\2!",
 			tp->u->nick, p->u->nick);
-		resign_player(p);
+		resign_player(tp);
 	}
 	else
 	{
@@ -569,9 +567,10 @@ move_player(player_t *p, int id)
 	/* we recycle the node_t here for speed */
 	n = node_find(p, &p->location->players);
 	node_del(n, &p->location->players);
+	node_free(n);
 
 	p->location = &wumpus.rmemctx[id];
-	node_add(p, n, &p->location->players);
+	node_add(p, node_create(), &p->location->players);
 
 	/* provide player with information, including their new location */
 	look_player(p);
@@ -627,7 +626,8 @@ void cmd_join(char *origin)
 
 	p = create_player(user_find(origin));
 
-	msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has joined the game!", origin);
+	if (p)
+		msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has joined the game!", origin);
 }
 
 command_t wumpus_join = { "JOIN", "Joins the game.", AC_NONE, cmd_join };
@@ -733,6 +733,22 @@ void cmd_help(char *origin)
 
 command_t wumpus_help = { "HELP", "Displays this command listing.", AC_NONE, cmd_help };
 
+void cmd_who(char *origin)
+{
+	node_t *n;
+
+	notice(wumpus_cfg.nick, origin, "The following people are playing:");
+
+	LIST_FOREACH(n, wumpus.players.head)
+	{
+		player_t *p = (player_t *) n->data;
+
+		notice(wumpus_cfg.nick, origin, "- %s", p->u->nick);
+	}
+}
+
+command_t wumpus_who = { "WHO", Displays who is playing the game.", AC_NONE, cmd_who };
+
 /* removes quitting players */
 void
 user_deleted(void *vptr)
@@ -804,6 +820,7 @@ _modinit(module_t *m)
 	command_add(&wumpus_shoot, &wumpus.cmdtree);
 	command_add(&wumpus_resign, &wumpus.cmdtree);
 	command_add(&wumpus_reset, &wumpus.cmdtree);
+	command_add(&wumpus_who, &wumpus.cmdtree);
 }
 
 void
@@ -824,6 +841,8 @@ _moddeinit(void)
 	command_delete(&wumpus_shoot, &wumpus.cmdtree);
 	command_delete(&wumpus_resign, &wumpus.cmdtree);
 	command_delete(&wumpus_reset, &wumpus.cmdtree);
+	command_delete(&wumpus_who, &wumpus.cmdtree);
 
 	event_delete(move_wumpus, NULL);
+	event_delete(start_game, NULL);
 }

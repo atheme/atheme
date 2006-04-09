@@ -1,3 +1,11 @@
+nenolod     2006/04/09 04:59:40 UTC	(20060409-4979)
+  Log:
+  fixes
+
+  Changes:	Modified:
+  +3 -0		trunk/contrib/wumpus.c (File Modified) 
+
+
 nenolod     2006/04/09 04:58:44 UTC	(20060409-4977)
   Log:
   - sanity checking
