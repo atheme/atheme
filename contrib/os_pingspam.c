@@ -4,15 +4,15 @@
  *
  * ping spammer thingy
  *
- * $Id: os_pingspam.c 4989 2006-04-09 07:03:08Z gxti $
+ * $Id: os_pingspam.c 4991 2006-04-09 08:19:53Z gxti $
  */
 
 #include "atheme.h"
 
 DECLARE_MODULE_V1
 (
-	"operserv/pingspam", TRUE, _modinit, _moddeinit,
-	"$Id: os_pingspam.c 4989 2006-04-09 07:03:08Z gxti $",
+	"operserv/pingspam", FALSE, _modinit, _moddeinit,
+	"$Id: os_pingspam.c 4991 2006-04-09 08:19:53Z gxti $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -29,7 +29,10 @@ char *notices[] =
 	"This notice brought to you by Burma-Shave.",
 	"They're coming...",
 	":)(::)(::)(::)(::)(::)(::)(::)(::)(::)(::)(::)(::)(::)(::)(::)(::)(::)(::)(::)(::)(:",
-	"lolz!"
+	"lolz!",
+	"<Hikaru> your a pagan",
+	"* Ads needs to shower soon",
+	"<Hik`Coding> Don't make me get Yakuza on you"
 };
 
 char *phrases[] =

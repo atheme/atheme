@@ -1,3 +1,12 @@
+gxti        2006/04/09 07:03:08 UTC	(20060409-4989)
+  Log:
+  Add meta for previous (sorry jilles).
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/contrib/os_pingspam.c (File Modified) (Property Modified)
+
+
 gxti        2006/04/09 06:56:31 UTC	(20060409-4987)
   Log:
   New contrib module: os_pingspam
