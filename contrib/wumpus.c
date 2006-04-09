@@ -649,6 +649,12 @@ void cmd_move(char *origin)
 		return;
 	}
 
+	if (!wumpus.running)
+	{
+		notice(wumpus_cfg.nick, origin, "The game must be running in order to use this command.");
+		return;
+	}
+
 	move_player(p, atoi(id));
 }
 
@@ -671,6 +677,12 @@ void cmd_shoot(char *origin)
 		return;
 	}
 
+	if (!wumpus.running)
+	{
+		notice(wumpus_cfg.nick, origin, "The game must be running in order to use this command.");
+		return;
+	}
+
 	shoot_player(p, atoi(id));
 }
 
@@ -683,6 +695,12 @@ void cmd_resign(char *origin)
 	if (!p)
 	{
 		notice(wumpus_cfg.nick, origin, "You must be playing the game in order to use this command.");
+		return;
+	}
+
+	if (!wumpus.running)
+	{
+		notice(wumpus_cfg.nick, origin, "The game must be running in order to use this command.");
 		return;
 	}
 
