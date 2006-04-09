@@ -608,10 +608,15 @@ move_player(player_t *p, int id)
 	/* and arrows? */
 	if (wumpus.rmemctx[id].contents == E_ARROWS)
 	{
-		notice(wumpus_cfg.nick, p->u->nick, "You found some arrows. You pick them up and continue on your way.");
-
-		p->arrows += 5;
-
+		if (p->arrows == 0)
+		{
+			notice(wumpus_cfg.nick, p->u->nick, "You found some arrows. You pick them up and continue on your way.");
+			p->arrows += 5;
+		}
+		else
+			notice(wumpus_cfg.nick, p->u->nick, "You found some arrows. You don't have any room to take them however, "
+						"so you break them in half and continue on your way.");
+		
 		wumpus.rmemctx[id].contents = E_NOTHING;
 	}
 
