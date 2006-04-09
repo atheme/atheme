@@ -302,10 +302,9 @@ start_game(void *unused)
 	if (wumpus.players.count < 2)
 	{
 		msg(wumpus_cfg.nick, wumpus_cfg.chan, "Not enough players to play. :(");
+		wumpus.starting = FALSE;
 		return;
 	}
-
-	msg(wumpus_cfg.nick, wumpus_cfg.chan, "The game is \2starting!\2");
 
 	init_game();
 }
@@ -690,6 +689,25 @@ void cmd_resign(char *origin)
 
 command_t wumpus_resign = { "RESIGN", "Resign from the game.", AC_NONE, cmd_resign };
 
+void cmd_reset(char *origin)
+{
+	if (wumpus.running)
+	{
+		msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has ended the game.", origin);
+
+		end_game();
+	}
+}
+
+command_t wumpus_reset = { "RESET", "Resets the game.", AC_IRCOP, cmd_reset };
+
+void cmd_help(char *origin)
+{
+	command_help(wumpus.svs->name, origin, &wumpus.cmdtree);
+}
+
+command_t wumpus_help = { "HELP", "Displays this command listing.", AC_NONE, cmd_help };
+
 /* removes quitting players */
 void
 user_deleted(void *vptr)
@@ -754,11 +772,13 @@ _modinit(module_t *m)
 	hook_add_event("user_delete");
 	hook_add_hook("user_delete", user_deleted);
 
+	command_add(&wumpus_help, &wumpus.cmdtree);
 	command_add(&wumpus_start, &wumpus.cmdtree);
 	command_add(&wumpus_join, &wumpus.cmdtree);
 	command_add(&wumpus_move, &wumpus.cmdtree);
 	command_add(&wumpus_shoot, &wumpus.cmdtree);
 	command_add(&wumpus_resign, &wumpus.cmdtree);
+	command_add(&wumpus_reset, &wumpus.cmdtree);
 }
 
 void
@@ -772,9 +792,11 @@ _moddeinit(void)
 
 	hook_del_hook("user_delete", user_deleted);
 
+	command_delete(&wumpus_help, &wumpus.cmdtree);
 	command_delete(&wumpus_start, &wumpus.cmdtree);
 	command_delete(&wumpus_join, &wumpus.cmdtree);
 	command_delete(&wumpus_move, &wumpus.cmdtree);
 	command_delete(&wumpus_shoot, &wumpus.cmdtree);
 	command_delete(&wumpus_resign, &wumpus.cmdtree);
+	command_delete(&wumpus_reset, &wumpus.cmdtree);
 }
