@@ -380,6 +380,57 @@ look_player(player_t *p)
 	}
 }
 
+/* shoot and kill other players */
+void
+shoot_player(player_t *p, int target_id)
+{
+	room_t *r;
+	player_t *tp;
+
+	if (!p->arrows)
+	{
+		notice(wumpus_cfg.nick, p->u->nick, "You have no arrows!");
+		return;
+	}
+
+	if (adjacent_room(p, target_id) == FALSE)
+	{
+		notice(wumpus_cfg.nick, p->u->nick, "You can't shoot into room %d from here.");
+		return;
+	}
+
+	if (p->location->id == target_id)
+	{
+		notice(wumpus_cfg.nick, p->u->nick, "You can only shoot into adjacent rooms!");
+		return;
+	}
+
+	r = &wumpus.rmemctx[target_id];
+	tp = r->players.head ? r->players.head->data : NULL;
+
+	p->arrows--;
+
+	if (!tp)
+	{
+		notice(wumpus_cfg.nick, p->u->nick, "You shoot at nothing.");
+		return;
+	}
+
+	/* 50 percent chance of success */
+	if (rand() % 2 == 0)
+	{
+		msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has been killed by \2%s\2!",
+			tp->u->nick, p->u->nick);
+		resign_player(p);
+	}
+	else
+	{
+		notice(wumpus_cfg.nick, tp->u->nick, "You have been shot at from room %d.",
+			p->location->id);
+		notice(wumpus_cfg.nick, p->u->nick, "You miss what you were shooting at.");
+	}
+}
+
 /* move the wumpus, the wumpus moves every 60 seconds */
 void
 move_wumpus(void *unused)
@@ -555,7 +606,7 @@ void cmd_start(char *origin)
 
 	wumpus.starting = TRUE;
 
-	event_add_once("start_game", start_game, NULL, 5);
+	event_add_once("start_game", start_game, NULL, 60);
 }
 
 /* reference tuple for the above code: cmd_start */
@@ -577,6 +628,67 @@ void cmd_join(char *origin)
 }
 
 command_t wumpus_join = { "JOIN", "Joins the game.", AC_NONE, cmd_join };
+
+void cmd_move(char *origin)
+{
+	player_t *p = find_player(user_find(origin));
+	char *id = strtok(NULL, " ");
+
+	if (!p)
+	{
+		notice(wumpus_cfg.nick, origin, "You must be playing the game in order to use this command.");
+		return;
+	}
+
+	if (!id)
+	{
+		notice(wumpus_cfg.nick, origin, "You must provide a room to move to.");
+		return;
+	}
+
+	move_player(p, atoi(id));
+}
+
+command_t wumpus_move = { "MOVE", "Move to another room.", AC_NONE, cmd_move };
+
+void cmd_shoot(char *origin)
+{
+	player_t *p = find_player(user_find(origin));
+	char *id = strtok(NULL, " ");
+
+	if (!p)
+	{
+		notice(wumpus_cfg.nick, origin, "You must be playing the game in order to use this command.");
+		return;
+	}
+
+	if (!id)
+	{
+		notice(wumpus_cfg.nick, origin, "You must provide a room to shoot at.");
+		return;
+	}
+
+	shoot_player(p, atoi(id));
+}
+
+command_t wumpus_move = { "SHOOT", "Shoot at another room.", AC_NONE, cmd_shoot };
+
+void cmd_resign(char *origin)
+{
+	player_t *p = find_player(user_find(origin));
+
+	if (!p)
+	{
+		notice(wumpus_cfg.nick, origin, "You must be playing the game in order to use this command.");
+		return;
+	}
+
+	msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has quit the game!", p->u->nick);
+
+	resign_player(p);
+}
+
+command_t wumpus_resign = { "RESIGN", "Resign from the game.", AC_NONE, cmd_resign };
 
 void
 _handler(char *origin, uint8_t parc, char *parv[])
@@ -627,6 +739,9 @@ _modinit(module_t *m)
 
 	command_add(&wumpus_start, &wumpus.cmdtree);
 	command_add(&wumpus_join, &wumpus.cmdtree);
+	command_add(&wumpus_move, &wumpus.cmdtree);
+	command_add(&wumpus_shoot, &wumpus.cmdtree);
+	command_add(&wumpus_resign, &wumpus.cmdtree);
 }
 
 void
@@ -640,4 +755,7 @@ _moddeinit(void)
 
 	command_delete(&wumpus_start, &wumpus.cmdtree);
 	command_delete(&wumpus_join, &wumpus.cmdtree);
+	command_delete(&wumpus_move, &wumpus.cmdtree);
+	command_delete(&wumpus_shoot, &wumpus.cmdtree);
+	command_delete(&wumpus_resign, &wumpus.cmdtree);
 }
