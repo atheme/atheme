@@ -535,13 +535,14 @@ move_wumpus(void *unused)
 			resign_player(p);
 		}
 
-		if (w_kills)
-			msg(wumpus_cfg.nick, wumpus_cfg.chan, "You hear the screams of %d surprised adventurer%s.", w_kills,
-				w_kills != 1 ? "s" : "");
-
 		/* prepare for the next turn */
 		p->has_moved = FALSE;
 	}
+
+	/* report any wumpus kills */
+	if (w_kills)
+		msg(wumpus_cfg.nick, wumpus_cfg.chan, "You hear the screams of %d surprised adventurer%s.", w_kills,
+			w_kills != 1 ? "s" : "");
 
 	if (wumpus.players.count == 1)
 	{

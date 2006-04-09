@@ -1,3 +1,12 @@
+nenolod     2006/04/09 19:54:24 UTC	(20060409-5005)
+  Log:
+  - remove the ability to have tunnels loopback to themselves
+  
+
+  Changes:	Modified:
+  +5 -0		trunk/contrib/wumpus.c (File Modified) 
+
+
 nenolod     2006/04/09 19:35:24 UTC	(20060409-5003)
   Log:
   - balance adjustment: change the factor used to place arrows from 2 to 3.
