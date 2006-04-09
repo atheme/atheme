@@ -380,7 +380,11 @@ end_game(void)
 	}
 
 	/* free memory vector */
-	free(wumpus.rmemctx);
+	if (wumpus.rmemctx)
+	{
+		free(wumpus.rmemctx);
+		wumpus.rmemctx = NULL;
+	}
 
 	wumpus.wumpus = -1;
 	wumpus.running = FALSE;
