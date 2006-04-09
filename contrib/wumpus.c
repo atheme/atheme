@@ -262,16 +262,19 @@ build_maze(int size)
 	}
 
 	/* arrows */
-	for (j = 0; j < size; j++)
+	for (i = 0; i < 2; i++)
 	{
-		/* 42 will do very nicely */
-		if (rand() % 42 == 0)
+		for (j = 0; j < size; j++)
 		{
-			room_t *r = &wumpus.rmemctx[j];
+			/* 42 will do very nicely */
+			if (rand() % 42 == 0)
+			{
+				room_t *r = &wumpus.rmemctx[j];
 
-			r->contents = E_ARROWS;
+				r->contents = E_ARROWS;
 
-			slog(LG_DEBUG, "wumpus: added arrows to chamber %d", j);
+				slog(LG_DEBUG, "wumpus: added arrows to chamber %d", j);
+			}
 		}
 	}
 
