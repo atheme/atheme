@@ -671,7 +671,7 @@ void cmd_shoot(char *origin)
 	shoot_player(p, atoi(id));
 }
 
-command_t wumpus_move = { "SHOOT", "Shoot at another room.", AC_NONE, cmd_shoot };
+command_t wumpus_shoot = { "SHOOT", "Shoot at another room.", AC_NONE, cmd_shoot };
 
 void cmd_resign(char *origin)
 {
@@ -689,6 +689,20 @@ void cmd_resign(char *origin)
 }
 
 command_t wumpus_resign = { "RESIGN", "Resign from the game.", AC_NONE, cmd_resign };
+
+/* removes quitting players */
+void
+user_deleted(void *vptr)
+{
+	user_t *u = (user_t *) vptr;
+	player_t *p;
+
+	if ((p = find_player(u)) != NULL)
+	{
+		msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has quit the game!", p->u->nick);
+		resign_player(p);
+	}
+}
 
 void
 _handler(char *origin, uint8_t parc, char *parv[])
@@ -737,6 +751,9 @@ _modinit(module_t *m)
 	else
 		burst_the_wumpus(NULL);
 
+	hook_add_event("user_delete");
+	hook_add_hook("user_delete", user_deleted);
+
 	command_add(&wumpus_start, &wumpus.cmdtree);
 	command_add(&wumpus_join, &wumpus.cmdtree);
 	command_add(&wumpus_move, &wumpus.cmdtree);
@@ -752,6 +769,8 @@ _moddeinit(void)
 		end_game();
 
 	del_service(wumpus.svs);
+
+	hook_del_hook("user_delete", user_deleted);
 
 	command_delete(&wumpus_start, &wumpus.cmdtree);
 	command_delete(&wumpus_join, &wumpus.cmdtree);
