@@ -1,3 +1,12 @@
+nenolod     2006/04/09 19:33:33 UTC	(20060409-5001)
+  Log:
+  - balance adjustment: only players who have no arrows can pick up more
+  
+
+  Changes:	Modified:
+  +9 -4		trunk/contrib/wumpus.c (File Modified) 
+
+
 nenolod     2006/04/09 19:21:01 UTC	(20060409-4999)
   Log:
   - add crystal ball powerup which exposes the current location of the wumpus
