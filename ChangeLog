@@ -1,3 +1,13 @@
+nenolod     2006/04/08 19:59:21 UTC	(20060408-4961)
+  Log:
+  - fix hook_cmessage_data_t, it was missing source var
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/atheme.h (File Modified) 
+  +1 -0		trunk/modules/chanserv/main.c (File Modified) 
+
+
 jilles      2006/04/08 00:02:39 UTC	(20060408-4959)
   Log:
   ChanServ FLAGS: Better error message for the case .flags +flags nick.
