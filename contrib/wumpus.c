@@ -295,6 +295,8 @@ init_game(void)
 	event_add("move_wumpus", move_wumpus, NULL, 60);
 
 	msg(wumpus_cfg.nick, wumpus_cfg.chan, "The game has started!");
+
+	wumpus.running = TRUE;
 }
 
 /* starts the game */
@@ -801,4 +803,6 @@ _moddeinit(void)
 	command_delete(&wumpus_shoot, &wumpus.cmdtree);
 	command_delete(&wumpus_resign, &wumpus.cmdtree);
 	command_delete(&wumpus_reset, &wumpus.cmdtree);
+
+	event_delete(move_wumpus, NULL);
 }
