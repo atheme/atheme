@@ -1,3 +1,12 @@
+gxti        2006/04/09 08:19:53 UTC	(20060409-4991)
+  Log:
+  Added more notices to pingspam, fixed permenant module issue.
+  
+
+  Changes:	Modified:
+  +5 -2		trunk/contrib/os_pingspam.c (File Modified) 
+
+
 gxti        2006/04/09 07:03:08 UTC	(20060409-4989)
   Log:
   Add meta for previous (sorry jilles).

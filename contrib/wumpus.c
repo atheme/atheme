@@ -164,7 +164,7 @@ create_player(user_t *u)
 	memset(p, '\0', sizeof(player_t));
 
 	p->u = u;
-	p->arrows = 5;
+	p->arrows = 10;
 
 	node_add(p, node_create(), &wumpus.players);
 }
