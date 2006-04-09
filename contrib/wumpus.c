@@ -180,9 +180,12 @@ resign_player(player_t *player)
 	if (player == NULL)
 		return;
 
-	n = node_find(player, &player->location->players);
-	node_del(n, &player->location->players);
-	node_free(n);
+	if (player->location)
+	{
+		n = node_find(player, &player->location->players);
+		node_del(n, &player->location->players);
+		node_free(n);
+	}
 
 	n = node_find(player, &wumpus.players);
 	node_del(n, &wumpus.players);
