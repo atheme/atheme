@@ -1,3 +1,14 @@
+nenolod     2006/04/09 20:18:28 UTC	(20060409-5011)
+  Log:
+  - implement the ability to kill the wumpus:
+    it takes 7 hits to kill him as his strength/speed gets divided by two each time:
+     60 -> 30 -> 15 -> 7 -> 3 -> 1 -> 0 (0.5, but because speed is an int, it becomes 0).
+  
+
+  Changes:	Modified:
+  +34 -10	trunk/contrib/wumpus.c (File Modified) 
+
+
 nenolod     2006/04/09 20:07:59 UTC	(20060409-5009)
   Log:
   - arrow regeneration (via Aerdan)

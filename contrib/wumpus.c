@@ -316,6 +316,7 @@ init_game(void)
 	if (!build_maze(rand() % 100))
 	{
 		msg(wumpus_cfg.nick, wumpus_cfg.chan, "Maze generation failed, please try again.");
+		end_game();
 		return;
 	}
 
