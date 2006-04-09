@@ -1,3 +1,12 @@
+nenolod     2006/04/09 21:08:55 UTC	(20060409-5013)
+  Log:
+  - reset game state when maze generation fails
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/contrib/wumpus.c (File Modified) 
+
+
 nenolod     2006/04/09 20:18:28 UTC	(20060409-5011)
   Log:
   - implement the ability to kill the wumpus:

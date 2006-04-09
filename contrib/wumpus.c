@@ -306,6 +306,7 @@ build_maze(int size)
 /* init_game depends on these */
 void move_wumpus(void *unused);
 void look_player(player_t *p);
+void end_game(void);
 
 /* sets the game up */
 void
