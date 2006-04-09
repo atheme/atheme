@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 4405 2006-01-01 22:23:09Z jilles $
+# $Id: Makefile.in 4987 2006-04-09 06:56:31Z gxti $
 #
 
 CC		= @CC@
@@ -43,7 +43,9 @@ SRCS = \
 	ircd_catserv.c		\
 	ns_generatepass.c	\
 	ns_enforce.c		\
-	us_generatepass.c
+	us_generatepass.c	\
+	os_pingspam.c
+
 # To compile your own modules, add them to SRCS or make blegh.so
 # Note: anope_convert.c cannot be compiled with this Makefile as it is
 # an anope module, not an atheme module.

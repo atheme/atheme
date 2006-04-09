@@ -1,3 +1,12 @@
+nenolod     2006/04/09 06:17:18 UTC	(20060409-4985)
+  Log:
+  - double the amount of passes used to place arrows
+  
+
+  Changes:	Modified:
+  +9 -6		trunk/contrib/wumpus.c (File Modified) 
+
+
 nenolod     2006/04/09 06:06:32 UTC	(20060409-4983)
   Log:
   - add arrows powerup
