@@ -1,3 +1,14 @@
+gxti        2006/04/09 06:56:31 UTC	(20060409-4987)
+  Log:
+  New contrib module: os_pingspam
+  If you have to ask, you don't want to know.
+  
+
+  Changes:	Modified:
+  +3 -1		trunk/contrib/Makefile.in (File Modified) 
+  +142 -0	trunk/contrib/os_pingspam.c (File Added) 
+
+
 nenolod     2006/04/09 06:17:18 UTC	(20060409-4985)
   Log:
   - double the amount of passes used to place arrows

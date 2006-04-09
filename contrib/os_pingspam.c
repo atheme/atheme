@@ -4,7 +4,7 @@
  *
  * ping spammer thingy
  *
- * $Id: noop.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: os_pingspam.c 4989 2006-04-09 07:03:08Z gxti $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/pingspam", TRUE, _modinit, _moddeinit,
-	"$Id: noop.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: os_pingspam.c 4989 2006-04-09 07:03:08Z gxti $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
