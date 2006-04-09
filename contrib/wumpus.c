@@ -219,6 +219,11 @@ build_maze(int size)
 		for (j = 0; j < 3, r->exits.count < 3; j++)
 		{
 			int t = rand() % size;
+
+			/* make sure this isn't a tunnel to itself */
+			while (t == r->id)
+				t = rand() % size;
+
 			slog(LG_DEBUG, "wumpus: creating link for route %d -> %d", i, t);
 			node_add(&wumpus.rmemctx[t], node_create(), &r->exits);
 		}
