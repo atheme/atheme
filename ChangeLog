@@ -1,3 +1,12 @@
+nenolod     2006/04/09 21:40:48 UTC	(20060409-5021)
+  Log:
+  - acknowledge that the game has been won after the wumpus is killed
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/contrib/wumpus.c (File Modified) 
+
+
 nenolod     2006/04/09 21:29:49 UTC	(20060409-5019)
   Log:
   - don't blindly free our vector

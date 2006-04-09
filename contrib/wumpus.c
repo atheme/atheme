@@ -370,18 +370,18 @@ end_game(void)
 	LIST_FOREACH_SAFE(n, tn, wumpus.players.head)
 		resign_player((player_t *) n->data);
 
-	/* destroy links between rooms */
-	for (i = 0; i < wumpus.mazesize; i++)
-	{
-		room_t *r = &wumpus.rmemctx[i];
-
-		LIST_FOREACH_SAFE(n, tn, r->exits.head)
-			node_del(n, &r->exits);
-	}
-
 	/* free memory vector */
 	if (wumpus.rmemctx)
 	{
+		/* destroy links between rooms */
+		for (i = 0; i < wumpus.mazesize; i++)
+		{
+			room_t *r = &wumpus.rmemctx[i];
+
+			LIST_FOREACH_SAFE(n, tn, r->exits.head)
+				node_del(n, &r->exits);
+		}
+
 		free(wumpus.rmemctx);
 		wumpus.rmemctx = NULL;
 	}
