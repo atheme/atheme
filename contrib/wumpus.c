@@ -540,6 +540,11 @@ move_wumpus(void *unused)
 
 		end_game();
 	}
+	else if (wumpus.players.count == 0)
+	{	
+		msg(wumpus_cfg.nick, wumpus_cfg.chan, "Everyone lost. Sucks. :(");
+		end_game();
+	}
 }
 
 /* handles movement requests from players */
