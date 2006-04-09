@@ -23,7 +23,8 @@ enum {
 	E_NOTHING = 0,
 	E_WUMPUS,
 	E_PIT,
-	E_BATS
+	E_BATS,
+	E_ARROWS
 };
 
 /* room_t: Describes a room that the wumpus or players could be in. */
@@ -257,6 +258,20 @@ build_maze(int size)
 
 				slog(LG_DEBUG, "wumpus: added bats to chamber %d", j);
 			}
+		}
+	}
+
+	/* arrows */
+	for (j = 0; j < size; j++)
+	{
+		/* 42 will do very nicely */
+		if (rand() % 42 == 0)
+		{
+			room_t *r = &wumpus.rmemctx[j];
+
+			r->contents = E_ARROWS;
+
+			slog(LG_DEBUG, "wumpus: added arrows to chamber %d", j);
 		}
 	}
 
@@ -564,6 +579,16 @@ move_player(player_t *p, int id)
 		return;
 	}
 
+	/* and arrows? */
+	if (wumpus.rmemctx[id].contents == E_ARROWS)
+	{
+		notice(wumpus_cfg.nick, p->u->nick, "You found some arrows. You pick them up and continue on your way.");
+
+		p->arrows += 5;
+
+		wumpus.rmemctx[id].contents = E_NOTHING;
+	}
+
 	/* we recycle the node_t here for speed */
 	n = node_find(p, &p->location->players);
 	node_del(n, &p->location->players);
@@ -747,7 +772,7 @@ void cmd_who(char *origin)
 	}
 }
 
-command_t wumpus_who = { "WHO", Displays who is playing the game.", AC_NONE, cmd_who };
+command_t wumpus_who = { "WHO", "Displays who is playing the game.", AC_NONE, cmd_who };
 
 /* removes quitting players */
 void
