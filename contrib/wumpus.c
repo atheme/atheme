@@ -559,6 +559,13 @@ move_wumpus(void *unused)
 	}
 }
 
+/* regenerates objects */
+void
+regen_obj(int obj)
+{
+	wumpus.rmemctx[rand() % 42].contents = obj;
+}
+
 /* handles movement requests from players */
 void
 move_player(player_t *p, int id)
@@ -624,6 +631,8 @@ move_player(player_t *p, int id)
 						"so you break them in half and continue on your way.");
 		
 		wumpus.rmemctx[id].contents = E_NOTHING;
+
+		regen_obj(E_ARROWS);
 	}
 
 	/* crystal ball */
