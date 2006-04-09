@@ -215,7 +215,7 @@ build_maze(int size)
 		r->id = i;
 
 		/* rooms have 3 exit points, exits are one-way */
-		for (j = 0; j < 3; j++)
+		for (j = 0; j < 3, r->exits.count < 3; j++)
 		{
 			int t = rand() % size;
 			slog(LG_DEBUG, "wumpus: creating link for route %d -> %d", i, t);
@@ -278,6 +278,14 @@ build_maze(int size)
 		}
 	}
 
+	/* ok, do some sanity checking */
+	for (j = 0; j < size; j++)
+		if (wumpus.rmemctx[j].exits.count < 3)
+		{
+			slog(LG_DEBUG, "wumpus: sanity checking failed");
+			return;
+		}
+
 	slog(LG_DEBUG, "wumpus: built maze");
 
 	return TRUE;
@@ -293,7 +301,11 @@ init_game(void)
 {
 	node_t *n;
 
-	build_maze(rand() % 100);
+	if (!build_maze(rand() % 100))
+	{
+		msg(wumpus_cfg.nick, wumpus_cfg.chan, "Maze generation failed, please try again.");
+		return;
+	}
 
 	/* place players in random positions */
 	LIST_FOREACH(n, wumpus.players.head)
