@@ -1,5 +1,7 @@
 /*
+ * Wumpus - 0.1.0
  * Copyright (c) 2006 William Pitcock <nenolod -at- nenolod.net>
+ *
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Hunt the Wumpus game implementation.
