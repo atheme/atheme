@@ -1,3 +1,12 @@
+nenolod     2006/04/09 03:12:38 UTC	(20060409-4963)
+  Log:
+  - wumpus for atheme (not yet complete)
+  
+
+  Changes:	Modified:
+  +598 -0	trunk/contrib/wumpus.c (File Added) 
+
+
 nenolod     2006/04/08 19:59:21 UTC	(20060408-4961)
   Log:
   - fix hook_cmessage_data_t, it was missing source var

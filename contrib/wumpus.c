@@ -162,6 +162,8 @@ create_player(user_t *u)
 
 	p->u = u;
 	p->arrows = 5;
+
+	node_add(p, node_create(), &wumpus.players);
 }
 
 /* destroys a player object and removes them from the game */
@@ -207,6 +209,8 @@ build_maze(int size)
 		room_t *r = &wumpus.rmemctx[i];
 		memset(r, '\0', sizeof(room_t));
 
+		r->id = i;
+
 		/* rooms have 3 exit points, exits are one-way */
 		for (j = 0; j < 3; j++)
 		{
@@ -224,7 +228,7 @@ build_maze(int size)
 	w->contents = E_WUMPUS;
 
 	/* pits */
-	for (i = 0; j < 10; i++)
+	for (i = 0; i < 5; i++)
 	{
 		for (j = 0; j < size; j++)
 		{
@@ -241,7 +245,7 @@ build_maze(int size)
 	}
 
 	/* bats */
-	for (i = 0; j < 10; i++)
+	for (i = 0; i < 5; i++)
 	{
 		for (j = 0; j < size; j++)
 		{
@@ -280,6 +284,8 @@ init_game(void)
 		player_t *p = (player_t *) n->data;
 
 		p->location = &wumpus.rmemctx[rand() % wumpus.mazesize];
+		node_add(p, node_create(), &p->location->players);
+
 		look_player(p);
 	}
 
@@ -329,6 +335,8 @@ end_game(void)
 
 	wumpus.wumpus = -1;
 	wumpus.running = FALSE;
+
+	event_delete(move_wumpus, NULL);
 
 	/* game is now ended */
 }
@@ -395,6 +403,10 @@ move_wumpus(void *unused)
 
 			if (rand() % 42 == 0 && moved == FALSE)
 			{
+#ifdef DEBUG_AI
+				msg(wumpus_cfg.nick, wumpus_cfg.chan, "I moved to chamber %d", tr->id);
+#endif
+
 				slog(LG_DEBUG, "wumpus: the wumpus is now in room %d! (was in %d)",
 					tr->id, wumpus.wumpus);
 				wumpus.wumpus = tr->id;
@@ -404,6 +416,18 @@ move_wumpus(void *unused)
 			}
 		}
 	}
+
+#ifdef DEBUG_AI
+	msg(wumpus_cfg.nick, wumpus_cfg.chan, "On my next turn, I can move to:");
+	r = &wumpus.rmemctx[wumpus.wumpus];
+
+	LIST_FOREACH(n, r->exits.head)
+	{
+		room_t *tr = (room_t *) n->data;
+
+		msg(wumpus_cfg.nick, wumpus_cfg.chan, "- %d", tr->id);
+	}
+#endif
 
 	LIST_FOREACH_SAFE(n, tn, wumpus.players.head)
 	{
@@ -428,7 +452,7 @@ move_wumpus(void *unused)
 
 	if (wumpus.players.count == 1)
 	{
-		player_t *p = (player_t *) wumpus.players.head;
+		player_t *p = (player_t *) wumpus.players.head->data;
 
 		msg(wumpus_cfg.nick, wumpus_cfg.chan, "%s won the game! Congratulations!", p->u->nick);
 
@@ -526,16 +550,33 @@ void cmd_start(char *origin)
 		return;
 	}
 
-	msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has started the game! Use \2/msg Wumpus JOIN\2 to play! You have \260 seconds\2.",
+	msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has started the game! Use \2/msg Wumpus JOIN\2 to play! You have\2 60 seconds\2.",
 		origin);
 
 	wumpus.starting = TRUE;
 
-	event_add_once("start_game", start_game, NULL, 60);
+	event_add_once("start_game", start_game, NULL, 5);
 }
 
 /* reference tuple for the above code: cmd_start */
-command_t wumpus_start = { "START", AC_NONE, "Starts the game.", cmd_start };
+command_t wumpus_start = { "START", "Starts the game.", AC_NONE, cmd_start };
+
+void cmd_join(char *origin)
+{
+	player_t *p;
+
+	if (!wumpus.starting || wumpus.running)
+	{
+		notice(wumpus_cfg.nick, origin, "You cannot use this command right now. Sorry.");
+		return;
+	}
+
+	p = create_player(user_find(origin));
+
+	msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has joined the game!", origin);
+}
+
+command_t wumpus_join = { "JOIN", "Joins the game.", AC_NONE, cmd_join };
 
 void
 _handler(char *origin, uint8_t parc, char *parv[])
@@ -585,6 +626,7 @@ _modinit(module_t *m)
 		burst_the_wumpus(NULL);
 
 	command_add(&wumpus_start, &wumpus.cmdtree);
+	command_add(&wumpus_join, &wumpus.cmdtree);
 }
 
 void
@@ -595,4 +637,7 @@ _moddeinit(void)
 		end_game();
 
 	del_service(wumpus.svs);
+
+	command_delete(&wumpus_start, &wumpus.cmdtree);
+	command_delete(&wumpus_join, &wumpus.cmdtree);
 }
