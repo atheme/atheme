@@ -24,7 +24,8 @@ enum {
 	E_WUMPUS,
 	E_PIT,
 	E_BATS,
-	E_ARROWS
+	E_ARROWS,
+	E_CRYSTALBALL
 };
 
 /* room_t: Describes a room that the wumpus or players could be in. */
@@ -277,6 +278,11 @@ build_maze(int size)
 			}
 		}
 	}
+
+	/* find a place to put the crystal ball */
+	w = &wumpus.rmemctx[rand() % size];
+	w->contents = E_CRYSTALBALL;
+	slog(LG_DEBUG, "wumpus: added crystal ball to chamber %d", w->id);
 
 	/* ok, do some sanity checking */
 	for (j = 0; j < size; j++)
@@ -607,6 +613,17 @@ move_player(player_t *p, int id)
 		p->arrows += 5;
 
 		wumpus.rmemctx[id].contents = E_NOTHING;
+	}
+
+	/* crystal ball */
+	if (wumpus.rmemctx[id].contents == E_CRYSTALBALL)
+	{
+		notice(wumpus_cfg.nick, p->u->nick, "You find a strange pulsating crystal ball. You examine it, and it shows room %d with the wumpus in it.",
+			wumpus.wumpus);
+		notice(wumpus_cfg.nick, p->u->nick, "The crystal ball then vanishes into the misama.");
+
+		wumpus.rmemctx[id].contents = E_NOTHING;
+		wumpus.rmemctx[rand() % wumpus.mazesize].contents = E_CRYSTALBALL;
 	}
 
 	/* we recycle the node_t here for speed */
