@@ -718,6 +718,9 @@ void cmd_reset(char *origin)
 		msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has ended the game.", origin);
 
 		end_game();
+
+		wumpus.running = FALSE;
+		wumpus.starting = FALSE;
 	}
 }
 
