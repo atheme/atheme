@@ -500,6 +500,7 @@ shoot_player(player_t *p, int target_id)
 		{
 			notice(wumpus_cfg.nick, p->u->nick, "You have killed the wumpus.");
 			msg(wumpus_cfg.nick, wumpus_cfg.chan, "The wumpus was killed by \2%s\2!", p->u->nick);
+			msg(wumpus_cfg.nick, wumpus_cfg.chan, "%s won the game! Congratulations!", p->u->nick);
 
 			end_game();
 		}

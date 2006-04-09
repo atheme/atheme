@@ -1,3 +1,12 @@
+nenolod     2006/04/09 21:29:49 UTC	(20060409-5019)
+  Log:
+  - don't blindly free our vector
+  
+
+  Changes:	Modified:
+  +5 -1		trunk/contrib/wumpus.c (File Modified) 
+
+
 nenolod     2006/04/09 21:15:45 UTC	(20060409-5017)
   Log:
   more sanity checking
