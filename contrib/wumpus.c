@@ -1,6 +1,7 @@
 /*
  * Wumpus - 0.1.0
  * Copyright (c) 2006 William Pitcock <nenolod -at- nenolod.net>
+ * Portions copyright (c) 2006 Kiyoshi Aman <kiyoshi.aman -at- gmail.com>
  *
  * Rights to this code are as documented in doc/LICENSE.
  *
@@ -43,6 +44,7 @@ struct player_ {
 	user_t    *u;
 	room_t    *location;
 	int        arrows;
+	int	   hp;
 	boolean_t  has_moved;
 };
 
@@ -58,6 +60,7 @@ struct game_ {
 	room_t *rmemctx;	/* memory page context */
 	service_t *svs;
 	list_t cmdtree;
+	int wump_hp;
 	int speed;
 };
 
@@ -167,6 +170,7 @@ create_player(user_t *u)
 
 	p->u = u;
 	p->arrows = 10;
+	p->hp = 30;
 
 	node_add(p, node_create(), &wumpus.players);
 }
@@ -179,7 +183,7 @@ resign_player(player_t *player)
 
 	if (player == NULL)
 		return;
-
+	
 	if (player->location)
 	{
 		n = node_find(player, &player->location->players);
@@ -342,6 +346,7 @@ init_game(void)
 
 	wumpus.running = TRUE;
 	wumpus.speed = 60;
+	wumpus.wump_hp = 70;
 }
 
 /* starts the game */
@@ -370,6 +375,15 @@ end_game(void)
 	LIST_FOREACH_SAFE(n, tn, wumpus.players.head)
 		resign_player((player_t *) n->data);
 
+	/* destroy links between rooms */
+	for (i = 0; i < wumpus.mazesize; i++)
+	{
+		room_t *r = &wumpus.rmemctx[i];
+
+		LIST_FOREACH_SAFE(n, tn, r->exits.head)
+			node_del(n, &r->exits);
+	}
+
 	/* free memory vector */
 	if (wumpus.rmemctx)
 	{
@@ -381,7 +395,6 @@ end_game(void)
 			LIST_FOREACH_SAFE(n, tn, r->exits.head)
 				node_del(n, &r->exits);
 		}
-
 		free(wumpus.rmemctx);
 		wumpus.rmemctx = NULL;
 	}
@@ -463,7 +476,7 @@ shoot_player(player_t *p, int target_id)
 
 	p->arrows--;
 
-	if (!tp && r->contents != E_WUMPUS)
+	if ((!tp) && (r->contents != E_WUMPUS))
 	{
 		notice(wumpus_cfg.nick, p->u->nick, "You shoot at nothing.");
 		return;
@@ -471,12 +484,17 @@ shoot_player(player_t *p, int target_id)
 
 	if (tp)
 	{
-		/* 50 percent chance of success */
-		if (rand() % 2 == 0)
+		/* 66 percent chance of success to balance hp. */
+		if ((rand() % (2/3) == 0) && (tp->u->hp <= 10))
 		{
 			msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has been killed by \2%s\2!",
 				tp->u->nick, p->u->nick);
 			resign_player(tp);
+		}
+		else if (tp->u->hp > 10) {
+			msg(wumpus_cfg.nick, tp->u->nick, "You were hit by an arrow from room %d.",
+				p->location->id);
+			tp->u->hp -= 10;
 		}
 		else
 		{
@@ -485,26 +503,28 @@ shoot_player(player_t *p, int target_id)
 			notice(wumpus_cfg.nick, p->u->nick, "You miss what you were shooting at.");
 		}
 	}
-	else if (r->contents == E_WUMPUS)	/* We are shooting at the wumpus. */
+	else if (r->contents == E_WUMPUS) /* Shootin' at the wumpus, we are... */
 	{
-		if (wumpus.speed != 0)
+		if ((wumpus.wump_hp > 0)) /* && (p->arrow->type == E_PLAIN)) */
 		{
-			notice(wumpus_cfg.nick, p->u->nick, "You shoot at the wumpus, but it only makes him angrier.");
-			wumpus.speed /= 2;	/* concept: 60 -> 30 -> 15 -> 7 -> 3 -> 1 -> 0 (0.5) */
+			notice(wumpus_cfg.nick, p->u->nick, "You shoot at the Wumpus, but he shrugs off the blow and seems angrier!");
+			wumpus.wump_hp -= 10;
+			wumpus.speed -= 6; /* the game becomes unwinnable if we div by 2,
+					      and higher values make it nearly impossible. */
 
-			/* reschedule the move_wumpus event */
+			/* reschedule move_wumpus for great justice */
 			event_delete(move_wumpus, NULL);
 			event_add("move_wumpus", move_wumpus, NULL, wumpus.speed);
 		}
-		else	/* We killed the wumpus */
+		else /* we killed the wumpus */
 		{
-			notice(wumpus_cfg.nick, p->u->nick, "You have killed the wumpus.");
-			msg(wumpus_cfg.nick, wumpus_cfg.chan, "The wumpus was killed by \2%s\2!", p->u->nick);
-			msg(wumpus_cfg.nick, wumpus_cfg.chan, "%s won the game! Congratulations!", p->u->nick);
-
+			notice(wumpus_cfg.nick, p->u->nick, "You have killed the wumpus!");
+			msg(wumpus_cfg.nick, wumpus_cfg.chan, "The wumpus was killed by \2%s\2.",
+				p->u->nick);
+			msg(wumpus_cfg.nick, wumpus_cfg.chan,
+				"%s has won the game! Congratulations!", p->u->nick);
 			end_game();
 		}
-	}
 }
 
 /* move the wumpus, the wumpus moves every 60 seconds */
