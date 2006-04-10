@@ -505,7 +505,7 @@ shoot_player(player_t *p, int target_id)
 	}
 	else if (r->contents == E_WUMPUS) /* Shootin' at the wumpus, we are... */
 	{
-		if ((wumpus.wump_hp > 0)) /* && (p->arrow->type == E_PLAIN)) */
+		if ((wumpus.wump_hp > 0) && (rand() % 3 < 2)) /* && (p->arrow->type == E_PLAIN)) */
 		{
 			notice(wumpus_cfg.nick, p->u->nick, "You shoot at the Wumpus, but he shrugs off the blow and seems angrier!");
 			wumpus.wump_hp -= 10;
