@@ -1,3 +1,12 @@
+nenolod     2006/04/10 00:53:03 UTC	(20060410-5031)
+  Log:
+  - allow for accuracy problems
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/contrib/wumpus.c (File Modified) 
+
+
 nenolod     2006/04/10 00:52:30 UTC	(20060410-5029)
   Log:
   - improvements to HP patch

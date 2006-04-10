@@ -346,7 +346,7 @@ init_game(void)
 
 	wumpus.running = TRUE;
 	wumpus.speed = 60;
-	wumpus.wump_hp = 700;
+	wumpus.wump_hp = 70;
 }
 
 /* starts the game */
@@ -505,13 +505,14 @@ shoot_player(player_t *p, int target_id)
 	}
 	else if (r->contents == E_WUMPUS) /* Shootin' at the wumpus, we are... */
 	{
-		if ((wumpus.wump_hp > 0) && (rand() % 3 < 2)) /* && (p->arrow->type == E_PLAIN)) */
+		if ((wumpus.wump_hp > 0) && (rand() % 3 < 2))
 		{
 			notice(wumpus_cfg.nick, p->u->nick, "You shoot at the Wumpus, but he shrugs off the blow and seems angrier!");
-			wumpus.wump_hp -= 10;
+			wumpus.wump_hp -= 5;
 			wumpus.speed -= 6; /* the game becomes unwinnable if we div by 2,
 					      and higher values make it nearly impossible. */
-
+			
+			move_wumpus(NULL); /* make the wumpus not stick around. */
 			/* reschedule move_wumpus for great justice */
 			event_delete(move_wumpus, NULL);
 			event_add("move_wumpus", move_wumpus, NULL, wumpus.speed);
