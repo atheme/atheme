@@ -1,3 +1,12 @@
+nenolod     2006/04/10 01:06:05 UTC	(20060410-5033)
+  Log:
+  - make the wumpus move when hit and reduce damage caused to it (per Aerdan)
+  
+
+  Changes:	Modified:
+  +5 -4		trunk/contrib/wumpus.c (File Modified) 
+
+
 nenolod     2006/04/10 00:53:03 UTC	(20060410-5031)
   Log:
   - allow for accuracy problems

@@ -492,7 +492,7 @@ shoot_player(player_t *p, int target_id)
 			resign_player(tp);
 		}
 		else if (tp->hp > 10) {
-			msg(wumpus_cfg.nick, tp->u->nick, "You were hit by an arrow from room %d.",
+			notice(wumpus_cfg.nick, tp->u->nick, "You were hit by an arrow from room %d.",
 				p->location->id);
 			tp->hp -= 10;
 		}
