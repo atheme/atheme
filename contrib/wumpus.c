@@ -491,7 +491,8 @@ shoot_player(player_t *p, int target_id)
 				tp->u->nick, p->u->nick);
 			resign_player(tp);
 		}
-		else if (tp->hp > 10) {
+		else if ((tp->hp > 10) && (rand() % 3 < 2))
+		{
 			notice(wumpus_cfg.nick, tp->u->nick, "You were hit by an arrow from room %d.",
 				p->location->id);
 			tp->hp -= 10;
@@ -517,7 +518,7 @@ shoot_player(player_t *p, int target_id)
 			event_delete(move_wumpus, NULL);
 			event_add("move_wumpus", move_wumpus, NULL, wumpus.speed);
 		}
-		else /* we killed the wumpus */
+		else if (wumpus.wump_hp <= 0)	/* we killed the wumpus */
 		{
 			notice(wumpus_cfg.nick, p->u->nick, "You have killed the wumpus!");
 			msg(wumpus_cfg.nick, wumpus_cfg.chan, "The wumpus was killed by \2%s\2.",
