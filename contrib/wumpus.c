@@ -538,6 +538,14 @@ move_wumpus(void *unused)
 	int w_kills = 0;
 	boolean_t moved = FALSE;
 
+	/* can we do any of this? if this is null, we really shouldn't be here */
+	if (wumpus.rmemctx == NULL)
+	{
+		slog(LG_DEBUG, "wumpus: move_wumpus() called while game not running!");
+		event_delete(move_wumpus, NULL);
+		return;
+	}
+
 	msg(wumpus_cfg.nick, wumpus_cfg.chan, "You hear footsteps...");
 
 	/* start moving */
