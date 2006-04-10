@@ -1,3 +1,12 @@
+nenolod     2006/04/10 00:40:50 UTC	(20060410-5025)
+  Log:
+  - HP patch. Copyright (c) 2006 Kiyoshi Aman <kiyoshi.aman -at- gmail.com>
+  
+
+  Changes:	Modified:
+  +36 -16	trunk/contrib/wumpus.c (File Modified) 
+
+
 nenolod     2006/04/09 21:59:58 UTC	(20060409-5023)
   Log:
   - more memory fixes sorry

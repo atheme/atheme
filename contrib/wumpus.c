@@ -485,16 +485,16 @@ shoot_player(player_t *p, int target_id)
 	if (tp)
 	{
 		/* 66 percent chance of success to balance hp. */
-		if ((rand() % (2/3) == 0) && (tp->u->hp <= 10))
+		if ((rand() % 100 <= 66) && (tp->hp <= 10))
 		{
 			msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has been killed by \2%s\2!",
 				tp->u->nick, p->u->nick);
 			resign_player(tp);
 		}
-		else if (tp->u->hp > 10) {
+		else if (tp->hp > 10) {
 			msg(wumpus_cfg.nick, tp->u->nick, "You were hit by an arrow from room %d.",
 				p->location->id);
-			tp->u->hp -= 10;
+			tp->hp -= 10;
 		}
 		else
 		{
@@ -525,6 +525,7 @@ shoot_player(player_t *p, int target_id)
 				"%s has won the game! Congratulations!", p->u->nick);
 			end_game();
 		}
+	}
 }
 
 /* move the wumpus, the wumpus moves every 60 seconds */
