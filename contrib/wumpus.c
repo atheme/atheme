@@ -452,6 +452,8 @@ shoot_player(player_t *p, int target_id)
 {
 	room_t *r;
 	player_t *tp;
+	/* chance to hit; moved up here for convenience. */
+	int hit = rand() % 3;
 
 	if (!p->arrows)
 	{
@@ -484,17 +486,16 @@ shoot_player(player_t *p, int target_id)
 
 	if (tp)
 	{
-		/* 66 percent chance of success to balance hp. */
-		if ((rand() % 3 < 2) && (tp->hp <= 10))
+		if ((hit < 2) && (tp->hp <= 10))
 		{
 			msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has been killed by \2%s\2!",
 				tp->u->nick, p->u->nick);
 			resign_player(tp);
 		}
-		else if ((tp->hp > 10) && (rand() % 3 < 2))
-		{
-			notice(wumpus_cfg.nick, tp->u->nick, "You were hit by an arrow from room %d.",
-				p->location->id);
+		else if ((tp->hp > 0) && (hit < 2)) {
+			notice(wumpus_cfg.nick, tp->u->nick,
+				"You were hit by an arrow from room %d.",p->location->id);
+			notice(wumpus_cfg.nick, p->u->nick,"You hit something.");
 			tp->hp -= 10;
 		}
 		else
@@ -506,19 +507,8 @@ shoot_player(player_t *p, int target_id)
 	}
 	else if (r->contents == E_WUMPUS) /* Shootin' at the wumpus, we are... */
 	{
-		if ((wumpus.wump_hp > 0) && (rand() % 3 < 2))
-		{
-			notice(wumpus_cfg.nick, p->u->nick, "You shoot at the Wumpus, but he shrugs off the blow and seems angrier!");
-			wumpus.wump_hp -= 5;
-			wumpus.speed -= 6; /* the game becomes unwinnable if we div by 2,
-					      and higher values make it nearly impossible. */
-			
-			move_wumpus(NULL); /* make the wumpus not stick around. */
-			/* reschedule move_wumpus for great justice */
-			event_delete(move_wumpus, NULL);
-			event_add("move_wumpus", move_wumpus, NULL, wumpus.speed);
-		}
-		else if (wumpus.wump_hp <= 0)	/* we killed the wumpus */
+		if (((wumpus.wump_hp > 0) && wumpus.wump_hp <= 5) && (hit < 2))
+			/* we killed the wumpus */
 		{
 			notice(wumpus_cfg.nick, p->u->nick, "You have killed the wumpus!");
 			msg(wumpus_cfg.nick, wumpus_cfg.chan, "The wumpus was killed by \2%s\2.",
@@ -527,8 +517,28 @@ shoot_player(player_t *p, int target_id)
 				"%s has won the game! Congratulations!", p->u->nick);
 			end_game();
 		}
+		else if ((wumpus.wump_hp > 5) && (hit < 2))
+		{
+			notice(wumpus_cfg.nick, p->u->nick,
+				"You shoot the Wumpus, but he shrugs it off and seems angrier!");
+
+			wumpus.wump_hp -= 5;
+			wumpus.speed -= 3;
+
+			move_wumpus(NULL);
+			event_delete(move_wumpus,NULL);
+			event_add("move_wumpus",move_wumpus,NULL,wumpus.speed);
+		}
+		else
+		{
+			notice(wumpus_cfg.nick, p->u->nick, "You miss what you were shooting at.");
+			move_wumpus(NULL);
+		}
 	}
 }
+
+/* move_wumpus depends on this */
+void regen_obj(int);
 
 /* move the wumpus, the wumpus moves every 60 seconds */
 void
@@ -551,6 +561,8 @@ move_wumpus(void *unused)
 
 	/* start moving */
 	r = &wumpus.rmemctx[wumpus.wumpus]; /* memslice describing the wumpus's current location */
+
+	regen_obj(r->contents);
 	r->contents = E_NOTHING;
 
 	while (!moved)
