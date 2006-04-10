@@ -1,3 +1,11 @@
+nenolod     2006/04/10 02:00:30 UTC	(20060410-5043)
+  Log:
+  - make things less confusing
+
+  Changes:	Modified:
+  +5 -10	trunk/contrib/wumpus.c (File Modified) 
+
+
 nenolod     2006/04/10 01:51:52 UTC	(20060410-5041)
   Log:
   - refactor shoot_player(). per Aerdan.
