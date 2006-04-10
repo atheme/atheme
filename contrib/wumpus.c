@@ -411,7 +411,7 @@ end_game(void)
 void
 look_player(player_t *p)
 {
-	node_t *n, *tn;
+	node_t *n;
 
 	notice(wumpus_cfg.nick, p->u->nick, "You are in room %d.", p->location->id);
 
@@ -422,18 +422,13 @@ look_player(player_t *p)
 		notice(wumpus_cfg.nick, p->u->nick, "You can move to room %d.", r->id);
 	}
 
+	if (distance_to_wumpus(p))
+		notice(wumpus_cfg.nick, p->u->nick, "You smell a wumpus!");
+
 	/* provide warnings */
 	LIST_FOREACH(n, p->location->exits.head)
 	{
 		room_t *r = (room_t *) n->data;
-
-		LIST_FOREACH(tn, r->exits.head)
-		{
-			room_t *tr = (room_t *) tn->data;
-
-			if (tr->contents == E_WUMPUS)
-				notice(wumpus_cfg.nick, p->u->nick, "You smell a wumpus!");
-		}
 
 		if (r->contents == E_WUMPUS)
 			notice(wumpus_cfg.nick, p->u->nick, "You smell a wumpus!");
@@ -495,7 +490,7 @@ shoot_player(player_t *p, int target_id)
 		else if ((tp->hp > 0) && (hit < 2)) {
 			notice(wumpus_cfg.nick, tp->u->nick,
 				"You were hit by an arrow from room %d.",p->location->id);
-			notice(wumpus_cfg.nick, p->u->nick,"You hit something.");
+			notice(wumpus_cfg.nick, p->u->nick, "You hit something.");
 			tp->hp -= 10;
 		}
 		else
