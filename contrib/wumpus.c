@@ -346,7 +346,7 @@ init_game(void)
 
 	wumpus.running = TRUE;
 	wumpus.speed = 60;
-	wumpus.wump_hp = 70;
+	wumpus.wump_hp = 700;
 }
 
 /* starts the game */
@@ -485,7 +485,7 @@ shoot_player(player_t *p, int target_id)
 	if (tp)
 	{
 		/* 66 percent chance of success to balance hp. */
-		if ((rand() % 100 <= 66) && (tp->hp <= 10))
+		if ((rand() % 3 < 2) && (tp->hp <= 10))
 		{
 			msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has been killed by \2%s\2!",
 				tp->u->nick, p->u->nick);
