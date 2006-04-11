@@ -1,3 +1,12 @@
+nenolod     2006/04/10 04:27:47 UTC	(20060410-5045)
+  Log:
+  - remove this. i didn't mean to commit it
+  
+
+  Changes:	Modified:
+  +0 -142	trunk/contrib/os_fuckover.c (File Deleted) 
+
+
 nenolod     2006/04/10 02:00:30 UTC	(20060410-5043)
   Log:
   - make things less confusing
