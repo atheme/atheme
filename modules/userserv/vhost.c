@@ -4,7 +4,7 @@
  *
  * VHost management! (ratbox only right now.)
  *
- * $Id: vhost.c 4873 2006-02-28 01:47:09Z jilles $
+ * $Id: vhost.c 5051 2006-04-11 22:17:35Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 4873 2006-02-28 01:47:09Z jilles $",
+	"$Id: vhost.c 5051 2006-04-11 22:17:35Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -51,6 +51,8 @@ static void do_sethost_all(myuser_t *mu, char *host)
 	{
 		u = n->data;
 
+		if (!strcmp(u->vhost, host))
+			continue;
 		strlcpy(u->vhost, host, HOSTLEN);
 		notice(usersvs.nick, u->nick, "Setting your host to \2%s\2.",
 			host);
@@ -66,6 +68,8 @@ static void do_sethost(user_t *u, char *host)
 {
 	char luhost[BUFSIZE];
 
+	if (!strcmp(u->vhost, host))
+		return;
 	strlcpy(u->vhost, host, HOSTLEN);
 	notice(usersvs.nick, u->nick, "Setting your host to \2%s\2.",
 		host);
@@ -86,6 +90,8 @@ static void do_restorehost_all(myuser_t *mu)
 	{
 		u = n->data;
 
+		if (!strcmp(u->vhost, u->host))
+			continue;
 		strlcpy(u->vhost, u->host, HOSTLEN);
 		notice(usersvs.nick, u->nick, "Setting your host to \2%s\2.",
 			u->host);
@@ -101,6 +107,8 @@ static void do_restorehost(user_t *u)
 {
 	char luhost[BUFSIZE];
 
+	if (!strcmp(u->vhost, u->host))
+		return;
 	strlcpy(u->vhost, u->host, HOSTLEN);
 	notice(usersvs.nick, u->nick, "Setting your host to \2%s\2.",
 		u->host);

@@ -1,3 +1,11 @@
+nenolod     2006/04/11 00:11:00 UTC	(20060411-5049)
+  Log:
+  oops that code needed to go
+
+  Changes:	Modified:
+  +0 -9		trunk/contrib/wumpus.c (File Modified) 
+
+
 nenolod     2006/04/10 04:27:47 UTC	(20060410-5045)
   Log:
   - remove this. i didn't mean to commit it
