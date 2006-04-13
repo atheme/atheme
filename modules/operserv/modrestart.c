@@ -4,7 +4,7 @@
  *
  * Module listing.
  *
- * $Id: modrestart.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: modrestart.c 5053 2006-04-13 10:59:42Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modrestart", TRUE, _modinit, _moddeinit,
-	"$Id: modrestart.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: modrestart.c 5053 2006-04-13 10:59:42Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -45,6 +45,7 @@ void _moddeinit()
 
 static void os_cmd_modrestart(char *origin)
 {
+#if 0
 	node_t *n;
 	uint32_t iter = 0;
 	uint32_t reloaded = 0;
@@ -77,4 +78,10 @@ static void os_cmd_modrestart(char *origin)
 	module_load_dir(MODDIR "/modules");
 
 	notice(opersvs.nick, origin, "Module restart: %d modules reloaded; %d modules now loaded", reloaded, modules.count);
+#else
+	/* The above stuff cannot possibly work, so disable it.
+	 * MODRESTART will probably have to be done in the core somehow
+	 * -- jilles */
+	notice(opersvs.nick, origin, "MODRESTART is currently not implemented.");
+#endif
 }

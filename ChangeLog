@@ -1,3 +1,14 @@
+jilles      2006/04/11 22:17:35 UTC	(20060411-5051)
+  Log:
+  Don't send a CHGHOST and associated notices if the host was unchanged,
+  e.g. same cloak on auth{} block and services.
+  
+
+  Changes:	Modified:
+  +9 -1		trunk/modules/nickserv/vhost.c (File Modified) 
+  +8 -0		trunk/modules/userserv/vhost.c (File Modified) 
+
+
 nenolod     2006/04/11 00:11:00 UTC	(20060411-5049)
   Log:
   oops that code needed to go
