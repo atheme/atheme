@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 5061 2006-04-14 03:10:51Z w00t $
+ * $Id: function.c 5063 2006-04-14 03:35:23Z w00t $
  */
 
 #include "atheme.h"
@@ -262,7 +262,7 @@ boolean_t regex_match(char *pattern, char *string)
 	}
 
 	/* match it */
-	if (regexec(&preg, string, 0, NULL, 0) != 0)
+	if (regexec(&preg, string, 0, NULL, 0) == 0)
 		retval = TRUE;
 	else
 		retval = FALSE;
