@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 4631 2006-01-20 16:38:15Z jilles $
+ * $Id: function.c 5055 2006-04-14 01:15:06Z w00t $
  */
 
 #include "atheme.h"
@@ -230,31 +230,43 @@ uint32_t time_msec(void)
 #endif
 }
 
-/* performs a regex match */
-uint8_t regex_match(regex_t * preg, char *pattern, char *string, size_t nmatch, regmatch_t pmatch[], int eflags)
+/*
+ * regex_match()
+ *  Internal wrapper API for POSIX-based regex matching.
+ *  `pattern' is the regex to compile, and check against `string'.
+ *  `pmatch' is additional flags to be sent to regexec(), and may be NULL.
+ *  Returns `true' on match, `false' else.
+ */
+boolean_t regex_match(char *pattern, char *string, regmatch_t pmatch[])
 {
-	static char errmsg[256];
+	boolean_t retval;
+	regex_t *preg;
+	static char errmsg[BUFSIZE];
 	int errnum;
 
 	/* compile regex */
 	preg = (regex_t *) malloc(sizeof(*preg));
 
 	errnum = regcomp(preg, pattern, REG_ICASE | REG_EXTENDED);
+	
 	if (errnum != 0)
 	{
-		regerror(errnum, preg, errmsg, 256);
+		regerror(errnum, preg, errmsg, BUFSIZE);
 		slog(LG_ERROR, "regex_match(): %s\n", errmsg);
 		free(preg);
 		preg = NULL;
-		return 1;
+		return FALSE;
 	}
 
 	/* match it */
 	if (regexec(preg, string, 5, pmatch, 0) != 0)
-		return 1;
-
+		retval = TRUE;
 	else
-		return 0;
+		retval = FALSE;
+	
+	free(preg);
+	preg = NULL;
+	return retval;
 }
 
 /*

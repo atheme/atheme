@@ -1,3 +1,13 @@
+jilles      2006/04/13 10:59:42 UTC	(20060413-5053)
+  Log:
+  Disable modrestart, it cannot possibly work. Modrestart
+  would require some stuff in core.
+  
+
+  Changes:	Modified:
+  +7 -0		trunk/modules/operserv/modrestart.c (File Modified) 
+
+
 jilles      2006/04/11 22:17:35 UTC	(20060411-5051)
   Log:
   Don't send a CHGHOST and associated notices if the host was unchanged,
