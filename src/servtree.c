@@ -4,7 +4,7 @@
  *
  * Services binary tree manipulation. (add_service, del_service, et al.)
  *
- * $Id: servtree.c 4867 2006-02-27 03:28:52Z nenolod $
+ * $Id: servtree.c 5071 2006-04-14 10:50:44Z w00t $
  */
 
 #include "atheme.h"
@@ -127,7 +127,6 @@ static service_t *find_named_service(char *name)
 service_t *find_service(char *name)
 {
 	service_t *sptr;
-	node_t *n;
 	user_t *u;
 	char *p;
 	char name2[NICKLEN];

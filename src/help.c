@@ -4,14 +4,13 @@
  *
  * This file contains a generic help system implementation.
  *
- * $Id: help.c 4617 2006-01-20 00:19:29Z jilles $
+ * $Id: help.c 5071 2006-04-14 10:50:44Z w00t $
  */
 
 #include "atheme.h"
 
 helpentry_t *help_cmd_find(char *svs, char *origin, char *cmd, list_t *list)
 {
-	user_t *u = user_find_named(origin);
 	node_t *n;
 	helpentry_t *c;
 

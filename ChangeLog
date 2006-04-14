@@ -1,3 +1,12 @@
+w00t        2006/04/14 09:03:55 UTC	(20060414-5069)
+  Log:
+  Let's redo regex again. Compiling the same regex every regex_match() for 4k users would be unacceptable, for example...
+
+  Changes:	Modified:
+  +3 -1		trunk/include/extern.h (File Modified) 
+  +43 -18	trunk/src/function.c (File Modified) 
+
+
 w00t        2006/04/14 08:44:09 UTC	(20060414-5067)
   Log:
   Change of my email address
