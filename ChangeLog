@@ -1,3 +1,15 @@
+w00t        2006/04/14 11:45:22 UTC	(20060414-5077)
+  Log:
+  Strict fixes.
+
+  Changes:	Modified:
+  +0 -1		trunk/modules/nickserv/ghost.c (File Modified) 
+  +0 -1		trunk/modules/nickserv/help.c (File Modified) 
+  +3 -1		trunk/modules/nickserv/identify.c (File Modified) 
+  +8 -4		trunk/modules/nickserv/info.c (File Modified) 
+  +14 -9	trunk/modules/nickserv/resetpass.c (File Modified) 
+
+
 jilles      2006/04/14 11:44:03 UTC	(20060414-5075)
   Log:
   Declare environ.
