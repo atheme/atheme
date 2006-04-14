@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 5059 2006-04-14 02:46:38Z w00t $
+ * $Id: function.c 5061 2006-04-14 03:10:51Z w00t $
  */
 
 #include "atheme.h"
@@ -237,7 +237,7 @@ uint32_t time_msec(void)
  *  `pmatch' is additional flags to be sent to regexec(), and may be NULL.
  *  Returns `true' on match, `false' else.
  */
-boolean_t regex_match(char *pattern, char *string, regmatch_t pmatch[])
+boolean_t regex_match(char *pattern, char *string)
 {
 	boolean_t retval;
 	regex_t preg;
@@ -262,7 +262,7 @@ boolean_t regex_match(char *pattern, char *string, regmatch_t pmatch[])
 	}
 
 	/* match it */
-	if (regexec(&preg, string, 5, pmatch, 0) != 0)
+	if (regexec(&preg, string, 0, NULL, 0) != 0)
 		retval = TRUE;
 	else
 		retval = FALSE;
