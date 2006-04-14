@@ -1,3 +1,12 @@
+w00t        2006/04/14 11:59:47 UTC	(20060414-5081)
+  Log:
+  Don't attempt to build dbtool, either
+
+  Changes:	Modified:
+  +1 -1		trunk/Makefile.in (File Modified) 
+  +1 -5		trunk/Makefile.win32 (File Modified) 
+
+
 w00t        2006/04/14 11:46:53 UTC	(20060414-5079)
   Log:
   dbtool is long not relevant, use the contrib module instead.

@@ -13864,7 +13864,7 @@ echo " "
 echo "Makefile generation"
 echo " "
 
-                                                                                                                                                                                    ac_config_files="$ac_config_files Makefile libatheme/Makefile backend/Makefile contrib/Makefile crypto/Makefile dbtool/Makefile modules/Makefile modules/chanserv/Makefile modules/global/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/userserv/Makefile modules/xmlrpc/Makefile modules/memoserv/Makefile modules/helpserv/Makefile modules/saslserv/Makefile protocol/Makefile src/Makefile"
+                                                                                                                                                                                    ac_config_files="$ac_config_files Makefile libatheme/Makefile backend/Makefile contrib/Makefile crypto/Makefile modules/Makefile modules/chanserv/Makefile modules/global/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/userserv/Makefile modules/xmlrpc/Makefile modules/memoserv/Makefile modules/helpserv/Makefile modules/saslserv/Makefile protocol/Makefile src/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -14395,7 +14395,6 @@ do
   "backend/Makefile" ) CONFIG_FILES="$CONFIG_FILES backend/Makefile" ;;
   "contrib/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/Makefile" ;;
   "crypto/Makefile" ) CONFIG_FILES="$CONFIG_FILES crypto/Makefile" ;;
-  "dbtool/Makefile" ) CONFIG_FILES="$CONFIG_FILES dbtool/Makefile" ;;
   "modules/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/Makefile" ;;
   "modules/chanserv/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/chanserv/Makefile" ;;
   "modules/global/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/global/Makefile" ;;
