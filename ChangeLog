@@ -1,3 +1,11 @@
+w00t        2006/04/14 11:46:53 UTC	(20060414-5079)
+  Log:
+  dbtool is long not relevant, use the contrib module instead.
+
+  Changes:	Modified:
+  + -		trunk/dbtool/ (File Deleted) 
+
+
 w00t        2006/04/14 11:45:22 UTC	(20060414-5077)
   Log:
   Strict fixes.

@@ -3,10 +3,10 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.win32 3607 2005-11-06 23:57:17Z jilles $
+# $Id: Makefile.win32 5081 2006-04-14 11:59:47Z w00t $
 #
 
-SUBDIRS=libatheme dbtool backend modules protocol src
+SUBDIRS=libatheme backend modules protocol src
 MAKE=mingw32-make -f Makefile.win32
 
 all: build
@@ -15,7 +15,6 @@ build:
 	copy win32\sysconf.h include\sysconf.h
 	copy win32\version.c src\version.c
 	$(MAKE) -C libatheme
-	$(MAKE) -C dbtool
 	$(MAKE) -C src
 	$(MAKE) -C modules
 	$(MAKE) -C backend
@@ -51,14 +50,11 @@ install: all
 	-copy modules\userserv\*.dll C:\atheme\modules\userserv
 	-copy modules\xmlrpc\*.dll C:\atheme\modules\xmlrpc
 	-copy src\atheme.exe c:\atheme\bin
-	-copy dbtool\dbtool.exe c:\atheme\bin
 
 clean:
 	del src\*.o libatheme\*.o
 	del src\*.a libatheme\*.a
 	del src\*.exe
-	del dbtool\*.o
-	del dbtool\*.exe
 	del protocol\*.dll
 	del backend\*.dll
 	del modules\chanserv\*.dll
