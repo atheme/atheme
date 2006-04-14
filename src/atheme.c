@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 5065 2006-04-14 03:55:44Z w00t $
+ * $Id: atheme.c 5075 2006-04-14 11:44:03Z jilles $
  */
 
 #include "atheme.h"
@@ -23,6 +23,10 @@ cnt_t cnt;
 
 char *config_file;
 boolean_t cold_start = FALSE;
+
+#ifndef _WIN32
+extern char **environ;
+#endif
 
 /* *INDENT-OFF* */
 static void print_help(void)

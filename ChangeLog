@@ -1,3 +1,18 @@
+w00t        2006/04/14 11:16:18 UTC	(20060414-5073)
+  Log:
+  Strict fixes for chanserv.
+
+  Changes:	Modified:
+  +1 -7		trunk/modules/chanserv/close.c (File Modified) 
+  +1 -4		trunk/modules/chanserv/drop.c (File Modified) 
+  +0 -2		trunk/modules/chanserv/flags.c (File Modified) 
+  +0 -1		trunk/modules/chanserv/info.c (File Modified) 
+  +0 -1		trunk/modules/chanserv/register.c (File Modified) 
+  +1 -3		trunk/modules/chanserv/template.c (File Modified) 
+  +0 -2		trunk/modules/chanserv/why.c (File Modified) 
+  +0 -5		trunk/modules/chanserv/xop.c (File Modified) 
+
+
 w00t        2006/04/14 10:50:44 UTC	(20060414-5071)
   Log:
   More strict fixes, somehow I missed these yesterday. Onto modules.
