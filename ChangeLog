@@ -1,3 +1,12 @@
+w00t        2006/04/14 10:50:44 UTC	(20060414-5071)
+  Log:
+  More strict fixes, somehow I missed these yesterday. Onto modules.
+
+  Changes:	Modified:
+  +0 -1		trunk/src/help.c (File Modified) 
+  +0 -1		trunk/src/servtree.c (File Modified) 
+
+
 w00t        2006/04/14 09:03:55 UTC	(20060414-5069)
   Log:
   Let's redo regex again. Compiling the same regex every regex_match() for 4k users would be unacceptable, for example...

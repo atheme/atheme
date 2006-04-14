@@ -4,7 +4,7 @@
  *
  * Closing for channels.
  *
- * $Id: close.c 4639 2006-01-21 22:06:41Z jilles $
+ * $Id: close.c 5073 2006-04-14 11:16:18Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/close", FALSE, _modinit, _moddeinit,
-	"$Id: close.c 4639 2006-01-21 22:06:41Z jilles $",
+	"$Id: close.c 5073 2006-04-14 11:16:18Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -49,7 +49,6 @@ static void close_check_join(void *vcu)
 {
 	mychan_t *mc;
 	chanuser_t *cu;
-	node_t *n;
 
 	cu = vcu;
 
@@ -61,8 +60,6 @@ static void close_check_join(void *vcu)
 
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-	        char buf[BUFSIZE];
-
 		/* don't join if we're already in there */
 		if (!chanuser_find(cu->chan, user_find_named(chansvs.nick)))
 			join(cu->chan->name, chansvs.nick);
@@ -92,8 +89,7 @@ static void cs_cmd_close(char *origin)
 	mychan_t *mc;
 	channel_t *c;
 	chanuser_t *cu;
-	node_t *n, *tn;
-	boolean_t found;
+	node_t *n;
 
 	if (!target || !action)
 	{
@@ -135,8 +131,6 @@ static void cs_cmd_close(char *origin)
 
 		if ((c = channel_find(target)))
 		{
-		        char buf[BUFSIZE];
-
 			if (!chanuser_find(c, user_find_named(chansvs.nick)))
 				join(target, chansvs.nick);
 

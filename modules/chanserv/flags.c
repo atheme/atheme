@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 4959 2006-04-08 00:02:39Z jilles $
+ * $Id: flags.c 5073 2006-04-14 11:16:18Z w00t $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 4959 2006-04-08 00:02:39Z jilles $",
+	"$Id: flags.c 5073 2006-04-14 11:16:18Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -50,7 +50,6 @@ void _moddeinit()
 static void cs_cmd_flags(char *origin)
 {
 	user_t *u = user_find_named(origin);
-	metadata_t *md;
 	chanacs_t *ca;
 	node_t *n;
 	int operoverride = 0;
@@ -247,7 +246,6 @@ static void cs_fcmd_flags(char *origin, char *channel)
 	char *target = strtok(NULL, " ");
 	char *flagstr = strtok(NULL, " ");
 	uint32_t addflags, removeflags, restrictflags;
-	metadata_t *md;
 
 	if (!target || !flagstr)
 	{

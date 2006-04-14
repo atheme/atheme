@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TEMPLATE functions.
  *
- * $Id: template.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: template.c 5073 2006-04-14 11:16:18Z w00t $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/template", FALSE, _modinit, _moddeinit,
-	"$Id: template.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: template.c 5073 2006-04-14 11:16:18Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -59,13 +59,11 @@ static void cs_cmd_template(char *origin)
 {
 	user_t *u = user_find_named(origin);
 	metadata_t *md;
-	chanacs_t *ca;
-	node_t *n;
 	int operoverride = 0, l;
 	char *channel = strtok(NULL, " ");
 	char *target = strtok(NULL, " ");
 	mychan_t *mc = mychan_find(channel);
-	uint32_t oldflags, newflags, addflags, removeflags, restrictflags;
+	uint32_t oldflags, newflags = 0, addflags, removeflags, restrictflags;
 	char *p, *q, *r;
 	char ss[40], newstr[400];
 	boolean_t found, denied;

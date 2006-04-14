@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 4763 2006-02-04 17:15:15Z nenolod $
+ * $Id: xop.c 5073 2006-04-14 11:16:18Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 4763 2006-02-04 17:15:15Z nenolod $",
+	"$Id: xop.c 5073 2006-04-14 11:16:18Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -78,9 +78,6 @@ static void cs_xop(char *origin, uint32_t level, char *leveldesc)
 	user_t *u = user_find_named(origin);
 	myuser_t *mu;
 	mychan_t *mc;
-	chanacs_t *ca;
-	chanuser_t *cu;
-	node_t *n;
 	int operoverride = 0;
 	uint32_t restrictflags;
 	char *chan = strtok(NULL, " ");
@@ -226,7 +223,6 @@ static void cs_cmd_hop(char *origin)
 static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level, char *leveldesc, uint32_t restrictflags)
 {
 	char hostbuf[BUFSIZE];
-	metadata_t *md;
 	chanuser_t *cu;
 	chanacs_t *ca;
 	node_t *n;
@@ -406,7 +402,6 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 static void cs_xop_do_del(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level, char *leveldesc)
 {
 	chanacs_t *ca;
-	metadata_t *md;
 	
 	/* let's finally make this sane.. --w00t */
 	if (!mu)
