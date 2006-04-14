@@ -6,7 +6,7 @@
 # This file generates version.c.
 # Stolen from ircd-ratbox.
 #
-# $Id: version.sh 4863 2006-02-23 02:42:42Z gxti $
+# $Id: version.sh 5067 2006-04-14 08:44:09Z w00t $
 #
 
 spitshell=cat
@@ -34,7 +34,7 @@ awk '{if (NF == 6) \
 else \
          { print $1 " "  $2 " " $3 " " $7 " at " $4 " " $5 " " $6 }}'`
 
-buildid=`echo "\$Revision: 4863 $" | \
+buildid=`echo "\$Revision: 5067 $" | \
 	awk '{ print $2 }'`;
 
 $spitshell >version.c <<!SUB!THIS!
@@ -110,7 +110,7 @@ const char *infotext[] =
   "  nenolod, William Pitcock <nenolod@nenolod.net>",
   "  pfish, Patrick Fish <pofish@gmail.com>",
   "  terminal, Theo Julienne <admin@ozweb.nu>",
-  "  w00t, Robin Burchell <w00t@staff.chatspike.net>",
+  "  w00t, Robin Burchell <viroteck@viroteck.net>",
   " ",
   "The following people have contributed blood, sweat and tears to",
   "this Atheme release:",

@@ -1,3 +1,18 @@
+w00t        2006/04/14 03:55:44 UTC	(20060414-5065)
+  Log:
+  Once again compile cleanly under strict cflags
+
+  Changes:	Modified:
+  +1 -2		trunk/src/atheme.c (File Modified) 
+  +0 -1		trunk/src/conf.c (File Modified) 
+  +0 -8		trunk/src/function.c (File Modified) 
+  +4 -5		trunk/src/node.c (File Modified) 
+  +0 -1		trunk/src/packet.c (File Modified) 
+  +1 -1		trunk/src/send.c (File Modified) 
+  +0 -1		trunk/src/services.c (File Modified) 
+  +1 -1		trunk/src/xmlrpc.c (File Modified) 
+
+
 w00t        2006/04/14 03:35:23 UTC	(20060414-5063)
   Log:
   Helps to have the true and false in the right place
