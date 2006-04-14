@@ -1,3 +1,11 @@
+w00t        2006/04/14 12:02:39 UTC	(20060414-5083)
+  Log:
+  And from configure.
+
+  Changes:	Modified:
+  +1 -2		trunk/configure (File Modified) 
+
+
 w00t        2006/04/14 11:59:47 UTC	(20060414-5081)
   Log:
   Don't attempt to build dbtool, either
