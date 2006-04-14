@@ -1,3 +1,13 @@
+jilles      2006/04/14 12:33:34 UTC	(20060414-5085)
+  Log:
+  Don't introduce a service with a UID if the ircd does
+  not support UIDs when loading it at runtime.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/servtree.c (File Modified) 
+
+
 w00t        2006/04/14 12:02:39 UTC	(20060414-5083)
   Log:
   And from configure.

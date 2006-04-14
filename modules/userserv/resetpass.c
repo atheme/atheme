@@ -4,7 +4,7 @@
  *
  * This file contains code for UserServ RESETPASS
  *
- * $Id: resetpass.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: resetpass.c 5087 2006-04-14 14:59:46Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/resetpass", FALSE, _modinit, _moddeinit,
-	"$Id: resetpass.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: resetpass.c 5087 2006-04-14 14:59:46Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -77,7 +77,7 @@ static void us_cmd_resetpass(char *origin)
 		return;
 	}
 
-	if (md = metadata_find(mu, METADATA_USER, "private:mark:setter"))
+	if ((md = metadata_find(mu, METADATA_USER, "private:mark:setter")))
 	{
 		logcommand(usersvs.me, u, CMDLOG_ADMIN, "failed RESETPASS %s (marked by %s)", name, md->value);
 		notice(usersvs.nick, origin, "This operation cannot be performed on %s, because the account has been marked by %s.", name, md->value);

@@ -4,7 +4,7 @@
  *
  * This file contains code for NickServ RESETPASS
  *
- * $Id: resetpass.c 5077 2006-04-14 11:45:22Z w00t $
+ * $Id: resetpass.c 5087 2006-04-14 14:59:46Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/resetpass", FALSE, _modinit, _moddeinit,
-	"$Id: resetpass.c 5077 2006-04-14 11:45:22Z w00t $",
+	"$Id: resetpass.c 5087 2006-04-14 14:59:46Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -65,24 +65,19 @@ static void ns_cmd_resetpass(char *origin)
 		return;
 	}
 
-	if (has_priv(u, PRIV_MARK))
+	if ((md = metadata_find(mu, METADATA_USER, "private:mark:setter")) && has_priv(u, PRIV_MARK))
 	{
-		md = metadata_find(mu, METADATA_USER, "private:mark:setter");
-
-		if (md)
-		{
-			logcommand(nicksvs.me, u, CMDLOG_ADMIN, "RESETPASS %s (overriding mark by %s)", name, md->value);
-			notice(nicksvs.nick, origin, "Overriding MARK placed by %s on the nickname %s.", md->value, name);
-			newpass = gen_pw(12);
-			notice(nicksvs.nick, origin, "The password for the nickname %s has been changed to %s.", name, newpass);
-			set_password(mu, newpass);
-			free(newpass);
-			wallops("%s reset the password for the \2MARKED\2 nickname %s.", origin, name);
-			return;
-		}
+		logcommand(nicksvs.me, u, CMDLOG_ADMIN, "RESETPASS %s (overriding mark by %s)", name, md->value);
+		notice(nicksvs.nick, origin, "Overriding MARK placed by %s on the nickname %s.", md->value, name);
+		newpass = gen_pw(12);
+		notice(nicksvs.nick, origin, "The password for the nickname %s has been changed to %s.", name, newpass);
+		set_password(mu, newpass);
+		free(newpass);
+		wallops("%s reset the password for the \2MARKED\2 nickname %s.", origin, name);
+		return;
 	}
 
-	if (md = metadata_find(mu, METADATA_USER, "private:mark:setter"))
+	if ((md = metadata_find(mu, METADATA_USER, "private:mark:setter")))
 	{
 		logcommand(nicksvs.me, u, CMDLOG_ADMIN, "failed RESETPASS %s (marked by %s)", name, md->value);
 		notice(nicksvs.nick, origin, "This operation cannot be performed on %s, because the nickname has been marked by %s.", name, md->value);

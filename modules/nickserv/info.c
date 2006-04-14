@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 5077 2006-04-14 11:45:22Z w00t $
+ * $Id: info.c 5087 2006-04-14 14:59:46Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 5077 2006-04-14 11:45:22Z w00t $",
+	"$Id: info.c 5087 2006-04-14 14:59:46Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -63,17 +63,13 @@ static void ns_cmd_info(char *origin)
 	strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 	tm2 = *localtime(&mu->lastlogin);
 	strftime(lastlogin, sizeof(lastlogin) -1, "%b %d %H:%M:%S %Y", &tm2);
+
 	notice(nicksvs.nick, origin, "Information on \2%s\2:", mu->name);
+
 	notice(nicksvs.nick, origin, "Registered: %s (%s ago)", strfbuf, time_ago(mu->registered));
-
-	if (has_priv(u, PRIV_USER_AUSPEX))
-	{
-		md = metadata_find(mu, METADATA_USER, "private:host:actual");
-
-		if (md)
-			notice(nicksvs.nick, origin, "Last address: %s", md->value);
-	}
-	else if (md = metadata_find(mu, METADATA_USER, "private:host:vhost"))
+	if (has_priv(u, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:host:actual")))
+		notice(nicksvs.nick, origin, "Last address: %s", md->value);
+	else if ((md = metadata_find(mu, METADATA_USER, "private:host:vhost")))
 		notice(nicksvs.nick, origin, "Last address: %s", md->value);
 
 	if (LIST_LENGTH(&mu->logins) == 0)
