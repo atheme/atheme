@@ -1,3 +1,11 @@
+w00t        2006/04/14 01:41:51 UTC	(20060414-5057)
+  Log:
+  regex_match(): bail on NULL arguments, don't crash. there's a good puppy.
+
+  Changes:	Modified:
+  +6 -0		trunk/src/function.c (File Modified) 
+
+
 w00t        2006/04/14 01:15:06 UTC	(20060414-5055)
   Log:
   Rework of regex_match to not be so .. interesting. Needed for barafranca bits and pieces.

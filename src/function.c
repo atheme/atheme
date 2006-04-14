@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 5057 2006-04-14 01:41:51Z w00t $
+ * $Id: function.c 5059 2006-04-14 02:46:38Z w00t $
  */
 
 #include "atheme.h"
@@ -240,38 +240,34 @@ uint32_t time_msec(void)
 boolean_t regex_match(char *pattern, char *string, regmatch_t pmatch[])
 {
 	boolean_t retval;
-	regex_t *preg;
+	regex_t preg;
 	static char errmsg[BUFSIZE];
 	int errnum;
-
+	
 	if (pattern == NULL || string == NULL)
 	{
 		slog(LG_ERROR, "regex_match(): we were given NULL string or pattern, bad!");
 		return FALSE;
 	}
 
-	/* compile regex */
-	preg = (regex_t *) malloc(sizeof(*preg));
 
-	errnum = regcomp(preg, pattern, REG_ICASE | REG_EXTENDED);
+	errnum = regcomp(&preg, pattern, REG_ICASE | REG_EXTENDED);
 	
 	if (errnum != 0)
 	{
-		regerror(errnum, preg, errmsg, BUFSIZE);
+		regerror(errnum, &preg, errmsg, BUFSIZE);
 		slog(LG_ERROR, "regex_match(): %s\n", errmsg);
-		free(preg);
-		preg = NULL;
+		regfree(&preg);
 		return FALSE;
 	}
 
 	/* match it */
-	if (regexec(preg, string, 5, pmatch, 0) != 0)
+	if (regexec(&preg, string, 5, pmatch, 0) != 0)
 		retval = TRUE;
 	else
 		retval = FALSE;
 	
-	free(preg);
-	preg = NULL;
+	regfree(&preg);
 	return retval;
 }
 
