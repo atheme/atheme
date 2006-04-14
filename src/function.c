@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 5055 2006-04-14 01:15:06Z w00t $
+ * $Id: function.c 5057 2006-04-14 01:41:51Z w00t $
  */
 
 #include "atheme.h"
@@ -243,6 +243,12 @@ boolean_t regex_match(char *pattern, char *string, regmatch_t pmatch[])
 	regex_t *preg;
 	static char errmsg[BUFSIZE];
 	int errnum;
+
+	if (pattern == NULL || string == NULL)
+	{
+		slog(LG_ERROR, "regex_match(): we were given NULL string or pattern, bad!");
+		return FALSE;
+	}
 
 	/* compile regex */
 	preg = (regex_t *) malloc(sizeof(*preg));

@@ -1,3 +1,12 @@
+w00t        2006/04/14 01:15:06 UTC	(20060414-5055)
+  Log:
+  Rework of regex_match to not be so .. interesting. Needed for barafranca bits and pieces.
+
+  Changes:	Modified:
+  +1 -2		trunk/include/extern.h (File Modified) 
+  +20 -8	trunk/src/function.c (File Modified) 
+
+
 jilles      2006/04/13 10:59:42 UTC	(20060413-5053)
   Log:
   Disable modrestart, it cannot possibly work. Modrestart
