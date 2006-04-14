@@ -1,3 +1,12 @@
+jilles      2006/04/14 11:44:03 UTC	(20060414-5075)
+  Log:
+  Declare environ.
+  
+
+  Changes:	Modified:
+  +4 -0		trunk/src/atheme.c (File Modified) 
+
+
 w00t        2006/04/14 11:16:18 UTC	(20060414-5073)
   Log:
   Strict fixes for chanserv.

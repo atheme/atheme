@@ -4,7 +4,7 @@
  *
  * This file contains code for NickServ RESETPASS
  *
- * $Id: resetpass.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: resetpass.c 5077 2006-04-14 11:45:22Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/resetpass", FALSE, _modinit, _moddeinit,
-	"$Id: resetpass.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: resetpass.c 5077 2006-04-14 11:45:22Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -65,16 +65,21 @@ static void ns_cmd_resetpass(char *origin)
 		return;
 	}
 
-	if ((md = metadata_find(mu, METADATA_USER, "private:mark:setter")) && has_priv(u, PRIV_MARK))
+	if (has_priv(u, PRIV_MARK))
 	{
-		logcommand(nicksvs.me, u, CMDLOG_ADMIN, "RESETPASS %s (overriding mark by %s)", name, md->value);
-		notice(nicksvs.nick, origin, "Overriding MARK placed by %s on the nickname %s.", md->value, name);
-		newpass = gen_pw(12);
-		notice(nicksvs.nick, origin, "The password for the nickname %s has been changed to %s.", name, newpass);
-		set_password(mu, newpass);
-		free(newpass);
-		wallops("%s reset the password for the \2MARKED\2 nickname %s.", origin, name);
-		return;
+		md = metadata_find(mu, METADATA_USER, "private:mark:setter");
+
+		if (md)
+		{
+			logcommand(nicksvs.me, u, CMDLOG_ADMIN, "RESETPASS %s (overriding mark by %s)", name, md->value);
+			notice(nicksvs.nick, origin, "Overriding MARK placed by %s on the nickname %s.", md->value, name);
+			newpass = gen_pw(12);
+			notice(nicksvs.nick, origin, "The password for the nickname %s has been changed to %s.", name, newpass);
+			set_password(mu, newpass);
+			free(newpass);
+			wallops("%s reset the password for the \2MARKED\2 nickname %s.", origin, name);
+			return;
+		}
 	}
 
 	if (md = metadata_find(mu, METADATA_USER, "private:mark:setter"))

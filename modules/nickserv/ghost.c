@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ GHOST function.
  *
- * $Id: ghost.c 4907 2006-03-20 02:40:44Z gxti $
+ * $Id: ghost.c 5077 2006-04-14 11:45:22Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/ghost", FALSE, _modinit, _moddeinit,
-	"$Id: ghost.c 4907 2006-03-20 02:40:44Z gxti $",
+	"$Id: ghost.c 5077 2006-04-14 11:45:22Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -43,7 +43,6 @@ void ns_cmd_ghost(char *origin)
 	char *target = strtok(NULL, " ");
 	char *password = strtok(NULL, " ");
 	user_t *target_u;
-	node_t *n, *tn;
 
 	if (!target)
 	{
