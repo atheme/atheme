@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 4951 2006-04-05 01:42:55Z nenolod $
+ * $Id: conf.c 5065 2006-04-14 03:55:44Z w00t $
  */
 
 #include "atheme.h"
@@ -366,7 +366,6 @@ void add_top_conf(char *name, int (*handler) (CONFIGENTRY *ce))
 
 void add_conf_item(char *name, list_t *conflist, int (*handler) (CONFIGENTRY *ce))
 {
-	node_t *n;
 	struct ConfTable *ct;
 
 	if ((ct = find_conf_item(name, conflist)))

@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 4881 2006-02-28 23:37:33Z jilles $
+ * $Id: node.c 5065 2006-04-14 03:55:44Z w00t $
  */
 
 #include "atheme.h"
@@ -539,7 +539,6 @@ void server_delete(char *name)
 	server_t *child;
 	user_t *u;
 	node_t *n, *tn;
-	uint32_t i;
 
 	if (!s)
 	{
@@ -1360,13 +1359,13 @@ myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags)
 
 void myuser_delete(myuser_t *mu)
 {
-	myuser_t *tmu, *successor;
-	mychan_t *mc, *tmc;
+	myuser_t *successor;
+	mychan_t *mc;
 	chanacs_t *ca;
 	user_t *u;
-	node_t *n, *tn, *n2;
+	node_t *n, *tn;
 	metadata_t *md;
-	uint32_t i, j, tcnt;
+	uint32_t i;
 
 	if (!mu)
 	{

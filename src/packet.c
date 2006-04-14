@@ -4,7 +4,7 @@
  *
  * IRC packet handling.
  *
- * $Id: packet.c 4163 2005-12-18 02:27:50Z jilles $
+ * $Id: packet.c 5065 2006-04-14 03:55:44Z w00t $
  *
  * TODO: Take all the sendq stuff in node.c and put it here.
  * sendq_flush becomes irc_whandler, etc.
@@ -110,7 +110,6 @@ static void ping_uplink(void *arg)
 
 static void irc_handle_connect(void *vptr)
 {
-	uint8_t ret;
 	connection_t *cptr = vptr;
 
 	/* add our server */

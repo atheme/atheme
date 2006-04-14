@@ -5,7 +5,7 @@
  * This file contains socket routines.
  * Based off of W. Campbell's code.
  *
- * $Id: send.c 4165 2005-12-18 02:54:01Z jilles $
+ * $Id: send.c 5065 2006-04-14 03:55:44Z w00t $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@ int8_t sts(char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
-	int16_t len, n;
+	int16_t len;
 
 	/* glibc sucks. */
 	if (!fmt)

@@ -1242,7 +1242,7 @@ char *xmlrpc_decode_string(char *buf)
 	int count;
 	int i;
 	char *token, *temp;
-	char *temptoken, *temptoken2;
+	char *temptoken;
 	char buf2[12];
 	char buf3[12];
 

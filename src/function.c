@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 5063 2006-04-14 03:35:23Z w00t $
+ * $Id: function.c 5065 2006-04-14 03:55:44Z w00t $
  */
 
 #include "atheme.h"
@@ -540,7 +540,6 @@ boolean_t validhostmask(char *host)
 int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 {
 #ifndef _WIN32
-	mychan_t *mc;
 	char *email, *date = NULL;
 	char cmdbuf[512], timebuf[256], to[128], from[128], subject[128];
 	FILE *out;
@@ -713,8 +712,6 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 /* various access level checkers */
 boolean_t is_founder(mychan_t *mychan, myuser_t *myuser)
 {
-	metadata_t *md;
-
 	if (!myuser)
 		return FALSE;
 
@@ -727,7 +724,6 @@ boolean_t is_founder(mychan_t *mychan, myuser_t *myuser)
 boolean_t is_xop(mychan_t *mychan, myuser_t *myuser, uint32_t level)
 {
 	chanacs_t *ca;
-	metadata_t *md;
 
 	if (!myuser)
 		return FALSE;
@@ -740,8 +736,6 @@ boolean_t is_xop(mychan_t *mychan, myuser_t *myuser, uint32_t level)
 
 boolean_t should_owner(mychan_t *mychan, myuser_t *myuser)
 {
-	chanuser_t *cu;
-
 	if (!myuser)
 		return FALSE;
 
@@ -759,8 +753,6 @@ boolean_t should_owner(mychan_t *mychan, myuser_t *myuser)
 
 boolean_t should_protect(mychan_t *mychan, myuser_t *myuser)
 {
-	chanuser_t *cu;
-
 	if (!myuser)
 		return FALSE;
 
