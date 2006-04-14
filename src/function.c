@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 5065 2006-04-14 03:55:44Z w00t $
+ * $Id: function.c 5069 2006-04-14 09:03:55Z w00t $
  */
 
 #include "atheme.h"
@@ -231,44 +231,69 @@ uint32_t time_msec(void)
 }
 
 /*
- * regex_match()
- *  Internal wrapper API for POSIX-based regex matching.
- *  `pattern' is the regex to compile, and check against `string'.
- *  `pmatch' is additional flags to be sent to regexec(), and may be NULL.
- *  Returns `true' on match, `false' else.
+ * regex_compile()
+ *  Compile a regex of `pattern' and return it.
  */
-boolean_t regex_match(char *pattern, char *string)
+regex_t *regex_create(char *pattern)
 {
-	boolean_t retval;
-	regex_t preg;
 	static char errmsg[BUFSIZE];
 	int errnum;
+	regex_t *preg;
 	
-	if (pattern == NULL || string == NULL)
+	if (pattern == NULL)
+	{
+		return NULL;
+	}
+	
+	preg = (regex_t *)malloc(sizeof(regex_t));
+	errnum = regcomp(preg, pattern, REG_ICASE | REG_EXTENDED);
+	
+	if (errnum != 0)
+	{
+		regerror(errnum, preg, errmsg, BUFSIZE);
+		slog(LG_ERROR, "regex_match(): %s\n", errmsg);
+		regfree(preg);
+		free(preg);
+		return NULL;
+	}
+	
+	return preg;
+}
+
+/*
+ * regex_match()
+ *  Internal wrapper API for POSIX-based regex matching.
+ *  `preg' is the regex to check with, `string' needs to be checked against.
+ *  Returns `true' on match, `false' else.
+ */
+boolean_t regex_match(regex_t *preg, char *string)
+{
+	boolean_t retval;
+	
+	if (preg == NULL || string == NULL)
 	{
 		slog(LG_ERROR, "regex_match(): we were given NULL string or pattern, bad!");
 		return FALSE;
 	}
 
-
-	errnum = regcomp(&preg, pattern, REG_ICASE | REG_EXTENDED);
-	
-	if (errnum != 0)
-	{
-		regerror(errnum, &preg, errmsg, BUFSIZE);
-		slog(LG_ERROR, "regex_match(): %s\n", errmsg);
-		regfree(&preg);
-		return FALSE;
-	}
-
 	/* match it */
-	if (regexec(&preg, string, 0, NULL, 0) == 0)
+	if (regexec(preg, string, 0, NULL, 0) == 0)
 		retval = TRUE;
 	else
 		retval = FALSE;
 	
-	regfree(&preg);
 	return retval;
+}
+
+/*
+ * regex_destroy()
+ *  Perform cleanup with regex `preg', free associated memory.
+ */
+boolean_t regex_destroy(regex_t *preg)
+{
+	regfree(preg);
+	free(preg);
+	return TRUE;
 }
 
 /*
