@@ -1,3 +1,12 @@
+gxti        2006/04/15 05:07:54 UTC	(20060415-5089)
+  Log:
+  pingspam: Redirect blame to NeoStats, add two notices.
+  
+
+  Changes:	Modified:
+  +4 -2		trunk/contrib/os_pingspam.c (File Modified) 
+
+
 w00t        2006/04/14 14:59:46 UTC	(20060414-5087)
   Log:
   Rework of fixing of warnings, port fixes over to userserv instead of being naughty.

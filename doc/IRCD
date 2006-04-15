@@ -1,4 +1,4 @@
-$Id: IRCD 4777 2006-02-04 23:11:00Z jilles $
+$Id: IRCD 5091 2006-04-15 22:43:28Z jilles $
 
 IRCD-specific notes
 -------------------
@@ -60,8 +60,13 @@ charybdis
 
 You will need a service{} block on all servers.
 
-If you want to use operserv kline, you need shared{} blocks or U:lines for
-services on all servers on the network.
+If you want to use akills, you need shared{} blocks for services on all servers
+on the network.
+
+Atheme supports both TS5 and TS6 protocol. It is recommended to use TS6
+as it reduces ghosts/desyncs and propagates user IP addresses. Although
+Atheme does not support IPv6 connections itself, user IPv6 addresses will
+be properly stored and logged.
 
 dreamforge
 ----------
@@ -91,6 +96,9 @@ will be used (this assumes the whole network has it). SVSLOGIN support can
 also be disabled with a simple source file change.
 
 The wallops option will report via +s server notices.
+
+Although Atheme does not support IPv6 connections itself, user IPv6 addresses
+will be properly stored and logged.
 
 inspircd
 --------
@@ -142,8 +150,8 @@ fighting with chanserv.
 plexus
 ------
 
-If you want to use operserv kline, you need shared{} blocks or U:lines
-for services on all servers on the network. Note that only plexus 2.0.x
+If you want to use akills, you need shared{} blocks or U:lines for services
+on all servers on the network. Note that only plexus 2.0.x
 supports remote unkline, although it may appear to sort of work in
 earlier versions.
 
@@ -167,6 +175,11 @@ etc. You will need a service{} block on all servers.
 
 Hybrid 6.x or csircd should also work but they are not recommended; you
 must leave join_chans enabled for full functionality.
+
+Atheme supports both TS5 and TS6 protocol. It is recommended to use TS6
+as it reduces ghosts/desyncs and propagates user IP addresses. Although
+Atheme does not support IPv6 connections itself, user IPv6 addresses will
+be properly stored and logged.
 
 shadowircd
 ----------
@@ -206,7 +219,7 @@ For host hiding (umode +x, <account>.<suffix>) to work, the hosthidesuffix
 in serverinfo{} must be correct (same value as F:HIDDEN_HOST in ircd.conf).
 
 Atheme does not support IPv6 (neither IPv6 connections nor IPv6 IPs in P10
-protocol).
+protocol). IPs of IPv6 clients will not be stored or logged.
 
 Atheme does not support oplevels; they should be disabled.
 
