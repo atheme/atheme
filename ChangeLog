@@ -1,3 +1,15 @@
+w00t        2006/04/14 14:59:46 UTC	(20060414-5087)
+  Log:
+  Rework of fixing of warnings, port fixes over to userserv instead of being naughty.
+
+  Changes:	Modified:
+  +1 -3		trunk/modules/nickserv/identify.c (File Modified) 
+  +5 -9		trunk/modules/nickserv/info.c (File Modified) 
+  +10 -15	trunk/modules/nickserv/resetpass.c (File Modified) 
+  +1 -1		trunk/modules/userserv/info.c (File Modified) 
+  +1 -1		trunk/modules/userserv/resetpass.c (File Modified) 
+
+
 jilles      2006/04/14 12:33:34 UTC	(20060414-5085)
   Log:
   Don't introduce a service with a UID if the ircd does

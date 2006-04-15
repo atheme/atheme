@@ -4,7 +4,7 @@
  *
  * ping spammer thingy
  *
- * $Id: os_pingspam.c 4991 2006-04-09 08:19:53Z gxti $
+ * $Id: os_pingspam.c 5089 2006-04-15 05:07:54Z gxti $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/pingspam", FALSE, _modinit, _moddeinit,
-	"$Id: os_pingspam.c 4991 2006-04-09 08:19:53Z gxti $",
+	"$Id: os_pingspam.c 5089 2006-04-15 05:07:54Z gxti $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -32,7 +32,9 @@ char *notices[] =
 	"lolz!",
 	"<Hikaru> your a pagan",
 	"* Ads needs to shower soon",
-	"<Hik`Coding> Don't make me get Yakuza on you"
+	"<Hik`Coding> Don't make me get Yakuza on you",
+	"beu fails it",
+	"BAN KAI~!$"
 };
 
 char *phrases[] =
@@ -41,7 +43,7 @@ char *phrases[] =
 	" please-ignore",
 	" proxy scan",
 	" ignore me",
-	" <3 irchighway",
+	" <3 neostats",
 };
 
 void pingspam(user_t *u);
