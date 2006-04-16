@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 4881 2006-02-28 23:37:33Z jilles $
+ * $Id: inspircd.c 5093 2006-04-16 01:04:24Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 4881 2006-02-28 23:37:33Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5093 2006-04-16 01:04:24Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -131,15 +131,44 @@ static void inspircd_wallops(char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
+	char *sendernick;
+	user_t *u;
+	node_t *n;
 
 	if (config_options.silent)
 		return;
+
+	if (me.me == NULL)
+	{
+		/*
+		 * this means we have no pseudoclients -- under present inspircd, servers cannot globops, and
+		 * thus, we will need to bail -- slog, and let them know. --w00t
+		 *
+		 * XXX - we shouldn't rely on me.me being NULL, me.me->userlist or something instead. --w00t
+		 */
+		 slog(LG_ERROR, "wallops(): InspIRCD requires at least one pseudoclient module to be loaded to send wallops.");
+	}
 
 	va_start(ap, fmt);
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s GLOBOPS :%s", me.name, buf);
+	if (is_internal_client(user_find_named(opersvs.nick)))
+	{
+		sendernick = opersvs.nick;
+	}
+	else
+	{
+		LIST_FOREACH(n, me.me->userlist.head)
+		{
+			u = (user_t *)n->data;
+
+			sendernick = u->nick;
+			break;
+		}
+	}
+
+	sts(":%s GLOBOPS :%s", sendernick, buf);
 }
 
 /* join a channel */

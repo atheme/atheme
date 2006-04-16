@@ -1,3 +1,14 @@
+jilles      2006/04/15 22:43:28 UTC	(20060415-5091)
+  Log:
+  - operserv kline -> akill
+  - user ipv6 addresses are supported on charybdis/ratbox/hyperion
+  - clarify that user ipv6 addresses are not supported on ircu
+  
+
+  Changes:	Modified:
+  +18 -5	trunk/doc/IRCD (File Modified) 
+
+
 gxti        2006/04/15 05:07:54 UTC	(20060415-5089)
   Log:
   pingspam: Redirect blame to NeoStats, add two notices.
