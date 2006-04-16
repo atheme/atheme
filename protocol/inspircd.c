@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 5093 2006-04-16 01:04:24Z w00t $
+ * $Id: inspircd.c 5095 2006-04-16 01:18:03Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5093 2006-04-16 01:04:24Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5095 2006-04-16 01:18:03Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -238,7 +238,7 @@ static void inspircd_numeric_sts(char *from, int numeric, char *target, char *fm
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	/* InspIRCd doesnt pass numerics around */
+	sts(":%s PUSH %s ::%s %d %s %s", me.name, target, from, numeric, target, buf);
 }
 
 /* KILL wrapper */
