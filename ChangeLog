@@ -1,3 +1,11 @@
+w00t        2006/04/16 01:18:03 UTC	(20060416-5095)
+  Log:
+  InspIRCd can now send numerics over server links - this should do it adequatly.
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/inspircd.c (File Modified) 
+
+
 w00t        2006/04/16 01:04:24 UTC	(20060416-5093)
   Log:
   Fix: Send wallops under inspircd, except when no protocol modules are loaded - this cannot be fixed, as inspircd requires commands be sent by a valid nick, and not a server as the sender.

@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 4961 2006-04-08 19:59:21Z nenolod $
+ * $Id: atheme.h 5097 2006-04-16 02:45:02Z w00t $
  */
 
 #ifndef ATHEME_H
@@ -246,6 +246,19 @@ struct help_command_
   const char *access;
   char *file;
   void (*func) (char *origin);
+};
+
+typedef struct email_t_ email_t;
+struct email_t_
+{
+	char *sender;
+	char *reciever;
+	char *subject;
+	char *body;
+	char **headers;
+	
+	void *miscellaneous;			/* module defined data */
+	void (*callback_sent)(email_t *);	/* callback on email send */
 };
 
 /* email types (meaning of param argument) */
