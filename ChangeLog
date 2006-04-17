@@ -1,3 +1,16 @@
+gxti        2006/04/17 04:26:48 UTC	(20060417-5099)
+  Log:
+  Toss old base64 code and replace with stolen gsasl code. Emptied XMLRPC base64 handlers because they were already broken.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/atheme.h (File Modified) 
+  +47 -0	trunk/include/base64.h (File Added) 
+  +0 -14	trunk/include/xmlrpc.h (File Modified) 
+  +365 -145	trunk/src/base64.c (File Modified) 
+  +2 -12	trunk/src/xmlrpc.c (File Modified) 
+
+
 w00t        2006/04/16 02:45:02 UTC	(20060416-5097)
   Log:
   Added src/email.c and email_t -- the start of a proper email API. Per nenolod.

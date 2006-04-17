@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 4949 2006-04-05 01:05:13Z nenolod $
+dnl $Id: configure.ac 5101 2006-04-17 05:22:23Z gxti $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, 1.1.0rc1, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 4949 2006-04-05 01:05:13Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 5101 2006-04-17 05:22:23Z gxti $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -283,25 +283,20 @@ echo " "
 echo "SASL support"
 echo " "
 
-AC_CHECK_HEADER(gsasl.h,
-    AC_CHECK_LIB(gsasl, gsasl_check_version,
-        [gsasl=yes AC_SUBST(GSASL_LIBS, -lgsasl)],
-        gsasl=no),
-    gsasl=no)
-AC_ARG_ENABLE(gsasl,
-    AC_HELP_STRING([--disable-gsasl], [don't use GNU SASL]),
-    gsasl=$enableval)
-if test "$gsasl" != "no" ; then
-    AC_DEFINE(USE_SASL, 1, [Define to 1 if you want GNU SASL.])
+sasl=yes
+AC_ARG_ENABLE(sasl,
+    AC_HELP_STRING([--disable-sasl], [don't use builtin SASL]),
+    [sasl=no])
+if test "$sasl" != "no" ; then
+    AC_DEFINE(USE_SASL, 1, [Define to 1 if you want builtin SASL.])
     SASL=yes
-    SASL_C=sasl.c
+    SASL_C="sasl.c main.c plain.c"
 else
-    AC_MSG_WARN([Cannot find GNU SASL, disabling])
     SASL=no
     SASL_C=
 fi
-AC_MSG_CHECKING([if GNU SASL should be used])
-AC_MSG_RESULT($gsasl)
+AC_MSG_CHECKING([if SASL should be used])
+AC_MSG_RESULT($SASL)
 
 AC_SUBST(SASL_C)
 
@@ -594,7 +589,7 @@ Configuration:
         Large network support: ${LARGENET}
         PostgreSQL support   : ${POSTGRESQL}
         MySQL support        : ${MYSQL}
-        SASL support         : ${gsasl}
+        SASL support         : ${sasl}
         Socket Engine        : ${SOCKET_ENGINE}
         CFLAGS               : ${CFLAGS}
 

@@ -34,8 +34,7 @@ CPPFLAGS	= @CPPFLAGS@
 
 default: all
 
-BASE_SRCS = 		\
-	main.c		
+BASE_SRCS =
 	
 SRCS = ${BASE_SRCS} @SASL_C@
 
@@ -52,9 +51,6 @@ install: build
 modules: $(OBJS)
 
 .SUFFIXES: .so
-
-sasl.so: sasl.c
-	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} -lgsasl $< -o $@
 
 .c.so:
 	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@

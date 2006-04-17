@@ -4,7 +4,7 @@
  *
  * Provides a SASL authentication agent for clients.
  *
- * $Id: sasl.c 4859 2006-02-20 06:13:53Z gxti $
+ * $Id: sasl.c 5101 2006-04-17 05:22:23Z gxti $
  */
 
 /* sasl.h and friends are included from atheme.h now --nenolod */
@@ -13,36 +13,32 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/sasl", FALSE, _modinit, _moddeinit,
-	"$Id: sasl.c 4859 2006-02-20 06:13:53Z gxti $",
+	"$Id: sasl.c 5101 2006-04-17 05:22:23Z gxti $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 list_t sessions[HASHSIZE];
+list_t *mechanisms;
 static BlockHeap *session_heap;
-Gsasl *ctx = NULL;
 
 sasl_session_t *find_session(char *uid);
 sasl_session_t *make_session(char *uid);
 void destroy_session(sasl_session_t *p);
 static void sasl_input(void *vptr);
 static void sasl_packet(sasl_session_t *p, char *buf, int len);
-static void sasl_write(char *target, char *data);
-int login_user(sasl_session_t *p, char *authid);
-int callback(Gsasl *ctx, Gsasl_session *sctx, Gsasl_property prop);
+static void sasl_write(char *target, char *data, int length);
+int login_user(sasl_session_t *p);
 static void user_burstlogin(void *vptr);
 
 void _modinit(module_t *m)
 {
 	session_heap = BlockHeapCreate(sizeof(sasl_session_t), 64);
+	mechanisms = module_locate_symbol("saslserv/main", "sasl_mechanisms");
 
 	hook_add_event("sasl_input");
 	hook_add_hook("sasl_input", sasl_input);
 	hook_add_event("user_burstlogin");
 	hook_add_hook("user_burstlogin", user_burstlogin);
-
-	/* XXX: Check for failure. */
-	gsasl_init(&ctx);
-	gsasl_callback_set(ctx, callback);
 }
 
 void _moddeinit()
@@ -56,9 +52,6 @@ void _moddeinit()
 	BlockHeapDestroy(session_heap);
 	hook_del_hook("sasl_input", sasl_input);
 	hook_del_hook("user_burstlogin", user_burstlogin);
-
-	gsasl_done(ctx);
-	ctx = NULL;
 }
 
 sasl_session_t *find_session(char *uid)
@@ -109,32 +102,12 @@ void destroy_session(sasl_session_t *p)
 
 	free(p->buf);
 	p->buf = p->p = NULL;
-	p->sctx = NULL;
+	if(p->mechptr)
+		p->mechptr->mech_finish(p); /* Free up any mechanism data */
+	free(p->username);
+	p->mechptr = NULL; /* We're not freeing the mechanism, just "dereferencing" it */
 
 	BlockHeapFree(session_heap, p);
-}
-
-int callback(Gsasl *ctx, Gsasl_session *sctx, Gsasl_property prop)
-{
-	myuser_t *mu = myuser_find((char*)gsasl_property_fast(sctx, GSASL_AUTHID));
-
-	if(!mu)
-		return GSASL_NO_CALLBACK;
-
-	switch(prop)
-	{
-		case GSASL_VALIDATE_SIMPLE:
-			return verify_password(mu, (char*)gsasl_property_fast(sctx, GSASL_PASSWORD)) ? GSASL_OK : GSASL_AUTHENTICATION_ERROR;
-
-		case GSASL_PASSWORD:
-			if(mu->flags & MU_CRYPTPASS) /* Crap! Perhaps filter mechs that this user doesn't support? */
-				return GSASL_NO_CALLBACK;
-			gsasl_property_set(sctx, GSASL_PASSWORD, mu->pass);
-			return GSASL_OK;
-
-		default:
-			return GSASL_NO_CALLBACK;
-	}
 }
 
 static void sasl_input(void *vptr)
@@ -161,6 +134,13 @@ static void sasl_input(void *vptr)
 	}
 	else
 	{
+		if(p->len + len + 1 > 8192) /* This is a little much... */
+		{
+			sasl_sts(p->uid, 'D', "F");
+			destroy_session(p);
+			return;
+		}
+
 		p->buf = (char *)realloc(p->buf, p->len + len + 1);
 		p->p = p->buf + p->len;
 		p->len += len;
@@ -179,20 +159,37 @@ static void sasl_input(void *vptr)
 	}
 }
 
+static sasl_mechanism_t *find_mechanism(char *name)
+{
+	node_t *n;
+	sasl_mechanism_t *mptr;
+
+	LIST_FOREACH(n, mechanisms->head)
+	{
+		mptr = n->data;
+		if(!strcmp(mptr->name, name))
+			return mptr;
+	}
+
+	return NULL;
+}
+
 static void sasl_packet(sasl_session_t *p, char *buf, int len)
 {
-	char *out;
 	int rc, i;
-	char *pt = buf;
-	int ol = len;
-	char *cloak;
+	size_t tlen = 0;
+	char *cloak, *out = NULL;
+	char *temp;
+	char mech[21];
+	int out_len = 0;
 	metadata_t *md;
 	myuser_t *mu;
+	node_t *n;
 
 	/* First piece of data in a session is the name of
 	 * the SASL mechanism that will be used.
 	 */
-	if(!*p->mech)
+	if(!p->mechptr)
 	{
 		if(len > 20)
 		{
@@ -201,45 +198,49 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 			return;
 		}
 
-		strlcpy(p->mech, buf, 21);
+		memcpy(mech, buf, len);
+		mech[len] = '\0';
 
-		if(gsasl_server_start(ctx, p->mech, &p->sctx) != GSASL_OK)
+		if(!(p->mechptr = find_mechanism(mech)))
 		{
-			char *buf, *mechs;
-			int l;
+			char temp[400], *ptr = temp;
+			int l = 0;
 
 			/* Generate a list of supported mechanisms. */
-			gsasl_server_mechlist(ctx, &mechs);
-			if(strlen(mechs) > 400)
+			LIST_FOREACH(n, mechanisms->head)
 			{
-				for(i = 399;i >= 0;i--)
-				{
-					if(mechs[i] = ' ')
-						mechs[i] = '\0';
+				sasl_mechanism_t *mptr = n->data;
+				if(l + strlen(mptr->name) > 510)
 					break;
-				}
+				strcpy(ptr, mptr->name);
+				ptr += strlen(mptr->name);
+				*ptr++ = ',';
+				l += strlen(mptr->name) + 1;
 			}
 
-			for(i = 0;mechs[i];i++)
-			{
-				if(mechs[i] == ' ')
-					mechs[i] = ',';
-			}
+			if(l)
+				ptr--;
+			*ptr = '\0';
 
-			sasl_sts(p->uid, 'M', mechs);
-			free(mechs);
+			sasl_sts(p->uid, 'M', temp);
 			destroy_session(p);
 			return;
 		}
-		buf[0] = '\0';
+
+		rc = p->mechptr->mech_start(p, &out, &out_len);
+	}else{
+		if(base64_decode_alloc(buf, len, &temp, &tlen))
+		{
+			rc = p->mechptr->mech_step(p, temp, tlen, &out, &out_len);
+			free(temp);
+		}else
+			rc = ASASL_FAIL;
 	}
 
-	rc = gsasl_step64(p->sctx, buf, &out);
-	if(rc == GSASL_OK)
+	if(rc == ASASL_DONE)
 	{
-		char *user_name = (char*)gsasl_property_fast(p->sctx, GSASL_AUTHID);
-		myuser_t *mu = myuser_find(user_name);
-		if(mu && login_user(p, (char*)gsasl_property_fast(p->sctx, GSASL_AUTHID)))
+		myuser_t *mu = myuser_find(p->username);
+		if(mu && login_user(p))
 		{
 			mu->flags |= MU_SASL;
 
@@ -253,30 +254,40 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 		}
 		else
 			sasl_sts(p->uid, 'D', "F");
-		free(out);
 		/* Will destroy session on introduction of user to net. */
 		return;
 	}
-	else if(rc == GSASL_NEEDS_MORE)
+	else if(rc == ASASL_MORE)
 	{
-		if(strlen(out))
-			sasl_write(p->uid, out);
+		if(out_len)
+		{
+			if(base64_encode_alloc(out, out_len, &temp))
+			{
+				sasl_write(p->uid, temp, strlen(temp));
+				free(temp);
+				free(out);
+				return;
+			}
+		}
 		else
+		{
 			sasl_sts(p->uid, 'C', "+");
-		free(out);
-		return;
+			free(out);
+			return;
+		}
 	}
 
+	free(out);
 	sasl_sts(p->uid, 'D', "F");
-	if(p->sctx)
-		gsasl_finish(p->sctx);
+	if(p->mechptr)
+		p->mechptr->mech_finish(p);
 	destroy_session(p);
 }
 
-static void sasl_write(char *target, char *data)
+static void sasl_write(char *target, char *data, int length)
 {
 	char out[401];
-	int last, rem = strlen(data);
+	int last, rem = length;
 
 	while(rem)
 	{
@@ -330,9 +341,9 @@ void sasl_logcommand(char *source, int level, const char *fmt, ...)
 	va_end(args);
 }
 
-int login_user(sasl_session_t *p, char *authid)
+int login_user(sasl_session_t *p)
 {
-	myuser_t *mu = myuser_find(authid);
+	myuser_t *mu = myuser_find(p->username);
 	metadata_t *md;
 	char *target = p->uid;
 
@@ -370,7 +381,7 @@ static void user_burstlogin(void *vptr)
 
 	slog(LG_INFO, "user_burstlogin");
 
-	/* Not concerned unless its a SASL login. */
+	/* Not concerned unless it's a SASL login. */
 	if(p == NULL)
 		return;
 	destroy_session(p);

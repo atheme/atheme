@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4559 2006-01-10 12:04:41Z jilles $
+ * $Id: main.c 5101 2006-04-17 05:22:23Z gxti $
  */
 
 #include "atheme.h"
@@ -12,9 +12,11 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4559 2006-01-10 12:04:41Z jilles $",
+	"$Id: main.c 5101 2006-04-17 05:22:23Z gxti $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
+
+list_t sasl_mechanisms;
 
 /* main services client routine */
 void saslserv(char *origin, uint8_t parc, char *parv[])
