@@ -454,10 +454,6 @@ static int xmlrpc_split_buf(char *buffer, char ***argv)
 			{
 				tagtype = 1;
 			}
-			else if (!stricmp("base64", nexttag))
-			{
-				tagtype = 2;
-			}
 			else
 			{
 				tagtype = 0;
@@ -472,10 +468,6 @@ static int xmlrpc_split_buf(char *buffer, char ***argv)
 					if (tagtype == 1)
 					{
 						(*argv)[ac++] = xmlrpc_decode_string(final);
-					}
-					else if (tagtype == 2)
-					{
-						(*argv)[ac++] = xmlrpc_decode64(final);
 					}
 					else
 					{
@@ -679,20 +671,6 @@ char *xmlrpc_boolean(char *buf, int value)
 	*buf = '\0';
 	snprintf(buf, XMLRPC_BUFSIZE, "<boolean>%d</boolean>", (value ? 1 : 0));
 	return buf;
-}
-
-/*************************************************************************/
-
-char *xmlrpc_base64(char *buf, char *value)
-{
-	return NULL;
-}
-
-/*************************************************************************/
-
-char *xmlrpc_decode64(char *value)
-{
-	return NULL;
 }
 
 /*************************************************************************/

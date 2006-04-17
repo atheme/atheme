@@ -1,3 +1,19 @@
+gxti        2006/04/17 05:22:23 UTC	(20060417-5101)
+  Log:
+  Replaced old gsasl backend with a shiny new modular system.
+  
+
+  Changes:	Modified:
+  +19 -235	trunk/configure (File Modified) 
+  +10 -15	trunk/configure.ac (File Modified) 
+  +1 -0		trunk/dist/example.conf (File Modified) 
+  +16 -4	trunk/include/sasl.h (File Modified) 
+  +1 -5		trunk/modules/saslserv/Makefile.in (File Modified) 
+  +4 -2		trunk/modules/saslserv/main.c (File Modified) (Property Modified)
+  +84 -0	trunk/modules/saslserv/plain.c (File Added) 
+  +90 -79	trunk/modules/saslserv/sasl.c (File Modified) (Property Modified)
+
+
 gxti        2006/04/17 04:26:48 UTC	(20060417-5099)
   Log:
   Toss old base64 code and replace with stolen gsasl code. Emptied XMLRPC base64 handlers because they were already broken.
