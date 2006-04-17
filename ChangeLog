@@ -1,3 +1,18 @@
+gxti        2006/04/17 08:18:44 UTC	(20060417-5105)
+  Log:
+  Autotools fix (cleanup from r5083)
+  New SASL mechanism CRYPT for posix crypt module friendly authentication.
+  Remove some debugging cruft.
+  
+
+  Changes:	Modified:
+  +4 -4		trunk/configure (File Modified) 
+  +1 -2		trunk/configure.ac (File Modified) 
+  +465 -0	trunk/modules/saslserv/crypt.c (File Added) 
+  +0 -2		trunk/modules/saslserv/plain.c (File Modified) 
+  +0 -6		trunk/modules/saslserv/sasl.c (File Modified) 
+
+
 gxti        2006/04/17 05:24:24 UTC	(20060417-5103)
   Log:
   Remove base64 code completely from XMLRPC until someone can implement it properly.
