@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 5101 2006-04-17 05:22:23Z gxti $
+dnl $Id: configure.ac 5105 2006-04-17 08:18:44Z gxti $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, 1.1.0rc1, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 5101 2006-04-17 05:22:23Z gxti $])
+AC_COPYRIGHT([$Id: configure.ac 5105 2006-04-17 08:18:44Z gxti $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -290,7 +290,7 @@ AC_ARG_ENABLE(sasl,
 if test "$sasl" != "no" ; then
     AC_DEFINE(USE_SASL, 1, [Define to 1 if you want builtin SASL.])
     SASL=yes
-    SASL_C="sasl.c main.c plain.c"
+    SASL_C="sasl.c main.c plain.c crypt.c"
 else
     SASL=no
     SASL_C=
@@ -565,7 +565,6 @@ AC_OUTPUT(Makefile \
 	backend/Makefile \
 	contrib/Makefile \
 	crypto/Makefile \
-	dbtool/Makefile \
 	modules/Makefile \
 	modules/chanserv/Makefile \
 	modules/global/Makefile \

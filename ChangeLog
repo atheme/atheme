@@ -1,3 +1,13 @@
+gxti        2006/04/17 05:24:24 UTC	(20060417-5103)
+  Log:
+  Remove base64 code completely from XMLRPC until someone can implement it properly.
+  
+
+  Changes:	Modified:
+  +0 -2		trunk/include/xmlrpc.h (File Modified) 
+  +0 -22	trunk/src/xmlrpc.c (File Modified) 
+
+
 gxti        2006/04/17 05:22:23 UTC	(20060417-5101)
   Log:
   Replaced old gsasl backend with a shiny new modular system.

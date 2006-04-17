@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# $Id: configure.ac 4949 2006-04-05 01:05:13Z nenolod $
+# $Id: configure.ac 5101 2006-04-17 05:22:23Z gxti $
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -968,7 +968,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-$Id: configure.ac 4949 2006-04-05 01:05:13Z nenolod $
+$Id: configure.ac 5101 2006-04-17 05:22:23Z gxti $
 _ACEOF
   exit 0
 fi
@@ -10001,7 +10001,7 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
     SASL=yes
-    SASL_C="sasl.c main.c plain.c"
+    SASL_C="sasl.c main.c plain.c crypt.c"
 else
     SASL=no
     SASL_C=
@@ -13649,7 +13649,7 @@ echo " "
 echo "Makefile generation"
 echo " "
 
-                                                                                                                                                                                    ac_config_files="$ac_config_files Makefile libatheme/Makefile backend/Makefile contrib/Makefile crypto/Makefile modules/Makefile modules/chanserv/Makefile modules/global/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/userserv/Makefile modules/xmlrpc/Makefile modules/memoserv/Makefile modules/helpserv/Makefile modules/saslserv/Makefile protocol/Makefile src/Makefile"
+                                                                                                                                                                          ac_config_files="$ac_config_files Makefile libatheme/Makefile backend/Makefile contrib/Makefile crypto/Makefile modules/Makefile modules/chanserv/Makefile modules/global/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/userserv/Makefile modules/xmlrpc/Makefile modules/memoserv/Makefile modules/helpserv/Makefile modules/saslserv/Makefile protocol/Makefile src/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure

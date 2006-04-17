@@ -4,7 +4,7 @@
  *
  * Provides a SASL authentication agent for clients.
  *
- * $Id: sasl.c 5101 2006-04-17 05:22:23Z gxti $
+ * $Id: sasl.c 5105 2006-04-17 08:18:44Z gxti $
  */
 
 /* sasl.h and friends are included from atheme.h now --nenolod */
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/sasl", FALSE, _modinit, _moddeinit,
-	"$Id: sasl.c 5101 2006-04-17 05:22:23Z gxti $",
+	"$Id: sasl.c 5105 2006-04-17 08:18:44Z gxti $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -279,8 +279,6 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 
 	free(out);
 	sasl_sts(p->uid, 'D', "F");
-	if(p->mechptr)
-		p->mechptr->mech_finish(p);
 	destroy_session(p);
 }
 
@@ -379,8 +377,6 @@ static void user_burstlogin(void *vptr)
 	myuser_t *mu;
 	node_t *n;
 
-	slog(LG_INFO, "user_burstlogin");
-
 	/* Not concerned unless it's a SASL login. */
 	if(p == NULL)
 		return;
@@ -389,8 +385,6 @@ static void user_burstlogin(void *vptr)
 	/* WTF? */
 	if((mu = u->myuser) == NULL)
 		return;
-
-	slog(LG_INFO, "pass!");
 
 	if (is_soper(mu))
 	{
