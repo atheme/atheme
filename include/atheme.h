@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 5097 2006-04-16 02:45:02Z w00t $
+ * $Id: atheme.h 5099 2006-04-17 04:26:48Z gxti $
  */
 
 #ifndef ATHEME_H
@@ -23,6 +23,7 @@
 #include "crypto.h"
 #include "culture.h"
 #include "xmlrpc.h"
+#include "base64.h"
 
 #ifdef USE_SASL
 # include "sasl.h"

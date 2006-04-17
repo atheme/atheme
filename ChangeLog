@@ -1,3 +1,12 @@
+w00t        2006/04/16 02:45:02 UTC	(20060416-5097)
+  Log:
+  Added src/email.c and email_t -- the start of a proper email API. Per nenolod.
+
+  Changes:	Modified:
+  +13 -0	trunk/include/atheme.h (File Modified) 
+  +37 -0	trunk/src/email.c (File Added) 
+
+
 w00t        2006/04/16 01:18:03 UTC	(20060416-5095)
   Log:
   InspIRCd can now send numerics over server links - this should do it adequatly.
