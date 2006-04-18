@@ -1,3 +1,17 @@
+gxti        2006/04/17 17:48:00 UTC	(20060417-5107)
+  Log:
+  Move MD5 code from crypto/ircservices.c and saslserv/crypt.c into a common md5.c
+  
+
+  Changes:	Modified:
+  +0 -306	trunk/crypto/ircservices.c (File Modified) 
+  +1 -0		trunk/include/atheme.h (File Modified) 
+  +26 -0	trunk/include/md5.h (File Added) 
+  +2 -309	trunk/modules/saslserv/crypt.c (File Modified) 
+  +1 -0		trunk/src/Makefile.in (File Modified) 
+  +290 -0	trunk/src/md5.c (File Added) 
+
+
 gxti        2006/04/17 08:18:44 UTC	(20060417-5105)
   Log:
   Autotools fix (cleanup from r5083)
