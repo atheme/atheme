@@ -4,7 +4,7 @@
  *
  * VHost management! (ratbox only right now.)
  *
- * $Id: vhost.c 5109 2006-04-18 00:10:31Z jilles $
+ * $Id: vhost.c 5113 2006-04-19 11:58:25Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 5109 2006-04-18 00:10:31Z jilles $",
+	"$Id: vhost.c 5113 2006-04-19 11:58:25Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -55,11 +55,11 @@ static void do_sethost_all(myuser_t *mu, char *host)
 			continue;
 		strlcpy(u->vhost, host, HOSTLEN);
 		notice(nicksvs.nick, u->nick, "Setting your host to \2%s\2.",
-			host);
-		sethost_sts(nicksvs.nick, u->nick, host);
+			u->vhost);
+		sethost_sts(nicksvs.nick, u->nick, u->vhost);
 		strlcpy(luhost, u->user, BUFSIZE);
 		strlcat(luhost, "@", BUFSIZE);
-		strlcat(luhost, host, BUFSIZE);
+		strlcat(luhost, u->vhost, BUFSIZE);
 		metadata_add(mu, METADATA_USER, "private:host:vhost", luhost);
 	}
 }
@@ -72,11 +72,11 @@ static void do_sethost(user_t *u, char *host)
 		return;
 	strlcpy(u->vhost, host, HOSTLEN);
 	notice(nicksvs.nick, u->nick, "Setting your host to \2%s\2.",
-		host);
-	sethost_sts(nicksvs.nick, u->nick, host);
+		u->vhost);
+	sethost_sts(nicksvs.nick, u->nick, u->vhost);
 	strlcpy(luhost, u->user, BUFSIZE);
 	strlcat(luhost, "@", BUFSIZE);
-	strlcat(luhost, host, BUFSIZE);
+	strlcat(luhost, u->vhost, BUFSIZE);
 	metadata_add(u->myuser, METADATA_USER, "private:host:vhost", luhost);
 }
 
@@ -164,6 +164,12 @@ static void ns_cmd_vhost(char *origin)
 		notice(nicksvs.nick, origin, "The vhost provided contains invalid characters.");
 		return;
 	}
+	if (strlen(host) >= HOSTLEN)
+	{
+		notice(nicksvs.nick, origin, "The vhost provided is too long.");
+		return;
+	}
+	/* XXX more checks here, perhaps as a configurable regexp? */
 
 	metadata_add(mu, METADATA_USER, "private:usercloak", host);
 	notice(nicksvs.nick, origin, "Assigned vhost \2%s\2 to \2%s\2.", 

@@ -1,3 +1,12 @@
+jilles      2006/04/19 11:48:27 UTC	(20060419-5111)
+  Log:
+  XMLRPC: reject vhosts which contain @!*? or are too long.
+  
+
+  Changes:	Modified:
+  +9 -0		trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 jilles      2006/04/18 00:10:31 UTC	(20060418-5109)
   Log:
   NickServ/UserServ vhost: Never ever allow @!?* in vhosts as
