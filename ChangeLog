@@ -1,3 +1,14 @@
+jilles      2006/04/19 11:58:25 UTC	(20060419-5113)
+  Log:
+  NickServ/UserServ VHOST: deny setting too long vhosts, use
+  truncated form when doing a sethost_sts().
+  
+
+  Changes:	Modified:
+  +12 -6	trunk/modules/nickserv/vhost.c (File Modified) 
+  +12 -6	trunk/modules/userserv/vhost.c (File Modified) 
+
+
 jilles      2006/04/19 11:48:27 UTC	(20060419-5111)
   Log:
   XMLRPC: reject vhosts which contain @!*? or are too long.

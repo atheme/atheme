@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 5111 2006-04-19 11:48:27Z jilles $
+ * $Id: account.c 5115 2006-04-19 12:01:42Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 5111 2006-04-19 11:48:27Z jilles $",
+	"$Id: account.c 5115 2006-04-19 12:01:42Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -632,6 +632,7 @@ static int do_set_vanity_host(void *conn, int parc, char *parv[])
 			xmlrpc_generic_error(5, "Invalid parameters.");
 			return 0;
 		}
+		/* XXX more checks here, perhaps as a configurable regexp? */
 		metadata_add(mu, METADATA_USER, "private:usercloak", parv[2]);
 		logcommand_external(using_nickserv ? nicksvs.me : usersvs.me, "xmlrpc", conn, mu, CMDLOG_ADMIN, "VHOST ASSIGN %s", parv[2]);
 	}
