@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 4827 2006-02-13 20:18:28Z nenolod $
+ * $Id: account.c 5111 2006-04-19 11:48:27Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 4827 2006-02-13 20:18:28Z nenolod $",
+	"$Id: account.c 5111 2006-04-19 11:48:27Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -593,6 +593,7 @@ static int do_metadata_get(void *conn, int parc, char *parv[])
  *       fault 1 - validation failed
  *       fault 2 - unknown account
  *       fault 4 - insufficient parameters
+ *       fault 5 - invalid parameters
  *       default - success message
  *
  * Side Effects:
@@ -623,6 +624,14 @@ static int do_set_vanity_host(void *conn, int parc, char *parv[])
 
 	if (parc > 2)
 	{
+		/* Never ever allow @!?* as they have special meaning in all ircds */
+		if (strchr(parv[2], '@') || strchr(parv[2], '!') ||
+			strchr(parv[2], '?') || strchr(parv[2], '*') ||
+			strlen(parv[2]) >= HOSTLEN)
+		{
+			xmlrpc_generic_error(5, "Invalid parameters.");
+			return 0;
+		}
 		metadata_add(mu, METADATA_USER, "private:usercloak", parv[2]);
 		logcommand_external(using_nickserv ? nicksvs.me : usersvs.me, "xmlrpc", conn, mu, CMDLOG_ADMIN, "VHOST ASSIGN %s", parv[2]);
 	}

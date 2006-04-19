@@ -1,3 +1,15 @@
+jilles      2006/04/18 00:10:31 UTC	(20060418-5109)
+  Log:
+  NickServ/UserServ vhost: Never ever allow @!?* in vhosts as
+  they have special meaning in all ircds (@ was already
+  disallowed).
+  
+
+  Changes:	Modified:
+  +3 -1		trunk/modules/nickserv/vhost.c (File Modified) 
+  +3 -1		trunk/modules/userserv/vhost.c (File Modified) 
+
+
 gxti        2006/04/17 17:48:00 UTC	(20060417-5107)
   Log:
   Move MD5 code from crypto/ircservices.c and saslserv/crypt.c into a common md5.c
