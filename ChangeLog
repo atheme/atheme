@@ -1,3 +1,12 @@
+jilles      2006/04/19 12:01:42 UTC	(20060419-5115)
+  Log:
+  XMLRPC: Add XXX comment about further vhost validation here as well.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 jilles      2006/04/19 11:58:25 UTC	(20060419-5113)
   Log:
   NickServ/UserServ VHOST: deny setting too long vhosts, use
