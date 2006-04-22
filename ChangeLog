@@ -1,3 +1,17 @@
+jilles      2006/04/22 19:10:00 UTC	(20060422-5119)
+  Log:
+  asuka/bircd/nefarious/undernet: change services client fake ip
+  from 'A' (invalid) to ']]]]]]' (255.255.255.255). This broke
+  on ircu 2.10.12 with ipv6 support.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/asuka.c (File Modified) 
+  +1 -1		trunk/protocol/bircd.c (File Modified) 
+  +1 -1		trunk/protocol/nefarious.c (File Modified) 
+  +1 -1		trunk/protocol/undernet.c (File Modified) 
+
+
 jilles      2006/04/19 12:01:42 UTC	(20060419-5115)
   Log:
   XMLRPC: Add XXX comment about further vhost validation here as well.
