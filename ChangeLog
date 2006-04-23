@@ -1,3 +1,12 @@
+jilles      2006/04/22 19:26:16 UTC	(20060422-5121)
+  Log:
+  origin is a nick in chanserv(), so use user_find_named().
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/main.c (File Modified) 
+
+
 jilles      2006/04/22 19:10:00 UTC	(20060422-5119)
   Log:
   asuka/bircd/nefarious/undernet: change services client fake ip

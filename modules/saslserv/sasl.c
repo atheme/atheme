@@ -4,7 +4,7 @@
  *
  * Provides a SASL authentication agent for clients.
  *
- * $Id: sasl.c 5105 2006-04-17 08:18:44Z gxti $
+ * $Id: sasl.c 5123 2006-04-23 03:10:00Z gxti $
  */
 
 /* sasl.h and friends are included from atheme.h now --nenolod */
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/sasl", FALSE, _modinit, _moddeinit,
-	"$Id: sasl.c 5105 2006-04-17 08:18:44Z gxti $",
+	"$Id: sasl.c 5123 2006-04-23 03:10:00Z gxti $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -203,10 +203,11 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 
 		if(!(p->mechptr = find_mechanism(mech)))
 		{
+			/* Generate a list of supported mechanisms (disabled since charybdis doesn't support this yet). */
+/*			
 			char temp[400], *ptr = temp;
 			int l = 0;
 
-			/* Generate a list of supported mechanisms. */
 			LIST_FOREACH(n, mechanisms->head)
 			{
 				sasl_mechanism_t *mptr = n->data;
@@ -223,6 +224,9 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 			*ptr = '\0';
 
 			sasl_sts(p->uid, 'M', temp);
+			*/
+
+			sasl_sts(p->uid, 'D', "F");
 			destroy_session(p);
 			return;
 		}
