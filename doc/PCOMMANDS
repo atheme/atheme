@@ -14,6 +14,8 @@ from atheme.conf).
 
 /info <atheme> (-) Shows copyright information and a list of authors.
 
+/motd <atheme> (-) Shows etc/atheme.motd (some substitutions are done).
+
 /stats <letter> <atheme> (-) Shows various statistics and configuration
 information. The following letters are recognized:
 	C (general:auspex) Shows uplink blocks.
@@ -44,4 +46,4 @@ services and no channel information is shown. It is assumed that networks
 that want to hide which server users are on do not allow remote whois other
 than /whois <nick> <nick>.
 
-$Id: PCOMMANDS 4503 2006-01-05 12:46:25Z jilles $
+$Id: PCOMMANDS 5125 2006-04-25 21:34:44Z jilles $

@@ -1,3 +1,14 @@
+gxti        2006/04/23 03:10:00 UTC	(20060423-5123)
+  Log:
+  Update example config to include saslserv/crypt.
+  Disable mechanism-listing and replace with a simple session abort, since chary doesn't support this.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/dist/example.conf (File Modified) 
+  +5 -1		trunk/modules/saslserv/sasl.c (File Modified) 
+
+
 jilles      2006/04/22 19:26:16 UTC	(20060422-5121)
   Log:
   origin is a nick in chanserv(), so use user_find_named().
