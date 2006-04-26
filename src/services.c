@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 5065 2006-04-14 03:55:44Z w00t $
+ * $Id: services.c 5127 2006-04-26 23:55:34Z jilles $
  */
 
 #include "atheme.h"
@@ -201,7 +201,8 @@ void reintroduce_user(user_t *u)
 		else
 		{
 			/* channel will have been destroyed... */
-			/* XXX ban desync between services and ircd */
+			/* XXX resend the bans instead of destroying them? */
+			chanban_clear(c);
 			join_sts(c, u, 1, channel_modes(c, TRUE));
 #if 0
 			strlcpy(chname, c->name, sizeof chname);
