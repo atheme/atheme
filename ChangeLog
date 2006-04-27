@@ -1,3 +1,15 @@
+jilles      2006/04/26 23:55:34 UTC	(20060426-5127)
+  Log:
+  Avoid a ban desync if a service is killed while alone in a channel,
+  by clearing all bans in the channel. Formerly, ircd lost the bans
+  but atheme kept them. A possible enhancement could be to resend the
+  bans.
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/04/25 21:34:44 UTC	(20060425-5125)
   Log:
   Mention /motd.

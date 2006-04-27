@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: asuka.c 5119 2006-04-22 19:10:00Z jilles $
+ * $Id: asuka.c 5129 2006-04-27 00:36:50Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 5119 2006-04-22 19:10:00Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 5129 2006-04-27 00:36:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -969,6 +969,11 @@ static void m_info(char *origin, uint8_t parc, char *parv[])
 	handle_info(user_find(origin));
 }
 
+static void m_motd(char *origin, uint8_t parc, char *parv[])
+{
+	handle_motd(user_find(origin));
+}
+
 static void m_whois(char *origin, uint8_t parc, char *parv[])
 {
 	handle_whois(user_find(origin), parc >= 2 ? parv[1] : "*");
@@ -1091,6 +1096,7 @@ void _modinit(module_t * m)
 	pcommand_add("PASS", m_pass);
 	pcommand_add("ERROR", m_error);
 	pcommand_add("T", m_topic);
+	pcommand_add("MO", m_motd);
 
 	m->mflags = MODTYPE_CORE;
 
