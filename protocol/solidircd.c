@@ -532,7 +532,6 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 {
 	server_t *s;
 	user_t *u;
-	kline_t *k;
 	struct in_addr ip;
 	char ipstring[64];
 
