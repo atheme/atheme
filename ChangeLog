@@ -1,3 +1,13 @@
+jilles      2006/05/01 14:10:38 UTC	(20060501-5141)
+  Log:
+  Use the new shorter help display in chanserv, verbosely shown commands are
+  REGISTER OP INVITE UNBAN FLAGS RECOVER
+  
+
+  Changes:	Modified:
+  +9 -1		trunk/modules/chanserv/help.c (File Modified) 
+
+
 jilles      2006/05/01 14:08:00 UTC	(20060501-5139)
   Log:
   Make this look a bit nicer.

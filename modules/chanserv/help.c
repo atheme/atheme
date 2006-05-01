@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 5141 2006-05-01 14:10:38Z jilles $
+ * $Id: help.c 5143 2006-05-01 14:15:35Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 5141 2006-05-01 14:10:38Z jilles $",
+	"$Id: help.c 5143 2006-05-01 14:15:35Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -108,6 +108,9 @@ static void cs_cmd_help(char *origin)
 		notice(chansvs.nick, origin, " ");
 		notice(chansvs.nick, origin, "For more information on a command, type:");
 		notice(chansvs.nick, origin, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
+		notice(chansvs.nick, origin, " ");
+		notice(chansvs.nick, origin, "For a verbose listing of all commands, type:");
+		notice(chansvs.nick, origin, "\2/%s%s help commands\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
 		notice(chansvs.nick, origin, " ");
 
 		command_help_short(chansvs.nick, origin, cs_cmdtree, "REGISTER OP INVITE UNBAN FLAGS RECOVER");
