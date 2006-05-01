@@ -1,3 +1,12 @@
+nenolod     2006/05/01 14:58:35 UTC	(20060501-5153)
+  Log:
+  add some debugging code
+
+  Changes:	Modified:
+  +121 -0	trunk/contrib/cs_repair.c (File Added) 
+  +2 -0		trunk/modules/saslserv/sasl.c (File Modified) 
+
+
 nenolod     2006/05/01 14:31:59 UTC	(20060501-5151)
   Log:
   - version bump: 1.1.0

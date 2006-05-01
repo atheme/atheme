@@ -15,7 +15,7 @@
    along with this program; if not, write to the Free Software Foundation,
    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-   $Id: base64.c 5099 2006-04-17 04:26:48Z gxti $ */
+   $Id: base64.c 5155 2006-05-01 15:32:34Z jilles $ */
 
 /* Written by Simon Josefsson.  Partially adapted from GNU MailUtils
  * (mailbox/filter_trans.c, as of 2004-11-28).  Improved by review
@@ -385,11 +385,11 @@ base64_decode_alloc (const char *in, size_t inlen, char **out,
      The exact amount is 3 * inlen / 4, minus 1 if the input ends
      with "=" and minus another 1 if the input ends with "==".
      Dividing before multiplying avoids the possibility of overflow.  */
-  size_t needlen = 3 * (inlen / 4) + 2;
+  size_t needlen = 3 * (inlen / 4) + 3;
 
   *out = malloc (needlen);
   if (!*out)
-    return true;
+    return false;
 
   if (!base64_decode (in, inlen, *out, &needlen))
     {
@@ -398,6 +398,7 @@ base64_decode_alloc (const char *in, size_t inlen, char **out,
       return false;
     }
 
+  (*out)[needlen] = '\0';
   if (outlen)
     *outlen = needlen;
 
