@@ -1,3 +1,13 @@
+jilles      2006/05/01 17:01:48 UTC	(20060501-5159)
+  Log:
+  Skeletal SASL documentation file, only links for now.
+  Probably want to extend this for 1.1.0.
+  
+
+  Changes:	Modified:
+  +7 -0		trunk/doc/SASL (File Added) 
+
+
 jilles      2006/05/01 16:59:38 UTC	(20060501-5157)
   Log:
   Release notes for 1.1.

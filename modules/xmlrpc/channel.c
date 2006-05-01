@@ -4,7 +4,7 @@
  *
  * XMLRPC channel management functions.
  *
- * $Id: channel.c 5135 2006-05-01 01:03:52Z gxti $
+ * $Id: channel.c 5161 2006-05-01 17:09:39Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/channel", FALSE, _modinit, _moddeinit,
-	"$Id: channel.c 5135 2006-05-01 01:03:52Z gxti $",
+	"$Id: channel.c 5161 2006-05-01 17:09:39Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -495,16 +495,14 @@ static int do_topic_append(void *conn, int parc, char *parv[])
  * atheme.channel.access.get
  *
  * XML inputs:
- *       authcookie, origin account name, channel name, account name
+ *       authcookie, account name, channel name
  *
  * XML outputs:
  *       fault 1 - validation failed
  *       fault 2 - unknown account
  *       fault 4 - insufficient parameters
  *       fault 5 - unknown channel
- *       fault 6 - no access
- *       fault 7 - key doesn't exist
- *       default - value
+ *       default - value (string starting with '+')
  *
  * Side Effects:
  *       none.
@@ -516,7 +514,7 @@ static int do_access_get(void *conn, int parc, char *parv[])
 	chanacs_t *ca;
 	char buf[XMLRPC_BUFSIZE];
 
-	if (parc < 4)
+	if (parc < 3)
 	{
 		xmlrpc_generic_error(4, "Insufficient parameters.");
 		return 0;
@@ -540,27 +538,11 @@ static int do_access_get(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (!(target = myuser_find(parv[3])))
-	{
-		xmlrpc_generic_error(2, "Unknown account.");
-		return 0;
-	}
+	logcommand_external(chansvs.me, "xmlrpc", conn, NULL, CMDLOG_GET, "%s GET ACCESS", mc->name);
 
-	if (!chanacs_find(mc, mu, CA_ACLVIEW) && !has_priv_myuser(mu, PRIV_CHAN_AUSPEX))
-	{
-		xmlrpc_generic_error(6, "No access.");
-		return 0;
-	}
+	ca = chanacs_find(mc, mu, 0);
 
-	if (!(ca = chanacs_find(mc, target, 0)))
-	{
-		xmlrpc_generic_error(7, "Key doesn't exist.");
-		return 0;
-	}
-
-	logcommand_external(chansvs.me, "xmlrpc", conn, NULL, CMDLOG_GET, "%s GET ACCESS %s", mc->name, parv[3]);
-
-	xmlrpc_string(buf, bitmask_to_flags(ca->level, chanacs_flags));
+	xmlrpc_string(buf, bitmask_to_flags(ca != NULL ? ca->level : 0, chanacs_flags));
 	xmlrpc_send(1, buf);
 	return 0;
 }
