@@ -4,7 +4,7 @@
  *
  * Provides a SASL authentication agent for clients.
  *
- * $Id: sasl.c 5123 2006-04-23 03:10:00Z gxti $
+ * $Id: sasl.c 5153 2006-05-01 14:58:35Z nenolod $
  */
 
 /* sasl.h and friends are included from atheme.h now --nenolod */
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/sasl", FALSE, _modinit, _moddeinit,
-	"$Id: sasl.c 5123 2006-04-23 03:10:00Z gxti $",
+	"$Id: sasl.c 5153 2006-05-01 14:58:35Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -170,6 +170,8 @@ static sasl_mechanism_t *find_mechanism(char *name)
 		if(!strcmp(mptr->name, name))
 			return mptr;
 	}
+
+	slog(LG_DEBUG, "find_mechanism(): cannot find mechanism `%s'! (listptr = %p)", name, mechanisms);
 
 	return NULL;
 }

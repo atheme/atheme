@@ -1,3 +1,13 @@
+nenolod     2006/05/01 14:31:59 UTC	(20060501-5151)
+  Log:
+  - version bump: 1.1.0
+  
+
+  Changes:	Modified:
+  +14 -14	trunk/configure (File Modified) 
+  +1 -1		trunk/configure.ac (File Modified) 
+
+
 jilles      2006/05/01 14:19:49 UTC	(20060501-5149)
   Log:
   Use the new shorter help display in userserv, verbosely shown commands are
