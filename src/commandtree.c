@@ -4,7 +4,7 @@
  *
  * Commandtree manipulation routines.
  *
- * $Id: commandtree.c 5137 2006-05-01 13:40:56Z jilles $
+ * $Id: commandtree.c 5139 2006-05-01 14:08:00Z jilles $
  */
 
 #include "atheme.h"
@@ -158,7 +158,7 @@ void command_help_short(char *mynick, char *origin, list_t *commandtree, char *m
 {
 	user_t *u = user_find_named(origin);
 	node_t *n;
-	int i=0;
+	unsigned int l;
 	char buf[256];
 
 	notice(mynick, origin, "The following commands are available:");
@@ -174,8 +174,9 @@ void command_help_short(char *mynick, char *origin, list_t *commandtree, char *m
 			notice(mynick, origin, "\2%-16s\2 %s", c->name, c->desc);
 	}
 
-	notice(mynick, origin, "Other commands:");
-	buf[0] = '\0';
+	notice(mynick, origin, " ");
+	strlcpy(buf, translation_get("Other commands: "), sizeof buf);
+	l = strlen(buf);
 	LIST_FOREACH(n, commandtree->head)
 	{
 		command_t *c = n->data;
@@ -185,19 +186,22 @@ void command_help_short(char *mynick, char *origin, list_t *commandtree, char *m
 		 */
 		if (!string_in_list(maincmds, c->name) && has_priv(u, c->access))
 		{
-			i++;
-			strlcat(buf, c->name, sizeof buf);
-			strlcat(buf, " ", sizeof buf);
-			if (i == 6)
+			if (strlen(buf) > l)
+				strlcat(buf, ", ", sizeof buf);
+			if (strlen(buf) > 55)
 			{
-				notice(mynick, origin, " %s", buf);
-				buf[0] = '\0';
-				i = 0;
+				notice(mynick, origin, "%s", buf);
+				buf[l] = '\0';
+				while (--l > 0)
+					buf[l] = ' ';
+				buf[0] = ' ';
+				l = strlen(buf);
 			}
+			strlcat(buf, c->name, sizeof buf);
 		}
 	}
-	if (i != 0)
-		notice(mynick, origin, " %s", buf);
+	if (strlen(buf) > l)
+		notice(mynick, origin, "%s", buf);
 }
 
 void fcommand_add(fcommand_t * cmd, list_t *commandtree)

@@ -1,3 +1,17 @@
+jilles      2006/05/01 13:40:56 UTC	(20060501-5137)
+  Log:
+  Add void command_help_short(char *mynick, char *origin,
+  list_t *commandtree, char *maincmds), like command_help()
+  but lists only the commands in maincmds
+  ("command1 command2...") verbosely and just shows the
+  other command names.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/commandtree.h (File Modified) 
+  +82 -0	trunk/src/commandtree.c (File Modified) 
+
+
 gxti        2006/05/01 01:03:52 UTC	(20060501-5135)
   Log:
   Remove need for user to be online (especially as their account name) in XMLRPC atheme.channel.topic.set/append
