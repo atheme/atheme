@@ -1,3 +1,12 @@
+jilles      2006/05/01 16:59:38 UTC	(20060501-5157)
+  Log:
+  Release notes for 1.1.
+  
+
+  Changes:	Modified:
+  +39 -0	trunk/doc/RELEASE (File Modified) 
+
+
 jilles      2006/05/01 15:32:34 UTC	(20060501-5155)
   Log:
   base64_decode_alloc():
