@@ -4,7 +4,7 @@
  *
  * XMLRPC channel management functions.
  *
- * $Id: channel.c 5133 2006-05-01 00:55:48Z gxti $
+ * $Id: channel.c 5135 2006-05-01 01:03:52Z gxti $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/channel", FALSE, _modinit, _moddeinit,
-	"$Id: channel.c 5133 2006-05-01 00:55:48Z gxti $",
+	"$Id: channel.c 5135 2006-05-01 01:03:52Z gxti $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -356,7 +356,6 @@ static int do_topic_set(void *conn, int parc, char *parv[])
 	myuser_t *mu;
 	mychan_t *mc;
 	channel_t *c;
-	user_t *u;
 	char buf[XMLRPC_BUFSIZE];
  
 	if (parc < 4)
@@ -382,8 +381,8 @@ static int do_topic_set(void *conn, int parc, char *parv[])
 		xmlrpc_generic_error(5, "Unknown channel.");
 		return 0;
 	}
-	u = user_find_named(parv[1]);
-	if (!chanacs_user_has_flag(mc, u, CA_TOPIC))
+
+	if (!chanacs_find(mc, mu, CA_TOPIC))
 	{
 		xmlrpc_generic_error(6, "No access.");
 		return 0;
@@ -432,7 +431,6 @@ static int do_topic_append(void *conn, int parc, char *parv[])
 	myuser_t *mu;
 	mychan_t *mc;
 	channel_t *c;
-	user_t *u;
 	char buf[XMLRPC_BUFSIZE], topicbuf[BUFSIZE];
  
 	if (parc < 4)
@@ -458,8 +456,8 @@ static int do_topic_append(void *conn, int parc, char *parv[])
 		xmlrpc_generic_error(5, "Unknown channel.");
 		return 0;
 	}
-	u = user_find_named(parv[1]);
-	if (!chanacs_user_has_flag(mc, u, CA_TOPIC))
+
+	if (!chanacs_find(mc, mu, CA_TOPIC))
 	{
 		xmlrpc_generic_error(6, "No access.");
 		return 0;

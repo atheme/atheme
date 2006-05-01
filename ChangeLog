@@ -1,3 +1,13 @@
+gxti        2006/05/01 00:55:48 UTC	(20060501-5133)
+  Log:
+  New XMLRPC method atheme.channel.access.get
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/contrib/xmlrpc_explorer.php (File Modified) 
+  +77 -0	trunk/modules/xmlrpc/channel.c (File Modified) 
+
+
 jilles      2006/04/29 19:09:24 UTC	(20060429-5131)
   Log:
   Remove unused variable kline_t *k from protocol modules.
