@@ -1,3 +1,14 @@
+jilles      2006/05/01 14:17:57 UTC	(20060501-5145)
+  Log:
+  Use the new shorter help display in nickserv, verbosely shown commands are
+  REGISTER IDENTIFY GHOST INFO LISTCHANS SET HOLD MARK FREEZE
+  (as before only commands the user has access to are shown)
+  
+
+  Changes:	Modified:
+  +9 -1		trunk/modules/nickserv/help.c (File Modified) 
+
+
 nenolod     2006/05/01 14:15:35 UTC	(20060501-5143)
   Log:
   - add a pointer to help commands here
