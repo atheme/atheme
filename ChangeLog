@@ -1,3 +1,13 @@
+jilles      2006/05/01 14:19:49 UTC	(20060501-5149)
+  Log:
+  Use the new shorter help display in userserv, verbosely shown commands are
+  REGISTER LOGIN INFO LISTCHANS SET HOLD MARK FREEZE
+  
+
+  Changes:	Modified:
+  +9 -1		trunk/modules/userserv/help.c (File Modified) 
+
+
 nenolod     2006/05/01 14:19:40 UTC	(20060501-5147)
   Log:
   - add SET to the shortened command list
