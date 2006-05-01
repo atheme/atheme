@@ -1,4 +1,43 @@
-$Id: RELEASE 4785 2006-02-05 04:22:25Z nenolod $
+$Id: RELEASE 5157 2006-05-01 16:59:38Z jilles $
+
+Atheme 1.1 Release Notes
+========================
+- Shorten /msg chanserv/nickserv/userserv help, the full command list
+  is on /msg *serv help commands.
+- Add XMLRPC method atheme.channel.access.get.
+- Disallow vhosts which are too long or contain @!*?
+- Don't introduce a service with a UID if the ircd does not support UIDs
+  when loading it at runtime.
+- Change regex_match API to be more efficient.
+- Disable modrestart, it cannot possibly work. (It used to crash.)
+- Add wumpus, a service providing a game, to contrib.
+- Add source of the message to hook_cmessage_data_t.
+- Add optional new syntax for operclass{} blocks.
+- Add SASL support, this allows users on charybdis networks to log in
+  before registration to the network; among other things this ensures
+  the real host behind a services vhost is not shown to nonopers.
+- Add support for /motd <atheme>, uses PREFIX/etc/atheme.motd.
+- Allow users to GHOST other nicks which are logged into their account.
+- Allow other services than chanserv to process fantasy commands.
+- Allow specification of akill duration in hours (h), days (d) and weeks (w).
+- Add /os akill sync, sends all akills to all servers.
+- Ultimate3 improvements.
+- Add support for Nefarious IRCu 0.4.x or later.
+- Several UserServ bugfixes.
+- InspIRCd improvements.
+- Ensure kline exempt fully exempts from akills; do not kill akilled users
+  at any time.
+- Avoid sending out klines with negative expiry time.
+- Add IP glob akill matching, for ircds that send user IP addresses.
+- Move akill checking to operserv/akill module.
+- Don't allocate me.name/me.numeric on rehash. This fixes a known P10
+  issue.
+- Add support for ircu2.10.12's +D mode, which was already implemented
+  in Asuka.
+- Always send both the channel TS and the topic TS when setting a topic
+  under P10 ircd's.
+- Several other minor tweaks and bugfixes.
+
 
 Atheme 1.0 Release Notes
 ========================

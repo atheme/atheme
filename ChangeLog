@@ -1,3 +1,14 @@
+jilles      2006/05/01 15:32:34 UTC	(20060501-5155)
+  Log:
+  base64_decode_alloc():
+  - Fix bug where it would return true if malloc failed
+  - Null-terminate the result
+  
+
+  Changes:	Modified:
+  +3 -2		trunk/src/base64.c (File Modified) 
+
+
 nenolod     2006/05/01 14:58:35 UTC	(20060501-5153)
   Log:
   add some debugging code
