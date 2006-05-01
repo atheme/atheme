@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the NickServ HELP command.
  *
- * $Id: help.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: help.c 5149 2006-05-01 14:19:49Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: help.c 5149 2006-05-01 14:19:49Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -54,8 +54,16 @@ void us_cmd_help(char *origin)
 		notice(usersvs.nick, origin, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", usersvs.disp);
 		notice(usersvs.nick, origin, " ");
 
-		command_help(usersvs.nick, origin, us_cmdtree);
+		command_help_short(usersvs.nick, origin, us_cmdtree, "REGISTER LOGIN INFO LISTCHANS SET HOLD MARK FREEZE");
 
+		notice(usersvs.nick, origin, "***** \2End of Help\2 *****");
+		return;
+	}
+
+	if (!strcasecmp("COMMANDS", command))
+	{
+		notice(usersvs.nick, origin, "***** \2%s Help\2 *****", usersvs.nick);
+		command_help(usersvs.nick, origin, us_cmdtree);
 		notice(usersvs.nick, origin, "***** \2End of Help\2 *****");
 		return;
 	}

@@ -1,3 +1,12 @@
+nenolod     2006/05/01 14:19:40 UTC	(20060501-5147)
+  Log:
+  - add SET to the shortened command list
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/help.c (File Modified) 
+
+
 jilles      2006/05/01 14:17:57 UTC	(20060501-5145)
   Log:
   Use the new shorter help display in nickserv, verbosely shown commands are
