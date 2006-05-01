@@ -1,3 +1,12 @@
+gxti        2006/05/01 01:03:52 UTC	(20060501-5135)
+  Log:
+  Remove need for user to be online (especially as their account name) in XMLRPC atheme.channel.topic.set/append
+  
+
+  Changes:	Modified:
+  +4 -6		trunk/modules/xmlrpc/channel.c (File Modified) 
+
+
 gxti        2006/05/01 00:55:48 UTC	(20060501-5133)
   Log:
   New XMLRPC method atheme.channel.access.get
