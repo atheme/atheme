@@ -1,3 +1,12 @@
+jilles      2006/05/01 14:08:00 UTC	(20060501-5139)
+  Log:
+  Make this look a bit nicer.
+  
+
+  Changes:	Modified:
+  +16 -12	trunk/src/commandtree.c (File Modified) 
+
+
 jilles      2006/05/01 13:40:56 UTC	(20060501-5137)
   Log:
   Add void command_help_short(char *mynick, char *origin,
