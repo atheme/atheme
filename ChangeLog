@@ -1,3 +1,13 @@
+jilles      2006/05/01 17:09:39 UTC	(20060501-5161)
+  Log:
+  Change atheme.channel.access.get procedure to apply to the
+  origin user always and not require +A.
+  
+
+  Changes:	Modified:
+  +6 -24	trunk/modules/xmlrpc/channel.c (File Modified) 
+
+
 jilles      2006/05/01 17:01:48 UTC	(20060501-5159)
   Log:
   Skeletal SASL documentation file, only links for now.

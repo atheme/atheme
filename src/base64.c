@@ -15,7 +15,7 @@
    along with this program; if not, write to the Free Software Foundation,
    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-   $Id: base64.c 5155 2006-05-01 15:32:34Z jilles $ */
+   $Id: base64.c 5193 2006-05-03 14:31:53Z jilles $ */
 
 /* Written by Simon Josefsson.  Partially adapted from GNU MailUtils
  * (mailbox/filter_trans.c, as of 2004-11-28).  Improved by review
@@ -63,7 +63,7 @@ void
 base64_encode (const char *in, size_t inlen,
 	       char *out, size_t outlen)
 {
-  static const char b64str[64] =
+  static const char b64str[65] =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
   while (inlen && outlen)

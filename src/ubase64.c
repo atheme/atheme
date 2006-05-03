@@ -4,7 +4,7 @@
  *
  * Undernet base64 routine.
  *
- * $Id: ubase64.c 4807 2006-02-10 03:02:02Z nenolod $
+ * $Id: ubase64.c 5193 2006-05-03 14:31:53Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
  * base64touint() written 01/20/06 by jilles, for getting IP addresses.
  */
 
-static const char ub64_alphabet[64] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789[]";
+static const char ub64_alphabet[65] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789[]";
 #define _ '\377'
 static const char ub64_lookuptab[256] = {
 _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, /* 0-15 */

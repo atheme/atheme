@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 5069 2006-04-14 09:03:55Z w00t $
+ * $Id: function.c 5193 2006-05-03 14:31:53Z jilles $
  */
 
 #include "atheme.h"
@@ -16,7 +16,7 @@ FILE *log_file;
 # undef HAVE_GETTIMEOFDAY
 #endif
 
-char ch[26] = "abcdefghijklmnopqrstuvwxyz";
+char ch[27] = "abcdefghijklmnopqrstuvwxyz";
 
 /* This function uses smalloc() to allocate memory.
  * You MUST free the result when you are done with it!
