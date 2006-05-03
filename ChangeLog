@@ -1,3 +1,18 @@
+jilles      2006/05/03 14:31:53 UTC	(20060503-5193)
+  Log:
+  Reserve space for the '\0' if we initialize a char array
+  with a string constant (even if we never use it as a
+  string).
+  
+  From nenolod's C++ cleanups.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/base64.c (File Modified) 
+  +1 -1		trunk/src/function.c (File Modified) 
+  +1 -1		trunk/src/ubase64.c (File Modified) 
+
+
 jilles      2006/05/01 17:09:39 UTC	(20060501-5161)
   Log:
   Change atheme.channel.access.get procedure to apply to the
