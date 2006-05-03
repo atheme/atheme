@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 5065 2006-04-14 03:55:44Z w00t $
+ * $Id: node.c 5221 2006-05-03 15:42:14Z jilles $
  */
 
 #include "atheme.h"
@@ -507,14 +507,19 @@ server_t *server_add(char *name, uint8_t hops, char *uplink, char *id, char *des
 		node_add(s, node_create(), &sidlist[s->shash]);
 	}
 
+	/* check to see if it's hidden */
+	if (!strncmp(desc, "(H)", 3))
+	{
+		s->flags |= SF_HIDE;
+		desc += 3;
+		if (*desc == ' ')
+			desc++;
+	}
+
 	s->name = sstrdup(name);
 	s->desc = sstrdup(desc);
 	s->hops = hops;
 	s->connected_since = CURRTIME;
-
-	/* check to see if it's hidden */
-	if (!strncmp(desc, "(H)", 3))
-		s->flags |= SF_HIDE;
 
 	if (u)
 	{

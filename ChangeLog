@@ -1,3 +1,12 @@
+jilles      2006/05/03 15:02:49 UTC	(20060503-5207)
+  Log:
+  Update to new definition of atheme.channel.access.get.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/contrib/xmlrpc_explorer.php (File Modified) 
+
+
 jilles      2006/05/03 14:51:14 UTC	(20060503-5203)
   Log:
   Comment changes to CRYPT mechanism:
