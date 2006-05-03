@@ -4,7 +4,7 @@
  *
  * CRYPT mechanism provider
  *
- * $Id: crypt.c 5107 2006-04-17 17:48:00Z gxti $
+ * $Id: crypt.c 5203 2006-05-03 14:51:14Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/crypt", FALSE, _modinit, _moddeinit,
-	"$Id: crypt.c 5107 2006-04-17 17:48:00Z gxti $",
+	"$Id: crypt.c 5203 2006-05-03 14:51:14Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,6 +48,8 @@ void _moddeinit()
  * C -> S: 16 random bytes(different from server's random bytes) + username
  * S -> C: salt from user's pass(possibly generated on the spot)
  * C -> S: raw MD5 of (server's data + client's data + crypted pass)
+ *
+ * WARNING: this allows the client to log in given just the encrypted password
  */
 
 static int mech_start(sasl_session_t *p, char **out, int *out_len)
@@ -107,7 +109,7 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 				*out = malloc(2);
 				memcpy(*out, mu->pass, 2);
 			}
-			else if(*(mu->pass) == '$') /* GNU extended MD5 type */
+			else if(*(mu->pass) == '$') /* FreeBSD MD5 type */
 			{
 				*out_len = strlen(mu->pass) - 22;
 				*out = malloc(*out_len);

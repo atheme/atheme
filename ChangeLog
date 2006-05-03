@@ -1,3 +1,14 @@
+jilles      2006/05/03 14:43:23 UTC	(20060503-5199)
+  Log:
+  Remove cs_repair.c, it probably wasn't meant to be committed.
+  (For broken anope conversions, change anope_convert.c instead
+  to output the proper levels.)
+  
+
+  Changes:	Modified:
+  +0 -121	trunk/contrib/cs_repair.c (File Deleted) 
+
+
 jilles      2006/05/03 14:31:53 UTC	(20060503-5193)
   Log:
   Reserve space for the '\0' if we initialize a char array
