@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 4929 2006-03-28 23:59:23Z jilles $
+ * $Id: ptasks.c 5243 2006-05-04 00:31:41Z jilles $
  */
 
 #include "atheme.h"
@@ -340,10 +340,7 @@ void handle_message(char *origin, char *target, boolean_t is_notice, char *messa
 		t = sptr->me;
 
 		/* Run it through flood checks. Channel commands are checked
-		 * separately. (XXX they aren't)
-		 *
-		 * XXX we have to ignore channel messages for now, otherwise people
-		 * could get akilled.
+		 * separately.
 		 */
 		if (t != NULL && *target != '#' && floodcheck(u, t))
 			return;
