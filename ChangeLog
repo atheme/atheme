@@ -1,3 +1,12 @@
+nenolod     2006/05/05 01:52:28 UTC	(20060505-5253)
+  Log:
+  - add SASL option and ability to append extra options to configure to setup script
+  
+
+  Changes:	Modified:
+  +48 -0	trunk/setup (File Modified) 
+
+
 nenolod     2006/05/05 01:43:39 UTC	(20060505-5251)
   Log:
   - durrrr
