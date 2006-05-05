@@ -1,3 +1,12 @@
+jilles      2006/05/04 00:31:41 UTC	(20060504-5243)
+  Log:
+  Comment change: fantasy commands are now (since r4557) indeed checked separately.
+  
+
+  Changes:	Modified:
+  +1 -4		trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2006/05/03 15:42:14 UTC	(20060503-5221)
   Log:
   Don't show (H) in the description for hidden servers (/whois etc).
