@@ -5,10 +5,11 @@
 #
 # This file is a simple setup script.
 #
-# $Id: setup 4869 2006-02-27 21:09:09Z jilles $
+# $Id: setup 5253 2006-05-05 01:52:28Z nenolod $
 
 PREFIX="$HOME/atheme"
 LARGENET="no"
+SASL="yes"
 VERSION=`grep AC_INIT configure.ac | awk '{print \$2}' | sed s:\,::g`
 
 export ok INPUT
@@ -91,6 +92,53 @@ case "$LARGENET" in
     ARGS="--prefix=$PREFIX --enable-large-net"
     ;;
 esac
+
+echo ""
+
+ok=0
+echo "Would you like to enable SASL authentication? This is a fairly"
+echo "new feature; most IRCDs do not support it yet, however charybdis"
+echo "does. Other IRCds may follow soon."
+while [ $ok -eq 0 ] ; do
+  echo -n "[$SASL] "
+  if read INPUT ; then : ; else echo "" ; exit 1 ; fi
+  if [ ! "$INPUT" ] ; then
+    INPUT=$SASL
+    ok=1
+  else
+    ok=1
+  fi
+done
+SASL=$INPUT
+
+case "$SASL" in
+  [Yy])
+    ARGS="$ARGS --enable-sasl"
+    ;;
+  Yes)
+    ARGS="$ARGS --enable-sasl"
+    ;;
+  yes)
+    ARGS="$ARGS --enable-sasl"
+    ;;
+esac
+
+echo ""
+
+ok=0
+echo "Would you like to pass any additional options to configure? If so,"
+echo "place them here:"
+while [ $ok -eq 0 ] ; do
+  echo -n "[no] "
+  if read INPUT ; then : ; else echo "" ; exit 1 ; fi
+  if [ ! "$INPUT" ] ; then
+    INPUT=""
+    ok=1
+  else
+    ok=1
+  fi
+done
+ARGS="$ARGS $INPUT"
 
 sh configure $ARGS
 if [ $? != 0 ]; then
