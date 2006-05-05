@@ -4,7 +4,7 @@
  *
  * PLAIN mechanism provider
  *
- * $Id: plain.c 5245 2006-05-05 01:40:30Z nenolod $
+ * $Id: plain.c 5247 2006-05-05 01:41:08Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/plain", FALSE, _modinit, _moddeinit,
-	"$Id: plain.c 5245 2006-05-05 01:40:30Z nenolod $",
+	"$Id: plain.c 5247 2006-05-05 01:41:08Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -70,9 +70,6 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 
 	/* Done dissecting, now check. */
 	if(!(mu = myuser_find(auth)))
-		return ASASL_FAIL;
-
-	if((md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
 		return ASASL_FAIL;
 
 	p->username = strdup(auth);
