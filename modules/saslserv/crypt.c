@@ -4,15 +4,22 @@
  *
  * CRYPT mechanism provider
  *
- * $Id: crypt.c 5203 2006-05-03 14:51:14Z jilles $
+ * $Id: crypt.c 5257 2006-05-05 21:20:49Z gxti $
  */
+
+/******************************* WARNING ******************************************
+ * This mechanism presents a vulnerability that allows any user to be logged in   *
+ * providing their crytped password is known. This allows attackers with a stolen *
+ * DB or crypted password to instantly log in using only the crypted password and *
+ * without cracking or brute-forcing. If you use this, guard your DB closely!     *
+ **********************************************************************************/
 
 #include "atheme.h"
 
 DECLARE_MODULE_V1
 (
 	"saslserv/crypt", FALSE, _modinit, _moddeinit,
-	"$Id: crypt.c 5203 2006-05-03 14:51:14Z jilles $",
+	"$Id: crypt.c 5257 2006-05-05 21:20:49Z gxti $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

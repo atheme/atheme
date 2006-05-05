@@ -1,3 +1,12 @@
+nenolod     2006/05/05 02:05:07 UTC	(20060505-5255)
+  Log:
+  - alignment changes: 16 characters becomes 15 characters to align with 'Other commands: <XXX>'
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/src/commandtree.c (File Modified) 
+
+
 nenolod     2006/05/05 01:52:28 UTC	(20060505-5253)
   Log:
   - add SASL option and ability to append extra options to configure to setup script
