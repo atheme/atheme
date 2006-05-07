@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 5127 2006-04-26 23:55:34Z jilles $
+ * $Id: services.c 5261 2006-05-07 21:47:38Z jilles $
  */
 
 #include "atheme.h"
@@ -196,7 +196,7 @@ void reintroduce_user(user_t *u)
 	LIST_FOREACH(n, u->channels.head)
 	{
 		c = ((chanuser_t *)n->data)->chan;
-		if (LIST_LENGTH(&c->members) > 1)
+		if (LIST_LENGTH(&c->members) > 1 || c->modes & ircd->perm_mode)
 			join_sts(c, u, 0, channel_modes(c, TRUE));
 		else
 		{

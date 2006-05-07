@@ -1,3 +1,14 @@
+jilles      2006/05/05 21:25:40 UTC	(20060505-5259)
+  Log:
+  Add better descriptions to sasl modules. Bring
+  example.userserv.conf up to date also.
+  
+
+  Changes:	Modified:
+  +6 -1		trunk/dist/example.conf (File Modified) 
+  +7 -1		trunk/dist/example.userserv.conf (File Modified) 
+
+
 gxti        2006/05/05 21:20:49 UTC	(20060505-5257)
   Log:
   Remove crypt module from example conf and add warning to source pertaining to vulnerability.
