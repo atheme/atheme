@@ -1,4 +1,4 @@
-$Id: IRCD 5091 2006-04-15 22:43:28Z jilles $
+$Id: IRCD 5265 2006-05-16 10:50:16Z jilles $
 
 IRCD-specific notes
 -------------------
@@ -38,6 +38,8 @@ Bahamut is designed for services not joining channels, not having the ability
 to prevent services being kicked/deopped and the like. If you want to use
 fantasy commands, you will have to enable join_chans anyway; beware of bots
 fighting with chanserv.
+
+Do not use the "services hub" server type.
 
 bircd
 -----
