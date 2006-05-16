@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 5131 2006-04-29 19:09:24Z jilles $
+ * $Id: plexus.c 5263 2006-05-16 04:22:14Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 5131 2006-04-29 19:09:24Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 5263 2006-05-16 04:22:14Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -19,17 +19,17 @@ ircd_t PleXusIRCd = {
         "$$",                           /* TLD Prefix, used by Global. */
         FALSE,                          /* Whether or not we use IRCNet/TS6 UID */
         FALSE,                          /* Whether or not we use RCOMMAND */
-        FALSE,                          /* Whether or not we support channel owners. */
-        FALSE,                          /* Whether or not we support channel protection. */
+        TRUE,                           /* Whether or not we support channel owners. */
+        TRUE,                           /* Whether or not we support channel protection. */
         TRUE,                           /* Whether or not we support halfops. */
 	FALSE,				/* Whether or not we use P10 */
 	TRUE,				/* Whether or not we use vHosts. */
 	CMODE_OPERONLY,			/* Oper-only cmodes */
-        0,		                /* Integer flag for owner channel flag. */
-        0,                              /* Integer flag for protect channel flag. */
-        0,                              /* Integer flag for halfops. */
-        "+",                            /* Mode we set for owner. */
-        "+",                            /* Mode we set for protect. */
+        CMODE_OWNER,	                /* Integer flag for owner channel flag. */
+        CMODE_PROTECT,                  /* Integer flag for protect channel flag. */
+        CMODE_HALFOP,                   /* Integer flag for halfops. */
+        "+q",                           /* Mode we set for owner. */
+        "+a",                           /* Mode we set for protect. */
         "+h",                           /* Mode we set for halfops. */
 	PROTOCOL_PLEXUS,		/* Protocol type */
 	0,                              /* Permanent cmodes */
@@ -46,13 +46,12 @@ struct cmode_ plexus_mode_list[] = {
   { 's', CMODE_SEC    },
   { 't', CMODE_TOPIC  },
   { 'c', CMODE_NOCOLOR },
-  { 'M', CMODE_MODREG },
   { 'R', CMODE_REGONLY },
   { 'O', CMODE_OPERONLY },
   { 'S', CMODE_STRIP },
   { 'K', CMODE_NOKNOCK },
   { 'N', CMODE_STICKY },
-  { 'Z', CMODE_BWSAVE },
+  { 'B', CMODE_BWSAVE },
   { '\0', 0 }
 };
 
@@ -61,6 +60,8 @@ struct cmode_ plexus_ignore_mode_list[] = {
 };
 
 struct cmode_ plexus_status_mode_list[] = {
+  { 'q', CMODE_OWNER   },
+  { 'a', CMODE_PROTECT },
   { 'o', CMODE_OP      },
   { 'h', CMODE_HALFOP  },
   { 'v', CMODE_VOICE   },
@@ -68,6 +69,8 @@ struct cmode_ plexus_status_mode_list[] = {
 };
 
 struct cmode_ plexus_prefix_mode_list[] = {
+  { '~', CMODE_OWNER   },
+  { '&', CMODE_PROTECT },
   { '@', CMODE_OP      },
   { '%', CMODE_HALFOP  },
   { '+', CMODE_VOICE   },
@@ -97,7 +100,7 @@ static uint8_t plexus_server_login(void)
 /* introduce a client */
 static void plexus_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
-	sts("NICK %s 1 %ld +%sS %s %s %s %s 0 0 :%s", nick, CURRTIME, "io", user, host, host, me.name, real);
+	sts("NICK %s 1 %ld +%sS %s %s %s 0 0 :%s", nick, CURRTIME, "io", user, host, me.name, real);
 }
 
 /* invite a user to a channel */
@@ -283,6 +286,8 @@ static void plexus_ping_sts(void)
 /* protocol-specific stuff to do on login */
 static void plexus_on_login(char *origin, char *user, char *wantedhost)
 {
+	user_t *u;
+
 	if (!me.connected)
 		return;
 
@@ -292,19 +297,31 @@ static void plexus_on_login(char *origin, char *user, char *wantedhost)
 	if (nicksvs.me == NULL || irccasecmp(origin, user))
 		return;
 
-	sts(":%s MODE %s +e", me.name, origin);
+	u = user_find(origin);
+
+	if (u == NULL)
+		return;
+
+	sts(":%s ENCAP * SVSMODE %s %ld +rd %ld", nicksvs.nick, origin, (unsigned long) u->ts, CURRTIME);
 }
 
 /* protocol-specific stuff to do on login */
 static boolean_t plexus_on_logout(char *origin, char *user, char *wantedhost)
 {
+	user_t *u;
+
 	if (!me.connected)
 		return FALSE;
 
 	if (nicksvs.me == NULL || irccasecmp(origin, user))
 		return FALSE;
 
-	sts(":%s MODE %s -e", me.name, origin);
+	u = user_find(origin);
+
+	if (u == NULL)
+		return;
+
+	sts(":%s ENCAP * SVSMODE %s %ld -r", nicksvs.nick, origin, (unsigned long) u->ts, origin);
 	return FALSE;
 }
 
@@ -322,7 +339,7 @@ static void plexus_sethost_sts(char *source, char *target, char *host)
 	if (!me.connected)
 		return;
 
-	sts(":%s SVSHOST %s :%s", source, target, host);
+	sts(":%s ENCAP * CHGHOST %s :%s", ME, target, host);
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
@@ -467,7 +484,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 	/* got the right number of args for an introduction? */
 	if (parc == 10)
 	{
-		s = server_find(parv[7]);
+		s = server_find(parv[6]);
 		if (!s)
 		{
 			slog(LG_DEBUG, "m_nick(): new user on nonexistant server: %s", parv[6]);
@@ -476,7 +493,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
 
-		u = user_add(parv[0], parv[4], parv[5], parv[6], NULL, NULL, parv[9], s, atoi(parv[2]));
+		u = user_add(parv[0], parv[4], parv[5], NULL, NULL, NULL, parv[9], s, atoi(parv[2]));
 
 		user_mode(u, parv[3]);
 
@@ -678,14 +695,19 @@ static void m_capab(char *origin, uint8_t parc, char *parv[])
 	services_init();
 }
 
-static void m_svshost(char *origin, uint8_t parc, char *parv[])
+static void m_encap(char *origin, uint8_t parc, char *parv[])
 {
-	user_t *u = user_find(parv[0]);
+	user_t *u;
 
-	if (!u)
-		return;
+	if (!irccmp("CHGHOST", parv[1]))
+	{
+		u = user_find(parv[2]);
 
-	strlcpy(u->vhost, parv[1], HOSTLEN);
+		if (!u)
+			return;
+
+		strlcpy(u->vhost, parv[3], HOSTLEN);
+	}
 }
 
 static void m_motd(char *origin, uint8_t parc, char *parv[])
@@ -750,7 +772,7 @@ void _modinit(module_t * m)
 	pcommand_add("ERROR", m_error);
 	pcommand_add("TOPIC", m_topic);
 	pcommand_add("CAPAB", m_capab);
-	pcommand_add("SVSHOST", m_svshost);
+	pcommand_add("ENCAP", m_encap);
 	pcommand_add("MOTD", m_motd);
 
 	m->mflags = MODTYPE_CORE;

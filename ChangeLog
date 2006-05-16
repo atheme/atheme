@@ -1,3 +1,14 @@
+jilles      2006/05/07 21:47:38 UTC	(20060507-5261)
+  Log:
+  If a service is killed while alone in a permanent channel
+  (e.g. +P in charybdis), the channel will not have been
+  destroyed.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/05/05 21:25:40 UTC	(20060505-5259)
   Log:
   Add better descriptions to sasl modules. Bring
