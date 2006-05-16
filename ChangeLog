@@ -1,3 +1,14 @@
+jilles      2006/05/16 11:10:44 UTC	(20060516-5267)
+  Log:
+  - Mention commenting out mta to disable email
+  - Warn that sending email may disclose services's IP
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/dist/example.conf (File Modified) 
+  +3 -0		trunk/dist/example.userserv.conf (File Modified) 
+
+
 jilles      2006/05/16 10:50:16 UTC	(20060516-5265)
   Log:
   Bahamut: tell people not to use "services hub" server type.

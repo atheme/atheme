@@ -1,4 +1,4 @@
-$Id: IRCD 5265 2006-05-16 10:50:16Z jilles $
+$Id: IRCD 5269 2006-05-16 12:55:16Z nenolod $
 
 IRCD-specific notes
 -------------------
@@ -152,10 +152,18 @@ fighting with chanserv.
 plexus
 ------
 
-If you want to use akills, you need shared{} blocks or U:lines for services
-on all servers on the network. Note that only plexus 2.0.x
-supports remote unkline, although it may appear to sort of work in
-earlier versions.
+PleXusIRCd 3 is the only version supported.
+
+If you want services to function properly, you will need a shared { } 
+block for services, without any usermask entries, tagged for services:
+
+shared
+{
+     name = "services.int";
+     type = all, services;
+};
+
+The above block should do the trick.
 
 ptlink
 ------
