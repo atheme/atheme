@@ -1,3 +1,12 @@
+jilles      2006/05/17 13:21:13 UTC	(20060517-5273)
+  Log:
+  Rename msg variable to avoid warning about shadowing.
+  
+
+  Changes:	Modified:
+  +5 -5		trunk/protocol/charybdis.c (File Modified) 
+
+
 jilles      2006/05/17 13:12:39 UTC	(20060517-5271)
   Log:
   Ratbox/charybdis/hybrid: Do not try to TB an
