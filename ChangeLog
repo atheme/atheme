@@ -1,3 +1,12 @@
+nenolod     2006/05/16 12:55:16 UTC	(20060516-5269)
+  Log:
+  - updates in regards to PleXus 3.
+  
+
+  Changes:	Modified:
+  +12 -4	trunk/doc/IRCD (File Modified) 
+
+
 jilles      2006/05/16 11:10:44 UTC	(20060516-5267)
   Log:
   - Mention commenting out mta to disable email
