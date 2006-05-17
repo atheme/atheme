@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 5271 2006-05-17 13:12:39Z jilles $
+ * $Id: charybdis.c 5273 2006-05-17 13:21:13Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 5271 2006-05-17 13:12:39Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 5273 2006-05-17 13:21:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -1074,15 +1074,15 @@ static void m_encap(char *origin, uint8_t parc, char *parv[])
 	else if (!irccasecmp(parv[1], "SASL"))
 	{
 		/* :08C ENCAP * SASL 08CAAAAAE * S d29vTklOSkFTAGRhdGEgaW4gZmlyc3QgbGluZQ== */
-		sasl_message_t msg;
+		sasl_message_t smsg;
 
 		if (parc < 6)
 			return;
 
-		msg.uid = parv[2];
-		msg.mode = *parv[4];
-		msg.buf = parv[5];
-		hook_call_event("sasl_input", &msg);
+		smsg.uid = parv[2];
+		smsg.mode = *parv[4];
+		smsg.buf = parv[5];
+		hook_call_event("sasl_input", &smsg);
 	}
 #endif
 }

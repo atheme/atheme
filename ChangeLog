@@ -1,3 +1,15 @@
+jilles      2006/05/17 13:12:39 UTC	(20060517-5271)
+  Log:
+  Ratbox/charybdis/hybrid: Do not try to TB an
+  empty topic, this can cause trouble.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/charybdis.c (File Modified) 
+  +1 -1		trunk/protocol/hybrid.c (File Modified) 
+  +1 -1		trunk/protocol/ratbox.c (File Modified) 
+
+
 nenolod     2006/05/16 12:55:16 UTC	(20060516-5269)
   Log:
   - updates in regards to PleXus 3.
