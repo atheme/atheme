@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ GHOST function.
  *
- * $Id: ghost.c 5077 2006-04-14 11:45:22Z w00t $
+ * $Id: ghost.c 5277 2006-05-19 17:07:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/ghost", FALSE, _modinit, _moddeinit,
-	"$Id: ghost.c 5077 2006-04-14 11:45:22Z w00t $",
+	"$Id: ghost.c 5277 2006-05-19 17:07:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -53,7 +53,7 @@ void ns_cmd_ghost(char *origin)
 
 	mu = myuser_find(target);
 	target_u = user_find_named(target);
-	if (!mu && !target_u)
+	if (!mu && (!target_u || !target_u->myuser))
 	{
 		notice(nicksvs.nick, origin, "\2%s\2 is not a registered nickname.", target);
 		return;
@@ -92,7 +92,14 @@ void ns_cmd_ghost(char *origin)
 		return;
 	}
 
-	logcommand(nicksvs.me, u, CMDLOG_DO, "failed GHOST %s (bad password)", target);
-
-	notice(nicksvs.nick, origin, "Invalid password for \2%s\2.", mu->name);
+	if (password && mu)
+	{
+		logcommand(nicksvs.me, u, CMDLOG_DO, "failed GHOST %s (bad password)", target);
+		notice(nicksvs.nick, origin, "Invalid password for \2%s\2.", mu->name);
+	}
+	else
+	{
+		logcommand(nicksvs.me, u, CMDLOG_DO, "failed GHOST %s (invalid login)", target);
+		notice(nicksvs.nick, origin, "You may not ghost \2%s\2.", target);
+	}
 }
