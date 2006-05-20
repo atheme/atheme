@@ -4,18 +4,18 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 5263 2006-05-16 04:22:14Z nenolod $
+ * $Id: plexus.c 5279 2006-05-20 23:37:18Z nenolod $
  */
 
 #include "atheme.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 5263 2006-05-16 04:22:14Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 5279 2006-05-20 23:37:18Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
 ircd_t PleXusIRCd = {
-        "PleXusIRCd 2.x family",	/* IRCd name */
+        "hybrid-7.2.1+plexus-3.x family",	/* IRCd name */
         "$$",                           /* TLD Prefix, used by Global. */
         FALSE,                          /* Whether or not we use IRCNet/TS6 UID */
         FALSE,                          /* Whether or not we use RCOMMAND */
@@ -100,7 +100,7 @@ static uint8_t plexus_server_login(void)
 /* introduce a client */
 static void plexus_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
-	sts("NICK %s 1 %ld +%sS %s %s %s 0 0 :%s", nick, CURRTIME, "io", user, host, me.name, real);
+	sts("NICK %s 1 %ld +%s %s %s %s 0 0 :%s", nick, CURRTIME, "io", user, host, me.name, real);
 }
 
 /* invite a user to a channel */
@@ -287,6 +287,7 @@ static void plexus_ping_sts(void)
 static void plexus_on_login(char *origin, char *user, char *wantedhost)
 {
 	user_t *u;
+	myuser_t *mu;
 
 	if (!me.connected)
 		return;
@@ -298,17 +299,22 @@ static void plexus_on_login(char *origin, char *user, char *wantedhost)
 		return;
 
 	u = user_find(origin);
+	mu = myuser_find(origin);
 
-	if (u == NULL)
-		return;
+	if (u == NULL || mu == NULL)
+		return;		/* realistically, this should never happen --nenolod */
 
-	sts(":%s ENCAP * SVSMODE %s %ld +rd %ld", nicksvs.nick, origin, (unsigned long) u->ts, CURRTIME);
+	if (is_soper(mu))
+		sts(":%s ENCAP * SVSMODE %s %ld +rdN %ld", nicksvs.nick, origin, (unsigned long) u->ts, CURRTIME);
+	else
+		sts(":%s ENCAP * SVSMODE %s %ld +rd %ld", nicksvs.nick, origin, (unsigned long) u->ts, CURRTIME);
 }
 
 /* protocol-specific stuff to do on login */
 static boolean_t plexus_on_logout(char *origin, char *user, char *wantedhost)
 {
 	user_t *u;
+        myuser_t *mu;
 
 	if (!me.connected)
 		return FALSE;
@@ -317,11 +323,15 @@ static boolean_t plexus_on_logout(char *origin, char *user, char *wantedhost)
 		return FALSE;
 
 	u = user_find(origin);
+        mu = myuser_find(origin);
 
-	if (u == NULL)
+	if (u == NULL || mu == NULL)
 		return;
 
-	sts(":%s ENCAP * SVSMODE %s %ld -r", nicksvs.nick, origin, (unsigned long) u->ts, origin);
+	if (is_soper(mu))
+		sts(":%s ENCAP * SVSMODE %s %ld -rN", nicksvs.nick, origin, (unsigned long) u->ts, origin);
+	else
+		sts(":%s ENCAP * SVSMODE %s %ld -r", nicksvs.nick, origin, (unsigned long) u->ts, origin);
 	return FALSE;
 }
 

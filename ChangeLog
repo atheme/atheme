@@ -1,3 +1,13 @@
+jilles      2006/05/19 17:07:13 UTC	(20060519-5277)
+  Log:
+  NickServ GHOST: fix "Invalid password for (null)".
+  Reported by damian.
+  
+
+  Changes:	Modified:
+  +11 -4	trunk/modules/nickserv/ghost.c (File Modified) 
+
+
 nenolod     2006/05/17 17:20:05 UTC	(20060517-5275)
   Log:
   - version bump: 1.1.1
