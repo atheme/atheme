@@ -1,3 +1,12 @@
+nenolod     2006/05/20 23:37:18 UTC	(20060520-5279)
+  Log:
+  - Improve support for PleXusIRCd 3.x, patch by eggy.
+  
+
+  Changes:	Modified:
+  +17 -7	trunk/protocol/plexus.c (File Modified) 
+
+
 jilles      2006/05/19 17:07:13 UTC	(20060519-5277)
   Log:
   NickServ GHOST: fix "Invalid password for (null)".

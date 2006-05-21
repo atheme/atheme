@@ -4,13 +4,16 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 5279 2006-05-20 23:37:18Z nenolod $
+ * $Id: plexus.c 5281 2006-05-21 00:21:33Z jilles $
  */
+
+/* option: set the netadmin umode +N */
+/*#define USE_NETADMIN*/
 
 #include "atheme.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 5279 2006-05-20 23:37:18Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 5281 2006-05-21 00:21:33Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -287,7 +290,6 @@ static void plexus_ping_sts(void)
 static void plexus_on_login(char *origin, char *user, char *wantedhost)
 {
 	user_t *u;
-	myuser_t *mu;
 
 	if (!me.connected)
 		return;
@@ -299,14 +301,15 @@ static void plexus_on_login(char *origin, char *user, char *wantedhost)
 		return;
 
 	u = user_find(origin);
-	mu = myuser_find(origin);
 
-	if (u == NULL || mu == NULL)
+	if (u == NULL)
 		return;		/* realistically, this should never happen --nenolod */
 
-	if (is_soper(mu))
+#ifdef USE_NETADMIN
+	if (has_priv(u, PRIV_ADMIN))
 		sts(":%s ENCAP * SVSMODE %s %ld +rdN %ld", nicksvs.nick, origin, (unsigned long) u->ts, CURRTIME);
 	else
+#endif
 		sts(":%s ENCAP * SVSMODE %s %ld +rd %ld", nicksvs.nick, origin, (unsigned long) u->ts, CURRTIME);
 }
 
@@ -314,7 +317,6 @@ static void plexus_on_login(char *origin, char *user, char *wantedhost)
 static boolean_t plexus_on_logout(char *origin, char *user, char *wantedhost)
 {
 	user_t *u;
-        myuser_t *mu;
 
 	if (!me.connected)
 		return FALSE;
@@ -323,15 +325,15 @@ static boolean_t plexus_on_logout(char *origin, char *user, char *wantedhost)
 		return FALSE;
 
 	u = user_find(origin);
-        mu = myuser_find(origin);
 
-	if (u == NULL || mu == NULL)
-		return;
+	if (u == NULL)
+		return FALSE;
 
-	if (is_soper(mu))
-		sts(":%s ENCAP * SVSMODE %s %ld -rN", nicksvs.nick, origin, (unsigned long) u->ts, origin);
-	else
-		sts(":%s ENCAP * SVSMODE %s %ld -r", nicksvs.nick, origin, (unsigned long) u->ts, origin);
+#ifdef USE_NETADMIN
+	sts(":%s ENCAP * SVSMODE %s %ld -rN", nicksvs.nick, origin, (unsigned long) u->ts, origin);
+#else
+	sts(":%s ENCAP * SVSMODE %s %ld -r", nicksvs.nick, origin, (unsigned long) u->ts, origin);
+#endif
 	return FALSE;
 }
 
