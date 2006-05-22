@@ -1,3 +1,11 @@
+nenolod     2006/05/22 00:37:43 UTC	(20060522-5283)
+  Log:
+  no explanation necessary...
+
+  Changes:	Modified:
+  +35 -0	trunk/contrib/cs_kickdots.c (File Added) 
+
+
 jilles      2006/05/21 00:21:33 UTC	(20060521-5281)
   Log:
   Moved netadmin to general:admin and hid it under a #define USE_NETADMIN.

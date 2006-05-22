@@ -36,7 +36,7 @@ default: all
 
 BASE_SRCS =
 	
-SRCS = ${BASE_SRCS} @SASL_C@
+SRCS = ${BASE_SRCS} @SASL_C@ pubkey.c
 
 OBJS = ${SRCS:.c=.so}
 
@@ -51,6 +51,9 @@ install: build
 modules: $(OBJS)
 
 .SUFFIXES: .so
+
+pubkey.so: pubkey.c
+	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} -lssl pubkey.c -o pubkey.so
 
 .c.so:
 	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@
