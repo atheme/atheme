@@ -1,3 +1,13 @@
+gxti        2006/05/22 01:21:37 UTC	(20060522-5285)
+  Log:
+  Precursory DSA/RSA-SHA1 mechanism (pubkey.so).
+  
+
+  Changes:	Modified:
+  +4 -1		trunk/modules/saslserv/Makefile.in (File Modified) 
+  +454 -0	trunk/modules/saslserv/pubkey.c (File Added) 
+
+
 nenolod     2006/05/22 00:37:43 UTC	(20060522-5283)
   Log:
   no explanation necessary...

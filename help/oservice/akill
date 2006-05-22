@@ -1,7 +1,7 @@
 Help for AKILL:
 
 AKILL allows you to maintain network-wide bans a la DALnet AKILL.
-Services will keep your AKILL's stored and allow for easy management.
+Services will keep your AKILLs stored and allow for easy management.
 
 Syntax: AKILL ADD <nick|hostmask> [!P|!T <minutes>] <reason>
 
