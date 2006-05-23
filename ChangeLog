@@ -1,3 +1,12 @@
+gxti        2006/05/23 21:18:47 UTC	(20060523-5289)
+  Log:
+  Added helpfile for ChanServ SET PROPERTY.
+  
+
+  Changes:	Modified:
+  +13 -0	trunk/help/cservice/set_property (File Added) 
+
+
 gxti        2006/05/22 22:36:37 UTC	(20060522-5287)
   Log:
   Minor grammatical fix.

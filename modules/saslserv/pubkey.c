@@ -4,7 +4,7 @@
  *
  * RSA/DSA-SHA1 mechanism provider
  *
- * $Id: plain.c 5251 2006-05-05 01:43:39Z nenolod $
+ * $Id: pubkey.c 5291 2006-05-23 21:48:03Z jilles $
  */
 
 #include "atheme.h"
@@ -15,13 +15,13 @@
 #include <openssl/objects.h>
 #include <arpa/inet.h>
 
-#define NO_DSA // XXX: implement this :TODO
-//#define NO_RSA
+#define NO_DSA /* XXX: implement this :TODO */
+/*#define NO_RSA*/
 
 DECLARE_MODULE_V1
 (
-	"saslserv/plain", FALSE, _modinit, _moddeinit,
-	"$Id: plain.c 5251 2006-05-05 01:43:39Z nenolod $",
+	"saslserv/pubkey", FALSE, _modinit, _moddeinit,
+	"$Id: pubkey.c 5291 2006-05-23 21:48:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
