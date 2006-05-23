@@ -1,3 +1,12 @@
+gxti        2006/05/22 22:36:37 UTC	(20060522-5287)
+  Log:
+  Minor grammatical fix.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/help/oservice/akill (File Modified) 
+
+
 gxti        2006/05/22 01:21:37 UTC	(20060522-5285)
   Log:
   Precursory DSA/RSA-SHA1 mechanism (pubkey.so).
