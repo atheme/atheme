@@ -1,3 +1,12 @@
+jilles      2006/05/23 21:48:03 UTC	(20060523-5291)
+  Log:
+  Fix Id keyword and remove C++ comments.
+  
+
+  Changes:	Modified:
+  +5 -5		trunk/modules/saslserv/pubkey.c (File Modified) (Property Modified)
+
+
 gxti        2006/05/23 21:18:47 UTC	(20060523-5289)
   Log:
   Added helpfile for ChanServ SET PROPERTY.

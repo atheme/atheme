@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 5275 2006-05-17 17:20:05Z nenolod $
+dnl $Id: configure.ac 5293 2006-05-23 22:00:58Z jilles $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, 1.1.1, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 5275 2006-05-17 17:20:05Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 5293 2006-05-23 22:00:58Z jilles $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -286,7 +286,7 @@ echo " "
 sasl=yes
 AC_ARG_ENABLE(sasl,
     AC_HELP_STRING([--disable-sasl], [don't use builtin SASL]),
-    [sasl=no])
+    [sasl=$enableval])
 if test "$sasl" != "no" ; then
     AC_DEFINE(USE_SASL, 1, [Define to 1 if you want builtin SASL.])
     SASL=yes
@@ -588,7 +588,7 @@ Configuration:
         Large network support: ${LARGENET}
         PostgreSQL support   : ${POSTGRESQL}
         MySQL support        : ${MYSQL}
-        SASL support         : ${sasl}
+        SASL support         : ${SASL}
         Socket Engine        : ${SOCKET_ENGINE}
         CFLAGS               : ${CFLAGS}
 
