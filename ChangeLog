@@ -1,3 +1,17 @@
+jilles      2006/05/23 22:10:54 UTC	(20060523-5297)
+  Log:
+  Change effect of --disable-sasl: it now prevents make
+  from entering modules/saslserv/ at all. This way the
+  list of sasl source files can live in modules/saslserv/Makefile.in
+  instead of in configure.ac.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/configure.ac (File Modified) 
+  +1 -1		trunk/modules/Makefile.in (File Modified) 
+  +3 -3		trunk/modules/saslserv/Makefile.in (File Modified) 
+
+
 jilles      2006/05/23 22:01:30 UTC	(20060523-5295)
   Log:
   Rerun autoconf and autoheader.

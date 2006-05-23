@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# $Id: configure.ac 5293 2006-05-23 22:00:58Z jilles $
+# $Id: configure.ac 5297 2006-05-23 22:10:54Z jilles $
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -313,7 +313,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA RM MV CP AR RANLIB SET_MAKE MKDEP CPP EGREP SOCKET_ENGINE POSIX_CRYPTC DOCDIR MODDIR SHAREDIR POSTGRESQL_C PGINC PQLIB MYSQL_C MYINC MYLIB SASL_C PICFLAGS LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA RM MV CP AR RANLIB SET_MAKE MKDEP CPP EGREP SOCKET_ENGINE POSIX_CRYPTC DOCDIR MODDIR SHAREDIR POSTGRESQL_C PGINC PQLIB MYSQL_C MYINC MYLIB SASL_DIR PICFLAGS LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -968,7 +968,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-$Id: configure.ac 5293 2006-05-23 22:00:58Z jilles $
+$Id: configure.ac 5297 2006-05-23 22:10:54Z jilles $
 _ACEOF
   exit 0
 fi
@@ -10001,10 +10001,10 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
     SASL=yes
-    SASL_C="sasl.c main.c plain.c crypt.c"
+    SASL_DIR="saslserv"
 else
     SASL=no
-    SASL_C=
+    SASL_DIR=
 fi
 echo "$as_me:$LINENO: checking if SASL should be used" >&5
 echo $ECHO_N "checking if SASL should be used... $ECHO_C" >&6
@@ -14307,7 +14307,7 @@ s,@PQLIB@,$PQLIB,;t t
 s,@MYSQL_C@,$MYSQL_C,;t t
 s,@MYINC@,$MYINC,;t t
 s,@MYLIB@,$MYLIB,;t t
-s,@SASL_C@,$SASL_C,;t t
+s,@SASL_DIR@,$SASL_DIR,;t t
 s,@PICFLAGS@,$PICFLAGS,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
