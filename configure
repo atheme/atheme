@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# $Id: configure.ac 5151 2006-05-01 14:31:59Z nenolod $
+# $Id: configure.ac 5293 2006-05-23 22:00:58Z jilles $
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -968,7 +968,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-$Id: configure.ac 5151 2006-05-01 14:31:59Z nenolod $
+$Id: configure.ac 5293 2006-05-23 22:00:58Z jilles $
 _ACEOF
   exit 0
 fi
@@ -9992,7 +9992,7 @@ sasl=yes
 # Check whether --enable-sasl or --disable-sasl was given.
 if test "${enable_sasl+set}" = set; then
   enableval="$enable_sasl"
-  sasl=no
+  sasl=$enableval
 fi;
 if test "$sasl" != "no" ; then
 
@@ -14835,7 +14835,7 @@ Configuration:
         Large network support: ${LARGENET}
         PostgreSQL support   : ${POSTGRESQL}
         MySQL support        : ${MYSQL}
-        SASL support         : ${sasl}
+        SASL support         : ${SASL}
         Socket Engine        : ${SOCKET_ENGINE}
         CFLAGS               : ${CFLAGS}
 

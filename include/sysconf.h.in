@@ -142,7 +142,7 @@
 /* Define to 1 if your <sys/time.h> declares `struct tm'. */
 #undef TM_IN_SYS_TIME
 
-/* Define to 1 if you want GNU SASL. */
+/* Define to 1 if you want builtin SASL. */
 #undef USE_SASL
 
 /* Enable GNU extensions on systems that have them.  */
