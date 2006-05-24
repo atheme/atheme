@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5101 2006-04-17 05:22:23Z gxti $
+ * $Id: main.c 5303 2006-05-24 04:03:06Z gxti $
  */
 
 #include "atheme.h"
@@ -12,11 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5101 2006-04-17 05:22:23Z gxti $",
+	"$Id: main.c 5303 2006-05-24 04:03:06Z gxti $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 list_t sasl_mechanisms;
+list_t ss_cmdtree;
+list_t ss_helptree;
 
 /* main services client routine */
 void saslserv(char *origin, uint8_t parc, char *parv[])
@@ -80,7 +82,8 @@ void saslserv(char *origin, uint8_t parc, char *parv[])
 	else if (*cmd == '\001')
 		return;
 
-	notice(saslsvs.nick, origin, "This service exists to identify connecting clients to the network. It has no public interface.");
+	/* take the command through the hash table */
+	command_exec(saslsvs.me, origin, cmd, &ss_cmdtree);
 }
 
 static void saslserv_config_ready(void *unused)

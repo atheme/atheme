@@ -1,3 +1,12 @@
+gxti        2006/05/24 04:01:35 UTC	(20060524-5301)
+  Log:
+  PLAIN auth now a little cleaner/safer.
+  
+
+  Changes:	Modified:
+  +6 -6		trunk/modules/saslserv/plain.c (File Modified) 
+
+
 jilles      2006/05/23 22:11:24 UTC	(20060523-5299)
   Log:
   Rerun autoconf.
