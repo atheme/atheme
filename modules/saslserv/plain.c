@@ -4,7 +4,7 @@
  *
  * PLAIN mechanism provider
  *
- * $Id: plain.c 5251 2006-05-05 01:43:39Z nenolod $
+ * $Id: plain.c 5301 2006-05-24 04:01:35Z gxti $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/plain", FALSE, _modinit, _moddeinit,
-	"$Id: plain.c 5251 2006-05-05 01:43:39Z nenolod $",
+	"$Id: plain.c 5301 2006-05-24 04:01:35Z gxti $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -49,24 +49,24 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 	metadata_t *md;
 
 	/* Skip the authzid entirely */
-	len -= strlen(message) + 1;
+	len -= strnlen(message, len) + 1;
 	if(len <= 0)
 		return ASASL_FAIL;
 	message += strlen(message) + 1;
 
 	/* Copy the authcid */
-	if(strlen(message) > 255)
+	if(strnlen(message, len) > 255)
 		return ASASL_FAIL;
-	strcpy(auth, message);
-	len -= strlen(message) + 1;
+	len -= strnlen(message, len) + 1;
 	if(len <= 0)
 		return ASASL_FAIL;
+	strcpy(auth, message);
 	message += strlen(message) + 1;
 
 	/* Copy the password */
-	if(strlen(message) > 255)
+	if(strnlen(message, len) > 255)
 		return ASASL_FAIL;
-	strcpy(pass, message);
+	strscpy(pass, message, len + 1);
 
 	/* Done dissecting, now check. */
 	if(!(mu = myuser_find(auth)))
