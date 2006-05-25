@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the SaslServ HELP command.
  *
- * $Id: help.c 5303 2006-05-24 04:03:06Z gxti $
+ * $Id: help.c 5305 2006-05-25 01:02:29Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 5303 2006-05-24 04:03:06Z gxti $",
+	"$Id: help.c 5305 2006-05-25 01:02:29Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,7 +20,7 @@ list_t *ss_cmdtree, *ss_helptree;
 
 static void ss_cmd_help(char *origin);
 
-command_t ss_help = { "HELP", "Displays contextual help information.", AC_NONE, ns_cmd_help };
+command_t ss_help = { "HELP", "Displays contextual help information.", AC_NONE, ss_cmd_help };
 
 void _modinit(module_t *m)
 {
