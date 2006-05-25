@@ -1,3 +1,16 @@
+jilles      2006/05/25 01:12:42 UTC	(20060525-5307)
+  Log:
+  - Make saslserv() static as we don't need it outside main.c
+  - Fix /msg (null) help <command> in help
+  - Don't use abbreviated command listing as saslserv will
+    have few commands.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/saslserv/help.c (File Modified) 
+  +3 -1		trunk/modules/saslserv/main.c (File Modified) 
+
+
 jilles      2006/05/25 01:02:29 UTC	(20060525-5305)
   Log:
   Compile fix.
