@@ -1,3 +1,12 @@
+gxti        2006/05/25 03:28:33 UTC	(20060525-5311)
+  Log:
+  DSA auth! It's aliiiiiive!
+  
+
+  Changes:	Modified:
+  +24 -8	trunk/modules/saslserv/pubkey.c (File Modified) 
+
+
 jilles      2006/05/25 01:50:44 UTC	(20060525-5309)
   Log:
   Don't use non-standard strnlen() here.

@@ -4,7 +4,7 @@
  *
  * Socketengine implementing poll().
  *
- * $Id: poll.c 3053 2005-10-20 18:04:13Z nenolod $
+ * $Id: poll.c 5313 2006-05-25 15:18:32Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -97,37 +97,50 @@ static void update_poll_fds(void)
 void connection_select(uint32_t delay)
 {
 	int32_t sr;
-	node_t *n;
+	node_t *n, *tn;
 	connection_t *cptr;
+	int slot;
 
 	update_poll_fds();
 
 	if ((sr = poll(pollfds, connection_list.count, delay / 100)) > 0)
 	{
-		LIST_FOREACH(n, connection_list.head)
+		/* Iterate twice, so we don't touch freed memory if
+		 * a connection is closed.
+		 * -- jilles */
+		LIST_FOREACH_SAFE(n, tn, connection_list.head)
 		{
 			cptr = n->data;
+			slot = cptr->pollslot;
 
-			if (pollfds[cptr->pollslot].revents == 0)
+			if (pollfds[slot].revents == 0)
 				continue;
 
-			if (pollfds[cptr->pollslot].revents & (POLLRDNORM | POLLIN | POLLHUP | POLLERR))
+			if (pollfds[slot].revents & (POLLRDNORM | POLLIN | POLLHUP | POLLERR))
 			{
+				pollfds[slot].events &= ~(POLLRDNORM | POLLIN | POLLHUP | POLLERR);
 				if (CF_IS_LISTENING(cptr))
 					hook_call_event("listener_in", cptr);
 				else
 					cptr->read_handler(cptr);
 			}
+		}
 
-			if (pollfds[cptr->pollslot].revents & (POLLWRNORM | POLLOUT | POLLHUP | POLLERR))
+		LIST_FOREACH_SAFE(n, tn, connection_list.head)
+		{
+			cptr = n->data;
+			slot = cptr->pollslot;
+
+			if (pollfds[slot].revents == 0)
+				continue;
+			if (pollfds[slot].revents & (POLLWRNORM | POLLOUT | POLLHUP | POLLERR))
 			{
+				pollfds[slot].events &= ~(POLLWRNORM | POLLOUT | POLLHUP | POLLERR);
 				if (CF_IS_CONNECTING(cptr))
 					hook_call_event("connected", cptr);
 				else
 					cptr->write_handler(cptr);
 			}
-
-			pollfds[cptr->pollslot].events = 0;
 		}
 	}
 }

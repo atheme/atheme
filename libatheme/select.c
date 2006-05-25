@@ -4,7 +4,7 @@
  *
  * Socketengine implementing select().
  *
- * $Id: select.c 3157 2005-10-23 08:56:09Z nenolod $
+ * $Id: select.c 5313 2006-05-25 15:18:32Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -82,7 +82,7 @@ static void update_select_sets(void)
 void connection_select(uint32_t delay)
 {
 	int8_t sr;
-	node_t *n;
+	node_t *n, *tn;
 	connection_t *cptr;
 	struct timeval to;
 
@@ -92,7 +92,10 @@ void connection_select(uint32_t delay)
 
 	if ((sr = select(claro_state.maxfd + 1, &readfds, &writefds, NULL, &to)) > 0)
 	{
-		LIST_FOREACH(n, connection_list.head)
+		/* Iterate twice, so we don't touch freed memory if
+		 * a connection is closed.
+		 * -- jilles */
+		LIST_FOREACH_SAFE(n, tn, connection_list.head)
 		{
 			cptr = n->data;
 
@@ -103,6 +106,11 @@ void connection_select(uint32_t delay)
 				else
 					cptr->write_handler(cptr);
 			}
+		}
+
+		LIST_FOREACH_SAFE(n, tn, connection_list.head)
+		{
+			cptr = n->data;
 
 			if (FD_ISSET(cptr->fd, &readfds))
 			{
