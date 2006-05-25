@@ -1,3 +1,12 @@
+jilles      2006/05/25 01:02:29 UTC	(20060525-5305)
+  Log:
+  Compile fix.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/saslserv/help.c (File Modified) 
+
+
 gxti        2006/05/24 04:03:06 UTC	(20060524-5303)
   Log:
   SaslServ command/help framework added (no docs yet).

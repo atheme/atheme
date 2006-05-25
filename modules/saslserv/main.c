@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5303 2006-05-24 04:03:06Z gxti $
+ * $Id: main.c 5307 2006-05-25 01:12:42Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5303 2006-05-24 04:03:06Z gxti $",
+	"$Id: main.c 5307 2006-05-25 01:12:42Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -21,7 +21,7 @@ list_t ss_cmdtree;
 list_t ss_helptree;
 
 /* main services client routine */
-void saslserv(char *origin, uint8_t parc, char *parv[])
+static void saslserv(char *origin, uint8_t parc, char *parv[])
 {
 	char *cmd, *s;
 	char orig[BUFSIZE];
@@ -93,6 +93,7 @@ static void saslserv_config_ready(void *unused)
 
         saslsvs.me = add_service(saslsvs.nick, saslsvs.user,
                                  saslsvs.host, saslsvs.real, saslserv);
+	saslsvs.disp = saslsvs.me->disp;
 
         hook_del_hook("config_ready", saslserv_config_ready);
 }
@@ -106,6 +107,7 @@ void _modinit(module_t *m)
         {
                 saslsvs.me = add_service(saslsvs.nick, saslsvs.user,
 			saslsvs.host, saslsvs.real, saslserv);
+		saslsvs.disp = saslsvs.me->disp;
         }
 }
 

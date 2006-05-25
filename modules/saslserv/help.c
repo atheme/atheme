@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the SaslServ HELP command.
  *
- * $Id: help.c 5305 2006-05-25 01:02:29Z jilles $
+ * $Id: help.c 5307 2006-05-25 01:12:42Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 5305 2006-05-25 01:02:29Z jilles $",
+	"$Id: help.c 5307 2006-05-25 01:12:42Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -52,7 +52,7 @@ void ss_cmd_help(char *origin)
 		notice(saslsvs.nick, origin, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", saslsvs.disp);
 		notice(saslsvs.nick, origin, " ");
 
-		command_help_short(saslsvs.nick, origin, ss_cmdtree, "PKEY");
+		command_help(saslsvs.nick, origin, ss_cmdtree);
 
 		notice(saslsvs.nick, origin, "***** \2End of Help\2 *****");
 		return;
