@@ -1,3 +1,13 @@
+jilles      2006/05/25 01:50:44 UTC	(20060525-5309)
+  Log:
+  Don't use non-standard strnlen() here.
+  It is not necessary anyway as sasl.c gives '\0'-terminated data.
+  
+
+  Changes:	Modified:
+  +4 -4		trunk/modules/saslserv/plain.c (File Modified) 
+
+
 jilles      2006/05/25 01:12:42 UTC	(20060525-5307)
   Log:
   - Make saslserv() static as we don't need it outside main.c

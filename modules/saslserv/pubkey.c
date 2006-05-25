@@ -4,7 +4,7 @@
  *
  * RSA/DSA-SHA1 mechanism provider
  *
- * $Id: pubkey.c 5303 2006-05-24 04:03:06Z gxti $
+ * $Id: pubkey.c 5311 2006-05-25 03:28:33Z gxti $
  */
 
 #include "atheme.h"
@@ -21,7 +21,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/pubkey", FALSE, _modinit, _moddeinit,
-	"$Id: pubkey.c 5303 2006-05-24 04:03:06Z gxti $",
+	"$Id: pubkey.c 5311 2006-05-25 03:28:33Z gxti $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,6 +48,7 @@ static RSA *rsa_from_blob(char **blob, int *length, char *fpchain);
 sasl_mechanism_t rsa_mech = {"RSA-SHA1", &mech_start, &rsa_step, &mech_finish};
 #endif
 
+static char *raw_to_hex(unsigned char *src);
 static void ss_cmd_pkey(char *origin);
 
 command_t ss_pkey = { "PKEY", "Sets your DSA or RSA fingerprint for public key auth.", AC_NONE, ss_cmd_pkey };
@@ -149,17 +150,15 @@ static int common_step(int using_rsa, sasl_session_t *p, char *message, int len,
 	myuser_t *mu;
 	metadata_t *md;
 	char client_data[32], digest[20];
-	char username[NICKLEN], fpchain[80];
+	char username[NICKLEN], fpchain[100];
 	char *signature = NULL, *knownchain = NULL;
 	char buf[32];
 	int sig_size, ret = ASASL_FAIL;
-	size_t chain_size, chain_expected_size = using_rsa ? 60 : 80;
+	size_t chain_size, chain_expected_size = using_rsa ? 60 : 100;
 	SHA_CTX ctx;
 
-	slog(LG_INFO, "enter common step, rsa: %d, session %p, inlen %d", using_rsa, p, len);
-
 	/* This allocates RSA and DSA structures when allowed, and fails if we're called
-	 * with an angorithm we weren't compiled with.
+	 * with an algorithm we weren't compiled with.
 	 */
 #ifndef NO_RSA
 	RSA *rsa = NULL;
@@ -182,7 +181,6 @@ static int common_step(int using_rsa, sasl_session_t *p, char *message, int len,
 	/* Client's random data */
 	if(len < 32)
 		return ASASL_FAIL;
-	slog(LG_INFO, "C %d", len);
 	memcpy(client_data, message, 32);
 	message += 32;
 	len -= 32;
@@ -206,6 +204,14 @@ static int common_step(int using_rsa, sasl_session_t *p, char *message, int len,
 #endif
 
 	/* Signature */
+	if(!using_rsa) /* DSA form includes a length for the signature since it != key size */
+	{
+		if(len < 2)
+			goto end;
+		sig_size = ntohs(*(size_t*)message);
+		message += 2;
+		len -= 2;
+	}
 	if(len < sig_size)
 		goto end;
 	signature = (char*)malloc(sig_size);
@@ -364,7 +370,7 @@ static BIGNUM *bignum_from_blob(char **blob, int *length, char *fpchain, int *n)
 #ifndef NO_DSA
 static DSA *dsa_from_blob(char **blob, int *length, char *fpchain)
 {
-	BIGNUM *p, *q, *g;
+	BIGNUM *p, *q, *g, *y;
 	DSA *dsa;
 	SHA_CTX ctx;
 	const char *orig = *blob;
@@ -380,10 +386,18 @@ static DSA *dsa_from_blob(char **blob, int *length, char *fpchain)
 		return NULL;
 	}
 
-	if((g = bignum_from_blob(blob, length, fpchain, &i)) == NULL) /* Q Component */
+	if((g = bignum_from_blob(blob, length, fpchain, &i)) == NULL) /* G Component */
 	{
 		BN_free(p);
 		BN_free(q);
+		return NULL;
+	}
+
+	if((y = bignum_from_blob(blob, length, fpchain, &i)) == NULL) /* Public Key */
+	{
+		BN_free(p);
+		BN_free(q);
+		BN_free(g);
 		return NULL;
 	}
 
@@ -396,11 +410,13 @@ static DSA *dsa_from_blob(char **blob, int *length, char *fpchain)
 		BN_free(p);
 		BN_free(q);
 		BN_free(g);
+		BN_free(y);
 		return NULL;
 	}
 	dsa->p = p;
 	dsa->q = q;
 	dsa->g = g;
+	dsa->pub_key = y;
 	return dsa;
 
 }
