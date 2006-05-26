@@ -1,3 +1,17 @@
+jilles      2006/05/25 15:18:32 UTC	(20060525-5313)
+  Log:
+  select/poll:
+  Iterate twice over the connection list, once for checking
+  for reading and once for checking for writing, as the
+  functions we call may destroy the connection and remove
+  it from the list.
+  
+
+  Changes:	Modified:
+  +20 -7	trunk/libatheme/poll.c (File Modified) 
+  +10 -2	trunk/libatheme/select.c (File Modified) 
+
+
 gxti        2006/05/25 03:28:33 UTC	(20060525-5311)
   Log:
   DSA auth! It's aliiiiiive!

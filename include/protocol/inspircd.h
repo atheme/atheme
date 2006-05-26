@@ -4,7 +4,7 @@
  *
  * This code contains the channel mode definitions for InspIRCd.
  *
- * $Id: inspircd.h 4639 2006-01-21 22:06:41Z jilles $
+ * $Id: inspircd.h 5315 2006-05-26 20:11:58Z brain $
  */
 
 #ifndef RATBOX_H
@@ -25,6 +25,8 @@
 #define CMODE_HIDING	0x00400000	/* unreal +u */
 #define CMODE_SSLONLY	0x00800000	/* unreal +z */
 #define CMODE_STICKY	0x01000000	/* unreal +N */
+#define CMODE_CENSOR    0x02000000	/* Censor +G */
+#define CMODE_NOCAPS    0x04000000	/* No capitals */
 
 #define CMODE_OWNER     0x10000000      /* unreal +q */
 #define CMODE_PROTECT   0x20000000      /* unreal +a */

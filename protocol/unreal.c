@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 5131 2006-04-29 19:09:24Z jilles $
+ * $Id: unreal.c 5315 2006-05-26 20:11:58Z brain $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 5131 2006-04-29 19:09:24Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 5315 2006-05-26 20:11:58Z brain $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -58,6 +58,7 @@ struct cmode_ unreal_mode_list[] = {
   { 'u', CMODE_HIDING   },
   { 'z', CMODE_SSLONLY  },
   { 'N', CMODE_STICKY   },
+  { 'G', CMODE_CENSOR   },
   { '\0', 0 }
 };
 
