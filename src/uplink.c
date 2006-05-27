@@ -4,7 +4,7 @@
  *
  * Uplink management stuff.
  *
- * $Id: uplink.c 4231 2005-12-27 22:36:56Z jilles $
+ * $Id: uplink.c 5319 2006-05-27 23:01:49Z jilles $
  */
 
 #include "atheme.h"
@@ -77,6 +77,7 @@ void connection_dead(void *vptr)
 			}
 			curr_uplink = uplinks.head->data;
 		}
+		curr_uplink->conn = NULL;
 	}
 
         connection_close(cptr);

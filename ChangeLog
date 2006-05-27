@@ -1,3 +1,13 @@
+jilles      2006/05/27 22:53:31 UTC	(20060527-5317)
+  Log:
+  Apparently connection_close(NULL) is not supposed to crash,
+  so make it so.
+  
+
+  Changes:	Modified:
+  +4 -4		trunk/libatheme/connection.c (File Modified) 
+
+
 brain       2006/05/26 20:11:58 UTC	(20060526-5315)
   Log:
   InspIRCd: Add support for modelock of +P and +G
