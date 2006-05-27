@@ -1,3 +1,13 @@
+jilles      2006/05/27 23:23:59 UTC	(20060527-5321)
+  Log:
+  connection_close(): Get the error from the socket using getsockopt SO_ERROR.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/configure.ac (File Modified) 
+  +15 -2	trunk/libatheme/connection.c (File Modified) 
+
+
 jilles      2006/05/27 23:01:49 UTC	(20060527-5319)
   Log:
   Null out curr_uplink->conn if it's closed.
