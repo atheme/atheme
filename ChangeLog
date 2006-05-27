@@ -1,3 +1,12 @@
+jilles      2006/05/27 23:01:49 UTC	(20060527-5319)
+  Log:
+  Null out curr_uplink->conn if it's closed.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/src/uplink.c (File Modified) 
+
+
 jilles      2006/05/27 22:53:31 UTC	(20060527-5317)
   Log:
   Apparently connection_close(NULL) is not supposed to crash,

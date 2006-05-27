@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 5297 2006-05-23 22:10:54Z jilles $
+dnl $Id: configure.ac 5321 2006-05-27 23:23:59Z jilles $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, 1.1.1, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 5297 2006-05-23 22:10:54Z jilles $])
+AC_COPYRIGHT([$Id: configure.ac 5321 2006-05-27 23:23:59Z jilles $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -138,6 +138,8 @@ elif test "$ac_cv_sizeof_long_long" = 8 ; then
 else
   AC_MSG_ERROR([Cannot find a type with size of 64 bits])
 fi
+
+AC_CHECK_TYPE(socklen_t, unsigned int)
 
 echo " "
 echo "Tweaks"

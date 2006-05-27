@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 5317 2006-05-27 22:53:31Z jilles $
+ * $Id: connection.c 5321 2006-05-27 23:23:59Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -131,6 +131,10 @@ void connection_close(connection_t *cptr)
 {
 	node_t *nptr, *nptr2;
 	datastream_t *sptr; 
+	int errno1, errno2;
+#ifdef SO_ERROR
+	socklen_t len = sizeof(errno2);
+#endif
 
 	if (!cptr || cptr->fd <= 0)
 	{
@@ -138,9 +142,18 @@ void connection_close(connection_t *cptr)
 		return;
 	}
 
-	if (errno)
+	errno1 = errno;
+#ifdef SO_ERROR
+	if (!getsockopt(cptr->fd, SOL_SOCKET, SO_ERROR, (char *) &errno2, (socklen_t *) &len))
+	{
+		if (errno2 != 0)
+			errno1 = errno2;
+	}
+#endif
+
+	if (errno1)
 		clog(LG_IOERROR, "connection_close(): connection %s[%d] closed due to error %d (%s)",
-				cptr->name, cptr->fd, errno, strerror(errno));
+				cptr->name, cptr->fd, errno1, strerror(errno1));
 
 	/* close the fd */
 	close(cptr->fd);
