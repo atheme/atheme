@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 4169 2005-12-19 15:39:53Z nenolod $
+ * $Id: connection.c 5317 2006-05-27 22:53:31Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -132,15 +132,15 @@ void connection_close(connection_t *cptr)
 	node_t *nptr, *nptr2;
 	datastream_t *sptr; 
 
-	if (errno)
-		clog(LG_IOERROR, "connection_close(): connection %s[%d] closed due to error %d (%s)",
-				cptr->name, cptr->fd, errno, strerror(errno));
-
 	if (!cptr || cptr->fd <= 0)
 	{
 		clog(LG_DEBUG, "connection_close(): no connection to close!");
 		return;
 	}
+
+	if (errno)
+		clog(LG_IOERROR, "connection_close(): connection %s[%d] closed due to error %d (%s)",
+				cptr->name, cptr->fd, errno, strerror(errno));
 
 	/* close the fd */
 	close(cptr->fd);

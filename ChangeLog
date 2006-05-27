@@ -1,3 +1,16 @@
+brain       2006/05/26 20:11:58 UTC	(20060526-5315)
+  Log:
+  InspIRCd: Add support for modelock of +P and +G
+  UnrealIRCd: Add support for modelock of +G
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/include/protocol/inspircd.h (File Modified) 
+  +1 -0		trunk/include/protocol/unreal.h (File Modified) 
+  +2 -0		trunk/protocol/inspircd.c (File Modified) 
+  +1 -0		trunk/protocol/unreal.c (File Modified) 
+
+
 jilles      2006/05/25 15:18:32 UTC	(20060525-5313)
   Log:
   select/poll:
