@@ -1,0 +1,15 @@
+Help for PKEY:
+
+PKEY sets or views the fingerprint of your
+DSA or RSA key. You should immediately
+log in after changing this to update the
+other stored security information. The
+fingerprint can be entered as hexadecimal
+with or without colons.
+
+Syntax: PKEY <hash>
+
+Examples:
+    /msg &nick& PKEY 0123456789ABCDEF0123
+    /msg &nick& PKEY 32:10:FE:DC:BA:98:76:54:32:10
+    /msg &nick& PKEY

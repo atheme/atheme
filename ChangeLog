@@ -1,3 +1,13 @@
+jilles      2006/05/27 23:32:52 UTC	(20060527-5324)
+  Log:
+  Don't flag an error when closing the connection at shutdown.
+  (Unless SO_ERROR has some error, then we want that.)
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/src/atheme.c (File Modified) 
+
+
 jilles      2006/05/27 23:23:59 UTC	(20060527-5321)
   Log:
   connection_close(): Get the error from the socket using getsockopt SO_ERROR.
