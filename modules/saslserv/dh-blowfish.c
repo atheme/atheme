@@ -4,10 +4,12 @@
  *
  * DH-BLOWFISH mechanism provider
  *
- * $Id: dh-blowfish.c 5326 2006-05-29 23:45:45Z gxti $
+ * $Id: dh-blowfish.c 5328 2006-05-30 04:01:34Z gxti $
  */
 
 #include "atheme.h"
+
+#ifdef HAVE_OPENSSL
 
 #include <openssl/bn.h>
 #include <openssl/dh.h>
@@ -17,7 +19,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/dh-blowfish", FALSE, _modinit, _moddeinit,
-	"$Id: dh-blowfish.c 5326 2006-05-29 23:45:45Z gxti $",
+	"$Id: dh-blowfish.c 5328 2006-05-30 04:01:34Z gxti $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -168,3 +170,4 @@ static void mech_finish(sasl_session_t *p)
 	}
 }
 
+#endif /* HAVE_OPENSSL */

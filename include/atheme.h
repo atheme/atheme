@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 5107 2006-04-17 17:48:00Z gxti $
+ * $Id: atheme.h 5328 2006-05-30 04:01:34Z gxti $
  */
 
 #ifndef ATHEME_H
@@ -25,6 +25,7 @@
 #include "xmlrpc.h"
 #include "base64.h"
 #include "md5.h"
+#include "sysconf.h"
 
 #ifdef USE_SASL
 # include "sasl.h"

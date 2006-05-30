@@ -1,3 +1,17 @@
+gxti        2006/05/29 23:45:45 UTC	(20060529-5326)
+  Log:
+  Documentation added for SaslServ PKEY.
+  New sasl module dh-blowfish.c for encrypted password auth (not yet in build system).
+  cap_sasl.pl added to tree under contrib/ with multi-mech support.
+  
+
+  Changes:	Modified:
+  +267 -0	trunk/contrib/cap_sasl.pl (File Added) 
+  + -		trunk/help/saslserv/ (File Added) 
+  +15 -0	trunk/help/saslserv/pkey (File Added) 
+  +170 -0	trunk/modules/saslserv/dh-blowfish.c (File Added) 
+
+
 jilles      2006/05/27 23:32:52 UTC	(20060527-5324)
   Log:
   Don't flag an error when closing the connection at shutdown.

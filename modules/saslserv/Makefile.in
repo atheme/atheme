@@ -24,7 +24,7 @@ SHAREDIR	= @SHAREDIR@
 BIN		= atheme@EXEEXT@
 MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include @PGINC@ @MYINC@
 PICFLAGS	= @PICFLAGS@
-CFLAGS		= @CFLAGS@ -I../../include -I../../libatheme @PGINC@ @MYINC@
+CFLAGS		= @CFLAGS@ -I../../include -I../../libatheme @PGINC@ @MYINC@ @SSL_LIBS@
 
 VERSION		= 0.1
 
@@ -34,7 +34,7 @@ CPPFLAGS	= @CPPFLAGS@
 
 default: all
 
-BASE_SRCS = sasl.c main.c plain.c crypt.c help.c
+BASE_SRCS = sasl.c main.c plain.c crypt.c pubkey.c dh-blowfish.c help.c
 
 SRCS = ${BASE_SRCS}
 
@@ -51,9 +51,6 @@ install: build
 modules: $(OBJS)
 
 .SUFFIXES: .so
-
-pubkey.so: pubkey.c
-	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} -lssl pubkey.c -o pubkey.so
 
 .c.so:
 	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@

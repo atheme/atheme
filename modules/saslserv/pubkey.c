@@ -4,10 +4,12 @@
  *
  * RSA/DSA-SHA1 mechanism provider
  *
- * $Id: pubkey.c 5311 2006-05-25 03:28:33Z gxti $
+ * $Id: pubkey.c 5328 2006-05-30 04:01:34Z gxti $
  */
 
 #include "atheme.h"
+
+#ifdef HAVE_OPENSSL
 
 #include <openssl/bn.h>
 #include <openssl/rsa.h>
@@ -21,7 +23,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/pubkey", FALSE, _modinit, _moddeinit,
-	"$Id: pubkey.c 5311 2006-05-25 03:28:33Z gxti $",
+	"$Id: pubkey.c 5328 2006-05-30 04:01:34Z gxti $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -497,3 +499,4 @@ static void ss_cmd_pkey(char *origin)
 	}
 }
 
+#endif /* HAVE_OPENSSL */
