@@ -1,3 +1,19 @@
+gxti        2006/05/30 04:01:34 UTC	(20060530-5328)
+  Log:
+  Incorporate SSL-enabled SASL mechanisms into build system.
+  Autotools regenerated.
+  
+
+  Changes:	Modified:
+  +254 -4	trunk/configure (File Modified) 
+  +24 -0	trunk/configure.ac (File Modified) 
+  +1 -0		trunk/include/atheme.h (File Modified) 
+  +9 -0		trunk/include/sysconf.h.in (File Modified) 
+  +2 -5		trunk/modules/saslserv/Makefile.in (File Modified) 
+  +3 -0		trunk/modules/saslserv/dh-blowfish.c (File Modified) 
+  +3 -0		trunk/modules/saslserv/pubkey.c (File Modified) 
+
+
 gxti        2006/05/29 23:45:45 UTC	(20060529-5326)
   Log:
   Documentation added for SaslServ PKEY.

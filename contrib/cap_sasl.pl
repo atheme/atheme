@@ -1,7 +1,7 @@
 use strict;
 use Irssi;
 use vars qw($VERSION %IRSSI);
-# $Id: cap_sasl.pl 5326 2006-05-29 23:45:45Z gxti $
+# $Id: cap_sasl.pl 5330 2006-05-31 02:25:21Z gxti $
 
 use MIME::Base64;
 
@@ -204,6 +204,10 @@ sub cmd_sasl_load {
 	Irssi::print("SASL: auth loaded from $file");
 }
 
+sub cmd_sasl_mechanisms {
+	Irssi::print("SASL: mechanisms supported: " . join(" ", keys %mech));
+}
+
 Irssi::signal_add_first('server connected', \&server_connected);
 Irssi::signal_add('event cap', \&event_cap);
 Irssi::signal_add('event authenticate', \&event_authenticate);
@@ -218,6 +222,7 @@ Irssi::command_bind('sasl load', \&cmd_sasl_load);
 Irssi::command_bind('sasl save', \&cmd_sasl_save);
 Irssi::command_bind('sasl set', \&cmd_sasl_set);
 Irssi::command_bind('sasl show', \&cmd_sasl_show);
+Irssi::command_bind('sasl mechanisms', \&cmd_sasl_mechanisms);
 
 $mech{PLAIN} = sub {
 	my($sasl, $data) = @_;
