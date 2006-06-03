@@ -1,3 +1,12 @@
+jilles      2006/06/03 17:03:36 UTC	(20060603-5336)
+  Log:
+  Add nefarious section.
+  
+
+  Changes:	Modified:
+  +23 -0	trunk/doc/IRCD (File Modified) 
+
+
 jilles      2006/06/03 16:37:20 UTC	(20060603-5334)
   Log:
   - Add Id keyword to cs_kickdots.c
