@@ -1,3 +1,14 @@
+jilles      2006/06/03 16:37:20 UTC	(20060603-5334)
+  Log:
+  - Add Id keyword to cs_kickdots.c
+  - Add cs_kickdots to contrib Makefile
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/contrib/Makefile.in (File Modified) 
+  + -		trunk/contrib/cs_kickdots.c  (Property Modified)
+
+
 jilles      2006/06/03 15:01:06 UTC	(20060603-5332)
   Log:
   Nefarious:
