@@ -1,3 +1,12 @@
+jilles      2006/06/03 17:41:25 UTC	(20060603-5338)
+  Log:
+  Nefarious: remove +x vhost on logout.
+  
+
+  Changes:	Modified:
+  +7 -0		trunk/protocol/nefarious.c (File Modified) 
+
+
 jilles      2006/06/03 17:03:36 UTC	(20060603-5336)
   Log:
   Add nefarious section.
