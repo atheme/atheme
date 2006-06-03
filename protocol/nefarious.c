@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
  *
- * $Id: nefarious.c 5131 2006-04-29 19:09:24Z jilles $
+ * $Id: nefarious.c 5332 2006-06-03 15:01:06Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 5131 2006-04-29 19:09:24Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 5332 2006-06-03 15:01:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -338,7 +338,7 @@ static void nefarious_on_login(char *origin, char *user, char *wantedhost)
 	if (!u)
 		return;
 
-	sts("%s AC %s R %s %ld", me.numeric, u->uid, u->myuser->name, CURRTIME);
+	sts("%s AC %s R %s", me.numeric, u->uid, u->myuser->name);
 	check_hidehost(u);
 }
 
@@ -358,7 +358,7 @@ static boolean_t nefarious_on_logout(char *origin, char *user, char *wantedhost)
 
 	sts("%s AC %s U", me.numeric, u->uid);
 
-	return TRUE;
+	return FALSE;
 }
 
 static void nefarious_jupe(char *server, char *reason)
