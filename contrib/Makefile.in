@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 4987 2006-04-09 06:56:31Z gxti $
+# $Id: Makefile.in 5334 2006-06-03 16:37:20Z jilles $
 #
 
 CC		= @CC@
@@ -36,6 +36,7 @@ default: all
 
 SRCS = \
 	cs_count.c		\
+	cs_kickdots.c		\
 	cs_ping.c		\
 	fc_dice.c		\
 	gen_echoserver.c	\
