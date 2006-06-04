@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 5243 2006-05-04 00:31:41Z jilles $
+ * $Id: ptasks.c 5346 2006-06-04 18:26:42Z jilles $
  */
 
 #include "atheme.h"
@@ -157,6 +157,7 @@ void handle_stats(user_t *u, char req)
 
 		  numeric_sts(me.name, 249, u->nick, "T :event      %7d", claro_state.event);
 		  numeric_sts(me.name, 249, u->nick, "T :node       %7d", claro_state.node);
+		  numeric_sts(me.name, 249, u->nick, "T :connection %7d", connection_count());
 		  numeric_sts(me.name, 249, u->nick, "T :operclass  %7d", cnt.operclass);
 		  numeric_sts(me.name, 249, u->nick, "T :soper      %7d", cnt.soper);
 		  numeric_sts(me.name, 249, u->nick, "T :tld        %7d", cnt.tld);

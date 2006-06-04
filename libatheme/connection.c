@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 5321 2006-05-27 23:23:59Z jilles $
+ * $Id: connection.c 5346 2006-06-04 18:26:42Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -115,6 +115,23 @@ connection_t *connection_find(int32_t fd)
 	return NULL;
 }
 
+/*
+ * connection_count()
+ *
+ * inputs:
+ *       none
+ *
+ * outputs:
+ *       number of connections tracked
+ *
+ * side effects:
+ *       none
+ */
+int connection_count(void)
+{
+
+	return LIST_LENGTH(&connection_list);
+}
 /*
  * connection_close()
  *

@@ -1,3 +1,12 @@
+jilles      2006/06/04 17:48:03 UTC	(20060604-5344)
+  Log:
+  flatfile load: show errno in logs if open failed
+  
+
+  Changes:	Modified:
+  +4 -3		trunk/backend/flatfile.c (File Modified) 
+
+
 jilles      2006/06/04 13:04:04 UTC	(20060604-5342)
   Log:
   flatfile save:
