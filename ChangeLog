@@ -1,3 +1,12 @@
+brain       2006/06/03 21:51:17 UTC	(20060603-5340)
+  Log:
+  Added note about requiring m_globops on inspircd
+  
+
+  Changes:	Modified:
+  +3 -1		trunk/doc/IRCD (File Modified) 
+
+
 jilles      2006/06/03 17:41:25 UTC	(20060603-5338)
   Log:
   Nefarious: remove +x vhost on logout.
