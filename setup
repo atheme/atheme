@@ -5,7 +5,7 @@
 #
 # This file is a simple setup script.
 #
-# $Id: setup 5253 2006-05-05 01:52:28Z nenolod $
+# $Id: setup 5348 2006-06-04 18:58:21Z jilles $
 
 PREFIX="$HOME/atheme"
 LARGENET="no"
@@ -120,6 +120,9 @@ case "$SASL" in
     ;;
   yes)
     ARGS="$ARGS --enable-sasl"
+    ;;
+  *)
+    ARGS="$ARGS --disable-sasl"
     ;;
 esac
 

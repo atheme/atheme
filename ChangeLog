@@ -1,3 +1,14 @@
+jilles      2006/06/04 18:26:42 UTC	(20060604-5346)
+  Log:
+  Show number of active connections in /stats t.
+  
+
+  Changes:	Modified:
+  +17 -0	trunk/libatheme/connection.c (File Modified) 
+  +1 -0		trunk/libatheme/connection.h (File Modified) 
+  +1 -0		trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2006/06/04 17:48:03 UTC	(20060604-5344)
   Log:
   flatfile load: show errno in logs if open failed
