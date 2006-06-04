@@ -1,3 +1,16 @@
+jilles      2006/06/04 13:04:04 UTC	(20060604-5342)
+  Log:
+  flatfile save:
+  - show errno in logs and wallops
+  - check if any write or close failed and if so log and
+    wallops and do not overwrite the correct database with
+    the incomplete file
+  
+
+  Changes:	Modified:
+  +18 -6	trunk/backend/flatfile.c (File Modified) 
+
+
 brain       2006/06/03 21:51:17 UTC	(20060603-5340)
   Log:
   Added note about requiring m_globops on inspircd
