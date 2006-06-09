@@ -1,3 +1,12 @@
+gxti        2006/06/09 03:36:14 UTC	(20060609-5350)
+  Log:
+  Add saslserv/dh-blowfish.so to example config (commented out).
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/dist/example.conf (File Modified) 
+
+
 jilles      2006/06/04 18:58:21 UTC	(20060604-5348)
   Log:
   Make disabling sasl in ./setup work.
