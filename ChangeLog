@@ -1,3 +1,12 @@
+jilles      2006/06/04 18:58:21 UTC	(20060604-5348)
+  Log:
+  Make disabling sasl in ./setup work.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/setup (File Modified) 
+
+
 jilles      2006/06/04 18:26:42 UTC	(20060604-5346)
   Log:
   Show number of active connections in /stats t.
