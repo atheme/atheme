@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 5193 2006-05-03 14:31:53Z jilles $
+ * $Id: function.c 5354 2006-06-09 18:35:06Z jilles $
  */
 
 #include "atheme.h"
@@ -87,8 +87,8 @@ void log_open(void)
 		/* At most one warning per hour */
 		if (me.connected && lastfail + 3600 < CURRTIME)
 		{
-			wallops("Could not open log file (%s), log entries will be missing!", strerror(errno)); 
 			lastfail = CURRTIME;
+			wallops("Could not open log file (%s), log entries will be missing!", strerror(errno)); 
 		}
 		return;
 	}
