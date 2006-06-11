@@ -5,7 +5,7 @@
  * Protocol handlers, both generic and the actual declarations themselves.
  * Declare NOTYET to use the function pointer voodoo.
  *
- * $Id: phandler.h 4935 2006-03-30 16:13:33Z nenolod $
+ * $Id: phandler.h 5360 2006-06-11 15:12:16Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -123,8 +123,10 @@ E void (*sethost_sts)(char *source, char *target, char *host);
  * FNC_FORCE:  force a user off their nick (kill if unsupported)
  */
 E void (*fnc_sts)(user_t *source, user_t *u, char *newnick, int type);
-
+/* change nick, user, host and/or services login name for a user
+ * target may also be a not yet fully introduced UID (for SASL) */
 E void (*svslogin_sts)(char *target, char *nick, char *user, char *host, char *login);
+/* send sasl message */
 E void (*sasl_sts) (char *target, char mode, char *data);
 
 E uint8_t generic_server_login(void);

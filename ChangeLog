@@ -1,3 +1,17 @@
+jilles      2006/06/11 15:07:07 UTC	(20060611-5358)
+  Log:
+  Add chanserv::changets config option. Does not do anything yet.
+  Make sure to 'make clean' when updating across this, otherwise
+  you may get segfaults.
+  
+
+  Changes:	Modified:
+  +9 -0		trunk/dist/example.conf (File Modified) 
+  +9 -0		trunk/dist/example.userserv.conf (File Modified) 
+  +2 -0		trunk/include/services.h (File Modified) 
+  +9 -0		trunk/src/conf.c (File Modified) 
+
+
 jilles      2006/06/11 14:09:04 UTC	(20060611-5356)
   Log:
   Enhance TS support to ignore modes with a younger TS.
