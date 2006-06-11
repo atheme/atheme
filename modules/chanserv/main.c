@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5362 2006-06-11 15:30:47Z jilles $
+ * $Id: main.c 5364 2006-06-11 20:28:33Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5362 2006-06-11 15:30:47Z jilles $",
+	"$Id: main.c 5364 2006-06-11 20:28:33Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -247,9 +247,9 @@ static void cs_join(chanuser_t *cu)
 	if (mc == NULL)
 		return;
 
-	/* attempt to deop people recreating channels, XXX this doesn't
-	 * really work properly */
-	if (mc->flags & MC_SECURE || (chan->nummembers == 1 && chan->ts > CURRTIME - 300))
+	/* attempt to deop people recreating channels, if the more
+	 * sophisticated mechanism is disabled */
+	if (mc->flags & MC_SECURE || (!chansvs.changets && chan->nummembers == 1 && chan->ts > CURRTIME - 300))
 		secure = TRUE;
 
 	if (chan->nummembers == 1 && config_options.join_chans)
@@ -310,7 +310,7 @@ static void cs_join(chanuser_t *cu)
 	if (mc->flags & MC_INHABIT)
 	{
 		mc->flags &= ~MC_INHABIT;
-		if (!config_options.join_chans && chanuser_find(chan, chansvs.me->me))
+		if (!config_options.join_chans && (!config_options.chan || irccmp(chan->name, config_options.chan)) && chanuser_find(chan, chansvs.me->me))
 			part(chan->name, chansvs.nick);
 	}
 
@@ -490,6 +490,7 @@ static void cs_keeptopic_topicset(channel_t *c)
 static void cs_newchan(channel_t *c)
 {
 	mychan_t *mc;
+	chanuser_t *cu;
 	metadata_t *md;
 	char *setter;
 	char *text;
@@ -501,6 +502,24 @@ static void cs_newchan(channel_t *c)
 
 	if (!(mc = mychan_find(c->name)))
 		return;
+
+	if (chansvs.changets && c->ts > mc->registered && mc->registered > 0)
+	{
+		/* Stop the splitrider -- jilles */
+		c->ts = mc->registered;
+		c->modes = CMODE_NOEXT | CMODE_TOPIC;
+		check_modes(mc, FALSE);
+		/* Don't show an mlocked key to an akicked user */
+		if (c->key)
+			free(c->key);
+		c->key = NULL;
+		/* No ops to clear */
+		chan_lowerts(c, chansvs.me->me);
+		cu = chanuser_add(c, CLIENT_NAME(chansvs.me->me));
+		cu->modes |= CMODE_OP;
+		/* make sure it parts again sometime (empty SJOIN etc) */
+		mc->flags |= MC_INHABIT;
+	}
 
 	if (!(MC_KEEPTOPIC & mc->flags))
 		return;

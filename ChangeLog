@@ -1,3 +1,13 @@
+jilles      2006/06/11 15:30:47 UTC	(20060611-5362)
+  Log:
+  Rename cs_keeptopic_newchan() to cs_newchan() as we
+  will do TS changes here soon.
+  
+
+  Changes:	Modified:
+  +4 -4		trunk/modules/chanserv/main.c (File Modified) 
+
+
 jilles      2006/06/11 15:12:16 UTC	(20060611-5360)
   Log:
   Document svslogin_sts and sasl_sts.

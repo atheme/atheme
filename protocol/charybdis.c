@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 5356 2006-06-11 14:09:04Z jilles $
+ * $Id: charybdis.c 5364 2006-06-11 20:28:33Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 5356 2006-06-11 14:09:04Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 5364 2006-06-11 20:28:33Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -163,6 +163,16 @@ static void charybdis_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *m
 	else
 		sts(":%s SJOIN %ld %s + :@%s", ME, c->ts, c->name,
 				CLIENT_NAME(u));
+}
+
+static void charybdis_chan_lowerts(channel_t *c, user_t *u)
+{
+	slog(LG_DEBUG, "charybdis_chan_lowerts(): lowering TS for %s to %ld",
+			c->name, (long)c->ts);
+	sts(":%s SJOIN %ld %s %s :@%s", ME, c->ts, c->name,
+				channel_modes(c, TRUE), CLIENT_NAME(u));
+	if (ircd->uses_uid)
+		chanban_clear(c);
 }
 
 /* kicks a user from a channel */
@@ -1276,6 +1286,7 @@ void _modinit(module_t * m)
 	quit_sts = &charybdis_quit_sts;
 	wallops = &charybdis_wallops;
 	join_sts = &charybdis_join_sts;
+	chan_lowerts = &charybdis_chan_lowerts;
 	kick = &charybdis_kick;
 	msg = &charybdis_msg;
 	notice_sts = &charybdis_notice;

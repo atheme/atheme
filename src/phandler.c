@@ -4,7 +4,7 @@
  *
  * Generic protocol event handlers.
  *
- * $Id: phandler.c 4935 2006-03-30 16:13:33Z nenolod $
+ * $Id: phandler.c 5364 2006-06-11 20:28:33Z jilles $
  */
 
 #include "atheme.h"
@@ -13,6 +13,7 @@ uint8_t(*server_login) (void) = generic_server_login;
 void (*introduce_nick) (char *nick, char *user, char *host, char *real, char *uid) = generic_introduce_nick;
 void (*wallops) (char *fmt, ...) = generic_wallops;
 void (*join_sts) (channel_t *c, user_t *u, boolean_t isnew, char *modes) = generic_join_sts;
+void (*chan_lowerts) (channel_t *c, user_t *u) = generic_chan_lowerts;
 void (*kick) (char *from, char *channel, char *to, char *reason) = generic_kick;
 void (*msg) (char *from, char *target, char *fmt, ...) = generic_msg;
 void (*notice_sts) (char *from, char *target, char *fmt, ...) = generic_notice;
@@ -64,6 +65,12 @@ void generic_wallops(char *fmt, ...)
 void generic_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
 {
 	/* We can't do anything here. Bail. */
+}
+
+void generic_chan_lowerts(channel_t *c, user_t *u)
+{
+	slog(LG_ERROR, "chan_lowerts() called but not supported!");
+	join_sts(c, u, TRUE, channel_modes(c, TRUE));
 }
 
 void generic_kick(char *from, char *channel, char *to, char *reason)

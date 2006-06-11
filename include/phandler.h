@@ -5,7 +5,7 @@
  * Protocol handlers, both generic and the actual declarations themselves.
  * Declare NOTYET to use the function pointer voodoo.
  *
- * $Id: phandler.h 5360 2006-06-11 15:12:16Z jilles $
+ * $Id: phandler.h 5364 2006-06-11 20:28:33Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -60,6 +60,12 @@ E void (*wallops)(char *fmt, ...);
  * modes is a convenience argument giving the simple modes with parameters
  * do not rely upon chanuser_find(c,u) */
 E void (*join_sts)(channel_t *c, user_t *u, boolean_t isnew, char *modes);
+/* lower the TS of a channel, joining it with the given client on the
+ * services server (opped), replacing the current simple modes with the
+ * ones stored in the channel_t and clearing all other statuses
+ * if bans are timestamped on this ircd, call chanban_clear()
+ * if the topic is timestamped on this ircd, clear it */
+E void (*chan_lowerts)(channel_t *c, user_t *u);
 /* kick a user from a channel
  * from is a client on the services server which may or may not be
  * on the channel */
@@ -135,6 +141,7 @@ E void generic_invite_sts(user_t *source, user_t *target, channel_t *channel);
 E void generic_quit_sts(user_t *u, char *reason);
 E void generic_wallops(char *fmt, ...);
 E void generic_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes);
+E void generic_chan_lowerts(channel_t *c, user_t *u);
 E void generic_kick(char *from, char *channel, char *to, char *reason);
 E void generic_msg(char *from, char *target, char *fmt, ...);
 E void generic_notice(char *from, char *target, char *fmt, ...);
