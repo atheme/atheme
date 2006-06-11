@@ -1,3 +1,14 @@
+jilles      2006/06/11 20:45:14 UTC	(20060611-5366)
+  Log:
+  Port over r5356 and r5364 from charybdis to ratbox and hybrid protocol modules:
+  stuff to lower channel TS
+  
+
+  Changes:	Modified:
+  +65 -9	trunk/protocol/hybrid.c (File Modified) 
+  +65 -9	trunk/protocol/ratbox.c (File Modified) 
+
+
 jilles      2006/06/11 20:28:33 UTC	(20060611-5364)
   Log:
   If chanserv::changets is enabled, change the TS of recreated
