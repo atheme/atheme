@@ -1,3 +1,15 @@
+jilles      2006/06/09 18:35:06 UTC	(20060609-5354)
+  Log:
+  If we send a wallops because the log file could not
+  be opened, first set the variable so we don't
+  immediately wallops again and then do the wallops.
+  wallops() could try to log in certain cases.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/function.c (File Modified) 
+
+
 jilles      2006/06/09 16:38:48 UTC	(20060609-5352)
   Log:
   All protocol modules: allow PART with multiple channels separated by commas.
