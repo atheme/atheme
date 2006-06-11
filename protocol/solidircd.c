@@ -142,6 +142,23 @@ static void solidircd_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *m
 				u->nick);
 }
 
+static void solidircd_chan_lowerts(channel_t *c, user_t *u)
+{
+	slog(LG_DEBUG, "solidircd_chan_lowerts(): lowering TS for %s to %ld",
+			c->name, (long)c->ts);
+	sts(":%s SJOIN %ld %s %s :@%s", me.name, c->ts, c->name,
+				channel_modes(c, TRUE), u->nick);
+	chanban_clear(c);
+	/*handle_topic(c, "", 0, "");*/
+	/* Don't destroy keeptopic info, I'll admit this is ugly -- jilles */
+	if (c->topic != NULL)
+		free(c->topic);
+	if (c->topic_setter != NULL)
+		free(c->topic_setter);
+	c->topic = c->topic_setter = NULL;
+	c->topicts = 0;
+}
+
 /* kicks a user from a channel */
 static void solidircd_kick(char *from, char *channel, char *to, char *reason)
 {
@@ -403,12 +420,14 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 	 */
 
 	channel_t *c;
+	boolean_t keep_new_modes = TRUE;
 	uint8_t modec = 0;
 	char *modev[16];
 	uint8_t userc;
 	char *userv[256];
 	uint8_t i;
 	time_t ts;
+	char *p;
 
 	if (origin && parc >= 4)
 	{
@@ -429,7 +448,13 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 			c = channel_add(parv[1], ts);
 		}
 
-		if (ts < c->ts)
+		if (ts == 0 || c->ts == 0)
+		{
+			if (c->ts != 0)
+				slog(LG_INFO, "m_sjoin(): server %s changing TS on %s from %ld to 0", origin, c->name, (long)c->ts);
+			c->ts = 0;
+		}
+		else if (ts < c->ts)
 		{
 			chanuser_t *cu;
 			node_t *n;
@@ -468,53 +493,39 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 
 			c->ts = ts;
 		}
+		else if (ts > c->ts)
+			keep_new_modes = FALSE;
 
-		channel_mode(NULL, c, modec, modev);
+		if (keep_new_modes)
+			channel_mode(NULL, c, modec, modev);
 
 		userc = sjtoken(parv[parc - 1], ' ', userv);
 
-		for (i = 0; i < userc; i++)
-			chanuser_add(c, userv[i]);
+		if (keep_new_modes)
+			for (i = 0; i < userc; i++)
+				chanuser_add(c, userv[i]);
+		else
+			for (i = 0; i < userc; i++)
+			{
+				p = userv[i];
+				while (*p == '@' || *p == '%' || *p == '+')
+					p++;
+				chanuser_add(c, p);
+			}
 	}
 	else
 	{
 		c = channel_find(parv[1]);
 		ts = atol(parv[0]);
 
-		if (ts < c->ts)
+		if (c == NULL || ts < c->ts)
 		{
-			chanuser_t *cu;
-			node_t *n;
-
-			/* the TS changed.  a TS change requires the following things
-			 * to be done to the channel:  reset all modes to nothing, remove
-			 * all status modes on known users on the channel (including ours),
-			 * and set the new TS.
-			 */
-
-			c->modes = 0;
-			c->limit = 0;
-			if (c->key)
-				free(c->key);
-			c->key = NULL;
-
-			LIST_FOREACH(n, c->members.head)
-			{
-				cu = (chanuser_t *)n->data;
-				if (cu->user->server == me.me)
-				{
-					/* it's a service, reop */
-					sts(":%s PART %s :Reop", cu->user->nick, c->name);
-					sts(":%s SJOIN %ld %s + :@%s", me.name, ts, c->name, cu->user->nick);
-					cu->modes = CMODE_OP;
-				}
-				else
-					cu->modes = 0;
-			}
-
-			slog(LG_INFO, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
-
-			c->ts = ts;
+			/* just request a resynch, this will include
+			 * the user joining -- jilles */
+			slog(LG_DEBUG, "m_sjoin(): requesting resynch for %s",
+					parv[1]);
+			sts("RESYNCH %s", parv[1]);
+			return;
 		}
 
 		chanuser_add(c, origin);
@@ -637,6 +648,8 @@ static void m_quit(char *origin, uint8_t parc, char *parv[])
 
 static void m_mode(char *origin, uint8_t parc, char *parv[])
 {
+	channel_t *c;
+
 	if (!origin)
 	{
 		slog(LG_DEBUG, "m_mode(): received MODE without origin");
@@ -650,7 +663,17 @@ static void m_mode(char *origin, uint8_t parc, char *parv[])
 	}
 
 	if (*parv[0] == '#')
+	{
+		c = channel_find(parv[0]);
+		if (c == NULL)
+		{
+			slog(LG_DEBUG, "m_mode(): unknown channel %s", parv[0]);
+			return;
+		}
+		if (atol(parv[1]) > c->ts)
+			return;
 		channel_mode(NULL, channel_find(parv[0]), parc - 2, &parv[2]);
+	}
 	else
 		user_mode(user_find(parv[0]), parv[1]);
 }
@@ -795,6 +818,7 @@ void _modinit(module_t * m)
 	quit_sts = &solidircd_quit_sts;
 	wallops = &solidircd_wallops;
 	join_sts = &solidircd_join_sts;
+	chan_lowerts = &solidircd_chan_lowerts;
 	kick = &solidircd_kick;
 	msg = &solidircd_msg;
 	notice_sts = &solidircd_notice;
