@@ -1,3 +1,24 @@
+jilles      2006/06/11 20:28:33 UTC	(20060611-5364)
+  Log:
+  If chanserv::changets is enabled, change the TS of recreated
+  registered channels to their registration time, if that is
+  older than their current TS. This removes all simple modes
+  and statuses (and depending on the ircd also bans and/or topic)
+  from the channel. The simple modes are replaced by +nt
+  modified by the channel mode lock (+k is set later, when
+  someone joins).
+  
+  Currently only for the charybdis protocol module but
+  ratbox, hybrid and bahamut will follow soon.
+  
+
+  Changes:	Modified:
+  +7 -0		trunk/include/phandler.h (File Modified) 
+  +23 -4	trunk/modules/chanserv/main.c (File Modified) 
+  +11 -0	trunk/protocol/charybdis.c (File Modified) 
+  +7 -0		trunk/src/phandler.c (File Modified) 
+
+
 jilles      2006/06/11 15:30:47 UTC	(20060611-5362)
   Log:
   Rename cs_keeptopic_newchan() to cs_newchan() as we

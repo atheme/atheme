@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 5352 2006-06-09 16:38:48Z jilles $
+ * $Id: ratbox.c 5366 2006-06-11 20:45:14Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 5352 2006-06-09 16:38:48Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 5366 2006-06-11 20:45:14Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -162,6 +162,16 @@ static void ratbox_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *mode
 	else
 		sts(":%s SJOIN %ld %s + :@%s", ME, c->ts, c->name,
 				CLIENT_NAME(u));
+}
+
+static void ratbox_chan_lowerts(channel_t *c, user_t *u)
+{
+	slog(LG_DEBUG, "ratbox_chan_lowerts(): lowering TS for %s to %ld",
+			c->name, (long)c->ts);
+	sts(":%s SJOIN %ld %s %s :@%s", ME, c->ts, c->name,
+				channel_modes(c, TRUE), CLIENT_NAME(u));
+	if (ircd->uses_uid)
+		chanban_clear(c);
 }
 
 /* kicks a user from a channel */
@@ -492,6 +502,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 	/* -> :proteus.malkier.net SJOIN 1073516550 #shrike +tn :@sycobuny @+rakaur */
 
 	channel_t *c;
+	boolean_t keep_new_modes = TRUE;
 	uint8_t modec = 0;
 	char *modev[16];
 	uint8_t userc;
@@ -499,6 +510,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 	uint8_t i;
 	time_t ts;
 	server_t *source_server;
+	char *p;
 
 	if (origin)
 	{
@@ -523,7 +535,13 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 			c = channel_add(parv[1], ts);
 		}
 
-		if (ts < c->ts)
+		if (ts == 0 || c->ts == 0)
+		{
+			if (c->ts != 0)
+				slog(LG_INFO, "m_sjoin(): server %s changing TS on %s from %ld to 0", source_server->name, c->name, (long)c->ts);
+			c->ts = 0;
+		}
+		else if (ts < c->ts)
 		{
 			chanuser_t *cu;
 			node_t *n;
@@ -564,13 +582,28 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 
 			c->ts = ts;
 		}
+		else if (ts > c->ts)
+			keep_new_modes = FALSE;
 
-		channel_mode(NULL, c, modec, modev);
+		if (keep_new_modes)
+			channel_mode(NULL, c, modec, modev);
 
 		userc = sjtoken(parv[parc - 1], ' ', userv);
 
-		for (i = 0; i < userc; i++)
-			chanuser_add(c, userv[i]);
+		if (keep_new_modes)
+			for (i = 0; i < userc; i++)
+				chanuser_add(c, userv[i]);
+		else
+			for (i = 0; i < userc; i++)
+			{
+				p = userv[i];
+				while (*p == '@' || *p == '%' || *p == '+')
+					p++;
+				/* XXX for TS5 we should mark them deopped
+				 * if they were opped and drop modes from them
+				 * -- jilles */
+				chanuser_add(c, p);
+			}
 	}
 }
 
@@ -578,6 +611,7 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 {
 	/* -> :1JJAAAAAB JOIN 1127474195 #test +tn */
 	user_t *u = user_find(origin);
+	boolean_t keep_new_modes = TRUE;
 	node_t *n, *tn;
 	channel_t *c;
 	chanuser_t *cu;
@@ -618,7 +652,13 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 		c = channel_add(parv[1], ts);
 	}
 
-	if (ts < c->ts)
+	if (ts == 0 || c->ts == 0)
+	{
+		if (c->ts != 0)
+			slog(LG_INFO, "m_join(): server %s changing TS on %s from %ld to 0", u->server->name, c->name, (long)c->ts);
+		c->ts = 0;
+	}
+	else if (ts < c->ts)
 	{
 		/* the TS changed.  a TS change requires the following things
 		 * to be done to the channel:  reset all modes to nothing, remove
@@ -646,14 +686,16 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 		}
 		slog(LG_INFO, "m_join(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
 		c->ts = ts;
-
-		channel_mode(NULL, c, modec, modev);
 	}
+	else if (ts > c->ts)
+		keep_new_modes = FALSE;
+
+	if (keep_new_modes)
+		channel_mode(NULL, c, modec, modev);
 
 	chanuser_add(c, origin);
 }
 
-/* XXX: We should follow TS rules here, but i'm lazy. --nenolod */
 static void m_bmask(char *origin, uint8_t parc, char *parv[])
 {
 	uint8_t ac, i;
@@ -667,6 +709,9 @@ static void m_bmask(char *origin, uint8_t parc, char *parv[])
 		slog(LG_DEBUG, "m_bmask(): got bmask for unknown channel");
 		return;
 	}
+
+	if (atol(parv[0]) > c->ts)
+		return;
 	
 	type = *parv[2];
 	if (!strchr(ircd->ban_like_modes, type))
@@ -836,6 +881,8 @@ static void m_mode(char *origin, uint8_t parc, char *parv[])
 
 static void m_tmode(char *origin, uint8_t parc, char *parv[])
 {
+	channel_t *c;
+
 	/* -> :1JJAAAAAB TMODE 1127511579 #new +o 2JJAAAAAB */
 	if (!origin)
 	{
@@ -849,9 +896,17 @@ static void m_tmode(char *origin, uint8_t parc, char *parv[])
 		return;
 	}
 
-	/* Ignore TS as we do not lower TSes ourselves */
+	c = channel_find(parv[1]);
+	if (c == NULL)
+	{
+		slog(LG_DEBUG, "m_tmode(): nonexistent channel %s", parv[1]);
+		return;
+	}
 
-	channel_mode(NULL, channel_find(parv[1]), parc - 2, &parv[2]);
+	if (atol(parv[0]) > c->ts)
+		return;
+
+	channel_mode(NULL, c, parc - 2, &parv[2]);
 }
 
 static void m_kick(char *origin, uint8_t parc, char *parv[])
@@ -1078,6 +1133,7 @@ void _modinit(module_t * m)
 	quit_sts = &ratbox_quit_sts;
 	wallops = &ratbox_wallops;
 	join_sts = &ratbox_join_sts;
+	chan_lowerts = &ratbox_chan_lowerts;
 	kick = &ratbox_kick;
 	msg = &ratbox_msg;
 	notice_sts = &ratbox_notice;
