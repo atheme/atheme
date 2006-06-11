@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 5065 2006-04-14 03:55:44Z w00t $
+ * $Id: conf.c 5358 2006-06-11 15:07:07Z jilles $
  */
 
 #include "atheme.h"
@@ -65,6 +65,7 @@ static int c_ci_vop(CONFIGENTRY *);
 static int c_ci_hop(CONFIGENTRY *);
 static int c_ci_aop(CONFIGENTRY *);
 static int c_ci_sop(CONFIGENTRY *);
+static int c_ci_changets(CONFIGENTRY *);
 
 /* GService client information. */
 static int c_gl_nick(CONFIGENTRY *);
@@ -266,6 +267,7 @@ void conf_init(void)
 	chansvs.ca_hop = CA_HOP_DEF;
 	chansvs.ca_aop = CA_AOP_DEF;
 	chansvs.ca_sop = CA_SOP_DEF;
+	chansvs.changets = FALSE;
 
 	if (!(runflags & RF_REHASHING))
 	{
@@ -505,6 +507,7 @@ void init_newconf(void)
 	add_conf_item("HOP", &conf_ci_table, c_ci_hop);
 	add_conf_item("AOP", &conf_ci_table, c_ci_aop);
 	add_conf_item("SOP", &conf_ci_table, c_ci_sop);
+	add_conf_item("CHANGETS", &conf_ci_table, c_ci_changets);
 
 	/* global{} block */
 	add_conf_item("NICK", &conf_gl_table, c_gl_nick);
@@ -1220,6 +1223,12 @@ static int c_ci_sop(CONFIGENTRY *ce)
 
 	chansvs.ca_sop = flags_to_bitmask(ce->ce_vardata, chanacs_flags, 0);
 
+	return 0;
+}
+
+static int c_ci_changets(CONFIGENTRY *ce)
+{
+	chansvs.changets = TRUE;
 	return 0;
 }
 

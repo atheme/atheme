@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 4935 2006-03-30 16:13:33Z nenolod $
+ * $Id: services.h 5358 2006-06-11 15:07:07Z jilles $
  */
 
 #ifndef SERVICES_H
@@ -37,6 +37,8 @@ struct chansvs_
   uint32_t ca_hop;
   uint32_t ca_aop;
   uint32_t ca_sop;
+
+  boolean_t changets;		/* use TS to better deop people */
 
   service_t *me;                /* our user_t struct          */
 };
