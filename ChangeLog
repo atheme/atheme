@@ -1,3 +1,12 @@
+jilles      2006/06/11 15:12:16 UTC	(20060611-5360)
+  Log:
+  Document svslogin_sts and sasl_sts.
+  
+
+  Changes:	Modified:
+  +3 -1		trunk/include/phandler.h (File Modified) 
+
+
 jilles      2006/06/11 15:07:07 UTC	(20060611-5358)
   Log:
   Add chanserv::changets config option. Does not do anything yet.

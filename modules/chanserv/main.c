@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5121 2006-04-22 19:26:16Z jilles $
+ * $Id: main.c 5362 2006-06-11 15:30:47Z jilles $
  */
 
 #include "atheme.h"
@@ -12,14 +12,14 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5121 2006-04-22 19:26:16Z jilles $",
+	"$Id: main.c 5362 2006-06-11 15:30:47Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_join(chanuser_t *cu);
 static void cs_part(chanuser_t *cu);
 static void cs_register(mychan_t *mc);
-static void cs_keeptopic_newchan(channel_t *c);
+static void cs_newchan(channel_t *c);
 static void cs_keeptopic_topicset(channel_t *c);
 static void cs_leave_empty(void *unused);
 
@@ -205,7 +205,7 @@ void _modinit(module_t *m)
 	hook_add_hook("channel_join", (void (*)(void *)) cs_join);
 	hook_add_hook("channel_part", (void (*)(void *)) cs_part);
 	hook_add_hook("channel_register", (void (*)(void *)) cs_register);
-	hook_add_hook("channel_add", (void (*)(void *)) cs_keeptopic_newchan);
+	hook_add_hook("channel_add", (void (*)(void *)) cs_newchan);
 	hook_add_hook("channel_topic", (void (*)(void *)) cs_keeptopic_topicset);
 	event_add("cs_leave_empty", cs_leave_empty, NULL, 300);
 }
@@ -223,7 +223,7 @@ void _moddeinit(void)
 	hook_del_hook("channel_join", (void (*)(void *)) cs_join);
 	hook_del_hook("channel_part", (void (*)(void *)) cs_part);
 	hook_del_hook("channel_register", (void (*)(void *)) cs_register);
-	hook_del_hook("channel_add", (void (*)(void *)) cs_keeptopic_newchan);
+	hook_del_hook("channel_add", (void (*)(void *)) cs_newchan);
 	hook_del_hook("channel_topic", (void (*)(void *)) cs_keeptopic_topicset);
 	event_delete(cs_leave_empty, NULL);
 }
@@ -487,7 +487,7 @@ static void cs_keeptopic_topicset(channel_t *c)
 }
 
 /* Called on creation of a channel */
-static void cs_keeptopic_newchan(channel_t *c)
+static void cs_newchan(channel_t *c)
 {
 	mychan_t *mc;
 	metadata_t *md;
