@@ -1,3 +1,13 @@
+jilles      2006/06/11 23:09:50 UTC	(20060611-5372)
+  Log:
+  Port over r5370 from bahamut to solidircd protocol module:
+  stuff to lower channel TS
+  
+
+  Changes:	Modified:
+  +61 -37	trunk/protocol/solidircd.c (File Modified) 
+
+
 jilles      2006/06/11 23:02:20 UTC	(20060611-5370)
   Log:
   bahamut: stuff to lower channel TS
