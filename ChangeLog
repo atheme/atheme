@@ -1,3 +1,14 @@
+jilles      2006/06/12 15:57:40 UTC	(20060612-5374)
+  Log:
+  - Add another necessary comment line for DH-BLOWFISH
+  - Add DH-BLOWFISH to example.userserv.conf also
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/dist/example.conf (File Modified) 
+  +2 -0		trunk/dist/example.userserv.conf (File Modified) 
+
+
 jilles      2006/06/11 23:09:50 UTC	(20060611-5372)
   Log:
   Port over r5370 from bahamut to solidircd protocol module:

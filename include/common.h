@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: common.h 3533 2005-11-06 05:48:20Z alambert $
+ * $Id: common.h 5376 2006-06-13 07:45:49Z nenolod $
  */
 
 #ifndef COMMON_H
@@ -24,7 +24,7 @@
 #define USERLEN 11
 #define GECOSLEN 51
 #define EMAILLEN 120
-#define MEMOLEN 129
+#define MEMOLEN 300
 #define MAXMSIGNORES 40
 
 /* H A S H */
