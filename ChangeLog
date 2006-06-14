@@ -1,3 +1,15 @@
+jilles      2006/06/14 11:42:30 UTC	(20060614-5378)
+  Log:
+  Forced commit to note that the previous commit (r5376)
+  changed MEMOLEN from 129 to 300.
+  (svn doesn't seem to support forced commits so I removed
+  a space somewhere)
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/common.h (File Modified) 
+
+
 nenolod     2006/06/13 07:45:49 UTC	(20060613-5376)
   Log:
   - ZOMG WTF
