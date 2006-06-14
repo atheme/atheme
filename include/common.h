@@ -4,14 +4,14 @@
  *
  * Data structures for account information.
  *
- * $Id: common.h 5376 2006-06-13 07:45:49Z nenolod $
+ * $Id: common.h 5378 2006-06-14 11:42:30Z jilles $
  */
 
 #ifndef COMMON_H
 #define COMMON_H
 
 /* D E F I N E S */
-#define BUFSIZE  1024            /* maximum size of a buffer */
+#define BUFSIZE 1024            /* maximum size of a buffer */
 #define MODESTACK_WAIT 500
 #define MAXMODES 4
 #define MAXPARAMSLEN (510-32-64-34-(7+MAXMODES))
