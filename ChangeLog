@@ -1,3 +1,13 @@
+brain       2006/06/14 14:40:41 UTC	(20060614-5380)
+  Log:
+  Add cmode +z (ssl only)
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/protocol/inspircd.h (File Modified) 
+  +1 -0		trunk/protocol/inspircd.c (File Modified) 
+
+
 jilles      2006/06/14 11:42:30 UTC	(20060614-5378)
   Log:
   Forced commit to note that the previous commit (r5376)
