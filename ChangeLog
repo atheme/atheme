@@ -1,3 +1,12 @@
+jilles      2006/06/14 19:13:04 UTC	(20060614-5382)
+  Log:
+  Fix compile breakage reported by Lauren.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/inspircd.c (File Modified) 
+
+
 brain       2006/06/14 14:40:41 UTC	(20060614-5380)
   Log:
   Add cmode +z (ssl only)
