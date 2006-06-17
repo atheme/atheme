@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService RECOVER functions.
  *
- * $Id: recover.c 5396 2006-06-17 22:47:00Z jilles $
+ * $Id: recover.c 5398 2006-06-17 23:09:35Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/recover", FALSE, _modinit, _moddeinit,
-	"$Id: recover.c 5396 2006-06-17 22:47:00Z jilles $",
+	"$Id: recover.c 5398 2006-06-17 23:09:35Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -113,35 +113,38 @@ static void cs_cmd_recover(char *origin)
 		}
 	}
 
-	/* remove modes that keep people out */
-	if (CMODE_LIMIT & mc->chan->modes)
+	if (origin_cu == NULL)
 	{
-		cmode(chansvs.nick, mc->chan->name, "-l", NULL);
-		mc->chan->modes &= ~CMODE_LIMIT;
-		mc->chan->limit = 0;
-	}
+		/* if requester is not on channel,
+		 * remove modes that keep people out */
+		if (CMODE_LIMIT & mc->chan->modes)
+		{
+			cmode(chansvs.nick, mc->chan->name, "-l", NULL);
+			mc->chan->modes &= ~CMODE_LIMIT;
+			mc->chan->limit = 0;
+		}
 
-	if (CMODE_KEY & mc->chan->modes)
-	{
-		cmode(chansvs.nick, mc->chan->name, "-k", mc->chan->key);
-		mc->chan->modes &= ~CMODE_KEY;
-		free(mc->chan->key);
-		mc->chan->key = NULL;
-	}
+		if (CMODE_KEY & mc->chan->modes)
+		{
+			cmode(chansvs.nick, mc->chan->name, "-k", mc->chan->key);
+			mc->chan->modes &= ~CMODE_KEY;
+			free(mc->chan->key);
+			mc->chan->key = NULL;
+		}
 
-	/* stuff like join throttling
-	 * just remove all of these, we don't keep track of them
-	 * XXX only remove modes that could keep people out
-	 * -- jilles */
-	str[0] = '-';
-	str[2] = '\0';
-	for (i = 0; ignore_mode_list[i].mode != '\0'; i++)
-	{
-		str[1] = ignore_mode_list[i].mode;
-		cmode(chansvs.nick, mc->chan->name, str);
+		/* stuff like join throttling
+		 * just remove all of these, we don't keep track of them
+		 * XXX only remove modes that could keep people out
+		 * -- jilles */
+		str[0] = '-';
+		str[2] = '\0';
+		for (i = 0; ignore_mode_list[i].mode != '\0'; i++)
+		{
+			str[1] = ignore_mode_list[i].mode;
+			cmode(chansvs.nick, mc->chan->name, str);
+		}
 	}
-
-	if (origin_cu != NULL)
+	else
 	{
 		if (!(CMODE_OP & origin_cu->modes))
 			cmode(chansvs.nick, mc->chan->name, "+o", CLIENT_NAME(u));

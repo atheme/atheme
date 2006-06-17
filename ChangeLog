@@ -1,3 +1,15 @@
+jilles      2006/06/17 22:47:00 UTC	(20060617-5396)
+  Log:
+  ChanServ RECOVER: Unset non-standard simple modes with
+  parameter, such as join throttling. This should really
+  only unset modes that could keep people out but it
+  does not.
+  
+
+  Changes:	Modified:
+  +14 -0	trunk/modules/chanserv/recover.c (File Modified) 
+
+
 jilles      2006/06/17 12:56:36 UTC	(20060617-5394)
   Log:
   Clarify that local operators (in some ircds) are not
