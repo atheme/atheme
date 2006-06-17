@@ -1,3 +1,13 @@
+jilles      2006/06/17 12:56:36 UTC	(20060617-5394)
+  Log:
+  Clarify that local operators (in some ircds) are not
+  IRCops from atheme's point of view.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/doc/PRIVILEGES (File Modified) 
+
+
 w00t        2006/06/17 07:28:37 UTC	(20060617-5392)
   Log:
   Not all AKILLs on inspircd should be permanent.
