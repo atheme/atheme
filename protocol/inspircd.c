@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 5382 2006-06-14 19:13:04Z jilles $
+ * $Id: inspircd.c 5388 2006-06-17 01:35:32Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5382 2006-06-14 19:13:04Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5388 2006-06-17 01:35:32Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -371,6 +371,14 @@ static void inspircd_sethost_sts(char *source, char *target, char *host)
 
 	sts(":%s CHGHOST %s %s", source, target, host);
 }
+
+static void inspircd_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
+{
+	/* svsnick can only be sent by a server */
+	sts(":%s SVSNICK %s %s %lu", me.name, u->nick, newnick,
+		(unsigned long)(CURRTIME - 60));
+}
+
 
 /* invite a user to a channel */
 static void inspircd_invite_sts(user_t *sender, user_t *target, channel_t *channel)
@@ -761,6 +769,7 @@ void _modinit(module_t * m)
 	ircd_on_logout = &inspircd_on_logout;
 	jupe = &inspircd_jupe;
 	sethost_sts = &inspircd_sethost_sts;
+	fnc_sts = &inspircd_fnc_sts;
 	invite_sts = &inspircd_invite_sts;
 
 	mode_list = inspircd_mode_list;
