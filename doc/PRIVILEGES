@@ -5,6 +5,9 @@ Terminology:
 
 IRCop
 	user with user mode +o, usually obtained with /oper
+	users whose operator status is indicated by a different user mode
+	than +o, or whose user mode +o is not propagated to other servers,
+	are not IRCops from atheme's point of view
 operclass
 	group of privileges defined in an operclass{} block in atheme.conf
 services operator
@@ -86,4 +89,4 @@ operserv:noop
 operserv:global
 	send global notices
 
-$Id: PRIVILEGES 4443 2006-01-03 13:25:30Z jilles $
+$Id: PRIVILEGES 5394 2006-06-17 12:56:36Z jilles $

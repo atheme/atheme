@@ -1,3 +1,11 @@
+w00t        2006/06/17 07:28:37 UTC	(20060617-5392)
+  Log:
+  Not all AKILLs on inspircd should be permanent.
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/inspircd.c (File Modified) 
+
+
 w00t        2006/06/17 04:50:19 UTC	(20060617-5390)
   Log:
   - Remove OS KLINE -- it's only been deprecated since 0.2 or so.
