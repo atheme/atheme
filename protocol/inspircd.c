@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 5388 2006-06-17 01:35:32Z w00t $
+ * $Id: inspircd.c 5392 2006-06-17 07:28:37Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5388 2006-06-17 01:35:32Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5392 2006-06-17 07:28:37Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -282,7 +282,7 @@ static void inspircd_kline_sts(char *server, char *user, char *host, long durati
 		return;
 
 	/* :services-dev.chatspike.net ADDLINE G test@test.com Brain 1133994664 0 :You are banned from this network */
-	sts(":%s ADDLINE G %s@%s %s %ld 0 :%s", me.name, user, host, opersvs.nick, time(NULL), reason);
+	sts(":%s ADDLINE G %s@%s %s %ld %ld :%s", me.name, user, host, opersvs.nick, time(NULL), duration, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
