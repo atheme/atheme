@@ -1,3 +1,11 @@
+w00t        2006/06/17 01:35:32 UTC	(20060617-5388)
+  Log:
+  - Add suppport for forced nick changes to InspIRCd protocol module through use of SVSNICK. Sent from server, not 'source', as InspIRCd requires a server send SVSNICK.
+
+  Changes:	Modified:
+  +9 -0		trunk/protocol/inspircd.c (File Modified) 
+
+
 jilles      2006/06/15 17:01:40 UTC	(20060615-5386)
   Log:
   Better chanserv::changets description.

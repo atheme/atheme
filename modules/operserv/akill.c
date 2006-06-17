@@ -3,9 +3,9 @@
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains functionality which implements
- * the OService AKILL/KLINE command.
+ * the OperServ AKILL command.
  *
- * $Id: akill.c 4889 2006-03-03 17:34:10Z jilles $
+ * $Id: akill.c 5390 2006-06-17 04:50:19Z w00t $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 4889 2006-03-03 17:34:10Z jilles $",
+	"$Id: akill.c 5390 2006-06-17 04:50:19Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -26,7 +26,6 @@ static void os_cmd_akill_list(char *origin, char *target);
 static void os_cmd_akill_sync(char *origin, char *target);
 
 
-command_t os_kline = { "KLINE", "Manages network bans. [deprecated, use OS AKILL in future.]", PRIV_AKILL, os_cmd_akill };
 command_t os_akill = { "AKILL", "Manages network bans.", PRIV_AKILL, os_cmd_akill };
 
 fcommand_t os_akill_add = { "ADD", AC_NONE, os_cmd_akill_add };
@@ -43,10 +42,9 @@ void _modinit(module_t *m)
 	os_cmdtree = module_locate_symbol("operserv/main", "os_cmdtree");
 	os_helptree = module_locate_symbol("operserv/main", "os_helptree");
 
-	command_add(&os_kline, os_cmdtree);
         command_add(&os_akill, os_cmdtree);
 
-    /* Add sub-commands */
+	/* Add sub-commands */
 	fcommand_add(&os_akill_add, &os_akill_cmds);
 	fcommand_add(&os_akill_del, &os_akill_cmds);
 	fcommand_add(&os_akill_list, &os_akill_cmds);
@@ -60,7 +58,6 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
-	command_delete(&os_kline, os_cmdtree);
 	command_delete(&os_akill, os_cmdtree);
 
 	/* Delete sub-commands */
