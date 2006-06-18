@@ -1,3 +1,12 @@
+brain       2006/06/18 12:51:17 UTC	(20060618-5414)
+  Log:
+  Put back gline and FNC stuff, there was a difference between our svn and athemes.
+  
+
+  Changes:	Modified:
+  +11 -2	trunk/protocol/inspircd.c (File Modified) 
+
+
 brain       2006/06/18 12:48:44 UTC	(20060618-5412)
   Log:
   Add support for channel mode +T, remove constant for channel mode +A (inspircd does not have this mode, throwback to unreal.c)

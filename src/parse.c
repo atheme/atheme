@@ -4,7 +4,7 @@
  *
  * This file contains IRC interaction routines.
  *
- * $Id: parse.c 2497 2005-10-01 04:35:25Z nenolod $
+ * $Id: parse.c 5416 2006-06-18 13:19:45Z jilles $
  */
 
 #include "atheme.h"
@@ -56,10 +56,7 @@ void irc_parse(char *line)
 			 */
 			if (*line == ':')
 			{
-				origin = line;
-
-				if (ircd->uses_p10 == FALSE)
-					origin++;
+				origin = line + 1;
 
 				if ((message = strchr(pos, ' ')))
 				{
@@ -161,8 +158,7 @@ void p10_parse(char *line)
 			if (*line == ':' || me.recvsvr == TRUE)
 			{
 				origin = line;
-
-				if (ircd->uses_p10 == FALSE)
+				if (*origin == ':')
 					origin++;
 
 				if ((message = strchr(pos, ' ')))
