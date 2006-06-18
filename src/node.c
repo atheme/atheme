@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 5402 2006-06-18 00:38:10Z jilles $
+ * $Id: node.c 5404 2006-06-18 00:41:31Z jilles $
  */
 
 #include "atheme.h"
@@ -2280,7 +2280,6 @@ metadata_t *metadata_find(void *target, int32_t type, char *name)
 	return NULL;
 }
 
-/* XXX This routine does NOT work right. */
 void expire_check(void *arg)
 {
 	uint32_t i;
