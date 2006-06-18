@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 5147 2006-05-01 14:19:40Z nenolod $
+ * $Id: help.c 5408 2006-06-18 01:16:45Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 5147 2006-05-01 14:19:40Z nenolod $",
+	"$Id: help.c 5408 2006-06-18 01:16:45Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -100,11 +100,20 @@ static void cs_cmd_help(char *origin)
 		notice(chansvs.nick, origin, "virtually impossible when a channel is registered with \2%s\2.", chansvs.nick);
 		notice(chansvs.nick, origin, "Registration is a quick and painless process. Once registered,");
 		notice(chansvs.nick, origin, "the founder can maintain complete and total control over the channel.");
-		notice(chansvs.nick, origin, "Please note that channels will expire after %d days of inactivity,", (config_options.expire / 86400));
-		notice(chansvs.nick, origin, "or if there are no eligible channel successors. Successors are");
-		notice(chansvs.nick, origin, "primarily those who have the +R flag set on their account in");
-		notice(chansvs.nick, origin, "the channel, although other people may be chosen depending on");
-		notice(chansvs.nick, origin, "their access level and activity.");
+		if (config_options.expire > 0)
+		{
+			notice(chansvs.nick, origin, "Please note that channels will expire after %d days of inactivity,", (config_options.expire / 86400));
+			notice(chansvs.nick, origin, "or if there are no eligible channel successors.");
+			notice(chansvs.nick, origin, "Activity is defined as a user with one of +vhHoOsrRf being on the channel.");
+		}
+		else
+		{
+			notice(chansvs.nick, origin, "Please note that channels will expire if there are no eligible channel successors.");
+		}
+		notice(chansvs.nick, origin, "Successors are primarily those who have the +R flag");
+		notice(chansvs.nick, origin, "set on their account in the channel, although other");
+		notice(chansvs.nick, origin, "people may be chosen depending on their access");
+		notice(chansvs.nick, origin, "level and activity.");
 		notice(chansvs.nick, origin, " ");
 		notice(chansvs.nick, origin, "For more information on a command, type:");
 		notice(chansvs.nick, origin, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
