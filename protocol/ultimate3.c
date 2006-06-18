@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 5352 2006-06-09 16:38:48Z jilles $
+ * $Id: ultimate3.c 5418 2006-06-18 15:14:17Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 5352 2006-06-09 16:38:48Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 5418 2006-06-18 15:14:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -173,9 +173,8 @@ static void ultimate3_notice(char *from, char *target, char *fmt, ...)
 	va_list ap;
 	char buf[BUFSIZE];
 
-	/*
-	 * ultimate3 appears to not like it when it recieves
-	 * * a message to and from the same person.
+	/* ultimate3 appears to not like it when it recieves
+	 * a message to and from the same person.
 	 */
 	if (!strcasecmp(from, target))
 		return;
@@ -335,25 +334,19 @@ static void m_topic(char *origin, uint8_t parc, char *parv[])
 
 static void m_ping(char *origin, uint8_t parc, char *parv[])
 {
-	/*
-	 * reply to PING's 
-	 */
+	/* reply to PING's */
 	sts(":%s PONG %s %s", me.name, me.name, parv[0]);
 }
 
 static void m_pong(char *origin, uint8_t parc, char *parv[])
 {
-	/*
-	 * someone replied to our PING 
-	 */
+	/* someone replied to our PING */
 	if ((!parv[0]) || (strcasecmp(me.actual, parv[0])))
 		return;
 
 	me.uplinkpong = CURRTIME;
 
-	/*
-	 * -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net 
-	 */
+	/* -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net */
 	if (me.bursting)
 	{
 #ifdef HAVE_GETTIMEOFDAY
@@ -405,9 +398,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 
 	if (origin && parc >= 4)
 	{
-		/*
-		 * :origin SJOIN ts chan modestr [key or limits] :users 
-		 */
+		/* :origin SJOIN ts chan modestr [key or limits] :users */
 		modev[modec++] = parv[2];
 
 		if (parc > 4)
@@ -431,9 +422,9 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 
 			/*
 			 * the TS changed.  a TS change requires the following things
-			 * * to be done to the channel:  reset all modes to nothing, remove
-			 * * all status modes on known users on the channel (including ours),
-			 * * and set the new TS.
+			 * to be done to the channel:  reset all modes to nothing, remove
+			 * all status modes on known users on the channel (including ours),
+			 * and set the new TS.
 			 */
 
 			c->modes = 0;
@@ -447,9 +438,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 				cu = (chanuser_t *)n->data;
 				if (cu->user->server == me.me)
 				{
-					/*
-					 * it's a service, reop 
-					 */
+					/* it's a service, reop */
 					sts(":%s PART %s :Reop", cu->user->nick, c->name);
 					sts(":%s SJOIN %ld %s + :@%s", me.name, ts, c->name, cu->user->nick);
 					cu->modes = CMODE_OP;
@@ -482,9 +471,9 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 
 			/*
 			 * the TS changed.  a TS change requires the following things
-			 * * to be done to the channel:  reset all modes to nothing, remove
-			 * * all status modes on known users on the channel (including ours),
-			 * * and set the new TS.
+			 * to be done to the channel:  reset all modes to nothing, remove
+			 * all status modes on known users on the channel (including ours),
+			 * and set the new TS.
 			 */
 
 			c->modes = 0;
@@ -498,9 +487,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 				cu = (chanuser_t *)n->data;
 				if (cu->user->server == me.me)
 				{
-					/*
-					 * it's a service, reop 
-					 */
+					/* it's a service, reop */
 					sts(":%s PART %s :Reop", cu->user->nick, c->name);
 					sts(":%s SJOIN %ld %s + :@%s", me.name, ts, c->name, cu->user->nick);
 					cu->modes = CMODE_OP;
@@ -560,23 +547,19 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 #else
 		u = user_add(parv[0], parv[5], parv[6], parv[7], inet_ntoa(addr), NULL, parv[11], s, atoi(parv[2]));
 #endif
-		/*
-		 * user modes 
-		 */
+		/* user modes */
 		user_mode(u, parv[3]);
-		/*
-		 * Oper Mode 
-		 */
+		/* Oper Mode */
 		user_mode(u, parv[4]);
 
 		/*
 		 * Ok, we have the user ready to go.
-		 * * Here's the deal -- if the user's SVID is before
-		 * * the start time, and not 0, then check to see
-		 * * if it's a registered account or not.
-		 * *
-		 * * If it IS registered, deal with that accordingly,
-		 * * via handle_burstlogin(). --nenolod
+		 * Here's the deal -- if the user's SVID is before
+		 * the start time, and not 0, then check to see
+		 * if it's a registered account or not.
+		 *
+		 * If it IS registered, deal with that accordingly,
+		 * via handle_burstlogin(). --nenolod
 		 */
 		/* Changed to just check umode +r for now -- jilles */
 #if 0
@@ -591,9 +574,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 		handle_nickchange(u);
 	}
 
-	/*
-	 * if it's only 2 then it's a nickname change 
-	 */
+	/* if it's only 2 then it's a nickname change */
 	else if (parc == 2)
 	{
 		node_t *n;
@@ -612,22 +593,16 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			/* changed nick to registered one, reset +r */
 			sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, parv[0], time(NULL));
 
-		/*
-		 * remove the current one from the list 
-		 */
+		/* remove the current one from the list */
 		n = node_find(u, &userlist[u->hash]);
 		node_del(n, &userlist[u->hash]);
 		node_free(n);
 
-		/*
-		 * change the nick 
-		 */
+		/* change the nick */
 		strlcpy(u->nick, parv[0], NICKLEN);
 		u->ts = atoi(parv[1]);
 
-		/*
-		 * readd with new nick (so the hash works) 
-		 */
+		/* readd with new nick (so the hash works) */
 		n = node_create();
 		u->hash = UHASH((unsigned char *)u->nick);
 		node_add(u, n, &userlist[u->hash]);
@@ -649,9 +624,7 @@ static void m_quit(char *origin, uint8_t parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", origin);
 
-	/*
-	 * user_delete() takes care of removing channels and so forth 
-	 */
+	/* user_delete() takes care of removing channels and so forth */
 	user_delete(user_find(origin));
 }
 
@@ -680,9 +653,7 @@ static void m_kick(char *origin, uint8_t parc, char *parv[])
 	user_t *u = user_find(parv[1]);
 	channel_t *c = channel_find(parv[0]);
 
-	/*
-	 * -> :rakaur KICK #shrike rintaun :test 
-	 */
+	/* -> :rakaur KICK #shrike rintaun :test */
 	slog(LG_DEBUG, "m_kick(): user was kicked: %s -> %s", parv[1], parv[0]);
 
 	if (!u)
@@ -784,9 +755,7 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 	if (!u)
 		return;
 
-	/*
-	 * JOIN 0 is really a part from all channels 
-	 */
+	/* JOIN 0 is really a part from all channels */
 	if (parv[0][0] == '0')
 	{
 		LIST_FOREACH_SAFE(n, tn, u->channels.head)
@@ -813,9 +782,7 @@ static void m_error(char *origin, uint8_t parc, char *parv[])
 
 void _modinit(module_t * m)
 {
-	/*
-	 * Symbol relocation voodoo. 
-	 */
+	/* Symbol relocation voodoo. */
 	server_login = &ultimate3_server_login;
 	introduce_nick = &ultimate3_introduce_nick;
 	quit_sts = &ultimate3_quit_sts;

@@ -1,3 +1,12 @@
+jilles      2006/06/18 13:19:45 UTC	(20060618-5416)
+  Log:
+  Make skipping the colon on the prefix somewhat more rational.
+  
+
+  Changes:	Modified:
+  +2 -6		trunk/src/parse.c (File Modified) 
+
+
 brain       2006/06/18 12:51:17 UTC	(20060618-5414)
   Log:
   Put back gline and FNC stuff, there was a difference between our svn and athemes.
