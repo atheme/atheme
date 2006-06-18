@@ -1,3 +1,12 @@
+jilles      2006/06/18 00:41:31 UTC	(20060618-5404)
+  Log:
+  Remove XXX comment before expire_check(), it was fixed quite some time ago.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/src/node.c (File Modified) 
+
+
 jilles      2006/06/18 00:38:10 UTC	(20060618-5402)
   Log:
   Make last used time for channels more accurate
