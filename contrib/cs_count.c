@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService COUNT functions.
  *
- * $Id: cs_count.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: cs_count.c 5400 2006-06-18 00:01:56Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/count", FALSE, _modinit, _moddeinit,
-	"$Id: cs_count.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: cs_count.c 5400 2006-06-18 00:01:56Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -45,7 +45,10 @@ static void cs_cmd_count(char *origin)
 	mychan_t *mc = mychan_find(chan);
 	user_t *u = user_find_named(origin);
 	uint8_t vopcnt = 0, aopcnt = 0, hopcnt = 0, sopcnt = 0, akickcnt = 0;
+	uint8_t othercnt = 0;
+	int i;
 	node_t *n;
+	char str[512];
 
 	if (!chan)
 	{
@@ -86,8 +89,25 @@ static void cs_cmd_count(char *origin)
 			sopcnt++;
 		else if (ca->level == CA_AKICK)
 			akickcnt++;
+		else if (ca->myuser != mc->founder)
+			othercnt++;
 	}
-	notice(chansvs.nick, origin, "%s: VOp: %d, HOp: %d, AOp: %d, SOp: %d, AKick: %d",
-			chan, vopcnt, hopcnt, aopcnt, sopcnt, akickcnt);
+	notice(chansvs.nick, origin, "%s: VOp: %d, HOp: %d, AOp: %d, SOp: %d, AKick: %d, other: %d",
+			chan, vopcnt, hopcnt, aopcnt, sopcnt, akickcnt, othercnt);
+	snprintf(str, sizeof str, "%s: ", chan);
+	for (i = 0; chanacs_flags[i].flag; i++)
+	{
+		othercnt = 0;
+		LIST_FOREACH(n, mc->chanacs.head)
+		{
+			ca = (chanacs_t *)n->data;
+
+			if (ca->level & chanacs_flags[i].value)
+				othercnt++;
+		}
+		snprintf(str + strlen(str), sizeof str - strlen(str),
+				"%c:%d ", chanacs_flags[i].flag, othercnt);
+	}
+	notice(chansvs.nick, origin, "%s", str);
 }
 

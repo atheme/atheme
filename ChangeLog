@@ -1,3 +1,13 @@
+jilles      2006/06/17 23:09:35 UTC	(20060617-5398)
+  Log:
+  Don't clear key, limit and non-standard simple modes if
+  the requester is on channel (they can do it themselves).
+  
+
+  Changes:	Modified:
+  +28 -25	trunk/modules/chanserv/recover.c (File Modified) 
+
+
 jilles      2006/06/17 22:47:00 UTC	(20060617-5396)
   Log:
   ChanServ RECOVER: Unset non-standard simple modes with

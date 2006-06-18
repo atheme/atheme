@@ -1,8 +1,12 @@
 Help for COUNT:
 
-This will give a count of how many entries are in each of the room's lists.
+This will give a count of how many entries are in each of
+the channel's xOP lists and how many entries on the access
+list do not match a xOP value (except the founder).
+
+The second line shows how many access entries have each flag.
 
 Syntax: COUNT <#channel>
 
 Examples:
-    /msg &nick& COUNT #teenconnection
+    /msg &nick& COUNT #oscn
