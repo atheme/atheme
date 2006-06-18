@@ -1,3 +1,13 @@
+jilles      2006/06/18 19:02:46 UTC	(20060618-5420)
+  Log:
+  Remove duplicate constant for +z and use the unreal module's one.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/include/protocol/inspircd.h (File Modified) 
+  +1 -1		trunk/protocol/inspircd.c (File Modified) 
+
+
 jilles      2006/06/18 15:14:17 UTC	(20060618-5418)
   Log:
   Revert gratuitous changes to comment formatting,
