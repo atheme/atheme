@@ -1,3 +1,13 @@
+jilles      2006/06/18 01:16:45 UTC	(20060618-5408)
+  Log:
+  More precise description of what "activity" of a channel means.
+  expiry == 0 means stuff doesn't expire
+  
+
+  Changes:	Modified:
+  +14 -5	trunk/modules/chanserv/help.c (File Modified) 
+
+
 jilles      2006/06/18 00:50:13 UTC	(20060618-5406)
   Log:
   Check last used for channels slightly more often
