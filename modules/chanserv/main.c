@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5368 2006-06-11 22:05:33Z jilles $
+ * $Id: main.c 5402 2006-06-18 00:38:10Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5368 2006-06-11 22:05:33Z jilles $",
+	"$Id: main.c 5402 2006-06-18 00:38:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -418,6 +418,9 @@ static void cs_part(chanuser_t *cu)
 	mc = mychan_find(cu->chan->name);
 	if (mc == NULL)
 		return;
+	if (CURRTIME - mc->used >= 3600)
+		if (chanacs_user_flags(mc, cu->user) & CA_USEDUPDATE)
+			mc->used = CURRTIME;
 	/*
 	 * When channel_part is fired, we haven't yet removed the
 	 * user from the room. So, the channel will have two members

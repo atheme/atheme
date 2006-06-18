@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 5221 2006-05-03 15:42:14Z jilles $
+ * $Id: node.c 5402 2006-06-18 00:38:10Z jilles $
  */
 
 #include "atheme.h"
@@ -2335,15 +2335,20 @@ void expire_check(void *arg)
 		{
 			mc = (mychan_t *)n->data;
 
-			if ((CURRTIME - mc->used) >= config_options.expire)
+			if ((CURRTIME - mc->used) >= 86400)
 			{
+				/* keep last used time accurate to
+				 * within a day -- jilles */
 				if (mychan_isused(mc))
 				{
 					mc->used = CURRTIME;
 					slog(LG_DEBUG, "expire_check(): updating last used time on %s because it appears to be still in use", mc->name);
 					continue;
 				}
+			}
 
+			if ((CURRTIME - mc->used) >= config_options.expire)
+			{
 				if (MU_HOLD & mc->founder->flags)
 					continue;
 

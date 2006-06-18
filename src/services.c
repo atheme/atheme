@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 5261 2006-05-07 21:47:38Z jilles $
+ * $Id: services.c 5402 2006-06-18 00:38:10Z jilles $
  */
 
 #include "atheme.h"
@@ -217,6 +217,9 @@ void verbose(mychan_t *mychan, char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
+
+	if (mychan->chan == NULL)
+		return;
 
 	va_start(ap, fmt);
 	vsnprintf(buf, BUFSIZE, fmt, ap);

@@ -1,3 +1,16 @@
+jilles      2006/06/18 00:01:56 UTC	(20060618-5400)
+  Log:
+  chanserv count contrib module:
+  make this work better in the flags world
+  show 'other' for entries not in any xOP list
+  show counts for each flag also
+  
+
+  Changes:	Modified:
+  +22 -2	trunk/contrib/cs_count.c (File Modified) 
+  +6 -2		trunk/help/cservice/count (File Modified) 
+
+
 jilles      2006/06/17 23:09:35 UTC	(20060617-5398)
   Log:
   Don't clear key, limit and non-standard simple modes if
