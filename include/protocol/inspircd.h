@@ -4,7 +4,7 @@
  *
  * This code contains the channel mode definitions for InspIRCd.
  *
- * $Id: inspircd.h 5410 2006-06-18 03:28:26Z brain $
+ * $Id: inspircd.h 5412 2006-06-18 12:48:44Z brain $
  */
 
 #ifndef RATBOX_H
@@ -16,7 +16,7 @@
 #define CMODE_MODREG	0x00002000	/* bahamut +M */
 #define CMODE_REGONLY	0x00004000	/* bahamut +R */
 #define CMODE_OPERONLY  0x00008000      /* bahamut +O */
-#define CMODE_ADMONLY	0x00010000	/* unreal +A */
+#define CMODE_NONOTICE	0x00010000	/* inspircd +T */
 #define CMODE_PEACE	0x00020000	/* unreal +Q */
 #define CMODE_STRIP	0x00040000	/* unreal +S */
 #define CMODE_NOKNOCK	0x00080000	/* unreal +K */
