@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 5414 2006-06-18 12:51:17Z brain $
+ * $Id: inspircd.c 5420 2006-06-18 19:02:46Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5414 2006-06-18 12:51:17Z brain $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5420 2006-06-18 19:02:46Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -56,7 +56,7 @@ struct cmode_ inspircd_mode_list[] = {
   { 'N', CMODE_STICKY   },
   { 'G', CMODE_CENSOR   },
   { 'P', CMODE_NOCAPS   },
-  { 'z', CMODE_SSL	},
+  { 'z', CMODE_SSLONLY	},
   { 'T', CMODE_NONOTICE },
   { '\0', 0 }
 };

@@ -1,3 +1,13 @@
+jilles      2006/06/18 15:14:17 UTC	(20060618-5418)
+  Log:
+  Revert gratuitous changes to comment formatting,
+  these cause grief every time I port something over.
+  
+
+  Changes:	Modified:
+  +30 -63	trunk/protocol/ultimate3.c (File Modified) 
+
+
 jilles      2006/06/18 13:19:45 UTC	(20060618-5416)
   Log:
   Make skipping the colon on the prefix somewhat more rational.
