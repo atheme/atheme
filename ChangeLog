@@ -1,3 +1,13 @@
+brain       2006/06/18 12:48:44 UTC	(20060618-5412)
+  Log:
+  Add support for channel mode +T, remove constant for channel mode +A (inspircd does not have this mode, throwback to unreal.c)
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/protocol/inspircd.h (File Modified) 
+  +3 -11	trunk/protocol/inspircd.c (File Modified) 
+
+
 brain       2006/06/18 03:28:26 UTC	(20060618-5410)
   Log:
   Fixed bug reported by Martin, linked +P and +z (they had the same constants in inspircd.h)

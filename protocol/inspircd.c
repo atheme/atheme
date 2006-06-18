@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 5412 2006-06-18 12:48:44Z brain $
+ * $Id: inspircd.c 5414 2006-06-18 12:51:17Z brain $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5412 2006-06-18 12:48:44Z brain $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5414 2006-06-18 12:51:17Z brain $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -56,7 +56,7 @@ struct cmode_ inspircd_mode_list[] = {
   { 'N', CMODE_STICKY   },
   { 'G', CMODE_CENSOR   },
   { 'P', CMODE_NOCAPS   },
-  { 'z', CMODE_SSL      },
+  { 'z', CMODE_SSL	},
   { 'T', CMODE_NONOTICE },
   { '\0', 0 }
 };
@@ -283,7 +283,7 @@ static void inspircd_kline_sts(char *server, char *user, char *host, long durati
 		return;
 
 	/* :services-dev.chatspike.net ADDLINE G test@test.com Brain 1133994664 0 :You are banned from this network */
-	sts(":%s ADDLINE G %s@%s %s %ld 0 :%s", me.name, user, host, opersvs.nick, time(NULL), reason);
+	sts(":%s ADDLINE G %s@%s %s %ld %ld :%s", me.name, user, host, opersvs.nick, time(NULL), duration, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
@@ -372,6 +372,14 @@ static void inspircd_sethost_sts(char *source, char *target, char *host)
 
 	sts(":%s CHGHOST %s %s", source, target, host);
 }
+
+static void inspircd_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
+{
+	/* svsnick can only be sent by a server */
+	sts(":%s SVSNICK %s %s %lu", me.name, u->nick, newnick,
+		(unsigned long)(CURRTIME - 60));
+}
+
 
 /* invite a user to a channel */
 static void inspircd_invite_sts(user_t *sender, user_t *target, channel_t *channel)
@@ -762,6 +770,7 @@ void _modinit(module_t * m)
 	ircd_on_logout = &inspircd_on_logout;
 	jupe = &inspircd_jupe;
 	sethost_sts = &inspircd_sethost_sts;
+	fnc_sts = &inspircd_fnc_sts;
 	invite_sts = &inspircd_invite_sts;
 
 	mode_list = inspircd_mode_list;
