@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 5402 2006-06-18 00:38:10Z jilles $
+ * $Id: services.c 5424 2006-06-19 00:00:25Z jilles $
  */
 
 #include "atheme.h"
@@ -94,9 +94,9 @@ void join(char *chan, char *nick)
 	c = channel_find(chan);
 	if (c == NULL)
 	{
-		c = channel_add(chan, CURRTIME);
+		mc = mychan_find(chan);
+		c = channel_add(chan, chansvs.changets && mc != NULL && mc->registered > 0 ? mc->registered : CURRTIME);
 		c->modes |= CMODE_NOEXT | CMODE_TOPIC;
-		mc = mychan_find(c->name);
 		if (mc != NULL)
 			check_modes(mc, FALSE);
 		isnew = TRUE;
