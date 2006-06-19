@@ -15,7 +15,7 @@
    along with this program; if not, write to the Free Software Foundation,
    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-   $Id: base64.c 5193 2006-05-03 14:31:53Z jilles $ */
+   $Id: base64.c 5454 2006-06-19 14:49:19Z jilles $ */
 
 /* Written by Simon Josefsson.  Partially adapted from GNU MailUtils
  * (mailbox/filter_trans.c, as of 2004-11-28).  Improved by review
@@ -47,6 +47,8 @@
 
 /* Get malloc. */
 #include <stdlib.h>
+
+#include <limits.h>
 
 /* C89 compliant way to cast 'char' to 'unsigned char'. */
 static inline unsigned char
@@ -279,7 +281,11 @@ static const signed char b64[0x100] = {
 bool
 isbase64 (char ch)
 {
+#if (CHAR_BIT) == 8
+  return 0 <= b64[to_uchar (ch)];
+#else
   return to_uchar (ch) <= 255 && 0 <= b64[to_uchar (ch)];
+#endif
 }
 
 /* Decode base64 encoded input array IN of length INLEN to output
