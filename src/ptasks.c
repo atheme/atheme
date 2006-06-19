@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 5346 2006-06-04 18:26:42Z jilles $
+ * $Id: ptasks.c 5426 2006-06-19 10:04:20Z jilles $
  */
 
 #include "atheme.h"
@@ -426,6 +426,27 @@ void handle_kill(char *origin, char *victim, char *reason)
 	{
 		slog(LG_DEBUG, "handle_kill(): %s killed user %s (%s)", source, u->nick, reason);
 		user_delete(u);
+	}
+}
+
+void handle_eob(server_t *s)
+{
+	node_t *n;
+	server_t *s2;
+
+	if (s == NULL)
+		return;
+	if (s->flags & SF_EOB)
+		return;
+	slog(LG_DEBUG, "handle_eob(): end of burst from %s", s->name);
+	s->flags |= SF_EOB;
+	hook_call_event("server_eob", s);
+	/* convert P10 style EOB to ircnet/ratbox style */
+	LIST_FOREACH(n, s->children.head)
+	{
+		s2 = n->data;
+		if (s2->flags & SF_EOB2)
+			handle_eob(s2);
 	}
 }
 

@@ -1,4 +1,4 @@
-$Id: HOOKS 4445 2006-01-03 13:55:28Z jilles $
+$Id: HOOKS 5426 2006-06-19 10:04:20Z jilles $
 
 Atheme hooks system
 
@@ -22,6 +22,7 @@ channel_delete     channel_t *
 channel_join       chanuser_t *
 channel_part       chanuser_t *
 channel_topic      channel_t *
+server_eob         server_t *
 user_add           user_t *
 user_delete        user_t *
 user_deoper        user_t *

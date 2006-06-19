@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 5366 2006-06-11 20:45:14Z jilles $
+ * $Id: ratbox.c 5426 2006-06-19 10:04:20Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 5366 2006-06-11 20:45:14Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 5426 2006-06-19 10:04:20Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -452,11 +452,7 @@ static void m_pong(char *origin, uint8_t parc, char *parv[])
 	s = server_find(parv[0]);
 	if (s == NULL)
 		return;
-	if (!(s->flags & SF_EOB))
-	{
-		s->flags |= SF_EOB;
-		server_eob(s);
-	}
+	handle_eob(s);
 
 	if (irccasecmp(me.actual, parv[0]))
 		return;
@@ -1190,6 +1186,9 @@ void _modinit(module_t * m)
 	pcommand_add("TMODE", m_tmode);
 	pcommand_add("SID", m_sid);
 	pcommand_add("MOTD", m_motd);
+
+	hook_add_event("server_eob");
+	hook_add_hook("server_eob", (void (*)(void *))server_eob);
 
 	m->mflags = MODTYPE_CORE;
 

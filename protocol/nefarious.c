@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
  *
- * $Id: nefarious.c 5384 2006-06-15 12:43:01Z jilles $
+ * $Id: nefarious.c 5426 2006-06-19 10:04:20Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 5384 2006-06-15 12:43:01Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 5426 2006-06-19 10:04:20Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -978,14 +978,25 @@ static void m_squit(char *origin, uint8_t parc, char *parv[])
 /* SERVER ircu.devel.atheme.org 1 1119902586 1119908830 J10 ABAP] + :lets lol */
 static void m_server(char *origin, uint8_t parc, char *parv[])
 {
+	server_t *s;
+
 	/* We dont care about the max connections. */
 	parv[5][2] = '\0';
 
-	slog(LG_DEBUG, "m_server(): new server: %s, id %s", parv[0], parv[5]);
-	server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, parv[5], parv[7]);
+	slog(LG_DEBUG, "m_server(): new server: %s, id %s, %s",
+			parv[0], parv[5],
+			parv[4][0] == 'P' ? "eob" : "bursting");
+	s = server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, parv[5], parv[7]);
 
 	if (cnt.server == 2)
 		me.actual = sstrdup(parv[0]);
+
+	/* SF_EOB may only be set when we have all users on the server.
+	 * so store the fact that they are EOB in another flag.
+	 * handle_eob() will set SF_EOB when the uplink has finished bursting.
+	 * -- jilles */
+	if (parv[4][0] == 'P')
+		s->flags |= SF_EOB2;
 
 	me.recvsvr = TRUE;
 }
@@ -1042,6 +1053,8 @@ static void m_error(char *origin, uint8_t parc, char *parv[])
 static void m_eos(char *origin, uint8_t parc, char *parv[])
 {
 	server_t *source = server_find(origin);
+
+	handle_eob(source);
 
 	/* acknowledge a local END_OF_BURST */
 	if (source->uplink == me.me)

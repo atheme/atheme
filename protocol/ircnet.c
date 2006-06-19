@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 5352 2006-06-09 16:38:48Z jilles $
+ * $Id: ircnet.c 5426 2006-06-19 10:04:20Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 5352 2006-06-09 16:38:48Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 5426 2006-06-19 10:04:20Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -399,11 +399,7 @@ static void m_eob(char *origin, uint8_t parc, char *parv[])
 	{
 		slog(LG_DEBUG, "m_eob(): Got EOB from unknown server %s", origin);
 	}
-	if (!(source->flags & SF_EOB))
-	{
-		source->flags |= SF_EOB;
-		slog(LG_DEBUG, "m_eob(): End of burst from %s", source->name);
-	}
+	handle_eob(source);
 	if (parc >= 1)
 	{
 		sidbuf[4] = '\0';
@@ -412,11 +408,7 @@ static void m_eob(char *origin, uint8_t parc, char *parv[])
 		{
 			memcpy(sidbuf, p, 4);
 			serv = server_find(sidbuf);
-			if (serv != NULL && !(serv->flags & SF_EOB))
-			{
-				slog(LG_DEBUG, "m_eob(): End of burst from %s (mass, via %s)", serv->name, source->name);
-				serv->flags |= SF_EOB;
-			}
+			handle_eob(serv);
 			if (p[4] != ',')
 				break;
 			p += 5;

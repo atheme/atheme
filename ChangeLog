@@ -1,3 +1,15 @@
+jilles      2006/06/19 00:00:25 UTC	(20060619-5424)
+  Log:
+  join(): if a service creates a registered channel and
+  chanserv::changets is enabled, create it with the
+  registration time as TS. This stops chanserv's
+  channel_add hook changing the TS and causing trouble.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/06/18 23:26:55 UTC	(20060618-5422)
   Log:
   Remove the special case for +k in changets: put +k in

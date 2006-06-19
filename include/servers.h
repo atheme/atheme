@@ -4,7 +4,7 @@
  *
  * Data structures related to network servers.
  *
- * $Id: servers.h 4231 2005-12-27 22:36:56Z jilles $
+ * $Id: servers.h 5426 2006-06-19 10:04:20Z jilles $
  */
 
 #ifndef SERVERS_H
@@ -38,8 +38,8 @@ struct server_
 };
 
 #define SF_HIDE        0x00000001
-#define SF_EOB         0x00000002 /* End of burst acknowledged, not all
-                                   * protocols use this -- jilles */
+#define SF_EOB         0x00000002 /* Burst finished (we have all users/channels) -- jilles */
+#define SF_EOB2        0x00000004 /* Is EOB but an uplink is not (for P10) */
 
 struct uplink_
 {
