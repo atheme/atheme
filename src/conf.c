@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 5358 2006-06-11 15:07:07Z jilles $
+ * $Id: conf.c 5464 2006-06-20 23:00:21Z jilles $
  */
 
 #include "atheme.h"
@@ -177,7 +177,7 @@ list_t conf_ss_table;
 
 /* *INDENT-ON* */
 
-void conf_parse(char *file)
+boolean_t conf_parse(char *file)
 {
 	CONFIGFILE *cfptr, *cfp;
 	CONFIGENTRY *ce;
@@ -188,9 +188,9 @@ void conf_parse(char *file)
 
 	if (cfp == NULL)
 	{
-		slog(LG_INFO, "conf_parse(): unable to open configuration file: %s", strerror(errno));
+		slog(LG_ERROR, "conf_parse(): unable to open configuration file: %s", strerror(errno));
 
-		exit(EXIT_FAILURE);
+		return FALSE;
 	}
 
 	for (; cfptr; cfptr = cfptr->cf_next)
@@ -221,6 +221,7 @@ void conf_parse(char *file)
 	}
 
 	hook_call_event("config_ready", NULL);
+	return TRUE;
 }
 
 void conf_init(void)
@@ -1772,11 +1773,8 @@ boolean_t conf_rehash(void)
 
 	mark_all_illegal();
 
-	/* now reload */
-	conf_parse(config_file);
-
-	/* now recheck */
-	if (!conf_check())
+	/* now reload and recheck */
+	if (!conf_parse(config_file) || !conf_check())
 	{
 		slog(LG_INFO, "conf_rehash(): conf file was malformed, aborting rehash");
 

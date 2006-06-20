@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 5324 2006-05-27 23:32:52Z jilles $
+ * $Id: atheme.c 5464 2006-06-20 23:00:21Z jilles $
  */
 
 #include "atheme.h"
@@ -187,12 +187,19 @@ int main(int argc, char *argv[])
 	pcommand_init();
 
 	conf_init();
-	conf_parse(config_file);
+	if (!conf_parse(config_file))
+	{
+		slog(LG_ERROR, "Error loading config file %s, aborting",
+				config_file);
+		exit(EXIT_FAILURE);
+	}
 
 	if (config_options.languagefile)
 	{
 		slog(LG_DEBUG, "Using language: %s", config_options.languagefile);
-		conf_parse(config_options.languagefile);
+		if (!conf_parse(config_options.languagefile))
+			slog(LG_INFO, "Error loading language file %s, continuing",
+					config_options.languagefile);
 	}
 
 	authcookie_init();

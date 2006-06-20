@@ -1,3 +1,21 @@
+jilles      2006/06/20 22:34:47 UTC	(20060620-5462)
+  Log:
+  Add getkey command to chanserv, returns the current
+  channel key (+k). Needs +i flag, like invite (both +i
+  and +k are modes to keep outsiders out).
+  Also works when the requester is on channel, since some
+  ircds only allow channel operators to see the key.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/dist/example.conf (File Modified) 
+  +2 -0		trunk/dist/example.userserv.conf (File Modified) 
+  +1 -1		trunk/help/cservice/flags (File Modified) 
+  +9 -0		trunk/help/cservice/getkey (File Added) 
+  +1 -0		trunk/modules/chanserv/Makefile.in (File Modified) 
+  +88 -0	trunk/modules/chanserv/getkey.c (File Added) 
+
+
 jilles      2006/06/20 19:08:22 UTC	(20060620-5460)
   Log:
   Limit mode lock checks to the following cases:
