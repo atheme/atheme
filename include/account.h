@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 4941 2006-04-02 18:31:04Z gxti $
+ * $Id: account.h 5460 2006-06-20 19:08:22Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -110,8 +110,9 @@ struct mychan_
 #define MC_KEEPTOPIC   0x00000040
 #define MC_VERBOSE_OPS 0x00000080
 
-/* The following is a temporary state */
+/* The following are temporary state */
 #define MC_INHABIT     0x80000000 /* we're on channel to enforce akick/staffonly/close */
+#define MC_MLOCK_CHECK 0x40000000 /* we need to check mode locks */
 
 /* struct for channel access list */
 struct chanacs_

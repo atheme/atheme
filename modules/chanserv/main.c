@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5422 2006-06-18 23:26:55Z jilles $
+ * $Id: main.c 5460 2006-06-20 19:08:22Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5422 2006-06-18 23:26:55Z jilles $",
+	"$Id: main.c 5460 2006-06-20 19:08:22Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -21,6 +21,7 @@ static void cs_part(chanuser_t *cu);
 static void cs_register(mychan_t *mc);
 static void cs_newchan(channel_t *c);
 static void cs_keeptopic_topicset(channel_t *c);
+static void cs_tschange(channel_t *c);
 static void cs_leave_empty(void *unused);
 
 list_t cs_cmdtree;
@@ -202,11 +203,13 @@ void _modinit(module_t *m)
 	hook_add_event("channel_register");
 	hook_add_event("channel_add");
 	hook_add_event("channel_topic");
+	hook_add_event("channel_tschange");
 	hook_add_hook("channel_join", (void (*)(void *)) cs_join);
 	hook_add_hook("channel_part", (void (*)(void *)) cs_part);
 	hook_add_hook("channel_register", (void (*)(void *)) cs_register);
 	hook_add_hook("channel_add", (void (*)(void *)) cs_newchan);
 	hook_add_hook("channel_topic", (void (*)(void *)) cs_keeptopic_topicset);
+	hook_add_hook("channel_tschange", (void (*)(void *)) cs_tschange);
 	event_add("cs_leave_empty", cs_leave_empty, NULL, 300);
 }
 
@@ -225,6 +228,7 @@ void _moddeinit(void)
 	hook_del_hook("channel_register", (void (*)(void *)) cs_register);
 	hook_del_hook("channel_add", (void (*)(void *)) cs_newchan);
 	hook_del_hook("channel_topic", (void (*)(void *)) cs_keeptopic_topicset);
+	hook_del_hook("channel_tschange", (void (*)(void *)) cs_tschange);
 	event_delete(cs_leave_empty, NULL);
 }
 
@@ -405,7 +409,8 @@ static void cs_join(chanuser_t *cu)
 	if ((md = metadata_find(mc, METADATA_CHANNEL, "url")))
 		numeric_sts(me.name, 328, cu->user->nick, "%s :%s", mc->name, md->value);
 
-	check_modes(mc, TRUE);
+	if (mc->flags & MC_MLOCK_CHECK)
+		check_modes(mc, TRUE);
 	
 	if (flags & CA_USEDUPDATE)
 		mc->used = CURRTIME;
@@ -506,6 +511,10 @@ static void cs_newchan(channel_t *c)
 	if (!(mc = mychan_find(c->name)))
 		return;
 
+	/* schedule a mode lock check when we know the current modes
+	 * -- jilles */
+	mc->flags |= MC_MLOCK_CHECK;
+
 	if (chansvs.changets && c->ts > mc->registered && mc->registered > 0)
 	{
 		/* Stop the splitrider -- jilles */
@@ -561,6 +570,18 @@ static void cs_newchan(channel_t *c)
 
 	handle_topic(c, setter, topicts, text);
 	topic_sts(c->name, setter, topicts, text);
+}
+
+static void cs_tschange(channel_t *c)
+{
+	mychan_t *mc;
+
+	if (!(mc = mychan_find(c->name)))
+		return;
+
+	/* schedule a mode lock check when we know the new modes
+	 * -- jilles */
+	mc->flags |= MC_MLOCK_CHECK;
 }
 
 static void cs_leave_empty(void *unused)

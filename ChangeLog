@@ -1,3 +1,18 @@
+jilles      2006/06/20 19:01:32 UTC	(20060620-5458)
+  Log:
+  inspircd m_fjoin(), P10 m_burst(), m_create():
+  make sure we call channel_mode() if a new channel is created,
+  otherwise mlock is only checked when a non-akicked user joins
+  
+
+  Changes:	Modified:
+  +19 -0	trunk/protocol/asuka.c (File Modified) 
+  +19 -0	trunk/protocol/bircd.c (File Modified) 
+  +8 -0		trunk/protocol/inspircd.c (File Modified) 
+  +19 -0	trunk/protocol/nefarious.c (File Modified) 
+  +19 -0	trunk/protocol/undernet.c (File Modified) 
+
+
 jilles      2006/06/20 16:47:01 UTC	(20060620-5456)
   Log:
   Add channel_tschange hook for TS changes due to protocol

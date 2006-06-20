@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 4909 2006-03-27 12:26:46Z jilles $
+ * $Id: cmode.c 5460 2006-06-20 19:08:22Z jilles $
  */
 
 #include "atheme.h"
@@ -17,6 +17,7 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 {
 	boolean_t matched = FALSE;
 	boolean_t chanserv_reopped = FALSE;
+	boolean_t simple_modes_changed = FALSE;
 	int i, parpos = 0, whatt = MTYPE_NUL;
 	char *pos = parv[0];
 	mychan_t *mc;
@@ -55,9 +56,17 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 				matched = TRUE;
 
 				if (whatt == MTYPE_ADD)
+				{
+					if (!(chan->modes & mode_list[i].value))
+						simple_modes_changed = TRUE;
 					chan->modes |= mode_list[i].value;
+				}
 				else
+				{
+					if (chan->modes & mode_list[i].value)
+						simple_modes_changed = TRUE;
 					chan->modes &= ~mode_list[i].value;
+				}
 
 				str[0] = whatt == MTYPE_ADD ? '+' : '-';
 				str[1] = *pos;
@@ -104,13 +113,18 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 				if (++parpos >= parc)
 					continue;
 				chan->modes |= CMODE_LIMIT;
-				chan->limit = atoi(parv[parpos]);
+				i = atoi(parv[parpos]);
+				if (chan->limit != i)
+					simple_modes_changed = TRUE;
+				chan->limit = i;
 				if (source)
 					cmode(source->nick, chan->name, "+l", parv[parpos]);
 			}
 			else
 			{
 				chan->modes &= ~CMODE_LIMIT;
+				if (chan->limit != 0)
+					simple_modes_changed = TRUE;
 				chan->limit = 0;
 				if (source)
 					cmode(source->nick, chan->name, "-l");
@@ -126,13 +140,21 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 					continue;
 				chan->modes |= CMODE_KEY;
 				if (chan->key)
+				{
+					if (strcmp(chan->key, parv[parpos]))
+						simple_modes_changed = TRUE;
 					free(chan->key);
+				}
+				else
+					simple_modes_changed = TRUE;
 				chan->key = sstrdup(parv[parpos]);
 				if (source)
 					cmode(source->nick, chan->name, "+k", chan->key);
 			}
 			else
 			{
+				if (chan->key)
+					simple_modes_changed = TRUE;
 				chan->modes &= ~CMODE_KEY;
 				if (source)
 					cmode(source->nick, chan->name, "-k", chan->key);
@@ -264,7 +286,11 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 	}
 
 	if (source == NULL && chansvs.me != NULL)
-		check_modes(mychan_find(chan->name), TRUE);
+	{
+		mc = mychan_find(chan->name);
+		if (simple_modes_changed || (mc->flags & MC_MLOCK_CHECK))
+			check_modes(mc, TRUE);
+	}
 }
 
 char *channel_modes(channel_t *c, boolean_t doparams)
@@ -611,6 +637,7 @@ void check_modes(mychan_t *mychan, boolean_t sendnow)
 
 	if (!mychan || !mychan->chan)
 		return;
+	mychan->flags &= ~MC_MLOCK_CHECK;
 
 	modes = ~mychan->chan->modes & mychan->mlock_on;
 	modes &= ~(CMODE_KEY | CMODE_LIMIT);
