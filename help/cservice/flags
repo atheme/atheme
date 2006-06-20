@@ -33,7 +33,7 @@ Permissions:
     +o - Enables use of the op/deop commands.
     +O - Enables automatic op.
     +s - Enables use of the set command.
-    +i - Enables use of the invite command.
+    +i - Enables use of the invite and getkey commands.
     +r - Enables use of the kick, ban, and kickban commands.
     +R - Enables use of the recover and clear commands.
     +f - Enables modification of channel access lists.

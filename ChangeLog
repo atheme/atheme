@@ -1,3 +1,17 @@
+jilles      2006/06/20 19:08:22 UTC	(20060620-5460)
+  Log:
+  Limit mode lock checks to the following cases:
+  - first mode change or non-akicked join after channel
+    creation or TS change
+  - mode change that alters simple modes
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/include/account.h (File Modified) 
+  +22 -1	trunk/modules/chanserv/main.c (File Modified) 
+  +29 -2	trunk/src/cmode.c (File Modified) 
+
+
 jilles      2006/06/20 19:01:32 UTC	(20060620-5458)
   Log:
   inspircd m_fjoin(), P10 m_burst(), m_create():

@@ -1,0 +1,9 @@
+Help for GETKEY:
+
+GETKEY returns the key (+k, password to be allowed in)
+of the specified channel: /join #channel key
+
+Syntax: GETKEY <#channel>
+
+Examples:
+    /msg &nick& GETKEY #foo
