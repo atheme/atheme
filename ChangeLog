@@ -1,3 +1,17 @@
+jilles      2006/06/20 23:24:29 UTC	(20060620-5466)
+  Log:
+  Split out conf_parse() some.
+  When rehashing, do reading and low-level parsing of the
+  conf file before clearing, so we can abort the rehash
+  cleanly if that fails.
+  Errors detected by conf_check(), or errors not checked for
+  at all, may still lead to strange behaviour.
+  
+
+  Changes:	Modified:
+  +35 -15	trunk/src/conf.c (File Modified) 
+
+
 jilles      2006/06/20 23:00:21 UTC	(20060620-5464)
   Log:
   Don't shut down if the language file has invalid syntax

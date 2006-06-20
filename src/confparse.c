@@ -6,7 +6,7 @@
  * This file contains config file parsing routines.
  * This code was taken from Sentinel: copyright W. Campbell.
  *
- * $Id: confparse.c 2859 2005-10-12 21:40:43Z nenolod $
+ * $Id: confparse.c 5468 2006-06-20 23:31:25Z jilles $
  */
 
 #include "atheme.h"
@@ -26,7 +26,7 @@ static void config_error(char *format, ...)
 	va_end(ap);
 	if ((ptr = strchr(buffer, '\n')) != NULL)
 		*ptr = '\0';
-	fprintf(stderr, "%s\n", buffer);
+	slog(LG_ERROR, "config_parse(): %s", buffer);
 }
 
 static CONFIGFILE *config_parse(char *filename, char *confdata)
