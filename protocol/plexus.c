@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 5426 2006-06-19 10:04:20Z jilles $
+ * $Id: plexus.c 5456 2006-06-20 16:47:01Z jilles $
  */
 
 /* option: set the netadmin umode +N */
@@ -13,7 +13,7 @@
 #include "atheme.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 5426 2006-06-19 10:04:20Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 5456 2006-06-20 16:47:01Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -479,6 +479,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 			slog(LG_INFO, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
 
 			c->ts = ts;
+			hook_call_event("channel_tschange", c);
 		}
 
 		channel_mode(NULL, c, modec, modev);

@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 5426 2006-06-19 10:04:20Z jilles $
+ * $Id: unreal.c 5456 2006-06-20 16:47:01Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 5426 2006-06-19 10:04:20Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 5456 2006-06-20 16:47:01Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -472,6 +472,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 			remove_our_modes(c);
 			slog(LG_INFO, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
 			c->ts = ts;
+			hook_call_event("channel_tschange", c);
 		}
 
 		channel_mode(NULL, c, modec, modev);
@@ -504,6 +505,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 			remove_our_modes(c);
 			slog(LG_INFO, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
 			c->ts = ts;
+			hook_call_event("channel_tschange", c);
 		}
 
 		userc = sjtoken(parv[parc - 1], ' ', userv);
@@ -530,6 +532,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 			slog(LG_INFO, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
 			c->ts = ts;
 			/* XXX lost modes! -- XXX - pardon? why do we worry about this? TS reset requires modes reset.. */
+			hook_call_event("channel_tschange", c);
 		}
 
 		chanuser_add(c, origin);

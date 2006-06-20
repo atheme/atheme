@@ -1,3 +1,12 @@
+jilles      2006/06/19 14:49:19 UTC	(20060619-5454)
+  Log:
+  Get rid of compile warning about redundant comparison in src/base64.c.
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/src/base64.c (File Modified) 
+
+
 jilles      2006/06/19 11:49:33 UTC	(20060619-5432)
   Log:
   Rerun autoconf.

@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
  *
- * $Id: nefarious.c 5426 2006-06-19 10:04:20Z jilles $
+ * $Id: nefarious.c 5456 2006-06-20 16:47:01Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 5426 2006-06-19 10:04:20Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 5456 2006-06-20 16:47:01Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -576,6 +576,7 @@ static void m_burst(char *origin, uint8_t parc, char *parv[])
 
 		slog(LG_INFO, "m_burst(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
 		c->ts = ts;
+		hook_call_event("channel_tschange", c);
 	}
 
 	bantype = 'b';

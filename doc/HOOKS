@@ -1,4 +1,4 @@
-$Id: HOOKS 5426 2006-06-19 10:04:20Z jilles $
+$Id: HOOKS 5456 2006-06-20 16:47:01Z jilles $
 
 Atheme hooks system
 
@@ -19,6 +19,7 @@ config_ready       <none>
 (ircd)
 channel_add        channel_t *
 channel_delete     channel_t *
+channel_tschange   channel_t *
 channel_join       chanuser_t *
 channel_part       chanuser_t *
 channel_topic      channel_t *
