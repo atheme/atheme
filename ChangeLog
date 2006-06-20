@@ -1,3 +1,12 @@
+jilles      2006/06/20 23:31:25 UTC	(20060620-5468)
+  Log:
+  Send errors in the conf file to the log file instead of stderr.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/confparse.c (File Modified) 
+
+
 jilles      2006/06/20 23:24:29 UTC	(20060620-5466)
   Log:
   Split out conf_parse() some.

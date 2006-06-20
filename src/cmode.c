@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 5460 2006-06-20 19:08:22Z jilles $
+ * $Id: cmode.c 5470 2006-06-20 23:55:15Z jilles $
  */
 
 #include "atheme.h"
@@ -288,7 +288,8 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 	if (source == NULL && chansvs.me != NULL)
 	{
 		mc = mychan_find(chan->name);
-		if (simple_modes_changed || (mc->flags & MC_MLOCK_CHECK))
+		if (mc != NULL && (simple_modes_changed ||
+					(mc->flags & MC_MLOCK_CHECK)))
 			check_modes(mc, TRUE);
 	}
 }
