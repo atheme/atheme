@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 5464 2006-06-20 23:00:21Z jilles $
+ * $Id: conf.c 5466 2006-06-20 23:24:29Z jilles $
  */
 
 #include "atheme.h"
@@ -177,23 +177,14 @@ list_t conf_ss_table;
 
 /* *INDENT-ON* */
 
-boolean_t conf_parse(char *file)
+static void conf_process(CONFIGFILE *cfp)
 {
-	CONFIGFILE *cfptr, *cfp;
+	CONFIGFILE *cfptr;
 	CONFIGENTRY *ce;
 	node_t *tn;
 	struct ConfTable *ct = NULL;
 
-	cfptr = cfp = config_load(file);
-
-	if (cfp == NULL)
-	{
-		slog(LG_ERROR, "conf_parse(): unable to open configuration file: %s", strerror(errno));
-
-		return FALSE;
-	}
-
-	for (; cfptr; cfptr = cfptr->cf_next)
+	for (cfptr = cfp; cfptr; cfptr = cfptr->cf_next)
 	{
 		for (ce = cfptr->cf_entries; ce; ce = ce->ce_next)
 		{
@@ -211,7 +202,21 @@ boolean_t conf_parse(char *file)
 				slog(LG_INFO, "%s:%d: invalid configuration option: %s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
 		}
 	}
+}
 
+boolean_t conf_parse(char *file)
+{
+	CONFIGFILE *cfp;
+
+	cfp = config_load(file);
+	if (cfp == NULL)
+	{
+		slog(LG_ERROR, "conf_parse(): unable to load configuration file: %s", strerror(errno));
+
+		return FALSE;
+	}
+
+	conf_process(cfp);
 	config_free(cfp);
 
 	if (!pmodule_loaded)
@@ -1758,10 +1763,20 @@ boolean_t conf_rehash(void)
 {
 	struct me *hold_me = scalloc(sizeof(struct me), 1);	/* and keep_me_warm; */
 	char *oldsnoop;
+	CONFIGFILE *cfp;
 
 	/* we're rehashing */
 	slog(LG_INFO, "conf_rehash(): rehashing");
 	runflags |= RF_REHASHING;
+
+	errno = 0;
+	cfp = config_load(config_file);
+	if (cfp == NULL)
+	{
+		slog(LG_INFO, "conf_rehash(): unable to load configuration file: %s, aborting rehash", strerror(errno));
+		runflags &= ~RF_REHASHING;
+		return FALSE;
+	}
 
 	copy_me(&me, hold_me);
 
@@ -1773,8 +1788,13 @@ boolean_t conf_rehash(void)
 
 	mark_all_illegal();
 
-	/* now reload and recheck */
-	if (!conf_parse(config_file) || !conf_check())
+	/* now reload */
+	conf_process(cfp);
+	config_free(cfp);
+	hook_call_event("config_ready", NULL);
+
+	/* now recheck */
+	if (!conf_check())
 	{
 		slog(LG_INFO, "conf_rehash(): conf file was malformed, aborting rehash");
 
@@ -1790,6 +1810,7 @@ boolean_t conf_rehash(void)
 		free(hold_me);
 		free(oldsnoop);
 
+		runflags &= ~RF_REHASHING;
 		return FALSE;
 	}
 
@@ -1812,7 +1833,6 @@ boolean_t conf_rehash(void)
 	free(oldsnoop);
 
 	runflags &= ~RF_REHASHING;
-
 	return TRUE;
 }
 

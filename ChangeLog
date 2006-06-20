@@ -1,3 +1,17 @@
+jilles      2006/06/20 23:00:21 UTC	(20060620-5464)
+  Log:
+  Don't shut down if the language file has invalid syntax
+  or if the config file has invalid syntax on a rehash;
+  however, in the latter case operclasses are lost so the
+  next rehash has to be done with a signal.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/extern.h (File Modified) 
+  +9 -2		trunk/src/atheme.c (File Modified) 
+  +6 -8		trunk/src/conf.c (File Modified) 
+
+
 jilles      2006/06/20 22:34:47 UTC	(20060620-5462)
   Log:
   Add getkey command to chanserv, returns the current
