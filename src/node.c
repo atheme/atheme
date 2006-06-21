@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 5478 2006-06-21 14:04:41Z jilles $
+ * $Id: node.c 5484 2006-06-21 15:17:23Z jilles $
  */
 
 #include "atheme.h"
@@ -915,6 +915,9 @@ void channel_delete(char *name)
 
 	if ((mc = mychan_find(c->name)))
 		mc->chan = NULL;
+
+	if (c->key != NULL)
+		free(c->key);
 
 	free(c->name);
 	BlockHeapFree(chan_heap, c);

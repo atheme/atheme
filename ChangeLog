@@ -1,3 +1,12 @@
+jilles      2006/06/21 14:50:23 UTC	(20060621-5482)
+  Log:
+  inspircd: don't op remote users JOINing a new channel
+  
+
+  Changes:	Modified:
+  +7 -13	trunk/protocol/inspircd.c (File Modified) 
+
+
 jilles      2006/06/21 14:40:09 UTC	(20060621-5480)
   Log:
   Don't complain about notices from servers in debug log.
