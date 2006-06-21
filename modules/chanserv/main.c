@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5460 2006-06-20 19:08:22Z jilles $
+ * $Id: main.c 5492 2006-06-21 21:23:05Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5460 2006-06-20 19:08:22Z jilles $",
+	"$Id: main.c 5492 2006-06-21 21:23:05Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -519,11 +519,8 @@ static void cs_newchan(channel_t *c)
 	{
 		/* Stop the splitrider -- jilles */
 		c->ts = mc->registered;
-		c->modes = CMODE_NOEXT | CMODE_TOPIC;
-		if (c->key)
-			free(c->key);
-		c->key = NULL;
-		c->limit = 0;
+		clear_simple_modes(c);
+		c->modes |= CMODE_NOEXT | CMODE_TOPIC;
 		check_modes(mc, FALSE);
 		/* No ops to clear */
 		chan_lowerts(c, chansvs.me->me);

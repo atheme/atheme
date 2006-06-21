@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for shadowircd-based ircd.
  *
- * $Id: shadowircd.c 5456 2006-06-20 16:47:01Z jilles $
+ * $Id: shadowircd.c 5492 2006-06-21 21:23:05Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/shadowircd.h"
 
-DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 5456 2006-06-20 16:47:01Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 5492 2006-06-21 21:23:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -429,11 +429,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 			 * and set the new TS.
 			 */
 
-			c->modes = 0;
-			c->limit = 0;
-			if (c->key)
-				free(c->key);
-			c->key = NULL;
+			clear_simple_modes(c);
 
 			LIST_FOREACH(n, c->members.head)
 			{

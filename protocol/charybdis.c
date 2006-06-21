@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 5456 2006-06-20 16:47:01Z jilles $
+ * $Id: charybdis.c 5492 2006-06-21 21:23:05Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 5456 2006-06-20 16:47:01Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 5492 2006-06-21 21:23:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -592,12 +592,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 			 * note that JOIN does not do this
 			 */
 
-			c->modes = 0;
-			c->limit = 0;
-			if (c->key)
-				free(c->key);
-			c->key = NULL;
-
+			clear_simple_modes(c);
 			if (source_server->sid != NULL)
 				chanban_clear(c);
 
@@ -704,11 +699,7 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 		 * all status modes on known users on the channel (including ours),
 		 * and set the new TS.
 		 */
-		c->modes = 0;
-		c->limit = 0;
-		if (c->key)
-			free(c->key);
-		c->key = NULL;
+		clear_simple_modes(c);
 
 		LIST_FOREACH(n, c->members.head)
 		{

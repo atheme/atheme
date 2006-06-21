@@ -1,3 +1,15 @@
+jilles      2006/06/21 21:02:07 UTC	(20060621-5490)
+  Log:
+  Add void clear_simple_modes(channel_t *c) to clear
+  all simple modes (+imnpstkl etc) on a channel.
+  Not used yet.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/extern.h (File Modified) 
+  +13 -0	trunk/src/cmode.c (File Modified) 
+
+
 jilles      2006/06/21 15:17:23 UTC	(20060621-5484)
   Log:
   channel_delete(): free key if it was set

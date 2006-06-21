@@ -476,12 +476,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 			 * also clear all bans and the topic
 			 */
 
-			c->modes = 0;
-			c->limit = 0;
-			if (c->key)
-				free(c->key);
-			c->key = NULL;
-
+			clear_simple_modes(c);
 			chanban_clear(c);
 			handle_topic(c, "", 0, "");
 
