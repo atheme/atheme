@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 5426 2006-06-19 10:04:20Z jilles $
+ * $Id: ptasks.c 5480 2006-06-21 14:40:09Z jilles $
  */
 
 #include "atheme.h"
@@ -316,12 +316,15 @@ void handle_message(char *origin, char *target, boolean_t is_notice, char *messa
 	service_t *sptr;
 	char *vec[3];
 
+	/* no prefix, so from server */
 	if (!origin)
 		return;
 
 	if (!(u = user_find(origin)))
 	{
-		slog(LG_DEBUG, "handle_privmsg(): got message from nonexistant user `%s'", origin);
+		/* don't complain about notices from servers */
+		if (!is_notice || !server_find(origin))
+			slog(LG_DEBUG, "handle_privmsg(): got message from nonexistant user `%s'", origin);
 		return;
 	}
 

@@ -1,3 +1,13 @@
+jilles      2006/06/21 14:04:41 UTC	(20060621-5478)
+  Log:
+  Fix umode +i tracking.
+  
+
+  Changes:	Modified:
+  +10 -2	trunk/src/cmode.c (File Modified) 
+  +2 -0		trunk/src/node.c (File Modified) 
+
+
 jilles      2006/06/21 14:01:08 UTC	(20060621-5476)
   Log:
   Decrement oper count if an oper quits.
