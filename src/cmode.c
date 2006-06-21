@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 5470 2006-06-20 23:55:15Z jilles $
+ * $Id: cmode.c 5478 2006-06-21 14:04:41Z jilles $
  */
 
 #include "atheme.h"
@@ -360,9 +360,17 @@ void user_mode(user_t *user, char *modes)
 			  break;
 		  case 'i':
 			  if (toadd)
-				  user->server->invis++;
+			  {
+				  if (!(user->flags & UF_INVIS))
+				  	user->server->invis++;
+				  user->flags |= UF_INVIS;
+			  }
 			  else
-				  user->server->invis--;
+			  {
+				  if (user->flags & UF_INVIS)
+					  user->server->invis--;
+				  user->flags &= ~UF_INVIS;
+			  }
 			  break;
 		  case 'o':
 			  if (toadd)
