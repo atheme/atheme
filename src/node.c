@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 5406 2006-06-18 00:50:13Z jilles $
+ * $Id: node.c 5476 2006-06-21 14:01:08Z jilles $
  */
 
 #include "atheme.h"
@@ -700,6 +700,8 @@ void user_delete(user_t *u)
 	hook_call_event("user_delete", u);
 
 	u->server->users--;
+	if (is_ircop(u))
+		u->server->opers--;
 
 	/* remove the user from each channel */
 	LIST_FOREACH_SAFE(n, tn, u->channels.head)

@@ -1,3 +1,12 @@
+jilles      2006/06/21 00:07:24 UTC	(20060621-5472)
+  Log:
+  Show more detailed version information in atheme -v.
+  
+
+  Changes:	Modified:
+  +4 -2		trunk/src/atheme.c (File Modified) 
+
+
 jilles      2006/06/20 23:55:15 UTC	(20060620-5470)
   Log:
   Yeah don't reference mc if it's NULL.
