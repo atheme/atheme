@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 5478 2006-06-21 14:04:41Z jilles $
+ * $Id: cmode.c 5490 2006-06-21 21:02:07Z jilles $
  */
 
 #include "atheme.h"
@@ -292,6 +292,19 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 					(mc->flags & MC_MLOCK_CHECK)))
 			check_modes(mc, TRUE);
 	}
+}
+
+/* Clear all simple modes (+imnpstkl etc) on a channel */
+void clear_simple_modes(channel_t *c)
+{
+
+	if (c == NULL)
+		return;
+	c->modes = 0;
+	c->limit = 0;
+	if (c->key != NULL)
+		free(c->key);
+	c->key = NULL;
 }
 
 char *channel_modes(channel_t *c, boolean_t doparams)

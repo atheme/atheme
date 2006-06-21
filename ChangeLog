@@ -1,3 +1,12 @@
+jilles      2006/06/21 15:17:23 UTC	(20060621-5484)
+  Log:
+  channel_delete(): free key if it was set
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/src/node.c (File Modified) 
+
+
 jilles      2006/06/21 14:50:23 UTC	(20060621-5482)
   Log:
   inspircd: don't op remote users JOINing a new channel
