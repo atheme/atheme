@@ -1,1 +1,1 @@
-#define SERNO "20060620-5468"
+#define SERNO "20060620-5470"

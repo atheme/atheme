@@ -1,3 +1,13 @@
+jilles      2006/06/20 23:55:15 UTC	(20060620-5470)
+  Log:
+  Yeah don't reference mc if it's NULL.
+  Found by Lauren.
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/src/cmode.c (File Modified) 
+
+
 jilles      2006/06/20 23:31:25 UTC	(20060620-5468)
   Log:
   Send errors in the conf file to the log file instead of stderr.
