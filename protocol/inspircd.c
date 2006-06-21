@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 5458 2006-06-20 19:01:32Z jilles $
+ * $Id: inspircd.c 5482 2006-06-21 14:50:23Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5458 2006-06-20 19:01:32Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5482 2006-06-21 14:50:23Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -493,8 +493,7 @@ static void m_fjoin(char *origin, uint8_t parc, char *parv[])
 		{
 			/* the TS changed.  a TS change requires us to do
 			 * bugger all except update the TS, because in InspIRCd,
-			 * remote servers enforce the TS change (this means that
-			 * rogue servers cant really get around it) - Brain
+			 * remote servers enforce the TS change - Brain
 			 */
 			c->ts = ts;
 			hook_call_event("channel_tschange", c);
@@ -694,27 +693,22 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 	channel_t *c;
 	chanuser_t *cu;
 	node_t *n, *tn;
+	char plus[] = "+";
 	char* modev[2];
 
 	if (!u)
 		return;
 
-	modev[0] = "+o";
-	modev[1] = origin;
+	modev[0] = plus;
+	modev[1] = NULL;
 	c = channel_find(parv[0]);
 	if (!c)
 	{
-		slog(LG_DEBUG, "m_join(): new channel: %s", parv[0]);
+		slog(LG_DEBUG, "m_join(): new channel: %s (TS and modes lost)", parv[0]);
 		c = channel_add(parv[0], CURRTIME);
-		chanuser_add(c, origin);
-		channel_mode(NULL, c, 2, modev);
+		channel_mode(NULL, c, 1, modev);
 	}
-	else
-	{
-		chanuser_add(c, origin);
-	}
-
-		
+	chanuser_add(c, origin);
 }
 
 static void m_sajoin(char *origin, uint8_t parc, char *parv[])

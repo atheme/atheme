@@ -1,3 +1,12 @@
+jilles      2006/06/21 14:40:09 UTC	(20060621-5480)
+  Log:
+  Don't complain about notices from servers in debug log.
+  
+
+  Changes:	Modified:
+  +4 -1		trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2006/06/21 14:04:41 UTC	(20060621-5478)
   Log:
   Fix umode +i tracking.
