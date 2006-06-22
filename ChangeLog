@@ -1,3 +1,12 @@
+jilles      2006/06/22 12:11:13 UTC	(20060622-5494)
+  Log:
+  Remove obsolete unused struct flag.
+  
+
+  Changes:	Modified:
+  +0 -8		trunk/src/function.c (File Modified) 
+
+
 jilles      2006/06/21 21:23:05 UTC	(20060621-5492)
   Log:
   Use clear_simple_modes() wherever appropriate.
