@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for shadowircd-based ircd.
  *
- * $Id: shadowircd.c 5492 2006-06-21 21:23:05Z jilles $
+ * $Id: shadowircd.c 5498 2006-06-22 13:30:35Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/shadowircd.h"
 
-DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 5492 2006-06-21 21:23:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 5498 2006-06-22 13:30:35Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -392,8 +392,6 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 	/* -> :proteus.malkier.net SJOIN 1073516550 #shrike +tn :@sycobuny @+rakaur */
 
 	channel_t *c;
-	uint8_t modec = 0;
-	char *modev[16];
 	uint8_t userc;
 	char *userv[256];
 	uint8_t i;
@@ -402,13 +400,6 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 	if (origin)
 	{
 		/* :origin SJOIN ts chan modestr [key or limits] :users */
-		modev[modec++] = parv[2];
-
-		if (parc > 4)
-			modev[modec++] = parv[3];
-		if (parc > 5)
-			modev[modec++] = parv[4];
-
 		c = channel_find(parv[1]);
 		ts = atol(parv[0]);
 
@@ -443,7 +434,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 			hook_call_event("channel_tschange", c);
 		}
 
-		channel_mode(NULL, c, modec, modev);
+		channel_mode(NULL, c, parc - 3, parv + 2);
 
 		userc = sjtoken(parv[parc - 1], ' ', userv);
 

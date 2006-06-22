@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 5492 2006-06-21 21:23:05Z jilles $
+ * $Id: hybrid.c 5498 2006-06-22 13:30:35Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 5492 2006-06-21 21:23:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 5498 2006-06-22 13:30:35Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -509,8 +509,6 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 
 	channel_t *c;
 	boolean_t keep_new_modes = TRUE;
-	uint8_t modec = 0;
-	char *modev[16];
 	uint8_t userc;
 	char *userv[256];
 	uint8_t i;
@@ -524,13 +522,6 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 		source_server = server_find(origin);
 		if (source_server == NULL)
 			return;
-
-		modev[modec++] = parv[2];
-
-		if (parc > 4)
-			modev[modec++] = parv[3];
-		if (parc > 5)
-			modev[modec++] = parv[4];
 
 		c = channel_find(parv[1]);
 		ts = atol(parv[0]);
@@ -589,7 +580,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 			keep_new_modes = FALSE;
 
 		if (keep_new_modes)
-			channel_mode(NULL, c, modec, modev);
+			channel_mode(NULL, c, parc - 3, parv + 2);
 
 		userc = sjtoken(parv[parc - 1], ' ', userv);
 
@@ -618,8 +609,6 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 	node_t *n, *tn;
 	channel_t *c;
 	chanuser_t *cu;
-	uint8_t modec = 0;
-	char *modev[16];
 	uint8_t i;
 	time_t ts;
 
@@ -639,13 +628,6 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 	}
 
 	/* :user JOIN ts chan modestr [key or limits] */
-	modev[modec++] = parv[2];
-
-	if (parc > 3)
-		modev[modec++] = parv[3];
-	if (parc > 4)
-		modev[modec++] = parv[4];
-
 	c = channel_find(parv[1]);
 	ts = atol(parv[0]);
 
@@ -692,7 +674,7 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 		keep_new_modes = FALSE;
 
 	if (keep_new_modes)
-		channel_mode(NULL, c, modec, modev);
+		channel_mode(NULL, c, parc - 2, parv + 2);
 
 	chanuser_add(c, origin);
 }
