@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 5354 2006-06-09 18:35:06Z jilles $
+ * $Id: function.c 5494 2006-06-22 12:11:13Z jilles $
  */
 
 #include "atheme.h"
@@ -373,14 +373,6 @@ char *r_itoa(int num)
 	return ret;
 }
 #endif
-
-/* channel modes we support */
-struct flag
-{
-	char mode;
-	int32_t flag;
-	char prefix;
-};
 
 /* convert mode flags to a text mode string */
 char *flags_to_string(int32_t flags)
