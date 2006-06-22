@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 5498 2006-06-22 13:30:35Z jilles $
+ * $Id: unreal.c 5500 2006-06-22 13:36:19Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 5498 2006-06-22 13:30:35Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 5500 2006-06-22 13:36:19Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -483,7 +483,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 
 		if (!c)
 		{
-			slog(LG_DEBUG, "m_sjoin(): new channel: %s", parv[1]);
+			slog(LG_DEBUG, "m_sjoin(): new channel: %s (modes lost)", parv[1]);
 			c = channel_add(parv[1], ts);
 		}
 
@@ -510,8 +510,12 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 	else if (parc == 2)
 	{
 		c = channel_find(parv[1]);
-		/* XXX what if the channel doesn't exist? -- XXX in which case, doesn't the ircd realise the chan doesn't exist...??*/
 		ts = atol(parv[0]);
+		if (!c)
+		{
+			slog(LG_DEBUG, "m_sjoin(): new channel: %s (modes lost)", parv[1]);
+			c = channel_add(parv[1], ts);
+		}
 
 		if (ts < c->ts)
 		{

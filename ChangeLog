@@ -1,3 +1,25 @@
+jilles      2006/06/22 13:30:35 UTC	(20060622-5498)
+  Log:
+  All m_sjoin(), TS6 m_join():
+  Give channel_mode() all parameters (but not the nicklist)
+  instead of only the first two. This also simplifies the code.
+  
+
+  Changes:	Modified:
+  +1 -10	trunk/protocol/bahamut.c (File Modified) 
+  +2 -20	trunk/protocol/charybdis.c (File Modified) 
+  +2 -20	trunk/protocol/hybrid.c (File Modified) 
+  +1 -10	trunk/protocol/hyperion.c (File Modified) 
+  +1 -10	trunk/protocol/monkey.c (File Modified) 
+  +1 -10	trunk/protocol/plexus.c (File Modified) 
+  +1 -10	trunk/protocol/ptlink.c (File Modified) 
+  +2 -20	trunk/protocol/ratbox.c (File Modified) 
+  +1 -10	trunk/protocol/shadowircd.c (File Modified) 
+  +1 -10	trunk/protocol/solidircd.c (File Modified) 
+  +1 -10	trunk/protocol/ultimate3.c (File Modified) 
+  +1 -10	trunk/protocol/unreal.c (File Modified) 
+
+
 jilles      2006/06/22 12:59:17 UTC	(20060622-5496)
   Log:
   Use clear_simple_modes() to free the key (and in future
