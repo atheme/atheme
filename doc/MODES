@@ -1,0 +1,64 @@
+User modes
+----------
+
+The Atheme core knows the following user modes:
+
++i	invisible, only tracked for use by modules
++o	IRC operator
+
+Some protocol modules recognize additional user modes.
+
+User modes are stored in user_t.flags together with other state information.
+
+Channel modes
+-------------
+
+The following types of channel modes exist:
+
+A	ban-like (list)
+B	simple, with parameter both when set and unset
+C	simple, with parameter only when set
+D	simple, no parameter
+E	prefix
+
+Modes of type E are characterized both by a letter and by a special
+character to be prefixed to a nick (or UID).
+
+The Atheme core knows the following channel modes:
+
+A	+b	channel ban
+B	+k	channel key (password)
+C	+l	user limit
+E	+o (@)	channel operator
+E	+v (+)	voice
+
+Protocol modules can define more modes of types A (ircd->ban_like_modes),
+C (ignore_mode_list), D (mode_list) and E (status_mode_list,
+prefix_mode_list).
+
+The mode_list should contain at least +i, +m, +n, +s and +t with the
+standard values.
+
+The Atheme core has special treatment for the following extended channel modes:
+A	ban exception		ircd->except_mchar
+A	invite exception	ircd->invex_mchar
+D	permanent channel	ircd->perm_mode
+E	halfop			ircd->uses_halfops, ircd->halfops_mode, ircd->halfops_mchar
+E	channel protection	ircd->protect_mode, ircd->protect_mchar
+E	channel founder		ircd->owner_mode, ircd->owner_mchar
+
+Modes of type D can be marked oper-only with ircd->oper_only_modes. This
+prevents users without chan:cmodes privilege from changing those modes in
+mode locks. The other modes in the mlock can be changed and the oper-only
+modes will remain untouched.
+
+The different types of modes are stored as follows:
+A	channel_t.bans
+B	channel_t.key
+C	channel_t.limit
+D	channel_t.modes
+E	chanuser_t.modes
+
+Modes of type C other than +l are currently not stored.
+
+$Id: MODES 5502 2006-06-22 14:41:49Z jilles $
