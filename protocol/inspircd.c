@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 5508 2006-06-23 09:19:12Z w00t $
+ * $Id: inspircd.c 5512 2006-06-23 15:06:08Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5508 2006-06-23 09:19:12Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5512 2006-06-23 15:06:08Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -531,9 +531,12 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 		/* char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, uint32_t ts */
 		u = user_add(parv[1], parv[4], parv[2], parv[3], parv[6], NULL, parv[7], s, atol(parv[0]));
 		user_mode(u, parv[5]);
-		handle_nickchange(u);
-	}
 
+		/* If server is not yet EOB we will do this later.
+		 * This avoids useless "please identify" -- jilles */
+		if (s->flags & SF_EOB)
+			handle_nickchange(u);
+	}
 	/* if it's only 1 then it's a nickname change */
 	else if (parc == 1)
 	{
@@ -561,7 +564,11 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 		u->hash = UHASH((unsigned char *)u->nick);
 		node_add(u, n, &userlist[u->hash]);
 
-		handle_nickchange(u);
+		/* It could happen that our PING arrived late and the
+		 * server didn't acknowledge EOB yet even though it is
+		 * EOB; don't send double notices in that case -- jilles */
+		if (u->server->flags & SF_EOB)
+			handle_nickchange(u);
 	}
 	else
 	{
@@ -783,6 +790,17 @@ static void m_capab(char *origin, uint8_t parc, char *parv[])
 	}
 }
 
+/* Server ended their burst: warn all their users if necessary -- jilles */
+static void server_eob(server_t *s)
+{
+	node_t *n;
+
+	LIST_FOREACH(n, s->userlist.head)
+	{
+		handle_nickchange((user_t *)n->data);
+	}
+}
+
 void _modinit(module_t * m)
 {
 	/* Symbol relocation voodoo. */
@@ -843,6 +861,9 @@ void _modinit(module_t * m)
 	pcommand_add("OPERTYPE", m_opertype);
 	pcommand_add("METADATA", m_metadata);
 	pcommand_add("CAPAB", m_capab);
+
+	hook_add_event("server_eob");
+	hook_add_hook("server_eob", (void (*)(void *))server_eob);
 
 	m->mflags = MODTYPE_CORE;
 

@@ -1,3 +1,11 @@
+w00t        2006/06/23 09:19:12 UTC	(20060623-5508)
+  Log:
+  Forward port 5506, once I learned how 'patch' worked again.
+
+  Changes:	Modified:
+  +42 -23	trunk/protocol/inspircd.c (File Modified) 
+
+
 jilles      2006/06/22 14:41:49 UTC	(20060622-5502)
   Log:
   Add some text about user and channel modes.
