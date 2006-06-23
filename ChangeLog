@@ -1,3 +1,14 @@
+jilles      2006/06/23 15:56:02 UTC	(20060623-5516)
+  Log:
+  Add channel_mode_va(), a simple wrapper for channel_mode()
+  allowing the parv array to be passed as varargs.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/extern.h (File Modified) 
+  +24 -0	trunk/src/cmode.c (File Modified) 
+
+
 jilles      2006/06/23 15:25:09 UTC	(20060623-5514)
   Log:
   Add tracking for non-standard simple modes with parameters (type C).

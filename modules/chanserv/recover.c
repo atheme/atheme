@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService RECOVER functions.
  *
- * $Id: recover.c 5398 2006-06-17 23:09:35Z jilles $
+ * $Id: recover.c 5518 2006-06-23 15:59:54Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/recover", FALSE, _modinit, _moddeinit,
-	"$Id: recover.c 5398 2006-06-17 23:09:35Z jilles $",
+	"$Id: recover.c 5518 2006-06-23 15:59:54Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -118,22 +118,11 @@ static void cs_cmd_recover(char *origin)
 		/* if requester is not on channel,
 		 * remove modes that keep people out */
 		if (CMODE_LIMIT & mc->chan->modes)
-		{
-			cmode(chansvs.nick, mc->chan->name, "-l", NULL);
-			mc->chan->modes &= ~CMODE_LIMIT;
-			mc->chan->limit = 0;
-		}
-
+			channel_mode_va(chansvs.me->me, mc->chan, 1, "-l");
 		if (CMODE_KEY & mc->chan->modes)
-		{
-			cmode(chansvs.nick, mc->chan->name, "-k", mc->chan->key);
-			mc->chan->modes &= ~CMODE_KEY;
-			free(mc->chan->key);
-			mc->chan->key = NULL;
-		}
+			channel_mode_va(chansvs.me->me, mc->chan, 2, "-k", "*");
 
 		/* stuff like join throttling
-		 * just remove all of these, we don't keep track of them
 		 * XXX only remove modes that could keep people out
 		 * -- jilles */
 		str[0] = '-';
@@ -141,7 +130,8 @@ static void cs_cmd_recover(char *origin)
 		for (i = 0; ignore_mode_list[i].mode != '\0'; i++)
 		{
 			str[1] = ignore_mode_list[i].mode;
-			cmode(chansvs.nick, mc->chan->name, str);
+			if (mc->chan->extmodes[i] != NULL)
+				channel_mode_va(chansvs.me->me, mc->chan, 1, str);
 		}
 	}
 	else
@@ -154,13 +144,11 @@ static void cs_cmd_recover(char *origin)
 	if (origin_cu != NULL || (chanacs_user_flags(mc, u) & (CA_OP | CA_AUTOOP)))
 	{
 
-		cmode(chansvs.nick, mc->chan->name, "+im", NULL);
-		mc->chan->modes |= CMODE_INVITE | CMODE_MOD;
+		channel_mode_va(chansvs.me->me, mc->chan, 1, "+im");
 	}
 	else if (CMODE_INVITE & mc->chan->modes)
 	{
-		cmode(chansvs.nick, mc->chan->name, "-i", NULL);
-		mc->chan->modes &= ~CMODE_INVITE;
+		channel_mode_va(chansvs.me->me, mc->chan, 1, "-i");
 	}
 
 	/* unban the user */
