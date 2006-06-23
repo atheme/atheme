@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 5514 2006-06-23 15:25:09Z jilles $
+ * $Id: cmode.c 5516 2006-06-23 15:56:02Z jilles $
  */
 
 #include "atheme.h"
@@ -309,6 +309,30 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 					(mc->flags & MC_MLOCK_CHECK)))
 			check_modes(mc, TRUE);
 	}
+}
+
+/* like channel_mode() but parv array passed as varargs */
+void channel_mode_va(user_t *source, channel_t *chan, uint8_t parc, char *parv0, ...)
+{
+	char *parv[255];
+	int i;
+	va_list va;
+
+	if (parc == 0)
+		return;
+#if 0
+	if (parc > sizeof parv / sizeof *parv)
+	{
+		slog(LG_DEBUG, "channel_mode_va(): parc too big (%d), truncating", parc);
+		parc = sizeof parv / sizeof *parv;
+	}
+#endif
+	parv[0] = parv0;
+	va_start(va, parv0);
+	for (i = 1; i < parc; i++)
+		parv[i] = va_arg(va, char *);
+	va_end(va);
+	channel_mode(source, chan, parc, parv);
 }
 
 /* Clear all simple modes (+imnpstkl etc) on a channel */

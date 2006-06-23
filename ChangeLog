@@ -1,3 +1,14 @@
+jilles      2006/06/23 15:25:09 UTC	(20060623-5514)
+  Log:
+  Add tracking for non-standard simple modes with parameters (type C).
+  At this time /cs recover will desync them.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/include/channels.h (File Modified) 
+  +38 -1	trunk/src/cmode.c (File Modified) 
+
+
 w00t        2006/06/23 15:06:08 UTC	(20060623-5512)
   Log:
   Added hook on server EOB, fixes dual notice issue caused by r5508 changes noted by jilles
