@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
  *
- * $Id: nefarious.c 5492 2006-06-21 21:23:05Z jilles $
+ * $Id: nefarious.c 5522 2006-06-23 16:18:08Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 5492 2006-06-21 21:23:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 5522 2006-06-23 16:18:08Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -458,8 +458,6 @@ static void m_create(char *origin, uint8_t parc, char *parv[])
 	uint8_t chanc;
 	char *chanv[256];
 	uint8_t i;
-	char plus[] = "+";
-	char *modev[] = { plus, NULL };
 
 	chanc = sjtoken(parv[0], ',', chanv);
 
@@ -472,7 +470,7 @@ static void m_create(char *origin, uint8_t parc, char *parv[])
 		 * join if everyone is akicked.
 		 * P10 does not allow any redundant modes
 		 * so this will not look ugly. -- jilles */
-		channel_mode(NULL, c, 1, modev);
+		channel_mode_va(NULL, c, 1, "+");
 
 		buf[0] = '@';
 		buf[1] = '\0';
@@ -516,7 +514,10 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 		channel_t *c = channel_find(chanv[i]);
 
 		if (!c)
+		{
 			c = channel_add(chanv[i], atoi(parv[1]));
+			channel_mode_va(NULL, c, 1, "+");
+		}
 
 		chanuser_add(c, origin);
 	}
@@ -527,7 +528,6 @@ static void m_burst(char *origin, uint8_t parc, char *parv[])
 	channel_t *c;
 	uint8_t modec;
 	char *modev[16];
-	char plus[] = "+";
 	uint8_t userc;
 	char *userv[256];
 	uint8_t i;
@@ -589,9 +589,7 @@ static void m_burst(char *origin, uint8_t parc, char *parv[])
 		/* Tell the core to check mode locks now,
 		 * otherwise it may only happen after the next
 		 * join if everyone is akicked. -- jilles */
-		modev[0] = plus;
-		modev[1] = NULL;
-		channel_mode(NULL, c, 1, modev);
+		channel_mode_va(NULL, c, 1, "+");
 	}
 
 	bantype = 'b';

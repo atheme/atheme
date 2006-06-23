@@ -1,3 +1,14 @@
+jilles      2006/06/23 16:03:29 UTC	(20060623-5520)
+  Log:
+  channel_mode(): when sending -k while the channel has no
+  key set, explicitly put "*" instead of relying on printf
+  to treat "%s", NULL properly.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/cmode.c (File Modified) 
+
+
 jilles      2006/06/23 15:59:54 UTC	(20060623-5518)
   Log:
   ChanServ RECOVER:
