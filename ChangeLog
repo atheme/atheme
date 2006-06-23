@@ -1,3 +1,14 @@
+jilles      2006/06/23 15:59:54 UTC	(20060623-5518)
+  Log:
+  ChanServ RECOVER:
+  Use channel_mode_va() to simplify this a bit and update
+  the tracking for type C modes.
+  
+
+  Changes:	Modified:
+  +6 -18	trunk/modules/chanserv/recover.c (File Modified) 
+
+
 jilles      2006/06/23 15:56:02 UTC	(20060623-5516)
   Log:
   Add channel_mode_va(), a simple wrapper for channel_mode()

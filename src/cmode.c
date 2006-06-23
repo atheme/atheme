@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 5516 2006-06-23 15:56:02Z jilles $
+ * $Id: cmode.c 5520 2006-06-23 16:03:29Z jilles $
  */
 
 #include "atheme.h"
@@ -174,7 +174,7 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 					simple_modes_changed = TRUE;
 				chan->modes &= ~CMODE_KEY;
 				if (source)
-					cmode(source->nick, chan->name, "-k", chan->key);
+					cmode(source->nick, chan->name, "-k", chan->key ? chan->key : "*");
 				free(chan->key);
 				chan->key = NULL;
 				/* ratbox typically sends either the key or a `*' on -k, so you
