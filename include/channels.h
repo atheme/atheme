@@ -4,7 +4,7 @@
  *
  * Data structures for channel information.
  *
- * $Id: channels.h 4639 2006-01-21 22:06:41Z jilles $
+ * $Id: channels.h 5514 2006-06-23 15:25:09Z jilles $
  */
 
 #ifndef CHANNELS_H
@@ -15,6 +15,8 @@ typedef struct channel_ channel_t;
 typedef struct chanuser_ chanuser_t;
 typedef struct chanban_ chanban_t;
 
+#define MAXEXTMODES 5
+
 struct channel_
 {
   char *name;
@@ -22,6 +24,7 @@ struct channel_
   uint32_t modes;
   char *key;
   uint32_t limit;
+  char *extmodes[MAXEXTMODES]; /* non-standard simple modes with param eg +j */
 
   uint32_t nummembers;
 

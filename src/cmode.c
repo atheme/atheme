@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 5490 2006-06-21 21:02:07Z jilles $
+ * $Id: cmode.c 5514 2006-06-23 15:25:09Z jilles $
  */
 
 #include "atheme.h"
@@ -93,12 +93,29 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 				{
 					if (++parpos >= parc)
 						break;
+					if (chan->extmodes[i])
+					{
+						if (strcmp(chan->extmodes[i], parv[parpos]))
+							simple_modes_changed = TRUE;
+						free(chan->extmodes[i]);
+					}
+					else
+						simple_modes_changed = TRUE;
+					chan->extmodes[i] = sstrdup(parv[parpos]);
 					if (source)
-						cmode(source->nick, chan->name, str, parv[parpos]);
+						cmode(source->nick, chan->name, str, chan->extmodes[i]);
 				}
 				else
+				{
+					if (chan->extmodes[i])
+					{
+						simple_modes_changed = TRUE;
+						free(chan->extmodes[i]);
+						chan->extmodes[i] = NULL;
+					}
 					if (source)
 						cmode(source->nick, chan->name, str, ".");
+				}
 				break;
 			}
 		}
@@ -297,6 +314,7 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 /* Clear all simple modes (+imnpstkl etc) on a channel */
 void clear_simple_modes(channel_t *c)
 {
+	int i;
 
 	if (c == NULL)
 		return;
@@ -305,6 +323,12 @@ void clear_simple_modes(channel_t *c)
 	if (c->key != NULL)
 		free(c->key);
 	c->key = NULL;
+	for (i = 0; i < MAXEXTMODES; i++)
+		if (c->extmodes[i] != NULL)
+		{
+			free(c->extmodes[i]);
+			c->extmodes[i] = NULL;
+		}
 }
 
 char *channel_modes(channel_t *c, boolean_t doparams)
@@ -344,6 +368,19 @@ char *channel_modes(channel_t *c, boolean_t doparams)
 			*q++ = ' ';
 			strlcpy(q, c->key, params + sizeof params - q);
 			q += strlen(q);
+		}
+	}
+	for (i = 0; ignore_mode_list[i].mode != '\0'; i++)
+	{
+		if (c->extmodes[i] != NULL)
+		{
+			*p++ = ignore_mode_list[i].mode;
+			if (doparams)
+			{
+				*q++ = ' ';
+				strlcpy(q, c->extmodes[i], params + sizeof params - q);
+				q += strlen(q);
+			}
 		}
 	}
 	strlcpy(p, params, fullmode + sizeof fullmode - p);

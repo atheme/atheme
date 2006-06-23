@@ -1,3 +1,11 @@
+w00t        2006/06/23 15:06:08 UTC	(20060623-5512)
+  Log:
+  Added hook on server EOB, fixes dual notice issue caused by r5508 changes noted by jilles
+
+  Changes:	Modified:
+  +24 -3	trunk/protocol/inspircd.c (File Modified) 
+
+
 w00t        2006/06/23 09:19:12 UTC	(20060623-5508)
   Log:
   Forward port 5506, once I learned how 'patch' worked again.
