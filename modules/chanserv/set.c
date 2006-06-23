@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 5524 2006-06-23 17:26:26Z jilles $
+ * $Id: set.c 5526 2006-06-23 18:25:01Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 5524 2006-06-23 17:26:26Z jilles $",
+	"$Id: set.c 5526 2006-06-23 18:25:01Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -460,6 +460,11 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 				  else if (strlen(arg) >= KEYLEN)
 				  {
 					  notice(chansvs.nick, origin, "MLOCK key is too long (%d > %d).", strlen(arg), KEYLEN - 1);
+					  return;
+				  }
+				  else if (strchr(arg, ',') || arg[0] == ':')
+				  {
+					  notice(chansvs.nick, origin, "MLOCK key contains invalid characters.");
 					  return;
 				  }
 

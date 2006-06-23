@@ -1,3 +1,16 @@
+jilles      2006/06/23 17:26:26 UTC	(20060623-5524)
+  Log:
+  - Don't allow mlocking a key longer than 23 characters,
+    ircd will truncate it and we'll be changing keys all
+    the time.
+  - Fix some memory leaks in /cs set mlock.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/common.h (File Modified) 
+  +10 -3	trunk/modules/chanserv/set.c (File Modified) 
+
+
 jilles      2006/06/23 16:18:08 UTC	(20060623-5522)
   Log:
   P10: make this look more sane with channel_mode_va().
