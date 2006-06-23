@@ -1,3 +1,13 @@
+jilles      2006/06/22 14:41:49 UTC	(20060622-5502)
+  Log:
+  Add some text about user and channel modes.
+  Does not describe the in-the-works changes to type C modes.
+  
+
+  Changes:	Modified:
+  +64 -0	trunk/doc/MODES (File Added) 
+
+
 jilles      2006/06/22 13:36:19 UTC	(20060622-5500)
   Log:
   Unreal: deal with client SJOIN creating a channel

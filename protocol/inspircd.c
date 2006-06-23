@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 5482 2006-06-21 14:50:23Z jilles $
+ * $Id: inspircd.c 5508 2006-06-23 09:19:12Z w00t $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5482 2006-06-21 14:50:23Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5508 2006-06-23 09:19:12Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -334,14 +334,7 @@ static void inspircd_on_login(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return;
 
-	/* Can only do this for nickserv, and can only record identified
-	 * state if logged in to correct nick, sorry -- jilles
-	 */
-	if (nicksvs.me == NULL || irccasecmp(origin, user))
-		return;
-
-	/* In InspIRCd, SVSMODE shows the +r if not already set */
-	sts(":%s SVSMODE %s +r", nicksvs.nick, origin);
+	sts(":%s METADATA %s accountname :%s", me.name, origin, user);
 }
 
 /* protocol-specific stuff to do on logout */
@@ -350,10 +343,7 @@ static boolean_t inspircd_on_logout(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return FALSE;
 
-	if (nicksvs.me == NULL || irccasecmp(origin, user))
-		return FALSE;
-
-	sts(":%s SVSMODE %s -r", nicksvs.nick, origin);
+	sts(":%s METADATA %s accountname :", me.name, origin);
 	return FALSE;
 }
 
@@ -540,13 +530,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 
 		/* char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, uint32_t ts */
 		u = user_add(parv[1], parv[4], parv[2], parv[3], parv[6], NULL, parv[7], s, atol(parv[0]));
-
 		user_mode(u, parv[5]);
-
-		/* Assumes ircd clears +r on nick changes (r2882 or newer) */
-		if (strchr(parv[5], 'r'))
-			handle_burstlogin(u, parv[1]);
-
 		handle_nickchange(u);
 	}
 
@@ -563,11 +547,6 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 		}
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", u->nick, parv[0]);
-
-		/* fix up +r if necessary -- jilles */
-		if (nicksvs.me != NULL && u->myuser != NULL && !(u->myuser->flags & MU_WAITAUTH) && irccasecmp(u->nick, parv[0]) && !irccasecmp(parv[0], u->myuser->name))
-			/* changed nick to registered one, reset +r */
-			sts(":%s SVSMODE %s +r", nicksvs.nick, parv[0]);
 
 		/* remove the current one from the list */
 		n = node_find(u, &userlist[u->hash]);
@@ -766,6 +745,44 @@ static void m_fhost(char *origin, uint8_t parc, char *parv[])
 	strlcpy(u->vhost, parv[0], HOSTLEN);
 }
 
+/*
+ * :<source server> METADATA <channel|user> <key> :<value>
+ * The sole piece of metadata we're interested in is 'accountname', set by Services,
+ * and kept by ircd.
+ *
+ * :services.barafranca METADATA w00t accountname :w00t
+ */
+
+static void m_metadata(char *origin, uint8_t parc, char *parv[])
+{
+	user_t *u;
+
+	if (!irccasecmp(parv[1], "accountname"))
+	{
+		/* find user */
+		u = user_find(parv[0]);
+
+		if (u == NULL)
+			return;
+
+		handle_burstlogin(u, parv[2]);
+	}
+}
+
+static void m_capab(char *origin, uint8_t parc, char *parv[])
+{
+	if (!strstr(parv[0], "m_services_account.so"))
+	{
+		fprintf(stderr, "atheme: you didn't load m_services_account into inspircd. atheme support requires this module. exiting.\n");
+		exit(EXIT_FAILURE);		
+	}
+	else if (!strstr(parv[0], "m_globops.so"))
+	{
+		fprintf(stderr, "atheme: you didn't load m_globops into inspircd. atheme support requires this module. exiting.\n");
+		exit(EXIT_FAILURE);
+	}
+}
+
 void _modinit(module_t * m)
 {
 	/* Symbol relocation voodoo. */
@@ -824,6 +841,8 @@ void _modinit(module_t * m)
 	pcommand_add("FHOST", m_fhost);
 	pcommand_add("IDLE", m_idle);
 	pcommand_add("OPERTYPE", m_opertype);
+	pcommand_add("METADATA", m_metadata);
+	pcommand_add("CAPAB", m_capab);
 
 	m->mflags = MODTYPE_CORE;
 
