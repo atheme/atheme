@@ -1,3 +1,16 @@
+jilles      2006/06/24 23:08:30 UTC	(20060624-5546)
+  Log:
+  Add a command line option -l to change the log file.
+  
+  Submitted by e-axe.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/extern.h (File Modified) 
+  +12 -2	trunk/src/atheme.c (File Modified) 
+  +1 -1		trunk/src/function.c (File Modified) 
+
+
 jilles      2006/06/24 23:02:17 UTC	(20060624-5544)
   Log:
   check_modes(): Do not send out a mode if sendnow is false,

@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 5544 2006-06-24 23:02:17Z jilles $
+ * $Id: cmode.c 5548 2006-06-24 23:22:40Z jilles $
  */
 
 #include "atheme.h"
@@ -896,8 +896,7 @@ void user_mode(user_t *user, char *modes)
 
 void check_modes(mychan_t *mychan, boolean_t sendnow)
 {
-	char newmodes[40], *newkey = NULL;
-	char *end = newmodes;
+	char *newkey = NULL;
 	int32_t newlimit = 0;
 	int modes;
 
@@ -907,9 +906,8 @@ void check_modes(mychan_t *mychan, boolean_t sendnow)
 
 	modes = ~mychan->chan->modes & mychan->mlock_on;
 	modes &= ~(CMODE_KEY | CMODE_LIMIT);
-
-	end += snprintf(end, sizeof(newmodes) - (end - newmodes) - 2, "+%s", flags_to_string(modes));
-
+	if (sendnow)
+		modestack_mode_simple(chansvs.nick, mychan->name, MTYPE_ADD, modes);
 	mychan->chan->modes |= modes;
 
 	if (mychan->mlock_limit && mychan->mlock_limit != mychan->chan->limit)
@@ -917,7 +915,7 @@ void check_modes(mychan_t *mychan, boolean_t sendnow)
 		newlimit = mychan->mlock_limit;
 		mychan->chan->limit = newlimit;
 		if (sendnow)
-			cmode(chansvs.nick, mychan->name, "+l", itoa(newlimit));
+			modestack_mode_limit(chansvs.nick, mychan->name, MTYPE_ADD, newlimit);
 	}
 
 	if (mychan->mlock_key)
@@ -926,7 +924,7 @@ void check_modes(mychan_t *mychan, boolean_t sendnow)
 		{
 			/* some ircds still need this... :\ -- jilles */
 			if (sendnow)
-				cmode(chansvs.nick, mychan->name, "-k", mychan->chan->key);
+				modestack_mode_param(chansvs.nick, mychan->name, MTYPE_DEL, 'k', mychan->chan->key);
 			free(mychan->chan->key);
 			mychan->chan->key = NULL;
 		}
@@ -936,43 +934,28 @@ void check_modes(mychan_t *mychan, boolean_t sendnow)
 			newkey = mychan->mlock_key;
 			mychan->chan->key = sstrdup(newkey);
 			if (sendnow)
-				cmode(chansvs.nick, mychan->name, "+k", newkey);
+				modestack_mode_param(chansvs.nick, mychan->name, MTYPE_ADD, 'k', newkey);
 		}
 	}
 
-	if (end[-1] == '+')
-		end--;
-
 	modes = mychan->chan->modes & mychan->mlock_off;
 	modes &= ~(CMODE_KEY | CMODE_LIMIT);
-
-	end += snprintf(end, sizeof(newmodes) - (end - newmodes) - 1, "-%s", flags_to_string(modes));
-
+	if (sendnow)
+		modestack_mode_simple(chansvs.nick, mychan->name, MTYPE_DEL, modes);
 	mychan->chan->modes &= ~modes;
 
 	if (mychan->chan->limit && (mychan->mlock_off & CMODE_LIMIT))
 	{
 		if (sendnow)
-			cmode(chansvs.nick, mychan->name, "-l");
+			modestack_mode_limit(chansvs.nick, mychan->name, MTYPE_DEL, 0);
 		mychan->chan->limit = 0;
 	}
 
 	if (mychan->chan->key && (mychan->mlock_off & CMODE_KEY))
 	{
 		if (sendnow)
-			cmode(chansvs.nick, mychan->name, "-k", mychan->chan->key);
+			modestack_mode_param(chansvs.nick, mychan->name, MTYPE_DEL, 'k', mychan->chan->key);
 		free(mychan->chan->key);
 		mychan->chan->key = NULL;
 	}
-
-	if (end[-1] == '-')
-		end--;
-
-	if (end == newmodes)
-		return;
-
-	*end = 0;
-
-	if (sendnow)
-		cmode(chansvs.nick, mychan->name, newmodes);
 }
