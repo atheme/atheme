@@ -4,7 +4,7 @@
  *
  * Closing for channels.
  *
- * $Id: close.c 5073 2006-04-14 11:16:18Z w00t $
+ * $Id: close.c 5532 2006-06-24 18:19:51Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/close", FALSE, _modinit, _moddeinit,
-	"$Id: close.c 5073 2006-04-14 11:16:18Z w00t $",
+	"$Id: close.c 5532 2006-06-24 18:19:51Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -68,13 +68,7 @@ static void close_check_join(void *vcu)
 		mc->flags |= MC_INHABIT;
 
 		/* lock it down */
-		cmode(chansvs.nick, cu->chan->name, "+isbl", "*!*@*", "1");
-		cu->chan->modes |= CMODE_INVITE;
-		cu->chan->modes |= CMODE_SEC;
-		cu->chan->modes |= CMODE_LIMIT;
-		cu->chan->limit = 1;
-		if (!chanban_find(cu->chan, "*!*@*", 'b'))
-			chanban_add(cu->chan, "*!*@*", 'b');
+		channel_mode_va(chansvs.me->me, cu->chan, 3, "+isbl", "*!*@*", "1");
 
 		/* clear the channel */
 		kick(chansvs.nick, cu->chan->name, cu->user->nick, "This channel has been closed");
@@ -138,13 +132,7 @@ static void cs_cmd_close(char *origin)
 			mc->flags |= MC_INHABIT;
 
 			/* lock it down */
-			cmode(chansvs.nick, target, "+isbl", "*!*@*", "1");
-			c->modes |= CMODE_INVITE;
-			c->modes |= CMODE_SEC;
-			c->modes |= CMODE_LIMIT;
-			c->limit = 1;
-			if (!chanban_find(c, "*!*@*", 'b'))
-				chanban_add(c, "*!*@*", 'b');
+			channel_mode_va(chansvs.me->me, c, 3, "+isbl", "*!*@*", "1");
 
 			/* clear the channel */
 			LIST_FOREACH(n, c->members.head)
@@ -182,15 +170,7 @@ static void cs_cmd_close(char *origin)
 			chanban_t *cb;
 
 			/* hmm, channel still exists, probably permanent? */
-			cb = chanban_find(c, "*!*@*", 'b');
-			if (cb != NULL)
-			{
-				chanban_delete(cb);
-				cmode(chansvs.nick, target, "-b", "*!*@*");
-			}
-			cmode(chansvs.nick, target, "-isl");
-			c->modes &= ~(CMODE_INVITE | CMODE_SEC | CMODE_LIMIT);
-			c->limit = 0;
+			channel_mode_va(chansvs.me->me, c, 2, "-isbl", "*!*@*");
 			check_modes(mc, TRUE);
 		}
 

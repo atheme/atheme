@@ -1,3 +1,13 @@
+jilles      2006/06/24 17:30:52 UTC	(20060624-5530)
+  Log:
+  Make flush_cmode_callback() static.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/include/extern.h (File Modified) 
+  +1 -1		trunk/src/cmode.c (File Modified) 
+
+
 jilles      2006/06/24 17:13:38 UTC	(20060624-5528)
   Log:
   Rewrite the mode stacker. This removes the Cygnus code,
