@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 5548 2006-06-24 23:22:40Z jilles $
+ * $Id: cmode.c 5550 2006-06-24 23:29:30Z jilles $
  */
 
 #include "atheme.h"
@@ -896,14 +896,13 @@ void user_mode(user_t *user, char *modes)
 
 void check_modes(mychan_t *mychan, boolean_t sendnow)
 {
-	char *newkey = NULL;
-	int32_t newlimit = 0;
 	int modes;
 
 	if (!mychan || !mychan->chan)
 		return;
 	mychan->flags &= ~MC_MLOCK_CHECK;
 
+	/* check what's locked on */
 	modes = ~mychan->chan->modes & mychan->mlock_on;
 	modes &= ~(CMODE_KEY | CMODE_LIMIT);
 	if (sendnow)
@@ -912,10 +911,9 @@ void check_modes(mychan_t *mychan, boolean_t sendnow)
 
 	if (mychan->mlock_limit && mychan->mlock_limit != mychan->chan->limit)
 	{
-		newlimit = mychan->mlock_limit;
-		mychan->chan->limit = newlimit;
+		mychan->chan->limit = mychan->mlock_limit;
 		if (sendnow)
-			modestack_mode_limit(chansvs.nick, mychan->name, MTYPE_ADD, newlimit);
+			modestack_mode_limit(chansvs.nick, mychan->name, MTYPE_ADD, mychan->mlock_limit);
 	}
 
 	if (mychan->mlock_key)
@@ -931,13 +929,13 @@ void check_modes(mychan_t *mychan, boolean_t sendnow)
 
 		if (mychan->chan->key == NULL)
 		{
-			newkey = mychan->mlock_key;
-			mychan->chan->key = sstrdup(newkey);
+			mychan->chan->key = sstrdup(mychan->mlock_key);
 			if (sendnow)
-				modestack_mode_param(chansvs.nick, mychan->name, MTYPE_ADD, 'k', newkey);
+				modestack_mode_param(chansvs.nick, mychan->name, MTYPE_ADD, 'k', mychan->mlock_key);
 		}
 	}
 
+	/* check what's locked off */
 	modes = mychan->chan->modes & mychan->mlock_off;
 	modes &= ~(CMODE_KEY | CMODE_LIMIT);
 	if (sendnow)
