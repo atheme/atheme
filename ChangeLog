@@ -1,3 +1,12 @@
+jilles      2006/06/24 18:30:43 UTC	(20060624-5534)
+  Log:
+  Make sure to also deprotect not logged in users if appropriate.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/chanserv/main.c (File Modified) 
+
+
 jilles      2006/06/24 18:19:51 UTC	(20060624-5532)
   Log:
   ChanServ CLOSE: simplify using channel_mode_va().
