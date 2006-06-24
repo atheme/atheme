@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 5528 2006-06-24 17:13:38Z jilles $
+ * $Id: cmode.c 5530 2006-06-24 17:30:52Z jilles $
  */
 
 #include "atheme.h"
@@ -607,7 +607,7 @@ static void modestack_add_param(struct modestackdata *md, int dir, char type, ch
 	strlcat(md->params, value, sizeof md->params);
 }
 
-void modestack_flush_callback(void *arg)
+static void modestack_flush_callback(void *arg)
 {
 	modestack_flush((struct modestackdata *)arg);
 	((struct modestackdata *)arg)->event = 0;

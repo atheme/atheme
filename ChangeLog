@@ -1,3 +1,21 @@
+jilles      2006/06/24 17:13:38 UTC	(20060624-5528)
+  Log:
+  Rewrite the mode stacker. This removes the Cygnus code,
+  improves compatibility and omits redundant type C modes.
+  There is no possibility for tracking pending modes for
+  multiple channels anymore, with a 0 second timeout this
+  seems only really useful for dreamforge-style ircds,
+  which are obsolete.
+  There is quite a lot of debug output; this can be removed
+  later. The API is still the ugly cmode() thing, I plan
+  to replace that by something more sensible.
+  
+
+  Changes:	Modified:
+  +1 -2		trunk/README (File Modified) 
+  +379 -235	trunk/src/cmode.c (File Modified) 
+
+
 jilles      2006/06/23 18:25:01 UTC	(20060623-5526)
   Log:
   Don't allow mlocking a key starting with a colon or containing a comma.
