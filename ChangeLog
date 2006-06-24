@@ -1,3 +1,16 @@
+jilles      2006/06/24 22:20:47 UTC	(20060624-5538)
+  Log:
+  Add a new modestacker API, modestack_mode_*(),
+  modestack_flush_channel(), modestack_forget_channel().
+  This will allow more compile time checking and less
+  futzing around with strings (e.g. constructing "-h").
+  
+
+  Changes:	Modified:
+  +7 -1		trunk/include/extern.h (File Modified) 
+  +64 -0	trunk/src/cmode.c (File Modified) 
+
+
 jilles      2006/06/24 21:02:10 UTC	(20060624-5536)
   Log:
   hyperion doesn't have channel mode +p.

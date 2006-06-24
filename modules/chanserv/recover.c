@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService RECOVER functions.
  *
- * $Id: recover.c 5518 2006-06-23 15:59:54Z jilles $
+ * $Id: recover.c 5540 2006-06-24 22:24:37Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/recover", FALSE, _modinit, _moddeinit,
-	"$Id: recover.c 5518 2006-06-23 15:59:54Z jilles $",
+	"$Id: recover.c 5540 2006-06-24 22:24:37Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -99,15 +99,12 @@ static void cs_cmd_recover(char *origin)
 		{
 			if ((CMODE_OP & cu->modes))
 			{
-				cmode(chansvs.nick, mc->chan->name, "-o", CLIENT_NAME(cu->user));
+				modestack_mode_param(chansvs.nick, mc->chan->name, MTYPE_DEL, 'o', CLIENT_NAME(cu->user));
 				cu->modes &= ~CMODE_OP;
 			}
 			if (ircd->uses_halfops && (ircd->halfops_mode & cu->modes))
 			{
-				char minush[3];
-				strlcpy(minush, ircd->halfops_mchar, 3);
-				minush[0] = '-';
-				cmode(chansvs.nick, mc->chan->name, minush, CLIENT_NAME(cu->user));
+				modestack_mode_param(chansvs.nick, mc->chan->name, MTYPE_DEL, ircd->halfops_mchar[1], CLIENT_NAME(cu->user));
 				cu->modes &= ~ircd->halfops_mode;
 			}
 		}
@@ -137,7 +134,7 @@ static void cs_cmd_recover(char *origin)
 	else
 	{
 		if (!(CMODE_OP & origin_cu->modes))
-			cmode(chansvs.nick, mc->chan->name, "+o", CLIENT_NAME(u));
+			modestack_mode_param(chansvs.nick, mc->chan->name, MTYPE_ADD, 'o', CLIENT_NAME(u));
 		origin_cu->modes |= CMODE_OP;
 	}
 
@@ -163,12 +160,10 @@ static void cs_cmd_recover(char *origin)
 			continue;
 		if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2))
 		{
-			cmode(chansvs.nick, mc->chan->name, "-b", cb->mask);
+			modestack_mode_param(chansvs.nick, mc->chan->name, MTYPE_DEL, 'b', cb->mask);
 			chanban_delete(cb);
 		}
 	}
-
-	cmode(NULL); /* flush stacker */
 
 	if (origin_cu == NULL)
 	{
@@ -179,15 +174,18 @@ static void cs_cmd_recover(char *origin)
 			if (!chanban_find(mc->chan, hostbuf2, e))
 			{
 				chanban_add(mc->chan, hostbuf2, e);
-				snprintf(hostbuf, BUFSIZE, "+%c %s", e, hostbuf2);
-				mode_sts(chansvs.nick, mc->chan->name, hostbuf);
+				modestack_mode_param(chansvs.nick, mc->chan->name, MTYPE_ADD, e, hostbuf2);
 				added_exempt = TRUE;
 			}
 		}
-
-		/* invite them back. */
-		invite_sts(chansvs.me->me, u, mc->chan);
 	}
+
+	modestack_flush_channel(mc->chan->name);
+
+	/* invite them back. must have sent +i before this */
+	if (origin_cu == NULL)
+		invite_sts(chansvs.me->me, u, mc->chan);
+
 	if (added_exempt)
 		notice(chansvs.nick, origin, "Recover complete for \2%s\2, ban exception \2%s\2 added.", mc->chan->name, hostbuf2);
 	else
