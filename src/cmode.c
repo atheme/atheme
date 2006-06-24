@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 5538 2006-06-24 22:20:47Z jilles $
+ * $Id: cmode.c 5542 2006-06-24 22:54:44Z jilles $
  */
 
 #include "atheme.h"
@@ -22,7 +22,6 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 	char *pos = parv[0];
 	mychan_t *mc;
 	chanuser_t *cu = NULL;
-	char str[3];
 
 	if ((!pos) || (*pos == '\0'))
 		return;
@@ -68,11 +67,8 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 					chan->modes &= ~mode_list[i].value;
 				}
 
-				str[0] = whatt == MTYPE_ADD ? '+' : '-';
-				str[1] = *pos;
-				str[2] = '\0';
 				if (source)
-					cmode(source->nick, chan->name, str);
+					modestack_mode_simple(source->nick, chan->name, whatt, mode_list[i].value);
 
 				break;
 			}
@@ -86,9 +82,6 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 			if (*pos == ignore_mode_list[i].mode)
 			{
 				matched = TRUE;
-				str[0] = whatt == MTYPE_ADD ? '+' : '-';
-				str[1] = *pos;
-				str[2] = '\0';
 				if (whatt == MTYPE_ADD)
 				{
 					if (++parpos >= parc)
@@ -103,7 +96,7 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 						simple_modes_changed = TRUE;
 					chan->extmodes[i] = sstrdup(parv[parpos]);
 					if (source)
-						cmode(source->nick, chan->name, str, chan->extmodes[i]);
+						modestack_mode_ext(source->nick, chan->name, MTYPE_ADD, i, chan->extmodes[i]);
 				}
 				else
 				{
@@ -114,7 +107,7 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 						chan->extmodes[i] = NULL;
 					}
 					if (source)
-						cmode(source->nick, chan->name, str, ".");
+						modestack_mode_ext(source->nick, chan->name, MTYPE_DEL, i, NULL);
 				}
 				break;
 			}
@@ -135,7 +128,7 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 					simple_modes_changed = TRUE;
 				chan->limit = i;
 				if (source)
-					cmode(source->nick, chan->name, "+l", parv[parpos]);
+					modestack_mode_limit(source->nick, chan->name, MTYPE_ADD, chan->limit);
 			}
 			else
 			{
@@ -144,7 +137,7 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 					simple_modes_changed = TRUE;
 				chan->limit = 0;
 				if (source)
-					cmode(source->nick, chan->name, "-l");
+					modestack_mode_limit(source->nick, chan->name, MTYPE_DEL, 0);
 			}
 			continue;
 		}
@@ -166,7 +159,7 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 					simple_modes_changed = TRUE;
 				chan->key = sstrdup(parv[parpos]);
 				if (source)
-					cmode(source->nick, chan->name, "+k", chan->key);
+					modestack_mode_param(source->nick, chan->name, MTYPE_ADD, 'k', chan->key);
 			}
 			else
 			{
@@ -174,7 +167,7 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 					simple_modes_changed = TRUE;
 				chan->modes &= ~CMODE_KEY;
 				if (source)
-					cmode(source->nick, chan->name, "-k", chan->key ? chan->key : "*");
+					modestack_mode_param(source->nick, chan->name, MTYPE_DEL, 'k', chan->key ? chan->key : "*");
 				free(chan->key);
 				chan->key = NULL;
 				/* ratbox typically sends either the key or a `*' on -k, so you
@@ -187,18 +180,13 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 
 		if (strchr(ircd->ban_like_modes, *pos))
 		{
-			char mchar[3];
-
 			if (++parpos >= parc)
 				continue;
 			if (whatt == MTYPE_ADD)
 			{
 				chanban_add(chan, parv[parpos], *pos);
-				mchar[0] = '+';
-				mchar[1] = *pos;
-				mchar[2] = '\0';
 				if (source)
-					cmode(source->nick, chan->name, mchar, parv[parpos]);
+					modestack_mode_param(source->nick, chan->name, MTYPE_ADD, *pos, parv[parpos]);
 			}
 			else
 			{
@@ -206,11 +194,8 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 
 				c = chanban_find(chan, parv[parpos], *pos);
 				chanban_delete(c);
-				mchar[0] = '-';
-				mchar[1] = *pos;
-				mchar[2] = '\0';
 				if (source)
-					cmode(source->nick, chan->name, mchar, parv[parpos]);
+					modestack_mode_param(source->nick, chan->name, MTYPE_DEL, *pos, parv[parpos]);
 			}
 			continue;
 		}
@@ -239,11 +224,8 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 				{
 					cu->modes |= status_mode_list[i].value;
 
-					str[0] = '+';
-					str[1] = *pos;
-					str[2] = '\0';
 					if (source)
-						cmode(source->nick, chan->name, str, CLIENT_NAME(cu->user));
+						modestack_mode_param(source->nick, chan->name, MTYPE_ADD, *pos, CLIENT_NAME(cu->user));
 
 					/* see if they did something we have to undo */
 					if (source == NULL && cu->user->server != me.me && chansvs.me != NULL && (mc = mychan_find(cu->chan->name)) && mc->flags & MC_SECURE)
@@ -251,17 +233,13 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 						if (status_mode_list[i].mode == 'o' && !(chanacs_user_flags(mc, cu->user) & (CA_OP | CA_AUTOOP)))
 						{
 							/* they were opped and aren't on the list, deop them */
-							cmode(chansvs.nick, mc->name, "-o", CLIENT_NAME(cu->user));
+							modestack_mode_param(chansvs.nick, mc->name, MTYPE_DEL, 'o', CLIENT_NAME(cu->user));
 							cu->modes &= ~status_mode_list[i].value;
 						}
 						else if (ircd->uses_halfops && status_mode_list[i].mode == ircd->halfops_mchar[1] && !(chanacs_user_flags(mc, cu->user) & (CA_HALFOP | CA_AUTOHALFOP)))
 						{
 							/* same for halfops -- jilles */
-							char mchar[3];
-
-							strlcpy(mchar, ircd->halfops_mchar, sizeof mchar);
-							mchar[0] = '-';
-							cmode(chansvs.nick, mc->name, mchar, CLIENT_NAME(cu->user));
+							modestack_mode_param(chansvs.nick, mc->name, MTYPE_DEL, ircd->halfops_mchar[1], CLIENT_NAME(cu->user));
 							cu->modes &= ~status_mode_list[i].value;
 						}
 					}
@@ -284,11 +262,8 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 						continue;
 					}
 
-					str[0] = '-';
-					str[1] = *pos;
-					str[2] = '\0';
 					if (source)
-						cmode(source->nick, chan->name, str, CLIENT_NAME(cu->user));
+						modestack_mode_param(source->nick, chan->name, MTYPE_DEL, *pos, CLIENT_NAME(cu->user));
 
 					cu->modes &= ~status_mode_list[i].value;
 				}
