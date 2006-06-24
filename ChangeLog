@@ -1,3 +1,12 @@
+jilles      2006/06/24 21:02:10 UTC	(20060624-5536)
+  Log:
+  hyperion doesn't have channel mode +p.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/protocol/hyperion.c (File Modified) 
+
+
 jilles      2006/06/24 18:30:43 UTC	(20060624-5534)
   Log:
   Make sure to also deprotect not logged in users if appropriate.

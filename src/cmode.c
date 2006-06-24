@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 5530 2006-06-24 17:30:52Z jilles $
+ * $Id: cmode.c 5538 2006-06-24 22:20:47Z jilles $
  */
 
 #include "atheme.h"
@@ -611,6 +611,70 @@ static void modestack_flush_callback(void *arg)
 {
 	modestack_flush((struct modestackdata *)arg);
 	((struct modestackdata *)arg)->event = 0;
+}
+
+/* flush pending modes for a certain channel */
+void modestack_flush_channel(char *channel)
+{
+	if (channel == NULL || !irccasecmp(channel, modestackdata.channel))
+		modestack_flush(&modestackdata);
+}
+
+/* forget pending modes for a certain channel */
+void modestack_forget_channel(char *channel)
+{
+	if (channel == NULL || !irccasecmp(channel, modestackdata.channel))
+		modestack_clear(&modestackdata);
+}
+
+/* stack simple modes without parameters */
+void modestack_mode_simple(char *source, char *channel, int dir, int32_t flags)
+{
+	struct modestackdata *md;
+
+	md = modestack_init(source, channel);
+	modestack_add_simple(md, dir, flags);
+	if (!md->event)
+		md->event = event_add_once("flush_cmode_callback", modestack_flush_callback, md, 0);
+}
+
+/* stack a limit */
+void modestack_mode_limit(char *source, char *channel, int dir, uint32_t limit)
+{
+	struct modestackdata *md;
+
+	md = modestack_init(source, channel);
+	modestack_add_limit(md, dir, limit);
+	if (!md->event)
+		md->event = event_add_once("flush_cmode_callback", modestack_flush_callback, md, 0);
+}
+
+/* stack a non-standard type C mode */
+void modestack_mode_ext(char *source, char *channel, int dir, int i, char *value)
+{
+	struct modestackdata *md;
+
+	md = modestack_init(source, channel);
+	if (i < 0 || i >= MAXEXTMODES)
+	{
+		slog(LG_ERROR, "modestack_mode_ext(): i=%d out of range (value=\"%s\")",
+				i, value);
+		return;
+	}
+	modestack_add_ext(md, dir, i, value);
+	if (!md->event)
+		md->event = event_add_once("flush_cmode_callback", modestack_flush_callback, md, 0);
+}
+
+/* stack a type A, B or E mode */
+void modestack_mode_param(char *source, char *channel, int dir, char type, char *value)
+{
+	struct modestackdata *md;
+
+	md = modestack_init(source, channel);
+	modestack_add_param(md, dir, type, value);
+	if (!md->event)
+		md->event = event_add_once("flush_cmode_callback", modestack_flush_callback, md, 0);
 }
 
 #define CMTYPE_UNKNOWN 0

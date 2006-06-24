@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 5530 2006-06-24 17:30:52Z jilles $
+ * $Id: extern.h 5538 2006-06-24 22:20:47Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -20,8 +20,14 @@ E void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 E void channel_mode_va(user_t *source, channel_t *chan, uint8_t parc, char *parv0, ...);
 E void clear_simple_modes(channel_t *c);
 E char *channel_modes(channel_t *c, boolean_t doparams);
-E void user_mode(user_t *user, char *modes);
+E void modestack_flush_channel(char *channel);
+E void modestack_forget_channel(char *channel);
+E void modestack_mode_simple(char *source, char *channel, int dir, int32_t flags);
+E void modestack_mode_limit(char *source, char *channel, int dir, uint32_t limit);
+E void modestack_mode_ext(char *source, char *channel, int dir, int i, char *value);
+E void modestack_mode_param(char *source, char *channel, int dir, char type, char *value);
 E void cmode(char *sender, ...);
+E void user_mode(user_t *user, char *modes);
 E void check_modes(mychan_t *mychan, boolean_t sendnow);
 
 /* conf.c */
