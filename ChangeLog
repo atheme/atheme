@@ -1,3 +1,12 @@
+jilles      2006/06/23 18:25:01 UTC	(20060623-5526)
+  Log:
+  Don't allow mlocking a key starting with a colon or containing a comma.
+  
+
+  Changes:	Modified:
+  +5 -0		trunk/modules/chanserv/set.c (File Modified) 
+
+
 jilles      2006/06/23 17:26:26 UTC	(20060623-5524)
   Log:
   - Don't allow mlocking a key longer than 23 characters,

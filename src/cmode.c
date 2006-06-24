@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 5520 2006-06-23 16:03:29Z jilles $
+ * $Id: cmode.c 5528 2006-06-24 17:13:38Z jilles $
  */
 
 #include "atheme.h"
@@ -335,6 +335,385 @@ void channel_mode_va(user_t *source, channel_t *chan, uint8_t parc, char *parv0,
 	channel_mode(source, chan, parc, parv);
 }
 
+static struct modestackdata {
+	char source[HOSTLEN]; /* name */
+	char channel[CHANNELLEN];
+	int32_t modes_on;
+	int32_t modes_off;
+	uint32_t limit;
+	char extmodes[MAXEXTMODES][512];
+	boolean_t limitused, extmodesused[MAXEXTMODES];
+	char pmodes[2*MAXMODES+2];
+	char params[512]; /* includes leading space */
+	int totalparamslen; /* includes leading space */
+	int totallen;
+	int paramcount;
+
+	uint32_t event;
+} modestackdata;
+
+static void modestack_calclen(struct modestackdata *md);
+
+static void modestack_debugprint(struct modestackdata *md)
+{
+	int i;
+
+	slog(LG_DEBUG, "modestack_debugprint(): %s MODE %s", md->source, md->channel);
+	slog(LG_DEBUG, "simple %x/%x", md->modes_on, md->modes_off);
+	if (md->limitused)
+		slog(LG_DEBUG, "limit %u", (unsigned)md->limit);
+	for (i = 0; i < MAXEXTMODES; i++)
+		if (md->extmodesused[i])
+			slog(LG_DEBUG, "ext %d %s", i, md->extmodes[i]);
+	slog(LG_DEBUG, "pmodes %s%s", md->pmodes, md->params);
+	modestack_calclen(md);
+	slog(LG_DEBUG, "totallen %d/%d", md->totalparamslen, md->totallen);
+}
+
+/* calculates the length fields */
+static void modestack_calclen(struct modestackdata *md)
+{
+	int i;
+	const char *p;
+
+	md->totallen = strlen(md->source) + USERLEN + HOSTLEN + 1 + 4 + 1 +
+		10 + strlen(md->channel) + 1;
+	md->totallen += 2 + 32 + strlen(md->pmodes);
+	md->totalparamslen = 0;
+	md->paramcount = (md->limitused != 0);
+	if (md->limitused && md->limit != 0)
+		md->totalparamslen += 11;
+	for (i = 0; i < MAXEXTMODES; i++)
+		if (md->extmodesused[i])
+		{
+			md->paramcount++;
+			if (*md->extmodes[i] != '\0')
+				md->totalparamslen += 1 + strlen(md->extmodes[i]);
+		}
+	md->totalparamslen += strlen(md->params);
+	p = md->params;
+	while (*p != '\0')
+		if (*p++ == ' ')
+			md->paramcount++;
+	md->totallen += md->totalparamslen;
+}
+
+/* clears the data */
+static void modestack_clear(struct modestackdata *md)
+{
+	int i;
+
+	md->modes_on = 0;
+	md->modes_off = 0;
+	md->limitused = 0;
+	for (i = 0; i < MAXEXTMODES; i++)
+		md->extmodesused[i] = 0, *md->extmodes[i] = '\0';
+	md->pmodes[0] = '\0';
+	md->params[0] = '\0';
+	md->totallen = 0;
+	md->totalparamslen = 0;
+	md->paramcount = 0;
+}
+
+/* sends a MODE and clears the data */
+static void modestack_flush(struct modestackdata *md)
+{
+	char buf[512];
+	char *end, *p;
+	int dir = MTYPE_NUL;
+	int i;
+
+	slog(LG_DEBUG, "modestack_flush(): flushing...");
+	modestack_debugprint(md);
+
+	p = buf;
+	end = buf + sizeof buf;
+
+	/* first do the mode letters */
+	if (md->modes_on)
+	{
+		if (dir != MTYPE_ADD)
+			dir = MTYPE_ADD, *p++ = '+';
+		strlcpy(p, flags_to_string(md->modes_on), end - p);
+		p += strlen(p);
+	}
+	if (md->limitused && md->limit != 0)
+	{
+		if (dir != MTYPE_ADD)
+			dir = MTYPE_ADD, *p++ = '+';
+		*p++ = 'l';
+	}
+	for (i = 0; i < MAXEXTMODES; i++)
+	{
+		if (md->extmodesused[i] && *md->extmodes[i] != '\0')
+		{
+			if (dir != MTYPE_ADD)
+				dir = MTYPE_ADD, *p++ = '+';
+			*p++ = ignore_mode_list[i].mode;
+		}
+	}
+	if (md->modes_off)
+	{
+		if (dir != MTYPE_DEL)
+			dir = MTYPE_DEL, *p++ = '-';
+		strlcpy(p, flags_to_string(md->modes_off), end - p);
+		p += strlen(p);
+	}
+	if (md->limitused && md->limit == 0)
+	{
+		if (dir != MTYPE_DEL)
+			dir = MTYPE_DEL, *p++ = '-';
+		*p++ = 'l';
+	}
+	for (i = 0; i < MAXEXTMODES; i++)
+	{
+		if (md->extmodesused[i] && *md->extmodes[i] == '\0')
+		{
+			if (dir != MTYPE_DEL)
+				dir = MTYPE_DEL, *p++ = '-';
+			*p++ = ignore_mode_list[i].mode;
+		}
+	}
+	strlcpy(p, md->pmodes + ((dir == MTYPE_ADD && *md->pmodes == '+') || (dir == MTYPE_DEL && *md->pmodes == '-') ? 1 : 0), end - p);
+	p += strlen(p);
+	if (p == buf)
+	{
+		slog(LG_DEBUG, "modestack_flush(): nothing to do");
+		return;
+	}
+	if (p + md->totalparamslen >= end)
+	{
+		slog(LG_ERROR, "modestack_flush() overflow: %s", buf);
+		modestack_clear(md);
+		return;
+	}
+	/* now the parameters, in the same order */
+	if (md->limitused && md->limit != 0)
+	{
+		snprintf(p, end - p, " %u", (unsigned)md->limit);
+		p += strlen(p);
+	}
+	for (i = 0; i < MAXEXTMODES; i++)
+	{
+		if (md->extmodesused[i] && *md->extmodes[i] != '\0')
+		{
+			snprintf(p, end - p, " %s", md->extmodes[i]);
+			p += strlen(p);
+		}
+	}
+	if (*md->params)
+	{
+		strlcpy(p, md->params, end - p);
+		p += strlen(p);
+	}
+	mode_sts(md->source, md->channel, buf);
+	modestack_clear(md);
+}
+
+static struct modestackdata *modestack_init(char *source, char *channel)
+{
+	if (irccasecmp(source, modestackdata.source) || irccasecmp(channel, modestackdata.channel))
+	{
+		slog(LG_DEBUG, "modestack_init(): new source/channel, flushing");
+		modestack_flush(&modestackdata);
+	}
+	strlcpy(modestackdata.source, source, sizeof modestackdata.source);
+	strlcpy(modestackdata.channel, channel, sizeof modestackdata.channel);
+	return &modestackdata;
+}
+
+static void modestack_add_simple(struct modestackdata *md, int dir, int32_t flags)
+{
+	if (dir == MTYPE_ADD)
+		md->modes_on |= flags, md->modes_off &= ~flags;
+	else if (dir = MTYPE_DEL)
+		md->modes_off |= flags, md->modes_on &= ~flags;
+}
+
+static void modestack_add_limit(struct modestackdata *md, int dir, uint32_t limit)
+{
+	md->limitused = 0;
+	modestack_calclen(md);
+	if (md->paramcount >= MAXMODES)
+		modestack_flush(md);
+	if (dir == MTYPE_ADD)
+	{
+		if (md->totallen + 11 > 512)
+			modestack_flush(md);
+		md->limit = limit;
+	}
+	else if (dir = MTYPE_DEL)
+		md->limit = 0;
+	md->limitused = 1;
+}
+
+static void modestack_add_ext(struct modestackdata *md, int dir, int i, char *value)
+{
+	md->extmodesused[i] = 0;
+	modestack_calclen(md);
+	if (md->paramcount >= MAXMODES)
+		modestack_flush(md);
+	if (dir == MTYPE_ADD)
+	{
+		if (md->totallen + 1 + strlen(value) > 512)
+			modestack_flush(md);
+		strlcpy(md->extmodes[i], value, sizeof md->extmodes[i]);
+	}
+	else if (dir = MTYPE_DEL)
+		md->extmodes[i][0] = '\0';
+	md->extmodesused[i] = 1;
+}
+
+static void modestack_add_param(struct modestackdata *md, int dir, char type, char *value)
+{
+	char *p;
+	int n = 0, i;
+	char dir2 = MTYPE_NUL;
+	char str[3];
+
+	p = md->pmodes;
+	while (*p != '\0')
+	{
+		if (*p == '+')
+			dir2 = MTYPE_ADD;
+		else if (*p == '-')
+			dir2 = MTYPE_DEL;
+		else
+			n++;
+		p++;
+	}
+	n += (md->limitused != 0);
+	for (i = 0; i < MAXEXTMODES; i++)
+		n += (md->extmodesused[i] != 0);
+	modestack_calclen(md);
+	if (n >= MAXMODES || md->totallen + (dir != dir2) + 2 + strlen(value) > 512 || (type == 'k' && strchr(md->pmodes, 'k')))
+	{
+		modestack_flush(md);
+		dir2 = MTYPE_NUL;
+	}
+	if (dir != dir2)
+	{
+		str[0] = dir == MTYPE_ADD ? '+' : '-';
+		str[1] = type;
+		str[2] = '\0';
+	}
+	else
+	{
+		str[0] = type;
+		str[1] = '\0';
+	}
+	strlcat(md->pmodes, str, sizeof md->pmodes);
+	strlcat(md->params, " ", sizeof md->params);
+	strlcat(md->params, value, sizeof md->params);
+}
+
+void modestack_flush_callback(void *arg)
+{
+	modestack_flush((struct modestackdata *)arg);
+	((struct modestackdata *)arg)->event = 0;
+}
+
+#define CMTYPE_UNKNOWN 0
+#define CMTYPE_SIMPLE 1
+#define CMTYPE_LIMIT 2
+#define CMTYPE_EXT 3
+#define CMTYPE_PARAM 4
+
+/* legacy interface, blah */
+void cmode(char *source, ...)
+{
+	va_list va;
+	char *channel, *modes, m, *param;
+	struct modestackdata *md;
+	int dir = MTYPE_NUL;
+	int type = CMTYPE_UNKNOWN;
+	int i;
+	uint32_t flag;
+
+	if (!source)
+	{
+		/* yuck */
+		modestack_flush(&modestackdata);
+		return;
+	}
+	va_start(va, source);
+	channel = va_arg(va, char *);
+	md = modestack_init(source, channel);
+	modes = va_arg(va, char *);
+	slog(LG_DEBUG, "cmode(): %s MODE %s %s", source, channel, modes);
+	while (*modes != '\0')
+	{
+		m = *modes++;
+		if (m == '+')
+		{
+			dir = MTYPE_ADD;
+			continue;
+		}
+		if (m == '-')
+		{
+			dir = MTYPE_DEL;
+			continue;
+		}
+		if (m == 'k' || strchr(ircd->ban_like_modes, m))
+			type = CMTYPE_PARAM;
+		else if (m == 'l')
+			type = CMTYPE_LIMIT;
+		else
+		{
+			for (i = 0; mode_list[i].mode != '\0'; i++)
+			{
+				if (m == mode_list[i].mode)
+					type = CMTYPE_SIMPLE, flag = mode_list[i].value;
+			}
+			for (i = 0; status_mode_list[i].mode != '\0'; i++)
+			{
+				if (m == status_mode_list[i].mode)
+					type = CMTYPE_PARAM;
+			}
+			/* this one must be last */
+			for (i = 0; ignore_mode_list[i].mode != '\0'; i++)
+			{
+				if (m == ignore_mode_list[i].mode)
+				{
+					type = CMTYPE_EXT;
+					break;
+				}
+			}
+		}
+		if (type == CMTYPE_UNKNOWN)
+		{
+			slog(LG_INFO, "cmode(): unknown mode %c", m);
+			continue;
+		}
+		if (type == CMTYPE_PARAM || (dir == MTYPE_ADD && type != CMTYPE_SIMPLE))
+			param = va_arg(va, char *);
+		else
+			param = NULL;
+		switch (type)
+		{
+			case CMTYPE_SIMPLE:
+				modestack_add_simple(md, dir, flag);
+				break;
+			case CMTYPE_LIMIT:
+				modestack_add_limit(md, dir, dir == MTYPE_ADD ? atoi(param) : 0);
+				break;
+			case CMTYPE_EXT:
+				modestack_add_ext(md, dir, i, param);
+				break;
+			case CMTYPE_PARAM:
+				modestack_add_param(md, dir, m, param);
+		}
+	}
+	va_end(va);
+	/*
+	 * We now schedule the stack to occur as soon as we return to io_loop. This makes
+	 * stacking 1:1 transactionally, but really, that's how it should work. Lag is
+	 * bad, people! --nenolod
+	 */
+	if (!md->event)
+		md->event = event_add_once("flush_cmode_callback", modestack_flush_callback, md, 0);
+}
+
 /* Clear all simple modes (+imnpstkl etc) on a channel */
 void clear_simple_modes(channel_t *c)
 {
@@ -474,241 +853,6 @@ void user_mode(user_t *user, char *modes)
 		}
 		modes++;
 	}
-}
-
-/* mode stacking code was borrowed from cygnus.
- * credit to darcy grexton and andrew church.
- */
-
-/* mode stacking struct */
-struct modedata_
-{
-	time_t used;
-	int last_add;
-	char channel[64];
-	char sender[32];
-	int32_t binmodes_on;
-	int32_t binmodes_off;
-	char opmodes[MAXMODES * 2 + 1];
-	char params[BUFSIZE];
-	int nparams;
-	int paramslen;
-	uint32_t event;
-} modedata[3];
-
-/* flush stacked and waiting cmodes */
-static void flush_cmode(struct modedata_ *md)
-{
-	char buf[BUFSIZE];
-	int len = 0;
-	char lastc = 0;
-
-	if (!md->binmodes_on && !md->binmodes_off && !*md->opmodes)
-	{
-		memset(md, 0, sizeof(*md));
-		md->last_add = -1;
-		return;
-	}
-
-	if (md->binmodes_off)
-	{
-		len += snprintf(buf + len, sizeof(buf) - len, "-%s", flags_to_string(md->binmodes_off));
-		lastc = '-';
-	}
-
-	if (md->binmodes_on)
-	{
-		len += snprintf(buf + len, sizeof(buf) - len, "+%s", flags_to_string(md->binmodes_on));
-		lastc = '+';
-	}
-
-	if (*md->opmodes)
-	{
-		if (*md->opmodes == lastc)
-			memmove(md->opmodes, md->opmodes + 1, strlen(md->opmodes + 1) + 1);
-		len += snprintf(buf + len, sizeof(buf) - len, "%s", md->opmodes);
-	}
-
-	if (md->paramslen)
-		snprintf(buf + len, sizeof(buf) - len, " %s", md->params);
-
-	mode_sts(md->sender, md->channel, buf);
-
-	memset(md, 0, sizeof(*md));
-	md->last_add = -1;
-}
-
-void flush_cmode_callback(void *arg)
-{
-	flush_cmode((struct modedata_ *)arg);
-}
-
-/* stacks channel modes to be applied to a channel */
-void cmode(char *sender, ...)
-{
-	va_list args;
-	char *channel, *modes;
-	struct modedata_ *md;
-	int which = -1, add;
-	int32_t flag;
-	int i;
-	char c, *s;
-	int takesparams; /* 0->no, 1->only when set, 2->always */
-
-	if (!sender)
-	{
-		for (i = 0; i < 3; i++)
-		{
-			if (modedata[i].used)
-				flush_cmode(&modedata[i]);
-		}
-		return;
-	}
-
-	va_start(args, sender);
-	channel = va_arg(args, char *);
-	modes = va_arg(args, char *);
-
-	for (i = 0; i < 3; i++)
-	{
-		if ((modedata[i].used) && (!strcasecmp(modedata[i].channel, channel)))
-		{
-			if (strcasecmp(modedata[i].sender, sender))
-				flush_cmode(&modedata[i]);
-
-			which = i;
-			break;
-		}
-	}
-
-	if (which < 0)
-	{
-		for (i = 0; i < 3; i++)
-		{
-			if (!modedata[i].used)
-			{
-				which = i;
-				modedata[which].last_add = -1;
-				break;
-			}
-		}
-	}
-
-	if (which < 0)
-	{
-		int oldest = 0;
-		time_t oldest_time = modedata[0].used;
-
-		for (i = 1; i < 3; i++)
-		{
-			if (modedata[i].used < oldest_time)
-			{
-				oldest_time = modedata[i].used;
-				oldest = i;
-			}
-		}
-
-		flush_cmode(&modedata[oldest]);
-		which = oldest;
-		modedata[which].last_add = -1;
-	}
-
-	md = &modedata[which];
-	strscpy(md->sender, sender, 32);
-	strscpy(md->channel, channel, 64);
-
-	add = -1;
-
-	while ((c = *modes++))
-	{
-		if (c == '+')
-		{
-			add = 1;
-			continue;
-		}
-		else if (c == '-')
-		{
-			add = 0;
-			continue;
-		}
-		else if (add < 0)
-			continue;
-
-		if (c == 'k' || strchr(ircd->ban_like_modes, c))
-			takesparams = 2;
-		else if (c == 'l')
-			takesparams = 1;
-		else
-		{
-			takesparams = 0;
-			for (i = 0; status_mode_list[i].mode != '\0'; i++)
-			{
-				if (c == status_mode_list[i].mode)
-					takesparams = 2;
-			}
-			for (i = 0; ignore_mode_list[i].mode != '\0'; i++)
-			{
-				if (c == ignore_mode_list[i].mode)
-					takesparams = 1; /* may not be true */
-			}
-		}
-		if (takesparams)
-		{
-			if (md->nparams >= MAXMODES || md->paramslen >= MAXPARAMSLEN)
-			{
-				flush_cmode(&modedata[which]);
-				strscpy(md->sender, sender, 32);
-				strscpy(md->channel, channel, 64);
-				md->used = CURRTIME;
-			}
-
-			s = md->opmodes + strlen(md->opmodes);
-
-			if (add != md->last_add)
-			{
-				*s++ = add ? '+' : '-';
-				md->last_add = add;
-			}
-
-			*s++ = c;
-
-			if (!add && takesparams == 1)
-				break;
-
-			s = va_arg(args, char *);
-
-			md->paramslen += snprintf(md->params + md->paramslen, MAXPARAMSLEN + 1 - md->paramslen, "%s%s", md->paramslen ? " " : "", s);
-
-			md->nparams++;
-
-		}
-		else
-		{
-			flag = mode_to_flag(c);
-
-			if (add)
-			{
-				md->binmodes_on |= flag;
-				md->binmodes_off &= ~flag;
-			}
-			else
-			{
-				md->binmodes_off |= flag;
-				md->binmodes_on &= ~flag;
-			}
-		}
-	}
-
-	va_end(args);
-	md->used = CURRTIME;
-
-	/*
-	 * We now schedule the stack to occur as soon as we return to io_loop. This makes
-	 * stacking 1:1 transactionally, but really, that's how it should work. Lag is
-	 * bad, people! --nenolod
-	 */
-	if (!md->event)
-		md->event = event_add_once("flush_cmode_callback", flush_cmode_callback, md, 0);
 }
 
 void check_modes(mychan_t *mychan, boolean_t sendnow)
