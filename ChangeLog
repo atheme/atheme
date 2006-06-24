@@ -1,3 +1,12 @@
+jilles      2006/06/24 18:19:51 UTC	(20060624-5532)
+  Log:
+  ChanServ CLOSE: simplify using channel_mode_va().
+  
+
+  Changes:	Modified:
+  +3 -23	trunk/modules/chanserv/close.c (File Modified) 
+
+
 jilles      2006/06/24 17:30:52 UTC	(20060624-5530)
   Log:
   Make flush_cmode_callback() static.

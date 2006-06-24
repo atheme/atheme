@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5492 2006-06-21 21:23:05Z jilles $
+ * $Id: main.c 5534 2006-06-24 18:30:43Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5492 2006-06-21 21:23:05Z jilles $",
+	"$Id: main.c 5534 2006-06-24 18:30:43Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -341,9 +341,9 @@ static void cs_join(chanuser_t *cu)
 	}
 
 	/* XXX still uses should_protect() */
-	if (ircd->uses_protect && u->myuser != NULL)
+	if (ircd->uses_protect)
 	{
-		if (should_protect(mc, u->myuser))
+		if (u->myuser != NULL && should_protect(mc, u->myuser))
 		{
 			if (!(noop || cu->modes & ircd->protect_mode))
 			{
