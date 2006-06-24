@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 5472 2006-06-21 00:07:24Z jilles $
+ * $Id: atheme.c 5546 2006-06-24 23:08:30Z jilles $
  */
 
 #include "atheme.h"
@@ -22,6 +22,7 @@ me_t me;
 cnt_t cnt;
 
 char *config_file;
+char *log_path;
 boolean_t cold_start = FALSE;
 
 #ifndef _WIN32
@@ -35,6 +36,7 @@ static void print_help(void)
 	       "-c <file>    Specify the config file\n"
 	       "-d           Start in debugging mode\n"
 	       "-h           Print this message and exit\n"
+	       "-l <file>    Specify the log file\n"
 	       "-n           Don't fork into the background (log screen + log file)\n"
 	       "-p <file>    Specify the pid file (will be overwritten)\n"
 	       "-v           Print version information and exit\n");
@@ -53,6 +55,7 @@ static void print_version(void)
 int main(int argc, char *argv[])
 {
 	boolean_t have_conf = FALSE;
+	boolean_t have_log = FALSE;
 	char buf[32];
 	int i, pid, r;
 	FILE *pid_file;
@@ -81,7 +84,7 @@ int main(int argc, char *argv[])
 #endif
 	
 	/* do command-line options */
-	while ((r = getopt(argc, argv, "c:dhnp:v")) != -1)
+	while ((r = getopt(argc, argv, "c:dhl:np:v")) != -1)
 	{
 		switch (r)
 		{
@@ -96,6 +99,10 @@ int main(int argc, char *argv[])
 			  print_help();
 			  exit(EXIT_SUCCESS);
 			  break;
+		  case 'l':
+			  log_path = sstrdup(optarg);
+			  have_log = TRUE;
+			  break;
 		  case 'n':
 			  runflags |= RF_LIVE;
 			  break;
@@ -107,7 +114,7 @@ int main(int argc, char *argv[])
 			  exit(EXIT_SUCCESS);
 			  break;
 		  default:
-			  printf("usage: atheme [-dhnv] [-c conf] [-p pidfile]\n");
+			  printf("usage: atheme [-dhnv] [-c conf] [-l logfile] [-p pidfile]\n");
 			  exit(EXIT_SUCCESS);
 			  break;
 		}
@@ -115,6 +122,9 @@ int main(int argc, char *argv[])
 
 	if (have_conf == FALSE)
 		config_file = sstrdup("etc/atheme.conf");
+
+	if (have_log == FALSE)
+		log_path = sstrdup("var/atheme.log");
 
 	cold_start = TRUE;
 

@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 5538 2006-06-24 22:20:47Z jilles $
+ * $Id: extern.h 5546 2006-06-24 23:08:30Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -51,6 +51,7 @@ E uint32_t allow_flags(uint32_t flags);
 
 /* function.c */
 E FILE *log_file;
+E char *log_path;
 
 E char *gen_pw(int8_t sz);
 

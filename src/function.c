@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 5494 2006-06-22 12:11:13Z jilles $
+ * $Id: function.c 5546 2006-06-24 23:08:30Z jilles $
  */
 
 #include "atheme.h"
@@ -82,7 +82,7 @@ void log_open(void)
 	if (log_file)
 		return;
 
-	if ((log_file = fopen("var/atheme.log", "a")) == NULL)
+	if ((log_file = fopen(log_path, "a")) == NULL)
 	{
 		/* At most one warning per hour */
 		if (me.connected && lastfail + 3600 < CURRTIME)

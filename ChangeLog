@@ -1,3 +1,16 @@
+jilles      2006/06/24 23:02:17 UTC	(20060624-5544)
+  Log:
+  check_modes(): Do not send out a mode if sendnow is false,
+  a key is on the channel and a different key is mlocked.
+  (This does not currently trigger because check_modes() is
+  only called with false on channels which have their
+  modes cleared.)
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/src/cmode.c (File Modified) 
+
+
 jilles      2006/06/24 22:54:44 UTC	(20060624-5542)
   Log:
   channel_mode(): use new modestacker api
