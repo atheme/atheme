@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 5542 2006-06-24 22:54:44Z jilles $
+ * $Id: cmode.c 5544 2006-06-24 23:02:17Z jilles $
  */
 
 #include "atheme.h"
@@ -925,7 +925,8 @@ void check_modes(mychan_t *mychan, boolean_t sendnow)
 		if (mychan->chan->key && strcmp(mychan->chan->key, mychan->mlock_key))
 		{
 			/* some ircds still need this... :\ -- jilles */
-			cmode(chansvs.nick, mychan->name, "-k", mychan->chan->key);
+			if (sendnow)
+				cmode(chansvs.nick, mychan->name, "-k", mychan->chan->key);
 			free(mychan->chan->key);
 			mychan->chan->key = NULL;
 		}
