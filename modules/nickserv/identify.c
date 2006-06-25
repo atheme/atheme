@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY function.
  *
- * $Id: identify.c 5087 2006-04-14 14:59:46Z w00t $
+ * $Id: identify.c 5556 2006-06-25 00:27:47Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/identify", FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 5087 2006-04-14 14:59:46Z w00t $",
+	"$Id: identify.c 5556 2006-06-25 00:27:47Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -213,31 +213,31 @@ static void ns_cmd_identify(char *origin)
 
 				if (ircd->uses_owner && !(cu->modes & ircd->owner_mode) && should_owner(ca->mychan, ca->myuser))
 				{
-					cmode(chansvs.nick, ca->mychan->name, ircd->owner_mchar, CLIENT_NAME(u));
+					modestack_mode_param(chansvs.nick, ca->mychan->name, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(u));
 					cu->modes |= ircd->owner_mode;
 				}
 
 				if (ircd->uses_protect && !(cu->modes & ircd->protect_mode) && should_protect(ca->mychan, ca->myuser))
 				{
-					cmode(chansvs.nick, ca->mychan->name, ircd->protect_mchar, CLIENT_NAME(u));
+					modestack_mode_param(chansvs.nick, ca->mychan->name, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(u));
 					cu->modes |= ircd->protect_mode;
 				}
 
 				if (!(cu->modes & CMODE_OP) && ca->level & CA_AUTOOP)
 				{
-					cmode(chansvs.nick, ca->mychan->name, "+o", CLIENT_NAME(u));
+					modestack_mode_param(chansvs.nick, ca->mychan->name, MTYPE_ADD, 'o', CLIENT_NAME(u));
 					cu->modes |= CMODE_OP;
 				}
 
 				if (ircd->uses_halfops && !(cu->modes & (CMODE_OP | ircd->halfops_mode)) && ca->level & CA_AUTOHALFOP)
 				{
-					cmode(chansvs.nick, ca->mychan->name, "+h", CLIENT_NAME(u));
+					modestack_mode_param(chansvs.nick, ca->mychan->name, MTYPE_ADD, 'h', CLIENT_NAME(u));
 					cu->modes |= ircd->halfops_mode;
 				}
 
 				if (!(cu->modes & (CMODE_OP | ircd->halfops_mode | CMODE_VOICE)) && ca->level & CA_AUTOVOICE)
 				{
-					cmode(chansvs.nick, ca->mychan->name, "+v", CLIENT_NAME(u));
+					modestack_mode_param(chansvs.nick, ca->mychan->name, MTYPE_ADD, 'v', CLIENT_NAME(u));
 					cu->modes |= CMODE_VOICE;
 				}
 			}

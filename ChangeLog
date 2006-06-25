@@ -1,3 +1,19 @@
+jilles      2006/06/25 00:20:34 UTC	(20060625-5554)
+  Log:
+  ChanServ: use new modestacker api
+  
+
+  Changes:	Modified:
+  +8 -8		trunk/modules/chanserv/ban.c (File Modified) 
+  +1 -5		trunk/modules/chanserv/clear_bans.c (File Modified) 
+  +2 -5		trunk/modules/chanserv/clear_users.c (File Modified) 
+  +4 -4		trunk/modules/chanserv/halfop.c (File Modified) 
+  +9 -19	trunk/modules/chanserv/main.c (File Modified) 
+  +4 -4		trunk/modules/chanserv/op.c (File Modified) 
+  +4 -4		trunk/modules/chanserv/voice.c (File Modified) 
+  +6 -6		trunk/modules/chanserv/xop.c (File Modified) 
+
+
 jilles      2006/06/25 00:05:27 UTC	(20060625-5552)
   Log:
   Use UID if appropriate when opping/halfopping/voicing
