@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 4639 2006-01-21 22:06:41Z jilles $
+ * $Id: ban.c 5554 2006-06-25 00:20:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", FALSE, _modinit, _moddeinit,
-	"$Id: ban.c 4639 2006-01-21 22:06:41Z jilles $",
+	"$Id: ban.c 5554 2006-06-25 00:20:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -107,7 +107,7 @@ static void cs_cmd_ban (char *origin)
 
 	if (validhostmask(target))
 	{
-		cmode(chansvs.nick, c->name, "+b", target);
+		modestack_mode_param(chansvs.nick, c->name, MTYPE_ADD, 'b', target);
 		chanban_add(c, target, 'b');
 		logcommand(chansvs.me, u, CMDLOG_DO, "%s BAN %s", mc->name, target);
 		if (!chanuser_find(mc->chan, u))
@@ -123,7 +123,7 @@ static void cs_cmd_ban (char *origin)
 		strlcat(hostbuf, "*!*@", BUFSIZE);
 		strlcat(hostbuf, tu->vhost, BUFSIZE);
 
-		cmode(chansvs.nick, c->name, "+b", hostbuf);
+		modestack_mode_param(chansvs.nick, c->name, MTYPE_ADD, 'b', hostbuf);
 		chanban_add(c, hostbuf, 'b');
 		logcommand(chansvs.me, u, CMDLOG_DO, "%s BAN %s (for user %s!%s@%s)", mc->name, hostbuf, tu->nick, tu->user, tu->vhost);
 		if (!chanuser_find(mc->chan, u))
@@ -187,7 +187,7 @@ static void cs_cmd_unban (char *origin)
 
 		if (cb)
 		{
-			cmode(chansvs.nick, c->name, "-b", target);
+			modestack_mode_param(chansvs.nick, c->name, MTYPE_DEL, 'b', target);
 			chanban_delete(cb);
 			logcommand(chansvs.me, u, CMDLOG_DO, "%s UNBAN %s", mc->name, target);
 			if (!chanuser_find(mc->chan, u))
@@ -219,7 +219,7 @@ static void cs_cmd_unban (char *origin)
 			if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2) || !match(cb->mask, hostbuf3))
 			{
 				logcommand(chansvs.me, u, CMDLOG_DO, "%s UNBAN %s (for user %s)", mc->name, cb->mask, hostbuf2);
-				cmode(chansvs.nick, c->name, "-b", cb->mask);
+				modestack_mode_param(chansvs.nick, c->name, MTYPE_DEL, 'b', cb->mask);
 				chanban_delete(cb);
 				count++;
 			}
@@ -280,7 +280,7 @@ static void cs_fcmd_ban (char *origin, char *channel)
 
 	if (validhostmask(target))
 	{
-		cmode(chansvs.nick, c->name, "+b", target);
+		modestack_mode_param(chansvs.nick, c->name, MTYPE_ADD, 'b', target);
 		chanban_add(c, target, 'b');
 		logcommand(chansvs.me, u, CMDLOG_DO, "%s BAN %s", mc->name, target);
 		return;
@@ -294,7 +294,7 @@ static void cs_fcmd_ban (char *origin, char *channel)
 		strlcat(hostbuf, "*!*@", BUFSIZE);
 		strlcat(hostbuf, tu->vhost, BUFSIZE);
 
-		cmode(chansvs.nick, c->name, "+b", hostbuf);
+		modestack_mode_param(chansvs.nick, c->name, MTYPE_ADD, 'b', hostbuf);
 		chanban_add(c, hostbuf, 'b');
 		logcommand(chansvs.me, u, CMDLOG_DO, "%s BAN %s (for user %s!%s@%s)", mc->name, hostbuf, tu->nick, tu->user, tu->vhost);
 		return;
@@ -355,7 +355,7 @@ static void cs_fcmd_unban (char *origin, char *channel)
 
 		if (cb)
 		{
-			cmode(chansvs.nick, c->name, "-b", target);
+			modestack_mode_param(chansvs.nick, c->name, MTYPE_DEL, 'b', target);
 			chanban_delete(cb);
 			logcommand(chansvs.me, u, CMDLOG_DO, "%s UNBAN %s", mc->name, target);
 		}
@@ -385,7 +385,7 @@ static void cs_fcmd_unban (char *origin, char *channel)
 			if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2) || !match(cb->mask, hostbuf3))
 			{
 				logcommand(chansvs.me, u, CMDLOG_DO, "%s UNBAN %s (for user %s)", mc->name, cb->mask, hostbuf2);
-				cmode(chansvs.nick, c->name, "-b", cb->mask);
+				modestack_mode_param(chansvs.nick, c->name, MTYPE_DEL, 'b', cb->mask);
 				chanban_delete(cb);
 				count++;
 			}

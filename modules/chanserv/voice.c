@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService VOICE functions.
  *
- * $Id: voice.c 4745 2006-01-31 02:26:19Z nenolod $
+ * $Id: voice.c 5554 2006-06-25 00:20:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/voice", FALSE, _modinit, _moddeinit,
-	"$Id: voice.c 4745 2006-01-31 02:26:19Z nenolod $",
+	"$Id: voice.c 5554 2006-06-25 00:20:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -116,7 +116,7 @@ static void cs_cmd_voice(char *origin)
 		return;
 	}
 
-	cmode(chansvs.nick, chan, "+v", CLIENT_NAME(tu));
+	modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'v', CLIENT_NAME(tu));
 	cu->modes |= CMODE_VOICE;
 
 	/* TODO: Add which username had access to perform the command */
@@ -179,7 +179,7 @@ static void cs_cmd_devoice(char *origin)
 		return;
 	}
 
-	cmode(chansvs.nick, chan, "-v", CLIENT_NAME(tu));
+	modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'v', CLIENT_NAME(tu));
 	cu->modes &= ~CMODE_VOICE;
 
 	/* TODO: Add which username had access to perform the command */
@@ -237,7 +237,7 @@ static void cs_fcmd_voice(char *origin, char *chan)
 			continue;
 		}
 
-		cmode(chansvs.nick, chan, "+v", CLIENT_NAME(tu));
+		modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'v', CLIENT_NAME(tu));
 		cu->modes |= CMODE_VOICE;
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s VOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	} while ((nick = strtok(NULL, " ")) != NULL);
@@ -290,7 +290,7 @@ static void cs_fcmd_devoice(char *origin, char *chan)
 			continue;
 		}
 
-		cmode(chansvs.nick, chan, "-v", CLIENT_NAME(tu));
+		modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'v', CLIENT_NAME(tu));
 		cu->modes &= ~CMODE_VOICE;
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s DEVOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	} while ((nick = strtok(NULL, " ")) != NULL);
