@@ -1,3 +1,13 @@
+jilles      2006/06/25 00:27:47 UTC	(20060625-5556)
+  Log:
+  NickServ IDENTIFY, UserServ LOGIN: use new modestacker api
+  
+
+  Changes:	Modified:
+  +5 -5		trunk/modules/nickserv/identify.c (File Modified) 
+  +5 -5		trunk/modules/userserv/login.c (File Modified) 
+
+
 jilles      2006/06/25 00:20:34 UTC	(20060625-5554)
   Log:
   ChanServ: use new modestacker api
