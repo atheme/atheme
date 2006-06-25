@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5554 2006-06-25 00:20:34Z jilles $
+ * $Id: main.c 5560 2006-06-25 00:46:21Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5554 2006-06-25 00:20:34Z jilles $",
+	"$Id: main.c 5560 2006-06-25 00:46:21Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -40,7 +40,7 @@ static void join_registered(boolean_t all)
 		{
 			mychan_t *mc = n->data;
 
-			if (all == TRUE)
+			if (all)
 			{
 				join(mc->name, chansvs.nick);
 				continue;
@@ -328,7 +328,7 @@ static void cs_join(chanuser_t *cu)
 				cu->modes |= ircd->owner_mode;
 			}
 		}
-		else if (secure == TRUE && (cu->modes & ircd->owner_mode))
+		else if (secure && (cu->modes & ircd->owner_mode))
 		{
 			modestack_mode_param(chansvs.nick, chan->name, MTYPE_DEL, ircd->owner_mchar[1], CLIENT_NAME(u));
 			cu->modes &= ~ircd->owner_mode;
@@ -346,7 +346,7 @@ static void cs_join(chanuser_t *cu)
 				cu->modes |= ircd->protect_mode;
 			}
 		}
-		else if (secure == TRUE && (cu->modes & ircd->protect_mode))
+		else if (secure && (cu->modes & ircd->protect_mode))
 		{
 			modestack_mode_param(chansvs.nick, chan->name, MTYPE_DEL, ircd->protect_mchar[1], CLIENT_NAME(u));
 			cu->modes &= ~ircd->protect_mode;
@@ -361,7 +361,7 @@ static void cs_join(chanuser_t *cu)
 			cu->modes |= CMODE_OP;
 		}
 	}
-	else if (secure == TRUE && (cu->modes & CMODE_OP) && !(flags & CA_OP))
+	else if (secure && (cu->modes & CMODE_OP) && !(flags & CA_OP))
 	{
 		modestack_mode_param(chansvs.nick, chan->name, MTYPE_DEL, 'o', CLIENT_NAME(u));
 		cu->modes &= ~CMODE_OP;
@@ -377,7 +377,7 @@ static void cs_join(chanuser_t *cu)
 				cu->modes |= ircd->halfops_mode;
 			}
 		}
-		else if (secure == TRUE && (cu->modes & ircd->halfops_mode) && !(flags & CA_HALFOP))
+		else if (secure && (cu->modes & ircd->halfops_mode) && !(flags & CA_HALFOP))
 		{
 			modestack_mode_param(chansvs.nick, chan->name, MTYPE_DEL, 'h', CLIENT_NAME(u));
 			cu->modes &= ~ircd->halfops_mode;
