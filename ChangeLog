@@ -1,3 +1,14 @@
+jilles      2006/06/25 01:11:16 UTC	(20060625-5562)
+  Log:
+  ChanServ CLEAR USERS:
+  More sensible modestacker handling, make sure the stacker
+  is flushed before we start kicking.
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/modules/chanserv/clear_users.c (File Modified) 
+
+
 jilles      2006/06/25 00:46:21 UTC	(20060625-5560)
   Log:
   chanserv/main: more == TRUE removal
