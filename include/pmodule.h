@@ -4,7 +4,7 @@
  *
  * Protocol module stuff.
  *
- * $Id: pmodule.h 4813 2006-02-10 15:02:54Z nenolod $
+ * $Id: pmodule.h 5582 2006-06-28 17:49:51Z jilles $
  */
 
 #ifndef PMODULE_H
@@ -39,7 +39,7 @@ E boolean_t backend_loaded;
 #define PROTOCOL_HYPERION		5
 #define PROTOCOL_INSPIRCD		6
 #define PROTOCOL_IRCNET			7
-#define PROTOCOL_MONKEY			8
+#define PROTOCOL_MONKEY			8 /* obsolete */
 #define PROTOCOL_PLEXUS			9
 #define PROTOCOL_PTLINK			10
 #define PROTOCOL_RATBOX			11

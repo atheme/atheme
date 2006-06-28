@@ -1,3 +1,14 @@
+jilles      2006/06/28 15:48:24 UTC	(20060628-5580)
+  Log:
+  ChanServ UNBAN: allow unbanning things on the ban list
+  which are not valid n!u@h masks; an existing nick takes
+  precedence (removes all bans matching that user).
+  
+
+  Changes:	Modified:
+  +28 -30	trunk/modules/chanserv/ban.c (File Modified) 
+
+
 jilles      2006/06/28 14:46:11 UTC	(20060628-5578)
   Log:
   Update documentation for the ptlink protocol module.
