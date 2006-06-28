@@ -1,3 +1,18 @@
+jilles      2006/06/28 19:09:55 UTC	(20060628-5584)
+  Log:
+  sorcery:
+  - fix NICK message
+  - remove umode +r stuff
+  - when creating a channel, op the service and set a TS
+  - allow JOIN messages with multiple channels
+  
+  don't ask
+  
+
+  Changes:	Modified:
+  +19 -38	trunk/protocol/sorcery.c (File Modified) 
+
+
 jilles      2006/06/28 17:49:51 UTC	(20060628-5582)
   Log:
   - remove chunky monkey references from example confs

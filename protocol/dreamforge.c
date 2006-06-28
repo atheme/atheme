@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: dreamforge.c 5426 2006-06-19 10:04:20Z jilles $
+ * $Id: dreamforge.c 5586 2006-06-28 21:38:18Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/dreamforge.h"
 
-DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 5426 2006-06-19 10:04:20Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 5586 2006-06-28 21:38:18Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -136,8 +136,8 @@ static void dreamforge_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *
 	else
 	{
 		sts(":%s JOIN %s", u->nick, c->name);
-		sts(":%s MODE %s +o %s %ld", u->nick, c->name, u->nick, c->ts);
 	}
+	sts(":%s MODE %s +o %s %ld", u->nick, c->name, u->nick, c->ts);
 }
 
 /* kicks a user from a channel */
@@ -466,10 +466,20 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 
 static void m_quit(char *origin, uint8_t parc, char *parv[])
 {
+	user_t *u;
+
+	u = user_find(origin);
+	if (u == NULL)
+		return;
+	if (u->server == me.me)
+	{
+		slog(LG_DEBUG, "m_quit(): not destroying own user %s (fake direction)", origin);
+		return;
+	}
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", origin);
 
 	/* user_delete() takes care of removing channels and so forth */
-	user_delete(user_find(origin));
+	user_delete(u);
 }
 
 static void m_mode(char *origin, uint8_t parc, char *parv[])
@@ -592,6 +602,9 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 	user_t *u = user_find(origin);
 	chanuser_t *cu;
 	node_t *n, *tn;
+	uint8_t chanc;
+	char *chanv[256];
+	int i;
 
 	if (!u)
 		return;
@@ -607,17 +620,18 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 	}
 	else
 	{
-		channel_t *c = channel_find(parv[0]);
-
-		if (!c)
+		chanc = sjtoken(parv[0], ',', chanv);
+		for (i = 0; i < chanc; i++)
 		{
-			slog(LG_DEBUG, "m_join(): new channel: %s", parv[0]);
-			c = channel_add(parv[0], CURRTIME);
+			channel_t *c = channel_find(chanv[i]);
+
+			if (!c)
+			{
+				slog(LG_DEBUG, "m_join(): new channel: %s", parv[0]);
+				c = channel_add(chanv[i], CURRTIME);
+			}
 			cu = chanuser_add(c, origin);
-			cu->modes |= CMODE_OP;
 		}
-		else
-			cu = chanuser_add(c, origin);
 	}
 }
 
