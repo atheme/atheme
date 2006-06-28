@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: dreamforge.c 5586 2006-06-28 21:38:18Z jilles $
+ * $Id: dreamforge.c 5588 2006-06-28 21:48:10Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/dreamforge.h"
 
-DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 5586 2006-06-28 21:38:18Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 5588 2006-06-28 21:48:10Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -497,7 +497,7 @@ static void m_mode(char *origin, uint8_t parc, char *parv[])
 	}
 
 	if (*parv[0] == '#')
-		channel_mode(NULL, channel_find(parv[0]), parc - 2, &parv[1]);
+		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
 	else
 		user_mode(user_find(parv[0]), parv[1]);
 }

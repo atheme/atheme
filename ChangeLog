@@ -1,3 +1,17 @@
+jilles      2006/06/28 21:38:18 UTC	(20060628-5586)
+  Log:
+  dreamforge:
+  - when creating a channel, op the service and set a TS (r5584)
+  - allow JOIN messages with multiple channels (r5584)
+  - do not process a QUIT message with a prefix designating one
+    of our services (fake direction), these are generated on
+    kills on services
+  
+
+  Changes:	Modified:
+  +24 -10	trunk/protocol/dreamforge.c (File Modified) 
+
+
 jilles      2006/06/28 19:09:55 UTC	(20060628-5584)
   Log:
   sorcery:
