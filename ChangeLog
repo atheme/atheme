@@ -1,3 +1,12 @@
+jilles      2006/06/28 14:25:29 UTC	(20060628-5576)
+  Log:
+  ptlink doesn't do services stamps, don't send them on SVSMODE
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/protocol/ptlink.c (File Modified) 
+
+
 jilles      2006/06/28 14:14:09 UTC	(20060628-5574)
   Log:
   ptlink:

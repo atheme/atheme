@@ -1,4 +1,4 @@
-$Id: IRCD 5566 2006-06-28 00:15:34Z jilles $
+$Id: IRCD 5578 2006-06-28 14:46:11Z jilles $
 
 IRCD-specific notes
 -------------------
@@ -183,7 +183,20 @@ The above block should do the trick.
 ptlink
 ------
 
-You will need U:lines for services on all services on the network.
+Atheme's server name must match ServicesServer in network.dconf (on all
+servers on the network).
+
+The following options/features are not recommended: HideServerOnWhois (not
+effective), SecureModes (Atheme does not set channels +r), RestrictedChans (not
+implemented by Atheme), user mode +H (various bugs and tricks allow users to
+see the oper status anyway), stealth mode (highly unethical and various bugs
+and tricks allow users to get around it).
+
+PTlink ircd allows services to do various special things like restarting the
+server; write a module if you want to use those.
+
+Although Atheme does not support IPv6 connections itself, user IPv6 addresses
+will be properly stored and logged.
 
 ratbox
 ------
