@@ -1,3 +1,16 @@
+jilles      2006/06/28 21:48:10 UTC	(20060628-5588)
+  Log:
+  dreamforge/sorcery:
+  Do not assume all modes have a TS; only modes from servers
+  and U:lined clients may have a TS and even then not always.
+  channel_mode() does not mind an extraneous parameter.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/dreamforge.c (File Modified) 
+  +1 -1		trunk/protocol/sorcery.c (File Modified) 
+
+
 jilles      2006/06/28 21:38:18 UTC	(20060628-5586)
   Log:
   dreamforge:
