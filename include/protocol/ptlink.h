@@ -4,7 +4,7 @@
  *
  * This code contains the channel mode definitions for ratbox ircd.
  *
- * $Id: ptlink.h 4639 2006-01-21 22:06:41Z jilles $
+ * $Id: ptlink.h 5570 2006-06-28 13:16:40Z jilles $
  */
 
 #ifndef RATBOX_H
@@ -22,5 +22,8 @@
 #define CMODE_NOQUIT	0x00040000
 #define CMODE_REGONLY	0x00080000
 #define CMODE_NOSPAM	0x00100000
+
+#define CMODE_PROTECT   0x20000000      /* unreal +a */
+#define CMODE_HALFOP    0x40000000      /* unreal +h */
 
 #endif

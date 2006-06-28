@@ -2,15 +2,15 @@
  * Copyright (c) 2003-2004 E. Will et al.
  * Rights to this code are documented in doc/LICENSE.
  *
- * This file contains protocol support for ptlink-based ircd.
+ * This file contains protocol support for ptlink ircd.
  *
- * $Id: ptlink.c 5498 2006-06-22 13:30:35Z jilles $
+ * $Id: ptlink.c 5570 2006-06-28 13:16:40Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ptlink.h"
 
-DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 5498 2006-06-22 13:30:35Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 5570 2006-06-28 13:16:40Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -23,7 +23,7 @@ ircd_t PTLink = {
         FALSE,                          /* Whether or not we support channel protection. */
         FALSE,                          /* Whether or not we support halfops. */
 	FALSE,				/* Whether or not we use P10 */
-	FALSE,				/* Whether or not we use vHosts. */
+	TRUE,				/* Whether or not we use vHosts. */
 	0,				/* Oper-only cmodes */
         0,                              /* Integer flag for owner channel flag. */
         0,                              /* Integer flag for protect channel flag. */
@@ -33,9 +33,9 @@ ircd_t PTLink = {
         "+",                            /* Mode we set for halfops. */
 	PROTOCOL_PTLINK,		/* Protocol type */
 	0,                              /* Permanent cmodes */
-	"beI",                          /* Ban-like cmodes */
-	'e',                            /* Except mchar */
-	'I'                             /* Invex mchar */
+	"b",                            /* Ban-like cmodes */
+	0,                              /* Except mchar */
+	0                               /* Invex mchar */
 };
 
 struct cmode_ ptlink_mode_list[] = {
@@ -63,13 +63,17 @@ struct cmode_ ptlink_ignore_mode_list[] = {
 };
 
 struct cmode_ ptlink_status_mode_list[] = {
+  { 'a', CMODE_PROTECT},
   { 'o', CMODE_OP    },
+  { 'h', CMODE_HALFOP},
   { 'v', CMODE_VOICE },
   { '\0', 0 }
 };
 
 struct cmode_ ptlink_prefix_mode_list[] = {
+  { '.', CMODE_PROTECT},
   { '@', CMODE_OP    },
+  { '%', CMODE_HALFOP},
   { '+', CMODE_VOICE },
   { '\0', 0 }
 };
@@ -89,7 +93,7 @@ static uint8_t ptlink_server_login(void)
 
 	sts("CAPAB :QS PTS4");
 	sts("SERVER %s 1 Atheme :%s", me.name, me.desc);
-	sts("SVINFO 6 3 0 :%ld", CURRTIME);
+	sts("SVINFO 10 3 0 :%ld", CURRTIME);
 
 	services_init();
 
@@ -99,7 +103,7 @@ static uint8_t ptlink_server_login(void)
 /* introduce a client */
 static void ptlink_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
-	sts("NICK %s 1 %ld +%s %s %s %s :%s", nick, CURRTIME, "io", user, host, me.name, real);
+	sts("NICK %s 1 %ld +%s %s %s %s %s :%s", nick, CURRTIME, "io", user, host, host, me.name, real);
 }
 
 /* invite a user to a channel */
@@ -309,6 +313,16 @@ static void ptlink_jupe(char *server, char *reason)
 	sts(":%s SERVER %s 2 Atheme :%s", me.name, server, reason);
 }
 
+static void ptlink_sethost_sts(char *source, char *target, char *host)
+{
+	user_t *tu = user_find(target);
+
+	if (!tu)
+		return;
+
+	sts(":%s NEWMASK %s :%s", me.name, host, tu->nick);
+}
+
 static void m_topic(char *origin, uint8_t parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
@@ -464,9 +478,9 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 	user_t *u;
 
 	/* got the right number of args for an introduction? */
-	if (parc == 8)
+	if (parc == 9)
 	{
-		s = server_find(parv[6]);
+		s = server_find(parv[7]);
 		if (!s)
 		{
 			slog(LG_DEBUG, "m_nick(): new user on nonexistant server: %s", parv[6]);
@@ -475,7 +489,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
 
-		u = user_add(parv[0], parv[4], parv[5], NULL, NULL, NULL, parv[7], s, atoi(parv[0]));
+		u = user_add(parv[0], parv[4], parv[5], parv[6], NULL, NULL, parv[8], s, atoi(parv[0]));
 
 		user_mode(u, parv[3]);
 
@@ -698,6 +712,30 @@ static void m_error(char *origin, uint8_t parc, char *parv[])
 	slog(LG_INFO, "m_error(): error from server: %s", parv[0]);
 }
 
+static void m_newmask(char *origin, uint8_t parc, char *parv[])
+{
+	user_t *target;
+	char *p;
+
+	if (parc < 1)
+		return;
+	target = user_find(parc >= 2 ? parv[1] : origin);
+	p = strchr(parv[0], '@');
+	if (p != NULL)
+	{
+		strlcpy(target->vhost, p + 1, sizeof target->vhost);
+		if (p - parv[0] < sizeof target->user)
+		{
+			memcpy(target->user, parv[0], p - parv[0]);
+			target->user[p - parv[0]] = '\0';
+		}
+	}
+	else
+		strlcpy(target->vhost, parv[0], sizeof target->vhost);
+	slog(LG_DEBUG, "m_newmask(): %s -> %s@%s",
+			target->nick, target->user, target->vhost);
+}
+
 static void m_motd(char *origin, uint8_t parc, char *parv[])
 {
 	handle_motd(user_find(origin));
@@ -726,6 +764,7 @@ void _modinit(module_t * m)
 	ircd_on_logout = &ptlink_on_logout;
 	jupe = &ptlink_jupe;
 	invite_sts = &ptlink_invite_sts;
+	sethost_sts = &ptlink_sethost_sts;
 
 	mode_list = ptlink_mode_list;
 	ignore_mode_list = ptlink_ignore_mode_list;
@@ -739,8 +778,10 @@ void _modinit(module_t * m)
 	pcommand_add("PRIVMSG", m_privmsg);
 	pcommand_add("NOTICE", m_notice);
 	pcommand_add("SJOIN", m_sjoin);
+	pcommand_add("NJOIN", m_sjoin);
 	pcommand_add("PART", m_part);
 	pcommand_add("NICK", m_nick);
+	pcommand_add("NNICK", m_nick);
 	pcommand_add("QUIT", m_quit);
 	pcommand_add("MODE", m_mode);
 	pcommand_add("KICK", m_kick);
@@ -757,6 +798,7 @@ void _modinit(module_t * m)
 	pcommand_add("PASS", m_pass);
 	pcommand_add("ERROR", m_error);
 	pcommand_add("TOPIC", m_topic);
+	pcommand_add("NEWMASK", m_newmask);
 	pcommand_add("MOTD", m_motd);
 
 	m->mflags = MODTYPE_CORE;
