@@ -1,4 +1,4 @@
-$Id: IRCD 5340 2006-06-03 21:51:17Z brain $
+$Id: IRCD 5566 2006-06-28 00:15:34Z jilles $
 
 IRCD-specific notes
 -------------------
@@ -140,16 +140,6 @@ that cause Atheme to kick as much as possible.
 
 Jupes will use SIDs numerically following services's SID, make sure to
 leave plenty of space.
-
-monkey
-------
-
-You need U:lines/super{} entries for services on all servers on the network.
-
-MonkeyIRCd is designed for services not joining channels, not having the ability
-to prevent services being kicked/deopped and the like. If you want to use
-fantasy commands, you will have to enable join_chans anyway; beware of bots
-fighting with chanserv.
 
 nefarious
 ---------

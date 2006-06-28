@@ -1,3 +1,14 @@
+jilles      2006/06/26 23:56:33 UTC	(20060626-5564)
+  Log:
+  ChanServ REGISTER: Don't allow users with an unverified
+  email address to register channels.
+  Requested by Martin
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/chanserv/register.c (File Modified) 
+
+
 jilles      2006/06/25 01:11:16 UTC	(20060625-5562)
   Log:
   ChanServ CLEAR USERS:
