@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ptlink ircd.
  *
- * $Id: ptlink.c 5570 2006-06-28 13:16:40Z jilles $
+ * $Id: ptlink.c 5572 2006-06-28 13:45:38Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ptlink.h"
 
-DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 5570 2006-06-28 13:16:40Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 5572 2006-06-28 13:45:38Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -237,7 +237,8 @@ static void ptlink_kline_sts(char *server, char *user, char *host, long duration
 	if (!me.connected)
 		return;
 
-	sts(":%s GLINE %s@%s %ld :%s", opersvs.nick, user, host, duration, reason);
+	/* we don't know the real setter here :( */
+	sts(":%s GLINE %s@%s %ld %s :%s", opersvs.nick, user, host, duration, opersvs.nick, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
@@ -724,7 +725,7 @@ static void m_newmask(char *origin, uint8_t parc, char *parv[])
 	if (p != NULL)
 	{
 		strlcpy(target->vhost, p + 1, sizeof target->vhost);
-		if (p - parv[0] < sizeof target->user)
+		if (p - parv[0] < sizeof target->user && p > parv[0])
 		{
 			memcpy(target->user, parv[0], p - parv[0]);
 			target->user[p - parv[0]] = '\0';

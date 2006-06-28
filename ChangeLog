@@ -1,3 +1,18 @@
+jilles      2006/06/28 13:16:40 UTC	(20060628-5570)
+  Log:
+  ptlink:
+  - fix NICK/NNICK message
+  - support NJOIN (burst SJOIN, no idea why they need a separate message)
+  - add vhost support
+  - recognize protect (admin) and halfop channel statuses but do not
+    send them
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/include/protocol/ptlink.h (File Modified) 
+  +52 -10	trunk/protocol/ptlink.c (File Modified) 
+
+
 jilles      2006/06/28 00:45:08 UTC	(20060628-5568)
   Log:
   P10: Remove the TS on MODE commands.
