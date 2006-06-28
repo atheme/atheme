@@ -1,3 +1,17 @@
+jilles      2006/06/28 17:49:51 UTC	(20060628-5582)
+  Log:
+  - remove chunky monkey references from example confs
+  - remove chunky monkey protocol include file
+  - add "obsolete" comment to PROTOCOL_MONKEY constant
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/dist/example.conf (File Modified) 
+  +0 -1		trunk/dist/example.userserv.conf (File Modified) 
+  +1 -1		trunk/include/pmodule.h (File Modified) 
+  +0 -22	trunk/include/protocol/monkey.h (File Deleted) 
+
+
 jilles      2006/06/28 15:48:24 UTC	(20060628-5580)
   Log:
   ChanServ UNBAN: allow unbanning things on the ban list

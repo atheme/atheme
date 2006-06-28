@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: sorcery.c 5426 2006-06-19 10:04:20Z jilles $
+ * $Id: sorcery.c 5584 2006-06-28 19:09:55Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/sorcery.h"
 
-DECLARE_MODULE_V1("protocol/sorcery", TRUE, _modinit, NULL, "$Id: sorcery.c 5426 2006-06-19 10:04:20Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/sorcery", TRUE, _modinit, NULL, "$Id: sorcery.c 5584 2006-06-28 19:09:55Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -91,7 +91,7 @@ static uint8_t sorcery_server_login(void)
 /* introduce a client */
 static void sorcery_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
-	sts("NICK %s 1 %ld %s %s %s 0 :%s", nick, CURRTIME, user, host, me.name, real);
+	sts("NICK %s 1 %ld %s %s %s :%s", nick, CURRTIME, user, host, me.name, real);
 	sts(":%s MODE %s +%s", nick, nick, "io");
 }
 
@@ -137,8 +137,8 @@ static void sorcery_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *mod
 	else
 	{
 		sts(":%s JOIN %s", u->nick, c->name);
-		sts(":%s MODE %s +o %s %ld", u->nick, c->name, u->nick, c->ts);
 	}
+	sts(":%s MODE %s +o %s %ld", u->nick, c->name, u->nick, c->ts);
 }
 
 /* kicks a user from a channel */
@@ -275,13 +275,7 @@ static void sorcery_on_login(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return;
 
-	/* Can only do this for nickserv, and can only record identified
-	 * state if logged in to correct nick, sorry -- jilles
-	 */
-	if (nicksvs.me == NULL || irccasecmp(origin, user))
-		return;
-
-	sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, origin, time(NULL));
+	/* nothing to do here */
 }
 
 /* protocol-specific stuff to do on login */
@@ -290,10 +284,7 @@ static boolean_t sorcery_on_logout(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return FALSE;
 
-	if (nicksvs.me == NULL || irccasecmp(origin, user))
-		return FALSE;
-
-	sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, origin, time(NULL));
+	/* nothing to do here */
 	return FALSE;
 }
 
@@ -395,21 +386,18 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 	server_t *s;
 	user_t *u;
 
-	if (parc == 8)
+	if (parc == 7)
 	{
 		s = server_find(parv[5]);
 		if (!s)
 		{
-			slog(LG_DEBUG, "m_nick(): new user on nonexistant server: %s", parv[6]);
+			slog(LG_DEBUG, "m_nick(): new user on nonexistant server: %s", parv[5]);
 			return;
 		}
 
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
 
-		u = user_add(parv[0], parv[3], parv[4], NULL, NULL, NULL, parv[7], s, atoi(parv[2]));
-
-		/* Note: cannot rely on umode +r to see if they're identified
-		 * -- jilles */
+		u = user_add(parv[0], parv[3], parv[4], NULL, NULL, NULL, parv[6], s, atoi(parv[2]));
 
 		handle_nickchange(u);
 	}
@@ -427,17 +415,6 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 		}
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", u->nick, parv[0]);
-
-		/* fix up +r if necessary -- jilles */
-		if (nicksvs.me != NULL && u->myuser != NULL && !(u->myuser->flags & MU_WAITAUTH) && irccasecmp(u->nick, parv[0]))
-		{
-			if (!irccasecmp(parv[0], u->myuser->name))
-				/* changed nick to registered one, reset +r */
-				sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, parv[0], CURRTIME);
-			else if (!irccasecmp(u->nick, u->myuser->name))
-				/* changed from registered nick, remove +r */
-				sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, parv[0], CURRTIME);
-		}
 
 		/* remove the current one from the list */
 		n = node_find(u, &userlist[u->hash]);
@@ -593,6 +570,9 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 	user_t *u = user_find(origin);
 	chanuser_t *cu;
 	node_t *n, *tn;
+	uint8_t chanc;
+	char *chanv[256];
+	int i;
 
 	if (!u)
 		return;
@@ -608,17 +588,18 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 	}
 	else
 	{
-		channel_t *c = channel_find(parv[0]);
-
-		if (!c)
+		chanc = sjtoken(parv[0], ',', chanv);
+		for (i = 0; i < chanc; i++)
 		{
-			slog(LG_DEBUG, "m_join(): new channel: %s", parv[0]);
-			c = channel_add(parv[0], CURRTIME);
+			channel_t *c = channel_find(chanv[i]);
+
+			if (!c)
+			{
+				slog(LG_DEBUG, "m_join(): new channel: %s", parv[0]);
+				c = channel_add(chanv[i], CURRTIME);
+			}
 			cu = chanuser_add(c, origin);
-			cu->modes |= CMODE_OP;
 		}
-		else
-			cu = chanuser_add(c, origin);
 	}
 }
 
