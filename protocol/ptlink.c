@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ptlink ircd.
  *
- * $Id: ptlink.c 5574 2006-06-28 14:14:09Z jilles $
+ * $Id: ptlink.c 5576 2006-06-28 14:25:29Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ptlink.h"
 
-DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 5574 2006-06-28 14:14:09Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 5576 2006-06-28 14:25:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -289,7 +289,7 @@ static void ptlink_on_login(char *origin, char *user, char *wantedhost)
 	if (nicksvs.me == NULL || irccasecmp(origin, user))
 		return;
 
-	sts(":%s SVSMODE %s +rd %ld", me.name, origin, CURRTIME);
+	sts(":%s SVSMODE %s +r", me.name, origin);
 }
 
 /* protocol-specific stuff to do on login */
@@ -301,7 +301,7 @@ static boolean_t ptlink_on_logout(char *origin, char *user, char *wantedhost)
 	if (nicksvs.me == NULL || irccasecmp(origin, user))
 		return FALSE;
 
-	sts(":%s SVSMODE %s -r+d %ld", me.name, origin, CURRTIME);
+	sts(":%s SVSMODE %s -r", me.name, origin);
 	return FALSE;
 }
 
@@ -528,7 +528,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 		/* fix up +r if necessary -- jilles */
 		if (nicksvs.me != NULL && u->myuser != NULL && !(u->myuser->flags & MU_WAITAUTH) && irccasecmp(u->nick, parv[0]) && !irccasecmp(parv[0], u->myuser->name))
 			/* changed nick to registered one, reset +r */
-			sts(":%s SVSMODE %s +rd %ld", me.name, parv[0], time(NULL));
+			sts(":%s SVSMODE %s +r", me.name, parv[0]);
 
 		/* remove the current one from the list */
 		n = node_find(u, &userlist[u->hash]);

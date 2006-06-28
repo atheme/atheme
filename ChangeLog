@@ -1,3 +1,14 @@
+jilles      2006/06/28 14:14:09 UTC	(20060628-5574)
+  Log:
+  ptlink:
+  - set services umode +p so they hide channels from lusers
+  - send version number in SERVER command (appears in /map)
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/protocol/ptlink.c (File Modified) 
+
+
 jilles      2006/06/28 13:45:38 UTC	(20060628-5572)
   Log:
   ptlink:
