@@ -1,3 +1,14 @@
+jilles      2006/06/28 13:45:38 UTC	(20060628-5572)
+  Log:
+  ptlink:
+  - fix vhost changes if username was not changed
+  - fix akill reasons
+  
+
+  Changes:	Modified:
+  +3 -2		trunk/protocol/ptlink.c (File Modified) 
+
+
 jilles      2006/06/28 13:16:40 UTC	(20060628-5570)
   Log:
   ptlink:

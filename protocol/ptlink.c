@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ptlink ircd.
  *
- * $Id: ptlink.c 5572 2006-06-28 13:45:38Z jilles $
+ * $Id: ptlink.c 5574 2006-06-28 14:14:09Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ptlink.h"
 
-DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 5572 2006-06-28 13:45:38Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 5574 2006-06-28 14:14:09Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -92,7 +92,7 @@ static uint8_t ptlink_server_login(void)
 	me.bursting = TRUE;
 
 	sts("CAPAB :QS PTS4");
-	sts("SERVER %s 1 Atheme :%s", me.name, me.desc);
+	sts("SERVER %s 1 Atheme-%s :%s", me.name, version, me.desc);
 	sts("SVINFO 10 3 0 :%ld", CURRTIME);
 
 	services_init();
@@ -103,7 +103,7 @@ static uint8_t ptlink_server_login(void)
 /* introduce a client */
 static void ptlink_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
-	sts("NICK %s 1 %ld +%s %s %s %s %s :%s", nick, CURRTIME, "io", user, host, host, me.name, real);
+	sts("NICK %s 1 %ld +%sp %s %s %s %s :%s", nick, CURRTIME, "io", user, host, host, me.name, real);
 }
 
 /* invite a user to a channel */
@@ -311,7 +311,7 @@ static void ptlink_jupe(char *server, char *reason)
 		return;
 
 	sts(":%s SQUIT %s :%s", opersvs.nick, server, reason);
-	sts(":%s SERVER %s 2 Atheme :%s", me.name, server, reason);
+	sts(":%s SERVER %s 2 Atheme-%s-jupe :%s", me.name, server, version, reason);
 }
 
 static void ptlink_sethost_sts(char *source, char *target, char *host)
