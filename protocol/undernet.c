@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: undernet.c 5522 2006-06-23 16:18:08Z jilles $
+ * $Id: undernet.c 5568 2006-06-28 00:45:08Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 5522 2006-06-23 16:18:08Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 5568 2006-06-28 00:45:08Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -138,12 +138,12 @@ static void undernet_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *mo
 	{
 		sts("%s C %s %ld", u->uid, c->name, c->ts);
 		if (modes[0] && modes[1])
-			sts("%s M %s %s %ld", u->uid, c->name, modes, c->ts);
+			sts("%s M %s %s", u->uid, c->name, modes);
 	}
 	else
 	{
 		sts("%s J %s %ld", u->uid, c->name, c->ts);
-		sts("%s M %s +o %s %ld", me.numeric, c->name, u->uid, c->ts);
+		sts("%s M %s +o %s", me.numeric, c->name, u->uid);
 	}
 }
 
@@ -300,9 +300,9 @@ static void undernet_mode_sts(char *sender, char *target, char *modes)
 		return;
 
 	if (chanuser_find(cptr, fptr))
-		sts("%s M %s %s %ld", fptr->uid, target, modes, cptr->ts);
+		sts("%s M %s %s", fptr->uid, target, modes);
 	else
-		sts("%s M %s %s %ld", me.numeric, target, modes, cptr->ts);
+		sts("%s M %s %s", me.numeric, target, modes);
 }
 
 /* ping wrapper */
@@ -549,7 +549,7 @@ static void m_burst(char *origin, uint8_t parc, char *parv[])
 			if (cu->user->server == me.me)
 			{
 				/* it's a service, reop */
-				sts("%s M %s +o %s %ld", me.numeric, c->name, CLIENT_NAME(cu->user), ts);
+				sts("%s M %s +o %s", me.numeric, c->name, CLIENT_NAME(cu->user));
 				cu->modes = CMODE_OP;
 			}
 			else
@@ -813,10 +813,9 @@ static void m_clearmode(char *origin, uint8_t parc, char *parv[])
 				if (cu->user->server == me.me)
 				{
 					/* it's a service, reop */
-					sts("%s M %s +o %s %ld", me.numeric,
+					sts("%s M %s +o %s", me.numeric,
 							chan->name,
-							cu->user->uid,
-							chan->ts);
+							cu->user->uid);
 				}
 				else
 					cu->modes &= ~CMODE_OP;

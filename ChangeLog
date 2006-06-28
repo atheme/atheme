@@ -1,3 +1,17 @@
+jilles      2006/06/28 00:15:34 UTC	(20060628-5566)
+  Log:
+  Remove the Chunky Monkey protocol module.
+  I don't think anyone uses this: the ircd project
+  is incomplete and dead. Also, the protocol is
+  too similar to bahamut to be interesting.
+  
+
+  Changes:	Modified:
+  +0 -10	trunk/doc/IRCD (File Modified) 
+  +0 -1		trunk/protocol/Makefile.in (File Modified) 
+  +0 -771	trunk/protocol/monkey.c (File Deleted) 
+
+
 jilles      2006/06/26 23:56:33 UTC	(20060626-5564)
   Log:
   ChanServ REGISTER: Don't allow users with an unverified
