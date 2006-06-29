@@ -44,8 +44,8 @@ A	ban exception		ircd->except_mchar
 A	invite exception	ircd->invex_mchar
 D	permanent channel	ircd->perm_mode
 E	halfop			ircd->uses_halfops, ircd->halfops_mode, ircd->halfops_mchar
-E	channel protection	ircd->protect_mode, ircd->protect_mchar
-E	channel founder		ircd->owner_mode, ircd->owner_mchar
+E	channel protection	ircd->uses_protect, ircd->protect_mode, ircd->protect_mchar
+E	channel founder		ircd->uses_owner, ircd->owner_mode, ircd->owner_mchar
 
 Modes of type D can be marked oper-only with ircd->oper_only_modes. This
 prevents users without chan:cmodes privilege from changing those modes in
@@ -61,4 +61,4 @@ E	chanuser_t.modes
 
 Modes of type C other than +l are currently not stored.
 
-$Id: MODES 5502 2006-06-22 14:41:49Z jilles $
+$Id: MODES 5594 2006-06-29 12:24:51Z jilles $

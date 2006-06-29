@@ -1,3 +1,12 @@
+jilles      2006/06/29 12:23:30 UTC	(20060629-5592)
+  Log:
+  ircnet m_njoin(): cause mlock checks when creating a channel
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/protocol/ircnet.c (File Modified) 
+
+
 jilles      2006/06/28 22:51:01 UTC	(20060628-5590)
   Log:
   dreamforge/sorcery:
