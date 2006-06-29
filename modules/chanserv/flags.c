@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 5073 2006-04-14 11:16:18Z w00t $
+ * $Id: flags.c 5596 2006-06-29 13:00:14Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 5073 2006-04-14 11:16:18Z w00t $",
+	"$Id: flags.c 5596 2006-06-29 13:00:14Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -133,9 +133,38 @@ static void cs_cmd_flags(char *origin)
 			return;
 		}
 
-		if (!target || !flagstr)
+		if (!target)
 		{
 			notice(chansvs.nick, origin, "Usage: FLAGS %s [target] [flags]", channel);
+			return;
+		}
+
+		if (!flagstr)
+		{
+			if (!(chanacs_user_flags(mc, u) & CA_ACLVIEW))
+			{
+				notice(chansvs.nick, origin, "You are not authorized to execute this command.");
+				return;
+			}
+			if (validhostmask(target))
+				ca = chanacs_find_host_literal(mc, target, 0);
+			else
+			{
+				if (!(tmu = myuser_find_ext(target)))
+				{
+					notice(chansvs.nick, origin, "The nickname \2%s\2 is not registered.", target);
+					return;
+				}
+				ca = chanacs_find(mc, tmu, 0);
+			}
+			if (ca != NULL)
+				notice(chansvs.nick, origin, "Flags for \2%s\2 in \2%s\2 are \2%s\2.",
+						target, channel,
+						bitmask_to_flags2(ca != NULL ? ca->level : 0, 0, chanacs_flags));
+			else
+				notice(chansvs.nick, origin, "No flags for \2%s\2 in \2%s\2.",
+						target, channel);
+			logcommand(chansvs.me, u, CMDLOG_SET, "%s FLAGS %s", mc->name, target);
 			return;
 		}
 
