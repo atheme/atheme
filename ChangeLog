@@ -1,3 +1,16 @@
+jilles      2006/06/28 22:51:01 UTC	(20060628-5590)
+  Log:
+  dreamforge/sorcery:
+  - add a warning that missing U:lines may cause storms
+    of mode changes
+  - add a warning that these ircds do not protect services
+    on channels against kick/deop
+  
+
+  Changes:	Modified:
+  +14 -2	trunk/doc/IRCD (File Modified) 
+
+
 jilles      2006/06/28 21:48:10 UTC	(20060628-5588)
   Log:
   dreamforge/sorcery:

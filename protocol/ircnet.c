@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 5426 2006-06-19 10:04:20Z jilles $
+ * $Id: ircnet.c 5592 2006-06-29 12:23:30Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 5426 2006-06-19 10:04:20Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 5592 2006-06-29 12:23:30Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -468,6 +468,8 @@ static void m_njoin(char *origin, uint8_t parc, char *parv[])
 			/* Give channels created during burst an older "TS"
 			 * so they won't be deopped -- jilles */
 			c = channel_add(parv[0], source->flags & SF_EOB ? CURRTIME : CURRTIME - 601);
+			/* Check mode locks */
+			channel_mode_va(NULL, c, 1, "+");
 		}
 
 		userc = sjtoken(parv[parc - 1], ',', userv);
