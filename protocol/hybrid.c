@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 5498 2006-06-22 13:30:35Z jilles $
+ * $Id: hybrid.c 5600 2006-06-29 22:19:27Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 5498 2006-06-22 13:30:35Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 5600 2006-06-29 22:19:27Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -124,7 +124,7 @@ static void hybrid_introduce_nick(char *nick, char *user, char *host, char *real
 static void hybrid_invite_sts(user_t *sender, user_t *target, channel_t *channel)
 {
 	/* some older TSora ircds require the sender to be
-	 * on the channel, but hyb7/hybrid don't
+	 * on the channel, but hyb7/ratbox don't
 	 * let's just assume it's not necessary -- jilles */
 	sts(":%s INVITE %s %s", CLIENT_NAME(sender), CLIENT_NAME(target), channel->name);
 }

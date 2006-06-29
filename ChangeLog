@@ -1,3 +1,14 @@
+jilles      2006/06/29 13:00:14 UTC	(20060629-5596)
+  Log:
+  ChanServ FLAGS: allow /cs flags <target> to see one access entry.
+  Requested by w00t.
+  This adds some duplicate code, cs_cmd_flags() can use some refactoring.
+  
+
+  Changes:	Modified:
+  +30 -1	trunk/modules/chanserv/flags.c (File Modified) 
+
+
 jilles      2006/06/29 12:24:51 UTC	(20060629-5594)
   Log:
   add missing descriptions for ircd->uses_protect and ircd->uses_owner
