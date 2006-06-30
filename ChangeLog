@@ -1,3 +1,12 @@
+jilles      2006/06/29 22:19:27 UTC	(20060629-5600)
+  Log:
+  Revert accidental hyb7/ratbox -> hyb7/hybrid change in comment.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/hybrid.c (File Modified) 
+
+
 jilles      2006/06/29 13:00:14 UTC	(20060629-5596)
   Log:
   ChanServ FLAGS: allow /cs flags <target> to see one access entry.

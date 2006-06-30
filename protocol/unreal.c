@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 5500 2006-06-22 13:36:19Z jilles $
+ * $Id: unreal.c 5602 2006-06-30 00:29:17Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 5500 2006-06-22 13:36:19Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 5602 2006-06-30 00:29:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -495,6 +495,8 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 			hook_call_event("channel_tschange", c);
 		}
 
+		channel_mode_va(NULL, c, 1, "+");
+
 		userc = sjtoken(parv[parc - 1], ' ', userv);
 
 		for (i = 0; i < userc; i++)
@@ -525,6 +527,8 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 			/* XXX lost modes! -- XXX - pardon? why do we worry about this? TS reset requires modes reset.. */
 			hook_call_event("channel_tschange", c);
 		}
+
+		channel_mode_va(NULL, c, 1, "+");
 
 		chanuser_add(c, origin);
 	}
