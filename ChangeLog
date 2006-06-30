@@ -1,3 +1,14 @@
+jilles      2006/06/30 23:32:12 UTC	(20060630-5604)
+  Log:
+  user_mode():
+  - default to '+' instead of '-' if none given (very rare)
+  - use MTYPE_ADD, MTYPE_DEL constants
+  
+
+  Changes:	Modified:
+  +7 -7		trunk/src/cmode.c (File Modified) 
+
+
 jilles      2006/06/30 00:29:17 UTC	(20060630-5602)
   Log:
   unreal m_sjoin(): Add some channel_mode_va(NULL, c, 1, "+");
