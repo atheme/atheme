@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 5558 2006-06-25 00:42:38Z jilles $
+ * $Id: cmode.c 5604 2006-06-30 23:32:12Z jilles $
  */
 
 #include "atheme.h"
@@ -826,7 +826,7 @@ char *channel_modes(channel_t *c, boolean_t doparams)
 /* i'm putting usermode in here too */
 void user_mode(user_t *user, char *modes)
 {
-	boolean_t toadd = FALSE;
+	int dir = MTYPE_ADD;
 
 	if (!user)
 	{
@@ -839,19 +839,19 @@ void user_mode(user_t *user, char *modes)
 		switch (*modes)
 		{
 		  case '+':
-			  toadd = TRUE;
+			  dir = MTYPE_ADD;
 			  break;
 		  case '-':
-			  toadd = FALSE;
+			  dir = MTYPE_DEL;
 			  break;
 		  case 'i':
-			  if (toadd)
+			  if (dir == MTYPE_ADD)
 			  {
 				  if (!(user->flags & UF_INVIS))
 				  	user->server->invis++;
 				  user->flags |= UF_INVIS;
 			  }
-			  else
+			  else if (dir = MTYPE_DEL)
 			  {
 				  if (user->flags & UF_INVIS)
 					  user->server->invis--;
@@ -859,7 +859,7 @@ void user_mode(user_t *user, char *modes)
 			  }
 			  break;
 		  case 'o':
-			  if (toadd)
+			  if (dir == MTYPE_ADD)
 			  {
 				  if (!is_ircop(user))
 				  {
@@ -870,7 +870,7 @@ void user_mode(user_t *user, char *modes)
 					  hook_call_event("user_oper", user);
 				  }
 			  }
-			  else
+			  else if (dir = MTYPE_DEL)
 			  {
 				  if (is_ircop(user))
 				  {

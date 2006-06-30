@@ -1,3 +1,12 @@
+jilles      2006/06/30 00:29:17 UTC	(20060630-5602)
+  Log:
+  unreal m_sjoin(): Add some channel_mode_va(NULL, c, 1, "+");
+  
+
+  Changes:	Modified:
+  +4 -0		trunk/protocol/unreal.c (File Modified) 
+
+
 jilles      2006/06/29 22:19:27 UTC	(20060629-5600)
   Log:
   Revert accidental hyb7/ratbox -> hyb7/hybrid change in comment.
