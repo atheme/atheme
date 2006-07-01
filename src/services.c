@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 5424 2006-06-19 00:00:25Z jilles $
+ * $Id: services.c 5622 2006-07-01 16:09:29Z jilles $
  */
 
 #include "atheme.h"
@@ -330,9 +330,11 @@ void handle_burstlogin(user_t *u, char *login)
 	mu = myuser_find(login);
 	if (mu == NULL)
 	{
-		/* account dropped during split... log them out */
+		/* account dropped during split...
+		 * if we have an authentication service, log them out */
 		slog(LG_DEBUG, "handle_burstlogin(): got nonexistent login %s for user %s", login, u->nick);
-		ircd_on_logout(u->nick, login, NULL);
+		if (authservice_loaded)
+			ircd_on_logout(u->nick, login, NULL);
 		return;
 	}
 	if (u->myuser != NULL)	/* already logged in, hmm */

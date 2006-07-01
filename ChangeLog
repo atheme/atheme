@@ -1,3 +1,21 @@
+jilles      2006/07/01 15:56:15 UTC	(20060701-5620)
+  Log:
+  Add int authservice_loaded, counts the number of
+  authentication services (nickserv, userserv,
+  saslserv) loaded.
+  This will be used for not changing services logins
+  and accepting new logins if no authentication service
+  is loaded.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/pmodule.h (File Modified) 
+  +2 -0		trunk/modules/nickserv/main.c (File Modified) 
+  +2 -0		trunk/modules/saslserv/main.c (File Modified) 
+  +2 -0		trunk/modules/userserv/main.c (File Modified) 
+  +1 -0		trunk/src/pmodule.c (File Modified) 
+
+
 jilles      2006/07/01 00:25:48 UTC	(20060701-5610)
   Log:
   INSTALL document:
