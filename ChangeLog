@@ -1,3 +1,15 @@
+jilles      2006/06/30 23:53:18 UTC	(20060630-5606)
+  Log:
+  Remove version number (1.x) in description of
+  charybdis protocol module as we support 2.x
+  also.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/dist/example.conf (File Modified) 
+  +1 -1		trunk/dist/example.userserv.conf (File Modified) 
+
+
 jilles      2006/06/30 23:32:12 UTC	(20060630-5604)
   Log:
   user_mode():
