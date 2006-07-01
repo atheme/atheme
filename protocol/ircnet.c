@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 5592 2006-06-29 12:23:30Z jilles $
+ * $Id: ircnet.c 5628 2006-07-01 23:38:42Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 5592 2006-06-29 12:23:30Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 5628 2006-07-01 23:38:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -50,7 +50,7 @@ struct cmode_ ircnet_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ ircnet_ignore_mode_list[] = {
+struct extmode ircnet_ignore_mode_list[] = {
   { '\0', 0 }
 };
 

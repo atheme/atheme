@@ -4,7 +4,7 @@
  *
  * Protocol handling stuff.
  *
- * $Id: pmodule.c 5620 2006-07-01 15:56:15Z jilles $
+ * $Id: pmodule.c 5628 2006-07-01 23:38:42Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@ list_t pcommands[HASHSIZE];
 BlockHeap *pcommand_heap;
 BlockHeap *messagetree_heap;
 struct cmode_ *mode_list;
-struct cmode_ *ignore_mode_list;
+struct extmode *ignore_mode_list;
 struct cmode_ *status_mode_list;
 struct cmode_ *prefix_mode_list;
 ircd_t *ircd;

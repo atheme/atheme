@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 5602 2006-06-30 00:29:17Z jilles $
+ * $Id: unreal.c 5628 2006-07-01 23:38:42Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 5602 2006-06-30 00:29:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 5628 2006-07-01 23:38:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -62,8 +62,10 @@ struct cmode_ unreal_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ unreal_ignore_mode_list[] = {
-  { 'j', CMODE_JTHROT },
+static boolean_t check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+
+struct extmode unreal_ignore_mode_list[] = {
+  { 'j', check_jointhrottle },
   { '\0', 0 }
 };
 
@@ -87,6 +89,30 @@ struct cmode_ unreal_prefix_mode_list[] = {
 };
 
 /* *INDENT-ON* */
+
+static boolean_t check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+{
+	const char *p, *arg2;
+
+	p = value, arg2 = NULL;
+	while (*p != '\0')
+	{
+		if (*p == ':')
+		{
+			if (arg2 != NULL)
+				return FALSE;
+			arg2 = p + 1;
+		}
+		else if (!isdigit(*p))
+			return FALSE;
+		p++;
+	}
+	if (arg2 == NULL)
+		return FALSE;
+	if (p - arg2 > 10 || arg2 - value - 1 > 10 || !atoi(value) || !atoi(arg2))
+		return FALSE;
+	return TRUE;
+}
 
 /* login to our uplink */
 static uint8_t unreal_server_login(void)

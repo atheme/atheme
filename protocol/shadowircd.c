@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for shadowircd-based ircd.
  *
- * $Id: shadowircd.c 5498 2006-06-22 13:30:35Z jilles $
+ * $Id: shadowircd.c 5628 2006-07-01 23:38:42Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/shadowircd.h"
 
-DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 5498 2006-06-22 13:30:35Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 5628 2006-07-01 23:38:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -57,7 +57,7 @@ struct cmode_ shadowircd_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ shadowircd_ignore_mode_list[] = {
+struct extmode shadowircd_ignore_mode_list[] = {
   { '\0', 0 }
 };
 

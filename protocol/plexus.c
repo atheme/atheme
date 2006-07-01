@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 5498 2006-06-22 13:30:35Z jilles $
+ * $Id: plexus.c 5628 2006-07-01 23:38:42Z jilles $
  */
 
 /* option: set the netadmin umode +N */
@@ -13,7 +13,7 @@
 #include "atheme.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 5498 2006-06-22 13:30:35Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 5628 2006-07-01 23:38:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -58,7 +58,7 @@ struct cmode_ plexus_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ plexus_ignore_mode_list[] = {
+struct extmode plexus_ignore_mode_list[] = {
   { '\0', 0 }
 };
 

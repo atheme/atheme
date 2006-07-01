@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 5328 2006-05-30 04:01:34Z gxti $
+ * $Id: atheme.h 5628 2006-07-01 23:38:42Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -69,6 +69,9 @@ typedef struct {
 
 typedef struct tld_ tld_t;
 typedef struct kline_ kline_t;
+
+struct mychan_;
+struct myuser_;
 
 typedef struct me me_t;
 
@@ -188,6 +191,12 @@ struct cmode_
 {
         char mode;
         uint32_t value;
+};
+
+struct extmode
+{
+	char mode;
+	boolean_t (*check)(const char *, channel_t *, struct mychan_ *, user_t *, struct myuser_ *);
 };
 
 /* tld list struct */

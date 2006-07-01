@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 5536 2006-06-24 21:02:10Z jilles $
+ * $Id: hyperion.c 5628 2006-07-01 23:38:42Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -15,7 +15,7 @@
 #include "atheme.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 5536 2006-06-24 21:02:10Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 5628 2006-07-01 23:38:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -61,10 +61,13 @@ struct cmode_ hyperion_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ hyperion_ignore_mode_list[] = {
-  { 'D', 0 },
-  { 'J', 0 },
-  { 'f', 0 },
+static boolean_t check_forward(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+static boolean_t check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+
+struct extmode hyperion_ignore_mode_list[] = {
+  /*{ 'D', 0 },*/
+  { 'f', check_forward },
+  { 'J', check_jointhrottle },
   { '\0', 0 }
 };
 
@@ -83,6 +86,46 @@ struct cmode_ hyperion_prefix_mode_list[] = {
 static boolean_t use_svslogin = FALSE;
 
 /* *INDENT-ON* */
+
+static boolean_t check_forward(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+{
+	channel_t *target_c;
+	mychan_t *target_mc;
+
+	if (*value != '#' || strlen(value) > 50)
+		return FALSE;
+	if (u == NULL && mu == NULL)
+		return TRUE;
+	target_c = channel_find(value);
+	target_mc = mychan_find(value);
+	if (target_c == NULL && target_mc == NULL)
+		return FALSE;
+	return TRUE;
+}
+
+static boolean_t check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+{
+	const char *p, *arg2;
+
+	p = value, arg2 = NULL;
+	while (*p != '\0')
+	{
+		if (*p == ',')
+		{
+			if (arg2 != NULL)
+				return FALSE;
+			arg2 = p + 1;
+		}
+		else if (!isdigit(*p))
+			return FALSE;
+		p++;
+	}
+	if (arg2 == NULL)
+		return FALSE;
+	if (p - arg2 > 5 || arg2 - value - 1 > 5 || !atoi(value) || !atoi(arg2))
+		return FALSE;
+	return TRUE;
+}
 
 /* login to our uplink */
 static uint8_t hyperion_server_login(void)

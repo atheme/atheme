@@ -55,7 +55,7 @@ struct cmode_ solidircd_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ solidircd_ignore_mode_list[] = {
+struct extmode solidircd_ignore_mode_list[] = {
   { '\0', 0 }
 };
 

@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 5512 2006-06-23 15:06:08Z w00t $
+ * $Id: inspircd.c 5628 2006-07-01 23:38:42Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5512 2006-06-23 15:06:08Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5628 2006-07-01 23:38:42Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -61,10 +61,14 @@ struct cmode_ inspircd_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ inspircd_ignore_mode_list[] = {
-  { 'f', 0 },
-  { 'j', 0 },
-  { 'L', 0 },
+static boolean_t check_flood(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+static boolean_t check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+static boolean_t check_forward(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+
+struct extmode inspircd_ignore_mode_list[] = {
+  { 'f', check_flood },
+  { 'j', check_jointhrottle },
+  { 'L', check_forward },
   { '\0', 0 }
 };
 
@@ -88,6 +92,52 @@ struct cmode_ inspircd_prefix_mode_list[] = {
 };
 
 /* *INDENT-ON* */
+
+static boolean_t check_flood(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+{
+
+	return *value == '*' ? check_jointhrottle(value + 1, c, mc, u, mu) : check_jointhrottle(value, c, mc, u, mu);
+}
+
+static boolean_t check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+{
+	const char *p, *arg2;
+
+	p = value, arg2 = NULL;
+	while (*p != '\0')
+	{
+		if (*p == ':')
+		{
+			if (arg2 != NULL)
+				return FALSE;
+			arg2 = p + 1;
+		}
+		else if (!isdigit(*p))
+			return FALSE;
+		p++;
+	}
+	if (arg2 == NULL)
+		return FALSE;
+	if (p - arg2 > 10 || arg2 - value - 1 > 10 || !atoi(value) || !atoi(arg2))
+		return FALSE;
+	return TRUE;
+}
+
+static boolean_t check_forward(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+{
+	channel_t *target_c;
+	mychan_t *target_mc;
+
+	if (*value != '#' || strlen(value) > 50)
+		return FALSE;
+	if (u == NULL && mu == NULL)
+		return TRUE;
+	target_c = channel_find(value);
+	target_mc = mychan_find(value);
+	if (target_c == NULL && target_mc == NULL)
+		return FALSE;
+	return TRUE;
+}
 
 /* login to our uplink */
 static uint8_t inspircd_server_login(void)

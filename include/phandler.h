@@ -4,7 +4,7 @@
  *
  * Protocol handlers, both generic and the actual declarations themselves.
  *
- * $Id: phandler.h 5626 2006-07-01 21:25:55Z jilles $
+ * $Id: phandler.h 5628 2006-07-01 23:38:42Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -162,7 +162,7 @@ E void generic_svslogin_sts(char *target, char *nick, char *user, char *host, ch
 E void generic_sasl_sts(char *target, char mode, char *data);
 
 E struct cmode_ *mode_list;
-E struct cmode_ *ignore_mode_list;
+E struct extmode *ignore_mode_list;
 E struct cmode_ *status_mode_list;
 E struct cmode_ *prefix_mode_list;
 

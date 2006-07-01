@@ -1,3 +1,12 @@
+jilles      2006/07/01 21:25:55 UTC	(20060701-5626)
+  Log:
+  Remove an obsolete comment.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/include/phandler.h (File Modified) 
+
+
 jilles      2006/07/01 21:01:30 UTC	(20060701-5624)
   Log:
   flatfile load: don't set an mlocked key if it is empty (after

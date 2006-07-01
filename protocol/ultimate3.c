@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 5498 2006-06-22 13:30:35Z jilles $
+ * $Id: ultimate3.c 5628 2006-07-01 23:38:42Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 5498 2006-06-22 13:30:35Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 5628 2006-07-01 23:38:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -51,7 +51,7 @@ struct cmode_ ultimate3_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ ultimate3_ignore_mode_list[] = {
+struct extmode ultimate3_ignore_mode_list[] = {
   { '\0', 0 }
 };
 

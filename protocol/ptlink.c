@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ptlink ircd.
  *
- * $Id: ptlink.c 5576 2006-06-28 14:25:29Z jilles $
+ * $Id: ptlink.c 5628 2006-07-01 23:38:42Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ptlink.h"
 
-DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 5576 2006-06-28 14:25:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 5628 2006-07-01 23:38:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -57,8 +57,10 @@ struct cmode_ ptlink_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ ptlink_ignore_mode_list[] = {
-  { 'f', CMODE_FLOOD  },
+static boolean_t check_flood(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+
+struct extmode ptlink_ignore_mode_list[] = {
+  { 'f', check_flood  },
   { '\0', 0 }
 };
 
@@ -79,6 +81,30 @@ struct cmode_ ptlink_prefix_mode_list[] = {
 };
 
 /* *INDENT-ON* */
+
+static boolean_t check_flood(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+{
+	const char *p, *arg2;
+
+	p = value, arg2 = NULL;
+	while (*p != '\0')
+	{
+		if (*p == ':')
+		{
+			if (arg2 != NULL)
+				return FALSE;
+			arg2 = p + 1;
+		}
+		else if (!isdigit(*p))
+			return FALSE;
+		p++;
+	}
+	if (arg2 == NULL)
+		return FALSE;
+	if (p - arg2 > 2 || arg2 - value - 1 > 2 || atoi(value) <= 1 || !atoi(arg2))
+		return FALSE;
+	return TRUE;
+}
 
 /* login to our uplink */
 static uint8_t ptlink_server_login(void)

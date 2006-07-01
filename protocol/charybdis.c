@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 5498 2006-06-22 13:30:35Z jilles $
+ * $Id: charybdis.c 5628 2006-07-01 23:38:42Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 5498 2006-06-22 13:30:35Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 5628 2006-07-01 23:38:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -56,9 +56,12 @@ struct cmode_ charybdis_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ charybdis_ignore_mode_list[] = {
-  { 'f', 0 },
-  { 'j', 0 },
+static boolean_t check_forward(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+static boolean_t check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+
+struct extmode charybdis_ignore_mode_list[] = {
+  { 'f', check_forward },
+  { 'j', check_jointhrottle },
   { '\0', 0 }
 };
 
@@ -83,6 +86,64 @@ static server_t *sid_find(char *name);
 static char ts6sid[3 + 1] = "";
 
 /* *INDENT-ON* */
+
+/* ircd allows forwards to existing channels; the target channel must be
+ * +F or the setter must have ops in it */
+static boolean_t check_forward(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+{
+	channel_t *target_c;
+	mychan_t *target_mc;
+	chanuser_t *target_cu;
+
+	if (*value != '#' || strlen(value) > 50)
+		return FALSE;
+	if (u == NULL && mu == NULL)
+		return TRUE;
+	target_c = channel_find(value);
+	target_mc = mychan_find(value);
+	if (target_c == NULL && target_mc == NULL)
+		return FALSE;
+	if (target_c != NULL && target_c->modes & CMODE_FTARGET)
+		return TRUE;
+	if (target_mc != NULL && target_mc->mlock_on & CMODE_FTARGET)
+		return TRUE;
+	if (u != NULL)
+	{
+		target_cu = chanuser_find(target_c, u);
+		if (target_cu != NULL && target_cu->modes & CMODE_OP)
+			return TRUE;
+		if (chanacs_user_flags(mc, u) & CA_SET)
+			return TRUE;
+	}
+	else if (mu != NULL)
+		if (chanacs_find(mc, mu, CA_SET))
+			return TRUE;
+	return FALSE;
+}
+
+static boolean_t check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+{
+	const char *p, *arg2;
+
+	p = value, arg2 = NULL;
+	while (*p != '\0')
+	{
+		if (*p == ':')
+		{
+			if (arg2 != NULL)
+				return FALSE;
+			arg2 = p + 1;
+		}
+		else if (!isdigit(*p))
+			return FALSE;
+		p++;
+	}
+	if (arg2 == NULL)
+		return FALSE;
+	if (p - arg2 > 10 || arg2 - value - 1 > 10 || !atoi(value) || !atoi(arg2))
+		return FALSE;
+	return TRUE;
+}
 
 /* login to our uplink */
 static uint8_t charybdis_server_login(void)

@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 5600 2006-06-29 22:19:27Z jilles $
+ * $Id: hybrid.c 5628 2006-07-01 23:38:42Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 5600 2006-06-29 22:19:27Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 5628 2006-07-01 23:38:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -48,7 +48,7 @@ struct cmode_ hybrid_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ hybrid_ignore_mode_list[] = {
+struct extmode hybrid_ignore_mode_list[] = {
   { '\0', 0 }
 };
 

@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: asuka.c 5568 2006-06-28 00:45:08Z jilles $
+ * $Id: asuka.c 5628 2006-07-01 23:38:42Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 5568 2006-06-28 00:45:08Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 5628 2006-07-01 23:38:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -55,7 +55,7 @@ struct cmode_ asuka_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ asuka_ignore_mode_list[] = {
+struct extmode asuka_ignore_mode_list[] = {
   { '\0', 0 }
 };
 
