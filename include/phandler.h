@@ -3,9 +3,8 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Protocol handlers, both generic and the actual declarations themselves.
- * Declare NOTYET to use the function pointer voodoo.
  *
- * $Id: phandler.h 5364 2006-06-11 20:28:33Z jilles $
+ * $Id: phandler.h 5626 2006-07-01 21:25:55Z jilles $
  */
 
 #ifndef PHANDLER_H

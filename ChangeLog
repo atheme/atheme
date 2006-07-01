@@ -1,3 +1,15 @@
+jilles      2006/07/01 21:01:30 UTC	(20060701-5624)
+  Log:
+  flatfile load: don't set an mlocked key if it is empty (after
+  stripping), starts with a colon or contains a comma.
+  Such keys are invalid and this makes it possible (with
+  a database version bump) to add stuff on the MC line.
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/backend/flatfile.c (File Modified) 
+
+
 jilles      2006/07/01 16:09:29 UTC	(20060701-5622)
   Log:
   Only log out people whose account is dropped or whose
