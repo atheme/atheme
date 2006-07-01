@@ -1,3 +1,15 @@
+jilles      2006/07/01 16:09:29 UTC	(20060701-5622)
+  Log:
+  Only log out people whose account is dropped or whose
+  (bursted) account does not exist if we have an
+  authentication service.
+  
+
+  Changes:	Modified:
+  +9 -6		trunk/src/node.c (File Modified) 
+  +4 -2		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/07/01 15:56:15 UTC	(20060701-5620)
   Log:
   Add int authservice_loaded, counts the number of
