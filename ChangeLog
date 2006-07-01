@@ -1,3 +1,15 @@
+jilles      2006/07/01 00:25:48 UTC	(20060701-5610)
+  Log:
+  INSTALL document:
+  - some reorganization w/r ircd issues
+  - charybdis/ratbox/inspircd/asuka/bircd/nefarious/undernet
+    put as "recommended" ircds
+  
+
+  Changes:	Modified:
+  +7 -6		trunk/INSTALL (File Modified) 
+
+
 jilles      2006/07/01 00:13:01 UTC	(20060701-5608)
   Log:
   protocol module list in example confs:

@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5307 2006-05-25 01:12:42Z jilles $
+ * $Id: main.c 5620 2006-07-01 15:56:15Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5307 2006-05-25 01:12:42Z jilles $",
+	"$Id: main.c 5620 2006-07-01 15:56:15Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -109,6 +109,7 @@ void _modinit(module_t *m)
 			saslsvs.host, saslsvs.real, saslserv);
 		saslsvs.disp = saslsvs.me->disp;
         }
+	authservice_loaded++;
 }
 
 void _moddeinit(void)
@@ -118,4 +119,5 @@ void _moddeinit(void)
                 del_service(saslsvs.me);
 		saslsvs.me = NULL;
 	}
+	authservice_loaded--;
 }

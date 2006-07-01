@@ -4,7 +4,7 @@
  *
  * Protocol module stuff.
  *
- * $Id: pmodule.h 5582 2006-06-28 17:49:51Z jilles $
+ * $Id: pmodule.h 5620 2006-07-01 15:56:15Z jilles $
  */
 
 #ifndef PMODULE_H
@@ -27,6 +27,7 @@ E pcommand_t *pcommand_find(char *token);
 
 E boolean_t pmodule_loaded;
 E boolean_t backend_loaded;
+E int authservice_loaded;
 
 /*  -- what the HELL are these used for? A grep reveals nothing.. --w00t
  *  -- they are used to provide a hint to third-party module coders about what
