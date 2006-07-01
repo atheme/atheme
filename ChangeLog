@@ -1,3 +1,16 @@
+jilles      2006/07/01 00:13:01 UTC	(20060701-5608)
+  Log:
+  protocol module list in example confs:
+  - ircnet ircd support is 2.11 only (not 2.10)
+  - plexus support is 3.x only (not 2.x)
+  - mention ptlink
+  
+
+  Changes:	Modified:
+  +3 -2		trunk/dist/example.conf (File Modified) 
+  +3 -2		trunk/dist/example.userserv.conf (File Modified) 
+
+
 jilles      2006/06/30 23:53:18 UTC	(20060630-5606)
   Log:
   Remove version number (1.x) in description of

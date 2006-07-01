@@ -45,6 +45,10 @@ Atheme requires a runtime linker. Systems which do not have a runtime linker
 will not be able to run Atheme. However, most systems include a runtime
 linker these days, so compilation and installation should be a breeze.
 
+IRCd's known to be supported by Atheme are listed in the example config
+(dist/example.conf). The recommended ones are charybdis, ratbox, inspircd,
+asuka, beware ircd (bircd), nefarious and undernet-ircu (undernet).
+
 The easy way: run the "setup" script. This does it all for you:
 	$ ./setup
 
@@ -57,11 +61,6 @@ Run the "configure" script:
 
 If you're running a large network (more than 2000 users) I suggest passing the
 --enable-large-net switch to configure.
-
-If you are running an ircd other than one used on EFnet (ratbox, hybrid or
-csircd), you will need to check which ircd type you need to use. IRCd's known
-to be supported by Atheme are now listed in the example config, as IRCd
-support has moved to modules.
 
 The "configure" script will run several tests, write several files, and exit.
 Once this is done you will want to compile Atheme. To do this, simply type:
@@ -103,7 +102,9 @@ Additionally, you need to do some configuration on all servers on the network.
 You need to reserve ("resv{}", "/resv", "Q line", etc) all nicks Atheme uses
 to avoid normal users taking those nicks and causing trouble. Also, many IRCds
 need to be configured to grant special privileges to Atheme ("service{}",
-"shared{}", "ulines{}", "U lines", etc). See doc/IRCD for more details.
+"shared{}", "ulines{}", "U lines", etc).
+
+See doc/IRCD for more details.
 
 4. STARTING ATHEME
 ------------------
