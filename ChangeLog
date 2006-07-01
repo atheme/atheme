@@ -1,3 +1,12 @@
+jilles      2006/07/01 23:52:50 UTC	(20060701-5630)
+  Log:
+  Make mc in hook_channel_req_t of type struct mychan_ * instead of void *.
+  
+
+  Changes:	Modified:
+  +1 -2		trunk/include/atheme.h (File Modified) 
+
+
 jilles      2006/07/01 23:38:42 UTC	(20060701-5628)
   Log:
   Add callbacks for non-standard type C channel modes

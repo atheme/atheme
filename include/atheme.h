@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 5630 2006-07-01 23:52:50Z jilles $
+ * $Id: atheme.h 5632 2006-07-01 23:55:36Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -63,7 +63,8 @@ typedef struct {
 
 typedef struct {
 	user_t *u;
-	struct mychan_ *mc;
+	struct mychan_ *mc; /* No, there is no easy way to make this a
+			     * mychan_t (can't redefine a typedef) -- jilles */
 } hook_channel_req_t;
 
 typedef struct tld_ tld_t;
