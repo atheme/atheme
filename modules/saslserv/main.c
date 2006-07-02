@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5620 2006-07-01 15:56:15Z jilles $
+ * $Id: main.c 5668 2006-07-02 18:34:02Z gxti $
  */
 
 #include "atheme.h"
@@ -12,13 +12,11 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5620 2006-07-01 15:56:15Z jilles $",
+	"$Id: main.c 5668 2006-07-02 18:34:02Z gxti $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 list_t sasl_mechanisms;
-list_t ss_cmdtree;
-list_t ss_helptree;
 
 /* main services client routine */
 static void saslserv(char *origin, uint8_t parc, char *parv[])
@@ -82,8 +80,7 @@ static void saslserv(char *origin, uint8_t parc, char *parv[])
 	else if (*cmd == '\001')
 		return;
 
-	/* take the command through the hash table */
-	command_exec(saslsvs.me, origin, cmd, &ss_cmdtree);
+	notice(saslsvs.nick, origin, "This service exists to identify connecting clients to the network. It has no public interface.");
 }
 
 static void saslserv_config_ready(void *unused)
@@ -93,7 +90,6 @@ static void saslserv_config_ready(void *unused)
 
         saslsvs.me = add_service(saslsvs.nick, saslsvs.user,
                                  saslsvs.host, saslsvs.real, saslserv);
-	saslsvs.disp = saslsvs.me->disp;
 
         hook_del_hook("config_ready", saslserv_config_ready);
 }
@@ -107,7 +103,6 @@ void _modinit(module_t *m)
         {
                 saslsvs.me = add_service(saslsvs.nick, saslsvs.user,
 			saslsvs.host, saslsvs.real, saslserv);
-		saslsvs.disp = saslsvs.me->disp;
         }
 	authservice_loaded++;
 }
