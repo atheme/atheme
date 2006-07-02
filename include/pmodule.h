@@ -4,7 +4,7 @@
  *
  * Protocol module stuff.
  *
- * $Id: pmodule.h 5620 2006-07-01 15:56:15Z jilles $
+ * $Id: pmodule.h 5646 2006-07-02 01:38:39Z jilles $
  */
 
 #ifndef PMODULE_H
@@ -49,7 +49,7 @@ E int authservice_loaded;
 #define PROTOCOL_SORCERY		14
 #define PROTOCOL_ULTIMATE3		15
 #define PROTOCOL_UNDERNET		16
-#define PROTOCOL_UNREAL			17
+#define PROTOCOL_UNREAL			17 /* obsolete */
 #define PROTOCOL_SOLIDIRCD		18
 #define PROTOCOL_NEFARIOUS		19
 

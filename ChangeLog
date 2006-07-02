@@ -1,3 +1,12 @@
+jilles      2006/07/02 01:32:36 UTC	(20060702-5644)
+  Log:
+  Comment changes to users.h: don't mention which ircds use vhost. Add some other explanation.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/include/users.h (File Modified) 
+
+
 nenolod     2006/07/02 00:57:52 UTC	(20060702-5642)
   Log:
   - remove unrealircd support -- it's never really worked very well, and nobody seems to care enough about it
