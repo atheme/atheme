@@ -1,3 +1,17 @@
+jilles      2006/07/02 01:38:39 UTC	(20060702-5646)
+  Log:
+  - remove last mention of unreal from example.conf
+  - remove unreal protocol module include file
+  - mark PROTOCOL_UNREAL constant obsolete
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/dist/example.conf (File Modified) 
+  +1 -1		trunk/dist/example.userserv.conf (File Modified) 
+  +1 -1		trunk/include/pmodule.h (File Modified) 
+  +0 -35	trunk/include/protocol/unreal.h (File Deleted) 
+
+
 jilles      2006/07/02 01:32:36 UTC	(20060702-5644)
   Log:
   Comment changes to users.h: don't mention which ircds use vhost. Add some other explanation.

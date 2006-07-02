@@ -4,7 +4,7 @@
  *
  * Commandlist manipulation routines.
  *
- * $Id: commandtree.h 5137 2006-05-01 13:40:56Z jilles $
+ * $Id: commandtree.h 5648 2006-07-02 04:21:38Z nenolod $
  */
 
 #ifndef COMMANDLIST_H
@@ -29,6 +29,7 @@ struct fcommandentry_ {
 E void command_add(command_t *cmd, list_t *commandtree);
 E void command_add_many(command_t **cmd, list_t *commandtree);
 E void command_delete(command_t *cmd, list_t *commandtree);
+E void command_delete_many(command_t **cmd, list_t *commandtree);
 E void command_exec(service_t *svs, char *origin, char *cmd, list_t *commandtree);
 E void command_help(char *mynick, char *origin, list_t *commandtree);
 E void command_help_short(char *mynick, char *origin, list_t *commandtree, char *maincmds);
