@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 5650 2006-07-02 04:28:25Z nenolod $
+ * $Id: set.c 5654 2006-07-02 05:05:34Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 5650 2006-07-02 04:28:25Z nenolod $",
+	"$Id: set.c 5654 2006-07-02 05:05:34Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -23,6 +23,20 @@ list_t *ns_cmdtree, *ns_helptree;
 command_t ns_set = { "SET", "Sets various control flags.", AC_NONE, ns_cmd_set };
 
 list_t ns_set_cmdtree;
+
+/* HELP SET */
+static void ns_help_set(char *origin)
+{
+	notice(nicksvs.nick, origin, "Help for \2SET\2:");
+	notice(nicksvs.nick, origin, " ");
+	notice(nicksvs.nick, origin, "SET allows you to set various control flags");
+	notice(nicksvs.nick, origin, "for nicknames that change the way certain operations");
+	notice(nicksvs.nick, origin, "are performed on them.");
+	notice(nicksvs.nick, origin, " ");
+	command_help(nicksvs.nick, origin, &ns_set_cmdtree);
+	notice(nicksvs.nick, origin, " ");
+	notice(nicksvs.nick, origin, "For more information, use \2/msg %s HELP SET \37command\37\2.", nicksvs.nick);
+}
 
 /* SET <setting> <parameters> */
 static void ns_cmd_set(char *origin)
@@ -502,6 +516,7 @@ void _modinit(module_t *m)
 	ns_helptree = module_locate_symbol("nickserv/main", "ns_helptree");
 	command_add(&ns_set, ns_cmdtree);
 
+	help_addentry(ns_helptree, "SET", NULL, ns_help_set);
 	help_addentry(ns_helptree, "SET EMAIL", "help/nickserv/set_email", NULL);
 	help_addentry(ns_helptree, "SET EMAILMEMOS", "help/nickserv/set_emailmemos", NULL);
 	help_addentry(ns_helptree, "SET HIDEMAIL", "help/nickserv/set_hidemail", NULL);
@@ -518,6 +533,7 @@ void _modinit(module_t *m)
 void _moddeinit()
 {
 	command_delete(&ns_set, ns_cmdtree);
+	help_delentry(ns_helptree, "SET");
 	help_delentry(ns_helptree, "SET EMAIL");
 	help_delentry(ns_helptree, "SET EMAILMEMOS");
 	help_delentry(ns_helptree, "SET HIDEMAIL");
