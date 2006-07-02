@@ -1,3 +1,13 @@
+jilles      2006/07/01 23:55:36 UTC	(20060701-5632)
+  Log:
+  Add a comment to hook_channel_req_t, it is not
+  possible to use mychan_t here.
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/include/atheme.h (File Modified) 
+
+
 jilles      2006/07/01 23:52:50 UTC	(20060701-5630)
   Log:
   Make mc in hook_channel_req_t of type struct mychan_ * instead of void *.
