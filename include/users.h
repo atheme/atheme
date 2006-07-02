@@ -4,7 +4,7 @@
  *
  * Data structures for connected clients.
  *
- * $Id: users.h 4709 2006-01-24 23:02:59Z jilles $
+ * $Id: users.h 5644 2006-07-02 01:32:36Z jilles $
  */
 
 #ifndef USERS_H
@@ -14,10 +14,10 @@ struct user_
 {
 	char nick[NICKLEN];
 	char user[USERLEN];
-	char host[HOSTLEN];
+	char host[HOSTLEN]; /* Real host */
 	char gecos[GECOSLEN];
-	char vhost[HOSTLEN];  /* Used by UnrealIRCd, InspIRCd, ShadowIRCd, Asuka, Nefarious. */
-	char uid[NICKLEN];    /* Used for TS6, P10, IRCNet ircd. */
+	char vhost[HOSTLEN]; /* Visible host */
+	char uid[NICKLEN]; /* Used for TS6, P10, IRCNet ircd. */
 	char ip[HOSTLEN];
 
 	list_t channels;

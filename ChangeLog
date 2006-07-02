@@ -1,3 +1,16 @@
+nenolod     2006/07/02 00:57:52 UTC	(20060702-5642)
+  Log:
+  - remove unrealircd support -- it's never really worked very well, and nobody seems to care enough about it
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/dist/example.conf (File Modified) 
+  +0 -1		trunk/dist/example.userserv.conf (File Modified) 
+  +0 -5		trunk/doc/IRCD (File Modified) 
+  +1 -2		trunk/protocol/Makefile.in (File Modified) 
+  +0 -940	trunk/protocol/unreal.c (File Deleted) 
+
+
 jilles      2006/07/02 00:48:37 UTC	(20060702-5640)
   Log:
   Add some consts.
