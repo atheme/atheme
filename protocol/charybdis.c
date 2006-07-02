@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 5628 2006-07-01 23:38:42Z jilles $
+ * $Id: charybdis.c 5662 2006-07-02 14:39:16Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 5628 2006-07-01 23:38:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 5662 2006-07-02 14:39:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -112,11 +112,11 @@ static boolean_t check_forward(const char *value, channel_t *c, mychan_t *mc, us
 		target_cu = chanuser_find(target_c, u);
 		if (target_cu != NULL && target_cu->modes & CMODE_OP)
 			return TRUE;
-		if (chanacs_user_flags(mc, u) & CA_SET)
+		if (chanacs_user_flags(target_mc, u) & CA_SET)
 			return TRUE;
 	}
 	else if (mu != NULL)
-		if (chanacs_find(mc, mu, CA_SET))
+		if (chanacs_find(target_mc, mu, CA_SET))
 			return TRUE;
 	return FALSE;
 }

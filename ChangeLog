@@ -1,3 +1,13 @@
+jilles      2006/07/02 13:01:33 UTC	(20060702-5660)
+  Log:
+  channel_mode(): don't check extmode parameters if the mode came from ircd
+  as there is no good way to deal with an invalid parameter.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/cmode.c (File Modified) 
+
+
 nenolod     2006/07/02 05:10:39 UTC	(20060702-5658)
   Log:
   - header/footer should be present on help `functions'
