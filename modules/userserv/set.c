@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 5652 2006-07-02 04:38:41Z nenolod $
+ * $Id: set.c 5678 2006-07-02 22:24:00Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 5652 2006-07-02 04:38:41Z nenolod $",
+	"$Id: set.c 5678 2006-07-02 22:24:00Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -28,6 +28,16 @@ list_t us_set_cmdtree;
 static void us_cmd_set(char *origin)
 {
 	char *setting = strtok(NULL, " ");
+	user_t *u;
+
+	u = user_find_named(origin);
+	if (u == NULL)
+		return;
+	if (u->myuser == NULL)
+	{
+		notice(usersvs.nick, origin, "You are not logged in.");
+		return;
+	}
 
 	if (setting == NULL)
 	{
@@ -47,10 +57,7 @@ static void _us_setemail(char *origin)
 	char *email = strtok(NULL, " ");
 
 	if (u == NULL || u->myuser == NULL)
-	{
-		notice(usersvs.nick, origin, "You are not authorized to perform this command.");
 		return;
-	}
 
 	if (email == NULL)
 	{
@@ -124,10 +131,7 @@ static void _us_sethidemail(char *origin)
 	char *params = strtok(NULL, " ");
 
 	if (u == NULL || u->myuser == NULL)
-	{
-		notice(usersvs.nick, origin, "You are not authorized to perform this command.");
 		return;
-	}
 
 	if (!strcasecmp("ON", params))
 	{
@@ -177,10 +181,7 @@ static void _us_setemailmemos(char *origin)
 	char *params = strtok(NULL, " ");
 
 	if (u == NULL || u->myuser == NULL)
-	{
-		notice(usersvs.nick, origin, "You are not authorized to perform this command.");
 		return;
-	}
 
 	if (u->myuser->flags & MU_WAITAUTH)
 	{
@@ -236,10 +237,7 @@ static void _us_setnomemo(char *origin)
 	char *params = strtok(NULL, " ");
 
 	if (u == NULL || u->myuser == NULL)
-	{
-		notice(usersvs.nick, origin, "You are not authorized to perform this command.");
 		return;
-	}
 
 	if (!strcasecmp("ON", params))
 	{
@@ -284,10 +282,7 @@ static void _us_setneverop(char *origin)
 	char *params = strtok(NULL, " ");
 
 	if (u == NULL || u->myuser == NULL)
-	{
-		notice(usersvs.nick, origin, "You are not authorized to perform this command.");
 		return;
-	}
 
 	if (!strcasecmp("ON", params))
 	{
@@ -338,10 +333,7 @@ static void _us_setnoop(char *origin)
 	char *params = strtok(NULL, " ");
 
 	if (u == NULL || u->myuser == NULL)
-	{
-		notice(usersvs.nick, origin, "You are not authorized to perform this command.");
 		return;
-	}
 
 	if (!strcasecmp("ON", params))
 	{
@@ -392,10 +384,7 @@ static void _us_setproperty(char *origin)
 	char *value = strtok(NULL, "");
 
 	if (u == NULL || u->myuser == NULL)
-	{
-		notice(usersvs.nick, origin, "You are not authorized to perform this command.");
 		return;
-	}
 
 	if (!property)
 	{
@@ -454,10 +443,7 @@ static void _us_setpassword(char *origin)
 	user_t *u = user_find_named(origin);
 
 	if (u == NULL || u->myuser == NULL)
-	{
-		notice(usersvs.nick, origin, "You are not authorized to perform this command.");
 		return;
-	}
 
 	if (strlen(password) > 32)
 	{

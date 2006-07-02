@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 5654 2006-07-02 05:05:34Z nenolod $
+ * $Id: set.c 5678 2006-07-02 22:24:00Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 5654 2006-07-02 05:05:34Z nenolod $",
+	"$Id: set.c 5678 2006-07-02 22:24:00Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -42,6 +42,16 @@ static void ns_help_set(char *origin)
 static void ns_cmd_set(char *origin)
 {
 	char *setting = strtok(NULL, " ");
+	user_t *u;
+
+	u = user_find_named(origin);
+	if (u == NULL)
+		return;
+	if (u->myuser == NULL)
+	{
+		notice(nicksvs.nick, origin, "You are not logged in.");
+		return;
+	}
 
 	if (setting == NULL)
 	{
@@ -61,10 +71,7 @@ static void _ns_setemail(char *origin)
 	char *email = strtok(NULL, " ");
 
 	if (u == NULL || u->myuser == NULL)
-	{
-		notice(nicksvs.nick, origin, "You are not authorized to perform this command.");
 		return;
-	}
 
 	if (email == NULL)
 	{
@@ -138,10 +145,7 @@ static void _ns_sethidemail(char *origin)
 	char *params = strtok(NULL, " ");
 
 	if (u == NULL || u->myuser == NULL)
-	{
-		notice(nicksvs.nick, origin, "You are not authorized to perform this command.");
 		return;
-	}
 
 	if (!strcasecmp("ON", params))
 	{
@@ -191,10 +195,7 @@ static void _ns_setemailmemos(char *origin)
 	char *params = strtok(NULL, " ");
 
 	if (u == NULL || u->myuser == NULL)
-	{
-		notice(nicksvs.nick, origin, "You are not authorized to perform this command.");
 		return;
-	}
 
 	if (u->myuser->flags & MU_WAITAUTH)
 	{
@@ -250,10 +251,7 @@ static void _ns_setnomemo(char *origin)
 	char *params = strtok(NULL, " ");
 
 	if (u == NULL || u->myuser == NULL)
-	{
-		notice(nicksvs.nick, origin, "You are not authorized to perform this command.");
 		return;
-	}
 
 	if (!strcasecmp("ON", params))
 	{
@@ -298,10 +296,7 @@ static void _ns_setneverop(char *origin)
 	char *params = strtok(NULL, " ");
 
 	if (u == NULL || u->myuser == NULL)
-	{
-		notice(nicksvs.nick, origin, "You are not authorized to perform this command.");
 		return;
-	}
 
 	if (!strcasecmp("ON", params))
 	{
@@ -352,10 +347,7 @@ static void _ns_setnoop(char *origin)
 	char *params = strtok(NULL, " ");
 
 	if (u == NULL || u->myuser == NULL)
-	{
-		notice(nicksvs.nick, origin, "You are not authorized to perform this command.");
 		return;
-	}
 
 	if (!strcasecmp("ON", params))
 	{
@@ -406,10 +398,7 @@ static void _ns_setproperty(char *origin)
 	char *value = strtok(NULL, "");
 
 	if (u == NULL || u->myuser == NULL)
-	{
-		notice(nicksvs.nick, origin, "You are not authorized to perform this command.");
 		return;
-	}
 
 	if (!property)
 	{
@@ -468,10 +457,7 @@ static void _ns_setpassword(char *origin)
 	user_t *u = user_find_named(origin);
 
 	if (u == NULL || u->myuser == NULL)
-	{
-		notice(nicksvs.nick, origin, "You are not authorized to perform this command.");
 		return;
-	}
 
 	if (strlen(password) > 32)
 	{
