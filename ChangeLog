@@ -1,3 +1,12 @@
+jilles      2006/07/02 00:08:33 UTC	(20060702-5636)
+  Log:
+  ChanServ UNBAN: remove unnecessary additional declaration of chanban_t *cb (2 times).
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/chanserv/ban.c (File Modified) 
+
+
 jilles      2006/07/02 00:05:59 UTC	(20060702-5634)
   Log:
   flatfile_db_save(): cast argument to %ld from time_t to long

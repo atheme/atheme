@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 5628 2006-07-01 23:38:42Z jilles $
+ * $Id: inspircd.c 5638 2006-07-02 00:21:54Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5628 2006-07-01 23:38:42Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5638 2006-07-02 00:21:54Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -509,8 +509,6 @@ static void m_fjoin(char *origin, uint8_t parc, char *parv[])
 	channel_t *c;
 	uint8_t i;
 	time_t ts;
-	char plus[] = "+";
-	char *modev[] = { plus, NULL };
 
 	if (parc >= 3)
 	{
@@ -526,7 +524,7 @@ static void m_fjoin(char *origin, uint8_t parc, char *parv[])
 			 * join if everyone is akicked.
 			 * Inspircd does not allow any redundant modes
 			 * so this will not look ugly. -- jilles */
-			channel_mode(NULL, c, 1, modev);
+			channel_mode_va(NULL, c, 1, "+");
 		}
 
 		if (ts < c->ts)
@@ -729,20 +727,16 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 	channel_t *c;
 	chanuser_t *cu;
 	node_t *n, *tn;
-	char plus[] = "+";
-	char* modev[2];
 
 	if (!u)
 		return;
 
-	modev[0] = plus;
-	modev[1] = NULL;
 	c = channel_find(parv[0]);
 	if (!c)
 	{
 		slog(LG_DEBUG, "m_join(): new channel: %s (TS and modes lost)", parv[0]);
 		c = channel_add(parv[0], CURRTIME);
-		channel_mode(NULL, c, 1, modev);
+		channel_mode_va(NULL, c, 1, "+");
 	}
 	chanuser_add(c, origin);
 }
