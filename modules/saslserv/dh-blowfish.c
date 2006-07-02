@@ -4,7 +4,7 @@
  *
  * DH-BLOWFISH mechanism provider
  *
- * $Id: dh-blowfish.c 5328 2006-05-30 04:01:34Z gxti $
+ * $Id: dh-blowfish.c 5666 2006-07-02 17:47:52Z gxti $
  */
 
 #include "atheme.h"
@@ -19,7 +19,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/dh-blowfish", FALSE, _modinit, _moddeinit,
-	"$Id: dh-blowfish.c 5328 2006-05-30 04:01:34Z gxti $",
+	"$Id: dh-blowfish.c 5666 2006-07-02 17:47:52Z gxti $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -130,16 +130,10 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 	if(len == 0 || len % 8 || len > 128)
 		goto end;
 
-	char *b = malloc(65);
-	int i;
-	for(i = 0;i < 32;i++)
-		sprintf(b + i * 2, "%02x", (unsigned char)secret[i]);
-	slog(LG_INFO, "key: %s", b);
-	free(b);
-
 	/* Decrypt! */
 	BF_set_key(&key, size, secret);
 	ptr = password = (char*)malloc(len + 1);
+    password[len] = '\0';
 	while(len)
 	{
 		BF_ecb_encrypt(message, ptr, &key, BF_DECRYPT);
@@ -150,8 +144,6 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 
 	if(verify_password(mu, password))
 		ret = ASASL_DONE;
-
-	slog(LG_INFO, "password: %s", password);
 
 end:
 	if(their_key)
