@@ -1,3 +1,14 @@
+jilles      2006/07/02 22:24:00 UTC	(20060702-5678)
+  Log:
+  NickServ/UserServ SET: move logged-in check to ns_cmd_set()/us_cmd_set().
+  Checks in individual set commands kept but messages removed.
+  
+
+  Changes:	Modified:
+  +10 -24	trunk/modules/nickserv/set.c (File Modified) 
+  +10 -24	trunk/modules/userserv/set.c (File Modified) 
+
+
 jilles      2006/07/02 21:42:21 UTC	(20060702-5676)
   Log:
   Fix comment preceding command_delete_many().

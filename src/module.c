@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 4217 2005-12-27 03:36:36Z nenolod $
+ * $Id: module.c 5680 2006-07-02 22:34:35Z jilles $
  */
 
 #include "atheme.h"
@@ -278,7 +278,7 @@ void *module_locate_symbol(char *modname, char *sym)
 
 	if (!(m = module_find_published(modname)))
 	{
-		slog(LG_DEBUG, "module_locate_symbol(): %s is not loaded.", modname);
+		slog(LG_ERROR, "module_locate_symbol(): %s is not loaded.", modname);
 		return NULL;
 	}
 
@@ -292,6 +292,8 @@ void *module_locate_symbol(char *modname, char *sym)
 
 	symptr = linker_getsym(m->handle, sym);
 
+	if (symptr == NULL)
+		slog(LG_ERROR, "module_locate_symbol(): could not find symbol %s in module %s.", sym, modname);
 	return symptr;
 }
 
