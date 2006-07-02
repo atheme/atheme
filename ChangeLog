@@ -1,3 +1,12 @@
+nenolod     2006/07/02 05:09:02 UTC	(20060702-5656)
+  Log:
+  - handle command_(add|delete)_many() a bit more sanely
+  
+
+  Changes:	Modified:
+  +6 -6		trunk/src/commandtree.c (File Modified) 
+
+
 nenolod     2006/07/02 05:05:34 UTC	(20060702-5654)
   Log:
   - HELP SET

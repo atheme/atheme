@@ -4,7 +4,7 @@
  *
  * This file contains a generic help system implementation.
  *
- * $Id: help.c 5071 2006-04-14 10:50:44Z w00t $
+ * $Id: help.c 5658 2006-07-02 05:10:39Z nenolod $
  */
 
 #include "atheme.h"
@@ -70,7 +70,13 @@ void help_display(char *svsnick, char *svsdisp, char *origin, char *command, lis
 			notice(svsnick, origin, "***** \2End of Help\2 *****");
 		}
 		else if (c->func)
+		{
+			notice(svsnick, origin, "***** \2%s Help\2 *****", svsnick);
+
 			c->func(origin);
+
+			notice(svsnick, origin, "***** \2End of Help\2 *****");
+		}
 		else
 			notice(svsnick, origin, "No help available for \2%s\2.", command);
 	}
