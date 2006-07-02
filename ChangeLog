@@ -1,3 +1,13 @@
+jilles      2006/07/02 21:20:32 UTC	(20060702-5674)
+  Log:
+  - Add extmodes description
+  - Add mode lock storage description
+  
+
+  Changes:	Modified:
+  +22 -7	trunk/doc/MODES (File Modified) 
+
+
 jilles      2006/07/02 18:37:23 UTC	(20060702-5672)
   Log:
   Add mode locking of non-standard simple modes with parameters.

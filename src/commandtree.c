@@ -4,7 +4,7 @@
  *
  * Commandtree manipulation routines.
  *
- * $Id: commandtree.c 5656 2006-07-02 05:09:02Z nenolod $
+ * $Id: commandtree.c 5676 2006-07-02 21:42:21Z jilles $
  */
 
 #include "atheme.h"
@@ -67,8 +67,8 @@ void command_delete(command_t * cmd, list_t *commandtree)
  *       none
  *
  * Side Effects:
- *       adds an array of commands to a command list,
- *       via command_add().
+ *       deletes an array of commands from a command list,
+ *       via command_delete().
  */
 void command_delete_many(command_t ** cmd, list_t *commandtree)
 {
