@@ -1,3 +1,13 @@
+nenolod     2006/07/02 04:21:38 UTC	(20060702-5648)
+  Log:
+  - add command_delete_many().
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/commandtree.h (File Modified) 
+  +22 -1	trunk/src/commandtree.c (File Modified) 
+
+
 jilles      2006/07/02 01:38:39 UTC	(20060702-5646)
   Log:
   - remove last mention of unreal from example.conf
