@@ -4,18 +4,18 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 5662 2006-07-02 14:39:16Z jilles $
+ * $Id: charybdis.c 5664 2006-07-02 16:31:26Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 5662 2006-07-02 14:39:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 5664 2006-07-02 16:31:26Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
 ircd_t Charybdis = {
-        "Charybdis 1.0+pre4",		/* IRCd name */
+        "Charybdis",			/* IRCd name */
         "$$",                           /* TLD Prefix, used by Global. */
         TRUE,                           /* Whether or not we use IRCNet/TS6 UID */
         FALSE,                          /* Whether or not we use RCOMMAND */

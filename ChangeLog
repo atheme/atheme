@@ -1,3 +1,13 @@
+jilles      2006/07/02 14:39:16 UTC	(20060702-5662)
+  Log:
+  charybdis +f callback: oops, checked access in source instead
+  of destination channel
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/protocol/charybdis.c (File Modified) 
+
+
 jilles      2006/07/02 13:01:33 UTC	(20060702-5660)
   Log:
   channel_mode(): don't check extmode parameters if the mode came from ircd
