@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 5628 2006-07-01 23:38:42Z jilles $
+ * $Id: cmode.c 5640 2006-07-02 00:48:37Z jilles $
  */
 
 #include "atheme.h"
@@ -19,7 +19,7 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 	boolean_t chanserv_reopped = FALSE;
 	boolean_t simple_modes_changed = FALSE;
 	int i, parpos = 0, whatt = MTYPE_NUL;
-	char *pos = parv[0];
+	const char *pos = parv[0];
 	mychan_t *mc;
 	chanuser_t *cu = NULL;
 
@@ -283,9 +283,9 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 }
 
 /* like channel_mode() but parv array passed as varargs */
-void channel_mode_va(user_t *source, channel_t *chan, uint8_t parc, char *parv0, ...)
+void channel_mode_va(user_t *source, channel_t *chan, uint8_t parc, const char *parv0, ...)
 {
-	char *parv[255];
+	const char *parv[255];
 	int i;
 	va_list va;
 
@@ -301,7 +301,7 @@ void channel_mode_va(user_t *source, channel_t *chan, uint8_t parc, char *parv0,
 	parv[0] = parv0;
 	va_start(va, parv0);
 	for (i = 1; i < parc; i++)
-		parv[i] = va_arg(va, char *);
+		parv[i] = va_arg(va, const char *);
 	va_end(va);
 	channel_mode(source, chan, parc, parv);
 }
@@ -518,7 +518,7 @@ static void modestack_add_limit(struct modestackdata *md, int dir, uint32_t limi
 	md->limitused = 1;
 }
 
-static void modestack_add_ext(struct modestackdata *md, int dir, int i, char *value)
+static void modestack_add_ext(struct modestackdata *md, int dir, int i, const char *value)
 {
 	md->extmodesused[i] = 0;
 	modestack_calclen(md);
@@ -535,7 +535,7 @@ static void modestack_add_ext(struct modestackdata *md, int dir, int i, char *va
 	md->extmodesused[i] = 1;
 }
 
-static void modestack_add_param(struct modestackdata *md, int dir, char type, char *value)
+static void modestack_add_param(struct modestackdata *md, int dir, char type, const char *value)
 {
 	char *p;
 	int n = 0, i;
@@ -621,7 +621,7 @@ void modestack_mode_limit(char *source, char *channel, int dir, uint32_t limit)
 }
 
 /* stack a non-standard type C mode */
-void modestack_mode_ext(char *source, char *channel, int dir, int i, char *value)
+void modestack_mode_ext(char *source, char *channel, int dir, int i, const char *value)
 {
 	struct modestackdata *md;
 
@@ -638,7 +638,7 @@ void modestack_mode_ext(char *source, char *channel, int dir, int i, char *value
 }
 
 /* stack a type A, B or E mode */
-void modestack_mode_param(char *source, char *channel, int dir, char type, char *value)
+void modestack_mode_param(char *source, char *channel, int dir, char type, const char *value)
 {
 	struct modestackdata *md;
 

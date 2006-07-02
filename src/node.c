@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 5622 2006-07-01 16:09:29Z jilles $
+ * $Id: node.c 5640 2006-07-02 00:48:37Z jilles $
  */
 
 #include "atheme.h"
@@ -747,7 +747,7 @@ void user_delete(user_t *u)
 	cnt.user--;
 }
 
-user_t *user_find(char *nick)
+user_t *user_find(const char *nick)
 {
 	user_t *u;
 	node_t *n;
@@ -757,7 +757,7 @@ user_t *user_find(char *nick)
 
 	if (ircd->uses_uid == TRUE)
 	{
-		LIST_FOREACH(n, uidlist[SHASH((unsigned char *)nick)].head)
+		LIST_FOREACH(n, uidlist[SHASH((const unsigned char *)nick)].head)
 		{
 			u = (user_t *)n->data;
 
@@ -766,7 +766,7 @@ user_t *user_find(char *nick)
 		}
 	}
 
-	LIST_FOREACH(n, userlist[SHASH((unsigned char *)nick)].head)
+	LIST_FOREACH(n, userlist[SHASH((const unsigned char *)nick)].head)
 	{
 		u = (user_t *)n->data;
 
@@ -783,12 +783,12 @@ user_t *user_find(char *nick)
 }
 
 /* Use this for user input, to prevent users chasing users by UID -- jilles */
-user_t *user_find_named(char *nick)
+user_t *user_find_named(const char *nick)
 {
 	user_t *u;
 	node_t *n;
 
-	LIST_FOREACH(n, userlist[SHASH((unsigned char *)nick)].head)
+	LIST_FOREACH(n, userlist[SHASH((const unsigned char *)nick)].head)
 	{
 		u = (user_t *)n->data;
 
@@ -924,12 +924,12 @@ void channel_delete(char *name)
 	cnt.chan--;
 }
 
-channel_t *channel_find(char *name)
+channel_t *channel_find(const char *name)
 {
 	channel_t *c;
 	node_t *n;
 
-	LIST_FOREACH(n, chanlist[shash((unsigned char *) name)].head)
+	LIST_FOREACH(n, chanlist[shash((const unsigned char *) name)].head)
 	{
 		c = (channel_t *)n->data;
 
@@ -944,7 +944,7 @@ channel_t *channel_find(char *name)
  * C H A N  B A N S *
  ********************/
 
-chanban_t *chanban_add(channel_t *chan, char *mask, int type)
+chanban_t *chanban_add(channel_t *chan, const char *mask, int type)
 {
 	chanban_t *c;
 	node_t *n;
@@ -989,7 +989,7 @@ void chanban_delete(chanban_t * c)
 	BlockHeapFree(chanban_heap, c);
 }
 
-chanban_t *chanban_find(channel_t *chan, char *mask, int type)
+chanban_t *chanban_find(channel_t *chan, const char *mask, int type)
 {
 	chanban_t *c;
 	node_t *n;
@@ -1595,12 +1595,12 @@ void mychan_delete(char *name)
 	cnt.mychan--;
 }
 
-mychan_t *mychan_find(char *name)
+mychan_t *mychan_find(const char *name)
 {
 	mychan_t *mc;
 	node_t *n;
 
-	LIST_FOREACH(n, mclist[shash((unsigned char *) name)].head)
+	LIST_FOREACH(n, mclist[shash((const unsigned char *) name)].head)
 	{
 		mc = (mychan_t *)n->data;
 

@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 5546 2006-06-24 23:08:30Z jilles $
+ * $Id: extern.h 5640 2006-07-02 00:48:37Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -17,15 +17,15 @@ E boolean_t cold_start;
 
 /* cmode.c */
 E void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[]);
-E void channel_mode_va(user_t *source, channel_t *chan, uint8_t parc, char *parv0, ...);
+E void channel_mode_va(user_t *source, channel_t *chan, uint8_t parc, const char *parv0, ...);
 E void clear_simple_modes(channel_t *c);
 E char *channel_modes(channel_t *c, boolean_t doparams);
 E void modestack_flush_channel(char *channel);
 E void modestack_forget_channel(char *channel);
 E void modestack_mode_simple(char *source, char *channel, int dir, int32_t flags);
 E void modestack_mode_limit(char *source, char *channel, int dir, uint32_t limit);
-E void modestack_mode_ext(char *source, char *channel, int dir, int i, char *value);
-E void modestack_mode_param(char *source, char *channel, int dir, char type, char *value);
+E void modestack_mode_ext(char *source, char *channel, int dir, int i, const char *value);
+E void modestack_mode_param(char *source, char *channel, int dir, char type, const char *value);
 E void cmode(char *sender, ...);
 E void user_mode(user_t *user, char *modes);
 E void check_modes(mychan_t *mychan, boolean_t sendnow);
@@ -185,9 +185,9 @@ E tld_t *tld_add(char *name);
 E void tld_delete(char *name);
 E tld_t *tld_find(char *name);
 
-E chanban_t *chanban_add(channel_t *chan, char *mask, int type);
+E chanban_t *chanban_add(channel_t *chan, const char *mask, int type);
 E void chanban_delete(chanban_t *c);
-E chanban_t *chanban_find(channel_t *chan, char *mask, int type);
+E chanban_t *chanban_find(channel_t *chan, const char *mask, int type);
 E void chanban_clear(channel_t *chan);
 
 E server_t *server_add(char *name, uint8_t hops, char *uplink, char *id, char *desc);
@@ -196,18 +196,17 @@ E server_t *server_find(char *name);
 
 E user_t *user_add(char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, uint32_t ts);
 E void user_delete(user_t *u);
-E user_t *user_find(char *nick);
-E user_t *user_find_named(char *nick);
+E user_t *user_find(const char *nick);
+E user_t *user_find_named(const char *nick);
 E void user_changeuid(user_t *u, char *uid);
 
 E channel_t *channel_add(char *name, uint32_t ts);
 E void channel_delete(char *name);
-E channel_t *channel_find(char *name);
+E channel_t *channel_find(const char *name);
 
 E chanuser_t *chanuser_add(channel_t *chan, char *user);
 E void chanuser_delete(channel_t *chan, user_t *user);
 E chanuser_t *chanuser_find(channel_t *chan, user_t *user);
-
 
 E kline_t *kline_add(char *user, char *host, char *reason, long duration);
 E void kline_delete(char *user, char *host);
@@ -224,7 +223,7 @@ E void myuser_notice(char *from, myuser_t *target, char *fmt, ...);
 
 E mychan_t *mychan_add(char *name);
 E void mychan_delete(char *name);
-E mychan_t *mychan_find(char *name);
+E mychan_t *mychan_find(const char *name);
 
 E chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, uint32_t level);
 E chanacs_t *chanacs_add_host(mychan_t *mychan, char *host, uint32_t level);
