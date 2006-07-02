@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INFO functions.
  *
- * $Id: info.c 5402 2006-06-18 00:38:10Z jilles $
+ * $Id: info.c 5672 2006-07-02 18:37:23Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 5402 2006-06-18 00:38:10Z jilles $",
+	"$Id: info.c 5672 2006-07-02 18:37:23Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,6 +48,8 @@ static void cs_cmd_info(char *origin)
 	struct tm tm;
 	metadata_t *md;
 	hook_channel_req_t req;
+	char *p, *q, *qq;
+	int dir;
 
 	if (!name)
 	{
@@ -94,24 +96,34 @@ static void cs_cmd_info(char *origin)
 		notice(chansvs.nick, origin, "Last used  : %s (%s ago)", strfbuf, time_ago(mc->used));
 	}
 
-	if (mc->mlock_on || mc->mlock_off || mc->mlock_limit || mc->mlock_key)
+	md = metadata_find(mc, METADATA_CHANNEL, "private:mlockext");
+	if (mc->mlock_on || mc->mlock_off || mc->mlock_limit || mc->mlock_key || md)
 	{
 		char params[BUFSIZE];
 
+		if (md != NULL && strlen(md->value) > 450)
+		{
+			/* Be safe */
+			notice(chansvs.nick, origin, "Mode lock is too long, not entirely shown");
+			md = NULL;
+		}
+
 		*buf = 0;
 		*params = 0;
+		dir = MTYPE_NUL;
 
 		if (mc->mlock_on)
 		{
-			strcat(buf, "+");
+			if (dir != MTYPE_ADD)
+				dir = MTYPE_ADD, strcat(buf, "+");
 			strcat(buf, flags_to_string(mc->mlock_on));
 
 		}
 
 		if (mc->mlock_limit)
 		{
-			if (*buf == '\0')
-				strcat(buf, "+");
+			if (dir != MTYPE_ADD)
+				dir = MTYPE_ADD, strcat(buf, "+");
 			strcat(buf, "l");
 			strcat(params, " ");
 			strcat(params, itoa(mc->mlock_limit));
@@ -119,19 +131,71 @@ static void cs_cmd_info(char *origin)
 
 		if (mc->mlock_key)
 		{
-			if (*buf == '\0')
-				strcat(buf, "+");
+			if (dir != MTYPE_ADD)
+				dir = MTYPE_ADD, strcat(buf, "+");
 			strcat(buf, "k");
+			strcat(params, " *");
+		}
+
+		if (md)
+		{
+			p = md->value;
+			q = buf + strlen(buf);
+			while (*p != '\0')
+			{
+				if (p[1] != ' ' && p[1] != '\0')
+				{
+					if (dir != MTYPE_ADD)
+						dir = MTYPE_ADD, *q++ = '+';
+					*q++ = *p++;
+					strcat(params, " ");
+					qq = params + strlen(params);
+					while (*p != '\0' && *p != ' ')
+						*qq++ = *p++;
+					*qq = '\0';
+				}
+				else
+				{
+					p++;
+					while (*p != '\0' && *p != ' ')
+						p++;
+				}
+				while (*p == ' ')
+					p++;
+			}
+			*q = '\0';
 		}
 
 		if (mc->mlock_off)
 		{
-			strcat(buf, "-");
+			if (dir != MTYPE_DEL)
+				dir = MTYPE_DEL, strcat(buf, "-");
 			strcat(buf, flags_to_string(mc->mlock_off));
 			if (mc->mlock_off & CMODE_LIMIT)
 				strcat(buf, "l");
 			if (mc->mlock_off & CMODE_KEY)
 				strcat(buf, "k");
+		}
+
+		if (md)
+		{
+			p = md->value;
+			q = buf + strlen(buf);
+			while (*p != '\0')
+			{
+				if (p[1] == ' ' || p[1] == '\0')
+				{
+					if (dir != MTYPE_DEL)
+						dir = MTYPE_DEL, *q++ = '-';
+					*q++ = *p;
+				}
+				p++;
+				while (*p != '\0' && *p != ' ')
+					p++;
+				while (*p == ' ')
+					p++;
+			}
+			*q = '\0';
 		}
 
 		if (*buf)

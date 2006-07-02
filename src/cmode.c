@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 5660 2006-07-02 13:01:33Z jilles $
+ * $Id: cmode.c 5672 2006-07-02 18:37:23Z jilles $
  */
 
 #include "atheme.h"
@@ -893,6 +893,10 @@ void user_mode(user_t *user, char *modes)
 void check_modes(mychan_t *mychan, boolean_t sendnow)
 {
 	int modes;
+	int i;
+	metadata_t *md;
+	char *p, *q;
+	char str2[512];
 
 	if (!mychan || !mychan->chan)
 		return;
@@ -952,4 +956,47 @@ void check_modes(mychan_t *mychan, boolean_t sendnow)
 		free(mychan->chan->key);
 		mychan->chan->key = NULL;
 	}
+
+	/* non-standard type C modes separately */
+	md = metadata_find(mychan, METADATA_CHANNEL, "private:mlockext");
+	if (md != NULL)
+	{
+		p = md->value;
+		while (*p != '\0')
+		{
+			for (i = 0; ignore_mode_list[i].mode != '\0'; i++)
+			{
+				if (ignore_mode_list[i].mode == *p)
+				{
+					if ((p[1] == ' ' || p[1] == '\0') && mychan->chan->extmodes[i] != NULL)
+					{
+						free(mychan->chan->extmodes[i]);
+						mychan->chan->extmodes[i] = NULL;
+						if (sendnow)
+							modestack_mode_ext(chansvs.nick, mychan->name, MTYPE_DEL, i, NULL);
+					}
+					else if (p[1] != ' ' && p[1] != '\0')
+					{
+						strlcpy(str2, p + 1, sizeof str2);
+						q = strchr(str2, ' ');
+						if (q != NULL)
+							*q = '\0';
+						if ((mychan->chan->extmodes[i] == NULL || strcmp(mychan->chan->extmodes[i], str2)) && ignore_mode_list[i].check(str2, mychan->chan, mychan, NULL, NULL))
+						{
+							if (mychan->chan->extmodes[i] != NULL)
+								free(mychan->chan->extmodes[i]);
+							mychan->chan->extmodes[i] = sstrdup(str2);
+							if (sendnow)
+								modestack_mode_ext(chansvs.nick, mychan->name, MTYPE_ADD, i, mychan->chan->extmodes[i]);
+						}
+					}
+				}
+			}
+			while (*p != ' ' && *p != '\0')
+				p++;
+			while (*p == ' ')
+				p++;
+		}
+	}
+
 }

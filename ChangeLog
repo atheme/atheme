@@ -1,3 +1,12 @@
+gxti        2006/07/02 18:35:45 UTC	(20060702-5670)
+  Log:
+  Also pull pubkey from autotools (duh).
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/saslserv/Makefile.in (File Modified) 
+
+
 gxti        2006/07/02 18:34:02 UTC	(20060702-5668)
   Log:
   Remove pubkey auth because it's broken and pointless.

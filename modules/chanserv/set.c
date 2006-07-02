@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 5526 2006-06-23 18:25:01Z jilles $
+ * $Id: set.c 5672 2006-07-02 18:37:23Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 5526 2006-06-23 18:25:01Z jilles $",
+	"$Id: set.c 5672 2006-07-02 18:37:23Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -403,7 +403,12 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 	int add = -1;
 	int32_t newlock_on = 0, newlock_off = 0, newlock_limit = 0, flag = 0;
 	int32_t mask;
-	char *newlock_key = NULL;
+	char newlock_key[KEYLEN];
+	char newlock_ext[MAXEXTMODES][512];
+	boolean_t newlock_ext_off[MAXEXTMODES];
+	char newext[512];
+	char ext_plus[MAXEXTMODES + 1], ext_minus[MAXEXTMODES + 1];
+	int i;
 	char *letters = strtok(params, " ");
 	char *arg;
 
@@ -424,6 +429,15 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
 		return;
 	}
+
+	for (i = 0; i < MAXEXTMODES; i++)
+	{
+		newlock_ext[i][0] = '\0';
+		newlock_ext_off[i] = FALSE;
+	}
+	ext_plus[0] = '\0';
+	ext_minus[0] = '\0';
+	newlock_key[0] = '\0';
 
 	mask = has_priv(u, PRIV_CHAN_CMODES) ? 0 : ircd->oper_only_modes;
 
@@ -448,9 +462,6 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 		  case 'k':
 			  if (add)
 			  {
-				  if (newlock_key)
-					  free(newlock_key);
-
 				  arg = strtok(NULL, " ");
 				  if (!arg)
 				  {
@@ -468,17 +479,12 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 					  return;
 				  }
 
-				  newlock_key = sstrdup(arg);
+				  strlcpy(newlock_key, arg, sizeof newlock_key);
 				  newlock_off &= ~CMODE_KEY;
 			  }
 			  else
 			  {
-				  if (newlock_key)
-				  {
-					  free(newlock_key);
-					  newlock_key = NULL;
-				  }
-
+				  newlock_key[0] = '\0';
 				  newlock_off |= CMODE_KEY;
 			  }
 
@@ -491,8 +497,6 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 				  if(!arg)
 				  {
 					  notice(chansvs.nick, origin, "You need to specify what limit to MLOCK.");
-					  if (newlock_key)
-						  free(newlock_key);
 					  return;
 				  }
 
@@ -522,8 +526,48 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 					  newlock_on |= flag, newlock_off &= ~flag;
 				  else
 					  newlock_off |= flag, newlock_on &= ~flag;
+				  break;
+			  }
+
+			  for (i = 0; i < MAXEXTMODES; i++)
+			  {
+				  if (c == ignore_mode_list[i].mode)
+				  {
+					  if (add)
+					  {
+						  arg = strtok(NULL, " ");
+						  if(!arg)
+						  {
+							  notice(chansvs.nick, origin, "You need to specify a value for mode +%c.", c);
+							  return;
+						  }
+						  if (strlen(arg) > 350)
+						  {
+							  notice(chansvs.nick, origin, "Invalid value \2%s\2 for mode +%c.", arg, c);
+							  return;
+						  }
+						  if ((mc->chan->extmodes[i] == NULL || strcmp(mc->chan->extmodes[i], arg)) && !ignore_mode_list[i].check(arg, mc->chan, mc, u, u->myuser))
+						  {
+							  notice(chansvs.nick, origin, "Invalid value \2%s\2 for mode +%c.", arg, c);
+							  return;
+						  }
+						  strlcpy(newlock_ext[i], arg, sizeof newlock_ext[i]);
+						  newlock_ext_off[i] = FALSE;
+					  }
+					  else
+					  {
+						  newlock_ext[i][0] = '\0';
+						  newlock_ext_off[i] = TRUE;
+					  }
+				  }
 			  }
 		}
+	}
+
+	if (strlen(newext) > 450)
+	{
+		notice(chansvs.nick, origin, "Mode lock is too long.");
+		return;
 	}
 
 	/* save it to mychan */
@@ -535,16 +579,41 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 	if (mc->mlock_key)
 		free(mc->mlock_key);
 
-	mc->mlock_key = newlock_key;
+	mc->mlock_key = *newlock_key != '\0' ? sstrdup(newlock_key) : NULL;
+
+	newext[0] = '\0';
+	for (i = 0; i < MAXEXTMODES; i++)
+	{
+		if (newlock_ext[i][0] != '\0' || newlock_ext_off[i])
+		{
+			if (*newext != '\0')
+			{
+				modebuf[0] = ' ';
+				modebuf[1] = '\0';
+				strlcat(newext, modebuf, sizeof newext);
+			}
+			modebuf[0] = ignore_mode_list[i].mode;
+			modebuf[1] = '\0';
+			strlcat(newext, modebuf, sizeof newext);
+			strlcat(newlock_ext_off[i] ? ext_minus : ext_plus,
+					modebuf, MAXEXTMODES + 1);
+			if (!newlock_ext_off[i])
+				strlcat(newext, newlock_ext[i], sizeof newext);
+		}
+	}
+	if (newext[0] != '\0')
+		metadata_add(mc, METADATA_CHANNEL, "private:mlockext", newext);
+	else
+		metadata_delete(mc, METADATA_CHANNEL, "private:mlockext");
 
 	end = modebuf;
 	*end = 0;
 
-	if (mc->mlock_on || mc->mlock_key || mc->mlock_limit)
-		end += snprintf(end, sizeof(modebuf) - (end - modebuf), "+%s%s%s", flags_to_string(mc->mlock_on), mc->mlock_key ? "k" : "", mc->mlock_limit ? "l" : "");
+	if (mc->mlock_on || mc->mlock_key || mc->mlock_limit || *ext_plus)
+		end += snprintf(end, sizeof(modebuf) - (end - modebuf), "+%s%s%s%s", flags_to_string(mc->mlock_on), mc->mlock_key ? "k" : "", mc->mlock_limit ? "l" : "", ext_plus);
 
-	if (mc->mlock_off)
-		end += snprintf(end, sizeof(modebuf) - (end - modebuf), "-%s%s%s", flags_to_string(mc->mlock_off), mc->mlock_off & CMODE_KEY ? "k" : "", mc->mlock_off & CMODE_LIMIT ? "l" : "");
+	if (mc->mlock_off || *ext_minus)
+		end += snprintf(end, sizeof(modebuf) - (end - modebuf), "-%s%s%s%s", flags_to_string(mc->mlock_off), mc->mlock_off & CMODE_KEY ? "k" : "", mc->mlock_off & CMODE_LIMIT ? "l" : "", ext_minus);
 
 	if (*modebuf)
 	{
