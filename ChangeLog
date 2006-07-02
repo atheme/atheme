@@ -1,3 +1,15 @@
+jilles      2006/07/02 00:48:37 UTC	(20060702-5640)
+  Log:
+  Add some consts.
+  There will remain a warning about const in src/cmode.c which is hard to remove.
+  
+
+  Changes:	Modified:
+  +9 -10	trunk/include/extern.h (File Modified) 
+  +8 -8		trunk/src/cmode.c (File Modified) 
+  +11 -11	trunk/src/node.c (File Modified) 
+
+
 jilles      2006/07/02 00:21:54 UTC	(20060702-5638)
   Log:
   Use channel_mode_va() to make the code less ugly.

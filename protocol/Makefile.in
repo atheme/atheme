@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 5566 2006-06-28 00:15:34Z jilles $
+# $Id: Makefile.in 5642 2006-07-02 00:57:52Z nenolod $
 #
 
 CC		= @CC@
@@ -50,8 +50,7 @@ BASE_SRCS = 		\
 	solidircd.c	\
 	sorcery.c       \
 	ultimate3.c	\
-	undernet.c      \
-	unreal.c
+	undernet.c
 
 SRCS = ${BASE_SRCS}
 
