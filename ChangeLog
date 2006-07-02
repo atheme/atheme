@@ -1,3 +1,14 @@
+gxti        2006/07/02 18:34:02 UTC	(20060702-5668)
+  Log:
+  Remove pubkey auth because it's broken and pointless.
+  Also, remove saslserv's command framework as it is no longer used.
+  
+
+  Changes:	Modified:
+  +1 -6		trunk/modules/saslserv/main.c (File Modified) 
+  +0 -502	trunk/modules/saslserv/pubkey.c (File Deleted) 
+
+
 gxti        2006/07/02 17:47:52 UTC	(20060702-5666)
   Log:
   Various DH-BLOWFISH fixes.
