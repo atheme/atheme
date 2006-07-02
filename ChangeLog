@@ -1,3 +1,12 @@
+jilles      2006/07/02 00:05:59 UTC	(20060702-5634)
+  Log:
+  flatfile_db_save(): cast argument to %ld from time_t to long
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/backend/flatfile.c (File Modified) 
+
+
 jilles      2006/07/01 23:55:36 UTC	(20060701-5632)
   Log:
   Add a comment to hook_channel_req_t, it is not
