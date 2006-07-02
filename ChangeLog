@@ -1,3 +1,15 @@
+nenolod     2006/07/02 04:28:25 UTC	(20060702-5650)
+  Log:
+  - change multiple string entities to single strings.
+  - remove redundant account lookups (we already had this information)
+  - remove a lot of other redundant shit
+  - remove use of set_command_, use command_t's instead.
+  
+
+  Changes:	Modified:
+  +150 -227	trunk/modules/nickserv/set.c (File Modified) 
+
+
 nenolod     2006/07/02 04:21:38 UTC	(20060702-5648)
   Log:
   - add command_delete_many().
