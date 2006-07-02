@@ -1,3 +1,12 @@
+nenolod     2006/07/02 05:10:39 UTC	(20060702-5658)
+  Log:
+  - header/footer should be present on help `functions'
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/src/help.c (File Modified) 
+
+
 nenolod     2006/07/02 05:09:02 UTC	(20060702-5656)
   Log:
   - handle command_(add|delete)_many() a bit more sanely

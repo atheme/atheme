@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 5640 2006-07-02 00:48:37Z jilles $
+ * $Id: cmode.c 5660 2006-07-02 13:01:33Z jilles $
  */
 
 #include "atheme.h"
@@ -85,7 +85,7 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 				{
 					if (++parpos >= parc)
 						break;
-					if (!ignore_mode_list[i].check(parv[parpos], chan, NULL, NULL, NULL))
+					if (source && !ignore_mode_list[i].check(parv[parpos], chan, NULL, NULL, NULL))
 						break;
 					if (chan->extmodes[i])
 					{
