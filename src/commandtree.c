@@ -4,7 +4,7 @@
  *
  * Commandtree manipulation routines.
  *
- * $Id: commandtree.c 5648 2006-07-02 04:21:38Z nenolod $
+ * $Id: commandtree.c 5656 2006-07-02 05:09:02Z nenolod $
  */
 
 #include "atheme.h"
@@ -38,10 +38,10 @@ void command_add(command_t * cmd, list_t *commandtree)
  */
 void command_add_many(command_t ** cmd, list_t *commandtree)
 {
-	command_t *cptr;
+	uint32_t i;
 
-	for (cptr = cmd[0]; cptr != NULL; cptr++)
-		command_add(cptr, commandtree);
+	for (i = 0; cmd[i] != NULL; i++)
+		command_add(cmd[i], commandtree);
 }
 
 void command_delete(command_t * cmd, list_t *commandtree)
@@ -72,10 +72,10 @@ void command_delete(command_t * cmd, list_t *commandtree)
  */
 void command_delete_many(command_t ** cmd, list_t *commandtree)
 {
-	command_t *cptr;
+	uint32_t i;
 
-	for (cptr = cmd[0]; cptr != NULL; cptr++)
-		command_delete(cptr, commandtree);
+	for (i = 0; cmd[i] != NULL; i++)
+		command_delete(cmd[i], commandtree);
 }
 
 void command_exec(service_t *svs, char *origin, char *cmd, list_t *commandtree)

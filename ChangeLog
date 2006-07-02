@@ -1,3 +1,13 @@
+nenolod     2006/07/02 05:05:34 UTC	(20060702-5654)
+  Log:
+  - HELP SET
+  
+
+  Changes:	Modified:
+  +0 -35	trunk/modules/nickserv/help.c (File Modified) 
+  +16 -0	trunk/modules/nickserv/set.c (File Modified) 
+
+
 nenolod     2006/07/02 04:38:41 UTC	(20060702-5652)
   Log:
   - ditto for userserv
