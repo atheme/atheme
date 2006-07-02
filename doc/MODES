@@ -47,18 +47,33 @@ E	halfop			ircd->uses_halfops, ircd->halfops_mode, ircd->halfops_mchar
 E	channel protection	ircd->uses_protect, ircd->protect_mode, ircd->protect_mchar
 E	channel founder		ircd->uses_owner, ircd->owner_mode, ircd->owner_mchar
 
+The different types of modes are stored as follows:
+A	channel_t.bans
+B	channel_t.key
+C	channel_t.limit, channel_t.extmodes
+D	channel_t.modes
+E	chanuser_t.modes
+
+channel_t.key and channel_t.extmodes are smalloc/sstrdup'ed strings and are
+NULL if the mode is not set.
+
+Mode locks are stored as follows (only simple modes can be mlocked):
+B	mychan_t.mlock_key
+C	mychan_t.mlock_limit, mychan_t metadata private:mlockext
+D	mychan_t.mlock_on, mychan_t.mlock_off
+
+Key/limit mlocked off are stored as CMODE_KEY/CMODE_LIMIT flags in
+mychan_t.mlock_off. Key/limit mlocked on do not use CMODE_KEY/CMODE_LIMIT
+flags.
+
 Modes of type D can be marked oper-only with ircd->oper_only_modes. This
 prevents users without chan:cmodes privilege from changing those modes in
 mode locks. The other modes in the mlock can be changed and the oper-only
 modes will remain untouched.
 
-The different types of modes are stored as follows:
-A	channel_t.bans
-B	channel_t.key
-C	channel_t.limit
-D	channel_t.modes
-E	chanuser_t.modes
+The format of private:mlockext is a space-separated sequence of
+<modechar><value>. If the value is empty, that mode is mlocked off. Modes
+which are not mentioned are not mlocked. The metadata entry is only present
+if any ignore_mode_list modes are mlocked.
 
-Modes of type C other than +l are currently not stored.
-
-$Id: MODES 5594 2006-06-29 12:24:51Z jilles $
+$Id: MODES 5674 2006-07-02 21:20:32Z jilles $

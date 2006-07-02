@@ -1,3 +1,17 @@
+jilles      2006/07/02 18:37:23 UTC	(20060702-5672)
+  Log:
+  Add mode locking of non-standard simple modes with parameters.
+  This is stored in private:mlockext, examples:
+  +jf 2:30 #overflow -> "j2:30 f#overflow"
+  -j+f #overflow -> "j f#overflow"
+  
+
+  Changes:	Modified:
+  +71 -7	trunk/modules/chanserv/info.c (File Modified) 
+  +87 -18	trunk/modules/chanserv/set.c (File Modified) 
+  +47 -0	trunk/src/cmode.c (File Modified) 
+
+
 gxti        2006/07/02 18:35:45 UTC	(20060702-5670)
   Log:
   Also pull pubkey from autotools (duh).
