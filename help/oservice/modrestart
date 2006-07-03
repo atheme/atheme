@@ -6,4 +6,6 @@ directly in modules/.
 
 operserv/main and operserv/modrestart are also untouched.
 
+A full restart may be more reliable than a module restart.
+
 Syntax: MODRESTART

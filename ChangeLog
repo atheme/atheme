@@ -1,3 +1,13 @@
+jilles      2006/07/03 23:00:41 UTC	(20060703-5702)
+  Log:
+  modunload help file: remove remark about unloading modload/modunload,
+  we now deny this altogether.
+  
+
+  Changes:	Modified:
+  +0 -3		trunk/help/oservice/modunload (File Modified) 
+
+
 jilles      2006/07/03 22:56:53 UTC	(20060703-5700)
   Log:
   Don't allow /os modunload to unload operserv/main, operserv/modunload
