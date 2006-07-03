@@ -1,3 +1,14 @@
+jilles      2006/07/03 22:56:53 UTC	(20060703-5700)
+  Log:
+  Don't allow /os modunload to unload operserv/main, operserv/modunload
+  and operserv/modload. Allowing one of the former two would cause
+  a crash, and allowing the latter is just dumb.
+  
+
+  Changes:	Modified:
+  +7 -0		trunk/modules/operserv/modunload.c (File Modified) 
+
+
 jilles      2006/07/03 22:48:14 UTC	(20060703-5698)
   Log:
   Update modrestart help file.
