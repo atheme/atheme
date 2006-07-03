@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 5480 2006-06-21 14:40:09Z jilles $
+ * $Id: ptasks.c 5708 2006-07-03 23:37:53Z jilles $
  */
 
 #include "atheme.h"
@@ -442,8 +442,8 @@ void handle_eob(server_t *s)
 	if (s->flags & SF_EOB)
 		return;
 	slog(LG_DEBUG, "handle_eob(): end of burst from %s", s->name);
-	s->flags |= SF_EOB;
 	hook_call_event("server_eob", s);
+	s->flags |= SF_EOB;
 	/* convert P10 style EOB to ircnet/ratbox style */
 	LIST_FOREACH(n, s->children.head)
 	{
