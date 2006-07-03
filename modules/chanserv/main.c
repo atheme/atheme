@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5560 2006-06-25 00:46:21Z jilles $
+ * $Id: main.c 5690 2006-07-03 17:01:33Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5560 2006-06-25 00:46:21Z jilles $",
+	"$Id: main.c 5690 2006-07-03 17:01:33Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -174,6 +174,9 @@ static void chanserv_config_ready(void *unused)
 	if (chansvs.fantasy)
 		fcmd_agent = chansvs.me;
 
+	if (me.connected && config_options.join_chans)
+		join_registered(!config_options.leave_chans);
+
 	hook_del_hook("config_ready", chanserv_config_ready);
 }
 
@@ -189,13 +192,8 @@ void _modinit(module_t *m)
 		if (chansvs.fantasy)
 			fcmd_agent = chansvs.me;
 
-		if (config_options.join_chans)
-		{
-			if (config_options.leave_chans)
-				join_registered(FALSE);
-			else
-				join_registered(TRUE);
-		}
+		if (me.connected && config_options.join_chans)
+			join_registered(!config_options.leave_chans);
 	}
 
 	hook_add_event("channel_join");
