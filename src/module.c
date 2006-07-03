@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 5684 2006-07-03 16:12:09Z jilles $
+ * $Id: module.c 5694 2006-07-03 22:21:20Z jilles $
  */
 
 #include "atheme.h"
@@ -135,7 +135,7 @@ module_t *module_load(char *filespec)
 
 	slog(LG_DEBUG, "module_load(): loaded %s at [0x%lx; MAPI version %d]", h->name, m->address, h->abi_ver);
 
-	if (me.connected)
+	if (me.connected && !cold_start)
 		wallops("Module %s loaded at [0x%lx; MAPI version %d]", h->name, m->address, h->abi_ver);
 
 	return m;

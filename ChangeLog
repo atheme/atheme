@@ -1,3 +1,12 @@
+jilles      2006/07/03 17:01:33 UTC	(20060703-5690)
+  Log:
+  Make chanserv join channels on modrestart
+  
+
+  Changes:	Modified:
+  +5 -7		trunk/modules/chanserv/main.c (File Modified) 
+
+
 jilles      2006/07/03 16:56:43 UTC	(20060703-5688)
   Log:
   operserv modrestart: make this work somewhat. still causes wallops floods.
