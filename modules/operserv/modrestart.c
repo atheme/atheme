@@ -4,7 +4,7 @@
  *
  * Module listing.
  *
- * $Id: modrestart.c 5688 2006-07-03 16:56:43Z jilles $
+ * $Id: modrestart.c 5696 2006-07-03 22:40:19Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modrestart", TRUE, _modinit, _moddeinit,
-	"$Id: modrestart.c 5688 2006-07-03 16:56:43Z jilles $",
+	"$Id: modrestart.c 5696 2006-07-03 22:40:19Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -47,7 +47,7 @@ void _moddeinit()
 static void os_cmd_modrestart(char *origin)
 {
 	node_t *n;
-	uint32_t unloaded = 0;
+	int loadedbefore, kept;
 	boolean_t old_silent;
 	boolean_t fail1 = FALSE;
 	boolean_t unloaded_something;
@@ -58,6 +58,8 @@ static void os_cmd_modrestart(char *origin)
 
 	old_silent = config_options.silent;
 	config_options.silent = TRUE; /* no wallops */
+
+	loadedbefore = modules.count;
 
 	/* unload everything we can */
 	/* this contorted loop is necessary because unloading a module
@@ -74,12 +76,13 @@ static void os_cmd_modrestart(char *origin)
 			if (!m->header->norestart && strcmp(m->header->name, "operserv/main") && strcmp(m->header->name, "operserv/modrestart"))
 			{
 				module_unload(m);
-				unloaded++;
 				unloaded_something = TRUE;
 				break;
 			}
 		}
 	} while (unloaded_something);
+
+	kept = modules.count;
 
 	/* now reload again */
 	module_load_dir(MODDIR "/modules");
@@ -91,12 +94,12 @@ static void os_cmd_modrestart(char *origin)
 
 	if (fail1)
 	{
-		wallops("Module restart failed, restart necessary");
-		notice(opersvs.nick, origin, "Module restart failed, restart necessary");
+		wallops("Module restart failed, functionality will be very limited");
+		notice(opersvs.nick, origin, "Module restart failed, fix it and try again or restart");
 	}
 	else
 	{
-		wallops("Module restart: %d modules unloaded; %d modules now loaded", unloaded, modules.count);
-		notice(opersvs.nick, origin, "Module restart: %d modules unloaded; %d modules now loaded", unloaded, modules.count);
+		wallops("Module restart: %d modules unloaded; %d kept; %d modules now loaded", loadedbefore - kept, kept, modules.count);
+		notice(opersvs.nick, origin, "Module restart: %d modules unloaded; %d kept; %d modules now loaded", loadedbefore - kept, kept, modules.count);
 	}
 }
