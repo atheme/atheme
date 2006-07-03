@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the helpserv HELP command.
  *
- * $Id: help.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: help.c 5686 2006-07-03 16:25:03Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"helpserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: help.c 5686 2006-07-03 16:25:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -25,8 +25,8 @@ command_t hs_help = { "HELP", "Displays contextual help information.", AC_NONE, 
 
 void _modinit(module_t *m)
 {
-	hs_cmdtree = module_locate_symbol("helpserv/main", "hs_cmdtree");
-	hs_helptree = module_locate_symbol("helpserv/main", "hs_helptree");
+	MODULE_USE_SYMBOL(hs_cmdtree, "helpserv/main", "hs_cmdtree");
+	MODULE_USE_SYMBOL(hs_helptree, "helpserv/main", "hs_helptree");
 
 	command_add(&hs_help, hs_cmdtree);
 	help_addentry(hs_helptree, "HELP", "help/help", NULL);

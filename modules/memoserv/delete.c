@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv DELETE function
  *
- * $Id: delete.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: delete.c 5686 2006-07-03 16:25:03Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/delete", FALSE, _modinit, _moddeinit,
-	"$Id: delete.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: delete.c 5686 2006-07-03 16:25:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -28,10 +28,11 @@ list_t *ms_helptree;
 
 void _modinit(module_t *m)
 {
-	ms_cmdtree = module_locate_symbol("memoserv/main", "ms_cmdtree");
+	MODULE_USE_SYMBOL(ms_cmdtree, "memoserv/main", "ms_cmdtree");
+	MODULE_USE_SYMBOL(ms_helptree, "memoserv/main", "ms_helptree");
+
         command_add(&ms_delete, ms_cmdtree);
 	command_add(&ms_del, ms_cmdtree);
-	ms_helptree = module_locate_symbol("memoserv/main", "ms_helptree");
 	help_addentry(ms_helptree, "DELETE", "help/memoserv/delete", NULL);
 }
 

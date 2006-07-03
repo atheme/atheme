@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ VERIFY function.
  *
- * $Id: verify.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: verify.c 5686 2006-07-03 16:25:03Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/verify", FALSE, _modinit, _moddeinit,
-	"$Id: verify.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: verify.c 5686 2006-07-03 16:25:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -24,8 +24,9 @@ list_t *ns_cmdtree, *ns_helptree;
 
 void _modinit(module_t *m)
 {
-	ns_cmdtree = module_locate_symbol("nickserv/main", "ns_cmdtree");
-	ns_helptree = module_locate_symbol("nickserv/main", "ns_helptree");
+	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
+	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
+
 	command_add(&ns_verify, ns_cmdtree);
 	help_addentry(ns_helptree, "VERIFY", "help/nickserv/verify", NULL);
 }

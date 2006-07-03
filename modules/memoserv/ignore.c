@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv IGNORE functions
  *
- * $Id: ignore.c 4743 2006-01-31 02:22:42Z jilles $
+ * $Id: ignore.c 5686 2006-07-03 16:25:03Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 4743 2006-01-31 02:22:42Z jilles $",
+	"$Id: ignore.c 5686 2006-07-03 16:25:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -34,10 +34,10 @@ list_t ms_ignore_cmds;
 
 void _modinit(module_t *m)
 {
-	ms_cmdtree = module_locate_symbol("memoserv/main", "ms_cmdtree");
-       command_add(&ms_ignore, ms_cmdtree);
-	
-	ms_helptree = module_locate_symbol("memoserv/main", "ms_helptree");
+	MODULE_USE_SYMBOL(ms_cmdtree, "memoserv/main", "ms_cmdtree");
+	MODULE_USE_SYMBOL(ms_helptree, "memoserv/main", "ms_helptree");
+
+	command_add(&ms_ignore, ms_cmdtree);
 	help_addentry(ms_helptree, "IGNORE", "help/memoserv/ignore", NULL);
 	
 	/* Add sub-commands */

@@ -4,7 +4,7 @@
  *
  * VHost management! (ratbox only right now.)
  *
- * $Id: vhost.c 5113 2006-04-19 11:58:25Z jilles $
+ * $Id: vhost.c 5686 2006-07-03 16:25:03Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 5113 2006-04-19 11:58:25Z jilles $",
+	"$Id: vhost.c 5686 2006-07-03 16:25:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -26,11 +26,12 @@ command_t us_vhost = { "VHOST", "Manages user virtualhosts.",
 
 void _modinit(module_t *m)
 {
-	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
+	MODULE_USE_SYMBOL(us_cmdtree, "userserv/main", "us_cmdtree");
+	MODULE_USE_SYMBOL(us_helptree, "userserv/main", "us_helptree");
+
 	hook_add_event("user_identify");
 	hook_add_hook("user_identify", vhost_on_identify);
 	command_add(&us_vhost, us_cmdtree);
-	us_helptree = module_locate_symbol("userserv/main", "us_helptree");
 	help_addentry(us_helptree, "VHOST", "help/userserv/vhost", NULL);
 }
 

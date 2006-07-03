@@ -4,7 +4,7 @@
  *
  * Provides a SASL authentication agent for clients.
  *
- * $Id: sasl.c 5153 2006-05-01 14:58:35Z nenolod $
+ * $Id: sasl.c 5686 2006-07-03 16:25:03Z jilles $
  */
 
 /* sasl.h and friends are included from atheme.h now --nenolod */
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/sasl", FALSE, _modinit, _moddeinit,
-	"$Id: sasl.c 5153 2006-05-01 14:58:35Z nenolod $",
+	"$Id: sasl.c 5686 2006-07-03 16:25:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -32,8 +32,8 @@ static void user_burstlogin(void *vptr);
 
 void _modinit(module_t *m)
 {
+	MODULE_USE_SYMBOL(mechanisms, "saslserv/main", "sasl_mechanisms");
 	session_heap = BlockHeapCreate(sizeof(sasl_session_t), 64);
-	mechanisms = module_locate_symbol("saslserv/main", "sasl_mechanisms");
 
 	hook_add_event("sasl_input");
 	hook_add_hook("sasl_input", sasl_input);

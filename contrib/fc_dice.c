@@ -4,7 +4,7 @@
  *
  * Dice generator fantasy command.
  *
- * $Id: fc_dice.c 3899 2005-11-13 06:20:50Z nenolod $
+ * $Id: fc_dice.c 5686 2006-07-03 16:25:03Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"contrib/fc_dice", FALSE, _modinit, _moddeinit,
-	"$Id: fc_dice.c 3899 2005-11-13 06:20:50Z nenolod $",
+	"$Id: fc_dice.c 5686 2006-07-03 16:25:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -24,7 +24,7 @@ list_t *cs_fcmdtree;
 
 void _modinit(module_t * m)
 {
-	cs_fcmdtree = module_locate_symbol("chanserv/main", "cs_fcmdtree");
+	MODULE_USE_SYMBOL(cs_fcmdtree, "chanserv/main", "cs_fcmdtree");
 	fcommand_add(&fc_dice, cs_fcmdtree);
 }
 

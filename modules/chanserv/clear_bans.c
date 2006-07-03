@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: clear_bans.c 5554 2006-06-25 00:20:34Z jilles $
+ * $Id: clear_bans.c 5686 2006-07-03 16:25:03Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/clear_bans", FALSE, _modinit, _moddeinit,
-	"$Id: clear_bans.c 5554 2006-06-25 00:20:34Z jilles $",
+	"$Id: clear_bans.c 5686 2006-07-03 16:25:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -25,8 +25,8 @@ list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
-	cs_clear_cmds = module_locate_symbol("chanserv/clear", "cs_clear_cmds");
-	cs_helptree = module_locate_symbol("chanserv/main", "cs_helptree");
+	MODULE_USE_SYMBOL(cs_clear_cmds, "chanserv/clear", "cs_clear_cmds");
+	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
 	fcommand_add(&cs_clear_bans, cs_clear_cmds);
 	help_addentry(cs_helptree, "CLEAR BANS", "help/cservice/clear_bans", NULL);	

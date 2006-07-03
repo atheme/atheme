@@ -255,6 +255,9 @@ void _modinit(module_t *m)
 	metadata_t *md;
 	int i = 0;
 	
+	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
+	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
+
 	/* Leave this for compatibility with old versions of this code
 	 * -- jilles */
 	for (i = 0; i < HASHSIZE; i++) {
@@ -267,8 +270,6 @@ void _modinit(module_t *m)
 	}
 	event_add("reg_check", reg_check, NULL, 30);
 	/*event_add("manage_bots", manage_bots, NULL, 30);*/
-	ns_cmdtree = module_locate_symbol("nickserv/main", "ns_cmdtree");
-	ns_helptree = module_locate_symbol("nickserv/main", "ns_helptree");
 	command_add(&ns_release, ns_cmdtree);
 	help_addentry(ns_helptree, "RELEASE", NULL, ns_help_release);
 	hook_add_event("user_identify");

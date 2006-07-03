@@ -5,7 +5,7 @@
  * This file contains code for the UserServ LISTCHANS function.
  *   -- Contains an alias "MYACCESS" for legacy users
  *
- * $Id: listchans.c 4825 2006-02-13 10:35:10Z pfish $
+ * $Id: listchans.c 5686 2006-07-03 16:25:03Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/listchans", FALSE, _modinit, _moddeinit,
-	"$Id: listchans.c 4825 2006-02-13 10:35:10Z pfish $",
+	"$Id: listchans.c 5686 2006-07-03 16:25:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -26,8 +26,8 @@ list_t *us_cmdtree, *us_helptree;
 
 void _modinit(module_t *m)
 {
-	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
-	us_helptree = module_locate_symbol("userserv/main", "us_helptree");
+	MODULE_USE_SYMBOL(us_cmdtree, "userserv/main", "us_cmdtree");
+	MODULE_USE_SYMBOL(us_helptree, "userserv/main", "us_helptree");
 	
 	command_add(&us_myaccess, us_cmdtree);
 	help_addentry(us_helptree, "MYACCESS", "help/userserv/listchans", NULL);

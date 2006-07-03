@@ -16,7 +16,7 @@ list_t *hs_cmdtree;
 
 void _modinit(module_t *m)
 {
-	hs_cmdtree = module_locate_symbol("helpserv/main", "hs_cmdtree");
+	MODULE_USE_SYMBOL(hs_cmdtree, "helpserv/main", "hs_cmdtree");
 
         command_add(&hs_helper, hs_cmdtree);
 }

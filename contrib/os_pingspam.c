@@ -4,7 +4,7 @@
  *
  * ping spammer thingy
  *
- * $Id: os_pingspam.c 5089 2006-04-15 05:07:54Z gxti $
+ * $Id: os_pingspam.c 5686 2006-07-03 16:25:03Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/pingspam", FALSE, _modinit, _moddeinit,
-	"$Id: os_pingspam.c 5089 2006-04-15 05:07:54Z gxti $",
+	"$Id: os_pingspam.c 5686 2006-07-03 16:25:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -61,7 +61,7 @@ void _modinit(module_t *m)
 {
 	spamming = 0;
 
-	os_cmdtree = module_locate_symbol("operserv/main", "os_cmdtree");
+	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	command_add(&os_pingspam, os_cmdtree);
 	command_add(&os_autopingspam, os_cmdtree);
 

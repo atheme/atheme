@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 5678 2006-07-02 22:24:00Z jilles $
+ * $Id: set.c 5686 2006-07-03 16:25:03Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 5678 2006-07-02 22:24:00Z jilles $",
+	"$Id: set.c 5686 2006-07-03 16:25:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -484,8 +484,8 @@ command_t *us_set_commands[] = {
 
 void _modinit(module_t *m)
 {
-	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
-	us_helptree = module_locate_symbol("userserv/main", "us_helptree");
+	MODULE_USE_SYMBOL(us_cmdtree, "userserv/main", "us_cmdtree");
+	MODULE_USE_SYMBOL(us_helptree, "userserv/main", "us_helptree");
 	command_add(&us_set, us_cmdtree);
 
 	help_addentry(us_helptree, "SET EMAIL", "help/userserv/set_email", NULL);

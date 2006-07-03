@@ -20,8 +20,8 @@ list_t *cs_fcmdtree;
 
 void _modinit(module_t *m)
 {
-	cs_cmdtree = module_locate_symbol("chanserv/main", "cs_cmdtree");
-	cs_fcmdtree = module_locate_symbol("chanserv/main", "cs_fcmdtree");
+	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
+	MODULE_USE_SYMBOL(cs_fcmdtree, "chanserv/main", "cs_fcmdtree");
 
         command_add(&cs_ping, cs_cmdtree);
 	fcommand_add(&fc_ping, cs_fcmdtree);

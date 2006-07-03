@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 5087 2006-04-14 14:59:46Z w00t $
+ * $Id: info.c 5686 2006-07-03 16:25:03Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 5087 2006-04-14 14:59:46Z w00t $",
+	"$Id: info.c 5686 2006-07-03 16:25:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -24,8 +24,9 @@ list_t *us_cmdtree, *us_helptree;
 
 void _modinit(module_t *m)
 {
-	us_cmdtree = module_locate_symbol("userserv/main", "us_cmdtree");
-	us_helptree = module_locate_symbol("userserv/main", "us_helptree");
+	MODULE_USE_SYMBOL(us_cmdtree, "userserv/main", "us_cmdtree");
+	MODULE_USE_SYMBOL(us_helptree, "userserv/main", "us_helptree");
+
 	command_add(&us_info, us_cmdtree);
 	help_addentry(us_helptree, "INFO", "help/userserv/info", NULL);
 }

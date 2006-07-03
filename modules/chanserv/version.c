@@ -3,7 +3,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/version", FALSE, _modinit, _moddeinit,
-	"$Id: version.c 2527 2005-10-03 17:40:09Z nenolod $",
+	"$Id: version.c 5686 2006-07-03 16:25:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,8 +20,8 @@ list_t *cs_fcmdtree;
 
 void _modinit(module_t *m)
 {
-	cs_cmdtree = module_locate_symbol("chanserv/main", "cs_cmdtree");
-	cs_fcmdtree = module_locate_symbol("chanserv/main", "cs_fcmdtree");
+	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
+	MODULE_USE_SYMBOL(cs_fcmdtree, "chanserv/main", "cs_fcmdtree");
 
         command_add(&cs_version, cs_cmdtree);
 	fcommand_add(&fc_version, cs_fcmdtree);

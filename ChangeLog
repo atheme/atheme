@@ -1,3 +1,20 @@
+jilles      2006/07/03 16:12:09 UTC	(20060703-5684)
+  Log:
+  Make it possible for a module init function to indicate failure
+  (m->mflags = MODTYPE_FAIL). If this happens the module will be
+  unloaded without calling the deinit function.
+  Added a macro MODULE_USE_SYMBOL to call module_locate_symbol()
+  and abort the module load on failure.
+  Other changes: the loaded module is now not in the modules list
+  when modinit is called, wallops/log for depending modules unload
+  in reverse order.
+  
+
+  Changes:	Modified:
+  +12 -0	trunk/include/module.h (File Modified) 
+  +22 -14	trunk/src/module.c (File Modified) 
+
+
 jilles      2006/07/03 00:27:40 UTC	(20060703-5682)
   Log:
   NickServ DROP: delete the command on unload instead of adding it another time

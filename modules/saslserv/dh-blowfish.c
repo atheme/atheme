@@ -4,7 +4,7 @@
  *
  * DH-BLOWFISH mechanism provider
  *
- * $Id: dh-blowfish.c 5666 2006-07-02 17:47:52Z gxti $
+ * $Id: dh-blowfish.c 5686 2006-07-03 16:25:03Z jilles $
  */
 
 #include "atheme.h"
@@ -19,7 +19,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/dh-blowfish", FALSE, _modinit, _moddeinit,
-	"$Id: dh-blowfish.c 5666 2006-07-02 17:47:52Z gxti $",
+	"$Id: dh-blowfish.c 5686 2006-07-03 16:25:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -33,7 +33,7 @@ sasl_mechanism_t mech = {"DH-BLOWFISH", &mech_start, &mech_step, &mech_finish};
 
 void _modinit(module_t *m)
 {
-	mechanisms = module_locate_symbol("saslserv/main", "sasl_mechanisms");
+	MODULE_USE_SYMBOL(mechanisms, "saslserv/main", "sasl_mechanisms");
 	mnode = node_create();
 	node_add(&mech, mnode, mechanisms);
 }

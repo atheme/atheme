@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: main.c 5686 2006-07-03 16:25:03Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"global/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: main.c 5686 2006-07-03 16:25:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -246,6 +246,9 @@ static void global_config_ready(void *unused)
 
 void _modinit(module_t *m)
 {
+	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
+	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
+
         hook_add_event("config_ready");
         hook_add_hook("config_ready", global_config_ready);
 
@@ -255,9 +258,6 @@ void _modinit(module_t *m)
                         globsvs.host, globsvs.real, gservice);
                 globsvs.disp = globsvs.me->disp;
         }
-
-	os_cmdtree = module_locate_symbol("operserv/main", "os_cmdtree");
-	os_helptree = module_locate_symbol("operserv/main", "os_helptree");
 
         command_add(&gs_global, &gs_cmdtree);
 

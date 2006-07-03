@@ -4,7 +4,7 @@
  *
  * Module listing.
  *
- * $Id: modrestart.c 5053 2006-04-13 10:59:42Z jilles $
+ * $Id: modrestart.c 5686 2006-07-03 16:25:03Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modrestart", TRUE, _modinit, _moddeinit,
-	"$Id: modrestart.c 5053 2006-04-13 10:59:42Z jilles $",
+	"$Id: modrestart.c 5686 2006-07-03 16:25:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -31,8 +31,9 @@ extern list_t modules;
 
 void _modinit(module_t *m)
 {
-	os_cmdtree = module_locate_symbol("operserv/main", "os_cmdtree");
-	os_helptree = module_locate_symbol("operserv/main", "os_helptree");
+	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
+	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
+
 	command_add(&os_modrestart, os_cmdtree);
 	help_addentry(os_helptree, "MODRESTART", "help/oservice/modrestart", NULL);
 }

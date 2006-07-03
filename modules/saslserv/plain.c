@@ -4,7 +4,7 @@
  *
  * PLAIN mechanism provider
  *
- * $Id: plain.c 5309 2006-05-25 01:50:44Z jilles $
+ * $Id: plain.c 5686 2006-07-03 16:25:03Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/plain", FALSE, _modinit, _moddeinit,
-	"$Id: plain.c 5309 2006-05-25 01:50:44Z jilles $",
+	"$Id: plain.c 5686 2006-07-03 16:25:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -25,8 +25,8 @@ sasl_mechanism_t mech = {"PLAIN", &mech_start, &mech_step, &mech_finish};
 
 void _modinit(module_t *m)
 {
+	MODULE_USE_SYMBOL(mechanisms, "saslserv/main", "sasl_mechanisms");
 	mnode = node_create();
-	mechanisms = module_locate_symbol("saslserv/main", "sasl_mechanisms");
 	node_add(&mech, mnode, mechanisms);
 }
 

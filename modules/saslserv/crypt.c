@@ -4,7 +4,7 @@
  *
  * CRYPT mechanism provider
  *
- * $Id: crypt.c 5257 2006-05-05 21:20:49Z gxti $
+ * $Id: crypt.c 5686 2006-07-03 16:25:03Z jilles $
  */
 
 /******************************* WARNING ******************************************
@@ -19,7 +19,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/crypt", FALSE, _modinit, _moddeinit,
-	"$Id: crypt.c 5257 2006-05-05 21:20:49Z gxti $",
+	"$Id: crypt.c 5686 2006-07-03 16:25:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -40,8 +40,8 @@ struct crypt_status
 
 void _modinit(module_t *m)
 {
+	MODULE_USE_SYMBOL(mechanisms, "saslserv/main", "sasl_mechanisms");
 	mnode = node_create();
-	mechanisms = module_locate_symbol("saslserv/main", "sasl_mechanisms");
 	node_add(&mech, mnode, mechanisms);
 }
 
