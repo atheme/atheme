@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 5680 2006-07-02 22:34:35Z jilles $
+ * $Id: module.c 5684 2006-07-03 16:12:09Z jilles $
  */
 
 #include "atheme.h"
@@ -112,10 +112,6 @@ module_t *module_load(char *filespec)
 	m->address = handle;
 #endif
 
-	n = node_create();
-
-	node_add(m, n, &modules);
-
 	/* set the module target for module dependencies */
 	modtarget = m;
 
@@ -124,6 +120,18 @@ module_t *module_load(char *filespec)
 
 	/* we won't be loading symbols outside the init code */
 	modtarget = NULL;
+
+	if (m->mflags & MODTYPE_FAIL)
+	{
+		slog(LG_INFO, "module_load(): module %s init failed", filespec);
+		if (me.connected)
+			wallops("Init failed while loading module %s", filespec);
+		module_unload(m);
+		return NULL;
+	}
+
+	n = node_create();
+	node_add(m, n, &modules);
 
 	slog(LG_DEBUG, "module_load(): loaded %s at [0x%lx; MAPI version %d]", h->name, m->address, h->abi_ver);
 
@@ -229,10 +237,6 @@ void module_unload(module_t * m)
 	if (!m)
 		return;
 
-	slog(LG_INFO, "module_unload(): unloaded %s", m->header->name);
-	if (me.connected)
-		wallops("Module %s unloaded.", m->header->name);
-
 	/* unload modules which depend on us */
 	LIST_FOREACH_SAFE(n, tn, m->dephost.head)
 		module_unload((module_t *) n->data);
@@ -248,14 +252,18 @@ void module_unload(module_t * m)
 	}
 
 	n = node_find(m, &modules);
+	if (n != NULL)
+	{
+		slog(LG_INFO, "module_unload(): unloaded %s", m->header->name);
+		if (me.connected)
+			wallops("Module %s unloaded.", m->header->name);
 
-	if (m->header->deinit)
-		m->header->deinit();
-
+		if (m->header->deinit)
+			m->header->deinit();
+		node_del(n, &modules);
+	}
+	/* else unloaded in embryonic state */
 	linker_close(m->handle);
-
-	node_del(n, &modules);
-
 	BlockHeapFree(module_heap, m);
 }
 

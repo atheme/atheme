@@ -4,7 +4,7 @@
  *
  * This file contains data structures concerning modules.
  *
- * $Id: module.h 4217 2005-12-27 03:36:36Z nenolod $
+ * $Id: module.h 5684 2006-07-03 16:12:09Z jilles $
  */
 
 #ifndef MODULE_H
@@ -29,6 +29,7 @@ struct module_ {
 
 #define MODTYPE_STANDARD	0
 #define MODTYPE_CORE		1 /* Can't be unloaded. */
+#define MODTYPE_FAIL		0x8000 /* modinit failed */
 
 #define MAPI_ATHEME_MAGIC	0xdeadbeef
 #define MAPI_ATHEME_V1		1
@@ -61,5 +62,16 @@ E void *module_locate_symbol(char *modname, char *sym);
 E void module_unload(module_t *m);
 E module_t *module_find(char *name);
 E module_t *module_find_published(char *name);
+
+/* Use this macro in your _modinit() function to use symbols from
+ * other modules. It will abort the _modinit() and unload your module
+ * without calling _moddeinit(). -- jilles */
+/* XXX this assumes the parameter is called m */
+#define MODULE_USE_SYMBOL(dest, modname, sym) \
+	if ((dest = module_locate_symbol(modname, sym)) == NULL)	\
+	{								\
+		m->mflags = MODTYPE_FAIL;				\
+		return;							\
+	}
 
 #endif

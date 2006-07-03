@@ -1,3 +1,12 @@
+jilles      2006/07/03 00:27:40 UTC	(20060703-5682)
+  Log:
+  NickServ DROP: delete the command on unload instead of adding it another time
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/drop.c (File Modified) 
+
+
 jilles      2006/07/02 22:34:35 UTC	(20060702-5680)
   Log:
   module_locate_symbol(): do LG_ERROR logging on failure
