@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ DROP function.
  *
- * $Id: drop.c 4613 2006-01-19 23:52:30Z jilles $
+ * $Id: drop.c 5682 2006-07-03 00:27:40Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 4613 2006-01-19 23:52:30Z jilles $",
+	"$Id: drop.c 5682 2006-07-03 00:27:40Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -32,7 +32,7 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
-	command_add(&ns_drop, ns_cmdtree);
+	command_delete(&ns_drop, ns_cmdtree);
 	help_delentry(ns_helptree, "DROP");
 }
 

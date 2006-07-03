@@ -1,3 +1,15 @@
+jilles      2006/07/02 22:34:35 UTC	(20060702-5680)
+  Log:
+  module_locate_symbol(): do LG_ERROR logging on failure
+  so you don't need gdb to find out why it crashed
+  (most uses of module_locate_symbol() do not check if
+  it failed).
+  
+
+  Changes:	Modified:
+  +3 -1		trunk/src/module.c (File Modified) 
+
+
 jilles      2006/07/02 22:24:00 UTC	(20060702-5678)
   Log:
   NickServ/UserServ SET: move logged-in check to ns_cmd_set()/us_cmd_set().
