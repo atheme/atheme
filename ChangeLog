@@ -1,3 +1,14 @@
+jilles      2006/07/03 23:37:53 UTC	(20060703-5708)
+  Log:
+  Call the server_eob hook before setting the SF_EOB flag
+  on the server, this way functions called from hooks
+  still know the users were bursted and not new users.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2006/07/03 23:25:09 UTC	(20060703-5706)
   Log:
   ChanServ: only send entry messages and urls if the

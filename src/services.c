@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 5622 2006-07-01 16:09:29Z jilles $
+ * $Id: services.c 5710 2006-07-03 23:40:14Z jilles $
  */
 
 #include "atheme.h"
@@ -269,6 +269,10 @@ void handle_nickchange(user_t *u)
 
 	/* They're logged in, don't send them spam -- jilles */
 	if (u->myuser)
+		u->flags |= UF_SEENINFO;
+
+	/* Also don't send it if they came back from a split -- jilles */
+	if (!(u->server->flags & SF_EOB))
 		u->flags |= UF_SEENINFO;
 
 	if (!(mu = myuser_find(u->nick)))
