@@ -1,3 +1,14 @@
+jilles      2006/07/03 22:40:19 UTC	(20060703-5696)
+  Log:
+  operserv modrestart:
+  - tweak notice/wallops on failure
+  - fix counts shown on success
+  
+
+  Changes:	Modified:
+  +9 -6		trunk/modules/operserv/modrestart.c (File Modified) 
+
+
 jilles      2006/07/03 22:21:20 UTC	(20060703-5694)
   Log:
   Don't send wallops about every module loaded on a module restart.

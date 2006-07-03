@@ -1,8 +1,9 @@
 Help for MODRESTART:
 
-MODRESTART unloads and reloads all non-permanent modules,
-then loads all modules directly in modules/.
+MODRESTART unloads all non-permanent modules, then loads
+all modules in the configuration file and all modules
+directly in modules/.
 
-This command appears to be currently disfunctional.
+operserv/main and operserv/modrestart are also untouched.
 
 Syntax: MODRESTART
