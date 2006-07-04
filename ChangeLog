@@ -1,3 +1,12 @@
+jilles      2006/07/04 01:05:32 UTC	(20060704-5714)
+  Log:
+  chanserv set mlock help file: improve examples
+  
+
+  Changes:	Modified:
+  +9 -5		trunk/help/cservice/set_mlock (File Modified) 
+
+
 jilles      2006/07/04 00:25:33 UTC	(20060704-5712)
   Log:
   Update the release notes.

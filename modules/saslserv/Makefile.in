@@ -34,7 +34,7 @@ CPPFLAGS	= @CPPFLAGS@
 
 default: all
 
-BASE_SRCS = sasl.c main.c plain.c crypt.c dh-blowfish.c help.c
+BASE_SRCS = main.c plain.c crypt.c dh-blowfish.c help.c
 
 SRCS = ${BASE_SRCS}
 
