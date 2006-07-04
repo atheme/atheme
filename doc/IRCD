@@ -1,4 +1,4 @@
-$Id: IRCD 5642 2006-07-02 00:57:52Z nenolod $
+$Id: IRCD 5724 2006-07-04 16:06:20Z w00t $
 
 IRCD-specific notes
 -------------------
@@ -272,3 +272,8 @@ Atheme does not support IPv6 (neither IPv6 connections nor IPv6 IPs in P10
 protocol). IPs of IPv6 clients will not be stored or logged.
 
 Atheme does not support oplevels; they should be disabled.
+
+unreal
+------
+
+You need ulines{} for services on all servers on the network.
