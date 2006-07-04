@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 5726 2006-07-04 17:11:15Z jilles $
+ * $Id: cmode.c 5728 2006-07-04 17:16:04Z jilles $
  */
 
 #include "atheme.h"
@@ -394,9 +394,6 @@ static void modestack_flush(struct modestackdata *md)
 	int dir = MTYPE_NUL;
 	int i;
 
-	slog(LG_DEBUG, "modestack_flush(): flushing...");
-	modestack_debugprint(md);
-
 	p = buf;
 	end = buf + sizeof buf;
 
@@ -449,12 +446,13 @@ static void modestack_flush(struct modestackdata *md)
 	p += strlen(p);
 	if (p == buf)
 	{
-		slog(LG_DEBUG, "modestack_flush(): nothing to do");
+		/*slog(LG_DEBUG, "modestack_flush(): nothing to do");*/
 		return;
 	}
 	if (p + md->totalparamslen >= end)
 	{
 		slog(LG_ERROR, "modestack_flush() overflow: %s", buf);
+		modestack_debugprint(md);
 		modestack_clear(md);
 		return;
 	}
@@ -485,7 +483,7 @@ static struct modestackdata *modestack_init(char *source, char *channel)
 {
 	if (irccasecmp(source, modestackdata.source) || irccasecmp(channel, modestackdata.channel))
 	{
-		slog(LG_DEBUG, "modestack_init(): new source/channel, flushing");
+		/*slog(LG_DEBUG, "modestack_init(): new source/channel, flushing");*/
 		modestack_flush(&modestackdata);
 	}
 	strlcpy(modestackdata.source, source, sizeof modestackdata.source);

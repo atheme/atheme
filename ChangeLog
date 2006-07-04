@@ -1,3 +1,13 @@
+jilles      2006/07/04 17:11:15 UTC	(20060704-5726)
+  Log:
+  cmode(): get rid of a warning about possibly uninitialized variables
+  (impossible, but gcc can't see that).
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/src/cmode.c (File Modified) 
+
+
 w00t        2006/07/04 16:06:20 UTC	(20060704-5724)
   Log:
   re-add the unreal module, I'm going to maintain it. (Or try to.)
