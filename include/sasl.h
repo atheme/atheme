@@ -4,7 +4,7 @@
  *
  * Data structures for SASL plugin use.
  *
- * $Id: sasl.h 5101 2006-04-17 05:22:23Z gxti $
+ * $Id: sasl.h 5718 2006-07-04 06:10:05Z gxti $
  */
 
 #ifndef SASL_H
@@ -17,7 +17,7 @@ typedef struct sasl_mechanism_ sasl_mechanism_t;
 struct sasl_session_ {
   char uid[NICKLEN];
   char *buf, *p;
-  int len;
+  int len, flags;
 
   struct sasl_mechanism_ *mechptr;
   void *mechdata;
@@ -40,6 +40,8 @@ struct sasl_mechanism_ {
 
 #define ASASL_FAIL 0 /* client supplied invalid credentials / screwed up their formatting */
 #define ASASL_MORE 1 /* everything looks good so far, but we're not done yet */
-#define ASASL_DONE 2 /* client successfully authenticatd */
+#define ASASL_DONE 2 /* client successfully authenticated */
+
+#define ASASL_MARKED_FOR_DELETION   1 /* see delete_stale() in saslserv/main.c */
 
 #endif

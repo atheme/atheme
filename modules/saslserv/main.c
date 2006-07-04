@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5716 2006-07-04 04:19:46Z gxti $
+ * $Id: main.c 5718 2006-07-04 06:10:05Z gxti $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5716 2006-07-04 04:19:46Z gxti $",
+	"$Id: main.c 5718 2006-07-04 06:10:05Z gxti $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -27,6 +27,7 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len);
 static void sasl_write(char *target, char *data, int length);
 int login_user(sasl_session_t *p);
 static void user_burstlogin(void *vptr);
+static void delete_stale(void *vptr);
 
 /* main services client routine */
 static void saslserv(char *origin, uint8_t parc, char *parv[])
@@ -112,6 +113,7 @@ void _modinit(module_t *m)
 	hook_add_hook("sasl_input", sasl_input);
 	hook_add_event("user_burstlogin");
 	hook_add_hook("user_burstlogin", user_burstlogin);
+	event_add("sasl_delete_stale", delete_stale, NULL, 15);
 
         if (!cold_start)
         {
@@ -127,6 +129,7 @@ void _moddeinit(void)
 
 	hook_del_hook("sasl_input", sasl_input);
 	hook_del_hook("user_burstlogin", user_burstlogin);
+	event_delete(delete_stale, NULL);
 
         if (saslsvs.me)
 	{
@@ -154,6 +157,7 @@ void _moddeinit(void)
  * Begin SASL-specific code
  */
 
+/* find an existing session by uid */
 sasl_session_t *find_session(char *uid)
 {
 	sasl_session_t *p;
@@ -169,6 +173,7 @@ sasl_session_t *find_session(char *uid)
 	return NULL;
 }
 
+/* create a new session if it does not already exist */
 sasl_session_t *make_session(char *uid)
 {
 	sasl_session_t *p = find_session(uid);
@@ -187,6 +192,7 @@ sasl_session_t *make_session(char *uid)
 	return p;
 }
 
+/* free a session and all its contents */
 void destroy_session(sasl_session_t *p)
 {
 	node_t *n, *tn;
@@ -211,6 +217,7 @@ void destroy_session(sasl_session_t *p)
 	free(p);
 }
 
+/* interpret an AUTHENTICATE message */
 static void sasl_input(void *vptr)
 {
 	sasl_message_t *msg = vptr;
@@ -260,6 +267,7 @@ static void sasl_input(void *vptr)
 	}
 }
 
+/* find a mechanism by name */
 static sasl_mechanism_t *find_mechanism(char *name)
 {
 	node_t *n;
@@ -277,6 +285,9 @@ static sasl_mechanism_t *find_mechanism(char *name)
 	return NULL;
 }
 
+/* given an entire sasl message, advance session by passing data to mechanism
+ * and feeding returned data back to client.
+ */
 static void sasl_packet(sasl_session_t *p, char *buf, int len)
 {
 	int rc, i;
@@ -392,6 +403,7 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 	destroy_session(p);
 }
 
+/* output an arbitrary amount of data to the SASL client */
 static void sasl_write(char *target, char *data, int length)
 {
 	char out[401];
@@ -449,6 +461,7 @@ void sasl_logcommand(char *source, int level, const char *fmt, ...)
 	va_end(args);
 }
 
+/* authenticated, now double check that their account is ok for login */
 int login_user(sasl_session_t *p)
 {
 	myuser_t *mu = myuser_find(p->username);
@@ -561,3 +574,39 @@ static void user_burstlogin(void *vptr)
 	hook_call_event("user_identify", u);
 }
 
+/* This function is run approximately once every 15 seconds.
+ * It looks for flagged sessions, and deletes them, while
+ * flagging all the others. This way stale sessions are deleted
+ * after no more than 30 seconds.
+ */
+static void delete_stale(void *vptr)
+{
+	sasl_session_t *p;
+	node_t *n, *tn, *m, *tm;
+
+	LIST_FOREACH_SAFE(n, tn, sessions.head)
+	{
+		p = n->data;
+		if(p->flags & ASASL_MARKED_FOR_DELETION)
+		{
+			/* Remove any pending login marker. */
+			LIST_FOREACH_SAFE(m, tm, saslsvs.pending.head)
+			{
+				if(!strcmp((char*)m->data, p->uid))
+				{
+					node_del(m, &saslsvs.pending);
+					free(m->data);
+					node_free(m);
+				}
+			}
+
+			node_del(n, &sessions);
+			destroy_session(p);
+			node_free(n);
+		}
+
+		p->flags |= ASASL_MARKED_FOR_DELETION;
+	}
+}
+
+/* vim: set ts=8 sts=8 noexpandtab: */

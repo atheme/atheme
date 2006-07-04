@@ -1,3 +1,20 @@
+gxti        2006/07/04 04:19:46 UTC	(20060704-5716)
+  Log:
+  SASL: Relocate sasl.c into main.c.
+  Store UIDs of authed users so we can omit notices when they connect.
+  Refine cleanup of sessions, mechanisms.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/dist/example.conf (File Modified) 
+  +0 -1		trunk/dist/example.userserv.conf (File Modified) 
+  +2 -0		trunk/include/services.h (File Modified) 
+  +1 -1		trunk/modules/saslserv/Makefile.in (File Modified) 
+  +448 -3	trunk/modules/saslserv/main.c (File Modified) 
+  +0 -448	trunk/modules/saslserv/sasl.c (File Deleted) 
+  +11 -0	trunk/src/services.c (File Modified) 
+
+
 jilles      2006/07/04 01:05:32 UTC	(20060704-5714)
   Log:
   chanserv set mlock help file: improve examples
