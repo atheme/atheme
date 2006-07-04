@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 5728 2006-07-04 17:16:04Z jilles $
+ * $Id: cmode.c 5730 2006-07-04 17:31:44Z jilles $
  */
 
 #include "atheme.h"
@@ -398,28 +398,6 @@ static void modestack_flush(struct modestackdata *md)
 	end = buf + sizeof buf;
 
 	/* first do the mode letters */
-	if (md->modes_on)
-	{
-		if (dir != MTYPE_ADD)
-			dir = MTYPE_ADD, *p++ = '+';
-		strlcpy(p, flags_to_string(md->modes_on), end - p);
-		p += strlen(p);
-	}
-	if (md->limitused && md->limit != 0)
-	{
-		if (dir != MTYPE_ADD)
-			dir = MTYPE_ADD, *p++ = '+';
-		*p++ = 'l';
-	}
-	for (i = 0; i < MAXEXTMODES; i++)
-	{
-		if (md->extmodesused[i] && *md->extmodes[i] != '\0')
-		{
-			if (dir != MTYPE_ADD)
-				dir = MTYPE_ADD, *p++ = '+';
-			*p++ = ignore_mode_list[i].mode;
-		}
-	}
 	if (md->modes_off)
 	{
 		if (dir != MTYPE_DEL)
@@ -442,8 +420,32 @@ static void modestack_flush(struct modestackdata *md)
 			*p++ = ignore_mode_list[i].mode;
 		}
 	}
+	if (md->modes_on)
+	{
+		if (dir != MTYPE_ADD)
+			dir = MTYPE_ADD, *p++ = '+';
+		strlcpy(p, flags_to_string(md->modes_on), end - p);
+		p += strlen(p);
+	}
+	if (md->limitused && md->limit != 0)
+	{
+		if (dir != MTYPE_ADD)
+			dir = MTYPE_ADD, *p++ = '+';
+		*p++ = 'l';
+	}
+	for (i = 0; i < MAXEXTMODES; i++)
+	{
+		if (md->extmodesused[i] && *md->extmodes[i] != '\0')
+		{
+			if (dir != MTYPE_ADD)
+				dir = MTYPE_ADD, *p++ = '+';
+			*p++ = ignore_mode_list[i].mode;
+		}
+	}
 	strlcpy(p, md->pmodes + ((dir == MTYPE_ADD && *md->pmodes == '+') || (dir == MTYPE_DEL && *md->pmodes == '-') ? 1 : 0), end - p);
 	p += strlen(p);
+
+	/* all mode letters done, now for some checks */
 	if (p == buf)
 	{
 		/*slog(LG_DEBUG, "modestack_flush(): nothing to do");*/
@@ -456,6 +458,7 @@ static void modestack_flush(struct modestackdata *md)
 		modestack_clear(md);
 		return;
 	}
+
 	/* now the parameters, in the same order */
 	if (md->limitused && md->limit != 0)
 	{

@@ -1,3 +1,12 @@
+jilles      2006/07/04 17:16:04 UTC	(20060704-5728)
+  Log:
+  Get rid of some over-copious mode stacker debug output.
+  
+
+  Changes:	Modified:
+  +3 -5		trunk/src/cmode.c (File Modified) 
+
+
 jilles      2006/07/04 17:11:15 UTC	(20060704-5726)
   Log:
   cmode(): get rid of a warning about possibly uninitialized variables
