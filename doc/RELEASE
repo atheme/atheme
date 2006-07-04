@@ -1,4 +1,52 @@
-$Id: RELEASE 5157 2006-05-01 16:59:38Z jilles $
+$Id: RELEASE 5712 2006-07-04 00:25:33Z jilles $
+
+Atheme 1.2 Release Notes
+========================
+[MERGED] indicates items merged to the 1.1 branch
+ircd protocol
+- Allow using TS changes to reliably deop people recreating channels
+  with the new chanserv::changets config option (for charybdis, ratbox,
+  hybrid, bahamut, solidircd).
+- Put netwide end of burst detection in the core. This is used for suppressing
+  various notices to users coming back from a netsplit or services restart.
+- Remove the Chunky Monkey protocol module.
+- Update Plexus protocol module to Plexus 3. [MERGED]
+- Fix global notices in the P10 protocol modules. [MERGED]
+- Fix login handling in the nefarious protocol module. [MERGED]
+- Support more modes in the inspircd protocol module. [MERGED]
+- Use m_services_account.so in inspircd to track services logins better.
+  Using this module is required. [MERGED]
+- Make the PTlink protocol module work. [MERGED]
+- Make the DreamForge and sorcery protocol modules work better. [MERGED]
+
+channels
+- Make the last used time for channels more accurate and show it in /cs info.
+- Get rid of many redundant mode lock checks.
+- Add full support for non-standard simple modes with parameters, like join
+  throttling. These can now be mode locked, etc.
+- Add GETKEY command to chanserv, returns the current key (+k) to users who
+  have +i flag.
+- Rewrite a lot of code relating to channel modes. Among other things, this
+  removes the Cygnus mode stacker.
+- Don't allow users with an unverified email address to register channels.
+- Add cs_kickdots contrib module, kicks users for saying "...". [MERGED]
+
+oper
+- Remove alias KLINE for AKILL.
+- Make modrestart work again.
+- Improve rehash error handling.
+- Show more detailed version information in atheme -v. [MERGED]
+
+other
+- Fix crash when a module tries to use something in another module which is
+  not loaded. This protection requires changes in modules using other modules
+  to be effective, see include/module.h.
+- Add command line option -l to change the log file.
+- Rewrite nickserv/userserv set command handling.
+- Improve flatfile error handling. [MERGED]
+- Change maximum length of memos from 129 to 300. [MERGED]
+- Improve handling for network errors. [MERGED]
+- Many bugfixes and documentation improvements. Some [MERGED]
 
 Atheme 1.1 Release Notes
 ========================

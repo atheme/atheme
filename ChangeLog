@@ -1,3 +1,12 @@
+jilles      2006/07/03 23:40:14 UTC	(20060703-5710)
+  Log:
+  Don't send nickserv::spam to bursted users, only to new users.
+  
+
+  Changes:	Modified:
+  +4 -0		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/07/03 23:37:53 UTC	(20060703-5708)
   Log:
   Call the server_eob hook before setting the SF_EOB flag
