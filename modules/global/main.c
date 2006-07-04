@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: main.c 5722 2006-07-04 15:30:09Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"global/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: main.c 5722 2006-07-04 15:30:09Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -61,6 +61,7 @@ static void gs_cmd_global(char *origin)
 	tld_t *tld;
 	char *params = strtok(NULL, "");
 	static char *sender = NULL;
+	boolean_t isfirst;
 
 	if (!params)
 	{
@@ -105,6 +106,7 @@ static void gs_cmd_global(char *origin)
 			return;
 		}
 
+		isfirst = TRUE;
 		LIST_FOREACH(n, globlist.head)
 		{
 			global = (struct global_ *)n->data;
@@ -114,8 +116,14 @@ static void gs_cmd_global(char *origin)
 			{
 				tld = (tld_t *)n2->data;
 
-				sts(":%s NOTICE %s*%s :[Network Notice] %s", globsvs.nick, ircd->tldprefix, tld->name, global->text);
+				sts(":%s NOTICE %s*%s :[Network Notice] %s%s%s",
+						globsvs.nick, ircd->tldprefix,
+						tld->name,
+						isfirst ? origin : "",
+						isfirst ? " - " : "",
+						global->text);
 			}
+			isfirst = FALSE;
 			/* log everything */
 			logcommand(globsvs.me, user_find_named(origin), CMDLOG_ADMIN, "GLOBAL %s", global->text);
 		}

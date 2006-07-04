@@ -1,3 +1,14 @@
+jilles      2006/07/04 12:25:00 UTC	(20060704-5720)
+  Log:
+  example confs: remove modules/saslserv/sasl from comments
+  Noticed by Lauren
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/dist/example.conf (File Modified) 
+  +0 -1		trunk/dist/example.userserv.conf (File Modified) 
+
+
 gxti        2006/07/04 06:10:05 UTC	(20060704-5718)
   Log:
   Clean up stale sessions periodically.
