@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 5672 2006-07-02 18:37:23Z jilles $
+ * $Id: cmode.c 5726 2006-07-04 17:11:15Z jilles $
  */
 
 #include "atheme.h"
@@ -662,8 +662,8 @@ void cmode(char *source, ...)
 	struct modestackdata *md;
 	int dir = MTYPE_NUL;
 	int type = CMTYPE_UNKNOWN;
-	int i;
-	uint32_t flag;
+	int i = 0;
+	uint32_t flag = 0;
 
 	if (!source)
 	{

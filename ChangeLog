@@ -1,3 +1,17 @@
+w00t        2006/07/04 16:06:20 UTC	(20060704-5724)
+  Log:
+  re-add the unreal module, I'm going to maintain it. (Or try to.)
+
+  Changes:	Modified:
+  +2 -1		trunk/dist/example.conf (File Modified) 
+  +2 -1		trunk/dist/example.userserv.conf (File Modified) 
+  +5 -0		trunk/doc/IRCD (File Modified) 
+  +1 -1		trunk/include/pmodule.h (File Modified) 
+  +35 -0	trunk/include/protocol/unreal.h (File Added) 
+  +2 -1		trunk/protocol/Makefile.in (File Modified) 
+  +940 -0	trunk/protocol/unreal.c (File Added) 
+
+
 jilles      2006/07/04 15:30:09 UTC	(20060704-5722)
   Log:
   global: include the oper's nick in the first line
