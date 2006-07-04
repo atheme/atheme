@@ -3,12 +3,16 @@ Help for SET MLOCK:
 MLOCK (or "mode lock") allows you to enforce a set
 of modes on a channel.  This can prevent abuse in cases
 such as +kl. It can also make it harder to fight evil
-bots, be careful.
+bots, be careful. Locked modes can be seen by anyone
+recreating the channel (this includes keys).
 
 Syntax: SET <#channel> MLOCK <modes>
 
-Examples:
-    /msg &nick& SET #foo MLOCK +nt-ilpksm
-    /msg &nick& SET #foo MLOCK +nt
-    /msg &nick& SET #foo MLOCK -kl
+Examples: (some may use modes your ircd does not support)
+    /msg &nick& SET #foo MLOCK +nt-lk
+    /msg &nick& SET #foo MLOCK +inst-kl
+    /msg &nick& SET #c MLOCK +ntk c
+    /msg &nick& SET #foo MLOCK +ntcjf-kl 2:30 #overflow
+    /msg &nick& SET #overflow MLOCK +mntF-kljf
+    /msg &nick& SET #foo1 MLOCK +ntlL 40 #foo2
     /msg &nick& SET #foo MLOCK OFF

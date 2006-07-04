@@ -1,3 +1,13 @@
+jilles      2006/07/04 00:25:33 UTC	(20060704-5712)
+  Log:
+  Update the release notes.
+  New format with sub headings and indications what's been merged to 1.1.
+  
+
+  Changes:	Modified:
+  +48 -0	trunk/doc/RELEASE (File Modified) 
+
+
 jilles      2006/07/03 23:40:14 UTC	(20060703-5710)
   Log:
   Don't send nickserv::spam to bursted users, only to new users.
