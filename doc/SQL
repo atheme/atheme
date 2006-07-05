@@ -1,4 +1,4 @@
-$Id: SQL 3545 2005-11-06 07:11:11Z nenolod $
+$Id: SQL 5732 2006-07-05 16:06:54Z w00t $
 
 SQL Notes
 ---------
@@ -47,17 +47,6 @@ The PostgreSQL FAQ has this to say on changing a column's data type:
 	the disk space used by the expired rows.
 
 (http://www.postgresql.org/docs/faqs.FAQ.html#4.3)
-
-MySQL
------
-
-To initialize the MySQL database, use:
-
-	mysql -p <database> < atheme_init.mysql
-
-It is critical that the database engine used supports transactions.
-Specifically, one *cannot* use MyISAM safely; instead, use InnoDB or
-BDB.
 
 Switching to a SQL backend
 --------------------------

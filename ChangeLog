@@ -1,3 +1,14 @@
+jilles      2006/07/04 17:31:44 UTC	(20060704-5730)
+  Log:
+  modestack_flush(): put - simple modes before + simple modes
+  this may help somewhat with ircds that still enforce +p xor +s
+  note that the modestacker treats +k as a non-simple mode
+  
+
+  Changes:	Modified:
+  +23 -20	trunk/src/cmode.c (File Modified) 
+
+
 jilles      2006/07/04 17:16:04 UTC	(20060704-5728)
   Log:
   Get rid of some over-copious mode stacker debug output.
