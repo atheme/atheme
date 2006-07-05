@@ -1,4 +1,4 @@
-$Id: RELEASE 5712 2006-07-04 00:25:33Z jilles $
+$Id: RELEASE 5740 2006-07-05 16:43:47Z jilles $
 
 Atheme 1.2 Release Notes
 ========================
@@ -35,6 +35,7 @@ oper
 - Remove alias KLINE for AKILL.
 - Make modrestart work again.
 - Improve rehash error handling.
+- Global notices now include the oper's nick in the first line.
 - Show more detailed version information in atheme -v. [MERGED]
 
 other
@@ -42,7 +43,14 @@ other
   not loaded. This protection requires changes in modules using other modules
   to be effective, see include/module.h.
 - Add command line option -l to change the log file.
-- Rewrite nickserv/userserv set command handling.
+- Rewrite nickserv/userserv set command handling, allowing modules to
+  provide extra set options.
+- Merge modules/saslserv/sasl module into modules/saslserv/main. You should
+  remove modules/saslserv/sasl from your config file.
+- Clean up stale SASL sessions periodically.
+- Remove the MySQL backend. If you were using this, first start the old version
+  with backend/mysql, then load a supported backend like backend/flatfile and
+  /msg operserv update, to convert your data. See doc/SQL for more information.
 - Improve flatfile error handling. [MERGED]
 - Change maximum length of memos from 129 to 300. [MERGED]
 - Improve handling for network errors. [MERGED]
