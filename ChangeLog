@@ -1,3 +1,14 @@
+jilles      2006/07/05 18:27:18 UTC	(20060705-5744)
+  Log:
+  example confs: add some comments
+  userserv gecos changed to "User Registration Services"
+  
+
+  Changes:	Modified:
+  +9 -0		trunk/dist/example.conf (File Modified) 
+  +14 -5	trunk/dist/example.userserv.conf (File Modified) 
+
+
 jilles      2006/07/05 16:43:47 UTC	(20060705-5740)
   Log:
   Update the release notes.
