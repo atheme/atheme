@@ -1,3 +1,12 @@
+jilles      2006/07/05 16:43:47 UTC	(20060705-5740)
+  Log:
+  Update the release notes.
+  
+
+  Changes:	Modified:
+  +9 -1		trunk/doc/RELEASE (File Modified) 
+
+
 jilles      2006/07/05 16:37:22 UTC	(20060705-5738)
   Log:
   **/Makefile.in: Remove the mysql include and library path
