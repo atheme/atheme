@@ -1,3 +1,14 @@
+jilles      2006/07/05 16:09:30 UTC	(20060705-5734)
+  Log:
+  Remove mysql from configure and example confs.
+  
+
+  Changes:	Modified:
+  +0 -43	trunk/configure.ac (File Modified) 
+  +0 -1		trunk/dist/example.conf (File Modified) 
+  +0 -1		trunk/dist/example.userserv.conf (File Modified) 
+
+
 w00t        2006/07/05 16:06:54 UTC	(20060705-5732)
   Log:
   Remove MySQL support; needs jilles to do autoconf

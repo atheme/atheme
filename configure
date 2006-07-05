@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# $Id: configure.ac 5430 2006-06-19 11:49:03Z jilles $
+# $Id: configure.ac 5734 2006-07-05 16:09:30Z jilles $
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -313,7 +313,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA RM MV CP AR RANLIB SET_MAKE MKDEP CPP EGREP SOCKET_ENGINE POSIX_CRYPTC DOCDIR MODDIR SHAREDIR POSTGRESQL_C PGINC PQLIB MYSQL_C MYINC MYLIB SASL_DIR SSL_LIBS PICFLAGS LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA RM MV CP AR RANLIB SET_MAKE MKDEP CPP EGREP SOCKET_ENGINE POSIX_CRYPTC DOCDIR MODDIR SHAREDIR POSTGRESQL_C PGINC PQLIB SASL_DIR SSL_LIBS PICFLAGS LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -969,7 +969,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-$Id: configure.ac 5430 2006-06-19 11:49:03Z jilles $
+$Id: configure.ac 5734 2006-07-05 16:09:30Z jilles $
 _ACEOF
   exit 0
 fi
@@ -9800,259 +9800,6 @@ fi
 
 
 echo " "
-echo "MySQL support"
-echo " "
-
-MYSQL="yes"
-MYINC=""
-MYSQL_C=""
-
-echo "$as_me:$LINENO: checking for MySQL include directory" >&5
-echo $ECHO_N "checking for MySQL include directory... $ECHO_C" >&6
-if test -d /usr/include/mysql; then
-	my_inc_dir="/usr/include/mysql"
-elif test -d /usr/local/include/mysql; then
-	my_inc_dir="/usr/local/include/mysql"
-	LDFLAGS="$LDFLAGS -L/usr/local/lib"
-elif test -d /usr/local/mysql/include; then
-	my_inc_dir="/usr/local/mysql/include"
-	LDFLAGS="$LDFLAGS -L/usr/local/mysql/lib"
-elif test -d /opt/mysql/include; then
-	my_inc_dir="/opt/mysql/include"
-	LDFLAGS="$LDFLAGS -L/opt/mysql/lib"
-else
-	my_inc_dir="no"
-	MYLIB=""
-	MYSQL="no"
-fi
-
-echo "$as_me:$LINENO: result: $my_inc_dir" >&5
-echo "${ECHO_T}$my_inc_dir" >&6
-
-if test "$MYINC" != "no" || test "$my_inc_dir" != "no"; then
-	as_ac_Header=`echo "ac_cv_header_$my_inc_dir/mysql.h" | $as_tr_sh`
-if eval "test \"\${$as_ac_Header+set}\" = set"; then
-  echo "$as_me:$LINENO: checking for $my_inc_dir/mysql.h" >&5
-echo $ECHO_N "checking for $my_inc_dir/mysql.h... $ECHO_C" >&6
-if eval "test \"\${$as_ac_Header+set}\" = set"; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-fi
-echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_Header'}'`" >&5
-echo "${ECHO_T}`eval echo '${'$as_ac_Header'}'`" >&6
-else
-  # Is the header compilable?
-echo "$as_me:$LINENO: checking $my_inc_dir/mysql.h usability" >&5
-echo $ECHO_N "checking $my_inc_dir/mysql.h usability... $ECHO_C" >&6
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-$ac_includes_default
-#include <$my_inc_dir/mysql.h>
-_ACEOF
-rm -f conftest.$ac_objext
-if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
-  (eval $ac_compile) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest.$ac_objext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_header_compiler=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_header_compiler=no
-fi
-rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
-echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
-echo "${ECHO_T}$ac_header_compiler" >&6
-
-# Is the header present?
-echo "$as_me:$LINENO: checking $my_inc_dir/mysql.h presence" >&5
-echo $ECHO_N "checking $my_inc_dir/mysql.h presence... $ECHO_C" >&6
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <$my_inc_dir/mysql.h>
-_ACEOF
-if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
-  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } >/dev/null; then
-  if test -s conftest.err; then
-    ac_cpp_err=$ac_c_preproc_warn_flag
-    ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
-  else
-    ac_cpp_err=
-  fi
-else
-  ac_cpp_err=yes
-fi
-if test -z "$ac_cpp_err"; then
-  ac_header_preproc=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-  ac_header_preproc=no
-fi
-rm -f conftest.err conftest.$ac_ext
-echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
-echo "${ECHO_T}$ac_header_preproc" >&6
-
-# So?  What about this header?
-case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
-  yes:no: )
-    { echo "$as_me:$LINENO: WARNING: $my_inc_dir/mysql.h: accepted by the compiler, rejected by the preprocessor!" >&5
-echo "$as_me: WARNING: $my_inc_dir/mysql.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
-    { echo "$as_me:$LINENO: WARNING: $my_inc_dir/mysql.h: proceeding with the compiler's result" >&5
-echo "$as_me: WARNING: $my_inc_dir/mysql.h: proceeding with the compiler's result" >&2;}
-    ac_header_preproc=yes
-    ;;
-  no:yes:* )
-    { echo "$as_me:$LINENO: WARNING: $my_inc_dir/mysql.h: present but cannot be compiled" >&5
-echo "$as_me: WARNING: $my_inc_dir/mysql.h: present but cannot be compiled" >&2;}
-    { echo "$as_me:$LINENO: WARNING: $my_inc_dir/mysql.h:     check for missing prerequisite headers?" >&5
-echo "$as_me: WARNING: $my_inc_dir/mysql.h:     check for missing prerequisite headers?" >&2;}
-    { echo "$as_me:$LINENO: WARNING: $my_inc_dir/mysql.h: see the Autoconf documentation" >&5
-echo "$as_me: WARNING: $my_inc_dir/mysql.h: see the Autoconf documentation" >&2;}
-    { echo "$as_me:$LINENO: WARNING: $my_inc_dir/mysql.h:     section \"Present But Cannot Be Compiled\"" >&5
-echo "$as_me: WARNING: $my_inc_dir/mysql.h:     section \"Present But Cannot Be Compiled\"" >&2;}
-    { echo "$as_me:$LINENO: WARNING: $my_inc_dir/mysql.h: proceeding with the preprocessor's result" >&5
-echo "$as_me: WARNING: $my_inc_dir/mysql.h: proceeding with the preprocessor's result" >&2;}
-    { echo "$as_me:$LINENO: WARNING: $my_inc_dir/mysql.h: in the future, the compiler will take precedence" >&5
-echo "$as_me: WARNING: $my_inc_dir/mysql.h: in the future, the compiler will take precedence" >&2;}
-    (
-      cat <<\_ASBOX
-## ------------------------------ ##
-## Report this to bugs@atheme.org ##
-## ------------------------------ ##
-_ASBOX
-    ) |
-      sed "s/^/$as_me: WARNING:     /" >&2
-    ;;
-esac
-echo "$as_me:$LINENO: checking for $my_inc_dir/mysql.h" >&5
-echo $ECHO_N "checking for $my_inc_dir/mysql.h... $ECHO_C" >&6
-if eval "test \"\${$as_ac_Header+set}\" = set"; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  eval "$as_ac_Header=\$ac_header_preproc"
-fi
-echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_Header'}'`" >&5
-echo "${ECHO_T}`eval echo '${'$as_ac_Header'}'`" >&6
-
-fi
-if test `eval echo '${'$as_ac_Header'}'` = yes; then
-
-		MYINC="-I$my_inc_dir"
-		echo "$as_me:$LINENO: checking for mysql_real_connect in -lmysqlclient" >&5
-echo $ECHO_N "checking for mysql_real_connect in -lmysqlclient... $ECHO_C" >&6
-if test "${ac_cv_lib_mysqlclient_mysql_real_connect+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lmysqlclient  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char mysql_real_connect ();
-int
-main ()
-{
-mysql_real_connect ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_mysqlclient_mysql_real_connect=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_mysqlclient_mysql_real_connect=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_mysqlclient_mysql_real_connect" >&5
-echo "${ECHO_T}$ac_cv_lib_mysqlclient_mysql_real_connect" >&6
-if test $ac_cv_lib_mysqlclient_mysql_real_connect = yes; then
-  MYLIB="-lmysqlclient"
-			MYSQL_C="mysql.c"
-fi
-
-
-fi
-
-
-else
-	MYSQL="no"
-fi
-
-
-
-
-
-echo " "
 echo "SASL support"
 echo " "
 
@@ -14619,9 +14366,6 @@ s,@SHAREDIR@,$SHAREDIR,;t t
 s,@POSTGRESQL_C@,$POSTGRESQL_C,;t t
 s,@PGINC@,$PGINC,;t t
 s,@PQLIB@,$PQLIB,;t t
-s,@MYSQL_C@,$MYSQL_C,;t t
-s,@MYINC@,$MYINC,;t t
-s,@MYLIB@,$MYLIB,;t t
 s,@SASL_DIR@,$SASL_DIR,;t t
 s,@SSL_LIBS@,$SSL_LIBS,;t t
 s,@PICFLAGS@,$PICFLAGS,;t t
@@ -15150,7 +14894,6 @@ Configuration:
         Module root directory: `eval echo $d`
         Large network support: ${LARGENET}
         PostgreSQL support   : ${POSTGRESQL}
-        MySQL support        : ${MYSQL}
         SASL support         : ${SASL}
         OpenSSL SASL support : ${SSL}
         Socket Engine        : ${SOCKET_ENGINE}
