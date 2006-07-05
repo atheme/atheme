@@ -22,9 +22,9 @@ DOCDIR		= @DOCDIR@
 MODDIR		= @MODDIR@
 SHAREDIR	= @SHAREDIR@
 BIN		= atheme@EXEEXT@
-MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include @PGINC@ @MYINC@
+MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include @PGINC@
 PICFLAGS	= @PICFLAGS@
-CFLAGS		= @CFLAGS@ -I../../include -I../../libatheme @PGINC@ @MYINC@ @SSL_LIBS@
+CFLAGS		= @CFLAGS@ -I../../include -I../../libatheme @PGINC@ @SSL_LIBS@
 
 VERSION		= 0.1
 

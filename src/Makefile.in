@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 5107 2006-04-17 17:48:00Z gxti $
+# $Id: Makefile.in 5738 2006-07-05 16:37:22Z jilles $
 #
 
 CC		= @CC@
@@ -22,12 +22,12 @@ DOCDIR		= @DOCDIR@
 MODDIR		= @MODDIR@
 SHAREDIR	= @SHAREDIR@
 BIN		= atheme@EXEEXT@
-MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../include -I../libatheme @PGINC@ @MYINC@
-CFLAGS		= @CFLAGS@ -I../include -I../libatheme @PGINC@ @MYINC@
+MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../include -I../libatheme @PGINC@
+CFLAGS		= @CFLAGS@ -I../include -I../libatheme @PGINC@
 
 VERSION		= @PACKAGE_VERSION@
 
-LIBS		= @LIBS@ @PQLIB@ @MYLIB@ -L../libatheme -lorg.atheme.claro.base
+LIBS		= @LIBS@ @PQLIB@ -L../libatheme -lorg.atheme.claro.base
 LDFLAGS		= @LDFLAGS@
 CPPFLAGS	= @CPPFLAGS@
 
