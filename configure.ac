@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 5734 2006-07-05 16:09:30Z jilles $
+dnl $Id: configure.ac 5752 2006-07-06 09:52:18Z nenolod $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, 1.2.0, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 5734 2006-07-05 16:09:30Z jilles $])
+AC_COPYRIGHT([$Id: configure.ac 5752 2006-07-06 09:52:18Z nenolod $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -498,6 +498,7 @@ ATHEME_C_GCC_TRY_FLAGS([-Wunused-function -Wunused-label -Wunused-value -Wunused
 ATHEME_C_GCC_TRY_FLAGS([-Wredundant-decls], atheme_cv_c_gcc_w_redundant_decls)
 ATHEME_C_GCC_TRY_FLAGS([-Wfloat-equal], atheme_cv_c_gcc_w_float_equal)
 ATHEME_C_GCC_TRY_FLAGS([-Wformat=2], atheme_cv_c_gcc_w_format)
+ATHEME_C_GCC_TRY_FLAGS([-Wdisabled-optimization], atheme_cv_c_gcc_w_format)
 ATHEME_C_GCC_TRY_FLAGS([-pedantic], atheme_cv_c_gcc_pedantic)
 
 dnl Too unreliable to be useful at this time.

@@ -13202,6 +13202,85 @@ echo "${ECHO_T}no" >&6
  fi
 
 
+ echo "$as_me:$LINENO: checking GCC flag(s) -Wdisabled-optimization" >&5
+echo $ECHO_N "checking GCC flag(s) -Wdisabled-optimization... $ECHO_C" >&6
+ if test "${GCC-no}" = yes
+ then
+  if test "${atheme_cv_c_gcc_w_format+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+   oldcflags="${CFLAGS-}"
+   CFLAGS="${CFLAGS-} ${CWARNS} -Wdisabled-optimization -Werror"
+   cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+#include <string.h>
+#include <stdio.h>
+int main(void);
+
+int
+main ()
+{
+
+    strcmp("a","b"); fprintf(stdout,"test ok\n");
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  atheme_cv_c_gcc_w_format=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+atheme_cv_c_gcc_w_format=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+   CFLAGS="${oldcflags}"
+fi
+
+  if test "x$atheme_cv_c_gcc_w_format" = xyes; then
+   CWARNS="${CWARNS}-Wdisabled-optimization "
+   echo "$as_me:$LINENO: result: ok" >&5
+echo "${ECHO_T}ok" >&6
+  else
+   atheme_cv_c_gcc_w_format=''
+   echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+  fi
+ else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+ fi
+
+
  echo "$as_me:$LINENO: checking GCC flag(s) -pedantic" >&5
 echo $ECHO_N "checking GCC flag(s) -pedantic... $ECHO_C" >&6
  if test "${GCC-no}" = yes
