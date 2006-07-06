@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 5546 2006-06-24 23:08:30Z jilles $
+ * $Id: function.c 5756 2006-07-06 19:54:45Z jilles $
  */
 
 #include "atheme.h"
@@ -533,6 +533,10 @@ boolean_t validhostmask(char *host)
 {
 	/* make sure it has ! and @ */
 	if (!strchr(host, '!') || !strchr(host, '@'))
+		return FALSE;
+
+	/* XXX this NICKLEN is too long */
+	if (strlen(host) > NICKLEN + USERLEN + HOSTLEN + 1)
 		return FALSE;
 
 	return TRUE;
