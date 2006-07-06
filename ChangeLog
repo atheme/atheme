@@ -1,3 +1,13 @@
+jilles      2006/07/05 18:37:31 UTC	(20060705-5746)
+  Log:
+  example confs: more clarification (numeric/SID, name in uplink block)
+  
+
+  Changes:	Modified:
+  +5 -3		trunk/dist/example.conf (File Modified) 
+  +5 -3		trunk/dist/example.userserv.conf (File Modified) 
+
+
 jilles      2006/07/05 18:27:18 UTC	(20060705-5744)
   Log:
   example confs: add some comments
