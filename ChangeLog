@@ -1,3 +1,13 @@
+nenolod     2006/07/06 09:52:18 UTC	(20060706-5752)
+  Log:
+  - add -Wdisabled-optimization to CFLAGS if --enable-warnings is toggled on.
+  
+
+  Changes:	Modified:
+  +79 -0	trunk/configure (File Modified) 
+  +1 -0		trunk/configure.ac (File Modified) 
+
+
 nenolod     2006/07/06 09:51:05 UTC	(20060706-5750)
   Log:
   - sorcerynet -> sorircd
