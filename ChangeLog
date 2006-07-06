@@ -1,3 +1,12 @@
+nenolod     2006/07/06 08:57:10 UTC	(20060706-5748)
+  Log:
+  - move some stuff around in the credits
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/src/version.sh (File Modified) 
+
+
 jilles      2006/07/05 18:37:31 UTC	(20060705-5746)
   Log:
   example confs: more clarification (numeric/SID, name in uplink block)
