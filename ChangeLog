@@ -1,3 +1,14 @@
+jilles      2006/07/06 19:54:45 UTC	(20060706-5756)
+  Log:
+  validhostmask(): reject obviously too long stuff (this
+  still allows too much because we don't know the real
+  NICKLEN)
+  
+
+  Changes:	Modified:
+  +4 -0		trunk/src/function.c (File Modified) 
+
+
 jilles      2006/07/06 18:51:54 UTC	(20060706-5754)
   Log:
   Add user_burstlogin and sasl_input hooks to HOOKS document.

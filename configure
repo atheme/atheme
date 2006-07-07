@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# $Id: configure.ac 5734 2006-07-05 16:09:30Z jilles $
+# $Id: configure.ac 5752 2006-07-06 09:52:18Z nenolod $
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -969,7 +969,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-$Id: configure.ac 5734 2006-07-05 16:09:30Z jilles $
+$Id: configure.ac 5752 2006-07-06 09:52:18Z nenolod $
 _ACEOF
   exit 0
 fi
