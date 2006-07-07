@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5706 2006-07-03 23:25:09Z jilles $
+ * $Id: main.c 5774 2006-07-07 20:54:19Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5706 2006-07-03 23:25:09Z jilles $",
+	"$Id: main.c 5774 2006-07-07 20:54:19Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -320,7 +320,7 @@ static void cs_join(chanuser_t *cu)
 	{
 		if (u->myuser != NULL && is_founder(mc, u->myuser))
 		{
-			if (!(noop || cu->modes & ircd->owner_mode))
+			if (flags & CA_AUTOOP && !(noop || cu->modes & ircd->owner_mode))
 			{
 				modestack_mode_param(chansvs.nick, chan->name, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(u));
 				cu->modes |= ircd->owner_mode;
@@ -338,7 +338,7 @@ static void cs_join(chanuser_t *cu)
 	{
 		if (u->myuser != NULL && should_protect(mc, u->myuser))
 		{
-			if (!(noop || cu->modes & ircd->protect_mode))
+			if (flags & CA_AUTOOP && !(noop || cu->modes & ircd->protect_mode))
 			{
 				modestack_mode_param(chansvs.nick, chan->name, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(u));
 				cu->modes |= ircd->protect_mode;
