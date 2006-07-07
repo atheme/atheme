@@ -1,3 +1,12 @@
+jilles      2006/07/07 13:08:41 UTC	(20060707-5762)
+  Log:
+  Rerun autoconf to fix Id tag.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/configure (File Modified) 
+
+
 jilles      2006/07/06 19:54:45 UTC	(20060706-5756)
   Log:
   validhostmask(): reject obviously too long stuff (this

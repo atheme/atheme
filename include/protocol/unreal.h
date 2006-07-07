@@ -4,7 +4,7 @@
  *
  * This code contains the channel mode definitions for ratbox ircd.
  *
- * $Id$
+ * $Id: unreal.h 5766 2006-07-07 13:31:13Z jilles $
  */
 
 #ifndef RATBOX_H
