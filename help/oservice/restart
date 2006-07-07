@@ -4,5 +4,5 @@ RESTART shuts down services and restarts them.
 
 Syntax: RESTART
 
-Example:
+Example:
     /msg &nick& RESTART

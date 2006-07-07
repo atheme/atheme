@@ -5,5 +5,5 @@ not reconnect or restart.
 
 Syntax: SHUTDOWN
 
-Example:
+Example:
     /msg &nick& SHUTDOWN

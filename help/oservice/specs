@@ -10,5 +10,5 @@ online users or of oper classes.
 Syntax: SPECS USER <nick>
 Syntax: SPECS OPERCLASS <classname>
 
-Example:
+Example:
     /msg &nick& SPECS USER w00t

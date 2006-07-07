@@ -7,14 +7,14 @@ will be killed.
 Syntax: NOOP ADD HOSTMASK <nick!user@host> [reason]
 Syntax: NOOP ADD SERVER <mask> [reason]
 
-Examples:
+Examples:
     /msg &nick& NOOP ADD HOSTMASK *!*@some.spoof Abusive operator
     /msg &nick& NOOP ADD SERVER bad.server Abusive admin
 
 Syntax: NOOP DEL HOSTMASK <nick!user@host>
 Syntax: NOOP DEL SERVER <mask>
 
-Examples:
+Examples:
     /msg &nick& AKILL DEL HOSTMASK *!some@operator.host
     /msg &nick& AKILL DEL SERVER bad.server
 

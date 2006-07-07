@@ -8,5 +8,5 @@ with MODLOAD.
 
 Syntax: MODINSPECT <name>
 
-Example:
+Example:
     /msg &nick& MODINSPECT protocol/charybdis

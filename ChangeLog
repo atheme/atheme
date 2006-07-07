@@ -1,3 +1,13 @@
+jilles      2006/07/07 13:31:13 UTC	(20060707-5766)
+  Log:
+  Set Id keywords on unreal protocol module stuff.
+  
+
+  Changes:	Modified:
+  + -		trunk/include/protocol/unreal.h  (Property Modified)
+  + -		trunk/protocol/unreal.c  (Property Modified)
+
+
 jilles      2006/07/07 13:08:41 UTC	(20060707-5762)
   Log:
   Rerun autoconf to fix Id tag.

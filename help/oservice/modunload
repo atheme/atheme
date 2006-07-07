@@ -9,5 +9,5 @@ with MODLOAD.
 
 Syntax: MODUNLOAD <name...>
 
-Example:
+Example:
     /msg &nick& MODUNLOAD chanserv/register
