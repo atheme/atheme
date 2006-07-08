@@ -5,7 +5,7 @@
 #
 # This file is a simple setup script.
 #
-# $Id: setup 5348 2006-06-04 18:58:21Z jilles $
+# $Id: setup 5786 2006-07-08 22:44:15Z jilles $
 
 PREFIX="$HOME/atheme"
 LARGENET="no"
@@ -90,39 +90,6 @@ case "$LARGENET" in
     ;;
   yes)
     ARGS="--prefix=$PREFIX --enable-large-net"
-    ;;
-esac
-
-echo ""
-
-ok=0
-echo "Would you like to enable SASL authentication? This is a fairly"
-echo "new feature; most IRCDs do not support it yet, however charybdis"
-echo "does. Other IRCds may follow soon."
-while [ $ok -eq 0 ] ; do
-  echo -n "[$SASL] "
-  if read INPUT ; then : ; else echo "" ; exit 1 ; fi
-  if [ ! "$INPUT" ] ; then
-    INPUT=$SASL
-    ok=1
-  else
-    ok=1
-  fi
-done
-SASL=$INPUT
-
-case "$SASL" in
-  [Yy])
-    ARGS="$ARGS --enable-sasl"
-    ;;
-  Yes)
-    ARGS="$ARGS --enable-sasl"
-    ;;
-  yes)
-    ARGS="$ARGS --enable-sasl"
-    ;;
-  *)
-    ARGS="$ARGS --disable-sasl"
     ;;
 esac
 

@@ -1,3 +1,12 @@
+jilles      2006/07/08 22:30:03 UTC	(20060708-5784)
+  Log:
+  Mention FANTASY in /cs help set.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/chanserv/help.c (File Modified) 
+
+
 jilles      2006/07/08 21:18:46 UTC	(20060708-5782)
   Log:
   All Makefile.in:
