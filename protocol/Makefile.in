@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 5724 2006-07-04 16:06:20Z w00t $
+# $Id: Makefile.in 5782 2006-07-08 21:18:46Z jilles $
 #
 
 CC		= @CC@
@@ -15,7 +15,7 @@ prefix		= @prefix@
 exec_prefix	= @exec_prefix@
 bindir		= @bindir@
 datadir		= @datadir@
-sysconfdir		= @sysconfdir@
+sysconfdir	= @sysconfdir@
 libdir		= @libdir@
 sbindir		= @sbindir@
 DOCDIR		= @DOCDIR@

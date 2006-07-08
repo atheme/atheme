@@ -1,3 +1,15 @@
+jilles      2006/07/08 21:01:07 UTC	(20060708-5780)
+  Log:
+  OK if I committed that stuff anyway let's complete it.
+  The ptlink module now assumes +a and +h exist, consistent
+  with the other protocol modules.
+  
+
+  Changes:	Modified:
+  +5 -0		trunk/doc/IRCD (File Modified) 
+  +1 -1		trunk/protocol/ptlink.c (File Modified) 
+
+
 jilles      2006/07/08 20:46:50 UTC	(20060708-5778)
   Log:
   Add some explanation about the loadmodule directive itself.

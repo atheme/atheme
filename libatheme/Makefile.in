@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in 4189 2005-12-26 00:02:24Z jilles $
+# $Id: Makefile.in 5782 2006-07-08 21:18:46Z jilles $
 #
 
 CC		= @CC@
@@ -15,7 +15,7 @@ prefix		= @prefix@
 exec_prefix	= @exec_prefix@
 bindir		= @bindir@
 datadir		= @datadir@
-sysconfdir		= @sysconfdir@
+sysconfdir	= @sysconfdir@
 libdir		= @libdir@
 sbindir		= @sbindir@
 DOCDIR		= @DOCDIR@
