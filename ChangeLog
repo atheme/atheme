@@ -1,3 +1,17 @@
+jilles      2006/07/08 16:51:24 UTC	(20060708-5776)
+  Log:
+  Add modules which disable use of halfops, channel
+  protection and founder statuses, to be loaded
+  after a protocol module.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/contrib/Makefile.in (File Modified) 
+  +43 -0	trunk/contrib/ircd_nohalfops.c (File Added) 
+  +40 -0	trunk/contrib/ircd_noowner.c (File Added) 
+  +40 -0	trunk/contrib/ircd_noprotect.c (File Added) 
+
+
 jilles      2006/07/07 20:54:19 UTC	(20060707-5774)
   Log:
   Only set founder/protect if user has +O (autoop) flag.

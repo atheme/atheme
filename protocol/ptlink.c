@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ptlink ircd.
  *
- * $Id: ptlink.c 5628 2006-07-01 23:38:42Z jilles $
+ * $Id: ptlink.c 5778 2006-07-08 20:46:50Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ptlink.h"
 
-DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 5628 2006-07-01 23:38:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 5778 2006-07-08 20:46:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -20,17 +20,17 @@ ircd_t PTLink = {
         FALSE,                          /* Whether or not we use IRCNet/TS6 UID */
         FALSE,                          /* Whether or not we use RCOMMAND */
         FALSE,                          /* Whether or not we support channel owners. */
-        FALSE,                          /* Whether or not we support channel protection. */
+        TRUE,                           /* Whether or not we support channel protection. */
         FALSE,                          /* Whether or not we support halfops. */
 	FALSE,				/* Whether or not we use P10 */
 	TRUE,				/* Whether or not we use vHosts. */
 	0,				/* Oper-only cmodes */
         0,                              /* Integer flag for owner channel flag. */
-        0,                              /* Integer flag for protect channel flag. */
-        0,                              /* Integer flag for halfops. */
+        CMODE_PROTECT,                  /* Integer flag for protect channel flag. */
+        CMODE_HALFOP,                   /* Integer flag for halfops. */
         "+",                            /* Mode we set for owner. */
-        "+",                            /* Mode we set for protect. */
-        "+",                            /* Mode we set for halfops. */
+        "+a",                           /* Mode we set for protect. */
+        "+h",                           /* Mode we set for halfops. */
 	PROTOCOL_PTLINK,		/* Protocol type */
 	0,                              /* Permanent cmodes */
 	"b",                            /* Ban-like cmodes */
