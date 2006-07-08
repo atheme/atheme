@@ -1,3 +1,16 @@
+jilles      2006/07/08 23:22:24 UTC	(20060708-5792)
+  Log:
+  Remove --enable-sasl configure option and related #define,
+  there is no issue with always building sasl support.
+  
+
+  Changes:	Modified:
+  +11 -35	trunk/configure.ac (File Modified) 
+  +1 -4		trunk/include/atheme.h (File Modified) 
+  +1 -1		trunk/modules/Makefile.in (File Modified) 
+  +0 -2		trunk/protocol/charybdis.c (File Modified) 
+
+
 jilles      2006/07/08 23:03:39 UTC	(20060708-5790)
   Log:
   cs_kickdots: add a header comment with copyright notice and short description

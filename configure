@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# $Id: configure.ac 5752 2006-07-06 09:52:18Z nenolod $
+# $Id: configure.ac 5792 2006-07-08 23:22:24Z jilles $
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -313,7 +313,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA RM MV CP AR RANLIB SET_MAKE MKDEP CPP EGREP SOCKET_ENGINE POSIX_CRYPTC DOCDIR MODDIR SHAREDIR POSTGRESQL_C PGINC PQLIB SASL_DIR SSL_LIBS PICFLAGS LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA RM MV CP AR RANLIB SET_MAKE MKDEP CPP EGREP SOCKET_ENGINE POSIX_CRYPTC DOCDIR MODDIR SHAREDIR POSTGRESQL_C PGINC PQLIB SSL_LIBS PICFLAGS LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -848,7 +848,6 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-fhs-paths      Use more FHS-like pathnames.
   --enable-large-net      Enable large network support.
-  --disable-sasl          don't use builtin SASL
   --disable-ssl           don't use OpenSSL to provide more SASL mechanisms
   --enable-warnings       Enable compiler warnings
   --disable-propolice     Disable propolice protections (for debugging.)
@@ -969,7 +968,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-$Id: configure.ac 5752 2006-07-06 09:52:18Z nenolod $
+$Id: configure.ac 5792 2006-07-08 23:22:24Z jilles $
 _ACEOF
   exit 0
 fi
@@ -9799,35 +9798,6 @@ fi
 
 
 
-echo " "
-echo "SASL support"
-echo " "
-
-sasl=yes
-# Check whether --enable-sasl or --disable-sasl was given.
-if test "${enable_sasl+set}" = set; then
-  enableval="$enable_sasl"
-  sasl=$enableval
-fi;
-if test "$sasl" != "no" ; then
-
-cat >>confdefs.h <<\_ACEOF
-#define USE_SASL 1
-_ACEOF
-
-    SASL=yes
-    SASL_DIR="saslserv"
-else
-    SASL=no
-    SASL_DIR=
-fi
-echo "$as_me:$LINENO: checking if SASL should be used" >&5
-echo $ECHO_N "checking if SASL should be used... $ECHO_C" >&6
-echo "$as_me:$LINENO: result: $SASL" >&5
-echo "${ECHO_T}$SASL" >&6
-
-
-
 # Check whether --enable-ssl or --disable-ssl was given.
 if test "${enable_ssl+set}" = set; then
   enableval="$enable_ssl"
@@ -9837,9 +9807,8 @@ else
 fi;
 
 SSL=no
-if test "$sasl" == "yes" ; then
-	if test "$enable_ssl" = "yes"; then
-		echo "$as_me:$LINENO: checking for SSL_read in -lssl" >&5
+if test "$enable_ssl" = "yes"; then
+	echo "$as_me:$LINENO: checking for SSL_read in -lssl" >&5
 echo $ECHO_N "checking for SSL_read in -lssl... $ECHO_C" >&6
 if test "${ac_cv_lib_ssl_SSL_read+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -10052,9 +10021,9 @@ if test `eval echo '${'$as_ac_Header'}'` = yes; then
 #define `echo "HAVE_$ac_header" | $as_tr_cpp` 1
 _ACEOF
 
-				SSL_LIBS="-lssl -lcrypto"
+			SSL_LIBS="-lssl -lcrypto"
 
-				SSL=yes
+			SSL=yes
 
 fi
 
@@ -10063,14 +10032,13 @@ done
 
 fi
 
-		if test "$SSL" = "yes"; then
+	if test "$SSL" = "yes"; then
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_OPENSSL
 _ACEOF
 
-			LIBS="$LIBS $SSL_LIBS"
-		fi
+		LIBS="$LIBS $SSL_LIBS"
 	fi
 fi
 
@@ -14445,7 +14413,6 @@ s,@SHAREDIR@,$SHAREDIR,;t t
 s,@POSTGRESQL_C@,$POSTGRESQL_C,;t t
 s,@PGINC@,$PGINC,;t t
 s,@PQLIB@,$PQLIB,;t t
-s,@SASL_DIR@,$SASL_DIR,;t t
 s,@SSL_LIBS@,$SSL_LIBS,;t t
 s,@PICFLAGS@,$PICFLAGS,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
@@ -14973,7 +14940,6 @@ Configuration:
         Module root directory: `eval echo $d`
         Large network support: ${LARGENET}
         PostgreSQL support   : ${POSTGRESQL}
-        SASL support         : ${SASL}
         OpenSSL SASL support : ${SSL}
         Socket Engine        : ${SOCKET_ENGINE}
         CFLAGS               : ${CFLAGS}
