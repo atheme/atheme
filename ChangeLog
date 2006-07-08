@@ -1,3 +1,12 @@
+jilles      2006/07/08 23:03:39 UTC	(20060708-5790)
+  Log:
+  cs_kickdots: add a header comment with copyright notice and short description
+  
+
+  Changes:	Modified:
+  +9 -0		trunk/contrib/cs_kickdots.c (File Modified) 
+
+
 jilles      2006/07/08 22:44:15 UTC	(20060708-5786)
   Log:
   Remove SASL question from ./setup. There is no problem

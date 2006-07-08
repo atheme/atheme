@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 5752 2006-07-06 09:52:18Z nenolod $
+dnl $Id: configure.ac 5792 2006-07-08 23:22:24Z jilles $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, 1.2.0, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 5752 2006-07-06 09:52:18Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 5792 2006-07-08 23:22:24Z jilles $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -239,46 +239,23 @@ AC_SUBST(POSTGRESQL_C)
 AC_SUBST(PGINC)
 AC_SUBST(PQLIB)
 
-echo " "
-echo "SASL support"
-echo " "
-
-sasl=yes
-AC_ARG_ENABLE(sasl,
-    AC_HELP_STRING([--disable-sasl], [don't use builtin SASL]),
-    [sasl=$enableval])
-if test "$sasl" != "no" ; then
-    AC_DEFINE(USE_SASL, 1, [Define to 1 if you want builtin SASL.])
-    SASL=yes
-    SASL_DIR="saslserv"
-else
-    SASL=no
-    SASL_DIR=
-fi
-AC_MSG_CHECKING([if SASL should be used])
-AC_MSG_RESULT($SASL)
-
-AC_SUBST(SASL_DIR)
-
 AC_ARG_ENABLE(ssl,
 	AC_HELP_STRING([--disable-ssl], [don't use OpenSSL to provide more SASL mechanisms]),
 	,
 	enable_ssl=yes)
 
 SSL=no
-if test "$sasl" == "yes" ; then
-	if test "$enable_ssl" = "yes"; then
-		AC_CHECK_LIB(ssl, SSL_read, [
-			AC_CHECK_HEADERS(openssl/ssl.h openssl/err.h, [
-				SSL_LIBS="-lssl -lcrypto"
-				AC_SUBST(SSL_LIBS)
-				SSL=yes
-				])
-			],, -lcrypto)
-		if test "$SSL" = "yes"; then
-			AC_DEFINE(HAVE_OPENSSL,, Define to 1 if openssl is available)
-			LIBS="$LIBS $SSL_LIBS"
-		fi
+if test "$enable_ssl" = "yes"; then
+	AC_CHECK_LIB(ssl, SSL_read, [
+		AC_CHECK_HEADERS(openssl/ssl.h openssl/err.h, [
+			SSL_LIBS="-lssl -lcrypto"
+			AC_SUBST(SSL_LIBS)
+			SSL=yes
+			])
+		],, -lcrypto)
+	if test "$SSL" = "yes"; then
+		AC_DEFINE(HAVE_OPENSSL,, Define to 1 if openssl is available)
+		LIBS="$LIBS $SSL_LIBS"
 	fi
 fi
 
@@ -571,7 +548,6 @@ Configuration:
         Module root directory: `eval echo $d`
         Large network support: ${LARGENET}
         PostgreSQL support   : ${POSTGRESQL}
-        SASL support         : ${SASL}
         OpenSSL SASL support : ${SSL}
         Socket Engine        : ${SOCKET_ENGINE}
         CFLAGS               : ${CFLAGS}
