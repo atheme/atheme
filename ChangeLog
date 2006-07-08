@@ -1,3 +1,14 @@
+jilles      2006/07/07 20:54:19 UTC	(20060707-5774)
+  Log:
+  Only set founder/protect if user has +O (autoop) flag.
+  Still allow them to keep it if they're founder/have +s
+  but not +O, even if SECURE is enabled, however.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/chanserv/main.c (File Modified) 
+
+
 beu         2006/07/07 15:12:24 UTC	(20060707-5770)
   Log:
   Update oservice help files (purely cosmetic).
