@@ -1,3 +1,13 @@
+jilles      2006/07/08 22:44:15 UTC	(20060708-5786)
+  Log:
+  Remove SASL question from ./setup. There is no problem
+  with building this all the time.
+  
+
+  Changes:	Modified:
+  +0 -33	trunk/setup (File Modified) 
+
+
 jilles      2006/07/08 22:30:03 UTC	(20060708-5784)
   Log:
   Mention FANTASY in /cs help set.

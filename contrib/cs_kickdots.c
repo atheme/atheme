@@ -1,9 +1,18 @@
+/*
+ * Copyright (c) 2006 William Pitcock
+ * Rights to this code are as documented in doc/LICENSE.
+ *
+ * Kicks people saying "..." on channels with "kickdots" metadata set.
+ *
+ * $Id: cs_kickdots.c 5790 2006-07-08 23:03:39Z jilles $
+ */
+
 #include "atheme.h"
 
 DECLARE_MODULE_V1
 (
 	"chanserv/kickdots", FALSE, _modinit, _moddeinit,
-	"$Id: cs_kickdots.c 5334 2006-06-03 16:37:20Z jilles $",
+	"$Id: cs_kickdots.c 5790 2006-07-08 23:03:39Z jilles $",
 	"William Pitcock <nenolod -at- nenolod.net>"
 );
 
