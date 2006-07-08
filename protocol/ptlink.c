@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for ptlink ircd.
  *
- * $Id: ptlink.c 5778 2006-07-08 20:46:50Z jilles $
+ * $Id: ptlink.c 5780 2006-07-08 21:01:07Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ptlink.h"
 
-DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 5778 2006-07-08 20:46:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 5780 2006-07-08 21:01:07Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -21,7 +21,7 @@ ircd_t PTLink = {
         FALSE,                          /* Whether or not we use RCOMMAND */
         FALSE,                          /* Whether or not we support channel owners. */
         TRUE,                           /* Whether or not we support channel protection. */
-        FALSE,                          /* Whether or not we support halfops. */
+        TRUE,                           /* Whether or not we support halfops. */
 	FALSE,				/* Whether or not we use P10 */
 	TRUE,				/* Whether or not we use vHosts. */
 	0,				/* Oper-only cmodes */

@@ -1,4 +1,4 @@
-$Id: IRCD 5724 2006-07-04 16:06:20Z w00t $
+$Id: IRCD 5780 2006-07-08 21:01:07Z jilles $
 
 IRCD-specific notes
 -------------------
@@ -200,6 +200,11 @@ and tricks allow users to get around it).
 
 PTlink ircd allows services to do various special things like restarting the
 server; write a module if you want to use those.
+
+By default, Atheme assumes cmode +a (channel admin/protect, AdminWithDot in
+network.dconf) and cmode +h (halfops, compile time option) are enabled. If
+this is not the case, compile and load the ircd_noprotect and/or
+ircd_nohalfops modules from contrib.
 
 Although Atheme does not support IPv6 connections itself, user IPv6 addresses
 will be properly stored and logged.

@@ -1,3 +1,14 @@
+jilles      2006/07/08 20:46:50 UTC	(20060708-5778)
+  Log:
+  Add some explanation about the loadmodule directive itself.
+  
+
+  Changes:	Modified:
+  +10 -0	trunk/dist/example.conf (File Modified) 
+  +10 -0	trunk/dist/example.userserv.conf (File Modified) 
+  +5 -5		trunk/protocol/ptlink.c (File Modified) 
+
+
 jilles      2006/07/08 16:51:24 UTC	(20060708-5776)
   Log:
   Add modules which disable use of halfops, channel
