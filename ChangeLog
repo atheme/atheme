@@ -1,3 +1,13 @@
+jilles      2006/07/09 16:05:52 UTC	(20060709-5812)
+  Log:
+  Remove last bold Example(s): from help files.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/help/oservice/akill (File Modified) 
+  +1 -1		trunk/help/oservice/ignore (File Modified) 
+
+
 beu         2006/07/09 15:22:57 UTC	(20060709-5810)
   Log:
   Spelling/grammatical fixes.
