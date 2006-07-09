@@ -4,7 +4,7 @@
  *
  * XMLRPC server code.
  *
- * $Id: main.c 3755 2005-11-09 23:48:04Z jilles $
+ * $Id: main.c 5800 2006-07-09 13:38:47Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 3755 2005-11-09 23:48:04Z jilles $",
+	"$Id: main.c 5800 2006-07-09 13:38:47Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -124,8 +124,14 @@ static void do_listen(connection_t *cptr)
 
 static void xmlrpc_config_ready(void *vptr)
 {
-	listener = connection_open_listener_tcp(xmlrpc_config.host,
-		xmlrpc_config.port, do_listen);
+	if (xmlrpc_config.host != NULL && xmlrpc_config.port != 0)
+	{
+		listener = connection_open_listener_tcp(xmlrpc_config.host,
+			xmlrpc_config.port, do_listen);
+		hook_del_hook("config_ready", xmlrpc_config_ready);
+	}
+	else
+		slog(LG_ERROR, "xmlrpc_config_ready(): xmlrpc{} block missing or invalid");
 }
 
 void _modinit(module_t *m)

@@ -1,3 +1,13 @@
+jilles      2006/07/09 00:14:43 UTC	(20060709-5798)
+  Log:
+  generatepass contrib module: avoid a crash when given certain arguments
+  
+
+  Changes:	Modified:
+  +7 -6		trunk/contrib/ns_generatepass.c (File Modified) 
+  +7 -6		trunk/contrib/us_generatepass.c (File Modified) 
+
+
 jilles      2006/07/09 00:04:07 UTC	(20060709-5796)
   Log:
   Remove the old modules/saslserv/sasl.so and
