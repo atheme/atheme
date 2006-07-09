@@ -9,7 +9,7 @@ If the !P token is specified the AKILL will never expire (permanent).
 If the !T token is specified expire time must follow, in minutes,
 hours ("h"), days ("d") or weeks ("w").
 
-Examples:
+Examples:
     /msg &nick& AKILL ADD foo !T 5 bar reason
     /msg &nick& AKILL ADD foo !T 3d bar reason
     /msg &nick& AKILL ADD foo@bar.com !P foo reason
@@ -32,7 +32,7 @@ If number is specified it correlates with the number on AKILL LIST.
 You may specify multiple numbers by separating with commas.
 You may specify a range by using a colon.
 
-Examples:
+Examples:
     /msg &nick& AKILL DEL foo@bar.com
     /msg &nick& AKILL DEL 5
     /msg &nick& AKILL DEL 1,2,5,10
@@ -42,7 +42,7 @@ Syntax: AKILL LIST [FULL]
 
 If FULL is specified the AKILL reasons will be shown.
 
-Examples:
+Examples:
     /msg &nick& AKILL LIST
     /msg &nick& AKILL LIST FULL
 
