@@ -8,5 +8,5 @@ can also (on most ircds) be removed with a simple
 
 Syntax: JUPE <server> <reason>
 
-Example:
+Example:
     /msg &nick& JUPE irc.blah.net very unstable server

@@ -7,5 +7,5 @@ doing.
 
 Syntax: RAW <parameters>
 
-Example:
+Example:
     /msg &nick& RAW :&nick& JOIN #test

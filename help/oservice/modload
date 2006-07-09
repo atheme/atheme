@@ -9,5 +9,5 @@ suffix like .so is optional.
 
 Syntax: MODLOAD <path...>
 
-Example:
+Example:
     /msg &nick& MODLOAD ../contrib/fc_dice

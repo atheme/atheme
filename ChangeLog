@@ -1,3 +1,23 @@
+beu         2006/07/09 14:34:41 UTC	(20060709-5802)
+  Log:
+  Update cservice (chanserv), nickserv and memoserv help files.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/help/cservice/set_property (File Modified) 
+  +1 -2		trunk/help/memoserv/delete (File Modified) 
+  +0 -1		trunk/help/memoserv/forward (File Modified) 
+  +3 -4		trunk/help/memoserv/list (File Modified) 
+  +0 -1		trunk/help/memoserv/read (File Modified) 
+  +0 -1		trunk/help/memoserv/send (File Modified) 
+  +0 -1		trunk/help/nickserv/freeze (File Modified) 
+  +2 -2		trunk/help/nickserv/info (File Modified) 
+  +0 -1		trunk/help/nickserv/register (File Modified) 
+  +3 -3		trunk/help/nickserv/set_nomemo (File Modified) 
+  +0 -1		trunk/help/nickserv/verify (File Modified) 
+  +5 -4		trunk/help/nickserv/vhost (File Modified) 
+
+
 jilles      2006/07/09 13:38:47 UTC	(20060709-5800)
   Log:
   xmlrpc:

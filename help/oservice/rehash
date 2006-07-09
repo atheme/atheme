@@ -7,5 +7,5 @@ command.
 
 Syntax: REHASH
 
-Example:
+Example:
     /msg &nick& REHASH

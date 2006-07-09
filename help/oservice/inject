@@ -6,6 +6,6 @@ not be used unless you know what you're doing.
 
 Syntax: INJECT <parameters>
 
-Examples:
+Examples:
     /msg &nick& INJECT :uplink.network.com PING :shrike.network.com
     /msg &nick& INJECT :foo PRIVMSG &nick& :HELP INJECT
