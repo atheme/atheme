@@ -1,3 +1,24 @@
+beu         2006/07/09 14:42:47 UTC	(20060709-5806)
+  Log:
+  Revert silly "all Examples: are bold" commit (from r5770).
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/help/oservice/inject (File Modified) 
+  +1 -1		trunk/help/oservice/jupe (File Modified) 
+  +1 -1		trunk/help/oservice/mode (File Modified) 
+  +1 -1		trunk/help/oservice/modinspect (File Modified) 
+  +1 -1		trunk/help/oservice/modload (File Modified) 
+  +1 -1		trunk/help/oservice/modunload (File Modified) 
+  +2 -2		trunk/help/oservice/noop (File Modified) 
+  +1 -1		trunk/help/oservice/raw (File Modified) 
+  +1 -1		trunk/help/oservice/rehash (File Modified) 
+  +1 -1		trunk/help/oservice/restart (File Modified) 
+  +1 -1		trunk/help/oservice/shutdown (File Modified) 
+  +1 -1		trunk/help/oservice/specs (File Modified) 
+  +1 -1		trunk/help/oservice/update (File Modified) 
+
+
 beu         2006/07/09 14:34:41 UTC	(20060709-5802)
   Log:
   Update cservice (chanserv), nickserv and memoserv help files.
