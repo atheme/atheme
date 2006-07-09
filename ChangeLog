@@ -1,3 +1,13 @@
+jilles      2006/07/08 23:23:03 UTC	(20060708-5794)
+  Log:
+  Rerun autoconf and autoheader.
+  
+
+  Changes:	Modified:
+  +9 -43	trunk/configure (File Modified) 
+  +0 -3		trunk/include/sysconf.h.in (File Modified) 
+
+
 jilles      2006/07/08 23:22:24 UTC	(20060708-5792)
   Log:
   Remove --enable-sasl configure option and related #define,
