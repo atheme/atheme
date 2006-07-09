@@ -1,3 +1,19 @@
+beu         2006/07/09 16:29:21 UTC	(20060709-5818)
+  Log:
+  Synchronise userserv and nickserv help files.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/help/nickserv/logout (File Modified) 
+  +1 -1		trunk/help/nickserv/set_emailmemos (File Modified) 
+  +1 -2		trunk/help/nickserv/set_password (File Modified) 
+  +4 -3		trunk/help/userserv/drop (File Modified) 
+  +2 -2		trunk/help/userserv/info (File Modified) 
+  +4 -1		trunk/help/userserv/register (File Modified) 
+  +0 -1		trunk/help/userserv/verify (File Modified) 
+  +6 -5		trunk/help/userserv/vhost (File Modified) 
+
+
 jilles      2006/07/09 16:05:52 UTC	(20060709-5812)
   Log:
   Remove last bold Example(s): from help files.

@@ -3,7 +3,7 @@ Help for VHOST:
 VHOST allows operators to set a virtual host (also
 known as a spoof or cloak) on a nickname. This vhost
 will be set on the user immediately and each time
-they connect. If no vhost is specified, clear any
+they identify. If no vhost is specified, clear any
 existing vhost.
 
 Syntax: VHOST <nickname> [<vhost>]
