@@ -12,4 +12,3 @@ Syntax: SEND <user|nick> text
 
 Examples:
     /msg &nick& SEND Kog pay your bills
-

@@ -9,4 +9,3 @@ Syntax: READ <memo number>
 
 Examples:
     /msg &nick& READ 1
-

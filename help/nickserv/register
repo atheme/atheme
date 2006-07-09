@@ -13,4 +13,3 @@ address.
 
 Examples:
     /msg &nick& REGISTER bar foo@bar.com
-

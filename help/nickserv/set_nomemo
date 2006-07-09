@@ -1,8 +1,8 @@
 Help for SET NOMEMO:
 
-This prevents people from being able to memo you.
-If you do not want to get memos from chatting,
-you can just turn them off for your nick.
+This prevents people from being able to send you
+a memo. If you do not want to receive memos, you
+can just turn them off for your nick.
 
 Syntax: SET NOMEMO [ON|OFF]
 

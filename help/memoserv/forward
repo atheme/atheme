@@ -9,4 +9,3 @@ Syntax: FORWARD <user|nick> <memo number>
 
 Examples:
     /msg &nick& FORWARD kog 1
-

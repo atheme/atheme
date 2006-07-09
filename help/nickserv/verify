@@ -8,4 +8,3 @@ Syntax: VERIFY <operation> <nickname> <key>
 Example:
     /msg &nick& VERIFY REGISTER jenny 161803399
     /msg &nick& VERIFY EMAILCHG Aeriana 271828183
-
