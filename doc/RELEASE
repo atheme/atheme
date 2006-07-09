@@ -1,4 +1,4 @@
-$Id: RELEASE 5740 2006-07-05 16:43:47Z jilles $
+$Id: RELEASE 5826 2006-07-09 18:10:01Z jilles $
 
 Atheme 1.2 Release Notes
 ========================
@@ -9,6 +9,9 @@ ircd protocol
   hybrid, bahamut, solidircd).
 - Put netwide end of burst detection in the core. This is used for suppressing
   various notices to users coming back from a netsplit or services restart.
+- Add modules which disable use of halfops, channel protection and founder
+  statuses to contrib.
+- Only set owner/protect modes if the user has the +O (autoop) flag.
 - Remove the Chunky Monkey protocol module.
 - Update Plexus protocol module to Plexus 3. [MERGED]
 - Fix global notices in the P10 protocol modules. [MERGED]
@@ -46,8 +49,10 @@ other
 - Rewrite nickserv/userserv set command handling, allowing modules to
   provide extra set options.
 - Merge modules/saslserv/sasl module into modules/saslserv/main. You should
-  remove modules/saslserv/sasl from your config file.
+  remove modules/saslserv/sasl from your config file, it will be deleted
+  automatically by make install.
 - Clean up stale SASL sessions periodically.
+- Mention FANTASY in /cs help set.
 - Remove the MySQL backend. If you were using this, first start the old version
   with backend/mysql, then load a supported backend like backend/flatfile and
   /msg operserv update, to convert your data. See doc/SQL for more information.

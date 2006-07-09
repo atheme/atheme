@@ -1,3 +1,13 @@
+jilles      2006/07/09 16:32:21 UTC	(20060709-5820)
+  Log:
+  vhost help files: vhosts apply on login, not on connect
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/help/nickserv/vhost (File Modified) 
+  +1 -1		trunk/help/userserv/vhost (File Modified) 
+
+
 beu         2006/07/09 16:29:21 UTC	(20060709-5818)
   Log:
   Synchronise userserv and nickserv help files.
