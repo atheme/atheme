@@ -1,3 +1,12 @@
+beu         2006/07/09 15:02:40 UTC	(20060709-5808)
+  Log:
+  Grammatical fix.
+  
+
+  Changes:	Modified:
+  +5 -5		trunk/help/cservice/flags (File Modified) 
+
+
 beu         2006/07/09 14:42:47 UTC	(20060709-5806)
   Log:
   Revert silly "all Examples: are bold" commit (from r5770).

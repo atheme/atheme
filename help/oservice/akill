@@ -29,7 +29,7 @@ in the configuration file for "foo reason."
 Syntax: AKILL DEL <hostmask|number>
 
 If number is specified it correlates with the number on AKILL LIST.
-You may specify multiple numbers by seperating with commas.
+You may specify multiple numbers by separating with commas.
 You may specify a range by using a colon.
 
 Examples:
