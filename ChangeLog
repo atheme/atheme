@@ -1,3 +1,12 @@
+jilles      2006/07/09 18:10:01 UTC	(20060709-5826)
+  Log:
+  Update the release notes.
+  
+
+  Changes:	Modified:
+  +6 -1		trunk/doc/RELEASE (File Modified) 
+
+
 jilles      2006/07/09 16:32:21 UTC	(20060709-5820)
   Log:
   vhost help files: vhosts apply on login, not on connect
