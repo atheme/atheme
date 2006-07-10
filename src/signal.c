@@ -4,7 +4,7 @@
  *
  * This file contains the signal handling routines.
  *
- * $Id: signal.c 5846 2006-07-10 16:01:44Z jilles $
+ * $Id: signal.c 5848 2006-07-10 17:50:42Z jilles $
  */
 
 #include "atheme.h"
@@ -33,9 +33,12 @@ void sighandler(int signum)
 		if (me.connected && curr_uplink != NULL &&
 				curr_uplink->conn != NULL)
 		{
-			write(curr_uplink->conn->fd, ":", 1);
-			write(curr_uplink->conn->fd, chansvs.nick, strlen(chansvs.nick));
-			write(curr_uplink->conn->fd, " QUIT :Out of memory!\r\n", 23);
+			if (chansvs.nick != NULL)
+			{
+				write(curr_uplink->conn->fd, ":", 1);
+				write(curr_uplink->conn->fd, chansvs.nick, strlen(chansvs.nick));
+				write(curr_uplink->conn->fd, " QUIT :Out of memory!\r\n", 23);
+			}
 			write(curr_uplink->conn->fd, "ERROR :Panic! Out of memory.\r\n", 30);
 		}
 		if (runflags & (RF_LIVE | RF_STARTING))

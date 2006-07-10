@@ -1,3 +1,21 @@
+jilles      2006/07/10 16:01:44 UTC	(20060710-5846)
+  Log:
+  Postpone actual signal handling to the end of the main loop,
+  functions like stdio, malloc, expire_check, db_save are
+  not safe from signals. The signal handler just sets a
+  variable.
+  Exception is SIGUSR1 (out of memory) as we cannot safely
+  return from there. So there we try (in a hackish way) to
+  notify the network and log files (using write(2)) and
+  abort(3) the process.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/extern.h (File Modified) 
+  +3 -0		trunk/src/send.c (File Modified) 
+  +47 -11	trunk/src/signal.c (File Modified) 
+
+
 jilles      2006/07/10 13:18:50 UTC	(20060710-5838)
   Log:
   Rerun autoconf.
