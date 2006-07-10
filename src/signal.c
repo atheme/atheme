@@ -4,7 +4,7 @@
  *
  * This file contains the signal handling routines.
  *
- * $Id: signal.c 4539 2006-01-08 23:46:58Z jilles $
+ * $Id: signal.c 5846 2006-07-10 16:01:44Z jilles $
  */
 
 #include "atheme.h"
@@ -15,11 +15,43 @@
 #define SIGUSR2 0
 #endif
 
+static int got_sighup, got_sigint, got_sigterm, got_sigusr2;
+
 void sighandler(int signum)
 {
-	/* rehash */
 	if (signum == SIGHUP)
+		got_sighup = 1;
+	else if (signum == SIGINT)
+		got_sigint = 1;
+	else if (signum == SIGTERM)
+		got_sigterm = 1;
+	else if (signum == SIGUSR1)
 	{
+		/* XXX */
+		if (log_file != NULL)
+			write(fileno(log_file), "Out of memory!\n", 15);
+		if (me.connected && curr_uplink != NULL &&
+				curr_uplink->conn != NULL)
+		{
+			write(curr_uplink->conn->fd, ":", 1);
+			write(curr_uplink->conn->fd, chansvs.nick, strlen(chansvs.nick));
+			write(curr_uplink->conn->fd, " QUIT :Out of memory!\r\n", 23);
+			write(curr_uplink->conn->fd, "ERROR :Panic! Out of memory.\r\n", 30);
+		}
+		if (runflags & (RF_LIVE | RF_STARTING))
+			write(2, "Out of memory!\n", 15);
+		abort();
+	}
+	else if (signum == SIGUSR2)
+		got_sigusr2 = 1;
+}
+
+void check_signals(void)
+{
+	/* rehash */
+	if (got_sighup)
+	{
+		got_sighup = 0;
 		slog(LG_INFO, "sighandler(): got SIGHUP, rehashing %s", config_file);
 
 		wallops("Got SIGHUP; reloading \2%s\2.", config_file);
@@ -45,18 +77,19 @@ void sighandler(int signum)
 	}
 
 	/* usually caused by ^C */
-	else if (signum == SIGINT && (runflags & RF_LIVE))
+	if (got_sigint && (runflags & RF_LIVE))
 	{
-		wallops("Exiting on signal %d.", signum);
+		got_sigint = 0;
+		wallops("Exiting on signal %d.", SIGINT);
 		if (chansvs.me != NULL && chansvs.me->me != NULL)
 			quit_sts(chansvs.me->me, "caught interrupt");
 		me.connected = FALSE;
 		slog(LG_INFO, "sighandler(): caught interrupt; exiting...");
 		runflags |= RF_SHUTDOWN;
 	}
-
-	else if (signum == SIGINT && !(runflags & RF_LIVE))
+	else if (got_sigint && !(runflags & RF_LIVE))
 	{
+		got_sigint = 0;
 		wallops("Got SIGINT; restarting.");
 
 		snoop("UPDATE: \2%s\2", "system console");
@@ -71,14 +104,16 @@ void sighandler(int signum)
 		runflags |= RF_RESTART;
 	}
 
-	else if (signum == SIGTERM)
+	if (got_sigterm)
 	{
-		wallops("Exiting on signal %d.", signum);
+		got_sigterm = 0;
+		wallops("Exiting on signal %d.", SIGTERM);
 		slog(LG_INFO, "sighandler(): got SIGTERM; exiting...");
 		runflags |= RF_SHUTDOWN;
 	}
 
-	else if (signum == SIGUSR1)
+#if 0
+	if (signum == SIGUSR1)
 	{
 		wallops("Panic! Out of memory.");
 		if (chansvs.me != NULL && chansvs.me->me != NULL)
@@ -87,10 +122,11 @@ void sighandler(int signum)
 		slog(LG_INFO, "sighandler(): out of memory; exiting");
 		runflags |= RF_SHUTDOWN;
 	}
-
-	else if (signum == SIGUSR2)
+#endif
+	if (got_sigusr2)
 	{
-		wallops("Got SIGUSER2; restarting.");
+		got_sigusr2 = 0;
+		wallops("Got SIGUSR2; restarting.");
 
 		snoop("UPDATE: \2%s\2", "system console");
 		wallops("Updating database by request of \2%s\2.", "system console");

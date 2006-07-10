@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 5640 2006-07-02 00:48:37Z jilles $
+ * $Id: extern.h 5846 2006-07-10 16:01:44Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -304,6 +304,7 @@ E void protocol_init(void);
 
 /* signal.c */
 E void sighandler(int signum);
+E void check_signals(void);
 
 /* ptasks.c */
 E void handle_version(user_t *);

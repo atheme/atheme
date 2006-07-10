@@ -5,7 +5,7 @@
  * This file contains socket routines.
  * Based off of W. Campbell's code.
  *
- * $Id: send.c 5065 2006-04-14 03:55:44Z w00t $
+ * $Id: send.c 5846 2006-07-10 16:01:44Z jilles $
  */
 
 #include "atheme.h"
@@ -108,5 +108,8 @@ void io_loop(void)
 			event_run();
 
 		connection_select(25000);
+
+		/* actually handle signals when it's safe to do so -- jilles */
+		check_signals();
 	}
 }
