@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: set.c 5832 2006-07-10 13:06:14Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: set.c 5832 2006-07-10 13:06:14Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -133,6 +133,12 @@ static void _us_sethidemail(char *origin)
 	if (u == NULL || u->myuser == NULL)
 		return;
 
+	if (params == NULL)
+	{
+		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "HIDEMAIL");
+		return;
+	}
+
 	if (!strcasecmp("ON", params))
 	{
 		if (MU_HIDEMAIL & u->myuser->flags)
@@ -189,6 +195,12 @@ static void _us_setemailmemos(char *origin)
 		return;
 	}
 
+	if (params == NULL)
+	{
+		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "EMAILMEMOS");
+		return;
+	}
+
 	if (!strcasecmp("ON", params))
 	{
 		if (me.mta == NULL)
@@ -239,6 +251,12 @@ static void _us_setnomemo(char *origin)
 	if (u == NULL || u->myuser == NULL)
 		return;
 
+	if (params == NULL)
+	{
+		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "NOMEMO");
+		return;
+	}
+
 	if (!strcasecmp("ON", params))
 	{
 		if (MU_NOMEMO & u->myuser->flags)
@@ -283,6 +301,12 @@ static void _us_setneverop(char *origin)
 
 	if (u == NULL || u->myuser == NULL)
 		return;
+
+	if (params == NULL)
+	{
+		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "NEVEROP");
+		return;
+	}
 
 	if (!strcasecmp("ON", params))
 	{
@@ -334,6 +358,12 @@ static void _us_setnoop(char *origin)
 
 	if (u == NULL || u->myuser == NULL)
 		return;
+
+	if (params == NULL)
+	{
+		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "NOOP");
+		return;
+	}
 
 	if (!strcasecmp("ON", params))
 	{
@@ -444,6 +474,12 @@ static void _us_setpassword(char *origin)
 
 	if (u == NULL || u->myuser == NULL)
 		return;
+
+	if (password == NULL)
+	{
+		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "PASSWORD");
+		return;
+	}
 
 	if (strlen(password) > 32)
 	{

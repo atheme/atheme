@@ -1,3 +1,12 @@
+nenolod     2006/07/10 10:30:21 UTC	(20060710-5830)
+  Log:
+  - don't segfault when passed crap
+  
+
+  Changes:	Modified:
+  +36 -0	trunk/modules/nickserv/set.c (File Modified) 
+
+
 jilles      2006/07/09 18:10:01 UTC	(20060709-5826)
   Log:
   Update the release notes.
