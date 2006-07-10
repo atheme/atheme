@@ -1,3 +1,12 @@
+jilles      2006/07/10 13:06:14 UTC	(20060710-5832)
+  Log:
+  Port over r5830 from nickserv set to userserv set.
+  
+
+  Changes:	Modified:
+  +36 -0	trunk/modules/userserv/set.c (File Modified) 
+
+
 nenolod     2006/07/10 10:30:21 UTC	(20060710-5830)
   Log:
   - don't segfault when passed crap
