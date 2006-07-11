@@ -1,3 +1,12 @@
+jilles      2006/07/10 17:50:42 UTC	(20060710-5848)
+  Log:
+  Make sure not to QUIT chansvs.nick if chansvs.nick is NULL.
+  
+
+  Changes:	Modified:
+  +6 -3		trunk/src/signal.c (File Modified) 
+
+
 jilles      2006/07/10 16:01:44 UTC	(20060710-5846)
   Log:
   Postpone actual signal handling to the end of the main loop,
