@@ -1,3 +1,12 @@
+nenolod     2006/07/12 19:08:58 UTC	(20060712-5860)
+  Log:
+  - hook up memo.c to the buildsystem
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/modules/xmlrpc/Makefile.in (File Modified) 
+
+
 nenolod     2006/07/12 19:02:10 UTC	(20060712-5858)
   Log:
   >>> Merge branch http://opensvn.csie.org/foss_pip/irc/services/atheme-trunk to http://svn.atheme.org/atheme/trunk with dsvn.
