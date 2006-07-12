@@ -458,10 +458,10 @@ static int memo_read(void *conn, int parc, char *parv[])
  */
 static int memo_ignore_add(void *conn, int parc, char *parv[])
 {
-        user_t *user = user_find_named(parv[1]);
-        myuser_t *myuser = user->myuser, *mytarget;
-        node_t *n, *node;
-        char *tmpbuf;
+	user_t *user = user_find_named(parv[1]);
+	myuser_t *myuser = user->myuser, *mytarget;
+	node_t *n, *node;
+	char *tmpbuf;
 	static char buf[XMLRPC_BUFSIZE] = "";
 
 	*buf = '\0';
@@ -470,7 +470,7 @@ static int memo_ignore_add(void *conn, int parc, char *parv[])
 	{
 		xmlrpc_generic_error(3, "Insufficient parameters.");
 		return 0;
-        }
+	}
 
 	if (!(myuser = myuser_find(parv[1])))
 	{
@@ -484,49 +484,49 @@ static int memo_ignore_add(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-        /* Sanity check (target is user) */
-        if (!strcasecmp(parv[2], myuser->name))
-        {       
+	/* Sanity check (target is user) */
+	if (!strcasecmp(parv[2], myuser->name))
+	{       
 		xmlrpc_generic_error(4, "You can't ignore yourself.");
-                return 0;
-        }
-        
-        /* Check whether target exists */
-        if (!(mytarget = myuser_find_ext(parv[2])))
-        {       
+		return 0;
+	}
+	
+	/* Check whether target exists */
+	if (!(mytarget = myuser_find_ext(parv[2])))
+	{       
 		xmlrpc_generic_error(5, "Target user nonexistent.");
-                return 0;
-        }
-        
-        /* Ignore list is full */
-        if (myuser->memo_ignores.count >= MAXMSIGNORES)
-        {       
+		return 0;
+	}
+	
+	/* Ignore list is full */
+	if (myuser->memo_ignores.count >= MAXMSIGNORES)
+	{       
 		xmlrpc_generic_error(6, "Ignore list full.");
-                return 0;
-        }
+		return 0;
+	}
 
-        LIST_FOREACH(n, myuser->memo_ignores.head)
-        {       
-                tmpbuf = (char *)n->data;
-                
-                /* Check whether the user is already being ignored */
-                if (!strcasecmp(tmpbuf, parv[2]))
-                {       
-		        xmlrpc_generic_error(7, "That user is already being ignored.");
-                        return 0;
-                }
-        }
-        
-        /* Ignore user */
-        tmpbuf = sstrdup(parv[2]);
+	LIST_FOREACH(n, myuser->memo_ignores.head)
+	{       
+		tmpbuf = (char *)n->data;
+		
+		/* Check whether the user is already being ignored */
+		if (!strcasecmp(tmpbuf, parv[2]))
+		{       
+			xmlrpc_generic_error(7, "That user is already being ignored.");
+			return 0;
+		}
+	}
+	
+	/* Ignore user */
+	tmpbuf = sstrdup(parv[2]);
 
-        node = node_create();
-        node_add(tmpbuf, node, &myuser->memo_ignores);
+	node = node_create();
+	node_add(tmpbuf, node, &myuser->memo_ignores);
 
 	xmlrpc_string(buf, "Operation successful.");
 	xmlrpc_send(1, buf);
 
-        return 0;
+	return 0;
 }
 
 /*
@@ -547,10 +547,10 @@ static int memo_ignore_add(void *conn, int parc, char *parv[])
  */
 static int memo_ignore_delete(void *conn, int parc, char *parv[])
 {
-        user_t *user = user_find_named(parv[1]);
-        myuser_t *myuser = user->myuser;
-        node_t *n, *tn;
-        char *tmpbuf;
+	user_t *user = user_find_named(parv[1]);
+	myuser_t *myuser = user->myuser;
+	node_t *n, *tn;
+	char *tmpbuf;
 	static char buf[XMLRPC_BUFSIZE] = "";
 
 	*buf = '\0';
@@ -573,27 +573,27 @@ static int memo_ignore_delete(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-        LIST_FOREACH_SAFE(n, tn, myuser->memo_ignores.head)
-        {       
-                tmpbuf = (char *)n->data;
-                
-                /* User is in the ignore list */
-                if (!strcasecmp(tmpbuf, parv[2]))
-                {       
-                        node_del(n, &myuser->memo_ignores);
-                        node_free(n);
+	LIST_FOREACH_SAFE(n, tn, myuser->memo_ignores.head)
+	{       
+		tmpbuf = (char *)n->data;
+		
+		/* User is in the ignore list */
+		if (!strcasecmp(tmpbuf, parv[2]))
+		{       
+			node_del(n, &myuser->memo_ignores);
+			node_free(n);
 
-                        free(tmpbuf);
+			free(tmpbuf);
 
-	                xmlrpc_string(buf, "Operation successful.");
-                        xmlrpc_send(1, buf);
-                        return 0;
-                }
-        }
-        
-        /* If we reach this spot then the user was not on the ignore list */
+			xmlrpc_string(buf, "Operation successful.");
+			xmlrpc_send(1, buf);
+			return 0;
+		}
+	}
+	
+	/* If we reach this spot then the user was not on the ignore list */
 	xmlrpc_generic_error(4, "User not on the ignore list.");
-        return 0;
+	return 0;
 }
 
 /*
@@ -614,9 +614,9 @@ static int memo_ignore_delete(void *conn, int parc, char *parv[])
  */
 static int memo_ignore_clear(void *conn, int parc, char *parv[])
 {
-        user_t *user = user_find_named(parv[1]);
-        myuser_t *myuser = user->myuser;
-        node_t *n, *tn;
+	user_t *user = user_find_named(parv[1]);
+	myuser_t *myuser = user->myuser;
+	node_t *n, *tn;
 	static char buf[XMLRPC_BUFSIZE] = "";
 
 	*buf = '\0';
@@ -639,23 +639,23 @@ static int memo_ignore_clear(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-        if (LIST_LENGTH(&myuser->memo_ignores) == 0)
-        {
-                xmlrpc_generic_error(4, "No users on the ignore list.");
-                return 0;
-        }
+	if (LIST_LENGTH(&myuser->memo_ignores) == 0)
+	{
+		xmlrpc_generic_error(4, "No users on the ignore list.");
+		return 0;
+	}
 
-        LIST_FOREACH_SAFE(n, tn, myuser->memo_ignores.head)
-        {       
-                free(n->data);
-                node_del(n, &myuser->memo_ignores);
-                node_free(n);
-        }
+	LIST_FOREACH_SAFE(n, tn, myuser->memo_ignores.head)
+	{       
+		free(n->data);
+		node_del(n, &myuser->memo_ignores);
+		node_free(n);
+	}
 
 	xmlrpc_string(buf, "Operation successful.");
 	xmlrpc_send(1, buf);
 
-        return 0;
+	return 0;
 }
 
 /*
@@ -676,11 +676,11 @@ static int memo_ignore_clear(void *conn, int parc, char *parv[])
  */
 static int memo_ignore_list(void *conn, int parc, char *parv[])
 {
-        user_t *user = user_find_named(parv[1]);
-        myuser_t *myuser = user->myuser;
-        node_t *n, *tn;
-        uint8_t i = 1;
-        char sendbuf[XMLRPC_BUFSIZE - 1] = "", ignorebuf[64] = "";
+	user_t *user = user_find_named(parv[1]);
+	myuser_t *myuser = user->myuser;
+	node_t *n, *tn;
+	uint8_t i = 1;
+	char sendbuf[XMLRPC_BUFSIZE - 1] = "", ignorebuf[64] = "";
 	static char buf[XMLRPC_BUFSIZE] = "";
 
 	*buf = '\0';
@@ -703,21 +703,21 @@ static int memo_ignore_list(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-        LIST_FOREACH(n, myuser->memo_ignores.head)
-        {
-                /* provide a list in the format id:user divided by newlines */
+	LIST_FOREACH(n, myuser->memo_ignores.head)
+	{
+		/* provide a list in the format id:user divided by newlines */
 		snprintf(ignorebuf, 64, "%d:%s", i, (char *)n->data);
 		strncat(sendbuf, ignorebuf, 64);
-                i++;
-        }
+		i++;
+	}
 
-        if (i == 1)
-        	xmlrpc_generic_error(4, "Ignore list empty.");
+	if (i == 1)
+		xmlrpc_generic_error(4, "Ignore list empty.");
 
 	xmlrpc_string(buf, sendbuf);
 	xmlrpc_send(1, buf);
 
-        return 0;
+	return 0;
 }
 
 

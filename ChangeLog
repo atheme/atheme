@@ -1,3 +1,17 @@
+nenolod     2006/07/12 17:40:19 UTC	(20060712-5852)
+  Log:
+  >>> Merge branch http://opensvn.csie.org/foss_pip/irc/services/atheme/modules/xmlrpc to http://svn.atheme.org/atheme/trunk/modules/xmlrpc with dsvn.
+  >>> Log:
+  
+  --This line, and those below, will be ignored.--
+  A    memo.c
+  A      memo.c
+  
+
+  Changes:	Modified:
+  +738 -0	trunk/modules/xmlrpc/memo.c (File Added) 
+
+
 jilles      2006/07/11 19:56:20 UTC	(20060711-5850)
   Log:
   doc/IRCD: inspircd: mention that m_services_account.so must be loaded
