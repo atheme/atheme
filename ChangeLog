@@ -1,3 +1,12 @@
+jilles      2006/07/11 19:56:20 UTC	(20060711-5850)
+  Log:
+  doc/IRCD: inspircd: mention that m_services_account.so must be loaded
+  
+
+  Changes:	Modified:
+  +4 -3		trunk/doc/IRCD (File Modified) 
+
+
 jilles      2006/07/10 17:50:42 UTC	(20060710-5848)
   Log:
   Make sure not to QUIT chansvs.nick if chansvs.nick is NULL.
