@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 5782 2006-07-08 21:18:46Z jilles $
+# $Id: Makefile.in 5860 2006-07-12 19:08:58Z nenolod $
 #
 
 CC		= @CC@
@@ -35,7 +35,8 @@ default: all
 BASE_SRCS = 		\
 	main.c 		\
 	account.c	\
-	channel.c
+	channel.c	\
+	memo.c
 	
 SRCS = ${BASE_SRCS}
 
