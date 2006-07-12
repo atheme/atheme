@@ -1,3 +1,19 @@
+nenolod     2006/07/12 18:06:34 UTC	(20060712-5856)
+  Log:
+  >>> Merge branch http://opensvn.csie.org/foss_pip/irc/services/atheme/modules/xmlrpc to http://svn.atheme.org/atheme/trunk/modules/xmlrpc with dsvn.
+  >>> Log:
+  ------------------------------------------------------------------------
+  r17 | pippijn | 2006-07-12 13:04:41 -0500 (Wed, 12 Jul 2006) | 2 lines
+  
+  Implemented memo forward
+  
+  ------------------------------------------------------------------------
+  
+
+  Changes:	Modified:
+  +152 -5	trunk/modules/xmlrpc/memo.c (File Modified) 
+
+
 nenolod     2006/07/12 17:44:19 UTC	(20060712-5854)
   Log:
   >>> Merge branch http://opensvn.csie.org/foss_pip/irc/services/atheme/modules/xmlrpc to http://svn.atheme.org/atheme/trunk/modules/xmlrpc with dsvn.

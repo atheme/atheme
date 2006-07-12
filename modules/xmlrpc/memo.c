@@ -33,6 +33,7 @@ DECLARE_MODULE_V1
  */
 static int memo_send(void *conn, int parc, char *parv[])
 {
+	/* Define and initialise structs and variables */
 	user_t *sender = user_find_named(parv[1]), *target = NULL;
 	myuser_t *mysender = sender->myuser, *mytarget = NULL;
 	mymemo_t *memo = NULL;
@@ -170,11 +171,12 @@ static int memo_send(void *conn, int parc, char *parv[])
  */
 static int memo_forward(void *conn, int parc, char *parv[])
 {
+	/* Define and initialise structs and variables */
 	user_t *sender = user_find_named(parv[1]), *target = NULL;
 	myuser_t *mysender = sender->myuser, *mytarget = NULL;
 	mymemo_t *memo = NULL, *forward = NULL;
 	node_t *n = NULL, *tmpnode = NULL;
-        uint8_t i = 1, memonum = atoi(parv[3]);
+	uint8_t i = 1, memonum = atoi(parv[3]);
 	static char buf[XMLRPC_BUFSIZE] = "";
 	char *m = parv[3];
 
@@ -231,12 +233,12 @@ static int memo_forward(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-        /* Sanity check on memo ID */
-        if (!memonum || memonum > mysender->memos.count)
-        {
-         	xmlrpc_generic_error(3, "Invalid memo ID.");
-                return 0;
-        }
+	/* Sanity check on memo ID */
+	if (!memonum || memonum > mysender->memos.count)
+	{
+	 	xmlrpc_generic_error(3, "Invalid memo ID.");
+		return 0;
+	}
 
 	/* Anti-flood */
 	if (CURRTIME - mysender->memo_ratelimit_time > MEMO_MAX_TIME)
@@ -262,34 +264,34 @@ static int memo_forward(void *conn, int parc, char *parv[])
 
 	logcommand_external(memosvs.me, "xmlrpc", conn, mysender, CMDLOG_SET, "FORWARD to %s", mytarget->name);
 
-        LIST_FOREACH(n, mysender->memos.head)
-        {
-        	if (i == memonum)
-                {
-                        /* Allocate memory */
-                        memo = (mymemo_t *)n->data;
-                	forward = smalloc(sizeof(mymemo_t));
+	LIST_FOREACH(n, mysender->memos.head)
+	{
+		if (i == memonum)
+		{
+			/* Allocate memory */
+			memo = (mymemo_t *)n->data;
+			forward = smalloc(sizeof(mymemo_t));
 
-                        /* Duplicate memo */
-                        memo->sent = CURRTIME;
-                        memo->status = MEMO_NEW;
-                        strlcpy (forward->sender, mysender->name, NICKLEN);
-                        strlcpy (forward->text, memo->text, MEMOLEN);
+			/* Duplicate memo */
+			memo->sent = CURRTIME;
+			memo->status = MEMO_NEW;
+			strlcpy (forward->sender, mysender->name, NICKLEN);
+			strlcpy (forward->text, memo->text, MEMOLEN);
 
-                        /* Send memo */
-                        n = node_create();
-                        node_add(memo, n, &mytarget->memos);
-                        mytarget->memoct_new++;
+			/* Send memo */
+			n = node_create();
+			node_add(memo, n, &mytarget->memos);
+			mytarget->memoct_new++;
 
-                        /* Tell the user that it has a new memo if it is online */
-                        myuser_notice(memosvs.nick, mytarget, "You have a new memo from %s.", mysender->name);
+			/* Tell the user that it has a new memo if it is online */
+			myuser_notice(memosvs.nick, mytarget, "You have a new memo from %s.", mysender->name);
 
-                        xmlrpc_string(buf, "Memo sent successfully.");
-                        xmlrpc_send(1, buf);
+			xmlrpc_string(buf, "Memo sent successfully.");
+			xmlrpc_send(1, buf);
 
-                        return 0;
-                }
-        }
+			return 0;
+		}
+	}
 
 	return 0;
 }
@@ -314,6 +316,7 @@ static int memo_forward(void *conn, int parc, char *parv[])
  */
 static int memo_delete(void *conn, int parc, char *parv[])
 {
+	/* Define and initialise structs and variables */
 	user_t *user = user_find_named(parv[1]);
 	myuser_t *myuser = user->myuser;
 	mymemo_t *memo = NULL;
@@ -409,6 +412,7 @@ static int memo_delete(void *conn, int parc, char *parv[])
  */
 static int memo_list(void *conn, int parc, char *parv[])
 {
+	/* Define and initialise structs and variables */
 	user_t *user = user_find_named(parv[1]);
 	myuser_t *myuser = user->myuser;
 	mymemo_t *memo = NULL;
@@ -491,6 +495,7 @@ static int memo_list(void *conn, int parc, char *parv[])
  */
 static int memo_read(void *conn, int parc, char *parv[])
 {
+	/* Define and initialise structs and variables */
 	user_t *user = user_find_named(parv[1]), *sender = NULL;
 	myuser_t *myuser = user->myuser, *mysender = NULL;
 	mymemo_t *memo = NULL, *receipt = NULL;
@@ -605,6 +610,7 @@ static int memo_read(void *conn, int parc, char *parv[])
  */
 static int memo_ignore_add(void *conn, int parc, char *parv[])
 {
+	/* Define and initialise structs and variables */
 	user_t *user = user_find_named(parv[1]);
 	myuser_t *myuser = user->myuser, *mytarget;
 	node_t *n, *node;
@@ -694,6 +700,7 @@ static int memo_ignore_add(void *conn, int parc, char *parv[])
  */
 static int memo_ignore_delete(void *conn, int parc, char *parv[])
 {
+	/* Define and initialise structs and variables */
 	user_t *user = user_find_named(parv[1]);
 	myuser_t *myuser = user->myuser;
 	node_t *n, *tn;
@@ -761,6 +768,7 @@ static int memo_ignore_delete(void *conn, int parc, char *parv[])
  */
 static int memo_ignore_clear(void *conn, int parc, char *parv[])
 {
+	/* Define and initialise structs and variables */
 	user_t *user = user_find_named(parv[1]);
 	myuser_t *myuser = user->myuser;
 	node_t *n, *tn;
@@ -823,6 +831,7 @@ static int memo_ignore_clear(void *conn, int parc, char *parv[])
  */
 static int memo_ignore_list(void *conn, int parc, char *parv[])
 {
+	/* Define and initialise structs and variables */
 	user_t *user = user_find_named(parv[1]);
 	myuser_t *myuser = user->myuser;
 	node_t *n, *tn;
@@ -871,15 +880,25 @@ static int memo_ignore_list(void *conn, int parc, char *parv[])
 void _modinit(module_t *m)
 {
 	xmlrpc_register_method("atheme.memo.send", memo_send);
+	xmlrpc_register_method("atheme.memo.forward", memo_forward);
 	xmlrpc_register_method("atheme.memo.delete", memo_delete);
 	xmlrpc_register_method("atheme.memo.list", memo_list);
 	xmlrpc_register_method("atheme.memo.read", memo_read);
+	xmlrpc_register_method("atheme.memo.ignore.add", memo_ignore_add);
+	xmlrpc_register_method("atheme.memo.ignore.delete", memo_ignore_delete);
+	xmlrpc_register_method("atheme.memo.ignore.clear", memo_ignore_clear);
+	xmlrpc_register_method("atheme.memo.ignore.list", memo_ignore_list);
 }
 
 void _moddeinit(void)
 {
 	xmlrpc_unregister_method("atheme.memo.send");
+	xmlrpc_unregister_method("atheme.memo.forward");
 	xmlrpc_unregister_method("atheme.memo.delete");
 	xmlrpc_unregister_method("atheme.memo.list");
 	xmlrpc_unregister_method("atheme.memo.read");
+	xmlrpc_unregister_method("atheme.memo.ignore.add");
+	xmlrpc_unregister_method("atheme.memo.ignore.delete");
+	xmlrpc_unregister_method("atheme.memo.ignore.clear");
+	xmlrpc_unregister_method("atheme.memo.ignore.list");
 }
