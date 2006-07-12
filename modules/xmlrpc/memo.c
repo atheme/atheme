@@ -139,14 +139,161 @@ static int memo_send(void *conn, int parc, char *parv[])
 	mytarget->memoct_new++;
 
 	/* Tell the user that it has a new memo if it is online */
-	target = user_find_named(parv[2]);
-	if (!irccmp(parv[1], mysender->name))
-		myuser_notice(memosvs.nick, mytarget, "You have a new memo from %s.", mysender->name);
-	else    
-		myuser_notice(memosvs.nick, mytarget, "You have a new memo from %s (nick: %s).", mysender->name, parv[1]);
+	myuser_notice(memosvs.nick, mytarget, "You have a new memo from %s.", mysender->name);
 
 	return 0;
 }
+
+/*
+ * atheme.memo.forward
+ *
+ * XML inputs:
+ *       authcookie, account name, target name, memo id
+ *
+ * XML outputs:
+ *       fault 1 - validation failed
+ *       fault 2 - sender account does not exist
+ *       fault 3 - bad parameters
+ *       fault 4 - insufficient parameters
+ *       fault 5 - target account doesn't exist
+ *       fault 6 - account not verified
+ *       fault 7 - target is sender
+ *       fault 8 - target denies memos
+ *       fault 9 - memo text too long
+ *       fault 10 - sender is on ignore list of target
+ *       fault 11 - memo flood
+ *       fault 12 - target inbox full
+ *       default - success message
+ *
+ * Side Effects:
+ *       a memo is sent to a user
+ */
+static int memo_forward(void *conn, int parc, char *parv[])
+{
+	user_t *sender = user_find_named(parv[1]), *target = NULL;
+	myuser_t *mysender = sender->myuser, *mytarget = NULL;
+	mymemo_t *memo = NULL, *forward = NULL;
+	node_t *n = NULL, *tmpnode = NULL;
+        uint8_t i = 1, memonum = atoi(parv[3]);
+	static char buf[XMLRPC_BUFSIZE] = "";
+	char *m = parv[3];
+
+	*buf = '\0';
+
+	if (parc < 4)
+	{
+		xmlrpc_generic_error(4, "Insufficient parameters.");
+		return 0;
+	}
+
+	if (!(mysender = myuser_find(parv[1])))
+	{
+		xmlrpc_generic_error(2, "Sending account nonexistent.");
+		return 0;
+	}
+
+	if (!(mytarget = myuser_find(parv[2])))
+	{
+		xmlrpc_generic_error(5, "Target account nonexistent.");
+		return 0;
+	}
+
+	if (authcookie_validate(parv[0], mysender) == FALSE)
+	{
+		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		return 0;
+	}
+
+	if (mysender->flags & MU_WAITAUTH)
+	{       
+		xmlrpc_generic_error(6, "Email address not verified.");
+		return 0;
+	}
+
+	/* Check whether target is not sender */
+	if (mytarget == mysender)
+	{       
+		xmlrpc_generic_error(7, "Target is sender.");
+		return 0;
+	}
+
+	/* Check for user setting "no memos" */
+	if (mytarget->flags & MU_NOMEMO)
+	{       
+		xmlrpc_generic_error(8, "Target does not wish to receive memos.");
+		return 0;
+	}
+
+	/* Check whether target inbox is full */
+	if (mytarget->memos.count >= me.mdlimit)
+	{       
+		xmlrpc_generic_error(12, "Inbox is full.");
+		return 0;
+	}
+
+        /* Sanity check on memo ID */
+        if (!memonum || memonum > mysender->memos.count)
+        {
+         	xmlrpc_generic_error(3, "Invalid memo ID.");
+                return 0;
+        }
+
+	/* Anti-flood */
+	if (CURRTIME - mysender->memo_ratelimit_time > MEMO_MAX_TIME)
+		mysender->memo_ratelimit_num = 0;
+	if (mysender->memo_ratelimit_num > MEMO_MAX_NUM)
+	{       
+		xmlrpc_generic_error(11, "Memo flood.");
+		return 0;
+	}		  
+	mysender->memo_ratelimit_num++; 
+	mysender->memo_ratelimit_time = CURRTIME;
+
+	/* Check whether sender is being ignored by the target */
+	LIST_FOREACH(n, mytarget->memo_ignores.head)							
+	{
+		if (!strcasecmp((char *)n->data, mysender->name))
+		{
+			logcommand_external(memosvs.me, "xmlrpc", conn, mysender, CMDLOG_SET, "failed SEND to %s (on ignore list)", mytarget->name);
+			xmlrpc_generic_error(10, "Sender is on ignore list.");
+			return 0;
+		}
+	}
+
+	logcommand_external(memosvs.me, "xmlrpc", conn, mysender, CMDLOG_SET, "FORWARD to %s", mytarget->name);
+
+        LIST_FOREACH(n, mysender->memos.head)
+        {
+        	if (i == memonum)
+                {
+                        /* Allocate memory */
+                        memo = (mymemo_t *)n->data;
+                	forward = smalloc(sizeof(mymemo_t));
+
+                        /* Duplicate memo */
+                        memo->sent = CURRTIME;
+                        memo->status = MEMO_NEW;
+                        strlcpy (forward->sender, mysender->name, NICKLEN);
+                        strlcpy (forward->text, memo->text, MEMOLEN);
+
+                        /* Send memo */
+                        n = node_create();
+                        node_add(memo, n, &mytarget->memos);
+                        mytarget->memoct_new++;
+
+                        /* Tell the user that it has a new memo if it is online */
+                        myuser_notice(memosvs.nick, mytarget, "You have a new memo from %s.", mysender->name);
+
+                        xmlrpc_string(buf, "Memo sent successfully.");
+                        xmlrpc_send(1, buf);
+
+                        return 0;
+                }
+        }
+
+	return 0;
+}
+
 
 /*
  * atheme.memo.delete
