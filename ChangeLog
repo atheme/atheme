@@ -1,3 +1,12 @@
+pippijn     2006/07/13 15:29:56 UTC	(20060713-5874)
+  Log:
+  Removed comment pointing to a fault never returned.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 nenolod     2006/07/13 14:35:23 UTC	(20060713-5872)
   Log:
   >>> Merge branch http://opensvn.csie.org/foss_pip/irc/services/atheme-trunk/translations to http://svn.atheme.org/atheme/trunk/translations with dsvn.

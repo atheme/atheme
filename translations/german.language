@@ -1,4 +1,4 @@
-/* $Id: german.language 5872 2006-07-13 14:35:23Z nenolod $ */
+/* $Id: german.language 5876 2006-07-13 15:35:41Z pippijn $ */
 language {
   name = "Deutsch";
   translator = "Pippijn van Steenhoven";
@@ -86,7 +86,7 @@ string "%s is currently online, and you may talk directly, by sending a private 
   translation = "%s ist momentan online und Sie koennen, indem sie ein Privatbericht senden, direkt damit sprechen.";
 };
 string "%s is not in your ignore list." {
-  translation = "%s ist nicht auf Ihrer ignorier liste.";
+  translation = "%s ist nicht auf Ihrer ignorier Liste.";
 };
 string "%s is not registered." {
   translation = "%s ist nicht registriert.";
@@ -95,49 +95,49 @@ string "%s is temporarily holding this channel." {
   translation = "%s haelt kurzzeitig diesen Kanal.";
 };
 string "%s list for \2%s\2:" {
-  translation = "%s list for \2%s\2:";
+  translation = "%s Liste fuer \2%s\2:";
 };
 string "%s password incorrect" {
-  translation = "%s password incorrect";
+  translation = "%s falsches Passwort";
 };
 string "%s provides the following in-channel commands:" {
-  translation = "%s provides the following in-channel commands:";
+  translation = "%s stellt folgende in-channel Anweisungen zur Verfuegung:";
 };
 string "%s was \2CLOSED\2 by %s on %s (%s)" {
-  translation = "%s was \2CLOSED\2 by %s on %s (%s)";
+  translation = "%s ist von %s am %s \2GESCHLOSSEN\2 (%s)";
 };
 string "%s was \2FROZEN\2 by %s on %s (%s)" {
-  translation = "%s was \2FROZEN\2 by %s on %s (%s)";
+  translation = "%s ist von %s am %s \2ERSTARRT\2 (%s)";
 };
 string "%s was \2MARKED\2 by %s on %s (%s)" {
-  translation = "%s was \2MARKED\2 by %s on %s (%s)";
+  translation = "%s ist von %s am %s \2MARKIERT\2 (%s)";
 };
 string "%s!%s@%s has released your nickname." {
-  translation = "%s!%s@%s has released your nickname.";
+  translation = "%s!%s@%s hat ihren Nicknamen freigegeben.";
 };
 string "%s's inbox is full" {
-  translation = "%s's inbox is full";
+  translation = "%s's Inbox ist voll";
 };
 string "%s: %s -> %s" {
   translation = "%s: %s -> %s";
 };
 string "%s: VOp: %d, HOp: %d, AOp: %d, SOp: %d, AKick: %d, other: %d" {
-  translation = "%s: VOp: %d, HOp: %d, AOp: %d, SOp: %d, AKick: %d, other: %d";
+  translation = "%s: VOp: %d, HOp: %d, AOp: %d, SOp: %d, AKick: %d, sonstige: %d";
 };
 string "*** \2End of Info\2 ***" {
-  translation = "*** \2End of Info\2 ***";
+  translation = "*** \2Ende der Info\2 ***";
 };
 string "***** \2%s Help\2 *****" {
-  translation = "***** \2%s Help\2 *****";
+  translation = "***** \2%s Hilfe\2 *****";
 };
 string "***** \2End of Help\2 *****" {
-  translation = "***** \2End of Help\2 *****";
+  translation = "***** \2Ende der Hilfe\2 *****";
 };
 string "- %d From: %s Sent: %s" {
-  translation = "- %d From: %s Sent: %s";
+  translation = "- %d Von: %s Gesendet am: %s";
 };
 string "- %d From: %s Sent: %s [unread]" {
-  translation = "- %d From: %s Sent: %s [unread]";
+  translation = "- %d Von: %s Gesendet am: %s [ungelesen]";
 };
 string "- %s" {
   translation = "- %s";
@@ -158,121 +158,121 @@ string "-------------------------" {
   translation = "-------------------------";
 };
 string "<reason>" {
-  translation = "<reason>";
+  translation = "<Grund>";
 };
 string "A game is already in progress. Sorry." {
-  translation = "A game is already in progress. Sorry.";
+  translation = "Ein Spiel ist bereits im Gange. Bitte entschuldigen Sie.";
 };
 string "A random password has been set; it has been sent to \2%s\2." {
-  translation = "A random password has been set; it has been sent to \2%s\2.";
+  translation = "Ein zufaelliges Passwort wurde eingestellt; es wurde an \2%s\2 geschickt.";
 };
 string "AKICK list for \2%s\2:" {
-  translation = "AKICK list for \2%s\2:";
+  translation = "AKICK Liste fuer \2%s\2:";
 };
 string "AKILL \2%s@%s\2 is already matched in the database." {
-  translation = "AKILL \2%s@%s\2 is already matched in the database.";
+  translation = "AKILL \2%s@%s\2 ist bereits in der Datenbank aufgelistet.";
 };
 string "AKILL \2*@%s\2 is already matched in the database." {
-  translation = "AKILL \2*@%s\2 is already matched in the database.";
+  translation = "AKILL \2*@%s\2 ist bereits in der Datenbank aufgelistet.";
 };
 string "AKILL list (with reasons):" {
-  translation = "AKILL list (with reasons):";
+  translation = "AKILL Liste (mit Gruende):";
 };
 string "AKILL list synchronized to servers." {
-  translation = "AKILL list synchronized to servers.";
+  translation = "AKILL liste synchronisiert mit den Servern.";
 };
 string "AKILL list:" {
-  translation = "AKILL list:";
+  translation = "AKILL liste:";
 };
 string "AKILL on \2%s@%s\2 has been successfully removed." {
-  translation = "AKILL on \2%s@%s\2 has been successfully removed.";
+  translation = "AKILL auf \2%s@%s\2 wurde erfolgreich geloescht.";
 };
 string "AKILL on \2%s@%s\2 was successfully added." {
-  translation = "AKILL on \2%s@%s\2 was successfully added.";
+  translation = "AKILL auf \2%s@%s\2 wurde erfolgreich hinzugefuegt.";
 };
 string "Access flag(s) %s in %s" {
-  translation = "Access flag(s) %s in %s";
+  translation = "Zugangsbit(s) %s in %s";
 };
 string "Account %s added to your ignore list." {
-  translation = "Account %s added to your ignore list.";
+  translation = "Benutzer %s wurde zu Ihrer ignorier Liste hinzugefuegt.";
 };
 string "Account %s is already in your ignore list." {
-  translation = "Account %s is already in your ignore list.";
+  translation = "Benutzer %s ist bereits auf Ihrer ignorier Liste.";
 };
 string "Account %s removed from ignore list." {
-  translation = "Account %s removed from ignore list.";
+  translation = "Benutzer %s wurde von Ihrer ignorier Liste geloescht.";
 };
 string "Activity is defined as a user with one of +vhHoOsrRf being on the channel." {
-  translation = "Activity is defined as a user with one of +vhHoOsrRf being on the channel.";
+  translation = "Aktivitaet ist definiert als das bestehen eines Benutzers mit einem der +vhHoOsrRf bits in einem Kanal.";
 };
 string "Added \2%s\2 to the hostmask NOOP list." {
-  translation = "Added \2%s\2 to the hostmask NOOP list.";
+  translation = "\2%s\2 wurde zu der Hostmask NOOP Liste hinzugefuegt.";
 };
 string "Added \2%s\2 to the server NOOP list." {
-  translation = "Added \2%s\2 to the server NOOP list.";
+  translation = "\2%s\2 wurde zu der Server NOOP Liste hinzugefuegt.";
 };
 string "Added template \2%s\2 with flags \2%s\2 in \2%s\2." {
-  translation = "Added template \2%s\2 with flags \2%s\2 in \2%s\2.";
+  translation = "Die Vorlage \2%s\2 mit den Bits \2%s\2 wurde zu \2%s\2 hinzugefuegt.";
 };
 string "Address    : %p" {
-  translation = "Address    : %p";
+  translation = "Adresse    : %p";
 };
 string "After that command is issued, the channel will be transferred." {
-  translation = "After that command is issued, the channel will be transferred.";
+  translation = "Nachdem dieser Befehl erlassen wurde, wird das Kanal uebertragen.";
 };
 string "An email containing account activation instructions has been sent to \2%s\2." {
-  translation = "An email containing account activation instructions has been sent to \2%s\2.";
+  translation = "Eine Email mit Anweisungen zur Benutzeraktivierung wurde an \2%s\2 gesendet.";
 };
 string "An email containing email changing instructions has been sent to \2%s\2." {
-  translation = "An email containing email changing instructions has been sent to \2%s\2.";
+  translation = "Eine Email mit Anweisungen zur Emailadressenaenderung wurde an \2%s\2 gesendet.";
 };
 string "An email containing nickname activation instructions has been sent to \2%s\2." {
-  translation = "An email containing nickname activation instructions has been sent to \2%s\2.";
+  translation = "Eine Email mit Anweisungen zur Nicknamenaktivierung wurde an \2%s\2 gesendet.";
 };
 string "Assigned vhost \2%s\2 to \2%s\2." {
-  translation = "Assigned vhost \2%s\2 to \2%s\2.";
+  translation = "vhost \2%s\2 wurde \2%s\2 zugeteilt.";
 };
 string "Authentication failed. Invalid password for \2%s\2." {
-  translation = "Authentication failed. Invalid password for \2%s\2.";
+  translation = "Authentifizierung misslungen. Ungueltiges Passwort fuer \2%s\2.";
 };
 string "Auto-pingspam is currently \2%s\2" {
-  translation = "Auto-pingspam is currently \2%s\2";
+  translation = "Auto-pingspam ist momentan \2%s\2";
 };
 string "Auto-pingspam is now \2OFF\2" {
-  translation = "Auto-pingspam is now \2OFF\2";
+  translation = "Auto-pingspam ist jetzt \2AUS\2";
 };
 string "Auto-pingspam is now \2ON\2" {
-  translation = "Auto-pingspam is now \2ON\2";
+  translation = "Auto-pingspam ist jetzt \2AN\2";
 };
 string "Banned \2%s\2 on \2%s\2." {
-  translation = "Banned \2%s\2 on \2%s\2.";
+  translation = "\2%s\2 wurde von \2%s\2 verbannt.";
 };
 string "Bats have picked you up and taken you to room %d." {
-  translation = "Bats have picked you up and taken you to room %d.";
+  translation = "Fledermaeuse haben Sie mitgenommen zum Raum %d.";
 };
 string "Cannot GETKEY: \2%s\2 is closed." {
-  translation = "Cannot GETKEY: \2%s\2 is closed.";
+  translation = "GETKEY misslungen: \2%s\2 ist geschlossen.";
 };
 string "Cannot INVITE: \2%s\2 is closed." {
-  translation = "Cannot INVITE: \2%s\2 is closed.";
+  translation = "INVITE misslungen: \2%s\2 ist geschlossen.";
 };
 string "Cannot add \2%s\2 to \2%s\2 metadata table, it is full." {
-  translation = "Cannot add \2%s\2 to \2%s\2 metadata table, it is full.";
+  translation = "Kann \2%s\2 nicht zur metadata tabelle von \2%s\2 hinzufuegen, sie ist voll.";
 };
 string "Cannot do RELEASE on this ircd." {
-  translation = "Cannot do RELEASE on this ircd.";
+  translation = "RELEASE funktioniert nicht auf diesem ircd.";
 };
 string "Cannot redefine built-in template \2%s\2." {
-  translation = "Cannot redefine built-in template \2%s\2.";
+  translation = "Kann die eingebaute Vorlage \2%s\2 nicht aendern.";
 };
 string "Changed template \2%s\2 to \2%s\2 in \2%s\2." {
-  translation = "Changed template \2%s\2 to \2%s\2 in \2%s\2.";
+  translation = "Vorlage \2%s\2 fuer \2%s\2 zu \2%s\2 geaendert.";
 };
 string "Channel \2%s\2 does not exist." {
-  translation = "Channel \2%s\2 does not exist.";
+  translation = "Kanal \2%s\2 existiert nicht.";
 };
 string "Channel \2%s\2 is not registered." {
-  translation = "Channel \2%s\2 is not registered.";
+  translation = "Kanal \2%s\2 ist nicht registriert.";
 };
 string "Channel \2%s\2 key is: %s" {
   translation = "Channel \2%s\2 key is: %s";
