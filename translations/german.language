@@ -1,0 +1,2217 @@
+/* $Id: german.language 5872 2006-07-13 14:35:23Z nenolod $ */
+language {
+  name = "Deutsch";
+  translator = "Pippijn van Steenhoven";
+};
+
+string "" {
+  translation = "";
+};
+string " " {
+  translation = " ";
+};
+string "   \2/msg %s SET %s FOUNDER %s\2" {
+  translation = "   \2/msg %s SET %s FOUNDER %s\2";
+};
+string " %s" {
+  translation = " %s";
+};
+string "%-20.*s %.*s" {
+  translation = "%-20.*s %.*s";
+};
+string "%-20s %s" {
+  translation = "%-20s %s";
+};
+string "%-32s: %s" {
+  translation = "%-32s: %s";
+};
+string "%-5d %-22s %s" {
+  translation = "%-5d %-22s %s";
+};
+string "%-5d %-31s %-21s %s" {
+  translation = "%-5d %-31s %-21s %s";
+};
+string "%2d: %-20s [loaded at 0x%lx]" {
+  translation = "%2d: %-20s [geladen in 0x%lx]";
+};
+string "%d - %s " {
+  translation = "%d - %s ";
+};
+string "%d memo%s deleted." {
+  translation = "%d memo%s geloescht.";
+};
+string "%d: %s by %s on %s (Reason: %s)" {
+  translation = "%d: %s von %s an %s (Grund: %s)";
+};
+string "%d: %s@%s - by \2%s\2 - \2permanent\2" {
+  translation = "%d: %s@%s - von \2%s\2 - \2permanent\2";
+};
+string "%d: %s@%s - by \2%s\2 - \2permanent\2 - (%s)" {
+  translation = "%d: %s@%s - von \2%s\2 - \2permanent\2 - (%s)";
+};
+string "%d: %s@%s - by \2%s\2 - expires in \2%s\2" {
+  translation = "%d: %s@%s - von \2%s\2 - laeuft in \2%s\2 ab";
+};
+string "%d: %s@%s - by \2%s\2 - expires in \2%s\2 - (%s)" {
+  translation = "%d: %s@%s - von \2%s\2 - laeuft in \2%s\2 ab - (%s)";
+};
+string "%d: \2%s\2" {
+  translation = "%d: \2%s\2";
+};
+string "%d: \2%s\2 (logged in)" {
+  translation = "%d: \2%s\2 (angemeldet)";
+};
+string "%d: \2%s\2 (not logged in)" {
+  translation = "%d: \2%s\2 (nicht angemeldet)";
+};
+string "%s" {
+  translation = "%s";
+};
+string "%s ACC 0" {
+  translation = "%s ACC 0";
+};
+string "%s ACC 3" {
+  translation = "%s ACC 3";
+};
+string "%s has been released." {
+  translation = "%s wurde freigegeben.";
+};
+string "%s has joined room %d with you." {
+  translation = "%s hat den raum %d mit Ihnen betreten.";
+};
+string "%s has not completed registration verification" {
+  translation = "%s hat die registrierung noch nicht bestaetigt";
+};
+string "%s is currently online, and you may talk directly, by sending a private message." {
+  translation = "%s ist momentan online und Sie koennen, indem sie ein Privatbericht senden, direkt damit sprechen.";
+};
+string "%s is not in your ignore list." {
+  translation = "%s ist nicht auf Ihrer ignorier liste.";
+};
+string "%s is not registered." {
+  translation = "%s ist nicht registriert.";
+};
+string "%s is temporarily holding this channel." {
+  translation = "%s haelt kurzzeitig diesen Kanal.";
+};
+string "%s list for \2%s\2:" {
+  translation = "%s list for \2%s\2:";
+};
+string "%s password incorrect" {
+  translation = "%s password incorrect";
+};
+string "%s provides the following in-channel commands:" {
+  translation = "%s provides the following in-channel commands:";
+};
+string "%s was \2CLOSED\2 by %s on %s (%s)" {
+  translation = "%s was \2CLOSED\2 by %s on %s (%s)";
+};
+string "%s was \2FROZEN\2 by %s on %s (%s)" {
+  translation = "%s was \2FROZEN\2 by %s on %s (%s)";
+};
+string "%s was \2MARKED\2 by %s on %s (%s)" {
+  translation = "%s was \2MARKED\2 by %s on %s (%s)";
+};
+string "%s!%s@%s has released your nickname." {
+  translation = "%s!%s@%s has released your nickname.";
+};
+string "%s's inbox is full" {
+  translation = "%s's inbox is full";
+};
+string "%s: %s -> %s" {
+  translation = "%s: %s -> %s";
+};
+string "%s: VOp: %d, HOp: %d, AOp: %d, SOp: %d, AKick: %d, other: %d" {
+  translation = "%s: VOp: %d, HOp: %d, AOp: %d, SOp: %d, AKick: %d, other: %d";
+};
+string "*** \2End of Info\2 ***" {
+  translation = "*** \2End of Info\2 ***";
+};
+string "***** \2%s Help\2 *****" {
+  translation = "***** \2%s Help\2 *****";
+};
+string "***** \2End of Help\2 *****" {
+  translation = "***** \2End of Help\2 *****";
+};
+string "- %d From: %s Sent: %s" {
+  translation = "- %d From: %s Sent: %s";
+};
+string "- %d From: %s Sent: %s [unread]" {
+  translation = "- %d From: %s Sent: %s [unread]";
+};
+string "- %s" {
+  translation = "- %s";
+};
+string "- %s (%s)" {
+  translation = "- %s (%s)";
+};
+string "- %s (%s) %s" {
+  translation = "- %s (%s) %s";
+};
+string "----- ---------------------- -----" {
+  translation = "----- ---------------------- -----";
+};
+string "----- ------------------------------- --------------------- --------------------------" {
+  translation = "----- ------------------------------- --------------------- --------------------------";
+};
+string "-------------------------" {
+  translation = "-------------------------";
+};
+string "<reason>" {
+  translation = "<reason>";
+};
+string "A game is already in progress. Sorry." {
+  translation = "A game is already in progress. Sorry.";
+};
+string "A random password has been set; it has been sent to \2%s\2." {
+  translation = "A random password has been set; it has been sent to \2%s\2.";
+};
+string "AKICK list for \2%s\2:" {
+  translation = "AKICK list for \2%s\2:";
+};
+string "AKILL \2%s@%s\2 is already matched in the database." {
+  translation = "AKILL \2%s@%s\2 is already matched in the database.";
+};
+string "AKILL \2*@%s\2 is already matched in the database." {
+  translation = "AKILL \2*@%s\2 is already matched in the database.";
+};
+string "AKILL list (with reasons):" {
+  translation = "AKILL list (with reasons):";
+};
+string "AKILL list synchronized to servers." {
+  translation = "AKILL list synchronized to servers.";
+};
+string "AKILL list:" {
+  translation = "AKILL list:";
+};
+string "AKILL on \2%s@%s\2 has been successfully removed." {
+  translation = "AKILL on \2%s@%s\2 has been successfully removed.";
+};
+string "AKILL on \2%s@%s\2 was successfully added." {
+  translation = "AKILL on \2%s@%s\2 was successfully added.";
+};
+string "Access flag(s) %s in %s" {
+  translation = "Access flag(s) %s in %s";
+};
+string "Account %s added to your ignore list." {
+  translation = "Account %s added to your ignore list.";
+};
+string "Account %s is already in your ignore list." {
+  translation = "Account %s is already in your ignore list.";
+};
+string "Account %s removed from ignore list." {
+  translation = "Account %s removed from ignore list.";
+};
+string "Activity is defined as a user with one of +vhHoOsrRf being on the channel." {
+  translation = "Activity is defined as a user with one of +vhHoOsrRf being on the channel.";
+};
+string "Added \2%s\2 to the hostmask NOOP list." {
+  translation = "Added \2%s\2 to the hostmask NOOP list.";
+};
+string "Added \2%s\2 to the server NOOP list." {
+  translation = "Added \2%s\2 to the server NOOP list.";
+};
+string "Added template \2%s\2 with flags \2%s\2 in \2%s\2." {
+  translation = "Added template \2%s\2 with flags \2%s\2 in \2%s\2.";
+};
+string "Address    : %p" {
+  translation = "Address    : %p";
+};
+string "After that command is issued, the channel will be transferred." {
+  translation = "After that command is issued, the channel will be transferred.";
+};
+string "An email containing account activation instructions has been sent to \2%s\2." {
+  translation = "An email containing account activation instructions has been sent to \2%s\2.";
+};
+string "An email containing email changing instructions has been sent to \2%s\2." {
+  translation = "An email containing email changing instructions has been sent to \2%s\2.";
+};
+string "An email containing nickname activation instructions has been sent to \2%s\2." {
+  translation = "An email containing nickname activation instructions has been sent to \2%s\2.";
+};
+string "Assigned vhost \2%s\2 to \2%s\2." {
+  translation = "Assigned vhost \2%s\2 to \2%s\2.";
+};
+string "Authentication failed. Invalid password for \2%s\2." {
+  translation = "Authentication failed. Invalid password for \2%s\2.";
+};
+string "Auto-pingspam is currently \2%s\2" {
+  translation = "Auto-pingspam is currently \2%s\2";
+};
+string "Auto-pingspam is now \2OFF\2" {
+  translation = "Auto-pingspam is now \2OFF\2";
+};
+string "Auto-pingspam is now \2ON\2" {
+  translation = "Auto-pingspam is now \2ON\2";
+};
+string "Banned \2%s\2 on \2%s\2." {
+  translation = "Banned \2%s\2 on \2%s\2.";
+};
+string "Bats have picked you up and taken you to room %d." {
+  translation = "Bats have picked you up and taken you to room %d.";
+};
+string "Cannot GETKEY: \2%s\2 is closed." {
+  translation = "Cannot GETKEY: \2%s\2 is closed.";
+};
+string "Cannot INVITE: \2%s\2 is closed." {
+  translation = "Cannot INVITE: \2%s\2 is closed.";
+};
+string "Cannot add \2%s\2 to \2%s\2 metadata table, it is full." {
+  translation = "Cannot add \2%s\2 to \2%s\2 metadata table, it is full.";
+};
+string "Cannot do RELEASE on this ircd." {
+  translation = "Cannot do RELEASE on this ircd.";
+};
+string "Cannot redefine built-in template \2%s\2." {
+  translation = "Cannot redefine built-in template \2%s\2.";
+};
+string "Changed template \2%s\2 to \2%s\2 in \2%s\2." {
+  translation = "Changed template \2%s\2 to \2%s\2 in \2%s\2.";
+};
+string "Channel \2%s\2 does not exist." {
+  translation = "Channel \2%s\2 does not exist.";
+};
+string "Channel \2%s\2 is not registered." {
+  translation = "Channel \2%s\2 is not registered.";
+};
+string "Channel \2%s\2 key is: %s" {
+  translation = "Channel \2%s\2 key is: %s";
+};
+string "Channel access to \2%s\2 for \2%s\2 unchanged." {
+  translation = "Channel access to \2%s\2 for \2%s\2 unchanged.";
+};
+string "Channels matching pattern \2%s\2:" {
+  translation = "Channels matching pattern \2%s\2:";
+};
+string "Cleared %s modes on \2%s\2 (%d removed)." {
+  translation = "Cleared %s modes on \2%s\2 (%d removed).";
+};
+string "Cleared users from \2%s\2." {
+  translation = "Cleared users from \2%s\2.";
+};
+string "Could not get help file for \2%s\2." {
+  translation = "Could not get help file for \2%s\2.";
+};
+string "Current Ignore list entries:" {
+  translation = "Current Ignore list entries:";
+};
+string "Deleted vhost for \2%s\2." {
+  translation = "Deleted vhost for \2%s\2.";
+};
+string "Email send failed." {
+  translation = "Email send failed.";
+};
+string "Email: %s%s" {
+  translation = "Email: %s%s";
+};
+string "End of Hostmask NOOP list." {
+  translation = "End of Hostmask NOOP list.";
+};
+string "End of Server NOOP list." {
+  translation = "End of Server NOOP list.";
+};
+string "End of \2%s\2 FLAGS listing." {
+  translation = "End of \2%s\2 FLAGS listing.";
+};
+string "End of \2%s\2 TEMPLATE listing." {
+  translation = "End of \2%s\2 TEMPLATE listing.";
+};
+string "End of \2%s\2 taxonomy." {
+  translation = "End of \2%s\2 taxonomy.";
+};
+string "End of network wide template list." {
+  translation = "End of network wide template list.";
+};
+string "End of privileges" {
+  translation = "End of privileges";
+};
+string "Enforcers are created when someone uses your" {
+  translation = "Enforcers are created when someone uses your";
+};
+string "Entry Hostmask                        Adder                 Reason" {
+  translation = "Entry Hostmask                        Adder                 Reason";
+};
+string "Entry Nickname/Host          Flags" {
+  translation = "Entry Nickname/Host          Flags";
+};
+string "Entry point: %p" {
+  translation = "Entry point: %p";
+};
+string "Exit point : %p" {
+  translation = "Exit point : %p";
+};
+string "External logout is not yet implemented." {
+  translation = "External logout is not yet implemented.";
+};
+string "FORCEXOP \2%s\2 done (\2%d\2 changes)" {
+  translation = "FORCEXOP \2%s\2 done (\2%d\2 changes)";
+};
+string "Fantasy is already disabled on \2%s\2." {
+  translation = "Fantasy is already disabled on \2%s\2.";
+};
+string "Fantasy is already enabled on \2%s\2." {
+  translation = "Fantasy is already enabled on \2%s\2.";
+};
+string "Flags      : %s" {
+  translation = "Flags      : %s";
+};
+string "Flags \2%s\2 were set on \2%s\2 in \2%s\2." {
+  translation = "Flags \2%s\2 were set on \2%s\2 in \2%s\2.";
+};
+string "Flags for \2%s\2 in \2%s\2 are \2%s\2." {
+  translation = "Flags for \2%s\2 in \2%s\2 are \2%s\2.";
+};
+string "Flags: %s" {
+  translation = "Flags: %s";
+};
+string "For a verbose listing of all commands, type:" {
+  translation = "For a verbose listing of all commands, type:";
+};
+string "For information on a command, type:" {
+  translation = "For information on a command, type:";
+};
+string "For more information on a command, type:" {
+  translation = "For more information on a command, type:";
+};
+string "For more information, use \2/msg %s HELP SET \37command\37\2." {
+  translation = "For more information, use \2/msg %s HELP SET \37command\37\2.";
+};
+string "For more specific help use \2HELP SET \37command\37\2." {
+  translation = "For more specific help use \2HELP SET \37command\37\2.";
+};
+string "For more specific help use \2HELP \37command\37\2." {
+  translation = "For more specific help use \2HELP \37command\37\2.";
+};
+string "For security reasons, you can't register your UID." {
+  translation = "For security reasons, you can't register your UID.";
+};
+string "Founder    : %s (logged in)" {
+  translation = "Founder    : %s (logged in)";
+};
+string "Founder    : %s (not logged in)" {
+  translation = "Founder    : %s (not logged in)";
+};
+string "Founder of %s" {
+  translation = "Founder of %s";
+};
+string "Foundership of \2%s\2 has been transferred from \2%s\2 to \2%s\2." {
+  translation = "Foundership of \2%s\2 has been transferred from \2%s\2 to \2%s\2.";
+};
+string "Help for \2RELEASE\2:" {
+  translation = "Help for \2RELEASE\2:";
+};
+string "Help for \2SET\2:" {
+  translation = "Help for \2SET\2:";
+};
+string "Hostmask NOOP list (%d entries):" {
+  translation = "Hostmask NOOP list (%d entries):";
+};
+string "If you do not complete registration within one day your account will expire." {
+  translation = "If you do not complete registration within one day your account will expire.";
+};
+string "If you do not complete registration within one day your nickname will expire." {
+  translation = "If you do not complete registration within one day your nickname will expire.";
+};
+string "Ignore list already empty." {
+  translation = "Ignore list already empty.";
+};
+string "Ignore list cleared." {
+  translation = "Ignore list cleared.";
+};
+string "Ignore list:" {
+  translation = "Ignore list:";
+};
+string "In addition, the following commands are supported via" {
+  translation = "In addition, the following commands are supported via";
+};
+string "In order to complete the transfer, \2%s\2 must perform the following command:" {
+  translation = "In order to complete the transfer, \2%s\2 must perform the following command:";
+};
+string "Information on \2%s\2:" {
+  translation = "Information on \2%s\2:";
+};
+string "Insufficient parameters for \2%s\2." {
+  translation = "Insufficient parameters for \2%s\2.";
+};
+string "Invalid character '%c' in user@host." {
+  translation = "Invalid character '%c' in user@host.";
+};
+string "Invalid command. Please use \2HELP\2 for help." {
+  translation = "Invalid command. Please use \2HELP\2 for help.";
+};
+string "Invalid command. Use \2/%s%s help\2 for a command listing." {
+  translation = "Invalid command. Use \2/%s%s help\2 for a command listing.";
+};
+string "Invalid duration given." {
+  translation = "Invalid duration given.";
+};
+string "Invalid host mask, %s" {
+  translation = "Invalid host mask, %s";
+};
+string "Invalid memo number." {
+  translation = "Invalid memo number.";
+};
+string "Invalid message index." {
+  translation = "Invalid message index.";
+};
+string "Invalid mode; valid ones are %s." {
+  translation = "Invalid mode; valid ones are %s.";
+};
+string "Invalid nickname/hostmask provided: \2%s\2" {
+  translation = "Invalid nickname/hostmask provided: \2%s\2";
+};
+string "Invalid operation specified for \2VERIFY\2." {
+  translation = "Invalid operation specified for \2VERIFY\2.";
+};
+string "Invalid parameters for \2%s\2." {
+  translation = "Invalid parameters for \2%s\2.";
+};
+string "Invalid password for \2%s\2." {
+  translation = "Invalid password for \2%s\2.";
+};
+string "Invalid property name." {
+  translation = "Invalid property name.";
+};
+string "Invalid setting.  Please use \2HELP\2 for help." {
+  translation = "Invalid setting.  Please use \2HELP\2 for help.";
+};
+string "Invalid template name \2%s\2." {
+  translation = "Invalid template name \2%s\2.";
+};
+string "Invalid template name given, use /%s%s TEMPLATE %s for a list" {
+  translation = "Invalid template name given, use /%s%s TEMPLATE %s for a list";
+};
+string "Invalid user@host: \2%s@%s\2. At least four non-wildcard characters are required." {
+  translation = "Invalid user@host: \2%s@%s\2. At least four non-wildcard characters are required.";
+};
+string "Invalid value \2%s\2 for mode +%c." {
+  translation = "Invalid value \2%s\2 for mode +%c.";
+};
+string "Last address: %s" {
+  translation = "Last address: %s";
+};
+string "Last failed attempt from: \2%s\2 on %s." {
+  translation = "Last failed attempt from: \2%s\2 on %s.";
+};
+string "Last seen: %s (%s ago)" {
+  translation = "Last seen: %s (%s ago)";
+};
+string "Last used  : %s (%s ago)" {
+  translation = "Last used  : %s (%s ago)";
+};
+string "Loaded modules:" {
+  translation = "Loaded modules:";
+};
+string "Logins from: %s" {
+  translation = "Logins from: %s";
+};
+string "Logins from: <hidden>" {
+  translation = "Logins from: <hidden>";
+};
+string "MLOCK key contains invalid characters." {
+  translation = "MLOCK key contains invalid characters.";
+};
+string "MLOCK key is too long (%d > %d)." {
+  translation = "MLOCK key is too long (%d > %d).";
+};
+string "Meow!" {
+  translation = "Meow!";
+};
+string "Metadata entry \2%s\2 added." {
+  translation = "Metadata entry \2%s\2 added.";
+};
+string "Metadata entry \2%s\2 has been deleted." {
+  translation = "Metadata entry \2%s\2 has been deleted.";
+};
+string "Metadata entry \2%s\2 was not set." {
+  translation = "Metadata entry \2%s\2 was not set.";
+};
+string "Mode lock  : %s%s" {
+  translation = "Mode lock  : %s%s";
+};
+string "Mode lock is too long, not entirely shown" {
+  translation = "Mode lock is too long, not entirely shown";
+};
+string "Mode lock is too long." {
+  translation = "Mode lock is too long.";
+};
+string "Module \2%s\2 failed to load." {
+  translation = "Module \2%s\2 failed to load.";
+};
+string "Module \2%s\2 loaded." {
+  translation = "Module \2%s\2 loaded.";
+};
+string "Module \2%s\2 unloaded." {
+  translation = "Module \2%s\2 unloaded.";
+};
+string "Module restart failed, fix it and try again or restart" {
+  translation = "Module restart failed, fix it and try again or restart";
+};
+string "Module restart: %d modules unloaded; %d kept; %d modules now loaded" {
+  translation = "Module restart: %d modules unloaded; %d kept; %d modules now loaded";
+};
+string "Name       : %s" {
+  translation = "Name       : %s";
+};
+string "Nicknames matching e-mail address \2%s\2:" {
+  translation = "Nicknames matching e-mail address \2%s\2:";
+};
+string "Nicknames matching pattern \2%s\2:" {
+  translation = "Nicknames matching pattern \2%s\2:";
+};
+string "No accounts matched e-mail address \2%s\2" {
+  translation = "No accounts matched e-mail address \2%s\2";
+};
+string "No accounts matched pattern \2%s\2" {
+  translation = "No accounts matched pattern \2%s\2";
+};
+string "No bans found matching \2%s\2 on \2%s\2." {
+  translation = "No bans found matching \2%s\2 on \2%s\2.";
+};
+string "No channel access was found for the account \2%s\2." {
+  translation = "No channel access was found for the account \2%s\2.";
+};
+string "No channel access was found for the nick \2%s\2." {
+  translation = "No channel access was found for the nick \2%s\2.";
+};
+string "No channel matched pattern \2%s\2" {
+  translation = "No channel matched pattern \2%s\2";
+};
+string "No flags for \2%s\2 in \2%s\2." {
+  translation = "No flags for \2%s\2 in \2%s\2.";
+};
+string "No help available for \2%s\2." {
+  translation = "No help available for \2%s\2.";
+};
+string "No message to clear." {
+  translation = "No message to clear.";
+};
+string "No message to send." {
+  translation = "No message to send.";
+};
+string "No nicknames matched e-mail address \2%s\2" {
+  translation = "No nicknames matched e-mail address \2%s\2";
+};
+string "No nicknames matched pattern \2%s\2" {
+  translation = "No nicknames matched pattern \2%s\2";
+};
+string "No such AKILL with number \2%d\2." {
+  translation = "No such AKILL with number \2%d\2.";
+};
+string "No such AKILL: \2%s@%s\2." {
+  translation = "No such AKILL: \2%s@%s\2.";
+};
+string "No such oper class \2%s\2." {
+  translation = "No such oper class \2%s\2.";
+};
+string "No such template \2%s\2 on \2%s\2." {
+  translation = "No such template \2%s\2 on \2%s\2.";
+};
+string "No templates set on channel \2%s\2." {
+  translation = "No templates set on channel \2%s\2.";
+};
+string "No valid flags given, use /%s%s HELP FLAGS for a list" {
+  translation = "No valid flags given, use /%s%s HELP FLAGS for a list";
+};
+string "Not all ircds support removing enforcers. You will" {
+  translation = "Not all ircds support removing enforcers. You will";
+};
+string "Oper class: %s" {
+  translation = "Oper class: %s";
+};
+string "Override has been enabled on your account." {
+  translation = "Override has been enabled on your account.";
+};
+string "Overriding MARK placed by %s on the account %s." {
+  translation = "Overriding MARK placed by %s on the account %s.";
+};
+string "Overriding MARK placed by %s on the nickname %s." {
+  translation = "Overriding MARK placed by %s on the nickname %s.";
+};
+string "Parameters are too long. Aborting." {
+  translation = "Parameters are too long. Aborting.";
+};
+string "Please change to a real nickname, and try again." {
+  translation = "Please change to a real nickname, and try again.";
+};
+string "Please double-check your verification e-mail." {
+  translation = "Please double-check your verification e-mail.";
+};
+string "Please log in before attempting to verify your registration." {
+  translation = "Please log in before attempting to verify your registration.";
+};
+string "Please note that channels will expire after %d days of inactivity," {
+  translation = "Please note that channels will expire after %d days of inactivity,";
+};
+string "Please note that channels will expire if there are no eligible channel successors." {
+  translation = "Please note that channels will expire if there are no eligible channel successors.";
+};
+string "Please verify your original registration before changing your e-mail address." {
+  translation = "Please verify your original registration before changing your e-mail address.";
+};
+string "Pong!" {
+  translation = "Pong!";
+};
+string "Privileges for \2%s\2:" {
+  translation = "Privileges for \2%s\2:";
+};
+string "Privileges for oper class \2%s\2:" {
+  translation = "Privileges for oper class \2%s\2:";
+};
+string "Randomly generated password: %s" {
+  translation = "Randomly generated password: %s";
+};
+string "Recover complete for \2%s\2, ban exception \2%s\2 added." {
+  translation = "Recover complete for \2%s\2, ban exception \2%s\2 added.";
+};
+string "Recover complete for \2%s\2." {
+  translation = "Recover complete for \2%s\2.";
+};
+string "Refusing to unload \2%s\2." {
+  translation = "Refusing to unload \2%s\2.";
+};
+string "Registered : %s (%s ago)" {
+  translation = "Registered : %s (%s ago)";
+};
+string "Registered channels: %d" {
+  translation = "Registered channels: %d";
+};
+string "Registered nicknames: %d" {
+  translation = "Registered nicknames: %d";
+};
+string "Registered: %s (%s ago)" {
+  translation = "Registered: %s (%s ago)";
+};
+string "Registration is a quick and painless process. Once registered," {
+  translation = "Registration is a quick and painless process. Once registered,";
+};
+string "Removed \2%s\2 from the hostmask NOOP list." {
+  translation = "Removed \2%s\2 from the hostmask NOOP list.";
+};
+string "Removed \2%s\2 from the server NOOP list." {
+  translation = "Removed \2%s\2 from the server NOOP list.";
+};
+string "Removed template \2%s\2 from \2%s\2." {
+  translation = "Removed template \2%s\2 from \2%s\2.";
+};
+string "SET allows you to set various control flags" {
+  translation = "SET allows you to set various control flags";
+};
+string "Sending email failed, account \2%s\2 remains with \2%s\2." {
+  translation = "Sending email failed, account \2%s\2 remains with \2%s\2.";
+};
+string "Sending email failed, nickname \2%s\2 remains with \2%s\2." {
+  translation = "Sending email failed, nickname \2%s\2 remains with \2%s\2.";
+};
+string "Sending email failed, sorry! Registration aborted." {
+  translation = "Sending email failed, sorry! Registration aborted.";
+};
+string "Sending email failed, sorry! Your email address is unchanged." {
+  translation = "Sending email failed, sorry! Your email address is unchanged.";
+};
+string "Sending email is administratively disabled." {
+  translation = "Sending email is administratively disabled.";
+};
+string "Server NOOP list (%d entries):" {
+  translation = "Server NOOP list (%d entries):";
+};
+string "Services are presently running in debug mode, attached to a console. You should take extra caution when utilizing your services passwords." {
+  translation = "Services are presently running in debug mode, attached to a console. You should take extra caution when utilizing your services passwords.";
+};
+string "Services have been up for %s" {
+  translation = "Services have been up for %s";
+};
+string "Services ignore list has been wiped!" {
+  translation = "Services ignore list has been wiped!";
+};
+string "Services ignore list is empty." {
+  translation = "Services ignore list is empty.";
+};
+string "Setting your host to \2%s\2." {
+  translation = "Setting your host to \2%s\2.";
+};
+string "Silly wabbit, you can't ignore yourself." {
+  translation = "Silly wabbit, you can't ignore yourself.";
+};
+string "Sorry, too many templates on \2%s\2." {
+  translation = "Sorry, too many templates on \2%s\2.";
+};
+string "Sorry, you cannot get to room %d from here." {
+  translation = "Sorry, you cannot get to room %d from here.";
+};
+string "Successors are primarily those who have the +R flag" {
+  translation = "Successors are primarily those who have the +R flag";
+};
+string "Syntax: !AKICK ADD|DEL|LIST <nickname|hostmask>" {
+  translation = "Syntax: !AKICK ADD|DEL|LIST <nickname|hostmask>";
+};
+string "Syntax: !BAN <nickname|hostmask>" {
+  translation = "Syntax: !BAN <nickname|hostmask>";
+};
+string "Syntax: !TOPIC <topic>" {
+  translation = "Syntax: !TOPIC <topic>";
+};
+string "Syntax: !TOPICAPPEND <topic>" {
+  translation = "Syntax: !TOPICAPPEND <topic>";
+};
+string "Syntax: !UNBAN <nickname|hostmask>" {
+  translation = "Syntax: !UNBAN <nickname|hostmask>";
+};
+string "Syntax: !UNBAN [nickname|hostmask]" {
+  translation = "Syntax: !UNBAN [nickname|hostmask]";
+};
+string "Syntax: .flags <target> <flags>" {
+  translation = "Syntax: .flags <target> <flags>";
+};
+string "Syntax: AKICK <#channel> ADD|DEL|LIST <nickname|hostmask>" {
+  translation = "Syntax: AKICK <#channel> ADD|DEL|LIST <nickname|hostmask>";
+};
+string "Syntax: AKILL ADD <user>@<host> [options] <reason>" {
+  translation = "Syntax: AKILL ADD <user>@<host> [options] <reason>";
+};
+string "Syntax: AKILL ADD|DEL|LIST" {
+  translation = "Syntax: AKILL ADD|DEL|LIST";
+};
+string "Syntax: AKILL DEL <hostmask>" {
+  translation = "Syntax: AKILL DEL <hostmask>";
+};
+string "Syntax: BAN <#channel> <nickname|hostmask>" {
+  translation = "Syntax: BAN <#channel> <nickname|hostmask>";
+};
+string "Syntax: CLEAR <#channel> <command>" {
+  translation = "Syntax: CLEAR <#channel> <command>";
+};
+string "Syntax: COUNT <#channel>" {
+  translation = "Syntax: COUNT <#channel>";
+};
+string "Syntax: DEHALFOP <#channel> [nickname]" {
+  translation = "Syntax: DEHALFOP <#channel> [nickname]";
+};
+string "Syntax: DELETE ALL|message id" {
+  translation = "Syntax: DELETE ALL|message id";
+};
+string "Syntax: DEOP <#channel> [nickname]" {
+  translation = "Syntax: DEOP <#channel> [nickname]";
+};
+string "Syntax: DEVOICE <#channel> [nickname]" {
+  translation = "Syntax: DEVOICE <#channel> [nickname]";
+};
+string "Syntax: DROP <#channel>" {
+  translation = "Syntax: DROP <#channel>";
+};
+string "Syntax: DROP <account> <password>" {
+  translation = "Syntax: DROP <account> <password>";
+};
+string "Syntax: DROP <nickname> <password>" {
+  translation = "Syntax: DROP <nickname> <password>";
+};
+string "Syntax: FLAGS <channel> [target] [flags]" {
+  translation = "Syntax: FLAGS <channel> [target] [flags]";
+};
+string "Syntax: FORCEXOP <#channel>" {
+  translation = "Syntax: FORCEXOP <#channel>";
+};
+string "Syntax: FTRANSFER <#channel> <newfounder>" {
+  translation = "Syntax: FTRANSFER <#channel> <newfounder>";
+};
+string "Syntax: GETKEY <#channel>" {
+  translation = "Syntax: GETKEY <#channel>";
+};
+string "Syntax: GHOST <target> [password]" {
+  translation = "Syntax: GHOST <target> [password]";
+};
+string "Syntax: GLOBAL <parameters>|SEND|CLEAR" {
+  translation = "Syntax: GLOBAL <parameters>|SEND|CLEAR";
+};
+string "Syntax: HALFOP <#channel> [nickname]" {
+  translation = "Syntax: HALFOP <#channel> [nickname]";
+};
+string "Syntax: IDENTIFY [nick] <password>" {
+  translation = "Syntax: IDENTIFY [nick] <password>";
+};
+string "Syntax: IGNORE ADD|DEL|LIST|CLEAR <account>" {
+  translation = "Syntax: IGNORE ADD|DEL|LIST|CLEAR <account>";
+};
+string "Syntax: IGNORE ADD|DEL|LIST|CLEAR <mask>" {
+  translation = "Syntax: IGNORE ADD|DEL|LIST|CLEAR <mask>";
+};
+string "Syntax: INFO <#channel>" {
+  translation = "Syntax: INFO <#channel>";
+};
+string "Syntax: INFO <account>" {
+  translation = "Syntax: INFO <account>";
+};
+string "Syntax: INFO <nickname>" {
+  translation = "Syntax: INFO <nickname>";
+};
+string "Syntax: INJECT <parameters>" {
+  translation = "Syntax: INJECT <parameters>";
+};
+string "Syntax: INVITE <#channel>" {
+  translation = "Syntax: INVITE <#channel>";
+};
+string "Syntax: KICK <#channel> <nickname> [reason]" {
+  translation = "Syntax: KICK <#channel> <nickname> [reason]";
+};
+string "Syntax: KICKBAN <#channel> <nickname> [reason]" {
+  translation = "Syntax: KICKBAN <#channel> <nickname> [reason]";
+};
+string "Syntax: LIST <account pattern>" {
+  translation = "Syntax: LIST <account pattern>";
+};
+string "Syntax: LIST <channel pattern>" {
+  translation = "Syntax: LIST <channel pattern>";
+};
+string "Syntax: LIST <nickname pattern>" {
+  translation = "Syntax: LIST <nickname pattern>";
+};
+string "Syntax: LISTMAIL <email>" {
+  translation = "Syntax: LISTMAIL <email>";
+};
+string "Syntax: LOGIN <account> <password>" {
+  translation = "Syntax: LOGIN <account> <password>";
+};
+string "Syntax: MODE <parameters>" {
+  translation = "Syntax: MODE <parameters>";
+};
+string "Syntax: MODINSPECT <module>" {
+  translation = "Syntax: MODINSPECT <module>";
+};
+string "Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]" {
+  translation = "Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]";
+};
+string "Syntax: NOOP ADD <HOSTMASK|SERVER> <mask> [reason]" {
+  translation = "Syntax: NOOP ADD <HOSTMASK|SERVER> <mask> [reason]";
+};
+string "Syntax: NOOP DEL <HOSTMASK|SERVER> <mask>" {
+  translation = "Syntax: NOOP DEL <HOSTMASK|SERVER> <mask>";
+};
+string "Syntax: NOOP LIST <HOSTMASK|SERVER>" {
+  translation = "Syntax: NOOP LIST <HOSTMASK|SERVER>";
+};
+string "Syntax: OP <#channel> [nickname]" {
+  translation = "Syntax: OP <#channel> [nickname]";
+};
+string "Syntax: RAW <parameters>" {
+  translation = "Syntax: RAW <parameters>";
+};
+string "Syntax: READ <memo number>" {
+  translation = "Syntax: READ <memo number>";
+};
+string "Syntax: RECOVER <#channel>" {
+  translation = "Syntax: RECOVER <#channel>";
+};
+string "Syntax: REGISTER <#channel>" {
+  translation = "Syntax: REGISTER <#channel>";
+};
+string "Syntax: REGISTER <account> <password> <email>" {
+  translation = "Syntax: REGISTER <account> <password> <email>";
+};
+string "Syntax: REGISTER <password> <email>" {
+  translation = "Syntax: REGISTER <password> <email>";
+};
+string "Syntax: RELEASE <nick> [password]" {
+  translation = "Syntax: RELEASE <nick> [password]";
+};
+string "Syntax: RELEASE <nickname> [password]" {
+  translation = "Syntax: RELEASE <nickname> [password]";
+};
+string "Syntax: RESETPASS <account>" {
+  translation = "Syntax: RESETPASS <account>";
+};
+string "Syntax: RESETPASS <nickname>" {
+  translation = "Syntax: RESETPASS <nickname>";
+};
+string "Syntax: SENDPASS <account>" {
+  translation = "Syntax: SENDPASS <account>";
+};
+string "Syntax: SENDPASS <nickname>" {
+  translation = "Syntax: SENDPASS <nickname>";
+};
+string "Syntax: SET <#channel> <setting> <parameters>" {
+  translation = "Syntax: SET <#channel> <setting> <parameters>";
+};
+string "Syntax: SET <#channel> PROPERTY <property> [value]" {
+  translation = "Syntax: SET <#channel> PROPERTY <property> [value]";
+};
+string "Syntax: SET <setting> <parameters>" {
+  translation = "Syntax: SET <setting> <parameters>";
+};
+string "Syntax: SET EMAIL <new e-mail>" {
+  translation = "Syntax: SET EMAIL <new e-mail>";
+};
+string "Syntax: SET PASSWORD <new password>" {
+  translation = "Syntax: SET PASSWORD <new password>";
+};
+string "Syntax: SET PROPERTY <property> [value]" {
+  translation = "Syntax: SET PROPERTY <property> [value]";
+};
+string "Syntax: SOP|AOP|HOP|VOP <#channel> ADD|DEL|LIST <nickname>" {
+  translation = "Syntax: SOP|AOP|HOP|VOP <#channel> ADD|DEL|LIST <nickname>";
+};
+string "Syntax: TAXONOMY <#channel>" {
+  translation = "Syntax: TAXONOMY <#channel>";
+};
+string "Syntax: TAXONOMY <nick>" {
+  translation = "Syntax: TAXONOMY <nick>";
+};
+string "Syntax: TOPIC <#channel> <topic>" {
+  translation = "Syntax: TOPIC <#channel> <topic>";
+};
+string "Syntax: TOPICAPPEND <#channel> <topic>" {
+  translation = "Syntax: TOPICAPPEND <#channel> <topic>";
+};
+string "Syntax: UNBAN <#channel> <nickname|hostmask>" {
+  translation = "Syntax: UNBAN <#channel> <nickname|hostmask>";
+};
+string "Syntax: UNBAN <#channel> [nickname|hostmask]" {
+  translation = "Syntax: UNBAN <#channel> [nickname|hostmask]";
+};
+string "Syntax: VERIFY <operation> <account> <key>" {
+  translation = "Syntax: VERIFY <operation> <account> <key>";
+};
+string "Syntax: VERIFY <operation> <nickname> <key>" {
+  translation = "Syntax: VERIFY <operation> <nickname> <key>";
+};
+string "Syntax: VHOST <nick> [vhost]" {
+  translation = "Syntax: VHOST <nick> [vhost]";
+};
+string "Syntax: VOICE <#channel> [nickname]" {
+  translation = "Syntax: VOICE <#channel> [nickname]";
+};
+string "Syntax: WHY <channel> <user>" {
+  translation = "Syntax: WHY <channel> <user>";
+};
+string "Target inbox is full." {
+  translation = "Target inbox is full.";
+};
+string "Taxonomy for \2%s\2:" {
+  translation = "Taxonomy for \2%s\2:";
+};
+string "Template \2%s\2 on \2%s\2 unchanged." {
+  translation = "Template \2%s\2 on \2%s\2 unchanged.";
+};
+string "The MLOCK for \2%s\2 has been removed." {
+  translation = "The MLOCK for \2%s\2 has been removed.";
+};
+string "The MLOCK for \2%s\2 has been set to \2%s\2." {
+  translation = "The MLOCK for \2%s\2 has been set to \2%s\2.";
+};
+string "The URL for \2%s\2 has been cleared." {
+  translation = "The URL for \2%s\2 has been cleared.";
+};
+string "The URL for \2%s\2 was not set." {
+  translation = "The URL for \2%s\2 was not set.";
+};
+string "The URL of \2%s\2 has been set to \2%s\2." {
+  translation = "The URL of \2%s\2 has been set to \2%s\2.";
+};
+string "The \2EMAILMEMOS\2 flag has been removed for \2%s\2." {
+  translation = "The \2EMAILMEMOS\2 flag has been removed for \2%s\2.";
+};
+string "The \2EMAILMEMOS\2 flag has been set for \2%s\2." {
+  translation = "The \2EMAILMEMOS\2 flag has been set for \2%s\2.";
+};
+string "The \2EMAILMEMOS\2 flag is already set for \2%s\2." {
+  translation = "The \2EMAILMEMOS\2 flag is already set for \2%s\2.";
+};
+string "The \2EMAILMEMOS\2 flag is not set for \2%s\2." {
+  translation = "The \2EMAILMEMOS\2 flag is not set for \2%s\2.";
+};
+string "The \2FANTASY\2 flag has been removed for \2%s\2." {
+  translation = "The \2FANTASY\2 flag has been removed for \2%s\2.";
+};
+string "The \2FANTASY\2 flag has been set for \2%s\2." {
+  translation = "The \2FANTASY\2 flag has been set for \2%s\2.";
+};
+string "The \2HIDEMAIL\2 flag has been removed for \2%s\2." {
+  translation = "The \2HIDEMAIL\2 flag has been removed for \2%s\2.";
+};
+string "The \2HIDEMAIL\2 flag has been set for \2%s\2." {
+  translation = "The \2HIDEMAIL\2 flag has been set for \2%s\2.";
+};
+string "The \2HIDEMAIL\2 flag is already set for \2%s\2." {
+  translation = "The \2HIDEMAIL\2 flag is already set for \2%s\2.";
+};
+string "The \2HIDEMAIL\2 flag is not set for \2%s\2." {
+  translation = "The \2HIDEMAIL\2 flag is not set for \2%s\2.";
+};
+string "The \2KEEPTOPIC\2 flag has been removed for \2%s\2." {
+  translation = "The \2KEEPTOPIC\2 flag has been removed for \2%s\2.";
+};
+string "The \2KEEPTOPIC\2 flag has been set for \2%s\2." {
+  translation = "The \2KEEPTOPIC\2 flag has been set for \2%s\2.";
+};
+string "The \2KEEPTOPIC\2 flag is already set for \2%s\2." {
+  translation = "The \2KEEPTOPIC\2 flag is already set for \2%s\2.";
+};
+string "The \2KEEPTOPIC\2 flag is not set for \2%s\2." {
+  translation = "The \2KEEPTOPIC\2 flag is not set for \2%s\2.";
+};
+string "The \2NEVEROP\2 flag has been removed for \2%s\2." {
+  translation = "The \2NEVEROP\2 flag has been removed for \2%s\2.";
+};
+string "The \2NEVEROP\2 flag has been set for \2%s\2." {
+  translation = "The \2NEVEROP\2 flag has been set for \2%s\2.";
+};
+string "The \2NEVEROP\2 flag is already set for \2%s\2." {
+  translation = "The \2NEVEROP\2 flag is already set for \2%s\2.";
+};
+string "The \2NEVEROP\2 flag is not set for \2%s\2." {
+  translation = "The \2NEVEROP\2 flag is not set for \2%s\2.";
+};
+string "The \2NOMEMO\2 flag has been removed for \2%s\2." {
+  translation = "The \2NOMEMO\2 flag has been removed for \2%s\2.";
+};
+string "The \2NOMEMO\2 flag has been set for \2%s\2." {
+  translation = "The \2NOMEMO\2 flag has been set for \2%s\2.";
+};
+string "The \2NOMEMO\2 flag is already set for \2%s\2." {
+  translation = "The \2NOMEMO\2 flag is already set for \2%s\2.";
+};
+string "The \2NOMEMO\2 flag is not set for \2%s\2." {
+  translation = "The \2NOMEMO\2 flag is not set for \2%s\2.";
+};
+string "The \2NOOP\2 flag has been removed for \2%s\2." {
+  translation = "The \2NOOP\2 flag has been removed for \2%s\2.";
+};
+string "The \2NOOP\2 flag has been set for \2%s\2." {
+  translation = "The \2NOOP\2 flag has been set for \2%s\2.";
+};
+string "The \2NOOP\2 flag is already set for \2%s\2." {
+  translation = "The \2NOOP\2 flag is already set for \2%s\2.";
+};
+string "The \2NOOP\2 flag is not set for \2%s\2." {
+  translation = "The \2NOOP\2 flag is not set for \2%s\2.";
+};
+string "The \2SECURE\2 flag has been removed for \2%s\2." {
+  translation = "The \2SECURE\2 flag has been removed for \2%s\2.";
+};
+string "The \2SECURE\2 flag has been set for \2%s\2." {
+  translation = "The \2SECURE\2 flag has been set for \2%s\2.";
+};
+string "The \2SECURE\2 flag is already set for \2%s\2." {
+  translation = "The \2SECURE\2 flag is already set for \2%s\2.";
+};
+string "The \2SECURE\2 flag is not set for \2%s\2." {
+  translation = "The \2SECURE\2 flag is not set for \2%s\2.";
+};
+string "The \2STAFFONLY\2 flag has been removed for \2%s\2." {
+  translation = "The \2STAFFONLY\2 flag has been removed for \2%s\2.";
+};
+string "The \2STAFFONLY\2 flag has been set for \2%s\2." {
+  translation = "The \2STAFFONLY\2 flag has been set for \2%s\2.";
+};
+string "The \2STAFFONLY\2 flag is already set for \2%s\2." {
+  translation = "The \2STAFFONLY\2 flag is already set for \2%s\2.";
+};
+string "The \2STAFFONLY\2 flag is not set for \2%s\2." {
+  translation = "The \2STAFFONLY\2 flag is not set for \2%s\2.";
+};
+string "The \2VERBOSE\2 flag has been removed for \2%s\2." {
+  translation = "The \2VERBOSE\2 flag has been removed for \2%s\2.";
+};
+string "The \2VERBOSE\2 flag has been set for \2%s\2." {
+  translation = "The \2VERBOSE\2 flag has been set for \2%s\2.";
+};
+string "The \2VERBOSE\2 flag is already set for \2%s\2." {
+  translation = "The \2VERBOSE\2 flag is already set for \2%s\2.";
+};
+string "The \2VERBOSE\2 flag is not set for \2%s\2." {
+  translation = "The \2VERBOSE\2 flag is not set for \2%s\2.";
+};
+string "The \2VERBOSE_OPS\2 flag has been set for \2%s\2." {
+  translation = "The \2VERBOSE_OPS\2 flag has been set for \2%s\2.";
+};
+string "The \2VERBOSE_OPS\2 flag is already set for \2%s\2." {
+  translation = "The \2VERBOSE_OPS\2 flag is already set for \2%s\2.";
+};
+string "The account \2%s\2 belongs to a services operator; it cannot be dropped." {
+  translation = "The account \2%s\2 belongs to a services operator; it cannot be dropped.";
+};
+string "The account \2%s\2 belongs to a services operator; it cannot be frozen." {
+  translation = "The account \2%s\2 belongs to a services operator; it cannot be frozen.";
+};
+string "The account \2%s\2 has been dropped." {
+  translation = "The account \2%s\2 has been dropped.";
+};
+string "The account \2%s\2 is not registered." {
+  translation = "The account \2%s\2 is not registered.";
+};
+string "The channel \2%s\2 has been dropped." {
+  translation = "The channel \2%s\2 has been dropped.";
+};
+string "The channel \2%s\2 is closed; it cannot be dropped." {
+  translation = "The channel \2%s\2 is closed; it cannot be dropped.";
+};
+string "The channel \2%s\2 is not registered." {
+  translation = "The channel \2%s\2 is not registered.";
+};
+string "The channel \2%s\2 must exist in order to register it." {
+  translation = "The channel \2%s\2 must exist in order to register it.";
+};
+string "The crystal ball then vanishes into the misama." {
+  translation = "The crystal ball then vanishes into the misama.";
+};
+string "The e-mail address for \2%s\2 has been set to \2%s\2" {
+  translation = "The e-mail address for \2%s\2 has been set to \2%s\2";
+};
+string "The e-mail address for \2%s\2 has been set to \2%s\2." {
+  translation = "The e-mail address for \2%s\2 has been set to \2%s\2.";
+};
+string "The e-mail address for \2%s\2 was deleted." {
+  translation = "The e-mail address for \2%s\2 was deleted.";
+};
+string "The e-mail address for \2%s\2 was not set." {
+  translation = "The e-mail address for \2%s\2 was not set.";
+};
+string "The email address for \2%s\2 has been changed to \2%s\2." {
+  translation = "The email address for \2%s\2 has been changed to \2%s\2.";
+};
+string "The email address for \2%s\2 is already set to \2%s\2." {
+  translation = "The email address for \2%s\2 is already set to \2%s\2.";
+};
+string "The entry message for \2%s\2 has been cleared." {
+  translation = "The entry message for \2%s\2 has been cleared.";
+};
+string "The entry message for \2%s\2 has been set to \2%s\2" {
+  translation = "The entry message for \2%s\2 has been set to \2%s\2";
+};
+string "The entry message for \2%s\2 was not set." {
+  translation = "The entry message for \2%s\2 was not set.";
+};
+string "The following IRCop commands are available." {
+  translation = "The following IRCop commands are available.";
+};
+string "The following SRA commands are available." {
+  translation = "The following SRA commands are available.";
+};
+string "The following commands are available." {
+  translation = "The following commands are available.";
+};
+string "The following commands are available:" {
+  translation = "The following commands are available:";
+};
+string "The following people are playing:" {
+  translation = "The following people are playing:";
+};
+string "The game is already in progress. Sorry!" {
+  translation = "The game is already in progress. Sorry!";
+};
+string "The game must be running in order to use this command." {
+  translation = "The game must be running in order to use this command.";
+};
+string "The global notice has been sent." {
+  translation = "The global notice has been sent.";
+};
+string "The mask \2%s\2 already exists on the services ignore list." {
+  translation = "The mask \2%s\2 already exists on the services ignore list.";
+};
+string "The memo has been successfully forwarded to %s." {
+  translation = "The memo has been successfully forwarded to %s.";
+};
+string "The memo has been successfully sent to %s." {
+  translation = "The memo has been successfully sent to %s.";
+};
+string "The more general mask \2%s\2 is already on the AKICK list for \2%s\2" {
+  translation = "The more general mask \2%s\2 is already on the AKICK list for \2%s\2";
+};
+string "The nickname \2%s\2 belongs to a services operator; it cannot be dropped." {
+  translation = "The nickname \2%s\2 belongs to a services operator; it cannot be dropped.";
+};
+string "The nickname \2%s\2 belongs to a services operator; it cannot be frozen." {
+  translation = "The nickname \2%s\2 belongs to a services operator; it cannot be frozen.";
+};
+string "The nickname \2%s\2 has been dropped." {
+  translation = "The nickname \2%s\2 has been dropped.";
+};
+string "The nickname \2%s\2 is not registered." {
+  translation = "The nickname \2%s\2 is not registered.";
+};
+string "The password for \2%s\2 has been changed to \2%s\2. Please write this down for future reference." {
+  translation = "The password for \2%s\2 has been changed to \2%s\2. Please write this down for future reference.";
+};
+string "The password for \2%s\2 has been sent to \2%s\2." {
+  translation = "The password for \2%s\2 has been sent to \2%s\2.";
+};
+string "The password for the account %s has been changed to %s." {
+  translation = "The password for the account %s has been changed to %s.";
+};
+string "The password for the nickname %s has been changed to %s." {
+  translation = "The password for the nickname %s has been changed to %s.";
+};
+string "The password is \2%s\2. Please write this down for future reference." {
+  translation = "The password is \2%s\2. Please write this down for future reference.";
+};
+string "The pending message has been deleted." {
+  translation = "The pending message has been deleted.";
+};
+string "The previous transfer request for \2%s\2 has been cancelled." {
+  translation = "The previous transfer request for \2%s\2 has been cancelled.";
+};
+string "The services ignore list is empty." {
+  translation = "The services ignore list is empty.";
+};
+string "The specified memo doesn't exist." {
+  translation = "The specified memo doesn't exist.";
+};
+string "The transfer of \2%s\2 has been cancelled." {
+  translation = "The transfer of \2%s\2 has been cancelled.";
+};
+string "The vhost provided contains invalid characters." {
+  translation = "The vhost provided contains invalid characters.";
+};
+string "The vhost provided is too long." {
+  translation = "The vhost provided is too long.";
+};
+string "The wumpus has joined your room and eaten you. Sorry." {
+  translation = "The wumpus has joined your room and eaten you. Sorry.";
+};
+string "There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d)." {
+  translation = "There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d).";
+};
+string "There is already a GLOBAL in progress by \2%s\2." {
+  translation = "There is already a GLOBAL in progress by \2%s\2.";
+};
+string "There is already a NOOP entry covering this target." {
+  translation = "There is already a NOOP entry covering this target.";
+};
+string "There is no NOOP hostmask entry for this target." {
+  translation = "There is no NOOP hostmask entry for this target.";
+};
+string "There is no NOOP server entry for this target." {
+  translation = "There is no NOOP server entry for this target.";
+};
+string "This is your first offense. You will be ignored for 30 seconds." {
+  translation = "This is your first offense. You will be ignored for 30 seconds.";
+};
+string "This is your last warning. You will be ignored for 30 seconds." {
+  translation = "This is your last warning. You will be ignored for 30 seconds.";
+};
+string "This nickname is registered. Please choose a different nickname, or identify via \2/%s%s identify <password>\2." {
+  translation = "This nickname is registered. Please choose a different nickname, or identify via \2/%s%s identify <password>\2.";
+};
+string "This operation cannot be performed on %s, because the account has been marked by %s." {
+  translation = "This operation cannot be performed on %s, because the account has been marked by %s.";
+};
+string "This operation cannot be performed on %s, because the nickname has been marked by %s." {
+  translation = "This operation cannot be performed on %s, because the nickname has been marked by %s.";
+};
+string "This service exists to identify connecting clients to the network. It has no public interface." {
+  translation = "This service exists to identify connecting clients to the network. It has no public interface.";
+};
+string "Timed AKILL on \2%s@%s\2 was successfully added and will expire in %s." {
+  translation = "Timed AKILL on \2%s@%s\2 was successfully added and will expire in %s.";
+};
+string "To avoid rejoin, %d ban exception(s) matching \2%s\2 have been removed from \2%s\2." {
+  translation = "To avoid rejoin, %d ban exception(s) matching \2%s\2 have been removed from \2%s\2.";
+};
+string "To cancel the transfer, use \2/msg %s SET %s FOUNDER %s\2" {
+  translation = "To cancel the transfer, use \2/msg %s SET %s FOUNDER %s\2";
+};
+string "To register a channel: REGISTER <#channel>" {
+  translation = "To register a channel: REGISTER <#channel>";
+};
+string "Too many memos; please wait a while and try again" {
+  translation = "Too many memos; please wait a while and try again";
+};
+string "Topic set to \2%s\2 on \2%s\2." {
+  translation = "Topic set to \2%s\2 on \2%s\2.";
+};
+string "Total of \2%d\2 %s in %s list of \2%s\2." {
+  translation = "Total of \2%d\2 %s in %s list of \2%s\2.";
+};
+string "Total of \2%d\2 %s in AKILL list." {
+  translation = "Total of \2%d\2 %s in AKILL list.";
+};
+string "Total of \2%d\2 %s in \2%s\2's AKICK list." {
+  translation = "Total of \2%d\2 %s in \2%s\2's AKICK list.";
+};
+string "URL        : %s" {
+  translation = "URL        : %s";
+};
+string "Unbanned \2%s\2 on \2%s\2 (%d ban%s removed)." {
+  translation = "Unbanned \2%s\2 on \2%s\2 (%d ban%s removed).";
+};
+string "Unbanned \2%s\2 on \2%s\2." {
+  translation = "Unbanned \2%s\2 on \2%s\2.";
+};
+string "Usage: CLOSE <#channel> <ON|OFF> [reason]" {
+  translation = "Usage: CLOSE <#channel> <ON|OFF> [reason]";
+};
+string "Usage: CLOSE <#channel> ON <reason>" {
+  translation = "Usage: CLOSE <#channel> ON <reason>";
+};
+string "Usage: FLAGS %s [target] [flags]" {
+  translation = "Usage: FLAGS %s [target] [flags]";
+};
+string "Usage: FREEZE <account> <ON|OFF> [reason]" {
+  translation = "Usage: FREEZE <account> <ON|OFF> [reason]";
+};
+string "Usage: FREEZE <username> <ON|OFF> [reason]" {
+  translation = "Usage: FREEZE <username> <ON|OFF> [reason]";
+};
+string "Usage: FREEZE <username> ON <reason>" {
+  translation = "Usage: FREEZE <username> ON <reason>";
+};
+string "Usage: HELPER <nickname> <ON|OFF>" {
+  translation = "Usage: HELPER <nickname> <ON|OFF>";
+};
+string "Usage: HOLD <#channel> <ON|OFF>" {
+  translation = "Usage: HOLD <#channel> <ON|OFF>";
+};
+string "Usage: HOLD <account> <ON|OFF>" {
+  translation = "Usage: HOLD <account> <ON|OFF>";
+};
+string "Usage: HOLD <nickname> <ON|OFF>" {
+  translation = "Usage: HOLD <nickname> <ON|OFF>";
+};
+string "Usage: JUPE <server> <reason>" {
+  translation = "Usage: JUPE <server> <reason>";
+};
+string "Usage: MARK <#channel> <ON|OFF> [note]" {
+  translation = "Usage: MARK <#channel> <ON|OFF> [note]";
+};
+string "Usage: MARK <#channel> ON <note>" {
+  translation = "Usage: MARK <#channel> ON <note>";
+};
+string "Usage: MARK <target> <ON|OFF> [note]" {
+  translation = "Usage: MARK <target> <ON|OFF> [note]";
+};
+string "Usage: MARK <target> ON <note>" {
+  translation = "Usage: MARK <target> ON <note>";
+};
+string "Usage: OVERRIDE <ON|OFF>" {
+  translation = "Usage: OVERRIDE <ON|OFF>";
+};
+string "Usage: RETURN <account> <e-mail address>" {
+  translation = "Usage: RETURN <account> <e-mail address>";
+};
+string "Usage: RETURN <nickname> <e-mail address>" {
+  translation = "Usage: RETURN <nickname> <e-mail address>";
+};
+string "Usage: SET <#channel> FOUNDER <new founder>" {
+  translation = "Usage: SET <#channel> FOUNDER <new founder>";
+};
+string "Usage: TEMPLATE %s [target flags]" {
+  translation = "Usage: TEMPLATE %s [target flags]";
+};
+string "Usage: \2PINGSPAM\2 <target>" {
+  translation = "Usage: \2PINGSPAM\2 <target>";
+};
+string "User not online." {
+  translation = "User not online.";
+};
+string "Users currently online: %d" {
+  translation = "Users currently online: %d";
+};
+string "Valid target types: USER, OPERCLASS." {
+  translation = "Valid target types: USER, OPERCLASS.";
+};
+string "Vendor     : %s" {
+  translation = "Vendor     : %s";
+};
+string "Verification failed. Invalid key for \2%s\2." {
+  translation = "Verification failed. Invalid key for \2%s\2.";
+};
+string "Version    : %s" {
+  translation = "Version    : %s";
+};
+string "Warning: Your IRC server does not support halfops." {
+  translation = "Warning: Your IRC server does not support halfops.";
+};
+string "You already have override enabled." {
+  translation = "You already have override enabled.";
+};
+string "You are a normal user on \2%s\2." {
+  translation = "You are a normal user on \2%s\2.";
+};
+string "You are a server administrator." {
+  translation = "You are a server administrator.";
+};
+string "You are a services operator of class %s." {
+  translation = "You are a services operator of class %s.";
+};
+string "You are a services root administrator." {
+  translation = "You are a services root administrator.";
+};
+string "You are already logged in as \2%s\2." {
+  translation = "You are already logged in as \2%s\2.";
+};
+string "You are already logged in." {
+  translation = "You are already logged in.";
+};
+string "You are already playing the game!" {
+  translation = "You are already playing the game!";
+};
+string "You are an IRC operator." {
+  translation = "You are an IRC operator.";
+};
+string "You are banned from \2%s\2." {
+  translation = "You are banned from \2%s\2.";
+};
+string "You are founder on \2%s\2." {
+  translation = "You are founder on \2%s\2.";
+};
+string "You are in room %d." {
+  translation = "You are in room %d.";
+};
+string "You are logged in as \2%s\2." {
+  translation = "You are logged in as \2%s\2.";
+};
+string "You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2." {
+  translation = "You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2.";
+};
+string "You are not allowed to set \2%s\2 on template \2%s\2 in \2%s\2." {
+  translation = "You are not allowed to set \2%s\2 on template \2%s\2 in \2%s\2.";
+};
+string "You are not authorized to execute this command." {
+  translation = "You are not authorized to execute this command.";
+};
+string "You are not authorized to modify the access entry for \2%s\2 on \2%s\2." {
+  translation = "You are not authorized to modify the access entry for \2%s\2 on \2%s\2.";
+};
+string "You are not authorized to perform this command." {
+  translation = "You are not authorized to perform this command.";
+};
+string "You are not authorized to perform this operation." {
+  translation = "You are not authorized to perform this operation.";
+};
+string "You are not authorized to use %s." {
+  translation = "You are not authorized to use %s.";
+};
+string "You are not authorized to use the target argument." {
+  translation = "You are not authorized to use the target argument.";
+};
+string "You are not logged in." {
+  translation = "You are not logged in.";
+};
+string "You are not the founder of \2%s\2." {
+  translation = "You are not the founder of \2%s\2.";
+};
+string "You are now identified for \2%s\2." {
+  translation = "You are now identified for \2%s\2.";
+};
+string "You are now logged in as \2%s\2." {
+  translation = "You are now logged in as \2%s\2.";
+};
+string "You can move to room %d." {
+  translation = "You can move to room %d.";
+};
+string "You can only shoot into adjacent rooms!" {
+  translation = "You can only shoot into adjacent rooms!";
+};
+string "You can't shoot into room %d from here." {
+  translation = "You can't shoot into room %d from here.";
+};
+string "You cannot RELEASE yourself." {
+  translation = "You cannot RELEASE yourself.";
+};
+string "You cannot identify to \2%s\2 because the nickname has been frozen." {
+  translation = "You cannot identify to \2%s\2 because the nickname has been frozen.";
+};
+string "You cannot inject an INJECT command." {
+  translation = "You cannot inject an INJECT command.";
+};
+string "You cannot login as \2%s\2 because the account has been frozen." {
+  translation = "You cannot login as \2%s\2 because the account has been frozen.";
+};
+string "You cannot send yourself a memo." {
+  translation = "You cannot send yourself a memo.";
+};
+string "You cannot use this command right now. Sorry." {
+  translation = "You cannot use this command right now. Sorry.";
+};
+string "You cannot use your account name as a password." {
+  translation = "You cannot use your account name as a password.";
+};
+string "You cannot use your nickname as a password." {
+  translation = "You cannot use your nickname as a password.";
+};
+string "You cannot use your username as a password." {
+  translation = "You cannot use your username as a password.";
+};
+string "You do not have %s privilege." {
+  translation = "You do not have %s privilege.";
+};
+string "You do not have override enabled." {
+  translation = "You do not have override enabled.";
+};
+string "You do not have sufficient privlidges to use this command." {
+  translation = "You do not have sufficient privlidges to use this command.";
+};
+string "You failed to authenticate in time for the nickname %s" {
+  translation = "You failed to authenticate in time for the nickname %s";
+};
+string "You feel a draft!" {
+  translation = "You feel a draft!";
+};
+string "You find a strange pulsating crystal ball. You examine it, and it shows room %d with the wumpus in it." {
+  translation = "You find a strange pulsating crystal ball. You examine it, and it shows room %d with the wumpus in it.";
+};
+string "You found some arrows. You pick them up and continue on your way." {
+  translation = "You found some arrows. You pick them up and continue on your way.";
+};
+string "You have %d memo%s (%d new)." {
+  translation = "You have %d memo%s (%d new).";
+};
+string "You have %d new memo%s." {
+  translation = "You have %d new memo%s.";
+};
+string "You have 30 seconds to identify to your nickname before it is changed." {
+  translation = "You have 30 seconds to identify to your nickname before it is changed.";
+};
+string "You have access flags \2%s\2 on \2%s\2." {
+  translation = "You have access flags \2%s\2 on \2%s\2.";
+};
+string "You have been dehalfopped on %s by %s" {
+  translation = "You have been dehalfopped on %s by %s";
+};
+string "You have been deopped on %s by %s" {
+  translation = "You have been deopped on %s by %s";
+};
+string "You have been devoiced on %s by %s" {
+  translation = "You have been devoiced on %s by %s";
+};
+string "You have been halfopped on %s by %s" {
+  translation = "You have been halfopped on %s by %s";
+};
+string "You have been invited to \2%s\2." {
+  translation = "You have been invited to \2%s\2.";
+};
+string "You have been logged out." {
+  translation = "You have been logged out.";
+};
+string "You have been opped on %s by %s" {
+  translation = "You have been opped on %s by %s";
+};
+string "You have been shot at from room %d." {
+  translation = "You have been shot at from room %d.";
+};
+string "You have been voiced on %s by %s" {
+  translation = "You have been voiced on %s by %s";
+};
+string "You have fallen into a bottomless pit. Sorry." {
+  translation = "You have fallen into a bottomless pit. Sorry.";
+};
+string "You have killed the wumpus!" {
+  translation = "You have killed the wumpus!";
+};
+string "You have no arrows!" {
+  translation = "You have no arrows!";
+};
+string "You have no memos to delete." {
+  translation = "You have no memos to delete.";
+};
+string "You have no memos to forward." {
+  translation = "You have no memos to forward.";
+};
+string "You have no memos." {
+  translation = "You have no memos.";
+};
+string "You have to verify your email address before you can enable emailing memos." {
+  translation = "You have to verify your email address before you can enable emailing memos.";
+};
+string "You have too many channels registered." {
+  translation = "You have too many channels registered.";
+};
+string "You have triggered services flood protection." {
+  translation = "You have triggered services flood protection.";
+};
+string "You hear bats!" {
+  translation = "You hear bats!";
+};
+string "You hit something." {
+  translation = "You hit something.";
+};
+string "You may not ghost \2%s\2." {
+  translation = "You may not ghost \2%s\2.";
+};
+string "You may not ghost yourself." {
+  translation = "You may not ghost yourself.";
+};
+string "You may not remove the founder's +f access." {
+  translation = "You may not remove the founder's +f access.";
+};
+string "You miss what you were shooting at." {
+  translation = "You miss what you were shooting at.";
+};
+string "You must be in \2%s\2 in order to register it." {
+  translation = "You must be in \2%s\2 in order to register it.";
+};
+string "You must be playing the game in order to use this command." {
+  translation = "You must be playing the game in order to use this command.";
+};
+string "You must provide a room to move to." {
+  translation = "You must provide a room to move to.";
+};
+string "You must provide a room to shoot at." {
+  translation = "You must provide a room to shoot at.";
+};
+string "You must specify a positive integer for limit." {
+  translation = "You must specify a positive integer for limit.";
+};
+string "You need to specify a value for mode +%c." {
+  translation = "You need to specify a value for mode +%c.";
+};
+string "You need to specify what limit to MLOCK." {
+  translation = "You need to specify what limit to MLOCK.";
+};
+string "You need to specify which key to MLOCK." {
+  translation = "You need to specify which key to MLOCK.";
+};
+string "You need to verify your email address before you may register channels." {
+  translation = "You need to verify your email address before you may register channels.";
+};
+string "You need to verify your email address before you may send memos." {
+  translation = "You need to verify your email address before you may send memos.";
+};
+string "You see %s!" {
+  translation = "You see %s!";
+};
+string "You see the wumpus approaching you. You scream for help, but it is too late." {
+  translation = "You see the wumpus approaching you. You scream for help, but it is too late.";
+};
+string "You shoot at nothing." {
+  translation = "You shoot at nothing.";
+};
+string "You smell a wumpus!" {
+  translation = "You smell a wumpus!";
+};
+string "You smell humans!" {
+  translation = "You smell humans!";
+};
+string "You're already on \2%s\2." {
+  translation = "You're already on \2%s\2.";
+};
+string "You've disabled override on your account." {
+  translation = "You've disabled override on your account.";
+};
+string "Your IRC server does not support halfops." {
+  translation = "Your IRC server does not support halfops.";
+};
+string "Your email address will not be changed until you follow these instructions." {
+  translation = "Your email address will not be changed until you follow these instructions.";
+};
+string "Your ignore list is full, please DEL an account." {
+  translation = "Your ignore list is full, please DEL an account.";
+};
+string "Your memo contains invalid characters." {
+  translation = "Your memo contains invalid characters.";
+};
+string "Your memo has been emailed to %s." {
+  translation = "Your memo has been emailed to %s.";
+};
+string "[%s] %s" {
+  translation = "[%s] %s";
+};
+string "[@%s] %s" {
+  translation = "[@%s] %s";
+};
+string "\001CLIENTINFO 114 97 107 97 117 114\001" {
+  translation = "\001CLIENTINFO 114 97 107 97 117 114\001";
+};
+string "\001CLIENTINFO LILITH\001" {
+  translation = "\001CLIENTINFO LILITH\001";
+};
+string "\001PING %s\001" {
+  translation = "\001PING %s\001";
+};
+string "\2%-15s\2 %s" {
+  translation = "\2%-15s\2 %s";
+};
+string "\2%d\2 channel access match%s for the account \2%s\2" {
+  translation = "\2%d\2 channel access match%s for the account \2%s\2";
+};
+string "\2%d\2 channel access match%s for the nick \2%s\2" {
+  translation = "\2%d\2 channel access match%s for the nick \2%s\2";
+};
+string "\2%d\2 failed %s since %s." {
+  translation = "\2%d\2 failed %s since %s.";
+};
+string "\2%d\2 match%s for e-mail address \2%s\2" {
+  translation = "\2%d\2 match%s for e-mail address \2%s\2";
+};
+string "\2%d\2 match%s for pattern \2%s\2" {
+  translation = "\2%d\2 match%s for pattern \2%s\2";
+};
+string "\2%d\2 modules loaded." {
+  translation = "\2%d\2 modules loaded.";
+};
+string "\2%s\2 added \2%s\2 to the AKICK list." {
+  translation = "\2%s\2 added \2%s\2 to the AKICK list.";
+};
+string "\2%s\2 allows users to \2'register'\2 a nickname, and stop" {
+  translation = "\2%s\2 allows users to \2'register'\2 a nickname, and stop";
+};
+string "\2%s\2 allows users to \2'register'\2 an account for use with" {
+  translation = "\2%s\2 allows users to \2'register'\2 an account for use with";
+};
+string "\2%s\2 allows users to modify settings concerning secure" {
+  translation = "\2%s\2 allows users to modify settings concerning secure";
+};
+string "\2%s\2 allows users to send memos to registered users." {
+  translation = "\2%s\2 allows users to send memos to registered users.";
+};
+string "\2%s\2 already has flags \2%s\2 on \2%s\2" {
+  translation = "\2%s\2 already has flags \2%s\2 on \2%s\2";
+};
+string "\2%s\2 belongs to a services operator; it cannot be returned." {
+  translation = "\2%s\2 belongs to a services operator; it cannot be returned.";
+};
+string "\2%s\2 belongs to a services operator; you need %s privilege to reset the password." {
+  translation = "\2%s\2 belongs to a services operator; you need %s privilege to reset the password.";
+};
+string "\2%s\2 belongs to a services operator; you need %s privilege to send the password." {
+  translation = "\2%s\2 belongs to a services operator; you need %s privilege to send the password.";
+};
+string "\2%s\2 can now take ownership of \2%s\2." {
+  translation = "\2%s\2 can now take ownership of \2%s\2.";
+};
+string "\2%s\2 cannot be closed." {
+  translation = "\2%s\2 cannot be closed.";
+};
+string "\2%s\2 cannot be inspected." {
+  translation = "\2%s\2 cannot be inspected.";
+};
+string "\2%s\2 does not exist." {
+  translation = "\2%s\2 does not exist.";
+};
+string "\2%s\2 does not wish to be added to access lists (NEVEROP set)." {
+  translation = "\2%s\2 does not wish to be added to access lists (NEVEROP set).";
+};
+string "\2%s\2 gives normal users the ability to maintain control" {
+  translation = "\2%s\2 gives normal users the ability to maintain control";
+};
+string "\2%s\2 has been added to the %s list for \2%s\2." {
+  translation = "\2%s\2 has been added to the %s list for \2%s\2.";
+};
+string "\2%s\2 has been added to the AKICK list for \2%s\2." {
+  translation = "\2%s\2 has been added to the AKICK list for \2%s\2.";
+};
+string "\2%s\2 has been added to the services ignore list." {
+  translation = "\2%s\2 has been added to the services ignore list.";
+};
+string "\2%s\2 has been closed down by the %s administration." {
+  translation = "\2%s\2 has been closed down by the %s administration.";
+};
+string "\2%s\2 has been dehalfopped on \2%s\2." {
+  translation = "\2%s\2 has been dehalfopped on \2%s\2.";
+};
+string "\2%s\2 has been deopped on \2%s\2." {
+  translation = "\2%s\2 has been deopped on \2%s\2.";
+};
+string "\2%s\2 has been devoiced on \2%s\2." {
+  translation = "\2%s\2 has been devoiced on \2%s\2.";
+};
+string "\2%s\2 has been ghosted." {
+  translation = "\2%s\2 has been ghosted.";
+};
+string "\2%s\2 has been halfopped on \2%s\2." {
+  translation = "\2%s\2 has been halfopped on \2%s\2.";
+};
+string "\2%s\2 has been jupitered." {
+  translation = "\2%s\2 has been jupitered.";
+};
+string "\2%s\2 has been kickbanned from \2%s\2." {
+  translation = "\2%s\2 has been kickbanned from \2%s\2.";
+};
+string "\2%s\2 has been kicked from \2%s\2." {
+  translation = "\2%s\2 has been kicked from \2%s\2.";
+};
+string "\2%s\2 has been logged out." {
+  translation = "\2%s\2 has been logged out.";
+};
+string "\2%s\2 has been opped on \2%s\2." {
+  translation = "\2%s\2 has been opped on \2%s\2.";
+};
+string "\2%s\2 has been pwned." {
+  translation = "\2%s\2 has been pwned.";
+};
+string "\2%s\2 has been released." {
+  translation = "\2%s\2 has been released.";
+};
+string "\2%s\2 has been removed from the %s list for \2%s\2." {
+  translation = "\2%s\2 has been removed from the %s list for \2%s\2.";
+};
+string "\2%s\2 has been removed from the AKICK list for \2%s\2." {
+  translation = "\2%s\2 has been removed from the AKICK list for \2%s\2.";
+};
+string "\2%s\2 has been removed from the services ignore list." {
+  translation = "\2%s\2 has been removed from the services ignore list.";
+};
+string "\2%s\2 has been reopened." {
+  translation = "\2%s\2 has been reopened.";
+};
+string "\2%s\2 has been thawed" {
+  translation = "\2%s\2 has been thawed";
+};
+string "\2%s\2 has been voiced on \2%s\2." {
+  translation = "\2%s\2 has been voiced on \2%s\2.";
+};
+string "\2%s\2 has now been verified." {
+  translation = "\2%s\2 has now been verified.";
+};
+string "\2%s\2 has the SECURE option enabled, and \2%s\2 does not have appropriate access." {
+  translation = "\2%s\2 has the SECURE option enabled, and \2%s\2 does not have appropriate access.";
+};
+string "\2%s\2 has too many accounts registered." {
+  translation = "\2%s\2 has too many accounts registered.";
+};
+string "\2%s\2 has too many channels registered." {
+  translation = "\2%s\2 has too many channels registered.";
+};
+string "\2%s\2 has too many nicknames registered." {
+  translation = "\2%s\2 has too many nicknames registered.";
+};
+string "\2%s\2 is already a helper." {
+  translation = "\2%s\2 is already a helper.";
+};
+string "\2%s\2 is already closed." {
+  translation = "\2%s\2 is already closed.";
+};
+string "\2%s\2 is already frozen." {
+  translation = "\2%s\2 is already frozen.";
+};
+string "\2%s\2 is already held." {
+  translation = "\2%s\2 is already held.";
+};
+string "\2%s\2 is already loaded." {
+  translation = "\2%s\2 is already loaded.";
+};
+string "\2%s\2 is already marked." {
+  translation = "\2%s\2 is already marked.";
+};
+string "\2%s\2 is already on the %s list for \2%s\2" {
+  translation = "\2%s\2 is already on the %s list for \2%s\2";
+};
+string "\2%s\2 is already on the %s list for \2%s\2." {
+  translation = "\2%s\2 is already on the %s list for \2%s\2.";
+};
+string "\2%s\2 is already on the AKICK list for \2%s\2" {
+  translation = "\2%s\2 is already on the AKICK list for \2%s\2";
+};
+string "\2%s\2 is already registered to \2%s\2." {
+  translation = "\2%s\2 is already registered to \2%s\2.";
+};
+string "\2%s\2 is already registered." {
+  translation = "\2%s\2 is already registered.";
+};
+string "\2%s\2 is already the founder of \2%s\2." {
+  translation = "\2%s\2 is already the founder of \2%s\2.";
+};
+string "\2%s\2 is an internal client." {
+  translation = "\2%s\2 is an internal client.";
+};
+string "\2%s\2 is closed." {
+  translation = "\2%s\2 is closed.";
+};
+string "\2%s\2 is closed; it cannot be transferred." {
+  translation = "\2%s\2 is closed; it cannot be transferred.";
+};
+string "\2%s\2 is currently empty." {
+  translation = "\2%s\2 is currently empty.";
+};
+string "\2%s\2 is neither a nickname nor a hostmask." {
+  translation = "\2%s\2 is neither a nickname nor a hostmask.";
+};
+string "\2%s\2 is no longer a helper." {
+  translation = "\2%s\2 is no longer a helper.";
+};
+string "\2%s\2 is no longer held." {
+  translation = "\2%s\2 is no longer held.";
+};
+string "\2%s\2 is not a helper." {
+  translation = "\2%s\2 is not a helper.";
+};
+string "\2%s\2 is not a registered account." {
+  translation = "\2%s\2 is not a registered account.";
+};
+string "\2%s\2 is not a registered channel." {
+  translation = "\2%s\2 is not a registered channel.";
+};
+string "\2%s\2 is not a registered nickname." {
+  translation = "\2%s\2 is not a registered nickname.";
+};
+string "\2%s\2 is not a valid e-mail address." {
+  translation = "\2%s\2 is not a valid e-mail address.";
+};
+string "\2%s\2 is not a valid email address." {
+  translation = "\2%s\2 is not a valid email address.";
+};
+string "\2%s\2 is not a valid server name." {
+  translation = "\2%s\2 is not a valid server name.";
+};
+string "\2%s\2 is not awaiting authorization." {
+  translation = "\2%s\2 is not awaiting authorization.";
+};
+string "\2%s\2 is not closed." {
+  translation = "\2%s\2 is not closed.";
+};
+string "\2%s\2 is not frozen." {
+  translation = "\2%s\2 is not frozen.";
+};
+string "\2%s\2 is not held." {
+  translation = "\2%s\2 is not held.";
+};
+string "\2%s\2 is not keyed." {
+  translation = "\2%s\2 is not keyed.";
+};
+string "\2%s\2 is not loaded." {
+  translation = "\2%s\2 is not loaded.";
+};
+string "\2%s\2 is not marked." {
+  translation = "\2%s\2 is not marked.";
+};
+string "\2%s\2 is not on IRC." {
+  translation = "\2%s\2 is not on IRC.";
+};
+string "\2%s\2 is not on \2%s\2." {
+  translation = "\2%s\2 is not on \2%s\2.";
+};
+string "\2%s\2 is not on the %s list for \2%s\2." {
+  translation = "\2%s\2 is not on the %s list for \2%s\2.";
+};
+string "\2%s\2 is not on the AKICK list for \2%s\2, however \2%s\2 is." {
+  translation = "\2%s\2 is not on the AKICK list for \2%s\2, however \2%s\2 is.";
+};
+string "\2%s\2 is not on the AKICK list for \2%s\2." {
+  translation = "\2%s\2 is not on the AKICK list for \2%s\2.";
+};
+string "\2%s\2 is not on the network" {
+  translation = "\2%s\2 is not on the network";
+};
+string "\2%s\2 is not online." {
+  translation = "\2%s\2 is not online.";
+};
+string "\2%s\2 is not registered." {
+  translation = "\2%s\2 is not registered.";
+};
+string "\2%s\2 is now a helper." {
+  translation = "\2%s\2 is now a helper.";
+};
+string "\2%s\2 is now closed." {
+  translation = "\2%s\2 is now closed.";
+};
+string "\2%s\2 is now frozen." {
+  translation = "\2%s\2 is now frozen.";
+};
+string "\2%s\2 is now held." {
+  translation = "\2%s\2 is now held.";
+};
+string "\2%s\2 is now marked." {
+  translation = "\2%s\2 is now marked.";
+};
+string "\2%s\2 is now registered to \2%s\2." {
+  translation = "\2%s\2 is now registered to \2%s\2.";
+};
+string "\2%s\2 is now unmarked." {
+  translation = "\2%s\2 is now unmarked.";
+};
+string "\2%s\2 is the current uplink; it cannot be jupitered!" {
+  translation = "\2%s\2 is the current uplink; it cannot be jupitered!";
+};
+string "\2%s\2 is the founder for \2%s\2 and may not be added to the %s list." {
+  translation = "\2%s\2 is the founder for \2%s\2 and may not be added to the %s list.";
+};
+string "\2%s\2 is the founder for \2%s\2 and may not be removed from the %s list." {
+  translation = "\2%s\2 is the founder for \2%s\2 and may not be removed from the %s list.";
+};
+string "\2%s\2 is the services server; it cannot be jupitered!" {
+  translation = "\2%s\2 is the services server; it cannot be jupitered!";
+};
+string "\2%s\2 is unprivileged." {
+  translation = "\2%s\2 is unprivileged.";
+};
+string "\2%s\2 manages help requests for support staff." {
+  translation = "\2%s\2 manages help requests for support staff.";
+};
+string "\2%s\2 provides essential network management services, such as" {
+  translation = "\2%s\2 provides essential network management services, such as";
+};
+string "\2%s\2 removed \2%s\2 from the AKICK list." {
+  translation = "\2%s\2 removed \2%s\2 from the AKICK list.";
+};
+string "\2%s\2 set flags \2%s\2 on \2%s\2 in \2%s\2." {
+  translation = "\2%s\2 set flags \2%s\2 on \2%s\2 in \2%s\2.";
+};
+string "\2%s\2 was not found on the services ignore list." {
+  translation = "\2%s\2 was not found on the services ignore list.";
+};
+string "\2%s\2 will drop the account, allowing it to be reregistered." {
+  translation = "\2%s\2 will drop the account, allowing it to be reregistered.";
+};
+string "\2%s\2 will drop the nickname, allowing it to be reregistered." {
+  translation = "\2%s\2 will drop the nickname, allowing it to be reregistered.";
+};
+string "\2%s\2's access on \2%s\2 has been changed to \2%s\2." {
+  translation = "\2%s\2's access on \2%s\2 has been changed to \2%s\2.";
+};
+string "\2%s\2. If a registered account is not used by the owner for %d days," {
+  translation = "\2%s\2. If a registered account is not used by the owner for %d days,";
+};
+string "\2*** End of Info ***\2" {
+  translation = "\2*** End of Info ***\2";
+};
+string "\2/%s%s <command>\2" {
+  translation = "\2/%s%s <command>\2";
+};
+string "\2/%s%s help <command>\2" {
+  translation = "\2/%s%s help <command>\2";
+};
+string "\2/%s%s help commands\2" {
+  translation = "\2/%s%s help commands\2";
+};
+string "\2Channels\2: %s" {
+  translation = "\2Channels\2: %s";
+};
+string "\2EMAIL\2         Changes the email address associated with a account." {
+  translation = "\2EMAIL\2         Changes the email address associated with a account.";
+};
+string "\2EMAIL\2         Sets the channel e-mail address." {
+  translation = "\2EMAIL\2         Sets the channel e-mail address.";
+};
+string "\2ENTRYMSG\2      Sets the channel's entry message." {
+  translation = "\2ENTRYMSG\2      Sets the channel's entry message.";
+};
+string "\2FANTASY\2       Allows or disallows in-channel commands." {
+  translation = "\2FANTASY\2       Allows or disallows in-channel commands.";
+};
+string "\2FOUNDER\2       Transfers foundership of a channel." {
+  translation = "\2FOUNDER\2       Transfers foundership of a channel.";
+};
+string "\2General\2: %s" {
+  translation = "\2General\2: %s";
+};
+string "\2HIDEMAIL\2      Hides a account's email address" {
+  translation = "\2HIDEMAIL\2      Hides a account's email address";
+};
+string "\2HOLD\2          Prevents services from expiring a account." {
+  translation = "\2HOLD\2          Prevents services from expiring a account.";
+};
+string "\2KEEPTOPIC\2     Enables topic retention." {
+  translation = "\2KEEPTOPIC\2     Enables topic retention.";
+};
+string "\2MLOCK\2         Sets channel mode lock." {
+  translation = "\2MLOCK\2         Sets channel mode lock.";
+};
+string "\2NEVEROP\2          Prevents you from being added to access lists." {
+  translation = "\2NEVEROP\2          Prevents you from being added to access lists.";
+};
+string "\2NOOP\2       Prevents services from automatically setting modes associated with access lists." {
+  translation = "\2NOOP\2       Prevents services from automatically setting modes associated with access lists.";
+};
+string "\2Nicknames/accounts\2: %s" {
+  translation = "\2Nicknames/accounts\2: %s";
+};
+string "\2OperServ\2: %s" {
+  translation = "\2OperServ\2: %s";
+};
+string "\2PASSWORD\2      Change the password of a account." {
+  translation = "\2PASSWORD\2      Change the password of a account.";
+};
+string "\2PROPERTY\2      Manipulates channel metadata." {
+  translation = "\2PROPERTY\2      Manipulates channel metadata.";
+};
+string "\2PROPERTY\2      Manipulates metadata entries associated with a account." {
+  translation = "\2PROPERTY\2      Manipulates metadata entries associated with a account.";
+};
+string "\2RELEASE\2 removes an enforcer for your nick or" {
+  translation = "\2RELEASE\2 removes an enforcer for your nick or";
+};
+string "\2STAFFONLY\2     Sets the channel as staff-only. (Non staff-members are kickbanned.)" {
+  translation = "\2STAFFONLY\2     Sets the channel as staff-only. (Non staff-members are kickbanned.)";
+};
+string "\2URL\2           Sets the channel URL." {
+  translation = "\2URL\2           Sets the channel URL.";
+};
+string "are performed on them." {
+  translation = "are performed on them.";
+};
+string "atheme-%s [%s] #%s" {
+  translation = "atheme-%s [%s] #%s";
+};
+string "changes the nick of a user that is using your" {
+  translation = "changes the nick of a user that is using your";
+};
+string "connection to the network. It may, for example, be used to" {
+  translation = "connection to the network. It may, for example, be used to";
+};
+string "file and try again." {
+  translation = "file and try again.";
+};
+string "for accounts that change the way certain operations" {
+  translation = "for accounts that change the way certain operations";
+};
+string "for channels that change the way certain" {
+  translation = "for channels that change the way certain";
+};
+string "for nicknames that change the way certain operations" {
+  translation = "for nicknames that change the way certain operations";
+};
+string "gaining operator status." {
+  translation = "gaining operator status.";
+};
+string "have to wait a few minutes then." {
+  translation = "have to wait a few minutes then.";
+};
+string "level and activity." {
+  translation = "level and activity.";
+};
+string "list empty" {
+  translation = "list empty";
+};
+string "modifications." {
+  translation = "modifications.";
+};
+string "nick without identifying and prevent all use" {
+  translation = "nick without identifying and prevent all use";
+};
+string "nick." {
+  translation = "nick.";
+};
+string "nickname to disconnect a user from the network that is using" {
+  translation = "nickname to disconnect a user from the network that is using";
+};
+string "of a channel, without the need of a bot. Channel takeovers are" {
+  translation = "of a channel, without the need of a bot. Channel takeovers are";
+};
+string "of it." {
+  translation = "of it.";
+};
+string "operations are performed on them." {
+  translation = "operations are performed on them.";
+};
+string "or if there are no eligible channel successors." {
+  translation = "or if there are no eligible channel successors.";
+};
+string "others from using that nick. \2%s\2 allows the owner of a" {
+  translation = "others from using that nick. \2%s\2 allows the owner of a";
+};
+string "people may be chosen depending on their access" {
+  translation = "people may be chosen depending on their access";
+};
+string "register it." {
+  translation = "register it.";
+};
+string "routing manipulation and access restriction. Please do not abuse" {
+  translation = "routing manipulation and access restriction. Please do not abuse";
+};
+string "set keys or fingerprints." {
+  translation = "set keys or fingerprints.";
+};
+string "set on their account in the channel, although other" {
+  translation = "set on their account in the channel, although other";
+};
+string "the founder can maintain complete and total control over the channel." {
+  translation = "the founder can maintain complete and total control over the channel.";
+};
+string "their nickname. If a registered nick is not used by the owner for %d days," {
+  translation = "their nickname. If a registered nick is not used by the owner for %d days,";
+};
+string "virtually impossible when a channel is registered with \2%s\2." {
+  translation = "virtually impossible when a channel is registered with \2%s\2.";
+};
+string "your access to \2%s\2!" {
+  translation = "your access to \2%s\2!";
+};
