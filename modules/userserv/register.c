@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: register.c 5868 2006-07-13 14:11:43Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: register.c 5868 2006-07-13 14:11:43Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -128,7 +128,7 @@ static void us_cmd_register(char *origin)
 			return;
 		}
 
-		notice(usersvs.nick, origin, "An email containing account activiation instructions has been sent to \2%s\2.", mu->email);
+		notice(usersvs.nick, origin, "An email containing account activation instructions has been sent to \2%s\2.", mu->email);
 		notice(usersvs.nick, origin, "If you do not complete registration within one day your account will expire.");
 
 		free(key);

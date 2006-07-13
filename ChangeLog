@@ -1,3 +1,19 @@
+nenolod     2006/07/13 10:32:41 UTC	(20060713-5866)
+  Log:
+  >>> Merge branch http://opensvn.csie.org/foss_pip/irc/services/atheme-trunk to http://svn.atheme.org/atheme/trunk with dsvn.
+  >>> Log:
+  ------------------------------------------------------------------------
+  r28 | pippijn | 2006-07-13 05:31:27 -0500 (Thu, 13 Jul 2006) | 2 lines
+  
+  Added perl atheme db reader
+  
+  ------------------------------------------------------------------------
+  
+
+  Changes:	Modified:
+  +158 -0	trunk/contrib/dbread.pl (File Added) 
+
+
 nenolod     2006/07/12 19:23:29 UTC	(20060712-5862)
   Log:
   >>> Merge branch http://opensvn.csie.org/foss_pip/irc/services/atheme-trunk/dist to http://svn.atheme.org/atheme/trunk/dist with dsvn.
