@@ -1,3 +1,20 @@
+nenolod     2006/07/13 14:35:23 UTC	(20060713-5872)
+  Log:
+  >>> Merge branch http://opensvn.csie.org/foss_pip/irc/services/atheme-trunk/translations to http://svn.atheme.org/atheme/trunk/translations with dsvn.
+  >>> Log:
+  ------------------------------------------------------------------------
+  r36 | pippijn | 2006-07-13 09:31:27 -0500 (Thu, 13 Jul 2006) | 2 lines
+  
+  Started German translations.
+  
+  ------------------------------------------------------------------------
+  
+
+  Changes:	Modified:
+  +2217 -0	trunk/translations/german.language (File Added) 
+  +737 -0	trunk/translations/german.strings (File Added) 
+
+
 nenolod     2006/07/13 14:28:13 UTC	(20060713-5870)
   Log:
   >>> Merge branch http://opensvn.csie.org/foss_pip/irc/services/atheme-trunk/modules to http://svn.atheme.org/atheme/trunk/modules with dsvn.

@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 5115 2006-04-19 12:01:42Z jilles $
+ * $Id: account.c 5874 2006-07-13 15:29:56Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 5115 2006-04-19 12:01:42Z jilles $",
+	"$Id: account.c 5874 2006-07-13 15:29:56Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -657,7 +657,6 @@ static int do_set_vanity_host(void *conn, int parc, char *parv[])
  *       fault 1 - validation failed
  *       fault 2 - unknown account
  *       fault 4 - insufficient parameters
- *       fault 6 - passwords do not match
  *       default - success message
  *
  * Side Effects:
