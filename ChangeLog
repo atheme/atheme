@@ -1,3 +1,20 @@
+nenolod     2006/07/12 19:23:29 UTC	(20060712-5862)
+  Log:
+  >>> Merge branch http://opensvn.csie.org/foss_pip/irc/services/atheme-trunk/dist to http://svn.atheme.org/atheme/trunk/dist with dsvn.
+  >>> Log:
+  ------------------------------------------------------------------------
+  r25 | pippijn | 2006-07-12 14:22:35 -0500 (Wed, 12 Jul 2006) | 2 lines
+  
+  Added memo handler for xmlrpc to the example config files
+  
+  ------------------------------------------------------------------------
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/dist/example.conf (File Modified) 
+  +2 -0		trunk/dist/example.userserv.conf (File Modified) 
+
+
 nenolod     2006/07/12 19:08:58 UTC	(20060712-5860)
   Log:
   - hook up memo.c to the buildsystem
