@@ -1,3 +1,13 @@
+pippijn     2006/07/13 15:35:41 UTC	(20060713-5876)
+  Log:
+  Improved translations.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/translations/dutch.language (File Modified) 
+  +54 -54	trunk/translations/german.language (File Modified) 
+
+
 pippijn     2006/07/13 15:29:56 UTC	(20060713-5874)
   Log:
   Removed comment pointing to a fault never returned.
