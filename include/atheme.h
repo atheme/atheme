@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 5891 2006-07-17 17:04:50Z jilles $
+ * $Id: atheme.h 5895 2006-07-17 18:41:43Z nenolod $
  */
 
 #ifndef ATHEME_H
@@ -26,6 +26,7 @@
 #include "base64.h"
 #include "md5.h"
 #include "sasl.h"
+#include "dictionary.h"
 #include "sysconf.h"
 
 #ifndef timersub

@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 5782 2006-07-08 21:18:46Z jilles $
+# $Id: Makefile.in 5895 2006-07-17 18:41:43Z nenolod $
 #
 
 CC		= @CC@
@@ -44,6 +44,7 @@ BASE_SRCS =		\
 	crypto.c	\
 	culture.c	\
 	dbhandler.c	\
+	dictionary.c	\
 	flags.c		\
 	function.c	\
 	help.c		\

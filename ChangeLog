@@ -1,3 +1,12 @@
+jilles      2006/07/17 17:05:33 UTC	(20060717-5893)
+  Log:
+  charybdis: use saslserv, not nickserv, as the sasl agent
+  
+
+  Changes:	Modified:
+  +7 -1		trunk/protocol/charybdis.c (File Modified) 
+
+
 jilles      2006/07/17 17:04:50 UTC	(20060717-5891)
   Log:
   Add channel_can_change_topic hook to allow modules to hook
