@@ -6,13 +6,13 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 5628 2006-07-01 23:38:42Z jilles $
+ * $Id: ircnet.c 5891 2006-07-17 17:04:50Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 5628 2006-07-01 23:38:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 5891 2006-07-17 17:04:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -370,7 +370,7 @@ static void m_topic(char *origin, uint8_t parc, char *parv[])
 	if (!c || !u)
 		return;
 
-	handle_topic(c, u->nick, CURRTIME, parv[1]);
+	handle_topic_from(origin, c, u->nick, CURRTIME, parv[1]);
 }
 
 static void m_ping(char *origin, uint8_t parc, char *parv[])

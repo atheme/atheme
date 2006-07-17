@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 5638 2006-07-02 00:21:54Z jilles $
+ * $Id: inspircd.c 5891 2006-07-17 17:04:50Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5638 2006-07-02 00:21:54Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 5891 2006-07-17 17:04:50Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -434,7 +434,7 @@ static void m_topic(char *origin, uint8_t parc, char *parv[])
 	if (!c)
 		return;
 
-	handle_topic(c, origin, time(NULL), parv[1]);
+	handle_topic_from(origin, c, origin, time(NULL), parv[1]);
 }
 
 static void m_ftopic(char *origin, uint8_t parc, char *parv[])
@@ -444,7 +444,7 @@ static void m_ftopic(char *origin, uint8_t parc, char *parv[])
 	if (!c)
 		return;
 
-	handle_topic(c, parv[2], atol(parv[1]), parv[3]);
+	handle_topic_from(origin, c, parv[2], atol(parv[1]), parv[3]);
 }
 
 static void m_ping(char *origin, uint8_t parc, char *parv[])

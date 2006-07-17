@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 5792 2006-07-08 23:22:24Z jilles $
+ * $Id: atheme.h 5891 2006-07-17 17:04:50Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -57,6 +57,17 @@ typedef struct {
         channel_t *c;
         char *msg;
 } hook_cmessage_data_t;
+
+typedef struct {
+	user_t *u; /* Online user that changed the topic */
+	server_t *s; /* Server that restored a topic */
+        channel_t *c; /* Channel still has old topic */
+        char *setter; /* Stored setter string, can be nick, nick!user@host
+			 or server */
+	time_t ts; /* Time the topic was changed */
+	char *topic; /* New topic */
+	int approved; /* Write non-zero here to cancel the change */
+} hook_channel_topic_check_t;
 
 typedef struct {
 	user_t *u;

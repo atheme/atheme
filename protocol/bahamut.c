@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: bahamut.c 5628 2006-07-01 23:38:42Z jilles $
+ * $Id: bahamut.c 5891 2006-07-17 17:04:50Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/bahamut.h"
 
-DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 5628 2006-07-01 23:38:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 5891 2006-07-17 17:04:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -345,7 +345,7 @@ static void m_topic(char *origin, uint8_t parc, char *parv[])
 	if (!c)
 		return;
 
-	handle_topic(c, parv[1], atol(parv[2]), parv[3]);
+	handle_topic_from(origin, c, parv[1], atol(parv[2]), parv[3]);
 }
 
 static void m_ping(char *origin, uint8_t parc, char *parv[])
@@ -454,7 +454,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 
 			clear_simple_modes(c);
 			chanban_clear(c);
-			handle_topic(c, "", 0, "");
+			handle_topic_from(origin, c, "", 0, "");
 
 			LIST_FOREACH(n, c->members.head)
 			{

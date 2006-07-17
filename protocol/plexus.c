@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 5628 2006-07-01 23:38:42Z jilles $
+ * $Id: plexus.c 5891 2006-07-17 17:04:50Z jilles $
  */
 
 /* option: set the netadmin umode +N */
@@ -13,7 +13,7 @@
 #include "atheme.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 5628 2006-07-01 23:38:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 5891 2006-07-17 17:04:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -362,7 +362,7 @@ static void m_topic(char *origin, uint8_t parc, char *parv[])
 	if (!c || !u)
 		return;
 
-	handle_topic(c, u->nick, CURRTIME, parv[1]);
+	handle_topic_from(origin, c, u->nick, CURRTIME, parv[1]);
 }
 
 static void m_ping(char *origin, uint8_t parc, char *parv[])

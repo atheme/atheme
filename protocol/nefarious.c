@@ -6,13 +6,13 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
  *
- * $Id: nefarious.c 5628 2006-07-01 23:38:42Z jilles $
+ * $Id: nefarious.c 5891 2006-07-17 17:04:50Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 5628 2006-07-01 23:38:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 5891 2006-07-17 17:04:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -404,7 +404,7 @@ static void m_topic(char *origin, uint8_t parc, char *parv[])
 		ts = atoi(parv[parc - 2]);
 	if (ts == 0)
 		ts = CURRTIME;
-	handle_topic(c, parc > 4 ? parv[parc - 4] : source, ts, parv[parc - 1]);
+	handle_topic_from(origin, c, parc > 4 ? parv[parc - 4] : source, ts, parv[parc - 1]);
 }
 
 /* AB G !1119920789.573932 services.atheme.org 1119920789.573932 */
@@ -566,7 +566,7 @@ static void m_burst(char *origin, uint8_t parc, char *parv[])
 
 		clear_simple_modes(c);
 		chanban_clear(c);
-		handle_topic(c, "", 0, "");
+		handle_topic_from(origin, c, "", 0, "");
 		LIST_FOREACH(n, c->members.head)
 		{
 			cu = (chanuser_t *)n->data;

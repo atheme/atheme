@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 5766 2006-07-07 13:31:13Z jilles $
+ * $Id: unreal.c 5891 2006-07-17 17:04:50Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 5766 2006-07-07 13:31:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 5891 2006-07-17 17:04:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -373,7 +373,7 @@ static void m_topic(char *origin, uint8_t parc, char *parv[])
 	if (!c)
 		return;
 
-	handle_topic(c, parv[1], atol(parv[2]), parv[3]);
+	handle_topic_from(origin, c, parv[1], atol(parv[2]), parv[3]);
 }
 
 static void m_ping(char *origin, uint8_t parc, char *parv[])

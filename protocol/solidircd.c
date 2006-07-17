@@ -360,7 +360,7 @@ static void m_topic(char *origin, uint8_t parc, char *parv[])
 	if (!c)
 		return;
 
-	handle_topic(c, parv[1], atol(parv[2]), parv[3]);
+	handle_topic_from(origin, c, parv[1], atol(parv[2]), parv[3]);
 }
 
 static void m_ping(char *origin, uint8_t parc, char *parv[])
@@ -469,7 +469,7 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 
 			clear_simple_modes(c);
 			chanban_clear(c);
-			handle_topic(c, "", 0, "");
+			handle_topic_from(origin, c, "", 0, "");
 
 			LIST_FOREACH(n, c->members.head)
 			{

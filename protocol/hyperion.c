@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 5628 2006-07-01 23:38:42Z jilles $
+ * $Id: hyperion.c 5891 2006-07-17 17:04:50Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -15,7 +15,7 @@
 #include "atheme.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 5628 2006-07-01 23:38:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 5891 2006-07-17 17:04:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -423,7 +423,7 @@ static void m_topic(char *origin, uint8_t parc, char *parv[])
 	if (!c || !u)
 		return;
 
-	handle_topic(c, u->nick, CURRTIME, parv[1]);
+	handle_topic_from(origin, c, u->nick, CURRTIME, parv[1]);
 }
 
 static void m_stopic(char *origin, uint8_t parc, char *parv[])
@@ -437,7 +437,7 @@ static void m_stopic(char *origin, uint8_t parc, char *parv[])
 	topicts = atol(parv[2]);
 	channelts = atol(parv[3]);
 	if (c->topic == NULL || (strcmp(c->topic, parv[1]) && channelts < c->ts || (channelts == c->ts && topicts > c->topicts)))
-		handle_topic(c, parv[1], topicts, parv[parc - 1]);
+		handle_topic_from(origin, c, parv[1], topicts, parv[parc - 1]);
 }
 
 static void m_ping(char *origin, uint8_t parc, char *parv[])

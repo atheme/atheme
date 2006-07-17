@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 5708 2006-07-03 23:37:53Z jilles $
+ * $Id: ptasks.c 5891 2006-07-17 17:04:50Z jilles $
  */
 
 #include "atheme.h"
@@ -364,6 +364,51 @@ void handle_message(char *origin, char *target, boolean_t is_notice, char *messa
 			sptr->notice_handler(u->nick, 2, vec);
 		else
 			sptr->handler(u->nick, 2, vec);
+	}
+}
+
+void handle_topic_from(char *source, channel_t *c, char *setter, time_t ts, char *topic)
+{
+	hook_channel_topic_check_t hdata;
+
+	if (topic != NULL && topic[0] == '\0')
+		topic = NULL;
+	hdata.u = user_find(source);
+	hdata.s = server_find(source);
+	hdata.c = c;
+	hdata.setter = setter;
+	hdata.ts = ts;
+	hdata.topic = topic;
+	hdata.approved = 0;
+	if (topic != NULL ? c->topic == NULL || strcmp(topic, c->topic) : c->topic != NULL)
+	{
+		/* Only call the hook if the topic actually changed */
+		hook_call_event("channel_can_change_topic", &hdata);
+	}
+	if (hdata.approved == 0)
+	{
+		if (topic == hdata.topic)
+			/* Allowed, process the change further */
+			handle_topic(c, setter, ts, topic);
+		else
+		{
+			/* Allowed, but topic tweaked */
+			ts -= 60; /* for TS6, use TB and hopefully ensure
+				     it's accepted -- jilles */
+			handle_topic(c, setter, ts, hdata.topic);
+			topic_sts(c->name, setter, ts, hdata.topic);
+		}
+	}
+	else
+	{
+		/* Not allowed, change it back */
+		if (c->topic != NULL)
+			topic_sts(c->name, c->topic_setter, c->topicts, c->topic);
+		else
+		{
+			/* Ick, there was no topic */
+			topic_sts(c->name, chansvs.nick != NULL ? chansvs.nick : me.name, ts - 1, "");
+		}
 	}
 }
 
