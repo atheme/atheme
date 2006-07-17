@@ -1,3 +1,13 @@
+nenolod     2006/07/17 18:48:54 UTC	(20060717-5897)
+  Log:
+  - svn:keywords zomg!
+  
+
+  Changes:	Modified:
+  + -		trunk/include/dictionary.h  (Property Modified)
+  + -		trunk/src/dictionary.c  (Property Modified)
+
+
 nenolod     2006/07/17 18:41:43 UTC	(20060717-5895)
   Log:
   - generic dictionary tree engine, will be used for the commandtree rewrite.

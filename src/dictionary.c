@@ -5,7 +5,7 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id: dictionary.c 5897 2006-07-17 18:48:54Z nenolod $
+ * $Id: dictionary.c 5899 2006-07-17 20:09:26Z nenolod $
  */
 
 #include "atheme.h"
@@ -90,6 +90,8 @@ dictionary_elem_t *dictionary_add(dictionary_tree_t *dtree, char *key, void *dat
 
 	i = shash((unsigned char *) key) % dtree->resolution;
 	delem = smalloc(sizeof(dictionary_elem_t));
+	memset(delem, '\0', sizeof(dictionary_elem_t));
+
 	delem->key = sstrdup(key);
 	node_add(data, &delem->node, &dtree->hashv[i]);
 
