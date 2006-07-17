@@ -1,3 +1,15 @@
+nenolod     2006/07/17 18:41:43 UTC	(20060717-5895)
+  Log:
+  - generic dictionary tree engine, will be used for the commandtree rewrite.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/atheme.h (File Modified) 
+  +68 -0	trunk/include/dictionary.h (File Added) 
+  +1 -0		trunk/src/Makefile.in (File Modified) 
+  +135 -0	trunk/src/dictionary.c (File Added) 
+
+
 jilles      2006/07/17 17:05:33 UTC	(20060717-5893)
   Log:
   charybdis: use saslserv, not nickserv, as the sasl agent

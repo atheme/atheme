@@ -5,7 +5,7 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id$
+ * $Id: dictionary.c 5897 2006-07-17 18:48:54Z nenolod $
  */
 
 #include "atheme.h"
