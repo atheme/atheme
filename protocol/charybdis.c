@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 5891 2006-07-17 17:04:50Z jilles $
+ * $Id: charybdis.c 5893 2006-07-17 17:05:33Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 5891 2006-07-17 17:04:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 5893 2006-07-17 17:05:33Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -505,8 +505,14 @@ static void charybdis_sasl_sts(char *target, char mode, char *data)
 	if(s == NULL)
 		return;
 
+	if (saslsvs.me == NULL)
+	{
+		slog(LG_ERROR, "charybdis_sasl_sts(): saslserv does not exist!");
+		return;
+	}
+
 	sts(":%s ENCAP %s SASL %s %s %c %s", ME, s->name,
-			nicksvs.me->uid,
+			saslsvs.me->uid,
 			target,
 			mode,
 			data);
