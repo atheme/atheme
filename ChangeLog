@@ -1,3 +1,21 @@
+jilles      2006/07/18 10:35:50 UTC	(20060718-5901)
+  Log:
+  Add TOPICLOCK flag, causes ChanServ to revert topic
+  changes by users without +t flag and servers.
+  TOPICLOCK requires KEEPTOPIC (otherwise topic would
+  be lost after every services restart, etc); enabling
+  TOPICLOCK enables KEEPTOPIC also, disabling KEEPTOPIC
+  disables TOPICLOCK also.
+  
+
+  Changes:	Modified:
+  +15 -0	trunk/help/cservice/set_topiclock (File Added) 
+  +1 -0		trunk/include/account.h (File Modified) 
+  +8 -0		trunk/modules/chanserv/info.c (File Modified) 
+  +30 -1	trunk/modules/chanserv/main.c (File Modified) 
+  +68 -1	trunk/modules/chanserv/set.c (File Modified) 
+
+
 nenolod     2006/07/17 20:09:26 UTC	(20060717-5899)
   Log:
   - always use zero'd memory when initializing elements. (can we get an smalloc0?)

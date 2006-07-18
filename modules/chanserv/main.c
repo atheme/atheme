@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5901 2006-07-18 10:35:50Z jilles $
+ * $Id: main.c 5903 2006-07-18 11:01:09Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5901 2006-07-18 10:35:50Z jilles $",
+	"$Id: main.c 5903 2006-07-18 11:01:09Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -492,10 +492,7 @@ static void cs_topiccheck(hook_channel_topic_check_t *data)
 {
 	mychan_t *mc;
 	metadata_t *md;
-
-	slog(LG_DEBUG, "cs_topiccheck(): called for channel %s user %s",
-			data->c->name,
-			data->u != NULL ? data->u->nick : "<null>");
+	uint32_t access = 0;
 
 	mc = mychan_find(data->c->name);
 	if (mc == NULL)
@@ -503,10 +500,27 @@ static void cs_topiccheck(hook_channel_topic_check_t *data)
 
 	if ((mc->flags & (MC_KEEPTOPIC | MC_TOPICLOCK)) == (MC_KEEPTOPIC | MC_TOPICLOCK))
 	{
-		if (data->u == NULL || !(chanacs_user_flags(mc, data->u) & CA_TOPIC))
+		if (data->u == NULL || !((access = chanacs_user_flags(mc, data->u)) & CA_TOPIC))
 		{
 			/* topic burst or unauthorized user, revert it */
 			data->approved = 1;
+			slog(LG_DEBUG, "cs_topiccheck(): reverting topic change on channel %s by %s",
+					data->c->name,
+					data->u != NULL ? data->u->nick : "<server>");
+
+			if (data->u != NULL && !(mc->mlock_off & CMODE_TOPIC))
+			{
+				/* they do not have access to be opped either,
+				 * deop them and set +t */
+				/* note: channel_mode() takes nicks, not UIDs
+				 * when used with a non-NULL source */
+				if (ircd->uses_halfops && !(access & (CA_OP | CA_AUTOOP | CA_HALFOP | CA_AUTOHALFOP)))
+					channel_mode_va(chansvs.me->me, data->c,
+							3, "+t-oh", data->u->nick, data->u->nick);
+				else if (!ircd->uses_halfops && !(access & (CA_OP | CA_AUTOOP)))
+					channel_mode_va(chansvs.me->me, data->c,
+							2, "+t-o", data->u->nick);
+			}
 		}
 	}
 }
