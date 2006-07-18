@@ -1,0 +1,15 @@
+Help for SET TOPICLOCK:
+
+SET TOPICLOCK causes &nick& to revert
+topic changes by users without the +t flag.
+Topic changes during netsplits or services
+outages will always be reverted.
+
+TOPICLOCK requires KEEPTOPIC and will
+automatically enable it; disabling KEEPTOPIC
+will disable TOPICLOCK also.
+
+Syntax: SET <#channel> TOPICLOCK <on/off>
+
+Example:
+    /msg &nick& SET #foo TOPICLOCK ON

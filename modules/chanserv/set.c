@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: set.c 5901 2006-07-18 10:35:50Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: set.c 5901 2006-07-18 10:35:50Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -41,6 +41,7 @@ void _modinit(module_t *m)
 	help_addentry(cs_helptree, "SET PROPERTY", "help/cservice/set_property", NULL);
 	help_addentry(cs_helptree, "SET STAFFONLY", "help/cservice/set_staffonly", NULL);
 	help_addentry(cs_helptree, "SET KEEPTOPIC", "help/cservice/set_keeptopic", NULL);
+	help_addentry(cs_helptree, "SET TOPICLOCK", "help/cservice/set_topiclock", NULL);
 	help_addentry(cs_helptree, "SET FANTASY", "help/cservice/set_fantasy", NULL);
 }
 
@@ -58,6 +59,7 @@ void _moddeinit()
 	help_delentry(cs_helptree, "SET PROPERTY");
 	help_delentry(cs_helptree, "SET STAFFONLY");
 	help_delentry(cs_helptree, "SET KEEPTOPIC");
+	help_delentry(cs_helptree, "SET TOPICLOCK");
 	help_delentry(cs_helptree, "SET FANTASY");
 }
 
@@ -681,7 +683,7 @@ static void cs_set_keeptopic(char *origin, char *name, char *params)
 
 		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET KEEPTOPIC OFF", mc->name);
 
-                mc->flags &= ~MC_KEEPTOPIC;
+                mc->flags &= ~(MC_KEEPTOPIC | MC_TOPICLOCK);
 
                 notice(chansvs.nick, origin, "The \2KEEPTOPIC\2 flag has been removed for \2%s\2.", mc->name);
 
@@ -691,6 +693,70 @@ static void cs_set_keeptopic(char *origin, char *name, char *params)
         else
         {
                 notice(chansvs.nick, origin, STR_INVALID_PARAMS, "KEEPTOPIC");
+                return;
+        }
+}
+
+static void cs_set_topiclock(char *origin, char *name, char *params)
+{
+	user_t *u = user_find_named(origin);
+	mychan_t *mc;
+
+	if (*name != '#')
+	{
+		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "TOPICLOCK");
+		return;
+	}
+
+	if (!(mc = mychan_find(name)))
+	{
+		notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
+		return;
+	}
+
+	if (!chanacs_user_has_flag(mc, u, CA_SET))
+	{
+		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
+		return;
+	}
+
+	if (!strcasecmp("ON", params))
+	{
+		if (MC_TOPICLOCK & mc->flags)
+                {
+                        notice(chansvs.nick, origin, "The \2TOPICLOCK\2 flag is already set for \2%s\2.", mc->name);
+                        return;
+                }
+
+		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET TOPICLOCK ON", mc->name);
+
+                mc->flags |= MC_KEEPTOPIC | MC_TOPICLOCK;
+
+                notice(chansvs.nick, origin, "The \2TOPICLOCK\2 flag has been set for \2%s\2.", mc->name);
+
+                return;
+        }
+
+        else if (!strcasecmp("OFF", params))
+        {
+                if (!(MC_TOPICLOCK & mc->flags))
+                {
+                        notice(chansvs.nick, origin, "The \2TOPICLOCK\2 flag is not set for \2%s\2.", mc->name);
+                        return;
+                }
+
+		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET TOPICLOCK OFF", mc->name);
+
+                mc->flags &= ~MC_TOPICLOCK;
+
+                notice(chansvs.nick, origin, "The \2TOPICLOCK\2 flag has been removed for \2%s\2.", mc->name);
+
+                return;
+        }
+
+        else
+        {
+                notice(chansvs.nick, origin, STR_INVALID_PARAMS, "TOPICLOCK");
                 return;
         }
 }
@@ -1065,6 +1131,7 @@ struct set_command_ set_commands[] = {
   { "PROPERTY",   AC_NONE,  cs_set_property   },
   { "EMAIL",      AC_NONE,  cs_set_email      },
   { "KEEPTOPIC",  AC_NONE,  cs_set_keeptopic  },
+  { "TOPICLOCK",  AC_NONE,  cs_set_topiclock  },
   { "FANTASY",    AC_NONE,  cs_set_fantasy    },
   { "STAFFONLY",  PRIV_CHAN_ADMIN, cs_set_staffonly  },
   { NULL, 0, NULL }

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INFO functions.
  *
- * $Id: info.c 5870 2006-07-13 14:28:13Z nenolod $
+ * $Id: info.c 5901 2006-07-18 10:35:50Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 5870 2006-07-13 14:28:13Z nenolod $",
+	"$Id: info.c 5901 2006-07-18 10:35:50Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -248,6 +248,14 @@ static void cs_cmd_info(char *origin)
 			strcat(buf, " ");
 
 		strcat(buf, "KEEPTOPIC");
+	}
+
+	if (MC_TOPICLOCK & mc->flags)
+	{
+		if (*buf)
+			strcat(buf, " ");
+
+		strcat(buf, "TOPICLOCK");
 	}
 
 	if (*buf)

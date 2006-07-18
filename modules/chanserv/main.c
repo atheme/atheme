@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5774 2006-07-07 20:54:19Z jilles $
+ * $Id: main.c 5901 2006-07-18 10:35:50Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5774 2006-07-07 20:54:19Z jilles $",
+	"$Id: main.c 5901 2006-07-18 10:35:50Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -21,6 +21,7 @@ static void cs_part(chanuser_t *cu);
 static void cs_register(mychan_t *mc);
 static void cs_newchan(channel_t *c);
 static void cs_keeptopic_topicset(channel_t *c);
+static void cs_topiccheck(hook_channel_topic_check_t *data);
 static void cs_tschange(channel_t *c);
 static void cs_leave_empty(void *unused);
 
@@ -201,12 +202,14 @@ void _modinit(module_t *m)
 	hook_add_event("channel_register");
 	hook_add_event("channel_add");
 	hook_add_event("channel_topic");
+	hook_add_event("channel_can_change_topic");
 	hook_add_event("channel_tschange");
 	hook_add_hook("channel_join", (void (*)(void *)) cs_join);
 	hook_add_hook("channel_part", (void (*)(void *)) cs_part);
 	hook_add_hook("channel_register", (void (*)(void *)) cs_register);
 	hook_add_hook("channel_add", (void (*)(void *)) cs_newchan);
 	hook_add_hook("channel_topic", (void (*)(void *)) cs_keeptopic_topicset);
+	hook_add_hook("channel_can_change_topic", (void (*)(void *)) cs_topiccheck);
 	hook_add_hook("channel_tschange", (void (*)(void *)) cs_tschange);
 	event_add("cs_leave_empty", cs_leave_empty, NULL, 300);
 }
@@ -226,6 +229,7 @@ void _moddeinit(void)
 	hook_del_hook("channel_register", (void (*)(void *)) cs_register);
 	hook_del_hook("channel_add", (void (*)(void *)) cs_newchan);
 	hook_del_hook("channel_topic", (void (*)(void *)) cs_keeptopic_topicset);
+	hook_del_hook("channel_can_change_topic", (void (*)(void *)) cs_topiccheck);
 	hook_del_hook("channel_tschange", (void (*)(void *)) cs_tschange);
 	event_delete(cs_leave_empty, NULL);
 }
@@ -442,7 +446,7 @@ static void cs_register(mychan_t *mc)
 	}
 }
 
-/* Called on set of a topic */
+/* Called on every set of a topic, after updating our internal structures */
 static void cs_keeptopic_topicset(channel_t *c)
 {
 	mychan_t *mc;
@@ -480,6 +484,31 @@ static void cs_keeptopic_topicset(channel_t *c)
 	}
 	else
 		slog(LG_DEBUG, "KeepTopic: topic cleared for %s", c->name);
+}
+
+/* Called when a topic change is received from the network, before altering
+ * our internal structures */
+static void cs_topiccheck(hook_channel_topic_check_t *data)
+{
+	mychan_t *mc;
+	metadata_t *md;
+
+	slog(LG_DEBUG, "cs_topiccheck(): called for channel %s user %s",
+			data->c->name,
+			data->u != NULL ? data->u->nick : "<null>");
+
+	mc = mychan_find(data->c->name);
+	if (mc == NULL)
+		return;
+
+	if ((mc->flags & (MC_KEEPTOPIC | MC_TOPICLOCK)) == (MC_KEEPTOPIC | MC_TOPICLOCK))
+	{
+		if (data->u == NULL || !(chanacs_user_flags(mc, data->u) & CA_TOPIC))
+		{
+			/* topic burst or unauthorized user, revert it */
+			data->approved = 1;
+		}
+	}
 }
 
 /* Called on creation of a channel */
