@@ -54,12 +54,17 @@ void common_ctcp_init(void)
 	dictionary_add(ctcptree, "\001CLIENTINFO\001", ctcp_clientinfo_handler);
 }
 
-void handle_ctcp_common(char *cmd, char *origin, char *svsnick)
+unsigned int handle_ctcp_common(char *cmd, char *origin, char *svsnick)
 {
 	ctcp_handler_t *handler;
 
 	handler = dictionary_retrieve(ctcptree, cmd);
 
 	if (handler != NULL)
+	{
 		(*handler)(cmd, origin, svsnick);
+		return 1;
+	}
+
+	return 0;
 }

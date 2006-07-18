@@ -1,3 +1,14 @@
+nenolod     2006/07/18 13:50:34 UTC	(20060718-5909)
+  Log:
+  - rewrite to use a dictionary tree. this allows modules to add their own CTCP handlers.
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/include/common-ctcp.h (File Modified) 
+  +1 -0		trunk/src/atheme.c (File Modified) 
+  +47 -32	trunk/src/ctcp-common.c (File Modified) 
+
+
 beu         2006/07/18 12:34:50 UTC	(20060718-5907)
   Log:
   - Move common CTCP response code into a new file, "src/ctcp-common.c".
