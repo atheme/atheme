@@ -1,3 +1,19 @@
+jilles      2006/07/18 14:55:02 UTC	(20060718-5917)
+  Log:
+  Ignore unknown CTCPs.
+  
+
+  Changes:	Modified:
+  +4 -1		trunk/modules/chanserv/main.c (File Modified) 
+  +4 -1		trunk/modules/global/main.c (File Modified) 
+  +4 -1		trunk/modules/helpserv/main.c (File Modified) 
+  +4 -1		trunk/modules/memoserv/main.c (File Modified) 
+  +4 -1		trunk/modules/nickserv/main.c (File Modified) 
+  +4 -1		trunk/modules/operserv/main.c (File Modified) 
+  +4 -1		trunk/modules/saslserv/main.c (File Modified) 
+  +4 -1		trunk/modules/userserv/main.c (File Modified) 
+
+
 jilles      2006/07/18 14:47:19 UTC	(20060718-5915)
   Log:
   Change ctcp ping reply to return all words not just

@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 5640 2006-07-02 00:48:37Z jilles $
+ * $Id: node.c 5919 2006-07-18 23:31:46Z jilles $
  */
 
 #include "atheme.h"
@@ -739,6 +739,7 @@ void user_delete(user_t *u)
 				break;
 			}
 		}
+		u->myuser->lastlogin = CURRTIME;
 		u->myuser = NULL;
 	}
 
