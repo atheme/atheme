@@ -1,3 +1,14 @@
+jilles      2006/07/18 14:47:19 UTC	(20060718-5915)
+  Log:
+  Change ctcp ping reply to return all words not just
+  the first one but limit it to 100 characters.
+  Fixes time display in irssi and maybe other clients.
+  
+
+  Changes:	Modified:
+  +6 -4		trunk/src/ctcp-common.c (File Modified) 
+
+
 nenolod     2006/07/18 14:24:09 UTC	(20060718-5913)
   Log:
   - damn GCC thinks we want to call the pointer itself as a function

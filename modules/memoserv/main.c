@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5907 2006-07-18 12:34:50Z beu $
+ * $Id: main.c 5917 2006-07-18 14:55:02Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5907 2006-07-18 12:34:50Z beu $",
+	"$Id: main.c 5917 2006-07-18 14:55:02Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,8 +48,11 @@ static void memoserv(char *origin, uint8_t parc, char *parv[])
 
 	if (!cmd)
 		return;
-	if (*cmd == '\001' && handle_ctcp_common(cmd, origin, memosvs.nick) != 0)
+	if (*cmd == '\001')
+	{
+		handle_ctcp_common(cmd, origin, memosvs.nick);
 		return;
+	}
 
 	/* take the command through the hash table */
 	command_exec(memosvs.me, origin, cmd, &ms_cmdtree);
