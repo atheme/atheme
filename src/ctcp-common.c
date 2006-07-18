@@ -11,8 +11,6 @@
 
 dictionary_tree_t *ctcptree;
 
-typedef void (*ctcp_handler_t)(char *cmd, char *origin, char *svsnick);
-
 void ctcp_ping_handler(char *cmd, char *origin, char *svsnick)
 {
 	char *s;
@@ -56,13 +54,13 @@ void common_ctcp_init(void)
 
 unsigned int handle_ctcp_common(char *cmd, char *origin, char *svsnick)
 {
-	ctcp_handler_t *handler;
+	void (*handler)(char *, char *, char *);
 
 	handler = dictionary_retrieve(ctcptree, cmd);
 
 	if (handler != NULL)
 	{
-		(*handler)(cmd, origin, svsnick);
+		handler(cmd, origin, svsnick);
 		return 1;
 	}
 
