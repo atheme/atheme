@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 5546 2006-06-24 23:08:30Z jilles $
+ * $Id: atheme.c 5909 2006-07-18 13:50:34Z nenolod $
  */
 
 #include "atheme.h"
@@ -215,6 +215,7 @@ int main(int argc, char *argv[])
 	}
 
 	authcookie_init();
+	common_ctcp_init();
 
 	if (!backend_loaded)
 	{

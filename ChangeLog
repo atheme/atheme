@@ -1,3 +1,24 @@
+beu         2006/07/18 12:34:50 UTC	(20060718-5907)
+  Log:
+  - Move common CTCP response code into a new file, "src/ctcp-common.c".
+  - Clean up a little.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/atheme.h (File Modified) 
+  +15 -0	trunk/include/common-ctcp.h (File Added) 
+  +1 -34	trunk/modules/chanserv/main.c (File Modified) 
+  +1 -33	trunk/modules/global/main.c (File Modified) 
+  +1 -38	trunk/modules/helpserv/main.c (File Modified) 
+  +1 -36	trunk/modules/memoserv/main.c (File Modified) 
+  +1 -33	trunk/modules/nickserv/main.c (File Modified) 
+  +1 -34	trunk/modules/operserv/main.c (File Modified) 
+  +4 -34	trunk/modules/saslserv/main.c (File Modified) 
+  +1 -33	trunk/modules/userserv/main.c (File Modified) 
+  +1 -0		trunk/src/Makefile.in (File Modified) 
+  +50 -0	trunk/src/ctcp-common.c (File Added) 
+
+
 jilles      2006/07/18 11:01:09 UTC	(20060718-5903)
   Log:
   TopicLock: if the unauthorized user does not have +o/O

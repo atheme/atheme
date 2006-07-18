@@ -10,6 +10,7 @@
 #ifndef COMMON_CTCP_H
 #define COMMON_CTCP_H
 
-E uint8_t handle_ctcp_common(char *, const char *, const char *);
+E void common_ctcp_init(void);
+E void handle_ctcp_common(char *, char *, char *);
 
 #endif
