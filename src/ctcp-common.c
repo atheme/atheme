@@ -15,11 +15,13 @@ void ctcp_ping_handler(char *cmd, char *origin, char *svsnick)
 {
 	char *s;
 
-	if (!(s = strtok(NULL, " ")))
-		s = " 0 ";
+	s = strtok(NULL, "\001");
+	if (s != NULL)
+		strip(s);
+	else
+		s = "pong!";
 
-	strip(s);
-	notice(svsnick, origin, "\001PING %s\001", s);
+	notice(svsnick, origin, "\001PING %.100s\001", s);
 }
 
 void ctcp_version_handler(char *cmd, char *origin, char *svsnick)
