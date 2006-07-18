@@ -1,3 +1,15 @@
+jilles      2006/07/18 11:01:09 UTC	(20060718-5903)
+  Log:
+  TopicLock: if the unauthorized user does not have +o/O
+  (+o/O/h/H) either and cmode +t is not locked off, deop
+  (deop and dehalfop) them and set +t, so as to prevent
+  further topic changes.
+  
+
+  Changes:	Modified:
+  +19 -5	trunk/modules/chanserv/main.c (File Modified) 
+
+
 jilles      2006/07/18 10:35:50 UTC	(20060718-5901)
   Log:
   Add TOPICLOCK flag, causes ChanServ to revert topic

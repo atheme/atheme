@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5718 2006-07-04 06:10:05Z gxti $
+ * $Id: main.c 5907 2006-07-18 12:34:50Z beu $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5718 2006-07-04 06:10:05Z gxti $",
+	"$Id: main.c 5907 2006-07-18 12:34:50Z beu $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -56,42 +56,12 @@ static void saslserv(char *origin, uint8_t parc, char *parv[])
 
 	if (!cmd)
 		return;
-
-	/* ctcp? case-sensitive as per rfc */
-	if (!strcmp(cmd, "\001PING"))
-	{
-		if (!(s = strtok(NULL, " ")))
-			s = " 0 ";
-
-		strip(s);
-		notice(saslsvs.nick, origin, "\001PING %s\001", s);
-		return;
-	}
-	else if (!strcmp(cmd, "\001VERSION\001"))
-	{
-		notice(saslsvs.nick, origin,
-		       "\001VERSION atheme-%s. %s %s %s%s%s%s%s%s%s%s%s TS5ow\001",
-		       version, revision, me.name,
-		       (match_mapping) ? "A" : "",
-		       (me.loglevel & LG_DEBUG) ? "d" : "",
-		       (me.auth) ? "e" : "",
-		       (config_options.flood_msgs) ? "F" : "",
-		       (config_options.leave_chans) ? "l" : "", (config_options.join_chans) ? "j" : "", (!match_mapping) ? "R" : "", (config_options.raw) ? "r" : "", (runflags & RF_LIVE) ? "n" : "");
-
-		return;
-	}
-	else if (!strcmp(cmd, "\001CLIENTINFO\001"))
-	{
-		/* easter eggs are mandatory these days */
-		notice(saslsvs.nick, origin, "\001CLIENTINFO LILITH\001");
-		return;
-	}
-
-	/* ctcps we don't care about are ignored */
-	else if (*cmd == '\001')
+	if (*cmd == '\001' && handle_ctcp_common(cmd, origin, opersvs.nick) != 0)
 		return;
 
-	notice(saslsvs.nick, origin, "This service exists to identify connecting clients to the network. It has no public interface.");
+	notice(saslsvs.nick, origin, "This service exists to identify "
+			"connecting clients to the network. It has no "
+			"public interface.");
 }
 
 static void saslserv_config_ready(void *unused)

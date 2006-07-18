@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 4559 2006-01-10 12:04:41Z jilles $
+ * $Id: main.c 5907 2006-07-18 12:34:50Z beu $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"helpserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 4559 2006-01-10 12:04:41Z jilles $",
+	"$Id: main.c 5907 2006-07-18 12:34:50Z beu $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -46,44 +46,7 @@ static void helpserv(char *origin, uint8_t parc, char *parv[])
 
 	if (!cmd)
 		return;
-
-	/* ctcp? case-sensitive as per rfc */
-	if (!strcmp(cmd, "\001PING"))
-	{
-		if (!(s = strtok(NULL, " ")))
-			s = " 0 ";
-
-		strip(s);
-		notice(helpsvs.nick, origin, "\001PING %s\001", s);
-		return;
-	}
-	else if (!strcmp(cmd, "\001VERSION\001"))
-	{
-		notice(helpsvs.nick, origin,
-		       "\001VERSION atheme-%s. %s %s %s%s%s%s%s%s%s%s%s TS5ow\001",
-		       version, revision, me.name,
-		       (match_mapping) ? "A" : "",
-		       (me.loglevel & LG_DEBUG) ? "d" : "",
-		       (me.auth) ? "e" : "",
-		       (config_options.flood_msgs) ? "F" : "",
-		       (config_options.leave_chans) ? "l" : "",
-		       (config_options.join_chans) ? "j" : "",
-		       (config_options.leave_chans) ? "l" : "", 
-		       (config_options.join_chans) ? "j" : "", 
-		       (!match_mapping) ? "R" : "", 
-		       (config_options.raw) ? "r" : "", 
-		       (runflags & RF_LIVE) ? "n" : "");
-
-		return;
-	}
-	else if (!strcmp(cmd, "\001KRALN\001"))
-	{
-		notice(helpsvs.nick,origin,
-			"\001KRALN No one can help you now... \001");
-	}
-
-	/* ctcps we don't care about are ignored */
-	else if (*cmd == '\001')
+	if (*cmd == '\001' && handle_ctcp_common(cmd, origin, helpsvs.nick) != 0)
 		return;
 
 	/* take the command through the hash table */

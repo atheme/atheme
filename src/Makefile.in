@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 5895 2006-07-17 18:41:43Z nenolod $
+# $Id: Makefile.in 5907 2006-07-18 12:34:50Z beu $
 #
 
 CC		= @CC@
@@ -39,6 +39,7 @@ BASE_SRCS =		\
 	base64.c	\
 	cmode.c		\
 	commandtree.c	\
+	ctcp-common.c	\
 	conf.c		\
 	confparse.c	\
 	crypto.c	\
