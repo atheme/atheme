@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 5874 2006-07-13 15:29:56Z pippijn $
+ * $Id: account.c 5921 2006-07-20 09:48:14Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 5874 2006-07-13 15:29:56Z pippijn $",
+	"$Id: account.c 5921 2006-07-20 09:48:14Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -25,16 +25,16 @@ boolean_t using_nickserv = FALSE;
  *       account to register, password, email.
  *
  * XML outputs:
- *       fault 1 - account already exists, please try again
- *       fault 2 - password != account, try again
- *       fault 3 - invalid email address
- *       fault 4 - not enough parameters
- *       fault 5 - user is on IRC (would be unfair to claim ownership)
- *       fault 6 - too many accounts associated with this email
- *       fault 7 - invalid account name
- *       fault 8 - invalid password
- *       fault 9 - sending email failed
- *       default - success message
+ *       fault 1  - not enough parameters
+ *       fault 2  - invalid account name
+ *       fault 2  - invalid password
+ *       fault 2  - password != account, try again
+ *       fault 2  - invalid email address
+ *       fault 6  - user is on IRC (would be unfair to claim ownership)
+ *       fault 6  - too many accounts associated with this email
+ *       fault 8  - account already exists, please try again
+ *       fault 11 - sending email failed
+ *       default  - success message
  *
  * Side Effects:
  *       an account is registered in the system
@@ -50,13 +50,13 @@ static int account_register(void *conn, int parc, char *parv[])
 
 	if (parc < 3)
 	{
-		xmlrpc_generic_error(4, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
 
 	if (using_nickserv == TRUE && user_find_named(parv[0]))
 	{
-		xmlrpc_generic_error(5, "A user matching this account is already on IRC.");
+		xmlrpc_generic_error(6, "A user matching this account is already on IRC.");
 		return 0;
 	}
 
@@ -78,7 +78,7 @@ static int account_register(void *conn, int parc, char *parv[])
 			|| strchr(parv[0], '!') || strchr(parv[0], '#') || strchr(parv[0], ',')
 			|| !(strlen(parv[0]) <= (NICKLEN - 1)) || IsDigit(parv[0][0]) || (parv[0][0] == '-'))
 		{
-			xmlrpc_generic_error(6, "The account name is invalid.");
+			xmlrpc_generic_error(2, "The account name is invalid.");
 			return 0;
 		}
 	}
@@ -86,7 +86,7 @@ static int account_register(void *conn, int parc, char *parv[])
 	{
 		if (strchr(parv[0], ' ') || strchr(parv[0], '\n') || strchr(parv[0], '\r'))
 		{
-			xmlrpc_generic_error(6, "The account name is invalid.");
+			xmlrpc_generic_error(2, "The account name is invalid.");
 			return 0;
 		}
 	}
@@ -100,7 +100,7 @@ static int account_register(void *conn, int parc, char *parv[])
 	if (strchr(parv[1], ' ') || strchr(parv[1], '\n') || strchr(parv[1], '\r')
 		|| !(strlen(parv[1]) <= (NICKLEN - 1)))
 	{
-		xmlrpc_generic_error(7, "The password is invalid.");
+		xmlrpc_generic_error(2, "The password is invalid.");
 		return 0;
 	}
 
@@ -108,13 +108,13 @@ static int account_register(void *conn, int parc, char *parv[])
 	if (strchr(parv[2], ' ') || strchr(parv[2], '\n') || strchr(parv[2], '\r')
 		|| !validemail(parv[2]) || !(strlen(parv[2]) <= (EMAILLEN - 1)))
 	{
-		xmlrpc_generic_error(3, "The e-mail address is invalid.");
+		xmlrpc_generic_error(2, "The e-mail address is invalid.");
 		return 0;
 	}
 
 	if ((mu = myuser_find(parv[0])) != NULL)
 	{
-		xmlrpc_generic_error(1, "The account is already registered.");
+		xmlrpc_generic_error(8, "The account is already registered.");
 		return 0;
 	}
 
@@ -131,7 +131,7 @@ static int account_register(void *conn, int parc, char *parv[])
 
 	if (tcnt >= me.maxusers)
 	{
-		xmlrpc_generic_error(6, "Too many accounts are associated with this e-mail address.");
+		xmlrpc_generic_error(9, "Too many accounts are associated with this e-mail address.");
 		return 0;
 	}
 
@@ -149,7 +149,7 @@ static int account_register(void *conn, int parc, char *parv[])
 		key = gen_pw(12);
 		if (!sendemail(using_nickserv ? nicksvs.me->me : usersvs.me->me, EMAIL_REGISTER, mu, key))
 		{
-			xmlrpc_generic_error(9, "Sending email failed.");
+			xmlrpc_generic_error(10, "Sending email failed.");
 			myuser_delete(mu);
 			free(key);
 			return 0;
@@ -179,12 +179,12 @@ static int account_register(void *conn, int parc, char *parv[])
  *       authcookie, account name, requested operation, key
  *
  * XML outputs:
- *       fault 1 - the account is not registered
- *       fault 2 - the operation has already been verified
- *       fault 3 - invalid verification key for this operation
- *       fault 4 - insufficient parameters
- *       fault 5 - invalid operation requested
- *       fault 6 - invalid authcookie
+ *       fault 1 - insufficient parameters
+ *       fault 2 - invalid operation requested
+ *       fault 3 - the account is not registered
+ *       fault 4 - the operation has already been verified
+ *       fault 5 - invalid verification key for this operation
+ *       fault 5 - invalid authcookie
  *       default - success
  *
  * Side Effects:
@@ -198,20 +198,20 @@ static int account_verify(void *conn, int parc, char *parv[])
 
 	if (parc < 4)
 	{
-		xmlrpc_generic_error(4, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
 
 	if (!(mu = myuser_find(parv[1])))
 	{
-		xmlrpc_generic_error(1, "The account is not registered.");
+		xmlrpc_generic_error(3, "The account is not registered.");
 		return 0;
 	}
 
 	/* avoid information leaks */
 	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
-		xmlrpc_generic_error(6, "Authcookie validation failed.");
+		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
@@ -219,7 +219,7 @@ static int account_verify(void *conn, int parc, char *parv[])
 	{
 		if (!(mu->flags & MU_WAITAUTH) || !(md = metadata_find(mu, METADATA_USER, "private:verify:register:key")))
 		{
-			xmlrpc_generic_error(2, "The operation has already been verified.");
+			xmlrpc_generic_error(4, "The operation has already been verified.");
 			return 0;
 		}
 
@@ -240,14 +240,14 @@ static int account_verify(void *conn, int parc, char *parv[])
 
 		snoop("REGISTER:VF: \2%s\2 via xmlrpc", mu->email);
 		logcommand_external(using_nickserv ? nicksvs.me : usersvs.me, "xmlrpc", conn, mu, CMDLOG_SET, "failed VERIFY REGISTER (invalid key)");
-		xmlrpc_generic_error(3, "Invalid key for this operation.");
+		xmlrpc_generic_error(5, "Invalid key for this operation.");
 		return 0;
 	}
 	else if (!strcasecmp(parv[2], "EMAILCHG"))
 	{
 		if (!(md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:key")))
 		{
-			xmlrpc_generic_error(2, "The operation has already been verified.");
+			xmlrpc_generic_error(4, "The operation has already been verified.");
 			return 0;
 		}
 
@@ -272,13 +272,13 @@ static int account_verify(void *conn, int parc, char *parv[])
 
 		snoop("REGISTER:VF: \2%s\2 via xmlrpc", mu->email);
 		logcommand_external(using_nickserv ? nicksvs.me : usersvs.me, "xmlrpc", conn, mu, CMDLOG_SET, "failed VERIFY EMAILCHG (invalid key)");
-		xmlrpc_generic_error(3, "Invalid key for this operation.");
+		xmlrpc_generic_error(5, "Invalid key for this operation.");
 
 		return 0;
 	}
 	else
 	{
-		xmlrpc_generic_error(5, "Invalid verification operation requested.");
+		xmlrpc_generic_error(2, "Invalid verification operation requested.");
 		return 0;
 	}
 
@@ -292,9 +292,9 @@ static int account_verify(void *conn, int parc, char *parv[])
  *       account name and password
  *
  * XML Outputs:
- *       fault 1 - account is not registered
- *       fault 2 - invalid username and password
- *       fault 4 - insufficient parameters
+ *       fault 1 - insufficient parameters
+ *       fault 3 - account is not registered
+ *       fault 5 - invalid username and password
  *       fault 6 - account is frozen
  *       default - success (authcookie)
  *
@@ -310,13 +310,13 @@ static int do_login(void *conn, int parc, char *parv[])
 
 	if (parc < 2)
 	{
-		xmlrpc_generic_error(4, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
 
 	if (!(mu = myuser_find(parv[0])))
 	{
-		xmlrpc_generic_error(1, "The account is not registered.");
+		xmlrpc_generic_error(3, "The account is not registered.");
 		return 0;
 	}
 
@@ -330,7 +330,7 @@ static int do_login(void *conn, int parc, char *parv[])
 	if (!verify_password(mu, parv[1]))
 	{
 		logcommand_external(using_nickserv ? nicksvs.me : usersvs.me, "xmlrpc", conn, NULL, CMDLOG_LOGIN, "failed LOGIN to %s (bad password)", mu->name);
-		xmlrpc_generic_error(2, "The password is not valid for this account.");
+		xmlrpc_generic_error(5, "The password is not valid for this account.");
 		return 0;
 	}
 
@@ -353,10 +353,9 @@ static int do_login(void *conn, int parc, char *parv[])
  *       authcookie, and account name.
  *
  * XML outputs:
- *       fault 1 - validation failed
- *       fault 2 - unknown authcookie
+ *       fault 1 - insufficient parameters
  *       fault 3 - unknown user
- *       fault 4 - insufficient parameters
+ *       fault 5 - validation failed
  *       default - success message
  *
  * Side Effects:
@@ -370,7 +369,7 @@ static int do_logout(void *conn, int parc, char *parv[])
 
         if (parc < 2)
         {
-                xmlrpc_generic_error(4, "Insufficient parameters.");
+                xmlrpc_generic_error(1, "Insufficient parameters.");
                 return 0;
         }
 
@@ -380,20 +379,15 @@ static int do_logout(void *conn, int parc, char *parv[])
                 return 0;
         }
 
-	if ((ac = authcookie_find(parv[0], mu)) == NULL)
-	{
-		xmlrpc_generic_error(2, "Unknown authcookie.");
-		return 0;
-	}
-
         if (authcookie_validate(parv[0], mu) == FALSE)
         {
-                xmlrpc_generic_error(1, "Invalid authcookie for this account.");
+                xmlrpc_generic_error(5, "Invalid authcookie for this account.");
                 return 0;
         }
 
 	logcommand_external(using_nickserv ? nicksvs.me : usersvs.me, "xmlrpc", conn, mu, CMDLOG_LOGIN, "LOGOUT");
 
+        ac = authcookie_find(parv[0], mu);
         authcookie_destroy(ac);
 
         xmlrpc_string(buf, "You are now logged out.");
@@ -409,11 +403,11 @@ static int do_logout(void *conn, int parc, char *parv[])
  *       authcookie, account name, key, value
  *
  * XML outputs:
- *       fault 1 - validation failed
- *       fault 2 - unknown account
- *       fault 4 - insufficient parameters
- *       fault 5 - invalid parameters
- *       fault 6 - too many entries
+ *       fault 1 - insufficient parameters
+ *       fault 2 - invalid parameters
+ *       fault 3 - unknown account
+ *       fault 5 - validation failed
+ *       fault 9 - too many entries
  *       default - success message
  *
  * Side Effects:
@@ -426,19 +420,19 @@ static int do_metadata_set(void *conn, int parc, char *parv[])
 
 	if (parc < 4)
 	{
-		xmlrpc_generic_error(4, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
 
 	if ((mu = myuser_find(parv[1])) == NULL)
 	{
-		xmlrpc_generic_error(2, "Unknown account.");
+		xmlrpc_generic_error(3, "Unknown account.");
 		return 0;
 	}
 
 	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
-		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
@@ -446,13 +440,13 @@ static int do_metadata_set(void *conn, int parc, char *parv[])
 		|| strchr(parv[2], '\r') || strchr(parv[2], '\n') || strchr(parv[2], ' ')
 		|| strchr(parv[3], '\r') || strchr(parv[3], '\n') || strchr(parv[3], ' '))
 	{
-		xmlrpc_generic_error(5, "Invalid parameters.");
+		xmlrpc_generic_error(2, "Invalid parameters.");
 		return 0;
 	}
 
 	if (mu->metadata.count >= me.mdlimit)
 	{
-		xmlrpc_generic_error(6, "Metadata table full.");
+		xmlrpc_generic_error(9, "Metadata table full.");
 		return 0;
 	}
 
@@ -472,11 +466,11 @@ static int do_metadata_set(void *conn, int parc, char *parv[])
  *       authcookie, account name, key
  *
  * XML outputs:
- *       fault 1 - validation failed
- *       fault 2 - unknown account
- *       fault 4 - insufficient parameters
- *       fault 5 - invalid parameters
- *       fault 6 - key never existed
+ *       fault 5 - validation failed
+ *       fault 3 - unknown account
+ *       fault 1 - insufficient parameters
+ *       fault 2 - invalid parameters
+ *       fault 7 - key never existed
  *       default - success message
  *
  * Side Effects:
@@ -489,19 +483,19 @@ static int do_metadata_delete(void *conn, int parc, char *parv[])
 
 	if (parc < 3)
 	{
-		xmlrpc_generic_error(4, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
 
 	if ((mu = myuser_find(parv[1])) == NULL)
 	{
-		xmlrpc_generic_error(2, "Unknown account.");
+		xmlrpc_generic_error(3, "Unknown account.");
 		return 0;
 	}
 
 	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
-		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
@@ -509,13 +503,13 @@ static int do_metadata_delete(void *conn, int parc, char *parv[])
 	if (strchr(parv[2], ':') || (strlen(parv[2]) > 32)
 		|| strchr(parv[2], '\r') || strchr(parv[2], '\n') || strchr(parv[2], ' '))
 	{
-		xmlrpc_generic_error(5, "Invalid parameters.");
+		xmlrpc_generic_error(2, "Invalid parameters.");
 		return 0;
 	}
 
 	if (!metadata_find(mu, METADATA_USER, parv[2]))
 	{
-		xmlrpc_generic_error(6, "Key does not exist.");
+		xmlrpc_generic_error(7, "Key does not exist.");
 		return 0;
 	}
 
@@ -535,10 +529,10 @@ static int do_metadata_delete(void *conn, int parc, char *parv[])
  *       account name, key
  *
  * XML outputs:
- *       fault 1 - unknown account
- *       fault 2 - insufficient parameters
- *       fault 3 - invalid parameters
- *       fault 4 - key doesn't exist
+ *       fault 1 - insufficient parameters
+ *       fault 2 - invalid parameters
+ *       fault 3 - unknown account
+ *       fault 7 - key doesn't exist
  *       default - value
  *
  * Side Effects:
@@ -552,27 +546,27 @@ static int do_metadata_get(void *conn, int parc, char *parv[])
 
 	if (parc < 2)
 	{
-		xmlrpc_generic_error(2, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
 
 	if (!(mu = myuser_find(parv[0])))
 	{
-		xmlrpc_generic_error(1, "Unknown account.");
+		xmlrpc_generic_error(3, "Unknown account.");
 		return 0;
 	}
 
 	if ((strlen(parv[1]) > 32)
 		|| strchr(parv[1], '\r') || strchr(parv[1], '\n') || strchr(parv[1], ' '))
 	{
-		xmlrpc_generic_error(3, "Invalid parameters.");
+		xmlrpc_generic_error(2, "Invalid parameters.");
 		return 0;
 	}
 
 	/* if private, pretend it doesn't exist */
 	if (!(md = metadata_find(mu, METADATA_USER, parv[1])) || md->private)
 	{
-		xmlrpc_generic_error(4, "Key does not exist.");
+		xmlrpc_generic_error(7, "Key does not exist.");
 		return 0;
 	}
 
@@ -590,10 +584,10 @@ static int do_metadata_get(void *conn, int parc, char *parv[])
  *       authcookie, account name, [vhost]
  *
  * XML outputs:
- *       fault 1 - validation failed
- *       fault 2 - unknown account
- *       fault 4 - insufficient parameters
- *       fault 5 - invalid parameters
+ *       fault 1 - insufficient parameters
+ *       fault 2 - invalid parameters
+ *       fault 3 - unknown account
+ *       fault 5 - validation failed
  *       default - success message
  *
  * Side Effects:
@@ -606,19 +600,19 @@ static int do_set_vanity_host(void *conn, int parc, char *parv[])
 
 	if (parc < 2)
 	{
-		xmlrpc_generic_error(4, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
 
 	if ((mu = myuser_find(parv[1])) == NULL)
 	{
-		xmlrpc_generic_error(2, "Unknown account.");
+		xmlrpc_generic_error(3, "Unknown account.");
 		return 0;
 	}
 
 	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
-		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
@@ -629,7 +623,7 @@ static int do_set_vanity_host(void *conn, int parc, char *parv[])
 			strchr(parv[2], '?') || strchr(parv[2], '*') ||
 			strlen(parv[2]) >= HOSTLEN)
 		{
-			xmlrpc_generic_error(5, "Invalid parameters.");
+			xmlrpc_generic_error(2, "Invalid parameters.");
 			return 0;
 		}
 		/* XXX more checks here, perhaps as a configurable regexp? */
@@ -654,9 +648,9 @@ static int do_set_vanity_host(void *conn, int parc, char *parv[])
  *       authcookie, account name, new password
  *
  * XML outputs:
- *       fault 1 - validation failed
- *       fault 2 - unknown account
- *       fault 4 - insufficient parameters
+ *       fault 1 - insufficient parameters
+ *       fault 3 - unknown account
+ *       fault 5 - validation failed
  *       default - success message
  *
  * Side Effects:
@@ -669,19 +663,19 @@ static int do_set_password(void *conn, int parc, char *parv[])
 
 	if (parc < 3)
 	{
-		xmlrpc_generic_error(4, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
 
 	if ((mu = myuser_find(parv[1])) == NULL)
 	{
-		xmlrpc_generic_error(2, "Unknown account.");
+		xmlrpc_generic_error(3, "Unknown account.");
 		return 0;
 	}
 
 	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
-		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 

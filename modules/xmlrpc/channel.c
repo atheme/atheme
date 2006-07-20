@@ -4,7 +4,7 @@
  *
  * XMLRPC channel management functions.
  *
- * $Id: channel.c 5161 2006-05-01 17:09:39Z jilles $
+ * $Id: channel.c 5921 2006-07-20 09:48:14Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/channel", FALSE, _modinit, _moddeinit,
-	"$Id: channel.c 5161 2006-05-01 17:09:39Z jilles $",
+	"$Id: channel.c 5921 2006-07-20 09:48:14Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -23,13 +23,13 @@ DECLARE_MODULE_V1
  *       authcookie, account name, channel name
  *
  * XML outputs:
- *       fault 1 - validation failed
- *       fault 2 - unknown account
- *       fault 3 - bad parameters
- *       fault 4 - insufficient parameters
- *       fault 5 - channel is already registered
+ *       fault 1 - insufficient parameters
+ *       fault 2 - bad parameters
+ *       fault 3 - unknown account
+ *       fault 5 - validation failed
  *       fault 6 - channel is on IRC (would be unfair to claim ownership)
- *       fault 7 - too many channels registered to this account
+ *       fault 8 - channel is already registered
+ *       fault 9 - too many channels registered to this account
  *       default - success message
  *
  * Side Effects:
@@ -47,26 +47,26 @@ static int channel_register(void *conn, int parc, char *parv[])
 
 	if (parc < 3)
 	{
-		xmlrpc_generic_error(4, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
 
 	if (!(mu = myuser_find(parv[1])))
 	{
-		xmlrpc_generic_error(2, "Unknown account.");
+		xmlrpc_generic_error(3, "Unknown account.");
 		return 0;
 	}
 
 	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
-		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
 	if ((parv[2][0] != '#') || strchr(parv[2], ',') || strchr(parv[2], ' ')
 		|| strchr(parv[2], '\r') || strchr(parv[2], '\n'))
 	{
-		xmlrpc_generic_error(3, "The channel name is invalid.");
+		xmlrpc_generic_error(2, "The channel name is invalid.");
 		return 0;
 	}
 
@@ -78,7 +78,7 @@ static int channel_register(void *conn, int parc, char *parv[])
 
 	if (mychan_find(parv[2]))
 	{
-		xmlrpc_generic_error(5, "The channel is already registered.");
+		xmlrpc_generic_error(8, "The channel is already registered.");
 		return 0;
 	}
 
@@ -95,7 +95,7 @@ static int channel_register(void *conn, int parc, char *parv[])
 
 	if (tcnt >= me.maxchans)
 	{
-		xmlrpc_generic_error(7, "Too many channels are associated with this account.");
+		xmlrpc_generic_error(9, "Too many channels are associated with this account.");
 		return 0;
 	}
 
@@ -128,13 +128,13 @@ static int channel_register(void *conn, int parc, char *parv[])
  *       authcookie, account name, channel name, key, value
  *
  * XML outputs:
- *       fault 1 - validation failed
- *       fault 2 - unknown account
- *       fault 4 - insufficient parameters
- *       fault 5 - unknown channel
+ *       fault 1 - insufficient parameters
+ *       fault 2 - bad parameters
+ *       fault 3 - unknown account
+ *       fault 4 - unknown channel
+ *       fault 5 - validation failed
  *       fault 6 - no access
- *       fault 7 - bad parameters
- *       fault 8 - table full
+ *       fault 9 - table full
  *       default - success message
  *
  * Side Effects:
@@ -148,25 +148,25 @@ static int do_metadata_set(void *conn, int parc, char *parv[])
 
 	if (parc < 5)
 	{
-		xmlrpc_generic_error(4, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
 
 	if (!(mu = myuser_find(parv[1])))
 	{
-		xmlrpc_generic_error(2, "Unknown account.");
+		xmlrpc_generic_error(3, "Unknown account.");
 		return 0;
 	}
 
 	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
-		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
 	if (!(mc = mychan_find(parv[2])))
 	{
-		xmlrpc_generic_error(5, "Unknown channel.");
+		xmlrpc_generic_error(4, "Unknown channel.");
 		return 0;
 	}
 
@@ -181,13 +181,13 @@ static int do_metadata_set(void *conn, int parc, char *parv[])
 		|| strchr(parv[3], '\r') || strchr(parv[3], '\n') || strchr(parv[3], ' ')
 		|| strchr(parv[4], '\r') || strchr(parv[4], '\n') || strchr(parv[4], ' '))
 	{
-		xmlrpc_generic_error(7, "Bad parameters.");
+		xmlrpc_generic_error(2, "Bad parameters.");
 		return 0;
 	}
 
 	if (mc->metadata.count >= me.mdlimit)
 	{
-		xmlrpc_generic_error(8, "Metadata table full.");
+		xmlrpc_generic_error(9, "Metadata table full.");
 		return 0;
 	}
 
@@ -207,13 +207,13 @@ static int do_metadata_set(void *conn, int parc, char *parv[])
  *       authcookie, account name, channel name, key
  *
  * XML outputs:
- *       fault 1 - validation failed
- *       fault 2 - unknown account
- *       fault 4 - insufficient parameters
- *       fault 5 - unknown channel
+ *       fault 1 - insufficient parameters
+ *       fault 2 - bad parameters
+ *       fault 3 - unknown account
+ *       fault 4 - unknown channel
+ *       fault 5 - validation failed
  *       fault 6 - no access
- *       fault 7 - bad parameters
- *       fault 8 - key never existed
+ *       fault 7 - key never existed
  *       default - success message
  *
  * Side Effects:
@@ -227,25 +227,25 @@ static int do_metadata_delete(void *conn, int parc, char *parv[])
 
 	if (parc < 4)
 	{
-		xmlrpc_generic_error(4, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
 
 	if (!(mu = myuser_find(parv[1])))
 	{
-		xmlrpc_generic_error(2, "Unknown account.");
+		xmlrpc_generic_error(3, "Unknown account.");
 		return 0;
 	}
 
 	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
-		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
 	if (!(mc = mychan_find(parv[2])))
 	{
-		xmlrpc_generic_error(5, "Unknown channel.");
+		xmlrpc_generic_error(4, "Unknown channel.");
 		return 0;
 	}
 
@@ -258,13 +258,13 @@ static int do_metadata_delete(void *conn, int parc, char *parv[])
 	if (strchr(parv[3], ':') || (strlen(parv[3]) > 32)
 		|| strchr(parv[3], '\r') || strchr(parv[3], '\n') || strchr(parv[3], ' '))
 	{
-		xmlrpc_generic_error(7, "Bad parameters.");
+		xmlrpc_generic_error(2, "Bad parameters.");
 		return 0;
 	}
 
 	if (!metadata_find(mc, METADATA_CHANNEL, parv[3]))
 	{
-		xmlrpc_generic_error(8, "Key does not exist.");
+		xmlrpc_generic_error(7, "Key does not exist.");
 		return 0;
 	}
 
@@ -284,10 +284,10 @@ static int do_metadata_delete(void *conn, int parc, char *parv[])
  *       channel name, key
  *
  * XML outputs:
- *       fault 1 - unknown channel
- *       fault 2 - insufficient parameters
- *       fault 3 - invalid parameters
- *       fault 4 - key doesn't exist
+ *       fault 1 - insufficient parameters
+ *       fault 2 - invalid parameters
+ *       fault 4 - unknown channel
+ *       fault 7 - key doesn't exist
  *       default - value
  *
  * Side Effects:
@@ -301,27 +301,27 @@ static int do_metadata_get(void *conn, int parc, char *parv[])
 
 	if (parc < 2)
 	{
-		xmlrpc_generic_error(2, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		xmlrpc_generic_error(1, "Unknown channel.");
+		xmlrpc_generic_error(4, "Unknown channel.");
 		return 0;
 	}
 
 	if ((strlen(parv[1]) > 32)
 		|| strchr(parv[1], '\r') || strchr(parv[1], '\n') || strchr(parv[1], ' '))
 	{
-		xmlrpc_generic_error(3, "Invalid parameters.");
+		xmlrpc_generic_error(2, "Invalid parameters.");
 		return 0;
 	}
 
 	/* if private, pretend it doesn't exist */
 	if (!(md = metadata_find(mc, METADATA_CHANNEL, parv[1])) || md->private)
 	{
-		xmlrpc_generic_error(4, "Key does not exist.");
+		xmlrpc_generic_error(7, "Key does not exist.");
 		return 0;
 	}
 
@@ -339,12 +339,12 @@ static int do_metadata_get(void *conn, int parc, char *parv[])
  *       authcookie, account name, channel name, topic
  *
  * XML outputs:
- *       fault 1 - validation failed
- *       fault 2 - unknown account
- *       fault 4 - insufficient parameters
- *       fault 5 - unknown channel
+ *       fault 1 - insufficient parameters
+ *       fault 2 - bad parameters
+ *       fault 3 - unknown account
+ *       fault 4 - unknown channel
+ *       fault 5 - validation failed
  *       fault 6 - no access
- *       fault 7 - bad parameters
  *       default - success message
  *
  * Side Effects:
@@ -360,25 +360,25 @@ static int do_topic_set(void *conn, int parc, char *parv[])
  
 	if (parc < 4)
 	{
-		xmlrpc_generic_error(4, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
  
 	if (!(mu = myuser_find(parv[1])))
 	{
-		xmlrpc_generic_error(2, "Unknown account.");
+		xmlrpc_generic_error(3, "Unknown account.");
 		return 0;
 	}
  
 	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
-		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
  
 	if (!(mc = mychan_find(parv[2])))
 	{
-		xmlrpc_generic_error(5, "Unknown channel.");
+		xmlrpc_generic_error(4, "Unknown channel.");
 		return 0;
 	}
 
@@ -390,7 +390,7 @@ static int do_topic_set(void *conn, int parc, char *parv[])
  
 	if (strlen(parv[3]) > 300 || strchr(parv[3], '\r') || strchr(parv[3], '\n'))
 	{
-		xmlrpc_generic_error(7, "Bad parameters.");
+		xmlrpc_generic_error(2, "Bad parameters.");
 		return 0;
 	}
 
@@ -414,12 +414,12 @@ static int do_topic_set(void *conn, int parc, char *parv[])
  *       authcookie, account name, channel name, topic
  *
  * XML outputs:
- *       fault 1 - validation failed
- *       fault 2 - unknown account
- *       fault 4 - insufficient parameters
- *       fault 5 - unknown channel
+ *       fault 1 - insufficient parameters
+ *       fault 2 - bad parameters
+ *       fault 3 - unknown account
+ *       fault 4 - unknown channel
+ *       fault 5 - validation failed
  *       fault 6 - no access
- *       fault 7 - bad parameters
  *       default - success message
  *
  * Side Effects:
@@ -435,25 +435,25 @@ static int do_topic_append(void *conn, int parc, char *parv[])
  
 	if (parc < 4)
 	{
-		xmlrpc_generic_error(4, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
  
 	if (!(mu = myuser_find(parv[1])))
 	{
-		xmlrpc_generic_error(2, "Unknown account.");
+		xmlrpc_generic_error(3, "Unknown account.");
 		return 0;
 	}
  
 	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
-		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
  
 	if (!(mc = mychan_find(parv[2])))
 	{
-		xmlrpc_generic_error(5, "Unknown channel.");
+		xmlrpc_generic_error(4, "Unknown channel.");
 		return 0;
 	}
 
@@ -477,7 +477,7 @@ static int do_topic_append(void *conn, int parc, char *parv[])
 
 	if (strlen(topicbuf) > 300 || strchr(topicbuf, '\r') || strchr(topicbuf, '\n'))
 	{
-		xmlrpc_generic_error(7, "Bad parameters.");
+		xmlrpc_generic_error(2, "Bad parameters.");
 		return 0;
 	}
 
@@ -498,10 +498,10 @@ static int do_topic_append(void *conn, int parc, char *parv[])
  *       authcookie, account name, channel name
  *
  * XML outputs:
- *       fault 1 - validation failed
- *       fault 2 - unknown account
- *       fault 4 - insufficient parameters
- *       fault 5 - unknown channel
+ *       fault 1 - insufficient parameters
+ *       fault 3 - unknown account
+ *       fault 4 - unknown channel
+ *       fault 5 - validation failed
  *       default - value (string starting with '+')
  *
  * Side Effects:
@@ -516,25 +516,25 @@ static int do_access_get(void *conn, int parc, char *parv[])
 
 	if (parc < 3)
 	{
-		xmlrpc_generic_error(4, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
 
 	if (!(mu = myuser_find(parv[1])))
 	{
-		xmlrpc_generic_error(2, "Unknown account.");
+		xmlrpc_generic_error(3, "Unknown account.");
 		return 0;
 	}
 
 	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
-		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
  
 	if (!(mc = mychan_find(parv[2])))
 	{
-		xmlrpc_generic_error(5, "Unknown channel.");
+		xmlrpc_generic_error(4, "Unknown channel.");
 		return 0;
 	}
 

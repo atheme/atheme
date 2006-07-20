@@ -1,3 +1,12 @@
+jilles      2006/07/18 23:31:46 UTC	(20060718-5919)
+  Log:
+  Update lastlogin time of the account when a logged in user quits.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/src/node.c (File Modified) 
+
+
 jilles      2006/07/18 14:55:02 UTC	(20060718-5917)
   Log:
   Ignore unknown CTCPs.

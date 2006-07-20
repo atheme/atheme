@@ -3,7 +3,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/memo", FALSE, _modinit, _moddeinit,
-	"$Id: memo.c revno date pippijn $",
+	"$Id$",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -14,19 +14,19 @@ DECLARE_MODULE_V1
  *       authcookie, account name, target name, memo text
  *
  * XML outputs:
- *       fault 1 - validation failed
- *       fault 2 - sender account does not exist
- *       fault 3 - bad parameters
- *       fault 4 - insufficient parameters
- *       fault 5 - target account doesn't exist
- *       fault 6 - account not verified
- *       fault 7 - target is sender
- *       fault 8 - target denies memos
- *       fault 9 - memo text too long
- *       fault 10 - sender is on ignore list of target
- *       fault 11 - memo flood
- *       fault 12 - target inbox full
- *       default - success message
+ *       fault 1  - insufficient parameters
+ *       fault 2  - bad parameters
+ *       fault 2  - target is sender
+ *       fault 2  - memo text too long
+ *       fault 3  - sender account does not exist
+ *       fault 4  - target account doesn't exist
+ *       fault 5  - validation failed
+ *       fault 6  - target denies memos
+ *       fault 6  - sender is on ignore list of target
+ *       fault 9  - memo flood
+ *       fault 9  - target inbox full
+ *       fault 11  - account not verified
+ *       default  - success message
  *
  * Side Effects:
  *       a memo is sent to a user
@@ -45,59 +45,59 @@ static int memo_send(void *conn, int parc, char *parv[])
 
 	if (parc < 4)
 	{
-		xmlrpc_generic_error(4, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
 
 	if (!(mysender = myuser_find(parv[1])))
 	{
-		xmlrpc_generic_error(2, "Sending account nonexistent.");
+		xmlrpc_generic_error(3, "Sending account nonexistent.");
 		return 0;
 	}
 
 	if (!(mytarget = myuser_find(parv[2])))
 	{
-		xmlrpc_generic_error(5, "Target account nonexistent.");
+		xmlrpc_generic_error(4, "Target account nonexistent.");
 		return 0;
 	}
 
 	if (authcookie_validate(parv[0], mysender) == FALSE)
 	{
-		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
 	if (mysender->flags & MU_WAITAUTH)
 	{       
-		xmlrpc_generic_error(6, "Email address not verified.");
+		xmlrpc_generic_error(11, "Email address not verified.");
 		return 0;
 	}
 
 	/* Check whether target is not sender */
 	if (mytarget == mysender)
 	{       
-		xmlrpc_generic_error(7, "Target is sender.");
+		xmlrpc_generic_error(2, "Target is sender.");
 		return 0;
 	}
 
 	/* Check for user setting "no memos" */
 	if (mytarget->flags & MU_NOMEMO)
 	{       
-		xmlrpc_generic_error(8, "Target does not wish to receive memos.");
+		xmlrpc_generic_error(6, "Target does not wish to receive memos.");
 		return 0;
 	}
 
 	/* Check for memo text length */
 	if (strlen(m) >= MEMOLEN)
 	{       
-		xmlrpc_generic_error(9, "Memo text too long.");
+		xmlrpc_generic_error(2, "Memo text too long.");
 		return 0;
 	}
 
 	/* Check whether target inbox is full */
 	if (mytarget->memos.count >= me.mdlimit)
 	{       
-		xmlrpc_generic_error(12, "Inbox is full.");
+		xmlrpc_generic_error(9, "Inbox is full.");
 		return 0;
 	}
 
@@ -106,7 +106,7 @@ static int memo_send(void *conn, int parc, char *parv[])
 		mysender->memo_ratelimit_num = 0;
 	if (mysender->memo_ratelimit_num > MEMO_MAX_NUM)
 	{       
-		xmlrpc_generic_error(11, "Memo flood.");
+		xmlrpc_generic_error(9, "Memo flood.");
 		return 0;
 	}		  
 	mysender->memo_ratelimit_num++; 
@@ -118,7 +118,7 @@ static int memo_send(void *conn, int parc, char *parv[])
 		if (!strcasecmp((char *)n->data, mysender->name))
 		{
 			logcommand_external(memosvs.me, "xmlrpc", conn, mysender, CMDLOG_SET, "failed SEND to %s (on ignore list)", mytarget->name);
-			xmlrpc_generic_error(10, "Sender is on ignore list.");
+			xmlrpc_generic_error(6, "Sender is on ignore list.");
 			return 0;
 		}
 	}
@@ -152,19 +152,18 @@ static int memo_send(void *conn, int parc, char *parv[])
  *       authcookie, account name, target name, memo id
  *
  * XML outputs:
- *       fault 1 - validation failed
- *       fault 2 - sender account does not exist
- *       fault 3 - bad parameters
- *       fault 4 - insufficient parameters
- *       fault 5 - target account doesn't exist
- *       fault 6 - account not verified
- *       fault 7 - target is sender
- *       fault 8 - target denies memos
- *       fault 9 - memo text too long
- *       fault 10 - sender is on ignore list of target
- *       fault 11 - memo flood
- *       fault 12 - target inbox full
- *       default - success message
+ *       fault 1  - insufficient parameters
+ *       fault 2  - bad parameters
+ *       fault 2  - target is sender
+ *       fault 3  - sender account does not exist
+ *       fault 4  - target account doesn't exist
+ *       fault 5  - validation failed
+ *       fault 6  - target denies memos
+ *       fault 6  - sender is on ignore list of target
+ *       fault 9  - memo flood
+ *       fault 9  - target inbox full
+ *       fault 11 - account not verified
+ *       default  - success message
  *
  * Side Effects:
  *       a memo is sent to a user
@@ -184,59 +183,59 @@ static int memo_forward(void *conn, int parc, char *parv[])
 
 	if (parc < 4)
 	{
-		xmlrpc_generic_error(4, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
 
 	if (!(mysender = myuser_find(parv[1])))
 	{
-		xmlrpc_generic_error(2, "Sending account nonexistent.");
+		xmlrpc_generic_error(3, "Sending account nonexistent.");
 		return 0;
 	}
 
 	if (!(mytarget = myuser_find(parv[2])))
 	{
-		xmlrpc_generic_error(5, "Target account nonexistent.");
+		xmlrpc_generic_error(4, "Target account nonexistent.");
 		return 0;
 	}
 
 	if (authcookie_validate(parv[0], mysender) == FALSE)
 	{
-		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
 	if (mysender->flags & MU_WAITAUTH)
 	{       
-		xmlrpc_generic_error(6, "Email address not verified.");
+		xmlrpc_generic_error(11, "Email address not verified.");
 		return 0;
 	}
 
 	/* Check whether target is not sender */
 	if (mytarget == mysender)
 	{       
-		xmlrpc_generic_error(7, "Target is sender.");
+		xmlrpc_generic_error(2, "Target is sender.");
 		return 0;
 	}
 
 	/* Check for user setting "no memos" */
 	if (mytarget->flags & MU_NOMEMO)
 	{       
-		xmlrpc_generic_error(8, "Target does not wish to receive memos.");
+		xmlrpc_generic_error(6, "Target does not wish to receive memos.");
 		return 0;
 	}
 
 	/* Check whether target inbox is full */
 	if (mytarget->memos.count >= me.mdlimit)
 	{       
-		xmlrpc_generic_error(12, "Inbox is full.");
+		xmlrpc_generic_error(9, "Inbox is full.");
 		return 0;
 	}
 
 	/* Sanity check on memo ID */
 	if (!memonum || memonum > mysender->memos.count)
 	{
-	 	xmlrpc_generic_error(3, "Invalid memo ID.");
+	 	xmlrpc_generic_error(7, "Invalid memo ID.");
 		return 0;
 	}
 
@@ -245,7 +244,7 @@ static int memo_forward(void *conn, int parc, char *parv[])
 		mysender->memo_ratelimit_num = 0;
 	if (mysender->memo_ratelimit_num > MEMO_MAX_NUM)
 	{       
-		xmlrpc_generic_error(11, "Memo flood.");
+		xmlrpc_generic_error(9, "Memo flood.");
 		return 0;
 	}		  
 	mysender->memo_ratelimit_num++; 
@@ -257,7 +256,7 @@ static int memo_forward(void *conn, int parc, char *parv[])
 		if (!strcasecmp((char *)n->data, mysender->name))
 		{
 			logcommand_external(memosvs.me, "xmlrpc", conn, mysender, CMDLOG_SET, "failed SEND to %s (on ignore list)", mytarget->name);
-			xmlrpc_generic_error(10, "Sender is on ignore list.");
+			xmlrpc_generic_error(6, "Sender is on ignore list.");
 			return 0;
 		}
 	}
@@ -304,11 +303,10 @@ static int memo_forward(void *conn, int parc, char *parv[])
  *       authcookie, account name, memo id
  *
  * XML outputs:
- *       fault 1 - validation failed
- *       fault 2 - account does not exist
- *       fault 3 - memo id nonexistent
- *       fault 4 - insufficient parameters
- *       fault 5 - no memos
+ *       fault 1 - insufficient parameters
+ *       fault 3 - account does not exist
+ *       fault 4 - memo id nonexistent
+ *       fault 5 - validation failed
  *       default - success message
  *
  * Side Effects:
@@ -328,26 +326,28 @@ static int memo_delete(void *conn, int parc, char *parv[])
 
 	if (parc < 3)
 	{
-		xmlrpc_generic_error(4, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
 
 	if (!(myuser = myuser_find(parv[1])))
 	{
-		xmlrpc_generic_error(2, "Account nonexistent.");
+		xmlrpc_generic_error(3, "Account nonexistent.");
 		return 0;
 	}
 
 	if (authcookie_validate(parv[0], myuser) == FALSE)
 	{
-		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
 	/* Check whether user has memos */
 	if (!myuser->memos.count)
 	{       
-		xmlrpc_generic_error(5, "No memos to delete.");
+        	/* If not, send back an empty string */
+		xmlrpc_string(buf, "");
+		xmlrpc_send(1, buf);
 		return 0;
 	}
 
@@ -361,7 +361,7 @@ static int memo_delete(void *conn, int parc, char *parv[])
 		/* Sanity checks */
 		if (!memonum || memonum > myuser->memos.count)
 		{       
-			xmlrpc_generic_error(3, "Memo ID invalid.");
+			xmlrpc_generic_error(4, "Memo ID invalid.");
 			return 0;
 		}
 	}
@@ -401,10 +401,9 @@ static int memo_delete(void *conn, int parc, char *parv[])
  *       authcookie, account name, list boolean (optional)
  *
  * XML outputs:
- *       fault 1 - validation failed
- *       fault 2 - account does not exist
- *       fault 3 - insufficient parameters
- *       fault 4 - no memos
+ *       fault 1 - insufficient parameters
+ *       fault 3 - account does not exist
+ *       fault 5 - validation failed
  *       default - success message
  *
  * Side Effects:
@@ -426,19 +425,19 @@ static int memo_list(void *conn, int parc, char *parv[])
 
 	if (parc < 2)
 	{
-		xmlrpc_generic_error(3, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
 
 	if (!(myuser = myuser_find(parv[1])))
 	{
-		xmlrpc_generic_error(2, "Account nonexistent.");
+		xmlrpc_generic_error(3, "Account nonexistent.");
 		return 0;
 	}
 
 	if (authcookie_validate(parv[0], myuser) == FALSE)
 	{
-		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
@@ -453,7 +452,9 @@ static int memo_list(void *conn, int parc, char *parv[])
 	/* Check whether user has memos */
 	if (!myuser->memos.count)
 	{       
-		xmlrpc_generic_error(4, "No memos.");
+        	/* If not, send back an empty string */
+		xmlrpc_string(buf, "");
+		xmlrpc_send(1, buf);
 		return 0;
 	}
 
@@ -484,10 +485,10 @@ static int memo_list(void *conn, int parc, char *parv[])
  *       authcookie, account name, memo id
  *
  * XML outputs:
- *       fault 1 - validation failed
- *       fault 2 - account does not exist
- *       fault 3 - insufficient parameters
+ *       fault 1 - insufficient parameters
+ *       fault 3 - account does not exist
  *       fault 4 - invalid memo id
+ *       fault 5 - validation failed
  *       default - success message
  *
  * Side Effects:
@@ -509,19 +510,19 @@ static int memo_read(void *conn, int parc, char *parv[])
 
 	if (parc < 3)
 	{
-		xmlrpc_generic_error(3, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
 
 	if (!(myuser = myuser_find(parv[1])))
 	{
-		xmlrpc_generic_error(2, "Account nonexistent.");
+		xmlrpc_generic_error(4, "Account nonexistent.");
 		return 0;
 	}
 
 	if (authcookie_validate(parv[0], myuser) == FALSE)
 	{
-		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
@@ -596,13 +597,13 @@ static int memo_read(void *conn, int parc, char *parv[])
  *       authcookie, account name, target
  *
  * XML outputs:
- *       fault 1 - validation failed
- *       fault 2 - account does not exist
- *       fault 3 - insufficient parameters
- *       fault 4 - trying to ignore oneself
- *       fault 5 - target does not exist
- *       fault 6 - ignore list full
- *       fault 7 - user already ignored
+ *       fault 1 - insufficient parameters
+ *       fault 2 - trying to ignore oneself
+ *       fault 2 - user already ignored
+ *       fault 3 - account does not exist
+ *       fault 4 - target does not exist
+ *       fault 5 - validation failed
+ *       fault 9 - ignore list full
  *       default - success message
  *
  * Side Effects:
@@ -621,40 +622,40 @@ static int memo_ignore_add(void *conn, int parc, char *parv[])
 
 	if (parc < 3)
 	{
-		xmlrpc_generic_error(3, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
 
 	if (!(myuser = myuser_find(parv[1])))
 	{
-		xmlrpc_generic_error(2, "Account nonexistent.");
+		xmlrpc_generic_error(3, "Account nonexistent.");
 		return 0;
 	}
 
 	if (authcookie_validate(parv[0], myuser) == FALSE)
 	{
-		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
 	/* Sanity check (target is user) */
 	if (!strcasecmp(parv[2], myuser->name))
 	{       
-		xmlrpc_generic_error(4, "You can't ignore yourself.");
+		xmlrpc_generic_error(2, "You can't ignore yourself.");
 		return 0;
 	}
 	
 	/* Check whether target exists */
 	if (!(mytarget = myuser_find_ext(parv[2])))
 	{       
-		xmlrpc_generic_error(5, "Target user nonexistent.");
+		xmlrpc_generic_error(4, "Target user nonexistent.");
 		return 0;
 	}
 	
 	/* Ignore list is full */
 	if (myuser->memo_ignores.count >= MAXMSIGNORES)
 	{       
-		xmlrpc_generic_error(6, "Ignore list full.");
+		xmlrpc_generic_error(9, "Ignore list full.");
 		return 0;
 	}
 
@@ -665,7 +666,7 @@ static int memo_ignore_add(void *conn, int parc, char *parv[])
 		/* Check whether the user is already being ignored */
 		if (!strcasecmp(tmpbuf, parv[2]))
 		{       
-			xmlrpc_generic_error(7, "That user is already being ignored.");
+			xmlrpc_generic_error(2, "That user is already being ignored.");
 			return 0;
 		}
 	}
@@ -689,10 +690,10 @@ static int memo_ignore_add(void *conn, int parc, char *parv[])
  *       authcookie, account name, target
  *
  * XML outputs:
- *       fault 1 - validation failed
- *       fault 2 - account does not exist
- *       fault 3 - insufficient parameters
+ *       fault 1 - insufficient parameters
+ *       fault 3 - account does not exist
  *       fault 4 - user not being ignored
+ *       fault 5 - validation failed
  *       default - success message
  *
  * Side Effects:
@@ -711,19 +712,19 @@ static int memo_ignore_delete(void *conn, int parc, char *parv[])
 
 	if (parc < 3)
 	{
-		xmlrpc_generic_error(3, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
 
 	if (!(myuser = myuser_find(parv[1])))
 	{
-		xmlrpc_generic_error(2, "Account nonexistent.");
+		xmlrpc_generic_error(3, "Account nonexistent.");
 		return 0;
 	}
 
 	if (authcookie_validate(parv[0], myuser) == FALSE)
 	{
-		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
@@ -757,10 +758,9 @@ static int memo_ignore_delete(void *conn, int parc, char *parv[])
  *       authcookie, account name
  *
  * XML outputs:
- *       fault 1 - validation failed
- *       fault 2 - account does not exist
- *       fault 3 - insufficient parameters
- *       fault 4 - list was already cleared
+ *       fault 1 - insufficient parameters
+ *       fault 3 - account does not exist
+ *       fault 5 - validation failed
  *       default - success message
  *
  * Side Effects:
@@ -778,25 +778,28 @@ static int memo_ignore_clear(void *conn, int parc, char *parv[])
 
 	if (parc < 3)
 	{
-		xmlrpc_generic_error(3, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
 
 	if (!(myuser = myuser_find(parv[1])))
 	{
-		xmlrpc_generic_error(2, "Account nonexistent.");
+		xmlrpc_generic_error(3, "Account nonexistent.");
 		return 0;
 	}
 
 	if (authcookie_validate(parv[0], myuser) == FALSE)
 	{
-		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
+        /* Check whether the user has ignores */
 	if (LIST_LENGTH(&myuser->memo_ignores) == 0)
 	{
-		xmlrpc_generic_error(4, "No users on the ignore list.");
+        	/* If not, send back an empty string */
+		xmlrpc_string(buf, "");
+		xmlrpc_send(1, buf);
 		return 0;
 	}
 
@@ -820,14 +823,13 @@ static int memo_ignore_clear(void *conn, int parc, char *parv[])
  *       authcookie, account name
  *
  * XML outputs:
- *       fault 1 - validation failed
- *       fault 2 - account does not exist
- *       fault 3 - insufficient parameters
- *       fault 4 - list is empty
+ *       fault 1 - insufficient parameters
+ *       fault 3 - account does not exist
+ *       fault 5 - validation failed
  *       default - success message
  *
  * Side Effects:
- *       unignores all users
+ *       none
  */
 static int memo_ignore_list(void *conn, int parc, char *parv[])
 {
@@ -843,19 +845,19 @@ static int memo_ignore_list(void *conn, int parc, char *parv[])
 
 	if (parc < 3)
 	{
-		xmlrpc_generic_error(3, "Insufficient parameters.");
+		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
 
 	if (!(myuser = myuser_find(parv[1])))
 	{
-		xmlrpc_generic_error(2, "Account nonexistent.");
+		xmlrpc_generic_error(3, "Account nonexistent.");
 		return 0;
 	}
 
 	if (authcookie_validate(parv[0], myuser) == FALSE)
 	{
-		xmlrpc_generic_error(1, "Authcookie validation failed.");
+		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
@@ -867,8 +869,13 @@ static int memo_ignore_list(void *conn, int parc, char *parv[])
 		i++;
 	}
 
+       	/* If user has no ignores, send back an empty string */
 	if (i == 1)
-		xmlrpc_generic_error(4, "Ignore list empty.");
+        {
+		xmlrpc_string(buf, "");
+		xmlrpc_send(1, buf);
+		return 0;
+        }
 
 	xmlrpc_string(buf, sendbuf);
 	xmlrpc_send(1, buf);
