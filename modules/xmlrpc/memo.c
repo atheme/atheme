@@ -1,9 +1,18 @@
+/*
+ * Copyright (c) 2005 Atheme Development Group
+ * Rights to this code are as documented in doc/LICENSE.
+ *
+ * XMLRPC memo management functions.
+ *
+ * $Id: memo.c 5929 2006-07-20 15:13:02Z pippijn $
+ */
+
 #include "atheme.h"
 
 DECLARE_MODULE_V1
 (
 	"xmlrpc/memo", FALSE, _modinit, _moddeinit,
-	"$Id$",
+	"$Id: memo.c 5929 2006-07-20 15:13:02Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
