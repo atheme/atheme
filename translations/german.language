@@ -1,4 +1,4 @@
-/* $Id: german.language 5876 2006-07-13 15:35:41Z pippijn $ */
+/* $Id: german.language 5927 2006-07-20 15:05:35Z pippijn $ */
 language {
   name = "Deutsch";
   translator = "Pippijn van Steenhoven";
@@ -86,7 +86,7 @@ string "%s is currently online, and you may talk directly, by sending a private 
   translation = "%s ist momentan online und Sie koennen, indem sie ein Privatbericht senden, direkt damit sprechen.";
 };
 string "%s is not in your ignore list." {
-  translation = "%s ist nicht auf Ihrer ignorier Liste.";
+  translation = "%s ist nicht auf Ihrer Ignorierliste.";
 };
 string "%s is not registered." {
   translation = "%s ist nicht registriert.";
@@ -194,13 +194,13 @@ string "Access flag(s) %s in %s" {
   translation = "Zugangsbit(s) %s in %s";
 };
 string "Account %s added to your ignore list." {
-  translation = "Benutzer %s wurde zu Ihrer ignorier Liste hinzugefuegt.";
+  translation = "Benutzer %s wurde zu Ihrer Ignorierliste hinzugefuegt.";
 };
 string "Account %s is already in your ignore list." {
-  translation = "Benutzer %s ist bereits auf Ihrer ignorier Liste.";
+  translation = "Benutzer %s ist bereits auf Ihrer Ignorierliste.";
 };
 string "Account %s removed from ignore list." {
-  translation = "Benutzer %s wurde von Ihrer ignorier Liste geloescht.";
+  translation = "Benutzer %s wurde von Ihrer Ignorierliste geloescht.";
 };
 string "Activity is defined as a user with one of +vhHoOsrRf being on the channel." {
   translation = "Aktivitaet ist definiert als das bestehen eines Benutzers mit einem der +vhHoOsrRf bits in einem Kanal.";
@@ -275,103 +275,103 @@ string "Channel \2%s\2 is not registered." {
   translation = "Kanal \2%s\2 ist nicht registriert.";
 };
 string "Channel \2%s\2 key is: %s" {
-  translation = "Channel \2%s\2 key is: %s";
+  translation = "Schluessel fuer Kanal \2%s\2 ist: %s";
 };
 string "Channel access to \2%s\2 for \2%s\2 unchanged." {
-  translation = "Channel access to \2%s\2 for \2%s\2 unchanged.";
+  translation = "Kanalzugriff zu \2%s\2 fuer \2%s\2 unveraendert.";
 };
 string "Channels matching pattern \2%s\2:" {
-  translation = "Channels matching pattern \2%s\2:";
+  translation = "Kanaele die dem Schema \2%s\2 entsprechen:";
 };
 string "Cleared %s modes on \2%s\2 (%d removed)." {
-  translation = "Cleared %s modes on \2%s\2 (%d removed).";
+  translation = "Modi %s von \2%s\2 geloescht (%d entfernt).";
 };
 string "Cleared users from \2%s\2." {
-  translation = "Cleared users from \2%s\2.";
+  translation = "Benutzer aus \2%s\2 entfernt.";
 };
 string "Could not get help file for \2%s\2." {
-  translation = "Could not get help file for \2%s\2.";
+  translation = "Konnte die Hilfedatei fuer \2%s\2 nicht laden.";
 };
 string "Current Ignore list entries:" {
-  translation = "Current Ignore list entries:";
+  translation = "Momentane Eintraege in der Ignorierliste:";
 };
 string "Deleted vhost for \2%s\2." {
-  translation = "Deleted vhost for \2%s\2.";
+  translation = "vhost fuer \2%s\2 wurde geloescht.";
 };
 string "Email send failed." {
-  translation = "Email send failed.";
+  translation = "Senden einer Email fehlgeschlagen.";
 };
 string "Email: %s%s" {
   translation = "Email: %s%s";
 };
 string "End of Hostmask NOOP list." {
-  translation = "End of Hostmask NOOP list.";
+  translation = "Ende der Hostmask NOOP Liste.";
 };
 string "End of Server NOOP list." {
-  translation = "End of Server NOOP list.";
+  translation = "Ende der Server NOOP Liste.";
 };
 string "End of \2%s\2 FLAGS listing." {
-  translation = "End of \2%s\2 FLAGS listing.";
+  translation = "Ende der Auflistung von \2%s\2 FLAGS.";
 };
 string "End of \2%s\2 TEMPLATE listing." {
-  translation = "End of \2%s\2 TEMPLATE listing.";
+  translation = "Ende der Auflistung von \2%s\2 TEMPLATEs.";
 };
 string "End of \2%s\2 taxonomy." {
-  translation = "End of \2%s\2 taxonomy.";
+  translation = "Ende der \2%s\2 Taxonomie.";
 };
 string "End of network wide template list." {
-  translation = "End of network wide template list.";
+  translation = "Ende der Netzwerkweiten Vorlagenliste.";
 };
 string "End of privileges" {
-  translation = "End of privileges";
+  translation = "Ende der Privilegien";
 };
 string "Enforcers are created when someone uses your" {
-  translation = "Enforcers are created when someone uses your";
+  translation = "Durchsetzer werden erstellt wenn jemand Ihren";
 };
 string "Entry Hostmask                        Adder                 Reason" {
-  translation = "Entry Hostmask                        Adder                 Reason";
+  translation = "Eintrag Hostmask                      Hinzugefuegt von      Grund";
 };
 string "Entry Nickname/Host          Flags" {
-  translation = "Entry Nickname/Host          Flags";
+  translation = "Eintrag Nickname/Host        Bits";
 };
 string "Entry point: %p" {
-  translation = "Entry point: %p";
+  translation = "Eintrittpunkt: %p";
 };
 string "Exit point : %p" {
-  translation = "Exit point : %p";
+  translation = "Austrittspunkt: %p";
 };
 string "External logout is not yet implemented." {
-  translation = "External logout is not yet implemented.";
+  translation = "Externes Abmelden ist noch nicht implementiert.";
 };
 string "FORCEXOP \2%s\2 done (\2%d\2 changes)" {
-  translation = "FORCEXOP \2%s\2 done (\2%d\2 changes)";
+  translation = "FORCEXOP \2%s\2 erledigt (\2%d\2 Aenderungen)";
 };
 string "Fantasy is already disabled on \2%s\2." {
-  translation = "Fantasy is already disabled on \2%s\2.";
+  translation = "Fantasy ist bereits ausgeschaltet in \2%s\2.";
 };
 string "Fantasy is already enabled on \2%s\2." {
-  translation = "Fantasy is already enabled on \2%s\2.";
+  translation = "Fantasy ist bereits eingeschaltet in \2%s\2.";
 };
 string "Flags      : %s" {
-  translation = "Flags      : %s";
+  translation = "Bits       : %s";
 };
 string "Flags \2%s\2 were set on \2%s\2 in \2%s\2." {
-  translation = "Flags \2%s\2 were set on \2%s\2 in \2%s\2.";
+  translation = "Bits \2%s\2 sind auf \2%s\2 in \2%s\2 gesetzt worden.";
 };
 string "Flags for \2%s\2 in \2%s\2 are \2%s\2." {
-  translation = "Flags for \2%s\2 in \2%s\2 are \2%s\2.";
+  translation = "Bits fuer \2%s\2 auf \2%s\2 sind \2%s\2.";
 };
 string "Flags: %s" {
-  translation = "Flags: %s";
+  translation = "Bits: %s";
 };
 string "For a verbose listing of all commands, type:" {
-  translation = "For a verbose listing of all commands, type:";
+  translation = "Fuer eine wortreichere Auflistung aller Befehle, tippen Sie:";
 };
 string "For information on a command, type:" {
-  translation = "For information on a command, type:";
+  translation = "Fuer Informationen zu einem Befehl, tippen Sie:";
 };
 string "For more information on a command, type:" {
-  translation = "For more information on a command, type:";
+  translation = "Fuer mehr Informationen zu einem Befehl, tippen Sie:";
 };
 string "For more information, use \2/msg %s HELP SET \37command\37\2." {
   translation = "For more information, use \2/msg %s HELP SET \37command\37\2.";

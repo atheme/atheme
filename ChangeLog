@@ -1,3 +1,13 @@
+pippijn     2006/07/20 15:03:38 UTC	(20060720-5925)
+  Log:
+  Fixed inconsistency in function definitions. Credits go to maht-atheme at
+  mail.maht0x0r.net for noticing and reporting.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/include/commandtree.h (File Modified) 
+
+
 pippijn     2006/07/20 15:02:18 UTC	(20060720-5923)
   Log:
   Fixed typo recieved->received. Credits go to maht-atheme at mail.maht0x0r.net
