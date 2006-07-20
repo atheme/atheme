@@ -1,3 +1,15 @@
+pippijn     2006/07/20 09:48:14 UTC	(20060720-5921)
+  Log:
+  Reworked XMLRPC fault codes. There are now 11 generic fault codes. This does
+  not mean that the fault text always has to be the same.
+  
+
+  Changes:	Modified:
+  +86 -92	trunk/modules/xmlrpc/account.c (File Modified) 
+  +72 -72	trunk/modules/xmlrpc/channel.c (File Modified) 
+  +117 -110	trunk/modules/xmlrpc/memo.c (File Modified) 
+
+
 jilles      2006/07/18 23:31:46 UTC	(20060718-5919)
   Log:
   Update lastlogin time of the account when a logged in user quits.

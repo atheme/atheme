@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5917 2006-07-18 14:55:02Z jilles $
+ * $Id: main.c 5923 2006-07-20 15:02:18Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5917 2006-07-18 14:55:02Z jilles $",
+	"$Id: main.c 5923 2006-07-20 15:02:18Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -27,7 +27,7 @@ void userserv(char *origin, uint8_t parc, char *parv[])
 
 	if (!origin)
 	{
-		slog(LG_DEBUG, "services(): recieved a request with no origin!");
+		slog(LG_DEBUG, "services(): received a request with no origin!");
 		return;
 	}
 
