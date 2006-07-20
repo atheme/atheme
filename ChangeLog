@@ -1,3 +1,21 @@
+pippijn     2006/07/20 15:02:18 UTC	(20060720-5923)
+  Log:
+  Fixed typo recieved->received. Credits go to maht-atheme at mail.maht0x0r.net
+  for noticing and reporting them.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/atheme.h (File Modified) 
+  +1 -1		trunk/modules/chanserv/main.c (File Modified) 
+  +1 -1		trunk/modules/global/main.c (File Modified) 
+  +1 -1		trunk/modules/helpserv/main.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/main.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/main.c (File Modified) 
+  +1 -1		trunk/modules/operserv/main.c (File Modified) 
+  +1 -1		trunk/modules/saslserv/main.c (File Modified) 
+  +1 -1		trunk/modules/userserv/main.c (File Modified) 
+
+
 pippijn     2006/07/20 09:48:14 UTC	(20060720-5921)
   Log:
   Reworked XMLRPC fault codes. There are now 11 generic fault codes. This does
