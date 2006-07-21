@@ -1,3 +1,13 @@
+pippijn     2006/07/21 08:48:17 UTC	(20060721-5931)
+  Log:
+  Fixed compiler warning related to const correctness.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/extern.h (File Modified) 
+  +1 -1		trunk/src/cmode.c (File Modified) 
+
+
 pippijn     2006/07/20 15:13:02 UTC	(20060720-5929)
   Log:
   Added appropriate header.
