@@ -1,3 +1,12 @@
+pippijn     2006/07/20 15:13:02 UTC	(20060720-5929)
+  Log:
+  Added appropriate header.
+  
+
+  Changes:	Modified:
+  +9 -0		trunk/modules/xmlrpc/memo.c (File Modified) (Property Modified)
+
+
 pippijn     2006/07/20 15:05:35 UTC	(20060720-5927)
   Log:
   Some more German translations.
