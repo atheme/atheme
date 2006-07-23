@@ -1,3 +1,15 @@
+pippijn     2006/07/21 11:45:43 UTC	(20060721-5933)
+  Log:
+  Reverted last change. parv cannot be const because in the end we need to pass
+  a non-const char to channel_mode and server_add. Maybe this can be changed but
+  currently, this is the only fix.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/include/extern.h (File Modified) 
+  +4 -4		trunk/src/cmode.c (File Modified) 
+
+
 pippijn     2006/07/21 08:48:17 UTC	(20060721-5931)
   Log:
   Fixed compiler warning related to const correctness.

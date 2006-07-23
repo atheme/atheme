@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 5891 2006-07-17 17:04:50Z jilles $
+ * $Id: ptasks.c 5937 2006-07-23 22:34:32Z jilles $
  */
 
 #include "atheme.h"
@@ -211,7 +211,7 @@ void handle_whois(user_t *u, char *target)
 		/* channels purposely omitted */
 		numeric_sts(me.name, 312, u->nick, "%s %s :%s", t->nick, t->server->name, t->server->desc);
 		if (is_ircop(t))
-			numeric_sts(me.name, 313, u->nick, "%s :is an IRC Operator", t->nick);
+			numeric_sts(me.name, 313, u->nick, "%s :%s", t->nick, is_internal_client(t) ? "is a Network Service" : "is an IRC Operator");
 		if (t->myuser)
 			numeric_sts(me.name, 330, u->nick, "%s %s :is logged in as", t->nick, t->myuser->name);
 	}
