@@ -5,7 +5,7 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id: dictionary.h 5897 2006-07-17 18:48:54Z nenolod $
+ * $Id: dictionary.h 5941 2006-07-25 20:09:08Z nenolod $
  */
 
 #ifndef _DICTIONARY_H
@@ -43,6 +43,16 @@ E dictionary_tree_t *dictionary_create(int resolution);
  */
 E void dictionary_destroy(dictionary_tree_t *dtree,
 	void (*destroy_cb)(dictionary_elem_t *delem, void *privdata),
+	void *privdata);
+
+/*
+ * dictionary_foreach() iterates all entries in a dtree, and also optionally calls
+ * a defined callback function to use any data attached to it.
+ *
+ * To shortcircuit iteration, return non-zero from the callback function.
+ */
+E void dictionary_foreach(dictionary_tree_t *dtree,
+	int (*foreach_cb)(dictionary_elem_t *delem, void *privdata),
 	void *privdata);
 
 /*

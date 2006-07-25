@@ -1,3 +1,14 @@
+jilles      2006/07/24 16:08:26 UTC	(20060724-5939)
+  Log:
+  chanserv akick help file:
+  - mention that +r flag exempts from being akicked
+  - mention that AKICK DEL does not remove channel bans
+  
+
+  Changes:	Modified:
+  +5 -1		trunk/help/cservice/akick (File Modified) 
+
+
 jilles      2006/07/23 22:34:32 UTC	(20060723-5937)
   Log:
   Send "is a Network Service" for RPL_WHOISOPER on services in a remote whois.

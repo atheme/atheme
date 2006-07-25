@@ -5,7 +5,7 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id: dictionary.c 5899 2006-07-17 20:09:26Z nenolod $
+ * $Id: dictionary.c 5941 2006-07-25 20:09:08Z nenolod $
  */
 
 #include "atheme.h"
@@ -49,6 +49,26 @@ void dictionary_destroy(dictionary_tree_t *dtree,
 
 	free(dtree->hashv);
 	free(dtree);
+}
+
+void dictionary_foreach(dictionary_tree_t *dtree,
+	int (*foreach_cb)(dictionary_elem_t *delem, void *privdata),
+	void *privdata)
+{
+	node_t *n, *tn;
+	int i, ret;
+
+	for (i = 0; i < dtree->resolution, ret == 0; i++)
+	{
+		LIST_FOREACH_SAFE(n, tn, dtree->hashv[i].head)
+		{
+			/* delem_t is a subclass of node_t. */
+			dictionary_elem_t *delem = (dictionary_elem_t *) n;
+
+			if (foreach_cb != NULL)
+				ret = (*foreach_cb)(delem, privdata);
+		}
+	}
 }
 
 dictionary_elem_t *dictionary_find(dictionary_tree_t *dtree, char *key)
