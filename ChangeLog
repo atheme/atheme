@@ -1,3 +1,14 @@
+nenolod     2006/07/25 20:09:08 UTC	(20060725-5941)
+  Log:
+  - add dictionary_foreach() for iterating over all entries in a dtree.
+  If a non-zero value is returned from the callback, then iteration is short-circuited.
+  
+
+  Changes:	Modified:
+  +10 -0	trunk/include/dictionary.h (File Modified) 
+  +20 -0	trunk/src/dictionary.c (File Modified) 
+
+
 jilles      2006/07/24 16:08:26 UTC	(20060724-5939)
   Log:
   chanserv akick help file:

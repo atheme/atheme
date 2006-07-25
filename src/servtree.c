@@ -1,15 +1,15 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Services binary tree manipulation. (add_service, del_service, et al.)
  *
- * $Id: servtree.c 5085 2006-04-14 12:33:34Z jilles $
+ * $Id: servtree.c 5943 2006-07-25 20:28:25Z nenolod $
  */
 
 #include "atheme.h"
 
-list_t services[HASHSIZE];
+dictionary_tree_t *services;
 static BlockHeap *service_heap;
 
 service_t *fcmd_agent = NULL;
@@ -23,6 +23,7 @@ static void dummy_handler(char *origin, uint8_t parc, char **parv)
 void servtree_init(void)
 {
 	service_heap = BlockHeapCreate(sizeof(service_t), 12);
+	services = dictionary_create(32);
 
 	if (!service_heap)
 	{
@@ -70,8 +71,6 @@ service_t *add_service(char *name, char *user, char *host, char *real, void (*ha
 	if (me.numeric && *me.numeric)
 		sptr->uid = sstrdup(uid_get());
 
-	sptr->hash = SHASH((unsigned char *)sptr->name);
-	sptr->node = node_create();
 	sptr->handler = handler;
 	sptr->notice_handler = dummy_handler;
 
@@ -86,14 +85,14 @@ service_t *add_service(char *name, char *user, char *host, char *real, void (*ha
 			join(config_options.chan, name);
 	}
 
-	node_add(sptr, sptr->node, &services[sptr->hash]);
+	dictionary_add(services, sptr->name, sptr);
 
 	return sptr;
 }
 
 void del_service(service_t * sptr)
 {
-	node_del(sptr->node, &services[sptr->hash]);
+	dictionary_delete(services, sptr->name);
 
 	quit_sts(sptr->me, "Service unloaded.");
 	user_delete(sptr->me);
@@ -107,21 +106,6 @@ void del_service(service_t * sptr)
 	free(sptr->uid);
 
 	BlockHeapFree(service_heap, sptr);
-}
-
-static service_t *find_named_service(char *name)
-{
-	node_t *n;
-	service_t *sptr;
-
-	LIST_FOREACH(n, services[SHASH((unsigned char *)name)].head)
-	{
-		sptr = n->data;
-
-		if (!strcasecmp(name, sptr->name))
-			return sptr;
-	}
-	return NULL;
 }
 
 service_t *find_service(char *name)
@@ -140,7 +124,7 @@ service_t *find_service(char *name)
 		p = strchr(name2, '@');
 		if (p != NULL)
 			*p = '\0';
-		sptr = find_named_service(name2);
+		sptr = dictionary_retrieve(services, name);
 		if (sptr != NULL)
 			return sptr;
 		/* XXX not really nice with a 64k hashtable, so don't do
@@ -158,7 +142,7 @@ service_t *find_service(char *name)
 	}
 	else
 	{
-		sptr = find_named_service(name);
+		sptr = dictionary_retrieve(services, name);
 		if (sptr != NULL)
 			return sptr;
 
@@ -167,7 +151,7 @@ service_t *find_service(char *name)
 			/* yuck yuck -- but quite efficient -- jilles */
 			u = user_find(name);
 			if (u != NULL && u->server == me.me)
-				return find_named_service(u->nick);
+				return dictionary_retrieve(services, u->nick);
 		}
 	}
 
