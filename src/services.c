@@ -4,12 +4,12 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 5716 2006-07-04 04:19:46Z gxti $
+ * $Id: services.c 5945 2006-07-25 20:50:58Z nenolod $
  */
 
 #include "atheme.h"
 
-extern list_t services[HASHSIZE];
+extern dictionary_tree_t *services;
 
 #define MAX_BUF 256
 
@@ -111,27 +111,30 @@ void join(char *chan, char *nick)
 	join_sts(c, u, isnew, channel_modes(c, TRUE));
 }
 
-/* bring on the services clients */
+int service_init_cb(dictionary_elem_t *delem, void *privdata)
+{
+	service_t *svs = delem->node.data;
+
+	if (ircd->uses_uid && svs->me->uid[0] == '\0')
+		user_changeuid(svs->me, svs->uid);
+	else if (!ircd->uses_uid && svs->me->uid[0] != '\0')
+		user_changeuid(svs->me, NULL);
+	introduce_nick(svs->name, svs->user, svs->host, svs->real, svs->uid);
+ 
+	return 0;
+}
+
 void services_init(void)
 {
-	node_t *n;
-	uint32_t i;
-	service_t *svs;
+	dictionary_foreach(services, service_init_cb, NULL);
+}
 
-	for (i = 0; i < HASHSIZE; i++)
-	{
-		LIST_FOREACH(n, services[i].head)
-		{
-			svs = n->data;
+int service_join_cb(dictionary_elem_t *delem, void *privdata)
+{
+	char *name = (char *) privdata;
+	service_t *svs = delem->node.data;
 
-			if (ircd->uses_uid && svs->me->uid[0] == '\0')
-				user_changeuid(svs->me, svs->uid);
-			else if (!ircd->uses_uid && svs->me->uid[0] != '\0')
-				user_changeuid(svs->me, NULL);
-			introduce_nick(svs->name, svs->user, svs->host, svs->real, svs->uid);
-			/* we'll join config_options.chan later -- jilles */
-		}
-	}
+	join(name, svs->name);
 }
 
 void joinall(char *name)
@@ -142,14 +145,8 @@ void joinall(char *name)
 
 	if (name == NULL)
 		return;
-	for (i = 0; i < HASHSIZE; i++)
-	{
-		LIST_FOREACH(n, services[i].head)
-		{
-			svs = n->data;
-			join(name, svs->name);
-		}
-	}
+
+	dictionary_foreach(services, service_join_cb, name);
 }
 
 void partall(char *name)
@@ -162,9 +159,9 @@ void partall(char *name)
 	if (name == NULL)
 		return;
 	mc = mychan_find(name);
-	for (i = 0; i < HASHSIZE; i++)
+	for (i = 0; i < 32; i++)
 	{
-		LIST_FOREACH(n, services[i].head)
+		LIST_FOREACH(n, services->hashv[i].head)
 		{
 			svs = n->data;
 			if (svs == chansvs.me && mc != NULL && config_options.join_chans)

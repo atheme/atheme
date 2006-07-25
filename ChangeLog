@@ -1,3 +1,12 @@
+nenolod     2006/07/25 20:28:25 UTC	(20060725-5943)
+  Log:
+  - services are now stored in a dtree
+  
+
+  Changes:	Modified:
+  +8 -24	trunk/src/servtree.c (File Modified) 
+
+
 nenolod     2006/07/25 20:09:08 UTC	(20060725-5941)
   Log:
   - add dictionary_foreach() for iterating over all entries in a dtree.
