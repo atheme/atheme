@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 5891 2006-07-17 17:04:50Z jilles $
+ * $Id: hyperion.c 5947 2006-07-26 11:39:11Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -15,7 +15,7 @@
 #include "atheme.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 5891 2006-07-17 17:04:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 5947 2006-07-26 11:39:11Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -751,6 +751,8 @@ static void m_server(char *origin, uint8_t parc, char *parv[])
 		 */
 		sts(":%s PING %s %s", me.name, me.name, parv[0]);
 	}
+
+	me.recvsvr = TRUE;
 }
 
 static void m_stats(char *origin, uint8_t parc, char *parv[])

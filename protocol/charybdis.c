@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 5893 2006-07-17 17:05:33Z jilles $
+ * $Id: charybdis.c 5947 2006-07-26 11:39:11Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 5893 2006-07-17 17:05:33Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 5947 2006-07-26 11:39:11Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -1052,6 +1052,8 @@ static void m_server(char *origin, uint8_t parc, char *parv[])
 		 */
 		sts(":%s PING %s %s", ME, me.name, parv[0]);
 	}
+
+	me.recvsvr = TRUE;
 }
 
 static void m_sid(char *origin, uint8_t parc, char *parv[])
@@ -1069,6 +1071,8 @@ static void m_sid(char *origin, uint8_t parc, char *parv[])
 		 */
 		sts(":%s PING %s %s", ME, me.name, parv[2]);
 	}
+
+	me.recvsvr = TRUE;
 }
 
 static void m_stats(char *origin, uint8_t parc, char *parv[])

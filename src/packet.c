@@ -4,7 +4,7 @@
  *
  * IRC packet handling.
  *
- * $Id: packet.c 5065 2006-04-14 03:55:44Z w00t $
+ * $Id: packet.c 5947 2006-07-26 11:39:11Z jilles $
  *
  * TODO: Take all the sendq stuff in node.c and put it here.
  * sendq_flush becomes irc_whandler, etc.
@@ -118,6 +118,8 @@ static void irc_handle_connect(void *vptr)
 	{
 		cptr->flags = CF_UPLINK;
 		me.connected = TRUE;
+		/* no SERVER message received */
+		me.recvsvr = FALSE;
 		/* remove any partial line from previous time */
 		irc_packet(NULL);
 

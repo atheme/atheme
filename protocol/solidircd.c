@@ -738,6 +738,8 @@ static void m_server(char *origin, uint8_t parc, char *parv[])
 		 */
 		sts(":%s PING %s %s", me.name, me.name, parv[0]);
 	}
+
+	me.recvsvr = TRUE;
 }
 
 static void m_stats(char *origin, uint8_t parc, char *parv[])

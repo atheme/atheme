@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 5923 2006-07-20 15:02:18Z pippijn $
+ * $Id: atheme.h 5947 2006-07-26 11:39:11Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -108,7 +108,7 @@ struct me
   server_t *me;                 /* pointer to our server struct       */
   boolean_t connected;          /* are we connected?                  */
   boolean_t bursting;           /* are we bursting?                   */
-  boolean_t recvsvr;		/* used by P10: received server peer  */
+  boolean_t recvsvr;		/* received server peer               */
 
   uint16_t maxlogins;           /* maximum logins per username        */
   uint16_t maxusers;            /* maximum usernames from one email   */
