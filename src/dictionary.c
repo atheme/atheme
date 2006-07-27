@@ -5,7 +5,7 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id: dictionary.c 5941 2006-07-25 20:09:08Z nenolod $
+ * $Id: dictionary.c 5949 2006-07-27 19:13:51Z jilles $
  */
 
 #include "atheme.h"
@@ -56,9 +56,9 @@ void dictionary_foreach(dictionary_tree_t *dtree,
 	void *privdata)
 {
 	node_t *n, *tn;
-	int i, ret;
+	int i, ret = 0;
 
-	for (i = 0; i < dtree->resolution, ret == 0; i++)
+	for (i = 0; i < dtree->resolution && ret == 0; i++)
 	{
 		LIST_FOREACH_SAFE(n, tn, dtree->hashv[i].head)
 		{
