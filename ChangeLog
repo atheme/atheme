@@ -1,3 +1,12 @@
+jilles      2006/07/27 19:13:51 UTC	(20060727-5949)
+  Log:
+  Fix dictionary_foreach().
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/src/dictionary.c (File Modified) 
+
+
 jilles      2006/07/26 11:39:11 UTC	(20060726-5947)
   Log:
   Use me.recvsvr for all protocols instead of just P10.

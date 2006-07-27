@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 5784 2006-07-08 22:30:03Z jilles $
+ * $Id: help.c 5951 2006-07-27 22:39:33Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 5784 2006-07-08 22:30:03Z jilles $",
+	"$Id: help.c 5951 2006-07-27 22:39:33Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -156,6 +156,7 @@ static void cs_cmd_help(char *origin)
 		notice(chansvs.nick, origin, "\2EMAIL\2         Sets the channel e-mail address.");
 		notice(chansvs.nick, origin, "\2ENTRYMSG\2      Sets the channel's entry message.");
 		notice(chansvs.nick, origin, "\2KEEPTOPIC\2     Enables topic retention.");
+		notice(chansvs.nick, origin, "\2TOPICLOCK\2     Restricts who can change the topic.");
 		notice(chansvs.nick, origin, "\2PROPERTY\2      Manipulates channel metadata.");
 		notice(chansvs.nick, origin, " ");
 
