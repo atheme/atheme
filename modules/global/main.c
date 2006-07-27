@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5923 2006-07-20 15:02:18Z pippijn $
+ * $Id: main.c 5953 2006-07-27 22:50:39Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"global/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5923 2006-07-20 15:02:18Z pippijn $",
+	"$Id: main.c 5953 2006-07-27 22:50:39Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -246,7 +246,7 @@ void _modinit(module_t *m)
 	if (os_helptree)
 		help_addentry(os_helptree, "GLOBAL", "help/gservice/global", NULL);
 
-	help_addentry(&gs_helptree, "GLOBAL", "help/help", NULL);
+	help_addentry(&gs_helptree, "HELP", "help/help", NULL);
 	help_addentry(&gs_helptree, "GLOBAL", "help/gservice/global", NULL);
 
         command_add(&gs_help, &gs_cmdtree);
