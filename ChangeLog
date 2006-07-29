@@ -1,3 +1,12 @@
+nenolod     2006/07/27 22:50:39 UTC	(20060727-5953)
+  Log:
+  - fix /gs help global
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/global/main.c (File Modified) 
+
+
 jilles      2006/07/27 22:39:33 UTC	(20060727-5951)
   Log:
   Mention TOPICLOCK in /cs help set.
