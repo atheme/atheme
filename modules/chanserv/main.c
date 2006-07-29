@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5923 2006-07-20 15:02:18Z pippijn $
+ * $Id: main.c 5967 2006-07-29 19:49:23Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5923 2006-07-20 15:02:18Z pippijn $",
+	"$Id: main.c 5967 2006-07-29 19:49:23Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -503,11 +503,9 @@ static void cs_newchan(channel_t *c)
 	metadata_t *md;
 	char *setter;
 	char *text;
-#if 0
-	time_t channelts;
-#endif
+	time_t channelts = 0;
 	time_t topicts;
-
+	char str[21];
 
 	if (!(mc = mychan_find(c->name)))
 		return;
@@ -516,10 +514,16 @@ static void cs_newchan(channel_t *c)
 	 * -- jilles */
 	mc->flags |= MC_MLOCK_CHECK;
 
-	if (chansvs.changets && c->ts > mc->registered && mc->registered > 0)
+	md = metadata_find(mc, METADATA_CHANNEL, "private:channelts");
+	if (md != NULL)
+		channelts = atol(md->value);
+	if (channelts == 0)
+		channelts = mc->registered;
+
+	if (chansvs.changets && c->ts > channelts && channelts > 0)
 	{
 		/* Stop the splitrider -- jilles */
-		c->ts = mc->registered;
+		c->ts = channelts;
 		clear_simple_modes(c);
 		c->modes |= CMODE_NOEXT | CMODE_TOPIC;
 		check_modes(mc, FALSE);
@@ -530,26 +534,20 @@ static void cs_newchan(channel_t *c)
 		/* make sure it parts again sometime (empty SJOIN etc) */
 		mc->flags |= MC_INHABIT;
 	}
+	else if (c->ts != channelts)
+	{
+		snprintf(str, sizeof str, "%lu", (unsigned long)c->ts);
+		metadata_add(mc, METADATA_CHANNEL, "private:channelts", str);
+	}
+	else if (!(MC_TOPICLOCK & mc->flags))
+		/* Same channel, let's assume ircd has kept topic.
+		 * However, if topiclock is enabled, we must change it back
+		 * regardless.
+		 * -- jilles */
+		return;
 
 	if (!(MC_KEEPTOPIC & mc->flags))
 		return;
-
-#if 0
-	md = metadata_find(mc, METADATA_CHANNEL, "private:channelts");
-	if (md == NULL)
-		return;
-	channelts = atol(md->value);
-	if (channelts == c->ts)
-	{
-		/* Same channel, let's assume ircd has kept it.
-		 * Probably not a good assumption if the ircd doesn't do
-		 * topic bursting.
-		 * -- jilles
-		 */
-		slog(LG_DEBUG, "Not doing keeptopic for %s because of equal channelTS", c->name);
-		return;
-	}
-#endif
 
 	md = metadata_find(mc, METADATA_CHANNEL, "private:topic:setter");
 	if (md == NULL)
@@ -573,9 +571,14 @@ static void cs_newchan(channel_t *c)
 static void cs_tschange(channel_t *c)
 {
 	mychan_t *mc;
+	char str[21];
 
 	if (!(mc = mychan_find(c->name)))
 		return;
+
+	/* store new TS */
+	snprintf(str, sizeof str, "%lu", (unsigned long)c->ts);
+	metadata_add(mc, METADATA_CHANNEL, "private:channelts", str);
 
 	/* schedule a mode lock check when we know the new modes
 	 * -- jilles */

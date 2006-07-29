@@ -1,3 +1,16 @@
+jilles      2006/07/29 19:42:29 UTC	(20060729-5965)
+  Log:
+  handle_topic_from(): if our uplink is bursting and trying
+  to change the topic on a channel that already has a topic,
+  assume our topic won and ignore the change. This stops
+  some redundant topic changes if topiclock is enabled,
+  which are visible with some ircds such as inspircd.
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/src/ptasks.c (File Modified) 
+
+
 nenolod     2006/07/29 19:13:41 UTC	(20060729-5963)
   Log:
   - src/dictionary.c, include/dictionary.c: add dictionary_search() routine, like dictionary_foreach() but used to search with custom constraints, instead of using the trie-like index.
