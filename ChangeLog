@@ -1,3 +1,14 @@
+jilles      2006/07/29 21:48:48 UTC	(20060729-5975)
+  Log:
+  solidircd:
+  - add motd support
+  - enable Id expansion
+  
+
+  Changes:	Modified:
+  +8 -2		trunk/protocol/solidircd.c (File Modified) (Property Modified)
+
+
 jilles      2006/07/29 21:25:44 UTC	(20060729-5973)
   Log:
   bahamut, solidircd: interpret BURST message and only

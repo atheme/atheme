@@ -4,7 +4,7 @@
  *
  * Services binary tree manipulation. (add_service, del_service, et al.)
  *
- * $Id: servtree.c 5971 2006-07-29 20:39:55Z jilles $
+ * $Id: servtree.c 5977 2006-07-29 22:02:27Z nenolod $
  */
 
 #include "atheme.h"
@@ -108,6 +108,17 @@ void del_service(service_t * sptr)
 	BlockHeapFree(service_heap, sptr);
 }
 
+void *find_service_search_cb(dictionary_elem_t *delem, void *privdata)
+{
+	char *name2 = (char *) privdata;
+	service_t *sptr = (service_t *) delem->node.data;
+
+	if (sptr->me != NULL && !strcasecmp(name2, sptr->user))
+		return sptr;
+
+	return NULL;	
+}
+
 service_t *find_service(char *name)
 {
 	service_t *sptr;
@@ -127,18 +138,9 @@ service_t *find_service(char *name)
 		sptr = dictionary_retrieve(services, name2);
 		if (sptr != NULL)
 			return sptr;
-		/* XXX not really nice with a 64k hashtable, so don't do
-		 * it for now -- jilles */
-#if 0
-		for (i = 0; i < HASHSIZE; i++)
-			LIST_FOREACH(n, services[i].head)
-			{
-				sptr = n->data;
-
-				if (sptr->me && !strcasecmp(name2, sptr->user))
-					return sptr;
-			}
-#endif
+		sptr = dictionary_search(services, find_service_search_cb, name2);
+		if (sptr != NULL)
+			return sptr;
 	}
 	else
 	{
