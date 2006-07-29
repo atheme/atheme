@@ -1,3 +1,15 @@
+nenolod     2006/07/29 19:13:41 UTC	(20060729-5963)
+  Log:
+  - src/dictionary.c, include/dictionary.c: add dictionary_search() routine, like dictionary_foreach() but used to search with custom constraints, instead of using the trie-like index.
+  - include/servtree.h: remove unnecessary entries because those are handled by the dtree they live in now.
+  
+
+  Changes:	Modified:
+  +11 -0	trunk/include/dictionary.h (File Modified) 
+  +0 -2		trunk/include/servtree.h (File Modified) 
+  +23 -0	trunk/src/dictionary.c (File Modified) 
+
+
 w00t        2006/07/29 14:54:28 UTC	(20060729-5961)
   Log:
   - Fix topic_sts() to match inspircd behaviour

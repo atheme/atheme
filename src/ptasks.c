@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 5937 2006-07-23 22:34:32Z jilles $
+ * $Id: ptasks.c 5965 2006-07-29 19:42:29Z jilles $
  */
 
 #include "atheme.h"
@@ -380,6 +380,12 @@ void handle_topic_from(char *source, channel_t *c, char *setter, time_t ts, char
 	hdata.ts = ts;
 	hdata.topic = topic;
 	hdata.approved = 0;
+	if (hdata.s != NULL && hdata.s->uplink == me.me &&
+			!(hdata.s->flags & SF_EOB) && c->topic != NULL)
+		/* Our uplink is trying to change the topic during burst,
+		 * and we have already set a topic. Assume our change won.
+		 * -- jilles */
+		return;
 	if (topic != NULL ? c->topic == NULL || strcmp(topic, c->topic) : c->topic != NULL)
 	{
 		/* Only call the hook if the topic actually changed */
