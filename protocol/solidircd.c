@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for solidircd.
  *
- * $Id: solidircd.c 3841 2005-11-11 11:49:44Z jilles $
+ * $Id: solidircd.c 5975 2006-07-29 21:48:48Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/solidircd.h"
 
-DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 3841 2005-11-11 11:49:44Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 5975 2006-07-29 21:48:48Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -822,6 +822,11 @@ static void m_error(char *origin, uint8_t parc, char *parv[])
 	slog(LG_INFO, "m_error(): error from server: %s", parv[0]);
 }
 
+static void m_motd(char *origin, uint8_t parc, char *parv[])
+{
+	handle_motd(user_find(origin));
+}
+
 static void m_svhost(char *origin, uint8_t parc, char *parv[])
 {
 	user_t *u = user_find(parv[0]);
@@ -890,6 +895,7 @@ void _modinit(module_t * m)
 	pcommand_add("PASS", m_pass);
 	pcommand_add("ERROR", m_error);
 	pcommand_add("TOPIC", m_topic);
+	pcommand_add("MOTD", m_motd);
 	pcommand_add("BURST", m_burst);
 	pcommand_add("SVHOST", m_svhost);
 

@@ -1,3 +1,15 @@
+jilles      2006/07/29 21:25:44 UTC	(20060729-5973)
+  Log:
+  bahamut, solidircd: interpret BURST message and only
+  mark our uplink end of burst when the topic burst
+  is also done.
+  
+
+  Changes:	Modified:
+  +18 -1	trunk/protocol/bahamut.c (File Modified) 
+  +18 -1	trunk/protocol/solidircd.c (File Modified) 
+
+
 jilles      2006/07/29 20:39:55 UTC	(20060729-5971)
   Log:
   Unbreak /msg nick@our.server.name.
