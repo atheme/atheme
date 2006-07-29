@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 5945 2006-07-25 20:50:58Z nenolod $
+ * $Id: services.c 5959 2006-07-29 11:41:34Z jilles $
  */
 
 #include "atheme.h"
@@ -201,6 +201,8 @@ void reintroduce_user(user_t *u)
 			/* XXX resend the bans instead of destroying them? */
 			chanban_clear(c);
 			join_sts(c, u, 1, channel_modes(c, TRUE));
+			if (c->topic != NULL)
+				topic_sts(c->name, c->topic_setter, c->topicts, c->topic);
 #if 0
 			strlcpy(chname, c->name, sizeof chname);
 			chanuser_delete(c, u);
