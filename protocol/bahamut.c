@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: bahamut.c 5947 2006-07-26 11:39:11Z jilles $
+ * $Id: bahamut.c 5973 2006-07-29 21:25:44Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/bahamut.h"
 
-DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 5947 2006-07-26 11:39:11Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 5973 2006-07-29 21:25:44Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -364,7 +364,9 @@ static void m_pong(char *origin, uint8_t parc, char *parv[])
 	s = server_find(parv[0]);
 	if (s == NULL)
 		return;
-	handle_eob(s);
+	/* Postpone EOB for our uplink until topic burst is also done */
+	if (s->uplink != me.me)
+		handle_eob(s);
 
 	if (irccasecmp(me.actual, parv[0]))
 		return;
@@ -372,6 +374,20 @@ static void m_pong(char *origin, uint8_t parc, char *parv[])
 	me.uplinkpong = CURRTIME;
 
 	/* -> :test.projectxero.net PONG test.projectxero.net :shrike.malkier.net */
+}
+
+static void m_burst(char *origin, uint8_t parc, char *parv[])
+{
+	server_t *s;
+
+	/* Ignore "BURST" at start of burst */
+	if (parc != 1)
+		return;
+
+	s = server_find(me.actual);
+	if (s != NULL)
+		handle_eob(s);
+
 	if (me.bursting)
 	{
 #ifdef HAVE_GETTIMEOFDAY
@@ -854,6 +870,7 @@ void _modinit(module_t * m)
 	pcommand_add("ERROR", m_error);
 	pcommand_add("TOPIC", m_topic);
 	pcommand_add("MOTD", m_motd);
+	pcommand_add("BURST", m_burst);
 
 	m->mflags = MODTYPE_CORE;
 
