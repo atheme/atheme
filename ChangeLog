@@ -1,3 +1,13 @@
+nenolod     2006/07/29 22:02:27 UTC	(20060729-5977)
+  Log:
+  - use dictionary_search() to try to find services by their user entry, this is useful for instance, for configs like:
+    general::secure, /msg login@channels.network.org login moo cow
+  
+
+  Changes:	Modified:
+  +14 -12	trunk/src/servtree.c (File Modified) 
+
+
 jilles      2006/07/29 21:48:48 UTC	(20060729-5975)
   Log:
   solidircd:

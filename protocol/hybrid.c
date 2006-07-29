@@ -4,13 +4,13 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 5947 2006-07-26 11:39:11Z jilles $
+ * $Id: hybrid.c 5979 2006-07-29 22:07:53Z jilles $
  */
 
 #include "atheme.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 5947 2006-07-26 11:39:11Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 5979 2006-07-29 22:07:53Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -442,6 +442,12 @@ static void m_tb(char *origin, uint8_t parc, char *parv[])
 		source = server_find(me.actual);
 	if (source == NULL)
 		source = me.me;
+
+	if (c->topic != NULL && c->topicts <= ts)
+	{
+		slog(LG_DEBUG, "m_tb(): ignoring newer topic on %s", c->name);
+		return;
+	}
 
 	handle_topic_from(origin, c, parc > 3 ? parv[2] : source->name, ts, parv[parc - 1]);
 }
