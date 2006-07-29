@@ -1,3 +1,20 @@
+jilles      2006/07/29 19:49:23 UTC	(20060729-5967)
+  Log:
+  Store the channelTS of registered channels in the
+  private:channelts metadata entry. If the entry does
+  not exist, the channel registration time is used.
+  This is used for:
+  1. forcing TS back to deop people recreating
+     channels, if chanserv::changets is enabled
+  2. not restoring topics if keeptopic is enabled
+     but topiclock is not
+  
+
+  Changes:	Modified:
+  +26 -23	trunk/modules/chanserv/main.c (File Modified) 
+  +15 -1	trunk/src/services.c (File Modified) 
+
+
 jilles      2006/07/29 19:42:29 UTC	(20060729-5965)
   Log:
   handle_topic_from(): if our uplink is bursting and trying
