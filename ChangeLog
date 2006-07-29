@@ -1,3 +1,13 @@
+jilles      2006/07/29 19:54:13 UTC	(20060729-5969)
+  Log:
+  Set private:channelts metadata on newly registered channels
+  (if the TS is greater than 0).
+  
+
+  Changes:	Modified:
+  +7 -0		trunk/modules/chanserv/register.c (File Modified) 
+
+
 jilles      2006/07/29 19:49:23 UTC	(20060729-5967)
   Log:
   Store the channelTS of registered channels in the

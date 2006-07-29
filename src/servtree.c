@@ -4,7 +4,7 @@
  *
  * Services binary tree manipulation. (add_service, del_service, et al.)
  *
- * $Id: servtree.c 5943 2006-07-25 20:28:25Z nenolod $
+ * $Id: servtree.c 5971 2006-07-29 20:39:55Z jilles $
  */
 
 #include "atheme.h"
@@ -124,7 +124,7 @@ service_t *find_service(char *name)
 		p = strchr(name2, '@');
 		if (p != NULL)
 			*p = '\0';
-		sptr = dictionary_retrieve(services, name);
+		sptr = dictionary_retrieve(services, name2);
 		if (sptr != NULL)
 			return sptr;
 		/* XXX not really nice with a 64k hashtable, so don't do
