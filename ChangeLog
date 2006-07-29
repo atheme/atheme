@@ -1,3 +1,12 @@
+nenolod     2006/07/29 01:42:33 UTC	(20060729-5955)
+  Log:
+  - version bump to 2.0.0 due to drastic planned ABI/API changes
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/configure.ac (File Modified) 
+
+
 nenolod     2006/07/27 22:50:39 UTC	(20060727-5953)
   Log:
   - fix /gs help global
