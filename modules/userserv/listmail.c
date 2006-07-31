@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ LISTMAIL function.
  *
- * $Id: listmail.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: listmail.c 5981 2006-07-31 22:33:14Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/listmail", FALSE, _modinit, _moddeinit,
-	"$Id: listmail.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: listmail.c 5981 2006-07-31 22:33:14Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -37,14 +37,36 @@ void _moddeinit()
 	help_delentry(us_helptree, "LISTMAIL");
 }
 
+struct listmail_state
+{
+	char *origin;
+	char *pattern;
+	int matches;
+};
+
+static int listmail_foreach_cb(dictionary_elem_t *delem, void *privdata)
+{
+	struct listmail_state *state = (struct listmail_state *) privdata;
+	myuser_t *mu = (myuser_t *)delem->node.data;
+
+	if (!match(state->pattern, mu->email))
+	{
+		/* in the future we could add a LIMIT parameter */
+		if (state->matches == 0)
+			notice(usersvs.nick, state->origin, "Accounts matching e-mail address \2%s\2:", state->pattern);
+
+		notice(usersvs.nick, state->origin, "- %s (%s)", mu->name, mu->email);
+		state->matches++;
+	}
+
+	return 0;
+}
+
 static void us_cmd_listmail(char *origin)
 {
 	user_t *u = user_find_named(origin);
-	myuser_t *mu;
-	node_t *n;
 	char *email = strtok(NULL, " ");
-	uint32_t i;
-	uint32_t matches = 0;
+	struct listmail_state state;
 
 	if (u == NULL)
 		return;
@@ -58,26 +80,14 @@ static void us_cmd_listmail(char *origin)
 
 	wallops("\2%s\2 is searching the account database for e-mail address \2%s\2", origin, email);
 
-	for (i = 0; i < HASHSIZE; i++)
-	{
-		LIST_FOREACH(n, mulist[i].head)
-		{
-			mu = (myuser_t *)n->data;
+	state.matches = 0;
+	state.pattern = email;
+	state.origin = origin;
+	dictionary_foreach(mulist, listmail_foreach_cb, &state);
 
-			if (!match(email, mu->email))
-			{
-				/* in the future we could add a LIMIT parameter */
-				if (matches == 0)
-					notice(usersvs.nick, origin, "Nicknames matching e-mail address \2%s\2:", email);
-				notice(usersvs.nick, origin, "- %s (%s)", mu->name, mu->email);
-				matches++;
-			}
-		}
-	}
-
-	logcommand(usersvs.me, u, CMDLOG_ADMIN, "LISTMAIL %s (%d matches)", email, matches);
-	if (matches == 0)
+	logcommand(usersvs.me, u, CMDLOG_ADMIN, "LISTMAIL %s (%d matches)", email, state.matches);
+	if (state.matches == 0)
 		notice(usersvs.nick, origin, "No accounts matched e-mail address \2%s\2", email);
 	else
-		notice(usersvs.nick, origin, "\2%d\2 match%s for e-mail address \2%s\2", matches, matches != 1 ? "es" : "", email);
+		notice(usersvs.nick, origin, "\2%d\2 match%s for e-mail address \2%s\2", state.matches, state.matches != 1 ? "es" : "", email);
 }

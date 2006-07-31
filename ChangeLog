@@ -1,3 +1,17 @@
+jilles      2006/07/29 22:07:53 UTC	(20060729-5979)
+  Log:
+  charybdis, hybrid, ratbox: ignore a TB (topic burst) with
+  newer or same TS if we already have a topic, the same rule
+  which ircd uses. This should reduce topic desyncs when
+  servers link in bursting channels.
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/protocol/charybdis.c (File Modified) 
+  +6 -0		trunk/protocol/hybrid.c (File Modified) 
+  +6 -0		trunk/protocol/ratbox.c (File Modified) 
+
+
 nenolod     2006/07/29 22:02:27 UTC	(20060729-5977)
   Log:
   - use dictionary_search() to try to find services by their user entry, this is useful for instance, for configs like:

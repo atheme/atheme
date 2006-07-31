@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 5634 2006-07-02 00:05:59Z jilles $
+ * $Id: flatfile.c 5981 2006-07-31 22:33:14Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,9 +13,61 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 5634 2006-07-02 00:05:59Z jilles $",
+	"$Id: flatfile.c 5981 2006-07-31 22:33:14Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
+
+/* flatfile state */
+unsigned int muout = 0, mcout = 0, caout = 0, kout = 0;
+
+static int flatfile_db_save_myusers_cb(dictionary_elem_t *delem, void *privdata)
+{
+	FILE *f = (FILE *) privdata;
+	myuser_t *mu = (myuser_t *) delem->node.data;
+	node_t *tn;
+
+	/* MU <name> <pass> <email> <registered> [lastlogin] [failnum*] [lastfail*]
+	 * [lastfailon*] [flags]
+	 *
+	 *  * failnum, lastfail, and lastfailon are deprecated (moved to metadata)
+	 */
+	fprintf(f, "MU %s %s %s %ld", mu->name, mu->pass, mu->email, (long)mu->registered);
+
+	if (mu->lastlogin)
+		fprintf(f, " %ld", (long)mu->lastlogin);
+	else
+		fprintf(f, " 0");
+
+	fprintf(f, " 0 0 0");
+
+	if (mu->flags)
+		fprintf(f, " %d\n", mu->flags);
+	else
+		fprintf(f, " 0\n");
+
+	muout++;
+
+	LIST_FOREACH(tn, mu->metadata.head)
+	{
+		metadata_t *md = (metadata_t *)tn->data;
+
+		fprintf(f, "MD U %s %s %s\n", mu->name, md->name, md->value);
+	}
+
+	LIST_FOREACH(tn, mu->memos.head)
+	{
+		mymemo_t *mz = (mymemo_t *)tn->data;
+
+		fprintf(f, "ME %s %s %lu %lu %s\n", mu->name, mz->sender, (unsigned long)mz->sent, (unsigned long)mz->status, mz->text);
+	}
+
+	LIST_FOREACH(tn, mu->memo_ignores.head)
+	{
+		fprintf(f, "MI %s %s\n", mu->name, (char *)tn->data);
+	}
+
+	return 0; 
+}
 
 /* write atheme.db */
 static void flatfile_db_save(void *arg)
@@ -27,10 +79,13 @@ static void flatfile_db_save(void *arg)
 	svsignore_t *svsignore;
 	node_t *n, *tn, *tn2;
 	FILE *f;
-	uint32_t i, muout = 0, mcout = 0, caout = 0, kout = 0;
+	uint32_t i;
 	int errno1, was_errored = 0;
 
 	errno = 0;
+
+	/* reset state */
+	muout = 0, mcout = 0, caout = 0, kout = 0;
 
 	/* write to a temporary file first */
 	if (!(f = fopen("etc/atheme.db.new", "w")))
@@ -46,53 +101,7 @@ static void flatfile_db_save(void *arg)
 
 	slog(LG_DEBUG, "db_save(): saving myusers");
 
-	for (i = 0; i < HASHSIZE; i++)
-	{
-		LIST_FOREACH(n, mulist[i].head)
-		{
-			mu = (myuser_t *)n->data;
-
-			/* MU <name> <pass> <email> <registered> [lastlogin] [failnum*] [lastfail*]
-			 * [lastfailon*] [flags]
-			 *
-			 *  * failnum, lastfail, and lastfailon are deprecated (moved to metadata)
-			 */
-			fprintf(f, "MU %s %s %s %ld", mu->name, mu->pass, mu->email, (long)mu->registered);
-
-			if (mu->lastlogin)
-				fprintf(f, " %ld", (long)mu->lastlogin);
-			else
-				fprintf(f, " 0");
-
-			fprintf(f, " 0 0 0");
-
-			if (mu->flags)
-				fprintf(f, " %d\n", mu->flags);
-			else
-				fprintf(f, " 0\n");
-
-			muout++;
-
-			LIST_FOREACH(tn, mu->metadata.head)
-			{
-				metadata_t *md = (metadata_t *)tn->data;
-
-				fprintf(f, "MD U %s %s %s\n", mu->name, md->name, md->value);
-			}
-
-			LIST_FOREACH(tn, mu->memos.head)
-			{
-				mymemo_t *mz = (mymemo_t *)tn->data;
-
-				fprintf(f, "ME %s %s %lu %lu %s\n", mu->name, mz->sender, (unsigned long)mz->sent, (unsigned long)mz->status, mz->text);
-			}
-			
-			LIST_FOREACH(tn, mu->memo_ignores.head)
-			{
-				fprintf(f, "MI %s %s\n", mu->name, (char *)tn->data);
-			}
-		}
-	}
+	dictionary_foreach(mulist, flatfile_db_save_myusers_cb, f);
 
 	slog(LG_DEBUG, "db_save(): saving mychans");
 

@@ -186,7 +186,8 @@ void reg_check(void *arg)
 	int i = 0, x = 0;
 	char ign[BUFSIZE];
 	
-	for (i = 0; i < HASHSIZE; i++) {
+	for (i = 0; i < HASHSIZE; i++)
+	{
 		LIST_FOREACH_SAFE(n, tn, userlist[i].head)
 		{
 			u = (user_t *)n->data;
@@ -248,6 +249,17 @@ static void remove_idcheck(void *vuser)
 	u->flags &= ~UF_NICK_WARNED;
 }
 
+static int idcheck_foreach_cb(dictionary_elem_t *delem, void *privdata)
+{
+	metadata_t *md;
+	myuser_t *mu = (myuser_t *) delem->node.data;
+
+	if (md = metadata_find(mu, METADATA_USER, "private:idcheck"))
+		metadata_delete(mu, METADATA_USER, "private:idcheck");
+
+	return 0;
+}
+
 void _modinit(module_t *m)
 {
 	node_t *n, *tn;
@@ -259,15 +271,10 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
 	/* Leave this for compatibility with old versions of this code
-	 * -- jilles */
-	for (i = 0; i < HASHSIZE; i++) {
-		LIST_FOREACH_SAFE(n, tn, mulist[i].head)
-		{
-			mu = (myuser_t *)n->data;
-			if (md = metadata_find(mu, METADATA_USER, "private:idcheck"))
-				metadata_delete(mu, METADATA_USER, "private:idcheck");
-		}
-	}
+	 * -- jilles
+	 */
+	dictionary_foreach(mulist, idcheck_foreach_cb, NULL);
+
 	event_add("reg_check", reg_check, NULL, 30);
 	/*event_add("manage_bots", manage_bots, NULL, 30);*/
 	command_add(&ns_release, ns_cmdtree);

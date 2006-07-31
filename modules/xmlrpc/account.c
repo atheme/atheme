@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 5921 2006-07-20 09:48:14Z pippijn $
+ * $Id: account.c 5981 2006-07-31 22:33:14Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,11 +12,24 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 5921 2006-07-20 09:48:14Z pippijn $",
+	"$Id: account.c 5981 2006-07-31 22:33:14Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 boolean_t using_nickserv = FALSE;
+
+unsigned int tcnt = 0;
+
+/* support function for atheme.account.register. */
+
+static int account_myuser_foreach_cb(dictionary_elem_t *delem, void *privdata)
+{
+	myuser_t *tmu = (myuser_t *) delem->node.data;
+	char *email = (char *) privdata;
+
+	if (!strcasecmp(email, tmu->email))
+		tcnt++;
+}
 
 /*
  * atheme.account.register
@@ -118,16 +131,8 @@ static int account_register(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	for (i = 0, tcnt = 0; i < HASHSIZE; i++)
-	{
-		LIST_FOREACH(n, mulist[i].head)
-		{
-			tmu = (myuser_t *)n->data;
-
-			if (!strcasecmp(parv[2], tmu->email))
-				tcnt++;
-		}
-	}
+	tcnt = 0;
+	dictionary_foreach(mulist, account_myuser_foreach_cb, parv[2]);
 
 	if (tcnt >= me.maxusers)
 	{

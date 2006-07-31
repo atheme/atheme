@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 5868 2006-07-13 14:11:43Z nenolod $
+ * $Id: register.c 5981 2006-07-31 22:33:14Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 5868 2006-07-13 14:11:43Z nenolod $",
+	"$Id: register.c 5981 2006-07-31 22:33:14Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,6 +22,8 @@ command_t us_register = { "REGISTER", "Registers a services account.",
 			  AC_NONE, us_cmd_register };
 
 list_t *us_cmdtree, *us_helptree;
+
+unsigned int tcnt = 0;
 
 void _modinit(module_t *m)
 {
@@ -38,6 +40,21 @@ void _moddeinit()
 	help_delentry(us_helptree, "REGISTER");
 }
 
+static int register_foreach_cb(dictionary_elem_t *delem, void *privdata)
+{
+	char *email = (char *) privdata;
+	myuser_t *tmu = (myuser_t *) delem->node.data;
+
+	if (!strcasecmp(email, tmu->email))
+		tcnt++;
+
+	/* optimization: if tcnt >= me.maxusers, quit iterating. -nenolod */
+	if (tcnt >= me.maxusers)
+		return -1;
+
+	return 0;
+}
+
 static void us_cmd_register(char *origin)
 {
 	user_t *u = user_find_named(origin);
@@ -47,7 +64,7 @@ static void us_cmd_register(char *origin)
 	char *pass = strtok(NULL, " ");
 	char *email = strtok(NULL, " ");
 	char lau[BUFSIZE], lao[BUFSIZE];
-	uint32_t i, tcnt;
+	uint32_t i;
 
 	if (u->myuser)
 	{
@@ -91,16 +108,8 @@ static void us_cmd_register(char *origin)
 	}
 
 	/* make sure they're within limits */
-	for (i = 0, tcnt = 0; i < HASHSIZE; i++)
-	{
-		LIST_FOREACH(n, mulist[i].head)
-		{
-			tmu = (myuser_t *)n->data;
-
-			if (!strcasecmp(email, tmu->email))
-				tcnt++;
-		}
-	}
+	tcnt = 0;
+	dictionary_foreach(mulist, register_foreach_cb, email);
 
 	if (tcnt >= me.maxusers)
 	{

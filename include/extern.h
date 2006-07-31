@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 5933 2006-07-21 11:45:43Z pippijn $
+ * $Id: extern.h 5981 2006-07-31 22:33:14Z nenolod $
  */
 
 #ifndef EXTERN_H
@@ -159,8 +159,8 @@ E list_t klnlist;
 E list_t servlist[HASHSIZE];
 E list_t userlist[HASHSIZE];
 E list_t chanlist[HASHSIZE];
-E list_t mulist[HASHSIZE];
 E list_t mclist[HASHSIZE];
+E dictionary_tree_t *mulist;
 
 E void init_ircpacket(void);
 E void init_nodes(void);

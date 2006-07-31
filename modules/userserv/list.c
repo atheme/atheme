@@ -5,7 +5,7 @@
  * This file contains code for the NickServ LIST function.
  * Based on Alex Lambert's LISTEMAIL.
  *
- * $Id: list.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: list.c 5981 2006-07-31 22:33:14Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: list.c 5981 2006-07-31 22:33:14Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -38,14 +38,48 @@ void _moddeinit()
 	help_delentry(us_helptree, "LIST");
 }
 
+struct list_state
+{
+	char *origin;
+	char *pattern;
+	int matches;
+};
+
+static int list_foreach_cb(dictionary_elem_t *delem, void *privdata)
+{
+	struct list_state *state = (struct list_state *) privdata;
+	myuser_t *mu = (myuser_t *) delem->node.data;
+	char buf[BUFSIZE];
+
+	if (!match(state->pattern, mu->name))
+	{
+		/* in the future we could add a LIMIT parameter */
+		*buf = '\0';
+
+		if (metadata_find(mu, METADATA_USER, "private:freeze:freezer")) {
+			if (*buf)
+				strlcat(buf, " ", BUFSIZE);
+
+			strlcat(buf, "\2[frozen]\2", BUFSIZE);
+		}
+		if (metadata_find(mu, METADATA_USER, "private:mark:setter")) {
+			if (*buf)
+				strlcat(buf, " ", BUFSIZE);
+
+			strlcat(buf, "\2[marked]\2", BUFSIZE);
+		}
+				
+		notice(usersvs.nick, state->origin, "- %s (%s) %s", mu->name, mu->email, buf);
+		state->matches++;
+	}
+}
+
 static void us_cmd_list(char *origin)
 {
 	user_t *u = user_find_named(origin);
-	myuser_t *mu;
-	node_t *n;
 	char *nickpattern = strtok(NULL, " ");
 	uint32_t i;
-	uint32_t matches = 0;
+	struct list_state state;
 
 	if (u == NULL)
 		return;
@@ -59,26 +93,14 @@ static void us_cmd_list(char *origin)
 
 	wallops("\2%s\2 is searching the account database for accounts matching \2%s\2", origin, nickpattern);
 
-	for (i = 0; i < HASHSIZE; i++)
-	{
-		LIST_FOREACH(n, mulist[i].head)
-		{
-			mu = (myuser_t *)n->data;
+	state.origin = origin;
+	state.pattern = nickpattern;
+	state.matches = 0;
+	dictionary_foreach(mulist, list_foreach_cb, &state);
 
-			if (!match(nickpattern, mu->name))
-			{
-				/* in the future we could add a LIMIT parameter */
-				if (matches == 0)
-					notice(usersvs.nick, origin, "Nicknames matching pattern \2%s\2:", nickpattern);
-				notice(usersvs.nick, origin, "- %s (%s)", mu->name, mu->email);
-				matches++;
-			}
-		}
-	}
-
-	logcommand(usersvs.me, u, CMDLOG_ADMIN, "LIST %s (%d matches)", nickpattern, matches);
-	if (matches == 0)
+	logcommand(usersvs.me, u, CMDLOG_ADMIN, "LIST %s (%d matches)", nickpattern, state.matches);
+	if (state.matches == 0)
 		notice(usersvs.nick, origin, "No accounts matched pattern \2%s\2", nickpattern);
 	else
-		notice(usersvs.nick, origin, "\2%d\2 match%s for pattern \2%s\2", matches, matches != 1 ? "es" : "", nickpattern);
+		notice(usersvs.nick, origin, "\2%d\2 match%s for pattern \2%s\2", state.matches, state.matches != 1 ? "es" : "", nickpattern);
 }

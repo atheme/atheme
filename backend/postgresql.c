@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 4839 2006-02-17 23:37:21Z jilles $
+ * $Id: postgresql.c 5981 2006-07-31 22:33:14Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 4839 2006-02-17 23:37:21Z jilles $",
+	"$Id: postgresql.c 5981 2006-07-31 22:33:14Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -91,6 +91,60 @@ static PGresult *safe_query(const char *string, ...)
 	return res;
 }
 
+unsigned int mu_out = 0;
+
+static int postgresql_db_save_myusers_cb(dictionary_elem_t *delem, void *privdata)
+{
+	myuser_t *mu = (myuser_t *) delem->node.data;
+	char user[BUFSIZE];
+	char pass[BUFSIZE];
+	char email[BUFSIZE];
+
+	PQescapeString(user, mu->name, BUFSIZE);
+	PQescapeString(pass, mu->pass, BUFSIZE);
+	PQescapeString(email, mu->email, BUFSIZE);
+
+	res = safe_query("INSERT INTO ACCOUNTS(ID, USERNAME, PASSWORD, EMAIL, REGISTERED, LASTLOGIN, FLAGS) "
+		"VALUES (%d, '%s', '%s', '%s', %ld, %ld, %ld)", mu_out, user, pass, email,
+		(long) mu->registered, (long) mu->lastlogin, (long) mu->flags);
+
+	LIST_FOREACH(tn, mu->metadata.head)
+	{
+		char key[BUFSIZE], keyval[BUFSIZE];
+		metadata_t *md = (metadata_t *)tn->data;
+
+		PQescapeString(key, md->name, BUFSIZE);
+		PQescapeString(keyval, md->value, BUFSIZE);
+
+		res = safe_query("INSERT INTO ACCOUNT_METADATA(ID, PARENT, KEYNAME, VALUE) VALUES ("
+			"DEFAULT, %d, '%s', '%s');", ii, key, keyval);
+	}
+
+	LIST_FOREACH(tn, mu->memos.head)
+	{
+		char sender[BUFSIZE], text[BUFSIZE];
+		mymemo_t *mz = (mymemo_t *)tn->data;
+
+		PQescapeString(sender, mz->sender, BUFSIZE);
+		PQescapeString(text, mz->text, BUFSIZE);
+
+		res = safe_query("INSERT INTO ACCOUNT_MEMOS(ID, PARENT, SENDER, TIME, STATUS, TEXT) VALUES ("
+			"DEFAULT, %d, '%s', %ld, %ld, '%s');", ii, sender, mz->sent, mz->status, text);
+	}
+			
+	LIST_FOREACH(tn, mu->memo_ignores.head)
+	{
+		char target[BUFSIZE], *temp = (char *)tn->data;
+		PQescapeString(target, temp, strlen(temp));
+				
+		res = safe_query("INSERT INTO ACCOUNT_MEMO_IGNORES(ID, PARENT, TARGET) VALUES(DEFAULT, %d, '%s')", ii, target);
+	}
+
+	mu_out++;
+
+	return 0;
+}
+
 /*
  * Writes a clean snapshot of Atheme's state to the SQL database.
  *
@@ -106,9 +160,7 @@ static void postgresql_db_save(void *arg)
 	uint32_t i, ii, iii;
 	PGresult *res;
 
-	slog(LG_DEBUG, "db_save(): saving myusers");
-
-	ii = 0;
+	mu_out = 0;
 
 	db_connect(FALSE);
 
@@ -125,61 +177,9 @@ static void postgresql_db_save(void *arg)
 	safe_query("DELETE FROM CHANNEL_ACCESS;");
 	safe_query("DELETE FROM KLINES;");
 
-	for (i = 0; i < HASHSIZE; i++)
-	{
-		LIST_FOREACH(n, mulist[i].head)
-		{
-			char user[BUFSIZE];
-			char pass[BUFSIZE];
-			char email[BUFSIZE];
+	slog(LG_DEBUG, "db_save(): saving myusers");
 
-			mu = (myuser_t *)n->data;
-
-			PQescapeString(user, mu->name, BUFSIZE);
-			PQescapeString(pass, mu->pass, BUFSIZE);
-			PQescapeString(email, mu->email, BUFSIZE);
-
-			res = safe_query("INSERT INTO ACCOUNTS(ID, USERNAME, PASSWORD, EMAIL, REGISTERED, LASTLOGIN, FLAGS) "
-					"VALUES (%d, '%s', '%s', '%s', %ld, %ld, %ld)", ii, user, pass, email,
-					(long) mu->registered, (long) mu->lastlogin, (long) mu->flags);
-
-			LIST_FOREACH(tn, mu->metadata.head)
-			{
-				char key[BUFSIZE], keyval[BUFSIZE];
-				metadata_t *md = (metadata_t *)tn->data;
-
-				PQescapeString(key, md->name, BUFSIZE);
-				PQescapeString(keyval, md->value, BUFSIZE);
-
-				res = safe_query("INSERT INTO ACCOUNT_METADATA(ID, PARENT, KEYNAME, VALUE) VALUES ("
-						"DEFAULT, %d, '%s', '%s');", ii, key, keyval);
-			}
-
-			LIST_FOREACH(tn, mu->memos.head)
-			{
-				char sender[BUFSIZE], text[BUFSIZE];
-				mymemo_t *mz = (mymemo_t *)tn->data;
-
-				PQescapeString(sender, mz->sender, BUFSIZE);
-				PQescapeString(text, mz->text, BUFSIZE);
-
-				res = safe_query("INSERT INTO ACCOUNT_MEMOS(ID, PARENT, SENDER, TIME, STATUS, TEXT) VALUES ("
-						"DEFAULT, %d, '%s', %ld, %ld, '%s');", ii, sender, mz->sent, mz->status, text);
-			}
-			
-			LIST_FOREACH(tn, mu->memo_ignores.head)
-			{
-				char target[BUFSIZE], *temp = (char *)tn->data;
-				PQescapeString(target, temp, strlen(temp));
-				
-				res = safe_query("INSERT INTO ACCOUNT_MEMO_IGNORES(ID, PARENT, TARGET) VALUES(DEFAULT, %d, '%s')", ii, target);
-						
-				free(target);
-			}
-
-			ii++;
-		}
-	}
+	dictionary_foreach(mulist, postgresql_db_save_myusers_cb, NULL);
 
 	slog(LG_DEBUG, "db_save(): saving mychans");
 

@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 5919 2006-07-18 23:31:46Z jilles $
+ * $Id: node.c 5981 2006-07-31 22:33:14Z nenolod $
  */
 
 #include "atheme.h"
@@ -22,7 +22,7 @@ list_t userlist[HASHSIZE];
 list_t uidlist[HASHSIZE];
 list_t chanlist[HASHSIZE];
 list_t mclist[HASHSIZE];
-list_t mulist[HASHSIZE];
+dictionary_tree_t *mulist;
 
 list_t sendq;
 
@@ -76,6 +76,12 @@ void init_nodes(void)
 		slog(LG_INFO, "init_nodes(): block allocator failed.");
 		exit(EXIT_FAILURE);
 	}
+
+#ifdef LARGE_NETWORK
+	mulist = dictionary_create(1024);
+#else
+	mulist = dictionary_create(128);
+#endif
 }
 
 /* Mark everything illegal, to be called before a rehash -- jilles */
@@ -1340,7 +1346,6 @@ myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags)
 	strlcpy(mu->name, name, NICKLEN);
 	strlcpy(mu->email, email, EMAILLEN);
 	mu->registered = CURRTIME;
-	mu->hash = MUHASH((unsigned char *)name);
 	mu->flags = flags;
 
 	/* If it's already crypted, don't touch the password. Otherwise,
@@ -1354,7 +1359,7 @@ myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags)
 	else
 		set_password(mu, pass);
 
-	node_add(mu, n, &mulist[mu->hash]);
+	dictionary_add(mulist, mu->name, mu);
 
 	if ((soper = soper_find_named(mu->name)) != NULL)
 	{
@@ -1459,9 +1464,8 @@ void myuser_delete(myuser_t *mu)
 	/* kill any authcookies */
 	authcookie_destroy_all(mu);
 
-	n = node_find(mu, &mulist[mu->hash]);
-	node_del(n, &mulist[mu->hash]);
-	node_free(n);
+	/* mu->name is the index for this dtree */
+	dictionary_delete(mulist, mu->name);
 
 	BlockHeapFree(myuser_heap, mu);
 
@@ -1470,21 +1474,7 @@ void myuser_delete(myuser_t *mu)
 
 myuser_t *myuser_find(char *name)
 {
-	myuser_t *mu;
-	node_t *n;
-
-	if (name == NULL)
-		return NULL;
-
-	LIST_FOREACH(n, mulist[shash((unsigned char *) name)].head)
-	{
-		mu = (myuser_t *)n->data;
-
-		if (!irccasecmp(name, mu->name))
-			return mu;
-	}
-
-	return NULL;
+	return dictionary_retrieve(mulist, name);
 }
 
 myuser_t *myuser_find_ext(char *name)
@@ -2290,6 +2280,39 @@ metadata_t *metadata_find(void *target, int32_t type, char *name)
 	return NULL;
 }
 
+int expire_myuser_cb(dictionary_elem_t *delem, void *unused)
+{
+	myuser_t *mu = (myuser_t *) delem->node.data;
+
+	/* If they're logged in, update lastlogin time.
+	 * To decrease db traffic, may want to only do
+	 * this if the account would otherwise be
+	 * deleted. -- jilles 
+	 */
+	if (LIST_LENGTH(&mu->logins) > 0)
+	{
+		mu->lastlogin = CURRTIME;
+		return 0;
+	}
+
+	if (MU_HOLD & mu->flags)
+		return 0;
+
+	if (((CURRTIME - mu->lastlogin) >= config_options.expire) || ((mu->flags & MU_WAITAUTH) && (CURRTIME - mu->registered >= 86400)))
+	{
+		/* Don't expire accounts with privs on them,
+		 * otherwise someone can reregister
+		 * them and take the privs -- jilles */
+		if (is_soper(mu))
+			return 0;
+
+		snoop("EXPIRE: \2%s\2 from \2%s\2 ", mu->name, mu->email);
+		myuser_delete(mu);
+	}
+
+	return 0;
+}
+
 void expire_check(void *arg)
 {
 	uint32_t i;
@@ -2304,39 +2327,7 @@ void expire_check(void *arg)
 	if (config_options.expire == 0)
 		return;
 
-	for (i = 0; i < HASHSIZE; i++)
-	{
-		LIST_FOREACH_SAFE(n, tn, mulist[i].head)
-		{
-			mu = (myuser_t *)n->data;
-
-			/* If they're logged in, update lastlogin time.
-			 * To decrease db traffic, may want to only do
-			 * this if the account would otherwise be
-			 * deleted. -- jilles 
-			 */
-			if (LIST_LENGTH(&mu->logins) > 0)
-			{
-				mu->lastlogin = CURRTIME;
-				continue;
-			}
-
-			if (MU_HOLD & mu->flags)
-				continue;
-
-			if (((CURRTIME - mu->lastlogin) >= config_options.expire) || ((mu->flags & MU_WAITAUTH) && (CURRTIME - mu->registered >= 86400)))
-			{
-				/* Don't expire accounts with privs on them,
-				 * otherwise someone can reregister
-				 * them and take the privs -- jilles */
-				if (is_soper(mu))
-					continue;
-
-				snoop("EXPIRE: \2%s\2 from \2%s\2 ", mu->name, mu->email);
-				myuser_delete(mu);
-			}
-		}
-	}
+	dictionary_foreach(mulist, expire_myuser_cb, NULL);
 
 	for (i = 0; i < HASHSIZE; i++)
 	{
@@ -2378,27 +2369,27 @@ void expire_check(void *arg)
 	}
 }
 
+int check_myuser_cb(dictionary_elem_t *delem, void *unused)
+{
+	myuser_t *mu = (myuser_t *) delem->node.data;
+
+	if (MU_OLD_ALIAS & mu->flags)
+	{
+		slog(LG_INFO, "db_check(): converting previously linked nick %s to a standalone nick", mu->name);
+		mu->flags &= ~MU_OLD_ALIAS;
+		metadata_delete(mu, METADATA_USER, "private:alias:parent");
+	}
+
+	return 0;
+}
+
 void db_check()
 {
 	uint32_t i;
-	myuser_t *mu;
 	mychan_t *mc;
 	node_t *n;
 
-	for (i = 0; i < HASHSIZE; i++)
-	{
-		LIST_FOREACH(n, mulist[i].head)
-		{
-			mu = (myuser_t *)n->data;
-
-			if (MU_OLD_ALIAS & mu->flags)
-			{
-				slog(LG_INFO, "db_check(): converting previously linked nick %s to a standalone nick", mu->name);
-				mu->flags &= ~MU_OLD_ALIAS;
-				metadata_delete(mu, METADATA_USER, "private:alias:parent");
-			}
-		}
-	}
+	dictionary_foreach(mulist, check_myuser_cb, NULL);
 
 	for (i = 0; i < HASHSIZE; i++)
 	{
