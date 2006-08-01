@@ -1,3 +1,23 @@
+nenolod     2006/07/31 22:33:14 UTC	(20060731-5981)
+  Log:
+  - convert mulist hashtable to a dtree.
+  
+
+  Changes:	Modified:
+  +58 -49	trunk/backend/flatfile.c (File Modified) 
+  +58 -58	trunk/backend/postgresql.c (File Modified) 
+  +17 -10	trunk/contrib/ns_enforce.c (File Modified) 
+  +1 -1		trunk/include/extern.h (File Modified) 
+  +44 -39	trunk/modules/nickserv/list.c (File Modified) 
+  +33 -23	trunk/modules/nickserv/listmail.c (File Modified) 
+  +20 -11	trunk/modules/nickserv/register.c (File Modified) 
+  +44 -22	trunk/modules/userserv/list.c (File Modified) 
+  +33 -23	trunk/modules/userserv/listmail.c (File Modified) 
+  +20 -11	trunk/modules/userserv/register.c (File Modified) 
+  +15 -10	trunk/modules/xmlrpc/account.c (File Modified) 
+  +60 -69	trunk/src/node.c (File Modified) 
+
+
 jilles      2006/07/29 22:07:53 UTC	(20060729-5979)
   Log:
   charybdis, hybrid, ratbox: ignore a TB (topic burst) with

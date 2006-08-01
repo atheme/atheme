@@ -5,7 +5,7 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id: dictionary.h 5963 2006-07-29 19:13:41Z nenolod $
+ * $Id: dictionary.h 5983 2006-08-01 00:36:17Z nenolod $
  */
 
 #ifndef _DICTIONARY_H
@@ -15,6 +15,7 @@ struct dictionary_tree_
 {
 	int resolution;
 	list_t *hashv;		/* dynamically allocated by dictionary_create() */
+	int (*compare_cb)(const char *a, const char *b);
 };
 
 typedef struct dictionary_tree_ dictionary_tree_t;
@@ -85,5 +86,12 @@ E void *dictionary_retrieve(dictionary_tree_t *dtree, char *key);
  * dictionary_delete() deletes a key->value entry from the dictionary tree.
  */
 E void *dictionary_delete(dictionary_tree_t *dtree, char *key);
+
+/*
+ * dictionary_set_compare_func() changes the key-based indexing method used.
+ * Typically, either strcasecmp or irccasecmp is used here.
+ */
+E void dictionary_set_compare_func(dictionary_tree_t *dtree,
+	int (*compare_cb)(const char *a, const char *b));
 
 #endif
