@@ -1,3 +1,13 @@
+jilles      2006/08/01 00:39:52 UTC	(20060801-5987)
+  Log:
+  Do what r4803 was supposed to do, make UIDs and SIDs case sensitive.
+  Required for P10, ircnet/TS6 don't care.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/src/node.c (File Modified) 
+
+
 nenolod     2006/08/01 00:39:20 UTC	(20060801-5985)
   Log:
   - use irccasecmp for indexing the mulist dtree.

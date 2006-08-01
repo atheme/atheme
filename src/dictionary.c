@@ -5,7 +5,7 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id: dictionary.c 5983 2006-08-01 00:36:17Z nenolod $
+ * $Id: dictionary.c 5989 2006-08-01 19:20:33Z jilles $
  */
 
 #include "atheme.h"
@@ -93,6 +93,56 @@ void *dictionary_search(dictionary_tree_t *dtree,
 	}
 
 	return ret;
+}
+
+void dictionary_foreach_start(dictionary_tree_t *dtree,
+	dictionary_iteration_state_t *state)
+{
+	state->bucket = 0;
+	state->cur = NULL;
+	state->next = NULL;
+	/* find first item */
+	while (state->bucket < dtree->resolution)
+	{
+		state->cur = dtree->hashv[state->bucket].head;
+		if (state->cur != NULL)
+			break;
+		state->bucket++;
+	}
+	if (state->cur == NULL)
+		return;
+	/* make state->cur point to first item and state->next point to
+	 * second item */
+	state->next = state->cur;
+	dictionary_foreach_next(dtree, state);
+}
+
+void *dictionary_foreach_cur(dictionary_tree_t *dtree,
+	dictionary_iteration_state_t *state)
+{
+	return state->cur != NULL ? state->cur->node.data : NULL;
+}
+
+void dictionary_foreach_next(dictionary_tree_t *dtree,
+	dictionary_iteration_state_t *state)
+{
+	if (state->cur == NULL)
+	{
+		slog(LG_DEBUG, "dictionary_foreach_next(): called again after iteration finished on dtree<%p>", dtree);
+		return;
+	}
+	state->cur = state->next;
+	if (state->next == NULL)
+		return;
+	state->next = (dictionary_elem_t *)state->next->node.next;
+	if (state->next != NULL)
+		return;
+	while (++state->bucket < dtree->resolution)
+	{
+		state->next = (dictionary_elem_t *)dtree->hashv[state->bucket].head;
+		if (state->next != NULL)
+			return;
+	}
 }
 
 dictionary_elem_t *dictionary_find(dictionary_tree_t *dtree, char *key)

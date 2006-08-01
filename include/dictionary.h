@@ -5,7 +5,7 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id: dictionary.h 5983 2006-08-01 00:36:17Z nenolod $
+ * $Id: dictionary.h 5989 2006-08-01 19:20:33Z jilles $
  */
 
 #ifndef _DICTIONARY_H
@@ -32,6 +32,19 @@ struct dictionary_elem_
 };
 
 typedef struct dictionary_elem_ dictionary_elem_t;
+
+/*
+ * dictionary_iteration_state_t, private.
+ */
+struct dictionary_iteration_state_
+{
+	int bucket;
+	dictionary_elem_t *cur, *next;
+};
+
+typedef struct dictionary_iteration_state_ dictionary_iteration_state_t;
+
+#define DICTIONARY_FOREACH(element,state,dict) for (dictionary_foreach_start((dict), (state)); element = dictionary_foreach_cur((dict), (state)); dictionary_foreach_next((dict), (state)))
 
 /*
  * dictionary_create() creates a new dictionary tree of the defined resolution.
@@ -66,6 +79,28 @@ E void dictionary_foreach(dictionary_tree_t *dtree,
 E void *dictionary_search(dictionary_tree_t *dtree,
 	void *(*foreach_cb)(dictionary_elem_t *delem, void *privdata),
 	void *privdata);
+
+/*
+ * dictionary_foreach_start() begins an iteration over all items
+ * keeping state in the given struct. If there is only one iteration
+ * in progress at a time, it is permitted to remove the current element
+ * of the iteration (but not any other element).
+ */
+E void dictionary_foreach_start(dictionary_tree_t *dtree,
+	dictionary_iteration_state_t *state);
+
+/*
+ * dictionary_foreach_cur() returns the current element of the iteration,
+ * or NULL if there are no more elements.
+ */
+E void *dictionary_foreach_cur(dictionary_tree_t *dtree,
+	dictionary_iteration_state_t *state);
+
+/*
+ * dictionary_foreach_next() moves to the next element.
+ */
+E void dictionary_foreach_next(dictionary_tree_t *dtree,
+	dictionary_iteration_state_t *state);
 
 /*
  * dictionary_add() adds a key->value entry to the dictionary tree.
