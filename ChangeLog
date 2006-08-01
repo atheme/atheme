@@ -1,3 +1,22 @@
+jilles      2006/08/01 20:41:37 UTC	(20060801-5997)
+  Log:
+  Remove dictionary_set_compare_func() and instead take the
+  comparison function from an extra argument to
+  dictionary_create(). This prevents run-time changes to
+  the comparison function possibly causing duplicates
+  and crashes, and forces the user to think about the
+  comparison function when creating a dictionary tree.
+  CTCPs are now properly case sensitive.
+  
+
+  Changes:	Modified:
+  +3 -8		trunk/include/dictionary.h (File Modified) 
+  +1 -1		trunk/src/ctcp-common.c (File Modified) 
+  +2 -8		trunk/src/dictionary.c (File Modified) 
+  +2 -4		trunk/src/node.c (File Modified) 
+  +1 -1		trunk/src/servtree.c (File Modified) 
+
+
 jilles      2006/08/01 19:25:51 UTC	(20060801-5995)
   Log:
   Fix compiler warning.

@@ -4,7 +4,7 @@
  *
  * This file contains IRC interaction routines.
  *
- * $Id$
+ * $Id: ctcp-common.c 5999 2006-08-01 20:49:40Z jilles $
  */
 
 #include "atheme.h"
