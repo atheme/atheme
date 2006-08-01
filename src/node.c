@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 5981 2006-07-31 22:33:14Z nenolod $
+ * $Id: node.c 5985 2006-08-01 00:39:20Z nenolod $
  */
 
 #include "atheme.h"
@@ -82,6 +82,8 @@ void init_nodes(void)
 #else
 	mulist = dictionary_create(128);
 #endif
+	/* Use irccasecmp instead of the default strcasecmp indexing function. -nenolod */
+	dictionary_set_compare_func(mulist, irccasecmp);
 }
 
 /* Mark everything illegal, to be called before a rehash -- jilles */

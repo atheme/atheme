@@ -1,3 +1,13 @@
+nenolod     2006/08/01 00:36:17 UTC	(20060801-5983)
+  Log:
+  - add dictionary_set_compare_func() for setting the lookup function.
+  
+
+  Changes:	Modified:
+  +8 -0		trunk/include/dictionary.h (File Modified) 
+  +8 -1		trunk/src/dictionary.c (File Modified) 
+
+
 nenolod     2006/07/31 22:33:14 UTC	(20060731-5981)
   Log:
   - convert mulist hashtable to a dtree.
