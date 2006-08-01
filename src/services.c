@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 5991 2006-08-01 19:21:09Z jilles $
+ * $Id: services.c 6001 2006-08-01 21:07:23Z jilles $
  */
 
 #include "atheme.h"
@@ -143,24 +143,20 @@ void services_init(void)
 	dictionary_foreach(services, service_init_cb, NULL);
 }
 
-int service_join_cb(dictionary_elem_t *delem, void *privdata)
-{
-	char *name = (char *) privdata;
-	service_t *svs = delem->node.data;
-
-	join(name, svs->name);
-}
-
 void joinall(char *name)
 {
 	node_t *n;
 	uint32_t i;
 	service_t *svs;
+	dictionary_iteration_state_t state;
 
 	if (name == NULL)
 		return;
 
-	dictionary_foreach(services, service_join_cb, name);
+	DICTIONARY_FOREACH(svs, &state, services)
+	{
+		join(name, svs->name);
+	}
 }
 
 void partall(char *name)
