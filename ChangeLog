@@ -1,3 +1,12 @@
+jilles      2006/08/01 22:23:17 UTC	(20060801-6005)
+  Log:
+  Hack for multiple packets...
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/xmlrpc/main.c (File Modified) 
+
+
 jilles      2006/08/01 21:18:22 UTC	(20060801-6003)
   Log:
   find_service(): if nick@server or user@server format is
