@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 5985 2006-08-01 00:39:20Z nenolod $
+ * $Id: node.c 5987 2006-08-01 00:39:52Z jilles $
  */
 
 #include "atheme.h"
@@ -623,7 +623,7 @@ server_t *server_find(char *name)
 		{
 			s = (server_t *)n->data;
 
-			if (!strcasecmp(name, s->sid))
+			if (!strcmp(name, s->sid))
 				return s;
 		}
 	}
@@ -770,7 +770,7 @@ user_t *user_find(const char *nick)
 		{
 			u = (user_t *)n->data;
 
-			if (!strcasecmp(nick, u->uid))
+			if (!strcmp(nick, u->uid))
 				return u;
 		}
 	}
