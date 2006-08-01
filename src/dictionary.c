@@ -5,10 +5,17 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id: dictionary.c 5989 2006-08-01 19:20:33Z jilles $
+ * $Id: dictionary.c 5993 2006-08-01 19:24:36Z jilles $
  */
 
 #include "atheme.h"
+
+struct dictionary_tree_
+{
+	int resolution;
+	list_t *hashv;		/* dynamically allocated by dictionary_create() */
+	int (*compare_cb)(const char *a, const char *b);
+};
 
 dictionary_tree_t *dictionary_create(int resolution)
 {

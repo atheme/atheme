@@ -1,3 +1,13 @@
+jilles      2006/08/01 19:21:09 UTC	(20060801-5991)
+  Log:
+  partall(): use DICTIONARY_FOREACH instead of grovelling
+  inside dictionary_t.
+  
+
+  Changes:	Modified:
+  +9 -14	trunk/src/services.c (File Modified) 
+
+
 jilles      2006/08/01 19:20:33 UTC	(20060801-5989)
   Log:
   dictionary: Add iteration without callbacks,

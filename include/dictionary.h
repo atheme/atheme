@@ -5,18 +5,13 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id: dictionary.h 5989 2006-08-01 19:20:33Z jilles $
+ * $Id: dictionary.h 5993 2006-08-01 19:24:36Z jilles $
  */
 
 #ifndef _DICTIONARY_H
 #define _DICTIONARY_H
 
-struct dictionary_tree_
-{
-	int resolution;
-	list_t *hashv;		/* dynamically allocated by dictionary_create() */
-	int (*compare_cb)(const char *a, const char *b);
-};
+struct dictionary_tree_; /* defined in src/dictionary.c */
 
 typedef struct dictionary_tree_ dictionary_tree_t;
 
