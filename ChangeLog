@@ -1,3 +1,14 @@
+jilles      2006/08/01 21:18:22 UTC	(20060801-6003)
+  Log:
+  find_service(): if nick@server or user@server format is
+  used, require the server name to be our server name
+  (don't allow jupes).
+  
+
+  Changes:	Modified:
+  +5 -1		trunk/src/servtree.c (File Modified) 
+
+
 jilles      2006/08/01 21:07:23 UTC	(20060801-6001)
   Log:
   Use DICTIONARY_FOREACH in joinall() and find_service().
