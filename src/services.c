@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 5967 2006-07-29 19:49:23Z jilles $
+ * $Id: services.c 5991 2006-08-01 19:21:09Z jilles $
  */
 
 #include "atheme.h"
@@ -165,27 +165,22 @@ void joinall(char *name)
 
 void partall(char *name)
 {
-	node_t *n;
-	uint32_t i;
+	dictionary_iteration_state_t state;
 	service_t *svs;
 	mychan_t *mc;
 
 	if (name == NULL)
 		return;
 	mc = mychan_find(name);
-	for (i = 0; i < 32; i++)
+	DICTIONARY_FOREACH(svs, &state, services)
 	{
-		LIST_FOREACH(n, services->hashv[i].head)
-		{
-			svs = n->data;
-			if (svs == chansvs.me && mc != NULL && config_options.join_chans)
-				continue;
-			/* Do not cache this channel_find(), the
-			 * channel may disappear under our feet
-			 * -- jilles */
-			if (chanuser_find(channel_find(name), svs->me))
-				part(name, svs->name);
-		}
+		if (svs == chansvs.me && mc != NULL && config_options.join_chans)
+			continue;
+		/* Do not cache this channel_find(), the
+		 * channel may disappear under our feet
+		 * -- jilles */
+		if (chanuser_find(channel_find(name), svs->me))
+			part(name, svs->name);
 	}
 }
 

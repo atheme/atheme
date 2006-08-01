@@ -1,3 +1,14 @@
+jilles      2006/08/01 19:20:33 UTC	(20060801-5989)
+  Log:
+  dictionary: Add iteration without callbacks,
+  dictionary_iteration_state_t and DICTIONARY_FOREACH.
+  
+
+  Changes:	Modified:
+  +35 -0	trunk/include/dictionary.h (File Modified) 
+  +50 -0	trunk/src/dictionary.c (File Modified) 
+
+
 jilles      2006/08/01 00:39:52 UTC	(20060801-5987)
   Log:
   Do what r4803 was supposed to do, make UIDs and SIDs case sensitive.
