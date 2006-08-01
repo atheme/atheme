@@ -47,7 +47,7 @@ void ctcp_clientinfo_handler(char *cmd, char *origin, char *svsnick)
 
 void common_ctcp_init(void)
 {
-	ctcptree = dictionary_create(32);
+	ctcptree = dictionary_create(32, strcmp);
 
 	dictionary_add(ctcptree, "\001PING", ctcp_ping_handler);
 	dictionary_add(ctcptree, "\001VERSION\001", ctcp_version_handler);

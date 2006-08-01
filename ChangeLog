@@ -1,3 +1,12 @@
+jilles      2006/08/01 19:25:51 UTC	(20060801-5995)
+  Log:
+  Fix compiler warning.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/dictionary.c (File Modified) 
+
+
 jilles      2006/08/01 19:24:36 UTC	(20060801-5993)
   Log:
   Move definition of struct dictionary_tree_ to dictionary.c.

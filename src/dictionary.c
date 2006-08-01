@@ -5,7 +5,7 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id: dictionary.c 5995 2006-08-01 19:25:51Z jilles $
+ * $Id: dictionary.c 5997 2006-08-01 20:41:37Z jilles $
  */
 
 #include "atheme.h"
@@ -17,13 +17,13 @@ struct dictionary_tree_
 	int (*compare_cb)(const char *a, const char *b);
 };
 
-dictionary_tree_t *dictionary_create(int resolution)
+dictionary_tree_t *dictionary_create(int resolution, int (*compare_cb)(const char *a, const char *b))
 {
 	dictionary_tree_t *dtree = smalloc(sizeof(dictionary_tree_t));
 
 	dtree->resolution = resolution;
 	dtree->hashv      = smalloc(sizeof(list_t) * resolution);
-	dtree->compare_cb = strcasecmp;
+	dtree->compare_cb = compare_cb;
 	memset(dtree->hashv, '\0', sizeof(list_t) * resolution);
 
 	return dtree;
@@ -235,10 +235,4 @@ void *dictionary_retrieve(dictionary_tree_t *dtree, char *key)
 	}
 	else
 		return delem->node.data;
-}
-
-void dictionary_set_compare_func(dictionary_tree_t *dtree,
-	int (*compare_cb)(const char *a, const char *b))
-{
-	dtree->compare_cb = compare_cb;
 }
