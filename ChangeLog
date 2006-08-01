@@ -1,3 +1,15 @@
+jilles      2006/08/01 19:24:36 UTC	(20060801-5993)
+  Log:
+  Move definition of struct dictionary_tree_ to dictionary.c.
+  This allows only pointers to dictionary_tree_t objects
+  in the other source files.
+  
+
+  Changes:	Modified:
+  +1 -6		trunk/include/dictionary.h (File Modified) 
+  +7 -0		trunk/src/dictionary.c (File Modified) 
+
+
 jilles      2006/08/01 19:21:09 UTC	(20060801-5991)
   Log:
   partall(): use DICTIONARY_FOREACH instead of grovelling

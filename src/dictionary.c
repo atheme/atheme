@@ -5,7 +5,7 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id: dictionary.c 5993 2006-08-01 19:24:36Z jilles $
+ * $Id: dictionary.c 5995 2006-08-01 19:25:51Z jilles $
  */
 
 #include "atheme.h"
@@ -111,7 +111,7 @@ void dictionary_foreach_start(dictionary_tree_t *dtree,
 	/* find first item */
 	while (state->bucket < dtree->resolution)
 	{
-		state->cur = dtree->hashv[state->bucket].head;
+		state->cur = (dictionary_elem_t *)dtree->hashv[state->bucket].head;
 		if (state->cur != NULL)
 			break;
 		state->bucket++;
