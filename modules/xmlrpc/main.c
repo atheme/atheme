@@ -4,7 +4,7 @@
  *
  * XMLRPC server code.
  *
- * $Id: main.c 6007 2006-08-01 22:48:28Z jilles $
+ * $Id: main.c 6009 2006-08-01 22:49:57Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6007 2006-08-01 22:48:28Z jilles $",
+	"$Id: main.c 6009 2006-08-01 22:49:57Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -100,7 +100,7 @@ static void do_packet(connection_t *cptr, char *buf)
 	/* XXX HACK this helps if the HTTP headers come in one packet
 	 * and the request itself in the next, but not if the request
 	 * is broken over multiple packets */
-	if (!strchr(buf, "<?xml"))
+	if (!strstr(buf, "<?xml"))
 		return;
 
 	/* so we can write our response back later */
