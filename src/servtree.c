@@ -4,7 +4,7 @@
  *
  * Services binary tree manipulation. (add_service, del_service, et al.)
  *
- * $Id: servtree.c 6001 2006-08-01 21:07:23Z jilles $
+ * $Id: servtree.c 6003 2006-08-01 21:18:22Z jilles $
  */
 
 #include "atheme.h"
@@ -119,8 +119,12 @@ service_t *find_service(char *name)
 	if (name[0] == '#')
 		return fcmd_agent;
 
-	if (strchr(name, '@'))
+	p = strchr(name, '@');
+	if (p != NULL)
 	{
+		/* Make sure it's for us, not for a jupe -- jilles */
+		if (irccasecmp(p + 1, me.name))
+			return NULL;
 		strlcpy(name2, name, sizeof name2);
 		p = strchr(name2, '@');
 		if (p != NULL)
