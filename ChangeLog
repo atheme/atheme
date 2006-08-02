@@ -1,3 +1,12 @@
+pippijn     2006/08/02 13:41:35 UTC	(20060802-6013)
+  Log:
+  Removed debug message.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/modules/xmlrpc/main.c (File Modified) 
+
+
 pippijn     2006/08/02 11:43:19 UTC	(20060802-6011)
   Log:
   Fixed xmlrpc request handling. Now the packets will be buffered until the

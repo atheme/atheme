@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 5965 2006-07-29 19:42:29Z jilles $
+ * $Id: ptasks.c 6015 2006-08-02 19:09:19Z jilles $
  */
 
 #include "atheme.h"
@@ -334,8 +334,15 @@ void handle_message(char *origin, char *target, boolean_t is_notice, char *messa
 	sptr = find_service(target);
 	if (sptr == NULL)
 	{
-		if (*target != '#')
-			slog(LG_DEBUG, "handle_privmsg(): got message to nonexistant user `%s'", target);
+		if (!is_notice && (isalnum(target[0]) || strchr("[\\]^_`{|}~", target[0])))
+		{
+			/* If it's not a notice and looks like a nick or
+			 * user@server, send back an error message */
+			if (strchr(target, '@') || !ircd->uses_uid || (!ircd->uses_p10 && !isdigit(target[0])))
+				numeric_sts(me.name, 401, u->nick, "%s :No such nick", target);
+			else
+				numeric_sts(me.name, 401, u->nick, "* :Target left IRC. Failed to deliver: [%.20s]", message);
+		}
 		return;
 	}
 
