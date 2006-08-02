@@ -4,7 +4,7 @@
  *
  * XMLRPC server code.
  *
- * $Id: main.c 6009 2006-08-01 22:49:57Z jilles $
+ * $Id: main.c 6011 2006-08-02 11:43:19Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6009 2006-08-01 22:49:57Z jilles $",
+	"$Id: main.c 6011 2006-08-02 11:43:19Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -27,6 +27,8 @@ struct xmlrpc_configuration
 	char *host;
 	int port;
 } xmlrpc_config;
+
+char recvbuf[BUFSIZE * 2];
 
 /***************************************************************************/
 
@@ -84,41 +86,43 @@ static char *dump_buffer(char *buf, int length)
 
 static int my_read(connection_t *cptr, char *buf)
 {
-        int n;
+	int n;
 
-        if ((n = read(cptr->fd, buf, BUFSIZE)) > 0)
-        {
-                buf[n] = '\0';
-                cnt.bin += n;
-        }
+	if ((n = read(cptr->fd, buf, BUFSIZE)) > 0)
+	{
+		buf[n] = '\0';
+		cnt.bin += n;
+	}
 
-        return n;
+	return n;
 }
 
 static void do_packet(connection_t *cptr, char *buf)
 {
-	/* XXX HACK this helps if the HTTP headers come in one packet
-	 * and the request itself in the next, but not if the request
-	 * is broken over multiple packets */
-	if (!strstr(buf, "<?xml"))
-		return;
+	/* buffer packets */
+	strlcat(recvbuf, buf, BUFSIZE * 2);
 
 	/* so we can write our response back later */
 	request = cptr;
 
-	xmlrpc_process(buf, cptr);
-
-	*buf = '\0';
+	if (strstr(buf, "</methodCall>"))
+	{       
+		/* now is the end of the request - process it */
+		xmlrpc_process(recvbuf, cptr);
+		slog(LG_ERROR, "do_packet(): %s", recvbuf);
+		*buf = '\0';
+		recvbuf[0] = '\0';
+	}
 }
 
 static void my_rhandler(connection_t * cptr)
 {
-        char buf[BUFSIZE * 2];
+	char buf[BUFSIZE * 2];
 
-        if (!my_read(cptr, buf))
+	if (!my_read(cptr, buf))
 		connection_close(cptr);
 
-        do_packet(cptr, buf);
+	do_packet(cptr, buf);
 }
 
 static void do_listen(connection_t *cptr)
