@@ -1,3 +1,15 @@
+pippijn     2006/08/02 11:43:19 UTC	(20060802-6011)
+  Log:
+  Fixed xmlrpc request handling. Now the packets will be buffered until the
+  entire request was sent. This probably fixes the problems occurring with Ruby
+  on Rails, Python and Java XML-RPC clients that send their requests in multiple
+  packets.
+  
+
+  Changes:	Modified:
+  +22 -18	trunk/modules/xmlrpc/main.c (File Modified) 
+
+
 jilles      2006/08/01 22:49:57 UTC	(20060801-6009)
   Log:
   ok xmlrpc hack should work finally
