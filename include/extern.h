@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 5981 2006-07-31 22:33:14Z nenolod $
+ * $Id: extern.h 6017 2006-08-07 14:06:59Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -14,6 +14,10 @@
 /* -> moved to atheme.h */
 
 E boolean_t cold_start;
+
+/* cidr.c */
+E int match_ips(const char *mask, const char *address);
+E int match_cidr(const char *mask, const char *address);
 
 /* cmode.c */
 E void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[]);

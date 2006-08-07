@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: ban.c 6017 2006-08-07 14:06:59Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", FALSE, _modinit, _moddeinit,
-	"$Id: ban.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: ban.c 6017 2006-08-07 14:06:59Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -201,8 +201,7 @@ static void cs_cmd_unban (char *origin)
 				continue;
 			slog(LG_DEBUG, "cs_unban(): iterating %s on %s", cb->mask, c->name);
 
-			/* XXX doesn't do CIDR bans */
-			if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2) || !match(cb->mask, hostbuf3))
+			if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2) || !match(cb->mask, hostbuf3) || !match_cidr(cb->mask, hostbuf3))
 			{
 				logcommand(chansvs.me, u, CMDLOG_DO, "%s UNBAN %s (for user %s)", mc->name, cb->mask, hostbuf2);
 				modestack_mode_param(chansvs.nick, c->name, MTYPE_DEL, 'b', cb->mask);
@@ -368,8 +367,7 @@ static void cs_fcmd_unban (char *origin, char *channel)
 				continue;
 			slog(LG_DEBUG, "cs_unban(): iterating %s on %s", cb->mask, c->name);
 
-			/* XXX doesn't do CIDR bans */
-			if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2) || !match(cb->mask, hostbuf3))
+			if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2) || !match(cb->mask, hostbuf3) || !match_cidr(cb->mask, hostbuf3))
 			{
 				logcommand(chansvs.me, u, CMDLOG_DO, "%s UNBAN %s (for user %s)", mc->name, cb->mask, hostbuf2);
 				modestack_mode_param(chansvs.nick, c->name, MTYPE_DEL, 'b', cb->mask);

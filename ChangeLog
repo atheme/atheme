@@ -1,3 +1,16 @@
+jilles      2006/08/02 19:09:19 UTC	(20060802-6015)
+  Log:
+  Send ERR_NOSUCHNICK if we get a privmsg to something
+  unknown starting with a letter, digit or [\]^_`{|}~.
+  (Hence not for channels, global notices, etc)
+  The message sent does not contain the target if it
+  is a UID.
+  
+
+  Changes:	Modified:
+  +9 -2		trunk/src/ptasks.c (File Modified) 
+
+
 pippijn     2006/08/02 13:41:35 UTC	(20060802-6013)
   Log:
   Removed debug message.

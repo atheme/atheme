@@ -19,10 +19,12 @@ TABLE OF CONTENTS
 ----------
 
 Atheme was originally based on Shrike, however, this has almost all been
-rewritten now. Atheme has also borrowed some code from Sentinel.
+rewritten now. Atheme has also borrowed some code from Sentinel and
+ircd-ratbox.
 
 Information about Shrike can be found at http://shrike.malkier.net/.
 Information about Sentinel can be found at http://ircd.botbay.net/sentinel/.
+Information about ircd-ratbox can be found at http://www.ircd-ratbox.org/.
 
 2. PRESENTATION
 ---------------

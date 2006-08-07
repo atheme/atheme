@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService RECOVER functions.
  *
- * $Id: recover.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: recover.c 6017 2006-08-07 14:06:59Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/recover", FALSE, _modinit, _moddeinit,
-	"$Id: recover.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: recover.c 6017 2006-08-07 14:06:59Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -46,7 +46,7 @@ static void cs_cmd_recover(char *origin)
 	mychan_t *mc;
 	node_t *n;
 	char *name = strtok(NULL, " ");
-	char hostbuf[BUFSIZE], hostbuf2[BUFSIZE];
+	char hostbuf[BUFSIZE], hostbuf2[BUFSIZE], hostbuf3[BUFSIZE];
 	char e;
 	boolean_t added_exempt = FALSE;
 	int i;
@@ -151,6 +151,7 @@ static void cs_cmd_recover(char *origin)
 	/* unban the user */
 	snprintf(hostbuf, BUFSIZE, "%s!%s@%s", u->nick, u->user, u->host);
 	snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", u->nick, u->user, u->vhost);
+	snprintf(hostbuf3, BUFSIZE, "%s!%s@%s", u->nick, u->user, u->ip);
 
 	LIST_FOREACH(n, mc->chan->bans.head)
 	{
@@ -158,7 +159,7 @@ static void cs_cmd_recover(char *origin)
 
 		if (cb->type != 'b')
 			continue;
-		if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2))
+		if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2) || !match(cb->mask, hostbuf3) || !match_cidr(cb->mask, hostbuf3))
 		{
 			modestack_mode_param(chansvs.nick, mc->chan->name, MTYPE_DEL, 'b', cb->mask);
 			chanban_delete(cb);

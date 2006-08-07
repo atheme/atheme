@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 6001 2006-08-01 21:07:23Z jilles $
+ * $Id: services.c 6017 2006-08-07 14:06:59Z jilles $
  */
 
 #include "atheme.h"
@@ -67,8 +67,7 @@ int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target)
 		if (cb->type != e)
 			continue;
 
-		/* XXX doesn't do CIDR bans */
-		if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2) || !match(cb->mask, hostbuf3))
+		if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2) || !match(cb->mask, hostbuf3) || !match_cidr(cb->mask, hostbuf3))
 		{
 			snprintf(change, sizeof change, "-%c %s", e, cb->mask);
 			mode_sts(source->nick, chan->name, change);

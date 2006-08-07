@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 5997 2006-08-01 20:41:37Z jilles $
+ * $Id: node.c 6017 2006-08-07 14:06:59Z jilles $
  */
 
 #include "atheme.h"
@@ -1287,7 +1287,7 @@ kline_t *kline_find_user(user_t *u)
 
 		if (k->duration != 0 && k->expires <= CURRTIME)
 			continue;
-		if (!match(k->user, u->user) && (!match(k->host, u->host) || !match(k->host, u->ip)))
+		if (!match(k->user, u->user) && (!match(k->host, u->host) || !match(k->host, u->ip) || !match_ips(k->host, u->ip)))
 			return k;
 	}
 
