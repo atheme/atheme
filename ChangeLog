@@ -1,3 +1,29 @@
+jilles      2006/08/07 14:06:59 UTC	(20060807-6017)
+  Log:
+  Add support for CIDR channel bans/exceptions and akills.
+  src/cidr.c provides match_ips() for matching a CIDR mask
+  against an IP address and match_cidr() for channel bans
+  (with nick!user@). In accordance with match(), zero is
+  returned for a match, non-zero otherwise. The code is
+  mostly taken from ratbox but modified to eliminate OS
+  dependency for IPv6.
+  CIDR is checked whether the ircd supports it or not.
+  ChanServ RECOVER used to only check host and vhost matches
+  for the implied unban but now also checks ip match and
+  CIDR.
+  
+
+  Changes:	Modified:
+  +3 -1		trunk/README (File Modified) 
+  +4 -0		trunk/include/extern.h (File Modified) 
+  +2 -4		trunk/modules/chanserv/ban.c (File Modified) 
+  +3 -2		trunk/modules/chanserv/recover.c (File Modified) 
+  +1 -0		trunk/src/Makefile.in (File Modified) 
+  +354 -0	trunk/src/cidr.c (File Added) 
+  +1 -1		trunk/src/node.c (File Modified) 
+  +1 -2		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/08/02 19:09:19 UTC	(20060802-6015)
   Log:
   Send ERR_NOSUCHNICK if we get a privmsg to something

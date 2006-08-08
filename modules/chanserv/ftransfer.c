@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FTRANSFER function.
  *
- * $Id: ftransfer.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: ftransfer.c 6019 2006-08-08 19:38:11Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ftransfer", FALSE, _modinit, _moddeinit,
-	"$Id: ftransfer.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: ftransfer.c 6019 2006-08-08 19:38:11Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -76,6 +76,7 @@ static void cs_cmd_ftransfer(char *origin)
 	snoop("FTRANSFER: %s transferred %s from %s to %s", origin, name, mc->founder->name, newfndr);
 	wallops("%s transferred foundership of %s from %s to %s", origin, name, mc->founder->name, newfndr);
 	logcommand(chansvs.me, user_find_named(origin), CMDLOG_ADMIN, "%s FTRANSFER from %s to %s", mc->name, mc->founder->name, newfndr);
+	verbose(mc, "Foundership transfer from \2%s\2 to \2%s\2 forced by %s administration.", mc->founder->name, newfndr, me.netname);
 	notice(chansvs.nick, origin, "Foundership of \2%s\2 has been transferred from \2%s\2 to \2%s\2.",
 		name, mc->founder->name, newfndr);
 

@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6017 2006-08-07 14:06:59Z jilles $
+ * $Id: node.c 6019 2006-08-08 19:38:11Z jilles $
  */
 
 #include "atheme.h"
@@ -1422,11 +1422,14 @@ void myuser_delete(myuser_t *mu)
 			if (mc->founder == mu && (successor = mychan_pick_successor(mc)) != NULL)
 			{
 				snoop("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2", successor->name, mc->name, mc->founder->name);
+				if (chansvs.me != NULL)
+					verbose(mc, "Foundership changed to \2%s\2 because \2%s\2 was dropped.", successor->name, mc->founder->name);
 
 				chanacs_change_simple(mc, successor, NULL, CA_FOUNDER_0, 0, CA_ALL);
 				mc->founder = successor;
 	
-				myuser_notice(chansvs.nick, mc->founder, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, mc->founder->name);
+				if (chansvs.me != NULL)
+					myuser_notice(chansvs.nick, mc->founder, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, mc->founder->name);
 			}
 		
 			/* no successor found */
