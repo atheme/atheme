@@ -1,3 +1,11 @@
+w00t        2006/08/13 15:15:01 UTC	(20060813-6021)
+  Log:
+  Why the fuck was memoserv sending this :?
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/register.c (File Modified) 
+
+
 jilles      2006/08/08 19:38:11 UTC	(20060808-6019)
   Log:
   Give verbose (/cs set verbose) notices on foundership changes
