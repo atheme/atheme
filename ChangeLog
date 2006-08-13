@@ -1,3 +1,12 @@
+nenolod     2006/08/13 18:12:43 UTC	(20060813-6027)
+  Log:
+  - support for WOD-style dice generation. Obtained from SpireNet patches.
+  
+
+  Changes:	Modified:
+  +84 -0	trunk/contrib/fc_dice.c (File Modified) 
+
+
 jilles      2006/08/13 18:05:55 UTC	(20060813-6025)
   Log:
   Fix /ns help hold.

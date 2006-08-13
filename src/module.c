@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 5694 2006-07-03 22:21:20Z jilles $
+ * $Id: module.c 6031 2006-08-13 18:27:28Z nenolod $
  */
 
 #include "atheme.h"
@@ -62,7 +62,7 @@ module_t *module_load(char *filespec)
 
 	if ((m = module_find(filespec)))
 	{
-		slog(LG_INFO, "module_load(): module %s is already loaded at [0x%lx]", filespec, m->address);
+		slog(LG_INFO, "module_load(): module %s is already loaded [at 0x%lx]", filespec, m->address);
 		return NULL;
 	}
 
@@ -133,10 +133,10 @@ module_t *module_load(char *filespec)
 	n = node_create();
 	node_add(m, n, &modules);
 
-	slog(LG_DEBUG, "module_load(): loaded %s at [0x%lx; MAPI version %d]", h->name, m->address, h->abi_ver);
+	slog(LG_DEBUG, "module_load(): loaded %s [at 0x%lx; MAPI version %d]", h->name, m->address, h->abi_ver);
 
 	if (me.connected && !cold_start)
-		wallops("Module %s loaded at [0x%lx; MAPI version %d]", h->name, m->address, h->abi_ver);
+		wallops("Module %s loaded [at 0x%lx; MAPI version %d]", h->name, m->address, h->abi_ver);
 
 	return m;
 }
