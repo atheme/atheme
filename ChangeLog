@@ -1,3 +1,17 @@
+jilles      2006/08/08 19:38:11 UTC	(20060808-6019)
+  Log:
+  Give verbose (/cs set verbose) notices on foundership changes
+  (/cs set founder, /cs ftransfer, succession).
+  The notice for ftransfer makes clear it is done by admin
+  authority but does not disclose the oper's nick.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/chanserv/ftransfer.c (File Modified) 
+  +1 -0		trunk/modules/chanserv/set.c (File Modified) 
+  +4 -1		trunk/src/node.c (File Modified) 
+
+
 jilles      2006/08/07 14:06:59 UTC	(20060807-6017)
   Log:
   Add support for CIDR channel bans/exceptions and akills.
