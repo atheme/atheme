@@ -1,3 +1,12 @@
+nenolod     2006/08/13 18:27:28 UTC	(20060813-6031)
+  Log:
+  - fix module loaded message
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/src/module.c (File Modified) 
+
+
 nenolod     2006/08/13 18:12:43 UTC	(20060813-6027)
   Log:
   - support for WOD-style dice generation. Obtained from SpireNet patches.
