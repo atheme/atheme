@@ -1,3 +1,12 @@
+jilles      2006/08/13 18:05:55 UTC	(20060813-6025)
+  Log:
+  Fix /ns help hold.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/hold.c (File Modified) 
+
+
 w00t        2006/08/13 15:15:01 UTC	(20060813-6021)
   Log:
   Why the fuck was memoserv sending this :?
