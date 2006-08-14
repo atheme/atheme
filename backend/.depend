@@ -1,4 +1,4 @@
-flatfile.o: flatfile.c ../include/atheme.h \
+flatfile.so: flatfile.c ../include/atheme.h \
   ../libatheme/org.atheme.claro.base ../include/sysconf.h \
   ../libatheme/stdinc.h ../libatheme/dlink.h ../libatheme/event.h \
   ../libatheme/balloc.h ../libatheme/connection.h ../libatheme/sockio.h \

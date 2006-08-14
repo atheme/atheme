@@ -1,4 +1,4 @@
-posix.o: posix.c ../include/atheme.h ../libatheme/org.atheme.claro.base \
+posix.so: posix.c ../include/atheme.h ../libatheme/org.atheme.claro.base \
   ../include/sysconf.h ../libatheme/stdinc.h ../libatheme/dlink.h \
   ../libatheme/event.h ../libatheme/balloc.h ../libatheme/connection.h \
   ../libatheme/sockio.h ../libatheme/hook.h ../libatheme/linker.h \
@@ -14,7 +14,7 @@ posix.o: posix.c ../include/atheme.h ../libatheme/org.atheme.claro.base \
   ../include/metadata.h ../include/phandler.h ../include/servtree.h \
   ../include/services.h ../include/commandtree.h ../include/users.h \
   ../include/authcookie.h ../include/privs.h ../include/common-ctcp.h
-ircservices.o: ircservices.c ../include/atheme.h \
+ircservices.so: ircservices.c ../include/atheme.h \
   ../libatheme/org.atheme.claro.base ../include/sysconf.h \
   ../libatheme/stdinc.h ../libatheme/dlink.h ../libatheme/event.h \
   ../libatheme/balloc.h ../libatheme/connection.h ../libatheme/sockio.h \

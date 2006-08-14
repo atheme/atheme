@@ -1,4 +1,4 @@
-main.o: main.c ../../include/atheme.h \
+main.so: main.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
   ../../libatheme/event.h ../../libatheme/balloc.h \
@@ -18,7 +18,7 @@ main.o: main.c ../../include/atheme.h \
   ../../include/services.h ../../include/commandtree.h \
   ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
   ../../include/common-ctcp.h
-help.o: help.c ../../include/atheme.h \
+help.so: help.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
   ../../libatheme/event.h ../../libatheme/balloc.h \
@@ -38,7 +38,7 @@ help.o: help.c ../../include/atheme.h \
   ../../include/services.h ../../include/commandtree.h \
   ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
   ../../include/common-ctcp.h
-send.o: send.c ../../include/atheme.h \
+send.so: send.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
   ../../libatheme/event.h ../../libatheme/balloc.h \
@@ -58,7 +58,7 @@ send.o: send.c ../../include/atheme.h \
   ../../include/services.h ../../include/commandtree.h \
   ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
   ../../include/common-ctcp.h
-list.o: list.c ../../include/atheme.h \
+list.so: list.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
   ../../libatheme/event.h ../../libatheme/balloc.h \
@@ -78,7 +78,7 @@ list.o: list.c ../../include/atheme.h \
   ../../include/services.h ../../include/commandtree.h \
   ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
   ../../include/common-ctcp.h
-delete.o: delete.c ../../include/atheme.h \
+delete.so: delete.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
   ../../libatheme/event.h ../../libatheme/balloc.h \
@@ -98,7 +98,7 @@ delete.o: delete.c ../../include/atheme.h \
   ../../include/services.h ../../include/commandtree.h \
   ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
   ../../include/common-ctcp.h
-forward.o: forward.c ../../include/atheme.h \
+forward.so: forward.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
   ../../libatheme/event.h ../../libatheme/balloc.h \
@@ -118,7 +118,7 @@ forward.o: forward.c ../../include/atheme.h \
   ../../include/services.h ../../include/commandtree.h \
   ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
   ../../include/common-ctcp.h
-read.o: read.c ../../include/atheme.h \
+read.so: read.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
   ../../libatheme/event.h ../../libatheme/balloc.h \
@@ -138,7 +138,7 @@ read.o: read.c ../../include/atheme.h \
   ../../include/services.h ../../include/commandtree.h \
   ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
   ../../include/common-ctcp.h
-ignore.o: ignore.c ../../include/atheme.h \
+ignore.so: ignore.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
   ../../libatheme/event.h ../../libatheme/balloc.h \

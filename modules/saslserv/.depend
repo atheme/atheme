@@ -1,4 +1,4 @@
-main.o: main.c ../../include/atheme.h \
+main.so: main.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
   ../../libatheme/event.h ../../libatheme/balloc.h \
@@ -18,7 +18,7 @@ main.o: main.c ../../include/atheme.h \
   ../../include/services.h ../../include/commandtree.h \
   ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
   ../../include/common-ctcp.h
-plain.o: plain.c ../../include/atheme.h \
+plain.so: plain.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
   ../../libatheme/event.h ../../libatheme/balloc.h \
@@ -38,7 +38,7 @@ plain.o: plain.c ../../include/atheme.h \
   ../../include/services.h ../../include/commandtree.h \
   ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
   ../../include/common-ctcp.h
-crypt.o: crypt.c ../../include/atheme.h \
+crypt.so: crypt.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
   ../../libatheme/event.h ../../libatheme/balloc.h \
@@ -58,7 +58,7 @@ crypt.o: crypt.c ../../include/atheme.h \
   ../../include/services.h ../../include/commandtree.h \
   ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
   ../../include/common-ctcp.h
-dh-blowfish.o: dh-blowfish.c ../../include/atheme.h \
+dh-blowfish.so: dh-blowfish.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
   ../../libatheme/event.h ../../libatheme/balloc.h \
@@ -78,7 +78,7 @@ dh-blowfish.o: dh-blowfish.c ../../include/atheme.h \
   ../../include/services.h ../../include/commandtree.h \
   ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
   ../../include/common-ctcp.h
-help.o: help.c ../../include/atheme.h \
+help.so: help.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
   ../../libatheme/event.h ../../libatheme/balloc.h \

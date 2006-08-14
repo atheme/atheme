@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 6039 2006-08-14 15:02:26Z jilles $
+# $Id: Makefile.in 6051 2006-08-14 16:39:35Z jilles $
 #
 
 CC		= @CC@
@@ -58,8 +58,9 @@ modules: $(OBJS)
 	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@
 
 .PHONY: depend clean distclean
+# This sed command sucks but I don't know a better way -- jilles
 depend:
-	${MKDEP} ${CPPFLAGS} ${CFLAGS} ${BASE_SRCS} > .depend
+	${MKDEP} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} ${BASE_SRCS} | sed -e 's/\.o:/.so:/' > .depend
 
 clean:
 	${RM} -f *.so

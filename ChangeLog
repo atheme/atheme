@@ -1,3 +1,14 @@
+jilles      2006/08/14 16:18:27 UTC	(20060814-6049)
+  Log:
+  constify match() and a lot of node.c
+  
+
+  Changes:	Modified:
+  +16 -16	trunk/include/extern.h (File Modified) 
+  +11 -11	trunk/src/match.c (File Modified) 
+  +24 -24	trunk/src/node.c (File Modified) 
+
+
 jilles      2006/08/14 15:59:37 UTC	(20060814-6047)
   Log:
   constify dictionary
