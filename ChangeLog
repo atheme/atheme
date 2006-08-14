@@ -1,3 +1,43 @@
+jilles      2006/08/14 15:02:26 UTC	(20060814-6039)
+  Log:
+  Make 'make depend' work again. This will cause better
+  recompilation when changing header files (with the
+  lame #include policy that means **/*.c usually).
+  
+
+  Changes:	Modified:
+  +17 -0	trunk/backend/.depend (File Added) 
+  +6 -2		trunk/backend/Makefile.in (File Modified) 
+  +5 -1		trunk/contrib/Makefile.in (File Modified) 
+  +33 -0	trunk/crypto/.depend (File Added) 
+  +5 -1		trunk/crypto/Makefile.in (File Modified) 
+  +48 -0	trunk/libatheme/.depend (File Added) 
+  +7 -2		trunk/libatheme/Makefile.in (File Modified) 
+  +7 -1		trunk/modules/Makefile.in (File Modified) 
+  +615 -0	trunk/modules/chanserv/.depend (File Added) 
+  +5 -1		trunk/modules/chanserv/Makefile.in (File Modified) 
+  +20 -0	trunk/modules/global/.depend (File Added) 
+  +5 -1		trunk/modules/global/Makefile.in (File Modified) 
+  +0 -0		trunk/modules/helpserv/.depend (File Added) 
+  +5 -1		trunk/modules/helpserv/Makefile.in (File Modified) 
+  +160 -0	trunk/modules/memoserv/.depend (File Added) 
+  +5 -1		trunk/modules/memoserv/Makefile.in (File Modified) 
+  +439 -0	trunk/modules/nickserv/.depend (File Added) 
+  +5 -1		trunk/modules/nickserv/Makefile.in (File Modified) 
+  +399 -0	trunk/modules/operserv/.depend (File Added) 
+  +5 -1		trunk/modules/operserv/Makefile.in (File Modified) 
+  +100 -0	trunk/modules/saslserv/.depend (File Added) 
+  +5 -1		trunk/modules/saslserv/Makefile.in (File Modified) 
+  +419 -0	trunk/modules/userserv/.depend (File Added) 
+  +5 -1		trunk/modules/userserv/Makefile.in (File Modified) 
+  +80 -0	trunk/modules/xmlrpc/.depend (File Added) 
+  +5 -1		trunk/modules/xmlrpc/Makefile.in (File Modified) 
+  +334 -0	trunk/protocol/.depend (File Added) 
+  +5 -1		trunk/protocol/Makefile.in (File Modified) 
+  +323 -180	trunk/src/.depend (File Modified) 
+  +4 -5		trunk/src/Makefile.in (File Modified) 
+
+
 jilles      2006/08/14 14:26:40 UTC	(20060814-6037)
   Log:
   channel_mode(): use a separate variable for the new limit
