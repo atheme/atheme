@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 6041 2006-08-14 15:07:19Z jilles $
+ * $Id: extern.h 6049 2006-08-14 16:18:27Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -152,7 +152,7 @@ E int irccasecmp(const char *, const char *);
 E int ircncmp(const char *, const char *, int);
 E int ircncasecmp(const char *, const char *, int);
 
-E int match(char *, char *);
+E int match(const char *, const char *);
 E char *collapse(char *);
 
 /* node.c */
@@ -185,44 +185,44 @@ E soper_t *soper_find_named(char *name);
 E svsignore_t *svsignore_find(user_t *user);
 E svsignore_t *svsignore_add(char *mask, char *reason);
 
-E tld_t *tld_add(char *name);
-E void tld_delete(char *name);
-E tld_t *tld_find(char *name);
+E tld_t *tld_add(const char *name);
+E void tld_delete(const char *name);
+E tld_t *tld_find(const char *name);
 
 E chanban_t *chanban_add(channel_t *chan, const char *mask, int type);
 E void chanban_delete(chanban_t *c);
 E chanban_t *chanban_find(channel_t *chan, const char *mask, int type);
 E void chanban_clear(channel_t *chan);
 
-E server_t *server_add(char *name, uint8_t hops, char *uplink, char *id, char *desc);
-E void server_delete(char *name);
-E server_t *server_find(char *name);
+E server_t *server_add(const char *name, uint8_t hops, const char *uplink, const char *id, const char *desc);
+E void server_delete(const char *name);
+E server_t *server_find(const char *name);
 
-E user_t *user_add(char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, uint32_t ts);
+E user_t *user_add(const char *nick, const char *user, const char *host, const char *vhost, const char *ip, const char *uid, const char *gecos, server_t *server, uint32_t ts);
 E void user_delete(user_t *u);
 E user_t *user_find(const char *nick);
 E user_t *user_find_named(const char *nick);
-E void user_changeuid(user_t *u, char *uid);
+E void user_changeuid(user_t *u, const char *uid);
 
-E channel_t *channel_add(char *name, uint32_t ts);
-E void channel_delete(char *name);
+E channel_t *channel_add(const char *name, uint32_t ts);
+E void channel_delete(const char *name);
 E channel_t *channel_find(const char *name);
 
-E chanuser_t *chanuser_add(channel_t *chan, char *user);
+E chanuser_t *chanuser_add(channel_t *chan, const char *user);
 E void chanuser_delete(channel_t *chan, user_t *user);
 E chanuser_t *chanuser_find(channel_t *chan, user_t *user);
 
 E kline_t *kline_add(char *user, char *host, char *reason, long duration);
-E void kline_delete(char *user, char *host);
-E kline_t *kline_find(char *user, char *host);
+E void kline_delete(const char *user, const char *host);
+E kline_t *kline_find(const char *user, const char *host);
 E kline_t *kline_find_num(uint32_t number);
 E kline_t *kline_find_user(user_t *u);
 E void kline_expire(void *arg);
 
 E myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags);
 E void myuser_delete(myuser_t *mu);
-E myuser_t *myuser_find(char *name);
-E myuser_t *myuser_find_ext(char *name);
+E myuser_t *myuser_find(const char *name);
+E myuser_t *myuser_find_ext(const char *name);
 E void myuser_notice(char *from, myuser_t *target, char *fmt, ...);
 
 E mychan_t *mychan_add(char *name);

@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6019 2006-08-08 19:38:11Z jilles $
+ * $Id: node.c 6049 2006-08-14 16:18:27Z jilles $
  */
 
 #include "atheme.h"
@@ -424,7 +424,7 @@ svsignore_t *svsignore_find(user_t *source)
  * T L D S *
  ***********/
 
-tld_t *tld_add(char *name)
+tld_t *tld_add(const char *name)
 {
 	tld_t *tld;
 	node_t *n = node_create();
@@ -442,7 +442,7 @@ tld_t *tld_add(char *name)
 	return tld;
 }
 
-void tld_delete(char *name)
+void tld_delete(const char *name)
 {
 	tld_t *tld = tld_find(name);
 	node_t *n;
@@ -466,7 +466,7 @@ void tld_delete(char *name)
 	cnt.tld--;
 }
 
-tld_t *tld_find(char *name)
+tld_t *tld_find(const char *name)
 {
 	tld_t *tld;
 	node_t *n;
@@ -486,11 +486,11 @@ tld_t *tld_find(char *name)
  * S E R V E R S *
  *****************/
 
-server_t *server_add(char *name, uint8_t hops, char *uplink, char *id, char *desc)
+server_t *server_add(const char *name, uint8_t hops, const char *uplink, const char *id, const char *desc)
 {
 	server_t *s, *u = NULL;
 	node_t *n = node_create();
-	char *tld;
+	const char *tld;
 
 	if (uplink)
 	{
@@ -502,14 +502,14 @@ server_t *server_add(char *name, uint8_t hops, char *uplink, char *id, char *des
 
 	s = BlockHeapAlloc(serv_heap);
 
-	s->hash = SHASH((unsigned char *)name);
+	s->hash = SHASH((const unsigned char *)name);
 
 	node_add(s, n, &servlist[s->hash]);
 
 	if (id != NULL)
 	{
 		s->sid = sstrdup(id);
-		s->shash = SHASH((unsigned char *)id);
+		s->shash = SHASH((const unsigned char *)id);
 		node_add(s, node_create(), &sidlist[s->shash]);
 	}
 
@@ -544,7 +544,7 @@ server_t *server_add(char *name, uint8_t hops, char *uplink, char *id, char *des
 	return s;
 }
 
-void server_delete(char *name)
+void server_delete(const char *name)
 {
 	server_t *s = server_find(name);
 	server_t *child;
@@ -610,14 +610,14 @@ void server_delete(char *name)
 	cnt.server--;
 }
 
-server_t *server_find(char *name)
+server_t *server_find(const char *name)
 {
 	server_t *s;
 	node_t *n;
 
 	if (ircd->uses_uid == TRUE)
 	{
-		LIST_FOREACH(n, sidlist[SHASH((unsigned char *)name)].head)
+		LIST_FOREACH(n, sidlist[SHASH((const unsigned char *)name)].head)
 		{
 			s = (server_t *)n->data;
 
@@ -626,7 +626,7 @@ server_t *server_find(char *name)
 		}
 	}
 
-	LIST_FOREACH(n, servlist[SHASH((unsigned char *)name)].head)
+	LIST_FOREACH(n, servlist[SHASH((const unsigned char *)name)].head)
 	{
 		s = (server_t *)n->data;
 
@@ -641,7 +641,7 @@ server_t *server_find(char *name)
  * U S E R S *
  *************/
 
-user_t *user_add(char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, uint32_t ts)
+user_t *user_add(const char *nick, const char *user, const char *host, const char *vhost, const char *ip, const char *uid, const char *gecos, server_t *server, uint32_t ts)
 {
 	user_t *u;
 	node_t *n = node_create();
@@ -650,12 +650,12 @@ user_t *user_add(char *nick, char *user, char *host, char *vhost, char *ip, char
 
 	u = BlockHeapAlloc(user_heap);
 
-	u->hash = UHASH((unsigned char *)nick);
+	u->hash = UHASH((const unsigned char *)nick);
 
 	if (uid != NULL)
 	{
 		strlcpy(u->uid, uid, NICKLEN);
-		u->uhash = UHASH((unsigned char *)uid);
+		u->uhash = UHASH((const unsigned char *)uid);
 		node_add(u, node_create(), &uidlist[u->uhash]);
 	}
 
@@ -807,7 +807,7 @@ user_t *user_find_named(const char *nick)
 }
 
 /* Change a UID, for services */
-void user_changeuid(user_t *u, char *uid)
+void user_changeuid(user_t *u, const char *uid)
 {
 	node_t *n;
 
@@ -822,7 +822,7 @@ void user_changeuid(user_t *u, char *uid)
 
 	if (*u->uid)
 	{
-		u->uhash = UHASH((unsigned char *)uid);
+		u->uhash = UHASH((const unsigned char *)uid);
 		node_add(u, node_create(), &uidlist[u->uhash]);
 	}
 }
@@ -830,7 +830,7 @@ void user_changeuid(user_t *u, char *uid)
 /*******************
  * C H A N N E L S *
  *******************/
-channel_t *channel_add(char *name, uint32_t ts)
+channel_t *channel_add(const char *name, uint32_t ts)
 {
 	channel_t *c;
 	mychan_t *mc;
@@ -857,7 +857,7 @@ channel_t *channel_add(char *name, uint32_t ts)
 
 	c->name = sstrdup(name);
 	c->ts = ts;
-	c->hash = CHASH((unsigned char *)name);
+	c->hash = CHASH((const unsigned char *)name);
 
 	c->topic = NULL;
 	c->topic_setter = NULL;
@@ -881,7 +881,7 @@ channel_t *channel_add(char *name, uint32_t ts)
 	return c;
 }
 
-void channel_delete(char *name)
+void channel_delete(const char *name)
 {
 	channel_t *c = channel_find(name);
 	mychan_t *mc;
@@ -1039,7 +1039,7 @@ void chanban_clear(channel_t *chan)
  * things. It worked fine for shrike, but the old code was restricted
  * to handling only @, @+ and + as prefixes.
  */
-chanuser_t *chanuser_add(channel_t *chan, char *nick)
+chanuser_t *chanuser_add(channel_t *chan, const char *nick)
 {
 	user_t *u;
 	node_t *n1;
@@ -1213,7 +1213,7 @@ kline_t *kline_add(char *user, char *host, char *reason, long duration)
 	return k;
 }
 
-void kline_delete(char *user, char *host)
+void kline_delete(const char *user, const char *host)
 {
 	kline_t *k = kline_find(user, host);
 	node_t *n;
@@ -1244,7 +1244,7 @@ void kline_delete(char *user, char *host)
 	cnt.kline--;
 }
 
-kline_t *kline_find(char *user, char *host)
+kline_t *kline_find(const char *user, const char *host)
 {
 	kline_t *k;
 	node_t *n;
@@ -1475,12 +1475,12 @@ void myuser_delete(myuser_t *mu)
 	cnt.myuser--;
 }
 
-myuser_t *myuser_find(char *name)
+myuser_t *myuser_find(const char *name)
 {
 	return dictionary_retrieve(mulist, name);
 }
 
-myuser_t *myuser_find_ext(char *name)
+myuser_t *myuser_find_ext(const char *name)
 {
 	user_t *u;
 

@@ -6,7 +6,7 @@
  * This file contains customized casemapping functions.
  * This code was mostly lifted from ircd 2.10.
  *
- * $Id: match.c 3347 2005-10-31 04:04:34Z nenolod $
+ * $Id: match.c 6049 2006-08-14 16:18:27Z jilles $
  */
 
 #include "atheme.h"
@@ -122,10 +122,10 @@ void set_match_mapping(int type)
 ** Written by Douglas A Lewis (dalewis@acsu.buffalo.edu)
 */
 
-int match(char *mask, char *name)
+int match(const char *mask, const char *name)
 {
-	u_char *m = (u_char *)mask, *n = (u_char *)name;
-	char *ma = mask, *na = name;
+	const u_char *m = (const u_char *)mask, *n = (const u_char *)name;
+	const char *ma = mask, *na = name;
 	int wild = 0, q = 0, calls = 0;
 
 	if (!mask || !name)
@@ -147,22 +147,22 @@ int match(char *mask, char *name)
 			while (*m == '*')
 				m++;
 			wild = 1;
-			ma = (char *)m;
-			na = (char *)n;
+			ma = (const char *)m;
+			na = (const char *)n;
 		}
 
 		if (!*m)
 		{
 			if (!*n)
 				return 0;
-			for (m--; (m > (u_char *) mask) && (*m == '?' || *m == '&' || *m == '#'); m--)
+			for (m--; (m > (const u_char *) mask) && (*m == '?' || *m == '&' || *m == '#'); m--)
 				;
-			if ((m > (u_char *) mask) && (*m == '*') && (m[-1] != '\\'))
+			if ((m > (const u_char *) mask) && (*m == '*') && (m[-1] != '\\'))
 				return 0;
 			if (!wild)
 				return 1;
-			m = (u_char *) ma;
-			n = (u_char *)++ na;
+			m = (const u_char *) ma;
+			n = (const u_char *)++ na;
 		}
 		else if (!*n)
 			return 1;
@@ -178,8 +178,8 @@ int match(char *mask, char *name)
 		{
 			if (!wild)
 				return 1;
-			m = (u_char *) ma;
-			n = (u_char *)++ na;
+			m = (const u_char *) ma;
+			n = (const u_char *)++ na;
 		}
 		else
 		{

@@ -1,3 +1,14 @@
+jilles      2006/08/14 15:59:37 UTC	(20060814-6047)
+  Log:
+  constify dictionary
+  dictionary_destroy() no longer calls free() on the keys
+  
+
+  Changes:	Modified:
+  +5 -5		trunk/include/dictionary.h (File Modified) 
+  +7 -10	trunk/src/dictionary.c (File Modified) 
+
+
 jilles      2006/08/14 15:30:47 UTC	(20060814-6045)
   Log:
   services_init(): use DICTIONARY_FOREACH
