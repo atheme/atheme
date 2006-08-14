@@ -1,3 +1,37 @@
+jilles      2006/08/14 16:39:35 UTC	(20060814-6051)
+  Log:
+  Change 'make depend' to change .o to .so if necessary
+  with a sed command, so dependencies also work for
+  stuff that's compiled to *.so.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/backend/.depend (File Modified) 
+  +2 -1		trunk/backend/Makefile.in (File Modified) 
+  +2 -1		trunk/contrib/Makefile.in (File Modified) 
+  +2 -2		trunk/crypto/.depend (File Modified) 
+  +2 -1		trunk/crypto/Makefile.in (File Modified) 
+  +31 -31	trunk/modules/chanserv/.depend (File Modified) 
+  +2 -1		trunk/modules/chanserv/Makefile.in (File Modified) 
+  +1 -1		trunk/modules/global/.depend (File Modified) 
+  +2 -1		trunk/modules/global/Makefile.in (File Modified) 
+  +2 -1		trunk/modules/helpserv/Makefile.in (File Modified) 
+  +8 -8		trunk/modules/memoserv/.depend (File Modified) 
+  +2 -1		trunk/modules/memoserv/Makefile.in (File Modified) 
+  +22 -22	trunk/modules/nickserv/.depend (File Modified) 
+  +2 -1		trunk/modules/nickserv/Makefile.in (File Modified) 
+  +20 -20	trunk/modules/operserv/.depend (File Modified) 
+  +2 -1		trunk/modules/operserv/Makefile.in (File Modified) 
+  +5 -5		trunk/modules/saslserv/.depend (File Modified) 
+  +2 -1		trunk/modules/saslserv/Makefile.in (File Modified) 
+  +21 -21	trunk/modules/userserv/.depend (File Modified) 
+  +2 -1		trunk/modules/userserv/Makefile.in (File Modified) 
+  +4 -4		trunk/modules/xmlrpc/.depend (File Modified) 
+  +2 -1		trunk/modules/xmlrpc/Makefile.in (File Modified) 
+  +19 -19	trunk/protocol/.depend (File Modified) 
+  +2 -1		trunk/protocol/Makefile.in (File Modified) 
+
+
 jilles      2006/08/14 16:18:27 UTC	(20060814-6049)
   Log:
   constify match() and a lot of node.c

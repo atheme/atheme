@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 5947 2006-07-26 11:39:11Z jilles $
+ * $Id: atheme.h 6053 2006-08-14 16:50:17Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -19,7 +19,6 @@
 #include "channels.h"
 #include "module.h"
 #include "pmodule.h"
-#include "serno.h"
 #include "crypto.h"
 #include "culture.h"
 #include "xmlrpc.h"
