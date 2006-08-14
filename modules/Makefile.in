@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 5792 2006-07-08 23:22:24Z jilles $
+# $Id: Makefile.in 6039 2006-08-14 15:02:26Z jilles $
 #
 
 CC		= @CC@
@@ -64,7 +64,13 @@ modules:
 .c.so:
 	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@
 
-.PHONY: clean distclean
+.PHONY: depend clean distclean
+depend:
+	@for i in $(SUBDIRS); do \
+		echo "depend ==> $$i"; \
+		cd $$i; \
+		${MAKE} depend; cd ..; \
+	done
 
 clean:
 	@for i in $(SUBDIRS); do \

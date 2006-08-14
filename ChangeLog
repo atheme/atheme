@@ -1,3 +1,13 @@
+jilles      2006/08/14 14:26:40 UTC	(20060814-6037)
+  Log:
+  channel_mode(): use a separate variable for the new limit
+  so as to get rid of signed <-> unsigned compare warning
+  
+
+  Changes:	Modified:
+  +4 -3		trunk/src/cmode.c (File Modified) 
+
+
 jilles      2006/08/14 14:05:41 UTC	(20060814-6035)
   Log:
   postgresql backend: unbreak compile, note that it is not otherwise tested!

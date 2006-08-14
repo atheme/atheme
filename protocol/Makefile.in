@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 5782 2006-07-08 21:18:46Z jilles $
+# $Id: Makefile.in 6039 2006-08-14 15:02:26Z jilles $
 #
 
 CC		= @CC@
@@ -72,10 +72,14 @@ protocols: $(OBJS)
 .c.so:
 	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@
 
-.PHONY: clean distclean
+.PHONY: depend clean distclean
+depend:
+	${MKDEP} ${CPPFLAGS} ${CFLAGS} ${BASE_SRCS} > .depend
 
 clean:
 	${RM} -f *.so
 
 distclean: clean
 	${RM} -f Makefile version.c.last
+
+include .depend

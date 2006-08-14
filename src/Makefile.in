@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 6017 2006-08-07 14:06:59Z jilles $
+# $Id: Makefile.in 6039 2006-08-14 15:02:26Z jilles $
 #
 
 CC		= @CC@
@@ -22,7 +22,7 @@ DOCDIR		= @DOCDIR@
 MODDIR		= @MODDIR@
 SHAREDIR	= @SHAREDIR@
 BIN		= atheme@EXEEXT@
-MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../include -I../libatheme @PGINC@
+MKDEP		= @MKDEP@
 CFLAGS		= @CFLAGS@ -I../include -I../libatheme @PGINC@
 
 VERSION		= @PACKAGE_VERSION@
@@ -69,10 +69,9 @@ BASE_SRCS =		\
 	ubase64.c	\
 	uid.c		\
 	uplink.c	\
-	xmlrpc.c	\
-	version.c
+	xmlrpc.c
 
-SRCS = ${BASE_SRCS}
+SRCS = ${BASE_SRCS} version.c
 
 OBJS = ${SRCS:.c=.o}
 
@@ -126,7 +125,7 @@ version.c:
 
 .PHONY: depend clean distclean
 depend:
-	${MKDEP} ${CPPFLAGS} ${BASE_SRCS} > .depend
+	${MKDEP} ${CPPFLAGS} ${CFLAGS} ${BASE_SRCS} > .depend
 
 clean:
 	${RM} -f *.o *.exe *~ version.c atheme.core core atheme

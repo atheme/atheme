@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in 5782 2006-07-08 21:18:46Z jilles $
+# $Id: Makefile.in 6039 2006-08-14 15:02:26Z jilles $
 #
 
 CC		= @CC@
@@ -10,6 +10,7 @@ LDFLAGS		= @LDFLAGS@
 MV		= @MV@
 AR		= @AR@
 RANLIB		= @RANLIB@
+MKDEP		= @MKDEP@
 
 prefix		= @prefix@
 exec_prefix	= @exec_prefix@
@@ -57,10 +58,14 @@ liborg.atheme.claro.base.a: ${OBJS}
 .c.o:
 	${CC} ${CPPFLAGS} ${CFLAGS} -c $< -o $@
 
+.PHONY: depend clean distclean
+depend:
+	${MKDEP} ${CPPFLAGS} ${CFLAGS} ${SOURCES} > .depend
+
 clean:
-	${RM} -f *.o *.exe *~ libatheme.a
+	${RM} -f *.o *.exe *~ *.a *.so
 
 distclean: clean
 	${RM} -f Makefile
 
-.PHONY: install depend
+include .depend

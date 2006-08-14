@@ -1,0 +1,615 @@
+main.o: main.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+akick.o: akick.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+ban.o: ban.c ../../include/atheme.h ../../libatheme/org.atheme.claro.base \
+  ../../include/sysconf.h ../../libatheme/stdinc.h \
+  ../../libatheme/dlink.h ../../libatheme/event.h \
+  ../../libatheme/balloc.h ../../libatheme/connection.h \
+  ../../libatheme/sockio.h ../../libatheme/hook.h \
+  ../../libatheme/linker.h ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+clear.o: clear.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+clear_bans.o: clear_bans.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+clear_users.o: clear_users.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+close.o: close.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+drop.o: drop.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+flags.o: flags.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h ../../include/template.h
+ftransfer.o: ftransfer.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+getkey.o: getkey.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+halfop.o: halfop.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+help.o: help.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+hold.o: hold.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+info.o: info.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+invite.o: invite.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+kick.o: kick.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+list.o: list.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+mark.o: mark.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+op.o: op.c ../../include/atheme.h ../../libatheme/org.atheme.claro.base \
+  ../../include/sysconf.h ../../libatheme/stdinc.h \
+  ../../libatheme/dlink.h ../../libatheme/event.h \
+  ../../libatheme/balloc.h ../../libatheme/connection.h \
+  ../../libatheme/sockio.h ../../libatheme/hook.h \
+  ../../libatheme/linker.h ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+recover.o: recover.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+register.o: register.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+set.o: set.c ../../include/atheme.h ../../libatheme/org.atheme.claro.base \
+  ../../include/sysconf.h ../../libatheme/stdinc.h \
+  ../../libatheme/dlink.h ../../libatheme/event.h \
+  ../../libatheme/balloc.h ../../libatheme/connection.h \
+  ../../libatheme/sockio.h ../../libatheme/hook.h \
+  ../../libatheme/linker.h ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+status.o: status.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+taxonomy.o: taxonomy.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+template.o: template.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h ../../include/template.h
+topic.o: topic.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+version.o: version.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+voice.o: voice.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+why.o: why.c ../../include/atheme.h ../../libatheme/org.atheme.claro.base \
+  ../../include/sysconf.h ../../libatheme/stdinc.h \
+  ../../libatheme/dlink.h ../../libatheme/event.h \
+  ../../libatheme/balloc.h ../../libatheme/connection.h \
+  ../../libatheme/sockio.h ../../libatheme/hook.h \
+  ../../libatheme/linker.h ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h
+xop.o: xop.c ../../include/atheme.h ../../libatheme/org.atheme.claro.base \
+  ../../include/sysconf.h ../../libatheme/stdinc.h \
+  ../../libatheme/dlink.h ../../libatheme/event.h \
+  ../../libatheme/balloc.h ../../libatheme/connection.h \
+  ../../libatheme/sockio.h ../../libatheme/hook.h \
+  ../../libatheme/linker.h ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/pmodule.h ../../include/serno.h ../../include/crypto.h \
+  ../../include/culture.h ../../include/xmlrpc.h ../../include/atheme.h \
+  ../../include/base64.h ../../include/md5.h ../../include/sasl.h \
+  ../../include/dictionary.h ../../include/sysconf.h \
+  ../../include/account.h ../../include/confparse.h ../../include/flags.h \
+  ../../include/extern.h ../../include/metadata.h \
+  ../../include/phandler.h ../../include/servtree.h \
+  ../../include/services.h ../../include/commandtree.h \
+  ../../include/users.h ../../include/authcookie.h ../../include/privs.h \
+  ../../include/common-ctcp.h

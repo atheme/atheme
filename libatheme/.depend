@@ -1,0 +1,48 @@
+balloc.o: balloc.c ./org.atheme.claro.base ../include/sysconf.h \
+  ./stdinc.h ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h \
+  ./hook.h ./linker.h ./org.atheme.claro.base.string \
+  ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
+claro.o: claro.c ./org.atheme.claro.base ../include/sysconf.h ./stdinc.h \
+  ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h ./hook.h \
+  ./linker.h ./org.atheme.claro.base.string \
+  ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
+connection.o: connection.c ./org.atheme.claro.base ../include/sysconf.h \
+  ./stdinc.h ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h \
+  ./hook.h ./linker.h ./org.atheme.claro.base.string \
+  ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
+datastream.o: datastream.c ./org.atheme.claro.base ../include/sysconf.h \
+  ./stdinc.h ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h \
+  ./hook.h ./linker.h ./org.atheme.claro.base.string \
+  ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
+dlink.o: dlink.c ./org.atheme.claro.base ../include/sysconf.h ./stdinc.h \
+  ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h ./hook.h \
+  ./linker.h ./org.atheme.claro.base.string \
+  ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
+event.o: event.c ./org.atheme.claro.base ../include/sysconf.h ./stdinc.h \
+  ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h ./hook.h \
+  ./linker.h ./org.atheme.claro.base.string \
+  ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
+hook.o: hook.c ./org.atheme.claro.base ../include/sysconf.h ./stdinc.h \
+  ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h ./hook.h \
+  ./linker.h ./org.atheme.claro.base.string \
+  ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
+linker.o: linker.c ./org.atheme.claro.base ../include/sysconf.h \
+  ./stdinc.h ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h \
+  ./hook.h ./linker.h ./org.atheme.claro.base.string \
+  ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
+memory.o: memory.c ./org.atheme.claro.base ../include/sysconf.h \
+  ./stdinc.h ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h \
+  ./hook.h ./linker.h ./org.atheme.claro.base.string \
+  ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
+sockio.o: sockio.c ./org.atheme.claro.base ../include/sysconf.h \
+  ./stdinc.h ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h \
+  ./hook.h ./linker.h ./org.atheme.claro.base.string \
+  ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
+string.o: string.c ./org.atheme.claro.base ../include/sysconf.h \
+  ./stdinc.h ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h \
+  ./hook.h ./linker.h ./org.atheme.claro.base.string \
+  ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
+poll.o: poll.c ./org.atheme.claro.base ../include/sysconf.h ./stdinc.h \
+  ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h ./hook.h \
+  ./linker.h ./org.atheme.claro.base.string \
+  ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
