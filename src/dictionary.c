@@ -5,7 +5,7 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id: dictionary.c 5997 2006-08-01 20:41:37Z jilles $
+ * $Id: dictionary.c 6047 2006-08-14 15:59:37Z jilles $
  */
 
 #include "atheme.h"
@@ -45,9 +45,6 @@ void dictionary_destroy(dictionary_tree_t *dtree,
 
 			if (destroy_cb != NULL)
 				(*destroy_cb)(delem, privdata);
-
-			if (delem->key != NULL)
-				free(delem->key);
 
 			node_del(&delem->node, &dtree->hashv[i]);
 
@@ -152,7 +149,7 @@ void dictionary_foreach_next(dictionary_tree_t *dtree,
 	}
 }
 
-dictionary_elem_t *dictionary_find(dictionary_tree_t *dtree, char *key)
+dictionary_elem_t *dictionary_find(dictionary_tree_t *dtree, const char *key)
 {
 	node_t *n;
 	int i;
@@ -160,7 +157,7 @@ dictionary_elem_t *dictionary_find(dictionary_tree_t *dtree, char *key)
 	if (dtree == NULL || key == NULL)
 		return NULL;
 
-	i = shash((unsigned char *) key) % dtree->resolution;
+	i = shash((const unsigned char *) key) % dtree->resolution;
 
 	LIST_FOREACH(n, dtree->hashv[i].head)
 	{
@@ -174,7 +171,7 @@ dictionary_elem_t *dictionary_find(dictionary_tree_t *dtree, char *key)
 	return NULL;
 }
 
-dictionary_elem_t *dictionary_add(dictionary_tree_t *dtree, char *key, void *data)
+dictionary_elem_t *dictionary_add(dictionary_tree_t *dtree, const char *key, void *data)
 {
 	dictionary_elem_t *delem;
 	int i;
@@ -189,7 +186,7 @@ dictionary_elem_t *dictionary_add(dictionary_tree_t *dtree, char *key, void *dat
 		return NULL;
 	}
 
-	i = shash((unsigned char *) key) % dtree->resolution;
+	i = shash((const unsigned char *) key) % dtree->resolution;
 	delem = smalloc(sizeof(dictionary_elem_t));
 	memset(delem, '\0', sizeof(dictionary_elem_t));
 
@@ -199,7 +196,7 @@ dictionary_elem_t *dictionary_add(dictionary_tree_t *dtree, char *key, void *dat
 	return delem;
 }
 
-void *dictionary_delete(dictionary_tree_t *dtree, char *key)
+void *dictionary_delete(dictionary_tree_t *dtree, const char *key)
 {
 	dictionary_elem_t *delem = dictionary_find(dtree, key);
 	void *data;
@@ -212,7 +209,7 @@ void *dictionary_delete(dictionary_tree_t *dtree, char *key)
 		return NULL;
 	}
 
-	i = shash((unsigned char *) key) % dtree->resolution;
+	i = shash((const unsigned char *) key) % dtree->resolution;
 
 	data = delem->node.data;
 
@@ -223,7 +220,7 @@ void *dictionary_delete(dictionary_tree_t *dtree, char *key)
 	return data;
 }
 
-void *dictionary_retrieve(dictionary_tree_t *dtree, char *key)
+void *dictionary_retrieve(dictionary_tree_t *dtree, const char *key)
 {
 	dictionary_elem_t *delem = dictionary_find(dtree, key);
 

@@ -5,7 +5,7 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id: dictionary.h 5997 2006-08-01 20:41:37Z jilles $
+ * $Id: dictionary.h 6047 2006-08-14 15:59:37Z jilles $
  */
 
 #ifndef _DICTIONARY_H
@@ -23,7 +23,7 @@ typedef struct dictionary_tree_ dictionary_tree_t;
 struct dictionary_elem_
 {
 	node_t node;
-	char *key;
+	const char *key;
 };
 
 typedef struct dictionary_elem_ dictionary_elem_t;
@@ -102,21 +102,21 @@ E void dictionary_foreach_next(dictionary_tree_t *dtree,
 /*
  * dictionary_add() adds a key->value entry to the dictionary tree.
  */
-E dictionary_elem_t *dictionary_add(dictionary_tree_t *dtree, char *key, void *data);
+E dictionary_elem_t *dictionary_add(dictionary_tree_t *dtree, const char *key, void *data);
 
 /*
  * dictionary_find() returns a dictionary_elem_t container from a dtree for key 'key'.
  */
-E dictionary_elem_t *dictionary_find(dictionary_tree_t *dtree, char *key);
+E dictionary_elem_t *dictionary_find(dictionary_tree_t *dtree, const char *key);
 
 /*
  * dictionary_find() returns data from a dtree for key 'key'.
  */
-E void *dictionary_retrieve(dictionary_tree_t *dtree, char *key);
+E void *dictionary_retrieve(dictionary_tree_t *dtree, const char *key);
 
 /*
  * dictionary_delete() deletes a key->value entry from the dictionary tree.
  */
-E void *dictionary_delete(dictionary_tree_t *dtree, char *key);
+E void *dictionary_delete(dictionary_tree_t *dtree, const char *key);
 
 #endif
