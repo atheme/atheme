@@ -1,3 +1,26 @@
+jilles      2006/08/14 16:50:17 UTC	(20060814-6053)
+  Log:
+  Only include serno.h in version.c so we don't have
+  to recompile everything on every svn update.
+  
+
+  Changes:	Modified:
+  +8 -8		trunk/backend/.depend (File Modified) 
+  +16 -16	trunk/crypto/.depend (File Modified) 
+  +0 -1		trunk/include/atheme.h (File Modified) 
+  +279 -279	trunk/modules/chanserv/.depend (File Modified) 
+  +1 -1		trunk/modules/chanserv/version.c (File Modified) 
+  +9 -9		trunk/modules/global/.depend (File Modified) 
+  +72 -72	trunk/modules/memoserv/.depend (File Modified) 
+  +198 -198	trunk/modules/nickserv/.depend (File Modified) 
+  +180 -180	trunk/modules/operserv/.depend (File Modified) 
+  +45 -45	trunk/modules/saslserv/.depend (File Modified) 
+  +189 -189	trunk/modules/userserv/.depend (File Modified) 
+  +36 -36	trunk/modules/xmlrpc/.depend (File Modified) 
+  +152 -154	trunk/protocol/.depend (File Modified) 
+  +272 -273	trunk/src/.depend (File Modified) 
+
+
 jilles      2006/08/14 16:39:35 UTC	(20060814-6051)
   Log:
   Change 'make depend' to change .o to .so if necessary
