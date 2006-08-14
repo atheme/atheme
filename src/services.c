@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 6043 2006-08-14 15:22:40Z jilles $
+ * $Id: services.c 6045 2006-08-14 15:30:47Z jilles $
  */
 
 #include "atheme.h"
@@ -126,22 +126,19 @@ void join(char *chan, char *nick)
 	join_sts(c, u, isnew, channel_modes(c, TRUE));
 }
 
-int service_init_cb(dictionary_elem_t *delem, void *privdata)
-{
-	service_t *svs = delem->node.data;
-
-	if (ircd->uses_uid && svs->me->uid[0] == '\0')
-		user_changeuid(svs->me, svs->uid);
-	else if (!ircd->uses_uid && svs->me->uid[0] != '\0')
-		user_changeuid(svs->me, NULL);
-	introduce_nick(svs->name, svs->user, svs->host, svs->real, svs->uid);
- 
-	return 0;
-}
-
 void services_init(void)
 {
-	dictionary_foreach(services, service_init_cb, NULL);
+	service_t *svs;
+	dictionary_iteration_state_t state;
+
+	DICTIONARY_FOREACH(svs, &state, services)
+	{
+		if (ircd->uses_uid && svs->me->uid[0] == '\0')
+			user_changeuid(svs->me, svs->uid);
+		else if (!ircd->uses_uid && svs->me->uid[0] != '\0')
+			user_changeuid(svs->me, NULL);
+		introduce_nick(svs->name, svs->user, svs->host, svs->real, svs->uid);
+	}
 }
 
 void joinall(char *name)

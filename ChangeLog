@@ -1,3 +1,16 @@
+jilles      2006/08/14 15:22:40 UTC	(20060814-6043)
+  Log:
+  Fix possibility for the channelTS to be set to garbage
+  if chanserv::changets is enabled and a channel that
+  is being created by a service does not have private:channelts
+  metadata.
+  This bug is not in 1.2.x.
+  
+
+  Changes:	Modified:
+  +4 -2		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/08/14 15:07:19 UTC	(20060814-6041)
   Log:
   Add a prototype for handle_topic_from().
