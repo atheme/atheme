@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 5933 2006-07-21 11:45:43Z pippijn $
+ * $Id: cmode.c 6037 2006-08-14 14:26:40Z jilles $
  */
 
 #include "atheme.h"
@@ -19,6 +19,7 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 	boolean_t chanserv_reopped = FALSE;
 	boolean_t simple_modes_changed = FALSE;
 	int i, parpos = 0, whatt = MTYPE_NUL;
+	uint32_t newlimit;
 	const char *pos = parv[0];
 	mychan_t *mc;
 	chanuser_t *cu = NULL;
@@ -123,10 +124,10 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 				if (++parpos >= parc)
 					continue;
 				chan->modes |= CMODE_LIMIT;
-				i = atoi(parv[parpos]);
-				if (chan->limit != i)
+				newlimit = atoi(parv[parpos]);
+				if (chan->limit != newlimit)
 					simple_modes_changed = TRUE;
-				chan->limit = i;
+				chan->limit = newlimit;
 				if (source)
 					modestack_mode_limit(source->nick, chan->name, MTYPE_ADD, chan->limit);
 			}
