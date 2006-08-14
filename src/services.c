@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 6017 2006-08-07 14:06:59Z jilles $
+ * $Id: services.c 6043 2006-08-14 15:22:40Z jilles $
  */
 
 #include "atheme.h"
@@ -98,11 +98,13 @@ void join(char *chan, char *nick)
 		mc = mychan_find(chan);
 		if (chansvs.changets && mc != NULL)
 		{
+			/* Use the previous TS if known, registration
+			 * time otherwise, but never ever create a channel
+			 * with TS 0 -- jilles */
+			ts = mc->registered;
 			md = metadata_find(mc, METADATA_CHANNEL, "private:channelts");
 			if (md != NULL)
 				ts = atol(md->value);
-			if (ts == 0)
-				ts = mc->registered;
 			if (ts == 0)
 				ts = CURRTIME;
 		}

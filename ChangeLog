@@ -1,3 +1,12 @@
+jilles      2006/08/14 15:07:19 UTC	(20060814-6041)
+  Log:
+  Add a prototype for handle_topic_from().
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/extern.h (File Modified) 
+
+
 jilles      2006/08/14 15:02:26 UTC	(20060814-6039)
   Log:
   Make 'make depend' work again. This will cause better
