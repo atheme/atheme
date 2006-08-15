@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5967 2006-07-29 19:49:23Z jilles $
+ * $Id: main.c 6059 2006-08-15 16:17:49Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5967 2006-07-29 19:49:23Z jilles $",
+	"$Id: main.c 6059 2006-08-15 16:17:49Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -462,7 +462,7 @@ static void cs_topiccheck(hook_channel_topic_check_t *data)
 {
 	mychan_t *mc;
 	metadata_t *md;
-	uint32_t access = 0;
+	uint32_t accessfl = 0;
 
 	mc = mychan_find(data->c->name);
 	if (mc == NULL)
@@ -470,7 +470,7 @@ static void cs_topiccheck(hook_channel_topic_check_t *data)
 
 	if ((mc->flags & (MC_KEEPTOPIC | MC_TOPICLOCK)) == (MC_KEEPTOPIC | MC_TOPICLOCK))
 	{
-		if (data->u == NULL || !((access = chanacs_user_flags(mc, data->u)) & CA_TOPIC))
+		if (data->u == NULL || !((accessfl = chanacs_user_flags(mc, data->u)) & CA_TOPIC))
 		{
 			/* topic burst or unauthorized user, revert it */
 			data->approved = 1;
@@ -484,10 +484,10 @@ static void cs_topiccheck(hook_channel_topic_check_t *data)
 				 * deop them and set +t */
 				/* note: channel_mode() takes nicks, not UIDs
 				 * when used with a non-NULL source */
-				if (ircd->uses_halfops && !(access & (CA_OP | CA_AUTOOP | CA_HALFOP | CA_AUTOHALFOP)))
+				if (ircd->uses_halfops && !(accessfl & (CA_OP | CA_AUTOOP | CA_HALFOP | CA_AUTOHALFOP)))
 					channel_mode_va(chansvs.me->me, data->c,
 							3, "+t-oh", data->u->nick, data->u->nick);
-				else if (!ircd->uses_halfops && !(access & (CA_OP | CA_AUTOOP)))
+				else if (!ircd->uses_halfops && !(accessfl & (CA_OP | CA_AUTOOP)))
 					channel_mode_va(chansvs.me->me, data->c,
 							2, "+t-o", data->u->nick);
 			}

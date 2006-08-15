@@ -1,3 +1,17 @@
+jilles      2006/08/15 16:03:17 UTC	(20060815-6057)
+  Log:
+  Add a flags argument to regex_create() to allow
+  specification of case sensitive (default) and
+  case insensitive (AREGEX_ICASE) matching.
+  Only w00t's chii uses this anyway.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/include/atheme.h (File Modified) 
+  +1 -1		trunk/include/extern.h (File Modified) 
+  +2 -2		trunk/src/function.c (File Modified) 
+
+
 jilles      2006/08/14 19:04:08 UTC	(20060814-6055)
   Log:
   Forgot to add contrib/.depend.
