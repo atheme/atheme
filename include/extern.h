@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 6049 2006-08-14 16:18:27Z jilles $
+ * $Id: extern.h 6057 2006-08-15 16:03:17Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -72,7 +72,7 @@ E void slog(uint32_t level, const char *fmt, ...);
 E void logcommand(void *svs, user_t *source, int level, const char *fmt, ...);
 E void logcommand_external(void *svs, char *type, connection_t *source, myuser_t *login, int level, const char *fmt, ...);
 E uint32_t time_msec(void);
-E regex_t *regex_create(char *pattern);
+E regex_t *regex_create(char *pattern, int flags);
 E boolean_t regex_match(regex_t *preg, char *string);
 E boolean_t regex_destroy(regex_t *preg);
 E uint32_t shash(const unsigned char *text);

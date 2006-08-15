@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 5756 2006-07-06 19:54:45Z jilles $
+ * $Id: function.c 6057 2006-08-15 16:03:17Z jilles $
  */
 
 #include "atheme.h"
@@ -234,7 +234,7 @@ uint32_t time_msec(void)
  * regex_compile()
  *  Compile a regex of `pattern' and return it.
  */
-regex_t *regex_create(char *pattern)
+regex_t *regex_create(char *pattern, int flags)
 {
 	static char errmsg[BUFSIZE];
 	int errnum;
@@ -246,7 +246,7 @@ regex_t *regex_create(char *pattern)
 	}
 	
 	preg = (regex_t *)malloc(sizeof(regex_t));
-	errnum = regcomp(preg, pattern, REG_ICASE | REG_EXTENDED);
+	errnum = regcomp(preg, pattern, (flags & AREGEX_ICASE ? REG_ICASE : 0) | REG_EXTENDED);
 	
 	if (errnum != 0)
 	{

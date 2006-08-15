@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 6053 2006-08-14 16:50:17Z jilles $
+ * $Id: atheme.h 6057 2006-08-15 16:03:17Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -233,6 +233,9 @@ struct global_ {
 /* database versions */
 #define DB_SHRIKE	1
 #define DB_ATHEME	2
+
+/* regex_create() flags */
+#define AREGEX_ICASE	1 /* case insensitive */
 
 /* struct for irc message hash table */
 struct message_
