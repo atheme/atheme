@@ -1,3 +1,12 @@
+jilles      2006/08/15 16:17:49 UTC	(20060815-6059)
+  Log:
+  Don't use "access" as a variable name.
+  
+
+  Changes:	Modified:
+  +4 -4		trunk/modules/chanserv/main.c (File Modified) 
+
+
 jilles      2006/08/15 16:03:17 UTC	(20060815-6057)
   Log:
   Add a flags argument to regex_create() to allow

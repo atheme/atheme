@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 6057 2006-08-15 16:03:17Z jilles $
+ * $Id: extern.h 6061 2006-08-15 16:28:18Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -44,14 +44,6 @@ E boolean_t conf_check(void);
 E void config_free(CONFIGFILE *cfptr);
 E CONFIGFILE *config_load(char *filename);
 E CONFIGENTRY *config_find(CONFIGENTRY *ceptr, char *name);
-
-/* flags.c */
-E void flags_make_bitmasks(const char *string, struct flags_table table[], uint32_t *addflags, uint32_t *removeflags);
-E uint32_t flags_to_bitmask(const char *, struct flags_table[], uint32_t flags);
-E char *bitmask_to_flags(uint32_t, struct flags_table[]);
-E char *bitmask_to_flags2(uint32_t, uint32_t, struct flags_table[]);
-E struct flags_table chanacs_flags[];
-E uint32_t allow_flags(uint32_t flags);
 
 /* function.c */
 E FILE *log_file;
@@ -248,23 +240,6 @@ E boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, char *hostmask
 E void expire_check(void *arg);
 /* Check the database for (version) problems common to all backends */
 E void db_check(void);
-
-/* services.c */
-E int ban(char *sender, char *channel, user_t *user);
-E int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target);
-E void join(char *chan, char *nick);
-E void initialize_services(void);
-E void joinall(char *name);
-E void partall(char *name);
-E void reintroduce_user(user_t *u);
-E void services_init(void);
-E void verbose(mychan_t *mychan, char *fmt, ...);
-E void snoop(char *fmt, ...);
-E void cservice(char *origin, uint8_t parc, char *parv[]);
-E void gservice(char *origin, uint8_t parc, char *parv[]);
-E void oservice(char *origin, uint8_t parc, char *parv[]);
-E void nickserv(char *origin, uint8_t parc, char *parv[]);
-E void notice(char *from, char *to, char *msg, ...);
 
 /* atheme.c */
 E char *config_file;

@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5953 2006-07-27 22:50:39Z nenolod $
+ * $Id: main.c 6061 2006-08-15 16:28:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"global/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5953 2006-07-27 22:50:39Z nenolod $",
+	"$Id: main.c 6061 2006-08-15 16:28:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -176,7 +176,7 @@ static void gs_cmd_global(char *origin)
 }
 
 /* main services client routine */
-void gservice(char *origin, uint8_t parc, char *parv[])
+static void gservice(char *origin, uint8_t parc, char *parv[])
 {
 	char *cmd, *s;
 	char orig[BUFSIZE];
