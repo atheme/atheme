@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 6057 2006-08-15 16:03:17Z jilles $
+ * $Id: function.c 6063 2006-08-15 16:49:42Z jilles $
  */
 
 #include "atheme.h"
@@ -228,72 +228,6 @@ uint32_t time_msec(void)
 #else
 	return CURRTIME * 1000;
 #endif
-}
-
-/*
- * regex_compile()
- *  Compile a regex of `pattern' and return it.
- */
-regex_t *regex_create(char *pattern, int flags)
-{
-	static char errmsg[BUFSIZE];
-	int errnum;
-	regex_t *preg;
-	
-	if (pattern == NULL)
-	{
-		return NULL;
-	}
-	
-	preg = (regex_t *)malloc(sizeof(regex_t));
-	errnum = regcomp(preg, pattern, (flags & AREGEX_ICASE ? REG_ICASE : 0) | REG_EXTENDED);
-	
-	if (errnum != 0)
-	{
-		regerror(errnum, preg, errmsg, BUFSIZE);
-		slog(LG_ERROR, "regex_match(): %s\n", errmsg);
-		regfree(preg);
-		free(preg);
-		return NULL;
-	}
-	
-	return preg;
-}
-
-/*
- * regex_match()
- *  Internal wrapper API for POSIX-based regex matching.
- *  `preg' is the regex to check with, `string' needs to be checked against.
- *  Returns `true' on match, `false' else.
- */
-boolean_t regex_match(regex_t *preg, char *string)
-{
-	boolean_t retval;
-	
-	if (preg == NULL || string == NULL)
-	{
-		slog(LG_ERROR, "regex_match(): we were given NULL string or pattern, bad!");
-		return FALSE;
-	}
-
-	/* match it */
-	if (regexec(preg, string, 0, NULL, 0) == 0)
-		retval = TRUE;
-	else
-		retval = FALSE;
-	
-	return retval;
-}
-
-/*
- * regex_destroy()
- *  Perform cleanup with regex `preg', free associated memory.
- */
-boolean_t regex_destroy(regex_t *preg)
-{
-	regfree(preg);
-	free(preg);
-	return TRUE;
 }
 
 /*

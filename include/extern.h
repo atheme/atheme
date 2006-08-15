@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 6061 2006-08-15 16:28:18Z jilles $
+ * $Id: extern.h 6063 2006-08-15 16:49:42Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -14,10 +14,6 @@
 /* -> moved to atheme.h */
 
 E boolean_t cold_start;
-
-/* cidr.c */
-E int match_ips(const char *mask, const char *address);
-E int match_cidr(const char *mask, const char *address);
 
 /* cmode.c */
 E void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[]);
@@ -64,9 +60,6 @@ E void slog(uint32_t level, const char *fmt, ...);
 E void logcommand(void *svs, user_t *source, int level, const char *fmt, ...);
 E void logcommand_external(void *svs, char *type, connection_t *source, myuser_t *login, int level, const char *fmt, ...);
 E uint32_t time_msec(void);
-E regex_t *regex_create(char *pattern, int flags);
-E boolean_t regex_match(regex_t *preg, char *string);
-E boolean_t regex_destroy(regex_t *preg);
 E uint32_t shash(const unsigned char *text);
 E char *replace(char *s, int32_t size, const char *old, const char *new);
 
@@ -111,41 +104,6 @@ E void irc_parse(char *line);
 E void p10_parse(char *line);
 E struct message_ messages[];
 E struct message_ *msg_find(const char *name);
-
-/* match.c */
-#define MATCH_RFC1459   0
-#define MATCH_ASCII     1
-
-E int match_mapping;
-
-#define IsLower(c)  ((unsigned char)(c) > 0x5f)
-#define IsUpper(c)  ((unsigned char)(c) < 0x60)
-
-#define C_ALPHA 0x00000001
-#define C_DIGIT 0x00000002
-
-E const unsigned int charattrs[];
-
-#define IsAlpha(c)      (charattrs[(unsigned char) (c)] & C_ALPHA)
-#define IsDigit(c)      (charattrs[(unsigned char) (c)] & C_DIGIT)
-#define IsAlphaNum(c)   (IsAlpha((c)) || IsDigit((c)))
-#define IsNon(c)        (!IsAlphaNum((c)))
-
-E const unsigned char ToLowerTab[];
-E const unsigned char ToUpperTab[];
-
-void set_match_mapping(int);
-
-E int ToLower(int);
-E int ToUpper(int);
-
-E int irccmp(const char *, const char *);
-E int irccasecmp(const char *, const char *);
-E int ircncmp(const char *, const char *, int);
-E int ircncasecmp(const char *, const char *, int);
-
-E int match(const char *, const char *);
-E char *collapse(char *);
 
 /* node.c */
 E list_t soperlist;

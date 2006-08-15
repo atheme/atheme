@@ -1,3 +1,20 @@
+jilles      2006/08/15 16:28:18 UTC	(20060815-6061)
+  Log:
+  - Move some declarations from extern.h to a more specific header file
+  - Remove declarations for gservice() etc
+  - Make the gservice() etc functions (service handlers) static
+  
+
+  Changes:	Modified:
+  +0 -25	trunk/include/extern.h (File Modified) 
+  +7 -0		trunk/include/flags.h (File Modified) 
+  +12 -0	trunk/include/services.h (File Modified) 
+  +1 -1		trunk/modules/global/main.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/main.c (File Modified) 
+  +1 -1		trunk/modules/operserv/main.c (File Modified) 
+  +1 -1		trunk/modules/userserv/main.c (File Modified) 
+
+
 jilles      2006/08/15 16:17:49 UTC	(20060815-6059)
   Log:
   Don't use "access" as a variable name.

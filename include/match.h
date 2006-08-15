@@ -1,0 +1,60 @@
+/*
+ * Copyright (c) 2003-2004 E. Will et al.
+ * Copyright (c) 2005-2006 Atheme Development Group
+ * Rights to this code are as defined in doc/LICENSE.
+ *
+ * String matching
+ *
+ * $Id: match.h 6063 2006-08-15 16:49:42Z jilles $
+ */
+
+#ifndef _MATCH_H
+#define _MATCH_H
+
+/* cidr.c */
+E int match_ips(const char *mask, const char *address);
+E int match_cidr(const char *mask, const char *address);
+
+/* match.c */
+#define MATCH_RFC1459   0
+#define MATCH_ASCII     1
+
+E int match_mapping;
+
+#define IsLower(c)  ((unsigned char)(c) > 0x5f)
+#define IsUpper(c)  ((unsigned char)(c) < 0x60)
+
+#define C_ALPHA 0x00000001
+#define C_DIGIT 0x00000002
+
+E const unsigned int charattrs[];
+
+#define IsAlpha(c)      (charattrs[(unsigned char) (c)] & C_ALPHA)
+#define IsDigit(c)      (charattrs[(unsigned char) (c)] & C_DIGIT)
+#define IsAlphaNum(c)   (IsAlpha((c)) || IsDigit((c)))
+#define IsNon(c)        (!IsAlphaNum((c)))
+
+E const unsigned char ToLowerTab[];
+E const unsigned char ToUpperTab[];
+
+void set_match_mapping(int);
+
+E int ToLower(int);
+E int ToUpper(int);
+
+E int irccmp(const char *, const char *);
+E int irccasecmp(const char *, const char *);
+E int ircncmp(const char *, const char *, int);
+E int ircncasecmp(const char *, const char *, int);
+
+E int match(const char *, const char *);
+E char *collapse(char *);
+
+/* regex_create() flags */
+#define AREGEX_ICASE	1 /* case insensitive */
+
+E regex_t *regex_create(char *pattern, int flags);
+E boolean_t regex_match(regex_t *preg, char *string);
+E boolean_t regex_destroy(regex_t *preg);
+
+#endif
