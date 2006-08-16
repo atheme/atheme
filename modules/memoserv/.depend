@@ -8,9 +8,9 @@ main.so: main.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base.memory \
   ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
   ../../include/servers.h ../../include/channels.h ../../include/module.h \
-  ../../include/pmodule.h ../../include/crypto.h ../../include/culture.h \
-  ../../include/xmlrpc.h ../../include/atheme.h ../../include/base64.h \
-  ../../include/md5.h ../../include/sasl.h ../../include/dictionary.h \
+  ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
+  ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
+  ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
   ../../include/sysconf.h ../../include/account.h \
   ../../include/confparse.h ../../include/flags.h ../../include/extern.h \
   ../../include/metadata.h ../../include/phandler.h \
@@ -28,9 +28,9 @@ help.so: help.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base.memory \
   ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
   ../../include/servers.h ../../include/channels.h ../../include/module.h \
-  ../../include/pmodule.h ../../include/crypto.h ../../include/culture.h \
-  ../../include/xmlrpc.h ../../include/atheme.h ../../include/base64.h \
-  ../../include/md5.h ../../include/sasl.h ../../include/dictionary.h \
+  ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
+  ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
+  ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
   ../../include/sysconf.h ../../include/account.h \
   ../../include/confparse.h ../../include/flags.h ../../include/extern.h \
   ../../include/metadata.h ../../include/phandler.h \
@@ -48,9 +48,9 @@ send.so: send.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base.memory \
   ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
   ../../include/servers.h ../../include/channels.h ../../include/module.h \
-  ../../include/pmodule.h ../../include/crypto.h ../../include/culture.h \
-  ../../include/xmlrpc.h ../../include/atheme.h ../../include/base64.h \
-  ../../include/md5.h ../../include/sasl.h ../../include/dictionary.h \
+  ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
+  ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
+  ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
   ../../include/sysconf.h ../../include/account.h \
   ../../include/confparse.h ../../include/flags.h ../../include/extern.h \
   ../../include/metadata.h ../../include/phandler.h \
@@ -68,9 +68,9 @@ list.so: list.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base.memory \
   ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
   ../../include/servers.h ../../include/channels.h ../../include/module.h \
-  ../../include/pmodule.h ../../include/crypto.h ../../include/culture.h \
-  ../../include/xmlrpc.h ../../include/atheme.h ../../include/base64.h \
-  ../../include/md5.h ../../include/sasl.h ../../include/dictionary.h \
+  ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
+  ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
+  ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
   ../../include/sysconf.h ../../include/account.h \
   ../../include/confparse.h ../../include/flags.h ../../include/extern.h \
   ../../include/metadata.h ../../include/phandler.h \
@@ -88,9 +88,9 @@ delete.so: delete.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base.memory \
   ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
   ../../include/servers.h ../../include/channels.h ../../include/module.h \
-  ../../include/pmodule.h ../../include/crypto.h ../../include/culture.h \
-  ../../include/xmlrpc.h ../../include/atheme.h ../../include/base64.h \
-  ../../include/md5.h ../../include/sasl.h ../../include/dictionary.h \
+  ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
+  ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
+  ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
   ../../include/sysconf.h ../../include/account.h \
   ../../include/confparse.h ../../include/flags.h ../../include/extern.h \
   ../../include/metadata.h ../../include/phandler.h \
@@ -108,9 +108,9 @@ forward.so: forward.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base.memory \
   ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
   ../../include/servers.h ../../include/channels.h ../../include/module.h \
-  ../../include/pmodule.h ../../include/crypto.h ../../include/culture.h \
-  ../../include/xmlrpc.h ../../include/atheme.h ../../include/base64.h \
-  ../../include/md5.h ../../include/sasl.h ../../include/dictionary.h \
+  ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
+  ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
+  ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
   ../../include/sysconf.h ../../include/account.h \
   ../../include/confparse.h ../../include/flags.h ../../include/extern.h \
   ../../include/metadata.h ../../include/phandler.h \
@@ -128,9 +128,9 @@ read.so: read.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base.memory \
   ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
   ../../include/servers.h ../../include/channels.h ../../include/module.h \
-  ../../include/pmodule.h ../../include/crypto.h ../../include/culture.h \
-  ../../include/xmlrpc.h ../../include/atheme.h ../../include/base64.h \
-  ../../include/md5.h ../../include/sasl.h ../../include/dictionary.h \
+  ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
+  ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
+  ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
   ../../include/sysconf.h ../../include/account.h \
   ../../include/confparse.h ../../include/flags.h ../../include/extern.h \
   ../../include/metadata.h ../../include/phandler.h \
@@ -148,9 +148,9 @@ ignore.so: ignore.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base.memory \
   ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
   ../../include/servers.h ../../include/channels.h ../../include/module.h \
-  ../../include/pmodule.h ../../include/crypto.h ../../include/culture.h \
-  ../../include/xmlrpc.h ../../include/atheme.h ../../include/base64.h \
-  ../../include/md5.h ../../include/sasl.h ../../include/dictionary.h \
+  ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
+  ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
+  ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
   ../../include/sysconf.h ../../include/account.h \
   ../../include/confparse.h ../../include/flags.h ../../include/extern.h \
   ../../include/metadata.h ../../include/phandler.h \

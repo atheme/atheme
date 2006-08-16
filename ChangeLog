@@ -1,3 +1,19 @@
+jilles      2006/08/16 17:07:03 UTC	(20060816-6081)
+  Log:
+  - Move definition of authservice_loaded from pmodule.c
+    to services.c
+  - Remove obsolete initialize_services() declaration
+  - Move reintroduce_user() and services_init() declarations
+    from services.h to pmodule.h
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/include/pmodule.h (File Modified) 
+  +3 -3		trunk/include/services.h (File Modified) 
+  +0 -1		trunk/src/pmodule.c (File Modified) 
+  +1 -0		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/08/16 16:44:39 UTC	(20060816-6079)
   Log:
   Move some protocol module specific stuff to pmodule.h,
