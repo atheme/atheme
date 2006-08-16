@@ -1,3 +1,12 @@
+jilles      2006/08/16 15:06:52 UTC	(20060816-6073)
+  Log:
+  Define callback functions static.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/src/node.c (File Modified) 
+
+
 jilles      2006/08/16 14:58:16 UTC	(20060816-6071)
   Log:
   Move many uplink related declarations to a new header

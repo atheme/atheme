@@ -4,7 +4,7 @@
  *
  * Data structures for channel information.
  *
- * $Id: channels.h 6069 2006-08-16 14:28:24Z jilles $
+ * $Id: channels.h 6075 2006-08-16 15:31:27Z jilles $
  */
 
 #ifndef CHANNELS_H
@@ -84,6 +84,24 @@ struct extmode
 	char mode;
 	boolean_t (*check)(const char *, channel_t *, struct mychan_ *, user_t *, struct myuser_ *);
 };
+
+/* channel related hooks */
+typedef struct {
+	user_t *u;
+        channel_t *c;
+        char *msg;
+} hook_cmessage_data_t;
+
+typedef struct {
+	user_t *u; /* Online user that changed the topic */
+	server_t *s; /* Server that restored a topic */
+        channel_t *c; /* Channel still has old topic */
+        char *setter; /* Stored setter string, can be nick, nick!user@host
+			 or server */
+	time_t ts; /* Time the topic was changed */
+	char *topic; /* New topic */
+	int approved; /* Write non-zero here to cancel the change */
+} hook_channel_topic_check_t;
 
 /* cmode.c */
 E void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[]);

@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 6069 2006-08-16 14:28:24Z jilles $
+ * $Id: atheme.h 6075 2006-08-16 15:31:27Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -52,29 +52,6 @@
 #define CLIENT_NAME(user)	((user)->uid[0] ? (user)->uid : (user)->nick)
 #define SERVER_NAME(serv)	((serv)->sid[0] ? (serv)->sid : (serv)->name)
 #define ME			(ircd->uses_uid ? me.numeric : me.name)
-
-typedef struct {
-	user_t *u;
-        channel_t *c;
-        char *msg;
-} hook_cmessage_data_t;
-
-typedef struct {
-	user_t *u; /* Online user that changed the topic */
-	server_t *s; /* Server that restored a topic */
-        channel_t *c; /* Channel still has old topic */
-        char *setter; /* Stored setter string, can be nick, nick!user@host
-			 or server */
-	time_t ts; /* Time the topic was changed */
-	char *topic; /* New topic */
-	int approved; /* Write non-zero here to cancel the change */
-} hook_channel_topic_check_t;
-
-typedef struct {
-	user_t *u;
-	struct mychan_ *mc; /* No, there is no easy way to make this a
-			     * mychan_t (can't redefine a typedef) -- jilles */
-} hook_channel_req_t;
 
 struct mychan_;
 struct myuser_;
@@ -234,15 +211,6 @@ struct email_t_
 #define CMDLOG_DO       4 /* change properties of dynamic data */
 #define CMDLOG_LOGIN    5 /* login/logout */
 #define CMDLOG_GET      6 /* query information */
-
-/* forced nick change types */
-#define FNC_REGAIN 0 /* give a registered user their nick back */
-#define FNC_FORCE  1 /* force a user off their nick (kill if unsupported) */
-
-/* bursting timer */
-#if HAVE_GETTIMEOFDAY
-struct timeval burstime;
-#endif
 
 /* help us keep consistent messages */
 #define STR_INSUFFICIENT_PARAMS "Insufficient parameters for \2%s\2."

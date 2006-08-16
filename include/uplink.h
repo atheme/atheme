@@ -5,7 +5,7 @@
  * Data structures related to our uplink.
  * Modules usually don't need this.
  *
- * $Id: uplink.h 6071 2006-08-16 14:58:16Z jilles $
+ * $Id: uplink.h 6075 2006-08-16 15:31:27Z jilles $
  */
 
 #ifndef _UPLINK_H
@@ -41,6 +41,11 @@ E void uplink_connect(void);
 E void connection_dead(void *vptr);
 
 /* packet.c */
+/* bursting timer */
+#if HAVE_GETTIMEOFDAY
+E struct timeval burstime;
+#endif
+
 E void irc_rhandler(connection_t *cptr);
 E void init_ircpacket(void);
 

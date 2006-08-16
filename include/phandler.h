@@ -4,7 +4,7 @@
  *
  * Protocol handlers, both generic and the actual declarations themselves.
  *
- * $Id: phandler.h 5628 2006-07-01 23:38:42Z jilles $
+ * $Id: phandler.h 6075 2006-08-16 15:31:27Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -35,6 +35,10 @@ struct ircd_ {
 };
 
 typedef struct ircd_ ircd_t;
+
+/* forced nick change types */
+#define FNC_REGAIN 0 /* give a registered user their nick back */
+#define FNC_FORCE  1 /* force a user off their nick (kill if unsupported) */
 
 /* server login, usually sends PASS, CAPAB, SERVER and SVINFO
  * you can still change ircd->uses_uid at this point

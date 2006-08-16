@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 6071 2006-08-16 14:58:16Z jilles $
+ * $Id: extern.h 6075 2006-08-16 15:31:27Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -115,8 +115,6 @@ E uint32_t base64touint(char* buf);
 /* protocol stuff */
 E void handle_nickchange(user_t *u);
 E void handle_burstlogin(user_t *u, char *login);
-
-E void protocol_init(void);
 
 /* signal.c */
 E void sighandler(int signum);
