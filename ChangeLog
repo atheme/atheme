@@ -1,3 +1,18 @@
+jilles      2006/08/15 16:49:42 UTC	(20060815-6063)
+  Log:
+  - Move regex_ stuff from function.c to match.c
+  - Move match.c and cidr.c stuff from atheme.h and extern.h
+    to a new header match.h
+  
+
+  Changes:	Modified:
+  +1 -3		trunk/include/atheme.h (File Modified) 
+  +0 -42	trunk/include/extern.h (File Modified) 
+  +60 -0	trunk/include/match.h (File Added) 
+  +0 -66	trunk/src/function.c (File Modified) 
+  +67 -0	trunk/src/match.c (File Modified) 
+
+
 jilles      2006/08/15 16:28:18 UTC	(20060815-6061)
   Log:
   - Move some declarations from extern.h to a more specific header file

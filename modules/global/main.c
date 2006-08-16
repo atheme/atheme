@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6061 2006-08-15 16:28:18Z jilles $
+ * $Id: main.c 6065 2006-08-16 01:16:42Z jilles $
  */
 
 #include "atheme.h"
@@ -12,9 +12,14 @@
 DECLARE_MODULE_V1
 (
 	"global/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6061 2006-08-15 16:28:18Z jilles $",
+	"$Id: main.c 6065 2006-08-16 01:16:42Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
+
+/* global list struct */
+struct global_ {
+  char *text;
+};
 
 list_t gs_cmdtree;
 list_t *os_cmdtree;

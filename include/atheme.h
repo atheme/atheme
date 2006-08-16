@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 6063 2006-08-15 16:49:42Z jilles $
+ * $Id: atheme.h 6065 2006-08-16 01:16:42Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -224,11 +224,6 @@ struct kline_ {
   long duration;
   time_t settime;
   time_t expires;
-};
-
-/* global list struct */
-struct global_ {
-  char *text;
 };
 
 /* database versions */
