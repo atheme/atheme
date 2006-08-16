@@ -4,13 +4,14 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 5979 2006-07-29 22:07:53Z jilles $
+ * $Id: charybdis.c 6071 2006-08-16 14:58:16Z jilles $
  */
 
 #include "atheme.h"
+#include "uplink.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 5979 2006-07-29 22:07:53Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6071 2006-08-16 14:58:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 

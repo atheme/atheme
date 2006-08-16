@@ -4,10 +4,11 @@
  *
  * This file contains the signal handling routines.
  *
- * $Id: signal.c 5848 2006-07-10 17:50:42Z jilles $
+ * $Id: signal.c 6071 2006-08-16 14:58:16Z jilles $
  */
 
 #include "atheme.h"
+#include "uplink.h"
 
 #ifdef _WIN32
 #define SIGHUP 0

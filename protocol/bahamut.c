@@ -4,13 +4,14 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: bahamut.c 5973 2006-07-29 21:25:44Z jilles $
+ * $Id: bahamut.c 6071 2006-08-16 14:58:16Z jilles $
  */
 
 #include "atheme.h"
+#include "uplink.h"
 #include "protocol/bahamut.h"
 
-DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 5973 2006-07-29 21:25:44Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 6071 2006-08-16 14:58:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 

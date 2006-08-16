@@ -4,7 +4,7 @@
  *
  * Data structures related to network servers.
  *
- * $Id: servers.h 6069 2006-08-16 14:28:24Z jilles $
+ * $Id: servers.h 6071 2006-08-16 14:58:16Z jilles $
  */
 
 #ifndef SERVERS_H
@@ -12,7 +12,6 @@
 
 typedef struct tld_ tld_t;
 typedef struct server_ server_t;
-typedef struct uplink_ uplink_t;
 
 /* servers struct */
 struct server_
@@ -46,33 +45,6 @@ struct server_
 struct tld_ {
   char *name;
 };
-
-struct uplink_
-{
-	char *name;
-	char *host;
-	char *pass;
-	char *vhost;
-
-	node_t	*node;
-
-	uint32_t port;
-
-	connection_t *conn;
-
-	uint32_t flags;
-};
-
-#define UPF_ILLEGAL 0x80000000 /* not in conf anymore, delete when disconnected */
-
-/* uplink.c */
-E uplink_t *uplink_add(char *name, char *host, char *password, char *vhost, int port);
-E void uplink_delete(uplink_t *u);
-E uplink_t *uplink_find(char *name);
-E list_t uplinks;
-E uplink_t *curr_uplink;
-E void uplink_connect(void);
-E void connection_dead(void *vptr);
 
 /* node.c */
 E list_t servlist[HASHSIZE];

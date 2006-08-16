@@ -4,13 +4,14 @@
  *
  * IRC packet handling.
  *
- * $Id: packet.c 5947 2006-07-26 11:39:11Z jilles $
+ * $Id: packet.c 6071 2006-08-16 14:58:16Z jilles $
  *
  * TODO: Take all the sendq stuff in node.c and put it here.
  * sendq_flush becomes irc_whandler, etc.
  */
 
 #include "atheme.h"
+#include "uplink.h"
 
 static int irc_read(connection_t * cptr, char *buf)
 {

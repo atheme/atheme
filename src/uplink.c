@@ -4,10 +4,11 @@
  *
  * Uplink management stuff.
  *
- * $Id: uplink.c 5319 2006-05-27 23:01:49Z jilles $
+ * $Id: uplink.c 6071 2006-08-16 14:58:16Z jilles $
  */
 
 #include "atheme.h"
+#include "uplink.h"
 
 uplink_t *curr_uplink;
 

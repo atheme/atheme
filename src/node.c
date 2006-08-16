@@ -5,10 +5,11 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6049 2006-08-14 16:18:27Z jilles $
+ * $Id: node.c 6071 2006-08-16 14:58:16Z jilles $
  */
 
 #include "atheme.h"
+#include "uplink.h"
 
 list_t operclasslist;
 list_t soperlist;

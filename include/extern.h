@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 6069 2006-08-16 14:28:24Z jilles $
+ * $Id: extern.h 6071 2006-08-16 14:58:16Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -80,16 +80,7 @@ E float bytes(float x);
 E helpentry_t *help_cmd_find(char *svs, char *origin, char *command,
 			     list_t *list);
 
-E char *tldprefix;
-E boolean_t uses_uid;
-
-/* irc.c */
-E void (*parse)(char *line);
-E void irc_parse(char *line);
-E void p10_parse(char *line);
-
 /* node.c */
-E void init_ircpacket(void);
 E void init_nodes(void);
 /* The following currently only do uplinks -- jilles */
 E void mark_all_illegal(void);
@@ -103,14 +94,6 @@ E char *config_file;
 E void init_uid(void);
 E char *uid_get(void);
 E void add_one_to_uid(uint32_t i);
-
-/* socket.c */
-E int servsock;
-
-E void irc_rhandler(connection_t *cptr);
-E int8_t sts(char *fmt, ...);
-E void reconn(void *arg);
-E void io_loop(void);
 
 /* tokenize.c */
 E int8_t sjtoken(char *message, char delimiter, char **parv);

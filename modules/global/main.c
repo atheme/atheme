@@ -4,15 +4,16 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6065 2006-08-16 01:16:42Z jilles $
+ * $Id: main.c 6071 2006-08-16 14:58:16Z jilles $
  */
 
 #include "atheme.h"
+#include "uplink.h" /* XXX direct use of sts() */
 
 DECLARE_MODULE_V1
 (
 	"global/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6065 2006-08-16 01:16:42Z jilles $",
+	"$Id: main.c 6071 2006-08-16 14:58:16Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

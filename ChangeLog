@@ -1,3 +1,18 @@
+jilles      2006/08/16 14:28:24 UTC	(20060816-6069)
+  Log:
+  Move some stuff from atheme.h and extern.h to account.h,
+  channels.h, servers.h and users.h.
+  
+
+  Changes:	Modified:
+  +70 -0	trunk/include/account.h (File Modified) 
+  +0 -52	trunk/include/atheme.h (File Modified) 
+  +50 -0	trunk/include/channels.h (File Modified) 
+  +0 -104	trunk/include/extern.h (File Modified) 
+  +19 -0	trunk/include/servers.h (File Modified) 
+  +9 -0		trunk/include/users.h (File Modified) 
+
+
 jilles      2006/08/16 01:34:01 UTC	(20060816-6067)
   Log:
   Move flatfile database version defines to backend/flatfile.c.

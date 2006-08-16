@@ -4,10 +4,11 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 5909 2006-07-18 13:50:34Z nenolod $
+ * $Id: atheme.c 6071 2006-08-16 14:58:16Z jilles $
  */
 
 #include "atheme.h"
+#include "uplink.h"
 
 chansvs_t chansvs;
 globsvs_t globsvs;
