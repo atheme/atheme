@@ -1,3 +1,52 @@
+jilles      2006/08/16 14:58:16 UTC	(20060816-6071)
+  Log:
+  Move many uplink related declarations to a new header
+  file uplink.h.
+  This header file is not included from atheme.h, restricting
+  use of this stuff (like sts()) to files where it is
+  explicitly included.
+  Again some old no longer used declarations have been removed also.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/contrib/ns_enforce.c (File Modified) 
+  +0 -17	trunk/include/extern.h (File Modified) 
+  +57 -28	trunk/include/servers.h (File Modified) 
+  + -		trunk/include/uplink.h (File Added) 
+  +1 -0		trunk/modules/global/main.c (File Modified) 
+  +1 -0		trunk/modules/operserv/inject.c (File Modified) 
+  +1 -1		trunk/modules/operserv/jupe.c (File Modified) 
+  +1 -0		trunk/modules/operserv/raw.c (File Modified) 
+  +1 -0		trunk/protocol/asuka.c (File Modified) 
+  +1 -0		trunk/protocol/bahamut.c (File Modified) 
+  +1 -0		trunk/protocol/bircd.c (File Modified) 
+  +1 -0		trunk/protocol/charybdis.c (File Modified) 
+  +1 -0		trunk/protocol/dreamforge.c (File Modified) 
+  +1 -0		trunk/protocol/hybrid.c (File Modified) 
+  +1 -0		trunk/protocol/hyperion.c (File Modified) 
+  +1 -0		trunk/protocol/inspircd.c (File Modified) 
+  +1 -0		trunk/protocol/ircnet.c (File Modified) 
+  +1 -0		trunk/protocol/nefarious.c (File Modified) 
+  +1 -0		trunk/protocol/plexus.c (File Modified) 
+  +1 -0		trunk/protocol/ptlink.c (File Modified) 
+  +1 -0		trunk/protocol/ratbox.c (File Modified) 
+  +1 -0		trunk/protocol/shadowircd.c (File Modified) 
+  +1 -0		trunk/protocol/solidircd.c (File Modified) 
+  +1 -0		trunk/protocol/sorcery.c (File Modified) 
+  +1 -0		trunk/protocol/ultimate3.c (File Modified) 
+  +1 -0		trunk/protocol/undernet.c (File Modified) 
+  +1 -0		trunk/protocol/unreal.c (File Modified) 
+  +1 -0		trunk/src/atheme.c (File Modified) 
+  +1 -0		trunk/src/conf.c (File Modified) 
+  +1 -0		trunk/src/node.c (File Modified) 
+  +1 -0		trunk/src/packet.c (File Modified) 
+  +1 -0		trunk/src/parse.c (File Modified) 
+  +1 -0		trunk/src/ptasks.c (File Modified) 
+  +1 -0		trunk/src/send.c (File Modified) 
+  +1 -0		trunk/src/signal.c (File Modified) 
+  +1 -0		trunk/src/uplink.c (File Modified) 
+
+
 jilles      2006/08/16 14:28:24 UTC	(20060816-6069)
   Log:
   Move some stuff from atheme.h and extern.h to account.h,

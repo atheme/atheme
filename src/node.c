@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6071 2006-08-16 14:58:16Z jilles $
+ * $Id: node.c 6073 2006-08-16 15:06:52Z jilles $
  */
 
 #include "atheme.h"
@@ -2284,7 +2284,7 @@ metadata_t *metadata_find(void *target, int32_t type, char *name)
 	return NULL;
 }
 
-int expire_myuser_cb(dictionary_elem_t *delem, void *unused)
+static int expire_myuser_cb(dictionary_elem_t *delem, void *unused)
 {
 	myuser_t *mu = (myuser_t *) delem->node.data;
 
@@ -2373,7 +2373,7 @@ void expire_check(void *arg)
 	}
 }
 
-int check_myuser_cb(dictionary_elem_t *delem, void *unused)
+static int check_myuser_cb(dictionary_elem_t *delem, void *unused)
 {
 	myuser_t *mu = (myuser_t *) delem->node.data;
 
