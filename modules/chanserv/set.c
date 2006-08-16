@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 6019 2006-08-08 19:38:11Z jilles $
+ * $Id: set.c 6085 2006-08-16 17:46:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,9 +12,19 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 6019 2006-08-08 19:38:11Z jilles $",
+	"$Id: set.c 6085 2006-08-16 17:46:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
+
+/* struct for set command hash table */
+struct set_command_
+{
+  const char *name;
+  const char *access;
+  void (*func) (char *origin, char *name, char *params);
+};
+
+static struct set_command_ *set_cmd_find(char *origin, char *command);
 
 static void cs_cmd_set(char *origin);
 
@@ -62,8 +72,6 @@ void _moddeinit()
 	help_delentry(cs_helptree, "SET TOPICLOCK");
 	help_delentry(cs_helptree, "SET FANTASY");
 }
-
-struct set_command_ *set_cmd_find(char *origin, char *command);
 
 /* SET <#channel> <setting> <parameters> */
 static void cs_cmd_set(char *origin)
@@ -1140,7 +1148,7 @@ struct set_command_ set_commands[] = {
 
 /* *INDENT-ON* */
 
-struct set_command_ *set_cmd_find(char *origin, char *command)
+static struct set_command_ *set_cmd_find(char *origin, char *command)
 {
 	user_t *u = user_find_named(origin);
 	struct set_command_ *c;

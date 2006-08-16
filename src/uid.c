@@ -4,7 +4,7 @@
  *
  * Hybrid's UID code, adopted to be as generic as possible.
  *
- * $Id: uid.c 2497 2005-10-01 04:35:25Z nenolod $
+ * $Id: uid.c 6085 2006-08-16 17:46:26Z jilles $
  */
 
 #include "atheme.h"
@@ -41,13 +41,7 @@ void init_uid(void)
 		new_uid[i] = 'A';
 }
 
-char *uid_get(void)
-{
-	add_one_to_uid(uindex - 1);	/* index from 0 */
-	return (new_uid);
-}
-
-void add_one_to_uid(uint32_t i)
+static void add_one_to_uid(uint32_t i)
 {
 	if (i != strlen(me.numeric))	/* Not reached server SID portion yet? */
 	{
@@ -70,3 +64,10 @@ void add_one_to_uid(uint32_t i)
 			new_uid[i] = new_uid[i] + 1;
 	}
 }
+
+char *uid_get(void)
+{
+	add_one_to_uid(uindex - 1);	/* index from 0 */
+	return (new_uid);
+}
+

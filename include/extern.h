@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 6079 2006-08-16 16:44:39Z jilles $
+ * $Id: extern.h 6085 2006-08-16 17:46:26Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -77,9 +77,6 @@ E int token_to_value(struct Token token_table[], char *token);
 E char *sbytes(float x);
 E float bytes(float x);
 
-E helpentry_t *help_cmd_find(char *svs, char *origin, char *command,
-			     list_t *list);
-
 /* node.c */
 E void init_nodes(void);
 /* The following currently only do uplinks -- jilles */
@@ -93,7 +90,6 @@ E char *config_file;
 /* uid.c */
 E void init_uid(void);
 E char *uid_get(void);
-E void add_one_to_uid(uint32_t i);
 
 /* tokenize.c */
 E int8_t sjtoken(char *message, char delimiter, char **parv);
@@ -115,11 +111,5 @@ E uint32_t base64touint(char* buf);
 /* signal.c */
 E void sighandler(int signum);
 E void check_signals(void);
-
-/* help.c */
-E void help_display(char *svsnick, char *svsdisp, char *origin, char *command, list_t *list);
-E void help_addentry(list_t *list, char *topic, char *fname,
-	void (*func)(char *origin));
-E void help_delentry(list_t *list, char *name);
 
 #endif /* EXTERN_H */

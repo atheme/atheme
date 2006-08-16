@@ -1,3 +1,24 @@
+jilles      2006/08/16 17:19:54 UTC	(20060816-6083)
+  Log:
+  Update depend files.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/backend/.depend (File Modified) 
+  +43 -43	trunk/contrib/.depend (File Modified) 
+  +6 -6		trunk/crypto/.depend (File Modified) 
+  +93 -93	trunk/modules/chanserv/.depend (File Modified) 
+  +4 -4		trunk/modules/global/.depend (File Modified) 
+  +24 -24	trunk/modules/memoserv/.depend (File Modified) 
+  +66 -66	trunk/modules/nickserv/.depend (File Modified) 
+  +62 -62	trunk/modules/operserv/.depend (File Modified) 
+  +15 -15	trunk/modules/saslserv/.depend (File Modified) 
+  +63 -63	trunk/modules/userserv/.depend (File Modified) 
+  +12 -12	trunk/modules/xmlrpc/.depend (File Modified) 
+  +95 -93	trunk/protocol/.depend (File Modified) 
+  +116 -113	trunk/src/.depend (File Modified) 
+
+
 jilles      2006/08/16 17:07:03 UTC	(20060816-6081)
   Log:
   - Move definition of authservice_loaded from pmodule.c

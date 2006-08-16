@@ -4,7 +4,7 @@
  *
  * Commandlist manipulation routines.
  *
- * $Id: commandtree.h 5925 2006-07-20 15:03:38Z pippijn $
+ * $Id: commandtree.h 6085 2006-08-16 17:46:26Z jilles $
  */
 
 #ifndef COMMANDLIST_H
@@ -26,6 +26,17 @@ struct fcommandentry_ {
 	void (*cmd)(char *, char *);
 };
 
+/* struct for help command hash table */
+struct help_command_
+{
+  char *name;
+  const char *access;
+  char *file;
+  void (*func) (char *origin);
+};
+typedef struct help_command_ helpentry_t;
+
+/* commandtree.c */
 E void command_add(command_t *cmd, list_t *commandtree);
 E void command_add_many(command_t **cmd, list_t *commandtree);
 E void command_delete(command_t *cmd, list_t *commandtree);
@@ -38,5 +49,13 @@ E void fcommand_add(fcommand_t *cmd, list_t *commandtree);
 E void fcommand_delete(fcommand_t *cmd, list_t *commandtree);
 E void fcommand_exec(service_t *svs, char *channel, char *origin, char *cmd, list_t *commandtree);
 E void fcommand_exec_floodcheck(service_t *svs, char *channel, char *origin, char *cmd, list_t *commandtree);
+
+/* help.c */
+E helpentry_t *help_cmd_find(char *svs, char *origin, char *command,
+			     list_t *list);
+E void help_display(char *svsnick, char *svsdisp, char *origin, char *command, list_t *list);
+E void help_addentry(list_t *list, char *topic, char *fname,
+	void (*func)(char *origin));
+E void help_delentry(list_t *list, char *name);
 
 #endif

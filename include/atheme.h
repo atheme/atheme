@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 6079 2006-08-16 16:44:39Z jilles $
+ * $Id: atheme.h 6085 2006-08-16 17:46:26Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -164,25 +164,6 @@ struct cnt
 };
 
 E cnt_t cnt;
-
-/* struct for set command hash table */
-struct set_command_
-{
-  const char *name;
-  const char *access;
-  void (*func) (char *origin, char *name, char *params);
-};
-
-typedef struct help_command_ helpentry_t;
-
-/* struct for help command hash table */
-struct help_command_
-{
-  char *name;
-  const char *access;
-  char *file;
-  void (*func) (char *origin);
-};
 
 typedef struct email_t_ email_t;
 struct email_t_
