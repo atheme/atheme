@@ -4,12 +4,13 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 5901 2006-07-18 10:35:50Z jilles $
+ * $Id: account.h 6069 2006-08-16 14:28:24Z jilles $
  */
 
 #ifndef ACCOUNT_H
 #define ACCOUNT_H
 
+typedef struct kline_ kline_t;
 typedef struct operclass_ operclass_t;
 typedef struct soper_ soper_t;
 typedef struct svsignore_ svsignore_t;
@@ -17,6 +18,19 @@ typedef struct myuser_ myuser_t;
 typedef struct mychan_ mychan_t;
 typedef struct chanacs_ chanacs_t;
 typedef struct mymemo_ mymemo_t;
+
+/* kline list struct */
+struct kline_ {
+  char *user;
+  char *host;
+  char *reason;
+  char *setby;
+
+  uint16_t number;
+  long duration;
+  time_t settime;
+  time_t expires;
+};
 
 struct operclass_ {
   char *name;
@@ -185,5 +199,61 @@ struct mymemo_ {
 /* memo status flags */
 #define MEMO_NEW           0x00000000
 #define MEMO_READ          0x00000001
+
+/* node.c */
+E list_t svs_ignore_list;
+E list_t klnlist;
+E list_t soperlist;
+E list_t mclist[HASHSIZE];
+E dictionary_tree_t *mulist;
+
+E svsignore_t *svsignore_find(user_t *user);
+E svsignore_t *svsignore_add(char *mask, char *reason);
+
+E kline_t *kline_add(char *user, char *host, char *reason, long duration);
+E void kline_delete(const char *user, const char *host);
+E kline_t *kline_find(const char *user, const char *host);
+E kline_t *kline_find_num(uint32_t number);
+E kline_t *kline_find_user(user_t *u);
+E void kline_expire(void *arg);
+
+E operclass_t *operclass_add(char *name, char *privs);
+E void operclass_delete(operclass_t *operclass);
+E operclass_t *operclass_find(char *name);
+
+E soper_t *soper_add(char *name, operclass_t *operclass);
+E void soper_delete(soper_t *soper);
+E soper_t *soper_find(myuser_t *myuser);
+E soper_t *soper_find_named(char *name);
+
+E myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags);
+E void myuser_delete(myuser_t *mu);
+E myuser_t *myuser_find(const char *name);
+E myuser_t *myuser_find_ext(const char *name);
+E void myuser_notice(char *from, myuser_t *target, char *fmt, ...);
+
+E mychan_t *mychan_add(char *name);
+E void mychan_delete(char *name);
+E mychan_t *mychan_find(const char *name);
+
+E chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, uint32_t level);
+E chanacs_t *chanacs_add_host(mychan_t *mychan, char *host, uint32_t level);
+E void chanacs_delete(mychan_t *mychan, myuser_t *myuser, uint32_t level);
+E void chanacs_delete_host(mychan_t *mychan, char *host, uint32_t level);
+E chanacs_t *chanacs_find(mychan_t *mychan, myuser_t *myuser, uint32_t level);
+E chanacs_t *chanacs_find_host(mychan_t *mychan, char *host, uint32_t level);
+E uint32_t chanacs_host_flags(mychan_t *mychan, char *host);
+E chanacs_t *chanacs_find_host_literal(mychan_t *mychan, char *host, uint32_t level);
+E chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, uint32_t level);
+E uint32_t chanacs_host_flags_by_user(mychan_t *mychan, user_t *u);
+E chanacs_t *chanacs_find_by_mask(mychan_t *mychan, char *mask, uint32_t level);
+E boolean_t chanacs_user_has_flag(mychan_t *mychan, user_t *u, uint32_t level);
+E uint32_t chanacs_user_flags(mychan_t *mychan, user_t *u);
+E boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_t *addflags, uint32_t *removeflags, uint32_t restrictflags);
+E boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_t addflags, uint32_t removeflags, uint32_t restrictflags);
+
+E void expire_check(void *arg);
+/* Check the database for (version) problems common to all backends */
+E void db_check(void);
 
 #endif

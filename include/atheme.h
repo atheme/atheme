@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 6067 2006-08-16 01:34:01Z jilles $
+ * $Id: atheme.h 6069 2006-08-16 14:28:24Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -75,9 +75,6 @@ typedef struct {
 	struct mychan_ *mc; /* No, there is no easy way to make this a
 			     * mychan_t (can't redefine a typedef) -- jilles */
 } hook_channel_req_t;
-
-typedef struct tld_ tld_t;
-typedef struct kline_ kline_t;
 
 struct mychan_;
 struct myuser_;
@@ -191,55 +188,6 @@ struct cnt
 };
 
 E cnt_t cnt;
-
-#define MTYPE_NUL 0
-#define MTYPE_ADD 1
-#define MTYPE_DEL 2
-
-struct cmode_
-{
-        char mode;
-        uint32_t value;
-};
-
-struct extmode
-{
-	char mode;
-	boolean_t (*check)(const char *, channel_t *, struct mychan_ *, user_t *, struct myuser_ *);
-};
-
-/* tld list struct */
-struct tld_ {
-  char *name;
-};
-
-/* kline list struct */
-struct kline_ {
-  char *user;
-  char *host;
-  char *reason;
-  char *setby;
-
-  uint16_t number;
-  long duration;
-  time_t settime;
-  time_t expires;
-};
-
-/* struct for irc message hash table */
-struct message_
-{
-  const char *name;
-  void (*func) (char *origin, uint8_t parc, char *parv[]);
-};
-
-/* struct for command hash table */
-struct command_
-{
-  const char *name;
-  const char *access;
-  void (*func) (char *nick);
-};
 
 /* struct for set command hash table */
 struct set_command_

@@ -4,7 +4,7 @@
  *
  * Data structures for connected clients.
  *
- * $Id: users.h 5644 2006-07-02 01:32:36Z jilles $
+ * $Id: users.h 6069 2006-08-16 14:28:24Z jilles $
  */
 
 #ifndef USERS_H
@@ -45,5 +45,14 @@ struct user_
 #define UF_SEENINFO    0x00000080
 #define UF_NICK_WARNED 0x00000100 /* warned about nickstealing, FNC next time */
 #define UF_HIDEHOSTREQ 0x00000200 /* host hiding requested */
+
+/* node.c */
+E list_t userlist[HASHSIZE];
+
+E user_t *user_add(const char *nick, const char *user, const char *host, const char *vhost, const char *ip, const char *uid, const char *gecos, server_t *server, uint32_t ts);
+E void user_delete(user_t *u);
+E user_t *user_find(const char *nick);
+E user_t *user_find_named(const char *nick);
+E void user_changeuid(user_t *u, const char *uid);
 
 #endif

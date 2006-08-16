@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 6063 2006-08-15 16:49:42Z jilles $
+ * $Id: extern.h 6069 2006-08-16 14:28:24Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -14,21 +14,6 @@
 /* -> moved to atheme.h */
 
 E boolean_t cold_start;
-
-/* cmode.c */
-E void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[]);
-E void channel_mode_va(user_t *source, channel_t *chan, uint8_t parc, char *parv0, ...);
-E void clear_simple_modes(channel_t *c);
-E char *channel_modes(channel_t *c, boolean_t doparams);
-E void modestack_flush_channel(char *channel);
-E void modestack_forget_channel(char *channel);
-E void modestack_mode_simple(char *source, char *channel, int dir, int32_t flags);
-E void modestack_mode_limit(char *source, char *channel, int dir, uint32_t limit);
-E void modestack_mode_ext(char *source, char *channel, int dir, int i, const char *value);
-E void modestack_mode_param(char *source, char *channel, int dir, char type, const char *value);
-E void cmode(char *sender, ...);
-E void user_mode(user_t *user, char *modes);
-E void check_modes(mychan_t *mychan, boolean_t sendnow);
 
 /* conf.c */
 E boolean_t conf_parse(char *);
@@ -102,102 +87,14 @@ E boolean_t uses_uid;
 E void (*parse)(char *line);
 E void irc_parse(char *line);
 E void p10_parse(char *line);
-E struct message_ messages[];
-E struct message_ *msg_find(const char *name);
 
 /* node.c */
-E list_t soperlist;
-E list_t svs_ignore_list;
-E list_t tldlist;
-E list_t klnlist;
-E list_t servlist[HASHSIZE];
-E list_t userlist[HASHSIZE];
-E list_t chanlist[HASHSIZE];
-E list_t mclist[HASHSIZE];
-E dictionary_tree_t *mulist;
-
 E void init_ircpacket(void);
 E void init_nodes(void);
 /* The following currently only do uplinks -- jilles */
 E void mark_all_illegal(void);
 E void unmark_all_illegal(void);
 E void remove_illegals(void);
-
-E operclass_t *operclass_add(char *name, char *privs);
-E void operclass_delete(operclass_t *operclass);
-E operclass_t *operclass_find(char *name);
-
-E soper_t *soper_add(char *name, operclass_t *operclass);
-E void soper_delete(soper_t *soper);
-E soper_t *soper_find(myuser_t *myuser);
-E soper_t *soper_find_named(char *name);
-
-E svsignore_t *svsignore_find(user_t *user);
-E svsignore_t *svsignore_add(char *mask, char *reason);
-
-E tld_t *tld_add(const char *name);
-E void tld_delete(const char *name);
-E tld_t *tld_find(const char *name);
-
-E chanban_t *chanban_add(channel_t *chan, const char *mask, int type);
-E void chanban_delete(chanban_t *c);
-E chanban_t *chanban_find(channel_t *chan, const char *mask, int type);
-E void chanban_clear(channel_t *chan);
-
-E server_t *server_add(const char *name, uint8_t hops, const char *uplink, const char *id, const char *desc);
-E void server_delete(const char *name);
-E server_t *server_find(const char *name);
-
-E user_t *user_add(const char *nick, const char *user, const char *host, const char *vhost, const char *ip, const char *uid, const char *gecos, server_t *server, uint32_t ts);
-E void user_delete(user_t *u);
-E user_t *user_find(const char *nick);
-E user_t *user_find_named(const char *nick);
-E void user_changeuid(user_t *u, const char *uid);
-
-E channel_t *channel_add(const char *name, uint32_t ts);
-E void channel_delete(const char *name);
-E channel_t *channel_find(const char *name);
-
-E chanuser_t *chanuser_add(channel_t *chan, const char *user);
-E void chanuser_delete(channel_t *chan, user_t *user);
-E chanuser_t *chanuser_find(channel_t *chan, user_t *user);
-
-E kline_t *kline_add(char *user, char *host, char *reason, long duration);
-E void kline_delete(const char *user, const char *host);
-E kline_t *kline_find(const char *user, const char *host);
-E kline_t *kline_find_num(uint32_t number);
-E kline_t *kline_find_user(user_t *u);
-E void kline_expire(void *arg);
-
-E myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags);
-E void myuser_delete(myuser_t *mu);
-E myuser_t *myuser_find(const char *name);
-E myuser_t *myuser_find_ext(const char *name);
-E void myuser_notice(char *from, myuser_t *target, char *fmt, ...);
-
-E mychan_t *mychan_add(char *name);
-E void mychan_delete(char *name);
-E mychan_t *mychan_find(const char *name);
-
-E chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, uint32_t level);
-E chanacs_t *chanacs_add_host(mychan_t *mychan, char *host, uint32_t level);
-E void chanacs_delete(mychan_t *mychan, myuser_t *myuser, uint32_t level);
-E void chanacs_delete_host(mychan_t *mychan, char *host, uint32_t level);
-E chanacs_t *chanacs_find(mychan_t *mychan, myuser_t *myuser, uint32_t level);
-E chanacs_t *chanacs_find_host(mychan_t *mychan, char *host, uint32_t level);
-E uint32_t chanacs_host_flags(mychan_t *mychan, char *host);
-E chanacs_t *chanacs_find_host_literal(mychan_t *mychan, char *host, uint32_t level);
-E chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, uint32_t level);
-E uint32_t chanacs_host_flags_by_user(mychan_t *mychan, user_t *u);
-E chanacs_t *chanacs_find_by_mask(mychan_t *mychan, char *mask, uint32_t level);
-E boolean_t chanacs_user_has_flag(mychan_t *mychan, user_t *u, uint32_t level);
-E uint32_t chanacs_user_flags(mychan_t *mychan, user_t *u);
-E boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_t *addflags, uint32_t *removeflags, uint32_t restrictflags);
-E boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_t addflags, uint32_t removeflags, uint32_t restrictflags);
-
-E void expire_check(void *arg);
-/* Check the database for (version) problems common to all backends */
-E void db_check(void);
 
 /* atheme.c */
 E char *config_file;
@@ -212,7 +109,6 @@ E int servsock;
 
 E void irc_rhandler(connection_t *cptr);
 E int8_t sts(char *fmt, ...);
-E int socket_connect(char *host, uint32_t port);
 E void reconn(void *arg);
 E void io_loop(void);
 

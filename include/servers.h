@@ -4,12 +4,13 @@
  *
  * Data structures related to network servers.
  *
- * $Id: servers.h 5426 2006-06-19 10:04:20Z jilles $
+ * $Id: servers.h 6069 2006-08-16 14:28:24Z jilles $
  */
 
 #ifndef SERVERS_H
 #define SERVERS_H
 
+typedef struct tld_ tld_t;
 typedef struct server_ server_t;
 typedef struct uplink_ uplink_t;
 
@@ -41,6 +42,11 @@ struct server_
 #define SF_EOB         0x00000002 /* Burst finished (we have all users/channels) -- jilles */
 #define SF_EOB2        0x00000004 /* Is EOB but an uplink is not (for P10) */
 
+/* tld list struct */
+struct tld_ {
+  char *name;
+};
+
 struct uplink_
 {
 	char *name;
@@ -59,6 +65,7 @@ struct uplink_
 
 #define UPF_ILLEGAL 0x80000000 /* not in conf anymore, delete when disconnected */
 
+/* uplink.c */
 E uplink_t *uplink_add(char *name, char *host, char *password, char *vhost, int port);
 E void uplink_delete(uplink_t *u);
 E uplink_t *uplink_find(char *name);
@@ -66,5 +73,17 @@ E list_t uplinks;
 E uplink_t *curr_uplink;
 E void uplink_connect(void);
 E void connection_dead(void *vptr);
+
+/* node.c */
+E list_t servlist[HASHSIZE];
+E list_t tldlist;
+
+E tld_t *tld_add(const char *name);
+E void tld_delete(const char *name);
+E tld_t *tld_find(const char *name);
+
+E server_t *server_add(const char *name, uint8_t hops, const char *uplink, const char *id, const char *desc);
+E void server_delete(const char *name);
+E server_t *server_find(const char *name);
 
 #endif

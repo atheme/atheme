@@ -4,11 +4,14 @@
  *
  * Data structures for channel information.
  *
- * $Id: channels.h 5514 2006-06-23 15:25:09Z jilles $
+ * $Id: channels.h 6069 2006-08-16 14:28:24Z jilles $
  */
 
 #ifndef CHANNELS_H
 #define CHANNELS_H
+
+struct mychan_; /* XXX cmode.c check_modes() uses this */
+struct myuser_; /* extmode check() uses this */
 
 typedef struct user_ user_t; /* XXX: Should be in users.h */
 typedef struct channel_ channel_t;
@@ -65,5 +68,52 @@ struct chanban_
 #define CMODE_PRIV      0x00000040      /* AKA PARA */
 #define CMODE_SEC       0x00000080
 #define CMODE_TOPIC     0x00000100
+
+#define MTYPE_NUL 0
+#define MTYPE_ADD 1
+#define MTYPE_DEL 2
+
+struct cmode_
+{
+        char mode;
+        uint32_t value;
+};
+
+struct extmode
+{
+	char mode;
+	boolean_t (*check)(const char *, channel_t *, struct mychan_ *, user_t *, struct myuser_ *);
+};
+
+/* cmode.c */
+E void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[]);
+E void channel_mode_va(user_t *source, channel_t *chan, uint8_t parc, char *parv0, ...);
+E void clear_simple_modes(channel_t *c);
+E char *channel_modes(channel_t *c, boolean_t doparams);
+E void modestack_flush_channel(char *channel);
+E void modestack_forget_channel(char *channel);
+E void modestack_mode_simple(char *source, char *channel, int dir, int32_t flags);
+E void modestack_mode_limit(char *source, char *channel, int dir, uint32_t limit);
+E void modestack_mode_ext(char *source, char *channel, int dir, int i, const char *value);
+E void modestack_mode_param(char *source, char *channel, int dir, char type, const char *value);
+E void cmode(char *sender, ...);
+E void user_mode(user_t *user, char *modes);
+E void check_modes(struct mychan_ *mychan, boolean_t sendnow);
+
+/* node.c */
+E list_t chanlist[HASHSIZE];
+
+E channel_t *channel_add(const char *name, uint32_t ts);
+E void channel_delete(const char *name);
+E channel_t *channel_find(const char *name);
+
+E chanuser_t *chanuser_add(channel_t *chan, const char *user);
+E void chanuser_delete(channel_t *chan, user_t *user);
+E chanuser_t *chanuser_find(channel_t *chan, user_t *user);
+
+E chanban_t *chanban_add(channel_t *chan, const char *mask, int type);
+E void chanban_delete(chanban_t *c);
+E chanban_t *chanban_find(channel_t *chan, const char *mask, int type);
+E void chanban_clear(channel_t *chan);
 
 #endif
