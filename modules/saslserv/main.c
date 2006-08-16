@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5923 2006-07-20 15:02:18Z pippijn $
+ * $Id: main.c 6077 2006-08-16 16:07:10Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5923 2006-07-20 15:02:18Z pippijn $",
+	"$Id: main.c 6077 2006-08-16 16:07:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -157,7 +157,7 @@ sasl_session_t *make_session(char *uid)
 
 	p = malloc(sizeof(sasl_session_t));
 	memset(p, 0, sizeof(sasl_session_t));
-	strlcpy(p->uid, uid, NICKLEN);
+	strlcpy(p->uid, uid, IDLEN);
 
 	n = node_create();
 	node_add(p, n, &sessions);

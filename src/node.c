@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6073 2006-08-16 15:06:52Z jilles $
+ * $Id: node.c 6077 2006-08-16 16:07:10Z jilles $
  */
 
 #include "atheme.h"
@@ -655,7 +655,7 @@ user_t *user_add(const char *nick, const char *user, const char *host, const cha
 
 	if (uid != NULL)
 	{
-		strlcpy(u->uid, uid, NICKLEN);
+		strlcpy(u->uid, uid, IDLEN);
 		u->uhash = UHASH((const unsigned char *)uid);
 		node_add(u, node_create(), &uidlist[u->uhash]);
 	}
@@ -673,7 +673,7 @@ user_t *user_add(const char *nick, const char *user, const char *host, const cha
 		strlcpy(u->vhost, host, HOSTLEN);
 
 	if (ip && strcmp(ip, "0") && strcmp(ip, "0.0.0.0") && strcmp(ip, "255.255.255.255"))
-		strlcpy(u->ip, ip, HOSTLEN);
+		strlcpy(u->ip, ip, HOSTIPLEN);
 
 	u->server = server;
 	u->server->users++;
@@ -819,7 +819,7 @@ void user_changeuid(user_t *u, const char *uid)
 		node_free(n);
 	}
 
-	strlcpy(u->uid, uid ? uid : "", NICKLEN);
+	strlcpy(u->uid, uid ? uid : "", IDLEN);
 
 	if (*u->uid)
 	{

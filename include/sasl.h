@@ -4,7 +4,7 @@
  *
  * Data structures for SASL plugin use.
  *
- * $Id: sasl.h 5718 2006-07-04 06:10:05Z gxti $
+ * $Id: sasl.h 6077 2006-08-16 16:07:10Z jilles $
  */
 
 #ifndef SASL_H
@@ -15,7 +15,7 @@ typedef struct sasl_message_ sasl_message_t;
 typedef struct sasl_mechanism_ sasl_mechanism_t;
 
 struct sasl_session_ {
-  char uid[NICKLEN];
+  char uid[IDLEN];
   char *buf, *p;
   int len, flags;
 

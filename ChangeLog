@@ -1,3 +1,22 @@
+jilles      2006/08/16 15:31:27 UTC	(20060816-6075)
+  Log:
+  - Move more stuff out of atheme.h.
+  - Remove another obsolete function from extern.h.
+  - Move burstime from atheme.h to uplink.h and do it
+    properly with just a declaration in uplink.h and a
+    definition in packet.c.
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/include/account.h (File Modified) 
+  +0 -32	trunk/include/atheme.h (File Modified) 
+  +18 -0	trunk/include/channels.h (File Modified) 
+  +0 -2		trunk/include/extern.h (File Modified) 
+  +4 -0		trunk/include/phandler.h (File Modified) 
+  +5 -0		trunk/include/uplink.h (File Modified) 
+  +5 -0		trunk/src/packet.c (File Modified) 
+
+
 jilles      2006/08/16 15:06:52 UTC	(20060816-6073)
   Log:
   Define callback functions static.

@@ -4,7 +4,7 @@
  *
  * Data structures for connected clients.
  *
- * $Id: users.h 6069 2006-08-16 14:28:24Z jilles $
+ * $Id: users.h 6077 2006-08-16 16:07:10Z jilles $
  */
 
 #ifndef USERS_H
@@ -17,8 +17,8 @@ struct user_
 	char host[HOSTLEN]; /* Real host */
 	char gecos[GECOSLEN];
 	char vhost[HOSTLEN]; /* Visible host */
-	char uid[NICKLEN]; /* Used for TS6, P10, IRCNet ircd. */
-	char ip[HOSTLEN];
+	char uid[IDLEN]; /* Used for TS6, P10, IRCNet ircd. */
+	char ip[HOSTIPLEN];
 
 	list_t channels;
 
