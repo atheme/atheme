@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 5981 2006-07-31 22:33:14Z nenolod $
+ * $Id: flatfile.c 6067 2006-08-16 01:34:01Z jilles $
  */
 
 #include "atheme.h"
@@ -13,9 +13,13 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 5981 2006-07-31 22:33:14Z nenolod $",
+	"$Id: flatfile.c 6067 2006-08-16 01:34:01Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
+
+/* database versions */
+#define DB_SHRIKE	1
+#define DB_ATHEME	2
 
 /* flatfile state */
 unsigned int muout = 0, mcout = 0, caout = 0, kout = 0;

@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 6065 2006-08-16 01:16:42Z jilles $
+ * $Id: atheme.h 6067 2006-08-16 01:34:01Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -225,10 +225,6 @@ struct kline_ {
   time_t settime;
   time_t expires;
 };
-
-/* database versions */
-#define DB_SHRIKE	1
-#define DB_ATHEME	2
 
 /* struct for irc message hash table */
 struct message_
