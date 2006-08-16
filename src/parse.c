@@ -4,11 +4,12 @@
  *
  * This file contains IRC interaction routines.
  *
- * $Id: parse.c 6071 2006-08-16 14:58:16Z jilles $
+ * $Id: parse.c 6079 2006-08-16 16:44:39Z jilles $
  */
 
 #include "atheme.h"
 #include "uplink.h"
+#include "pmodule.h"
 
 /* by default, we want the 2.8.21 parser */
 void (*parse) (char *line) = &irc_parse;

@@ -4,7 +4,7 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 6075 2006-08-16 15:31:27Z jilles $
+ * $Id: extern.h 6079 2006-08-16 16:44:39Z jilles $
  */
 
 #ifndef EXTERN_H
@@ -112,39 +112,14 @@ E const char *infotext[];
 E const char* uinttobase64(char* buf, uint64_t v, int64_t count);
 E uint32_t base64touint(char* buf);
 
-/* protocol stuff */
-E void handle_nickchange(user_t *u);
-E void handle_burstlogin(user_t *u, char *login);
-
 /* signal.c */
 E void sighandler(int signum);
 E void check_signals(void);
-
-/* ptasks.c */
-E void handle_version(user_t *);
-E void handle_admin(user_t *);
-E void handle_info(user_t *);
-E void handle_stats(user_t *, char);
-E void handle_whois(user_t *, char *);
-E void handle_trace(user_t *, char *, char *);
-E void handle_motd(user_t *);
-E void handle_message(char *, char *, boolean_t, char *);
-E void handle_topic_from(char *, channel_t *, char *, time_t, char *);
-E void handle_topic(channel_t *, char *, time_t, char *);
-E void handle_kill(char *, char *, char *);
-E void handle_eob(server_t *);
-E int floodcheck(user_t *, user_t *);
 
 /* help.c */
 E void help_display(char *svsnick, char *svsdisp, char *origin, char *command, list_t *list);
 E void help_addentry(list_t *list, char *topic, char *fname,
 	void (*func)(char *origin));
 E void help_delentry(list_t *list, char *name);
-
-/* pmodule.c */
-E BlockHeap *pcommand_heap;
-E BlockHeap *messagetree_heap;
-
-E void verbose_wallops(char *, ...);
 
 #endif /* EXTERN_H */

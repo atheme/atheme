@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 6061 2006-08-15 16:28:18Z jilles $
+ * $Id: services.h 6079 2006-08-16 16:44:39Z jilles $
  */
 
 #ifndef SERVICES_H
@@ -137,6 +137,7 @@ E usersvs_t usersvs;
 E saslsvs_t saslsvs;
 
 E service_t *fcmd_agent;
+E int authservice_loaded;
 
 E int ban(char *sender, char *channel, user_t *user);
 E int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target);
@@ -149,5 +150,10 @@ E void services_init(void);
 E void verbose(mychan_t *mychan, char *fmt, ...);
 E void snoop(char *fmt, ...);
 E void notice(char *from, char *to, char *message, ...);
+E void verbose_wallops(char *, ...);
+
+/* ptasks.c */
+E void handle_topic(channel_t *, char *, time_t, char *);
+E int floodcheck(user_t *, user_t *);
 
 #endif

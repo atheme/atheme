@@ -4,10 +4,11 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 6045 2006-08-14 15:30:47Z jilles $
+ * $Id: services.c 6079 2006-08-16 16:44:39Z jilles $
  */
 
 #include "atheme.h"
+#include "pmodule.h"
 
 extern dictionary_tree_t *services;
 

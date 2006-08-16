@@ -3,8 +3,9 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Protocol module stuff.
+ * Modules usually do not need this.
  *
- * $Id: pmodule.h 5724 2006-07-04 16:06:20Z w00t $
+ * $Id: pmodule.h 6079 2006-08-16 16:44:39Z jilles $
  */
 
 #ifndef PMODULE_H
@@ -17,7 +18,12 @@ struct pcommand_ {
 	void	(*handler)(char *origin, uint8_t parc, char *parv[]);
 };
 
+/* pmodule.c */
+E BlockHeap *pcommand_heap;
+E BlockHeap *messagetree_heap;
 E list_t pcommands[HASHSIZE];
+
+E boolean_t pmodule_loaded;
 
 E void pcommand_init(void);
 E void pcommand_add(char *token,
@@ -25,34 +31,21 @@ E void pcommand_add(char *token,
 E void pcommand_delete(char *token);
 E pcommand_t *pcommand_find(char *token);
 
-E boolean_t pmodule_loaded;
-E boolean_t backend_loaded;
-E int authservice_loaded;
+/* ptasks.c */
+E void handle_version(user_t *);
+E void handle_admin(user_t *);
+E void handle_info(user_t *);
+E void handle_stats(user_t *, char);
+E void handle_whois(user_t *, char *);
+E void handle_trace(user_t *, char *, char *);
+E void handle_motd(user_t *);
+E void handle_message(char *, char *, boolean_t, char *);
+E void handle_topic_from(char *, channel_t *, char *, time_t, char *);
+E void handle_kill(char *, char *, char *);
+E void handle_eob(server_t *);
 
-/*  -- what the HELL are these used for? A grep reveals nothing.. --w00t
- *  -- they are used to provide a hint to third-party module coders about what
- *     ircd they are working with. --nenolod
- */
-#define PROTOCOL_ASUKA			1
-#define PROTOCOL_BAHAMUT		2
-#define PROTOCOL_CHARYBDIS		3
-#define PROTOCOL_DREAMFORGE		4
-#define PROTOCOL_HYPERION		5
-#define PROTOCOL_INSPIRCD		6
-#define PROTOCOL_IRCNET			7
-#define PROTOCOL_MONKEY			8 /* obsolete */
-#define PROTOCOL_PLEXUS			9
-#define PROTOCOL_PTLINK			10
-#define PROTOCOL_RATBOX			11
-#define PROTOCOL_SCYLLA			12
-#define PROTOCOL_SHADOWIRCD		13
-#define PROTOCOL_SORCERY		14
-#define PROTOCOL_ULTIMATE3		15
-#define PROTOCOL_UNDERNET		16
-#define PROTOCOL_UNREAL			17
-#define PROTOCOL_SOLIDIRCD		18
-#define PROTOCOL_NEFARIOUS		19
-
-#define PROTOCOL_OTHER			255
+/* services.c */
+E void handle_nickchange(user_t *u);
+E void handle_burstlogin(user_t *u, char *login);
 
 #endif

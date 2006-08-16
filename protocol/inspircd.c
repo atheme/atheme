@@ -4,14 +4,15 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 6071 2006-08-16 14:58:16Z jilles $
+ * $Id: inspircd.c 6079 2006-08-16 16:44:39Z jilles $
  */
 
 #include "atheme.h"
 #include "uplink.h"
+#include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 6071 2006-08-16 14:58:16Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 6079 2006-08-16 16:44:39Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 

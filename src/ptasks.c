@@ -4,11 +4,12 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 6071 2006-08-16 14:58:16Z jilles $
+ * $Id: ptasks.c 6079 2006-08-16 16:44:39Z jilles $
  */
 
 #include "atheme.h"
 #include "uplink.h"
+#include "pmodule.h"
 
 void handle_info(user_t *u)
 {

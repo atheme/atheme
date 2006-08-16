@@ -4,10 +4,11 @@
  *
  * Protocol handling stuff.
  *
- * $Id: pmodule.c 5628 2006-07-01 23:38:42Z jilles $
+ * $Id: pmodule.c 6079 2006-08-16 16:44:39Z jilles $
  */
 
 #include "atheme.h"
+#include "pmodule.h"
 
 list_t pcommands[HASHSIZE];
 BlockHeap *pcommand_heap;

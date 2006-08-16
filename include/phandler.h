@@ -4,7 +4,7 @@
  *
  * Protocol handlers, both generic and the actual declarations themselves.
  *
- * $Id: phandler.h 6075 2006-08-16 15:31:27Z jilles $
+ * $Id: phandler.h 6079 2006-08-16 16:44:39Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -35,6 +35,33 @@ struct ircd_ {
 };
 
 typedef struct ircd_ ircd_t;
+
+/* values for type */
+/*  -- what the HELL are these used for? A grep reveals nothing.. --w00t
+ *  -- they are used to provide a hint to third-party module coders about what
+ *     ircd they are working with. --nenolod
+ */
+#define PROTOCOL_ASUKA			1
+#define PROTOCOL_BAHAMUT		2
+#define PROTOCOL_CHARYBDIS		3
+#define PROTOCOL_DREAMFORGE		4
+#define PROTOCOL_HYPERION		5
+#define PROTOCOL_INSPIRCD		6
+#define PROTOCOL_IRCNET			7
+#define PROTOCOL_MONKEY			8 /* obsolete */
+#define PROTOCOL_PLEXUS			9
+#define PROTOCOL_PTLINK			10
+#define PROTOCOL_RATBOX			11
+#define PROTOCOL_SCYLLA			12
+#define PROTOCOL_SHADOWIRCD		13
+#define PROTOCOL_SORCERY		14
+#define PROTOCOL_ULTIMATE3		15
+#define PROTOCOL_UNDERNET		16
+#define PROTOCOL_UNREAL			17
+#define PROTOCOL_SOLIDIRCD		18
+#define PROTOCOL_NEFARIOUS		19
+
+#define PROTOCOL_OTHER			255
 
 /* forced nick change types */
 #define FNC_REGAIN 0 /* give a registered user their nick back */
@@ -172,9 +199,4 @@ E struct cmode_ *prefix_mode_list;
 
 E ircd_t *ircd;
 
-/* This stuff is for databases, but it's the same sort of concept. */
-E void (*db_save)(void *arg);
-E void (*db_load)(void);
-
 #endif
-
