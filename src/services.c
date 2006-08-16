@@ -4,13 +4,14 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 6079 2006-08-16 16:44:39Z jilles $
+ * $Id: services.c 6081 2006-08-16 17:07:03Z jilles $
  */
 
 #include "atheme.h"
 #include "pmodule.h"
 
 extern dictionary_tree_t *services;
+int authservice_loaded = 0;
 
 #define MAX_BUF 256
 

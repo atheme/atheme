@@ -5,7 +5,7 @@
  * Protocol module stuff.
  * Modules usually do not need this.
  *
- * $Id: pmodule.h 6079 2006-08-16 16:44:39Z jilles $
+ * $Id: pmodule.h 6081 2006-08-16 17:07:03Z jilles $
  */
 
 #ifndef PMODULE_H
@@ -45,6 +45,8 @@ E void handle_kill(char *, char *, char *);
 E void handle_eob(server_t *);
 
 /* services.c */
+E void services_init(void);
+E void reintroduce_user(user_t *u);
 E void handle_nickchange(user_t *u);
 E void handle_burstlogin(user_t *u, char *login);
 

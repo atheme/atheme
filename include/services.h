@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 6079 2006-08-16 16:44:39Z jilles $
+ * $Id: services.h 6081 2006-08-16 17:07:03Z jilles $
  */
 
 #ifndef SERVICES_H
@@ -136,17 +136,17 @@ E nicksvs_t nicksvs;
 E usersvs_t usersvs;
 E saslsvs_t saslsvs;
 
+/* servtree.c */
 E service_t *fcmd_agent;
+
+/* services.c */
 E int authservice_loaded;
 
 E int ban(char *sender, char *channel, user_t *user);
 E int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target);
 E void join(char *chan, char *nick);
-E void initialize_services(void);
 E void joinall(char *name);
 E void partall(char *name);
-E void reintroduce_user(user_t *u);
-E void services_init(void);
 E void verbose(mychan_t *mychan, char *fmt, ...);
 E void snoop(char *fmt, ...);
 E void notice(char *from, char *to, char *message, ...);
