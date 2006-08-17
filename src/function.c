@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 6093 2006-08-17 15:36:43Z jilles $
+ * $Id: function.c 6095 2006-08-17 16:40:16Z jilles $
  */
 
 #include "atheme.h"
@@ -215,19 +215,6 @@ void logcommand_external(void *svs, char *type, connection_t *source, myuser_t *
 #endif
 
 	va_end(args);
-}
-
-/* return the current time in milliseconds */
-uint32_t time_msec(void)
-{
-#ifdef HAVE_GETTIMEOFDAY
-	struct timeval tv;
-
-	gettimeofday(&tv, NULL);
-	return tv.tv_sec * 1000 + tv.tv_usec / 1000;
-#else
-	return CURRTIME * 1000;
-#endif
 }
 
 /*

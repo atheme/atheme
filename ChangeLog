@@ -1,3 +1,21 @@
+jilles      2006/08/17 15:36:43 UTC	(20060817-6093)
+  Log:
+  More moving around.
+  
+
+  Changes:	Modified:
+  +10 -0	trunk/include/account.h (File Modified) 
+  +0 -11	trunk/include/atheme.h (File Modified) 
+  +4 -0		trunk/include/channels.h (File Modified) 
+  +2 -0		trunk/include/confparse.h (File Modified) 
+  +1 -24	trunk/include/extern.h (File Modified) 
+  +3 -0		trunk/include/servers.h (File Modified) 
+  +4 -1		trunk/include/services.h (File Modified) 
+  +11 -0	trunk/include/users.h (File Modified) 
+  +22 -0	trunk/src/conf.c (File Modified) 
+  +0 -22	trunk/src/function.c (File Modified) 
+
+
 jilles      2006/08/17 15:25:00 UTC	(20060817-6091)
   Log:
   operserv akill: better treatment for user@host masks
