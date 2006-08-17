@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 6095 2006-08-17 16:40:16Z jilles $
+ * $Id: function.c 6101 2006-08-17 23:48:37Z jilles $
  */
 
 #include "atheme.h"
@@ -473,9 +473,9 @@ boolean_t validhostmask(char *host)
  *
  * u is whoever caused this to be called, the corresponding service
  *   in case of xmlrpc
- * type is EMAIL_*, see include/atheme.h
+ * type is EMAIL_*, see include/tools.h
  * mu is the recipient user
- * param depends on type, also see include/atheme.h
+ * param depends on type, also see include/tools.h
  *
  * XXX -- sendemail() is broken on Windows.
  */

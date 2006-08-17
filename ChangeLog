@@ -1,3 +1,24 @@
+jilles      2006/08/17 23:43:00 UTC	(20060817-6099)
+  Log:
+  Rerun make depend.
+  
+
+  Changes:	Modified:
+  +5 -5		trunk/backend/.depend (File Modified) 
+  +71 -70	trunk/contrib/.depend (File Modified) 
+  +10 -10	trunk/crypto/.depend (File Modified) 
+  +62 -62	trunk/modules/chanserv/.depend (File Modified) 
+  +2 -2		trunk/modules/global/.depend (File Modified) 
+  +16 -16	trunk/modules/memoserv/.depend (File Modified) 
+  +44 -44	trunk/modules/nickserv/.depend (File Modified) 
+  +40 -40	trunk/modules/operserv/.depend (File Modified) 
+  +10 -10	trunk/modules/saslserv/.depend (File Modified) 
+  +42 -42	trunk/modules/userserv/.depend (File Modified) 
+  +8 -8		trunk/modules/xmlrpc/.depend (File Modified) 
+  +120 -114	trunk/protocol/.depend (File Modified) 
+  +182 -173	trunk/src/.depend (File Modified) 
+
+
 jilles      2006/08/17 23:40:49 UTC	(20060817-6097)
   Log:
   Remove extern.h and everything except the #includes in
