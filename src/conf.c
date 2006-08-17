@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 6079 2006-08-16 16:44:39Z jilles $
+ * $Id: conf.c 6093 2006-08-17 15:36:43Z jilles $
  */
 
 #include "atheme.h"
@@ -429,6 +429,28 @@ void del_conf_item(char *name, list_t *conflist)
 	free(ct->name);
 
 	BlockHeapFree(conftable_heap, ct);
+}
+
+/* stolen from Sentinel */
+int token_to_value(struct Token token_table[], char *token)
+{
+	int i;
+
+	if ((token_table != NULL) && (token != NULL))
+	{
+		for (i = 0; token_table[i].text != NULL; i++)
+		{
+			if (strcasecmp(token_table[i].text, token) == 0)
+			{
+				return token_table[i].value;
+			}
+		}
+		/* If no match... */
+		return TOKEN_UNMATCHED;
+	}
+
+	/* Otherwise... */
+	return TOKEN_ERROR;
 }
 
 void init_newconf(void)

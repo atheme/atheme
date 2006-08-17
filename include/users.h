@@ -4,7 +4,7 @@
  *
  * Data structures for connected clients.
  *
- * $Id: users.h 6077 2006-08-16 16:07:10Z jilles $
+ * $Id: users.h 6093 2006-08-17 15:36:43Z jilles $
  */
 
 #ifndef USERS_H
@@ -46,6 +46,13 @@ struct user_
 #define UF_NICK_WARNED 0x00000100 /* warned about nickstealing, FNC next time */
 #define UF_HIDEHOSTREQ 0x00000200 /* host hiding requested */
 
+#define CLIENT_NAME(user)	((user)->uid[0] ? (user)->uid : (user)->nick)
+
+/* function.c */
+E boolean_t is_ircop(user_t *user);
+E boolean_t is_admin(user_t *user);
+E boolean_t is_internal_client(user_t *user);
+
 /* node.c */
 E list_t userlist[HASHSIZE];
 
@@ -54,5 +61,9 @@ E void user_delete(user_t *u);
 E user_t *user_find(const char *nick);
 E user_t *user_find_named(const char *nick);
 E void user_changeuid(user_t *u, const char *uid);
+
+/* uid.c */
+E void init_uid(void);
+E char *uid_get(void);
 
 #endif

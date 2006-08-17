@@ -1,3 +1,13 @@
+jilles      2006/08/17 15:25:00 UTC	(20060817-6091)
+  Log:
+  operserv akill: better treatment for user@host masks
+  with two or more '@' signs.
+  
+
+  Changes:	Modified:
+  +8 -1		trunk/modules/operserv/akill.c (File Modified) 
+
+
 jilles      2006/08/17 15:24:10 UTC	(20060817-6089)
   Log:
   Get rid of debug message when dictionary_retrieve()

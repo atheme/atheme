@@ -4,16 +4,11 @@
  *
  * This header file contains all of the extern's needed.
  *
- * $Id: extern.h 6085 2006-08-16 17:46:26Z jilles $
+ * $Id: extern.h 6093 2006-08-17 15:36:43Z jilles $
  */
 
 #ifndef EXTERN_H
 #define EXTERN_H
-
-/* save some space/typing */
-/* -> moved to atheme.h */
-
-E boolean_t cold_start;
 
 /* conf.c */
 E boolean_t conf_parse(char *);
@@ -52,8 +47,6 @@ E char *replace(char *s, int32_t size, const char *old, const char *new);
 E char *itoa(int num);
 #endif
 
-E char *flags_to_string(int32_t flags);
-E int32_t mode_to_flag(char c);
 E char *time_ago(time_t event);
 E char *timediff(time_t seconds);
 E unsigned long makekey(void);
@@ -61,19 +54,6 @@ E int validemail(char *email);
 E boolean_t validhostmask(char *host);
 E int sendemail(user_t *from, int type, myuser_t *mu, const char *param);
 
-E boolean_t is_founder(mychan_t *mychan, myuser_t *myuser);
-E boolean_t is_xop(mychan_t *mychan, myuser_t *myuser, uint32_t level);
-E boolean_t should_owner(mychan_t *mychan, myuser_t *myuser);
-E boolean_t should_protect(mychan_t *mychan, myuser_t *myuser);
-E boolean_t is_soper(myuser_t *myuser);
-E boolean_t is_ircop(user_t *user);
-E boolean_t is_admin(user_t *user);
-E boolean_t is_internal_client(user_t *user);
-
-E void set_password(myuser_t *mu, char *newpassword);
-E boolean_t verify_password(myuser_t *mu, char *password);
-
-E int token_to_value(struct Token token_table[], char *token);
 E char *sbytes(float x);
 E float bytes(float x);
 
@@ -85,11 +65,8 @@ E void unmark_all_illegal(void);
 E void remove_illegals(void);
 
 /* atheme.c */
+E boolean_t cold_start;
 E char *config_file;
-
-/* uid.c */
-E void init_uid(void);
-E char *uid_get(void);
 
 /* tokenize.c */
 E int8_t sjtoken(char *message, char delimiter, char **parv);

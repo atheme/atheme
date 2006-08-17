@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 6079 2006-08-16 16:44:39Z jilles $
+ * $Id: account.h 6093 2006-08-17 15:36:43Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -210,6 +210,16 @@ typedef struct {
 E boolean_t backend_loaded;
 E void (*db_save)(void *arg);
 E void (*db_load)(void);
+
+/* function.c */
+E boolean_t is_founder(mychan_t *mychan, myuser_t *myuser);
+E boolean_t is_xop(mychan_t *mychan, myuser_t *myuser, uint32_t level);
+E boolean_t should_owner(mychan_t *mychan, myuser_t *myuser);
+E boolean_t should_protect(mychan_t *mychan, myuser_t *myuser);
+E boolean_t is_soper(myuser_t *myuser);
+
+E void set_password(myuser_t *mu, char *newpassword);
+E boolean_t verify_password(myuser_t *mu, char *password);
 
 /* node.c */
 E list_t svs_ignore_list;

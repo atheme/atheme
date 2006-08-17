@@ -4,7 +4,7 @@
  *
  * Data structures related to network servers.
  *
- * $Id: servers.h 6071 2006-08-16 14:58:16Z jilles $
+ * $Id: servers.h 6093 2006-08-17 15:36:43Z jilles $
  */
 
 #ifndef SERVERS_H
@@ -45,6 +45,9 @@ struct server_
 struct tld_ {
   char *name;
 };
+
+#define SERVER_NAME(serv)	((serv)->sid[0] ? (serv)->sid : (serv)->name)
+#define ME			(ircd->uses_uid ? me.numeric : me.name)
 
 /* node.c */
 E list_t servlist[HASHSIZE];

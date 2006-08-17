@@ -4,7 +4,7 @@
  *
  * This is the main header file, usually the only one #include'd
  *
- * $Id: atheme.h 6085 2006-08-16 17:46:26Z jilles $
+ * $Id: atheme.h 6093 2006-08-17 15:36:43Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -48,13 +48,6 @@
 #define MCHASH(mychan) shash(mychan)
 
 /* other stuff. */
-#define CLIENT_NAME(user)	((user)->uid[0] ? (user)->uid : (user)->nick)
-#define SERVER_NAME(serv)	((serv)->sid[0] ? (serv)->sid : (serv)->name)
-#define ME			(ircd->uses_uid ? me.numeric : me.name)
-
-struct mychan_;
-struct myuser_;
-
 typedef struct me me_t;
 
 /* S T R U C T U R E S */
@@ -191,10 +184,6 @@ struct email_t_
 #define CMDLOG_DO       4 /* change properties of dynamic data */
 #define CMDLOG_LOGIN    5 /* login/logout */
 #define CMDLOG_GET      6 /* query information */
-
-/* help us keep consistent messages */
-#define STR_INSUFFICIENT_PARAMS "Insufficient parameters for \2%s\2."
-#define STR_INVALID_PARAMS "Invalid parameters for \2%s\2."
 
 /* *INDENT-OFF* */
 

@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 6081 2006-08-16 17:07:03Z jilles $
+ * $Id: services.h 6093 2006-08-17 15:36:43Z jilles $
  */
 
 #ifndef SERVICES_H
@@ -125,8 +125,11 @@ struct saslsvs_
   service_t *me;
 };
 
-/* extern declarations */
+/* help us keep consistent messages */
+#define STR_INSUFFICIENT_PARAMS "Insufficient parameters for \2%s\2."
+#define STR_INVALID_PARAMS "Invalid parameters for \2%s\2."
 
+/* extern declarations */
 E chansvs_t chansvs;
 E globsvs_t globsvs;
 E opersvs_t opersvs;

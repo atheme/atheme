@@ -4,7 +4,7 @@
  *
  * Data structures for flags to bitmask processing routines.
  *
- * $Id: confparse.h 2825 2005-10-10 21:53:24Z nenolod $
+ * $Id: confparse.h 6093 2006-08-17 15:36:43Z jilles $
  */
 
 #ifndef CONFPARSE_H
@@ -62,5 +62,7 @@ extern void add_conf_item(char *name, list_t *conflist, int (*handler)(CONFIGENT
 extern void del_top_conf(char *name);
 extern void del_conf_item(char *name, list_t *conflist);
 extern int subblock_handler(CONFIGENTRY *ce, list_t *entries);
+
+extern int token_to_value(struct Token token_table[], char *token);
 
 #endif

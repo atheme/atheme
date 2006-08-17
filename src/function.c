@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 6063 2006-08-15 16:49:42Z jilles $
+ * $Id: function.c 6093 2006-08-17 15:36:43Z jilles $
  */
 
 #include "atheme.h"
@@ -783,28 +783,6 @@ boolean_t verify_password(myuser_t *mu, char *password)
 		}
 	else
 		return (strcmp(mu->pass, password) == 0);
-}
-
-/* stolen from Sentinel */
-int token_to_value(struct Token token_table[], char *token)
-{
-	int i;
-
-	if ((token_table != NULL) && (token != NULL))
-	{
-		for (i = 0; token_table[i].text != NULL; i++)
-		{
-			if (strcasecmp(token_table[i].text, token) == 0)
-			{
-				return token_table[i].value;
-			}
-		}
-		/* If no match... */
-		return TOKEN_UNMATCHED;
-	}
-
-	/* Otherwise... */
-	return TOKEN_ERROR;
 }
 
 char *sbytes(float x)
