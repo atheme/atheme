@@ -5,7 +5,7 @@
  * This file contains functionality which implements
  * the OperServ AKILL command.
  *
- * $Id: akill.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: akill.c 6091 2006-08-17 15:25:00Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: akill.c 6091 2006-08-17 15:25:00Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -223,6 +223,13 @@ static void os_cmd_akill_add(char *origin, char *target)
 			return;
 		}
 
+		if (strchr(hostbuf,'@'))
+		{
+			notice(opersvs.nick, origin, "Too many '%c' in user@host.", '@');
+			notice(opersvs.nick, origin, "Syntax: AKILL ADD <user>@<host> [options] <reason>");
+			return;
+		}
+
 		/* make sure there's at least 4 non-wildcards */
 		for (p = userbuf; *p; p++)
 		{
@@ -402,7 +409,7 @@ static void os_cmd_akill_del(char *origin, char *target)
 	}
 
 	userbuf = strtok(target, "@");
-	hostbuf = strtok(NULL, "@");
+	hostbuf = strtok(NULL, "");
 
 	if (!(k = kline_find(userbuf, hostbuf)))
 	{

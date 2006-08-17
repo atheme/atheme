@@ -1,3 +1,13 @@
+jilles      2006/08/17 15:24:10 UTC	(20060817-6089)
+  Log:
+  Get rid of debug message when dictionary_retrieve()
+  cannot find an entry (happens often in normal operation).
+  
+
+  Changes:	Modified:
+  +0 -4		trunk/src/dictionary.c (File Modified) 
+
+
 jilles      2006/08/17 00:37:36 UTC	(20060817-6087)
   Log:
   atheme.c: #include "pmodule.h" for pcommand_init()
