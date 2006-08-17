@@ -1,3 +1,14 @@
+jilles      2006/08/17 16:40:16 UTC	(20060817-6095)
+  Log:
+  Remove time_msec(), "return time since the Epoch in
+  milliseconds in a 32bit int"
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/include/extern.h (File Modified) 
+  +0 -13	trunk/src/function.c (File Modified) 
+
+
 jilles      2006/08/17 15:36:43 UTC	(20060817-6093)
   Log:
   More moving around.
