@@ -10,11 +10,11 @@ cs_count.so: cs_count.c ../include/atheme.h \
   ../include/crypto.h ../include/culture.h ../include/xmlrpc.h \
   ../include/atheme.h ../include/base64.h ../include/md5.h \
   ../include/sasl.h ../include/dictionary.h ../include/match.h \
-  ../include/sysconf.h ../include/account.h ../include/confparse.h \
-  ../include/flags.h ../include/extern.h ../include/metadata.h \
-  ../include/phandler.h ../include/servtree.h ../include/services.h \
-  ../include/commandtree.h ../include/users.h ../include/authcookie.h \
-  ../include/privs.h ../include/common-ctcp.h
+  ../include/sysconf.h ../include/account.h ../include/tools.h \
+  ../include/confparse.h ../include/global.h ../include/flags.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/commandtree.h ../include/users.h \
+  ../include/authcookie.h ../include/privs.h ../include/common-ctcp.h
 cs_kickdots.so: cs_kickdots.c ../include/atheme.h \
   ../libatheme/org.atheme.claro.base ../include/sysconf.h \
   ../libatheme/stdinc.h ../libatheme/dlink.h ../libatheme/event.h \
@@ -27,11 +27,11 @@ cs_kickdots.so: cs_kickdots.c ../include/atheme.h \
   ../include/crypto.h ../include/culture.h ../include/xmlrpc.h \
   ../include/atheme.h ../include/base64.h ../include/md5.h \
   ../include/sasl.h ../include/dictionary.h ../include/match.h \
-  ../include/sysconf.h ../include/account.h ../include/confparse.h \
-  ../include/flags.h ../include/extern.h ../include/metadata.h \
-  ../include/phandler.h ../include/servtree.h ../include/services.h \
-  ../include/commandtree.h ../include/users.h ../include/authcookie.h \
-  ../include/privs.h ../include/common-ctcp.h
+  ../include/sysconf.h ../include/account.h ../include/tools.h \
+  ../include/confparse.h ../include/global.h ../include/flags.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/commandtree.h ../include/users.h \
+  ../include/authcookie.h ../include/privs.h ../include/common-ctcp.h
 cs_ping.so: cs_ping.c ../include/atheme.h \
   ../libatheme/org.atheme.claro.base ../include/sysconf.h \
   ../libatheme/stdinc.h ../libatheme/dlink.h ../libatheme/event.h \
@@ -44,11 +44,11 @@ cs_ping.so: cs_ping.c ../include/atheme.h \
   ../include/crypto.h ../include/culture.h ../include/xmlrpc.h \
   ../include/atheme.h ../include/base64.h ../include/md5.h \
   ../include/sasl.h ../include/dictionary.h ../include/match.h \
-  ../include/sysconf.h ../include/account.h ../include/confparse.h \
-  ../include/flags.h ../include/extern.h ../include/metadata.h \
-  ../include/phandler.h ../include/servtree.h ../include/services.h \
-  ../include/commandtree.h ../include/users.h ../include/authcookie.h \
-  ../include/privs.h ../include/common-ctcp.h
+  ../include/sysconf.h ../include/account.h ../include/tools.h \
+  ../include/confparse.h ../include/global.h ../include/flags.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/commandtree.h ../include/users.h \
+  ../include/authcookie.h ../include/privs.h ../include/common-ctcp.h
 fc_dice.so: fc_dice.c ../include/atheme.h \
   ../libatheme/org.atheme.claro.base ../include/sysconf.h \
   ../libatheme/stdinc.h ../libatheme/dlink.h ../libatheme/event.h \
@@ -61,11 +61,11 @@ fc_dice.so: fc_dice.c ../include/atheme.h \
   ../include/crypto.h ../include/culture.h ../include/xmlrpc.h \
   ../include/atheme.h ../include/base64.h ../include/md5.h \
   ../include/sasl.h ../include/dictionary.h ../include/match.h \
-  ../include/sysconf.h ../include/account.h ../include/confparse.h \
-  ../include/flags.h ../include/extern.h ../include/metadata.h \
-  ../include/phandler.h ../include/servtree.h ../include/services.h \
-  ../include/commandtree.h ../include/users.h ../include/authcookie.h \
-  ../include/privs.h ../include/common-ctcp.h
+  ../include/sysconf.h ../include/account.h ../include/tools.h \
+  ../include/confparse.h ../include/global.h ../include/flags.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/commandtree.h ../include/users.h \
+  ../include/authcookie.h ../include/privs.h ../include/common-ctcp.h
 gen_echoserver.so: gen_echoserver.c ../include/atheme.h \
   ../libatheme/org.atheme.claro.base ../include/sysconf.h \
   ../libatheme/stdinc.h ../libatheme/dlink.h ../libatheme/event.h \
@@ -78,11 +78,11 @@ gen_echoserver.so: gen_echoserver.c ../include/atheme.h \
   ../include/crypto.h ../include/culture.h ../include/xmlrpc.h \
   ../include/atheme.h ../include/base64.h ../include/md5.h \
   ../include/sasl.h ../include/dictionary.h ../include/match.h \
-  ../include/sysconf.h ../include/account.h ../include/confparse.h \
-  ../include/flags.h ../include/extern.h ../include/metadata.h \
-  ../include/phandler.h ../include/servtree.h ../include/services.h \
-  ../include/commandtree.h ../include/users.h ../include/authcookie.h \
-  ../include/privs.h ../include/common-ctcp.h
+  ../include/sysconf.h ../include/account.h ../include/tools.h \
+  ../include/confparse.h ../include/global.h ../include/flags.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/commandtree.h ../include/users.h \
+  ../include/authcookie.h ../include/privs.h ../include/common-ctcp.h
 gen_listenerdemo.so: gen_listenerdemo.c ../include/atheme.h \
   ../libatheme/org.atheme.claro.base ../include/sysconf.h \
   ../libatheme/stdinc.h ../libatheme/dlink.h ../libatheme/event.h \
@@ -95,11 +95,11 @@ gen_listenerdemo.so: gen_listenerdemo.c ../include/atheme.h \
   ../include/crypto.h ../include/culture.h ../include/xmlrpc.h \
   ../include/atheme.h ../include/base64.h ../include/md5.h \
   ../include/sasl.h ../include/dictionary.h ../include/match.h \
-  ../include/sysconf.h ../include/account.h ../include/confparse.h \
-  ../include/flags.h ../include/extern.h ../include/metadata.h \
-  ../include/phandler.h ../include/servtree.h ../include/services.h \
-  ../include/commandtree.h ../include/users.h ../include/authcookie.h \
-  ../include/privs.h ../include/common-ctcp.h
+  ../include/sysconf.h ../include/account.h ../include/tools.h \
+  ../include/confparse.h ../include/global.h ../include/flags.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/commandtree.h ../include/users.h \
+  ../include/authcookie.h ../include/privs.h ../include/common-ctcp.h
 ircd_catserv.so: ircd_catserv.c ../include/atheme.h \
   ../libatheme/org.atheme.claro.base ../include/sysconf.h \
   ../libatheme/stdinc.h ../libatheme/dlink.h ../libatheme/event.h \
@@ -112,11 +112,11 @@ ircd_catserv.so: ircd_catserv.c ../include/atheme.h \
   ../include/crypto.h ../include/culture.h ../include/xmlrpc.h \
   ../include/atheme.h ../include/base64.h ../include/md5.h \
   ../include/sasl.h ../include/dictionary.h ../include/match.h \
-  ../include/sysconf.h ../include/account.h ../include/confparse.h \
-  ../include/flags.h ../include/extern.h ../include/metadata.h \
-  ../include/phandler.h ../include/servtree.h ../include/services.h \
-  ../include/commandtree.h ../include/users.h ../include/authcookie.h \
-  ../include/privs.h ../include/common-ctcp.h
+  ../include/sysconf.h ../include/account.h ../include/tools.h \
+  ../include/confparse.h ../include/global.h ../include/flags.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/commandtree.h ../include/users.h \
+  ../include/authcookie.h ../include/privs.h ../include/common-ctcp.h
 ircd_nohalfops.so: ircd_nohalfops.c ../include/atheme.h \
   ../libatheme/org.atheme.claro.base ../include/sysconf.h \
   ../libatheme/stdinc.h ../libatheme/dlink.h ../libatheme/event.h \
@@ -129,11 +129,11 @@ ircd_nohalfops.so: ircd_nohalfops.c ../include/atheme.h \
   ../include/crypto.h ../include/culture.h ../include/xmlrpc.h \
   ../include/atheme.h ../include/base64.h ../include/md5.h \
   ../include/sasl.h ../include/dictionary.h ../include/match.h \
-  ../include/sysconf.h ../include/account.h ../include/confparse.h \
-  ../include/flags.h ../include/extern.h ../include/metadata.h \
-  ../include/phandler.h ../include/servtree.h ../include/services.h \
-  ../include/commandtree.h ../include/users.h ../include/authcookie.h \
-  ../include/privs.h ../include/common-ctcp.h
+  ../include/sysconf.h ../include/account.h ../include/tools.h \
+  ../include/confparse.h ../include/global.h ../include/flags.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/commandtree.h ../include/users.h \
+  ../include/authcookie.h ../include/privs.h ../include/common-ctcp.h
 ircd_noowner.so: ircd_noowner.c ../include/atheme.h \
   ../libatheme/org.atheme.claro.base ../include/sysconf.h \
   ../libatheme/stdinc.h ../libatheme/dlink.h ../libatheme/event.h \
@@ -146,11 +146,11 @@ ircd_noowner.so: ircd_noowner.c ../include/atheme.h \
   ../include/crypto.h ../include/culture.h ../include/xmlrpc.h \
   ../include/atheme.h ../include/base64.h ../include/md5.h \
   ../include/sasl.h ../include/dictionary.h ../include/match.h \
-  ../include/sysconf.h ../include/account.h ../include/confparse.h \
-  ../include/flags.h ../include/extern.h ../include/metadata.h \
-  ../include/phandler.h ../include/servtree.h ../include/services.h \
-  ../include/commandtree.h ../include/users.h ../include/authcookie.h \
-  ../include/privs.h ../include/common-ctcp.h
+  ../include/sysconf.h ../include/account.h ../include/tools.h \
+  ../include/confparse.h ../include/global.h ../include/flags.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/commandtree.h ../include/users.h \
+  ../include/authcookie.h ../include/privs.h ../include/common-ctcp.h
 ircd_noprotect.so: ircd_noprotect.c ../include/atheme.h \
   ../libatheme/org.atheme.claro.base ../include/sysconf.h \
   ../libatheme/stdinc.h ../libatheme/dlink.h ../libatheme/event.h \
@@ -163,11 +163,11 @@ ircd_noprotect.so: ircd_noprotect.c ../include/atheme.h \
   ../include/crypto.h ../include/culture.h ../include/xmlrpc.h \
   ../include/atheme.h ../include/base64.h ../include/md5.h \
   ../include/sasl.h ../include/dictionary.h ../include/match.h \
-  ../include/sysconf.h ../include/account.h ../include/confparse.h \
-  ../include/flags.h ../include/extern.h ../include/metadata.h \
-  ../include/phandler.h ../include/servtree.h ../include/services.h \
-  ../include/commandtree.h ../include/users.h ../include/authcookie.h \
-  ../include/privs.h ../include/common-ctcp.h
+  ../include/sysconf.h ../include/account.h ../include/tools.h \
+  ../include/confparse.h ../include/global.h ../include/flags.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/commandtree.h ../include/users.h \
+  ../include/authcookie.h ../include/privs.h ../include/common-ctcp.h
 ns_generatepass.so: ns_generatepass.c ../include/atheme.h \
   ../libatheme/org.atheme.claro.base ../include/sysconf.h \
   ../libatheme/stdinc.h ../libatheme/dlink.h ../libatheme/event.h \
@@ -180,11 +180,11 @@ ns_generatepass.so: ns_generatepass.c ../include/atheme.h \
   ../include/crypto.h ../include/culture.h ../include/xmlrpc.h \
   ../include/atheme.h ../include/base64.h ../include/md5.h \
   ../include/sasl.h ../include/dictionary.h ../include/match.h \
-  ../include/sysconf.h ../include/account.h ../include/confparse.h \
-  ../include/flags.h ../include/extern.h ../include/metadata.h \
-  ../include/phandler.h ../include/servtree.h ../include/services.h \
-  ../include/commandtree.h ../include/users.h ../include/authcookie.h \
-  ../include/privs.h ../include/common-ctcp.h
+  ../include/sysconf.h ../include/account.h ../include/tools.h \
+  ../include/confparse.h ../include/global.h ../include/flags.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/commandtree.h ../include/users.h \
+  ../include/authcookie.h ../include/privs.h ../include/common-ctcp.h
 ns_enforce.so: ns_enforce.c ../include/atheme.h \
   ../libatheme/org.atheme.claro.base ../include/sysconf.h \
   ../libatheme/stdinc.h ../libatheme/dlink.h ../libatheme/event.h \
@@ -197,11 +197,12 @@ ns_enforce.so: ns_enforce.c ../include/atheme.h \
   ../include/crypto.h ../include/culture.h ../include/xmlrpc.h \
   ../include/atheme.h ../include/base64.h ../include/md5.h \
   ../include/sasl.h ../include/dictionary.h ../include/match.h \
-  ../include/sysconf.h ../include/account.h ../include/confparse.h \
-  ../include/flags.h ../include/extern.h ../include/metadata.h \
-  ../include/phandler.h ../include/servtree.h ../include/services.h \
-  ../include/commandtree.h ../include/users.h ../include/authcookie.h \
-  ../include/privs.h ../include/common-ctcp.h ../include/uplink.h
+  ../include/sysconf.h ../include/account.h ../include/tools.h \
+  ../include/confparse.h ../include/global.h ../include/flags.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/commandtree.h ../include/users.h \
+  ../include/authcookie.h ../include/privs.h ../include/common-ctcp.h \
+  ../include/uplink.h
 us_generatepass.so: us_generatepass.c ../include/atheme.h \
   ../libatheme/org.atheme.claro.base ../include/sysconf.h \
   ../libatheme/stdinc.h ../libatheme/dlink.h ../libatheme/event.h \
@@ -214,11 +215,11 @@ us_generatepass.so: us_generatepass.c ../include/atheme.h \
   ../include/crypto.h ../include/culture.h ../include/xmlrpc.h \
   ../include/atheme.h ../include/base64.h ../include/md5.h \
   ../include/sasl.h ../include/dictionary.h ../include/match.h \
-  ../include/sysconf.h ../include/account.h ../include/confparse.h \
-  ../include/flags.h ../include/extern.h ../include/metadata.h \
-  ../include/phandler.h ../include/servtree.h ../include/services.h \
-  ../include/commandtree.h ../include/users.h ../include/authcookie.h \
-  ../include/privs.h ../include/common-ctcp.h
+  ../include/sysconf.h ../include/account.h ../include/tools.h \
+  ../include/confparse.h ../include/global.h ../include/flags.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/commandtree.h ../include/users.h \
+  ../include/authcookie.h ../include/privs.h ../include/common-ctcp.h
 os_pingspam.so: os_pingspam.c ../include/atheme.h \
   ../libatheme/org.atheme.claro.base ../include/sysconf.h \
   ../libatheme/stdinc.h ../libatheme/dlink.h ../libatheme/event.h \
@@ -231,8 +232,8 @@ os_pingspam.so: os_pingspam.c ../include/atheme.h \
   ../include/crypto.h ../include/culture.h ../include/xmlrpc.h \
   ../include/atheme.h ../include/base64.h ../include/md5.h \
   ../include/sasl.h ../include/dictionary.h ../include/match.h \
-  ../include/sysconf.h ../include/account.h ../include/confparse.h \
-  ../include/flags.h ../include/extern.h ../include/metadata.h \
-  ../include/phandler.h ../include/servtree.h ../include/services.h \
-  ../include/commandtree.h ../include/users.h ../include/authcookie.h \
-  ../include/privs.h ../include/common-ctcp.h
+  ../include/sysconf.h ../include/account.h ../include/tools.h \
+  ../include/confparse.h ../include/global.h ../include/flags.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/commandtree.h ../include/users.h \
+  ../include/authcookie.h ../include/privs.h ../include/common-ctcp.h

@@ -1,3 +1,21 @@
+jilles      2006/08/17 23:40:49 UTC	(20060817-6097)
+  Log:
+  Remove extern.h and everything except the #includes in
+  atheme.h, moving the contents to two new header files
+  global.h and tools.h.
+  The material has been reordered and some comments have
+  been added.
+  To compile after this it is necessary to run make depend
+  (or wait after next commit).
+  
+
+  Changes:	Modified:
+  +3 -165	trunk/include/atheme.h (File Modified) 
+  +0 -91	trunk/include/extern.h (File Deleted) 
+  +163 -0	trunk/include/global.h (File Added) 
+  +106 -0	trunk/include/tools.h (File Added) 
+
+
 jilles      2006/08/17 16:40:16 UTC	(20060817-6095)
   Log:
   Remove time_msec(), "return time since the Epoch in

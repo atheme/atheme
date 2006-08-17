@@ -11,8 +11,8 @@ main.so: main.c ../../include/atheme.h \
   ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
   ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
   ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
-  ../../include/sysconf.h ../../include/account.h \
-  ../../include/confparse.h ../../include/flags.h ../../include/extern.h \
+  ../../include/sysconf.h ../../include/account.h ../../include/tools.h \
+  ../../include/confparse.h ../../include/global.h ../../include/flags.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
@@ -31,8 +31,8 @@ help.so: help.c ../../include/atheme.h \
   ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
   ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
   ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
-  ../../include/sysconf.h ../../include/account.h \
-  ../../include/confparse.h ../../include/flags.h ../../include/extern.h \
+  ../../include/sysconf.h ../../include/account.h ../../include/tools.h \
+  ../../include/confparse.h ../../include/global.h ../../include/flags.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
@@ -51,8 +51,8 @@ send.so: send.c ../../include/atheme.h \
   ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
   ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
   ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
-  ../../include/sysconf.h ../../include/account.h \
-  ../../include/confparse.h ../../include/flags.h ../../include/extern.h \
+  ../../include/sysconf.h ../../include/account.h ../../include/tools.h \
+  ../../include/confparse.h ../../include/global.h ../../include/flags.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
@@ -71,8 +71,8 @@ list.so: list.c ../../include/atheme.h \
   ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
   ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
   ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
-  ../../include/sysconf.h ../../include/account.h \
-  ../../include/confparse.h ../../include/flags.h ../../include/extern.h \
+  ../../include/sysconf.h ../../include/account.h ../../include/tools.h \
+  ../../include/confparse.h ../../include/global.h ../../include/flags.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
@@ -91,8 +91,8 @@ delete.so: delete.c ../../include/atheme.h \
   ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
   ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
   ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
-  ../../include/sysconf.h ../../include/account.h \
-  ../../include/confparse.h ../../include/flags.h ../../include/extern.h \
+  ../../include/sysconf.h ../../include/account.h ../../include/tools.h \
+  ../../include/confparse.h ../../include/global.h ../../include/flags.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
@@ -111,8 +111,8 @@ forward.so: forward.c ../../include/atheme.h \
   ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
   ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
   ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
-  ../../include/sysconf.h ../../include/account.h \
-  ../../include/confparse.h ../../include/flags.h ../../include/extern.h \
+  ../../include/sysconf.h ../../include/account.h ../../include/tools.h \
+  ../../include/confparse.h ../../include/global.h ../../include/flags.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
@@ -131,8 +131,8 @@ read.so: read.c ../../include/atheme.h \
   ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
   ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
   ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
-  ../../include/sysconf.h ../../include/account.h \
-  ../../include/confparse.h ../../include/flags.h ../../include/extern.h \
+  ../../include/sysconf.h ../../include/account.h ../../include/tools.h \
+  ../../include/confparse.h ../../include/global.h ../../include/flags.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
@@ -151,8 +151,8 @@ ignore.so: ignore.c ../../include/atheme.h \
   ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
   ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
   ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
-  ../../include/sysconf.h ../../include/account.h \
-  ../../include/confparse.h ../../include/flags.h ../../include/extern.h \
+  ../../include/sysconf.h ../../include/account.h ../../include/tools.h \
+  ../../include/confparse.h ../../include/global.h ../../include/flags.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
