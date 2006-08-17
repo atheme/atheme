@@ -1,3 +1,18 @@
+jilles      2006/08/16 17:46:26 UTC	(20060816-6085)
+  Log:
+  - Make add_one_to_uid() static
+  - Move declaration of struct set_command_ to modules/chanserv/set.c
+  - Move help stuff to include/commandtree.h
+  
+
+  Changes:	Modified:
+  +0 -19	trunk/include/atheme.h (File Modified) 
+  +19 -0	trunk/include/commandtree.h (File Modified) 
+  +0 -10	trunk/include/extern.h (File Modified) 
+  +11 -3	trunk/modules/chanserv/set.c (File Modified) 
+  +8 -7		trunk/src/uid.c (File Modified) 
+
+
 jilles      2006/08/16 17:19:54 UTC	(20060816-6083)
   Log:
   Update depend files.
