@@ -1,3 +1,12 @@
+jilles      2006/08/17 00:37:36 UTC	(20060817-6087)
+  Log:
+  atheme.c: #include "pmodule.h" for pcommand_init()
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/src/atheme.c (File Modified) 
+
+
 jilles      2006/08/16 17:46:26 UTC	(20060816-6085)
   Log:
   - Make add_one_to_uid() static

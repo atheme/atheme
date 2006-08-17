@@ -5,7 +5,7 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id: dictionary.c 6047 2006-08-14 15:59:37Z jilles $
+ * $Id: dictionary.c 6089 2006-08-17 15:24:10Z jilles $
  */
 
 #include "atheme.h"
@@ -225,11 +225,7 @@ void *dictionary_retrieve(dictionary_tree_t *dtree, const char *key)
 	dictionary_elem_t *delem = dictionary_find(dtree, key);
 
 	if (delem == NULL)
-	{
-		slog(LG_DEBUG, "dictionary_retrieve(): entry '%s' does not exist in dtree<%p>!",
-			key, dtree);
 		return NULL;
-	}
 	else
 		return delem->node.data;
 }
