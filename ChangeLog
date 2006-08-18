@@ -1,3 +1,20 @@
+jilles      2006/08/18 16:59:55 UTC	(20060818-6127)
+  Log:
+  - Add new priv PRIV_MASS_AKILL, operserv:massakill, which
+    will control the new channel/RE kill/akill commands
+  - Add remark that general:auspex should not violate user
+    privacy
+  - Rework CLEARCHAN some, add wallops/snoop/log, cleaner
+    code, crash avoidance
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/doc/PRIVILEGES (File Modified) 
+  +1 -0		trunk/include/privs.h (File Modified) 
+  +43 -34	trunk/modules/operserv/clearchan.c (File Modified) 
+  +1 -0		trunk/modules/operserv/specs.c (File Modified) 
+
+
 jilles      2006/08/18 16:11:48 UTC	(20060818-6125)
   Log:
   operserv compare: add log and snoop, change priv to user:auspex

@@ -1,9 +1,8 @@
 Help for COMPARE:
 
-COMPARE allows operators with the
-general auspex flag to view matching
-information on two users, or two
-channels.
+COMPARE allows operators with user:auspex
+privilege to view matching information
+on two users, or two channels.
 
 It is useful in clone detection,
 amongst other situations.

@@ -1,0 +1,16 @@
+Help for RMATCH:
+
+RMATCH shows all users whose
+nick!user@host gecos
+matches the given POSIX extended
+regular expression.
+
+Prefix your pattern with !i: to do a
+case insensitive match.
+
+Syntax: RMATCH <[!i:]regexp>
+
+Example:
+    /msg &nick& RMATCH !i:^m(oo|00)cow
+    /msg &nick& RMATCH ^[a-z]+!~?[a-z]+@
+    /msg &nick& RMATCH ^[^ ]* [^ ]*$

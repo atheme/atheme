@@ -1,0 +1,8 @@
+Help for RNC:
+
+RNC shows the most common realnames on the network.
+
+Syntax: RNC [number]
+
+Example:
+    /msg &nick& RNC 10

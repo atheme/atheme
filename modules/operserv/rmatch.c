@@ -4,7 +4,7 @@
  *
  * Regex usersearch feature.
  *
- * $Id: rmatch.c 6123 2006-08-18 15:55:06Z jilles $
+ * $Id: rmatch.c 6129 2006-08-18 20:40:53Z jilles $
  */
 
 /*
@@ -16,11 +16,12 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rmatch", FALSE, _modinit, _moddeinit,
-	"$Id: rmatch.c 6123 2006-08-18 15:55:06Z jilles $",
+	"$Id: rmatch.c 6129 2006-08-18 20:40:53Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 list_t *os_cmdtree;
+list_t *os_helptree;
 
 static void os_cmd_rmatch(char *origin);
 
@@ -29,13 +30,16 @@ command_t os_rmatch = { "RMATCH", "Scans the network for users based on a specif
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
+	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
 	command_add(&os_rmatch, os_cmdtree);
+	help_addentry(os_helptree, "RMATCH", "help/oservice/rmatch", NULL);
 }
 
 void _moddeinit(void)
 {
 	command_delete(&os_rmatch, os_cmdtree);
+	help_delentry(os_helptree, "RMATCH");
 }
 
 static void os_cmd_rmatch(char *origin)
