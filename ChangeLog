@@ -1,3 +1,12 @@
+w00t        2006/08/18 11:07:55 UTC	(20060818-6109)
+  Log:
+  port chii/compare to operserv/compare - again, code could probably do with a cleanup.
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/operserv/Makefile.in (File Modified) 
+  +181 -0	trunk/modules/operserv/compare.c (File Added) 
+
+
 w00t        2006/08/18 10:46:09 UTC	(20060818-6107)
   Log:
   Port over chii/clearchan to operserv. Probably not the nicest of code, seems to work fine.

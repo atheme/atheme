@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 6109 2006-08-18 11:07:55Z w00t $
+# $Id: Makefile.in 6111 2006-08-18 11:14:14Z nenolod $
 #
 
 CC		= @CC@
@@ -35,7 +35,7 @@ default: all
 BASE_SRCS = 		\
 	main.c		\
 	akill.c		\
-	clearchan.c \
+	clearchan.c	\
 	compare.c   \
 	help.c		\
 	ignore.c	\
@@ -49,6 +49,7 @@ BASE_SRCS = 		\
 	modunload.c	\
 	noop.c		\
 	raw.c		\
+	rakill.c	\
 	rehash.c	\
 	restart.c	\
 	shutdown.c	\
