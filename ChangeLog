@@ -1,3 +1,18 @@
+jilles      2006/08/18 15:55:06 UTC	(20060818-6123)
+  Log:
+  operserv rnc, rmatch:
+  - add logging
+  - add snoop to rmatch
+  - change priv from general:auspex to user:auspex as these
+    commands may violate user privacy
+  - minor code cleanups
+  
+
+  Changes:	Modified:
+  +6 -5		trunk/modules/operserv/rmatch.c (File Modified) 
+  +3 -1		trunk/modules/operserv/rnc.c (File Modified) 
+
+
 jilles      2006/08/18 15:09:17 UTC	(20060818-6121)
   Log:
   Services commands should do user_find_named(origin),
