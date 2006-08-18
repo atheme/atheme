@@ -1,3 +1,12 @@
+w00t        2006/08/18 10:46:09 UTC	(20060818-6107)
+  Log:
+  Port over chii/clearchan to operserv. Probably not the nicest of code, seems to work fine.
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/operserv/Makefile.in (File Modified) 
+  +150 -0	trunk/modules/operserv/clearchan.c (File Added) 
+
+
 jilles      2006/08/18 00:24:46 UTC	(20060818-6105)
   Log:
   Move some of the common typedefs to common.h so they
