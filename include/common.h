@@ -4,7 +4,7 @@
  *
  * Defines needed by multiple header files.
  *
- * $Id: common.h 6103 2006-08-18 00:04:43Z jilles $
+ * $Id: common.h 6105 2006-08-18 00:24:46Z jilles $
  */
 
 #ifndef COMMON_H
@@ -54,5 +54,24 @@
 
 #define CACHEFILE_HEAP_SIZE     32
 #define CACHELINE_HEAP_SIZE     64
+
+/* Make it possible to use pointers to these types everywhere
+ * (for structures used in multiple header files) */
+typedef struct user_ user_t;
+
+typedef struct server_ server_t;
+
+typedef struct channel_ channel_t;
+typedef struct chanuser_ chanuser_t;
+typedef struct chanban_ chanban_t;
+
+typedef struct operclass_ operclass_t;
+typedef struct myuser_ myuser_t;
+typedef struct mychan_ mychan_t;
+
+typedef struct service_ service_t;
+
+typedef struct _configfile CONFIGFILE;
+typedef struct _configentry CONFIGENTRY;
 
 #endif

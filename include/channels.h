@@ -4,19 +4,11 @@
  *
  * Data structures for channel information.
  *
- * $Id: channels.h 6093 2006-08-17 15:36:43Z jilles $
+ * $Id: channels.h 6105 2006-08-18 00:24:46Z jilles $
  */
 
 #ifndef CHANNELS_H
 #define CHANNELS_H
-
-struct mychan_; /* XXX cmode.c check_modes() uses this */
-struct myuser_; /* extmode check() uses this */
-
-typedef struct user_ user_t; /* XXX: Should be in users.h */
-typedef struct channel_ channel_t;
-typedef struct chanuser_ chanuser_t;
-typedef struct chanban_ chanban_t;
 
 #define MAXEXTMODES 5
 
@@ -82,7 +74,7 @@ struct cmode_
 struct extmode
 {
 	char mode;
-	boolean_t (*check)(const char *, channel_t *, struct mychan_ *, user_t *, struct myuser_ *);
+	boolean_t (*check)(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 };
 
 /* channel related hooks */
@@ -116,7 +108,7 @@ E void modestack_mode_ext(char *source, char *channel, int dir, int i, const cha
 E void modestack_mode_param(char *source, char *channel, int dir, char type, const char *value);
 E void cmode(char *sender, ...);
 E void user_mode(user_t *user, char *modes);
-E void check_modes(struct mychan_ *mychan, boolean_t sendnow);
+E void check_modes(mychan_t *mychan, boolean_t sendnow);
 
 /* function.c */
 E char *flags_to_string(int32_t flags);

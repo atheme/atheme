@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 6101 2006-08-17 23:48:37Z jilles $
+ * $Id: function.c 6105 2006-08-18 00:24:46Z jilles $
  */
 
 #include "atheme.h"
@@ -133,8 +133,7 @@ void slog(uint32_t level, const char *fmt, ...)
 	va_end(args);
 }
 
-/* svs is really service_t * but that's not available in extern.h */
-void logcommand(void *svs, user_t *source, int level, const char *fmt, ...)
+void logcommand(service_t *svs, user_t *source, int level, const char *fmt, ...)
 {
 	va_list args;
 	time_t t;
@@ -159,7 +158,7 @@ void logcommand(void *svs, user_t *source, int level, const char *fmt, ...)
 	{
 		fprintf(log_file, "%s %s %s:%s!%s@%s[%s] %s\n",
 				datetime,
-				svs != NULL ? ((service_t *)svs)->name : me.name,
+				svs != NULL ? svs->name : me.name,
 				source->myuser != NULL ? source->myuser->name : "",
 				source->nick, source->user, source->vhost,
 				source->ip[0] != '\0' ? source->ip : source->host,
@@ -176,7 +175,7 @@ void logcommand(void *svs, user_t *source, int level, const char *fmt, ...)
 	va_end(args);
 }
 
-void logcommand_external(void *svs, char *type, connection_t *source, myuser_t *login, int level, const char *fmt, ...)
+void logcommand_external(service_t *svs, char *type, connection_t *source, myuser_t *login, int level, const char *fmt, ...)
 {
 	va_list args;
 	time_t t;
@@ -201,7 +200,7 @@ void logcommand_external(void *svs, char *type, connection_t *source, myuser_t *
 	{
 		fprintf(log_file, "%s %s %s:%s[%s] %s\n",
 				datetime,
-				svs != NULL ? ((service_t *)svs)->name : me.name,
+				svs != NULL ? svs->name : me.name,
 				login != NULL ? login->name : "",
 				type, source->hbuf,
 				lbuf);

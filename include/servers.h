@@ -4,14 +4,13 @@
  *
  * Data structures related to network servers.
  *
- * $Id: servers.h 6093 2006-08-17 15:36:43Z jilles $
+ * $Id: servers.h 6105 2006-08-18 00:24:46Z jilles $
  */
 
 #ifndef SERVERS_H
 #define SERVERS_H
 
 typedef struct tld_ tld_t;
-typedef struct server_ server_t;
 
 /* servers struct */
 struct server_

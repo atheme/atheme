@@ -4,14 +4,11 @@
  *
  * Data structures for flags to bitmask processing routines.
  *
- * $Id: confparse.h 6103 2006-08-18 00:04:43Z jilles $
+ * $Id: confparse.h 6105 2006-08-18 00:24:46Z jilles $
  */
 
 #ifndef CONFPARSE_H
 #define CONFPARSE_H
-
-typedef struct _configfile CONFIGFILE;
-typedef struct _configentry CONFIGENTRY;
 
 struct _configfile
 {

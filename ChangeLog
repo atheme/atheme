@@ -1,3 +1,16 @@
+jilles      2006/08/18 00:04:43 UTC	(20060818-6103)
+  Log:
+  - Move TOKEN_ constants to confparse.h (only used with
+    the conf stuff)
+  - Remove two defines used by the old modestacker
+  - Update comments in common.h
+  
+
+  Changes:	Modified:
+  +2 -6		trunk/include/common.h (File Modified) 
+  +3 -0		trunk/include/confparse.h (File Modified) 
+
+
 jilles      2006/08/17 23:48:37 UTC	(20060817-6101)
   Log:
   Update a reference to atheme.h.
