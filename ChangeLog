@@ -1,3 +1,16 @@
+jilles      2006/08/18 15:09:17 UTC	(20060818-6121)
+  Log:
+  Services commands should do user_find_named(origin),
+  not user_find(origin).
+  
+
+  Changes:	Modified:
+  +4 -4		trunk/contrib/wumpus.c (File Modified) 
+  +1 -1		trunk/modules/operserv/clearchan.c (File Modified) 
+  +1 -1		trunk/modules/operserv/rakill.c (File Modified) 
+  +1 -1		trunk/modules/operserv/rmatch.c (File Modified) 
+
+
 w00t        2006/08/18 11:41:46 UTC	(20060818-6119)
   Log:
   Port chii/rnc to operserv/rnc - this could almost certainly be modified to use dictionary. Modify rakill to use it's helpfile.

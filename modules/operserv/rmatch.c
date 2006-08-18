@@ -4,7 +4,7 @@
  *
  * Regex usersearch feature.
  *
- * $Id: rmatch.c 6121 2006-08-18 15:09:17Z jilles $
+ * $Id: rmatch.c 6123 2006-08-18 15:55:06Z jilles $
  */
 
 /*
@@ -16,15 +16,15 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rmatch", FALSE, _modinit, _moddeinit,
-	"$Id: rmatch.c 6121 2006-08-18 15:09:17Z jilles $",
+	"$Id: rmatch.c 6123 2006-08-18 15:55:06Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 list_t *os_cmdtree;
 
-static void _os_rmatch(char *origin);
+static void os_cmd_rmatch(char *origin);
 
-command_t os_rmatch = { "RMATCH", "Scans the network for users based on a specific regex pattern.", PRIV_SERVER_AUSPEX, _os_rmatch };
+command_t os_rmatch = { "RMATCH", "Scans the network for users based on a specific regex pattern.", PRIV_USER_AUSPEX, os_cmd_rmatch };
 
 void _modinit(module_t *m)
 {
@@ -38,7 +38,7 @@ void _moddeinit(void)
 	command_delete(&os_rmatch, os_cmdtree);
 }
 
-static void _os_rmatch(char *origin)
+static void os_cmd_rmatch(char *origin)
 {
 	regex_t *regex;
 	char usermask[512];
@@ -47,7 +47,6 @@ static void _os_rmatch(char *origin)
 	node_t *n;
 	user_t *u;
 	char *pattern = strtok(NULL, "");
-	user_t *me = user_find_named(origin);
 	int flags = 0;
 
 	if (pattern == NULL)
@@ -80,7 +79,7 @@ static void _os_rmatch(char *origin)
 			
 			sprintf(usermask, "%s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
 
-			if (regex_match(regex, (char *)usermask) == TRUE)
+			if (regex_match(regex, usermask) == TRUE)
 			{
 				/* match */
 				notice(opersvs.nick, origin, "\2Match:\2  %s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
@@ -91,4 +90,6 @@ static void _os_rmatch(char *origin)
 	
 	regex_destroy(regex);
 	notice(opersvs.nick, origin, "\2%d\2 matches for %s", matches, pattern);
+	logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "RMATCH %s (%d matches)", pattern, matches);
+	snoop("RMATCH: \2%s\2 by \2%s\2", pattern, origin);
 }

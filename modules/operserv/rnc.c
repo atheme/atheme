@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ RNC.
  *
- * $Id: rnc.c 6119 2006-08-18 11:41:46Z w00t $
+ * $Id: rnc.c 6123 2006-08-18 15:55:06Z jilles $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rnc", FALSE, _modinit, _moddeinit,
-	"$Id: rnc.c 6119 2006-08-18 11:41:46Z w00t $",
+	"$Id: rnc.c 6123 2006-08-18 15:55:06Z jilles $",
 	"Robin Burchell <surreal.w00t@gmail.com>"
 );
 
 static void os_cmd_rnc(char *origin);
 
-command_t os_rnc = { "RNC", "Shows the most frequent realnames on the network", PRIV_SERVER_AUSPEX, os_cmd_rnc };
+command_t os_rnc = { "RNC", "Shows the most frequent realnames on the network", PRIV_USER_AUSPEX, os_cmd_rnc };
 
 list_t *os_cmdtree;
 list_t *os_helptree;
@@ -127,5 +127,7 @@ static void os_cmd_rnc(char *origin)
 		node_del(n1, &realnames);
 		node_free(n1);
 	}
+
+	logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "RNC %d", count);
 }
 
