@@ -1,3 +1,18 @@
+jilles      2006/08/18 20:40:53 UTC	(20060818-6129)
+  Log:
+  operserv help files:
+  - update help files for clearchan and compare
+  - add help files for rmatch and rnc
+  
+
+  Changes:	Modified:
+  +7 -4		trunk/help/oservice/clearchan (File Modified) 
+  +3 -4		trunk/help/oservice/compare (File Modified) 
+  +16 -0	trunk/help/oservice/rmatch (File Added) 
+  +8 -0		trunk/help/oservice/rnc (File Added) 
+  +4 -0		trunk/modules/operserv/rmatch.c (File Modified) 
+
+
 jilles      2006/08/18 16:59:55 UTC	(20060818-6127)
   Log:
   - Add new priv PRIV_MASS_AKILL, operserv:massakill, which

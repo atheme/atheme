@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: dreamforge.c 6079 2006-08-16 16:44:39Z jilles $
+ * $Id: dreamforge.c 6131 2006-08-18 23:27:41Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/dreamforge.h"
 
-DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 6079 2006-08-16 16:44:39Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 6131 2006-08-18 23:27:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -634,7 +634,7 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 				slog(LG_DEBUG, "m_join(): new channel: %s", parv[0]);
 				c = channel_add(chanv[i], CURRTIME);
 			}
-			cu = chanuser_add(c, origin);
+			chanuser_add(c, origin);
 		}
 	}
 }
