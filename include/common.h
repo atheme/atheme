@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
- * Data structures for account information.
+ * Defines needed by multiple header files.
  *
- * $Id: common.h 6077 2006-08-16 16:07:10Z jilles $
+ * $Id: common.h 6103 2006-08-18 00:04:43Z jilles $
  */
 
 #ifndef COMMON_H
@@ -12,11 +12,7 @@
 
 /* D E F I N E S */
 #define BUFSIZE 1024            /* maximum size of a buffer */
-#define MODESTACK_WAIT 500
 #define MAXMODES 4
-#define MAXPARAMSLEN (510-32-64-34-(7+MAXMODES))
-#define TOKEN_UNMATCHED -1
-#define TOKEN_ERROR -2
 
 /* lengths of buffers (string length is 1 less) */
 #define NICKLEN 51
