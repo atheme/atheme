@@ -1,0 +1,14 @@
+Help for CLEARCHAN:
+
+CLEARCHAN allows operators with the
+channel administration flag to clear
+a channel in one of three ways. KICK,
+which is the default. KILL, or GLINE.
+
+This command should not be used lightly.
+
+Syntax: CLEARCHAN <#channel> [!KICK|!KILL|!GLINE] <reason>
+
+Example:
+    /msg &nick& CLEARCHAN #warez warez is bad, mk?
+    /msg &nick& CLEARCHAN #warez !GLINE you were warned!
