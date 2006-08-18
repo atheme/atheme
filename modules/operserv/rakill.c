@@ -4,7 +4,7 @@
  *
  * Regexp-based AKILL implementation.
  *
- * $Id$
+ * $Id: rakill.c 6113 2006-08-18 11:19:40Z nenolod $
  */
 
 /*
@@ -17,7 +17,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rakill", FALSE, _modinit, _moddeinit,
-	"$Id$",
+	"$Id: rakill.c 6113 2006-08-18 11:19:40Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

@@ -1,3 +1,13 @@
+nenolod     2006/08/18 11:14:14 UTC	(20060818-6111)
+  Log:
+  - port @rakill from chii2 to OperServ.
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/modules/operserv/Makefile.in (File Modified) 
+  +97 -0	trunk/modules/operserv/rakill.c (File Added) 
+
+
 w00t        2006/08/18 11:07:55 UTC	(20060818-6109)
   Log:
   port chii/compare to operserv/compare - again, code could probably do with a cleanup.
