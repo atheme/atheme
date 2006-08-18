@@ -4,7 +4,7 @@
  *
  * Regexp-based AKILL implementation.
  *
- * $Id: rakill.c 6113 2006-08-18 11:19:40Z nenolod $
+ * $Id: rakill.c 6119 2006-08-18 11:41:46Z w00t $
  */
 
 /*
@@ -17,26 +17,30 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rakill", FALSE, _modinit, _moddeinit,
-	"$Id: rakill.c 6113 2006-08-18 11:19:40Z nenolod $",
+	"$Id: rakill.c 6119 2006-08-18 11:41:46Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 list_t *os_cmdtree;
+list_t *os_helptree;
 
-static void _os_rakill(char *origin);
+static void os_cmd_rakill(char *origin);
 
-command_t os_rakill = { "RAKILL", "Sets a group of AKILLs against users matching a specific regex pattern.", PRIV_ADMIN, _os_rakill };
+command_t os_rakill = { "RAKILL", "Sets a group of AKILLs against users matching a specific regex pattern.", PRIV_ADMIN, os_cmd_rakill };
 
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
+	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
 	command_add(&os_rakill, os_cmdtree);
+	help_addentry(os_helptree, "RAKILL", "help/oservice/rakill", NULL);
 }
 
 void _moddeinit(void)
 {
 	command_delete(&os_rakill, os_cmdtree);
+	help_delentry(os_helptree, "RAKILL");
 }
 
 static void _os_rakill(char *origin)

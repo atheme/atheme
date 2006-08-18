@@ -1,3 +1,13 @@
+nenolod     2006/08/18 11:31:52 UTC	(20060818-6117)
+  Log:
+  - @rmatch from chii2
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/modules/operserv/Makefile.in (File Modified) 
+  +94 -0	trunk/modules/operserv/rmatch.c (File Added) 
+
+
 w00t        2006/08/18 11:23:04 UTC	(20060818-6115)
   Log:
   helpfiles

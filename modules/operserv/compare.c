@@ -2,9 +2,9 @@
  * Copyright (c) 2006 Robin Burchell <surreal.w00t@gmail.com>
  * Rights to this code are documented in doc/LICENCE.
  *
- * This file contains functionality implementing OperServ CLEARCHAN.
+ * This file contains functionality implementing OperServ COMPARE.
  *
- * $Id: compare.c 6109 2006-08-18 11:07:55Z w00t $
+ * $Id: compare.c 6119 2006-08-18 11:41:46Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/compare", FALSE, _modinit, _moddeinit,
-	"$Id: compare.c 6109 2006-08-18 11:07:55Z w00t $",
+	"$Id: compare.c 6119 2006-08-18 11:41:46Z w00t $",
 	"Robin Burchell <surreal.w00t@gmail.com>"
 );
 
