@@ -1,3 +1,22 @@
+jilles      2006/08/18 00:24:46 UTC	(20060818-6105)
+  Log:
+  Move some of the common typedefs to common.h so they
+  can be used everywhere and hacks like defining user_t
+  in channels.h or using struct <blah>_ are no longer
+  needed.
+  
+
+  Changes:	Modified:
+  +2 -5		trunk/include/account.h (File Modified) 
+  +2 -10	trunk/include/channels.h (File Modified) 
+  +19 -0	trunk/include/common.h (File Modified) 
+  +0 -3		trunk/include/confparse.h (File Modified) 
+  +0 -1		trunk/include/servers.h (File Modified) 
+  +0 -2		trunk/include/servtree.h (File Modified) 
+  +2 -2		trunk/include/tools.h (File Modified) 
+  +4 -5		trunk/src/function.c (File Modified) 
+
+
 jilles      2006/08/18 00:04:43 UTC	(20060818-6103)
   Log:
   - Move TOKEN_ constants to confparse.h (only used with
