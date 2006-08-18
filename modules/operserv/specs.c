@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService SPECS command.
  *
- * $Id: specs.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: specs.c 6127 2006-08-18 16:59:55Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/specs", FALSE, _modinit, _moddeinit,
-	"$Id: specs.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: specs.c 6127 2006-08-18 16:59:55Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -67,6 +67,7 @@ struct
 	/* OperServ */
 	{ PRIV_OMODE, NULL, NULL, NULL, "set channel modes" },
 	{ PRIV_AKILL, NULL, NULL, NULL, "add and remove autokills" },
+	{ PRIV_MASS_AKILL, NULL, NULL, NULL, "masskill channels or regexes" },
 	{ PRIV_JUPE, NULL, NULL, NULL, "jupe servers" },
 	{ PRIV_NOOP, NULL, NULL, NULL, "NOOP access" },
 	{ PRIV_GLOBAL, NULL, NULL, NULL, "send global notices" },

@@ -4,7 +4,7 @@
  *
  * Fine grained services operator privileges
  *
- * $Id: privs.h 4419 2006-01-02 12:41:30Z jilles $
+ * $Id: privs.h 6127 2006-08-18 16:59:55Z jilles $
  */
 
 #ifndef PRIVS_H
@@ -34,6 +34,7 @@
 /* operserv */
 #define PRIV_OMODE           "operserv:omode"
 #define PRIV_AKILL           "operserv:akill"
+#define PRIV_MASS_AKILL      "operserv:massakill"
 #define PRIV_JUPE            "operserv:jupe"
 #define PRIV_NOOP            "operserv:noop"
 #define PRIV_GLOBAL          "operserv:global"

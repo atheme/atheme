@@ -1,3 +1,12 @@
+jilles      2006/08/18 16:11:48 UTC	(20060818-6125)
+  Log:
+  operserv compare: add log and snoop, change priv to user:auspex
+  
+
+  Changes:	Modified:
+  +3 -1		trunk/modules/operserv/compare.c (File Modified) 
+
+
 jilles      2006/08/18 15:55:06 UTC	(20060818-6123)
   Log:
   operserv rnc, rmatch:
