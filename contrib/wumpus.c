@@ -769,7 +769,7 @@ void cmd_join(char *origin)
 		return;
 	}
 
-	p = create_player(user_find(origin));
+	p = create_player(user_find_named(origin));
 
 	if (p)
 		msg(wumpus_cfg.nick, wumpus_cfg.chan, "\2%s\2 has joined the game!", origin);
@@ -779,7 +779,7 @@ command_t wumpus_join = { "JOIN", "Joins the game.", AC_NONE, cmd_join };
 
 void cmd_move(char *origin)
 {
-	player_t *p = find_player(user_find(origin));
+	player_t *p = find_player(user_find_named(origin));
 	char *id = strtok(NULL, " ");
 
 	if (!p)
@@ -807,7 +807,7 @@ command_t wumpus_move = { "MOVE", "Move to another room.", AC_NONE, cmd_move };
 
 void cmd_shoot(char *origin)
 {
-	player_t *p = find_player(user_find(origin));
+	player_t *p = find_player(user_find_named(origin));
 	char *id = strtok(NULL, " ");
 
 	if (!p)
@@ -835,7 +835,7 @@ command_t wumpus_shoot = { "SHOOT", "Shoot at another room.", AC_NONE, cmd_shoot
 
 void cmd_resign(char *origin)
 {
-	player_t *p = find_player(user_find(origin));
+	player_t *p = find_player(user_find_named(origin));
 
 	if (!p)
 	{

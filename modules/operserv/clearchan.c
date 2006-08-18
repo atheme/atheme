@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ CLEARCHAN.
  *
- * $Id: clearchan.c 6107 2006-08-18 10:46:09Z w00t $
+ * $Id: clearchan.c 6121 2006-08-18 15:09:17Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clearchan", FALSE, _modinit, _moddeinit,
-	"$Id: clearchan.c 6107 2006-08-18 10:46:09Z w00t $",
+	"$Id: clearchan.c 6121 2006-08-18 15:09:17Z jilles $",
 	"Robin Burchell <surreal.w00t@gmail.com>"
 );
 
@@ -49,7 +49,7 @@ static void os_cmd_clearchan(char *origin)
 	char reason[BUFSIZE], *treason;
 	int matches = 0;
 	int ignores = 0;
-	user_t *me2 = user_find(origin);
+	user_t *me2 = user_find_named(origin);
 
 	if (!targchan || !token)
 	{
