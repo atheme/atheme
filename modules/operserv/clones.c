@@ -1,16 +1,14 @@
 #include "atheme.h"
-#define C_ITER 0x80000000
 
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 6145 2006-08-19 18:46:23Z jilles $",
+	"$Id: clones.c 6147 2006-08-19 19:52:41Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static int32_t hosthash_countip(char *);
-static void hook_newuser(void *);
-static void hook_userquit(void *);
+static void clones_newuser(void *);
+static void clones_userquit(void *);
 
 static void os_cmd_clones(char *);
 static void os_cmd_clones_list(char *, char *);
@@ -26,14 +24,22 @@ list_t *os_helptree;
 list_t os_clones_cmds;
 
 static list_t clone_exempts;
-list_t hostlist[HASHSIZE];
+dictionary_tree_t *hostlist;
+BlockHeap *hostentry_heap;
 
-typedef struct cexcept_t_ cexcept_t;
-struct cexcept_t_
+typedef struct cexcept_ cexcept_t;
+struct cexcept_
 {
 	char *ip;
 	int clones;
 	char *reason;
+};
+
+typedef struct hostentry_ hostentry_t;
+struct hostentry_
+{
+	char ip[HOSTIPLEN];
+	list_t clients;
 };
 
 command_t os_clones = { "CLONES", "Manages network wide clones.", PRIV_AKILL, os_cmd_clones };
@@ -61,9 +67,12 @@ void _modinit(module_t *m)
 	help_addentry(os_helptree, "CLONES", "help/oservice/clones", NULL);
 
 	hook_add_event("user_add");
-	hook_add_hook("user_add", hook_newuser);
+	hook_add_hook("user_add", clones_newuser);
 	hook_add_event("user_delete");
-	hook_add_hook("user_delete", hook_userquit);
+	hook_add_hook("user_delete", clones_userquit);
+
+	hostlist = dictionary_create(8192, strcmp);
+	hostentry_heap = BlockHeapCreate(sizeof(hostentry_t), HEAP_USER);
 
 	load_exemptdb();
 
@@ -72,9 +81,22 @@ void _modinit(module_t *m)
 	{
 		LIST_FOREACH_SAFE(n, tn, userlist[i].head)
 		{
-			hook_newuser(n->data);
+			clones_newuser(n->data);
 		}
 	}
+}
+
+static void free_hostentry(dictionary_elem_t *delem, void *privdata)
+{
+	node_t *n, *tn;
+	hostentry_t *he = delem->node.data;
+
+	LIST_FOREACH_SAFE(n, tn, he->clients.head)
+	{
+		node_del(n, &he->clients);
+		node_free(n);
+	}
+	BlockHeapFree(hostentry_heap, he);
 }
 
 void _moddeinit(void)
@@ -82,14 +104,8 @@ void _moddeinit(void)
 	int i = 0;
 	node_t *n, *tn;
 
-	for (i = 0; i < HASHSIZE; i++)
-	{
-		LIST_FOREACH_SAFE(n, tn, hostlist[i].head)
-		{
-			node_del(n, &hostlist[i]);
-			node_free(n);
-		}
-	}
+	dictionary_destroy(hostlist, free_hostentry, NULL);
+	BlockHeapDestroy(hostentry_heap);
 
 	LIST_FOREACH_SAFE(n, tn, clone_exempts.head)
 	{
@@ -112,8 +128,8 @@ void _moddeinit(void)
 
 	help_delentry(os_helptree, "CLONES");
 
-	hook_del_hook("user_add", hook_newuser);
-	hook_del_hook("user_delete", hook_userquit);
+	hook_del_hook("user_add", clones_newuser);
+	hook_del_hook("user_delete", clones_userquit);
 }
 
 static void write_exemptdb(void)
@@ -217,45 +233,22 @@ static void os_cmd_clones(char *origin)
 
 static void os_cmd_clones_list(char *origin, char *channel)
 {
-	node_t *n, *tn;
-	int32_t i, k = 0, l = 0;
+	hostentry_t *he;
+	int32_t k = 0;
+	dictionary_iteration_state_t state;
 
-	for (i = 0; i < HASHSIZE; i++)
+	DICTIONARY_FOREACH(he, &state, hostlist)
 	{
-		LIST_FOREACH(n, hostlist[i].head)
+		k = LIST_LENGTH(&he->clients);
+
+		/*if (k > 3)*/
 		{
-			user_t *tu = (user_t *) n->data;
-
-			if (*tu->ip != '\0' && !(tu->flags & C_ITER))
-			{
-				k = hosthash_countip(tu->ip);
-
-				if (k > 3)
-				{
-					if (!(tu->flags & C_ITER))
-						if (is_exempt(tu->ip))
-							notice(opersvs.nick, origin, "%d from %s (\2EXEMPT\2)", k, tu->ip);
-						else
-							notice(opersvs.nick, origin, "%d from %s", k, tu->ip);
-				}
-
-				/* already viewed this user! */
-				tu->flags |= C_ITER;
-			}
+			if (is_exempt(he->ip))
+				notice(opersvs.nick, origin, "%d from %s (\2EXEMPT\2)", k, he->ip);
+			else
+				notice(opersvs.nick, origin, "%d from %s", k, he->ip);
 		}
 	}
-
-	/* cleanup */
-	for (i = 0; i < HASHSIZE; i++)
-	{
-		LIST_FOREACH(n, hostlist[i].head)
-		{
-			user_t *tu = (user_t *) n->data;
-
-			tu->flags &= ~C_ITER;
-		}
-	}
-
 	notice(opersvs.nick, origin, "End of CLONES LIST");
 }
 
@@ -322,6 +315,7 @@ static void os_cmd_clones_delexempt(char *origin, char *channel)
 			free(c->reason);
 			free(c);
 			node_del(n, &clone_exempts);
+			node_free(n);
 			notice(opersvs.nick, origin, "Removed \2%s\2 from clone exempt list.", arg);
 			write_exemptdb();
 			return;
@@ -344,59 +338,71 @@ static void os_cmd_clones_listexempt(char *origin, char *channel)
 	notice(opersvs.nick, origin, "End of CLONES LISTEXEMPT");
 }
 
-static int32_t hosthash_countip(char *ip)
-{
-	node_t *n;
-	int32_t count = 0;
-
-	LIST_FOREACH(n, hostlist[shash((unsigned char *) ip)].head)
-	{
-		user_t *u = (user_t *)n->data;
-
-		if (!strcmp(u->ip, ip))
-			count++;
-	}
-
-	return count;
-}
-
-static void hook_newuser(void *vptr)
+static void clones_newuser(void *vptr)
 {
 	int i;
 	user_t *u = vptr;
+	hostentry_t *he;
+	node_t *n;
+	kline_t *k;
 
-	if (*u->ip != '\0')
+	/* User has no IP, ignore him */
+	if (is_internal_client(u) || *u->ip == '\0')
+		return;
+
+	he = dictionary_retrieve(hostlist, u->ip);
+	if (he == NULL)
 	{
-		node_add(u, node_create(), &hostlist[UHASH((unsigned char *)u->ip)]);
+		he = BlockHeapAlloc(hostentry_heap);
+		strlcpy(he->ip, u->ip, sizeof he->ip);
+		dictionary_add(hostlist, he->ip, he);
 	}
+	node_add(u, node_create(), &he->clients);
+	i = LIST_LENGTH(&he->clients);
 
-	if (*u->ip != '\0' && !is_exempt(u->ip))
+	if (i > 3 && !is_exempt(u->ip))
 	{
-		i = hosthash_countip(u->ip);
-
-		if (i > 3 && i < 6)
+		if (i < 6)
 		{
 			snoop("CLONES: %d clones on %s", i, u->ip);
 		}
-		else if (i >= 6)
+		else
 		{
 			snoop("CLONES: %d clones on %s (TKLINE due to excess clones)", i, u->ip);
-			kline_add("*", u->host, "Excessive clones", 3600);
+			if (!kline_find("*", u->ip))
+			{
+				k = kline_add("*", u->ip, "Excessive clones", 3600);
+				k->setby = sstrdup(opersvs.nick);
+			}
 		}
 	}
 }
 
-static void hook_userquit(void *vptr)
+static void clones_userquit(void *vptr)
 {
 	user_t *u = vptr;
 	node_t *n;
+	hostentry_t *he;
 
-	n = node_find(u, &hostlist[UHASH((unsigned char *)u->ip)]);
+	/* User has no IP, ignore him */
+	if (is_internal_client(u) || *u->ip == '\0')
+		return;
 
+	he = dictionary_retrieve(hostlist, u->ip);
+	if (he == NULL)
+	{
+		slog(LG_DEBUG, "clones_userquit(): hostentry for %s not found??", u->ip);
+		return;
+	}
+	n = node_find(u, &he->clients);
 	if (n)
 	{
-		node_del(n, &hostlist[UHASH((unsigned char *)u->ip)]);
+		node_del(n, &he->clients);
 		node_free(n);
+		if (LIST_LENGTH(&he->clients) == 0)
+		{
+			dictionary_delete(hostlist, he->ip);
+			BlockHeapFree(hostentry_heap, he);
+		}
 	}
 }
-

@@ -1,3 +1,13 @@
+jilles      2006/08/19 18:46:23 UTC	(20060819-6145)
+  Log:
+  First operserv version of clones, needs more work still.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/operserv/Makefile.in (File Modified) 
+  +402 -0	trunk/modules/operserv/clones.c (File Added) 
+
+
 w00t        2006/08/19 17:55:00 UTC	(20060819-6143)
   Log:
   Add logcommand and snoop to rakill
