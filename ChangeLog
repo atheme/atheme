@@ -1,3 +1,34 @@
+jilles      2006/08/19 16:25:52 UTC	(20060819-6141)
+  Log:
+  Don't leave empty channels if all users in a channel are
+  killed or invalid.
+  More specifically, don't process a P10 JOIN or CREATE if
+  the user does not exist, and destroy the channel created
+  by a BURST, FJOIN, NJOIN or SJOIN if it has 0 members after
+  processing all joins and is not set persistent (checked for
+  all ircds, even though not all of them have such modes).
+  
+
+  Changes:	Modified:
+  +9 -0		trunk/protocol/asuka.c (File Modified) 
+  +3 -0		trunk/protocol/bahamut.c (File Modified) 
+  +9 -0		trunk/protocol/bircd.c (File Modified) 
+  +3 -0		trunk/protocol/charybdis.c (File Modified) 
+  +3 -0		trunk/protocol/hybrid.c (File Modified) 
+  +3 -0		trunk/protocol/hyperion.c (File Modified) 
+  +3 -0		trunk/protocol/inspircd.c (File Modified) 
+  +3 -0		trunk/protocol/ircnet.c (File Modified) 
+  +9 -0		trunk/protocol/nefarious.c (File Modified) 
+  +3 -0		trunk/protocol/plexus.c (File Modified) 
+  +3 -0		trunk/protocol/ptlink.c (File Modified) 
+  +3 -0		trunk/protocol/ratbox.c (File Modified) 
+  +3 -0		trunk/protocol/shadowircd.c (File Modified) 
+  +3 -0		trunk/protocol/solidircd.c (File Modified) 
+  +10 -31	trunk/protocol/ultimate3.c (File Modified) 
+  +9 -0		trunk/protocol/undernet.c (File Modified) 
+  +5 -0		trunk/protocol/unreal.c (File Modified) 
+
+
 jilles      2006/08/19 13:07:07 UTC	(20060819-6139)
   Log:
   Change parameter type for the channel_join and channel_part

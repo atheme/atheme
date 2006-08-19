@@ -4,7 +4,7 @@
  *
  * Regexp-based AKILL implementation.
  *
- * $Id: rakill.c 6121 2006-08-18 15:09:17Z jilles $
+ * $Id: rakill.c 6143 2006-08-19 17:55:00Z w00t $
  */
 
 /*
@@ -17,7 +17,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rakill", FALSE, _modinit, _moddeinit,
-	"$Id: rakill.c 6121 2006-08-18 15:09:17Z jilles $",
+	"$Id: rakill.c 6143 2006-08-19 17:55:00Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -98,4 +98,6 @@ static void _os_rakill(char *origin)
 	
 	regex_destroy(regex);
 	notice(opersvs.nick, origin, "\2%d\2 matches for %s akilled!", matches, pattern);
+	logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "RAKILL %s: %s (%d matches)", pattern, reason ? reason : "(none)", matches);
+	snoop("RAKILL: \2%s\2 by \2%s\2 (%s)", pattern, origin, reason ? reason : "(none)");
 }
