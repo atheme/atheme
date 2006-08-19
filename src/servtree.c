@@ -4,7 +4,7 @@
  *
  * Services binary tree manipulation. (add_service, del_service, et al.)
  *
- * $Id: servtree.c 6153 2006-08-19 21:46:12Z jilles $
+ * $Id: servtree.c 6155 2006-08-19 21:53:45Z jilles $
  */
 
 #include "atheme.h"
@@ -23,7 +23,7 @@ static void dummy_handler(char *origin, uint8_t parc, char **parv)
 void servtree_init(void)
 {
 	service_heap = BlockHeapCreate(sizeof(service_t), 12);
-	services = dictionary_create("services", 32, strcasecmp);
+	services = dictionary_create("services", HASH_SMALL, strcasecmp);
 
 	if (!service_heap)
 	{

@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6153 2006-08-19 21:46:12Z jilles $
+ * $Id: node.c 6155 2006-08-19 21:53:45Z jilles $
  */
 
 #include "atheme.h"
@@ -78,11 +78,7 @@ void init_nodes(void)
 		exit(EXIT_FAILURE);
 	}
 
-#ifdef LARGE_NETWORK
-	mulist = dictionary_create("myuser", 1024, irccasecmp);
-#else
-	mulist = dictionary_create("myuser", 128, irccasecmp);
-#endif
+	mulist = dictionary_create("myuser", HASH_USER, irccasecmp);
 }
 
 /* Mark everything illegal, to be called before a rehash -- jilles */
