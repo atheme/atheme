@@ -4,7 +4,7 @@
  *
  * Regexp-based AKILL implementation.
  *
- * $Id: rakill.c 6143 2006-08-19 17:55:00Z w00t $
+ * $Id: rakill.c 6157 2006-08-19 22:05:04Z jilles $
  */
 
 /*
@@ -17,7 +17,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rakill", FALSE, _modinit, _moddeinit,
-	"$Id: rakill.c 6143 2006-08-19 17:55:00Z w00t $",
+	"$Id: rakill.c 6157 2006-08-19 22:05:04Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -26,7 +26,7 @@ list_t *os_helptree;
 
 static void os_cmd_rakill(char *origin);
 
-command_t os_rakill = { "RAKILL", "Sets a group of AKILLs against users matching a specific regex pattern.", PRIV_ADMIN, os_cmd_rakill };
+command_t os_rakill = { "RAKILL", "Sets a group of AKILLs against users matching a specific regex pattern.", PRIV_MASS_AKILL, os_cmd_rakill };
 
 void _modinit(module_t *m)
 {
@@ -43,7 +43,7 @@ void _moddeinit(void)
 	help_delentry(os_helptree, "RAKILL");
 }
 
-static void _os_rakill(char *origin)
+static void os_cmd_rakill(char *origin)
 {
 	regex_t *regex;
 	char usermask[512];
@@ -78,6 +78,8 @@ static void _os_rakill(char *origin)
 		return;
 	}
 
+	snoop("RAKILL: \2%s\2 by \2%s\2 (%s)", pattern, origin, reason ? reason : "(none)");
+
 	for (i = 0; i < HASHSIZE; i++)
 	{
 		LIST_FOREACH(n, userlist[i].head)
@@ -90,7 +92,7 @@ static void _os_rakill(char *origin)
 			{
 				/* match */
 				notice(opersvs.nick, origin, "\2Match:\2  %s!%s@%s %s - akilling", u->nick, u->user, u->host, u->gecos);
-				kline_sts(me.name, "*", u->host, 604800, reason ? reason : "(none)");
+				kline_sts("*", "*", u->host, 604800, reason ? reason : "(none)");
 				matches++;
 			}
 		}
@@ -99,5 +101,4 @@ static void _os_rakill(char *origin)
 	regex_destroy(regex);
 	notice(opersvs.nick, origin, "\2%d\2 matches for %s akilled!", matches, pattern);
 	logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "RAKILL %s: %s (%d matches)", pattern, reason ? reason : "(none)", matches);
-	snoop("RAKILL: \2%s\2 by \2%s\2 (%s)", pattern, origin, reason ? reason : "(none)");
 }

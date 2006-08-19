@@ -1,3 +1,16 @@
+jilles      2006/08/19 21:53:45 UTC	(20060819-6155)
+  Log:
+  Make all hashtable sizes for dictionary #defines in common.h.
+  
+
+  Changes:	Modified:
+  +4 -0		trunk/include/common.h (File Modified) 
+  +1 -1		trunk/modules/operserv/clones.c (File Modified) 
+  +1 -1		trunk/src/ctcp-common.c (File Modified) 
+  +1 -5		trunk/src/node.c (File Modified) 
+  +1 -1		trunk/src/servtree.c (File Modified) 
+
+
 jilles      2006/08/19 21:46:12 UTC	(20060819-6153)
   Log:
   Add /stats B, shows hash statistics about dictionary,
