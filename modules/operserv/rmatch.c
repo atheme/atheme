@@ -4,7 +4,7 @@
  *
  * Regex usersearch feature.
  *
- * $Id: rmatch.c 6129 2006-08-18 20:40:53Z jilles $
+ * $Id: rmatch.c 6159 2006-08-19 23:27:19Z jilles $
  */
 
 /*
@@ -16,7 +16,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rmatch", FALSE, _modinit, _moddeinit,
-	"$Id: rmatch.c 6129 2006-08-18 20:40:53Z jilles $",
+	"$Id: rmatch.c 6159 2006-08-19 23:27:19Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -50,28 +50,30 @@ static void os_cmd_rmatch(char *origin)
 	uint32_t i = 0;
 	node_t *n;
 	user_t *u;
-	char *pattern = strtok(NULL, "");
+	char *args = strtok(NULL, "");
+	char *pattern;
 	int flags = 0;
 
-	if (pattern == NULL)
+	if (args == NULL)
 	{
 		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "RMATCH");
-		notice(opersvs.nick, origin, "Syntax: RMATCH [!i:]<regex>");
+		notice(opersvs.nick, origin, "Syntax: RMATCH /<regex>/[i]");
 		return;
 	}
 
-	/* insensitivity option -nenolod */
-	if (!strncasecmp(pattern, "!i:", 3))
+	pattern = regex_extract(args, &args, &flags);
+	if (pattern == NULL)
 	{
-		pattern += 3;
-		flags = AREGEX_ICASE;
+		notice(opersvs.nick, origin, STR_INVALID_PARAMS, "RMATCH");
+		notice(opersvs.nick, origin, "Syntax: RMATCH /<regex>/[i]");
+		return;
 	}
 
 	regex = regex_create(pattern, flags);
 	
 	if (regex == NULL)
 	{
-		notice(opersvs.nick, origin, "The provided regex is invalid.");
+		notice(opersvs.nick, origin, "The provided regex \2%s\2 is invalid.", pattern);
 		return;
 	}
 		

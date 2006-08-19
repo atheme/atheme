@@ -1,3 +1,16 @@
+jilles      2006/08/19 22:05:04 UTC	(20060819-6157)
+  Log:
+  operserv rakill:
+  - fix function name
+  - change priv from general:admin to operserv:massakill
+  - send the snoop before adding any klines
+  - fix destination server argument to kline_sts()
+  
+
+  Changes:	Modified:
+  +5 -4		trunk/modules/operserv/rakill.c (File Modified) 
+
+
 jilles      2006/08/19 21:53:45 UTC	(20060819-6155)
   Log:
   Make all hashtable sizes for dictionary #defines in common.h.

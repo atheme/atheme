@@ -5,7 +5,7 @@
  *
  * String matching
  *
- * $Id: match.h 6063 2006-08-15 16:49:42Z jilles $
+ * $Id: match.h 6159 2006-08-19 23:27:19Z jilles $
  */
 
 #ifndef _MATCH_H
@@ -54,6 +54,7 @@ E char *collapse(char *);
 #define AREGEX_ICASE	1 /* case insensitive */
 
 E regex_t *regex_create(char *pattern, int flags);
+E char *regex_extract(char *pattern, char **pend, int *pflags);
 E boolean_t regex_match(regex_t *preg, char *string);
 E boolean_t regex_destroy(regex_t *preg);
 

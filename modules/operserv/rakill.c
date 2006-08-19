@@ -4,7 +4,7 @@
  *
  * Regexp-based AKILL implementation.
  *
- * $Id: rakill.c 6157 2006-08-19 22:05:04Z jilles $
+ * $Id: rakill.c 6159 2006-08-19 23:27:19Z jilles $
  */
 
 /*
@@ -17,7 +17,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rakill", FALSE, _modinit, _moddeinit,
-	"$Id: rakill.c 6157 2006-08-19 22:05:04Z jilles $",
+	"$Id: rakill.c 6159 2006-08-19 23:27:19Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -51,34 +51,60 @@ static void os_cmd_rakill(char *origin)
 	uint32_t i = 0;
 	node_t *n;
 	user_t *u;
-	char *pattern = strtok(NULL, " ");
-	char *reason = strtok(NULL, "");
-	user_t *me2 = user_find_named(origin);
+	char *args = strtok(NULL, "");
+	char *pattern;
+	char *reason;
+	user_t *source = user_find_named(origin);
 	int flags = 0;
 
-	if (pattern == NULL)
+	if (source == NULL)
+		return;
+
+	if (args == NULL)
 	{
 		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "RAKILL");
-		notice(opersvs.nick, origin, "Syntax: RAKILL [!i:]<regex> [reason]");
+		notice(opersvs.nick, origin, "Syntax: RAKILL /<regex>/[i] <reason>");
 		return;
 	}
 
-	/* insensitivity option -nenolod */
-	if (!strncasecmp(pattern, "!i:", 3))
+	pattern = regex_extract(args, &args, &flags);
+	if (pattern == NULL)
 	{
-		pattern += 3;
-		flags = AREGEX_ICASE;
+		notice(opersvs.nick, origin, STR_INVALID_PARAMS, "RAKILL");
+		notice(opersvs.nick, origin, "Syntax: RAKILL /<regex>/[i] <reason>");
+		return;
+	}
+
+	reason = args;
+	while (*reason == ' ')
+		reason++;
+	if (*reason == '\0')
+	{
+		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "RAKILL");
+		notice(opersvs.nick, origin, "Syntax: RAKILL /<regex>/[i] <reason>");
+		return;
 	}
 
 	regex = regex_create(pattern, flags);
-	
 	if (regex == NULL)
 	{
-		notice(opersvs.nick, origin, "The provided regex is invalid.");
+		notice(opersvs.nick, origin, "The provided regex \2%s\2 is invalid.", pattern);
 		return;
 	}
 
-	snoop("RAKILL: \2%s\2 by \2%s\2 (%s)", pattern, origin, reason ? reason : "(none)");
+	sprintf(usermask, "%s!%s@%s %s", source->nick, source->user, source->host, source->gecos);
+	if (regex_match(regex, (char *)usermask))
+	{
+		regex_destroy(regex);
+		notice(opersvs.nick, origin, "The provided regex matches you, refusing RAKILL.");
+		snoop("RAKILL:REFUSED: \2%s\2 by \2%s\2 (%s) (matches self)", pattern, origin, reason);
+		wallops("\2%s\2 attempted to do RAKILL on \2%s\2 matching self",
+				origin, pattern);
+		logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "RAKILL %s %s (refused, matches self)", pattern, reason);
+		return;
+	}
+
+	snoop("RAKILL: \2%s\2 by \2%s\2 (%s)", pattern, origin, reason);
 
 	for (i = 0; i < HASHSIZE; i++)
 	{
@@ -88,17 +114,17 @@ static void os_cmd_rakill(char *origin)
 
 			sprintf(usermask, "%s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
 
-			if (regex_match(regex, (char *)usermask) == TRUE)
+			if (regex_match(regex, (char *)usermask))
 			{
 				/* match */
 				notice(opersvs.nick, origin, "\2Match:\2  %s!%s@%s %s - akilling", u->nick, u->user, u->host, u->gecos);
-				kline_sts("*", "*", u->host, 604800, reason ? reason : "(none)");
+				kline_sts("*", "*", u->host, 604800, reason);
 				matches++;
 			}
 		}
 	}
 	
 	regex_destroy(regex);
-	notice(opersvs.nick, origin, "\2%d\2 matches for %s akilled!", matches, pattern);
-	logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "RAKILL %s: %s (%d matches)", pattern, reason ? reason : "(none)", matches);
+	notice(opersvs.nick, origin, "\2%d\2 matches for %s akilled.", matches, pattern);
+	logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "RAKILL %s %s (%d matches)", pattern, reason, matches);
 }

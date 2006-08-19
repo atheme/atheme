@@ -6,7 +6,7 @@
  * This file contains customized casemapping functions.
  * This code was mostly lifted from ircd 2.10.
  *
- * $Id: match.c 6063 2006-08-15 16:49:42Z jilles $
+ * $Id: match.c 6159 2006-08-19 23:27:19Z jilles $
  */
 
 #include "atheme.h"
@@ -607,6 +607,36 @@ regex_t *regex_create(char *pattern, int flags)
 	}
 	
 	return preg;
+}
+
+char *regex_extract(char *pattern, char **pend, int *pflags)
+{
+	char c, *p;
+	boolean_t backslash = FALSE;
+
+	c = *pattern;
+	if (isalnum(c) || isspace(c) || c == '\\')
+		return NULL;
+	p = pattern + 1;
+	while (*p != c || backslash)
+	{
+		if (*p == '\0')
+			return NULL;
+		if (*p == '\\')
+			backslash = !backslash;
+		p++;
+	}
+	*p = '\0';
+	p++;
+	*pflags = 0;
+	while (*p != '\0' && *p != ' ')
+	{
+		if (*p == 'i')
+			*pflags |= AREGEX_ICASE;
+		p++;
+	}
+	*pend = p;
+	return pattern + 1;
 }
 
 /*

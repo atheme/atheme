@@ -5,12 +5,15 @@ RMATCH shows all users whose
 matches the given POSIX extended
 regular expression.
 
-Prefix your pattern with !i: to do a
-case insensitive match.
+Instead of a slash, any character that
+is not a letter, digit, whitespace or
+backslash and does not occur in the pattern
+can be used. An i after the pattern means
+case insensitive matching.
 
-Syntax: RMATCH <[!i:]regexp>
+Syntax: RMATCH /<pattern>/[i]
 
 Example:
-    /msg &nick& RMATCH !i:^m(oo|00)cow
-    /msg &nick& RMATCH ^[a-z]+!~?[a-z]+@
-    /msg &nick& RMATCH ^[^ ]* [^ ]*$
+    /msg &nick& RMATCH /^m(oo|00)cow/i
+    /msg &nick& RMATCH #^[a-z]+!~?[a-z]+@#
+    /msg &nick& RMATCH /^[^ ]* [^ ]*$/
