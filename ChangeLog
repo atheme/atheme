@@ -1,3 +1,11 @@
+w00t        2006/08/19 17:55:00 UTC	(20060819-6143)
+  Log:
+  Add logcommand and snoop to rakill
+
+  Changes:	Modified:
+  +2 -0		trunk/modules/operserv/rakill.c (File Modified) 
+
+
 jilles      2006/08/19 16:25:52 UTC	(20060819-6141)
   Log:
   Don't leave empty channels if all users in a channel are
