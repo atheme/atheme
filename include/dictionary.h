@@ -5,7 +5,7 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id: dictionary.h 6047 2006-08-14 15:59:37Z jilles $
+ * $Id: dictionary.h 6153 2006-08-19 21:46:12Z jilles $
  */
 
 #ifndef _DICTIONARY_H
@@ -43,10 +43,11 @@ typedef struct dictionary_iteration_state_ dictionary_iteration_state_t;
 
 /*
  * dictionary_create() creates a new dictionary tree of the defined resolution.
+ * name is only used for statistical purposes.
  * compare_cb is the comparison function, typically strcmp, strcasecmp or
  * irccasecmp.
  */
-E dictionary_tree_t *dictionary_create(int resolution, int (*compare_cb)(const char *a, const char *b));
+E dictionary_tree_t *dictionary_create(const char *name, int resolution, int (*compare_cb)(const char *a, const char *b));
 
 /*
  * dictionary_destroy() destroys all entries in a dtree, and also optionally calls
@@ -118,5 +119,13 @@ E void *dictionary_retrieve(dictionary_tree_t *dtree, const char *key);
  * dictionary_delete() deletes a key->value entry from the dictionary tree.
  */
 E void *dictionary_delete(dictionary_tree_t *dtree, const char *key);
+
+/*
+ * dictionary_stats() outputs hash statistics for all dictionary trees.
+ * The output consists of a number of lines, output one by one via the
+ * given callback.
+ */
+E void dictionary_stats(void (*stats_cb)(const char *line, void *privdata),
+		void *privdata);
 
 #endif

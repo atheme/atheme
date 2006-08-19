@@ -3,7 +3,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 6147 2006-08-19 19:52:41Z jilles $",
+	"$Id: clones.c 6153 2006-08-19 21:46:12Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -71,7 +71,7 @@ void _modinit(module_t *m)
 	hook_add_event("user_delete");
 	hook_add_hook("user_delete", clones_userquit);
 
-	hostlist = dictionary_create(8192, strcmp);
+	hostlist = dictionary_create("clones hostlist", 8192, strcmp);
 	hostentry_heap = BlockHeapCreate(sizeof(hostentry_t), HEAP_USER);
 
 	load_exemptdb();

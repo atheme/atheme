@@ -5,26 +5,32 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id: dictionary.c 6089 2006-08-17 15:24:10Z jilles $
+ * $Id: dictionary.c 6153 2006-08-19 21:46:12Z jilles $
  */
 
 #include "atheme.h"
 
+list_t dictionarylist;
+
 struct dictionary_tree_
 {
+	const char *name;
 	int resolution;
 	list_t *hashv;		/* dynamically allocated by dictionary_create() */
 	int (*compare_cb)(const char *a, const char *b);
+	node_t node;
 };
 
-dictionary_tree_t *dictionary_create(int resolution, int (*compare_cb)(const char *a, const char *b))
+dictionary_tree_t *dictionary_create(const char *name, int resolution, int (*compare_cb)(const char *a, const char *b))
 {
 	dictionary_tree_t *dtree = smalloc(sizeof(dictionary_tree_t));
 
+	dtree->name       = name;
 	dtree->resolution = resolution;
 	dtree->hashv      = smalloc(sizeof(list_t) * resolution);
 	dtree->compare_cb = compare_cb;
 	memset(dtree->hashv, '\0', sizeof(list_t) * resolution);
+	node_add(dtree, &dtree->node, &dictionarylist);
 
 	return dtree;
 }
@@ -51,6 +57,8 @@ void dictionary_destroy(dictionary_tree_t *dtree,
 			free(delem);
 		}
 	}
+
+	node_del(&dtree->node, &dictionarylist);
 
 	free(dtree->hashv);
 	free(dtree);
@@ -228,4 +236,46 @@ void *dictionary_retrieve(dictionary_tree_t *dtree, const char *key)
 		return NULL;
 	else
 		return delem->node.data;
+}
+
+#define MAXCOUNT 10
+
+void dictionary_stats(void (*stats_cb)(const char *line, void *privdata), void *privdata)
+{
+	node_t *n;
+	dictionary_tree_t *dtree;
+	char buf[120];
+	int i, count1, totalcount, maxdepth;
+	int counts[MAXCOUNT + 1];
+
+	LIST_FOREACH(n, dictionarylist.head)
+	{
+		dtree = n->data;
+		snprintf(buf, sizeof buf, "Hash statistics for %s", dtree->name);
+		stats_cb(buf, privdata);
+		for (i = 0; i <= MAXCOUNT; i++)
+			counts[i] = 0;
+		totalcount = 0;
+		maxdepth = 0;
+		for (i = 0; i < dtree->resolution; i++)
+		{
+			count1 = LIST_LENGTH(&dtree->hashv[i]);
+			totalcount += count1;
+			if (count1 > maxdepth)
+				maxdepth = count1;
+			if (count1 > MAXCOUNT)
+				count1 = MAXCOUNT;
+			counts[count1]++;
+		}
+		snprintf(buf, sizeof buf, "Size: %d  Items: %d  Max depth: %d",
+				dtree->resolution, totalcount, maxdepth);
+		stats_cb(buf, privdata);
+		for (i = 0; i <= MAXCOUNT; i++)
+		{
+			snprintf(buf, sizeof buf, "Nodes with %d%s entries: %d",
+					i, i == MAXCOUNT ? " or more" : "",
+					counts[i]);
+			stats_cb(buf, privdata);
+		}
+	}
 }

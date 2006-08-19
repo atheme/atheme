@@ -1,3 +1,12 @@
+jilles      2006/08/19 21:35:04 UTC	(20060819-6151)
+  Log:
+  node_add(): always set next and prev fields
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/libatheme/dlink.c (File Modified) 
+
+
 jilles      2006/08/19 20:03:47 UTC	(20060819-6149)
   Log:
   Fix node leaks in help_delete(), command_delete(),

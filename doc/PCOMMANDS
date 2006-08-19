@@ -18,6 +18,7 @@ from atheme.conf).
 
 /stats <letter> <atheme> (-) Shows various statistics and configuration
 information. The following letters are recognized:
+	B (general:auspex) Shows hash statistics.
 	C (general:auspex) Shows uplink blocks.
 	E (general:auspex) Shows events.
 	K (operserv:akill) Shows akills.
@@ -46,4 +47,4 @@ services and no channel information is shown. It is assumed that networks
 that want to hide which server users are on do not allow remote whois other
 than /whois <nick> <nick>.
 
-$Id: PCOMMANDS 5125 2006-04-25 21:34:44Z jilles $
+$Id: PCOMMANDS 6153 2006-08-19 21:46:12Z jilles $

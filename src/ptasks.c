@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 6079 2006-08-16 16:44:39Z jilles $
+ * $Id: ptasks.c 6153 2006-08-19 21:46:12Z jilles $
  */
 
 #include "atheme.h"
@@ -64,6 +64,12 @@ void handle_admin(user_t *u)
 	numeric_sts(me.name, 259, u->nick, ":<%s>", me.adminemail);
 }
 
+static void dictionary_stats_cb(const char *line, void *privdata)
+{
+
+	numeric_sts(me.name, 249, ((user_t *)privdata)->nick, "B :%s", line);
+}
+
 void handle_stats(user_t *u, char req)
 {
 	kline_t *k;
@@ -78,6 +84,13 @@ void handle_stats(user_t *u, char req)
 
 	switch (req)
 	{
+	  case 'B':
+		  if (!has_priv(u, PRIV_SERVER_AUSPEX))
+			  break;
+
+		  dictionary_stats(dictionary_stats_cb, u);
+		  break;
+
 	  case 'C':
 	  case 'c':
 		  if (!has_priv(u, PRIV_SERVER_AUSPEX))
