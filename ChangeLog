@@ -1,3 +1,13 @@
+jilles      2006/08/18 23:27:41 UTC	(20060818-6131)
+  Log:
+  dreamforge/sorcery: remove ineffective use of chanuser_add() return value
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/dreamforge.c (File Modified) 
+  +1 -1		trunk/protocol/sorcery.c (File Modified) 
+
+
 jilles      2006/08/18 20:40:53 UTC	(20060818-6129)
   Log:
   operserv help files:

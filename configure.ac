@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 5955 2006-07-29 01:42:33Z nenolod $
+dnl $Id: configure.ac 6133 2006-08-19 09:21:15Z nenolod $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, 2.0.0, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 5955 2006-07-29 01:42:33Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 6133 2006-08-19 09:21:15Z nenolod $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -190,6 +190,17 @@ AC_HELP_STRING([--enable-large-net],[ Enable large network support.]),
 ])
 AC_MSG_RESULT($LARGENET)
 
+balloc="no"
+AC_MSG_CHECKING(if you want to disable the block allocator)
+AC_ARG_ENABLE(balloc,
+AC_HELP_STRING([--disable-balloc],[Disable the block allocator.]),
+[balloc=$enableval], [balloc=yes])
+
+if test "$balloc" = no; then
+        AC_DEFINE([NOBALLOC], 1, [Define to 1 if you wish to disable the block allocator.])
+fi
+AC_MSG_RESULT($balloc)
+
 echo " "
 echo "PostgreSQL support"
 echo " "
@@ -239,6 +250,10 @@ AC_SUBST(POSTGRESQL_C)
 AC_SUBST(PGINC)
 AC_SUBST(PQLIB)
 
+echo " "
+echo "OpenSSL-based SASL support"
+echo " "
+
 AC_ARG_ENABLE(ssl,
 	AC_HELP_STRING([--disable-ssl], [don't use OpenSSL to provide more SASL mechanisms]),
 	,
@@ -258,7 +273,6 @@ if test "$enable_ssl" = "yes"; then
 		LIBS="$LIBS $SSL_LIBS"
 	fi
 fi
-
 
 echo " "
 echo "Module support"
@@ -550,6 +564,7 @@ Configuration:
         PostgreSQL support   : ${POSTGRESQL}
         OpenSSL SASL support : ${SSL}
         Socket Engine        : ${SOCKET_ENGINE}
+        Block Allocator      : ${balloc}
         CFLAGS               : ${CFLAGS}
 
 Type make to build Atheme, and make install to install it."
