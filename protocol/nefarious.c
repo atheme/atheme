@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
  *
- * $Id: nefarious.c 6079 2006-08-16 16:44:39Z jilles $
+ * $Id: nefarious.c 6141 2006-08-19 16:25:52Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 6079 2006-08-16 16:44:39Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 6141 2006-08-19 16:25:52Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -460,6 +460,9 @@ static void m_create(char *origin, uint8_t parc, char *parv[])
 	char *chanv[256];
 	uint8_t i;
 
+	if (!user_find(origin))
+		return;
+
 	chanc = sjtoken(parv[0], ',', chanv);
 
 	for (i = 0; i < chanc; i++)
@@ -506,6 +509,9 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 		return;
 	}
 	if (parc < 2)
+		return;
+
+	if (!user_find(origin))
 		return;
 
 	chanc = sjtoken(parv[0], ',', chanv);
@@ -650,6 +656,9 @@ static void m_burst(char *origin, uint8_t parc, char *parv[])
 			}
 		}
 	}
+
+	if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))
+		channel_delete(c->name);
 }
 
 static void m_part(char *origin, uint8_t parc, char *parv[])

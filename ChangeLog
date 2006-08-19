@@ -1,3 +1,23 @@
+jilles      2006/08/19 13:07:07 UTC	(20060819-6139)
+  Log:
+  Change parameter type for the channel_join and channel_part
+  hooks to hook_channel_joinpart_t *.
+  This structure contains just a chanuser_t pointer.
+  If the user is kicked out, this pointer must be reset to
+  NULL, so that further hook functions do not reference
+  freed memory. As before, it is required to join a service
+  before kicking out the last user. More explanation in
+  channels.h.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/doc/HOOKS (File Modified) 
+  +12 -0	trunk/include/channels.h (File Modified) 
+  +4 -5		trunk/modules/chanserv/close.c (File Modified) 
+  +16 -7	trunk/modules/chanserv/main.c (File Modified) 
+  +8 -3		trunk/src/node.c (File Modified) 
+
+
 w00t        2006/08/19 12:42:57 UTC	(20060819-6137)
   Log:
   snoop() on RNC, this is an expensive operation.

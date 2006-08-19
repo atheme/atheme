@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 6079 2006-08-16 16:44:39Z jilles $
+ * $Id: hybrid.c 6141 2006-08-19 16:25:52Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 6079 2006-08-16 16:44:39Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 6141 2006-08-19 16:25:52Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -606,6 +606,9 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 				 * -- jilles */
 				chanuser_add(c, p);
 			}
+
+		if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))
+			channel_delete(c->name);
 	}
 }
 

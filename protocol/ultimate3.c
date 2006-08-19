@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 6079 2006-08-16 16:44:39Z jilles $
+ * $Id: ultimate3.c 6141 2006-08-19 16:25:52Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 6079 2006-08-16 16:44:39Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 6141 2006-08-19 16:25:52Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -463,42 +463,21 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 		c = channel_find(parv[1]);
 		ts = atol(parv[0]);
 
-		if (ts < c->ts)
+		if (c == NULL || ts < c->ts)
 		{
-			chanuser_t *cu;
-			node_t *n;
-
-			/*
-			 * the TS changed.  a TS change requires the following things
-			 * to be done to the channel:  reset all modes to nothing, remove
-			 * all status modes on known users on the channel (including ours),
-			 * and set the new TS.
-			 */
-
-			clear_simple_modes(c);
-
-			LIST_FOREACH(n, c->members.head)
-			{
-				cu = (chanuser_t *)n->data;
-				if (cu->user->server == me.me)
-				{
-					/* it's a service, reop */
-					sts(":%s PART %s :Reop", cu->user->nick, c->name);
-					sts(":%s SJOIN %ld %s + :@%s", me.name, ts, c->name, cu->user->nick);
-					cu->modes = CMODE_OP;
-				}
-				else
-					cu->modes = 0;
-			}
-
-			slog(LG_INFO, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
-
-			c->ts = ts;
-			hook_call_event("channel_tschange", c);
+			/* just request a resynch, this will include
+			 * the user joining -- jilles */
+			slog(LG_DEBUG, "m_sjoin(): requesting resynch for %s",
+					parv[1]);
+			sts("RESYNCH %s", parv[1]);
+			return;
 		}
 
 		chanuser_add(c, origin);
 	}
+
+	if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))
+		channel_delete(c->name);
 }
 
 static void m_part(char *origin, uint8_t parc, char *parv[])

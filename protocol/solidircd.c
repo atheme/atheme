@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for solidircd.
  *
- * $Id: solidircd.c 6079 2006-08-16 16:44:39Z jilles $
+ * $Id: solidircd.c 6141 2006-08-19 16:25:52Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/solidircd.h"
 
-DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 6079 2006-08-16 16:44:39Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 6141 2006-08-19 16:25:52Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -545,6 +545,9 @@ static void m_sjoin(char *origin, uint8_t parc, char *parv[])
 
 		chanuser_add(c, origin);
 	}
+
+	if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))
+		channel_delete(c->name);
 }
 
 static void m_part(char *origin, uint8_t parc, char *parv[])
