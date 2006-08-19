@@ -4,7 +4,7 @@
  *
  * Linked list stuff.
  *
- * $Id: dlink.c 3047 2005-10-20 04:37:13Z nenolod $
+ * $Id: dlink.c 6151 2006-08-19 21:35:04Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -55,6 +55,7 @@ void node_add(void *data, node_t *n, list_t *l)
 {
         node_t *tn;
 
+        n->next = n->prev = NULL;
         n->data = data;
 
         /* first node? */

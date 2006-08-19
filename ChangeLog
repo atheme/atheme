@@ -1,3 +1,18 @@
+jilles      2006/08/19 20:03:47 UTC	(20060819-6149)
+  Log:
+  Fix node leaks in help_delete(), command_delete(),
+  fcommand_delete(), hook_delete() and module_unload().
+  The point is that node_del() does not free a node;
+  node_free() is also needed.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/libatheme/hook.c (File Modified) 
+  +2 -0		trunk/src/commandtree.c (File Modified) 
+  +1 -0		trunk/src/help.c (File Modified) 
+  +3 -0		trunk/src/module.c (File Modified) 
+
+
 jilles      2006/08/19 19:52:41 UTC	(20060819-6147)
   Log:
   operserv clones:
