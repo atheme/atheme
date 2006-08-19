@@ -4,7 +4,7 @@
  *
  * A hook system. Idea taken from hybrid.
  *
- * $Id: hook.c 3053 2005-10-20 18:04:13Z nenolod $
+ * $Id: hook.c 6149 2006-08-19 20:03:47Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -93,7 +93,10 @@ void hook_del_hook(const char *event, void (*handler)(void *data))
 	LIST_FOREACH_SAFE(n, n2, h->hooks.head)
 	{
 		if (handler == (void (*)(void *)) n->data)
+		{
 			node_del(n, &h->hooks);
+			node_free(n);
+		}
 	}
 }
 

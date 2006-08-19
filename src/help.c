@@ -4,7 +4,7 @@
  *
  * This file contains a generic help system implementation.
  *
- * $Id: help.c 5658 2006-07-02 05:10:39Z nenolod $
+ * $Id: help.c 6149 2006-08-19 20:03:47Z jilles $
  */
 
 #include "atheme.h"
@@ -135,6 +135,7 @@ void help_delentry(list_t *list, char *name)
 			free(he);
 
 			node_del(n, list);
+			node_free(n);
 		}
 	}
 }

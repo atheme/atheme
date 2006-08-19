@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 6031 2006-08-13 18:27:28Z nenolod $
+ * $Id: module.c 6149 2006-08-19 20:03:47Z jilles $
  */
 
 #include "atheme.h"
@@ -248,7 +248,9 @@ void module_unload(module_t * m)
 		node_t *hn = node_find(m, &hm->dephost);
 
 		node_del(hn, &hm->dephost);		
+		node_free(hn);
 		node_del(n, &m->deplist);
+		node_free(n);
 	}
 
 	n = node_find(m, &modules);
@@ -261,6 +263,7 @@ void module_unload(module_t * m)
 		if (m->header->deinit)
 			m->header->deinit();
 		node_del(n, &modules);
+		node_free(n);
 	}
 	/* else unloaded in embryonic state */
 	linker_close(m->handle);

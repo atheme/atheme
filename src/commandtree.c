@@ -4,7 +4,7 @@
  *
  * Commandtree manipulation routines.
  *
- * $Id: commandtree.c 5676 2006-07-02 21:42:21Z jilles $
+ * $Id: commandtree.c 6149 2006-08-19 20:03:47Z jilles $
  */
 
 #include "atheme.h"
@@ -55,6 +55,7 @@ void command_delete(command_t * cmd, list_t *commandtree)
 	}
 
 	node_del(n, commandtree);
+	node_free(n);
 }
 
 /*
@@ -250,6 +251,7 @@ void fcommand_delete(fcommand_t * cmd, list_t *commandtree)
 	}
 
 	node_del(n, commandtree);
+	node_free(n);
 }
 
 void fcommand_exec(service_t *svs, char *channel, char *origin, char *cmd, list_t *commandtree)
