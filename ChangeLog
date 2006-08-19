@@ -1,3 +1,11 @@
+w00t        2006/08/19 12:42:57 UTC	(20060819-6137)
+  Log:
+  snoop() on RNC, this is an expensive operation.
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/operserv/rnc.c (File Modified) 
+
+
 nenolod     2006/08/19 09:23:48 UTC	(20060819-6135)
   Log:
   - rerun autoconf and autoheader.

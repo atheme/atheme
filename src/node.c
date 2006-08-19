@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6077 2006-08-16 16:07:10Z jilles $
+ * $Id: node.c 6139 2006-08-19 13:07:07Z jilles $
  */
 
 #include "atheme.h"
@@ -1048,6 +1048,7 @@ chanuser_t *chanuser_add(channel_t *chan, const char *nick)
 	chanuser_t *cu, *tcu;
 	uint32_t flags = 0;
 	int i = 0;
+	hook_channel_joinpart_t hdata;
 
 	if (chan == NULL)
 		return NULL;
@@ -1107,15 +1108,18 @@ chanuser_t *chanuser_add(channel_t *chan, const char *nick)
 
 	cnt.chanuser++;
 
-	hook_call_event("channel_join", cu);
+	hdata.cu = cu;
+	hook_call_event("channel_join", &hdata);
 
-	return cu;
+	/* Return NULL if a hook function kicked the user out */
+	return hdata.cu;
 }
 
 void chanuser_delete(channel_t *chan, user_t *user)
 {
 	chanuser_t *cu;
 	node_t *n, *tn, *n2;
+	hook_channel_joinpart_t hdata;
 
 	if (!chan)
 	{
@@ -1136,7 +1140,8 @@ void chanuser_delete(channel_t *chan, user_t *user)
 		if (cu->user == user)
 		{
 			/* this is called BEFORE we remove the user */
-			hook_call_event("channel_part", cu);
+			hdata.cu = cu;
+			hook_call_event("channel_part", &hdata);
 
 			slog(LG_DEBUG, "chanuser_delete(): %s -> %s (%d)", cu->chan->name, cu->user->nick, cu->chan->nummembers - 1);
 			node_del(n, &chan->members);

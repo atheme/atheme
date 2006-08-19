@@ -4,7 +4,7 @@
  *
  * Closing for channels.
  *
- * $Id: close.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: close.c 6139 2006-08-19 13:07:07Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/close", FALSE, _modinit, _moddeinit,
-	"$Id: close.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: close.c 6139 2006-08-19 13:07:07Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -45,14 +45,12 @@ void _moddeinit()
 	help_delentry(cs_helptree, "CLOSE");
 }
 
-static void close_check_join(void *vcu)
+static void close_check_join(void *vdata)
 {
 	mychan_t *mc;
-	chanuser_t *cu;
+	chanuser_t *cu = ((hook_channel_joinpart_t *)vdata)->cu;
 
-	cu = vcu;
-
-	if (is_internal_client(cu->user))
+	if (cu == NULL || is_internal_client(cu->user))
 		return;
 
 	if (!(mc = mychan_find(cu->chan->name)))
@@ -72,6 +70,7 @@ static void close_check_join(void *vcu)
 
 		/* clear the channel */
 		kick(chansvs.nick, cu->chan->name, cu->user->nick, "This channel has been closed");
+		((hook_channel_joinpart_t *)vdata)->cu = NULL;
 	}
 }
 

@@ -1,4 +1,4 @@
-$Id: HOOKS 5754 2006-07-06 18:51:54Z jilles $
+$Id: HOOKS 6139 2006-08-19 13:07:07Z jilles $
 
 Atheme hooks system
 
@@ -20,8 +20,8 @@ config_ready       <none>
 channel_add        channel_t *
 channel_delete     channel_t *
 channel_tschange   channel_t *
-channel_join       chanuser_t *
-channel_part       chanuser_t *
+channel_join       hook_channel_joinpart_t *
+channel_part       hook_channel_joinpart_t *
 channel_topic      channel_t *
 server_eob         server_t *
 user_add           user_t *

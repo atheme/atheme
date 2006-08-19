@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6059 2006-08-15 16:17:49Z jilles $
+ * $Id: main.c 6139 2006-08-19 13:07:07Z jilles $
  */
 
 #include "atheme.h"
@@ -12,12 +12,12 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6059 2006-08-15 16:17:49Z jilles $",
+	"$Id: main.c 6139 2006-08-19 13:07:07Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void cs_join(chanuser_t *cu);
-static void cs_part(chanuser_t *cu);
+static void cs_join(hook_channel_joinpart_t *hdata);
+static void cs_part(hook_channel_joinpart_t *hdata);
 static void cs_register(mychan_t *mc);
 static void cs_newchan(channel_t *c);
 static void cs_keeptopic_topicset(channel_t *c);
@@ -204,10 +204,11 @@ void _moddeinit(void)
 	event_delete(cs_leave_empty, NULL);
 }
 
-static void cs_join(chanuser_t *cu)
+static void cs_join(hook_channel_joinpart_t *hdata)
 {
-	user_t *u = cu->user;
-	channel_t *chan = cu->chan;
+	chanuser_t *cu = hdata->cu;
+	user_t *u;
+	channel_t *chan;
 	mychan_t *mc;
 	uint32_t flags;
 	metadata_t *md;
@@ -215,8 +216,10 @@ static void cs_join(chanuser_t *cu)
 	chanacs_t *ca2;
 	boolean_t secure = FALSE;
 
-	if (is_internal_client(cu->user))
+	if (cu == NULL || is_internal_client(cu->user))
 		return;
+	u = cu->user;
+	chan = cu->chan;
 
 	/* first check if this is a registered channel at all */
 	mc = mychan_find(chan->name);
@@ -248,6 +251,7 @@ static void cs_join(chanuser_t *cu)
 		ban(chansvs.nick, chan->name, u);
 		remove_ban_exceptions(chansvs.me->me, chan, u);
 		kick(chansvs.nick, chan->name, u->nick, "You are not authorized to be on this channel");
+		hdata->cu = NULL;
 		return;
 	}
 
@@ -278,6 +282,7 @@ static void cs_join(chanuser_t *cu)
 			ban(chansvs.nick, chan->name, u);
 		remove_ban_exceptions(chansvs.me->me, chan, u);
 		kick(chansvs.nick, chan->name, u->nick, "User is banned from this channel");
+		hdata->cu = NULL;
 		return;
 	}
 
@@ -378,10 +383,14 @@ static void cs_join(chanuser_t *cu)
 		mc->used = CURRTIME;
 }
 
-static void cs_part(chanuser_t *cu)
+static void cs_part(hook_channel_joinpart_t *hdata)
 {
+	chanuser_t *cu;
 	mychan_t *mc;
 
+	cu = hdata->cu;
+	if (cu == NULL)
+		return;
 	mc = mychan_find(cu->chan->name);
 	if (mc == NULL)
 		return;
