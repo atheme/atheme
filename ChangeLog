@@ -1,3 +1,15 @@
+jilles      2006/08/20 22:17:35 UTC	(20060820-6187)
+  Log:
+  Make helpfile formatting somewhat more consistent.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/help/cservice/op_voice (File Modified) 
+  +3 -2		trunk/help/nickserv/drop (File Modified) 
+  +4 -4		trunk/help/oservice/rwatch (File Modified) 
+  +4 -3		trunk/help/userserv/drop (File Modified) 
+
+
 jilles      2006/08/20 21:32:21 UTC	(20060820-6185)
   Log:
   Add the new operserv modules to the example confs.
