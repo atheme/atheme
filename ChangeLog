@@ -1,3 +1,13 @@
+jilles      2006/08/20 14:11:58 UTC	(20060820-6169)
+  Log:
+  Header comments for operserv clones and rwatch.
+  
+
+  Changes:	Modified:
+  +9 -0		trunk/modules/operserv/clones.c (File Modified) 
+  +9 -0		trunk/modules/operserv/rwatch.c (File Modified) 
+
+
 jilles      2006/08/20 14:08:59 UTC	(20060820-6167)
   Log:
   Add operserv rwatch, a list of regular expressions all

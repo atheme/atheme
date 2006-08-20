@@ -4,7 +4,7 @@
  *
  * Regexp-based AKILL implementation.
  *
- * $Id: rakill.c 6159 2006-08-19 23:27:19Z jilles $
+ * $Id: rakill.c 6171 2006-08-20 14:14:15Z jilles $
  */
 
 /*
@@ -17,7 +17,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rakill", FALSE, _modinit, _moddeinit,
-	"$Id: rakill.c 6159 2006-08-19 23:27:19Z jilles $",
+	"$Id: rakill.c 6171 2006-08-20 14:14:15Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -59,6 +59,13 @@ static void os_cmd_rakill(char *origin)
 
 	if (source == NULL)
 		return;
+
+	/* make sure they could have done RMATCH */
+	if (!has_priv(source, PRIV_USER_AUSPEX))
+	{
+		notice(opersvs.nick, origin, "You do not have %s privilege.", PRIV_USER_AUSPEX);
+		return;
+	}
 
 	if (args == NULL)
 	{
