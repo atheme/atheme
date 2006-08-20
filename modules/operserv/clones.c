@@ -3,7 +3,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 6163 2006-08-20 13:22:45Z jilles $",
+	"$Id: clones.c 6165 2006-08-20 13:35:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -369,11 +369,9 @@ static void clones_newuser(void *vptr)
 		else
 		{
 			snoop("CLONES: %d clones on %s (TKLINE due to excess clones)", i, u->ip);
-			if (!kline_find("*", u->ip))
-			{
-				k = kline_add("*", u->ip, "Excessive clones", 3600);
-				k->setby = sstrdup(opersvs.nick);
-			}
+			slog(LG_INFO, "clones_newuser(): klining *@%s (user %s!%s@%s)",
+					u->ip, u->nick, u->user, u->host);
+			kline_sts("*", "*", u->ip, 3600, "Excessive clones");
 		}
 	}
 }

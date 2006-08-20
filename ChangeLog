@@ -1,3 +1,12 @@
+jilles      2006/08/20 13:22:45 UTC	(20060820-6163)
+  Log:
+  Only show IPs with >= 4 clients in clones list.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/operserv/clones.c (File Modified) 
+
+
 jilles      2006/08/20 00:19:27 UTC	(20060820-6161)
   Log:
   regex_extract():
