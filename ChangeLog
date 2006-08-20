@@ -1,3 +1,14 @@
+jilles      2006/08/20 00:19:27 UTC	(20060820-6161)
+  Log:
+  regex_extract():
+  - fix backslash handling like it should be (e.g. accept /\//)
+  - be more strict in what to allow after the RE (e.g. deny /aaa/.)
+  
+
+  Changes:	Modified:
+  +6 -3		trunk/src/match.c (File Modified) 
+
+
 jilles      2006/08/19 23:27:19 UTC	(20060819-6159)
   Log:
   Change syntax for operserv rmatch and rakill, to cope

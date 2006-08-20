@@ -3,7 +3,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 6155 2006-08-19 21:53:45Z jilles $",
+	"$Id: clones.c 6163 2006-08-20 13:22:45Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -241,7 +241,7 @@ static void os_cmd_clones_list(char *origin, char *channel)
 	{
 		k = LIST_LENGTH(&he->clients);
 
-		/*if (k > 3)*/
+		if (k > 3)
 		{
 			if (is_exempt(he->ip))
 				notice(opersvs.nick, origin, "%d from %s (\2EXEMPT\2)", k, he->ip);
