@@ -1,3 +1,17 @@
+jilles      2006/08/20 14:29:20 UTC	(20060820-6173)
+  Log:
+  operserv modload, modunload:
+  - Don't expect strtok(3) state to be kept intact across
+    loading/unloading modules
+  - Don't abort the full modload command if a module is
+    already loaded, continue with the rest
+  
+
+  Changes:	Modified:
+  +17 -7	trunk/modules/operserv/modload.c (File Modified) 
+  +11 -0	trunk/modules/operserv/modunload.c (File Modified) 
+
+
 jilles      2006/08/20 14:14:15 UTC	(20060820-6171)
   Log:
   operserv rakill: require user:auspex as well as operserv:massakill,

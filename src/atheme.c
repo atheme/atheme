@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 6087 2006-08-17 00:37:36Z jilles $
+ * $Id: atheme.c 6175 2006-08-20 19:29:12Z jilles $
  */
 
 #include "atheme.h"
@@ -21,7 +21,7 @@ usersvs_t usersvs;
 saslsvs_t saslsvs;
 
 me_t me;
-cnt_t cnt;
+struct cnt cnt;
 
 char *config_file;
 char *log_path;

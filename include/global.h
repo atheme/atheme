@@ -5,7 +5,7 @@
  *
  * Global data
  *
- * $Id: global.h 6097 2006-08-17 23:40:49Z jilles $
+ * $Id: global.h 6175 2006-08-20 19:29:12Z jilles $
  */
 
 #ifndef _GLOBAL_H
@@ -100,8 +100,6 @@ struct Database
 } database_options;
 
 /* keep track of how many of what we have */
-typedef struct cnt cnt_t;
-
 struct cnt
 {
   uint32_t event;
@@ -123,7 +121,7 @@ struct cnt
   uint32_t operclass;
 };
 
-E cnt_t cnt;
+E struct cnt cnt;
 
 /* conf.c */
 E boolean_t conf_parse(char *);
