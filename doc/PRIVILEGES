@@ -40,6 +40,8 @@ special:ircop
 user:auspex
 	see the invisible about user registrations,
 	ns/us info/list/listchans mainly
+	also allows searching information about online users,
+	os rnc/rmatch/rwatch
 user:admin
 	administer users
 user:vhost
@@ -85,6 +87,8 @@ operserv:akill
 	use /os akill and /stats k
 operserv:massakill
 	do mass kills and akills on channels and regular expressions
+	os clearchan/rakill/rwatch
+	this also needs chan:admin or user:auspex depending on the command
 operserv:jupe
 	use /os jupe
 operserv:noop
@@ -92,4 +96,4 @@ operserv:noop
 operserv:global
 	send global notices
 
-$Id: PRIVILEGES 6127 2006-08-18 16:59:55Z jilles $
+$Id: PRIVILEGES 6183 2006-08-20 21:08:55Z jilles $
