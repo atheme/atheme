@@ -1,3 +1,14 @@
+jilles      2006/08/20 13:35:26 UTC	(20060820-6165)
+  Log:
+  operserv clones:
+  - don't add full-fledged akills, just add klines to the servers
+  - log each added kline at INFO level
+  
+
+  Changes:	Modified:
+  +3 -5		trunk/modules/operserv/clones.c (File Modified) 
+
+
 jilles      2006/08/20 13:22:45 UTC	(20060820-6163)
   Log:
   Only show IPs with >= 4 clients in clones list.
