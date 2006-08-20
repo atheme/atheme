@@ -1,3 +1,23 @@
+jilles      2006/08/19 23:27:19 UTC	(20060819-6159)
+  Log:
+  Change syntax for operserv rmatch and rakill, to cope
+  with regular expressions and reasons both containing
+  spaces.
+  This uses a new function in match.c
+  char *regex_extract(char *pattern, char **pend, int *pflags);
+  returns the extracted RE (overwriting a character in pattern
+  with '\0')
+  
+
+  Changes:	Modified:
+  +5 -7		trunk/help/oservice/rakill (File Modified) 
+  +9 -6		trunk/help/oservice/rmatch (File Modified) 
+  +1 -0		trunk/include/match.h (File Modified) 
+  +42 -16	trunk/modules/operserv/rakill.c (File Modified) 
+  +10 -8	trunk/modules/operserv/rmatch.c (File Modified) 
+  +30 -0	trunk/src/match.c (File Modified) 
+
+
 jilles      2006/08/19 22:05:04 UTC	(20060819-6157)
   Log:
   operserv rakill:
