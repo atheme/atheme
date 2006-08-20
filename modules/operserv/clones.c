@@ -1,9 +1,18 @@
+/*
+ * Copyright (c) 2006 Atheme Development Group
+ * Rights to this code are documented in doc/LICENCE.
+ *
+ * This file contains functionality implementing clone detection.
+ *
+ * $Id: clones.c 6169 2006-08-20 14:11:58Z jilles $
+ */
+
 #include "atheme.h"
 
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 6165 2006-08-20 13:35:26Z jilles $",
+	"$Id: clones.c 6169 2006-08-20 14:11:58Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

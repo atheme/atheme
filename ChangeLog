@@ -1,3 +1,22 @@
+jilles      2006/08/20 14:08:59 UTC	(20060820-6167)
+  Log:
+  Add operserv rwatch, a list of regular expressions all
+  connecting clients are matched against. Matching clients
+  are described in the snoop channel and/or klined.
+  All subcommands require user:auspex privilege, enabling or
+  disabling klines additionally requires operserv:massakill.
+  All changes are snooped, changes to kline are also sent over
+  wallops. There is also full logging.
+  Loading this module (as well as clones) with /os modload
+  may cause strange errors about loading other modules,
+  I will fix this later.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/operserv/Makefile.in (File Modified) 
+  +465 -0	trunk/modules/operserv/rwatch.c (File Added) 
+
+
 jilles      2006/08/20 13:35:26 UTC	(20060820-6165)
   Log:
   operserv clones:

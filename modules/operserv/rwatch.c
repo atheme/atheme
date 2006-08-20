@@ -1,9 +1,18 @@
+/*
+ * Copyright (c) 2006 Atheme Development Group
+ * Rights to this code are documented in doc/LICENCE.
+ *
+ * This file contains functionality implementing OperServ RWATCH.
+ *
+ * $Id: rwatch.c 6169 2006-08-20 14:11:58Z jilles $
+ */
+
 #include "atheme.h"
 
 DECLARE_MODULE_V1
 (
 	"operserv/rwatch", FALSE, _modinit, _moddeinit,
-	"$Id: rwatch.c 6167 2006-08-20 14:08:59Z jilles $",
+	"$Id: rwatch.c 6169 2006-08-20 14:11:58Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
