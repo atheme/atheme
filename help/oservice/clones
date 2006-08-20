@@ -1,0 +1,47 @@
+Help for CLONES:
+
+CLONES keeps track of the number of clients
+per IP address. Warnings are displayed in
+the snoop channel about IP addresses with
+more than 3 clients, and IP addresses with more
+than 5 clients are banned from the network
+for one hour (these bans are not added to the
+AKILL list).
+
+CLONES only works on clients whose IP address
+Atheme knows. If the ircd does not support
+propagating IP addresses at all, CLONES is
+not useful; if IP addresses are not sent for
+spoofed clients, those clients are exempt from
+CLONES checking.
+
+Syntax: CLONES LIST
+
+Shows all IP addresses with 4 or more clients with
+the number of clients and whether the IP address
+is exempt.
+
+Syntax: CLONES ADDEXEMPT <ip> <clones> <reason>
+
+Adds an IP address to the clone exemption list.
+The IP address must match exactly with the form
+used by the ircd (mind '::' shortening with IPv6).
+<clones> is the number of clones allowed; although
+this is currently ignored it must be at least 6.
+The reason is shown in LISTEXEMPT.
+Exempted IP addresses are not warned about and are
+not banned for clones.
+The clone exemption list is stored in etc/exempts.db
+and saved whenever it is modified.
+
+Syntax: CLONES DELEXEMPT <ip>
+
+Removes an IP address from the clone exemption list.
+
+Syntax: CLONES LISTEXEMPT
+
+Shows the clone exemption list with reasons.
+
+Example:
+    /msg &nick& CLONES ADDEXEMPT 127.0.0.1 100 local
+    /msg &nick& CLONES DELEXEMPT 192.168.1.2

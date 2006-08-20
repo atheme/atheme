@@ -1,3 +1,12 @@
+jilles      2006/08/20 19:51:25 UTC	(20060820-6177)
+  Log:
+  Use $(INSTALL) instead of install in Makefile.in.
+  
+
+  Changes:	Modified:
+  +4 -4		trunk/src/Makefile.in (File Modified) 
+
+
 jilles      2006/08/20 19:29:12 UTC	(20060820-6175)
   Log:
   Get rid of cnt_t typedef and just use struct cnt.
