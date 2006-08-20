@@ -1,3 +1,15 @@
+jilles      2006/08/20 22:43:42 UTC	(20060820-6191)
+  Log:
+  More helpfile consistency stuff; update memo length (now 300).
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/help/memoserv/send (File Modified) 
+  +4 -3		trunk/help/nickserv/register (File Modified) 
+  +5 -5		trunk/help/oservice/rwatch (File Modified) 
+  +4 -3		trunk/help/userserv/register (File Modified) 
+
+
 jilles      2006/08/20 22:18:15 UTC	(20060820-6189)
   Log:
   Remove nickserv link help file.
