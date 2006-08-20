@@ -1,3 +1,15 @@
+jilles      2006/08/20 19:29:12 UTC	(20060820-6175)
+  Log:
+  Get rid of cnt_t typedef and just use struct cnt.
+  We use this typedef exactly twice and Solaris 9
+  defines it in sys/types.h in a conflicting way.
+  
+
+  Changes:	Modified:
+  +1 -3		trunk/include/global.h (File Modified) 
+  +1 -1		trunk/src/atheme.c (File Modified) 
+
+
 jilles      2006/08/20 14:29:20 UTC	(20060820-6173)
   Log:
   operserv modload, modunload:
