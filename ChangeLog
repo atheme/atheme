@@ -1,3 +1,15 @@
+jilles      2006/08/20 21:32:21 UTC	(20060820-6185)
+  Log:
+  Add the new operserv modules to the example confs.
+  CLONES, the operserv:massakill privilege and everything
+  depending on it are commented out, the rest is enabled.
+  
+
+  Changes:	Modified:
+  +12 -1	trunk/dist/example.conf (File Modified) 
+  +12 -1	trunk/dist/example.userserv.conf (File Modified) 
+
+
 jilles      2006/08/20 21:08:55 UTC	(20060820-6183)
   Log:
   Add more information to user:auspex and operserv:massakill

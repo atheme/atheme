@@ -1,5 +1,4 @@
-Command - DROP
-Usage   - DROP <nickname> <password>
+Help for DROP:
   
 Using this command makes NickServ stop watching your nick, and
 will remove it from services' database. If a nick is dropped,
@@ -10,6 +9,8 @@ before doing this.
 When dropping and re-registering a nick during a netsplit, users
 on the other side of the split may later be recognized as the
 new account.
+
+Syntax: DROP <nickname> <password>
 
 Examples:
     /msg &nick& DROP foo bar

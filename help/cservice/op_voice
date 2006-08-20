@@ -11,8 +11,8 @@ on the person requesting the command.
 Most IRC networks do not support halfops.
 
 Syntax: OP|DEOP <#channel> [nickname]
-        HALFOP|DEHALFOP <#channel> [nickname]
-        VOICE|DEVOICE <#channel> [nickname]
+Syntax: HALFOP|DEHALFOP <#channel> [nickname]
+Syntax: VOICE|DEVOICE <#channel> [nickname]
 
 Examples:
     /msg &nick& OP #foo bar
