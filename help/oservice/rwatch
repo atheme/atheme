@@ -25,17 +25,17 @@ Removes a regular expression from the RWATCH list.
 Syntax: RWATCH LIST
 
 Shows the RWATCH list. The meaning of the letters is:
-i - case insensitive match
-S - matching clients are shown in the snoop channel
-K - matching clients are banned from the network
+    i - case insensitive match
+    S - matching clients are shown in the snoop channel
+    K - matching clients are banned from the network
 
 Syntax: RWATCH SET /<pattern>/[i] <options>
 
 Changes the action for a regular expression. Possible
 values for <options> are:
-    SNOOP - enables display in the snoop channel
+    SNOOP   - enables display in the snoop channel
     NOSNOOP - disables display in the snoop channel
-    KLINE - enables network bans
+    KLINE   - enables network bans
     NOKLINE - disables network bans
 
 Example:

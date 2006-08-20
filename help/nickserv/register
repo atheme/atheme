@@ -1,6 +1,5 @@
-Command - REGISTER
-Usage   - REGISTER <password> <email-address>
-  
+Help for REGISTER:
+
 This will register your current nickname with NickServ. This
 means that only you can have access to this nickname, unless
 you give access to others. The password is a case-sensitive
@@ -10,6 +9,8 @@ your password! You will need it later to change settings.
 You may be required to confirm the email address. To do this,
 follow the instructions in the message sent to the email
 address.
+
+Syntax: REGISTER <password> <email-address>
 
 Examples:
     /msg &nick& REGISTER bar foo@bar.com
