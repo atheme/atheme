@@ -4,7 +4,7 @@
  *
  * Loads a new module in.
  *
- * $Id: modload.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: modload.c 6173 2006-08-20 14:29:20Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modload", FALSE, _modinit, _moddeinit,
-	"$Id: modload.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: modload.c 6173 2006-08-20 14:29:20Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -44,21 +44,31 @@ static void os_cmd_modload(char *origin)
 	char *module;
 	module_t *m;
 	char pbuf[BUFSIZE + 1];
+	unsigned int i;
+	char *toload[BUFSIZE / 2];
 
+	i = 0;
 	while((module = strtok(NULL, " ")))
 	{
-
-	        if (module_find_published(module))
-       		{
-                notice(opersvs.nick, origin, "\2%s\2 is already loaded.", module);
-                return;
-       		}
+		toload[i++] = module;
+		if (i - 1 >= sizeof toload / sizeof *toload)
+			break;
+	}
+	toload[i] = NULL;
+	i = 0;
+	while ((module = toload[i++]))
+	{
+		if (module_find_published(module))
+		{
+			notice(opersvs.nick, origin, "\2%s\2 is already loaded.", module);
+			continue;
+		}
 
 		logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "MODLOAD %s", module);
 		if (*module != '/')
 		{
 			snprintf(pbuf, BUFSIZE, "%s/%s", MODDIR "/modules",
-				 module);
+					module);
 			m = module_load(pbuf);
 		}
 		else

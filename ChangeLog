@@ -1,3 +1,13 @@
+jilles      2006/08/20 14:14:15 UTC	(20060820-6171)
+  Log:
+  operserv rakill: require user:auspex as well as operserv:massakill,
+  so they could have done rmatch before
+  
+
+  Changes:	Modified:
+  +7 -0		trunk/modules/operserv/rakill.c (File Modified) 
+
+
 jilles      2006/08/20 14:11:58 UTC	(20060820-6169)
   Log:
   Header comments for operserv clones and rwatch.
