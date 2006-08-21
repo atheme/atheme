@@ -2,9 +2,9 @@
  * Copyright (c) 2005 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
- * This file contains protocol support for spanning-tree inspircd, b6 or later.
+ * This file contains protocol support for spanning tree stable branch inspircd.
  *
- * $Id: inspircd.c 6201 2006-08-21 12:14:37Z w00t $
+ * $Id: inspircd.c 6203 2006-08-21 12:32:41Z w00t $
  */
 
 #include "atheme.h"
@@ -12,32 +12,32 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 6201 2006-08-21 12:14:37Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 6203 2006-08-21 12:32:41Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
 ircd_t InspIRCd = {
-        "InspIRCd 1.0 Beta 6 or later", /* IRCd name */
+        "InspIRCd 1.0.x", /* IRCd name */
         "$",                            /* TLD Prefix, used by Global. */
         FALSE,                          /* Whether or not we use IRCNet/TS6 UID */
         FALSE,                          /* Whether or not we use RCOMMAND */
         TRUE,                           /* Whether or not we support channel owners. */
         TRUE,                           /* Whether or not we support channel protection. */
         TRUE,                           /* Whether or not we support halfops. */
-	FALSE,				/* Whether or not we use P10 */
-	TRUE,				/* Whether or not we use vHosts. */
-	CMODE_OPERONLY,			/* Oper-only cmodes */
+		FALSE,				/* Whether or not we use P10 */
+		TRUE,				/* Whether or not we use vHosts. */
+		CMODE_OPERONLY,			/* Oper-only cmodes */
         CMODE_OWNER,                    /* Integer flag for owner channel flag. */
         CMODE_PROTECT,                  /* Integer flag for protect channel flag. */
         CMODE_HALFOP,                   /* Integer flag for halfops. */
         "+q",                           /* Mode we set for owner. */
         "+a",                           /* Mode we set for protect. */
         "+h",                           /* Mode we set for halfops. */
-	PROTOCOL_INSPIRCD,		/* Protocol type */
-	0,                              /* Permanent cmodes */
-	"beIg",                         /* Ban-like cmodes */
-	'e',                            /* Except mchar */
-	'I'                             /* Invex mchar */
+		PROTOCOL_INSPIRCD,		/* Protocol type */
+		0,                              /* Permanent cmodes */
+		"beIg",                         /* Ban-like cmodes */
+		'e',                            /* Except mchar */
+		'I'                             /* Invex mchar */
 };
 
 struct cmode_ inspircd_mode_list[] = {

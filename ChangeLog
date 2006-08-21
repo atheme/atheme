@@ -1,3 +1,11 @@
+w00t        2006/08/21 12:14:37 UTC	(20060821-6201)
+  Log:
+  There should be a return here, oops.
+
+  Changes:	Modified:
+  +2 -1		trunk/protocol/inspircd.c (File Modified) 
+
+
 jilles      2006/08/21 09:44:29 UTC	(20060821-6199)
   Log:
   ns/us listchans, os compare moved from user:auspex to chan:auspex
