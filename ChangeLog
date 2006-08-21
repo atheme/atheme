@@ -1,3 +1,12 @@
+jilles      2006/08/21 15:32:29 UTC	(20060821-6217)
+  Log:
+  Fix crash on /os ignore add.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/operserv/ignore.c (File Modified) 
+
+
 jilles      2006/08/21 15:27:59 UTC	(20060821-6215)
   Log:
   flatfile backend: add snoops about database errors

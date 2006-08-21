@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService IGNORE command.
  *
- * $Id: ignore.c 6217 2006-08-21 15:32:29Z jilles $
+ * $Id: ignore.c 6219 2006-08-21 15:36:49Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 6217 2006-08-21 15:32:29Z jilles $",
+	"$Id: ignore.c 6219 2006-08-21 15:36:49Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -121,6 +121,7 @@ static void os_cmd_ignore_add(char *origin, char *target)
 
 	logcommand(opersvs.me, u, CMDLOG_ADMIN, "IGNORE ADD %s", target);
 	wallops("%s added a services ignore for \2%s\2.", origin, target);
+	snoop("IGNORE:ADD: \2%s\2 by \2%s\2", target, origin);
 
 	return;
 }
@@ -153,6 +154,7 @@ static void os_cmd_ignore_del(char *origin, char *target)
 			free(svsignore->reason);
 
 			wallops("%s removed \2%s\2 from the services ignore list.", origin, target);
+			snoop("IGNORE:DEL: \2%s\2 by \2%s\2", target, origin);
 			logcommand(opersvs.me, u, CMDLOG_ADMIN, "IGNORE DEL %s", target);
 
 			return;
@@ -191,6 +193,7 @@ static void os_cmd_ignore_clear(char *origin, char *arg)
 	notice(opersvs.nick, origin, "Services ignore list has been wiped!");
 
 	wallops("\2%s\2 wiped the services ignore list.", origin);
+	snoop("IGNORE:CLEAR: by \2%s\2", origin);
 	logcommand(opersvs.me, u, CMDLOG_ADMIN, "IGNORE CLEAR");
 
 	return;
