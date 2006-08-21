@@ -1,3 +1,13 @@
+jilles      2006/08/21 14:41:15 UTC	(20060821-6207)
+  Log:
+  ns/us list: unbreak when more than one nick/account exists
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/nickserv/list.c (File Modified) 
+  +1 -0		trunk/modules/userserv/list.c (File Modified) 
+
+
 jilles      2006/08/21 14:36:38 UTC	(20060821-6205)
   Log:
   cs/ns/us list/listmail changed from wallops to snoop
