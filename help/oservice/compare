@@ -1,6 +1,6 @@
 Help for COMPARE:
 
-COMPARE allows operators with user:auspex
+COMPARE allows operators with chan:auspex
 privilege to view matching information
 on two users, or two channels.
 

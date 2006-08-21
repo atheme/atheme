@@ -1,3 +1,14 @@
+jilles      2006/08/21 09:27:21 UTC	(20060821-6197)
+  Log:
+  Add operserv clearchan (commented out) and compare (enabled)
+  to example confs.
+  
+
+  Changes:	Modified:
+  +4 -0		trunk/dist/example.conf (File Modified) 
+  +4 -0		trunk/dist/example.userserv.conf (File Modified) 
+
+
 jilles      2006/08/21 08:18:02 UTC	(20060821-6195)
   Log:
   Remove chanserv sendpass help file.

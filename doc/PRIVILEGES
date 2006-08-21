@@ -39,7 +39,7 @@ special:ircop
 
 user:auspex
 	see the invisible about user registrations,
-	ns/us info/list/listchans mainly
+	ns/us info/list mainly
 	also allows searching information about online users,
 	os rnc/rmatch/rwatch
 user:admin
@@ -48,8 +48,8 @@ user:vhost
 	set vhosts
 
 chan:auspex
-	see the invisible about channel registrations,
-	cs info/list/flags mainly
+	see the invisible about channels and channel registrations,
+	cs info/list/flags, ns/us listchans, os compare mainly
 chan:admin
 	administer channels
 chan:cmodes
@@ -96,4 +96,4 @@ operserv:noop
 operserv:global
 	send global notices
 
-$Id: PRIVILEGES 6183 2006-08-20 21:08:55Z jilles $
+$Id: PRIVILEGES 6199 2006-08-21 09:44:29Z jilles $

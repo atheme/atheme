@@ -5,7 +5,7 @@
  * This file contains code for the UserServ LISTCHANS function.
  *   -- Contains an alias "MYACCESS" for legacy users
  *
- * $Id: listchans.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: listchans.c 6199 2006-08-21 09:44:29Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/listchans", FALSE, _modinit, _moddeinit,
-	"$Id: listchans.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: listchans.c 6199 2006-08-21 09:44:29Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -58,7 +58,7 @@ static void us_cmd_listchans(char *origin)
 
 	if (target)
 	{
-		if (!has_priv(u, PRIV_USER_AUSPEX))
+		if (!has_priv(u, PRIV_CHAN_AUSPEX))
 		{
 			notice(usersvs.nick, origin, "You are not authorized to use the target argument.");
 			return;
