@@ -1,3 +1,12 @@
+jilles      2006/08/21 08:18:02 UTC	(20060821-6195)
+  Log:
+  Remove chanserv sendpass help file.
+  
+
+  Changes:	Modified:
+  +0 -9		trunk/help/cservice/sendpass (File Deleted) 
+
+
 jilles      2006/08/20 22:47:01 UTC	(20060820-6193)
   Log:
   Simple script to convert the help files to HTML.
