@@ -1,3 +1,13 @@
+jilles      2006/08/21 15:05:22 UTC	(20060821-6211)
+  Log:
+  - Convert wallops about failed attempts to load modules to snoops
+  - Add snoops about successful module loads and unloads
+  
+
+  Changes:	Modified:
+  +9 -3		trunk/src/module.c (File Modified) 
+
+
 w00t        2006/08/21 14:46:46 UTC	(20060821-6209)
   Log:
   Move beu from core to contributors
