@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 6149 2006-08-19 20:03:47Z jilles $
+ * $Id: module.c 6211 2006-08-21 15:05:22Z jilles $
  */
 
 #include "atheme.h"
@@ -73,7 +73,7 @@ module_t *module_load(char *filespec)
 		char *errp = sstrdup(dlerror());
 		slog(LG_INFO, "module_load(): error: %s", errp);
 		if (me.connected)
-			wallops("Error while loading module %s: %s", filespec, errp);
+			snoop("MODLOAD:ERROR: loading module \2%s\2: %s", filespec, errp);
 		free(errp);
 		return NULL;
 	}
@@ -88,7 +88,7 @@ module_t *module_load(char *filespec)
 		slog(LG_DEBUG, "module_load(): %s: Attempted to load an incompatible module. Aborting.", filespec);
 
 		if (me.connected)
-			wallops("Module %s is not a valid atheme module.", filespec);
+			snoop("MODLOAD:ERROR: Module \2%s\2 is not a valid atheme module.", filespec);
 
 		linker_close(handle);
 		return NULL;
@@ -125,7 +125,7 @@ module_t *module_load(char *filespec)
 	{
 		slog(LG_INFO, "module_load(): module %s init failed", filespec);
 		if (me.connected)
-			wallops("Init failed while loading module %s", filespec);
+			snoop("MODLOAD:ERROR: Init failed while loading module \2%s\2", filespec);
 		module_unload(m);
 		return NULL;
 	}
@@ -136,7 +136,10 @@ module_t *module_load(char *filespec)
 	slog(LG_DEBUG, "module_load(): loaded %s [at 0x%lx; MAPI version %d]", h->name, m->address, h->abi_ver);
 
 	if (me.connected && !cold_start)
+	{
 		wallops("Module %s loaded [at 0x%lx; MAPI version %d]", h->name, m->address, h->abi_ver);
+		snoop("MODLOAD: \2%s\2 [at 0x%lx; MAPI version %d]", h->name, m->address, h->abi_ver);
+	}
 
 	return m;
 }
@@ -258,7 +261,10 @@ void module_unload(module_t * m)
 	{
 		slog(LG_INFO, "module_unload(): unloaded %s", m->header->name);
 		if (me.connected)
+		{
 			wallops("Module %s unloaded.", m->header->name);
+			snoop("MODUNLOAD: \2%s\2", m->header->name);
+		}
 
 		if (m->header->deinit)
 			m->header->deinit();

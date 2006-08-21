@@ -1,3 +1,11 @@
+w00t        2006/08/21 14:46:46 UTC	(20060821-6209)
+  Log:
+  Move beu from core to contributors
+
+  Changes:	Modified:
+  +1 -1		trunk/src/version.sh (File Modified) 
+
+
 jilles      2006/08/21 14:41:15 UTC	(20060821-6207)
   Log:
   ns/us list: unbreak when more than one nick/account exists
