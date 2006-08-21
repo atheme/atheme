@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 6067 2006-08-16 01:34:01Z jilles $
+ * $Id: flatfile.c 6215 2006-08-21 15:27:59Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 6067 2006-08-16 01:34:01Z jilles $",
+	"$Id: flatfile.c 6215 2006-08-21 15:27:59Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -97,6 +97,7 @@ static void flatfile_db_save(void *arg)
 		errno1 = errno;
 		slog(LG_ERROR, "db_save(): cannot create atheme.db.new: %s", strerror(errno1));
 		wallops("\2DATABASE ERROR\2: db_save(): cannot create atheme.db.new: %s", strerror(errno1));
+		snoop("\2DATABASE ERROR\2: db_save(): cannot create atheme.db.new: %s", strerror(errno1));
 		return;
 	}
 
@@ -209,6 +210,7 @@ static void flatfile_db_save(void *arg)
 		errno1 = errno;
 		slog(LG_ERROR, "db_save(): cannot write to atheme.db.new: %s", strerror(errno1));
 		wallops("\2DATABASE ERROR\2: db_save(): cannot write to atheme.db.new: %s", strerror(errno1));
+		snoop("\2DATABASE ERROR\2: db_save(): cannot write to atheme.db.new: %s", strerror(errno1));
 		return;
 	}
 	/* now, replace the old database with the new one, using an atomic rename */
@@ -222,6 +224,7 @@ static void flatfile_db_save(void *arg)
 		errno1 = errno;
 		slog(LG_ERROR, "db_save(): cannot rename atheme.db.new to atheme.db: %s", strerror(errno1));
 		wallops("\2DATABASE ERROR\2: db_save(): cannot rename atheme.db.new to atheme.db: %s", strerror(errno1));
+		snoop("\2DATABASE ERROR\2: db_save(): cannot rename atheme.db.new to atheme.db: %s", strerror(errno1));
 		return;
 	}
 }
