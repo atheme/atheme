@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning-tree inspircd, b6 or later.
  *
- * $Id: inspircd.c 6141 2006-08-19 16:25:52Z jilles $
+ * $Id: inspircd.c 6201 2006-08-21 12:14:37Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 6141 2006-08-19 16:25:52Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 6201 2006-08-21 12:14:37Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -202,7 +202,8 @@ static void inspircd_wallops(char *fmt, ...)
 		 *
 		 * XXX - we shouldn't rely on me.me being NULL, me.me->userlist or something instead. --w00t
 		 */
-		 slog(LG_ERROR, "wallops(): InspIRCD requires at least one pseudoclient module to be loaded to send wallops.");
+		slog(LG_ERROR, "wallops(): InspIRCD requires at least one pseudoclient module to be loaded to send wallops.");
+		return;
 	}
 
 	va_start(ap, fmt);

@@ -1,3 +1,16 @@
+jilles      2006/08/21 09:44:29 UTC	(20060821-6199)
+  Log:
+  ns/us listchans, os compare moved from user:auspex to chan:auspex
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/doc/PRIVILEGES (File Modified) 
+  +1 -1		trunk/help/oservice/compare (File Modified) 
+  +1 -1		trunk/modules/nickserv/listchans.c (File Modified) 
+  +1 -1		trunk/modules/operserv/compare.c (File Modified) 
+  +1 -1		trunk/modules/userserv/listchans.c (File Modified) 
+
+
 jilles      2006/08/21 09:27:21 UTC	(20060821-6197)
   Log:
   Add operserv clearchan (commented out) and compare (enabled)
