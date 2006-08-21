@@ -1,3 +1,12 @@
+jilles      2006/08/21 15:27:59 UTC	(20060821-6215)
+  Log:
+  flatfile backend: add snoops about database errors
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/backend/flatfile.c (File Modified) 
+
+
 jilles      2006/08/21 15:25:03 UTC	(20060821-6213)
   Log:
   chanserv close: add snoops
