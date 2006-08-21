@@ -1,3 +1,18 @@
+jilles      2006/08/21 14:36:38 UTC	(20060821-6205)
+  Log:
+  cs/ns/us list/listmail changed from wallops to snoop
+  snoop added to os mode
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/list.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/list.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/listmail.c (File Modified) 
+  +1 -0		trunk/modules/operserv/mode.c (File Modified) 
+  +1 -1		trunk/modules/userserv/list.c (File Modified) 
+  +1 -1		trunk/modules/userserv/listmail.c (File Modified) 
+
+
 w00t        2006/08/21 12:32:41 UTC	(20060821-6203)
   Log:
   I doubt this would work with b6 anymore. Note that it's stable branch inspircd.
