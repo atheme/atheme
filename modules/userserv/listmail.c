@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ LISTMAIL function.
  *
- * $Id: listmail.c 5981 2006-07-31 22:33:14Z nenolod $
+ * $Id: listmail.c 6205 2006-08-21 14:36:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/listmail", FALSE, _modinit, _moddeinit,
-	"$Id: listmail.c 5981 2006-07-31 22:33:14Z nenolod $",
+	"$Id: listmail.c 6205 2006-08-21 14:36:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -78,7 +78,7 @@ static void us_cmd_listmail(char *origin)
 		return;
 	}
 
-	wallops("\2%s\2 is searching the account database for e-mail address \2%s\2", origin, email);
+	snoop("LISTMAIL: \2%s\2 by \2%s\2", email, origin);
 
 	state.matches = 0;
 	state.pattern = email;
