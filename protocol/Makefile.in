@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 6051 2006-08-14 16:39:35Z jilles $
+# $Id: Makefile.in 6223 2006-08-26 23:41:15Z w00t $
 #
 
 CC		= @CC@
@@ -41,6 +41,7 @@ BASE_SRCS = 		\
 	hybrid.c	\
 	hyperion.c      \
 	inspircd.c      \
+	inspircd_dev.c	\
 	ircnet.c        \
 	nefarious.c	\
 	plexus.c        \
