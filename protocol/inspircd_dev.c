@@ -370,6 +370,7 @@ static void inspircd_mode_sts(char *sender, char *target, char *modes)
 		return;
 
 	sts(":%s MODE %s %s", sender, target, modes);
+
 }
 
 /* ping wrapper */
@@ -509,8 +510,15 @@ static void m_notice(char *origin, uint8_t parc, char *parv[])
 
 static void m_fjoin(char *origin, uint8_t parc, char *parv[])
 {
+	/* FJOIN #flaps 1234 :@,fanny +%,arse ,tits ,breasts &~,poontang */
 	channel_t *c;
+	uint8_t userc;
 	uint8_t i;
+	uint8_t j;
+	uint8_t nlen;
+	boolean_t prefix = true;
+	char *userv[256];
+	char prefixandnick[51];
 	time_t ts;
 
 	if (parc >= 3)
@@ -540,8 +548,46 @@ static void m_fjoin(char *origin, uint8_t parc, char *parv[])
 			hook_call_event("channel_tschange", c);
 		}
 
-		for (i = 2; i < parc; i++)
-			chanuser_add(c, parv[i]);
+		/*
+		 * ok, here's the difference from 1.0 -> 1.1:
+		 * 1.0 sent p[3] and up as individual users, prefixed with their 'highest' prefix, @, % or +
+		 * in 1.1, this is more complex. All prefixes are sent, with the additional caveat that modules
+		 * can add their own prefixes (dangerous!) - therefore, don't just chanuser_add(), split the prefix
+		 * out and ignore unknown prefixes (probably the safest option). --w00t
+		 */
+		userc = sjtoken(parv[parc - 1], ' ', userv);
+
+		for (i = 0; i < userc; i++)
+		{
+			nlen = 0;
+			prefix = true;
+
+			slog(LG_DEBUG, "m_fjoin(): processing user: %s", userv[i]);
+
+for (; *userv[i]; userv[i]++)
+{
+	int j;
+	for (j = 0; prefix_mode_list[j].mode; j++)
+	{
+		if (*userv[i] == prefix_mode_list[j].mode)
+		{
+			prefixandnick[nlen++] = *userv[i];
+			continue;
+		}
+ 
+		if (*userv[i] == ',')
+		{
+			userv[i]++;
+			strncpy(prefixandnick + nlen, userv[i], sizeof(prefixandnick));
+			nlen = strlen(prefixandnick); // eww, but it makes life so much easier
+			break;
+		}
+	}
+}
+ 
+chanuser_add(c, prefixandnick);
+
+		}
 
 		if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))
 			channel_delete(c->name);
