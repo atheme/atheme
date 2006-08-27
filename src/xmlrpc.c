@@ -509,7 +509,7 @@ void xmlrpc_generic_error(int code, const char *string)
 	int len;
 
 	snprintf(buf, XMLRPC_BUFSIZE,
-		 "<?xml version=\"1.0\"?>\r\n <methodResponse>\n\r  <fault>\n\r   <value>\n\r    <struct>\n\r     <member>\n\r      <name>faultCode</name>\n\r      <value><int>%d</int></value>\n\r     </member>\n\r     <member>\n\r      <name>faultString</name>\n\r      <value><string>%s</string></value>\n\r     </member>\n\r    </struct>\n\r   </value>\r\n  </fault>\r\n </methodResponse>",
+		 "<?xml version=\"1.0\"?>\r\n<methodResponse>\n\r <fault>\n\r  <value>\n\r   <struct>\n\r    <member>\n\r     <name>faultCode</name>\n\r     <value><int>%d</int></value>\n\r    </member>\n\r    <member>\n\r     <name>faultString</name>\n\r     <value><string>%s</string></value>\n\r    </member>\n\r   </struct>\n\r  </value>\r\n </fault>\r\n</methodResponse>",
 		 code, string);
 	len = strlen(buf);
 

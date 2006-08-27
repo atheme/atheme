@@ -1,3 +1,14 @@
+nenolod     2006/08/27 03:32:55 UTC	(20060827-6227)
+  Log:
+  - support the notion of a later addition to EUID to add additional fields.
+  This addition does not yet exist, but adding it would be trivial, as atheme would still
+  pick the right field for use as gecos now.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/protocol/charybdis.c (File Modified) 
+
+
 nenolod     2006/08/27 03:19:07 UTC	(20060827-6225)
   Log:
   Preliminary support for EUID.
