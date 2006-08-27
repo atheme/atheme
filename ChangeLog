@@ -1,3 +1,12 @@
+pippijn     2006/08/27 12:08:04 UTC	(20060827-6231)
+  Log:
+  Fixed XML-RPC. It's \r\n, not \n\r. Clients die over this!
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/src/xmlrpc.c (File Modified) 
+
+
 pippijn     2006/08/27 11:51:45 UTC	(20060827-6229)
   Log:
   Fixed XML-RPC returning non-wellformed XML. There was a space before <methodResponse>.

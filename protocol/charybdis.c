@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 6227 2006-08-27 03:32:55Z nenolod $
+ * $Id: charybdis.c 6233 2006-08-27 12:09:16Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6227 2006-08-27 03:32:55Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6233 2006-08-27 12:09:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -183,7 +183,7 @@ static uint8_t charybdis_server_login(void)
 static void charybdis_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
 	if (ircd->uses_uid && use_euid == TRUE)
-		sts(":%s EUID %s 1 %ld +%s%sS %s * 0 %s %s * :%s", me.numeric, nick, CURRTIME, "io", chansvs.fantasy ? "" : "D", user, uid, host, real);
+		sts(":%s EUID %s 1 %ld +%s%sS %s %s 0 %s * * :%s", me.numeric, nick, CURRTIME, "io", chansvs.fantasy ? "" : "D", user, host, uid, real);
 	else if (ircd->uses_uid)
 		sts(":%s UID %s 1 %ld +%s%sS %s %s 0 %s :%s", me.numeric, nick, CURRTIME, "io", chansvs.fantasy ? "" : "D", user, host, uid, real);
 	else
@@ -964,7 +964,7 @@ static void m_euid(char *origin, uint8_t parc, char *parv[])
 
 		u = user_add(parv[0],				/* nick */
 			parv[4],				/* user */
-			parv[8] != '*' ? parv[8] : parv[5],	/* hostname */
+			*parv[8] != '*' ? parv[8] : parv[5],	/* hostname */
 			parv[5],				/* hostname (visible) */
 			parv[6],				/* ip */
 			parv[7],				/* uid */
