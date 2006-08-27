@@ -85,7 +85,6 @@ struct cmode_ inspircd_status_mode_list[] = {
 
 struct cmode_ inspircd_prefix_mode_list[] = {
   { '~', CMODE_OWNER   },
-  { '*', CMODE_PROTECT },
   { '&', CMODE_PROTECT },
   { '@', CMODE_OP      },
   { '%', CMODE_HALFOP  },

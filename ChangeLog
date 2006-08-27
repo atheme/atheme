@@ -1,3 +1,11 @@
+w00t        2006/08/27 14:01:59 UTC	(20060827-6237)
+  Log:
+  FMODE parser, currently duplicates MODE parser. We may want to do something with the TS, which is why I've seperated the two.
+
+  Changes:	Modified:
+  +42 -22	trunk/protocol/inspircd_dev.c (File Modified) 
+
+
 w00t        2006/08/27 13:13:26 UTC	(20060827-6235)
   Log:
   Seemingly (?) working FJOIN parser, needs cleanup - will do that in next commit most likely. Could probably be more efficient. Suggestions?
