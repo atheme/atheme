@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 6141 2006-08-19 16:25:52Z jilles $
+ * $Id: charybdis.c 6225 2006-08-27 03:19:07Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6141 2006-08-19 16:25:52Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6225 2006-08-27 03:19:07Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -81,6 +81,7 @@ struct cmode_ charybdis_prefix_mode_list[] = {
 
 static boolean_t use_rserv_support = FALSE;
 static boolean_t use_tb = FALSE;
+static boolean_t use_euid = FALSE;
 
 static void server_eob(server_t *s);
 static server_t *sid_find(char *name);
@@ -171,7 +172,7 @@ static uint8_t charybdis_server_login(void)
 
 	me.bursting = TRUE;
 
-	sts("CAPAB :QS EX IE KLN UNKLN ENCAP TB SERVICES");
+	sts("CAPAB :QS EX IE KLN UNKLN ENCAP TB SERVICES EUID");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
 	sts("SVINFO %d 3 0 :%ld", ircd->uses_uid ? 6 : 5, CURRTIME);
 
@@ -181,7 +182,9 @@ static uint8_t charybdis_server_login(void)
 /* introduce a client */
 static void charybdis_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
 {
-	if (ircd->uses_uid)
+	if (ircd->uses_uid && use_euid == TRUE)
+		sts(":%s EUID %s 1 %ld +%s%sS %s * 0 %s %s * :%s", me.numeric, nick, CURRTIME, "io", chansvs.fantasy ? "" : "D", user, uid, host, real);
+	else if (ircd->uses_uid)
 		sts(":%s UID %s 1 %ld +%s%sS %s %s 0 %s :%s", me.numeric, nick, CURRTIME, "io", chansvs.fantasy ? "" : "D", user, host, uid, real);
 	else
 		sts("NICK %s 1 %ld +%s%sS %s %s %s :%s", nick, CURRTIME, "io", chansvs.fantasy ? "" : "D", user, host, me.name, real);
@@ -942,6 +945,57 @@ static void m_uid(char *origin, uint8_t parc, char *parv[])
 	}
 }
 
+static void m_euid(char *origin, uint8_t parc, char *parv[])
+{
+	server_t *s;
+	user_t *u;
+
+	/* got the right number of args for an introduction? */
+	if (parc == 11)
+	{
+		s = server_find(origin);
+		if (!s)
+		{
+			slog(LG_DEBUG, "m_uid(): new user on nonexistant server: %s", origin);
+			return;
+		}
+
+		slog(LG_DEBUG, "m_euid(): new user on `%s': %s", s->name, parv[0]);
+
+		u = user_add(parv[0],				/* nick */
+			parv[4],				/* user */
+			parv[8] != '*' ? parv[8] : parv[5],	/* hostname */
+			parv[5],				/* hostname (visible) */
+			parv[6],				/* ip */
+			parv[7],				/* uid */
+			parv[10],				/* gecos */
+			s,					/* object parent (server) */
+			atoi(parv[2]));				/* hopcount */
+
+		user_mode(u, parv[3]);
+
+		/* If server is not yet EOB we will do this later.
+		 * This avoids useless "please identify" -- jilles
+		 *
+		 * But, if we have an account in the EUID message then
+		 * we just log them in *now* and don't bother with nagging
+		 * at all, period. -nenolod
+		 */
+		if (*parv[9] != '*')
+			handle_burstlogin(u, parv[9]);
+		else if (s->flags & SF_EOB)
+			handle_nickchange(u);
+	}
+	else
+	{
+		int i;
+		slog(LG_DEBUG, "m_euid(): got EUID with wrong number of params");
+
+		for (i = 0; i < parc; i++)
+			slog(LG_DEBUG, "m_euid():   parv[%d] = %s", i, parv[i]);
+	}
+}
+
 static void m_quit(char *origin, uint8_t parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", origin);
@@ -1281,6 +1335,11 @@ static void m_capab(char *origin, uint8_t parc, char *parv[])
 	use_tb = FALSE;
 	for (p = strtok(parv[0], " "); p != NULL; p = strtok(NULL, " "))
 	{
+		if (!irccasecmp(p, "EUID"))
+		{
+			slog(LG_DEBUG, "m_capab(): uplink supports EUID, enabling support.");
+			use_euid = TRUE;
+		}
 		if (!irccasecmp(p, "SERVICES"))
 		{
 			slog(LG_DEBUG, "m_capab(): uplink has rserv extensions, enabling support.");
@@ -1400,6 +1459,7 @@ void _modinit(module_t * m)
 	pcommand_add("SID", m_sid);
 	pcommand_add("MOTD", m_motd);
 	pcommand_add("SIGNON", m_signon);
+	pcommand_add("EUID", m_euid);
 
 	hook_add_event("server_eob");
 	hook_add_hook("server_eob", (void (*)(void *))server_eob);

@@ -1,3 +1,12 @@
+w00t        2006/08/26 23:41:15 UTC	(20060826-6223)
+  Log:
+  Fork inspircd.c protocol module to inspircd_dev.c for 1.1 branch experimental support - FJOIN sending modified so far.
+
+  Changes:	Modified:
+  +1 -0		trunk/protocol/Makefile.in (File Modified) 
+  +923 -0	trunk/protocol/inspircd_dev.c (File Added) 
+
+
 jilles      2006/08/21 15:36:49 UTC	(20060821-6219)
   Log:
   operserv ignore: add snoops
