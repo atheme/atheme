@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 6225 2006-08-27 03:19:07Z nenolod $
+ * $Id: charybdis.c 6227 2006-08-27 03:32:55Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6225 2006-08-27 03:19:07Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6227 2006-08-27 03:32:55Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -951,7 +951,7 @@ static void m_euid(char *origin, uint8_t parc, char *parv[])
 	user_t *u;
 
 	/* got the right number of args for an introduction? */
-	if (parc == 11)
+	if (parc >= 11)
 	{
 		s = server_find(origin);
 		if (!s)
@@ -968,7 +968,7 @@ static void m_euid(char *origin, uint8_t parc, char *parv[])
 			parv[5],				/* hostname (visible) */
 			parv[6],				/* ip */
 			parv[7],				/* uid */
-			parv[10],				/* gecos */
+			parv[parc - 1],				/* gecos */
 			s,					/* object parent (server) */
 			atoi(parv[2]));				/* hopcount */
 

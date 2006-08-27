@@ -1,3 +1,15 @@
+nenolod     2006/08/27 03:19:07 UTC	(20060827-6225)
+  Log:
+  Preliminary support for EUID.
+  EUID is a replacement for standard TS6 UIDs which better supports the notion of having accounts and 
+  services spoofs.
+  More information is available at http://www.stack.nl/~jilles/irc/euid.txt
+  
+
+  Changes:	Modified:
+  +62 -2	trunk/protocol/charybdis.c (File Modified) 
+
+
 w00t        2006/08/26 23:41:15 UTC	(20060826-6223)
   Log:
   Fork inspircd.c protocol module to inspircd_dev.c for 1.1 branch experimental support - FJOIN sending modified so far.
