@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 6233 2006-08-27 12:09:16Z jilles $
+ * $Id: charybdis.c 6241 2006-08-27 14:09:17Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6233 2006-08-27 12:09:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6241 2006-08-27 14:09:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -473,8 +473,10 @@ static void charybdis_sethost_sts(char *source, char *target, char *host)
 	if (!tu)
 		return;
 
-	sts(":%s ENCAP * CHGHOST %s :%s", ME, tu->nick,
-		host);
+	if (use_euid)
+		sts(":%s CHGHOST %s :%s", ME, CLIENT_NAME(tu), host);
+	else
+		sts(":%s ENCAP * CHGHOST %s :%s", ME, tu->nick, host);
 }
 
 static void charybdis_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
@@ -1367,6 +1369,16 @@ static void m_capab(char *origin, uint8_t parc, char *parv[])
 	services_init();
 }
 
+static void m_chghost(char *origin, uint8_t parc, char *parv[])
+{
+	user_t *u = user_find(parv[0]);
+
+	if (!u)
+		return;
+
+	strlcpy(u->vhost, parv[1], HOSTLEN);
+}
+
 static void m_motd(char *origin, uint8_t parc, char *parv[])
 {
 	handle_motd(user_find(origin));
@@ -1457,6 +1469,7 @@ void _modinit(module_t * m)
 	pcommand_add("BMASK", m_bmask);
 	pcommand_add("TMODE", m_tmode);
 	pcommand_add("SID", m_sid);
+	pcommand_add("CHGHOST", m_chghost);
 	pcommand_add("MOTD", m_motd);
 	pcommand_add("SIGNON", m_signon);
 	pcommand_add("EUID", m_euid);

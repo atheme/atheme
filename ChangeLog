@@ -1,3 +1,11 @@
+w00t        2006/08/27 14:04:35 UTC	(20060827-6239)
+  Log:
+  Remove * prefix. Why was this here?
+
+  Changes:	Modified:
+  +0 -1		trunk/protocol/inspircd_dev.c (File Modified) 
+
+
 w00t        2006/08/27 14:01:59 UTC	(20060827-6237)
   Log:
   FMODE parser, currently duplicates MODE parser. We may want to do something with the TS, which is why I've seperated the two.
