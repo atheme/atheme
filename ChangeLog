@@ -1,3 +1,12 @@
+pippijn     2006/08/27 11:51:45 UTC	(20060827-6229)
+  Log:
+  Fixed XML-RPC returning non-wellformed XML. There was a space before <methodResponse>.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/xmlrpc.c (File Modified) 
+
+
 nenolod     2006/08/27 03:32:55 UTC	(20060827-6227)
   Log:
   - support the notion of a later addition to EUID to add additional fields.
