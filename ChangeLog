@@ -1,3 +1,11 @@
+w00t        2006/08/27 13:13:26 UTC	(20060827-6235)
+  Log:
+  Seemingly (?) working FJOIN parser, needs cleanup - will do that in next commit most likely. Could probably be more efficient. Suggestions?
+
+  Changes:	Modified:
+  +48 -2	trunk/protocol/inspircd_dev.c (File Modified) 
+
+
 jilles      2006/08/27 12:09:16 UTC	(20060827-6233)
   Log:
   Fix EUID support.

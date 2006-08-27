@@ -564,29 +564,28 @@ static void m_fjoin(char *origin, uint8_t parc, char *parv[])
 
 			slog(LG_DEBUG, "m_fjoin(): processing user: %s", userv[i]);
 
-for (; *userv[i]; userv[i]++)
-{
-	int j;
-	for (j = 0; prefix_mode_list[j].mode; j++)
-	{
-		if (*userv[i] == prefix_mode_list[j].mode)
-		{
-			prefixandnick[nlen++] = *userv[i];
-			continue;
-		}
+			for (; *userv[i]; userv[i]++)
+			{
+				int j;
+				for (j = 0; prefix_mode_list[j].mode; j++)
+				{
+					if (*userv[i] == prefix_mode_list[j].mode)
+					{
+						prefixandnick[nlen++] = *userv[i];
+						continue;
+					}
  
-		if (*userv[i] == ',')
-		{
-			userv[i]++;
-			strncpy(prefixandnick + nlen, userv[i], sizeof(prefixandnick));
-			nlen = strlen(prefixandnick); // eww, but it makes life so much easier
-			break;
-		}
-	}
-}
+					if (*userv[i] == ',')
+					{
+						userv[i]++;
+						strncpy(prefixandnick + nlen, userv[i], sizeof(prefixandnick));
+						nlen = strlen(prefixandnick); // eww, but it makes life so much easier
+						break;
+					}
+				}
+			}
  
-chanuser_add(c, prefixandnick);
-
+			chanuser_add(c, prefixandnick);
 		}
 
 		if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))
@@ -706,6 +705,27 @@ static void m_mode(char *origin, uint8_t parc, char *parv[])
 		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
 	else
 		user_mode(user_find(parv[0]), parv[1]);
+}
+
+static void m_fmode(char *origin, uint8_t parc, char *parv[])
+{
+	/* :server.moo FMODE #blarp tshere +ntsklLg keymoo 1337 secks */
+	if (!origin)
+	{
+		slog(LG_DEBUG, "m_fmode(): received FMODE without origin");
+		return;
+	}
+
+	if (parc < 3)
+	{
+		slog(LG_DEBUG, "m_fmode(): missing parameters in FMODE");
+		return;
+	}
+
+	if (*parv[0] == '#')
+		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[2]);
+	else
+		user_mode(user_find(parv[0]), parv[2]);
 }
 
 static void m_kick(char *origin, uint8_t parc, char *parv[])
@@ -941,7 +961,7 @@ void _modinit(module_t * m)
 	pcommand_add("NICK", m_nick);
 	pcommand_add("QUIT", m_quit);
 	pcommand_add("MODE", m_mode);
-	pcommand_add("FMODE", m_mode);
+	pcommand_add("FMODE", m_fmode);
 	pcommand_add("SAMODE", m_samode);
 	pcommand_add("SAJOIN", m_sajoin);
 	pcommand_add("SAPART", m_sapart);
