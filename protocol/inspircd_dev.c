@@ -952,17 +952,50 @@ static void m_metadata(char *origin, uint8_t parc, char *parv[])
 	}
 }
 
+static boolean_t has_servicesmod = false;
+static boolean_t has_globopsmod = false;
+
 static void m_capab(char *origin, uint8_t parc, char *parv[])
 {
-	if (!strstr(parv[0], "m_services_account.so"))
+	if (strcasecmp(parv[0], "START") == 0)
 	{
-		fprintf(stderr, "atheme: you didn't load m_services_account into inspircd. atheme support requires this module. exiting.\n");
-		exit(EXIT_FAILURE);		
+		/* reset all our previously recieved CAPAB stuff */
+		has_servicesmod = false;
+		has_globopsmod = false;
 	}
-	else if (!strstr(parv[0], "m_globops.so"))
+	else if (strcasecmp(parv[0], "CAPABILITIES") == 0)
 	{
-		fprintf(stderr, "atheme: you didn't load m_globops into inspircd. atheme support requires this module. exiting.\n");
-		exit(EXIT_FAILURE);
+		/* check for ident length, etc */
+	}
+	else if (strcasecmp(parv[0], "MODULES") == 0)
+	{
+		if (strstr(parv[1], "m_services_account.so"))
+		{
+			has_servicesmod = true;
+		}
+
+		if (strstr(parv[1], "m_globops.so"))
+		{
+			has_globopsmod = true;
+		}
+	}
+	else if (strcasecmp(parv[0], "END") == 0)
+	{
+		if (has_globopsmod == false)
+		{
+			fprintf(stderr, "atheme: you didn't load m_globops into inspircd. atheme support requires this module. exiting.\n");
+			exit(EXIT_FAILURE);
+		}
+
+		if (has_servicesmod == false)
+		{
+			fprintf(stderr, "atheme: you didn't load m_services_account into inspircd. atheme support requires this module. exiting.\n");
+			exit(EXIT_FAILURE);	
+		}
+	}
+	else
+	{
+		slog(LG_DEBUG, "m_capab(): unknown CAPAB type %s - out of date protocol module?", parv[0]);
 	}
 }
 

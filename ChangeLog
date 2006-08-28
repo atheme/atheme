@@ -1,3 +1,11 @@
+w00t        2006/08/28 15:36:14 UTC	(20060828-6247)
+  Log:
+  Should be prefix_mode_list, not status_mode_list, thanks jilles
+
+  Changes:	Modified:
+  +2 -2		trunk/protocol/inspircd_dev.c (File Modified) 
+
+
 w00t        2006/08/28 15:31:34 UTC	(20060828-6245)
   Log:
   FJOIN qaohv mode bouncing on TS difference. Untested, ugly code, should work though.
