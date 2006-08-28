@@ -865,7 +865,7 @@ static void m_motd(char *origin, uint8_t parc, char *parv[])
 
 static void m_admin(char *origin, uint8_t parc, char *parv[])
 {
-	handle_stats(user_find(origin));
+	handle_admin(user_find(origin));
 }
 
 static void m_join(char *origin, uint8_t parc, char *parv[])
