@@ -525,6 +525,7 @@ static void m_fjoin(char *origin, uint8_t parc, char *parv[])
 	uint8_t j;
 	uint8_t nlen;
 	boolean_t prefix = true;
+	boolean_t keep_new_modes = true;
 	char *userv[256];
 	char prefixandnick[51];
 	time_t ts;
@@ -555,6 +556,8 @@ static void m_fjoin(char *origin, uint8_t parc, char *parv[])
 			c->ts = ts;
 			hook_call_event("channel_tschange", c);
 		}
+		else if (ts > c->ts)
+			keep_new_modes = false; /* bounce them! */
 
 		/*
 		 * ok, here's the difference from 1.0 -> 1.1:
@@ -565,35 +568,82 @@ static void m_fjoin(char *origin, uint8_t parc, char *parv[])
 		 */
 		userc = sjtoken(parv[parc - 1], ' ', userv);
 
-		for (i = 0; i < userc; i++)
+		if (keep_new_modes == true)
 		{
-			nlen = 0;
-			prefix = true;
-
-			slog(LG_DEBUG, "m_fjoin(): processing user: %s", userv[i]);
-
-			for (; *userv[i]; userv[i]++)
+			for (i = 0; i < userc; i++)
 			{
-				int j;
-				for (j = 0; prefix_mode_list[j].mode; j++)
+				nlen = 0;
+				prefix = true;
+
+				slog(LG_DEBUG, "m_fjoin(): processing user: %s", userv[i]);
+
+				for (; *userv[i]; userv[i]++)
 				{
-					if (*userv[i] == prefix_mode_list[j].mode)
+					int j;
+					for (j = 0; prefix_mode_list[j].mode; j++)
 					{
-						prefixandnick[nlen++] = *userv[i];
-						continue;
-					}
+						if (*userv[i] == prefix_mode_list[j].mode)
+						{
+							prefixandnick[nlen++] = *userv[i];
+							continue;
+						}
  
+						if (*userv[i] == ',')
+						{
+							userv[i]++;
+							strncpy(prefixandnick + nlen, userv[i], sizeof(prefixandnick));
+							nlen = strlen(prefixandnick); // eww, but it makes life so much easier
+							break;
+						}
+					}
+				}
+ 
+				chanuser_add(c, prefixandnick);
+			}
+		}
+		else
+		{
+			for (i = 0; i < userc; i++)
+			{
+				/* remove prefixes. build a list of what we need to bounce first. */
+				nlen = 0;
+
+				while (*userv[i])
+				{
+					int j;
+
 					if (*userv[i] == ',')
 					{
 						userv[i]++;
-						strncpy(prefixandnick + nlen, userv[i], sizeof(prefixandnick));
-						nlen = strlen(prefixandnick); // eww, but it makes life so much easier
 						break;
 					}
+
+					for (j = 0; status_mode_list[j].mode; j++)
+					{
+						if (*userv[i] == status_mode_list[j].mode)
+						{
+							prefixandnick[nlen] = status_mode_list[j].mode;
+							nlen++;
+						}
+					}	
+
+					userv[i]++;
 				}
+
+				prefixandnick[nlen] = '\0';
+
+				char *bounce = prefixandnick;
+
+				/* now we have a list of prefixes, bounce them */
+				while (*bounce)
+				{
+					modestack_mode_param(me.name, c->name, MTYPE_DEL, *bounce, userv[i]);
+					bounce++;
+				}
+
+				/* add modeless user to channel */
+				chanuser_add(c, userv[i]);
 			}
- 
-			chanuser_add(c, prefixandnick);
 		}
 
 		if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))

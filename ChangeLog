@@ -1,3 +1,11 @@
+w00t        2006/08/28 15:03:27 UTC	(20060828-6243)
+  Log:
+  Implement basic lowerts. Bouncing (per 1.1 spec) to come
+
+  Changes:	Modified:
+  +10 -0	trunk/protocol/inspircd_dev.c (File Modified) 
+
+
 jilles      2006/08/27 14:09:17 UTC	(20060827-6241)
   Log:
   Add non-ENCAP CHGHOST.
