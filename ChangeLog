@@ -1,3 +1,11 @@
+w00t        2006/08/28 15:31:34 UTC	(20060828-6245)
+  Log:
+  FJOIN qaohv mode bouncing on TS difference. Untested, ugly code, should work though.
+
+  Changes:	Modified:
+  +65 -15	trunk/protocol/inspircd_dev.c (File Modified) 
+
+
 w00t        2006/08/28 15:03:27 UTC	(20060828-6243)
   Log:
   Implement basic lowerts. Bouncing (per 1.1 spec) to come

@@ -618,9 +618,9 @@ static void m_fjoin(char *origin, uint8_t parc, char *parv[])
 						break;
 					}
 
-					for (j = 0; status_mode_list[j].mode; j++)
+					for (j = 0; prefix_mode_list[j].mode; j++)
 					{
-						if (*userv[i] == status_mode_list[j].mode)
+						if (*userv[i] == prefix_mode_list[j].mode)
 						{
 							prefixandnick[nlen] = status_mode_list[j].mode;
 							nlen++;
