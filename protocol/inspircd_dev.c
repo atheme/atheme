@@ -858,6 +858,16 @@ static void m_stats(char *origin, uint8_t parc, char *parv[])
 	handle_stats(user_find(origin), parv[0][0]);
 }
 
+static void m_motd(char *origin, uint8_t parc, char *parv[])
+{
+	handle_motd(user_find(origin));
+}
+
+static void m_admin(char *origin, uint8_t parc, char *parv[])
+{
+	handle_stats(user_find(origin));
+}
+
 static void m_join(char *origin, uint8_t parc, char *parv[])
 {
 	user_t *u = user_find(origin);
@@ -1068,6 +1078,8 @@ void _modinit(module_t * m)
 	pcommand_add("SQUIT", m_squit);
 	pcommand_add("SERVER", m_server);
 	pcommand_add("STATS", m_stats);
+	pcommand_add("MOTD", m_motd);
+	pcommand_add("ADMIN", m_admin);
 	pcommand_add("FTOPIC", m_ftopic);
 	pcommand_add("JOIN", m_join);
 	pcommand_add("ERROR", m_error);

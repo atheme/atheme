@@ -1,3 +1,11 @@
+w00t        2006/08/28 16:34:43 UTC	(20060828-6251)
+  Log:
+  Remote STATS support
+
+  Changes:	Modified:
+  +6 -0		trunk/protocol/inspircd_dev.c (File Modified) 
+
+
 w00t        2006/08/28 16:10:43 UTC	(20060828-6249)
   Log:
   Update m_capab to support SVN 1.1 leetness, not yet finished (I want to check for incorrectly configured ident length, as inspircd's default is one greater than Atheme can handle, etc)
