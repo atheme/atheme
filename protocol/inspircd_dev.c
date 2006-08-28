@@ -242,6 +242,15 @@ static void inspircd_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *mo
 	}
 }
 
+static void inspircd_chan_lowerts(channel_t *c, user_t *u)
+{
+	slog(LG_DEBUG, "inspircd_chan_lowerts(): lowering TS for %s to %ld", 
+		c->name, (long)c->ts);
+
+	sts(":%s FJOIN %s %ld :@,%s", me.name, c->name, c->ts, u->nick);
+	sts(":%s FMODE %s %ld %s", me.name, c->name, c->ts, channel_modes(c, TRUE));
+}
+
 /* kicks a user from a channel */
 static void inspircd_kick(char *from, char *channel, char *to, char *reason)
 {
@@ -926,6 +935,7 @@ void _modinit(module_t * m)
 	quit_sts = &inspircd_quit_sts;
 	wallops = &inspircd_wallops;
 	join_sts = &inspircd_join_sts;
+	chan_lowerts = &inspircd_chan_lowerts;
 	kick = &inspircd_kick;
 	msg = &inspircd_msg;
 	notice_sts = &inspircd_notice;

@@ -1,3 +1,12 @@
+jilles      2006/08/27 14:09:17 UTC	(20060827-6241)
+  Log:
+  Add non-ENCAP CHGHOST.
+  
+
+  Changes:	Modified:
+  +15 -2	trunk/protocol/charybdis.c (File Modified) 
+
+
 w00t        2006/08/27 14:04:35 UTC	(20060827-6239)
   Log:
   Remove * prefix. Why was this here?
