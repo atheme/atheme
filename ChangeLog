@@ -1,3 +1,11 @@
+w00t        2006/08/28 16:10:43 UTC	(20060828-6249)
+  Log:
+  Update m_capab to support SVN 1.1 leetness, not yet finished (I want to check for incorrectly configured ident length, as inspircd's default is one greater than Atheme can handle, etc)
+
+  Changes:	Modified:
+  +39 -6	trunk/protocol/inspircd_dev.c (File Modified) 
+
+
 w00t        2006/08/28 15:36:14 UTC	(20060828-6247)
   Log:
   Should be prefix_mode_list, not status_mode_list, thanks jilles
