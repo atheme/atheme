@@ -1,3 +1,13 @@
+jilles      2006/08/31 15:55:58 UTC	(20060831-6261)
+  Log:
+  nickserv enforce: port over /ns enforce command from
+  ns_enforce_inspircd.c as /ns set enforce.
+  
+
+  Changes:	Modified:
+  +75 -4	trunk/contrib/ns_enforce.c (File Modified) 
+
+
 jilles      2006/08/31 15:25:39 UTC	(20060831-6259)
   Log:
   nickserv enforce: change timeout for removable

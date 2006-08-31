@@ -148,9 +148,11 @@ static void ns_cmd_release(char *origin)
 	char *password = strtok(NULL, " ");
 	char *gnick;
 	int i;
-	user_t *u = user_find_named(target), *m = user_find_named(origin);
+	user_t *u, *m = user_find_named(origin);
 	char ign[BUFSIZE];
 
+	if (!target && m->myuser != NULL)
+		target = m->myuser->name;
 	if (!target)
 	{
 		notice(nicksvs.nick, origin, STR_INSUFFICIENT_PARAMS, "RELEASE");
@@ -158,6 +160,7 @@ static void ns_cmd_release(char *origin)
 		return;
 	}
 
+	u = user_find_named(target);
 	mu = myuser_find(target);
 	
 	if (!mu)
