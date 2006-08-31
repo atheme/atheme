@@ -210,7 +210,7 @@ void reg_check(void *arg)
 								break;
 						}
 						fnc_sts(nicksvs.me->me, u, gnick, FNC_FORCE);
-						holdnick_sts(nicksvs.me->me, 300, u->nick, mu);
+						holdnick_sts(nicksvs.me->me, 3600, u->nick, mu);
 #if 0 /* can't do this, need to wait for SVSNICK to complete! -- jilles */
 						uid = uid_get();
 						introduce_nick(u->nick, "enforcer", "services.hold", "Services Enforcer", uid);

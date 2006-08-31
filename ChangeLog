@@ -1,3 +1,26 @@
+jilles      2006/08/31 15:23:16 UTC	(20060831-6257)
+  Log:
+  Add void holdnick_sts(user_t *source, int duration, const char *nick,
+  myuser_t *account) protocol function, makes the given nick
+  temporarily unavailable (except possibly to the given account)
+  for duration seconds. A duration of 0 tries to remove the effect
+  of a previous call.
+  Use this in the nickserv enforce module instead of direct sts().
+  Enforcers that cannot be removed are limited to 5 minutes.
+  
+
+  Changes:	Modified:
+  +5 -14	trunk/contrib/ns_enforce.c (File Modified) 
+  +6 -0		trunk/include/phandler.h (File Modified) 
+  +8 -0		trunk/protocol/bahamut.c (File Modified) 
+  +16 -0	trunk/protocol/charybdis.c (File Modified) 
+  +11 -0	trunk/protocol/hybrid.c (File Modified) 
+  +11 -0	trunk/protocol/ratbox.c (File Modified) 
+  +8 -0		trunk/protocol/solidircd.c (File Modified) 
+  +9 -1		trunk/protocol/unreal.c (File Modified) 
+  +6 -0		trunk/src/phandler.c (File Modified) 
+
+
 w00t        2006/08/28 23:35:57 UTC	(20060828-6255)
   Log:
   Ok, fix that compile error lack of sleep introduced, and laziness propegated.
