@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2006 William Pitcock, et al.
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the NickServ RELEASE/ENFORCE functions.
@@ -22,14 +22,17 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
+static void ns_cmd_set_enforce(char *origin);
+static void ns_help_set_enforce(char *origin);
 static void ns_cmd_release(char *origin);
 static void ns_help_release(char *origin);
 static void reg_check(void *arg);
 static void remove_idcheck(void *vuser);
 
+command_t ns_set_enforce = { "ENFORCE", "Enables or disables automatic protection of a nickname.", AC_NONE, ns_cmd_set_enforce }; 
 command_t ns_release = { "RELEASE", "Releases a services enforcer.", AC_NONE, ns_cmd_release };
 
-list_t *ns_cmdtree, *ns_helptree, userlist[HASHSIZE];
+list_t *ns_cmdtree, *ns_set_cmdtree, *ns_helptree, userlist[HASHSIZE];
 
 #if 0
 void manage_bots(void *arg)
@@ -71,6 +74,69 @@ void manage_bots(void *arg)
 	}
 }
 #endif
+
+static void ns_cmd_set_enforce(char *origin)
+{
+	user_t *u = user_find_named(origin);
+	metadata_t *md;
+	char *setting = strtok(NULL, " ");
+
+	if (!setting)
+	{
+		notice(nicksvs.nick, origin, STR_INSUFFICIENT_PARAMS, "ENFORCE");
+		notice(nicksvs.nick, origin, "Syntax: SET ENFORCE <on|off>");
+		return;
+	}
+
+	if (!u || !u->myuser)
+	{
+		notice(nicksvs.nick, origin, "You are not logged in.");
+		return;
+	}
+
+	if (strcasecmp(setting, "ON") == 0)
+	{
+		if (md = metadata_find(u->myuser, METADATA_USER, "private:doenforce"))
+		{
+			notice(nicksvs.nick, origin, "ENFORCE is already enabled.");
+		}
+		else
+		{
+			metadata_add(u->myuser, METADATA_USER, "private:doenforce", "1");
+			notice(nicksvs.nick, origin, "ENFORCE is now enabled.");
+		}
+	}
+	else if (strcasecmp(setting, "OFF") == 0)
+	{
+		if (md = metadata_find(u->myuser, METADATA_USER, "private:doenforce"))
+		{
+			metadata_delete(u->myuser, METADATA_USER, "private:doenforce");
+			notice(nicksvs.nick, origin, "ENFORCE is now disabled.");
+		}
+		else
+		{
+			notice(nicksvs.nick, origin, "ENFORCE is already disabled.");
+		}
+	}
+	else
+	{
+		notice(nicksvs.nick, origin, "Unknown value for ENFORCE. Expected values are ON or OFF.");
+	}
+}
+
+static void ns_help_set_enforce(char *origin)
+{
+	notice(nicksvs.nick, origin, "Help for \2ENFORCE\2:");
+	notice(nicksvs.nick, origin, "\2ENFORCE\2 allows you to enable protection for");
+	notice(nicksvs.nick, origin, "your nickname.");
+	notice(nicksvs.nick, origin, " ");
+	notice(nicksvs.nick, origin, "This will automatically change the nick of someone");
+	notice(nicksvs.nick, origin, "who attempts to use it without identifying in time,");
+	notice(nicksvs.nick, origin, "and temporarily block its use, which can be");
+	notice(nicksvs.nick, origin, "removed at your discretion. See help on RELEASE.");
+	notice(nicksvs.nick, origin, " ");
+	notice(nicksvs.nick, origin, "Syntax: SET ENFORCE <ON|OFF>");
+}
 
 static void ns_cmd_release(char *origin)
 {
@@ -152,7 +218,6 @@ static void ns_cmd_release(char *origin)
 
 static void ns_help_release(char *origin)
 {
-	notice(nicksvs.nick, origin, "***** \2%s Help\2 *****", nicksvs.nick);
 	notice(nicksvs.nick, origin, "Help for \2RELEASE\2:");
 	notice(nicksvs.nick, origin, "\2RELEASE\2 removes an enforcer for your nick or");
 	notice(nicksvs.nick, origin, "changes the nick of a user that is using your");
@@ -166,7 +231,6 @@ static void ns_help_release(char *origin)
 	notice(nicksvs.nick, origin, "have to wait a few minutes then.");
 	notice(nicksvs.nick, origin, " ");
 	notice(nicksvs.nick, origin, "Syntax: RELEASE <nick> [password]");
-	notice(nicksvs.nick, origin, "***** \2End of Help\2 *****");
 }
 
 void reg_check(void *arg)
@@ -195,6 +259,8 @@ void reg_check(void *arg)
 				{
 					if (u->myuser == mu)
 						continue;
+					if (!metadata_find(mu, METADATA_USER, "private:doenforce"))
+						;
 					else if (u->flags & UF_NICK_WARNED)
 					{
 						notice(nicksvs.nick, u->nick, "You failed to authenticate in time for the nickname %s", u->nick);
@@ -261,6 +327,7 @@ void _modinit(module_t *m)
 	
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
+	MODULE_USE_SYMBOL(ns_set_cmdtree, "nickserv/set", "ns_set_cmdtree");
 
 	/* Leave this for compatibility with old versions of this code
 	 * -- jilles
@@ -270,7 +337,9 @@ void _modinit(module_t *m)
 	event_add("reg_check", reg_check, NULL, 30);
 	/*event_add("manage_bots", manage_bots, NULL, 30);*/
 	command_add(&ns_release, ns_cmdtree);
+	command_add(&ns_set_enforce, ns_set_cmdtree);
 	help_addentry(ns_helptree, "RELEASE", NULL, ns_help_release);
+	help_addentry(ns_helptree, "SET ENFORCE", NULL, ns_help_set_enforce);
 	hook_add_event("user_identify");
 	hook_add_hook("user_identify", remove_idcheck);
 }
@@ -285,6 +354,8 @@ void _moddeinit()
 	event_delete(reg_check, NULL);
 	/*event_delete(manage_bots, NULL);*/
 	command_delete(&ns_release, ns_cmdtree);
+	command_delete(&ns_set_enforce, ns_set_cmdtree);
 	help_delentry(ns_helptree, "RELEASE");
+	help_delentry(ns_helptree, "SET ENFORCE");
 	hook_del_hook("user_identify", remove_idcheck);
 }
