@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for solidircd.
  *
- * $Id: solidircd.c 6141 2006-08-19 16:25:52Z jilles $
+ * $Id: solidircd.c 6257 2006-08-31 15:23:16Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/solidircd.h"
 
-DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 6141 2006-08-19 16:25:52Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 6257 2006-08-31 15:23:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -353,6 +353,13 @@ static void solidircd_fnc_sts(user_t *source, user_t *u, char *newnick, int type
 {
 	sts(":%s SVSNICK %s %s %lu", source->nick, u->nick, newnick,
 			(unsigned long)(CURRTIME - 60));
+}
+
+static void solidircd_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account)
+{
+	sts(":%s SVSHOLD %s %d :Reserved by %s for nickname owner (%s)",
+			source->nick, nick, duration, source->nick,
+			account != NULL ? account->name : nick);
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
@@ -869,6 +876,7 @@ void _modinit(module_t * m)
 	sethost_sts = &solidircd_sethost_sts;
 	fnc_sts = &solidircd_fnc_sts;
 	invite_sts = &solidircd_invite_sts;
+	holdnick_sts = &solidircd_holdnick_sts;
 
 	mode_list = solidircd_mode_list;
 	ignore_mode_list = solidircd_ignore_mode_list;

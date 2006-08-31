@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 6141 2006-08-19 16:25:52Z jilles $
+ * $Id: unreal.c 6257 2006-08-31 15:23:16Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 6141 2006-08-19 16:25:52Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 6257 2006-08-31 15:23:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -367,7 +367,14 @@ static void unreal_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
 	sts(":%s SVSNICK %s %s %lu", source->nick, u->nick, newnick,
 			(unsigned long)(CURRTIME - 60));
 }
-	
+
+static void unreal_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account)
+{
+	sts(":%s SVSHOLD %s %d :Reserved by %s for nickname owner (%s)",
+			source->nick, nick, duration, source->nick,
+			account != NULL ? account->name : nick);
+}
+
 static void m_topic(char *origin, uint8_t parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
@@ -873,6 +880,7 @@ void _modinit(module_t * m)
 	sethost_sts = &unreal_sethost_sts;
 	fnc_sts = &unreal_fnc_sts;
 	invite_sts = &unreal_invite_sts;
+	holdnick_sts = &unreal_holdnick_sts;
 
 	mode_list = unreal_mode_list;
 	ignore_mode_list = unreal_ignore_mode_list;

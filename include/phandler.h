@@ -4,7 +4,7 @@
  *
  * Protocol handlers, both generic and the actual declarations themselves.
  *
- * $Id: phandler.h 6079 2006-08-16 16:44:39Z jilles $
+ * $Id: phandler.h 6257 2006-08-31 15:23:16Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -159,6 +159,11 @@ E void (*sethost_sts)(char *source, char *target, char *host);
  * FNC_FORCE:  force a user off their nick (kill if unsupported)
  */
 E void (*fnc_sts)(user_t *source, user_t *u, char *newnick, int type);
+/* temporarily make a nick unavailable to users
+ * source is the responsible service
+ * duration is in seconds, 0 to remove the effect of a previous call
+ * account is an account that may still use the nick, or NULL */
+E void (*holdnick_sts)(user_t *source, int duration, const char *nick, myuser_t *account);
 /* change nick, user, host and/or services login name for a user
  * target may also be a not yet fully introduced UID (for SASL) */
 E void (*svslogin_sts)(char *target, char *nick, char *user, char *host, char *login);
@@ -189,6 +194,7 @@ E boolean_t generic_on_logout(char *origin, char *user, char *wantedhost);
 E void generic_jupe(char *server, char *reason);
 E void generic_sethost_sts(char *source, char *target, char *host);
 E void generic_fnc_sts(user_t *source, user_t *u, char *newnick, int type);
+E void generic_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account);
 E void generic_svslogin_sts(char *target, char *nick, char *user, char *host, char *login);
 E void generic_sasl_sts(char *target, char mode, char *data);
 

@@ -1,3 +1,11 @@
+w00t        2006/08/28 23:35:57 UTC	(20060828-6255)
+  Log:
+  Ok, fix that compile error lack of sleep introduced, and laziness propegated.
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/inspircd_dev.c (File Modified) 
+
+
 w00t        2006/08/28 23:25:59 UTC	(20060828-6253)
   Log:
   Remote ADMIN and MOTD support, per 1.1 SVN

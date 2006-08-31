@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 6141 2006-08-19 16:25:52Z jilles $
+ * $Id: ratbox.c 6257 2006-08-31 15:23:16Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 6141 2006-08-19 16:25:52Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 6257 2006-08-31 15:23:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -411,6 +411,16 @@ static void ratbox_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
 			(unsigned long)u->ts);
 	else
 		generic_fnc_sts(source, u, newnick, type);
+}
+
+static void ratbox_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account)
+{
+	if (duration == 0)
+		return; /* can't do this safely */
+	sts(":%s ENCAP * RESV %d %s 0 :Reserved by %s for nickname owner (%s)",
+			CLIENT_NAME(source), duration > 300 ? 300 : duration,
+			nick, source->nick,
+			account != NULL ? account->name : nick);
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
@@ -1139,6 +1149,7 @@ void _modinit(module_t * m)
 	jupe = &ratbox_jupe;
 	fnc_sts = &ratbox_fnc_sts;
 	invite_sts = &ratbox_invite_sts;
+	holdnick_sts = &ratbox_holdnick_sts;
 
 	mode_list = ratbox_mode_list;
 	ignore_mode_list = ratbox_ignore_mode_list;

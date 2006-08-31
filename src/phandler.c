@@ -4,7 +4,7 @@
  *
  * Generic protocol event handlers.
  *
- * $Id: phandler.c 5364 2006-06-11 20:28:33Z jilles $
+ * $Id: phandler.c 6257 2006-08-31 15:23:16Z jilles $
  */
 
 #include "atheme.h"
@@ -32,6 +32,7 @@ boolean_t (*ircd_on_logout) (char *origin, char *user, char *wantedhost) = gener
 void (*jupe) (char *server, char *reason) = generic_jupe;
 void (*sethost_sts) (char *source, char *target, char *host) = generic_sethost_sts;
 void (*fnc_sts) (user_t *source, user_t *u, char *newnick, int type) = generic_fnc_sts;
+void (*holdnick_sts)(user_t *source, int duration, const char *nick, myuser_t *account) = generic_holdnick_sts;
 void (*invite_sts) (user_t *source, user_t *target, channel_t *channel) = generic_invite_sts;
 void (*svslogin_sts) (char *target, char *nick, char *user, char *host, char *login) = generic_svslogin_sts;
 void (*sasl_sts) (char *target, char mode, char *data) = generic_sasl_sts;
@@ -186,6 +187,11 @@ void generic_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
 {
 	if (type == FNC_FORCE)
 		skill(source->nick, u->nick, "Nickname enforcement (%s)", u->nick);
+}
+
+E void generic_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account)
+{
+	/* nothing to do here. */	
 }
 
 void generic_invite_sts(user_t *source, user_t *target, channel_t *channel)

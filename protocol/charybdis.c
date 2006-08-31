@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 6241 2006-08-27 14:09:17Z jilles $
+ * $Id: charybdis.c 6257 2006-08-31 15:23:16Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6241 2006-08-27 14:09:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6257 2006-08-31 15:23:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -523,6 +523,21 @@ static void charybdis_sasl_sts(char *target, char mode, char *data)
 			target,
 			mode,
 			data);
+}
+
+static void charybdis_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account)
+{
+	if (use_euid)
+		sts(":%s ENCAP * NICKDELAY %d %s", ME, duration, nick);
+	else
+	{
+		if (duration == 0)
+			return; /* can't do this safely */
+		sts(":%s ENCAP * RESV %d %s 0 :Reserved by %s for nickname owner (%s)",
+				CLIENT_NAME(source), duration > 300 ? 300 : duration,
+				nick, source->nick,
+				account != NULL ? account->name : nick);
+	}
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
@@ -1429,6 +1444,7 @@ void _modinit(module_t * m)
 	sethost_sts = &charybdis_sethost_sts;
 	fnc_sts = &charybdis_fnc_sts;
 	invite_sts = &charybdis_invite_sts;
+	holdnick_sts = &charybdis_holdnick_sts;
 	svslogin_sts = &charybdis_svslogin_sts;
 	sasl_sts = &charybdis_sasl_sts;
 

@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 6141 2006-08-19 16:25:52Z jilles $
+ * $Id: hybrid.c 6257 2006-08-31 15:23:16Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 6141 2006-08-19 16:25:52Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 6257 2006-08-31 15:23:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -421,6 +421,16 @@ static void hybrid_sethost_sts(char *source, char *target, char *host)
 		return;
 
 	sts(":%s CHGHOST %s :%s", ME, tu->nick, host);
+}
+
+static void hybrid_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account)
+{
+	if (duration == 0)
+		return; /* can't do this safely */
+	sts(":%s ENCAP * RESV %d %s 0 :Reserved by %s for nickname owner (%s)",
+			CLIENT_NAME(source), duration > 300 ? 300 : duration,
+			nick, source->nick,
+			account != NULL ? account->name : nick);
 }
 
 static void m_topic(char *origin, uint8_t parc, char *parv[])
@@ -1160,6 +1170,7 @@ void _modinit(module_t * m)
 	jupe = &hybrid_jupe;
 	fnc_sts = &hybrid_fnc_sts;
 	invite_sts = &hybrid_invite_sts;
+	holdnick_sts = &hybrid_holdnick_sts;
 	sethost_sts = &hybrid_sethost_sts;
 
 	mode_list = hybrid_mode_list;

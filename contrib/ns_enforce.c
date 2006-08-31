@@ -14,7 +14,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h" /* XXX direct use of sts() */
 
 DECLARE_MODULE_V1
 (
@@ -112,15 +111,10 @@ static void ns_cmd_release(char *origin)
 		{
 			if (md = metadata_find(mu, METADATA_USER, "private:enforcer"))
 				metadata_delete(mu, METADATA_USER, "private:enforcer");
-			if (ircd->type == PROTOCOL_BAHAMUT || ircd->type == PROTOCOL_SOLIDIRCD || ircd->type == PROTOCOL_UNREAL)
-			{
-				logcommand(nicksvs.me, m, CMDLOG_DO, "RELEASE %s", target);
-				sts(":%s SVSHOLD %s 0", nicksvs.nick, target);
-				notice(nicksvs.nick, origin, "\2%s\2 has been released.", target);
-				/*hook_call_event("user_identify", u);*/
-			}
-			else
-				notice(nicksvs.nick, origin, "Cannot do RELEASE on this ircd.", target);
+			logcommand(nicksvs.me, m, CMDLOG_DO, "RELEASE %s", target);
+			holdnick_sts(nicksvs.me->me, 0, target, mu);
+			notice(nicksvs.nick, origin, "\2%s\2 has been released.", target);
+			/*hook_call_event("user_identify", u);*/
 		}
 		else
 		{
@@ -216,10 +210,7 @@ void reg_check(void *arg)
 								break;
 						}
 						fnc_sts(nicksvs.me->me, u, gnick, FNC_FORCE);
-						if (ircd->type == PROTOCOL_BAHAMUT || ircd->type == PROTOCOL_SOLIDIRCD || ircd->type == PROTOCOL_UNREAL)
-							sts(":%s SVSHOLD %s %d :Reserved by %s for nickname owner", nicksvs.nick, u->nick, 300, nicksvs.nick);
-						else if (ircd->type == PROTOCOL_RATBOX || ircd->type == PROTOCOL_CHARYBDIS)
-							sts(":%s ENCAP * RESV %d %s 0 :Reserved by %s for nickname owner", CLIENT_NAME(nicksvs.me->me), 300, u->nick, nicksvs.nick);
+						holdnick_sts(nicksvs.me->me, 300, u->nick, mu);
 #if 0 /* can't do this, need to wait for SVSNICK to complete! -- jilles */
 						uid = uid_get();
 						introduce_nick(u->nick, "enforcer", "services.hold", "Services Enforcer", uid);
