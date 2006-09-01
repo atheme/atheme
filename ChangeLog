@@ -1,3 +1,13 @@
+jilles      2006/08/31 16:01:57 UTC	(20060831-6263)
+  Log:
+  Allow /ns release without nick (defaults to the nick
+  the user is identified to).
+  
+
+  Changes:	Modified:
+  +4 -1		trunk/contrib/ns_enforce.c (File Modified) 
+
+
 jilles      2006/08/31 15:55:58 UTC	(20060831-6261)
   Log:
   nickserv enforce: port over /ns enforce command from

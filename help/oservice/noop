@@ -15,8 +15,8 @@ Syntax: NOOP DEL HOSTMASK <nick!user@host>
 Syntax: NOOP DEL SERVER <mask>
 
 Examples:
-    /msg &nick& AKILL DEL HOSTMASK *!some@operator.host
-    /msg &nick& AKILL DEL SERVER bad.server
+    /msg &nick& NOOP DEL HOSTMASK *!some@operator.host
+    /msg &nick& NOOP DEL SERVER bad.server
 
 Syntax: NOOP LIST HOSTMASK
 Syntax: NOOP LIST SERVER
