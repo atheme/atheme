@@ -1,3 +1,12 @@
+jilles      2006/09/01 00:45:40 UTC	(20060901-6265)
+  Log:
+  operserv noop helpfile had akill instead of noop somewhere
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/help/oservice/noop (File Modified) 
+
+
 jilles      2006/08/31 16:01:57 UTC	(20060831-6263)
   Log:
   Allow /ns release without nick (defaults to the nick
