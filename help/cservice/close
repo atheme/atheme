@@ -5,6 +5,9 @@ who enters is immediately kickbanned. The channel
 cannot be dropped and foundership cannot be
 transferred.
 
+Enabling CLOSE will immediately kick all
+users from the channel.
+
 Use CLOSE OFF to reopen a channel. While closed,
 channels will still expire.
 

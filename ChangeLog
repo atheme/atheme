@@ -1,3 +1,12 @@
+jilles      2006/09/01 01:04:53 UTC	(20060901-6267)
+  Log:
+  operserv ignore help file: formatting change to table
+  
+
+  Changes:	Modified:
+  +4 -4		trunk/help/oservice/ignore (File Modified) 
+
+
 jilles      2006/09/01 00:45:40 UTC	(20060901-6265)
   Log:
   operserv noop helpfile had akill instead of noop somewhere
