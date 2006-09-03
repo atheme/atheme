@@ -75,9 +75,6 @@ install: build
 	$(INSTALL) -m 755 -c $(BIN) $(PREFIX)/bin
 	$(INSTALL) -m 640 -c ../dist/example.conf $(PREFIX)/etc
 	$(INSTALL) -m 640 -c ../dist/example.userserv.conf $(PREFIX)/etc
-	if [ ! -r $(PREFIX)/etc/atheme.db ]; then \
-		$(INSTALL) -m 640 -c ../dist/atheme.db $(PREFIX)/etc ; \
-	fi
 	if [ ! -r $(PREFIX)/etc/atheme.chk ]; then \
 		$(INSTALL) -m 640 -c ../dist/atheme.chk $(PREFIX)/etc ; \
 	fi
