@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing clone detection.
  *
- * $Id: clones.c 6283 2006-09-03 22:58:36Z jilles $
+ * $Id: clones.c 6285 2006-09-03 23:03:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 6283 2006-09-03 22:58:36Z jilles $",
+	"$Id: clones.c 6285 2006-09-03 23:03:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -270,6 +270,7 @@ static void os_cmd_clones_kline(char *origin, char *channel)
 		kline_enabled = TRUE;
 		wallops("\2%s\2 enabled CLONES klines", origin);
 		snoop("CLONES:KLINE:ON: \2%s\2", origin);
+		logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "CLONES KLINE ON");
 		write_exemptdb();
 	}
 	else if (!strcasecmp(arg, "OFF"))
@@ -282,6 +283,7 @@ static void os_cmd_clones_kline(char *origin, char *channel)
 		kline_enabled = FALSE;
 		wallops("\2%s\2 disabled CLONES klines", origin);
 		snoop("CLONES:KLINE:OFF: \2%s\2", origin);
+		logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "CLONES KLINE OFF");
 		write_exemptdb();
 	}
 	else
@@ -312,6 +314,7 @@ static void os_cmd_clones_list(char *origin, char *channel)
 		}
 	}
 	notice(opersvs.nick, origin, "End of CLONES LIST");
+	logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "CLONES LIST");
 }
 
 static void os_cmd_clones_addexempt(char *origin, char *channel)
@@ -356,6 +359,7 @@ static void os_cmd_clones_addexempt(char *origin, char *channel)
 
 	node_add(c, node_create(), &clone_exempts);
 	notice(opersvs.nick, origin, "Added \2%s\2 to clone exempt list.", ip);
+	logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "CLONES ADDEXEMPT %s", ip);
 	write_exemptdb();
 }
 
@@ -379,6 +383,7 @@ static void os_cmd_clones_delexempt(char *origin, char *channel)
 			node_del(n, &clone_exempts);
 			node_free(n);
 			notice(opersvs.nick, origin, "Removed \2%s\2 from clone exempt list.", arg);
+			logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "CLONES DELEXEMPT %s", arg);
 			write_exemptdb();
 			return;
 		}
@@ -398,6 +403,7 @@ static void os_cmd_clones_listexempt(char *origin, char *channel)
 		notice(opersvs.nick, origin, "%s (%d, %s)", c->ip, c->clones, c->reason);
 	}
 	notice(opersvs.nick, origin, "End of CLONES LISTEXEMPT");
+	logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "CLONES LISTEXEMPT");
 }
 
 static void clones_newuser(void *vptr)
