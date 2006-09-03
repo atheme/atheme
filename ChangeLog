@@ -1,3 +1,12 @@
+jilles      2006/09/03 18:34:42 UTC	(20060903-6271)
+  Log:
+  Shut down if too many services are killed in one second.
+  
+
+  Changes:	Modified:
+  +14 -1	trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2006/09/01 01:05:31 UTC	(20060901-6269)
   Log:
   chanserv close help file: clarify that CLOSE ON will

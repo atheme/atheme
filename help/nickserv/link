@@ -1,0 +1,10 @@
+Syntax - LINK
+
+Adds your current nickname as a child nickname of your
+primary account. The new nickname must not be
+registered yet.
+
+Example:
+    /msg &nick& IDENTIFY OldNick sesame
+    /nick NewNick
+    /msg &nick& LINK
