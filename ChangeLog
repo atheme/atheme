@@ -1,3 +1,14 @@
+pippijn     2006/09/03 22:03:45 UTC	(20060903-6273)
+  Log:
+  Merged
+  
+
+  Changes:	Modified:
+  +9 -0		trunk/help/cservice/sendpass (File Added) 
+  +10 -0	trunk/help/nickserv/link (File Added) 
+  +335 -0	trunk/include/extern.h (File Added) 
+
+
 jilles      2006/09/03 18:34:42 UTC	(20060903-6271)
   Log:
   Shut down if too many services are killed in one second.
