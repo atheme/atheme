@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 6153 2006-08-19 21:46:12Z jilles $
+ * $Id: ptasks.c 6271 2006-09-03 18:34:42Z jilles $
  */
 
 #include "atheme.h"
@@ -480,6 +480,8 @@ void handle_kill(char *origin, char *victim, char *reason)
 	server_t *source_server;
 	user_t *source_user;
 	user_t *u;
+	static time_t lastkill = 0;
+	static int killcount = 0;
 
 	if (origin == NULL)
 		source = me.actual;
@@ -496,7 +498,18 @@ void handle_kill(char *origin, char *victim, char *reason)
 	else if (u->server == me.me)
 	{
 		slog(LG_INFO, "handle_kill(): %s killed service %s (%s)", source, u->nick, reason);
-		reintroduce_user(u);
+		if (lastkill != CURRTIME && killcount < 5 + me.me->users)
+			killcount = 0, lastkill = CURRTIME;
+		killcount++;
+		if (killcount < 5 + me.me->users)
+			reintroduce_user(u);
+		else
+		{
+			slog(LG_ERROR, "handle_kill(): services kill fight (%s -> %s), shutting down", source, u->nick);
+			wallops("Services kill fight (%s -> %s), shutting down!", source, u->nick);
+			snoop("ERROR: Services kill fight (%s -> %s), shutting down!", source, u->nick);
+			runflags |= RF_SHUTDOWN;
+		}
 	}
 	else
 	{

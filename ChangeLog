@@ -1,3 +1,13 @@
+jilles      2006/09/01 01:05:31 UTC	(20060901-6269)
+  Log:
+  chanserv close help file: clarify that CLOSE ON will
+  immediately kick all users from channel
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/help/cservice/close (File Modified) 
+
+
 jilles      2006/09/01 01:04:53 UTC	(20060901-6267)
   Log:
   operserv ignore help file: formatting change to table
