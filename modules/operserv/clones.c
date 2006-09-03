@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing clone detection.
  *
- * $Id: clones.c 6169 2006-08-20 14:11:58Z jilles $
+ * $Id: clones.c 6283 2006-09-03 22:58:36Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 6169 2006-08-20 14:11:58Z jilles $",
+	"$Id: clones.c 6283 2006-09-03 22:58:36Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,6 +20,7 @@ static void clones_newuser(void *);
 static void clones_userquit(void *);
 
 static void os_cmd_clones(char *);
+static void os_cmd_clones_kline(char *, char *);
 static void os_cmd_clones_list(char *, char *);
 static void os_cmd_clones_addexempt(char *, char *);
 static void os_cmd_clones_delexempt(char *, char *);
@@ -33,6 +34,7 @@ list_t *os_helptree;
 list_t os_clones_cmds;
 
 static list_t clone_exempts;
+boolean_t kline_enabled;
 dictionary_tree_t *hostlist;
 BlockHeap *hostentry_heap;
 
@@ -53,6 +55,7 @@ struct hostentry_
 
 command_t os_clones = { "CLONES", "Manages network wide clones.", PRIV_AKILL, os_cmd_clones };
 
+fcommand_t os_clones_kline = { "KLINE", AC_NONE, os_cmd_clones_kline };
 fcommand_t os_clones_list = { "LIST", AC_NONE, os_cmd_clones_list };
 fcommand_t os_clones_addexempt = { "ADDEXEMPT", AC_NONE, os_cmd_clones_addexempt };
 fcommand_t os_clones_delexempt = { "DELEXEMPT", AC_NONE, os_cmd_clones_delexempt };
@@ -68,6 +71,7 @@ void _modinit(module_t *m)
 
 	command_add(&os_clones, os_cmdtree);
 
+	fcommand_add(&os_clones_kline, &os_clones_cmds);
 	fcommand_add(&os_clones_list, &os_clones_cmds);
 	fcommand_add(&os_clones_addexempt, &os_clones_cmds);
 	fcommand_add(&os_clones_delexempt, &os_clones_cmds);
@@ -130,6 +134,7 @@ void _moddeinit(void)
 
 	command_delete(&os_clones, os_cmdtree);
 
+	fcommand_delete(&os_clones_kline, &os_clones_cmds);
 	fcommand_delete(&os_clones_list, &os_clones_cmds);
 	fcommand_delete(&os_clones_addexempt, &os_clones_cmds);
 	fcommand_delete(&os_clones_delexempt, &os_clones_cmds);
@@ -153,6 +158,7 @@ static void write_exemptdb(void)
 		return;
 	}
 
+	fprintf(f, "CK %d\n", kline_enabled ? 1 : 0);
 	LIST_FOREACH(n, clone_exempts.head)
 	{
 		c = n->data;
@@ -203,6 +209,13 @@ static void load_exemptdb(void)
 				node_add(c, node_create(), &clone_exempts);
 			}
 		}
+		else if (!strcmp(item, "CK"))
+		{
+			char *enable = strtok(NULL, " ");
+
+			if (enable != NULL)
+				kline_enabled = atoi(enable) != 0;
+		}
 	}
 
 	fclose(f);
@@ -238,6 +251,46 @@ static void os_cmd_clones(char *origin)
 	}
 	
 	fcommand_exec(opersvs.me, "", origin, cmd, &os_clones_cmds);
+}
+
+static void os_cmd_clones_kline(char *origin, char *channel)
+{
+	const char *arg = strtok(NULL, " ");
+
+	if (arg == NULL)
+		arg = "";
+
+	if (!strcasecmp(arg, "ON"))
+	{
+		if (kline_enabled)
+		{
+			notice(opersvs.nick, origin, "CLONES klines are already enabled.");
+			return;
+		}
+		kline_enabled = TRUE;
+		wallops("\2%s\2 enabled CLONES klines", origin);
+		snoop("CLONES:KLINE:ON: \2%s\2", origin);
+		write_exemptdb();
+	}
+	else if (!strcasecmp(arg, "OFF"))
+	{
+		if (!kline_enabled)
+		{
+			notice(opersvs.nick, origin, "CLONES klines are already disabled.");
+			return;
+		}
+		kline_enabled = FALSE;
+		wallops("\2%s\2 disabled CLONES klines", origin);
+		snoop("CLONES:KLINE:OFF: \2%s\2", origin);
+		write_exemptdb();
+	}
+	else
+	{
+		if (kline_enabled)
+			notice(opersvs.nick, origin, "CLONES klines are currently enabled.");
+		else
+			notice(opersvs.nick, origin, "CLONES klines are currently disabled.");
+	}
 }
 
 static void os_cmd_clones_list(char *origin, char *channel)
@@ -372,9 +425,9 @@ static void clones_newuser(void *vptr)
 	if (i > 3 && !is_exempt(u->ip))
 	{
 		if (i < 6)
-		{
 			snoop("CLONES: %d clones on %s", i, u->ip);
-		}
+		else if (!kline_enabled)
+			snoop("CLONES: %d clones on %s (TKLINE disabled)", i, u->ip);
 		else
 		{
 			snoop("CLONES: %d clones on %s (TKLINE due to excess clones)", i, u->ip);
