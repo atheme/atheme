@@ -1,3 +1,12 @@
+jilles      2006/09/03 23:03:38 UTC	(20060903-6285)
+  Log:
+  operserv clones: add command logging
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/operserv/clones.c (File Modified) 
+
+
 jilles      2006/09/03 22:58:36 UTC	(20060903-6283)
   Log:
   Add /os clones kline on|off, defaults to off, saved to exempts.db.
