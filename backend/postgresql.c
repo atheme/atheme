@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 6035 2006-08-14 14:05:41Z jilles $
+ * $Id: postgresql.c 6277 2006-09-03 22:30:26Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 6035 2006-08-14 14:05:41Z jilles $",
+	"$Id: postgresql.c 6277 2006-09-03 22:30:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -275,7 +275,6 @@ static void postgresql_db_save(void *arg)
 	safe_query("COMMIT TRANSACTION;");
 }
 
-/* loads atheme.db */
 static void postgresql_db_load(void)
 {
 	myuser_t *mu;

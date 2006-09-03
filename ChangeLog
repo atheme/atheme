@@ -1,3 +1,14 @@
+pippijn     2006/09/03 22:05:48 UTC	(20060903-6275)
+  Log:
+  Unmerged :S sorry
+  
+
+  Changes:	Modified:
+  +0 -9		trunk/help/cservice/sendpass (File Deleted) 
+  +0 -10	trunk/help/nickserv/link (File Deleted) 
+  +0 -335	trunk/include/extern.h (File Deleted) 
+
+
 pippijn     2006/09/03 22:03:45 UTC	(20060903-6273)
   Log:
   Merged
