@@ -4,7 +4,7 @@
  * 
  * LoveServ implementation.
  *
- * $Id$
+ * $Id: ircd_loveserv.c 6289 2006-09-04 15:45:05Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
         "contrib/ircd_loveserv", FALSE, _modinit, _moddeinit,
-        "$Id: ircd_catserv.c 4095 2005-12-15 08:55:00Z w00t $",
+        "$Id: ircd_loveserv.c 6289 2006-09-04 15:45:05Z jilles $",
         "Atheme Development Group <http://www.atheme.org>"
 );
 
