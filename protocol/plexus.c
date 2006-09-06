@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 6297 2006-09-06 14:41:39Z pippijn $
+ * $Id: plexus.c 6299 2006-09-06 15:23:54Z jilles $
  */
 
 /* option: set the netadmin umode +N */
@@ -15,7 +15,7 @@
 #include "pmodule.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 6297 2006-09-06 14:41:39Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 6299 2006-09-06 15:23:54Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -766,32 +766,32 @@ void _modinit(module_t * m)
 
 	ircd = &PleXusIRCd;
 
-	pcommand_add("PING", m_ping);
-	pcommand_add("PONG", m_pong);
-	pcommand_add("PRIVMSG", m_privmsg);
-	pcommand_add("NOTICE", m_notice);
-	pcommand_add("SJOIN", m_sjoin);
-	pcommand_add("PART", m_part);
-	pcommand_add("NICK", m_nick);
-	pcommand_add("QUIT", m_quit);
-	pcommand_add("MODE", m_mode);
-	pcommand_add("KICK", m_kick);
-	pcommand_add("KILL", m_kill);
-	pcommand_add("SQUIT", m_squit);
-	pcommand_add("SERVER", m_server);
-	pcommand_add("STATS", m_stats);
-	pcommand_add("ADMIN", m_admin);
-	pcommand_add("VERSION", m_version);
-	pcommand_add("INFO", m_info);
-	pcommand_add("WHOIS", m_whois);
-	pcommand_add("TRACE", m_trace);
-	pcommand_add("JOIN", m_join);
-	pcommand_add("PASS", m_pass);
-	pcommand_add("ERROR", m_error);
-	pcommand_add("TOPIC", m_topic);
-	pcommand_add("CAPAB", m_capab);
-	pcommand_add("ENCAP", m_encap);
-	pcommand_add("MOTD", m_motd);
+	pcommand_add("PING", m_ping, 1, MSRC_USER | MSRC_SERVER);
+	pcommand_add("PONG", m_pong, 1, MSRC_SERVER);
+	pcommand_add("PRIVMSG", m_privmsg, 2, MSRC_USER);
+	pcommand_add("NOTICE", m_notice, 2, MSRC_UNREG | MSRC_USER | MSRC_SERVER);
+	pcommand_add("SJOIN", m_sjoin, 4, MSRC_SERVER);
+	pcommand_add("PART", m_part, 1, MSRC_USER);
+	pcommand_add("NICK", m_nick, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("QUIT", m_quit, 1, MSRC_USER);
+	pcommand_add("MODE", m_mode, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("KICK", m_kick, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("KILL", m_kill, 1, MSRC_USER | MSRC_SERVER);
+	pcommand_add("SQUIT", m_squit, 1, MSRC_USER | MSRC_SERVER);
+	pcommand_add("SERVER", m_server, 3, MSRC_UNREG | MSRC_SERVER);
+	pcommand_add("STATS", m_stats, 2, MSRC_USER);
+	pcommand_add("ADMIN", m_admin, 1, MSRC_USER);
+	pcommand_add("VERSION", m_version, 1, MSRC_USER);
+	pcommand_add("INFO", m_info, 1, MSRC_USER);
+	pcommand_add("WHOIS", m_whois, 2, MSRC_USER);
+	pcommand_add("TRACE", m_trace, 1, MSRC_USER);
+	pcommand_add("JOIN", m_join, 1, MSRC_USER);
+	pcommand_add("PASS", m_pass, 1, MSRC_UNREG);
+	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);
+	pcommand_add("TOPIC", m_topic, 2, MSRC_USER);
+	pcommand_add("CAPAB", m_capab, 1, MSRC_UNREG);
+	pcommand_add("ENCAP", m_encap, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
 
 	m->mflags = MODTYPE_CORE;
 

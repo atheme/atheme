@@ -4,7 +4,7 @@
  *
  * This file contains IRC interaction routines.
  *
- * $Id: parse.c 6291 2006-09-06 02:26:55Z pippijn $
+ * $Id: parse.c 6299 2006-09-06 15:23:54Z jilles $
  */
 
 #include "atheme.h"
@@ -131,10 +131,32 @@ void irc_parse(char *line)
 
 		/* take the command through the hash table */
 		if ((pcmd = pcommand_find(command)))
+		{
+			if (si.su && !(pcmd->sourcetype & MSRC_USER))
+			{
+				slog(LG_INFO, "irc_parse(): user %s sent disallowed command %s", si.su->nick, pcmd->token);
+				return;
+			}
+			else if (si.s && !(pcmd->sourcetype & MSRC_SERVER))
+			{
+				slog(LG_INFO, "irc_parse(): server %s sent disallowed command %s", si.s->name, pcmd->token);
+				return;
+			}
+			else if (!me.recvsvr && !(pcmd->sourcetype & MSRC_UNREG))
+			{
+				slog(LG_INFO, "irc_parse(): unregistered server sent disallowed command %s", pcmd->token);
+				return;
+			}
+			if (parc < pcmd->minparc)
+			{
+				slog(LG_INFO, "irc_parse(): insufficient parameters for command %s", pcmd->token);
+				return;
+			}
 			if (pcmd->handler)
 			{
-                                pcmd->handler(&si, parc, parv);
+				pcmd->handler(&si, parc, parv);
 			}
+		}
 	}
 }
 
@@ -249,10 +271,32 @@ void p10_parse(char *line)
 
 		/* take the command through the hash table */
 		if ((pcmd = pcommand_find(command)))
+		{
+			if (si.su && !(pcmd->sourcetype & MSRC_USER))
+			{
+				slog(LG_INFO, "irc_parse(): user %s sent disallowed command %s", si.su->nick, pcmd->token);
+				return;
+			}
+			else if (si.s && !(pcmd->sourcetype & MSRC_SERVER))
+			{
+				slog(LG_INFO, "irc_parse(): server %s sent disallowed command %s", si.s->name, pcmd->token);
+				return;
+			}
+			else if (!me.recvsvr && !(pcmd->sourcetype & MSRC_UNREG))
+			{
+				slog(LG_INFO, "irc_parse(): unregistered server sent disallowed command %s", pcmd->token);
+				return;
+			}
+			if (parc < pcmd->minparc)
+			{
+				slog(LG_INFO, "irc_parse(): insufficient parameters for command %s", pcmd->token);
+				return;
+			}
 			if (pcmd->handler)
 			{
 				pcmd->handler(&si, parc, parv);
 				return;
 			}
+		}
 	}
 }

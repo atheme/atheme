@@ -1,3 +1,25 @@
+pippijn     2006/09/06 14:41:39 UTC	(20060906-6297)
+  Log:
+  Fixed bad bug in plexus protocol module and cleaned up some unused variables.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/backend/flatfile.c (File Modified) 
+  +0 -1		trunk/protocol/asuka.c (File Modified) 
+  +0 -1		trunk/protocol/bircd.c (File Modified) 
+  +0 -1		trunk/protocol/charybdis.c (File Modified) 
+  +0 -1		trunk/protocol/hybrid.c (File Modified) 
+  +1 -1		trunk/protocol/hyperion.c (File Modified) 
+  +0 -4		trunk/protocol/inspircd.c (File Modified) 
+  +0 -2		trunk/protocol/inspircd_dev.c (File Modified) 
+  +0 -3		trunk/protocol/nefarious.c (File Modified) 
+  +11 -5	trunk/protocol/plexus.c (File Modified) 
+  +0 -1		trunk/protocol/ratbox.c (File Modified) 
+  +0 -1		trunk/protocol/undernet.c (File Modified) 
+  +0 -1		trunk/src/node.c (File Modified) 
+  +0 -2		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/09/06 14:02:52 UTC	(20060906-6295)
   Log:
   Fix some uninitialized variables and various other compiler warnings.

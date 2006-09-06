@@ -5,7 +5,7 @@
  * Protocol module stuff.
  * Modules usually do not need this.
  *
- * $Id: pmodule.h 6291 2006-09-06 02:26:55Z pippijn $
+ * $Id: pmodule.h 6299 2006-09-06 15:23:54Z jilles $
  */
 
 #ifndef PMODULE_H
@@ -16,7 +16,14 @@ typedef struct pcommand_ pcommand_t;
 struct pcommand_ {
 	char	*token;
 	void	(*handler)(sourceinfo_t *si, uint8_t parc, char *parv[]);
+	int	minparc;
+	int	sourcetype;
 };
+
+/* values for sourcetype */
+#define MSRC_UNREG	1 /* before SERVER is sent */
+#define MSRC_USER	2 /* from users */
+#define MSRC_SERVER	4 /* from servers */
 
 /* pmodule.c */
 E BlockHeap *pcommand_heap;
@@ -27,7 +34,8 @@ E boolean_t pmodule_loaded;
 
 E void pcommand_init(void);
 E void pcommand_add(char *token,
-        void (*handler)(sourceinfo_t *si, uint8_t parc, char *parv[]));
+	void (*handler)(sourceinfo_t *si, uint8_t parc, char *parv[]),
+	int minparc, int sourcetype);
 E void pcommand_delete(char *token);
 E pcommand_t *pcommand_find(char *token);
 

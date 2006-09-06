@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree stable branch inspircd.
  *
- * $Id: inspircd.c 6297 2006-09-06 14:41:39Z pippijn $
+ * $Id: inspircd.c 6299 2006-09-06 15:23:54Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 6297 2006-09-06 14:41:39Z pippijn $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 6299 2006-09-06 15:23:54Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -868,33 +868,33 @@ void _modinit(module_t * m)
 
 	ircd = &InspIRCd;
 
-	pcommand_add("PING", m_ping);
-	pcommand_add("PONG", m_pong);
-	pcommand_add("PRIVMSG", m_privmsg);
-	pcommand_add("NOTICE", m_notice);
-	pcommand_add("FJOIN", m_fjoin);
-	pcommand_add("PART", m_part);
-	pcommand_add("NICK", m_nick);
-	pcommand_add("QUIT", m_quit);
-	pcommand_add("MODE", m_mode);
-	pcommand_add("FMODE", m_mode);
-	pcommand_add("SAMODE", m_samode);
-	pcommand_add("SAJOIN", m_sajoin);
-	pcommand_add("SAPART", m_sapart);
-	pcommand_add("SANICK", m_sanick);
-	pcommand_add("KICK", m_kick);
-	pcommand_add("KILL", m_kill);
-	pcommand_add("SQUIT", m_squit);
-	pcommand_add("SERVER", m_server);
-	pcommand_add("FTOPIC", m_ftopic);
-	pcommand_add("JOIN", m_join);
-	pcommand_add("ERROR", m_error);
-	pcommand_add("TOPIC", m_topic);
-	pcommand_add("FHOST", m_fhost);
-	pcommand_add("IDLE", m_idle);
-	pcommand_add("OPERTYPE", m_opertype);
-	pcommand_add("METADATA", m_metadata);
-	pcommand_add("CAPAB", m_capab);
+	pcommand_add("PING", m_ping, 1, MSRC_USER | MSRC_SERVER);
+	pcommand_add("PONG", m_pong, 1, MSRC_SERVER);
+	pcommand_add("PRIVMSG", m_privmsg, 2, MSRC_USER);
+	pcommand_add("NOTICE", m_notice, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("FJOIN", m_fjoin, 3, MSRC_SERVER);
+	pcommand_add("PART", m_part, 1, MSRC_USER);
+	pcommand_add("NICK", m_nick, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("QUIT", m_quit, 1, MSRC_USER);
+	pcommand_add("MODE", m_mode, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("FMODE", m_mode, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("SAMODE", m_samode, 3, MSRC_USER);
+	pcommand_add("SAJOIN", m_sajoin, 2, MSRC_USER);
+	pcommand_add("SAPART", m_sapart, 2, MSRC_USER);
+	pcommand_add("SANICK", m_sanick, 2, MSRC_USER);
+	pcommand_add("KICK", m_kick, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("KILL", m_kill, 1, MSRC_USER | MSRC_SERVER);
+	pcommand_add("SQUIT", m_squit, 1, MSRC_USER | MSRC_SERVER);
+	pcommand_add("SERVER", m_server, 4, MSRC_UNREG | MSRC_SERVER);
+	pcommand_add("FTOPIC", m_ftopic, 4, MSRC_SERVER);
+	pcommand_add("JOIN", m_join, 1, MSRC_USER);
+	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);
+	pcommand_add("TOPIC", m_topic, 2, MSRC_USER);
+	pcommand_add("FHOST", m_fhost, 1, MSRC_USER);
+	pcommand_add("IDLE", m_idle, 1, MSRC_USER | MSRC_SERVER);
+	pcommand_add("OPERTYPE", m_opertype, 1, MSRC_USER);
+	pcommand_add("METADATA", m_metadata, 3, MSRC_SERVER);
+	pcommand_add("CAPAB", m_capab, 1, MSRC_UNREG);
 
 	hook_add_event("server_eob");
 	hook_add_hook("server_eob", (void (*)(void *))server_eob);

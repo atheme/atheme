@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for solidircd.
  *
- * $Id: solidircd.c 6295 2006-09-06 14:02:52Z jilles $
+ * $Id: solidircd.c 6299 2006-09-06 15:23:54Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/solidircd.h"
 
-DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 6295 2006-09-06 14:02:52Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 6299 2006-09-06 15:23:54Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -839,7 +839,12 @@ static void m_motd(sourceinfo_t *si, uint8_t parc, char *parv[])
 
 static void m_svhost(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	strlcpy(si->su->vhost, parv[1], HOSTLEN);
+	user_t *u;
+
+	u = user_find(parv[0]);
+	if (u == NULL)
+		return;
+	strlcpy(u->vhost, parv[1], HOSTLEN);
 }
 
 void _modinit(module_t * m)
@@ -878,32 +883,32 @@ void _modinit(module_t * m)
 
 	ircd = &Solidircd;
 
-	pcommand_add("PING", m_ping);
-	pcommand_add("PONG", m_pong);
-	pcommand_add("PRIVMSG", m_privmsg);
-	pcommand_add("NOTICE", m_notice);
-	pcommand_add("SJOIN", m_sjoin);
-	pcommand_add("PART", m_part);
-	pcommand_add("NICK", m_nick);
-	pcommand_add("QUIT", m_quit);
-	pcommand_add("MODE", m_mode);
-	pcommand_add("KICK", m_kick);
-	pcommand_add("KILL", m_kill);
-	pcommand_add("SQUIT", m_squit);
-	pcommand_add("SERVER", m_server);
-	pcommand_add("STATS", m_stats);
-	pcommand_add("ADMIN", m_admin);
-	pcommand_add("VERSION", m_version);
-	pcommand_add("INFO", m_info);
-	pcommand_add("WHOIS", m_whois);
-	pcommand_add("TRACE", m_trace);
-	pcommand_add("JOIN", m_join);
-	pcommand_add("PASS", m_pass);
-	pcommand_add("ERROR", m_error);
-	pcommand_add("TOPIC", m_topic);
-	pcommand_add("MOTD", m_motd);
-	pcommand_add("BURST", m_burst);
-	pcommand_add("SVHOST", m_svhost);
+	pcommand_add("PING", m_ping, 1, MSRC_USER | MSRC_SERVER);
+	pcommand_add("PONG", m_pong, 1, MSRC_SERVER);
+	pcommand_add("PRIVMSG", m_privmsg, 2, MSRC_USER);
+	pcommand_add("NOTICE", m_notice, 2, MSRC_UNREG | MSRC_USER | MSRC_SERVER);
+	pcommand_add("SJOIN", m_sjoin, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("PART", m_part, 1, MSRC_USER);
+	pcommand_add("NICK", m_nick, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("QUIT", m_quit, 1, MSRC_USER);
+	pcommand_add("MODE", m_mode, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("KICK", m_kick, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("KILL", m_kill, 1, MSRC_USER | MSRC_SERVER);
+	pcommand_add("SQUIT", m_squit, 1, MSRC_USER | MSRC_SERVER);
+	pcommand_add("SERVER", m_server, 3, MSRC_UNREG | MSRC_SERVER);
+	pcommand_add("STATS", m_stats, 2, MSRC_USER);
+	pcommand_add("ADMIN", m_admin, 1, MSRC_USER);
+	pcommand_add("VERSION", m_version, 1, MSRC_USER);
+	pcommand_add("INFO", m_info, 1, MSRC_USER);
+	pcommand_add("WHOIS", m_whois, 2, MSRC_USER);
+	pcommand_add("TRACE", m_trace, 1, MSRC_USER);
+	pcommand_add("JOIN", m_join, 1, MSRC_USER);
+	pcommand_add("PASS", m_pass, 1, MSRC_UNREG);
+	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);
+	pcommand_add("TOPIC", m_topic, 4, MSRC_USER | MSRC_SERVER);
+	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
+	pcommand_add("BURST", m_burst, 0, MSRC_SERVER);
+	pcommand_add("SVHOST", m_svhost, 2, MSRC_USER | MSRC_SERVER);
 
 	m->mflags = MODTYPE_CORE;
 

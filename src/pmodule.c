@@ -4,7 +4,7 @@
  *
  * Protocol handling stuff.
  *
- * $Id: pmodule.c 6291 2006-09-06 02:26:55Z pippijn $
+ * $Id: pmodule.c 6299 2006-09-06 15:23:54Z jilles $
  */
 
 #include "atheme.h"
@@ -32,7 +32,7 @@ void pcommand_init(void)
 	}
 }
 
-void pcommand_add(char *token, void (*handler) (sourceinfo_t *si, uint8_t parc, char *parv[]))
+void pcommand_add(char *token, void (*handler) (sourceinfo_t *si, uint8_t parc, char *parv[]), int minparc, int sourcetype)
 {
 	node_t *n;
 	pcommand_t *pcmd;
@@ -46,6 +46,8 @@ void pcommand_add(char *token, void (*handler) (sourceinfo_t *si, uint8_t parc, 
 	pcmd = BlockHeapAlloc(pcommand_heap);
 	pcmd->token = sstrdup(token);
 	pcmd->handler = handler;
+	pcmd->minparc = minparc;
+	pcmd->sourcetype = sourcetype;
 
 	n = node_create();
 

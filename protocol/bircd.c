@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: bircd.c 6297 2006-09-06 14:41:39Z pippijn $
+ * $Id: bircd.c 6299 2006-09-06 15:23:54Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 6297 2006-09-06 14:41:39Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 6299 2006-09-06 15:23:54Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -1012,35 +1012,35 @@ void _modinit(module_t * m)
 
 	ircd = &Asuka;
 
-	pcommand_add("G", m_ping);
-	pcommand_add("Z", m_pong);
-	pcommand_add("P", m_privmsg);
-	pcommand_add("O", m_notice);
-	pcommand_add("C", m_create);
-	pcommand_add("J", m_join);
-	pcommand_add("EB", m_eos);
-	pcommand_add("B", m_burst);
-	pcommand_add("L", m_part);
-	pcommand_add("N", m_nick);
-	pcommand_add("Q", m_quit);
-	pcommand_add("M", m_mode);
-	pcommand_add("OM", m_mode); /* OPMODE, treat as MODE */
-	pcommand_add("CM", m_clearmode);
-	pcommand_add("K", m_kick);
-	pcommand_add("D", m_kill);
-	pcommand_add("SQ", m_squit);
-	pcommand_add("S", m_server);
-	pcommand_add("SERVER", m_server);
-	pcommand_add("R", m_stats);
-	pcommand_add("AD", m_admin);
-	pcommand_add("V", m_version);
-	pcommand_add("F", m_info);
-	pcommand_add("W", m_whois);
-	pcommand_add("TR", m_trace);
-	pcommand_add("PASS", m_pass);
-	pcommand_add("ERROR", m_error);
-	pcommand_add("T", m_topic);
-	pcommand_add("MO", m_motd);
+	pcommand_add("G", m_ping, 1, MSRC_USER | MSRC_SERVER);
+	pcommand_add("Z", m_pong, 1, MSRC_SERVER);
+	pcommand_add("P", m_privmsg, 2, MSRC_USER);
+	pcommand_add("O", m_notice, 2, MSRC_UNREG | MSRC_USER | MSRC_SERVER);
+	pcommand_add("C", m_create, 1, MSRC_USER);
+	pcommand_add("J", m_join, 1, MSRC_USER);
+	pcommand_add("EB", m_eos, 0, MSRC_SERVER);
+	pcommand_add("B", m_burst, 2, MSRC_SERVER);
+	pcommand_add("L", m_part, 1, MSRC_USER);
+	pcommand_add("N", m_nick, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("Q", m_quit, 1, MSRC_USER);
+	pcommand_add("M", m_mode, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("OM", m_mode, 2, MSRC_USER); /* OPMODE, treat as MODE */
+	pcommand_add("CM", m_clearmode, 2, MSRC_USER);
+	pcommand_add("K", m_kick, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("D", m_kill, 1, MSRC_USER | MSRC_SERVER);
+	pcommand_add("SQ", m_squit, 1, MSRC_USER | MSRC_SERVER);
+	pcommand_add("S", m_server, 8, MSRC_UNREG | MSRC_SERVER);
+	pcommand_add("SERVER", m_server, 8, MSRC_UNREG | MSRC_SERVER);
+	pcommand_add("R", m_stats, 2, MSRC_USER);
+	pcommand_add("AD", m_admin, 1, MSRC_USER);
+	pcommand_add("V", m_version, 1, MSRC_USER);
+	pcommand_add("F", m_info, 1, MSRC_USER);
+	pcommand_add("W", m_whois, 2, MSRC_USER);
+	pcommand_add("TR", m_trace, 1, MSRC_USER);
+	pcommand_add("PASS", m_pass, 1, MSRC_UNREG);
+	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);
+	pcommand_add("T", m_topic, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("MO", m_motd, 1, MSRC_USER);
 
 	m->mflags = MODTYPE_CORE;
 
