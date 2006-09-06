@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: asuka.c 6305 2006-09-06 15:35:33Z jilles $
+ * $Id: asuka.c 6309 2006-09-06 16:07:30Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 6305 2006-09-06 15:35:33Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 6309 2006-09-06 16:07:30Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -382,7 +382,7 @@ static void m_topic(sourceinfo_t *si, uint8_t parc, char *parv[])
 	char *source;
 	time_t ts = 0;
 
-	if (!c || parc < 2)
+	if (!c)
 		return;
 
         if (si->s != NULL)
@@ -532,12 +532,6 @@ static void m_burst(sourceinfo_t *si, uint8_t parc, char *parv[])
 	 * %<bans separated with spaces>
 	 * <nicks>
 	 */
-	if (parc < 2)
-	{
-		slog(LG_DEBUG, "m_burst(): too few parameters");
-		return;
-	}
-
 	ts = atoi(parv[1]);
 
 	c = channel_find(parv[0]);
@@ -640,8 +634,6 @@ static void m_part(sourceinfo_t *si, uint8_t parc, char *parv[])
 	char *chanv[256];
 	int i;
 
-	if (parc < 1)
-		return;
 	chanc = sjtoken(parv[0], ',', chanv);
 	for (i = 0; i < chanc; i++)
 	{
@@ -763,12 +755,6 @@ static void m_mode(sourceinfo_t *si, uint8_t parc, char *parv[])
 	user_t *u;
 	char *p;
 
-	if (parc < 2)
-	{
-		slog(LG_DEBUG, "m_mode(): missing parameters in MODE");
-		return;
-	}
-
 	if (*parv[0] == '#')
 		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
 	else
@@ -824,12 +810,6 @@ static void m_clearmode(sourceinfo_t *si, uint8_t parc, char *parv[])
 	node_t *n;
 	chanuser_t *cu;
 	int i;
-
-	if (parc < 2)
-	{
-		slog(LG_DEBUG, "m_clearmode(): missing parameters in CLEARMODE");
-		return;
-	}
 
 	/* -> ABAAA CM # b */
 	/* Note: this is an IRCop command, do not enforce mode locks. */
@@ -923,8 +903,6 @@ static void m_kick(sourceinfo_t *si, uint8_t parc, char *parv[])
 
 static void m_kill(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	if (parc < 1)
-		return;
 	handle_kill(si, parv[0], parc > 1 ? parv[1] : "<No reason given>");
 }
 
@@ -987,12 +965,12 @@ static void m_motd(sourceinfo_t *si, uint8_t parc, char *parv[])
 
 static void m_whois(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	handle_whois(si->su, parc >= 2 ? parv[1] : "*");
+	handle_whois(si->su, parv[1]);
 }
 
 static void m_trace(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	handle_trace(si->su, parc >= 1 ? parv[0] : "*", parc >= 2 ? parv[1] : NULL);
+	handle_trace(si->su, parv[0], parc >= 2 ? parv[1] : NULL);
 }
 
 static void m_pass(sourceinfo_t *si, uint8_t parc, char *parv[])

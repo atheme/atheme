@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree stable branch inspircd.
  *
- * $Id: inspircd.c 6299 2006-09-06 15:23:54Z jilles $
+ * $Id: inspircd.c 6309 2006-09-06 16:07:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 6299 2006-09-06 15:23:54Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 6309 2006-09-06 16:07:30Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -509,39 +509,36 @@ static void m_fjoin(sourceinfo_t *si, uint8_t parc, char *parv[])
 	uint8_t i;
 	time_t ts;
 
-	if (parc >= 3)
+	c = channel_find(parv[0]);
+	ts = atol(parv[1]);
+
+	if (!c)
 	{
-		c = channel_find(parv[0]);
-		ts = atol(parv[1]);
-
-		if (!c)
-		{
-			slog(LG_DEBUG, "m_fjoin(): new channel: %s", parv[0]);
-			c = channel_add(parv[0], ts);
-			/* Tell the core to check mode locks now,
-			 * otherwise it may only happen after the next
-			 * join if everyone is akicked.
-			 * Inspircd does not allow any redundant modes
-			 * so this will not look ugly. -- jilles */
-			channel_mode_va(NULL, c, 1, "+");
-		}
-
-		if (ts < c->ts)
-		{
-			/* the TS changed.  a TS change requires us to do
-			 * bugger all except update the TS, because in InspIRCd,
-			 * remote servers enforce the TS change - Brain
-			 */
-			c->ts = ts;
-			hook_call_event("channel_tschange", c);
-		}
-
-		for (i = 2; i < parc; i++)
-			chanuser_add(c, parv[i]);
-
-		if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))
-			channel_delete(c->name);
+		slog(LG_DEBUG, "m_fjoin(): new channel: %s", parv[0]);
+		c = channel_add(parv[0], ts);
+		/* Tell the core to check mode locks now,
+		 * otherwise it may only happen after the next
+		 * join if everyone is akicked.
+		 * Inspircd does not allow any redundant modes
+		 * so this will not look ugly. -- jilles */
+		channel_mode_va(NULL, c, 1, "+");
 	}
+
+	if (ts < c->ts)
+	{
+		/* the TS changed.  a TS change requires us to do
+		 * bugger all except update the TS, because in InspIRCd,
+		 * remote servers enforce the TS change - Brain
+		 */
+		c->ts = ts;
+		hook_call_event("channel_tschange", c);
+	}
+
+	for (i = 2; i < parc; i++)
+		chanuser_add(c, parv[i]);
+
+	if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))
+		channel_delete(c->name);
 }
 
 static void m_part(sourceinfo_t *si, uint8_t parc, char *parv[])
@@ -550,8 +547,6 @@ static void m_part(sourceinfo_t *si, uint8_t parc, char *parv[])
 	char *chanv[256];
 	int i;
 
-	if (parc < 1)
-		return;
 	chanc = sjtoken(parv[0], ',', chanv);
 	for (i = 0; i < chanc; i++)
 	{
@@ -631,12 +626,6 @@ static void m_quit(sourceinfo_t *si, uint8_t parc, char *parv[])
 
 static void m_mode(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	if (parc < 2)
-	{
-		slog(LG_DEBUG, "m_mode(): missing parameters in MODE");
-		return;
-	}
-
 	if (*parv[0] == '#')
 		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
 	else
@@ -681,8 +670,6 @@ static void m_kick(sourceinfo_t *si, uint8_t parc, char *parv[])
 
 static void m_kill(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	if (parc < 1)
-		return;
 	handle_kill(si, parv[0], parc > 1 ? parv[1] : "<No reason given>");
 }
 

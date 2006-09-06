@@ -1,3 +1,12 @@
+jilles      2006/09/06 15:38:06 UTC	(20060906-6307)
+  Log:
+  ctcp-common: make the handlers static
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/src/ctcp-common.c (File Modified) 
+
+
 jilles      2006/09/06 15:35:33 UTC	(20060906-6305)
   Log:
   P10: chanuser_add() takes UIDs, not nicks

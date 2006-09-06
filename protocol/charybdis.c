@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 6299 2006-09-06 15:23:54Z jilles $
+ * $Id: charybdis.c 6309 2006-09-06 16:07:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6299 2006-09-06 15:23:54Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6309 2006-09-06 16:07:30Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -837,8 +837,6 @@ static void m_part(sourceinfo_t *si, uint8_t parc, char *parv[])
 	char *chanv[256];
 	int i;
 
-	if (parc < 1)
-		return;
 	chanc = sjtoken(parv[0], ',', chanv);
 	for (i = 0; i < chanc; i++)
 	{
@@ -1016,12 +1014,6 @@ static void m_quit(sourceinfo_t *si, uint8_t parc, char *parv[])
 
 static void m_mode(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	if (parc < 2)
-	{
-		slog(LG_DEBUG, "m_mode(): missing parameters in MODE");
-		return;
-	}
-
 	if (*parv[0] == '#')
 		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
 	else
@@ -1033,13 +1025,6 @@ static void m_tmode(sourceinfo_t *si, uint8_t parc, char *parv[])
 	channel_t *c;
 
 	/* -> :1JJAAAAAB TMODE 1127511579 #new +o 2JJAAAAAB */
-
-	if (parc < 3)
-	{
-		slog(LG_DEBUG, "m_tmode(): missing parameters in TMODE");
-		return;
-	}
-
 	c = channel_find(parv[1]);
 	if (c == NULL)
 	{
@@ -1091,8 +1076,6 @@ static void m_kick(sourceinfo_t *si, uint8_t parc, char *parv[])
 
 static void m_kill(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	if (parc < 1)
-		return;
 	handle_kill(si, parv[0], parc > 1 ? parv[1] : "<No reason given>");
 }
 
@@ -1161,12 +1144,12 @@ static void m_info(sourceinfo_t *si, uint8_t parc, char *parv[])
 
 static void m_whois(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	handle_whois(si->su, parc >= 2 ? parv[1] : "*");
+	handle_whois(si->su, parv[1]);
 }
 
 static void m_trace(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	handle_trace(si->su, parc >= 1 ? parv[0] : "*", parc >= 2 ? parv[1] : NULL);
+	handle_trace(si->su, parv[0], parc >= 2 ? parv[1] : NULL);
 }
 
 static void m_pass(sourceinfo_t *si, uint8_t parc, char *parv[])
@@ -1201,8 +1184,6 @@ static void m_encap(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	user_t *u;
 
-	if (parc < 2)
-		return;
 	if (match(parv[0], me.name))
 		return;
 	if (!irccasecmp(parv[1], "LOGIN"))

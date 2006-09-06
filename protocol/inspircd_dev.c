@@ -522,122 +522,119 @@ static void m_fjoin(sourceinfo_t *si, uint8_t parc, char *parv[])
 	time_t ts;
 	char *bounce;
 
-	if (parc >= 3)
+	c = channel_find(parv[0]);
+	ts = atol(parv[1]);
+
+	if (!c)
 	{
-		c = channel_find(parv[0]);
-		ts = atol(parv[1]);
+		slog(LG_DEBUG, "m_fjoin(): new channel: %s", parv[0]);
+		c = channel_add(parv[0], ts);
+		/* Tell the core to check mode locks now,
+		 * otherwise it may only happen after the next
+		 * join if everyone is akicked.
+		 * Inspircd does not allow any redundant modes
+		 * so this will not look ugly. -- jilles */
+		channel_mode_va(NULL, c, 1, "+");
+	}
 
-		if (!c)
-		{
-			slog(LG_DEBUG, "m_fjoin(): new channel: %s", parv[0]);
-			c = channel_add(parv[0], ts);
-			/* Tell the core to check mode locks now,
-			 * otherwise it may only happen after the next
-			 * join if everyone is akicked.
-			 * Inspircd does not allow any redundant modes
-			 * so this will not look ugly. -- jilles */
-			channel_mode_va(NULL, c, 1, "+");
-		}
-
-		if (ts < c->ts)
-		{
-			/* the TS changed.  a TS change requires us to do
-			 * bugger all except update the TS, because in InspIRCd,
-			 * remote servers enforce the TS change - Brain
-			 */
-			c->ts = ts;
-			hook_call_event("channel_tschange", c);
-		}
-		else if (ts > c->ts)
-			keep_new_modes = false; /* bounce them! */
-
-		/*
-		 * ok, here's the difference from 1.0 -> 1.1:
-		 * 1.0 sent p[3] and up as individual users, prefixed with their 'highest' prefix, @, % or +
-		 * in 1.1, this is more complex. All prefixes are sent, with the additional caveat that modules
-		 * can add their own prefixes (dangerous!) - therefore, don't just chanuser_add(), split the prefix
-		 * out and ignore unknown prefixes (probably the safest option). --w00t
+	if (ts < c->ts)
+	{
+		/* the TS changed.  a TS change requires us to do
+		 * bugger all except update the TS, because in InspIRCd,
+		 * remote servers enforce the TS change - Brain
 		 */
-		userc = sjtoken(parv[parc - 1], ' ', userv);
+		c->ts = ts;
+		hook_call_event("channel_tschange", c);
+	}
+	else if (ts > c->ts)
+		keep_new_modes = false; /* bounce them! */
 
-		if (keep_new_modes == true)
+	/*
+	 * ok, here's the difference from 1.0 -> 1.1:
+	 * 1.0 sent p[3] and up as individual users, prefixed with their 'highest' prefix, @, % or +
+	 * in 1.1, this is more complex. All prefixes are sent, with the additional caveat that modules
+	 * can add their own prefixes (dangerous!) - therefore, don't just chanuser_add(), split the prefix
+	 * out and ignore unknown prefixes (probably the safest option). --w00t
+	 */
+	userc = sjtoken(parv[parc - 1], ' ', userv);
+
+	if (keep_new_modes == true)
+	{
+		for (i = 0; i < userc; i++)
 		{
-			for (i = 0; i < userc; i++)
+			nlen = 0;
+			prefix = true;
+
+			slog(LG_DEBUG, "m_fjoin(): processing user: %s", userv[i]);
+
+			for (; *userv[i]; userv[i]++)
 			{
-				nlen = 0;
-				prefix = true;
-
-				slog(LG_DEBUG, "m_fjoin(): processing user: %s", userv[i]);
-
-				for (; *userv[i]; userv[i]++)
+				for (j = 0; prefix_mode_list[j].mode; j++)
 				{
-					for (j = 0; prefix_mode_list[j].mode; j++)
+					if (*userv[i] == prefix_mode_list[j].mode)
 					{
-						if (*userv[i] == prefix_mode_list[j].mode)
-						{
-							prefixandnick[nlen++] = *userv[i];
-							continue;
-						}
- 
-						if (*userv[i] == ',')
-						{
-							userv[i]++;
-							strncpy(prefixandnick + nlen, userv[i], sizeof(prefixandnick));
-							nlen = strlen(prefixandnick); /* eww, but it makes life so much easier */
-							break;
-						}
+						prefixandnick[nlen++] = *userv[i];
+						continue;
 					}
-				}
- 
-				chanuser_add(c, prefixandnick);
-			}
-		}
-		else
-		{
-			for (i = 0; i < userc; i++)
-			{
-				/* remove prefixes. build a list of what we need to bounce first. */
-				nlen = 0;
 
-				while (*userv[i])
-				{
 					if (*userv[i] == ',')
 					{
 						userv[i]++;
+						strncpy(prefixandnick + nlen, userv[i], sizeof(prefixandnick));
+						nlen = strlen(prefixandnick); /* eww, but it makes life so much easier */
 						break;
 					}
-
-					for (j = 0; prefix_mode_list[j].mode; j++)
-					{
-						if (*userv[i] == prefix_mode_list[j].mode)
-						{
-							prefixandnick[nlen] = status_mode_list[j].mode;
-							nlen++;
-						}
-					}	
-
-					userv[i]++;
 				}
-
-				prefixandnick[nlen] = '\0';
-
-				bounce = prefixandnick;
-
-				/* now we have a list of prefixes, bounce them */
-				while (*bounce)
-				{
-					modestack_mode_param(me.name, c->name, MTYPE_DEL, *bounce, userv[i]);
-					bounce++;
-				}
-
-				/* add modeless user to channel */
-				chanuser_add(c, userv[i]);
 			}
-		}
 
-		if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))
-			channel_delete(c->name);
+			chanuser_add(c, prefixandnick);
+		}
 	}
+	else
+	{
+		for (i = 0; i < userc; i++)
+		{
+			/* remove prefixes. build a list of what we need to bounce first. */
+			nlen = 0;
+
+			while (*userv[i])
+			{
+				if (*userv[i] == ',')
+				{
+					userv[i]++;
+					break;
+				}
+
+				for (j = 0; prefix_mode_list[j].mode; j++)
+				{
+					if (*userv[i] == prefix_mode_list[j].mode)
+					{
+						prefixandnick[nlen] = status_mode_list[j].mode;
+						nlen++;
+					}
+				}	
+
+				userv[i]++;
+			}
+
+			prefixandnick[nlen] = '\0';
+
+			bounce = prefixandnick;
+
+			/* now we have a list of prefixes, bounce them */
+			while (*bounce)
+			{
+				modestack_mode_param(me.name, c->name, MTYPE_DEL, *bounce, userv[i]);
+				bounce++;
+			}
+
+			/* add modeless user to channel */
+			chanuser_add(c, userv[i]);
+		}
+	}
+
+	if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))
+		channel_delete(c->name);
 }
 
 static void m_part(sourceinfo_t *si, uint8_t parc, char *parv[])
@@ -646,8 +643,6 @@ static void m_part(sourceinfo_t *si, uint8_t parc, char *parv[])
 	char *chanv[256];
 	int i;
 
-	if (parc < 1)
-		return;
 	chanc = sjtoken(parv[0], ',', chanv);
 	for (i = 0; i < chanc; i++)
 	{
@@ -727,12 +722,6 @@ static void m_quit(sourceinfo_t *si, uint8_t parc, char *parv[])
 
 static void m_mode(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	if (parc < 2)
-	{
-		slog(LG_DEBUG, "m_mode(): missing parameters in MODE");
-		return;
-	}
-
 	if (*parv[0] == '#')
 		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
 	else
@@ -742,12 +731,6 @@ static void m_mode(sourceinfo_t *si, uint8_t parc, char *parv[])
 static void m_fmode(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	/* :server.moo FMODE #blarp tshere +ntsklLg keymoo 1337 secks */
-	if (parc < 3)
-	{
-		slog(LG_DEBUG, "m_fmode(): missing parameters in FMODE");
-		return;
-	}
-
 	if (*parv[0] == '#')
 		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[2]);
 	else
@@ -792,8 +775,6 @@ static void m_kick(sourceinfo_t *si, uint8_t parc, char *parv[])
 
 static void m_kill(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	if (parc < 1)
-		return;
 	handle_kill(si, parv[0], parc > 1 ? parv[1] : "<No reason given>");
 }
 
