@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 6291 2006-09-06 02:26:55Z pippijn $
+ * $Id: ultimate3.c 6295 2006-09-06 14:02:52Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 6291 2006-09-06 02:26:55Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 6295 2006-09-06 14:02:52Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -457,6 +457,9 @@ static void m_sjoin(sourceinfo_t *si, uint8_t parc, char *parv[])
 
 		for (i = 0; i < userc; i++)
 			chanuser_add(c, userv[i]);
+
+		if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))
+			channel_delete(c->name);
 	}
 	else if (parc >= 2 && si->su != NULL)
 	{
@@ -480,9 +483,6 @@ static void m_sjoin(sourceinfo_t *si, uint8_t parc, char *parv[])
 		slog(LG_DEBUG, "m_sjoin(): invalid source/parameters: origin %s %s parc %d",
 				si->origin, si->su != NULL ? si->su->nick : (si->s != NULL ? si->s->name : "<none>"), parc);
 	}
-
-	if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))
-		channel_delete(c->name);
 }
 
 static void m_part(sourceinfo_t *si, uint8_t parc, char *parv[])

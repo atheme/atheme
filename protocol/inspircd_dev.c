@@ -186,24 +186,14 @@ static void inspircd_wallops(char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
-	char *sendernick;
+	char *sendernick = NULL;
 	user_t *u;
 	node_t *n;
 
 	if (config_options.silent)
 		return;
-
 	if (me.me == NULL)
-	{
-		/*
-		 * this means we have no pseudoclients -- under present inspircd, servers cannot globops, and
-		 * thus, we will need to bail -- slog, and let them know. --w00t
-		 *
-		 * XXX - we shouldn't rely on me.me being NULL, me.me->userlist or something instead. --w00t
-		 */
-		slog(LG_ERROR, "wallops(): InspIRCD requires at least one pseudoclient module to be loaded to send wallops.");
 		return;
-	}
 
 	va_start(ap, fmt);
 	vsnprintf(buf, BUFSIZE, fmt, ap);
@@ -222,6 +212,16 @@ static void inspircd_wallops(char *fmt, ...)
 			sendernick = u->nick;
 			break;
 		}
+	}
+
+	if (sendernick == NULL)
+	{
+		/*
+		 * this means we have no pseudoclients -- under present inspircd, servers cannot globops, and
+		 * thus, we will need to bail -- slog, and let them know. --w00t
+		 */
+		slog(LG_ERROR, "wallops(): InspIRCD requires at least one pseudoclient module to be loaded to send wallops.");
+		return;
 	}
 
 	sts(":%s GLOBOPS :%s", sendernick, buf);
@@ -520,6 +520,7 @@ static void m_fjoin(sourceinfo_t *si, uint8_t parc, char *parv[])
 	char *userv[256];
 	char prefixandnick[51];
 	time_t ts;
+	char *bounce;
 
 	if (parc >= 3)
 	{
@@ -570,7 +571,6 @@ static void m_fjoin(sourceinfo_t *si, uint8_t parc, char *parv[])
 
 				for (; *userv[i]; userv[i]++)
 				{
-					int j;
 					for (j = 0; prefix_mode_list[j].mode; j++)
 					{
 						if (*userv[i] == prefix_mode_list[j].mode)
@@ -583,7 +583,7 @@ static void m_fjoin(sourceinfo_t *si, uint8_t parc, char *parv[])
 						{
 							userv[i]++;
 							strncpy(prefixandnick + nlen, userv[i], sizeof(prefixandnick));
-							nlen = strlen(prefixandnick); // eww, but it makes life so much easier
+							nlen = strlen(prefixandnick); /* eww, but it makes life so much easier */
 							break;
 						}
 					}
@@ -601,8 +601,6 @@ static void m_fjoin(sourceinfo_t *si, uint8_t parc, char *parv[])
 
 				while (*userv[i])
 				{
-					int j;
-
 					if (*userv[i] == ',')
 					{
 						userv[i]++;
@@ -623,7 +621,7 @@ static void m_fjoin(sourceinfo_t *si, uint8_t parc, char *parv[])
 
 				prefixandnick[nlen] = '\0';
 
-				char *bounce = prefixandnick;
+				bounce = prefixandnick;
 
 				/* now we have a list of prefixes, bounce them */
 				while (*bounce)
@@ -661,7 +659,6 @@ static void m_part(sourceinfo_t *si, uint8_t parc, char *parv[])
 
 static void m_nick(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	server_t *s;
 	user_t *u;
 
 	/* :services-dev.chatspike.net NICK 1133994664 DevNull chatspike.net chatspike.net services +i 0.0.0.0 :/dev/null -- message sink */
@@ -670,7 +667,7 @@ static void m_nick(sourceinfo_t *si, uint8_t parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", si->s->name, parv[1]);
 
 		/* char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, uint32_t ts */
-		u = user_add(parv[1], parv[4], parv[2], parv[3], parv[6], NULL, parv[7], s, atol(parv[0]));
+		u = user_add(parv[1], parv[4], parv[2], parv[3], parv[6], NULL, parv[7], si->s, atol(parv[0]));
 		user_mode(u, parv[5]);
 
 		/* If server is not yet EOB we will do this later.
@@ -707,7 +704,7 @@ static void m_nick(sourceinfo_t *si, uint8_t parc, char *parv[])
 		/* It could happen that our PING arrived late and the
 		 * server didn't acknowledge EOB yet even though it is
 		 * EOB; don't send double notices in that case -- jilles */
-		if (u->server->flags & SF_EOB)
+		if (si->su->server->flags & SF_EOB)
 			handle_nickchange(si->su);
 	}
 	else

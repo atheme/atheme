@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for solidircd.
  *
- * $Id: solidircd.c 6291 2006-09-06 02:26:55Z pippijn $
+ * $Id: solidircd.c 6295 2006-09-06 14:02:52Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/solidircd.h"
 
-DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 6291 2006-09-06 02:26:55Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 6295 2006-09-06 14:02:52Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -534,6 +534,9 @@ static void m_sjoin(sourceinfo_t *si, uint8_t parc, char *parv[])
 					p++;
 				chanuser_add(c, p);
 			}
+
+		if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))
+			channel_delete(c->name);
 	}
 	else if (parc >= 2 && si->su != NULL)
 	{
@@ -557,9 +560,6 @@ static void m_sjoin(sourceinfo_t *si, uint8_t parc, char *parv[])
 		slog(LG_DEBUG, "m_sjoin(): invalid source/parameters: origin %s %s parc %d",
 				si->origin, si->su != NULL ? si->su->nick : (si->s != NULL ? si->s->name : "<none>"), parc);
 	}
-
-	if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))
-		channel_delete(c->name);
 }
 
 static void m_part(sourceinfo_t *si, uint8_t parc, char *parv[])
@@ -634,7 +634,7 @@ static void m_nick(sourceinfo_t *si, uint8_t parc, char *parv[])
                         return;
                 }
 
-		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", u->nick, parv[0]);
+		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
 		/* fix up +r if necessary -- jilles */
 		if (nicksvs.me != NULL && si->su->myuser != NULL && !(si->su->myuser->flags & MU_WAITAUTH) && irccasecmp(si->su->nick, parv[0]) && !irccasecmp(parv[0], si->su->myuser->name))

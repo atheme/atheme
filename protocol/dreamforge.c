@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: dreamforge.c 6291 2006-09-06 02:26:55Z pippijn $
+ * $Id: dreamforge.c 6295 2006-09-06 14:02:52Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/dreamforge.h"
 
-DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 6291 2006-09-06 02:26:55Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 6295 2006-09-06 14:02:52Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -466,8 +466,6 @@ static void m_nick(sourceinfo_t *si, uint8_t parc, char *parv[])
 
 static void m_quit(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	user_t *u;
-
 	if (si->su->server == me.me)
 	{
 		slog(LG_DEBUG, "m_quit(): not destroying own user %s (fake direction)", si->su->nick);
@@ -476,7 +474,7 @@ static void m_quit(sourceinfo_t *si, uint8_t parc, char *parv[])
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
 
 	/* user_delete() takes care of removing channels and so forth */
-	user_delete(u);
+	user_delete(si->su);
 }
 
 static void m_mode(sourceinfo_t *si, uint8_t parc, char *parv[])

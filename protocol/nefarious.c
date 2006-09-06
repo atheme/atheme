@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
  *
- * $Id: nefarious.c 6291 2006-09-06 02:26:55Z pippijn $
+ * $Id: nefarious.c 6295 2006-09-06 14:02:52Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 6291 2006-09-06 02:26:55Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 6295 2006-09-06 14:02:52Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -380,8 +380,6 @@ static void nefarious_jupe(char *server, char *reason)
 static void m_topic(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
-	server_t *source_server;
-	user_t *source_user;
 	char *source;
 	time_t ts = 0;
 
@@ -390,7 +388,7 @@ static void m_topic(sourceinfo_t *si, uint8_t parc, char *parv[])
 
 	if (si->s != NULL)
 		source = si->s->name;
-	else if (si->su != NULL)
+	else
 		source = si->su->nick;
 
 	/* Let's accept any topic
@@ -667,7 +665,6 @@ static void m_part(sourceinfo_t *si, uint8_t parc, char *parv[])
 
 static void m_nick(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	server_t *s;
 	user_t *u;
 	struct in_addr ip;
 	char ipstring[64];
@@ -688,7 +685,7 @@ static void m_nick(sourceinfo_t *si, uint8_t parc, char *parv[])
 			if (!inet_ntop(AF_INET, &ip, ipstring, sizeof ipstring))
 				ipstring[0] = '\0';
 		}
-		u = user_add(parv[0], parv[3], parv[4], NULL, ipstring, parv[parc - 2], parv[parc - 1], s, atoi(parv[2]));
+		u = user_add(parv[0], parv[3], parv[4], NULL, ipstring, parv[parc - 2], parv[parc - 1], si->s, atoi(parv[2]));
 
 		if (parv[5][0] == '+')
 		{
@@ -752,7 +749,7 @@ static void m_nick(sourceinfo_t *si, uint8_t parc, char *parv[])
 		/* readd with new nick (so the hash works) */
 		n = node_create();
 		si->su->hash = UHASH((unsigned char *)si->su->nick);
-		node_add(u, n, &userlist[si->su->hash]);
+		node_add(si->su, n, &userlist[si->su->hash]);
 
 		handle_nickchange(si->su);
 	}

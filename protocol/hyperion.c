@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 6291 2006-09-06 02:26:55Z pippijn $
+ * $Id: hyperion.c 6295 2006-09-06 14:02:52Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -17,7 +17,7 @@
 #include "pmodule.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 6291 2006-09-06 02:26:55Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 6295 2006-09-06 14:02:52Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -912,15 +912,14 @@ static void m_setname(sourceinfo_t *si, uint8_t parc, char *parv[])
  */
 static void m_signon(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	user_t *u;
 	char *nick_parv[2];
 
 	if (parc < 5)
 		return;
 	slog(LG_DEBUG, "m_signon(): signon %s -> %s!%s@%s (login %s)", si->su->nick, parv[1], parv[2], parv[3], parv[0]);
 
-	strlcpy(u->user, parv[2], USERLEN);
-	strlcpy(u->vhost, parv[3], HOSTLEN);
+	strlcpy(si->su->user, parv[2], USERLEN);
+	strlcpy(si->su->vhost, parv[3], HOSTLEN);
 	nick_parv[0] = parv[1];
 	nick_parv[1] = parv[4];
 	if (strcmp(si->su->nick, parv[1]))
