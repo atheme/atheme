@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 6309 2006-09-06 16:07:30Z jilles $
+ * $Id: ircnet.c 6313 2006-09-06 17:18:31Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 6309 2006-09-06 16:07:30Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 6313 2006-09-06 17:18:31Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -543,6 +543,46 @@ static void m_nick(sourceinfo_t *si, uint8_t parc, char *parv[])
 	}
 }
 
+static void m_save(sourceinfo_t *si, uint8_t parc, char *parv[])
+{
+	user_t *u;
+	node_t *n;
+
+	u = user_find(parv[0]);
+	if (u == NULL)
+		return;
+	if (!strcmp(u->nick, u->uid))
+	{
+		slog(LG_DEBUG, "m_save(): ignoring noop SAVE message for %s", u->nick);
+		return;
+	}
+	if (is_internal_client(u))
+	{
+		slog(LG_INFO, "m_save(): service %s got hit, changing back", u->nick);
+		sts(":%s NICK %s", u->uid, u->nick);
+		/* XXX services wars */
+	}
+	else
+	{
+		slog(LG_DEBUG, "m_save(): nickname change for `%s': %s", u->nick, u->uid);
+
+		/* remove the current one from the list */
+		n = node_find(u, &userlist[u->hash]);
+		node_del(n, &userlist[u->hash]);
+		node_free(n);
+
+		/* change the nick */
+		strlcpy(u->nick, u->uid, NICKLEN);
+
+		/* readd with new nick (so the hash works) */
+		n = node_create();
+		u->hash = UHASH((unsigned char *)u->nick);
+		node_add(u, n, &userlist[u->hash]);
+
+		handle_nickchange(u);
+	}
+}
+
 static void m_quit(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
@@ -723,6 +763,7 @@ void _modinit(module_t * m)
 	pcommand_add("PART", m_part, 1, MSRC_USER);
 	pcommand_add("NICK", m_nick, 1, MSRC_USER);
 	pcommand_add("UNICK", m_nick, 7, MSRC_SERVER);
+	pcommand_add("SAVE", m_save, 1, MSRC_SERVER);
 	pcommand_add("QUIT", m_quit, 1, MSRC_USER);
 	pcommand_add("MODE", m_mode, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("KICK", m_kick, 2, MSRC_USER | MSRC_SERVER);

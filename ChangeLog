@@ -1,3 +1,13 @@
+jilles      2006/09/06 16:08:16 UTC	(20060906-6311)
+  Log:
+  inspircd nick changes do not have a nickTS, so just one parameter
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/inspircd.c (File Modified) 
+  +1 -1		trunk/protocol/inspircd_dev.c (File Modified) 
+
+
 jilles      2006/09/06 16:07:30 UTC	(20060906-6309)
   Log:
   Get rid of most redundant parc checks in the protocol modules.
