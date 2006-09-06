@@ -1,3 +1,31 @@
+jilles      2006/09/06 16:07:30 UTC	(20060906-6309)
+  Log:
+  Get rid of most redundant parc checks in the protocol modules.
+  
+
+  Changes:	Modified:
+  +3 -25	trunk/protocol/asuka.c (File Modified) 
+  +2 -12	trunk/protocol/bahamut.c (File Modified) 
+  +3 -25	trunk/protocol/bircd.c (File Modified) 
+  +2 -21	trunk/protocol/charybdis.c (File Modified) 
+  +2 -12	trunk/protocol/dreamforge.c (File Modified) 
+  +2 -21	trunk/protocol/hybrid.c (File Modified) 
+  +2 -26	trunk/protocol/hyperion.c (File Modified) 
+  +26 -39	trunk/protocol/inspircd.c (File Modified) 
+  +86 -105	trunk/protocol/inspircd_dev.c (File Modified) 
+  +2 -12	trunk/protocol/ircnet.c (File Modified) 
+  +3 -25	trunk/protocol/nefarious.c (File Modified) 
+  +2 -12	trunk/protocol/plexus.c (File Modified) 
+  +2 -14	trunk/protocol/ptlink.c (File Modified) 
+  +2 -21	trunk/protocol/ratbox.c (File Modified) 
+  +2 -12	trunk/protocol/shadowircd.c (File Modified) 
+  +2 -12	trunk/protocol/solidircd.c (File Modified) 
+  +2 -12	trunk/protocol/sorcery.c (File Modified) 
+  +2 -12	trunk/protocol/ultimate3.c (File Modified) 
+  +3 -25	trunk/protocol/undernet.c (File Modified) 
+  +2 -12	trunk/protocol/unreal.c (File Modified) 
+
+
 jilles      2006/09/06 15:38:06 UTC	(20060906-6307)
   Log:
   ctcp-common: make the handlers static
