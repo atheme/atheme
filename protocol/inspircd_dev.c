@@ -839,8 +839,6 @@ static void m_admin(sourceinfo_t *si, uint8_t parc, char *parv[])
 static void m_join(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	channel_t *c;
-	chanuser_t *cu;
-	node_t *n, *tn;
 
 	c = channel_find(parv[0]);
 	if (!c)

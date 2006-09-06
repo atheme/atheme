@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 6295 2006-09-06 14:02:52Z jilles $
+ * $Id: hyperion.c 6297 2006-09-06 14:41:39Z pippijn $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -17,7 +17,7 @@
 #include "pmodule.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 6295 2006-09-06 14:02:52Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 6297 2006-09-06 14:41:39Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -437,7 +437,7 @@ static void m_stopic(sourceinfo_t *si, uint8_t parc, char *parv[])
 	 * locally :( */
 	topicts = atol(parv[2]);
 	channelts = atol(parv[3]);
-	if (c->topic == NULL || (strcmp(c->topic, parv[1]) && channelts < c->ts || (channelts == c->ts && topicts > c->topicts)))
+	if (c->topic == NULL || ((strcmp(c->topic, parv[1]) && channelts < c->ts) || (channelts == c->ts && topicts > c->topicts)))
 		handle_topic_from(si, c, parv[1], topicts, parv[parc - 1]);
 }
 

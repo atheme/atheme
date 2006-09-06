@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 6291 2006-09-06 02:26:55Z pippijn $
+ * $Id: plexus.c 6297 2006-09-06 14:41:39Z pippijn $
  */
 
 /* option: set the netadmin umode +N */
@@ -15,7 +15,7 @@
 #include "pmodule.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 6291 2006-09-06 02:26:55Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 6297 2006-09-06 14:41:39Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -589,25 +589,31 @@ static void m_kick(sourceinfo_t *si, uint8_t parc, char *parv[])
 	/* -> :rakaur KICK #shrike rintaun :test */
 	slog(LG_DEBUG, "m_kick(): user was kicked: %s -> %s", parv[1], parv[0]);
 
+	if (!u)
+	{
+		slog(LG_DEBUG, "m_kick(): got kick for nonexistant user %s", parv[1]);
+		return;
+	}
+
 	if (!c)
 	{
 		slog(LG_DEBUG, "m_kick(): got kick in nonexistant channel: %s", parv[0]);
 		return;
 	}
 
-	if (!chanuser_find(c, si->su))
+	if (!chanuser_find(c, u))
 	{
-		slog(LG_DEBUG, "m_kick(): got kick for %s not in %s", si->su->nick, c->name);
+		slog(LG_DEBUG, "m_kick(): got kick for %s not in %s", u->nick, c->name);
 		return;
 	}
 
-	chanuser_delete(c, si->su);
+	chanuser_delete(c, u);
 
 	/* if they kicked us, let's rejoin */
-	if (is_internal_client(si->su))
+	if (is_internal_client(u))
 	{
 		slog(LG_DEBUG, "m_kick(): %s got kicked from %s; rejoining", si->su->nick, parv[0]);
-		join(parv[0], si->su->nick);
+		join(parv[0], u->nick);
 	}
 }
 

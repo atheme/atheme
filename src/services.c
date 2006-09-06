@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 6081 2006-08-16 17:07:03Z jilles $
+ * $Id: services.c 6297 2006-09-06 14:41:39Z pippijn $
  */
 
 #include "atheme.h"
@@ -145,8 +145,6 @@ void services_init(void)
 
 void joinall(char *name)
 {
-	node_t *n;
-	uint32_t i;
 	service_t *svs;
 	dictionary_iteration_state_t state;
 

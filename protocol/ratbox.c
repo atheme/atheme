@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 6291 2006-09-06 02:26:55Z pippijn $
+ * $Id: ratbox.c 6297 2006-09-06 14:41:39Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 6291 2006-09-06 02:26:55Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 6297 2006-09-06 14:41:39Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -615,7 +615,6 @@ static void m_join(sourceinfo_t *si, uint8_t parc, char *parv[])
 	node_t *n, *tn;
 	channel_t *c;
 	chanuser_t *cu;
-	uint8_t i;
 	time_t ts;
 
 	if (!u)

@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: bircd.c 6295 2006-09-06 14:02:52Z jilles $
+ * $Id: bircd.c 6297 2006-09-06 14:41:39Z pippijn $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 6295 2006-09-06 14:02:52Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 6297 2006-09-06 14:41:39Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -457,7 +457,6 @@ static void m_create(sourceinfo_t *si, uint8_t parc, char *parv[])
 
 static void m_join(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	char buf[BUFSIZE];
 	uint8_t chanc;
 	char *chanv[256];
 	uint8_t i;

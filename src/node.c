@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6155 2006-08-19 21:53:45Z jilles $
+ * $Id: node.c 6297 2006-09-06 14:41:39Z pippijn $
  */
 
 #include "atheme.h"
@@ -2321,7 +2321,6 @@ static int expire_myuser_cb(dictionary_elem_t *delem, void *unused)
 void expire_check(void *arg)
 {
 	uint32_t i;
-	myuser_t *mu;
 	mychan_t *mc;
 	node_t *n, *tn;
 

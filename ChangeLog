@@ -1,3 +1,22 @@
+jilles      2006/09/06 14:02:52 UTC	(20060906-6295)
+  Log:
+  Fix some uninitialized variables and various other compiler warnings.
+  
+
+  Changes:	Modified:
+  +1 -3		trunk/protocol/asuka.c (File Modified) 
+  +3 -3		trunk/protocol/bahamut.c (File Modified) 
+  +1 -3		trunk/protocol/bircd.c (File Modified) 
+  +1 -3		trunk/protocol/dreamforge.c (File Modified) 
+  +2 -3		trunk/protocol/hyperion.c (File Modified) 
+  +11 -11	trunk/protocol/inspircd.c (File Modified) 
+  +16 -19	trunk/protocol/inspircd_dev.c (File Modified) 
+  +3 -6		trunk/protocol/nefarious.c (File Modified) 
+  +4 -4		trunk/protocol/solidircd.c (File Modified) 
+  +3 -3		trunk/protocol/ultimate3.c (File Modified) 
+  +1 -3		trunk/protocol/undernet.c (File Modified) 
+
+
 pippijn     2006/09/06 02:26:55 UTC	(20060906-6291)
   Log:
   Started the move towards sourceinfo. This will ultimately reduce code

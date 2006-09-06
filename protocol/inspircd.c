@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree stable branch inspircd.
  *
- * $Id: inspircd.c 6295 2006-09-06 14:02:52Z jilles $
+ * $Id: inspircd.c 6297 2006-09-06 14:41:39Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 6295 2006-09-06 14:02:52Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 6297 2006-09-06 14:41:39Z pippijn $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -461,8 +461,6 @@ static void m_ping(sourceinfo_t *si, uint8_t parc, char *parv[])
 
 static void m_pong(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	server_t *s;
-
 	if (si->s == NULL)
 		return;
 	handle_eob(si->s);
@@ -715,8 +713,6 @@ static void m_server(sourceinfo_t *si, uint8_t parc, char *parv[])
 static void m_join(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	channel_t *c;
-	chanuser_t *cu;
-	node_t *n, *tn;
 
 	if (!si->su)
 		return;
