@@ -1,3 +1,14 @@
+jilles      2006/09/06 17:18:31 UTC	(20060906-6313)
+  Log:
+  ircnet: add SAVE support
+  will cause flooding if there are two atheme instances
+  wanting the same nicks on the network
+  
+
+  Changes:	Modified:
+  +41 -0	trunk/protocol/ircnet.c (File Modified) 
+
+
 jilles      2006/09/06 16:08:16 UTC	(20060906-6311)
   Log:
   inspircd nick changes do not have a nickTS, so just one parameter
