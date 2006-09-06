@@ -5,7 +5,7 @@
  * This file contains functionality which implements
  * the OperServ AKILL command.
  *
- * $Id: akill.c 6091 2006-08-17 15:25:00Z jilles $
+ * $Id: akill.c 6317 2006-09-06 20:03:32Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 6091 2006-08-17 15:25:00Z jilles $",
+	"$Id: akill.c 6317 2006-09-06 20:03:32Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -92,7 +92,6 @@ static void os_akill_newuser(void *vptr)
 static void os_cmd_akill(char *origin)
 {
 	/* Grab args */
-	user_t *u = user_find_named(origin);
 	char *cmd = strtok(NULL, " ");
 	char *arg = strtok(NULL, " ");
 	

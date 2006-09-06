@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing clone detection.
  *
- * $Id: clones.c 6287 2006-09-03 23:06:23Z jilles $
+ * $Id: clones.c 6317 2006-09-06 20:03:32Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 6287 2006-09-03 23:06:23Z jilles $",
+	"$Id: clones.c 6317 2006-09-06 20:03:32Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -114,7 +114,6 @@ static void free_hostentry(dictionary_elem_t *delem, void *privdata)
 
 void _moddeinit(void)
 {
-	int i = 0;
 	node_t *n, *tn;
 
 	dictionary_destroy(hostlist, free_hostentry, NULL);
@@ -177,7 +176,6 @@ static void write_exemptdb(void)
 static void load_exemptdb(void)
 {
 	FILE *f;
-	node_t *n;
 	char *item, rBuf[BUFSIZE * 2];
 
 	if (!(f = fopen("etc/exempts.db", "r")))
@@ -239,7 +237,6 @@ static int is_exempt(const char *ip)
 static void os_cmd_clones(char *origin)
 {
 	/* Grab args */
-	user_t *u = user_find_named(origin);
 	char *cmd = strtok(NULL, " ");
 	
 	/* Bad/missing arg */
@@ -411,8 +408,6 @@ static void clones_newuser(void *vptr)
 	int i;
 	user_t *u = vptr;
 	hostentry_t *he;
-	node_t *n;
-	kline_t *k;
 
 	/* User has no IP, ignore him */
 	if (is_internal_client(u) || *u->ip == '\0')

@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 6315 2006-09-06 17:43:23Z jilles $
+ * $Id: cmode.c 6317 2006-09-06 20:03:32Z pippijn $
  */
 
 #include "atheme.h"
@@ -499,7 +499,7 @@ static void modestack_add_simple(struct modestackdata *md, int dir, int32_t flag
 {
 	if (dir == MTYPE_ADD)
 		md->modes_on |= flags, md->modes_off &= ~flags;
-	else if (dir = MTYPE_DEL)
+	else if ((dir = MTYPE_DEL))
 		md->modes_off |= flags, md->modes_on &= ~flags;
 }
 
@@ -515,7 +515,7 @@ static void modestack_add_limit(struct modestackdata *md, int dir, uint32_t limi
 			modestack_flush(md);
 		md->limit = limit;
 	}
-	else if (dir = MTYPE_DEL)
+	else if ((dir = MTYPE_DEL))
 		md->limit = 0;
 	md->limitused = 1;
 }
@@ -532,7 +532,7 @@ static void modestack_add_ext(struct modestackdata *md, int dir, int i, const ch
 			modestack_flush(md);
 		strlcpy(md->extmodes[i], value, sizeof md->extmodes[i]);
 	}
-	else if (dir = MTYPE_DEL)
+	else if ((dir = MTYPE_DEL))
 		md->extmodes[i][0] = '\0';
 	md->extmodesused[i] = 1;
 }
@@ -857,7 +857,7 @@ void user_mode(user_t *user, char *modes)
 				  	user->server->invis++;
 				  user->flags |= UF_INVIS;
 			  }
-			  else if (dir = MTYPE_DEL)
+			  else if ((dir = MTYPE_DEL))
 			  {
 				  if (user->flags & UF_INVIS)
 					  user->server->invis--;
@@ -876,7 +876,7 @@ void user_mode(user_t *user, char *modes)
 					  hook_call_event("user_oper", user);
 				  }
 			  }
-			  else if (dir = MTYPE_DEL)
+			  else if ((dir = MTYPE_DEL))
 			  {
 				  if (is_ircop(user))
 				  {

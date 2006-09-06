@@ -4,7 +4,7 @@
  *
  * XMLRPC channel management functions.
  *
- * $Id: channel.c 5921 2006-07-20 09:48:14Z pippijn $
+ * $Id: channel.c 6317 2006-09-06 20:03:32Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/channel", FALSE, _modinit, _moddeinit,
-	"$Id: channel.c 5921 2006-07-20 09:48:14Z pippijn $",
+	"$Id: channel.c 6317 2006-09-06 20:03:32Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -352,7 +352,6 @@ static int do_metadata_get(void *conn, int parc, char *parv[])
  */ 
 static int do_topic_set(void *conn, int parc, char *parv[])
 {
-	char *chan = strtok(NULL, " ");
 	myuser_t *mu;
 	mychan_t *mc;
 	channel_t *c;
@@ -427,7 +426,6 @@ static int do_topic_set(void *conn, int parc, char *parv[])
  */ 
 static int do_topic_append(void *conn, int parc, char *parv[])
 {
-	char *chan = strtok(NULL, " ");
 	myuser_t *mu;
 	mychan_t *mc;
 	channel_t *c;
@@ -509,7 +507,7 @@ static int do_topic_append(void *conn, int parc, char *parv[])
  */ 
 static int do_access_get(void *conn, int parc, char *parv[])
 {
-	myuser_t *mu, *target;
+	myuser_t *mu;
 	mychan_t *mc;
 	chanacs_t *ca;
 	char buf[XMLRPC_BUFSIZE];

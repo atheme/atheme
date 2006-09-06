@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the MemoServ HELP command.
  *
- * $Id: help.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: help.c 6317 2006-09-06 20:03:32Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: help.c 6317 2006-09-06 20:03:32Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -41,7 +41,6 @@ void _moddeinit()
 /* HELP <command> [params] */
 void ms_cmd_help(char *origin)
 {
-	user_t *u = user_find_named(origin);
 	char *command = strtok(NULL, "");
 
 	if (!command)

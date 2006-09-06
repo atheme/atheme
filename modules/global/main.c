@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6071 2006-08-16 14:58:16Z jilles $
+ * $Id: main.c 6317 2006-09-06 20:03:32Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"global/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6071 2006-08-16 14:58:16Z jilles $",
+	"$Id: main.c 6317 2006-09-06 20:03:32Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -41,9 +41,6 @@ command_t gs_global = { "GLOBAL", "Sends a global notice.",
 static void gs_cmd_help(char *origin)
 {
 	char *command = strtok(NULL, "");
-	char buf[BUFSIZE];
-	struct help_command_ *c;
-	FILE *help_file;
 
 	if (!command)
 	{
@@ -184,7 +181,7 @@ static void gs_cmd_global(char *origin)
 /* main services client routine */
 static void gservice(char *origin, uint8_t parc, char *parv[])
 {
-	char *cmd, *s;
+	char *cmd;
 	char orig[BUFSIZE];
 
         if (!origin)

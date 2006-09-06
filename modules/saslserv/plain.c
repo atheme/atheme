@@ -4,7 +4,7 @@
  *
  * PLAIN mechanism provider
  *
- * $Id: plain.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: plain.c 6317 2006-09-06 20:03:32Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/plain", FALSE, _modinit, _moddeinit,
-	"$Id: plain.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: plain.c 6317 2006-09-06 20:03:32Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -44,9 +44,7 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 {
 	char auth[256];
 	char pass[256];
-	int n = 0, s = 0;
 	myuser_t *mu;
-	metadata_t *md;
 
 	/* Skip the authzid entirely */
 	len -= strlen(message) + 1;

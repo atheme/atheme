@@ -4,7 +4,7 @@
  *
  * XMLRPC memo management functions.
  *
- * $Id: memo.c 5929 2006-07-20 15:13:02Z pippijn $
+ * $Id: memo.c 6317 2006-09-06 20:03:32Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/memo", FALSE, _modinit, _moddeinit,
-	"$Id: memo.c 5929 2006-07-20 15:13:02Z pippijn $",
+	"$Id: memo.c 6317 2006-09-06 20:03:32Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -43,8 +43,7 @@ DECLARE_MODULE_V1
 static int memo_send(void *conn, int parc, char *parv[])
 {
 	/* Define and initialise structs and variables */
-	user_t *sender = user_find_named(parv[1]), *target = NULL;
-	myuser_t *mysender = sender->myuser, *mytarget = NULL;
+	myuser_t *mu, *tmu = NULL;
 	mymemo_t *memo = NULL;
 	node_t *n = NULL;
 	static char buf[XMLRPC_BUFSIZE] = "";
@@ -58,39 +57,39 @@ static int memo_send(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (!(mysender = myuser_find(parv[1])))
+	if (!(mu = myuser_find(parv[1])))
 	{
 		xmlrpc_generic_error(3, "Sending account nonexistent.");
 		return 0;
 	}
 
-	if (!(mytarget = myuser_find(parv[2])))
+	if (!(tmu = myuser_find(parv[2])))
 	{
 		xmlrpc_generic_error(4, "Target account nonexistent.");
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], mysender) == FALSE)
+	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
-	if (mysender->flags & MU_WAITAUTH)
+	if (mu->flags & MU_WAITAUTH)
 	{       
 		xmlrpc_generic_error(11, "Email address not verified.");
 		return 0;
 	}
 
 	/* Check whether target is not sender */
-	if (mytarget == mysender)
+	if (tmu == mu)
 	{       
 		xmlrpc_generic_error(2, "Target is sender.");
 		return 0;
 	}
 
 	/* Check for user setting "no memos" */
-	if (mytarget->flags & MU_NOMEMO)
+	if (tmu->flags & MU_NOMEMO)
 	{       
 		xmlrpc_generic_error(6, "Target does not wish to receive memos.");
 		return 0;
@@ -104,29 +103,29 @@ static int memo_send(void *conn, int parc, char *parv[])
 	}
 
 	/* Check whether target inbox is full */
-	if (mytarget->memos.count >= me.mdlimit)
+	if (tmu->memos.count >= me.mdlimit)
 	{       
 		xmlrpc_generic_error(9, "Inbox is full.");
 		return 0;
 	}
 
 	/* Anti-flood */
-	if (CURRTIME - mysender->memo_ratelimit_time > MEMO_MAX_TIME)
-		mysender->memo_ratelimit_num = 0;
-	if (mysender->memo_ratelimit_num > MEMO_MAX_NUM)
+	if (CURRTIME - mu->memo_ratelimit_time > MEMO_MAX_TIME)
+		mu->memo_ratelimit_num = 0;
+	if (mu->memo_ratelimit_num > MEMO_MAX_NUM)
 	{       
 		xmlrpc_generic_error(9, "Memo flood.");
 		return 0;
 	}		  
-	mysender->memo_ratelimit_num++; 
-	mysender->memo_ratelimit_time = CURRTIME;
+	mu->memo_ratelimit_num++; 
+	mu->memo_ratelimit_time = CURRTIME;
 
 	/* Check whether sender is being ignored by the target */
-	LIST_FOREACH(n, mytarget->memo_ignores.head)							
+	LIST_FOREACH(n, tmu->memo_ignores.head)							
 	{
-		if (!strcasecmp((char *)n->data, mysender->name))
+		if (!strcasecmp((char *)n->data, mu->name))
 		{
-			logcommand_external(memosvs.me, "xmlrpc", conn, mysender, CMDLOG_SET, "failed SEND to %s (on ignore list)", mytarget->name);
+			logcommand_external(memosvs.me, "xmlrpc", conn, mu, CMDLOG_SET, "failed SEND to %s (on ignore list)", tmu->name);
 			xmlrpc_generic_error(6, "Sender is on ignore list.");
 			return 0;
 		}
@@ -135,21 +134,21 @@ static int memo_send(void *conn, int parc, char *parv[])
 	xmlrpc_string(buf, "Memo sent successfully.");
 	xmlrpc_send(1, buf);
 
-	logcommand_external(memosvs.me, "xmlrpc", conn, mysender, CMDLOG_SET, "SEND to %s", mytarget->name);
+	logcommand_external(memosvs.me, "xmlrpc", conn, mu, CMDLOG_SET, "SEND to %s", tmu->name);
 
 	memo = smalloc(sizeof(mymemo_t));
 	memo->sent = CURRTIME;
 	memo->status = MEMO_NEW;
-	strlcpy (memo->sender, mysender->name, NICKLEN);
+	strlcpy (memo->sender, mu->name, NICKLEN);
 	strlcpy (memo->text, m, MEMOLEN);
 
 	/* Send memo */
 	n = node_create();
-	node_add(memo, n, &mytarget->memos);
-	mytarget->memoct_new++;
+	node_add(memo, n, &tmu->memos);
+	tmu->memoct_new++;
 
 	/* Tell the user that it has a new memo if it is online */
-	myuser_notice(memosvs.nick, mytarget, "You have a new memo from %s.", mysender->name);
+	myuser_notice(memosvs.nick, tmu, "You have a new memo from %s.", mu->name);
 
 	return 0;
 }
@@ -180,13 +179,12 @@ static int memo_send(void *conn, int parc, char *parv[])
 static int memo_forward(void *conn, int parc, char *parv[])
 {
 	/* Define and initialise structs and variables */
-	user_t *sender = user_find_named(parv[1]), *target = NULL;
-	myuser_t *mysender = sender->myuser, *mytarget = NULL;
+	user_t *u = user_find_named(parv[1]);
+	myuser_t *mu = u->myuser, *tmu = NULL;
 	mymemo_t *memo = NULL, *forward = NULL;
-	node_t *n = NULL, *tmpnode = NULL;
+	node_t *n = NULL;
 	uint8_t i = 1, memonum = atoi(parv[3]);
 	static char buf[XMLRPC_BUFSIZE] = "";
-	char *m = parv[3];
 
 	*buf = '\0';
 
@@ -196,83 +194,83 @@ static int memo_forward(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (!(mysender = myuser_find(parv[1])))
+	if (!(mu = myuser_find(parv[1])))
 	{
 		xmlrpc_generic_error(3, "Sending account nonexistent.");
 		return 0;
 	}
 
-	if (!(mytarget = myuser_find(parv[2])))
+	if (!(tmu = myuser_find(parv[2])))
 	{
 		xmlrpc_generic_error(4, "Target account nonexistent.");
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], mysender) == FALSE)
+	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
-	if (mysender->flags & MU_WAITAUTH)
+	if (mu->flags & MU_WAITAUTH)
 	{       
 		xmlrpc_generic_error(11, "Email address not verified.");
 		return 0;
 	}
 
 	/* Check whether target is not sender */
-	if (mytarget == mysender)
+	if (tmu == mu)
 	{       
 		xmlrpc_generic_error(2, "Target is sender.");
 		return 0;
 	}
 
 	/* Check for user setting "no memos" */
-	if (mytarget->flags & MU_NOMEMO)
+	if (tmu->flags & MU_NOMEMO)
 	{       
 		xmlrpc_generic_error(6, "Target does not wish to receive memos.");
 		return 0;
 	}
 
 	/* Check whether target inbox is full */
-	if (mytarget->memos.count >= me.mdlimit)
+	if (tmu->memos.count >= me.mdlimit)
 	{       
 		xmlrpc_generic_error(9, "Inbox is full.");
 		return 0;
 	}
 
 	/* Sanity check on memo ID */
-	if (!memonum || memonum > mysender->memos.count)
+	if (!memonum || memonum > mu->memos.count)
 	{
 	 	xmlrpc_generic_error(7, "Invalid memo ID.");
 		return 0;
 	}
 
 	/* Anti-flood */
-	if (CURRTIME - mysender->memo_ratelimit_time > MEMO_MAX_TIME)
-		mysender->memo_ratelimit_num = 0;
-	if (mysender->memo_ratelimit_num > MEMO_MAX_NUM)
+	if (CURRTIME - mu->memo_ratelimit_time > MEMO_MAX_TIME)
+		mu->memo_ratelimit_num = 0;
+	if (mu->memo_ratelimit_num > MEMO_MAX_NUM)
 	{       
 		xmlrpc_generic_error(9, "Memo flood.");
 		return 0;
 	}		  
-	mysender->memo_ratelimit_num++; 
-	mysender->memo_ratelimit_time = CURRTIME;
+	mu->memo_ratelimit_num++; 
+	mu->memo_ratelimit_time = CURRTIME;
 
 	/* Check whether sender is being ignored by the target */
-	LIST_FOREACH(n, mytarget->memo_ignores.head)							
+	LIST_FOREACH(n, tmu->memo_ignores.head)							
 	{
-		if (!strcasecmp((char *)n->data, mysender->name))
+		if (!strcasecmp((char *)n->data, mu->name))
 		{
-			logcommand_external(memosvs.me, "xmlrpc", conn, mysender, CMDLOG_SET, "failed SEND to %s (on ignore list)", mytarget->name);
+			logcommand_external(memosvs.me, "xmlrpc", conn, mu, CMDLOG_SET, "failed SEND to %s (on ignore list)", tmu->name);
 			xmlrpc_generic_error(6, "Sender is on ignore list.");
 			return 0;
 		}
 	}
 
-	logcommand_external(memosvs.me, "xmlrpc", conn, mysender, CMDLOG_SET, "FORWARD to %s", mytarget->name);
+	logcommand_external(memosvs.me, "xmlrpc", conn, mu, CMDLOG_SET, "FORWARD to %s", tmu->name);
 
-	LIST_FOREACH(n, mysender->memos.head)
+	LIST_FOREACH(n, mu->memos.head)
 	{
 		if (i == memonum)
 		{
@@ -283,16 +281,16 @@ static int memo_forward(void *conn, int parc, char *parv[])
 			/* Duplicate memo */
 			memo->sent = CURRTIME;
 			memo->status = MEMO_NEW;
-			strlcpy (forward->sender, mysender->name, NICKLEN);
+			strlcpy (forward->sender, mu->name, NICKLEN);
 			strlcpy (forward->text, memo->text, MEMOLEN);
 
 			/* Send memo */
 			n = node_create();
-			node_add(memo, n, &mytarget->memos);
-			mytarget->memoct_new++;
+			node_add(memo, n, &tmu->memos);
+			tmu->memoct_new++;
 
 			/* Tell the user that it has a new memo if it is online */
-			myuser_notice(memosvs.nick, mytarget, "You have a new memo from %s.", mysender->name);
+			myuser_notice(memosvs.nick, tmu, "You have a new memo from %s.", mu->name);
 
 			xmlrpc_string(buf, "Memo sent successfully.");
 			xmlrpc_send(1, buf);
@@ -324,8 +322,7 @@ static int memo_forward(void *conn, int parc, char *parv[])
 static int memo_delete(void *conn, int parc, char *parv[])
 {
 	/* Define and initialise structs and variables */
-	user_t *user = user_find_named(parv[1]);
-	myuser_t *myuser = user->myuser;
+	myuser_t *mu;
 	mymemo_t *memo = NULL;
 	node_t *n = NULL, *tn = NULL;
 	uint8_t i = 0, delcount = 0, memonum = 0, deleteall = 0;
@@ -339,20 +336,20 @@ static int memo_delete(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (!(myuser = myuser_find(parv[1])))
+	if (!(mu = myuser_find(parv[1])))
 	{
 		xmlrpc_generic_error(3, "Account nonexistent.");
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], myuser) == FALSE)
+	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
 	/* Check whether user has memos */
-	if (!myuser->memos.count)
+	if (!mu->memos.count)
 	{       
         	/* If not, send back an empty string */
 		xmlrpc_string(buf, "");
@@ -368,7 +365,7 @@ static int memo_delete(void *conn, int parc, char *parv[])
 		memonum = atoi(parv[2]);
 		
 		/* Sanity checks */
-		if (!memonum || memonum > myuser->memos.count)
+		if (!memonum || memonum > mu->memos.count)
 		{       
 			xmlrpc_generic_error(4, "Memo ID invalid.");
 			return 0;
@@ -378,7 +375,7 @@ static int memo_delete(void *conn, int parc, char *parv[])
 	delcount = 0;
 
 	/* Delete memos */
-	LIST_FOREACH_SAFE(n, tn, myuser->memos.head)
+	LIST_FOREACH_SAFE(n, tn, mu->memos.head)
 	{       
 		i++;
 		if ((i == memonum) || (deleteall == 1))
@@ -388,9 +385,9 @@ static int memo_delete(void *conn, int parc, char *parv[])
 			memo = (mymemo_t*) n->data;
 			
 			if (memo->status == MEMO_NEW)
-				myuser->memoct_new--; /* Decrease memocount */
+				mu->memoct_new--; /* Decrease memocount */
 			
-			node_del(n,&myuser->memos);
+			node_del(n,&mu->memos);
 			node_free(n);
 			
 			free(memo);
@@ -421,8 +418,7 @@ static int memo_delete(void *conn, int parc, char *parv[])
 static int memo_list(void *conn, int parc, char *parv[])
 {
 	/* Define and initialise structs and variables */
-	user_t *user = user_find_named(parv[1]);
-	myuser_t *myuser = user->myuser;
+	myuser_t *mu;
 	mymemo_t *memo = NULL;
 	node_t *n = NULL;
 	uint8_t i = 0;
@@ -438,13 +434,13 @@ static int memo_list(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (!(myuser = myuser_find(parv[1])))
+	if (!(mu = myuser_find(parv[1])))
 	{
 		xmlrpc_generic_error(3, "Account nonexistent.");
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], myuser) == FALSE)
+	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
@@ -452,14 +448,14 @@ static int memo_list(void *conn, int parc, char *parv[])
 
 	/* Just return a note of memos:unread */
 	if (!parv[2]) {
-		snprintf(memobuf, 64, "%d:%d", myuser->memos.count, myuser->memoct_new);
+		snprintf(memobuf, 64, "%d:%d", mu->memos.count, mu->memoct_new);
 		xmlrpc_string(buf, memobuf);
 		xmlrpc_send(1, buf);
 		return 0;
 	}
 
 	/* Check whether user has memos */
-	if (!myuser->memos.count)
+	if (!mu->memos.count)
 	{       
         	/* If not, send back an empty string */
 		xmlrpc_string(buf, "");
@@ -467,12 +463,12 @@ static int memo_list(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	LIST_FOREACH(n, myuser->memos.head)
+	LIST_FOREACH(n, mu->memos.head)
 	{       
 		i++;
 		memo = (mymemo_t *)n->data;
 		memotime = *localtime(&memo->sent);
-		snprintf(timebuf, 16, "%d", mktime(&memotime));
+		snprintf(timebuf, 16, "%d", (int) mktime(&memotime));
 		
 		if (memo->status == MEMO_NEW)
 			snprintf(memobuf, 64, "%d:%s:%s:1\n", i, memo->sender, timebuf);
@@ -506,8 +502,7 @@ static int memo_list(void *conn, int parc, char *parv[])
 static int memo_read(void *conn, int parc, char *parv[])
 {
 	/* Define and initialise structs and variables */
-	user_t *user = user_find_named(parv[1]), *sender = NULL;
-	myuser_t *myuser = user->myuser, *mysender = NULL;
+	myuser_t *mu;
 	mymemo_t *memo = NULL, *receipt = NULL;
 	node_t *n = NULL;
 	uint32_t i = 1, memonum = 0;
@@ -523,13 +518,13 @@ static int memo_read(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (!(myuser = myuser_find(parv[1])))
+	if (!(mu = myuser_find(parv[1])))
 	{
 		xmlrpc_generic_error(4, "Account nonexistent.");
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], myuser) == FALSE)
+	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
@@ -543,21 +538,21 @@ static int memo_read(void *conn, int parc, char *parv[])
 	} else memonum = atoi(parv[2]);
 
 	/* More memo id sanity checks */
-	if (!memonum || memonum > myuser->memos.count)
+	if (!memonum || memonum > mu->memos.count)
 	{       
 		xmlrpc_generic_error(4, "Invalid memo ID.");
 		return 0;
 	}
 
 	/* Read memo ids */
-	LIST_FOREACH(n, myuser->memos.head)
+	LIST_FOREACH(n, mu->memos.head)
 	{       
 		if (i == memonum)
 		{       
 			/* Now, i is the memo id => read the memo */
 			memo = (mymemo_t*) n->data;
 			memotime = *localtime(&memo->sent);
-			snprintf(timebuf, 16, "%d", mktime(&memotime));
+			snprintf(timebuf, 16, "%d", (int) mktime(&memotime));
 			strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &memotime);
 
 			/* If the memo is unread, */
@@ -566,22 +561,22 @@ static int memo_read(void *conn, int parc, char *parv[])
 				/* mark it as read */
 				memo->status = MEMO_READ;
 				/* and decrease "new memos" count */
-				myuser->memoct_new--;
-				mysender = myuser_find(memo->sender);
+				mu->memoct_new--;
+				mu = myuser_find(memo->sender);
 
 				/* If the sender's inbox is not full and is not MemoServ */
-				if ((mysender != NULL) && (mysender->memos.count < me.mdlimit) && strcasecmp(memosvs.nick, memo->sender))
+				if ((mu != NULL) && (mu->memos.count < me.mdlimit) && strcasecmp(memosvs.nick, memo->sender))
 				{       
 					receipt = smalloc(sizeof(mymemo_t));
 					receipt->sent = CURRTIME;
 					receipt->status = MEMO_NEW;
 					strlcpy(receipt->sender, memosvs.nick, NICKLEN);
-					snprintf(receipt->text, MEMOLEN, "%s has read a memo from you sent at %s", myuser->name, strfbuf);
+					snprintf(receipt->text, MEMOLEN, "%s has read a memo from you sent at %s", mu->name, strfbuf);
 
 					/* Send a memo to the sender that the memo was read */
 					n = node_create();
-					node_add(receipt, n, &mysender->memos);
-					mysender->memoct_new++;
+					node_add(receipt, n, &mu->memos);
+					mu->memoct_new++;
 				}
 			}
 
@@ -621,8 +616,7 @@ static int memo_read(void *conn, int parc, char *parv[])
 static int memo_ignore_add(void *conn, int parc, char *parv[])
 {
 	/* Define and initialise structs and variables */
-	user_t *user = user_find_named(parv[1]);
-	myuser_t *myuser = user->myuser, *mytarget;
+	myuser_t *mu, *tmu;
 	node_t *n, *node;
 	char *tmpbuf;
 	static char buf[XMLRPC_BUFSIZE] = "";
@@ -635,40 +629,40 @@ static int memo_ignore_add(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (!(myuser = myuser_find(parv[1])))
+	if (!(mu = myuser_find(parv[1])))
 	{
 		xmlrpc_generic_error(3, "Account nonexistent.");
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], myuser) == FALSE)
+	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
 	/* Sanity check (target is user) */
-	if (!strcasecmp(parv[2], myuser->name))
+	if (!strcasecmp(parv[2], mu->name))
 	{       
 		xmlrpc_generic_error(2, "You can't ignore yourself.");
 		return 0;
 	}
 	
 	/* Check whether target exists */
-	if (!(mytarget = myuser_find_ext(parv[2])))
+	if (!(tmu = myuser_find_ext(parv[2])))
 	{       
 		xmlrpc_generic_error(4, "Target user nonexistent.");
 		return 0;
 	}
 	
 	/* Ignore list is full */
-	if (myuser->memo_ignores.count >= MAXMSIGNORES)
+	if (mu->memo_ignores.count >= MAXMSIGNORES)
 	{       
 		xmlrpc_generic_error(9, "Ignore list full.");
 		return 0;
 	}
 
-	LIST_FOREACH(n, myuser->memo_ignores.head)
+	LIST_FOREACH(n, mu->memo_ignores.head)
 	{       
 		tmpbuf = (char *)n->data;
 		
@@ -684,7 +678,7 @@ static int memo_ignore_add(void *conn, int parc, char *parv[])
 	tmpbuf = sstrdup(parv[2]);
 
 	node = node_create();
-	node_add(tmpbuf, node, &myuser->memo_ignores);
+	node_add(tmpbuf, node, &mu->memo_ignores);
 
 	xmlrpc_string(buf, "Operation successful.");
 	xmlrpc_send(1, buf);
@@ -711,8 +705,7 @@ static int memo_ignore_add(void *conn, int parc, char *parv[])
 static int memo_ignore_delete(void *conn, int parc, char *parv[])
 {
 	/* Define and initialise structs and variables */
-	user_t *user = user_find_named(parv[1]);
-	myuser_t *myuser = user->myuser;
+	myuser_t *mu;
 	node_t *n, *tn;
 	char *tmpbuf;
 	static char buf[XMLRPC_BUFSIZE] = "";
@@ -725,26 +718,26 @@ static int memo_ignore_delete(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (!(myuser = myuser_find(parv[1])))
+	if (!(mu = myuser_find(parv[1])))
 	{
 		xmlrpc_generic_error(3, "Account nonexistent.");
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], myuser) == FALSE)
+	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
-	LIST_FOREACH_SAFE(n, tn, myuser->memo_ignores.head)
+	LIST_FOREACH_SAFE(n, tn, mu->memo_ignores.head)
 	{       
 		tmpbuf = (char *)n->data;
 		
 		/* User is in the ignore list */
 		if (!strcasecmp(tmpbuf, parv[2]))
 		{       
-			node_del(n, &myuser->memo_ignores);
+			node_del(n, &mu->memo_ignores);
 			node_free(n);
 
 			free(tmpbuf);
@@ -778,8 +771,7 @@ static int memo_ignore_delete(void *conn, int parc, char *parv[])
 static int memo_ignore_clear(void *conn, int parc, char *parv[])
 {
 	/* Define and initialise structs and variables */
-	user_t *user = user_find_named(parv[1]);
-	myuser_t *myuser = user->myuser;
+	myuser_t *mu;
 	node_t *n, *tn;
 	static char buf[XMLRPC_BUFSIZE] = "";
 
@@ -791,20 +783,20 @@ static int memo_ignore_clear(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (!(myuser = myuser_find(parv[1])))
+	if (!(mu = myuser_find(parv[1])))
 	{
 		xmlrpc_generic_error(3, "Account nonexistent.");
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], myuser) == FALSE)
+	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
         /* Check whether the user has ignores */
-	if (LIST_LENGTH(&myuser->memo_ignores) == 0)
+	if (LIST_LENGTH(&mu->memo_ignores) == 0)
 	{
         	/* If not, send back an empty string */
 		xmlrpc_string(buf, "");
@@ -812,10 +804,10 @@ static int memo_ignore_clear(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	LIST_FOREACH_SAFE(n, tn, myuser->memo_ignores.head)
+	LIST_FOREACH_SAFE(n, tn, mu->memo_ignores.head)
 	{       
 		free(n->data);
-		node_del(n, &myuser->memo_ignores);
+		node_del(n, &mu->memo_ignores);
 		node_free(n);
 	}
 
@@ -843,9 +835,8 @@ static int memo_ignore_clear(void *conn, int parc, char *parv[])
 static int memo_ignore_list(void *conn, int parc, char *parv[])
 {
 	/* Define and initialise structs and variables */
-	user_t *user = user_find_named(parv[1]);
-	myuser_t *myuser = user->myuser;
-	node_t *n, *tn;
+	myuser_t *mu;
+	node_t *n;
 	uint8_t i = 1;
 	char sendbuf[XMLRPC_BUFSIZE - 1] = "", ignorebuf[64] = "";
 	static char buf[XMLRPC_BUFSIZE] = "";
@@ -858,19 +849,19 @@ static int memo_ignore_list(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	if (!(myuser = myuser_find(parv[1])))
+	if (!(mu = myuser_find(parv[1])))
 	{
 		xmlrpc_generic_error(3, "Account nonexistent.");
 		return 0;
 	}
 
-	if (authcookie_validate(parv[0], myuser) == FALSE)
+	if (authcookie_validate(parv[0], mu) == FALSE)
 	{
 		xmlrpc_generic_error(5, "Authcookie validation failed.");
 		return 0;
 	}
 
-	LIST_FOREACH(n, myuser->memo_ignores.head)
+	LIST_FOREACH(n, mu->memo_ignores.head)
 	{
 		/* provide a list in the format id:user divided by newlines */
 		snprintf(ignorebuf, 64, "%d:%s", i, (char *)n->data);

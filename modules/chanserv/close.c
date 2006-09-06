@@ -4,7 +4,7 @@
  *
  * Closing for channels.
  *
- * $Id: close.c 6213 2006-08-21 15:25:03Z jilles $
+ * $Id: close.c 6317 2006-09-06 20:03:32Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/close", FALSE, _modinit, _moddeinit,
-	"$Id: close.c 6213 2006-08-21 15:25:03Z jilles $",
+	"$Id: close.c 6317 2006-09-06 20:03:32Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -167,8 +167,6 @@ static void cs_cmd_close(char *origin)
 		c = channel_find(target);
 		if (c != NULL)
 		{
-			chanban_t *cb;
-
 			/* hmm, channel still exists, probably permanent? */
 			channel_mode_va(chansvs.me->me, c, 2, "-isbl", "*!*@*");
 			check_modes(mc, TRUE);

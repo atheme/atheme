@@ -5,7 +5,7 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id: dictionary.h 6153 2006-08-19 21:46:12Z jilles $
+ * $Id: dictionary.h 6317 2006-09-06 20:03:32Z pippijn $
  */
 
 #ifndef _DICTIONARY_H
@@ -39,7 +39,7 @@ struct dictionary_iteration_state_
 
 typedef struct dictionary_iteration_state_ dictionary_iteration_state_t;
 
-#define DICTIONARY_FOREACH(element,state,dict) for (dictionary_foreach_start((dict), (state)); element = dictionary_foreach_cur((dict), (state)); dictionary_foreach_next((dict), (state)))
+#define DICTIONARY_FOREACH(element, state, dict) for (dictionary_foreach_start((dict), (state)); (element = dictionary_foreach_cur((dict), (state))); dictionary_foreach_next((dict), (state)))
 
 /*
  * dictionary_create() creates a new dictionary tree of the defined resolution.

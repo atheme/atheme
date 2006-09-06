@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6077 2006-08-16 16:07:10Z jilles $
+ * $Id: main.c 6317 2006-09-06 20:03:32Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6077 2006-08-16 16:07:10Z jilles $",
+	"$Id: main.c 6317 2006-09-06 20:03:32Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -32,7 +32,7 @@ static void delete_stale(void *vptr);
 /* main services client routine */
 static void saslserv(char *origin, uint8_t parc, char *parv[])
 {
-	char *cmd, *s;
+	char *cmd;
 	char orig[BUFSIZE];
 
 	if (!origin)
@@ -169,7 +169,6 @@ sasl_session_t *make_session(char *uid)
 void destroy_session(sasl_session_t *p)
 {
 	node_t *n, *tn;
-	int i;
 
 	LIST_FOREACH_SAFE(n, tn, sessions.head)
 	{
@@ -263,14 +262,13 @@ static sasl_mechanism_t *find_mechanism(char *name)
  */
 static void sasl_packet(sasl_session_t *p, char *buf, int len)
 {
-	int rc, i;
+	int rc;
 	size_t tlen = 0;
 	char *cloak, *out = NULL;
 	char *temp;
 	char mech[21];
 	int out_len = 0;
 	metadata_t *md;
-	myuser_t *mu;
 	node_t *n;
 
 	/* First piece of data in a session is the name of
@@ -408,7 +406,7 @@ void sasl_logcommand(char *source, int level, const char *fmt, ...)
 	time_t t;
 	struct tm tm;
 	char datetime[64];
-	char lbuf[BUFSIZE], strfbuf[32];
+	char lbuf[BUFSIZE];
 
 	/* XXX use level */
 
@@ -444,7 +442,7 @@ int login_user(sasl_session_t *p)
 	if(mu == NULL) /* WTF? */
 		return 0;
 
- 	if (md = metadata_find(mu, METADATA_USER, "private:freeze:freezer"))
+ 	if ((md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
 	{
 		sasl_logcommand(target, CMDLOG_LOGIN, "failed IDENTIFY to %s (frozen)", mu->name);
 		return 0;

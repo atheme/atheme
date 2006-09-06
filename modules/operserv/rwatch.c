@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ RWATCH.
  *
- * $Id: rwatch.c 6169 2006-08-20 14:11:58Z jilles $
+ * $Id: rwatch.c 6317 2006-09-06 20:03:32Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rwatch", FALSE, _modinit, _moddeinit,
-	"$Id: rwatch.c 6169 2006-08-20 14:11:58Z jilles $",
+	"$Id: rwatch.c 6317 2006-09-06 20:03:32Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -55,9 +55,6 @@ fcommand_t os_rwatch_set = { "SET", AC_NONE, os_cmd_rwatch_set };
 
 void _modinit(module_t *m)
 {
-	int i;
-	node_t *n, *tn;
-
 	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
@@ -78,7 +75,6 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
-	int i = 0;
 	node_t *n, *tn;
 
 	LIST_FOREACH_SAFE(n, tn, rwatch_list.head)
@@ -138,7 +134,6 @@ static void write_rwatchdb(void)
 static void load_rwatchdb(void)
 {
 	FILE *f;
-	node_t *n;
 	char *item, rBuf[BUFSIZE * 2];
 	rwatch_t *rw = NULL;
 
@@ -192,7 +187,6 @@ static void load_rwatchdb(void)
 static void os_cmd_rwatch(char *origin)
 {
 	/* Grab args */
-	user_t *u = user_find_named(origin);
 	char *cmd = strtok(NULL, " ");
 	
 	/* Bad/missing arg */
@@ -438,7 +432,6 @@ static void os_cmd_rwatch_set(char *origin, char *channel)
 
 static void rwatch_newuser(void *vptr)
 {
-	int i;
 	user_t *u = vptr;
 	char usermask[NICKLEN+USERLEN+HOSTLEN];
 	node_t *n;

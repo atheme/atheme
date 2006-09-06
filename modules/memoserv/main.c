@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 5923 2006-07-20 15:02:18Z pippijn $
+ * $Id: main.c 6317 2006-09-06 20:03:32Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 5923 2006-07-20 15:02:18Z pippijn $",
+	"$Id: main.c 6317 2006-09-06 20:03:32Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -24,7 +24,7 @@ list_t ms_helptree;
 /* main services client routine */
 static void memoserv(char *origin, uint8_t parc, char *parv[])
 {
-	char *cmd, *s;
+	char *cmd;
 	char orig[BUFSIZE];
 
 	if (!origin)

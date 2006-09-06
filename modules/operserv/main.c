@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6061 2006-08-15 16:28:18Z jilles $
+ * $Id: main.c 6317 2006-09-06 20:03:32Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6061 2006-08-15 16:28:18Z jilles $",
+	"$Id: main.c 6317 2006-09-06 20:03:32Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,7 +22,7 @@ list_t os_helptree;
 /* main services client routine */
 static void oservice(char *origin, uint8_t parc, char *parv[])
 {
-	char *cmd, *s;
+	char *cmd;
 	char orig[BUFSIZE];
 
         if (!origin)

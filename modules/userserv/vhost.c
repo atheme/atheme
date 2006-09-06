@@ -4,7 +4,7 @@
  *
  * VHost management! (ratbox only right now.)
  *
- * $Id: vhost.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: vhost.c 6317 2006-09-06 20:03:32Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: vhost.c 6317 2006-09-06 20:03:32Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -104,28 +104,11 @@ static void do_restorehost_all(myuser_t *mu)
 	}
 }
 
-static void do_restorehost(user_t *u)
-{
-	char luhost[BUFSIZE];
-
-	if (!strcmp(u->vhost, u->host))
-		return;
-	strlcpy(u->vhost, u->host, HOSTLEN);
-	notice(usersvs.nick, u->nick, "Setting your host to \2%s\2.",
-		u->host);
-	sethost_sts(usersvs.nick, u->nick, u->host);
-	strlcpy(luhost, u->user, BUFSIZE);
-	strlcat(luhost, "@", BUFSIZE);
-	strlcat(luhost, u->host, BUFSIZE);
-	metadata_add(u->myuser, METADATA_USER, "private:host:vhost", luhost);
-}
-
 /* VHOST <nick> [host] */
 static void us_cmd_vhost(char *origin)
 {
 	char *target = strtok(NULL, " ");
 	char *host = strtok(NULL, " ");
-	node_t *n;
 	user_t *source = user_find_named(origin);
 	myuser_t *mu;
 

@@ -4,7 +4,7 @@
  *
  * CRYPT mechanism provider
  *
- * $Id: crypt.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: crypt.c 6317 2006-09-06 20:03:32Z pippijn $
  */
 
 /******************************* WARNING ******************************************
@@ -19,7 +19,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/crypt", FALSE, _modinit, _moddeinit,
-	"$Id: crypt.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: crypt.c 6317 2006-09-06 20:03:32Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -123,11 +123,11 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 				memcpy(*out, mu->pass, *out_len);
 				(*out)[(*out_len) - 1] = '$';
 			}
-			s->password = strdup(mu->pass);
+			s->password = (unsigned char *) strdup(mu->pass);
 		}
 		else
 		{
-			s->password = strdup(crypt(mu->pass, gen_salt()));
+			s->password = (unsigned char *) strdup(crypt(mu->pass, gen_salt()));
 			*out_len = 10;
 			*out = strdup(s->password);
 		}
@@ -145,7 +145,7 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 		MD5Update(&ctx, s->server_data, 16);
 		MD5Update(&ctx, s->client_data, 16);
 		MD5Update(&ctx, s->password, strlen(s->password));
-		MD5Final(hash, &ctx);
+		MD5Final((unsigned char *) hash, &ctx);
 
 		if(!memcmp(message, hash, 16))
 			return ASASL_DONE;
