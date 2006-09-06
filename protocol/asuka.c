@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: asuka.c 6141 2006-08-19 16:25:52Z jilles $
+ * $Id: asuka.c 6291 2006-09-06 02:26:55Z pippijn $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 6141 2006-08-19 16:25:52Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 6291 2006-09-06 02:26:55Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -376,7 +376,7 @@ static void asuka_jupe(char *server, char *reason)
 	sts("%s JU * !+%s %ld :%s", me.numeric, server, CURRTIME, reason);
 }
 
-static void m_topic(char *origin, uint8_t parc, char *parv[])
+static void m_topic(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
 	server_t *source_server;
@@ -387,14 +387,10 @@ static void m_topic(char *origin, uint8_t parc, char *parv[])
 	if (!c || parc < 2)
 		return;
 
-	if (origin == NULL)
-		source = me.actual;
-	else if ((source_server = server_find(origin)) != NULL)
-		source = source_server->name;
-	else if ((source_user = user_find(origin)) != NULL)
-		source = source_user->nick;
-	else
-		source = origin;
+        if (si->s != NULL)
+                source = si->s->name;
+        else if (si->su != NULL)
+                source = si->su->nick;
 
 	/* Let's accept any topic
 	 * The criteria asuka uses for acceptance are broken,
@@ -404,17 +400,17 @@ static void m_topic(char *origin, uint8_t parc, char *parv[])
 		ts = atoi(parv[parc - 2]);
 	if (ts == 0)
 		ts = CURRTIME;
-	handle_topic_from(origin, c, source, ts, parv[parc - 1]);
+	handle_topic_from(si, c, source, ts, parv[parc - 1]);
 }
 
 /* AB G !1119920789.573932 services.atheme.org 1119920789.573932 */
-static void m_ping(char *origin, uint8_t parc, char *parv[])
+static void m_ping(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	/* reply to PING's */
 	sts("%s Z %s %s %s", me.numeric, parv[0], parv[1], parv[2]);
 }
 
-static void m_pong(char *origin, uint8_t parc, char *parv[])
+static void m_pong(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	me.uplinkpong = CURRTIME;
 
@@ -436,31 +432,28 @@ static void m_pong(char *origin, uint8_t parc, char *parv[])
 	}
 }
 
-static void m_privmsg(char *origin, uint8_t parc, char *parv[])
+static void m_privmsg(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	if (parc != 2)
 		return;
 
-	handle_message(origin, parv[0], FALSE, parv[1]);
+	handle_message(si, parv[0], FALSE, parv[1]);
 }
 
-static void m_notice(char *origin, uint8_t parc, char *parv[])
+static void m_notice(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	if (parc != 2)
 		return;
 
-	handle_message(origin, parv[0], TRUE, parv[1]);
+	handle_message(si, parv[0], TRUE, parv[1]);
 }
 
-static void m_create(char *origin, uint8_t parc, char *parv[])
+static void m_create(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	char buf[BUFSIZE];
 	uint8_t chanc;
 	char *chanv[256];
 	uint8_t i;
-
-	if (!user_find(origin))
-		return;
 
 	chanc = sjtoken(parv[0], ',', chanv);
 
@@ -478,39 +471,32 @@ static void m_create(char *origin, uint8_t parc, char *parv[])
 		buf[0] = '@';
 		buf[1] = '\0';
 
-		strlcat(buf, origin, BUFSIZE);
+		strlcat(buf, si->su->nick, BUFSIZE);
 
 		chanuser_add(c, buf);
 	}
 }
 
-static void m_join(char *origin, uint8_t parc, char *parv[])
+static void m_join(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	char buf[BUFSIZE];
 	uint8_t chanc;
 	char *chanv[256];
 	uint8_t i;
-	user_t *u;
 	node_t *n, *tn;
 	chanuser_t *cu;
 
 	/* JOIN 0 is really a part from all channels */
 	if (!strcmp(parv[0], "0"))
 	{
-		u = user_find(origin);
-		if (u == NULL)
-			return;
-		LIST_FOREACH_SAFE(n, tn, u->channels.head)
+		LIST_FOREACH_SAFE(n, tn, si->su->channels.head)
 		{
 			cu = (chanuser_t *)n->data;
-			chanuser_delete(cu->chan, u);
+			chanuser_delete(cu->chan, si->su);
 		}
 		return;
 	}
 	if (parc < 2)
-		return;
-
-	if (!user_find(origin))
 		return;
 
 	chanc = sjtoken(parv[0], ',', chanv);
@@ -525,11 +511,11 @@ static void m_join(char *origin, uint8_t parc, char *parv[])
 			channel_mode_va(NULL, c, 1, "+");
 		}
 
-		chanuser_add(c, origin);
+		chanuser_add(c, si->su->nick);
 	}
 }
 
-static void m_burst(char *origin, uint8_t parc, char *parv[])
+static void m_burst(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	channel_t *c;
 	uint8_t modec;
@@ -571,7 +557,7 @@ static void m_burst(char *origin, uint8_t parc, char *parv[])
 
 		clear_simple_modes(c);
 		chanban_clear(c);
-		handle_topic_from(origin, c, "", 0, "");
+		handle_topic_from(si, c, "", 0, "");
 		LIST_FOREACH(n, c->members.head)
 		{
 			cu = (chanuser_t *)n->data;
@@ -651,7 +637,7 @@ static void m_burst(char *origin, uint8_t parc, char *parv[])
 		channel_delete(c->name);
 }
 
-static void m_part(char *origin, uint8_t parc, char *parv[])
+static void m_part(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	uint8_t chanc;
 	char *chanv[256];
@@ -662,15 +648,14 @@ static void m_part(char *origin, uint8_t parc, char *parv[])
 	chanc = sjtoken(parv[0], ',', chanv);
 	for (i = 0; i < chanc; i++)
 	{
-		slog(LG_DEBUG, "m_part(): user left channel: %s -> %s", origin, chanv[i]);
+		slog(LG_DEBUG, "m_part(): user left channel: %s -> %s", si->su->nick, chanv[i]);
 
-		chanuser_delete(channel_find(chanv[i]), user_find(origin));
+		chanuser_delete(channel_find(chanv[i]), si->su);
 	}
 }
 
-static void m_nick(char *origin, uint8_t parc, char *parv[])
+static void m_nick(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	server_t *s;
 	user_t *u;
 	struct in_addr ip;
 	char ipstring[64];
@@ -682,14 +667,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 	{
 		/* -> AB N jilles 1 1137687480 jilles jaguar.test +oiwgrx jilles B]AAAB ABAAE :Jilles Tjoelker */
 		/* -> AB N test4 1 1137690148 jilles jaguar.test +iw B]AAAB ABAAG :Jilles Tjoelker */
-		s = server_find(origin);
-		if (!s)
-		{
-			slog(LG_DEBUG, "m_nick(): new user on nonexistant server: %s", origin);
-			return;
-		}
-
-		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
+		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", si->s->name, parv[0]);
 
 		ipstring[0] = '\0';
 		if (strlen(parv[parc - 3]) == 6)
@@ -698,7 +676,7 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 			if (!inet_ntop(AF_INET, &ip, ipstring, sizeof ipstring))
 				ipstring[0] = '\0';
 		}
-		u = user_add(parv[0], parv[3], parv[4], NULL, ipstring, parv[parc - 2], parv[parc - 1], s, atoi(parv[2]));
+		u = user_add(parv[0], parv[3], parv[4], NULL, ipstring, parv[parc - 2], parv[parc - 1], si->s, atoi(parv[2]));
 
 		if (parv[5][0] == '+')
 		{
@@ -742,30 +720,29 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 	{
 		node_t *n;
 
-		u = user_find(origin);
-		if (!u)
+		if (!si->su)
 		{
-			slog(LG_DEBUG, "m_nick(): nickname change from nonexistant user: %s", origin);
+			slog(LG_DEBUG, "m_nick(): server trying to change nick: %s", si->s != NULL ? si->s->name : "<none>");
 			return;
 		}
 
-		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", u->nick, parv[0]);
+		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
 		/* remove the current one from the list */
-		n = node_find(u, &userlist[u->hash]);
-		node_del(n, &userlist[u->hash]);
+		n = node_find(si->su, &userlist[si->su->hash]);
+		node_del(n, &userlist[si->su->hash]);
 		node_free(n);
 
 		/* change the nick */
-		strlcpy(u->nick, parv[0], NICKLEN);
-		u->ts = atoi(parv[1]);
+		strlcpy(si->su->nick, parv[0], NICKLEN);
+		si->su->ts = atoi(parv[1]);
 
 		/* readd with new nick (so the hash works) */
 		n = node_create();
-		u->hash = UHASH((unsigned char *)u->nick);
-		node_add(u, n, &userlist[u->hash]);
+		si->su->hash = UHASH((unsigned char *) si->su->nick);
+		node_add(si->su, n, &userlist[si->su->hash]);
 
-		handle_nickchange(u);
+		handle_nickchange(si->su);
 	}
 	else
 	{
@@ -776,24 +753,18 @@ static void m_nick(char *origin, uint8_t parc, char *parv[])
 	}
 }
 
-static void m_quit(char *origin, uint8_t parc, char *parv[])
+static void m_quit(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	slog(LG_DEBUG, "m_quit(): user leaving: %s", origin);
+	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
 
 	/* user_delete() takes care of removing channels and so forth */
-	user_delete(user_find(origin));
+	user_delete(si->su);
 }
 
-static void m_mode(char *origin, uint8_t parc, char *parv[])
+static void m_mode(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	user_t *u;
 	char *p;
-
-	if (!origin)
-	{
-		slog(LG_DEBUG, "m_mode(): received MODE without origin");
-		return;
-	}
 
 	if (parc < 2)
 	{
@@ -849,7 +820,7 @@ static void m_mode(char *origin, uint8_t parc, char *parv[])
 	}
 }
 
-static void m_clearmode(char *origin, uint8_t parc, char *parv[])
+static void m_clearmode(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	channel_t *chan;
 	char *p, c;
@@ -917,7 +888,7 @@ static void m_clearmode(char *origin, uint8_t parc, char *parv[])
 	}
 }
 
-static void m_kick(char *origin, uint8_t parc, char *parv[])
+static void m_kick(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	user_t *u = user_find(parv[1]);
 	channel_t *c = channel_find(parv[0]);
@@ -953,21 +924,21 @@ static void m_kick(char *origin, uint8_t parc, char *parv[])
 	}
 }
 
-static void m_kill(char *origin, uint8_t parc, char *parv[])
+static void m_kill(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	if (parc < 1)
 		return;
-	handle_kill(origin, parv[0], parc > 1 ? parv[1] : "<No reason given>");
+	handle_kill(si, parv[0], parc > 1 ? parv[1] : "<No reason given>");
 }
 
-static void m_squit(char *origin, uint8_t parc, char *parv[])
+static void m_squit(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_squit(): server leaving: %s from %s", parv[0], parv[1]);
 	server_delete(parv[0]);
 }
 
 /* SERVER ircu.devel.atheme.org 1 1119902586 1119908830 J10 ABAP] + :lets lol */
-static void m_server(char *origin, uint8_t parc, char *parv[])
+static void m_server(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	server_t *s;
 
@@ -977,7 +948,7 @@ static void m_server(char *origin, uint8_t parc, char *parv[])
 	slog(LG_DEBUG, "m_server(): new server: %s, id %s, %s",
 			parv[0], parv[5],
 			parv[4][0] == 'P' ? "eob" : "bursting");
-	s = server_add(parv[0], atoi(parv[1]), origin ? origin : me.name, parv[5], parv[7]);
+	s = server_add(parv[0], atoi(parv[1]), si->origin ? si->origin : me.name, parv[5], parv[7]);
 
 	if (cnt.server == 2)
 		me.actual = sstrdup(parv[0]);
@@ -992,42 +963,42 @@ static void m_server(char *origin, uint8_t parc, char *parv[])
 	me.recvsvr = TRUE;
 }
 
-static void m_stats(char *origin, uint8_t parc, char *parv[])
+static void m_stats(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	handle_stats(user_find(origin), parv[0][0]);
+	handle_stats(si->su, parv[0][0]);
 }
 
-static void m_admin(char *origin, uint8_t parc, char *parv[])
+static void m_admin(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	handle_admin(user_find(origin));
+	handle_admin(si->su);
 }
 
-static void m_version(char *origin, uint8_t parc, char *parv[])
+static void m_version(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	handle_version(user_find(origin));
+	handle_version(si->su);
 }
 
-static void m_info(char *origin, uint8_t parc, char *parv[])
+static void m_info(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	handle_info(user_find(origin));
+	handle_info(si->su);
 }
 
-static void m_motd(char *origin, uint8_t parc, char *parv[])
+static void m_motd(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	handle_motd(user_find(origin));
+	handle_motd(si->su);
 }
 
-static void m_whois(char *origin, uint8_t parc, char *parv[])
+static void m_whois(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	handle_whois(user_find(origin), parc >= 2 ? parv[1] : "*");
+	handle_whois(si->su, parc >= 2 ? parv[1] : "*");
 }
 
-static void m_trace(char *origin, uint8_t parc, char *parv[])
+static void m_trace(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	handle_trace(user_find(origin), parc >= 1 ? parv[0] : "*", parc >= 2 ? parv[1] : NULL);
+	handle_trace(si->su, parc >= 1 ? parv[0] : "*", parc >= 2 ? parv[1] : NULL);
 }
 
-static void m_pass(char *origin, uint8_t parc, char *parv[])
+static void m_pass(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	if (strcmp(curr_uplink->pass, parv[0]))
 	{
@@ -1036,19 +1007,17 @@ static void m_pass(char *origin, uint8_t parc, char *parv[])
 	}
 }
 
-static void m_error(char *origin, uint8_t parc, char *parv[])
+static void m_error(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
 	slog(LG_INFO, "m_error(): error from server: %s", parv[0]);
 }
 
-static void m_eos(char *origin, uint8_t parc, char *parv[])
+static void m_eos(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	server_t *source = server_find(origin);
-
-	handle_eob(source);
+	handle_eob(si->s);
 
 	/* acknowledge a local END_OF_BURST */
-	if (source->uplink == me.me)
+	if (si->s->uplink == me.me)
 		sts("%s EA", me.numeric);
 }
 

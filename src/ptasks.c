@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 6281 2006-09-03 22:44:55Z jilles $
+ * $Id: ptasks.c 6291 2006-09-06 02:26:55Z pippijn $
  */
 
 #include "atheme.h"
@@ -324,79 +324,63 @@ void handle_motd(user_t *u)
 	fclose(f);
 }
 
-void handle_message(char *origin, char *target, boolean_t is_notice, char *message)
+void handle_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *message)
 {
-	user_t *u;
-	user_t *t;
-	service_t *sptr;
 	char *vec[3];
 
-	/* no prefix, so from server */
-	if (!origin)
+	/* message from server, ignore */
+	if (si->su == NULL)
 		return;
-
-	if (!(u = user_find(origin)))
-	{
-		/* don't complain about notices from servers */
-		if (!is_notice || !server_find(origin))
-			slog(LG_DEBUG, "handle_privmsg(): got message from nonexistant user `%s'", origin);
-		return;
-	}
 
 	/* If target is a channel and fantasy commands are enabled,
 	 * this will return chanserv
 	 */
-	sptr = find_service(target);
-	if (sptr == NULL)
+	si->sptr = find_service(target);
+	if (si->sptr == NULL)
 	{
 		if (!is_notice && (isalnum(target[0]) || strchr("[\\]^_`{|}~", target[0])))
 		{
 			/* If it's not a notice and looks like a nick or
 			 * user@server, send back an error message */
 			if (strchr(target, '@') || !ircd->uses_uid || (!ircd->uses_p10 && !isdigit(target[0])))
-				numeric_sts(me.name, 401, u->nick, "%s :No such nick", target);
+				numeric_sts(me.name, 401, si->su->nick, "%s :No such nick", target);
 			else
-				numeric_sts(me.name, 401, u->nick, "* :Target left IRC. Failed to deliver: [%.20s]", message);
+				numeric_sts(me.name, 401, si->su->nick, "* :Target left IRC. Failed to deliver: [%.20s]", message);
 		}
 		return;
 	}
 
-	if (sptr)
+	/* Run it through flood checks. Channel commands are checked
+	 * separately.
+	 */
+	if (si->sptr->me != NULL && *target != '#' && floodcheck(si->su, si->sptr->me))
+		return;
+
+	if (!is_notice && config_options.secure && *target != '#' && irccasecmp(target, si->sptr->disp))
 	{
-		t = sptr->me;
-
-		/* Run it through flood checks. Channel commands are checked
-		 * separately.
-		 */
-		if (t != NULL && *target != '#' && floodcheck(u, t))
-			return;
-
-		if (!is_notice && config_options.secure && *target != '#' && irccasecmp(target, sptr->disp))
-		{
-			notice(t->nick, u->nick, "For security reasons, \2/msg %s\2 has been disabled."
-					" Use \2/%s%s <command>\2 to send a command.",
-					sptr->me->nick, (ircd->uses_rcommand ? "" : "msg "), sptr->disp);
-			return;
-		}
-
-		vec[0] = target;
-		vec[1] = message;
-		vec[2] = NULL;
-		if (is_notice)
-			sptr->notice_handler(u->nick, 2, vec);
-		else
-			sptr->handler(u->nick, 2, vec);
+		notice(si->sptr->me->nick, si->su->nick, "For security reasons, \2/msg %s\2 has been disabled."
+				" Use \2/%s%s <command>\2 to send a command.",
+				si->sptr->me->nick, (ircd->uses_rcommand ? "" : "msg "), si->sptr->disp);
+		return;
 	}
+
+	vec[0] = target;
+	vec[1] = message;
+	vec[2] = NULL;
+	if (is_notice)
+		si->sptr->notice_handler(si->su->nick, 2, vec);
+	else
+		si->sptr->handler(si->su->nick, 2, vec);
 }
 
-void handle_topic_from(char *source, channel_t *c, char *setter, time_t ts, char *topic)
+void handle_topic_from(sourceinfo_t *si, channel_t *c, char *setter, time_t ts, char *topic)
 {
 	hook_channel_topic_check_t hdata;
 
 	if (topic != NULL && topic[0] == '\0')
 		topic = NULL;
-	hdata.u = user_find(source);
-	hdata.s = server_find(source);
+	hdata.u = si->su;
+	hdata.s = si->s;
 	hdata.c = c;
 	hdata.setter = setter;
 	hdata.ts = ts;
@@ -474,27 +458,21 @@ void handle_topic(channel_t *c, char *setter, time_t ts, char *topic)
 	hook_call_event("channel_topic", c);
 }
 
-void handle_kill(char *origin, char *victim, char *reason)
+void handle_kill(sourceinfo_t *si, char *victim, char *reason)
 {
 	char *source;
-	server_t *source_server;
-	user_t *source_user;
 	user_t *u;
 	static time_t lastkill = 0;
 	static unsigned int killcount = 0;
 
-	if (origin == NULL)
-		source = me.actual;
-	else if ((source_server = server_find(origin)) != NULL)
-		source = source_server->name;
-	else if ((source_user = user_find(origin)) != NULL)
-		source = source_user->nick;
-	else
-		source = origin;
+	if (si->s != NULL)
+		source = si->s->name;
+	else if (si->su != NULL)
+		source = si->su->nick;
 
 	u = user_find(victim);
 	if (u == NULL)
-		slog(LG_DEBUG, "handle_kill(): %s killed unknown user %s (%s)", origin, victim, reason);
+		slog(LG_DEBUG, "handle_kill(): %s killed unknown user %s (%s)", si->origin, victim, reason);
 	else if (u->server == me.me)
 	{
 		slog(LG_INFO, "handle_kill(): %s killed service %s (%s)", source, u->nick, reason);
@@ -644,3 +622,4 @@ int floodcheck(user_t *u, user_t *t)
 
 	return 0;
 }
+

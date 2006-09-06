@@ -3,7 +3,7 @@
  * (C) 2005 Trystan Scott Lee
  * Contact trystan@nomadirc.net
  *
- * Please read COPYING and README for furhter details.
+ * Please read COPYING and README for further details.
  *
  * Based on the original code from Denora
  * 

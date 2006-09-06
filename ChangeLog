@@ -1,3 +1,12 @@
+jilles      2006/09/04 15:45:05 UTC	(20060904-6289)
+  Log:
+  Add Id keyword
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/contrib/ircd_loveserv.c (File Modified) (Property Modified)
+
+
 jilles      2006/09/03 23:06:23 UTC	(20060903-6287)
   Log:
   operserv clones: mention KLINE in syntax error message

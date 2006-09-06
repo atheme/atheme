@@ -4,7 +4,7 @@
  *
  * This file contains IRC interaction routines.
  *
- * $Id: parse.c 6079 2006-08-16 16:44:39Z jilles $
+ * $Id: parse.c 6291 2006-09-06 02:26:55Z pippijn $
  */
 
 #include "atheme.h"
@@ -17,7 +17,7 @@ void (*parse) (char *line) = &irc_parse;
 /* parses a standard 2.8.21 style IRC stream */
 void irc_parse(char *line)
 {
-	char *origin = NULL;
+	sourceinfo_t si = { 0 };
 	char *pos;
 	char *command = NULL;
 	char *message = NULL;
@@ -58,7 +58,10 @@ void irc_parse(char *line)
 			 */
 			if (*line == ':')
 			{
-				origin = line + 1;
+                        	si.origin = line + 1;
+
+				si.s = server_find(si.origin);
+				si.su = user_find(si.origin);
 
 				if ((message = strchr(pos, ' ')))
 				{
@@ -74,10 +77,31 @@ void irc_parse(char *line)
 			}
 			else
 			{
+				if (me.recvsvr)
+				{
+					si.origin = me.actual;
+					si.s = server_find(si.origin);
+				}
 				message = pos;
 				command = line;
 			}
 		}
+		else
+		{
+			if (me.recvsvr)
+			{
+				si.origin = me.actual;
+				si.s = server_find(si.origin);
+			}
+			command = line;
+			message = NULL;
+		}
+                if (!si.s && !si.su && me.recvsvr)
+                {
+                        slog(LG_INFO, "irc_parse(): got message from nonexistant user or server: %s", si.origin);
+                        return;
+                }
+
 		/* okay, the nasty part is over, now we need to make a
 		 * parv out of what's left
 		 */
@@ -109,8 +133,7 @@ void irc_parse(char *line)
 		if ((pcmd = pcommand_find(command)))
 			if (pcmd->handler)
 			{
-				pcmd->handler(origin, parc, parv);
-				return;
+                                pcmd->handler(&si, parc, parv);
 			}
 	}
 }
@@ -118,7 +141,7 @@ void irc_parse(char *line)
 /* parses a P10 IRC stream */
 void p10_parse(char *line)
 {
-	char *origin = NULL;
+	sourceinfo_t si = { 0 };
 	char *pos;
 	char *command = NULL;
 	char *message = NULL;
@@ -159,9 +182,18 @@ void p10_parse(char *line)
 			 */
 			if (*line == ':' || me.recvsvr == TRUE)
 			{
-				origin = line;
-				if (*origin == ':')
-					origin++;
+				si.origin = line;
+				if (*si.origin == ':')
+				{
+					si.origin++;
+                                	si.s = server_find(si.origin);
+                                	si.su = user_find_named(si.origin);
+				}
+				else
+				{
+                                	si.s = server_find(si.origin);
+                                	si.su = user_find(si.origin);
+				}
 
 				if ((message = strchr(pos, ' ')))
 				{
@@ -181,6 +213,13 @@ void p10_parse(char *line)
 				command = line;
 			}
 		}
+
+                if (!si.s && !si.su && me.recvsvr)
+                {
+                        slog(LG_DEBUG, "irc_parse(): got message from nonexistant user or server: %s", si.origin);
+                        return;
+                }
+
 		/* okay, the nasty part is over, now we need to make a
 		 * parv out of what's left
 		 */
@@ -212,7 +251,7 @@ void p10_parse(char *line)
 		if ((pcmd = pcommand_find(command)))
 			if (pcmd->handler)
 			{
-				pcmd->handler(origin, parc, parv);
+				pcmd->handler(&si, parc, parv);
 				return;
 			}
 	}

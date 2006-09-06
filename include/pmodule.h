@@ -5,7 +5,7 @@
  * Protocol module stuff.
  * Modules usually do not need this.
  *
- * $Id: pmodule.h 6081 2006-08-16 17:07:03Z jilles $
+ * $Id: pmodule.h 6291 2006-09-06 02:26:55Z pippijn $
  */
 
 #ifndef PMODULE_H
@@ -15,7 +15,7 @@ typedef struct pcommand_ pcommand_t;
 
 struct pcommand_ {
 	char	*token;
-	void	(*handler)(char *origin, uint8_t parc, char *parv[]);
+	void	(*handler)(sourceinfo_t *si, uint8_t parc, char *parv[]);
 };
 
 /* pmodule.c */
@@ -27,7 +27,7 @@ E boolean_t pmodule_loaded;
 
 E void pcommand_init(void);
 E void pcommand_add(char *token,
-        void (*handler)(char *origin, uint8_t parc, char *parv[]));
+        void (*handler)(sourceinfo_t *si, uint8_t parc, char *parv[]));
 E void pcommand_delete(char *token);
 E pcommand_t *pcommand_find(char *token);
 
@@ -39,9 +39,9 @@ E void handle_stats(user_t *, char);
 E void handle_whois(user_t *, char *);
 E void handle_trace(user_t *, char *, char *);
 E void handle_motd(user_t *);
-E void handle_message(char *, char *, boolean_t, char *);
-E void handle_topic_from(char *, channel_t *, char *, time_t, char *);
-E void handle_kill(char *, char *, char *);
+E void handle_message(sourceinfo_t *, char *, boolean_t, char *);
+E void handle_topic_from(sourceinfo_t *, channel_t *, char *, time_t, char *);
+E void handle_kill(sourceinfo_t *, char *, char *);
 E void handle_eob(server_t *);
 
 /* services.c */
