@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 6291 2006-09-06 02:26:55Z pippijn $
+ * $Id: ptasks.c 6301 2006-09-06 15:29:38Z jilles $
  */
 
 #include "atheme.h"
@@ -467,7 +467,7 @@ void handle_kill(sourceinfo_t *si, char *victim, char *reason)
 
 	if (si->s != NULL)
 		source = si->s->name;
-	else if (si->su != NULL)
+	else
 		source = si->su->nick;
 
 	u = user_find(victim);
