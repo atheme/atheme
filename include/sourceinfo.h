@@ -4,7 +4,7 @@
  *
  * Data structures for sourceinfo
  *
- * $Id$
+ * $Id: sourceinfo.h 6319 2006-09-06 20:09:24Z pippijn $
  */
 
 #ifndef SOURCEINFO_H

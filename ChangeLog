@@ -1,3 +1,45 @@
+pippijn     2006/09/06 20:03:32 UTC	(20060906-6317)
+  Log:
+  - Removed unused code in modules/nickserv/vhost.c and modules/userserv/vhost.c
+  - Removed useless calls of user_find_named in almost all modules
+  - Removed some clearly unused variables, it's possible that I have missed some but now is not the time to look for those in great depth
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/dictionary.h (File Modified) 
+  +0 -2		trunk/modules/chanserv/close.c (File Modified) 
+  +1 -2		trunk/modules/chanserv/main.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/xop.c (File Modified) 
+  +1 -4		trunk/modules/global/main.c (File Modified) 
+  +0 -1		trunk/modules/helpserv/help.c (File Modified) 
+  +1 -1		trunk/modules/helpserv/main.c (File Modified) 
+  +0 -1		trunk/modules/memoserv/help.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/main.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/read.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/identify.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/main.c (File Modified) 
+  +1 -2		trunk/modules/nickserv/register.c (File Modified) 
+  +0 -17	trunk/modules/nickserv/vhost.c (File Modified) 
+  +0 -1		trunk/modules/operserv/akill.c (File Modified) 
+  +0 -5		trunk/modules/operserv/clones.c (File Modified) 
+  +2 -3		trunk/modules/operserv/ignore.c (File Modified) 
+  +1 -1		trunk/modules/operserv/main.c (File Modified) 
+  +0 -7		trunk/modules/operserv/rwatch.c (File Modified) 
+  +0 -3		trunk/modules/operserv/uptime.c (File Modified) 
+  +3 -3		trunk/modules/saslserv/crypt.c (File Modified) 
+  +4 -6		trunk/modules/saslserv/main.c (File Modified) 
+  +0 -2		trunk/modules/saslserv/plain.c (File Modified) 
+  +0 -1		trunk/modules/userserv/help.c (File Modified) 
+  +0 -1		trunk/modules/userserv/list.c (File Modified) 
+  +1 -1		trunk/modules/userserv/main.c (File Modified) 
+  +1 -2		trunk/modules/userserv/register.c (File Modified) 
+  +0 -17	trunk/modules/userserv/vhost.c (File Modified) 
+  +2 -3		trunk/modules/xmlrpc/account.c (File Modified) 
+  +1 -3		trunk/modules/xmlrpc/channel.c (File Modified) 
+  +97 -106	trunk/modules/xmlrpc/memo.c (File Modified) 
+  +5 -5		trunk/src/cmode.c (File Modified) 
+
+
 jilles      2006/09/06 17:43:23 UTC	(20060906-6315)
   Log:
   modestack_mode_simple():
