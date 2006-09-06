@@ -5,7 +5,7 @@
  *
  * This file contains IRC interaction routines.
  *
- * $Id: tokenize.c 2263 2005-09-16 21:53:11Z nenolod $
+ * $Id: tokenize.c 6323 2006-09-06 23:59:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -118,7 +118,7 @@ int8_t tokenize(char *message, char **parv)
 		if (count == 19)
 		{
 			/* we've reached one less than our max limit
-			 * to handle the parameter we alreayd ripped off
+			 * to handle the parameter we already ripped off
 			 */
 			slog(LG_DEBUG, "tokenize(): reached para limit");
 			return count;

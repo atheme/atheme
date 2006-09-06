@@ -1,3 +1,17 @@
+jilles      2006/09/06 22:55:36 UTC	(20060906-6321)
+  Log:
+  operserv clearchan: Change syntax
+  old: CLEARCHAN <#channel> [!KICK|!KILL|!GLINE] <reason>
+  new: CLEARCHAN KICK|KILL|GLINE <#channel> <reason>
+  This avoids ugly optional arguments in the middle.
+  As before there is an undocumented alias KLINE for GLINE.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/help/oservice/clearchan (File Modified) 
+  +13 -35	trunk/modules/operserv/clearchan.c (File Modified) 
+
+
 pippijn     2006/09/06 20:09:24 UTC	(20060906-6319)
   Log:
   Set Id property on sourceinfo.h
