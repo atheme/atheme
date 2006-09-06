@@ -10,8 +10,8 @@ the channel.
 
 This command should not be used lightly.
 
-Syntax: CLEARCHAN <#channel> [!KICK|!KILL|!GLINE] <reason>
+Syntax: CLEARCHAN KICK|KILL|GLINE <#channel> <reason>
 
 Example:
-    /msg &nick& CLEARCHAN #warez warez is bad, mk?
-    /msg &nick& CLEARCHAN #warez !GLINE you were warned!
+    /msg &nick& CLEARCHAN KICK #warez warez is bad, mk?
+    /msg &nick& CLEARCHAN GLINE #warez you were warned!

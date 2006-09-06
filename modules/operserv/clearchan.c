@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ CLEARCHAN.
  *
- * $Id: clearchan.c 6127 2006-08-18 16:59:55Z jilles $
+ * $Id: clearchan.c 6321 2006-09-06 22:55:36Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clearchan", FALSE, _modinit, _moddeinit,
-	"$Id: clearchan.c 6127 2006-08-18 16:59:55Z jilles $",
+	"$Id: clearchan.c 6321 2006-09-06 22:55:36Z jilles $",
 	"Robin Burchell <surreal.w00t@gmail.com>"
 );
 
@@ -47,46 +47,19 @@ static void os_cmd_clearchan(char *origin)
 	chanuser_t *cu = NULL;
 	node_t *n = NULL;
 	channel_t *c = NULL;
+	int action;
+	char *actionstr = strtok(NULL, " ");
 	char *targchan = strtok(NULL, " ");
-	char *actionstr = "KICK";
-	int action = CLEAR_KICK;
-	char *token = strtok(NULL, " ");
-	char reason[BUFSIZE], *treason;
+	char *treason = strtok(NULL, "");
+	char reason[512];
 	int matches = 0;
 	int ignores = 0;
 
-	if (!targchan || !token)
+	if (!actionstr || !targchan || !treason)
 	{
 		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "CLEARCHAN");
-		notice(opersvs.nick, origin, "Syntax: CLEARCHAN <#channel> [!KICK|!KILL|!GLINE] <reason here>");
+		notice(opersvs.nick, origin, "Syntax: CLEARCHAN KICK|KILL|GLINE <#channel> <reason>");
  		return;
-	}
-
-	if (*token == '!')
-	{
-		/* an action was specified */
-		actionstr = token + 1;
-		treason = strtok(NULL, "");
-
-		if (treason)
-		{
-			strlcpy(reason, treason, BUFSIZE);
-		}
-		else
-		{
-			snprintf(reason, sizeof reason, "Clearing %s", targchan);
-		}
-	}
-	else
-	{
-		strlcpy(reason, token, BUFSIZE);
-		treason = strtok(NULL, "");
-
-		if (treason)
-		{
-			strlcat(reason, " ", BUFSIZE);
-			strlcat(reason, treason, BUFSIZE);
-		}
 	}
 
 	c = channel_find(targchan);
@@ -94,7 +67,7 @@ static void os_cmd_clearchan(char *origin)
 	if (!c)
 	{
 		notice(opersvs.nick, origin, "The channel must exist for CLEARCHAN.");
- 		return;				
+ 		return;
 	}
 
 	/* check what they are doing is valid */
@@ -116,6 +89,11 @@ static void os_cmd_clearchan(char *origin)
 		notice(opersvs.nick, origin, "You do not have %s privilege.", PRIV_MASS_AKILL);
 		return;
 	}
+
+	if (action == CLEAR_KICK)
+		snprintf(reason, sizeof reason, "(Clearing) %s", treason);
+	else
+		snprintf(reason, sizeof reason, "(Clearing %s) %s", targchan, treason);
 
 	wallops("\2%s\2 is clearing channel %s with %s",
 			origin, targchan, actionstr);
@@ -155,5 +133,5 @@ static void os_cmd_clearchan(char *origin)
 	}
 
 	notice(opersvs.nick, origin, "\2%d\2 matches, \2%d\2 ignores for \2%s\2 on \2%s\2", matches, ignores, actionstr, targchan);
-	logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "CLEARCHAN %s %s (%d matches, %d ignores)", actionstr, targchan, matches, ignores);
+	logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "CLEARCHAN %s %s %s (%d matches, %d ignores)", actionstr, targchan, treason, matches, ignores);
 }

@@ -1,3 +1,12 @@
+pippijn     2006/09/06 20:09:24 UTC	(20060906-6319)
+  Log:
+  Set Id property on sourceinfo.h
+  
+
+  Changes:	Modified:
+  + -		trunk/include/sourceinfo.h  (Property Modified)
+
+
 pippijn     2006/09/06 20:03:32 UTC	(20060906-6317)
   Log:
   - Removed unused code in modules/nickserv/vhost.c and modules/userserv/vhost.c
