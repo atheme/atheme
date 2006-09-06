@@ -1,3 +1,12 @@
+jilles      2006/09/06 15:29:38 UTC	(20060906-6301)
+  Log:
+  get rid of compiler warning
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2006/09/06 15:23:54 UTC	(20060906-6299)
   Log:
   Add two extra parameters to pcommand_add(), the minimum

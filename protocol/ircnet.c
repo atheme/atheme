@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 6299 2006-09-06 15:23:54Z jilles $
+ * $Id: ircnet.c 6303 2006-09-06 15:30:18Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 6299 2006-09-06 15:23:54Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 6303 2006-09-06 15:30:18Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -493,7 +493,6 @@ static void m_part(sourceinfo_t *si, uint8_t parc, char *parv[])
 
 static void m_nick(sourceinfo_t *si, uint8_t parc, char *parv[])
 {
-	server_t *s;
 	user_t *u;
 
 	/* got the right number of args for an introduction? */
@@ -501,7 +500,7 @@ static void m_nick(sourceinfo_t *si, uint8_t parc, char *parv[])
 	{
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", si->s->name, parv[0]);
 
-		u = user_add(parv[0], parv[2], parv[3], NULL, parv[4], parv[1], parv[6], s, 0);
+		u = user_add(parv[0], parv[2], parv[3], NULL, parv[4], parv[1], parv[6], si->s, 0);
 
 		user_mode(u, parv[5]);
 
