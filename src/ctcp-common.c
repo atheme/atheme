@@ -4,14 +4,14 @@
  *
  * This file contains IRC interaction routines.
  *
- * $Id: ctcp-common.c 6155 2006-08-19 21:53:45Z jilles $
+ * $Id: ctcp-common.c 6307 2006-09-06 15:38:06Z jilles $
  */
 
 #include "atheme.h"
 
 dictionary_tree_t *ctcptree;
 
-void ctcp_ping_handler(char *cmd, char *origin, char *svsnick)
+static void ctcp_ping_handler(char *cmd, char *origin, char *svsnick)
 {
 	char *s;
 
@@ -24,7 +24,7 @@ void ctcp_ping_handler(char *cmd, char *origin, char *svsnick)
 	notice(svsnick, origin, "\001PING %.100s\001", s);
 }
 
-void ctcp_version_handler(char *cmd, char *origin, char *svsnick)
+static void ctcp_version_handler(char *cmd, char *origin, char *svsnick)
 {
 	notice(svsnick, origin,
 		"\001VERSION atheme-%s. %s %s %s%s%s%s%s%s%s%s%s TS5ow\001",
@@ -39,7 +39,7 @@ void ctcp_version_handler(char *cmd, char *origin, char *svsnick)
 		(runflags & RF_LIVE) ? "n" : "");
 }
 
-void ctcp_clientinfo_handler(char *cmd, char *origin, char *svsnick)
+static void ctcp_clientinfo_handler(char *cmd, char *origin, char *svsnick)
 {
 	/* easter egg :X */
 	notice(svsnick, origin, "\001CLIENTINFO 114 97 107 97 117 114\001");
