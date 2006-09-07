@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 5346 2006-06-04 18:26:42Z jilles $
+ * $Id: connection.c 6325 2006-09-07 22:39:09Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -147,7 +147,6 @@ int connection_count(void)
 void connection_close(connection_t *cptr)
 {
 	node_t *nptr, *nptr2;
-	datastream_t *sptr; 
 	int errno1, errno2;
 #ifdef SO_ERROR
 	socklen_t len = sizeof(errno2);
@@ -187,27 +186,7 @@ void connection_close(connection_t *cptr)
 	node_del(nptr, &connection_list);
 	node_free(nptr);
 
-	LIST_FOREACH_SAFE(nptr, nptr2, cptr->recvq.head)
-	{
-		sptr = nptr->data;
-
-		node_del(nptr, &cptr->recvq);
-		node_free(nptr);
-
-		free(sptr->buf);
-		free(sptr);
-	}
-
-	LIST_FOREACH_SAFE(nptr, nptr2, cptr->sendq.head)
-	{
-		sptr = nptr->data;
-
-		node_del(nptr, &cptr->sendq);
-		node_free(nptr);
-
-		free(sptr->buf);
-		free(sptr);
-	}
+	sendqrecvq_free(cptr);
 
 	BlockHeapFree(connection_heap, cptr);
 }

@@ -1,3 +1,12 @@
+pippijn     2006/09/06 23:59:05 UTC	(20060906-6323)
+  Log:
+  Fixed typo in comment
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/tokenize.c (File Modified) 
+
+
 jilles      2006/09/06 22:55:36 UTC	(20060906-6321)
   Log:
   operserv clearchan: Change syntax

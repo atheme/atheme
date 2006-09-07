@@ -4,9 +4,16 @@
  *
  * Datastream stuff.
  *
- * $Id: datastream.c 3539 2005-11-06 06:21:35Z nenolod $
+ * $Id: datastream.c 6325 2006-09-07 22:39:09Z jilles $
  */
 #include <org.atheme.claro.base>
+
+/* sendq struct */
+struct sendq {
+	char *buf;
+	int len;
+	int pos;
+};
 
 void sendq_add(connection_t * cptr, char *buf, int len, int pos)
 {
@@ -63,4 +70,32 @@ void sendq_flush(connection_t * cptr)
                         return;
                 }
         }
+}
+
+void sendqrecvq_free(connection_t *cptr)
+{
+	node_t *nptr, *nptr2;
+	struct sendq *sptr;
+
+	LIST_FOREACH_SAFE(nptr, nptr2, cptr->recvq.head)
+	{
+		sptr = nptr->data;
+
+		node_del(nptr, &cptr->recvq);
+		node_free(nptr);
+
+		free(sptr->buf);
+		free(sptr);
+	}
+
+	LIST_FOREACH_SAFE(nptr, nptr2, cptr->sendq.head)
+	{
+		sptr = nptr->data;
+
+		node_del(nptr, &cptr->sendq);
+		node_free(nptr);
+
+		free(sptr->buf);
+		free(sptr);
+	}
 }

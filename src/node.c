@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6297 2006-09-06 14:41:39Z pippijn $
+ * $Id: node.c 6325 2006-09-07 22:39:09Z jilles $
  */
 
 #include "atheme.h"
@@ -24,8 +24,6 @@ list_t uidlist[HASHSIZE];
 list_t chanlist[HASHSIZE];
 list_t mclist[HASHSIZE];
 dictionary_tree_t *mulist;
-
-list_t sendq;
 
 static BlockHeap *operclass_heap;
 static BlockHeap *soper_heap;
