@@ -4,7 +4,7 @@
  *
  * Linked list stuff.
  *
- * $Id: dlink.c 6151 2006-08-19 21:35:04Z jilles $
+ * $Id: dlink.c 6329 2006-09-08 22:52:31Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -62,19 +62,10 @@ void node_add(void *data, node_t *n, list_t *l)
         if (!l->head)
         {
                 l->head = n;
-                l->tail = NULL;
+                l->tail = n;
                 l->count++;
                 return;
         }
-
-	if (l->head && !l->tail)
-	{
-		l->tail = n;
-		l->head->next = n;
-		l->tail->prev = l->head;
-		l->count++;
-		return;
-	}
 
 	/* Speed increase. */
 	tn = l->tail;
