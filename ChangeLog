@@ -1,3 +1,16 @@
+jilles      2006/09/07 22:39:09 UTC	(20060907-6325)
+  Log:
+  - remove obsolete list_t sendq
+  - make struct sendq private to libatheme/datastream.c
+  
+
+  Changes:	Modified:
+  +1 -22	trunk/libatheme/connection.c (File Modified) 
+  +35 -0	trunk/libatheme/datastream.c (File Modified) 
+  +1 -11	trunk/libatheme/org.atheme.claro.base.datastream (File Modified) 
+  +0 -2		trunk/src/node.c (File Modified) 
+
+
 pippijn     2006/09/06 23:59:05 UTC	(20060906-6323)
   Log:
   Fixed typo in comment

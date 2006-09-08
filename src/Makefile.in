@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 6177 2006-08-20 19:51:25Z jilles $
+# $Id: Makefile.in 6327 2006-09-08 09:51:51Z jilles $
 #
 
 CC		= @CC@
@@ -79,7 +79,7 @@ all: atheme
 
 build: all
 
-atheme: $(OBJS)
+atheme: $(OBJS) ../libatheme/liborg.atheme.claro.base.a
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ ${OBJS} ${LIBS}
 	$(MV) version.c version.c.last
 
