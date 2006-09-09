@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2006 William Pitcock, et al.
- * Rights to this code are documented in doc/LICEusE.
+ * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 5832 2006-07-10 13:06:14Z jilles $
+ * $Id: set.c 6335 2006-09-09 23:58:19Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 5832 2006-07-10 13:06:14Z jilles $",
+	"$Id: set.c 6335 2006-09-09 23:58:19Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

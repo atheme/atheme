@@ -1,3 +1,12 @@
+pippijn     2006/09/09 18:46:50 UTC	(20060909-6333)
+  Log:
+  nptr2 is no longer needed ever since the LIST_FOREACH_SAFE that used to use it is no longer there.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/libatheme/connection.c (File Modified) 
+
+
 jilles      2006/09/08 23:14:03 UTC	(20060908-6331)
   Log:
   Add gen_vhostonreg module from atheme-modules.
