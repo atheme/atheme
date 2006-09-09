@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 6325 2006-09-07 22:39:09Z jilles $
+ * $Id: connection.c 6333 2006-09-09 18:46:50Z pippijn $
  */
 
 #include <org.atheme.claro.base>
@@ -146,7 +146,7 @@ int connection_count(void)
  */
 void connection_close(connection_t *cptr)
 {
-	node_t *nptr, *nptr2;
+	node_t *nptr;
 	int errno1, errno2;
 #ifdef SO_ERROR
 	socklen_t len = sizeof(errno2);

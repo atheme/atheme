@@ -1,3 +1,18 @@
+jilles      2006/09/08 23:14:03 UTC	(20060908-6331)
+  Log:
+  Add gen_vhostonreg module from atheme-modules.
+  Sets a vhost on new registrations (nickserv or userserv),
+  <accountname>.<hidehostsuffix> where hidehostsuffix is
+  the hidehostsuffix value in serverinfo{}.
+  Note that this is different from the gen_vhostonreg
+  in atheme-modules which uses a custom setting.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/contrib/Makefile.in (File Modified) 
+  +51 -0	trunk/contrib/gen_vhostonreg.c (File Added) 
+
+
 jilles      2006/09/08 22:52:31 UTC	(20060908-6329)
   Log:
   node_add(): when adding the first node to a list, make
