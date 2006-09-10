@@ -1,3 +1,18 @@
+jilles      2006/09/10 20:19:07 UTC	(20060910-6345)
+  Log:
+  Update contrib to sourceinfo.
+  
+
+  Changes:	Modified:
+  +12 -13	trunk/contrib/cs_count.c (File Modified) 
+  +5 -5		trunk/contrib/cs_ping.c (File Modified) 
+  +23 -16	trunk/contrib/ircd_catserv.c (File Modified) 
+  +38 -39	trunk/contrib/ns_enforce.c (File Modified) 
+  +59 -60	trunk/contrib/ns_generatepass.c (File Modified) 
+  +15 -15	trunk/contrib/os_pingspam.c (File Modified) 
+  +59 -60	trunk/contrib/us_generatepass.c (File Modified) 
+
+
 jilles      2006/09/10 19:43:19 UTC	(20060910-6343)
   Log:
   Get rid of third value "ERROR" in boolean_t,

@@ -143,8 +143,8 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 	node_t *n, *tn;
 	metadata_t *md;
 	service_t *svs;
-	char *target = strtok(NULL, " ");
-	char *password = strtok(NULL, " ");
+	char *target = parv[0];
+	char *password = parv[1];
 	char *gnick;
 	int i;
 	user_t *u;
