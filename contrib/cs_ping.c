@@ -7,11 +7,11 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void cs_cmd_ping(char *origin);
+static void cs_cmd_ping(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_fcmd_ping(char *origin, char *chan);
 
 command_t cs_ping = { "PING", "Verifies network connectivity by responding with pong.",
-                        AC_NONE, cs_cmd_ping };
+                        AC_NONE, 0, cs_cmd_ping };
 
 fcommand_t fc_ping = { "!ping", AC_NONE, cs_fcmd_ping };
 
@@ -33,14 +33,14 @@ void _moddeinit()
 	fcommand_delete(&fc_ping, cs_fcmdtree);
 }
 
-static void cs_cmd_ping(char *origin)
+static void cs_cmd_ping(sourceinfo_t *si, int parc, char *parv[])
 {
-        notice(chansvs.nick, origin, "Pong!");                                         
+        notice(chansvs.nick, si->su->nick, "Pong!");
         return;
 }
 
 static void cs_fcmd_ping(char *origin, char *chan)
 {
-	cs_cmd_ping(origin);
+        notice(chansvs.nick, origin, "Pong!");
 	return;
 }

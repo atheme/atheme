@@ -4,7 +4,7 @@
  *
  * ping spammer thingy
  *
- * $Id: os_pingspam.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: os_pingspam.c 6345 2006-09-10 20:19:07Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/pingspam", FALSE, _modinit, _moddeinit,
-	"$Id: os_pingspam.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: os_pingspam.c 6345 2006-09-10 20:19:07Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,11 +48,11 @@ char *phrases[] =
 
 void pingspam(user_t *u);
 static void user_add_hook(void *vptr);
-static void os_cmd_pingspam(char *origin);
-static void os_cmd_autopingspam(char *origin);
+static void os_cmd_pingspam(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_autopingspam(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_pingspam = { "PINGSPAM", "Spam a user with pings from every service, plus some bonus notices.", PRIV_OMODE, os_cmd_pingspam };
-command_t os_autopingspam = { "AUTOPINGSPAM", "Spam connecting users with pings from every service, plus some bonus notices (setting).", PRIV_ADMIN, os_cmd_autopingspam };
+command_t os_pingspam = { "PINGSPAM", "Spam a user with pings from every service, plus some bonus notices.", PRIV_OMODE, 1, os_cmd_pingspam };
+command_t os_autopingspam = { "AUTOPINGSPAM", "Spam connecting users with pings from every service, plus some bonus notices (setting).", PRIV_ADMIN, 1, os_cmd_autopingspam };
 
 int spamming;
 list_t *os_cmdtree;
@@ -83,45 +83,45 @@ static void user_add_hook(void *vptr)
 		pingspam(u);
 }
 
-static void os_cmd_pingspam(char *origin)
+static void os_cmd_pingspam(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *target = strtok(NULL, " ");
+	char *target = parv[0];
 	user_t *u;
 
 	if(!target)
 	{
-		notice(opersvs.nick, origin, "Usage: \2PINGSPAM\2 <target>");
+		notice(opersvs.nick, si->su->nick, "Usage: \2PINGSPAM\2 <target>");
 		return;
 	}
 
 	if(!(u = user_find_named(target)))
 	{
-		notice(opersvs.nick, origin, "\2%s\2 is not on the network", target);
+		notice(opersvs.nick, si->su->nick, "\2%s\2 is not on the network", target);
 		return;
 	}
 
 	pingspam(u);
-	notice(opersvs.nick, origin, "\2%s\2 has been pwned.", target);
-	snoop("PINGSPAM: \2%s\2 -> \2%s\2", origin, target);
+	notice(opersvs.nick, si->su->nick, "\2%s\2 has been pwned.", target);
+	snoop("PINGSPAM: \2%s\2 -> \2%s\2", si->su->nick, target);
 }
 
-static void os_cmd_autopingspam(char *origin)
+static void os_cmd_autopingspam(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *mode = strtok(NULL, " ");
+	char *mode = parv[0];
 
 	if(!mode)
 	{
-		notice(opersvs.nick, origin, "Auto-pingspam is currently \2%s\2", spamming ? "ON" : "OFF");
+		notice(opersvs.nick, si->su->nick, "Auto-pingspam is currently \2%s\2", spamming ? "ON" : "OFF");
 		return;
 	}
 
 	if(strcasecmp(mode, "on") == 0 || atoi(mode))
 	{
 		spamming = 1;
-		notice(opersvs.nick, origin, "Auto-pingspam is now \2ON\2");
+		notice(opersvs.nick, si->su->nick, "Auto-pingspam is now \2ON\2");
 	}else{
 		spamming = 0;
-		notice(opersvs.nick, origin, "Auto-pingspam is now \2OFF\2");
+		notice(opersvs.nick, si->su->nick, "Auto-pingspam is now \2OFF\2");
 	}
 }
 

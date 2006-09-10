@@ -4,7 +4,7 @@
  *
  * Generates a new password, either n digits long (w/ nickserv arg), or 7 digits
  *
- * $Id: ns_generatepass.c 5798 2006-07-09 00:14:43Z jilles $
+ * $Id: ns_generatepass.c 6345 2006-09-10 20:19:07Z jilles $
  */
 
 #include "atheme.h"
@@ -12,14 +12,14 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/generatepass", FALSE, _modinit, _moddeinit,
-	"$Id: ns_generatepass.c 5798 2006-07-09 00:14:43Z jilles $",
+	"$Id: ns_generatepass.c 6345 2006-09-10 20:19:07Z jilles $",
 	"Epiphanic Networks <http://www.epiphanic.org>"
 );
 
-static void ns_cmd_generatepass(char *origin);
+static void ns_cmd_generatepass(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_generatepass = { "GENERATEPASS", "Generates a random password.",
-                        AC_NONE, ns_cmd_generatepass };
+                        AC_NONE, 1, ns_cmd_generatepass };
                                                                                    
 list_t *ns_cmdtree;
 list_t *ns_helptree;
@@ -41,20 +41,19 @@ void _moddeinit()
 	help_delentry(ns_helptree, "GENERATEPASS");
 }
 
-static void ns_cmd_generatepass(char *origin)
+static void ns_cmd_generatepass(sourceinfo_t *si, int parc, char *parv[])
 {
 	int n = 0;
-	char *arg = strtok(NULL, " ");
 	char *newpass;
    
-	if (arg)
-		n = atoi(arg);
+	if (parc >= 1)
+		n = atoi(parv[0]);
 
 	if (n <= 0 || n > 127)
 		n = 7;
 
 	newpass = gen_pw(n);
 
-	notice(nicksvs.nick, origin, "Randomly generated password: %s",newpass);
+	notice(nicksvs.nick, si->su->nick, "Randomly generated password: %s",newpass);
 	free(newpass);
 }

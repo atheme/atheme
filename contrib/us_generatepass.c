@@ -4,7 +4,7 @@
  *
  * Generates a new password, either n digits long (w/ userserv arg), or 7 digits
  *
- * $Id: us_generatepass.c 5798 2006-07-09 00:14:43Z jilles $
+ * $Id: us_generatepass.c 6345 2006-09-10 20:19:07Z jilles $
  */
 
 #include "atheme.h"
@@ -12,14 +12,14 @@
 DECLARE_MODULE_V1
 (
 	"userserv/generatepass", FALSE, _modinit, _moddeinit,
-	"$Id: us_generatepass.c 5798 2006-07-09 00:14:43Z jilles $",
+	"$Id: us_generatepass.c 6345 2006-09-10 20:19:07Z jilles $",
 	"Epiphanic Networks <http://www.epiphanic.org>"
 );
 
-static void us_cmd_generatepass(char *origin);
+static void us_cmd_generatepass(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t us_generatepass = { "GENERATEPASS", "Generates a random password.",
-                        AC_NONE, us_cmd_generatepass };
+                        AC_NONE, 1, us_cmd_generatepass };
                                                                                    
 list_t *us_cmdtree;
 list_t *us_helptree;
@@ -41,20 +41,19 @@ void _moddeinit()
 	help_delentry(us_helptree, "GENERATEPASS");
 }
 
-static void us_cmd_generatepass(char *origin)
+static void us_cmd_generatepass(sourceinfo_t *si, int parc, char *parv[])
 {
 	int n = 0;
-	char *arg = strtok(NULL, " ");
 	char *newpass;
    
-	if (arg)
-		n = atoi(arg);
+	if (parc >= 1)
+		n = atoi(parv[0]);
 
 	if (n <= 0 || n > 127)
 		n = 7;
 
 	newpass = gen_pw(n);
 
-	notice(usersvs.nick, origin, "Randomly generated password: %s",newpass);
+	notice(usersvs.nick, si->su->nick, "Randomly generated password: %s",newpass);
 	free(newpass);
 }

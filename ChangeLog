@@ -1,3 +1,13 @@
+jilles      2006/09/10 19:43:19 UTC	(20060910-6343)
+  Log:
+  Get rid of third value "ERROR" in boolean_t,
+  before anyone uses it.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/libatheme/stdinc.h (File Modified) 
+
+
 jilles      2006/09/10 16:36:29 UTC	(20060910-6341)
   Log:
   Rename sourceinfo_t.sptr to sourceinfo_t.service,

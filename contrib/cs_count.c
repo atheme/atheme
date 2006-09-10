@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService COUNT functions.
  *
- * $Id: cs_count.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: cs_count.c 6345 2006-09-10 20:19:07Z jilles $
  */
 
 #include "atheme.h"
@@ -12,14 +12,14 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/count", FALSE, _modinit, _moddeinit,
-	"$Id: cs_count.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: cs_count.c 6345 2006-09-10 20:19:07Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void cs_cmd_count(char *origin);
+static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_count = { "COUNT", "Shows number of entries in xOP lists.",
-                         AC_NONE, cs_cmd_count };
+                         AC_NONE, 1, cs_cmd_count };
 
 list_t *cs_cmdtree;
 list_t *cs_helptree;
@@ -38,12 +38,11 @@ void _moddeinit()
 	command_delete(&cs_count, cs_cmdtree);
 }
 
-static void cs_cmd_count(char *origin)
+static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *chan = strtok(NULL, " ");
+	char *chan = parv[0];
 	chanacs_t *ca;
 	mychan_t *mc = mychan_find(chan);
-	user_t *u = user_find_named(origin);
 	uint8_t vopcnt = 0, aopcnt = 0, hopcnt = 0, sopcnt = 0, akickcnt = 0;
 	uint8_t othercnt = 0;
 	int i;
@@ -52,26 +51,26 @@ static void cs_cmd_count(char *origin)
 
 	if (!chan)
 	{
-		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "COUNT");
-		notice(chansvs.nick, origin, "Syntax: COUNT <#channel>");
+		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "COUNT");
+		notice(chansvs.nick, si->su->nick, "Syntax: COUNT <#channel>");
 		return;
 	}
 
 	if (!mc)
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is not registered.", chan);
+		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", chan);
 		return;
 	}
 
-	if (!chanacs_user_has_flag(mc, u, CA_ACLVIEW))
+	if (!chanacs_user_has_flag(mc, si->su, CA_ACLVIEW))
 	{
-		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+		notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
 		return;
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is closed.", chan);
+		notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", chan);
 		return;
 	}
 
@@ -92,7 +91,7 @@ static void cs_cmd_count(char *origin)
 		else if (ca->myuser != mc->founder)
 			othercnt++;
 	}
-	notice(chansvs.nick, origin, "%s: VOp: %d, HOp: %d, AOp: %d, SOp: %d, AKick: %d, other: %d",
+	notice(chansvs.nick, si->su->nick, "%s: VOp: %d, HOp: %d, AOp: %d, SOp: %d, AKick: %d, other: %d",
 			chan, vopcnt, hopcnt, aopcnt, sopcnt, akickcnt, othercnt);
 	snprintf(str, sizeof str, "%s: ", chan);
 	for (i = 0; chanacs_flags[i].flag; i++)
@@ -108,6 +107,6 @@ static void cs_cmd_count(char *origin)
 		snprintf(str + strlen(str), sizeof str - strlen(str),
 				"%c:%d ", chanacs_flags[i].flag, othercnt);
 	}
-	notice(chansvs.nick, origin, "%s", str);
+	notice(chansvs.nick, si->su->nick, "%s", str);
 }
 
