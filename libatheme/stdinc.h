@@ -4,7 +4,7 @@
  *
  * This is the header which includes all of the system stuff.
  *
- * $Id: stdinc.h 3377 2005-11-01 03:45:37Z nenolod $
+ * $Id: stdinc.h 6343 2006-09-10 19:43:19Z jilles $
  */
 
 #ifndef STDINC_H
@@ -60,7 +60,7 @@
 #include <dirent.h>
 
 #ifndef _WIN32
-typedef enum { ERROR = -1, FALSE, TRUE } l_boolean_t;
+typedef enum { FALSE, TRUE } l_boolean_t;
 #else
 typedef int l_boolean_t;
 #define FALSE 0

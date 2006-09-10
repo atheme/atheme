@@ -1,3 +1,14 @@
+jilles      2006/09/10 16:36:29 UTC	(20060910-6341)
+  Log:
+  Rename sourceinfo_t.sptr to sourceinfo_t.service,
+  to avoid confusion with sourceinfo_t.s.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/sourceinfo.h (File Modified) 
+  +8 -8		trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2006/09/10 16:18:54 UTC	(20060910-6339)
   Log:
   operserv modload/modunload:
