@@ -4,7 +4,7 @@
  *
  * Data structures for sourceinfo
  *
- * $Id: sourceinfo.h 6319 2006-09-06 20:09:24Z pippijn $
+ * $Id: sourceinfo.h 6341 2006-09-10 16:36:29Z jilles $
  */
 
 #ifndef SOURCEINFO_H
@@ -22,7 +22,7 @@ struct sourceinfo_
 	user_t *su; /* source, if it's a user */
 	server_t *s; /* source, if it's a server */
 
-	service_t *sptr; /* destination service */
+	service_t *service; /* destination service */
 
 	channel_t *c; /* channel this command applies to */
 };

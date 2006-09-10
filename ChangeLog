@@ -1,3 +1,14 @@
+jilles      2006/09/10 16:18:54 UTC	(20060910-6339)
+  Log:
+  operserv modload/modunload:
+  Get rid of comparison between signed and unsigned.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/operserv/modload.c (File Modified) 
+  +1 -1		trunk/modules/operserv/modunload.c (File Modified) 
+
+
 pippijn     2006/09/10 15:54:41 UTC	(20060910-6337)
   Log:
   Merged in sourceinfo changes to the services layer.

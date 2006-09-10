@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: ptasks.c 6341 2006-09-10 16:36:29Z jilles $
  */
 
 #include "atheme.h"
@@ -335,8 +335,8 @@ void handle_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *m
 	/* If target is a channel and fantasy commands are enabled,
 	 * this will return chanserv
 	 */
-	si->sptr = find_service(target);
-	if (si->sptr == NULL)
+	si->service = find_service(target);
+	if (si->service == NULL)
 	{
 		if (!is_notice && (isalnum(target[0]) || strchr("[\\]^_`{|}~", target[0])))
 		{
@@ -353,14 +353,14 @@ void handle_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *m
 	/* Run it through flood checks. Channel commands are checked
 	 * separately.
 	 */
-	if (si->sptr->me != NULL && *target != '#' && floodcheck(si->su, si->sptr->me))
+	if (si->service->me != NULL && *target != '#' && floodcheck(si->su, si->service->me))
 		return;
 
-	if (!is_notice && config_options.secure && *target != '#' && irccasecmp(target, si->sptr->disp))
+	if (!is_notice && config_options.secure && *target != '#' && irccasecmp(target, si->service->disp))
 	{
-		notice(si->sptr->me->nick, si->su->nick, "For security reasons, \2/msg %s\2 has been disabled."
+		notice(si->service->me->nick, si->su->nick, "For security reasons, \2/msg %s\2 has been disabled."
 				" Use \2/%s%s <command>\2 to send a command.",
-				si->sptr->me->nick, (ircd->uses_rcommand ? "" : "msg "), si->sptr->disp);
+				si->service->me->nick, (ircd->uses_rcommand ? "" : "msg "), si->service->disp);
 		return;
 	}
 
@@ -368,9 +368,9 @@ void handle_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *m
 	vec[1] = message;
 	vec[2] = NULL;
 	if (is_notice)
-		si->sptr->notice_handler(si, 2, vec);
+		si->service->notice_handler(si, 2, vec);
 	else
-		si->sptr->handler(si, 2, vec);
+		si->service->handler(si, 2, vec);
 }
 
 void handle_topic_from(sourceinfo_t *si, channel_t *c, char *setter, time_t ts, char *topic)
