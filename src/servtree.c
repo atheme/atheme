@@ -4,7 +4,7 @@
  *
  * Services binary tree manipulation. (add_service, del_service, et al.)
  *
- * $Id: servtree.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: servtree.c 6351 2006-09-10 21:06:47Z jilles $
  */
 
 #include "atheme.h"
@@ -40,6 +40,7 @@ static void me_me_init(void)
 service_t *add_service(char *name, char *user, char *host, char *real, void (*handler) (sourceinfo_t *si, int parc, char *parv[]))
 {
 	service_t *sptr;
+	user_t *u;
 
 	if (me.me == NULL)
 		me_me_init();
@@ -71,6 +72,16 @@ service_t *add_service(char *name, char *user, char *host, char *real, void (*ha
 
 	sptr->handler = handler;
 	sptr->notice_handler = dummy_handler;
+
+	if (me.connected)
+	{
+		u = user_find_named(name);
+		if (u != NULL)
+		{
+			skill(me.name, u->nick, "Nick taken by service");
+			user_delete(u);
+		}
+	}
 
 	sptr->me = user_add(name, user, host, NULL, NULL, ircd->uses_uid ? sptr->uid : NULL, real, me.me, CURRTIME);
 	sptr->me->flags |= UF_IRCOP;

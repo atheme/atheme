@@ -1,3 +1,15 @@
+pippijn     2006/09/10 21:05:56 UTC	(20060910-6349)
+  Log:
+  Fixed some snprintf's to cast time_t to long unsigned integers and got rid
+  of an unused variable.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/modules/saslserv/dh-blowfish.c (File Modified) 
+  +2 -2		trunk/modules/xmlrpc/memo.c (File Modified) 
+  +2 -2		trunk/src/function.c (File Modified) 
+
+
 jilles      2006/09/10 20:24:16 UTC	(20060910-6347)
   Log:
   last commit forgot a strtok in ns_enforce.c
