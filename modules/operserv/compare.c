@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ COMPARE.
  *
- * $Id: compare.c 6199 2006-08-21 09:44:29Z jilles $
+ * $Id: compare.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,14 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"operserv/compare", FALSE, _modinit, _moddeinit,
-	"$Id: compare.c 6199 2006-08-21 09:44:29Z jilles $",
+	"$Id: compare.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Robin Burchell <surreal.w00t@gmail.com>"
 );
 
-static void os_cmd_compare(char *origin);
+static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_compare = { "COMPARE", "Compares two users or channels.", 
-		PRIV_CHAN_AUSPEX, os_cmd_compare };
+command_t os_compare = { "COMPARE", "Compares two users or channels.", PRIV_CHAN_AUSPEX, 2, os_cmd_compare };
 
 list_t *os_cmdtree;
 list_t *os_helptree;
@@ -39,10 +38,10 @@ void _moddeinit(void)
 	help_delentry(os_helptree, "COMPARE");
 }
 
-static void os_cmd_compare(char *origin)
+static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *object1 = strtok(NULL, " ");
-	char *object2 = strtok(NULL, "");
+	char *object1 = parv[0];
+	char *object2 = parv[1];
 	channel_t *c1, *c2;
 	user_t *u1, *u2;
 	node_t *n1, *n2;
@@ -58,8 +57,8 @@ static void os_cmd_compare(char *origin)
 
 	if (!object1 || !object2)
 	{
-		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "COMPARE");
-		notice(opersvs.nick, origin, "Syntax: COMPARE <nick|#channel> <nick|#channel>");
+		notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "COMPARE");
+		notice(opersvs.nick, si->su->nick, "Syntax: COMPARE <nick|#channel> <nick|#channel>");
 		return;
 	}
 
@@ -73,11 +72,11 @@ static void os_cmd_compare(char *origin)
 
 			if (!c1 || !c2)
 			{
-				notice(opersvs.nick, origin, "Both channels must exist for @compare");
+				notice(opersvs.nick, si->su->nick, "Both channels must exist for @compare");
 				return;				
 			}
 
-			notice(opersvs.nick, origin, "Common users in \2%s\2 and \2%s\2", object1, object2);
+			notice(opersvs.nick, si->su->nick, "Common users in \2%s\2 and \2%s\2", object1, object2);
 
 			/* iterate over the users in channel 1 */
 			LIST_FOREACH(n1, c1->members.head)
@@ -100,7 +99,7 @@ static void os_cmd_compare(char *origin)
 						/* if too many, output to user */
 						if (temp >= 5 || strlen(buf) > 300)
 						{
-							notice(opersvs.nick, origin, "%s", buf);
+							notice(opersvs.nick, si->su->nick, "%s", buf);
 							bzero(buf, 512);
 							temp = 0;
 						}
@@ -114,7 +113,7 @@ static void os_cmd_compare(char *origin)
 		else
 		{
 			/* bad syntax */
-			notice(opersvs.nick, origin, "Bad syntax for @compare. Use @compare on two channels, or two users.");
+			notice(opersvs.nick, si->su->nick, "Bad syntax for @compare. Use @compare on two channels, or two users.");
 			return;				
 		}
 	}
@@ -123,7 +122,7 @@ static void os_cmd_compare(char *origin)
 		if (*object2 == '#')
 		{
 			/* bad syntax */
-			notice(opersvs.nick, origin, "Bad syntax for @compare. Use @compare on two channels, or two users.");
+			notice(opersvs.nick, si->su->nick, "Bad syntax for @compare. Use @compare on two channels, or two users.");
 			return;				
 		}
 		else
@@ -134,11 +133,11 @@ static void os_cmd_compare(char *origin)
 
 			if (!u1 || !u2)
 			{
-				notice(opersvs.nick, origin, "Both users must exist for @compare");
+				notice(opersvs.nick, si->su->nick, "Both users must exist for @compare");
 				return;				
 			}
 
-			notice(opersvs.nick, origin, "Common channels for \2%s\2 and \2%s\2", object1, object2);
+			notice(opersvs.nick, si->su->nick, "Common channels for \2%s\2 and \2%s\2", object1, object2);
 
 			/* iterate over the channels of user 1 */
 			LIST_FOREACH(n1, u1->channels.head)
@@ -161,7 +160,7 @@ static void os_cmd_compare(char *origin)
 						/* if too many, output to user */
 						if (temp >= 5 || strlen(buf) > 300)
 						{
-							notice(opersvs.nick, origin, "%s", buf);
+							notice(opersvs.nick, si->su->nick, "%s", buf);
 							bzero(buf, 512);
 							temp = 0;
 						}
@@ -175,9 +174,9 @@ static void os_cmd_compare(char *origin)
 	}
 
 	if (buf[0] != 0)
-		notice(opersvs.nick, origin, "%s", buf);
+		notice(opersvs.nick, si->su->nick, "%s", buf);
 
-	notice(opersvs.nick, origin, "\2%d\2 matches comparing %s and %s", matches, object1, object2);
-	logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "COMPARE %s to %s (%d matches)", object1, object2, matches);
-	snoop("COMPARE: \2%s\2 to \2%s\2 by \2%s\2", object1, object2, origin);
+	notice(opersvs.nick, si->su->nick, "\2%d\2 matches comparing %s and %s", matches, object1, object2);
+	logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "COMPARE %s to %s (%d matches)", object1, object2, matches);
+	snoop("COMPARE: \2%s\2 to \2%s\2 by \2%s\2", object1, object2, si->su->nick);
 }

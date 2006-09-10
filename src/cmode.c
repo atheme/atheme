@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 6317 2006-09-06 20:03:32Z pippijn $
+ * $Id: cmode.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 /* If source == NULL, apply a mode change from outside to our structures
  * If source != NULL, apply the mode change and send it out from that user
  */
-void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
+void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 {
 	boolean_t matched = FALSE;
 	boolean_t chanserv_reopped = FALSE;
@@ -284,7 +284,7 @@ void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[])
 }
 
 /* like channel_mode() but parv array passed as varargs */
-void channel_mode_va(user_t *source, channel_t *chan, uint8_t parc, char *parv0, ...)
+void channel_mode_va(user_t *source, channel_t *chan, int parc, char *parv0, ...)
 {
 	char *parv[255];
 	int i;

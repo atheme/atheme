@@ -4,12 +4,14 @@
  *
  * Commandtree manipulation routines.
  *
- * $Id: commandtree.c 6149 2006-08-19 20:03:47Z jilles $
+ * $Id: commandtree.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
 
-void command_add(command_t * cmd, list_t *commandtree)
+static int parse1(char *text, int maxparc, char **parv);
+
+void command_add(command_t *cmd, list_t *commandtree)
 {
 	node_t *n;
 
@@ -36,7 +38,7 @@ void command_add(command_t * cmd, list_t *commandtree)
  *       adds an array of commands to a command list,
  *       via command_add().
  */
-void command_add_many(command_t ** cmd, list_t *commandtree)
+void command_add_many(command_t **cmd, list_t *commandtree)
 {
 	uint32_t i;
 
@@ -44,7 +46,7 @@ void command_add_many(command_t ** cmd, list_t *commandtree)
 		command_add(cmd[i], commandtree);
 }
 
-void command_delete(command_t * cmd, list_t *commandtree)
+void command_delete(command_t *cmd, list_t *commandtree)
 {
 	node_t *n;
 
@@ -71,7 +73,7 @@ void command_delete(command_t * cmd, list_t *commandtree)
  *       deletes an array of commands from a command list,
  *       via command_delete().
  */
-void command_delete_many(command_t ** cmd, list_t *commandtree)
+void command_delete_many(command_t **cmd, list_t *commandtree)
 {
 	uint32_t i;
 
@@ -79,7 +81,7 @@ void command_delete_many(command_t ** cmd, list_t *commandtree)
 		command_delete(cmd[i], commandtree);
 }
 
-void command_exec(service_t *svs, char *origin, char *cmd, list_t *commandtree)
+command_t *command_find(list_t *commandtree, const char *command)
 {
 	node_t *n;
 
@@ -87,26 +89,46 @@ void command_exec(service_t *svs, char *origin, char *cmd, list_t *commandtree)
 	{
 		command_t *c = n->data;
 
-		if (!strcasecmp(cmd, c->name))
+		if (!strcasecmp(command, c->name))
 		{
-			user_t *u = user_find_named(origin);
-
-			if (has_priv(u, c->access))
-			{
-				c->cmd(origin);
-				return;
-			}
-
-			if (has_any_privs(u))
-				notice(svs->name, origin, "You do not have %s privilege.", c->access);
-			else
-				notice(svs->name, origin, "You are not authorized to perform this operation.");
-			/*snoop("DENIED CMD: \2%s\2 used %s %s", origin, svs->name, cmd);*/
-			return;
+			return c;
 		}
 	}
+	return NULL;
+}
 
-	notice(svs->name, origin, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", svs->disp);
+void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char *parv[])
+{
+	if (has_priv(si->su, c->access))
+	{
+		c->cmd(si, parc, parv);
+		return;
+	}
+
+	if (has_any_privs(si->su))
+		notice(svs->name, si->su->nick, "You do not have %s privilege.", c->access);
+	else
+		notice(svs->name, si->su->nick, "You are not authorized to perform this operation.");
+	/*snoop("DENIED CMD: \2%s\2 used %s %s", origin, svs->name, cmd);*/
+}
+
+void command_exec_split(service_t *svs, sourceinfo_t *si, char *cmd, char *text, list_t *commandtree)
+{
+	int parc, i;
+	char *parv[20];
+        command_t *c;
+
+	if ((c = command_find(commandtree, cmd)))
+	{
+		parc = parse1(text, c->maxparc, parv);
+		for (i = parc; i < sizeof(parv) / sizeof (parv[0]); i++)
+			parv[i] = NULL;
+		command_exec(svs, si, c, parc, parv);
+	}
+	else
+	{
+		notice(svs->name, si->su->nick, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", svs->disp);
+	}
 }
 
 /*
@@ -165,7 +187,7 @@ static boolean_t string_in_list(const char *str, const char *name)
 
 /*
  * command_help_short
- *     Iterates the command tree and lists available commands.
+ *     Iterates over the command tree and lists available commands.
  *
  * inputs -
  *     mynick:      The nick of the services bot sending out the notices.
@@ -226,7 +248,7 @@ void command_help_short(char *mynick, char *origin, list_t *commandtree, char *m
 		notice(mynick, origin, "%s", buf);
 }
 
-void fcommand_add(fcommand_t * cmd, list_t *commandtree)
+void fcommand_add(fcommand_t *cmd, list_t *commandtree)
 {
 	node_t *n;
 
@@ -240,7 +262,7 @@ void fcommand_add(fcommand_t * cmd, list_t *commandtree)
 	node_add(cmd, n, commandtree);
 }
 
-void fcommand_delete(fcommand_t * cmd, list_t *commandtree)
+void fcommand_delete(fcommand_t *cmd, list_t *commandtree)
 {
 	node_t *n;
 
@@ -317,4 +339,34 @@ void fcommand_exec_floodcheck(service_t *svs, char *channel, char *origin, char 
 			return;
 		notice(svs->name, origin, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", svs->disp);
 	}
+}
+
+static int parse1(char *text, int maxparc, char **parv)
+{
+	int count = 0;
+	char *p;
+
+        if (maxparc == 0)
+        	return 0;
+
+	if (!text)
+		return 0;
+
+	p = text;
+	while (count < maxparc - 1 && (parv[count] = strtok(p, " ")) != NULL)
+		count++, p = NULL;
+
+	if ((parv[count] = strtok(p, "")) != NULL)
+	{
+		p = parv[count];
+		if (*p != '\0')
+		{
+			p += strlen(p) - 1;
+			while (*p == ' ' && p > parv[count])
+				p--;
+			p[1] = '\0';
+		}
+		count++;
+	}
+	return count;
 }

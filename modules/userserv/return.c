@@ -4,7 +4,7 @@
  *
  * Implements USERSERV RETURN.
  *
- * $Id: return.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: return.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,14 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"userserv/return", FALSE, _modinit, _moddeinit,
-	"$Id: return.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: return.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void us_cmd_return(char *origin);
+static void us_cmd_return(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t us_return = { "RETURN", "Returns an account to its owner.",
-			PRIV_USER_ADMIN, us_cmd_return };
+command_t us_return = { "RETURN", "Returns an account to its owner.", PRIV_USER_ADMIN, 2, us_cmd_return };
 
 list_t *us_cmdtree, *us_helptree;
 
@@ -38,41 +37,37 @@ void _moddeinit()
 	help_delentry(us_helptree, "RETURN");
 }
 
-static void us_cmd_return(char *origin)
+static void us_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
-	char *target = strtok(NULL, " ");
-	char *newmail = strtok(NULL, " ");
+	char *target = parv[0];
+	char *newmail = parv[1];
 	char *newpass;
 	char oldmail[EMAILLEN];
 	myuser_t *mu;
 
-	if (u == NULL)
-		return;
-
 	if (!target || !newmail)
 	{
-		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "RETURN");
-		notice(usersvs.nick, origin, "Usage: RETURN <account> <e-mail address>");
+		notice(usersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "RETURN");
+		notice(usersvs.nick, si->su->nick, "Usage: RETURN <account> <e-mail address>");
 		return;
 	}
 
 	if (!(mu = myuser_find(target)))
 	{
-		notice(usersvs.nick, origin, "\2%s\2 is not registered.", target);
+		notice(usersvs.nick, si->su->nick, "\2%s\2 is not registered.", target);
 		return;
 	}
 
 	if (is_soper(mu))
 	{
-		logcommand(usersvs.me, u, CMDLOG_ADMIN, "failed RETURN %s to %s (is SOPER)", target, newmail);
-		notice(usersvs.nick, origin, "\2%s\2 belongs to a services operator; it cannot be returned.", target);
+		logcommand(usersvs.me, si->su, CMDLOG_ADMIN, "failed RETURN %s to %s (is SOPER)", target, newmail);
+		notice(usersvs.nick, si->su->nick, "\2%s\2 belongs to a services operator; it cannot be returned.", target);
 		return;
 	}
 
 	if ((strlen(newmail) > 32) || !validemail(newmail))
 	{
-		notice(usersvs.nick, origin, "\2%s\2 is not a valid e-mail address.", newmail);
+		notice(usersvs.nick, si->su->nick, "\2%s\2 is not a valid e-mail address.", newmail);
 		return;
 	}
 
@@ -80,10 +75,10 @@ static void us_cmd_return(char *origin)
 	strlcpy(oldmail, mu->email, EMAILLEN);
 	strlcpy(mu->email, newmail, EMAILLEN);
 
-	if (!sendemail(u, EMAIL_SENDPASS, mu, newpass))
+	if (!sendemail(si->su, EMAIL_SENDPASS, mu, newpass))
 	{
 		strlcpy(mu->email, oldmail, EMAILLEN);
-		notice(usersvs.nick, origin, "Sending email failed, account \2%s\2 remains with \2%s\2.",
+		notice(usersvs.nick, si->su->nick, "Sending email failed, account \2%s\2 remains with \2%s\2.",
 				mu->name, mu->email);
 		return;
 	}
@@ -97,10 +92,10 @@ static void us_cmd_return(char *origin)
 	metadata_delete(mu, METADATA_USER, "private:verify:emailchg:newemail");
 	metadata_delete(mu, METADATA_USER, "private:verify:emailchg:timestamp");
 
-	wallops("%s returned the account \2%s\2 to \2%s\2", origin, target, newmail);
-	logcommand(usersvs.me, u, CMDLOG_ADMIN, "RETURN %s to %s", target, newmail);
-	notice(usersvs.nick, origin, "The e-mail address for \2%s\2 has been set to \2%s\2",
+	wallops("%s returned the account \2%s\2 to \2%s\2", si->su->nick, target, newmail);
+	logcommand(usersvs.me, si->su, CMDLOG_ADMIN, "RETURN %s to %s", target, newmail);
+	notice(usersvs.nick, si->su->nick, "The e-mail address for \2%s\2 has been set to \2%s\2",
 						target, newmail);
-	notice(usersvs.nick, origin, "A random password has been set; it has been sent to \2%s\2.",
+	notice(usersvs.nick, si->su->nick, "A random password has been set; it has been sent to \2%s\2.",
 						newmail);
 }

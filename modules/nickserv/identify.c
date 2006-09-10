@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY function.
  *
- * $Id: identify.c 6317 2006-09-06 20:03:32Z pippijn $
+ * $Id: identify.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,16 +12,14 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/identify", FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 6317 2006-09-06 20:03:32Z pippijn $",
+	"$Id: identify.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void ns_cmd_identify(char *origin);
+static void ns_cmd_identify(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_identify = { "IDENTIFY", "Identifies to services for a nickname.",
-				AC_NONE, ns_cmd_identify };
-command_t ns_id = { "ID", "Alias for IDENTIFY",
-				AC_NONE, ns_cmd_identify };
+command_t ns_identify = { "IDENTIFY", "Identifies to services for a nickname.", AC_NONE, 2, ns_cmd_identify };
+command_t ns_id = { "ID", "Alias for IDENTIFY", AC_NONE, 2, ns_cmd_identify };
 
 list_t *ns_cmdtree, *ns_helptree, *ms_cmdtree;
 
@@ -44,17 +42,17 @@ void _moddeinit()
 	help_delentry(ns_helptree, "ID");
 }
 
-static void ns_cmd_identify(char *origin)
+static void ns_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
+	user_t *u = si->su;
 	myuser_t *mu;
 	chanuser_t *cu;
 	chanacs_t *ca;
 	node_t *n, *tn;
 	metadata_t *md;
 
-	char *target = strtok(NULL, " ");
-	char *password = strtok(NULL, " ");
+	char *target = parv[0];
+	char *password = parv[1];
 	char buf[BUFSIZE], strfbuf[32];
 	char lau[BUFSIZE], lao[BUFSIZE];
 	struct tm tm;
@@ -63,13 +61,13 @@ static void ns_cmd_identify(char *origin)
 	if (target && !password)
 	{
 		password = target;
-		target = origin;
+		target = si->su->nick;
 	}
 
 	if (!target && !password)
 	{
-		notice(nicksvs.nick, origin, STR_INSUFFICIENT_PARAMS, "IDENTIFY");
-		notice(nicksvs.nick, origin, "Syntax: IDENTIFY [nick] <password>");
+		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "IDENTIFY");
+		notice(nicksvs.nick, si->su->nick, "Syntax: IDENTIFY [nick] <password>");
 		return;
 	}
 
@@ -77,20 +75,20 @@ static void ns_cmd_identify(char *origin)
 
 	if (!mu)
 	{
-		notice(nicksvs.nick, origin, "\2%s\2 is not a registered nickname.", target);
+		notice(nicksvs.nick, si->su->nick, "\2%s\2 is not a registered nickname.", target);
 		return;
 	}
 
 	if ((md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
 	{
-		notice(nicksvs.nick, origin, "You cannot identify to \2%s\2 because the nickname has been frozen.", mu->name);
+		notice(nicksvs.nick, si->su->nick, "You cannot identify to \2%s\2 because the nickname has been frozen.", mu->name);
 		logcommand(nicksvs.me, u, CMDLOG_LOGIN, "failed IDENTIFY to %s (frozen)", mu->name);
 		return;
 	}
 
 	if (u->myuser == mu)
 	{
-		notice(nicksvs.nick, origin, "You are already logged in as \2%s\2.", mu->name);
+		notice(nicksvs.nick, si->su->nick, "You are already logged in as \2%s\2.", mu->name);
 		return;
 	}
 	else if (u->myuser != NULL && ircd_on_logout(u->nick, u->myuser->name, NULL))
@@ -104,7 +102,7 @@ static void ns_cmd_identify(char *origin)
 	{
 		if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
 		{
-			notice(nicksvs.nick, origin, "There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d).", LIST_LENGTH(&mu->logins), mu->name, me.maxlogins);
+			notice(nicksvs.nick, si->su->nick, "There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d).", LIST_LENGTH(&mu->logins), mu->name, me.maxlogins);
 			logcommand(nicksvs.me, u, CMDLOG_LOGIN, "failed IDENTIFY to %s (too many logins)", mu->name);
 			return;
 		}
@@ -150,7 +148,7 @@ static void ns_cmd_identify(char *origin)
 
 		logcommand(nicksvs.me, u, CMDLOG_LOGIN, "IDENTIFY");
 
-		notice(nicksvs.nick, origin, "You are now identified for \2%s\2.", u->myuser->name);
+		notice(nicksvs.nick, si->su->nick, "You are now identified for \2%s\2.", u->myuser->name);
 
 		/* check for failed attempts and let them know */
 		if (md_failnum && (atoi(md_failnum->value) > 0))
@@ -161,7 +159,7 @@ static void ns_cmd_identify(char *origin)
 			tm = *localtime(&mu->lastlogin);
 			strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-			notice(nicksvs.nick, origin, "\2%d\2 failed %s since %s.",
+			notice(nicksvs.nick, si->su->nick, "\2%d\2 failed %s since %s.",
 				atoi(md_failnum->value), (atoi(md_failnum->value) == 1) ? "login" : "logins", strfbuf);
 
 			md_failtime = metadata_find(mu, METADATA_USER, "private:loginfail:lastfailtime");
@@ -171,7 +169,7 @@ static void ns_cmd_identify(char *origin)
 			tm = *localtime(&ts);
 			strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-			notice(nicksvs.nick, origin, "Last failed attempt from: \2%s\2 on %s.",
+			notice(nicksvs.nick, si->su->nick, "Last failed attempt from: \2%s\2 on %s.",
 				md_failaddr->value, strfbuf);
 
 			metadata_delete(mu, METADATA_USER, "private:loginfail:failnum");	/* md_failnum now invalid */
@@ -248,7 +246,7 @@ static void ns_cmd_identify(char *origin)
 		/* don't allow them to join regonly chans until their
 		 * email is verified */
 		if (!(mu->flags & MU_WAITAUTH))
-			ircd_on_login(origin, mu->name, NULL);
+			ircd_on_login(si->su->nick, mu->name, NULL);
 
 		hook_call_event("user_identify", u);
 
@@ -257,7 +255,7 @@ static void ns_cmd_identify(char *origin)
 
 	logcommand(nicksvs.me, u, CMDLOG_LOGIN, "failed IDENTIFY to %s (bad password)", mu->name);
 
-	notice(nicksvs.nick, origin, "Invalid password for \2%s\2.", mu->name);
+	notice(nicksvs.nick, si->su->nick, "Invalid password for \2%s\2.", mu->name);
 
 	/* record the failed attempts */
 	/* note that we reuse this buffer later when warning opers about failed logins */

@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 6317 2006-09-06 20:03:32Z pippijn $
+ * $Id: register.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 6317 2006-09-06 20:03:32Z pippijn $",
+	"$Id: register.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void ns_cmd_register(char *origin);
+static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_register = { "REGISTER", "Registers a nickname.", AC_NONE, ns_cmd_register };
+command_t ns_register = { "REGISTER", "Registers a nickname.", AC_NONE, 2, ns_cmd_register };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -54,59 +54,59 @@ static int register_foreach_cb(dictionary_elem_t *delem, void *privdata)
 	return 0;
 }
 
-static void ns_cmd_register(char *origin)
+static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
+	user_t *u = si->su;
 	myuser_t *mu;
 	node_t *n;
-	char *pass = strtok(NULL, " ");
-	char *email = strtok(NULL, " ");
+	char *pass = parv[0];
+	char *email = parv[1];
 	char lau[BUFSIZE], lao[BUFSIZE];
 
 	if (u->myuser)
 	{
-		notice(nicksvs.nick, origin, "You are already logged in.");
+		notice(nicksvs.nick, si->su->nick, "You are already logged in.");
 		return;
 	}
 
 	if (!pass || !email)
 	{
-		notice(nicksvs.nick, origin, STR_INSUFFICIENT_PARAMS, "REGISTER");
-		notice(nicksvs.nick, origin, "Syntax: REGISTER <password> <email>");
+		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "REGISTER");
+		notice(nicksvs.nick, si->su->nick, "Syntax: REGISTER <password> <email>");
 		return;
 	}
 
 	if ((strlen(pass) > 32) || (strlen(email) >= EMAILLEN))
 	{
-		notice(nicksvs.nick, origin, STR_INVALID_PARAMS, "REGISTER");
+		notice(nicksvs.nick, si->su->nick, STR_INVALID_PARAMS, "REGISTER");
 		return;
 	}
 
 	if (IsDigit(*u->nick))
 	{
-		notice(nicksvs.nick, origin, "For security reasons, you can't register your UID.");
-		notice(nicksvs.nick, origin, "Please change to a real nickname, and try again.");
+		notice(nicksvs.nick, si->su->nick, "For security reasons, you can't register your UID.");
+		notice(nicksvs.nick, si->su->nick, "Please change to a real nickname, and try again.");
 		return;
 	}
 
-	if (!strcasecmp(pass, origin))
+	if (!strcasecmp(pass, si->su->nick))
 	{
-		notice(nicksvs.nick, origin, "You cannot use your nickname as a password.");
-		notice(nicksvs.nick, origin, "Syntax: REGISTER <password> <email>");
+		notice(nicksvs.nick, si->su->nick, "You cannot use your nickname as a password.");
+		notice(nicksvs.nick, si->su->nick, "Syntax: REGISTER <password> <email>");
 		return;
 	}
 
 	if (!validemail(email))
 	{
-		notice(nicksvs.nick, origin, "\2%s\2 is not a valid email address.", email);
+		notice(nicksvs.nick, si->su->nick, "\2%s\2 is not a valid email address.", email);
 		return;
 	}
 
 	/* make sure it isn't registered already */
-	mu = myuser_find(origin);
+	mu = myuser_find(si->su->nick);
 	if (mu != NULL)
 	{
-		notice(nicksvs.nick, origin, "\2%s\2 is already registered.", mu->name);
+		notice(nicksvs.nick, si->su->nick, "\2%s\2 is already registered.", mu->name);
 
 		return;
 	}
@@ -117,11 +117,11 @@ static void ns_cmd_register(char *origin)
 
 	if (tcnt >= me.maxusers)
 	{
-		notice(nicksvs.nick, origin, "\2%s\2 has too many nicknames registered.", email);
+		notice(nicksvs.nick, si->su->nick, "\2%s\2 has too many nicknames registered.", email);
 		return;
 	}
 
-	mu = myuser_add(origin, pass, email, config_options.defuflags);
+	mu = myuser_add(si->su->nick, pass, email, config_options.defuflags);
 	mu->registered = CURRTIME;
 	mu->lastlogin = CURRTIME;
 
@@ -135,14 +135,14 @@ static void ns_cmd_register(char *origin)
 
 		if (!sendemail(u, EMAIL_REGISTER, mu, key))
 		{
-			notice(nicksvs.nick, origin, "Sending email failed, sorry! Registration aborted.");
+			notice(nicksvs.nick, si->su->nick, "Sending email failed, sorry! Registration aborted.");
 			myuser_delete(mu);
 			free(key);
 			return;
 		}
 
-		notice(nicksvs.nick, origin, "An email containing nickname activation instructions has been sent to \2%s\2.", mu->email);
-		notice(nicksvs.nick, origin, "If you do not complete registration within one day your nickname will expire.");
+		notice(nicksvs.nick, si->su->nick, "An email containing nickname activation instructions has been sent to \2%s\2.", mu->email);
+		notice(nicksvs.nick, si->su->nick, "If you do not complete registration within one day your nickname will expire.");
 
 		free(key);
 	}
@@ -153,9 +153,9 @@ static void ns_cmd_register(char *origin)
 
 	if (!(mu->flags & MU_WAITAUTH))
 		/* only grant ircd registered status if it's verified */
-		ircd_on_login(origin, mu->name, NULL);
+		ircd_on_login(si->su->nick, mu->name, NULL);
 
-	snoop("REGISTER: \2%s\2 to \2%s\2", origin, email);
+	snoop("REGISTER: \2%s\2 to \2%s\2", si->su->nick, email);
 	logcommand(nicksvs.me, u, CMDLOG_REGISTER, "REGISTER to %s", email);
 	if (is_soper(mu))
 	{
@@ -163,8 +163,8 @@ static void ns_cmd_register(char *origin)
 		snoop("SOPER: \2%s\2 as \2%s\2", u->nick, mu->name);
 	}
 
-	notice(nicksvs.nick, origin, "\2%s\2 is now registered to \2%s\2.", mu->name, mu->email);
-	notice(nicksvs.nick, origin, "The password is \2%s\2. Please write this down for future reference.", pass);
+	notice(nicksvs.nick, si->su->nick, "\2%s\2 is now registered to \2%s\2.", mu->name, mu->email);
+	notice(nicksvs.nick, si->su->nick, "The password is \2%s\2. Please write this down for future reference.", pass);
 	hook_call_event("user_register", mu);
 
 	snprintf(lau, BUFSIZE, "%s@%s", u->user, u->vhost);

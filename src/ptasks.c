@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 6301 2006-09-06 15:29:38Z jilles $
+ * $Id: ptasks.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -368,9 +368,9 @@ void handle_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *m
 	vec[1] = message;
 	vec[2] = NULL;
 	if (is_notice)
-		si->sptr->notice_handler(si->su->nick, 2, vec);
+		si->sptr->notice_handler(si, 2, vec);
 	else
-		si->sptr->handler(si->su->nick, 2, vec);
+		si->sptr->handler(si, 2, vec);
 }
 
 void handle_topic_from(sourceinfo_t *si, channel_t *c, char *setter, time_t ts, char *topic)

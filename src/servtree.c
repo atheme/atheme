@@ -4,7 +4,7 @@
  *
  * Services binary tree manipulation. (add_service, del_service, et al.)
  *
- * $Id: servtree.c 6155 2006-08-19 21:53:45Z jilles $
+ * $Id: servtree.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -14,9 +14,7 @@ static BlockHeap *service_heap;
 
 service_t *fcmd_agent = NULL;
 
-static void dummy_handler(char *origin, uint8_t parc, char **parv);
-
-static void dummy_handler(char *origin, uint8_t parc, char **parv)
+static void dummy_handler(sourceinfo_t *si, int parc, char **parv)
 {
 }
 
@@ -39,7 +37,7 @@ static void me_me_init(void)
 	me.me = server_add(me.name, 0, NULL, me.numeric ? me.numeric : NULL, me.desc);
 }
 
-service_t *add_service(char *name, char *user, char *host, char *real, void (*handler) (char *origin, uint8_t parc, char *parv[]))
+service_t *add_service(char *name, char *user, char *host, char *real, void (*handler) (sourceinfo_t *si, int parc, char *parv[]))
 {
 	service_t *sptr;
 

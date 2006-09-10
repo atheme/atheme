@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 6335 2006-09-09 23:58:19Z pippijn $
+ * $Id: set.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,192 +12,193 @@
 DECLARE_MODULE_V1
 (
 	"userserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 6335 2006-09-09 23:58:19Z pippijn $",
+	"$Id: set.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void us_cmd_set(char *origin);
+static void us_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
 list_t *us_cmdtree, *us_helptree;
 
-command_t us_set = { "SET", "Sets various control flags.", AC_NONE, us_cmd_set };
+command_t us_set = { "SET", "Sets various control flags.", AC_NONE, 2, us_cmd_set };
 
 list_t us_set_cmdtree;
 
 /* SET <setting> <parameters> */
-static void us_cmd_set(char *origin)
+static void us_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *setting = strtok(NULL, " ");
-	user_t *u;
+	char *setting = parv[0];
+	command_t *c;
 
-	u = user_find_named(origin);
-	if (u == NULL)
-		return;
-	if (u->myuser == NULL)
+	if (si->su->myuser == NULL)
 	{
-		notice(usersvs.nick, origin, "You are not logged in.");
+		notice(usersvs.nick, si->su->nick, "You are not logged in.");
 		return;
 	}
 
 	if (setting == NULL)
 	{
-		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "SET");
-		notice(usersvs.nick, origin, "Syntax: SET <setting> <parameters>");
+		notice(usersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "SET");
+		notice(usersvs.nick, si->su->nick, "Syntax: SET <setting> <parameters>");
 		return;
 	}
 
-        /* take the command through the hash table */
-        command_exec(usersvs.me, origin, setting, &us_set_cmdtree);
+	/* take the command through the hash table */
+        if ((c = command_find(&us_set_cmdtree, setting)))
+	{
+		command_exec(usersvs.me, si, c, parc - 1, parv + 1);
+	}
+	else
+	{
+		notice(usersvs.nick, si->su->nick, "Invalid set command. Use \2/%s%s HELP SET\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", usersvs.nick);
+	}
 }
 
 /* SET EMAIL <new address> */
-static void _us_setemail(char *origin)
+static void _us_setemail(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
-	char *email = strtok(NULL, " ");
+	char *email = parv[0];
 
-	if (u == NULL || u->myuser == NULL)
+	if (si->su->myuser == NULL)
 		return;
 
 	if (email == NULL)
 	{
-		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "EMAIL");
-		notice(usersvs.nick, origin, "Syntax: SET EMAIL <new e-mail>");
+		notice(usersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "EMAIL");
+		notice(usersvs.nick, si->su->nick, "Syntax: SET EMAIL <new e-mail>");
 		return;
 	}
 
 	if (strlen(email) >= EMAILLEN)
 	{
-		notice(usersvs.nick, origin, STR_INVALID_PARAMS, "EMAIL");
+		notice(usersvs.nick, si->su->nick, STR_INVALID_PARAMS, "EMAIL");
 		return;
 	}
 
-	if (u->myuser->flags & MU_WAITAUTH)
+	if (si->su->myuser->flags & MU_WAITAUTH)
 	{
-		notice(usersvs.nick, origin, "Please verify your original registration before changing your e-mail address.");
+		notice(usersvs.nick, si->su->nick, "Please verify your original registration before changing your e-mail address.");
 		return;
 	}
 
 	if (!validemail(email))
 	{
-		notice(usersvs.nick, origin, "\2%s\2 is not a valid email address.", email);
+		notice(usersvs.nick, si->su->nick, "\2%s\2 is not a valid email address.", email);
 		return;
 	}
 
-	if (!strcasecmp(u->myuser->email, email))
+	if (!strcasecmp(si->su->myuser->email, email))
 	{
-		notice(usersvs.nick, origin, "The email address for \2%s\2 is already set to \2%s\2.", u->myuser->name, u->myuser->email);
+		notice(usersvs.nick, si->su->nick, "The email address for \2%s\2 is already set to \2%s\2.", si->su->myuser->name, si->su->myuser->email);
 		return;
 	}
 
-	snoop("SET:EMAIL: \2%s\2 (\2%s\2 -> \2%s\2)", u->myuser->name, u->myuser->email, email);
+	snoop("SET:EMAIL: \2%s\2 (\2%s\2 -> \2%s\2)", si->su->myuser->name, si->su->myuser->email, email);
 
 	if (me.auth == AUTH_EMAIL)
 	{
 		unsigned long key = makekey();
 
-		metadata_add(u->myuser, METADATA_USER, "private:verify:emailchg:key", itoa(key));
-		metadata_add(u->myuser, METADATA_USER, "private:verify:emailchg:newemail", email);
-		metadata_add(u->myuser, METADATA_USER, "private:verify:emailchg:timestamp", itoa(time(NULL)));
+		metadata_add(si->su->myuser, METADATA_USER, "private:verify:emailchg:key", itoa(key));
+		metadata_add(si->su->myuser, METADATA_USER, "private:verify:emailchg:newemail", email);
+		metadata_add(si->su->myuser, METADATA_USER, "private:verify:emailchg:timestamp", itoa(time(NULL)));
 
-		if (!sendemail(u, EMAIL_SETEMAIL, u->myuser, itoa(key)))
+		if (!sendemail(si->su, EMAIL_SETEMAIL, si->su->myuser, itoa(key)))
 		{
-			notice(usersvs.nick, origin, "Sending email failed, sorry! Your email address is unchanged.");
-			metadata_delete(u->myuser, METADATA_USER, "private:verify:emailchg:key");
-			metadata_delete(u->myuser, METADATA_USER, "private:verify:emailchg:newemail");
-			metadata_delete(u->myuser, METADATA_USER, "private:verify:emailchg:timestamp");
+			notice(usersvs.nick, si->su->nick, "Sending email failed, sorry! Your email address is unchanged.");
+			metadata_delete(si->su->myuser, METADATA_USER, "private:verify:emailchg:key");
+			metadata_delete(si->su->myuser, METADATA_USER, "private:verify:emailchg:newemail");
+			metadata_delete(si->su->myuser, METADATA_USER, "private:verify:emailchg:timestamp");
 			return;
 		}
 
-		logcommand(usersvs.me, u, CMDLOG_SET, "SET EMAIL %s (awaiting verification)", email);
-		notice(usersvs.nick, origin, "An email containing email changing instructions has been sent to \2%s\2.", email);
-		notice(usersvs.nick, origin, "Your email address will not be changed until you follow these instructions.");
+		logcommand(usersvs.me, si->su, CMDLOG_SET, "SET EMAIL %s (awaiting verification)", email);
+		notice(usersvs.nick, si->su->nick, "An email containing email changing instructions has been sent to \2%s\2.", email);
+		notice(usersvs.nick, si->su->nick, "Your email address will not be changed until you follow these instructions.");
 
 		return;
 	}
 
-	strlcpy(u->myuser->email, email, EMAILLEN);
+	strlcpy(si->su->myuser->email, email, EMAILLEN);
 
-	logcommand(usersvs.me, u, CMDLOG_SET, "SET EMAIL %s", email);
-	notice(usersvs.nick, origin, "The email address for \2%s\2 has been changed to \2%s\2.", u->myuser->name, u->myuser->email);
+	logcommand(usersvs.me, si->su, CMDLOG_SET, "SET EMAIL %s", email);
+	notice(usersvs.nick, si->su->nick, "The email address for \2%s\2 has been changed to \2%s\2.", si->su->myuser->name, si->su->myuser->email);
 }
 
-command_t us_set_email = { "EMAIL", "Changes the e-mail address associated with a username.", AC_NONE, _us_setemail };
+command_t us_set_email = { "EMAIL", "Changes the e-mail address associated with a username.", AC_NONE, 1, _us_setemail };
 
 /* SET HIDEMAIL [ON|OFF] */
-static void _us_sethidemail(char *origin)
+static void _us_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
-	char *params = strtok(NULL, " ");
+	char *params = strtok(parv[0], " ");
 
-	if (u == NULL || u->myuser == NULL)
+	if (si->su->myuser == NULL)
 		return;
 
 	if (params == NULL)
 	{
-		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "HIDEMAIL");
+		notice(usersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "HIDEMAIL");
 		return;
 	}
 
 	if (!strcasecmp("ON", params))
 	{
-		if (MU_HIDEMAIL & u->myuser->flags)
+		if (MU_HIDEMAIL & si->su->myuser->flags)
 		{
-			notice(usersvs.nick, origin, "The \2HIDEMAIL\2 flag is already set for \2%s\2.", u->myuser->name);
+			notice(usersvs.nick, si->su->nick, "The \2HIDEMAIL\2 flag is already set for \2%s\2.", si->su->myuser->name);
 			return;
 		}
 
-		logcommand(usersvs.me, u, CMDLOG_SET, "SET HIDEMAIL ON");
+		logcommand(usersvs.me, si->su, CMDLOG_SET, "SET HIDEMAIL ON");
 
-		u->myuser->flags |= MU_HIDEMAIL;
+		si->su->myuser->flags |= MU_HIDEMAIL;
 
-		notice(usersvs.nick, origin, "The \2HIDEMAIL\2 flag has been set for \2%s\2.", u->myuser->name);
+		notice(usersvs.nick, si->su->nick, "The \2HIDEMAIL\2 flag has been set for \2%s\2.", si->su->myuser->name);
 
 		return;
 	}
 	else if (!strcasecmp("OFF", params))
 	{
-		if (!(MU_HIDEMAIL & u->myuser->flags))
+		if (!(MU_HIDEMAIL & si->su->myuser->flags))
 		{
-			notice(usersvs.nick, origin, "The \2HIDEMAIL\2 flag is not set for \2%s\2.", u->myuser->name);
+			notice(usersvs.nick, si->su->nick, "The \2HIDEMAIL\2 flag is not set for \2%s\2.", si->su->myuser->name);
 			return;
 		}
 
-		logcommand(usersvs.me, u, CMDLOG_SET, "SET HIDEMAIL OFF");
+		logcommand(usersvs.me, si->su, CMDLOG_SET, "SET HIDEMAIL OFF");
 
-		u->myuser->flags &= ~MU_HIDEMAIL;
+		si->su->myuser->flags &= ~MU_HIDEMAIL;
 
-		notice(usersvs.nick, origin, "The \2HIDEMAIL\2 flag has been removed for \2%s\2.", u->myuser->name);
+		notice(usersvs.nick, si->su->nick, "The \2HIDEMAIL\2 flag has been removed for \2%s\2.", si->su->myuser->name);
 
 		return;
 	}
 
 	else
 	{
-		notice(usersvs.nick, origin, STR_INVALID_PARAMS, "HIDEMAIL");
+		notice(usersvs.nick, si->su->nick, STR_INVALID_PARAMS, "HIDEMAIL");
 		return;
 	}
 }
 
-command_t us_set_hidemail = { "HIDEMAIL", "Hides the e-mail address associated with a username.", AC_NONE, _us_sethidemail };
+command_t us_set_hidemail = { "HIDEMAIL", "Hides the e-mail address associated with a username.", AC_NONE, 1, _us_sethidemail };
 
-static void _us_setemailmemos(char *origin)
+static void _us_setemailmemos(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
-	char *params = strtok(NULL, " ");
+	char *params = strtok(parv[0], " ");
 
-	if (u == NULL || u->myuser == NULL)
+	if (si->su->myuser == NULL)
 		return;
 
-	if (u->myuser->flags & MU_WAITAUTH)
+	if (si->su->myuser->flags & MU_WAITAUTH)
 	{
-		notice(usersvs.nick, origin, "You have to verify your email address before you can enable emailing memos.");
+		notice(usersvs.nick, si->su->nick, "You have to verify your email address before you can enable emailing memos.");
 		return;
 	}
 
 	if (params == NULL)
 	{
-		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "EMAILMEMOS");
+		notice(usersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "EMAILMEMOS");
 		return;
 	}
 
@@ -205,306 +206,301 @@ static void _us_setemailmemos(char *origin)
 	{
 		if (me.mta == NULL)
 		{
-			notice(usersvs.nick, origin, "Sending email is administratively disabled.");
+			notice(usersvs.nick, si->su->nick, "Sending email is administratively disabled.");
 			return;
 		}
-		if (MU_EMAILMEMOS & u->myuser->flags)
+		if (MU_EMAILMEMOS & si->su->myuser->flags)
 		{
-			notice(usersvs.nick, origin, "The \2EMAILMEMOS\2 flag is already set for \2%s\2.", u->myuser->name);
-			return;
-		}
-
-		logcommand(usersvs.me, u, CMDLOG_SET, "SET EMAILMEMOS ON");
-		u->myuser->flags |= MU_EMAILMEMOS;
-		notice(usersvs.nick, origin, "The \2EMAILMEMOS\2 flag has been set for \2%s\2.", u->myuser->name);
-		return;
-	}
-
-        else if (!strcasecmp("OFF", params))
-        {
-                if (!(MU_EMAILMEMOS & u->myuser->flags))
-                {
-                        notice(usersvs.nick, origin, "The \2EMAILMEMOS\2 flag is not set for \2%s\2.", u->myuser->name);
-                        return;
-                }
-
-		logcommand(usersvs.me, u, CMDLOG_SET, "SET EMAILMEMOS OFF");
-                u->myuser->flags &= ~MU_EMAILMEMOS;
-                notice(usersvs.nick, origin, "The \2EMAILMEMOS\2 flag has been removed for \2%s\2.", u->myuser->name);
-                return;
-        }
-
-        else
-        {
-                notice(usersvs.nick, origin, STR_INVALID_PARAMS, "EMAILMEMOS");
-                return;
-        }
-}
-
-command_t us_set_emailmemos = { "EMAILMEMOS", "Forwards incoming memos to your account's e-mail address.", AC_NONE, _us_setemailmemos };
-
-static void _us_setnomemo(char *origin)
-{
-	user_t *u = user_find_named(origin);
-	char *params = strtok(NULL, " ");
-
-	if (u == NULL || u->myuser == NULL)
-		return;
-
-	if (params == NULL)
-	{
-		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "NOMEMO");
-		return;
-	}
-
-	if (!strcasecmp("ON", params))
-	{
-		if (MU_NOMEMO & u->myuser->flags)
-		{
-			notice(usersvs.nick, origin, "The \2NOMEMO\2 flag is already set for \2%s\2.", u->myuser->name);
-			return;
-                }
-
-		logcommand(usersvs.me, u, CMDLOG_SET, "SET NOMEMO ON");
-                u->myuser->flags |= MU_NOMEMO;
-                notice(usersvs.nick, origin, "The \2NOMEMO\2 flag has been set for \2%s\2.", u->myuser->name);
-                return;
-	}
-
-	else if (!strcasecmp("OFF", params))
-	{
-		if (!(MU_NOMEMO & u->myuser->flags))
-		{
-			notice(usersvs.nick, origin, "The \2NOMEMO\2 flag is not set for \2%s\2.", u->myuser->name);
+			notice(usersvs.nick, si->su->nick, "The \2EMAILMEMOS\2 flag is already set for \2%s\2.", si->su->myuser->name);
 			return;
 		}
 
-		logcommand(usersvs.me, u, CMDLOG_SET, "SET NOMEMO OFF");
-		u->myuser->flags &= ~MU_NOMEMO;
-		notice(usersvs.nick, origin, "The \2NOMEMO\2 flag has been removed for \2%s\2.", u->myuser->name);
-		return;
-        }
-	
-	else
-	{
-		notice(usersvs.nick, origin, STR_INVALID_PARAMS, "NOMEMO");
-		return;
-	}
-}
-
-command_t us_set_nomemo = { "NOMEMO", "Disables the ability to recieve memos.", AC_NONE, _us_setnomemo };
-
-static void _us_setneverop(char *origin)
-{
-	user_t *u = user_find_named(origin);
-	char *params = strtok(NULL, " ");
-
-	if (u == NULL || u->myuser == NULL)
-		return;
-
-	if (params == NULL)
-	{
-		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "NEVEROP");
-		return;
-	}
-
-	if (!strcasecmp("ON", params))
-	{
-		if (MU_NEVEROP & u->myuser->flags)
-		{
-			notice(usersvs.nick, origin, "The \2NEVEROP\2 flag is already set for \2%s\2.", u->myuser->name);
-			return;
-		}
-
-		logcommand(usersvs.me, u, CMDLOG_SET, "SET NEVEROP ON");
-
-		u->myuser->flags |= MU_NEVEROP;
-
-		notice(usersvs.nick, origin, "The \2NEVEROP\2 flag has been set for \2%s\2.", u->myuser->name);
-
+		logcommand(usersvs.me, si->su, CMDLOG_SET, "SET EMAILMEMOS ON");
+		si->su->myuser->flags |= MU_EMAILMEMOS;
+		notice(usersvs.nick, si->su->nick, "The \2EMAILMEMOS\2 flag has been set for \2%s\2.", si->su->myuser->name);
 		return;
 	}
 
 	else if (!strcasecmp("OFF", params))
 	{
-		if (!(MU_NEVEROP & u->myuser->flags))
+		if (!(MU_EMAILMEMOS & si->su->myuser->flags))
 		{
-			notice(usersvs.nick, origin, "The \2NEVEROP\2 flag is not set for \2%s\2.", u->myuser->name);
+			notice(usersvs.nick, si->su->nick, "The \2EMAILMEMOS\2 flag is not set for \2%s\2.", si->su->myuser->name);
 			return;
 		}
 
-		logcommand(usersvs.me, u, CMDLOG_SET, "SET NEVEROP OFF");
-
-		u->myuser->flags &= ~MU_NEVEROP;
-
-		notice(usersvs.nick, origin, "The \2NEVEROP\2 flag has been removed for \2%s\2.", u->myuser->name);
-
+		logcommand(usersvs.me, si->su, CMDLOG_SET, "SET EMAILMEMOS OFF");
+		si->su->myuser->flags &= ~MU_EMAILMEMOS;
+		notice(usersvs.nick, si->su->nick, "The \2EMAILMEMOS\2 flag has been removed for \2%s\2.", si->su->myuser->name);
 		return;
 	}
 
 	else
 	{
-		notice(usersvs.nick, origin, STR_INVALID_PARAMS, "NEVEROP");
+		notice(usersvs.nick, si->su->nick, STR_INVALID_PARAMS, "EMAILMEMOS");
 		return;
 	}
 }
 
-command_t us_set_neverop = { "NEVEROP", "Prevents you from being added to access lists.", AC_NONE, _us_setneverop };
+command_t us_set_emailmemos = { "EMAILMEMOS", "Forwards incoming memos to your account's e-mail address.", AC_NONE, 1, _us_setemailmemos };
 
-static void _us_setnoop(char *origin)
+static void _us_setnomemo(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
-	char *params = strtok(NULL, " ");
+	char *params = strtok(parv[0], " ");
 
-	if (u == NULL || u->myuser == NULL)
+	if (si->su->myuser == NULL)
 		return;
 
 	if (params == NULL)
 	{
-		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "NOOP");
+		notice(usersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "NOMEMO");
 		return;
 	}
 
 	if (!strcasecmp("ON", params))
 	{
-		if (MU_NOOP & u->myuser->flags)
+		if (MU_NOMEMO & si->su->myuser->flags)
 		{
-			notice(usersvs.nick, origin, "The \2NOOP\2 flag is already set for \2%s\2.", u->myuser->name);
+			notice(usersvs.nick, si->su->nick, "The \2NOMEMO\2 flag is already set for \2%s\2.", si->su->myuser->name);
 			return;
 		}
 
-		logcommand(usersvs.me, u, CMDLOG_SET, "SET NOOP ON");
+		logcommand(usersvs.me, si->su, CMDLOG_SET, "SET NOMEMO ON");
+		si->su->myuser->flags |= MU_NOMEMO;
+		notice(usersvs.nick, si->su->nick, "The \2NOMEMO\2 flag has been set for \2%s\2.", si->su->myuser->name);
+		return;
+	}
 
-		u->myuser->flags |= MU_NOOP;
+	else if (!strcasecmp("OFF", params))
+	{
+		if (!(MU_NOMEMO & si->su->myuser->flags))
+		{
+			notice(usersvs.nick, si->su->nick, "The \2NOMEMO\2 flag is not set for \2%s\2.", si->su->myuser->name);
+			return;
+		}
 
-		notice(usersvs.nick, origin, "The \2NOOP\2 flag has been set for \2%s\2.", u->myuser->name);
+		logcommand(usersvs.me, si->su, CMDLOG_SET, "SET NOMEMO OFF");
+		si->su->myuser->flags &= ~MU_NOMEMO;
+		notice(usersvs.nick, si->su->nick, "The \2NOMEMO\2 flag has been removed for \2%s\2.", si->su->myuser->name);
+		return;
+	}
+
+	else
+	{
+		notice(usersvs.nick, si->su->nick, STR_INVALID_PARAMS, "NOMEMO");
+		return;
+	}
+}
+
+command_t us_set_nomemo = { "NOMEMO", "Disables the ability to recieve memos.", AC_NONE, 1, _us_setnomemo };
+
+static void _us_setneverop(sourceinfo_t *si, int parc, char *parv[])
+{
+	char *params = strtok(parv[0], " ");
+
+	if (si->su->myuser == NULL)
+		return;
+
+	if (params == NULL)
+	{
+		notice(usersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "NEVEROP");
+		return;
+	}
+
+	if (!strcasecmp("ON", params))
+	{
+		if (MU_NEVEROP & si->su->myuser->flags)
+		{
+			notice(usersvs.nick, si->su->nick, "The \2NEVEROP\2 flag is already set for \2%s\2.", si->su->myuser->name);
+			return;
+		}
+
+		logcommand(usersvs.me, si->su, CMDLOG_SET, "SET NEVEROP ON");
+
+		si->su->myuser->flags |= MU_NEVEROP;
+
+		notice(usersvs.nick, si->su->nick, "The \2NEVEROP\2 flag has been set for \2%s\2.", si->su->myuser->name);
 
 		return;
 	}
+
 	else if (!strcasecmp("OFF", params))
 	{
-		if (!(MU_NOOP & u->myuser->flags))
+		if (!(MU_NEVEROP & si->su->myuser->flags))
 		{
-			notice(usersvs.nick, origin, "The \2NOOP\2 flag is not set for \2%s\2.", u->myuser->name);
+			notice(usersvs.nick, si->su->nick, "The \2NEVEROP\2 flag is not set for \2%s\2.", si->su->myuser->name);
 			return;
 		}
 
-		logcommand(usersvs.me, u, CMDLOG_SET, "SET NOOP OFF");
+		logcommand(usersvs.me, si->su, CMDLOG_SET, "SET NEVEROP OFF");
 
-		u->myuser->flags &= ~MU_NOOP;
+		si->su->myuser->flags &= ~MU_NEVEROP;
 
-		notice(usersvs.nick, origin, "The \2NOOP\2 flag has been removed for \2%s\2.", u->myuser->name);
+		notice(usersvs.nick, si->su->nick, "The \2NEVEROP\2 flag has been removed for \2%s\2.", si->su->myuser->name);
 
 		return;
 	}
 
 	else
 	{
-		notice(usersvs.nick, origin, STR_INVALID_PARAMS, "NOOP");
+		notice(usersvs.nick, si->su->nick, STR_INVALID_PARAMS, "NEVEROP");
 		return;
 	}
 }
 
-command_t us_set_noop = { "NOOP", "Prevents services from setting modes upon you automatically.", AC_NONE, _us_setnoop };
+command_t us_set_neverop = { "NEVEROP", "Prevents you from being added to access lists.", AC_NONE, 1, _us_setneverop };
 
-static void _us_setproperty(char *origin)
+static void _us_setnoop(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
-	char *property = strtok(NULL, " ");
-	char *value = strtok(NULL, "");
+	char *params = strtok(parv[0], " ");
 
-	if (u == NULL || u->myuser == NULL)
+	if (si->su->myuser == NULL)
+		return;
+
+	if (params == NULL)
+	{
+		notice(usersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "NOOP");
+		return;
+	}
+
+	if (!strcasecmp("ON", params))
+	{
+		if (MU_NOOP & si->su->myuser->flags)
+		{
+			notice(usersvs.nick, si->su->nick, "The \2NOOP\2 flag is already set for \2%s\2.", si->su->myuser->name);
+			return;
+		}
+
+		logcommand(usersvs.me, si->su, CMDLOG_SET, "SET NOOP ON");
+
+		si->su->myuser->flags |= MU_NOOP;
+
+		notice(usersvs.nick, si->su->nick, "The \2NOOP\2 flag has been set for \2%s\2.", si->su->myuser->name);
+
+		return;
+	}
+	else if (!strcasecmp("OFF", params))
+	{
+		if (!(MU_NOOP & si->su->myuser->flags))
+		{
+			notice(usersvs.nick, si->su->nick, "The \2NOOP\2 flag is not set for \2%s\2.", si->su->myuser->name);
+			return;
+		}
+
+		logcommand(usersvs.me, si->su, CMDLOG_SET, "SET NOOP OFF");
+
+		si->su->myuser->flags &= ~MU_NOOP;
+
+		notice(usersvs.nick, si->su->nick, "The \2NOOP\2 flag has been removed for \2%s\2.", si->su->myuser->name);
+
+		return;
+	}
+
+	else
+	{
+		notice(usersvs.nick, si->su->nick, STR_INVALID_PARAMS, "NOOP");
+		return;
+	}
+}
+
+command_t us_set_noop = { "NOOP", "Prevents services from setting modes upon you automatically.", AC_NONE, 1, _us_setnoop };
+
+static void _us_setproperty(sourceinfo_t *si, int parc, char *parv[])
+{
+	char *property = parv[0];
+	char *value = parv[1];
+
+	if (si->su->myuser == NULL)
 		return;
 
 	if (!property)
 	{
-		notice(usersvs.nick, origin, "Syntax: SET PROPERTY <property> [value]");
+		notice(usersvs.nick, si->su->nick, "Syntax: SET PROPERTY <property> [value]");
 		return;
 	}
 
-	if (strchr(property, ':') && !has_priv(u, PRIV_METADATA))
+	if (strchr(property, ':') && !has_priv(si->su, PRIV_METADATA))
 	{
-		notice(usersvs.nick, origin, "Invalid property name.");
+		notice(usersvs.nick, si->su->nick, "Invalid property name.");
 		return;
 	}
 
 	if (strchr(property, ':'))
-		snoop("SET:PROPERTY: \2%s\2: \2%s\2/\2%s\2", u->myuser->name, property, value);
+		snoop("SET:PROPERTY: \2%s\2: \2%s\2/\2%s\2", si->su->myuser->name, property, value);
 
-	if (u->myuser->metadata.count >= me.mdlimit)
+	if (si->su->myuser->metadata.count >= me.mdlimit)
 	{
-		notice(usersvs.nick, origin, "Cannot add \2%s\2 to \2%s\2 metadata table, it is full.",
-					property, u->myuser->name);
+		notice(usersvs.nick, si->su->nick, "Cannot add \2%s\2 to \2%s\2 metadata table, it is full.",
+					property, si->su->myuser->name);
 		return;
 	}
 
 	if (!value)
 	{
-		metadata_t *md = metadata_find(u->myuser, METADATA_USER, property);
+		metadata_t *md = metadata_find(si->su->myuser, METADATA_USER, property);
 
 		if (!md)
 		{
-			notice(usersvs.nick, origin, "Metadata entry \2%s\2 was not set.", property);
+			notice(usersvs.nick, si->su->nick, "Metadata entry \2%s\2 was not set.", property);
 			return;
 		}
 
-		metadata_delete(u->myuser, METADATA_USER, property);
-		logcommand(usersvs.me, u, CMDLOG_SET, "SET PROPERTY %s (deleted)", property);
-		notice(usersvs.nick, origin, "Metadata entry \2%s\2 has been deleted.", property);
+		metadata_delete(si->su->myuser, METADATA_USER, property);
+		logcommand(usersvs.me, si->su, CMDLOG_SET, "SET PROPERTY %s (deleted)", property);
+		notice(usersvs.nick, si->su->nick, "Metadata entry \2%s\2 has been deleted.", property);
 		return;
 	}
 
 	if (strlen(property) > 32 || strlen(value) > 300)
 	{
-		notice(usersvs.nick, origin, "Parameters are too long. Aborting.");
+		notice(usersvs.nick, si->su->nick, "Parameters are too long. Aborting.");
 		return;
 	}
 
-	metadata_add(u->myuser, METADATA_USER, property, value);
-	logcommand(usersvs.me, u, CMDLOG_SET, "SET PROPERTY %s to %s", property, value);
-	notice(usersvs.nick, origin, "Metadata entry \2%s\2 added.", property);
+	metadata_add(si->su->myuser, METADATA_USER, property, value);
+	logcommand(usersvs.me, si->su, CMDLOG_SET, "SET PROPERTY %s to %s", property, value);
+	notice(usersvs.nick, si->su->nick, "Metadata entry \2%s\2 added.", property);
 }
 
-command_t us_set_property = { "PROPERTY", "Manipulates metadata entries associated with a username.", AC_NONE, _us_setproperty };
+command_t us_set_property = { "PROPERTY", "Manipulates metadata entries associated with a username.", AC_NONE, 2, _us_setproperty };
 
-static void _us_setpassword(char *origin)
+static void _us_setpassword(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *password = strtok(NULL, " ");
-	user_t *u = user_find_named(origin);
+	char *password = strtok(parv[0], " ");
 
-	if (u == NULL || u->myuser == NULL)
+	if (si->su->myuser == NULL)
 		return;
 
 	if (password == NULL)
 	{
-		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "PASSWORD");
+		notice(usersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "PASSWORD");
 		return;
 	}
 
 	if (strlen(password) > 32)
 	{
-		notice(usersvs.nick, origin, STR_INVALID_PARAMS, "PASSWORD");
+		notice(usersvs.nick, si->su->nick, STR_INVALID_PARAMS, "PASSWORD");
 		return;
 	}
 
-	if (!strcasecmp(password, u->myuser->name))
+	if (!strcasecmp(password, si->su->myuser->name))
 	{
-		notice(usersvs.nick, origin, "You cannot use your username as a password.");
-		notice(usersvs.nick, origin, "Syntax: SET PASSWORD <new password>");
+		notice(usersvs.nick, si->su->nick, "You cannot use your username as a password.");
+		notice(usersvs.nick, si->su->nick, "Syntax: SET PASSWORD <new password>");
 		return;
 	}
 
-	/*snoop("SET:PASSWORD: \2%s\2 as \2%s\2 for \2%s\2", u->user, u->myuser->name, u->myuser->name);*/
-	logcommand(usersvs.me, u, CMDLOG_SET, "SET PASSWORD");
+	/*snoop("SET:PASSWORD: \2%s\2 as \2%s\2 for \2%s\2", si->su->user, si->su->myuser->name, si->su->myuser->name);*/
+	logcommand(usersvs.me, si->su, CMDLOG_SET, "SET PASSWORD");
 
-	set_password(u->myuser, password);
+	set_password(si->su->myuser, password);
 
-	notice(usersvs.nick, origin, "The password for \2%s\2 has been changed to \2%s\2. Please write this down for future reference.", u->myuser->name, password);
+	notice(usersvs.nick, si->su->nick, "The password for \2%s\2 has been changed to \2%s\2. Please write this down for future reference.", si->su->myuser->name, password);
 
 	return;
 }
 
-command_t us_set_password = { "PASSWORD", "Changes the password associated with your username.", AC_NONE, _us_setpassword };
+command_t us_set_password = { "PASSWORD", "Changes the password associated with your username.", AC_NONE, 1, _us_setpassword };
 
 command_t *us_set_commands[] = {
 	&us_set_email,

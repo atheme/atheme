@@ -4,7 +4,7 @@
  *
  * This file contains code for OS UPTIME
  *
- * $Id: uptime.c 6317 2006-09-06 20:03:32Z pippijn $
+ * $Id: uptime.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,14 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"operserv/uptime", FALSE, _modinit, _moddeinit,
-	"$Id: uptime.c 6317 2006-09-06 20:03:32Z pippijn $",
+	"$Id: uptime.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void os_cmd_uptime(char *origin);
+static void os_cmd_uptime(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_uptime = { "UPTIME", "Shows services uptime and the number of registered nicks and channels.",
-                        PRIV_SERVER_AUSPEX, os_cmd_uptime };
+command_t os_uptime = { "UPTIME", "Shows services uptime and the number of registered nicks and channels.", PRIV_SERVER_AUSPEX, 1, os_cmd_uptime };
 
 list_t *os_cmdtree;
 list_t *os_helptree;
@@ -39,14 +38,14 @@ void _moddeinit()
 	help_delentry(os_helptree, "UPTIME");
 }
 
-static void os_cmd_uptime(char *origin)
+static void os_cmd_uptime(sourceinfo_t *si, int parc, char *parv[])
 {
-	logcommand(opersvs.me, user_find_named(origin), CMDLOG_GET, "UPTIME");
+	logcommand(opersvs.me, si->su, CMDLOG_GET, "UPTIME");
 
-        notice(opersvs.nick, origin, "atheme-%s [%s] #%s", version, revision, generation);
-        notice(opersvs.nick, origin, "Services have been up for %s", timediff(CURRTIME - me.start));
-        notice(opersvs.nick, origin, "Registered nicknames: %d", cnt.myuser);
-        notice(opersvs.nick, origin, "Registered channels: %d", cnt.mychan);
-        notice(opersvs.nick, origin, "Users currently online: %d", cnt.user - me.me->users);
+        notice(opersvs.nick, si->su->nick, "atheme-%s [%s] #%s", version, revision, generation);
+        notice(opersvs.nick, si->su->nick, "Services have been up for %s", timediff(CURRTIME - me.start));
+        notice(opersvs.nick, si->su->nick, "Registered nicknames: %d", cnt.myuser);
+        notice(opersvs.nick, si->su->nick, "Registered channels: %d", cnt.mychan);
+        notice(opersvs.nick, si->su->nick, "Users currently online: %d", cnt.user - me.me->users);
 }
 

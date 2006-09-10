@@ -4,7 +4,7 @@
  * 
  * LoveServ implementation.
  *
- * $Id: ircd_loveserv.c 6289 2006-09-04 15:45:05Z jilles $
+ * $Id: ircd_loveserv.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
         "contrib/ircd_loveserv", FALSE, _modinit, _moddeinit,
-        "$Id: ircd_loveserv.c 6289 2006-09-04 15:45:05Z jilles $",
+        "$Id: ircd_loveserv.c 6337 2006-09-10 15:54:41Z pippijn $",
         "Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -297,7 +297,7 @@ static void _ls_help(char *origin)
 command_t ls_help = { "HELP", "Displays contextual help information.",
                                 AC_NONE, _ls_help };
 
-static void ls_handler(char *origin, uint8_t parc, char *parv[])
+static void ls_handler(char *origin, int parc, char *parv[])
 {
         char *cmd;
         char orig[BUFSIZE];

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 6317 2006-09-06 20:03:32Z pippijn $
+ * $Id: xop.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 6317 2006-09-06 20:03:32Z pippijn $",
+	"$Id: xop.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -21,22 +21,22 @@ static void cs_xop_do_list(mychan_t *mc, char *origin, uint32_t level, char *lev
 static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level, char *leveldesc, uint32_t restrictflags);
 static void cs_xop_do_del(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level, char *leveldesc);
 
-static void cs_cmd_sop(char *origin);
-static void cs_cmd_aop(char *origin);
-static void cs_cmd_hop(char *origin);
-static void cs_cmd_vop(char *origin);
-static void cs_cmd_forcexop(char *origin);
+static void cs_cmd_sop(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_aop(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_hop(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_vop(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_sop = { "SOP", "Manipulates a channel SOP list.",
-                        AC_NONE, cs_cmd_sop };
+                        AC_NONE, 3, cs_cmd_sop };
 command_t cs_aop = { "AOP", "Manipulates a channel AOP list.",
-                        AC_NONE, cs_cmd_aop };
+                        AC_NONE, 3, cs_cmd_aop };
 command_t cs_hop = { "HOP", "Manipulates a channel HOP list.",
-			AC_NONE, cs_cmd_hop };
+			AC_NONE, 3, cs_cmd_hop };
 command_t cs_vop = { "VOP", "Manipulates a channel VOP list.",
-                        AC_NONE, cs_cmd_vop };
+                        AC_NONE, 3, cs_cmd_vop };
 command_t cs_forcexop = { "FORCEXOP", "Forces access levels to xOP levels.",
-                         AC_NONE, cs_cmd_forcexop };
+                         AC_NONE, 1, cs_cmd_forcexop };
 
 list_t *cs_cmdtree, *cs_helptree;
 
@@ -73,28 +73,27 @@ void _moddeinit()
 	help_delentry(cs_helptree, "FORCEXOP");
 }
 
-static void cs_xop(char *origin, uint32_t level, char *leveldesc)
+static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, char *leveldesc)
 {
-	user_t *u = user_find_named(origin);
 	myuser_t *mu;
 	mychan_t *mc;
 	int operoverride = 0;
 	uint32_t restrictflags;
-	char *chan = strtok(NULL, " ");
-	char *cmd = strtok(NULL, " ");
-	char *uname = strtok(NULL, " ");
+	char *chan = parv[0];
+	char *cmd = parv[1];
+	char *uname = parv[2];
 
 	if (!cmd || !chan)
 	{
-		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "xOP");
-		notice(chansvs.nick, origin, "Syntax: SOP|AOP|HOP|VOP <#channel> ADD|DEL|LIST <nickname>");
+		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "xOP");
+		notice(chansvs.nick, si->su->nick, "Syntax: SOP|AOP|HOP|VOP <#channel> ADD|DEL|LIST <nickname>");
 		return;
 	}
 
 	if ((strcasecmp("LIST", cmd)) && (!uname))
 	{
-		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "xOP");
-		notice(chansvs.nick, origin, "Syntax: SOP|AOP|HOP|VOP <#channel> ADD|DEL|LIST <nickname>");
+		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "xOP");
+		notice(chansvs.nick, si->su->nick, "Syntax: SOP|AOP|HOP|VOP <#channel> ADD|DEL|LIST <nickname>");
 		return;
 	}
 
@@ -102,12 +101,12 @@ static void cs_xop(char *origin, uint32_t level, char *leveldesc)
 	 * and the founder of the channel before
 	 * we go any further.
 	 */
-	if (!u->myuser)
+	if (!si->su->myuser)
 	{
 		/* if they're opers and just want to LIST, they don't have to log in */
-		if (!(has_priv(u, PRIV_CHAN_AUSPEX) && !strcasecmp("LIST", cmd)))
+		if (!(has_priv(si->su, PRIV_CHAN_AUSPEX) && !strcasecmp("LIST", cmd)))
 		{
-			notice(chansvs.nick, origin, "You are not logged in.");
+			notice(chansvs.nick, si->su->nick, "You are not logged in.");
 			return;
 		}
 	}
@@ -115,13 +114,13 @@ static void cs_xop(char *origin, uint32_t level, char *leveldesc)
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		notice(chansvs.nick, origin, "The channel \2%s\2 is not registered.", chan);
+		notice(chansvs.nick, si->su->nick, "The channel \2%s\2 is not registered.", chan);
 		return;
 	}
 	
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && (!has_priv(u, PRIV_CHAN_AUSPEX) || strcasecmp("LIST", cmd)))
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && (!has_priv(si->su, PRIV_CHAN_AUSPEX) || strcasecmp("LIST", cmd)))
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is closed.", chan);
+		notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", chan);
 		return;
 	}
 
@@ -131,24 +130,24 @@ static void cs_xop(char *origin, uint32_t level, char *leveldesc)
 		mu = myuser_find_ext(uname);
 
 		/* As in /cs flags, allow founder to do anything */
-		if (is_founder(mc, u->myuser))
+		if (is_founder(mc, si->su->myuser))
 			restrictflags = CA_ALL;
 		else
-			restrictflags = chanacs_user_flags(mc, u);
+			restrictflags = chanacs_user_flags(mc, si->su);
 		/* The following is a bit complicated, to allow for
 		 * possible future denial of granting +f */
 		if (!(restrictflags & CA_FLAGS))
 		{
-			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+			notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
 			return;
 		}
 		restrictflags = allow_flags(restrictflags);
 		if ((restrictflags & level) != level)
 		{
-			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+			notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
 			return;
 		}
-		cs_xop_do_add(mc, mu, origin, uname, level, leveldesc, restrictflags);
+		cs_xop_do_add(mc, mu, si->su->nick, uname, level, leveldesc, restrictflags);
 	}
 
 	else if (!strcasecmp("DEL", cmd))
@@ -156,67 +155,67 @@ static void cs_xop(char *origin, uint32_t level, char *leveldesc)
 		mu = myuser_find_ext(uname);
 
 		/* As in /cs flags, allow founder to do anything -- fix for #64: allow self removal. */
-		if (is_founder(mc, u->myuser) || mu == u->myuser)
+		if (is_founder(mc, si->su->myuser) || mu == si->su->myuser)
 			restrictflags = CA_ALL;
 		else
-			restrictflags = chanacs_user_flags(mc, u);
+			restrictflags = chanacs_user_flags(mc, si->su);
 		/* The following is a bit complicated, to allow for
 		 * possible future denial of granting +f */
 		if (!(restrictflags & CA_FLAGS))
 		{
-			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+			notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
 			return;
 		}
 		restrictflags = allow_flags(restrictflags);
 		if ((restrictflags & level) != level)
 		{
-			notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+			notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
 			return;
 		}
-		cs_xop_do_del(mc, mu, origin, uname, level, leveldesc);
+		cs_xop_do_del(mc, mu, si->su->nick, uname, level, leveldesc);
 	}
 
 	else if (!strcasecmp("LIST", cmd))
 	{
-		if (!chanacs_user_has_flag(mc, u, CA_ACLVIEW))
+		if (!chanacs_user_has_flag(mc, si->su, CA_ACLVIEW))
 		{
-			if (has_priv(u, PRIV_CHAN_AUSPEX))
+			if (has_priv(si->su, PRIV_CHAN_AUSPEX))
 				operoverride = 1;
 			else
 			{
-				notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+				notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
 				return;
 			}
 		}
-		cs_xop_do_list(mc, origin, level, leveldesc, operoverride);
+		cs_xop_do_list(mc, si->su->nick, level, leveldesc, operoverride);
 	}
 }
 
-static void cs_cmd_sop(char *origin)
+static void cs_cmd_sop(sourceinfo_t *si, int parc, char *parv[])
 {
-	cs_xop(origin, chansvs.ca_sop, "SOP");
+	cs_xop(si, parc, parv, chansvs.ca_sop, "SOP");
 }
 
-static void cs_cmd_aop(char *origin)
+static void cs_cmd_aop(sourceinfo_t *si, int parc, char *parv[])
 {
-	cs_xop(origin, chansvs.ca_aop, "AOP");
+	cs_xop(si, parc, parv, chansvs.ca_aop, "AOP");
 }
 
-static void cs_cmd_vop(char *origin)
+static void cs_cmd_vop(sourceinfo_t *si, int parc, char *parv[])
 {
-	cs_xop(origin, chansvs.ca_vop, "VOP");
+	cs_xop(si, parc, parv, chansvs.ca_vop, "VOP");
 }
 
-static void cs_cmd_hop(char *origin)
+static void cs_cmd_hop(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* Don't reject the command. This helps the rare case where
 	 * a network switches to a non-halfop ircd: users can still
 	 * remove pre-transition HOP entries.
 	 */
 	if (!ircd->uses_halfops)
-		notice(chansvs.nick, origin, "Warning: Your IRC server does not support halfops.");
+		notice(chansvs.nick, si->su->nick, "Warning: Your IRC server does not support halfops.");
 
-	cs_xop(origin, chansvs.ca_hop, "HOP");
+	cs_xop(si, parc, parv, chansvs.ca_hop, "HOP");
 }
 
 
@@ -475,12 +474,11 @@ static void cs_xop_do_list(mychan_t *mc, char *origin, uint32_t level, char *lev
 		logcommand(chansvs.me, user_find_named(origin), CMDLOG_GET, "%s %s LIST", mc->name, leveldesc);
 }
 
-static void cs_cmd_forcexop(char *origin)
+static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *chan = strtok(NULL, " ");
+	char *chan = parv[0];
 	chanacs_t *ca;
 	mychan_t *mc = mychan_find(chan);
-	user_t *u = user_find_named(origin);
 	node_t *n;
 	int changes;
 	uint32_t newlevel;
@@ -488,26 +486,26 @@ static void cs_cmd_forcexop(char *origin)
 
 	if (!chan)
 	{
-		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "FORCEXOP");
-		notice(chansvs.nick, origin, "Syntax: FORCEXOP <#channel>");
+		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "FORCEXOP");
+		notice(chansvs.nick, si->su->nick, "Syntax: FORCEXOP <#channel>");
 		return;
 	}
 
 	if (!mc)
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is not registered.", chan);
+		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", chan);
 		return;
 	}
 
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is closed.", chan);
+		notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", chan);
 		return;
 	}
 
-	if (!is_founder(mc, u->myuser))
+	if (!is_founder(mc, si->su->myuser))
 	{
-		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+		notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
 		return;
 	}
 
@@ -543,11 +541,11 @@ static void cs_cmd_forcexop(char *origin)
 		if (newlevel == ca->level)
 			continue;
 		changes++;
-		notice(chansvs.nick, origin, "%s: %s -> %s", ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level, chanacs_flags), desc);
+		notice(chansvs.nick, si->su->nick, "%s: %s -> %s", ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level, chanacs_flags), desc);
 		ca->level = newlevel;
 	}
-	notice(chansvs.nick, origin, "FORCEXOP \2%s\2 done (\2%d\2 changes)", mc->name, changes);
+	notice(chansvs.nick, si->su->nick, "FORCEXOP \2%s\2 done (\2%d\2 changes)", mc->name, changes);
 	if (changes > 0)
-		verbose(mc, "\2%s\2 reset access levels to xOP (\2%d\2 changes)", u->nick, changes);
-	logcommand(chansvs.me, u, CMDLOG_SET, "%s FORCEXOP (%d changes)", mc->name, changes);
+		verbose(mc, "\2%s\2 reset access levels to xOP (\2%d\2 changes)", si->su->nick, changes);
+	logcommand(chansvs.me, si->su, CMDLOG_SET, "%s FORCEXOP (%d changes)", mc->name, changes);
 }

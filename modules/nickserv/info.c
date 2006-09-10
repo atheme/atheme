@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: info.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: info.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void ns_cmd_info(char *origin);
+static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_info = { "INFO", "Displays information on registrations.", AC_NONE, ns_cmd_info };
+command_t ns_info = { "INFO", "Displays information on registrations.", AC_NONE, 1, ns_cmd_info };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -37,11 +37,10 @@ void _moddeinit()
 	help_delentry(ns_helptree, "INFO");
 }
 
-static void ns_cmd_info(char *origin)
+static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
 	myuser_t *mu;
-	char *name = strtok(NULL, " ");
+	char *name = parv[0];
 	char buf[BUFSIZE], strfbuf[32], lastlogin[32];
 	struct tm tm, tm2;
 	metadata_t *md;
@@ -49,14 +48,14 @@ static void ns_cmd_info(char *origin)
 
 	if (!name)
 	{
-		notice(nicksvs.nick, origin, STR_INSUFFICIENT_PARAMS, "INFO");
-		notice(nicksvs.nick, origin, "Syntax: INFO <nickname>");
+		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "INFO");
+		notice(nicksvs.nick, si->su->nick, "Syntax: INFO <nickname>");
 		return;
 	}
 
 	if (!(mu = myuser_find_ext(name)))
 	{
-		notice(nicksvs.nick, origin, "\2%s\2 is not registered.", name);
+		notice(nicksvs.nick, si->su->nick, "\2%s\2 is not registered.", name);
 		return;
 	}
 
@@ -65,24 +64,25 @@ static void ns_cmd_info(char *origin)
 	tm2 = *localtime(&mu->lastlogin);
 	strftime(lastlogin, sizeof(lastlogin) -1, "%b %d %H:%M:%S %Y", &tm2);
 
-	notice(nicksvs.nick, origin, "Information on \2%s\2:", mu->name);
 
-	notice(nicksvs.nick, origin, "Registered: %s (%s ago)", strfbuf, time_ago(mu->registered));
-	if (has_priv(u, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:host:actual")))
-		notice(nicksvs.nick, origin, "Last address: %s", md->value);
+	notice(nicksvs.nick, si->su->nick, "Information on \2%s\2:", mu->name);
+
+	notice(nicksvs.nick, si->su->nick, "Registered: %s (%s ago)", strfbuf, time_ago(mu->registered));
+	if (has_priv(si->su, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:host:actual")))
+		notice(nicksvs.nick, si->su->nick, "Last address: %s", md->value);
 	else if ((md = metadata_find(mu, METADATA_USER, "private:host:vhost")))
-		notice(nicksvs.nick, origin, "Last address: %s", md->value);
+		notice(nicksvs.nick, si->su->nick, "Last address: %s", md->value);
 
 	if (LIST_LENGTH(&mu->logins) == 0)
-		notice(nicksvs.nick, origin, "Last seen: %s (%s ago)", lastlogin, time_ago(mu->lastlogin));
-	else if (mu == u->myuser || has_priv(u, PRIV_USER_AUSPEX))
+		notice(nicksvs.nick, si->su->nick, "Last seen: %s (%s ago)", lastlogin, time_ago(mu->lastlogin));
+	else if (mu == si->su->myuser || has_priv(si->su, PRIV_USER_AUSPEX))
 	{
 		buf[0] = '\0';
 		LIST_FOREACH(n, mu->logins.head)
 		{
 			if (strlen(buf) > 80)
 			{
-				notice(nicksvs.nick, origin, "Logins from: %s", buf);
+				notice(nicksvs.nick, si->su->nick, "Logins from: %s", buf);
 				buf[0] = '\0';
 			}
 			if (buf[0])
@@ -90,15 +90,15 @@ static void ns_cmd_info(char *origin)
 			strcat(buf, ((user_t *)(n->data))->nick);
 		}
 		if (buf[0])
-			notice(nicksvs.nick, origin, "Logins from: %s", buf);
+			notice(nicksvs.nick, si->su->nick, "Logins from: %s", buf);
 	}
 	else
-		notice(nicksvs.nick, origin, "Logins from: <hidden>");
+		notice(nicksvs.nick, si->su->nick, "Logins from: <hidden>");
 
 
 	if (!(mu->flags & MU_HIDEMAIL)
-		|| (u->myuser == mu || has_priv(u, PRIV_USER_AUSPEX)))
-		notice(nicksvs.nick, origin, "Email: %s%s", mu->email,
+		|| (si->su->myuser == mu || has_priv(si->su, PRIV_USER_AUSPEX)))
+		notice(nicksvs.nick, si->su->nick, "Email: %s%s", mu->email,
 					(mu->flags & MU_HIDEMAIL) ? " (hidden)": "");
 
 	*buf = '\0';
@@ -143,32 +143,32 @@ static void ns_cmd_info(char *origin)
 	}
 
 	if (*buf)
-		notice(nicksvs.nick, origin, "Flags: %s", buf);
+		notice(nicksvs.nick, si->su->nick, "Flags: %s", buf);
 
-	if (mu->soper && (mu == u->myuser || has_priv(u, PRIV_VIEWPRIVS)))
+	if (mu->soper && (mu == si->su->myuser || has_priv(si->su, PRIV_VIEWPRIVS)))
 	{
-		notice(nicksvs.nick, origin, "Oper class: %s", mu->soper->operclass ? mu->soper->operclass->name : "*");
+		notice(nicksvs.nick, si->su->nick, "Oper class: %s", mu->soper->operclass ? mu->soper->operclass->name : "*");
 	}
 
-        if (has_priv(u, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
-        {
-                char *setter = md->value;
-                char *reason;
-                time_t ts;
+	if (has_priv(si->su, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
+	{
+		char *setter = md->value;
+		char *reason;
+		time_t ts;
 
-                md = metadata_find(mu, METADATA_USER, "private:freeze:reason");
+		md = metadata_find(mu, METADATA_USER, "private:freeze:reason");
 		reason = md != NULL ? md->value : "unknown";
 
-                md = metadata_find(mu, METADATA_USER, "private:freeze:timestamp");
-                ts = md != NULL ? atoi(md->value) : 0;
+		md = metadata_find(mu, METADATA_USER, "private:freeze:timestamp");
+		ts = md != NULL ? atoi(md->value) : 0;
 
-                tm = *localtime(&ts);
-                strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
+		tm = *localtime(&ts);
+		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-                notice(nicksvs.nick, origin, "%s was \2FROZEN\2 by %s on %s (%s)", mu->name, setter, strfbuf, reason);
-        }
+		notice(nicksvs.nick, si->su->nick, "%s was \2FROZEN\2 by %s on %s (%s)", mu->name, setter, strfbuf, reason);
+	}
 
-	if (has_priv(u, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:mark:setter")))
+	if (has_priv(si->su, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:mark:setter")))
 	{
 		char *setter = md->value;
 		char *reason;
@@ -183,13 +183,13 @@ static void ns_cmd_info(char *origin)
 		tm = *localtime(&ts);
 		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-		notice(nicksvs.nick, origin, "%s was \2MARKED\2 by %s on %s (%s)", mu->name, setter, strfbuf, reason);
+		notice(nicksvs.nick, si->su->nick, "%s was \2MARKED\2 by %s on %s (%s)", mu->name, setter, strfbuf, reason);
 	}
 
-	if ((MU_WAITAUTH & mu->flags) && has_priv(u, PRIV_USER_AUSPEX))
-		notice(nicksvs.nick, origin, "%s has not completed registration verification", mu->name);
+	if ((MU_WAITAUTH & mu->flags) && has_priv(si->su, PRIV_USER_AUSPEX))
+		notice(nicksvs.nick, si->su->nick, "%s has not completed registration verification", mu->name);
 
-	notice(nicksvs.nick, origin, "*** \2End of Info\2 ***");
+	notice(nicksvs.nick, si->su->nick, "*** \2End of Info\2 ***");
 
-	logcommand(nicksvs.me, u, CMDLOG_GET, "INFO %s", mu->name);
+	logcommand(nicksvs.me, si->su, CMDLOG_GET, "INFO %s", mu->name);
 }

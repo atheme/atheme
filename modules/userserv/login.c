@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGIN functions.
  *
- * $Id: login.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: login.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,14 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"userserv/login", FALSE, _modinit, _moddeinit,
-	"$Id: login.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: login.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void us_cmd_login(char *origin);
+static void us_cmd_login(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t us_login = { "LOGIN", "Authenticates to a services account.",
-			AC_NONE, us_cmd_login };
+command_t us_login = { "LOGIN", "Authenticates to a services account.", AC_NONE, 2, us_cmd_login };
 
 list_t *us_cmdtree, *us_helptree, *ms_cmdtree;
 
@@ -38,15 +37,14 @@ void _moddeinit()
 	help_delentry(us_helptree, "LOGIN");
 }
 
-static void us_cmd_login(char *origin)
+static void us_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
 	myuser_t *mu;
 	chanuser_t *cu;
 	chanacs_t *ca;
 	node_t *n, *tn;
-	char *target = strtok(NULL, " ");
-	char *password = strtok(NULL, " ");
+	char *target = parv[0];
+	char *password = parv[1];
 	char buf[BUFSIZE], strfbuf[32];
 	char lau[BUFSIZE], lao[BUFSIZE];
 	struct tm tm;
@@ -54,8 +52,8 @@ static void us_cmd_login(char *origin)
 
 	if (!target || !password)
 	{
-		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "LOGIN");
-		notice(usersvs.nick, origin, "Syntax: LOGIN <account> <password>");
+		notice(usersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "LOGIN");
+		notice(usersvs.nick, si->su->nick, "Syntax: LOGIN <account> <password>");
 		return;
 	}
 
@@ -63,23 +61,23 @@ static void us_cmd_login(char *origin)
 
 	if (!mu)
 	{
-		notice(usersvs.nick, origin, "\2%s\2 is not a registered account.", target);
+		notice(usersvs.nick, si->su->nick, "\2%s\2 is not a registered account.", target);
 		return;
 	}
 
-        if (metadata_find(mu->name, METADATA_USER, "private:freeze:freezer"))
-        {
-		notice(usersvs.nick, origin, "You cannot login as \2%s\2 because the account has been frozen.", mu->name);
-		logcommand(usersvs.me, u, CMDLOG_LOGIN, "failed LOGIN to %s (frozen)", mu->name);
-                return;
-        }
-
-	if (u->myuser == mu)
+	if (metadata_find(mu->name, METADATA_USER, "private:freeze:freezer"))
 	{
-		notice(usersvs.nick, origin, "You are already logged in as \2%s\2.", mu->name);
+		notice(usersvs.nick, si->su->nick, "You cannot login as \2%s\2 because the account has been frozen.", mu->name);
+		logcommand(usersvs.me, si->su, CMDLOG_LOGIN, "failed LOGIN to %s (frozen)", mu->name);
+			return;
+	}
+
+	if (si->su->myuser == mu)
+	{
+		notice(usersvs.nick, si->su->nick, "You are already logged in as \2%s\2.", mu->name);
 		return;
 	}
-	else if (u->myuser != NULL && ircd_on_logout(u->nick, u->myuser->name, NULL))
+	else if (si->su->myuser != NULL && ircd_on_logout(si->su->nick, si->su->myuser->name, NULL))
 		/* logout killed the user... */
 		return;
 
@@ -90,53 +88,53 @@ static void us_cmd_login(char *origin)
 	{
 		if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
 		{
-			notice(usersvs.nick, origin, "There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d).", LIST_LENGTH(&mu->logins), mu->name, me.maxlogins);
-			logcommand(usersvs.me, u, CMDLOG_LOGIN, "failed LOGIN to %s (too many logins)", mu->name);
+			notice(usersvs.nick, si->su->nick, "There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d).", LIST_LENGTH(&mu->logins), mu->name, me.maxlogins);
+			logcommand(usersvs.me, si->su, CMDLOG_LOGIN, "failed LOGIN to %s (too many logins)", mu->name);
 			return;
 		}
 
 		/* if they are identified to another account, nuke their session first */
-		if (u->myuser)
+		if (si->su->myuser)
 		{
-		        u->myuser->lastlogin = CURRTIME;
-		        LIST_FOREACH_SAFE(n, tn, u->myuser->logins.head)
-		        {
-			        if (n->data == u)
-		                {
-		                        node_del(n, &u->myuser->logins);
-		                        node_free(n);
-		                        break;
-		                }
-		        }
-		        u->myuser = NULL;
+			si->su->myuser->lastlogin = CURRTIME;
+			LIST_FOREACH_SAFE(n, tn, si->su->myuser->logins.head)
+			{
+				if (n->data == si->su)
+				{
+					node_del(n, &si->su->myuser->logins);
+					node_free(n);
+					break;
+				}
+			}
+			si->su->myuser = NULL;
 		}
 
 		if (is_soper(mu))
 		{
-			snoop("SOPER: \2%s\2 as \2%s\2", u->nick, mu->name);
+			snoop("SOPER: \2%s\2 as \2%s\2", si->su->nick, mu->name);
 		}
 
-		myuser_notice(usersvs.nick, mu, "%s!%s@%s has just authenticated as you (%s)", u->nick, u->user, u->vhost, mu->name);
+		myuser_notice(usersvs.nick, mu, "%s!%s@%s has just authenticated as you (%s)", si->su->nick, si->su->user, si->su->vhost, mu->name);
 
-		u->myuser = mu;
+		si->su->myuser = mu;
 		n = node_create();
-		node_add(u, n, &mu->logins);
+		node_add(si->su, n, &mu->logins);
 
 		/* keep track of login address for users */
-		strlcpy(lau, u->user, BUFSIZE);
+		strlcpy(lau, si->su->user, BUFSIZE);
 		strlcat(lau, "@", BUFSIZE);
-		strlcat(lau, u->vhost, BUFSIZE);
+		strlcat(lau, si->su->vhost, BUFSIZE);
 		metadata_add(mu, METADATA_USER, "private:host:vhost", lau);
 
 		/* and for opers.. */
-		strlcpy(lao, u->user, BUFSIZE);
+		strlcpy(lao, si->su->user, BUFSIZE);
 		strlcat(lao, "@", BUFSIZE);
-		strlcat(lao, u->host, BUFSIZE);
+		strlcat(lao, si->su->host, BUFSIZE);
 		metadata_add(mu, METADATA_USER, "private:host:actual", lao);
 
-		logcommand(usersvs.me, u, CMDLOG_LOGIN, "LOGIN");
+		logcommand(usersvs.me, si->su, CMDLOG_LOGIN, "LOGIN");
 
-		notice(usersvs.nick, origin, "You are now logged in as \2%s\2.", u->myuser->name);
+		notice(usersvs.nick, si->su->nick, "You are now logged in as \2%s\2.", si->su->myuser->name);
 
 		/* check for failed attempts and let them know */
 		if (md_failnum && (atoi(md_failnum->value) > 0))
@@ -147,7 +145,7 @@ static void us_cmd_login(char *origin)
 			tm = *localtime(&mu->lastlogin);
 			strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-			notice(usersvs.nick, origin, "\2%d\2 failed %s since %s.",
+			notice(usersvs.nick, si->su->nick, "\2%d\2 failed %s since %s.",
 				atoi(md_failnum->value), (atoi(md_failnum->value) == 1) ? "login" : "logins", strfbuf);
 
 			md_failtime = metadata_find(mu, METADATA_USER, "private:loginfail:lastfailtime");
@@ -157,7 +155,7 @@ static void us_cmd_login(char *origin)
 			tm = *localtime(&ts);
 			strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-			notice(usersvs.nick, origin, "Last failed attempt from: \2%s\2 on %s.",
+			notice(usersvs.nick, si->su->nick, "Last failed attempt from: \2%s\2 on %s.",
 				md_failaddr->value, strfbuf);
 
 			metadata_delete(mu, METADATA_USER, "private:loginfail:failnum");	/* md_failnum now invalid */
@@ -174,7 +172,7 @@ static void us_cmd_login(char *origin)
 		{
 			ca = (chanacs_t *)n->data;
 
-			cu = chanuser_find(ca->mychan->chan, u);
+			cu = chanuser_find(ca->mychan->chan, si->su);
 			if (cu && chansvs.me != NULL)
 			{
 				if (ca->level & CA_AKICK && !(ca->level & CA_REMOVE))
@@ -186,9 +184,9 @@ static void us_cmd_login(char *origin)
 						if (!config_options.join_chans)
 							join(cu->chan->name, chansvs.nick);
 					}
-					ban(chansvs.nick, ca->mychan->name, u);
-					remove_ban_exceptions(chansvs.me->me, channel_find(ca->mychan->name), u);
-					kick(chansvs.nick, ca->mychan->name, u->nick, "User is banned from this channel");
+					ban(chansvs.nick, ca->mychan->name, si->su);
+					remove_ban_exceptions(chansvs.me->me, channel_find(ca->mychan->name), si->su);
+					kick(chansvs.nick, ca->mychan->name, si->su->nick, "User is banned from this channel");
 					continue;
 				}
 
@@ -200,31 +198,31 @@ static void us_cmd_login(char *origin)
 
 				if (ircd->uses_owner && !(cu->modes & ircd->owner_mode) && should_owner(ca->mychan, ca->myuser))
 				{
-					modestack_mode_param(chansvs.nick, ca->mychan->name, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(u));
+					modestack_mode_param(chansvs.nick, ca->mychan->name, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(si->su));
 					cu->modes |= ircd->owner_mode;
 				}
 
 				if (ircd->uses_protect && !(cu->modes & ircd->protect_mode) && should_protect(ca->mychan, ca->myuser))
 				{
-					modestack_mode_param(chansvs.nick, ca->mychan->name, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(u));
+					modestack_mode_param(chansvs.nick, ca->mychan->name, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(si->su));
 					cu->modes |= ircd->protect_mode;
 				}
 
 				if (!(cu->modes & CMODE_OP) && ca->level & CA_AUTOOP)
 				{
-					modestack_mode_param(chansvs.nick, ca->mychan->name, MTYPE_ADD, 'o', CLIENT_NAME(u));
+					modestack_mode_param(chansvs.nick, ca->mychan->name, MTYPE_ADD, 'o', CLIENT_NAME(si->su));
 					cu->modes |= CMODE_OP;
 				}
 
 				if (ircd->uses_halfops && !(cu->modes & (CMODE_OP | ircd->halfops_mode)) && ca->level & CA_AUTOHALFOP)
 				{
-					modestack_mode_param(chansvs.nick, ca->mychan->name, MTYPE_ADD, 'h', CLIENT_NAME(u));
+					modestack_mode_param(chansvs.nick, ca->mychan->name, MTYPE_ADD, 'h', CLIENT_NAME(si->su));
 					cu->modes |= ircd->halfops_mode;
 				}
 
 				if (!(cu->modes & (CMODE_OP | ircd->halfops_mode | CMODE_VOICE)) && ca->level & CA_AUTOVOICE)
 				{
-					modestack_mode_param(chansvs.nick, ca->mychan->name, MTYPE_ADD, 'v', CLIENT_NAME(u));
+					modestack_mode_param(chansvs.nick, ca->mychan->name, MTYPE_ADD, 'v', CLIENT_NAME(si->su));
 					cu->modes |= CMODE_VOICE;
 				}
 			}
@@ -235,24 +233,24 @@ static void us_cmd_login(char *origin)
 		 * email is verified
 		 */
 		if (!(mu->flags & MU_WAITAUTH))
-			ircd_on_login(origin, mu->name, NULL);
+			ircd_on_login(si->su->nick, mu->name, NULL);
 
-		hook_call_event("user_identify", u);
+		hook_call_event("user_identify", si->su);
 
 		return;
 	}
 
-	logcommand(usersvs.me, u, CMDLOG_LOGIN, "failed LOGIN to %s (bad password)", mu->name);
+	logcommand(usersvs.me, si->su, CMDLOG_LOGIN, "failed LOGIN to %s (bad password)", mu->name);
 
-	notice(usersvs.nick, origin, "Invalid password for \2%s\2.", mu->name);
+	notice(usersvs.nick, si->su->nick, "Invalid password for \2%s\2.", mu->name);
 
 	/* record the failed attempts */
 	/* note that we reuse this buffer later when warning opers about failed logins */
-	strlcpy(buf, u->nick, BUFSIZE);
+	strlcpy(buf, si->su->nick, BUFSIZE);
 	strlcat(buf, "!", BUFSIZE);
-	strlcat(buf, u->user, BUFSIZE);
+	strlcat(buf, si->su->user, BUFSIZE);
 	strlcat(buf, "@", BUFSIZE);
-	strlcat(buf, u->vhost, BUFSIZE);
+	strlcat(buf, si->su->vhost, BUFSIZE);
 
 	/* increment fail count */
 	if (md_failnum && (atoi(md_failnum->value) > 0))

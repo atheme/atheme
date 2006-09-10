@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 6309 2006-09-06 16:07:30Z jilles $
+ * $Id: plexus.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 /* option: set the netadmin umode +N */
@@ -15,7 +15,7 @@
 #include "pmodule.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 6309 2006-09-06 16:07:30Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 6337 2006-09-10 15:54:41Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -356,7 +356,7 @@ static void plexus_sethost_sts(char *source, char *target, char *host)
 	sts(":%s ENCAP * CHGHOST %s :%s", ME, target, host);
 }
 
-static void m_topic(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
 
@@ -366,13 +366,13 @@ static void m_topic(sourceinfo_t *si, uint8_t parc, char *parv[])
 	handle_topic_from(si, c, si->su->nick, CURRTIME, parv[1]);
 }
 
-static void m_ping(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_ping(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* reply to PING's */
 	sts(":%s PONG %s %s", me.name, me.name, parv[0]);
 }
 
-static void m_pong(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_pong(sourceinfo_t *si, int parc, char *parv[])
 {
 	server_t *s;
 
@@ -407,7 +407,7 @@ static void m_pong(sourceinfo_t *si, uint8_t parc, char *parv[])
 	}
 }
 
-static void m_privmsg(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_privmsg(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (parc != 2)
 		return;
@@ -415,7 +415,7 @@ static void m_privmsg(sourceinfo_t *si, uint8_t parc, char *parv[])
 	handle_message(si, parv[0], FALSE, parv[1]);
 }
 
-static void m_notice(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_notice(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (parc != 2)
 		return;
@@ -423,7 +423,7 @@ static void m_notice(sourceinfo_t *si, uint8_t parc, char *parv[])
 	handle_message(si, parv[0], TRUE, parv[1]);
 }
 
-static void m_sjoin(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* -> :proteus.malkier.net SJOIN 1073516550 #shrike +tn :@sycobuny @+rakaur */
 
@@ -479,7 +479,7 @@ static void m_sjoin(sourceinfo_t *si, uint8_t parc, char *parv[])
 		channel_delete(c->name);
 }
 
-static void m_part(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_part(sourceinfo_t *si, int parc, char *parv[])
 {
 	uint8_t chanc;
 	char *chanv[256];
@@ -494,7 +494,7 @@ static void m_part(sourceinfo_t *si, uint8_t parc, char *parv[])
 	}
 }
 
-static void m_nick(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
 	server_t *s;
@@ -557,7 +557,7 @@ static void m_nick(sourceinfo_t *si, uint8_t parc, char *parv[])
 	}
 }
 
-static void m_quit(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_quit(sourceinfo_t *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
 
@@ -565,7 +565,7 @@ static void m_quit(sourceinfo_t *si, uint8_t parc, char *parv[])
 	user_delete(si->su);
 }
 
-static void m_mode(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (*parv[0] == '#')
 		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
@@ -573,7 +573,7 @@ static void m_mode(sourceinfo_t *si, uint8_t parc, char *parv[])
 		user_mode(user_find(parv[0]), parv[1]);
 }
 
-static void m_kick(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_kick(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u = user_find(parv[1]);
 	channel_t *c = channel_find(parv[0]);
@@ -609,18 +609,18 @@ static void m_kick(sourceinfo_t *si, uint8_t parc, char *parv[])
 	}
 }
 
-static void m_kill(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_kill(sourceinfo_t *si, int parc, char *parv[])
 {
 	handle_kill(si, parv[0], parc > 1 ? parv[1] : "<No reason given>");
 }
 
-static void m_squit(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_squit(sourceinfo_t *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_squit(): server leaving: %s from %s", parv[0], parv[1]);
 	server_delete(parv[0]);
 }
 
-static void m_server(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_server(sourceinfo_t *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
 	server_add(parv[0], atoi(parv[1]), si->origin ? si->origin : me.name, NULL, parv[2]);
@@ -638,37 +638,37 @@ static void m_server(sourceinfo_t *si, uint8_t parc, char *parv[])
 	me.recvsvr = TRUE;
 }
 
-static void m_stats(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_stats(sourceinfo_t *si, int parc, char *parv[])
 {
 	handle_stats(si->su, parv[0][0]);
 }
 
-static void m_admin(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_admin(sourceinfo_t *si, int parc, char *parv[])
 {
 	handle_admin(si->su);
 }
 
-static void m_version(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_version(sourceinfo_t *si, int parc, char *parv[])
 {
 	handle_version(si->su);
 }
 
-static void m_info(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_info(sourceinfo_t *si, int parc, char *parv[])
 {
 	handle_info(si->su);
 }
 
-static void m_whois(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_whois(sourceinfo_t *si, int parc, char *parv[])
 {
 	handle_whois(si->su, parv[1]);
 }
 
-static void m_trace(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_trace(sourceinfo_t *si, int parc, char *parv[])
 {
 	handle_trace(si->su, parv[0], parc >= 2 ? parv[1] : NULL);
 }
 
-static void m_join(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_join(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanuser_t *cu;
 	node_t *n, *tn;
@@ -684,7 +684,7 @@ static void m_join(sourceinfo_t *si, uint8_t parc, char *parv[])
 	}
 }
 
-static void m_pass(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_pass(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (strcmp(curr_uplink->pass, parv[0]))
 	{
@@ -693,17 +693,17 @@ static void m_pass(sourceinfo_t *si, uint8_t parc, char *parv[])
 	}
 }
 
-static void m_error(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_error(sourceinfo_t *si, int parc, char *parv[])
 {
 	slog(LG_INFO, "m_error(): error from server: %s", parv[0]);
 }
 
-static void m_capab(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 {
 	services_init();
 }
 
-static void m_encap(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_encap(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
 
@@ -718,7 +718,7 @@ static void m_encap(sourceinfo_t *si, uint8_t parc, char *parv[])
 	}
 }
 
-static void m_motd(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_motd(sourceinfo_t *si, int parc, char *parv[])
 {
 	handle_motd(si->su);
 }

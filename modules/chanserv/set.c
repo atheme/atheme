@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 6085 2006-08-16 17:46:26Z jilles $
+ * $Id: set.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 6085 2006-08-16 17:46:26Z jilles $",
+	"$Id: set.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -21,15 +21,15 @@ struct set_command_
 {
   const char *name;
   const char *access;
-  void (*func) (char *origin, char *name, char *params);
+  void (*func)(char *origin, char *name, char *params);
 };
 
 static struct set_command_ *set_cmd_find(char *origin, char *command);
 
-static void cs_cmd_set(char *origin);
+static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_set = { "SET", "Sets various control flags.",
-                        AC_NONE, cs_cmd_set };
+                        AC_NONE, 3, cs_cmd_set };
 
 list_t *cs_cmdtree;
 list_t *cs_helptree;
@@ -74,27 +74,27 @@ void _moddeinit()
 }
 
 /* SET <#channel> <setting> <parameters> */
-static void cs_cmd_set(char *origin)
+static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *name = strtok(NULL, " ");
-	char *setting = strtok(NULL, " ");
-	char *params = strtok(NULL, "");
+	char *name = parv[0];
+	char *setting = parv[1];
+	char *params = parv[2];
 	struct set_command_ *c;
 
 	if (!name || !setting || !params)
 	{
-		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "SET");
-		notice(chansvs.nick, origin, "Syntax: SET <#channel> <setting> <parameters>");
+		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "SET");
+		notice(chansvs.nick, si->su->nick, "Syntax: SET <#channel> <setting> <parameters>");
 		return;
 	}
 
 	/* take the command through the hash table */
-	if ((c = set_cmd_find(origin, setting)))
+	if ((c = set_cmd_find(si->su->nick, setting)))
 	{
 		if (c->func)
-			c->func(origin, name, params);
+			c->func(si->su->nick, name, params);
 		else
-			notice(chansvs.nick, origin, "Invalid setting.  Please use \2HELP\2 for help.");
+			notice(chansvs.nick, si->su->nick, "Invalid setting.  Please use \2HELP\2 for help.");
 	}
 }
 
@@ -102,7 +102,7 @@ static void cs_set_email(char *origin, char *name, char *params)
 {
         user_t *u = user_find_named(origin);
         mychan_t *mc;
-        char *mail = strtok(params, " ");
+        char *mail = params;
 
         if (*name != '#')
         {
@@ -159,7 +159,7 @@ static void cs_set_url(char *origin, char *name, char *params)
 {
 	user_t *u = user_find_named(origin);
 	mychan_t *mc;
-	char *url = strtok(params, " ");
+	char *url = params;
 
 	if (*name != '#')
 	{
@@ -266,7 +266,7 @@ static void cs_set_entrymsg(char *origin, char *name, char *params)
 static void cs_set_founder(char *origin, char *name, char *params)
 {
 	user_t *u = user_find_named(origin);
-	char *newfounder = strtok(params, " ");
+	char *newfounder = params;
 	myuser_t *tmu;
 	mychan_t *mc;
 

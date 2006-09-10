@@ -4,7 +4,7 @@
  *
  * Gives services the ability to freeze nicknames
  *
- * $Id: freeze.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: freeze.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,15 +12,14 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/freeze", FALSE, _modinit, _moddeinit,
-	"$Id: freeze.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: freeze.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void ns_cmd_freeze(char *origin);
+static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[]);
 
 /* FREEZE ON|OFF -- don't pollute the root with THAW */
-command_t ns_freeze = { "FREEZE", "Freezes a nickname.",
-			PRIV_USER_ADMIN, ns_cmd_freeze };
+command_t ns_freeze = { "FREEZE", "Freezes a nickname.", PRIV_USER_ADMIN, 3, ns_cmd_freeze };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -39,67 +38,62 @@ void _moddeinit()
 	help_delentry(ns_helptree, "FREEZE");
 }
 
-static void ns_cmd_freeze(char *origin)
+static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
-	user_t *source = user_find_named(origin);
-	char *target = strtok(NULL, " ");
-	char *action = strtok(NULL, " ");
-	char *reason = strtok(NULL, "");
-
-	if (source == NULL)
-		return;
+	char *target = parv[0];
+	char *action = parv[1];
+	char *reason = parv[2];
 
 	if (!target || !action)
 	{
-		notice(nicksvs.nick, origin, STR_INSUFFICIENT_PARAMS, "FREEZE");
-		notice(nicksvs.nick, origin, "Usage: FREEZE <username> <ON|OFF> [reason]");
+		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "FREEZE");
+		notice(nicksvs.nick, si->su->nick, "Usage: FREEZE <nickname> <ON|OFF> [reason]");
 		return;
 	}
 
 	mu = myuser_find_ext(target);
 
 	if (!mu)
-        {
-                notice(nicksvs.nick, origin, "\2%s\2 is not a registered nickname.", target);
-                return;
-        }
+	{
+		notice(nicksvs.nick, si->su->nick, "\2%s\2 is not a registered nickname.", target);
+		return;
+	}
 
 	if (!strcasecmp(action, "ON"))
 	{
 		if (!reason)
 		{
-			notice(nicksvs.nick, origin, STR_INSUFFICIENT_PARAMS, "FREEZE");
-			notice(nicksvs.nick, origin, "Usage: FREEZE <username> ON <reason>");
+			notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "FREEZE");
+			notice(nicksvs.nick, si->su->nick, "Usage: FREEZE <nickname> ON <reason>");
 			return;
 		}
 
-	if (is_soper(mu))
-	{
-                notice(nicksvs.nick, origin, "The nickname \2%s\2 belongs to a services operator; it cannot be frozen.", target);
-		return;
-	}
-
+		if (is_soper(mu))
+		{
+			notice(nicksvs.nick, si->su->nick, "The nickname \2%s\2 belongs to a services operator; it cannot be frozen.", target);
+			return;
+		}
 
 		if (metadata_find(mu, METADATA_USER, "private:freeze:freezer"))
 		{
-			notice(nicksvs.nick, origin, "\2%s\2 is already frozen.", target);
+			notice(nicksvs.nick, si->su->nick, "\2%s\2 is already frozen.", target);
 			return;
 		}
 
-		metadata_add(mu, METADATA_USER, "private:freeze:freezer", origin);
+		metadata_add(mu, METADATA_USER, "private:freeze:freezer", si->su->nick);
 		metadata_add(mu, METADATA_USER, "private:freeze:reason", reason);
 		metadata_add(mu, METADATA_USER, "private:freeze:timestamp", itoa(CURRTIME));
 
-		wallops("%s froze the nickname \2%s\2 (%s).", origin, target, reason);
-		logcommand(nicksvs.me, source, CMDLOG_ADMIN, "FREEZE %s ON", target);
-		notice(nicksvs.nick, origin, "\2%s\2 is now frozen.", target);
+		wallops("%s froze the nickname \2%s\2 (%s).", si->su->nick, target, reason);
+		logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "FREEZE %s ON", target);
+		notice(nicksvs.nick, si->su->nick, "\2%s\2 is now frozen.", target);
 	}
 	else if (!strcasecmp(action, "OFF"))
 	{
 		if (!metadata_find(mu, METADATA_USER, "private:freeze:freezer"))
 		{
-			notice(nicksvs.nick, origin, "\2%s\2 is not frozen.", target);
+			notice(nicksvs.nick, si->su->nick, "\2%s\2 is not frozen.", target);
 			return;
 		}
 
@@ -107,13 +101,13 @@ static void ns_cmd_freeze(char *origin)
 		metadata_delete(mu, METADATA_USER, "private:freeze:reason");
 		metadata_delete(mu, METADATA_USER, "private:freeze:timestamp");
 
-		wallops("%s thawed the nickname \2%s\2.", origin, target);
-		logcommand(nicksvs.me, source, CMDLOG_ADMIN, "FREEZE %s OFF", target);
-		notice(nicksvs.nick, origin, "\2%s\2 has been thawed", target);
+		wallops("%s thawed the nickname \2%s\2.", si->su->nick, target);
+		logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "FREEZE %s OFF", target);
+		notice(nicksvs.nick, si->su->nick, "\2%s\2 has been thawed", target);
 	}
 	else
 	{
-		notice(nicksvs.nick, origin, STR_INSUFFICIENT_PARAMS, "FREEZE");
-		notice(nicksvs.nick, origin, "Usage: FREEZE <account> <ON|OFF> [reason]");
+		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "FREEZE");
+		notice(nicksvs.nick, si->su->nick, "Usage: FREEZE <nickname> <ON|OFF> [reason]");
 	}
 }

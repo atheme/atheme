@@ -4,7 +4,7 @@
  *
  * Marking for accounts.
  *
- * $Id: mark.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: mark.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,14 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"userserv/mark", FALSE, _modinit, _moddeinit,
-	"$Id: mark.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: mark.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void us_cmd_mark(char *origin);
+static void us_cmd_mark(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t us_mark = { "MARK", "Adds a note to a user.",
-			PRIV_MARK, us_cmd_mark };
+command_t us_mark = { "MARK", "Adds a note to a user.", PRIV_MARK, 3, us_cmd_mark };
 
 list_t *us_cmdtree, *us_helptree;
 
@@ -38,27 +37,23 @@ void _moddeinit()
 	help_delentry(us_helptree, "MARK");
 }
 
-static void us_cmd_mark(char *origin)
+static void us_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *source = user_find_named(origin);
-	char *target = strtok(NULL, " ");
-	char *action = strtok(NULL, " ");
-	char *info = strtok(NULL, "");
+	char *target = parv[0];
+	char *action = parv[1];
+	char *info = parv[2];
 	myuser_t *mu;
-
-	if (source == NULL)
-		return;
 
 	if (!target || !action)
 	{
-		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "MARK");
-		notice(usersvs.nick, origin, "Usage: MARK <target> <ON|OFF> [note]");
+		notice(usersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "MARK");
+		notice(usersvs.nick, si->su->nick, "Usage: MARK <target> <ON|OFF> [note]");
 		return;
 	}
 
 	if (!(mu = myuser_find_ext(target)))
 	{
-		notice(usersvs.nick, origin, "\2%s\2 is not registered.", target);
+		notice(usersvs.nick, si->su->nick, "\2%s\2 is not registered.", target);
 		return;
 	}
 
@@ -66,30 +61,30 @@ static void us_cmd_mark(char *origin)
 	{
 		if (!info)
 		{
-			notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "MARK");
-			notice(usersvs.nick, origin, "Usage: MARK <target> ON <note>");
+			notice(usersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "MARK");
+			notice(usersvs.nick, si->su->nick, "Usage: MARK <target> ON <note>");
 			return;
 		}
 
 		if (metadata_find(mu, METADATA_USER, "private:mark:setter"))
 		{
-			notice(usersvs.nick, origin, "\2%s\2 is already marked.", target);
+			notice(usersvs.nick, si->su->nick, "\2%s\2 is already marked.", target);
 			return;
 		}
 
-		metadata_add(mu, METADATA_USER, "private:mark:setter", origin);
+		metadata_add(mu, METADATA_USER, "private:mark:setter", si->su->nick);
 		metadata_add(mu, METADATA_USER, "private:mark:reason", info);
 		metadata_add(mu, METADATA_USER, "private:mark:timestamp", itoa(time(NULL)));
 
-		wallops("%s marked the account \2%s\2.", origin, target);
-		logcommand(usersvs.me, source, CMDLOG_ADMIN, "MARK %s ON (reason: %s)", target, info);
-		notice(usersvs.nick, origin, "\2%s\2 is now marked.", target);
+		wallops("%s marked the account \2%s\2.", si->su->nick, target);
+		logcommand(usersvs.me, si->su, CMDLOG_ADMIN, "MARK %s ON (reason: %s)", target, info);
+		notice(usersvs.nick, si->su->nick, "\2%s\2 is now marked.", target);
 	}
 	else if (!strcasecmp(action, "OFF"))
 	{
 		if (!metadata_find(mu, METADATA_USER, "private:mark:setter"))
 		{
-			notice(usersvs.nick, origin, "\2%s\2 is not marked.", target);
+			notice(usersvs.nick, si->su->nick, "\2%s\2 is not marked.", target);
 			return;
 		}
 
@@ -97,13 +92,13 @@ static void us_cmd_mark(char *origin)
 		metadata_delete(mu, METADATA_USER, "private:mark:reason");
 		metadata_delete(mu, METADATA_USER, "private:mark:timestamp");
 
-		wallops("%s unmarked the account \2%s\2.", origin, target);
-		logcommand(usersvs.me, source, CMDLOG_ADMIN, "MARK %s OFF", target);
-		notice(usersvs.nick, origin, "\2%s\2 is now unmarked.", target);
+		wallops("%s unmarked the account \2%s\2.", si->su->nick, target);
+		logcommand(usersvs.me, si->su, CMDLOG_ADMIN, "MARK %s OFF", target);
+		notice(usersvs.nick, si->su->nick, "\2%s\2 is now unmarked.", target);
 	}
 	else
 	{
-		notice(usersvs.nick, origin, STR_INVALID_PARAMS, "MARK");
-		notice(usersvs.nick, origin, "Usage: MARK <target> <ON|OFF> [note]");
+		notice(usersvs.nick, si->su->nick, STR_INVALID_PARAMS, "MARK");
+		notice(usersvs.nick, si->su->nick, "Usage: MARK <target> <ON|OFF> [note]");
 	}
 }

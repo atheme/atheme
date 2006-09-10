@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService RAW command.
  *
- * $Id: inject.c 6071 2006-08-16 14:58:16Z jilles $
+ * $Id: inject.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,14 +13,13 @@
 DECLARE_MODULE_V1
 (
 	"operserv/inject", FALSE, _modinit, _moddeinit,
-	"$Id: inject.c 6071 2006-08-16 14:58:16Z jilles $",
+	"$Id: inject.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void os_cmd_inject(char *origin);
+static void os_cmd_inject(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_inject = { "INJECT", "Fakes data from the uplink (debugging tool).",
-                        PRIV_ADMIN, os_cmd_inject };
+command_t os_inject = { "INJECT", "Fakes data from the uplink (debugging tool).", PRIV_ADMIN, 1, os_cmd_inject };
 
 list_t *os_cmdtree;
 list_t *os_helptree;
@@ -40,30 +39,30 @@ void _moddeinit()
 	help_delentry(os_helptree, "INJECT");
 }
 
-static void os_cmd_inject(char *origin)
+static void os_cmd_inject(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *inject;
 	static boolean_t injecting = FALSE;
-	inject = strtok(NULL, "");
+	inject = parv[0];
 
 	if (!config_options.raw)
 		return;
 
 	if (!inject)
 	{
-		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "INJECT");
-		notice(opersvs.nick, origin, "Syntax: INJECT <parameters>");
+		notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "INJECT");
+		notice(opersvs.nick, si->su->nick, "Syntax: INJECT <parameters>");
 		return;
 	}
 
-	logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "INJECT %s", inject);
+	logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "INJECT %s", inject);
 
 	/* looks like someone INJECT'd an INJECT command.
 	 * this is probably a bad thing.
 	 */
 	if (injecting == TRUE)
 	{
-		notice(opersvs.nick, origin, "You cannot inject an INJECT command.");
+		notice(opersvs.nick, si->su->nick, "You cannot inject an INJECT command.");
 		return;
 	}
 

@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: bircd.c 6309 2006-09-06 16:07:30Z jilles $
+ * $Id: bircd.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 6309 2006-09-06 16:07:30Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 6337 2006-09-10 15:54:41Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -356,7 +356,7 @@ static void asuka_jupe(char *server, char *reason)
 	sts("%s JU * !+%s %ld :%s", me.numeric, server, CURRTIME, reason);
 }
 
-static void m_topic(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
 	char *source;
@@ -382,13 +382,13 @@ static void m_topic(sourceinfo_t *si, uint8_t parc, char *parv[])
 }
 
 /* AB G !1119920789.573932 services.atheme.org 1119920789.573932 */
-static void m_ping(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_ping(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* reply to PING's */
 	sts("%s Z %s %s %s", me.numeric, parv[0], parv[1], parv[2]);
 }
 
-static void m_pong(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_pong(sourceinfo_t *si, int parc, char *parv[])
 {
 	me.uplinkpong = CURRTIME;
 
@@ -410,7 +410,7 @@ static void m_pong(sourceinfo_t *si, uint8_t parc, char *parv[])
 	}
 }
 
-static void m_privmsg(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_privmsg(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (parc != 2)
 		return;
@@ -418,7 +418,7 @@ static void m_privmsg(sourceinfo_t *si, uint8_t parc, char *parv[])
 	handle_message(si, parv[0], FALSE, parv[1]);
 }
 
-static void m_notice(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_notice(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (parc != 2)
 		return;
@@ -426,7 +426,7 @@ static void m_notice(sourceinfo_t *si, uint8_t parc, char *parv[])
 	handle_message(si, parv[0], TRUE, parv[1]);
 }
 
-static void m_create(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_create(sourceinfo_t *si, int parc, char *parv[])
 {
 	char buf[BUFSIZE];
 	uint8_t chanc;
@@ -455,7 +455,7 @@ static void m_create(sourceinfo_t *si, uint8_t parc, char *parv[])
 	}
 }
 
-static void m_join(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_join(sourceinfo_t *si, int parc, char *parv[])
 {
 	uint8_t chanc;
 	char *chanv[256];
@@ -492,7 +492,7 @@ static void m_join(sourceinfo_t *si, uint8_t parc, char *parv[])
 	}
 }
 
-static void m_burst(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c;
 	uint8_t modec;
@@ -608,7 +608,7 @@ static void m_burst(sourceinfo_t *si, uint8_t parc, char *parv[])
 		channel_delete(c->name);
 }
 
-static void m_part(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_part(sourceinfo_t *si, int parc, char *parv[])
 {
 	uint8_t chanc;
 	char *chanv[256];
@@ -623,7 +623,7 @@ static void m_part(sourceinfo_t *si, uint8_t parc, char *parv[])
 	}
 }
 
-static void m_nick(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
 	struct in_addr ip;
@@ -704,7 +704,7 @@ static void m_nick(sourceinfo_t *si, uint8_t parc, char *parv[])
 	}
 }
 
-static void m_quit(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_quit(sourceinfo_t *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
 
@@ -712,7 +712,7 @@ static void m_quit(sourceinfo_t *si, uint8_t parc, char *parv[])
 	user_delete(si->su);
 }
 
-static void m_mode(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
 
@@ -736,7 +736,7 @@ static void m_mode(sourceinfo_t *si, uint8_t parc, char *parv[])
 	}
 }
 
-static void m_clearmode(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_clearmode(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *chan;
 	char *p, c;
@@ -798,7 +798,7 @@ static void m_clearmode(sourceinfo_t *si, uint8_t parc, char *parv[])
 	}
 }
 
-static void m_kick(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_kick(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u = user_find(parv[1]);
 	channel_t *c = channel_find(parv[0]);
@@ -834,19 +834,19 @@ static void m_kick(sourceinfo_t *si, uint8_t parc, char *parv[])
 	}
 }
 
-static void m_kill(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_kill(sourceinfo_t *si, int parc, char *parv[])
 {
 	handle_kill(si, parv[0], parc > 1 ? parv[1] : "<No reason given>");
 }
 
-static void m_squit(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_squit(sourceinfo_t *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_squit(): server leaving: %s from %s", parv[0], parv[1]);
 	server_delete(parv[0]);
 }
 
 /* SERVER ircu.devel.atheme.org 1 1119902586 1119908830 J10 ABAP] + :lets lol */
-static void m_server(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_server(sourceinfo_t *si, int parc, char *parv[])
 {
 	server_t *s;
 
@@ -871,42 +871,42 @@ static void m_server(sourceinfo_t *si, uint8_t parc, char *parv[])
 	me.recvsvr = TRUE;
 }
 
-static void m_stats(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_stats(sourceinfo_t *si, int parc, char *parv[])
 {
 	handle_stats(si->su, parv[0][0]);
 }
 
-static void m_admin(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_admin(sourceinfo_t *si, int parc, char *parv[])
 {
 	handle_admin(si->su);
 }
 
-static void m_version(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_version(sourceinfo_t *si, int parc, char *parv[])
 {
 	handle_version(si->su);
 }
 
-static void m_info(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_info(sourceinfo_t *si, int parc, char *parv[])
 {
 	handle_info(si->su);
 }
 
-static void m_motd(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_motd(sourceinfo_t *si, int parc, char *parv[])
 {
 	handle_motd(si->su);
 }
 
-static void m_whois(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_whois(sourceinfo_t *si, int parc, char *parv[])
 {
 	handle_whois(si->su, parv[1]);
 }
 
-static void m_trace(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_trace(sourceinfo_t *si, int parc, char *parv[])
 {
 	handle_trace(si->su, parv[0], parc >= 2 ? parv[1] : NULL);
 }
 
-static void m_pass(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_pass(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (strcmp(curr_uplink->pass, parv[0]))
 	{
@@ -915,12 +915,12 @@ static void m_pass(sourceinfo_t *si, uint8_t parc, char *parv[])
 	}
 }
 
-static void m_error(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_error(sourceinfo_t *si, int parc, char *parv[])
 {
 	slog(LG_INFO, "m_error(): error from server: %s", parv[0]);
 }
 
-static void m_eos(sourceinfo_t *si, uint8_t parc, char *parv[])
+static void m_eos(sourceinfo_t *si, int parc, char *parv[])
 {
 	handle_eob(si->s);
 

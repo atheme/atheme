@@ -4,7 +4,7 @@
  *
  * Loads a new module in.
  *
- * $Id: modunload.c 6173 2006-08-20 14:29:20Z jilles $
+ * $Id: modunload.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,14 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modunload", FALSE, _modinit, _moddeinit,
-	"$Id: modunload.c 6173 2006-08-20 14:29:20Z jilles $",
+	"$Id: modunload.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void os_cmd_modunload(char *origin);
+static void os_cmd_modunload(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_modunload = { "MODUNLOAD", "Unloads a module.",
-			 PRIV_ADMIN, os_cmd_modunload };
+command_t os_modunload = { "MODUNLOAD", "Unloads a module.", PRIV_ADMIN, 20, os_cmd_modunload };
 
 list_t *os_cmdtree;
 list_t *os_helptree;
@@ -40,28 +39,27 @@ void _moddeinit()
 	help_delentry(os_helptree, "MODUNLOAD");
 }
 
-static void os_cmd_modunload(char *origin)
+static void os_cmd_modunload(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *module;
 	unsigned int i;
-	char *toload[BUFSIZE / 2];
+	module_t *m;
 
-	i = 0;
-	while((module = strtok(NULL, " ")))
+	if (parc < 1)
 	{
-		toload[i++] = module;
-		if (i - 1 >= sizeof toload / sizeof *toload)
-			break;
+		notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "MODUNLOAD");
+		notice(opersvs.nick, si->su->nick, "Syntax: MODUNLOAD <module...>");
+		return;
 	}
-	toload[i] = NULL;
 	i = 0;
-	while ((module = toload[i++]))
+	while (i < parc)
 	{
-		module_t *m = module_find_published(module);
+		module = parv[i++];
+		m = module_find_published(module);
 
 		if (!m)
 		{
-			notice(opersvs.nick, origin, "\2%s\2 is not loaded; "
+			notice(opersvs.nick, si->su->nick, "\2%s\2 is not loaded; "
 					"it cannot be unloaded.", module);
 			continue;
 		}
@@ -69,22 +67,22 @@ static void os_cmd_modunload(char *origin)
 		if (m->header->norestart)
 		{
 			slog(LG_INFO, "%s tried to unload a permanent module",
-				origin);
-			notice(opersvs.nick, origin, "\2%s\2 is an permanent module; "
+				si->su->nick);
+			notice(opersvs.nick, si->su->nick, "\2%s\2 is an permanent module; "
 					"it cannot be unloaded.", module);
 			continue;
 		}
 
 		if (!strcmp(m->header->name, "operserv/main") || !strcmp(m->header->name, "operserv/modload") || !strcmp(m->header->name, "operserv/modunload"))
 		{
-			notice(opersvs.nick, origin, "Refusing to unload \2%s\2.",
+			notice(opersvs.nick, si->su->nick, "Refusing to unload \2%s\2.",
 					module);
 			continue;
 		}
 
 		module_unload(m);
 
-		logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "MODUNLOAD %s", module);
-		notice(opersvs.nick, origin, "Module \2%s\2 unloaded.", module);
+		logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "MODUNLOAD %s", module);
+		notice(opersvs.nick, si->su->nick, "Module \2%s\2 unloaded.", module);
 	}
 }

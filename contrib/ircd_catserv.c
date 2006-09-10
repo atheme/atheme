@@ -4,7 +4,7 @@
  *
  * Meow!
  *
- * $Id: ircd_catserv.c 4095 2005-12-15 08:55:00Z w00t $
+ * $Id: ircd_catserv.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"contrib/ircd_catserv", FALSE, _modinit, _moddeinit,
-	"$Id: ircd_catserv.c 4095 2005-12-15 08:55:00Z w00t $",
+	"$Id: ircd_catserv.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -21,7 +21,7 @@ list_t catserv_cmdtree;
 
 static void catserv_cmd_meow(char *origin);
 static void catserv_cmd_help(char *origin);
-static void catserv_handler(char *origin, uint8_t parc, char **parv);
+static void catserv_handler(char *origin, int parc, char **parv);
 
 command_t catserv_meow = { "MEOW", "Makes the cute little kitty-cat meow!",
 				AC_NONE, catserv_cmd_meow };
@@ -54,7 +54,7 @@ static void catserv_cmd_help(char *origin)
 	command_help(catserv->name, origin, &catserv_cmdtree);
 }
 
-static void catserv_handler(char *origin, uint8_t parc, char *parv[])
+static void catserv_handler(char *origin, int parc, char *parv[])
 {
         char *cmd;
         char orig[BUFSIZE];

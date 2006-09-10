@@ -909,7 +909,7 @@ user_deleted(void *vptr)
 }
 
 void
-_handler(char *origin, uint8_t parc, char *parv[])
+_handler(char *origin, int parc, char *parv[])
 {
         char *cmd;
         char orig[BUFSIZE];

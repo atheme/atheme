@@ -16,7 +16,7 @@
    along with this program; if not, write to the Free Software Foundation,
    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-   $Id: base64.h 5099 2006-04-17 04:26:48Z gxti $ */
+   $Id: base64.h 6337 2006-09-10 15:54:41Z pippijn $ */
 
 #ifndef BASE64_H
 # define BASE64_H
@@ -33,15 +33,9 @@
 
 extern bool isbase64 (char ch);
 
-extern void base64_encode (const char *in, size_t inlen,
-			   char *out, size_t outlen);
-
+extern void base64_encode (const char *in, size_t inlen, char *out, size_t outlen);
 extern size_t base64_encode_alloc (const char *in, size_t inlen, char **out);
-
-extern bool base64_decode (const char *in, size_t inlen,
-			   char *out, size_t *outlen);
-
-extern bool base64_decode_alloc (const char *in, size_t inlen,
-				 char **out, size_t *outlen);
+extern bool base64_decode (const char *in, size_t inlen, char *out, size_t *outlen);
+extern bool base64_decode_alloc (const char *in, size_t inlen, char **out, size_t *outlen);
 
 #endif /* BASE64_H */

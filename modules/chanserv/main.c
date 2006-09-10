@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6317 2006-09-06 20:03:32Z pippijn $
+ * $Id: main.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6317 2006-09-06 20:03:32Z pippijn $",
+	"$Id: main.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -56,19 +56,14 @@ static void join_registered(boolean_t all)
 }
 
 /* main services client routine */
-static void chanserv(char *origin, uint8_t parc, char *parv[])
+static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc;
-	char *cmd;
 	char orig[BUFSIZE];
 	boolean_t is_fcommand = FALSE;
 	hook_cmessage_data_t cdata;
-
-        if (!origin)
-        {
-                slog(LG_DEBUG, "services(): received a request with no origin!");
-                return;
-        }
+	char *cmd;
+	char *text;
 
 	/* this should never happen */
 	if (parv[parc - 2][0] == '&')
@@ -111,23 +106,24 @@ static void chanserv(char *origin, uint8_t parc, char *parv[])
 
 	/* lets go through this to get the command */
 	cmd = strtok(parv[parc - 1], " ");
+        text = strtok(NULL, "");
 
 	if (!cmd)
 		return;
 	if (*cmd == '\001')
 	{
-		handle_ctcp_common(cmd, origin, chansvs.nick);
+		handle_ctcp_common(cmd, si->su->nick, chansvs.nick);
 		return;
 	}
 
 	/* take the command through the hash table */
 	if (!is_fcommand)
-		command_exec(chansvs.me, origin, cmd, &cs_cmdtree);
+		command_exec_split(chansvs.me, si, cmd, text, &cs_cmdtree);
 	else
 	{
-		fcommand_exec_floodcheck(chansvs.me, parv[parc - 2], origin, cmd, &cs_fcmdtree);
+		fcommand_exec_floodcheck(chansvs.me, parv[parc - 2], si->su->nick, cmd, &cs_fcmdtree);
 
-		cdata.u = user_find_named(origin);
+		cdata.u = si->su;
 		cdata.c = channel_find(parv[parc - 2]);
 		cdata.msg = parv[parc - 1];
 		hook_call_event("channel_message", &cdata);

@@ -4,7 +4,7 @@
  *
  * XMLRPC memo management functions.
  *
- * $Id: memo.c 6317 2006-09-06 20:03:32Z pippijn $
+ * $Id: memo.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/memo", FALSE, _modinit, _moddeinit,
-	"$Id: memo.c 6317 2006-09-06 20:03:32Z pippijn $",
+	"$Id: memo.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -468,7 +468,7 @@ static int memo_list(void *conn, int parc, char *parv[])
 		i++;
 		memo = (mymemo_t *)n->data;
 		memotime = *localtime(&memo->sent);
-		snprintf(timebuf, 16, "%d", (int) mktime(&memotime));
+		snprintf(timebuf, 16, "%lu", mktime(&memotime));
 		
 		if (memo->status == MEMO_NEW)
 			snprintf(memobuf, 64, "%d:%s:%s:1\n", i, memo->sender, timebuf);
@@ -552,7 +552,7 @@ static int memo_read(void *conn, int parc, char *parv[])
 			/* Now, i is the memo id => read the memo */
 			memo = (mymemo_t*) n->data;
 			memotime = *localtime(&memo->sent);
-			snprintf(timebuf, 16, "%d", (int) mktime(&memotime));
+			snprintf(timebuf, 16, "%lu", mktime(&memotime));
 			strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &memotime);
 
 			/* If the memo is unread, */

@@ -4,7 +4,7 @@
  *
  * Jupiters a server.
  *
- * $Id: jupe.c 6071 2006-08-16 14:58:16Z jilles $
+ * $Id: jupe.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"operserv/jupe", FALSE, _modinit, _moddeinit,
-	"$Id: jupe.c 6071 2006-08-16 14:58:16Z jilles $",
+	"$Id: jupe.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void os_cmd_jupe(char *origin);
+static void os_cmd_jupe(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_jupe = { "JUPE", "Jupiters a server.", PRIV_JUPE, os_cmd_jupe };
+command_t os_jupe = { "JUPE", "Jupiters a server.", PRIV_JUPE, 2, os_cmd_jupe };
 
 list_t *os_cmdtree;
 list_t *os_helptree;
@@ -38,40 +38,40 @@ void _moddeinit()
 	help_delentry(os_helptree, "JUPE");
 }
 
-static void os_cmd_jupe(char *origin)
+static void os_cmd_jupe(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *server = strtok(NULL, " ");
-	char *reason = strtok(NULL, "");
+	char *server = parv[0];
+	char *reason = parv[1];
 
 	if (!server || !reason)
 	{
-		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "JUPE");
-		notice(opersvs.nick, origin, "Usage: JUPE <server> <reason>");
+		notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "JUPE");
+		notice(opersvs.nick, si->su->nick, "Usage: JUPE <server> <reason>");
 		return;
 	}
 
 	if (!strchr(server, '.'))
 	{
-		notice(opersvs.nick, origin, "\2%s\2 is not a valid server name.", server);
+		notice(opersvs.nick, si->su->nick, "\2%s\2 is not a valid server name.", server);
 		return;
 	}
 
 	if (!irccasecmp(server, me.name))
 	{
-		notice(opersvs.nick, origin, "\2%s\2 is the services server; it cannot be jupitered!", server);
+		notice(opersvs.nick, si->su->nick, "\2%s\2 is the services server; it cannot be jupitered!", server);
 		return;
 	}
 
 	if (!irccasecmp(server, me.actual))
 	{
-		notice(opersvs.nick, origin, "\2%s\2 is the current uplink; it cannot be jupitered!", server);
+		notice(opersvs.nick, si->su->nick, "\2%s\2 is the current uplink; it cannot be jupitered!", server);
 		return;
 	}
 
-	logcommand(opersvs.me, user_find_named(origin), CMDLOG_SET, "JUPE %s %s", server, reason);
+	logcommand(opersvs.me, si->su, CMDLOG_SET, "JUPE %s %s", server, reason);
 
 	server_delete(server);
 	jupe(server, reason);
 
-	notice(opersvs.nick, origin, "\2%s\2 has been jupitered.", server);
+	notice(opersvs.nick, si->su->nick, "\2%s\2 has been jupitered.", server);
 }

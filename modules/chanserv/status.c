@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService STATUS function.
  *
- * $Id: status.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: status.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,14 +12,14 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/status", FALSE, _modinit, _moddeinit,
-	"$Id: status.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: status.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void cs_cmd_status(char *origin);
+static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_status = { "STATUS", "Displays your status in services.",
-                         AC_NONE, cs_cmd_status };
+                         AC_NONE, 1, cs_cmd_status };
 
 list_t *cs_cmdtree;
 list_t *cs_helptree;
@@ -39,14 +39,13 @@ void _moddeinit()
 	help_delentry(cs_helptree, "STATUS");
 }
 
-static void cs_cmd_status(char *origin)
+static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
-	char *chan = strtok(NULL, " ");
+	char *chan = parv[0];
 
-	if (!u->myuser)
+	if (!si->su->myuser)
 	{
-		notice(chansvs.nick, origin, "You are not logged in.");
+		notice(chansvs.nick, si->su->nick, "You are not logged in.");
 		return;
 	}
 
@@ -57,57 +56,57 @@ static void cs_cmd_status(char *origin)
 
 		if (*chan != '#')
 		{
-			notice(chansvs.nick, origin, STR_INVALID_PARAMS, "STATUS");
+			notice(chansvs.nick, si->su->nick, STR_INVALID_PARAMS, "STATUS");
 			return;
 		}
 
 		if (!mc)
 		{
-			notice(chansvs.nick, origin, "\2%s\2 is not registered.", chan);
+			notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", chan);
 			return;
 		}
 
-		logcommand(chansvs.me, u, CMDLOG_GET, "%s STATUS", mc->name);
+		logcommand(chansvs.me, si->su, CMDLOG_GET, "%s STATUS", mc->name);
 		
 		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 		{
-			notice(chansvs.nick, origin, "\2%s\2 is closed.", chan);
+			notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", chan);
 			return;
 		}
 
-		if (is_founder(mc, u->myuser))
-			notice(chansvs.nick, origin, "You are founder on \2%s\2.", mc->name);
+		if (is_founder(mc, si->su->myuser))
+			notice(chansvs.nick, si->su->nick, "You are founder on \2%s\2.", mc->name);
 
-		flags = chanacs_user_flags(mc, u);
+		flags = chanacs_user_flags(mc, si->su);
 		if (flags & CA_AKICK)
-			notice(chansvs.nick, origin, "You are banned from \2%s\2.", mc->name);
+			notice(chansvs.nick, si->su->nick, "You are banned from \2%s\2.", mc->name);
 		else if (flags != 0)
 		{
-			notice(chansvs.nick, origin, "You have access flags \2%s\2 on \2%s\2.", bitmask_to_flags(flags, chanacs_flags), mc->name);
+			notice(chansvs.nick, si->su->nick, "You have access flags \2%s\2 on \2%s\2.", bitmask_to_flags(flags, chanacs_flags), mc->name);
 		}
 		else
-			notice(chansvs.nick, origin, "You are a normal user on \2%s\2.", mc->name);
+			notice(chansvs.nick, si->su->nick, "You are a normal user on \2%s\2.", mc->name);
 
 		return;
 	}
 
-	logcommand(chansvs.me, u, CMDLOG_GET, "STATUS");
-	notice(chansvs.nick, origin, "You are logged in as \2%s\2.", u->myuser->name);
+	logcommand(chansvs.me, si->su, CMDLOG_GET, "STATUS");
+	notice(chansvs.nick, si->su->nick, "You are logged in as \2%s\2.", si->su->myuser->name);
 
-	if (is_soper(u->myuser))
+	if (is_soper(si->su->myuser))
 	{
 		operclass_t *operclass;
 
-		operclass = u->myuser->soper->operclass;
+		operclass = si->su->myuser->soper->operclass;
 		if (operclass == NULL)
-			notice(chansvs.nick, origin, "You are a services root administrator.");
+			notice(chansvs.nick, si->su->nick, "You are a services root administrator.");
 		else
-			notice(chansvs.nick, origin, "You are a services operator of class %s.", operclass->name);
+			notice(chansvs.nick, si->su->nick, "You are a services operator of class %s.", operclass->name);
 	}
 
-	if (is_admin(u))
-		notice(chansvs.nick, origin, "You are a server administrator.");
+	if (is_admin(si->su))
+		notice(chansvs.nick, si->su->nick, "You are a server administrator.");
 
-	if (is_ircop(u))
-		notice(chansvs.nick, origin, "You are an IRC operator.");
+	if (is_ircop(si->su))
+		notice(chansvs.nick, si->su->nick, "You are an IRC operator.");
 }

@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6317 2006-09-06 20:03:32Z pippijn $
+ * $Id: main.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6317 2006-09-06 20:03:32Z pippijn $",
+	"$Id: main.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -30,16 +30,10 @@ static void user_burstlogin(void *vptr);
 static void delete_stale(void *vptr);
 
 /* main services client routine */
-static void saslserv(char *origin, uint8_t parc, char *parv[])
+static void saslserv(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *cmd;
 	char orig[BUFSIZE];
-
-	if (!origin)
-	{
-		slog(LG_DEBUG, "services(): received a request with no origin!");
-		return;
-	}
 
 	/* this should never happen */
 	if (parv[0][0] == '&')
@@ -58,11 +52,11 @@ static void saslserv(char *origin, uint8_t parc, char *parv[])
 		return;
 	if (*cmd == '\001')
 	{
-		handle_ctcp_common(cmd, origin, opersvs.nick);
+		handle_ctcp_common(cmd, si->su->nick, opersvs.nick);
 		return;
 	}
 
-	notice(saslsvs.nick, origin, "This service exists to identify "
+	notice(saslsvs.nick, si->su->nick, "This service exists to identify "
 			"connecting clients to the network. It has no "
 			"public interface.");
 }

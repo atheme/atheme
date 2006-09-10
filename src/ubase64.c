@@ -4,7 +4,7 @@
  *
  * Undernet base64 routine.
  *
- * $Id: ubase64.c 5193 2006-05-03 14:31:53Z jilles $
+ * $Id: ubase64.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -53,7 +53,7 @@ uint32_t base64touint(char *buf)
 	uint32_t v = 0;
 	int count = 6;
 
-	while (--count >= 0 && (bits = ub64_lookuptab[255 & (int)*buf++]) != '\377')
+	while (--count >= 0 && (bits = ub64_lookuptab[255 & *buf++]) != '\377')
 		v = v << 6 | bits;
 	return v;
 }

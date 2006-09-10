@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 William Pitcock
+ * Copyright (c) 2005 William Pitcock <nenolod -at- nenolod.net>
  * Rights to this code are as documented in doc/LICENSE.
  *
  * VHost management! (ratbox only right now.)
  *
- * $Id: vhost.c 6317 2006-09-06 20:03:32Z pippijn $
+ * $Id: vhost.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,17 +12,16 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 6317 2006-09-06 20:03:32Z pippijn $",
+	"$Id: vhost.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 list_t *ns_cmdtree, *ns_helptree;
 
 static void vhost_on_identify(void *vptr);
-static void ns_cmd_vhost(char *origin);
+static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_vhost = { "VHOST", "Manages user virtualhosts.",
-			PRIV_USER_VHOST, ns_cmd_vhost };
+command_t ns_vhost = { "VHOST", "Manages user virtualhosts.", PRIV_USER_VHOST, 2, ns_cmd_vhost };
 
 void _modinit(module_t *m)
 {
@@ -105,27 +104,23 @@ static void do_restorehost_all(myuser_t *mu)
 }
 
 /* VHOST <nick> [host] */
-static void ns_cmd_vhost(char *origin)
+static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *target = strtok(NULL, " ");
-	char *host = strtok(NULL, " ");
-	user_t *source = user_find_named(origin);
+	char *target = parv[0];
+	char *host = parv[1];
 	myuser_t *mu;
-
-	if (source == NULL)
-		return;
 
 	if (!target)
 	{
-		notice(nicksvs.nick, origin, STR_INVALID_PARAMS, "VHOST");
-		notice(nicksvs.nick, origin, "Syntax: VHOST <nick> [vhost]");
+		notice(nicksvs.nick, si->su->nick, STR_INVALID_PARAMS, "VHOST");
+		notice(nicksvs.nick, si->su->nick, "Syntax: VHOST <nick> [vhost]");
 		return;
 	}
 
 	/* find the user... */
 	if (!(mu = myuser_find_ext(target)))
 	{
-		notice(nicksvs.nick, origin, "\2%s\2 is not a registered nickname.", target);
+		notice(nicksvs.nick, si->su->nick, "\2%s\2 is not a registered nickname.", target);
 		return;
 	}
 
@@ -133,10 +128,9 @@ static void ns_cmd_vhost(char *origin)
 	if (!host)
 	{
 		metadata_delete(mu, METADATA_USER, "private:usercloak");
-		notice(nicksvs.nick, origin, "Deleted vhost for \2%s\2.", target);
-		snoop("VHOST:REMOVE: \2%s\2 by \2%s\2", target, origin);
-		logcommand(nicksvs.me, source, CMDLOG_ADMIN, "VHOST REMOVE %s",
-				target);
+		notice(nicksvs.nick, si->su->nick, "Deleted vhost for \2%s\2.", target);
+		snoop("VHOST:REMOVE: \2%s\2 by \2%s\2", target, si->su->nick);
+		logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "VHOST REMOVE %s", target);
 		do_restorehost_all(mu);
 		return;
 	}
@@ -145,21 +139,21 @@ static void ns_cmd_vhost(char *origin)
 	if (strchr(host, '@') || strchr(host, '!') || strchr(host, '?') ||
 			strchr(host, '*'))
 	{
-		notice(nicksvs.nick, origin, "The vhost provided contains invalid characters.");
+		notice(nicksvs.nick, si->su->nick, "The vhost provided contains invalid characters.");
 		return;
 	}
 	if (strlen(host) >= HOSTLEN)
 	{
-		notice(nicksvs.nick, origin, "The vhost provided is too long.");
+		notice(nicksvs.nick, si->su->nick, "The vhost provided is too long.");
 		return;
 	}
 	/* XXX more checks here, perhaps as a configurable regexp? */
 
 	metadata_add(mu, METADATA_USER, "private:usercloak", host);
-	notice(nicksvs.nick, origin, "Assigned vhost \2%s\2 to \2%s\2.", 
-		host, target);
-	snoop("VHOST:ASSIGN: \2%s\2 to \2%s\2 by \2%s\2", host, target, origin);
-	logcommand(nicksvs.me, source, CMDLOG_ADMIN, "VHOST ASSIGN %s %s",
+	notice(nicksvs.nick, si->su->nick, "Assigned vhost \2%s\2 to \2%s\2.",
+			host, target);
+	snoop("VHOST:ASSIGN: \2%s\2 to \2%s\2 by \2%s\2", host, target, si->su->nick);
+	logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "VHOST ASSIGN %s %s",
 			target, host);
 	do_sethost_all(mu, host);
 	return;

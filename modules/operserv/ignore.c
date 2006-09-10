@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService IGNORE command.
  *
- * $Id: ignore.c 6317 2006-09-06 20:03:32Z pippijn $
+ * $Id: ignore.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,22 +12,21 @@
 DECLARE_MODULE_V1
 (
 	"operserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 6317 2006-09-06 20:03:32Z pippijn $",
+	"$Id: ignore.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void os_cmd_ignore(char *origin);
-static void os_cmd_ignore_add(char *origin, char *target);
-static void os_cmd_ignore_del(char *origin, char *target);
-static void os_cmd_ignore_list(char *origin, char *arg);
-static void os_cmd_ignore_clear(char *origin, char *arg);
+static void os_cmd_ignore(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_ignore = { "IGNORE", "Ignore a mask from services.",
-                        PRIV_ADMIN, os_cmd_ignore };
-fcommand_t os_ignore_add = { "ADD", PRIV_ADMIN, os_cmd_ignore_add };
-fcommand_t os_ignore_del = { "DEL", PRIV_ADMIN, os_cmd_ignore_del };
-fcommand_t os_ignore_list = { "LIST", PRIV_ADMIN, os_cmd_ignore_list };
-fcommand_t os_ignore_clear = { "CLEAR", PRIV_ADMIN, os_cmd_ignore_clear };
+command_t os_ignore = { "IGNORE", "Ignore a mask from services.", PRIV_ADMIN, 3, os_cmd_ignore };
+command_t os_ignore_add = { "ADD", "Add services ignore", PRIV_ADMIN, 2, os_cmd_ignore_add };
+command_t os_ignore_del = { "DEL", "Delete services ignore", PRIV_ADMIN, 1, os_cmd_ignore_del };
+command_t os_ignore_list = { "LIST", "List services ignores", PRIV_ADMIN, 0, os_cmd_ignore_list };
+command_t os_ignore_clear = { "CLEAR", "Clear all services ignores", PRIV_ADMIN, 0, os_cmd_ignore_clear };
 
 list_t *os_cmdtree;
 list_t *os_helptree;
@@ -44,10 +43,10 @@ void _modinit(module_t *m)
 	help_addentry(os_helptree, "IGNORE", "help/oservice/ignore", NULL);
 
 	/* Sub-commands */
-	fcommand_add(&os_ignore_add, &os_ignore_cmds);
-	fcommand_add(&os_ignore_del, &os_ignore_cmds);
-	fcommand_add(&os_ignore_clear, &os_ignore_cmds);
-	fcommand_add(&os_ignore_list, &os_ignore_cmds);
+	command_add(&os_ignore_add, &os_ignore_cmds);
+	command_add(&os_ignore_del, &os_ignore_cmds);
+	command_add(&os_ignore_clear, &os_ignore_cmds);
+	command_add(&os_ignore_list, &os_ignore_cmds);
 }
 
 void _moddeinit()
@@ -56,46 +55,54 @@ void _moddeinit()
 	help_delentry(os_helptree, "IGNORE");
 
 	/* Sub-commands */
-	fcommand_delete(&os_ignore_add, &os_ignore_cmds);
-	fcommand_delete(&os_ignore_del, &os_ignore_cmds);
-	fcommand_delete(&os_ignore_list, &os_ignore_cmds);
-	fcommand_delete(&os_ignore_clear, &os_ignore_cmds);
+	command_delete(&os_ignore_add, &os_ignore_cmds);
+	command_delete(&os_ignore_del, &os_ignore_cmds);
+	command_delete(&os_ignore_list, &os_ignore_cmds);
+	command_delete(&os_ignore_clear, &os_ignore_cmds);
 
 }
 
-static void os_cmd_ignore(char *origin)
+static void os_cmd_ignore(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *cmd = strtok(NULL, " ");
-	char *arg = strtok(NULL, " ");
+	char *cmd = parv[0];
+        command_t *c;
 
 	if (!cmd)
 	{
-		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "IGNORE");
-		notice(opersvs.nick, origin, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <mask>");
+		notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "IGNORE");
+		notice(opersvs.nick, si->su->nick, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <mask>");
 		return;
 	}
 
-	fcommand_exec(opersvs.me, arg, origin, cmd, &os_ignore_cmds);
+        c = command_find(&os_ignore_cmds, cmd);
+	if (c == NULL)
+	{
+		notice(opersvs.nick, si->su->nick, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", opersvs.me->disp);
+		return;
+	}
+
+	command_exec(opersvs.me, si, c, parc - 1, parv + 1);
 
 }
 
-static void os_cmd_ignore_add(char *origin, char *target)
+static void os_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
+	user_t *u = si->su;
 	node_t *n;
-	char *reason = strtok(NULL, "");
+        char *target = parv[0];
+	char *reason = parv[1];
 	svsignore_t *svsignore;
 
 	if (target == NULL)
 	{
-		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "IGNORE");
-		notice(opersvs.nick, origin, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <mask>");
+		notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "IGNORE");
+		notice(opersvs.nick, si->su->nick, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <mask>");
 		return;
 	}
 
 	if (!validhostmask(target))
 	{
-		notice(opersvs.nick, origin, "Invalid host mask, %s", target);
+		notice(opersvs.nick, si->su->nick, "Invalid host mask, %s", target);
 		return;
 	}
 
@@ -107,34 +114,35 @@ static void os_cmd_ignore_add(char *origin, char *target)
 		/* We're here */
 		if (!strcasecmp(svsignore->mask, target))
 		{
-			notice(opersvs.nick, origin, "The mask \2%s\2 already exists on the services ignore list.", svsignore->mask);
+			notice(opersvs.nick, si->su->nick, "The mask \2%s\2 already exists on the services ignore list.", svsignore->mask);
 			return;
 		}
 	}
 
 	svsignore = svsignore_add(target, reason);
-	svsignore->setby = sstrdup(origin);
+	svsignore->setby = sstrdup(si->su->nick);
 	svsignore->settime = CURRTIME;
 
-	notice(opersvs.nick, origin, "\2%s\2 has been added to the services ignore list.", target);
+	notice(opersvs.nick, si->su->nick, "\2%s\2 has been added to the services ignore list.", target);
 
 	logcommand(opersvs.me, u, CMDLOG_ADMIN, "IGNORE ADD %s", target);
-	wallops("%s added a services ignore for \2%s\2.", origin, target);
-	snoop("IGNORE:ADD: \2%s\2 by \2%s\2", target, origin);
+	wallops("%s added a services ignore for \2%s\2.", si->su->nick, target);
+	snoop("IGNORE:ADD: \2%s\2 by \2%s\2", target, si->su->nick);
 
 	return;
 }
 
-static void os_cmd_ignore_del(char *origin, char *target)
+static void os_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
+	char *target = parv[0];
+	user_t *u = si->su;
 	node_t *n, *tn;
 	svsignore_t *svsignore;
 
 	if (target == NULL)
 	{
-		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "IGNORE");
-		notice(opersvs.nick, origin, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <mask>");
+		notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "IGNORE");
+		notice(opersvs.nick, si->su->nick, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <mask>");
 		return;
 	}
 
@@ -144,7 +152,7 @@ static void os_cmd_ignore_del(char *origin, char *target)
 
 		if (!strcasecmp(svsignore->mask,target))
 		{
-			notice(opersvs.nick, origin, "\2%s\2 has been removed from the services ignore list.", svsignore->mask);
+			notice(opersvs.nick, si->su->nick, "\2%s\2 has been removed from the services ignore list.", svsignore->mask);
 
 			node_del(n,&svs_ignore_list);
 			node_free(n);
@@ -152,27 +160,27 @@ static void os_cmd_ignore_del(char *origin, char *target)
 			free(svsignore->setby);
 			free(svsignore->reason);
 
-			wallops("%s removed \2%s\2 from the services ignore list.", origin, target);
-			snoop("IGNORE:DEL: \2%s\2 by \2%s\2", target, origin);
+			wallops("%s removed \2%s\2 from the services ignore list.", si->su->nick, target);
+			snoop("IGNORE:DEL: \2%s\2 by \2%s\2", target, si->su->nick);
 			logcommand(opersvs.me, u, CMDLOG_ADMIN, "IGNORE DEL %s", target);
 
 			return;
 		}
 	}
 
-	notice(opersvs.nick, origin, "\2%s\2 was not found on the services ignore list.", target);
+	notice(opersvs.nick, si->su->nick, "\2%s\2 was not found on the services ignore list.", target);
 	return;
 }
 
-static void os_cmd_ignore_clear(char *origin, char *arg)
+static void os_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
+	user_t *u = si->su;
 	node_t *n, *tn;
 	svsignore_t *svsignore;
 
 	if (LIST_LENGTH(&svs_ignore_list) == 0)
 	{
-		notice(opersvs.nick, origin, "Services ignore list is empty.");
+		notice(opersvs.nick, si->su->nick, "Services ignore list is empty.");
 		return;
 	}
 
@@ -180,7 +188,7 @@ static void os_cmd_ignore_clear(char *origin, char *arg)
 	{
 		svsignore = (svsignore_t *)n->data;
 
-		notice(opersvs.nick, origin, "\2%s\2 has been removed from the services ignore list.", svsignore->mask);
+		notice(opersvs.nick, si->su->nick, "\2%s\2 has been removed from the services ignore list.", svsignore->mask);
 		node_del(n,&svs_ignore_list);
 		node_free(n);
 		free(svsignore->mask);
@@ -189,19 +197,19 @@ static void os_cmd_ignore_clear(char *origin, char *arg)
 
 	}
 
-	notice(opersvs.nick, origin, "Services ignore list has been wiped!");
+	notice(opersvs.nick, si->su->nick, "Services ignore list has been wiped!");
 
-	wallops("\2%s\2 wiped the services ignore list.", origin);
-	snoop("IGNORE:CLEAR: by \2%s\2", origin);
+	wallops("\2%s\2 wiped the services ignore list.", si->su->nick);
+	snoop("IGNORE:CLEAR: by \2%s\2", si->su->nick);
 	logcommand(opersvs.me, u, CMDLOG_ADMIN, "IGNORE CLEAR");
 
 	return;
 }
 
 
-static void os_cmd_ignore_list(char *origin, char *arg)
+static void os_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
+	user_t *u = si->su;
 	node_t *n;
 	uint8_t i = 1;
 	svsignore_t *svsignore;
@@ -210,12 +218,12 @@ static void os_cmd_ignore_list(char *origin, char *arg)
 
 	if (LIST_LENGTH(&svs_ignore_list) == 0)
 	{
-		notice(opersvs.nick, origin, "The services ignore list is empty.");
+		notice(opersvs.nick, si->su->nick, "The services ignore list is empty.");
 		return;
 	}
 
-	notice(opersvs.nick, origin, "Current Ignore list entries:");
-	notice(opersvs.nick, origin, "-------------------------");
+	notice(opersvs.nick, si->su->nick, "Current Ignore list entries:");
+	notice(opersvs.nick, si->su->nick, "-------------------------");
 
 	LIST_FOREACH(n, svs_ignore_list.head)
 	{
@@ -224,11 +232,11 @@ static void os_cmd_ignore_list(char *origin, char *arg)
 		tm = *localtime(&svsignore->settime);
 		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-		notice(opersvs.nick, origin, "%d: %s by %s on %s (Reason: %s)", i, svsignore->mask, svsignore->setby, strfbuf, svsignore->reason);
+		notice(opersvs.nick, si->su->nick, "%d: %s by %s on %s (Reason: %s)", i, svsignore->mask, svsignore->setby, strfbuf, svsignore->reason);
 		i++;
 	}
 
-	notice(opersvs.nick, origin, "-------------------------");
+	notice(opersvs.nick, si->su->nick, "-------------------------");
 
 	logcommand(opersvs.me, u, CMDLOG_ADMIN, "IGNORE LIST");
 

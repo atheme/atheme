@@ -4,7 +4,7 @@
  *
  * Regex usersearch feature.
  *
- * $Id: rmatch.c 6159 2006-08-19 23:27:19Z jilles $
+ * $Id: rmatch.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 /*
@@ -16,16 +16,16 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rmatch", FALSE, _modinit, _moddeinit,
-	"$Id: rmatch.c 6159 2006-08-19 23:27:19Z jilles $",
+	"$Id: rmatch.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 list_t *os_cmdtree;
 list_t *os_helptree;
 
-static void os_cmd_rmatch(char *origin);
+static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_rmatch = { "RMATCH", "Scans the network for users based on a specific regex pattern.", PRIV_USER_AUSPEX, os_cmd_rmatch };
+command_t os_rmatch = { "RMATCH", "Scans the network for users based on a specific regex pattern.", PRIV_USER_AUSPEX, 1, os_cmd_rmatch };
 
 void _modinit(module_t *m)
 {
@@ -42,7 +42,7 @@ void _moddeinit(void)
 	help_delentry(os_helptree, "RMATCH");
 }
 
-static void os_cmd_rmatch(char *origin)
+static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 {
 	regex_t *regex;
 	char usermask[512];
@@ -50,22 +50,22 @@ static void os_cmd_rmatch(char *origin)
 	uint32_t i = 0;
 	node_t *n;
 	user_t *u;
-	char *args = strtok(NULL, "");
+	char *args = parv[0];
 	char *pattern;
 	int flags = 0;
 
 	if (args == NULL)
 	{
-		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "RMATCH");
-		notice(opersvs.nick, origin, "Syntax: RMATCH /<regex>/[i]");
+		notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "RMATCH");
+		notice(opersvs.nick, si->su->nick, "Syntax: RMATCH /<regex>/[i]");
 		return;
 	}
 
 	pattern = regex_extract(args, &args, &flags);
 	if (pattern == NULL)
 	{
-		notice(opersvs.nick, origin, STR_INVALID_PARAMS, "RMATCH");
-		notice(opersvs.nick, origin, "Syntax: RMATCH /<regex>/[i]");
+		notice(opersvs.nick, si->su->nick, STR_INVALID_PARAMS, "RMATCH");
+		notice(opersvs.nick, si->su->nick, "Syntax: RMATCH /<regex>/[i]");
 		return;
 	}
 
@@ -73,7 +73,7 @@ static void os_cmd_rmatch(char *origin)
 	
 	if (regex == NULL)
 	{
-		notice(opersvs.nick, origin, "The provided regex \2%s\2 is invalid.", pattern);
+		notice(opersvs.nick, si->su->nick, "The provided regex \2%s\2 is invalid.", pattern);
 		return;
 	}
 		
@@ -88,14 +88,14 @@ static void os_cmd_rmatch(char *origin)
 			if (regex_match(regex, usermask) == TRUE)
 			{
 				/* match */
-				notice(opersvs.nick, origin, "\2Match:\2  %s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
+				notice(opersvs.nick, si->su->nick, "\2Match:\2  %s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
 				matches++;
 			}
 		}
 	}
 	
 	regex_destroy(regex);
-	notice(opersvs.nick, origin, "\2%d\2 matches for %s", matches, pattern);
-	logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "RMATCH %s (%d matches)", pattern, matches);
-	snoop("RMATCH: \2%s\2 by \2%s\2", pattern, origin);
+	notice(opersvs.nick, si->su->nick, "\2%d\2 matches for %s", matches, pattern);
+	logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "RMATCH %s (%d matches)", pattern, matches);
+	snoop("RMATCH: \2%s\2 by \2%s\2", pattern, si->su->nick);
 }

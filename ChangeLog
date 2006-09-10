@@ -1,3 +1,12 @@
+pippijn     2006/09/09 23:58:19 UTC	(20060909-6335)
+  Log:
+  Fixed typo in comment - ever heard of LICEusE?
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/userserv/set.c (File Modified) 
+
+
 pippijn     2006/09/09 18:46:50 UTC	(20060909-6333)
   Log:
   nptr2 is no longer needed ever since the LIST_FOREACH_SAFE that used to use it is no longer there.

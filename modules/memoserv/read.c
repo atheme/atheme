@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv READ function
  *
- * $Id: read.c 6317 2006-09-06 20:03:32Z pippijn $
+ * $Id: read.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,14 +12,14 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/read", FALSE, _modinit, _moddeinit,
-	"$Id: read.c 6317 2006-09-06 20:03:32Z pippijn $",
+	"$Id: read.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void ms_cmd_read(char *origin);
+static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_read = { "READ", "Reads a memo.",
-                        AC_NONE, ms_cmd_read };
+                        AC_NONE, 2, ms_cmd_read };
 
 list_t *ms_cmdtree;
 list_t *ms_helptree;
@@ -39,10 +39,10 @@ void _moddeinit()
 	help_delentry(ms_helptree, "READ");
 }
 
-static void ms_cmd_read(char *origin)
+static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* Misc structs etc */
-	user_t *u = user_find_named(origin);
+	user_t *u = si->su;
 	myuser_t *mu = u->myuser, *tmu;
 	mymemo_t *memo, *receipt;
 	node_t *n;
@@ -51,15 +51,15 @@ static void ms_cmd_read(char *origin)
 	struct tm tm;
 	
 	/* Grab arg */
-	char *arg1 = strtok(NULL, " ");
+	char *arg1 = parv[0];
 	
 	/* Bad/missing arg -- how do I make sure it's a digit they fed me? */
 	if (!arg1)
 	{
-		notice(memosvs.nick, origin, 
+		notice(memosvs.nick, si->su->nick, 
 			STR_INSUFFICIENT_PARAMS, "READ");
 		
-		notice(memosvs.nick, origin, "Syntax: READ <memo number>");
+		notice(memosvs.nick, si->su->nick, "Syntax: READ <memo number>");
 		return;
 	}
 	else
@@ -68,28 +68,28 @@ static void ms_cmd_read(char *origin)
 	/* user logged in? */
 	if (mu == NULL)
 	{
-		notice(memosvs.nick, origin, "You are not logged in.");
+		notice(memosvs.nick, si->su->nick, "You are not logged in.");
 		return;
 	}
 	
 	/* Check to see if any memos */
 	if (!mu->memos.count)
 	{
-		notice(memosvs.nick, origin, "You have no memos.");
+		notice(memosvs.nick, si->su->nick, "You have no memos.");
 		return;
 	}
 	
 	/* Is arg1 an int? */
 	if (!memonum)
 	{
-		notice(memosvs.nick, origin, "Invalid message index.");
+		notice(memosvs.nick, si->su->nick, "Invalid message index.");
 		return;
 	}
 	
 	/* Check to see if memonum is greater than memocount */
 	if (memonum > mu->memos.count)
 	{
-		notice(memosvs.nick, origin, "Invalid message index.");
+		notice(memosvs.nick, si->su->nick, "Invalid message index.");
 		return;
 	}
 
@@ -111,7 +111,7 @@ static void ms_cmd_read(char *origin)
 				
 				/* If the sender is logged in, tell them the memo's been read */
 				if (strcasecmp(memosvs.nick,memo->sender) && (tmu != NULL) && (tmu->logins.count > 0))
-					myuser_notice(memosvs.nick, tmu, "%s has read your memo, which was sent at %s", origin, strfbuf);			
+					myuser_notice(memosvs.nick, tmu, "%s has read your memo, which was sent at %s", si->su->nick, strfbuf);			
 				else
 				{	
 					/* If they have an account, their inbox is not full and they aren't memoserv */
@@ -122,7 +122,7 @@ static void ms_cmd_read(char *origin)
 						receipt->sent = CURRTIME;
 						receipt->status = MEMO_NEW;
 						strlcpy(receipt->sender,memosvs.nick,NICKLEN);
-						snprintf(receipt->text, MEMOLEN, "%s has read a memo from you sent at %s", origin, strfbuf);
+						snprintf(receipt->text, MEMOLEN, "%s has read a memo from you sent at %s", si->su->nick, strfbuf);
 						
 						/* Attach to their linked list */
 						n = node_create();
@@ -132,13 +132,13 @@ static void ms_cmd_read(char *origin)
 				}
 			}
 		
-			notice(memosvs.nick, origin, 
+			notice(memosvs.nick, si->su->nick, 
 				"\2Memo %d - Sent by %s, %s\2",i,memo->sender, strfbuf);
 			
-			notice(memosvs.nick, origin, 
+			notice(memosvs.nick, si->su->nick, 
 				"------------------------------------------");
 			
-			notice(memosvs.nick, origin, "%s", memo->text);
+			notice(memosvs.nick, si->su->nick, "%s", memo->text);
 			
 			return;
 		}

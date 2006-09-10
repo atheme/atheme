@@ -4,7 +4,7 @@
  *
  * Module listing.
  *
- * $Id: modlist.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: modlist.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,14 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modlist", FALSE, _modinit, _moddeinit,
-	"$Id: modlist.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: modlist.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void os_cmd_modlist(char *origin);
+static void os_cmd_modlist(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_modlist = { "MODLIST", "Lists loaded modules.",
-			 PRIV_SERVER_AUSPEX, os_cmd_modlist };
+command_t os_modlist = { "MODLIST", "Lists loaded modules.", PRIV_SERVER_AUSPEX, 0, os_cmd_modlist };
 
 list_t *os_cmdtree;
 list_t *os_helptree;
@@ -40,20 +39,20 @@ void _moddeinit()
 	help_delentry(os_helptree, "MODLIST");
 }
 
-static void os_cmd_modlist(char *origin)
+static void os_cmd_modlist(sourceinfo_t *si, int parc, char *parv[])
 {
 	node_t *n;
 	uint16_t i = 0;
-	notice(opersvs.nick, origin, "Loaded modules:");
+	notice(opersvs.nick, si->su->nick, "Loaded modules:");
 
 	LIST_FOREACH(n, modules.head)
 	{
 		module_t *m = n->data;
 
-		notice(opersvs.nick, origin, "%2d: %-20s [loaded at 0x%lx]",
+		notice(opersvs.nick, si->su->nick, "%2d: %-20s [loaded at 0x%lx]",
 			++i, m->header->name, m->address);
 	}
 
-	notice(opersvs.nick, origin, "\2%d\2 modules loaded.", i);
-	logcommand(opersvs.me, user_find_named(origin), CMDLOG_GET, "MODLIST");
+	notice(opersvs.nick, si->su->nick, "\2%d\2 modules loaded.", i);
+	logcommand(opersvs.me, si->su, CMDLOG_GET, "MODLIST");
 }

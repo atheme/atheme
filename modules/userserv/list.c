@@ -5,7 +5,7 @@
  * This file contains code for the NickServ LIST function.
  * Based on Alex Lambert's LISTEMAIL.
  *
- * $Id: list.c 6317 2006-09-06 20:03:32Z pippijn $
+ * $Id: list.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,13 +13,13 @@
 DECLARE_MODULE_V1
 (
 	"userserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 6317 2006-09-06 20:03:32Z pippijn $",
+	"$Id: list.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void us_cmd_list(char *origin);
+static void us_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t us_list = { "LIST", "Lists accounts registered matching a given pattern.", PRIV_USER_AUSPEX, us_cmd_list };
+command_t us_list = { "LIST", "Lists accounts registered matching a given pattern.", PRIV_USER_AUSPEX, 1, us_cmd_list };
 
 list_t *us_cmdtree, *us_helptree;
 
@@ -68,39 +68,35 @@ static int list_foreach_cb(dictionary_elem_t *delem, void *privdata)
 
 			strlcat(buf, "\2[marked]\2", BUFSIZE);
 		}
-				
+
 		notice(usersvs.nick, state->origin, "- %s (%s) %s", mu->name, mu->email, buf);
 		state->matches++;
 	}
 	return 0;
 }
 
-static void us_cmd_list(char *origin)
+static void us_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
-	char *nickpattern = strtok(NULL, " ");
+	char *nickpattern = parv[0];
 	struct list_state state;
-
-	if (u == NULL)
-		return;
 
 	if (!nickpattern)
 	{
-		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "LIST");
-		notice(usersvs.nick, origin, "Syntax: LIST <account pattern>");
+		notice(usersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "LIST");
+		notice(usersvs.nick, si->su->nick, "Syntax: LIST <account pattern>");
 		return;
 	}
 
-	snoop("LIST:ACCOUNTS: \2%s\2 by \2%s\2", nickpattern, origin);
+	snoop("LIST:ACCOUNTS: \2%s\2 by \2%s\2", nickpattern, si->su->nick);
 
-	state.origin = origin;
+	state.origin = si->su->nick;
 	state.pattern = nickpattern;
 	state.matches = 0;
 	dictionary_foreach(mulist, list_foreach_cb, &state);
 
-	logcommand(usersvs.me, u, CMDLOG_ADMIN, "LIST %s (%d matches)", nickpattern, state.matches);
+	logcommand(usersvs.me, si->su, CMDLOG_ADMIN, "LIST %s (%d matches)", nickpattern, state.matches);
 	if (state.matches == 0)
-		notice(usersvs.nick, origin, "No accounts matched pattern \2%s\2", nickpattern);
+		notice(usersvs.nick, si->su->nick, "No accounts matched pattern \2%s\2", nickpattern);
 	else
-		notice(usersvs.nick, origin, "\2%d\2 match%s for pattern \2%s\2", state.matches, state.matches != 1 ? "es" : "", nickpattern);
+		notice(usersvs.nick, si->su->nick, "\2%d\2 match%s for pattern \2%s\2", state.matches, state.matches != 1 ? "es" : "", nickpattern);
 }

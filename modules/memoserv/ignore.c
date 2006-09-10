@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv IGNORE functions
  *
- * $Id: ignore.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: ignore.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,17 +12,17 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: ignore.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void ms_cmd_ignore(char *origin);
+static void ms_cmd_ignore(sourceinfo_t *si, int parc, char *parv[]);
 static void ms_cmd_ignore_add(char *origin, char *target);
 static void ms_cmd_ignore_del(char *origin, char *target);
 static void ms_cmd_ignore_clear(char *origin, char *arg);
 static void ms_cmd_ignore_list(char *origin, char *arg);
 
-command_t ms_ignore = { "IGNORE", "Ignores memos.", AC_NONE, ms_cmd_ignore };
+command_t ms_ignore = { "IGNORE", "Ignores memos.", AC_NONE, 2, ms_cmd_ignore };
 fcommand_t ms_ignore_add = { "ADD", AC_NONE, ms_cmd_ignore_add };
 fcommand_t ms_ignore_del = { "DEL", AC_NONE, ms_cmd_ignore_del };
 fcommand_t ms_ignore_clear = { "CLEAR", AC_NONE, ms_cmd_ignore_clear };
@@ -59,32 +59,32 @@ void _moddeinit()
 	fcommand_delete(&ms_ignore_list, &ms_ignore_cmds);
 }
 
-static void ms_cmd_ignore(char *origin)
+static void ms_cmd_ignore(sourceinfo_t *si, int parc, char *parv[])
 {	
 	/* Grab args */
-	user_t *u = user_find_named(origin);
+	user_t *u = si->su;
 	myuser_t *mu = u->myuser;
-	char *cmd = strtok(NULL, " ");
-	char *arg = strtok(NULL, " ");
+	char *cmd = parv[0];
+	char *arg = parv[1];
 	
 	/* Bad/missing arg */
 	if (!cmd)
 	{
-		notice(memosvs.nick, origin, 
+		notice(memosvs.nick, si->su->nick, 
 			STR_INSUFFICIENT_PARAMS, "IGNORE");
 		
-		notice(memosvs.nick, origin, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <account>");
+		notice(memosvs.nick, si->su->nick, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <account>");
 		return;
 	}
 	
 	/* User logged in? */
 	if (mu == NULL)
 	{
-		notice(memosvs.nick, origin, "You are not logged in.");
+		notice(memosvs.nick, si->su->nick, "You are not logged in.");
 		return;
 	}
 	
-	fcommand_exec(memosvs.me, arg, origin, cmd, &ms_ignore_cmds);
+	fcommand_exec(memosvs.me, arg, si->su->nick, cmd, &ms_ignore_cmds);
 }
 
 static void ms_cmd_ignore_add(char *origin, char *target)

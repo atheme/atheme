@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TOPIC functions.
  *
- * $Id: topic.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: topic.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,19 +12,19 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/topic", FALSE, _modinit, _moddeinit,
-	"$Id: topic.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: topic.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void cs_cmd_topic(char *origin);
-static void cs_cmd_topicappend(char *origin);
+static void cs_cmd_topic(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_fcmd_topic(char *origin, char *chan);
 static void cs_fcmd_topicappend(char *origin, char *chan);
 
 command_t cs_topic = { "TOPIC", "Sets a topic on a channel.",
-                        AC_NONE, cs_cmd_topic };
+                        AC_NONE, 2, cs_cmd_topic };
 command_t cs_topicappend = { "TOPICAPPEND", "Appends a topic on a channel.",
-                        AC_NONE, cs_cmd_topicappend };
+                        AC_NONE, 2, cs_cmd_topicappend };
 
 fcommand_t fc_topic = { "!topic", AC_NONE, cs_fcmd_topic };
 fcommand_t fc_topicappend = { "!topicappend", AC_NONE, cs_fcmd_topicappend };
@@ -59,98 +59,92 @@ void _moddeinit()
 	help_delentry(cs_helptree, "TOPICAPPEND");
 }
 
-static void cs_cmd_topic(char *origin)
+static void cs_cmd_topic(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *chan = strtok(NULL, " ");
-	char *topic = strtok(NULL, "");
+	char *chan = parv[0];
+	char *topic = parv[1];
 	mychan_t *mc;
 	channel_t *c;
-	user_t *u;
 
 	if (!chan || !topic)
 	{
-		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "TOPIC");
-		notice(chansvs.nick, origin, "Syntax: TOPIC <#channel> <topic>");
+		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "TOPIC");
+		notice(chansvs.nick, si->su->nick, "Syntax: TOPIC <#channel> <topic>");
 		return;
 	}
 
 	c = channel_find(chan);
 	if (!c)
 	{
-                notice(chansvs.nick, origin, "\2%s\2 is not registered.", chan);
+                notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", chan);
                 return;
         }
 
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		notice(chansvs.nick, origin, "Channel \2%s\2 is not registered.", chan);
+		notice(chansvs.nick, si->su->nick, "Channel \2%s\2 is not registered.", chan);
 		return;
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is closed.", chan);
+		notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", chan);
 		return;
 	}
 
-	u = user_find_named(origin);
-
-	if (!chanacs_user_has_flag(mc, u, CA_TOPIC))
+	if (!chanacs_user_has_flag(mc, si->su, CA_TOPIC))
 	{
-		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+		notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
 		return;
 	}
 
-	handle_topic(c, origin, CURRTIME, topic);
-	topic_sts(chan, origin, CURRTIME, topic);
+	handle_topic(c, si->su->nick, CURRTIME, topic);
+	topic_sts(chan, si->su->nick, CURRTIME, topic);
 
-	logcommand(chansvs.me, u, CMDLOG_SET, "%s TOPIC", mc->name);
-	if (!chanuser_find(c, u))
-		notice(chansvs.nick, origin, "Topic set to \2%s\2 on \2%s\2.", topic, chan);
+	logcommand(chansvs.me, si->su, CMDLOG_SET, "%s TOPIC", mc->name);
+	if (!chanuser_find(c, si->su))
+		notice(chansvs.nick, si->su->nick, "Topic set to \2%s\2 on \2%s\2.", topic, chan);
 }
 
-static void cs_cmd_topicappend(char *origin)
+static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[])
 {
-        char *chan = strtok(NULL, " ");
-        char *topic = strtok(NULL, "");
+        char *chan = parv[0];
+        char *topic = parv[1];
         mychan_t *mc;
-        user_t *u;
 	char topicbuf[BUFSIZE];
 	channel_t *c;
 
         if (!chan || !topic)
         {
-                notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "TOPICAPPEND");
-                notice(chansvs.nick, origin, "Syntax: TOPICAPPEND <#channel> <topic>");
+                notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "TOPICAPPEND");
+                notice(chansvs.nick, si->su->nick, "Syntax: TOPICAPPEND <#channel> <topic>");
                 return;
         }
 
 	c = channel_find(chan);
 	if (!c)
 	{
-                notice(chansvs.nick, origin, "\2%s\2 is not registered.", chan);
+                notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", chan);
                 return;
         }
 
         mc = mychan_find(chan);
         if (!mc)
         {
-                notice(chansvs.nick, origin, "Channel \2%s\2 is not registered.", chan);
+                notice(chansvs.nick, si->su->nick, "Channel \2%s\2 is not registered.", chan);
                 return;
         }
 
-        u = user_find_named(origin);
-
-        if (!chanacs_user_has_flag(mc, u, CA_TOPIC))
+        if (!chanacs_user_has_flag(mc, si->su, CA_TOPIC))
         {
-                notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+                notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
                 return;
         }
         
         if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is closed.", chan);
+		notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", chan);
 		return;
 	}
 
@@ -165,12 +159,12 @@ static void cs_cmd_topicappend(char *origin)
 	else
 		strlcpy(topicbuf, topic, BUFSIZE);
 
-	handle_topic(c, origin, CURRTIME, topicbuf);
-	topic_sts(chan, origin, CURRTIME, topicbuf);
+	handle_topic(c, si->su->nick, CURRTIME, topicbuf);
+	topic_sts(chan, si->su->nick, CURRTIME, topicbuf);
 
-	logcommand(chansvs.me, u, CMDLOG_SET, "%s TOPICAPPEND", mc->name);
-	if (!chanuser_find(c, u))
-        	notice(chansvs.nick, origin, "Topic set to \2%s\2 on \2%s\2.", c->topic, chan);
+	logcommand(chansvs.me, si->su, CMDLOG_SET, "%s TOPICAPPEND", mc->name);
+	if (!chanuser_find(c, si->su))
+        	notice(chansvs.nick, si->su->nick, "Topic set to \2%s\2 on \2%s\2.", c->topic, chan);
 }
 
 

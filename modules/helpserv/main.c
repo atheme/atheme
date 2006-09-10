@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6317 2006-09-06 20:03:32Z pippijn $
+ * $Id: main.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"helpserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6317 2006-09-06 20:03:32Z pippijn $",
+	"$Id: main.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,7 +20,7 @@ list_t hs_cmdtree;
 list_t hs_helptree;
 
 /* main services client routine */
-static void helpserv(char *origin, uint8_t parc, char *parv[])
+static void helpserv(char *origin, int parc, char *parv[])
 {
 	char *cmd;
 	char orig[BUFSIZE];

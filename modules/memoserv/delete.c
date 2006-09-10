@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv DELETE function
  *
- * $Id: delete.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: delete.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,16 +12,16 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/delete", FALSE, _modinit, _moddeinit,
-	"$Id: delete.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: delete.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void ms_cmd_delete(char *origin);
+static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ms_delete = { "DELETE", "Deletes memos.",
-                        AC_NONE, ms_cmd_delete };
+                        AC_NONE, 1, ms_cmd_delete };
 command_t ms_del = { "DEL", "Alias for DELETE",
-			AC_NONE, ms_cmd_delete };
+			AC_NONE, 1, ms_cmd_delete };
 
 list_t *ms_cmdtree;
 list_t *ms_helptree;
@@ -43,39 +43,39 @@ void _moddeinit()
 	help_delentry(ms_helptree, "DELETE");
 }
 
-static void ms_cmd_delete(char *origin)
+static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* Misc structs etc */
-	user_t *u = user_find_named(origin);
+	user_t *u = si->su;
 	myuser_t *mu = u->myuser;
 	node_t *n, *tn;
 	uint8_t i = 0, delcount = 0, memonum = 0, deleteall = 0;
 	mymemo_t *memo;
 	
 	/* We only take 1 arg, and we ignore all others */
-	char *arg1 = strtok(NULL, " ");
+	char *arg1 = parv[0];
 	
 	/* Does the arg exist? */
 	if (!arg1)
 	{
-		notice(memosvs.nick, origin, 
+		notice(memosvs.nick, si->su->nick, 
 			STR_INSUFFICIENT_PARAMS, "DELETE");
 		
-		notice(memosvs.nick, origin, "Syntax: DELETE ALL|message id");
+		notice(memosvs.nick, si->su->nick, "Syntax: DELETE ALL|message id");
 		return;
 	}
 	
 	/* user logged in? */
 	if (mu == NULL)
 	{
-		notice(memosvs.nick, origin, "You are not logged in.");
+		notice(memosvs.nick, si->su->nick, "You are not logged in.");
 		return;
 	}
 	
 	/* Do we have any memos? */
 	if (!mu->memos.count)
 	{
-		notice(memosvs.nick,origin,"You have no memos to delete.");
+		notice(memosvs.nick, si->su->nick, "You have no memos to delete.");
 		return;
 	}
 	
@@ -92,14 +92,14 @@ static void ms_cmd_delete(char *origin)
 		/* Make sure they didn't slip us an alphabetic index */
 		if (!memonum)
 		{
-			notice(memosvs.nick,origin,"Invalid message index.");
+			notice(memosvs.nick, si->su->nick, "Invalid message index.");
 			return;
 		}
 		
 		/* If int, does that index exist? And do we have something to delete? */
 		if (memonum > mu->memos.count)
 		{
-			notice(memosvs.nick,origin,"The specified memo doesn't exist.");
+			notice(memosvs.nick, si->su->nick, "The specified memo doesn't exist.");
 			return;
 		}
 	}
@@ -121,7 +121,7 @@ static void ms_cmd_delete(char *origin)
 				mu->memoct_new--;
 			
 			/* Free to node pool, remove from chain */
-			node_del(n,&mu->memos);
+			node_del(n, &mu->memos);
 			node_free(n);
 
 			free(memo);
@@ -129,8 +129,8 @@ static void ms_cmd_delete(char *origin)
 		
 	}
 	
-	notice(memosvs.nick, origin, "%d memo%s deleted.",delcount, 
-		(delcount == 1) ? "":"s");
+	notice(memosvs.nick, si->su->nick, "%d memo%s deleted.", delcount, 
+		(delcount == 1) ? "" : "s");
 	
 	return;
 }

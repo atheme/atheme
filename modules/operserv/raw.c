@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService RAW command.
  *
- * $Id: raw.c 6071 2006-08-16 14:58:16Z jilles $
+ * $Id: raw.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,14 +13,13 @@
 DECLARE_MODULE_V1
 (
 	"operserv/raw", FALSE, _modinit, _moddeinit,
-	"$Id: raw.c 6071 2006-08-16 14:58:16Z jilles $",
+	"$Id: raw.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void os_cmd_raw(char *origin);
+static void os_cmd_raw(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_raw = { "RAW", "Sends data to the uplink.",
-                        PRIV_ADMIN, os_cmd_raw };
+command_t os_raw = { "RAW", "Sends data to the uplink.", PRIV_ADMIN, 1, os_cmd_raw };
 
 list_t *os_cmdtree;
 list_t *os_helptree;
@@ -40,21 +39,21 @@ void _moddeinit()
 	help_delentry(os_helptree, "RAW");
 }
 
-static void os_cmd_raw(char *origin)
+static void os_cmd_raw(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *s = strtok(NULL, "");
+	char *s = parv[0];
 
 	if (!config_options.raw)
 		return;
 
 	if (!s)
 	{
-		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "RAW");
-		notice(opersvs.nick, origin, "Syntax: RAW <parameters>");
+		notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "RAW");
+		notice(opersvs.nick, si->su->nick, "Syntax: RAW <parameters>");
 		return;
 	}
 
-	snoop("RAW: \"%s\" by \2%s\2", s, origin);
-	logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "RAW %s", s);
+	snoop("RAW: \"%s\" by \2%s\2", s, si->su->nick);
+	logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "RAW %s", s);
 	sts("%s", s);
 }

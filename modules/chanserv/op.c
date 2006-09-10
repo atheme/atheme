@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: op.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: op.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,19 +12,19 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/op", FALSE, _modinit, _moddeinit,
-	"$Id: op.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: op.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void cs_cmd_op(char *origin);
-static void cs_cmd_deop(char *origin);
+static void cs_cmd_op(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_deop(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_fcmd_op(char *origin, char *chan);
 static void cs_fcmd_deop(char *origin, char *chan);
 
 command_t cs_op = { "OP", "Gives channel ops to a user.",
-                        AC_NONE, cs_cmd_op };
+                        AC_NONE, 2, cs_cmd_op };
 command_t cs_deop = { "DEOP", "Removes channel ops from a user.",
-                        AC_NONE, cs_cmd_deop };
+                        AC_NONE, 2, cs_cmd_deop };
 
 fcommand_t fc_op = { "!op", AC_NONE, cs_fcmd_op };
 fcommand_t fc_deop = { "!deop", AC_NONE, cs_fcmd_deop };
@@ -59,49 +59,49 @@ void _moddeinit()
 	help_delentry(cs_helptree, "DEOP");
 }
 
-static void cs_cmd_op(char *origin)
+static void cs_cmd_op(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *chan = strtok(NULL, " ");
-	char *nick = strtok(NULL, " ");
+	char *chan = parv[0];
+	char *nick = parv[1];
 	mychan_t *mc;
-	user_t *u, *tu;
+	user_t *tu;
 	chanuser_t *cu;
 
 	if (!chan)
 	{
-		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "OP");
-		notice(chansvs.nick, origin, "Syntax: OP <#channel> [nickname]");
+		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "OP");
+		notice(chansvs.nick, si->su->nick, "Syntax: OP <#channel> [nickname]");
 		return;
 	}
 
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is not registered.", chan);
+		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", chan);
 		return;
 	}
 
-	u = user_find_named(origin);
-	if (!chanacs_user_has_flag(mc, u, CA_OP))
+	si->su = user_find_named(si->su->nick);
+	if (!chanacs_user_has_flag(mc, si->su, CA_OP))
 	{
-		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+		notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
 		return;
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is closed.", chan);
+		notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", chan);
 		return;
 	}
 
 	/* figure out who we're going to op */
 	if (!nick)
-		tu = u;
+		tu = si->su;
 	else
 	{
 		if (!(tu = user_find_named(nick)))
 		{
-			notice(chansvs.nick, origin, "\2%s\2 is not online.", nick);
+			notice(chansvs.nick, si->su->nick, "\2%s\2 is not online.", nick);
 			return;
 		}
 	}
@@ -110,17 +110,17 @@ static void cs_cmd_op(char *origin)
 		return;
 
 	/* SECURE check; we can skip this if sender == target, because we already verified */
-	if ((u != tu) && (mc->flags & MC_SECURE) && !chanacs_user_has_flag(mc, tu, CA_OP) && !chanacs_user_has_flag(mc, tu, CA_AUTOOP))
+	if ((si->su != tu) && (mc->flags & MC_SECURE) && !chanacs_user_has_flag(mc, tu, CA_OP) && !chanacs_user_has_flag(mc, tu, CA_AUTOOP))
 	{
-		notice(chansvs.nick, origin, "You are not authorized to perform this operation.", mc->name);
-		notice(chansvs.nick, origin, "\2%s\2 has the SECURE option enabled, and \2%s\2 does not have appropriate access.", mc->name, tu->nick);
+		notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.", mc->name);
+		notice(chansvs.nick, si->su->nick, "\2%s\2 has the SECURE option enabled, and \2%s\2 does not have appropriate access.", mc->name, tu->nick);
 		return;
 	}
 
 	cu = chanuser_find(mc->chan, tu);
 	if (!cu)
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is not on \2%s\2.", tu->nick, mc->name);
+		notice(chansvs.nick, si->su->nick, "\2%s\2 is not on \2%s\2.", tu->nick, mc->name);
 		return;
 	}
 
@@ -128,57 +128,57 @@ static void cs_cmd_op(char *origin)
 	cu->modes |= CMODE_OP;
 
 	/* TODO: Add which username had access to perform the command */
-	if (tu != u)
-		notice(chansvs.nick, tu->nick, "You have been opped on %s by %s", mc->name, origin);
+	if (tu != si->su)
+		notice(chansvs.nick, tu->nick, "You have been opped on %s by %s", mc->name, si->su->nick);
 
-	logcommand(chansvs.me, u, CMDLOG_SET, "%s OP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
-	if (!chanuser_find(mc->chan, u))
-		notice(chansvs.nick, origin, "\2%s\2 has been opped on \2%s\2.", tu->nick, mc->name);
+	logcommand(chansvs.me, si->su, CMDLOG_SET, "%s OP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
+	if (!chanuser_find(mc->chan, si->su))
+		notice(chansvs.nick, si->su->nick, "\2%s\2 has been opped on \2%s\2.", tu->nick, mc->name);
 }
 
-static void cs_cmd_deop(char *origin)
+static void cs_cmd_deop(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *chan = strtok(NULL, " ");
-	char *nick = strtok(NULL, " ");
+	char *chan = parv[0];
+	char *nick = parv[1];
 	mychan_t *mc;
-	user_t *u, *tu;
+	user_t *tu;
 	chanuser_t *cu;
 
 	if (!chan)
 	{
-		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "DEOP");
-		notice(chansvs.nick, origin, "Syntax: DEOP <#channel> [nickname]");
+		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "DEOP");
+		notice(chansvs.nick, si->su->nick, "Syntax: DEOP <#channel> [nickname]");
 		return;
 	}
 
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is not registered.", chan);
+		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", chan);
 		return;
 	}
 
-	u = user_find_named(origin);
-	if (!chanacs_user_has_flag(mc, u, CA_OP))
+	si->su = user_find_named(si->su->nick);
+	if (!chanacs_user_has_flag(mc, si->su, CA_OP))
 	{
-		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+		notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
 		return;
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is closed.", chan);
+		notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", chan);
 		return;
 	}
 
 	/* figure out who we're going to deop */
 	if (!nick)
-		tu = u;
+		tu = si->su;
 	else
 	{
 		if (!(tu = user_find_named(nick)))
 		{
-			notice(chansvs.nick, origin, "\2%s\2 is not online.", nick);
+			notice(chansvs.nick, si->su->nick, "\2%s\2 is not online.", nick);
 			return;
 		}
 	}
@@ -189,7 +189,7 @@ static void cs_cmd_deop(char *origin)
 	cu = chanuser_find(mc->chan, tu);
 	if (!cu)
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is not on \2%s\2.", tu->nick, mc->name);
+		notice(chansvs.nick, si->su->nick, "\2%s\2 is not on \2%s\2.", tu->nick, mc->name);
 		return;
 	}
 
@@ -197,12 +197,12 @@ static void cs_cmd_deop(char *origin)
 	cu->modes &= ~CMODE_OP;
 
 	/* TODO: Add which username had access to perform the command */
-	if (tu != u)
-		notice(chansvs.nick, tu->nick, "You have been deopped on %s by %s", mc->name, origin);
+	if (tu != si->su)
+		notice(chansvs.nick, tu->nick, "You have been deopped on %s by %s", mc->name, si->su->nick);
 
-	logcommand(chansvs.me, u, CMDLOG_SET, "%s DEOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
-	if (!chanuser_find(mc->chan, u))
-		notice(chansvs.nick, origin, "\2%s\2 has been deopped on \2%s\2.", tu->nick, mc->name);
+	logcommand(chansvs.me, si->su, CMDLOG_SET, "%s DEOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
+	if (!chanuser_find(mc->chan, si->su))
+		notice(chansvs.nick, si->su->nick, "\2%s\2 has been deopped on \2%s\2.", tu->nick, mc->name);
 }
 
 static void cs_fcmd_op(char *origin, char *chan)

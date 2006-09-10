@@ -4,7 +4,7 @@
  *
  * OperServ NOOP command.
  *
- * $Id: noop.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: noop.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/noop", TRUE, _modinit, _moddeinit,
-	"$Id: noop.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: noop.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -27,12 +27,11 @@ struct noop_ {
 list_t noop_hostmask_list;
 list_t noop_server_list;
 
-static void os_cmd_noop(char *origin);
+static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[]);
 static void check_user(user_t *u);
 static BlockHeap *noop_heap;
 
-command_t os_noop = { "NOOP", "Restricts IRCop access.", PRIV_NOOP,
-			os_cmd_noop };
+command_t os_noop = { "NOOP", "Restricts IRCop access.", PRIV_NOOP, 4, os_cmd_noop };
 
 list_t *os_cmdtree;
 list_t *os_helptree;
@@ -113,19 +112,19 @@ static noop_t *noop_find(char *target, list_t *list)
 }
 
 /* NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> [reason] */
-static void os_cmd_noop(char *origin)
+static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 {
 	node_t *n;
 	noop_t *np;
-	char *action = strtok(NULL, " ");
-	char *type = strtok(NULL, " ");
-	char *mask = strtok(NULL, " ");
-	char *reason = strtok(NULL, "");
+	char *action = parv[0];
+	char *type = parv[1];
+	char *mask = parv[2];
+	char *reason = parv[3];
 
 	if (!action || !type)
 	{
-		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "NOOP");
-		notice(opersvs.nick, origin, "Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]");
+		notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "NOOP");
+		notice(opersvs.nick, si->su->nick, "Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]");
 		return;
 	}
 
@@ -135,20 +134,20 @@ static void os_cmd_noop(char *origin)
 		{
 			if (!mask)
                         {
-				notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "NOOP");
-				notice(opersvs.nick, origin, "Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]");
+				notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "NOOP");
+				notice(opersvs.nick, si->su->nick, "Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]");
 				return;
 			}
 			if ((np = noop_find(mask, &noop_hostmask_list)))
 			{
-				notice(opersvs.nick, origin, "There is already a NOOP entry covering this target.");
+				notice(opersvs.nick, si->su->nick, "There is already a NOOP entry covering this target.");
 				return;
 			}
 
 			np = BlockHeapAlloc(noop_heap);
 
 			np->target = sstrdup(mask);
-			np->added_by = sstrdup(origin);
+			np->added_by = sstrdup(si->su->nick);
 
 			if (reason)
 				np->reason = sstrdup(reason);
@@ -158,8 +157,8 @@ static void os_cmd_noop(char *origin)
 			n = node_create();
 			node_add(np, n, &noop_hostmask_list);
 
-			logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "NOOP ADD HOSTMASK %s %s", np->target, np->reason);
-			notice(opersvs.nick, origin, "Added \2%s\2 to the hostmask NOOP list.", mask);
+			logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "NOOP ADD HOSTMASK %s %s", np->target, np->reason);
+			notice(opersvs.nick, si->su->nick, "Added \2%s\2 to the hostmask NOOP list.", mask);
 
 			return;
 		}
@@ -167,20 +166,20 @@ static void os_cmd_noop(char *origin)
 		{
 			if (!mask)
 			{
-				notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "NOOP");
-				notice(opersvs.nick, origin, "Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]");
+				notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "NOOP");
+				notice(opersvs.nick, si->su->nick, "Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]");
 				return;
 			}
 			if ((np = noop_find(mask, &noop_server_list)))
 			{
-				notice(opersvs.nick, origin, "There is already a NOOP entry covering this target.");
+				notice(opersvs.nick, si->su->nick, "There is already a NOOP entry covering this target.");
 				return;
 			}
 
 			np = BlockHeapAlloc(noop_heap);
 
 			np->target = sstrdup(mask);
-			np->added_by = sstrdup(origin);
+			np->added_by = sstrdup(si->su->nick);
 
 			if (reason)
 				np->reason = sstrdup(reason);
@@ -190,15 +189,15 @@ static void os_cmd_noop(char *origin)
 			n = node_create();
 			node_add(np, n, &noop_server_list);
 
-			logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "NOOP ADD SERVER %s %s", np->target, np->reason);
-			notice(opersvs.nick, origin, "Added \2%s\2 to the server NOOP list.", mask);
+			logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "NOOP ADD SERVER %s %s", np->target, np->reason);
+			notice(opersvs.nick, si->su->nick, "Added \2%s\2 to the server NOOP list.", mask);
 
 			return;
 		}
 		else
 		{
-			notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "NOOP");
-			notice(opersvs.nick, origin, "Syntax: NOOP ADD <HOSTMASK|SERVER> <mask> [reason]");
+			notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "NOOP");
+			notice(opersvs.nick, si->su->nick, "Syntax: NOOP ADD <HOSTMASK|SERVER> <mask> [reason]");
 		}			
 	}
 	else if (!strcasecmp(action, "DEL"))
@@ -207,18 +206,18 @@ static void os_cmd_noop(char *origin)
 		{
 			if (!mask)
 			{
-				notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "NOOP");
-				notice(opersvs.nick, origin, "Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]");
+				notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "NOOP");
+				notice(opersvs.nick, si->su->nick, "Syntax: NOOP <ADD|DEL|LIST> <HOSTMASK|SERVER> <mask> [reason]");
 				return;
 			}
 			if (!(np = noop_find(mask, &noop_hostmask_list)))
 			{
-				notice(opersvs.nick, origin, "There is no NOOP hostmask entry for this target.");
+				notice(opersvs.nick, si->su->nick, "There is no NOOP hostmask entry for this target.");
 				return;
 			}
 
-			logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "NOOP DEL HOSTMASK %s", np->target);
-			notice(opersvs.nick, origin, "Removed \2%s\2 from the hostmask NOOP list.", np->target);
+			logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "NOOP DEL HOSTMASK %s", np->target);
+			notice(opersvs.nick, si->su->nick, "Removed \2%s\2 from the hostmask NOOP list.", np->target);
 
 			n = node_find(np, &noop_hostmask_list);
 
@@ -236,12 +235,12 @@ static void os_cmd_noop(char *origin)
 		{
 			if (!(np = noop_find(mask, &noop_server_list)))
 			{
-				notice(opersvs.nick, origin, "There is no NOOP server entry for this target.");
+				notice(opersvs.nick, si->su->nick, "There is no NOOP server entry for this target.");
 				return;
 			}
 
-			logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "NOOP DEL SERVER %s", np->target);
-			notice(opersvs.nick, origin, "Removed \2%s\2 from the server NOOP list.", np->target);
+			logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "NOOP DEL SERVER %s", np->target);
+			notice(opersvs.nick, si->su->nick, "Removed \2%s\2 from the server NOOP list.", np->target);
 
 			n = node_find(np, &noop_server_list);
 
@@ -257,8 +256,8 @@ static void os_cmd_noop(char *origin)
 		}
 		else
 		{
-			notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "NOOP");
-			notice(opersvs.nick, origin, "Syntax: NOOP DEL <HOSTMASK|SERVER> <mask>");
+			notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "NOOP");
+			notice(opersvs.nick, si->su->nick, "Syntax: NOOP DEL <HOSTMASK|SERVER> <mask>");
 		}			
 	}
 	else if (!strcasecmp(action, "LIST"))
@@ -266,47 +265,47 @@ static void os_cmd_noop(char *origin)
 		if (!strcasecmp(type, "HOSTMASK"))
 		{
 			uint16_t i = 1;
-			logcommand(opersvs.me, user_find_named(origin), CMDLOG_GET, "NOOP LIST HOSTMASK");
-			notice(opersvs.nick, origin, "Hostmask NOOP list (%d entries):", noop_hostmask_list.count);
-			notice(opersvs.nick, origin, " ");
-			notice(opersvs.nick, origin, "Entry Hostmask                        Adder                 Reason");
-			notice(opersvs.nick, origin, "----- ------------------------------- --------------------- --------------------------");
+			logcommand(opersvs.me, si->su, CMDLOG_GET, "NOOP LIST HOSTMASK");
+			notice(opersvs.nick, si->su->nick, "Hostmask NOOP list (%d entries):", noop_hostmask_list.count);
+			notice(opersvs.nick, si->su->nick, " ");
+			notice(opersvs.nick, si->su->nick, "Entry Hostmask                        Adder                 Reason");
+			notice(opersvs.nick, si->su->nick, "----- ------------------------------- --------------------- --------------------------");
 
 			LIST_FOREACH(n, noop_hostmask_list.head)
 			{
 				np = n->data;
 
-				notice(opersvs.nick, origin, "%-5d %-31s %-21s %s", i, np->target, np->added_by, np->reason);
+				notice(opersvs.nick, si->su->nick, "%-5d %-31s %-21s %s", i, np->target, np->added_by, np->reason);
 				i++;
 			}
 
-			notice(opersvs.nick, origin, "----- ------------------------------- --------------------- --------------------------");
-			notice(opersvs.nick, origin, "End of Hostmask NOOP list.");
+			notice(opersvs.nick, si->su->nick, "----- ------------------------------- --------------------- --------------------------");
+			notice(opersvs.nick, si->su->nick, "End of Hostmask NOOP list.");
 		}
 		else if (!strcasecmp(type, "SERVER"))
 		{
 			uint16_t i = 1;
-			logcommand(opersvs.me, user_find_named(origin), CMDLOG_GET, "NOOP LIST SERVER");
-			notice(opersvs.nick, origin, "Server NOOP list (%d entries):", noop_server_list.count);
-			notice(opersvs.nick, origin, " ");
-			notice(opersvs.nick, origin, "Entry Hostmask                        Adder                 Reason");
-			notice(opersvs.nick, origin, "----- ------------------------------- --------------------- --------------------------");
+			logcommand(opersvs.me, si->su, CMDLOG_GET, "NOOP LIST SERVER");
+			notice(opersvs.nick, si->su->nick, "Server NOOP list (%d entries):", noop_server_list.count);
+			notice(opersvs.nick, si->su->nick, " ");
+			notice(opersvs.nick, si->su->nick, "Entry Hostmask                        Adder                 Reason");
+			notice(opersvs.nick, si->su->nick, "----- ------------------------------- --------------------- --------------------------");
 
 			LIST_FOREACH(n, noop_server_list.head)
 			{
 				np = n->data;
 
-				notice(opersvs.nick, origin, "%-5d %-31s %-21s %s", i, np->target, np->added_by, np->reason);
+				notice(opersvs.nick, si->su->nick, "%-5d %-31s %-21s %s", i, np->target, np->added_by, np->reason);
 				i++;
 			}
 
-			notice(opersvs.nick, origin, "----- ------------------------------- --------------------- --------------------------");
-			notice(opersvs.nick, origin, "End of Server NOOP list.");
+			notice(opersvs.nick, si->su->nick, "----- ------------------------------- --------------------- --------------------------");
+			notice(opersvs.nick, si->su->nick, "End of Server NOOP list.");
 		}
 		else
 		{
-			notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "NOOP");
-			notice(opersvs.nick, origin, "Syntax: NOOP LIST <HOSTMASK|SERVER>");
+			notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "NOOP");
+			notice(opersvs.nick, si->su->nick, "Syntax: NOOP LIST <HOSTMASK|SERVER>");
 		}			
 	}
 }

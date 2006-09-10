@@ -5,7 +5,7 @@
  * This file contains code for the UserServ LISTCHANS function.
  *   -- Contains an alias "MYACCESS" for legacy users
  *
- * $Id: listchans.c 6199 2006-08-21 09:44:29Z jilles $
+ * $Id: listchans.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,14 +13,14 @@
 DECLARE_MODULE_V1
 (
 	"userserv/listchans", FALSE, _modinit, _moddeinit,
-	"$Id: listchans.c 6199 2006-08-21 09:44:29Z jilles $",
+	"$Id: listchans.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void us_cmd_listchans(char *origin);
+static void us_cmd_listchans(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t us_myaccess = { "MYACCESS", "Alias for LISTCHANS", AC_NONE, us_cmd_listchans };
-command_t us_listchans = { "LISTCHANS", "Lists channels that you have access to.", AC_NONE, us_cmd_listchans };
+command_t us_listchans = { "LISTCHANS", "Lists channels that you have access to.", AC_NONE, 1, us_cmd_listchans };
+command_t us_myaccess = { "MYACCESS", "Alias for LISTCHANS", AC_NONE, 1, us_cmd_listchans };
 
 list_t *us_cmdtree, *us_helptree;
 
@@ -28,10 +28,10 @@ void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(us_cmdtree, "userserv/main", "us_cmdtree");
 	MODULE_USE_SYMBOL(us_helptree, "userserv/main", "us_helptree");
-	
+
 	command_add(&us_myaccess, us_cmdtree);
 	help_addentry(us_helptree, "MYACCESS", "help/userserv/listchans", NULL);
-	
+
 	command_add(&us_listchans, us_cmdtree);
 	help_addentry(us_helptree, "LISTCHANS", "help/userserv/listchans", NULL);
 }
@@ -40,27 +40,26 @@ void _moddeinit()
 {
 	command_delete(&us_myaccess, us_cmdtree);
 	help_delentry(us_helptree, "MYACCESS");
-	
+
 	command_delete(&us_listchans, us_cmdtree);
 	help_delentry(us_helptree, "LISTCHANS");
 }
 
-static void us_cmd_listchans(char *origin)
+static void us_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
 	myuser_t *mu;
 	node_t *n;
 	chanacs_t *ca;
 	uint32_t akicks = 0, i;
 
 	/* Optional target */
-	char *target = strtok(NULL, " ");
+	char *target = parv[0];
 
 	if (target)
 	{
-		if (!has_priv(u, PRIV_CHAN_AUSPEX))
+		if (!has_priv(si->su, PRIV_CHAN_AUSPEX))
 		{
-			notice(usersvs.nick, origin, "You are not authorized to use the target argument.");
+			notice(usersvs.nick, si->su->nick, "You are not authorized to use the target argument.");
 			return;
 		}
 
@@ -68,61 +67,61 @@ static void us_cmd_listchans(char *origin)
 
 		if (mu == NULL)
 		{
-			notice(usersvs.nick, origin, "The account \2%s\2 is not registered.", target);
+			notice(usersvs.nick, si->su->nick, "The account \2%s\2 is not registered.", target);
 			return;
 		}
 	}
 	else
 	{
-		mu = u->myuser;
+		mu = si->su->myuser;
 		if (mu == NULL)
 		{
-			notice(usersvs.nick, origin, "You are not logged in.");
+			notice(usersvs.nick, si->su->nick, "You are not logged in.");
 			return;
 		}
 	}
 
 
-	if (mu != u->myuser)
+	if (mu != si->su->myuser)
 	{	/* must have been an oper */
-		snoop("LISTCHANS: \2%s\2 on \2%s\2", u->nick, mu->name);
-		logcommand(usersvs.me, u, CMDLOG_ADMIN, "LISTCHANS %s", mu->name);
+		snoop("LISTCHANS: \2%s\2 on \2%s\2", si->su->nick, mu->name);
+		logcommand(usersvs.me, si->su, CMDLOG_ADMIN, "LISTCHANS %s", mu->name);
 	}
 	else
 	{	/* just a user, or oper is listing himself */
-		logcommand(usersvs.me, u, CMDLOG_GET, "LISTCHANS");
+		logcommand(usersvs.me, si->su, CMDLOG_GET, "LISTCHANS");
 	}
 
 	if (mu->chanacs.count == 0)
 	{
-		notice(usersvs.nick, origin, "No channel access was found for the account \2%s\2.", mu->name);
+		notice(usersvs.nick, si->su->nick, "No channel access was found for the account \2%s\2.", mu->name);
 		return;
 	}
-  
+
 	LIST_FOREACH(n, mu->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
 
 		if (is_founder(ca->mychan, mu))
-			notice(usersvs.nick, origin, "Founder of %s", ca->mychan->name);
+			notice(usersvs.nick, si->su->nick, "Founder of %s", ca->mychan->name);
 
 		switch (ca->level)
 		{
 			default:
 				/* don't tell users they're akicked (flag +b) */
 				if (!(ca->level & CA_AKICK))
-					notice(usersvs.nick, origin, "Access flag(s) %s in %s", bitmask_to_flags(ca->level, chanacs_flags), ca->mychan->name);
+					notice(usersvs.nick, si->su->nick, "Access flag(s) %s in %s", bitmask_to_flags(ca->level, chanacs_flags), ca->mychan->name);
 				else
-					akicks++;	
+					akicks++;
 		}
 	}
 
 	i = mu->chanacs.count - akicks;
 
 	if (i == 0)
-		notice(usersvs.nick, origin, "No channel access was found for the account \2%s\2.", mu->name);
+		notice(usersvs.nick, si->su->nick, "No channel access was found for the account \2%s\2.", mu->name);
 	else
-		notice(usersvs.nick, origin, "\2%d\2 channel access match%s for the account \2%s\2",
+		notice(usersvs.nick, si->su->nick, "\2%d\2 channel access match%s for the account \2%s\2",
 							i, (akicks > 1) ? "es" : "", mu->name);
 
 }

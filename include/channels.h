@@ -4,7 +4,7 @@
  *
  * Data structures for channel information.
  *
- * $Id: channels.h 6139 2006-08-19 13:07:07Z jilles $
+ * $Id: channels.h 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #ifndef CHANNELS_H
@@ -108,8 +108,8 @@ typedef struct {
 } hook_channel_topic_check_t;
 
 /* cmode.c */
-E void channel_mode(user_t *source, channel_t *chan, uint8_t parc, char *parv[]);
-E void channel_mode_va(user_t *source, channel_t *chan, uint8_t parc, char *parv0, ...);
+E void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[]);
+E void channel_mode_va(user_t *source, channel_t *chan, int parc, char *parv0, ...);
 E void clear_simple_modes(channel_t *c);
 E char *channel_modes(channel_t *c, boolean_t doparams);
 E void modestack_flush_channel(char *channel);

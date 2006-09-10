@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ RNC.
  *
- * $Id: rnc.c 6137 2006-08-19 12:42:57Z w00t $
+ * $Id: rnc.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rnc", FALSE, _modinit, _moddeinit,
-	"$Id: rnc.c 6137 2006-08-19 12:42:57Z w00t $",
+	"$Id: rnc.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Robin Burchell <surreal.w00t@gmail.com>"
 );
 
-static void os_cmd_rnc(char *origin);
+static void os_cmd_rnc(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_rnc = { "RNC", "Shows the most frequent realnames on the network", PRIV_USER_AUSPEX, os_cmd_rnc };
+command_t os_rnc = { "RNC", "Shows the most frequent realnames on the network", PRIV_USER_AUSPEX, 1, os_cmd_rnc };
 
 list_t *os_cmdtree;
 list_t *os_helptree;
@@ -45,9 +45,9 @@ void _moddeinit(void)
 	help_delentry(os_helptree, "RNC");
 }
 
-static void os_cmd_rnc(char *origin)
+static void os_cmd_rnc(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *param = strtok(NULL, " ");
+	char *param = parv[0];
 	int count = param ? atoi(param) : 20;
 	node_t *n1, *n2, *biggest = NULL;
 	user_t *u;
@@ -109,7 +109,7 @@ static void os_cmd_rnc(char *origin)
 		if (biggest == NULL)
 			break;
 
-		notice(opersvs.nick, origin, "\2%d\2: \2%d\2 matches for realname \2%s\2", i, ((rnc_t *)(biggest->data))->count, ((rnc_t *)biggest->data)->gecos);
+		notice(opersvs.nick, si->su->nick, "\2%d\2: \2%d\2 matches for realname \2%s\2", i, ((rnc_t *)(biggest->data))->count, ((rnc_t *)biggest->data)->gecos);
 		free(biggest->data);
 		node_del(biggest, &realnames);
 		node_free(biggest);
@@ -128,7 +128,7 @@ static void os_cmd_rnc(char *origin)
 		node_free(n1);
 	}
 
-	logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "RNC %d", count);
-	snoop("RNC: by \2%s\2", origin);
+	logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "RNC %d", count);
+	snoop("RNC: by \2%s\2", si->su->nick);
 }
 

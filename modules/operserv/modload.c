@@ -4,7 +4,7 @@
  *
  * Loads a new module in.
  *
- * $Id: modload.c 6173 2006-08-20 14:29:20Z jilles $
+ * $Id: modload.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,14 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modload", FALSE, _modinit, _moddeinit,
-	"$Id: modload.c 6173 2006-08-20 14:29:20Z jilles $",
+	"$Id: modload.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void os_cmd_modload(char *origin);
+static void os_cmd_modload(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_modload = { "MODLOAD", "Loads a module.",
-			 PRIV_ADMIN, os_cmd_modload };
+command_t os_modload = { "MODLOAD", "Loads a module.", PRIV_ADMIN, 20, os_cmd_modload };
 
 list_t *os_cmdtree;
 list_t *os_helptree;
@@ -39,32 +38,30 @@ void _moddeinit()
 	help_delentry(os_helptree, "MODLOAD");
 }
 
-static void os_cmd_modload(char *origin)
+static void os_cmd_modload(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *module;
 	module_t *m;
 	char pbuf[BUFSIZE + 1];
 	unsigned int i;
-	char *toload[BUFSIZE / 2];
 
-	i = 0;
-	while((module = strtok(NULL, " ")))
+	if (parc < 1)
 	{
-		toload[i++] = module;
-		if (i - 1 >= sizeof toload / sizeof *toload)
-			break;
+		notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "MODLOAD");
+		notice(opersvs.nick, si->su->nick, "Syntax: MODLOAD <module...>");
+		return;
 	}
-	toload[i] = NULL;
 	i = 0;
-	while ((module = toload[i++]))
+	while (i < parc)
 	{
+		module = parv[i++];
 		if (module_find_published(module))
 		{
-			notice(opersvs.nick, origin, "\2%s\2 is already loaded.", module);
+			notice(opersvs.nick, si->su->nick, "\2%s\2 is already loaded.", module);
 			continue;
 		}
 
-		logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "MODLOAD %s", module);
+		logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "MODLOAD %s", module);
 		if (*module != '/')
 		{
 			snprintf(pbuf, BUFSIZE, "%s/%s", MODDIR "/modules",
@@ -75,8 +72,8 @@ static void os_cmd_modload(char *origin)
 			m = module_load(module);
 
 		if (m != NULL)
-			notice(opersvs.nick, origin, "Module \2%s\2 loaded.", module);
+			notice(opersvs.nick, si->su->nick, "Module \2%s\2 loaded.", module);
 		else
-			notice(opersvs.nick, origin, "Module \2%s\2 failed to load.", module);
+			notice(opersvs.nick, si->su->nick, "Module \2%s\2 failed to load.", module);
 	}
 }

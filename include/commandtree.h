@@ -4,7 +4,7 @@
  *
  * Commandlist manipulation routines.
  *
- * $Id: commandtree.h 6085 2006-08-16 17:46:26Z jilles $
+ * $Id: commandtree.h 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #ifndef COMMANDLIST_H
@@ -14,14 +14,15 @@ typedef struct commandentry_ command_t;
 typedef struct fcommandentry_ fcommand_t;
 
 struct commandentry_ {
-	char *name;
-	char *desc;
+	const char *name;
+	const char *desc;
 	const char *access;
-	void (*cmd)(char *);
+        const int maxparc;
+	void (*cmd)(sourceinfo_t *, const int parc, char *parv[]);
 };
 
 struct fcommandentry_ {
-	char *name;
+	const char *name;
 	const char *access;
 	void (*cmd)(char *, char *);
 };
@@ -41,7 +42,9 @@ E void command_add(command_t *cmd, list_t *commandtree);
 E void command_add_many(command_t **cmd, list_t *commandtree);
 E void command_delete(command_t *cmd, list_t *commandtree);
 E void command_delete_many(command_t **cmd, list_t *commandtree);
-E void command_exec(service_t *svs, char *origin, char *cmd, list_t *commandtree);
+E command_t *command_find(list_t *commandtree, const char *command);
+E void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char *parv[]);
+E void command_exec_split(service_t *svs, sourceinfo_t *si, char *cmd, char *text, list_t *commandtree);
 E void command_help(char *mynick, char *origin, list_t *commandtree);
 E void command_help_short(char *mynick, char *origin, list_t *commandtree, char *maincmds);
 

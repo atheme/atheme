@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ VERIFY function.
  *
- * $Id: verify.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: verify.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/verify", FALSE, _modinit, _moddeinit,
-	"$Id: verify.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: verify.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void ns_cmd_verify(char *origin);
+static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_verify = { "VERIFY", "Verifies a nickname registration.", AC_NONE, ns_cmd_verify };
+command_t ns_verify = { "VERIFY", "Verifies a nickname registration.", AC_NONE, 3, ns_cmd_verify };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -37,34 +37,33 @@ void _moddeinit()
 	help_delentry(ns_helptree, "VERIFY");
 }
 
-static void ns_cmd_verify(char *origin)
+static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	metadata_t *md;
-	user_t *u = user_find_named(origin);
-	char *op = strtok(NULL, " ");
-	char *nick = strtok(NULL, " ");
-	char *key = strtok(NULL, " ");
+	char *op = parv[0];
+	char *nick = parv[1];
+	char *key = parv[2];
 
 	if (!op || !nick || !key)
 	{
-		notice(nicksvs.nick, origin, STR_INSUFFICIENT_PARAMS, "VERIFY");
-		notice(nicksvs.nick, origin, "Syntax: VERIFY <operation> <nickname> <key>");
+		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "VERIFY");
+		notice(nicksvs.nick, si->su->nick, "Syntax: VERIFY <operation> <nickname> <key>");
 		return;
 	}
 
 	if (!(mu = myuser_find(nick)))
 	{
-		notice(nicksvs.nick, origin, "\2%s\2 is not registered.", nick);
+		notice(nicksvs.nick, si->su->nick, "\2%s\2 is not registered.", nick);
 		return;
 	}
 
 	/* forcing users to log in before we verify
 	 * prevents some information leaks
 	 */
-	if (!(u->myuser == mu))
+	if (!(si->su->myuser == mu))
 	{
-		notice(nicksvs.nick, origin, "Please log in before attempting to verify your registration.");
+		notice(nicksvs.nick, si->su->nick, "Please log in before attempting to verify your registration.");
 		return;
 	}
 
@@ -72,7 +71,7 @@ static void ns_cmd_verify(char *origin)
 	{
 		if (!(mu->flags & MU_WAITAUTH) || !(md = metadata_find(mu, METADATA_USER, "private:verify:register:key")))
 		{
-			notice(nicksvs.nick, origin, "\2%s\2 is not awaiting authorization.", nick);
+			notice(nicksvs.nick, si->su->nick, "\2%s\2 is not awaiting authorization.", nick);
 			return;
 		}
 
@@ -80,23 +79,23 @@ static void ns_cmd_verify(char *origin)
 		{
 			mu->flags &= ~MU_WAITAUTH;
 
-			snoop("REGISTER:VS: \2%s\2 by \2%s\2", mu->email, origin);
-			logcommand(nicksvs.me, u, CMDLOG_SET, "VERIFY REGISTER (email: %s)", mu->email);
+			snoop("REGISTER:VS: \2%s\2 by \2%s\2", mu->email, si->su->nick);
+			logcommand(nicksvs.me, si->su, CMDLOG_SET, "VERIFY REGISTER (email: %s)", mu->email);
 
 			metadata_delete(mu, METADATA_USER, "private:verify:register:key");
 			metadata_delete(mu, METADATA_USER, "private:verify:register:timestamp");
 
-			notice(nicksvs.nick, origin, "\2%s\2 has now been verified.", mu->name);
-			notice(nicksvs.nick, origin, "Thank you for verifying your e-mail address! You have taken steps in "
+			notice(nicksvs.nick, si->su->nick, "\2%s\2 has now been verified.", mu->name);
+			notice(nicksvs.nick, si->su->nick, "Thank you for verifying your e-mail address! You have taken steps in "
 				"ensuring that your registrations are not exploited.");
-			ircd_on_login(origin, mu->name, NULL);
+			ircd_on_login(si->su->nick, mu->name, NULL);
 
 			return;
 		}
 
-		snoop("REGISTER:VF: \2%s\2 by \2%s\2", mu->email, origin);
-		logcommand(nicksvs.me, u, CMDLOG_SET, "failed VERIFY REGISTER (invalid key)");
-		notice(nicksvs.nick, origin, "Verification failed. Invalid key for \2%s\2.", mu->name);
+		snoop("REGISTER:VF: \2%s\2 by \2%s\2", mu->email, si->su->nick);
+		logcommand(nicksvs.me, si->su, CMDLOG_SET, "failed VERIFY REGISTER (invalid key)");
+		notice(nicksvs.nick, si->su->nick, "Verification failed. Invalid key for \2%s\2.", mu->name);
 
 		return;
 	}
@@ -104,38 +103,38 @@ static void ns_cmd_verify(char *origin)
 	{
 		if (!(md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:key")))
 		{
-			notice(nicksvs.nick, origin, "\2%s\2 is not awaiting authorization.", nick);
+			notice(nicksvs.nick, si->su->nick, "\2%s\2 is not awaiting authorization.", nick);
 			return;
 		}
 
 		if (!strcasecmp(key, md->value))
-                {
+		{
 			md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:newemail");
 
 			strlcpy(mu->email, md->value, EMAILLEN);
 
-			snoop("SET:EMAIL:VS: \2%s\2 by \2%s\2", mu->email, origin);
-			logcommand(nicksvs.me, u, CMDLOG_SET, "VERIFY EMAILCHG (email: %s)", mu->email);
+			snoop("SET:EMAIL:VS: \2%s\2 by \2%s\2", mu->email, si->su->nick);
+			logcommand(nicksvs.me, si->su, CMDLOG_SET, "VERIFY EMAILCHG (email: %s)", mu->email);
 
 			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:key");
 			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:newemail");
 			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:timestamp");
 
-			notice(nicksvs.nick, origin, "\2%s\2 has now been verified.", mu->email);
+			notice(nicksvs.nick, si->su->nick, "\2%s\2 has now been verified.", mu->email);
 
 			return;
-                }
+		}
 
-		snoop("REGISTER:VF: \2%s\2 by \2%s\2", mu->email, origin);
-		logcommand(nicksvs.me, u, CMDLOG_SET, "failed VERIFY EMAILCHG (invalid key)");
-		notice(nicksvs.nick, origin, "Verification failed. Invalid key for \2%s\2.", mu->name);
+		snoop("REGISTER:VF: \2%s\2 by \2%s\2", mu->email, si->su->nick);
+		logcommand(nicksvs.me, si->su, CMDLOG_SET, "failed VERIFY EMAILCHG (invalid key)");
+		notice(nicksvs.nick, si->su->nick, "Verification failed. Invalid key for \2%s\2.", mu->name);
 
 		return;
 	}
 	else
 	{
-		notice(nicksvs.nick, origin, "Invalid operation specified for \2VERIFY\2.");
-		notice(nicksvs.nick, origin, "Please double-check your verification e-mail.");
+		notice(nicksvs.nick, si->su->nick, "Invalid operation specified for \2VERIFY\2.");
+		notice(nicksvs.nick, si->su->nick, "Please double-check your verification e-mail.");
 		return;
 	}
 }

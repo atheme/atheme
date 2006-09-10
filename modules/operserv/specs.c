@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService SPECS command.
  *
- * $Id: specs.c 6127 2006-08-18 16:59:55Z jilles $
+ * $Id: specs.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,14 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"operserv/specs", FALSE, _modinit, _moddeinit,
-	"$Id: specs.c 6127 2006-08-18 16:59:55Z jilles $",
+	"$Id: specs.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void os_cmd_specs(char *origin);
+static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_specs = { "SPECS", "Shows oper flags.",
-                        AC_NONE, os_cmd_specs };
+command_t os_specs = { "SPECS", "Shows oper flags.", AC_NONE, 2, os_cmd_specs };
 
 list_t *os_cmdtree;
 list_t *os_helptree;
@@ -75,18 +74,18 @@ struct
 	{ NULL, NULL, NULL, NULL, NULL }
 };
 
-static void os_cmd_specs(char *origin)
+static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin), *tu = NULL;
+	user_t *u = si->su, *tu = NULL;
 	operclass_t *cl = NULL;
-	char *targettype = strtok(NULL, " ");
-	char *target = strtok(NULL, " ");
+	char *targettype = parv[0];
+	char *target = parv[1];
 	char nprivs[BUFSIZE], cprivs[BUFSIZE], gprivs[BUFSIZE], oprivs[BUFSIZE];
 	int i;
 
 	if (!has_any_privs(u))
 	{
-		notice(opersvs.nick, origin, "You are not authorized to use %s.", opersvs.nick);
+		notice(opersvs.nick, si->su->nick, "You are not authorized to use %s.", opersvs.nick);
 		return;
 	}
 
@@ -94,7 +93,7 @@ static void os_cmd_specs(char *origin)
 	{
 		if (!has_priv(u, PRIV_VIEWPRIVS))
 		{
-			notice(opersvs.nick, origin, "You do not have %s privilege.", PRIV_VIEWPRIVS);
+			notice(opersvs.nick, si->su->nick, "You do not have %s privilege.", PRIV_VIEWPRIVS);
 			return;
 		}
 		if (target == NULL)
@@ -104,17 +103,17 @@ static void os_cmd_specs(char *origin)
 			tu = user_find_named(target);
 			if (tu == NULL)
 			{
-				notice(opersvs.nick, origin, "\2%s\2 is not on IRC.", target);
+				notice(opersvs.nick, si->su->nick, "\2%s\2 is not on IRC.", target);
 				return;
 			}
 			if (!has_any_privs(tu))
 			{
-				notice(opersvs.nick, origin, "\2%s\2 is unprivileged.", tu->nick);
+				notice(opersvs.nick, si->su->nick, "\2%s\2 is unprivileged.", tu->nick);
 				return;
 			}
 			if (is_internal_client(tu))
 			{
-				notice(opersvs.nick, origin, "\2%s\2 is an internal client.", tu->nick);
+				notice(opersvs.nick, si->su->nick, "\2%s\2 is an internal client.", tu->nick);
 				return;
 			}
 		}
@@ -123,13 +122,13 @@ static void os_cmd_specs(char *origin)
 			cl = operclass_find(target);
 			if (cl == NULL)
 			{
-				notice(opersvs.nick, origin, "No such oper class \2%s\2.", target);
+				notice(opersvs.nick, si->su->nick, "No such oper class \2%s\2.", target);
 				return;
 			}
 		}
 		else
 		{
-			notice(opersvs.nick, origin, "Valid target types: USER, OPERCLASS.");
+			notice(opersvs.nick, si->su->nick, "Valid target types: USER, OPERCLASS.");
 			return;
 		}
 	}
@@ -171,22 +170,22 @@ static void os_cmd_specs(char *origin)
 	}
 
 	if (tu)
-		notice(opersvs.nick, origin, "Privileges for \2%s\2:", tu->nick);
+		notice(opersvs.nick, si->su->nick, "Privileges for \2%s\2:", tu->nick);
 	else
-		notice(opersvs.nick, origin, "Privileges for oper class \2%s\2:", cl->name);
+		notice(opersvs.nick, si->su->nick, "Privileges for oper class \2%s\2:", cl->name);
 
 	if (*nprivs)
-		notice(opersvs.nick, origin, "\2Nicknames/accounts\2: %s", nprivs);
+		notice(opersvs.nick, si->su->nick, "\2Nicknames/accounts\2: %s", nprivs);
 	if (*cprivs)
-		notice(opersvs.nick, origin, "\2Channels\2: %s", cprivs);
+		notice(opersvs.nick, si->su->nick, "\2Channels\2: %s", cprivs);
 	if (*gprivs)
-		notice(opersvs.nick, origin, "\2General\2: %s", gprivs);
+		notice(opersvs.nick, si->su->nick, "\2General\2: %s", gprivs);
 	if (*oprivs)
-		notice(opersvs.nick, origin, "\2OperServ\2: %s", oprivs);
-	notice(opersvs.nick, origin, "End of privileges");
+		notice(opersvs.nick, si->su->nick, "\2OperServ\2: %s", oprivs);
+	notice(opersvs.nick, si->su->nick, "End of privileges");
 
 	if (tu)
-		logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "SPECS USER %s!%s@%s", tu->nick, tu->user, tu->vhost);
+		logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "SPECS USER %s!%s@%s", tu->nick, tu->user, tu->vhost);
 	else
-		logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "SPECS OPERCLASS %s", cl->name);
+		logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "SPECS OPERCLASS %s", cl->name);
 }

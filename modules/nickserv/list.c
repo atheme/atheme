@@ -5,7 +5,7 @@
  * This file contains code for the NickServ LIST function.
  * Based on Alex Lambert's LISTEMAIL.
  *
- * $Id: list.c 6207 2006-08-21 14:41:15Z jilles $
+ * $Id: list.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,13 +13,13 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 6207 2006-08-21 14:41:15Z jilles $",
+	"$Id: list.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void ns_cmd_list(char *origin);
+static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_list = { "LIST", "Lists nicknames registered matching a given pattern.", PRIV_USER_AUSPEX, ns_cmd_list };
+command_t ns_list = { "LIST", "Lists nicknames registered matching a given pattern.", PRIV_USER_AUSPEX, 1, ns_cmd_list };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -68,40 +68,35 @@ static int list_foreach_cb(dictionary_elem_t *delem, void *privdata)
 
 			strlcat(buf, "\2[marked]\2", BUFSIZE);
 		}
-				
+
 		notice(nicksvs.nick, state->origin, "- %s (%s) %s", mu->name, mu->email, buf);
 		state->matches++;
 	}
 	return 0;
 }
 
-static void ns_cmd_list(char *origin)
+static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
-	char *nickpattern = strtok(NULL, " ");
+	char *nickpattern = parv[0];
 	struct list_state state;
-
-	if (u == NULL)
-		return;
 
 	if (!nickpattern)
 	{
-		notice(nicksvs.nick, origin, STR_INSUFFICIENT_PARAMS, "LIST");
-		notice(nicksvs.nick, origin, "Syntax: LIST <nickname pattern>");
+		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "LIST");
+		notice(nicksvs.nick, si->su->nick, "Syntax: LIST <nickname pattern>");
 		return;
 	}
 
-	snoop("LIST:NICKS: \2%s\2 by \2%s\2", nickpattern, origin);
-	notice(nicksvs.nick, origin, "Nicknames matching pattern \2%s\2:", nickpattern);
+	snoop("LIST:nicknameS: \2%s\2 by \2%s\2", nickpattern, si->su->nick);
 
-	state.origin = origin;
+	state.origin = si->su->nick;
 	state.pattern = nickpattern;
 	state.matches = 0;
 	dictionary_foreach(mulist, list_foreach_cb, &state);
 
-	logcommand(nicksvs.me, u, CMDLOG_ADMIN, "LIST %s (%d matches)", nickpattern, state.matches);
+	logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "LIST %s (%d matches)", nickpattern, state.matches);
 	if (state.matches == 0)
-		notice(nicksvs.nick, origin, "No nicknames matched pattern \2%s\2", nickpattern);
+		notice(nicksvs.nick, si->su->nick, "No nicknames matched pattern \2%s\2", nickpattern);
 	else
-		notice(nicksvs.nick, origin, "\2%d\2 match%s for pattern \2%s\2", state.matches, state.matches != 1 ? "es" : "", nickpattern);
+		notice(nicksvs.nick, si->su->nick, "\2%d\2 match%s for pattern \2%s\2", state.matches, state.matches != 1 ? "es" : "", nickpattern);
 }

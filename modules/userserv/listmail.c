@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ LISTMAIL function.
  *
- * $Id: listmail.c 6205 2006-08-21 14:36:38Z jilles $
+ * $Id: listmail.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"userserv/listmail", FALSE, _modinit, _moddeinit,
-	"$Id: listmail.c 6205 2006-08-21 14:36:38Z jilles $",
+	"$Id: listmail.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void us_cmd_listmail(char *origin);
+static void us_cmd_listmail(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t us_listmail = { "LISTMAIL", "Lists accounts registered to an e-mail address.", PRIV_USER_AUSPEX, us_cmd_listmail };
+command_t us_listmail = { "LISTMAIL", "Lists accounts registered to an e-mail address.", PRIV_USER_AUSPEX, 1, us_cmd_listmail };
 
 list_t *us_cmdtree, *us_helptree;
 
@@ -62,32 +62,28 @@ static int listmail_foreach_cb(dictionary_elem_t *delem, void *privdata)
 	return 0;
 }
 
-static void us_cmd_listmail(char *origin)
+static void us_cmd_listmail(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
-	char *email = strtok(NULL, " ");
+	char *email = parv[0];
 	struct listmail_state state;
-
-	if (u == NULL)
-		return;
 
 	if (!email)
 	{
-		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "LISTMAIL");
-		notice(usersvs.nick, origin, "Syntax: LISTMAIL <email>");
+		notice(usersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "LISTMAIL");
+		notice(usersvs.nick, si->su->nick, "Syntax: LISTMAIL <email>");
 		return;
 	}
 
-	snoop("LISTMAIL: \2%s\2 by \2%s\2", email, origin);
+	snoop("LISTMAIL: \2%s\2 by \2%s\2", email, si->su->nick);
 
 	state.matches = 0;
 	state.pattern = email;
-	state.origin = origin;
+	state.origin = si->su->nick;
 	dictionary_foreach(mulist, listmail_foreach_cb, &state);
 
-	logcommand(usersvs.me, u, CMDLOG_ADMIN, "LISTMAIL %s (%d matches)", email, state.matches);
+	logcommand(usersvs.me, si->su, CMDLOG_ADMIN, "LISTMAIL %s (%d matches)", email, state.matches);
 	if (state.matches == 0)
-		notice(usersvs.nick, origin, "No accounts matched e-mail address \2%s\2", email);
+		notice(usersvs.nick, si->su->nick, "No accounts matched e-mail address \2%s\2", email);
 	else
-		notice(usersvs.nick, origin, "\2%d\2 match%s for e-mail address \2%s\2", state.matches, state.matches != 1 ? "es" : "", email);
+		notice(usersvs.nick, si->su->nick, "\2%d\2 match%s for e-mail address \2%s\2", state.matches, state.matches != 1 ? "es" : "", email);
 }

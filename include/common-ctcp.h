@@ -4,7 +4,7 @@
  *
  * This file contains IRC interaction routines.
  *
- * $Id$
+ * $Id: common-ctcp.h 48 2006-07-19 13:51:17Z pippijn $
  */
 
 #ifndef COMMON_CTCP_H

@@ -4,7 +4,7 @@
  *
  * This file contains code for the UserServ DROP function.
  *
- * $Id: drop.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: drop.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"userserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: drop.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void us_cmd_drop(char *origin);
+static void us_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t us_drop = { "DROP", "Drops a account registration.", AC_NONE, us_cmd_drop };
+command_t us_drop = { "DROP", "Drops a account registration.", AC_NONE, 2, us_cmd_drop };
 
 list_t *us_cmdtree, *us_helptree;
 
@@ -37,44 +37,43 @@ void _moddeinit()
 	help_delentry(us_helptree, "DROP");
 }
 
-static void us_cmd_drop(char *origin)
+static void us_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
 	myuser_t *mu;
-	char *acc = strtok(NULL, " ");
-	char *pass = strtok(NULL, " ");
+	char *acc = parv[0];
+	char *pass = parv[1];
 
 	if (!acc)
 	{
-		notice(usersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "DROP");
-		notice(usersvs.nick, origin, "Syntax: DROP <account> <password>");
+		notice(usersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "DROP");
+		notice(usersvs.nick, si->su->nick, "Syntax: DROP <account> <password>");
 		return;
 	}
 
 	if (!(mu = myuser_find(acc)))
 	{
-		notice(usersvs.nick, origin, "\2%s\2 is not registered.", acc);
+		notice(usersvs.nick, si->su->nick, "\2%s\2 is not registered.", acc);
 		return;
 	}
 
-	if ((pass || !has_priv(u, PRIV_USER_ADMIN)) && !verify_password(mu, pass))
+	if ((pass || !has_priv(si->su, PRIV_USER_ADMIN)) && !verify_password(mu, pass))
 	{
-		notice(usersvs.nick, origin, "Authentication failed. Invalid password for \2%s\2.", mu->name);
+		notice(usersvs.nick, si->su->nick, "Authentication failed. Invalid password for \2%s\2.", mu->name);
 		return;
 	}
 
 	if (is_soper(mu))
 	{
-		notice(usersvs.nick, origin, "The account \2%s\2 belongs to a services operator; it cannot be dropped.", acc);
+		notice(usersvs.nick, si->su->nick, "The account \2%s\2 belongs to a services operator; it cannot be dropped.", acc);
 		return;
 	}
 
 	if (!pass)
-		wallops("%s dropped the account \2%s\2", origin, mu->name);
+		wallops("%s dropped the account \2%s\2", si->su->nick, mu->name);
 
-	snoop("DROP: \2%s\2 by \2%s\2", mu->name, u->nick);
-	logcommand(usersvs.me, u, pass ? CMDLOG_REGISTER : CMDLOG_ADMIN, "DROP %s%s", mu->name, pass ? "" : " (admin)");
+	snoop("DROP: \2%s\2 by \2%s\2", mu->name, si->su->nick);
+	logcommand(usersvs.me, si->su, pass ? CMDLOG_REGISTER : CMDLOG_ADMIN, "DROP %s%s", mu->name, pass ? "" : " (admin)");
 	hook_call_event("user_drop", mu);
-	notice(usersvs.nick, origin, "The account \2%s\2 has been dropped.", mu->name);
+	notice(usersvs.nick, si->su->nick, "The account \2%s\2 has been dropped.", mu->name);
 	myuser_delete(mu);
 }

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 6017 2006-08-07 14:06:59Z jilles $
+ * $Id: ban.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,19 +12,19 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", FALSE, _modinit, _moddeinit,
-	"$Id: ban.c 6017 2006-08-07 14:06:59Z jilles $",
+	"$Id: ban.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void cs_cmd_ban(char *origin);
-static void cs_cmd_unban(char *origin);
+static void cs_cmd_ban(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_fcmd_ban(char *origin, char *channel);
 static void cs_fcmd_unban(char *origin, char *channel);
 
 command_t cs_ban = { "BAN", "Sets a ban on a channel.",
-                        AC_NONE, cs_cmd_ban };
+                        AC_NONE, 2, cs_cmd_ban };
 command_t cs_unban = { "UNBAN", "Removes a ban on a channel.",
-			AC_NONE, cs_cmd_unban };
+			AC_NONE, 2, cs_cmd_unban };
 
 fcommand_t fc_ban = { "!ban", AC_NONE, cs_fcmd_ban };
 fcommand_t fc_unban = { "!unban", AC_NONE, cs_fcmd_unban };
@@ -59,49 +59,48 @@ void _moddeinit()
 	help_delentry(cs_helptree, "UNBAN");
 }
 
-static void cs_cmd_ban (char *origin)
+static void cs_cmd_ban(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *channel = strtok(NULL, " ");
-	char *target = strtok(NULL, " ");
+	char *channel = parv[0];
+	char *target = parv[1];
 	channel_t *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
-	user_t *u = user_find_named(origin);
 	user_t *tu;
 
 	if (!channel || !target)
 	{
-		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "BAN");
-		notice(chansvs.nick, origin, "Syntax: BAN <#channel> <nickname|hostmask>");
+		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "BAN");
+		notice(chansvs.nick, si->su->nick, "Syntax: BAN <#channel> <nickname|hostmask>");
 		return;
 	}
 
 	if (!c)
 	{
-		notice(chansvs.nick, origin, "Channel \2%s\2 does not exist.", channel);
+		notice(chansvs.nick, si->su->nick, "Channel \2%s\2 does not exist.", channel);
 		return;
 	}
 
 	if (!mc)
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is not registered.", channel);
+		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", channel);
 		return;
 	}
 
-	if (!u->myuser)
+	if (!si->su->myuser)
 	{
-		notice(chansvs.nick, origin, "You are not logged in.");
+		notice(chansvs.nick, si->su->nick, "You are not logged in.");
 		return;
 	}
 
-	if (!chanacs_user_has_flag(mc, u, CA_REMOVE))
+	if (!chanacs_user_has_flag(mc, si->su, CA_REMOVE))
 	{
-		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+		notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
 		return;
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is closed.", channel);
+		notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", channel);
 		return;
 	}
 
@@ -109,9 +108,9 @@ static void cs_cmd_ban (char *origin)
 	{
 		modestack_mode_param(chansvs.nick, c->name, MTYPE_ADD, 'b', target);
 		chanban_add(c, target, 'b');
-		logcommand(chansvs.me, u, CMDLOG_DO, "%s BAN %s", mc->name, target);
-		if (!chanuser_find(mc->chan, u))
-			notice(chansvs.nick, origin, "Banned \2%s\2 on \2%s\2.", target, channel);
+		logcommand(chansvs.me, si->su, CMDLOG_DO, "%s BAN %s", mc->name, target);
+		if (!chanuser_find(mc->chan, si->su))
+			notice(chansvs.nick, si->su->nick, "Banned \2%s\2 on \2%s\2.", target, channel);
 		return;
 	}
 	else if ((tu = user_find_named(target)))
@@ -125,60 +124,59 @@ static void cs_cmd_ban (char *origin)
 
 		modestack_mode_param(chansvs.nick, c->name, MTYPE_ADD, 'b', hostbuf);
 		chanban_add(c, hostbuf, 'b');
-		logcommand(chansvs.me, u, CMDLOG_DO, "%s BAN %s (for user %s!%s@%s)", mc->name, hostbuf, tu->nick, tu->user, tu->vhost);
-		if (!chanuser_find(mc->chan, u))
-			notice(chansvs.nick, origin, "Banned \2%s\2 on \2%s\2.", target, channel);
+		logcommand(chansvs.me, si->su, CMDLOG_DO, "%s BAN %s (for user %s!%s@%s)", mc->name, hostbuf, tu->nick, tu->user, tu->vhost);
+		if (!chanuser_find(mc->chan, si->su))
+			notice(chansvs.nick, si->su->nick, "Banned \2%s\2 on \2%s\2.", target, channel);
 		return;
 	}
 	else
 	{
-		notice(chansvs.nick, origin, "Invalid nickname/hostmask provided: \2%s\2", target);
-		notice(chansvs.nick, origin, "Syntax: BAN <#channel> <nickname|hostmask>");
+		notice(chansvs.nick, si->su->nick, "Invalid nickname/hostmask provided: \2%s\2", target);
+		notice(chansvs.nick, si->su->nick, "Syntax: BAN <#channel> <nickname|hostmask>");
 		return;
 	}
 }
 
-static void cs_cmd_unban (char *origin)
+static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
 {
-        char *channel = strtok(NULL, " ");
-        char *target = strtok(NULL, " ");
+        char *channel = parv[0];
+        char *target = parv[1];
         channel_t *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
-	user_t *u = user_find_named(origin);
 	user_t *tu;
 	chanban_t *cb;
 
 	if (!target)
-		target = origin;
+		target = si->su->nick;
 
 	if (!channel)
 	{
-		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "UNBAN");
-		notice(chansvs.nick, origin, "Syntax: UNBAN <#channel> <nickname|hostmask>");
+		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "UNBAN");
+		notice(chansvs.nick, si->su->nick, "Syntax: UNBAN <#channel> <nickname|hostmask>");
 		return;
 	}
 
 	if (!c)
 	{
-		notice(chansvs.nick, origin, "Channel \2%s\2 does not exist.", channel);
+		notice(chansvs.nick, si->su->nick, "Channel \2%s\2 does not exist.", channel);
 		return;
 	}
 
 	if (!mc)
 	{
-		notice(chansvs.nick, origin, "Channel \2%s\2 is not registered.", channel);
+		notice(chansvs.nick, si->su->nick, "Channel \2%s\2 is not registered.", channel);
 		return;
 	}
 
-	if (!u->myuser)
+	if (!si->su->myuser)
 	{
-		notice(chansvs.nick, origin, "You are not logged in.");
+		notice(chansvs.nick, si->su->nick, "You are not logged in.");
 		return;
 	}
 
-	if (!chanacs_user_has_flag(mc, u, CA_REMOVE))
+	if (!chanacs_user_has_flag(mc, si->su, CA_REMOVE))
 	{
-		notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
+		notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
 		return;
 	}
 
@@ -203,17 +201,17 @@ static void cs_cmd_unban (char *origin)
 
 			if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2) || !match(cb->mask, hostbuf3) || !match_cidr(cb->mask, hostbuf3))
 			{
-				logcommand(chansvs.me, u, CMDLOG_DO, "%s UNBAN %s (for user %s)", mc->name, cb->mask, hostbuf2);
+				logcommand(chansvs.me, si->su, CMDLOG_DO, "%s UNBAN %s (for user %s)", mc->name, cb->mask, hostbuf2);
 				modestack_mode_param(chansvs.nick, c->name, MTYPE_DEL, 'b', cb->mask);
 				chanban_delete(cb);
 				count++;
 			}
 		}
 		if (count > 0)
-			notice(chansvs.nick, origin, "Unbanned \2%s\2 on \2%s\2 (%d ban%s removed).",
+			notice(chansvs.nick, si->su->nick, "Unbanned \2%s\2 on \2%s\2 (%d ban%s removed).",
 				target, channel, count, (count != 1 ? "s" : ""));
 		else
-			notice(chansvs.nick, origin, "No bans found matching \2%s\2 on \2%s\2.", target, channel);
+			notice(chansvs.nick, si->su->nick, "No bans found matching \2%s\2 on \2%s\2.", target, channel);
 		return;
 	}
 	else if ((cb = chanban_find(c, target, 'b')) != NULL || validhostmask(target))
@@ -222,17 +220,17 @@ static void cs_cmd_unban (char *origin)
 		{
 			modestack_mode_param(chansvs.nick, c->name, MTYPE_DEL, 'b', target);
 			chanban_delete(cb);
-			logcommand(chansvs.me, u, CMDLOG_DO, "%s UNBAN %s", mc->name, target);
-			if (!chanuser_find(mc->chan, u))
-				notice(chansvs.nick, origin, "Unbanned \2%s\2 on \2%s\2.", target, channel);
+			logcommand(chansvs.me, si->su, CMDLOG_DO, "%s UNBAN %s", mc->name, target);
+			if (!chanuser_find(mc->chan, si->su))
+				notice(chansvs.nick, si->su->nick, "Unbanned \2%s\2 on \2%s\2.", target, channel);
 		}
 
 		return;
 	}
         else
         {
-		notice(chansvs.nick, origin, "Invalid nickname/hostmask provided: \2%s\2", target);
-		notice(chansvs.nick, origin, "Syntax: UNBAN <#channel> [nickname|hostmask]");
+		notice(chansvs.nick, si->su->nick, "Invalid nickname/hostmask provided: \2%s\2", target);
+		notice(chansvs.nick, si->su->nick, "Syntax: UNBAN <#channel> [nickname|hostmask]");
 		return;
         }
 }

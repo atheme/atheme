@@ -1,3 +1,11 @@
+-  Get rid of code duplication between ChanServ fantasy and normal commands
+-  Same for IRC and XML-RPC
+-  Move all modules to sourceinfo
+-+ Convert handle_ctcp_common
+
+-- Implement JSON
+-  Finish off Dutch and German translations
+
 TODO information is available on our tracker:
 	http://www.bsdnerds.org/
 

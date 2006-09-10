@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGOUT functions.
  *
- * $Id: logout.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: logout.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,15 +12,14 @@
 DECLARE_MODULE_V1
 (
 	"userserv/logout", FALSE, _modinit, _moddeinit,
-	"$Id: logout.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: logout.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void us_cmd_logout(char *origin);
+static void us_cmd_logout(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t us_logout = { "LOGOUT", "Logs your services session out.",
-                        AC_NONE, us_cmd_logout };
-                                                                                   
+command_t us_logout = { "LOGOUT", "Logs your services session out.", AC_NONE, 2, us_cmd_logout };
+
 list_t *us_cmdtree, *us_helptree;
 
 void _modinit(module_t *m)
@@ -28,7 +27,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(us_cmdtree, "userserv/main", "us_cmdtree");
 	MODULE_USE_SYMBOL(us_helptree, "userserv/main", "us_helptree");
 
-        command_add(&us_logout, us_cmdtree);
+	command_add(&us_logout, us_cmdtree);
 	help_addentry(us_helptree, "LOGOUT", "help/userserv/logout", NULL);
 }
 
@@ -38,17 +37,16 @@ void _moddeinit()
 	help_delentry(us_helptree, "LOGOUT");
 }
 
-static void us_cmd_logout(char *origin)
+static void us_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
-	user_t *source = u;
+	user_t *u = si->su;
 	node_t *n, *tn;
-	char *user = strtok(NULL, " ");
-	char *pass = strtok(NULL, " ");
+	char *user = parv[0];
+	char *pass = parv[1];
 
-	if ((!u->myuser) && (!user || !pass))
+	if ((!si->su->myuser) && (!user || !pass))
 	{
-		notice(usersvs.nick, origin, "You are not logged in.");
+		notice(usersvs.nick, si->su->nick, "You are not logged in.");
 		return;
 	}
 
@@ -58,7 +56,7 @@ static void us_cmd_logout(char *origin)
 
 		if (!mu)
 		{
-			notice(usersvs.nick, origin, "\2%s\2 is not registered.", user);
+			notice(usersvs.nick, si->su->nick, "\2%s\2 is not registered.", user);
 			return;
 		}
 
@@ -75,36 +73,36 @@ static void us_cmd_logout(char *origin)
 		}
 #endif
 		/* remove this for now -- jilles */
-		notice(usersvs.nick, origin, "External logout is not yet implemented.");
+		notice(usersvs.nick, si->su->nick, "External logout is not yet implemented.");
 		return;
 	}
 
-	if (is_soper(u->myuser))
-		snoop("DESOPER: \2%s\2 as \2%s\2", u->nick, u->myuser->name);
+	if (is_soper(si->su->myuser))
+		snoop("DESOPER: \2%s\2 as \2%s\2", si->su->nick, si->su->myuser->name);
 
-	if (irccasecmp(origin, u->nick))
+	if (si->su != u)
 	{
-		logcommand(usersvs.me, source, CMDLOG_LOGIN, "LOGOUT %s", u->nick);
-		notice(usersvs.nick, origin, "\2%s\2 has been logged out.", u->nick);
+		logcommand(usersvs.me, si->su, CMDLOG_LOGIN, "LOGOUT %s", u->nick);
+		notice(usersvs.nick, si->su->nick, "\2%s\2 has been logged out.", si->su->nick);
 	}
 	else
 	{
-		logcommand(usersvs.me, source, CMDLOG_LOGIN, "LOGOUT");
-		notice(usersvs.nick, origin, "You have been logged out.");
+		logcommand(usersvs.me, si->su, CMDLOG_LOGIN, "LOGOUT");
+		notice(usersvs.nick, si->su->nick, "You have been logged out.");
 	}
 
-	u->myuser->lastlogin = CURRTIME;
-	if (!ircd_on_logout(u->nick, u->myuser->name, NULL))
+	si->su->myuser->lastlogin = CURRTIME;
+	if (!ircd_on_logout(si->su->nick, si->su->myuser->name, NULL))
 	{
-		LIST_FOREACH_SAFE(n, tn, u->myuser->logins.head)
+		LIST_FOREACH_SAFE(n, tn, si->su->myuser->logins.head)
 		{
-			if (n->data == u)
+			if (n->data == si->su)
 			{
-				node_del(n, &u->myuser->logins);
+				node_del(n, &si->su->myuser->logins);
 				node_free(n);
 				break;
 			}
 		}
-		u->myuser = NULL;
+		si->su->myuser = NULL;
 	}
 }

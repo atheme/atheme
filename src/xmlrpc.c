@@ -1111,7 +1111,7 @@ int xmlrpc_set_options(int type, const char *value)
 
 char *xmlrpc_char_encode(char *outbuffer, char *s1)
 {
-	int i;
+	long unsigned int i;
 	unsigned char c;
 	char buf2[15];
 	char buf3[XMLRPC_BUFSIZE];
@@ -1124,12 +1124,12 @@ char *xmlrpc_char_encode(char *outbuffer, char *s1)
 		return (char *)"";
 	}
 
-	for (i = 0; i <= (int)strlen(s1) - 1; i++)
+	for (i = 0; i <= strlen(s1) - 1; i++)
 	{
 		c = s1[i];
 		if (c > 127)
 		{
-			snprintf(buf2, 15, "&#%ld;", (long int)c);
+			snprintf(buf2, 15, "&#%c;", c);
 			if (outbuffer)
 			{
 				snprintf(buf3, XMLRPC_BUFSIZE, "%s%s", outbuffer, buf2);

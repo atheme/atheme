@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ RWATCH.
  *
- * $Id: rwatch.c 6317 2006-09-06 20:03:32Z pippijn $
+ * $Id: rwatch.c 6337 2006-09-10 15:54:41Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rwatch", FALSE, _modinit, _moddeinit,
-	"$Id: rwatch.c 6317 2006-09-06 20:03:32Z pippijn $",
+	"$Id: rwatch.c 6337 2006-09-10 15:54:41Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void rwatch_newuser(void *);
 
-static void os_cmd_rwatch(char *);
+static void os_cmd_rwatch(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_rwatch_list(char *, char *);
 static void os_cmd_rwatch_add(char *, char *);
 static void os_cmd_rwatch_del(char *, char *);
@@ -46,7 +46,7 @@ struct rwatch_
 	regex_t *re;
 };
 
-command_t os_rwatch = { "RWATCH", "Performs actions on connecting clients matching regexes.", PRIV_USER_AUSPEX, os_cmd_rwatch };
+command_t os_rwatch = { "RWATCH", "Performs actions on connecting clients matching regexes.", PRIV_USER_AUSPEX, 2, os_cmd_rwatch };
 
 fcommand_t os_rwatch_add = { "ADD", AC_NONE, os_cmd_rwatch_add };
 fcommand_t os_rwatch_del = { "DEL", AC_NONE, os_cmd_rwatch_del };
@@ -184,26 +184,25 @@ static void load_rwatchdb(void)
 	fclose(f);
 }
 
-static void os_cmd_rwatch(char *origin)
+static void os_cmd_rwatch(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* Grab args */
-	char *cmd = strtok(NULL, " ");
+	char *cmd = parv[0];
 	
 	/* Bad/missing arg */
 	if (!cmd)
 	{
-		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "RWATCH");
-		notice(opersvs.nick, origin, "Syntax: RWATCH ADD|DEL|LIST|SET");
+		notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "RWATCH");
+		notice(opersvs.nick, si->su->nick, "Syntax: RWATCH ADD|DEL|LIST|SET");
 		return;
 	}
 	
-	fcommand_exec(opersvs.me, "", origin, cmd, &os_rwatch_cmds);
+	fcommand_exec(opersvs.me, parv[1], si->su->nick, cmd, &os_rwatch_cmds);
 }
 
-static void os_cmd_rwatch_add(char *origin, char *channel)
+static void os_cmd_rwatch_add(char *origin, char *args)
 {
 	node_t *n;
-	char *args = strtok(NULL, "");
 	char *pattern;
 	char *reason;
 	regex_t *regex;
@@ -267,10 +266,9 @@ static void os_cmd_rwatch_add(char *origin, char *channel)
 	write_rwatchdb();
 }
 
-static void os_cmd_rwatch_del(char *origin, char *channel)
+static void os_cmd_rwatch_del(char *origin, char *args)
 {
 	node_t *n, *tn;
-	char *args = strtok(NULL, "");
 	char *pattern;
 	int flags;
 
@@ -341,10 +339,9 @@ static void os_cmd_rwatch_list(char *origin, char *channel)
 	logcommand(opersvs.me, user_find_named(origin), CMDLOG_GET, "RWATCH LIST");
 }
 
-static void os_cmd_rwatch_set(char *origin, char *channel)
+static void os_cmd_rwatch_set(char *origin, char *args)
 {
 	node_t *n, *tn;
-	char *args = strtok(NULL, "");
 	char *pattern;
 	char *opts;
 	int addflags = 0, removeflags = 0;
