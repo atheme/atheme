@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: function.c 6349 2006-09-10 21:05:56Z pippijn $
  */
 
 #include "atheme.h"
@@ -377,7 +377,7 @@ char *time_ago(time_t event)
 char *timediff(time_t seconds)
 {
 	static char buf[BUFSIZE];
-	unsigned long days, hours, minutes;
+	long unsigned days, hours, minutes;
 
 	days = seconds / 86400;
 	seconds %= 86400;
@@ -387,7 +387,7 @@ char *timediff(time_t seconds)
 	minutes %= 60;
 	seconds %= 60;
 
-	snprintf(buf, sizeof(buf), "%lu day%s, %lu:%02lu:%02lu", days, (days == 1) ? "" : "s", hours, minutes, seconds);
+	snprintf(buf, sizeof(buf), "%lu day%s, %lu:%02lu:%02lu", days, (days == 1) ? "" : "s", hours, minutes, (long unsigned) seconds);
 
 	return buf;
 }

@@ -4,7 +4,7 @@
  *
  * DH-BLOWFISH mechanism provider
  *
- * $Id: dh-blowfish.c 5686 2006-07-03 16:25:03Z jilles $
+ * $Id: dh-blowfish.c 6349 2006-09-10 21:05:56Z pippijn $
  */
 
 #include "atheme.h"
@@ -19,7 +19,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/dh-blowfish", FALSE, _modinit, _moddeinit,
-	"$Id: dh-blowfish.c 5686 2006-07-03 16:25:03Z jilles $",
+	"$Id: dh-blowfish.c 6349 2006-09-10 21:05:56Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -90,7 +90,6 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 	BIGNUM *their_key = NULL;
 	myuser_t *mu;
 	char *ptr, *secret = NULL, *password = NULL;
-	char buffer[16];
 	int size, ret = ASASL_FAIL;
 
 	if(!p->mechdata)

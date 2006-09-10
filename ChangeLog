@@ -1,3 +1,12 @@
+jilles      2006/09/10 20:24:16 UTC	(20060910-6347)
+  Log:
+  last commit forgot a strtok in ns_enforce.c
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/contrib/ns_enforce.c (File Modified) 
+
+
 jilles      2006/09/10 20:19:07 UTC	(20060910-6345)
   Log:
   Update contrib to sourceinfo.
