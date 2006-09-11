@@ -4,12 +4,12 @@
  *
  * Datastream query stuff.
  *
- * $Id: org.atheme.claro.base.datastream 6353 2006-09-11 13:54:43Z jilles $
+ * $Id: org.atheme.claro.base.datastream 6355 2006-09-11 15:15:47Z jilles $
  */
 #ifndef __CLARODATASTREAM
 #define __CLARODATASTREAM
 
-E void sendq_add(connection_t *cptr, char *buf, int len, int pos);
+E void sendq_add(connection_t *cptr, char *buf, int len);
 E void sendq_flush(connection_t *cptr);
 E boolean_t sendq_nonempty(connection_t *cptr);
 E void sendqrecvq_free(connection_t *cptr);

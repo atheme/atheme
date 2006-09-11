@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 6333 2006-09-09 18:46:50Z pippijn $
+ * $Id: connection.c 6355 2006-09-11 15:15:47Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -444,7 +444,7 @@ void connection_write(connection_t *to, char *format, ...)
 	buf[len++] = '\n';
 	buf[len] = '\0';
 
-	sendq_add(to, buf, len, 0);
+	sendq_add(to, buf, len);
 }
 
 /*
@@ -461,5 +461,5 @@ void connection_write(connection_t *to, char *format, ...)
  */
 void connection_write_raw(connection_t *to, char *data)
 {
-	sendq_add(to, data, strlen(data), 0);
+	sendq_add(to, data, strlen(data));
 }

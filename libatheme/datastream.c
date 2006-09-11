@@ -4,7 +4,7 @@
  *
  * Datastream stuff.
  *
- * $Id: datastream.c 6353 2006-09-11 13:54:43Z jilles $
+ * $Id: datastream.c 6355 2006-09-11 15:15:47Z jilles $
  */
 #include <org.atheme.claro.base>
 
@@ -18,11 +18,12 @@ struct sendq {
 	char buf[SENDQSIZE];
 };
 
-void sendq_add(connection_t * cptr, char *buf, int len, int pos)
+void sendq_add(connection_t * cptr, char *buf, int len)
 {
 	node_t *n;
 	struct sendq *sq;
 	int l;
+	int pos = 0;
 
 	if (!cptr)
 		return;

@@ -5,7 +5,7 @@
  * This file contains socket routines.
  * Based off of W. Campbell's code.
  *
- * $Id: send.c 6071 2006-08-16 14:58:16Z jilles $
+ * $Id: send.c 6355 2006-09-11 15:15:47Z jilles $
  */
 
 #include "atheme.h"
@@ -35,7 +35,7 @@ int8_t sts(char *fmt, ...)
 
 	cnt.bout += len;
 
-	sendq_add(curr_uplink->conn, buf, len, 0);
+	sendq_add(curr_uplink->conn, buf, len);
 
 	return 0;
 }

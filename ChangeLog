@@ -1,3 +1,17 @@
+jilles      2006/09/11 13:54:43 UTC	(20060911-6353)
+  Log:
+  Change sendq handling to use fixed-size buffers of
+  slightly less than 4K. This will cause less malloc/free
+  and less syscalls when sending data to the uplink.
+  
+
+  Changes:	Modified:
+  +69 -35	trunk/libatheme/datastream.c (File Modified) 
+  +1 -0		trunk/libatheme/org.atheme.claro.base.datastream (File Modified) 
+  +1 -1		trunk/libatheme/poll.c (File Modified) 
+  +1 -1		trunk/libatheme/select.c (File Modified) 
+
+
 jilles      2006/09/10 21:06:47 UTC	(20060910-6351)
   Log:
   add_service():
