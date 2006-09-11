@@ -1,3 +1,14 @@
+jilles      2006/09/10 21:06:47 UTC	(20060910-6351)
+  Log:
+  add_service():
+  if we are connected to the uplink and the nick already
+  exists, kill it
+  
+
+  Changes:	Modified:
+  +11 -0	trunk/src/servtree.c (File Modified) 
+
+
 pippijn     2006/09/10 21:05:56 UTC	(20060910-6349)
   Log:
   Fixed some snprintf's to cast time_t to long unsigned integers and got rid

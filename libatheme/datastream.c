@@ -4,32 +4,55 @@
  *
  * Datastream stuff.
  *
- * $Id: datastream.c 6325 2006-09-07 22:39:09Z jilles $
+ * $Id: datastream.c 6353 2006-09-11 13:54:43Z jilles $
  */
 #include <org.atheme.claro.base>
 
+#define SENDQSIZE (4096 - 40)
+
 /* sendq struct */
 struct sendq {
-	char *buf;
-	int len;
-	int pos;
+	node_t node;
+	int firstused; /* offset of first used byte */
+	int firstfree; /* 1 + offset of last used byte */
+	char buf[SENDQSIZE];
 };
 
 void sendq_add(connection_t * cptr, char *buf, int len, int pos)
 {
-        node_t *n;
-        struct sendq *sq;
+	node_t *n;
+	struct sendq *sq;
+	int l;
 
 	if (!cptr)
 		return;
 
-	n = node_create();
-	sq = smalloc(sizeof(struct sendq));
+	n = cptr->sendq.tail;
+	if (n != NULL)
+	{
+		sq = n->data;
+		l = SENDQSIZE - sq->firstfree;
+		if (l > len)
+			l = len;
+		memcpy(sq->buf + sq->firstfree, buf + pos, l);
+		sq->firstfree += l;
+		pos += l;
+		len -= l;
+	}
 
-        sq->buf = sstrdup(buf);
-        sq->len = len - pos;
-        sq->pos = pos;
-        node_add(sq, n, &cptr->sendq);
+	while (len > 0)
+	{
+		sq = smalloc(sizeof(struct sendq));
+		sq->firstused = sq->firstfree = 0;
+		node_add(sq, &sq->node, &cptr->sendq);
+		l = SENDQSIZE - sq->firstfree;
+		if (l > len)
+			l = len;
+		memcpy(sq->buf + sq->firstfree, buf + pos, l);
+		sq->firstfree += l;
+		pos += l;
+		len -= l;
+	}
 }
 
 void sendq_flush(connection_t * cptr)
@@ -45,10 +68,13 @@ void sendq_flush(connection_t * cptr)
         {
                 sq = (struct sendq *)n->data;
 
+                if (sq->firstused == sq->firstfree)
+                        break;
+
 #ifdef _WIN32
-                if ((l = send(cptr->fd, sq->buf + sq->pos, sq->len, 0)) == -1)
+                if ((l = send(cptr->fd, sq->buf + sq->firstused, sq->firstfree - sq->firstused, 0)) == -1)
 #else
-                if ((l = write(cptr->fd, sq->buf + sq->pos, sq->len)) == -1)
+                if ((l = write(cptr->fd, sq->buf + sq->firstused, sq->firstfree - sq->firstused)) == -1)
 #endif
                 {
                         if (errno != EAGAIN)
@@ -56,46 +82,54 @@ void sendq_flush(connection_t * cptr)
                         return;
                 }
 
-                if (l == sq->len)
+                sq->firstused += l;
+                if (sq->firstused == sq->firstfree)
                 {
-                        node_del(n, &cptr->sendq);
-                        free(sq->buf);
-                        free(sq);
-                        node_free(n);
+			if (LIST_LENGTH(&cptr->sendq) > 1)
+			{
+                        	node_del(&sq->node, &cptr->sendq);
+                        	free(sq);
+			}
+			else
+				/* keep one struct sendq */
+				sq->firstused = sq->firstfree = 0;
                 }
                 else
-                {
-                        sq->pos += l;
-                        sq->len -= l;
                         return;
-                }
         }
+}
+
+
+boolean_t sendq_nonempty(connection_t *cptr)
+{
+	node_t *n;
+	struct sendq *sq;
+
+	n = cptr->sendq.head;
+	if (n == NULL)
+		return FALSE;
+	sq = n->data;
+	return sq->firstfree > sq->firstused;
 }
 
 void sendqrecvq_free(connection_t *cptr)
 {
 	node_t *nptr, *nptr2;
-	struct sendq *sptr;
+	struct sendq *sq;
 
 	LIST_FOREACH_SAFE(nptr, nptr2, cptr->recvq.head)
 	{
-		sptr = nptr->data;
+		sq = nptr->data;
 
-		node_del(nptr, &cptr->recvq);
-		node_free(nptr);
-
-		free(sptr->buf);
-		free(sptr);
+		node_del(&sq->node, &cptr->recvq);
+		free(sq);
 	}
 
 	LIST_FOREACH_SAFE(nptr, nptr2, cptr->sendq.head)
 	{
-		sptr = nptr->data;
+		sq = nptr->data;
 
-		node_del(nptr, &cptr->sendq);
-		node_free(nptr);
-
-		free(sptr->buf);
-		free(sptr);
+		node_del(&sq->node, &cptr->sendq);
+		free(sq);
 	}
 }

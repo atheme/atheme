@@ -4,7 +4,7 @@
  *
  * Socketengine implementing poll().
  *
- * $Id: poll.c 5313 2006-05-25 15:18:32Z jilles $
+ * $Id: poll.c 6353 2006-09-11 13:54:43Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -66,7 +66,7 @@ static void update_poll_fds(void)
 
 		cptr->pollslot = slot;
 
-		if (CF_IS_CONNECTING(cptr) || cptr->sendq.count != 0)
+		if (CF_IS_CONNECTING(cptr) || sendq_nonempty(cptr))
 		{
 			pollfds[slot].fd = cptr->fd;
 			pollfds[slot].events |= POLLWRNORM;
