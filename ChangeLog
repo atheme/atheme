@@ -1,3 +1,21 @@
+pippijn     2006/09/12 23:18:15 UTC	(20060912-6359)
+  Log:
+  Fixed ctcp handling.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/common-ctcp.h (File Modified) 
+  +1 -1		trunk/modules/chanserv/main.c (File Modified) 
+  +1 -1		trunk/modules/global/main.c (File Modified) 
+  +1 -1		trunk/modules/helpserv/main.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/main.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/main.c (File Modified) 
+  +1 -1		trunk/modules/operserv/main.c (File Modified) 
+  +3 -1		trunk/modules/saslserv/main.c (File Modified) 
+  +1 -1		trunk/modules/userserv/main.c (File Modified) 
+  +7 -7		trunk/src/ctcp-common.c (File Modified) 
+
+
 jilles      2006/09/12 22:44:37 UTC	(20060912-6357)
   Log:
   HTTP Server header should be <product>/<version>

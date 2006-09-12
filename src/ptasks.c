@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 6341 2006-09-10 16:36:29Z jilles $
+ * $Id: ptasks.c 6361 2006-09-12 23:22:07Z pippijn $
  */
 
 #include "atheme.h"
@@ -336,6 +336,15 @@ void handle_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *m
 	 * this will return chanserv
 	 */
 	si->service = find_service(target);
+
+	/* If target is a channel but command is no fantasy command,
+         * it will be normal chatter
+         */
+        if ((si->service == chansvs.me) && (*target == '#') && (*message != '!' && *message != '.'))
+        {
+        	return;
+        }
+
 	if (si->service == NULL)
 	{
 		if (!is_notice && (isalnum(target[0]) || strchr("[\\]^_`{|}~", target[0])))
