@@ -11,6 +11,6 @@
 #define COMMON_CTCP_H
 
 E void common_ctcp_init(void);
-E unsigned int handle_ctcp_common(char *, char *, char *);
+E unsigned int handle_ctcp_common(char *, char *, char *, char *);
 
 #endif

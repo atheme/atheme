@@ -1,3 +1,13 @@
+jilles      2006/09/12 22:44:37 UTC	(20060912-6357)
+  Log:
+  HTTP Server header should be <product>/<version>
+  not <product> <version>.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/xmlrpc.c (File Modified) 
+
+
 jilles      2006/09/11 15:15:47 UTC	(20060911-6355)
   Log:
   Get rid of unnecessary and unused pos argument in sendq_add().

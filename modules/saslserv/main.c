@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: main.c 6359 2006-09-12 23:18:15Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: main.c 6359 2006-09-12 23:18:15Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -33,6 +33,7 @@ static void delete_stale(void *vptr);
 static void saslserv(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *cmd;
+        char *text;
 	char orig[BUFSIZE];
 
 	/* this should never happen */
@@ -47,12 +48,13 @@ static void saslserv(sourceinfo_t *si, int parc, char *parv[])
 
 	/* lets go through this to get the command */
 	cmd = strtok(parv[parc - 1], " ");
+        text = strtok(NULL, "");
 
 	if (!cmd)
 		return;
 	if (*cmd == '\001')
 	{
-		handle_ctcp_common(cmd, si->su->nick, opersvs.nick);
+		handle_ctcp_common(cmd, text, si->su->nick, opersvs.nick);
 		return;
 	}
 
