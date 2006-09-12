@@ -4,7 +4,7 @@
  *
  * This file contains IRC interaction routines.
  *
- * $Id: ctcp-common.c 6359 2006-09-12 23:18:15Z pippijn $
+ * $Id: ctcp-common.c 6365 2006-09-12 23:59:27Z jilles $
  */
 
 #include "atheme.h"
@@ -27,7 +27,7 @@ static void ctcp_ping_handler(char *cmd, char *args, char *origin, char *svsnick
 static void ctcp_version_handler(char *cmd, char *args, char *origin, char *svsnick)
 {
 	notice(svsnick, origin,
-		"\001VERSION atheme-%s. %s %s %s%s%s%s%s%s%s%s%s TS5ow\001",
+		"\001VERSION atheme-%s. %s %s %s%s%s%s%s%s%s%s%s [%s]\001",
 		version, revision, me.name,
 		(match_mapping) ? "A" : "",
 		(me.loglevel & LG_DEBUG) ? "d" : "",
@@ -36,7 +36,8 @@ static void ctcp_version_handler(char *cmd, char *args, char *origin, char *svsn
 		(config_options.leave_chans) ? "l" : "",
 		(config_options.join_chans) ? "j" : "",
 		(!match_mapping) ? "R" : "", (config_options.raw) ? "r" : "",
-		(runflags & RF_LIVE) ? "n" : "");
+		(runflags & RF_LIVE) ? "n" : "",
+		ircd->ircdname);
 }
 
 static void ctcp_clientinfo_handler(char *cmd, char *args, char *origin, char *svsnick)

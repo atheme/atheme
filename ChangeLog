@@ -1,3 +1,12 @@
+pippijn     2006/09/12 23:44:21 UTC	(20060912-6363)
+  Log:
+  Added '@' to the possible fantasy command prefixes.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/ptasks.c (File Modified) 
+
+
 pippijn     2006/09/12 23:22:07 UTC	(20060912-6361)
   Log:
   Added check in handle_message that checks, if fantasy commands are enabled,
