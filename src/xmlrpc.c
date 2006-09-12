@@ -398,7 +398,7 @@ char *xmlrpc_write_header(int length)
 	tm = *localtime(&ts);
 	strftime(timebuf, XMLRPC_BUFSIZE - 1, "%Y-%m-%d %H:%M:%S", &tm);
 
-	snprintf(buf, XMLRPC_BUFSIZE, "HTTP/1.1 200 OK\r\nConnection: close\r\n" "Content-Length: %d\r\n" "Content-Type: text/xml\r\n" "Date: %s\r\n" "Server: Atheme %s\r\n\r\n", length, timebuf, version);
+	snprintf(buf, XMLRPC_BUFSIZE, "HTTP/1.1 200 OK\r\nConnection: close\r\n" "Content-Length: %d\r\n" "Content-Type: text/xml\r\n" "Date: %s\r\n" "Server: Atheme/%s\r\n\r\n", length, timebuf, version);
 	return xmlrpc_strdup(buf);
 }
 
