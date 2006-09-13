@@ -4,7 +4,7 @@
  *
  * This contains the connection_t structure.
  *
- * $Id: connection.h 6373 2006-09-13 15:56:58Z jilles $
+ * $Id: connection.h 6379 2006-09-13 21:53:18Z jilles $
  */
 
 #ifndef CONNECTION_H
@@ -50,6 +50,8 @@ struct connection_
 #define CF_DEAD       0x00000040
 
 #define CF_NONEWLINE  0x00000080
+#define CF_SEND_EOF   0x00000100 /* shutdown(2) write end if sendq empty */
+#define CF_SEND_DEAD  0x00000200 /* write end shut down */
 
 #define CF_IS_UPLINK(x) ((x)->flags & CF_UPLINK)
 #define CF_IS_DCC(x) ((x)->flags & (CF_DCCOUT | CF_DCCIN))

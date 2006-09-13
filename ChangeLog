@@ -1,3 +1,12 @@
+jilles      2006/09/13 16:10:57 UTC	(20060913-6377)
+  Log:
+  Set CF_LISTENING flag on listeners.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/libatheme/connection.c (File Modified) 
+
+
 jilles      2006/09/13 16:08:25 UTC	(20060913-6375)
   Log:
   Get rid of listener_in hook, this is pointless

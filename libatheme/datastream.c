@@ -4,7 +4,7 @@
  *
  * Datastream stuff.
  *
- * $Id: datastream.c 6373 2006-09-13 15:56:58Z jilles $
+ * $Id: datastream.c 6379 2006-09-13 21:53:18Z jilles $
  */
 #include <org.atheme.claro.base>
 
@@ -27,6 +27,11 @@ void sendq_add(connection_t * cptr, char *buf, int len)
 
 	if (!cptr)
 		return;
+	if (cptr->flags & (CF_DEAD | CF_SEND_EOF))
+	{
+		clog(LG_DEBUG, "sendq_add(): attempted to send to fd %d which is already dead", cptr->fd);
+		return;
+	}
 
 	n = cptr->sendq.tail;
 	if (n != NULL)
@@ -54,6 +59,18 @@ void sendq_add(connection_t * cptr, char *buf, int len)
 		pos += l;
 		len -= l;
 	}
+}
+
+void sendq_add_eof(connection_t * cptr)
+{
+	if (!cptr)
+		return;
+	if (cptr->flags & (CF_DEAD | CF_SEND_EOF))
+	{
+		clog(LG_DEBUG, "sendq_add(): attempted to send to fd %d which is already dead", cptr->fd);
+		return;
+	}
+	cptr->flags |= CF_SEND_EOF;
 }
 
 void sendq_flush(connection_t * cptr)
@@ -103,14 +120,28 @@ void sendq_flush(connection_t * cptr)
                 else
                         return;
         }
+	if (cptr->flags & CF_SEND_EOF)
+	{
+		/* shut down write end, kill entire connection
+		 * only when the other side acknowledges -- jilles */
+#ifdef SHUT_WR
+		shutdown(cptr->fd, SHUT_WR);
+#else
+		shutdown(cptr->fd, 1);
+#endif
+		cptr->flags |= CF_SEND_DEAD;
+	}
 }
-
 
 boolean_t sendq_nonempty(connection_t *cptr)
 {
 	node_t *n;
 	struct sendq *sq;
 
+	if (cptr->flags & CF_SEND_DEAD)
+		return FALSE;
+	if (cptr->flags & CF_SEND_EOF)
+		return TRUE;
 	n = cptr->sendq.head;
 	if (n == NULL)
 		return FALSE;
@@ -140,6 +171,19 @@ void recvq_put(connection_t *cptr)
 
 	if (!cptr)
 		return;
+	if (cptr->flags & (CF_DEAD | CF_SEND_DEAD))
+	{
+		/* If CF_SEND_DEAD:
+		 * The client closed the connection or sent some
+		 * data we don't care about, be done with it.
+		 * If CF_DEAD:
+		 * Connection died earlier, be done with it now.
+		 * -- jilles
+		 */
+		errno = 0;
+		connection_close(cptr);
+		return;
+	}
 
 	n = cptr->recvq.tail;
 	if (n != NULL)
