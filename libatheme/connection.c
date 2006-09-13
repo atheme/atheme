@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 6373 2006-09-13 15:56:58Z jilles $
+ * $Id: connection.c 6377 2006-09-13 16:10:57Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -355,7 +355,7 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 		return NULL;
 	}
 
-	cptr = connection_add(buf, s, 0, read_handler, NULL);
+	cptr = connection_add(buf, s, CF_LISTENING, read_handler, NULL);
 
 	return cptr;
 }

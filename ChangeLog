@@ -1,3 +1,15 @@
+jilles      2006/09/13 16:08:25 UTC	(20060913-6375)
+  Log:
+  Get rid of listener_in hook, this is pointless
+  (read_handler does the job fine) and not used.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/doc/HOOKS (File Modified) 
+  +1 -4		trunk/libatheme/poll.c (File Modified) 
+  +1 -4		trunk/libatheme/select.c (File Modified) 
+
+
 jilles      2006/09/13 15:56:58 UTC	(20060913-6373)
   Log:
   - Get rid of connection_dead hook and replace it with
