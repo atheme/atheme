@@ -4,7 +4,7 @@
  *
  * Datastream stuff.
  *
- * $Id: datastream.c 6355 2006-09-11 15:15:47Z jilles $
+ * $Id: datastream.c 6369 2006-09-13 14:50:12Z jilles $
  */
 #include <org.atheme.claro.base>
 
@@ -111,6 +111,177 @@ boolean_t sendq_nonempty(connection_t *cptr)
 		return FALSE;
 	sq = n->data;
 	return sq->firstfree > sq->firstused;
+}
+
+int recvq_length(connection_t *cptr)
+{
+	int l = 0;
+	node_t *n;
+	struct sendq *sq;
+
+	LIST_FOREACH(n, cptr->recvq.head)
+	{
+		sq = n->data;
+		l += sq->firstfree - sq->firstused;
+	}
+	return l;
+}
+
+void recvq_put(connection_t *cptr)
+{
+	node_t *n;
+	struct sendq *sq = NULL;
+	int l, ll;
+
+	if (!cptr)
+		return;
+
+	n = cptr->recvq.tail;
+	if (n != NULL)
+	{
+		sq = n->data;
+		l = SENDQSIZE - sq->firstfree;
+		if (l == 0)
+			sq = NULL;
+	}
+	if (sq == NULL)
+	{
+		sq = smalloc(sizeof(struct sendq));
+		sq->firstused = sq->firstfree = 0;
+		node_add(sq, &sq->node, &cptr->recvq);
+		l = SENDQSIZE;
+	}
+	errno = 0;
+#ifdef _WIN32
+	l = recv(cptr->fd, sq->buf + sq->firstfree, l, 0);
+#else
+	l = read(cptr->fd, sq->buf + sq->firstfree, l);
+#endif
+	if (l == 0 || (l < 0 && errno != EWOULDBLOCK && errno != EAGAIN && errno != EALREADY && errno != EINTR && errno != ENOBUFS))
+	{
+		if (l == 0)
+			clog(LG_INFO, "recvq_put(): fd %d closed the connection", cptr->fd);
+		else
+			clog(LG_INFO, "recvq_put(): lost connection on fd %d", cptr->fd);
+		/* XXX this shouldn't be a hook */
+		hook_call_event("connection_dead", cptr);
+		return;
+	}
+	else if (l > 0)
+		sq->firstfree += l;
+
+	clog(LG_DEBUG, "recvq_put(): %d bytes received, %d now in recvq", l, recvq_length(cptr));
+	if (cptr->recvq_handler)
+	{
+		l = recvq_length(cptr);
+		do /* call handler until it consumes nothing */
+		{
+			clog(LG_DEBUG, "recvq_put(): calling handler with %d in recvq", l);
+			cptr->recvq_handler(cptr);
+			ll = l;
+			l = recvq_length(cptr);
+		} while (ll != l && l != 0);
+	}
+	return;
+}
+
+int recvq_get(connection_t *cptr, char *buf, int len)
+{
+	node_t *n, *tn;
+	struct sendq *sq;
+	int l;
+	char *p = buf;
+
+	if (!cptr)
+		return 0;
+
+	LIST_FOREACH_SAFE(n, tn, cptr->recvq.head)
+	{
+		sq = (struct sendq *)n->data;
+
+		if (sq->firstused == sq->firstfree || len <= 0)
+			break;
+
+		l = sq->firstfree - sq->firstused;
+		if (l > len)
+			l = len;
+		memcpy(p, sq->buf + sq->firstused, l);
+
+		p += l;
+		len -= l;
+		sq->firstused += l;
+		if (sq->firstused == sq->firstfree)
+		{
+			if (LIST_LENGTH(&cptr->recvq) > 1)
+			{
+				node_del(&sq->node, &cptr->recvq);
+				free(sq);
+			}
+			else
+				/* keep one struct sendq */
+				sq->firstused = sq->firstfree = 0;
+		}
+		else
+			return p - buf;
+	}
+	return p - buf;
+}
+
+int recvq_getline(connection_t *cptr, char *buf, int len)
+{
+	node_t *n, *tn;
+	struct sendq *sq, *sq2 = NULL;
+	int l = 0;
+	char *p = buf;
+	char *newline = NULL;
+
+	if (!cptr)
+		return 0;
+
+	LIST_FOREACH(n, cptr->recvq.head)
+	{
+		sq2 = n->data;
+		l += sq2->firstfree - sq2->firstused;
+		newline = memchr(sq2->buf + sq2->firstused, '\n', sq2->firstfree - sq2->firstused);
+		if (newline != NULL || l >= len)
+			break;
+	}
+	if (newline == NULL && l < len)
+		return 0;
+
+	cptr->flags |= CF_NONEWLINE;
+	LIST_FOREACH_SAFE(n, tn, cptr->recvq.head)
+	{
+		sq = (struct sendq *)n->data;
+
+		if (sq->firstused == sq->firstfree || len <= 0)
+			break;
+
+		l = sq->firstfree - sq->firstused;
+		if (l > len)
+			l = len;
+		if (sq == sq2 && l >= newline - sq->buf - sq->firstused + 1)
+			cptr->flags &= ~CF_NONEWLINE, l = newline - sq->buf - sq->firstused + 1;
+		memcpy(p, sq->buf + sq->firstused, l);
+
+		p += l;
+		len -= l;
+		sq->firstused += l;
+		if (sq->firstused == sq->firstfree)
+		{
+			if (LIST_LENGTH(&cptr->recvq) > 1)
+			{
+				node_del(&sq->node, &cptr->recvq);
+				free(sq);
+			}
+			else
+				/* keep one struct sendq */
+				sq->firstused = sq->firstfree = 0;
+		}
+		else
+			return p - buf;
+	}
+	return p - buf;
 }
 
 void sendqrecvq_free(connection_t *cptr)

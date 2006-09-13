@@ -1,3 +1,13 @@
+jilles      2006/09/13 00:34:03 UTC	(20060913-6367)
+  Log:
+  Make nickserv/userserv set property work again.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/nickserv/set.c (File Modified) 
+  +2 -2		trunk/modules/userserv/set.c (File Modified) 
+
+
 jilles      2006/09/12 23:59:27 UTC	(20060912-6365)
   Log:
   Replace TS5ow in ctcp version replies with the protocol module name.

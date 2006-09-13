@@ -4,7 +4,7 @@
  *
  * This contains the connection_t structure.
  *
- * $Id: connection.h 5346 2006-06-04 18:26:42Z jilles $
+ * $Id: connection.h 6369 2006-09-13 14:50:12Z jilles $
  */
 
 #ifndef CONNECTION_H
@@ -34,6 +34,9 @@ struct connection_
 	void (*write_handler)(connection_t *);
 
 	uint32_t flags;
+
+	void (*recvq_handler)(connection_t *);
+	void *userdata;
 };
 
 #define CF_UPLINK     0x00000001
@@ -44,6 +47,8 @@ struct connection_
 #define CF_LISTENING  0x00000010
 #define CF_CONNECTED  0x00000020
 #define CF_DEAD       0x00000040
+
+#define CF_NONEWLINE  0x00000080
 
 #define CF_IS_UPLINK(x) ((x)->flags & CF_UPLINK)
 #define CF_IS_DCC(x) ((x)->flags & (CF_DCCOUT | CF_DCCIN))
