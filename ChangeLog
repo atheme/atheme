@@ -1,3 +1,14 @@
+jilles      2006/09/12 23:59:27 UTC	(20060912-6365)
+  Log:
+  Replace TS5ow in ctcp version replies with the protocol module name.
+  TS5ow is often wrong (we do TS6 or a non-TSora protocol) and only
+  really meaningful in a server /version.
+  
+
+  Changes:	Modified:
+  +3 -2		trunk/src/ctcp-common.c (File Modified) 
+
+
 pippijn     2006/09/12 23:44:21 UTC	(20060912-6363)
   Log:
   Added '@' to the possible fantasy command prefixes.

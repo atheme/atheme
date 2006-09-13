@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: set.c 6367 2006-09-13 00:34:03Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"userserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: set.c 6367 2006-09-13 00:34:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -407,8 +407,8 @@ command_t us_set_noop = { "NOOP", "Prevents services from setting modes upon you
 
 static void _us_setproperty(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *property = parv[0];
-	char *value = parv[1];
+	char *property = strtok(parv[0], " ");
+	char *value = strtok(NULL, "");
 
 	if (si->su->myuser == NULL)
 		return;
