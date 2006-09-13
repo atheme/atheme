@@ -1,3 +1,27 @@
+jilles      2006/09/13 15:56:58 UTC	(20060913-6373)
+  Log:
+  - Get rid of connection_dead hook and replace it with
+    close_handler callback. This way other connections
+    than the ircd uplink can have special shutdown code.
+  - Use the CF_DEAD flag to mark connections that got
+    an error in sendq_flush() to close them when it is
+    safe to do so. We may call sendq_flush() on a
+    different connection than the current node in
+    poll.c's LIST_FOREACH_SAFE.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/doc/HOOKS (File Modified) 
+  +0 -1		trunk/include/uplink.h (File Modified) 
+  +12 -10	trunk/libatheme/connection.c (File Modified) 
+  +1 -0		trunk/libatheme/connection.h (File Modified) 
+  +7 -3		trunk/libatheme/datastream.c (File Modified) 
+  +7 -0		trunk/libatheme/poll.c (File Modified) 
+  +7 -0		trunk/libatheme/select.c (File Modified) 
+  +1 -4		trunk/src/packet.c (File Modified) 
+  +21 -24	trunk/src/uplink.c (File Modified) 
+
+
 jilles      2006/09/13 14:51:44 UTC	(20060913-6371)
   Log:
   Use new recvq code for the ircd uplink.

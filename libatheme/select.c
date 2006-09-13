@@ -4,7 +4,7 @@
  *
  * Socketengine implementing select().
  *
- * $Id: select.c 6373 2006-09-13 15:56:58Z jilles $
+ * $Id: select.c 6375 2006-09-13 16:08:25Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -114,10 +114,7 @@ void connection_select(uint32_t delay)
 
 			if (FD_ISSET(cptr->fd, &readfds))
 			{
-				if (CF_IS_LISTENING(cptr))
-					hook_call_event("listener_in", cptr);
-				else
-					cptr->read_handler(cptr);
+				cptr->read_handler(cptr);
 			}
 		}
 
