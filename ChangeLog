@@ -1,3 +1,13 @@
+jilles      2006/09/13 21:54:38 UTC	(20060913-6381)
+  Log:
+  Add a simple web server using the new libatheme stuff.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/contrib/Makefile.in (File Modified) 
+  +249 -0	trunk/contrib/gen_httpd.c (File Added) 
+
+
 jilles      2006/09/13 21:53:18 UTC	(20060913-6379)
   Log:
   Add sendq_add_eof(), schedules the write side of the

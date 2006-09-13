@@ -4,7 +4,7 @@
  *
  * Meow!
  *
- * $Id: ircd_catserv.c 6345 2006-09-10 20:19:07Z jilles $
+ * $Id: ircd_catserv.c 6383 2006-09-13 22:08:28Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"contrib/ircd_catserv", FALSE, _modinit, _moddeinit,
-	"$Id: ircd_catserv.c 6345 2006-09-10 20:19:07Z jilles $",
+	"$Id: ircd_catserv.c 6383 2006-09-13 22:08:28Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -78,7 +78,7 @@ static void catserv_handler(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	if (*cmd == '\001')
 	{
-		handle_ctcp_common(cmd, si->su->nick, catserv->name);
+		handle_ctcp_common(cmd, text, si->su->nick, catserv->name);
 		return;
 	}
 
