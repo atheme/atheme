@@ -4,7 +4,7 @@
  *
  * A simple web server
  *
- * $Id: gen_httpd.c 6381 2006-09-13 21:54:38Z jilles $
+ * $Id: gen_httpd.c 6385 2006-09-13 22:13:31Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"contrib/gen_httpd", FALSE, _modinit, _moddeinit,
-	"$Id: gen_httpd.c 6381 2006-09-13 21:54:38Z jilles $",
+	"$Id: gen_httpd.c 6385 2006-09-13 22:13:31Z jilles $",
 	"Jilles Tjoelker <jilles -at- stack.nl>"
 );
 
@@ -187,7 +187,7 @@ static void httpd_recvqhandler(connection_t *cptr)
 				content_type(hd->filename),
 				(unsigned long)sb.st_size);
 		sendq_add(cptr, outbuf, strlen(outbuf));
-		count1 = sb.st_size;
+		count1 = is_get ? sb.st_size : 0;
 		while (count1 > 0)
 		{
 			count = sizeof outbuf;

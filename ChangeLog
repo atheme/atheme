@@ -1,3 +1,12 @@
+jilles      2006/09/13 22:08:28 UTC	(20060913-6383)
+  Log:
+  Adapt catserv to ctcp changes.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/contrib/ircd_catserv.c (File Modified) 
+
+
 jilles      2006/09/13 21:54:38 UTC	(20060913-6381)
   Log:
   Add a simple web server using the new libatheme stuff.
