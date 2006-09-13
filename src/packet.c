@@ -4,7 +4,7 @@
  *
  * IRC packet handling.
  *
- * $Id: packet.c 6075 2006-08-16 15:31:27Z jilles $
+ * $Id: packet.c 6371 2006-09-13 14:51:44Z jilles $
  *
  * TODO: Take all the sendq stuff in node.c and put it here.
  * sendq_flush becomes irc_whandler, etc.
@@ -18,73 +18,27 @@
 struct timeval burstime;
 #endif
 
-static int irc_read(connection_t * cptr, char *buf)
+static void irc_recvq_handler(connection_t *cptr)
 {
-	int n;
+	boolean_t wasnonl;
+	char parsebuf[BUFSIZE + 1];
+	int count;
 
-#ifdef _WIN32
-	if ((n = recv(cptr->fd, buf, BUFSIZE, 0)) > 0)
-#else
-	if ((n = read(cptr->fd, buf, BUFSIZE)) > 0)
-#endif
-	{
-		buf[n] = '\0';
-		cnt.bin += n;
-	}
-
-	return n;
-}
-
-static void irc_packet(char *buf)
-{
-	char *iptr;
-	static char parsebuf[BUFSIZE * 2 + 1];
-	static char *pptr;
-
-	if (buf == NULL)
-	{
-		/* connection established, remove any old crap */
-		pptr = parsebuf;
+	wasnonl = cptr->flags & CF_NONEWLINE ? TRUE : FALSE;
+	count = recvq_getline(cptr, parsebuf, sizeof parsebuf - 1);
+	if (count <= 0)
 		return;
-	}
-
-	for (iptr = buf; *iptr != '\0'; )
-	{
-		if (*iptr == '\n')
-		{
-			*pptr = '\0';
-			if (*(iptr-1) == '\r')
-				*(pptr-1) = '\0';
-			iptr++;
-			me.uplinkpong = CURRTIME;
-			parse(parsebuf);
-			pptr = parsebuf;
-		}
-		else
-			*pptr++ = *iptr++;
-	}
-}
-
-void irc_rhandler(connection_t * cptr)
-{
-	char buf[BUFSIZE * 2];
-	int n;
-
-	errno = 0;
-	n = irc_read(cptr, buf);
-	if (n > 0)
-		irc_packet(buf);
-	else if (n == 0 || (n < 0 && errno != EWOULDBLOCK && errno != EAGAIN && errno != EALREADY && errno != EINTR && errno != ENOBUFS))
-	{
-		if (n == 0)
-			slog(LG_INFO, "io_loop(): server %s closed the connection", curr_uplink->name);
-		else
-			slog(LG_INFO, "io_loop(): lost connection to server %s", curr_uplink->name);
-		hook_call_event("connection_dead", cptr);
-		me.connected = FALSE;
+	cnt.bin += count;
+	/* ignore the excessive part of a too long line */
+	if (wasnonl)
 		return;
-	}
-
+	me.uplinkpong = CURRTIME;
+	if (parsebuf[count - 1] == '\n')
+		count--;
+	if (count > 0 && parsebuf[count - 1] == '\r')
+		count--;
+	parsebuf[count] = '\0';
+	parse(parsebuf);
 }
 
 static void ping_uplink(void *arg)
@@ -123,11 +77,10 @@ static void irc_handle_connect(void *vptr)
 	if (cptr == curr_uplink->conn)
 	{
 		cptr->flags = CF_UPLINK;
+		cptr->recvq_handler = irc_recvq_handler;
 		me.connected = TRUE;
 		/* no SERVER message received */
 		me.recvsvr = FALSE;
-		/* remove any partial line from previous time */
-		irc_packet(NULL);
 
 		slog(LG_INFO, "irc_handle_connect(): connection to uplink established");
 

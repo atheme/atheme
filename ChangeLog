@@ -1,3 +1,17 @@
+jilles      2006/09/13 14:50:12 UTC	(20060913-6369)
+  Log:
+  Add recvq code to libatheme.
+  This handles most of the dirty work of retrying reads
+  and getting lines of text.
+  It will be used both for the ircd uplink and http (RPC).
+  
+
+  Changes:	Modified:
+  +5 -0		trunk/libatheme/connection.h (File Modified) 
+  +171 -0	trunk/libatheme/datastream.c (File Modified) 
+  +6 -0		trunk/libatheme/org.atheme.claro.base.datastream (File Modified) 
+
+
 jilles      2006/09/13 00:34:03 UTC	(20060913-6367)
   Log:
   Make nickserv/userserv set property work again.
