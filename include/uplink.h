@@ -5,7 +5,7 @@
  * Data structures related to our uplink.
  * Modules usually don't need this.
  *
- * $Id: uplink.h 6075 2006-08-16 15:31:27Z jilles $
+ * $Id: uplink.h 6373 2006-09-13 15:56:58Z jilles $
  */
 
 #ifndef _UPLINK_H
@@ -38,7 +38,6 @@ E uplink_t *uplink_find(char *name);
 E list_t uplinks;
 E uplink_t *curr_uplink;
 E void uplink_connect(void);
-E void connection_dead(void *vptr);
 
 /* packet.c */
 /* bursting timer */

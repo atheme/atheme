@@ -1,3 +1,13 @@
+jilles      2006/09/13 14:51:44 UTC	(20060913-6371)
+  Log:
+  Use new recvq code for the ircd uplink.
+  
+
+  Changes:	Modified:
+  +18 -65	trunk/src/packet.c (File Modified) 
+  +1 -1		trunk/src/uplink.c (File Modified) 
+
+
 jilles      2006/09/13 14:50:12 UTC	(20060913-6369)
   Log:
   Add recvq code to libatheme.

@@ -4,7 +4,7 @@
  *
  * IRC packet handling.
  *
- * $Id: packet.c 6371 2006-09-13 14:51:44Z jilles $
+ * $Id: packet.c 6373 2006-09-13 15:56:58Z jilles $
  *
  * TODO: Take all the sendq stuff in node.c and put it here.
  * sendq_flush becomes irc_whandler, etc.
@@ -59,7 +59,7 @@ static void ping_uplink(void *arg)
 			if (me.connected)
 			{
 				errno = 0;
-				hook_call_event("connection_dead", curr_uplink->conn);
+				connection_close(curr_uplink->conn);
 			}
 		}
 	}
@@ -105,7 +105,4 @@ void init_ircpacket(void)
 {
 	hook_add_event("connected");
 	hook_add_hook("connected", irc_handle_connect);
-
-	hook_add_event("connection_dead");
-	hook_add_hook("connection_dead", connection_dead);
 }

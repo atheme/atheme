@@ -4,7 +4,7 @@
  *
  * Datastream stuff.
  *
- * $Id: datastream.c 6369 2006-09-13 14:50:12Z jilles $
+ * $Id: datastream.c 6373 2006-09-13 15:56:58Z jilles $
  */
 #include <org.atheme.claro.base>
 
@@ -79,7 +79,12 @@ void sendq_flush(connection_t * cptr)
 #endif
                 {
                         if (errno != EAGAIN)
-                                hook_call_event("connection_dead", cptr);
+			{
+				clog(LG_IOERROR, "sendq_flush(): write error %d (%s) on connection %s[%d]",
+						errno, strerror(errno),
+						cptr->name, cptr->fd);
+				cptr->flags |= CF_DEAD;
+			}
                         return;
                 }
 
@@ -163,8 +168,7 @@ void recvq_put(connection_t *cptr)
 			clog(LG_INFO, "recvq_put(): fd %d closed the connection", cptr->fd);
 		else
 			clog(LG_INFO, "recvq_put(): lost connection on fd %d", cptr->fd);
-		/* XXX this shouldn't be a hook */
-		hook_call_event("connection_dead", cptr);
+		connection_close(cptr);
 		return;
 	}
 	else if (l > 0)

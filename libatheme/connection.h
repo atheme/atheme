@@ -4,7 +4,7 @@
  *
  * This contains the connection_t structure.
  *
- * $Id: connection.h 6369 2006-09-13 14:50:12Z jilles $
+ * $Id: connection.h 6373 2006-09-13 15:56:58Z jilles $
  */
 
 #ifndef CONNECTION_H
@@ -36,6 +36,7 @@ struct connection_
 	uint32_t flags;
 
 	void (*recvq_handler)(connection_t *);
+	void (*close_handler)(connection_t *);
 	void *userdata;
 };
 

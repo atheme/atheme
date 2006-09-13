@@ -1,4 +1,4 @@
-$Id: HOOKS 6139 2006-08-19 13:07:07Z jilles $
+$Id: HOOKS 6373 2006-09-13 15:56:58Z jilles $
 
 Atheme hooks system
 
@@ -13,7 +13,6 @@ Name               Argument type
 (claro)
 connected          connection_t *
 listener_in        connection_t *
-connection_dead    connection_t *
 (main)
 config_ready       <none>
 (ircd)

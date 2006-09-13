@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 6355 2006-09-11 15:15:47Z jilles $
+ * $Id: connection.c 6373 2006-09-13 15:56:58Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -152,9 +152,17 @@ void connection_close(connection_t *cptr)
 	socklen_t len = sizeof(errno2);
 #endif
 
-	if (!cptr || cptr->fd <= 0)
+	if (!cptr)
 	{
 		clog(LG_DEBUG, "connection_close(): no connection to close!");
+		return;
+	}
+
+	nptr = node_find(cptr, &connection_list);
+	if (!nptr)
+	{
+		clog(LG_DEBUG, "connection_close(): connection %p is not registered!",
+			cptr);
 		return;
 	}
 
@@ -171,17 +179,11 @@ void connection_close(connection_t *cptr)
 		clog(LG_IOERROR, "connection_close(): connection %s[%d] closed due to error %d (%s)",
 				cptr->name, cptr->fd, errno1, strerror(errno1));
 
+	if (cptr->close_handler)
+		cptr->close_handler(cptr);
+
 	/* close the fd */
 	close(cptr->fd);
-
-	nptr = node_find(cptr, &connection_list);
-
-	if (!nptr)
-	{
-		clog(LG_DEBUG, "connection_close(): connection %s (fd %d) is not registered!",
-			cptr->name, cptr->fd);
-		return;
-	}
 
 	node_del(nptr, &connection_list);
 	node_free(nptr);

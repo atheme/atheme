@@ -4,13 +4,15 @@
  *
  * Uplink management stuff.
  *
- * $Id: uplink.c 6371 2006-09-13 14:51:44Z jilles $
+ * $Id: uplink.c 6373 2006-09-13 15:56:58Z jilles $
  */
 
 #include "atheme.h"
 #include "uplink.h"
 
 uplink_t *curr_uplink;
+
+static void uplink_close(connection_t *cptr);
 
 void uplink_connect(void)
 {
@@ -42,45 +44,40 @@ void uplink_connect(void)
 	u = curr_uplink;
 	
 	curr_uplink->conn = connection_open_tcp(u->host, u->vhost, u->port, recvq_put, sendq_flush);
+	curr_uplink->conn->close_handler = uplink_close;
 }
 
 /*
- * connection_dead()
+ * uplink_close()
  * 
  * inputs:
- *       void pointer pointing to connection nodelet,
- *       triggered by event connection_dead.
+ *       connection pointer of current uplink
+ *       triggered by callback close_handler
  *
  * outputs:
  *       none
  *
  * side effects:
- *       the connection is closed and shut down.
+ *       reconnection is scheduled
+ *       uplink marked dead
+ *       uplink deleted if it had been removed from configuration
  */
-void connection_dead(void *vptr)
+static void uplink_close(connection_t *cptr)
 {
-        connection_t *cptr = vptr;
+	event_add_once("reconn", reconn, NULL, me.recontime);
 
-        if (cptr == curr_uplink->conn)
+	me.connected = FALSE;
+
+	if (curr_uplink->flags & UPF_ILLEGAL)
 	{
-                event_add_once("reconn", reconn, NULL, me.recontime);
-
-		me.connected = FALSE;
-
-		if (curr_uplink->flags & UPF_ILLEGAL)
+		slog(LG_INFO, "uplink_close(): %s was removed from configuration, deleting", curr_uplink->name);
+		uplink_delete(curr_uplink);
+		if (uplinks.head == NULL)
 		{
-			slog(LG_INFO, "connection_dead(): %s was removed from configuration, deleting", curr_uplink->name);
-			uplink_delete(curr_uplink);
-			if (uplinks.head == NULL)
-			{
-				slog(LG_ERROR, "connection_dead(): last uplink deleted, exiting.");
-				exit(EXIT_FAILURE);
-			}
-			curr_uplink = uplinks.head->data;
+			slog(LG_ERROR, "uplink_close(): last uplink deleted, exiting.");
+			exit(EXIT_FAILURE);
 		}
-		curr_uplink->conn = NULL;
+		curr_uplink = uplinks.head->data;
 	}
-
-        connection_close(cptr);
+	curr_uplink->conn = NULL;
 }
-
