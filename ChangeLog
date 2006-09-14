@@ -1,3 +1,21 @@
+jilles      2006/09/14 00:58:10 UTC	(20060914-6387)
+  Log:
+  - Add tracking which listener (if any) a connection was accepted on
+    (just a listener pointer in each connection, not a list of
+    connections with each listener).
+  - Add connection_close_soon(), calls the close_handler, marks the
+    connection CF_DEAD and clears all handlers.
+  - Add connection_close_soon_children(), calls connection_close_soon()
+    for the connection itself and all connections accepted on it.
+  - Use this in gen_httpd.c to avoid crashes on unload.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/contrib/gen_httpd.c (File Modified) 
+  +70 -0	trunk/libatheme/connection.c (File Modified) 
+  +3 -0		trunk/libatheme/connection.h (File Modified) 
+
+
 jilles      2006/09/13 22:13:31 UTC	(20060913-6385)
   Log:
   HEAD shouldn't send the file data...

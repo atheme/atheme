@@ -4,7 +4,7 @@
  *
  * A simple web server
  *
- * $Id: gen_httpd.c 6387 2006-09-14 00:58:10Z jilles $
+ * $Id: gen_httpd.c 6389 2006-09-14 14:26:32Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"contrib/gen_httpd", FALSE, _modinit, _moddeinit,
-	"$Id: gen_httpd.c 6387 2006-09-14 00:58:10Z jilles $",
+	"$Id: gen_httpd.c 6389 2006-09-14 14:26:32Z jilles $",
 	"Jilles Tjoelker <jilles -at- stack.nl>"
 );
 
@@ -238,12 +238,39 @@ static void do_listen(connection_t *cptr)
 	newptr->close_handler = httpd_closehandler;
 }
 
+extern list_t connection_list; /* XXX ? */
+
+static void httpd_checkidle(void *arg)
+{
+	node_t *n;
+	connection_t *cptr;
+
+	(void)arg;
+	LIST_FOREACH(n, connection_list.head)
+	{
+		cptr = n->data;
+		if (cptr->listener == listener && cptr->last_recv + 300 < CURRTIME)
+		{
+			if (sendq_nonempty(cptr))
+				cptr->last_recv = CURRTIME;
+			else
+				/* from a timeout function,
+				 * connection_close_soon() may take quite
+				 * a while, and connection_close() is safe
+				 * -- jilles */
+				connection_close(cptr);
+		}
+	}
+}
+
 void _modinit(module_t *m)
 {
 	listener = connection_open_listener_tcp("127.0.0.1", 7100, do_listen);
+	event_add("httpd_checkidle", httpd_checkidle, NULL, 60);
 }
 
 void _moddeinit(void)
 {
+	event_delete(httpd_checkidle, NULL);
 	connection_close_soon_children(listener);
 }
