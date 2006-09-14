@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: ratbox.c 6393 2006-09-14 15:36:45Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 6337 2006-09-10 15:54:41Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 6393 2006-09-14 15:36:45Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -808,12 +808,6 @@ static void m_uid(sourceinfo_t *si, int parc, char *parv[])
 	if (parc == 9)
 	{
 		s = si->s;
-		if (!s)
-		{
-			slog(LG_DEBUG, "m_uid(): new user on nonexistant server: %s", si->origin);
-			return;
-		}
-
 		slog(LG_DEBUG, "m_uid(): new user on `%s': %s", s->name, parv[0]);
 
 		u = user_add(parv[0], parv[4], parv[5], NULL, parv[6], parv[7], parv[8], s, atoi(parv[2]));

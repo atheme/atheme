@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: charybdis.c 6393 2006-09-14 15:36:45Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6337 2006-09-10 15:54:41Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6393 2006-09-14 15:36:45Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -925,12 +925,6 @@ static void m_uid(sourceinfo_t *si, int parc, char *parv[])
 	if (parc == 9)
 	{
 		s = si->s;
-		if (!s)
-		{
-			slog(LG_DEBUG, "m_uid(): new user on nonexistant server: %s", si->origin);
-			return;
-		}
-
 		slog(LG_DEBUG, "m_uid(): new user on `%s': %s", s->name, parv[0]);
 
 		u = user_add(parv[0], parv[4], parv[5], NULL, parv[6], parv[7], parv[8], s, atoi(parv[2]));
@@ -962,12 +956,6 @@ static void m_euid(sourceinfo_t *si, int parc, char *parv[])
 	if (parc >= 11)
 	{
 		s = si->s;
-		if (!s)
-		{
-			slog(LG_DEBUG, "m_uid(): new user on nonexistant server: %s", si->origin);
-			return;
-		}
-
 		slog(LG_DEBUG, "m_euid(): new user on `%s': %s", s->name, parv[0]);
 
 		u = user_add(parv[0],				/* nick */

@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: hybrid.c 6393 2006-09-14 15:36:45Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 6337 2006-09-10 15:54:41Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 6393 2006-09-14 15:36:45Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -818,12 +818,6 @@ static void m_uid(sourceinfo_t *si, int parc, char *parv[])
 	if (parc == 9)
 	{
 		s = si->s;
-		if (!s)
-		{
-			slog(LG_DEBUG, "m_uid(): new user on nonexistant server: %s", si->origin);
-			return;
-		}
-
 		slog(LG_DEBUG, "m_uid(): new user on `%s': %s", s->name, parv[0]);
 
 
