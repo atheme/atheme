@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 6393 2006-09-14 15:36:45Z jilles $
+ * $Id: charybdis.c 6395 2006-09-14 15:47:01Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6393 2006-09-14 15:36:45Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6395 2006-09-14 15:47:01Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -1076,7 +1076,7 @@ static void m_squit(sourceinfo_t *si, int parc, char *parv[])
 static void m_server(sourceinfo_t *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
-	server_add(parv[0], atoi(parv[1]), si->origin ? si->origin : me.name, si->origin != NULL || !ircd->uses_uid ? NULL : ts6sid, parv[2]);
+	server_add(parv[0], atoi(parv[1]), si->s ? si->s->name : me.name, si->origin != NULL || !ircd->uses_uid ? NULL : ts6sid, parv[2]);
 
 	if (cnt.server == 2)
 		me.actual = sstrdup(parv[0]);
@@ -1095,7 +1095,7 @@ static void m_sid(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* -> :1JJ SID file. 2 00F :telnet server */
 	slog(LG_DEBUG, "m_sid(): new server: %s", parv[0]);
-	server_add(parv[0], atoi(parv[1]), si->origin ? si->origin : me.name, parv[2], parv[3]);
+	server_add(parv[0], atoi(parv[1]), si->s ? si->s->name : me.name, parv[2], parv[3]);
 
 	if (cnt.server == 2)
 		me.actual = sstrdup(parv[0]);

@@ -787,7 +787,7 @@ static void m_squit(sourceinfo_t *si, int parc, char *parv[])
 static void m_server(sourceinfo_t *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
-	server_add(parv[0], atoi(parv[2]), si->origin ? si->origin : me.name, NULL, parv[3]);
+	server_add(parv[0], atoi(parv[2]), si->s ? si->s->name : me.name, NULL, parv[3]);
 
 	if (cnt.server == 2)
 		me.actual = sstrdup(parv[0]);

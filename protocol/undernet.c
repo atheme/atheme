@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: undernet.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: undernet.c 6395 2006-09-14 15:47:01Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 6337 2006-09-10 15:54:41Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 6395 2006-09-14 15:47:01Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -854,7 +854,7 @@ static void m_server(sourceinfo_t *si, int parc, char *parv[])
 	slog(LG_DEBUG, "m_server(): new server: %s, id %s, %s",
 			parv[0], parv[5],
 			parv[4][0] == 'P' ? "eob" : "bursting");
-	s = server_add(parv[0], atoi(parv[1]), si->origin ? si->origin : me.name, parv[5], parv[7]);
+	s = server_add(parv[0], atoi(parv[1]), si->s ? si->s->name : me.name, parv[5], parv[7]);
 
 	if (cnt.server == 2)
 		me.actual = sstrdup(parv[0]);

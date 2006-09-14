@@ -1,3 +1,17 @@
+jilles      2006/09/14 15:36:45 UTC	(20060914-6393)
+  Log:
+  TS6 m_uid()/m_euid(): no need to check if the source server
+  is not NULL, we already specify to parse.c that only servers
+  may originate UID/EUID.
+  This gets rid of some more si->origin references.
+  
+
+  Changes:	Modified:
+  +0 -12	trunk/protocol/charybdis.c (File Modified) 
+  +0 -6		trunk/protocol/hybrid.c (File Modified) 
+  +0 -6		trunk/protocol/ratbox.c (File Modified) 
+
+
 jilles      2006/09/14 15:32:03 UTC	(20060914-6391)
   Log:
   Get rid of some si->origin usages in debug messages.
