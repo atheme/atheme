@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 6363 2006-09-12 23:44:21Z pippijn $
+ * $Id: ptasks.c 6391 2006-09-14 15:32:03Z jilles $
  */
 
 #include "atheme.h"
@@ -481,7 +481,7 @@ void handle_kill(sourceinfo_t *si, char *victim, char *reason)
 
 	u = user_find(victim);
 	if (u == NULL)
-		slog(LG_DEBUG, "handle_kill(): %s killed unknown user %s (%s)", si->origin, victim, reason);
+		slog(LG_DEBUG, "handle_kill(): %s killed unknown user %s (%s)", source, victim, reason);
 	else if (u->server == me.me)
 	{
 		slog(LG_INFO, "handle_kill(): %s killed service %s (%s)", source, u->nick, reason);

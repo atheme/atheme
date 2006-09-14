@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: ultimate3.c 6391 2006-09-14 15:32:03Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 6337 2006-09-10 15:54:41Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 6391 2006-09-14 15:32:03Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -480,8 +480,8 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 	{
-		slog(LG_DEBUG, "m_sjoin(): invalid source/parameters: origin %s %s parc %d",
-				si->origin, si->su != NULL ? si->su->nick : (si->s != NULL ? si->s->name : "<none>"), parc);
+		slog(LG_DEBUG, "m_sjoin(): invalid source/parameters: origin %s parc %d",
+				si->su != NULL ? si->su->nick : (si->s != NULL ? si->s->name : "<none>"), parc);
 	}
 }
 

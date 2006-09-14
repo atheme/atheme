@@ -1,3 +1,13 @@
+jilles      2006/09/14 14:26:32 UTC	(20060914-6389)
+  Log:
+  Idle timeouts for gen_httpd. Somewhat ugly, imports
+  connection_list.
+  
+
+  Changes:	Modified:
+  +27 -0	trunk/contrib/gen_httpd.c (File Modified) 
+
+
 jilles      2006/09/14 00:58:10 UTC	(20060914-6387)
   Log:
   - Add tracking which listener (if any) a connection was accepted on
