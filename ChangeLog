@@ -1,3 +1,14 @@
+jilles      2006/09/14 15:49:50 UTC	(20060914-6397)
+  Log:
+  inspircd m_idle(): use si->su->nick, but check first
+  it's a user and not a server
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/inspircd.c (File Modified) 
+  +2 -2		trunk/protocol/inspircd_dev.c (File Modified) 
+
+
 jilles      2006/09/14 15:47:01 UTC	(20060914-6395)
   Log:
   Don't use si->origin in m_server() and similar.
