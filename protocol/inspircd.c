@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree stable branch inspircd.
  *
- * $Id: inspircd.c 6397 2006-09-14 15:49:50Z jilles $
+ * $Id: inspircd.c 6401 2006-09-14 16:03:29Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 6397 2006-09-14 15:49:50Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 6401 2006-09-14 16:03:29Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -675,7 +675,7 @@ static void m_kill(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_squit(sourceinfo_t *si, int parc, char *parv[])
 {
-	slog(LG_DEBUG, "m_squit(): server leaving: %s from %s", parv[0], si->origin);
+	slog(LG_DEBUG, "m_squit(): server leaving: %s", parv[0]);
 	server_delete(parv[0]);
 }
 

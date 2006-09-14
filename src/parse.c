@@ -4,7 +4,7 @@
  *
  * This file contains IRC interaction routines.
  *
- * $Id: parse.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: parse.c 6401 2006-09-14 16:03:29Z jilles $
  */
 
 #include "atheme.h"
@@ -19,6 +19,7 @@ void irc_parse(char *line)
 {
 	sourceinfo_t si = { 0 };
 	char *pos;
+	char *origin = NULL;
 	char *command = NULL;
 	char *message = NULL;
 	char *parv[20];
@@ -58,10 +59,10 @@ void irc_parse(char *line)
 			 */
 			if (*line == ':')
 			{
-                        	si.origin = line + 1;
+                        	origin = line + 1;
 
-				si.s = server_find(si.origin);
-				si.su = user_find(si.origin);
+				si.s = server_find(origin);
+				si.su = user_find(origin);
 
 				if ((message = strchr(pos, ' ')))
 				{
@@ -79,8 +80,8 @@ void irc_parse(char *line)
 			{
 				if (me.recvsvr)
 				{
-					si.origin = me.actual;
-					si.s = server_find(si.origin);
+					origin = me.actual;
+					si.s = server_find(origin);
 				}
 				message = pos;
 				command = line;
@@ -90,15 +91,15 @@ void irc_parse(char *line)
 		{
 			if (me.recvsvr)
 			{
-				si.origin = me.actual;
-				si.s = server_find(si.origin);
+				origin = me.actual;
+				si.s = server_find(origin);
 			}
 			command = line;
 			message = NULL;
 		}
                 if (!si.s && !si.su && me.recvsvr)
                 {
-                        slog(LG_INFO, "irc_parse(): got message from nonexistant user or server: %s", si.origin);
+                        slog(LG_INFO, "irc_parse(): got message from nonexistant user or server: %s", origin);
                         return;
                 }
 
@@ -165,6 +166,7 @@ void p10_parse(char *line)
 {
 	sourceinfo_t si = { 0 };
 	char *pos;
+	char *origin = NULL;
 	char *command = NULL;
 	char *message = NULL;
 	char *parv[20];
@@ -204,17 +206,17 @@ void p10_parse(char *line)
 			 */
 			if (*line == ':' || me.recvsvr == TRUE)
 			{
-				si.origin = line;
-				if (*si.origin == ':')
+				origin = line;
+				if (*origin == ':')
 				{
-					si.origin++;
-                                	si.s = server_find(si.origin);
-                                	si.su = user_find_named(si.origin);
+					origin++;
+                                	si.s = server_find(origin);
+                                	si.su = user_find_named(origin);
 				}
 				else
 				{
-                                	si.s = server_find(si.origin);
-                                	si.su = user_find(si.origin);
+                                	si.s = server_find(origin);
+                                	si.su = user_find(origin);
 				}
 
 				if ((message = strchr(pos, ' ')))
@@ -238,7 +240,7 @@ void p10_parse(char *line)
 
                 if (!si.s && !si.su && me.recvsvr)
                 {
-                        slog(LG_DEBUG, "irc_parse(): got message from nonexistant user or server: %s", si.origin);
+                        slog(LG_DEBUG, "irc_parse(): got message from nonexistant user or server: %s", origin);
                         return;
                 }
 

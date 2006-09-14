@@ -4,7 +4,7 @@
  *
  * Data structures for sourceinfo
  *
- * $Id: sourceinfo.h 6341 2006-09-10 16:36:29Z jilles $
+ * $Id: sourceinfo.h 6401 2006-09-14 16:03:29Z jilles $
  */
 
 #ifndef SOURCEINFO_H
@@ -14,7 +14,6 @@
 struct sourceinfo_
 {
 	/* fields describing the source of the message */
-	char *origin; /* textual origin XXX remove me */
 	/* at most one of these two can be non-NULL
 	 * before server registration, both are NULL, otherwise exactly
 	 * one is NULL

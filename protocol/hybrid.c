@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 6395 2006-09-14 15:47:01Z jilles $
+ * $Id: hybrid.c 6401 2006-09-14 16:03:29Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 6395 2006-09-14 15:47:01Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 6401 2006-09-14 16:03:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -925,7 +925,7 @@ static void m_squit(sourceinfo_t *si, int parc, char *parv[])
 static void m_server(sourceinfo_t *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
-	server_add(parv[0], atoi(parv[1]), si->s ? si->s->name : me.name, si->origin != NULL || !ircd->uses_uid ? NULL : ts6sid, parv[2]);
+	server_add(parv[0], atoi(parv[1]), si->s ? si->s->name : me.name, si->s || !ircd->uses_uid ? NULL : ts6sid, parv[2]);
 
 	if (cnt.server == 2)
 		me.actual = sstrdup(parv[0]);
