@@ -1,10 +1,11 @@
 /*
  * Copyright (c) 2003-2004 E. Will et al.
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 6395 2006-09-14 15:47:01Z jilles $
+ * $Id: plexus.c 6403 2006-09-14 16:08:56Z jilles $
  */
 
 /* option: set the netadmin umode +N */
@@ -15,7 +16,7 @@
 #include "pmodule.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 6395 2006-09-14 15:47:01Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 6403 2006-09-14 16:08:56Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 

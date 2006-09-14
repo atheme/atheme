@@ -1,10 +1,11 @@
 /*
  * Copyright (c) 2003-2004 E. Will et al.
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: dreamforge.c 6395 2006-09-14 15:47:01Z jilles $
+ * $Id: dreamforge.c 6403 2006-09-14 16:08:56Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/dreamforge.h"
 
-DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 6395 2006-09-14 15:47:01Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 6403 2006-09-14 16:08:56Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 

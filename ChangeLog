@@ -1,3 +1,19 @@
+jilles      2006/09/14 16:03:29 UTC	(20060914-6401)
+  Log:
+  Get rid of sourceinfo_t.origin, this field's interpretation
+  (nick vs UID, etc) is too confusing and it is not that useful.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/include/sourceinfo.h (File Modified) 
+  +1 -1		trunk/protocol/charybdis.c (File Modified) 
+  +1 -1		trunk/protocol/hybrid.c (File Modified) 
+  +1 -1		trunk/protocol/inspircd.c (File Modified) 
+  +1 -1		trunk/protocol/inspircd_dev.c (File Modified) 
+  +1 -1		trunk/protocol/ratbox.c (File Modified) 
+  +18 -16	trunk/src/parse.c (File Modified) 
+
+
 jilles      2006/09/14 15:51:07 UTC	(20060914-6399)
   Log:
   Add Id keyword.
