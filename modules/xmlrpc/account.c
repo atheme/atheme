@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: account.c 6405 2006-09-14 16:21:47Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: account.c 6405 2006-09-14 16:21:47Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -47,7 +47,7 @@ static int account_myuser_foreach_cb(dictionary_elem_t *delem, void *privdata)
  *       fault 6  - user is on IRC (would be unfair to claim ownership)
  *       fault 6  - too many accounts associated with this email
  *       fault 8  - account already exists, please try again
- *       fault 11 - sending email failed
+ *       fault 10 - sending email failed
  *       default  - success message
  *
  * Side Effects:
