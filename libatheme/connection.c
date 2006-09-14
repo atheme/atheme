@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 6377 2006-09-13 16:10:57Z jilles $
+ * $Id: connection.c 6387 2006-09-14 00:58:10Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -132,6 +132,7 @@ int connection_count(void)
 
 	return LIST_LENGTH(&connection_list);
 }
+
 /*
  * connection_close()
  *
@@ -191,6 +192,74 @@ void connection_close(connection_t *cptr)
 	sendqrecvq_free(cptr);
 
 	BlockHeapFree(connection_heap, cptr);
+}
+
+/* This one is only safe for use by connection_close_soon(),
+ * it will cause infinite loops otherwise */
+static void empty_handler(connection_t *cptr)
+{
+}
+
+/*
+ * connection_close_soon()
+ *
+ * inputs:
+ *       the connection being closed.
+ *
+ * outputs:
+ *       none
+ *
+ * side effects:
+ *       the connection is marked to be closed soon
+ *       handlers reset
+ *       close_handler called
+ */
+void connection_close_soon(connection_t *cptr)
+{
+	if (cptr == NULL)
+		return;
+	cptr->flags |= CF_DEAD;
+	/* these two cannot be NULL */
+	cptr->read_handler = empty_handler;
+	cptr->write_handler = empty_handler;
+	cptr->recvq_handler = NULL;
+	if (cptr->close_handler)
+		cptr->close_handler(cptr);
+	cptr->close_handler = NULL;
+	cptr->listener = NULL;
+}
+
+/*
+ * connection_close_soon_children()
+ *
+ * inputs:
+ *       a listener.
+ *
+ * outputs:
+ *       none
+ *
+ * side effects:
+ *       connection_close_soon() called on the connection itself and
+ *       for all connections accepted on this listener
+ */
+void connection_close_soon_children(connection_t *cptr)
+{
+	node_t *n;
+	connection_t *cptr2;
+
+	if (cptr == NULL)
+		return;
+
+	if (CF_IS_LISTENING(cptr))
+	{
+		LIST_FOREACH(n, connection_list.head)
+		{
+			cptr2 = n->data;
+			if (cptr2->listener == cptr)
+				connection_close_soon(cptr2);
+		}
+	}
+	connection_close_soon(cptr);
 }
 
 /*
@@ -395,6 +464,7 @@ connection_t *connection_accept_tcp(connection_t *cptr,
 
 	strlcpy(buf, "incoming connection", BUFSIZE);
 	newptr = connection_add(buf, s, 0, read_handler, write_handler);
+	newptr->listener = cptr;
 	return newptr;
 }
 

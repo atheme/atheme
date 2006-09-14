@@ -4,7 +4,7 @@
  *
  * This contains the connection_t structure.
  *
- * $Id: connection.h 6379 2006-09-13 21:53:18Z jilles $
+ * $Id: connection.h 6387 2006-09-14 00:58:10Z jilles $
  */
 
 #ifndef CONNECTION_H
@@ -37,6 +37,7 @@ struct connection_
 
 	void (*recvq_handler)(connection_t *);
 	void (*close_handler)(connection_t *);
+	connection_t *listener;
 	void *userdata;
 };
 
@@ -76,6 +77,8 @@ extern connection_t *connection_accept_tcp(connection_t *,
 extern void connection_setselect(connection_t *, void(*)(connection_t *),
 	void(*)(connection_t *));
 extern void connection_close(connection_t *);
+extern void connection_close_soon(connection_t *);
+extern void connection_close_soon_children(connection_t *);
 extern void connection_write(connection_t *to, char *format, ...);
 extern void connection_write_raw(connection_t *to, char *data);
 extern connection_t *connection_find(int32_t);

@@ -4,7 +4,7 @@
  *
  * A simple web server
  *
- * $Id: gen_httpd.c 6385 2006-09-13 22:13:31Z jilles $
+ * $Id: gen_httpd.c 6387 2006-09-14 00:58:10Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"contrib/gen_httpd", FALSE, _modinit, _moddeinit,
-	"$Id: gen_httpd.c 6385 2006-09-13 22:13:31Z jilles $",
+	"$Id: gen_httpd.c 6387 2006-09-14 00:58:10Z jilles $",
 	"Jilles Tjoelker <jilles -at- stack.nl>"
 );
 
@@ -245,5 +245,5 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
-	connection_close(listener);
+	connection_close_soon_children(listener);
 }
