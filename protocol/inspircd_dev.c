@@ -863,9 +863,9 @@ static void m_error(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_idle(sourceinfo_t *si, int parc, char *parv[])
 {
-	if (parc == 1)
+	if (parc == 1 && si->su != NULL)
 	{
-		sts(":%s IDLE %s %ld 0", parv[0], si->origin, CURRTIME);
+		sts(":%s IDLE %s %ld 0", parv[0], si->su->nick, CURRTIME);
 	}
 	else
 	{
