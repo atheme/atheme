@@ -1,3 +1,12 @@
+jilles      2006/09/14 16:21:47 UTC	(20060914-6405)
+  Log:
+  Fix fault code in comment.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 jilles      2006/09/14 16:08:56 UTC	(20060914-6403)
   Log:
   Update some copyright years on protocol modules.

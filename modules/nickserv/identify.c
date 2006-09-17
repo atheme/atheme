@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY function.
  *
- * $Id: identify.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: identify.c 6407 2006-09-17 18:11:51Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/identify", FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: identify.c 6407 2006-09-17 18:11:51Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -198,8 +198,8 @@ static void ns_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
 						if (!config_options.join_chans)
 							join(cu->chan->name, chansvs.nick);
 					}
-					ban(chansvs.nick, ca->mychan->name, u);
-					remove_ban_exceptions(chansvs.me->me, channel_find(ca->mychan->name), u);
+					ban(chansvs.me->me, ca->mychan->chan, u);
+					remove_ban_exceptions(chansvs.me->me, ca->mychan->chan, u);
 					kick(chansvs.nick, ca->mychan->name, u->nick, "User is banned from this channel");
 					continue;
 				}

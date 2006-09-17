@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6359 2006-09-12 23:18:15Z pippijn $
+ * $Id: main.c 6407 2006-09-17 18:11:51Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6359 2006-09-12 23:18:15Z pippijn $",
+	"$Id: main.c 6407 2006-09-17 18:11:51Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -244,7 +244,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 			if (!config_options.join_chans)
 				join(chan->name, chansvs.nick);
 		}
-		ban(chansvs.nick, chan->name, u);
+		ban(chansvs.me->me, chan, u);
 		remove_ban_exceptions(chansvs.me->me, chan, u);
 		kick(chansvs.nick, chan->name, u->nick, "You are not authorized to be on this channel");
 		hdata->cu = NULL;
@@ -275,7 +275,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 			}
 		}
 		else
-			ban(chansvs.nick, chan->name, u);
+			ban(chansvs.me->me, chan, u);
 		remove_ban_exceptions(chansvs.me->me, chan, u);
 		kick(chansvs.nick, chan->name, u->nick, "User is banned from this channel");
 		hdata->cu = NULL;
