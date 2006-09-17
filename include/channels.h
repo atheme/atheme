@@ -4,7 +4,7 @@
  *
  * Data structures for channel information.
  *
- * $Id: channels.h 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: channels.h 6411 2006-09-17 20:57:27Z jilles $
  */
 
 #ifndef CHANNELS_H
@@ -118,7 +118,6 @@ E void modestack_mode_simple(char *source, char *channel, int dir, int32_t flags
 E void modestack_mode_limit(char *source, char *channel, int dir, uint32_t limit);
 E void modestack_mode_ext(char *source, char *channel, int dir, int i, const char *value);
 E void modestack_mode_param(char *source, char *channel, int dir, char type, const char *value);
-E void cmode(char *sender, ...);
 E void user_mode(user_t *user, char *modes);
 E void check_modes(mychan_t *mychan, boolean_t sendnow);
 

@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: cmode.c 6411 2006-09-17 20:57:27Z jilles $
  */
 
 #include "atheme.h"
@@ -648,107 +648,6 @@ void modestack_mode_param(char *source, char *channel, int dir, char type, const
 
 	md = modestack_init(source, channel);
 	modestack_add_param(md, dir, type, value);
-	if (!md->event)
-		md->event = event_add_once("flush_cmode_callback", modestack_flush_callback, md, 0);
-}
-
-#define CMTYPE_UNKNOWN 0
-#define CMTYPE_SIMPLE 1
-#define CMTYPE_LIMIT 2
-#define CMTYPE_EXT 3
-#define CMTYPE_PARAM 4
-
-/* legacy interface, blah */
-void cmode(char *source, ...)
-{
-	va_list va;
-	char *channel, *modes, m, *param;
-	struct modestackdata *md;
-	int dir = MTYPE_NUL;
-	int type = CMTYPE_UNKNOWN;
-	int i = 0;
-	uint32_t flag = 0;
-
-	if (!source)
-	{
-		/* yuck */
-		modestack_flush(&modestackdata);
-		return;
-	}
-	va_start(va, source);
-	channel = va_arg(va, char *);
-	md = modestack_init(source, channel);
-	modes = va_arg(va, char *);
-	slog(LG_DEBUG, "cmode(): %s MODE %s %s", source, channel, modes);
-	while (*modes != '\0')
-	{
-		m = *modes++;
-		if (m == '+')
-		{
-			dir = MTYPE_ADD;
-			continue;
-		}
-		if (m == '-')
-		{
-			dir = MTYPE_DEL;
-			continue;
-		}
-		if (m == 'k' || strchr(ircd->ban_like_modes, m))
-			type = CMTYPE_PARAM;
-		else if (m == 'l')
-			type = CMTYPE_LIMIT;
-		else
-		{
-			for (i = 0; mode_list[i].mode != '\0'; i++)
-			{
-				if (m == mode_list[i].mode)
-					type = CMTYPE_SIMPLE, flag = mode_list[i].value;
-			}
-			for (i = 0; status_mode_list[i].mode != '\0'; i++)
-			{
-				if (m == status_mode_list[i].mode)
-					type = CMTYPE_PARAM;
-			}
-			/* this one must be last */
-			for (i = 0; ignore_mode_list[i].mode != '\0'; i++)
-			{
-				if (m == ignore_mode_list[i].mode)
-				{
-					type = CMTYPE_EXT;
-					break;
-				}
-			}
-		}
-		if (type == CMTYPE_UNKNOWN)
-		{
-			slog(LG_INFO, "cmode(): unknown mode %c", m);
-			continue;
-		}
-		if (type == CMTYPE_PARAM || (dir == MTYPE_ADD && type != CMTYPE_SIMPLE))
-			param = va_arg(va, char *);
-		else
-			param = NULL;
-		switch (type)
-		{
-			case CMTYPE_SIMPLE:
-				modestack_add_simple(md, dir, flag);
-				break;
-			case CMTYPE_LIMIT:
-				modestack_add_limit(md, dir, dir == MTYPE_ADD ? atoi(param) : 0);
-				break;
-			case CMTYPE_EXT:
-				modestack_add_ext(md, dir, i, param);
-				break;
-			case CMTYPE_PARAM:
-				modestack_add_param(md, dir, m, param);
-		}
-	}
-	va_end(va);
-	/*
-	 * We now schedule the stack to occur as soon as we return to io_loop. This makes
-	 * stacking 1:1 transactionally, but really, that's how it should work. Lag is
-	 * bad, people! --nenolod
-	 */
 	if (!md->event)
 		md->event = event_add_once("flush_cmode_callback", modestack_flush_callback, md, 0);
 }
