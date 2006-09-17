@@ -1,3 +1,18 @@
+jilles      2006/09/17 18:11:51 UTC	(20060917-6407)
+  Log:
+  Change ban() from (char *, char *, user_t *) to
+  (user_t *, channel_t *, user_t *).
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/services.h (File Modified) 
+  +2 -2		trunk/modules/chanserv/kick.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/main.c (File Modified) 
+  +2 -2		trunk/modules/nickserv/identify.c (File Modified) 
+  +2 -2		trunk/modules/userserv/login.c (File Modified) 
+  +2 -3		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/09/14 16:21:47 UTC	(20060914-6405)
   Log:
   Fix fault code in comment.

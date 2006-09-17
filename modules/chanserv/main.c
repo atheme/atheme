@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6407 2006-09-17 18:11:51Z jilles $
+ * $Id: main.c 6409 2006-09-17 18:21:04Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6407 2006-09-17 18:11:51Z jilles $",
+	"$Id: main.c 6409 2006-09-17 18:21:04Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -63,7 +63,6 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 	boolean_t is_fcommand = FALSE;
 	hook_cmessage_data_t cdata;
 	char *cmd;
-	char *text;
 
 	/* this should never happen */
 	if (parv[parc - 2][0] == '&')
@@ -106,19 +105,18 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 
 	/* lets go through this to get the command */
 	cmd = strtok(parv[parc - 1], " ");
-        text = strtok(NULL, "");
 
 	if (!cmd)
 		return;
 	if (*cmd == '\001')
 	{
-		handle_ctcp_common(cmd, text, si->su->nick, chansvs.nick);
+		handle_ctcp_common(cmd, strtok(NULL, ""), si->su->nick, chansvs.nick);
 		return;
 	}
 
 	/* take the command through the hash table */
 	if (!is_fcommand)
-		command_exec_split(chansvs.me, si, cmd, text, &cs_cmdtree);
+		command_exec_split(chansvs.me, si, cmd, strtok(NULL, ""), &cs_cmdtree);
 	else
 	{
 		fcommand_exec_floodcheck(chansvs.me, parv[parc - 2], si->su->nick, cmd, &cs_fcmdtree);
