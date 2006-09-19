@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY function.
  *
- * $Id: identify.c 6407 2006-09-17 18:11:51Z jilles $
+ * $Id: identify.c 6413 2006-09-19 15:12:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/identify", FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 6407 2006-09-17 18:11:51Z jilles $",
+	"$Id: identify.c 6413 2006-09-19 15:12:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -179,6 +179,14 @@ static void ns_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
 
 		mu->lastlogin = CURRTIME;
 
+		/* XXX: ircd_on_login supports hostmasking, we just dont have it yet. */
+		/* don't allow them to join regonly chans until their
+		 * email is verified */
+		if (!(mu->flags & MU_WAITAUTH))
+			ircd_on_login(si->su->nick, mu->name, NULL);
+
+		hook_call_event("user_identify", u);
+
 		/* now we get to check for xOP */
 		/* we don't check for host access yet (could match different
 		 * entries because of services cloaks) */
@@ -241,14 +249,6 @@ static void ns_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
 				}
 			}
 		}
-
-		/* XXX: ircd_on_login supports hostmasking, we just dont have it yet. */
-		/* don't allow them to join regonly chans until their
-		 * email is verified */
-		if (!(mu->flags & MU_WAITAUTH))
-			ircd_on_login(si->su->nick, mu->name, NULL);
-
-		hook_call_event("user_identify", u);
 
 		return;
 	}

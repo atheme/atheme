@@ -1,3 +1,15 @@
+jilles      2006/09/17 20:57:27 UTC	(20060917-6411)
+  Log:
+  Get rid of the legacy API cmode(). Everything uses
+  modestack_*() already. There is little point leaving
+  it considering the API overhaul.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/include/channels.h (File Modified) 
+  +0 -101	trunk/src/cmode.c (File Modified) 
+
+
 jilles      2006/09/17 18:21:04 UTC	(20060917-6409)
   Log:
   Unbreak fantasy commands.
