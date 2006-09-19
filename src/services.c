@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 6407 2006-09-17 18:11:51Z jilles $
+ * $Id: services.c 6415 2006-09-19 21:20:19Z jilles $
  */
 
 #include "atheme.h"
@@ -138,7 +138,7 @@ void services_init(void)
 			user_changeuid(svs->me, svs->uid);
 		else if (!ircd->uses_uid && svs->me->uid[0] != '\0')
 			user_changeuid(svs->me, NULL);
-		introduce_nick(svs->name, svs->user, svs->host, svs->real, svs->uid);
+		introduce_nick(svs->me);
 	}
 }
 
@@ -191,7 +191,7 @@ void reintroduce_user(user_t *u)
 		slog(LG_DEBUG, "tried to reintroduce_user non-service %s", u->nick);
 		return;
 	}
-	introduce_nick(u->nick, u->user, u->host, svs->real, u->uid);
+	introduce_nick(u);
 	LIST_FOREACH(n, u->channels.head)
 	{
 		c = ((chanuser_t *)n->data)->chan;

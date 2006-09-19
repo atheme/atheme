@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: asuka.c 6403 2006-09-14 16:08:56Z jilles $
+ * $Id: asuka.c 6415 2006-09-19 21:20:19Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 6403 2006-09-14 16:08:56Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 6415 2006-09-19 21:20:19Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -99,9 +99,9 @@ static uint8_t asuka_server_login(void)
 }
 
 /* introduce a client */
-static void asuka_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
+static void asuka_introduce_nick(user_t *u)
 {
-	sts("%s N %s 1 %ld %s %s +%s%sk ]]]]]] %s :%s", me.numeric, nick, CURRTIME, user, host, "io", chansvs.fantasy ? "" : "d", uid, real);
+	sts("%s N %s 1 %ld %s %s +%s%sk ]]]]]] %s :%s", me.numeric, u->nick, u->ts, u->user, u->host, "io", chansvs.fantasy ? "" : "d", u->uid, u->gecos);
 }
 
 /* invite a user to a channel */

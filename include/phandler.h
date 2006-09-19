@@ -4,7 +4,7 @@
  *
  * Protocol handlers, both generic and the actual declarations themselves.
  *
- * $Id: phandler.h 6257 2006-08-31 15:23:16Z jilles $
+ * $Id: phandler.h 6415 2006-09-19 21:20:19Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -73,7 +73,7 @@ typedef struct ircd_ ircd_t;
  * return 1 if sts() failed (by returning 1), otherwise 0 */
 E uint8_t (*server_login)(void);
 /* introduce a client on the services server */
-E void (*introduce_nick)(char *nick, char *user, char *host, char *real, char *uid);
+E void (*introduce_nick)(user_t *u);
 /* send an invite for a given user to a channel
  * the source may not be on the channel */
 E void (*invite_sts)(user_t *source, user_t *target, channel_t *channel);
@@ -171,7 +171,7 @@ E void (*svslogin_sts)(char *target, char *nick, char *user, char *host, char *l
 E void (*sasl_sts) (char *target, char mode, char *data);
 
 E uint8_t generic_server_login(void);
-E void generic_introduce_nick(char *nick, char *ser, char *host, char *real, char *uid);
+E void generic_introduce_nick(user_t *u);
 E void generic_invite_sts(user_t *source, user_t *target, channel_t *channel);
 E void generic_quit_sts(user_t *u, char *reason);
 E void generic_wallops(char *fmt, ...);

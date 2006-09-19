@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
  *
- * $Id: nefarious.c 6403 2006-09-14 16:08:56Z jilles $
+ * $Id: nefarious.c 6415 2006-09-19 21:20:19Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 6403 2006-09-14 16:08:56Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 6415 2006-09-19 21:20:19Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -111,9 +111,9 @@ static uint8_t nefarious_server_login(void)
 }
 
 /* introduce a client */
-static void nefarious_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
+static void nefarious_introduce_nick(user_t *u)
 {
-	sts("%s N %s 1 %ld %s %s +%s%sk ]]]]]] %s :%s", me.numeric, nick, CURRTIME, user, host, "io", chansvs.fantasy ? "" : "d", uid, real);
+	sts("%s N %s 1 %ld %s %s +%s%sk ]]]]]] %s :%s", me.numeric, u->nick, u->ts, u->user, u->host, "io", chansvs.fantasy ? "" : "d", u->uid, u->gecos);
 }
 
 /* invite a user to a channel */

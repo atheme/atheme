@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 6403 2006-09-14 16:08:56Z jilles $
+ * $Id: ircnet.c 6415 2006-09-19 21:20:19Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 6403 2006-09-14 16:08:56Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 6415 2006-09-19 21:20:19Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -91,9 +91,9 @@ static uint8_t ircnet_server_login(void)
 }
 
 /* introduce a client */
-static void ircnet_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
+static void ircnet_introduce_nick(user_t *u)
 {
-	sts(":%s UNICK %s %s %s %s 0.0.0.0 +%s :%s", me.numeric, nick, uid, user, host, "io", real);
+	sts(":%s UNICK %s %s %s %s 0.0.0.0 +%s :%s", me.numeric, u->nick, u->uid, u->user, u->host, "io", u->gecos);
 }
 
 /* invite a user to a channel */

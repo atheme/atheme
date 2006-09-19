@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 6403 2006-09-14 16:08:56Z jilles $
+ * $Id: hyperion.c 6415 2006-09-19 21:20:19Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -17,7 +17,7 @@
 #include "pmodule.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 6403 2006-09-14 16:08:56Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 6415 2006-09-19 21:20:19Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -157,11 +157,11 @@ static uint8_t hyperion_server_login(void)
  * Protocol information ripped from theia/dancer-services (Hybserv2 TS of some sort).
  *    -- nenolod
  */
-static void hyperion_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
+static void hyperion_introduce_nick(user_t *u)
 {
 	const char *privs = "6@BFmMopPRUX";
-	sts("NICK %s 1 %ld +ei%s %s %s %s 0.0.0.0 :%s", nick, CURRTIME, privs, user, host, me.name, real);
-	sts(":%s OPER %s +%s", me.name, nick, privs);
+	sts("NICK %s 1 %ld +ei%s %s %s %s 0.0.0.0 :%s", u->nick, u->ts, privs, u->user, u->host, me.name, u->gecos);
+	sts(":%s OPER %s +%s", me.name, u->nick, privs);
 }
 
 /* invite a user to a channel */

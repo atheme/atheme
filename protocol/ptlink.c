@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for ptlink ircd.
  *
- * $Id: ptlink.c 6403 2006-09-14 16:08:56Z jilles $
+ * $Id: ptlink.c 6415 2006-09-19 21:20:19Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/ptlink.h"
 
-DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 6403 2006-09-14 16:08:56Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 6415 2006-09-19 21:20:19Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -130,9 +130,9 @@ static uint8_t ptlink_server_login(void)
 }
 
 /* introduce a client */
-static void ptlink_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
+static void ptlink_introduce_nick(user_t *u)
 {
-	sts("NICK %s 1 %ld +%sp %s %s %s %s :%s", nick, CURRTIME, "io", user, host, host, me.name, real);
+	sts("NICK %s 1 %ld +%sp %s %s %s %s :%s", u->nick, u->ts, "io", u->user, u->host, u->host, me.name, u->gecos);
 }
 
 /* invite a user to a channel */

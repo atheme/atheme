@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree stable branch inspircd.
  *
- * $Id: inspircd.c 6403 2006-09-14 16:08:56Z jilles $
+ * $Id: inspircd.c 6415 2006-09-19 21:20:19Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 6403 2006-09-14 16:08:56Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd.c 6415 2006-09-19 21:20:19Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -167,11 +167,11 @@ static uint8_t inspircd_server_login(void)
 }
 
 /* introduce a client */
-static void inspircd_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
+static void inspircd_introduce_nick(user_t *u)
 {
 	/* :services-dev.chatspike.net NICK 1133994664 OperServ chatspike.net chatspike.net services +oii 0.0.0.0 :Operator Server  */
-	sts(":%s NICK %ld %s %s %s %s +%s 0.0.0.0 :%s", me.name, CURRTIME, nick, host, host, user, "io", real);
-	sts(":%s OPERTYPE Services",nick);
+	sts(":%s NICK %ld %s %s %s %s +%s 0.0.0.0 :%s", me.name, u->ts, u->nick, u->host, u->host, u->user, "io", u->gecos);
+	sts(":%s OPERTYPE Services", u->nick);
 }
 
 static void inspircd_quit_sts(user_t *u, char *reason)

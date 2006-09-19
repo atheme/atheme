@@ -4,7 +4,7 @@
  *
  * Services binary tree manipulation. (add_service, del_service, et al.)
  *
- * $Id: servtree.c 6351 2006-09-10 21:06:47Z jilles $
+ * $Id: servtree.c 6415 2006-09-19 21:20:19Z jilles $
  */
 
 #include "atheme.h"
@@ -88,7 +88,7 @@ service_t *add_service(char *name, char *user, char *host, char *real, void (*ha
 
 	if (me.connected)
 	{
-		introduce_nick(name, user, host, real, sptr->uid);
+		introduce_nick(sptr->me);
 		/* if the snoop channel already exists, join it now */
 		if (config_options.chan != NULL && channel_find(config_options.chan) != NULL)
 			join(config_options.chan, name);

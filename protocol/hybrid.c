@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 6401 2006-09-14 16:03:29Z jilles $
+ * $Id: hybrid.c 6415 2006-09-19 21:20:19Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 6401 2006-09-14 16:03:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 6415 2006-09-19 21:20:19Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -108,18 +108,19 @@ static uint8_t hybrid_server_login(void)
 }
 
 /* introduce a client */
-static void hybrid_introduce_nick(char *nick, char *user, char *host, char *real, char *uid)
+static void hybrid_introduce_nick(user_t *u)
 {
 	if (ircd->uses_uid)
 		sts(":%s UID %s 1 %ld +%s%s%s %s %s 0 %s :%s",
-			me.numeric, nick, CURRTIME, "io",
+			me.numeric, u->nick, u->ts, "io",
 			chansvs.fantasy ? "" : "D",
-			use_rserv_support ? "S" : "", user, host, uid, real);
+			use_rserv_support ? "S" : "", u->user, u->host, u->uid,
+			u->gecos);
 	else
 		sts("NICK %s 1 %ld +%s%s%s %s %s %s :%s",
-			nick, CURRTIME, "io", chansvs.fantasy ? "" : "D",
+			u->nick, u->ts, "io", chansvs.fantasy ? "" : "D",
 			use_rserv_support ? "S" : "",
-			user, host, me.name, real);
+			u->user, u->host, me.name, u->gecos);
 }
 
 /* invite a user to a channel */
