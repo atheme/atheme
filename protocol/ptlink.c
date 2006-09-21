@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for ptlink ircd.
  *
- * $Id: ptlink.c 6415 2006-09-19 21:20:19Z jilles $
+ * $Id: ptlink.c 6417 2006-09-21 17:33:29Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/ptlink.h"
 
-DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 6415 2006-09-19 21:20:19Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 6417 2006-09-21 17:33:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -204,16 +204,19 @@ static void ptlink_msg(char *from, char *target, char *fmt, ...)
 }
 
 /* NOTICE wrapper */
-static void ptlink_notice(char *from, char *target, char *fmt, ...)
+static void ptlink_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
-	va_list ap;
-	char buf[BUFSIZE];
+	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->nick, text);
+}
 
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
+static void ptlink_notice_global_sts(user_t *from, const char *mask, const char *text)
+{
+	sts(":%s NOTICE %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
+}
 
-	sts(":%s NOTICE %s :%s", from, target, buf);
+static void ptlink_notice_channel_sts(user_t *from, channel_t *target, const char *text)
+{
+	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->name, text);
 }
 
 /* numeric wrapper */
@@ -766,7 +769,9 @@ void _modinit(module_t * m)
 	join_sts = &ptlink_join_sts;
 	kick = &ptlink_kick;
 	msg = &ptlink_msg;
-	notice_sts = &ptlink_notice;
+	notice_user_sts = &ptlink_notice_user_sts;
+	notice_global_sts = &ptlink_notice_global_sts;
+	notice_channel_sts = &ptlink_notice_channel_sts;
 	numeric_sts = &ptlink_numeric_sts;
 	skill = &ptlink_skill;
 	part = &ptlink_part;

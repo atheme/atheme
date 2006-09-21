@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 6415 2006-09-19 21:20:19Z jilles $
+ * $Id: ircnet.c 6417 2006-09-21 17:33:29Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 6415 2006-09-19 21:20:19Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 6417 2006-09-21 17:33:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -177,27 +177,34 @@ static void ircnet_msg(char *from, char *target, char *fmt, ...)
 }
 
 /* NOTICE wrapper */
-static void ircnet_notice(char *from, char *target, char *fmt, ...)
+static void ircnet_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-	user_t *u = user_find(from);
-	user_t *t = user_find(target);
+	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, CLIENT_NAME(target), text);
+}
 
-	if (u == NULL && (from == NULL || (irccasecmp(from, me.name) && irccasecmp(from, ME))))
+static void ircnet_notice_global_sts(user_t *from, const char *mask, const char *text)
+{
+	node_t *n;
+	tld_t *tld;
+
+	if (!strcmp(mask, "*"))
 	{
-		slog(LG_DEBUG, "ircnet_notice(): unknown source %s for notice to %s", from, target);
-		return;
+		LIST_FOREACH(n, tldlist.head)
+		{
+			tld = n->data;
+			sts(":%s NOTICE %s*%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, tld->name, text);
+		}
 	}
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	if (u == NULL || target[0] != '#' || chanuser_find(channel_find(target), user_find(from)))
-		sts(":%s NOTICE %s :%s", u ? CLIENT_NAME(u) : ME, t ? CLIENT_NAME(t) : target, buf);
 	else
-		sts(":%s NOTICE %s :%s: %s", ME, target, u->nick, buf);
+		sts(":%s NOTICE %s%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, mask, text);
+}
+
+static void ircnet_notice_channel_sts(user_t *from, channel_t *target, const char *text)
+{
+	if (from == NULL || chanuser_find(target, from))
+		sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, target->name, text);
+	else
+		sts(":%s NOTICE %s :%s: %s", ME, target->name, from->nick, text);
 }
 
 /* numeric wrapper */
@@ -732,7 +739,9 @@ void _modinit(module_t * m)
 	join_sts = &ircnet_join_sts;
 	kick = &ircnet_kick;
 	msg = &ircnet_msg;
-	notice_sts = &ircnet_notice;
+	notice_user_sts = &ircnet_notice_user_sts;
+	notice_global_sts = &ircnet_notice_global_sts;
+	notice_channel_sts = &ircnet_notice_channel_sts;
 	/* no wallchops, ircnet ircd does not support this */
 	numeric_sts = &ircnet_numeric_sts;
 	skill = &ircnet_skill;

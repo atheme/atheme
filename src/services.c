@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 6415 2006-09-19 21:20:19Z jilles $
+ * $Id: services.c 6417 2006-09-21 17:33:29Z jilles $
  */
 
 #include "atheme.h"
@@ -367,6 +367,8 @@ void notice(char *from, char *to, char *fmt, ...)
 	va_list args;
 	char buf[BUFSIZE];
 	char *str = translation_get(fmt);
+	user_t *u;
+	channel_t *c;
 
 	va_start(args, fmt);
 	vsnprintf(buf, BUFSIZE, str, args);
@@ -375,7 +377,20 @@ void notice(char *from, char *to, char *fmt, ...)
 	if (config_options.use_privmsg)
 		msg(from, to, "%s", buf);
 	else
-		notice_sts(from, to, "%s", buf);
+	{
+		if (*to == '#')
+		{
+			c = channel_find(to);
+			if (c != NULL)
+				notice_channel_sts(user_find_named(from), c, buf);
+		}
+		else
+		{
+			u = user_find_named(to);
+			if (u != NULL)
+				notice_user_sts(user_find_named(from), u, buf);
+		}
+	}
 }
 
 void verbose_wallops(char *fmt, ...)

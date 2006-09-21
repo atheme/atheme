@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: undernet.c 6415 2006-09-19 21:20:19Z jilles $
+ * $Id: undernet.c 6417 2006-09-21 17:33:29Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 6415 2006-09-19 21:20:19Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 6417 2006-09-21 17:33:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -181,24 +181,34 @@ static void undernet_msg(char *from, char *target, char *fmt, ...)
 }
 
 /* NOTICE wrapper */
-static void undernet_notice(char *from, char *target, char *fmt, ...)
+static void undernet_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-	user_t *u = user_find_named(from);
-	user_t *t = user_find_named(target);
+	sts("%s O %s :%s", from ? from->uid : me.numeric, target->uid, text);
+}
 
-	if (u == NULL && (from == NULL || (irccasecmp(from, me.name) && irccasecmp(from, ME))))
+static void undernet_notice_global_sts(user_t *from, const char *mask, const char *text)
+{
+	node_t *n;
+	tld_t *tld;
+
+	if (!strcmp(mask, "*"))
 	{
-		slog(LG_DEBUG, "undernet_notice(): unknown source %s for notice to %s", from, target);
-		return;
+		LIST_FOREACH(n, tldlist.head)
+		{
+			tld = n->data;
+			sts(":%s O %s*%s :%s", from ? from->uid : me.numeric, ircd->tldprefix, tld->name, text);
+		}
 	}
+	else
+		sts("%s O %s%s :%s", from ? from->uid : me.numeric, ircd->tldprefix, mask, text);
+}
 
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts("%s O %s :%s", u ? u->uid : me.numeric, t ? t->uid : target, buf);
+static void undernet_notice_channel_sts(user_t *from, channel_t *target, const char *text)
+{
+	if (from == NULL || chanuser_find(target, from))
+		sts(":%s O %s :%s", from ? from->uid : me.numeric, target->name, text);
+	else
+		sts(":%s O %s :%s: %s", me.numeric, target->name, from->nick, text);
 }
 
 static void undernet_wallchops(user_t *sender, channel_t *channel, char *message)
@@ -964,7 +974,9 @@ void _modinit(module_t * m)
 	join_sts = &undernet_join_sts;
 	kick = &undernet_kick;
 	msg = &undernet_msg;
-	notice_sts = &undernet_notice;
+	notice_user_sts = &undernet_notice_user_sts;
+	notice_global_sts = &undernet_notice_global_sts;
+	notice_channel_sts = &undernet_notice_channel_sts;
 	wallchops = &undernet_wallchops;
 	numeric_sts = &undernet_numeric_sts;
 	skill = &undernet_skill;

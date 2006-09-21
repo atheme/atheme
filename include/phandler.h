@@ -4,7 +4,7 @@
  *
  * Protocol handlers, both generic and the actual declarations themselves.
  *
- * $Id: phandler.h 6415 2006-09-19 21:20:19Z jilles $
+ * $Id: phandler.h 6417 2006-09-21 17:33:29Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -103,12 +103,20 @@ E void (*kick)(char *from, char *channel, char *to, char *reason);
 /* send a privmsg
  * here it's ok to assume the source is able to send */
 E void (*msg)(char *from, char *target, char *fmt, ...);
-/* send a notice
+/* send a notice to a user
  * from can be a client on the services server or the services server
- * itself (me.name or ME)
+ * itself (NULL) */
+E void (*notice_user_sts)(user_t *from, user_t *target, const char *text);
+/* send a global notice to all users on servers matching the mask
+ * from is a client on the services server
+ * mask is either "*" or it has a non-wildcard TLD */
+E void (*notice_global_sts)(user_t *from, const char *mask, const char *text);
+/* send a notice to a channel
+ * from can be a client on the services server or the services server
+ * itself (NULL)
  * if the source cannot send because it is not on the channel, send the
  * notice from the server or join for a moment */
-E void (*notice_sts)(char *from, char *target, char *fmt, ...);
+E void (*notice_channel_sts)(user_t *from, channel_t *target, const char *text);
 /* send a notice to ops in a channel
  * source may or may not be on channel
  * generic_wallchops() sends an individual notice to each channel operator */
@@ -179,7 +187,9 @@ E void generic_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes);
 E void generic_chan_lowerts(channel_t *c, user_t *u);
 E void generic_kick(char *from, char *channel, char *to, char *reason);
 E void generic_msg(char *from, char *target, char *fmt, ...);
-E void generic_notice(char *from, char *target, char *fmt, ...);
+E void generic_notice_user_sts(user_t *from, user_t *target, const char *text);
+E void generic_notice_global_sts(user_t *from, const char *mask, const char *text);
+E void generic_notice_channel_sts(user_t *from, channel_t *target, const char *text);
 E void generic_wallchops(user_t *source, channel_t *target, char *message);
 E void generic_numeric_sts(char *from, int numeric, char *target, char *fmt, ...);
 E void generic_skill(char *from, char *nick, char *fmt, ...);

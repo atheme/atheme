@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 6415 2006-09-19 21:20:19Z jilles $
+ * $Id: charybdis.c 6417 2006-09-21 17:33:29Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6415 2006-09-19 21:20:19Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6417 2006-09-21 17:33:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -283,27 +283,34 @@ static void charybdis_msg(char *from, char *target, char *fmt, ...)
 }
 
 /* NOTICE wrapper */
-static void charybdis_notice(char *from, char *target, char *fmt, ...)
+static void charybdis_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-	user_t *u = user_find(from);
-	user_t *t = user_find(target);
+	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, CLIENT_NAME(target), text);
+}
 
-	if (u == NULL && (from == NULL || (irccasecmp(from, me.name) && irccasecmp(from, ME))))
+static void charybdis_notice_global_sts(user_t *from, const char *mask, const char *text)
+{
+	node_t *n;
+	tld_t *tld;
+
+	if (!strcmp(mask, "*"))
 	{
-		slog(LG_DEBUG, "charybdis_notice(): unknown source %s for notice to %s", from, target);
-		return;
+		LIST_FOREACH(n, tldlist.head)
+		{
+			tld = n->data;
+			sts(":%s NOTICE %s*%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, tld->name, text);
+		}
 	}
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	if (u == NULL || target[0] != '#' || chanuser_find(channel_find(target), u))
-		sts(":%s NOTICE %s :%s", u ? CLIENT_NAME(u) : ME, t ? CLIENT_NAME(t) : target, buf);
 	else
-		sts(":%s NOTICE %s :%s: %s", ME, target, u->nick, buf);
+		sts(":%s NOTICE %s%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, mask, text);
+}
+
+static void charybdis_notice_channel_sts(user_t *from, channel_t *target, const char *text)
+{
+	if (from == NULL || chanuser_find(target, from))
+		sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, target->name, text);
+	else
+		sts(":%s NOTICE %s :%s: %s", ME, target->name, from->nick, text);
 }
 
 static void charybdis_wallchops(user_t *sender, channel_t *channel, char *message)
@@ -1380,7 +1387,9 @@ void _modinit(module_t * m)
 	chan_lowerts = &charybdis_chan_lowerts;
 	kick = &charybdis_kick;
 	msg = &charybdis_msg;
-	notice_sts = &charybdis_notice;
+	notice_user_sts = &charybdis_notice_user_sts;
+	notice_global_sts = &charybdis_notice_global_sts;
+	notice_channel_sts = &charybdis_notice_channel_sts;
 	wallchops = &charybdis_wallchops;
 	numeric_sts = &charybdis_numeric_sts;
 	skill = &charybdis_skill;

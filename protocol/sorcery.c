@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: sorcery.c 6415 2006-09-19 21:20:19Z jilles $
+ * $Id: sorcery.c 6417 2006-09-21 17:33:29Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/sorcery.h"
 
-DECLARE_MODULE_V1("protocol/sorcery", TRUE, _modinit, NULL, "$Id: sorcery.c 6415 2006-09-19 21:20:19Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/sorcery", TRUE, _modinit, NULL, "$Id: sorcery.c 6417 2006-09-21 17:33:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -172,16 +172,31 @@ static void sorcery_msg(char *from, char *target, char *fmt, ...)
 }
 
 /* NOTICE wrapper */
-static void sorcery_notice(char *from, char *target, char *fmt, ...)
+static void sorcery_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
-	va_list ap;
-	char buf[BUFSIZE];
+	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->nick, text);
+}
 
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
+static void sorcery_notice_global_sts(user_t *from, const char *mask, const char *text)
+{
+	node_t *n;
+	tld_t *tld;
 
-	sts(":%s NOTICE %s :%s", from, target, buf);
+	if (!strcmp(mask, "*"))
+	{
+		LIST_FOREACH(n, tldlist.head)
+		{
+			tld = n->data;
+			sts(":%s NOTICE %s*%s :%s", from ? from->nick : me.name, ircd->tldprefix, tld->name, text);
+		}
+	}
+	else
+		sts(":%s NOTICE %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
+}
+
+static void sorcery_notice_channel_sts(user_t *from, channel_t *target, const char *text)
+{
+	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->name, text);
 }
 
 static void sorcery_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
@@ -611,7 +626,9 @@ void _modinit(module_t * m)
 	join_sts = &sorcery_join_sts;
 	kick = &sorcery_kick;
 	msg = &sorcery_msg;
-	notice_sts = &sorcery_notice;
+	notice_user_sts = &sorcery_notice_user_sts;
+	notice_global_sts = &sorcery_notice_global_sts;
+	notice_channel_sts = &sorcery_notice_channel_sts;
 	numeric_sts = &sorcery_numeric_sts;
 	skill = &sorcery_skill;
 	part = &sorcery_part;

@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 6415 2006-09-19 21:20:19Z jilles $
+ * $Id: hybrid.c 6417 2006-09-21 17:33:29Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 6415 2006-09-19 21:20:19Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 6417 2006-09-21 17:33:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -218,30 +218,37 @@ static void hybrid_msg(char *from, char *target, char *fmt, ...)
 }
 
 /* NOTICE wrapper */
-static void hybrid_notice(char *from, char *target, char *fmt, ...)
+static void hybrid_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-	user_t *u = user_find(from);
-	user_t *t = user_find(target);
+	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, CLIENT_NAME(target), text);
+}
 
-	if (u == NULL && (from == NULL || (irccasecmp(from, me.name) && irccasecmp(from, ME))))
+static void hybrid_notice_global_sts(user_t *from, const char *mask, const char *text)
+{
+	node_t *n;
+	tld_t *tld;
+
+	if (!strcmp(mask, "*"))
 	{
-		slog(LG_DEBUG, "hybrid_notice(): unknown source %s for notice to %s", from, target);
-		return;
+		LIST_FOREACH(n, tldlist.head)
+		{
+			tld = n->data;
+			sts(":%s NOTICE %s*%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, tld->name, text);
+		}
 	}
+	else
+		sts(":%s NOTICE %s%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, mask, text);
+}
 
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	if (u == NULL || target[0] != '#' || chanuser_find(channel_find(target), u))
-		sts(":%s NOTICE %s :%s", u ? CLIENT_NAME(u) : ME, t ? CLIENT_NAME(t) : target, buf);
+static void hybrid_notice_channel_sts(user_t *from, channel_t *target, const char *text)
+{
+	if (from == NULL || chanuser_find(target, from))
+		sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, target->name, text);
 	else
 		/* not on channel, let's send it from the server
 		 * hyb6 won't accept this, oh well, they'll have to
 		 * enable join_chans -- jilles */
-		sts(":%s NOTICE %s :%s: %s", ME, target, u->nick, buf);
+		sts(":%s NOTICE %s :%s: %s", ME, target->name, from->nick, text);
 }
 
 static void hybrid_wallchops(user_t *sender, channel_t *channel, char *message)
@@ -1113,7 +1120,9 @@ void _modinit(module_t * m)
 	chan_lowerts = &hybrid_chan_lowerts;
 	kick = &hybrid_kick;
 	msg = &hybrid_msg;
-	notice_sts = &hybrid_notice;
+	notice_user_sts = &hybrid_notice_user_sts;
+	notice_global_sts = &hybrid_notice_global_sts;
+	notice_channel_sts = &hybrid_notice_channel_sts;
 	wallchops = &hybrid_wallchops;
 	numeric_sts = &hybrid_numeric_sts;
 	skill = &hybrid_skill;

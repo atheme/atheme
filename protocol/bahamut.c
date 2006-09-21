@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: bahamut.c 6415 2006-09-19 21:20:19Z jilles $
+ * $Id: bahamut.c 6417 2006-09-21 17:33:29Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/bahamut.h"
 
-DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 6415 2006-09-19 21:20:19Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 6417 2006-09-21 17:33:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -185,22 +185,31 @@ static void bahamut_msg(char *from, char *target, char *fmt, ...)
 }
 
 /* NOTICE wrapper */
-static void bahamut_notice(char *from, char *target, char *fmt, ...)
+static void bahamut_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
-	va_list ap;
-	char buf[BUFSIZE];
+	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->nick, text);
+}
 
-	/* Bahamut appears to not like it when it recieves
-	 * a message to and from the same person.
-	 */
-	if (!strcasecmp(from, target))
-		return;
+static void bahamut_notice_global_sts(user_t *from, const char *mask, const char *text)
+{
+	node_t *n;
+	tld_t *tld;
 
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
+	if (!strcmp(mask, "*"))
+	{
+		LIST_FOREACH(n, tldlist.head)
+		{
+			tld = n->data;
+			sts(":%s NOTICE %s*%s :%s", from ? from->nick : me.name, ircd->tldprefix, tld->name, text);
+		}
+	}
+	else
+		sts(":%s NOTICE %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
+}
 
-	sts(":%s NOTICE %s :%s", from, target, buf);
+static void bahamut_notice_channel_sts(user_t *from, channel_t *target, const char *text)
+{
+	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->name, text);
 }
 
 static void bahamut_wallchops(user_t *sender, channel_t *channel, char *message)
@@ -824,7 +833,9 @@ void _modinit(module_t * m)
 	chan_lowerts = &bahamut_chan_lowerts;
 	kick = &bahamut_kick;
 	msg = &bahamut_msg;
-	notice_sts = &bahamut_notice;
+	notice_user_sts = &bahamut_notice_user_sts;
+	notice_global_sts = &bahamut_notice_global_sts;
+	notice_channel_sts = &bahamut_notice_channel_sts;
 	wallchops = &bahamut_wallchops;
 	numeric_sts = &bahamut_numeric_sts;
 	skill = &bahamut_skill;

@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6359 2006-09-12 23:18:15Z pippijn $
+ * $Id: main.c 6417 2006-09-21 17:33:29Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"global/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6359 2006-09-12 23:18:15Z pippijn $",
+	"$Id: main.c 6417 2006-09-21 17:33:29Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -70,11 +70,12 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 	static BlockHeap *glob_heap = NULL;
 	struct global_ *global;
 	static list_t globlist;
-	node_t *n, *n2, *tn;
+	node_t *n, *tn;
 	tld_t *tld;
 	char *params = parv[0];
 	static char *sender = NULL;
 	boolean_t isfirst;
+	char buf[BUFSIZE];
 
 	if (!params)
 	{
@@ -124,18 +125,11 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 		{
 			global = (struct global_ *)n->data;
 
-			/* send to every tld */
-			LIST_FOREACH(n2, tldlist.head)
-			{
-				tld = (tld_t *)n2->data;
-
-				sts(":%s NOTICE %s*%s :[Network Notice] %s%s%s",
-						globsvs.nick, ircd->tldprefix,
-						tld->name,
-						isfirst ? si->su->nick : "",
-						isfirst ? " - " : "",
-						global->text);
-			}
+			snprintf(buf, sizeof buf, "[Network Notice] %s%s%s",
+					isfirst ? si->su->nick : "",
+					isfirst ? " - " : "",
+					global->text);
+			notice_global_sts(globsvs.me->me, "*", buf);
 			isfirst = FALSE;
 			/* log everything */
 			logcommand(globsvs.me, si->su, CMDLOG_ADMIN, "GLOBAL %s", global->text);

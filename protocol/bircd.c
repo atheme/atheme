@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: bircd.c 6415 2006-09-19 21:20:19Z jilles $
+ * $Id: bircd.c 6417 2006-09-21 17:33:29Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 6415 2006-09-19 21:20:19Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 6417 2006-09-21 17:33:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -184,24 +184,34 @@ static void asuka_msg(char *from, char *target, char *fmt, ...)
 }
 
 /* NOTICE wrapper */
-static void asuka_notice(char *from, char *target, char *fmt, ...)
+static void asuka_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-	user_t *u = user_find_named(from);
-	user_t *t = user_find_named(target);
+	sts("%s O %s :%s", from ? from->uid : me.numeric, target->uid, text);
+}
 
-	if (u == NULL && (from == NULL || (irccasecmp(from, me.name) && irccasecmp(from, ME))))
+static void asuka_notice_global_sts(user_t *from, const char *mask, const char *text)
+{
+	node_t *n;
+	tld_t *tld;
+
+	if (!strcmp(mask, "*"))
 	{
-		slog(LG_DEBUG, "asuka_notice(): unknown source %s for notice to %s", from, target);
-		return;
+		LIST_FOREACH(n, tldlist.head)
+		{
+			tld = n->data;
+			sts(":%s O %s*%s :%s", from ? from->uid : me.numeric, ircd->tldprefix, tld->name, text);
+		}
 	}
+	else
+		sts("%s O %s%s :%s", from ? from->uid : me.numeric, ircd->tldprefix, mask, text);
+}
 
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts("%s O %s :%s", u ? u->uid : me.numeric, t ? t->uid : target, buf);
+static void asuka_notice_channel_sts(user_t *from, channel_t *target, const char *text)
+{
+	if (from == NULL || chanuser_find(target, from))
+		sts(":%s O %s :%s", from ? from->uid : me.numeric, target->name, text);
+	else
+		sts(":%s O %s :%s: %s", me.numeric, target->name, from->nick, text);
 }
 
 static void asuka_wallchops(user_t *sender, channel_t *channel, char *message)
@@ -966,7 +976,9 @@ void _modinit(module_t * m)
 	join_sts = &asuka_join_sts;
 	kick = &asuka_kick;
 	msg = &asuka_msg;
-	notice_sts = &asuka_notice;
+	notice_user_sts = &asuka_notice_user_sts;
+	notice_global_sts = &asuka_notice_global_sts;
+	notice_channel_sts = &asuka_notice_channel_sts;
 	wallchops = &asuka_wallchops;
 	numeric_sts = &asuka_numeric_sts;
 	skill = &asuka_skill;

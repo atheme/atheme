@@ -4,7 +4,7 @@
  *
  * Generic protocol event handlers.
  *
- * $Id: phandler.c 6415 2006-09-19 21:20:19Z jilles $
+ * $Id: phandler.c 6417 2006-09-21 17:33:29Z jilles $
  */
 
 #include "atheme.h"
@@ -16,8 +16,10 @@ void (*join_sts) (channel_t *c, user_t *u, boolean_t isnew, char *modes) = gener
 void (*chan_lowerts) (channel_t *c, user_t *u) = generic_chan_lowerts;
 void (*kick) (char *from, char *channel, char *to, char *reason) = generic_kick;
 void (*msg) (char *from, char *target, char *fmt, ...) = generic_msg;
-void (*notice_sts) (char *from, char *target, char *fmt, ...) = generic_notice;
-void (*wallchops)(user_t *source, channel_t *target, char *message) = generic_wallchops;
+void (*notice_user_sts) (user_t *from, user_t *target, const char *text) = generic_notice_user_sts;
+void (*notice_global_sts) (user_t *from, const char *mask, const char *text) = generic_notice_global_sts;
+void (*notice_channel_sts) (user_t *from, channel_t *target, const char *text) = generic_notice_channel_sts;
+void (*wallchops) (user_t *source, channel_t *target, char *message) = generic_wallchops;
 void (*numeric_sts) (char *from, int numeric, char *target, char *fmt, ...) = generic_numeric_sts;
 void (*skill) (char *from, char *nick, char *fmt, ...) = generic_skill;
 void (*part) (char *chan, char *nick) = generic_part;
@@ -91,16 +93,19 @@ void generic_msg(char *from, char *target, char *fmt, ...)
 	slog(LG_INFO, "Cannot send message to %s (%s): don't know how. Load a protocol module perhaps?", target, buf);
 }
 
-void generic_notice(char *from, char *target, char *fmt, ...)
+void generic_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
-	va_list ap;
-	char buf[BUFSIZE];
+	slog(LG_INFO, "Cannot send notice to %s (%s): don't know how. Load a protocol module perhaps?", target->nick, text);
+}
 
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
+void generic_notice_global_sts(user_t *from, const char *mask, const char *text)
+{
+	slog(LG_INFO, "Cannot send global notice to %s (%s): don't know how. Load a protocol module perhaps?", mask, text);
+}
 
-	slog(LG_INFO, "Cannot send notice to %s (%s): don't know how. Load a protocol module perhaps?", target, buf);
+void generic_notice_channel_sts(user_t *from, channel_t *target, const char *text)
+{
+	slog(LG_INFO, "Cannot send notice to %s (%s): don't know how. Load a protocol module perhaps?", target->name, text);
 }
 
 void generic_wallchops(user_t *sender, channel_t *channel, char *message)	

@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 6415 2006-09-19 21:20:19Z jilles $
+ * $Id: hyperion.c 6417 2006-09-21 17:33:29Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -17,7 +17,7 @@
 #include "pmodule.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 6415 2006-09-19 21:20:19Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 6417 2006-09-21 17:33:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -234,16 +234,19 @@ static void hyperion_msg(char *from, char *target, char *fmt, ...)
 }
 
 /* NOTICE wrapper */
-static void hyperion_notice(char *from, char *target, char *fmt, ...)
+static void hyperion_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
-	va_list ap;
-	char buf[BUFSIZE];
+	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->nick, text);
+}
 
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
+static void hyperion_notice_global_sts(user_t *from, const char *mask, const char *text)
+{
+	sts(":%s NOTICE %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
+}
 
-	sts(":%s NOTICE %s :%s", from, target, buf);
+static void hyperion_notice_channel_sts(user_t *from, channel_t *target, const char *text)
+{
+	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->name, text);
 }
 
 static void hyperion_wallchops(user_t *sender, channel_t *channel, char *message)
@@ -918,7 +921,9 @@ void _modinit(module_t * m)
 	join_sts = &hyperion_join_sts;
 	kick = &hyperion_kick;
 	msg = &hyperion_msg;
-	notice_sts = &hyperion_notice;
+	notice_user_sts = &hyperion_notice_user_sts;
+	notice_global_sts = &hyperion_notice_global_sts;
+	notice_channel_sts = &hyperion_notice_channel_sts;
 	wallchops = &hyperion_wallchops;
 	numeric_sts = &hyperion_numeric_sts;
 	skill = &hyperion_skill;

@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 6415 2006-09-19 21:20:19Z jilles $
+ * $Id: unreal.c 6417 2006-09-21 17:33:29Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 6415 2006-09-19 21:20:19Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 6417 2006-09-21 17:33:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -211,16 +211,31 @@ static void unreal_msg(char *from, char *target, char *fmt, ...)
 }
 
 /* NOTICE wrapper */
-static void unreal_notice(char *from, char *target, char *fmt, ...)
+static void unreal_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
-	va_list ap;
-	char buf[BUFSIZE];
+	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->nick, text);
+}
 
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
+static void unreal_notice_global_sts(user_t *from, const char *mask, const char *text)
+{
+	node_t *n;
+	tld_t *tld;
 
-	sts(":%s NOTICE %s :%s", from, target, buf);
+	if (!strcmp(mask, "*"))
+	{
+		LIST_FOREACH(n, tldlist.head)
+		{
+			tld = n->data;
+			sts(":%s NOTICE %s*%s :%s", from ? from->nick : me.name, ircd->tldprefix, tld->name, text);
+		}
+	}
+	else
+		sts(":%s NOTICE %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
+}
+
+static void unreal_notice_channel_sts(user_t *from, channel_t *target, const char *text)
+{
+	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->name, text);
 }
 
 static void unreal_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
@@ -839,7 +854,9 @@ void _modinit(module_t * m)
 	join_sts = &unreal_join_sts;
 	kick = &unreal_kick;
 	msg = &unreal_msg;
-	notice_sts = &unreal_notice;
+	notice_user_sts = &unreal_notice_user_sts;
+	notice_global_sts = &unreal_notice_global_sts;
+	notice_channel_sts = &unreal_notice_channel_sts;
 	numeric_sts = &unreal_numeric_sts;
 	skill = &unreal_skill;
 	part = &unreal_part;

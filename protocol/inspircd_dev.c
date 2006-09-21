@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd_dev.c 6415 2006-09-19 21:20:19Z jilles $
+ * $Id: inspircd_dev.c 6417 2006-09-21 17:33:29Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd_dev.c 6415 2006-09-19 21:20:19Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd_dev.c 6417 2006-09-21 17:33:29Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -279,16 +279,19 @@ static void inspircd_msg(char *from, char *target, char *fmt, ...)
 }
 
 /* NOTICE wrapper */
-static void inspircd_notice(char *from, char *target, char *fmt, ...)
+static void inspircd_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
-	va_list ap;
-	char buf[BUFSIZE];
+	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->nick, text);
+}
 
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
+static void inspircd_notice_global_sts(user_t *from, const char *mask, const char *text)
+{
+	sts(":%s NOTICE %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
+}
 
-	sts(":%s NOTICE %s :%s", from, target, buf);
+static void inspircd_notice_channel_sts(user_t *from, channel_t *target, const char *text)
+{
+	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->name, text);
 }
 
 static void inspircd_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
@@ -981,7 +984,9 @@ void _modinit(module_t * m)
 	chan_lowerts = &inspircd_chan_lowerts;
 	kick = &inspircd_kick;
 	msg = &inspircd_msg;
-	notice_sts = &inspircd_notice;
+	notice_user_sts = &inspircd_notice_user_sts;
+	notice_global_sts = &inspircd_notice_global_sts;
+	notice_channel_sts = &inspircd_notice_channel_sts;
 	numeric_sts = &inspircd_numeric_sts;
 	skill = &inspircd_skill;
 	part = &inspircd_part;

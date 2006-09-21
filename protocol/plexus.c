@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 6415 2006-09-19 21:20:19Z jilles $
+ * $Id: plexus.c 6417 2006-09-21 17:33:29Z jilles $
  */
 
 /* option: set the netadmin umode +N */
@@ -16,7 +16,7 @@
 #include "pmodule.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 6415 2006-09-19 21:20:19Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 6417 2006-09-21 17:33:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -178,16 +178,31 @@ static void plexus_msg(char *from, char *target, char *fmt, ...)
 }
 
 /* NOTICE wrapper */
-static void plexus_notice(char *from, char *target, char *fmt, ...)
+static void plexus_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
-	va_list ap;
-	char buf[BUFSIZE];
+	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->nick, text);
+}
 
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
+static void plexus_notice_global_sts(user_t *from, const char *mask, const char *text)
+{
+	node_t *n;
+	tld_t *tld;
 
-	sts(":%s NOTICE %s :%s", from, target, buf);
+	if (!strcmp(mask, "*"))
+	{
+		LIST_FOREACH(n, tldlist.head)
+		{
+			tld = n->data;
+			sts(":%s NOTICE %s*%s :%s", from ? from->nick : me.name, ircd->tldprefix, tld->name, text);
+		}
+	}
+	else
+		sts(":%s NOTICE %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
+}
+
+static void plexus_notice_channel_sts(user_t *from, channel_t *target, const char *text)
+{
+	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->name, text);
 }
 
 static void plexus_wallchops(user_t *sender, channel_t *channel, char *message)
@@ -734,7 +749,9 @@ void _modinit(module_t * m)
 	join_sts = &plexus_join_sts;
 	kick = &plexus_kick;
 	msg = &plexus_msg;
-	notice_sts = &plexus_notice;
+	notice_user_sts = &plexus_notice_user_sts;
+	notice_global_sts = &plexus_notice_global_sts;
+	notice_channel_sts = &plexus_notice_channel_sts;
 	wallchops = &plexus_wallchops;
 	numeric_sts = &plexus_numeric_sts;
 	skill = &plexus_skill;
