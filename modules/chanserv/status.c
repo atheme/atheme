@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService STATUS function.
  *
- * $Id: status.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: status.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/status", FALSE, _modinit, _moddeinit,
-	"$Id: status.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: status.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -45,7 +45,7 @@ static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!si->su->myuser)
 	{
-		notice(chansvs.nick, si->su->nick, "You are not logged in.");
+		command_success_nodata(si, "You are not logged in.");
 		return;
 	}
 
@@ -56,13 +56,13 @@ static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 
 		if (*chan != '#')
 		{
-			notice(chansvs.nick, si->su->nick, STR_INVALID_PARAMS, "STATUS");
+			command_fail(si, fault_badparams, STR_INVALID_PARAMS, "STATUS");
 			return;
 		}
 
 		if (!mc)
 		{
-			notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", chan);
+			command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", chan);
 			return;
 		}
 
@@ -70,22 +70,22 @@ static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 		
 		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 		{
-			notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", chan);
+			command_fail(si, fault_noprivs, "\2%s\2 is closed.", chan);
 			return;
 		}
 
 		if (is_founder(mc, si->su->myuser))
-			notice(chansvs.nick, si->su->nick, "You are founder on \2%s\2.", mc->name);
+			command_success_nodata(si, "You are founder on \2%s\2.", mc->name);
 
 		flags = chanacs_user_flags(mc, si->su);
 		if (flags & CA_AKICK)
-			notice(chansvs.nick, si->su->nick, "You are banned from \2%s\2.", mc->name);
+			command_success_nodata(si, "You are banned from \2%s\2.", mc->name);
 		else if (flags != 0)
 		{
-			notice(chansvs.nick, si->su->nick, "You have access flags \2%s\2 on \2%s\2.", bitmask_to_flags(flags, chanacs_flags), mc->name);
+			command_success_nodata(si, "You have access flags \2%s\2 on \2%s\2.", bitmask_to_flags(flags, chanacs_flags), mc->name);
 		}
 		else
-			notice(chansvs.nick, si->su->nick, "You are a normal user on \2%s\2.", mc->name);
+			command_success_nodata(si, "You are a normal user on \2%s\2.", mc->name);
 
 		return;
 	}
@@ -99,14 +99,14 @@ static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 
 		operclass = si->su->myuser->soper->operclass;
 		if (operclass == NULL)
-			notice(chansvs.nick, si->su->nick, "You are a services root administrator.");
+			command_success_nodata(si, "You are a services root administrator.");
 		else
-			notice(chansvs.nick, si->su->nick, "You are a services operator of class %s.", operclass->name);
+			command_success_nodata(si, "You are a services operator of class %s.", operclass->name);
 	}
 
 	if (is_admin(si->su))
-		notice(chansvs.nick, si->su->nick, "You are a server administrator.");
+		command_success_nodata(si, "You are a server administrator.");
 
 	if (is_ircop(si->su))
-		notice(chansvs.nick, si->su->nick, "You are an IRC operator.");
+		command_success_nodata(si, "You are an IRC operator.");
 }

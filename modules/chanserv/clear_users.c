@@ -4,7 +4,7 @@
  *
  * This file contains code for the ChanServ CLEAR USERS function.
  *
- * $Id: clear_users.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: clear_users.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/clear_users", FALSE, _modinit, _moddeinit,
-	"$Id: clear_users.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: clear_users.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -52,7 +52,7 @@ static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(c = channel_find(channel)))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 does not exist.", channel);
+		command_fail(si, fault_nosuch_target, "\2%s\2 does not exist.", channel);
 		return;
 	}
 
@@ -63,19 +63,19 @@ static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!mc)
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", c->name);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", c->name);
 		return;
 	}
 
 	if (!chanacs_user_has_flag(mc, si->su, CA_RECOVER))
 	{
-		notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 		return;
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", channel);
+		command_fail(si, fault_noprivs, "\2%s\2 is closed.", channel);
 		return;
 	}
 
@@ -121,5 +121,5 @@ static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(chansvs.me, si->su, CMDLOG_DO, "%s CLEAR USERS", mc->name);
 
-	notice(chansvs.nick, si->su->nick, "Cleared users from \2%s\2.", channel);
+	command_success_nodata(si, "Cleared users from \2%s\2.", channel);
 }

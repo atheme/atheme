@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService GETKEY functions.
  *
- * $Id: getkey.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: getkey.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/getkey", FALSE, _modinit, _moddeinit,
-	"$Id: getkey.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: getkey.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -46,42 +46,42 @@ static void cs_cmd_getkey(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!chan)
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "GETKEY");
-		notice(chansvs.nick, si->su->nick, "Syntax: GETKEY <#channel>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "GETKEY");
+		command_fail(si, fault_needmoreparams, "Syntax: GETKEY <#channel>");
 		return;
 	}
 
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", chan);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", chan);
 		return;
 	}
 
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		notice(chansvs.nick, si->su->nick, "Cannot GETKEY: \2%s\2 is closed.", chan);
+		command_fail(si, fault_noprivs, "Cannot GETKEY: \2%s\2 is closed.", chan);
 		return;
 	}
 
 	if (!chanacs_user_has_flag(mc, si->su, CA_INVITE))
 	{
-		notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 		return;
 	}
 
 	if (!mc->chan)
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is currently empty.", mc->name);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is currently empty.", mc->name);
 		return;
 	}
 
 	if (!mc->chan->key)
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not keyed.", mc->name);
+		command_fail(si, fault_nosuch_key, "\2%s\2 is not keyed.", mc->name);
 		return;
 	}
 	logcommand(chansvs.me, si->su, CMDLOG_GET, "%s GETKEY", mc->name);
-	notice(chansvs.nick, si->su->nick, "Channel \2%s\2 key is: %s",
+	command_success_string(si, mc->chan->key, "Channel \2%s\2 key is: %s",
 			mc->name, mc->chan->key);
 }

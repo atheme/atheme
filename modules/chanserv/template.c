@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TEMPLATE functions.
  *
- * $Id: template.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: template.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/template", FALSE, _modinit, _moddeinit,
-	"$Id: template.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: template.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -44,14 +44,14 @@ void _moddeinit()
 
 static void list_generic_flags(sourceinfo_t *si)
 {
-	notice(chansvs.nick, si->su->nick, "%-20s %s", "Name", "Flags");
-	notice(chansvs.nick, si->su->nick, "%-20s %s", "--------------------", "-----");
-	notice(chansvs.nick, si->su->nick, "%-20s %s", "SOP", bitmask_to_flags(chansvs.ca_sop, chanacs_flags));
-	notice(chansvs.nick, si->su->nick, "%-20s %s", "AOP", bitmask_to_flags(chansvs.ca_aop, chanacs_flags));
-	notice(chansvs.nick, si->su->nick, "%-20s %s", "HOP", bitmask_to_flags(chansvs.ca_hop, chanacs_flags));
-	notice(chansvs.nick, si->su->nick, "%-20s %s", "VOP", bitmask_to_flags(chansvs.ca_vop, chanacs_flags));
-	notice(chansvs.nick, si->su->nick, "%-20s %s", "--------------------", "-----");
-	notice(chansvs.nick, si->su->nick, "End of network wide template list.");
+	command_success_nodata(si, "%-20s %s", "Name", "Flags");
+	command_success_nodata(si, "%-20s %s", "--------------------", "-----");
+	command_success_nodata(si, "%-20s %s", "SOP", bitmask_to_flags(chansvs.ca_sop, chanacs_flags));
+	command_success_nodata(si, "%-20s %s", "AOP", bitmask_to_flags(chansvs.ca_aop, chanacs_flags));
+	command_success_nodata(si, "%-20s %s", "HOP", bitmask_to_flags(chansvs.ca_hop, chanacs_flags));
+	command_success_nodata(si, "%-20s %s", "VOP", bitmask_to_flags(chansvs.ca_vop, chanacs_flags));
+	command_success_nodata(si, "%-20s %s", "--------------------", "-----");
+	command_success_nodata(si, "End of network wide template list.");
 }
 
 /* TEMPLATE [channel] [template] [flags] */
@@ -77,7 +77,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 	mc = mychan_find(channel);
 	if (!mc)
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", channel);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", channel);
 		return;
 	}
 
@@ -91,14 +91,14 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 				operoverride = 1;
 			else
 			{
-				notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
+				command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 				return;
 			}
 		}
 		
 		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && !has_priv(si->su, PRIV_CHAN_AUSPEX))
 		{
-			notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", channel);
+			command_fail(si, fault_noprivs, "\2%s\2 is closed.", channel);
 			return;
 		}
 
@@ -106,8 +106,8 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 
 		if (md != NULL)
 		{
-			notice(chansvs.nick, si->su->nick, "%-20s %s", "Name", "Flags");
-			notice(chansvs.nick, si->su->nick, "%-20s %s", "--------------------", "-----");
+			command_success_nodata(si, "%-20s %s", "Name", "Flags");
+			command_success_nodata(si, "%-20s %s", "--------------------", "-----");
 
 			p = md->value;
 			while (p != NULL)
@@ -118,16 +118,16 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 				if (q == NULL)
 					break;
 				r = strchr(q, ' ');
-				notice(chansvs.nick, si->su->nick, "%-20.*s %.*s", (q - p), p, r != NULL ? (r - q - 1) : strlen(q + 1), q + 1);
+				command_success_nodata(si, "%-20.*s %.*s", (q - p), p, r != NULL ? (r - q - 1) : strlen(q + 1), q + 1);
 				i++;
 				p = r;
 			}
 
-			notice(chansvs.nick, si->su->nick, "%-20s %s", "--------------------", "-----");
-			notice(chansvs.nick, si->su->nick, "End of \2%s\2 TEMPLATE listing.", mc->name);
+			command_success_nodata(si, "%-20s %s", "--------------------", "-----");
+			command_success_nodata(si, "End of \2%s\2 TEMPLATE listing.", mc->name);
 		}
 		else
-			notice(chansvs.nick, si->su->nick, "No templates set on channel \2%s\2.", mc->name);
+			command_success_nodata(si, "No templates set on channel \2%s\2.", mc->name);
 		if (operoverride)
 			logcommand(chansvs.me, si->su, CMDLOG_ADMIN, "%s TEMPLATE (oper override)", mc->name);
 		else
@@ -139,7 +139,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!si->su->myuser)
 		{
-			notice(chansvs.nick, si->su->nick, "You are not logged in.");
+			command_fail(si, fault_noprivs, "You are not logged in.");
 			return;
 		}
 
@@ -153,7 +153,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 			restrictflags = chanacs_user_flags(mc, si->su);
 			if (!(restrictflags & CA_FLAGS))
 			{
-				notice(chansvs.nick, si->su->nick, "You are not authorized to execute this command.");
+				command_fail(si, fault_noprivs, "You are not authorized to execute this command.");
 				return;
 			}
 			restrictflags = allow_flags(restrictflags);
@@ -161,19 +161,19 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 		
 		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 		{
-			notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", channel);
+			command_fail(si, fault_noprivs, "\2%s\2 is closed.", channel);
 			return;
 		}
 
 		if (!target || !flagstr)
 		{
-			notice(chansvs.nick, si->su->nick, "Usage: TEMPLATE %s [target flags]", channel);
+			command_fail(si, fault_needmoreparams, "Usage: TEMPLATE %s [target flags]", channel);
 			return;
 		}
 
 		if (*target == '+' || *target == '-' || *target == '=')
 		{
-			notice(chansvs.nick, si->su->nick, "Invalid template name \2%s\2.", target);
+			command_fail(si, fault_badparams, "Invalid template name \2%s\2.", target);
 			return;
 		}
 		l = strlen(target);
@@ -185,7 +185,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 					!strcasecmp(target, "HOP") ||
 					!strcasecmp(target, "VOP")))
 		{
-			notice(chansvs.nick, si->su->nick, "Cannot redefine built-in template \2%s\2.", target);
+			command_fail(si, fault_noprivs, "Cannot redefine built-in template \2%s\2.", target);
 			return;
 		}
 
@@ -194,7 +194,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 			flags_make_bitmasks(flagstr, chanacs_flags, &addflags, &removeflags);
 			if (addflags == 0 && removeflags == 0)
 			{
-				notice(chansvs.nick, si->su->nick, "No valid flags given, use /%s%s HELP FLAGS for a list", ircd->uses_rcommand ? "" : "msg ", chansvs.disp);
+				command_fail(si, fault_badparams, "No valid flags given, use /%s%s HELP FLAGS for a list", ircd->uses_rcommand ? "" : "msg ", chansvs.disp);
 				return;
 			}
 		}
@@ -204,7 +204,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 			addflags = get_template_flags(mc, flagstr);
 			if (addflags == 0)
 			{
-				notice(chansvs.nick, si->su->nick, "Invalid template name given, use /%s%s TEMPLATE %s for a list", ircd->uses_rcommand ? "" : "msg ", chansvs.disp, mc->name);
+				command_fail(si, fault_nosuch_key, "Invalid template name given, use /%s%s TEMPLATE %s for a list", ircd->uses_rcommand ? "" : "msg ", chansvs.disp, mc->name);
 				return;
 			}
 			removeflags = CA_ALL & ~addflags;
@@ -287,19 +287,19 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 		if ((addflags | removeflags) == 0)
 		{
 			if (oldflags != 0)
-				notice(chansvs.nick, si->su->nick, "Template \2%s\2 on \2%s\2 unchanged.", target, channel);
+				command_fail(si, fault_nochange, "Template \2%s\2 on \2%s\2 unchanged.", target, channel);
 			else
-				notice(chansvs.nick, si->su->nick, "No such template \2%s\2 on \2%s\2.", target, channel);
+				command_fail(si, fault_nosuch_key, "No such template \2%s\2 on \2%s\2.", target, channel);
 			return;
 		}
 		if (denied)
 		{
-			notice(chansvs.nick, si->su->nick, "You are not allowed to set \2%s\2 on template \2%s\2 in \2%s\2.", bitmask_to_flags2(addflags, removeflags, chanacs_flags), target, mc->name);
+			command_fail(si, fault_noprivs, "You are not allowed to set \2%s\2 on template \2%s\2 in \2%s\2.", bitmask_to_flags2(addflags, removeflags, chanacs_flags), target, mc->name);
 			return;
 		}
 		if (strlen(newstr) >= 300)
 		{
-			notice(chansvs.nick, si->su->nick, "Sorry, too many templates on \2%s\2.", channel);
+			command_fail(si, fault_toomany, "Sorry, too many templates on \2%s\2.", channel);
 			return;
 		}
 		if (newstr[0] == '\0')
@@ -307,11 +307,11 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 		else
 			metadata_add(mc, METADATA_CHANNEL, "private:templates", newstr);
 		if (oldflags == 0)
-			notice(chansvs.nick, si->su->nick, "Added template \2%s\2 with flags \2%s\2 in \2%s\2.", target, bitmask_to_flags(newflags, chanacs_flags), channel);
+			command_success_nodata(si, "Added template \2%s\2 with flags \2%s\2 in \2%s\2.", target, bitmask_to_flags(newflags, chanacs_flags), channel);
 		else if (newflags == 0)
-			notice(chansvs.nick, si->su->nick, "Removed template \2%s\2 from \2%s\2.", target, channel);
+			command_success_nodata(si, "Removed template \2%s\2 from \2%s\2.", target, channel);
 		else
-			notice(chansvs.nick, si->su->nick, "Changed template \2%s\2 to \2%s\2 in \2%s\2.", target, bitmask_to_flags(newflags, chanacs_flags), channel);
+			command_success_nodata(si, "Changed template \2%s\2 to \2%s\2 in \2%s\2.", target, bitmask_to_flags(newflags, chanacs_flags), channel);
 		flagstr = bitmask_to_flags2(addflags, removeflags, chanacs_flags);
 		logcommand(chansvs.me, si->su, CMDLOG_SET, "%s TEMPLATE %s %s", mc->name, target, flagstr);
 		/*verbose(mc, "Flags \2%s\2 were set on template \2%s\2 in \2%s\2.", flagstr, target, channel);*/

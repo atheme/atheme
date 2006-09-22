@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: xop.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: xop.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -85,15 +85,15 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 
 	if (!cmd || !chan)
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "xOP");
-		notice(chansvs.nick, si->su->nick, "Syntax: SOP|AOP|HOP|VOP <#channel> ADD|DEL|LIST <nickname>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "xOP");
+		command_fail(si, fault_needmoreparams, "Syntax: SOP|AOP|HOP|VOP <#channel> ADD|DEL|LIST <nickname>");
 		return;
 	}
 
 	if ((strcasecmp("LIST", cmd)) && (!uname))
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "xOP");
-		notice(chansvs.nick, si->su->nick, "Syntax: SOP|AOP|HOP|VOP <#channel> ADD|DEL|LIST <nickname>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "xOP");
+		command_fail(si, fault_needmoreparams, "Syntax: SOP|AOP|HOP|VOP <#channel> ADD|DEL|LIST <nickname>");
 		return;
 	}
 
@@ -106,7 +106,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 		/* if they're opers and just want to LIST, they don't have to log in */
 		if (!(has_priv(si->su, PRIV_CHAN_AUSPEX) && !strcasecmp("LIST", cmd)))
 		{
-			notice(chansvs.nick, si->su->nick, "You are not logged in.");
+			command_fail(si, fault_noprivs, "You are not logged in.");
 			return;
 		}
 	}
@@ -114,13 +114,13 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		notice(chansvs.nick, si->su->nick, "The channel \2%s\2 is not registered.", chan);
+		command_fail(si, fault_nosuch_target, "The channel \2%s\2 is not registered.", chan);
 		return;
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && (!has_priv(si->su, PRIV_CHAN_AUSPEX) || strcasecmp("LIST", cmd)))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", chan);
+		command_fail(si, fault_noprivs, "\2%s\2 is closed.", chan);
 		return;
 	}
 
@@ -138,13 +138,13 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 		 * possible future denial of granting +f */
 		if (!(restrictflags & CA_FLAGS))
 		{
-			notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
+			command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 			return;
 		}
 		restrictflags = allow_flags(restrictflags);
 		if ((restrictflags & level) != level)
 		{
-			notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
+			command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 			return;
 		}
 		cs_xop_do_add(mc, mu, si->su->nick, uname, level, leveldesc, restrictflags);
@@ -163,13 +163,13 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 		 * possible future denial of granting +f */
 		if (!(restrictflags & CA_FLAGS))
 		{
-			notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
+			command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 			return;
 		}
 		restrictflags = allow_flags(restrictflags);
 		if ((restrictflags & level) != level)
 		{
-			notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
+			command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 			return;
 		}
 		cs_xop_do_del(mc, mu, si->su->nick, uname, level, leveldesc);
@@ -183,7 +183,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 				operoverride = 1;
 			else
 			{
-				notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
+				command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 				return;
 			}
 		}
@@ -486,26 +486,26 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!chan)
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "FORCEXOP");
-		notice(chansvs.nick, si->su->nick, "Syntax: FORCEXOP <#channel>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FORCEXOP");
+		command_fail(si, fault_needmoreparams, "Syntax: FORCEXOP <#channel>");
 		return;
 	}
 
 	if (!mc)
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", chan);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", chan);
 		return;
 	}
 
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", chan);
+		command_fail(si, fault_noprivs, "\2%s\2 is closed.", chan);
 		return;
 	}
 
 	if (!is_founder(mc, si->su->myuser))
 	{
-		notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 		return;
 	}
 
@@ -541,10 +541,10 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 		if (newlevel == ca->level)
 			continue;
 		changes++;
-		notice(chansvs.nick, si->su->nick, "%s: %s -> %s", ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level, chanacs_flags), desc);
+		command_success_nodata(si, "%s: %s -> %s", ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level, chanacs_flags), desc);
 		ca->level = newlevel;
 	}
-	notice(chansvs.nick, si->su->nick, "FORCEXOP \2%s\2 done (\2%d\2 changes)", mc->name, changes);
+	command_success_nodata(si, "FORCEXOP \2%s\2 done (\2%d\2 changes)", mc->name, changes);
 	if (changes > 0)
 		verbose(mc, "\2%s\2 reset access levels to xOP (\2%d\2 changes)", si->su->nick, changes);
 	logcommand(chansvs.me, si->su, CMDLOG_SET, "%s FORCEXOP (%d changes)", mc->name, changes);

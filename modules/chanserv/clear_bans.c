@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: clear_bans.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: clear_bans.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/clear_bans", FALSE, _modinit, _moddeinit,
-	"$Id: clear_bans.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: clear_bans.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -59,37 +59,37 @@ static void cs_cmd_clear_bans(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!strchr(ircd->ban_like_modes, *p))
 		{
-			notice(chansvs.nick, si->su->nick, "Invalid mode; valid ones are %s.", ircd->ban_like_modes);
+			command_fail(si, fault_badparams, "Invalid mode; valid ones are %s.", ircd->ban_like_modes);
 			return;
 		}
 	}
 	if (*item == '\0')
 	{
-		notice(chansvs.nick, si->su->nick, "Invalid mode; valid ones are %s.", ircd->ban_like_modes);
+		command_fail(si, fault_badparams, "Invalid mode; valid ones are %s.", ircd->ban_like_modes);
 		return;
 	}
 
 	if (!(c = channel_find(parv[0])))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 does not exist.", parv[0]);
+		command_fail(si, fault_nosuch_target, "\2%s\2 does not exist.", parv[0]);
 		return;
 	}
 
 	if (!mc)
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", c->name);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", c->name);
 		return;
 	}
 
 	if (!chanacs_user_has_flag(mc, si->su, CA_RECOVER))
 	{
-		notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 		return;
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", parv[0]);
+		command_fail(si, fault_noprivs, "\2%s\2 is closed.", parv[0]);
 		return;
 	}
 
@@ -107,6 +107,6 @@ static void cs_cmd_clear_bans(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(chansvs.me, si->su, CMDLOG_DO, "%s CLEAR BANS %s",
 			mc->name, item);
 
-	notice(chansvs.nick, si->su->nick, "Cleared %s modes on \2%s\2 (%d removed).",
+	command_success_nodata(si, "Cleared %s modes on \2%s\2 (%d removed).",
 			item, parv[0], hits);
 }

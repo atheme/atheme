@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: flags.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: flags.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -58,8 +58,8 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 	if (parc < 1)
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "FLAGS");
-		notice(chansvs.nick, si->su->nick, "Syntax: FLAGS <channel> [target] [flags]");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FLAGS");
+		command_fail(si, fault_needmoreparams, "Syntax: FLAGS <channel> [target] [flags]");
 		return;
 	}
 
@@ -70,7 +70,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!mc)
 		{
-			notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", channel);
+			command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", channel);
 			return;
 		}
 
@@ -80,29 +80,29 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				operoverride = 1;
 			else
 			{
-				notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
+				command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 				return;
 			}
 		}
 		
 		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && !has_priv(si->su, PRIV_CHAN_AUSPEX))
 		{
-			notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", channel);
+			command_fail(si, fault_noprivs, "\2%s\2 is closed.", channel);
 			return;
 		}
 
-		notice(chansvs.nick, si->su->nick, "Entry Nickname/Host          Flags");
-		notice(chansvs.nick, si->su->nick, "----- ---------------------- -----");
+		command_success_nodata(si, "Entry Nickname/Host          Flags");
+		command_success_nodata(si, "----- ---------------------- -----");
 
 		LIST_FOREACH(n, mc->chanacs.head)
 		{
 			ca = n->data;
-			notice(chansvs.nick, si->su->nick, "%-5d %-22s %s", i, ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level, chanacs_flags));
+			command_success_nodata(si, "%-5d %-22s %s", i, ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level, chanacs_flags));
 			i++;
 		}
 
-		notice(chansvs.nick, si->su->nick, "----- ---------------------- -----");
-		notice(chansvs.nick, si->su->nick, "End of \2%s\2 FLAGS listing.", channel);
+		command_success_nodata(si, "----- ---------------------- -----");
+		command_success_nodata(si, "End of \2%s\2 FLAGS listing.", channel);
 		if (operoverride)
 			logcommand(chansvs.me, si->su, CMDLOG_ADMIN, "%s FLAGS (oper override)", mc->name);
 		else
@@ -116,25 +116,25 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!si->su->myuser)
 		{
-			notice(chansvs.nick, si->su->nick, "You are not logged in.");
+			command_fail(si, fault_noprivs, "You are not logged in.");
 			return;
 		}
 
 		if (!mc)
 		{
-			notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", channel);
+			command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", channel);
 			return;
 		}
 		
 		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 		{
-			notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", channel);
+			command_fail(si, fault_noprivs, "\2%s\2 is closed.", channel);
 			return;
 		}
 
 		if (!target)
 		{
-			notice(chansvs.nick, si->su->nick, "Usage: FLAGS %s [target] [flags]", channel);
+			command_fail(si, fault_needmoreparams, "Usage: FLAGS %s [target] [flags]", channel);
 			return;
 		}
 
@@ -142,7 +142,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		{
 			if (!(chanacs_user_flags(mc, si->su) & CA_ACLVIEW))
 			{
-				notice(chansvs.nick, si->su->nick, "You are not authorized to execute this command.");
+				command_fail(si, fault_noprivs, "You are not authorized to execute this command.");
 				return;
 			}
 			if (validhostmask(target))
@@ -151,17 +151,17 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			{
 				if (!(tmu = myuser_find_ext(target)))
 				{
-					notice(chansvs.nick, si->su->nick, "The nickname \2%s\2 is not registered.", target);
+					command_fail(si, fault_nosuch_target, "The nickname \2%s\2 is not registered.", target);
 					return;
 				}
 				ca = chanacs_find(mc, tmu, 0);
 			}
 			if (ca != NULL)
-				notice(chansvs.nick, si->su->nick, "Flags for \2%s\2 in \2%s\2 are \2%s\2.",
+				command_success_nodata(si, "Flags for \2%s\2 in \2%s\2 are \2%s\2.",
 						target, channel,
 						bitmask_to_flags2(ca != NULL ? ca->level : 0, 0, chanacs_flags));
 			else
-				notice(chansvs.nick, si->su->nick, "No flags for \2%s\2 in \2%s\2.",
+				command_success_nodata(si, "No flags for \2%s\2 in \2%s\2.",
 						target, channel);
 			logcommand(chansvs.me, si->su, CMDLOG_SET, "%s FLAGS %s", mc->name, target);
 			return;
@@ -182,7 +182,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 						irccmp(target, si->su->myuser->name) ||
 						strcmp(flagstr, "-*"))
 				{
-					notice(chansvs.nick, si->su->nick, "You are not authorized to execute this command.");
+					command_fail(si, fault_noprivs, "You are not authorized to execute this command.");
 					return;
 				}
 			}
@@ -194,7 +194,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			flags_make_bitmasks(flagstr, chanacs_flags, &addflags, &removeflags);
 			if (addflags == 0 && removeflags == 0)
 			{
-				notice(chansvs.nick, si->su->nick, "No valid flags given, use /%s%s HELP FLAGS for a list", ircd->uses_rcommand ? "" : "msg ", chansvs.disp);
+				command_fail(si, fault_badparams, "No valid flags given, use /%s%s HELP FLAGS for a list", ircd->uses_rcommand ? "" : "msg ", chansvs.disp);
 				return;
 			}
 		}
@@ -205,9 +205,9 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			{
 				/* Hack -- jilles */
 				if (*target == '+' || *target == '-' || *target == '=')
-					notice(chansvs.nick, si->su->nick, "Usage: FLAGS %s [target] [flags]", mc->name);
+					command_fail(si, fault_badparams, "Usage: FLAGS %s [target] [flags]", mc->name);
 				else
-					notice(chansvs.nick, si->su->nick, "Invalid template name given, use /%s%s TEMPLATE %s for a list", ircd->uses_rcommand ? "" : "msg ", chansvs.disp, mc->name);
+					command_fail(si, fault_badparams, "Invalid template name given, use /%s%s TEMPLATE %s for a list", ircd->uses_rcommand ? "" : "msg ", chansvs.disp, mc->name);
 				return;
 			}
 			removeflags = CA_ALL & ~addflags;
@@ -217,13 +217,13 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		{
 			if (!(tmu = myuser_find_ext(target)))
 			{
-				notice(chansvs.nick, si->su->nick, "The nickname \2%s\2 is not registered.", target);
+				command_fail(si, fault_nosuch_target, "The nickname \2%s\2 is not registered.", target);
 				return;
 			}
 
 			if (tmu == mc->founder && removeflags & CA_FLAGS)
 			{
-				notice(chansvs.nick, si->su->nick, "You may not remove the founder's +f access.");
+				command_fail(si, fault_noprivs, "You may not remove the founder's +f access.");
 				return;
 			}
 
@@ -233,13 +233,13 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			 * -- jilles */
 			if (MU_NEVEROP & tmu->flags && addflags != CA_AKICK && addflags != 0 && ((ca = chanacs_find(mc, tmu, 0)) == NULL || ca->level == CA_AKICK))
 			{
-				notice(chansvs.nick, si->su->nick, "\2%s\2 does not wish to be added to access lists (NEVEROP set).", tmu->name);
+				command_fail(si, fault_noprivs, "\2%s\2 does not wish to be added to access lists (NEVEROP set).", tmu->name);
 				return;
 			}
 
 			if (!chanacs_change(mc, tmu, NULL, &addflags, &removeflags, restrictflags))
 			{
-		                notice(chansvs.nick, si->su->nick, "You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2.", bitmask_to_flags2(addflags, removeflags, chanacs_flags), tmu->name, mc->name);
+		                command_fail(si, fault_noprivs, "You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2.", bitmask_to_flags2(addflags, removeflags, chanacs_flags), tmu->name, mc->name);
 				return;
 			}
 		}
@@ -247,18 +247,18 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		{
 			if (!chanacs_change(mc, NULL, target, &addflags, &removeflags, restrictflags))
 			{
-		                notice(chansvs.nick, si->su->nick, "You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2.", bitmask_to_flags2(addflags, removeflags, chanacs_flags), target, mc->name);
+		                command_fail(si, fault_noprivs, "You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2.", bitmask_to_flags2(addflags, removeflags, chanacs_flags), target, mc->name);
 				return;
 			}
 		}
 
 		if ((addflags | removeflags) == 0)
 		{
-			notice(chansvs.nick, si->su->nick, "Channel access to \2%s\2 for \2%s\2 unchanged.", channel, target);
+			command_fail(si, fault_nochange, "Channel access to \2%s\2 for \2%s\2 unchanged.", channel, target);
 			return;
 		}
 		flagstr = bitmask_to_flags2(addflags, removeflags, chanacs_flags);
-		notice(chansvs.nick, si->su->nick, "Flags \2%s\2 were set on \2%s\2 in \2%s\2.", flagstr, target, channel);
+		command_success_nodata(si, "Flags \2%s\2 were set on \2%s\2 in \2%s\2.", flagstr, target, channel);
 		logcommand(chansvs.me, si->su, CMDLOG_SET, "%s FLAGS %s %s", mc->name, target, flagstr);
 		verbose(mc, "\2%s\2 set flags \2%s\2 on \2%s\2 in \2%s\2.", si->su->nick, flagstr, target, channel);
 	}

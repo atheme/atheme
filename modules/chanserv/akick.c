@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: akick.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@ static void cs_fcmd_akick(char *origin, char *chan);
 DECLARE_MODULE_V1
 (
 	"chanserv/akick", FALSE, _modinit, _moddeinit,
-	"$Id: akick.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: akick.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -59,15 +59,15 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!cmd || !chan)
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "AKICK");
-		notice(chansvs.nick, si->su->nick, "Syntax: AKICK <#channel> ADD|DEL|LIST <nickname|hostmask>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKICK");
+		command_fail(si, fault_needmoreparams, "Syntax: AKICK <#channel> ADD|DEL|LIST <nickname|hostmask>");
 		return;
 	}
 
 	if ((strcasecmp("LIST", cmd)) && (!uname))
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "AKICK");
-		notice(chansvs.nick, si->su->nick, "Syntax: AKICK <#channel> ADD|DEL|LIST <nickname|hostmask>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKICK");
+		command_fail(si, fault_needmoreparams, "Syntax: AKICK <#channel> ADD|DEL|LIST <nickname|hostmask>");
 		return;
 	}
 
@@ -88,13 +88,13 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", chan);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", chan);
 		return;
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", chan);
+		command_fail(si, fault_noprivs, "\2%s\2 is closed.", chan);
 		return;
 	}
 
@@ -103,7 +103,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if ((chanacs_user_flags(mc, si->su) & (CA_FLAGS | CA_REMOVE)) != (CA_FLAGS | CA_REMOVE))
 		{
-			notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
+			command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 			return;
 		}
 
@@ -113,7 +113,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			/* we might be adding a hostmask */
 			if (!validhostmask(uname))
 			{
-				notice(chansvs.nick, si->su->nick, "\2%s\2 is neither a nickname nor a hostmask.", uname);
+				command_fail(si, fault_badparams, "\2%s\2 is neither a nickname nor a hostmask.", uname);
 				return;
 			}
 
@@ -123,16 +123,16 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			if (ca != NULL)
 			{
 				if (ca->level & CA_AKICK)
-					notice(chansvs.nick, si->su->nick, "\2%s\2 is already on the AKICK list for \2%s\2", uname, mc->name);
+					command_fail(si, fault_nochange, "\2%s\2 is already on the AKICK list for \2%s\2", uname, mc->name);
 				else
-					notice(chansvs.nick, si->su->nick, "\2%s\2 already has flags \2%s\2 on \2%s\2", uname, bitmask_to_flags(ca->level, chanacs_flags), mc->name);
+					command_fail(si, fault_alreadyexists, "\2%s\2 already has flags \2%s\2 on \2%s\2", uname, bitmask_to_flags(ca->level, chanacs_flags), mc->name);
 				return;
 			}
 
 			ca = chanacs_find_host(mc, uname, CA_AKICK);
 			if (ca != NULL)
 			{
-				notice(chansvs.nick, si->su->nick, "The more general mask \2%s\2 is already on the AKICK list for \2%s\2", ca->host, mc->name);
+				command_fail(si, fault_nochange, "The more general mask \2%s\2 is already on the AKICK list for \2%s\2", ca->host, mc->name);
 				return;
 			}
 
@@ -145,7 +145,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", si->su->nick, uname);
 			logcommand(chansvs.me, si->su, CMDLOG_SET, "%s AKICK ADD %s", mc->name, uname);
 
-			notice(chansvs.nick, si->su->nick, "\2%s\2 has been added to the AKICK list for \2%s\2.", uname, mc->name);
+			command_success_nodata(si, "\2%s\2 has been added to the AKICK list for \2%s\2.", uname, mc->name);
 
 			return;
 		}
@@ -154,9 +154,9 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			if ((ca = chanacs_find(mc, mu, 0x0)))
 			{
 				if (ca->level & CA_AKICK)
-					notice(chansvs.nick, si->su->nick, "\2%s\2 is already on the AKICK list for \2%s\2", mu->name, mc->name);
+					command_fail(si, fault_nochange, "\2%s\2 is already on the AKICK list for \2%s\2", mu->name, mc->name);
 				else
-					notice(chansvs.nick, si->su->nick, "\2%s\2 already has flags \2%s\2 on \2%s\2", mu->name, bitmask_to_flags(ca->level, chanacs_flags), mc->name);
+					command_fail(si, fault_alreadyexists, "\2%s\2 already has flags \2%s\2 on \2%s\2", mu->name, bitmask_to_flags(ca->level, chanacs_flags), mc->name);
 				return;
 			}
 
@@ -164,7 +164,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 
 			hook_call_event("channel_akick_add", ca2);
 
-			notice(chansvs.nick, si->su->nick, "\2%s\2 has been added to the AKICK list for \2%s\2.", mu->name, mc->name);
+			command_success_nodata(si, "\2%s\2 has been added to the AKICK list for \2%s\2.", mu->name, mc->name);
 
 			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", si->su->nick, mu->name);
 			logcommand(chansvs.me, si->su, CMDLOG_SET, "%s AKICK ADD %s", mc->name, mu->name);
@@ -186,7 +186,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			/* we might be deleting a hostmask */
 			if (!validhostmask(uname))
 			{
-				notice(chansvs.nick, si->su->nick, "\2%s\2 is neither a nickname nor a hostmask.", uname);
+				command_fail(si, fault_badparams, "\2%s\2 is neither a nickname nor a hostmask.", uname);
 				return;
 			}
 
@@ -194,9 +194,9 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			{
 				ca = chanacs_find_host(mc, uname, CA_AKICK);
 				if (ca != NULL)
-					notice(chansvs.nick, si->su->nick, "\2%s\2 is not on the AKICK list for \2%s\2, however \2%s\2 is.", uname, mc->name, ca->host);
+					command_fail(si, fault_nosuch_key, "\2%s\2 is not on the AKICK list for \2%s\2, however \2%s\2 is.", uname, mc->name, ca->host);
 				else
-					notice(chansvs.nick, si->su->nick, "\2%s\2 is not on the AKICK list for \2%s\2.", uname, mc->name);
+					command_fail(si, fault_nosuch_key, "\2%s\2 is not on the AKICK list for \2%s\2.", uname, mc->name);
 				return;
 			}
 
@@ -205,20 +205,20 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", si->su->nick, uname);
 			logcommand(chansvs.me, si->su, CMDLOG_SET, "%s AKICK DEL %s", mc->name, uname);
 
-			notice(chansvs.nick, si->su->nick, "\2%s\2 has been removed from the AKICK list for \2%s\2.", uname, mc->name);
+			command_success_nodata(si, "\2%s\2 has been removed from the AKICK list for \2%s\2.", uname, mc->name);
 
 			return;
 		}
 
 		if (!(ca = chanacs_find(mc, mu, CA_AKICK)))
 		{
-			notice(chansvs.nick, si->su->nick, "\2%s\2 is not on the AKICK list for \2%s\2.", mu->name, mc->name);
+			command_fail(si, fault_nosuch_key, "\2%s\2 is not on the AKICK list for \2%s\2.", mu->name, mc->name);
 			return;
 		}
 
 		chanacs_delete(mc, mu, CA_AKICK);
 
-		notice(chansvs.nick, si->su->nick, "\2%s\2 has been removed from the AKICK list for \2%s\2.", mu->name, mc->name);
+		command_success_nodata(si, "\2%s\2 has been removed from the AKICK list for \2%s\2.", mu->name, mc->name);
 		logcommand(chansvs.me, si->su, CMDLOG_SET, "%s AKICK DEL %s", mc->name, mu->name);
 
 		verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", si->su->nick, mu->name);
@@ -235,11 +235,11 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 				operoverride = 1;
 			else
 			{
-				notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
+				command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 				return;
 			}
 		}
-		notice(chansvs.nick, si->su->nick, "AKICK list for \2%s\2:", mc->name);
+		command_success_nodata(si, "AKICK list for \2%s\2:", mc->name);
 
 		LIST_FOREACH(n, mc->chanacs.head)
 		{
@@ -248,17 +248,17 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			if (ca->level == CA_AKICK)
 			{
 				if (ca->myuser == NULL)
-					notice(chansvs.nick, si->su->nick, "%d: \2%s\2", ++i, ca->host);
+					command_success_nodata(si, "%d: \2%s\2", ++i, ca->host);
 
 				else if (LIST_LENGTH(&ca->myuser->logins) > 0)
-					notice(chansvs.nick, si->su->nick, "%d: \2%s\2 (logged in)", ++i, ca->myuser->name);
+					command_success_nodata(si, "%d: \2%s\2 (logged in)", ++i, ca->myuser->name);
 				else
-					notice(chansvs.nick, si->su->nick, "%d: \2%s\2 (not logged in)", ++i, ca->myuser->name);
+					command_success_nodata(si, "%d: \2%s\2 (not logged in)", ++i, ca->myuser->name);
 			}
 
 		}
 
-		notice(chansvs.nick, si->su->nick, "Total of \2%d\2 %s in \2%s\2's AKICK list.", i, (i == 1) ? "entry" : "entries", mc->name);
+		command_success_nodata(si, "Total of \2%d\2 %s in \2%s\2's AKICK list.", i, (i == 1) ? "entry" : "entries", mc->name);
 		if (operoverride)
 			logcommand(chansvs.me, si->su, CMDLOG_ADMIN, "%s AKICK LIST (oper override)", mc->name);
 		else

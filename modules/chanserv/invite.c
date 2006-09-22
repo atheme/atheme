@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INVITE functions.
  *
- * $Id: invite.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: invite.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/invite", FALSE, _modinit, _moddeinit,
-	"$Id: invite.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: invite.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -46,43 +46,43 @@ static void cs_cmd_invite(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!chan)
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "INVITE");
-		notice(chansvs.nick, si->su->nick, "Syntax: INVITE <#channel>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "INVITE");
+		command_fail(si, fault_needmoreparams, "Syntax: INVITE <#channel>");
 		return;
 	}
 
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", chan);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", chan);
 		return;
 	}
 
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		notice(chansvs.nick, si->su->nick, "Cannot INVITE: \2%s\2 is closed.", chan);
+		command_fail(si, fault_noprivs, "Cannot INVITE: \2%s\2 is closed.", chan);
 		return;
 	}
 
 	if (!chanacs_user_has_flag(mc, si->su, CA_INVITE))
 	{
-		notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 		return;
 	}
 
 	if (chanuser_find(mc->chan, si->su))
 	{
-		notice(chansvs.nick, si->su->nick, "You're already on \2%s\2.", mc->name);
+		command_fail(si, fault_noprivs, "You're already on \2%s\2.", mc->name);
 		return;
 	}
 
 	if (!mc->chan)
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is currently empty.", mc->name);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is currently empty.", mc->name);
 		return;
 	}
 
 	invite_sts(chansvs.me->me, si->su, mc->chan);
 	logcommand(chansvs.me, si->su, CMDLOG_SET, "%s INVITE", mc->name);
-	notice(chansvs.nick, si->su->nick, "You have been invited to \2%s\2.", mc->name);
+	command_success_nodata(si, "You have been invited to \2%s\2.", mc->name);
 }

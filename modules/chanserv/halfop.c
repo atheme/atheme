@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: halfop.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: halfop.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/halfop", FALSE, _modinit, _moddeinit,
-	"$Id: halfop.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: halfop.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -75,34 +75,34 @@ static void cs_cmd_halfop(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!ircd->uses_halfops)
 	{
-		notice(chansvs.nick, si->su->nick, "Your IRC server does not support halfops.");
+		command_fail(si, fault_noprivs, "Your IRC server does not support halfops.");
 		return;
 	}
 
 	if (!chan)
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "HALFOP");
-		notice(chansvs.nick, si->su->nick, "Syntax: HALFOP <#channel> [nickname]");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "HALFOP");
+		command_fail(si, fault_needmoreparams, "Syntax: HALFOP <#channel> [nickname]");
 		return;
 	}
 
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", chan);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", chan);
 		return;
 	}
 
 	si->su = user_find_named(si->su->nick);
 	if (!chanacs_user_has_flag(mc, si->su, CA_HALFOP))
 	{
-		notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 		return;
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", chan);
+		command_fail(si, fault_noprivs, "\2%s\2 is closed.", chan);
 		return;
 	}
 
@@ -113,7 +113,7 @@ static void cs_cmd_halfop(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(tu = user_find_named(nick)))
 		{
-			notice(chansvs.nick, si->su->nick, "\2%s\2 is not online.", nick);
+			command_fail(si, fault_nosuch_target, "\2%s\2 is not online.", nick);
 			return;
 		}
 	}
@@ -124,15 +124,15 @@ static void cs_cmd_halfop(sourceinfo_t *si, int parc, char *parv[])
 	/* SECURE check; we can skip this if sender == target, because we already verified */
 	if ((si->su != tu) && (mc->flags & MC_SECURE) && !chanacs_user_has_flag(mc, tu, CA_HALFOP) && !chanacs_user_has_flag(mc, tu, CA_AUTOHALFOP))
 	{
-		notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.", mc->name);
-		notice(chansvs.nick, si->su->nick, "\2%s\2 has the SECURE option enabled, and \2%s\2 does not have appropriate access.", mc->name, tu->nick);
+		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.", mc->name);
+		command_fail(si, fault_noprivs, "\2%s\2 has the SECURE option enabled, and \2%s\2 does not have appropriate access.", mc->name, tu->nick);
 		return;
 	}
 
 	cu = chanuser_find(mc->chan, tu);
 	if (!cu)
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not on \2%s\2.", tu->nick, mc->name);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not on \2%s\2.", tu->nick, mc->name);
 		return;
 	}
 
@@ -145,7 +145,7 @@ static void cs_cmd_halfop(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(chansvs.me, si->su, CMDLOG_SET, "%s HALFOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (!chanuser_find(mc->chan, si->su))
-		notice(chansvs.nick, si->su->nick, "\2%s\2 has been halfopped on \2%s\2.", tu->nick, mc->name);
+		command_success_nodata(si, "\2%s\2 has been halfopped on \2%s\2.", tu->nick, mc->name);
 }
 
 static void cs_cmd_dehalfop(sourceinfo_t *si, int parc, char *parv[])
@@ -158,34 +158,34 @@ static void cs_cmd_dehalfop(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!ircd->uses_halfops)
 	{
-		notice(chansvs.nick, si->su->nick, "Your IRC server does not support halfops.");
+		command_fail(si, fault_noprivs, "Your IRC server does not support halfops.");
 		return;
 	}
 
 	if (!chan)
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "DEHALFOP");
-		notice(chansvs.nick, si->su->nick, "Syntax: DEHALFOP <#channel> [nickname]");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DEHALFOP");
+		command_fail(si, fault_needmoreparams, "Syntax: DEHALFOP <#channel> [nickname]");
 		return;
 	}
 
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", chan);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", chan);
 		return;
 	}
 
 	si->su = user_find_named(si->su->nick);
 	if (!chanacs_user_has_flag(mc, si->su, CA_HALFOP))
 	{
-		notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 		return;
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", chan);
+		command_fail(si, fault_noprivs, "\2%s\2 is closed.", chan);
 		return;
 	}
 
@@ -196,7 +196,7 @@ static void cs_cmd_dehalfop(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(tu = user_find_named(nick)))
 		{
-			notice(chansvs.nick, si->su->nick, "\2%s\2 is not online.", nick);
+			command_fail(si, fault_nosuch_target, "\2%s\2 is not online.", nick);
 			return;
 		}
 	}
@@ -207,7 +207,7 @@ static void cs_cmd_dehalfop(sourceinfo_t *si, int parc, char *parv[])
 	cu = chanuser_find(mc->chan, tu);
 	if (!cu)
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not on \2%s\2.", tu->nick, mc->name);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not on \2%s\2.", tu->nick, mc->name);
 		return;
 	}
 
@@ -220,7 +220,7 @@ static void cs_cmd_dehalfop(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(chansvs.me, si->su, CMDLOG_SET, "%s DEHALFOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (!chanuser_find(mc->chan, si->su))
-		notice(chansvs.nick, si->su->nick, "\2%s\2 has been dehalfopped on \2%s\2.", tu->nick, mc->name);
+		command_success_nodata(si, "\2%s\2 has been dehalfopped on \2%s\2.", tu->nick, mc->name);
 }
 
 static void cs_fcmd_halfop(char *origin, char *chan)

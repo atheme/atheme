@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService VOICE functions.
  *
- * $Id: voice.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: voice.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/voice", FALSE, _modinit, _moddeinit,
-	"$Id: voice.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: voice.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -69,28 +69,28 @@ static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!chan)
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "VOICE");
-		notice(chansvs.nick, si->su->nick, "Syntax: VOICE <#channel> [nickname]");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "VOICE");
+		command_fail(si, fault_needmoreparams, "Syntax: VOICE <#channel> [nickname]");
 		return;
 	}
 
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", chan);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", chan);
 		return;
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", chan);
+		command_fail(si, fault_noprivs, "\2%s\2 is closed.", chan);
 		return;
 	}
 
 	si->su = user_find_named(si->su->nick);
 	if (!chanacs_user_has_flag(mc, si->su, CA_VOICE))
 	{
-		notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 		return;
 	}
 
@@ -101,7 +101,7 @@ static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(tu = user_find_named(nick)))
 		{
-			notice(chansvs.nick, si->su->nick, "\2%s\2 is not online.", nick);
+			command_fail(si, fault_nosuch_target, "\2%s\2 is not online.", nick);
 			return;
 		}
 	}
@@ -112,7 +112,7 @@ static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[])
 	cu = chanuser_find(mc->chan, tu);
 	if (!cu)
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not on \2%s\2.", tu->nick, mc->name);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not on \2%s\2.", tu->nick, mc->name);
 		return;
 	}
 
@@ -125,7 +125,7 @@ static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(chansvs.me, si->su, CMDLOG_SET, "%s VOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (!chanuser_find(mc->chan, si->su))
-		notice(chansvs.nick, si->su->nick, "\2%s\2 has been voiced on \2%s\2.", tu->nick, mc->name);
+		command_success_nodata(si, "\2%s\2 has been voiced on \2%s\2.", tu->nick, mc->name);
 }
 
 static void cs_cmd_devoice(sourceinfo_t *si, int parc, char *parv[])
@@ -138,22 +138,22 @@ static void cs_cmd_devoice(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!chan)
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "DEVOICE");
-		notice(chansvs.nick, si->su->nick, "Syntax: DEVOICE <#channel> [nickname]");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DEVOICE");
+		command_fail(si, fault_needmoreparams, "Syntax: DEVOICE <#channel> [nickname]");
 		return;
 	}
 
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", chan);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", chan);
 		return;
 	}
 
 	si->su = user_find_named(si->su->nick);
 	if (!chanacs_user_has_flag(mc, si->su, CA_VOICE))
 	{
-		notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 		return;
 	}
 
@@ -164,7 +164,7 @@ static void cs_cmd_devoice(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(tu = user_find_named(nick)))
 		{
-			notice(chansvs.nick, si->su->nick, "\2%s\2 is not online.", nick);
+			command_fail(si, fault_nosuch_target, "\2%s\2 is not online.", nick);
 			return;
 		}
 	}
@@ -175,7 +175,7 @@ static void cs_cmd_devoice(sourceinfo_t *si, int parc, char *parv[])
 	cu = chanuser_find(mc->chan, tu);
 	if (!cu)
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not on \2%s\2.", tu->nick, mc->name);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not on \2%s\2.", tu->nick, mc->name);
 		return;
 	}
 
@@ -188,7 +188,7 @@ static void cs_cmd_devoice(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(chansvs.me, si->su, CMDLOG_SET, "%s DEVOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (!chanuser_find(mc->chan, si->su))
-		notice(chansvs.nick, si->su->nick, "\2%s\2 has been devoiced on \2%s\2.", tu->nick, mc->name);
+		command_success_nodata(si, "\2%s\2 has been devoiced on \2%s\2.", tu->nick, mc->name);
 }
 
 static void cs_fcmd_voice(char *origin, char *chan)

@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: set.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: set.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -83,8 +83,8 @@ static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!name || !setting || !params)
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "SET");
-		notice(chansvs.nick, si->su->nick, "Syntax: SET <#channel> <setting> <parameters>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET");
+		command_fail(si, fault_needmoreparams, "Syntax: SET <#channel> <setting> <parameters>");
 		return;
 	}
 
@@ -94,7 +94,7 @@ static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 		if (c->func)
 			c->func(si->su->nick, name, params);
 		else
-			notice(chansvs.nick, si->su->nick, "Invalid setting.  Please use \2HELP\2 for help.");
+			command_fail(si, fault_nosuch_key, "Invalid setting.  Please use \2HELP\2 for help.");
 	}
 }
 

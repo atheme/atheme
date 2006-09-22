@@ -4,7 +4,7 @@
  *
  * This file contains code for the ChanServ LIST function.
  *
- * $Id: list.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: list.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: list.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -49,13 +49,13 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!chanpattern)
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "LIST");
-		notice(chansvs.nick, si->su->nick, "Syntax: LIST <channel pattern>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "LIST");
+		command_fail(si, fault_needmoreparams, "Syntax: LIST <channel pattern>");
 		return;
 	}
 
 	snoop("LIST:CHANNELS: \2%s\2 by \2%s\2", chanpattern, si->su->nick);
-	notice(chansvs.nick, si->su->nick, "Channels matching pattern \2%s\2:", chanpattern);
+	command_success_nodata(si, "Channels matching pattern \2%s\2:", chanpattern);
 
 	for (i = 0; i < HASHSIZE; i++)
 	{
@@ -78,7 +78,7 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 					strlcat(buf, "\2[closed]\2", BUFSIZE);
 				}
 
-				notice(chansvs.nick, si->su->nick, "- %s (%s) %s", mc->name, mc->founder->name, buf);
+				command_success_nodata(si, "- %s (%s) %s", mc->name, mc->founder->name, buf);
 				matches++;
 			}
 		}
@@ -86,7 +86,7 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(chansvs.me, si->su, CMDLOG_ADMIN, "LIST %s (%d matches)", chanpattern, matches);
 	if (matches == 0)
-		notice(chansvs.nick, si->su->nick, "No channel matched pattern \2%s\2", chanpattern);
+		command_success_nodata(si, "No channel matched pattern \2%s\2", chanpattern);
 	else
-		notice(chansvs.nick, si->su->nick, "\2%d\2 match%s for pattern \2%s\2", matches, matches != 1 ? "es" : "", chanpattern);
+		command_success_nodata(si, "\2%d\2 match%s for pattern \2%s\2", matches, matches != 1 ? "es" : "", chanpattern);
 }

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TOPIC functions.
  *
- * $Id: topic.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: topic.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/topic", FALSE, _modinit, _moddeinit,
-	"$Id: topic.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: topic.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -68,34 +68,34 @@ static void cs_cmd_topic(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!chan || !topic)
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "TOPIC");
-		notice(chansvs.nick, si->su->nick, "Syntax: TOPIC <#channel> <topic>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "TOPIC");
+		command_fail(si, fault_needmoreparams, "Syntax: TOPIC <#channel> <topic>");
 		return;
 	}
 
 	c = channel_find(chan);
 	if (!c)
 	{
-                notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", chan);
+                command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", chan);
                 return;
         }
 
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		notice(chansvs.nick, si->su->nick, "Channel \2%s\2 is not registered.", chan);
+		command_fail(si, fault_nosuch_target, "Channel \2%s\2 is not registered.", chan);
 		return;
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", chan);
+		command_fail(si, fault_noprivs, "\2%s\2 is closed.", chan);
 		return;
 	}
 
 	if (!chanacs_user_has_flag(mc, si->su, CA_TOPIC))
 	{
-		notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 		return;
 	}
 
@@ -104,7 +104,7 @@ static void cs_cmd_topic(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(chansvs.me, si->su, CMDLOG_SET, "%s TOPIC", mc->name);
 	if (!chanuser_find(c, si->su))
-		notice(chansvs.nick, si->su->nick, "Topic set to \2%s\2 on \2%s\2.", topic, chan);
+		command_success_nodata(si, "Topic set to \2%s\2 on \2%s\2.", topic, chan);
 }
 
 static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[])
@@ -117,34 +117,34 @@ static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[])
 
         if (!chan || !topic)
         {
-                notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "TOPICAPPEND");
-                notice(chansvs.nick, si->su->nick, "Syntax: TOPICAPPEND <#channel> <topic>");
+                command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "TOPICAPPEND");
+                command_fail(si, fault_needmoreparams, "Syntax: TOPICAPPEND <#channel> <topic>");
                 return;
         }
 
 	c = channel_find(chan);
 	if (!c)
 	{
-                notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", chan);
+                command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", chan);
                 return;
         }
 
         mc = mychan_find(chan);
         if (!mc)
         {
-                notice(chansvs.nick, si->su->nick, "Channel \2%s\2 is not registered.", chan);
+                command_fail(si, fault_nosuch_target, "Channel \2%s\2 is not registered.", chan);
                 return;
         }
 
         if (!chanacs_user_has_flag(mc, si->su, CA_TOPIC))
         {
-                notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
+                command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
                 return;
         }
         
         if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", chan);
+		command_fail(si, fault_noprivs, "\2%s\2 is closed.", chan);
 		return;
 	}
 
@@ -164,7 +164,7 @@ static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(chansvs.me, si->su, CMDLOG_SET, "%s TOPICAPPEND", mc->name);
 	if (!chanuser_find(c, si->su))
-        	notice(chansvs.nick, si->su->nick, "Topic set to \2%s\2 on \2%s\2.", c->topic, chan);
+        	command_success_nodata(si, "Topic set to \2%s\2 on \2%s\2.", c->topic, chan);
 }
 
 

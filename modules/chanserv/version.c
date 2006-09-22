@@ -3,7 +3,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/version", FALSE, _modinit, _moddeinit,
-	"$Id: version.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: version.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -37,7 +37,7 @@ static void cs_cmd_version(sourceinfo_t *si, int parc, char *parv[])
 {
         char buf[BUFSIZE];
         snprintf(buf, BUFSIZE, "Atheme %s [%s] #%s", version, revision, generation);
-        notice(chansvs.nick, si->su->nick, buf);
+        command_success_string(si, buf, "%s", buf);
         return;
 }
 

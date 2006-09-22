@@ -4,7 +4,7 @@
  *
  * Closing for channels.
  *
- * $Id: close.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: close.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/close", FALSE, _modinit, _moddeinit,
-	"$Id: close.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: close.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -86,14 +86,14 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!target || !action)
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "CLOSE");
-		notice(chansvs.nick, si->su->nick, "Usage: CLOSE <#channel> <ON|OFF> [reason]");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLOSE");
+		command_fail(si, fault_needmoreparams, "Usage: CLOSE <#channel> <ON|OFF> [reason]");
 		return;
 	}
 
 	if (!(mc = mychan_find(target)))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", target);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", target);
 		return;
 	}
 
@@ -101,20 +101,20 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!reason)
 		{
-			notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "CLOSE");
-			notice(chansvs.nick, si->su->nick, "Usage: CLOSE <#channel> ON <reason>");
+			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLOSE");
+			command_fail(si, fault_needmoreparams, "Usage: CLOSE <#channel> ON <reason>");
 			return;
 		}
 
 		if (config_options.chan && !irccasecmp(config_options.chan, target))
 		{
-			notice(chansvs.nick, si->su->nick, "\2%s\2 cannot be closed.", target);
+			command_fail(si, fault_noprivs, "\2%s\2 cannot be closed.", target);
 			return;
 		}
 
 		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 		{
-			notice(chansvs.nick, si->su->nick, "\2%s\2 is already closed.", target);
+			command_fail(si, fault_nochange, "\2%s\2 is already closed.", target);
 			return;
 		}
 
@@ -146,13 +146,13 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 		wallops("%s closed the channel \2%s\2 (%s).", si->su->nick, target, reason);
 		snoop("CLOSE:ON: \2%s\2 by \2%s\2 (%s)", target, si->su->nick, reason);
 		logcommand(chansvs.me, si->su, CMDLOG_ADMIN, "%s CLOSE ON %s", target, reason);
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is now closed.", target);
+		command_success_nodata(si, "\2%s\2 is now closed.", target);
 	}
 	else if (!strcasecmp(action, "OFF"))
 	{
 		if (!metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 		{
-			notice(chansvs.nick, si->su->nick, "\2%s\2 is not closed.", target);
+			command_fail(si, fault_nochange, "\2%s\2 is not closed.", target);
 			return;
 		}
 
@@ -175,11 +175,11 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 		wallops("%s reopened the channel \2%s\2.", si->su->nick, target);
 		snoop("CLOSE:OFF: \2%s\2 by \2%s\2", target, si->su->nick);
 		logcommand(chansvs.me, si->su, CMDLOG_ADMIN, "%s CLOSE OFF", target);
-		notice(chansvs.nick, si->su->nick, "\2%s\2 has been reopened.", target);
+		command_success_nodata(si, "\2%s\2 has been reopened.", target);
 	}
 	else
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "CLOSE");
-		notice(chansvs.nick, si->su->nick, "Usage: CLOSE <#channel> <ON|OFF> [reason]");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "CLOSE");
+		command_fail(si, fault_badparams, "Usage: CLOSE <#channel> <ON|OFF> [reason]");
 	}
 }

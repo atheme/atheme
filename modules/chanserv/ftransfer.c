@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FTRANSFER function.
  *
- * $Id: ftransfer.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: ftransfer.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ftransfer", FALSE, _modinit, _moddeinit,
-	"$Id: ftransfer.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: ftransfer.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,26 +48,26 @@ static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!name || !newfndr)
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "FTRANSFER");
-		notice(chansvs.nick, si->su->nick, "Syntax: FTRANSFER <#channel> <newfounder>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FTRANSFER");
+		command_fail(si, fault_needmoreparams, "Syntax: FTRANSFER <#channel> <newfounder>");
 		return;
 	}
 
 	if (!(tmu = myuser_find_ext(newfndr)))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", newfndr);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", newfndr);
 		return;
 	}
 
 	if (!(mc = mychan_find(name)))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", name);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", name);
 		return;
 	}
 	
 	if (tmu == mc->founder)
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is already the founder of \2%s\2.", newfndr, name);
+		command_fail(si, fault_nochange, "\2%s\2 is already the founder of \2%s\2.", newfndr, name);
 		return;
 	}
 
@@ -77,7 +77,7 @@ static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[])
 	wallops("%s transferred foundership of %s from %s to %s", si->su->nick, name, mc->founder->name, newfndr);
 	logcommand(chansvs.me, si->su, CMDLOG_ADMIN, "%s FTRANSFER from %s to %s", mc->name, mc->founder->name, newfndr);
 	verbose(mc, "Foundership transfer from \2%s\2 to \2%s\2 forced by %s administration.", mc->founder->name, newfndr, me.netname);
-	notice(chansvs.nick, si->su->nick, "Foundership of \2%s\2 has been transferred from \2%s\2 to \2%s\2.",
+	command_success_nodata(si, "Foundership of \2%s\2 has been transferred from \2%s\2 to \2%s\2.",
 		name, mc->founder->name, newfndr);
 
 	mc->founder = tmu;

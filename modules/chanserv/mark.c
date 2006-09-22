@@ -4,7 +4,7 @@
  *
  * Marking for channels.
  *
- * $Id: mark.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: mark.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/mark", FALSE, _modinit, _moddeinit,
-	"$Id: mark.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: mark.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,20 +48,20 @@ static void cs_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!target || !action)
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "MARK");
-		notice(chansvs.nick, si->su->nick, "Usage: MARK <#channel> <ON|OFF> [note]");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MARK");
+		command_fail(si, fault_needmoreparams, "Usage: MARK <#channel> <ON|OFF> [note]");
 		return;
 	}
 
 	if (target[0] != '#')
 	{
-		notice(chansvs.nick, si->su->nick, STR_INVALID_PARAMS, "MARK");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "MARK");
 		return;
 	}
 
 	if (!(mc = mychan_find(target)))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", target);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", target);
 		return;
 	}
 	
@@ -69,14 +69,14 @@ static void cs_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!info)
 		{
-			notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "MARK");
-			notice(chansvs.nick, si->su->nick, "Usage: MARK <#channel> ON <note>");
+			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MARK");
+			command_fail(si, fault_needmoreparams, "Usage: MARK <#channel> ON <note>");
 			return;
 		}
 
 		if (metadata_find(mc, METADATA_CHANNEL, "private:mark:setter"))
 		{
-			notice(chansvs.nick, si->su->nick, "\2%s\2 is already marked.", target);
+			command_fail(si, fault_nochange, "\2%s\2 is already marked.", target);
 			return;
 		}
 
@@ -86,13 +86,13 @@ static void cs_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 
 		wallops("%s marked the channel \2%s\2.", si->su->nick, target);
 		logcommand(chansvs.me, si->su, CMDLOG_ADMIN, "%s MARK ON", mc->name);
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is now marked.", target);
+		command_success_nodata(si, "\2%s\2 is now marked.", target);
 	}
 	else if (!strcasecmp(action, "OFF"))
 	{
 		if (!metadata_find(mc, METADATA_CHANNEL, "private:mark:setter"))
 		{
-			notice(chansvs.nick, si->su->nick, "\2%s\2 is not marked.", target);
+			command_fail(si, fault_nochange, "\2%s\2 is not marked.", target);
 			return;
 		}
 
@@ -102,11 +102,11 @@ static void cs_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 
 		wallops("%s unmarked the channel \2%s\2.", si->su->nick, target);
 		logcommand(chansvs.me, si->su, CMDLOG_ADMIN, "%s MARK OFF", mc->name);
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is now unmarked.", target);
+		command_success_nodata(si, "\2%s\2 is now unmarked.", target);
 	}
 	else
 	{
-		notice(chansvs.nick, si->su->nick, STR_INVALID_PARAMS, "MARK");
-		notice(chansvs.nick, si->su->nick, "Usage: MARK <#channel> <ON|OFF> [note]");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "MARK");
+		command_fail(si, fault_badparams, "Usage: MARK <#channel> <ON|OFF> [note]");
 	}
 }

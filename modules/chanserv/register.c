@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService REGISTER function.
  *
- * $Id: register.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: register.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: register.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -51,56 +51,56 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!name)
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "REGISTER");
-		notice(chansvs.nick, si->su->nick, "To register a channel: REGISTER <#channel>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "REGISTER");
+		command_fail(si, fault_needmoreparams, "To register a channel: REGISTER <#channel>");
 		return;
 	}
 
 	if (*name != '#')
 	{
-		notice(chansvs.nick, si->su->nick, STR_INVALID_PARAMS, "REGISTER");
-		notice(chansvs.nick, si->su->nick, "Syntax: REGISTER <#channel>");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "REGISTER");
+		command_fail(si, fault_badparams, "Syntax: REGISTER <#channel>");
 		return;
 	}
 
 	/* make sure they're logged in */
 	if (!si->su->myuser)
 	{
-		notice(chansvs.nick, si->su->nick, "You are not logged in.");
+		command_fail(si, fault_noprivs, "You are not logged in.");
 		return;
 	}
 
 	if (si->su->myuser->flags & MU_WAITAUTH)
 	{
-		notice(chansvs.nick, si->su->nick, "You need to verify your email address before you may register channels.");
+		command_fail(si, fault_notverified, "You need to verify your email address before you may register channels.");
 		return;
 	}
 	
 	/* make sure it isn't already registered */
 	if ((mc = mychan_find(name)))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is already registered to \2%s\2.", mc->name, mc->founder->name);
+		command_fail(si, fault_alreadyexists, "\2%s\2 is already registered to \2%s\2.", mc->name, mc->founder->name);
 		return;
 	}
 
 	/* make sure the channel exists */
 	if (!(c = channel_find(name)))
 	{
-		notice(chansvs.nick, si->su->nick, "The channel \2%s\2 must exist in order to register it.", name);
+		command_fail(si, fault_nosuch_target, "The channel \2%s\2 must exist in order to register it.", name);
 		return;
 	}
 
 	/* make sure they're in it */
 	if (!(cu = chanuser_find(c, si->su)))
 	{
-		notice(chansvs.nick, si->su->nick, "You must be in \2%s\2 in order to register it.", name);
+		command_fail(si, fault_noprivs, "You must be in \2%s\2 in order to register it.", name);
 		return;
 	}
 
 	/* make sure they're opped */
 	if (!(CMODE_OP & cu->modes))
 	{
-		notice(chansvs.nick, si->su->nick, "You must be a channel operator in \2%s\2 in order to " "register it.", name);
+		command_fail(si, fault_noprivs, "You must be a channel operator in \2%s\2 in order to " "register it.", name);
 		return;
 	}
 
@@ -118,7 +118,7 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 
 	if ((tcnt >= me.maxchans) && !has_priv(si->su, PRIV_REG_NOLIMIT))
 	{
-		notice(chansvs.nick, si->su->nick, "You have too many channels registered.");
+		command_fail(si, fault_toomany, "You have too many channels registered.");
 		return;
 	}
 
@@ -141,7 +141,7 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		metadata_add(mc, METADATA_CHANNEL, "private:channelts", str);
 	}
 
-	notice(chansvs.nick, si->su->nick, "\2%s\2 is now registered to \2%s\2.", mc->name, mc->founder->name);
+	command_success_nodata(si, "\2%s\2 is now registered to \2%s\2.", mc->name, mc->founder->name);
 
 	hook_call_event("channel_register", mc);
 }

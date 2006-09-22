@@ -4,7 +4,7 @@
  *
  * Lists object properties via their metadata table.
  *
- * $Id: taxonomy.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: taxonomy.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/taxonomy", FALSE, _modinit, _moddeinit,
-	"$Id: taxonomy.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: taxonomy.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,14 +48,14 @@ void cs_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!target || *target != '#')
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "TAXONOMY");
-		notice(chansvs.nick, si->su->nick, "Syntax: TAXONOMY <#channel>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "TAXONOMY");
+		command_fail(si, fault_needmoreparams, "Syntax: TAXONOMY <#channel>");
 		return;
 	}
 
 	if (!(mc = mychan_find(target)))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not a registered channel.", target);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not a registered channel.", target);
 		return;
 	}
 
@@ -64,7 +64,7 @@ void cs_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(chansvs.me, si->su, CMDLOG_ADMIN, "%s TAXONOMY (oper)", mc->name);
 	else
 		logcommand(chansvs.me, si->su, CMDLOG_GET, "%s TAXONOMY", mc->name);
-	notice(chansvs.nick, si->su->nick, "Taxonomy for \2%s\2:", target);
+	command_success_nodata(si, "Taxonomy for \2%s\2:", target);
 
 	LIST_FOREACH(n, mc->metadata.head)
 	{
@@ -73,8 +73,8 @@ void cs_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
                 if (md->private && !isoper)
                         continue;
 
-		notice(chansvs.nick, si->su->nick, "%-32s: %s", md->name, md->value);
+		command_success_nodata(si, "%-32s: %s", md->name, md->value);
 	}
 
-	notice(chansvs.nick, si->su->nick, "End of \2%s\2 taxonomy.", target);
+	command_success_nodata(si, "End of \2%s\2 taxonomy.", target);
 }

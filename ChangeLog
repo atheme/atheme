@@ -1,3 +1,14 @@
+jilles      2006/09/22 18:58:40 UTC	(20060922-6425)
+  Log:
+  command_fail(): show numeric fault code on IRC.
+  This will probably go away later but seems useful
+  for debugging.
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/09/22 18:52:58 UTC	(20060922-6423)
   Log:
   Add missing const.

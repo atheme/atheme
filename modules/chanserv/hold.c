@@ -4,7 +4,7 @@
  *
  * Controls noexpire options for channels.
  *
- * $Id: hold.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: hold.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/hold", FALSE, _modinit, _moddeinit,
-	"$Id: hold.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: hold.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -47,20 +47,20 @@ static void cs_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!target || !action)
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "HOLD");
-		notice(chansvs.nick, si->su->nick, "Usage: HOLD <#channel> <ON|OFF>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "HOLD");
+		command_fail(si, fault_needmoreparams, "Usage: HOLD <#channel> <ON|OFF>");
 		return;
 	}
 
 	if (*target != '#')
 	{
-		notice(chansvs.nick, si->su->nick, STR_INVALID_PARAMS, "HOLD");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "HOLD");
 		return;
 	}
 
 	if (!(mc = mychan_find(target)))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", target);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", target);
 		return;
 	}
 	
@@ -68,7 +68,7 @@ static void cs_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (mc->flags & MC_HOLD)
 		{
-			notice(chansvs.nick, si->su->nick, "\2%s\2 is already held.", target);
+			command_fail(si, fault_nochange, "\2%s\2 is already held.", target);
 			return;
 		}
 
@@ -76,13 +76,13 @@ static void cs_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 
 		wallops("%s set the HOLD option for the channel \2%s\2.", si->su->nick, target);
 		logcommand(chansvs.me, si->su, CMDLOG_ADMIN, "%s HOLD ON", mc->name);
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is now held.", target);
+		command_success_nodata(si, "\2%s\2 is now held.", target);
 	}
 	else if (!strcasecmp(action, "OFF"))
 	{
 		if (!(mc->flags & MC_HOLD))
 		{
-			notice(chansvs.nick, si->su->nick, "\2%s\2 is not held.", target);
+			command_fail(si, fault_nochange, "\2%s\2 is not held.", target);
 			return;
 		}
 
@@ -90,11 +90,11 @@ static void cs_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 
 		wallops("%s removed the HOLD option on the channel \2%s\2.", si->su->nick, target);
 		logcommand(chansvs.me, si->su, CMDLOG_ADMIN, "%s HOLD OFF", mc->name);
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is no longer held.", target);
+		command_success_nodata(si, "\2%s\2 is no longer held.", target);
 	}
 	else
 	{
-		notice(chansvs.nick, si->su->nick, STR_INVALID_PARAMS, "HOLD");
-		notice(chansvs.nick, si->su->nick, "Usage: HOLD <#channel> <ON|OFF>");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "HOLD");
+		command_fail(si, fault_badparams, "Usage: HOLD <#channel> <ON|OFF>");
 	}
 }

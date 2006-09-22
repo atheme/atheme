@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService RECOVER functions.
  *
- * $Id: recover.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: recover.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/recover", FALSE, _modinit, _moddeinit,
-	"$Id: recover.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: recover.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -53,32 +53,32 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!name)
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "RECOVER");
-		notice(chansvs.nick, si->su->nick, "Syntax: RECOVER <#channel>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RECOVER");
+		command_fail(si, fault_needmoreparams, "Syntax: RECOVER <#channel>");
 		return;
 	}
 
 	if (!(mc = mychan_find(name)))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", name);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", name);
 		return;
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is closed.", name);
+		command_fail(si, fault_noprivs, "\2%s\2 is closed.", name);
 		return;
 	}
 
 	if (!mc->chan)
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 does not exist.", name);
+		command_fail(si, fault_nosuch_target, "\2%s\2 does not exist.", name);
 		return;
 	}
 
 	if (!chanacs_user_has_flag(mc, si->su, CA_RECOVER))
 	{
-		notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 		return;
 	}
 
@@ -187,7 +187,7 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 		invite_sts(chansvs.me->me, si->su, mc->chan);
 
 	if (added_exempt)
-		notice(chansvs.nick, si->su->nick, "Recover complete for \2%s\2, ban exception \2%s\2 added.", mc->chan->name, hostbuf2);
+		command_success_nodata(si, "Recover complete for \2%s\2, ban exception \2%s\2 added.", mc->chan->name, hostbuf2);
 	else
-		notice(chansvs.nick, si->su->nick, "Recover complete for \2%s\2.", mc->chan->name);
+		command_success_nodata(si, "Recover complete for \2%s\2.", mc->chan->name);
 }

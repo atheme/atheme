@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INFO functions.
  *
- * $Id: info.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: info.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: info.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -52,47 +52,47 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!name)
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "INFO");
-		notice(chansvs.nick, si->su->nick, "Syntax: INFO <#channel>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "INFO");
+		command_fail(si, fault_needmoreparams, "Syntax: INFO <#channel>");
 		return;
 	}
 
 	if (*name != '#')
 	{
-		notice(chansvs.nick, si->su->nick, STR_INVALID_PARAMS, "INFO");
-		notice(chansvs.nick, si->su->nick, "Syntax: INFO <#channel>");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "INFO");
+		command_fail(si, fault_badparams, "Syntax: INFO <#channel>");
 		return;
 	}
 
 	if (!(mc = mychan_find(name)))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", name);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", name);
 		return;
 	}
 
 	if (!has_priv(si->su, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, METADATA_CHANNEL, "private:close:closer")))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 has been closed down by the %s administration.", mc->name, me.netname);
+		command_fail(si, fault_noprivs, "\2%s\2 has been closed down by the %s administration.", mc->name, me.netname);
 		return;
 	}
 
 	tm = *localtime(&mc->registered);
 	strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-	notice(chansvs.nick, si->su->nick, "Information on \2%s\2:", mc->name);
+	command_success_nodata(si, "Information on \2%s\2:", mc->name);
 
 	if (LIST_LENGTH(&mc->founder->logins))
-		notice(chansvs.nick, si->su->nick, "Founder    : %s (logged in)", mc->founder->name);
+		command_success_nodata(si, "Founder    : %s (logged in)", mc->founder->name);
 	else
-		notice(chansvs.nick, si->su->nick, "Founder    : %s (not logged in)", mc->founder->name);
+		command_success_nodata(si, "Founder    : %s (not logged in)", mc->founder->name);
 
-	notice(chansvs.nick, si->su->nick, "Registered : %s (%s ago)", strfbuf, time_ago(mc->registered));
+	command_success_nodata(si, "Registered : %s (%s ago)", strfbuf, time_ago(mc->registered));
 
 	if (CURRTIME - mc->used >= 86400)
 	{
 		tm = *localtime(&mc->used);
 		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
-		notice(chansvs.nick, si->su->nick, "Last used  : %s (%s ago)", strfbuf, time_ago(mc->used));
+		command_success_nodata(si, "Last used  : %s (%s ago)", strfbuf, time_ago(mc->used));
 	}
 
 	md = metadata_find(mc, METADATA_CHANNEL, "private:mlockext");
@@ -103,7 +103,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		if (md != NULL && strlen(md->value) > 450)
 		{
 			/* Be safe */
-			notice(chansvs.nick, si->su->nick, "Mode lock is too long, not entirely shown");
+			command_success_nodata(si, "Mode lock is too long, not entirely shown");
 			md = NULL;
 		}
 
@@ -198,12 +198,12 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		if (*buf)
-			notice(chansvs.nick, si->su->nick, "Mode lock  : %s%s", buf, (params) ? params : "");
+			command_success_nodata(si, "Mode lock  : %s%s", buf, (params) ? params : "");
 	}
 
 
 	if ((md = metadata_find(mc, METADATA_CHANNEL, "url")))
-		notice(chansvs.nick, si->su->nick, "URL        : %s", md->value);
+		command_success_nodata(si, "URL        : %s", md->value);
 
 	*buf = '\0';
 
@@ -258,7 +258,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (*buf)
-		notice(chansvs.nick, si->su->nick, "Flags      : %s", buf);
+		command_success_nodata(si, "Flags      : %s", buf);
 
 	if (has_priv(si->su, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, METADATA_CHANNEL, "private:mark:setter")))
 	{
@@ -275,11 +275,11 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		tm = *localtime(&ts);
 		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-		notice(chansvs.nick, si->su->nick, "%s was \2MARKED\2 by %s on %s (%s)", mc->name, setter, strfbuf, reason);
+		command_success_nodata(si, "%s was \2MARKED\2 by %s on %s (%s)", mc->name, setter, strfbuf, reason);
 	}
 
 	if (has_priv(si->su, PRIV_CHAN_AUSPEX) && (MC_INHABIT & mc->flags))
-		notice(chansvs.nick, si->su->nick, "%s is temporarily holding this channel.", chansvs.nick);
+		command_success_nodata(si, "%s is temporarily holding this channel.", chansvs.nick);
 
 	if (has_priv(si->su, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, METADATA_CHANNEL, "private:close:closer")))
 	{
@@ -296,13 +296,13 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		tm = *localtime(&ts);
 		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-		notice(chansvs.nick, si->su->nick, "%s was \2CLOSED\2 by %s on %s (%s)", mc->name, setter, strfbuf, reason);
+		command_success_nodata(si, "%s was \2CLOSED\2 by %s on %s (%s)", mc->name, setter, strfbuf, reason);
 	}
 
 	req.u = si->su;
 	req.mc = mc;
 	hook_call_event("channel_info", &req);
 
-	notice(chansvs.nick,si->su->nick, "\2*** End of Info ***\2");
+	command_success_nodata(si, "\2*** End of Info ***\2");
 	logcommand(chansvs.me, si->su, CMDLOG_GET, "%s INFO", mc->name);
 }

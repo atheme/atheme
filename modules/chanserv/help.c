@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: help.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: help.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -94,81 +94,81 @@ static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!command)
 	{
-		notice(chansvs.nick, si->su->nick, "***** \2%s Help\2 *****", chansvs.nick);
-		notice(chansvs.nick, si->su->nick, "\2%s\2 gives normal users the ability to maintain control", chansvs.nick);
-		notice(chansvs.nick, si->su->nick, "of a channel, without the need of a bot. Channel takeovers are");
-		notice(chansvs.nick, si->su->nick, "virtually impossible when a channel is registered with \2%s\2.", chansvs.nick);
-		notice(chansvs.nick, si->su->nick, "Registration is a quick and painless process. Once registered,");
-		notice(chansvs.nick, si->su->nick, "the founder can maintain complete and total control over the channel.");
+		command_success_nodata(si, "***** \2%s Help\2 *****", chansvs.nick);
+		command_success_nodata(si, "\2%s\2 gives normal users the ability to maintain control", chansvs.nick);
+		command_success_nodata(si, "of a channel, without the need of a bot. Channel takeovers are");
+		command_success_nodata(si, "virtually impossible when a channel is registered with \2%s\2.", chansvs.nick);
+		command_success_nodata(si, "Registration is a quick and painless process. Once registered,");
+		command_success_nodata(si, "the founder can maintain complete and total control over the channel.");
 		if (config_options.expire > 0)
 		{
-			notice(chansvs.nick, si->su->nick, "Please note that channels will expire after %d days of inactivity,", (config_options.expire / 86400));
-			notice(chansvs.nick, si->su->nick, "or if there are no eligible channel successors.");
-			notice(chansvs.nick, si->su->nick, "Activity is defined as a user with one of +vhHoOsrRf being on the channel.");
+			command_success_nodata(si, "Please note that channels will expire after %d days of inactivity,", (config_options.expire / 86400));
+			command_success_nodata(si, "or if there are no eligible channel successors.");
+			command_success_nodata(si, "Activity is defined as a user with one of +vhHoOsrRf being on the channel.");
 		}
 		else
 		{
-			notice(chansvs.nick, si->su->nick, "Please note that channels will expire if there are no eligible channel successors.");
+			command_success_nodata(si, "Please note that channels will expire if there are no eligible channel successors.");
 		}
-		notice(chansvs.nick, si->su->nick, "Successors are primarily those who have the +R flag");
-		notice(chansvs.nick, si->su->nick, "set on their account in the channel, although other");
-		notice(chansvs.nick, si->su->nick, "people may be chosen depending on their access");
-		notice(chansvs.nick, si->su->nick, "level and activity.");
-		notice(chansvs.nick, si->su->nick, " ");
-		notice(chansvs.nick, si->su->nick, "For more information on a command, type:");
-		notice(chansvs.nick, si->su->nick, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
-		notice(chansvs.nick, si->su->nick, " ");
-		notice(chansvs.nick, si->su->nick, "For a verbose listing of all commands, type:");
-		notice(chansvs.nick, si->su->nick, "\2/%s%s help commands\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
-		notice(chansvs.nick, si->su->nick, " ");
+		command_success_nodata(si, "Successors are primarily those who have the +R flag");
+		command_success_nodata(si, "set on their account in the channel, although other");
+		command_success_nodata(si, "people may be chosen depending on their access");
+		command_success_nodata(si, "level and activity.");
+		command_success_nodata(si, " ");
+		command_success_nodata(si, "For more information on a command, type:");
+		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
+		command_success_nodata(si, " ");
+		command_success_nodata(si, "For a verbose listing of all commands, type:");
+		command_success_nodata(si, "\2/%s%s help commands\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
+		command_success_nodata(si, " ");
 
 		command_help_short(chansvs.nick, si->su->nick, cs_cmdtree, "REGISTER OP INVITE UNBAN FLAGS RECOVER SET");
 
-		notice(chansvs.nick, si->su->nick, "***** \2End of Help\2 *****");
+		command_success_nodata(si, "***** \2End of Help\2 *****");
 		return;
 	}
 
 	if (!strcasecmp("COMMANDS", command))
 	{
-		notice(chansvs.nick, si->su->nick, "***** \2%s Help\2 *****", chansvs.nick);
+		command_success_nodata(si, "***** \2%s Help\2 *****", chansvs.nick);
 		command_help(chansvs.nick, si->su->nick, cs_cmdtree);
-		notice(chansvs.nick, si->su->nick, "***** \2End of Help\2 *****");
+		command_success_nodata(si, "***** \2End of Help\2 *****");
 		return;
 	}
 
 	if (!strcasecmp("SET", command))
 	{
-		notice(chansvs.nick, si->su->nick, "***** \2%s Help\2 *****", chansvs.nick);
-		notice(chansvs.nick, si->su->nick, "Help for \2SET\2:");
-		notice(chansvs.nick, si->su->nick, " ");
-		notice(chansvs.nick, si->su->nick, "SET allows you to set various control flags");
-		notice(chansvs.nick, si->su->nick, "for channels that change the way certain");
-		notice(chansvs.nick, si->su->nick, "operations are performed on them.");
-		notice(chansvs.nick, si->su->nick, " ");
-		notice(chansvs.nick, si->su->nick, "The following commands are available.");
-		notice(chansvs.nick, si->su->nick, "\2FOUNDER\2       Transfers foundership of a channel.");
-		notice(chansvs.nick, si->su->nick, "\2MLOCK\2         Sets channel mode lock.");
-		notice(chansvs.nick, si->su->nick, "\2SECURE\2        Prevents unauthorized people from " "gaining operator status.");
-		notice(chansvs.nick, si->su->nick, "\2VERBOSE\2       Notifies channel about access list " "modifications.");
-		notice(chansvs.nick, si->su->nick, "\2FANTASY\2       Allows or disallows in-channel commands.");
-		notice(chansvs.nick, si->su->nick, "\2URL\2           Sets the channel URL.");
-		notice(chansvs.nick, si->su->nick, "\2EMAIL\2         Sets the channel e-mail address.");
-		notice(chansvs.nick, si->su->nick, "\2ENTRYMSG\2      Sets the channel's entry message.");
-		notice(chansvs.nick, si->su->nick, "\2KEEPTOPIC\2     Enables topic retention.");
-		notice(chansvs.nick, si->su->nick, "\2TOPICLOCK\2     Restricts who can change the topic.");
-		notice(chansvs.nick, si->su->nick, "\2PROPERTY\2      Manipulates channel metadata.");
-		notice(chansvs.nick, si->su->nick, " ");
+		command_success_nodata(si, "***** \2%s Help\2 *****", chansvs.nick);
+		command_success_nodata(si, "Help for \2SET\2:");
+		command_success_nodata(si, " ");
+		command_success_nodata(si, "SET allows you to set various control flags");
+		command_success_nodata(si, "for channels that change the way certain");
+		command_success_nodata(si, "operations are performed on them.");
+		command_success_nodata(si, " ");
+		command_success_nodata(si, "The following commands are available.");
+		command_success_nodata(si, "\2FOUNDER\2       Transfers foundership of a channel.");
+		command_success_nodata(si, "\2MLOCK\2         Sets channel mode lock.");
+		command_success_nodata(si, "\2SECURE\2        Prevents unauthorized people from " "gaining operator status.");
+		command_success_nodata(si, "\2VERBOSE\2       Notifies channel about access list " "modifications.");
+		command_success_nodata(si, "\2FANTASY\2       Allows or disallows in-channel commands.");
+		command_success_nodata(si, "\2URL\2           Sets the channel URL.");
+		command_success_nodata(si, "\2EMAIL\2         Sets the channel e-mail address.");
+		command_success_nodata(si, "\2ENTRYMSG\2      Sets the channel's entry message.");
+		command_success_nodata(si, "\2KEEPTOPIC\2     Enables topic retention.");
+		command_success_nodata(si, "\2TOPICLOCK\2     Restricts who can change the topic.");
+		command_success_nodata(si, "\2PROPERTY\2      Manipulates channel metadata.");
+		command_success_nodata(si, " ");
 
 		if (has_any_privs(si->su))
 		{
-			notice(chansvs.nick, si->su->nick, "The following IRCop commands are available.");
-			notice(chansvs.nick, si->su->nick, "\2STAFFONLY\2     Sets the channel as staff-only. (Non staff-members are kickbanned.)");
-			notice(chansvs.nick, si->su->nick, " ");
+			command_success_nodata(si, "The following IRCop commands are available.");
+			command_success_nodata(si, "\2STAFFONLY\2     Sets the channel as staff-only. (Non staff-members are kickbanned.)");
+			command_success_nodata(si, " ");
 		}
 
-		notice(chansvs.nick, si->su->nick, "For more specific help use \2HELP SET \37command\37\2.");
+		command_success_nodata(si, "For more specific help use \2HELP SET \37command\37\2.");
 
-		notice(chansvs.nick, si->su->nick, "***** \2End of Help\2 *****");
+		command_success_nodata(si, "***** \2End of Help\2 *****");
 		return;
 	}
 

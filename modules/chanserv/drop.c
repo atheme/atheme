@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService DROP function.
  *
- * $Id: drop.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: drop.c 6427 2006-09-22 19:38:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: drop.c 6427 2006-09-22 19:38:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -46,34 +46,34 @@ static void cs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!name)
 	{
-		notice(chansvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "DROP");
-		notice(chansvs.nick, si->su->nick, "Syntax: DROP <#channel>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DROP");
+		command_fail(si, fault_needmoreparams, "Syntax: DROP <#channel>");
 		return;
 	}
 
 	if (*name != '#')
 	{
-		notice(chansvs.nick, si->su->nick, STR_INVALID_PARAMS, "DROP");
-		notice(chansvs.nick, si->su->nick, "Syntax: DROP <#channel>");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "DROP");
+		command_fail(si, fault_badparams, "Syntax: DROP <#channel>");
 		return;
 	}
 
 	if (!(mc = mychan_find(name)))
 	{
-		notice(chansvs.nick, si->su->nick, "\2%s\2 is not registered.", name);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", name);
 		return;
 	}
 
 	if (!is_founder(mc, si->su->myuser) && !has_priv(si->su, PRIV_CHAN_ADMIN))
 	{
-		notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 		return;
 	}
 
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && !has_priv(si->su, PRIV_CHAN_ADMIN))
 	{
 		logcommand(chansvs.me, si->su, CMDLOG_REGISTER, "%s failed DROP (closed)", mc->name);
-		notice(chansvs.nick, si->su->nick, "The channel \2%s\2 is closed; it cannot be dropped.", mc->name);
+		command_fail(si, fault_noprivs, "The channel \2%s\2 is closed; it cannot be dropped.", mc->name);
 		return;
 	}
 
@@ -91,6 +91,6 @@ static void cs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 	if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
 		part(mc->name, chansvs.nick);
 	mychan_delete(mc->name);
-	notice(chansvs.nick, si->su->nick, "The channel \2%s\2 has been dropped.", name);
+	command_success_nodata(si, "The channel \2%s\2 has been dropped.", name);
 	return;
 }
