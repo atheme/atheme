@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 6421 2006-09-22 16:37:48Z jilles $
+ * $Id: services.c 6423 2006-09-22 18:52:58Z jilles $
  */
 
 #include "atheme.h"
@@ -366,7 +366,7 @@ void notice(char *from, char *to, char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
-	char *str = translation_get(fmt);
+	const char *str = translation_get(fmt);
 	user_t *u;
 	channel_t *c;
 

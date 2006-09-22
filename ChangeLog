@@ -1,3 +1,16 @@
+jilles      2006/09/22 16:37:48 UTC	(20060922-6421)
+  Log:
+  Add command_fail(), command_success_nodata(),
+  command_success_string() from tracker #38.
+  Add faultcode_t enum for symbolic fault codes.
+  command_success variants for struct/table TBD.
+  
+
+  Changes:	Modified:
+  +21 -0	trunk/include/services.h (File Modified) 
+  +86 -0	trunk/src/services.c (File Modified) 
+
+
 jilles      2006/09/22 15:23:08 UTC	(20060922-6419)
   Log:
   Constify translation_get().
