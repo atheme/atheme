@@ -1,3 +1,18 @@
+jilles      2006/09/22 20:02:23 UTC	(20060922-6429)
+  Log:
+  Use command_fail() etc in memoserv, where possible.
+  
+
+  Changes:	Modified:
+  +7 -7		trunk/modules/memoserv/delete.c (File Modified) 
+  +16 -16	trunk/modules/memoserv/forward.c (File Modified) 
+  +7 -7		trunk/modules/memoserv/help.c (File Modified) 
+  +3 -3		trunk/modules/memoserv/ignore.c (File Modified) 
+  +5 -5		trunk/modules/memoserv/list.c (File Modified) 
+  +9 -9		trunk/modules/memoserv/read.c (File Modified) 
+  +15 -15	trunk/modules/memoserv/send.c (File Modified) 
+
+
 jilles      2006/09/22 19:38:34 UTC	(20060922-6427)
   Log:
   Use command_fail() etc in chanserv, where possible.

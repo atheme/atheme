@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing clone detection.
  *
- * $Id: clones.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: clones.c 6431 2006-09-22 23:40:58Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: clones.c 6431 2006-09-22 23:40:58Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -436,12 +436,12 @@ static void clones_newuser(void *vptr)
 	if (i > 3 && !is_exempt(u->ip))
 	{
 		if (i < 6)
-			snoop("CLONES: %d clones on %s", i, u->ip);
+			snoop("CLONES: %d clones on %s (%s!%s@%s)", i, u->ip, u->nick, u->user, u->host);
 		else if (!kline_enabled)
-			snoop("CLONES: %d clones on %s (TKLINE disabled)", i, u->ip);
+			snoop("CLONES: %d clones on %s (%s!%s@%s) (TKLINE disabled)", i, u->ip, u->nick, u->user, u->host);
 		else
 		{
-			snoop("CLONES: %d clones on %s (TKLINE due to excess clones)", i, u->ip);
+			snoop("CLONES: %d clones on %s (%s!%s@%s) (TKLINE due to excess clones)", i, u->ip, u->nick, u->user, u->host);
 			slog(LG_INFO, "clones_newuser(): klining *@%s (user %s!%s@%s)",
 					u->ip, u->nick, u->user, u->host);
 			kline_sts("*", "*", u->ip, 3600, "Excessive clones");
