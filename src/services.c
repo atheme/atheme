@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 6417 2006-09-21 17:33:29Z jilles $
+ * $Id: services.c 6421 2006-09-22 16:37:48Z jilles $
  */
 
 #include "atheme.h"
@@ -392,6 +392,92 @@ void notice(char *from, char *to, char *fmt, ...)
 		}
 	}
 }
+
+void command_fail(sourceinfo_t *si, faultcode_t code, const char *fmt, ...)
+{
+	va_list args;
+	char buf[BUFSIZE];
+	const char *str = translation_get(fmt);
+
+	va_start(args, fmt);
+	vsnprintf(buf, BUFSIZE, str, args);
+	va_end(args);
+
+	if (config_options.use_privmsg)
+		msg(si->service->name, si->su->nick, "%s", buf);
+	else
+		notice_user_sts(si->service->me, si->su, buf);
+}
+
+void command_success_nodata(sourceinfo_t *si, const char *fmt, ...)
+{
+	va_list args;
+	char buf[BUFSIZE];
+	const char *str = translation_get(fmt);
+
+	va_start(args, fmt);
+	vsnprintf(buf, BUFSIZE, str, args);
+	va_end(args);
+
+	if (config_options.use_privmsg)
+		msg(si->service->name, si->su->nick, "%s", buf);
+	else
+		notice_user_sts(si->service->me, si->su, buf);
+}
+
+void command_success_string(sourceinfo_t *si, const char *result, const char *fmt, ...)
+{
+	va_list args;
+	char buf[BUFSIZE];
+	const char *str = translation_get(fmt);
+
+	va_start(args, fmt);
+	vsnprintf(buf, BUFSIZE, str, args);
+	va_end(args);
+
+	if (config_options.use_privmsg)
+		msg(si->service->name, si->su->nick, "%s", buf);
+	else
+		notice_user_sts(si->service->me, si->su, buf);
+}
+
+#if 0
+/* TBD */
+void command_success_struct(sourceinfo_t *si, char *name, char *value)
+{
+	const char *name1 = translation_get(name);
+
+	if (config_options.use_privmsg)
+		msg(si->service->name, si->su->nick, "%-16s: %s", name, value);
+	else
+		notice_user_sts(si->service->me, si->su, buf);
+}
+
+void command_success_table_init(sourceinfo_t *si, int count, ...)
+{
+	va_list args;
+	char *name, *name1;
+	char buf[BUFSIZE];
+	int i;
+	int size;
+
+	va_start(args, count);
+	buf[0] = '\0';
+	for (i = 0; i < count; i++)
+	{
+		name = va_arg(args, char *);
+		name1 = translation_get(name);
+		size = va_arg(args, int);
+		snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf),
+				"%-*s ", size, name1);
+	}
+	va_end(args);
+	if (config_options.use_privmsg)
+		msg(si->service->name, si->su->nick, "%s", buf);
+	else
+		notice_user_sts(si->service->me, si->su, buf);
+}
+#endif
 
 void verbose_wallops(char *fmt, ...)
 {

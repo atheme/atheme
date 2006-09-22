@@ -1,3 +1,13 @@
+jilles      2006/09/22 15:23:08 UTC	(20060922-6419)
+  Log:
+  Constify translation_get().
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/culture.h (File Modified) 
+  +1 -1		trunk/src/culture.c (File Modified) 
+
+
 jilles      2006/09/21 17:33:29 UTC	(20060921-6417)
   Log:
   Split notice_sts() into notice_user_sts() and notice_channel_sts().

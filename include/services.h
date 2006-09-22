@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 6407 2006-09-17 18:11:51Z jilles $
+ * $Id: services.h 6421 2006-09-22 16:37:48Z jilles $
  */
 
 #ifndef SERVICES_H
@@ -129,6 +129,24 @@ struct saslsvs_
 #define STR_INSUFFICIENT_PARAMS "Insufficient parameters for \2%s\2."
 #define STR_INVALID_PARAMS "Invalid parameters for \2%s\2."
 
+/* for command_fail() */
+enum faultcode_
+{
+	fault_needmoreparams = 1,
+	fault_badparams = 2,
+	fault_nosuch_source = 3,
+	fault_nosuch_target = 4,
+	fault_authfail = 5,
+	fault_noprivs = 6,
+	fault_nosuch_key = 7,
+	fault_alreadyexists = 8,
+	fault_toomany = 9,
+	fault_emailfail = 10,
+	fault_notverified = 11,
+	fault_nochange = 12
+};
+typedef enum faultcode_ faultcode_t;
+
 /* extern declarations */
 E chansvs_t chansvs;
 E globsvs_t globsvs;
@@ -153,6 +171,9 @@ E void partall(char *name);
 E void verbose(mychan_t *mychan, char *fmt, ...);
 E void snoop(char *fmt, ...);
 E void notice(char *from, char *to, char *message, ...);
+E void command_fail(sourceinfo_t *si, faultcode_t code, const char *fmt, ...);
+E void command_success_nodata(sourceinfo_t *si, const char *fmt, ...);
+E void command_success_string(sourceinfo_t *si, const char *result, const char *fmt, ...);
 E void verbose_wallops(char *, ...);
 
 /* ptasks.c */
