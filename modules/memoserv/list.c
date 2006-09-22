@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv LIST function
  *
- * $Id: list.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: list.c 6429 2006-09-22 20:02:23Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: list.c 6429 2006-09-22 20:02:23Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -53,12 +53,12 @@ static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	/* user logged in? */
 	if (mu == NULL)
 	{
-		notice(memosvs.nick, si->su->nick, "You are not logged in.");
+		command_fail(si, fault_noprivs, "You are not logged in.");
 		return;
 	}
 		
 	
-	notice(memosvs.nick, si->su->nick, "You have %d memo%s (%d new).", mu->memos.count, 
+	command_success_nodata(si, "You have %d memo%s (%d new).", mu->memos.count, 
 		(!mu->memos.count || mu->memos.count > 1) ? "s":"", mu->memoct_new);
 	
 	/* Check to see if any memos */
@@ -66,7 +66,7 @@ static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		return;
 
 	/* Go to listing memos */
-	notice(memosvs.nick, si->su->nick, " ");
+	command_success_nodata(si, " ");
 	
 	LIST_FOREACH(n, mu->memos.head)
 	{
@@ -78,9 +78,9 @@ static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 			"%b %d %H:%M:%S %Y", &tm);
 		
 		if (memo->status == MEMO_NEW)
-			notice(memosvs.nick, si->su->nick, "- %d From: %s Sent: %s [unread]",i,memo->sender,strfbuf);
+			command_success_nodata(si, "- %d From: %s Sent: %s [unread]",i,memo->sender,strfbuf);
 		else
-			notice(memosvs.nick, si->su->nick, "- %d From: %s Sent: %s",i,memo->sender,strfbuf);
+			command_success_nodata(si, "- %d From: %s Sent: %s",i,memo->sender,strfbuf);
 	}
 	
 	return;

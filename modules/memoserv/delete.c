@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv DELETE function
  *
- * $Id: delete.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: delete.c 6429 2006-09-22 20:02:23Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/delete", FALSE, _modinit, _moddeinit,
-	"$Id: delete.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: delete.c 6429 2006-09-22 20:02:23Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -58,24 +58,24 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 	/* Does the arg exist? */
 	if (!arg1)
 	{
-		notice(memosvs.nick, si->su->nick, 
+		command_fail(si, fault_needmoreparams, 
 			STR_INSUFFICIENT_PARAMS, "DELETE");
 		
-		notice(memosvs.nick, si->su->nick, "Syntax: DELETE ALL|message id");
+		command_fail(si, fault_needmoreparams, "Syntax: DELETE ALL|message id");
 		return;
 	}
 	
 	/* user logged in? */
 	if (mu == NULL)
 	{
-		notice(memosvs.nick, si->su->nick, "You are not logged in.");
+		command_fail(si, fault_noprivs, "You are not logged in.");
 		return;
 	}
 	
 	/* Do we have any memos? */
 	if (!mu->memos.count)
 	{
-		notice(memosvs.nick, si->su->nick, "You have no memos to delete.");
+		command_fail(si, fault_nochange, "You have no memos to delete.");
 		return;
 	}
 	
@@ -92,14 +92,14 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 		/* Make sure they didn't slip us an alphabetic index */
 		if (!memonum)
 		{
-			notice(memosvs.nick, si->su->nick, "Invalid message index.");
+			command_fail(si, fault_badparams, "Invalid message index.");
 			return;
 		}
 		
 		/* If int, does that index exist? And do we have something to delete? */
 		if (memonum > mu->memos.count)
 		{
-			notice(memosvs.nick, si->su->nick, "The specified memo doesn't exist.");
+			command_fail(si, fault_nosuch_key, "The specified memo doesn't exist.");
 			return;
 		}
 	}
@@ -129,7 +129,7 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 		
 	}
 	
-	notice(memosvs.nick, si->su->nick, "%d memo%s deleted.", delcount, 
+	command_success_nodata(si, "%d memo%s deleted.", delcount, 
 		(delcount == 1) ? "" : "s");
 	
 	return;

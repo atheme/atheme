@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv READ function
  *
- * $Id: read.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: read.c 6429 2006-09-22 20:02:23Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/read", FALSE, _modinit, _moddeinit,
-	"$Id: read.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: read.c 6429 2006-09-22 20:02:23Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -56,10 +56,10 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 	/* Bad/missing arg -- how do I make sure it's a digit they fed me? */
 	if (!arg1)
 	{
-		notice(memosvs.nick, si->su->nick, 
+		command_fail(si, fault_needmoreparams, 
 			STR_INSUFFICIENT_PARAMS, "READ");
 		
-		notice(memosvs.nick, si->su->nick, "Syntax: READ <memo number>");
+		command_fail(si, fault_needmoreparams, "Syntax: READ <memo number>");
 		return;
 	}
 	else
@@ -68,28 +68,28 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 	/* user logged in? */
 	if (mu == NULL)
 	{
-		notice(memosvs.nick, si->su->nick, "You are not logged in.");
+		command_fail(si, fault_noprivs, "You are not logged in.");
 		return;
 	}
 	
 	/* Check to see if any memos */
 	if (!mu->memos.count)
 	{
-		notice(memosvs.nick, si->su->nick, "You have no memos.");
+		command_fail(si, fault_nosuch_key, "You have no memos.");
 		return;
 	}
 	
 	/* Is arg1 an int? */
 	if (!memonum)
 	{
-		notice(memosvs.nick, si->su->nick, "Invalid message index.");
+		command_fail(si, fault_badparams, "Invalid message index.");
 		return;
 	}
 	
 	/* Check to see if memonum is greater than memocount */
 	if (memonum > mu->memos.count)
 	{
-		notice(memosvs.nick, si->su->nick, "Invalid message index.");
+		command_fail(si, fault_nosuch_key, "Invalid message index.");
 		return;
 	}
 
@@ -132,13 +132,13 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 				}
 			}
 		
-			notice(memosvs.nick, si->su->nick, 
+			command_success_nodata(si, 
 				"\2Memo %d - Sent by %s, %s\2",i,memo->sender, strfbuf);
 			
-			notice(memosvs.nick, si->su->nick, 
+			command_success_nodata(si, 
 				"------------------------------------------");
 			
-			notice(memosvs.nick, si->su->nick, "%s", memo->text);
+			command_success_nodata(si, "%s", memo->text);
 			
 			return;
 		}

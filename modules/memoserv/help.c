@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the MemoServ HELP command.
  *
- * $Id: help.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: help.c 6429 2006-09-22 20:02:23Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: help.c 6429 2006-09-22 20:02:23Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -45,16 +45,16 @@ void ms_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!command)
 	{
-		notice(memosvs.nick, si->su->nick, "***** \2%s Help\2 *****", memosvs.nick);
-		notice(memosvs.nick, si->su->nick, "\2%s\2 allows users to send memos to registered users.", memosvs.nick);
-		notice(memosvs.nick, si->su->nick, " ");
-		notice(memosvs.nick, si->su->nick, "For more information on a command, type:");
-		notice(memosvs.nick, si->su->nick, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", memosvs.disp);
-		notice(memosvs.nick, si->su->nick, " ");
+		command_success_nodata(si, "***** \2%s Help\2 *****", memosvs.nick);
+		command_success_nodata(si, "\2%s\2 allows users to send memos to registered users.", memosvs.nick);
+		command_success_nodata(si, " ");
+		command_success_nodata(si, "For more information on a command, type:");
+		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", memosvs.disp);
+		command_success_nodata(si, " ");
 
 		command_help(memosvs.nick, si->su->nick, ms_cmdtree);
 
-		notice(memosvs.nick, si->su->nick, "***** \2End of Help\2 *****");
+		command_success_nodata(si, "***** \2End of Help\2 *****");
 		return;
 	}
 

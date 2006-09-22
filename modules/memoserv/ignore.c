@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv IGNORE functions
  *
- * $Id: ignore.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: ignore.c 6429 2006-09-22 20:02:23Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: ignore.c 6429 2006-09-22 20:02:23Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -70,17 +70,17 @@ static void ms_cmd_ignore(sourceinfo_t *si, int parc, char *parv[])
 	/* Bad/missing arg */
 	if (!cmd)
 	{
-		notice(memosvs.nick, si->su->nick, 
+		command_fail(si, fault_needmoreparams, 
 			STR_INSUFFICIENT_PARAMS, "IGNORE");
 		
-		notice(memosvs.nick, si->su->nick, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <account>");
+		command_fail(si, fault_needmoreparams, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <account>");
 		return;
 	}
 	
 	/* User logged in? */
 	if (mu == NULL)
 	{
-		notice(memosvs.nick, si->su->nick, "You are not logged in.");
+		command_fail(si, fault_noprivs, "You are not logged in.");
 		return;
 	}
 	
