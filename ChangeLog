@@ -1,3 +1,12 @@
+jilles      2006/09/22 23:40:58 UTC	(20060922-6431)
+  Log:
+  OperServ CLONES: Show nick!user@host in warnings.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/modules/operserv/clones.c (File Modified) 
+
+
 jilles      2006/09/22 20:02:23 UTC	(20060922-6429)
   Log:
   Use command_fail() etc in memoserv, where possible.
