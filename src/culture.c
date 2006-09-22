@@ -4,7 +4,7 @@
  *
  * Translation framework.
  *
- * $Id: culture.c 4299 2005-12-29 03:04:46Z nenolod $
+ * $Id: culture.c 6419 2006-09-22 15:23:08Z jilles $
  */
 
 #include "atheme.h"
@@ -24,7 +24,7 @@ list_t transhash[HASHSIZE];
  * Side Effects:
  *       none
  */
-char *translation_get(char *str)
+const char *translation_get(const char *str)
 {
 	node_t *n;
 
