@@ -1,3 +1,12 @@
+jilles      2006/09/22 18:52:58 UTC	(20060922-6423)
+  Log:
+  Add missing const.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/09/22 16:37:48 UTC	(20060922-6421)
   Log:
   Add command_fail(), command_success_nodata(),

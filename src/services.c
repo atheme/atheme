@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 6423 2006-09-22 18:52:58Z jilles $
+ * $Id: services.c 6425 2006-09-22 18:58:40Z jilles $
  */
 
 #include "atheme.h"
@@ -399,8 +399,9 @@ void command_fail(sourceinfo_t *si, faultcode_t code, const char *fmt, ...)
 	char buf[BUFSIZE];
 	const char *str = translation_get(fmt);
 
+	snprintf(buf, sizeof buf, "E%d ", code);
 	va_start(args, fmt);
-	vsnprintf(buf, BUFSIZE, str, args);
+	vsnprintf(buf + strlen(buf), sizeof buf - strlen(buf), str, args);
 	va_end(args);
 
 	if (config_options.use_privmsg)
