@@ -1,3 +1,11 @@
+w00t        2006/09/24 16:52:33 UTC	(20060924-6445)
+  Log:
+  REMSTATUS is now obsolete for use in this manner
+
+  Changes:	Modified:
+  +0 -18	trunk/protocol/inspircd11.c (File Modified) 
+
+
 w00t        2006/09/24 16:42:06 UTC	(20060924-6443)
   Log:
   Lowering TS now removes ops sucessfully, and broadcasts FMODEs
