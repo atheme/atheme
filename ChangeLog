@@ -1,3 +1,17 @@
+w00t        2006/09/24 15:35:55 UTC	(20060924-6439)
+  Log:
+  Move InspIRCd modules to inspircd10 for 1.0, inspircd11 for 1.1. Update example confs.
+
+  Changes:	Modified:
+  +2 -1		trunk/dist/example.conf (File Modified) 
+  +2 -1		trunk/dist/example.userserv.conf (File Modified) 
+  +2 -2		trunk/protocol/Makefile.in (File Modified) 
+  +1972 -897	trunk/protocol/inspircd.c (File Deleted) 
+  + -		trunk/protocol/inspircd10.c (File Added) 
+  + -		trunk/protocol/inspircd11.c (File Added) 
+  +0 -1075	trunk/protocol/inspircd_dev.c (File Deleted) 
+
+
 jilles      2006/09/24 13:18:06 UTC	(20060924-6437)
   Log:
   Add sourceinfo_t.smu (account of source user).

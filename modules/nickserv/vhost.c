@@ -2,9 +2,9 @@
  * Copyright (c) 2005 William Pitcock <nenolod -at- nenolod.net>
  * Rights to this code are as documented in doc/LICENSE.
  *
- * VHost management! (ratbox only right now.)
+ * Allows setting a vhost on an account
  *
- * $Id: vhost.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: vhost.c 6441 2006-09-24 16:08:37Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: vhost.c 6441 2006-09-24 16:08:37Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
