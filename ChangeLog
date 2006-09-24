@@ -1,3 +1,11 @@
+w00t        2006/09/24 12:32:01 UTC	(20060924-6435)
+  Log:
+  Add REMSTATUS support, available in InspIRCd SVN. This means people get deopped properly, and easily. Join parsing will be improved soon.
+
+  Changes:	Modified:
+  +32 -6	trunk/protocol/inspircd_dev.c (File Modified) 
+
+
 jilles      2006/09/22 23:56:52 UTC	(20060922-6433)
   Log:
   command_exec(): use command_fail()

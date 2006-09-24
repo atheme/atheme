@@ -4,7 +4,7 @@
  *
  * This file contains IRC interaction routines.
  *
- * $Id: parse.c 6401 2006-09-14 16:03:29Z jilles $
+ * $Id: parse.c 6437 2006-09-24 13:18:06Z jilles $
  */
 
 #include "atheme.h"
@@ -102,6 +102,7 @@ void irc_parse(char *line)
                         slog(LG_INFO, "irc_parse(): got message from nonexistant user or server: %s", origin);
                         return;
                 }
+		si.smu = si.su != NULL ? si.su->myuser : NULL;
 
 		/* okay, the nasty part is over, now we need to make a
 		 * parv out of what's left
@@ -243,6 +244,7 @@ void p10_parse(char *line)
                         slog(LG_DEBUG, "irc_parse(): got message from nonexistant user or server: %s", origin);
                         return;
                 }
+		si.smu = si.su != NULL ? si.su->myuser : NULL;
 
 		/* okay, the nasty part is over, now we need to make a
 		 * parv out of what's left
