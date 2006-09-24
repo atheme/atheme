@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 6439 2006-09-24 15:35:55Z w00t $
+ * $Id: inspircd11.c 6443 2006-09-24 16:42:06Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 6439 2006-09-24 15:35:55Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 6443 2006-09-24 16:42:06Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -576,82 +576,34 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 	 */
 	userc = sjtoken(parv[parc - 1], ' ', userv);
 
-	if (keep_new_modes == true)
+	for (i = 0; i < userc; i++)
 	{
-		for (i = 0; i < userc; i++)
+		nlen = 0;
+		prefix = true;
+
+		slog(LG_DEBUG, "m_fjoin(): processing user: %s", userv[i]);
+
+		for (; *userv[i]; userv[i]++)
 		{
-			nlen = 0;
-			prefix = true;
-
-			slog(LG_DEBUG, "m_fjoin(): processing user: %s", userv[i]);
-
-			for (; *userv[i]; userv[i]++)
+			for (j = 0; prefix_mode_list[j].mode; j++)
 			{
-				for (j = 0; prefix_mode_list[j].mode; j++)
+				if (*userv[i] == prefix_mode_list[j].mode)
 				{
-					if (*userv[i] == prefix_mode_list[j].mode)
-					{
-						prefixandnick[nlen++] = *userv[i];
-						continue;
-					}
-
-					if (*userv[i] == ',')
-					{
-						userv[i]++;
-						strncpy(prefixandnick + nlen, userv[i], sizeof(prefixandnick));
-						nlen = strlen(prefixandnick); /* eww, but it makes life so much easier */
-						break;
-					}
+					prefixandnick[nlen++] = *userv[i];
+					continue;
 				}
-			}
 
-			chanuser_add(c, prefixandnick);
-		}
-	}
-	else
-	{
-		for (i = 0; i < userc; i++)
-		{
-			/* remove prefixes. build a list of what we need to bounce first. */
-			slog(LG_DEBUG, "m_fjoin(): processing AND BOUNCING user: %s", userv[i]);
-			nlen = 0;
-
-			while (*userv[i])
-			{
 				if (*userv[i] == ',')
 				{
 					userv[i]++;
+					strncpy(prefixandnick + nlen, userv[i], sizeof(prefixandnick));
+					nlen = strlen(prefixandnick); /* eww, but it makes life so much easier */
 					break;
 				}
-
-				for (j = 0; prefix_mode_list[j].mode; j++)
-				{
-					if (*userv[i] == prefix_mode_list[j].mode)
-					{
-						prefixandnick[nlen] = status_mode_list[j].mode;
-						nlen++;
-					}
-				}	
-
-				userv[i]++;
 			}
-
-			prefixandnick[nlen] = '\0';
-
-			bounce = prefixandnick;
-
-			/* now we have a list of prefixes, bounce them */
-			while (*bounce)
-			{
-				slog(LG_DEBUG, "m_fjoin(): bouncing prefix %c for %s", *bounce, userv[i]);
-				modestack_mode_param(me.name, c->name, MTYPE_DEL, *bounce, userv[i]);
-				bounce++;
-			}
-
-			/* add modeless user to channel */
-			slog(LG_DEBUG, "m_fjoin(): adding modeless user %s", userv[i]);
-			chanuser_add(c, userv[i]);
 		}
+
+		chanuser_add(c, prefixandnick);
 	}
 
 	if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))

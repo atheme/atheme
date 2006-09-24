@@ -1,3 +1,14 @@
+jilles      2006/09/24 16:08:37 UTC	(20060924-6441)
+  Log:
+  nickserv/userserv vhost:
+  make the comment at the top a bit more serious
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/vhost.c (File Modified) 
+  +1 -1		trunk/modules/userserv/vhost.c (File Modified) 
+
+
 w00t        2006/09/24 15:35:55 UTC	(20060924-6439)
   Log:
   Move InspIRCd modules to inspircd10 for 1.0, inspircd11 for 1.1. Update example confs.
