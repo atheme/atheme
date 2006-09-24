@@ -1,3 +1,26 @@
+nenolod     2006/09/24 23:52:03 UTC	(20060924-6447)
+  Log:
+  - remove win32 port, it's hopelessly broken and nobody cares about it
+  
+
+  Changes:	Modified:
+  +0 -69	trunk/Makefile.win32 (File Deleted) 
+  +0 -53	trunk/backend/Makefile.win32 (File Deleted) 
+  +0 -55	trunk/libatheme/Makefile.win32 (File Deleted) 
+  +0 -52	trunk/modules/Makefile.win32 (File Deleted) 
+  +0 -81	trunk/modules/chanserv/Makefile.win32 (File Deleted) 
+  +0 -52	trunk/modules/global/Makefile.win32 (File Deleted) 
+  +0 -56	trunk/modules/helpserv/Makefile.win32 (File Deleted) 
+  +0 -64	trunk/modules/memoserv/Makefile.win32 (File Deleted) 
+  +0 -74	trunk/modules/nickserv/Makefile.win32 (File Deleted) 
+  +0 -70	trunk/modules/operserv/Makefile.win32 (File Deleted) 
+  +0 -73	trunk/modules/userserv/Makefile.win32 (File Deleted) 
+  +0 -56	trunk/modules/xmlrpc/Makefile.win32 (File Deleted) 
+  +0 -68	trunk/protocol/Makefile.win32 (File Deleted) 
+  +0 -107	trunk/src/Makefile.win32 (File Deleted) 
+  + -		trunk/win32/ (File Deleted) 
+
+
 w00t        2006/09/24 16:52:33 UTC	(20060924-6445)
   Log:
   REMSTATUS is now obsolete for use in this manner

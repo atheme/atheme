@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 6349 2006-09-10 21:05:56Z pippijn $
+ * $Id: function.c 6449 2006-09-24 23:55:08Z jilles $
  */
 
 #include "atheme.h"
@@ -227,11 +227,6 @@ void logcommand_external(service_t *svs, char *type, connection_t *source, myuse
 uint32_t shash(const unsigned char *p)
 {
 	unsigned int hval = HASHINIT;
-
-#ifndef _WIN32
-	if (!strstr(me.execname, "atheme"))
-		return (rand() % HASHSIZE);
-#endif
 
 	if (!p)
 		return (0);
