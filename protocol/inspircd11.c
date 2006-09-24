@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 6443 2006-09-24 16:42:06Z w00t $
+ * $Id: inspircd11.c 6445 2006-09-24 16:52:33Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 6443 2006-09-24 16:42:06Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 6445 2006-09-24 16:52:33Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -95,7 +95,6 @@ struct cmode_ inspircd_prefix_mode_list[] = {
 /* CAPABilities */
 static boolean_t has_servicesmod = false;
 static boolean_t has_globopsmod = false;
-static boolean_t has_remstatus = false; /* this is temporary, to keep inspircd_dev compatible with 1.1b1 */
 
 
 /* *INDENT-ON* */
@@ -252,12 +251,6 @@ static void inspircd_chan_lowerts(channel_t *c, user_t *u)
 {
 	slog(LG_DEBUG, "inspircd_chan_lowerts(): lowering TS for %s to %ld", 
 		c->name, (long)c->ts);
-
-	if (has_remstatus == true)
-	{
-		/* instruct server to remove all status modes */
-		sts(":%s REMSTATUS %s", me.name, c->name);
-	}
 
 	sts(":%s FJOIN %s %ld :@,%s", me.name, c->name, c->ts, u->nick);
 	sts(":%s FMODE %s %ld %s", me.name, c->name, c->ts, channel_modes(c, TRUE));
@@ -892,16 +885,10 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		/* reset all our previously recieved CAPAB stuff */
 		has_servicesmod = false;
 		has_globopsmod = false;
-		has_remstatus = false;
 	}
 	else if (strcasecmp(parv[0], "CAPABILITIES") == 0)
 	{
 		/* check for ident length, etc */
-		if (strstr(parv[1], "PROTOCOL=1101"))
-		{
-			/* XXX - this is temporary! */
-			has_remstatus = true;
-		}
 	}
 	else if (strcasecmp(parv[0], "MODULES") == 0)
 	{
@@ -928,11 +915,6 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 			fprintf(stderr, "atheme: you didn't load m_services_account into inspircd. atheme support requires this module. exiting.\n");
 			exit(EXIT_FAILURE);	
 		}
-
-		if (has_remstatus == false)
-		{
-			fprintf(stderr, "atheme: You have beta1 or older of InspIRCd-1.1, this is bad and means that incorrect people may be left opped on channels.");
-		}	
 	}
 	else
 	{
