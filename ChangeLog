@@ -1,3 +1,12 @@
+jilles      2006/09/22 23:56:52 UTC	(20060922-6433)
+  Log:
+  command_exec(): use command_fail()
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/src/commandtree.c (File Modified) 
+
+
 jilles      2006/09/22 23:40:58 UTC	(20060922-6431)
   Log:
   OperServ CLONES: Show nick!user@host in warnings.
