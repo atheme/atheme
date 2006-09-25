@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY function.
  *
- * $Id: identify.c 6457 2006-09-25 10:33:40Z nenolod $
+ * $Id: identify.c 6477 2006-09-25 15:24:55Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/identify", FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 6457 2006-09-25 10:33:40Z nenolod $",
+	"$Id: identify.c 6477 2006-09-25 15:24:55Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -49,7 +49,6 @@ static void ns_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
 	chanuser_t *cu;
 	chanacs_t *ca;
 	node_t *n, *tn;
-	metadata_t *md;
 
 	char *target = parv[0];
 	char *password = parv[1];
@@ -79,7 +78,7 @@ static void ns_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if ((md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
+	if (metadata_find(mu, METADATA_USER, "private:freeze:freezer"))
 	{
 		command_fail(si, fault_authfail, "You cannot identify to \2%s\2 because the nickname has been frozen.", mu->name);
 		logcommand(nicksvs.me, u, CMDLOG_LOGIN, "failed IDENTIFY to %s (frozen)", mu->name);

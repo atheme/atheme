@@ -1,3 +1,14 @@
+jilles      2006/09/25 15:17:51 UTC	(20060925-6475)
+  Log:
+  Remove modules/saslserv/help.c, this has been obsolete (and
+  not installed) for quite a while.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/saslserv/Makefile.in (File Modified) 
+  +0 -78	trunk/modules/saslserv/help.c (File Deleted) 
+
+
 jilles      2006/09/25 15:14:21 UTC	(20060925-6473)
   Log:
   Convert saslserv and a few missing notices in chanserv.
