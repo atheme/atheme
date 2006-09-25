@@ -1,3 +1,26 @@
+jilles      2006/09/25 13:46:33 UTC	(20060925-6465)
+  Log:
+  Convert some more operserv modules.
+  Success confirmation added to REHASH and MODE.
+  Multi-arg MODLOAD and MODUNLOAD can mix
+  command_success_nodata() with command_fail().
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/modules/operserv/inject.c (File Modified) 
+  +6 -6		trunk/modules/operserv/jupe.c (File Modified) 
+  +4 -3		trunk/modules/operserv/mode.c (File Modified) 
+  +12 -12	trunk/modules/operserv/modinspect.c (File Modified) 
+  +3 -3		trunk/modules/operserv/modlist.c (File Modified) 
+  +5 -5		trunk/modules/operserv/modload.c (File Modified) 
+  +2 -2		trunk/modules/operserv/modrestart.c (File Modified) 
+  +6 -6		trunk/modules/operserv/modunload.c (File Modified) 
+  +36 -36	trunk/modules/operserv/noop.c (File Modified) 
+  +11 -11	trunk/modules/operserv/rakill.c (File Modified) 
+  +2 -2		trunk/modules/operserv/raw.c (File Modified) 
+  +4 -4		trunk/modules/operserv/rehash.c (File Modified) 
+
+
 jilles      2006/09/25 13:03:41 UTC	(20060925-6463)
   Log:
   Convert some operserv modules to command_fail etc.

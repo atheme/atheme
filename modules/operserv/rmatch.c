@@ -4,7 +4,7 @@
  *
  * Regex usersearch feature.
  *
- * $Id: rmatch.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: rmatch.c 6467 2006-09-25 13:54:27Z jilles $
  */
 
 /*
@@ -16,7 +16,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rmatch", FALSE, _modinit, _moddeinit,
-	"$Id: rmatch.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: rmatch.c 6467 2006-09-25 13:54:27Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -56,16 +56,16 @@ static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 
 	if (args == NULL)
 	{
-		notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "RMATCH");
-		notice(opersvs.nick, si->su->nick, "Syntax: RMATCH /<regex>/[i]");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RMATCH");
+		command_fail(si, fault_needmoreparams, "Syntax: RMATCH /<regex>/[i]");
 		return;
 	}
 
 	pattern = regex_extract(args, &args, &flags);
 	if (pattern == NULL)
 	{
-		notice(opersvs.nick, si->su->nick, STR_INVALID_PARAMS, "RMATCH");
-		notice(opersvs.nick, si->su->nick, "Syntax: RMATCH /<regex>/[i]");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "RMATCH");
+		command_fail(si, fault_badparams, "Syntax: RMATCH /<regex>/[i]");
 		return;
 	}
 
@@ -73,7 +73,7 @@ static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 	
 	if (regex == NULL)
 	{
-		notice(opersvs.nick, si->su->nick, "The provided regex \2%s\2 is invalid.", pattern);
+		command_fail(si, fault_badparams, "The provided regex \2%s\2 is invalid.", pattern);
 		return;
 	}
 		
@@ -88,14 +88,14 @@ static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 			if (regex_match(regex, usermask) == TRUE)
 			{
 				/* match */
-				notice(opersvs.nick, si->su->nick, "\2Match:\2  %s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
+				command_success_nodata(si, "\2Match:\2  %s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
 				matches++;
 			}
 		}
 	}
 	
 	regex_destroy(regex);
-	notice(opersvs.nick, si->su->nick, "\2%d\2 matches for %s", matches, pattern);
+	command_success_nodata(si, "\2%d\2 matches for %s", matches, pattern);
 	logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "RMATCH %s (%d matches)", pattern, matches);
 	snoop("RMATCH: \2%s\2 by \2%s\2", pattern, si->su->nick);
 }
