@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ CLEARCHAN.
  *
- * $Id: clearchan.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: clearchan.c 6463 2006-09-25 13:03:41Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clearchan", FALSE, _modinit, _moddeinit,
-	"$Id: clearchan.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: clearchan.c 6463 2006-09-25 13:03:41Z jilles $",
 	"Robin Burchell <surreal.w00t@gmail.com>"
 );
 
@@ -57,8 +57,8 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!actionstr || !targchan || !treason)
 	{
-		notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "CLEARCHAN");
-		notice(opersvs.nick, si->su->nick, "Syntax: CLEARCHAN KICK|KILL|GLINE <#channel> <reason>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLEARCHAN");
+		command_fail(si, fault_needmoreparams, "Syntax: CLEARCHAN KICK|KILL|GLINE <#channel> <reason>");
  		return;
 	}
 
@@ -66,7 +66,7 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!c)
 	{
-		notice(opersvs.nick, si->su->nick, "The channel must exist for CLEARCHAN.");
+		command_fail(si, fault_nosuch_target, "The channel must exist for CLEARCHAN.");
  		return;
 	}
 
@@ -80,13 +80,13 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		/* not valid! */
-		notice(opersvs.nick, si->su->nick, "\2%s\2 is not a valid action", actionstr);
+		command_fail(si, fault_badparams, "\2%s\2 is not a valid action", actionstr);
  		return;				
 	}
 
 	if (action != CLEAR_KICK && !has_priv(si->su, PRIV_MASS_AKILL))
 	{
-		notice(opersvs.nick, si->su->nick, "You do not have %s privilege.", PRIV_MASS_AKILL);
+		command_fail(si, fault_noprivs, "You do not have %s privilege.", PRIV_MASS_AKILL);
 		return;
 	}
 
@@ -98,7 +98,7 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 	wallops("\2%s\2 is clearing channel %s with %s",
 			si->su->nick, targchan, actionstr);
 	snoop("CLEARCHAN: %s on \2%s\2 by \2%s\2", actionstr, targchan, si->su->nick);
-	notice(opersvs.nick, si->su->nick, "Clearing \2%s\2 with \2%s\2", targchan, actionstr);
+	command_success_nodata(si, "Clearing \2%s\2 with \2%s\2", targchan, actionstr);
 
 	/* iterate over the users in channel */
 	LIST_FOREACH(n, c->members.head)
@@ -109,12 +109,12 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 			;
 		else if (is_ircop(cu->user))
 		{
-			notice(opersvs.nick, si->su->nick, "\2CLEARCHAN\2: Ignoring IRC Operator \2%s\2!%s@%s {%s}", cu->user->nick, cu->user->user, cu->user->host, cu->user->gecos);
+			command_success_nodata(si, "\2CLEARCHAN\2: Ignoring IRC Operator \2%s\2!%s@%s {%s}", cu->user->nick, cu->user->user, cu->user->host, cu->user->gecos);
 			ignores++;
 		}
 		else
 		{
-			notice(opersvs.nick, si->su->nick, "\2CLEARCHAN\2: \2%s\2 hit \2%s\2!%s@%s {%s}", actionstr, cu->user->nick, cu->user->user, cu->user->host, cu->user->gecos);
+			command_success_nodata(si, "\2CLEARCHAN\2: \2%s\2 hit \2%s\2!%s@%s {%s}", actionstr, cu->user->nick, cu->user->user, cu->user->host, cu->user->gecos);
 			matches++;
 
 			switch (action)
@@ -132,6 +132,6 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	notice(opersvs.nick, si->su->nick, "\2%d\2 matches, \2%d\2 ignores for \2%s\2 on \2%s\2", matches, ignores, actionstr, targchan);
+	command_success_nodata(si, "\2%d\2 matches, \2%d\2 ignores for \2%s\2 on \2%s\2", matches, ignores, actionstr, targchan);
 	logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "CLEARCHAN %s %s %s (%d matches, %d ignores)", actionstr, targchan, treason, matches, ignores);
 }

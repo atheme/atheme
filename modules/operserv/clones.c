@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing clone detection.
  *
- * $Id: clones.c 6431 2006-09-22 23:40:58Z jilles $
+ * $Id: clones.c 6463 2006-09-25 13:03:41Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 6431 2006-09-22 23:40:58Z jilles $",
+	"$Id: clones.c 6463 2006-09-25 13:03:41Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -245,15 +245,15 @@ static void os_cmd_clones(sourceinfo_t *si, int parc, char *parv[])
 	/* Bad/missing arg */
 	if (!cmd)
 	{
-		notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "CLONES");
-		notice(opersvs.nick, si->su->nick, "Syntax: CLONES KLINE|LIST|ADDEXEMPT|DELEXEMPT|LISTEXEMPT [parameters]");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLONES");
+		command_fail(si, fault_needmoreparams, "Syntax: CLONES KLINE|LIST|ADDEXEMPT|DELEXEMPT|LISTEXEMPT [parameters]");
 		return;
 	}
 	
 	c = command_find(&os_clones_cmds, cmd);
 	if (c == NULL)
 	{
-		notice(opersvs.nick, si->su->nick, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", opersvs.me->disp);
+		command_fail(si, fault_badparams, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", opersvs.me->disp);
 		return;
 	}
 
@@ -271,10 +271,11 @@ static void os_cmd_clones_kline(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (kline_enabled)
 		{
-			notice(opersvs.nick, si->su->nick, "CLONES klines are already enabled.");
+			command_fail(si, fault_nochange, "CLONES klines are already enabled.");
 			return;
 		}
 		kline_enabled = TRUE;
+		command_success_nodata(si, "Enabled CLONES klines.");
 		wallops("\2%s\2 enabled CLONES klines", si->su->nick);
 		snoop("CLONES:KLINE:ON: \2%s\2", si->su->nick);
 		logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "CLONES KLINE ON");
@@ -284,10 +285,11 @@ static void os_cmd_clones_kline(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!kline_enabled)
 		{
-			notice(opersvs.nick, si->su->nick, "CLONES klines are already disabled.");
+			command_fail(si, fault_nochange, "CLONES klines are already disabled.");
 			return;
 		}
 		kline_enabled = FALSE;
+		command_success_nodata(si, "Disabled CLONES klines.");
 		wallops("\2%s\2 disabled CLONES klines", si->su->nick);
 		snoop("CLONES:KLINE:OFF: \2%s\2", si->su->nick);
 		logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "CLONES KLINE OFF");
@@ -296,9 +298,9 @@ static void os_cmd_clones_kline(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		if (kline_enabled)
-			notice(opersvs.nick, si->su->nick, "CLONES klines are currently enabled.");
+			command_success_string(si, "ON", "CLONES klines are currently enabled.");
 		else
-			notice(opersvs.nick, si->su->nick, "CLONES klines are currently disabled.");
+			command_success_string(si, "OFF", "CLONES klines are currently disabled.");
 	}
 }
 
@@ -315,12 +317,12 @@ static void os_cmd_clones_list(sourceinfo_t *si, int parc, char *parv[])
 		if (k > 3)
 		{
 			if (is_exempt(he->ip))
-				notice(opersvs.nick, si->su->nick, "%d from %s (\2EXEMPT\2)", k, he->ip);
+				command_success_nodata(si, "%d from %s (\2EXEMPT\2)", k, he->ip);
 			else
-				notice(opersvs.nick, si->su->nick, "%d from %s", k, he->ip);
+				command_success_nodata(si, "%d from %s", k, he->ip);
 		}
 	}
-	notice(opersvs.nick, si->su->nick, "End of CLONES LIST");
+	command_success_nodata(si, "End of CLONES LIST");
 	logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "CLONES LIST");
 }
 
@@ -335,15 +337,15 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!ip || !clonesstr || !reason)
 	{
-		notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "CLONES ADDEXEMPT");
-		notice(opersvs.nick, si->su->nick, "Syntax: CLONES ADDEXEMPT <ip> <clones> <reason>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLONES ADDEXEMPT");
+		command_fail(si, fault_needmoreparams, "Syntax: CLONES ADDEXEMPT <ip> <clones> <reason>");
 		return;
 	}
 
 	clones = atoi(clonesstr);
 	if (clones < 6)
 	{
-		notice(opersvs.nick, si->su->nick, "Allowed clones count must be at least %d", 6);
+		command_fail(si, fault_badparams, "Allowed clones count must be at least %d", 6);
 		return;
 	}
 
@@ -353,7 +355,7 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!strcmp(ip, t->ip))
 		{
-			notice(opersvs.nick, si->su->nick, "\2%s\2 already found in exempt list; not adding.", ip);
+			command_fail(si, fault_alreadyexists, "\2%s\2 already found in exempt list; not adding.", ip);
 			return;
 		}
 	}
@@ -365,7 +367,7 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 	c->reason = sstrdup(reason);
 
 	node_add(c, node_create(), &clone_exempts);
-	notice(opersvs.nick, si->su->nick, "Added \2%s\2 to clone exempt list.", ip);
+	command_success_nodata(si, "Added \2%s\2 to clone exempt list.", ip);
 	logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "CLONES ADDEXEMPT %s", ip);
 	write_exemptdb();
 }
@@ -389,14 +391,14 @@ static void os_cmd_clones_delexempt(sourceinfo_t *si, int parc, char *parv[])
 			free(c);
 			node_del(n, &clone_exempts);
 			node_free(n);
-			notice(opersvs.nick, si->su->nick, "Removed \2%s\2 from clone exempt list.", arg);
+			command_success_nodata(si, "Removed \2%s\2 from clone exempt list.", arg);
 			logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "CLONES DELEXEMPT %s", arg);
 			write_exemptdb();
 			return;
 		}
 	}
 
-	notice(opersvs.nick, si->su->nick, "\2%s\2 not found in clone exempt list.", arg);
+	command_fail(si, fault_nosuch_target, "\2%s\2 not found in clone exempt list.", arg);
 }
 
 static void os_cmd_clones_listexempt(sourceinfo_t *si, int parc, char *parv[])
@@ -407,9 +409,9 @@ static void os_cmd_clones_listexempt(sourceinfo_t *si, int parc, char *parv[])
 	{
 		cexcept_t *c = n->data;
 
-		notice(opersvs.nick, si->su->nick, "%s (%d, %s)", c->ip, c->clones, c->reason);
+		command_success_nodata(si, "%s (%d, %s)", c->ip, c->clones, c->reason);
 	}
-	notice(opersvs.nick, si->su->nick, "End of CLONES LISTEXEMPT");
+	command_success_nodata(si, "End of CLONES LISTEXEMPT");
 	logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "CLONES LISTEXEMPT");
 }
 

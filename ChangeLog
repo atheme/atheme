@@ -1,3 +1,12 @@
+jilles      2006/09/25 12:28:25 UTC	(20060925-6461)
+  Log:
+  nickserv list: fix typo
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/list.c (File Modified) 
+
+
 w00t        2006/09/25 11:53:08 UTC	(20060925-6459)
   Log:
   Add SVSHOLD support available in InspIRCd SVN (as of r5319)

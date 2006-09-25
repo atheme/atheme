@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: help.c 6463 2006-09-25 13:03:41Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: help.c 6463 2006-09-25 13:03:41Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -45,24 +45,24 @@ static void os_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!has_any_privs(si->su))
 	{
-		notice(opersvs.nick, si->su->nick, "You are not authorized to use %s.", opersvs.nick);
+		command_fail(si, fault_noprivs, "You are not authorized to use %s.", opersvs.nick);
 		return;
 	}
 
 	if (!command)
 	{
-		notice(opersvs.nick, si->su->nick, "***** \2%s Help\2 *****", opersvs.nick);
-		notice(opersvs.nick, si->su->nick, "\2%s\2 provides essential network management services, such as", opersvs.nick);
-		notice(opersvs.nick, si->su->nick, "routing manipulation and access restriction. Please do not abuse");
-		notice(opersvs.nick, si->su->nick, "your access to \2%s\2!", opersvs.nick);
-		notice(opersvs.nick, si->su->nick, " ");
-		notice(opersvs.nick, si->su->nick, "For information on a command, type:");
-		notice(opersvs.nick, si->su->nick, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", opersvs.disp);
-		notice(opersvs.nick, si->su->nick, " ");
+		command_success_nodata(si, "***** \2%s Help\2 *****", opersvs.nick);
+		command_success_nodata(si, "\2%s\2 provides essential network management services, such as", opersvs.nick);
+		command_success_nodata(si, "routing manipulation and access restriction. Please do not abuse");
+		command_success_nodata(si, "your access to \2%s\2!", opersvs.nick);
+		command_success_nodata(si, " ");
+		command_success_nodata(si, "For information on a command, type:");
+		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", opersvs.disp);
+		command_success_nodata(si, " ");
 
 		command_help(opersvs.nick, si->su->nick, os_cmdtree);
 
-		notice(opersvs.nick, si->su->nick, "***** \2End of Help\2 *****", opersvs.nick);
+		command_success_nodata(si, "***** \2End of Help\2 *****", opersvs.nick);
 		return;
 	}
 
