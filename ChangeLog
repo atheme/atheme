@@ -1,3 +1,32 @@
+nenolod     2006/09/25 10:33:40 UTC	(20060925-6457)
+  Log:
+  - convert NickServ to command_fail()/command_success_nodata().
+  
+
+  Changes:	Modified:
+  +6 -6		trunk/modules/nickserv/drop.c (File Modified) 
+  +12 -12	trunk/modules/nickserv/freeze.c (File Modified) 
+  +8 -8		trunk/modules/nickserv/ghost.c (File Modified) 
+  +13 -13	trunk/modules/nickserv/help.c (File Modified) 
+  +9 -9		trunk/modules/nickserv/hold.c (File Modified) 
+  +10 -10	trunk/modules/nickserv/identify.c (File Modified) 
+  +18 -19	trunk/modules/nickserv/info.c (File Modified) 
+  +7 -7		trunk/modules/nickserv/list.c (File Modified) 
+  +9 -11	trunk/modules/nickserv/listchans.c (File Modified) 
+  +8 -8		trunk/modules/nickserv/listmail.c (File Modified) 
+  +7 -7		trunk/modules/nickserv/logout.c (File Modified) 
+  +11 -11	trunk/modules/nickserv/mark.c (File Modified) 
+  +16 -17	trunk/modules/nickserv/register.c (File Modified) 
+  +8 -9		trunk/modules/nickserv/resetpass.c (File Modified) 
+  +8 -8		trunk/modules/nickserv/return.c (File Modified) 
+  +7 -7		trunk/modules/nickserv/sendpass.c (File Modified) 
+  +58 -61	trunk/modules/nickserv/set.c (File Modified) 
+  +9 -9		trunk/modules/nickserv/status.c (File Modified) 
+  +6 -6		trunk/modules/nickserv/taxonomy.c (File Modified) 
+  +15 -13	trunk/modules/nickserv/verify.c (File Modified) 
+  +7 -7		trunk/modules/nickserv/vhost.c (File Modified) 
+
+
 nenolod     2006/09/25 10:05:22 UTC	(20060925-6455)
   Log:
   - add fault_unimplemented

@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 6451 2006-09-25 09:03:29Z nenolod $
+ * $Id: inspircd11.c 6459 2006-09-25 11:53:08Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 6451 2006-09-25 09:03:29Z nenolod $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 6459 2006-09-25 11:53:08Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -95,6 +95,7 @@ struct cmode_ inspircd_prefix_mode_list[] = {
 /* CAPABilities */
 static boolean_t has_servicesmod = false;
 static boolean_t has_globopsmod = false;
+static boolean_t has_svshold = false;
 
 
 /* *INDENT-ON* */
@@ -445,6 +446,19 @@ static void inspircd_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
 static void inspircd_invite_sts(user_t *sender, user_t *target, channel_t *channel)
 {
 	sts(":%s INVITE %s %s", sender->nick, target->nick, channel->name);
+}
+
+static void inspircd_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account)
+{
+	if (duration == 0)
+	{
+		/* remove SVSHOLD */
+		sts(":%s SVSHOLD %s", source->nick, nick);
+	}
+	else
+	{
+		sts(":%s SVSHOLD %s %ds :Registered nickname.", source->nick, nick);
+	}
 }
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
@@ -885,6 +899,7 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		/* reset all our previously recieved CAPAB stuff */
 		has_servicesmod = false;
 		has_globopsmod = false;
+		has_svshold = false;
 	}
 	else if (strcasecmp(parv[0], "CAPABILITIES") == 0)
 	{
@@ -896,10 +911,13 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		{
 			has_servicesmod = TRUE;
 		}
-
 		if (strstr(parv[1], "m_globops.so"))
 		{
 			has_globopsmod = TRUE;
+		}
+		if (strstr(parv[1], "m_svshold.so"))
+		{
+			has_svshold = true;
 		}
 	}
 	else if (strcasecmp(parv[0], "END") == 0)
@@ -914,6 +932,11 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		{
 			fprintf(stderr, "atheme: you didn't load m_services_account into inspircd. atheme support requires this module. exiting.\n");
 			exit(EXIT_FAILURE);	
+		}
+
+		if (has_svshold == false)
+		{
+			fprintf(stderr, "atheme: you didn't load m_svshold into inspircd. nickname enforcers will not work.\n");
 		}
 	}
 	else
@@ -961,6 +984,7 @@ void _modinit(module_t * m)
 	sethost_sts = &inspircd_sethost_sts;
 	fnc_sts = &inspircd_fnc_sts;
 	invite_sts = &inspircd_invite_sts;
+	holdnick_sts = &inspircd_holdnick_sts;
 
 	mode_list = inspircd_mode_list;
 	ignore_mode_list = inspircd_ignore_mode_list;
