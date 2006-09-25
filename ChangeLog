@@ -1,3 +1,14 @@
+jilles      2006/09/25 15:14:21 UTC	(20060925-6473)
+  Log:
+  Convert saslserv and a few missing notices in chanserv.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/chanserv/akick.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/status.c (File Modified) 
+  +1 -1		trunk/modules/saslserv/main.c (File Modified) 
+
+
 jilles      2006/09/25 15:09:54 UTC	(20060925-6471)
   Log:
   Convert global.

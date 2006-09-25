@@ -32,7 +32,7 @@ CPPFLAGS	= @CPPFLAGS@
 
 default: all
 
-BASE_SRCS = main.c plain.c crypt.c dh-blowfish.c help.c
+BASE_SRCS = main.c plain.c crypt.c dh-blowfish.c
 
 SRCS = ${BASE_SRCS}
 
