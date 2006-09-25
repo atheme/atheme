@@ -4,7 +4,7 @@
  *
  * Module listing.
  *
- * $Id: modrestart.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: modrestart.c 6465 2006-09-25 13:46:33Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modrestart", TRUE, _modinit, _moddeinit,
-	"$Id: modrestart.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: modrestart.c 6465 2006-09-25 13:46:33Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -94,11 +94,11 @@ static void os_cmd_modrestart(sourceinfo_t *si, int parc, char *parv[])
 	if (fail1)
 	{
 		wallops("Module restart failed, functionality will be very limited");
-		notice(opersvs.nick, si->su->nick, "Module restart failed, fix it and try again or restart");
+		command_fail(si, fault_nosuch_target, "Module restart failed, fix it and try again or restart");
 	}
 	else
 	{
 		wallops("Module restart: %d modules unloaded; %d kept; %d modules now loaded", loadedbefore - kept, kept, modules.count);
-		notice(opersvs.nick, si->su->nick, "Module restart: %d modules unloaded; %d kept; %d modules now loaded", loadedbefore - kept, kept, modules.count);
+		command_success_nodata(si, "Module restart: %d modules unloaded; %d kept; %d modules now loaded", loadedbefore - kept, kept, modules.count);
 	}
 }

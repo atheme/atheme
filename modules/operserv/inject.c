@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService RAW command.
  *
- * $Id: inject.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: inject.c 6465 2006-09-25 13:46:33Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/inject", FALSE, _modinit, _moddeinit,
-	"$Id: inject.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: inject.c 6465 2006-09-25 13:46:33Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -50,8 +50,8 @@ static void os_cmd_inject(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!inject)
 	{
-		notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "INJECT");
-		notice(opersvs.nick, si->su->nick, "Syntax: INJECT <parameters>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "INJECT");
+		command_fail(si, fault_needmoreparams, "Syntax: INJECT <parameters>");
 		return;
 	}
 
@@ -62,7 +62,7 @@ static void os_cmd_inject(sourceinfo_t *si, int parc, char *parv[])
 	 */
 	if (injecting == TRUE)
 	{
-		notice(opersvs.nick, si->su->nick, "You cannot inject an INJECT command.");
+		command_fail(si, fault_noprivs, "You cannot inject an INJECT command.");
 		return;
 	}
 

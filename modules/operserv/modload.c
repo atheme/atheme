@@ -4,7 +4,7 @@
  *
  * Loads a new module in.
  *
- * $Id: modload.c 6339 2006-09-10 16:18:54Z jilles $
+ * $Id: modload.c 6465 2006-09-25 13:46:33Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modload", FALSE, _modinit, _moddeinit,
-	"$Id: modload.c 6339 2006-09-10 16:18:54Z jilles $",
+	"$Id: modload.c 6465 2006-09-25 13:46:33Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -47,8 +47,8 @@ static void os_cmd_modload(sourceinfo_t *si, int parc, char *parv[])
 
 	if (parc < 1)
 	{
-		notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "MODLOAD");
-		notice(opersvs.nick, si->su->nick, "Syntax: MODLOAD <module...>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MODLOAD");
+		command_fail(si, fault_needmoreparams, "Syntax: MODLOAD <module...>");
 		return;
 	}
 	i = 0;
@@ -57,7 +57,7 @@ static void os_cmd_modload(sourceinfo_t *si, int parc, char *parv[])
 		module = parv[i++];
 		if (module_find_published(module))
 		{
-			notice(opersvs.nick, si->su->nick, "\2%s\2 is already loaded.", module);
+			command_fail(si, fault_nochange, "\2%s\2 is already loaded.", module);
 			continue;
 		}
 
@@ -72,8 +72,8 @@ static void os_cmd_modload(sourceinfo_t *si, int parc, char *parv[])
 			m = module_load(module);
 
 		if (m != NULL)
-			notice(opersvs.nick, si->su->nick, "Module \2%s\2 loaded.", module);
+			command_success_nodata(si, "Module \2%s\2 loaded.", module);
 		else
-			notice(opersvs.nick, si->su->nick, "Module \2%s\2 failed to load.", module);
+			command_fail(si, fault_nosuch_target, "Module \2%s\2 failed to load.", module);
 	}
 }

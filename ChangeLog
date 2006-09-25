@@ -1,3 +1,19 @@
+jilles      2006/09/25 13:03:41 UTC	(20060925-6463)
+  Log:
+  Convert some operserv modules to command_fail etc.
+  /os clones kline on|off now confirms success with a notice
+  (command_success_nodata()).
+  
+
+  Changes:	Modified:
+  +39 -39	trunk/modules/operserv/akill.c (File Modified) 
+  +9 -9		trunk/modules/operserv/clearchan.c (File Modified) 
+  +21 -19	trunk/modules/operserv/clones.c (File Modified) 
+  +12 -12	trunk/modules/operserv/compare.c (File Modified) 
+  +10 -10	trunk/modules/operserv/help.c (File Modified) 
+  +20 -20	trunk/modules/operserv/ignore.c (File Modified) 
+
+
 jilles      2006/09/25 12:28:25 UTC	(20060925-6461)
   Log:
   nickserv list: fix typo

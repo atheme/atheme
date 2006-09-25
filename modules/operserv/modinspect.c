@@ -4,7 +4,7 @@
  *
  * A simple module inspector.
  *
- * $Id: modinspect.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: modinspect.c 6465 2006-09-25 13:46:33Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modinspect", FALSE, _modinit, _moddeinit,
-	"$Id: modinspect.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: modinspect.c 6465 2006-09-25 13:46:33Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -45,8 +45,8 @@ static void os_cmd_modinspect(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!mname)
 	{
-		notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "MODINSPECT");
-		notice(opersvs.nick, si->su->nick, "Syntax: MODINSPECT <module>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MODINSPECT");
+		command_fail(si, fault_needmoreparams, "Syntax: MODINSPECT <module>");
 		return;
 	}
 
@@ -56,23 +56,23 @@ static void os_cmd_modinspect(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!m)
 	{
-		notice(opersvs.nick, si->su->nick, "\2%s\2 is not loaded.", mname);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not loaded.", mname);
 		return;
 	}
 
 	/* Is there a header? */
 	if (!m->header)
 	{
-		notice(opersvs.nick, si->su->nick, "\2%s\2 cannot be inspected.", mname);
+		command_fail(si, fault_unimplemented, "\2%s\2 cannot be inspected.", mname);
 		return;
 	}
 
-	notice(opersvs.nick, si->su->nick, "Information on \2%s\2:", mname);
-	notice(opersvs.nick, si->su->nick, "Name       : %s", m->header->name);
-	notice(opersvs.nick, si->su->nick, "Address    : %p", m->address);
-	notice(opersvs.nick, si->su->nick, "Entry point: %p", m->header->modinit);
-	notice(opersvs.nick, si->su->nick, "Exit point : %p", m->header->deinit);
-	notice(opersvs.nick, si->su->nick, "Version    : %s", m->header->version);
-	notice(opersvs.nick, si->su->nick, "Vendor     : %s", m->header->vendor);
-	notice(opersvs.nick, si->su->nick, "*** \2End of Info\2 ***");
+	command_success_nodata(si, "Information on \2%s\2:", mname);
+	command_success_nodata(si, "Name       : %s", m->header->name);
+	command_success_nodata(si, "Address    : %p", m->address);
+	command_success_nodata(si, "Entry point: %p", m->header->modinit);
+	command_success_nodata(si, "Exit point : %p", m->header->deinit);
+	command_success_nodata(si, "Version    : %s", m->header->version);
+	command_success_nodata(si, "Vendor     : %s", m->header->vendor);
+	command_success_nodata(si, "*** \2End of Info\2 ***");
 }

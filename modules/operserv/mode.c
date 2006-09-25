@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService MODE command.
  *
- * $Id: mode.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: mode.c 6465 2006-09-25 13:46:33Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/mode", FALSE, _modinit, _moddeinit,
-	"$Id: mode.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: mode.c 6465 2006-09-25 13:46:33Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,15 +48,15 @@ static void os_cmd_mode(sourceinfo_t *si, int parc, char *parv[])
 
         if (!channel || !mode)
         {
-                notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "MODE");
-                notice(opersvs.nick, si->su->nick, "Syntax: MODE <parameters>");
+                command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MODE");
+                command_fail(si, fault_needmoreparams, "Syntax: MODE <channel> <parameters>");
                 return;
         }
 
 	c = channel_find(channel);
 	if (!c)
 	{
-                notice(opersvs.nick, si->su->nick, "Channel \2%s\2 does not exist.", channel);
+                command_fail(si, fault_nosuch_target, "Channel \2%s\2 does not exist.", channel);
                 return;
 	}
 
@@ -68,5 +68,6 @@ static void os_cmd_mode(sourceinfo_t *si, int parc, char *parv[])
 	modeparc = sjtoken(mode, ' ', modeparv);
 
 	channel_mode(opersvs.me->me, c, modeparc, modeparv);
+	command_success_nodata(si, "Set modes \2%s\2 on \2%s\2.", mode, channel);
 }
 

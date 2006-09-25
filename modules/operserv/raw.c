@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService RAW command.
  *
- * $Id: raw.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: raw.c 6465 2006-09-25 13:46:33Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/raw", FALSE, _modinit, _moddeinit,
-	"$Id: raw.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: raw.c 6465 2006-09-25 13:46:33Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,8 +48,8 @@ static void os_cmd_raw(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!s)
 	{
-		notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "RAW");
-		notice(opersvs.nick, si->su->nick, "Syntax: RAW <parameters>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RAW");
+		command_fail(si, fault_needmoreparams, "Syntax: RAW <parameters>");
 		return;
 	}
 

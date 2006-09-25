@@ -4,7 +4,7 @@
  *
  * Loads a new module in.
  *
- * $Id: modunload.c 6339 2006-09-10 16:18:54Z jilles $
+ * $Id: modunload.c 6465 2006-09-25 13:46:33Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modunload", FALSE, _modinit, _moddeinit,
-	"$Id: modunload.c 6339 2006-09-10 16:18:54Z jilles $",
+	"$Id: modunload.c 6465 2006-09-25 13:46:33Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -47,8 +47,8 @@ static void os_cmd_modunload(sourceinfo_t *si, int parc, char *parv[])
 
 	if (parc < 1)
 	{
-		notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "MODUNLOAD");
-		notice(opersvs.nick, si->su->nick, "Syntax: MODUNLOAD <module...>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MODUNLOAD");
+		command_fail(si, fault_needmoreparams, "Syntax: MODUNLOAD <module...>");
 		return;
 	}
 	i = 0;
@@ -59,7 +59,7 @@ static void os_cmd_modunload(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!m)
 		{
-			notice(opersvs.nick, si->su->nick, "\2%s\2 is not loaded; "
+			command_fail(si, fault_nosuch_target, "\2%s\2 is not loaded; "
 					"it cannot be unloaded.", module);
 			continue;
 		}
@@ -68,14 +68,14 @@ static void os_cmd_modunload(sourceinfo_t *si, int parc, char *parv[])
 		{
 			slog(LG_INFO, "%s tried to unload a permanent module",
 				si->su->nick);
-			notice(opersvs.nick, si->su->nick, "\2%s\2 is an permanent module; "
+			command_fail(si, fault_noprivs, "\2%s\2 is an permanent module; "
 					"it cannot be unloaded.", module);
 			continue;
 		}
 
 		if (!strcmp(m->header->name, "operserv/main") || !strcmp(m->header->name, "operserv/modload") || !strcmp(m->header->name, "operserv/modunload"))
 		{
-			notice(opersvs.nick, si->su->nick, "Refusing to unload \2%s\2.",
+			command_fail(si, fault_noprivs, "Refusing to unload \2%s\2.",
 					module);
 			continue;
 		}
@@ -83,6 +83,6 @@ static void os_cmd_modunload(sourceinfo_t *si, int parc, char *parv[])
 		module_unload(m);
 
 		logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "MODUNLOAD %s", module);
-		notice(opersvs.nick, si->su->nick, "Module \2%s\2 unloaded.", module);
+		command_success_nodata(si, "Module \2%s\2 unloaded.", module);
 	}
 }
