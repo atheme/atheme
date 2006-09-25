@@ -1,3 +1,11 @@
+w00t        2006/09/25 11:53:08 UTC	(20060925-6459)
+  Log:
+  Add SVSHOLD support available in InspIRCd SVN (as of r5319)
+
+  Changes:	Modified:
+  +25 -1	trunk/protocol/inspircd11.c (File Modified) 
+
+
 nenolod     2006/09/25 10:33:40 UTC	(20060925-6457)
   Log:
   - convert NickServ to command_fail()/command_success_nodata().
