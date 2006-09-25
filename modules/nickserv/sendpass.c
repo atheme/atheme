@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService SENDPASS function.
  *
- * $Id: sendpass.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: sendpass.c 6457 2006-09-25 10:33:40Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/sendpass", FALSE, _modinit, _moddeinit,
-	"$Id: sendpass.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: sendpass.c 6457 2006-09-25 10:33:40Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -45,28 +45,28 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!name)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "SENDPASS");
-		notice(nicksvs.nick, si->su->nick, "Syntax: SENDPASS <nickname>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SENDPASS");
+		command_fail(si, fault_needmoreparams, "Syntax: SENDPASS <nickname>");
 		return;
 	}
 
 	if (!(mu = myuser_find(name)))
 	{
-		notice(nicksvs.nick, si->su->nick, "\2%s\2 is not registered.", name);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", name);
 		return;
 	}
 
 	if (is_soper(mu) && !has_priv(si->su, PRIV_ADMIN))
 	{
 		logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "failed SENDPASS %s (is SOPER)", name);
-		notice(nicksvs.nick, si->su->nick, "\2%s\2 belongs to a services operator; you need %s privilege to send the password.", name, PRIV_ADMIN);
+		command_fail(si, fault_badparams, "\2%s\2 belongs to a services operator; you need %s privilege to send the password.", name, PRIV_ADMIN);
 		return;
 	}
 
 	/* this is not without controversy... :) */
 	if (mu->flags & MU_CRYPTPASS)
 	{
-		notice(nicksvs.nick, si->su->nick, "The password for the nickname \2%s\2 is encrypted; "
+		command_success_nodata(si, "The password for the nickname \2%s\2 is encrypted; "
 						"a new password will be assigned and sent.", name);
 		newpass = gen_pw(12);
 		set_password(mu, newpass);
@@ -75,10 +75,10 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 	if (sendemail(si->su, EMAIL_SENDPASS, mu, (newpass == NULL) ? mu->pass : newpass))
 	{
 		logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "SENDPASS %s", name);
-		notice(nicksvs.nick, si->su->nick, "The password for \2%s\2 has been sent to \2%s\2.", mu->name, mu->email);
+		command_success_nodata(si, "The password for \2%s\2 has been sent to \2%s\2.", mu->name, mu->email);
 	}
 	else
-		notice(nicksvs.nick, si->su->nick, "Email send failed.");
+		command_fail(si, fault_emailfail, "Email send failed.");
 
 	if (newpass != NULL)
 		free(newpass);

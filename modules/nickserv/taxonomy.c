@@ -4,7 +4,7 @@
  *
  * Lists object properties via their metadata table.
  *
- * $Id: taxonomy.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: taxonomy.c 6457 2006-09-25 10:33:40Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/taxonomy", FALSE, _modinit, _moddeinit,
-	"$Id: taxonomy.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: taxonomy.c 6457 2006-09-25 10:33:40Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -46,14 +46,14 @@ static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!target)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "TAXONOMY");
-		notice(nicksvs.nick, si->su->nick, "Syntax: TAXONOMY <nick>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "TAXONOMY");
+		command_fail(si, fault_needmoreparams, "Syntax: TAXONOMY <nick>");
 		return;
 	}
 
 	if (!(mu = myuser_find_ext(target)))
 	{
-		notice(nicksvs.nick, si->su->nick, "\2%s\2 is not a registered nickname.", target);
+		command_fail(si, fault_badparams, "\2%s\2 is not a registered nickname.", target);
 		return;
 	}
 
@@ -63,7 +63,7 @@ static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 	else
 		logcommand(nicksvs.me, si->su, CMDLOG_GET, "TAXONOMY %s", target);
 
-	notice(nicksvs.nick, si->su->nick, "Taxonomy for \2%s\2:", target);
+	command_success_nodata(si, "Taxonomy for \2%s\2:", target);
 
 	LIST_FOREACH(n, mu->metadata.head)
 	{
@@ -72,8 +72,8 @@ static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 		if (md->private == TRUE && !isoper)
 			continue;
 
-		notice(nicksvs.nick, si->su->nick, "%-32s: %s", md->name, md->value);
+		command_success_nodata(si, "%-32s: %s", md->name, md->value);
 	}
 
-	notice(nicksvs.nick, si->su->nick, "End of \2%s\2 taxonomy.", target);
+	command_success_nodata(si, "End of \2%s\2 taxonomy.", target);
 }

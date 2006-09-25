@@ -5,7 +5,7 @@
  * This file contains code for the nickserv LISTCHANS function.
  *   -- Contains an alias "MYACCESS" for legacy users
  *
- * $Id: listchans.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: listchans.c 6457 2006-09-25 10:33:40Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/listchans", FALSE, _modinit, _moddeinit,
-	"$Id: listchans.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: listchans.c 6457 2006-09-25 10:33:40Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -59,7 +59,7 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!has_priv(si->su, PRIV_CHAN_AUSPEX))
 		{
-			notice(nicksvs.nick, si->su->nick, "You are not authorized to use the target argument.");
+			command_fail(si, fault_authfail, "You are not authorized to use the target argument.");
 			return;
 		}
 
@@ -67,7 +67,7 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 
 		if (mu == NULL)
 		{
-			notice(nicksvs.nick, si->su->nick, "The nickname \2%s\2 is not registered.", target);
+			command_fail(si, fault_nosuch_target, "The nickname \2%s\2 is not registered.", target);
 			return;
 		}
 	}
@@ -76,11 +76,10 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 		mu = si->su->myuser;
 		if (mu == NULL)
 		{
-			notice(nicksvs.nick, si->su->nick, "You are not logged in.");
+			command_fail(si, fault_authfail, "You are not logged in.");
 			return;
 		}
 	}
-
 
 	if (mu != si->su->myuser)
 	{	/* must have been an oper */
@@ -94,7 +93,7 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 
 	if (mu->chanacs.count == 0)
 	{
-		notice(nicksvs.nick, si->su->nick, "No channel access was found for the nickname \2%s\2.", mu->name);
+		command_success_nodata(si, "No channel access was found for the nickname \2%s\2.", mu->name);
 		return;
 	}
 
@@ -103,14 +102,14 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 		ca = (chanacs_t *)n->data;
 
 		if (is_founder(ca->mychan, mu))
-			notice(nicksvs.nick, si->su->nick, "Founder of %s", ca->mychan->name);
+			command_success_nodata(si, "Founder of %s", ca->mychan->name);
 
 		switch (ca->level)
 		{
 			default:
 				/* don't tell users they're akicked (flag +b) */
 				if (!(ca->level & CA_AKICK))
-					notice(nicksvs.nick, si->su->nick, "Access flag(s) %s in %s", bitmask_to_flags(ca->level, chanacs_flags), ca->mychan->name);
+					command_success_nodata(si, "Access flag(s) %s in %s", bitmask_to_flags(ca->level, chanacs_flags), ca->mychan->name);
 				else
 					akicks++;
 		}
@@ -119,9 +118,8 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 	i = mu->chanacs.count - akicks;
 
 	if (i == 0)
-		notice(nicksvs.nick, si->su->nick, "No channel access was found for the nickname \2%s\2.", mu->name);
+		command_success_nodata(si, "No channel access was found for the nickname \2%s\2.", mu->name);
 	else
-		notice(nicksvs.nick, si->su->nick, "\2%d\2 channel access match%s for the nickname \2%s\2",
-							i, (akicks > 1) ? "es" : "", mu->name);
-
+		command_success_nodata(si, "\2%d\2 channel access match%s for the nickname \2%s\2",
+							i, (i > 1) ? "es" : "", mu->name);
 }

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService STATUS function.
  *
- * $Id: status.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: status.c 6457 2006-09-25 10:33:40Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/status", FALSE, _modinit, _moddeinit,
-	"$Id: status.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: status.c 6457 2006-09-25 10:33:40Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -55,7 +55,7 @@ static void ns_cmd_acc(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!u)
 	{
-		notice(nicksvs.nick, si->su->nick, "User not online.");
+		command_fail(si, fault_nosuch_target, "User not online.");
 		return;
 	}
 
@@ -64,11 +64,11 @@ static void ns_cmd_acc(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!u->myuser)
 	{
-		notice(nicksvs.nick, si->su->nick, "%s ACC 0", u->nick);
+		command_success_nodata(si, "%s ACC 0", u->nick);
 		return;
 	}
 	else
-		notice(nicksvs.nick, si->su->nick, "%s ACC 3", u->nick);
+		command_success_nodata(si, "%s ACC 3", u->nick);
 }
 
 static void ns_cmd_status(sourceinfo_t *si, int parc, char *parv[])
@@ -77,11 +77,11 @@ static void ns_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!si->su->myuser)
 	{
-		notice(nicksvs.nick, si->su->nick, "You are not logged in.");
+		command_fail(si, fault_authfail, "You are not logged in.");
 		return;
 	}
 
-	notice(nicksvs.nick, si->su->nick, "You are logged in as \2%s\2.", si->su->myuser->name);
+	command_success_nodata(si, "You are logged in as \2%s\2.", si->su->myuser->name);
 
 	if (is_soper(si->su->myuser))
 	{
@@ -89,15 +89,15 @@ static void ns_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 
 		operclass = si->su->myuser->soper->operclass;
 		if (operclass == NULL)
-			notice(nicksvs.nick, si->su->nick, "You are a services root administrator.");
+			command_success_nodata(si, "You are a services root administrator.");
 		else
-			notice(nicksvs.nick, si->su->nick, "You are a services operator of class %s.", operclass->name);
+			command_success_nodata(si, "You are a services operator of class %s.", operclass->name);
 	}
 
 	if (is_admin(si->su))
-		notice(nicksvs.nick, si->su->nick, "You are a server administrator.");
+		command_success_nodata(si, "You are a server administrator.");
 
 	if (is_ircop(si->su))
-		notice(nicksvs.nick, si->su->nick, "You are an IRC operator.");
+		command_success_nodata(si, "You are an IRC operator.");
 }
 

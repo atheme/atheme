@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the NickServ HELP command.
  *
- * $Id: help.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: help.c 6457 2006-09-25 10:33:40Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: help.c 6457 2006-09-25 10:33:40Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -44,28 +44,28 @@ void ns_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!command)
 	{
-		notice(nicksvs.nick, si->su->nick, "***** \2%s Help\2 *****", nicksvs.nick);
-		notice(nicksvs.nick, si->su->nick, "\2%s\2 allows users to \2'register'\2 a nickname, and stop", nicksvs.nick);
-		notice(nicksvs.nick, si->su->nick, "others from using that nick. \2%s\2 allows the owner of a", nicksvs.nick);
-		notice(nicksvs.nick, si->su->nick, "nickname to disconnect a user from the network that is using", nicksvs.nick);
-		notice(nicksvs.nick, si->su->nick, "their nickname. If a registered nick is not used by the owner for %d days,", (config_options.expire / 86400));
-		notice(nicksvs.nick, si->su->nick, "\2%s\2 will drop the nickname, allowing it to be reregistered.", nicksvs.nick);
-		notice(nicksvs.nick, si->su->nick, " ");
-		notice(nicksvs.nick, si->su->nick, "For more information on a command, type:");
-		notice(nicksvs.nick, si->su->nick, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.disp);
-		notice(nicksvs.nick, si->su->nick, " ");
+		command_success_nodata(si, "***** \2%s Help\2 *****", nicksvs.nick);
+		command_success_nodata(si, "\2%s\2 allows users to \2'register'\2 a nickname, and stop", nicksvs.nick);
+		command_success_nodata(si, "others from using that nick. \2%s\2 allows the owner of a", nicksvs.nick);
+		command_success_nodata(si, "nickname to disconnect a user from the network that is using", nicksvs.nick);
+		command_success_nodata(si, "their nickname. If a registered nick is not used by the owner for %d days,", (config_options.expire / 86400));
+		command_success_nodata(si, "\2%s\2 will drop the nickname, allowing it to be reregistered.", nicksvs.nick);
+		command_success_nodata(si, " ");
+		command_success_nodata(si, "For more information on a command, type:");
+		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.disp);
+		command_success_nodata(si, " ");
 
 		command_help_short(nicksvs.nick, si->su->nick, ns_cmdtree, "REGISTER IDENTIFY GHOST INFO LISTCHANS SET HOLD MARK FREEZE");
 
-		notice(nicksvs.nick, si->su->nick, "***** \2End of Help\2 *****");
+		command_success_nodata(si, "***** \2End of Help\2 *****");
 		return;
 	}
 
 	if (!strcasecmp("COMMANDS", command))
 	{
-		notice(nicksvs.nick, si->su->nick, "***** \2%s Help\2 *****", nicksvs.nick);
+		command_success_nodata(si, "***** \2%s Help\2 *****", nicksvs.nick);
 		command_help(nicksvs.nick, si->su->nick, ns_cmdtree);
-		notice(nicksvs.nick, si->su->nick, "***** \2End of Help\2 *****");
+		command_success_nodata(si, "***** \2End of Help\2 *****");
 		return;
 	}
 

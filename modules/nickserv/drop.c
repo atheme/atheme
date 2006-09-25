@@ -4,7 +4,7 @@
  *
  * This file contains code for the nickserv DROP function.
  *
- * $Id: drop.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: drop.c 6457 2006-09-25 10:33:40Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: drop.c 6457 2006-09-25 10:33:40Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -45,26 +45,26 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!acc)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "DROP");
-		notice(nicksvs.nick, si->su->nick, "Syntax: DROP <nickname> <password>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DROP");
+		command_fail(si, fault_needmoreparams, "Syntax: DROP <nickname> <password>");
 		return;
 	}
 
 	if (!(mu = myuser_find(acc)))
 	{
-		notice(nicksvs.nick, si->su->nick, "\2%s\2 is not registered.", acc);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", acc);
 		return;
 	}
 
 	if ((pass || !has_priv(si->su, PRIV_USER_ADMIN)) && !verify_password(mu, pass))
 	{
-		notice(nicksvs.nick, si->su->nick, "Authentication failed. Invalid password for \2%s\2.", mu->name);
+		command_fail(si, fault_authfail, "Authentication failed. Invalid password for \2%s\2.", mu->name);
 		return;
 	}
 
 	if (is_soper(mu))
 	{
-		notice(nicksvs.nick, si->su->nick, "The nickname \2%s\2 belongs to a services operator; it cannot be dropped.", acc);
+		command_fail(si, fault_badparams, "The nickname \2%s\2 belongs to a services operator; it cannot be dropped.", acc);
 		return;
 	}
 
@@ -74,6 +74,6 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 	snoop("DROP: \2%s\2 by \2%s\2", mu->name, si->su->nick);
 	logcommand(nicksvs.me, si->su, pass ? CMDLOG_REGISTER : CMDLOG_ADMIN, "DROP %s%s", mu->name, pass ? "" : " (admin)");
 	hook_call_event("user_drop", mu);
-	notice(nicksvs.nick, si->su->nick, "The nickname \2%s\2 has been dropped.", mu->name);
+	command_success_nodata(si, "The nickname \2%s\2 has been dropped.", mu->name);
 	myuser_delete(mu);
 }

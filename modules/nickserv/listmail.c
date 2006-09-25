@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ LISTMAIL function.
  *
- * $Id: listmail.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: listmail.c 6457 2006-09-25 10:33:40Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/listmail", FALSE, _modinit, _moddeinit,
-	"$Id: listmail.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: listmail.c 6457 2006-09-25 10:33:40Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -39,7 +39,7 @@ void _moddeinit()
 
 struct listmail_state
 {
-	char *origin;
+	sourceinfo_t *origin;
 	char *pattern;
 	int matches;
 };
@@ -53,9 +53,9 @@ static int listmail_foreach_cb(dictionary_elem_t *delem, void *privdata)
 	{
 		/* in the future we could add a LIMIT parameter */
 		if (state->matches == 0)
-			notice(nicksvs.nick, state->origin, "nicknames matching e-mail address \2%s\2:", state->pattern);
+			command_success_nodata(state->origin, "nicknames matching e-mail address \2%s\2:", state->pattern);
 
-		notice(nicksvs.nick, state->origin, "- %s (%s)", mu->name, mu->email);
+		command_success_nodata(state->origin, "- %s (%s)", mu->name, mu->email);
 		state->matches++;
 	}
 
@@ -69,8 +69,8 @@ static void ns_cmd_listmail(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!email)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "LISTMAIL");
-		notice(nicksvs.nick, si->su->nick, "Syntax: LISTMAIL <email>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "LISTMAIL");
+		command_fail(si, fault_needmoreparams, "Syntax: LISTMAIL <email>");
 		return;
 	}
 
@@ -78,12 +78,12 @@ static void ns_cmd_listmail(sourceinfo_t *si, int parc, char *parv[])
 
 	state.matches = 0;
 	state.pattern = email;
-	state.origin = si->su->nick;
+	state.origin = si;
 	dictionary_foreach(mulist, listmail_foreach_cb, &state);
 
 	logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "LISTMAIL %s (%d matches)", email, state.matches);
 	if (state.matches == 0)
-		notice(nicksvs.nick, si->su->nick, "No nicknames matched e-mail address \2%s\2", email);
+		command_success_nodata(si, "No nicknames matched e-mail address \2%s\2", email);
 	else
-		notice(nicksvs.nick, si->su->nick, "\2%d\2 match%s for e-mail address \2%s\2", state.matches, state.matches != 1 ? "es" : "", email);
+		command_success_nodata(si, "\2%d\2 match%s for e-mail address \2%s\2", state.matches, state.matches != 1 ? "es" : "", email);
 }

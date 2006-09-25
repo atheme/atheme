@@ -5,7 +5,7 @@
  * This file contains code for the NickServ LIST function.
  * Based on Alex Lambert's LISTEMAIL.
  *
- * $Id: list.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: list.c 6457 2006-09-25 10:33:40Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: list.c 6457 2006-09-25 10:33:40Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -40,7 +40,7 @@ void _moddeinit()
 
 struct list_state
 {
-	char *origin;
+	sourceinfo_t *origin;
 	char *pattern;
 	int matches;
 };
@@ -69,7 +69,7 @@ static int list_foreach_cb(dictionary_elem_t *delem, void *privdata)
 			strlcat(buf, "\2[marked]\2", BUFSIZE);
 		}
 
-		notice(nicksvs.nick, state->origin, "- %s (%s) %s", mu->name, mu->email, buf);
+		command_nodata_success(state->origin, "- %s (%s) %s", mu->name, mu->email, buf);
 		state->matches++;
 	}
 	return 0;
@@ -82,21 +82,21 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!nickpattern)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "LIST");
-		notice(nicksvs.nick, si->su->nick, "Syntax: LIST <nickname pattern>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "LIST");
+		command_fail(si, fault_needmoreparams, "Syntax: LIST <nickname pattern>");
 		return;
 	}
 
 	snoop("LIST:nicknameS: \2%s\2 by \2%s\2", nickpattern, si->su->nick);
 
-	state.origin = si->su->nick;
+	state.origin = si;
 	state.pattern = nickpattern;
 	state.matches = 0;
 	dictionary_foreach(mulist, list_foreach_cb, &state);
 
 	logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "LIST %s (%d matches)", nickpattern, state.matches);
 	if (state.matches == 0)
-		notice(nicksvs.nick, si->su->nick, "No nicknames matched pattern \2%s\2", nickpattern);
+		command_success_nodata(si, "No nicknames matched pattern \2%s\2", nickpattern);
 	else
-		notice(nicksvs.nick, si->su->nick, "\2%d\2 match%s for pattern \2%s\2", state.matches, state.matches != 1 ? "es" : "", nickpattern);
+		command_success_nodata(si, "\2%d\2 match%s for pattern \2%s\2", state.matches, state.matches != 1 ? "es" : "", nickpattern);
 }

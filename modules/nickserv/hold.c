@@ -4,7 +4,7 @@
  *
  * Controls noexpire options for nicknames.
  *
- * $Id: hold.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: hold.c 6457 2006-09-25 10:33:40Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/hold", FALSE, _modinit, _moddeinit,
-	"$Id: hold.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: hold.c 6457 2006-09-25 10:33:40Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -51,14 +51,14 @@ static void ns_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!target || !action)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "HOLD");
-		notice(nicksvs.nick, si->su->nick, "Usage: HOLD <nickname> <ON|OFF>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "HOLD");
+		command_fail(si, fault_needmoreparams, "Usage: HOLD <nickname> <ON|OFF>");
 		return;
 	}
 
 	if (!(mu = myuser_find_ext(target)))
 	{
-		notice(nicksvs.nick, si->su->nick, "\2%s\2 is not registered.", target);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", target);
 		return;
 	}
 
@@ -66,7 +66,7 @@ static void ns_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (mu->flags & MU_HOLD)
 		{
-			notice(nicksvs.nick, si->su->nick, "\2%s\2 is already held.", target);
+			command_fail(si, fault_badparams, "\2%s\2 is already held.", target);
 			return;
 		}
 
@@ -74,13 +74,13 @@ static void ns_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 
 		wallops("%s set the HOLD option for the nickname \2%s\2.", si->su->nick, target);
 		logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "HOLD %s ON", target);
-		notice(nicksvs.nick, si->su->nick, "\2%s\2 is now held.", target);
+		command_success_nodata(si, "\2%s\2 is now held.", target);
 	}
 	else if (!strcasecmp(action, "OFF"))
 	{
 		if (!(mu->flags & MU_HOLD))
 		{
-			notice(nicksvs.nick, si->su->nick, "\2%s\2 is not held.", target);
+			command_fail(si, fault_badparams, "\2%s\2 is not held.", target);
 			return;
 		}
 
@@ -88,11 +88,11 @@ static void ns_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 
 		wallops("%s removed the HOLD option on the nickname \2%s\2.", si->su->nick, target);
 		logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "HOLD %s OFF", target);
-		notice(nicksvs.nick, si->su->nick, "\2%s\2 is no longer held.", target);
+		command_success_nodata(si, "\2%s\2 is no longer held.", target);
 	}
 	else
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INVALID_PARAMS, "HOLD");
-		notice(nicksvs.nick, si->su->nick, "Usage: HOLD <nickname> <ON|OFF>");
+		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "HOLD");
+		command_fail(si, fault_needmoreparams, "Usage: HOLD <nickname> <ON|OFF>");
 	}
 }

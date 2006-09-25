@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY function.
  *
- * $Id: identify.c 6413 2006-09-19 15:12:18Z jilles $
+ * $Id: identify.c 6457 2006-09-25 10:33:40Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/identify", FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 6413 2006-09-19 15:12:18Z jilles $",
+	"$Id: identify.c 6457 2006-09-25 10:33:40Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -66,8 +66,8 @@ static void ns_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!target && !password)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "IDENTIFY");
-		notice(nicksvs.nick, si->su->nick, "Syntax: IDENTIFY [nick] <password>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "IDENTIFY");
+		command_fail(si, fault_needmoreparams, "Syntax: IDENTIFY [nick] <password>");
 		return;
 	}
 
@@ -75,20 +75,20 @@ static void ns_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!mu)
 	{
-		notice(nicksvs.nick, si->su->nick, "\2%s\2 is not a registered nickname.", target);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not a registered nickname.", target);
 		return;
 	}
 
 	if ((md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
 	{
-		notice(nicksvs.nick, si->su->nick, "You cannot identify to \2%s\2 because the nickname has been frozen.", mu->name);
+		command_fail(si, fault_authfail, "You cannot identify to \2%s\2 because the nickname has been frozen.", mu->name);
 		logcommand(nicksvs.me, u, CMDLOG_LOGIN, "failed IDENTIFY to %s (frozen)", mu->name);
 		return;
 	}
 
 	if (u->myuser == mu)
 	{
-		notice(nicksvs.nick, si->su->nick, "You are already logged in as \2%s\2.", mu->name);
+		command_fail(si, fault_authfail, "You are already logged in as \2%s\2.", mu->name);
 		return;
 	}
 	else if (u->myuser != NULL && ircd_on_logout(u->nick, u->myuser->name, NULL))
@@ -102,7 +102,7 @@ static void ns_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
 		{
-			notice(nicksvs.nick, si->su->nick, "There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d).", LIST_LENGTH(&mu->logins), mu->name, me.maxlogins);
+			command_fail(si, fault_toomany, "There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d).", LIST_LENGTH(&mu->logins), mu->name, me.maxlogins);
 			logcommand(nicksvs.me, u, CMDLOG_LOGIN, "failed IDENTIFY to %s (too many logins)", mu->name);
 			return;
 		}
@@ -148,7 +148,7 @@ static void ns_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
 
 		logcommand(nicksvs.me, u, CMDLOG_LOGIN, "IDENTIFY");
 
-		notice(nicksvs.nick, si->su->nick, "You are now identified for \2%s\2.", u->myuser->name);
+		command_success_nodata(si, "You are now identified for \2%s\2.", u->myuser->name);
 
 		/* check for failed attempts and let them know */
 		if (md_failnum && (atoi(md_failnum->value) > 0))
@@ -159,7 +159,7 @@ static void ns_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
 			tm = *localtime(&mu->lastlogin);
 			strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-			notice(nicksvs.nick, si->su->nick, "\2%d\2 failed %s since %s.",
+			command_success_nodata(si, "\2%d\2 failed %s since %s.",
 				atoi(md_failnum->value), (atoi(md_failnum->value) == 1) ? "login" : "logins", strfbuf);
 
 			md_failtime = metadata_find(mu, METADATA_USER, "private:loginfail:lastfailtime");
@@ -169,7 +169,7 @@ static void ns_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
 			tm = *localtime(&ts);
 			strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-			notice(nicksvs.nick, si->su->nick, "Last failed attempt from: \2%s\2 on %s.",
+			command_success_nodata(si, "Last failed attempt from: \2%s\2 on %s.",
 				md_failaddr->value, strfbuf);
 
 			metadata_delete(mu, METADATA_USER, "private:loginfail:failnum");	/* md_failnum now invalid */
@@ -255,7 +255,7 @@ static void ns_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(nicksvs.me, u, CMDLOG_LOGIN, "failed IDENTIFY to %s (bad password)", mu->name);
 
-	notice(nicksvs.nick, si->su->nick, "Invalid password for \2%s\2.", mu->name);
+	command_fail(si, fault_authfail, "Invalid password for \2%s\2.", mu->name);
 
 	/* record the failed attempts */
 	/* note that we reuse this buffer later when warning opers about failed logins */

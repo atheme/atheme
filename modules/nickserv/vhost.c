@@ -4,7 +4,7 @@
  *
  * Allows setting a vhost on an account
  *
- * $Id: vhost.c 6441 2006-09-24 16:08:37Z jilles $
+ * $Id: vhost.c 6457 2006-09-25 10:33:40Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 6441 2006-09-24 16:08:37Z jilles $",
+	"$Id: vhost.c 6457 2006-09-25 10:33:40Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -112,15 +112,15 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!target)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INVALID_PARAMS, "VHOST");
-		notice(nicksvs.nick, si->su->nick, "Syntax: VHOST <nick> [vhost]");
+		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "VHOST");
+		command_fail(si, fault_needmoreparams, "Syntax: VHOST <nick> [vhost]");
 		return;
 	}
 
 	/* find the user... */
 	if (!(mu = myuser_find_ext(target)))
 	{
-		notice(nicksvs.nick, si->su->nick, "\2%s\2 is not a registered nickname.", target);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not a registered nickname.", target);
 		return;
 	}
 
@@ -128,7 +128,7 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	if (!host)
 	{
 		metadata_delete(mu, METADATA_USER, "private:usercloak");
-		notice(nicksvs.nick, si->su->nick, "Deleted vhost for \2%s\2.", target);
+		command_success_nodata(si, "Deleted vhost for \2%s\2.", target);
 		snoop("VHOST:REMOVE: \2%s\2 by \2%s\2", target, si->su->nick);
 		logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "VHOST REMOVE %s", target);
 		do_restorehost_all(mu);
@@ -139,18 +139,18 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	if (strchr(host, '@') || strchr(host, '!') || strchr(host, '?') ||
 			strchr(host, '*'))
 	{
-		notice(nicksvs.nick, si->su->nick, "The vhost provided contains invalid characters.");
+		command_fail(si, fault_badparams, "The vhost provided contains invalid characters.");
 		return;
 	}
 	if (strlen(host) >= HOSTLEN)
 	{
-		notice(nicksvs.nick, si->su->nick, "The vhost provided is too long.");
+		command_fail(si, fault_badparams, "The vhost provided is too long.");
 		return;
 	}
 	/* XXX more checks here, perhaps as a configurable regexp? */
 
 	metadata_add(mu, METADATA_USER, "private:usercloak", host);
-	notice(nicksvs.nick, si->su->nick, "Assigned vhost \2%s\2 to \2%s\2.",
+	command_success_nodata(si, "Assigned vhost \2%s\2 to \2%s\2.",
 			host, target);
 	snoop("VHOST:ASSIGN: \2%s\2 to \2%s\2 by \2%s\2", host, target, si->su->nick);
 	logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "VHOST ASSIGN %s %s",

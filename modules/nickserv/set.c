@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 6367 2006-09-13 00:34:03Z jilles $
+ * $Id: set.c 6457 2006-09-25 10:33:40Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 6367 2006-09-13 00:34:03Z jilles $",
+	"$Id: set.c 6457 2006-09-25 10:33:40Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -32,14 +32,14 @@ static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 
 	if (si->su->myuser == NULL)
 	{
-		notice(nicksvs.nick, si->su->nick, "You are not logged in.");
+		command_fail(si, fault_authfail, "You are not logged in.");
 		return;
 	}
 
 	if (setting == NULL)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "SET");
-		notice(nicksvs.nick, si->su->nick, "Syntax: SET <setting> <parameters>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET");
+		command_fail(si, fault_needmoreparams, "Syntax: SET <setting> <parameters>");
 		return;
 	}
 
@@ -50,7 +50,7 @@ static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 	{
-		notice(nicksvs.nick, si->su->nick, "Invalid set command. Use \2/%s%s HELP SET\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.nick);
+		command_fail(si, fault_badparams, "Invalid set command. Use \2/%s%s HELP SET\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.nick);
 	}
 }
 
@@ -64,32 +64,32 @@ static void _ns_setemail(sourceinfo_t *si, int parc, char *parv[])
 
 	if (email == NULL)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "EMAIL");
-		notice(nicksvs.nick, si->su->nick, "Syntax: SET EMAIL <new e-mail>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "EMAIL");
+		command_fail(si, fault_needmoreparams, "Syntax: SET EMAIL <new e-mail>");
 		return;
 	}
 
 	if (strlen(email) >= EMAILLEN)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INVALID_PARAMS, "EMAIL");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "EMAIL");
 		return;
 	}
 
 	if (si->su->myuser->flags & MU_WAITAUTH)
 	{
-		notice(nicksvs.nick, si->su->nick, "Please verify your original registration before changing your e-mail address.");
+		command_fail(si, fault_authfail, "Please verify your original registration before changing your e-mail address.");
 		return;
 	}
 
 	if (!validemail(email))
 	{
-		notice(nicksvs.nick, si->su->nick, "\2%s\2 is not a valid email address.", email);
+		command_fail(si, fault_badparams, "\2%s\2 is not a valid email address.", email);
 		return;
 	}
 
 	if (!strcasecmp(si->su->myuser->email, email))
 	{
-		notice(nicksvs.nick, si->su->nick, "The email address for \2%s\2 is already set to \2%s\2.", si->su->myuser->name, si->su->myuser->email);
+		command_fail(si, fault_badparams, "The email address for \2%s\2 is already set to \2%s\2.", si->su->myuser->name, si->su->myuser->email);
 		return;
 	}
 
@@ -105,7 +105,7 @@ static void _ns_setemail(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!sendemail(si->su, EMAIL_SETEMAIL, si->su->myuser, itoa(key)))
 		{
-			notice(nicksvs.nick, si->su->nick, "Sending email failed, sorry! Your email address is unchanged.");
+			command_fail(si, fault_emailfail, "Sending email failed, sorry! Your email address is unchanged.");
 			metadata_delete(si->su->myuser, METADATA_USER, "private:verify:emailchg:key");
 			metadata_delete(si->su->myuser, METADATA_USER, "private:verify:emailchg:newemail");
 			metadata_delete(si->su->myuser, METADATA_USER, "private:verify:emailchg:timestamp");
@@ -113,8 +113,8 @@ static void _ns_setemail(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		logcommand(nicksvs.me, si->su, CMDLOG_SET, "SET EMAIL %s (awaiting verification)", email);
-		notice(nicksvs.nick, si->su->nick, "An email containing email changing instructions has been sent to \2%s\2.", email);
-		notice(nicksvs.nick, si->su->nick, "Your email address will not be changed until you follow these instructions.");
+		command_success_nodata(si, "An email containing email changing instructions has been sent to \2%s\2.", email);
+		command_success_nodata(si, "Your email address will not be changed until you follow these instructions.");
 
 		return;
 	}
@@ -122,7 +122,7 @@ static void _ns_setemail(sourceinfo_t *si, int parc, char *parv[])
 	strlcpy(si->su->myuser->email, email, EMAILLEN);
 
 	logcommand(nicksvs.me, si->su, CMDLOG_SET, "SET EMAIL %s", email);
-	notice(nicksvs.nick, si->su->nick, "The email address for \2%s\2 has been changed to \2%s\2.", si->su->myuser->name, si->su->myuser->email);
+	command_success_nodata(si, "The email address for \2%s\2 has been changed to \2%s\2.", si->su->myuser->name, si->su->myuser->email);
 }
 
 command_t ns_set_email = { "EMAIL", "Changes the e-mail address associated with a nickname.", AC_NONE, 1, _ns_setemail };
@@ -137,7 +137,7 @@ static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 
 	if (params == NULL)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "HIDEMAIL");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "HIDEMAIL");
 		return;
 	}
 
@@ -145,7 +145,7 @@ static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MU_HIDEMAIL & si->su->myuser->flags)
 		{
-			notice(nicksvs.nick, si->su->nick, "The \2HIDEMAIL\2 flag is already set for \2%s\2.", si->su->myuser->name);
+			command_fail(si, fault_badparams, "The \2HIDEMAIL\2 flag is already set for \2%s\2.", si->su->myuser->name);
 			return;
 		}
 
@@ -153,7 +153,7 @@ static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 
 		si->su->myuser->flags |= MU_HIDEMAIL;
 
-		notice(nicksvs.nick, si->su->nick, "The \2HIDEMAIL\2 flag has been set for \2%s\2.", si->su->myuser->name);
+		command_success_nodata(si, "The \2HIDEMAIL\2 flag has been set for \2%s\2.", si->su->myuser->name);
 
 		return;
 	}
@@ -161,7 +161,7 @@ static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(MU_HIDEMAIL & si->su->myuser->flags))
 		{
-			notice(nicksvs.nick, si->su->nick, "The \2HIDEMAIL\2 flag is not set for \2%s\2.", si->su->myuser->name);
+			command_fail(si, fault_badparams, "The \2HIDEMAIL\2 flag is not set for \2%s\2.", si->su->myuser->name);
 			return;
 		}
 
@@ -169,14 +169,13 @@ static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 
 		si->su->myuser->flags &= ~MU_HIDEMAIL;
 
-		notice(nicksvs.nick, si->su->nick, "The \2HIDEMAIL\2 flag has been removed for \2%s\2.", si->su->myuser->name);
+		command_success_nodata(si, "The \2HIDEMAIL\2 flag has been removed for \2%s\2.", si->su->myuser->name);
 
 		return;
 	}
-
 	else
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INVALID_PARAMS, "HIDEMAIL");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "HIDEMAIL");
 		return;
 	}
 }
@@ -192,13 +191,13 @@ static void _ns_setemailmemos(sourceinfo_t *si, int parc, char *parv[])
 
 	if (si->su->myuser->flags & MU_WAITAUTH)
 	{
-		notice(nicksvs.nick, si->su->nick, "You have to verify your email address before you can enable emailing memos.");
+		command_fail(si, fault_authfail, "You have to verify your email address before you can enable emailing memos.");
 		return;
 	}
 
 	if (params == NULL)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "EMAILMEMOS");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "EMAILMEMOS");
 		return;
 	}
 
@@ -206,18 +205,18 @@ static void _ns_setemailmemos(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (me.mta == NULL)
 		{
-			notice(nicksvs.nick, si->su->nick, "Sending email is administratively disabled.");
+			command_fail(si, fault_emailfail, "Sending email is administratively disabled.");
 			return;
 		}
 		if (MU_EMAILMEMOS & si->su->myuser->flags)
 		{
-			notice(nicksvs.nick, si->su->nick, "The \2EMAILMEMOS\2 flag is already set for \2%s\2.", si->su->myuser->name);
+			command_fail(si, fault_badparams, "The \2EMAILMEMOS\2 flag is already set for \2%s\2.", si->su->myuser->name);
 			return;
 		}
 
 		logcommand(nicksvs.me, si->su, CMDLOG_SET, "SET EMAILMEMOS ON");
 		si->su->myuser->flags |= MU_EMAILMEMOS;
-		notice(nicksvs.nick, si->su->nick, "The \2EMAILMEMOS\2 flag has been set for \2%s\2.", si->su->myuser->name);
+		command_success_nodata(si, "The \2EMAILMEMOS\2 flag has been set for \2%s\2.", si->su->myuser->name);
 		return;
 	}
 
@@ -225,19 +224,18 @@ static void _ns_setemailmemos(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(MU_EMAILMEMOS & si->su->myuser->flags))
 		{
-			notice(nicksvs.nick, si->su->nick, "The \2EMAILMEMOS\2 flag is not set for \2%s\2.", si->su->myuser->name);
+			command_fail(si, fault_badparams, "The \2EMAILMEMOS\2 flag is not set for \2%s\2.", si->su->myuser->name);
 			return;
 		}
 
 		logcommand(nicksvs.me, si->su, CMDLOG_SET, "SET EMAILMEMOS OFF");
 		si->su->myuser->flags &= ~MU_EMAILMEMOS;
-		notice(nicksvs.nick, si->su->nick, "The \2EMAILMEMOS\2 flag has been removed for \2%s\2.", si->su->myuser->name);
+		command_success_nodata(si, "The \2EMAILMEMOS\2 flag has been removed for \2%s\2.", si->su->myuser->name);
 		return;
 	}
-
 	else
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INVALID_PARAMS, "EMAILMEMOS");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "EMAILMEMOS");
 		return;
 	}
 }
@@ -253,7 +251,7 @@ static void _ns_setnomemo(sourceinfo_t *si, int parc, char *parv[])
 
 	if (params == NULL)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "NOMEMO");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "NOMEMO");
 		return;
 	}
 
@@ -261,13 +259,13 @@ static void _ns_setnomemo(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MU_NOMEMO & si->su->myuser->flags)
 		{
-			notice(nicksvs.nick, si->su->nick, "The \2NOMEMO\2 flag is already set for \2%s\2.", si->su->myuser->name);
+			command_fail(si, fault_badparams, "The \2NOMEMO\2 flag is already set for \2%s\2.", si->su->myuser->name);
 			return;
 		}
 
 		logcommand(nicksvs.me, si->su, CMDLOG_SET, "SET NOMEMO ON");
 		si->su->myuser->flags |= MU_NOMEMO;
-		notice(nicksvs.nick, si->su->nick, "The \2NOMEMO\2 flag has been set for \2%s\2.", si->su->myuser->name);
+		command_success_nodata(si, "The \2NOMEMO\2 flag has been set for \2%s\2.", si->su->myuser->name);
 		return;
 	}
 
@@ -275,19 +273,18 @@ static void _ns_setnomemo(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(MU_NOMEMO & si->su->myuser->flags))
 		{
-			notice(nicksvs.nick, si->su->nick, "The \2NOMEMO\2 flag is not set for \2%s\2.", si->su->myuser->name);
+			command_fail(si, fault_badparams, "The \2NOMEMO\2 flag is not set for \2%s\2.", si->su->myuser->name);
 			return;
 		}
 
 		logcommand(nicksvs.me, si->su, CMDLOG_SET, "SET NOMEMO OFF");
 		si->su->myuser->flags &= ~MU_NOMEMO;
-		notice(nicksvs.nick, si->su->nick, "The \2NOMEMO\2 flag has been removed for \2%s\2.", si->su->myuser->name);
+		command_success_nodata(si, "The \2NOMEMO\2 flag has been removed for \2%s\2.", si->su->myuser->name);
 		return;
 	}
-
 	else
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INVALID_PARAMS, "NOMEMO");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "NOMEMO");
 		return;
 	}
 }
@@ -303,7 +300,7 @@ static void _ns_setneverop(sourceinfo_t *si, int parc, char *parv[])
 
 	if (params == NULL)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "NEVEROP");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "NEVEROP");
 		return;
 	}
 
@@ -311,7 +308,7 @@ static void _ns_setneverop(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MU_NEVEROP & si->su->myuser->flags)
 		{
-			notice(nicksvs.nick, si->su->nick, "The \2NEVEROP\2 flag is already set for \2%s\2.", si->su->myuser->name);
+			command_fail(si, fault_badparams, "The \2NEVEROP\2 flag is already set for \2%s\2.", si->su->myuser->name);
 			return;
 		}
 
@@ -319,7 +316,7 @@ static void _ns_setneverop(sourceinfo_t *si, int parc, char *parv[])
 
 		si->su->myuser->flags |= MU_NEVEROP;
 
-		notice(nicksvs.nick, si->su->nick, "The \2NEVEROP\2 flag has been set for \2%s\2.", si->su->myuser->name);
+		command_success_nodata(si, "The \2NEVEROP\2 flag has been set for \2%s\2.", si->su->myuser->name);
 
 		return;
 	}
@@ -328,7 +325,7 @@ static void _ns_setneverop(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(MU_NEVEROP & si->su->myuser->flags))
 		{
-			notice(nicksvs.nick, si->su->nick, "The \2NEVEROP\2 flag is not set for \2%s\2.", si->su->myuser->name);
+			command_fail(si, fault_badparams, "The \2NEVEROP\2 flag is not set for \2%s\2.", si->su->myuser->name);
 			return;
 		}
 
@@ -336,14 +333,14 @@ static void _ns_setneverop(sourceinfo_t *si, int parc, char *parv[])
 
 		si->su->myuser->flags &= ~MU_NEVEROP;
 
-		notice(nicksvs.nick, si->su->nick, "The \2NEVEROP\2 flag has been removed for \2%s\2.", si->su->myuser->name);
+		command_success_nodata(si, "The \2NEVEROP\2 flag has been removed for \2%s\2.", si->su->myuser->name);
 
 		return;
 	}
 
 	else
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INVALID_PARAMS, "NEVEROP");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "NEVEROP");
 		return;
 	}
 }
@@ -359,7 +356,7 @@ static void _ns_setnoop(sourceinfo_t *si, int parc, char *parv[])
 
 	if (params == NULL)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "NOOP");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "NOOP");
 		return;
 	}
 
@@ -367,7 +364,7 @@ static void _ns_setnoop(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MU_NOOP & si->su->myuser->flags)
 		{
-			notice(nicksvs.nick, si->su->nick, "The \2NOOP\2 flag is already set for \2%s\2.", si->su->myuser->name);
+			command_fail(si, fault_badparams, "The \2NOOP\2 flag is already set for \2%s\2.", si->su->myuser->name);
 			return;
 		}
 
@@ -375,7 +372,7 @@ static void _ns_setnoop(sourceinfo_t *si, int parc, char *parv[])
 
 		si->su->myuser->flags |= MU_NOOP;
 
-		notice(nicksvs.nick, si->su->nick, "The \2NOOP\2 flag has been set for \2%s\2.", si->su->myuser->name);
+		command_success_nodata(si, "The \2NOOP\2 flag has been set for \2%s\2.", si->su->myuser->name);
 
 		return;
 	}
@@ -383,7 +380,7 @@ static void _ns_setnoop(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(MU_NOOP & si->su->myuser->flags))
 		{
-			notice(nicksvs.nick, si->su->nick, "The \2NOOP\2 flag is not set for \2%s\2.", si->su->myuser->name);
+			command_fail(si, fault_badparams, "The \2NOOP\2 flag is not set for \2%s\2.", si->su->myuser->name);
 			return;
 		}
 
@@ -391,14 +388,14 @@ static void _ns_setnoop(sourceinfo_t *si, int parc, char *parv[])
 
 		si->su->myuser->flags &= ~MU_NOOP;
 
-		notice(nicksvs.nick, si->su->nick, "The \2NOOP\2 flag has been removed for \2%s\2.", si->su->myuser->name);
+		command_success_nodata(si, "The \2NOOP\2 flag has been removed for \2%s\2.", si->su->myuser->name);
 
 		return;
 	}
 
 	else
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INVALID_PARAMS, "NOOP");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "NOOP");
 		return;
 	}
 }
@@ -415,13 +412,13 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!property)
 	{
-		notice(nicksvs.nick, si->su->nick, "Syntax: SET PROPERTY <property> [value]");
+		command_fail(si, fault_needmoreparams, "Syntax: SET PROPERTY <property> [value]");
 		return;
 	}
 
 	if (strchr(property, ':') && !has_priv(si->su, PRIV_METADATA))
 	{
-		notice(nicksvs.nick, si->su->nick, "Invalid property name.");
+		command_fail(si, fault_badparams, "Invalid property name.");
 		return;
 	}
 
@@ -430,7 +427,7 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 
 	if (si->su->myuser->metadata.count >= me.mdlimit)
 	{
-		notice(nicksvs.nick, si->su->nick, "Cannot add \2%s\2 to \2%s\2 metadata table, it is full.",
+		command_fail(si, fault_toomany, "Cannot add \2%s\2 to \2%s\2 metadata table, it is full.",
 					property, si->su->myuser->name);
 		return;
 	}
@@ -441,25 +438,25 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!md)
 		{
-			notice(nicksvs.nick, si->su->nick, "Metadata entry \2%s\2 was not set.", property);
+			command_fail(si, fault_nosuch_target, "Metadata entry \2%s\2 was not set.", property);
 			return;
 		}
 
 		metadata_delete(si->su->myuser, METADATA_USER, property);
 		logcommand(nicksvs.me, si->su, CMDLOG_SET, "SET PROPERTY %s (deleted)", property);
-		notice(nicksvs.nick, si->su->nick, "Metadata entry \2%s\2 has been deleted.", property);
+		command_success_nodata(si, "Metadata entry \2%s\2 has been deleted.", property);
 		return;
 	}
 
 	if (strlen(property) > 32 || strlen(value) > 300)
 	{
-		notice(nicksvs.nick, si->su->nick, "Parameters are too long. Aborting.");
+		command_fail(si, fault_badparams, "Parameters are too long. Aborting.");
 		return;
 	}
 
 	metadata_add(si->su->myuser, METADATA_USER, property, value);
 	logcommand(nicksvs.me, si->su, CMDLOG_SET, "SET PROPERTY %s to %s", property, value);
-	notice(nicksvs.nick, si->su->nick, "Metadata entry \2%s\2 added.", property);
+	command_success_nodata(si, "Metadata entry \2%s\2 added.", property);
 }
 
 command_t ns_set_property = { "PROPERTY", "Manipulates metadata entries associated with a nickname.", AC_NONE, 2, _ns_setproperty };
@@ -473,20 +470,20 @@ static void _ns_setpassword(sourceinfo_t *si, int parc, char *parv[])
 
 	if (password == NULL)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "PASSWORD");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "PASSWORD");
 		return;
 	}
 
 	if (strlen(password) > 32)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INVALID_PARAMS, "PASSWORD");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "PASSWORD");
 		return;
 	}
 
 	if (!strcasecmp(password, si->su->myuser->name))
 	{
-		notice(nicksvs.nick, si->su->nick, "You cannot use your nickname as a password.");
-		notice(nicksvs.nick, si->su->nick, "Syntax: SET PASSWORD <new password>");
+		command_fail(si, fault_badparams, "You cannot use your nickname as a password.");
+		command_fail(si, fault_badparams, "Syntax: SET PASSWORD <new password>");
 		return;
 	}
 
@@ -495,7 +492,7 @@ static void _ns_setpassword(sourceinfo_t *si, int parc, char *parv[])
 
 	set_password(si->su->myuser, password);
 
-	notice(nicksvs.nick, si->su->nick, "The password for \2%s\2 has been changed to \2%s\2. Please write this down for future reference.", si->su->myuser->name, password);
+	command_success_nodata(si, "The password for \2%s\2 has been changed to \2%s\2. Please write this down for future reference.", si->su->myuser->name, password);
 
 	return;
 }

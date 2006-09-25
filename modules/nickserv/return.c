@@ -4,7 +4,7 @@
  *
  * Implements nickserv RETURN.
  *
- * $Id: return.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: return.c 6457 2006-09-25 10:33:40Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/return", FALSE, _modinit, _moddeinit,
-	"$Id: return.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: return.c 6457 2006-09-25 10:33:40Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -47,27 +47,27 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!target || !newmail)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "RETURN");
-		notice(nicksvs.nick, si->su->nick, "Usage: RETURN <nickname> <e-mail address>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RETURN");
+		command_fail(si, fault_needmoreparams, "Usage: RETURN <nickname> <e-mail address>");
 		return;
 	}
 
 	if (!(mu = myuser_find(target)))
 	{
-		notice(nicksvs.nick, si->su->nick, "\2%s\2 is not registered.", target);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", target);
 		return;
 	}
 
 	if (is_soper(mu))
 	{
 		logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "failed RETURN %s to %s (is SOPER)", target, newmail);
-		notice(nicksvs.nick, si->su->nick, "\2%s\2 belongs to a services operator; it cannot be returned.", target);
+		command_fail(si, fault_badparams, "\2%s\2 belongs to a services operator; it cannot be returned.", target);
 		return;
 	}
 
 	if ((strlen(newmail) > 32) || !validemail(newmail))
 	{
-		notice(nicksvs.nick, si->su->nick, "\2%s\2 is not a valid e-mail address.", newmail);
+		command_fail(si, fault_badparams, "\2%s\2 is not a valid e-mail address.", newmail);
 		return;
 	}
 
@@ -78,7 +78,7 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 	if (!sendemail(si->su, EMAIL_SENDPASS, mu, newpass))
 	{
 		strlcpy(mu->email, oldmail, EMAILLEN);
-		notice(nicksvs.nick, si->su->nick, "Sending email failed, nickname \2%s\2 remains with \2%s\2.",
+		command_fail(si, fault_emailfail, "Sending email failed, nickname \2%s\2 remains with \2%s\2.",
 				mu->name, mu->email);
 		return;
 	}
@@ -94,8 +94,8 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 
 	wallops("%s returned the nickname \2%s\2 to \2%s\2", si->su->nick, target, newmail);
 	logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "RETURN %s to %s", target, newmail);
-	notice(nicksvs.nick, si->su->nick, "The e-mail address for \2%s\2 has been set to \2%s\2",
+	command_success_nodata(si, "The e-mail address for \2%s\2 has been set to \2%s\2",
 						target, newmail);
-	notice(nicksvs.nick, si->su->nick, "A random password has been set; it has been sent to \2%s\2.",
+	command_success_nodata(si, "A random password has been set; it has been sent to \2%s\2.",
 						newmail);
 }

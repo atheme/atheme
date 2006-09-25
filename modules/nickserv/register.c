@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: register.c 6457 2006-09-25 10:33:40Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: register.c 6457 2006-09-25 10:33:40Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -65,40 +65,40 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 
 	if (u->myuser)
 	{
-		notice(nicksvs.nick, si->su->nick, "You are already logged in.");
+		command_fail(si, fault_already_authed, "You are already logged in.");
 		return;
 	}
 
 	if (!pass || !email)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "REGISTER");
-		notice(nicksvs.nick, si->su->nick, "Syntax: REGISTER <password> <email>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "REGISTER");
+		command_fail(si, fault_needmoreparams, "Syntax: REGISTER <password> <email>");
 		return;
 	}
 
 	if ((strlen(pass) > 32) || (strlen(email) >= EMAILLEN))
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INVALID_PARAMS, "REGISTER");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "REGISTER");
 		return;
 	}
 
 	if (IsDigit(*u->nick))
 	{
-		notice(nicksvs.nick, si->su->nick, "For security reasons, you can't register your UID.");
-		notice(nicksvs.nick, si->su->nick, "Please change to a real nickname, and try again.");
+		command_fail(si, fault_badparams, "For security reasons, you can't register your UID.");
+		command_fail(si, fault_badparams, "Please change to a real nickname, and try again.");
 		return;
 	}
 
 	if (!strcasecmp(pass, si->su->nick))
 	{
-		notice(nicksvs.nick, si->su->nick, "You cannot use your nickname as a password.");
-		notice(nicksvs.nick, si->su->nick, "Syntax: REGISTER <password> <email>");
+		command_fail(si, fault_badparams, "You cannot use your nickname as a password.");
+		command_fail(si, fault_badparams, "Syntax: REGISTER <password> <email>");
 		return;
 	}
 
 	if (!validemail(email))
 	{
-		notice(nicksvs.nick, si->su->nick, "\2%s\2 is not a valid email address.", email);
+		command_fail(si, fault_badparams, "\2%s\2 is not a valid email address.", email);
 		return;
 	}
 
@@ -106,8 +106,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	mu = myuser_find(si->su->nick);
 	if (mu != NULL)
 	{
-		notice(nicksvs.nick, si->su->nick, "\2%s\2 is already registered.", mu->name);
-
+		command_fail(si, fault_alreadyexists, "\2%s\2 is already registered.", mu->name);
 		return;
 	}
 
@@ -117,7 +116,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 
 	if (tcnt >= me.maxusers)
 	{
-		notice(nicksvs.nick, si->su->nick, "\2%s\2 has too many nicknames registered.", email);
+		command_fail(si, fault_toomany, "\2%s\2 has too many nicknames registered.", email);
 		return;
 	}
 
@@ -135,14 +134,14 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!sendemail(u, EMAIL_REGISTER, mu, key))
 		{
-			notice(nicksvs.nick, si->su->nick, "Sending email failed, sorry! Registration aborted.");
+			command_fail(si, fault_emailfail, "Sending email failed, sorry! Registration aborted.");
 			myuser_delete(mu);
 			free(key);
 			return;
 		}
 
-		notice(nicksvs.nick, si->su->nick, "An email containing nickname activation instructions has been sent to \2%s\2.", mu->email);
-		notice(nicksvs.nick, si->su->nick, "If you do not complete registration within one day your nickname will expire.");
+		command_success_nodata(si, "An email containing nickname activation instructions has been sent to \2%s\2.", mu->email);
+		command_success_nodata(si, "If you do not complete registration within one day your nickname will expire.");
 
 		free(key);
 	}
@@ -163,8 +162,8 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		snoop("SOPER: \2%s\2 as \2%s\2", u->nick, mu->name);
 	}
 
-	notice(nicksvs.nick, si->su->nick, "\2%s\2 is now registered to \2%s\2.", mu->name, mu->email);
-	notice(nicksvs.nick, si->su->nick, "The password is \2%s\2. Please write this down for future reference.", pass);
+	command_success_nodata(si, "\2%s\2 is now registered to \2%s\2.", mu->name, mu->email);
+	command_success_nodata(si, "The password is \2%s\2. Please write this down for future reference.", pass);
 	hook_call_event("user_register", mu);
 
 	snprintf(lau, BUFSIZE, "%s@%s", u->user, u->vhost);

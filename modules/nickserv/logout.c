@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGOUT functions.
  *
- * $Id: logout.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: logout.c 6457 2006-09-25 10:33:40Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/logout", FALSE, _modinit, _moddeinit,
-	"$Id: logout.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: logout.c 6457 2006-09-25 10:33:40Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -46,7 +46,7 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 
 	if ((!si->su->myuser) && (!user || !pass))
 	{
-		notice(nicksvs.nick, si->su->nick, "You are not logged in.");
+		command_fail(si, fault_authfail, "You are not logged in.");
 		return;
 	}
 
@@ -56,7 +56,7 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!mu)
 		{
-			notice(nicksvs.nick, si->su->nick, "\2%s\2 is not registered.", user);
+			command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", user);
 			return;
 		}
 
@@ -64,16 +64,16 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 		if ((verify_password(mu, pass)) && (mu->user))
 		{
 			u = mu->user;
-			notice(u->nick, "You were logged out by \2%s\2.", origin);
+			notice(nicksvs.nick, u->nick, "You were logged out by \2%s\2.", si->su->nick);
 		}
 		else
 		{
-			notice(nicksvs.nick, origin, "Authentication failed. Invalid password for \2%s\2.", mu->name);
+			command_fail(si, fault_authfail, "Authentication failed. Invalid password for \2%s\2.", mu->name);
 			return;
 		}
 #endif
 		/* remove this for now -- jilles */
-		notice(nicksvs.nick, si->su->nick, "External logout is not yet implemented.");
+		command_fail(si, fault_unimplemented, "External logout is not yet implemented.");
 		return;
 	}
 
@@ -83,12 +83,12 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 	if (si->su != u)
 	{
 		logcommand(nicksvs.me, si->su, CMDLOG_LOGIN, "LOGOUT %s", u->nick);
-		notice(nicksvs.nick, si->su->nick, "\2%s\2 has been logged out.", si->su->nick);
+		command_success_nodata(si, "\2%s\2 has been logged out.", si->su->nick);
 	}
 	else
 	{
 		logcommand(nicksvs.me, si->su, CMDLOG_LOGIN, "LOGOUT");
-		notice(nicksvs.nick, si->su->nick, "You have been logged out.");
+		command_success_nodata(si, "You have been logged out.");
 	}
 
 	si->su->myuser->lastlogin = CURRTIME;
