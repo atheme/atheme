@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 6445 2006-09-24 16:52:33Z w00t $
+ * $Id: inspircd11.c 6451 2006-09-25 09:03:29Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 6445 2006-09-24 16:52:33Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 6451 2006-09-25 09:03:29Z nenolod $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -523,8 +523,8 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 	uint8_t i;
 	uint8_t j;
 	uint8_t nlen;
-	boolean_t prefix = true;
-	boolean_t keep_new_modes = true;
+	boolean_t prefix = TRUE;
+	boolean_t keep_new_modes = TRUE;
 	char *userv[256];
 	char prefixandnick[51];
 	time_t ts;
@@ -572,7 +572,7 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 	for (i = 0; i < userc; i++)
 	{
 		nlen = 0;
-		prefix = true;
+		prefix = TRUE;
 
 		slog(LG_DEBUG, "m_fjoin(): processing user: %s", userv[i]);
 
@@ -894,12 +894,12 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (strstr(parv[1], "m_services_account.so"))
 		{
-			has_servicesmod = true;
+			has_servicesmod = TRUE;
 		}
 
 		if (strstr(parv[1], "m_globops.so"))
 		{
-			has_globopsmod = true;
+			has_globopsmod = TRUE;
 		}
 	}
 	else if (strcasecmp(parv[0], "END") == 0)
