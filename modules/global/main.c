@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6417 2006-09-21 17:33:29Z jilles $
+ * $Id: main.c 6471 2006-09-25 15:09:54Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"global/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6417 2006-09-21 17:33:29Z jilles $",
+	"$Id: main.c 6471 2006-09-25 15:09:54Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -55,7 +55,7 @@ static void gs_cmd_help(sourceinfo_t *si, const int parc, char *parv[])
 	if (!command)
 	{
 		command_help(globsvs.nick, si->su->nick, &gs_cmdtree);
-		notice(globsvs.nick, si->su->nick, "For more specific help use \2HELP \37command\37\2.");
+		command_success_nodata(si, "For more specific help use \2HELP \37command\37\2.");
 
 		return;
 	}
@@ -79,8 +79,8 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 
 	if (!params)
 	{
-		notice(globsvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "GLOBAL");
-		notice(globsvs.nick, si->su->nick, "Syntax: GLOBAL <parameters>|SEND|CLEAR");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "GLOBAL");
+		command_fail(si, fault_needmoreparams, "Syntax: GLOBAL <parameters>|SEND|CLEAR");
 		return;
 	}
 
@@ -88,7 +88,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 	{
 		if (!globlist.count)
 		{
-			notice(globsvs.nick, si->su->nick, "No message to clear.");
+			command_fail(si, fault_nochange, "No message to clear.");
 			return;
 		}
 
@@ -107,7 +107,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 		free(sender);
 		sender = NULL;
 
-		notice(globsvs.nick, si->su->nick, "The pending message has been deleted.");
+		command_success_nodata(si, "The pending message has been deleted.");
 
 		return;
 	}
@@ -116,7 +116,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 	{
 		if (!globlist.count)
 		{
-			notice(globsvs.nick, si->su->nick, "No message to send.");
+			command_fail(si, fault_nosuch_target, "No message to send.");
 			return;
 		}
 
@@ -153,7 +153,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 
 		snoop("GLOBAL: \2%s\2", si->su->nick);
 
-		notice(globsvs.nick, si->su->nick, "The global notice has been sent.");
+		command_success_nodata(si, "The global notice has been sent.");
 
 		return;
 	}
@@ -166,7 +166,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 
 	if (irccasecmp(sender, si->su->nick))
 	{
-		notice(globsvs.nick, si->su->nick, "There is already a GLOBAL in progress by \2%s\2.", sender);
+		command_fail(si, fault_noprivs, "There is already a GLOBAL in progress by \2%s\2.", sender);
 		return;
 	}
 
@@ -177,7 +177,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 	n = node_create();
 	node_add(global, n, &globlist);
 
-	notice(globsvs.nick, si->su->nick,
+	command_success_nodata(si,
 		"Stored text to be sent as line %d. Use \2GLOBAL SEND\2 "
 		"to send message, \2GLOBAL CLEAR\2 to delete the pending message, " "or \2GLOBAL\2 to store additional lines.", globlist.count);
 }

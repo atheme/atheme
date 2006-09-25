@@ -1,3 +1,16 @@
+jilles      2006/09/25 15:03:30 UTC	(20060925-6469)
+  Log:
+  Do the rest of the easy operserv notice substitutions.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/operserv/akill.c (File Modified) 
+  +2 -2		trunk/modules/operserv/rwatch.c (File Modified) 
+  +14 -14	trunk/modules/operserv/specs.c (File Modified) 
+  +2 -0		trunk/modules/operserv/update.c (File Modified) 
+  +5 -5		trunk/modules/operserv/uptime.c (File Modified) 
+
+
 jilles      2006/09/25 13:54:27 UTC	(20060925-6467)
   Log:
   Convert two more operserv modules.
