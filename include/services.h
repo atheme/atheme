@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 6455 2006-09-25 10:05:22Z nenolod $
+ * $Id: services.h 6479 2006-09-25 16:41:02Z jilles $
  */
 
 #ifndef SERVICES_H
@@ -91,6 +91,7 @@ struct helpsvs_
 struct nicksvs_
 {
   boolean_t  spam;
+  boolean_t  no_nick_ownership;
 
   char   *nick;
   char   *user;

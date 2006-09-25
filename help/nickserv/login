@@ -1,0 +1,10 @@
+Help for LOGIN:
+
+LOGIN identifies you with services so that you
+can perform general maintenance and commands that
+require you to be logged in.
+
+Syntax: LOGIN <account> <password>
+
+Example:
+    /msg &nick& LOGIN smith sesame

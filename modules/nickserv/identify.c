@@ -1,25 +1,38 @@
 /*
- * Copyright (c) 2005 William Pitcock, et al.
+ * Copyright (c) 2005-2006 William Pitcock, et al.
  * Rights to this code are as documented in doc/LICENSE.
  *
- * This file contains code for the NickServ IDENTIFY function.
+ * This file contains code for the NickServ IDENTIFY and LOGIN functions.
  *
- * $Id: identify.c 6477 2006-09-25 15:24:55Z jilles $
+ * $Id: identify.c 6479 2006-09-25 16:41:02Z jilles $
  */
 
 #include "atheme.h"
 
+/* Check whether we are compiling IDENTIFY or LOGIN */
+#ifdef NICKSERV_LOGIN
+#define COMMAND_UC "LOGIN"
+#define COMMAND_LC "login"
+#else
+#define COMMAND_UC "IDENTIFY"
+#define COMMAND_LC "identify"
+#endif
+
 DECLARE_MODULE_V1
 (
-	"nickserv/identify", FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 6477 2006-09-25 15:24:55Z jilles $",
+	"nickserv/" COMMAND_LC, FALSE, _modinit, _moddeinit,
+	"$Id: identify.c 6479 2006-09-25 16:41:02Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void ns_cmd_identify(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_identify = { "IDENTIFY", "Identifies to services for a nickname.", AC_NONE, 2, ns_cmd_identify };
-command_t ns_id = { "ID", "Alias for IDENTIFY", AC_NONE, 2, ns_cmd_identify };
+#ifdef NICKSERV_LOGIN
+command_t ns_login = { "LOGIN", "Authenticates to a services account.", AC_NONE, 2, ns_cmd_login };
+#else
+command_t ns_identify = { "IDENTIFY", "Identifies to services for a nickname.", AC_NONE, 2, ns_cmd_login };
+command_t ns_id = { "ID", "Alias for IDENTIFY", AC_NONE, 2, ns_cmd_login };
+#endif
 
 list_t *ns_cmdtree, *ns_helptree, *ms_cmdtree;
 
@@ -28,28 +41,37 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
+#ifdef NICKSERV_LOGIN
+	command_add(&ns_login, ns_cmdtree);
+	help_addentry(ns_helptree, "LOGIN", "help/nickserv/login", NULL);
+#else
 	command_add(&ns_identify, ns_cmdtree);
 	command_add(&ns_id, ns_cmdtree);
 	help_addentry(ns_helptree, "IDENTIFY", "help/nickserv/identify", NULL);
 	help_addentry(ns_helptree, "ID", "help/nickserv/identify", NULL);
+#endif
 }
 
 void _moddeinit()
 {
+#ifdef NICKSERV_LOGIN
+	command_delete(&ns_login, ns_cmdtree);
+	help_delentry(ns_helptree, "LOGIN");
+#else
 	command_delete(&ns_identify, ns_cmdtree);
 	command_delete(&ns_id, ns_cmdtree);
 	help_delentry(ns_helptree, "IDENTIFY");
 	help_delentry(ns_helptree, "ID");
+#endif
 }
 
-static void ns_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
+static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u = si->su;
 	myuser_t *mu;
 	chanuser_t *cu;
 	chanacs_t *ca;
 	node_t *n, *tn;
-
 	char *target = parv[0];
 	char *password = parv[1];
 	char buf[BUFSIZE], strfbuf[32];
@@ -57,16 +79,18 @@ static void ns_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
 	struct tm tm;
 	metadata_t *md_failnum;
 
-	if (target && !password)
+#ifndef NICKSERV_LOGIN
+	if (!nicksvs.no_nick_ownership && target && !password)
 	{
 		password = target;
 		target = si->su->nick;
 	}
+#endif
 
-	if (!target && !password)
+	if (!target || !password)
 	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "IDENTIFY");
-		command_fail(si, fault_needmoreparams, "Syntax: IDENTIFY [nick] <password>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, COMMAND_UC);
+		command_fail(si, fault_needmoreparams, nicksvs.no_nick_ownership ? "Syntax: " COMMAND_UC " <account> <password>" : "Syntax: " COMMAND_UC " [nick] <password>");
 		return;
 	}
 
@@ -74,14 +98,14 @@ static void ns_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!mu)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not a registered nickname.", target);
+		command_fail(si, fault_nosuch_target, nicksvs.no_nick_ownership ? "\2%s\2 is not a registered account." : "\2%s\2 is not a registered nickname.", target);
 		return;
 	}
 
 	if (metadata_find(mu, METADATA_USER, "private:freeze:freezer"))
 	{
-		command_fail(si, fault_authfail, "You cannot identify to \2%s\2 because the nickname has been frozen.", mu->name);
-		logcommand(nicksvs.me, u, CMDLOG_LOGIN, "failed IDENTIFY to %s (frozen)", mu->name);
+		command_fail(si, fault_authfail, nicksvs.no_nick_ownership ? "You cannot login as \2%s\2 because the account has been frozen." : "You cannot identify to \2%s\2 because the nickname has been frozen.", mu->name);
+		logcommand(nicksvs.me, u, CMDLOG_LOGIN, "failed " COMMAND_UC " to %s (frozen)", mu->name);
 		return;
 	}
 
@@ -102,7 +126,7 @@ static void ns_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
 		if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
 		{
 			command_fail(si, fault_toomany, "There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d).", LIST_LENGTH(&mu->logins), mu->name, me.maxlogins);
-			logcommand(nicksvs.me, u, CMDLOG_LOGIN, "failed IDENTIFY to %s (too many logins)", mu->name);
+			logcommand(nicksvs.me, u, CMDLOG_LOGIN, "failed " COMMAND_UC " to %s (too many logins)", mu->name);
 			return;
 		}
 
@@ -145,9 +169,9 @@ static void ns_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
 		strlcat(lao, u->host, BUFSIZE);
 		metadata_add(mu, METADATA_USER, "private:host:actual", lao);
 
-		logcommand(nicksvs.me, u, CMDLOG_LOGIN, "IDENTIFY");
+		logcommand(nicksvs.me, u, CMDLOG_LOGIN, COMMAND_UC);
 
-		command_success_nodata(si, "You are now identified for \2%s\2.", u->myuser->name);
+		command_success_nodata(si, nicksvs.no_nick_ownership ? "You are now logged in as \2%s\2." : "You are now identified for \2%s\2.", u->myuser->name);
 
 		/* check for failed attempts and let them know */
 		if (md_failnum && (atoi(md_failnum->value) > 0))
@@ -252,7 +276,7 @@ static void ns_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	logcommand(nicksvs.me, u, CMDLOG_LOGIN, "failed IDENTIFY to %s (bad password)", mu->name);
+	logcommand(nicksvs.me, u, CMDLOG_LOGIN, "failed " COMMAND_UC " to %s (bad password)", mu->name);
 
 	command_fail(si, fault_authfail, "Invalid password for \2%s\2.", mu->name);
 

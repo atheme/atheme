@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 6417 2006-09-21 17:33:29Z jilles $
+ * $Id: unreal.c 6479 2006-09-25 16:41:02Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 6417 2006-09-21 17:33:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 6479 2006-09-25 16:41:02Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -337,7 +337,7 @@ static void unreal_on_login(char *origin, char *user, char *wantedhost)
 	/* Can only do this for nickserv, and can only record identified
 	 * state if logged in to correct nick, sorry -- jilles
 	 */
-	if (nicksvs.me == NULL || irccasecmp(origin, user))
+	if (nicksvs.no_nick_ownership || irccasecmp(origin, user))
 		return;
 
 	u = user_find(origin);
@@ -354,7 +354,7 @@ static boolean_t unreal_on_logout(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return FALSE;
 
-	if (nicksvs.me == NULL || irccasecmp(origin, user))
+	if (nicksvs.no_nick_ownership || irccasecmp(origin, user))
 		return FALSE;
 
 	sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, origin);

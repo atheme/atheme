@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ GHOST function.
  *
- * $Id: ghost.c 6457 2006-09-25 10:33:40Z nenolod $
+ * $Id: ghost.c 6479 2006-09-25 16:41:02Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/ghost", FALSE, _modinit, _moddeinit,
-	"$Id: ghost.c 6457 2006-09-25 10:33:40Z nenolod $",
+	"$Id: ghost.c 6479 2006-09-25 16:41:02Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -71,8 +71,8 @@ void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if ((target_u->myuser && target_u->myuser == si->su->myuser) || /* they're identified under our account */
-			(mu && mu == si->su->myuser) || /* we're identified under their account */
-			(password && mu && verify_password(mu, password))) /* we have their password */
+			(!nicksvs.no_nick_ownership && mu && mu == si->su->myuser) || /* we're identified under their account */
+			(!nicksvs.no_nick_ownership && password && mu && verify_password(mu, password))) /* we have their password */
 	{
 		/* If we're ghosting an unregistered nick, mu will be unset,
 		 * however if it _is_ registered, we still need to set it or

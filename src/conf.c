@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 6093 2006-08-17 15:36:43Z jilles $
+ * $Id: conf.c 6479 2006-09-25 16:41:02Z jilles $
  */
 
 #include "atheme.h"
@@ -87,6 +87,7 @@ static int c_ni_user(CONFIGENTRY *);
 static int c_ni_host(CONFIGENTRY *);
 static int c_ni_real(CONFIGENTRY *);
 static int c_ni_spam(CONFIGENTRY *);
+static int c_ni_no_nick_ownership(CONFIGENTRY *);
 
 /* UserServ client information. */
 static int c_ui_nick(CONFIGENTRY *);
@@ -557,6 +558,7 @@ void init_newconf(void)
 	add_conf_item("HOST", &conf_ni_table, c_ni_host);
 	add_conf_item("REAL", &conf_ni_table, c_ni_real);
 	add_conf_item("SPAM", &conf_ni_table, c_ni_spam);
+	add_conf_item("NO_NICK_OWNERSHIP", &conf_ni_table, c_ni_no_nick_ownership);
 
 	/* userserv{} block */
 	add_conf_item("NICK", &conf_ui_table, c_ui_nick);
@@ -1491,6 +1493,12 @@ static int c_ni_real(CONFIGENTRY *ce)
 static int c_ni_spam(CONFIGENTRY *ce)
 {
 	nicksvs.spam = TRUE;
+	return 0;
+}
+
+static int c_ni_no_nick_ownership(CONFIGENTRY *ce)
+{
+	nicksvs.no_nick_ownership = TRUE;
 	return 0;
 }
 

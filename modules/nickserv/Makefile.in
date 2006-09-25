@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 6051 2006-08-14 16:39:35Z jilles $
+# $Id: Makefile.in 6479 2006-09-25 16:41:02Z jilles $
 #
 
 CC		= @CC@
@@ -58,7 +58,7 @@ BASE_SRCS = 		\
 	
 SRCS = ${BASE_SRCS}
 
-OBJS = ${SRCS:.c=.so}
+OBJS = ${SRCS:.c=.so} login.so
 
 all: modules
 
@@ -74,6 +74,9 @@ modules: $(OBJS)
 
 .c.so:
 	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@
+
+login.so: identify.c
+	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} -DNICKSERV_LOGIN identify.c -o login.so
 
 .PHONY: depend clean distclean
 # This sed command sucks but I don't know a better way -- jilles
