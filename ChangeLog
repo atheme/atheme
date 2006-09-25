@@ -1,3 +1,33 @@
+jilles      2006/09/25 16:41:02 UTC	(20060925-6479)
+  Log:
+  Make it possible for nickserv to act as userserv
+  with the nickserv::no_nick_ownership option and
+  the nickserv/login module (compiled from the same
+  C file as nickserv/identify). It will still say
+  "nick" or "nickname" where it should say "account".
+  
+
+  Changes:	Modified:
+  +22 -0	trunk/dist/example.conf (File Modified) 
+  + -		trunk/help/nickserv/login (File Added) 
+  +1 -0		trunk/include/services.h (File Modified) 
+  +4 -1		trunk/modules/nickserv/Makefile.in (File Modified) 
+  +2 -2		trunk/modules/nickserv/ghost.c (File Modified) 
+  +43 -19	trunk/modules/nickserv/identify.c (File Modified) 
+  +2 -2		trunk/modules/xmlrpc/account.c (File Modified) 
+  +2 -2		trunk/protocol/bahamut.c (File Modified) 
+  +2 -2		trunk/protocol/dreamforge.c (File Modified) 
+  +2 -2		trunk/protocol/hyperion.c (File Modified) 
+  +2 -2		trunk/protocol/plexus.c (File Modified) 
+  +2 -2		trunk/protocol/ptlink.c (File Modified) 
+  +2 -2		trunk/protocol/shadowircd.c (File Modified) 
+  +2 -2		trunk/protocol/solidircd.c (File Modified) 
+  +2 -2		trunk/protocol/ultimate3.c (File Modified) 
+  +2 -2		trunk/protocol/unreal.c (File Modified) 
+  +8 -0		trunk/src/conf.c (File Modified) 
+  +1 -1		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/09/25 15:24:55 UTC	(20060925-6477)
   Log:
   get rid of useless md pointer like in userserv login
