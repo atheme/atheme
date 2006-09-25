@@ -1,3 +1,13 @@
+jilles      2006/09/25 13:54:27 UTC	(20060925-6467)
+  Log:
+  Convert two more operserv modules.
+  
+
+  Changes:	Modified:
+  +7 -7		trunk/modules/operserv/rmatch.c (File Modified) 
+  +1 -1		trunk/modules/operserv/rnc.c (File Modified) 
+
+
 jilles      2006/09/25 13:46:33 UTC	(20060925-6465)
   Log:
   Convert some more operserv modules.

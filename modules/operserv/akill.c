@@ -5,7 +5,7 @@
  * This file contains functionality which implements
  * the OperServ AKILL command.
  *
- * $Id: akill.c 6463 2006-09-25 13:03:41Z jilles $
+ * $Id: akill.c 6469 2006-09-25 15:03:30Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 6463 2006-09-25 13:03:41Z jilles $",
+	"$Id: akill.c 6469 2006-09-25 15:03:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -321,7 +321,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 				{
 					if (!(k = kline_find_num(i)))
 					{
-						notice(opersvs.nick, si->su->nick, "No such AKILL with number \2%d\2.", i);
+						command_fail(si, fault_nosuch_target, "No such AKILL with number \2%d\2.", i);
 						continue;
 					}
 

@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService UPDATE command.
  *
- * $Id: update.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: update.c 6469 2006-09-25 15:03:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/update", FALSE, _modinit, _moddeinit,
-	"$Id: update.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: update.c 6469 2006-09-25 15:03:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -45,4 +45,6 @@ void os_cmd_update(sourceinfo_t *si, int parc, char *parv[])
 	wallops("Updating database by request of \2%s\2.", si->su->nick);
 	expire_check(NULL);
 	db_save(NULL);
+	/* db_save() will wallops/snoop/log the error */
+	command_success_nodata(si, "UPDATE completed.");
 }

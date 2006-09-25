@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ RWATCH.
  *
- * $Id: rwatch.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: rwatch.c 6469 2006-09-25 15:03:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rwatch", FALSE, _modinit, _moddeinit,
-	"$Id: rwatch.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: rwatch.c 6469 2006-09-25 15:03:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -192,8 +192,8 @@ static void os_cmd_rwatch(sourceinfo_t *si, int parc, char *parv[])
 	/* Bad/missing arg */
 	if (!cmd)
 	{
-		notice(opersvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "RWATCH");
-		notice(opersvs.nick, si->su->nick, "Syntax: RWATCH ADD|DEL|LIST|SET");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RWATCH");
+		command_fail(si, fault_needmoreparams, "Syntax: RWATCH ADD|DEL|LIST|SET");
 		return;
 	}
 	

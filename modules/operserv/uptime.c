@@ -4,7 +4,7 @@
  *
  * This file contains code for OS UPTIME
  *
- * $Id: uptime.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: uptime.c 6469 2006-09-25 15:03:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/uptime", FALSE, _modinit, _moddeinit,
-	"$Id: uptime.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: uptime.c 6469 2006-09-25 15:03:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -42,10 +42,10 @@ static void os_cmd_uptime(sourceinfo_t *si, int parc, char *parv[])
 {
 	logcommand(opersvs.me, si->su, CMDLOG_GET, "UPTIME");
 
-        notice(opersvs.nick, si->su->nick, "atheme-%s [%s] #%s", version, revision, generation);
-        notice(opersvs.nick, si->su->nick, "Services have been up for %s", timediff(CURRTIME - me.start));
-        notice(opersvs.nick, si->su->nick, "Registered nicknames: %d", cnt.myuser);
-        notice(opersvs.nick, si->su->nick, "Registered channels: %d", cnt.mychan);
-        notice(opersvs.nick, si->su->nick, "Users currently online: %d", cnt.user - me.me->users);
+        command_success_nodata(si, "atheme-%s [%s] #%s", version, revision, generation);
+        command_success_nodata(si, "Services have been up for %s", timediff(CURRTIME - me.start));
+        command_success_nodata(si, "Registered nicknames: %d", cnt.myuser);
+        command_success_nodata(si, "Registered channels: %d", cnt.mychan);
+        command_success_nodata(si, "Users currently online: %d", cnt.user - me.me->users);
 }
 
