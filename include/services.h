@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 6453 2006-09-25 09:11:33Z nenolod $
+ * $Id: services.h 6455 2006-09-25 10:05:22Z nenolod $
  */
 
 #ifndef SERVICES_H
@@ -144,7 +144,8 @@ enum faultcode_
 	fault_emailfail = 10,
 	fault_notverified = 11,
 	fault_nochange = 12,
-	fault_already_authed = 13
+	fault_already_authed = 13,
+	fault_unimplemented = 14
 };
 typedef enum faultcode_ faultcode_t;
 
