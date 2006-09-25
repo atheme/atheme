@@ -1,3 +1,12 @@
+jilles      2006/09/25 15:09:54 UTC	(20060925-6471)
+  Log:
+  Convert global.
+  
+
+  Changes:	Modified:
+  +9 -9		trunk/modules/global/main.c (File Modified) 
+
+
 jilles      2006/09/25 15:03:30 UTC	(20060925-6469)
   Log:
   Do the rest of the easy operserv notice substitutions.
