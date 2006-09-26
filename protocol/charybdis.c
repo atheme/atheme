@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 6497 2006-09-26 16:23:41Z jilles $
+ * $Id: charybdis.c 6503 2006-09-26 17:28:33Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6497 2006-09-26 16:23:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6503 2006-09-26 17:28:33Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -977,17 +977,13 @@ static void m_euid(sourceinfo_t *si, int parc, char *parv[])
 			atoi(parv[2]));				/* hopcount */
 
 		user_mode(u, parv[3]);
-
-		/* If server is not yet EOB we will do this later.
-		 * This avoids useless "please identify" -- jilles
-		 *
-		 * But, if we have an account in the EUID message then
-		 * we just log them in *now* and don't bother with nagging
-		 * at all, period. -nenolod
-		 */
 		if (*parv[9] != '*')
 			handle_burstlogin(u, parv[9]);
-		else if (s->flags & SF_EOB)
+
+		/* server_eob() cannot know if a user was introduced
+		 * with NICK/UID or EUID and handle_nickchange() must
+		 * be called exactly once for each new user -- jilles */
+		if (s->flags & SF_EOB)
 			handle_nickchange(u);
 	}
 	else

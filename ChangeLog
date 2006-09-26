@@ -1,3 +1,12 @@
+jilles      2006/09/26 16:38:12 UTC	(20060926-6501)
+  Log:
+  Make indenting consistent.
+  
+
+  Changes:	Modified:
+  +10 -10	trunk/src/services.c (File Modified) 
+
+
 jilles      2006/09/26 16:31:54 UTC	(20060926-6499)
   Log:
   nickserv vhost: Refuse to set a vhost that looks like a cidr mask
