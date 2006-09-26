@@ -1,3 +1,14 @@
+jilles      2006/09/26 15:50:27 UTC	(20060926-6493)
+  Log:
+  Use the extension to the translation framework to
+  solve the pesky nickserv as userserv strings problem.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/identify.c (File Modified) 
+  +68 -0	trunk/modules/nickserv/main.c (File Modified) 
+
+
 jilles      2006/09/26 15:49:18 UTC	(20060926-6491)
   Log:
   Update nickserv register and help for accounts.
