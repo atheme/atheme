@@ -4,7 +4,7 @@
  *
  * Allows setting a vhost on an account
  *
- * $Id: vhost.c 6489 2006-09-26 15:47:06Z jilles $
+ * $Id: vhost.c 6499 2006-09-26 16:31:54Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 6489 2006-09-26 15:47:06Z jilles $",
+	"$Id: vhost.c 6499 2006-09-26 16:31:54Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -109,6 +109,7 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	char *target = parv[0];
 	char *host = parv[1];
 	myuser_t *mu;
+	char *p;
 
 	if (!target)
 	{
@@ -145,6 +146,12 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	if (strlen(host) >= HOSTLEN)
 	{
 		command_fail(si, fault_badparams, "The vhost provided is too long.");
+		return;
+	}
+	p = strrchr(host, '/');
+	if (p != NULL && isdigit(p[1]))
+	{
+		command_fail(si, fault_badparams, "The vhost provided looks like a CIDR mask.");
 		return;
 	}
 	/* XXX more checks here, perhaps as a configurable regexp? */
