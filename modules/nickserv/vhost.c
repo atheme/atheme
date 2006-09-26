@@ -4,7 +4,7 @@
  *
  * Allows setting a vhost on an account
  *
- * $Id: vhost.c 6457 2006-09-25 10:33:40Z nenolod $
+ * $Id: vhost.c 6489 2006-09-26 15:47:06Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 6457 2006-09-25 10:33:40Z nenolod $",
+	"$Id: vhost.c 6489 2006-09-26 15:47:06Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -120,7 +120,7 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	/* find the user... */
 	if (!(mu = myuser_find_ext(target)))
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not a registered nickname.", target);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", target);
 		return;
 	}
 

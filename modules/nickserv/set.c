@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 6457 2006-09-25 10:33:40Z nenolod $
+ * $Id: set.c 6489 2006-09-26 15:47:06Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 6457 2006-09-25 10:33:40Z nenolod $",
+	"$Id: set.c 6489 2006-09-26 15:47:06Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -125,7 +125,7 @@ static void _ns_setemail(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, "The email address for \2%s\2 has been changed to \2%s\2.", si->su->myuser->name, si->su->myuser->email);
 }
 
-command_t ns_set_email = { "EMAIL", "Changes the e-mail address associated with a nickname.", AC_NONE, 1, _ns_setemail };
+command_t ns_set_email = { "EMAIL", "Changes your e-mail address.", AC_NONE, 1, _ns_setemail };
 
 /* SET HIDEMAIL [ON|OFF] */
 static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
@@ -180,7 +180,7 @@ static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-command_t ns_set_hidemail = { "HIDEMAIL", "Hides the e-mail address associated with a nickname.", AC_NONE, 1, _ns_sethidemail };
+command_t ns_set_hidemail = { "HIDEMAIL", "Hides your e-mail address.", AC_NONE, 1, _ns_sethidemail };
 
 static void _ns_setemailmemos(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -240,7 +240,7 @@ static void _ns_setemailmemos(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-command_t ns_set_emailmemos = { "EMAILMEMOS", "Forwards incoming memos to your nickname's e-mail address.", AC_NONE, 1, _ns_setemailmemos };
+command_t ns_set_emailmemos = { "EMAILMEMOS", "Forwards incoming memos to your e-mail address.", AC_NONE, 1, _ns_setemailmemos };
 
 static void _ns_setnomemo(sourceinfo_t *si, int parc, char *parv[])
 {

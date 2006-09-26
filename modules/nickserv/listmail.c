@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ LISTMAIL function.
  *
- * $Id: listmail.c 6457 2006-09-25 10:33:40Z nenolod $
+ * $Id: listmail.c 6489 2006-09-26 15:47:06Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/listmail", FALSE, _modinit, _moddeinit,
-	"$Id: listmail.c 6457 2006-09-25 10:33:40Z nenolod $",
+	"$Id: listmail.c 6489 2006-09-26 15:47:06Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -53,7 +53,7 @@ static int listmail_foreach_cb(dictionary_elem_t *delem, void *privdata)
 	{
 		/* in the future we could add a LIMIT parameter */
 		if (state->matches == 0)
-			command_success_nodata(state->origin, "nicknames matching e-mail address \2%s\2:", state->pattern);
+			command_success_nodata(state->origin, "Nicknames matching e-mail address \2%s\2:", state->pattern);
 
 		command_success_nodata(state->origin, "- %s (%s)", mu->name, mu->email);
 		state->matches++;
