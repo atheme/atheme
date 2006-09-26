@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6507 2006-09-26 18:11:19Z jilles $
+ * $Id: main.c 6511 2006-09-26 18:45:03Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6507 2006-09-26 18:11:19Z jilles $",
+	"$Id: main.c 6511 2006-09-26 18:45:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -188,18 +188,18 @@ void destroy_session(sasl_session_t *p)
 /* interpret an AUTHENTICATE message */
 static void sasl_input(void *vptr)
 {
-	sasl_message_t *msg = vptr;
-	sasl_session_t *p = make_session(msg->uid);
-	int len = strlen(msg->buf);
+	sasl_message_t *smsg = vptr;
+	sasl_session_t *p = make_session(smsg->uid);
+	int len = strlen(smsg->buf);
 
 	/* Abort packets, or maybe some other kind of (D)one */
-	if(msg->mode == 'D')
+	if(smsg->mode == 'D')
 	{
 		destroy_session(p);
 		return;
 	}
 
-	if(msg->mode != 'S' && msg->mode != 'C')
+	if(smsg->mode != 'S' && smsg->mode != 'C')
 		return;
 
 	if(p->buf == NULL)
@@ -222,7 +222,7 @@ static void sasl_input(void *vptr)
 		p->len += len;
 	}
 
-	memcpy(p->p, msg->buf, len);
+	memcpy(p->p, smsg->buf, len);
 
 	/* Messages not exactly 400 bytes are the end of a packet. */
 	if(len < 400)
@@ -372,29 +372,30 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 static void sasl_write(char *target, char *data, int length)
 {
 	char out[401];
-	int last, rem = length;
+	int last = 400, rem = length;
 
 	while(rem)
 	{
-		int send = rem > 400 ? 400 : rem;
-		memcpy(out, data, send);
-		out[send] = '\0';
+		int nbytes = rem > 400 ? 400 : rem;
+		memcpy(out, data, nbytes);
+		out[nbytes] = '\0';
 		sasl_sts(target, 'C', out);
 
-		data += send;
-		rem -= send;
-		last = send;
+		data += nbytes;
+		rem -= nbytes;
+		last = nbytes;
 	}
 
 	/* The end of a packet is indicated by a string not of length 400.
 	 * If last piece is exactly 400 in size, send an empty string to
 	 * finish the transaction.
+	 * Also if there is no data at all.
 	 */
 	if(last == 400)
 		sasl_sts(target, 'C', "+");
 }
 
-void sasl_logcommand(char *source, int level, const char *fmt, ...)
+static void sasl_logcommand(char *source, int level, const char *fmt, ...)
 {
 	va_list args;
 	time_t t;

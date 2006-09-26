@@ -1,3 +1,14 @@
+jilles      2006/09/26 18:30:13 UTC	(20060926-6509)
+  Log:
+  Remove user_burstlogin hook, I don't see what this is
+  useful for, at least in its current form.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/doc/HOOKS (File Modified) 
+  +0 -2		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/09/26 18:11:19 UTC	(20060926-6507)
   Log:
   Get rid of the hacks previously used to suppress
