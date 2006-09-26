@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 6457 2006-09-25 10:33:40Z nenolod $
+ * $Id: register.c 6491 2006-09-26 15:49:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 6457 2006-09-25 10:33:40Z nenolod $",
+	"$Id: register.c 6491 2006-09-26 15:49:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_register = { "REGISTER", "Registers a nickname.", AC_NONE, 2, ns_cmd_register };
+command_t ns_register = { "REGISTER", "Registers a nickname.", AC_NONE, 3, ns_cmd_register };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -56,20 +56,25 @@ static int register_foreach_cb(dictionary_elem_t *delem, void *privdata)
 
 static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = si->su;
 	myuser_t *mu;
 	node_t *n;
+	char *account;
 	char *pass = parv[0];
 	char *email = parv[1];
 	char lau[BUFSIZE], lao[BUFSIZE];
 
-	if (u->myuser)
+	if (si->su->myuser)
 	{
 		command_fail(si, fault_already_authed, "You are already logged in.");
 		return;
 	}
 
-	if (!pass || !email)
+	if (nicksvs.no_nick_ownership)
+		account = parv[0], pass = parv[1], email = parv[2];
+	else
+		account = si->su->nick, pass = parv[0], email = parv[1];
+
+	if (!account || !pass || !email)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "REGISTER");
 		command_fail(si, fault_needmoreparams, "Syntax: REGISTER <password> <email>");
@@ -82,14 +87,14 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (IsDigit(*u->nick))
+	if (!nicksvs.no_nick_ownership && IsDigit(*account))
 	{
 		command_fail(si, fault_badparams, "For security reasons, you can't register your UID.");
 		command_fail(si, fault_badparams, "Please change to a real nickname, and try again.");
 		return;
 	}
 
-	if (!strcasecmp(pass, si->su->nick))
+	if (!strcasecmp(pass, si->su->nick) || !strcasecmp(pass, account))
 	{
 		command_fail(si, fault_badparams, "You cannot use your nickname as a password.");
 		command_fail(si, fault_badparams, "Syntax: REGISTER <password> <email>");
@@ -103,7 +108,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* make sure it isn't registered already */
-	mu = myuser_find(si->su->nick);
+	mu = myuser_find(account);
 	if (mu != NULL)
 	{
 		command_fail(si, fault_alreadyexists, "\2%s\2 is already registered.", mu->name);
@@ -132,7 +137,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		metadata_add(mu, METADATA_USER, "private:verify:register:key", key);
 		metadata_add(mu, METADATA_USER, "private:verify:register:timestamp", itoa(time(NULL)));
 
-		if (!sendemail(u, EMAIL_REGISTER, mu, key))
+		if (!sendemail(si->su, EMAIL_REGISTER, mu, key))
 		{
 			command_fail(si, fault_emailfail, "Sending email failed, sorry! Registration aborted.");
 			myuser_delete(mu);
@@ -146,29 +151,29 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		free(key);
 	}
 
-	u->myuser = mu;
+	si->su->myuser = mu;
 	n = node_create();
-	node_add(u, n, &mu->logins);
+	node_add(si->su, n, &mu->logins);
 
 	if (!(mu->flags & MU_WAITAUTH))
 		/* only grant ircd registered status if it's verified */
 		ircd_on_login(si->su->nick, mu->name, NULL);
 
-	snoop("REGISTER: \2%s\2 to \2%s\2", si->su->nick, email);
-	logcommand(nicksvs.me, u, CMDLOG_REGISTER, "REGISTER to %s", email);
+	snoop("REGISTER: \2%s\2 to \2%s\2", account, email);
+	logcommand(nicksvs.me, si->su, CMDLOG_REGISTER, "REGISTER to %s", email);
 	if (is_soper(mu))
 	{
-		wallops("%s registered the nick \2%s\2 and gained services operator privileges.", u->nick, mu->name);
-		snoop("SOPER: \2%s\2 as \2%s\2", u->nick, mu->name);
+		wallops("%s registered the nick \2%s\2 and gained services operator privileges.", si->su->nick, mu->name);
+		snoop("SOPER: \2%s\2 as \2%s\2", si->su->nick, mu->name);
 	}
 
 	command_success_nodata(si, "\2%s\2 is now registered to \2%s\2.", mu->name, mu->email);
 	command_success_nodata(si, "The password is \2%s\2. Please write this down for future reference.", pass);
 	hook_call_event("user_register", mu);
 
-	snprintf(lau, BUFSIZE, "%s@%s", u->user, u->vhost);
+	snprintf(lau, BUFSIZE, "%s@%s", si->su->user, si->su->vhost);
 	metadata_add(mu, METADATA_USER, "private:host:vhost", lau);
 
-	snprintf(lao, BUFSIZE, "%s@%s", u->user, u->host);
+	snprintf(lao, BUFSIZE, "%s@%s", si->su->user, si->su->host);
 	metadata_add(mu, METADATA_USER, "private:host:actual", lao);
 }

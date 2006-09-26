@@ -1,3 +1,17 @@
+jilles      2006/09/26 15:47:06 UTC	(20060926-6489)
+  Log:
+  Simplify some nickserv messages where possible so they
+  don't contain "nickname" or "account".
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/nickserv/list.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/listmail.c (File Modified) 
+  +3 -3		trunk/modules/nickserv/set.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/taxonomy.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/vhost.c (File Modified) 
+
+
 jilles      2006/09/26 15:32:49 UTC	(20060926-6487)
   Log:
   Put command descriptions through translation_get().

@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the NickServ HELP command.
  *
- * $Id: help.c 6457 2006-09-25 10:33:40Z nenolod $
+ * $Id: help.c 6491 2006-09-26 15:49:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 6457 2006-09-25 10:33:40Z nenolod $",
+	"$Id: help.c 6491 2006-09-26 15:49:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -45,11 +45,20 @@ void ns_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	if (!command)
 	{
 		command_success_nodata(si, "***** \2%s Help\2 *****", nicksvs.nick);
-		command_success_nodata(si, "\2%s\2 allows users to \2'register'\2 a nickname, and stop", nicksvs.nick);
-		command_success_nodata(si, "others from using that nick. \2%s\2 allows the owner of a", nicksvs.nick);
-		command_success_nodata(si, "nickname to disconnect a user from the network that is using", nicksvs.nick);
-		command_success_nodata(si, "their nickname. If a registered nick is not used by the owner for %d days,", (config_options.expire / 86400));
-		command_success_nodata(si, "\2%s\2 will drop the nickname, allowing it to be reregistered.", nicksvs.nick);
+		if (nicksvs.no_nick_ownership)
+		{
+			command_success_nodata(si, "\2%s\2 allows users to \2'register'\2 an account for use with", nicksvs.nick);
+			command_success_nodata(si, "\2%s\2. If a registered account is not used by the owner for %d days,", chansvs.nick, (config_options.expire / 86400));
+			command_success_nodata(si, "\2%s\2 will drop the account, allowing it to be reregistered.", nicksvs.nick);
+		}
+		else
+		{
+			command_success_nodata(si, "\2%s\2 allows users to \2'register'\2 a nickname, and stop", nicksvs.nick);
+			command_success_nodata(si, "others from using that nick. \2%s\2 allows the owner of a", nicksvs.nick);
+			command_success_nodata(si, "nickname to disconnect a user from the network that is using", nicksvs.nick);
+			command_success_nodata(si, "their nickname. If a registered nick is not used by the owner for %d days,", (config_options.expire / 86400));
+			command_success_nodata(si, "\2%s\2 will drop the nickname, allowing it to be reregistered.", nicksvs.nick);
+		}
 		command_success_nodata(si, " ");
 		command_success_nodata(si, "For more information on a command, type:");
 		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.disp);
