@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 6497 2006-09-26 16:23:41Z jilles $
+ * $Id: services.c 6501 2006-09-26 16:38:12Z jilles $
  */
 
 #include "atheme.h"
@@ -257,7 +257,7 @@ void snoop(char *fmt, ...)
 void handle_nickchange(user_t *u)
 {
 	myuser_t *mu;
-    node_t *n;
+	node_t *n;
 
 	if (u == NULL)
 		return;
@@ -277,15 +277,15 @@ void handle_nickchange(user_t *u)
 	if (!(u->server->flags & SF_EOB))
 		u->flags |= UF_SEENINFO;
 
-    /* If the user recently completed SASL login, omit -- gxti */
-    if(*u->uid)
-    {
-        LIST_FOREACH(n, saslsvs.pending.head)
-        {
-            if(!strcmp((char*)n->data, u->uid))
-                return;
-        }
-    }
+	/* If the user recently completed SASL login, omit -- gxti */
+	if(*u->uid)
+	{
+		LIST_FOREACH(n, saslsvs.pending.head)
+		{
+			if(!strcmp((char*)n->data, u->uid))
+				return;
+		}
+	}
 
 	if (!(mu = myuser_find(u->nick)))
 	{

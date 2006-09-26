@@ -1,3 +1,14 @@
+jilles      2006/09/26 16:31:54 UTC	(20060926-6499)
+  Log:
+  nickserv vhost: Refuse to set a vhost that looks like a cidr mask
+  (contains a slash and last slash is followed by a digit).
+  These could lead to accidental wide bans from channels or servers.
+  
+
+  Changes:	Modified:
+  +7 -0		trunk/modules/nickserv/vhost.c (File Modified) 
+
+
 jilles      2006/09/26 16:23:41 UTC	(20060926-6497)
   Log:
   Apply translations to wallops.
