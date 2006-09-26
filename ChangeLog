@@ -1,3 +1,13 @@
+jilles      2006/09/26 15:49:18 UTC	(20060926-6491)
+  Log:
+  Update nickserv register and help for accounts.
+  
+
+  Changes:	Modified:
+  +14 -5	trunk/modules/nickserv/help.c (File Modified) 
+  +21 -16	trunk/modules/nickserv/register.c (File Modified) 
+
+
 jilles      2006/09/26 15:47:06 UTC	(20060926-6489)
   Log:
   Simplify some nickserv messages where possible so they
