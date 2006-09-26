@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 6479 2006-09-25 16:41:02Z jilles $
+ * $Id: unreal.c 6497 2006-09-26 16:23:41Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 6479 2006-09-25 16:41:02Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 6497 2006-09-26 16:23:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -157,7 +157,7 @@ static void unreal_quit_sts(user_t *u, char *reason)
 }
 
 /* WALLOPS wrapper */
-static void unreal_wallops(char *fmt, ...)
+static void unreal_wallops_sts(char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -850,7 +850,7 @@ void _modinit(module_t * m)
 	server_login = &unreal_server_login;
 	introduce_nick = &unreal_introduce_nick;
 	quit_sts = &unreal_quit_sts;
-	wallops = &unreal_wallops;
+	wallops_sts = &unreal_wallops_sts;
 	join_sts = &unreal_join_sts;
 	kick = &unreal_kick;
 	msg = &unreal_msg;

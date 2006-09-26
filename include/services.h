@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 6479 2006-09-25 16:41:02Z jilles $
+ * $Id: services.h 6497 2006-09-26 16:23:41Z jilles $
  */
 
 #ifndef SERVICES_H
@@ -177,6 +177,7 @@ E void notice(char *from, char *to, char *message, ...);
 E void command_fail(sourceinfo_t *si, faultcode_t code, const char *fmt, ...);
 E void command_success_nodata(sourceinfo_t *si, const char *fmt, ...);
 E void command_success_string(sourceinfo_t *si, const char *result, const char *fmt, ...);
+E void wallops(char *, ...);
 E void verbose_wallops(char *, ...);
 
 /* ptasks.c */

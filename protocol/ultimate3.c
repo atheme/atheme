@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 6479 2006-09-25 16:41:02Z jilles $
+ * $Id: ultimate3.c 6497 2006-09-26 16:23:41Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 6479 2006-09-25 16:41:02Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 6497 2006-09-26 16:23:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -117,7 +117,7 @@ static void ultimate3_quit_sts(user_t *u, char *reason)
 }
 
 /* WALLOPS wrapper */
-static void ultimate3_wallops(char *fmt, ...)
+static void ultimate3_wallops_sts(char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -768,7 +768,7 @@ void _modinit(module_t * m)
 	server_login = &ultimate3_server_login;
 	introduce_nick = &ultimate3_introduce_nick;
 	quit_sts = &ultimate3_quit_sts;
-	wallops = &ultimate3_wallops;
+	wallops_sts = &ultimate3_wallops_sts;
 	join_sts = &ultimate3_join_sts;
 	kick = &ultimate3_kick;
 	msg = &ultimate3_msg;

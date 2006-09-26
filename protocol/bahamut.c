@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: bahamut.c 6479 2006-09-25 16:41:02Z jilles $
+ * $Id: bahamut.c 6497 2006-09-26 16:23:41Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/bahamut.h"
 
-DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 6479 2006-09-25 16:41:02Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 6497 2006-09-26 16:23:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -114,7 +114,7 @@ static void bahamut_quit_sts(user_t *u, char *reason)
 }
 
 /* WALLOPS wrapper */
-static void bahamut_wallops(char *fmt, ...)
+static void bahamut_wallops_sts(char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -828,7 +828,7 @@ void _modinit(module_t * m)
 	server_login = &bahamut_server_login;
 	introduce_nick = &bahamut_introduce_nick;
 	quit_sts = &bahamut_quit_sts;
-	wallops = &bahamut_wallops;
+	wallops_sts = &bahamut_wallops_sts;
 	join_sts = &bahamut_join_sts;
 	chan_lowerts = &bahamut_chan_lowerts;
 	kick = &bahamut_kick;

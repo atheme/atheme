@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for solidircd.
  *
- * $Id: solidircd.c 6479 2006-09-25 16:41:02Z jilles $
+ * $Id: solidircd.c 6497 2006-09-26 16:23:41Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/solidircd.h"
 
-DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 6479 2006-09-25 16:41:02Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 6497 2006-09-26 16:23:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -118,7 +118,7 @@ static void solidircd_quit_sts(user_t *u, char *reason)
 }
 
 /* WALLOPS wrapper */
-static void solidircd_wallops(char *fmt, ...)
+static void solidircd_wallops_sts(char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -852,7 +852,7 @@ void _modinit(module_t * m)
 	server_login = &solidircd_server_login;
 	introduce_nick = &solidircd_introduce_nick;
 	quit_sts = &solidircd_quit_sts;
-	wallops = &solidircd_wallops;
+	wallops_sts = &solidircd_wallops_sts;
 	join_sts = &solidircd_join_sts;
 	chan_lowerts = &solidircd_chan_lowerts;
 	kick = &solidircd_kick;

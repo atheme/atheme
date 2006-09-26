@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: dreamforge.c 6479 2006-09-25 16:41:02Z jilles $
+ * $Id: dreamforge.c 6497 2006-09-26 16:23:41Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/dreamforge.h"
 
-DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 6479 2006-09-25 16:41:02Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 6497 2006-09-26 16:23:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -112,7 +112,7 @@ static void dreamforge_quit_sts(user_t *u, char *reason)
 }
 
 /* WALLOPS wrapper */
-static void dreamforge_wallops(char *fmt, ...)
+static void dreamforge_wallops_sts(char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -653,7 +653,7 @@ void _modinit(module_t * m)
 	server_login = &dreamforge_server_login;
 	introduce_nick = &dreamforge_introduce_nick;
 	quit_sts = &dreamforge_quit_sts;
-	wallops = &dreamforge_wallops;
+	wallops_sts = &dreamforge_wallops_sts;
 	join_sts = &dreamforge_join_sts;
 	kick = &dreamforge_kick;
 	msg = &dreamforge_msg;

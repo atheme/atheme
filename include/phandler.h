@@ -4,7 +4,7 @@
  *
  * Protocol handlers, both generic and the actual declarations themselves.
  *
- * $Id: phandler.h 6417 2006-09-21 17:33:29Z jilles $
+ * $Id: phandler.h 6497 2006-09-26 16:23:41Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -79,10 +79,10 @@ E void (*introduce_nick)(user_t *u);
 E void (*invite_sts)(user_t *source, user_t *target, channel_t *channel);
 /* quit a client on the services server with the given message */
 E void (*quit_sts)(user_t *u, char *reason);
-/* send wallops
+/* send wallops_sts
  * check config_options.silent and do nothing if it's set
  * use something that only opers can see if easily possible */
-E void (*wallops)(char *fmt, ...);
+E void (*wallops_sts)(char *fmt, ...);
 /* join a channel with a client on the services server
  * the client should be introduced opped
  * isnew indicates the channel modes (and bans XXX) should be bursted
@@ -182,7 +182,7 @@ E uint8_t generic_server_login(void);
 E void generic_introduce_nick(user_t *u);
 E void generic_invite_sts(user_t *source, user_t *target, channel_t *channel);
 E void generic_quit_sts(user_t *u, char *reason);
-E void generic_wallops(char *fmt, ...);
+E void generic_wallops_sts(char *fmt, ...);
 E void generic_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes);
 E void generic_chan_lowerts(channel_t *c, user_t *u);
 E void generic_kick(char *from, char *channel, char *to, char *reason);

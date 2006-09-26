@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: bircd.c 6417 2006-09-21 17:33:29Z jilles $
+ * $Id: bircd.c 6497 2006-09-26 16:23:41Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 6417 2006-09-21 17:33:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 6497 2006-09-26 16:23:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -119,7 +119,7 @@ static void asuka_quit_sts(user_t *u, char *reason)
 }
 
 /* WALLOPS wrapper */
-static void asuka_wallops(char *fmt, ...)
+static void asuka_wallops_sts(char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -972,7 +972,7 @@ void _modinit(module_t * m)
 	server_login = &asuka_server_login;
 	introduce_nick = &asuka_introduce_nick;
 	quit_sts = &asuka_quit_sts;
-	wallops = &asuka_wallops;
+	wallops_sts = &asuka_wallops_sts;
 	join_sts = &asuka_join_sts;
 	kick = &asuka_kick;
 	msg = &asuka_msg;

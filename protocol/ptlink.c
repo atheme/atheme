@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for ptlink ircd.
  *
- * $Id: ptlink.c 6479 2006-09-25 16:41:02Z jilles $
+ * $Id: ptlink.c 6497 2006-09-26 16:23:41Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/ptlink.h"
 
-DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 6479 2006-09-25 16:41:02Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 6497 2006-09-26 16:23:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -150,7 +150,7 @@ static void ptlink_quit_sts(user_t *u, char *reason)
 }
 
 /* WALLOPS wrapper */
-static void ptlink_wallops(char *fmt, ...)
+static void ptlink_wallops_sts(char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -765,7 +765,7 @@ void _modinit(module_t * m)
 	server_login = &ptlink_server_login;
 	introduce_nick = &ptlink_introduce_nick;
 	quit_sts = &ptlink_quit_sts;
-	wallops = &ptlink_wallops;
+	wallops_sts = &ptlink_wallops_sts;
 	join_sts = &ptlink_join_sts;
 	kick = &ptlink_kick;
 	msg = &ptlink_msg;

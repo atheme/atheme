@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 6417 2006-09-21 17:33:29Z jilles $
+ * $Id: charybdis.c 6497 2006-09-26 16:23:41Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6417 2006-09-21 17:33:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6497 2006-09-26 16:23:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -206,7 +206,7 @@ static void charybdis_quit_sts(user_t *u, char *reason)
 }
 
 /* WALLOPS wrapper */
-static void charybdis_wallops(char *fmt, ...)
+static void charybdis_wallops_sts(char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -1382,7 +1382,7 @@ void _modinit(module_t * m)
 	server_login = &charybdis_server_login;
 	introduce_nick = &charybdis_introduce_nick;
 	quit_sts = &charybdis_quit_sts;
-	wallops = &charybdis_wallops;
+	wallops_sts = &charybdis_wallops_sts;
 	join_sts = &charybdis_join_sts;
 	chan_lowerts = &charybdis_chan_lowerts;
 	kick = &charybdis_kick;

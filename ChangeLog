@@ -1,3 +1,14 @@
+jilles      2006/09/26 15:57:09 UTC	(20060926-6495)
+  Log:
+  nickserv-as-userserv register registered wrong account,
+  and the syntax error message was incorrect
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/nickserv/main.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/register.c (File Modified) 
+
+
 jilles      2006/09/26 15:50:27 UTC	(20060926-6493)
   Log:
   Use the extension to the translation framework to

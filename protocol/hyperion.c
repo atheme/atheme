@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 6479 2006-09-25 16:41:02Z jilles $
+ * $Id: hyperion.c 6497 2006-09-26 16:23:41Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -17,7 +17,7 @@
 #include "pmodule.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 6479 2006-09-25 16:41:02Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 6497 2006-09-26 16:23:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -179,7 +179,7 @@ static void hyperion_quit_sts(user_t *u, char *reason)
 }
 
 /* WALLOPS wrapper */
-static void hyperion_wallops(char *fmt, ...)
+static void hyperion_wallops_sts(char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -917,7 +917,7 @@ void _modinit(module_t * m)
 	server_login = &hyperion_server_login;
 	introduce_nick = &hyperion_introduce_nick;
 	quit_sts = &hyperion_quit_sts;
-	wallops = &hyperion_wallops;
+	wallops_sts = &hyperion_wallops_sts;
 	join_sts = &hyperion_join_sts;
 	kick = &hyperion_kick;
 	msg = &hyperion_msg;

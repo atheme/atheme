@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 6459 2006-09-25 11:53:08Z w00t $
+ * $Id: inspircd11.c 6497 2006-09-26 16:23:41Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 6459 2006-09-25 11:53:08Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 6497 2006-09-26 16:23:41Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -188,7 +188,7 @@ static void inspircd_quit_sts(user_t *u, char *reason)
 }
 
 /* WALLOPS wrapper */
-static void inspircd_wallops(char *fmt, ...)
+static void inspircd_wallops_sts(char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -226,7 +226,7 @@ static void inspircd_wallops(char *fmt, ...)
 		 * this means we have no pseudoclients -- under present inspircd, servers cannot globops, and
 		 * thus, we will need to bail -- slog, and let them know. --w00t
 		 */
-		slog(LG_ERROR, "wallops(): InspIRCD requires at least one pseudoclient module to be loaded to send wallops.");
+		slog(LG_ERROR, "wallops_sts(): InspIRCD requires at least one pseudoclient module to be loaded to send wallops_sts.");
 		return;
 	}
 
@@ -962,7 +962,7 @@ void _modinit(module_t * m)
 	server_login = &inspircd_server_login;
 	introduce_nick = &inspircd_introduce_nick;
 	quit_sts = &inspircd_quit_sts;
-	wallops = &inspircd_wallops;
+	wallops_sts = &inspircd_wallops_sts;
 	join_sts = &inspircd_join_sts;
 	chan_lowerts = &inspircd_chan_lowerts;
 	kick = &inspircd_kick;

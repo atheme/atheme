@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: sorcery.c 6417 2006-09-21 17:33:29Z jilles $
+ * $Id: sorcery.c 6497 2006-09-26 16:23:41Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/sorcery.h"
 
-DECLARE_MODULE_V1("protocol/sorcery", TRUE, _modinit, NULL, "$Id: sorcery.c 6417 2006-09-21 17:33:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/sorcery", TRUE, _modinit, NULL, "$Id: sorcery.c 6497 2006-09-26 16:23:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -113,7 +113,7 @@ static void sorcery_quit_sts(user_t *u, char *reason)
 }
 
 /* WALLOPS wrapper */
-static void sorcery_wallops(char *fmt, ...)
+static void sorcery_wallops_sts(char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -622,7 +622,7 @@ void _modinit(module_t * m)
 	server_login = &sorcery_server_login;
 	introduce_nick = &sorcery_introduce_nick;
 	quit_sts = &sorcery_quit_sts;
-	wallops = &sorcery_wallops;
+	wallops_sts = &sorcery_wallops_sts;
 	join_sts = &sorcery_join_sts;
 	kick = &sorcery_kick;
 	msg = &sorcery_msg;

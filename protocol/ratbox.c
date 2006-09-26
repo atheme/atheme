@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 6417 2006-09-21 17:33:29Z jilles $
+ * $Id: ratbox.c 6497 2006-09-26 16:23:41Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 6417 2006-09-21 17:33:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 6497 2006-09-26 16:23:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -142,7 +142,7 @@ static void ratbox_quit_sts(user_t *u, char *reason)
 }
 
 /* WALLOPS wrapper */
-static void ratbox_wallops(char *fmt, ...)
+static void ratbox_wallops_sts(char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -1095,7 +1095,7 @@ void _modinit(module_t * m)
 	server_login = &ratbox_server_login;
 	introduce_nick = &ratbox_introduce_nick;
 	quit_sts = &ratbox_quit_sts;
-	wallops = &ratbox_wallops;
+	wallops_sts = &ratbox_wallops_sts;
 	join_sts = &ratbox_join_sts;
 	chan_lowerts = &ratbox_chan_lowerts;
 	kick = &ratbox_kick;

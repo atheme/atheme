@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
  *
- * $Id: nefarious.c 6417 2006-09-21 17:33:29Z jilles $
+ * $Id: nefarious.c 6497 2006-09-26 16:23:41Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 6417 2006-09-21 17:33:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 6497 2006-09-26 16:23:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -132,7 +132,7 @@ static void nefarious_quit_sts(user_t *u, char *reason)
 }
 
 /* WALLOPS wrapper */
-static void nefarious_wallops(char *fmt, ...)
+static void nefarious_wallops_sts(char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -1070,7 +1070,7 @@ void _modinit(module_t * m)
 	server_login = &nefarious_server_login;
 	introduce_nick = &nefarious_introduce_nick;
 	quit_sts = &nefarious_quit_sts;
-	wallops = &nefarious_wallops;
+	wallops_sts = &nefarious_wallops_sts;
 	join_sts = &nefarious_join_sts;
 	kick = &nefarious_kick;
 	msg = &nefarious_msg;

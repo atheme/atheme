@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 6417 2006-09-21 17:33:29Z jilles $
+ * $Id: hybrid.c 6497 2006-09-26 16:23:41Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 6417 2006-09-21 17:33:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 6497 2006-09-26 16:23:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -141,7 +141,7 @@ static void hybrid_quit_sts(user_t *u, char *reason)
 }
 
 /* WALLOPS wrapper */
-static void hybrid_wallops(char *fmt, ...)
+static void hybrid_wallops_sts(char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -1115,7 +1115,7 @@ void _modinit(module_t * m)
 	server_login = &hybrid_server_login;
 	introduce_nick = &hybrid_introduce_nick;
 	quit_sts = &hybrid_quit_sts;
-	wallops = &hybrid_wallops;
+	wallops_sts = &hybrid_wallops_sts;
 	join_sts = &hybrid_join_sts;
 	chan_lowerts = &hybrid_chan_lowerts;
 	kick = &hybrid_kick;

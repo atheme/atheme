@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for shadowircd-based ircd.
  *
- * $Id: shadowircd.c 6479 2006-09-25 16:41:02Z jilles $
+ * $Id: shadowircd.c 6497 2006-09-26 16:23:41Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/shadowircd.h"
 
-DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 6479 2006-09-25 16:41:02Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 6497 2006-09-26 16:23:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -121,7 +121,7 @@ static void shadowircd_quit_sts(user_t *u, char *reason)
 }
 
 /* WALLOPS wrapper */
-static void shadowircd_wallops(char *fmt, ...)
+static void shadowircd_wallops_sts(char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -699,7 +699,7 @@ void _modinit(module_t * m)
 	server_login = &shadowircd_server_login;
 	introduce_nick = &shadowircd_introduce_nick;
 	quit_sts = &shadowircd_quit_sts;
-	wallops = &shadowircd_wallops;
+	wallops_sts = &shadowircd_wallops_sts;
 	join_sts = &shadowircd_join_sts;
 	kick = &shadowircd_kick;
 	msg = &shadowircd_msg;

@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: undernet.c 6417 2006-09-21 17:33:29Z jilles $
+ * $Id: undernet.c 6497 2006-09-26 16:23:41Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 6417 2006-09-21 17:33:29Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 6497 2006-09-26 16:23:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -116,7 +116,7 @@ static void undernet_quit_sts(user_t *u, char *reason)
 }
 
 /* WALLOPS wrapper */
-static void undernet_wallops(char *fmt, ...)
+static void undernet_wallops_sts(char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -970,7 +970,7 @@ void _modinit(module_t * m)
 	server_login = &undernet_server_login;
 	introduce_nick = &undernet_introduce_nick;
 	quit_sts = &undernet_quit_sts;
-	wallops = &undernet_wallops;
+	wallops_sts = &undernet_wallops_sts;
 	join_sts = &undernet_join_sts;
 	kick = &undernet_kick;
 	msg = &undernet_msg;
