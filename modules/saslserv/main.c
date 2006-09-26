@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6473 2006-09-25 15:14:21Z jilles $
+ * $Id: main.c 6505 2006-09-26 17:54:41Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6473 2006-09-25 15:14:21Z jilles $",
+	"$Id: main.c 6505 2006-09-26 17:54:41Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -26,7 +26,7 @@ static void sasl_input(void *vptr);
 static void sasl_packet(sasl_session_t *p, char *buf, int len);
 static void sasl_write(char *target, char *data, int length);
 int login_user(sasl_session_t *p);
-static void user_burstlogin(void *vptr);
+static void sasl_newuser(void *vptr);
 static void delete_stale(void *vptr);
 
 /* main services client routine */
@@ -80,8 +80,8 @@ void _modinit(module_t *m)
 	hook_add_hook("config_ready", saslserv_config_ready);
 	hook_add_event("sasl_input");
 	hook_add_hook("sasl_input", sasl_input);
-	hook_add_event("user_burstlogin");
-	hook_add_hook("user_burstlogin", user_burstlogin);
+	hook_add_event("user_add");
+	hook_add_hook("user_add", sasl_newuser);
 	event_add("sasl_delete_stale", delete_stale, NULL, 15);
 
         if (!cold_start)
@@ -97,7 +97,7 @@ void _moddeinit(void)
 	node_t *n, *tn;
 
 	hook_del_hook("sasl_input", sasl_input);
-	hook_del_hook("user_burstlogin", user_burstlogin);
+	hook_del_hook("user_add", sasl_newuser);
 	event_delete(delete_stale, NULL);
 
         if (saslsvs.me)
@@ -456,7 +456,7 @@ int login_user(sasl_session_t *p)
 }
 
 /* clean up after a user who is finally on the net */
-static void user_burstlogin(void *vptr)
+static void sasl_newuser(void *vptr)
 {
 	user_t *u = vptr;
 	sasl_session_t *p = find_session(u->uid);
@@ -481,11 +481,18 @@ static void user_burstlogin(void *vptr)
 	/* Not concerned unless it's a SASL login. */
 	if(p == NULL)
 		return;
-	destroy_session(p);
 
-	/* WTF? */
-	if((mu = u->myuser) == NULL)
+	/* Find the account */
+	mu = p->username ? myuser_find(p->username) : NULL;
+	if (mu == NULL)
+	{
+		notice(saslsvs.nick, u->nick, "Account %s dropped, login cancelled",
+				p->username ? p->username : "??");
+		destroy_session(p);
+		/* We'll remove their ircd login in handle_burstlogin() */
 		return;
+	}
+	destroy_session(p);
 
 	if (is_soper(mu))
 	{

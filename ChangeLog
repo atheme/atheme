@@ -1,3 +1,13 @@
+jilles      2006/09/26 17:28:33 UTC	(20060926-6503)
+  Log:
+  charybdis: make sure to call handle_nickchange()
+  exactly once on each new user
+  
+
+  Changes:	Modified:
+  +5 -9		trunk/protocol/charybdis.c (File Modified) 
+
+
 jilles      2006/09/26 16:38:12 UTC	(20060926-6501)
   Log:
   Make indenting consistent.
