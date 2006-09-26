@@ -1,3 +1,16 @@
+jilles      2006/09/26 17:54:41 UTC	(20060926-6505)
+  Log:
+  saslserv: change user_burstlogin hook to a user_add hook
+  and take the account from the sasl_session_t.
+  Give a special notice to the user if the account was
+  dropped between them completing SASL authentication
+  and being introduced to the network.
+  
+
+  Changes:	Modified:
+  +15 -8	trunk/modules/saslserv/main.c (File Modified) 
+
+
 jilles      2006/09/26 17:28:33 UTC	(20060926-6503)
   Log:
   charybdis: make sure to call handle_nickchange()

@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 6501 2006-09-26 16:38:12Z jilles $
+ * $Id: services.c 6507 2006-09-26 18:11:19Z jilles $
  */
 
 #include "atheme.h"
@@ -277,16 +277,6 @@ void handle_nickchange(user_t *u)
 	if (!(u->server->flags & SF_EOB))
 		u->flags |= UF_SEENINFO;
 
-	/* If the user recently completed SASL login, omit -- gxti */
-	if(*u->uid)
-	{
-		LIST_FOREACH(n, saslsvs.pending.head)
-		{
-			if(!strcmp((char*)n->data, u->uid))
-				return;
-		}
-	}
-
 	if (!(mu = myuser_find(u->nick)))
 	{
 		if (!nicksvs.spam)
@@ -306,20 +296,6 @@ void handle_nickchange(user_t *u)
 
 	if (u->myuser == mu)
 		return;
-
-	/* If we're MU_SASL, then this user has just identified by SASL
-	 * (we just don't know it yet). So, we bypass the complaint below.
-	 *
-	 * This is not a major concern, as MU_SASL is a hack intended to bypass
-	 * NickServ anyway. The u->myuser relationship isn't set up until later.
-	 *
-	 *   - nenolod
-	 */
-	if (mu->flags & MU_SASL)
-	{
-		mu->flags &= ~MU_SASL;
-		return;
-	}
 
 	notice(nicksvs.nick, u->nick, "This nickname is registered. Please choose a different nickname, or identify via \2/%s%s identify <password>\2.",
 	       (ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.disp);

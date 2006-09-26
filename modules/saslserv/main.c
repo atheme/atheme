@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6505 2006-09-26 17:54:41Z jilles $
+ * $Id: main.c 6507 2006-09-26 18:11:19Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6505 2006-09-26 17:54:41Z jilles $",
+	"$Id: main.c 6507 2006-09-26 18:11:19Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -327,8 +327,6 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 		myuser_t *mu = myuser_find(p->username);
 		if(mu && login_user(p))
 		{
-			mu->flags |= MU_SASL;
-
 			if ((md = metadata_find(mu, METADATA_USER, "private:usercloak")))
 				cloak = md->value;
 			else
