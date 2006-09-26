@@ -1,3 +1,12 @@
+jilles      2006/09/25 23:20:14 UTC	(20060925-6481)
+  Log:
+  Experimental nickserv-as-userserv changes: DROP.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/modules/nickserv/drop.c (File Modified) 
+
+
 jilles      2006/09/25 16:41:02 UTC	(20060925-6479)
   Log:
   Make it possible for nickserv to act as userserv
