@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 6507 2006-09-26 18:11:19Z jilles $
+ * $Id: services.c 6509 2006-09-26 18:30:13Z jilles $
  */
 
 #include "atheme.h"
@@ -316,8 +316,6 @@ void handle_burstlogin(user_t *u, char *login)
 {
 	myuser_t *mu;
 	node_t *n;
-
-	hook_call_event("user_burstlogin", u);
 
 	mu = myuser_find(login);
 	if (mu == NULL)
