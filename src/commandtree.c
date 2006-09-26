@@ -4,7 +4,7 @@
  *
  * Commandtree manipulation routines.
  *
- * $Id: commandtree.c 6433 2006-09-22 23:56:52Z jilles $
+ * $Id: commandtree.c 6487 2006-09-26 15:32:49Z jilles $
  */
 
 #include "atheme.h"
@@ -158,7 +158,7 @@ void command_help(char *mynick, char *origin, list_t *commandtree)
 		 * (taken from command_exec())
 		 */
 		if (has_priv(u, c->access))
-			notice(mynick, origin, "\2%-15s\2 %s", c->name, c->desc);
+			notice(mynick, origin, "\2%-15s\2 %s", c->name, translation_get(c->desc));
 	}
 }
 
@@ -215,7 +215,7 @@ void command_help_short(char *mynick, char *origin, list_t *commandtree, char *m
 		 * (taken from command_exec())
 		 */
 		if (string_in_list(maincmds, c->name) && has_priv(u, c->access))
-			notice(mynick, origin, "\2%-15s\2 %s", c->name, c->desc);
+			notice(mynick, origin, "\2%-15s\2 %s", c->name, translation_get(c->desc));
 	}
 
 	notice(mynick, origin, " ");

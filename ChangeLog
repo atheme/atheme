@@ -1,3 +1,14 @@
+jilles      2006/09/26 15:31:48 UTC	(20060926-6485)
+  Log:
+  Add "internal translations", itranslation_create/destroy,
+  for nickserv/userserv.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/include/culture.h (File Modified) 
+  +67 -2	trunk/src/culture.c (File Modified) 
+
+
 jilles      2006/09/26 14:54:03 UTC	(20060926-6483)
   Log:
   Revert previous commit, I'm going to do this differently.
