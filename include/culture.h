@@ -4,7 +4,7 @@
  *
  * Message translation stuff.
  * 
- * $Id: culture.h 6419 2006-09-22 15:23:08Z jilles $
+ * $Id: culture.h 6485 2006-09-26 15:31:48Z jilles $
  */
 
 #ifndef CULTURE_H
@@ -19,6 +19,8 @@ struct translation_
 typedef struct translation_ translation_t;
 
 E const char *translation_get(const char *name);
+E void itranslation_create(char *str, char *trans);
+E void itranslation_destroy(char *str);
 E void translation_create(char *str, char *trans);
 E void translation_destroy(char *str);
 
