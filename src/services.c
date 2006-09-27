@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 6509 2006-09-26 18:30:13Z jilles $
+ * $Id: services.c 6515 2006-09-27 17:13:42Z jilles $
  */
 
 #include "atheme.h"
@@ -459,11 +459,14 @@ void wallops(char *fmt, ...)
 	va_list args;
 	char buf[BUFSIZE];
 
+	if (config_options.silent)
+		return;
+
 	va_start(args, fmt);
 	vsnprintf(buf, BUFSIZE, translation_get(fmt), args);
 	va_end(args);
 
-	wallops_sts("%s", buf);
+	wallops_sts(buf);
 }
 
 void verbose_wallops(char *fmt, ...)
@@ -471,12 +474,12 @@ void verbose_wallops(char *fmt, ...)
 	va_list args;
 	char buf[BUFSIZE];
 
-	if (!config_options.verbose_wallops)
+	if (config_options.silent || !config_options.verbose_wallops)
 		return;
 
 	va_start(args, fmt);
 	vsnprintf(buf, BUFSIZE, translation_get(fmt), args);
 	va_end(args);
 
-	wallops_sts("%s", buf);
+	wallops_sts(buf);
 }

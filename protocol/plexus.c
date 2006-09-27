@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 6497 2006-09-26 16:23:41Z jilles $
+ * $Id: plexus.c 6515 2006-09-27 17:13:42Z jilles $
  */
 
 /* option: set the netadmin umode +N */
@@ -16,7 +16,7 @@
 #include "pmodule.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 6497 2006-09-26 16:23:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 6515 2006-09-27 17:13:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -124,19 +124,9 @@ static void plexus_quit_sts(user_t *u, char *reason)
 }
 
 /* WALLOPS wrapper */
-static void plexus_wallops_sts(char *fmt, ...)
+static void plexus_wallops_sts(const char *text)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-
-	if (config_options.silent)
-		return;
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts(":%s WALLOPS :%s", me.name, buf);
+	sts(":%s WALLOPS :%s", me.name, text);
 }
 
 /* join a channel */

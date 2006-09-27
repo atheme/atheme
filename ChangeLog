@@ -1,3 +1,15 @@
+jilles      2006/09/27 00:32:08 UTC	(20060927-6513)
+  Log:
+  For sasl logins from charybdis servers before 2.1 (no EUID),
+  store IP instead of at that point unknown real host.
+  This could be improved by storing the real host when
+  receiving ENCAP REALHOST.
+  
+
+  Changes:	Modified:
+  +9 -1		trunk/modules/saslserv/main.c (File Modified) 
+
+
 jilles      2006/09/26 18:45:03 UTC	(20060926-6511)
   Log:
   saslserv/main: get rid of some compiler warnings

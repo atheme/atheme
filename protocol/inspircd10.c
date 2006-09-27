@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree stable branch inspircd.
  *
- * $Id: inspircd10.c 6497 2006-09-26 16:23:41Z jilles $
+ * $Id: inspircd10.c 6515 2006-09-27 17:13:42Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 6497 2006-09-26 16:23:41Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 6515 2006-09-27 17:13:42Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -183,22 +183,14 @@ static void inspircd_quit_sts(user_t *u, char *reason)
 }
 
 /* WALLOPS wrapper */
-static void inspircd_wallops_sts(char *fmt, ...)
+static void inspircd_wallops_sts(const char *text)
 {
-	va_list ap;
-	char buf[BUFSIZE];
 	char *sendernick = NULL;
 	user_t *u;
 	node_t *n;
 
-	if (config_options.silent)
-		return;
 	if (me.me == NULL)
 		return;
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
 
 	if (is_internal_client(user_find_named(opersvs.nick)))
 	{
@@ -221,11 +213,11 @@ static void inspircd_wallops_sts(char *fmt, ...)
 		 * this means we have no pseudoclients -- under present inspircd, servers cannot globops, and
 		 * thus, we will need to bail -- slog, and let them know. --w00t
 		 */
-		slog(LG_ERROR, "wallops_sts(): InspIRCD requires at least one pseudoclient module to be loaded to send wallops_sts.");
+		slog(LG_ERROR, "wallops_sts(): InspIRCD requires at least one pseudoclient module to be loaded to send wallops.");
 		return;
 	}
 
-	sts(":%s GLOBOPS :%s", sendernick, buf);
+	sts(":%s GLOBOPS :%s", sendernick, text);
 }
 
 /* join a channel */

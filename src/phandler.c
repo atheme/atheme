@@ -4,14 +4,14 @@
  *
  * Generic protocol event handlers.
  *
- * $Id: phandler.c 6497 2006-09-26 16:23:41Z jilles $
+ * $Id: phandler.c 6515 2006-09-27 17:13:42Z jilles $
  */
 
 #include "atheme.h"
 
 uint8_t(*server_login) (void) = generic_server_login;
 void (*introduce_nick) (user_t *u) = generic_introduce_nick;
-void (*wallops_sts) (char *fmt, ...) = generic_wallops_sts;
+void (*wallops_sts) (const char *text) = generic_wallops_sts;
 void (*join_sts) (channel_t *c, user_t *u, boolean_t isnew, char *modes) = generic_join_sts;
 void (*chan_lowerts) (channel_t *c, user_t *u) = generic_chan_lowerts;
 void (*kick) (char *from, char *channel, char *to, char *reason) = generic_kick;
@@ -50,19 +50,9 @@ void generic_introduce_nick(user_t *u)
 	/* Nothing to do here. */
 }
 
-void generic_wallops_sts(char *fmt, ...)
+void generic_wallops_sts(const char *text)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-
-	if (config_options.silent)
-		return;
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	slog(LG_INFO, "Don't know how to send wallops_sts: %s", buf);
+	slog(LG_INFO, "Don't know how to send wallops: %s", text);
 }
 
 void generic_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)

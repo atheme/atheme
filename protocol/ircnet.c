@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 6497 2006-09-26 16:23:41Z jilles $
+ * $Id: ircnet.c 6515 2006-09-27 17:13:42Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 6497 2006-09-26 16:23:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 6515 2006-09-27 17:13:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -123,19 +123,9 @@ static void ircnet_quit_sts(user_t *u, char *reason)
 }
 
 /* WALLOPS wrapper */
-static void ircnet_wallops_sts(char *fmt, ...)
+static void ircnet_wallops_sts(const char *text)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-
-	if (config_options.silent)
-		return;
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts(":%s WALLOPS :%s", me.name, buf);
+	sts(":%s WALLOPS :%s", me.name, text);
 }
 
 /* join a channel */

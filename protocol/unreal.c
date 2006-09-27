@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 6497 2006-09-26 16:23:41Z jilles $
+ * $Id: unreal.c 6515 2006-09-27 17:13:42Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 6497 2006-09-26 16:23:41Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 6515 2006-09-27 17:13:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -157,19 +157,9 @@ static void unreal_quit_sts(user_t *u, char *reason)
 }
 
 /* WALLOPS wrapper */
-static void unreal_wallops_sts(char *fmt, ...)
+static void unreal_wallops_sts(const char *text)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-
-	if (config_options.silent)
-		return;
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts(":%s GLOBOPS :%s", me.name, buf);
+	sts(":%s GLOBOPS :%s", me.name, text);
 }
 
 /* join a channel */
