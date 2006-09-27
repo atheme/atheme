@@ -1,3 +1,21 @@
+jilles      2006/09/27 23:01:53 UTC	(20060927-6521)
+  Log:
+  - Disconnect the old userserv from the build (rerun configure).
+  - Delete the old userserv/main.so on make install.
+  - Get rid of most of the mentions of userserv in the rest of the tree.
+  
+
+  Changes:	Modified:
+  +0 -13	trunk/include/services.h (File Modified) 
+  +3 -2		trunk/modules/Makefile.in (File Modified) 
+  +0 -7		trunk/modules/nickserv/main.c (File Modified) 
+  +16 -21	trunk/modules/xmlrpc/account.c (File Modified) 
+  +0 -1		trunk/src/atheme.c (File Modified) 
+  +0 -61	trunk/src/conf.c (File Modified) 
+  +2 -2		trunk/src/function.c (File Modified) 
+  +1 -1		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/09/27 22:44:37 UTC	(20060927-6519)
   Log:
   nickserv: use sourceinfo_t.smu in some places
