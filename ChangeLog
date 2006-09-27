@@ -1,3 +1,14 @@
+jilles      2006/09/27 23:22:13 UTC	(20060927-6523)
+  Log:
+  Autogenerate example.userserv.conf from example.conf in src/Makefile.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/dist/example.conf (File Modified) 
+  +0 -929	trunk/dist/example.userserv.conf (File Deleted) 
+  +13 -2	trunk/src/Makefile.in (File Modified) 
+
+
 jilles      2006/09/27 23:01:53 UTC	(20060927-6521)
   Log:
   - Disconnect the old userserv from the build (rerun configure).
