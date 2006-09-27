@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService STATUS function.
  *
- * $Id: status.c 6473 2006-09-25 15:14:21Z jilles $
+ * $Id: status.c 6517 2006-09-27 17:49:58Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/status", FALSE, _modinit, _moddeinit,
-	"$Id: status.c 6473 2006-09-25 15:14:21Z jilles $",
+	"$Id: status.c 6517 2006-09-27 17:49:58Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -43,7 +43,7 @@ static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
 
-	if (!si->su->myuser)
+	if (!si->smu)
 	{
 		command_success_nodata(si, "You are not logged in.");
 		return;
@@ -74,7 +74,7 @@ static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		if (is_founder(mc, si->su->myuser))
+		if (is_founder(mc, si->smu))
 			command_success_nodata(si, "You are founder on \2%s\2.", mc->name);
 
 		flags = chanacs_user_flags(mc, si->su);
@@ -91,13 +91,13 @@ static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	logcommand(chansvs.me, si->su, CMDLOG_GET, "STATUS");
-	command_success_nodata(si, "You are logged in as \2%s\2.", si->su->myuser->name);
+	command_success_nodata(si, "You are logged in as \2%s\2.", si->smu->name);
 
-	if (is_soper(si->su->myuser))
+	if (is_soper(si->smu))
 	{
 		operclass_t *operclass;
 
-		operclass = si->su->myuser->soper->operclass;
+		operclass = si->smu->soper->operclass;
 		if (operclass == NULL)
 			command_success_nodata(si, "You are a services root administrator.");
 		else

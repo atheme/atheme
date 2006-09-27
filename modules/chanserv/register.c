@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService REGISTER function.
  *
- * $Id: register.c 6427 2006-09-22 19:38:34Z jilles $
+ * $Id: register.c 6517 2006-09-27 17:49:58Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 6427 2006-09-22 19:38:34Z jilles $",
+	"$Id: register.c 6517 2006-09-27 17:49:58Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -64,13 +64,7 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* make sure they're logged in */
-	if (!si->su->myuser)
-	{
-		command_fail(si, fault_noprivs, "You are not logged in.");
-		return;
-	}
-
-	if (si->su->myuser->flags & MU_WAITAUTH)
+	if (si->smu->flags & MU_WAITAUTH)
 	{
 		command_fail(si, fault_notverified, "You need to verify your email address before you may register channels.");
 		return;
@@ -111,7 +105,7 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		{
 			tmc = (mychan_t *)n->data;
 
-			if (is_founder(tmc, si->su->myuser))
+			if (is_founder(tmc, si->smu))
 				tcnt++;
 		}
 	}
@@ -123,17 +117,17 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	logcommand(chansvs.me, si->su, CMDLOG_REGISTER, "%s REGISTER", name);
-	snoop("REGISTER: \2%s\2 to \2%s\2 as \2%s\2", name, si->su->nick, si->su->myuser->name);
+	snoop("REGISTER: \2%s\2 to \2%s\2 as \2%s\2", name, si->su->nick, si->smu->name);
 
 	mc = mychan_add(name);
-	mc->founder = si->su->myuser;
+	mc->founder = si->smu;
 	mc->registered = CURRTIME;
 	mc->used = CURRTIME;
 	mc->mlock_on |= (CMODE_NOEXT | CMODE_TOPIC);
 	mc->mlock_off |= (CMODE_LIMIT | CMODE_KEY);
 	mc->flags |= config_options.defcflags;
 
-	chanacs_add(mc, si->su->myuser, CA_INITIAL);
+	chanacs_add(mc, si->smu, CA_INITIAL);
 
 	if (c->ts > 0)
 	{

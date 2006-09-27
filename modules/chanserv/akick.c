@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 6473 2006-09-25 15:14:21Z jilles $
+ * $Id: akick.c 6517 2006-09-27 17:49:58Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@ static void cs_fcmd_akick(char *origin, char *chan);
 DECLARE_MODULE_V1
 (
 	"chanserv/akick", FALSE, _modinit, _moddeinit,
-	"$Id: akick.c 6473 2006-09-25 15:14:21Z jilles $",
+	"$Id: akick.c 6517 2006-09-27 17:49:58Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -75,7 +75,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 	 * and the founder of the channel before
 	 * we go any further.
 	 */
-	if (!si->su->myuser)
+	if (!si->smu)
 	{
 		/* if they're opers and just want to LIST, they don't have to log in */
 		if (!(has_priv(si->su, PRIV_CHAN_AUSPEX) && !strcasecmp("LIST", cmd)))

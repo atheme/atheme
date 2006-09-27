@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 6427 2006-09-22 19:38:34Z jilles $
+ * $Id: xop.c 6517 2006-09-27 17:49:58Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 6427 2006-09-22 19:38:34Z jilles $",
+	"$Id: xop.c 6517 2006-09-27 17:49:58Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -101,7 +101,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 	 * and the founder of the channel before
 	 * we go any further.
 	 */
-	if (!si->su->myuser)
+	if (!si->smu)
 	{
 		/* if they're opers and just want to LIST, they don't have to log in */
 		if (!(has_priv(si->su, PRIV_CHAN_AUSPEX) && !strcasecmp("LIST", cmd)))
@@ -130,7 +130,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 		mu = myuser_find_ext(uname);
 
 		/* As in /cs flags, allow founder to do anything */
-		if (is_founder(mc, si->su->myuser))
+		if (is_founder(mc, si->smu))
 			restrictflags = CA_ALL;
 		else
 			restrictflags = chanacs_user_flags(mc, si->su);
@@ -155,7 +155,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 		mu = myuser_find_ext(uname);
 
 		/* As in /cs flags, allow founder to do anything -- fix for #64: allow self removal. */
-		if (is_founder(mc, si->su->myuser) || mu == si->su->myuser)
+		if (is_founder(mc, si->smu) || mu == si->smu)
 			restrictflags = CA_ALL;
 		else
 			restrictflags = chanacs_user_flags(mc, si->su);
@@ -503,7 +503,7 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!is_founder(mc, si->su->myuser))
+	if (!is_founder(mc, si->smu))
 	{
 		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 		return;

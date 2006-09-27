@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 6427 2006-09-22 19:38:34Z jilles $
+ * $Id: ban.c 6517 2006-09-27 17:49:58Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", FALSE, _modinit, _moddeinit,
-	"$Id: ban.c 6427 2006-09-22 19:38:34Z jilles $",
+	"$Id: ban.c 6517 2006-09-27 17:49:58Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -86,7 +86,7 @@ static void cs_cmd_ban(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!si->su->myuser)
+	if (!si->smu)
 	{
 		command_fail(si, fault_noprivs, "You are not logged in.");
 		return;
@@ -168,7 +168,7 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!si->su->myuser)
+	if (!si->smu)
 	{
 		command_fail(si, fault_noprivs, "You are not logged in.");
 		return;

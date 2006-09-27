@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 6427 2006-09-22 19:38:34Z jilles $
+ * $Id: flags.c 6517 2006-09-27 17:49:58Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 6427 2006-09-22 19:38:34Z jilles $",
+	"$Id: flags.c 6517 2006-09-27 17:49:58Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -114,7 +114,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		myuser_t *tmu;
 		char *flagstr = parv[2];
 
-		if (!si->su->myuser)
+		if (!si->smu)
 		{
 			command_fail(si, fault_noprivs, "You are not logged in.");
 			return;
@@ -168,7 +168,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		/* founder may always set flags -- jilles */
-		if (is_founder(mc, si->su->myuser))
+		if (is_founder(mc, si->smu))
 			restrictflags = CA_ALL;
 		else
 		{
@@ -178,8 +178,8 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				/* allow a user to remove their own access
 				 * even without +f */
 				if (restrictflags & CA_AKICK ||
-						si->su->myuser == NULL ||
-						irccmp(target, si->su->myuser->name) ||
+						si->smu == NULL ||
+						irccmp(target, si->smu->name) ||
 						strcmp(flagstr, "-*"))
 				{
 					command_fail(si, fault_noprivs, "You are not authorized to execute this command.");
