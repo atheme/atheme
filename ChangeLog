@@ -1,3 +1,19 @@
+jilles      2006/09/27 22:44:37 UTC	(20060927-6519)
+  Log:
+  nickserv: use sourceinfo_t.smu in some places
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/modules/nickserv/ghost.c (File Modified) 
+  +3 -3		trunk/modules/nickserv/info.c (File Modified) 
+  +2 -2		trunk/modules/nickserv/listchans.c (File Modified) 
+  +7 -7		trunk/modules/nickserv/logout.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/register.c (File Modified) 
+  +73 -73	trunk/modules/nickserv/set.c (File Modified) 
+  +4 -4		trunk/modules/nickserv/status.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/verify.c (File Modified) 
+
+
 jilles      2006/09/27 17:49:58 UTC	(20060927-6517)
   Log:
   chanserv: use sourceinfo_t.smu in some places

@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 6449 2006-09-24 23:55:08Z jilles $
+ * $Id: function.c 6521 2006-09-27 23:01:53Z jilles $
  */
 
 #include "atheme.h"
@@ -602,7 +602,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	if (type == EMAIL_REGISTER)
 	{
 		fprintf(out, "In order to complete your registration, you must send the following\ncommand on IRC:\n");
-		fprintf(out, "/MSG %s VERIFY REGISTER %s %s\n\n", (nicksvs.nick ? nicksvs.nick : usersvs.nick), mu->name, param);
+		fprintf(out, "/MSG %s VERIFY REGISTER %s %s\n\n", nicksvs.nick, mu->name, param);
 		fprintf(out, "Thank you for registering your %s on the %s IRC " "network!\n\n",
 				(nicksvs.nick ? "nickname" : "account"), me.netname);
 	}
@@ -614,7 +614,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	else if (type == EMAIL_SETEMAIL)
 	{
 		fprintf(out, "In order to complete your email change, you must send\n" "the following command on IRC:\n");
-		fprintf(out, "/MSG %s VERIFY EMAILCHG %s %s\n\n", (nicksvs.nick ? nicksvs.nick : usersvs.nick), mu->name, param);
+		fprintf(out, "/MSG %s VERIFY EMAILCHG %s %s\n\n", nicksvs.nick, mu->name, param);
 	}
 	if (type == EMAIL_MEMO)
 	{

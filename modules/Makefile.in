@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 6039 2006-08-14 15:02:26Z jilles $
+# $Id: Makefile.in 6521 2006-09-27 23:01:53Z jilles $
 #
 
 CC		= @CC@
@@ -38,8 +38,8 @@ SRCS = ${BASE_SRCS}
 
 OBJS = ${SRCS:.c=.so}
 
-SUBDIRS = chanserv nickserv global operserv userserv xmlrpc memoserv saslserv
-# helpserv
+SUBDIRS = chanserv nickserv global operserv xmlrpc memoserv saslserv
+# userserv helpserv
 
 all: modules
 
@@ -51,6 +51,7 @@ install: build
 		cd $$i; \
 		${MAKE} install || exit; cd ..; \
 	done
+	-${RM} -f ${MODDIR}/modules/userserv/main.so
 
 modules:
 	@for i in $(SUBDIRS); do \

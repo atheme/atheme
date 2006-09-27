@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6495 2006-09-26 15:57:09Z jilles $
+ * $Id: main.c 6521 2006-09-27 23:01:53Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6495 2006-09-26 15:57:09Z jilles $",
+	"$Id: main.c 6521 2006-09-27 23:01:53Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -121,13 +121,6 @@ static void nickserv_config_ready(void *unused)
         nicksvs.me = add_service(nicksvs.nick, nicksvs.user,
                                  nicksvs.host, nicksvs.real, nickserv);
         nicksvs.disp = nicksvs.me->disp;
-
-	if (usersvs.nick)
-	{
-		slog(LG_ERROR, "idiotic conf detected: nickserv enabled but userserv{} block present, ignoring userserv");
-		free(usersvs.nick);
-		usersvs.nick = NULL;
-	}
 
 	if (nicksvs.no_nick_ownership)
 		for (i = 0; nick_account_trans[i].nickstring != NULL; i++)

@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 6497 2006-09-26 16:23:41Z jilles $
+ * $Id: services.h 6521 2006-09-27 23:01:53Z jilles $
  */
 
 #ifndef SERVICES_H
@@ -16,7 +16,6 @@ typedef struct opersvs_ opersvs_t;
 typedef struct memosvs_ memosvs_t;
 typedef struct helpsvs_ helpsvs_t;
 typedef struct nicksvs_ nicksvs_t;
-typedef struct usersvs_ usersvs_t;
 typedef struct saslsvs_ saslsvs_t;
 
 /* don't forget to define the extern variables below,
@@ -102,17 +101,6 @@ struct nicksvs_
   service_t *me;
 };
 
-struct usersvs_
-{
-  char   *nick;
-  char   *user;
-  char   *host;
-  char   *real;
-  char   *disp;			/* the IRC client's dispname  */
-
-  service_t *me;
-};
-
 struct saslsvs_
 {
   list_t pending;
@@ -157,7 +145,6 @@ E opersvs_t opersvs;
 E memosvs_t memosvs;
 E helpsvs_t helpsvs;
 E nicksvs_t nicksvs;
-E usersvs_t usersvs;
 E saslsvs_t saslsvs;
 
 /* servtree.c */

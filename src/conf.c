@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 6479 2006-09-25 16:41:02Z jilles $
+ * $Id: conf.c 6521 2006-09-27 23:01:53Z jilles $
  */
 
 #include "atheme.h"
@@ -25,7 +25,6 @@ static int c_general(CONFIGENTRY *);
 static int c_database(CONFIGENTRY *);
 static int c_uplink(CONFIGENTRY *);
 static int c_nickserv(CONFIGENTRY *);
-static int c_userserv(CONFIGENTRY *);
 static int c_saslserv(CONFIGENTRY *);
 static int c_memoserv(CONFIGENTRY *);
 static int c_helpserv(CONFIGENTRY *);
@@ -88,12 +87,6 @@ static int c_ni_host(CONFIGENTRY *);
 static int c_ni_real(CONFIGENTRY *);
 static int c_ni_spam(CONFIGENTRY *);
 static int c_ni_no_nick_ownership(CONFIGENTRY *);
-
-/* UserServ client information. */
-static int c_ui_nick(CONFIGENTRY *);
-static int c_ui_user(CONFIGENTRY *);
-static int c_ui_host(CONFIGENTRY *);
-static int c_ui_real(CONFIGENTRY *);
 
 /* SaslServ client information. */
 static int c_ss_nick(CONFIGENTRY *);
@@ -172,7 +165,6 @@ list_t conf_oi_table;
 list_t conf_ni_table;
 list_t conf_db_table;
 list_t conf_gi_table;
-list_t conf_ui_table;
 list_t conf_ms_table;
 list_t conf_hs_table;
 list_t conf_la_table;
@@ -473,7 +465,6 @@ void init_newconf(void)
 	add_top_conf("OPERSERV", c_oservice);
 	add_top_conf("OSERVICE", c_oservice);
 	add_top_conf("NICKSERV", c_nickserv);
-	add_top_conf("USERSERV", c_userserv);
 	add_top_conf("SASLSERV", c_saslserv);
 	add_top_conf("MEMOSERV", c_memoserv);
 	add_top_conf("HELPSERV", c_helpserv);
@@ -560,12 +551,6 @@ void init_newconf(void)
 	add_conf_item("SPAM", &conf_ni_table, c_ni_spam);
 	add_conf_item("NO_NICK_OWNERSHIP", &conf_ni_table, c_ni_no_nick_ownership);
 
-	/* userserv{} block */
-	add_conf_item("NICK", &conf_ui_table, c_ui_nick);
-	add_conf_item("USER", &conf_ui_table, c_ui_user);
-	add_conf_item("HOST", &conf_ui_table, c_ui_host);
-	add_conf_item("REAL", &conf_ui_table, c_ui_real);
-
 	/* saslserv{} block */
 	add_conf_item("NICK", &conf_ss_table, c_ss_nick);
 	add_conf_item("USER", &conf_ss_table, c_ss_user);
@@ -623,12 +608,6 @@ static int c_oservice(CONFIGENTRY *ce)
 static int c_nickserv(CONFIGENTRY *ce)
 {
 	subblock_handler(ce, &conf_ni_table);
-	return 0;
-}
-
-static int c_userserv(CONFIGENTRY *ce)
-{
-	subblock_handler(ce, &conf_ui_table);
 	return 0;
 }
 
@@ -1499,46 +1478,6 @@ static int c_ni_spam(CONFIGENTRY *ce)
 static int c_ni_no_nick_ownership(CONFIGENTRY *ce)
 {
 	nicksvs.no_nick_ownership = TRUE;
-	return 0;
-}
-
-static int c_ui_nick(CONFIGENTRY *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	usersvs.nick = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_ui_user(CONFIGENTRY *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	usersvs.user = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_ui_host(CONFIGENTRY *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	usersvs.host = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_ui_real(CONFIGENTRY *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	usersvs.real = sstrdup(ce->ce_vardata);
-
 	return 0;
 }
 
