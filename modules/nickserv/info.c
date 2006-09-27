@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 6457 2006-09-25 10:33:40Z nenolod $
+ * $Id: info.c 6519 2006-09-27 22:44:37Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 6457 2006-09-25 10:33:40Z nenolod $",
+	"$Id: info.c 6519 2006-09-27 22:44:37Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -74,7 +74,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	if (LIST_LENGTH(&mu->logins) == 0)
 		command_success_nodata(si, "Last seen: %s (%s ago)", lastlogin, time_ago(mu->lastlogin));
-	else if (mu == si->su->myuser || has_priv(si->su, PRIV_USER_AUSPEX))
+	else if (mu == si->smu || has_priv(si->su, PRIV_USER_AUSPEX))
 	{
 		buf[0] = '\0';
 		LIST_FOREACH(n, mu->logins.head)
@@ -96,7 +96,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 
 	if (!(mu->flags & MU_HIDEMAIL)
-		|| (si->su->myuser == mu || has_priv(si->su, PRIV_USER_AUSPEX)))
+		|| (si->smu == mu || has_priv(si->su, PRIV_USER_AUSPEX)))
 		command_success_nodata(si, "Email: %s%s", mu->email,
 					(mu->flags & MU_HIDEMAIL) ? " (hidden)": "");
 
@@ -144,7 +144,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	if (*buf)
 		command_success_nodata(si, "Flags: %s", buf);
 
-	if (mu->soper && (mu == si->su->myuser || has_priv(si->su, PRIV_VIEWPRIVS)))
+	if (mu->soper && (mu == si->smu || has_priv(si->su, PRIV_VIEWPRIVS)))
 	{
 		command_success_nodata(si, "Oper class: %s", mu->soper->operclass ? mu->soper->operclass->name : "*");
 	}

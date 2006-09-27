@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ GHOST function.
  *
- * $Id: ghost.c 6479 2006-09-25 16:41:02Z jilles $
+ * $Id: ghost.c 6519 2006-09-27 22:44:37Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/ghost", FALSE, _modinit, _moddeinit,
-	"$Id: ghost.c 6479 2006-09-25 16:41:02Z jilles $",
+	"$Id: ghost.c 6519 2006-09-27 22:44:37Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -70,14 +70,14 @@ void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if ((target_u->myuser && target_u->myuser == si->su->myuser) || /* they're identified under our account */
-			(!nicksvs.no_nick_ownership && mu && mu == si->su->myuser) || /* we're identified under their account */
+	if ((target_u->myuser && target_u->myuser == si->smu) || /* they're identified under our account */
+			(!nicksvs.no_nick_ownership && mu && mu == si->smu) || /* we're identified under their account */
 			(!nicksvs.no_nick_ownership && password && mu && verify_password(mu, password))) /* we have their password */
 	{
 		/* If we're ghosting an unregistered nick, mu will be unset,
 		 * however if it _is_ registered, we still need to set it or
 		 * the wrong user will have their last seen time updated... */
-		if(target_u->myuser && target_u->myuser == si->su->myuser)
+		if(target_u->myuser && target_u->myuser == si->smu)
 			mu = target_u->myuser;
 
 		skill(nicksvs.nick, target, "GHOST command used by %s!%s@%s", si->su->nick, si->su->user, si->su->vhost);

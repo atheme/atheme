@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGOUT functions.
  *
- * $Id: logout.c 6457 2006-09-25 10:33:40Z nenolod $
+ * $Id: logout.c 6519 2006-09-27 22:44:37Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/logout", FALSE, _modinit, _moddeinit,
-	"$Id: logout.c 6457 2006-09-25 10:33:40Z nenolod $",
+	"$Id: logout.c 6519 2006-09-27 22:44:37Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -44,7 +44,7 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 	char *user = parv[0];
 	char *pass = parv[1];
 
-	if ((!si->su->myuser) && (!user || !pass))
+	if ((!si->smu) && (!user || !pass))
 	{
 		command_fail(si, fault_authfail, "You are not logged in.");
 		return;
@@ -77,8 +77,8 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (is_soper(si->su->myuser))
-		snoop("DESOPER: \2%s\2 as \2%s\2", si->su->nick, si->su->myuser->name);
+	if (is_soper(si->smu))
+		snoop("DESOPER: \2%s\2 as \2%s\2", si->su->nick, si->smu->name);
 
 	if (si->su != u)
 	{
@@ -91,14 +91,14 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "You have been logged out.");
 	}
 
-	si->su->myuser->lastlogin = CURRTIME;
-	if (!ircd_on_logout(si->su->nick, si->su->myuser->name, NULL))
+	si->smu->lastlogin = CURRTIME;
+	if (!ircd_on_logout(si->su->nick, si->smu->name, NULL))
 	{
-		LIST_FOREACH_SAFE(n, tn, si->su->myuser->logins.head)
+		LIST_FOREACH_SAFE(n, tn, si->smu->logins.head)
 		{
 			if (n->data == si->su)
 			{
-				node_del(n, &si->su->myuser->logins);
+				node_del(n, &si->smu->logins);
 				node_free(n);
 				break;
 			}

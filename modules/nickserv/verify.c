@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ VERIFY function.
  *
- * $Id: verify.c 6457 2006-09-25 10:33:40Z nenolod $
+ * $Id: verify.c 6519 2006-09-27 22:44:37Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/verify", FALSE, _modinit, _moddeinit,
-	"$Id: verify.c 6457 2006-09-25 10:33:40Z nenolod $",
+	"$Id: verify.c 6519 2006-09-27 22:44:37Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -61,7 +61,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 	/* forcing users to log in before we verify
 	 * prevents some information leaks
 	 */
-	if (!(si->su->myuser == mu))
+	if (!(si->smu == mu))
 	{
 		command_fail(si, fault_badparams, "Please log in before attempting to verify your registration.");
 		return;

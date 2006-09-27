@@ -5,7 +5,7 @@
  * This file contains code for the nickserv LISTCHANS function.
  *   -- Contains an alias "MYACCESS" for legacy users
  *
- * $Id: listchans.c 6457 2006-09-25 10:33:40Z nenolod $
+ * $Id: listchans.c 6519 2006-09-27 22:44:37Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/listchans", FALSE, _modinit, _moddeinit,
-	"$Id: listchans.c 6457 2006-09-25 10:33:40Z nenolod $",
+	"$Id: listchans.c 6519 2006-09-27 22:44:37Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -73,7 +73,7 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 	{
-		mu = si->su->myuser;
+		mu = si->smu;
 		if (mu == NULL)
 		{
 			command_fail(si, fault_authfail, "You are not logged in.");
@@ -81,7 +81,7 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	if (mu != si->su->myuser)
+	if (mu != si->smu)
 	{	/* must have been an oper */
 		snoop("LISTCHANS: \2%s\2 on \2%s\2", si->su->nick, mu->name);
 		logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "LISTCHANS %s", mu->name);

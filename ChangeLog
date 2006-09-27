@@ -1,3 +1,19 @@
+jilles      2006/09/27 17:49:58 UTC	(20060927-6517)
+  Log:
+  chanserv: use sourceinfo_t.smu in some places
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/akick.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/ban.c (File Modified) 
+  +3 -3		trunk/modules/chanserv/drop.c (File Modified) 
+  +4 -4		trunk/modules/chanserv/flags.c (File Modified) 
+  +5 -11	trunk/modules/chanserv/register.c (File Modified) 
+  +5 -5		trunk/modules/chanserv/status.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/template.c (File Modified) 
+  +4 -4		trunk/modules/chanserv/xop.c (File Modified) 
+
+
 jilles      2006/09/27 17:13:42 UTC	(20060927-6515)
   Log:
   - Change wallops_sts() protocol function to take a
