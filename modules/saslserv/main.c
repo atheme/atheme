@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6511 2006-09-26 18:45:03Z jilles $
+ * $Id: main.c 6513 2006-09-27 00:32:08Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6511 2006-09-26 18:45:03Z jilles $",
+	"$Id: main.c 6513 2006-09-27 00:32:08Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -513,7 +513,15 @@ static void sasl_newuser(void *vptr)
 	/* and for opers */
 	strlcpy(lao, u->user, BUFSIZE);
 	strlcat(lao, "@", BUFSIZE);
-	strlcat(lao, u->host, BUFSIZE);
+	/* Hack for charybdis before 2.1: store IP instead of vhost
+	 * (real host is not known at this time) -- jilles */
+	slog(LG_DEBUG, "nick %s host %s vhost %s ip %s",
+			u->nick, u->host, u->vhost, u->ip);
+	if (!strcmp(u->host, u->vhost) && *u->ip != '\0' &&
+			metadata_find(mu, METADATA_USER, "private:usercloak"))
+		strlcat(lao, u->ip, BUFSIZE);
+	else
+		strlcat(lao, u->host, BUFSIZE);
 	metadata_add(mu, METADATA_USER, "private:host:actual", lao);
 
 	/* check for failed attempts and let them know */

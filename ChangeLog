@@ -1,3 +1,12 @@
+jilles      2006/09/26 18:45:03 UTC	(20060926-6511)
+  Log:
+  saslserv/main: get rid of some compiler warnings
+  
+
+  Changes:	Modified:
+  +15 -14	trunk/modules/saslserv/main.c (File Modified) 
+
+
 jilles      2006/09/26 18:30:13 UTC	(20060926-6509)
   Log:
   Remove user_burstlogin hook, I don't see what this is
