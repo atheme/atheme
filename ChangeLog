@@ -1,3 +1,12 @@
+jilles      2006/09/27 23:46:05 UTC	(20060927-6525)
+  Log:
+  Warn users if we're logging them out because their account is unknown.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/09/27 23:22:13 UTC	(20060927-6523)
   Log:
   Autogenerate example.userserv.conf from example.conf in src/Makefile.

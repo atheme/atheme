@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 6381 2006-09-13 21:54:38Z jilles $
+# $Id: Makefile.in 6527 2006-09-28 00:11:12Z jilles $
 #
 
 CC		= @CC@
@@ -47,7 +47,6 @@ SRCS = \
 	ircd_noprotect.c	\
 	ns_generatepass.c	\
 	ns_enforce.c		\
-	us_generatepass.c	\
 	os_pingspam.c
 
 # To compile your own modules, add them to SRCS or make blegh.so
