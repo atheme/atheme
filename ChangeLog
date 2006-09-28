@@ -1,3 +1,12 @@
+jilles      2006/09/28 00:11:12 UTC	(20060928-6527)
+  Log:
+  Disconnect contrib/us_generatepass.c from the build.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/contrib/Makefile.in (File Modified) 
+
+
 jilles      2006/09/27 23:46:05 UTC	(20060927-6525)
   Log:
   Warn users if we're logging them out because their account is unknown.

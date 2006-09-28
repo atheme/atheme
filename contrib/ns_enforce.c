@@ -150,6 +150,11 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 	user_t *u;
 	char ign[BUFSIZE];
 
+	/* Absolutely do not do anything like this if nicks
+	 * are not considered owned */
+	if (nicksvs.no_nick_ownership)
+		return;
+
 	if (!target && si->su->myuser != NULL)
 		target = si->su->myuser->name;
 	if (!target)
@@ -246,6 +251,11 @@ void reg_check(void *arg)
 	char *uid, *gnick;
 	int i = 0, x = 0;
 	char ign[BUFSIZE];
+
+	/* Absolutely do not do anything like this if nicks
+	 * are not considered owned */
+	if (nicksvs.no_nick_ownership)
+		return;
 	
 	for (i = 0; i < HASHSIZE; i++)
 	{
