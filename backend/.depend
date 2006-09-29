@@ -1,3 +1,4 @@
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/backend//"
 flatfile.so: flatfile.c ../include/atheme.h \
   ../libatheme/org.atheme.claro.base ../include/sysconf.h \
   ../libatheme/stdinc.h ../libatheme/dlink.h ../libatheme/event.h \
@@ -14,4 +15,25 @@ flatfile.so: flatfile.c ../include/atheme.h \
   ../include/confparse.h ../include/global.h ../include/flags.h \
   ../include/metadata.h ../include/phandler.h ../include/servtree.h \
   ../include/services.h ../include/commandtree.h ../include/users.h \
-  ../include/authcookie.h ../include/privs.h ../include/common-ctcp.h
+  ../include/sourceinfo.h ../include/authcookie.h ../include/privs.h \
+  ../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/backend//"
+postgresql.so: postgresql.c ../include/atheme.h \
+  ../libatheme/org.atheme.claro.base ../include/sysconf.h \
+  ../libatheme/stdinc.h ../libatheme/dlink.h ../libatheme/event.h \
+  ../libatheme/balloc.h ../libatheme/connection.h ../libatheme/sockio.h \
+  ../libatheme/hook.h ../libatheme/linker.h \
+  ../libatheme/org.atheme.claro.base.string \
+  ../libatheme/org.atheme.claro.base.memory \
+  ../libatheme/org.atheme.claro.base.datastream ../include/common.h \
+  ../include/servers.h ../include/channels.h ../include/module.h \
+  ../include/crypto.h ../include/culture.h ../include/xmlrpc.h \
+  ../include/atheme.h ../include/base64.h ../include/md5.h \
+  ../include/sasl.h ../include/dictionary.h ../include/match.h \
+  ../include/sysconf.h ../include/account.h ../include/tools.h \
+  ../include/confparse.h ../include/global.h ../include/flags.h \
+  ../include/metadata.h ../include/phandler.h ../include/servtree.h \
+  ../include/services.h ../include/commandtree.h ../include/users.h \
+  ../include/sourceinfo.h ../include/authcookie.h ../include/privs.h \
+  ../include/common-ctcp.h /usr/local/include/libpq-fe.h \
+  /usr/local/include/postgres_ext.h

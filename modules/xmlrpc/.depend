@@ -1,3 +1,4 @@
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/xmlrpc//"
 main.so: main.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -16,8 +17,9 @@ main.so: main.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/xmlrpc//"
 account.so: account.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -36,8 +38,9 @@ account.so: account.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/xmlrpc//"
 channel.so: channel.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -56,8 +59,9 @@ channel.so: channel.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/xmlrpc//"
 memo.so: memo.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -76,5 +80,5 @@ memo.so: memo.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h

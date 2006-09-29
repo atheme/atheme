@@ -1,3 +1,13 @@
+jilles      2006/09/29 18:11:51 UTC	(20060929-6555)
+  Log:
+  nickserv enforce:
+  Use command_fail(), command_success_nodata() and sourceinfo_t.smu.
+  
+
+  Changes:	Modified:
+  +29 -26	trunk/contrib/ns_enforce.c (File Modified) 
+
+
 jilles      2006/09/29 17:45:54 UTC	(20060929-6553)
   Log:
   nickserv enforce:

@@ -1,3 +1,4 @@
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
 main.so: main.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -16,8 +17,9 @@ main.so: main.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
 akill.so: akill.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -36,8 +38,72 @@ akill.so: akill.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
+clearchan.so: clearchan.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
+  ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
+  ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
+  ../../include/sysconf.h ../../include/account.h ../../include/tools.h \
+  ../../include/confparse.h ../../include/global.h ../../include/flags.h \
+  ../../include/metadata.h ../../include/phandler.h \
+  ../../include/servtree.h ../../include/services.h \
+  ../../include/commandtree.h ../../include/users.h \
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
+clones.so: clones.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
+  ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
+  ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
+  ../../include/sysconf.h ../../include/account.h ../../include/tools.h \
+  ../../include/confparse.h ../../include/global.h ../../include/flags.h \
+  ../../include/metadata.h ../../include/phandler.h \
+  ../../include/servtree.h ../../include/services.h \
+  ../../include/commandtree.h ../../include/users.h \
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
+compare.so: compare.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
+  ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
+  ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
+  ../../include/sysconf.h ../../include/account.h ../../include/tools.h \
+  ../../include/confparse.h ../../include/global.h ../../include/flags.h \
+  ../../include/metadata.h ../../include/phandler.h \
+  ../../include/servtree.h ../../include/services.h \
+  ../../include/commandtree.h ../../include/users.h \
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
 help.so: help.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -56,8 +122,9 @@ help.so: help.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
 ignore.so: ignore.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -76,8 +143,9 @@ ignore.so: ignore.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
 inject.so: inject.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -96,8 +164,10 @@ inject.so: inject.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h ../../include/uplink.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h \
+  ../../include/uplink.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
 jupe.so: jupe.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -116,8 +186,9 @@ jupe.so: jupe.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
 mode.so: mode.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -136,8 +207,9 @@ mode.so: mode.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
 modinspect.so: modinspect.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -156,8 +228,9 @@ modinspect.so: modinspect.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
 modlist.so: modlist.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -176,8 +249,9 @@ modlist.so: modlist.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
 modload.so: modload.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -196,8 +270,9 @@ modload.so: modload.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
 modrestart.so: modrestart.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -216,8 +291,9 @@ modrestart.so: modrestart.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
 modunload.so: modunload.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -236,8 +312,9 @@ modunload.so: modunload.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
 noop.so: noop.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -256,8 +333,9 @@ noop.so: noop.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
 raw.so: raw.c ../../include/atheme.h ../../libatheme/org.atheme.claro.base \
   ../../include/sysconf.h ../../libatheme/stdinc.h \
   ../../libatheme/dlink.h ../../libatheme/event.h \
@@ -275,8 +353,52 @@ raw.so: raw.c ../../include/atheme.h ../../libatheme/org.atheme.claro.base \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h ../../include/uplink.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h \
+  ../../include/uplink.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
+rakill.so: rakill.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
+  ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
+  ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
+  ../../include/sysconf.h ../../include/account.h ../../include/tools.h \
+  ../../include/confparse.h ../../include/global.h ../../include/flags.h \
+  ../../include/metadata.h ../../include/phandler.h \
+  ../../include/servtree.h ../../include/services.h \
+  ../../include/commandtree.h ../../include/users.h \
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
+rmatch.so: rmatch.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
+  ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
+  ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
+  ../../include/sysconf.h ../../include/account.h ../../include/tools.h \
+  ../../include/confparse.h ../../include/global.h ../../include/flags.h \
+  ../../include/metadata.h ../../include/phandler.h \
+  ../../include/servtree.h ../../include/services.h \
+  ../../include/commandtree.h ../../include/users.h \
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
 rehash.so: rehash.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -295,8 +417,9 @@ rehash.so: rehash.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
 restart.so: restart.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -315,8 +438,50 @@ restart.so: restart.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
+rnc.so: rnc.c ../../include/atheme.h ../../libatheme/org.atheme.claro.base \
+  ../../include/sysconf.h ../../libatheme/stdinc.h \
+  ../../libatheme/dlink.h ../../libatheme/event.h \
+  ../../libatheme/balloc.h ../../libatheme/connection.h \
+  ../../libatheme/sockio.h ../../libatheme/hook.h \
+  ../../libatheme/linker.h ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
+  ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
+  ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
+  ../../include/sysconf.h ../../include/account.h ../../include/tools.h \
+  ../../include/confparse.h ../../include/global.h ../../include/flags.h \
+  ../../include/metadata.h ../../include/phandler.h \
+  ../../include/servtree.h ../../include/services.h \
+  ../../include/commandtree.h ../../include/users.h \
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
+rwatch.so: rwatch.c ../../include/atheme.h \
+  ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
+  ../../libatheme/stdinc.h ../../libatheme/dlink.h \
+  ../../libatheme/event.h ../../libatheme/balloc.h \
+  ../../libatheme/connection.h ../../libatheme/sockio.h \
+  ../../libatheme/hook.h ../../libatheme/linker.h \
+  ../../libatheme/org.atheme.claro.base.string \
+  ../../libatheme/org.atheme.claro.base.memory \
+  ../../libatheme/org.atheme.claro.base.datastream ../../include/common.h \
+  ../../include/servers.h ../../include/channels.h ../../include/module.h \
+  ../../include/crypto.h ../../include/culture.h ../../include/xmlrpc.h \
+  ../../include/atheme.h ../../include/base64.h ../../include/md5.h \
+  ../../include/sasl.h ../../include/dictionary.h ../../include/match.h \
+  ../../include/sysconf.h ../../include/account.h ../../include/tools.h \
+  ../../include/confparse.h ../../include/global.h ../../include/flags.h \
+  ../../include/metadata.h ../../include/phandler.h \
+  ../../include/servtree.h ../../include/services.h \
+  ../../include/commandtree.h ../../include/users.h \
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
 shutdown.so: shutdown.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -335,8 +500,9 @@ shutdown.so: shutdown.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
 specs.so: specs.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -355,8 +521,9 @@ specs.so: specs.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
 uptime.so: uptime.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -375,8 +542,9 @@ uptime.so: uptime.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/modules/operserv//"
 update.so: update.c ../../include/atheme.h \
   ../../libatheme/org.atheme.claro.base ../../include/sysconf.h \
   ../../libatheme/stdinc.h ../../libatheme/dlink.h \
@@ -395,5 +563,5 @@ update.so: update.c ../../include/atheme.h \
   ../../include/metadata.h ../../include/phandler.h \
   ../../include/servtree.h ../../include/services.h \
   ../../include/commandtree.h ../../include/users.h \
-  ../../include/authcookie.h ../../include/privs.h \
-  ../../include/common-ctcp.h
+  ../../include/sourceinfo.h ../../include/authcookie.h \
+  ../../include/privs.h ../../include/common-ctcp.h

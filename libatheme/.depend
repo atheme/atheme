@@ -1,47 +1,59 @@
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/libatheme//"
 balloc.o: balloc.c ./org.atheme.claro.base ../include/sysconf.h \
   ./stdinc.h ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h \
   ./hook.h ./linker.h ./org.atheme.claro.base.string \
   ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/libatheme//"
 claro.o: claro.c ./org.atheme.claro.base ../include/sysconf.h ./stdinc.h \
   ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h ./hook.h \
   ./linker.h ./org.atheme.claro.base.string \
   ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/libatheme//"
 connection.o: connection.c ./org.atheme.claro.base ../include/sysconf.h \
   ./stdinc.h ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h \
   ./hook.h ./linker.h ./org.atheme.claro.base.string \
   ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/libatheme//"
 datastream.o: datastream.c ./org.atheme.claro.base ../include/sysconf.h \
   ./stdinc.h ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h \
   ./hook.h ./linker.h ./org.atheme.claro.base.string \
   ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/libatheme//"
 dlink.o: dlink.c ./org.atheme.claro.base ../include/sysconf.h ./stdinc.h \
   ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h ./hook.h \
   ./linker.h ./org.atheme.claro.base.string \
   ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/libatheme//"
 event.o: event.c ./org.atheme.claro.base ../include/sysconf.h ./stdinc.h \
   ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h ./hook.h \
   ./linker.h ./org.atheme.claro.base.string \
   ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/libatheme//"
 hook.o: hook.c ./org.atheme.claro.base ../include/sysconf.h ./stdinc.h \
   ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h ./hook.h \
   ./linker.h ./org.atheme.claro.base.string \
   ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/libatheme//"
 linker.o: linker.c ./org.atheme.claro.base ../include/sysconf.h \
   ./stdinc.h ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h \
   ./hook.h ./linker.h ./org.atheme.claro.base.string \
   ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/libatheme//"
 memory.o: memory.c ./org.atheme.claro.base ../include/sysconf.h \
   ./stdinc.h ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h \
   ./hook.h ./linker.h ./org.atheme.claro.base.string \
   ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/libatheme//"
 sockio.o: sockio.c ./org.atheme.claro.base ../include/sysconf.h \
   ./stdinc.h ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h \
   ./hook.h ./linker.h ./org.atheme.claro.base.string \
   ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/libatheme//"
 string.o: string.c ./org.atheme.claro.base ../include/sysconf.h \
   ./stdinc.h ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h \
   ./hook.h ./linker.h ./org.atheme.claro.base.string \
   ./org.atheme.claro.base.memory ./org.atheme.claro.base.datastream
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/libatheme//"
 poll.o: poll.c ./org.atheme.claro.base ../include/sysconf.h ./stdinc.h \
   ./dlink.h ./event.h ./balloc.h ./connection.h ./sockio.h ./hook.h \
   ./linker.h ./org.atheme.claro.base.string \

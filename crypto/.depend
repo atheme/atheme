@@ -1,3 +1,4 @@
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/crypto//"
 posix.so: posix.c ../include/atheme.h ../libatheme/org.atheme.claro.base \
   ../include/sysconf.h ../libatheme/stdinc.h ../libatheme/dlink.h \
   ../libatheme/event.h ../libatheme/balloc.h ../libatheme/connection.h \
@@ -13,7 +14,9 @@ posix.so: posix.c ../include/atheme.h ../libatheme/org.atheme.claro.base \
   ../include/confparse.h ../include/global.h ../include/flags.h \
   ../include/metadata.h ../include/phandler.h ../include/servtree.h \
   ../include/services.h ../include/commandtree.h ../include/users.h \
-  ../include/authcookie.h ../include/privs.h ../include/common-ctcp.h
+  ../include/sourceinfo.h ../include/authcookie.h ../include/privs.h \
+  ../include/common-ctcp.h
+# 1 "/sabretooth.mnt/user/capitalism/home/jilles/svn/atheme/crypto//"
 ircservices.so: ircservices.c ../include/atheme.h \
   ../libatheme/org.atheme.claro.base ../include/sysconf.h \
   ../libatheme/stdinc.h ../libatheme/dlink.h ../libatheme/event.h \
@@ -30,4 +33,5 @@ ircservices.so: ircservices.c ../include/atheme.h \
   ../include/confparse.h ../include/global.h ../include/flags.h \
   ../include/metadata.h ../include/phandler.h ../include/servtree.h \
   ../include/services.h ../include/commandtree.h ../include/users.h \
-  ../include/authcookie.h ../include/privs.h ../include/common-ctcp.h
+  ../include/sourceinfo.h ../include/authcookie.h ../include/privs.h \
+  ../include/common-ctcp.h
