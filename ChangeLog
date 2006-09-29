@@ -1,3 +1,12 @@
+jilles      2006/09/29 21:54:21 UTC	(20060929-6563)
+  Log:
+  Fix tcnt stuff, still ugly though.
+  
+
+  Changes:	Modified:
+  +1 -2		trunk/modules/xmlrpc/account.c (File Modified) 
+
+
 jilles      2006/09/29 21:20:37 UTC	(20060929-6561)
   Log:
   Update catserv to new add_service().
