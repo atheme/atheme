@@ -1,3 +1,12 @@
+jilles      2006/09/29 22:34:35 UTC	(20060929-6565)
+  Log:
+  CatServ: Use command_success_nodata().
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/contrib/ircd_catserv.c (File Modified) 
+
+
 jilles      2006/09/29 21:54:21 UTC	(20060929-6563)
   Log:
   Fix tcnt stuff, still ugly though.
