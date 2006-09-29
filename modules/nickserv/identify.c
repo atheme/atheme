@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY and LOGIN functions.
  *
- * $Id: identify.c 6493 2006-09-26 15:50:27Z jilles $
+ * $Id: identify.c 6541 2006-09-29 15:05:47Z jilles $
  */
 
 #include "atheme.h"
@@ -21,7 +21,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/" COMMAND_LC, FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 6493 2006-09-26 15:50:27Z jilles $",
+	"$Id: identify.c 6541 2006-09-29 15:05:47Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -105,7 +105,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 	if (metadata_find(mu, METADATA_USER, "private:freeze:freezer"))
 	{
 		command_fail(si, fault_authfail, nicksvs.no_nick_ownership ? "You cannot login as \2%s\2 because the account has been frozen." : "You cannot identify to \2%s\2 because the nickname has been frozen.", mu->name);
-		logcommand(nicksvs.me, u, CMDLOG_LOGIN, "failed " COMMAND_UC " to %s (frozen)", mu->name);
+		logcommand(nicksvs.me, si->su, CMDLOG_LOGIN, "failed " COMMAND_UC " to %s (frozen)", mu->name);
 		return;
 	}
 
@@ -126,7 +126,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
 		{
 			command_fail(si, fault_toomany, "There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d).", LIST_LENGTH(&mu->logins), mu->name, me.maxlogins);
-			logcommand(nicksvs.me, u, CMDLOG_LOGIN, "failed " COMMAND_UC " to %s (too many logins)", mu->name);
+			logcommand(nicksvs.me, si->su, CMDLOG_LOGIN, "failed " COMMAND_UC " to %s (too many logins)", mu->name);
 			return;
 		}
 
@@ -169,7 +169,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		strlcat(lao, u->host, BUFSIZE);
 		metadata_add(mu, METADATA_USER, "private:host:actual", lao);
 
-		logcommand(nicksvs.me, u, CMDLOG_LOGIN, COMMAND_UC);
+		logcommand(nicksvs.me, si->su, CMDLOG_LOGIN, COMMAND_UC);
 
 		command_success_nodata(si, nicksvs.no_nick_ownership ? "You are now logged in as \2%s\2." : "You are now identified for \2%s\2.", u->myuser->name);
 
@@ -276,7 +276,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	logcommand(nicksvs.me, u, CMDLOG_LOGIN, "failed " COMMAND_UC " to %s (bad password)", mu->name);
+	logcommand(nicksvs.me, si->su, CMDLOG_LOGIN, "failed " COMMAND_UC " to %s (bad password)", mu->name);
 
 	command_fail(si, fault_authfail, "Invalid password for \2%s\2.", mu->name);
 
