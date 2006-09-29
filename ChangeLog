@@ -1,3 +1,17 @@
+jilles      2006/09/29 22:50:24 UTC	(20060929-6569)
+  Log:
+  Call some function pointers accessed via the sourceinfo_t
+  for command_fail/command_success_nodata/command_success_string
+  on sources without a user_t (non-IRC).
+  
+
+  Changes:	Modified:
+  +20 -0	trunk/include/common.h (File Modified) 
+  +0 -20	trunk/include/services.h (File Modified) 
+  +10 -0	trunk/include/sourceinfo.h (File Modified) 
+  +24 -1	trunk/src/services.c (File Modified) 
+
+
 jilles      2006/09/29 22:47:23 UTC	(20060929-6567)
   Log:
   logcommand(): allow commands with user_t and connection_t both NULL
