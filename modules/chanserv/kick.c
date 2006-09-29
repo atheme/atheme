@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: kick.c 6427 2006-09-22 19:38:34Z jilles $
+ * $Id: kick.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/kick", FALSE, _modinit, _moddeinit,
-	"$Id: kick.c 6427 2006-09-22 19:38:34Z jilles $",
+	"$Id: kick.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -118,7 +118,7 @@ static void cs_cmd_kick(sourceinfo_t *si, int parc, char *parv[])
 
 	snprintf(reasonbuf, BUFSIZE, "%s (%s)", reason ? reason : "No reason given", si->su->nick);
 	kick(chansvs.nick, chan, tu->nick, reasonbuf);
-	logcommand(chansvs.me, si->su, CMDLOG_SET, "%s KICK %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
+	logcommand(si, CMDLOG_SET, "%s KICK %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (si->su != tu && !chanuser_find(mc->chan, si->su))
 		command_success_nodata(si, "\2%s\2 has been kicked from \2%s\2.", tu->nick, mc->name);
 }
@@ -178,7 +178,7 @@ static void cs_cmd_kickban(sourceinfo_t *si, int parc, char *parv[])
 	if (n > 0)
 		command_success_nodata(si, "To avoid rejoin, %d ban exception(s) matching \2%s\2 have been removed from \2%s\2.", n, tu->nick, mc->name);
 	kick(chansvs.nick, chan, tu->nick, reasonbuf);
-	logcommand(chansvs.me, si->su, CMDLOG_SET, "%s KICKBAN %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
+	logcommand(si, CMDLOG_SET, "%s KICKBAN %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (si->su != tu && !chanuser_find(mc->chan, si->su))
 		command_success_nodata(si, "\2%s\2 has been kickbanned from \2%s\2.", tu->nick, mc->name);
 }
@@ -234,7 +234,7 @@ static void cs_fcmd_kick(char *origin, char *chan)
 
 	snprintf(reasonbuf, BUFSIZE, "%s (%s)", reason ? reason : "No reason given", origin);
 	kick(chansvs.nick, chan, tu->nick, reasonbuf);
-	logcommand(chansvs.me, u, CMDLOG_SET, "%s KICK %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
+	logcommand_user(chansvs.me, u, CMDLOG_SET, "%s KICK %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 }
 
 static void cs_fcmd_kickban(char *origin, char *chan)
@@ -293,6 +293,6 @@ static void cs_fcmd_kickban(char *origin, char *chan)
 	if (n > 0)
 		notice(chansvs.nick, origin, "To avoid rejoin, %d ban exception(s) matching \2%s\2 have been removed from \2%s\2.", n, tu->nick, mc->name);
 	kick(chansvs.nick, chan, tu->nick, reasonbuf);
-	logcommand(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s KICKBAN %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
+	logcommand_user(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s KICKBAN %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 }
 

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService VOICE functions.
  *
- * $Id: voice.c 6427 2006-09-22 19:38:34Z jilles $
+ * $Id: voice.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/voice", FALSE, _modinit, _moddeinit,
-	"$Id: voice.c 6427 2006-09-22 19:38:34Z jilles $",
+	"$Id: voice.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -123,7 +123,7 @@ static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[])
 	if (tu != si->su)
 		notice(chansvs.nick, tu->nick, "You have been voiced on %s by %s", mc->name, si->su->nick);
 
-	logcommand(chansvs.me, si->su, CMDLOG_SET, "%s VOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
+	logcommand(si, CMDLOG_SET, "%s VOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (!chanuser_find(mc->chan, si->su))
 		command_success_nodata(si, "\2%s\2 has been voiced on \2%s\2.", tu->nick, mc->name);
 }
@@ -186,7 +186,7 @@ static void cs_cmd_devoice(sourceinfo_t *si, int parc, char *parv[])
 	if (tu != si->su)
 		notice(chansvs.nick, tu->nick, "You have been devoiced on %s by %s", mc->name, si->su->nick);
 
-	logcommand(chansvs.me, si->su, CMDLOG_SET, "%s DEVOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
+	logcommand(si, CMDLOG_SET, "%s DEVOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (!chanuser_find(mc->chan, si->su))
 		command_success_nodata(si, "\2%s\2 has been devoiced on \2%s\2.", tu->nick, mc->name);
 }
@@ -239,7 +239,7 @@ static void cs_fcmd_voice(char *origin, char *chan)
 
 		modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'v', CLIENT_NAME(tu));
 		cu->modes |= CMODE_VOICE;
-		logcommand(chansvs.me, u, CMDLOG_SET, "%s VOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
+		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s VOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	} while ((nick = strtok(NULL, " ")) != NULL);
 
 }
@@ -292,7 +292,7 @@ static void cs_fcmd_devoice(char *origin, char *chan)
 
 		modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'v', CLIENT_NAME(tu));
 		cu->modes &= ~CMODE_VOICE;
-		logcommand(chansvs.me, u, CMDLOG_SET, "%s DEVOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
+		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s DEVOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	} while ((nick = strtok(NULL, " ")) != NULL);
 }
 

@@ -4,7 +4,7 @@
  *
  * Closing for channels.
  *
- * $Id: close.c 6427 2006-09-22 19:38:34Z jilles $
+ * $Id: close.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/close", FALSE, _modinit, _moddeinit,
-	"$Id: close.c 6427 2006-09-22 19:38:34Z jilles $",
+	"$Id: close.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -145,7 +145,7 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 
 		wallops("%s closed the channel \2%s\2 (%s).", si->su->nick, target, reason);
 		snoop("CLOSE:ON: \2%s\2 by \2%s\2 (%s)", target, si->su->nick, reason);
-		logcommand(chansvs.me, si->su, CMDLOG_ADMIN, "%s CLOSE ON %s", target, reason);
+		logcommand(si, CMDLOG_ADMIN, "%s CLOSE ON %s", target, reason);
 		command_success_nodata(si, "\2%s\2 is now closed.", target);
 	}
 	else if (!strcasecmp(action, "OFF"))
@@ -174,7 +174,7 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 
 		wallops("%s reopened the channel \2%s\2.", si->su->nick, target);
 		snoop("CLOSE:OFF: \2%s\2 by \2%s\2", target, si->su->nick);
-		logcommand(chansvs.me, si->su, CMDLOG_ADMIN, "%s CLOSE OFF", target);
+		logcommand(si, CMDLOG_ADMIN, "%s CLOSE OFF", target);
 		command_success_nodata(si, "\2%s\2 has been reopened.", target);
 	}
 	else

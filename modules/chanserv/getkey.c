@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService GETKEY functions.
  *
- * $Id: getkey.c 6427 2006-09-22 19:38:34Z jilles $
+ * $Id: getkey.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/getkey", FALSE, _modinit, _moddeinit,
-	"$Id: getkey.c 6427 2006-09-22 19:38:34Z jilles $",
+	"$Id: getkey.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -81,7 +81,7 @@ static void cs_cmd_getkey(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_key, "\2%s\2 is not keyed.", mc->name);
 		return;
 	}
-	logcommand(chansvs.me, si->su, CMDLOG_GET, "%s GETKEY", mc->name);
+	logcommand(si, CMDLOG_GET, "%s GETKEY", mc->name);
 	command_success_string(si, mc->chan->key, "Channel \2%s\2 key is: %s",
 			mc->name, mc->chan->key);
 }

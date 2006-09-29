@@ -4,7 +4,7 @@
  *
  * Loads a new module in.
  *
- * $Id: modload.c 6465 2006-09-25 13:46:33Z jilles $
+ * $Id: modload.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modload", FALSE, _modinit, _moddeinit,
-	"$Id: modload.c 6465 2006-09-25 13:46:33Z jilles $",
+	"$Id: modload.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -61,7 +61,7 @@ static void os_cmd_modload(sourceinfo_t *si, int parc, char *parv[])
 			continue;
 		}
 
-		logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "MODLOAD %s", module);
+		logcommand(si, CMDLOG_ADMIN, "MODLOAD %s", module);
 		if (*module != '/')
 		{
 			snprintf(pbuf, BUFSIZE, "%s/%s", MODDIR "/modules",

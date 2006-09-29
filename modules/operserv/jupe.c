@@ -4,7 +4,7 @@
  *
  * Jupiters a server.
  *
- * $Id: jupe.c 6465 2006-09-25 13:46:33Z jilles $
+ * $Id: jupe.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/jupe", FALSE, _modinit, _moddeinit,
-	"$Id: jupe.c 6465 2006-09-25 13:46:33Z jilles $",
+	"$Id: jupe.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -68,7 +68,7 @@ static void os_cmd_jupe(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	logcommand(opersvs.me, si->su, CMDLOG_SET, "JUPE %s %s", server, reason);
+	logcommand(si, CMDLOG_SET, "JUPE %s %s", server, reason);
 
 	server_delete(server);
 	jupe(server, reason);

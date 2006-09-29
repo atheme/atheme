@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TEMPLATE functions.
  *
- * $Id: template.c 6517 2006-09-27 17:49:58Z jilles $
+ * $Id: template.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/template", FALSE, _modinit, _moddeinit,
-	"$Id: template.c 6517 2006-09-27 17:49:58Z jilles $",
+	"$Id: template.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -70,7 +70,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 	if (!channel)
 	{
 		list_generic_flags(si);
-		logcommand(chansvs.me, si->su, CMDLOG_GET, "TEMPLATE");
+		logcommand(si, CMDLOG_GET, "TEMPLATE");
 		return;
 	}
 
@@ -129,9 +129,9 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 		else
 			command_success_nodata(si, "No templates set on channel \2%s\2.", mc->name);
 		if (operoverride)
-			logcommand(chansvs.me, si->su, CMDLOG_ADMIN, "%s TEMPLATE (oper override)", mc->name);
+			logcommand(si, CMDLOG_ADMIN, "%s TEMPLATE (oper override)", mc->name);
 		else
-			logcommand(chansvs.me, si->su, CMDLOG_GET, "%s TEMPLATE", mc->name);
+			logcommand(si, CMDLOG_GET, "%s TEMPLATE", mc->name);
 	}
 	else
 	{
@@ -313,7 +313,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 		else
 			command_success_nodata(si, "Changed template \2%s\2 to \2%s\2 in \2%s\2.", target, bitmask_to_flags(newflags, chanacs_flags), channel);
 		flagstr = bitmask_to_flags2(addflags, removeflags, chanacs_flags);
-		logcommand(chansvs.me, si->su, CMDLOG_SET, "%s TEMPLATE %s %s", mc->name, target, flagstr);
+		logcommand(si, CMDLOG_SET, "%s TEMPLATE %s %s", mc->name, target, flagstr);
 		/*verbose(mc, "Flags \2%s\2 were set on template \2%s\2 in \2%s\2.", flagstr, target, channel);*/
 	}
 }

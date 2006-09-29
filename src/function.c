@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 6521 2006-09-27 23:01:53Z jilles $
+ * $Id: function.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -133,7 +133,21 @@ void slog(uint32_t level, const char *fmt, ...)
 	va_end(args);
 }
 
-void logcommand(service_t *svs, user_t *source, int level, const char *fmt, ...)
+void logcommand(sourceinfo_t *si, int level, const char *fmt, ...)
+{
+	va_list args;
+	char lbuf[BUFSIZE];
+
+	va_start(args, fmt);
+	vsnprintf(lbuf, BUFSIZE, fmt, args);
+	va_end(args);
+	if (si->su != NULL)
+		logcommand_user(si->service, si->su, level, "%s", lbuf);
+	else
+		logcommand_external(si->service, "rpc", si->connection, si->smu, level, "%s", lbuf);
+}
+
+void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt, ...)
 {
 	va_list args;
 	time_t t;

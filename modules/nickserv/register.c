@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 6519 2006-09-27 22:44:37Z jilles $
+ * $Id: register.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 6519 2006-09-27 22:44:37Z jilles $",
+	"$Id: register.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -160,7 +160,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		ircd_on_login(si->su->nick, mu->name, NULL);
 
 	snoop("REGISTER: \2%s\2 to \2%s\2", account, email);
-	logcommand(nicksvs.me, si->su, CMDLOG_REGISTER, "REGISTER to %s", email);
+	logcommand(si, CMDLOG_REGISTER, "REGISTER to %s", email);
 	if (is_soper(mu))
 	{
 		wallops("%s registered the nick \2%s\2 and gained services operator privileges.", si->su->nick, mu->name);

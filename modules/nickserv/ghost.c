@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ GHOST function.
  *
- * $Id: ghost.c 6519 2006-09-27 22:44:37Z jilles $
+ * $Id: ghost.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/ghost", FALSE, _modinit, _moddeinit,
-	"$Id: ghost.c 6519 2006-09-27 22:44:37Z jilles $",
+	"$Id: ghost.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -83,7 +83,7 @@ void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])
 		skill(nicksvs.nick, target, "GHOST command used by %s!%s@%s", si->su->nick, si->su->user, si->su->vhost);
 		user_delete(target_u);
 
-		logcommand(nicksvs.me, si->su, CMDLOG_DO, "GHOST %s", target);
+		logcommand(si, CMDLOG_DO, "GHOST %s", target);
 
 		command_success_nodata(si, "\2%s\2 has been ghosted.", target);
 
@@ -94,12 +94,12 @@ void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])
 
 	if (password && mu)
 	{
-		logcommand(nicksvs.me, si->su, CMDLOG_DO, "failed GHOST %s (bad password)", target);
+		logcommand(si, CMDLOG_DO, "failed GHOST %s (bad password)", target);
 		command_fail(si, fault_authfail, "Invalid password for \2%s\2.", mu->name);
 	}
 	else
 	{
-		logcommand(nicksvs.me, si->su, CMDLOG_DO, "failed GHOST %s (invalid login)", target);
+		logcommand(si, CMDLOG_DO, "failed GHOST %s (invalid login)", target);
 		command_fail(si, fault_authfail, "You may not ghost \2%s\2.", target);
 	}
 }

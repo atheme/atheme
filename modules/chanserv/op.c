@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: op.c 6427 2006-09-22 19:38:34Z jilles $
+ * $Id: op.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/op", FALSE, _modinit, _moddeinit,
-	"$Id: op.c 6427 2006-09-22 19:38:34Z jilles $",
+	"$Id: op.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -131,7 +131,7 @@ static void cs_cmd_op(sourceinfo_t *si, int parc, char *parv[])
 	if (tu != si->su)
 		notice(chansvs.nick, tu->nick, "You have been opped on %s by %s", mc->name, si->su->nick);
 
-	logcommand(chansvs.me, si->su, CMDLOG_SET, "%s OP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
+	logcommand(si, CMDLOG_SET, "%s OP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (!chanuser_find(mc->chan, si->su))
 		command_success_nodata(si, "\2%s\2 has been opped on \2%s\2.", tu->nick, mc->name);
 }
@@ -200,7 +200,7 @@ static void cs_cmd_deop(sourceinfo_t *si, int parc, char *parv[])
 	if (tu != si->su)
 		notice(chansvs.nick, tu->nick, "You have been deopped on %s by %s", mc->name, si->su->nick);
 
-	logcommand(chansvs.me, si->su, CMDLOG_SET, "%s DEOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
+	logcommand(si, CMDLOG_SET, "%s DEOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (!chanuser_find(mc->chan, si->su))
 		command_success_nodata(si, "\2%s\2 has been deopped on \2%s\2.", tu->nick, mc->name);
 }
@@ -267,7 +267,7 @@ static void cs_fcmd_op(char *origin, char *chan)
 
 		modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'o', CLIENT_NAME(tu));
 		cu->modes |= CMODE_OP;
-		logcommand(chansvs.me, u, CMDLOG_SET, "%s OP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
+		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s OP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	} while ((nick = strtok(NULL, " ")) != NULL);
 }
 
@@ -325,7 +325,7 @@ static void cs_fcmd_deop(char *origin, char *chan)
 
 		modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'o', CLIENT_NAME(tu));
 		cu->modes &= ~CMODE_OP;
-		logcommand(chansvs.me, u, CMDLOG_SET, "%s DEOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
+		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s DEOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	} while ((nick = strtok(NULL, " ")) != NULL);
 }
 

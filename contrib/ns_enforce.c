@@ -184,7 +184,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 		{
 			if (md = metadata_find(mu, METADATA_USER, "private:enforcer"))
 				metadata_delete(mu, METADATA_USER, "private:enforcer");
-			logcommand(nicksvs.me, si->su, CMDLOG_DO, "RELEASE %s", target);
+			logcommand(si, CMDLOG_DO, "RELEASE %s", target);
 			holdnick_sts(nicksvs.me->me, 0, target, mu);
 			notice(nicksvs.nick, si->su->nick, "\2%s\2 has been released.", target);
 			/*hook_call_event("user_identify", u);*/
@@ -205,7 +205,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 			}
 			fnc_sts(nicksvs.me->me, u, gnick, FNC_FORCE);
 			notice(nicksvs.nick, si->su->nick, "%s has been released.", target);
-			logcommand(nicksvs.me, si->su, CMDLOG_DO, "RELEASE %s", target);
+			logcommand(si, CMDLOG_DO, "RELEASE %s", target);
 			/*hook_call_event("user_identify", u);*/
 		}
 		return;
@@ -219,7 +219,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		notice(nicksvs.nick, si->su->nick, "%s password incorrect", target);
-		logcommand(nicksvs.me, si->su, CMDLOG_DO, "failed RELEASE %s (bad password)", target);
+		logcommand(si, CMDLOG_DO, "failed RELEASE %s (bad password)", target);
 	}
 }
 

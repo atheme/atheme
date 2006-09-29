@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService RAW command.
  *
- * $Id: shutdown.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: shutdown.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/shutdown", FALSE, _modinit, _moddeinit,
-	"$Id: shutdown.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: shutdown.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -45,7 +45,7 @@ static void os_cmd_shutdown(sourceinfo_t *si, int parc, char *parv[])
 	expire_check(NULL);
 	db_save(NULL);
 
-	logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "SHUTDOWN");
+	logcommand(si, CMDLOG_ADMIN, "SHUTDOWN");
 	snoop("SHUTDOWN: \2%s\2", si->su->nick);
 	wallops("Shutting down by request of \2%s\2.", si->su->nick);
 

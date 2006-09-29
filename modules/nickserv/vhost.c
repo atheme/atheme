@@ -4,7 +4,7 @@
  *
  * Allows setting a vhost on an account
  *
- * $Id: vhost.c 6499 2006-09-26 16:31:54Z jilles $
+ * $Id: vhost.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 6499 2006-09-26 16:31:54Z jilles $",
+	"$Id: vhost.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -131,7 +131,7 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 		metadata_delete(mu, METADATA_USER, "private:usercloak");
 		command_success_nodata(si, "Deleted vhost for \2%s\2.", target);
 		snoop("VHOST:REMOVE: \2%s\2 by \2%s\2", target, si->su->nick);
-		logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "VHOST REMOVE %s", target);
+		logcommand(si, CMDLOG_ADMIN, "VHOST REMOVE %s", target);
 		do_restorehost_all(mu);
 		return;
 	}
@@ -160,7 +160,7 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, "Assigned vhost \2%s\2 to \2%s\2.",
 			host, target);
 	snoop("VHOST:ASSIGN: \2%s\2 to \2%s\2 by \2%s\2", host, target, si->su->nick);
-	logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "VHOST ASSIGN %s %s",
+	logcommand(si, CMDLOG_ADMIN, "VHOST ASSIGN %s %s",
 			target, host);
 	do_sethost_all(mu, host);
 	return;

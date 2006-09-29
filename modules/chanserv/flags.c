@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 6517 2006-09-27 17:49:58Z jilles $
+ * $Id: flags.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 6517 2006-09-27 17:49:58Z jilles $",
+	"$Id: flags.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -104,9 +104,9 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "----- ---------------------- -----");
 		command_success_nodata(si, "End of \2%s\2 FLAGS listing.", channel);
 		if (operoverride)
-			logcommand(chansvs.me, si->su, CMDLOG_ADMIN, "%s FLAGS (oper override)", mc->name);
+			logcommand(si, CMDLOG_ADMIN, "%s FLAGS (oper override)", mc->name);
 		else
-			logcommand(chansvs.me, si->su, CMDLOG_GET, "%s FLAGS", mc->name);
+			logcommand(si, CMDLOG_GET, "%s FLAGS", mc->name);
 	}
 	else
 	{
@@ -163,7 +163,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			else
 				command_success_nodata(si, "No flags for \2%s\2 in \2%s\2.",
 						target, channel);
-			logcommand(chansvs.me, si->su, CMDLOG_SET, "%s FLAGS %s", mc->name, target);
+			logcommand(si, CMDLOG_SET, "%s FLAGS %s", mc->name, target);
 			return;
 		}
 
@@ -259,7 +259,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		}
 		flagstr = bitmask_to_flags2(addflags, removeflags, chanacs_flags);
 		command_success_nodata(si, "Flags \2%s\2 were set on \2%s\2 in \2%s\2.", flagstr, target, channel);
-		logcommand(chansvs.me, si->su, CMDLOG_SET, "%s FLAGS %s %s", mc->name, target, flagstr);
+		logcommand(si, CMDLOG_SET, "%s FLAGS %s %s", mc->name, target, flagstr);
 		verbose(mc, "\2%s\2 set flags \2%s\2 on \2%s\2 in \2%s\2.", si->su->nick, flagstr, target, channel);
 	}
 }
@@ -385,6 +385,6 @@ static void cs_fcmd_flags(char *origin, char *channel)
 		return;
 	}
 	flagstr = bitmask_to_flags2(addflags, removeflags, chanacs_flags);
-	logcommand(chansvs.me, u, CMDLOG_SET, "%s FLAGS %s %s", mc->name, target, flagstr);
+	logcommand_user(chansvs.me, u, CMDLOG_SET, "%s FLAGS %s %s", mc->name, target, flagstr);
 	notice(chansvs.nick, channel, "\2%s\2 set flags \2%s\2 on \2%s\2 in \2%s\2.", origin, flagstr, target, channel);
 }

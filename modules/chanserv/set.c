@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 6427 2006-09-22 19:38:34Z jilles $
+ * $Id: set.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 6427 2006-09-22 19:38:34Z jilles $",
+	"$Id: set.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -128,7 +128,7 @@ static void cs_set_email(char *origin, char *name, char *params)
                 {
                         metadata_delete(mc, METADATA_CHANNEL, "email");
                         notice(chansvs.nick, origin, "The e-mail address for \2%s\2 was deleted.", mc->name);
-			logcommand(chansvs.me, u, CMDLOG_SET, "%s SET EMAIL NONE", mc->name);
+			logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET EMAIL NONE", mc->name);
                         return;
                 }
 
@@ -151,7 +151,7 @@ static void cs_set_email(char *origin, char *name, char *params)
         /* we'll overwrite any existing metadata */
         metadata_add(mc, METADATA_CHANNEL, "email", mail);
 
-	logcommand(chansvs.me, u, CMDLOG_SET, "%s SET EMAIL %s", mc->name, mail);
+	logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET EMAIL %s", mc->name, mail);
         notice(chansvs.nick, origin, "The e-mail address for \2%s\2 has been set to \2%s\2.", name, mail);
 }
 
@@ -188,7 +188,7 @@ static void cs_set_url(char *origin, char *name, char *params)
 		if (metadata_find(mc, METADATA_CHANNEL, "url"))
 		{
 			metadata_delete(mc, METADATA_CHANNEL, "url");
-			logcommand(chansvs.me, u, CMDLOG_SET, "%s SET URL NONE", mc->name);
+			logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET URL NONE", mc->name);
 			notice(chansvs.nick, origin, "The URL for \2%s\2 has been cleared.", name);
 			return;
 		}
@@ -200,7 +200,7 @@ static void cs_set_url(char *origin, char *name, char *params)
 	/* we'll overwrite any existing metadata */
 	metadata_add(mc, METADATA_CHANNEL, "url", url);
 
-	logcommand(chansvs.me, u, CMDLOG_SET, "%s SET URL %s", mc->name, url);
+	logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET URL %s", mc->name, url);
 	notice(chansvs.nick, origin, "The URL of \2%s\2 has been set to \2%s\2.", name, url);
 }
 
@@ -230,7 +230,7 @@ static void cs_set_entrymsg(char *origin, char *name, char *params)
 		if (metadata_find(mc, METADATA_CHANNEL, "private:entrymsg"))
 		{
 			metadata_delete(mc, METADATA_CHANNEL, "private:entrymsg");
-			logcommand(chansvs.me, u, CMDLOG_SET, "%s SET ENTRYMSG NONE", mc->name, params);
+			logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET ENTRYMSG NONE", mc->name, params);
 			notice(chansvs.nick, origin, "The entry message for \2%s\2 has been cleared.", name);
 			return;
 		}
@@ -242,7 +242,7 @@ static void cs_set_entrymsg(char *origin, char *name, char *params)
 	/* we'll overwrite any existing metadata */
 	metadata_add(mc, METADATA_CHANNEL, "private:entrymsg", params);
 
-	logcommand(chansvs.me, u, CMDLOG_SET, "%s SET ENTRYMSG %s", mc->name, params);
+	logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET ENTRYMSG %s", mc->name, params);
 	notice(chansvs.nick, origin, "The entry message for \2%s\2 has been set to \2%s\2", name, params);
 }
 
@@ -342,7 +342,7 @@ static void cs_set_founder(char *origin, char *name, char *params)
 				return;
 			}
 
-			logcommand(chansvs.me, u, CMDLOG_SET, "%s SET FOUNDER %s (completing transfer from %s)", mc->name, tmu->name, mc->founder->name);
+			logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET FOUNDER %s (completing transfer from %s)", mc->name, tmu->name, mc->founder->name);
 			verbose(mc, "Foundership transferred from \2%s\2 to \2%s\2.", mc->founder->name, tmu->name);
 
 			/* add target as founder... */
@@ -377,7 +377,7 @@ static void cs_set_founder(char *origin, char *name, char *params)
 			metadata_delete(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder");
 			metadata_delete(mc, METADATA_CHANNEL, "private:verify:founderchg:timestamp");
 
-			logcommand(chansvs.me, u, CMDLOG_SET, "%s SET FOUNDER %s (cancelling transfer)", mc->name, tmu->name);
+			logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET FOUNDER %s (cancelling transfer)", mc->name, tmu->name);
 			notice(chansvs.nick, origin, "The transfer of \2%s\2 has been cancelled.", mc->name);
 
 			return;
@@ -390,11 +390,11 @@ static void cs_set_founder(char *origin, char *name, char *params)
 	/* check for lazy cancellation of outstanding requests */
 	if (metadata_find(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder"))
 	{
-		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET FOUNDER %s (cancelling old transfer and initializing transfer)", mc->name, tmu->name);
+		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET FOUNDER %s (cancelling old transfer and initializing transfer)", mc->name, tmu->name);
 		notice(chansvs.nick, origin, "The previous transfer request for \2%s\2 has been cancelled.", mc->name);
 	}
 	else
-		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET FOUNDER %s (initializing transfer)", mc->name, tmu->name);
+		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET FOUNDER %s (initializing transfer)", mc->name, tmu->name);
 
 	metadata_add(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder", tmu->name);
 	metadata_add(mc, METADATA_CHANNEL, "private:verify:founderchg:timestamp", itoa(time(NULL)));
@@ -629,12 +629,12 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 	if (*modebuf)
 	{
 		notice(chansvs.nick, origin, "The MLOCK for \2%s\2 has been set to \2%s\2.", mc->name, modebuf);
-		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET MLOCK %s", mc->name, modebuf);
+		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET MLOCK %s", mc->name, modebuf);
 	}
 	else
 	{
 		notice(chansvs.nick, origin, "The MLOCK for \2%s\2 has been removed.", mc->name);
-		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET MLOCK NONE", mc->name);
+		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET MLOCK NONE", mc->name);
 	}
 
 	check_modes(mc, TRUE);
@@ -673,7 +673,7 @@ static void cs_set_keeptopic(char *origin, char *name, char *params)
                         return;
                 }
 
-		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET KEEPTOPIC ON", mc->name);
+		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET KEEPTOPIC ON", mc->name);
 
                 mc->flags |= MC_KEEPTOPIC;
 
@@ -690,7 +690,7 @@ static void cs_set_keeptopic(char *origin, char *name, char *params)
                         return;
                 }
 
-		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET KEEPTOPIC OFF", mc->name);
+		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET KEEPTOPIC OFF", mc->name);
 
                 mc->flags &= ~(MC_KEEPTOPIC | MC_TOPICLOCK);
 
@@ -737,7 +737,7 @@ static void cs_set_topiclock(char *origin, char *name, char *params)
                         return;
                 }
 
-		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET TOPICLOCK ON", mc->name);
+		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET TOPICLOCK ON", mc->name);
 
                 mc->flags |= MC_KEEPTOPIC | MC_TOPICLOCK;
 
@@ -754,7 +754,7 @@ static void cs_set_topiclock(char *origin, char *name, char *params)
                         return;
                 }
 
-		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET TOPICLOCK OFF", mc->name);
+		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET TOPICLOCK OFF", mc->name);
 
                 mc->flags &= ~MC_TOPICLOCK;
 
@@ -801,7 +801,7 @@ static void cs_set_secure(char *origin, char *name, char *params)
 			return;
 		}
 
-		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET SECURE ON", mc->name);
+		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET SECURE ON", mc->name);
 
 		mc->flags |= MC_SECURE;
 
@@ -818,7 +818,7 @@ static void cs_set_secure(char *origin, char *name, char *params)
 			return;
 		}
 
-		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET SECURE OFF", mc->name);
+		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET SECURE OFF", mc->name);
 
 		mc->flags &= ~MC_SECURE;
 
@@ -865,7 +865,7 @@ static void cs_set_verbose(char *origin, char *name, char *params)
 			return;
 		}
 
-		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET VERBOSE ON", mc->name);
+		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET VERBOSE ON", mc->name);
 
  		mc->flags &= ~MC_VERBOSE_OPS;
  		mc->flags |= MC_VERBOSE;
@@ -884,7 +884,7 @@ static void cs_set_verbose(char *origin, char *name, char *params)
 			return;
 		}
 
-		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET VERBOSE OPS", mc->name);
+		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET VERBOSE OPS", mc->name);
 
 		if (mc->flags & MC_VERBOSE)
 		{
@@ -910,7 +910,7 @@ static void cs_set_verbose(char *origin, char *name, char *params)
 			return;
 		}
 
-		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET VERBOSE OFF", mc->name);
+		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET VERBOSE OFF", mc->name);
 
 		if (mc->flags & MC_VERBOSE)
 			verbose(mc, "\2%s\2 disabled the VERBOSE flag", u->nick);
@@ -965,7 +965,7 @@ static void cs_set_fantasy(char *origin, char *name, char *params)
 
 		metadata_delete(mc, METADATA_CHANNEL, "disable_fantasy");
 
-		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET FANTASY ON", mc->name);
+		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET FANTASY ON", mc->name);
 		notice(chansvs.nick, origin, "The \2FANTASY\2 flag has been set for \2%s\2.", mc->name);
 		return;
 	}
@@ -981,7 +981,7 @@ static void cs_set_fantasy(char *origin, char *name, char *params)
 
 		metadata_add(mc, METADATA_CHANNEL, "disable_fantasy", "on");
 
-		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET FANTASY OFF", mc->name);
+		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET FANTASY OFF", mc->name);
 		notice(chansvs.nick, origin, "The \2FANTASY\2 flag has been removed for \2%s\2.", mc->name);
 		return;
 	}
@@ -1018,7 +1018,7 @@ static void cs_set_staffonly(char *origin, char *name, char *params)
 		}
 
 		snoop("SET:STAFFONLY:ON: for \2%s\2 by \2%s\2", mc->name, origin);
-		logcommand(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s SET STAFFONLY ON", mc->name);
+		logcommand_user(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s SET STAFFONLY ON", mc->name);
 
 		mc->flags |= MC_STAFFONLY;
 
@@ -1036,7 +1036,7 @@ static void cs_set_staffonly(char *origin, char *name, char *params)
 		}
 
 		snoop("SET:STAFFONLY:OFF: for \2%s\2 by \2%s\2", mc->name, origin);
-		logcommand(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s SET STAFFONLY OFF", mc->name);
+		logcommand_user(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s SET STAFFONLY OFF", mc->name);
 
 		mc->flags &= ~MC_STAFFONLY;
 
@@ -1111,7 +1111,7 @@ static void cs_set_property(char *origin, char *name, char *params)
 		}
 
 		metadata_delete(mc, METADATA_CHANNEL, property);
-		logcommand(chansvs.me, u, CMDLOG_SET, "%s SET PROPERTY %s (deleted)", mc->name, property);
+		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET PROPERTY %s (deleted)", mc->name, property);
 		notice(chansvs.nick, origin, "Metadata entry \2%s\2 has been deleted.", property);
 		return;
 	}
@@ -1123,7 +1123,7 @@ static void cs_set_property(char *origin, char *name, char *params)
 	}
 
 	metadata_add(mc, METADATA_CHANNEL, property, value);
-	logcommand(chansvs.me, u, CMDLOG_SET, "%s SET PROPERTY %s to %s", mc->name, property, value);
+	logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET PROPERTY %s to %s", mc->name, property, value);
 	notice(chansvs.nick, origin, "Metadata entry \2%s\2 added.", property);
 }
 

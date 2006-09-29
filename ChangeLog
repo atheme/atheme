@@ -1,3 +1,14 @@
+jilles      2006/09/29 15:17:38 UTC	(20060929-6545)
+  Log:
+  Add sourceinfo_t.connection, pointer to the connection_t
+  the command was received on.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/sourceinfo.h (File Modified) 
+  +4 -0		trunk/src/parse.c (File Modified) 
+
+
 jilles      2006/09/29 15:09:51 UTC	(20060929-6543)
   Log:
   memoserv: get rid of separate u and mu variables,

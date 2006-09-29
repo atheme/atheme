@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService SPECS command.
  *
- * $Id: specs.c 6469 2006-09-25 15:03:30Z jilles $
+ * $Id: specs.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/specs", FALSE, _modinit, _moddeinit,
-	"$Id: specs.c 6469 2006-09-25 15:03:30Z jilles $",
+	"$Id: specs.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -185,7 +185,7 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, "End of privileges");
 
 	if (tu)
-		logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "SPECS USER %s!%s@%s", tu->nick, tu->user, tu->vhost);
+		logcommand(si, CMDLOG_ADMIN, "SPECS USER %s!%s@%s", tu->nick, tu->user, tu->vhost);
 	else
-		logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "SPECS OPERCLASS %s", cl->name);
+		logcommand(si, CMDLOG_ADMIN, "SPECS OPERCLASS %s", cl->name);
 }

@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ MYACCESS function.
  *
- * $Id: why.c 6427 2006-09-22 19:38:34Z jilles $
+ * $Id: why.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/why", FALSE, _modinit, _moddeinit,
-	"$Id: why.c 6427 2006-09-22 19:38:34Z jilles $",
+	"$Id: why.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -76,7 +76,7 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	
-	logcommand(chansvs.me, si->su, CMDLOG_GET, "%s WHY %s!%s@%s", mc->name, u->nick, u->user, u->vhost);
+	logcommand(si, CMDLOG_GET, "%s WHY %s!%s@%s", mc->name, u->nick, u->user, u->vhost);
 
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{

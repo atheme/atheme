@@ -4,7 +4,7 @@
  *
  * Implements nickserv RETURN.
  *
- * $Id: return.c 6457 2006-09-25 10:33:40Z nenolod $
+ * $Id: return.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/return", FALSE, _modinit, _moddeinit,
-	"$Id: return.c 6457 2006-09-25 10:33:40Z nenolod $",
+	"$Id: return.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -60,7 +60,7 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 
 	if (is_soper(mu))
 	{
-		logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "failed RETURN %s to %s (is SOPER)", target, newmail);
+		logcommand(si, CMDLOG_ADMIN, "failed RETURN %s to %s (is SOPER)", target, newmail);
 		command_fail(si, fault_badparams, "\2%s\2 belongs to a services operator; it cannot be returned.", target);
 		return;
 	}
@@ -93,7 +93,7 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 	metadata_delete(mu, METADATA_USER, "private:verify:emailchg:timestamp");
 
 	wallops("%s returned the nickname \2%s\2 to \2%s\2", si->su->nick, target, newmail);
-	logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "RETURN %s to %s", target, newmail);
+	logcommand(si, CMDLOG_ADMIN, "RETURN %s to %s", target, newmail);
 	command_success_nodata(si, "The e-mail address for \2%s\2 has been set to \2%s\2",
 						target, newmail);
 	command_success_nodata(si, "A random password has been set; it has been sent to \2%s\2.",

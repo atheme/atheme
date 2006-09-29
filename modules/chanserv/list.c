@@ -4,7 +4,7 @@
  *
  * This file contains code for the ChanServ LIST function.
  *
- * $Id: list.c 6427 2006-09-22 19:38:34Z jilles $
+ * $Id: list.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 6427 2006-09-22 19:38:34Z jilles $",
+	"$Id: list.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -84,7 +84,7 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	logcommand(chansvs.me, si->su, CMDLOG_ADMIN, "LIST %s (%d matches)", chanpattern, matches);
+	logcommand(si, CMDLOG_ADMIN, "LIST %s (%d matches)", chanpattern, matches);
 	if (matches == 0)
 		command_success_nodata(si, "No channel matched pattern \2%s\2", chanpattern);
 	else

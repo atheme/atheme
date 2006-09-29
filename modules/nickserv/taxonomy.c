@@ -4,7 +4,7 @@
  *
  * Lists object properties via their metadata table.
  *
- * $Id: taxonomy.c 6489 2006-09-26 15:47:06Z jilles $
+ * $Id: taxonomy.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/taxonomy", FALSE, _modinit, _moddeinit,
-	"$Id: taxonomy.c 6489 2006-09-26 15:47:06Z jilles $",
+	"$Id: taxonomy.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -59,9 +59,9 @@ static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 
 	isoper = has_priv(si->su, PRIV_USER_AUSPEX);
 	if (isoper)
-		logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "TAXONOMY %s (oper)", target);
+		logcommand(si, CMDLOG_ADMIN, "TAXONOMY %s (oper)", target);
 	else
-		logcommand(nicksvs.me, si->su, CMDLOG_GET, "TAXONOMY %s", target);
+		logcommand(si, CMDLOG_GET, "TAXONOMY %s", target);
 
 	command_success_nodata(si, "Taxonomy for \2%s\2:", target);
 

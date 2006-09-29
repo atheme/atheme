@@ -4,7 +4,7 @@
  *
  * Regexp-based AKILL implementation.
  *
- * $Id: rakill.c 6465 2006-09-25 13:46:33Z jilles $
+ * $Id: rakill.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 /*
@@ -17,7 +17,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rakill", FALSE, _modinit, _moddeinit,
-	"$Id: rakill.c 6465 2006-09-25 13:46:33Z jilles $",
+	"$Id: rakill.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -107,7 +107,7 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 		snoop("RAKILL:REFUSED: \2%s\2 by \2%s\2 (%s) (matches self)", pattern, si->su->nick, reason);
 		wallops("\2%s\2 attempted to do RAKILL on \2%s\2 matching self",
 				si->su->nick, pattern);
-		logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "RAKILL %s %s (refused, matches self)", pattern, reason);
+		logcommand(si, CMDLOG_ADMIN, "RAKILL %s %s (refused, matches self)", pattern, reason);
 		return;
 	}
 
@@ -133,5 +133,5 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 	
 	regex_destroy(regex);
 	command_success_nodata(si, "\2%d\2 matches for %s akilled.", matches, pattern);
-	logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "RAKILL %s %s (%d matches)", pattern, reason, matches);
+	logcommand(si, CMDLOG_ADMIN, "RAKILL %s %s (%d matches)", pattern, reason, matches);
 }

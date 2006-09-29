@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 6391 2006-09-14 15:32:03Z jilles $
+ * $Id: ptasks.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -80,7 +80,7 @@ void handle_stats(user_t *u, char req)
 
 	if (floodcheck(u, NULL))
 		return;
-	logcommand(NULL, u, CMDLOG_GET, "STATS %c", req);
+	logcommand_user(NULL, u, CMDLOG_GET, "STATS %c", req);
 
 	switch (req)
 	{

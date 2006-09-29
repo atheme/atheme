@@ -4,7 +4,7 @@
  *
  * This file contains code for nickserv RESETPASS
  *
- * $Id: resetpass.c 6457 2006-09-25 10:33:40Z nenolod $
+ * $Id: resetpass.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/resetpass", FALSE, _modinit, _moddeinit,
-	"$Id: resetpass.c 6457 2006-09-25 10:33:40Z nenolod $",
+	"$Id: resetpass.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -59,14 +59,14 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 
 	if (is_soper(mu) && !has_priv(si->su, PRIV_ADMIN))
 	{
-		logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "failed RESETPASS %s (is SOPER)", name);
+		logcommand(si, CMDLOG_ADMIN, "failed RESETPASS %s (is SOPER)", name);
 		command_fail(si, fault_badparams, "\2%s\2 belongs to a services operator; you need %s privilege to reset the password.", name, PRIV_ADMIN);
 		return;
 	}
 
 	if ((md = metadata_find(mu, METADATA_USER, "private:mark:setter")) && has_priv(si->su, PRIV_MARK))
 	{
-		logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "RESETPASS %s (overriding mark by %s)", name, md->value);
+		logcommand(si, CMDLOG_ADMIN, "RESETPASS %s (overriding mark by %s)", name, md->value);
 		command_success_nodata(si, "Overriding MARK placed by %s on the nickname %s.", md->value, name);
 		newpass = gen_pw(12);
 		command_success_nodata(si, "The password for the nickname %s has been changed to %s.", name, newpass);
@@ -78,7 +78,7 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 
 	if ((md = metadata_find(mu, METADATA_USER, "private:mark:setter")))
 	{
-		logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "failed RESETPASS %s (marked by %s)", name, md->value);
+		logcommand(si, CMDLOG_ADMIN, "failed RESETPASS %s (marked by %s)", name, md->value);
 		command_fail(si, fault_badparams, "This operation cannot be performed on %s, because the nickname has been marked by %s.", name, md->value);
 		return;
 	}
@@ -90,5 +90,5 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 
 	wallops("%s reset the password for the nickname %s", si->su->nick, name);
 	snoop("RESETPASS: \2%s\2 reset the password for \2%s\2", si->su->nick, name);
-	logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "RESETPASS %s", name);
+	logcommand(si, CMDLOG_ADMIN, "RESETPASS %s", name);
 }

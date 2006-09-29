@@ -4,7 +4,7 @@
  *
  * This file contains code for OS UPTIME
  *
- * $Id: uptime.c 6469 2006-09-25 15:03:30Z jilles $
+ * $Id: uptime.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/uptime", FALSE, _modinit, _moddeinit,
-	"$Id: uptime.c 6469 2006-09-25 15:03:30Z jilles $",
+	"$Id: uptime.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -40,7 +40,7 @@ void _moddeinit()
 
 static void os_cmd_uptime(sourceinfo_t *si, int parc, char *parv[])
 {
-	logcommand(opersvs.me, si->su, CMDLOG_GET, "UPTIME");
+	logcommand(si, CMDLOG_GET, "UPTIME");
 
         command_success_nodata(si, "atheme-%s [%s] #%s", version, revision, generation);
         command_success_nodata(si, "Services have been up for %s", timediff(CURRTIME - me.start));

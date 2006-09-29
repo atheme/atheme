@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService STATUS function.
  *
- * $Id: status.c 6517 2006-09-27 17:49:58Z jilles $
+ * $Id: status.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/status", FALSE, _modinit, _moddeinit,
-	"$Id: status.c 6517 2006-09-27 17:49:58Z jilles $",
+	"$Id: status.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -66,7 +66,7 @@ static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		logcommand(chansvs.me, si->su, CMDLOG_GET, "%s STATUS", mc->name);
+		logcommand(si, CMDLOG_GET, "%s STATUS", mc->name);
 		
 		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 		{
@@ -90,7 +90,7 @@ static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	logcommand(chansvs.me, si->su, CMDLOG_GET, "STATUS");
+	logcommand(si, CMDLOG_GET, "STATUS");
 	command_success_nodata(si, "You are logged in as \2%s\2.", si->smu->name);
 
 	if (is_soper(si->smu))

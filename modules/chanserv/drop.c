@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService DROP function.
  *
- * $Id: drop.c 6517 2006-09-27 17:49:58Z jilles $
+ * $Id: drop.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 6517 2006-09-27 17:49:58Z jilles $",
+	"$Id: drop.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -72,18 +72,18 @@ static void cs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && !has_priv(si->su, PRIV_CHAN_ADMIN))
 	{
-		logcommand(chansvs.me, si->su, CMDLOG_REGISTER, "%s failed DROP (closed)", mc->name);
+		logcommand(si, CMDLOG_REGISTER, "%s failed DROP (closed)", mc->name);
 		command_fail(si, fault_noprivs, "The channel \2%s\2 is closed; it cannot be dropped.", mc->name);
 		return;
 	}
 
 	if (!is_founder(mc, si->smu))
 	{
-		logcommand(chansvs.me, si->su, CMDLOG_ADMIN, "%s DROP", mc->name);
+		logcommand(si, CMDLOG_ADMIN, "%s DROP", mc->name);
 		wallops("%s dropped the channel \2%s\2", si->su->nick, name);
 	}
 	else
-		logcommand(chansvs.me, si->su, CMDLOG_REGISTER, "%s DROP", mc->name);
+		logcommand(si, CMDLOG_REGISTER, "%s DROP", mc->name);
 
 	snoop("DROP: \2%s\2 by \2%s\2 as \2%s\2", mc->name, si->su->nick, si->smu->name);
 

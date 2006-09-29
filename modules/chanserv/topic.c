@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TOPIC functions.
  *
- * $Id: topic.c 6427 2006-09-22 19:38:34Z jilles $
+ * $Id: topic.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/topic", FALSE, _modinit, _moddeinit,
-	"$Id: topic.c 6427 2006-09-22 19:38:34Z jilles $",
+	"$Id: topic.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -102,7 +102,7 @@ static void cs_cmd_topic(sourceinfo_t *si, int parc, char *parv[])
 	handle_topic(c, si->su->nick, CURRTIME, topic);
 	topic_sts(chan, si->su->nick, CURRTIME, topic);
 
-	logcommand(chansvs.me, si->su, CMDLOG_SET, "%s TOPIC", mc->name);
+	logcommand(si, CMDLOG_SET, "%s TOPIC", mc->name);
 	if (!chanuser_find(c, si->su))
 		command_success_nodata(si, "Topic set to \2%s\2 on \2%s\2.", topic, chan);
 }
@@ -162,7 +162,7 @@ static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[])
 	handle_topic(c, si->su->nick, CURRTIME, topicbuf);
 	topic_sts(chan, si->su->nick, CURRTIME, topicbuf);
 
-	logcommand(chansvs.me, si->su, CMDLOG_SET, "%s TOPICAPPEND", mc->name);
+	logcommand(si, CMDLOG_SET, "%s TOPICAPPEND", mc->name);
 	if (!chanuser_find(c, si->su))
         	command_success_nodata(si, "Topic set to \2%s\2 on \2%s\2.", c->topic, chan);
 }
@@ -213,7 +213,7 @@ static void cs_fcmd_topic(char *origin, char *chan)
 
 	handle_topic(c, origin, CURRTIME, topic);
         topic_sts(chan, origin, CURRTIME, topic);
-	logcommand(chansvs.me, u, CMDLOG_SET, "%s TOPIC", mc->name);
+	logcommand_user(chansvs.me, u, CMDLOG_SET, "%s TOPIC", mc->name);
 }
 
 static void cs_fcmd_topicappend(char *origin, char *chan)
@@ -271,5 +271,5 @@ static void cs_fcmd_topicappend(char *origin, char *chan)
 	handle_topic(c, origin, CURRTIME, topicbuf);
         topic_sts(chan, origin, CURRTIME, topicbuf);
 
-	logcommand(chansvs.me, u, CMDLOG_SET, "%s TOPICAPPEND", mc->name);
+	logcommand_user(chansvs.me, u, CMDLOG_SET, "%s TOPICAPPEND", mc->name);
 }

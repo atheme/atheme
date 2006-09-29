@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService SENDPASS function.
  *
- * $Id: sendpass.c 6457 2006-09-25 10:33:40Z nenolod $
+ * $Id: sendpass.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/sendpass", FALSE, _modinit, _moddeinit,
-	"$Id: sendpass.c 6457 2006-09-25 10:33:40Z nenolod $",
+	"$Id: sendpass.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -58,7 +58,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 
 	if (is_soper(mu) && !has_priv(si->su, PRIV_ADMIN))
 	{
-		logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "failed SENDPASS %s (is SOPER)", name);
+		logcommand(si, CMDLOG_ADMIN, "failed SENDPASS %s (is SOPER)", name);
 		command_fail(si, fault_badparams, "\2%s\2 belongs to a services operator; you need %s privilege to send the password.", name, PRIV_ADMIN);
 		return;
 	}
@@ -74,7 +74,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 
 	if (sendemail(si->su, EMAIL_SENDPASS, mu, (newpass == NULL) ? mu->pass : newpass))
 	{
-		logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "SENDPASS %s", name);
+		logcommand(si, CMDLOG_ADMIN, "SENDPASS %s", name);
 		command_success_nodata(si, "The password for \2%s\2 has been sent to \2%s\2.", mu->name, mu->email);
 	}
 	else

@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ RWATCH.
  *
- * $Id: rwatch.c 6469 2006-09-25 15:03:30Z jilles $
+ * $Id: rwatch.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rwatch", FALSE, _modinit, _moddeinit,
-	"$Id: rwatch.c 6469 2006-09-25 15:03:30Z jilles $",
+	"$Id: rwatch.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -262,7 +262,7 @@ static void os_cmd_rwatch_add(char *origin, char *args)
 	node_add(rw, node_create(), &rwatch_list);
 	notice(opersvs.nick, origin, "Added \2%s\2 to regex watch list.", pattern);
 	snoop("RWATCH:ADD: \2%s\2 by \2%s\2", pattern, origin);
-	logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "RWATCH ADD %s %s", pattern, reason);
+	logcommand_user(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "RWATCH ADD %s %s", pattern, reason);
 	write_rwatchdb();
 }
 
@@ -311,7 +311,7 @@ static void os_cmd_rwatch_del(char *origin, char *args)
 			node_free(n);
 			notice(opersvs.nick, origin, "Removed \2%s\2 from regex watch list.", pattern);
 			snoop("RWATCH:DEL: \2%s\2 by \2%s\2", pattern, origin);
-			logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "RWATCH DEL %s", pattern);
+			logcommand_user(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "RWATCH DEL %s", pattern);
 			write_rwatchdb();
 			return;
 		}
@@ -336,7 +336,7 @@ static void os_cmd_rwatch_list(char *origin, char *channel)
 				rw->reason);
 	}
 	notice(opersvs.nick, origin, "End of RWATCH LIST");
-	logcommand(opersvs.me, user_find_named(origin), CMDLOG_GET, "RWATCH LIST");
+	logcommand_user(opersvs.me, user_find_named(origin), CMDLOG_GET, "RWATCH LIST");
 }
 
 static void os_cmd_rwatch_set(char *origin, char *args)
@@ -418,7 +418,7 @@ static void os_cmd_rwatch_set(char *origin, char *args)
 				wallops("\2%s\2 enabled kline on regex watch pattern \2%s\2", origin, pattern);
 			if (removeflags & RWACT_KLINE)
 				wallops("\2%s\2 disabled kline on regex watch pattern \2%s\2", origin, pattern);
-			logcommand(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "RWATCH SET %s %s", pattern, opts);
+			logcommand_user(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "RWATCH SET %s %s", pattern, opts);
 			write_rwatchdb();
 			return;
 		}

@@ -5,7 +5,7 @@
  * This file contains code for the NickServ LIST function.
  * Based on Alex Lambert's LISTEMAIL.
  *
- * $Id: list.c 6489 2006-09-26 15:47:06Z jilles $
+ * $Id: list.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 6489 2006-09-26 15:47:06Z jilles $",
+	"$Id: list.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -94,7 +94,7 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	state.matches = 0;
 	dictionary_foreach(mulist, list_foreach_cb, &state);
 
-	logcommand(nicksvs.me, si->su, CMDLOG_ADMIN, "LIST %s (%d matches)", nickpattern, state.matches);
+	logcommand(si, CMDLOG_ADMIN, "LIST %s (%d matches)", nickpattern, state.matches);
 	if (state.matches == 0)
 		command_success_nodata(si, "No nicknames matched pattern \2%s\2", nickpattern);
 	else

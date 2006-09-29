@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService RAW command.
  *
- * $Id: inject.c 6465 2006-09-25 13:46:33Z jilles $
+ * $Id: inject.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/inject", FALSE, _modinit, _moddeinit,
-	"$Id: inject.c 6465 2006-09-25 13:46:33Z jilles $",
+	"$Id: inject.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -55,7 +55,7 @@ static void os_cmd_inject(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "INJECT %s", inject);
+	logcommand(si, CMDLOG_ADMIN, "INJECT %s", inject);
 
 	/* looks like someone INJECT'd an INJECT command.
 	 * this is probably a bad thing.

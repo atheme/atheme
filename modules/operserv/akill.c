@@ -5,7 +5,7 @@
  * This file contains functionality which implements
  * the OperServ AKILL command.
  *
- * $Id: akill.c 6469 2006-09-25 15:03:30Z jilles $
+ * $Id: akill.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 6469 2006-09-25 15:03:30Z jilles $",
+	"$Id: akill.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -274,7 +274,7 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 
 	verbose_wallops("\2%s\2 is \2adding\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2", si->su->nick, k->user, k->host, 
 		k->reason);
-	logcommand(opersvs.me, si->su, CMDLOG_SET, "AKILL ADD %s@%s %s", k->user, k->host, k->reason);
+	logcommand(si, CMDLOG_SET, "AKILL ADD %s@%s %s", k->user, k->host, k->reason);
 }
 
 static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
@@ -330,7 +330,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 						si->su->nick, k->user, k->host, k->reason);
 
 					snoop("AKILL:DEL: \2%s@%s\2 by \2%s\2", k->user, k->host, si->su->nick);
-					logcommand(opersvs.me, si->su, CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
+					logcommand(si, CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
 					kline_delete(k->user, k->host);
 				}
 
@@ -350,7 +350,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 				si->su->nick, k->user, k->host, k->reason);
 
 			snoop("AKILL:DEL: \2%s@%s\2 by \2%s\2", k->user, k->host, si->su->nick);
-			logcommand(opersvs.me, si->su, CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
+			logcommand(si, CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
 			kline_delete(k->user, k->host);
 		} while ((s = strtok(NULL, ",")));
 
@@ -411,7 +411,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 			si->su->nick, k->user, k->host, k->reason);
 
 		snoop("AKILL:DEL: \2%s@%s\2 by \2%s\2", k->user, k->host, si->su->nick);
-		logcommand(opersvs.me, si->su, CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
+		logcommand(si, CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
 		kline_delete(k->user, k->host);
 		return;
 	}
@@ -431,7 +431,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 		si->su->nick, k->user, k->host, k->reason);
 
 	snoop("AKILL:DEL: \2%s@%s\2 by \2%s\2", k->user, k->host, si->su->nick);
-	logcommand(opersvs.me, si->su, CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
+	logcommand(si, CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
 	kline_delete(userbuf, hostbuf);
 }
 
@@ -465,7 +465,7 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	command_success_nodata(si, "Total of \2%d\2 %s in AKILL list.", klnlist.count, (klnlist.count == 1) ? "entry" : "entries");
-	logcommand(opersvs.me, si->su, CMDLOG_GET, "AKILL LIST%s", full ? " FULL" : "");
+	logcommand(si, CMDLOG_GET, "AKILL LIST%s", full ? " FULL" : "");
 }
 
 static void os_cmd_akill_sync(sourceinfo_t *si, int parc, char *parv[])
@@ -473,7 +473,7 @@ static void os_cmd_akill_sync(sourceinfo_t *si, int parc, char *parv[])
 	node_t *n;
 	kline_t *k;
 
-	logcommand(opersvs.me, si->su, CMDLOG_DO, "AKILL SYNC");
+	logcommand(si, CMDLOG_DO, "AKILL SYNC");
 	snoop("AKILL:SYNC: \2%s\2", si->su->nick);
 
 	LIST_FOREACH(n, klnlist.head)

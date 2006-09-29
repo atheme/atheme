@@ -4,7 +4,7 @@
  *
  * OperServ NOOP command.
  *
- * $Id: noop.c 6465 2006-09-25 13:46:33Z jilles $
+ * $Id: noop.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/noop", TRUE, _modinit, _moddeinit,
-	"$Id: noop.c 6465 2006-09-25 13:46:33Z jilles $",
+	"$Id: noop.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -157,7 +157,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 			n = node_create();
 			node_add(np, n, &noop_hostmask_list);
 
-			logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "NOOP ADD HOSTMASK %s %s", np->target, np->reason);
+			logcommand(si, CMDLOG_ADMIN, "NOOP ADD HOSTMASK %s %s", np->target, np->reason);
 			command_success_nodata(si, "Added \2%s\2 to the hostmask NOOP list.", mask);
 
 			return;
@@ -189,7 +189,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 			n = node_create();
 			node_add(np, n, &noop_server_list);
 
-			logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "NOOP ADD SERVER %s %s", np->target, np->reason);
+			logcommand(si, CMDLOG_ADMIN, "NOOP ADD SERVER %s %s", np->target, np->reason);
 			command_success_nodata(si, "Added \2%s\2 to the server NOOP list.", mask);
 
 			return;
@@ -216,7 +216,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
-			logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "NOOP DEL HOSTMASK %s", np->target);
+			logcommand(si, CMDLOG_ADMIN, "NOOP DEL HOSTMASK %s", np->target);
 			command_success_nodata(si, "Removed \2%s\2 from the hostmask NOOP list.", np->target);
 
 			n = node_find(np, &noop_hostmask_list);
@@ -239,7 +239,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
-			logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "NOOP DEL SERVER %s", np->target);
+			logcommand(si, CMDLOG_ADMIN, "NOOP DEL SERVER %s", np->target);
 			command_success_nodata(si, "Removed \2%s\2 from the server NOOP list.", np->target);
 
 			n = node_find(np, &noop_server_list);
@@ -265,7 +265,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 		if (!strcasecmp(type, "HOSTMASK"))
 		{
 			uint16_t i = 1;
-			logcommand(opersvs.me, si->su, CMDLOG_GET, "NOOP LIST HOSTMASK");
+			logcommand(si, CMDLOG_GET, "NOOP LIST HOSTMASK");
 			command_success_nodata(si, "Hostmask NOOP list (%d entries):", noop_hostmask_list.count);
 			command_success_nodata(si, " ");
 			command_success_nodata(si, "Entry Hostmask                        Adder                 Reason");
@@ -285,7 +285,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 		else if (!strcasecmp(type, "SERVER"))
 		{
 			uint16_t i = 1;
-			logcommand(opersvs.me, si->su, CMDLOG_GET, "NOOP LIST SERVER");
+			logcommand(si, CMDLOG_GET, "NOOP LIST SERVER");
 			command_success_nodata(si, "Server NOOP list (%d entries):", noop_server_list.count);
 			command_success_nodata(si, " ");
 			command_success_nodata(si, "Entry Hostmask                        Adder                 Reason");

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 6517 2006-09-27 17:49:58Z jilles $
+ * $Id: akick.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@ static void cs_fcmd_akick(char *origin, char *chan);
 DECLARE_MODULE_V1
 (
 	"chanserv/akick", FALSE, _modinit, _moddeinit,
-	"$Id: akick.c 6517 2006-09-27 17:49:58Z jilles $",
+	"$Id: akick.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -143,7 +143,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			hook_call_event("channel_akick_add", ca2);
 
 			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", si->su->nick, uname);
-			logcommand(chansvs.me, si->su, CMDLOG_SET, "%s AKICK ADD %s", mc->name, uname);
+			logcommand(si, CMDLOG_SET, "%s AKICK ADD %s", mc->name, uname);
 
 			command_success_nodata(si, "\2%s\2 has been added to the AKICK list for \2%s\2.", uname, mc->name);
 
@@ -167,7 +167,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, "\2%s\2 has been added to the AKICK list for \2%s\2.", mu->name, mc->name);
 
 			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", si->su->nick, mu->name);
-			logcommand(chansvs.me, si->su, CMDLOG_SET, "%s AKICK ADD %s", mc->name, mu->name);
+			logcommand(si, CMDLOG_SET, "%s AKICK ADD %s", mc->name, mu->name);
 
 			return;
 		}
@@ -203,7 +203,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			chanacs_delete_host(mc, uname, CA_AKICK);
 
 			verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", si->su->nick, uname);
-			logcommand(chansvs.me, si->su, CMDLOG_SET, "%s AKICK DEL %s", mc->name, uname);
+			logcommand(si, CMDLOG_SET, "%s AKICK DEL %s", mc->name, uname);
 
 			command_success_nodata(si, "\2%s\2 has been removed from the AKICK list for \2%s\2.", uname, mc->name);
 
@@ -219,7 +219,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 		chanacs_delete(mc, mu, CA_AKICK);
 
 		command_success_nodata(si, "\2%s\2 has been removed from the AKICK list for \2%s\2.", mu->name, mc->name);
-		logcommand(chansvs.me, si->su, CMDLOG_SET, "%s AKICK DEL %s", mc->name, mu->name);
+		logcommand(si, CMDLOG_SET, "%s AKICK DEL %s", mc->name, mu->name);
 
 		verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", si->su->nick, mu->name);
 
@@ -260,9 +260,9 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 
 		command_success_nodata(si, "Total of \2%d\2 %s in \2%s\2's AKICK list.", i, (i == 1) ? "entry" : "entries", mc->name);
 		if (operoverride)
-			logcommand(chansvs.me, si->su, CMDLOG_ADMIN, "%s AKICK LIST (oper override)", mc->name);
+			logcommand(si, CMDLOG_ADMIN, "%s AKICK LIST (oper override)", mc->name);
 		else
-			logcommand(chansvs.me, si->su, CMDLOG_GET, "%s AKICK LIST", mc->name);
+			logcommand(si, CMDLOG_GET, "%s AKICK LIST", mc->name);
 	}
 }
 
@@ -353,7 +353,7 @@ void cs_fcmd_akick(char *origin, char *chan)
 			hook_call_event("channel_akick_add", ca2);
 
 			notice(chansvs.nick, mc->name, "\2%s\2 added \2%s\2 to the AKICK list.", u->nick, uname);
-			logcommand(chansvs.me, u, CMDLOG_SET, "%s AKICK ADD %s", mc->name, uname);
+			logcommand_user(chansvs.me, u, CMDLOG_SET, "%s AKICK ADD %s", mc->name, uname);
 
 			notice(chansvs.nick, origin, "\2%s\2 has been added to the AKICK list for \2%s\2.", uname, mc->name);
 
@@ -377,7 +377,7 @@ void cs_fcmd_akick(char *origin, char *chan)
 			notice(chansvs.nick, origin, "\2%s\2 has been added to the AKICK list for \2%s\2.", mu->name, mc->name);
 
 			notice(chansvs.nick, mc->name, "\2%s\2 added \2%s\2 to the AKICK list.", u->nick, mu->name);
-			logcommand(chansvs.me, u, CMDLOG_SET, "%s AKICK ADD %s", mc->name, mu->name);
+			logcommand_user(chansvs.me, u, CMDLOG_SET, "%s AKICK ADD %s", mc->name, mu->name);
 
 			return;
 		}
@@ -413,7 +413,7 @@ void cs_fcmd_akick(char *origin, char *chan)
 			chanacs_delete_host(mc, uname, CA_AKICK);
 
 			notice(chansvs.nick, mc->name, "\2%s\2 removed \2%s\2 from the AKICK list.", u->nick, uname);
-			logcommand(chansvs.me, u, CMDLOG_SET, "%s AKICK DEL %s", mc->name, uname);
+			logcommand_user(chansvs.me, u, CMDLOG_SET, "%s AKICK DEL %s", mc->name, uname);
 
 			notice(chansvs.nick, origin, "\2%s\2 has been removed from the AKICK list for \2%s\2.", uname, mc->name);
 
@@ -429,7 +429,7 @@ void cs_fcmd_akick(char *origin, char *chan)
 		chanacs_delete(mc, mu, CA_AKICK);
 
 		notice(chansvs.nick, origin, "\2%s\2 has been removed from the AKICK list for \2%s\2.", mu->name, mc->name);
-		logcommand(chansvs.me, u, CMDLOG_SET, "%s AKICK DEL %s", mc->name, mu->name);
+		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s AKICK DEL %s", mc->name, mu->name);
 
 		notice(chansvs.nick, mc->name, "\2%s\2 removed \2%s\2 from the AKICK list.", u->nick, mu->name);
 
@@ -464,6 +464,6 @@ void cs_fcmd_akick(char *origin, char *chan)
 		}
 
 		notice(chansvs.nick, origin, "Total of \2%d\2 %s in \2%s\2's AKICK list.", i, (i == 1) ? "entry" : "entries", mc->name);
-		logcommand(chansvs.me, u, CMDLOG_GET, "%s AKICK LIST", mc->name);
+		logcommand_user(chansvs.me, u, CMDLOG_GET, "%s AKICK LIST", mc->name);
 	}
 }

@@ -4,7 +4,7 @@
  *
  * Loads a new module in.
  *
- * $Id: modunload.c 6465 2006-09-25 13:46:33Z jilles $
+ * $Id: modunload.c 6547 2006-09-29 16:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modunload", FALSE, _modinit, _moddeinit,
-	"$Id: modunload.c 6465 2006-09-25 13:46:33Z jilles $",
+	"$Id: modunload.c 6547 2006-09-29 16:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -82,7 +82,7 @@ static void os_cmd_modunload(sourceinfo_t *si, int parc, char *parv[])
 
 		module_unload(m);
 
-		logcommand(opersvs.me, si->su, CMDLOG_ADMIN, "MODUNLOAD %s", module);
+		logcommand(si, CMDLOG_ADMIN, "MODUNLOAD %s", module);
 		command_success_nodata(si, "Module \2%s\2 unloaded.", module);
 	}
 }
