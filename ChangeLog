@@ -1,3 +1,14 @@
+jilles      2006/09/29 17:45:54 UTC	(20060929-6553)
+  Log:
+  nickserv enforce:
+  - add Id keyword
+  - update the comment at the start of the file
+  
+
+  Changes:	Modified:
+  +10 -5	trunk/contrib/ns_enforce.c (File Modified) (Property Modified)
+
+
 jilles      2006/09/29 17:35:49 UTC	(20060929-6551)
   Log:
   has_any_privs(): allow passing NULL and return FALSE in that case

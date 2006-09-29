@@ -23,7 +23,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/enforce",FALSE, _modinit, _moddeinit,
-	"$Id: ns_enforce.c 6553 2006-09-29 17:45:54Z jilles $",
+	"$Id: ns_enforce.c 6555 2006-09-29 18:11:51Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -87,44 +87,44 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!setting)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "ENFORCE");
-		notice(nicksvs.nick, si->su->nick, "Syntax: SET ENFORCE <on|off>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ENFORCE");
+		command_fail(si, fault_needmoreparams, "Syntax: SET ENFORCE ON|OFF");
 		return;
 	}
 
-	if (!si->su->myuser)
+	if (!si->smu)
 	{
-		notice(nicksvs.nick, si->su->nick, "You are not logged in.");
+		command_fail(si, fault_noprivs, "You are not logged in.");
 		return;
 	}
 
 	if (strcasecmp(setting, "ON") == 0)
 	{
-		if (md = metadata_find(si->su->myuser, METADATA_USER, "private:doenforce"))
+		if (md = metadata_find(si->smu, METADATA_USER, "private:doenforce"))
 		{
-			notice(nicksvs.nick, si->su->nick, "ENFORCE is already enabled.");
+			command_fail(si, fault_nochange, "ENFORCE is already enabled.");
 		}
 		else
 		{
-			metadata_add(si->su->myuser, METADATA_USER, "private:doenforce", "1");
-			notice(nicksvs.nick, si->su->nick, "ENFORCE is now enabled.");
+			metadata_add(si->smu, METADATA_USER, "private:doenforce", "1");
+			command_success_nodata(si, "ENFORCE is now enabled.");
 		}
 	}
 	else if (strcasecmp(setting, "OFF") == 0)
 	{
-		if (md = metadata_find(si->su->myuser, METADATA_USER, "private:doenforce"))
+		if (md = metadata_find(si->smu, METADATA_USER, "private:doenforce"))
 		{
-			metadata_delete(si->su->myuser, METADATA_USER, "private:doenforce");
-			notice(nicksvs.nick, si->su->nick, "ENFORCE is now disabled.");
+			metadata_delete(si->smu, METADATA_USER, "private:doenforce");
+			command_success_nodata(si, "ENFORCE is now disabled.");
 		}
 		else
 		{
-			notice(nicksvs.nick, si->su->nick, "ENFORCE is already disabled.");
+			command_fail(si, fault_nochange, "ENFORCE is already disabled.");
 		}
 	}
 	else
 	{
-		notice(nicksvs.nick, si->su->nick, "Unknown value for ENFORCE. Expected values are ON or OFF.");
+		command_fail(si, fault_badparams, "Unknown value for ENFORCE. Expected values are ON or OFF.");
 	}
 }
 
@@ -139,7 +139,7 @@ static void ns_help_set_enforce(char *origin)
 	notice(nicksvs.nick, origin, "and temporarily block its use, which can be");
 	notice(nicksvs.nick, origin, "removed at your discretion. See help on RELEASE.");
 	notice(nicksvs.nick, origin, " ");
-	notice(nicksvs.nick, origin, "Syntax: SET ENFORCE <ON|OFF>");
+	notice(nicksvs.nick, origin, "Syntax: SET ENFORCE ON|OFF");
 }
 
 static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
@@ -158,14 +158,17 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 	/* Absolutely do not do anything like this if nicks
 	 * are not considered owned */
 	if (nicksvs.no_nick_ownership)
+	{
+		command_fail(si, fault_noprivs, "RELEASE is disabled.");
 		return;
+	}
 
-	if (!target && si->su->myuser != NULL)
-		target = si->su->myuser->name;
+	if (!target && si->smu != NULL)
+		target = si->smu->name;
 	if (!target)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "RELEASE");
-		notice(nicksvs.nick, si->su->nick, "Syntax: RELEASE <nick> [password]");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RELEASE");
+		command_fail(si, fault_needmoreparams, "Syntax: RELEASE <nick> [password]");
 		return;
 	}
 
@@ -174,16 +177,16 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 	
 	if (!mu)
 	{
-		notice(nicksvs.nick, si->su->nick, "\2%s\2 is not a registered nickname.", target);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not a registered nickname.", target);
 		return;
 	}
 	
 	if (u == si->su)
 	{
-		notice(nicksvs.nick, si->su->nick, "You cannot RELEASE yourself.");
+		command_fail(si, fault_noprivs, "You cannot RELEASE yourself.");
 		return;
 	}
-	if ((si->su->myuser == mu) || verify_password(mu, password))
+	if ((si->smu == mu) || verify_password(mu, password))
 	{
 		if (u == NULL || is_internal_client(u))
 		{
@@ -191,7 +194,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 				metadata_delete(mu, METADATA_USER, "private:enforcer");
 			logcommand(si, CMDLOG_DO, "RELEASE %s", target);
 			holdnick_sts(nicksvs.me->me, 0, target, mu);
-			notice(nicksvs.nick, si->su->nick, "\2%s\2 has been released.", target);
+			command_success_nodata(si, "\2%s\2 has been released.", target);
 			/*hook_call_event("user_identify", u);*/
 		}
 		else
@@ -209,7 +212,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 					break;
 			}
 			fnc_sts(nicksvs.me->me, u, gnick, FNC_FORCE);
-			notice(nicksvs.nick, si->su->nick, "%s has been released.", target);
+			command_success_nodata(si, "%s has been released.", target);
 			logcommand(si, CMDLOG_DO, "RELEASE %s", target);
 			/*hook_call_event("user_identify", u);*/
 		}
@@ -217,14 +220,14 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 	}
 	if (!password)
 	{
-		notice(nicksvs.nick, si->su->nick, STR_INSUFFICIENT_PARAMS, "RELEASE");
-		notice(nicksvs.nick, si->su->nick, "Syntax: RELEASE <nickname> [password]");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RELEASE");
+		command_fail(si, fault_needmoreparams, "Syntax: RELEASE <nickname> [password]");
 		return;
 	}
 	else
 	{
-		notice(nicksvs.nick, si->su->nick, "%s password incorrect", target);
 		logcommand(si, CMDLOG_DO, "failed RELEASE %s (bad password)", target);
+		command_fail(si, fault_authfail, "Invalid password for \2%s\2.", target);
 	}
 }
 
