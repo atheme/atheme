@@ -4,13 +4,18 @@
  *
  * This file contains code for the NickServ RELEASE/ENFORCE functions.
  *
- * This does nickserv enforcement on all registered nicks. Users who do
- * not identify within 30-60 seconds have their nick changed to Guest<num>.
+ * This does nickserv enforcement on registered nicks if the ENFORCE option
+ * has been enabled. Users who do not identify within 30-60 seconds have
+ * their nick changed to Guest<num>.
  * If the ircd or protocol module do not support forced nick changes,
  * they are killed instead.
- * Enforcement of the nick is currently only supported for bahamut, ratbox
- * and charybdis (i.e. making sure they can't change back immediately).
- * Consequently this module is of little use for other ircds.
+ * Enforcement of the nick is only supported for ircds that support
+ * holdnick_sts(), currently bahamut, charybdis, hybrid, inspircd11,
+ * solidircd, ratbox and unreal (i.e. making sure they can't change back
+ * immediately). Consequently this module is of little use for other ircds.
+ * Note: For hybrid and ratbox, and charybdis before 2.1, the
+ * RELEASE command to remove an enforcer prematurely is not supported,
+ * although it pretends to be successful.
  */
 
 #include "atheme.h"
@@ -18,7 +23,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/enforce",FALSE, _modinit, _moddeinit,
-	"$Id$",
+	"$Id: ns_enforce.c 6553 2006-09-29 17:45:54Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
