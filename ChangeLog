@@ -1,3 +1,15 @@
+jilles      2006/09/29 14:23:12 UTC	(20060929-6535)
+  Log:
+  Rerun autoconf and autoheader, for userserv changes.
+  Also go back to 2.59 instead of 2.60, this gets rid
+  of some silly warning messages.
+  
+
+  Changes:	Modified:
+  +4503 -6688	trunk/configure (File Modified) 
+  +8 -8		trunk/include/sysconf.h.in (File Modified) 
+
+
 jilles      2006/09/29 14:21:55 UTC	(20060929-6533)
   Log:
   Remove userserv Makefile from configure.ac.

@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 6521 2006-09-27 23:01:53Z jilles $
+ * $Id: services.h 6537 2006-09-29 14:33:02Z jilles $
  */
 
 #ifndef SERVICES_H
@@ -14,7 +14,6 @@ typedef struct chansvs_ chansvs_t;
 typedef struct globsvs_ globsvs_t;
 typedef struct opersvs_ opersvs_t;
 typedef struct memosvs_ memosvs_t;
-typedef struct helpsvs_ helpsvs_t;
 typedef struct nicksvs_ nicksvs_t;
 typedef struct saslsvs_ saslsvs_t;
 
@@ -65,17 +64,6 @@ struct opersvs_
 };
 
 struct memosvs_
-{
-  char   *nick;
-  char   *user;
-  char   *host;
-  char   *real;
-  char   *disp;
-
-  service_t *me;
-};
-
-struct helpsvs_
 {
   char   *nick;
   char   *user;
@@ -143,7 +131,6 @@ E chansvs_t chansvs;
 E globsvs_t globsvs;
 E opersvs_t opersvs;
 E memosvs_t memosvs;
-E helpsvs_t helpsvs;
 E nicksvs_t nicksvs;
 E saslsvs_t saslsvs;
 
