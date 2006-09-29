@@ -1,3 +1,12 @@
+jilles      2006/09/29 15:05:47 UTC	(20060929-6541)
+  Log:
+  Use 'si->su' in logcommand() if possible (easier substitution later).
+  
+
+  Changes:	Modified:
+  +4 -4		trunk/modules/nickserv/identify.c (File Modified) 
+
+
 jilles      2006/09/29 14:33:35 UTC	(20060929-6539)
   Log:
   Rerun autoconf.

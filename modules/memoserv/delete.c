@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv DELETE function
  *
- * $Id: delete.c 6429 2006-09-22 20:02:23Z jilles $
+ * $Id: delete.c 6543 2006-09-29 15:09:51Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/delete", FALSE, _modinit, _moddeinit,
-	"$Id: delete.c 6429 2006-09-22 20:02:23Z jilles $",
+	"$Id: delete.c 6543 2006-09-29 15:09:51Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -46,8 +46,6 @@ void _moddeinit()
 static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* Misc structs etc */
-	user_t *u = si->su;
-	myuser_t *mu = u->myuser;
 	node_t *n, *tn;
 	uint8_t i = 0, delcount = 0, memonum = 0, deleteall = 0;
 	mymemo_t *memo;
@@ -66,14 +64,14 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 	}
 	
 	/* user logged in? */
-	if (mu == NULL)
+	if (si->smu == NULL)
 	{
 		command_fail(si, fault_noprivs, "You are not logged in.");
 		return;
 	}
 	
 	/* Do we have any memos? */
-	if (!mu->memos.count)
+	if (!si->smu->memos.count)
 	{
 		command_fail(si, fault_nochange, "You have no memos to delete.");
 		return;
@@ -97,7 +95,7 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 		}
 		
 		/* If int, does that index exist? And do we have something to delete? */
-		if (memonum > mu->memos.count)
+		if (memonum > si->smu->memos.count)
 		{
 			command_fail(si, fault_nosuch_key, "The specified memo doesn't exist.");
 			return;
@@ -107,7 +105,7 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 	delcount = 0;
 	
 	/* Iterate through memos, doing deletion */
-	LIST_FOREACH_SAFE(n, tn, mu->memos.head)
+	LIST_FOREACH_SAFE(n, tn, si->smu->memos.head)
 	{
 		i++;
 		
@@ -118,10 +116,10 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 			memo = (mymemo_t*) n->data;
 			
 			if (memo->status == MEMO_NEW)
-				mu->memoct_new--;
+				si->smu->memoct_new--;
 			
 			/* Free to node pool, remove from chain */
-			node_del(n, &mu->memos);
+			node_del(n, &si->smu->memos);
 			node_free(n);
 
 			free(memo);

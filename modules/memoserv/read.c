@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv READ function
  *
- * $Id: read.c 6429 2006-09-22 20:02:23Z jilles $
+ * $Id: read.c 6543 2006-09-29 15:09:51Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/read", FALSE, _modinit, _moddeinit,
-	"$Id: read.c 6429 2006-09-22 20:02:23Z jilles $",
+	"$Id: read.c 6543 2006-09-29 15:09:51Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -42,8 +42,7 @@ void _moddeinit()
 static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* Misc structs etc */
-	user_t *u = si->su;
-	myuser_t *mu = u->myuser, *tmu;
+	myuser_t *tmu;
 	mymemo_t *memo, *receipt;
 	node_t *n;
 	uint32_t i = 1, memonum = 0;
@@ -66,14 +65,14 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 		memonum = atoi(arg1);
 	
 	/* user logged in? */
-	if (mu == NULL)
+	if (si->smu == NULL)
 	{
 		command_fail(si, fault_noprivs, "You are not logged in.");
 		return;
 	}
 	
 	/* Check to see if any memos */
-	if (!mu->memos.count)
+	if (!si->smu->memos.count)
 	{
 		command_fail(si, fault_nosuch_key, "You have no memos.");
 		return;
@@ -87,14 +86,14 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 	}
 	
 	/* Check to see if memonum is greater than memocount */
-	if (memonum > mu->memos.count)
+	if (memonum > si->smu->memos.count)
 	{
 		command_fail(si, fault_nosuch_key, "Invalid message index.");
 		return;
 	}
 
 	/* Go to reading memos */	
-	LIST_FOREACH(n, mu->memos.head)
+	LIST_FOREACH(n, si->smu->memos.head)
 	{
 		if (i == memonum)
 		{
@@ -106,7 +105,7 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 			if (memo->status == MEMO_NEW)
 			{
 				memo->status = MEMO_READ;
-				mu->memoct_new--;
+				si->smu->memoct_new--;
 				tmu = myuser_find(memo->sender);
 				
 				/* If the sender is logged in, tell them the memo's been read */

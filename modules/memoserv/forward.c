@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv FORWARD function
  *
- * $Id: forward.c 6429 2006-09-22 20:02:23Z jilles $
+ * $Id: forward.c 6543 2006-09-29 15:09:51Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/forward", FALSE, _modinit, _moddeinit,
-	"$Id: forward.c 6429 2006-09-22 20:02:23Z jilles $",
+	"$Id: forward.c 6543 2006-09-29 15:09:51Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -42,8 +42,8 @@ void _moddeinit()
 static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* Misc structs etc */
-	user_t *u = si->su, *tu;
-	myuser_t *mu = u->myuser, *tmu;
+	user_t *tu;
+	myuser_t *tmu;
 	mymemo_t *memo, *newmemo;
 	node_t *n, *temp;
 	uint8_t i = 1, memonum = 0;
@@ -67,20 +67,20 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 		memonum = atoi(arg);
 	
 	/* user logged in? */
-	if (mu == NULL)
+	if (si->smu == NULL)
 	{
 		command_fail(si, fault_noprivs, "You are not logged in.");
 		return;
 	}
 	
-	if (mu->flags & MU_WAITAUTH)
+	if (si->smu->flags & MU_WAITAUTH)
 	{
 		command_fail(si, fault_notverified, "You need to verify your email address before you may send memos.");
 		return;
 	}
 
 	/* Check to see if any memos */
-	if (!mu->memos.count)
+	if (!si->smu->memos.count)
 	{
 		command_fail(si, fault_nosuch_key, "You have no memos to forward.");
 		return;
@@ -94,7 +94,7 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 	}
 	
 	/* Make sure target isn't sender */
-	if (mu == tmu)
+	if (si->smu == tmu)
 	{
 		command_fail(si, fault_noprivs, "You cannot send yourself a memo.");
 		return;
@@ -117,7 +117,7 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* Check to see if memo n exists */
-	if (memonum > mu->memos.count)
+	if (memonum > si->smu->memos.count)
 	{
 		command_fail(si, fault_nosuch_key, "Invalid memo number.");
 		return;
@@ -127,36 +127,36 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 	if (tmu->memos.count >= me.mdlimit)
 	{
 		command_fail(si, fault_toomany, "Target inbox is full.");
-		logcommand(memosvs.me, u, CMDLOG_SET, "failed FORWARD to %s (target inbox full)", tmu->name);
+		logcommand(memosvs.me, si->su, CMDLOG_SET, "failed FORWARD to %s (target inbox full)", tmu->name);
 		return;
 	}
 
 	/* rate limit it -- jilles */
-	if (CURRTIME - mu->memo_ratelimit_time > MEMO_MAX_TIME)
-		mu->memo_ratelimit_num = 0;
-	if (mu->memo_ratelimit_num > MEMO_MAX_NUM)
+	if (CURRTIME - si->smu->memo_ratelimit_time > MEMO_MAX_TIME)
+		si->smu->memo_ratelimit_num = 0;
+	if (si->smu->memo_ratelimit_num > MEMO_MAX_NUM)
 	{
 		command_fail(si, fault_toomany, "Too many memos; please wait a while and try again");
 		return;
 	}
-	mu->memo_ratelimit_num++;
-	mu->memo_ratelimit_time = CURRTIME;
+	si->smu->memo_ratelimit_num++;
+	si->smu->memo_ratelimit_time = CURRTIME;
 
 	/* Make sure we're not on ignore */
 	LIST_FOREACH(n, tmu->memo_ignores.head)
 	{
-		if (!strcasecmp((char *)n->data, mu->name))
+		if (!strcasecmp((char *)n->data, si->smu->name))
 		{
 			/* Lie... change this if you want it to fail silent */
-			logcommand(memosvs.me, u, CMDLOG_SET, "failed FORWARD to %s (on ignore list)", tmu->name);
+			logcommand(memosvs.me, si->su, CMDLOG_SET, "failed FORWARD to %s (on ignore list)", tmu->name);
 			command_success_nodata(si, "The memo has been successfully forwarded to %s.", target);
 			return;
 		}
 	}
-	logcommand(memosvs.me, u, CMDLOG_SET, "FORWARD to %s", tmu->name);
+	logcommand(memosvs.me, si->su, CMDLOG_SET, "FORWARD to %s", tmu->name);
 	
 	/* Go to forwarding memos */
-	LIST_FOREACH(n, mu->memos.head)
+	LIST_FOREACH(n, si->smu->memos.head)
 	{
 		if (i == memonum)
 		{
@@ -167,7 +167,7 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 			/* Create memo */
 			newmemo->sent = CURRTIME;
 			newmemo->status = MEMO_NEW;
-			strlcpy(newmemo->sender,mu->name,NICKLEN);
+			strlcpy(newmemo->sender,si->smu->name,NICKLEN);
 			strlcpy(newmemo->text,memo->text,MEMOLEN);
 			
 			/* Create node, add to their linked list of memos */
@@ -178,7 +178,7 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 			/* Should we email this? */
 			if (tmu->flags & MU_EMAILMEMOS)
 			{
-				if (sendemail(u, EMAIL_MEMO, tmu, memo->text))
+				if (sendemail(si->su, EMAIL_MEMO, tmu, memo->text))
 				{
 					command_success_nodata(si, "Your memo has been emailed to %s.", target);
 					return;
@@ -195,10 +195,10 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 	{
 		command_success_nodata(si, "%s is currently online, and you may talk directly, by sending a private message.", target);
 	}
-	if (!irccmp(si->su->nick, mu->name))
-		myuser_notice(memosvs.nick, tmu, "You have a new forwarded memo from %s.", mu->name);
+	if (!irccmp(si->su->nick, si->smu->name))
+		myuser_notice(memosvs.nick, tmu, "You have a new forwarded memo from %s.", si->smu->name);
 	else
-		myuser_notice(memosvs.nick, tmu, "You have a new forwarded memo from %s (nick: %s).", mu->name, si->su->nick);
+		myuser_notice(memosvs.nick, tmu, "You have a new forwarded memo from %s (nick: %s).", si->smu->name, si->su->nick);
 
 	command_success_nodata(si, "The memo has been successfully forwarded to %s.", target);
 	return;
