@@ -1,3 +1,12 @@
+jilles      2006/09/29 22:47:23 UTC	(20060929-6567)
+  Log:
+  logcommand(): allow commands with user_t and connection_t both NULL
+  
+
+  Changes:	Modified:
+  +3 -2		trunk/src/function.c (File Modified) 
+
+
 jilles      2006/09/29 22:34:35 UTC	(20060929-6565)
   Log:
   CatServ: Use command_success_nodata().

@@ -4,7 +4,7 @@
  *
  * Defines needed by multiple header files.
  *
- * $Id: common.h 6291 2006-09-06 02:26:55Z pippijn $
+ * $Id: common.h 6569 2006-09-29 22:50:24Z jilles $
  */
 
 #ifndef COMMON_H
@@ -79,5 +79,25 @@ typedef struct sourceinfo_ sourceinfo_t;
 
 typedef struct _configfile CONFIGFILE;
 typedef struct _configentry CONFIGENTRY;
+
+/* fault codes */
+enum faultcode_
+{
+	fault_needmoreparams = 1,
+	fault_badparams = 2,
+	fault_nosuch_source = 3,
+	fault_nosuch_target = 4,
+	fault_authfail = 5,
+	fault_noprivs = 6,
+	fault_nosuch_key = 7,
+	fault_alreadyexists = 8,
+	fault_toomany = 9,
+	fault_emailfail = 10,
+	fault_notverified = 11,
+	fault_nochange = 12,
+	fault_already_authed = 13,
+	fault_unimplemented = 14
+};
+typedef enum faultcode_ faultcode_t;
 
 #endif

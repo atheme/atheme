@@ -4,11 +4,18 @@
  *
  * Data structures for sourceinfo
  *
- * $Id: sourceinfo.h 6545 2006-09-29 15:17:38Z jilles $
+ * $Id: sourceinfo.h 6569 2006-09-29 22:50:24Z jilles $
  */
 
 #ifndef SOURCEINFO_H
 #define SOURCEINFO_H
+
+struct sourceinfo_vtable
+{
+	void (*cmd_fail)(sourceinfo_t *si, faultcode_t code, const char *message);
+	void (*cmd_success_nodata)(sourceinfo_t *si, const char *message);
+	void (*cmd_success_string)(sourceinfo_t *si, const char *result, const char *message);
+};
 
 /* structure describing data about a protocol message or service command */
 struct sourceinfo_
@@ -27,6 +34,9 @@ struct sourceinfo_
 	service_t *service; /* destination service */
 
 	channel_t *c; /* channel this command applies to */
+
+	struct sourceinfo_vtable *v; /* function pointers */
+	void *callerdata; /* opaque data pointer for caller */
 };
 
 #endif

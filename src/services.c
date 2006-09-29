@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 6525 2006-09-27 23:46:05Z jilles $
+ * $Id: services.c 6569 2006-09-29 22:50:24Z jilles $
  */
 
 #include "atheme.h"
@@ -375,11 +375,20 @@ void command_fail(sourceinfo_t *si, faultcode_t code, const char *fmt, ...)
 	va_list args;
 	char buf[BUFSIZE];
 	const char *str = translation_get(fmt);
+	int len1;
 
 	snprintf(buf, sizeof buf, "E%d ", code);
+	len1 = strlen(buf);
 	va_start(args, fmt);
-	vsnprintf(buf + strlen(buf), sizeof buf - strlen(buf), str, args);
+	vsnprintf(buf + len1, sizeof buf - len1, str, args);
 	va_end(args);
+
+	if (si->su == NULL)
+	{
+		if (si->v != NULL && si->v->cmd_fail)
+			si->v->cmd_fail(si, code, buf + len1);
+		return;
+	}
 
 	if (config_options.use_privmsg)
 		msg(si->service->name, si->su->nick, "%s", buf);
@@ -397,6 +406,13 @@ void command_success_nodata(sourceinfo_t *si, const char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, str, args);
 	va_end(args);
 
+	if (si->su == NULL)
+	{
+		if (si->v != NULL && si->v->cmd_fail)
+			si->v->cmd_success_nodata(si, buf);
+		return;
+	}
+
 	if (config_options.use_privmsg)
 		msg(si->service->name, si->su->nick, "%s", buf);
 	else
@@ -412,6 +428,13 @@ void command_success_string(sourceinfo_t *si, const char *result, const char *fm
 	va_start(args, fmt);
 	vsnprintf(buf, BUFSIZE, str, args);
 	va_end(args);
+
+	if (si->su == NULL)
+	{
+		if (si->v != NULL && si->v->cmd_fail)
+			si->v->cmd_success_string(si, result, buf);
+		return;
+	}
 
 	if (config_options.use_privmsg)
 		msg(si->service->name, si->su->nick, "%s", buf);

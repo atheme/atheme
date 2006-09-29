@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 6537 2006-09-29 14:33:02Z jilles $
+ * $Id: services.h 6569 2006-09-29 22:50:24Z jilles $
  */
 
 #ifndef SERVICES_H
@@ -105,26 +105,6 @@ struct saslsvs_
 /* help us keep consistent messages */
 #define STR_INSUFFICIENT_PARAMS "Insufficient parameters for \2%s\2."
 #define STR_INVALID_PARAMS "Invalid parameters for \2%s\2."
-
-/* for command_fail() */
-enum faultcode_
-{
-	fault_needmoreparams = 1,
-	fault_badparams = 2,
-	fault_nosuch_source = 3,
-	fault_nosuch_target = 4,
-	fault_authfail = 5,
-	fault_noprivs = 6,
-	fault_nosuch_key = 7,
-	fault_alreadyexists = 8,
-	fault_toomany = 9,
-	fault_emailfail = 10,
-	fault_notverified = 11,
-	fault_nochange = 12,
-	fault_already_authed = 13,
-	fault_unimplemented = 14
-};
-typedef enum faultcode_ faultcode_t;
 
 /* extern declarations */
 E chansvs_t chansvs;
