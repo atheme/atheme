@@ -1,3 +1,15 @@
+jilles      2006/09/28 00:13:23 UTC	(20060928-6529)
+  Log:
+  Don't check for nickstealers or allow RELEASE if
+  nickserv::no_nick_ownership is enabled.
+  (meant to preserve policy if ns_enforce is
+  accidentally loaded on a userserv network)
+  
+
+  Changes:	Modified:
+  +10 -0	trunk/contrib/ns_enforce.c (File Modified) 
+
+
 jilles      2006/09/28 00:11:12 UTC	(20060928-6527)
   Log:
   Disconnect contrib/us_generatepass.c from the build.
