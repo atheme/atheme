@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 6521 2006-09-27 23:01:53Z jilles $
+ * $Id: account.c 6563 2006-09-29 21:54:21Z jilles $
  */
 
 #include "atheme.h"
@@ -12,11 +12,11 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 6521 2006-09-27 23:01:53Z jilles $",
+	"$Id: account.c 6563 2006-09-29 21:54:21Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-unsigned int tcnt = 0;
+static unsigned int tcnt = 0;
 
 /* support function for atheme.account.register. */
 
@@ -54,7 +54,6 @@ static int account_myuser_foreach_cb(dictionary_elem_t *delem, void *privdata)
 static int account_register(void *conn, int parc, char *parv[])
 {
 	myuser_t *mu;
-	uint32_t tcnt;
 	static char buf[XMLRPC_BUFSIZE];
 
 	*buf = '\0';

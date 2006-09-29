@@ -1,3 +1,12 @@
+jilles      2006/09/29 21:20:37 UTC	(20060929-6561)
+  Log:
+  Update catserv to new add_service().
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/contrib/ircd_catserv.c (File Modified) 
+
+
 jilles      2006/09/29 21:15:10 UTC	(20060929-6559)
   Log:
   Add list_t *cmdtree member/parameter to service_t/add_service().
