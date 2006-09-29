@@ -1,3 +1,12 @@
+jilles      2006/09/29 14:21:55 UTC	(20060929-6533)
+  Log:
+  Remove userserv Makefile from configure.ac.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/configure.ac (File Modified) 
+
+
 jilles      2006/09/29 14:18:52 UTC	(20060929-6531)
   Log:
   Delete the old userserv.
