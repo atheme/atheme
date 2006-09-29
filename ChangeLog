@@ -1,3 +1,15 @@
+jilles      2006/09/29 22:52:13 UTC	(20060929-6571)
+  Log:
+  Add to contrib something to test executing commands without user_t.
+  Usage: /msg operserv testcmd <service> <command> [args]
+  Multiple args should be separated with semicolons.
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/contrib/Makefile.in (File Modified) 
+  +129 -0	trunk/contrib/os_testcmd.c (File Added) 
+
+
 jilles      2006/09/29 22:50:24 UTC	(20060929-6569)
   Log:
   Call some function pointers accessed via the sourceinfo_t
