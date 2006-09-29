@@ -1,3 +1,19 @@
+jilles      2006/09/29 15:09:51 UTC	(20060929-6543)
+  Log:
+  memoserv: get rid of separate u and mu variables,
+  instead using the sourceinfo fields every time,
+  stop using u->myuser where possible
+  
+
+  Changes:	Modified:
+  +6 -8		trunk/modules/memoserv/delete.c (File Modified) 
+  +22 -22	trunk/modules/memoserv/forward.c (File Modified) 
+  +1 -3		trunk/modules/memoserv/ignore.c (File Modified) 
+  +7 -7		trunk/modules/memoserv/list.c (File Modified) 
+  +6 -7		trunk/modules/memoserv/read.c (File Modified) 
+  +19 -19	trunk/modules/memoserv/send.c (File Modified) 
+
+
 jilles      2006/09/29 15:05:47 UTC	(20060929-6541)
   Log:
   Use 'si->su' in logcommand() if possible (easier substitution later).
