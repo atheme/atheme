@@ -1,3 +1,20 @@
+jilles      2006/09/29 21:15:10 UTC	(20060929-6559)
+  Log:
+  Add list_t *cmdtree member/parameter to service_t/add_service().
+  This will allow RPC modules to find services commands.
+  
+
+  Changes:	Modified:
+  +4 -1		trunk/include/servtree.h (File Modified) 
+  +3 -2		trunk/modules/chanserv/main.c (File Modified) 
+  +4 -2		trunk/modules/global/main.c (File Modified) 
+  +3 -2		trunk/modules/memoserv/main.c (File Modified) 
+  +3 -2		trunk/modules/nickserv/main.c (File Modified) 
+  +3 -2		trunk/modules/operserv/main.c (File Modified) 
+  +2 -2		trunk/modules/saslserv/main.c (File Modified) 
+  +3 -1		trunk/src/servtree.c (File Modified) 
+
+
 jilles      2006/09/29 20:51:14 UTC	(20060929-6557)
   Log:
   Update depend files.

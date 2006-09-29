@@ -4,7 +4,7 @@
  *
  * Meow!
  *
- * $Id: ircd_catserv.c 6383 2006-09-13 22:08:28Z jilles $
+ * $Id: ircd_catserv.c 6561 2006-09-29 21:20:37Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"contrib/ircd_catserv", FALSE, _modinit, _moddeinit,
-	"$Id: ircd_catserv.c 6383 2006-09-13 22:08:28Z jilles $",
+	"$Id: ircd_catserv.c 6561 2006-09-29 21:20:37Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -30,7 +30,7 @@ command_t catserv_help = { "HELP", "Displays contextual help information.",
 
 void _modinit(module_t *m)
 {
-	catserv = add_service("CatServ", "meow", "meowth.nu", "Kitty cat!", catserv_handler);
+	catserv = add_service("CatServ", "meow", "meowth.nu", "Kitty cat!", catserv_handler, &catserv_cmdtree);
 
 	command_add(&catserv_meow, &catserv_cmdtree);
 	command_add(&catserv_help, &catserv_cmdtree);
