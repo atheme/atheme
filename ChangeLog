@@ -1,3 +1,12 @@
+jilles      2006/09/29 17:07:46 UTC	(20060929-6549)
+  Log:
+  Add the reason field for services ignores to log/snoop/wallops.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/modules/operserv/ignore.c (File Modified) 
+
+
 jilles      2006/09/29 16:39:38 UTC	(20060929-6547)
   Log:
   Change logcommand() to take sourceinfo_t * instead of service_t *, user_t *

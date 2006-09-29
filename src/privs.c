@@ -4,7 +4,7 @@
  *
  * See doc/LICENSE for licensing information.
  *
- * $Id: privs.c 4419 2006-01-02 12:41:30Z jilles $
+ * $Id: privs.c 6551 2006-09-29 17:35:49Z jilles $
  */
 
 #include "atheme.h"
@@ -34,6 +34,8 @@ static boolean_t string_in_list(const char *str, const char *name)
 
 boolean_t has_any_privs(user_t *u)
 {
+	if (u == NULL)
+		return FALSE;
 	if (is_ircop(u))
 		return TRUE;
 	if (u->myuser && is_soper(u->myuser))
