@@ -1,3 +1,13 @@
+jilles      2006/09/29 14:18:52 UTC	(20060929-6531)
+  Log:
+  Delete the old userserv.
+  
+
+  Changes:	Modified:
+  +0 -59	trunk/contrib/us_generatepass.c (File Deleted) 
+  + -		trunk/modules/userserv/ (File Deleted) 
+
+
 jilles      2006/09/28 00:13:23 UTC	(20060928-6529)
   Log:
   Don't check for nickstealers or allow RELEASE if
