@@ -1,3 +1,23 @@
+jilles      2006/09/29 20:51:14 UTC	(20060929-6557)
+  Log:
+  Update depend files.
+  
+
+  Changes:	Modified:
+  +23 -1	trunk/backend/.depend (File Modified) 
+  +6 -2		trunk/crypto/.depend (File Modified) 
+  +12 -0	trunk/libatheme/.depend (File Modified) 
+  +95 -62	trunk/modules/chanserv/.depend (File Modified) 
+  +4 -2		trunk/modules/global/.depend (File Modified) 
+  +24 -16	trunk/modules/memoserv/.depend (File Modified) 
+  +66 -44	trunk/modules/nickserv/.depend (File Modified) 
+  +208 -40	trunk/modules/operserv/.depend (File Modified) 
+  +12 -28	trunk/modules/saslserv/.depend (File Modified) 
+  +12 -8	trunk/modules/xmlrpc/.depend (File Modified) 
+  +91 -39	trunk/protocol/.depend (File Modified) 
+  +104 -47	trunk/src/.depend (File Modified) 
+
+
 jilles      2006/09/29 18:11:51 UTC	(20060929-6555)
   Log:
   nickserv enforce:

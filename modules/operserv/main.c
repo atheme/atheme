@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6359 2006-09-12 23:18:15Z pippijn $
+ * $Id: main.c 6559 2006-09-29 21:15:10Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6359 2006-09-12 23:18:15Z pippijn $",
+	"$Id: main.c 6559 2006-09-29 21:15:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -58,7 +58,8 @@ static void operserv_config_ready(void *unused)
                 del_service(opersvs.me);
 
         opersvs.me = add_service(opersvs.nick, opersvs.user,
-                                 opersvs.host, opersvs.real, oservice);
+                                 opersvs.host, opersvs.real,
+				 oservice, &os_cmdtree);
         opersvs.disp = opersvs.me->disp;
 
         hook_del_hook("config_ready", operserv_config_ready);
@@ -72,7 +73,7 @@ void _modinit(module_t *m)
         if (!cold_start)
         {
                 opersvs.me = add_service(opersvs.nick, opersvs.user,
-                        opersvs.host, opersvs.real, oservice);
+                        opersvs.host, opersvs.real, oservice, &os_cmdtree);
                 opersvs.disp = opersvs.me->disp;
         }
 }

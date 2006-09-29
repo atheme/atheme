@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6521 2006-09-27 23:01:53Z jilles $
+ * $Id: main.c 6559 2006-09-29 21:15:10Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6521 2006-09-27 23:01:53Z jilles $",
+	"$Id: main.c 6559 2006-09-29 21:15:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -119,7 +119,8 @@ static void nickserv_config_ready(void *unused)
                 del_service(nicksvs.me);
 
         nicksvs.me = add_service(nicksvs.nick, nicksvs.user,
-                                 nicksvs.host, nicksvs.real, nickserv);
+                                 nicksvs.host, nicksvs.real,
+				 nickserv, &ns_cmdtree);
         nicksvs.disp = nicksvs.me->disp;
 
 	if (nicksvs.no_nick_ownership)
@@ -141,7 +142,7 @@ void _modinit(module_t *m)
         if (!cold_start)
         {
                 nicksvs.me = add_service(nicksvs.nick, nicksvs.user,
-			nicksvs.host, nicksvs.real, nickserv);
+			nicksvs.host, nicksvs.real, nickserv, &ns_cmdtree);
                 nicksvs.disp = nicksvs.me->disp;
         }
 	authservice_loaded++;

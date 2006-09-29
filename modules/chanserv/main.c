@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6409 2006-09-17 18:21:04Z jilles $
+ * $Id: main.c 6559 2006-09-29 21:15:10Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6409 2006-09-17 18:21:04Z jilles $",
+	"$Id: main.c 6559 2006-09-29 21:15:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -134,7 +134,8 @@ static void chanserv_config_ready(void *unused)
 		del_service(chansvs.me);
 
 	chansvs.me = add_service(chansvs.nick, chansvs.user,
-				 chansvs.host, chansvs.real, chanserv);
+				 chansvs.host, chansvs.real,
+				 chanserv, &cs_cmdtree);
 	chansvs.disp = chansvs.me->disp;
 	if (chansvs.fantasy)
 		fcmd_agent = chansvs.me;
@@ -152,7 +153,7 @@ void _modinit(module_t *m)
 
 	if (!cold_start)
 	{
-		chansvs.me = add_service(chansvs.nick, chansvs.user, chansvs.host, chansvs.real, chanserv);
+		chansvs.me = add_service(chansvs.nick, chansvs.user, chansvs.host, chansvs.real, chanserv, &cs_cmdtree);
 		chansvs.disp = chansvs.me->disp;
 		if (chansvs.fantasy)
 			fcmd_agent = chansvs.me;
