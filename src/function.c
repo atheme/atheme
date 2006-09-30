@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 6567 2006-09-29 22:47:23Z jilles $
+ * $Id: function.c 6587 2006-09-30 22:35:46Z jilles $
  */
 
 #include "atheme.h"
@@ -144,7 +144,7 @@ void logcommand(sourceinfo_t *si, int level, const char *fmt, ...)
 	if (si->su != NULL)
 		logcommand_user(si->service, si->su, level, "%s", lbuf);
 	else
-		logcommand_external(si->service, si->connection != NULL ? "rpc" : "unknown", si->connection, si->smu, level, "%s", lbuf);
+		logcommand_external(si->service, si->v != NULL ? si->v->description : "unknown", si->connection, si->smu, level, "%s", lbuf);
 }
 
 void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt, ...)

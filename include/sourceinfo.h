@@ -4,7 +4,7 @@
  *
  * Data structures for sourceinfo
  *
- * $Id: sourceinfo.h 6569 2006-09-29 22:50:24Z jilles $
+ * $Id: sourceinfo.h 6587 2006-09-30 22:35:46Z jilles $
  */
 
 #ifndef SOURCEINFO_H
@@ -12,6 +12,7 @@
 
 struct sourceinfo_vtable
 {
+	const char *description;
 	void (*cmd_fail)(sourceinfo_t *si, faultcode_t code, const char *message);
 	void (*cmd_success_nodata)(sourceinfo_t *si, const char *message);
 	void (*cmd_success_string)(sourceinfo_t *si, const char *result, const char *message);

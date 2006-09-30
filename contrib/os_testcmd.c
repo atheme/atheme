@@ -4,7 +4,7 @@
  *
  * Calls a command without a user_t.
  *
- * $Id: os_testcmd.c 6571 2006-09-29 22:52:13Z jilles $
+ * $Id: os_testcmd.c 6587 2006-09-30 22:35:46Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/testcmd", FALSE, _modinit, _moddeinit,
-	"$Id: os_testcmd.c 6571 2006-09-29 22:52:13Z jilles $",
+	"$Id: os_testcmd.c 6587 2006-09-30 22:35:46Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -34,7 +34,7 @@ command_t os_testcmd = { "TESTCMD", "Executes a command without a user_t.",
 list_t *os_cmdtree;
 list_t *os_helptree;
 
-struct sourceinfo_vtable testcmd_vtable = { testcmd_command_fail, testcmd_command_success_nodata, testcmd_command_success_string };
+struct sourceinfo_vtable testcmd_vtable = { "testcmd", testcmd_command_fail, testcmd_command_success_nodata, testcmd_command_success_string };
 
 void _modinit(module_t *m)
 {

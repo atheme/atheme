@@ -1,3 +1,19 @@
+jilles      2006/09/30 22:10:34 UTC	(20060930-6585)
+  Log:
+  Convert help_display() to sourceinfo.
+  Make help_cmd_find() static.
+  
+
+  Changes:	Modified:
+  +1 -3		trunk/include/commandtree.h (File Modified) 
+  +1 -1		trunk/modules/chanserv/help.c (File Modified) 
+  +1 -1		trunk/modules/global/main.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/help.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/help.c (File Modified) 
+  +1 -1		trunk/modules/operserv/help.c (File Modified) 
+  +15 -14	trunk/src/help.c (File Modified) 
+
+
 jilles      2006/09/30 21:45:01 UTC	(20060930-6583)
   Log:
   src/packet.c: remove obsolete TODO comment.
