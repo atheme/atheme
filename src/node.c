@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6325 2006-09-07 22:39:09Z jilles $
+ * $Id: node.c 6575 2006-09-30 21:15:23Z jilles $
  */
 
 #include "atheme.h"
@@ -2027,6 +2027,27 @@ uint32_t chanacs_user_flags(mychan_t *mychan, user_t *u)
 	result |= chanacs_host_flags_by_user(mychan, u);
 
 	return result;
+}
+
+boolean_t chanacs_source_has_flag(mychan_t *mychan, sourceinfo_t *si, uint32_t level)
+{
+	return si->su != NULL ? chanacs_user_has_flag(mychan, si->su, level) :
+		chanacs_find(mychan, si->smu, level) != NULL;
+}
+
+uint32_t chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si)
+{
+	chanacs_t *ca;
+
+	if (si->su != NULL)
+	{
+		return chanacs_user_flags(mychan, si->su);
+	}
+	else
+	{
+		ca = chanacs_find(mychan, si->smu, 0);
+		return ca != NULL ? ca->level : 0;
+	}
 }
 
 /* Change channel access

@@ -1,3 +1,13 @@
+jilles      2006/09/29 23:01:05 UTC	(20060929-6573)
+  Log:
+  nickserv set: <option> already/not set should be
+  fault_nochange, not fault_badparams
+  
+
+  Changes:	Modified:
+  +10 -10	trunk/modules/nickserv/set.c (File Modified) 
+
+
 jilles      2006/09/29 22:52:13 UTC	(20060929-6571)
   Log:
   Add to contrib something to test executing commands without user_t.

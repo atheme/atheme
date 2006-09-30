@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 6507 2006-09-26 18:11:19Z jilles $
+ * $Id: account.h 6575 2006-09-30 21:15:23Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -267,6 +267,8 @@ E uint32_t chanacs_host_flags_by_user(mychan_t *mychan, user_t *u);
 E chanacs_t *chanacs_find_by_mask(mychan_t *mychan, char *mask, uint32_t level);
 E boolean_t chanacs_user_has_flag(mychan_t *mychan, user_t *u, uint32_t level);
 E uint32_t chanacs_user_flags(mychan_t *mychan, user_t *u);
+E boolean_t chanacs_source_has_flag(mychan_t *mychan, sourceinfo_t *si, uint32_t level);
+E uint32_t chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si);
 E boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_t *addflags, uint32_t *removeflags, uint32_t restrictflags);
 E boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_t addflags, uint32_t removeflags, uint32_t restrictflags);
 
