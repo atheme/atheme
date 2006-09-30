@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6559 2006-09-29 21:15:10Z jilles $
+ * $Id: main.c 6585 2006-09-30 22:10:34Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"global/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6559 2006-09-29 21:15:10Z jilles $",
+	"$Id: main.c 6585 2006-09-30 22:10:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -61,7 +61,7 @@ static void gs_cmd_help(sourceinfo_t *si, const int parc, char *parv[])
 	}
 
 	/* take the command through the hash table */
-	help_display(globsvs.nick, globsvs.disp, si->su->nick, command, &gs_helptree);
+	help_display(si, command, &gs_helptree);
 }
 
 /* GLOBAL <parameters>|SEND|CLEAR */

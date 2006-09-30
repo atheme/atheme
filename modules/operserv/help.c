@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 6463 2006-09-25 13:03:41Z jilles $
+ * $Id: help.c 6585 2006-09-30 22:10:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 6463 2006-09-25 13:03:41Z jilles $",
+	"$Id: help.c 6585 2006-09-30 22:10:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -67,5 +67,5 @@ static void os_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* take the command through the hash table */
-	help_display(opersvs.nick, opersvs.disp, si->su->nick, command, os_helptree);
+	help_display(si, command, os_helptree);
 }

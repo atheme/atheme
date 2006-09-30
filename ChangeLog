@@ -1,3 +1,12 @@
+jilles      2006/09/30 21:45:01 UTC	(20060930-6583)
+  Log:
+  src/packet.c: remove obsolete TODO comment.
+  
+
+  Changes:	Modified:
+  +0 -3		trunk/src/packet.c (File Modified) 
+
+
 jilles      2006/09/30 21:35:44 UTC	(20060930-6581)
   Log:
   chanserv flags <channel> <target> (display one entry):

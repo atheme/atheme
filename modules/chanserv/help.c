@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 6427 2006-09-22 19:38:34Z jilles $
+ * $Id: help.c 6585 2006-09-30 22:10:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 6427 2006-09-22 19:38:34Z jilles $",
+	"$Id: help.c 6585 2006-09-30 22:10:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -172,5 +172,5 @@ static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	help_display(chansvs.nick, chansvs.disp, si->su->nick, command, cs_helptree);
+	help_display(si, command, cs_helptree);
 }
