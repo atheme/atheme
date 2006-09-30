@@ -1,3 +1,28 @@
+jilles      2006/09/30 21:17:34 UTC	(20060930-6577)
+  Log:
+  Use chanacs_source_has_flag() and chanacs_source_flags() in some places.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/contrib/cs_count.c (File Modified) 
+  +3 -3		trunk/modules/chanserv/akick.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/ban.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/clear_bans.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/clear_users.c (File Modified) 
+  +3 -3		trunk/modules/chanserv/flags.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/getkey.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/halfop.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/invite.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/kick.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/op.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/recover.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/status.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/template.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/topic.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/voice.c (File Modified) 
+  +3 -3		trunk/modules/chanserv/xop.c (File Modified) 
+
+
 jilles      2006/09/30 21:15:23 UTC	(20060930-6575)
   Log:
   Add chanacs_source_has_flag() and chanacs_source_flags(),
