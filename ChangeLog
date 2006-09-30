@@ -1,3 +1,14 @@
+jilles      2006/09/30 21:35:44 UTC	(20060930-6581)
+  Log:
+  chanserv flags <channel> <target> (display one entry):
+  - use command_success_string()
+  - this is CMDLOG_GET not CMDLOG_SET
+  
+
+  Changes:	Modified:
+  +8 -4		trunk/modules/chanserv/flags.c (File Modified) 
+
+
 jilles      2006/09/30 21:24:30 UTC	(20060930-6579)
   Log:
   chanserv flags: use chanacs_source_has_flag to test a single flag (+A).

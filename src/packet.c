@@ -4,10 +4,7 @@
  *
  * IRC packet handling.
  *
- * $Id: packet.c 6373 2006-09-13 15:56:58Z jilles $
- *
- * TODO: Take all the sendq stuff in node.c and put it here.
- * sendq_flush becomes irc_whandler, etc.
+ * $Id: packet.c 6583 2006-09-30 21:45:01Z jilles $
  */
 
 #include "atheme.h"
