@@ -1,3 +1,12 @@
+jilles      2006/09/30 21:24:30 UTC	(20060930-6579)
+  Log:
+  chanserv flags: use chanacs_source_has_flag to test a single flag (+A).
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/flags.c (File Modified) 
+
+
 jilles      2006/09/30 21:17:34 UTC	(20060930-6577)
   Log:
   Use chanacs_source_has_flag() and chanacs_source_flags() in some places.

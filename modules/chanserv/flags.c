@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 6579 2006-09-30 21:24:30Z jilles $
+ * $Id: flags.c 6581 2006-09-30 21:35:44Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 6579 2006-09-30 21:24:30Z jilles $",
+	"$Id: flags.c 6581 2006-09-30 21:35:44Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -54,6 +54,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	int operoverride = 0;
 	char *channel = parv[0];
 	char *target = parv[1];
+	const char *str1;
 	uint32_t addflags, removeflags, restrictflags;
 
 	if (parc < 1)
@@ -157,13 +158,16 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				ca = chanacs_find(mc, tmu, 0);
 			}
 			if (ca != NULL)
-				command_success_nodata(si, "Flags for \2%s\2 in \2%s\2 are \2%s\2.",
+			{
+				str1 = bitmask_to_flags2(ca->level, 0, chanacs_flags);
+				command_success_string(si, str1, "Flags for \2%s\2 in \2%s\2 are \2%s\2.",
 						target, channel,
-						bitmask_to_flags2(ca != NULL ? ca->level : 0, 0, chanacs_flags));
+						str1);
+			}
 			else
-				command_success_nodata(si, "No flags for \2%s\2 in \2%s\2.",
+				command_success_string(si, "", "No flags for \2%s\2 in \2%s\2.",
 						target, channel);
-			logcommand(si, CMDLOG_SET, "%s FLAGS %s", mc->name, target);
+			logcommand(si, CMDLOG_GET, "%s FLAGS %s", mc->name, target);
 			return;
 		}
 
