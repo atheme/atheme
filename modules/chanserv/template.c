@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TEMPLATE functions.
  *
- * $Id: template.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: template.c 6577 2006-09-30 21:17:34Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/template", FALSE, _modinit, _moddeinit,
-	"$Id: template.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: template.c 6577 2006-09-30 21:17:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -85,7 +85,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 	{
 		uint8_t i = 1;
 
-		if (!chanacs_user_has_flag(mc, si->su, CA_ACLVIEW))
+		if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 		{
 			if (has_priv(si->su, PRIV_CHAN_AUSPEX))
 				operoverride = 1;
@@ -150,7 +150,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 		else
 #endif
 		{
-			restrictflags = chanacs_user_flags(mc, si->su);
+			restrictflags = chanacs_source_flags(mc, si);
 			if (!(restrictflags & CA_FLAGS))
 			{
 				command_fail(si, fault_noprivs, "You are not authorized to execute this command.");

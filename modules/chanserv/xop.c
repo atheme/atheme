@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: xop.c 6577 2006-09-30 21:17:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: xop.c 6577 2006-09-30 21:17:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -133,7 +133,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 		if (is_founder(mc, si->smu))
 			restrictflags = CA_ALL;
 		else
-			restrictflags = chanacs_user_flags(mc, si->su);
+			restrictflags = chanacs_source_flags(mc, si);
 		/* The following is a bit complicated, to allow for
 		 * possible future denial of granting +f */
 		if (!(restrictflags & CA_FLAGS))
@@ -158,7 +158,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 		if (is_founder(mc, si->smu) || mu == si->smu)
 			restrictflags = CA_ALL;
 		else
-			restrictflags = chanacs_user_flags(mc, si->su);
+			restrictflags = chanacs_source_flags(mc, si);
 		/* The following is a bit complicated, to allow for
 		 * possible future denial of granting +f */
 		if (!(restrictflags & CA_FLAGS))
@@ -177,7 +177,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 
 	else if (!strcasecmp("LIST", cmd))
 	{
-		if (!chanacs_user_has_flag(mc, si->su, CA_ACLVIEW))
+		if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 		{
 			if (has_priv(si->su, PRIV_CHAN_AUSPEX))
 				operoverride = 1;

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService VOICE functions.
  *
- * $Id: voice.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: voice.c 6577 2006-09-30 21:17:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/voice", FALSE, _modinit, _moddeinit,
-	"$Id: voice.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: voice.c 6577 2006-09-30 21:17:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -88,7 +88,7 @@ static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	si->su = user_find_named(si->su->nick);
-	if (!chanacs_user_has_flag(mc, si->su, CA_VOICE))
+	if (!chanacs_source_has_flag(mc, si, CA_VOICE))
 	{
 		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 		return;
@@ -151,7 +151,7 @@ static void cs_cmd_devoice(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	si->su = user_find_named(si->su->nick);
-	if (!chanacs_user_has_flag(mc, si->su, CA_VOICE))
+	if (!chanacs_source_has_flag(mc, si, CA_VOICE))
 	{
 		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 		return;

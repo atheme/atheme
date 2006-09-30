@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService STATUS function.
  *
- * $Id: status.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: status.c 6577 2006-09-30 21:17:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/status", FALSE, _modinit, _moddeinit,
-	"$Id: status.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: status.c 6577 2006-09-30 21:17:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -77,7 +77,7 @@ static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 		if (is_founder(mc, si->smu))
 			command_success_nodata(si, "You are founder on \2%s\2.", mc->name);
 
-		flags = chanacs_user_flags(mc, si->su);
+		flags = chanacs_source_flags(mc, si);
 		if (flags & CA_AKICK)
 			command_success_nodata(si, "You are banned from \2%s\2.", mc->name);
 		else if (flags != 0)

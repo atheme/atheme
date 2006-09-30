@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService RECOVER functions.
  *
- * $Id: recover.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: recover.c 6577 2006-09-30 21:17:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/recover", FALSE, _modinit, _moddeinit,
-	"$Id: recover.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: recover.c 6577 2006-09-30 21:17:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -76,7 +76,7 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!chanacs_user_has_flag(mc, si->su, CA_RECOVER))
+	if (!chanacs_source_has_flag(mc, si, CA_RECOVER))
 	{
 		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 		return;
@@ -137,7 +137,7 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 		origin_cu->modes |= CMODE_OP;
 	}
 
-	if (origin_cu != NULL || (chanacs_user_flags(mc, si->su) & (CA_OP | CA_AUTOOP)))
+	if (origin_cu != NULL || (chanacs_source_flags(mc, si) & (CA_OP | CA_AUTOOP)))
 	{
 
 		channel_mode_va(chansvs.me->me, mc->chan, 1, "+im");

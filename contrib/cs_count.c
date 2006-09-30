@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService COUNT functions.
  *
- * $Id: cs_count.c 6345 2006-09-10 20:19:07Z jilles $
+ * $Id: cs_count.c 6577 2006-09-30 21:17:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/count", FALSE, _modinit, _moddeinit,
-	"$Id: cs_count.c 6345 2006-09-10 20:19:07Z jilles $",
+	"$Id: cs_count.c 6577 2006-09-30 21:17:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -62,7 +62,7 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!chanacs_user_has_flag(mc, si->su, CA_ACLVIEW))
+	if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 	{
 		notice(chansvs.nick, si->su->nick, "You are not authorized to perform this operation.");
 		return;

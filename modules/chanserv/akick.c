@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: akick.c 6577 2006-09-30 21:17:34Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@ static void cs_fcmd_akick(char *origin, char *chan);
 DECLARE_MODULE_V1
 (
 	"chanserv/akick", FALSE, _modinit, _moddeinit,
-	"$Id: akick.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: akick.c 6577 2006-09-30 21:17:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -101,7 +101,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 	/* ADD */
 	if (!strcasecmp("ADD", cmd))
 	{
-		if ((chanacs_user_flags(mc, si->su) & (CA_FLAGS | CA_REMOVE)) != (CA_FLAGS | CA_REMOVE))
+		if ((chanacs_source_flags(mc, si) & (CA_FLAGS | CA_REMOVE)) != (CA_FLAGS | CA_REMOVE))
 		{
 			command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 			return;
@@ -174,7 +174,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (!strcasecmp("DEL", cmd))
 	{
-		if ((chanacs_user_flags(mc, si->su) & (CA_FLAGS | CA_REMOVE)) != (CA_FLAGS | CA_REMOVE))
+		if ((chanacs_source_flags(mc, si) & (CA_FLAGS | CA_REMOVE)) != (CA_FLAGS | CA_REMOVE))
 		{
 			command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 			return;
@@ -229,7 +229,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 	{
 		uint8_t i = 0;
 
-		if (!chanacs_user_has_flag(mc, si->su, CA_ACLVIEW))
+		if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 		{
 			if (has_priv(si->su, PRIV_CHAN_AUSPEX))
 				operoverride = 1;
