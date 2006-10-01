@@ -1,3 +1,40 @@
+jilles      2006/10/01 22:11:49 UTC	(20061001-6617)
+  Log:
+  Make has_priv() and has_any_privs() take sourceinfo_t *
+  instead of user_t *. The new functions has_priv_user() and
+  has_any_privs_user() take user_t *.
+  
+
+  Changes:	Modified:
+  +6 -3		trunk/include/privs.h (File Modified) 
+  +2 -2		trunk/modules/chanserv/akick.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/drop.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/flags.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/help.c (File Modified) 
+  +4 -4		trunk/modules/chanserv/info.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/main.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/register.c (File Modified) 
+  +4 -4		trunk/modules/chanserv/set.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/taxonomy.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/template.c (File Modified) 
+  +3 -3		trunk/modules/chanserv/xop.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/drop.c (File Modified) 
+  +7 -7		trunk/modules/nickserv/info.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/listchans.c (File Modified) 
+  +2 -2		trunk/modules/nickserv/resetpass.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/sendpass.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/set.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/taxonomy.c (File Modified) 
+  +1 -1		trunk/modules/operserv/clearchan.c (File Modified) 
+  +1 -1		trunk/modules/operserv/help.c (File Modified) 
+  +1 -1		trunk/modules/operserv/rakill.c (File Modified) 
+  +2 -2		trunk/modules/operserv/rwatch.c (File Modified) 
+  +4 -4		trunk/modules/operserv/specs.c (File Modified) 
+  +9 -9		trunk/src/commandtree.c (File Modified) 
+  +17 -2	trunk/src/privs.c (File Modified) 
+  +10 -10	trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2006/10/01 21:45:34 UTC	(20061001-6615)
   Log:
   Make type argument of logcommand_external() const.

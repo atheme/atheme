@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService SPECS command.
  *
- * $Id: specs.c 6617 2006-10-01 22:11:49Z jilles $
+ * $Id: specs.c 6619 2006-10-01 22:34:45Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/specs", FALSE, _modinit, _moddeinit,
-	"$Id: specs.c 6617 2006-10-01 22:11:49Z jilles $",
+	"$Id: specs.c 6619 2006-10-01 22:34:45Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -139,7 +139,7 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 	*nprivs = *cprivs = *gprivs = *oprivs = '\0';
 	while (privnames[i].priv != NULL)
 	{
-		if (tu ? has_priv_user(tu, privnames[i].priv) : has_priv_operclass(cl, privnames[i].priv))
+		if (targettype == NULL ? has_priv(si, privnames[i].priv) : (tu ? has_priv_user(tu, privnames[i].priv) : has_priv_operclass(cl, privnames[i].priv)))
 		{
 			if (privnames[i].npriv != NULL)
 			{
@@ -169,7 +169,9 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 		i++;
 	}
 
-	if (tu)
+	if (targettype == NULL)
+		command_success_nodata(si, "Privileges for \2%s\2:", si->su->nick);
+	else if (tu)
 		command_success_nodata(si, "Privileges for \2%s\2:", tu->nick);
 	else
 		command_success_nodata(si, "Privileges for oper class \2%s\2:", cl->name);
@@ -184,7 +186,9 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "\2OperServ\2: %s", oprivs);
 	command_success_nodata(si, "End of privileges");
 
-	if (tu)
+	if (targettype == NULL)
+		logcommand(si, CMDLOG_ADMIN, "SPECS");
+	else if (tu)
 		logcommand(si, CMDLOG_ADMIN, "SPECS USER %s!%s@%s", tu->nick, tu->user, tu->vhost);
 	else
 		logcommand(si, CMDLOG_ADMIN, "SPECS OPERCLASS %s", cl->name);
