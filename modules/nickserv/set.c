@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 6597 2006-10-01 19:20:01Z jilles $
+ * $Id: set.c 6601 2006-10-01 20:35:01Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 6597 2006-10-01 19:20:01Z jilles $",
+	"$Id: set.c 6601 2006-10-01 20:35:01Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -30,7 +30,10 @@ static void ns_help_set(sourceinfo_t *si)
 	command_success_nodata(si, "Help for \2SET\2:");
 	command_success_nodata(si, " ");
 	command_success_nodata(si, "SET allows you to set various control flags");
-	command_success_nodata(si, "for nicknames that change the way certain operations");
+	if (nicksvs.no_nick_ownership)
+		command_success_nodata(si, "for accounts that change the way certain operations");
+	else
+		command_success_nodata(si, "for nicknames that change the way certain operations");
 	command_success_nodata(si, "are performed on them.");
 	command_success_nodata(si, " ");
 	command_help(si, &ns_set_cmdtree);
