@@ -1,3 +1,12 @@
+jilles      2006/10/01 21:00:54 UTC	(20061001-6607)
+  Log:
+  Remove empty helpserv help directory.
+  
+
+  Changes:	Modified:
+  + -		trunk/help/helpserv/ (File Deleted) 
+
+
 jilles      2006/10/01 20:57:36 UTC	(20061001-6605)
   Log:
   command_help(), command_help_short():
