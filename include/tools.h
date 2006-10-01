@@ -5,7 +5,7 @@
  *
  * Misc tools
  *
- * $Id: tools.h 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: tools.h 6615 2006-10-01 21:45:34Z jilles $
  */
 
 #ifndef _TOOLS_H
@@ -51,7 +51,7 @@ E void log_open(void);
 E void slog(uint32_t level, const char *fmt, ...);
 E void logcommand(sourceinfo_t *si, int level, const char *fmt, ...);
 E void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt, ...);
-E void logcommand_external(service_t *svs, char *type, connection_t *source, myuser_t *login, int level, const char *fmt, ...);
+E void logcommand_external(service_t *svs, const char *type, connection_t *source, myuser_t *login, int level, const char *fmt, ...);
 
 /* misc string stuff */
 E char *gen_pw(int8_t sz);

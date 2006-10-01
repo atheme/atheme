@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 6587 2006-09-30 22:35:46Z jilles $
+ * $Id: function.c 6615 2006-10-01 21:45:34Z jilles $
  */
 
 #include "atheme.h"
@@ -189,7 +189,7 @@ void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt,
 	va_end(args);
 }
 
-void logcommand_external(service_t *svs, char *type, connection_t *source, myuser_t *login, int level, const char *fmt, ...)
+void logcommand_external(service_t *svs, const char *type, connection_t *source, myuser_t *login, int level, const char *fmt, ...)
 {
 	va_list args;
 	time_t t;
