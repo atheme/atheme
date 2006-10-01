@@ -1,3 +1,13 @@
+jilles      2006/10/01 22:42:14 UTC	(20061001-6621)
+  Log:
+  nickserv ghost/enforce: log u@h of the target in case of success
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/contrib/ns_enforce.c (File Modified) 
+  +2 -2		trunk/modules/nickserv/ghost.c (File Modified) 
+
+
 jilles      2006/10/01 22:34:45 UTC	(20061001-6619)
   Log:
   operserv specs: Make this work with non-IRC sources

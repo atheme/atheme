@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: op.c 6577 2006-09-30 21:17:34Z jilles $
+ * $Id: op.c 6623 2006-10-01 23:20:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/op", FALSE, _modinit, _moddeinit,
-	"$Id: op.c 6577 2006-09-30 21:17:34Z jilles $",
+	"$Id: op.c 6623 2006-10-01 23:20:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -81,7 +81,6 @@ static void cs_cmd_op(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	si->su = user_find_named(si->su->nick);
 	if (!chanacs_source_has_flag(mc, si, CA_OP))
 	{
 		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
@@ -158,7 +157,6 @@ static void cs_cmd_deop(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	si->su = user_find_named(si->su->nick);
 	if (!chanacs_source_has_flag(mc, si, CA_OP))
 	{
 		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
