@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the NickServ HELP command.
  *
- * $Id: help.c 6585 2006-09-30 22:10:34Z jilles $
+ * $Id: help.c 6593 2006-10-01 18:51:45Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 6585 2006-09-30 22:10:34Z jilles $",
+	"$Id: help.c 6593 2006-10-01 18:51:45Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -64,7 +64,7 @@ void ns_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.disp);
 		command_success_nodata(si, " ");
 
-		command_help_short(nicksvs.nick, si->su->nick, ns_cmdtree, "REGISTER IDENTIFY GHOST INFO LISTCHANS SET HOLD MARK FREEZE");
+		command_help_short(si, ns_cmdtree, "REGISTER IDENTIFY GHOST INFO LISTCHANS SET HOLD MARK FREEZE");
 
 		command_success_nodata(si, "***** \2End of Help\2 *****");
 		return;
@@ -73,7 +73,7 @@ void ns_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	if (!strcasecmp("COMMANDS", command))
 	{
 		command_success_nodata(si, "***** \2%s Help\2 *****", nicksvs.nick);
-		command_help(nicksvs.nick, si->su->nick, ns_cmdtree);
+		command_help(si, ns_cmdtree);
 		command_success_nodata(si, "***** \2End of Help\2 *****");
 		return;
 	}

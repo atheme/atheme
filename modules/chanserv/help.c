@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 6585 2006-09-30 22:10:34Z jilles $
+ * $Id: help.c 6593 2006-10-01 18:51:45Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 6585 2006-09-30 22:10:34Z jilles $",
+	"$Id: help.c 6593 2006-10-01 18:51:45Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -77,11 +77,9 @@ static void fc_cmd_help(char *origin, char *chan)
 	if (i!=6) notice(chansvs.nick, origin, " %s", buf);
 
         notice(chansvs.nick, origin, " ");
-	notice(chansvs.nick, origin, "In addition, the following commands are supported via");
-        notice(chansvs.nick, origin, "\2/%s%s <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
+	notice(chansvs.nick, origin, "More commands are supported via \2/%s%s <command>\2,", (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
+        notice(chansvs.nick, origin, "use \2/%s%s HELP\2 for more information.", (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
         notice(chansvs.nick, origin, " ");
-
-        command_help(chansvs.nick, origin, cs_cmdtree);
 
         notice(chansvs.nick, origin, "***** \2End of Help\2 *****");
         return;
@@ -122,7 +120,7 @@ static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "\2/%s%s help commands\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
 		command_success_nodata(si, " ");
 
-		command_help_short(chansvs.nick, si->su->nick, cs_cmdtree, "REGISTER OP INVITE UNBAN FLAGS RECOVER SET");
+		command_help_short(si, cs_cmdtree, "REGISTER OP INVITE UNBAN FLAGS RECOVER SET");
 
 		command_success_nodata(si, "***** \2End of Help\2 *****");
 		return;
@@ -131,7 +129,7 @@ static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	if (!strcasecmp("COMMANDS", command))
 	{
 		command_success_nodata(si, "***** \2%s Help\2 *****", chansvs.nick);
-		command_help(chansvs.nick, si->su->nick, cs_cmdtree);
+		command_help(si, cs_cmdtree);
 		command_success_nodata(si, "***** \2End of Help\2 *****");
 		return;
 	}
