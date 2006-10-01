@@ -1,3 +1,12 @@
+jilles      2006/10/01 20:35:01 UTC	(20061001-6601)
+  Log:
+  nickserv help set: take no_nick_ownership into account
+  
+
+  Changes:	Modified:
+  +4 -1		trunk/modules/nickserv/set.c (File Modified) 
+
+
 jilles      2006/10/01 20:31:57 UTC	(20061001-6599)
   Log:
   Convert memoserv ignore to command_t and sourceinfo.

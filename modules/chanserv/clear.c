@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: clear.c 6427 2006-09-22 19:38:34Z jilles $
+ * $Id: clear.c 6603 2006-10-01 20:49:21Z jilles $
  */
 
 #include "atheme.h"
@@ -12,11 +12,12 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/clear", FALSE, _modinit, _moddeinit,
-	"$Id: clear.c 6427 2006-09-22 19:38:34Z jilles $",
+	"$Id: clear.c 6603 2006-10-01 20:49:21Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_cmd_clear(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_help_clear(sourceinfo_t *si);
 
 command_t cs_clear = { "CLEAR", "Channel removal toolkit.",
                         AC_NONE, 3, cs_cmd_clear };
@@ -31,7 +32,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
         command_add(&cs_clear, cs_cmdtree);
-	help_addentry(cs_helptree, "CLEAR", "help/cservice/clear", NULL);
+	help_addentry(cs_helptree, "CLEAR", NULL, cs_help_clear);
 }
 
 void _moddeinit()
@@ -39,6 +40,17 @@ void _moddeinit()
 	command_delete(&cs_clear, cs_cmdtree);
 
 	help_delentry(cs_helptree,  "CLEAR");
+}
+
+static void cs_help_clear(sourceinfo_t *si)
+{
+	command_success_nodata(si, "Help for \2CLEAR\2:");
+	command_success_nodata(si, " ");
+	command_success_nodata(si, "CLEAR allows you to clear various aspects of a channel.");
+	command_success_nodata(si, " ");
+	command_help(si, &cs_clear_cmds);
+	command_success_nodata(si, " ");
+	command_success_nodata(si, "For more information, use \2/msg %s HELP CLEAR \37command\37\2.", chansvs.nick);
 }
 
 static void cs_cmd_clear(sourceinfo_t *si, int parc, char *parv[])
