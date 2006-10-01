@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 6573 2006-09-29 23:01:05Z jilles $
+ * $Id: set.c 6597 2006-10-01 19:20:01Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 6573 2006-09-29 23:01:05Z jilles $",
+	"$Id: set.c 6597 2006-10-01 19:20:01Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -23,6 +23,20 @@ list_t *ns_cmdtree, *ns_helptree;
 command_t ns_set = { "SET", "Sets various control flags.", AC_NONE, 2, ns_cmd_set };
 
 list_t ns_set_cmdtree;
+
+/* HELP SET */
+static void ns_help_set(sourceinfo_t *si)
+{
+	command_success_nodata(si, "Help for \2SET\2:");
+	command_success_nodata(si, " ");
+	command_success_nodata(si, "SET allows you to set various control flags");
+	command_success_nodata(si, "for nicknames that change the way certain operations");
+	command_success_nodata(si, "are performed on them.");
+	command_success_nodata(si, " ");
+	command_help(si, &ns_set_cmdtree);
+	command_success_nodata(si, " ");
+	command_success_nodata(si, "For more information, use \2/msg %s HELP SET \37command\37\2.", nicksvs.nick);
+}
 
 /* SET <setting> <parameters> */
 static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[])
@@ -517,6 +531,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 	command_add(&ns_set, ns_cmdtree);
 
+	help_addentry(ns_helptree, "SET", NULL, ns_help_set);
 	help_addentry(ns_helptree, "SET EMAIL", "help/nickserv/set_email", NULL);
 	help_addentry(ns_helptree, "SET EMAILMEMOS", "help/nickserv/set_emailmemos", NULL);
 	help_addentry(ns_helptree, "SET HIDEMAIL", "help/nickserv/set_hidemail", NULL);
@@ -533,6 +548,7 @@ void _modinit(module_t *m)
 void _moddeinit()
 {
 	command_delete(&ns_set, ns_cmdtree);
+	help_delentry(ns_helptree, "SET");
 	help_delentry(ns_helptree, "SET EMAIL");
 	help_delentry(ns_helptree, "SET EMAILMEMOS");
 	help_delentry(ns_helptree, "SET HIDEMAIL");

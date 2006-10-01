@@ -1,3 +1,14 @@
+jilles      2006/10/01 19:12:28 UTC	(20061001-6595)
+  Log:
+  Change help functions (not used much) to sourceinfo.
+  
+
+  Changes:	Modified:
+  +27 -27	trunk/contrib/ns_enforce.c (File Modified) 
+  +2 -2		trunk/include/commandtree.h (File Modified) 
+  +2 -3		trunk/src/help.c (File Modified) 
+
+
 jilles      2006/10/01 18:51:45 UTC	(20061001-6593)
   Log:
   Update command_help() and command_help_short() to sourceinfo.
