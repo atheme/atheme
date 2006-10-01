@@ -23,7 +23,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/enforce",FALSE, _modinit, _moddeinit,
-	"$Id: ns_enforce.c 6595 2006-10-01 19:12:28Z jilles $",
+	"$Id: ns_enforce.c 6621 2006-10-01 22:42:14Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -213,7 +213,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 			}
 			fnc_sts(nicksvs.me->me, u, gnick, FNC_FORCE);
 			command_success_nodata(si, "%s has been released.", target);
-			logcommand(si, CMDLOG_DO, "RELEASE %s", target);
+			logcommand(si, CMDLOG_DO, "RELEASE %s!%s@%s", u->nick, u->user, u->vhost);
 			/*hook_call_event("user_identify", u);*/
 		}
 		return;
