@@ -1,3 +1,14 @@
+jilles      2006/09/30 22:35:46 UTC	(20060930-6587)
+  Log:
+  Add description field to testcmd_vtable. This is used for logging.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/contrib/os_testcmd.c (File Modified) 
+  +1 -0		trunk/include/sourceinfo.h (File Modified) 
+  +1 -1		trunk/src/function.c (File Modified) 
+
+
 jilles      2006/09/30 22:10:34 UTC	(20060930-6585)
   Log:
   Convert help_display() to sourceinfo.
