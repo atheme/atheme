@@ -4,7 +4,7 @@
  *
  * Fine grained services operator privileges
  *
- * $Id: privs.h 6127 2006-08-18 16:59:55Z jilles $
+ * $Id: privs.h 6617 2006-10-01 22:11:49Z jilles $
  */
 
 #ifndef PRIVS_H
@@ -50,9 +50,12 @@
 /* has_any_privs(): used to determine whether we should give detailed
  * messages about disallowed things
  * warning: do not use this for any kind of real privilege! */
-E boolean_t has_any_privs(user_t *);
-/* has_priv(): for online users */
-E boolean_t has_priv(user_t *, const char *);
+E boolean_t has_any_privs(sourceinfo_t *);
+E boolean_t has_any_privs_user(user_t *);
+/* has_priv(): for sources of commands */
+E boolean_t has_priv(sourceinfo_t *, const char *);
+/* has_priv_user(): for online users */
+E boolean_t has_priv_user(user_t *, const char *);
 /* has_priv_myuser(): channel succession etc */
 E boolean_t has_priv_myuser(myuser_t *, const char *);
 /* has_priv_operclass(): /os specs etc */

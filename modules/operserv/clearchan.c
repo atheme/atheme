@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ CLEARCHAN.
  *
- * $Id: clearchan.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: clearchan.c 6617 2006-10-01 22:11:49Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clearchan", FALSE, _modinit, _moddeinit,
-	"$Id: clearchan.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: clearchan.c 6617 2006-10-01 22:11:49Z jilles $",
 	"Robin Burchell <surreal.w00t@gmail.com>"
 );
 
@@ -84,7 +84,7 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
  		return;				
 	}
 
-	if (action != CLEAR_KICK && !has_priv(si->su, PRIV_MASS_AKILL))
+	if (action != CLEAR_KICK && !has_priv(si, PRIV_MASS_AKILL))
 	{
 		command_fail(si, fault_noprivs, "You do not have %s privilege.", PRIV_MASS_AKILL);
 		return;

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 6581 2006-09-30 21:35:44Z jilles $
+ * $Id: flags.c 6617 2006-10-01 22:11:49Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 6581 2006-09-30 21:35:44Z jilles $",
+	"$Id: flags.c 6617 2006-10-01 22:11:49Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -77,7 +77,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 		{
-			if (has_priv(si->su, PRIV_CHAN_AUSPEX))
+			if (has_priv(si, PRIV_CHAN_AUSPEX))
 				operoverride = 1;
 			else
 			{
@@ -86,7 +86,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			}
 		}
 		
-		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && !has_priv(si->su, PRIV_CHAN_AUSPEX))
+		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && !has_priv(si, PRIV_CHAN_AUSPEX))
 		{
 			command_fail(si, fault_noprivs, "\2%s\2 is closed.", channel);
 			return;

@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6559 2006-09-29 21:15:10Z jilles $
+ * $Id: main.c 6617 2006-10-01 22:11:49Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6559 2006-09-29 21:15:10Z jilles $",
+	"$Id: main.c 6617 2006-10-01 22:11:49Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -234,7 +234,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 			u->myuser->flags & MU_NOOP);
 
 	/* auto stuff */
-	if ((mc->flags & MC_STAFFONLY) && !has_priv(u, PRIV_JOIN_STAFFONLY))
+	if ((mc->flags & MC_STAFFONLY) && !has_priv_user(u, PRIV_JOIN_STAFFONLY))
 	{
 		/* Stay on channel if this would empty it -- jilles */
 		if (chan->nummembers <= (config_options.join_chans ? 2 : 1))

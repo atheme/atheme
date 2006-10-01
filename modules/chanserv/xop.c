@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 6577 2006-09-30 21:17:34Z jilles $
+ * $Id: xop.c 6617 2006-10-01 22:11:49Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 6577 2006-09-30 21:17:34Z jilles $",
+	"$Id: xop.c 6617 2006-10-01 22:11:49Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -104,7 +104,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 	if (!si->smu)
 	{
 		/* if they're opers and just want to LIST, they don't have to log in */
-		if (!(has_priv(si->su, PRIV_CHAN_AUSPEX) && !strcasecmp("LIST", cmd)))
+		if (!(has_priv(si, PRIV_CHAN_AUSPEX) && !strcasecmp("LIST", cmd)))
 		{
 			command_fail(si, fault_noprivs, "You are not logged in.");
 			return;
@@ -118,7 +118,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 		return;
 	}
 	
-	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && (!has_priv(si->su, PRIV_CHAN_AUSPEX) || strcasecmp("LIST", cmd)))
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && (!has_priv(si, PRIV_CHAN_AUSPEX) || strcasecmp("LIST", cmd)))
 	{
 		command_fail(si, fault_noprivs, "\2%s\2 is closed.", chan);
 		return;
@@ -179,7 +179,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 	{
 		if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 		{
-			if (has_priv(si->su, PRIV_CHAN_AUSPEX))
+			if (has_priv(si, PRIV_CHAN_AUSPEX))
 				operoverride = 1;
 			else
 			{

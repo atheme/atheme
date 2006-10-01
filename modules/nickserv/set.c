@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 6601 2006-10-01 20:35:01Z jilles $
+ * $Id: set.c 6617 2006-10-01 22:11:49Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 6601 2006-10-01 20:35:01Z jilles $",
+	"$Id: set.c 6617 2006-10-01 22:11:49Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -433,7 +433,7 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (strchr(property, ':') && !has_priv(si->su, PRIV_METADATA))
+	if (strchr(property, ':') && !has_priv(si, PRIV_METADATA))
 	{
 		command_fail(si, fault_badparams, "Invalid property name.");
 		return;

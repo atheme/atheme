@@ -1,3 +1,13 @@
+jilles      2006/10/01 21:45:34 UTC	(20061001-6615)
+  Log:
+  Make type argument of logcommand_external() const.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/tools.h (File Modified) 
+  +1 -1		trunk/src/function.c (File Modified) 
+
+
 jilles      2006/10/01 21:26:58 UTC	(20061001-6613)
   Log:
   operserv specs: get rid of user_t *u = si->su local variable

@@ -4,7 +4,7 @@
  *
  * This file contains code for nickserv RESETPASS
  *
- * $Id: resetpass.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: resetpass.c 6617 2006-10-01 22:11:49Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/resetpass", FALSE, _modinit, _moddeinit,
-	"$Id: resetpass.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: resetpass.c 6617 2006-10-01 22:11:49Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -57,14 +57,14 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (is_soper(mu) && !has_priv(si->su, PRIV_ADMIN))
+	if (is_soper(mu) && !has_priv(si, PRIV_ADMIN))
 	{
 		logcommand(si, CMDLOG_ADMIN, "failed RESETPASS %s (is SOPER)", name);
 		command_fail(si, fault_badparams, "\2%s\2 belongs to a services operator; you need %s privilege to reset the password.", name, PRIV_ADMIN);
 		return;
 	}
 
-	if ((md = metadata_find(mu, METADATA_USER, "private:mark:setter")) && has_priv(si->su, PRIV_MARK))
+	if ((md = metadata_find(mu, METADATA_USER, "private:mark:setter")) && has_priv(si, PRIV_MARK))
 	{
 		logcommand(si, CMDLOG_ADMIN, "RESETPASS %s (overriding mark by %s)", name, md->value);
 		command_success_nodata(si, "Overriding MARK placed by %s on the nickname %s.", md->value, name);

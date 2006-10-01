@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: info.c 6617 2006-10-01 22:11:49Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: info.c 6617 2006-10-01 22:11:49Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -67,14 +67,14 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, "Information on \2%s\2:", mu->name);
 
 	command_success_nodata(si, "Registered: %s (%s ago)", strfbuf, time_ago(mu->registered));
-	if (has_priv(si->su, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:host:actual")))
+	if (has_priv(si, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:host:actual")))
 		command_success_nodata(si, "Last address: %s", md->value);
 	else if ((md = metadata_find(mu, METADATA_USER, "private:host:vhost")))
 		command_success_nodata(si, "Last address: %s", md->value);
 
 	if (LIST_LENGTH(&mu->logins) == 0)
 		command_success_nodata(si, "Last seen: %s (%s ago)", lastlogin, time_ago(mu->lastlogin));
-	else if (mu == si->smu || has_priv(si->su, PRIV_USER_AUSPEX))
+	else if (mu == si->smu || has_priv(si, PRIV_USER_AUSPEX))
 	{
 		buf[0] = '\0';
 		LIST_FOREACH(n, mu->logins.head)
@@ -96,7 +96,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 
 	if (!(mu->flags & MU_HIDEMAIL)
-		|| (si->smu == mu || has_priv(si->su, PRIV_USER_AUSPEX)))
+		|| (si->smu == mu || has_priv(si, PRIV_USER_AUSPEX)))
 		command_success_nodata(si, "Email: %s%s", mu->email,
 					(mu->flags & MU_HIDEMAIL) ? " (hidden)": "");
 
@@ -144,12 +144,12 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	if (*buf)
 		command_success_nodata(si, "Flags: %s", buf);
 
-	if (mu->soper && (mu == si->smu || has_priv(si->su, PRIV_VIEWPRIVS)))
+	if (mu->soper && (mu == si->smu || has_priv(si, PRIV_VIEWPRIVS)))
 	{
 		command_success_nodata(si, "Oper class: %s", mu->soper->operclass ? mu->soper->operclass->name : "*");
 	}
 
-	if (has_priv(si->su, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
+	if (has_priv(si, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
 	{
 		char *setter = md->value;
 		char *reason;
@@ -167,7 +167,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "%s was \2FROZEN\2 by %s on %s (%s)", mu->name, setter, strfbuf, reason);
 	}
 
-	if (has_priv(si->su, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:mark:setter")))
+	if (has_priv(si, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:mark:setter")))
 	{
 		char *setter = md->value;
 		char *reason;
@@ -185,7 +185,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "%s was \2MARKED\2 by %s on %s (%s)", mu->name, setter, strfbuf, reason);
 	}
 
-	if ((MU_WAITAUTH & mu->flags) && has_priv(si->su, PRIV_USER_AUSPEX))
+	if ((MU_WAITAUTH & mu->flags) && has_priv(si, PRIV_USER_AUSPEX))
 		command_success_nodata(si, "%s has not completed registration verification", mu->name);
 
 	command_success_nodata(si, "*** \2End of Info\2 ***");

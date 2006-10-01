@@ -4,7 +4,7 @@
  *
  * Commandtree manipulation routines.
  *
- * $Id: commandtree.c 6611 2006-10-01 21:26:34Z jilles $
+ * $Id: commandtree.c 6617 2006-10-01 22:11:49Z jilles $
  */
 
 #include "atheme.h"
@@ -99,13 +99,13 @@ command_t *command_find(list_t *commandtree, const char *command)
 
 void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char *parv[])
 {
-	if (has_priv(si->su, c->access))
+	if (has_priv(si, c->access))
 	{
 		c->cmd(si, parc, parv);
 		return;
 	}
 
-	if (has_any_privs(si->su))
+	if (has_any_privs(si))
 		command_fail(si, fault_noprivs, "You do not have %s privilege.", c->access);
 	else
 		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
@@ -158,7 +158,7 @@ void command_help(sourceinfo_t *si, list_t *commandtree)
 		/* show only the commands we have access to
 		 * (taken from command_exec())
 		 */
-		if (has_priv(si->su, c->access))
+		if (has_priv(si, c->access))
 			command_success_nodata(si, "\2%-15s\2 %s", c->name, translation_get(c->desc));
 	}
 }
@@ -217,7 +217,7 @@ void command_help_short(sourceinfo_t *si, list_t *commandtree, char *maincmds)
 		/* show only the commands we have access to
 		 * (taken from command_exec())
 		 */
-		if (string_in_list(maincmds, c->name) && has_priv(si->su, c->access))
+		if (string_in_list(maincmds, c->name) && has_priv(si, c->access))
 			command_success_nodata(si, "\2%-15s\2 %s", c->name, translation_get(c->desc));
 	}
 
@@ -231,7 +231,7 @@ void command_help_short(sourceinfo_t *si, list_t *commandtree, char *maincmds)
 		/* show only the commands we have access to
 		 * (taken from command_exec())
 		 */
-		if (!string_in_list(maincmds, c->name) && has_priv(si->su, c->access))
+		if (!string_in_list(maincmds, c->name) && has_priv(si, c->access))
 		{
 			if (strlen(buf) > l)
 				strlcat(buf, ", ", sizeof buf);
@@ -291,12 +291,12 @@ void fcommand_exec(service_t *svs, char *channel, char *origin, char *cmd, list_
 		{
 			user_t *u = user_find_named(origin);
 
-			if (has_priv(u, c->access))
+			if (has_priv_user(u, c->access))
 			{
 				c->cmd(origin, channel);
 				return;
 			}
-			if (has_any_privs(u))
+			if (has_any_privs_user(u))
 				notice(svs->name, origin, "You do not have %s privilege.", c->access);
 			else
 				notice(svs->name, origin, "You are not authorized to perform this operation.");
@@ -323,12 +323,12 @@ void fcommand_exec_floodcheck(service_t *svs, char *channel, char *origin, char 
 			if (floodcheck(u, NULL))
 				return;
 
-			if (has_priv(u, c->access))
+			if (has_priv_user(u, c->access))
 			{
 				c->cmd(origin, channel);
 				return;
 			}
-			if (has_any_privs(u))
+			if (has_any_privs_user(u))
 				notice(svs->name, origin, "You do not have %s privilege.", c->access);
 			else
 				notice(svs->name, origin, "You are not authorized to perform this operation.");

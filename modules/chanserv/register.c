@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService REGISTER function.
  *
- * $Id: register.c 6591 2006-10-01 17:54:52Z jilles $
+ * $Id: register.c 6617 2006-10-01 22:11:49Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 6591 2006-10-01 17:54:52Z jilles $",
+	"$Id: register.c 6617 2006-10-01 22:11:49Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -116,7 +116,7 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	if ((tcnt >= me.maxchans) && !has_priv(si->su, PRIV_REG_NOLIMIT))
+	if ((tcnt >= me.maxchans) && !has_priv(si, PRIV_REG_NOLIMIT))
 	{
 		command_fail(si, fault_toomany, "You have too many channels registered.");
 		return;

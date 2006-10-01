@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: set.c 6617 2006-10-01 22:11:49Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: set.c 6617 2006-10-01 22:11:49Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -450,7 +450,7 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 	ext_minus[0] = '\0';
 	newlock_key[0] = '\0';
 
-	mask = has_priv(u, PRIV_CHAN_CMODES) ? 0 : ircd->oper_only_modes;
+	mask = has_priv_user(u, PRIV_CHAN_CMODES) ? 0 : ircd->oper_only_modes;
 
 	while (*letters)
 	{
@@ -1072,7 +1072,7 @@ static void cs_set_property(char *origin, char *name, char *params)
         }
 
 	/* do we really need to allow this? -- jilles */
-        if (strchr(property, ':') && !has_priv(u, PRIV_METADATA))
+        if (strchr(property, ':') && !has_priv_user(u, PRIV_METADATA))
         {
                 notice(chansvs.nick, origin, "Invalid property name.");
                 return;
@@ -1157,13 +1157,13 @@ static struct set_command_ *set_cmd_find(char *origin, char *command)
 	{
 		if (!strcasecmp(command, c->name))
 		{
-			if (has_priv(u, c->access))
+			if (has_priv_user(u, c->access))
 				return c;
 
 			/* otherwise... */
 			else
 			{
-				if (has_any_privs(u))
+				if (has_any_privs_user(u))
 					notice(chansvs.nick, origin, "You do not have %s privilege.", c->access);
 				else
 					notice(chansvs.nick, origin, "You are not authorized to perform this operation.");

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INFO functions.
  *
- * $Id: info.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: info.c 6617 2006-10-01 22:11:49Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: info.c 6617 2006-10-01 22:11:49Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -70,7 +70,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!has_priv(si->su, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, METADATA_CHANNEL, "private:close:closer")))
+	if (!has_priv(si, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, METADATA_CHANNEL, "private:close:closer")))
 	{
 		command_fail(si, fault_noprivs, "\2%s\2 has been closed down by the %s administration.", mc->name, me.netname);
 		return;
@@ -260,7 +260,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	if (*buf)
 		command_success_nodata(si, "Flags      : %s", buf);
 
-	if (has_priv(si->su, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, METADATA_CHANNEL, "private:mark:setter")))
+	if (has_priv(si, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, METADATA_CHANNEL, "private:mark:setter")))
 	{
 		char *setter = md->value;
 		char *reason;
@@ -278,10 +278,10 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "%s was \2MARKED\2 by %s on %s (%s)", mc->name, setter, strfbuf, reason);
 	}
 
-	if (has_priv(si->su, PRIV_CHAN_AUSPEX) && (MC_INHABIT & mc->flags))
+	if (has_priv(si, PRIV_CHAN_AUSPEX) && (MC_INHABIT & mc->flags))
 		command_success_nodata(si, "%s is temporarily holding this channel.", chansvs.nick);
 
-	if (has_priv(si->su, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, METADATA_CHANNEL, "private:close:closer")))
+	if (has_priv(si, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, METADATA_CHANNEL, "private:close:closer")))
 	{
 		char *setter = md->value;
 		char *reason;

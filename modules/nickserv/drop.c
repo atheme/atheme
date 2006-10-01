@@ -4,7 +4,7 @@
  *
  * This file contains code for the nickserv DROP function.
  *
- * $Id: drop.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: drop.c 6617 2006-10-01 22:11:49Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: drop.c 6617 2006-10-01 22:11:49Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -56,7 +56,7 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if ((pass || !has_priv(si->su, PRIV_USER_ADMIN)) && !verify_password(mu, pass))
+	if ((pass || !has_priv(si, PRIV_USER_ADMIN)) && !verify_password(mu, pass))
 	{
 		command_fail(si, fault_authfail, "Authentication failed. Invalid password for \2%s\2.", mu->name);
 		return;

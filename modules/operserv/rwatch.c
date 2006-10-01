@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ RWATCH.
  *
- * $Id: rwatch.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: rwatch.c 6617 2006-10-01 22:11:49Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rwatch", FALSE, _modinit, _moddeinit,
-	"$Id: rwatch.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: rwatch.c 6617 2006-10-01 22:11:49Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -295,7 +295,7 @@ static void os_cmd_rwatch_del(char *origin, char *args)
 		{
 			if (rw->actions & RWACT_KLINE)
 			{
-				if (!has_priv(user_find_named(origin), PRIV_MASS_AKILL))
+				if (!has_priv_user(user_find_named(origin), PRIV_MASS_AKILL))
 				{
 					notice(opersvs.nick, origin, "You do not have %s privilege.", PRIV_MASS_AKILL);
 					return;
@@ -393,7 +393,7 @@ static void os_cmd_rwatch_set(char *origin, char *args)
 			args++;
 	}
 
-	if ((addflags | removeflags) & RWACT_KLINE && !has_priv(user_find_named(origin), PRIV_MASS_AKILL))
+	if ((addflags | removeflags) & RWACT_KLINE && !has_priv_user(user_find_named(origin), PRIV_MASS_AKILL))
 	{
 		notice(opersvs.nick, origin, "You do not have %s privilege.", PRIV_MASS_AKILL);
 		return;

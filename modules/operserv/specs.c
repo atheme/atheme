@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService SPECS command.
  *
- * $Id: specs.c 6613 2006-10-01 21:26:58Z jilles $
+ * $Id: specs.c 6617 2006-10-01 22:11:49Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/specs", FALSE, _modinit, _moddeinit,
-	"$Id: specs.c 6613 2006-10-01 21:26:58Z jilles $",
+	"$Id: specs.c 6617 2006-10-01 22:11:49Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -83,7 +83,7 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 	char nprivs[BUFSIZE], cprivs[BUFSIZE], gprivs[BUFSIZE], oprivs[BUFSIZE];
 	int i;
 
-	if (!has_any_privs(si->su))
+	if (!has_any_privs(si))
 	{
 		command_fail(si, fault_noprivs, "You are not authorized to use %s.", opersvs.nick);
 		return;
@@ -91,7 +91,7 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 
 	if (targettype != NULL)
 	{
-		if (!has_priv(si->su, PRIV_VIEWPRIVS))
+		if (!has_priv(si, PRIV_VIEWPRIVS))
 		{
 			command_fail(si, fault_noprivs, "You do not have %s privilege.", PRIV_VIEWPRIVS);
 			return;
@@ -106,7 +106,7 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 				command_fail(si, fault_nosuch_target, "\2%s\2 is not on IRC.", target);
 				return;
 			}
-			if (!has_any_privs(tu))
+			if (!has_any_privs_user(tu))
 			{
 				command_success_nodata(si, "\2%s\2 is unprivileged.", tu->nick);
 				return;
@@ -139,7 +139,7 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 	*nprivs = *cprivs = *gprivs = *oprivs = '\0';
 	while (privnames[i].priv != NULL)
 	{
-		if (tu ? has_priv(tu, privnames[i].priv) : has_priv_operclass(cl, privnames[i].priv))
+		if (tu ? has_priv_user(tu, privnames[i].priv) : has_priv_operclass(cl, privnames[i].priv))
 		{
 			if (privnames[i].npriv != NULL)
 			{

@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: ptasks.c 6617 2006-10-01 22:11:49Z jilles $
  */
 
 #include "atheme.h"
@@ -85,7 +85,7 @@ void handle_stats(user_t *u, char req)
 	switch (req)
 	{
 	  case 'B':
-		  if (!has_priv(u, PRIV_SERVER_AUSPEX))
+		  if (!has_priv_user(u, PRIV_SERVER_AUSPEX))
 			  break;
 
 		  dictionary_stats(dictionary_stats_cb, u);
@@ -93,7 +93,7 @@ void handle_stats(user_t *u, char req)
 
 	  case 'C':
 	  case 'c':
-		  if (!has_priv(u, PRIV_SERVER_AUSPEX))
+		  if (!has_priv_user(u, PRIV_SERVER_AUSPEX))
 			  break;
 
 		  LIST_FOREACH(n, uplinks.head)
@@ -105,7 +105,7 @@ void handle_stats(user_t *u, char req)
 
 	  case 'E':
 	  case 'e':
-		  if (!has_priv(u, PRIV_SERVER_AUSPEX))
+		  if (!has_priv_user(u, PRIV_SERVER_AUSPEX))
 			  break;
 
 		  numeric_sts(me.name, 249, u->nick, "E :Last event to run: %s", last_event_ran);
@@ -121,7 +121,7 @@ void handle_stats(user_t *u, char req)
 
 	  case 'H':
 	  case 'h':
-		  if (!has_priv(u, PRIV_SERVER_AUSPEX))
+		  if (!has_priv_user(u, PRIV_SERVER_AUSPEX))
 			  break;
 
 		  LIST_FOREACH(n, uplinks.head)
@@ -138,7 +138,7 @@ void handle_stats(user_t *u, char req)
 
 	  case 'K':
 	  case 'k':
-		  if (!has_priv(u, PRIV_AKILL))
+		  if (!has_priv_user(u, PRIV_AKILL))
 			  break;
 
 		  LIST_FOREACH(n, klnlist.head)
@@ -152,7 +152,7 @@ void handle_stats(user_t *u, char req)
 
 	  case 'o':
 	  case 'O':
-		  if (!has_priv(u, PRIV_VIEWPRIVS))
+		  if (!has_priv_user(u, PRIV_VIEWPRIVS))
 			  break;
 
 		  LIST_FOREACH(n, soperlist.head)
@@ -167,7 +167,7 @@ void handle_stats(user_t *u, char req)
 
 	  case 'T':
 	  case 't':
-		  if (!has_priv(u, PRIV_SERVER_AUSPEX))
+		  if (!has_priv_user(u, PRIV_SERVER_AUSPEX))
 			  break;
 
 		  numeric_sts(me.name, 249, u->nick, "T :event      %7d", claro_state.event);
@@ -194,7 +194,7 @@ void handle_stats(user_t *u, char req)
 
 	  case 'V':
 	  case 'v':
-		  if (!has_priv(u, PRIV_SERVER_AUSPEX))
+		  if (!has_priv_user(u, PRIV_SERVER_AUSPEX))
 			  break;
 
 		  /* we received this command from the uplink, so,
@@ -265,7 +265,7 @@ void handle_trace(user_t *u, char *target, char *dest)
 			single_trace(u, t);
 			nusers--;
 		}
-		if (has_priv(u, PRIV_SERVER_AUSPEX))
+		if (has_priv_user(u, PRIV_SERVER_AUSPEX))
 			numeric_sts(me.name, 206, u->nick, "Serv uplink %dS %dC %s *!*@%s 0", cnt.server - 1, nusers, me.actual, me.name);
 		target = me.name;
 	}
@@ -577,7 +577,7 @@ int floodcheck(user_t *u, user_t *t)
 		{
 			/* they're flooding. */
 			/* perhaps allowed to? -- jilles */
-			if (has_priv(u, PRIV_FLOOD))
+			if (has_priv_user(u, PRIV_FLOOD))
 			{
 				u->msgs = 0;
 				return 0;
