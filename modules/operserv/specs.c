@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService SPECS command.
  *
- * $Id: specs.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: specs.c 6613 2006-10-01 21:26:58Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/specs", FALSE, _modinit, _moddeinit,
-	"$Id: specs.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: specs.c 6613 2006-10-01 21:26:58Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -76,14 +76,14 @@ struct
 
 static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = si->su, *tu = NULL;
+	user_t *tu = NULL;
 	operclass_t *cl = NULL;
 	char *targettype = parv[0];
 	char *target = parv[1];
 	char nprivs[BUFSIZE], cprivs[BUFSIZE], gprivs[BUFSIZE], oprivs[BUFSIZE];
 	int i;
 
-	if (!has_any_privs(u))
+	if (!has_any_privs(si->su))
 	{
 		command_fail(si, fault_noprivs, "You are not authorized to use %s.", opersvs.nick);
 		return;
@@ -91,7 +91,7 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 
 	if (targettype != NULL)
 	{
-		if (!has_priv(u, PRIV_VIEWPRIVS))
+		if (!has_priv(si->su, PRIV_VIEWPRIVS))
 		{
 			command_fail(si, fault_noprivs, "You do not have %s privilege.", PRIV_VIEWPRIVS);
 			return;
@@ -133,7 +133,7 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 	else
-		tu = u;
+		tu = si->su;
 
 	i = 0;
 	*nprivs = *cprivs = *gprivs = *oprivs = '\0';
