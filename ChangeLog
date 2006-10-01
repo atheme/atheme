@@ -1,3 +1,15 @@
+jilles      2006/10/01 20:57:36 UTC	(20061001-6605)
+  Log:
+  command_help(), command_help_short():
+  Say we are listing "subcommands" instead of "commands"
+  if we are listing a command list other than the service's
+  main command list.
+  
+
+  Changes:	Modified:
+  +8 -2		trunk/src/commandtree.c (File Modified) 
+
+
 jilles      2006/10/01 20:49:21 UTC	(20061001-6603)
   Log:
   chanserv clear: move /cs help clear to a help function
