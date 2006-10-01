@@ -1,3 +1,15 @@
+jilles      2006/10/01 20:49:21 UTC	(20061001-6603)
+  Log:
+  chanserv clear: move /cs help clear to a help function
+  that displays all subcommands currently loaded, similar
+  to /ns help set.
+  
+
+  Changes:	Modified:
+  +0 -16	trunk/help/cservice/clear (File Deleted) 
+  +13 -1	trunk/modules/chanserv/clear.c (File Modified) 
+
+
 jilles      2006/10/01 20:35:01 UTC	(20061001-6601)
   Log:
   nickserv help set: take no_nick_ownership into account

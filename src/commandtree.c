@@ -4,7 +4,7 @@
  *
  * Commandtree manipulation routines.
  *
- * $Id: commandtree.c 6593 2006-10-01 18:51:45Z jilles $
+ * $Id: commandtree.c 6605 2006-10-01 20:57:36Z jilles $
  */
 
 #include "atheme.h"
@@ -146,7 +146,10 @@ void command_help(sourceinfo_t *si, list_t *commandtree)
 {
 	node_t *n;
 
-	command_success_nodata(si, "The following commands are available:");
+	if (si->service == NULL || si->service->cmdtree == commandtree)
+		command_success_nodata(si, "The following commands are available:");
+	else
+		command_success_nodata(si, "The following subcommands are available:");
 
 	LIST_FOREACH(n, commandtree->head)
 	{
@@ -202,7 +205,10 @@ void command_help_short(sourceinfo_t *si, list_t *commandtree, char *maincmds)
 	unsigned int l;
 	char buf[256];
 
-	command_success_nodata(si, "The following commands are available:");
+	if (si->service == NULL || si->service->cmdtree == commandtree)
+		command_success_nodata(si, "The following commands are available:");
+	else
+		command_success_nodata(si, "The following subcommands are available:");
 
 	LIST_FOREACH(n, commandtree->head)
 	{
