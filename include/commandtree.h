@@ -4,7 +4,7 @@
  *
  * Commandlist manipulation routines.
  *
- * $Id: commandtree.h 6593 2006-10-01 18:51:45Z jilles $
+ * $Id: commandtree.h 6595 2006-10-01 19:12:28Z jilles $
  */
 
 #ifndef COMMANDLIST_H
@@ -33,7 +33,7 @@ struct help_command_
   char *name;
   const char *access;
   char *file;
-  void (*func) (char *origin);
+  void (*func)(sourceinfo_t *si);
 };
 typedef struct help_command_ helpentry_t;
 
@@ -56,7 +56,7 @@ E void fcommand_exec_floodcheck(service_t *svs, char *channel, char *origin, cha
 /* help.c */
 E void help_display(sourceinfo_t *si, char *command, list_t *list);
 E void help_addentry(list_t *list, char *topic, char *fname,
-	void (*func)(char *origin));
+	void (*func)(sourceinfo_t *si));
 E void help_delentry(list_t *list, char *name);
 
 #endif

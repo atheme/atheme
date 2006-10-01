@@ -23,14 +23,14 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/enforce",FALSE, _modinit, _moddeinit,
-	"$Id: ns_enforce.c 6555 2006-09-29 18:11:51Z jilles $",
+	"$Id: ns_enforce.c 6595 2006-10-01 19:12:28Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[]);
-static void ns_help_set_enforce(char *origin);
+static void ns_help_set_enforce(sourceinfo_t *si);
 static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[]);
-static void ns_help_release(char *origin);
+static void ns_help_release(sourceinfo_t *si);
 static void reg_check(void *arg);
 static void remove_idcheck(void *vuser);
 
@@ -128,18 +128,18 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void ns_help_set_enforce(char *origin)
+static void ns_help_set_enforce(sourceinfo_t *si)
 {
-	notice(nicksvs.nick, origin, "Help for \2ENFORCE\2:");
-	notice(nicksvs.nick, origin, "\2ENFORCE\2 allows you to enable protection for");
-	notice(nicksvs.nick, origin, "your nickname.");
-	notice(nicksvs.nick, origin, " ");
-	notice(nicksvs.nick, origin, "This will automatically change the nick of someone");
-	notice(nicksvs.nick, origin, "who attempts to use it without identifying in time,");
-	notice(nicksvs.nick, origin, "and temporarily block its use, which can be");
-	notice(nicksvs.nick, origin, "removed at your discretion. See help on RELEASE.");
-	notice(nicksvs.nick, origin, " ");
-	notice(nicksvs.nick, origin, "Syntax: SET ENFORCE ON|OFF");
+	command_success_nodata(si, "Help for \2ENFORCE\2:");
+	command_success_nodata(si, "\2ENFORCE\2 allows you to enable protection for");
+	command_success_nodata(si, "your nickname.");
+	command_success_nodata(si, " ");
+	command_success_nodata(si, "This will automatically change the nick of someone");
+	command_success_nodata(si, "who attempts to use it without identifying in time,");
+	command_success_nodata(si, "and temporarily block its use, which can be");
+	command_success_nodata(si, "removed at your discretion. See help on RELEASE.");
+	command_success_nodata(si, " ");
+	command_success_nodata(si, "Syntax: SET ENFORCE ON|OFF");
 }
 
 static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
@@ -231,21 +231,21 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void ns_help_release(char *origin)
+static void ns_help_release(sourceinfo_t *si)
 {
-	notice(nicksvs.nick, origin, "Help for \2RELEASE\2:");
-	notice(nicksvs.nick, origin, "\2RELEASE\2 removes an enforcer for your nick or");
-	notice(nicksvs.nick, origin, "changes the nick of a user that is using your");
-	notice(nicksvs.nick, origin, "nick.");
-	notice(nicksvs.nick, origin, " ");
-	notice(nicksvs.nick, origin, "Enforcers are created when someone uses your");
-	notice(nicksvs.nick, origin, "nick without identifying and prevent all use");
-	notice(nicksvs.nick, origin, "of it.");
-	notice(nicksvs.nick, origin, " ");
-	notice(nicksvs.nick, origin, "Not all ircds support removing enforcers. You will");
-	notice(nicksvs.nick, origin, "have to wait a few minutes then.");
-	notice(nicksvs.nick, origin, " ");
-	notice(nicksvs.nick, origin, "Syntax: RELEASE <nick> [password]");
+	command_success_nodata(si, "Help for \2RELEASE\2:");
+	command_success_nodata(si, "\2RELEASE\2 removes an enforcer for your nick or");
+	command_success_nodata(si, "changes the nick of a user that is using your");
+	command_success_nodata(si, "nick.");
+	command_success_nodata(si, " ");
+	command_success_nodata(si, "Enforcers are created when someone uses your");
+	command_success_nodata(si, "nick without identifying and prevent all use");
+	command_success_nodata(si, "of it.");
+	command_success_nodata(si, " ");
+	command_success_nodata(si, "Not all ircds support removing enforcers. You will");
+	command_success_nodata(si, "have to wait a few minutes then.");
+	command_success_nodata(si, " ");
+	command_success_nodata(si, "Syntax: RELEASE <nick> [password]");
 }
 
 void reg_check(void *arg)

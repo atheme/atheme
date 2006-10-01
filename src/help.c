@@ -4,7 +4,7 @@
  *
  * This file contains a generic help system implementation.
  *
- * $Id: help.c 6585 2006-09-30 22:10:34Z jilles $
+ * $Id: help.c 6595 2006-10-01 19:12:28Z jilles $
  */
 
 #include "atheme.h"
@@ -73,8 +73,7 @@ void help_display(sourceinfo_t *si, char *command, list_t *list)
 		{
 			command_success_nodata(si, "***** \2%s Help\2 *****", si->service->name);
 
-			if (si->su != NULL) /* XXX */
-				c->func(si->su->nick);
+			c->func(si);
 
 			command_success_nodata(si, "***** \2End of Help\2 *****");
 		}
@@ -84,7 +83,7 @@ void help_display(sourceinfo_t *si, char *command, list_t *list)
 }
 
 void help_addentry(list_t *list, char *topic, char *fname,
-	void (*func)(char *origin))
+	void (*func)(sourceinfo_t *si))
 {
 	helpentry_t *he = smalloc(sizeof(helpentry_t));
 	node_t *n;

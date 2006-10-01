@@ -1,3 +1,19 @@
+jilles      2006/10/01 18:51:45 UTC	(20061001-6593)
+  Log:
+  Update command_help() and command_help_short() to sourceinfo.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/contrib/ircd_catserv.c (File Modified) 
+  +2 -2		trunk/include/commandtree.h (File Modified) 
+  +4 -6		trunk/modules/chanserv/help.c (File Modified) 
+  +1 -1		trunk/modules/global/main.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/help.c (File Modified) 
+  +2 -2		trunk/modules/nickserv/help.c (File Modified) 
+  +1 -1		trunk/modules/operserv/help.c (File Modified) 
+  +13 -16	trunk/src/commandtree.c (File Modified) 
+
+
 jilles      2006/10/01 17:54:52 UTC	(20061001-6591)
   Log:
   Properly fix chanserv register, bug was introduced in r6517 by me.
