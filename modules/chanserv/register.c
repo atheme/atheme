@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService REGISTER function.
  *
- * $Id: register.c 6589 2006-10-01 00:37:28Z pippijn $
+ * $Id: register.c 6591 2006-10-01 17:54:52Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 6589 2006-10-01 00:37:28Z pippijn $",
+	"$Id: register.c 6591 2006-10-01 17:54:52Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -64,7 +64,13 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* make sure they're logged in */
-	if (si->smu && (si->smu->flags & MU_WAITAUTH))
+	if (!si->smu)
+	{
+		command_fail(si, fault_noprivs, "You are not logged in.");
+		return;
+	}
+
+	if (si->smu->flags & MU_WAITAUTH)
 	{
 		command_fail(si, fault_notverified, "You need to verify your email address before you may register channels.");
 		return;
