@@ -1,3 +1,12 @@
+jilles      2006/10/01 21:09:55 UTC	(20061001-6609)
+  Log:
+  sourceinfo.h: improve comments
+  
+
+  Changes:	Modified:
+  +9 -6		trunk/include/sourceinfo.h (File Modified) 
+
+
 jilles      2006/10/01 21:00:54 UTC	(20061001-6607)
   Log:
   Remove empty helpserv help directory.

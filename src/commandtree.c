@@ -4,7 +4,7 @@
  *
  * Commandtree manipulation routines.
  *
- * $Id: commandtree.c 6605 2006-10-01 20:57:36Z jilles $
+ * $Id: commandtree.c 6611 2006-10-01 21:26:34Z jilles $
  */
 
 #include "atheme.h"
@@ -121,7 +121,7 @@ void command_exec_split(service_t *svs, sourceinfo_t *si, char *cmd, char *text,
 	if ((c = command_find(commandtree, cmd)))
 	{
 		parc = parse1(text, c->maxparc, parv);
-		for (i = parc; i < sizeof(parv) / sizeof (parv[0]); i++)
+		for (i = parc; i < (int)(sizeof(parv) / sizeof(parv[0])); i++)
 			parv[i] = NULL;
 		command_exec(svs, si, c, parc, parv);
 	}
