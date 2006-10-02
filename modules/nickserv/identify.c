@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY and LOGIN functions.
  *
- * $Id: identify.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: identify.c 6643 2006-10-02 15:54:30Z jilles $
  */
 
 #include "atheme.h"
@@ -21,7 +21,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/" COMMAND_LC, FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: identify.c 6643 2006-10-02 15:54:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -78,6 +78,12 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 	char lau[BUFSIZE], lao[BUFSIZE];
 	struct tm tm;
 	metadata_t *md_failnum;
+
+	if (si->su == NULL)
+	{
+		command_fail(si, fault_noprivs, "\2%s\2 can only be executed via IRC.", COMMAND_UC);
+		return;
+	}
 
 #ifndef NICKSERV_LOGIN
 	if (!nicksvs.no_nick_ownership && target && !password)

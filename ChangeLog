@@ -1,3 +1,13 @@
+jilles      2006/10/02 15:49:12 UTC	(20061002-6641)
+  Log:
+  Constify the metadata functions.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/include/metadata.h (File Modified) 
+  +3 -3		trunk/src/node.c (File Modified) 
+
+
 jilles      2006/10/02 15:44:53 UTC	(20061002-6639)
   Log:
   Use get_oper_name() in some more places.
