@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService IGNORE command.
  *
- * $Id: ignore.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: ignore.c 6633 2006-10-02 10:37:43Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: ignore.c 6633 2006-10-02 10:37:43Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -87,7 +87,6 @@ static void os_cmd_ignore(sourceinfo_t *si, int parc, char *parv[])
 
 static void os_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = si->su;
 	node_t *n;
         char *target = parv[0];
 	char *reason = parv[1];
@@ -135,7 +134,6 @@ static void os_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 static void os_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *target = parv[0];
-	user_t *u = si->su;
 	node_t *n, *tn;
 	svsignore_t *svsignore;
 
@@ -174,7 +172,6 @@ static void os_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[])
 
 static void os_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = si->su;
 	node_t *n, *tn;
 	svsignore_t *svsignore;
 
@@ -209,7 +206,6 @@ static void os_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[])
 
 static void os_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = si->su;
 	node_t *n;
 	uint8_t i = 1;
 	svsignore_t *svsignore;
