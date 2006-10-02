@@ -1,3 +1,16 @@
+jilles      2006/10/02 15:44:53 UTC	(20061002-6639)
+  Log:
+  Use get_oper_name() in some more places.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/mark.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/freeze.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/mark.c (File Modified) 
+  +1 -1		trunk/modules/operserv/clearchan.c (File Modified) 
+  +2 -2		trunk/modules/operserv/noop.c (File Modified) 
+
+
 jilles      2006/10/02 15:28:50 UTC	(20061002-6637)
   Log:
   chanserv topic/topicappend:

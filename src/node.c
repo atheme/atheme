@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6575 2006-09-30 21:15:23Z jilles $
+ * $Id: node.c 6641 2006-10-02 15:49:12Z jilles $
  */
 
 #include "atheme.h"
@@ -2160,7 +2160,7 @@ boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, char *hostmask, 
  * M E T A D A T A *
  *******************/
 
-metadata_t *metadata_add(void *target, int32_t type, char *name, char *value)
+metadata_t *metadata_add(void *target, int32_t type, const char *name, const char *value)
 {
 	myuser_t *mu = NULL;
 	mychan_t *mc = NULL;
@@ -2216,7 +2216,7 @@ metadata_t *metadata_add(void *target, int32_t type, char *name, char *value)
 	return md;
 }
 
-void metadata_delete(void *target, int32_t type, char *name)
+void metadata_delete(void *target, int32_t type, const char *name)
 {
 	node_t *n;
 	myuser_t *mu;
@@ -2260,7 +2260,7 @@ void metadata_delete(void *target, int32_t type, char *name)
 	BlockHeapFree(metadata_heap, md);
 }
 
-metadata_t *metadata_find(void *target, int32_t type, char *name)
+metadata_t *metadata_find(void *target, int32_t type, const char *name)
 {
 	node_t *n;
 	myuser_t *mu;
