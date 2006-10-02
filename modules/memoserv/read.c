@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv READ function
  *
- * $Id: read.c 6543 2006-09-29 15:09:51Z jilles $
+ * $Id: read.c 6627 2006-10-02 09:36:29Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/read", FALSE, _modinit, _moddeinit,
-	"$Id: read.c 6543 2006-09-29 15:09:51Z jilles $",
+	"$Id: read.c 6627 2006-10-02 09:36:29Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -110,9 +110,9 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 				
 				/* If the sender is logged in, tell them the memo's been read */
 				if (strcasecmp(memosvs.nick,memo->sender) && (tmu != NULL) && (tmu->logins.count > 0))
-					myuser_notice(memosvs.nick, tmu, "%s has read your memo, which was sent at %s", si->su->nick, strfbuf);			
+					myuser_notice(memosvs.nick, tmu, "%s has read your memo, which was sent at %s", si->smu->name, strfbuf);
 				else
-				{	
+				{
 					/* If they have an account, their inbox is not full and they aren't memoserv */
 					if ( (tmu != NULL) && (tmu->memos.count < me.mdlimit) && strcasecmp(memosvs.nick,memo->sender))
 					{
@@ -121,7 +121,7 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 						receipt->sent = CURRTIME;
 						receipt->status = MEMO_NEW;
 						strlcpy(receipt->sender,memosvs.nick,NICKLEN);
-						snprintf(receipt->text, MEMOLEN, "%s has read a memo from you sent at %s", si->su->nick, strfbuf);
+						snprintf(receipt->text, MEMOLEN, "%s has read a memo from you sent at %s", si->smu->name, strfbuf);
 						
 						/* Attach to their linked list */
 						n = node_create();

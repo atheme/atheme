@@ -1,3 +1,12 @@
+jilles      2006/10/02 09:29:08 UTC	(20061002-6625)
+  Log:
+  saslserv ctcp replies came from operserv
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/saslserv/main.c (File Modified) 
+
+
 jilles      2006/10/01 23:20:34 UTC	(20061001-6623)
   Log:
   chanserv voice/halfop/op: get rid of si->su = user_find_named(si->su->nick);

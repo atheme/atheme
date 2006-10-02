@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv FORWARD function
  *
- * $Id: forward.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: forward.c 6627 2006-10-02 09:36:29Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/forward", FALSE, _modinit, _moddeinit,
-	"$Id: forward.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: forward.c 6627 2006-10-02 09:36:29Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -195,7 +195,7 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 	{
 		command_success_nodata(si, "%s is currently online, and you may talk directly, by sending a private message.", target);
 	}
-	if (!irccmp(si->su->nick, si->smu->name))
+	if (si->su == NULL || !irccmp(si->su->nick, si->smu->name))
 		myuser_notice(memosvs.nick, tmu, "You have a new forwarded memo from %s.", si->smu->name);
 	else
 		myuser_notice(memosvs.nick, tmu, "You have a new forwarded memo from %s (nick: %s).", si->smu->name, si->su->nick);
