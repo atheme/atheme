@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 6577 2006-09-30 21:17:34Z jilles $
+ * $Id: ban.c 6645 2006-10-02 16:02:27Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", FALSE, _modinit, _moddeinit,
-	"$Id: ban.c 6577 2006-09-30 21:17:34Z jilles $",
+	"$Id: ban.c 6645 2006-10-02 16:02:27Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -146,14 +146,22 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
 	user_t *tu;
 	chanban_t *cb;
 
-	if (!target)
-		target = si->su->nick;
-
 	if (!channel)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "UNBAN");
 		command_fail(si, fault_needmoreparams, "Syntax: UNBAN <#channel> <nickname|hostmask>");
 		return;
+	}
+
+	if (!target)
+	{
+		if (si->su == NULL)
+		{
+			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "UNBAN");
+			command_fail(si, fault_needmoreparams, "Syntax: UNBAN <#channel> <nickname|hostmask>");
+			return;
+		}
+		target = si->su->nick;
 	}
 
 	if (!c)

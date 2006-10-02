@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGOUT functions.
  *
- * $Id: logout.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: logout.c 6645 2006-10-02 16:02:27Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/logout", FALSE, _modinit, _moddeinit,
-	"$Id: logout.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: logout.c 6645 2006-10-02 16:02:27Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -76,6 +76,13 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_unimplemented, "External logout is not yet implemented.");
 		return;
 	}
+	else if (si->su == NULL)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "LOGOUT");
+		command_fail(si, fault_needmoreparams, "Syntax: LOGOUT <target> <password>");
+		return;
+	}
+
 
 	if (is_soper(si->smu))
 		snoop("DESOPER: \2%s\2 as \2%s\2", get_oper_name(si), si->smu->name);

@@ -1,3 +1,12 @@
+jilles      2006/10/02 15:54:30 UTC	(20061002-6643)
+  Log:
+  nickserv login/identify can only be executed via IRC
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/nickserv/identify.c (File Modified) 
+
+
 jilles      2006/10/02 15:49:12 UTC	(20061002-6641)
   Log:
   Constify the metadata functions.
