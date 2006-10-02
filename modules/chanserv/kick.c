@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: kick.c 6577 2006-09-30 21:17:34Z jilles $
+ * $Id: kick.c 6631 2006-10-02 10:24:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/kick", FALSE, _modinit, _moddeinit,
-	"$Id: kick.c 6577 2006-09-30 21:17:34Z jilles $",
+	"$Id: kick.c 6631 2006-10-02 10:24:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -116,7 +116,7 @@ static void cs_cmd_kick(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	snprintf(reasonbuf, BUFSIZE, "%s (%s)", reason ? reason : "No reason given", si->su->nick);
+	snprintf(reasonbuf, BUFSIZE, "%s (%s)", reason ? reason : "No reason given", get_source_name(si));
 	kick(chansvs.nick, chan, tu->nick, reasonbuf);
 	logcommand(si, CMDLOG_SET, "%s KICK %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (si->su != tu && !chanuser_find(mc->chan, si->su))
@@ -172,7 +172,7 @@ static void cs_cmd_kickban(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	snprintf(reasonbuf, BUFSIZE, "%s (%s)", reason ? reason : "No reason given", si->su->nick);
+	snprintf(reasonbuf, BUFSIZE, "%s (%s)", reason ? reason : "No reason given", get_source_name(si));
 	ban(chansvs.me->me, mc->chan, tu);
 	n = remove_ban_exceptions(chansvs.me->me, mc->chan, tu);
 	if (n > 0)

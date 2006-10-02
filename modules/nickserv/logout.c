@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGOUT functions.
  *
- * $Id: logout.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: logout.c 6631 2006-10-02 10:24:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/logout", FALSE, _modinit, _moddeinit,
-	"$Id: logout.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: logout.c 6631 2006-10-02 10:24:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -78,7 +78,7 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (is_soper(si->smu))
-		snoop("DESOPER: \2%s\2 as \2%s\2", si->su->nick, si->smu->name);
+		snoop("DESOPER: \2%s\2 as \2%s\2", get_oper_name(si), si->smu->name);
 
 	if (si->su != u)
 	{

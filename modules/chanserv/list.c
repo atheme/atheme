@@ -4,7 +4,7 @@
  *
  * This file contains code for the ChanServ LIST function.
  *
- * $Id: list.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: list.c 6631 2006-10-02 10:24:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: list.c 6631 2006-10-02 10:24:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -54,7 +54,7 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	snoop("LIST:CHANNELS: \2%s\2 by \2%s\2", chanpattern, si->su->nick);
+	snoop("LIST:CHANNELS: \2%s\2 by \2%s\2", chanpattern, get_oper_name(si));
 	command_success_nodata(si, "Channels matching pattern \2%s\2:", chanpattern);
 
 	for (i = 0; i < HASHSIZE; i++)

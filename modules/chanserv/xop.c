@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 6617 2006-10-01 22:11:49Z jilles $
+ * $Id: xop.c 6631 2006-10-02 10:24:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 6617 2006-10-01 22:11:49Z jilles $",
+	"$Id: xop.c 6631 2006-10-02 10:24:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -212,7 +212,7 @@ static void cs_cmd_hop(sourceinfo_t *si, int parc, char *parv[])
 	 * a network switches to a non-halfop ircd: users can still
 	 * remove pre-transition HOP entries.
 	 */
-	if (!ircd->uses_halfops)
+	if (!ircd->uses_halfops && si->su != NULL)
 		notice(chansvs.nick, si->su->nick, "Warning: Your IRC server does not support halfops.");
 
 	cs_xop(si, parc, parv, chansvs.ca_hop, "HOP");
@@ -546,6 +546,6 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 	}
 	command_success_nodata(si, "FORCEXOP \2%s\2 done (\2%d\2 changes)", mc->name, changes);
 	if (changes > 0)
-		verbose(mc, "\2%s\2 reset access levels to xOP (\2%d\2 changes)", si->su->nick, changes);
+		verbose(mc, "\2%s\2 reset access levels to xOP (\2%d\2 changes)", get_source_name(si), changes);
 	logcommand(si, CMDLOG_SET, "%s FORCEXOP (%d changes)", mc->name, changes);
 }

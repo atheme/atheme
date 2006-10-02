@@ -4,7 +4,7 @@
  *
  * Gives services the ability to freeze nicknames
  *
- * $Id: freeze.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: freeze.c 6631 2006-10-02 10:24:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/freeze", FALSE, _modinit, _moddeinit,
-	"$Id: freeze.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: freeze.c 6631 2006-10-02 10:24:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -85,7 +85,7 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 		metadata_add(mu, METADATA_USER, "private:freeze:reason", reason);
 		metadata_add(mu, METADATA_USER, "private:freeze:timestamp", itoa(CURRTIME));
 
-		wallops("%s froze the nickname \2%s\2 (%s).", si->su->nick, target, reason);
+		wallops("%s froze the nickname \2%s\2 (%s).", get_oper_name(si), target, reason);
 		logcommand(si, CMDLOG_ADMIN, "FREEZE %s ON", target);
 		command_success_nodata(si, "\2%s\2 is now frozen.", target);
 	}
@@ -101,7 +101,7 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 		metadata_delete(mu, METADATA_USER, "private:freeze:reason");
 		metadata_delete(mu, METADATA_USER, "private:freeze:timestamp");
 
-		wallops("%s thawed the nickname \2%s\2.", si->su->nick, target);
+		wallops("%s thawed the nickname \2%s\2.", get_oper_name(si), target);
 		logcommand(si, CMDLOG_ADMIN, "FREEZE %s OFF", target);
 		command_success_nodata(si, "\2%s\2 has been thawed", target);
 	}

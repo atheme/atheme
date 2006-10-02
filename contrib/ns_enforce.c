@@ -23,7 +23,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/enforce",FALSE, _modinit, _moddeinit,
-	"$Id: ns_enforce.c 6621 2006-10-01 22:42:14Z jilles $",
+	"$Id: ns_enforce.c 6631 2006-10-02 10:24:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -202,7 +202,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 			if (md = metadata_find(mu, METADATA_USER, "private:enforcer"))
 				metadata_delete(mu, METADATA_USER, "private:enforcer");
 			
-			notice(nicksvs.nick, target, "%s!%s@%s has released your nickname.", si->su->nick, si->su->user, si->su->vhost);
+			notice(nicksvs.nick, target, "%s has released your nickname.", get_source_mask(si));
 			i = 0;
 			for (i = 0; i < 30; i++)
 			{

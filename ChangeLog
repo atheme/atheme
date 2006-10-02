@@ -1,3 +1,20 @@
+jilles      2006/10/02 10:20:50 UTC	(20061002-6629)
+  Log:
+  Add get_source_name(), get_source_mask() and get_oper_name().
+  These generate a name for a sourceinfo.
+  The general idea is that get_source_name() and
+  get_oper_name() are just a nick in the normal case
+  where the user is logged in to an account with the
+  same name as their nick, and get_source_mask() is
+  nick!user@vhost. Somewhat longer results apply in
+  other cases.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/include/services.h (File Modified) 
+  +61 -0	trunk/src/services.c (File Modified) 
+
+
 jilles      2006/10/02 09:36:29 UTC	(20061002-6627)
   Log:
   memoserv: make it work better for non-IRC

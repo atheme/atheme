@@ -4,7 +4,7 @@
  *
  * Marking for channels.
  *
- * $Id: mark.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: mark.c 6631 2006-10-02 10:24:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/mark", FALSE, _modinit, _moddeinit,
-	"$Id: mark.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: mark.c 6631 2006-10-02 10:24:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -84,7 +84,7 @@ static void cs_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 		metadata_add(mc, METADATA_CHANNEL, "private:mark:reason", info);
 		metadata_add(mc, METADATA_CHANNEL, "private:mark:timestamp", itoa(CURRTIME));
 
-		wallops("%s marked the channel \2%s\2.", si->su->nick, target);
+		wallops("%s marked the channel \2%s\2.", get_oper_name(si), target);
 		logcommand(si, CMDLOG_ADMIN, "%s MARK ON", mc->name);
 		command_success_nodata(si, "\2%s\2 is now marked.", target);
 	}
@@ -100,7 +100,7 @@ static void cs_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 		metadata_delete(mc, METADATA_CHANNEL, "private:mark:reason");
 		metadata_delete(mc, METADATA_CHANNEL, "private:mark:timestamp");
 
-		wallops("%s unmarked the channel \2%s\2.", si->su->nick, target);
+		wallops("%s unmarked the channel \2%s\2.", get_oper_name(si), target);
 		logcommand(si, CMDLOG_ADMIN, "%s MARK OFF", mc->name);
 		command_success_nodata(si, "\2%s\2 is now unmarked.", target);
 	}

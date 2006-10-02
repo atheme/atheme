@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ CLEARCHAN.
  *
- * $Id: clearchan.c 6617 2006-10-01 22:11:49Z jilles $
+ * $Id: clearchan.c 6631 2006-10-02 10:24:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clearchan", FALSE, _modinit, _moddeinit,
-	"$Id: clearchan.c 6617 2006-10-01 22:11:49Z jilles $",
+	"$Id: clearchan.c 6631 2006-10-02 10:24:13Z jilles $",
 	"Robin Burchell <surreal.w00t@gmail.com>"
 );
 
@@ -97,7 +97,7 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 
 	wallops("\2%s\2 is clearing channel %s with %s",
 			si->su->nick, targchan, actionstr);
-	snoop("CLEARCHAN: %s on \2%s\2 by \2%s\2", actionstr, targchan, si->su->nick);
+	snoop("CLEARCHAN: %s on \2%s\2 by \2%s\2", actionstr, targchan, get_oper_name(si));
 	command_success_nodata(si, "Clearing \2%s\2 with \2%s\2", targchan, actionstr);
 
 	/* iterate over the users in channel */

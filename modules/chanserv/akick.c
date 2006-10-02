@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 6617 2006-10-01 22:11:49Z jilles $
+ * $Id: akick.c 6631 2006-10-02 10:24:13Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@ static void cs_fcmd_akick(char *origin, char *chan);
 DECLARE_MODULE_V1
 (
 	"chanserv/akick", FALSE, _modinit, _moddeinit,
-	"$Id: akick.c 6617 2006-10-01 22:11:49Z jilles $",
+	"$Id: akick.c 6631 2006-10-02 10:24:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -142,7 +142,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 
 			hook_call_event("channel_akick_add", ca2);
 
-			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", si->su->nick, uname);
+			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", get_source_name(si), uname);
 			logcommand(si, CMDLOG_SET, "%s AKICK ADD %s", mc->name, uname);
 
 			command_success_nodata(si, "\2%s\2 has been added to the AKICK list for \2%s\2.", uname, mc->name);
@@ -166,7 +166,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 
 			command_success_nodata(si, "\2%s\2 has been added to the AKICK list for \2%s\2.", mu->name, mc->name);
 
-			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", si->su->nick, mu->name);
+			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", get_source_name(si), mu->name);
 			logcommand(si, CMDLOG_SET, "%s AKICK ADD %s", mc->name, mu->name);
 
 			return;
@@ -202,7 +202,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 
 			chanacs_delete_host(mc, uname, CA_AKICK);
 
-			verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", si->su->nick, uname);
+			verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", get_source_name(si), uname);
 			logcommand(si, CMDLOG_SET, "%s AKICK DEL %s", mc->name, uname);
 
 			command_success_nodata(si, "\2%s\2 has been removed from the AKICK list for \2%s\2.", uname, mc->name);
@@ -221,7 +221,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "\2%s\2 has been removed from the AKICK list for \2%s\2.", mu->name, mc->name);
 		logcommand(si, CMDLOG_SET, "%s AKICK DEL %s", mc->name, mu->name);
 
-		verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", si->su->nick, mu->name);
+		verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", get_source_name(si), mu->name);
 
 		return;
 	}

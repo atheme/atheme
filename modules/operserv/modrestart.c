@@ -4,7 +4,7 @@
  *
  * Module listing.
  *
- * $Id: modrestart.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: modrestart.c 6631 2006-10-02 10:24:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modrestart", TRUE, _modinit, _moddeinit,
-	"$Id: modrestart.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: modrestart.c 6631 2006-10-02 10:24:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -51,9 +51,9 @@ static void os_cmd_modrestart(sourceinfo_t *si, int parc, char *parv[])
 	boolean_t fail1 = FALSE;
 	boolean_t unloaded_something;
 
-	snoop("MODRESTART: \2%s\2", si->su->nick);
+	snoop("MODRESTART: \2%s\2", get_oper_name(si));
 	logcommand(si, CMDLOG_ADMIN, "MODRESTART");
-	wallops("Restarting modules by request of \2%s\2", si->su->nick);
+	wallops("Restarting modules by request of \2%s\2", get_oper_name(si));
 
 	old_silent = config_options.silent;
 	config_options.silent = TRUE; /* no wallops */

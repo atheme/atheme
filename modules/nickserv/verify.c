@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ VERIFY function.
  *
- * $Id: verify.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: verify.c 6631 2006-10-02 10:24:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/verify", FALSE, _modinit, _moddeinit,
-	"$Id: verify.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: verify.c 6631 2006-10-02 10:24:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -79,7 +79,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 		{
 			mu->flags &= ~MU_WAITAUTH;
 
-			snoop("REGISTER:VS: \2%s\2 by \2%s\2", mu->email, si->su->nick);
+			snoop("REGISTER:VS: \2%s\2 by \2%s\2", mu->email, get_source_name(si));
 			logcommand(si, CMDLOG_SET, "VERIFY REGISTER (email: %s)", mu->email);
 
 			metadata_delete(mu, METADATA_USER, "private:verify:register:key");
@@ -93,7 +93,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		snoop("REGISTER:VF: \2%s\2 by \2%s\2", mu->email, si->su->nick);
+		snoop("REGISTER:VF: \2%s\2 by \2%s\2", mu->email, get_source_name(si));
 		logcommand(si, CMDLOG_SET, "failed VERIFY REGISTER (invalid key)");
 		command_fail(si, fault_badparams, "Verification failed. Invalid key for \2%s\2.", 
 			mu->name);
@@ -114,7 +114,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 
 			strlcpy(mu->email, md->value, EMAILLEN);
 
-			snoop("SET:EMAIL:VS: \2%s\2 by \2%s\2", mu->email, si->su->nick);
+			snoop("SET:EMAIL:VS: \2%s\2 by \2%s\2", mu->email, get_source_name(si));
 			logcommand(si, CMDLOG_SET, "VERIFY EMAILCHG (email: %s)", mu->email);
 
 			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:key");
@@ -126,7 +126,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		snoop("REGISTER:VF: \2%s\2 by \2%s\2", mu->email, si->su->nick);
+		snoop("REGISTER:VF: \2%s\2 by \2%s\2", mu->email, get_source_name(si));
 		logcommand(si, CMDLOG_SET, "failed VERIFY EMAILCHG (invalid key)");
 		command_fail(si, fault_badparams, "Verification failed. Invalid key for \2%s\2.", 
 			mu->name);

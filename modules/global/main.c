@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6593 2006-10-01 18:51:45Z jilles $
+ * $Id: main.c 6631 2006-10-02 10:24:13Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"global/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6593 2006-10-01 18:51:45Z jilles $",
+	"$Id: main.c 6631 2006-10-02 10:24:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -151,7 +151,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 		free(sender);
 		sender = NULL;
 
-		snoop("GLOBAL: \2%s\2", si->su->nick);
+		snoop("GLOBAL: \2%s\2", get_oper_name(si));
 
 		command_success_nodata(si, "The global notice has been sent.");
 

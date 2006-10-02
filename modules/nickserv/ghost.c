@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ GHOST function.
  *
- * $Id: ghost.c 6621 2006-10-01 22:42:14Z jilles $
+ * $Id: ghost.c 6631 2006-10-02 10:24:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/ghost", FALSE, _modinit, _moddeinit,
-	"$Id: ghost.c 6621 2006-10-01 22:42:14Z jilles $",
+	"$Id: ghost.c 6631 2006-10-02 10:24:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -82,7 +82,7 @@ void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])
 
 		logcommand(si, CMDLOG_DO, "GHOST %s!%s@%s", target_u->nick, target_u->user, target_u->vhost);
 
-		skill(nicksvs.nick, target, "GHOST command used by %s!%s@%s", si->su->nick, si->su->user, si->su->vhost);
+		skill(nicksvs.nick, target, "GHOST command used by %s", get_source_mask(si));
 		user_delete(target_u);
 
 		command_success_nodata(si, "\2%s\2 has been ghosted.", target);

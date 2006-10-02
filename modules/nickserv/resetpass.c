@@ -4,7 +4,7 @@
  *
  * This file contains code for nickserv RESETPASS
  *
- * $Id: resetpass.c 6617 2006-10-01 22:11:49Z jilles $
+ * $Id: resetpass.c 6631 2006-10-02 10:24:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/resetpass", FALSE, _modinit, _moddeinit,
-	"$Id: resetpass.c 6617 2006-10-01 22:11:49Z jilles $",
+	"$Id: resetpass.c 6631 2006-10-02 10:24:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -72,7 +72,7 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "The password for the nickname %s has been changed to %s.", name, newpass);
 		set_password(mu, newpass);
 		free(newpass);
-		wallops("%s reset the password for the \2MARKED\2 nickname %s.", si->su->nick, name);
+		wallops("%s reset the password for the \2MARKED\2 nickname %s.", get_oper_name(si), name);
 		return;
 	}
 
@@ -88,7 +88,7 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 	set_password(mu, newpass);
 	free(newpass);
 
-	wallops("%s reset the password for the nickname %s", si->su->nick, name);
-	snoop("RESETPASS: \2%s\2 reset the password for \2%s\2", si->su->nick, name);
+	wallops("%s reset the password for the nickname %s", get_oper_name(si), name);
+	snoop("RESETPASS: \2%s\2 reset the password for \2%s\2", get_oper_name(si), name);
 	logcommand(si, CMDLOG_ADMIN, "RESETPASS %s", name);
 }

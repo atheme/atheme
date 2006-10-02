@@ -4,7 +4,7 @@
  *
  * ping spammer thingy
  *
- * $Id: os_pingspam.c 6345 2006-09-10 20:19:07Z jilles $
+ * $Id: os_pingspam.c 6631 2006-10-02 10:24:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/pingspam", FALSE, _modinit, _moddeinit,
-	"$Id: os_pingspam.c 6345 2006-09-10 20:19:07Z jilles $",
+	"$Id: os_pingspam.c 6631 2006-10-02 10:24:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -102,7 +102,7 @@ static void os_cmd_pingspam(sourceinfo_t *si, int parc, char *parv[])
 
 	pingspam(u);
 	notice(opersvs.nick, si->su->nick, "\2%s\2 has been pwned.", target);
-	snoop("PINGSPAM: \2%s\2 -> \2%s\2", si->su->nick, target);
+	snoop("PINGSPAM: \2%s\2 -> \2%s\2", get_oper_name(si), target);
 }
 
 static void os_cmd_autopingspam(sourceinfo_t *si, int parc, char *parv[])

@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService REHASH command.
  *
- * $Id: rehash.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: rehash.c 6631 2006-10-02 10:24:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rehash", FALSE, _modinit, _moddeinit,
-	"$Id: rehash.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: rehash.c 6631 2006-10-02 10:24:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -41,14 +41,14 @@ void _moddeinit()
 /* REHASH */
 void os_cmd_rehash(sourceinfo_t *si, int parc, char *parv[])
 {
-	snoop("UPDATE: \2%s\2", si->su->nick);
-	wallops("Updating database by request of \2%s\2.", si->su->nick);
+	snoop("UPDATE: \2%s\2", get_oper_name(si));
+	wallops("Updating database by request of \2%s\2.", get_oper_name(si));
 	expire_check(NULL);
 	db_save(NULL);
 
-	snoop("REHASH: \2%s\2", si->su->nick);
+	snoop("REHASH: \2%s\2", get_oper_name(si));
 	logcommand(si, CMDLOG_ADMIN, "REHASH");
-	wallops("Rehashing \2%s\2 by request of \2%s\2.", config_file, si->su->nick);
+	wallops("Rehashing \2%s\2 by request of \2%s\2.", config_file, get_oper_name(si));
 
 	if (conf_rehash())
 		command_success_nodata(si, "REHASH completed.");

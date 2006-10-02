@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 6617 2006-10-01 22:11:49Z jilles $
+ * $Id: flags.c 6631 2006-10-02 10:24:13Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 6617 2006-10-01 22:11:49Z jilles $",
+	"$Id: flags.c 6631 2006-10-02 10:24:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -264,7 +264,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		flagstr = bitmask_to_flags2(addflags, removeflags, chanacs_flags);
 		command_success_nodata(si, "Flags \2%s\2 were set on \2%s\2 in \2%s\2.", flagstr, target, channel);
 		logcommand(si, CMDLOG_SET, "%s FLAGS %s %s", mc->name, target, flagstr);
-		verbose(mc, "\2%s\2 set flags \2%s\2 on \2%s\2 in \2%s\2.", si->su->nick, flagstr, target, channel);
+		verbose(mc, "\2%s\2 set flags \2%s\2 on \2%s\2 in \2%s\2.", get_source_name(si), flagstr, target, channel);
 	}
 }
 

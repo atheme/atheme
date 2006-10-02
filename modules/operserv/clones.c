@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing clone detection.
  *
- * $Id: clones.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: clones.c 6631 2006-10-02 10:24:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: clones.c 6631 2006-10-02 10:24:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -276,8 +276,8 @@ static void os_cmd_clones_kline(sourceinfo_t *si, int parc, char *parv[])
 		}
 		kline_enabled = TRUE;
 		command_success_nodata(si, "Enabled CLONES klines.");
-		wallops("\2%s\2 enabled CLONES klines", si->su->nick);
-		snoop("CLONES:KLINE:ON: \2%s\2", si->su->nick);
+		wallops("\2%s\2 enabled CLONES klines", get_oper_name(si));
+		snoop("CLONES:KLINE:ON: \2%s\2", get_oper_name(si));
 		logcommand(si, CMDLOG_ADMIN, "CLONES KLINE ON");
 		write_exemptdb();
 	}
@@ -290,8 +290,8 @@ static void os_cmd_clones_kline(sourceinfo_t *si, int parc, char *parv[])
 		}
 		kline_enabled = FALSE;
 		command_success_nodata(si, "Disabled CLONES klines.");
-		wallops("\2%s\2 disabled CLONES klines", si->su->nick);
-		snoop("CLONES:KLINE:OFF: \2%s\2", si->su->nick);
+		wallops("\2%s\2 disabled CLONES klines", get_oper_name(si));
+		snoop("CLONES:KLINE:OFF: \2%s\2", get_oper_name(si));
 		logcommand(si, CMDLOG_ADMIN, "CLONES KLINE OFF");
 		write_exemptdb();
 	}

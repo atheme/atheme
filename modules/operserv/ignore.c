@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService IGNORE command.
  *
- * $Id: ignore.c 6549 2006-09-29 17:07:46Z jilles $
+ * $Id: ignore.c 6631 2006-10-02 10:24:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 6549 2006-09-29 17:07:46Z jilles $",
+	"$Id: ignore.c 6631 2006-10-02 10:24:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -126,8 +126,8 @@ static void os_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, "\2%s\2 has been added to the services ignore list.", target);
 
 	logcommand(si, CMDLOG_ADMIN, "IGNORE ADD %s %s", target, reason);
-	wallops("%s added a services ignore for \2%s\2 (%s).", si->su->nick, target, reason);
-	snoop("IGNORE:ADD: \2%s\2 by \2%s\2 (%s)", target, si->su->nick, reason);
+	wallops("%s added a services ignore for \2%s\2 (%s).", get_oper_name(si), target, reason);
+	snoop("IGNORE:ADD: \2%s\2 by \2%s\2 (%s)", target, get_oper_name(si), reason);
 
 	return;
 }
@@ -160,8 +160,8 @@ static void os_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[])
 			free(svsignore->setby);
 			free(svsignore->reason);
 
-			wallops("%s removed \2%s\2 from the services ignore list.", si->su->nick, target);
-			snoop("IGNORE:DEL: \2%s\2 by \2%s\2", target, si->su->nick);
+			wallops("%s removed \2%s\2 from the services ignore list.", get_oper_name(si), target);
+			snoop("IGNORE:DEL: \2%s\2 by \2%s\2", target, get_oper_name(si));
 			logcommand(si, CMDLOG_ADMIN, "IGNORE DEL %s", target);
 
 			return;
@@ -199,8 +199,8 @@ static void os_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, "Services ignore list has been wiped!");
 
-	wallops("\2%s\2 wiped the services ignore list.", si->su->nick);
-	snoop("IGNORE:CLEAR: by \2%s\2", si->su->nick);
+	wallops("\2%s\2 wiped the services ignore list.", get_oper_name(si));
+	snoop("IGNORE:CLEAR: by \2%s\2", get_oper_name(si));
 	logcommand(si, CMDLOG_ADMIN, "IGNORE CLEAR");
 
 	return;

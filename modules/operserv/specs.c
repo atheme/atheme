@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService SPECS command.
  *
- * $Id: specs.c 6619 2006-10-01 22:34:45Z jilles $
+ * $Id: specs.c 6631 2006-10-02 10:24:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/specs", FALSE, _modinit, _moddeinit,
-	"$Id: specs.c 6619 2006-10-01 22:34:45Z jilles $",
+	"$Id: specs.c 6631 2006-10-02 10:24:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -170,7 +170,7 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (targettype == NULL)
-		command_success_nodata(si, "Privileges for \2%s\2:", si->su->nick);
+		command_success_nodata(si, "Privileges for \2%s\2:", get_source_name(si));
 	else if (tu)
 		command_success_nodata(si, "Privileges for \2%s\2:", tu->nick);
 	else

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService DROP function.
  *
- * $Id: drop.c 6617 2006-10-01 22:11:49Z jilles $
+ * $Id: drop.c 6631 2006-10-02 10:24:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 6617 2006-10-01 22:11:49Z jilles $",
+	"$Id: drop.c 6631 2006-10-02 10:24:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -80,12 +80,12 @@ static void cs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 	if (!is_founder(mc, si->smu))
 	{
 		logcommand(si, CMDLOG_ADMIN, "%s DROP", mc->name);
-		wallops("%s dropped the channel \2%s\2", si->su->nick, name);
+		wallops("%s dropped the channel \2%s\2", get_oper_name(si), name);
 	}
 	else
 		logcommand(si, CMDLOG_REGISTER, "%s DROP", mc->name);
 
-	snoop("DROP: \2%s\2 by \2%s\2 as \2%s\2", mc->name, si->su->nick, si->smu->name);
+	snoop("DROP: \2%s\2 by \2%s\2 as \2%s\2", mc->name, get_oper_name(si), si->smu->name);
 
 	hook_call_event("channel_drop", mc);
 	if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)

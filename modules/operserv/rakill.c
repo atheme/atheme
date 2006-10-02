@@ -4,7 +4,7 @@
  *
  * Regexp-based AKILL implementation.
  *
- * $Id: rakill.c 6617 2006-10-01 22:11:49Z jilles $
+ * $Id: rakill.c 6631 2006-10-02 10:24:13Z jilles $
  */
 
 /*
@@ -17,7 +17,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rakill", FALSE, _modinit, _moddeinit,
-	"$Id: rakill.c 6617 2006-10-01 22:11:49Z jilles $",
+	"$Id: rakill.c 6631 2006-10-02 10:24:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -104,14 +104,14 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 	{
 		regex_destroy(regex);
 		command_fail(si, fault_noprivs, "The provided regex matches you, refusing RAKILL.");
-		snoop("RAKILL:REFUSED: \2%s\2 by \2%s\2 (%s) (matches self)", pattern, si->su->nick, reason);
+		snoop("RAKILL:REFUSED: \2%s\2 by \2%s\2 (%s) (matches self)", pattern, get_oper_name(si), reason);
 		wallops("\2%s\2 attempted to do RAKILL on \2%s\2 matching self",
 				si->su->nick, pattern);
 		logcommand(si, CMDLOG_ADMIN, "RAKILL %s %s (refused, matches self)", pattern, reason);
 		return;
 	}
 
-	snoop("RAKILL: \2%s\2 by \2%s\2 (%s)", pattern, si->su->nick, reason);
+	snoop("RAKILL: \2%s\2 by \2%s\2 (%s)", pattern, get_oper_name(si), reason);
 
 	for (i = 0; i < HASHSIZE; i++)
 	{
