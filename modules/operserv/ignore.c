@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService IGNORE command.
  *
- * $Id: ignore.c 6633 2006-10-02 10:37:43Z jilles $
+ * $Id: ignore.c 6635 2006-10-02 15:10:11Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 6633 2006-10-02 10:37:43Z jilles $",
+	"$Id: ignore.c 6635 2006-10-02 15:10:11Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -119,7 +119,7 @@ static void os_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	svsignore = svsignore_add(target, reason);
-	svsignore->setby = sstrdup(si->su->nick);
+	svsignore->setby = sstrdup(get_oper_name(si));
 	svsignore->settime = CURRTIME;
 
 	command_success_nodata(si, "\2%s\2 has been added to the services ignore list.", target);

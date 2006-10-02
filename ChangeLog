@@ -1,3 +1,12 @@
+jilles      2006/10/02 10:37:43 UTC	(20061002-6633)
+  Log:
+  operserv ignore: get rid of unused user_t *u = si->su;
+  
+
+  Changes:	Modified:
+  +0 -4		trunk/modules/operserv/ignore.c (File Modified) 
+
+
 jilles      2006/10/02 10:24:13 UTC	(20061002-6631)
   Log:
   Use the new sourceinfo name functions.
