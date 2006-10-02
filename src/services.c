@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 6569 2006-09-29 22:50:24Z jilles $
+ * $Id: services.c 6629 2006-10-02 10:20:50Z jilles $
  */
 
 #include "atheme.h"
@@ -479,6 +479,67 @@ void command_success_table_init(sourceinfo_t *si, int count, ...)
 		notice_user_sts(si->service->me, si->su, buf);
 }
 #endif
+
+const char *get_source_name(sourceinfo_t *si)
+{
+	static char result[NICKLEN+NICKLEN+10];
+
+	if (si->su != NULL)
+	{
+		if (si->smu && !irccmp(si->su->nick, si->smu->name))
+			snprintf(result, sizeof result, "%s", si->su->nick);
+		else
+			snprintf(result, sizeof result, "%s(%s)", si->su->nick,
+					si->smu ? si->smu->name : "");
+	}
+	else
+	{
+		snprintf(result, sizeof result, "<%s>%s", si->v->description,
+				si->smu ? si->smu->name : "");
+	}
+	return result;
+}
+
+const char *get_source_mask(sourceinfo_t *si)
+{
+	static char result[NICKLEN+USERLEN+HOSTLEN+10];
+
+	if (si->su != NULL)
+	{
+		snprintf(result, sizeof result, "%s!%s@%s", si->su->nick,
+				si->su->user, si->su->vhost);
+	}
+	else
+	{
+		snprintf(result, sizeof result, "<%s>%s", si->v->description,
+				si->smu ? si->smu->name : "");
+	}
+	return result;
+}
+
+const char *get_oper_name(sourceinfo_t *si)
+{
+	static char result[NICKLEN+USERLEN+HOSTLEN+NICKLEN+10];
+
+	if (si->su != NULL)
+	{
+		if (si->smu == NULL)
+			snprintf(result, sizeof result, "%s!%s@%s{%s}", si->su->nick,
+					si->su->user, si->su->vhost,
+					si->su->server->name);
+		else if (!irccmp(si->su->nick, si->smu->name))
+			snprintf(result, sizeof result, "%s", si->su->nick);
+		else
+			snprintf(result, sizeof result, "%s(%s)", si->su->nick,
+					si->smu ? si->smu->name : "");
+	}
+	else
+	{
+		snprintf(result, sizeof result, "<%s>%s", si->v->description,
+				si->smu ? si->smu->name : "");
+	}
+	return result;
+}
 
 void wallops(char *fmt, ...)
 {

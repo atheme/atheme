@@ -1,3 +1,15 @@
+jilles      2006/10/02 09:36:29 UTC	(20061002-6627)
+  Log:
+  memoserv: make it work better for non-IRC
+  "<user> has read your memo" now shows account name, not nick
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/memoserv/forward.c (File Modified) 
+  +3 -3		trunk/modules/memoserv/read.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/send.c (File Modified) 
+
+
 jilles      2006/10/02 09:29:08 UTC	(20061002-6625)
   Log:
   saslserv ctcp replies came from operserv
