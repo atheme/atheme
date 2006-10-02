@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TOPIC functions.
  *
- * $Id: topic.c 6577 2006-09-30 21:17:34Z jilles $
+ * $Id: topic.c 6637 2006-10-02 15:28:50Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/topic", FALSE, _modinit, _moddeinit,
-	"$Id: topic.c 6577 2006-09-30 21:17:34Z jilles $",
+	"$Id: topic.c 6637 2006-10-02 15:28:50Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -65,6 +65,7 @@ static void cs_cmd_topic(sourceinfo_t *si, int parc, char *parv[])
 	char *topic = parv[1];
 	mychan_t *mc;
 	channel_t *c;
+	char *topicsetter;
 
 	if (!chan || !topic)
 	{
@@ -99,8 +100,14 @@ static void cs_cmd_topic(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	handle_topic(c, si->su->nick, CURRTIME, topic);
-	topic_sts(chan, si->su->nick, CURRTIME, topic);
+	if (si->su != NULL)
+		topicsetter = si->su->nick;
+	else if (si->smu != NULL)
+		topicsetter = si->smu->name;
+	else
+		topicsetter = "unknown";
+	handle_topic(c, topicsetter, CURRTIME, topic);
+	topic_sts(chan, topicsetter, CURRTIME, topic);
 
 	logcommand(si, CMDLOG_SET, "%s TOPIC", mc->name);
 	if (!chanuser_find(c, si->su))
@@ -114,6 +121,7 @@ static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[])
         mychan_t *mc;
 	char topicbuf[BUFSIZE];
 	channel_t *c;
+	char *topicsetter;
 
         if (!chan || !topic)
         {
@@ -159,8 +167,14 @@ static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[])
 	else
 		strlcpy(topicbuf, topic, BUFSIZE);
 
-	handle_topic(c, si->su->nick, CURRTIME, topicbuf);
-	topic_sts(chan, si->su->nick, CURRTIME, topicbuf);
+	if (si->su != NULL)
+		topicsetter = si->su->nick;
+	else if (si->smu != NULL)
+		topicsetter = si->smu->name;
+	else
+		topicsetter = "unknown";
+	handle_topic(c, topicsetter, CURRTIME, topicbuf);
+	topic_sts(chan, topicsetter, CURRTIME, topicbuf);
 
 	logcommand(si, CMDLOG_SET, "%s TOPICAPPEND", mc->name);
 	if (!chanuser_find(c, si->su))

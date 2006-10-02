@@ -1,3 +1,13 @@
+jilles      2006/10/02 15:10:11 UTC	(20061002-6635)
+  Log:
+  Use get_oper_name() for the setby field in svsignores and akills.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/operserv/akill.c (File Modified) 
+  +1 -1		trunk/modules/operserv/ignore.c (File Modified) 
+
+
 jilles      2006/10/02 10:37:43 UTC	(20061002-6633)
   Log:
   operserv ignore: get rid of unused user_t *u = si->su;
