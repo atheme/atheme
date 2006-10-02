@@ -4,7 +4,7 @@
  *
  * Marking for nicknames.
  *
- * $Id: mark.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: mark.c 6639 2006-10-02 15:44:53Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/mark", FALSE, _modinit, _moddeinit,
-	"$Id: mark.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: mark.c 6639 2006-10-02 15:44:53Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -72,7 +72,7 @@ static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		metadata_add(mu, METADATA_USER, "private:mark:setter", si->su->nick);
+		metadata_add(mu, METADATA_USER, "private:mark:setter", get_oper_name(si));
 		metadata_add(mu, METADATA_USER, "private:mark:reason", info);
 		metadata_add(mu, METADATA_USER, "private:mark:timestamp", itoa(time(NULL)));
 

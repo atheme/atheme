@@ -4,7 +4,7 @@
  *
  * Marking for channels.
  *
- * $Id: mark.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: mark.c 6639 2006-10-02 15:44:53Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/mark", FALSE, _modinit, _moddeinit,
-	"$Id: mark.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: mark.c 6639 2006-10-02 15:44:53Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -80,7 +80,7 @@ static void cs_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		metadata_add(mc, METADATA_CHANNEL, "private:mark:setter", si->su->nick);
+		metadata_add(mc, METADATA_CHANNEL, "private:mark:setter", get_oper_name(si));
 		metadata_add(mc, METADATA_CHANNEL, "private:mark:reason", info);
 		metadata_add(mc, METADATA_CHANNEL, "private:mark:timestamp", itoa(CURRTIME));
 

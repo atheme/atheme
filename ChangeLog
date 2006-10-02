@@ -1,3 +1,14 @@
+jilles      2006/10/02 15:28:50 UTC	(20061002-6637)
+  Log:
+  chanserv topic/topicappend:
+  Don't crash when called from non-IRC; the topic will
+  appear to be set by the account name in that case.
+  
+
+  Changes:	Modified:
+  +18 -4	trunk/modules/chanserv/topic.c (File Modified) 
+
+
 jilles      2006/10/02 15:10:11 UTC	(20061002-6635)
   Log:
   Use get_oper_name() for the setby field in svsignores and akills.
