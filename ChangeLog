@@ -1,3 +1,13 @@
+jilles      2006/10/02 16:02:27 UTC	(20061002-6645)
+  Log:
+  for non-irc, require explicit target for /ns logut and /cs unban
+  
+
+  Changes:	Modified:
+  +11 -3	trunk/modules/chanserv/ban.c (File Modified) 
+  +7 -0		trunk/modules/nickserv/logout.c (File Modified) 
+
+
 jilles      2006/10/02 15:54:30 UTC	(20061002-6643)
   Log:
   nickserv login/identify can only be executed via IRC
