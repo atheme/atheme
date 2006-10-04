@@ -1,3 +1,12 @@
+jilles      2006/10/04 13:56:08 UTC	(20061004-6651)
+  Log:
+  Add an example of using the new xmlrpc stuff using perl RPC::XML.
+  
+
+  Changes:	Modified:
+  +69 -0	trunk/contrib/perlxmlrpc.pl (File Added) 
+
+
 jilles      2006/10/04 13:53:34 UTC	(20061004-6649)
   Log:
   Rewrite modules/xmlrpc/main with code from contrib/gen_httpd.

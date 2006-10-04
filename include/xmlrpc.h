@@ -4,7 +4,7 @@
  *
  * XMLRPC library header, hacked up for Atheme.
  *
- * $Id: xmlrpc.h 5103 2006-04-17 05:24:24Z gxti $
+ * $Id: xmlrpc.h 6653 2006-10-04 16:42:42Z jilles $
  */
 #ifndef XMLRPC_H
 #define XMLRPC_H
@@ -90,7 +90,7 @@ E int xmlrpc_unregister_method(const char *method);
 E char *xmlrpc_array(int argc, ...);
 E char *xmlrpc_double(char *buf, double value);
 E char *xmlrpc_boolean(char *buf, int value);
-E char *xmlrpc_string(char *buf, char *value);
+E char *xmlrpc_string(char *buf, const char *value);
 E char *xmlrpc_integer(char *buf, int value);
 E char *xmlrpc_time2date(char *buf, time_t t);
 
@@ -99,7 +99,7 @@ E void xmlrpc_set_buffer(char *(*func)(char *buffer, int len));
 E void xmlrpc_generic_error(int code, const char *string);
 E void xmlrpc_send(int argc, ...);
 E int xmlrpc_about(void *userdata, int ac, char **av);
-E char *xmlrpc_char_encode(char *outbuffer, char *s1);
+E char *xmlrpc_char_encode(char *outbuffer, const char *s1);
 E char *xmlrpc_decode_string(char *buf);
 
 #endif

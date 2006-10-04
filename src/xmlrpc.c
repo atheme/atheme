@@ -654,7 +654,7 @@ char *xmlrpc_integer(char *buf, int value)
 
 /*************************************************************************/
 
-char *xmlrpc_string(char *buf, char *value)
+char *xmlrpc_string(char *buf, const char *value)
 {
 	char encoded[XMLRPC_BUFSIZE];
 	*buf = '\0';
@@ -1109,7 +1109,7 @@ int xmlrpc_set_options(int type, const char *value)
 
 /*************************************************************************/
 
-char *xmlrpc_char_encode(char *outbuffer, char *s1)
+char *xmlrpc_char_encode(char *outbuffer, const char *s1)
 {
 	long unsigned int i;
 	unsigned char c;
