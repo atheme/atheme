@@ -1,3 +1,27 @@
+jilles      2006/10/04 21:22:47 UTC	(20061004-6657)
+  Log:
+  Use si->service instead of YYYYsvs.me in some places.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/contrib/ns_enforce.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/clear.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/invite.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/kick.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/main.c (File Modified) 
+  +6 -6		trunk/modules/chanserv/recover.c (File Modified) 
+  +4 -1		trunk/modules/global/main.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/ignore.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/main.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/main.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/set.c (File Modified) 
+  +1 -1		trunk/modules/operserv/akill.c (File Modified) 
+  +1 -1		trunk/modules/operserv/clones.c (File Modified) 
+  +1 -1		trunk/modules/operserv/ignore.c (File Modified) 
+  +1 -1		trunk/modules/operserv/main.c (File Modified) 
+  +1 -1		trunk/modules/operserv/mode.c (File Modified) 
+
+
 jilles      2006/10/04 20:52:27 UTC	(20061004-6655)
   Log:
   Convert operserv rwatch to command_t and sourceinfo.
