@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: kick.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: kick.c 6657 2006-10-04 21:22:47Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/kick", FALSE, _modinit, _moddeinit,
-	"$Id: kick.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: kick.c 6657 2006-10-04 21:22:47Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -173,8 +173,8 @@ static void cs_cmd_kickban(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	snprintf(reasonbuf, BUFSIZE, "%s (%s)", reason ? reason : "No reason given", get_source_name(si));
-	ban(chansvs.me->me, mc->chan, tu);
-	n = remove_ban_exceptions(chansvs.me->me, mc->chan, tu);
+	ban(si->service->me, mc->chan, tu);
+	n = remove_ban_exceptions(si->service->me, mc->chan, tu);
 	if (n > 0)
 		command_success_nodata(si, "To avoid rejoin, %d ban exception(s) matching \2%s\2 have been removed from \2%s\2.", n, tu->nick, mc->name);
 	kick(chansvs.nick, chan, tu->nick, reasonbuf);

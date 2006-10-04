@@ -1,3 +1,12 @@
+jilles      2006/10/04 20:52:27 UTC	(20061004-6655)
+  Log:
+  Convert operserv rwatch to command_t and sourceinfo.
+  
+
+  Changes:	Modified:
+  +76 -65	trunk/modules/operserv/rwatch.c (File Modified) 
+
+
 jilles      2006/10/04 16:42:42 UTC	(20061004-6653)
   Log:
   Constify some more in the xmlrpc library.

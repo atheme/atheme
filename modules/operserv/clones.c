@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing clone detection.
  *
- * $Id: clones.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: clones.c 6657 2006-10-04 21:22:47Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: clones.c 6657 2006-10-04 21:22:47Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -257,7 +257,7 @@ static void os_cmd_clones(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	command_exec(opersvs.me, si, c, parc + 1, parv + 1);
+	command_exec(si->service, si, c, parc + 1, parv + 1);
 }
 
 static void os_cmd_clones_kline(sourceinfo_t *si, int parc, char *parv[])

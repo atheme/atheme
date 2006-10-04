@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService RECOVER functions.
  *
- * $Id: recover.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: recover.c 6657 2006-10-04 21:22:47Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/recover", FALSE, _modinit, _moddeinit,
-	"$Id: recover.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: recover.c 6657 2006-10-04 21:22:47Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -114,9 +114,9 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 		/* if requester is not on channel,
 		 * remove modes that keep people out */
 		if (CMODE_LIMIT & mc->chan->modes)
-			channel_mode_va(chansvs.me->me, mc->chan, 1, "-l");
+			channel_mode_va(si->service->me, mc->chan, 1, "-l");
 		if (CMODE_KEY & mc->chan->modes)
-			channel_mode_va(chansvs.me->me, mc->chan, 2, "-k", "*");
+			channel_mode_va(si->service->me, mc->chan, 2, "-k", "*");
 
 		/* stuff like join throttling
 		 * XXX only remove modes that could keep people out
@@ -127,7 +127,7 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 		{
 			str[1] = ignore_mode_list[i].mode;
 			if (mc->chan->extmodes[i] != NULL)
-				channel_mode_va(chansvs.me->me, mc->chan, 1, str);
+				channel_mode_va(si->service->me, mc->chan, 1, str);
 		}
 	}
 	else
@@ -140,11 +140,11 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 	if (origin_cu != NULL || (chanacs_source_flags(mc, si) & (CA_OP | CA_AUTOOP)))
 	{
 
-		channel_mode_va(chansvs.me->me, mc->chan, 1, "+im");
+		channel_mode_va(si->service->me, mc->chan, 1, "+im");
 	}
 	else if (CMODE_INVITE & mc->chan->modes)
 	{
-		channel_mode_va(chansvs.me->me, mc->chan, 1, "-i");
+		channel_mode_va(si->service->me, mc->chan, 1, "-i");
 	}
 
 	/* unban the user */
@@ -184,7 +184,7 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 
 	/* invite them back. must have sent +i before this */
 	if (origin_cu == NULL)
-		invite_sts(chansvs.me->me, si->su, mc->chan);
+		invite_sts(si->service->me, si->su, mc->chan);
 
 	if (added_exempt)
 		command_success_nodata(si, "Recover complete for \2%s\2, ban exception \2%s\2 added.", mc->chan->name, hostbuf2);

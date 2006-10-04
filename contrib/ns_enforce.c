@@ -23,7 +23,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/enforce",FALSE, _modinit, _moddeinit,
-	"$Id: ns_enforce.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: ns_enforce.c 6657 2006-10-04 21:22:47Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -193,7 +193,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 			if (md = metadata_find(mu, METADATA_USER, "private:enforcer"))
 				metadata_delete(mu, METADATA_USER, "private:enforcer");
 			logcommand(si, CMDLOG_DO, "RELEASE %s", target);
-			holdnick_sts(nicksvs.me->me, 0, target, mu);
+			holdnick_sts(si->service->me, 0, target, mu);
 			command_success_nodata(si, "\2%s\2 has been released.", target);
 			/*hook_call_event("user_identify", u);*/
 		}
@@ -211,7 +211,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 				if (!user_find_named(ign))
 					break;
 			}
-			fnc_sts(nicksvs.me->me, u, gnick, FNC_FORCE);
+			fnc_sts(si->service->me, u, gnick, FNC_FORCE);
 			command_success_nodata(si, "%s has been released.", target);
 			logcommand(si, CMDLOG_DO, "RELEASE %s!%s@%s", u->nick, u->user, u->vhost);
 			/*hook_call_event("user_identify", u);*/

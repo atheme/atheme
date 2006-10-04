@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: clear.c 6603 2006-10-01 20:49:21Z jilles $
+ * $Id: clear.c 6657 2006-10-04 21:22:47Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/clear", FALSE, _modinit, _moddeinit,
-	"$Id: clear.c 6603 2006-10-01 20:49:21Z jilles $",
+	"$Id: clear.c 6657 2006-10-04 21:22:47Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -80,10 +80,10 @@ static void cs_cmd_clear(sourceinfo_t *si, int parc, char *parv[])
 	c = command_find(&cs_clear_cmds, cmd);
 	if (c == NULL)
 	{
-		command_fail(si, fault_badparams, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.me->disp);
+		command_fail(si, fault_badparams, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", si->service->disp);
 		return;
 	}
 
 	parv[1] = chan;
-	command_exec(chansvs.me, si, c, parc - 1, parv + 1);
+	command_exec(si->service, si, c, parc - 1, parv + 1);
 }

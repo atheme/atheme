@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: main.c 6657 2006-10-04 21:22:47Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"global/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: main.c 6657 2006-10-04 21:22:47Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -129,6 +129,9 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 					isfirst ? si->su->nick : "",
 					isfirst ? " - " : "",
 					global->text);
+			/* Cannot use si->service->me here, global notices
+			 * should come from global even if /os global was
+			 * used. */
 			notice_global_sts(globsvs.me->me, "*", buf);
 			isfirst = FALSE;
 			/* log everything */
@@ -211,7 +214,7 @@ static void gservice(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	command_exec_split(globsvs.me, si, cmd, text, &gs_cmdtree);
+	command_exec_split(si->service, si, cmd, text, &gs_cmdtree);
 }
 
 static void global_config_ready(void *unused)
