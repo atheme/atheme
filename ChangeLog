@@ -1,3 +1,13 @@
+jilles      2006/10/04 16:42:42 UTC	(20061004-6653)
+  Log:
+  Constify some more in the xmlrpc library.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/include/xmlrpc.h (File Modified) 
+  +2 -2		trunk/src/xmlrpc.c (File Modified) 
+
+
 jilles      2006/10/04 13:56:08 UTC	(20061004-6651)
   Log:
   Add an example of using the new xmlrpc stuff using perl RPC::XML.

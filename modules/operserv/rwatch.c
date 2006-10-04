@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ RWATCH.
  *
- * $Id: rwatch.c 6617 2006-10-01 22:11:49Z jilles $
+ * $Id: rwatch.c 6655 2006-10-04 20:52:27Z jilles $
  */
 
 #include "atheme.h"
@@ -12,17 +12,17 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rwatch", FALSE, _modinit, _moddeinit,
-	"$Id: rwatch.c 6617 2006-10-01 22:11:49Z jilles $",
+	"$Id: rwatch.c 6655 2006-10-04 20:52:27Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void rwatch_newuser(void *);
 
 static void os_cmd_rwatch(sourceinfo_t *si, int parc, char *parv[]);
-static void os_cmd_rwatch_list(char *, char *);
-static void os_cmd_rwatch_add(char *, char *);
-static void os_cmd_rwatch_del(char *, char *);
-static void os_cmd_rwatch_set(char *, char *);
+static void os_cmd_rwatch_list(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_rwatch_add(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_rwatch_del(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[]);
 
 static void write_rwatchdb(void);
 static void load_rwatchdb(void);
@@ -48,10 +48,10 @@ struct rwatch_
 
 command_t os_rwatch = { "RWATCH", "Performs actions on connecting clients matching regexes.", PRIV_USER_AUSPEX, 2, os_cmd_rwatch };
 
-fcommand_t os_rwatch_add = { "ADD", AC_NONE, os_cmd_rwatch_add };
-fcommand_t os_rwatch_del = { "DEL", AC_NONE, os_cmd_rwatch_del };
-fcommand_t os_rwatch_list = { "LIST", AC_NONE, os_cmd_rwatch_list };
-fcommand_t os_rwatch_set = { "SET", AC_NONE, os_cmd_rwatch_set };
+command_t os_rwatch_add = { "ADD", "Adds an entry to the regex watch list.", AC_NONE, 1, os_cmd_rwatch_add };
+command_t os_rwatch_del = { "DEL", "Removes an entry from the regex watch list.", AC_NONE, 1, os_cmd_rwatch_del };
+command_t os_rwatch_list = { "LIST", "Displays the regex watch list.", AC_NONE, 1, os_cmd_rwatch_list };
+command_t os_rwatch_set = { "SET", "Changes actions on an entry in the regex watch list", AC_NONE, 1, os_cmd_rwatch_set };
 
 void _modinit(module_t *m)
 {
@@ -60,10 +60,10 @@ void _modinit(module_t *m)
 
 	command_add(&os_rwatch, os_cmdtree);
 
-	fcommand_add(&os_rwatch_add, &os_rwatch_cmds);
-	fcommand_add(&os_rwatch_del, &os_rwatch_cmds);
-	fcommand_add(&os_rwatch_list, &os_rwatch_cmds);
-	fcommand_add(&os_rwatch_set, &os_rwatch_cmds);
+	command_add(&os_rwatch_add, &os_rwatch_cmds);
+	command_add(&os_rwatch_del, &os_rwatch_cmds);
+	command_add(&os_rwatch_list, &os_rwatch_cmds);
+	command_add(&os_rwatch_set, &os_rwatch_cmds);
 
 	help_addentry(os_helptree, "RWATCH", "help/oservice/rwatch", NULL);
 
@@ -93,10 +93,10 @@ void _moddeinit(void)
 
 	command_delete(&os_rwatch, os_cmdtree);
 
-	fcommand_delete(&os_rwatch_add, &os_rwatch_cmds);
-	fcommand_delete(&os_rwatch_del, &os_rwatch_cmds);
-	fcommand_delete(&os_rwatch_list, &os_rwatch_cmds);
-	fcommand_delete(&os_rwatch_set, &os_rwatch_cmds);
+	command_delete(&os_rwatch_add, &os_rwatch_cmds);
+	command_delete(&os_rwatch_del, &os_rwatch_cmds);
+	command_delete(&os_rwatch_list, &os_rwatch_cmds);
+	command_delete(&os_rwatch_set, &os_rwatch_cmds);
 
 	help_delentry(os_helptree, "RWATCH");
 
@@ -188,7 +188,8 @@ static void os_cmd_rwatch(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* Grab args */
 	char *cmd = parv[0];
-	
+	command_t *c;
+
 	/* Bad/missing arg */
 	if (!cmd)
 	{
@@ -196,11 +197,18 @@ static void os_cmd_rwatch(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, "Syntax: RWATCH ADD|DEL|LIST|SET");
 		return;
 	}
-	
-	fcommand_exec(opersvs.me, parv[1], si->su->nick, cmd, &os_rwatch_cmds);
+
+	c = command_find(&os_rwatch_cmds, cmd);
+	if (c == NULL)
+	{
+		command_fail(si, fault_badparams, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", si->service->disp);
+		return;
+	}
+
+	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
-static void os_cmd_rwatch_add(char *origin, char *args)
+static void os_cmd_rwatch_add(sourceinfo_t *si, int parc, char *parv[])
 {
 	node_t *n;
 	char *pattern;
@@ -208,19 +216,20 @@ static void os_cmd_rwatch_add(char *origin, char *args)
 	regex_t *regex;
 	rwatch_t *rw;
 	int flags;
+	char *args = parv[0];
 
 	if (args == NULL)
 	{
-		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "RWATCH ADD");
-		notice(opersvs.nick, origin, "Syntax: RWATCH ADD /<regex>/[i] <reason>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RWATCH ADD");
+		command_fail(si, fault_needmoreparams, "Syntax: RWATCH ADD /<regex>/[i] <reason>");
 		return;
 	}
 
 	pattern = regex_extract(args, &args, &flags);
 	if (pattern == NULL)
 	{
-		notice(opersvs.nick, origin, STR_INVALID_PARAMS, "RWATCH ADD");
-		notice(opersvs.nick, origin, "Syntax: RWATCH ADD /<regex>/[i] <reason>");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "RWATCH ADD");
+		command_fail(si, fault_badparams, "Syntax: RWATCH ADD /<regex>/[i] <reason>");
 		return;
 	}
 
@@ -229,8 +238,8 @@ static void os_cmd_rwatch_add(char *origin, char *args)
 		reason++;
 	if (*reason == '\0')
 	{
-		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "RWATCH ADD");
-		notice(opersvs.nick, origin, "Syntax: RWATCH ADD /<regex>/[i] <reason>");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RWATCH ADD");
+		command_fail(si, fault_needmoreparams, "Syntax: RWATCH ADD /<regex>/[i] <reason>");
 		return;
 	}
 
@@ -240,7 +249,7 @@ static void os_cmd_rwatch_add(char *origin, char *args)
 
 		if (!strcmp(pattern, t->regex))
 		{
-			notice(opersvs.nick, origin, "\2%s\2 already found in regex watch list; not adding.", pattern);
+			command_fail(si, fault_nochange, "\2%s\2 already found in regex watch list; not adding.", pattern);
 			return;
 		}
 	}
@@ -248,7 +257,7 @@ static void os_cmd_rwatch_add(char *origin, char *args)
 	regex = regex_create(pattern, flags);
 	if (regex == NULL)
 	{
-		notice(opersvs.nick, origin, "The provided regex \2%s\2 is invalid.", pattern);
+		command_fail(si, fault_badparams, "The provided regex \2%s\2 is invalid.", pattern);
 		return;
 	}
 
@@ -260,30 +269,31 @@ static void os_cmd_rwatch_add(char *origin, char *args)
 	rw->re = regex;
 
 	node_add(rw, node_create(), &rwatch_list);
-	notice(opersvs.nick, origin, "Added \2%s\2 to regex watch list.", pattern);
-	snoop("RWATCH:ADD: \2%s\2 by \2%s\2", pattern, origin);
-	logcommand_user(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "RWATCH ADD %s %s", pattern, reason);
+	command_success_nodata(si, "Added \2%s\2 to regex watch list.", pattern);
+	snoop("RWATCH:ADD: \2%s\2 by \2%s\2", pattern, get_oper_name(si));
+	logcommand(si, CMDLOG_ADMIN, "RWATCH ADD %s %s", pattern, reason);
 	write_rwatchdb();
 }
 
-static void os_cmd_rwatch_del(char *origin, char *args)
+static void os_cmd_rwatch_del(sourceinfo_t *si, int parc, char *parv[])
 {
 	node_t *n, *tn;
 	char *pattern;
 	int flags;
+	char *args = parv[0];
 
 	if (args == NULL)
 	{
-		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "RWATCH DEL");
-		notice(opersvs.nick, origin, "Syntax: RWATCH DEL /<regex>/[i]");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RWATCH DEL");
+		command_fail(si, fault_needmoreparams, "Syntax: RWATCH DEL /<regex>/[i]");
 		return;
 	}
 
 	pattern = regex_extract(args, &args, &flags);
 	if (pattern == NULL)
 	{
-		notice(opersvs.nick, origin, STR_INVALID_PARAMS, "RWATCH DEL");
-		notice(opersvs.nick, origin, "Syntax: RWATCH DEL /<regex>/[i]");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "RWATCH DEL");
+		command_fail(si, fault_badparams, "Syntax: RWATCH DEL /<regex>/[i]");
 		return;
 	}
 
@@ -295,12 +305,12 @@ static void os_cmd_rwatch_del(char *origin, char *args)
 		{
 			if (rw->actions & RWACT_KLINE)
 			{
-				if (!has_priv_user(user_find_named(origin), PRIV_MASS_AKILL))
+				if (!has_priv(si, PRIV_MASS_AKILL))
 				{
-					notice(opersvs.nick, origin, "You do not have %s privilege.", PRIV_MASS_AKILL);
+					command_fail(si, fault_noprivs, "You do not have %s privilege.", PRIV_MASS_AKILL);
 					return;
 				}
-				wallops("\2%s\2 disabled kline on regex watch pattern \2%s\2", origin, pattern);
+				wallops("\2%s\2 disabled kline on regex watch pattern \2%s\2", get_oper_name(si), pattern);
 			}
 			free(rw->regex);
 			free(rw->reason);
@@ -309,18 +319,18 @@ static void os_cmd_rwatch_del(char *origin, char *args)
 			free(rw);
 			node_del(n, &rwatch_list);
 			node_free(n);
-			notice(opersvs.nick, origin, "Removed \2%s\2 from regex watch list.", pattern);
-			snoop("RWATCH:DEL: \2%s\2 by \2%s\2", pattern, origin);
-			logcommand_user(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "RWATCH DEL %s", pattern);
+			command_success_nodata(si, "Removed \2%s\2 from regex watch list.", pattern);
+			snoop("RWATCH:DEL: \2%s\2 by \2%s\2", pattern, get_oper_name(si));
+			logcommand(si, CMDLOG_ADMIN, "RWATCH DEL %s", pattern);
 			write_rwatchdb();
 			return;
 		}
 	}
 
-	notice(opersvs.nick, origin, "\2%s\2 not found in regex watch list.", pattern);
+	command_fail(si, fault_nochange, "\2%s\2 not found in regex watch list.", pattern);
 }
 
-static void os_cmd_rwatch_list(char *origin, char *channel)
+static void os_cmd_rwatch_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	node_t *n;
 
@@ -328,37 +338,38 @@ static void os_cmd_rwatch_list(char *origin, char *channel)
 	{
 		rwatch_t *rw = n->data;
 
-		notice(opersvs.nick, origin, "%s (%s%s%s) - %s",
+		command_success_nodata(si, "%s (%s%s%s) - %s",
 				rw->regex,
 				rw->reflags & AREGEX_ICASE ? "i" : "",
 				rw->actions & RWACT_SNOOP ? "S" : "",
 				rw->actions & RWACT_KLINE ? "\2K\2" : "",
 				rw->reason);
 	}
-	notice(opersvs.nick, origin, "End of RWATCH LIST");
-	logcommand_user(opersvs.me, user_find_named(origin), CMDLOG_GET, "RWATCH LIST");
+	command_success_nodata(si, "End of RWATCH LIST");
+	logcommand(si, CMDLOG_GET, "RWATCH LIST");
 }
 
-static void os_cmd_rwatch_set(char *origin, char *args)
+static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[])
 {
 	node_t *n, *tn;
 	char *pattern;
 	char *opts;
 	int addflags = 0, removeflags = 0;
 	int flags;
+	char *args = parv[0];
 
 	if (args == NULL)
 	{
-		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "RWATCH SET");
-		notice(opersvs.nick, origin, "Syntax: RWATCH SET /<regex>/[i] [KLINE] [NOKLINE] [SNOOP] [NOSNOOP]");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RWATCH SET");
+		command_fail(si, fault_needmoreparams, "Syntax: RWATCH SET /<regex>/[i] [KLINE] [NOKLINE] [SNOOP] [NOSNOOP]");
 		return;
 	}
 
 	pattern = regex_extract(args, &args, &flags);
 	if (pattern == NULL)
 	{
-		notice(opersvs.nick, origin, STR_INVALID_PARAMS, "RWATCH SET");
-		notice(opersvs.nick, origin, "Syntax: RWATCH SET /<regex>/[i] [KLINE] [NOKLINE] [SNOOP] [NOSNOOP]");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "RWATCH SET");
+		command_fail(si, fault_badparams, "Syntax: RWATCH SET /<regex>/[i] [KLINE] [NOKLINE] [SNOOP] [NOSNOOP]");
 		return;
 	}
 	while (*args == ' ')
@@ -366,8 +377,8 @@ static void os_cmd_rwatch_set(char *origin, char *args)
 
 	if (*args == '\0')
 	{
-		notice(opersvs.nick, origin, STR_INSUFFICIENT_PARAMS, "RWATCH SET");
-		notice(opersvs.nick, origin, "Syntax: RWATCH SET /<regex>/[i] [KLINE] [NOKLINE] [SNOOP] [NOSNOOP]");
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RWATCH SET");
+		command_fail(si, fault_needmoreparams, "Syntax: RWATCH SET /<regex>/[i] [KLINE] [NOKLINE] [SNOOP] [NOSNOOP]");
 		return;
 	}
 
@@ -385,17 +396,17 @@ static void os_cmd_rwatch_set(char *origin, char *args)
 
 		if (*args != '\0' && *args != ' ')
 		{
-			notice(opersvs.nick, origin, STR_INVALID_PARAMS, "RWATCH SET");
-			notice(opersvs.nick, origin, "Syntax: RWATCH SET /<regex>/[i] [KLINE] [NOKLINE] [SNOOP] [NOSNOOP]");
+			command_fail(si, fault_badparams, STR_INVALID_PARAMS, "RWATCH SET");
+			command_fail(si, fault_badparams, "Syntax: RWATCH SET /<regex>/[i] [KLINE] [NOKLINE] [SNOOP] [NOSNOOP]");
 			return;
 		}
 		while (*args == ' ')
 			args++;
 	}
 
-	if ((addflags | removeflags) & RWACT_KLINE && !has_priv_user(user_find_named(origin), PRIV_MASS_AKILL))
+	if ((addflags | removeflags) & RWACT_KLINE && !has_priv(si, PRIV_MASS_AKILL))
 	{
-		notice(opersvs.nick, origin, "You do not have %s privilege.", PRIV_MASS_AKILL);
+		command_fail(si, fault_noprivs, "You do not have %s privilege.", PRIV_MASS_AKILL);
 		return;
 	}
 
@@ -407,24 +418,24 @@ static void os_cmd_rwatch_set(char *origin, char *args)
 		{
 			if (((~rw->actions & addflags) | (rw->actions & removeflags)) == 0)
 			{
-				notice(opersvs.nick, origin, "Options for \2%s\2 unchanged.", pattern);
+				command_fail(si, fault_nochange, "Options for \2%s\2 unchanged.", pattern);
 				return;
 			}
 			rw->actions |= addflags;
 			rw->actions &= ~removeflags;
-			notice(opersvs.nick, origin, "Set options \2%s\2 on \2%s\2.", opts, pattern);
-			snoop("RWATCH:SET: \2%s\2 \2%s\2 by \2%s\2", pattern, opts, origin);
+			command_success_nodata(si, "Set options \2%s\2 on \2%s\2.", opts, pattern);
+			snoop("RWATCH:SET: \2%s\2 \2%s\2 by \2%s\2", pattern, opts, get_oper_name(si));
 			if (addflags & RWACT_KLINE)
-				wallops("\2%s\2 enabled kline on regex watch pattern \2%s\2", origin, pattern);
+				wallops("\2%s\2 enabled kline on regex watch pattern \2%s\2", get_oper_name(si), pattern);
 			if (removeflags & RWACT_KLINE)
-				wallops("\2%s\2 disabled kline on regex watch pattern \2%s\2", origin, pattern);
-			logcommand_user(opersvs.me, user_find_named(origin), CMDLOG_ADMIN, "RWATCH SET %s %s", pattern, opts);
+				wallops("\2%s\2 disabled kline on regex watch pattern \2%s\2", get_oper_name(si), pattern);
+			logcommand(si, CMDLOG_ADMIN, "RWATCH SET %s %s", pattern, opts);
 			write_rwatchdb();
 			return;
 		}
 	}
 
-	notice(opersvs.nick, origin, "\2%s\2 not found in regex watch list.", pattern);
+	command_fail(si, fault_nosuch_target, "\2%s\2 not found in regex watch list.", pattern);
 }
 
 static void rwatch_newuser(void *vptr)
