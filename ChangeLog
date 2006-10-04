@@ -1,3 +1,14 @@
+jilles      2006/10/04 21:46:31 UTC	(20061004-6659)
+  Log:
+  nickserv logout: Make DESOPER notice show nick, not
+  get_oper_name which would show the account name another time.
+  This is consistent with the other SOPER/DESOPER notices.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/logout.c (File Modified) 
+
+
 jilles      2006/10/04 21:22:47 UTC	(20061004-6657)
   Log:
   Use si->service instead of YYYYsvs.me in some places.
