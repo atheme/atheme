@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 6617 2006-10-01 22:11:49Z jilles $
+ * $Id: set.c 6663 2006-10-04 23:43:58Z jilles $
  */
 
 #include "atheme.h"
@@ -12,27 +12,61 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 6617 2006-10-01 22:11:49Z jilles $",
+	"$Id: set.c 6663 2006-10-04 23:43:58Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-/* struct for set command hash table */
-struct set_command_
-{
-  const char *name;
-  const char *access;
-  void (*func)(char *origin, char *name, char *params);
-};
-
-static struct set_command_ *set_cmd_find(char *origin, char *command);
-
+static void cs_help_set(sourceinfo_t *si);
 static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
+
+static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_keeptopic(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_secure(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_staffonly(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_set = { "SET", "Sets various control flags.",
                         AC_NONE, 3, cs_cmd_set };
 
+command_t cs_set_founder   = { "FOUNDER",   "Transfers foundership of a channel.",                          AC_NONE, 2, cs_cmd_set_founder    };
+command_t cs_set_mlock     = { "MLOCK",     "Sets channel mode lock.",                                      AC_NONE, 2, cs_cmd_set_mlock      };
+command_t cs_set_secure    = { "SECURE",    "Prevents unauthorized users from gaining operator status.",    AC_NONE, 2, cs_cmd_set_secure     };
+command_t cs_set_verbose   = { "VERBOSE",   "Notifies channel about access list modifications.",            AC_NONE, 2, cs_cmd_set_verbose    };
+command_t cs_set_url       = { "URL",       "Sets the channel URL.",                                        AC_NONE, 2, cs_cmd_set_url        };
+command_t cs_set_entrymsg  = { "ENTRYMSG",  "Sets the channel's entry message.",                            AC_NONE, 2, cs_cmd_set_entrymsg   };
+command_t cs_set_property  = { "PROPERTY",  "Manipulates channel metadata.",                                AC_NONE, 2, cs_cmd_set_property   };
+command_t cs_set_email     = { "EMAIL",     "Sets the channel e-mail address.",                             AC_NONE, 2, cs_cmd_set_email      };
+command_t cs_set_keeptopic = { "KEEPTOPIC", "Enables topic retention.",                                     AC_NONE, 2, cs_cmd_set_keeptopic  };
+command_t cs_set_topiclock = { "TOPICLOCK", "Restricts who can change the topic.",                          AC_NONE, 2, cs_cmd_set_topiclock  };
+command_t cs_set_fantasy   = { "FANTASY",   "Allows or disallows in-channel commands.",                     AC_NONE, 2, cs_cmd_set_fantasy    };
+command_t cs_set_staffonly = { "STAFFONLY", "Sets the channel as staff-only. (Non staff is kickbanned.)",   PRIV_CHAN_ADMIN, 2, cs_cmd_set_staffonly  };
+
+command_t *cs_set_commands[] = {
+	&cs_set_founder,
+	&cs_set_mlock,
+	&cs_set_secure,
+	&cs_set_verbose,
+	&cs_set_url,
+	&cs_set_entrymsg,
+	&cs_set_property,
+	&cs_set_email,
+	&cs_set_keeptopic,
+	&cs_set_topiclock,
+	&cs_set_fantasy,
+	&cs_set_staffonly,
+	NULL
+};
+
 list_t *cs_cmdtree;
 list_t *cs_helptree;
+list_t cs_set_cmdtree;
 
 void _modinit(module_t *m)
 {
@@ -40,7 +74,9 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
         command_add(&cs_set, cs_cmdtree);
+	command_add_many(cs_set_commands, &cs_set_cmdtree);
 
+	help_addentry(cs_helptree, "SET", NULL, cs_help_set);
 	help_addentry(cs_helptree, "SET FOUNDER", "help/cservice/set_founder", NULL);
 	help_addentry(cs_helptree, "SET MLOCK", "help/cservice/set_mlock", NULL);
 	help_addentry(cs_helptree, "SET SECURE", "help/cservice/set_secure", NULL);
@@ -58,7 +94,9 @@ void _modinit(module_t *m)
 void _moddeinit()
 {
 	command_delete(&cs_set, cs_cmdtree);
+	command_delete_many(cs_set_commands, &cs_set_cmdtree);
 
+	help_delentry(cs_helptree, "SET");
 	help_delentry(cs_helptree, "SET FOUNDER");
 	help_delentry(cs_helptree, "SET MLOCK");
 	help_delentry(cs_helptree, "SET SECURE");
@@ -73,52 +111,69 @@ void _moddeinit()
 	help_delentry(cs_helptree, "SET FANTASY");
 }
 
+static void cs_help_set(sourceinfo_t *si)
+{
+	command_success_nodata(si, "Help for \2SET\2:");
+	command_success_nodata(si, " ");
+	command_success_nodata(si, "SET allows you to set various control flags");
+	command_success_nodata(si, "for channels that change the way certain");
+	command_success_nodata(si, "operations are performed on them.");
+	command_success_nodata(si, " ");
+	command_help(si, &cs_set_cmdtree);
+	command_success_nodata(si, " ");
+	command_success_nodata(si, "For more specific help use \2/msg %s HELP SET \37command\37\2.", si->service->disp);
+}
+
 /* SET <#channel> <setting> <parameters> */
 static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *name = parv[0];
-	char *setting = parv[1];
-	char *params = parv[2];
-	struct set_command_ *c;
+	char *chan;
+	char *cmd;
+	command_t *c;
 
-	if (!name || !setting || !params)
+	if (parc < 3)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SET");
 		command_fail(si, fault_needmoreparams, "Syntax: SET <#channel> <setting> <parameters>");
 		return;
 	}
 
-	/* take the command through the hash table */
-	if ((c = set_cmd_find(si->su->nick, setting)))
+	if (parv[0][0] == '#')
+		chan = parv[0], cmd = parv[1];
+	else if (parv[1][0] == '#')
+		cmd = parv[0], chan = parv[1];
+	else
 	{
-		if (c->func)
-			c->func(si->su->nick, name, params);
-		else
-			command_fail(si, fault_nosuch_key, "Invalid setting.  Please use \2HELP\2 for help.");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SET");
+		command_fail(si, fault_badparams, "Syntax: SET <#channel> <setting> <parameters>");
+		return;
 	}
+
+	c = command_find(&cs_set_cmdtree, cmd);
+	if (c == NULL)
+	{
+		command_fail(si, fault_badparams, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", si->service->disp);
+		return;
+	}
+
+	parv[1] = chan;
+	command_exec(si->service, si, c, parc - 1, parv + 1);
 }
 
-static void cs_set_email(char *origin, char *name, char *params)
+static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
 {
-        user_t *u = user_find_named(origin);
         mychan_t *mc;
-        char *mail = params;
+        char *mail = parv[1];
 
-        if (*name != '#')
+        if (!(mc = mychan_find(parv[0])))
         {
-                notice(chansvs.nick, origin, STR_INVALID_PARAMS, "EMAIL");
+                command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", parv[0]);
                 return;
         }
 
-        if (!(mc = mychan_find(name)))
+        if (!chanacs_source_has_flag(mc, si, CA_SET))
         {
-                notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
-                return;
-        }
-
-        if (!chanacs_user_has_flag(mc, u, CA_SET))
-        {
-                notice(chansvs.nick, origin, "You are not authorized to execute this command.");
+                command_fail(si, fault_noprivs, "You are not authorized to execute this command.");
                 return;
         }
 
@@ -127,55 +182,48 @@ static void cs_set_email(char *origin, char *name, char *params)
                 if (metadata_find(mc, METADATA_CHANNEL, "email"))
                 {
                         metadata_delete(mc, METADATA_CHANNEL, "email");
-                        notice(chansvs.nick, origin, "The e-mail address for \2%s\2 was deleted.", mc->name);
-			logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET EMAIL NONE", mc->name);
+                        command_success_nodata(si, "The e-mail address for \2%s\2 was deleted.", mc->name);
+			logcommand(si, CMDLOG_SET, "%s SET EMAIL NONE", mc->name);
                         return;
                 }
 
-                notice(chansvs.nick, origin, "The e-mail address for \2%s\2 was not set.", mc->name);
+                command_fail(si, fault_nochange, "The e-mail address for \2%s\2 was not set.", mc->name);
                 return;
         }
 
         if (strlen(mail) >= EMAILLEN)
         {
-                notice(chansvs.nick, origin, STR_INVALID_PARAMS, "EMAIL");
+                command_fail(si, fault_badparams, STR_INVALID_PARAMS, "EMAIL");
                 return;
         }
 
         if (!validemail(mail))
         {
-                notice(chansvs.nick, origin, "\2%s\2 is not a valid e-mail address.", mail);
+                command_fail(si, fault_badparams, "\2%s\2 is not a valid e-mail address.", mail);
                 return;
         }
 
         /* we'll overwrite any existing metadata */
         metadata_add(mc, METADATA_CHANNEL, "email", mail);
 
-	logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET EMAIL %s", mc->name, mail);
-        notice(chansvs.nick, origin, "The e-mail address for \2%s\2 has been set to \2%s\2.", name, mail);
+	logcommand(si, CMDLOG_SET, "%s SET EMAIL %s", mc->name, mail);
+        command_success_nodata(si, "The e-mail address for \2%s\2 has been set to \2%s\2.", parv[0], mail);
 }
 
-static void cs_set_url(char *origin, char *name, char *params)
+static void cs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
 	mychan_t *mc;
-	char *url = params;
+	char *url = parv[1];
 
-	if (*name != '#')
+	if (!(mc = mychan_find(parv[0])))
 	{
-		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "URL");
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", parv[0]);
 		return;
 	}
 
-	if (!(mc = mychan_find(name)))
+	if (!chanacs_source_has_flag(mc, si, CA_SET))
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
-		return;
-	}
-
-	if (!chanacs_user_has_flag(mc, u, CA_SET))
-	{
-		notice(chansvs.nick, origin, "You are not authorized to execute this command.");
+		command_fail(si, fault_noprivs, "You are not authorized to execute this command.");
 		return;
 	}
 
@@ -188,41 +236,40 @@ static void cs_set_url(char *origin, char *name, char *params)
 		if (metadata_find(mc, METADATA_CHANNEL, "url"))
 		{
 			metadata_delete(mc, METADATA_CHANNEL, "url");
-			logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET URL NONE", mc->name);
-			notice(chansvs.nick, origin, "The URL for \2%s\2 has been cleared.", name);
+			logcommand(si, CMDLOG_SET, "%s SET URL NONE", mc->name);
+			command_success_nodata(si, "The URL for \2%s\2 has been cleared.", parv[0]);
 			return;
 		}
 
-		notice(chansvs.nick, origin, "The URL for \2%s\2 was not set.", name);
+		command_fail(si, fault_nochange, "The URL for \2%s\2 was not set.", parv[0]);
 		return;
 	}
 
 	/* we'll overwrite any existing metadata */
 	metadata_add(mc, METADATA_CHANNEL, "url", url);
 
-	logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET URL %s", mc->name, url);
-	notice(chansvs.nick, origin, "The URL of \2%s\2 has been set to \2%s\2.", name, url);
+	logcommand(si, CMDLOG_SET, "%s SET URL %s", mc->name, url);
+	command_success_nodata(si, "The URL of \2%s\2 has been set to \2%s\2.", parv[0], url);
 }
 
-static void cs_set_entrymsg(char *origin, char *name, char *params)
+static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
 	mychan_t *mc;
 
-	if (!(mc = mychan_find(name)))
+	if (!(mc = mychan_find(parv[0])))
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", parv[0]);
 		return;
 	}
 
-	if (!chanacs_user_has_flag(mc, u, CA_SET))
+	if (!chanacs_source_has_flag(mc, si, CA_SET))
 	{
-		notice(chansvs.nick, origin, "You are not authorized to execute this command.");
+		command_fail(si, fault_noprivs, "You are not authorized to execute this command.");
 		return;
 	}
 
 	/* XXX: I'd like to be able to use /CS SET #channel ENTRYMSG to clear but CS SET won't let me... */
-	if (!params || !strcasecmp("OFF", params) || !strcasecmp("NONE", params))
+	if (!parv[1] || !strcasecmp("OFF", parv[1]) || !strcasecmp("NONE", parv[1]))
 	{
 		/* entrymsg is private because users won't see it if they're AKICKED,
 		 * if the channel is +i, or if the channel is STAFFONLY
@@ -230,20 +277,20 @@ static void cs_set_entrymsg(char *origin, char *name, char *params)
 		if (metadata_find(mc, METADATA_CHANNEL, "private:entrymsg"))
 		{
 			metadata_delete(mc, METADATA_CHANNEL, "private:entrymsg");
-			logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET ENTRYMSG NONE", mc->name, params);
-			notice(chansvs.nick, origin, "The entry message for \2%s\2 has been cleared.", name);
+			logcommand(si, CMDLOG_SET, "%s SET ENTRYMSG NONE", mc->name, parv[1]);
+			command_success_nodata(si, "The entry message for \2%s\2 has been cleared.", parv[0]);
 			return;
 		}
 
-		notice(chansvs.nick, origin, "The entry message for \2%s\2 was not set.", name);
+		command_fail(si, fault_nochange, "The entry message for \2%s\2 was not set.", parv[0]);
 		return;
 	}
 
 	/* we'll overwrite any existing metadata */
-	metadata_add(mc, METADATA_CHANNEL, "private:entrymsg", params);
+	metadata_add(mc, METADATA_CHANNEL, "private:entrymsg", parv[1]);
 
-	logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET ENTRYMSG %s", mc->name, params);
-	notice(chansvs.nick, origin, "The entry message for \2%s\2 has been set to \2%s\2", name, params);
+	logcommand(si, CMDLOG_SET, "%s SET ENTRYMSG %s", mc->name, parv[1]);
+	command_success_nodata(si, "The entry message for \2%s\2 has been set to \2%s\2", parv[0], parv[1]);
 }
 
 /*
@@ -263,44 +310,31 @@ static void cs_set_entrymsg(char *origin, char *name, char *params)
  * undesirable channels (e.g. registering #kidsex and transferring to an
  * innocent user.) Originally, we used channel passwords for this purpose.
  */
-static void cs_set_founder(char *origin, char *name, char *params)
+static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
-	char *newfounder = params;
+	char *newfounder = parv[1];
 	myuser_t *tmu;
 	mychan_t *mc;
 
-	if (!u->myuser)
+	if (!si->smu)
 	{
-		notice(chansvs.nick, origin, "You are not logged in.");
-		return;
-	}
-
-	if (!name || !newfounder)
-	{
-		notice(chansvs.nick, origin, STR_INSUFFICIENT_PARAMS, "FOUNDER");
-		notice(chansvs.nick, origin, "Usage: SET <#channel> FOUNDER <new founder>");
-	}
-
-	if (*name != '#')
-	{
-		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "FOUNDER");
+		command_fail(si, fault_noprivs, "You are not logged in.");
 		return;
 	}
 
 	if (!(tmu = myuser_find_ext(newfounder)))
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is not registered.", newfounder);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", newfounder);
 		return;
 	}
 
-	if (!(mc = mychan_find(name)))
+	if (!(mc = mychan_find(parv[0])))
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", parv[0]);
 		return;
 	}
 
-	if (!is_founder(mc, u->myuser))
+	if (!is_founder(mc, si->smu))
 	{
 		/* User is not currently the founder.
 		 * Maybe he is trying to complete a transfer?
@@ -308,11 +342,11 @@ static void cs_set_founder(char *origin, char *name, char *params)
 		metadata_t *md;
 
 		/* XXX is it portable to compare times like that? */
-		if ((u->myuser == tmu)
+		if ((si->smu == tmu)
 			&& (md = metadata_find(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder"))
-			&& !irccasecmp(md->value, u->myuser->name)
+			&& !irccasecmp(md->value, si->smu->name)
 			&& (md = metadata_find(mc, METADATA_CHANNEL, "private:verify:founderchg:timestamp"))
-			&& (atol(md->value) >= u->myuser->registered))
+			&& (atol(md->value) >= si->smu->registered))
 		{
 			mychan_t *tmc;
 			node_t *n;
@@ -332,17 +366,17 @@ static void cs_set_founder(char *origin, char *name, char *params)
 
 			if ((tcnt >= me.maxchans) && !has_priv_myuser(tmu, PRIV_REG_NOLIMIT))
 			{
-				notice(chansvs.nick, origin, "\2%s\2 has too many channels registered.", tmu->name);
+				command_fail(si, fault_toomany, "\2%s\2 has too many channels registered.", tmu->name);
 				return;
 			}
 
 			if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 			{
-				notice(chansvs.nick, origin, "\2%s\2 is closed; it cannot be transferred.", mc->name);
+				command_fail(si, fault_noprivs, "\2%s\2 is closed; it cannot be transferred.", mc->name);
 				return;
 			}
 
-			logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET FOUNDER %s (completing transfer from %s)", mc->name, tmu->name, mc->founder->name);
+			logcommand(si, CMDLOG_SET, "%s SET FOUNDER %s (completing transfer from %s)", mc->name, tmu->name, mc->founder->name);
 			verbose(mc, "Foundership transferred from \2%s\2 to \2%s\2.", mc->founder->name, tmu->name);
 
 			/* add target as founder... */
@@ -355,13 +389,13 @@ static void cs_set_founder(char *origin, char *name, char *params)
 
 			/* done! */
 			snoop("SET:FOUNDER: \2%s\2 -> \2%s\2", mc->name, tmu->name);
-			notice(chansvs.nick, origin, "Transfer complete: "
+			command_success_nodata(si, "Transfer complete: "
 				"\2%s\2 has been set as founder for \2%s\2.", tmu->name, mc->name);
 
 			return;
 		}
 
-		notice(chansvs.nick, origin, "You are not the founder of \2%s\2.", mc->name);
+		command_fail(si, fault_noprivs, "You are not the founder of \2%s\2.", mc->name);
 		return;
 	}
 
@@ -377,38 +411,37 @@ static void cs_set_founder(char *origin, char *name, char *params)
 			metadata_delete(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder");
 			metadata_delete(mc, METADATA_CHANNEL, "private:verify:founderchg:timestamp");
 
-			logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET FOUNDER %s (cancelling transfer)", mc->name, tmu->name);
-			notice(chansvs.nick, origin, "The transfer of \2%s\2 has been cancelled.", mc->name);
+			logcommand(si, CMDLOG_SET, "%s SET FOUNDER %s (cancelling transfer)", mc->name, tmu->name);
+			command_success_nodata(si, "The transfer of \2%s\2 has been cancelled.", mc->name);
 
 			return;
 		}
 
-		notice(chansvs.nick, origin, "\2%s\2 is already the founder of \2%s\2.", tmu->name, mc->name);
+		command_fail(si, fault_nochange, "\2%s\2 is already the founder of \2%s\2.", tmu->name, mc->name);
 		return;
 	}
 
 	/* check for lazy cancellation of outstanding requests */
 	if (metadata_find(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder"))
 	{
-		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET FOUNDER %s (cancelling old transfer and initializing transfer)", mc->name, tmu->name);
-		notice(chansvs.nick, origin, "The previous transfer request for \2%s\2 has been cancelled.", mc->name);
+		logcommand(si, CMDLOG_SET, "%s SET FOUNDER %s (cancelling old transfer and initializing transfer)", mc->name, tmu->name);
+		command_success_nodata(si, "The previous transfer request for \2%s\2 has been cancelled.", mc->name);
 	}
 	else
-		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET FOUNDER %s (initializing transfer)", mc->name, tmu->name);
+		logcommand(si, CMDLOG_SET, "%s SET FOUNDER %s (initializing transfer)", mc->name, tmu->name);
 
 	metadata_add(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder", tmu->name);
 	metadata_add(mc, METADATA_CHANNEL, "private:verify:founderchg:timestamp", itoa(time(NULL)));
 
-	notice(chansvs.nick, origin, "\2%s\2 can now take ownership of \2%s\2.", tmu->name, mc->name);
-	notice(chansvs.nick, origin, "In order to complete the transfer, \2%s\2 must perform the following command:", tmu->name);
-	notice(chansvs.nick, origin, "   \2/msg %s SET %s FOUNDER %s\2", chansvs.nick, mc->name, tmu->name);
-	notice(chansvs.nick, origin, "After that command is issued, the channel will be transferred.", mc->name);
-	notice(chansvs.nick, origin, "To cancel the transfer, use \2/msg %s SET %s FOUNDER %s\2", chansvs.nick, mc->name, mc->founder->name);
+	command_success_nodata(si, "\2%s\2 can now take ownership of \2%s\2.", tmu->name, mc->name);
+	command_success_nodata(si, "In order to complete the transfer, \2%s\2 must perform the following command:", tmu->name);
+	command_success_nodata(si, "   \2/msg %s SET %s FOUNDER %s\2", chansvs.nick, mc->name, tmu->name);
+	command_success_nodata(si, "After that command is issued, the channel will be transferred.", mc->name);
+	command_success_nodata(si, "To cancel the transfer, use \2/msg %s SET %s FOUNDER %s\2", chansvs.nick, mc->name, mc->founder->name);
 }
 
-static void cs_set_mlock(char *origin, char *name, char *params)
+static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
 	mychan_t *mc;
 	char modebuf[32], *end, c;
 	int add = -1;
@@ -420,24 +453,24 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 	char newext[512];
 	char ext_plus[MAXEXTMODES + 1], ext_minus[MAXEXTMODES + 1];
 	int i;
-	char *letters = strtok(params, " ");
+	char *letters = strtok(parv[1], " ");
 	char *arg;
 
-	if (*name != '#' || !letters)
+	if (!letters)
 	{
-		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "MLOCK");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "MLOCK");
 		return;
 	}
 
-	if (!(mc = mychan_find(name)))
+	if (!(mc = mychan_find(parv[0])))
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", parv[0]);
 		return;
 	}
 
-	if (!chanacs_user_has_flag(mc, u, CA_SET))
+	if (!chanacs_source_has_flag(mc, si, CA_SET))
 	{
-		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
+		command_fail(si, fault_noprivs, "You are not authorized to perform this command.");
 		return;
 	}
 
@@ -450,7 +483,7 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 	ext_minus[0] = '\0';
 	newlock_key[0] = '\0';
 
-	mask = has_priv_user(u, PRIV_CHAN_CMODES) ? 0 : ircd->oper_only_modes;
+	mask = has_priv(si, PRIV_CHAN_CMODES) ? 0 : ircd->oper_only_modes;
 
 	while (*letters)
 	{
@@ -476,17 +509,17 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 				  arg = strtok(NULL, " ");
 				  if (!arg)
 				  {
-					  notice(chansvs.nick, origin, "You need to specify which key to MLOCK.");
+					  command_fail(si, fault_badparams, "You need to specify which key to MLOCK.");
 					  return;
 				  }
 				  else if (strlen(arg) >= KEYLEN)
 				  {
-					  notice(chansvs.nick, origin, "MLOCK key is too long (%d > %d).", strlen(arg), KEYLEN - 1);
+					  command_fail(si, fault_badparams, "MLOCK key is too long (%d > %d).", strlen(arg), KEYLEN - 1);
 					  return;
 				  }
 				  else if (strchr(arg, ',') || arg[0] == ':')
 				  {
-					  notice(chansvs.nick, origin, "MLOCK key contains invalid characters.");
+					  command_fail(si, fault_badparams, "MLOCK key contains invalid characters.");
 					  return;
 				  }
 
@@ -507,13 +540,13 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 				  arg = strtok(NULL, " ");
 				  if(!arg)
 				  {
-					  notice(chansvs.nick, origin, "You need to specify what limit to MLOCK.");
+					  command_fail(si, fault_badparams, "You need to specify what limit to MLOCK.");
 					  return;
 				  }
 
 				  if (atol(arg) <= 0)
 				  {
-					  notice(chansvs.nick, origin, "You must specify a positive integer for limit.");
+					  command_fail(si, fault_badparams, "You must specify a positive integer for limit.");
 					  return;
 				  }
 
@@ -549,17 +582,17 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 						  arg = strtok(NULL, " ");
 						  if(!arg)
 						  {
-							  notice(chansvs.nick, origin, "You need to specify a value for mode +%c.", c);
+							  command_fail(si, fault_badparams, "You need to specify a value for mode +%c.", c);
 							  return;
 						  }
 						  if (strlen(arg) > 350)
 						  {
-							  notice(chansvs.nick, origin, "Invalid value \2%s\2 for mode +%c.", arg, c);
+							  command_fail(si, fault_badparams, "Invalid value \2%s\2 for mode +%c.", arg, c);
 							  return;
 						  }
-						  if ((mc->chan->extmodes[i] == NULL || strcmp(mc->chan->extmodes[i], arg)) && !ignore_mode_list[i].check(arg, mc->chan, mc, u, u->myuser))
+						  if ((mc->chan->extmodes[i] == NULL || strcmp(mc->chan->extmodes[i], arg)) && !ignore_mode_list[i].check(arg, mc->chan, mc, si->su, si->smu))
 						  {
-							  notice(chansvs.nick, origin, "Invalid value \2%s\2 for mode +%c.", arg, c);
+							  command_fail(si, fault_badparams, "Invalid value \2%s\2 for mode +%c.", arg, c);
 							  return;
 						  }
 						  strlcpy(newlock_ext[i], arg, sizeof newlock_ext[i]);
@@ -577,7 +610,7 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 
 	if (strlen(newext) > 450)
 	{
-		notice(chansvs.nick, origin, "Mode lock is too long.");
+		command_fail(si, fault_badparams, "Mode lock is too long.");
 		return;
 	}
 
@@ -628,13 +661,13 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 
 	if (*modebuf)
 	{
-		notice(chansvs.nick, origin, "The MLOCK for \2%s\2 has been set to \2%s\2.", mc->name, modebuf);
-		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET MLOCK %s", mc->name, modebuf);
+		command_success_nodata(si, "The MLOCK for \2%s\2 has been set to \2%s\2.", mc->name, modebuf);
+		logcommand(si, CMDLOG_SET, "%s SET MLOCK %s", mc->name, modebuf);
 	}
 	else
 	{
-		notice(chansvs.nick, origin, "The MLOCK for \2%s\2 has been removed.", mc->name);
-		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET MLOCK NONE", mc->name);
+		command_success_nodata(si, "The MLOCK for \2%s\2 has been removed.", mc->name);
+		logcommand(si, CMDLOG_SET, "%s SET MLOCK NONE", mc->name);
 	}
 
 	check_modes(mc, TRUE);
@@ -642,458 +675,410 @@ static void cs_set_mlock(char *origin, char *name, char *params)
 	return;
 }
 
-static void cs_set_keeptopic(char *origin, char *name, char *params)
+static void cs_cmd_set_keeptopic(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
 	mychan_t *mc;
 
-	if (*name != '#')
+	if (!(mc = mychan_find(parv[0])))
 	{
-		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "KEEPTOPIC");
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", parv[0]);
 		return;
 	}
 
-	if (!(mc = mychan_find(name)))
+	if (!chanacs_source_has_flag(mc, si, CA_SET))
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
+		command_fail(si, fault_noprivs, "You are not authorized to perform this command.");
 		return;
 	}
 
-	if (!chanacs_user_has_flag(mc, u, CA_SET))
-	{
-		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
-		return;
-	}
-
-	if (!strcasecmp("ON", params))
+	if (!strcasecmp("ON", parv[1]))
 	{
 		if (MC_KEEPTOPIC & mc->flags)
                 {
-                        notice(chansvs.nick, origin, "The \2KEEPTOPIC\2 flag is already set for \2%s\2.", mc->name);
+                        command_fail(si, fault_nochange, "The \2KEEPTOPIC\2 flag is already set for \2%s\2.", mc->name);
                         return;
                 }
 
-		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET KEEPTOPIC ON", mc->name);
+		logcommand(si, CMDLOG_SET, "%s SET KEEPTOPIC ON", mc->name);
 
                 mc->flags |= MC_KEEPTOPIC;
 
-                notice(chansvs.nick, origin, "The \2KEEPTOPIC\2 flag has been set for \2%s\2.", mc->name);
+                command_success_nodata(si, "The \2KEEPTOPIC\2 flag has been set for \2%s\2.", mc->name);
 
                 return;
         }
 
-        else if (!strcasecmp("OFF", params))
+        else if (!strcasecmp("OFF", parv[1]))
         {
                 if (!(MC_KEEPTOPIC & mc->flags))
                 {
-                        notice(chansvs.nick, origin, "The \2KEEPTOPIC\2 flag is not set for \2%s\2.", mc->name);
+                        command_fail(si, fault_nochange, "The \2KEEPTOPIC\2 flag is not set for \2%s\2.", mc->name);
                         return;
                 }
 
-		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET KEEPTOPIC OFF", mc->name);
+		logcommand(si, CMDLOG_SET, "%s SET KEEPTOPIC OFF", mc->name);
 
                 mc->flags &= ~(MC_KEEPTOPIC | MC_TOPICLOCK);
 
-                notice(chansvs.nick, origin, "The \2KEEPTOPIC\2 flag has been removed for \2%s\2.", mc->name);
+                command_success_nodata(si, "The \2KEEPTOPIC\2 flag has been removed for \2%s\2.", mc->name);
 
                 return;
         }
 
         else
         {
-                notice(chansvs.nick, origin, STR_INVALID_PARAMS, "KEEPTOPIC");
+                command_fail(si, fault_badparams, STR_INVALID_PARAMS, "KEEPTOPIC");
                 return;
         }
 }
 
-static void cs_set_topiclock(char *origin, char *name, char *params)
+static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
 	mychan_t *mc;
 
-	if (*name != '#')
+	if (!(mc = mychan_find(parv[0])))
 	{
-		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "TOPICLOCK");
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", parv[0]);
 		return;
 	}
 
-	if (!(mc = mychan_find(name)))
+	if (!chanacs_source_has_flag(mc, si, CA_SET))
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
+		command_fail(si, fault_noprivs, "You are not authorized to perform this command.");
 		return;
 	}
 
-	if (!chanacs_user_has_flag(mc, u, CA_SET))
-	{
-		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
-		return;
-	}
-
-	if (!strcasecmp("ON", params))
+	if (!strcasecmp("ON", parv[1]))
 	{
 		if (MC_TOPICLOCK & mc->flags)
                 {
-                        notice(chansvs.nick, origin, "The \2TOPICLOCK\2 flag is already set for \2%s\2.", mc->name);
+                        command_fail(si, fault_nochange, "The \2TOPICLOCK\2 flag is already set for \2%s\2.", mc->name);
                         return;
                 }
 
-		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET TOPICLOCK ON", mc->name);
+		logcommand(si, CMDLOG_SET, "%s SET TOPICLOCK ON", mc->name);
 
                 mc->flags |= MC_KEEPTOPIC | MC_TOPICLOCK;
 
-                notice(chansvs.nick, origin, "The \2TOPICLOCK\2 flag has been set for \2%s\2.", mc->name);
+                command_success_nodata(si, "The \2TOPICLOCK\2 flag has been set for \2%s\2.", mc->name);
 
                 return;
         }
 
-        else if (!strcasecmp("OFF", params))
+        else if (!strcasecmp("OFF", parv[1]))
         {
                 if (!(MC_TOPICLOCK & mc->flags))
                 {
-                        notice(chansvs.nick, origin, "The \2TOPICLOCK\2 flag is not set for \2%s\2.", mc->name);
+                        command_fail(si, fault_nochange, "The \2TOPICLOCK\2 flag is not set for \2%s\2.", mc->name);
                         return;
                 }
 
-		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET TOPICLOCK OFF", mc->name);
+		logcommand(si, CMDLOG_SET, "%s SET TOPICLOCK OFF", mc->name);
 
                 mc->flags &= ~MC_TOPICLOCK;
 
-                notice(chansvs.nick, origin, "The \2TOPICLOCK\2 flag has been removed for \2%s\2.", mc->name);
+                command_success_nodata(si, "The \2TOPICLOCK\2 flag has been removed for \2%s\2.", mc->name);
 
                 return;
         }
 
         else
         {
-                notice(chansvs.nick, origin, STR_INVALID_PARAMS, "TOPICLOCK");
+                command_fail(si, fault_badparams, STR_INVALID_PARAMS, "TOPICLOCK");
                 return;
         }
 }
 
-static void cs_set_secure(char *origin, char *name, char *params)
+static void cs_cmd_set_secure(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
 	mychan_t *mc;
 
-	if (*name != '#')
+	if (!(mc = mychan_find(parv[0])))
 	{
-		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "SECURE");
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", parv[0]);
 		return;
 	}
 
-	if (!(mc = mychan_find(name)))
+	if (!chanacs_source_has_flag(mc, si, CA_SET))
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
+		command_fail(si, fault_noprivs, "You are not authorized to perform this command.");
 		return;
 	}
 
-	if (!chanacs_user_has_flag(mc, u, CA_SET))
-	{
-		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
-		return;
-	}
-
-	if (!strcasecmp("ON", params))
+	if (!strcasecmp("ON", parv[1]))
 	{
 		if (MC_SECURE & mc->flags)
 		{
-			notice(chansvs.nick, origin, "The \2SECURE\2 flag is already set for \2%s\2.", mc->name);
+			command_fail(si, fault_nochange, "The \2SECURE\2 flag is already set for \2%s\2.", mc->name);
 			return;
 		}
 
-		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET SECURE ON", mc->name);
+		logcommand(si, CMDLOG_SET, "%s SET SECURE ON", mc->name);
 
 		mc->flags |= MC_SECURE;
 
-		notice(chansvs.nick, origin, "The \2SECURE\2 flag has been set for \2%s\2.", mc->name);
+		command_success_nodata(si, "The \2SECURE\2 flag has been set for \2%s\2.", mc->name);
 
 		return;
 	}
 
-	else if (!strcasecmp("OFF", params))
+	else if (!strcasecmp("OFF", parv[1]))
 	{
 		if (!(MC_SECURE & mc->flags))
 		{
-			notice(chansvs.nick, origin, "The \2SECURE\2 flag is not set for \2%s\2.", mc->name);
+			command_fail(si, fault_nochange, "The \2SECURE\2 flag is not set for \2%s\2.", mc->name);
 			return;
 		}
 
-		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET SECURE OFF", mc->name);
+		logcommand(si, CMDLOG_SET, "%s SET SECURE OFF", mc->name);
 
 		mc->flags &= ~MC_SECURE;
 
-		notice(chansvs.nick, origin, "The \2SECURE\2 flag has been removed for \2%s\2.", mc->name);
+		command_success_nodata(si, "The \2SECURE\2 flag has been removed for \2%s\2.", mc->name);
 
 		return;
 	}
 
 	else
 	{
-		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "SECURE");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SECURE");
 		return;
 	}
 }
 
-static void cs_set_verbose(char *origin, char *name, char *params)
+static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
 	mychan_t *mc;
 
-	if (*name != '#')
+	if (!(mc = mychan_find(parv[0])))
 	{
-		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "VERBOSE");
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", parv[0]);
 		return;
 	}
 
-	if (!(mc = mychan_find(name)))
+	if (!chanacs_source_has_flag(mc, si, CA_SET))
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
+		command_fail(si, fault_noprivs, "You are not authorized to perform this command.");
 		return;
 	}
 
-	if (!chanacs_user_has_flag(mc, u, CA_SET))
-	{
-		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
-		return;
-	}
-
-	if (!strcasecmp("ON", params) || !strcasecmp("ALL", params))
+	if (!strcasecmp("ON", parv[1]) || !strcasecmp("ALL", parv[1]))
 	{
 		if (MC_VERBOSE & mc->flags)
 		{
-			notice(chansvs.nick, origin, "The \2VERBOSE\2 flag is already set for \2%s\2.", mc->name);
+			command_fail(si, fault_nochange, "The \2VERBOSE\2 flag is already set for \2%s\2.", mc->name);
 			return;
 		}
 
-		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET VERBOSE ON", mc->name);
+		logcommand(si, CMDLOG_SET, "%s SET VERBOSE ON", mc->name);
 
  		mc->flags &= ~MC_VERBOSE_OPS;
  		mc->flags |= MC_VERBOSE;
 
-		verbose(mc, "\2%s\2 enabled the VERBOSE flag", u->nick);
-		notice(chansvs.nick, origin, "The \2VERBOSE\2 flag has been set for \2%s\2.", mc->name);
+		verbose(mc, "\2%s\2 enabled the VERBOSE flag", get_source_name(si));
+		command_success_nodata(si, "The \2VERBOSE\2 flag has been set for \2%s\2.", mc->name);
 
 		return;
 	}
 
-	else if (!strcasecmp("OPS", params))
+	else if (!strcasecmp("OPS", parv[1]))
 	{
 		if (MC_VERBOSE_OPS & mc->flags)
 		{
-			notice(chansvs.nick, origin, "The \2VERBOSE_OPS\2 flag is already set for \2%s\2.", mc->name);
+			command_fail(si, fault_nochange, "The \2VERBOSE_OPS\2 flag is already set for \2%s\2.", mc->name);
 			return;
 		}
 
-		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET VERBOSE OPS", mc->name);
+		logcommand(si, CMDLOG_SET, "%s SET VERBOSE OPS", mc->name);
 
 		if (mc->flags & MC_VERBOSE)
 		{
-			verbose(mc, "\2%s\2 restricted VERBOSE to chanops", u->nick);
+			verbose(mc, "\2%s\2 restricted VERBOSE to chanops", get_source_name(si));
  			mc->flags &= ~MC_VERBOSE;
  			mc->flags |= MC_VERBOSE_OPS;
 		}
 		else
 		{
  			mc->flags |= MC_VERBOSE_OPS;
-			verbose(mc, "\2%s\2 enabled the VERBOSE_OPS flag", u->nick);
+			verbose(mc, "\2%s\2 enabled the VERBOSE_OPS flag", get_source_name(si));
 		}
 
-		notice(chansvs.nick, origin, "The \2VERBOSE_OPS\2 flag has been set for \2%s\2.", mc->name);
+		command_success_nodata(si, "The \2VERBOSE_OPS\2 flag has been set for \2%s\2.", mc->name);
 
 		return;
 	}
-	else if (!strcasecmp("OFF", params))
+	else if (!strcasecmp("OFF", parv[1]))
 	{
 		if (!((MC_VERBOSE | MC_VERBOSE_OPS) & mc->flags))
 		{
-			notice(chansvs.nick, origin, "The \2VERBOSE\2 flag is not set for \2%s\2.", mc->name);
+			command_fail(si, fault_nochange, "The \2VERBOSE\2 flag is not set for \2%s\2.", mc->name);
 			return;
 		}
 
-		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET VERBOSE OFF", mc->name);
+		logcommand(si, CMDLOG_SET, "%s SET VERBOSE OFF", mc->name);
 
 		if (mc->flags & MC_VERBOSE)
-			verbose(mc, "\2%s\2 disabled the VERBOSE flag", u->nick);
+			verbose(mc, "\2%s\2 disabled the VERBOSE flag", get_source_name(si));
 		else
-			verbose(mc, "\2%s\2 disabled the VERBOSE_OPS flag", u->nick);
+			verbose(mc, "\2%s\2 disabled the VERBOSE_OPS flag", get_source_name(si));
 		mc->flags &= ~(MC_VERBOSE | MC_VERBOSE_OPS);
 
-		notice(chansvs.nick, origin, "The \2VERBOSE\2 flag has been removed for \2%s\2.", mc->name);
+		command_success_nodata(si, "The \2VERBOSE\2 flag has been removed for \2%s\2.", mc->name);
 
 		return;
 	}
 
 	else
 	{
-		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "VERBOSE");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "VERBOSE");
 		return;
 	}
 }
 
-static void cs_set_fantasy(char *origin, char *name, char *params)
+static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
 	mychan_t *mc;
 
-	if (*name != '#')
+	if (!(mc = mychan_find(parv[0])))
 	{
-		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "FANTASY");
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", parv[0]);
 		return;
 	}
 
-	if (!(mc = mychan_find(name)))
+	if (!chanacs_source_has_flag(mc, si, CA_SET))
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
+		command_fail(si, fault_noprivs, "You are not authorized to perform this command.");
 		return;
 	}
 
-	if (!chanacs_user_has_flag(mc, u, CA_SET))
-	{
-		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
-		return;
-	}
-
-	if (!strcasecmp("ON", params))
+	if (!strcasecmp("ON", parv[1]))
 	{
 		metadata_t *md = metadata_find(mc, METADATA_CHANNEL, "disable_fantasy");
 
 		if (!md)
 		{
-			notice(chansvs.nick, origin, "Fantasy is already enabled on \2%s\2.", mc->name);
+			command_fail(si, fault_nochange, "Fantasy is already enabled on \2%s\2.", mc->name);
 			return;
 		}
 
 		metadata_delete(mc, METADATA_CHANNEL, "disable_fantasy");
 
-		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET FANTASY ON", mc->name);
-		notice(chansvs.nick, origin, "The \2FANTASY\2 flag has been set for \2%s\2.", mc->name);
+		logcommand(si, CMDLOG_SET, "%s SET FANTASY ON", mc->name);
+		command_success_nodata(si, "The \2FANTASY\2 flag has been set for \2%s\2.", mc->name);
 		return;
 	}
-	else if (!strcasecmp("OFF", params))
+	else if (!strcasecmp("OFF", parv[1]))
 	{
 		metadata_t *md = metadata_find(mc, METADATA_CHANNEL, "disable_fantasy");
 
 		if (md)
 		{
-			notice(chansvs.nick, origin, "Fantasy is already disabled on \2%s\2.", mc->name);
+			command_fail(si, fault_nochange, "Fantasy is already disabled on \2%s\2.", mc->name);
 			return;
 		}
 
 		metadata_add(mc, METADATA_CHANNEL, "disable_fantasy", "on");
 
-		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET FANTASY OFF", mc->name);
-		notice(chansvs.nick, origin, "The \2FANTASY\2 flag has been removed for \2%s\2.", mc->name);
+		logcommand(si, CMDLOG_SET, "%s SET FANTASY OFF", mc->name);
+		command_success_nodata(si, "The \2FANTASY\2 flag has been removed for \2%s\2.", mc->name);
 		return;
 	}
 
 	else
 	{
-		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "FANTASY");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "FANTASY");
 		return;
 	}
 }
 
-static void cs_set_staffonly(char *origin, char *name, char *params)
+static void cs_cmd_set_staffonly(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 
-	if (*name != '#')
+	if (!(mc = mychan_find(parv[0])))
 	{
-		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "STAFFONLY");
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", parv[0]);
 		return;
 	}
 
-	if (!(mc = mychan_find(name)))
-	{
-		notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
-		return;
-	}
-
-	if (!strcasecmp("ON", params))
+	if (!strcasecmp("ON", parv[1]))
 	{
 		if (MC_STAFFONLY & mc->flags)
 		{
-			notice(chansvs.nick, origin, "The \2STAFFONLY\2 flag is already set for \2%s\2.", mc->name);
+			command_fail(si, fault_nochange, "The \2STAFFONLY\2 flag is already set for \2%s\2.", mc->name);
 			return;
 		}
 
-		snoop("SET:STAFFONLY:ON: for \2%s\2 by \2%s\2", mc->name, origin);
-		logcommand_user(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s SET STAFFONLY ON", mc->name);
+		snoop("SET:STAFFONLY:ON: for \2%s\2 by \2%s\2", mc->name, get_oper_name(si));
+		logcommand(si, CMDLOG_SET, "%s SET STAFFONLY ON", mc->name);
 
 		mc->flags |= MC_STAFFONLY;
 
-		notice(chansvs.nick, origin, "The \2STAFFONLY\2 flag has been set for \2%s\2.", mc->name);
+		command_success_nodata(si, "The \2STAFFONLY\2 flag has been set for \2%s\2.", mc->name);
 
 		return;
 	}
 
-	else if (!strcasecmp("OFF", params))
+	else if (!strcasecmp("OFF", parv[1]))
 	{
 		if (!(MC_STAFFONLY & mc->flags))
 		{
-			notice(chansvs.nick, origin, "The \2STAFFONLY\2 flag is not set for \2%s\2.", mc->name);
+			command_fail(si, fault_nochange, "The \2STAFFONLY\2 flag is not set for \2%s\2.", mc->name);
 			return;
 		}
 
-		snoop("SET:STAFFONLY:OFF: for \2%s\2 by \2%s\2", mc->name, origin);
-		logcommand_user(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s SET STAFFONLY OFF", mc->name);
+		snoop("SET:STAFFONLY:OFF: for \2%s\2 by \2%s\2", mc->name, get_oper_name(si));
+		logcommand(si, CMDLOG_SET, "%s SET STAFFONLY OFF", mc->name);
 
 		mc->flags &= ~MC_STAFFONLY;
 
-		notice(chansvs.nick, origin, "The \2STAFFONLY\2 flag has been removed for \2%s\2.", mc->name);
+		command_success_nodata(si, "The \2STAFFONLY\2 flag has been removed for \2%s\2.", mc->name);
 
 		return;
 	}
 
 	else
 	{
-		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "STAFFONLY");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "STAFFONLY");
 		return;
 	}
 }
 
-static void cs_set_property(char *origin, char *name, char *params)
+static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = user_find_named(origin);
 	mychan_t *mc;
-        char *property = strtok(params, " ");
+        char *property = strtok(parv[1], " ");
         char *value = strtok(NULL, "");
-
-	if (*name != '#')
-	{
-		notice(chansvs.nick, origin, STR_INVALID_PARAMS, "PROPERTY");
-		return;
-	}
 
         if (!property)
         {
-                notice(chansvs.nick, origin, "Syntax: SET <#channel> PROPERTY <property> [value]");
+                command_fail(si, fault_needmoreparams, "Syntax: SET <#channel> PROPERTY <property> [value]");
                 return;
         }
 
 	/* do we really need to allow this? -- jilles */
-        if (strchr(property, ':') && !has_priv_user(u, PRIV_METADATA))
+        if (strchr(property, ':') && !has_priv(si, PRIV_METADATA))
         {
-                notice(chansvs.nick, origin, "Invalid property name.");
+                command_fail(si, fault_badparams, "Invalid property name.");
                 return;
         }
 
-	if (!(mc = mychan_find(name)))
+	if (!(mc = mychan_find(parv[0])))
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is not registered.", name);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", parv[0]);
 		return;
 	}
 
-	if (!is_founder(mc, u->myuser))
+	if (!is_founder(mc, si->smu))
 	{
-		notice(chansvs.nick, origin, "You are not authorized to perform this command.");
+		command_fail(si, fault_noprivs, "You are not authorized to perform this command.");
 		return;
 	}
 
 	if (mc->metadata.count >= me.mdlimit)
 	{
-		notice(chansvs.nick, origin, "Cannot add \2%s\2 to \2%s\2 metadata table, it is full.",
-						property, name);
+		command_fail(si, fault_toomany, "Cannot add \2%s\2 to \2%s\2 metadata table, it is full.",
+						property, parv[0]);
 		return;
 	}
 
@@ -1106,73 +1091,23 @@ static void cs_set_property(char *origin, char *name, char *params)
 
 		if (!md)
 		{
-			notice(chansvs.nick, origin, "Metadata entry \2%s\2 was not set.", property);
+			command_fail(si, fault_nochange, "Metadata entry \2%s\2 was not set.", property);
 			return;
 		}
 
 		metadata_delete(mc, METADATA_CHANNEL, property);
-		logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET PROPERTY %s (deleted)", mc->name, property);
-		notice(chansvs.nick, origin, "Metadata entry \2%s\2 has been deleted.", property);
+		logcommand(si, CMDLOG_SET, "%s SET PROPERTY %s (deleted)", mc->name, property);
+		command_success_nodata(si, "Metadata entry \2%s\2 has been deleted.", property);
 		return;
 	}
 
 	if (strlen(property) > 32 || strlen(value) > 300)
 	{
-		notice(chansvs.nick, origin, "Parameters are too long. Aborting.");
+		command_fail(si, fault_badparams, "Parameters are too long. Aborting.");
 		return;
 	}
 
 	metadata_add(mc, METADATA_CHANNEL, property, value);
-	logcommand_user(chansvs.me, u, CMDLOG_SET, "%s SET PROPERTY %s to %s", mc->name, property, value);
-	notice(chansvs.nick, origin, "Metadata entry \2%s\2 added.", property);
-}
-
-/* *INDENT-OFF* */
-
-/* commands we understand */
-struct set_command_ set_commands[] = {
-  { "FOUNDER",    AC_NONE,  cs_set_founder    },
-  { "MLOCK",      AC_NONE,  cs_set_mlock      },
-  { "SECURE",     AC_NONE,  cs_set_secure     },
-  { "VERBOSE",    AC_NONE,  cs_set_verbose    },
-  { "URL",	  AC_NONE,  cs_set_url        },
-  { "ENTRYMSG",	  AC_NONE,  cs_set_entrymsg   },
-  { "PROPERTY",   AC_NONE,  cs_set_property   },
-  { "EMAIL",      AC_NONE,  cs_set_email      },
-  { "KEEPTOPIC",  AC_NONE,  cs_set_keeptopic  },
-  { "TOPICLOCK",  AC_NONE,  cs_set_topiclock  },
-  { "FANTASY",    AC_NONE,  cs_set_fantasy    },
-  { "STAFFONLY",  PRIV_CHAN_ADMIN, cs_set_staffonly  },
-  { NULL, 0, NULL }
-};
-
-/* *INDENT-ON* */
-
-static struct set_command_ *set_cmd_find(char *origin, char *command)
-{
-	user_t *u = user_find_named(origin);
-	struct set_command_ *c;
-
-	for (c = set_commands; c->name; c++)
-	{
-		if (!strcasecmp(command, c->name))
-		{
-			if (has_priv_user(u, c->access))
-				return c;
-
-			/* otherwise... */
-			else
-			{
-				if (has_any_privs_user(u))
-					notice(chansvs.nick, origin, "You do not have %s privilege.", c->access);
-				else
-					notice(chansvs.nick, origin, "You are not authorized to perform this operation.");
-				return NULL;
-			}
-		}
-	}
-
-	/* it's a command we don't understand */
-	notice(chansvs.nick, origin, "Invalid command. Please use \2HELP\2 for help.");
-	return NULL;
+	logcommand(si, CMDLOG_SET, "%s SET PROPERTY %s to %s", mc->name, property, value);
+	command_success_nodata(si, "Metadata entry \2%s\2 added.", property);
 }

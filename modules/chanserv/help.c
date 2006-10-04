@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 6617 2006-10-01 22:11:49Z jilles $
+ * $Id: help.c 6663 2006-10-04 23:43:58Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 6617 2006-10-01 22:11:49Z jilles $",
+	"$Id: help.c 6663 2006-10-04 23:43:58Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -130,42 +130,6 @@ static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	{
 		command_success_nodata(si, "***** \2%s Help\2 *****", chansvs.nick);
 		command_help(si, cs_cmdtree);
-		command_success_nodata(si, "***** \2End of Help\2 *****");
-		return;
-	}
-
-	if (!strcasecmp("SET", command))
-	{
-		command_success_nodata(si, "***** \2%s Help\2 *****", chansvs.nick);
-		command_success_nodata(si, "Help for \2SET\2:");
-		command_success_nodata(si, " ");
-		command_success_nodata(si, "SET allows you to set various control flags");
-		command_success_nodata(si, "for channels that change the way certain");
-		command_success_nodata(si, "operations are performed on them.");
-		command_success_nodata(si, " ");
-		command_success_nodata(si, "The following commands are available.");
-		command_success_nodata(si, "\2FOUNDER\2       Transfers foundership of a channel.");
-		command_success_nodata(si, "\2MLOCK\2         Sets channel mode lock.");
-		command_success_nodata(si, "\2SECURE\2        Prevents unauthorized people from " "gaining operator status.");
-		command_success_nodata(si, "\2VERBOSE\2       Notifies channel about access list " "modifications.");
-		command_success_nodata(si, "\2FANTASY\2       Allows or disallows in-channel commands.");
-		command_success_nodata(si, "\2URL\2           Sets the channel URL.");
-		command_success_nodata(si, "\2EMAIL\2         Sets the channel e-mail address.");
-		command_success_nodata(si, "\2ENTRYMSG\2      Sets the channel's entry message.");
-		command_success_nodata(si, "\2KEEPTOPIC\2     Enables topic retention.");
-		command_success_nodata(si, "\2TOPICLOCK\2     Restricts who can change the topic.");
-		command_success_nodata(si, "\2PROPERTY\2      Manipulates channel metadata.");
-		command_success_nodata(si, " ");
-
-		if (has_any_privs(si))
-		{
-			command_success_nodata(si, "The following IRCop commands are available.");
-			command_success_nodata(si, "\2STAFFONLY\2     Sets the channel as staff-only. (Non staff-members are kickbanned.)");
-			command_success_nodata(si, " ");
-		}
-
-		command_success_nodata(si, "For more specific help use \2HELP SET \37command\37\2.");
-
 		command_success_nodata(si, "***** \2End of Help\2 *****");
 		return;
 	}
