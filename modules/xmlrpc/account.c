@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 6563 2006-09-29 21:54:21Z jilles $
+ * $Id: account.c 6649 2006-10-04 13:53:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 6563 2006-09-29 21:54:21Z jilles $",
+	"$Id: account.c 6649 2006-10-04 13:53:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -285,117 +285,6 @@ static int account_verify(void *conn, int parc, char *parv[])
 	}
 
 	return 0;
-}
-
-/*
- * atheme.login
- *
- * XML Inputs:
- *       account name and password
- *
- * XML Outputs:
- *       fault 1 - insufficient parameters
- *       fault 3 - account is not registered
- *       fault 5 - invalid username and password
- *       fault 6 - account is frozen
- *       default - success (authcookie)
- *
- * Side Effects:
- *       an authcookie ticket is created for the myuser_t.
- *       the user's lastlogin is updated
- */
-static int do_login(void *conn, int parc, char *parv[])
-{
-	myuser_t *mu;
-	authcookie_t *ac;
-	char buf[BUFSIZE];
-
-	if (parc < 2)
-	{
-		xmlrpc_generic_error(1, "Insufficient parameters.");
-		return 0;
-	}
-
-	if (!(mu = myuser_find(parv[0])))
-	{
-		xmlrpc_generic_error(3, "The account is not registered.");
-		return 0;
-	}
-
-	if (metadata_find(mu, METADATA_USER, "private:freeze:freezer") != NULL)
-	{
-		logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, CMDLOG_LOGIN, "failed LOGIN to %s (frozen)", mu->name);
-		xmlrpc_generic_error(6, "The account has been frozen.");
-		return 0;
-	}
-
-	if (!verify_password(mu, parv[1]))
-	{
-		logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, CMDLOG_LOGIN, "failed LOGIN to %s (bad password)", mu->name);
-		xmlrpc_generic_error(5, "The password is not valid for this account.");
-		return 0;
-	}
-
-	mu->lastlogin = CURRTIME;
-
-	ac = authcookie_create(mu);
-
-	logcommand_external(nicksvs.me, "xmlrpc", conn, mu, CMDLOG_LOGIN, "LOGIN");
-
-	xmlrpc_string(buf, ac->ticket);
-	xmlrpc_send(1, buf);
-
-	return 0;
-}
-
-/*
- * atheme.logout
- *
- * XML inputs:
- *       authcookie, and account name.
- *
- * XML outputs:
- *       fault 1 - insufficient parameters
- *       fault 3 - unknown user
- *       fault 5 - validation failed
- *       default - success message
- *
- * Side Effects:
- *       an authcookie ticket is destroyed.
- */
-static int do_logout(void *conn, int parc, char *parv[])
-{
-	authcookie_t *ac;
-	myuser_t *mu;
-        char buf[XMLRPC_BUFSIZE];
-
-        if (parc < 2)
-        {
-                xmlrpc_generic_error(1, "Insufficient parameters.");
-                return 0;
-        }
-
-        if ((mu = myuser_find(parv[1])) == NULL)
-        {
-                xmlrpc_generic_error(3, "Unknown user.");
-                return 0;
-        }
-
-        if (authcookie_validate(parv[0], mu) == FALSE)
-        {
-                xmlrpc_generic_error(5, "Invalid authcookie for this account.");
-                return 0;
-        }
-
-	logcommand_external(nicksvs.me, "xmlrpc", conn, mu, CMDLOG_LOGIN, "LOGOUT");
-
-        ac = authcookie_find(parv[0], mu);
-        authcookie_destroy(ac);
-
-        xmlrpc_string(buf, "You are now logged out.");
-        xmlrpc_send(1, buf);
-
-        return 0;
 }
 
 /*
@@ -694,8 +583,6 @@ void _modinit(module_t *m)
 {
 	xmlrpc_register_method("atheme.account.register", account_register);
 	xmlrpc_register_method("atheme.account.verify", account_verify);	
-	xmlrpc_register_method("atheme.login", do_login);
-        xmlrpc_register_method("atheme.logout", do_logout);
 	xmlrpc_register_method("atheme.account.metadata.set", do_metadata_set);
 	xmlrpc_register_method("atheme.account.metadata.delete", do_metadata_delete);
 	xmlrpc_register_method("atheme.account.metadata.get", do_metadata_get);
@@ -707,8 +594,6 @@ void _moddeinit(void)
 {
 	xmlrpc_unregister_method("atheme.account.register");
 	xmlrpc_unregister_method("atheme.account.verify");
-	xmlrpc_unregister_method("atheme.login");
-        xmlrpc_unregister_method("atheme.logout");
 	xmlrpc_unregister_method("atheme.account.metadata.set");
 	xmlrpc_unregister_method("atheme.account.metadata.delete");
 	xmlrpc_unregister_method("atheme.account.metadata.get");

@@ -1,3 +1,12 @@
+jilles      2006/10/04 13:18:20 UTC	(20061004-6647)
+  Log:
+  There is no default for xmlrpc::port.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/dist/example.conf (File Modified) 
+
+
 jilles      2006/10/02 16:02:27 UTC	(20061002-6645)
   Log:
   for non-irc, require explicit target for /ns logut and /cs unban
