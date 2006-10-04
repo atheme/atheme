@@ -1,3 +1,18 @@
+jilles      2006/10/04 13:53:34 UTC	(20061004-6649)
+  Log:
+  Rewrite modules/xmlrpc/main with code from contrib/gen_httpd.
+  atheme.login and atheme.logout are now in main.
+  The new method atheme.command which can be used to invoke
+  any services command is also in main.
+  xmlrpc configuration is the same as before.
+  
+
+  Changes:	Modified:
+  +6 -6		trunk/dist/example.conf (File Modified) 
+  +0 -115	trunk/modules/xmlrpc/account.c (File Modified) 
+  +560 -67	trunk/modules/xmlrpc/main.c (File Modified) 
+
+
 jilles      2006/10/04 13:18:20 UTC	(20061004-6647)
   Log:
   There is no default for xmlrpc::port.
