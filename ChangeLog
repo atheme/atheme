@@ -1,3 +1,20 @@
+jilles      2006/10/05 23:45:09 UTC	(20061005-6665)
+  Log:
+  Add an extra parameter to logcommand_external() for a
+  source IP address or similar. Format of the log entries
+  changed to contain both direct source and this new field.
+  atheme.login has an optional parameter to use for this field.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/tools.h (File Modified) 
+  +11 -11	trunk/modules/xmlrpc/account.c (File Modified) 
+  +7 -7		trunk/modules/xmlrpc/channel.c (File Modified) 
+  +8 -5		trunk/modules/xmlrpc/main.c (File Modified) 
+  +4 -4		trunk/modules/xmlrpc/memo.c (File Modified) 
+  +4 -3		trunk/src/function.c (File Modified) 
+
+
 jilles      2006/10/04 23:43:58 UTC	(20061004-6663)
   Log:
   Change /cs set to use command_t, much like /ns set and /cs clear.

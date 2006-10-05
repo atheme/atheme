@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 # Simple example of using Atheme's XMLRPC server with perl RPC::XML.
-# $Id: perlxmlrpc.pl 6651 2006-10-04 13:56:08Z jilles $
+# $Id: perlxmlrpc.pl 6667 2006-10-05 23:46:42Z jilles $
 
 require RPC::XML;
 require RPC::XML::Client;
@@ -22,7 +22,7 @@ system("stty echo </dev/tty");
 print TTY "\n";
 exit 0 if ($password eq '');
 
-$resp = $cli->simple_request('atheme.login', $login, $password);
+$resp = $cli->simple_request('atheme.login', $login, $password, '127.0.0.1');
 if (defined $resp)
 {
 	if (ref $resp)
