@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 6649 2006-10-04 13:53:34Z jilles $
+ * $Id: account.c 6665 2006-10-05 23:45:09Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 6649 2006-10-04 13:53:34Z jilles $",
+	"$Id: account.c 6665 2006-10-05 23:45:09Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -168,7 +168,7 @@ static int account_register(void *conn, int parc, char *parv[])
 	else
 		xmlrpc_string(buf, "Registration successful.");
 
-	logcommand_external(nicksvs.me, "xmlrpc", conn, mu, CMDLOG_REGISTER, "REGISTER to %s", mu->email);
+	logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_REGISTER, "REGISTER to %s", mu->email);
 
 	xmlrpc_send(1, buf);
 	return 0;
@@ -234,14 +234,14 @@ static int account_verify(void *conn, int parc, char *parv[])
 			metadata_delete(mu, METADATA_USER, "private:verify:register:key");
 			metadata_delete(mu, METADATA_USER, "private:verify:register:timestamp");
 
-			logcommand_external(nicksvs.me, "xmlrpc", conn, mu, CMDLOG_SET, "VERIFY REGISTER (email: %s)", mu->email);
+			logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "VERIFY REGISTER (email: %s)", mu->email);
 			xmlrpc_string(buf, "Registration verification was successful.");
 			xmlrpc_send(1, buf);
 			return 0;
 		}
 
 		snoop("REGISTER:VF: \2%s\2 via xmlrpc", mu->email);
-		logcommand_external(nicksvs.me, "xmlrpc", conn, mu, CMDLOG_SET, "failed VERIFY REGISTER (invalid key)");
+		logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "failed VERIFY REGISTER (invalid key)");
 		xmlrpc_generic_error(5, "Invalid key for this operation.");
 		return 0;
 	}
@@ -260,7 +260,7 @@ static int account_verify(void *conn, int parc, char *parv[])
 			strlcpy(mu->email, md->value, EMAILLEN);
 
 			snoop("SET:EMAIL:VS: \2%s\2 via xmlrpc", mu->email);
-			logcommand_external(nicksvs.me, "xmlrpc", conn, mu, CMDLOG_SET, "VERIFY EMAILCHG (email: %s)", mu->email);
+			logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "VERIFY EMAILCHG (email: %s)", mu->email);
 
 			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:key");
 			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:newemail");
@@ -273,7 +273,7 @@ static int account_verify(void *conn, int parc, char *parv[])
                 }
 
 		snoop("REGISTER:VF: \2%s\2 via xmlrpc", mu->email);
-		logcommand_external(nicksvs.me, "xmlrpc", conn, mu, CMDLOG_SET, "failed VERIFY EMAILCHG (invalid key)");
+		logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "failed VERIFY EMAILCHG (invalid key)");
 		xmlrpc_generic_error(5, "Invalid key for this operation.");
 
 		return 0;
@@ -343,7 +343,7 @@ static int do_metadata_set(void *conn, int parc, char *parv[])
 
 	metadata_add(mu, METADATA_USER, parv[2], parv[3]);
 
-	logcommand_external(nicksvs.me, "xmlrpc", conn, mu, CMDLOG_SET, "SET PROPERTY %s to %s", parv[2], parv[3]);
+	logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "SET PROPERTY %s to %s", parv[2], parv[3]);
 
 	xmlrpc_string(buf, "Operation was successful.");
 	xmlrpc_send(1, buf);
@@ -406,7 +406,7 @@ static int do_metadata_delete(void *conn, int parc, char *parv[])
 
 	metadata_delete(mu, METADATA_USER, parv[2]);
 
-	logcommand_external(nicksvs.me, "xmlrpc", conn, mu, CMDLOG_SET, "SET PROPERTY %s (deleted)", parv[2]);
+	logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "SET PROPERTY %s (deleted)", parv[2]);
 
 	xmlrpc_string(buf, "Operation was successful.");
 	xmlrpc_send(1, buf);
@@ -461,7 +461,7 @@ static int do_metadata_get(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, CMDLOG_GET, "%s GET PROPERTY %s", mu->name, parv[1]);
+	logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, NULL, CMDLOG_GET, "%s GET PROPERTY %s", mu->name, parv[1]);
 
 	xmlrpc_string(buf, md->value);
 	xmlrpc_send(1, buf);
@@ -519,12 +519,12 @@ static int do_set_vanity_host(void *conn, int parc, char *parv[])
 		}
 		/* XXX more checks here, perhaps as a configurable regexp? */
 		metadata_add(mu, METADATA_USER, "private:usercloak", parv[2]);
-		logcommand_external(nicksvs.me, "xmlrpc", conn, mu, CMDLOG_ADMIN, "VHOST ASSIGN %s", parv[2]);
+		logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_ADMIN, "VHOST ASSIGN %s", parv[2]);
 	}
 	else
 	{
 		metadata_delete(mu, METADATA_USER, "private:usercloak");
-		logcommand_external(nicksvs.me, "xmlrpc", conn, mu, CMDLOG_ADMIN, "VHOST DELETE");
+		logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_ADMIN, "VHOST DELETE");
 	}
 
 	xmlrpc_string(buf, "Operation was successful.");
@@ -572,7 +572,7 @@ static int do_set_password(void *conn, int parc, char *parv[])
 
 	set_password(mu, parv[2]);
 
-	logcommand_external(nicksvs.me, "xmlrpc", conn, mu, CMDLOG_ADMIN, "SET PASSWORD");
+	logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_ADMIN, "SET PASSWORD");
 
 	xmlrpc_string(buf, "Operation was successful.");
 	xmlrpc_send(1, buf);

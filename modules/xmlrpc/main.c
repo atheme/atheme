@@ -4,7 +4,7 @@
  *
  * New xmlrpc implementation
  *
- * $Id: main.c 6649 2006-10-04 13:53:34Z jilles $
+ * $Id: main.c 6665 2006-10-05 23:45:09Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6649 2006-10-04 13:53:34Z jilles $",
+	"$Id: main.c 6665 2006-10-05 23:45:09Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -463,7 +463,7 @@ static void xmlrpc_command_success_string(sourceinfo_t *si, const char *result, 
  * atheme.login
  *
  * XML Inputs:
- *       account name and password
+ *       account name, password, source ip (optional)
  *
  * XML Outputs:
  *       fault 1 - insufficient parameters
@@ -481,12 +481,15 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
 	myuser_t *mu;
 	authcookie_t *ac;
 	char buf[BUFSIZE];
+	const char *sourceip;
 
 	if (parc < 2)
 	{
 		xmlrpc_generic_error(1, "Insufficient parameters.");
 		return 0;
 	}
+
+	sourceip = parc >= 3 && *parv[2] != '\0' ? parv[2] : NULL;
 
 	if (!(mu = myuser_find(parv[0])))
 	{
@@ -496,14 +499,14 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
 
 	if (metadata_find(mu, METADATA_USER, "private:freeze:freezer") != NULL)
 	{
-		logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, CMDLOG_LOGIN, "failed LOGIN to %s (frozen)", mu->name);
+		logcommand_external(nicksvs.me, "xmlrpc", conn, sourceip, NULL, CMDLOG_LOGIN, "failed LOGIN to %s (frozen)", mu->name);
 		xmlrpc_generic_error(6, "The account has been frozen.");
 		return 0;
 	}
 
 	if (!verify_password(mu, parv[1]))
 	{
-		logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, CMDLOG_LOGIN, "failed LOGIN to %s (bad password)", mu->name);
+		logcommand_external(nicksvs.me, "xmlrpc", conn, sourceip, NULL, CMDLOG_LOGIN, "failed LOGIN to %s (bad password)", mu->name);
 		xmlrpc_generic_error(5, "The password is not valid for this account.");
 		return 0;
 	}
@@ -512,7 +515,7 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[])
 
 	ac = authcookie_create(mu);
 
-	logcommand_external(nicksvs.me, "xmlrpc", conn, mu, CMDLOG_LOGIN, "LOGIN");
+	logcommand_external(nicksvs.me, "xmlrpc", conn, sourceip, mu, CMDLOG_LOGIN, "LOGIN");
 
 	xmlrpc_string(buf, ac->ticket);
 	xmlrpc_send(1, buf);
@@ -559,7 +562,7 @@ static int xmlrpcmethod_logout(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	logcommand_external(nicksvs.me, "xmlrpc", conn, mu, CMDLOG_LOGIN, "LOGOUT");
+	logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_LOGIN, "LOGOUT");
 
 	ac = authcookie_find(parv[0], mu);
 	authcookie_destroy(ac);

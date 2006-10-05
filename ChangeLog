@@ -1,3 +1,13 @@
+jilles      2006/10/04 23:43:58 UTC	(20061004-6663)
+  Log:
+  Change /cs set to use command_t, much like /ns set and /cs clear.
+  
+
+  Changes:	Modified:
+  +0 -36	trunk/modules/chanserv/help.c (File Modified) 
+  +279 -344	trunk/modules/chanserv/set.c (File Modified) 
+
+
 jilles      2006/10/04 23:41:37 UTC	(20061004-6661)
   Log:
   Respect general::secure in /cs help clear output.

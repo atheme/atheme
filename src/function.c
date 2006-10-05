@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 6615 2006-10-01 21:45:34Z jilles $
+ * $Id: function.c 6665 2006-10-05 23:45:09Z jilles $
  */
 
 #include "atheme.h"
@@ -144,7 +144,7 @@ void logcommand(sourceinfo_t *si, int level, const char *fmt, ...)
 	if (si->su != NULL)
 		logcommand_user(si->service, si->su, level, "%s", lbuf);
 	else
-		logcommand_external(si->service, si->v != NULL ? si->v->description : "unknown", si->connection, si->smu, level, "%s", lbuf);
+		logcommand_external(si->service, si->v != NULL ? si->v->description : "unknown", si->connection, NULL, si->smu, level, "%s", lbuf);
 }
 
 void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt, ...)
@@ -189,7 +189,7 @@ void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt,
 	va_end(args);
 }
 
-void logcommand_external(service_t *svs, const char *type, connection_t *source, myuser_t *login, int level, const char *fmt, ...)
+void logcommand_external(service_t *svs, const char *type, connection_t *source,const char *sourcedesc, myuser_t *login, int level, const char *fmt, ...)
 {
 	va_list args;
 	time_t t;
@@ -212,12 +212,13 @@ void logcommand_external(service_t *svs, const char *type, connection_t *source,
 
 	if (log_file)
 	{
-		fprintf(log_file, "%s %s %s:%s[%s] %s\n",
+		fprintf(log_file, "%s %s %s:%s(%s)[%s] %s\n",
 				datetime,
 				svs != NULL ? svs->name : me.name,
 				login != NULL ? login->name : "",
 				type,
 				source != NULL ? source->hbuf : "<noconn>",
+				sourcedesc != NULL ? sourcedesc : "<unknown>",
 				lbuf);
 
 		fflush(log_file);
