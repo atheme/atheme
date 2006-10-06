@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 # Simple example of using Atheme's XMLRPC server with perl RPC::XML.
-# $Id: perlxmlrpc.pl 6667 2006-10-05 23:46:42Z jilles $
+# $Id: perlxmlrpc.pl 6669 2006-10-06 00:13:15Z jilles $
 
 require RPC::XML;
 require RPC::XML::Client;
@@ -10,6 +10,7 @@ my $resp;
 my $authcookie = undef;
 my $login;
 my $password;
+my $sourceip = '::1'; # something clearly different
 
 open(TTY, "+</dev/tty") or die "open /dev/tty: $!";
 print TTY "login: ";
@@ -22,7 +23,7 @@ system("stty echo </dev/tty");
 print TTY "\n";
 exit 0 if ($password eq '');
 
-$resp = $cli->simple_request('atheme.login', $login, $password, '127.0.0.1');
+$resp = $cli->simple_request('atheme.login', $login, $password, $sourceip);
 if (defined $resp)
 {
 	if (ref $resp)
@@ -44,7 +45,7 @@ else
 
 if (defined $authcookie)
 {
-	$resp = $cli->simple_request('atheme.command', $authcookie, $login, '.', 'ChanServ', 'DEOP', '#irc', 'jilles');
+	$resp = $cli->simple_request('atheme.command', $authcookie, $login, $sourceip, 'ChanServ', 'DEOP', '#irc', 'jilles');
 	#$resp = $cli->simple_request('atheme.command', $authcookie, $login, '.', 'ChanServ', 'KICK', '#irc', 'jilles', 'xmlrpc test');
 	#$resp = $cli->simple_request('atheme.command', $authcookie, $login, '.', 'ChanServ', 'INFO', '#irc');
 	#$resp = $cli->simple_request('atheme.command', $authcookie, $login, '.', 'ChanServ', 'FLAGS', '#irc');

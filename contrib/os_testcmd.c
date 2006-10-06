@@ -4,7 +4,7 @@
  *
  * Calls a command without a user_t.
  *
- * $Id: os_testcmd.c 6587 2006-09-30 22:35:46Z jilles $
+ * $Id: os_testcmd.c 6669 2006-10-06 00:13:15Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/testcmd", FALSE, _modinit, _moddeinit,
-	"$Id: os_testcmd.c 6587 2006-09-30 22:35:46Z jilles $",
+	"$Id: os_testcmd.c 6669 2006-10-06 00:13:15Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -120,6 +120,10 @@ static void os_cmd_testcmd(sourceinfo_t *si, int parc, char *parv[])
 		newparc = 0;
 	memset(&newsi, '\0', sizeof newsi);
 	newsi.smu = si->smu;
+	if (si->su != NULL)
+		newsi.sourcedesc = si->su->ip[0] != '\0' ? si->su->ip : si->su->host;
+	else
+		newsi.sourcedesc = si->sourcedesc;
 	newsi.service = svs;
 	newsi.v = &testcmd_vtable;
 	newsi.callerdata = &udata;

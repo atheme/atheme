@@ -4,7 +4,7 @@
  *
  * New xmlrpc implementation
  *
- * $Id: main.c 6665 2006-10-05 23:45:09Z jilles $
+ * $Id: main.c 6669 2006-10-06 00:13:15Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6665 2006-10-05 23:45:09Z jilles $",
+	"$Id: main.c 6669 2006-10-06 00:13:15Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -653,7 +653,7 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 	memset(&si, '\0', sizeof si);
 	si.smu = mu;
 	si.service = svs;
-	/*si.realip = parv[2];*/
+	si.sourcedesc = parv[2][0] != '\0' ? parv[2] : NULL;
 	si.connection = conn;
 	si.v = &xmlrpc_vtable;
 	command_exec(svs, &si, cmd, newparc, newparv);

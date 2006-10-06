@@ -4,7 +4,7 @@
  *
  * Data structures for sourceinfo
  *
- * $Id: sourceinfo.h 6609 2006-10-01 21:09:55Z jilles $
+ * $Id: sourceinfo.h 6669 2006-10-06 00:13:15Z jilles $
  */
 
 #ifndef SOURCEINFO_H
@@ -33,6 +33,7 @@ struct sourceinfo_
 	server_t *s; /* source, if it's a server */
 
 	connection_t *connection; /* physical connection cmd received from */
+	const char *sourcedesc; /* additional information (e.g. IP address) */
 	myuser_t *smu; /* login associated with source */
 
 	service_t *service; /* destination service */
