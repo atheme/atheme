@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 6663 2006-10-04 23:43:58Z jilles $
+ * $Id: set.c 6673 2006-10-06 14:22:19Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 6663 2006-10-04 23:43:58Z jilles $",
+	"$Id: set.c 6673 2006-10-06 14:22:19Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -590,7 +590,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 							  command_fail(si, fault_badparams, "Invalid value \2%s\2 for mode +%c.", arg, c);
 							  return;
 						  }
-						  if ((mc->chan->extmodes[i] == NULL || strcmp(mc->chan->extmodes[i], arg)) && !ignore_mode_list[i].check(arg, mc->chan, mc, si->su, si->smu))
+						  if ((mc->chan == NULL || mc->chan->extmodes[i] == NULL || strcmp(mc->chan->extmodes[i], arg)) && !ignore_mode_list[i].check(arg, mc->chan, mc, si->su, si->smu))
 						  {
 							  command_fail(si, fault_badparams, "Invalid value \2%s\2 for mode +%c.", arg, c);
 							  return;

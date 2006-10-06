@@ -1,3 +1,18 @@
+jilles      2006/10/06 00:13:15 UTC	(20061006-6669)
+  Log:
+  Add const char *sourcedesc field to sourceinfo_t to
+  put the sourceip parameter to atheme.command.
+  /os testcmd also puts a meaningful value there.
+  
+
+  Changes:	Modified:
+  +4 -0		trunk/contrib/os_testcmd.c (File Modified) 
+  +3 -2		trunk/contrib/perlxmlrpc.pl (File Modified) 
+  +1 -0		trunk/include/sourceinfo.h (File Modified) 
+  +1 -1		trunk/modules/xmlrpc/main.c (File Modified) 
+  +1 -1		trunk/src/function.c (File Modified) 
+
+
 jilles      2006/10/05 23:46:42 UTC	(20061005-6667)
   Log:
   perlxmlrpc.pl:
