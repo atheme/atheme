@@ -1,3 +1,12 @@
+jilles      2006/10/06 14:22:19 UTC	(20061006-6673)
+  Log:
+  Fix crash.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/set.c (File Modified) 
+
+
 jilles      2006/10/06 00:13:15 UTC	(20061006-6669)
   Log:
   Add const char *sourcedesc field to sourceinfo_t to

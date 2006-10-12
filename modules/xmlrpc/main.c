@@ -4,7 +4,7 @@
  *
  * New xmlrpc implementation
  *
- * $Id: main.c 6669 2006-10-06 00:13:15Z jilles $
+ * $Id: main.c 6677 2006-10-12 21:06:47Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6669 2006-10-06 00:13:15Z jilles $",
+	"$Id: main.c 6677 2006-10-12 21:06:47Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -425,13 +425,13 @@ static void xmlrpc_command_success_nodata(sourceinfo_t *si, const char *message)
 		return;
 	if (hd->replybuf != NULL)
 	{
-		hd->replybuf = srealloc(hd->replybuf, strlen(hd->replybuf) + strlen(message) + 1);
+		hd->replybuf = srealloc(hd->replybuf, strlen(hd->replybuf) + strlen(message) + 2);
 		p = hd->replybuf + strlen(hd->replybuf);
 		*p++ = '\n';
 	}
 	else
 	{
-		hd->replybuf = smalloc(strlen(message));
+		hd->replybuf = smalloc(strlen(message) + 1);
 		p = hd->replybuf;
 	}
 	q = message;
