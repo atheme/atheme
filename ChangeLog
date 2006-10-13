@@ -1,3 +1,12 @@
+jilles      2006/10/12 21:06:47 UTC	(20061012-6677)
+  Log:
+  xmlrpc_command_success_nodata(): make sure to allocate enough memory for reply
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/xmlrpc/main.c (File Modified) 
+
+
 jilles      2006/10/06 14:22:19 UTC	(20061006-6673)
   Log:
   Fix crash.
