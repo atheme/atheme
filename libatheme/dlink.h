@@ -4,7 +4,7 @@
  *
  * Data structures and macros for manipulating linked lists.
  *
- * $Id: dlink.h 3023 2005-10-19 05:26:32Z nenolod $
+ * $Id: dlink.h 6681 2006-10-14 13:53:31Z jilles $
  */
 
 #ifndef NODE_H
@@ -39,6 +39,8 @@ struct list_
 E node_t *node_create(void);
 E void node_free(node_t *n);
 E void node_add(void *data, node_t *n, list_t *l);
+E void node_add_head(void *data, node_t *n, list_t *l);
+E void node_add_before(void *data, node_t *n, list_t *l, node_t *before);
 E void node_del(node_t *n, list_t *l);
 E node_t *node_find(void *data, list_t *l);
 E void node_move(node_t *m, list_t *oldlist, list_t *newlist);

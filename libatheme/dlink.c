@@ -4,7 +4,7 @@
  *
  * Linked list stuff.
  *
- * $Id: dlink.c 6329 2006-09-08 22:52:31Z jilles $
+ * $Id: dlink.c 6681 2006-10-14 13:53:31Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -81,6 +81,47 @@ void node_add(void *data, node_t *n, list_t *l)
 
         /* up the count */
         l->count++;
+}
+
+/* adds a node to the head of a list */
+void node_add_head(void *data, node_t *n, list_t *l)
+{
+	node_t *tn;
+
+	n->next = n->prev = NULL;
+	n->data = data;
+
+	/* first node? */
+	if (!l->head)
+	{
+		l->head = n;
+		l->tail = n;
+		l->count++;
+		return;
+	}
+
+	tn = l->head;
+	n->next = tn;
+	tn->prev = n;
+	l->head = n;
+	l->count++;
+}
+
+/* adds a node to a list before another node, or to the end */
+void node_add_before(void *data, node_t *n, list_t *l, node_t *before)
+{
+	if (before == NULL)
+		node_add(data, n, l);
+	else if (before == l->head)
+		node_add_head(data, n, l);
+	else
+	{
+		n->data = data;
+		n->prev = before->prev;
+		n->next = before;
+		before->prev = n;
+		l->count++;
+	}
 }
 
 void node_del(node_t *n, list_t *l)

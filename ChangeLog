@@ -1,3 +1,12 @@
+jilles      2006/10/13 19:43:11 UTC	(20061013-6679)
+  Log:
+  ChanServ: Make sure not to part the snoop channel if MC_INHABIT gets set on it.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/chanserv/main.c (File Modified) 
+
+
 jilles      2006/10/12 21:06:47 UTC	(20061012-6677)
   Log:
   xmlrpc_command_success_nodata(): make sure to allocate enough memory for reply
