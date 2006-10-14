@@ -1,3 +1,12 @@
+jilles      2006/10/14 14:48:01 UTC	(20061014-6685)
+  Log:
+  Using hook_add_hook_first(), check close before akick/autoop/etc.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/close.c (File Modified) 
+
+
 jilles      2006/10/14 14:47:13 UTC	(20061014-6683)
   Log:
   Add hook_add_hook_first(), like hook_add_hook() but adds

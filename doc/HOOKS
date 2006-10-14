@@ -1,10 +1,11 @@
-$Id: HOOKS 6509 2006-09-26 18:30:13Z jilles $
+$Id: HOOKS 6687 2006-10-14 15:15:05Z jilles $
 
 Atheme hooks system
 
 hook_add_event("name")
 hook_call_event("name", argument)
 hook_add_hook("name", handler)
+hook_add_hook_first("name", handler)
 hook_del_hook("name", handler)
 
 Current list of hooks
