@@ -4,7 +4,7 @@
  *
  * A hook system. Idea taken from hybrid.
  *
- * $Id: hook.c 6149 2006-08-19 20:03:47Z jilles $
+ * $Id: hook.c 6683 2006-10-14 14:47:13Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -111,6 +111,19 @@ void hook_add_hook(const char *event, void (*handler)(void *data))
 	n = node_create();
 
 	node_add((void *) handler, n, &h->hooks);
+}
+
+void hook_add_hook_first(const char *event, void (*handler)(void *data))
+{
+	hook_t *h;
+	node_t *n;
+
+	if (!(h = find_hook(event)))
+		return;
+
+	n = node_create();
+
+	node_add_head((void *) handler, n, &h->hooks);
 }
 
 void hook_call_event(const char *event, void *dptr)

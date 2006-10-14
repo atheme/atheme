@@ -1,3 +1,15 @@
+jilles      2006/10/14 13:53:31 UTC	(20061014-6681)
+  Log:
+  Add node_add_head() and node_add_before() to add nodes to
+  a list in a place other than the tail.
+  First intended use: hook priority scheme
+  
+
+  Changes:	Modified:
+  +41 -0	trunk/libatheme/dlink.c (File Modified) 
+  +2 -0		trunk/libatheme/dlink.h (File Modified) 
+
+
 jilles      2006/10/13 19:43:11 UTC	(20061013-6679)
   Log:
   ChanServ: Make sure not to part the snoop channel if MC_INHABIT gets set on it.
