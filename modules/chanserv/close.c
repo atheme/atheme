@@ -4,7 +4,7 @@
  *
  * Closing for channels.
  *
- * $Id: close.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: close.c 6685 2006-10-14 14:48:01Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/close", FALSE, _modinit, _moddeinit,
-	"$Id: close.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: close.c 6685 2006-10-14 14:48:01Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -34,7 +34,7 @@ void _modinit(module_t *m)
 
 	command_add(&cs_close, cs_cmdtree);
 	hook_add_event("channel_join");
-	hook_add_hook("channel_join", close_check_join);
+	hook_add_hook_first("channel_join", close_check_join);
 	help_addentry(cs_helptree, "CLOSE", "help/cservice/close", NULL);
 }
 
