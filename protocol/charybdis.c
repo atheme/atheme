@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 6515 2006-09-27 17:13:42Z jilles $
+ * $Id: charybdis.c 6689 2006-10-14 15:49:25Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6515 2006-09-27 17:13:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6689 2006-10-14 15:49:25Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -554,6 +554,9 @@ static void m_tb(sourceinfo_t *si, int parc, char *parv[])
 	channel_t *c = channel_find(parv[0]);
 	time_t ts = atol(parv[1]);
 	server_t *source = si->s;
+
+	if (c == NULL)
+		return;
 
 	if (source == NULL)
 		source = server_find(me.actual);

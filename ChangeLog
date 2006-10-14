@@ -1,3 +1,12 @@
+jilles      2006/10/14 15:15:05 UTC	(20061014-6687)
+  Log:
+  Document hook_add_hook_first() in doc/HOOKS.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/doc/HOOKS (File Modified) 
+
+
 jilles      2006/10/14 14:48:01 UTC	(20061014-6685)
   Log:
   Using hook_add_hook_first(), check close before akick/autoop/etc.
