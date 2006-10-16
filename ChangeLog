@@ -1,3 +1,12 @@
+jilles      2006/10/16 10:15:12 UTC	(20061016-6691)
+  Log:
+  xmlrpc: avoid a crash on an unusual Connection header
+  
+
+  Changes:	Modified:
+  +3 -2		trunk/modules/xmlrpc/main.c (File Modified) 
+
+
 jilles      2006/10/14 15:49:25 UTC	(20061014-6689)
   Log:
   ratbox/charybdis/hybrid m_tb(): check that the channel exists

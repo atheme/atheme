@@ -4,7 +4,7 @@
  *
  * A simple web server
  *
- * $Id: gen_httpd.c 6389 2006-09-14 14:26:32Z jilles $
+ * $Id: gen_httpd.c 6693 2006-10-16 10:16:27Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"contrib/gen_httpd", FALSE, _modinit, _moddeinit,
-	"$Id: gen_httpd.c 6389 2006-09-14 14:26:32Z jilles $",
+	"$Id: gen_httpd.c 6693 2006-10-16 10:16:27Z jilles $",
 	"Jilles Tjoelker <jilles -at- stack.nl>"
 );
 
@@ -53,10 +53,18 @@ static void process_header(connection_t *cptr, char *line)
 	p++;
 	while (*p == ' ')
 		p++;
-	if (!strcasecmp(line, "Connection") && !strcasecmp(p, "close"))
+	if (!strcasecmp(line, "Connection"))
 	{
-		slog(LG_DEBUG, "process_header(): Connection: close requested by fd %d", cptr->fd);
-		hd->connection_close = TRUE;
+		p = strtok(p, ", \t");
+		while (p != NULL)
+		{
+			if (!strcasecmp(p, "close"))
+			{
+				slog(LG_DEBUG, "process_header(): Connection: close requested by fd %d", cptr->fd);
+				hd->connection_close = TRUE;
+			}
+			p = strtok(NULL, ", \t");
+		}
 	}
 }
 
