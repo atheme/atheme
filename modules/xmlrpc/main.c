@@ -4,7 +4,7 @@
  *
  * New xmlrpc implementation
  *
- * $Id: main.c 6677 2006-10-12 21:06:47Z jilles $
+ * $Id: main.c 6691 2006-10-16 10:15:12Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6677 2006-10-12 21:06:47Z jilles $",
+	"$Id: main.c 6691 2006-10-16 10:15:12Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -117,14 +117,15 @@ static void process_header(connection_t *cptr, char *line)
 	if (!strcasecmp(line, "Connection"))
 	{
 		p = strtok(p, ", \t");
-		do
+		while (p != NULL)
 		{
 			if (!strcasecmp(p, "close"))
 			{
 				slog(LG_DEBUG, "process_header(): Connection: close requested by fd %d", cptr->fd);
 				hd->connection_close = TRUE;
 			}
-		} while ((p = strtok(NULL, ", \t")) != NULL);
+			p = strtok(NULL, ", \t");
+		}
 	}
 	else if (!strcasecmp(line, "Content-Length"))
 	{

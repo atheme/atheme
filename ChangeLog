@@ -1,3 +1,14 @@
+jilles      2006/10/14 15:49:25 UTC	(20061014-6689)
+  Log:
+  ratbox/charybdis/hybrid m_tb(): check that the channel exists
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/protocol/charybdis.c (File Modified) 
+  +3 -0		trunk/protocol/hybrid.c (File Modified) 
+  +3 -0		trunk/protocol/ratbox.c (File Modified) 
+
+
 jilles      2006/10/14 15:15:05 UTC	(20061014-6687)
   Log:
   Document hook_add_hook_first() in doc/HOOKS.
