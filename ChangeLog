@@ -1,3 +1,13 @@
+jilles      2006/10/20 20:28:45 UTC	(20061020-6757)
+  Log:
+  - remove nick! from nick access entries (use just user@host)
+  - allow IP and CIDR access entries
+  
+
+  Changes:	Modified:
+  +7 -4		trunk/src/account.c (File Modified) 
+
+
 jilles      2006/10/20 20:12:43 UTC	(20061020-6755)
   Log:
   Rename myuser_access_attach() to myuser_access_add().
