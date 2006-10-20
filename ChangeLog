@@ -1,3 +1,13 @@
+jilles      2006/10/20 17:09:17 UTC	(20061020-6705)
+  Log:
+  Only try a fantasy command if the first character of the
+  "command" (after '!') is a letter.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/main.c (File Modified) 
+
+
 jilles      2006/10/20 16:40:26 UTC	(20061020-6703)
   Log:
   Make /cs invite command description reflect that you
