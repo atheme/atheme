@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6723 2006-10-20 18:40:59Z nenolod $
+ * $Id: node.c 6739 2006-10-20 19:08:26Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,6 @@
 
 list_t operclasslist;
 list_t soperlist;
-list_t svs_ignore_list;
 list_t tldlist;
 list_t uplinks;
 list_t klnlist;
@@ -26,7 +25,6 @@ list_t mclist[HASHSIZE];
 
 static BlockHeap *operclass_heap;
 static BlockHeap *soper_heap;
-static BlockHeap *svsignore_heap;
 static BlockHeap *tld_heap;
 static BlockHeap *serv_heap;
 static BlockHeap *user_heap;
@@ -54,7 +52,6 @@ void init_nodes(void)
 {
 	operclass_heap = BlockHeapCreate(sizeof(operclass_t), 2);
 	soper_heap = BlockHeapCreate(sizeof(soper_t), 2);
-	svsignore_heap = BlockHeapCreate(sizeof(svsignore_t), 2);
 	tld_heap = BlockHeapCreate(sizeof(tld_t), 4);
 	serv_heap = BlockHeapCreate(sizeof(server_t), HEAP_SERVER);
 	user_heap = BlockHeapCreate(sizeof(user_t), HEAP_USER);
@@ -68,7 +65,7 @@ void init_nodes(void)
 	chanacs_heap = BlockHeapCreate(sizeof(chanacs_t), HEAP_CHANUSER);
 
 	if (!tld_heap || !serv_heap || !user_heap || !chan_heap || !soper_heap || !chanuser_heap || !chanban_heap || !uplink_heap || !metadata_heap || !kline_heap || !mychan_heap
-	    || !chanacs_heap || !svsignore_heap)
+	    || !chanacs_heap)
 	{
 		slog(LG_INFO, "init_nodes(): block allocator failed.");
 		exit(EXIT_FAILURE);
@@ -365,53 +362,6 @@ soper_t *soper_find_named(char *name)
 
 	return NULL;
 }
-
-/*********************
- * S V S I G N O R E *
- *********************/
-
-svsignore_t *svsignore_add(char *mask, char *reason)
-{
-	svsignore_t *svsignore;
-	node_t *n = node_create();
-
-	svsignore = BlockHeapAlloc(svsignore_heap);
-
-	node_add(svsignore, n, &svs_ignore_list);
-
-	svsignore->mask = sstrdup(mask);
-	svsignore->settime = CURRTIME;
-	svsignore->reason = sstrdup(reason);
-	cnt.svsignore++;
-
-	return svsignore;
-}
-
-svsignore_t *svsignore_find(user_t *source)
-{
-	svsignore_t *svsignore;
-	node_t *n;
-	char host[BUFSIZE];
-
-	*host = '\0';
-	strlcpy(host, source->nick, BUFSIZE);
-	strlcat(host, "!", BUFSIZE);
-	strlcat(host, source->user, BUFSIZE);
-	strlcat(host, "@", BUFSIZE);
-	strlcat(host, source->host, BUFSIZE);
-
-	LIST_FOREACH(n, svs_ignore_list.head)
-	{
-		svsignore = (svsignore_t *)n->data;
-
-		if (!match(svsignore->mask, host))
-			return svsignore;
-	}
-
-	return NULL;
-
-}
-
 
 /***********
  * T L D S *

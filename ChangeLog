@@ -1,3 +1,12 @@
+jilles      2006/10/20 19:07:43 UTC	(20061020-6737)
+  Log:
+  crypto/sorservices: fix warnings
+  
+
+  Changes:	Modified:
+  +7 -7		trunk/crypto/sorservices.c (File Modified) 
+
+
 jilles      2006/10/20 19:00:48 UTC	(20061020-6735)
   Log:
   account.h: give a proper prototype for init_accounts().

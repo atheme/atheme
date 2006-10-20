@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 6735 2006-10-20 19:00:48Z jilles $
+ * $Id: account.h 6739 2006-10-20 19:08:26Z nenolod $
  */
 
 #ifndef ACCOUNT_H
@@ -233,6 +233,7 @@ E dictionary_tree_t *mulist;
 
 E svsignore_t *svsignore_find(user_t *user);
 E svsignore_t *svsignore_add(char *mask, char *reason);
+E void svsignore_delete(svsignore_t *svsignore);
 
 E kline_t *kline_add(char *user, char *host, char *reason, long duration);
 E void kline_delete(const char *user, const char *host);
