@@ -1,3 +1,13 @@
+jilles      2006/10/20 16:28:07 UTC	(20061020-6699)
+  Log:
+  Move channel_message hook call from chanserv/main to handle_message().
+  
+
+  Changes:	Modified:
+  +0 -6		trunk/modules/chanserv/main.c (File Modified) 
+  +18 -7	trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2006/10/20 16:15:13 UTC	(20061020-6697)
   Log:
   Add experimental code which uses the normal command_t's
