@@ -1,3 +1,13 @@
+jilles      2006/10/20 16:40:26 UTC	(20061020-6703)
+  Log:
+  Make /cs invite command description reflect that you
+  can only invite yourself, not others.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/invite.c (File Modified) 
+
+
 jilles      2006/10/20 16:38:40 UTC	(20061020-6701)
   Log:
   Make !help work somehow.
