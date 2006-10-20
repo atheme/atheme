@@ -1,3 +1,12 @@
+jilles      2006/10/20 17:11:00 UTC	(20061020-6707)
+  Log:
+  Add back flood checking on fantasy commands.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/modules/chanserv/main.c (File Modified) 
+
+
 jilles      2006/10/20 17:09:17 UTC	(20061020-6705)
   Log:
   Only try a fantasy command if the first character of the
