@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 6719 2006-10-20 18:35:41Z nenolod $
+ * $Id: services.c 6747 2006-10-20 19:50:48Z jilles $
  */
 
 #include "atheme.h"
@@ -298,12 +298,8 @@ void handle_nickchange(user_t *u)
 		return;
 
 	/* OpenServices: is user on access list? -nenolod */
-	if (myuser_access_verify(u, mu) == TRUE)
-	{
-		u->myuser = mu;
-		node_add(u, node_create(), &mu->logins);
+	if (myuser_access_verify(u, mu))
 		return;
-	}
 
 	notice(nicksvs.nick, u->nick, "This nickname is registered. Please choose a different nickname, or identify via \2/%s%s identify <password>\2.",
 	       (ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.disp);
