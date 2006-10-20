@@ -1,3 +1,12 @@
+jilles      2006/10/20 20:04:14 UTC	(20061020-6751)
+  Log:
+  myuser_access_verify(): update last login time if user matches
+  
+
+  Changes:	Modified:
+  +4 -1		trunk/src/account.c (File Modified) 
+
+
 jilles      2006/10/20 19:59:26 UTC	(20061020-6749)
   Log:
   ns_enforce: Don't FNC users who match an access list entry on the nick.
