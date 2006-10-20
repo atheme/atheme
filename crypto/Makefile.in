@@ -32,7 +32,7 @@ CPPFLAGS	= @CPPFLAGS@
 
 default: all
 
-BASE_SRCS = @POSIX_CRYPTC@ ircservices.c
+BASE_SRCS = @POSIX_CRYPTC@ ircservices.c sorservices.c
 
 SRCS = ${BASE_SRCS}
 
