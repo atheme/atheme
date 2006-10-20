@@ -23,7 +23,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/enforce",FALSE, _modinit, _moddeinit,
-	"$Id: ns_enforce.c 6657 2006-10-04 21:22:47Z jilles $",
+	"$Id: ns_enforce.c 6749 2006-10-20 19:59:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -280,6 +280,8 @@ void reg_check(void *arg)
 					if (u->myuser == mu)
 						continue;
 					if (!metadata_find(mu, METADATA_USER, "private:doenforce"))
+						;
+					else if (myuser_access_verify(u, mu))
 						;
 					else if (u->flags & UF_NICK_WARNED)
 					{

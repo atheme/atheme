@@ -1,3 +1,13 @@
+jilles      2006/10/20 19:50:48 UTC	(20061020-6747)
+  Log:
+  Don't log users in when they match an access list entry,
+  just suppress the 'please identify' notice.
+  
+
+  Changes:	Modified:
+  +1 -5		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/10/20 19:46:45 UTC	(20061020-6745)
   Log:
   Update contrib/fc_dice to new APIs.
