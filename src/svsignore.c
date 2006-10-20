@@ -4,7 +4,7 @@
  *
  * Services ignorelist functions.
  *
- * $Id: svsignore.c 6739 2006-10-20 19:08:26Z nenolod $
+ * $Id: svsignore.c 6741 2006-10-20 19:10:57Z jilles $
  */
 
 #include "atheme.h"
@@ -56,7 +56,7 @@ void svsignore_delete(svsignore_t *svsignore)
 {
 	node_t *n;
 
-	node_find(svsignore, &svs_ignore_list);
+	n = node_find(svsignore, &svs_ignore_list);
 	node_del(n, &svs_ignore_list);
 
 	free(svsignore->mask);
