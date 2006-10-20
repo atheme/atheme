@@ -8,39 +8,26 @@ DECLARE_MODULE_V1
 );
 
 static void cs_cmd_ping(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_fcmd_ping(char *origin, char *chan);
 
 command_t cs_ping = { "PING", "Verifies network connectivity by responding with pong.",
-                        AC_NONE, 0, cs_cmd_ping };
-
-fcommand_t fc_ping = { "!ping", AC_NONE, cs_fcmd_ping };
+			AC_NONE, 0, cs_cmd_ping };
 
 list_t *cs_cmdtree;
-list_t *cs_fcmdtree;
 
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
-	MODULE_USE_SYMBOL(cs_fcmdtree, "chanserv/main", "cs_fcmdtree");
 
         command_add(&cs_ping, cs_cmdtree);
-	fcommand_add(&fc_ping, cs_fcmdtree);
 }
 
 void _moddeinit()
 {
 	command_delete(&cs_ping, cs_cmdtree);
-	fcommand_delete(&fc_ping, cs_fcmdtree);
 }
 
 static void cs_cmd_ping(sourceinfo_t *si, int parc, char *parv[])
 {
-        notice(chansvs.nick, si->su->nick, "Pong!");
-        return;
-}
-
-static void cs_fcmd_ping(char *origin, char *chan)
-{
-        notice(chansvs.nick, origin, "Pong!");
+	command_success_nodata(si, "Pong!");
 	return;
 }
