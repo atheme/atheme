@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 6753 2006-10-20 20:09:01Z jilles $
+ * $Id: account.c 6755 2006-10-20 20:12:43Z jilles $
  */
 
 #include "atheme.h"
@@ -356,7 +356,7 @@ myuser_access_verify(user_t *u, myuser_t *mu)
 }
 
 /*
- * myuser_access_attach()
+ * myuser_access_add()
  *
  * Inputs:
  *     - account to attach access mask to, access mask itself
@@ -369,20 +369,20 @@ myuser_access_verify(user_t *u, myuser_t *mu)
  *     - an access mask is added to an account.
  */
 boolean_t
-myuser_access_attach(myuser_t *mu, char *mask)
+myuser_access_add(myuser_t *mu, char *mask)
 {
 	node_t *n;
 	char *msk;
 
 	if (mu == NULL || mask == NULL)
 	{
-		slog(LG_DEBUG, "myuser_access_attach(): invalid parameters: mu = %p, mask = %p", mu, mask);
+		slog(LG_DEBUG, "myuser_access_add(): invalid parameters: mu = %p, mask = %p", mu, mask);
 		return FALSE;
 	}
 
 	if (LIST_LENGTH(&mu->access_list) > me.mdlimit)
 	{
-		slog(LG_DEBUG, "myuser_access_attach(): access entry limit reached for %s", mu->name);
+		slog(LG_DEBUG, "myuser_access_add(): access entry limit reached for %s", mu->name);
 		return FALSE;
 	}
 

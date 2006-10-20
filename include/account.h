@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 6739 2006-10-20 19:08:26Z nenolod $
+ * $Id: account.h 6755 2006-10-20 20:12:43Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -287,7 +287,7 @@ E void init_accounts(void);
 
 /* openservices patch */
 E boolean_t myuser_access_verify(user_t *u, myuser_t *mu);
-E boolean_t myuser_access_attach(myuser_t *mu, char *mask);
+E boolean_t myuser_access_add(myuser_t *mu, char *mask);
 E void myuser_access_delete(myuser_t *mu, char *mask);
 
 E boolean_t mychan_isused(mychan_t *mc);
