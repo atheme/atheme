@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 William Pitcock <nenolod@nenolod.net>
+ * Copyright (c) 2005-2006 William Pitcock <nenolod@nenolod.net> et al
  * Rights to this code are documented in doc/LICENSE.
  *
  * Dice generator fantasy command.
  *
- * $Id: fc_dice.c 6027 2006-08-13 18:12:43Z nenolod $
+ * $Id: fc_dice.c 6745 2006-10-20 19:46:45Z jilles $
  */
 
 #include "atheme.h"
@@ -12,39 +12,45 @@
 DECLARE_MODULE_V1
 (
 	"contrib/fc_dice", FALSE, _modinit, _moddeinit,
-	"$Id: fc_dice.c 6027 2006-08-13 18:12:43Z nenolod $",
+	"$Id: fc_dice.c 6745 2006-10-20 19:46:45Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static void fcommand_dice(char *origin, char *channel);
-static void fcommand_wod(char *origin, char *channel);
+static void command_dice(sourceinfo_t *si, int parc, char *parv[]);
+static void command_wod(sourceinfo_t *si, int parc, char *parv[]);
 
-fcommand_t fc_dice = { "!roll", AC_NONE, fcommand_dice };
-fcommand_t fc_wod = { "!wod", AC_NONE, fcommand_wod };
+command_t cmd_dice = { "ROLL", "Rolls one or more dice.", AC_NONE, 2, command_dice };
+command_t cmd_wod = { "WOD", "WOD-style dice generation.", AC_NONE, 7, command_wod };
 
-list_t *cs_fcmdtree;
+list_t *cs_cmdtree;
 
 void _modinit(module_t * m)
 {
-	MODULE_USE_SYMBOL(cs_fcmdtree, "chanserv/main", "cs_fcmdtree");
-	fcommand_add(&fc_dice, cs_fcmdtree);
-	fcommand_add(&fc_wod, cs_fcmdtree);
+	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
+	command_add(&cmd_dice, cs_cmdtree);
+	command_add(&cmd_wod, cs_cmdtree);
 }
 
 void _moddeinit()
 {
-	fcommand_delete(&fc_dice, cs_fcmdtree);
-	fcommand_delete(&fc_wod, cs_fcmdtree);
+	command_delete(&cmd_dice, cs_cmdtree);
+	command_delete(&cmd_wod, cs_cmdtree);
 }
 
-static void fcommand_dice(char *origin, char *channel)
+static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *arg = strtok(NULL, " ");
+	char *arg = parv[1];
 	int32_t dice, sides, i, roll = 1;
+
+	/* this command is only available on channel */
+	if (!si->c)
+	{
+		command_fail(si, fault_noprivs, "This command is only available on channel.");
+		return;
+	}
 
 	if (!arg)
 		return;
-
 	sscanf(arg, "%dd%d", &dice, &sides);
 
 	if (dice <= 0)
@@ -67,13 +73,14 @@ static void fcommand_dice(char *origin, char *channel)
 	for (i = 0; i < dice; i++)
 		roll += (rand() % sides);
 
-	msg(chansvs.nick, channel, "Your roll: \2%d\2", roll);
+	msg(chansvs.nick, parv[0], "Your roll: \2%d\2", roll);
 }
 
-static void fcommand_wod(char *origin, char *channel)
+static void command_wod(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *arg_dice = strtok(NULL, " ");
-	char *arg_difficulty = strtok(NULL, " ");
+	int ii = 1;
+	char *arg_dice = parv[ii++];
+	char *arg_difficulty = parv[ii++];
 
 	int32_t dice, difficulty;
 	int32_t roll, total = 0, roll_count = 0, i;
@@ -82,11 +89,18 @@ static void fcommand_wod(char *origin, char *channel)
 	static char buf[BUFSIZE];
 	char *end_p;
 
+	/* this command is only available on channel */
+	if (!si->c)
+	{
+		command_fail(si, fault_noprivs, "This command is only available on channel.");
+		return;
+	}
+
 	srand(CURRTIME);
 
 	if (arg_dice == NULL || arg_difficulty == NULL)
 	{
-		notice(chansvs.nick, origin, "Syntax: !wod <dice> <difficulty>");
+		command_fail(si, fault_needmoreparams, "Syntax: !wod <dice> <difficulty>");
 		return;
 	}
 
@@ -99,9 +113,15 @@ static void fcommand_wod(char *origin, char *channel)
 		difficulty = atoi(arg_difficulty);
 
 		if (dice > 30 || dice < 1)
-			notice(chansvs.nick, origin, "Only 1-30 dice may be thrown at one time.");
+		{
+			command_fail(si, fault_badparams, "Only 1-30 dice may be thrown at one time.");
+			return;
+		}
 		else if (difficulty > 10 || difficulty < 1)
-			notice(chansvs.nick, origin, "Difficulty setting must be between 1 and 10.");
+		{
+			command_fail(si, fault_badparams, "Difficulty setting must be between 1 and 10.");
+			return;
+		}
 		else
 		{
 			end_p = buf;
@@ -129,23 +149,23 @@ static void fcommand_wod(char *origin, char *channel)
 			rerolls = rerolls - botches;
 			total = success - botches;
 
-			msg(chansvs.nick, channel, "%s rolls %d dice at difficulty %d: %s", origin, dice, difficulty, buf);
+			msg(chansvs.nick, parv[0], "%s rolls %d dice at difficulty %d: %s", si->su->nick, dice, difficulty, buf);
 
 			if (rerolls > 0)
 			{
-				msg(chansvs.nick, channel, "Successes: %d, Failures: %d, Botches: %d, Total: %d. "
+				msg(chansvs.nick, parv[0], "Successes: %d, Failures: %d, Botches: %d, Total: %d. "
 					"You may reroll %d if you have a specialty.",
 					success, failure, botches, total, rerolls);
 			}
 			else
 			{
-				msg(chansvs.nick, channel, "Successes: %d, Failures: %d, Botches: %d, Total: %d.",
+				msg(chansvs.nick, parv[0], "Successes: %d, Failures: %d, Botches: %d, Total: %d.",
 					success, failure, botches, total);
 			}
 		}
 
 		/* prepare for another go. */
-		arg_dice = strtok(NULL, " ");		
-		arg_difficulty = strtok(NULL, " ");
+		arg_dice = parv[ii++];
+		arg_difficulty = parv[ii++];
 	}
 }

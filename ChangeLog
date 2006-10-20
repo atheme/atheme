@@ -1,3 +1,12 @@
+jilles      2006/10/20 19:13:35 UTC	(20061020-6743)
+  Log:
+  Update contrib/cs_ping to new APIs.
+  
+
+  Changes:	Modified:
+  +2 -15	trunk/contrib/cs_ping.c (File Modified) 
+
+
 jilles      2006/10/20 19:10:57 UTC	(20061020-6741)
   Log:
   svsignore_delete(): actually use 'n'.
