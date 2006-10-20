@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6697 2006-10-20 16:15:13Z jilles $
+ * $Id: main.c 6699 2006-10-20 16:28:07Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6697 2006-10-20 16:15:13Z jilles $",
+	"$Id: main.c 6699 2006-10-20 16:28:07Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -62,7 +62,6 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 	char orig[BUFSIZE];
 	char newargs[BUFSIZE];
 	uint32_t oldflags;
-	hook_cmessage_data_t cdata;
 	char *cmd;
 	char *args;
 
@@ -140,11 +139,6 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 			mc->flags &= ~MC_VERBOSE_MASK;
 			mc->flags |= oldflags;
 		}
-
-		cdata.u = si->su;
-		cdata.c = channel_find(parv[parc - 2]);
-		cdata.msg = parv[parc - 1];
-		hook_call_event("channel_message", &cdata);
 	}
 }
 

@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 6617 2006-10-01 22:11:49Z jilles $
+ * $Id: ptasks.c 6699 2006-10-20 16:28:07Z jilles $
  */
 
 #include "atheme.h"
@@ -327,6 +327,7 @@ void handle_motd(user_t *u)
 void handle_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *message)
 {
 	char *vec[3];
+	hook_cmessage_data_t cdata;
 
 	/* message from server, ignore */
 	if (si->su == NULL)
@@ -337,13 +338,23 @@ void handle_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *m
 	 */
 	si->service = find_service(target);
 
-	/* If target is a channel but command is no fantasy command,
-         * it will be normal chatter
-         */
-        if ((si->service == chansvs.me) && (*target == '#') && (*message != '!' && *message != '.' && *message != '@'))
-        {
-        	return;
-        }
+	if (*target == '#')
+	{
+		/* Call hook here */
+		cdata.u = si->su;
+		cdata.c = channel_find(target);
+		cdata.msg = message;
+		/* No such channel, ignore... */
+		if (cdata.c == NULL)
+			return;
+		hook_call_event("channel_message", &cdata);
+
+		/* If target is a channel but command is no fantasy command,
+		 * it will be normal chatter
+		 */
+		if (*message != '!' && *message != '.' && *message != '@')
+			return;
+	}
 
 	if (si->service == NULL)
 	{

@@ -1,3 +1,17 @@
+jilles      2006/10/20 16:15:13 UTC	(20061020-6697)
+  Log:
+  Add experimental code which uses the normal command_t's
+  for fantasy commands, allowing complete removal of
+  fcommand later. Uses lines starting with '!', removing
+  the '!' to get the command name. Adds the channel name
+  before the arguments. There is a special case for
+  '.flags'.
+  
+
+  Changes:	Modified:
+  +27 -7	trunk/modules/chanserv/main.c (File Modified) 
+
+
 jilles      2006/10/20 15:10:26 UTC	(20061020-6695)
   Log:
   Add #define MC_VERBOSE_MASK (MC_VERBOSE | MC_VERBOSE_OPS).
