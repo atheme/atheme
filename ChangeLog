@@ -1,3 +1,13 @@
+jilles      2006/10/20 21:10:04 UTC	(20061020-6759)
+  Log:
+  Update cs_count and ns_generatepass from contrib to new APIs.
+  
+
+  Changes:	Modified:
+  +7 -7		trunk/contrib/cs_count.c (File Modified) 
+  +1 -1		trunk/contrib/ns_generatepass.c (File Modified) 
+
+
 jilles      2006/10/20 20:28:45 UTC	(20061020-6757)
   Log:
   - remove nick! from nick access entries (use just user@host)

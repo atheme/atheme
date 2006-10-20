@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 6727 2006-10-20 18:48:53Z jilles $
+ * $Id: flags.c 6761 2006-10-20 21:43:42Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 6727 2006-10-20 18:48:53Z jilles $",
+	"$Id: flags.c 6761 2006-10-20 21:43:42Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -149,6 +149,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 					command_fail(si, fault_nosuch_target, "The nickname \2%s\2 is not registered.", target);
 					return;
 				}
+				target = tmu->name;
 				ca = chanacs_find(mc, tmu, 0);
 			}
 			if (ca != NULL)
@@ -218,6 +219,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				command_fail(si, fault_nosuch_target, "The nickname \2%s\2 is not registered.", target);
 				return;
 			}
+			target = tmu->name;
 
 			if (tmu == mc->founder && removeflags & CA_FLAGS)
 			{
