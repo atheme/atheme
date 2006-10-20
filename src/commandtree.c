@@ -4,7 +4,7 @@
  *
  * Commandtree manipulation routines.
  *
- * $Id: commandtree.c 6617 2006-10-01 22:11:49Z jilles $
+ * $Id: commandtree.c 6727 2006-10-20 18:48:53Z jilles $
  */
 
 #include "atheme.h"
@@ -249,99 +249,6 @@ void command_help_short(sourceinfo_t *si, list_t *commandtree, char *maincmds)
 	}
 	if (strlen(buf) > l)
 		command_success_nodata(si, "%s", buf);
-}
-
-void fcommand_add(fcommand_t *cmd, list_t *commandtree)
-{
-	node_t *n;
-
-	if ((n = node_find(cmd, commandtree)))
-	{
-		slog(LG_INFO, "fcommand_add(): command %s already in the list", cmd->name);
-		return;
-	}
-
-	n = node_create();
-	node_add(cmd, n, commandtree);
-}
-
-void fcommand_delete(fcommand_t *cmd, list_t *commandtree)
-{
-	node_t *n;
-
-	if (!(n = node_find(cmd, commandtree)))
-	{
-		slog(LG_INFO, "command_delete(): command %s was not registered.", cmd->name);
-		return;
-	}
-
-	node_del(n, commandtree);
-	node_free(n);
-}
-
-void fcommand_exec(service_t *svs, char *channel, char *origin, char *cmd, list_t *commandtree)
-{
-	node_t *n;
-
-	LIST_FOREACH(n, commandtree->head)
-	{
-		fcommand_t *c = n->data;
-
-		if (!strcasecmp(cmd, c->name))
-		{
-			user_t *u = user_find_named(origin);
-
-			if (has_priv_user(u, c->access))
-			{
-				c->cmd(origin, channel);
-				return;
-			}
-			if (has_any_privs_user(u))
-				notice(svs->name, origin, "You do not have %s privilege.", c->access);
-			else
-				notice(svs->name, origin, "You are not authorized to perform this operation.");
-			return;
-		}
-	}
-
-	if (!channel || *channel != '#')
-		notice(svs->name, origin, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", svs->disp);
-}
-
-void fcommand_exec_floodcheck(service_t *svs, char *channel, char *origin, char *cmd, list_t *commandtree)
-{
-	node_t *n;
-	user_t *u = user_find_named(origin); /* Yeah, silly */
-
-	LIST_FOREACH(n, commandtree->head)
-	{
-		fcommand_t *c = n->data;
-
-		if (!strcasecmp(cmd, c->name))
-		{
-			/* run it through floodcheck which also checks for services ignore */
-			if (floodcheck(u, NULL))
-				return;
-
-			if (has_priv_user(u, c->access))
-			{
-				c->cmd(origin, channel);
-				return;
-			}
-			if (has_any_privs_user(u))
-				notice(svs->name, origin, "You do not have %s privilege.", c->access);
-			else
-				notice(svs->name, origin, "You are not authorized to perform this operation.");
-			return;
-		}
-	}
-
-	if (!channel || *channel != '#')
-	{
-		if (floodcheck(u, NULL))
-			return;
-		notice(svs->name, origin, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", svs->disp);
-	}
 }
 
 static int parse1(char *text, int maxparc, char **parv)

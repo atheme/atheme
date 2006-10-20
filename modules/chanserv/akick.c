@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: akick.c 6727 2006-10-20 18:48:53Z jilles $
  */
 
 #include "atheme.h"
@@ -15,26 +15,22 @@ static void cs_fcmd_akick(char *origin, char *chan);
 DECLARE_MODULE_V1
 (
 	"chanserv/akick", FALSE, _modinit, _moddeinit,
-	"$Id: akick.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: akick.c 6727 2006-10-20 18:48:53Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 command_t cs_akick = { "AKICK", "Manipulates a channel's AKICK list.",
                         AC_NONE, 3, cs_cmd_akick };
-fcommand_t fc_akick = { "!akick", AC_NONE, cs_fcmd_akick };
 
 list_t *cs_cmdtree;
-list_t *cs_fcmdtree;
 list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
-	MODULE_USE_SYMBOL(cs_fcmdtree, "chanserv/main", "cs_fcmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
         command_add(&cs_akick, cs_cmdtree);
-	fcommand_add(&fc_akick, cs_fcmdtree);
 
 	help_addentry(cs_helptree, "AKICK", "help/cservice/akick", NULL);
 }
@@ -42,7 +38,6 @@ void _modinit(module_t *m)
 void _moddeinit()
 {
 	command_delete(&cs_akick, cs_cmdtree);
-	fcommand_delete(&fc_akick, cs_fcmdtree);
 	help_delentry(cs_helptree, "AKICK");
 }
 

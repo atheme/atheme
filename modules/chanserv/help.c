@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 6701 2006-10-20 16:38:40Z jilles $
+ * $Id: help.c 6727 2006-10-20 18:48:53Z jilles $
  */
 
 #include "atheme.h"
@@ -12,77 +12,30 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 6701 2006-10-20 16:38:40Z jilles $",
+	"$Id: help.c 6727 2006-10-20 18:48:53Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
-static void fc_cmd_help(char *origin, char *chan);
 
 command_t cs_help = { "HELP", "Displays contextual help information.",
                         AC_NONE, 1, cs_cmd_help };
-fcommand_t fc_help = { "!help", AC_NONE, fc_cmd_help };
 
-list_t *cs_cmdtree, *cs_fcmdtree, *cs_helptree;
+list_t *cs_cmdtree, *cs_helptree;
 
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
-        MODULE_USE_SYMBOL(cs_fcmdtree, "chanserv/main", "cs_fcmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
 	command_add(&cs_help, cs_cmdtree);
-	fcommand_add(&fc_help, cs_fcmdtree);
 	help_addentry(cs_helptree, "HELP", "help/help", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&cs_help, cs_cmdtree);
-        fcommand_delete(&fc_help, cs_fcmdtree);
 	help_delentry(cs_helptree, "HELP");
-}
-
-static void fc_cmd_help(char *origin, char *chan)
-{
-        node_t *n;
-	char buf[BUFSIZE];
-	char delim[2] = " ";
-	int i=0;
-
-        notice(chansvs.nick, origin, "***** \2%s Help\2 *****", chansvs.nick);
-        notice(chansvs.nick, origin, "%s provides the following in-channel commands:", chansvs.nick);
-        notice(chansvs.nick, origin, " ");
-	
-	buf[0]='\0';
-	
-	LIST_FOREACH(n, cs_fcmdtree->head)
-        {
-                fcommand_t *c = n->data;
-         	i++;
-		strlcat(buf, c->name, BUFSIZE);
-		strlcat(buf, delim, BUFSIZE);
-
-		if (c->access != NULL)
-			continue;
-
-		if (i==6)
-		{
-	        	notice(chansvs.nick, origin, " %s", buf);
-			buf[0]='\0';
-			i=0;
-		}
-        }
-
-	if (i!=6) notice(chansvs.nick, origin, " %s", buf);
-
-        notice(chansvs.nick, origin, " ");
-	notice(chansvs.nick, origin, "More commands are supported via \2/%s%s <command>\2,", (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
-        notice(chansvs.nick, origin, "use \2/%s%s HELP\2 for more information.", (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
-        notice(chansvs.nick, origin, " ");
-
-        notice(chansvs.nick, origin, "***** \2End of Help\2 *****");
-        return;
 }
 
 /* HELP <command> [params] */
