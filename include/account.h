@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 6711 2006-10-20 18:05:20Z nenolod $
+ * $Id: account.h 6715 2006-10-20 18:31:20Z nenolod $
  */
 
 #ifndef ACCOUNT_H
@@ -51,6 +51,14 @@ struct svsignore_ {
   char *reason;
 };
 
+/* openservices patch: /ns access masks */
+struct myaccessmask_
+{
+  char user[NICKLEN];
+  char host[HOSTLEN];
+};
+
+/* services accounts */
 struct myuser_
 {
   char name[NICKLEN];
@@ -74,6 +82,9 @@ struct myuser_
   uint8_t memo_ratelimit_num; /* memos sent recently */
   time_t memo_ratelimit_time; /* last time a memo was sent */
   list_t memo_ignores;
+
+  /* openservices patch */
+  list_t access_list;
 };
 
 #define MU_HOLD        0x00000001
@@ -279,5 +290,10 @@ E void expire_check(void *arg);
 E void db_check(void);
 
 E void init_accounts();
+
+/* openservices patch */
+E boolean_t myuser_access_verify(user_t *u, myuser_t *mu);
+E boolean_t myuser_access_attach(myuser_t *mu, char *mask);
+E void myuser_access_delete(myuser_t *mu, char *mask);
 
 #endif

@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 6711 2006-10-20 18:05:20Z nenolod $
+ * $Id: account.c 6715 2006-10-20 18:31:20Z nenolod $
  */
 
 #include "atheme.h"
@@ -301,5 +301,120 @@ void myuser_notice(char *from, myuser_t *target, char *fmt, ...)
 	{
 		u = (user_t *)n->data;
 		notice(from, u->nick, "%s", buf);
+	}
+}
+
+/*
+ * myuser_access_verify()
+ *
+ * Inputs:
+ *     - user to verify, account to verify against
+ *
+ * Outputs:
+ *     - TRUE if user matches an accesslist entry
+ *     - FALSE otherwise
+ *
+ * Side Effects:
+ *     - none
+ */
+boolean_t
+myuser_access_verify(user_t *u, myuser_t *mu)
+{
+	node_t *n;
+	char buf[BUFSIZE], buf2[BUFSIZE];
+
+	if (u == NULL || mu == NULL)
+	{
+		slog(LG_DEBUG, "myuser_access_verify(): invalid parameters: u = %p, mu = %p", u, mu);
+		return FALSE;
+	}
+
+	snprintf(buf, BUFSIZE, "%s!%s@%s", u->nick, u->user, u->vhost);
+	snprintf(buf2, BUFSIZE, "%s!%s@%s", u->nick, u->user, u->host);
+
+	LIST_FOREACH(n, mu->access_list.head)
+	{
+		char *entry = (char *) n->data;
+
+		if (!match(entry, buf) || !match(entry, buf2))
+			return TRUE;
+	}
+
+	return FALSE;
+}
+
+/*
+ * myuser_access_attach()
+ *
+ * Inputs:
+ *     - account to attach access mask to, access mask itself
+ *
+ * Outputs:
+ *     - FALSE: me.mdlimit is reached (too many access entries)
+ *     - TRUE : success
+ *
+ * Side Effects:
+ *     - an access mask is added to an account.
+ */
+boolean_t
+myuser_access_attach(myuser_t *mu, char *mask)
+{
+	node_t *n;
+	char *msk;
+
+	if (mu == NULL || mask == NULL)
+	{
+		slog(LG_DEBUG, "myuser_access_attach(): invalid parameters: mu = %p, mask = %p", mu, mask);
+		return FALSE;
+	}
+
+	if (LIST_LENGTH(&mu->access_list) > me.mdlimit)
+	{
+		slog(LG_DEBUG, "myuser_access_attach(): access entry limit reached for %s", mu->name);
+		return FALSE;
+	}
+
+	msk = sstrdup(mask);
+	n = node_create();
+	node_add(msk, n, &mu->access_list);
+
+	return TRUE;
+}
+
+/*
+ * myuser_access_delete()
+ *
+ * Inputs:
+ *     - account to delete access mask from, access mask itself
+ *
+ * Outputs:
+ *     - FALSE: me.mdlimit is reached (too many access entries)
+ *     - TRUE : success
+ *
+ * Side Effects:
+ *     - an access mask is added to an account.
+ */
+void
+myuser_access_delete(myuser_t *mu, char *mask)
+{
+	node_t *n, *tn;
+
+	if (mu == NULL || mask == NULL)
+	{
+		slog(LG_DEBUG, "myuser_access_delete(): invalid parameters: mu = %p, mask = %p", mu, mask);
+		return;
+	}
+
+	LIST_FOREACH_SAFE(n, tn, mu->access_list.head)
+	{
+		char *entry = (char *) n->data;
+
+		if (!strcasecmp(entry, mask))
+		{
+			node_del(n, &n->data);
+			free(entry);
+
+			return;
+		}
 	}
 }

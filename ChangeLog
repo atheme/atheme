@@ -1,3 +1,13 @@
+nenolod     2006/10/20 18:16:35 UTC	(20061020-6713)
+  Log:
+  - sorservices-compatible encryption support (+openservices patch)
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/crypto/Makefile.in (File Modified) 
+  +341 -0	trunk/crypto/sorservices.c (File Added) 
+
+
 nenolod     2006/10/20 18:05:20 UTC	(20061020-6711)
   Log:
   - break out some (not all yet) account-related functions into account.c
