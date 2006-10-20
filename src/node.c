@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6721 2006-10-20 18:39:39Z nenolod $
+ * $Id: node.c 6723 2006-10-20 18:40:59Z nenolod $
  */
 
 #include "atheme.h"
@@ -42,9 +42,9 @@ static BlockHeap *mychan_heap;	/* HEAP_CHANNEL */
 static BlockHeap *chanacs_heap;	/* HEAP_CHANACS */
 static BlockHeap *metadata_heap;	/* HEAP_CHANUSER */
 
-static boolean_t mychan_isused(mychan_t *mc);
-static myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t minlevel, int maxtime);
-static myuser_t *mychan_pick_successor(mychan_t *mc);
+boolean_t mychan_isused(mychan_t *mc);
+myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t minlevel, int maxtime);
+myuser_t *mychan_pick_successor(mychan_t *mc);
 
 /*************
  * L I S T S *
@@ -1405,7 +1405,7 @@ mychan_t *mychan_find(const char *name)
 /* Check if there is anyone on the channel fulfilling the conditions.
  * Fairly expensive, but this is sometimes necessary to avoid
  * inappropriate drops. -- jilles */
-static boolean_t mychan_isused(mychan_t *mc)
+boolean_t mychan_isused(mychan_t *mc)
 {
 	node_t *n;
 	channel_t *c;
@@ -1424,7 +1424,7 @@ static boolean_t mychan_isused(mychan_t *mc)
 }
 
 /* Find a user fulfilling the conditions who can take another channel */
-static myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t minlevel, int maxtime)
+myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t minlevel, int maxtime)
 {
 	int j, tcnt;
 	node_t *n, *n2;
@@ -1468,7 +1468,7 @@ static myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t minlevel, int maxt
  * the channel or on IRC; this would give an unfair advantage to
  * 24*7 clients and bots.
  * -- jilles */
-static myuser_t *mychan_pick_successor(mychan_t *mc)
+myuser_t *mychan_pick_successor(mychan_t *mc)
 {
 	myuser_t *mu;
 

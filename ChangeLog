@@ -1,3 +1,13 @@
+nenolod     2006/10/20 18:39:39 UTC	(20061020-6721)
+  Log:
+  - move blockheap for accounts to accounts.c
+  
+
+  Changes:	Modified:
+  +9 -0		trunk/src/account.c (File Modified) 
+  +1 -2		trunk/src/node.c (File Modified) 
+
+
 nenolod     2006/10/20 18:35:41 UTC	(20061020-6719)
   Log:
   - missed a spot
