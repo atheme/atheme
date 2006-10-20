@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 6721 2006-10-20 18:39:39Z nenolod $
+ * $Id: account.c 6751 2006-10-20 20:04:14Z jilles $
  */
 
 #include "atheme.h"
@@ -324,7 +324,7 @@ void myuser_notice(char *from, myuser_t *target, char *fmt, ...)
  *     - FALSE otherwise
  *
  * Side Effects:
- *     - none
+ *     - last login time updated if user matches
  */
 boolean_t
 myuser_access_verify(user_t *u, myuser_t *mu)
@@ -346,7 +346,10 @@ myuser_access_verify(user_t *u, myuser_t *mu)
 		char *entry = (char *) n->data;
 
 		if (!match(entry, buf) || !match(entry, buf2))
+		{
+			mu->lastlogin = CURRTIME;
 			return TRUE;
+		}
 	}
 
 	return FALSE;
