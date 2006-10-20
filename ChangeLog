@@ -1,3 +1,12 @@
+jilles      2006/10/20 16:38:40 UTC	(20061020-6701)
+  Log:
+  Make !help work somehow.
+  
+
+  Changes:	Modified:
+  +8 -0		trunk/modules/chanserv/help.c (File Modified) 
+
+
 jilles      2006/10/20 16:28:07 UTC	(20061020-6699)
   Log:
   Move channel_message hook call from chanserv/main to handle_message().

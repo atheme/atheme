@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INVITE functions.
  *
- * $Id: invite.c 6657 2006-10-04 21:22:47Z jilles $
+ * $Id: invite.c 6703 2006-10-20 16:40:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/invite", FALSE, _modinit, _moddeinit,
-	"$Id: invite.c 6657 2006-10-04 21:22:47Z jilles $",
+	"$Id: invite.c 6703 2006-10-20 16:40:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_cmd_invite(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_invite = { "INVITE", "Invites a user to a channel.",
+command_t cs_invite = { "INVITE", "Invites you to a channel.",
                         AC_NONE, 1, cs_cmd_invite };
                                                                                    
 list_t *cs_cmdtree;
