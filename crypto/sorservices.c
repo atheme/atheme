@@ -10,7 +10,7 @@
 DECLARE_MODULE_V1
 (
 	"crypto/sorservices", FALSE, _modinit, _moddeinit,
-	"$Id: sorservices.c 6713 2006-10-20 18:16:35Z nenolod $",
+	"$Id: sorservices.c 6737 2006-10-20 19:07:43Z jilles $",
 	"OpenServices devel team, http://openservices.sorcery.net"
 );
 
@@ -288,31 +288,31 @@ MyMD5Transform(uint32 buf[4], uint32 const in[16])
     buf[3] += d;
 }
 
-void md5_buffer(unsigned char *passwd, int len, unsigned char *target)
+static void md5_buffer(char *passwd, int len, char *target)
 {
      struct MyMD5Context ctx;
  
      MyMD5Init(&ctx);
-     MyMD5Update(&ctx, passwd, len);
-     MyMD5Final(target, &ctx);
+     MyMD5Update(&ctx, (unsigned char *)passwd, len);
+     MyMD5Final((unsigned char *)target, &ctx);
 }
 
 /**
  * \brief Get the MD5 hashed version of password
  * \param pw Password to hash
  */
-unsigned char *md5_password(unsigned char *pw)
+static char *md5_password(char *pw)
 {
-  unsigned static char md5buffer[16 + 1];
+  static char md5buffer[16 + 1];
   /* unsigned static char tresult[512]; */
   /* int cnt = 0, o = 0; */
   if (!pw) {
       static char buf[16] = "";
 
       buf[0] = '\0';
-      return (unsigned char *)(buf);
+      return buf;
   }
-  md5_buffer((unsigned char *)pw, strlen((char *)pw), md5buffer);
+  md5_buffer(pw, strlen(pw), md5buffer);
   return md5buffer;
 }
 

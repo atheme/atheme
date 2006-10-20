@@ -1,3 +1,12 @@
+jilles      2006/10/20 19:00:48 UTC	(20061020-6735)
+  Log:
+  account.h: give a proper prototype for init_accounts().
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/account.h (File Modified) 
+
+
 jilles      2006/10/20 18:58:50 UTC	(20061020-6733)
   Log:
   Don't allow !drop.
