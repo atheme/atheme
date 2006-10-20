@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 6717 2006-10-20 18:32:36Z nenolod $
+ * $Id: account.h 6725 2006-10-20 18:42:05Z nenolod $
  */
 
 #ifndef ACCOUNT_H
@@ -288,5 +288,9 @@ E void init_accounts();
 E boolean_t myuser_access_verify(user_t *u, myuser_t *mu);
 E boolean_t myuser_access_attach(myuser_t *mu, char *mask);
 E void myuser_access_delete(myuser_t *mu, char *mask);
+
+E boolean_t mychan_isused(mychan_t *mc);
+E myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t minlevel, int maxtime);
+E myuser_t *mychan_pick_successor(mychan_t *mc);
 
 #endif
