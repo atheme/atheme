@@ -4,11 +4,12 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 6715 2006-10-20 18:31:20Z nenolod $
+ * $Id: account.c 6721 2006-10-20 18:39:39Z nenolod $
  */
 
 #include "atheme.h"
 
+static BlockHeap *myuser_heap;  /* HEAP_USER */
 dictionary_tree_t *mulist;
 
 /*
@@ -27,6 +28,14 @@ dictionary_tree_t *mulist;
  */
 void init_accounts(void)
 {
+	myuser_heap = BlockHeapCreate(sizeof(myuser_t), HEAP_USER);
+
+	if (myuser_heap == NULL)
+	{
+		slog(LG_ERROR, "init_accounts(): block allocator failure.");
+		exit(EXIT_FAILURE);
+	}
+
 	mulist = dictionary_create("myuser", HASH_USER, irccasecmp);
 }
 

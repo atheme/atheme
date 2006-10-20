@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6711 2006-10-20 18:05:20Z nenolod $
+ * $Id: node.c 6721 2006-10-20 18:39:39Z nenolod $
  */
 
 #include "atheme.h"
@@ -64,11 +64,10 @@ void init_nodes(void)
 	uplink_heap = BlockHeapCreate(sizeof(uplink_t), 4);
 	metadata_heap = BlockHeapCreate(sizeof(metadata_t), HEAP_CHANUSER);
 	kline_heap = BlockHeapCreate(sizeof(kline_t), 16);
-	myuser_heap = BlockHeapCreate(sizeof(myuser_t), HEAP_USER);
 	mychan_heap = BlockHeapCreate(sizeof(mychan_t), HEAP_CHANNEL);
 	chanacs_heap = BlockHeapCreate(sizeof(chanacs_t), HEAP_CHANUSER);
 
-	if (!tld_heap || !serv_heap || !user_heap || !chan_heap || !soper_heap || !chanuser_heap || !chanban_heap || !uplink_heap || !metadata_heap || !kline_heap || !myuser_heap || !mychan_heap
+	if (!tld_heap || !serv_heap || !user_heap || !chan_heap || !soper_heap || !chanuser_heap || !chanban_heap || !uplink_heap || !metadata_heap || !kline_heap || !mychan_heap
 	    || !chanacs_heap || !svsignore_heap)
 	{
 		slog(LG_INFO, "init_nodes(): block allocator failed.");
