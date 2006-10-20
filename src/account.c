@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 6755 2006-10-20 20:12:43Z jilles $
+ * $Id: account.c 6757 2006-10-20 20:28:45Z jilles $
  */
 
 #include "atheme.h"
@@ -330,7 +330,9 @@ boolean_t
 myuser_access_verify(user_t *u, myuser_t *mu)
 {
 	node_t *n;
-	char buf[BUFSIZE], buf2[BUFSIZE];
+	char buf[USERLEN+HOSTLEN];
+	char buf2[USERLEN+HOSTLEN];
+	char buf3[USERLEN+HOSTLEN];
 
 	if (u == NULL || mu == NULL)
 	{
@@ -338,14 +340,15 @@ myuser_access_verify(user_t *u, myuser_t *mu)
 		return FALSE;
 	}
 
-	snprintf(buf, BUFSIZE, "%s!%s@%s", u->nick, u->user, u->vhost);
-	snprintf(buf2, BUFSIZE, "%s!%s@%s", u->nick, u->user, u->host);
+	snprintf(buf, BUFSIZE, "%s@%s", u->user, u->vhost);
+	snprintf(buf2, BUFSIZE, "%s@%s", u->user, u->host);
+	snprintf(buf3, BUFSIZE, "%s@%s", u->user, u->ip);
 
 	LIST_FOREACH(n, mu->access_list.head)
 	{
 		char *entry = (char *) n->data;
 
-		if (!match(entry, buf) || !match(entry, buf2))
+		if (!match(entry, buf) || !match(entry, buf2) || !match(entry, buf3) || !match_cidr(entry, buf3))
 		{
 			mu->lastlogin = CURRTIME;
 			return TRUE;
