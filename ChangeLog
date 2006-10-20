@@ -1,3 +1,12 @@
+nenolod     2006/10/20 18:32:36 UTC	(20061020-6717)
+  Log:
+  - remove unused struct myaccessmask_
+  
+
+  Changes:	Modified:
+  +0 -7		trunk/include/account.h (File Modified) 
+
+
 nenolod     2006/10/20 18:31:20 UTC	(20061020-6715)
   Log:
   - framework for /ns access and related commands (+openservices patch)

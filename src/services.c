@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 6715 2006-10-20 18:31:20Z nenolod $
+ * $Id: services.c 6719 2006-10-20 18:35:41Z nenolod $
  */
 
 #include "atheme.h"
@@ -391,7 +391,7 @@ void command_fail(sourceinfo_t *si, faultcode_t code, const char *fmt, ...)
 	if (si->su == NULL)
 	{
 		if (si->v != NULL && si->v->cmd_fail)
-			si->v->cmd_fail(si, code, buf + len1);
+			si->v->cmd_fail(si, code, buf);
 		return;
 	}
 
