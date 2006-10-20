@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 6715 2006-10-20 18:31:20Z nenolod $
+ * $Id: account.h 6717 2006-10-20 18:32:36Z nenolod $
  */
 
 #ifndef ACCOUNT_H
@@ -49,13 +49,6 @@ struct svsignore_ {
   time_t settime;
   char *setby;
   char *reason;
-};
-
-/* openservices patch: /ns access masks */
-struct myaccessmask_
-{
-  char user[NICKLEN];
-  char host[HOSTLEN];
 };
 
 /* services accounts */
