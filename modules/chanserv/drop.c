@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService DROP function.
  *
- * $Id: drop.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: drop.c 6733 2006-10-20 18:58:50Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: drop.c 6733 2006-10-20 18:58:50Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -61,6 +61,12 @@ static void cs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 	if (!(mc = mychan_find(name)))
 	{
 		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", name);
+		return;
+	}
+
+	if (si->c != NULL)
+	{
+		command_fail(si, fault_noprivs, "For security reasons, you may not drop a channel registration with a fantasy command.");
 		return;
 	}
 

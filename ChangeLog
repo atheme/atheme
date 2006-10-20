@@ -1,3 +1,12 @@
+jilles      2006/10/20 18:56:52 UTC	(20061020-6731)
+  Log:
+  Remove old cs_fcmd_akick().
+  
+
+  Changes:	Modified:
+  +0 -202	trunk/modules/chanserv/akick.c (File Modified) 
+
+
 nenolod     2006/10/20 18:55:23 UTC	(20061020-6729)
   Log:
   - rename parse1() to text_to_parv().
