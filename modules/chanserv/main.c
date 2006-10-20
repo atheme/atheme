@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6679 2006-10-13 19:43:11Z jilles $
+ * $Id: main.c 6697 2006-10-20 16:15:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6679 2006-10-13 19:43:11Z jilles $",
+	"$Id: main.c 6697 2006-10-20 16:15:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -58,11 +58,13 @@ static void join_registered(boolean_t all)
 /* main services client routine */
 static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 {
-	mychan_t *mc;
+	mychan_t *mc = NULL;
 	char orig[BUFSIZE];
-	boolean_t is_fcommand = FALSE;
+	char newargs[BUFSIZE];
+	uint32_t oldflags;
 	hook_cmessage_data_t cdata;
 	char *cmd;
+	char *args;
 
 	/* this should never happen */
 	if (parv[parc - 2][0] == '&')
@@ -95,9 +97,6 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 			/* fantasy disabled on this channel. don't message them, just bail. */
 			return;
 		}
-
-		/* we're ok to go */
-		is_fcommand = TRUE;
 	}
 
 	/* make a copy of the original for debugging */
@@ -115,11 +114,32 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* take the command through the hash table */
-	if (!is_fcommand)
+	if (mc == NULL)
 		command_exec_split(si->service, si, cmd, strtok(NULL, ""), &cs_cmdtree);
 	else
 	{
-		fcommand_exec_floodcheck(si->service, parv[parc - 2], si->su->nick, cmd, &cs_fcmdtree);
+		if (strlen(cmd) > 2 && (cmd[0] == '!' || !strcasecmp(cmd, ".flags")) && strcasecmp(cmd + 1, "set"))
+		{
+			/* construct <channel> <args> */
+			strlcpy(newargs, parv[parc - 2], sizeof newargs);
+			args = strtok(NULL, "");
+			if (args != NULL)
+			{
+				strlcat(newargs, " ", sizeof newargs);
+				strlcat(newargs, args, sizeof newargs);
+			}
+			/* let the command know it's called as fantasy cmd */
+			si->c = mc->chan;
+			/* fantasy commands are always verbose
+			 * (due to the way this works, we can't allow !set)
+			 */
+			oldflags = mc->flags & MC_VERBOSE_MASK;
+			mc->flags &= ~MC_VERBOSE_MASK;
+			mc->flags |= MC_VERBOSE;
+			command_exec_split(si->service, si, cmd + 1, newargs, &cs_cmdtree);
+			mc->flags &= ~MC_VERBOSE_MASK;
+			mc->flags |= oldflags;
+		}
 
 		cdata.u = si->su;
 		cdata.c = channel_find(parv[parc - 2]);
