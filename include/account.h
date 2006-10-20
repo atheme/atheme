@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 6725 2006-10-20 18:42:05Z nenolod $
+ * $Id: account.h 6735 2006-10-20 19:00:48Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -282,7 +282,7 @@ E void expire_check(void *arg);
 /* Check the database for (version) problems common to all backends */
 E void db_check(void);
 
-E void init_accounts();
+E void init_accounts(void);
 
 /* openservices patch */
 E boolean_t myuser_access_verify(user_t *u, myuser_t *mu);
