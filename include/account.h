@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 6695 2006-10-20 15:10:26Z jilles $
+ * $Id: account.h 6711 2006-10-20 18:05:20Z nenolod $
  */
 
 #ifndef ACCOUNT_H
@@ -277,5 +277,7 @@ E boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, char *hostmask
 E void expire_check(void *arg);
 /* Check the database for (version) problems common to all backends */
 E void db_check(void);
+
+E void init_accounts();
 
 #endif

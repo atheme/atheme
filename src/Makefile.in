@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 6523 2006-09-27 23:22:13Z jilles $
+# $Id: Makefile.in 6711 2006-10-20 18:05:20Z nenolod $
 #
 
 CC		= @CC@
@@ -34,6 +34,7 @@ CPPFLAGS	= @CPPFLAGS@
 default: all
 
 BASE_SRCS =		\
+	account.c	\
 	atheme.c	\
 	authcookie.c	\
 	base64.c	\

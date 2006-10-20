@@ -1,3 +1,12 @@
+nenolod     2006/10/20 17:41:09 UTC	(20061020-6709)
+  Log:
+  - remove error codes from command_fail() output on IRC
+  
+
+  Changes:	Modified:
+  +1 -4		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/10/20 17:11:00 UTC	(20061020-6707)
   Log:
   Add back flood checking on fantasy commands.
