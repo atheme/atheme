@@ -1,3 +1,12 @@
+jilles      2006/10/16 10:16:27 UTC	(20061016-6693)
+  Log:
+  gen_httpd: add more complete handling of Connection header from xmlrpc server
+  
+
+  Changes:	Modified:
+  +11 -3	trunk/contrib/gen_httpd.c (File Modified) 
+
+
 jilles      2006/10/16 10:15:12 UTC	(20061016-6691)
   Log:
   xmlrpc: avoid a crash on an unusual Connection header
