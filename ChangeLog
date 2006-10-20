@@ -1,3 +1,24 @@
+jilles      2006/10/20 18:48:53 UTC	(20061020-6727)
+  Log:
+  Remove fcommand completely.
+  
+
+  Changes:	Modified:
+  +0 -12	trunk/include/commandtree.h (File Modified) 
+  +0 -5		trunk/modules/chanserv/akick.c (File Modified) 
+  +0 -174	trunk/modules/chanserv/ban.c (File Modified) 
+  +0 -130	trunk/modules/chanserv/flags.c (File Modified) 
+  +0 -152	trunk/modules/chanserv/halfop.c (File Modified) 
+  +1 -48	trunk/modules/chanserv/help.c (File Modified) 
+  +0 -127	trunk/modules/chanserv/kick.c (File Modified) 
+  +0 -1		trunk/modules/chanserv/main.c (File Modified) 
+  +0 -135	trunk/modules/chanserv/op.c (File Modified) 
+  +0 -117	trunk/modules/chanserv/topic.c (File Modified) 
+  +0 -15	trunk/modules/chanserv/version.c (File Modified) 
+  +0 -116	trunk/modules/chanserv/voice.c (File Modified) 
+  +0 -93	trunk/src/commandtree.c (File Modified) 
+
+
 nenolod     2006/10/20 18:42:05 UTC	(20061020-6725)
   Log:
   - declare those now-public declarations

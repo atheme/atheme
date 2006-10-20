@@ -4,12 +4,12 @@
  *
  * Commandtree manipulation routines.
  *
- * $Id: commandtree.c 6727 2006-10-20 18:48:53Z jilles $
+ * $Id: commandtree.c 6729 2006-10-20 18:55:23Z nenolod $
  */
 
 #include "atheme.h"
 
-static int parse1(char *text, int maxparc, char **parv);
+static int text_to_parv(char *text, int maxparc, char **parv);
 
 void command_add(command_t *cmd, list_t *commandtree)
 {
@@ -120,7 +120,7 @@ void command_exec_split(service_t *svs, sourceinfo_t *si, char *cmd, char *text,
 
 	if ((c = command_find(commandtree, cmd)))
 	{
-		parc = parse1(text, c->maxparc, parv);
+		parc = text_to_parv(text, c->maxparc, parv);
 		for (i = parc; i < (int)(sizeof(parv) / sizeof(parv[0])); i++)
 			parv[i] = NULL;
 		command_exec(svs, si, c, parc, parv);
@@ -251,7 +251,7 @@ void command_help_short(sourceinfo_t *si, list_t *commandtree, char *maincmds)
 		command_success_nodata(si, "%s", buf);
 }
 
-static int parse1(char *text, int maxparc, char **parv)
+static int text_to_parv(char *text, int maxparc, char **parv)
 {
 	int count = 0;
 	char *p;
