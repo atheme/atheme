@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService STATUS function.
  *
- * $Id: status.c 6813 2006-10-21 20:18:14Z jilles $
+ * $Id: status.c 6815 2006-10-21 20:37:21Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/status", FALSE, _modinit, _moddeinit,
-	"$Id: status.c 6813 2006-10-21 20:18:14Z jilles $",
+	"$Id: status.c 6815 2006-10-21 20:37:21Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -93,10 +93,19 @@ static void ns_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	if (is_admin(si->su))
+	if (si->su != NULL && (si->smu == NULL || irccasecmp(si->smu->name, si->su->nick)))
+	{
+		myuser_t *mu;
+
+		mu = myuser_find(si->su->nick);
+		if (mu != NULL && myuser_access_verify(si->su, mu))
+			command_success_nodata(si, "You are recognized as \2%s\2.", mu->name);
+	}
+
+	if (si->su != NULL && is_admin(si->su))
 		command_success_nodata(si, "You are a server administrator.");
 
-	if (is_ircop(si->su))
+	if (si->su != NULL && is_ircop(si->su))
 		command_success_nodata(si, "You are an IRC operator.");
 }
 
