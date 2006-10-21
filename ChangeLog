@@ -1,3 +1,18 @@
+jilles      2006/10/21 16:59:20 UTC	(20061021-6791)
+  Log:
+  - Only use services ignores if operserv/ignore is loaded
+  - Only use nickname access lists if nickserv/access is loaded
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/include/services.h (File Modified) 
+  +4 -0		trunk/modules/nickserv/access.c (File Modified) 
+  +3 -0		trunk/modules/operserv/ignore.c (File Modified) 
+  +3 -0		trunk/src/account.c (File Modified) 
+  +2 -0		trunk/src/services.c (File Modified) 
+  +4 -1		trunk/src/svsignore.c (File Modified) 
+
+
 jilles      2006/10/21 16:48:09 UTC	(20061021-6789)
   Log:
   myuser_access_find(): make sure to return a value
