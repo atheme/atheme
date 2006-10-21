@@ -1,3 +1,16 @@
+jilles      2006/10/21 20:37:21 UTC	(20061021-6815)
+  Log:
+  nickserv/chanserv status:
+  - don't crash if called from non-IRC
+  - show if the user is recognized via access list (but
+    not logged in to that nick)
+  
+
+  Changes:	Modified:
+  +11 -2	trunk/modules/chanserv/status.c (File Modified) 
+  +11 -2	trunk/modules/nickserv/status.c (File Modified) 
+
+
 jilles      2006/10/21 20:18:14 UTC	(20061021-6813)
   Log:
   nickserv/chanserv status: give more information if the user is not logged in

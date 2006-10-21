@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 6787 2006-10-21 15:32:04Z jilles $
+ * $Id: connection.c 6817 2006-10-21 20:43:28Z nenolod $
  */
 
 #include <org.atheme.claro.base>
@@ -75,6 +75,9 @@ connection_t *connection_add(const char *name, int32_t fd, uint32_t flags,
 	cptr->read_handler = read_handler;
 	cptr->write_handler = write_handler;
 
+	/* set connection name */
+	strlcpy(cptr->name, name, HOSTLEN);
+
 	/* XXX */
 	cptr->saddr_size = sizeof(cptr->saddr);
 	getpeername(cptr->fd, &cptr->saddr, &cptr->saddr_size);
@@ -129,7 +132,6 @@ connection_t *connection_find(int32_t fd)
  */
 int connection_count(void)
 {
-
 	return LIST_LENGTH(&connection_list);
 }
 
@@ -195,7 +197,8 @@ void connection_close(connection_t *cptr)
 }
 
 /* This one is only safe for use by connection_close_soon(),
- * it will cause infinite loops otherwise */
+ * it will cause infinite loops otherwise
+ */
 static void empty_handler(connection_t *cptr)
 {
 }

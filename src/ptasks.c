@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 6699 2006-10-20 16:28:07Z jilles $
+ * $Id: ptasks.c 6817 2006-10-21 20:43:28Z nenolod $
  */
 
 #include "atheme.h"
@@ -115,6 +115,20 @@ void handle_stats(user_t *u, char req)
 		  {
 			  if (event_table[i].active)
 				  numeric_sts(me.name, 249, u->nick, "E :%-28s %4d seconds (%d)", event_table[i].name, event_table[i].when - CURRTIME, event_table[i].frequency);
+		  }
+
+		  break;
+
+	  case 'f':
+	  case 'F':
+		  if (!has_priv_user(u, PRIV_SERVER_AUSPEX))
+			  break;
+
+		  LIST_FOREACH(n, connection_list.head)
+		  {
+			  connection_t *c = (connection_t *) n->data;
+
+			  numeric_sts(me.name, 249, u->nick, "F :fd %-3d desc '%s'", c->fd, c->name);
 		  }
 
 		  break;
