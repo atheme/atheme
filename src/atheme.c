@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 6537 2006-09-29 14:33:02Z jilles $
+ * $Id: atheme.c 6787 2006-10-21 15:32:04Z jilles $
  */
 
 #include "atheme.h"
@@ -336,7 +336,7 @@ int main(int argc, char *argv[])
 	remove(pidfilename);
 	errno = 0;
 	sendq_flush(curr_uplink->conn);
-	connection_close(curr_uplink->conn);
+	connection_close_all();
 
 	me.connected = FALSE;
 

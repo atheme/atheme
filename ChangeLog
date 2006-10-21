@@ -1,3 +1,15 @@
+jilles      2006/10/21 15:22:55 UTC	(20061021-6785)
+  Log:
+  contrib/gen_httpd, modules/xmlrpc/main:
+  If opening the listener fails, give an error message
+  and do not close all non-listener connections periodically.
+  
+
+  Changes:	Modified:
+  +4 -0		trunk/contrib/gen_httpd.c (File Modified) 
+  +4 -0		trunk/modules/xmlrpc/main.c (File Modified) 
+
+
 jilles      2006/10/21 15:20:10 UTC	(20061021-6783)
   Log:
   Go into contrib on 'make depend' but ignore any error.

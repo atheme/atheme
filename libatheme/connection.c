@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 6387 2006-09-14 00:58:10Z jilles $
+ * $Id: connection.c 6787 2006-10-21 15:32:04Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -260,6 +260,30 @@ void connection_close_soon_children(connection_t *cptr)
 		}
 	}
 	connection_close_soon(cptr);
+}
+
+/*
+ * connection_close_all()
+ *
+ * inputs:
+ *       none
+ *
+ * outputs:
+ *       none
+ *
+ * side effects:
+ *       connection_close() called on all registered connections
+ */
+void connection_close_all(void)
+{
+	node_t *n, *tn;
+	connection_t *cptr;
+
+	LIST_FOREACH_SAFE(n, tn, connection_list.head)
+	{
+		cptr = n->data;
+		connection_close(cptr);
+	}
 }
 
 /*
