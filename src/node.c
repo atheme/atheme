@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6773 2006-10-21 02:49:17Z nenolod $
+ * $Id: node.c 6799 2006-10-21 19:03:06Z jilles $
  */
 
 #include "atheme.h"
@@ -18,7 +18,7 @@ list_t uplinks;
 list_t klnlist;
 list_t sidlist[HASHSIZE];
 list_t servlist[HASHSIZE];
-list_t chanlist[HASHSIZE];
+dictionary_tree_t *chanlist;
 list_t mclist[HASHSIZE];
 
 static BlockHeap *operclass_heap;
@@ -65,6 +65,8 @@ void init_nodes(void)
 		slog(LG_INFO, "init_nodes(): block allocator failed.");
 		exit(EXIT_FAILURE);
 	}
+
+	chanlist = dictionary_create("channel", HASH_CHANNEL, irccasecmp);
 
 	init_accounts();
 	init_users();
@@ -583,7 +585,6 @@ channel_t *channel_add(const char *name, uint32_t ts)
 {
 	channel_t *c;
 	mychan_t *mc;
-	node_t *n;
 
 	if (*name != '#')
 	{
@@ -601,12 +602,10 @@ channel_t *channel_add(const char *name, uint32_t ts)
 
 	slog(LG_DEBUG, "channel_add(): %s", name);
 
-	n = node_create();
 	c = BlockHeapAlloc(chan_heap);
 
 	c->name = sstrdup(name);
 	c->ts = ts;
-	c->hash = CHASH((const unsigned char *)name);
 
 	c->topic = NULL;
 	c->topic_setter = NULL;
@@ -618,7 +617,7 @@ channel_t *channel_add(const char *name, uint32_t ts)
 	if ((mc = mychan_find(c->name)))
 		mc->chan = c;
 
-	node_add(c, n, &chanlist[c->hash]);
+	dictionary_add(chanlist, c->name, c);
 
 	cnt.chan++;
 
@@ -665,9 +664,7 @@ void channel_delete(const char *name)
 
 	/* we assume all lists should be null */
 
-	n = node_find(c, &chanlist[c->hash]);
-	node_del(n, &chanlist[c->hash]);
-	node_free(n);
+	dictionary_delete(chanlist, c->name);
 
 	if ((mc = mychan_find(c->name)))
 		mc->chan = NULL;
@@ -682,18 +679,7 @@ void channel_delete(const char *name)
 
 channel_t *channel_find(const char *name)
 {
-	channel_t *c;
-	node_t *n;
-
-	LIST_FOREACH(n, chanlist[shash((const unsigned char *) name)].head)
-	{
-		c = (channel_t *)n->data;
-
-		if (!irccasecmp(name, c->name))
-			return c;
-	}
-
-	return NULL;
+	return dictionary_retrieve(chanlist, name);
 }
 
 /********************

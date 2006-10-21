@@ -4,7 +4,7 @@
  *
  * Defines needed by multiple header files.
  *
- * $Id: common.h 6795 2006-10-21 18:37:52Z jilles $
+ * $Id: common.h 6799 2006-10-21 19:03:06Z jilles $
  */
 
 #ifndef COMMON_H
@@ -45,6 +45,7 @@
 #define HEAP_SERVER     16
 #define HEAP_CHANACS    1024
 #define HASH_USER       65535
+#define HASH_CHANNEL    32768
 #else
 #define HEAP_CHANNEL    64
 #define HEAP_CHANUSER   128
@@ -52,6 +53,7 @@
 #define HEAP_SERVER     8
 #define HEAP_CHANACS    128
 #define HASH_USER       1024
+#define HASH_CHANNEL    512
 #endif
 
 #define HASH_COMMAND    256

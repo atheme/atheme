@@ -5,7 +5,7 @@
  * This file contains socket routines.
  * Based off of W. Campbell's code.
  *
- * $Id: send.c 6355 2006-09-11 15:15:47Z jilles $
+ * $Id: send.c 6799 2006-10-21 19:03:06Z jilles $
  */
 
 #include "atheme.h"
@@ -46,6 +46,7 @@ void reconn(void *arg)
 	server_t *s;
 	channel_t *c;
 	node_t *n, *tn;
+	dictionary_iteration_state_t state;
 
 	if (me.connected)
 		return;
@@ -68,9 +69,8 @@ void reconn(void *arg)
 	/* remove all the channels left */
 	for (i = 0; i < HASHSIZE; i++)
 	{
-		LIST_FOREACH_SAFE(n, tn, chanlist[i].head)
+		DICTIONARY_FOREACH(c, &state, chanlist)
 		{
-			c = (channel_t *)n->data;
 			channel_delete(c->name);
 		}
 	}

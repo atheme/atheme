@@ -4,7 +4,7 @@
  *
  * Data structures for channel information.
  *
- * $Id: channels.h 6411 2006-09-17 20:57:27Z jilles $
+ * $Id: channels.h 6799 2006-10-21 19:03:06Z jilles $
  */
 
 #ifndef CHANNELS_H
@@ -24,7 +24,6 @@ struct channel_
   uint32_t nummembers;
 
   time_t ts;
-  int32_t hash;
 
   char *topic;
   char *topic_setter;
@@ -126,7 +125,7 @@ E char *flags_to_string(int32_t flags);
 E int32_t mode_to_flag(char c);
 
 /* node.c */
-E list_t chanlist[HASHSIZE];
+E dictionary_tree_t *chanlist;
 
 E channel_t *channel_add(const char *name, uint32_t ts);
 E void channel_delete(const char *name);
