@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 6777 2006-10-21 12:36:05Z jilles $
+ * $Id: account.c 6789 2006-10-21 16:48:09Z jilles $
  */
 
 #include "atheme.h"
@@ -416,7 +416,7 @@ myuser_access_find(myuser_t *mu, char *mask)
 	if (mu == NULL || mask == NULL)
 	{
 		slog(LG_DEBUG, "myuser_access_find(): invalid parameters: mu = %p, mask = %p", mu, mask);
-		return;
+		return NULL;
 	}
 
 	LIST_FOREACH(n, mu->access_list.head)
