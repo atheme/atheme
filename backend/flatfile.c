@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 6297 2006-09-06 14:41:39Z pippijn $
+ * $Id: flatfile.c 6767 2006-10-21 01:32:42Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 6297 2006-09-06 14:41:39Z pippijn $",
+	"$Id: flatfile.c 6767 2006-10-21 01:32:42Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -68,6 +68,11 @@ static int flatfile_db_save_myusers_cb(dictionary_elem_t *delem, void *privdata)
 	LIST_FOREACH(tn, mu->memo_ignores.head)
 	{
 		fprintf(f, "MI %s %s\n", mu->name, (char *)tn->data);
+	}
+
+	LIST_FOREACH(tn, mu->access_list.head)
+	{
+		fprintf(f, "AC %s %s\n", mu->name, (char *)tn->data);
 	}
 
 	return 0; 
@@ -371,7 +376,6 @@ static void flatfile_db_load(void)
 			target = strtok(NULL, "\n");
 
 			mu = myuser_find(user);
-			tmu = myuser_find(target);
 			
 			if (!mu)
 			{
@@ -379,10 +383,28 @@ static void flatfile_db_load(void)
 				continue;
 			}
 			
-			strbuf = smalloc(sizeof(char[NICKLEN]));
-			strlcpy(strbuf,target,NICKLEN-1);
+			strbuf = sstrdup(target);
 			
 			node_add(strbuf, node_create(), &mu->memo_ignores);
+		}
+
+		/* myuser access list */
+		if (!strcmp("AC", item))
+		{
+			char *user, *mask;
+
+			user = strtok(NULL, " ");
+			mask = strtok(NULL, "\n");
+
+			mu = myuser_find(user);
+
+			if (mu == NULL)
+			{
+				slog(LG_DEBUG, "db_load(): invalid access entry<%s> for unknown user<%s>", mask, user);
+				continue;
+			}
+
+			myuser_access_add(mu, mask);
 		}
 
 		/* mychans */

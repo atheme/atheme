@@ -1,14 +1,15 @@
---- A PostgreSQL Schema for Atheme 0.2
---- Copyright (c) 2005 William Pitcock, et al.
+--- A PostgreSQL Schema for Atheme 2.x
+--- Copyright (c) 2006 William Pitcock, et al.
 ---
 --- Use of this code is permitted under the terms presented in doc/LICENSE.
 ---
---- $Id: atheme_init.pgsql 3241 2005-10-29 20:48:51Z alambert $
+--- $Id: atheme_init.pgsql 6767 2006-10-21 01:32:42Z nenolod $
 
 CREATE SEQUENCE accounts_id_seq;
 CREATE SEQUENCE account_metadata_id_seq;
 CREATE SEQUENCE account_memos_seq;
 CREATE SEQUENCE account_memo_ignores_seq;
+CREATE SEQUENCE account_access_seq;
 CREATE SEQUENCE channels_id_seq;
 CREATE SEQUENCE channel_metadata_id_seq;
 CREATE SEQUENCE channel_access_id_seq;
@@ -50,6 +51,13 @@ CREATE TABLE ACCOUNT_MEMO_IGNORES
 	ID		INT		DEFAULT nextval('account_memo_ignores_seq')	NOT NULL,
 	PARENT		INT		NOT NULL,
 	TARGET		VARCHAR(255)	NOT NULL
+);
+
+CREATE TABLE ACCOUNT_ACCESS
+(
+	ID		INT		DEFAULT nextval('account_access_seq')	NOT NULL,
+	PARENT		INT		NOT NULL,
+	MASK		VARCHAR(255)	NOT NULL
 );
 
 --- MC equivilant
