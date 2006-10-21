@@ -5,7 +5,7 @@
  * Protocol module stuff.
  * Modules usually do not need this.
  *
- * $Id: pmodule.h 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: pmodule.h 6795 2006-10-21 18:37:52Z jilles $
  */
 
 #ifndef PMODULE_H
@@ -28,7 +28,7 @@ struct pcommand_ {
 /* pmodule.c */
 E BlockHeap *pcommand_heap;
 E BlockHeap *messagetree_heap;
-E list_t pcommands[HASHSIZE];
+E dictionary_tree_t *pcommands;
 
 E boolean_t pmodule_loaded;
 
