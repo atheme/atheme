@@ -23,7 +23,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/enforce",FALSE, _modinit, _moddeinit,
-	"$Id: ns_enforce.c 6749 2006-10-20 19:59:26Z jilles $",
+	"$Id: ns_enforce.c 6811 2006-10-21 20:08:09Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -37,7 +37,7 @@ static void remove_idcheck(void *vuser);
 command_t ns_set_enforce = { "ENFORCE", "Enables or disables automatic protection of a nickname.", AC_NONE, 1, ns_cmd_set_enforce }; 
 command_t ns_release = { "RELEASE", "Releases a services enforcer.", AC_NONE, 2, ns_cmd_release };
 
-list_t *ns_cmdtree, *ns_set_cmdtree, *ns_helptree, userlist[HASHSIZE];
+list_t *ns_cmdtree, *ns_set_cmdtree, *ns_helptree;
 
 #if 0
 void manage_bots(void *arg)
