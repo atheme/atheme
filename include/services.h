@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 6629 2006-10-02 10:20:50Z jilles $
+ * $Id: services.h 6791 2006-10-21 16:59:20Z jilles $
  */
 
 #ifndef SERVICES_H
@@ -119,6 +119,8 @@ E service_t *fcmd_agent;
 
 /* services.c */
 E int authservice_loaded;
+E int use_myuser_access;
+E int use_svsignore;
 
 E int ban(user_t *source, channel_t *chan, user_t *target);
 E int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target);

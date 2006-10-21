@@ -4,7 +4,7 @@
  *
  * Changes and shows nickname access lists.
  *
- * $Id: access.c 6781 2006-10-21 14:52:13Z jilles $
+ * $Id: access.c 6791 2006-10-21 16:59:20Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/access", FALSE, _modinit, _moddeinit,
-	"$Id: access.c 6781 2006-10-21 14:52:13Z jilles $",
+	"$Id: access.c 6791 2006-10-21 16:59:20Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -29,12 +29,16 @@ void _modinit(module_t *m)
 
 	command_add(&ns_access, ns_cmdtree);
 	help_addentry(ns_helptree, "ACCESS", "help/nickserv/access", NULL);
+
+	use_myuser_access++;
 }
 
 void _moddeinit()
 {
 	command_delete(&ns_access, ns_cmdtree);
 	help_delentry(ns_helptree, "ACCESS");
+
+	use_myuser_access--;
 }
 
 static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])

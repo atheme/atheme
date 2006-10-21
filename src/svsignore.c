@@ -4,7 +4,7 @@
  *
  * Services ignorelist functions.
  *
- * $Id: svsignore.c 6741 2006-10-20 19:10:57Z jilles $
+ * $Id: svsignore.c 6791 2006-10-21 16:59:20Z jilles $
  */
 
 #include "atheme.h"
@@ -33,7 +33,10 @@ svsignore_t *svsignore_find(user_t *source)
         svsignore_t *svsignore;
         node_t *n;
         char host[BUFSIZE];
-        
+
+	if (!use_svsignore)
+		return NULL;
+
         *host = '\0';
         strlcpy(host, source->nick, BUFSIZE);
         strlcat(host, "!", BUFSIZE);

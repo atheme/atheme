@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 6789 2006-10-21 16:48:09Z jilles $
+ * $Id: account.c 6791 2006-10-21 16:59:20Z jilles $
  */
 
 #include "atheme.h"
@@ -339,6 +339,9 @@ myuser_access_verify(user_t *u, myuser_t *mu)
 		slog(LG_DEBUG, "myuser_access_verify(): invalid parameters: u = %p, mu = %p", u, mu);
 		return FALSE;
 	}
+
+	if (!use_myuser_access)
+		return FALSE;
 
 	snprintf(buf, BUFSIZE, "%s@%s", u->user, u->vhost);
 	snprintf(buf2, BUFSIZE, "%s@%s", u->user, u->host);

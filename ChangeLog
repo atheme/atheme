@@ -1,3 +1,12 @@
+jilles      2006/10/21 16:48:09 UTC	(20061021-6789)
+  Log:
+  myuser_access_find(): make sure to return a value
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/account.c (File Modified) 
+
+
 jilles      2006/10/21 15:32:04 UTC	(20061021-6787)
   Log:
   Add connection_close_all() to close all connections
