@@ -1,3 +1,24 @@
+jilles      2006/10/21 01:46:23 UTC	(20061021-6771)
+  Log:
+  Remove .depend files from svn.
+  
+
+  Changes:	Modified:
+  +0 -39	trunk/backend/.depend (File Deleted) 
+  +0 -239	trunk/contrib/.depend (File Deleted) 
+  +0 -56	trunk/crypto/.depend (File Deleted) 
+  +0 -60	trunk/libatheme/.depend (File Deleted) 
+  +0 -648	trunk/modules/chanserv/.depend (File Deleted) 
+  +0 -22	trunk/modules/global/.depend (File Deleted) 
+  +0 -168	trunk/modules/memoserv/.depend (File Deleted) 
+  +0 -461	trunk/modules/nickserv/.depend (File Deleted) 
+  +0 -567	trunk/modules/operserv/.depend (File Deleted) 
+  +0 -84	trunk/modules/saslserv/.depend (File Deleted) 
+  +0 -84	trunk/modules/xmlrpc/.depend (File Deleted) 
+  +0 -392	trunk/protocol/.depend (File Deleted) 
+  +0 -669	trunk/src/.depend (File Deleted) 
+
+
 jilles      2006/10/21 01:44:52 UTC	(20061021-6769)
   Log:
   - Make 'make depend' work without .depend files

@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 6739 2006-10-20 19:08:26Z nenolod $
+# $Id: Makefile.in 6773 2006-10-21 02:49:17Z nenolod $
 #
 
 CC		= @CC@
@@ -69,6 +69,7 @@ BASE_SRCS =		\
 	template.c	\
 	tokenize.c	\
 	ubase64.c	\
+	users.c		\
 	uid.c		\
 	uplink.c	\
 	xmlrpc.c

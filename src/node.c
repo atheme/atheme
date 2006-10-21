@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6739 2006-10-20 19:08:26Z nenolod $
+ * $Id: node.c 6773 2006-10-21 02:49:17Z nenolod $
  */
 
 #include "atheme.h"
@@ -18,8 +18,6 @@ list_t uplinks;
 list_t klnlist;
 list_t sidlist[HASHSIZE];
 list_t servlist[HASHSIZE];
-list_t userlist[HASHSIZE];
-list_t uidlist[HASHSIZE];
 list_t chanlist[HASHSIZE];
 list_t mclist[HASHSIZE];
 
@@ -27,7 +25,6 @@ static BlockHeap *operclass_heap;
 static BlockHeap *soper_heap;
 static BlockHeap *tld_heap;
 static BlockHeap *serv_heap;
-static BlockHeap *user_heap;
 static BlockHeap *chan_heap;
 
 static BlockHeap *chanuser_heap;
@@ -35,7 +32,6 @@ static BlockHeap *chanban_heap;
 static BlockHeap *uplink_heap;
 
 static BlockHeap *kline_heap;	/* 16 */
-static BlockHeap *myuser_heap;	/* HEAP_USER */
 static BlockHeap *mychan_heap;	/* HEAP_CHANNEL */
 static BlockHeap *chanacs_heap;	/* HEAP_CHANACS */
 static BlockHeap *metadata_heap;	/* HEAP_CHANUSER */
@@ -54,7 +50,6 @@ void init_nodes(void)
 	soper_heap = BlockHeapCreate(sizeof(soper_t), 2);
 	tld_heap = BlockHeapCreate(sizeof(tld_t), 4);
 	serv_heap = BlockHeapCreate(sizeof(server_t), HEAP_SERVER);
-	user_heap = BlockHeapCreate(sizeof(user_t), HEAP_USER);
 	chan_heap = BlockHeapCreate(sizeof(channel_t), HEAP_CHANNEL);
 	chanuser_heap = BlockHeapCreate(sizeof(chanuser_t), HEAP_CHANUSER);
 	chanban_heap = BlockHeapCreate(sizeof(chanban_t), HEAP_CHANUSER);
@@ -64,7 +59,7 @@ void init_nodes(void)
 	mychan_heap = BlockHeapCreate(sizeof(mychan_t), HEAP_CHANNEL);
 	chanacs_heap = BlockHeapCreate(sizeof(chanacs_t), HEAP_CHANUSER);
 
-	if (!tld_heap || !serv_heap || !user_heap || !chan_heap || !soper_heap || !chanuser_heap || !chanban_heap || !uplink_heap || !metadata_heap || !kline_heap || !mychan_heap
+	if (!tld_heap || !serv_heap || !chan_heap || !soper_heap || !chanuser_heap || !chanban_heap || !uplink_heap || !metadata_heap || !kline_heap || !mychan_heap
 	    || !chanacs_heap)
 	{
 		slog(LG_INFO, "init_nodes(): block allocator failed.");
@@ -72,6 +67,7 @@ void init_nodes(void)
 	}
 
 	init_accounts();
+	init_users();
 }
 
 /* Mark everything illegal, to be called before a rehash -- jilles */
@@ -578,196 +574,6 @@ server_t *server_find(const char *name)
 	}
 
 	return NULL;
-}
-
-/*************
- * U S E R S *
- *************/
-
-user_t *user_add(const char *nick, const char *user, const char *host, const char *vhost, const char *ip, const char *uid, const char *gecos, server_t *server, uint32_t ts)
-{
-	user_t *u;
-	node_t *n = node_create();
-
-	slog(LG_DEBUG, "user_add(): %s (%s@%s) -> %s", nick, user, host, server->name);
-
-	u = BlockHeapAlloc(user_heap);
-
-	u->hash = UHASH((const unsigned char *)nick);
-
-	if (uid != NULL)
-	{
-		strlcpy(u->uid, uid, IDLEN);
-		u->uhash = UHASH((const unsigned char *)uid);
-		node_add(u, node_create(), &uidlist[u->uhash]);
-	}
-
-	node_add(u, n, &userlist[u->hash]);
-
-	strlcpy(u->nick, nick, NICKLEN);
-	strlcpy(u->user, user, USERLEN);
-	strlcpy(u->host, host, HOSTLEN);
-	strlcpy(u->gecos, gecos, GECOSLEN);
-
-	if (vhost)
-		strlcpy(u->vhost, vhost, HOSTLEN);
-	else
-		strlcpy(u->vhost, host, HOSTLEN);
-
-	if (ip && strcmp(ip, "0") && strcmp(ip, "0.0.0.0") && strcmp(ip, "255.255.255.255"))
-		strlcpy(u->ip, ip, HOSTIPLEN);
-
-	u->server = server;
-	u->server->users++;
-	node_add(u, node_create(), &u->server->userlist);
-
-	if (ts)
-		u->ts = ts;
-	else
-		u->ts = CURRTIME;
-
-	cnt.user++;
-
-	hook_call_event("user_add", u);
-
-	return u;
-}
-
-void user_delete(user_t *u)
-{
-	node_t *n, *tn;
-	chanuser_t *cu;
-
-	if (!u)
-	{
-		slog(LG_DEBUG, "user_delete(): called for NULL user");
-		return;
-	}
-
-	slog(LG_DEBUG, "user_delete(): removing user: %s -> %s", u->nick, u->server->name);
-
-	hook_call_event("user_delete", u);
-
-	u->server->users--;
-	if (is_ircop(u))
-		u->server->opers--;
-	if (u->flags & UF_INVIS)
-		u->server->invis--;
-
-	/* remove the user from each channel */
-	LIST_FOREACH_SAFE(n, tn, u->channels.head)
-	{
-		cu = (chanuser_t *)n->data;
-
-		chanuser_delete(cu->chan, u);
-	}
-
-	n = node_find(u, &userlist[u->hash]);
-	node_del(n, &userlist[u->hash]);
-	node_free(n);
-
-	if (*u->uid)
-	{
-		n = node_find(u, &uidlist[u->uhash]);
-		node_del(n, &uidlist[u->uhash]);
-		node_free(n);
-	}
-
-	n = node_find(u, &u->server->userlist);
-	node_del(n, &u->server->userlist);
-	node_free(n);
-
-	if (u->myuser)
-	{
-		LIST_FOREACH_SAFE(n, tn, u->myuser->logins.head)
-		{
-			if (n->data == u)
-			{
-				node_del(n, &u->myuser->logins);
-				node_free(n);
-				break;
-			}
-		}
-		u->myuser->lastlogin = CURRTIME;
-		u->myuser = NULL;
-	}
-
-	BlockHeapFree(user_heap, u);
-
-	cnt.user--;
-}
-
-user_t *user_find(const char *nick)
-{
-	user_t *u;
-	node_t *n;
-
-	if (nick == NULL)
-		return NULL;
-
-	if (ircd->uses_uid == TRUE)
-	{
-		LIST_FOREACH(n, uidlist[SHASH((const unsigned char *)nick)].head)
-		{
-			u = (user_t *)n->data;
-
-			if (!strcmp(nick, u->uid))
-				return u;
-		}
-	}
-
-	LIST_FOREACH(n, userlist[SHASH((const unsigned char *)nick)].head)
-	{
-		u = (user_t *)n->data;
-
-		if (!irccasecmp(nick, u->nick))
-		{
-			if (ircd->uses_p10)
-				wallops("user_find() found user %s by nick!",
-						nick);
-			return u;
-		}
-	}
-
-	return NULL;
-}
-
-/* Use this for user input, to prevent users chasing users by UID -- jilles */
-user_t *user_find_named(const char *nick)
-{
-	user_t *u;
-	node_t *n;
-
-	LIST_FOREACH(n, userlist[SHASH((const unsigned char *)nick)].head)
-	{
-		u = (user_t *)n->data;
-
-		if (!irccasecmp(nick, u->nick))
-			return u;
-	}
-
-	return NULL;
-}
-
-/* Change a UID, for services */
-void user_changeuid(user_t *u, const char *uid)
-{
-	node_t *n;
-
-	if (*u->uid)
-	{
-		n = node_find(u, &uidlist[u->uhash]);
-		node_del(n, &uidlist[u->uhash]);
-		node_free(n);
-	}
-
-	strlcpy(u->uid, uid ? uid : "", IDLEN);
-
-	if (*u->uid)
-	{
-		u->uhash = UHASH((const unsigned char *)uid);
-		node_add(u, node_create(), &uidlist[u->uhash]);
-	}
 }
 
 /*******************
