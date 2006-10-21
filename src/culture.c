@@ -4,64 +4,74 @@
  *
  * Translation framework.
  *
- * $Id: culture.c 6485 2006-09-26 15:31:48Z jilles $
+ * $Id: culture.c 6803 2006-10-21 19:24:38Z nenolod $
  */
 
 #include "atheme.h"
 
-list_t itranshash[HASHSIZE]; /* internal translations, userserv/nickserv etc */
-list_t transhash[HASHSIZE]; /* language translations */
+dictionary_tree_t *itranslation_tree; /* internal translations, userserv/nickserv etc */
+dictionary_tree_t *translation_tree; /* language translations */
 
 /*
- * translation_get()
+ * translation_init()
+ *
+ * Initializes the translation DTrees.
  *
  * Inputs:
- *       string to get translation for
+ *     - none
  *
  * Outputs:
- *       translated string, or the original string if no translation
+ *     - nothing
+ *
+ * Side Effects:
+ *     - on success, nothing
+ *     - on failure, the program will abort
+ */
+void translation_init(void)
+{
+	itranslation_tree = dictionary_create("itranslation_tree", HASH_SMALL, strcmp);
+	translation_tree = dictionary_create("translation_tree", HASH_SMALL, strcmp);
+}
+
+/*
+ * translation_get(const char *str)
+ *
+ * Inputs:
+ *     - string to get translation for
+ *
+ * Outputs:
+ *     - translated string, or the original string if no translation
  *       was found
  *
  * Side Effects:
- *       none
+ *     - none
  */
 const char *translation_get(const char *str)
 {
 	node_t *n;
+	translation_t *t;
 
-	LIST_FOREACH(n, itranshash[shash((unsigned char *) str)].head)
-	{
-		translation_t *t = (translation_t *) n->data;
+	/* See if an internal substitution is present. */
+	if ((t = dictionary_retrieve(itranslation_tree, str)) != NULL)
+		str = t->replacement;
 
-		if (!strcmp(str, t->name))
-		{
-			str = t->replacement;
-			break;
-		}
-	}
-
-	LIST_FOREACH(n, transhash[shash((unsigned char *) str)].head)
-	{
-		translation_t *t = (translation_t *) n->data;
-
-		if (!strcmp(str, t->name))
-			return t->replacement;
-	}
+	if ((t = dictionary_retrieve(translation_tree, str)) != NULL)
+		return t->replacement;
 
 	return str;
 }
 
 /*
- * itranslation_create()
+ * itranslation_create(char *str, char *trans)
  *
  * Inputs:
- *       string to translate, translation of the string
+ *     - string to translate, translation of the string
  *
  * Outputs:
- *       none
+ *     - none
  *
  * Side Effects:
- *       a new translation is added to the cache
+ *     - a new translation is added to the cache
  */
 void itranslation_create(char *str, char *trans)
 {
@@ -70,51 +80,42 @@ void itranslation_create(char *str, char *trans)
 	t->name = sstrdup(str);
 	t->replacement = sstrdup(trans);
 
-	node_add(t, node_create(), &itranshash[shash((unsigned char *) t->name)]);
+	dictionary_add(itranslation_tree, t->name, t);
 }
 
 /*
- * itranslation_destroy()
+ * itranslation_destroy(char *str)
  *
  * Inputs:
- *       string to remove from the translation cache
+ *     - string to remove from the translation cache
  *
  * Outputs:
- *       none
+ *     - none
  *
  * Side Effects:
- *       a string is removed from the translation cache
+ *     - a string is removed from the translation cache
  */
 void itranslation_destroy(char *str)
 {
 	node_t *n, *tn;
-	translation_t *t;
+	translation_t *t = dictionary_delete(itranslation_tree, str);
 
-	LIST_FOREACH_SAFE(n, tn, itranshash[shash((unsigned char *) str)].head)
-	{
-		t = n->data;
-		if (!strcmp(str, t->name))
-		{
-			node_del(n, &itranshash[shash((unsigned char *) str)]);
-			node_free(n);
-
-			free(t->name);
-			free(t->replacement);
-			free(t);
-		}
-	}
+	free(t->name);
+	free(t->replacement);
+	free(t);
 }
+
 /*
- * translation_create()
+ * translation_create(char *str, char *trans)
  *
  * Inputs:
- *       string to translate, translation of the string
+ *     - string to translate, translation of the string
  *
  * Outputs:
- *       none
+ *     - none
  *
  * Side Effects:
- *       a new translation is added to the cache
+ *     - a new translation is added to the cache
  */
 void translation_create(char *str, char *trans)
 {
@@ -131,37 +132,27 @@ void translation_create(char *str, char *trans)
 
 	t->replacement = sstrdup(buf);
 
-	node_add(t, node_create(), &transhash[shash((unsigned char *) t->name)]);
+	dictionary_add(translation_tree, t->name, t);
 }
 
 /*
- * translation_destroy()
+ * translation_destroy(char *str)
  *
  * Inputs:
- *       string to remove from the translation cache
+ *     - string to remove from the translation cache
  *
  * Outputs:
- *       none
+ *     - none
  *
  * Side Effects:
- *       a string is removed from the translation cache
+ *     - a string is removed from the translation cache
  */
 void translation_destroy(char *str)
 {
 	node_t *n, *tn;
-	translation_t *t;
+	translation_t *t = dictionary_delete(translation_tree, str);
 
-	LIST_FOREACH_SAFE(n, tn, transhash[shash((unsigned char *) str)].head)
-	{
-		t = n->data;
-		if (!strcmp(str, t->name))
-		{
-			node_del(n, &transhash[shash((unsigned char *) str)]);
-			node_free(n);
-
-			free(t->name);
-			free(t->replacement);
-			free(t);
-		}
-	}
+	free(t->name);
+	free(t->replacement);
+	free(t);
 }

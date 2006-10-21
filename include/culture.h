@@ -4,7 +4,7 @@
  *
  * Message translation stuff.
  * 
- * $Id: culture.h 6485 2006-09-26 15:31:48Z jilles $
+ * $Id: culture.h 6803 2006-10-21 19:24:38Z nenolod $
  */
 
 #ifndef CULTURE_H
@@ -23,5 +23,6 @@ E void itranslation_create(char *str, char *trans);
 E void itranslation_destroy(char *str);
 E void translation_create(char *str, char *trans);
 E void translation_destroy(char *str);
+E void translation_init(void);
 
 #endif
