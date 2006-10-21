@@ -4,7 +4,7 @@
  *
  * This contains the connection_t structure.
  *
- * $Id: connection.h 6787 2006-10-21 15:32:04Z jilles $
+ * $Id: connection.h 6819 2006-10-21 21:24:10Z jilles $
  */
 
 #ifndef CONNECTION_H
@@ -80,6 +80,7 @@ extern void connection_close(connection_t *);
 extern void connection_close_soon(connection_t *);
 extern void connection_close_soon_children(connection_t *);
 extern void connection_close_all(void);
+extern void connection_stats(void (*)(const char *, void *), void *);
 extern void connection_write(connection_t *to, char *format, ...);
 extern void connection_write_raw(connection_t *to, char *data);
 extern connection_t *connection_find(int32_t);

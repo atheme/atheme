@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 6817 2006-10-21 20:43:28Z nenolod $
+ * $Id: connection.c 6819 2006-10-21 21:24:10Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -514,6 +514,52 @@ void connection_setselect(connection_t *cptr,
 {
 	cptr->read_handler = read_handler;
 	cptr->write_handler = write_handler;
+}
+
+/*
+ * connection_stats()
+ *
+ * inputs:
+ *       callback function, data for callback function
+ *
+ * outputs:
+ *       none
+ *
+ * side effects:
+ *       callback function is called with a series of lines
+ */
+void connection_stats(void (*stats_cb)(const char *, void *), void *privdata)
+{
+	node_t *n;
+	char buf[160];
+	char buf2[20];
+
+	LIST_FOREACH(n, connection_list.head)
+	{
+		connection_t *c = (connection_t *) n->data;
+
+		snprintf(buf, sizeof buf, "fd %-3d desc '%s'", c->fd, c->flags & CF_UPLINK ? "uplink" : c->flags & CF_LISTENING ? "listener" : "misc");
+		if (c->listener != NULL)
+		{
+			snprintf(buf2, sizeof buf2, " listener %d", c->listener->fd);
+			strlcat(buf, buf2, sizeof buf);
+		}
+		if (c->flags & (CF_CONNECTING | CF_DEAD | CF_NONEWLINE | CF_SEND_EOF | CF_SEND_DEAD))
+		{
+			strlcat(buf, " status", sizeof buf);
+			if (c->flags & CF_CONNECTING)
+				strlcat(buf, " connecting", sizeof buf);
+			if (c->flags & CF_DEAD)
+				strlcat(buf, " dead", sizeof buf);
+			if (c->flags & CF_NONEWLINE)
+				strlcat(buf, " nonewline", sizeof buf);
+			if (c->flags & CF_SEND_DEAD)
+				strlcat(buf, " send_dead", sizeof buf);
+			else if (c->flags & CF_SEND_EOF)
+				strlcat(buf, " send_eof", sizeof buf);
+		}
+		stats_cb(buf, privdata);
+	}
 }
 
 /*
