@@ -1,3 +1,14 @@
+nenolod     2006/10/21 02:49:17 UTC	(20061021-6773)
+  Log:
+  - break out user-related functions into users.c
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/src/Makefile.in (File Modified) 
+  +2 -196	trunk/src/node.c (File Modified) 
+  +312 -0	trunk/src/users.c (File Added) 
+
+
 jilles      2006/10/21 01:46:23 UTC	(20061021-6771)
   Log:
   Remove .depend files from svn.
