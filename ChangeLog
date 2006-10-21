@@ -1,3 +1,13 @@
+jilles      2006/10/20 21:43:42 UTC	(20061020-6761)
+  Log:
+  chanserv flags: use account name with original capitalization,
+  not given account name (which could also be =<nick>.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/modules/chanserv/flags.c (File Modified) 
+
+
 jilles      2006/10/20 21:10:04 UTC	(20061020-6759)
   Log:
   Update cs_count and ns_generatepass from contrib to new APIs.
