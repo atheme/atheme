@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6799 2006-10-21 19:03:06Z jilles $
+ * $Id: node.c 6805 2006-10-21 19:37:11Z jilles $
  */
 
 #include "atheme.h"
@@ -16,8 +16,8 @@ list_t soperlist;
 list_t tldlist;
 list_t uplinks;
 list_t klnlist;
-list_t sidlist[HASHSIZE];
-list_t servlist[HASHSIZE];
+dictionary_tree_t *sidlist;
+dictionary_tree_t *servlist;
 dictionary_tree_t *chanlist;
 list_t mclist[HASHSIZE];
 
@@ -67,6 +67,8 @@ void init_nodes(void)
 	}
 
 	chanlist = dictionary_create("channel", HASH_CHANNEL, irccasecmp);
+	servlist = dictionary_create("server", HASH_SERVER, irccasecmp);
+	sidlist = dictionary_create("sid", HASH_SERVER, strcmp);
 
 	init_accounts();
 	init_users();
@@ -430,7 +432,6 @@ tld_t *tld_find(const char *name)
 server_t *server_add(const char *name, uint8_t hops, const char *uplink, const char *id, const char *desc)
 {
 	server_t *s, *u = NULL;
-	node_t *n = node_create();
 	const char *tld;
 
 	if (uplink)
@@ -443,15 +444,10 @@ server_t *server_add(const char *name, uint8_t hops, const char *uplink, const c
 
 	s = BlockHeapAlloc(serv_heap);
 
-	s->hash = SHASH((const unsigned char *)name);
-
-	node_add(s, n, &servlist[s->hash]);
-
 	if (id != NULL)
 	{
 		s->sid = sstrdup(id);
-		s->shash = SHASH((const unsigned char *)id);
-		node_add(s, node_create(), &sidlist[s->shash]);
+		dictionary_add(sidlist, s->sid, s);
 	}
 
 	/* check to see if it's hidden */
@@ -467,6 +463,8 @@ server_t *server_add(const char *name, uint8_t hops, const char *uplink, const c
 	s->desc = sstrdup(desc);
 	s->hops = hops;
 	s->connected_since = CURRTIME;
+
+	dictionary_add(servlist, s->name, s);
 
 	if (u)
 	{
@@ -523,16 +521,10 @@ void server_delete(const char *name)
 	}
 
 	/* now remove the server */
-	n = node_find(s, &servlist[s->hash]);
-	node_del(n, &servlist[s->hash]);
-	node_free(n);
+	dictionary_delete(servlist, s->name);
 
 	if (s->sid)
-	{
-		n = node_find(s, &sidlist[s->shash]);
-		node_del(n, &sidlist[s->shash]);
-		node_free(n);
-	}
+		dictionary_delete(sidlist, s->sid);
 
 	if (s->uplink)
 	{
@@ -556,26 +548,14 @@ server_t *server_find(const char *name)
 	server_t *s;
 	node_t *n;
 
-	if (ircd->uses_uid == TRUE)
+	if (ircd->uses_uid)
 	{
-		LIST_FOREACH(n, sidlist[SHASH((const unsigned char *)name)].head)
-		{
-			s = (server_t *)n->data;
-
-			if (!strcmp(name, s->sid))
-				return s;
-		}
-	}
-
-	LIST_FOREACH(n, servlist[SHASH((const unsigned char *)name)].head)
-	{
-		s = (server_t *)n->data;
-
-		if (!irccasecmp(name, s->name))
+		s = dictionary_retrieve(sidlist, name);
+		if (s != NULL)
 			return s;
 	}
 
-	return NULL;
+	return dictionary_retrieve(servlist, name);
 }
 
 /*******************

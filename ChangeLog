@@ -1,3 +1,14 @@
+nenolod     2006/10/21 19:24:38 UTC	(20061021-6803)
+  Log:
+  - move translation code from hashtable to dtree structure
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/culture.h (File Modified) 
+  +1 -0		trunk/src/atheme.c (File Modified) 
+  +60 -69	trunk/src/culture.c (File Modified) 
+
+
 jilles      2006/10/21 19:08:32 UTC	(20061021-6801)
   Log:
   Remove some cruft related to the old hashing stuff.

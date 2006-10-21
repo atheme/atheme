@@ -4,7 +4,7 @@
  *
  * Data structures related to network servers.
  *
- * $Id: servers.h 6105 2006-08-18 00:24:46Z jilles $
+ * $Id: servers.h 6805 2006-10-21 19:37:11Z jilles $
  */
 
 #ifndef SERVERS_H
@@ -28,8 +28,6 @@ struct server_
 	time_t connected_since;
 
 	uint32_t flags;
-	int32_t hash;
-	int32_t shash;
 
 	server_t *uplink; /* uplink server */
 	list_t children;  /* children linked to me */
@@ -49,7 +47,7 @@ struct tld_ {
 #define ME			(ircd->uses_uid ? me.numeric : me.name)
 
 /* node.c */
-E list_t servlist[HASHSIZE];
+E dictionary_tree_t *servlist;
 E list_t tldlist;
 
 E tld_t *tld_add(const char *name);

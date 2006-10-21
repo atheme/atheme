@@ -5,7 +5,7 @@
  * This file contains socket routines.
  * Based off of W. Campbell's code.
  *
- * $Id: send.c 6799 2006-10-21 19:03:06Z jilles $
+ * $Id: send.c 6805 2006-10-21 19:37:11Z jilles $
  */
 
 #include "atheme.h"
@@ -42,10 +42,7 @@ int8_t sts(char *fmt, ...)
 
 void reconn(void *arg)
 {
-	uint32_t i;
-	server_t *s;
 	channel_t *c;
-	node_t *n, *tn;
 	dictionary_iteration_state_t state;
 
 	if (me.connected)
@@ -57,22 +54,11 @@ void reconn(void *arg)
 	 * we do not clear users here because when you delete a server,
 	 * it deletes its users
 	 */
-	for (i = 0; i < HASHSIZE; i++)
-	{
-		LIST_FOREACH_SAFE(n, tn, servlist[i].head)
-		{
-			s = (server_t *)n->data;
-			if (s != me.me)
-				server_delete(s->name);
-		}
-	}
+	server_delete(me.actual);
 	/* remove all the channels left */
-	for (i = 0; i < HASHSIZE; i++)
+	DICTIONARY_FOREACH(c, &state, chanlist)
 	{
-		DICTIONARY_FOREACH(c, &state, chanlist)
-		{
-			channel_delete(c->name);
-		}
+		channel_delete(c->name);
 	}
 	/* this leaves me.me and all users on it (i.e. services) */
 
