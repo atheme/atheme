@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 5782 2006-07-08 21:18:46Z jilles $
+# $Id: Makefile.in 6769 2006-10-21 01:44:52Z jilles $
 #
 
 CC		= @CC@
@@ -27,7 +27,7 @@ SHELL=/bin/sh
 SUBDIRS=libatheme crypto backend modules protocol src
 CLEANDIRS = ${SUBDIRS}
 
-all: build
+all: depend build
 
 build:
 	-@if [ ! -f include/sysconf.h ] ; then \
@@ -66,6 +66,7 @@ depend:
 	@for i in $(SUBDIRS); do \
 		echo "depend ==> $$i"; \
 		cd $$i; \
+		touch .depend; \
 		${MAKE} depend; cd ..; \
 	done
 

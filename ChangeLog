@@ -1,3 +1,15 @@
+nenolod     2006/10/21 01:32:42 UTC	(20061021-6767)
+  Log:
+  - store account access list on disk
+  - fix some silliness in backend::flatfile
+  
+
+  Changes:	Modified:
+  +10 -2	trunk/SQL/atheme_init.pgsql (File Modified) 
+  +25 -3	trunk/backend/flatfile.c (File Modified) 
+  +8 -0		trunk/backend/postgresql.c (File Modified) 
+
+
 jilles      2006/10/21 00:13:45 UTC	(20061021-6765)
   Log:
   Rerun make depend.
