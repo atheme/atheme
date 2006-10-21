@@ -1,3 +1,14 @@
+jilles      2006/10/21 18:37:52 UTC	(20061021-6795)
+  Log:
+  Convert pcommands to dtree.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/common.h (File Modified) 
+  +1 -1		trunk/include/pmodule.h (File Modified) 
+  +6 -27	trunk/src/pmodule.c (File Modified) 
+
+
 jilles      2006/10/21 17:11:40 UTC	(20061021-6793)
   Log:
   example.conf: clarify which modules are just commands and

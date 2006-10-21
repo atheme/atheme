@@ -4,7 +4,7 @@
  *
  * Includes most headers usually needed.
  *
- * $Id: atheme.h 6291 2006-09-06 02:26:55Z pippijn $
+ * $Id: atheme.h 6797 2006-10-21 18:56:49Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -15,6 +15,7 @@
 #include <org.atheme.claro.base>
 
 #include "common.h"
+#include "dictionary.h"
 #include "servers.h"
 #include "channels.h"
 #include "module.h"
@@ -24,7 +25,6 @@
 #include "base64.h"
 #include "md5.h"
 #include "sasl.h"
-#include "dictionary.h"
 #include "match.h"
 #include "sysconf.h"
 #include "account.h"
