@@ -1,3 +1,14 @@
+jilles      2006/10/21 12:36:05 UTC	(20061021-6777)
+  Log:
+  Add myuser_access_find(), searches for an access mask.
+  Also fix a comment for myuser_access_delete().
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/account.h (File Modified) 
+  +34 -2	trunk/src/account.c (File Modified) 
+
+
 nenolod     2006/10/21 02:49:49 UTC	(20061021-6775)
   Log:
   - add prototype for init_users().

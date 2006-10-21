@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 6769 2006-10-21 01:44:52Z jilles $
+# $Id: Makefile.in 6779 2006-10-21 12:58:08Z jilles $
 #
 
 CC		= @CC@
@@ -70,7 +70,7 @@ depend:
 		${MAKE} depend; cd ..; \
 	done
 
-install: all
+install: build
 	@for i in $(SUBDIRS); do \
 		echo "install ==> $$i"; \
 		cd $$i; \
