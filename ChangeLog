@@ -1,3 +1,12 @@
+jilles      2006/10/21 12:58:08 UTC	(20061021-6779)
+  Log:
+  Don't rerun make depend on make install.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/Makefile.in (File Modified) 
+
+
 jilles      2006/10/21 12:36:05 UTC	(20061021-6777)
   Log:
   Add myuser_access_find(), searches for an access mask.
