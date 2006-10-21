@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 6515 2006-09-27 17:13:42Z jilles $
+ * $Id: inspircd11.c 6821 2006-10-21 22:30:12Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 6515 2006-09-27 17:13:42Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 6821 2006-10-21 22:30:12Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -562,8 +562,10 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 		 */
 		c->ts = ts;
 		hook_call_event("channel_tschange", c);
-		keep_new_modes = false; /* bounce them! */
-		slog(LG_DEBUG, "m_fjoin(): preparing to bounce modes on: %s", parv[0]);
+	}
+	else if (ts > c->ts)
+	{
+		keep_new_modes = false; /* ignore statuses */
 	}
 
 	/*
@@ -575,6 +577,7 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 	 */
 	userc = sjtoken(parv[parc - 1], ' ', userv);
 
+	/* loop over all the users in this fjoin */
 	for (i = 0; i < userc; i++)
 	{
 		nlen = 0;
@@ -582,27 +585,53 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 
 		slog(LG_DEBUG, "m_fjoin(): processing user: %s", userv[i]);
 
+		/*
+		 * ok, now look at the chars in the nick.. we have something like "@%,w00t", but need @%w00t.. and
+		 * we also want to ignore unknown prefixes.. loop through the chars
+		 */
 		for (; *userv[i]; userv[i]++)
 		{
+			/* does this char match a known prefix? */
 			for (j = 0; prefix_mode_list[j].mode; j++)
 			{
+				/* yup. add it to the 'final' combination (@%w00t) */
 				if (*userv[i] == prefix_mode_list[j].mode)
 				{
 					prefixandnick[nlen++] = *userv[i];
 					continue;
 				}
+			}
 
-				if (*userv[i] == ',')
+			/* it's not a known prefix char, have we reached the end of the prefixes? */
+			if (*userv[i] == ',')
+			{
+				/* yup, skip over the comma */
+				userv[i]++;
+
+				/* if we're ignoring status (keep_new_modes is false) then just add them to chan here.. */
+				if (keep_new_modes == false)
 				{
-					userv[i]++;
-					strncpy(prefixandnick + nlen, userv[i], sizeof(prefixandnick));
-					nlen = strlen(prefixandnick); /* eww, but it makes life so much easier */
-					break;
+					/* This ignores the @%, and just adds 'w00t' to the chan */
+					chanuser_add(c, userv[i]);
 				}
+				else
+				{
+					/* else, we do care about their prefixes.. add '@%w00t' to the chan */
+					strncpy(prefixandnick + nlen, userv[i], sizeof(prefixandnick));
+					chanuser_add(c, prefixandnick);
+					//nlen = strlen(prefixandnick); /* eww, but it makes life so much easier */
+				}
+
+				/* added them.. break out of this loop, which will move us to the next user */
+				break;
+			}
+			else
+			{
+				/* unknown prefix char */
 			}
 		}
 
-		chanuser_add(c, prefixandnick);
+		/* go to the next user */
 	}
 
 	if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))
