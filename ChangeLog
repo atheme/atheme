@@ -1,3 +1,14 @@
+jilles      2006/10/21 19:43:43 UTC	(20061021-6807)
+  Log:
+  - Move translation_init() up so it's done when it's needed.
+  - Don't crash when removing a translation that doesn't exist.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/atheme.c (File Modified) 
+  +6 -0		trunk/src/culture.c (File Modified) 
+
+
 jilles      2006/10/21 19:37:11 UTC	(20061021-6805)
   Log:
   Move servlist and sidlist (servers) over to dtree.

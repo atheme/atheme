@@ -4,7 +4,7 @@
  *
  * Defines needed by multiple header files.
  *
- * $Id: common.h 6805 2006-10-21 19:37:11Z jilles $
+ * $Id: common.h 6809 2006-10-21 19:47:41Z jilles $
  */
 
 #ifndef COMMON_H
@@ -60,6 +60,8 @@
 
 #define HASH_COMMAND    256
 #define HASH_SMALL      32
+#define HASH_ITRANS     128
+#define HASH_TRANS      2048
 
 #define CACHEFILE_HEAP_SIZE     32
 #define CACHELINE_HEAP_SIZE     64

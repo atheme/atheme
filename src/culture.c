@@ -4,7 +4,7 @@
  *
  * Translation framework.
  *
- * $Id: culture.c 6807 2006-10-21 19:43:43Z jilles $
+ * $Id: culture.c 6809 2006-10-21 19:47:41Z jilles $
  */
 
 #include "atheme.h"
@@ -29,8 +29,8 @@ dictionary_tree_t *translation_tree; /* language translations */
  */
 void translation_init(void)
 {
-	itranslation_tree = dictionary_create("itranslation_tree", HASH_SMALL, strcmp);
-	translation_tree = dictionary_create("translation_tree", HASH_SMALL, strcmp);
+	itranslation_tree = dictionary_create("itranslation_tree", HASH_ITRANS, strcmp);
+	translation_tree = dictionary_create("translation_tree", HASH_TRANS, strcmp);
 }
 
 /*
