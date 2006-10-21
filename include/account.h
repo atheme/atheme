@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 6777 2006-10-21 12:36:05Z jilles $
+ * $Id: account.h 6801 2006-10-21 19:08:32Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -68,7 +68,6 @@ struct myuser_
   list_t metadata;
 
   uint32_t flags;
-  int32_t hash;
   
   list_t memos; /* store memos */
   uint8_t memoct_new;

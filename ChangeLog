@@ -1,3 +1,15 @@
+jilles      2006/10/21 19:03:06 UTC	(20061021-6799)
+  Log:
+  Move chanlist (channels existing on the IRC network) to dtree.
+  
+
+  Changes:	Modified:
+  +1 -2		trunk/include/channels.h (File Modified) 
+  +2 -0		trunk/include/common.h (File Modified) 
+  +6 -20	trunk/src/node.c (File Modified) 
+  +2 -2		trunk/src/send.c (File Modified) 
+
+
 jilles      2006/10/21 18:56:49 UTC	(20061021-6797)
   Log:
   Move dictionary.h closer to the top so it can be used in more places.

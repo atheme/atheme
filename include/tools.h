@@ -5,7 +5,7 @@
  *
  * Misc tools
  *
- * $Id: tools.h 6665 2006-10-05 23:45:09Z jilles $
+ * $Id: tools.h 6801 2006-10-21 19:08:32Z jilles $
  */
 
 #ifndef _TOOLS_H
@@ -71,8 +71,6 @@ E unsigned long makekey(void);
 E uint32_t shash(const unsigned char *text);
 #define SHASH(server) shash(server)
 #define UHASH(nick) shash(nick)
-#define CHASH(chan) shash(chan)
-#define MUHASH(myuser) shash(myuser)
 #define MCHASH(mychan) shash(mychan)
 
 /* time stuff */
