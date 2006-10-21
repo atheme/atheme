@@ -1,3 +1,12 @@
+jilles      2006/10/21 15:20:10 UTC	(20061021-6783)
+  Log:
+  Go into contrib on 'make depend' but ignore any error.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/Makefile.in (File Modified) 
+
+
 jilles      2006/10/21 14:52:13 UTC	(20061021-6781)
   Log:
   Add /ns access command.

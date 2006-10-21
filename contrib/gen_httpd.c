@@ -4,7 +4,7 @@
  *
  * A simple web server
  *
- * $Id: gen_httpd.c 6693 2006-10-16 10:16:27Z jilles $
+ * $Id: gen_httpd.c 6785 2006-10-21 15:22:55Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"contrib/gen_httpd", FALSE, _modinit, _moddeinit,
-	"$Id: gen_httpd.c 6693 2006-10-16 10:16:27Z jilles $",
+	"$Id: gen_httpd.c 6785 2006-10-21 15:22:55Z jilles $",
 	"Jilles Tjoelker <jilles -at- stack.nl>"
 );
 
@@ -254,6 +254,8 @@ static void httpd_checkidle(void *arg)
 	connection_t *cptr;
 
 	(void)arg;
+	if (listener == NULL)
+		return;
 	LIST_FOREACH(n, connection_list.head)
 	{
 		cptr = n->data;
@@ -274,6 +276,8 @@ static void httpd_checkidle(void *arg)
 void _modinit(module_t *m)
 {
 	listener = connection_open_listener_tcp("127.0.0.1", 7100, do_listen);
+	if (listener == NULL)
+		slog(LG_ERROR, "gen_httpd/_modinit(): failed to open listener on host %s port %d", "127.0.0.1", 7100);
 	event_add("httpd_checkidle", httpd_checkidle, NULL, 60);
 }
 

@@ -4,7 +4,7 @@
  *
  * New xmlrpc implementation
  *
- * $Id: main.c 6691 2006-10-16 10:15:12Z jilles $
+ * $Id: main.c 6785 2006-10-21 15:22:55Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6691 2006-10-16 10:15:12Z jilles $",
+	"$Id: main.c 6785 2006-10-21 15:22:55Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -309,6 +309,8 @@ static void httpd_checkidle(void *arg)
 	connection_t *cptr;
 
 	(void)arg;
+	if (listener == NULL)
+		return;
 	LIST_FOREACH(n, connection_list.head)
 	{
 		cptr = n->data;
@@ -351,6 +353,8 @@ static void xmlrpc_config_ready(void *vptr)
 	{
 		listener = connection_open_listener_tcp(xmlrpc_config.host,
 			xmlrpc_config.port, do_listen);
+		if (listener == NULL)
+			slog(LG_ERROR, "xmlrpc_config_ready(): failed to open listener on host %s port %d", xmlrpc_config.host, xmlrpc_config.port);
 		hook_del_hook("config_ready", xmlrpc_config_ready);
 	}
 	else
