@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 6757 2006-10-20 20:28:45Z jilles $
+ * $Id: account.c 6777 2006-10-21 12:36:05Z jilles $
  */
 
 #include "atheme.h"
@@ -397,14 +397,46 @@ myuser_access_add(myuser_t *mu, char *mask)
 }
 
 /*
+ * myuser_access_find()
+ *
+ * Inputs:
+ *     - account to find access mask in, access mask
+ *
+ * Outputs:
+ *     - pointer to found access mask or NULL if not found
+ *
+ * Side Effects:
+ *     - none
+ */
+char *
+myuser_access_find(myuser_t *mu, char *mask)
+{
+	node_t *n;
+
+	if (mu == NULL || mask == NULL)
+	{
+		slog(LG_DEBUG, "myuser_access_find(): invalid parameters: mu = %p, mask = %p", mu, mask);
+		return;
+	}
+
+	LIST_FOREACH(n, mu->access_list.head)
+	{
+		char *entry = (char *) n->data;
+
+		if (!strcasecmp(entry, mask))
+			return entry;
+	}
+	return NULL;
+}
+
+/*
  * myuser_access_delete()
  *
  * Inputs:
  *     - account to delete access mask from, access mask itself
  *
  * Outputs:
- *     - FALSE: me.mdlimit is reached (too many access entries)
- *     - TRUE : success
+ *     - none
  *
  * Side Effects:
  *     - an access mask is added to an account.
