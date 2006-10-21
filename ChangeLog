@@ -1,3 +1,12 @@
+jilles      2006/10/21 00:11:37 UTC	(20061021-6763)
+  Log:
+  example.conf: mention crypto/sorservices
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/dist/example.conf (File Modified) 
+
+
 jilles      2006/10/20 21:43:42 UTC	(20061020-6761)
   Log:
   chanserv flags: use account name with original capitalization,
