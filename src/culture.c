@@ -4,7 +4,7 @@
  *
  * Translation framework.
  *
- * $Id: culture.c 6803 2006-10-21 19:24:38Z nenolod $
+ * $Id: culture.c 6807 2006-10-21 19:43:43Z jilles $
  */
 
 #include "atheme.h"
@@ -100,6 +100,9 @@ void itranslation_destroy(char *str)
 	node_t *n, *tn;
 	translation_t *t = dictionary_delete(itranslation_tree, str);
 
+	if (t == NULL)
+		return;
+
 	free(t->name);
 	free(t->replacement);
 	free(t);
@@ -151,6 +154,9 @@ void translation_destroy(char *str)
 {
 	node_t *n, *tn;
 	translation_t *t = dictionary_delete(translation_tree, str);
+
+	if (t == NULL)
+		return;
 
 	free(t->name);
 	free(t->replacement);

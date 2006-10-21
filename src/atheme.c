@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 6803 2006-10-21 19:24:38Z nenolod $
+ * $Id: atheme.c 6807 2006-10-21 19:43:43Z jilles $
  */
 
 #include "atheme.h"
@@ -190,6 +190,7 @@ int main(int argc, char *argv[])
 
 	libclaro_init(slog);
 
+	translation_init();
 	init_nodes();
 	init_newconf();
 	servtree_init();
@@ -216,7 +217,6 @@ int main(int argc, char *argv[])
 
 	authcookie_init();
 	common_ctcp_init();
-	translation_init();
 
 	if (!backend_loaded)
 	{
