@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 6821 2006-10-21 22:30:12Z w00t $
+ * $Id: inspircd11.c 6823 2006-10-21 22:43:43Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 6821 2006-10-21 22:30:12Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 6823 2006-10-21 22:43:43Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -617,7 +617,7 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 				else
 				{
 					/* else, we do care about their prefixes.. add '@%w00t' to the chan */
-					strncpy(prefixandnick + nlen, userv[i], sizeof(prefixandnick));
+					strlcpy(prefixandnick + nlen, userv[i], sizeof(prefixandnick) - nlen);
 					chanuser_add(c, prefixandnick);
 					//nlen = strlen(prefixandnick); /* eww, but it makes life so much easier */
 				}
