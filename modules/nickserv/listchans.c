@@ -5,7 +5,7 @@
  * This file contains code for the nickserv LISTCHANS function.
  *   -- Contains an alias "MYACCESS" for legacy users
  *
- * $Id: listchans.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: listchans.c 6825 2006-10-21 23:32:38Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/listchans", FALSE, _modinit, _moddeinit,
-	"$Id: listchans.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: listchans.c 6825 2006-10-21 23:32:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -59,7 +59,7 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!has_priv(si, PRIV_CHAN_AUSPEX))
 		{
-			command_fail(si, fault_authfail, "You are not authorized to use the target argument.");
+			command_fail(si, fault_noprivs, "You are not authorized to use the target argument.");
 			return;
 		}
 
@@ -76,7 +76,7 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 		mu = si->smu;
 		if (mu == NULL)
 		{
-			command_fail(si, fault_authfail, "You are not logged in.");
+			command_fail(si, fault_noprivs, "You are not logged in.");
 			return;
 		}
 	}

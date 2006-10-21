@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 6657 2006-10-04 21:22:47Z jilles $
+ * $Id: set.c 6825 2006-10-21 23:32:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 6657 2006-10-04 21:22:47Z jilles $",
+	"$Id: set.c 6825 2006-10-21 23:32:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -49,7 +49,7 @@ static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 
 	if (si->smu == NULL)
 	{
-		command_fail(si, fault_authfail, "You are not logged in.");
+		command_fail(si, fault_noprivs, "You are not logged in.");
 		return;
 	}
 
@@ -94,7 +94,7 @@ static void _ns_setemail(sourceinfo_t *si, int parc, char *parv[])
 
 	if (si->smu->flags & MU_WAITAUTH)
 	{
-		command_fail(si, fault_authfail, "Please verify your original registration before changing your e-mail address.");
+		command_fail(si, fault_noprivs, "Please verify your original registration before changing your e-mail address.");
 		return;
 	}
 
@@ -208,7 +208,7 @@ static void _ns_setemailmemos(sourceinfo_t *si, int parc, char *parv[])
 
 	if (si->smu->flags & MU_WAITAUTH)
 	{
-		command_fail(si, fault_authfail, "You have to verify your email address before you can enable emailing memos.");
+		command_fail(si, fault_noprivs, "You have to verify your email address before you can enable emailing memos.");
 		return;
 	}
 

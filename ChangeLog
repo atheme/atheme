@@ -1,3 +1,11 @@
+w00t        2006/10/21 22:43:43 UTC	(20061021-6823)
+  Log:
+  Fix a minor oops, thanks, jilles
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/inspircd11.c (File Modified) 
+
+
 w00t        2006/10/21 22:30:12 UTC	(20061021-6821)
   Log:
   Simplified FJOIN processing and commented it.
