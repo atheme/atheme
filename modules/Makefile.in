@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 6769 2006-10-21 01:44:52Z jilles $
+# $Id: Makefile.in 6907 2006-10-22 23:10:41Z jilles $
 #
 
 CC		= @CC@
@@ -51,7 +51,7 @@ install: build
 		cd $$i; \
 		${MAKE} install || exit; cd ..; \
 	done
-	-${RM} -f ${MODDIR}/modules/userserv/main.so
+	-${RM} -f $(DESTDIR)${MODDIR}/modules/userserv/main.so
 
 modules:
 	@for i in $(SUBDIRS); do \
