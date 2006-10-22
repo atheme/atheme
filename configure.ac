@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 6537 2006-09-29 14:33:02Z jilles $
+dnl $Id: configure.ac 6851 2006-10-22 12:38:43Z lu_zero $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, 2.0.0, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 6537 2006-09-29 14:33:02Z jilles $])
+AC_COPYRIGHT([$Id: configure.ac 6851 2006-10-22 12:38:43Z lu_zero $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -207,43 +207,57 @@ echo " "
 
 POSTGRESQL="yes"
 
-AC_MSG_CHECKING(for PostgreSQL include directory)
-if test -d /usr/include/pgsql ; then
- 	pg_inc_dir="/usr/include/pgsql"
-elif test -f /usr/local/include/libpq-fe.h ; then
-# kludge for freebsd ports, found on liveharmony boxes. --nenolod
-	pg_inc_dir="/usr/local/include"
-	LDFLAGS="-L/usr/local/lib"
-elif test -d /usr/include/postgresql ; then
- 	pg_inc_dir="/usr/include/postgresql"
-elif test -d /usr/local/psql/include ; then
- 	pg_inc_dir="/usr/local/psql/include"
-elif test -d /usr/local/include/postgresql ; then
-	pg_inc_dir="/usr/local/include/postgresql"
-elif test -d /usr/local/pgsql/include ; then
-	pg_inc_dir="/usr/local/pgsql/include"
-elif test -d /usr/local/include/psql ; then
-	pg_inc_dir="/usr/local/include/psql"
-elif test -d /opt/psql/include ; then
- 	pg_inc_dir="/opt/psql/include"
-else
-	pg_inc_dir="no"
- 	PQLIB=""
-	POSTGRESQL="no"
-fi
+AC_ARG_WITH(postgresql,
+AC_HELP_STRING([--with-postgresql],[ Enables PostgreSQL backend support.]),
+[
+       case "$withval" in
+               yes|no)
+                       POSTGRESQL="$withval"
+                       ;;
+               *)
+                       AC_MSG_ERROR([Invalid argument to --with-postgresql (expecting either 'yes' or 'no')])
+                       ;;
+       esac
+])
 
-POSTGRESQL_C=""
+if test "x$POSTGRESQL" = xyes; then
+       AC_MSG_CHECKING(for PostgreSQL include directory)
+       if test -d /usr/include/pgsql ; then
+               pg_inc_dir="/usr/include/pgsql"
+       elif test -f /usr/local/include/libpq-fe.h ; then
+               # kludge for freebsd ports, found on liveharmony boxes. --nenolod
+               pg_inc_dir="/usr/local/include"
+               LDFLAGS="-L/usr/local/lib"
+       elif test -d /usr/include/postgresql ; then
+               pg_inc_dir="/usr/include/postgresql"
+       elif test -d /usr/local/psql/include ; then
+               pg_inc_dir="/usr/local/psql/include"
+       elif test -d /usr/local/include/postgresql ; then
+               pg_inc_dir="/usr/local/include/postgresql"
+       elif test -d /usr/local/pgsql/include ; then
+               pg_inc_dir="/usr/local/include/psql"
+       elif test -d /usr/local/include/psql ; then
+               pg_inc_dir="/usr/local/include/psql"
+       elif test -d /opt/psql/include ; then
+               pg_inc_dir="/opt/psql/include"
+       else
+               pg_inc_dir="no"
+               PQLIB=""
+               POSTGRESQL="no"
+       fi
+       POSTGRESQL_C=""
 
-AC_MSG_RESULT($pg_inc_dir)
+       AC_MSG_RESULT($pg_inc_dir)
 
-if test "$pg_inc_dir" != "no"; then
-	AC_CHECK_HEADER($pg_inc_dir/libpq-fe.h, [
-		PGINC="-I$pg_inc_dir"
-	AC_CHECK_LIB(pq, PQconnectdb, [PQLIB="-lpq"
-		POSTGRESQL_C="postgresql.c"])
-	])
-else
-	POSTGRESQL="no"
+       if test "$pg_inc_dir" != "no"; then
+               AC_CHECK_HEADER($pg_inc_dir/libpq-fe.h, [
+                       PGINC="-I$pg_inc_dir"
+               AC_CHECK_LIB(pq, PQconnectdb, PQLIB="-lpq"
+                            POSTGRESQL_C="postgresql.c")
+               ])
+       else
+               POSTGRESQL="no"
+       fi
 fi
 
 AC_SUBST(POSTGRESQL_C)
