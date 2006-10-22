@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 6767 2006-10-21 01:32:42Z nenolod $
+ * $Id: postgresql.c 6869 2006-10-22 14:31:21Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 6767 2006-10-21 01:32:42Z nenolod $",
+	"$Id: postgresql.c 6869 2006-10-22 14:31:21Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -147,7 +147,7 @@ static void postgresql_db_save(void *arg)
 			PQescapeString(keyval, md->value, BUFSIZE);
 
 			res = safe_query("INSERT INTO ACCOUNT_METADATA(ID, PARENT, KEYNAME, VALUE) VALUES ("
-				"DEFAULT, %d, '%s', '%s');", ii, key, keyval);
+				"DEFAULT, %d, '%s', '%s');", mu_out, key, keyval);
 		}
 
 		LIST_FOREACH(tn, mu->memos.head)
@@ -159,7 +159,7 @@ static void postgresql_db_save(void *arg)
 			PQescapeString(text, mz->text, BUFSIZE);
 
 			res = safe_query("INSERT INTO ACCOUNT_MEMOS(ID, PARENT, SENDER, TIME, STATUS, TEXT) VALUES ("
-				"DEFAULT, %d, '%s', %ld, %ld, '%s');", ii, sender, mz->sent, mz->status, text);
+				"DEFAULT, %d, '%s', %ld, %ld, '%s');", mu_out, sender, mz->sent, mz->status, text);
 		}
 				
 		LIST_FOREACH(tn, mu->memo_ignores.head)
@@ -167,7 +167,7 @@ static void postgresql_db_save(void *arg)
 			char target[BUFSIZE], *temp = (char *)tn->data;
 			PQescapeString(target, temp, strlen(temp));
 					
-			res = safe_query("INSERT INTO ACCOUNT_MEMO_IGNORES(ID, PARENT, TARGET) VALUES(DEFAULT, %d, '%s')", ii, target);
+			res = safe_query("INSERT INTO ACCOUNT_MEMO_IGNORES(ID, PARENT, TARGET) VALUES(DEFAULT, %d, '%s')", mu_out, target);
 		}
 
 		LIST_FOREACH(tn, mu->access_list.head)
@@ -175,7 +175,7 @@ static void postgresql_db_save(void *arg)
 			char target[BUFSIZE], *temp = (char *)tn->data;
 			PQescapeString(target, temp, strlen(temp));
 					
-			res = safe_query("INSERT INTO ACCOUNT_ACCESS(ID, PARENT, TARGET) VALUES(DEFAULT, %d, '%s')", ii, target);
+			res = safe_query("INSERT INTO ACCOUNT_ACCESS(ID, PARENT, TARGET) VALUES(DEFAULT, %d, '%s')", mu_out, target);
 		}
 
 		mu_out++;

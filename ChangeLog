@@ -1,3 +1,12 @@
+jilles      2006/10/22 14:26:16 UTC	(20061022-6867)
+  Log:
+  Rerun autoconf.
+  
+
+  Changes:	Modified:
+  +60 -36	trunk/configure (File Modified) 
+
+
 jilles      2006/10/22 14:24:52 UTC	(20061022-6865)
   Log:
   Revert bogus change to pgsql include directory check.
