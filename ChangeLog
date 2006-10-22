@@ -1,3 +1,16 @@
+jilles      2006/10/22 15:07:53 UTC	(20061022-6873)
+  Log:
+  Move contrib/ns_enforce to modules/nickserv/enforce.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/contrib/Makefile.in (File Modified) 
+  +0 -374	trunk/contrib/ns_enforce.c (File Deleted) 
+  +2 -0		trunk/dist/example.conf (File Modified) 
+  +375 -0	trunk/modules/nickserv/Makefile.in (File Modified) 
+  + -		trunk/modules/nickserv/enforce.c (File Added) 
+
+
 jilles      2006/10/22 15:04:52 UTC	(20061022-6871)
   Log:
   ns_enforce:
