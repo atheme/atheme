@@ -1,3 +1,12 @@
+nenolod     2006/10/22 01:55:56 UTC	(20061022-6833)
+  Log:
+  - document the DTree system
+  
+
+  Changes:	Modified:
+  +230 -3	trunk/src/dictionary.c (File Modified) 
+
+
 nenolod     2006/10/22 01:20:25 UTC	(20061022-6831)
   Log:
   - document user_mode().

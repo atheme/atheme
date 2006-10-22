@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 Patrick Fish, et al.
+ * Copyright (c) 2005-2006 Patrick Fish, et al.
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService COUNT functions.
  *
- * $Id: cs_count.c 6759 2006-10-20 21:10:04Z jilles $
+ * $Id: cs_count.c 6835 2006-10-22 01:58:09Z jilles $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/count", FALSE, _modinit, _moddeinit,
-	"$Id: cs_count.c 6759 2006-10-20 21:10:04Z jilles $",
+	"$Id: cs_count.c 6835 2006-10-22 01:58:09Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_count = { "COUNT", "Shows number of entries in xOP lists.",
+command_t cs_count = { "COUNT", "Shows number of entries in access lists.",
                          AC_NONE, 1, cs_cmd_count };
 
 list_t *cs_cmdtree;
@@ -48,6 +48,7 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 	int i;
 	node_t *n;
 	char str[512];
+	int operoverride = 0;
 
 	if (!chan)
 	{
@@ -64,8 +65,13 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 	{
-		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
-		return;
+		if (has_priv(si, PRIV_CHAN_AUSPEX))
+			operoverride = 1;
+		else
+		{
+			command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+			return;
+		}
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
@@ -108,5 +114,9 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 				"%c:%d ", chanacs_flags[i].flag, othercnt);
 	}
 	command_success_nodata(si, "%s", str);
+	if (operoverride)
+		logcommand(si, CMDLOG_ADMIN, "%s COUNT (oper override)", mc->name);
+	else
+		logcommand(si, CMDLOG_GET, "%s COUNT", mc->name);
 }
 
