@@ -1,3 +1,12 @@
+jilles      2006/10/22 14:18:56 UTC	(20061022-6863)
+  Log:
+  Get rid of C++ comment (was an old commented out bit of code).
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/protocol/inspircd11.c (File Modified) 
+
+
 jilles      2006/10/22 14:08:20 UTC	(20061022-6861)
   Log:
   Use user_changenick() in protocol modules.
