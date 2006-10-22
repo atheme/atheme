@@ -4,7 +4,7 @@
  *
  * This file contains IRC interaction routines.
  *
- * $Id: parse.c 6545 2006-09-29 15:17:38Z jilles $
+ * $Id: parse.c 6903 2006-10-22 21:35:56Z jilles $
  */
 
 #include "atheme.h"
@@ -17,7 +17,7 @@ void (*parse) (char *line) = &irc_parse;
 /* parses a standard 2.8.21 style IRC stream */
 void irc_parse(char *line)
 {
-	sourceinfo_t si = { 0 };
+	sourceinfo_t si;
 	char *pos;
 	char *origin = NULL;
 	char *command = NULL;
@@ -32,6 +32,7 @@ void irc_parse(char *line)
 	for (i = 0; i < 20; i++)
 		parv[i] = NULL;
 
+	memset(&si, '\0', sizeof si);
 	si.connection = curr_uplink->conn;
 
 	if (line != NULL)
@@ -167,7 +168,7 @@ void irc_parse(char *line)
 /* parses a P10 IRC stream */
 void p10_parse(char *line)
 {
-	sourceinfo_t si = { 0 };
+	sourceinfo_t si;
 	char *pos;
 	char *origin = NULL;
 	char *command = NULL;
@@ -182,6 +183,7 @@ void p10_parse(char *line)
 	for (i = 0; i < 20; i++)
 		parv[i] = NULL;
 
+	memset(&si, '\0', sizeof si);
 	si.connection = curr_uplink->conn;
 
 	if (line != NULL)

@@ -1,3 +1,16 @@
+jilles      2006/10/22 21:33:00 UTC	(20061022-6901)
+  Log:
+  Reorder some declarations and update the comments
+  saying in which .c files they are.
+  
+
+  Changes:	Modified:
+  +12 -12	trunk/include/account.h (File Modified) 
+  +3 -3		trunk/include/channels.h (File Modified) 
+  +3 -3		trunk/include/servers.h (File Modified) 
+  +3 -3		trunk/include/users.h (File Modified) 
+
+
 jilles      2006/10/22 21:22:33 UTC	(20061022-6899)
   Log:
   Remove redundant redeclarations.
