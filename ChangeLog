@@ -1,3 +1,12 @@
+jilles      2006/10/22 13:25:10 UTC	(20061022-6855)
+  Log:
+  Comments: write "UID", not "unique identifier".
+  
+
+  Changes:	Modified:
+  +4 -4		trunk/src/users.c (File Modified) 
+
+
 jilles      2006/10/22 13:12:06 UTC	(20061022-6853)
   Log:
   Proper prototype for init_servers().

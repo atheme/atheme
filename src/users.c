@@ -4,7 +4,7 @@
  *
  * User management functions.
  *
- * $Id: users.c 6855 2006-10-22 13:25:10Z jilles $
+ * $Id: users.c 6857 2006-10-22 13:45:09Z jilles $
  */
 
 #include "atheme.h"
@@ -84,8 +84,6 @@ user_t *user_add(const char *nick, const char *user, const char *host, const cha
 		dictionary_add(uidlist, u->uid, u);
 	}
 
-	dictionary_add(userlist, u->nick, u);
-
 	strlcpy(u->nick, nick, NICKLEN);
 	strlcpy(u->user, user, USERLEN);
 	strlcpy(u->host, host, HOSTLEN);
@@ -107,6 +105,8 @@ user_t *user_add(const char *nick, const char *user, const char *host, const cha
 		u->ts = ts;
 	else
 		u->ts = CURRTIME;
+
+	dictionary_add(userlist, u->nick, u);
 
 	cnt.user++;
 
