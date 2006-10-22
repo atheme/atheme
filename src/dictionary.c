@@ -5,7 +5,7 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id: dictionary.c 6153 2006-08-19 21:46:12Z jilles $
+ * $Id: dictionary.c 6833 2006-10-22 01:55:56Z nenolod $
  */
 
 #include "atheme.h"
@@ -21,6 +21,24 @@ struct dictionary_tree_
 	node_t node;
 };
 
+/*
+ * dictionary_create(const char *name, int resolution,
+ *                   int (*compare_cb)(const char *a, const char *b)
+ *
+ * DTree object factory.
+ *
+ * Inputs:
+ *     - name of dictionary tree
+ *     - resolution of dictionary tree
+ *     - function to use for comparing two entries in the dtree
+ *
+ * Outputs:
+ *     - on success, a new DTree object.
+ *
+ * Side Effects:
+ *     - if services runs out of memory and cannot allocate the object,
+ *       the program will abort.
+ */
 dictionary_tree_t *dictionary_create(const char *name, int resolution, int (*compare_cb)(const char *a, const char *b))
 {
 	dictionary_tree_t *dtree = smalloc(sizeof(dictionary_tree_t));
@@ -35,6 +53,31 @@ dictionary_tree_t *dictionary_create(const char *name, int resolution, int (*com
 	return dtree;
 }
 
+/*
+ * dictionary_destroy(dictionary_tree_t *dtree,
+ *     void (*destroy_cb)(dictionary_elem_t *delem, void *privdata),
+ *     void *privdata);
+ *
+ * Recursively destroys all nodes in a dictionary tree.
+ *
+ * Inputs:
+ *     - dictionary tree object
+ *     - optional iteration callback
+ *     - optional opaque/private data to pass to callback
+ *
+ * Outputs:
+ *     - nothing
+ *
+ * Side Effects:
+ *     - on success, a dtree and optionally it's children are destroyed.
+ *
+ * Notes:
+ *     - if this is called without a callback, the objects bound to the
+ *       DTree will not be destroyed.
+ *
+ * Bugs:
+ *     - this function assumes that the given dtree reference is valid.
+ */
 void dictionary_destroy(dictionary_tree_t *dtree,
 	void (*destroy_cb)(dictionary_elem_t *delem, void *privdata),
 	void *privdata)
@@ -64,6 +107,27 @@ void dictionary_destroy(dictionary_tree_t *dtree,
 	free(dtree);
 }
 
+/*
+ * dictionary_foreach(dictionary_tree_t *dtree,
+ *     void (*destroy_cb)(dictionary_elem_t *delem, void *privdata),
+ *     void *privdata);
+ *
+ * Iterates over all entries in a DTree.
+ *
+ * Inputs:
+ *     - dictionary tree object
+ *     - optional iteration callback
+ *     - optional opaque/private data to pass to callback
+ *
+ * Outputs:
+ *     - nothing
+ *
+ * Side Effects:
+ *     - on success, a dtree is iterated
+ *
+ * Bugs:
+ *     - this function assumes that the given dtree reference is valid.
+ */
 void dictionary_foreach(dictionary_tree_t *dtree,
 	int (*foreach_cb)(dictionary_elem_t *delem, void *privdata),
 	void *privdata)
@@ -84,6 +148,28 @@ void dictionary_foreach(dictionary_tree_t *dtree,
 	}
 }
 
+/*
+ * dictionary_foreach(dictionary_tree_t *dtree,
+ *     void (*destroy_cb)(dictionary_elem_t *delem, void *privdata),
+ *     void *privdata);
+ *
+ * Searches all entries in a DTree using a custom callback.
+ *
+ * Inputs:
+ *     - dictionary tree object
+ *     - optional iteration callback
+ *     - optional opaque/private data to pass to callback
+ *
+ * Outputs:
+ *     - on success, the requested object
+ *     - on failure, NULL.
+ *
+ * Side Effects:
+ *     - a dtree is iterated until the requested conditions are met
+ *
+ * Bugs:
+ *     - this function assumes that the given dtree reference is valid.
+ */
 void *dictionary_search(dictionary_tree_t *dtree,
 	void *(*foreach_cb)(dictionary_elem_t *delem, void *privdata),
 	void *privdata)
@@ -107,6 +193,25 @@ void *dictionary_search(dictionary_tree_t *dtree,
 	return ret;
 }
 
+/*
+ * dictionary_foreach_start(dictionary_tree_t *dtree,
+ *     dictionary_iteration_state_t *state);
+ *
+ * Initializes a static DTree iterator.
+ *
+ * Inputs:
+ *     - dictionary tree object
+ *     - static DTree iterator
+ *
+ * Outputs:
+ *     - nothing
+ *
+ * Side Effects:
+ *     - the static iterator, &state, is initialized.
+ *
+ * Bugs:
+ *     - this function assumes that the given dtree reference is valid.
+ */
 void dictionary_foreach_start(dictionary_tree_t *dtree,
 	dictionary_iteration_state_t *state)
 {
@@ -129,12 +234,51 @@ void dictionary_foreach_start(dictionary_tree_t *dtree,
 	dictionary_foreach_next(dtree, state);
 }
 
+/*
+ * dictionary_foreach_cur(dictionary_tree_t *dtree,
+ *     dictionary_iteration_state_t *state);
+ *
+ * Returns the data from the current node being iterated by the
+ * static iterator.
+ *
+ * Inputs:
+ *     - dictionary tree object
+ *     - static DTree iterator
+ *
+ * Outputs:
+ *     - reference to data in the current dtree node being iterated
+ *
+ * Side Effects:
+ *     - none
+ *
+ * Bugs:
+ *     - this function assumes that the given dtree reference is valid.
+ */
 void *dictionary_foreach_cur(dictionary_tree_t *dtree,
 	dictionary_iteration_state_t *state)
 {
 	return state->cur != NULL ? state->cur->node.data : NULL;
 }
 
+/*
+ * dictionary_foreach_next(dictionary_tree_t *dtree,
+ *     dictionary_iteration_state_t *state);
+ *
+ * Advances a static DTree iterator.
+ *
+ * Inputs:
+ *     - dictionary tree object
+ *     - static DTree iterator
+ *
+ * Outputs:
+ *     - nothing
+ *
+ * Side Effects:
+ *     - the static iterator, &state, is advanced to a new DTree node.
+ *
+ * Bugs:
+ *     - this function assumes that the given dtree reference is valid.
+ */
 void dictionary_foreach_next(dictionary_tree_t *dtree,
 	dictionary_iteration_state_t *state)
 {
@@ -157,6 +301,22 @@ void dictionary_foreach_next(dictionary_tree_t *dtree,
 	}
 }
 
+/*
+ * dictionary_find(dictionary_tree_t *dtree, const char *key)
+ *
+ * Looks up a DTree node by name.
+ *
+ * Inputs:
+ *     - dictionary tree object
+ *     - name of node to lookup
+ *
+ * Outputs:
+ *     - on success, the dtree node requested
+ *     - on failure, NULL
+ *
+ * Side Effects:
+ *     - none
+ */
 dictionary_elem_t *dictionary_find(dictionary_tree_t *dtree, const char *key)
 {
 	node_t *n;
@@ -179,6 +339,23 @@ dictionary_elem_t *dictionary_find(dictionary_tree_t *dtree, const char *key)
 	return NULL;
 }
 
+/*
+ * dictionary_add(dictionary_tree_t *dtree, const char *key, void *data)
+ *
+ * Creates a new DTree node and binds data to it.
+ *
+ * Inputs:
+ *     - dictionary tree object
+ *     - name for new DTree node
+ *     - data to bind to the new DTree node
+ *
+ * Outputs:
+ *     - on success, a new DTree node
+ *     - on failure, NULL
+ *
+ * Side Effects:
+ *     - data is inserted into the DTree.
+ */
 dictionary_elem_t *dictionary_add(dictionary_tree_t *dtree, const char *key, void *data)
 {
 	dictionary_elem_t *delem;
@@ -204,6 +381,25 @@ dictionary_elem_t *dictionary_add(dictionary_tree_t *dtree, const char *key, voi
 	return delem;
 }
 
+/*
+ * dictionary_delete(dictionary_tree_t *dtree, const char *key)
+ *
+ * Deletes data from a dictionary tree.
+ *
+ * Inputs:
+ *     - dictionary tree object
+ *     - name of DTree node to delete
+ *
+ * Outputs:
+ *     - on success, the remaining data that needs to be freed
+ *     - on failure, NULL
+ *
+ * Side Effects:
+ *     - data is removed from the DTree.
+ *
+ * Notes:
+ *     - the returned data needs to be freed/released manually!
+ */
 void *dictionary_delete(dictionary_tree_t *dtree, const char *key)
 {
 	dictionary_elem_t *delem = dictionary_find(dtree, key);
@@ -228,18 +424,49 @@ void *dictionary_delete(dictionary_tree_t *dtree, const char *key)
 	return data;
 }
 
+/*
+ * dictionary_retrieves(dictionary_tree_t *dtree, const char *key)
+ *
+ * Retrieves data from a dictionary tree.
+ *
+ * Inputs:
+ *     - dictionary tree object
+ *     - name of node to lookup
+ *
+ * Outputs:
+ *     - on success, the data bound to the DTree node.
+ *     - on failure, NULL
+ *
+ * Side Effects:
+ *     - none
+ */
 void *dictionary_retrieve(dictionary_tree_t *dtree, const char *key)
 {
 	dictionary_elem_t *delem = dictionary_find(dtree, key);
 
-	if (delem == NULL)
-		return NULL;
-	else
+	if (delem != NULL)
 		return delem->node.data;
+
+	return NULL;
 }
 
 #define MAXCOUNT 10
 
+/*
+ * dictionary_stats(void (*stats_cb)(const char *line, void *privdata), void *privdata)
+ *
+ * Displays statistics about all of the registered DTrees.
+ *
+ * Inputs:
+ *     - callback function
+ *     - optional opaque data
+ *
+ * Outputs:
+ *     - none
+ *
+ * Side Effects:
+ *     - data is passed to the callback function about the dtree system.
+ */
 void dictionary_stats(void (*stats_cb)(const char *line, void *privdata), void *privdata)
 {
 	node_t *n;
