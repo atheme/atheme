@@ -1,3 +1,15 @@
+nenolod     2006/10/22 00:40:48 UTC	(20061022-6829)
+  Log:
+  - remove strscpy().
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/libatheme/org.atheme.claro.base.string (File Modified) 
+  +0 -12	trunk/libatheme/string.c (File Modified) 
+  +1 -1		trunk/modules/saslserv/crypt.c (File Modified) 
+  +1 -1		trunk/modules/saslserv/plain.c (File Modified) 
+
+
 jilles      2006/10/22 00:29:50 UTC	(20061022-6827)
   Log:
   Move user_mode() from cmode.c to users.c.

@@ -4,7 +4,7 @@
  *
  * User management functions.
  *
- * $Id: users.c 6827 2006-10-22 00:29:50Z jilles $
+ * $Id: users.c 6831 2006-10-22 01:20:25Z nenolod $
  */
 
 #include "atheme.h"
@@ -311,6 +311,24 @@ void user_changeuid(user_t *u, const char *uid)
         }
 }
 
+/*
+ * user_mode(user_t *user, char *modes)
+ *
+ * Changes a user object's modes.
+ *
+ * Inputs:
+ *     - user object to change modes on
+ *     - modestring describing the usermode change
+ *
+ * Outputs:
+ *     - nothing
+ *
+ * Side Effects:
+ *     - on success, a user's modes are adjusted.
+ *
+ * Bugs:
+ *     - this routine only tracks +i and +o usermode changes.
+ */
 void user_mode(user_t *user, char *modes)
 {
 	int dir = MTYPE_ADD;
