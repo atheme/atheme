@@ -1,3 +1,11 @@
+lu_zero     2006/10/22 12:38:43 UTC	(20061022-6851)
+  Log:
+  Make postgresql an option, useful for packagers and who don't need pg support even if has it installed
+
+  Changes:	Modified:
+  +48 -34	trunk/configure.ac (File Modified) 
+
+
 nenolod     2006/10/22 06:00:10 UTC	(20061022-6849)
   Log:
   - convert userlist/uidlist to DTree.
