@@ -1,0 +1,20 @@
+Help for ACC:
+
+ACC returns parsable information about a user's
+login status. Note that on many networks, /whois
+shows similar information faster and more reliably.
+The answer is in the form <nick> ACC <digit>:
+    0 - account or user does not exist
+    1 - account exists but user is not logged in
+    2 - user is not logged in but recognized (see ACCESS)
+    3 - user is logged in
+If the account is omitted the user's nick is used.
+Account * means the account the user is logged in with.
+
+Syntax: ACC
+Syntax: ACC <nick>
+Syntax: ACC <nick> <account>
+Syntax: ACC <nick> *
+
+Example:
+    /msg &nick& ACC jilles *

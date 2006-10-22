@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService STATUS function.
  *
- * $Id: status.c 6815 2006-10-21 20:37:21Z jilles $
+ * $Id: status.c 6887 2006-10-22 16:29:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/status", FALSE, _modinit, _moddeinit,
-	"$Id: status.c 6815 2006-10-21 20:37:21Z jilles $",
+	"$Id: status.c 6887 2006-10-22 16:29:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,7 +20,7 @@ static void ns_cmd_acc(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_status(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_status = { "STATUS", "Displays session information.", AC_NONE, 0, ns_cmd_status };
-command_t ns_acc = { "ACC", "Displays parsable session information", AC_NONE, 1, ns_cmd_acc };
+command_t ns_acc = { "ACC", "Displays parsable session information", AC_NONE, 2, ns_cmd_acc };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -45,30 +45,44 @@ void _moddeinit()
 
 static void ns_cmd_acc(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *targ = parv[0];
+	char *targuser = parv[0];
+	char *targaccount = parv[1];
 	user_t *u;
+	myuser_t *mu;
 
-	if (!targ)
+	if (!targuser)
+	{
 		u = si->su;
+		targuser = u != NULL ? u->nick : "?";
+	}
 	else
-		u = user_find_named(targ);
+		u = user_find_named(targuser);
 
 	if (!u)
 	{
-		command_fail(si, fault_nosuch_target, "User not online.");
+		command_fail(si, fault_nosuch_target, "%s%s%s ACC 0 (offline)", targuser, parc >= 2 ? " -> " : "", parc >= 2 ? targaccount : "");
 		return;
 	}
 
-
-	logcommand(si, CMDLOG_GET, "ACC %s", u->nick);
-
-	if (!u->myuser)
-	{
-		command_success_nodata(si, "%s ACC 0", u->nick);
-		return;
-	}
+	if (!targaccount)
+		targaccount = u->nick;
+	if (!strcmp(targaccount, "*"))
+		mu = u->myuser;
 	else
-		command_success_nodata(si, "%s ACC 3", u->nick);
+		mu = myuser_find_ext(targaccount);
+
+	if (!mu)
+	{
+		command_fail(si, fault_nosuch_target, "%s%s%s ACC 0 (not registered)", u->nick, parc >= 2 ? " -> " : "", parc >= 2 ? targaccount : "");
+		return;
+	}
+
+	if (u->myuser == mu)
+		command_success_nodata(si, "%s%s%s ACC 3", u->nick, parc >= 2 ? " -> " : "", parc >= 2 ? mu->name : "");
+	else if (!irccasecmp(mu->name, u->nick) && myuser_access_verify(u, mu))
+		command_success_nodata(si, "%s%s%s ACC 2", u->nick, parc >= 2 ? " -> " : "", parc >= 2 ? mu->name : "");
+	else
+		command_success_nodata(si, "%s%s%s ACC 1", u->nick, parc >= 2 ? " -> " : "", parc >= 2 ? mu->name : "");
 }
 
 static void ns_cmd_status(sourceinfo_t *si, int parc, char *parv[])
