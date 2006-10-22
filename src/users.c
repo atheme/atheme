@@ -4,7 +4,7 @@
  *
  * User management functions.
  *
- * $Id: users.c 6849 2006-10-22 06:00:10Z nenolod $
+ * $Id: users.c 6855 2006-10-22 13:25:10Z jilles $
  */
 
 #include "atheme.h"
@@ -190,10 +190,10 @@ void user_delete(user_t *u)
 /*
  * user_find(const char *nick)
  *
- * Finds a user by unique identifier or nickname.
+ * Finds a user by UID or nickname.
  *
  * Inputs:
- *     - nickname or unique identifier to look up
+ *     - nickname or UID to look up
  *
  * Outputs:
  *     - on success, the user object that was requested
@@ -232,7 +232,7 @@ user_t *user_find(const char *nick)
 /*
  * user_find_named(const char *nick)
  *
- * Finds a user by nickname. Prevents chasing users by their unique identifier.
+ * Finds a user by nickname. Prevents chasing users by their UID.
  *
  * Inputs:
  *     - nickname to look up
@@ -252,7 +252,7 @@ user_t *user_find_named(const char *nick)
 /*
  * user_changeuid(user_t *u, const char *uid)
  *
- * Changes a user object's unique identifier.
+ * Changes a user object's UID.
  *
  * Inputs:
  *     - user object to change UID

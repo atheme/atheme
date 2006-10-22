@@ -1,3 +1,12 @@
+jilles      2006/10/22 13:12:06 UTC	(20061022-6853)
+  Log:
+  Proper prototype for init_servers().
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/servers.h (File Modified) 
+
+
 lu_zero     2006/10/22 12:38:43 UTC	(20061022-6851)
   Log:
   Make postgresql an option, useful for packagers and who don't need pg support even if has it installed
