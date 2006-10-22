@@ -1,3 +1,12 @@
+jilles      2006/10/22 15:37:39 UTC	(20061022-6879)
+  Log:
+  Tweak some comments in example.conf.
+  
+
+  Changes:	Modified:
+  +8 -11	trunk/dist/example.conf (File Modified) 
+
+
 jilles      2006/10/22 15:26:26 UTC	(20061022-6877)
   Log:
   Move contrib/cs_count to modules/chanserv/count
