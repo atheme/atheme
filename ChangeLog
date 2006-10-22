@@ -1,3 +1,14 @@
+jilles      2006/10/22 15:43:33 UTC	(20061022-6881)
+  Log:
+  Allow putting topiclock in general::cflags (flags set
+  on new channels).
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/dist/example.conf (File Modified) 
+  +1 -0		trunk/src/conf.c (File Modified) 
+
+
 jilles      2006/10/22 15:37:39 UTC	(20061022-6879)
   Log:
   Tweak some comments in example.conf.

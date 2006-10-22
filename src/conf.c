@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 6881 2006-10-22 15:43:33Z jilles $
+ * $Id: conf.c 6883 2006-10-22 15:46:09Z jilles $
  */
 
 #include "atheme.h"
@@ -1309,6 +1309,9 @@ static int c_gi_cflags(CONFIGENTRY *ce)
 			slog(LG_INFO, "%s:%d: unknown flag: %s", flce->ce_fileptr->cf_filename, flce->ce_varlinenum, flce->ce_varname);
 		}
 	}
+
+	if (config_options.defcflags & MC_TOPICLOCK)
+		config_options.defcflags |= MC_KEEPTOPIC;
 
 	return 0;
 }
