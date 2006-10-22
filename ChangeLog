@@ -1,3 +1,12 @@
+nenolod     2006/10/22 04:30:55 UTC	(20061022-6843)
+  Log:
+  - claro manifests are no longer in this format, and i dont feel like updating it
+  
+
+  Changes:	Modified:
+  +0 -20	trunk/src/Manifest (File Deleted) 
+
+
 nenolod     2006/10/22 04:29:25 UTC	(20061022-6841)
   Log:
   - split out and document the server code
