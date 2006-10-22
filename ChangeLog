@@ -1,3 +1,12 @@
+jilles      2006/10/22 14:31:21 UTC	(20061022-6869)
+  Log:
+  Hopefully fix postgresql IDs in myuser-related tables.
+  
+
+  Changes:	Modified:
+  +4 -4		trunk/backend/postgresql.c (File Modified) 
+
+
 jilles      2006/10/22 14:26:16 UTC	(20061022-6867)
   Log:
   Rerun autoconf.

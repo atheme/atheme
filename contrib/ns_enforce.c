@@ -23,7 +23,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/enforce",FALSE, _modinit, _moddeinit,
-	"$Id: ns_enforce.c 6811 2006-10-21 20:08:09Z jilles $",
+	"$Id: ns_enforce.c 6871 2006-10-22 15:04:52Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -259,66 +259,57 @@ void reg_check(void *arg)
 	char *uid, *gnick;
 	int i = 0, x = 0;
 	char ign[BUFSIZE];
+	dictionary_iteration_state_t state;
 
 	/* Absolutely do not do anything like this if nicks
 	 * are not considered owned */
 	if (nicksvs.no_nick_ownership)
 		return;
 	
-	for (i = 0; i < HASHSIZE; i++)
+	DICTIONARY_FOREACH(u, &state, userlist)
 	{
-		LIST_FOREACH_SAFE(n, tn, userlist[i].head)
+		/* nick is a service, ignore it */
+		if (is_internal_client(u))
+			continue;
+		if ((mu = myuser_find(u->nick)))
 		{
-			u = (user_t *)n->data;
-			/* nick is a service, ignore it */
-			if (is_internal_client(u))
-				break;
+			if (u->myuser == mu)
+				continue;
+			if (!metadata_find(mu, METADATA_USER, "private:doenforce"))
+				;
+			else if (myuser_access_verify(u, mu))
+				;
+			else if (u->flags & UF_NICK_WARNED)
+			{
+				notice(nicksvs.nick, u->nick, "You failed to authenticate in time for the nickname %s", u->nick);
+				/* Generate a new guest nickname and check if it already exists
+				 * This will try to generate a new nickname 30 different times
+				 * if nicks are in use. If it runs into 30 nicks in use, maybe 
+				 * you shouldn't use this module. */
+				for (x = 0; x < 30; x++)
+				{
+					snprintf( ign, BUFSIZE, "Guest%d", rand( )%99999 );
+					gnick = ign;
+					if (!user_find_named(ign))
+						break;
+				}
+				fnc_sts(nicksvs.me->me, u, gnick, FNC_FORCE);
+				holdnick_sts(nicksvs.me->me, 3600, u->nick, mu);
+#if 0 /* can't do this, need to wait for SVSNICK to complete! -- jilles */
+				uid = uid_get();
+				introduce_nick(u->nick, "enforcer", "services.hold", "Services Enforcer", uid);
+				user_add(u->nick, "enforcer", "services.hold", NULL, NULL, uid, "Services Enforcer", me.me, CURRTIME);
+#endif
+				u->flags &= ~UF_NICK_WARNED;
+				metadata_add(mu, METADATA_USER, "private:enforcer", "1");
+			}
 			else
 			{
-				if ((mu = myuser_find(u->nick)))
-				{
-					if (u->myuser == mu)
-						continue;
-					if (!metadata_find(mu, METADATA_USER, "private:doenforce"))
-						;
-					else if (myuser_access_verify(u, mu))
-						;
-					else if (u->flags & UF_NICK_WARNED)
-					{
-						notice(nicksvs.nick, u->nick, "You failed to authenticate in time for the nickname %s", u->nick);
-						/* Generate a new guest nickname and check if it already exists
-						 * This will try to generate a new nickname 30 different times
-						 * if nicks are in use. If it runs into 30 nicks in use, maybe 
-						 * you shouldn't use this module. */
-						for (x = 0; x < 30; x++)
-						{
-							snprintf( ign, BUFSIZE, "Guest%d", rand( )%99999 );
-							gnick = ign;
-							if (!user_find_named(ign))
-								break;
-						}
-						fnc_sts(nicksvs.me->me, u, gnick, FNC_FORCE);
-						holdnick_sts(nicksvs.me->me, 3600, u->nick, mu);
-#if 0 /* can't do this, need to wait for SVSNICK to complete! -- jilles */
-						uid = uid_get();
-						introduce_nick(u->nick, "enforcer", "services.hold", "Services Enforcer", uid);
-						user_add(u->nick, "enforcer", "services.hold", NULL, NULL, uid, "Services Enforcer", me.me, CURRTIME);
-#endif
-						u->flags &= ~UF_NICK_WARNED;
-						metadata_add(mu, METADATA_USER, "private:enforcer", "1");
-					}
-					else
-					{
-						u->flags |= UF_NICK_WARNED;
-						notice(nicksvs.nick, u->nick, "You have 30 seconds to identify to your nickname before it is changed.");
-					}
-				}
-				else
-					continue;
+				u->flags |= UF_NICK_WARNED;
+				notice(nicksvs.nick, u->nick, "You have 30 seconds to identify to your nickname before it is changed.");
 			}
 		}
 	}
-
 }
 
 static void remove_idcheck(void *vuser)
