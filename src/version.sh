@@ -6,7 +6,7 @@
 # This file generates version.c.
 # Stolen from ircd-ratbox.
 #
-# $Id: version.sh 6209 2006-08-21 14:46:46Z w00t $
+# $Id: version.sh 6847 2006-10-22 05:18:20Z nenolod $
 #
 
 spitshell=cat
@@ -34,7 +34,7 @@ awk '{if (NF == 6) \
 else \
          { print $1 " "  $2 " " $3 " " $7 " at " $4 " " $5 " " $6 }}'`
 
-buildid=`echo "\$Revision: 6209 $" | \
+buildid=`echo "\$Revision: 6847 $" | \
 	awk '{ print $2 }'`;
 
 $spitshell >version.c <<!SUB!THIS!
@@ -107,7 +107,6 @@ const char *infotext[] =
   "  gxti, Michael Tharp <gxti@partiallystapled.com>",
   "  jilles, Jilles Tjoelker <jilles@stack.nl>",
   "  nenolod, William Pitcock <nenolod@nenolod.net>",
-  "  terminal, Theo Julienne <admin@ozweb.nu>",
   "  w00t, Robin Burchell <viroteck@viroteck.net>",
   " ",
   "The following people have contributed blood, sweat and tears to",
@@ -118,6 +117,7 @@ const char *infotext[] =
   "  kog, Greg Feigenson <kog@epiphanic.org>",
   "  kuja, Jeff Katz <jeff@katzonline.net>",
   "  pfish, Patrick Fish <pofish@gmail.com>",
+  "  terminal, Theo Julienne <admin@ozweb.nu>",
   "  Trystan, Trystan Scott Lee <trystan@nomadirc.net>",
   "  zparta, Jens Holmqvist <zparta@hispan.se>",
   " ",
