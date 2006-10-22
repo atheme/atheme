@@ -1,3 +1,22 @@
+lu_zero     2006/10/22 19:08:29 UTC	(20061022-6891)
+  Log:
+  destdir support
+
+  Changes:	Modified:
+  +2 -2		trunk/backend/Makefile.in (File Modified) 
+  +2 -2		trunk/contrib/Makefile.in (File Modified) 
+  +2 -2		trunk/crypto/Makefile.in (File Modified) 
+  +2 -2		trunk/modules/chanserv/Makefile.in (File Modified) 
+  +2 -2		trunk/modules/global/Makefile.in (File Modified) 
+  +2 -2		trunk/modules/memoserv/Makefile.in (File Modified) 
+  +2 -2		trunk/modules/nickserv/Makefile.in (File Modified) 
+  +2 -2		trunk/modules/operserv/Makefile.in (File Modified) 
+  +4 -3		trunk/modules/saslserv/Makefile.in (File Modified) 
+  +2 -2		trunk/modules/xmlrpc/Makefile.in (File Modified) 
+  +2 -2		trunk/protocol/Makefile.in (File Modified) 
+  +15 -15	trunk/src/Makefile.in (File Modified) 
+
+
 jilles      2006/10/22 18:51:00 UTC	(20061022-6889)
   Log:
   Tweak nickserv acc help file a little so it looks nicer in HTML.

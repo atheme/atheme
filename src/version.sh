@@ -6,7 +6,7 @@
 # This file generates version.c.
 # Stolen from ircd-ratbox.
 #
-# $Id: version.sh 6847 2006-10-22 05:18:20Z nenolod $
+# $Id: version.sh 6893 2006-10-22 19:13:57Z lu_zero $
 #
 
 spitshell=cat
@@ -34,7 +34,7 @@ awk '{if (NF == 6) \
 else \
          { print $1 " "  $2 " " $3 " " $7 " at " $4 " " $5 " " $6 }}'`
 
-buildid=`echo "\$Revision: 6847 $" | \
+buildid=`echo "\$Revision: 6893 $" | \
 	awk '{ print $2 }'`;
 
 $spitshell >version.c <<!SUB!THIS!
@@ -116,6 +116,7 @@ const char *infotext[] =
   "  Dianora, Diane Bruce <db@db.net>",
   "  kog, Greg Feigenson <kog@epiphanic.org>",
   "  kuja, Jeff Katz <jeff@katzonline.net>",
+  "  lu_zero, Luca Barbato <lu_zero@gentoo.org>",
   "  pfish, Patrick Fish <pofish@gmail.com>",
   "  terminal, Theo Julienne <admin@ozweb.nu>",
   "  Trystan, Trystan Scott Lee <trystan@nomadirc.net>",
