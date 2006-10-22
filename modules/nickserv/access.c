@@ -4,7 +4,7 @@
  *
  * Changes and shows nickname access lists.
  *
- * $Id: access.c 6791 2006-10-21 16:59:20Z jilles $
+ * $Id: access.c 6885 2006-10-22 15:57:32Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/access", FALSE, _modinit, _moddeinit,
-	"$Id: access.c 6791 2006-10-21 16:59:20Z jilles $",
+	"$Id: access.c 6885 2006-10-22 15:57:32Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -156,7 +156,7 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 				command_fail(si, fault_badparams, "Too wide mask \2%s\2.", parv[1]);
 				return;
 			}
-			if (p[0] == '*')
+			if (host[0] == '*')
 			{
 				command_fail(si, fault_badparams, "Too wide mask \2%s\2.", parv[1]);
 				return;

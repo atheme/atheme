@@ -1,3 +1,12 @@
+jilles      2006/10/22 15:46:09 UTC	(20061022-6883)
+  Log:
+  If general::cflags has topiclock, set keeptopic too.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/src/conf.c (File Modified) 
+
+
 jilles      2006/10/22 15:43:33 UTC	(20061022-6881)
   Log:
   Allow putting topiclock in general::cflags (flags set
