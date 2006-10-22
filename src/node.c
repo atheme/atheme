@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6805 2006-10-21 19:37:11Z jilles $
+ * $Id: node.c 6841 2006-10-22 04:29:25Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,18 +13,13 @@
 
 list_t operclasslist;
 list_t soperlist;
-list_t tldlist;
 list_t uplinks;
 list_t klnlist;
-dictionary_tree_t *sidlist;
-dictionary_tree_t *servlist;
 dictionary_tree_t *chanlist;
 list_t mclist[HASHSIZE];
 
 static BlockHeap *operclass_heap;
 static BlockHeap *soper_heap;
-static BlockHeap *tld_heap;
-static BlockHeap *serv_heap;
 static BlockHeap *chan_heap;
 
 static BlockHeap *chanuser_heap;
@@ -48,8 +43,6 @@ void init_nodes(void)
 {
 	operclass_heap = BlockHeapCreate(sizeof(operclass_t), 2);
 	soper_heap = BlockHeapCreate(sizeof(soper_t), 2);
-	tld_heap = BlockHeapCreate(sizeof(tld_t), 4);
-	serv_heap = BlockHeapCreate(sizeof(server_t), HEAP_SERVER);
 	chan_heap = BlockHeapCreate(sizeof(channel_t), HEAP_CHANNEL);
 	chanuser_heap = BlockHeapCreate(sizeof(chanuser_t), HEAP_CHANUSER);
 	chanban_heap = BlockHeapCreate(sizeof(chanban_t), HEAP_CHANUSER);
@@ -59,7 +52,7 @@ void init_nodes(void)
 	mychan_heap = BlockHeapCreate(sizeof(mychan_t), HEAP_CHANNEL);
 	chanacs_heap = BlockHeapCreate(sizeof(chanacs_t), HEAP_CHANUSER);
 
-	if (!tld_heap || !serv_heap || !chan_heap || !soper_heap || !chanuser_heap || !chanban_heap || !uplink_heap || !metadata_heap || !kline_heap || !mychan_heap
+	if (!chan_heap || !soper_heap || !chanuser_heap || !chanban_heap || !uplink_heap || !metadata_heap || !kline_heap || !mychan_heap
 	    || !chanacs_heap)
 	{
 		slog(LG_INFO, "init_nodes(): block allocator failed.");
@@ -67,9 +60,8 @@ void init_nodes(void)
 	}
 
 	chanlist = dictionary_create("channel", HASH_CHANNEL, irccasecmp);
-	servlist = dictionary_create("server", HASH_SERVER, irccasecmp);
-	sidlist = dictionary_create("sid", HASH_SERVER, strcmp);
 
+	init_servers();
 	init_accounts();
 	init_users();
 }
@@ -361,201 +353,6 @@ soper_t *soper_find_named(char *name)
 	}
 
 	return NULL;
-}
-
-/***********
- * T L D S *
- ***********/
-
-tld_t *tld_add(const char *name)
-{
-	tld_t *tld;
-	node_t *n = node_create();
-
-	slog(LG_DEBUG, "tld_add(): %s", name);
-
-	tld = BlockHeapAlloc(tld_heap);
-
-	node_add(tld, n, &tldlist);
-
-	tld->name = sstrdup(name);
-
-	cnt.tld++;
-
-	return tld;
-}
-
-void tld_delete(const char *name)
-{
-	tld_t *tld = tld_find(name);
-	node_t *n;
-
-	if (!tld)
-	{
-		slog(LG_DEBUG, "tld_delete(): called for nonexistant tld: %s", name);
-
-		return;
-	}
-
-	slog(LG_DEBUG, "tld_delete(): %s", tld->name);
-
-	n = node_find(tld, &tldlist);
-	node_del(n, &tldlist);
-	node_free(n);
-
-	free(tld->name);
-	BlockHeapFree(tld_heap, tld);
-
-	cnt.tld--;
-}
-
-tld_t *tld_find(const char *name)
-{
-	tld_t *tld;
-	node_t *n;
-
-	LIST_FOREACH(n, tldlist.head)
-	{
-		tld = (tld_t *)n->data;
-
-		if (!strcasecmp(name, tld->name))
-			return tld;
-	}
-
-	return NULL;
-}
-
-/*****************
- * S E R V E R S *
- *****************/
-
-server_t *server_add(const char *name, uint8_t hops, const char *uplink, const char *id, const char *desc)
-{
-	server_t *s, *u = NULL;
-	const char *tld;
-
-	if (uplink)
-	{
-		slog(LG_DEBUG, "server_add(): %s, uplink %s", name, uplink);
-		u = server_find(uplink);
-	}
-	else
-		slog(LG_DEBUG, "server_add(): %s, root", name);
-
-	s = BlockHeapAlloc(serv_heap);
-
-	if (id != NULL)
-	{
-		s->sid = sstrdup(id);
-		dictionary_add(sidlist, s->sid, s);
-	}
-
-	/* check to see if it's hidden */
-	if (!strncmp(desc, "(H)", 3))
-	{
-		s->flags |= SF_HIDE;
-		desc += 3;
-		if (*desc == ' ')
-			desc++;
-	}
-
-	s->name = sstrdup(name);
-	s->desc = sstrdup(desc);
-	s->hops = hops;
-	s->connected_since = CURRTIME;
-
-	dictionary_add(servlist, s->name, s);
-
-	if (u)
-	{
-		s->uplink = u;
-		node_add(s, node_create(), &u->children);
-	}
-
-	/* tld list for global noticer */
-	tld = strrchr(name, '.');
-
-	if (!tld_find(tld))
-		tld_add(tld);
-
-	cnt.server++;
-
-	return s;
-}
-
-void server_delete(const char *name)
-{
-	server_t *s = server_find(name);
-	server_t *child;
-	user_t *u;
-	node_t *n, *tn;
-
-	if (!s)
-	{
-		slog(LG_DEBUG, "server_delete(): called for nonexistant server: %s", name);
-
-		return;
-	}
-	if (s == me.me)
-	{
-		/* Deleting this would cause confusion, so let's not do it.
-		 * Some ircds send SQUIT <myname> when atheme is squitted.
-		 * -- jilles */
-		slog(LG_DEBUG, "server_delete(): tried to delete myself");
-		return;
-	}
-
-	slog(LG_DEBUG, "server_delete(): %s", s->name);
-
-	/* first go through it's users and kill all of them */
-	LIST_FOREACH_SAFE(n, tn, s->userlist.head)
-	{
-		u = (user_t *)n->data;
-		user_delete(u);
-	}
-
-	LIST_FOREACH_SAFE(n, tn, s->children.head)
-	{
-		child = n->data;
-		server_delete(child->name);
-	}
-
-	/* now remove the server */
-	dictionary_delete(servlist, s->name);
-
-	if (s->sid)
-		dictionary_delete(sidlist, s->sid);
-
-	if (s->uplink)
-	{
-		n = node_find(s, &s->uplink->children);
-		node_del(n, &s->uplink->children);
-		node_free(n);
-	}
-
-	free(s->name);
-	free(s->desc);
-	if (s->sid)
-		free(s->sid);
-
-	BlockHeapFree(serv_heap, s);
-
-	cnt.server--;
-}
-
-server_t *server_find(const char *name)
-{
-	server_t *s;
-	node_t *n;
-
-	if (ircd->uses_uid)
-	{
-		s = dictionary_retrieve(sidlist, name);
-		if (s != NULL)
-			return s;
-	}
-
-	return dictionary_retrieve(servlist, name);
 }
 
 /*******************

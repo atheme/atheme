@@ -4,7 +4,7 @@
  *
  * Data structures related to network servers.
  *
- * $Id: servers.h 6805 2006-10-21 19:37:11Z jilles $
+ * $Id: servers.h 6841 2006-10-22 04:29:25Z nenolod $
  */
 
 #ifndef SERVERS_H
@@ -57,5 +57,7 @@ E tld_t *tld_find(const char *name);
 E server_t *server_add(const char *name, uint8_t hops, const char *uplink, const char *id, const char *desc);
 E void server_delete(const char *name);
 E server_t *server_find(const char *name);
+
+E void init_servers();
 
 #endif
