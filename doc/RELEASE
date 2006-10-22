@@ -1,4 +1,99 @@
-$Id: RELEASE 5826 2006-07-09 18:10:01Z jilles $
+$Id: RELEASE 6909 2006-10-22 23:47:13Z jilles $
+
+Atheme 2.0 Release Notes
+========================
+ircd protocol
+- The ptlink module now assumes +a (channel admin) and +h (halfops) exist.
+- Make protocol parsing stricter, rejecting various illegal messages.
+- Don't leave empty channels if all users in a channel are killed or invalid.
+- Add support for EUID (real host behind dynamic spoofs and login name in same
+  message as user introduction) to the charybdis module.
+- Split inspircd support in inspircd10 for 1.0 and inspircd11 for 1.1.
+- Add chanserv::changets support to the inspircd11 module.
+- Add STATS, ADMIN and MOTD support to the inspircd11 module.
+- Add SVSHOLD support (nickname enforcers that are not clients) to the
+  protocol abstraction.
+services
+- Make CTCP replies generic to all services.
+- Make services commands more generic, allowing them to be called in other
+  ways than from IRC.
+- Show more details when describing users issuing commands, for example
+  the account name if it is different from the nick.
+- Send no such nick reply if we get a message to a nonexistent service.
+- Support CIDR channel bans/exceptions and akills.
+- Shut down if too many services are killed in one second.
+- Handle SASL logins more cleanly.
+nickserv
+- Move nickname enforcement module from contrib to modules. This forces
+  nickname changes on users who do not identify to their nick.
+- Add gen_vhostonreg module to contrib from atheme-modules, sets a vhost on
+  new nick/account registrations.
+- Make it possible for nickserv to act as userserv with the
+  nickserv::no_nick_ownership config option and the nickserv/login module.
+  Remove the old userserv which mostly consisted of a duplicate of nickserv.
+- Add nickname access lists; users matching an u@h mask on the access list for
+  a nick will not be warned to identify and will not be affected by nickname
+  enforcement, and the last login time will be updated. Channel access will
+  not be granted.
+- Make /ns acc a bit more usable.
+chanserv
+- Add TOPICLOCK flag, reverts topic changes by users who do not have +t flag.
+- Store the channelTS of registered channels in the private:channelts metadata
+  entry. This is used to make chanserv::changets nicer and to avoid KEEPTOPIC
+  restores if the channel was not recreated.
+- Also give VERBOSE notices on foundership changes.
+- Fantasy and regular commands now use the same code. Fantasy commands are
+  executed with VERBOSE set.
+- Allow /cs status when not logged in.
+- Add /cs count from contrib, shows how many entries are in access lists.
+oper
+- Add a privilege operserv:massakill to control new commands that may
+  do mass kills.
+- Add /os clearchan, kicks, kills or klines all non-IRCops in a channel.
+- Add /os compare, shows common channels of two users or common users in two
+  channels.
+- Add /os rmatch, shows all users matching a regular expression.
+- Add /os rakill, bans all users matching a regular expression from the
+  network.
+- Add /os rnc, shows the most common realnames on the network.
+- Add /os clones, watches the network for IPs with too many connections.
+- Add operserv rwatch, a list of regular expressions all connecting clients
+  are matched against. Matching clients are described in the snoop channel
+  and/or klined.
+- Add /stats B, shows hash statistics, requires general:auspex privilege.
+- Add messages to the snoop channels about various things that used to
+  generate wallops only; move some other things from wallops to snoops.
+- Add /stats f, shows some information about open connections.
+xmlrpc
+- Clean up the HTTP protocol handling considerably.
+- Allow pipelining multiple calls over one connection.
+- Allow calling most services commands via XMLRPC.
+- Allow passing a parameter (typically true source IP address) to various
+  XMLRPC methods, which will be logged.
+documentation
+- Add a script to convert the help files to HTML.
+- Make various help files clearer.
+code
+- Replace the old hashtables with a cleaner and more powerful dictionary tree
+  implementation.
+- Make 'make depend' work, this allows only recompiling what is necessary.
+- Move around many things to different source files, hopefully making it
+  easier to find things.
+- Restrict visibility of some uplink-related declarations (uplink.h and
+  pmodule.h no longer included by atheme.h).
+- Add ability to run/build Atheme without the block allocator (for debugging).
+- Change parameter type for the channel_join and channel_part hooks to
+  hook_channel_joinpart_t *. This avoids ugliness when the first hook kicks
+  out the user and the next uses freed memory.
+- Rewrite much of the network I/O code.
+- Pass less nicks and UIDs around in string form.
+- Remove the win32 port, it was hopelessly broken and nobody cares about it.
+other
+- Get rid of signal-related race conditions.
+- Add DESTDIR support to the build system (allows installing to a different
+  path than where we expect to run from).
+- Add sorservices-compatible password encryption support.
+- Various bugfixes and cleanups.
 
 Atheme 1.2 Release Notes
 ========================
