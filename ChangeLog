@@ -1,3 +1,12 @@
+nenolod     2006/10/22 03:50:50 UTC	(20061022-6837)
+  Log:
+  - remove email.c boilerplate [unused]
+  
+
+  Changes:	Modified:
+  +0 -37	trunk/src/email.c (File Deleted) 
+
+
 jilles      2006/10/22 01:58:09 UTC	(20061022-6835)
   Log:
   contrib/cs_count: tweak description, add oper override

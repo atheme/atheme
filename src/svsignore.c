@@ -4,13 +4,31 @@
  *
  * Services ignorelist functions.
  *
- * $Id: svsignore.c 6791 2006-10-21 16:59:20Z jilles $
+ * $Id: svsignore.c 6839 2006-10-22 03:56:35Z nenolod $
  */
 
 #include "atheme.h"
 
 list_t svs_ignore_list;
 
+/*
+ * svsignore_add(char *mask, char *reason)
+ *
+ * Services ignore factory.
+ *
+ * Inputs:
+ *     - mask to ignore
+ *     - reason for ignore
+ *
+ * Outputs:
+ *     - on success, a new svsignore object
+ *
+ * Side Effects:
+ *     - a services ignore is added
+ *
+ * Bugs:
+ *     - this function does not check for dupes
+ */
 svsignore_t *svsignore_add(char *mask, char *reason)
 {
         svsignore_t *svsignore;
@@ -27,7 +45,22 @@ svsignore_t *svsignore_add(char *mask, char *reason)
          
         return svsignore;
 }
-                
+
+/*
+ * svsignore_find(user_t *source)
+ *
+ * Finds any services ignores that affect a user.
+ *
+ * Inputs:
+ *     - user object to check
+ *
+ * Outputs:
+ *     - if any ignores match, the ignore that matches
+ *     - if none match, NULL
+ *
+ * Side Effects:
+ *     - none
+ */                
 svsignore_t *svsignore_find(user_t *source)
 {       
         svsignore_t *svsignore;
@@ -55,6 +88,20 @@ svsignore_t *svsignore_find(user_t *source)
         return NULL;
 }
 
+/*
+ * svsignore_delete(svsignore_t *svsignore)
+ *
+ * Destroys a services ignore.
+ *
+ * Inputs:
+ *     - svsignore to destroy
+ *
+ * Outputs:
+ *     - nothing
+ *
+ * Side Effects:
+ *     - a services ignore is destroyed and removed from the list
+ */
 void svsignore_delete(svsignore_t *svsignore)
 {
 	node_t *n;
