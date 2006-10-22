@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 6515 2006-09-27 17:13:42Z jilles $
+ * $Id: hyperion.c 6849 2006-10-22 06:00:10Z nenolod $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -17,7 +17,7 @@
 #include "pmodule.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 6515 2006-09-27 17:13:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 6849 2006-10-22 06:00:10Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -621,18 +621,14 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 			sts(":%s MODE %s +e", me.name, parv[0]);
 
 		/* remove the current one from the list */
-		n = node_find(si->su, &userlist[si->su->hash]);
-		node_del(n, &userlist[si->su->hash]);
-		node_free(n);
+		dictionary_delete(userlist, si->su->nick);
 
 		/* change the nick */
 		strlcpy(si->su->nick, parv[0], NICKLEN);
 		si->su->ts = atoi(parv[1]);
 
 		/* readd with new nick (so the hash works) */
-		n = node_create();
-		si->su->hash = UHASH((unsigned char *)si->su->nick);
-		node_add(si->su, n, &userlist[si->su->hash]);
+		dictionary_add(userlist, si->su->nick, si->su);
 
 		handle_nickchange(si->su);
 	}

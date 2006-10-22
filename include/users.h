@@ -4,7 +4,7 @@
  *
  * Data structures for connected clients.
  *
- * $Id: users.h 6827 2006-10-22 00:29:50Z jilles $
+ * $Id: users.h 6849 2006-10-22 06:00:10Z nenolod $
  */
 
 #ifndef USERS_H
@@ -30,8 +30,6 @@ struct user_
 	time_t lastmsg;
 
 	uint32_t flags;
-	int32_t hash;
-	int32_t uhash;
 
 	uint32_t ts;
 };
@@ -54,7 +52,8 @@ E boolean_t is_admin(user_t *user);
 E boolean_t is_internal_client(user_t *user);
 
 /* node.c */
-E list_t userlist[HASHSIZE];
+E dictionary_tree_t *userlist;
+E dictionary_tree_t *uidlist;
 
 E user_t *user_add(const char *nick, const char *user, const char *host, const char *vhost, const char *ip, const char *uid, const char *gecos, server_t *server, uint32_t ts);
 E void user_delete(user_t *u);

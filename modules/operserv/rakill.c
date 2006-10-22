@@ -4,7 +4,7 @@
  *
  * Regexp-based AKILL implementation.
  *
- * $Id: rakill.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: rakill.c 6849 2006-10-22 06:00:10Z nenolod $
  */
 
 /*
@@ -17,7 +17,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rakill", FALSE, _modinit, _moddeinit,
-	"$Id: rakill.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: rakill.c 6849 2006-10-22 06:00:10Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -49,7 +49,7 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 	char usermask[512];
 	uint32_t matches = 0;
 	uint32_t i = 0;
-	node_t *n;
+	dictionary_iteration_state_t state;
 	user_t *u;
 	char *args = parv[0];
 	char *pattern;
@@ -113,21 +113,16 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 
 	snoop("RAKILL: \2%s\2 by \2%s\2 (%s)", pattern, get_oper_name(si), reason);
 
-	for (i = 0; i < HASHSIZE; i++)
+	DICTIONARY_FOREACH(u, &state, userlist)
 	{
-		LIST_FOREACH(n, userlist[i].head)
+		sprintf(usermask, "%s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
+
+		if (regex_match(regex, (char *)usermask))
 		{
-			u = (user_t *) n->data;
-
-			sprintf(usermask, "%s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
-
-			if (regex_match(regex, (char *)usermask))
-			{
-				/* match */
-				command_success_nodata(si, "\2Match:\2  %s!%s@%s %s - akilling", u->nick, u->user, u->host, u->gecos);
-				kline_sts("*", "*", u->host, 604800, reason);
-				matches++;
-			}
+			/* match */
+			command_success_nodata(si, "\2Match:\2  %s!%s@%s %s - akilling", u->nick, u->user, u->host, u->gecos);
+			kline_sts("*", "*", u->host, 604800, reason);
+			matches++;
 		}
 	}
 	

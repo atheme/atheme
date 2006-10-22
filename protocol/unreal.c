@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 6515 2006-09-27 17:13:42Z jilles $
+ * $Id: unreal.c 6849 2006-10-22 06:00:10Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 6515 2006-09-27 17:13:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 6849 2006-10-22 06:00:10Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -648,18 +648,14 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		/* remove the current one from the list */
-		n = node_find(si->su, &userlist[si->su->hash]);
-		node_del(n, &userlist[si->su->hash]);
-		node_free(n);
+		dictionary_delete(userlist, si->su->nick);
 
 		/* change the nick */
 		strlcpy(si->su->nick, parv[0], NICKLEN);
 		si->su->ts = atoi(parv[1]);
 
 		/* readd with new nick (so the hash works) */
-		n = node_create();
-		si->su->hash = UHASH((unsigned char *)si->su->nick);
-		node_add(si->su, n, &userlist[si->su->hash]);
+		dictionary_add(userlist, si->su->nick, si->su);
 
 		handle_nickchange(si->su);
 	}

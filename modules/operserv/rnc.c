@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ RNC.
  *
- * $Id: rnc.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: rnc.c 6849 2006-10-22 06:00:10Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rnc", FALSE, _modinit, _moddeinit,
-	"$Id: rnc.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: rnc.c 6849 2006-10-22 06:00:10Z nenolod $",
 	"Robin Burchell <surreal.w00t@gmail.com>"
 );
 
@@ -54,40 +54,36 @@ static void os_cmd_rnc(sourceinfo_t *si, int parc, char *parv[])
 	rnc_t *rnc;
 	list_t realnames;
 	int i, found = 0;
+	dictionary_iteration_state_t state;
 
 	realnames.head = NULL;
 	realnames.tail = NULL;
 	realnames.count = 0;
 
-	for (i = 0; i < HASHSIZE; i++)
+	DICTIONARY_FOREACH(u, &state, userlist)
 	{
-		LIST_FOREACH(n1, userlist[i].head)
+		LIST_FOREACH(n2, realnames.head)
 		{
-			u = n1->data;
+			rnc = n2->data;
 
-			LIST_FOREACH(n2, realnames.head)
+			if (strcmp(rnc->gecos, u->gecos) == 0)
 			{
-				rnc = n2->data;
-
-				if (strcmp(rnc->gecos, u->gecos) == 0)
-				{
-					/* existing match */
-					rnc->count++;
-					found = 1;
-				}
+				/* existing match */
+				rnc->count++;
+				found = 1;
 			}
-
-			if (found == 0)
-			{
-				/* new realname */
-				rnc = (rnc_t *)malloc(sizeof(rnc_t));
-				sprintf(rnc->gecos, "%s", u->gecos);
-				rnc->count = 1;
-				node_add(rnc, node_create(), &realnames);
-			}
-
-			found = 0;
 		}
+
+		if (found == 0)
+		{
+			/* new realname */
+			rnc = (rnc_t *)malloc(sizeof(rnc_t));
+			sprintf(rnc->gecos, "%s", u->gecos);
+			rnc->count = 1;
+			node_add(rnc, node_create(), &realnames);
+		}
+
+		found = 0;
 	}
 
 	found = 0;

@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 6515 2006-09-27 17:13:42Z jilles $
+ * $Id: ultimate3.c 6849 2006-10-22 06:00:10Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 6515 2006-09-27 17:13:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 6849 2006-10-22 06:00:10Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -571,18 +571,14 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 			sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, parv[0], time(NULL));
 
 		/* remove the current one from the list */
-		n = node_find(si->su, &userlist[si->su->hash]);
-		node_del(n, &userlist[si->su->hash]);
-		node_free(n);
+		dictionary_delete(userlist, si->su->nick);
 
 		/* change the nick */
 		strlcpy(si->su->nick, parv[0], NICKLEN);
 		si->su->ts = atoi(parv[1]);
 
 		/* readd with new nick (so the hash works) */
-		n = node_create();
-		si->su->hash = UHASH((unsigned char *)si->su->nick);
-		node_add(si->su, n, &userlist[si->su->hash]);
+		dictionary_add(userlist, si->su->nick, si->su);
 
 		handle_nickchange(si->su);
 	}

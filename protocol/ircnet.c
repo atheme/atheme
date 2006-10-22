@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 6515 2006-09-27 17:13:42Z jilles $
+ * $Id: ircnet.c 6849 2006-10-22 06:00:10Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 6515 2006-09-27 17:13:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 6849 2006-10-22 06:00:10Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -516,17 +516,13 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
 		/* remove the current one from the list */
-		n = node_find(si->su, &userlist[si->su->hash]);
-		node_del(n, &userlist[si->su->hash]);
-		node_free(n);
-
+		dictionary_delete(userlist, si->su->nick);
+	
 		/* change the nick */
 		strlcpy(si->su->nick, parv[0], NICKLEN);
 
 		/* readd with new nick (so the hash works) */
-		n = node_create();
-		si->su->hash = UHASH((unsigned char *)si->su->nick);
-		node_add(si->su, n, &userlist[si->su->hash]);
+		dictionary_add(userlist, si->su->nick, si->su);
 
 		handle_nickchange(si->su);
 	}
@@ -564,17 +560,13 @@ static void m_save(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_save(): nickname change for `%s': %s", u->nick, u->uid);
 
 		/* remove the current one from the list */
-		n = node_find(u, &userlist[u->hash]);
-		node_del(n, &userlist[u->hash]);
-		node_free(n);
-
+		dictionary_delete(userlist, si->su->nick);
+	
 		/* change the nick */
-		strlcpy(u->nick, u->uid, NICKLEN);
+		strlcpy(si->su->nick, parv[0], NICKLEN);
 
 		/* readd with new nick (so the hash works) */
-		n = node_create();
-		u->hash = UHASH((unsigned char *)u->nick);
-		node_add(u, n, &userlist[u->hash]);
+		dictionary_add(userlist, si->su->nick, si->su);
 
 		handle_nickchange(u);
 	}

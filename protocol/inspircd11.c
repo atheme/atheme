@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 6823 2006-10-21 22:43:43Z w00t $
+ * $Id: inspircd11.c 6849 2006-10-22 06:00:10Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 6823 2006-10-21 22:43:43Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 6849 2006-10-22 06:00:10Z nenolod $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -685,17 +685,13 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
 		/* remove the current one from the list */
-		n = node_find(si->su, &userlist[si->su->hash]);
-		node_del(n, &userlist[si->su->hash]);
-		node_free(n);
+		dictionary_delete(userlist, si->su->nick);
 
 		/* change the nick */
 		strlcpy(si->su->nick, parv[0], NICKLEN);
 
 		/* readd with new nick (so the hash works) */
-		n = node_create();
-		si->su->hash = UHASH((unsigned char *)si->su->nick);
-		node_add(si->su, n, &userlist[si->su->hash]);
+		dictionary_add(userlist, si->su->nick, si->su);
 
 		/* It could happen that our PING arrived late and the
 		 * server didn't acknowledge EOB yet even though it is

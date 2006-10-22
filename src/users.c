@@ -4,14 +4,15 @@
  *
  * User management functions.
  *
- * $Id: users.c 6831 2006-10-22 01:20:25Z nenolod $
+ * $Id: users.c 6849 2006-10-22 06:00:10Z nenolod $
  */
 
 #include "atheme.h"
 
 static BlockHeap *user_heap;
-list_t userlist[HASHSIZE];
-list_t uidlist[HASHSIZE];
+
+dictionary_tree_t *userlist;
+dictionary_tree_t *uidlist;
 
 /*
  * init_users()
@@ -37,7 +38,8 @@ void init_users(void)
 		exit(EXIT_FAILURE);
 	}
 
-	/* TODO: userlist = dictionary_create("userlist", HASH_USER, irccasecmp); */
+	userlist = dictionary_create("user", HASH_USER, irccasecmp);
+	uidlist = dictionary_create("uid", HASH_USER, strcmp);
 }
 
 /*
@@ -70,51 +72,47 @@ void init_users(void)
  */
 user_t *user_add(const char *nick, const char *user, const char *host, const char *vhost, const char *ip, const char *uid, const char *gecos, server_t *server, uint32_t ts)
 {
-        user_t *u;
-        node_t *n = node_create();
+	user_t *u;
 
-        slog(LG_DEBUG, "user_add(): %s (%s@%s) -> %s", nick, user, host, server->name);
+	slog(LG_DEBUG, "user_add(): %s (%s@%s) -> %s", nick, user, host, server->name);
 
-        u = BlockHeapAlloc(user_heap);
+	u = BlockHeapAlloc(user_heap);
 
-        u->hash = UHASH((const unsigned char *)nick);
+	if (uid != NULL)
+	{
+		strlcpy(u->uid, uid, IDLEN);
+		dictionary_add(uidlist, u->uid, u);
+	}
 
-        if (uid != NULL)
-        {
-                strlcpy(u->uid, uid, IDLEN);
-                u->uhash = UHASH((const unsigned char *)uid);
-                node_add(u, node_create(), &uidlist[u->uhash]);
-        }
+	dictionary_add(userlist, u->nick, u);
 
-        node_add(u, n, &userlist[u->hash]);
+	strlcpy(u->nick, nick, NICKLEN);
+	strlcpy(u->user, user, USERLEN);
+	strlcpy(u->host, host, HOSTLEN);
+	strlcpy(u->gecos, gecos, GECOSLEN);
 
-        strlcpy(u->nick, nick, NICKLEN);
-        strlcpy(u->user, user, USERLEN);
-        strlcpy(u->host, host, HOSTLEN);
-        strlcpy(u->gecos, gecos, GECOSLEN);
+	if (vhost)
+		strlcpy(u->vhost, vhost, HOSTLEN);
+	else
+		strlcpy(u->vhost, host, HOSTLEN);
 
-        if (vhost)
-                strlcpy(u->vhost, vhost, HOSTLEN);
-        else
-                strlcpy(u->vhost, host, HOSTLEN);
+	if (ip && strcmp(ip, "0") && strcmp(ip, "0.0.0.0") && strcmp(ip, "255.255.255.255"))
+		strlcpy(u->ip, ip, HOSTIPLEN);
 
-        if (ip && strcmp(ip, "0") && strcmp(ip, "0.0.0.0") && strcmp(ip, "255.255.255.255"))
-                strlcpy(u->ip, ip, HOSTIPLEN);
+	u->server = server;
+	u->server->users++;
+	node_add(u, node_create(), &u->server->userlist);
 
-        u->server = server;
-        u->server->users++;
-        node_add(u, node_create(), &u->server->userlist);
+	if (ts)
+		u->ts = ts;
+	else
+		u->ts = CURRTIME;
 
-        if (ts)
-                u->ts = ts;
-        else
-                u->ts = CURRTIME;
+	cnt.user++;
 
-        cnt.user++;
+	hook_call_event("user_add", u);
 
-        hook_call_event("user_add", u);
-
-        return u;
+	return u;
 }
 
 /*
@@ -133,66 +131,60 @@ user_t *user_add(const char *nick, const char *user, const char *host, const cha
  */
 void user_delete(user_t *u)
 {
-        node_t *n, *tn;
-        chanuser_t *cu;
+	node_t *n, *tn;
+	chanuser_t *cu;
 
-        if (!u)
-        {
-                slog(LG_DEBUG, "user_delete(): called for NULL user");
-                return;
-        }
+	if (!u)
+	{
+		slog(LG_DEBUG, "user_delete(): called for NULL user");
+		return;
+	}
 
-        slog(LG_DEBUG, "user_delete(): removing user: %s -> %s", u->nick, u->server->name);
+	slog(LG_DEBUG, "user_delete(): removing user: %s -> %s", u->nick, u->server->name);
 
-        hook_call_event("user_delete", u);
+	hook_call_event("user_delete", u);
 
-        u->server->users--;
-        if (is_ircop(u))
-                u->server->opers--;
-        if (u->flags & UF_INVIS)
-                u->server->invis--;
+	u->server->users--;
+	if (is_ircop(u))
+		u->server->opers--;
+	if (u->flags & UF_INVIS)
+		u->server->invis--;
 
-        /* remove the user from each channel */
-        LIST_FOREACH_SAFE(n, tn, u->channels.head)
-        {
-                cu = (chanuser_t *)n->data;
+	/* remove the user from each channel */
+	LIST_FOREACH_SAFE(n, tn, u->channels.head)
+	{
+		cu = (chanuser_t *)n->data;
 
-                chanuser_delete(cu->chan, u);
-        }
+		chanuser_delete(cu->chan, u);
+	}
 
-        n = node_find(u, &userlist[u->hash]);
-        node_del(n, &userlist[u->hash]);
-        node_free(n);
+	dictionary_delete(userlist, u->nick);
 
-        if (*u->uid)
-        {
-                n = node_find(u, &uidlist[u->uhash]);
-                node_del(n, &uidlist[u->uhash]);
-                node_free(n);
-        }
+	if (*u->uid)
+		dictionary_delete(uidlist, u->uid);
 
-        n = node_find(u, &u->server->userlist);
-        node_del(n, &u->server->userlist);
-        node_free(n);
+	n = node_find(u, &u->server->userlist);
+	node_del(n, &u->server->userlist);
+	node_free(n);
 
-        if (u->myuser)
-        {
-                LIST_FOREACH_SAFE(n, tn, u->myuser->logins.head)
-                {
-                        if (n->data == u)
-                        {
-                                node_del(n, &u->myuser->logins);
-                                node_free(n);
-                                break;
-                        }
-                }
-                u->myuser->lastlogin = CURRTIME;
-                u->myuser = NULL;
-        }
+	if (u->myuser)
+	{
+		LIST_FOREACH_SAFE(n, tn, u->myuser->logins.head)
+		{
+			if (n->data == u)
+			{
+				node_del(n, &u->myuser->logins);
+				node_free(n);
+				break;
+			}
+		}
+		u->myuser->lastlogin = CURRTIME;
+		u->myuser = NULL;
+	}
 
-        BlockHeapFree(user_heap, u);
+	BlockHeapFree(user_heap, u);
 
-        cnt.user--;
+	cnt.user--;
 }
 
 /*
@@ -212,37 +204,29 @@ void user_delete(user_t *u)
  */
 user_t *user_find(const char *nick)
 {
-        user_t *u;
-        node_t *n;
+	user_t *u;
 
-        if (nick == NULL)
-                return NULL;
+	if (nick == NULL)
+		return NULL;
 
-        if (ircd->uses_uid == TRUE)
-        {
-                LIST_FOREACH(n, uidlist[SHASH((const unsigned char *)nick)].head)
-                {
-                        u = (user_t *)n->data;
+	if (ircd->uses_uid == TRUE)
+	{
+		u = dictionary_retrieve(uidlist, nick);
 
-                        if (!strcmp(nick, u->uid))
-                                return u;
-                }
-        }
+		if (u != NULL)
+			return u;
+	}
 
-        LIST_FOREACH(n, userlist[SHASH((const unsigned char *)nick)].head)
-        {
-                u = (user_t *)n->data;
+	u = dictionary_retrieve(userlist, nick);
 
-                if (!irccasecmp(nick, u->nick))
-                {
-                        if (ircd->uses_p10)
-                                wallops("user_find() found user %s by nick!",
-                                                nick);
-                        return u;
-                }
-        }
+	if (u != NULL)
+	{
+		if (ircd->uses_p10)
+			wallops("user_find() found user %s by nick!", nick);
+		return u;
+	}
 
-        return NULL;
+	return NULL;
 }
 
 /*
@@ -262,18 +246,7 @@ user_t *user_find(const char *nick)
  */
 user_t *user_find_named(const char *nick)
 {
-        user_t *u;
-        node_t *n;
-
-        LIST_FOREACH(n, userlist[SHASH((const unsigned char *)nick)].head)
-        {
-                u = (user_t *)n->data;
-
-                if (!irccasecmp(nick, u->nick))
-                        return u;
-        }
-
-        return NULL;
+	return dictionary_retrieve(userlist, nick);
 }
 
 /*
@@ -293,22 +266,15 @@ user_t *user_find_named(const char *nick)
  */
 void user_changeuid(user_t *u, const char *uid)
 {
-        node_t *n;
+	node_t *n;
 
-        if (*u->uid)
-        {
-                n = node_find(u, &uidlist[u->uhash]);
-                node_del(n, &uidlist[u->uhash]);
-                node_free(n);
-        }
+	if (*u->uid)
+		dictionary_delete(uidlist, u->uid);
 
-        strlcpy(u->uid, uid ? uid : "", IDLEN);
+	strlcpy(u->uid, uid ? uid : "", IDLEN);
 
-        if (*u->uid)
-        {
-                u->uhash = UHASH((const unsigned char *)uid);
-                node_add(u, node_create(), &uidlist[u->uhash]);
-        }
+	if (*u->uid)
+		dictionary_add(uidlist, u->uid, u);
 }
 
 /*
@@ -353,7 +319,7 @@ void user_mode(user_t *user, char *modes)
 			  if (dir == MTYPE_ADD)
 			  {
 				  if (!(user->flags & UF_INVIS))
-				  	user->server->invis++;
+					  user->server->invis++;
 				  user->flags |= UF_INVIS;
 			  }
 			  else if ((dir = MTYPE_DEL))
@@ -392,4 +358,3 @@ void user_mode(user_t *user, char *modes)
 		modes++;
 	}
 }
-

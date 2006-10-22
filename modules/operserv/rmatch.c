@@ -4,7 +4,7 @@
  *
  * Regex usersearch feature.
  *
- * $Id: rmatch.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: rmatch.c 6849 2006-10-22 06:00:10Z nenolod $
  */
 
 /*
@@ -16,7 +16,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rmatch", FALSE, _modinit, _moddeinit,
-	"$Id: rmatch.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: rmatch.c 6849 2006-10-22 06:00:10Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,7 +48,7 @@ static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 	char usermask[512];
 	uint32_t matches = 0;
 	uint32_t i = 0;
-	node_t *n;
+	dictionary_iteration_state_t state;
 	user_t *u;
 	char *args = parv[0];
 	char *pattern;
@@ -77,20 +77,15 @@ static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 		
-	for (i = 0; i < HASHSIZE; i++)
+	DICTIONARY_FOREACH(u, &state, userlist)
 	{
-		LIST_FOREACH(n, userlist[i].head)
-		{
-			u = n->data;
-			
-			sprintf(usermask, "%s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
+		sprintf(usermask, "%s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
 
-			if (regex_match(regex, usermask) == TRUE)
-			{
-				/* match */
-				command_success_nodata(si, "\2Match:\2  %s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
-				matches++;
-			}
+		if (regex_match(regex, usermask) == TRUE)
+		{
+			/* match */
+			command_success_nodata(si, "\2Match:\2  %s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
+			matches++;
 		}
 	}
 	

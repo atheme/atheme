@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 6689 2006-10-14 15:49:25Z jilles $
+ * $Id: hybrid.c 6849 2006-10-22 06:00:10Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 6689 2006-10-14 15:49:25Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 6849 2006-10-22 06:00:10Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -781,18 +781,14 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
 		/* remove the current one from the list */
-		n = node_find(si->su, &userlist[si->su->hash]);
-		node_del(n, &userlist[si->su->hash]);
-		node_free(n);
+		dictionary_delete(userlist, si->su->nick);
 
 		/* change the nick */
 		strlcpy(si->su->nick, parv[0], NICKLEN);
 		si->su->ts = atoi(parv[1]);
 
 		/* readd with new nick (so the hash works) */
-		n = node_create();
-		si->su->hash = UHASH((unsigned char *)si->su->nick);
-		node_add(si->su, n, &userlist[si->su->hash]);
+		dictionary_add(userlist, si->su->nick, si->su);
 
 		/* It could happen that our PING arrived late and the
 		 * server didn't acknowledge EOB yet even though it is
