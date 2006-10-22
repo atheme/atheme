@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# $Id: configure.ac 6537 2006-09-29 14:33:02Z jilles $
+# $Id: configure.ac 6865 2006-10-22 14:24:52Z jilles $
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -854,6 +854,11 @@ Optional Features:
   --disable-propolice     Disable propolice protections (for debugging.)
   --enable-profile        Enable profiling extensions
 
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-postgresql       Enables PostgreSQL backend support.
+
 Some influential environment variables:
   CC          C compiler command
   CFLAGS      C compiler flags
@@ -969,7 +974,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-$Id: configure.ac 6537 2006-09-29 14:33:02Z jilles $
+$Id: configure.ac 6865 2006-10-22 14:24:52Z jilles $
 _ACEOF
   exit 0
 fi
@@ -9566,39 +9571,57 @@ echo " "
 
 POSTGRESQL="yes"
 
-echo "$as_me:$LINENO: checking for PostgreSQL include directory" >&5
+
+# Check whether --with-postgresql or --without-postgresql was given.
+if test "${with_postgresql+set}" = set; then
+  withval="$with_postgresql"
+
+       case "$withval" in
+               yes|no)
+                       POSTGRESQL="$withval"
+                       ;;
+               *)
+                       { { echo "$as_me:$LINENO: error: Invalid argument to --with-postgresql (expecting either 'yes' or 'no')" >&5
+echo "$as_me: error: Invalid argument to --with-postgresql (expecting either 'yes' or 'no')" >&2;}
+   { (exit 1); exit 1; }; }
+                       ;;
+       esac
+
+fi;
+
+if test "x$POSTGRESQL" = xyes; then
+       echo "$as_me:$LINENO: checking for PostgreSQL include directory" >&5
 echo $ECHO_N "checking for PostgreSQL include directory... $ECHO_C" >&6
-if test -d /usr/include/pgsql ; then
- 	pg_inc_dir="/usr/include/pgsql"
-elif test -f /usr/local/include/libpq-fe.h ; then
-# kludge for freebsd ports, found on liveharmony boxes. --nenolod
-	pg_inc_dir="/usr/local/include"
-	LDFLAGS="-L/usr/local/lib"
-elif test -d /usr/include/postgresql ; then
- 	pg_inc_dir="/usr/include/postgresql"
-elif test -d /usr/local/psql/include ; then
- 	pg_inc_dir="/usr/local/psql/include"
-elif test -d /usr/local/include/postgresql ; then
-	pg_inc_dir="/usr/local/include/postgresql"
-elif test -d /usr/local/pgsql/include ; then
-	pg_inc_dir="/usr/local/pgsql/include"
-elif test -d /usr/local/include/psql ; then
-	pg_inc_dir="/usr/local/include/psql"
-elif test -d /opt/psql/include ; then
- 	pg_inc_dir="/opt/psql/include"
-else
-	pg_inc_dir="no"
- 	PQLIB=""
-	POSTGRESQL="no"
-fi
+       if test -d /usr/include/pgsql ; then
+               pg_inc_dir="/usr/include/pgsql"
+       elif test -f /usr/local/include/libpq-fe.h ; then
+               # kludge for freebsd ports, found on liveharmony boxes. --nenolod
+               pg_inc_dir="/usr/local/include"
+               LDFLAGS="-L/usr/local/lib"
+       elif test -d /usr/include/postgresql ; then
+               pg_inc_dir="/usr/include/postgresql"
+       elif test -d /usr/local/psql/include ; then
+               pg_inc_dir="/usr/local/psql/include"
+       elif test -d /usr/local/include/postgresql ; then
+               pg_inc_dir="/usr/local/include/postgresql"
+       elif test -d /usr/local/pgsql/include ; then
+               pg_inc_dir="/usr/local/pgsql/include"
+       elif test -d /usr/local/include/psql ; then
+               pg_inc_dir="/usr/local/include/psql"
+       elif test -d /opt/psql/include ; then
+               pg_inc_dir="/opt/psql/include"
+       else
+               pg_inc_dir="no"
+               PQLIB=""
+               POSTGRESQL="no"
+       fi
+       POSTGRESQL_C=""
 
-POSTGRESQL_C=""
-
-echo "$as_me:$LINENO: result: $pg_inc_dir" >&5
+       echo "$as_me:$LINENO: result: $pg_inc_dir" >&5
 echo "${ECHO_T}$pg_inc_dir" >&6
 
-if test "$pg_inc_dir" != "no"; then
-	as_ac_Header=`echo "ac_cv_header_$pg_inc_dir/libpq-fe.h" | $as_tr_sh`
+       if test "$pg_inc_dir" != "no"; then
+               as_ac_Header=`echo "ac_cv_header_$pg_inc_dir/libpq-fe.h" | $as_tr_sh`
 if eval "test \"\${$as_ac_Header+set}\" = set"; then
   echo "$as_me:$LINENO: checking for $pg_inc_dir/libpq-fe.h" >&5
 echo $ECHO_N "checking for $pg_inc_dir/libpq-fe.h... $ECHO_C" >&6
@@ -9738,8 +9761,8 @@ echo "${ECHO_T}`eval echo '${'$as_ac_Header'}'`" >&6
 fi
 if test `eval echo '${'$as_ac_Header'}'` = yes; then
 
-		PGINC="-I$pg_inc_dir"
-	echo "$as_me:$LINENO: checking for PQconnectdb in -lpq" >&5
+                       PGINC="-I$pg_inc_dir"
+               echo "$as_me:$LINENO: checking for PQconnectdb in -lpq" >&5
 echo $ECHO_N "checking for PQconnectdb in -lpq... $ECHO_C" >&6
 if test "${ac_cv_lib_pq_PQconnectdb+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -9805,15 +9828,16 @@ echo "$as_me:$LINENO: result: $ac_cv_lib_pq_PQconnectdb" >&5
 echo "${ECHO_T}$ac_cv_lib_pq_PQconnectdb" >&6
 if test $ac_cv_lib_pq_PQconnectdb = yes; then
   PQLIB="-lpq"
-		POSTGRESQL_C="postgresql.c"
+                            POSTGRESQL_C="postgresql.c"
 fi
 
 
 fi
 
 
-else
-	POSTGRESQL="no"
+       else
+               POSTGRESQL="no"
+       fi
 fi
 
 
