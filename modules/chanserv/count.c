@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService COUNT functions.
  *
- * $Id: cs_count.c 6835 2006-10-22 01:58:09Z jilles $
+ * $Id: count.c 6877 2006-10-22 15:26:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/count", FALSE, _modinit, _moddeinit,
-	"$Id: cs_count.c 6835 2006-10-22 01:58:09Z jilles $",
+	"$Id: count.c 6877 2006-10-22 15:26:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

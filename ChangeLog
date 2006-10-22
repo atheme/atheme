@@ -1,3 +1,12 @@
+jilles      2006/10/22 15:12:58 UTC	(20061022-6875)
+  Log:
+  Show /ns release verbosely in /ns help.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/help.c (File Modified) 
+
+
 jilles      2006/10/22 15:07:53 UTC	(20061022-6873)
   Log:
   Move contrib/ns_enforce to modules/nickserv/enforce.

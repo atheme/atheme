@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 6873 2006-10-22 15:07:53Z jilles $
+# $Id: Makefile.in 6877 2006-10-22 15:26:26Z jilles $
 #
 
 CC		= @CC@
@@ -33,7 +33,6 @@ CPPFLAGS	= @CPPFLAGS@
 default: all
 
 SRCS = \
-	cs_count.c		\
 	cs_kickdots.c		\
 	cs_ping.c		\
 	fc_dice.c		\
