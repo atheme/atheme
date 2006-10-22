@@ -4,7 +4,7 @@
  *
  * User management functions.
  *
- * $Id: users.c 6857 2006-10-22 13:45:09Z jilles $
+ * $Id: users.c 6859 2006-10-22 13:49:42Z jilles $
  */
 
 #include "atheme.h"
@@ -275,6 +275,34 @@ void user_changeuid(user_t *u, const char *uid)
 
 	if (*u->uid)
 		dictionary_add(uidlist, u->uid, u);
+}
+
+/*
+ * user_changenick(user_t *u, const char *uid)
+ *
+ * Changes a user object's nick and TS.
+ *
+ * Inputs:
+ *     - user object to change
+ *     - new nick
+ *     - new TS
+ *
+ * Outputs:
+ *     - nothing
+ *
+ * Side Effects:
+ *     - a user object's nick and TS is changed.
+ */
+void user_changenick(user_t *u, const char *nick, uint32_t ts)
+{
+	node_t *n;
+
+	dictionary_delete(userlist, u->nick);
+
+	strlcpy(u->nick, nick, NICKLEN);
+	u->ts = ts;
+
+	dictionary_add(userlist, u->nick, u);
 }
 
 /*

@@ -1,3 +1,13 @@
+jilles      2006/10/22 13:45:09 UTC	(20061022-6857)
+  Log:
+  user_add(): Make sure u->nick is initialized before calling
+  dictionary_add() with it.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/src/users.c (File Modified) 
+
+
 jilles      2006/10/22 13:25:10 UTC	(20061022-6855)
   Log:
   Comments: write "UID", not "unique identifier".
