@@ -43,8 +43,8 @@ all: protocols
 build: all
 
 install: build
-	${INSTALL} -d ${MODDIR}/crypto
-	${INSTALL} -m 755 *.so ${MODDIR}/crypto
+	${INSTALL} -d $(DESTDIR)${MODDIR}/crypto
+	${INSTALL} -m 755 *.so $(DESTDIR)${MODDIR}/crypto
 
 protocols: $(OBJS)
 

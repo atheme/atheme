@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 6845 2006-10-22 05:15:04Z nenolod $
+# $Id: Makefile.in 6891 2006-10-22 19:08:29Z lu_zero $
 #
 
 CC		= @CC@
@@ -100,25 +100,25 @@ atheme: $(OBJS) ../libatheme/liborg.atheme.claro.base.a
 	  -e 's/real = "Nickname Services";/real = "User Registration Services";/' ../dist/example.conf) >../dist/example.userserv.conf
 
 install: build
-	$(INSTALL) -m 755 -d $(prefix)
-	$(INSTALL) -m 755 -d $(prefix)/bin
-	$(INSTALL) -m 755 -d $(prefix)/etc
-	$(INSTALL) -m 755 -d $(prefix)/var
-	$(INSTALL) -m 755 -d $(DOCDIR)
-	$(INSTALL) -m 755 -d $(SHAREDIR)/help
-	$(INSTALL) -m 755 -c $(BIN) $(prefix)/bin
-	$(INSTALL) -m 640 -c ../dist/example.conf $(prefix)/etc
-	$(INSTALL) -m 640 -c ../dist/example.motd $(prefix)/etc
-	$(INSTALL) -m 640 -c ../dist/example.userserv.conf $(prefix)/etc
-	$(INSTALL) -m 640 -c ../dist/atheme.chk $(prefix)/etc/atheme.chk.sample
-	(cd ../doc; for i in *; do $(INSTALL) -m 644 $$i $(DOCDIR); done)
+	$(INSTALL) -m 755 -d $(DESTDIR)$(prefix)
+	$(INSTALL) -m 755 -d $(DESTDIR)$(prefix)/bin
+	$(INSTALL) -m 755 -d $(DESTDIR)$(prefix)/etc
+	$(INSTALL) -m 755 -d $(DESTDIR)$(prefix)/var
+	$(INSTALL) -m 755 -d $(DESTDIR)$(DOCDIR)
+	$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/help
+	$(INSTALL) -m 755 -c $(BIN) $(DESTDIR)$(prefix)/bin
+	$(INSTALL) -m 640 -c ../dist/example.conf $(DESTDIR)$(prefix)/etc
+	$(INSTALL) -m 640 -c ../dist/example.motd $(DESTDIR)$(prefix)/etc
+	$(INSTALL) -m 640 -c ../dist/example.userserv.conf $(DESTDIR)$(prefix)/etc
+	$(INSTALL) -m 640 -c ../dist/atheme.chk $(DESTDIR)$(prefix)/etc/atheme.chk.sample
+	(cd ../doc; for i in *; do $(INSTALL) -m 644 $$i $(DESTDIR)$(DOCDIR); done)
 	(cd ../help; for i in *; do \
-		[ -f $$i ] && $(INSTALL) -m 644 $$i $(SHAREDIR)/help; \
+		[ -f $$i ] && $(INSTALL) -m 644 $$i $(DESTDIR)$(SHAREDIR)/help; \
 		if [ -d $$i ]; then \
 			cd $$i; \
-			$(INSTALL) -m 755 -d $(SHAREDIR)/help/$$i; \
+			$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/help/$$i; \
 			for j in *; do \
-				[ -f $$j ] && $(INSTALL) -m 644 $$j $(SHAREDIR)/help/$$i; \
+				[ -f $$j ] && $(INSTALL) -m 644 $$j $(DESTDIR)$(SHAREDIR)/help/$$i; \
 			done; \
 			cd ..; \
 		fi; \

@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 6167 2006-08-20 14:08:59Z jilles $
+# $Id: Makefile.in 6891 2006-10-22 19:08:29Z lu_zero $
 #
 
 CC		= @CC@
@@ -70,8 +70,8 @@ all: modules
 build: all
 
 install: build
-	${INSTALL} -d ${MODDIR}/modules/operserv
-	${INSTALL} -m 755 *.so ${MODDIR}/modules/operserv
+	${INSTALL} -d $(DESTDIR)${MODDIR}/modules/operserv
+	${INSTALL} -m 755 *.so $(DESTDIR)${MODDIR}/modules/operserv
 
 modules: $(OBJS)
 

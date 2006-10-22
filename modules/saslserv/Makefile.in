@@ -44,9 +44,10 @@ build: all
 
 # Remove the old sasl.so and help.so as loading them can cause trouble
 install: build
-	${INSTALL} -d ${MODDIR}/modules/saslserv
-	${INSTALL} -m 755 *.so ${MODDIR}/modules/saslserv
-	-${RM} -f ${MODDIR}/modules/saslserv/sasl.so ${MODDIR}/modules/saslserv/help.so
+	${INSTALL} -d $(DESTDIR)${MODDIR}/modules/saslserv
+	${INSTALL} -m 755 *.so $(DESTDIR)${MODDIR}/modules/saslserv
+	-${RM} -f $(DESTDIR)${MODDIR}/modules/saslserv/sasl.so \
+		  $(DESTDIR)${MODDIR}/modules/saslserv/help.so
 
 modules: $(OBJS)
 

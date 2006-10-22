@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 6873 2006-10-22 15:07:53Z jilles $
+# $Id: Makefile.in 6891 2006-10-22 19:08:29Z lu_zero $
 #
 
 CC		= @CC@
@@ -67,8 +67,8 @@ all: modules
 build: all
 
 install: build
-	${INSTALL} -d ${MODDIR}/modules/nickserv
-	${INSTALL} -m 755 *.so ${MODDIR}/modules/nickserv
+	${INSTALL} -d $(DESTDIR)${MODDIR}/modules/nickserv
+	${INSTALL} -m 755 *.so $(DESTDIR)${MODDIR}/modules/nickserv
 
 modules: $(OBJS)
 

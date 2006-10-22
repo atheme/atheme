@@ -1,3 +1,12 @@
+jilles      2006/10/22 18:51:00 UTC	(20061022-6889)
+  Log:
+  Tweak nickserv acc help file a little so it looks nicer in HTML.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/help/nickserv/acc (File Modified) 
+
+
 jilles      2006/10/22 16:29:18 UTC	(20061022-6887)
   Log:
   nickserv acc:

@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 6877 2006-10-22 15:26:26Z jilles $
+# $Id: Makefile.in 6891 2006-10-22 19:08:29Z lu_zero $
 #
 
 CC		= @CC@
@@ -57,8 +57,8 @@ OBJS = ${SRCS:.c=.so}
 all: ${OBJS}
 
 install:
-	${INSTALL} -d ${MODDIR}/contrib
-	${INSTALL} -m 755 *.so ${MODDIR}/contrib
+	${INSTALL} -d $(DESTDIR)${MODDIR}/contrib
+	${INSTALL} -m 755 *.so $(DESTDIR)${MODDIR}/contrib
 
 .SUFFIXES: .so
 

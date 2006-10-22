@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 6051 2006-08-14 16:39:35Z jilles $
+# $Id: Makefile.in 6891 2006-10-22 19:08:29Z lu_zero $
 #
 
 CC		= @CC@
@@ -47,8 +47,8 @@ all: modules
 build: all
 
 install: build
-	${INSTALL} -d ${MODDIR}/modules/xmlrpc
-	${INSTALL} -m 755 *.so ${MODDIR}/modules/xmlrpc
+	${INSTALL} -d $(DESTDIR)${MODDIR}/modules/xmlrpc
+	${INSTALL} -m 755 *.so $(DESTDIR)${MODDIR}/modules/xmlrpc
 
 modules: $(OBJS)
 
