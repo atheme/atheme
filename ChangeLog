@@ -1,3 +1,15 @@
+jilles      2006/10/22 00:29:50 UTC	(20061022-6827)
+  Log:
+  Move user_mode() from cmode.c to users.c.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/include/channels.h (File Modified) 
+  +1 -0		trunk/include/users.h (File Modified) 
+  +0 -65	trunk/src/cmode.c (File Modified) 
+  +65 -0	trunk/src/users.c (File Modified) 
+
+
 jilles      2006/10/21 23:32:38 UTC	(20061021-6825)
   Log:
   Use fault_noprivs instead of fault_authfail in some

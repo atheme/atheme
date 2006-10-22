@@ -4,7 +4,7 @@
  *
  * String stuff.
  *
- * $Id: org.atheme.claro.base.string 3607 2005-11-06 23:57:17Z jilles $
+ * $Id: org.atheme.claro.base.string 6829 2006-10-22 00:40:48Z nenolod $
  */
 
 #ifndef __CLAROSTRING
@@ -17,7 +17,6 @@ E size_t strlcat(char *dest, const char *src, size_t count);
 E size_t strlcpy(char *dest, const char *src, size_t count);
 #endif
 
-E char *strscpy(char *d, const char *s, size_t len);
 E void strip(char *line);
 
 #endif

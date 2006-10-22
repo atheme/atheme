@@ -4,7 +4,7 @@
  *
  * CRYPT mechanism provider
  *
- * $Id: crypt.c 6317 2006-09-06 20:03:32Z pippijn $
+ * $Id: crypt.c 6829 2006-10-22 00:40:48Z nenolod $
  */
 
 /******************************* WARNING ******************************************
@@ -19,7 +19,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/crypt", FALSE, _modinit, _moddeinit,
-	"$Id: crypt.c 6317 2006-09-06 20:03:32Z pippijn $",
+	"$Id: crypt.c 6829 2006-10-22 00:40:48Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -102,7 +102,7 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 		len -= 16;
 
 		/* Sanitize and check if user exists */
-		strscpy(user, message, len > 63 ? 64 : len + 1);
+		strlcpy(user, message, len > 63 ? 64 : len + 1);
 		if(!(mu = myuser_find(user)))
 			return ASASL_FAIL;
 		p->username = strdup(user);

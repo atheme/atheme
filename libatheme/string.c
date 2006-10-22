@@ -4,7 +4,7 @@
  *
  * String functions.
  *
- * $Id: string.c 3053 2005-10-20 18:04:13Z nenolod $
+ * $Id: string.c 6829 2006-10-22 00:40:48Z nenolod $
  */
 
 #include <org.atheme.claro.base>
@@ -41,18 +41,6 @@ size_t strlcpy(char *dest, const char *src, size_t size)
         return ret;
 }
 #endif
-
-/* copy at most len-1 characters from a string to a buffer, NULL terminate */
-char *strscpy(char *d, const char *s, size_t len)
-{
-        char *d_orig = d;
-
-        if (!len)
-                return d;
-        while (--len && (*d++ = *s++));
-        *d = 0;
-        return d_orig;
-}
 
 /* removes unwanted chars from a line */
 void strip(char *line)
