@@ -1,3 +1,17 @@
+jilles      2006/10/22 15:26:26 UTC	(20061022-6877)
+  Log:
+  Move contrib/cs_count to modules/chanserv/count
+  and enable it in example.conf.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/contrib/Makefile.in (File Modified) 
+  +0 -122	trunk/contrib/cs_count.c (File Deleted) 
+  +2 -0		trunk/dist/example.conf (File Modified) 
+  +123 -0	trunk/modules/chanserv/Makefile.in (File Modified) 
+  + -		trunk/modules/chanserv/count.c (File Added) 
+
+
 jilles      2006/10/22 15:12:58 UTC	(20061022-6875)
   Log:
   Show /ns release verbosely in /ns help.
