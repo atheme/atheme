@@ -23,7 +23,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/enforce",FALSE, _modinit, _moddeinit,
-	"$Id: ns_enforce.c 6871 2006-10-22 15:04:52Z jilles $",
+	"$Id: enforce.c 6873 2006-10-22 15:07:53Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

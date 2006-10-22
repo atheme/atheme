@@ -1,3 +1,14 @@
+jilles      2006/10/22 15:04:52 UTC	(20061022-6871)
+  Log:
+  ns_enforce:
+  - unbreak compile
+  - fix bug where it skipped other users when encountering a service
+  
+
+  Changes:	Modified:
+  +36 -45	trunk/contrib/ns_enforce.c (File Modified) 
+
+
 jilles      2006/10/22 14:31:21 UTC	(20061022-6869)
   Log:
   Hopefully fix postgresql IDs in myuser-related tables.
