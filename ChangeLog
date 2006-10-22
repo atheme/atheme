@@ -1,3 +1,21 @@
+jilles      2006/10/22 21:07:24 UTC	(20061022-6895)
+  Log:
+  Convert mclist (registered channels) to dtree.
+  
+
+  Changes:	Modified:
+  +45 -49	trunk/backend/flatfile.c (File Modified) 
+  +1 -2		trunk/include/account.h (File Modified) 
+  +0 -3		trunk/include/tools.h (File Modified) 
+  +15 -21	trunk/modules/chanserv/list.c (File Modified) 
+  +25 -33	trunk/modules/chanserv/main.c (File Modified) 
+  +5 -8		trunk/modules/chanserv/register.c (File Modified) 
+  +6 -9		trunk/modules/chanserv/set.c (File Modified) 
+  +6 -9		trunk/modules/xmlrpc/channel.c (File Modified) 
+  +20 -25	trunk/src/account.c (File Modified) 
+  +38 -66	trunk/src/node.c (File Modified) 
+
+
 lu_zero     2006/10/22 19:13:57 UTC	(20061022-6893)
   Log:
   adding myself to the list

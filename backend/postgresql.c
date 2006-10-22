@@ -5,7 +5,7 @@
  * This file contains the implementation of the database
  * using PostgreSQL.
  *
- * $Id: postgresql.c 6869 2006-10-22 14:31:21Z jilles $
+ * $Id: postgresql.c 6897 2006-10-22 21:12:42Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/postgresql", TRUE, _modinit, NULL,
-	"$Id: postgresql.c 6869 2006-10-22 14:31:21Z jilles $",
+	"$Id: postgresql.c 6897 2006-10-22 21:12:42Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -103,7 +103,7 @@ static void postgresql_db_save(void *arg)
 	chanacs_t *ca;
 	kline_t *k;
 	node_t *n, *tn, *tn2;
-	uint32_t i, ii, iii;
+	uint32_t ii, iii;
 	PGresult *res;
 	char user[BUFSIZE];
 	char pass[BUFSIZE];
@@ -186,73 +186,68 @@ static void postgresql_db_save(void *arg)
 	ii = 0;
 	iii = 0;
 
-	for (i = 0; i < HASHSIZE; i++)
+	DICTIONARY_FOREACH(mc, &state, mclist)
 	{
-		LIST_FOREACH(n, mclist[i].head)
+		char cname[BUFSIZE], cfounder[BUFSIZE];
+		char ckey[BUFSIZE];
+
+		PQescapeString(cname, mc->name, BUFSIZE);
+		/* founder shouldn't contain anything bad, but be safe anyway */
+		PQescapeString(cfounder, mc->founder->name, BUFSIZE);
+
+		if (mc->mlock_key)
+			PQescapeString(ckey, mc->mlock_key, BUFSIZE);
+
+		res = safe_query("INSERT INTO CHANNELS(ID, NAME, FOUNDER, REGISTERED, LASTUSED, "
+				"FLAGS, MLOCK_ON, MLOCK_OFF, MLOCK_LIMIT, MLOCK_KEY) VALUES ("
+				"%d, '%s', '%s', %ld, %ld, %ld, %ld, %ld, %ld, '%s');", ii,
+				cname, cfounder, (long)mc->registered, (long)mc->used, (long)mc->flags,
+				(long)mc->mlock_on, (long)mc->mlock_off, (long)mc->mlock_limit,
+				mc->mlock_key ? ckey : "");
+
+		LIST_FOREACH(tn, mc->chanacs.head)
 		{
-			char cname[BUFSIZE], cfounder[BUFSIZE];
-			char ckey[BUFSIZE];
+			char caaccount[BUFSIZE];
 
-			mc = (mychan_t *)n->data;
+			ca = (chanacs_t *)tn->data;
 
-			PQescapeString(cname, mc->name, BUFSIZE);
-			/* founder shouldn't contain anything bad, but be safe anyway */
-			PQescapeString(cfounder, mc->founder->name, BUFSIZE);
+			if (!ca->myuser)
+				PQescapeString(caaccount, ca->host, BUFSIZE);
+			else
+				PQescapeString(caaccount, ca->myuser->name, BUFSIZE);
 
-			if (mc->mlock_key)
-				PQescapeString(ckey, mc->mlock_key, BUFSIZE);
+			res = safe_query("INSERT INTO CHANNEL_ACCESS(ID, PARENT, ACCOUNT, PERMISSIONS) VALUES ("
+					"%d, %d, '%s', '%s');", iii, ii, caaccount,
+					bitmask_to_flags(ca->level, chanacs_flags));
 
-			res = safe_query("INSERT INTO CHANNELS(ID, NAME, FOUNDER, REGISTERED, LASTUSED, "
-					"FLAGS, MLOCK_ON, MLOCK_OFF, MLOCK_LIMIT, MLOCK_KEY) VALUES ("
-					"%d, '%s', '%s', %ld, %ld, %ld, %ld, %ld, %ld, '%s');", ii,
-					cname, cfounder, (long)mc->registered, (long)mc->used, (long)mc->flags,
-					(long)mc->mlock_on, (long)mc->mlock_off, (long)mc->mlock_limit,
-					mc->mlock_key ? ckey : "");
-
-			LIST_FOREACH(tn, mc->chanacs.head)
-			{
-				char caaccount[BUFSIZE];
-
-				ca = (chanacs_t *)tn->data;
-
-				if (!ca->myuser)
-					PQescapeString(caaccount, ca->host, BUFSIZE);
-				else
-					PQescapeString(caaccount, ca->myuser->name, BUFSIZE);
-
-				res = safe_query("INSERT INTO CHANNEL_ACCESS(ID, PARENT, ACCOUNT, PERMISSIONS) VALUES ("
-						"%d, %d, '%s', '%s');", iii, ii, caaccount,
-						bitmask_to_flags(ca->level, chanacs_flags));
-
-				LIST_FOREACH(tn2, ca->metadata.head)
-				{
-					char key[BUFSIZE], keyval[BUFSIZE];
-					metadata_t *md = (metadata_t *)tn2->data;
-
-					PQescapeString(key, md->name, BUFSIZE);
-					PQescapeString(keyval, md->name, BUFSIZE);
-
-					res = safe_query("INSERT INTO CHANNEL_ACCESS_METADATA(ID, PARENT, KEYNAME, VALUE) VALUES("
-						"DEFAULT, %d, '%s', '%s');", iii, key, keyval);
-				}
-
-				iii++;
-			}
-
-			LIST_FOREACH(tn, mc->metadata.head)
+			LIST_FOREACH(tn2, ca->metadata.head)
 			{
 				char key[BUFSIZE], keyval[BUFSIZE];
-				metadata_t *md = (metadata_t *)tn->data;
+				metadata_t *md = (metadata_t *)tn2->data;
 
 				PQescapeString(key, md->name, BUFSIZE);
-				PQescapeString(keyval, md->value, BUFSIZE);
+				PQescapeString(keyval, md->name, BUFSIZE);
 
-				res = safe_query("INSERT INTO CHANNEL_METADATA(ID, PARENT, KEYNAME, VALUE) VALUES ("
-						"DEFAULT, %d, '%s', '%s');", ii, key, keyval);
+				res = safe_query("INSERT INTO CHANNEL_ACCESS_METADATA(ID, PARENT, KEYNAME, VALUE) VALUES("
+						"DEFAULT, %d, '%s', '%s');", iii, key, keyval);
 			}
 
-			ii++;
+			iii++;
 		}
+
+		LIST_FOREACH(tn, mc->metadata.head)
+		{
+			char key[BUFSIZE], keyval[BUFSIZE];
+			metadata_t *md = (metadata_t *)tn->data;
+
+			PQescapeString(key, md->name, BUFSIZE);
+			PQescapeString(keyval, md->value, BUFSIZE);
+
+			res = safe_query("INSERT INTO CHANNEL_METADATA(ID, PARENT, KEYNAME, VALUE) VALUES ("
+					"DEFAULT, %d, '%s', '%s');", ii, key, keyval);
+		}
+
+		ii++;
 	}
 
 	slog(LG_DEBUG, "db_save(): saving klines");
