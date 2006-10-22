@@ -1,3 +1,17 @@
+jilles      2006/10/21 23:32:38 UTC	(20061021-6825)
+  Log:
+  Use fault_noprivs instead of fault_authfail in some
+  cases where no password or other authentication token
+  is involved.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/ghost.c (File Modified) 
+  +2 -2		trunk/modules/nickserv/listchans.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/logout.c (File Modified) 
+  +3 -3		trunk/modules/nickserv/set.c (File Modified) 
+
+
 w00t        2006/10/21 22:43:43 UTC	(20061021-6823)
   Log:
   Fix a minor oops, thanks, jilles

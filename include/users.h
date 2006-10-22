@@ -4,7 +4,7 @@
  *
  * Data structures for connected clients.
  *
- * $Id: users.h 6775 2006-10-21 02:49:49Z nenolod $
+ * $Id: users.h 6827 2006-10-22 00:29:50Z jilles $
  */
 
 #ifndef USERS_H
@@ -61,6 +61,7 @@ E void user_delete(user_t *u);
 E user_t *user_find(const char *nick);
 E user_t *user_find_named(const char *nick);
 E void user_changeuid(user_t *u, const char *uid);
+E void user_mode(user_t *user, char *modes);
 
 /* uid.c */
 E void init_uid(void);

@@ -4,7 +4,7 @@
  *
  * User management functions.
  *
- * $Id: users.c 6773 2006-10-21 02:49:17Z nenolod $
+ * $Id: users.c 6827 2006-10-22 00:29:50Z jilles $
  */
 
 #include "atheme.h"
@@ -310,3 +310,68 @@ void user_changeuid(user_t *u, const char *uid)
                 node_add(u, node_create(), &uidlist[u->uhash]);
         }
 }
+
+void user_mode(user_t *user, char *modes)
+{
+	int dir = MTYPE_ADD;
+
+	if (!user)
+	{
+		slog(LG_DEBUG, "user_mode(): called for nonexistant user");
+		return;
+	}
+
+	while (*modes != '\0')
+	{
+		switch (*modes)
+		{
+		  case '+':
+			  dir = MTYPE_ADD;
+			  break;
+		  case '-':
+			  dir = MTYPE_DEL;
+			  break;
+		  case 'i':
+			  if (dir == MTYPE_ADD)
+			  {
+				  if (!(user->flags & UF_INVIS))
+				  	user->server->invis++;
+				  user->flags |= UF_INVIS;
+			  }
+			  else if ((dir = MTYPE_DEL))
+			  {
+				  if (user->flags & UF_INVIS)
+					  user->server->invis--;
+				  user->flags &= ~UF_INVIS;
+			  }
+			  break;
+		  case 'o':
+			  if (dir == MTYPE_ADD)
+			  {
+				  if (!is_ircop(user))
+				  {
+					  user->flags |= UF_IRCOP;
+					  slog(LG_DEBUG, "user_mode(): %s is now an IRCop", user->nick);
+					  snoop("OPER: %s (%s)", user->nick, user->server->name);
+					  user->server->opers++;
+					  hook_call_event("user_oper", user);
+				  }
+			  }
+			  else if ((dir = MTYPE_DEL))
+			  {
+				  if (is_ircop(user))
+				  {
+					  user->flags &= ~UF_IRCOP;
+					  slog(LG_DEBUG, "user_mode(): %s is no longer an IRCop", user->nick);
+					  snoop("DEOPER: %s (%s)", user->nick, user->server->name);
+					  user->server->opers--;
+					  hook_call_event("user_deoper", user);
+				  }
+			  }
+		  default:
+			  break;
+		}
+		modes++;
+	}
+}
+
