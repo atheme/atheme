@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 6767 2006-10-21 01:32:42Z nenolod $
+ * $Id: flatfile.c 6895 2006-10-22 21:07:24Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 6767 2006-10-21 01:32:42Z nenolod $",
+	"$Id: flatfile.c 6895 2006-10-22 21:07:24Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -89,6 +89,7 @@ static void flatfile_db_save(void *arg)
 	FILE *f;
 	uint32_t i;
 	int errno1, was_errored = 0;
+	dictionary_iteration_state_t state;
 
 	errno = 0;
 
@@ -114,69 +115,64 @@ static void flatfile_db_save(void *arg)
 
 	slog(LG_DEBUG, "db_save(): saving mychans");
 
-	for (i = 0; i < HASHSIZE; i++)
+	DICTIONARY_FOREACH(mc, &state, mclist)
 	{
-		LIST_FOREACH(n, mclist[i].head)
+		/* MC <name> <pass> <founder> <registered> [used] [flags]
+		 * [mlock_on] [mlock_off] [mlock_limit] [mlock_key]
+		 * PASS is now ignored -- replaced with a "0" to avoid having to special-case this version
+		 */
+		fprintf(f, "MC %s %s %s %ld %ld", mc->name, "0", mc->founder->name, (long)mc->registered, (long)mc->used);
+
+		if (mc->flags)
+			fprintf(f, " %d", mc->flags);
+		else
+			fprintf(f, " 0");
+
+		if (mc->mlock_on)
+			fprintf(f, " %d", mc->mlock_on);
+		else
+			fprintf(f, " 0");
+
+		if (mc->mlock_off)
+			fprintf(f, " %d", mc->mlock_off);
+		else
+			fprintf(f, " 0");
+
+		if (mc->mlock_limit)
+			fprintf(f, " %d", mc->mlock_limit);
+		else
+			fprintf(f, " 0");
+
+		if (mc->mlock_key)
+			fprintf(f, " %s\n", mc->mlock_key);
+		else
+			fprintf(f, "\n");
+
+		mcout++;
+
+		LIST_FOREACH(tn, mc->chanacs.head)
 		{
-			mc = (mychan_t *)n->data;
+			ca = (chanacs_t *)tn->data;
 
-			/* MC <name> <pass> <founder> <registered> [used] [flags]
-			 * [mlock_on] [mlock_off] [mlock_limit] [mlock_key]
-			 * PASS is now ignored -- replaced with a "0" to avoid having to special-case this version
-			 */
-			fprintf(f, "MC %s %s %s %ld %ld", mc->name, "0", mc->founder->name, (long)mc->registered, (long)mc->used);
+			fprintf(f, "CA %s %s %s\n", ca->mychan->name, ca->myuser ? ca->myuser->name : ca->host,
+					bitmask_to_flags(ca->level, chanacs_flags));
 
-			if (mc->flags)
-				fprintf(f, " %d", mc->flags);
-			else
-				fprintf(f, " 0");
-
-			if (mc->mlock_on)
-				fprintf(f, " %d", mc->mlock_on);
-			else
-				fprintf(f, " 0");
-
-			if (mc->mlock_off)
-				fprintf(f, " %d", mc->mlock_off);
-			else
-				fprintf(f, " 0");
-
-			if (mc->mlock_limit)
-				fprintf(f, " %d", mc->mlock_limit);
-			else
-				fprintf(f, " 0");
-
-			if (mc->mlock_key)
-				fprintf(f, " %s\n", mc->mlock_key);
-			else
-				fprintf(f, "\n");
-
-			mcout++;
-
-			LIST_FOREACH(tn, mc->chanacs.head)
+			LIST_FOREACH(tn2, ca->metadata.head)
 			{
-				ca = (chanacs_t *)tn->data;
+				metadata_t *md = (metadata_t *)tn2->data;
 
-				fprintf(f, "CA %s %s %s\n", ca->mychan->name, ca->myuser ? ca->myuser->name : ca->host,
-						bitmask_to_flags(ca->level, chanacs_flags));
-
-				LIST_FOREACH(tn2, ca->metadata.head)
-				{
-					metadata_t *md = (metadata_t *)tn2->data;
-
-					fprintf(f, "MD A %s:%s %s %s\n", ca->mychan->name,
-						(ca->host) ? ca->host : ca->myuser->name, md->name, md->value);
-				}
-
-				caout++;
+				fprintf(f, "MD A %s:%s %s %s\n", ca->mychan->name,
+					(ca->host) ? ca->host : ca->myuser->name, md->name, md->value);
 			}
 
-			LIST_FOREACH(tn, mc->metadata.head)
-			{
-				metadata_t *md = (metadata_t *)tn->data;
+			caout++;
+		}
 
-				fprintf(f, "MD C %s %s %s\n", mc->name, md->name, md->value);
-			}
+		LIST_FOREACH(tn, mc->metadata.head)
+		{
+			metadata_t *md = (metadata_t *)tn->data;
+
+			fprintf(f, "MD C %s %s %s\n", mc->name, md->name, md->value);
 		}
 	}
 

@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 6791 2006-10-21 16:59:20Z jilles $
+ * $Id: account.c 6895 2006-10-22 21:07:24Z jilles $
  */
 
 #include "atheme.h"
@@ -130,7 +130,7 @@ void myuser_delete(myuser_t *mu)
 	user_t *u;
 	node_t *n, *tn;
 	metadata_t *md;
-	uint32_t i;
+	dictionary_iteration_state_t state;
 
 	if (!mu)
 	{
@@ -160,36 +160,31 @@ void myuser_delete(myuser_t *mu)
 	 * We CANNOT do this based soley on chanacs!
 	 * A founder could remove all of his flags.
 	 */
-	for (i = 0; i < HASHSIZE; i++)
+	DICTIONARY_FOREACH(mc, &state, mclist)
 	{
-		LIST_FOREACH_SAFE(n, tn, mclist[i].head)
+		/* attempt succession */
+		if (mc->founder == mu && (successor = mychan_pick_successor(mc)) != NULL)
 		{
-			mc = (mychan_t *)n->data;
+			snoop("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2", successor->name, mc->name, mc->founder->name);
+			if (chansvs.me != NULL)
+				verbose(mc, "Foundership changed to \2%s\2 because \2%s\2 was dropped.", successor->name, mc->founder->name);
 
-			/* attempt succession */
-			if (mc->founder == mu && (successor = mychan_pick_successor(mc)) != NULL)
-			{
-				snoop("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2", successor->name, mc->name, mc->founder->name);
-				if (chansvs.me != NULL)
-					verbose(mc, "Foundership changed to \2%s\2 because \2%s\2 was dropped.", successor->name, mc->founder->name);
+			chanacs_change_simple(mc, successor, NULL, CA_FOUNDER_0, 0, CA_ALL);
+			mc->founder = successor;
 
-				chanacs_change_simple(mc, successor, NULL, CA_FOUNDER_0, 0, CA_ALL);
-				mc->founder = successor;
+			if (chansvs.me != NULL)
+				myuser_notice(chansvs.nick, mc->founder, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, mc->founder->name);
+		}
 
-				if (chansvs.me != NULL)
-					myuser_notice(chansvs.nick, mc->founder, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, mc->founder->name);
-			}
+		/* no successor found */
+		if (mc->founder == mu)
+		{
+			snoop("DELETE: \2%s\2 from \2%s\2", mc->name, mu->name);
 
-			/* no successor found */
-			if (mc->founder == mu)
-			{
-				snoop("DELETE: \2%s\2 from \2%s\2", mc->name, mu->name);
-
-				hook_call_event("channel_drop", mc);
-				if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
-					part(mc->name, chansvs.nick);
-				mychan_delete(mc->name);
-			}
+			hook_call_event("channel_drop", mc);
+			if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
+				part(mc->name, chansvs.nick);
+			mychan_delete(mc->name);
 		}
 	}
 

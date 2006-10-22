@@ -4,7 +4,7 @@
  *
  * This file contains code for the ChanServ LIST function.
  *
- * $Id: list.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: list.c 6895 2006-10-22 21:07:24Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: list.c 6895 2006-10-22 21:07:24Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -41,11 +41,10 @@ void _moddeinit()
 static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc;
-	node_t *n;
 	char *chanpattern = parv[0];
 	char buf[BUFSIZE];
-	uint32_t i;
 	uint32_t matches = 0;
+	dictionary_iteration_state_t state;
 
 	if (!chanpattern)
 	{
@@ -57,30 +56,25 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	snoop("LIST:CHANNELS: \2%s\2 by \2%s\2", chanpattern, get_oper_name(si));
 	command_success_nodata(si, "Channels matching pattern \2%s\2:", chanpattern);
 
-	for (i = 0; i < HASHSIZE; i++)
+	DICTIONARY_FOREACH(mc, &state, mclist)
 	{
-		LIST_FOREACH(n, mclist[i].head)
+		if (!match(chanpattern, mc->name))
 		{
-			mc = (mychan_t *)n->data;
+			/* in the future we could add a LIMIT parameter */
+			*buf = '\0';
 
-			if (!match(chanpattern, mc->name))
-			{
-				/* in the future we could add a LIMIT parameter */
-				*buf = '\0';
-
-				if (metadata_find(mc, METADATA_CHANNEL, "private:mark:setter")) {
-					strlcat(buf, "\2[marked]\2", BUFSIZE);
-				}
-				if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer")) {
-					if (*buf)
-						strlcat(buf, " ", BUFSIZE);
-
-					strlcat(buf, "\2[closed]\2", BUFSIZE);
-				}
-
-				command_success_nodata(si, "- %s (%s) %s", mc->name, mc->founder->name, buf);
-				matches++;
+			if (metadata_find(mc, METADATA_CHANNEL, "private:mark:setter")) {
+				strlcat(buf, "\2[marked]\2", BUFSIZE);
 			}
+			if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer")) {
+				if (*buf)
+					strlcat(buf, " ", BUFSIZE);
+
+				strlcat(buf, "\2[closed]\2", BUFSIZE);
+			}
+
+			command_success_nodata(si, "- %s (%s) %s", mc->name, mc->founder->name, buf);
+			matches++;
 		}
 	}
 

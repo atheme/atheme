@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 6801 2006-10-21 19:08:32Z jilles $
+ * $Id: account.h 6895 2006-10-22 21:07:24Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -110,7 +110,6 @@ struct mychan_
   char *mlock_key;
 
   uint32_t flags;
-  int32_t hash;
 
   list_t metadata;
 };
@@ -227,7 +226,7 @@ E boolean_t verify_password(myuser_t *mu, char *password);
 E list_t svs_ignore_list;
 E list_t klnlist;
 E list_t soperlist;
-E list_t mclist[HASHSIZE];
+E dictionary_tree_t *mclist;
 E dictionary_tree_t *mulist;
 
 E svsignore_t *svsignore_find(user_t *user);

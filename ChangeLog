@@ -1,3 +1,11 @@
+lu_zero     2006/10/22 19:13:57 UTC	(20061022-6893)
+  Log:
+  adding myself to the list
+
+  Changes:	Modified:
+  +1 -0		trunk/src/version.sh (File Modified) 
+
+
 lu_zero     2006/10/22 19:08:29 UTC	(20061022-6891)
   Log:
   destdir support

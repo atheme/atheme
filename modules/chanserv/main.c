@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6727 2006-10-20 18:48:53Z jilles $
+ * $Id: main.c 6895 2006-10-22 21:07:24Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6727 2006-10-20 18:48:53Z jilles $",
+	"$Id: main.c 6895 2006-10-22 21:07:24Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -32,24 +32,21 @@ E list_t mychan;
 
 static void join_registered(boolean_t all)
 {
-	node_t *n;	uint32_t i;
+	node_t *n;
+	mychan_t *mc;
+	dictionary_iteration_state_t state;
 
-	for (i = 0; i < HASHSIZE; i++)
+	DICTIONARY_FOREACH(mc, &state, mclist)
 	{
-		LIST_FOREACH(n, mclist[i].head)
+		if (all)
 		{
-			mychan_t *mc = n->data;
-
-			if (all)
-			{
-				join(mc->name, chansvs.nick);
-				continue;
-			}
-			else if (mc->chan != NULL && mc->chan->members.count != 0)
-			{
-				join(mc->name, chansvs.nick);
-				continue;
-			}
+			join(mc->name, chansvs.nick);
+			continue;
+		}
+		else if (mc->chan != NULL && mc->chan->members.count != 0)
+		{
+			join(mc->name, chansvs.nick);
+			continue;
 		}
 	}
 }
@@ -605,29 +602,24 @@ static void cs_tschange(channel_t *c)
 
 static void cs_leave_empty(void *unused)
 {
-	int i;
-	node_t *n;
 	mychan_t *mc;
+	dictionary_iteration_state_t state;
 
 	(void)unused;
-	for (i = 0; i < HASHSIZE; i++)
+	DICTIONARY_FOREACH(mc, &state, mclist)
 	{
-		LIST_FOREACH(n, mclist[i].head)
+		if (!(mc->flags & MC_INHABIT))
+			continue;
+		mc->flags &= ~MC_INHABIT;
+		if (mc->chan != NULL &&
+				(!config_options.chan || irccmp(mc->name, config_options.chan)) &&
+				(!config_options.join_chans ||
+				 (config_options.leave_chans && mc->chan->nummembers == 1) ||
+				 metadata_find(mc, METADATA_CHANNEL, "private:close:closer")) &&
+				chanuser_find(mc->chan, chansvs.me->me))
 		{
-			mc = n->data;
-			if (!(mc->flags & MC_INHABIT))
-				continue;
-			mc->flags &= ~MC_INHABIT;
-			if (mc->chan != NULL &&
-					(!config_options.chan || irccmp(mc->name, config_options.chan)) &&
-					(!config_options.join_chans ||
-					 (config_options.leave_chans && mc->chan->nummembers == 1) ||
-					 metadata_find(mc, METADATA_CHANNEL, "private:close:closer")) &&
-					chanuser_find(mc->chan, chansvs.me->me))
-			{
-				slog(LG_DEBUG, "cs_leave_empty(): leaving %s", mc->chan->name);
-				part(mc->chan->name, chansvs.nick);
-			}
+			slog(LG_DEBUG, "cs_leave_empty(): leaving %s", mc->chan->name);
+			part(mc->chan->name, chansvs.nick);
 		}
 	}
 }

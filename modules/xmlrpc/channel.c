@@ -4,7 +4,7 @@
  *
  * XMLRPC channel management functions.
  *
- * $Id: channel.c 6665 2006-10-05 23:45:09Z jilles $
+ * $Id: channel.c 6895 2006-10-22 21:07:24Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/channel", FALSE, _modinit, _moddeinit,
-	"$Id: channel.c 6665 2006-10-05 23:45:09Z jilles $",
+	"$Id: channel.c 6895 2006-10-22 21:07:24Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -40,8 +40,9 @@ static int channel_register(void *conn, int parc, char *parv[])
 	myuser_t *mu;
 	mychan_t *mc, *tmc;
 	node_t *n;
-	uint32_t i, tcnt;
+	uint32_t tcnt;
 	static char buf[XMLRPC_BUFSIZE];
+	dictionary_iteration_state_t state;
 
 	*buf = '\0';
 
@@ -82,15 +83,11 @@ static int channel_register(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	for (i = 0, tcnt = 0; i < HASHSIZE; i++)
+	tcnt = 0;
+	DICTIONARY_FOREACH(tmc, &state, mclist)
 	{
-		LIST_FOREACH(n, mclist[i].head)
-		{
-			tmc = (mychan_t *)n->data;
-
-			if (is_founder(tmc, mu))
-				tcnt++;
-		}
+		if (is_founder(tmc, mu))
+			tcnt++;
 	}
 
 	if (tcnt >= me.maxchans)

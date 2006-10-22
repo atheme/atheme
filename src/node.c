@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6845 2006-10-22 05:15:04Z nenolod $
+ * $Id: node.c 6895 2006-10-22 21:07:24Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@ list_t operclasslist;
 list_t soperlist;
 list_t uplinks;
 list_t klnlist;
-list_t mclist[HASHSIZE];
+dictionary_tree_t *mclist;
 
 static BlockHeap *operclass_heap;
 static BlockHeap *soper_heap;
@@ -49,6 +49,8 @@ void init_nodes(void)
 		slog(LG_INFO, "init_nodes(): block allocator failed.");
 		exit(EXIT_FAILURE);
 	}
+
+	mclist = dictionary_create("mychan", HASH_CHANNEL, irccasecmp);
 
 	init_servers();
 	init_accounts();
@@ -489,7 +491,6 @@ void kline_expire(void *arg)
 mychan_t *mychan_add(char *name)
 {
 	mychan_t *mc;
-	node_t *n;
 
 	mc = mychan_find(name);
 
@@ -501,16 +502,14 @@ mychan_t *mychan_add(char *name)
 
 	slog(LG_DEBUG, "mychan_add(): %s", name);
 
-	n = node_create();
 	mc = BlockHeapAlloc(mychan_heap);
 
 	strlcpy(mc->name, name, CHANNELLEN);
 	mc->founder = NULL;
 	mc->registered = CURRTIME;
 	mc->chan = channel_find(name);
-	mc->hash = MCHASH((unsigned char *)name);
 
-	node_add(mc, n, &mclist[mc->hash]);
+	dictionary_add(mclist, mc->name, mc);
 
 	cnt.mychan++;
 
@@ -542,9 +541,7 @@ void mychan_delete(char *name)
 			chanacs_delete_host(ca->mychan, ca->host, ca->level);
 	}
 
-	n = node_find(mc, &mclist[mc->hash]);
-	node_del(n, &mclist[mc->hash]);
-	node_free(n);
+	dictionary_delete(mclist, mc->name);
 
 	BlockHeapFree(mychan_heap, mc);
 
@@ -553,18 +550,7 @@ void mychan_delete(char *name)
 
 mychan_t *mychan_find(const char *name)
 {
-	mychan_t *mc;
-	node_t *n;
-
-	LIST_FOREACH(n, mclist[shash((const unsigned char *) name)].head)
-	{
-		mc = (mychan_t *)n->data;
-
-		if (!irccasecmp(name, mc->name))
-			return mc;
-	}
-
-	return NULL;
+	return dictionary_retrieve(mclist, name);
 }
 
 /* Check if there is anyone on the channel fulfilling the conditions.
@@ -596,6 +582,7 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t minlevel, int maxtime)
 	chanacs_t *ca;
 	mychan_t *tmc;
 	myuser_t *mu;
+	dictionary_iteration_state_t state;
 
 	LIST_FOREACH(n, mc->chanacs.head)
 	{
@@ -610,15 +597,10 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t minlevel, int maxtime)
 			if (has_priv_myuser(mu, PRIV_REG_NOLIMIT))
 				return mu;
 			tcnt = 0;
-			for (j = 0; j < HASHSIZE; j++)
+			DICTIONARY_FOREACH(tmc, &state, mclist)
 			{
-				LIST_FOREACH(n2, mclist[j].head)
-				{
-					tmc = (mychan_t *)n2->data;
-
-					if (is_founder(tmc, mu))
-						tcnt++;
-				}
+				if (is_founder(tmc, mu))
+					tcnt++;
 			}
 		
 			if (tcnt < me.maxchans)
@@ -1303,7 +1285,7 @@ void expire_check(void *arg)
 {
 	uint32_t i;
 	mychan_t *mc;
-	node_t *n, *tn;
+	dictionary_iteration_state_t state;
 
 	/* Let them know about this and the likely subsequent db_save()
 	 * right away -- jilles */
@@ -1314,42 +1296,37 @@ void expire_check(void *arg)
 
 	dictionary_foreach(mulist, expire_myuser_cb, NULL);
 
-	for (i = 0; i < HASHSIZE; i++)
+	DICTIONARY_FOREACH(mc, &state, mclist)
 	{
-		LIST_FOREACH_SAFE(n, tn, mclist[i].head)
+		if ((CURRTIME - mc->used) >= 86400 - 3660)
 		{
-			mc = (mychan_t *)n->data;
-
-			if ((CURRTIME - mc->used) >= 86400 - 3660)
+			/* keep last used time accurate to
+			 * within a day, making sure an active
+			 * channel will never get "Last used"
+			 * in /cs info -- jilles */
+			if (mychan_isused(mc))
 			{
-				/* keep last used time accurate to
-				 * within a day, making sure an active
-				 * channel will never get "Last used"
-				 * in /cs info -- jilles */
-				if (mychan_isused(mc))
-				{
-					mc->used = CURRTIME;
-					slog(LG_DEBUG, "expire_check(): updating last used time on %s because it appears to be still in use", mc->name);
-					continue;
-				}
+				mc->used = CURRTIME;
+				slog(LG_DEBUG, "expire_check(): updating last used time on %s because it appears to be still in use", mc->name);
+				continue;
 			}
+		}
 
-			if ((CURRTIME - mc->used) >= config_options.expire)
-			{
-				if (MU_HOLD & mc->founder->flags)
-					continue;
+		if ((CURRTIME - mc->used) >= config_options.expire)
+		{
+			if (MU_HOLD & mc->founder->flags)
+				continue;
 
-				if (MC_HOLD & mc->flags)
-					continue;
+			if (MC_HOLD & mc->flags)
+				continue;
 
-				snoop("EXPIRE: \2%s\2 from \2%s\2", mc->name, mc->founder->name);
+			snoop("EXPIRE: \2%s\2 from \2%s\2", mc->name, mc->founder->name);
 
-				hook_call_event("channel_drop", mc);
-				if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
-					part(mc->name, chansvs.nick);
+			hook_call_event("channel_drop", mc);
+			if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
+				part(mc->name, chansvs.nick);
 
-				mychan_delete(mc->name);
-			}
+			mychan_delete(mc->name);
 		}
 	}
 }
@@ -1372,21 +1349,16 @@ void db_check()
 {
 	uint32_t i;
 	mychan_t *mc;
-	node_t *n;
+	dictionary_iteration_state_t state;
 
 	dictionary_foreach(mulist, check_myuser_cb, NULL);
 
-	for (i = 0; i < HASHSIZE; i++)
+	DICTIONARY_FOREACH(mc, &state, mclist)
 	{
-		LIST_FOREACH(n, mclist[i].head)
+		if (!chanacs_find(mc, mc->founder, CA_FLAGS))
 		{
-			mc = (mychan_t *)n->data;
-
-			if (!chanacs_find(mc, mc->founder, CA_FLAGS))
-			{
-				slog(LG_INFO, "db_check(): adding access for founder on channel %s", mc->name);
-				chanacs_change_simple(mc, mc->founder, NULL, CA_FOUNDER_0, 0, CA_ALL);
-			}
+			slog(LG_INFO, "db_check(): adding access for founder on channel %s", mc->name);
+			chanacs_change_simple(mc, mc->founder, NULL, CA_FOUNDER_0, 0, CA_ALL);
 		}
 	}
 }
