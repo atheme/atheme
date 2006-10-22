@@ -1,3 +1,12 @@
+jilles      2006/10/22 01:58:09 UTC	(20061022-6835)
+  Log:
+  contrib/cs_count: tweak description, add oper override
+  
+
+  Changes:	Modified:
+  +14 -4	trunk/contrib/cs_count.c (File Modified) 
+
+
 nenolod     2006/10/22 01:55:56 UTC	(20061022-6833)
   Log:
   - document the DTree system
