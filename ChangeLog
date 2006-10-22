@@ -1,3 +1,12 @@
+jilles      2006/10/22 21:12:42 UTC	(20061022-6897)
+  Log:
+  Make postgresql backend compile again.
+  
+
+  Changes:	Modified:
+  +45 -50	trunk/backend/postgresql.c (File Modified) 
+
+
 jilles      2006/10/22 21:07:24 UTC	(20061022-6895)
   Log:
   Convert mclist (registered channels) to dtree.

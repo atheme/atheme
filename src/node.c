@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6895 2006-10-22 21:07:24Z jilles $
+ * $Id: node.c 6899 2006-10-22 21:22:33Z jilles $
  */
 
 #include "atheme.h"
@@ -25,10 +25,6 @@ static BlockHeap *kline_heap;	/* 16 */
 static BlockHeap *mychan_heap;	/* HEAP_CHANNEL */
 static BlockHeap *chanacs_heap;	/* HEAP_CHANACS */
 static BlockHeap *metadata_heap;	/* HEAP_CHANUSER */
-
-boolean_t mychan_isused(mychan_t *mc);
-myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t minlevel, int maxtime);
-myuser_t *mychan_pick_successor(mychan_t *mc);
 
 /*************
  * L I S T S *
