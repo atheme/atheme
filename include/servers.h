@@ -4,7 +4,7 @@
  *
  * Data structures related to network servers.
  *
- * $Id: servers.h 6853 2006-10-22 13:12:06Z jilles $
+ * $Id: servers.h 6901 2006-10-22 21:33:00Z jilles $
  */
 
 #ifndef SERVERS_H
@@ -46,9 +46,11 @@ struct tld_ {
 #define SERVER_NAME(serv)	((serv)->sid[0] ? (serv)->sid : (serv)->name)
 #define ME			(ircd->uses_uid ? me.numeric : me.name)
 
-/* node.c */
+/* servers.c */
 E dictionary_tree_t *servlist;
 E list_t tldlist;
+
+E void init_servers(void);
 
 E tld_t *tld_add(const char *name);
 E void tld_delete(const char *name);
@@ -57,7 +59,5 @@ E tld_t *tld_find(const char *name);
 E server_t *server_add(const char *name, uint8_t hops, const char *uplink, const char *id, const char *desc);
 E void server_delete(const char *name);
 E server_t *server_find(const char *name);
-
-E void init_servers(void);
 
 #endif

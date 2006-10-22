@@ -1,3 +1,12 @@
+jilles      2006/10/22 21:22:33 UTC	(20061022-6899)
+  Log:
+  Remove redundant redeclarations.
+  
+
+  Changes:	Modified:
+  +0 -4		trunk/src/node.c (File Modified) 
+
+
 jilles      2006/10/22 21:12:42 UTC	(20061022-6897)
   Log:
   Make postgresql backend compile again.

@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 6895 2006-10-22 21:07:24Z jilles $
+ * $Id: account.h 6901 2006-10-22 21:33:00Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -227,7 +227,6 @@ E list_t svs_ignore_list;
 E list_t klnlist;
 E list_t soperlist;
 E dictionary_tree_t *mclist;
-E dictionary_tree_t *mulist;
 
 E svsignore_t *svsignore_find(user_t *user);
 E svsignore_t *svsignore_add(char *mask, char *reason);
@@ -249,15 +248,12 @@ E void soper_delete(soper_t *soper);
 E soper_t *soper_find(myuser_t *myuser);
 E soper_t *soper_find_named(char *name);
 
-E myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags);
-E void myuser_delete(myuser_t *mu);
-E myuser_t *myuser_find(const char *name);
-E myuser_t *myuser_find_ext(const char *name);
-E void myuser_notice(char *from, myuser_t *target, char *fmt, ...);
-
 E mychan_t *mychan_add(char *name);
 E void mychan_delete(char *name);
 E mychan_t *mychan_find(const char *name);
+E boolean_t mychan_isused(mychan_t *mc);
+E myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t minlevel, int maxtime);
+E myuser_t *mychan_pick_successor(mychan_t *mc);
 
 E chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, uint32_t level);
 E chanacs_t *chanacs_add_host(mychan_t *mychan, char *host, uint32_t level);
@@ -281,16 +277,20 @@ E void expire_check(void *arg);
 /* Check the database for (version) problems common to all backends */
 E void db_check(void);
 
+/* account.c */
+E dictionary_tree_t *mulist;
+
 E void init_accounts(void);
 
-/* openservices patch */
+E myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags);
+E void myuser_delete(myuser_t *mu);
+E myuser_t *myuser_find(const char *name);
+E myuser_t *myuser_find_ext(const char *name);
+E void myuser_notice(char *from, myuser_t *target, char *fmt, ...);
+
 E boolean_t myuser_access_verify(user_t *u, myuser_t *mu);
 E boolean_t myuser_access_add(myuser_t *mu, char *mask);
 E char *myuser_access_find(myuser_t *mu, char *mask);
 E void myuser_access_delete(myuser_t *mu, char *mask);
-
-E boolean_t mychan_isused(mychan_t *mc);
-E myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t minlevel, int maxtime);
-E myuser_t *mychan_pick_successor(mychan_t *mc);
 
 #endif

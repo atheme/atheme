@@ -4,7 +4,7 @@
  *
  * Data structures for channel information.
  *
- * $Id: channels.h 6845 2006-10-22 05:15:04Z nenolod $
+ * $Id: channels.h 6901 2006-10-22 21:33:00Z jilles $
  */
 
 #ifndef CHANNELS_H
@@ -123,8 +123,10 @@ E void check_modes(mychan_t *mychan, boolean_t sendnow);
 E char *flags_to_string(int32_t flags);
 E int32_t mode_to_flag(char c);
 
-/* node.c */
+/* channels.c */
 E dictionary_tree_t *chanlist;
+
+E void init_channels(void);
 
 E channel_t *channel_add(const char *name, uint32_t ts);
 E void channel_delete(const char *name);
@@ -138,7 +140,5 @@ E chanban_t *chanban_add(channel_t *chan, const char *mask, int type);
 E void chanban_delete(chanban_t *c);
 E chanban_t *chanban_find(channel_t *chan, const char *mask, int type);
 E void chanban_clear(channel_t *chan);
-
-E void init_channels(void);
 
 #endif

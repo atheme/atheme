@@ -4,7 +4,7 @@
  *
  * Data structures for connected clients.
  *
- * $Id: users.h 6859 2006-10-22 13:49:42Z jilles $
+ * $Id: users.h 6901 2006-10-22 21:33:00Z jilles $
  */
 
 #ifndef USERS_H
@@ -51,9 +51,11 @@ E boolean_t is_ircop(user_t *user);
 E boolean_t is_admin(user_t *user);
 E boolean_t is_internal_client(user_t *user);
 
-/* node.c */
+/* users.c */
 E dictionary_tree_t *userlist;
 E dictionary_tree_t *uidlist;
+
+E void init_users(void);
 
 E user_t *user_add(const char *nick, const char *user, const char *host, const char *vhost, const char *ip, const char *uid, const char *gecos, server_t *server, uint32_t ts);
 E void user_delete(user_t *u);
@@ -66,7 +68,5 @@ E void user_mode(user_t *user, char *modes);
 /* uid.c */
 E void init_uid(void);
 E char *uid_get(void);
-
-E void init_users(void);
 
 #endif
