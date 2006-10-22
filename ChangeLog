@@ -1,3 +1,14 @@
+jilles      2006/10/22 21:35:56 UTC	(20061022-6903)
+  Log:
+  We're assuming NULL pointers are zero anyway, so just
+  use memset instead of partially initializing the
+  sourceinfo causing a warning.
+  
+
+  Changes:	Modified:
+  +4 -2		trunk/src/parse.c (File Modified) 
+
+
 jilles      2006/10/22 21:33:00 UTC	(20061022-6901)
   Log:
   Reorder some declarations and update the comments
