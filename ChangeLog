@@ -1,3 +1,13 @@
+jilles      2006/10/22 13:49:42 UTC	(20061022-6859)
+  Log:
+  Add void user_changenick(user_t *u, const char *nick, uint32_t ts)
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/users.h (File Modified) 
+  +28 -0	trunk/src/users.c (File Modified) 
+
+
 jilles      2006/10/22 13:45:09 UTC	(20061022-6857)
   Log:
   user_add(): Make sure u->nick is initialized before calling

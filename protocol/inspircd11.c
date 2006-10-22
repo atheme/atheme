@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 6849 2006-10-22 06:00:10Z nenolod $
+ * $Id: inspircd11.c 6861 2006-10-22 14:08:20Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 6849 2006-10-22 06:00:10Z nenolod $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 6861 2006-10-22 14:08:20Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -684,14 +684,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
-		/* remove the current one from the list */
-		dictionary_delete(userlist, si->su->nick);
-
-		/* change the nick */
-		strlcpy(si->su->nick, parv[0], NICKLEN);
-
-		/* readd with new nick (so the hash works) */
-		dictionary_add(userlist, si->su->nick, si->su);
+		/* No TS here for some reason, hmm */
+		user_changenick(si->su, parv[0], si->su->ts);
 
 		/* It could happen that our PING arrived late and the
 		 * server didn't acknowledge EOB yet even though it is

@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for solidircd.
  *
- * $Id: solidircd.c 6849 2006-10-22 06:00:10Z nenolod $
+ * $Id: solidircd.c 6861 2006-10-22 14:08:20Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/solidircd.h"
 
-DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 6849 2006-10-22 06:00:10Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 6861 2006-10-22 14:08:20Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -638,15 +638,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 			/* changed nick to registered one, reset +r */
 			sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, parv[0], time(NULL));
 
-		/* remove the current one from the list */
-		dictionary_delete(userlist, si->su->nick);
-
-		/* change the nick */
-		strlcpy(si->su->nick, parv[0], NICKLEN);
-		si->su->ts = atoi(parv[1]);
-
-		/* readd with new nick (so the hash works) */
-		dictionary_add(userlist, si->su->nick, si->su);
+		user_changenick(si->su, parv[0], atoi(parv[1]));
 
 		handle_nickchange(si->su);
 	}

@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 6849 2006-10-22 06:00:10Z nenolod $
+ * $Id: charybdis.c 6861 2006-10-22 14:08:20Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6849 2006-10-22 06:00:10Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6861 2006-10-22 14:08:20Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -887,15 +887,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
-		/* remove the current one from the list */
-		dictionary_delete(userlist, si->su->nick);
-
-		/* change the nick */
-		strlcpy(si->su->nick, parv[0], NICKLEN);
-		si->su->ts = atoi(parv[1]);
-
-		/* readd with new nick (so the hash works) */
-		dictionary_add(userlist, si->su->nick, si->su);
+		user_changenick(si->su, parv[0], atoi(parv[1]));
 
 		/* It could happen that our PING arrived late and the
 		 * server didn't acknowledge EOB yet even though it is
@@ -1230,15 +1222,7 @@ static void m_signon(sourceinfo_t *si, int parc, char *parv[])
 		return;
 
 	/* NICK */
-	/* remove the current one from the list */
-	dictionary_delete(userlist, u->nick);
-
-	/* change the nick */
-	strlcpy(u->nick, parv[0], NICKLEN);
-	u->ts = atoi(parv[3]);
-
-	/* readd with new nick (so the hash works) */
-	dictionary_add(userlist, u->nick, u);
+	user_changenick(u, parv[0], atoi(parv[3]));
 
 	handle_nickchange(u); /* If they're logging out, this will bug them about identifying. Or something. */
 
