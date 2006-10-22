@@ -8,6 +8,7 @@ The answer is in the form <nick> ACC <digit>:
     1 - account exists but user is not logged in
     2 - user is not logged in but recognized (see ACCESS)
     3 - user is logged in
+
 If the account is omitted the user's nick is used.
 Account * means the account the user is logged in with.
 

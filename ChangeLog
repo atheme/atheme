@@ -1,3 +1,16 @@
+jilles      2006/10/22 16:29:18 UTC	(20061022-6887)
+  Log:
+  nickserv acc:
+  - Support identify as in a somewhat better way
+  - Support nickname access lists
+  - Add help file
+  
+
+  Changes:	Modified:
+  +20 -0	trunk/help/nickserv/acc (File Added) 
+  +24 -10	trunk/modules/nickserv/status.c (File Modified) 
+
+
 jilles      2006/10/22 15:57:32 UTC	(20061022-6885)
   Log:
   nickserv access: make ...@*/... restriction work
