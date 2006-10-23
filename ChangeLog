@@ -1,3 +1,12 @@
+jilles      2006/10/23 00:23:32 UTC	(20061023-6911)
+  Log:
+  chanserv why: require +A channel access or oper override (chan:auspex).
+  
+
+  Changes:	Modified:
+  +16 -1	trunk/modules/chanserv/why.c (File Modified) 
+
+
 jilles      2006/10/22 23:47:13 UTC	(20061022-6909)
   Log:
   Update the release notes.
