@@ -1,3 +1,13 @@
+jilles      2006/10/23 00:32:54 UTC	(20061023-6913)
+  Log:
+  Rename doc/XMLRPC to doc/XMLRPCLIB.
+  
+
+  Changes:	Modified:
+  +96 -96	trunk/doc/XMLRPC (File Deleted) 
+  + -		trunk/doc/XMLRPCLIB (File Added) 
+
+
 jilles      2006/10/23 00:23:32 UTC	(20061023-6911)
   Log:
   chanserv why: require +A channel access or oper override (chan:auspex).

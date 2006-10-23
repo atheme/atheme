@@ -1,0 +1,119 @@
+Atheme XMLRPC interface
+-----------------------
+
+The modules/xmlrpc/* modules provide an XMLRPC interface to Atheme.
+
+Atheme does not use HTTP authentication, instead using its own system with
+authentication cookies.
+
+All parameters are strings.
+
+Methods from modules/xmlrpc/main:
+
+/*
+ * atheme.login
+ *
+ * XML Inputs:
+ *       account name, password, source ip (optional)
+ *
+ * XML Outputs:
+ *       fault 1 - insufficient parameters
+ *       fault 3 - account is not registered
+ *       fault 5 - invalid username and password
+ *       fault 6 - account is frozen
+ *       default - success (authcookie)
+ *
+ * Side Effects:
+ *       an authcookie ticket is created for the myuser_t.
+ *       the user's lastlogin is updated
+ */
+
+Source ip is logged with the request, it does not need to be an IP address.
+
+For web interfaces, the resulting authcookie can be stored in a HTTP cookie,
+avoiding password storage.
+
+The authcookie will be valid for one hour or until Atheme shuts down.
+
+/*
+ * atheme.logout
+ *
+ * XML inputs:
+ *       authcookie, and account name.
+ *
+ * XML outputs:
+ *       fault 1 - insufficient parameters
+ *       fault 3 - unknown user
+ *       fault 5 - validation failed
+ *       default - success message
+ *
+ * Side Effects:
+ *       an authcookie ticket is destroyed.
+ */
+
+/*
+ * atheme.command
+ *
+ * XML inputs:
+ *       authcookie, account name, source ip, service name, command name,
+ *       parameters.
+ *
+ * XML outputs:
+ *       depends on command
+ *
+ * Side Effects:
+ *       command is executed
+ */
+
+Authcookie and account name specify authentication for the command; authcookie
+can be specified as '.' to execute a command without a login.
+Source ip is logged with the request, it does not need to be an IP address.
+Service name is the nick of the service.
+Command name is the command to be executed. Subcommand names are parameters.
+Parameters are specified in the same order as on IRC with mostly one distinct
+entity per parameter. Exceptions to this are for example operserv akill (two
+parameters), operserv rwatch (one parameter) and nickserv set property (two
+parameters in all cases).
+
+Failed commands return an appropriate fault code with the first descriptive
+string that would be returned on IRC. Most successful commands return all
+descriptive text that would be returned on IRC; some, such as chanserv getkey,
+return only a result string.
+
+For experimenting with parameters and results you can use contrib/os_testcmd.
+Usage is /os testcmd <servicename> <commandname> [parameters] where the
+parameters are separated with semicolons.
+
+For an example see contrib/perlxmlrpc.pl.
+
+Other methods:
+
+See the source code, modules/xmlrpc/*.c.
+
+Fault codes:
+
+1 : fault_needmoreparams. Not enough parameters
+2 : fault_badparams. Parameters invalid somehow
+3 : fault_nosuch_source. Source account does not exist
+4 : fault_nosuch_target. Target does not exist
+5 : fault_authfail. Bad password or authcookie
+6 : fault_noprivs. Permission denied (various, but not bad password/authcookie)
+7 : fault_nosuch_key. Requested element on target does not exist
+8 : fault_alreadyexists. Something conflicting already exists
+9 : fault_toomany. Too many of something
+10 : fault_emailfail. Sending email failed
+11 : fault_notverified. Account not verified
+12 : fault_nochange. Object is already in requested state
+13 : fault_already_authed. Already logged in
+14 : fault_unimplemented. Function not implemented
+
+Negative fault codes are from the XMLRPC library, see also doc/XMLRPCLIB:
+-1 : xmlrpc_process() was passed a NULL buffer
+-2 : xmlrpc_parse() returned NULL, likely not a XML document
+-3 : xmlrpc_method() returned NULL, likely XML document did not contain <methodname>
+-4 : findXMLRPCCommand() returned NULL, able to find the method
+-6 : method has no registered function
+-7 : function returned XMLRPC_STOP
+-8 : xmlrpc_set_buffer() was passed a NULL variable
+
+$Id: XMLRPC 6915 2006-10-23 08:48:20Z jilles $
