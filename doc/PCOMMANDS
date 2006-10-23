@@ -21,6 +21,7 @@ information. The following letters are recognized:
 	B (general:auspex) Shows hash statistics.
 	C (general:auspex) Shows uplink blocks.
 	E (general:auspex) Shows events.
+	F (general:auspex) Shows open connections.
 	K (operserv:akill) Shows akills.
 	O (general:viewprivs) Shows operator blocks.
 	T (general:auspex) Shows various counts.
@@ -47,4 +48,4 @@ services and no channel information is shown. It is assumed that networks
 that want to hide which server users are on do not allow remote whois other
 than /whois <nick> <nick>.
 
-$Id: PCOMMANDS 6153 2006-08-19 21:46:12Z jilles $
+$Id: PCOMMANDS 6919 2006-10-23 09:18:14Z jilles $
