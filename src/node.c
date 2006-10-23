@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6899 2006-10-22 21:22:33Z jilles $
+ * $Id: node.c 6923 2006-10-23 15:53:31Z jilles $
  */
 
 #include "atheme.h"
@@ -13,13 +13,11 @@
 
 list_t operclasslist;
 list_t soperlist;
-list_t uplinks;
 list_t klnlist;
 dictionary_tree_t *mclist;
 
 static BlockHeap *operclass_heap;
 static BlockHeap *soper_heap;
-static BlockHeap *uplink_heap;
 
 static BlockHeap *kline_heap;	/* 16 */
 static BlockHeap *mychan_heap;	/* HEAP_CHANNEL */
@@ -34,13 +32,12 @@ void init_nodes(void)
 {
 	operclass_heap = BlockHeapCreate(sizeof(operclass_t), 2);
 	soper_heap = BlockHeapCreate(sizeof(soper_t), 2);
-	uplink_heap = BlockHeapCreate(sizeof(uplink_t), 4);
 	metadata_heap = BlockHeapCreate(sizeof(metadata_t), HEAP_CHANUSER);
 	kline_heap = BlockHeapCreate(sizeof(kline_t), 16);
 	mychan_heap = BlockHeapCreate(sizeof(mychan_t), HEAP_CHANNEL);
 	chanacs_heap = BlockHeapCreate(sizeof(chanacs_t), HEAP_CHANUSER);
 
-	if (!soper_heap || !uplink_heap || !metadata_heap || !kline_heap || !mychan_heap || !chanacs_heap)
+	if (!soper_heap || !metadata_heap || !kline_heap || !mychan_heap || !chanacs_heap)
 	{
 		slog(LG_INFO, "init_nodes(): block allocator failed.");
 		exit(EXIT_FAILURE);
@@ -48,6 +45,7 @@ void init_nodes(void)
 
 	mclist = dictionary_create("mychan", HASH_CHANNEL, irccasecmp);
 
+	init_uplinks();
 	init_servers();
 	init_accounts();
 	init_users();
@@ -107,85 +105,6 @@ void remove_illegals()
 		if (u->flags & UPF_ILLEGAL && u != curr_uplink)
 			uplink_delete(u);
 	}
-}
-
-/*****************
- * U P L I N K S *
- *****************/
-
-uplink_t *uplink_add(char *name, char *host, char *password, char *vhost, int port)
-{
-	uplink_t *u;
-	node_t *n;
-
-	slog(LG_DEBUG, "uplink_add(): %s -> %s:%d", me.name, name, port);
-
-	if ((u = uplink_find(name)))
-	{
-		if (u->flags & UPF_ILLEGAL)
-		{
-			u->flags &= ~UPF_ILLEGAL;
-			free(u->name);
-			free(u->host);
-			free(u->pass);
-			free(u->vhost);
-		}
-		else
-		{
-			slog(LG_INFO, "Duplicate uplink %s.", name);
-			return NULL;
-		}
-	}
-	else
-	{
-		u = BlockHeapAlloc(uplink_heap);
-		n = node_create();
-		u->node = n;
-		node_add(u, n, &uplinks);
-		cnt.uplink++;
-	}
-
-	u->name = sstrdup(name);
-	u->host = sstrdup(host);
-	u->pass = sstrdup(password);
-	if (vhost)
-		u->vhost = sstrdup(vhost);
-	else
-		u->vhost = sstrdup("0.0.0.0");
-	u->port = port;
-
-	return u;
-}
-
-void uplink_delete(uplink_t * u)
-{
-	node_t *n = node_find(u, &uplinks);
-
-	free(u->name);
-	free(u->host);
-	free(u->pass);
-	free(u->vhost);
-
-	node_del(n, &uplinks);
-	node_free(n);
-
-	BlockHeapFree(uplink_heap, u);
-	cnt.uplink--;
-}
-
-uplink_t *uplink_find(char *name)
-{
-	node_t *n;
-
-	LIST_FOREACH(n, uplinks.head)
-	{
-		uplink_t *u = n->data;
-
-		if (!strcasecmp(u->name, name))
-			return u;
-	}
-
-	return NULL;
 }
 
 /*************************

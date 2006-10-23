@@ -4,15 +4,103 @@
  *
  * Uplink management stuff.
  *
- * $Id: uplink.c 6373 2006-09-13 15:56:58Z jilles $
+ * $Id: uplink.c 6923 2006-10-23 15:53:31Z jilles $
  */
 
 #include "atheme.h"
 #include "uplink.h"
 
+list_t uplinks;
 uplink_t *curr_uplink;
 
+static BlockHeap *uplink_heap;
+
 static void uplink_close(connection_t *cptr);
+
+void init_uplinks(void)
+{
+	uplink_heap = BlockHeapCreate(sizeof(uplink_t), 4);
+	if (!uplink_heap)
+	{
+		slog(LG_INFO, "init_uplinks(): block allocator failed.");
+		exit(EXIT_FAILURE);
+	}
+}
+
+uplink_t *uplink_add(char *name, char *host, char *password, char *vhost, int port)
+{
+	uplink_t *u;
+	node_t *n;
+
+	slog(LG_DEBUG, "uplink_add(): %s -> %s:%d", me.name, name, port);
+
+	if ((u = uplink_find(name)))
+	{
+		if (u->flags & UPF_ILLEGAL)
+		{
+			u->flags &= ~UPF_ILLEGAL;
+			free(u->name);
+			free(u->host);
+			free(u->pass);
+			free(u->vhost);
+		}
+		else
+		{
+			slog(LG_INFO, "Duplicate uplink %s.", name);
+			return NULL;
+		}
+	}
+	else
+	{
+		u = BlockHeapAlloc(uplink_heap);
+		n = node_create();
+		u->node = n;
+		node_add(u, n, &uplinks);
+		cnt.uplink++;
+	}
+
+	u->name = sstrdup(name);
+	u->host = sstrdup(host);
+	u->pass = sstrdup(password);
+	if (vhost)
+		u->vhost = sstrdup(vhost);
+	else
+		u->vhost = sstrdup("0.0.0.0");
+	u->port = port;
+
+	return u;
+}
+
+void uplink_delete(uplink_t * u)
+{
+	node_t *n = node_find(u, &uplinks);
+
+	free(u->name);
+	free(u->host);
+	free(u->pass);
+	free(u->vhost);
+
+	node_del(n, &uplinks);
+	node_free(n);
+
+	BlockHeapFree(uplink_heap, u);
+	cnt.uplink--;
+}
+
+uplink_t *uplink_find(char *name)
+{
+	node_t *n;
+
+	LIST_FOREACH(n, uplinks.head)
+	{
+		uplink_t *u = n->data;
+
+		if (!strcasecmp(u->name, name))
+			return u;
+	}
+
+	return NULL;
+}
 
 void uplink_connect(void)
 {

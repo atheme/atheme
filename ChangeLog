@@ -1,3 +1,13 @@
+jilles      2006/10/23 10:26:24 UTC	(20061023-6921)
+  Log:
+  charybdis: on a new connection, start without EUID unless
+  that connection sent a CAPAB with EUID
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/protocol/charybdis.c (File Modified) 
+
+
 jilles      2006/10/23 09:18:14 UTC	(20061023-6919)
   Log:
   doc/PCOMMANDS: mention /stats F
