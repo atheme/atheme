@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ MYACCESS function.
  *
- * $Id: why.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: why.c 6911 2006-10-23 00:23:32Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/why", FALSE, _modinit, _moddeinit,
-	"$Id: why.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: why.c 6911 2006-10-23 00:23:32Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -49,6 +49,7 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 	myuser_t *mu;
 	node_t *n;
 	chanacs_t *ca;
+	int operoverride = 0;
 
 	if (!chan || !targ)
 	{
@@ -76,7 +77,16 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	
-	logcommand(si, CMDLOG_GET, "%s WHY %s!%s@%s", mc->name, u->nick, u->user, u->vhost);
+	if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
+	{
+		if (has_priv(si, PRIV_CHAN_AUSPEX))
+			operoverride = 1;
+		else
+		{
+			command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+			return;
+		}
+	}
 
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
@@ -90,6 +100,11 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 			targ);
 		return;
 	}
+
+	if (operoverride)
+		logcommand(si, CMDLOG_ADMIN, "%s WHY %s!%s@%s (oper override)", mc->name, u->nick, u->user, u->vhost);
+	else
+		logcommand(si, CMDLOG_GET, "%s WHY %s!%s@%s", mc->name, u->nick, u->user, u->vhost);
 
 	snprintf(host, BUFSIZE, "%s!%s@%s", u->nick, u->user, u->vhost);
 
