@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 6861 2006-10-22 14:08:20Z jilles $
+ * $Id: charybdis.c 6921 2006-10-23 10:26:24Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6861 2006-10-22 14:08:20Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6921 2006-10-23 10:26:24Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -1275,6 +1275,7 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *p;
 
+	use_euid = FALSE;
 	use_rserv_support = FALSE;
 	use_tb = FALSE;
 	for (p = strtok(parv[0], " "); p != NULL; p = strtok(NULL, " "))
