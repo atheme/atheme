@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Socketengine implementing select().
  *
- * $Id: select.c 6375 2006-09-13 16:08:25Z jilles $
+ * $Id: select.c 6929 2006-10-24 15:30:53Z jilles $
  */
 
 #include <org.atheme.claro.base>

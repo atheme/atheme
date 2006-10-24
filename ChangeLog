@@ -1,3 +1,34 @@
+jilles      2006/10/24 15:22:05 UTC	(20061024-6927)
+  Log:
+  operserv:
+  - update copyright years to 2006 (sourceinfo changes, etc)
+  - remove E. Will copyright from files that contain hardly
+    or none shrike code anymore
+  - otherwise fix some header comments
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/operserv/akill.c (File Modified) 
+  +2 -1		trunk/modules/operserv/help.c (File Modified) 
+  +1 -1		trunk/modules/operserv/ignore.c (File Modified) 
+  +2 -1		trunk/modules/operserv/inject.c (File Modified) 
+  +1 -1		trunk/modules/operserv/jupe.c (File Modified) 
+  +1 -1		trunk/modules/operserv/main.c (File Modified) 
+  +1 -1		trunk/modules/operserv/mode.c (File Modified) 
+  +1 -1		trunk/modules/operserv/modinspect.c (File Modified) 
+  +1 -1		trunk/modules/operserv/modlist.c (File Modified) 
+  +1 -1		trunk/modules/operserv/modload.c (File Modified) 
+  +2 -2		trunk/modules/operserv/modrestart.c (File Modified) 
+  +2 -2		trunk/modules/operserv/modunload.c (File Modified) 
+  +1 -1		trunk/modules/operserv/noop.c (File Modified) 
+  +1 -1		trunk/modules/operserv/raw.c (File Modified) 
+  +1 -1		trunk/modules/operserv/rehash.c (File Modified) 
+  +1 -1		trunk/modules/operserv/restart.c (File Modified) 
+  +2 -2		trunk/modules/operserv/shutdown.c (File Modified) 
+  +1 -1		trunk/modules/operserv/update.c (File Modified) 
+  +1 -1		trunk/modules/operserv/uptime.c (File Modified) 
+
+
 jilles      2006/10/24 15:15:37 UTC	(20061024-6925)
   Log:
   operserv raw help file: more appropriate example

@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * A hook system. Idea taken from hybrid.
  *
- * $Id: hook.c 6683 2006-10-14 14:47:13Z jilles $
+ * $Id: hook.c 6929 2006-10-24 15:30:53Z jilles $
  */
 
 #include <org.atheme.claro.base>
