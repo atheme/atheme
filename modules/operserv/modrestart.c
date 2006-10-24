@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 William Pitcock, et al.
+ * Copyright (c) 2005-2006 William Pitcock, et al.
  * Rights to this code are as documented in doc/LICENSE.
  *
- * Module listing.
+ * Module restart.
  *
- * $Id: modrestart.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: modrestart.c 6927 2006-10-24 15:22:05Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modrestart", TRUE, _modinit, _moddeinit,
-	"$Id: modrestart.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: modrestart.c 6927 2006-10-24 15:22:05Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

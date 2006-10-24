@@ -1,10 +1,11 @@
 /*
  * Copyright (c) 2003-2004 E. Will et al.
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
- * This file contains functionality which implements the OService RAW command.
+ * This file contains functionality which implements the OService INJECT command.
  *
- * $Id: inject.c 6547 2006-09-29 16:39:38Z jilles $
+ * $Id: inject.c 6927 2006-10-24 15:22:05Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/inject", FALSE, _modinit, _moddeinit,
-	"$Id: inject.c 6547 2006-09-29 16:39:38Z jilles $",
+	"$Id: inject.c 6927 2006-10-24 15:22:05Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

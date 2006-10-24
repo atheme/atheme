@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 William Pitcock, et al.
+ * Copyright (c) 2005-2006 William Pitcock, et al.
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains functionality which implements the OService MODE command.
  *
- * $Id: mode.c 6657 2006-10-04 21:22:47Z jilles $
+ * $Id: mode.c 6927 2006-10-24 15:22:05Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/mode", FALSE, _modinit, _moddeinit,
-	"$Id: mode.c 6657 2006-10-04 21:22:47Z jilles $",
+	"$Id: mode.c 6927 2006-10-24 15:22:05Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

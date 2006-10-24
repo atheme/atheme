@@ -1,3 +1,12 @@
+jilles      2006/10/24 15:15:37 UTC	(20061024-6925)
+  Log:
+  operserv raw help file: more appropriate example
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/help/oservice/raw (File Modified) 
+
+
 jilles      2006/10/23 15:53:31 UTC	(20061023-6923)
   Log:
   Move uplink_add(), uplink_delete() and related stuff

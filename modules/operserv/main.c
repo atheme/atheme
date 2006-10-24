@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6657 2006-10-04 21:22:47Z jilles $
+ * $Id: main.c 6927 2006-10-24 15:22:05Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6657 2006-10-04 21:22:47Z jilles $",
+	"$Id: main.c 6927 2006-10-24 15:22:05Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

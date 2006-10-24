@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2006 Patrick Fish
+ * Copyright (c) 2006 Patrick Fish, et al
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains functionality which implements the OService IGNORE command.
  *
- * $Id: ignore.c 6791 2006-10-21 16:59:20Z jilles $
+ * $Id: ignore.c 6927 2006-10-24 15:22:05Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 6791 2006-10-21 16:59:20Z jilles $",
+	"$Id: ignore.c 6927 2006-10-24 15:22:05Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

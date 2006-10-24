@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2003-2004 E. Will et al.
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains functionality which implements the OService UPDATE command.
  *
- * $Id: update.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: update.c 6927 2006-10-24 15:22:05Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/update", FALSE, _modinit, _moddeinit,
-	"$Id: update.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: update.c 6927 2006-10-24 15:22:05Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
