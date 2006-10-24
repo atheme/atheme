@@ -8,4 +8,4 @@ doing.
 Syntax: RAW <parameters>
 
 Example:
-    /msg &nick& RAW :&nick& JOIN #test
+    /msg &nick& RAW :&nick& OPERWALL :My admin is a loser

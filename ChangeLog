@@ -1,3 +1,15 @@
+jilles      2006/10/23 15:53:31 UTC	(20061023-6923)
+  Log:
+  Move uplink_add(), uplink_delete() and related stuff
+  from node.c to uplink.c.
+  
+
+  Changes:	Modified:
+  +4 -2		trunk/include/uplink.h (File Modified) 
+  +2 -83	trunk/src/node.c (File Modified) 
+  +88 -0	trunk/src/uplink.c (File Modified) 
+
+
 jilles      2006/10/23 10:26:24 UTC	(20061023-6921)
   Log:
   charybdis: on a new connection, start without EUID unless
