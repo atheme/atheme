@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Protocol handling stuff.
  *
- * $Id: pmodule.c 6795 2006-10-21 18:37:52Z jilles $
+ * $Id: pmodule.c 6931 2006-10-24 16:53:07Z jilles $
  */
 
 #include "atheme.h"

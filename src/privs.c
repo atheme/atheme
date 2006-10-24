@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 Jilles Tjoelker, et al
+ * Copyright (c) 2005-2006 Jilles Tjoelker, et al
  * privs.c: Fine grained services operator privileges
  *
  * See doc/LICENSE for licensing information.
  *
- * $Id: privs.c 6617 2006-10-01 22:11:49Z jilles $
+ * $Id: privs.c 6931 2006-10-24 16:53:07Z jilles $
  */
 
 #include "atheme.h"

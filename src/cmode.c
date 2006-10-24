@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 6827 2006-10-22 00:29:50Z jilles $
+ * $Id: cmode.c 6931 2006-10-24 16:53:07Z jilles $
  */
 
 #include "atheme.h"

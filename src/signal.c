@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains the signal handling routines.
  *
- * $Id: signal.c 6071 2006-08-16 14:58:16Z jilles $
+ * $Id: signal.c 6931 2006-10-24 16:53:07Z jilles $
  */
 
 #include "atheme.h"

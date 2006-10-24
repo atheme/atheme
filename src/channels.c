@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2006 Atheme developers.
+ * Copyright (c) 2005-2006 Atheme developers.
  * Rights to this code are documented in doc/LICENSE.
  *
  * Channel stuff.
  *
- * $Id: channels.c 6845 2006-10-22 05:15:04Z nenolod $
+ * $Id: channels.c 6931 2006-10-24 16:53:07Z jilles $
  */
 
 #include "atheme.h"

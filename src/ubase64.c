@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Undernet base64 routine.
  *
- * $Id: ubase64.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: ubase64.c 6931 2006-10-24 16:53:07Z jilles $
  */
 
 #include "atheme.h"

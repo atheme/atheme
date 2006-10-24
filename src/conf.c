@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 6883 2006-10-22 15:46:09Z jilles $
+ * $Id: conf.c 6931 2006-10-24 16:53:07Z jilles $
  */
 
 #include "atheme.h"

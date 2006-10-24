@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2006 Atheme developers
+ * Copyright (c) 2005-2006 Atheme developers
  * Rights to this code are as documented in doc/LICENSE.
  *
  * User management functions.
  *
- * $Id: users.c 6859 2006-10-22 13:49:42Z jilles $
+ * $Id: users.c 6931 2006-10-24 16:53:07Z jilles $
  */
 
 #include "atheme.h"

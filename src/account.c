@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2006 Atheme developers
+ * Copyright (c) 2005-2006 Atheme developers
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Account-related functions.
  *
- * $Id: account.c 6895 2006-10-22 21:07:24Z jilles $
+ * $Id: account.c 6931 2006-10-24 16:53:07Z jilles $
  */
 
 #include "atheme.h"

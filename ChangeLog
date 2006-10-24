@@ -1,3 +1,17 @@
+jilles      2006/10/24 15:30:53 UTC	(20061024-6929)
+  Log:
+  libatheme: update copyright years
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/libatheme/connection.c (File Modified) 
+  +1 -1		trunk/libatheme/datastream.c (File Modified) 
+  +1 -1		trunk/libatheme/dlink.c (File Modified) 
+  +1 -1		trunk/libatheme/hook.c (File Modified) 
+  +1 -1		trunk/libatheme/poll.c (File Modified) 
+  +1 -1		trunk/libatheme/select.c (File Modified) 
+
+
 jilles      2006/10/24 15:22:05 UTC	(20061024-6927)
   Log:
   operserv:

@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains misc routines.
  *
- * $Id: function.c 6669 2006-10-06 00:13:15Z jilles $
+ * $Id: function.c 6931 2006-10-24 16:53:07Z jilles $
  */
 
 #include "atheme.h"

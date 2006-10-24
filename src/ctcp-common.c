@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005, 2006 Atheme Development Group
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains IRC interaction routines.
  *
- * $Id: ctcp-common.c 6365 2006-09-12 23:59:27Z jilles $
+ * $Id: ctcp-common.c 6931 2006-10-24 16:53:07Z jilles $
  */
 
 #include "atheme.h"

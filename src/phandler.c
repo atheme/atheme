@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2006 Atheme Development Group
  * The rights to this code are as documented in doc/LICENSE.
  *
  * Generic protocol event handlers.
  *
- * $Id: phandler.c 6515 2006-09-27 17:13:42Z jilles $
+ * $Id: phandler.c 6931 2006-10-24 16:53:07Z jilles $
  */
 
 #include "atheme.h"

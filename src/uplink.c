@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Uplink management stuff.
  *
- * $Id: uplink.c 6923 2006-10-23 15:53:31Z jilles $
+ * $Id: uplink.c 6931 2006-10-24 16:53:07Z jilles $
  */
 
 #include "atheme.h"

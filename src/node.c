@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6923 2006-10-23 15:53:31Z jilles $
+ * $Id: node.c 6931 2006-10-24 16:53:07Z jilles $
  */
 
 #include "atheme.h"

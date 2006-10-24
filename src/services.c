@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 6791 2006-10-21 16:59:20Z jilles $
+ * $Id: services.c 6931 2006-10-24 16:53:07Z jilles $
  */
 
 #include "atheme.h"

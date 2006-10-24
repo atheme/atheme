@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains a generic help system implementation.
  *
- * $Id: help.c 6595 2006-10-01 19:12:28Z jilles $
+ * $Id: help.c 6931 2006-10-24 16:53:07Z jilles $
  */
 
 #include "atheme.h"

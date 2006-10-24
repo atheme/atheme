@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2006 Atheme developers
+ * Copyright (c) 2005-2006 Atheme developers
  * Rights to this code are documented in doc/LICENSE.
  *
  * Server stuff.
  *
- * $Id: servers.c 6841 2006-10-22 04:29:25Z nenolod $
+ * $Id: servers.c 6931 2006-10-24 16:53:07Z jilles $
  */
 
 #include "atheme.h"

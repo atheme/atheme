@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Module management.
  *
- * $Id: module.c 6211 2006-08-21 15:05:22Z jilles $
+ * $Id: module.c 6931 2006-10-24 16:53:07Z jilles $
  */
 
 #include "atheme.h"
