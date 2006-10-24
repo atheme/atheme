@@ -4,7 +4,7 @@
  *
  * Channel stuff.
  *
- * $Id: channels.c 6931 2006-10-24 16:53:07Z jilles $
+ * $Id: channels.c 6933 2006-10-24 22:03:31Z jilles $
  */
 
 #include "atheme.h"
@@ -58,7 +58,9 @@ void init_channels(void)
  *     - on failure, NULL
  *
  * Side Effects:
- *     - the channel is automatically inserted into the channel DTree.
+ *     - the channel is automatically inserted into the channel DTree
+ *     - channel_add hook is called
+ *     - all services are joined if this is the snoop channel
  */
 channel_t *channel_add(const char *name, uint32_t ts)
 {
@@ -111,7 +113,7 @@ channel_t *channel_add(const char *name, uint32_t ts)
 /*
  * channel_delete(const char *name)
  *
- * Destroys a channel object and it's children member objects.
+ * Destroys a channel object and its children member objects.
  *
  * Inputs:
  *     - name of channel object to find and destroy
@@ -120,7 +122,9 @@ channel_t *channel_add(const char *name, uint32_t ts)
  *     - nothing
  *
  * Side Effects:
- *     - a channel and it's members are recursively destroyed
+ *     - channel_delete hook is called
+ *     - a channel and its members are recursively destroyed
+ *     - no protocol messages are sent for any remaining members
  */
 void channel_delete(const char *name)
 {
@@ -198,7 +202,7 @@ channel_t *channel_find(const char *name)
  * Inputs:
  *     - channel that the ban belongs to
  *     - banmask
- *     - type of ban
+ *     - type of ban, e.g. 'b' or 'e'
  *
  * Outputs:
  *     - on success, a new channel ban object
@@ -312,6 +316,7 @@ chanban_t *chanban_find(channel_t *chan, const char *mask, int type)
  *
  * Side Effects:
  *     - the banlist on the channel is cleared
+ *     - no protocol messages are sent
  */
 void chanban_clear(channel_t *chan)
 {
@@ -325,6 +330,25 @@ void chanban_clear(channel_t *chan)
 }
 
 /*
+ * chanuser_add(channel_t *chan, const char *nick)
+ *
+ * Channel user factory.
+ *
+ * Inputs:
+ *     - channel that the user should belong to
+ *     - nick/UID with any appropriate prefixes (e.g. ~, &, @, %, +)
+ *       (if the user has a UID it must be used)
+ *
+ * Outputs:
+ *     - on success, a new channel user object
+ *     - on failure (NULL channel, or user kicked by channel_join hook), NULL
+ *
+ * Side Effects:
+ *     - the channel user object is automatically associated to its parents
+ *     - channel_join hook is called
+ */
+
+/*
  * Rewritten 06/23/05 by nenolod:
  *
  * Iterate through the list of prefix characters we know about.
@@ -335,23 +359,6 @@ void chanban_clear(channel_t *chan)
  * privileges. Otherwise we have a very inefficient way of doing
  * things. It worked fine for shrike, but the old code was restricted
  * to handling only @, @+ and + as prefixes.
- */
-
-/*
- * chanuser_add(channel_t *chan, const char *nick)
- *
- * Channel user factory.
- *
- * Inputs:
- *     - channel that the user should belong to
- *     - nick with any appropriate prefixes (e.g. ~, &, @, %, +)
- *
- * Outputs:
- *     - on success, a new channel user object
- *     - on failure, NULL
- *
- * Side Effects:
- *     - the channel user object is automatically associated to it's parent.
  */
 chanuser_t *chanuser_add(channel_t *chan, const char *nick)
 {
@@ -441,8 +448,12 @@ chanuser_t *chanuser_add(channel_t *chan, const char *nick)
  *     - nothing
  *
  * Side Effects:
- *     - on success, a channel user object is removed from the
+ *     if the user is on the channel:
+ *     - a channel user object is removed from the
  *       channel's userlist and the user's channellist.
+ *     - channel_part hook is called
+ *     - if this empties the channel and the channel is not set permanent
+ *       (ircd->perm_mode), channel_delete() is called (q.v.)
  */
 void chanuser_delete(channel_t *chan, user_t *user)
 {

@@ -1,3 +1,35 @@
+jilles      2006/10/24 16:53:07 UTC	(20061024-6931)
+  Log:
+  src: update copyright years
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/account.c (File Modified) 
+  +1 -1		trunk/src/channels.c (File Modified) 
+  +1 -1		trunk/src/cmode.c (File Modified) 
+  +1 -1		trunk/src/commandtree.c (File Modified) 
+  +1 -1		trunk/src/conf.c (File Modified) 
+  +1 -1		trunk/src/ctcp-common.c (File Modified) 
+  +1 -1		trunk/src/function.c (File Modified) 
+  +1 -1		trunk/src/help.c (File Modified) 
+  +1 -1		trunk/src/match.c (File Modified) 
+  +1 -1		trunk/src/module.c (File Modified) 
+  +1 -1		trunk/src/node.c (File Modified) 
+  +1 -1		trunk/src/packet.c (File Modified) 
+  +1 -1		trunk/src/parse.c (File Modified) 
+  +1 -1		trunk/src/phandler.c (File Modified) 
+  +1 -1		trunk/src/pmodule.c (File Modified) 
+  +1 -1		trunk/src/privs.c (File Modified) 
+  +1 -1		trunk/src/ptasks.c (File Modified) 
+  +1 -1		trunk/src/send.c (File Modified) 
+  +1 -1		trunk/src/servers.c (File Modified) 
+  +1 -1		trunk/src/services.c (File Modified) 
+  +1 -1		trunk/src/signal.c (File Modified) 
+  +1 -1		trunk/src/ubase64.c (File Modified) 
+  +1 -1		trunk/src/uplink.c (File Modified) 
+  +1 -1		trunk/src/users.c (File Modified) 
+
+
 jilles      2006/10/24 15:30:53 UTC	(20061024-6929)
   Log:
   libatheme: update copyright years
