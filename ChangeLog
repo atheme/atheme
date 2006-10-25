@@ -1,3 +1,12 @@
+jilles      2006/10/25 15:44:02 UTC	(20061025-6937)
+  Log:
+  doc/RELEASE: mention that many comments were added to the code
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/doc/RELEASE (File Modified) 
+
+
 jilles      2006/10/25 00:43:03 UTC	(20061025-6935)
   Log:
   chanserv clear users: don't chanuser_delete() after kick(),

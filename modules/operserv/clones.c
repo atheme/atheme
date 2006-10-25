@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing clone detection.
  *
- * $Id: clones.c 6849 2006-10-22 06:00:10Z nenolod $
+ * $Id: clones.c 6939 2006-10-25 16:38:04Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 6849 2006-10-22 06:00:10Z nenolod $",
+	"$Id: clones.c 6939 2006-10-25 16:38:04Z w00t $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -229,7 +229,7 @@ static int is_exempt(const char *ip)
 		cexcept_t *c = n->data;
 
 		if (!strcmp(ip, c->ip))
-			return 1;
+			return c->clones;
 	}
 
 	return 0;
@@ -307,6 +307,7 @@ static void os_cmd_clones_list(sourceinfo_t *si, int parc, char *parv[])
 	hostentry_t *he;
 	int32_t k = 0;
 	dictionary_iteration_state_t state;
+	int allowed = 0;
 
 	DICTIONARY_FOREACH(he, &state, hostlist)
 	{
@@ -314,8 +315,8 @@ static void os_cmd_clones_list(sourceinfo_t *si, int parc, char *parv[])
 
 		if (k > 3)
 		{
-			if (is_exempt(he->ip))
-				command_success_nodata(si, "%d from %s (\2EXEMPT\2)", k, he->ip);
+			if (allowed = is_exempt(he->ip))
+				command_success_nodata(si, "%d from %s (\2EXEMPT\2; allowed %d)", k, he->ip, allowed);
 			else
 				command_success_nodata(si, "%d from %s", k, he->ip);
 		}
@@ -418,6 +419,7 @@ static void clones_newuser(void *vptr)
 	int i;
 	user_t *u = vptr;
 	hostentry_t *he;
+	int allowed = 0;
 
 	/* User has no IP, ignore him */
 	if (is_internal_client(u) || *u->ip == '\0')
@@ -433,18 +435,23 @@ static void clones_newuser(void *vptr)
 	node_add(u, node_create(), &he->clients);
 	i = LIST_LENGTH(&he->clients);
 
-	if (i > 3 && !is_exempt(u->ip))
+	if (i > 3)
 	{
-		if (i < 6)
-			snoop("CLONES: %d clones on %s (%s!%s@%s)", i, u->ip, u->nick, u->user, u->host);
-		else if (!kline_enabled)
-			snoop("CLONES: %d clones on %s (%s!%s@%s) (TKLINE disabled)", i, u->ip, u->nick, u->user, u->host);
-		else
+		allowed = is_exempt(u->ip);
+
+		if (allowed == 0 || i > allowed)
 		{
-			snoop("CLONES: %d clones on %s (%s!%s@%s) (TKLINE due to excess clones)", i, u->ip, u->nick, u->user, u->host);
-			slog(LG_INFO, "clones_newuser(): klining *@%s (user %s!%s@%s)",
-					u->ip, u->nick, u->user, u->host);
-			kline_sts("*", "*", u->ip, 3600, "Excessive clones");
+			if (i < 6)
+				snoop("CLONES: %d clones on %s (%s!%s@%s)", i, u->ip, u->nick, u->user, u->host);
+			else if (!kline_enabled)
+				snoop("CLONES: %d clones on %s (%s!%s@%s) (TKLINE disabled)", i, u->ip, u->nick, u->user, u->host);
+			else
+			{
+				snoop("CLONES: %d clones on %s (%s!%s@%s) (TKLINE due to excess clones)", i, u->ip, u->nick, u->user, u->host);
+				slog(LG_INFO, "clones_newuser(): klining *@%s (user %s!%s@%s)",
+						u->ip, u->nick, u->user, u->host);
+				kline_sts("*", "*", u->ip, 3600, "Excessive clones");
+			}
 		}
 	}
 }
