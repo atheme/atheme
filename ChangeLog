@@ -1,3 +1,12 @@
+jilles      2006/10/25 17:29:26 UTC	(20061025-6945)
+  Log:
+  Add extra set of parentheses around assignment in if.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/operserv/clones.c (File Modified) 
+
+
 jilles      2006/10/25 17:04:55 UTC	(20061025-6943)
   Log:
   Fix alignment by adding a tab.

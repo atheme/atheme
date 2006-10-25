@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 6931 2006-10-24 16:53:07Z jilles $
+ * $Id: cmode.c 6947 2006-10-25 17:43:00Z jilles $
  */
 
 #include "atheme.h"
@@ -499,8 +499,10 @@ static void modestack_add_simple(struct modestackdata *md, int dir, int32_t flag
 {
 	if (dir == MTYPE_ADD)
 		md->modes_on |= flags, md->modes_off &= ~flags;
-	else if ((dir = MTYPE_DEL))
+	else if (dir == MTYPE_DEL)
 		md->modes_off |= flags, md->modes_on &= ~flags;
+	else
+		slog(LG_ERROR, "modestack_add_simple(): invalid direction");
 }
 
 static void modestack_add_limit(struct modestackdata *md, int dir, uint32_t limit)
@@ -515,8 +517,10 @@ static void modestack_add_limit(struct modestackdata *md, int dir, uint32_t limi
 			modestack_flush(md);
 		md->limit = limit;
 	}
-	else if ((dir = MTYPE_DEL))
+	else if (dir == MTYPE_DEL)
 		md->limit = 0;
+	else
+		slog(LG_ERROR, "modestack_add_limit(): invalid direction");
 	md->limitused = 1;
 }
 
@@ -532,8 +536,10 @@ static void modestack_add_ext(struct modestackdata *md, int dir, int i, const ch
 			modestack_flush(md);
 		strlcpy(md->extmodes[i], value, sizeof md->extmodes[i]);
 	}
-	else if ((dir = MTYPE_DEL))
+	else if (dir == MTYPE_DEL)
 		md->extmodes[i][0] = '\0';
+	else
+		slog(LG_ERROR, "modestack_add_ext(): invalid direction");
 	md->extmodesused[i] = 1;
 }
 
