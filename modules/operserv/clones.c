@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing clone detection.
  *
- * $Id: clones.c 6939 2006-10-25 16:38:04Z w00t $
+ * $Id: clones.c 6945 2006-10-25 17:29:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 6939 2006-10-25 16:38:04Z w00t $",
+	"$Id: clones.c 6945 2006-10-25 17:29:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -315,7 +315,7 @@ static void os_cmd_clones_list(sourceinfo_t *si, int parc, char *parv[])
 
 		if (k > 3)
 		{
-			if (allowed = is_exempt(he->ip))
+			if ((allowed = is_exempt(he->ip)))
 				command_success_nodata(si, "%d from %s (\2EXEMPT\2; allowed %d)", k, he->ip, allowed);
 			else
 				command_success_nodata(si, "%d from %s", k, he->ip);

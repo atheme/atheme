@@ -1,3 +1,12 @@
+jilles      2006/10/25 17:04:55 UTC	(20061025-6943)
+  Log:
+  Fix alignment by adding a tab.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/contrib/Makefile.in (File Modified) 
+
+
 w00t        2006/10/25 16:39:43 UTC	(20061025-6941)
   Log:
   Fix helpfile; clone limits are now respected.
