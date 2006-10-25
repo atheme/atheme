@@ -1,3 +1,12 @@
+jilles      2006/10/24 22:03:31 UTC	(20061024-6933)
+  Log:
+  channels.c: add more details to the comments
+  
+
+  Changes:	Modified:
+  +32 -21	trunk/src/channels.c (File Modified) 
+
+
 jilles      2006/10/24 16:53:07 UTC	(20061024-6931)
   Log:
   src: update copyright years
