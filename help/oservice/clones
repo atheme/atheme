@@ -31,8 +31,8 @@ Syntax: CLONES ADDEXEMPT <ip> <clones> <reason>
 Adds an IP address to the clone exemption list.
 The IP address must match exactly with the form
 used by the ircd (mind '::' shortening with IPv6).
-<clones> is the number of clones allowed; although
-this is currently ignored it must be at least 6.
+<clones> is the number of clones allowed; it must be
+at least 6.
 The reason is shown in LISTEXEMPT.
 Exempted IP addresses are not warned about and are
 not banned for clones.

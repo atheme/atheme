@@ -1,3 +1,11 @@
+w00t        2006/10/25 16:38:04 UTC	(20061025-6939)
+  Log:
+  Make clone limits actually do something.
+
+  Changes:	Modified:
+  +20 -13	trunk/modules/operserv/clones.c (File Modified) 
+
+
 jilles      2006/10/25 15:44:02 UTC	(20061025-6937)
   Log:
   doc/RELEASE: mention that many comments were added to the code
