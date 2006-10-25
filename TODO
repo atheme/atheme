@@ -1,11 +1,2 @@
--  Get rid of code duplication between ChanServ fantasy and normal commands
--  Same for IRC and XML-RPC
-
--- Implement JSON
--  Finish off Dutch and German translations
-
 TODO information is available on our tracker:
-	http://www.bsdnerds.org/
-
-We also have additional TODO information on our trac instance:
-	http://trac.atheme.org/
+	http://bugs.viroteck.net

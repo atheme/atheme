@@ -1,3 +1,14 @@
+jilles      2006/10/25 22:53:31 UTC	(20061025-6951)
+  Log:
+  chanserv unban: give an error message if the given
+  mask is a valid n!u@h mask but is not on the channel
+  ban list (previously this silently did nothing).
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/modules/chanserv/ban.c (File Modified) 
+
+
 jilles      2006/10/25 17:51:13 UTC	(20061025-6949)
   Log:
   operserv clones help file: don't say exempted ip addresses
