@@ -1,3 +1,13 @@
+jilles      2006/10/25 17:51:13 UTC	(20061025-6949)
+  Log:
+  operserv clones help file: don't say exempted ip addresses
+  are never banned for clones as that's no longer the case
+  
+
+  Changes:	Modified:
+  +1 -2		trunk/help/oservice/clones (File Modified) 
+
+
 jilles      2006/10/25 17:43:00 UTC	(20061025-6947)
   Log:
   cmode.c: fix up bad assignments in if
