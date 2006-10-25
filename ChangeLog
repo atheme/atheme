@@ -1,3 +1,14 @@
+jilles      2006/10/25 17:43:00 UTC	(20061025-6947)
+  Log:
+  cmode.c: fix up bad assignments in if
+  (someone had silenced the warning but the variable was
+  not supposed to be assigned)
+  
+
+  Changes:	Modified:
+  +9 -3		trunk/src/cmode.c (File Modified) 
+
+
 jilles      2006/10/25 17:29:26 UTC	(20061025-6945)
   Log:
   Add extra set of parentheses around assignment in if.
