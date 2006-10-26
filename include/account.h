@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 6967 2006-10-26 22:46:58Z jilles $
+ * $Id: account.h 6969 2006-10-26 23:10:14Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -213,7 +213,6 @@ E boolean_t verify_password(myuser_t *mu, char *password);
 /* node.c */
 E list_t svs_ignore_list;
 E list_t klnlist;
-E dictionary_tree_t *mclist;
 
 E svsignore_t *svsignore_find(user_t *user);
 E svsignore_t *svsignore_add(char *mask, char *reason);
@@ -225,6 +224,23 @@ E kline_t *kline_find(const char *user, const char *host);
 E kline_t *kline_find_num(uint32_t number);
 E kline_t *kline_find_user(user_t *u);
 E void kline_expire(void *arg);
+
+/* account.c */
+E dictionary_tree_t *mulist;
+E dictionary_tree_t *mclist;
+
+E void init_accounts(void);
+
+E myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags);
+E void myuser_delete(myuser_t *mu);
+E myuser_t *myuser_find(const char *name);
+E myuser_t *myuser_find_ext(const char *name);
+E void myuser_notice(char *from, myuser_t *target, char *fmt, ...);
+
+E boolean_t myuser_access_verify(user_t *u, myuser_t *mu);
+E boolean_t myuser_access_add(myuser_t *mu, char *mask);
+E char *myuser_access_find(myuser_t *mu, char *mask);
+E void myuser_access_delete(myuser_t *mu, char *mask);
 
 E mychan_t *mychan_add(char *name);
 E void mychan_delete(char *name);
@@ -254,21 +270,5 @@ E boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, char *hostmask
 E void expire_check(void *arg);
 /* Check the database for (version) problems common to all backends */
 E void db_check(void);
-
-/* account.c */
-E dictionary_tree_t *mulist;
-
-E void init_accounts(void);
-
-E myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags);
-E void myuser_delete(myuser_t *mu);
-E myuser_t *myuser_find(const char *name);
-E myuser_t *myuser_find_ext(const char *name);
-E void myuser_notice(char *from, myuser_t *target, char *fmt, ...);
-
-E boolean_t myuser_access_verify(user_t *u, myuser_t *mu);
-E boolean_t myuser_access_add(myuser_t *mu, char *mask);
-E char *myuser_access_find(myuser_t *mu, char *mask);
-E void myuser_access_delete(myuser_t *mu, char *mask);
 
 #endif
