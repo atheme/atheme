@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 6965 2006-10-26 22:38:09Z jilles $
+ * $Id: account.h 6967 2006-10-26 22:46:58Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -196,6 +196,8 @@ typedef struct {
 
 /* pmodule.c XXX */
 E boolean_t backend_loaded;
+
+/* dbhandler.c */
 E void (*db_save)(void *arg);
 E void (*db_load)(void);
 

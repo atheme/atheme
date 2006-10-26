@@ -1,3 +1,14 @@
+jilles      2006/10/26 22:38:09 UTC	(20061026-6965)
+  Log:
+  Remove is_xop() which is just a simple wrapper for
+  chanacs_find() doing nothing useful.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/include/account.h (File Modified) 
+  +1 -14	trunk/src/function.c (File Modified) 
+
+
 jilles      2006/10/26 22:30:51 UTC	(20061026-6963)
   Log:
   Move flags_to_string() and mode_to_flag() from function.c to cmode.c.
