@@ -4,7 +4,7 @@
  *
  * Includes most headers usually needed.
  *
- * $Id: atheme.h 6797 2006-10-21 18:56:49Z jilles $
+ * $Id: atheme.h 6977 2006-10-26 23:18:45Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -41,7 +41,6 @@
 #include "sourceinfo.h"
 #include "authcookie.h"
 #include "privs.h"
-#include "common-ctcp.h"
 
 #ifdef _WIN32
 

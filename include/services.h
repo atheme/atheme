@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 6975 2006-10-26 23:15:15Z jilles $
+ * $Id: services.h 6977 2006-10-26 23:18:45Z jilles $
  */
 
 #ifndef SERVICES_H
@@ -139,5 +139,9 @@ E void verbose_wallops(char *, ...);
 /* ptasks.c */
 E void handle_topic(channel_t *, char *, time_t, char *);
 E int floodcheck(user_t *, user_t *);
+
+/* ctcp-common.c */
+E void common_ctcp_init(void);
+E unsigned int handle_ctcp_common(char *, char *, char *, char *);
 
 #endif
