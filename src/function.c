@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 6963 2006-10-26 22:30:51Z jilles $
+ * $Id: function.c 6965 2006-10-26 22:38:09Z jilles $
  */
 
 #include "atheme.h"
@@ -647,19 +647,6 @@ boolean_t is_founder(mychan_t *mychan, myuser_t *myuser)
 	return FALSE;
 }
 
-boolean_t is_xop(mychan_t *mychan, myuser_t *myuser, uint32_t level)
-{
-	chanacs_t *ca;
-
-	if (!myuser)
-		return FALSE;
-
-	if ((ca = chanacs_find(mychan, myuser, level)))
-		return TRUE;
-
-	return FALSE;
-}
-
 boolean_t should_owner(mychan_t *mychan, myuser_t *myuser)
 {
 	if (!myuser)
@@ -688,7 +675,7 @@ boolean_t should_protect(mychan_t *mychan, myuser_t *myuser)
 	if (MU_NOOP & myuser->flags)
 		return FALSE;
 
-	if (is_xop(mychan, myuser, CA_SET))
+	if (chanacs_find(mychan, myuser, CA_SET))
 		return TRUE;
 
 	return FALSE;

@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 6961 2006-10-26 22:22:50Z jilles $
+ * $Id: account.h 6965 2006-10-26 22:38:09Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -201,7 +201,6 @@ E void (*db_load)(void);
 
 /* function.c */
 E boolean_t is_founder(mychan_t *mychan, myuser_t *myuser);
-E boolean_t is_xop(mychan_t *mychan, myuser_t *myuser, uint32_t level);
 E boolean_t should_owner(mychan_t *mychan, myuser_t *myuser);
 E boolean_t should_protect(mychan_t *mychan, myuser_t *myuser);
 E boolean_t is_soper(myuser_t *myuser);

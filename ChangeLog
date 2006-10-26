@@ -1,3 +1,14 @@
+jilles      2006/10/26 22:30:51 UTC	(20061026-6963)
+  Log:
+  Move flags_to_string() and mode_to_flag() from function.c to cmode.c.
+  
+
+  Changes:	Modified:
+  +2 -4		trunk/include/channels.h (File Modified) 
+  +26 -0	trunk/src/cmode.c (File Modified) 
+  +0 -26	trunk/src/function.c (File Modified) 
+
+
 jilles      2006/10/26 22:22:50 UTC	(20061026-6961)
   Log:
   Move soper and operclass stuff to privs.[ch].
