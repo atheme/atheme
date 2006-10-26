@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 6791 2006-10-21 16:59:20Z jilles $
+ * $Id: services.h 6975 2006-10-26 23:15:15Z jilles $
  */
 
 #ifndef SERVICES_H
@@ -16,9 +16,6 @@ typedef struct opersvs_ opersvs_t;
 typedef struct memosvs_ memosvs_t;
 typedef struct nicksvs_ nicksvs_t;
 typedef struct saslsvs_ saslsvs_t;
-
-/* don't forget to define the extern variables below,
-   and then the real definitions in atheme.c ! */
 
 /* core services */
 struct chansvs_
@@ -106,7 +103,7 @@ struct saslsvs_
 #define STR_INSUFFICIENT_PARAMS "Insufficient parameters for \2%s\2."
 #define STR_INVALID_PARAMS "Invalid parameters for \2%s\2."
 
-/* extern declarations */
+/* atheme.c */
 E chansvs_t chansvs;
 E globsvs_t globsvs;
 E opersvs_t opersvs;
