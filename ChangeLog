@@ -1,3 +1,14 @@
+jilles      2006/10/26 23:10:14 UTC	(20061026-6969)
+  Log:
+  Move mychan, chanacs, metadata and expiry stuff from node.c to account.c.
+  
+
+  Changes:	Modified:
+  +17 -17	trunk/include/account.h (File Modified) 
+  +892 -2	trunk/src/account.c (File Modified) 
+  +1 -889	trunk/src/node.c (File Modified) 
+
+
 jilles      2006/10/26 22:46:58 UTC	(20061026-6967)
   Log:
   Update a comment to reality.

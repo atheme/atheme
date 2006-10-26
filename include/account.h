@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 6969 2006-10-26 23:10:14Z jilles $
+ * $Id: account.h 6971 2006-10-26 23:12:00Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -211,12 +211,7 @@ E void set_password(myuser_t *mu, char *newpassword);
 E boolean_t verify_password(myuser_t *mu, char *password);
 
 /* node.c */
-E list_t svs_ignore_list;
 E list_t klnlist;
-
-E svsignore_t *svsignore_find(user_t *user);
-E svsignore_t *svsignore_add(char *mask, char *reason);
-E void svsignore_delete(svsignore_t *svsignore);
 
 E kline_t *kline_add(char *user, char *host, char *reason, long duration);
 E void kline_delete(const char *user, const char *host);
@@ -270,5 +265,12 @@ E boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, char *hostmask
 E void expire_check(void *arg);
 /* Check the database for (version) problems common to all backends */
 E void db_check(void);
+
+/* svsignore.c */
+E list_t svs_ignore_list;
+
+E svsignore_t *svsignore_find(user_t *user);
+E svsignore_t *svsignore_add(char *mask, char *reason);
+E void svsignore_delete(svsignore_t *svsignore);
 
 #endif
