@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 6901 2006-10-22 21:33:00Z jilles $
+ * $Id: account.h 6961 2006-10-26 22:22:50Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -13,7 +13,6 @@
 typedef struct chanacs_ chanacs_t;
 typedef struct kline_ kline_t;
 typedef struct mymemo_ mymemo_t;
-typedef struct soper_ soper_t;
 typedef struct svsignore_ svsignore_t;
 
 /* kline list struct */
@@ -27,18 +26,6 @@ struct kline_ {
   long duration;
   time_t settime;
   time_t expires;
-};
-
-struct operclass_ {
-  char *name;
-  char *privs; /* priv1 priv2 priv3... */
-};
-
-/* soper list struct */
-struct soper_ {
-  myuser_t *myuser;
-  char *name;
-  operclass_t *operclass;
 };
 
 /* services ignore struct */
@@ -225,7 +212,6 @@ E boolean_t verify_password(myuser_t *mu, char *password);
 /* node.c */
 E list_t svs_ignore_list;
 E list_t klnlist;
-E list_t soperlist;
 E dictionary_tree_t *mclist;
 
 E svsignore_t *svsignore_find(user_t *user);
@@ -238,15 +224,6 @@ E kline_t *kline_find(const char *user, const char *host);
 E kline_t *kline_find_num(uint32_t number);
 E kline_t *kline_find_user(user_t *u);
 E void kline_expire(void *arg);
-
-E operclass_t *operclass_add(char *name, char *privs);
-E void operclass_delete(operclass_t *operclass);
-E operclass_t *operclass_find(char *name);
-
-E soper_t *soper_add(char *name, operclass_t *operclass);
-E void soper_delete(soper_t *soper);
-E soper_t *soper_find(myuser_t *myuser);
-E soper_t *soper_find_named(char *name);
 
 E mychan_t *mychan_add(char *name);
 E void mychan_delete(char *name);

@@ -5,19 +5,14 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6931 2006-10-24 16:53:07Z jilles $
+ * $Id: node.c 6961 2006-10-26 22:22:50Z jilles $
  */
 
 #include "atheme.h"
 #include "uplink.h"
 
-list_t operclasslist;
-list_t soperlist;
 list_t klnlist;
 dictionary_tree_t *mclist;
-
-static BlockHeap *operclass_heap;
-static BlockHeap *soper_heap;
 
 static BlockHeap *kline_heap;	/* 16 */
 static BlockHeap *mychan_heap;	/* HEAP_CHANNEL */
@@ -30,14 +25,12 @@ static BlockHeap *metadata_heap;	/* HEAP_CHANUSER */
 
 void init_nodes(void)
 {
-	operclass_heap = BlockHeapCreate(sizeof(operclass_t), 2);
-	soper_heap = BlockHeapCreate(sizeof(soper_t), 2);
 	metadata_heap = BlockHeapCreate(sizeof(metadata_t), HEAP_CHANUSER);
 	kline_heap = BlockHeapCreate(sizeof(kline_t), 16);
 	mychan_heap = BlockHeapCreate(sizeof(mychan_t), HEAP_CHANNEL);
 	chanacs_heap = BlockHeapCreate(sizeof(chanacs_t), HEAP_CHANUSER);
 
-	if (!soper_heap || !metadata_heap || !kline_heap || !mychan_heap || !chanacs_heap)
+	if (!metadata_heap || !kline_heap || !mychan_heap || !chanacs_heap)
 	{
 		slog(LG_INFO, "init_nodes(): block allocator failed.");
 		exit(EXIT_FAILURE);
@@ -50,6 +43,7 @@ void init_nodes(void)
 	init_accounts();
 	init_users();
 	init_channels();
+	init_privs();
 }
 
 /* Mark everything illegal, to be called before a rehash -- jilles */
@@ -105,161 +99,6 @@ void remove_illegals()
 		if (u->flags & UPF_ILLEGAL && u != curr_uplink)
 			uplink_delete(u);
 	}
-}
-
-/*************************
- * O P E R C L A S S E S *
- *************************/
-operclass_t *operclass_add(char *name, char *privs)
-{
-	operclass_t *operclass;
-	node_t *n = node_create();
-
-	operclass = operclass_find(name);
-	if (operclass != NULL)
-	{
-		slog(LG_DEBUG, "operclass_add(): duplicate class %s", name);
-		return NULL;
-	}
-	slog(LG_DEBUG, "operclass_add(): %s [%s]", name, privs);
-	operclass = BlockHeapAlloc(operclass_heap);
-	node_add(operclass, n, &operclasslist);
-	operclass->name = sstrdup(name);
-	operclass->privs = sstrdup(privs);
-	cnt.operclass++;
-	return operclass;
-}
-
-void operclass_delete(operclass_t *operclass)
-{
-	node_t *n;
-
-	if (operclass == NULL)
-		return;
-	slog(LG_DEBUG, "operclass_delete(): %s", operclass->name);
-	n = node_find(operclass, &operclasslist);
-	node_del(n, &operclasslist);
-	node_free(n);
-	free(operclass->name);
-	free(operclass->privs);
-	BlockHeapFree(operclass_heap, operclass);
-	cnt.operclass--;
-}
-
-operclass_t *operclass_find(char *name)
-{
-	operclass_t *operclass;
-	node_t *n;
-
-	LIST_FOREACH(n, operclasslist.head)
-	{
-		operclass = (operclass_t *)n->data;
-
-		if (!strcasecmp(operclass->name, name))
-			return operclass;
-	}
-
-	return NULL;
-}
-
-/***************
- * S O P E R S *
- ***************/
-
-soper_t *soper_add(char *name, operclass_t *operclass)
-{
-	soper_t *soper;
-	myuser_t *mu = myuser_find(name);
-	node_t *n;
-
-	if (mu ? soper_find(mu) : soper_find_named(name))
-	{
-		slog(LG_INFO, "soper_add(): duplicate soper %s", name);
-		return NULL;
-	}
-	slog(LG_DEBUG, "soper_add(): %s -> %s", (mu) ? mu->name : name, operclass ? operclass->name : "<null>");
-
-	soper = BlockHeapAlloc(soper_heap);
-	n = node_create();
-
-	node_add(soper, n, &soperlist);
-
-	if (mu)
-	{
-		soper->myuser = mu;
-		mu->soper = soper;
-		soper->name = NULL;
-	}
-	else
-	{
-		soper->name = sstrdup(name);
-		soper->myuser = NULL;
-	}
-	soper->operclass = operclass;
-
-	cnt.soper++;
-
-	return soper;
-}
-
-void soper_delete(soper_t *soper)
-{
-	node_t *n;
-
-	if (!soper)
-	{
-		slog(LG_DEBUG, "soper_delete(): called for null soper");
-
-		return;
-	}
-
-	slog(LG_DEBUG, "soper_delete(): %s", (soper->myuser) ? soper->myuser->name : soper->name);
-
-	n = node_find(soper, &soperlist);
-	node_del(n, &soperlist);
-	node_free(n);
-
-	if (soper->myuser)
-		soper->myuser->soper = NULL;
-
-	if (soper->name)
-		free(soper->name);
-
-	BlockHeapFree(soper_heap, soper);
-
-	cnt.soper--;
-}
-
-soper_t *soper_find(myuser_t *myuser)
-{
-	soper_t *soper;
-	node_t *n;
-
-	LIST_FOREACH(n, soperlist.head)
-	{
-		soper = (soper_t *)n->data;
-
-		if (soper->myuser && soper->myuser == myuser)
-			return soper;
-	}
-
-	return NULL;
-}
-
-soper_t *soper_find_named(char *name)
-{
-	soper_t *soper;
-	node_t *n;
-
-	LIST_FOREACH(n, soperlist.head)
-	{
-		soper = (soper_t *)n->data;
-
-		if (soper->name && !irccasecmp(soper->name, name))
-			return soper;
-	}
-
-	return NULL;
 }
 
 /*************

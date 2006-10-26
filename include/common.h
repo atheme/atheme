@@ -4,7 +4,7 @@
  *
  * Defines needed by multiple header files.
  *
- * $Id: common.h 6809 2006-10-21 19:47:41Z jilles $
+ * $Id: common.h 6961 2006-10-26 22:22:50Z jilles $
  */
 
 #ifndef COMMON_H
@@ -77,6 +77,7 @@ typedef struct chanuser_ chanuser_t;
 typedef struct chanban_ chanban_t;
 
 typedef struct operclass_ operclass_t;
+typedef struct soper_ soper_t;
 typedef struct myuser_ myuser_t;
 typedef struct mychan_ mychan_t;
 

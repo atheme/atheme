@@ -4,7 +4,7 @@
  *
  * Fine grained services operator privileges
  *
- * $Id: privs.h 6617 2006-10-01 22:11:49Z jilles $
+ * $Id: privs.h 6961 2006-10-26 22:22:50Z jilles $
  */
 
 #ifndef PRIVS_H
@@ -46,6 +46,34 @@
 #define AC_IRCOP "special:ircop"
 #define AC_SRA "general:admin"
 #define is_sra(mu) (has_priv_myuser(mu, PRIV_ADMIN))
+
+struct operclass_ {
+  char *name;
+  char *privs; /* priv1 priv2 priv3... */
+};
+
+/* soper list struct */
+struct soper_ {
+  myuser_t *myuser;
+  char *name;
+  operclass_t *operclass;
+};
+
+/* privs.c */
+E list_t operclasslist;
+E list_t soperlist;
+
+E void init_privs(void);
+
+E operclass_t *operclass_add(char *name, char *privs);
+E void operclass_delete(operclass_t *operclass);
+E operclass_t *operclass_find(char *name);
+
+E soper_t *soper_add(char *name, operclass_t *operclass);
+E void soper_delete(soper_t *soper);
+E soper_t *soper_find(myuser_t *myuser);
+E soper_t *soper_find_named(char *name);
+
 
 /* has_any_privs(): used to determine whether we should give detailed
  * messages about disallowed things
