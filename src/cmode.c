@@ -4,10 +4,36 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 6947 2006-10-25 17:43:00Z jilles $
+ * $Id: cmode.c 6963 2006-10-26 22:30:51Z jilles $
  */
 
 #include "atheme.h"
+
+/* convert mode flags to a text mode string */
+char *flags_to_string(int32_t flags)
+{
+	static char buf[32];
+	char *s = buf;
+	int i;
+
+	for (i = 0; mode_list[i].mode != 0; i++)
+		if (flags & mode_list[i].value)
+			*s++ = mode_list[i].mode;
+
+	*s = 0;
+
+	return buf;
+}
+
+/* convert a mode character to a flag. */
+int32_t mode_to_flag(char c)
+{
+	int i;
+
+	for (i = 0; mode_list[i].mode != 0 && mode_list[i].mode != c; i++);
+
+	return mode_list[i].value;
+}
 
 /* yeah, this should be fun. */
 /* If source == NULL, apply a mode change from outside to our structures

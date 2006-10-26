@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 6931 2006-10-24 16:53:07Z jilles $
+ * $Id: function.c 6963 2006-10-26 22:30:51Z jilles $
  */
 
 #include "atheme.h"
@@ -304,32 +304,6 @@ char *r_itoa(int num)
 	return ret;
 }
 #endif
-
-/* convert mode flags to a text mode string */
-char *flags_to_string(int32_t flags)
-{
-	static char buf[32];
-	char *s = buf;
-	int i;
-
-	for (i = 0; mode_list[i].mode != 0; i++)
-		if (flags & mode_list[i].value)
-			*s++ = mode_list[i].mode;
-
-	*s = 0;
-
-	return buf;
-}
-
-/* convert a mode character to a flag. */
-int32_t mode_to_flag(char c)
-{
-	int i;
-
-	for (i = 0; mode_list[i].mode != 0 && mode_list[i].mode != c; i++);
-
-	return mode_list[i].value;
-}
 
 /* return the time elapsed since an event */
 char *time_ago(time_t event)

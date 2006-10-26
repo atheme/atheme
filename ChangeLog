@@ -1,3 +1,16 @@
+jilles      2006/10/26 22:22:50 UTC	(20061026-6961)
+  Log:
+  Move soper and operclass stuff to privs.[ch].
+  
+
+  Changes:	Modified:
+  +0 -23	trunk/include/account.h (File Modified) 
+  +1 -0		trunk/include/common.h (File Modified) 
+  +28 -0	trunk/include/privs.h (File Modified) 
+  +2 -163	trunk/src/node.c (File Modified) 
+  +172 -0	trunk/src/privs.c (File Modified) 
+
+
 w00t        2006/10/26 14:15:06 UTC	(20061026-6959)
   Log:
   ENFORCE relies on SET, and therefore won't load before it in configuration order.
