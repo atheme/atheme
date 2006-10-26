@@ -4,7 +4,7 @@
  *
  * Allows setting a vhost on an account
  *
- * $Id: vhost.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: vhost.c 6955 2006-10-26 11:37:10Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: vhost.c 6955 2006-10-26 11:37:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -129,9 +129,9 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	if (!host)
 	{
 		metadata_delete(mu, METADATA_USER, "private:usercloak");
-		command_success_nodata(si, "Deleted vhost for \2%s\2.", target);
-		snoop("VHOST:REMOVE: \2%s\2 by \2%s\2", target, get_oper_name(si));
-		logcommand(si, CMDLOG_ADMIN, "VHOST REMOVE %s", target);
+		command_success_nodata(si, "Deleted vhost for \2%s\2.", mu->name);
+		snoop("VHOST:REMOVE: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
+		logcommand(si, CMDLOG_ADMIN, "VHOST REMOVE %s", mu->name);
 		do_restorehost_all(mu);
 		return;
 	}
@@ -158,10 +158,10 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 
 	metadata_add(mu, METADATA_USER, "private:usercloak", host);
 	command_success_nodata(si, "Assigned vhost \2%s\2 to \2%s\2.",
-			host, target);
-	snoop("VHOST:ASSIGN: \2%s\2 to \2%s\2 by \2%s\2", host, target, get_oper_name(si));
+			host, mu->name);
+	snoop("VHOST:ASSIGN: \2%s\2 to \2%s\2 by \2%s\2", host, mu->name, get_oper_name(si));
 	logcommand(si, CMDLOG_ADMIN, "VHOST ASSIGN %s %s",
-			target, host);
+			mu->name, host);
 	do_sethost_all(mu, host);
 	return;
 }
