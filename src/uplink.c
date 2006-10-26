@@ -4,7 +4,7 @@
  *
  * Uplink management stuff.
  *
- * $Id: uplink.c 6931 2006-10-24 16:53:07Z jilles $
+ * $Id: uplink.c 6957 2006-10-26 13:09:57Z w00t $
  */
 
 #include "atheme.h"
@@ -114,19 +114,19 @@ void uplink_connect(void)
 			exit(EXIT_FAILURE);
 		}
 		curr_uplink = uplinks.head->data;
-		slog(LG_INFO, "uplink_connect(): connecting to first entry %s[%s].", curr_uplink->name, curr_uplink->host);
+		slog(LG_INFO, "uplink_connect(): connecting to first entry %s[%s]:%d.", curr_uplink->name, curr_uplink->host, curr_uplink->port);
 	}
 	else if (curr_uplink->node->next)
 	{
 		u = curr_uplink->node->next->data;
 
 		curr_uplink = u;
-		slog(LG_INFO, "uplink_connect(): trying alternate uplink %s[%s]", curr_uplink->name, curr_uplink->host);
+		slog(LG_INFO, "uplink_connect(): trying alternate uplink %s[%s]:%d", curr_uplink->name, curr_uplink->host, curr_uplink->port);
 	}
 	else
 	{
 		curr_uplink = uplinks.head->data;
-		slog(LG_INFO, "uplink_connect(): trying again first entry %s[%s]", curr_uplink->name, curr_uplink->host);
+		slog(LG_INFO, "uplink_connect(): trying again first entry %s[%s]:%d", curr_uplink->name, curr_uplink->host, curr_uplink->port);
 	}
 
 	u = curr_uplink;
