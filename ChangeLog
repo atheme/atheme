@@ -1,3 +1,12 @@
+jilles      2006/10/26 23:12:00 UTC	(20061026-6971)
+  Log:
+  account.h: reflect svsignore.c split-out
+  
+
+  Changes:	Modified:
+  +7 -5		trunk/include/account.h (File Modified) 
+
+
 jilles      2006/10/26 23:10:14 UTC	(20061026-6969)
   Log:
   Move mychan, chanacs, metadata and expiry stuff from node.c to account.c.
