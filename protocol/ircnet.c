@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 6861 2006-10-22 14:08:20Z jilles $
+ * $Id: ircnet.c 6983 2006-10-27 21:51:38Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 6861 2006-10-22 14:08:20Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 6983 2006-10-27 21:51:38Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -618,7 +618,16 @@ static void m_kill(sourceinfo_t *si, int parc, char *parv[])
 static void m_squit(sourceinfo_t *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_squit(): server leaving: %s from %s", parv[0], parv[1]);
-	server_delete(parv[0]);
+	if (server_find(parv[0]))
+		server_delete(parv[0]);
+	else if (si->su != NULL)
+	{
+		/* XXX we don't have a list of jupes, so let's just
+		 * assume it is one if we don't know it */
+		slog(LG_INFO, "m_squit(): accepting SQUIT for jupe %s from %s", parv[0], si->su->nick);
+		sts(":%s WALLOPS :Received SQUIT %s from %s (%s)", me.numeric, parv[0], si->su->nick, parv[1]);
+		sts(":%s SQUIT %s :%s", me.numeric, parv[0], parv[1]);
+	}
 }
 
 static void m_server(sourceinfo_t *si, int parc, char *parv[])
