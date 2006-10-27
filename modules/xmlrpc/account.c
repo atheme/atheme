@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 6665 2006-10-05 23:45:09Z jilles $
+ * $Id: account.c 6989 2006-10-27 23:12:55Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 6665 2006-10-05 23:45:09Z jilles $",
+	"$Id: account.c 6989 2006-10-27 23:12:55Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -94,7 +94,7 @@ static int account_register(void *conn, int parc, char *parv[])
 	}
 	else	/* fewer restrictions for account names */
 	{
-		if (strchr(parv[0], ' ') || strchr(parv[0], '\n') || strchr(parv[0], '\r'))
+		if (strchr(parv[0], ' ') || strchr(parv[0], '\n') || strchr(parv[0], '\r') || parv[0][0] == '=' || parv[0][0] == '#' || parv[0][0] == '@' || parv[0][0] == '+' || parv[0][0] == '%' || parv[0][0] == '!' || strchr(parv[0], ','))
 		{
 			xmlrpc_generic_error(2, "The account name is invalid.");
 			return 0;

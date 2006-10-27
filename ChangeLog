@@ -1,3 +1,13 @@
+jilles      2006/10/27 22:47:52 UTC	(20061027-6987)
+  Log:
+  If nickserv::no_nick_ownership is not enabled, deny
+  registering a nick that exists on IRC via non-IRC.
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/nickserv/register.c (File Modified) 
+
+
 jilles      2006/10/27 21:52:17 UTC	(20061027-6985)
   Log:
   hyperion: avoid a crash if we get an STOPIC for a channel that doesn't exist

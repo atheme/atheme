@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 6987 2006-10-27 22:47:52Z jilles $
+ * $Id: register.c 6989 2006-10-27 23:12:55Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 6987 2006-10-27 22:47:52Z jilles $",
+	"$Id: register.c 6989 2006-10-27 23:12:55Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -101,6 +101,15 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, "For security reasons, you can't register your UID.");
 		command_fail(si, fault_badparams, "Please change to a real nickname, and try again.");
 		return;
+	}
+
+	if (nicksvs.no_nick_ownership || si->su == NULL)
+	{
+		if (strchr(account, ' ') || strchr(account, '\n') || strchr(account, '\r') || account[0] == '=' || account[0] == '#' || account[0] == '@' || account[0] == '+' || account[0] == '%' || account[0] == '!' || strchr(account, ','))
+		{
+			command_fail(si, fault_badparams, "The account name \2%s\2 is invalid.", account);
+			return;
+		}
 	}
 
 	if ((si->su != NULL && !strcasecmp(pass, si->su->nick)) || !strcasecmp(pass, account))
