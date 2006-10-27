@@ -1,3 +1,15 @@
+jilles      2006/10/26 23:18:45 UTC	(20061026-6977)
+  Log:
+  Delete common-ctcp.h and move everything in it (two
+  function declarations) to services.h.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/include/atheme.h (File Modified) 
+  +0 -16	trunk/include/common-ctcp.h (File Deleted) 
+  +4 -0		trunk/include/services.h (File Modified) 
+
+
 jilles      2006/10/26 23:15:15 UTC	(20061026-6975)
   Log:
   services.h: make some comments more like the rest

@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6657 2006-10-04 21:22:47Z jilles $
+ * $Id: main.c 6979 2006-10-27 21:29:51Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6657 2006-10-04 21:22:47Z jilles $",
+	"$Id: main.c 6979 2006-10-27 21:29:51Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -88,7 +88,6 @@ struct
 	{ "No nicknames matched e-mail address \2%s\2", "No accounts matched e-mail address \2%s\2" },
 	{ "%s marked the nickname \2%s\2.", "%s marked the account \2%s\2." },
 	{ "%s unmarked the nickname \2%s\2.", "%s unmarked the account \2%s\2." },
-	{ "Syntax: REGISTER <password> <email>", "Syntax: REGISTER <account> <password> <email>" },
 	{ "\2%s\2 has too many nicknames registered.", "\2%s\2 has too many accounts registered." },
 	{ "An email containing nickname activation instructions has been sent to \2%s\2.", "An email containing account activation instructions has been sent to \2%s\2." },
 	{ "If you do not complete registration within one day your nickname will expire.", "If you do not complete registration within one day your account will expire." },
