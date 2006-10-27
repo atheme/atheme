@@ -1,3 +1,12 @@
+jilles      2006/10/27 21:51:38 UTC	(20061027-6983)
+  Log:
+  ircnet: make /squit on a jupe work somehow
+  
+
+  Changes:	Modified:
+  +10 -1	trunk/protocol/ircnet.c (File Modified) 
+
+
 jilles      2006/10/27 21:38:25 UTC	(20061027-6981)
   Log:
   Use the help/userserv/ helpfiles if nickserv::no_nick_ownership is enabled.
