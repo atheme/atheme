@@ -1,3 +1,12 @@
+jilles      2006/10/27 21:52:17 UTC	(20061027-6985)
+  Log:
+  hyperion: avoid a crash if we get an STOPIC for a channel that doesn't exist
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/protocol/hyperion.c (File Modified) 
+
+
 jilles      2006/10/27 21:51:38 UTC	(20061027-6983)
   Log:
   ircnet: make /squit on a jupe work somehow

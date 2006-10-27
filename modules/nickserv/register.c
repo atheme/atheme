@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 6979 2006-10-27 21:29:51Z jilles $
+ * $Id: register.c 6987 2006-10-27 22:47:52Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 6979 2006-10-27 21:29:51Z jilles $",
+	"$Id: register.c 6987 2006-10-27 22:47:52Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -87,6 +87,12 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	if ((strlen(pass) > 32) || (strlen(email) >= EMAILLEN))
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "REGISTER");
+		return;
+	}
+
+	if (!nicksvs.no_nick_ownership && si->su == NULL && user_find_named(account))
+	{
+		command_fail(si, fault_noprivs, "A user matching this account is already on IRC.");
 		return;
 	}
 
