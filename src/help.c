@@ -4,7 +4,7 @@
  *
  * This file contains a generic help system implementation.
  *
- * $Id: help.c 6931 2006-10-24 16:53:07Z jilles $
+ * $Id: help.c 6981 2006-10-27 21:38:25Z jilles $
  */
 
 #include "atheme.h"
@@ -42,6 +42,8 @@ void help_display(sourceinfo_t *si, char *command, list_t *list)
 			else
 			{
 				snprintf(buf, sizeof buf, "%s/%s", SHAREDIR, c->file);
+				if (nicksvs.no_nick_ownership && !strncmp(c->file, "help/nickserv/", 14))
+					memcpy(buf + (sizeof(SHAREDIR) - 1) + 6, "userserv", 8);
 				help_file = fopen(buf, "r");
 			}
 

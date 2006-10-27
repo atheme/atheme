@@ -1,3 +1,14 @@
+jilles      2006/10/27 21:29:51 UTC	(20061027-6979)
+  Log:
+  Make /ns register via xmlrpc work in some way
+  (always takes the account name).
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/modules/nickserv/main.c (File Modified) 
+  +26 -14	trunk/modules/nickserv/register.c (File Modified) 
+
+
 jilles      2006/10/26 23:18:45 UTC	(20061026-6977)
   Log:
   Delete common-ctcp.h and move everything in it (two
