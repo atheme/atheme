@@ -1,4 +1,4 @@
-$Id: IRCD 5850 2006-07-11 19:56:20Z jilles $
+$Id: IRCD 6993 2006-10-28 13:18:51Z jilles $
 
 IRCD-specific notes
 -------------------
@@ -81,15 +81,20 @@ ability to prevent services being kicked/deopped and the like. If you want to
 use fantasy commands, you will have to enable join_chans anyway; beware of bots
 fighting with chanserv.
 
+The TOPIC and TOPICAPPEND commands cannot be used to change topics as
+dreamforge does not allow services to set newer topics. KEEPTOPIC and
+TOPICLOCK can be used, however.
+
 Dreamforge is a dated IRCd, you should probably upgrade to a more
 modern one.
 
 hyperion
 --------
 
-The channel modes +dDfJ are not supported and will be ignored. Bans with
-forward channels will also not be recognized properly. This may lead to
-problems like users still being banned after a chanserv unban command.
+The channel mode +D is not supported and will be ignored. Gecos bans (+d)
+are tracked but otherwise ignored. Bans with forward channels will also not
+be recognized properly. This may lead to problems like users still being
+banned after a chanserv unban command.
 
 There are two methods to allow services to remember users after a netsplit or
 restart and to enable things like channels only accessible for registered
@@ -252,6 +257,10 @@ ircd-sor is designed for services not joining channels, not having the
 ability to prevent services being kicked/deopped and the like. If you want to
 use fantasy commands, you will have to enable join_chans anyway; beware of bots
 fighting with chanserv.
+
+The TOPIC and TOPICAPPEND commands cannot be used to change topics as
+ircd-sor does not allow services to set newer topics. KEEPTOPIC and
+TOPICLOCK can be used, however.
 
 ultimate3
 ---------
