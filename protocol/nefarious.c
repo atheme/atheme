@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
  *
- * $Id: nefarious.c 6991 2006-10-28 00:35:51Z jilles $
+ * $Id: nefarious.c 6995 2006-10-28 15:04:27Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 6991 2006-10-28 00:35:51Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 6995 2006-10-28 15:04:27Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -283,7 +283,8 @@ static void nefarious_kline_sts(char *server, char *user, char *host, long durat
 	if (!me.connected)
 		return;
 
-	sts("%s GL * +%s@%s %ld :%s", me.numeric, user, host, duration, reason);
+	/* hold permanent akills for four weeks -- jilles */
+	sts("%s GL * +%s@%s %ld :%s", me.numeric, user, host, duration > 0 ? duration : 2419200, reason);
 }
 
 /* server-to-server UNKLINE wrapper */

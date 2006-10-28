@@ -1,3 +1,14 @@
+jilles      2006/10/28 13:18:51 UTC	(20061028-6993)
+  Log:
+  - mention that dreamforge and ircd-sor 1.x do not allow
+    services to set newer topics (i.e. no /cs topic)
+  - update the bit about hyperion channel modes
+  
+
+  Changes:	Modified:
+  +12 -3	trunk/doc/IRCD (File Modified) 
+
+
 jilles      2006/10/28 00:35:51 UTC	(20061028-6991)
   Log:
   P10: send the current time for topicTS so that topiclock works
