@@ -1,3 +1,12 @@
+jilles      2006/10/28 22:43:21 UTC	(20061028-7001)
+  Log:
+  Change version from 2.0.0 to 2.0.0rc1.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/configure.ac (File Modified) 
+
+
 jilles      2006/10/28 21:55:39 UTC	(20061028-6999)
   Log:
   Delete doc/example_module.c, it is rather obsolete and
