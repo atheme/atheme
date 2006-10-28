@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: undernet.c 6861 2006-10-22 14:08:20Z jilles $
+ * $Id: undernet.c 6991 2006-10-28 00:35:51Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 6861 2006-10-22 14:08:20Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 6991 2006-10-28 00:35:51Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -288,7 +288,9 @@ static void undernet_topic_sts(char *channel, char *setter, time_t ts, char *top
 	c = channel_find(channel);
 	if (c == NULL)
 		return;
-	sts("%s T %s %ld %ld :%s", chansvs.me->me->uid, channel, c->ts, ts, topic);
+	/* P10 ircds only accept topics with newer topicTS, ever,
+	 * so send the current time -- jilles */
+	sts("%s T %s %ld %ld :%s", chansvs.me->me->uid, channel, c->ts, CURRTIME, topic);
 }
 
 /* mode wrapper */
