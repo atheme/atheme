@@ -1,3 +1,13 @@
+jilles      2006/10/28 21:49:58 UTC	(20061028-6997)
+  Log:
+  Remove mention of modules.atheme.org from README, at
+  this time it seems unlikely that it is useful.
+  
+
+  Changes:	Modified:
+  +0 -3		trunk/README (File Modified) 
+
+
 jilles      2006/10/28 15:04:27 UTC	(20061028-6995)
   Log:
   P10: when sending a permanent akill, hold it for four weeks
