@@ -3,7 +3,9 @@ Help for CLONES:
 CLONES keeps track of the number of clients
 per IP address. Warnings are displayed in
 the snoop channel about IP addresses with
-more than 3 clients, and 
+more than 3 clients, and network bans may
+optionally be set on IP addresses with more
+than 5 clients.
 
 CLONES only works on clients whose IP address
 Atheme knows. If the ircd does not support
@@ -22,9 +24,9 @@ defaults to off.
 
 Syntax: CLONES LIST
 
-Shows all IP addresses with 4 or more clients with
-the number of clients and whether the IP address
-is exempt.
+Shows all IP addresses with more than 3 clients
+with the number of clients and whether the IP
+address is exempt.
 
 Syntax: CLONES ADDEXEMPT <ip> <clones> <reason>
 

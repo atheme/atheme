@@ -1,3 +1,12 @@
+jilles      2006/10/28 22:44:44 UTC	(20061028-7003)
+  Log:
+  Rerun autoconf.
+  
+
+  Changes:	Modified:
+  +11 -11	trunk/configure (File Modified) 
+
+
 jilles      2006/10/28 22:43:21 UTC	(20061028-7001)
   Log:
   Change version from 2.0.0 to 2.0.0rc1.
