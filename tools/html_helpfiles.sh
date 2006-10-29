@@ -6,7 +6,7 @@
 
 htmldir=${1:-tools/htmlhelp}
 helpdir=${2:-help}
-idstring='$Id: html_helpfiles.sh 6193 2006-08-20 22:47:01Z jilles $'
+idstring='$Id: html_helpfiles.sh 7009 2006-10-29 00:29:33Z jilles $'
 
 mkdir -p "$htmldir"
 
@@ -38,7 +38,7 @@ for d in $helpdir/*; do
 		echo "<h1>$service</h1>"
 		for f in $d/*; do
 			[ -f "$f" ] || continue
-			sed -e 's/</\&lt;/g' -e 's/>/\&gt;/g' -e "s/&nick&/$service/g" -e 's#^Help for \(.*\).*#<h2>\1</h2>#' -e 's#^Examples*:$#<strong>&</strong>#' -e 's#^Syntax: \(.*\)$#<strong>Syntax:</strong> <tt>\1</tt><br>#' -e 's#\([^]*\)#<b>\1</b>#g' -e 's#\([^]*\)#<u>\1</u>#g' -e 's#^$#<p>#' -e 's#^    \(.*\)$#<br><tt>\1</tt>#' $f
+			sed -e 's/</\&lt;/g' -e 's/>/\&gt;/g' -e "s/&nick&/$service/g" -e 's#^Help for \(.*\).*#<a name="\1"><h2>\1</h2></a>#' -e 's#^Examples*:$#<strong>&</strong>#' -e 's#^Syntax: \(.*\)$#<strong>Syntax:</strong> <tt>\1</tt><br>#' -e 's#\([^]*\)#<b>\1</b>#g' -e 's#\([^]*\)#<u>\1</u>#g' -e 's#^$#<p>#' -e 's#^    \(.*\)$#<br><tt>\1</tt>#' $f
 		done
 		echo "</body></html>"
 	} > "$htmldir/$service.html"

@@ -1,3 +1,14 @@
+jilles      2006/10/29 00:08:37 UTC	(20061029-7007)
+  Log:
+  operserv clones help file:
+  - add missing part of sentence
+  - consistency fix
+  
+
+  Changes:	Modified:
+  +6 -4		trunk/help/oservice/clones (File Modified) 
+
+
 jilles      2006/10/28 22:44:44 UTC	(20061028-7003)
   Log:
   Rerun autoconf.
