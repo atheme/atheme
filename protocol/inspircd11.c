@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 6863 2006-10-22 14:18:56Z jilles $
+ * $Id: inspircd11.c 7011 2006-10-31 16:13:17Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 6863 2006-10-22 14:18:56Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7011 2006-10-31 16:13:17Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -553,6 +553,9 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 
 	if (ts < c->ts)
 	{
+		chanuser_t *cu;
+		node_t *n;
+
 		/* the TS changed.  a TS change requires us to do
 		 * bugger all except update the TS, because in InspIRCd
 		 * remote servers enforce the TS change - Brain
@@ -560,6 +563,20 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 		 * This is no longer the case with 1.1, we need to bounce their modes
 		 * as well as lowering the channel ts. Do both. -- w00t
 		 */
+
+		LIST_FOREACH(n, c->members.head)
+		{
+			cu = (chanuser_t *)n->data;
+			if (cu->user->server == me.me)
+			{
+				/* it's a service, reop */
+				sts(":%s MODE %s +o %s", cu->user->nick, c->name, cu->user->nick);
+				cu->modes = CMODE_OP;
+			}
+			else
+				cu->modes = 0;
+		}
+
 		c->ts = ts;
 		hook_call_event("channel_tschange", c);
 	}
@@ -720,9 +737,51 @@ static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_fmode(sourceinfo_t *si, int parc, char *parv[])
 {
+	channel_t *c;
+	boolean_t onlydeop;
+	time_t ts;
+	const char *p;
+
 	/* :server.moo FMODE #blarp tshere +ntsklLg keymoo 1337 secks */
 	if (*parv[0] == '#')
-		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[2]);
+	{
+		c = channel_find(parv[0]);
+		if (c == NULL)
+		{
+			slog(LG_DEBUG, "m_fmode(): nonexistant channel: %s", parv[0]);
+		}
+		ts = atoi(parv[1]);
+		if (ts == c->ts)
+		{
+			onlydeop = TRUE;
+			p = parv[2];
+			while (*p != '\0')
+			{
+				if (!strchr("-qaohv", *p))
+					onlydeop = FALSE;
+				p++;
+			}
+			if (onlydeop && si->s != NULL)
+			{
+				/* ignore redundant deops generated
+				 * if we lower the TS of a channel
+				 * scenario: user with autoop privs recreates
+				 * channel
+				 * XXX could this ignore other stuff too?
+				 * -- jilles */
+				slog(LG_DEBUG, "m_fmode(): ignoring %s %s: incoming TS %ld is equal to our TS %ld, and only deops", parv[0], parv[2], ts, c->ts);
+				return;
+			}
+		}
+		else if (ts > c->ts)
+		{
+			/* XXX */
+			slog(LG_DEBUG, "m_fmode(): accepting but should bounce %s %s: incoming TS %ld is newer than our TS %ld", parv[0], parv[2], ts, c->ts);
+		}
+		else
+			slog(LG_DEBUG, "m_fmode(): %s %s: incoming TS %ld is older than our TS %ld, possible desync", parv[0], parv[2], ts, c->ts);
+		channel_mode(NULL, c, parc - 1, &parv[2]);
+	}
 	else
 		user_mode(user_find(parv[0]), parv[2]);
 }
