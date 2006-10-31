@@ -1,3 +1,18 @@
+jilles      2006/10/31 16:13:17 UTC	(20061031-7011)
+  Log:
+  - If an FJOIN with lower TS comes in, deop all existing users
+    and reop any services in the channel (using :<service> MODE).
+  - Ignore FMODE from a server with the same TS containing only
+    deops (-qaohv). This is necessary to avoid a desync if a
+    user with autoop privs recreates a registered channel with
+    changets enabled (if we accept the FMODE, the user ends up
+    deopped in our state, while they should be opped).
+  
+
+  Changes:	Modified:
+  +60 -1	trunk/protocol/inspircd11.c (File Modified) 
+
+
 jilles      2006/10/29 00:29:33 UTC	(20061029-7009)
   Log:
   Add <a name=> to each command heading in the html helpfiles.

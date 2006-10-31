@@ -57,6 +57,9 @@ E	chanuser_t.modes
 channel_t.key and channel_t.extmodes are smalloc/sstrdup'ed strings and are
 NULL if the mode is not set.
 
+Channel mode locks
+------------------
+
 Mode locks are stored as follows (only simple modes can be mlocked):
 B	mychan_t.mlock_key
 C	mychan_t.mlock_limit, mychan_t metadata private:mlockext
@@ -76,4 +79,23 @@ The format of private:mlockext is a space-separated sequence of
 which are not mentioned are not mlocked. The metadata entry is only present
 if any ignore_mode_list modes are mlocked.
 
-$Id: MODES 5674 2006-07-02 21:20:32Z jilles $
+Mode lock checks are scheduled in a sophisticated way to avoid annoying
+redundant mode changes showing up while still keeping the modes correct, in
+all supported ircds:
+- on creation of a channel and on TS changes (these often clear all simple
+  modes), mark the channel registration MC_MLOCK_CHECK
+- on an incoming mode change, if the channel registration is marked
+  MC_MLOCK_CHECK or the mode change altered simple modes, check the mode
+  locks; prefixed nicks on SJOIN/FJOIN/NJOIN do not count as mode changes,
+  but simple modes on SJOIN do
+- on creation of a channel, if it is possible that no mode changes (according
+  to the previous item) are sent for this channel, check mode locks right away
+  (this is done by faking an incoming mode change "+")
+- when a user joins and is not kicked by chanserv, if the channel registration
+  is marked MC_MLOCK_CHECK, check the mode locks (this is probably not that
+  useful)
+- when a channel is registered or the mode locks are changed, check the
+  mode locks right away
+- on any mode lock check, clear MC_MLOCK_CHECK if it is set
+
+$Id: MODES 7013 2006-10-31 22:29:23Z jilles $
