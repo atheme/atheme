@@ -1,3 +1,12 @@
+jilles      2006/10/31 22:29:23 UTC	(20061031-7013)
+  Log:
+  Document how mode lock checks work.
+  
+
+  Changes:	Modified:
+  +22 -0	trunk/doc/MODES (File Modified) 
+
+
 jilles      2006/10/31 16:13:17 UTC	(20061031-7011)
   Log:
   - If an FJOIN with lower TS comes in, deop all existing users

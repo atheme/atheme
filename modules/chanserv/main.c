@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6895 2006-10-22 21:07:24Z jilles $
+ * $Id: main.c 7015 2006-11-01 00:13:30Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6895 2006-10-22 21:07:24Z jilles $",
+	"$Id: main.c 7015 2006-11-01 00:13:30Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -115,6 +115,10 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (strlen(cmd) > 2 && (cmd[0] == '!' || !strcasecmp(cmd, ".flags")) && strcasecmp(cmd + 1, "set") && isalpha(cmd[1]))
 		{
+			/* XXX not really nice to look up the command twice
+			 * -- jilles */
+			if (command_find(&cs_cmdtree, cmd + 1) == NULL)
+				return;
 			if (floodcheck(si->su, si->service->me))
 				return;
 			/* construct <channel> <args> */
