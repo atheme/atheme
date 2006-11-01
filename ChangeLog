@@ -1,3 +1,14 @@
+jilles      2006/11/01 01:43:20 UTC	(20061101-7017)
+  Log:
+  Move help for nickserv/enforce to help files.
+  
+
+  Changes:	Modified:
+  +20 -0	trunk/help/nickserv/release (File Added) 
+  +11 -0	trunk/help/nickserv/set_enforce (File Added) 
+  +2 -35	trunk/modules/nickserv/enforce.c (File Modified) 
+
+
 jilles      2006/11/01 00:13:30 UTC	(20061101-7015)
   Log:
   Silently ignore lines starting with '!' which are
