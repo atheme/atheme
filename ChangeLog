@@ -1,3 +1,13 @@
+jilles      2006/11/01 02:16:08 UTC	(20061101-7019)
+  Log:
+  Consistency fixes to helpfiles.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/help/nickserv/set_neverop (File Modified) 
+  +1 -1		trunk/help/nickserv/set_noop (File Modified) 
+
+
 jilles      2006/11/01 01:43:20 UTC	(20061101-7017)
   Log:
   Move help for nickserv/enforce to help files.
