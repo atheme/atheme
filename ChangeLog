@@ -1,3 +1,12 @@
+jilles      2006/11/01 22:43:33 UTC	(20061101-7025)
+  Log:
+  Bump trunk version to 2.1.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/configure.ac (File Modified) 
+
+
 jilles      2006/11/01 02:16:08 UTC	(20061101-7019)
   Log:
   Consistency fixes to helpfiles.
