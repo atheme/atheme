@@ -23,14 +23,12 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/enforce",FALSE, _modinit, _moddeinit,
-	"$Id: enforce.c 6873 2006-10-22 15:07:53Z jilles $",
+	"$Id: enforce.c 7017 2006-11-01 01:43:20Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[]);
-static void ns_help_set_enforce(sourceinfo_t *si);
 static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[]);
-static void ns_help_release(sourceinfo_t *si);
 static void reg_check(void *arg);
 static void remove_idcheck(void *vuser);
 
@@ -128,20 +126,6 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void ns_help_set_enforce(sourceinfo_t *si)
-{
-	command_success_nodata(si, "Help for \2ENFORCE\2:");
-	command_success_nodata(si, "\2ENFORCE\2 allows you to enable protection for");
-	command_success_nodata(si, "your nickname.");
-	command_success_nodata(si, " ");
-	command_success_nodata(si, "This will automatically change the nick of someone");
-	command_success_nodata(si, "who attempts to use it without identifying in time,");
-	command_success_nodata(si, "and temporarily block its use, which can be");
-	command_success_nodata(si, "removed at your discretion. See help on RELEASE.");
-	command_success_nodata(si, " ");
-	command_success_nodata(si, "Syntax: SET ENFORCE ON|OFF");
-}
-
 static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
@@ -229,23 +213,6 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_DO, "failed RELEASE %s (bad password)", target);
 		command_fail(si, fault_authfail, "Invalid password for \2%s\2.", target);
 	}
-}
-
-static void ns_help_release(sourceinfo_t *si)
-{
-	command_success_nodata(si, "Help for \2RELEASE\2:");
-	command_success_nodata(si, "\2RELEASE\2 removes an enforcer for your nick or");
-	command_success_nodata(si, "changes the nick of a user that is using your");
-	command_success_nodata(si, "nick.");
-	command_success_nodata(si, " ");
-	command_success_nodata(si, "Enforcers are created when someone uses your");
-	command_success_nodata(si, "nick without identifying and prevent all use");
-	command_success_nodata(si, "of it.");
-	command_success_nodata(si, " ");
-	command_success_nodata(si, "Not all ircds support removing enforcers. You will");
-	command_success_nodata(si, "have to wait a few minutes then.");
-	command_success_nodata(si, " ");
-	command_success_nodata(si, "Syntax: RELEASE <nick> [password]");
 }
 
 void reg_check(void *arg)
@@ -351,8 +318,8 @@ void _modinit(module_t *m)
 	/*event_add("manage_bots", manage_bots, NULL, 30);*/
 	command_add(&ns_release, ns_cmdtree);
 	command_add(&ns_set_enforce, ns_set_cmdtree);
-	help_addentry(ns_helptree, "RELEASE", NULL, ns_help_release);
-	help_addentry(ns_helptree, "SET ENFORCE", NULL, ns_help_set_enforce);
+	help_addentry(ns_helptree, "RELEASE", "help/nickserv/release", NULL);
+	help_addentry(ns_helptree, "SET ENFORCE", "help/nickserv/set_enforce", NULL);
 	hook_add_event("user_identify");
 	hook_add_hook("user_identify", remove_idcheck);
 }

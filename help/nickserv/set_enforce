@@ -1,0 +1,11 @@
+Help for SET ENFORCE:
+
+SET ENFORCE allows you to enable protection for
+your nickname.
+
+This will automatically change the nick of someone
+who attempts to use it without identifying in time,
+and temporarily block its use, which can be
+removed at your discretion. See help on RELEASE.
+
+Syntax: SET ENFORCE ON|OFF

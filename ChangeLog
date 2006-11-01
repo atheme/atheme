@@ -1,3 +1,17 @@
+jilles      2006/11/01 00:13:30 UTC	(20061101-7015)
+  Log:
+  Silently ignore lines starting with '!' which are
+  not existing fantasy commands. This is the same
+  behaviour as atheme 1.x.
+  
+  Unfortunately this does the command lookup twice
+  for existing commands.
+  
+
+  Changes:	Modified:
+  +4 -0		trunk/modules/chanserv/main.c (File Modified) 
+
+
 jilles      2006/10/31 22:29:23 UTC	(20061031-7013)
   Log:
   Document how mode lock checks work.
