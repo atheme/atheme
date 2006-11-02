@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing clone detection.
  *
- * $Id: clones.c 7039 2006-11-02 23:20:29Z jilles $
+ * $Id: clones.c 7041 2006-11-02 23:36:06Z jilles $
  */
 
 #include "atheme.h"
@@ -12,12 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 7039 2006-11-02 23:20:29Z jilles $",
+	"$Id: clones.c 7041 2006-11-02 23:36:06Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-#define DEFAULT_WARN_CLONES 3
-#define DEFAULT_KLINE_CLONES 6
+#define DEFAULT_WARN_CLONES	3 /* IPs with more than this are warned about */
+#define DEFAULT_KLINE_CLONES	6 /* IPs with this or more are banned */
+#define EXEMPT_GRACE		10 /* exempt IPs exceeding their allowance by this are banned */
 
 static void clones_newuser(void *);
 static void clones_userquit(void *);
@@ -444,8 +445,10 @@ static void clones_newuser(void *vptr)
 
 		if (allowed == 0 || i > allowed)
 		{
-			if (i < DEFAULT_KLINE_CLONES)
+			if (allowed == 0 && i < DEFAULT_KLINE_CLONES)
 				snoop("CLONES: %d clones on %s (%s!%s@%s)", i, u->ip, u->nick, u->user, u->host);
+			else if (allowed != 0 && i < allowed + EXEMPT_GRACE)
+				snoop("CLONES: %d clones on %s (%s!%s@%s) (%d allowed)", i, u->ip, u->nick, u->user, u->host, allowed);
 			else if (!kline_enabled)
 				snoop("CLONES: %d clones on %s (%s!%s@%s) (TKLINE disabled)", i, u->ip, u->nick, u->user, u->host);
 			else
