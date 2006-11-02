@@ -4,7 +4,7 @@
  *
  * Changes and shows nickname access lists.
  *
- * $Id: access.c 6885 2006-10-22 15:57:32Z jilles $
+ * $Id: access.c 7033 2006-11-02 20:05:23Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/access", FALSE, _modinit, _moddeinit,
-	"$Id: access.c 6885 2006-10-22 15:57:32Z jilles $",
+	"$Id: access.c 7033 2006-11-02 20:05:23Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -167,6 +167,12 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 			p = strrchr(host, '.');
 			if (p != NULL)
 			{
+				/* No wildcarded IPs */
+				if (isdigit(p[1]) && (strchr(host, '*') || strchr(host, '?')))
+				{
+					command_fail(si, fault_badparams, "Too wide mask \2%s\2.", parv[1]);
+					return;
+				}
 				/* Require non-wildcard top and second level
 				 * domain */
 				if (strchr(p, '?') || strchr(p, '*'))

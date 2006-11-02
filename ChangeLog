@@ -1,3 +1,12 @@
+jilles      2006/11/02 17:22:21 UTC	(20061102-7031)
+  Log:
+  2.0 release notes: clarify a little what changed to fantasy commands
+  
+
+  Changes:	Modified:
+  +3 -1		trunk/doc/RELEASE (File Modified) 
+
+
 jilles      2006/11/01 22:44:10 UTC	(20061101-7027)
   Log:
   Rerun autoconf.
