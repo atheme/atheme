@@ -1,4 +1,4 @@
-$Id: RELEASE 6937 2006-10-25 15:44:02Z jilles $
+$Id: RELEASE 7031 2006-11-02 17:22:21Z jilles $
 
 Atheme 2.0 Release Notes
 ========================
@@ -43,7 +43,9 @@ chanserv
   restores if the channel was not recreated.
 - Also give VERBOSE notices on foundership changes.
 - Fantasy and regular commands now use the same code. Fantasy commands are
-  executed with VERBOSE set.
+  executed with VERBOSE set. This allows executing all chanserv commands
+  affecting a single registered channel, except DROP and SET, as a fantasy
+  command but removes some aliases.
 - Allow /cs status when not logged in.
 - Add /cs count from contrib, shows how many entries are in access lists.
 oper
