@@ -1,3 +1,16 @@
+jilles      2006/11/02 23:36:06 UTC	(20061102-7041)
+  Log:
+  Change what the "allowed number of clones" field in
+  an exempt does:
+  - at or above allowed number, send warnings
+  - at or above allowed number plus 10, kline
+  discussed with w00t
+  
+
+  Changes:	Modified:
+  +6 -3		trunk/modules/operserv/clones.c (File Modified) 
+
+
 jilles      2006/11/02 23:20:29 UTC	(20061102-7039)
   Log:
   operserv clones:
