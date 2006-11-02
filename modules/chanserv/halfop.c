@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: halfop.c 6727 2006-10-20 18:48:53Z jilles $
+ * $Id: halfop.c 7035 2006-11-02 20:13:35Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/halfop", FALSE, _modinit, _moddeinit,
-	"$Id: halfop.c 6727 2006-10-20 18:48:53Z jilles $",
+	"$Id: halfop.c 7035 2006-11-02 20:13:35Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -121,7 +121,7 @@ static void cs_cmd_halfop(sourceinfo_t *si, int parc, char *parv[])
 	modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'h', CLIENT_NAME(tu));
 	cu->modes |= ircd->halfops_mode;
 
-	if (tu != si->su)
+	if (si->c == NULL && tu != si->su)
 		notice(chansvs.nick, tu->nick, "You have been halfopped on %s by %s", mc->name, get_source_name(si));
 
 	logcommand(si, CMDLOG_SET, "%s HALFOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
@@ -194,7 +194,7 @@ static void cs_cmd_dehalfop(sourceinfo_t *si, int parc, char *parv[])
 	modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'h', CLIENT_NAME(tu));
 	cu->modes &= ~ircd->halfops_mode;
 
-	if (tu != si->su)
+	if (si->c == NULL && tu != si->su)
 		notice(chansvs.nick, tu->nick, "You have been dehalfopped on %s by %s", mc->name, get_source_name(si));
 
 	logcommand(si, CMDLOG_SET, "%s DEHALFOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);

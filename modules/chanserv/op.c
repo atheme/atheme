@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: op.c 6727 2006-10-20 18:48:53Z jilles $
+ * $Id: op.c 7035 2006-11-02 20:13:35Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/op", FALSE, _modinit, _moddeinit,
-	"$Id: op.c 6727 2006-10-20 18:48:53Z jilles $",
+	"$Id: op.c 7035 2006-11-02 20:13:35Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -115,7 +115,7 @@ static void cs_cmd_op(sourceinfo_t *si, int parc, char *parv[])
 	modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'o', CLIENT_NAME(tu));
 	cu->modes |= CMODE_OP;
 
-	if (tu != si->su)
+	if (si->c == NULL && tu != si->su)
 		notice(chansvs.nick, tu->nick, "You have been opped on %s by %s", mc->name, get_source_name(si));
 
 	logcommand(si, CMDLOG_SET, "%s OP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
@@ -182,7 +182,7 @@ static void cs_cmd_deop(sourceinfo_t *si, int parc, char *parv[])
 	modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'o', CLIENT_NAME(tu));
 	cu->modes &= ~CMODE_OP;
 
-	if (tu != si->su)
+	if (si->c == NULL && tu != si->su)
 		notice(chansvs.nick, tu->nick, "You have been deopped on %s by %s", mc->name, get_source_name(si));
 
 	logcommand(si, CMDLOG_SET, "%s DEOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);

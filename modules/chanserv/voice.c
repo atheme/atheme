@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService VOICE functions.
  *
- * $Id: voice.c 6727 2006-10-20 18:48:53Z jilles $
+ * $Id: voice.c 7035 2006-11-02 20:13:35Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/voice", FALSE, _modinit, _moddeinit,
-	"$Id: voice.c 6727 2006-10-20 18:48:53Z jilles $",
+	"$Id: voice.c 7035 2006-11-02 20:13:35Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -107,7 +107,7 @@ static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[])
 	modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'v', CLIENT_NAME(tu));
 	cu->modes |= CMODE_VOICE;
 
-	if (tu != si->su)
+	if (si->c == NULL && tu != si->su)
 		notice(chansvs.nick, tu->nick, "You have been voiced on %s by %s", mc->name, get_source_name(si));
 
 	logcommand(si, CMDLOG_SET, "%s VOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
@@ -168,7 +168,7 @@ static void cs_cmd_devoice(sourceinfo_t *si, int parc, char *parv[])
 	modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'v', CLIENT_NAME(tu));
 	cu->modes &= ~CMODE_VOICE;
 
-	if (tu != si->su)
+	if (si->c == NULL && tu != si->su)
 		notice(chansvs.nick, tu->nick, "You have been devoiced on %s by %s", mc->name, get_source_name(si));
 
 	logcommand(si, CMDLOG_SET, "%s DEVOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);

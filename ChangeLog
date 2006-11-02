@@ -1,3 +1,12 @@
+jilles      2006/11/02 20:05:23 UTC	(20061102-7033)
+  Log:
+  Don't allow access list entries like someuser@*.3.4.
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/nickserv/access.c (File Modified) 
+
+
 jilles      2006/11/02 17:22:21 UTC	(20061102-7031)
   Log:
   2.0 release notes: clarify a little what changed to fantasy commands
