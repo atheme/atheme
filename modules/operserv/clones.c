@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing clone detection.
  *
- * $Id: clones.c 6945 2006-10-25 17:29:26Z jilles $
+ * $Id: clones.c 7039 2006-11-02 23:20:29Z jilles $
  */
 
 #include "atheme.h"
@@ -12,9 +12,12 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 6945 2006-10-25 17:29:26Z jilles $",
+	"$Id: clones.c 7039 2006-11-02 23:20:29Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
+
+#define DEFAULT_WARN_CLONES 3
+#define DEFAULT_KLINE_CLONES 6
 
 static void clones_newuser(void *);
 static void clones_userquit(void *);
@@ -193,7 +196,7 @@ static void load_exemptdb(void)
 			int clones = atoi(strtok(NULL, " "));
 			char *reason = strtok(NULL, "");
 
-			if (!ip || clones < 6 || !reason)
+			if (!ip || clones <= 0 || !reason)
 				; /* erroneous, don't add */
 			else
 			{
@@ -342,9 +345,9 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	clones = atoi(clonesstr);
-	if (clones < 6)
+	if (clones <= DEFAULT_WARN_CLONES)
 	{
-		command_fail(si, fault_badparams, "Allowed clones count must be at least %d", 6);
+		command_fail(si, fault_badparams, "Allowed clones count must be more than %d", DEFAULT_WARN_CLONES);
 		return;
 	}
 
@@ -435,13 +438,13 @@ static void clones_newuser(void *vptr)
 	node_add(u, node_create(), &he->clients);
 	i = LIST_LENGTH(&he->clients);
 
-	if (i > 3)
+	if (i > DEFAULT_WARN_CLONES)
 	{
 		allowed = is_exempt(u->ip);
 
 		if (allowed == 0 || i > allowed)
 		{
-			if (i < 6)
+			if (i < DEFAULT_KLINE_CLONES)
 				snoop("CLONES: %d clones on %s (%s!%s@%s)", i, u->ip, u->nick, u->user, u->host);
 			else if (!kline_enabled)
 				snoop("CLONES: %d clones on %s (%s!%s@%s) (TKLINE disabled)", i, u->ip, u->nick, u->user, u->host);

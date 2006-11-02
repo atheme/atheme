@@ -1,3 +1,29 @@
+jilles      2006/11/02 23:07:34 UTC	(20061102-7037)
+  Log:
+  - add a framework for allowing SOPERs in the DB as well as
+    in atheme.conf
+  - in /stats o, conf SOPERs have * in the password field,
+    DB SOPERs have D.
+  - move is_soper() from function.c/account.h to privs.c/privs.h
+  - add is_conf_soper(), returns true if the given account
+    has an operator{} block in atheme.conf
+  - remove general::sras
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/include/account.h (File Modified) 
+  +7 -1		trunk/include/privs.h (File Modified) 
+  +2 -6		trunk/modules/chanserv/status.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/info.c (File Modified) 
+  +2 -6		trunk/modules/nickserv/status.c (File Modified) 
+  +2 -2		trunk/src/account.c (File Modified) 
+  +1 -13	trunk/src/conf.c (File Modified) 
+  +0 -11	trunk/src/function.c (File Modified) 
+  +2 -1		trunk/src/node.c (File Modified) 
+  +47 -7	trunk/src/privs.c (File Modified) 
+  +3 -2		trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2006/11/02 20:13:35 UTC	(20061102-7035)
   Log:
   chanserv op/halfop/voice:
