@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService STATUS function.
  *
- * $Id: status.c 6887 2006-10-22 16:29:18Z jilles $
+ * $Id: status.c 7037 2006-11-02 23:07:34Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/status", FALSE, _modinit, _moddeinit,
-	"$Id: status.c 6887 2006-10-22 16:29:18Z jilles $",
+	"$Id: status.c 7037 2006-11-02 23:07:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -97,13 +97,9 @@ static void ns_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 
 		if (is_soper(si->smu))
 		{
-			operclass_t *operclass;
+			soper_t *soper = si->smu->soper;
 
-			operclass = si->smu->soper->operclass;
-			if (operclass == NULL)
-				command_success_nodata(si, "You are a services root administrator.");
-			else
-				command_success_nodata(si, "You are a services operator of class %s.", operclass->name);
+			command_success_nodata(si, "You are a services operator of class %s.", soper->operclass ? soper->operclass->name : soper->classname);
 		}
 	}
 

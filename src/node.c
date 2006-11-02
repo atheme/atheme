@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 6969 2006-10-26 23:10:14Z jilles $
+ * $Id: node.c 7037 2006-11-02 23:07:34Z jilles $
  */
 
 #include "atheme.h"
@@ -55,7 +55,8 @@ void mark_all_illegal()
 	LIST_FOREACH_SAFE(n, tn, soperlist.head)
 	{
 		soper = (soper_t *)n->data;
-		soper_delete(soper);
+		if (soper->flags & SOPER_CONF)
+			soper_delete(soper);
 	}
 	/* no sopers pointing to these anymore */
 	LIST_FOREACH_SAFE(n, tn, operclasslist.head)

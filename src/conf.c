@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 6931 2006-10-24 16:53:07Z jilles $
+ * $Id: conf.c 7037 2006-11-02 23:07:34Z jilles $
  */
 
 #include "atheme.h"
@@ -124,7 +124,6 @@ static int c_gi_flood_time(CONFIGENTRY *);
 static int c_gi_kline_time(CONFIGENTRY *);
 static int c_gi_commit_interval(CONFIGENTRY *);
 static int c_gi_expire(CONFIGENTRY *);
-static int c_gi_sras(CONFIGENTRY *);
 static int c_gi_secure(CONFIGENTRY *);
 
 static BlockHeap *conftable_heap;
@@ -509,7 +508,6 @@ void init_newconf(void)
 	add_conf_item("KLINE_TIME", &conf_gi_table, c_gi_kline_time);
 	add_conf_item("COMMIT_INTERVAL", &conf_gi_table, c_gi_commit_interval);
 	add_conf_item("EXPIRE", &conf_gi_table, c_gi_expire);
-	add_conf_item("SRAS", &conf_gi_table, c_gi_sras);
 
 	/* chanserv{} block */
 	add_conf_item("NICK", &conf_ci_table, c_ci_nick);
@@ -798,7 +796,7 @@ static int c_operator(CONFIGENTRY *ce)
 	}
 
 	if (operclass != NULL)
-		soper_add(name, operclass);
+		soper_add(name, operclass->name, SOPER_CONF);
 	else
 		slog(LG_ERROR, "%s:%d: skipping operator %s because of bad/missing parameters",
 						topce->ce_fileptr->cf_filename, topce->ce_varlinenum, name);
@@ -1580,16 +1578,6 @@ static int c_gl_real(CONFIGENTRY *ce)
 		PARAM_ERROR(ce);
 
 	globsvs.real = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_gi_sras(CONFIGENTRY *ce)
-{
-	CONFIGENTRY *flce;
-
-	for (flce = ce->ce_entries; flce; flce = flce->ce_next)
-		soper_add(flce->ce_varname, NULL);
 
 	return 0;
 }

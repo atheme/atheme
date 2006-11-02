@@ -4,7 +4,7 @@
  *
  * Fine grained services operator privileges
  *
- * $Id: privs.h 6961 2006-10-26 22:22:50Z jilles $
+ * $Id: privs.h 7037 2006-11-02 23:07:34Z jilles $
  */
 
 #ifndef PRIVS_H
@@ -57,7 +57,11 @@ struct soper_ {
   myuser_t *myuser;
   char *name;
   operclass_t *operclass;
+  char *classname;
+  int flags;
 };
+
+#define SOPER_CONF	0x1 /* oper is listed in atheme.conf */
 
 /* privs.c */
 E list_t operclasslist;
@@ -69,11 +73,13 @@ E operclass_t *operclass_add(char *name, char *privs);
 E void operclass_delete(operclass_t *operclass);
 E operclass_t *operclass_find(char *name);
 
-E soper_t *soper_add(char *name, operclass_t *operclass);
+E soper_t *soper_add(char *name, char *classname, int flags);
 E void soper_delete(soper_t *soper);
 E soper_t *soper_find(myuser_t *myuser);
 E soper_t *soper_find_named(char *name);
 
+E boolean_t is_soper(myuser_t *myuser);
+E boolean_t is_conf_soper(myuser_t *myuser);
 
 /* has_any_privs(): used to determine whether we should give detailed
  * messages about disallowed things

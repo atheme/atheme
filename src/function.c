@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 6965 2006-10-26 22:38:09Z jilles $
+ * $Id: function.c 7037 2006-11-02 23:07:34Z jilles $
  */
 
 #include "atheme.h"
@@ -676,17 +676,6 @@ boolean_t should_protect(mychan_t *mychan, myuser_t *myuser)
 		return FALSE;
 
 	if (chanacs_find(mychan, myuser, CA_SET))
-		return TRUE;
-
-	return FALSE;
-}
-
-boolean_t is_soper(myuser_t *myuser)
-{
-	if (!myuser)
-		return FALSE;
-
-	if (myuser->soper)
 		return TRUE;
 
 	return FALSE;

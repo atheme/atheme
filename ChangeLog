@@ -1,3 +1,18 @@
+jilles      2006/11/02 20:13:35 UTC	(20061102-7035)
+  Log:
+  chanserv op/halfop/voice:
+  don't explicitly tell the target by whom they have been
+  opped/deopped/etc if it is a fantasy command (they can
+  see in the channel).
+  This agrees with atheme 1.x behaviour.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/chanserv/halfop.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/op.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/voice.c (File Modified) 
+
+
 jilles      2006/11/02 20:05:23 UTC	(20061102-7033)
   Log:
   Don't allow access list entries like someuser@*.3.4.

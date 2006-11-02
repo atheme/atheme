@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 6931 2006-10-24 16:53:07Z jilles $
+ * $Id: ptasks.c 7037 2006-11-02 23:07:34Z jilles $
  */
 
 #include "atheme.h"
@@ -173,9 +173,10 @@ void handle_stats(user_t *u, char req)
 		  {
 			  soper = n->data;
 
-			  numeric_sts(me.name, 243, u->nick, "O *@* * %s %s %s",
+			  numeric_sts(me.name, 243, u->nick, "O *@* %s %s %s %s",
+					  soper->flags & SOPER_CONF ? "*" : "D",
 					  soper->myuser ? soper->myuser->name : soper->name,
-					  soper->operclass ? soper->operclass->name : "*", "-1");
+					  soper->operclass ? soper->operclass->name : soper->classname, "-1");
 		  }
 		  break;
 

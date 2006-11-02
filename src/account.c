@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 6969 2006-10-26 23:10:14Z jilles $
+ * $Id: account.c 7037 2006-11-02 23:07:34Z jilles $
  */
 
 #include "atheme.h"
@@ -1259,10 +1259,10 @@ static int expire_myuser_cb(dictionary_elem_t *delem, void *unused)
 
 	if (((CURRTIME - mu->lastlogin) >= config_options.expire) || ((mu->flags & MU_WAITAUTH) && (CURRTIME - mu->registered >= 86400)))
 	{
-		/* Don't expire accounts with privs on them,
+		/* Don't expire accounts with privs on them in atheme.conf,
 		 * otherwise someone can reregister
 		 * them and take the privs -- jilles */
-		if (is_soper(mu))
+		if (is_conf_soper(mu))
 			return 0;
 
 		snoop("EXPIRE: \2%s\2 from \2%s\2 ", mu->name, mu->email);

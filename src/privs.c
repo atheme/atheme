@@ -4,7 +4,7 @@
  *
  * See doc/LICENSE for licensing information.
  *
- * $Id: privs.c 6961 2006-10-26 22:22:50Z jilles $
+ * $Id: privs.c 7037 2006-11-02 23:07:34Z jilles $
  */
 
 #include "atheme.h"
@@ -46,6 +46,13 @@ operclass_t *operclass_add(char *name, char *privs)
 	operclass->name = sstrdup(name);
 	operclass->privs = sstrdup(privs);
 	cnt.operclass++;
+	LIST_FOREACH(n, soperlist.head)
+	{
+		soper_t *soper = n->data;
+		if (soper->operclass == NULL &&
+				!strcasecmp(name, soper->classname))
+			soper->operclass = operclass;
+	}
 	return operclass;
 }
 
@@ -59,6 +66,12 @@ void operclass_delete(operclass_t *operclass)
 	n = node_find(operclass, &operclasslist);
 	node_del(n, &operclasslist);
 	node_free(n);
+	LIST_FOREACH(n, soperlist.head)
+	{
+		soper_t *soper = n->data;
+		if (soper->operclass == operclass)
+			soper->operclass = NULL;
+	}
 	free(operclass->name);
 	free(operclass->privs);
 	BlockHeapFree(operclass_heap, operclass);
@@ -85,11 +98,12 @@ operclass_t *operclass_find(char *name)
  * S O P E R S *
  ***************/
 
-soper_t *soper_add(char *name, operclass_t *operclass)
+soper_t *soper_add(char *name, char *classname, int flags)
 {
 	soper_t *soper;
 	myuser_t *mu = myuser_find(name);
 	node_t *n;
+	operclass_t *operclass = operclass_find(classname);
 
 	if (mu ? soper_find(mu) : soper_find_named(name))
 	{
@@ -115,6 +129,8 @@ soper_t *soper_add(char *name, operclass_t *operclass)
 		soper->myuser = NULL;
 	}
 	soper->operclass = operclass;
+	soper->classname = sstrdup(classname);
+	soper->flags = flags;
 
 	cnt.soper++;
 
@@ -143,6 +159,8 @@ void soper_delete(soper_t *soper)
 
 	if (soper->name)
 		free(soper->name);
+
+	free(soper->classname);
 
 	BlockHeapFree(soper_heap, soper);
 
@@ -179,6 +197,28 @@ soper_t *soper_find_named(char *name)
 	}
 
 	return NULL;
+}
+
+boolean_t is_soper(myuser_t *myuser)
+{
+	if (!myuser)
+		return FALSE;
+
+	if (myuser->soper)
+		return TRUE;
+
+	return FALSE;
+}
+
+boolean_t is_conf_soper(myuser_t *myuser)
+{
+	if (!myuser)
+		return FALSE;
+
+	if (myuser->soper && myuser->soper->flags & SOPER_CONF)
+		return TRUE;
+
+	return FALSE;
 }
 
 /* name1 name2 name3... */
@@ -247,8 +287,8 @@ boolean_t has_priv_user(user_t *u, const char *priv)
 	if (u->myuser && is_soper(u->myuser))
 	{
 		operclass = u->myuser->soper->operclass;
-		if (operclass == NULL) /* old sras = {} */
-			return TRUE;
+		if (operclass == NULL)
+			return FALSE;
 		if (string_in_list(operclass->privs, priv))
 			return TRUE;
 	}
@@ -266,8 +306,8 @@ boolean_t has_priv_myuser(myuser_t *mu, const char *priv)
 	if (!is_soper(mu))
 		return FALSE;
 	operclass = mu->soper->operclass;
-	if (operclass == NULL) /* old sras = {} */
-		return TRUE;
+	if (operclass == NULL)
+		return FALSE;
 	if (string_in_list(operclass->privs, priv))
 		return TRUE;
 	return FALSE;
@@ -275,8 +315,8 @@ boolean_t has_priv_myuser(myuser_t *mu, const char *priv)
 
 boolean_t has_priv_operclass(operclass_t *operclass, const char *priv)
 {
-	if (operclass == NULL) /* old sras = {} */
-		return TRUE;
+	if (operclass == NULL)
+		return FALSE;
 	if (string_in_list(operclass->privs, priv))
 		return TRUE;
 	return FALSE;
