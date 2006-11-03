@@ -1,4 +1,4 @@
-$Id: SQL 5732 2006-07-05 16:06:54Z w00t $
+$Id: SQL 7059 2006-11-03 19:26:47Z jilles $
 
 SQL Notes
 ---------
@@ -6,6 +6,15 @@ SQL Notes
 Atheme supports SQL databases. SQL is not "live" for a number of
 reasons. Most significantly, better, more portable, and safer
 functionality is provided by Atheme's XML-RPC interface.
+
+To repeat, the SQL backends do not pick up any changes to the
+database at run time and only write changes to the database every
+5 minutes (or configurable time), and therefore they cannot (or only
+to a very limited extent) be used to create web interfaces to services.
+
+Additionally the SQL backends are less well tested than flatfile, and
+may lack some recent features (nickname access lists (/ns access),
+services ignores).
 
 Schema files are available in the SQL/ directory.
 
@@ -68,3 +77,4 @@ the configuration file, as your flatfile database will no longer
 be updated. You may want to restart Services to ensure that the
 transition was successful after updating the config file.
 
+Switching from a SQL backend to flatfile can be done similarly.

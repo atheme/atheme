@@ -1,3 +1,16 @@
+jilles      2006/11/03 16:28:49 UTC	(20061103-7053)
+  Log:
+  Make syntax descriptions in help files more consistent:
+  ON|OFF instead of <ON|OFF> or <on/off>
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/help/cservice/close (File Modified) 
+  +1 -1		trunk/help/cservice/set_fantasy (File Modified) 
+  +1 -1		trunk/help/cservice/set_keeptopic (File Modified) 
+  +1 -1		trunk/help/cservice/set_topiclock (File Modified) 
+
+
 jilles      2006/11/03 15:39:24 UTC	(20061103-7049)
   Log:
   nickserv access: convert masks like 1.2.*.*, 1.2.* and 1.2.3.* to cidr.
