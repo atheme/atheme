@@ -1,3 +1,12 @@
+jilles      2006/11/03 15:39:24 UTC	(20061103-7049)
+  Log:
+  nickserv access: convert masks like 1.2.*.*, 1.2.* and 1.2.3.* to cidr.
+  
+
+  Changes:	Modified:
+  +52 -0	trunk/modules/nickserv/access.c (File Modified) 
+
+
 jilles      2006/11/02 23:45:35 UTC	(20061102-7043)
   Log:
   Update operserv clones help file.

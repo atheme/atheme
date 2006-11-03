@@ -9,7 +9,7 @@ TOPICLOCK requires KEEPTOPIC and will
 automatically enable it; disabling KEEPTOPIC
 will disable TOPICLOCK also.
 
-Syntax: SET <#channel> TOPICLOCK <on/off>
+Syntax: SET <#channel> TOPICLOCK ON|OFF
 
 Example:
     /msg &nick& SET #foo TOPICLOCK ON

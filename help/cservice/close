@@ -11,7 +11,7 @@ users from the channel.
 Use CLOSE OFF to reopen a channel. While closed,
 channels will still expire.
 
-Syntax: CLOSE <#channel> <ON|OFF> [reason]
+Syntax: CLOSE <#channel> ON|OFF [reason]
 
 Examples:
     /msg &nick& CLOSE #lamers ON spamming

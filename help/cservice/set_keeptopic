@@ -7,7 +7,7 @@ after netsplits or services outages, so it
 is not recommended to turn this on if your
 channel tends to never empty.
 
-Syntax: SET <#channel> KEEPTOPIC <on/off>
+Syntax: SET <#channel> KEEPTOPIC ON|OFF
 
 Example:
     /msg &nick& SET #foo KEEPTOPIC ON
