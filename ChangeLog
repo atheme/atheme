@@ -1,3 +1,12 @@
+jilles      2006/11/02 23:45:35 UTC	(20061102-7043)
+  Log:
+  Update operserv clones help file.
+  
+
+  Changes:	Modified:
+  +3 -2		trunk/help/oservice/clones (File Modified) 
+
+
 jilles      2006/11/02 23:36:06 UTC	(20061102-7041)
   Log:
   Change what the "allowed number of clones" field in

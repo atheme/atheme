@@ -4,7 +4,7 @@
  *
  * Changes and shows nickname access lists.
  *
- * $Id: access.c 7033 2006-11-02 20:05:23Z jilles $
+ * $Id: access.c 7049 2006-11-03 15:39:24Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/access", FALSE, _modinit, _moddeinit,
-	"$Id: access.c 7033 2006-11-02 20:05:23Z jilles $",
+	"$Id: access.c 7049 2006-11-03 15:39:24Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -41,6 +41,52 @@ void _moddeinit()
 	use_myuser_access--;
 }
 
+static boolean_t mangle_wildcard_to_cidr(const char *host, char *dest, int destlen)
+{
+	int i;
+	const char *p;
+
+	p = host;
+
+	if ((p[0] != '0' || p[1] != '.') && ((i = atoi(p)) < 1 || i > 255))
+		return FALSE;
+	while (isdigit(*p))
+		p++;
+	if (*p++ != '.')
+		return FALSE;
+	if (p[0] == '*' && p[1] == '\0')
+	{
+		snprintf(dest, destlen, "%.*s0.0.0/8", p - host, host);
+		return TRUE;
+	}
+
+	if ((p[0] != '0' || p[1] != '.') && ((i = atoi(p)) < 1 || i > 255))
+		return FALSE;
+	while (isdigit(*p))
+		p++;
+	if (*p++ != '.')
+		return FALSE;
+	if (p[0] == '*' && (p[1] == '\0' || (p[1] == '.' && p[2] == '*' && p[3] == '\0')))
+	{
+		snprintf(dest, destlen, "%.*s0.0/16", p - host, host);
+		return TRUE;
+	}
+
+	if ((p[0] != '0' || p[1] != '.') && ((i = atoi(p)) < 1 || i > 255))
+		return FALSE;
+	while (isdigit(*p))
+		p++;
+	if (*p++ != '.')
+		return FALSE;
+	if (p[0] == '*' && p[1] == '\0')
+	{
+		snprintf(dest, destlen, "%.*s0/24", p - host, host);
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
 static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
@@ -48,6 +94,7 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 	char *mask;
 	char *host;
 	char *p;
+	char mangledmask[NICKLEN+HOSTLEN+10];
 
 	if (parc < 1)
 	{
@@ -136,6 +183,11 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 		host++;
+		/* try mangling to cidr */
+		strlcpy(mangledmask, mask, sizeof mangledmask);
+		if (mangle_wildcard_to_cidr(host, mangledmask + (host - mask), sizeof mangledmask - (host - mask)))
+			host = mangledmask + (host - mask), mask = mangledmask;
+		/* more checks */
 		if (si->su != NULL && (!strcasecmp(host, si->su->host) || !strcasecmp(host, si->su->vhost)))
 			; /* it's their host, allow it */
 		else if (host[0] == '.' || host[0] == ':' || host[0] == '\0' || host[1] == '\0' || host == mask + 1 || strchr(host, '@') || strstr(host, ".."))
