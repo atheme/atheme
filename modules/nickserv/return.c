@@ -4,7 +4,7 @@
  *
  * Implements nickserv RETURN.
  *
- * $Id: return.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: return.c 7067 2006-11-04 20:14:57Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/return", FALSE, _modinit, _moddeinit,
-	"$Id: return.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: return.c 7067 2006-11-04 20:14:57Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -75,7 +75,7 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 	strlcpy(oldmail, mu->email, EMAILLEN);
 	strlcpy(mu->email, newmail, EMAILLEN);
 
-	if (!sendemail(si->su, EMAIL_SENDPASS, mu, newpass))
+	if (!sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_SENDPASS, mu, newpass))
 	{
 		strlcpy(mu->email, oldmail, EMAILLEN);
 		command_fail(si, fault_emailfail, "Sending email failed, nickname \2%s\2 remains with \2%s\2.",

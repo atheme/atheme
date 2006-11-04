@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 6825 2006-10-21 23:32:38Z jilles $
+ * $Id: set.c 7067 2006-11-04 20:14:57Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 6825 2006-10-21 23:32:38Z jilles $",
+	"$Id: set.c 7067 2006-11-04 20:14:57Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -120,7 +120,7 @@ static void _ns_setemail(sourceinfo_t *si, int parc, char *parv[])
 		metadata_add(si->smu, METADATA_USER, "private:verify:emailchg:newemail", email);
 		metadata_add(si->smu, METADATA_USER, "private:verify:emailchg:timestamp", itoa(time(NULL)));
 
-		if (!sendemail(si->su, EMAIL_SETEMAIL, si->smu, itoa(key)))
+		if (!sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_SETEMAIL, si->smu, itoa(key)))
 		{
 			command_fail(si, fault_emailfail, "Sending email failed, sorry! Your email address is unchanged.");
 			metadata_delete(si->smu, METADATA_USER, "private:verify:emailchg:key");
