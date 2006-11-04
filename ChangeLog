@@ -1,3 +1,12 @@
+jilles      2006/11/03 19:26:47 UTC	(20061103-7059)
+  Log:
+  Clarify the limited usefulness of the SQL backends.
+  
+
+  Changes:	Modified:
+  +10 -0	trunk/doc/SQL (File Modified) 
+
+
 jilles      2006/11/03 16:28:49 UTC	(20061103-7053)
   Log:
   Make syntax descriptions in help files more consistent:

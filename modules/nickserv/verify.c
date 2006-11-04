@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ VERIFY function.
  *
- * $Id: verify.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: verify.c 7063 2006-11-04 19:26:52Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/verify", FALSE, _modinit, _moddeinit,
-	"$Id: verify.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: verify.c 7063 2006-11-04 19:26:52Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -41,6 +41,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	metadata_t *md;
+	node_t *n;
 	char *op = parv[0];
 	char *nick = parv[1];
 	char *key = parv[2];
@@ -88,7 +89,11 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, "\2%s\2 has now been verified.", mu->name);
 			command_success_nodata(si, "Thank you for verifying your e-mail address! You have taken steps in "
 				"ensuring that your registrations are not exploited.");
-			ircd_on_login(si->su->nick, mu->name, NULL);
+			LIST_FOREACH(n, mu->logins.head)
+			{
+				user_t *u = n->data;
+				ircd_on_login(u->nick, mu->name, NULL);
+			}
 
 			return;
 		}
