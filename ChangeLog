@@ -1,3 +1,17 @@
+jilles      2006/11/04 20:14:57 UTC	(20061104-7067)
+  Log:
+  nickserv register/return/sendpass/set email:
+  make sending emails work if the command came from non-IRC
+  unfortunately this loses information who requested the email
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/register.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/return.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/sendpass.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/set.c (File Modified) 
+
+
 jilles      2006/11/04 19:29:11 UTC	(20061104-7065)
   Log:
   Use "Account Registration" instead of "Nickname Registration"
