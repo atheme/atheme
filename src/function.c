@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 7037 2006-11-02 23:07:34Z jilles $
+ * $Id: function.c 7065 2006-11-04 19:29:11Z jilles $
  */
 
 #include "atheme.h"
@@ -544,10 +544,10 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	strlcpy(subject, me.netname, sizeof subject);
 	strlcat(subject, " ", sizeof subject);
 	if (type == EMAIL_REGISTER)
-		if (nicksvs.nick)
-			strlcat(subject, "Nickname Registration", sizeof subject);
-		else
+		if (nicksvs.no_nick_ownership)
 			strlcat(subject, "Account Registration", sizeof subject);
+		else
+			strlcat(subject, "Nickname Registration", sizeof subject);
 	else if (type == EMAIL_SENDPASS)
 		strlcat(subject, "Password Retrieval", sizeof subject);
 	else if (type == EMAIL_SETEMAIL)

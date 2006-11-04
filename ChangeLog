@@ -1,3 +1,17 @@
+jilles      2006/11/04 19:26:52 UTC	(20061104-7063)
+  Log:
+  nickserv verify:
+  grant ircd registered status to all IRC users logged in
+  to the nick, not to the source of the command
+  - fixes crashes with xmlrpc verify with some protocol modules
+  - grants all required registered status if the user is
+    logged in multiple times
+  
+
+  Changes:	Modified:
+  +6 -1		trunk/modules/nickserv/verify.c (File Modified) 
+
+
 jilles      2006/11/03 19:26:47 UTC	(20061103-7059)
   Log:
   Clarify the limited usefulness of the SQL backends.
