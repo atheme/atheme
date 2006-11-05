@@ -4,7 +4,7 @@
  *
  * Fine grained services operator privileges
  *
- * $Id: privs.h 7081 2006-11-05 16:43:27Z jilles $
+ * $Id: privs.h 7097 2006-11-05 23:32:20Z jilles $
  */
 
 #ifndef PRIVS_H
@@ -45,7 +45,6 @@
 /* please do not use the following anymore */
 #define AC_IRCOP "special:ircop"
 #define AC_SRA "general:admin"
-#define is_sra(mu) (has_priv_myuser(mu, PRIV_ADMIN))
 
 struct operclass_ {
   char *name;

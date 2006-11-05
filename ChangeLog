@@ -1,3 +1,12 @@
+jilles      2006/11/05 22:04:32 UTC	(20061105-7095)
+  Log:
+  Make operserv rakill work via non-IRC.
+  
+
+  Changes:	Modified:
+  +8 -6		trunk/modules/operserv/rakill.c (File Modified) 
+
+
 jilles      2006/11/05 17:20:21 UTC	(20061105-7093)
   Log:
   Mention explicitly that an account cannot have both conf
