@@ -4,7 +4,7 @@
  *
  * Dynamic services operator privileges
  *
- * $Id: soper.c 7079 2006-11-05 16:13:00Z jilles $
+ * $Id: soper.c 7083 2006-11-05 16:44:35Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/soper", FALSE, _modinit, _moddeinit,
-	"$Id: soper.c 7079 2006-11-05 16:13:00Z jilles $",
+	"$Id: soper.c 7083 2006-11-05 16:44:35Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -165,6 +165,18 @@ static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (!has_all_operclass(si, operclass))
+	{
+		command_fail(si, fault_noprivs, "Oper class \2%s\2 has more privileges than you.", operclass->name);
+		return;
+	}
+	else if (mu->soper != NULL && mu->soper->operclass != NULL && !has_all_operclass(si, mu->soper->operclass))
+	{
+		command_fail(si, fault_noprivs, "Oper class for \2%s\2 is set to \2%s\2 which you are not authorized to change.",
+				mu->name, mu->soper->operclass->name);
+		return;
+	}
+
 	wallops("\2%s\2 is changing oper class for \2%s\2 to \2%s\2",
 		get_oper_name(si), mu->name, operclass->name);
 	snoop("SOPER:ADD: \2%s\2 to \2%s\2 by \2%s\2", mu->name, operclass->name, get_oper_name(si));
@@ -203,6 +215,12 @@ static void os_cmd_soper_del(sourceinfo_t *si, int parc, char *parv[])
 	if (!is_soper(mu))
 	{
 		command_fail(si, fault_nochange, "\2%s\2 does not have an operclass set.", mu->name);
+		return;
+	}
+	else if (mu->soper->operclass != NULL && !has_all_operclass(si, mu->soper->operclass))
+	{
+		command_fail(si, fault_noprivs, "Oper class for \2%s\2 is set to \2%s\2 which you are not authorized to change.",
+				mu->name, mu->soper->operclass->name);
 		return;
 	}
 
