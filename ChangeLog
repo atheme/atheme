@@ -1,3 +1,12 @@
+jilles      2006/11/05 17:09:33 UTC	(20061105-7091)
+  Log:
+  Don't reuse the name "dup".
+  
+
+  Changes:	Modified:
+  +5 -5		trunk/src/privs.c (File Modified) 
+
+
 jilles      2006/11/05 17:06:22 UTC	(20061105-7089)
   Log:
   soper_add(): If there is a duplicate soper and one is from

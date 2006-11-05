@@ -17,6 +17,10 @@ services operator
 	user logged into an account named in an operator{} block in
 	atheme.conf or an account granted privileges with /os soper
 
+Note that an account cannot have both an operator{} block and privileges
+granted with /os soper. If this happens, the privileges from /os soper
+will be discarded.
+
 A few privileges are granted independently of operclasses:
 
 To all IRCops and services operators (has_any_priv()):
@@ -106,4 +110,4 @@ operserv:global
 operserv:grant
 	use /os soper add/del
 
-$Id: PRIVILEGES 7079 2006-11-05 16:13:00Z jilles $
+$Id: PRIVILEGES 7093 2006-11-05 17:20:21Z jilles $
