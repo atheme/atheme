@@ -1,3 +1,13 @@
+jilles      2006/11/05 17:20:21 UTC	(20061105-7093)
+  Log:
+  Mention explicitly that an account cannot have both conf
+  and DB soper privs, and that conf privs take precedence.
+  
+
+  Changes:	Modified:
+  +4 -0		trunk/doc/PRIVILEGES (File Modified) 
+
+
 jilles      2006/11/05 17:09:33 UTC	(20061105-7091)
   Log:
   Don't reuse the name "dup".

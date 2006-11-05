@@ -4,7 +4,7 @@
  *
  * Regexp-based AKILL implementation.
  *
- * $Id: rakill.c 6849 2006-10-22 06:00:10Z nenolod $
+ * $Id: rakill.c 7095 2006-11-05 22:04:32Z jilles $
  */
 
 /*
@@ -17,7 +17,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rakill", FALSE, _modinit, _moddeinit,
-	"$Id: rakill.c 6849 2006-10-22 06:00:10Z nenolod $",
+	"$Id: rakill.c 7095 2006-11-05 22:04:32Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -54,14 +54,11 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 	char *args = parv[0];
 	char *pattern;
 	char *reason;
-	user_t *source = si->su;
+	user_t *source;
 	int flags = 0;
 
-	if (source == NULL)
-		return;
-
 	/* make sure they could have done RMATCH */
-	if (!has_priv_user(source, PRIV_USER_AUSPEX))
+	if (!has_priv(si, PRIV_USER_AUSPEX))
 	{
 		command_fail(si, fault_noprivs, "You do not have %s privilege.", PRIV_USER_AUSPEX);
 		return;
@@ -99,6 +96,11 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	source = si->su;
+	/* try to find them on IRC, otherwise use operserv */
+	if (source == NULL)
+		source = si->smu != NULL && LIST_LENGTH(&si->smu->logins) > 0 ?
+			si->smu->logins.head->data : si->service->me;
 	sprintf(usermask, "%s!%s@%s %s", source->nick, source->user, source->host, source->gecos);
 	if (regex_match(regex, (char *)usermask))
 	{
@@ -106,7 +108,7 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, "The provided regex matches you, refusing RAKILL.");
 		snoop("RAKILL:REFUSED: \2%s\2 by \2%s\2 (%s) (matches self)", pattern, get_oper_name(si), reason);
 		wallops("\2%s\2 attempted to do RAKILL on \2%s\2 matching self",
-				si->su->nick, pattern);
+				get_oper_name(si), pattern);
 		logcommand(si, CMDLOG_ADMIN, "RAKILL %s %s (refused, matches self)", pattern, reason);
 		return;
 	}
