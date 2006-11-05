@@ -1,3 +1,15 @@
+jilles      2006/11/05 17:06:22 UTC	(20061105-7089)
+  Log:
+  soper_add(): If there is a duplicate soper and one is from
+  atheme.conf and the other is not, remove/ignore the one that
+  is not from atheme.conf. In other cases, ignore the new one
+  as before.
+  
+
+  Changes:	Modified:
+  +17 -3	trunk/src/privs.c (File Modified) 
+
+
 jilles      2006/11/05 16:53:06 UTC	(20061105-7087)
   Log:
   Add missing comment line for operserv/soper.
