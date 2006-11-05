@@ -1,3 +1,12 @@
+jilles      2006/11/05 16:53:06 UTC	(20061105-7087)
+  Log:
+  Add missing comment line for operserv/soper.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/dist/example.conf (File Modified) 
+
+
 jilles      2006/11/05 16:51:58 UTC	(20061105-7085)
   Log:
   /os soper listclass now shows - for operclasses with more

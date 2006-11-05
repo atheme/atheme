@@ -4,7 +4,7 @@
  *
  * See doc/LICENSE for licensing information.
  *
- * $Id: privs.c 7081 2006-11-05 16:43:27Z jilles $
+ * $Id: privs.c 7089 2006-11-05 17:06:22Z jilles $
  */
 
 #include "atheme.h"
@@ -105,10 +105,24 @@ soper_t *soper_add(char *name, char *classname, int flags)
 	node_t *n;
 	operclass_t *operclass = operclass_find(classname);
 
-	if (mu ? soper_find(mu) : soper_find_named(name))
+	soper = mu ? soper_find(mu) : soper_find_named(name);
+	if (soper != NULL)
 	{
-		slog(LG_INFO, "soper_add(): duplicate soper %s", name);
-		return NULL;
+		if (flags & SOPER_CONF && !(soper->flags & SOPER_CONF))
+		{
+			slog(LG_INFO, "soper_add(): conf soper %s (%s) is replacing DB soper with class %s", name, classname, soper->classname);
+			soper_delete(soper);
+		}
+		else if (!(flags & SOPER_CONF) && soper->flags & SOPER_CONF)
+		{
+			slog(LG_INFO, "soper_add(): ignoring DB soper %s (%s) because of conf soper with class %s", name, classname, soper->classname);
+			return NULL;
+		}
+		else
+		{
+			slog(LG_INFO, "soper_add(): duplicate soper %s", name);
+			return NULL;
+		}
 	}
 	slog(LG_DEBUG, "soper_add(): %s -> %s", (mu) ? mu->name : name, operclass ? operclass->name : "<null>");
 
