@@ -4,7 +4,7 @@
  *
  * See doc/LICENSE for licensing information.
  *
- * $Id: privs.c 7037 2006-11-02 23:07:34Z jilles $
+ * $Id: privs.c 7081 2006-11-05 16:43:27Z jilles $
  */
 
 #include "atheme.h"
@@ -320,4 +320,24 @@ boolean_t has_priv_operclass(operclass_t *operclass, const char *priv)
 	if (string_in_list(operclass->privs, priv))
 		return TRUE;
 	return FALSE;
+}
+
+boolean_t has_all_operclass(sourceinfo_t *si, operclass_t *operclass)
+{
+	char *dup;
+	char *priv;
+
+	dup = sstrdup(operclass->privs);
+	priv = strtok(dup, " ");
+	while (priv != NULL)
+	{
+		if (!has_priv(si, priv))
+		{
+			free(dup);
+			return FALSE;
+		}
+		priv = strtok(NULL, " ");
+	}
+	free(dup);
+	return TRUE;
 }

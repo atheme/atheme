@@ -1,3 +1,17 @@
+jilles      2006/11/05 16:13:00 UTC	(20061105-7079)
+  Log:
+  Add /os soper, allows editing of services operator
+  privileges without editing the configuration file.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/dist/example.conf (File Modified) 
+  +15 -5	trunk/doc/PRIVILEGES (File Modified) 
+  +30 -0	trunk/help/oservice/soper (File Added) 
+  +1 -0		trunk/modules/operserv/Makefile.in (File Modified) 
+  +215 -0	trunk/modules/operserv/soper.c (File Added) 
+
+
 jilles      2006/11/05 14:01:52 UTC	(20061105-7077)
   Log:
   Save and load non-conf SOPERs in atheme.db.
