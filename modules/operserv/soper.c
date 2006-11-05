@@ -4,7 +4,7 @@
  *
  * Dynamic services operator privileges
  *
- * $Id: soper.c 7083 2006-11-05 16:44:35Z jilles $
+ * $Id: soper.c 7085 2006-11-05 16:51:58Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/soper", FALSE, _modinit, _moddeinit,
-	"$Id: soper.c 7083 2006-11-05 16:44:35Z jilles $",
+	"$Id: soper.c 7085 2006-11-05 16:51:58Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -123,7 +123,9 @@ static void os_cmd_soper_listclass(sourceinfo_t *si, int parc, char *parv[])
 	LIST_FOREACH(n, operclasslist.head)
 	{
 		operclass = n->data;
-		command_success_nodata(si, "- %s", operclass->name);
+		command_success_nodata(si, "%c %s",
+				has_all_operclass(si, operclass) ? '+' : '-',
+				operclass->name);
 	}
 	command_success_nodata(si, "End of oper class list");
 }

@@ -1,3 +1,12 @@
+jilles      2006/11/05 16:44:35 UTC	(20061105-7083)
+  Log:
+  operserv soper: only allow adding/removing privs the source oper also has
+  
+
+  Changes:	Modified:
+  +18 -0	trunk/modules/operserv/soper.c (File Modified) 
+
+
 jilles      2006/11/05 16:43:27 UTC	(20061105-7081)
   Log:
   Add boolean_t has_all_operclass(sourceinfo_t *si, operclass_t *operclass),
