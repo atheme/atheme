@@ -10,9 +10,12 @@ IRCop
 	are not IRCops from atheme's point of view
 operclass
 	group of privileges defined in an operclass{} block in atheme.conf
-services operator
+config services operator
 	user logged into an account named in an operator{} block in
 	atheme.conf
+services operator
+	user logged into an account named in an operator{} block in
+	atheme.conf or an account granted privileges with /os soper
 
 A few privileges are granted independently of operclasses:
 
@@ -20,17 +23,22 @@ To all IRCops and services operators (has_any_priv()):
 	more detailed "not authorized" messages telling which priv they are
 	missing, ability to use /os help
 
-To all services operators:
+To all config services operators:
 	account does not expire (unlike HOLD, registered channels do);
 	this is to avoid someone else registering the account and taking
 	the privs
 
+To all services operators:
+	operations like drop, sendpass and return are restricted
+
 All IRCops get the privileges in the "ircop" operclass. Services operators
-get the privileges in the operclass in their operator{} block. If both
-conditions apply, the union of the privileges is granted.
+get the privileges in the operclass in their operator{} block or the operclass
+set with /os soper. If both conditions apply, the union of the privileges is
+granted.
 
 The OperServ SPECS command shows the privileges granted to an online user
-or operclass, in a somewhat wordy format.
+or operclass, in a somewhat wordy format. /stats o and SOPER LIST show all
+services operators. SOPER LISTCLASS shows all operclasses.
 
 Description of the privileges in operclasses:
 
@@ -95,5 +103,7 @@ operserv:noop
 	use /os noop
 operserv:global
 	send global notices
+operserv:grant
+	use /os soper add/del
 
-$Id: PRIVILEGES 6199 2006-08-21 09:44:29Z jilles $
+$Id: PRIVILEGES 7079 2006-11-05 16:13:00Z jilles $

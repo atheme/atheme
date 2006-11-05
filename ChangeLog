@@ -1,3 +1,12 @@
+jilles      2006/11/05 14:01:52 UTC	(20061105-7077)
+  Log:
+  Save and load non-conf SOPERs in atheme.db.
+  
+
+  Changes:	Modified:
+  +34 -0	trunk/backend/flatfile.c (File Modified) 
+
+
 jilles      2006/11/04 23:55:32 UTC	(20061104-7075)
   Log:
   Only allow chanserv invite via IRC, it would cause a crash via non-IRC.
