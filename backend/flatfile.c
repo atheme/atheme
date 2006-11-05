@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 6895 2006-10-22 21:07:24Z jilles $
+ * $Id: flatfile.c 7077 2006-11-05 14:01:52Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 6895 2006-10-22 21:07:24Z jilles $",
+	"$Id: flatfile.c 7077 2006-11-05 14:01:52Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -85,6 +85,7 @@ static void flatfile_db_save(void *arg)
 	chanacs_t *ca;
 	kline_t *k;
 	svsignore_t *svsignore;
+	soper_t *soper;
 	node_t *n, *tn, *tn2;
 	FILE *f;
 	uint32_t i;
@@ -187,6 +188,19 @@ static void flatfile_db_save(void *arg)
 		fprintf(f, "SI %s %ld %s %s\n", svsignore->mask, (long)svsignore->settime, svsignore->setby, svsignore->reason);
 	}
 
+	/* Services operators */
+	slog(LG_DEBUG, "db_save(): saving sopers");
+
+	LIST_FOREACH(n, soperlist.head)
+	{
+		soper = n->data;
+
+		if (soper->flags & SOPER_CONF || soper->myuser == NULL)
+			continue;
+
+		/* SO <account> <operclass> <flags> */
+		fprintf(f, "SO %s %s %d\n", soper->myuser->name, soper->classname, soper->flags);
+	}
 
 	slog(LG_DEBUG, "db_save(): saving klines");
 
@@ -401,6 +415,26 @@ static void flatfile_db_load(void)
 			}
 
 			myuser_access_add(mu, mask);
+		}
+
+		/* services oper */
+		if (!strcmp("SO", item))
+		{
+			char *user, *class, *flagstr;
+			myuser_t *tmu;
+
+			user = strtok(NULL, " ");
+			class = strtok(NULL, " ");
+			flagstr = strtok(NULL, "\n");
+
+			mu = myuser_find(user);
+
+			if (!mu || !class || !flagstr)
+			{
+				slog(LG_DEBUG, "db_load(): invalid services oper (SO %s %s %s)", user, class, flagstr);
+				continue;
+			}
+			soper_add(mu->name, class, atoi(flagstr) & ~SOPER_CONF);
 		}
 
 		/* mychans */

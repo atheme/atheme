@@ -1,3 +1,12 @@
+jilles      2006/11/04 23:55:32 UTC	(20061104-7075)
+  Log:
+  Only allow chanserv invite via IRC, it would cause a crash via non-IRC.
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/chanserv/invite.c (File Modified) 
+
+
 jilles      2006/11/04 20:14:57 UTC	(20061104-7067)
   Log:
   nickserv register/return/sendpass/set email:
