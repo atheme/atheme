@@ -1,3 +1,13 @@
+jilles      2006/11/06 11:21:32 UTC	(20061106-7101)
+  Log:
+  validhostmask(): do not accept hostmasks containing
+  spaces, or starting with ,-#@!
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/src/function.c (File Modified) 
+
+
 jilles      2006/11/05 23:32:20 UTC	(20061105-7097)
   Log:
   Remove is_sra compatibility macro, it is not nice with sourceinfo.
