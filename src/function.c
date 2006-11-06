@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 7065 2006-11-04 19:29:11Z jilles $
+ * $Id: function.c 7101 2006-11-06 11:21:32Z jilles $
  */
 
 #include "atheme.h"
@@ -436,12 +436,18 @@ int validemail(char *email)
 
 boolean_t validhostmask(char *host)
 {
+	if (strchr(host, ' '))
+		return FALSE;
+
 	/* make sure it has ! and @ */
 	if (!strchr(host, '!') || !strchr(host, '@'))
 		return FALSE;
 
 	/* XXX this NICKLEN is too long */
 	if (strlen(host) > NICKLEN + USERLEN + HOSTLEN + 1)
+		return FALSE;
+
+	if (host[0] == ',' || host[0] == '-' || host[0] == '#' || host[0] == '@' || host[0] == '!')
 		return FALSE;
 
 	return TRUE;

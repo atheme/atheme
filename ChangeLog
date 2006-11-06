@@ -1,3 +1,12 @@
+jilles      2006/11/05 23:32:20 UTC	(20061105-7097)
+  Log:
+  Remove is_sra compatibility macro, it is not nice with sourceinfo.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/include/privs.h (File Modified) 
+
+
 jilles      2006/11/05 22:04:32 UTC	(20061105-7095)
   Log:
   Make operserv rakill work via non-IRC.
