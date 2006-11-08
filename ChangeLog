@@ -1,3 +1,18 @@
+jilles      2006/11/08 15:18:19 UTC	(20061108-7109)
+  Log:
+  chanserv template: Allow updating all channel access entries
+  matching the template with a template change with a command
+  like /cs template sometemplate !+O. This can also be used
+  to delete access entries in mass (!-*).
+  If we ever add notification to users that their channel
+  access has changed, this needs to be changed with that.
+  
+
+  Changes:	Modified:
+  +9 -5		trunk/help/cservice/template (File Modified) 
+  +45 -3	trunk/modules/chanserv/template.c (File Modified) 
+
+
 jilles      2006/11/06 11:22:38 UTC	(20061106-7103)
   Log:
   chanserv akick del: do not check if the hostmask is valid
