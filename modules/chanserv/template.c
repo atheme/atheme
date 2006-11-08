@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 Jilles Tjoelker, et al.
+ * Copyright (c) 2005-2006 Jilles Tjoelker, et al.
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService TEMPLATE functions.
  *
- * $Id: template.c 6617 2006-10-01 22:11:49Z jilles $
+ * $Id: template.c 7109 2006-11-08 15:18:19Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/template", FALSE, _modinit, _moddeinit,
-	"$Id: template.c 6617 2006-10-01 22:11:49Z jilles $",
+	"$Id: template.c 7109 2006-11-08 15:18:19Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -58,7 +58,7 @@ static void list_generic_flags(sourceinfo_t *si)
 static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 {
 	metadata_t *md;
-	int operoverride = 0, l;
+	int operoverride = 0, changechanacs = 0, l;
 	char *channel = parv[0];
 	char *target = parv[1];
 	mychan_t *mc = mychan_find(channel);
@@ -189,6 +189,12 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
+		if (*flagstr == '!' && (flagstr[1] == '+' || flagstr[1] == '-' || flagstr[1] == '='))
+		{
+			changechanacs = 1;
+			flagstr++;
+		}
+
 		if (*flagstr == '+' || *flagstr == '-' || *flagstr == '=')
 		{
 			flags_make_bitmasks(flagstr, chanacs_flags, &addflags, &removeflags);
@@ -312,8 +318,44 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, "Removed template \2%s\2 from \2%s\2.", target, channel);
 		else
 			command_success_nodata(si, "Changed template \2%s\2 to \2%s\2 in \2%s\2.", target, bitmask_to_flags(newflags, chanacs_flags), channel);
+
 		flagstr = bitmask_to_flags2(addflags, removeflags, chanacs_flags);
-		logcommand(si, CMDLOG_SET, "%s TEMPLATE %s %s", mc->name, target, flagstr);
+		if (changechanacs)
+		{
+			node_t *n, *tn;
+			chanacs_t *ca;
+			int changes = 0, founderskipped = 0;
+			char flagstr2[128];
+
+			LIST_FOREACH_SAFE(n, tn, mc->chanacs.head)
+			{
+				ca = n->data;
+				if (ca->level != oldflags)
+					continue;
+				if (ca->myuser != NULL && is_founder(mc, ca->myuser) && !(newflags & CA_FLAGS))
+				{
+					founderskipped = 1;
+					continue;
+				}
+				changes++;
+				if (newflags == 0)
+					if (ca->myuser != NULL)
+						chanacs_delete(mc, ca->myuser, ca->level);
+					else
+						chanacs_delete_host(mc, ca->host, ca->level);
+				else
+					ca->level = newflags;
+			}
+			logcommand(si, CMDLOG_SET, "%s TEMPLATE %s !%s (%d changes)", mc->name, target, flagstr, changes);
+			strlcpy(flagstr2, flagstr, sizeof flagstr2);
+			if (changes > 0)
+				verbose(mc, "\2%s\2 set \2%s\2 on %d access entries with flags \2%s\2.", get_source_name(si), flagstr2, changes, bitmask_to_flags(oldflags, chanacs_flags));
+			command_success_nodata(si, "%d access entries updated accordingly.", changes);
+			if (founderskipped)
+				command_success_nodata(si, "The access entry for %s was not updated because they are channel founder.", mc->founder->name);
+		}
+		else
+			logcommand(si, CMDLOG_SET, "%s TEMPLATE %s %s", mc->name, target, flagstr);
 		/*verbose(mc, "Flags \2%s\2 were set on template \2%s\2 in \2%s\2.", flagstr, target, channel);*/
 	}
 }

@@ -15,11 +15,14 @@ Syntax: TEMPLATE <#channel>
 
 Otherwise, a template is modified. A modification may be
 specified by a template name (copies the template) or a
-flags change (starts with + or -). Templates cannot be
-the empty set (making a template empty deletes it).
+flags change (starts with + or -, optionally preceded by
+an !). Templates cannot be the empty set (making a
+template empty deletes it).
 
-Template modifications do not affect existing access
-entries in any way.
+If the ! form is used, all access entries which exactly
+match the template are changed accordingly, with the
+exception that it is not possible to remove the
+founder's +f access.
 
 There is a limit on the length of all templates on a
 channel.
@@ -29,11 +32,12 @@ as in FLAGS.
 
 Syntax: TEMPLATE <#channel> [template oldtemplate]
 Syntax: TEMPLATE <#channel> [template flag_changes]
+Syntax: TEMPLATE <#channel> [template !flag_changes]
 
 Examples:
     /msg &nick& TEMPLATE #foo
     /msg &nick& TEMPLATE #foo user VOP
-    /msg &nick& TEMPLATE #foo user +A
+    /msg &nick& TEMPLATE #foo user !+A
     /msg &nick& TEMPLATE #foo co-founder +*-OH
     /msg &nick& TEMPLATE #foo op -*+vVhoti
     /msg &nick& TEMPLATE #foo obsoletetemplate -*

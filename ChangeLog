@@ -1,3 +1,14 @@
+jilles      2006/11/06 11:22:38 UTC	(20061106-7103)
+  Log:
+  chanserv akick del: do not check if the hostmask is valid
+  (i.e., allow removal of bogus hostmasks that somehow
+  ended up on the akick list)
+  
+
+  Changes:	Modified:
+  +0 -6		trunk/modules/chanserv/akick.c (File Modified) 
+
+
 jilles      2006/11/06 11:21:32 UTC	(20061106-7101)
   Log:
   validhostmask(): do not accept hostmasks containing
