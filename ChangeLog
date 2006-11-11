@@ -1,3 +1,16 @@
+jilles      2006/11/11 15:25:32 UTC	(20061111-7129)
+  Log:
+  Add /cs sync to contrib, makes channel status agree with flags.
+  Ugly bits:
+  - can cause flooding if used repeatedly with flags changes
+  - duplicates cs_join() code but not exactly the same
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/contrib/Makefile.in (File Modified) 
+  +184 -0	trunk/contrib/cs_sync.c (File Added) 
+
+
 jilles      2006/11/11 15:23:55 UTC	(20061111-7127)
   Log:
   inspircd11: fix SAMODE handling

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService REGISTER function.
  *
- * $Id: register.c 6895 2006-10-22 21:07:24Z jilles $
+ * $Id: register.c 7131 2006-11-11 19:48:21Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 6895 2006-10-22 21:07:24Z jilles $",
+	"$Id: register.c 7131 2006-11-11 19:48:21Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -127,7 +127,10 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	mc->registered = CURRTIME;
 	mc->used = CURRTIME;
 	mc->mlock_on |= (CMODE_NOEXT | CMODE_TOPIC);
-	mc->mlock_off |= (CMODE_LIMIT | CMODE_KEY);
+	if (c->limit == 0)
+		mc->mlock_off |= CMODE_LIMIT;
+	if (c->key == NULL)
+		mc->mlock_off |= CMODE_KEY;
 	mc->flags |= config_options.defcflags;
 
 	chanacs_add(mc, si->smu, CA_INITIAL);
