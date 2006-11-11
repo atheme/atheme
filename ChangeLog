@@ -1,3 +1,13 @@
+jilles      2006/11/11 19:48:21 UTC	(20061111-7131)
+  Log:
+  On newly registered channels, only mlock -l if no limit is set
+  and only mlock -k if no key is set.
+  
+
+  Changes:	Modified:
+  +4 -1		trunk/modules/chanserv/register.c (File Modified) 
+
+
 jilles      2006/11/11 15:25:32 UTC	(20061111-7129)
   Log:
   Add /cs sync to contrib, makes channel status agree with flags.
