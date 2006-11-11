@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 7011 2006-10-31 16:13:17Z jilles $
+ * $Id: inspircd11.c 7127 2006-11-11 15:23:55Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7011 2006-10-31 16:13:17Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7127 2006-11-11 15:23:55Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -900,9 +900,9 @@ static void m_sanick(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_samode(sourceinfo_t *si, int parc, char *parv[])
 {
-	si->su = NULL;
-        si->s = server_find(me.name);
-	m_mode(si, parc - 1, &parv[1]);
+	/* note that SAMODE is not checked in any way before propagation,
+	 * and only works on channels, not users */
+	channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
 }
 
 static void m_error(sourceinfo_t *si, int parc, char *parv[])
@@ -1072,7 +1072,7 @@ void _modinit(module_t * m)
 	pcommand_add("QUIT", m_quit, 1, MSRC_USER);
 	pcommand_add("MODE", m_mode, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("FMODE", m_fmode, 3, MSRC_USER | MSRC_SERVER);
-	pcommand_add("SAMODE", m_samode, 3, MSRC_USER);
+	pcommand_add("SAMODE", m_samode, 2, MSRC_USER);
 	pcommand_add("SAJOIN", m_sajoin, 2, MSRC_USER);
 	pcommand_add("SAPART", m_sapart, 2, MSRC_USER);
 	pcommand_add("SANICK", m_sanick, 2, MSRC_USER);

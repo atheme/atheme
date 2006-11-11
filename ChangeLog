@@ -1,3 +1,15 @@
+jilles      2006/11/10 23:19:18 UTC	(20061110-7123)
+  Log:
+  - add chanserv set entrymsg help file
+  - don't mention a real email address in chanserv set email
+    help file, make the formatting a little nicer
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/help/cservice/set_email (File Modified) 
+  +11 -0	trunk/help/cservice/set_entrymsg (File Added) 
+
+
 jilles      2006/11/08 23:19:35 UTC	(20061108-7119)
   Log:
   Make protocol/inspircd10 give a clearer error message
