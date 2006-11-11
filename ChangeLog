@@ -1,3 +1,12 @@
+jilles      2006/11/11 15:23:55 UTC	(20061111-7127)
+  Log:
+  inspircd11: fix SAMODE handling
+  
+
+  Changes:	Modified:
+  +4 -4		trunk/protocol/inspircd11.c (File Modified) 
+
+
 jilles      2006/11/10 23:19:18 UTC	(20061110-7123)
   Log:
   - add chanserv set entrymsg help file
