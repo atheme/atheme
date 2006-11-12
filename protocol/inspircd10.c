@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree stable branch inspircd.
  *
- * $Id: inspircd10.c 7133 2006-11-11 21:32:12Z jilles $
+ * $Id: inspircd10.c 7135 2006-11-12 17:10:53Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 7133 2006-11-11 21:32:12Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 7135 2006-11-12 17:10:53Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -863,7 +863,7 @@ void _modinit(module_t * m)
 	pcommand_add("QUIT", m_quit, 1, MSRC_USER);
 	pcommand_add("MODE", m_mode, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("FMODE", m_mode, 2, MSRC_USER | MSRC_SERVER);
-	pcommand_add("SAMODE", m_samode, 3, MSRC_USER);
+	pcommand_add("SAMODE", m_samode, 2, MSRC_USER);
 	pcommand_add("SAJOIN", m_sajoin, 2, MSRC_USER);
 	pcommand_add("SAPART", m_sapart, 2, MSRC_USER);
 	pcommand_add("SANICK", m_sanick, 2, MSRC_USER);

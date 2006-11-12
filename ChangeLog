@@ -1,3 +1,15 @@
+jilles      2006/11/11 21:32:12 UTC	(20061111-7133)
+  Log:
+  inspircd
+  - port samode fix from inspircd10 to inspircd11
+  - don't crash if target of sajoin/sapart/sanick does not exist
+  
+
+  Changes:	Modified:
+  +13 -7	trunk/protocol/inspircd10.c (File Modified) 
+  +6 -0		trunk/protocol/inspircd11.c (File Modified) 
+
+
 jilles      2006/11/11 19:48:21 UTC	(20061111-7131)
   Log:
   On newly registered channels, only mlock -l if no limit is set
