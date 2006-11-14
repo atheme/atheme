@@ -1,3 +1,13 @@
+jilles      2006/11/13 13:35:46 UTC	(20061113-7139)
+  Log:
+  chanserv status: don't say the user is banned if they
+  have both +b and +r (+r exempts).
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/status.c (File Modified) 
+
+
 jilles      2006/11/12 17:10:53 UTC	(20061112-7135)
   Log:
   Missed pcommand_add() change for SAMODE in inspircd10.

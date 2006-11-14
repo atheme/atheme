@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 7133 2006-11-11 21:32:12Z jilles $
+ * $Id: inspircd11.c 7141 2006-11-14 23:19:37Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7133 2006-11-11 21:32:12Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7141 2006-11-14 23:19:37Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -96,7 +96,9 @@ struct cmode_ inspircd_prefix_mode_list[] = {
 static boolean_t has_servicesmod = false;
 static boolean_t has_globopsmod = false;
 static boolean_t has_svshold = false;
+static int has_protocol = 0;
 
+#define PROTOCOL_SNONOTICE 1102
 
 /* *INDENT-ON* */
 
@@ -193,6 +195,16 @@ static void inspircd_wallops_sts(const char *text)
 	char *sendernick = NULL;
 	user_t *u;
 	node_t *n;
+
+	if (has_protocol >= PROTOCOL_SNONOTICE)
+	{
+		/* XXX */
+		if (has_globopsmod)
+			sts(":%s SNONOTICE g :%s", me.name, text);
+		else
+			sts(":%s OPERNOTICE :%s", me.name, text);
+		return;
+	}
 
 	if (me.me == NULL)
 		return;
@@ -969,18 +981,28 @@ static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 {
+	int i, varc;
+	char *varv[256];
+
 	if (strcasecmp(parv[0], "START") == 0)
 	{
 		/* reset all our previously recieved CAPAB stuff */
 		has_servicesmod = false;
 		has_globopsmod = false;
 		has_svshold = false;
+		has_protocol = 0;
 	}
-	else if (strcasecmp(parv[0], "CAPABILITIES") == 0)
+	else if (strcasecmp(parv[0], "CAPABILITIES") == 0 && parc > 1)
 	{
-		/* check for ident length, etc */
+		varc = sjtoken(parv[1], ' ', varv);
+		for (i = 0; i < varc; i++)
+		{
+			if (!strncmp(varv[i], "PROTOCOL=", 9))
+				has_protocol = atoi(varv[i] + 9);
+			/* XXX check/store HALFOP/CHANMAX/IDENTMAX */
+		}
 	}
-	else if (strcasecmp(parv[0], "MODULES") == 0)
+	else if (strcasecmp(parv[0], "MODULES") == 0 && parc > 1)
 	{
 		if (strstr(parv[1], "m_services_account.so"))
 		{
@@ -997,7 +1019,7 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (strcasecmp(parv[0], "END") == 0)
 	{
-		if (has_globopsmod == false)
+		if (has_globopsmod == false && has_protocol < PROTOCOL_SNONOTICE)
 		{
 			fprintf(stderr, "atheme: you didn't load m_globops into inspircd. atheme support requires this module. exiting.\n");
 			exit(EXIT_FAILURE);
