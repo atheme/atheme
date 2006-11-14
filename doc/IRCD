@@ -1,4 +1,4 @@
-$Id: IRCD 7143 2006-11-14 23:21:53Z jilles $
+$Id: IRCD 7145 2006-11-14 23:29:46Z jilles $
 
 IRCD-specific notes
 -------------------
@@ -116,9 +116,9 @@ will be properly stored and logged.
 inspircd
 --------
 
-You need <ulines> for services on all servers on the network.
-
 There are inspircd10 for inspircd 1.0.x and inspircd11 for inspircd 1.1.x.
+
+You need <uline> tags for services on all servers on the network.
 
 Several of the modes supported by Atheme are in optional modules. It should
 usually not be a problem if those modules are not loaded. The exceptions to
