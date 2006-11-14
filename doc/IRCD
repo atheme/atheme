@@ -1,4 +1,4 @@
-$Id: IRCD 7141 2006-11-14 23:19:37Z jilles $
+$Id: IRCD 7143 2006-11-14 23:21:53Z jilles $
 
 IRCD-specific notes
 -------------------
@@ -116,7 +116,9 @@ will be properly stored and logged.
 inspircd
 --------
 
-This module supports inspircd beta6 or newer (tree linking) only.
+You need <ulines> for services on all servers on the network.
+
+There are inspircd10 for inspircd 1.0.x and inspircd11 for inspircd 1.1.x.
 
 Several of the modes supported by Atheme are in optional modules. It should
 usually not be a problem if those modules are not loaded. The exceptions to
@@ -125,11 +127,7 @@ loaded at all times on your inspircd servers if you wish to use this version of
 atheme. If the servers are protocol 1102 or newer, m_globops.so is not
 required, although it will be used if loaded.
 
-Inspircd prior to r2882 does not clear umode +r on nick changes; this can be
-abused by changing to a registered nick during a netsplit or while services
-are down.
-
-The inspircd support was developed in cooperation with the inspircd
+The inspircd support is developed in cooperation with the inspircd
 developers.
 
 ircnet

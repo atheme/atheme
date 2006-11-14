@@ -1,3 +1,21 @@
+jilles      2006/11/14 23:19:37 UTC	(20061114-7141)
+  Log:
+  inspircd11:
+  - add support for new SNONOTICE/OPERNOTICE stuff, wallops
+    will appear to come from atheme's server name now and
+    are sent to snomask +g (if m_globops.so is loaded, as
+    before) or all +s opers (otherwise)
+  - no longer require m_globops.so if SNONOTICE/OPERNOTICE
+    is supported
+  - don't crash when a required second parameter is missing
+    in CAPAB
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/doc/IRCD (File Modified) 
+  +26 -4	trunk/protocol/inspircd11.c (File Modified) 
+
+
 jilles      2006/11/13 13:35:46 UTC	(20061113-7139)
   Log:
   chanserv status: don't say the user is banned if they
