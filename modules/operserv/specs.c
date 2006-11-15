@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService SPECS command.
  *
- * $Id: specs.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: specs.c 7167 2006-11-15 17:54:46Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/specs", FALSE, _modinit, _moddeinit,
-	"$Id: specs.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: specs.c 7167 2006-11-15 17:54:46Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -70,6 +70,7 @@ struct
 	{ PRIV_JUPE, NULL, NULL, NULL, "jupe servers" },
 	{ PRIV_NOOP, NULL, NULL, NULL, "NOOP access" },
 	{ PRIV_GLOBAL, NULL, NULL, NULL, "send global notices" },
+	{ PRIV_GRANT, NULL, NULL, NULL, "edit oper privileges" },
 	/* -- */
 	{ NULL, NULL, NULL, NULL, NULL }
 };
