@@ -1,3 +1,14 @@
+jilles      2006/11/15 13:56:23 UTC	(20061115-7155)
+  Log:
+  www.atheme.org -> www.atheme.net in documentation
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/INSTALL (File Modified) 
+  +1 -1		trunk/README (File Modified) 
+  +1 -1		trunk/src/version.sh (File Modified) 
+
+
 nenolod     2006/11/15 11:46:36 UTC	(20061115-7147)
   Log:
   - avoid an unnecessary integer overflow in flags display

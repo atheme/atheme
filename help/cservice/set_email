@@ -1,7 +1,8 @@
 Help for SET EMAIL:
 
 SET EMAIL allows you to change or set the email
-address associated with a channel.
+address associated with a channel. This is shown
+to all users in INFO.
 
 Syntax: SET <channel> EMAIL <email>
 
