@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 6761 2006-10-20 21:43:42Z jilles $
+ * $Id: flags.c 7147 2006-11-15 11:46:36Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 6761 2006-10-20 21:43:42Z jilles $",
+	"$Id: flags.c 7147 2006-11-15 11:46:36Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -61,7 +61,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	if (!target)
 	{
 		mychan_t *mc = mychan_find(channel);
-		uint8_t i = 1;
+		unsigned int i = 1;
 
 		if (!mc)
 		{

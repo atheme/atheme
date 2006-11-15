@@ -1,3 +1,12 @@
+jilles      2006/11/14 23:29:46 UTC	(20061114-7145)
+  Log:
+  inspircd description: typo fix and swapping around two paragraphs
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/doc/IRCD (File Modified) 
+
+
 jilles      2006/11/14 23:21:53 UTC	(20061114-7143)
   Log:
   Update inspircd description somewhat.
