@@ -1,3 +1,13 @@
+jilles      2006/11/15 16:46:25 UTC	(20061115-7161)
+  Log:
+  Update bugtracker urls.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/README (File Modified) 
+  +1 -1		trunk/TODO (File Modified) 
+
+
 jilles      2006/11/15 16:19:24 UTC	(20061115-7159)
   Log:
   Show channel email address in /cs info, and mention
