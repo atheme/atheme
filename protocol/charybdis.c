@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 6921 2006-10-23 10:26:24Z jilles $
+ * $Id: charybdis.c 7165 2006-11-15 17:39:43Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 6921 2006-10-23 10:26:24Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 7165 2006-11-15 17:39:43Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -300,7 +300,7 @@ static void charybdis_notice_channel_sts(user_t *from, channel_t *target, const 
 	if (from == NULL || chanuser_find(target, from))
 		sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, target->name, text);
 	else
-		sts(":%s NOTICE %s :%s: %s", ME, target->name, from->nick, text);
+		sts(":%s NOTICE %s :[%s:%s] %s", ME, target->name, from->nick, target->name, text);
 }
 
 static void charybdis_wallchops(user_t *sender, channel_t *channel, char *message)

@@ -1,3 +1,13 @@
+jilles      2006/11/15 17:02:05 UTC	(20061115-7163)
+  Log:
+  Don't show channel name in /cs flags verbose notice.
+  The other verbose notices don't show it either.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/flags.c (File Modified) 
+
+
 jilles      2006/11/15 16:46:25 UTC	(20061115-7161)
   Log:
   Update bugtracker urls.

@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 6861 2006-10-22 14:08:20Z jilles $
+ * $Id: hybrid.c 7165 2006-11-15 17:39:43Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 6861 2006-10-22 14:08:20Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 7165 2006-11-15 17:39:43Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -238,7 +238,7 @@ static void hybrid_notice_channel_sts(user_t *from, channel_t *target, const cha
 		/* not on channel, let's send it from the server
 		 * hyb6 won't accept this, oh well, they'll have to
 		 * enable join_chans -- jilles */
-		sts(":%s NOTICE %s :%s: %s", ME, target->name, from->nick, text);
+		sts(":%s NOTICE %s :[%s:%s]: %s", ME, target->name, from->nick, target->name, text);
 }
 
 static void hybrid_wallchops(user_t *sender, channel_t *channel, char *message)

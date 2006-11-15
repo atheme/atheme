@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
  *
- * $Id: nefarious.c 6995 2006-10-28 15:04:27Z jilles $
+ * $Id: nefarious.c 7165 2006-11-15 17:39:43Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 6995 2006-10-28 15:04:27Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 7165 2006-11-15 17:39:43Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -214,7 +214,7 @@ static void nefarious_notice_channel_sts(user_t *from, channel_t *target, const 
 	if (from == NULL || chanuser_find(target, from))
 		sts(":%s O %s :%s", from ? from->uid : me.numeric, target->name, text);
 	else
-		sts(":%s O %s :%s: %s", me.numeric, target->name, from->nick, text);
+		sts(":%s O %s :[%s:%s] %s", me.numeric, target->name, from->nick, target->name, text);
 }
 
 static void nefarious_wallchops(user_t *sender, channel_t *channel, char *message)
