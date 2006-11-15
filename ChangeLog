@@ -1,3 +1,18 @@
+jilles      2006/11/15 16:19:24 UTC	(20061115-7159)
+  Log:
+  Show channel email address in /cs info, and mention
+  this fact in /cs help set email. The channel email
+  address was already publicly visible via /cs taxonomy.
+  I have my doubts on the use of /cs set email, but
+  this makes it a bit more consistent.
+  Pointed out by: ken/wilson/whateverhisnickisnow
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/help/cservice/set_email (File Modified) 
+  +3 -0		trunk/modules/chanserv/info.c (File Modified) 
+
+
 jilles      2006/11/15 13:56:23 UTC	(20061115-7155)
   Log:
   www.atheme.org -> www.atheme.net in documentation
