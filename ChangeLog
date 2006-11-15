@@ -1,3 +1,12 @@
+jilles      2006/11/15 17:56:41 UTC	(20061115-7169)
+  Log:
+  Remove obsolete comment.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/privs.h (File Modified) 
+
+
 jilles      2006/11/15 17:54:46 UTC	(20061115-7167)
   Log:
   Show operserv:grant privilege in /os specs.
