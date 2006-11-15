@@ -4,7 +4,7 @@
  *
  * Fine grained services operator privileges
  *
- * $Id: privs.h 7097 2006-11-05 23:32:20Z jilles $
+ * $Id: privs.h 7169 2006-11-15 17:56:41Z jilles $
  */
 
 #ifndef PRIVS_H
@@ -38,7 +38,7 @@
 #define PRIV_JUPE            "operserv:jupe"
 #define PRIV_NOOP            "operserv:noop"
 #define PRIV_GLOBAL          "operserv:global"
-#define PRIV_GRANT           "operserv:grant" /* for (nonexistent) grant privs */
+#define PRIV_GRANT           "operserv:grant"
 
 /* obsolete access levels */
 #define AC_NONE NULL

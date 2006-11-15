@@ -1,3 +1,12 @@
+jilles      2006/11/15 17:54:46 UTC	(20061115-7167)
+  Log:
+  Show operserv:grant privilege in /os specs.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/operserv/specs.c (File Modified) 
+
+
 jilles      2006/11/15 17:39:43 UTC	(20061115-7165)
   Log:
   P10/TS6/ircnet:
