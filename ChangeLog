@@ -1,3 +1,21 @@
+jilles      2006/11/15 19:27:49 UTC	(20061115-7171)
+  Log:
+  Add /cs fflags, allows chan:admin services opers to force
+  a flags change on any channel. A wallops and snoops is done,
+  and the VERBOSE flag applies like in regular flags changes.
+  Currently the NEVEROP flag on a user is not overridden.
+  A separate privilege for fflags and ftransfer could be
+  added later.
+  fflags is not enabled by default in example.conf.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/dist/example.conf (File Modified) 
+  +12 -0	trunk/help/cservice/fflags (File Added) 
+  +1 -0		trunk/modules/chanserv/Makefile.in (File Modified) 
+  +150 -0	trunk/modules/chanserv/fflags.c (File Added) 
+
+
 jilles      2006/11/15 17:56:41 UTC	(20061115-7169)
   Log:
   Remove obsolete comment.

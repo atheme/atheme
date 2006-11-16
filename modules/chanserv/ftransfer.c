@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FTRANSFER function.
  *
- * $Id: ftransfer.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: ftransfer.c 7175 2006-11-16 18:15:27Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ftransfer", FALSE, _modinit, _moddeinit,
-	"$Id: ftransfer.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: ftransfer.c 7175 2006-11-16 18:15:27Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -67,18 +67,18 @@ static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[])
 	
 	if (tmu == mc->founder)
 	{
-		command_fail(si, fault_nochange, "\2%s\2 is already the founder of \2%s\2.", newfndr, name);
+		command_fail(si, fault_nochange, "\2%s\2 is already the founder of \2%s\2.", tmu->name, name);
 		return;
 	}
 
 	/* no maxchans check (intentional -- this is an oper command) */
 
-	snoop("FTRANSFER: %s transferred %s from %s to %s", get_oper_name(si), name, mc->founder->name, newfndr);
-	wallops("%s transferred foundership of %s from %s to %s", get_oper_name(si), name, mc->founder->name, newfndr);
-	logcommand(si, CMDLOG_ADMIN, "%s FTRANSFER from %s to %s", mc->name, mc->founder->name, newfndr);
-	verbose(mc, "Foundership transfer from \2%s\2 to \2%s\2 forced by %s administration.", mc->founder->name, newfndr, me.netname);
+	snoop("FTRANSFER: %s transferred %s from %s to %s", get_oper_name(si), name, mc->founder->name, tmu->name);
+	wallops("%s transferred foundership of %s from %s to %s", get_oper_name(si), name, mc->founder->name, tmu->name);
+	logcommand(si, CMDLOG_ADMIN, "%s FTRANSFER from %s to %s", mc->name, mc->founder->name, tmu->name);
+	verbose(mc, "Foundership transfer from \2%s\2 to \2%s\2 forced by %s administration.", mc->founder->name, tmu->name, me.netname);
 	command_success_nodata(si, "Foundership of \2%s\2 has been transferred from \2%s\2 to \2%s\2.",
-		name, mc->founder->name, newfndr);
+		name, mc->founder->name, tmu->name);
 
 	mc->founder = tmu;
 	mc->used = CURRTIME;
