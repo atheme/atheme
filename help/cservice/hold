@@ -1,6 +1,8 @@
 Help for HOLD:
 
-HOLD prevents a channel from expiring.
+HOLD prevents a channel from expiring for inactivity.
+Held channels will still expire when there are no
+eligible successors.
 
 Syntax: HOLD <#channel> ON|OFF
 
