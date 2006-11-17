@@ -7,7 +7,7 @@ account.
 
 FREEZE information will be displayed in INFO output.
 
-Syntax: FREEZE <acccount> ON|OFF <reason>
+Syntax: FREEZE <account> ON|OFF <reason>
 
 Examples:
     /msg &nick& FREEZE pfish ON Persistent spammer

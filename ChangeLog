@@ -1,3 +1,40 @@
+jilles      2006/11/17 19:58:40 UTC	(20061117-7179)
+  Log:
+  Add nickname grouping. Nickname grouping allows users to
+  register multiple nicks to one account. Each nick has
+  its own registered and last seen times but all other
+  data is shared (accounts also have their own registered
+  and last seen times).
+  Nickname grouping works together with ACCESS, ENFORCE,
+  GHOST.
+  The DROP command drops entire accounts; the UNGROUP
+  command must be used to drop single nicks.
+  Some missing bits: administrator UNGROUP, expiry of single nicks
+  
+
+  Changes:	Modified:
+  +30 -0	trunk/backend/flatfile.c (File Modified) 
+  +2 -0		trunk/dist/example.conf (File Modified) 
+  +16 -0	trunk/help/nickserv/group (File Added) 
+  +15 -0	trunk/help/nickserv/ungroup (File Added) 
+  +21 -1	trunk/include/account.h (File Modified) 
+  +1 -0		trunk/include/common.h (File Modified) 
+  +1 -0		trunk/include/global.h (File Modified) 
+  +6 -5		trunk/modules/chanserv/status.c (File Modified) 
+  +1 -0		trunk/modules/nickserv/Makefile.in (File Modified) 
+  +12 -10	trunk/modules/nickserv/enforce.c (File Modified) 
+  +11 -3	trunk/modules/nickserv/ghost.c (File Modified) 
+  +132 -0	trunk/modules/nickserv/group.c (File Added) 
+  +11 -1	trunk/modules/nickserv/identify.c (File Modified) 
+  +41 -1	trunk/modules/nickserv/info.c (File Modified) 
+  +9 -3		trunk/modules/nickserv/register.c (File Modified) 
+  +9 -6		trunk/modules/nickserv/status.c (File Modified) 
+  +149 -5	trunk/src/account.c (File Modified) 
+  +1 -0		trunk/src/ptasks.c (File Modified) 
+  +11 -4	trunk/src/services.c (File Modified) 
+  +8 -0		trunk/src/users.c (File Modified) 
+
+
 jilles      2006/11/17 19:45:40 UTC	(20061117-7177)
   Log:
   nickserv register help file: better description of what
