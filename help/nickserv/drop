@@ -1,14 +1,14 @@
 Help for DROP:
   
-Using this command makes NickServ stop watching your nick, and
-will remove it from services' database. If a nick is dropped,
-anyone else can register it. You will also lose all your channel
-access and memos. You must use the NickServ IDENTIFY command
-before doing this.
+Using this command makes &nick& remove your account
+and stop watching your nick(s), If a nick is dropped,
+anyone else can register it. You will also lose all
+your channel access and memos. You must use the
+&nick& IDENTIFY command before doing this.
 
-When dropping and re-registering a nick during a netsplit, users
-on the other side of the split may later be recognized as the
-new account.
+When dropping and re-registering an account during a
+netsplit, users on the other side of the split may later
+be recognized as the new account.
 
 Syntax: DROP <nickname> <password>
 

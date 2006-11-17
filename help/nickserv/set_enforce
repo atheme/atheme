@@ -1,7 +1,7 @@
 Help for SET ENFORCE:
 
-SET ENFORCE allows you to enable protection for
-your nickname.
+SET ENFORCE allows you to enable more protection for
+all nicknames registered to your account.
 
 This will automatically change the nick of someone
 who attempts to use it without identifying in time,

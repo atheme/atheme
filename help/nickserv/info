@@ -1,7 +1,9 @@
 Help for INFO:
 
-INFO displays nickname information such as
+INFO displays account information such as
 registration time, flags, and other details.
+Additionally it will display registration
+and last seen time of the nick you give.
 
 You can query the nick a user is logged in as
 by specifying an equals sign followed by their

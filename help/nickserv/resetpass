@@ -1,7 +1,7 @@
 Help for RESETPASS:
 
 RESETPASS sets a random password for the specified
-nickname.
+account.
 
 Syntax: RESETPASS <nickname>
 

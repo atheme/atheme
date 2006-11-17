@@ -1,7 +1,7 @@
 Help for SET EMAIL:
 
 SET EMAIL changes the e-mail address
-associated with a nickname. The e-mail
+associated with an account. The e-mail
 address is used for password retrieval.
 
 You may be required to confirm the new

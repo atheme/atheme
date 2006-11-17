@@ -8,6 +8,8 @@ an alias for your account name.
 
 Please note that grouped nicks expire separately
 from accounts. To prevent this, you must use them.
+Otherwise, all properties of the account are shared
+among all nicks registered to it.
 
 Syntax: GROUP
 

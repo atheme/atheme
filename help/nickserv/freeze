@@ -1,13 +1,13 @@
 Help for FREEZE:
 
 FREEZE allows operators to "freeze" an abusive user's
-nickname. Users cannot log into a frozen nickname.
-Thus, users cannot obtain the access associated with
-the nickname.
+account. Users cannot log into a frozen account. Thus,
+users cannot obtain the access associated with the
+account.
 
 FREEZE information will be displayed in INFO output.
 
-Syntax: FREEZE <nickname> ON|OFF <reason>
+Syntax: FREEZE <nick> ON|OFF <reason>
 
 Examples:
     /msg &nick& FREEZE pfish ON Persistent spammer

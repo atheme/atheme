@@ -1,7 +1,7 @@
 Help for VERIFY:
 
 VERIFY confirms a change associated with
-your nickname registration.
+your account registration.
 
 Syntax: VERIFY <operation> <nickname> <key>
 

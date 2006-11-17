@@ -3,8 +3,8 @@ Help for GHOST:
 GHOST disconnects an old user session, or somebody
 attempting to use your nickname without authorization.
 
-If you are logged in to the nick, you need not specify
-a password, otherwise you have to.
+If you are logged in to the nick's account, you need
+not specify a password, otherwise you have to.
 
 Syntax: GHOST <nick> [password]
 

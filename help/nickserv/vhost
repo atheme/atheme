@@ -1,7 +1,7 @@
 Help for VHOST:
 
 VHOST allows operators to set a virtual host (also
-known as a spoof or cloak) on a nickname. This vhost
+known as a spoof or cloak) on an account. This vhost
 will be set on the user immediately and each time
 they identify. If no vhost is specified, clear any
 existing vhost.
