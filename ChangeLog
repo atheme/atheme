@@ -1,3 +1,20 @@
+jilles      2006/11/17 21:02:46 UTC	(20061117-7185)
+  Log:
+  nickserv drop/freeze/hold:
+  Convert various strings to say an "account" is being
+  affected instead of a "nickname" if the action affects
+  the entire account, not a single nickname.
+  This removes some strings from the no_nick_ownership
+  translation table.
+  
+
+  Changes:	Modified:
+  +5 -5		trunk/modules/nickserv/drop.c (File Modified) 
+  +6 -6		trunk/modules/nickserv/freeze.c (File Modified) 
+  +5 -5		trunk/modules/nickserv/hold.c (File Modified) 
+  +0 -12	trunk/modules/nickserv/main.c (File Modified) 
+
+
 jilles      2006/11/17 20:38:15 UTC	(20061117-7183)
   Log:
   Helpfile updates for grouping.
