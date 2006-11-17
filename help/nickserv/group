@@ -1,0 +1,16 @@
+Help for GROUP:
+
+GROUP registers your current nickname to your account.
+This means that &nick& protects this nickname the
+same way as it protects your account name. Most
+services commands will accept the new nickname as
+an alias for your account name.
+
+Please note that grouped nicks expire separately
+from accounts. To prevent this, you must use them.
+
+Syntax: GROUP
+
+Examples:
+    /msg &nick& IDENTIFY OldNick SecretPassword
+    /msg &nick& GROUP

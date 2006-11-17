@@ -4,7 +4,7 @@
  *
  * User management functions.
  *
- * $Id: users.c 6931 2006-10-24 16:53:07Z jilles $
+ * $Id: users.c 7179 2006-11-17 19:58:40Z jilles $
  */
 
 #include "atheme.h"
@@ -133,6 +133,7 @@ void user_delete(user_t *u)
 {
 	node_t *n, *tn;
 	chanuser_t *cu;
+	mynick_t *mn;
 
 	if (!u)
 	{
@@ -179,6 +180,9 @@ void user_delete(user_t *u)
 			}
 		}
 		u->myuser->lastlogin = CURRTIME;
+		if ((mn = mynick_find(u->nick)) != NULL &&
+				mn->owner == u->myuser)
+			mn->lastseen = CURRTIME;
 		u->myuser = NULL;
 	}
 
@@ -296,7 +300,11 @@ void user_changeuid(user_t *u, const char *uid)
 void user_changenick(user_t *u, const char *nick, uint32_t ts)
 {
 	node_t *n;
+	mynick_t *mn;
 
+	if (u->myuser != NULL && (mn = mynick_find(u->nick)) != NULL &&
+			mn->owner == u->myuser)
+		mn->lastseen = CURRTIME;
 	dictionary_delete(userlist, u->nick);
 
 	strlcpy(u->nick, nick, NICKLEN);

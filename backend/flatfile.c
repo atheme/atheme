@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 7077 2006-11-05 14:01:52Z jilles $
+ * $Id: flatfile.c 7179 2006-11-17 19:58:40Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 7077 2006-11-05 14:01:52Z jilles $",
+	"$Id: flatfile.c 7179 2006-11-17 19:58:40Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -73,6 +73,13 @@ static int flatfile_db_save_myusers_cb(dictionary_elem_t *delem, void *privdata)
 	LIST_FOREACH(tn, mu->access_list.head)
 	{
 		fprintf(f, "AC %s %s\n", mu->name, (char *)tn->data);
+	}
+
+	LIST_FOREACH(tn, mu->nicks.head)
+	{
+		mynick_t *mn = tn->data;
+
+		fprintf(f, "MN %s %s %ld %ld\n", mu->name, mn->nick, (long)mn->registered, (long)mn->lastseen);
 	}
 
 	return 0; 
@@ -415,6 +422,29 @@ static void flatfile_db_load(void)
 			}
 
 			myuser_access_add(mu, mask);
+		}
+
+		/* registered nick */
+		if (!strcmp("MN", item))
+		{
+			char *user, *nick, *treg, *tseen;
+			mynick_t *mn;
+
+			user = strtok(NULL, " ");
+			nick = strtok(NULL, " ");
+			treg = strtok(NULL, " ");
+			tseen = strtok(NULL, " ");
+
+			mu = myuser_find(user);
+			if (mu == NULL || nick == NULL || tseen == NULL)
+			{
+				slog(LG_DEBUG, "db_load(): invalid registered nick<%s> for user<%s>", nick, user);
+				continue;
+			}
+
+			mn = mynick_add(mu, nick);
+			mn->registered = atoi(treg);
+			mn->lastseen = atoi(tseen);
 		}
 
 		/* services oper */

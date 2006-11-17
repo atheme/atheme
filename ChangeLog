@@ -1,3 +1,13 @@
+jilles      2006/11/17 19:45:40 UTC	(20061117-7177)
+  Log:
+  nickserv register help file: better description of what
+  registration does, don't mention sharing passwords
+  
+
+  Changes:	Modified:
+  +8 -5		trunk/help/nickserv/register (File Modified) 
+
+
 jilles      2006/11/16 18:15:27 UTC	(20061116-7175)
   Log:
   chanserv ftransfer: Show account name of new founder

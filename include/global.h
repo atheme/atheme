@@ -5,7 +5,7 @@
  *
  * Global data
  *
- * $Id: global.h 6175 2006-08-20 19:29:12Z jilles $
+ * $Id: global.h 7179 2006-11-17 19:58:40Z jilles $
  */
 
 #ifndef _GLOBAL_H
@@ -112,6 +112,7 @@ struct cnt
   uint32_t chan;
   uint32_t chanuser;
   uint32_t myuser;
+  uint32_t mynick;
   uint32_t mychan;
   uint32_t chanacs;
   uint32_t node;

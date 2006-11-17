@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY and LOGIN functions.
  *
- * $Id: identify.c 6643 2006-10-02 15:54:30Z jilles $
+ * $Id: identify.c 7179 2006-11-17 19:58:40Z jilles $
  */
 
 #include "atheme.h"
@@ -21,7 +21,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/" COMMAND_LC, FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 6643 2006-10-02 15:54:30Z jilles $",
+	"$Id: identify.c 7179 2006-11-17 19:58:40Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -69,6 +69,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u = si->su;
 	myuser_t *mu;
+	mynick_t *mn;
 	chanuser_t *cu;
 	chanacs_t *ca;
 	node_t *n, *tn;
@@ -100,7 +101,13 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	mu = myuser_find(target);
+	if (nicksvs.no_nick_ownership)
+		mu = myuser_find(target);
+	else
+	{
+		mn = mynick_find(target);
+		mu = mn != NULL ? mn->owner : NULL;
+	}
 
 	if (!mu)
 	{
@@ -207,6 +214,9 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		mu->lastlogin = CURRTIME;
+		mn = mynick_find(u->nick);
+		if (mn != NULL && mn->owner == mu)
+			mn->lastseen = CURRTIME;
 
 		/* XXX: ircd_on_login supports hostmasking, we just dont have it yet. */
 		/* don't allow them to join regonly chans until their

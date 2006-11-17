@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 7067 2006-11-04 20:14:57Z jilles $
+ * $Id: register.c 7179 2006-11-17 19:58:40Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 7067 2006-11-04 20:14:57Z jilles $",
+	"$Id: register.c 7179 2006-11-17 19:58:40Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -57,6 +57,7 @@ static int register_foreach_cb(dictionary_elem_t *delem, void *privdata)
 static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
+	mynick_t *mn;
 	node_t *n;
 	char *account;
 	char *pass = parv[0];
@@ -129,10 +130,9 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* make sure it isn't registered already */
-	mu = myuser_find(account);
-	if (mu != NULL)
+	if (nicksvs.no_nick_ownership ? myuser_find(account) != NULL : mynick_find(account) != NULL)
 	{
-		command_fail(si, fault_alreadyexists, "\2%s\2 is already registered.", mu->name);
+		command_fail(si, fault_alreadyexists, "\2%s\2 is already registered.", account);
 		return;
 	}
 
@@ -149,6 +149,12 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	mu = myuser_add(account, pass, email, config_options.defuflags);
 	mu->registered = CURRTIME;
 	mu->lastlogin = CURRTIME;
+	if (!nicksvs.no_nick_ownership)
+	{
+		mn = mynick_add(mu, mu->name);
+		mn->registered = CURRTIME;
+		mn->lastseen = CURRTIME;
+	}
 
 	if (me.auth == AUTH_EMAIL)
 	{

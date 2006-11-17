@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 William Pitcock, et al.
+ * Copyright (c) 2005-2006 William Pitcock, et al.
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 7037 2006-11-02 23:07:34Z jilles $
+ * $Id: info.c 7179 2006-11-17 19:58:40Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 7037 2006-11-02 23:07:34Z jilles $",
+	"$Id: info.c 7179 2006-11-17 19:58:40Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -40,6 +40,8 @@ void _moddeinit()
 static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
+	mynick_t *mn;
+	user_t *u;
 	char *name = parv[0];
 	char buf[BUFSIZE], strfbuf[32], lastlogin[32];
 	struct tm tm, tm2;
@@ -94,6 +96,44 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, "Logins from: <hidden>");
 
+	if (!nicksvs.no_nick_ownership)
+	{
+		/* describe queried nick */
+		mn = mynick_find(*name == '=' ? name + 1 : name);
+		if (mn != NULL && mn->owner == mu)
+		{
+			tm = *localtime(&mn->registered);
+			strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
+			command_success_nodata(si, "Nick %s registered: %s (%s ago)", mn->nick, strfbuf, time_ago(mn->registered));
+			u = user_find_named(mn->nick);
+			if (u != NULL && u->myuser == mu)
+				command_success_nodata(si, "Nick %s is currently online", mn->nick);
+			else
+			{
+				tm = *localtime(&mn->lastseen);
+				strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
+				command_success_nodata(si, "Nick %s last seen: %s (%s ago)", mn->nick, strfbuf, time_ago(mn->lastseen));
+			}
+		}
+		/* list registered nicks if privileged */
+		if (mu == si->smu || has_priv(si, PRIV_USER_AUSPEX))
+		{
+			buf[0] = '\0';
+			LIST_FOREACH(n, mu->nicks.head)
+			{
+				if (strlen(buf) > 80)
+				{
+					command_success_nodata(si, "Registered nicks: %s", buf);
+					buf[0] = '\0';
+				}
+				if (buf[0])
+					strcat(buf, " ");
+				strcat(buf, ((mynick_t *)(n->data))->nick);
+			}
+			if (buf[0])
+				command_success_nodata(si, "Registered nicks: %s", buf);
+		}
+	}
 
 	if (!(mu->flags & MU_HIDEMAIL)
 		|| (si->smu == mu || has_priv(si, PRIV_USER_AUSPEX)))

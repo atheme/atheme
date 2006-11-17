@@ -1,0 +1,15 @@
+Help for UNGROUP:
+
+UNGROUP unregisters the given nickname from your
+account. The nickname will be available for others to
+register. This will not affect your channel access
+or memos.
+
+If you do not specify a nickname, your current
+nickname will be ungrouped. You cannot ungroup
+your account name.
+
+Syntax: UNGROUP [nickname]
+
+Examples:
+    /msg &nick& UNGROUP SomeNick

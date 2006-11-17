@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Data structures for account information.
  *
- * $Id: account.h 7037 2006-11-02 23:07:34Z jilles $
+ * $Id: account.h 7179 2006-11-17 19:58:40Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -64,6 +64,8 @@ struct myuser_
 
   /* openservices patch */
   list_t access_list;
+
+  list_t nicks; /* registered nicks, must include mu->name if nonempty */
 };
 
 #define MU_HOLD        0x00000001
@@ -80,6 +82,19 @@ struct myuser_
 /* memoserv rate limiting parameters */
 #define MEMO_MAX_NUM   5
 #define MEMO_MAX_TIME  180
+
+/* registered nick */
+struct mynick_
+{
+  char nick[NICKLEN];
+
+  myuser_t *owner;
+
+  time_t registered;
+  time_t lastseen;
+
+  node_t node; /* for myuser_t.nicks */
+};
 
 struct mychan_
 {
@@ -221,6 +236,7 @@ E void kline_expire(void *arg);
 
 /* account.c */
 E dictionary_tree_t *mulist;
+E dictionary_tree_t *nicklist;
 E dictionary_tree_t *mclist;
 
 E void init_accounts(void);
@@ -235,6 +251,10 @@ E boolean_t myuser_access_verify(user_t *u, myuser_t *mu);
 E boolean_t myuser_access_add(myuser_t *mu, char *mask);
 E char *myuser_access_find(myuser_t *mu, char *mask);
 E void myuser_access_delete(myuser_t *mu, char *mask);
+
+E mynick_t *mynick_add(myuser_t *mu, const char *name);
+E void mynick_delete(mynick_t *mn);
+E mynick_t *mynick_find(const char *name);
 
 E mychan_t *mychan_add(char *name);
 E void mychan_delete(char *name);

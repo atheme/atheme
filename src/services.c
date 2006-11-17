@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 6931 2006-10-24 16:53:07Z jilles $
+ * $Id: services.c 7179 2006-11-17 19:58:40Z jilles $
  */
 
 #include "atheme.h"
@@ -258,7 +258,7 @@ void snoop(char *fmt, ...)
 /* protocol wrapper for nickchange/nick burst */
 void handle_nickchange(user_t *u)
 {
-	myuser_t *mu;
+	mynick_t *mn;
 	node_t *n;
 
 	if (u == NULL)
@@ -279,7 +279,7 @@ void handle_nickchange(user_t *u)
 	if (!(u->server->flags & SF_EOB))
 		u->flags |= UF_SEENINFO;
 
-	if (!(mu = myuser_find(u->nick)))
+	if (!(mn = mynick_find(u->nick)))
 	{
 		if (!nicksvs.spam)
 			return;
@@ -296,12 +296,18 @@ void handle_nickchange(user_t *u)
 		return;
 	}
 
-	if (u->myuser == mu)
+	if (u->myuser == mn->owner)
+	{
+		mn->lastseen = CURRTIME;
 		return;
+	}
 
 	/* OpenServices: is user on access list? -nenolod */
-	if (myuser_access_verify(u, mu))
+	if (myuser_access_verify(u, mn->owner))
+	{
+		mn->lastseen = CURRTIME;
 		return;
+	}
 
 	notice(nicksvs.nick, u->nick, "This nickname is registered. Please choose a different nickname, or identify via \2/%s%s identify <password>\2.",
 	       (ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.disp);
@@ -323,6 +329,7 @@ void handle_burstlogin(user_t *u, char *login)
 	myuser_t *mu;
 	node_t *n;
 
+	/* don't allow alias nicks here -- jilles */
 	mu = myuser_find(login);
 	if (mu == NULL)
 	{

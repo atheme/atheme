@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService STATUS function.
  *
- * $Id: status.c 7139 2006-11-13 13:35:46Z jilles $
+ * $Id: status.c 7179 2006-11-17 19:58:40Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/status", FALSE, _modinit, _moddeinit,
-	"$Id: status.c 7139 2006-11-13 13:35:46Z jilles $",
+	"$Id: status.c 7179 2006-11-17 19:58:40Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -99,13 +99,14 @@ static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	if (si->su != NULL && (si->smu == NULL || irccasecmp(si->smu->name, si->su->nick)))
+	if (si->su != NULL)
 	{
-		myuser_t *mu;
+		mynick_t *mn;
 
-		mu = myuser_find(si->su->nick);
-		if (mu != NULL && myuser_access_verify(si->su, mu))
-			command_success_nodata(si, "You are recognized as \2%s\2.", mu->name);
+		mn = mynick_find(si->su->nick);
+		if (mn != NULL && mn->owner != si->smu &&
+				myuser_access_verify(si->su, mn->owner))
+			command_success_nodata(si, "You are recognized as \2%s\2.", mn->owner->name);
 	}
 
 	if (si->su != NULL && is_admin(si->su))

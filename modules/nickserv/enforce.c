@@ -23,7 +23,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/enforce",FALSE, _modinit, _moddeinit,
-	"$Id: enforce.c 7017 2006-11-01 01:43:20Z jilles $",
+	"$Id: enforce.c 7179 2006-11-17 19:58:40Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -128,7 +128,7 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 
 static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 {
-	myuser_t *mu;
+	mynick_t *mn;
 	node_t *n, *tn;
 	metadata_t *md;
 	service_t *svs;
@@ -157,9 +157,9 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	u = user_find_named(target);
-	mu = myuser_find(target);
+	mn = mynick_find(target);
 	
-	if (!mu)
+	if (!mn)
 	{
 		command_fail(si, fault_nosuch_target, "\2%s\2 is not a registered nickname.", target);
 		return;
@@ -170,21 +170,21 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, "You cannot RELEASE yourself.");
 		return;
 	}
-	if ((si->smu == mu) || verify_password(mu, password))
+	if ((si->smu == mn->owner) || verify_password(mn->owner, password))
 	{
 		if (u == NULL || is_internal_client(u))
 		{
-			if (md = metadata_find(mu, METADATA_USER, "private:enforcer"))
-				metadata_delete(mu, METADATA_USER, "private:enforcer");
+			if (md = metadata_find(mn->owner, METADATA_USER, "private:enforcer"))
+				metadata_delete(mn->owner, METADATA_USER, "private:enforcer");
 			logcommand(si, CMDLOG_DO, "RELEASE %s", target);
-			holdnick_sts(si->service->me, 0, target, mu);
+			holdnick_sts(si->service->me, 0, target, mn->owner);
 			command_success_nodata(si, "\2%s\2 has been released.", target);
 			/*hook_call_event("user_identify", u);*/
 		}
 		else
 		{
-			if (md = metadata_find(mu, METADATA_USER, "private:enforcer"))
-				metadata_delete(mu, METADATA_USER, "private:enforcer");
+			if (md = metadata_find(mn->owner, METADATA_USER, "private:enforcer"))
+				metadata_delete(mn->owner, METADATA_USER, "private:enforcer");
 			
 			notice(nicksvs.nick, target, "%s has released your nickname.", get_source_mask(si));
 			i = 0;
@@ -219,6 +219,7 @@ void reg_check(void *arg)
 {
 	user_t *u;
 	node_t *n, *tn;
+	mynick_t *mn;
 	myuser_t *mu;
 	metadata_t *md;
 	time_t ts = CURRTIME;
@@ -238,8 +239,9 @@ void reg_check(void *arg)
 		/* nick is a service, ignore it */
 		if (is_internal_client(u))
 			continue;
-		if ((mu = myuser_find(u->nick)))
+		if ((mn = mynick_find(u->nick)))
 		{
+			mu = mn->owner;
 			if (u->myuser == mu)
 				continue;
 			if (!metadata_find(mu, METADATA_USER, "private:doenforce"))

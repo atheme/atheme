@@ -4,16 +4,18 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7037 2006-11-02 23:07:34Z jilles $
+ * $Id: account.c 7179 2006-11-17 19:58:40Z jilles $
  */
 
 #include "atheme.h"
 #include "uplink.h" /* XXX, for sendq_flush(curr_uplink->conn); */
 
 dictionary_tree_t *mulist;
+dictionary_tree_t *nicklist;
 dictionary_tree_t *mclist;
 
 static BlockHeap *myuser_heap;  /* HEAP_USER */
+static BlockHeap *mynick_heap;  /* HEAP_USER */
 static BlockHeap *mychan_heap;	/* HEAP_CHANNEL */
 static BlockHeap *chanacs_heap;	/* HEAP_CHANACS */
 static BlockHeap *metadata_heap;	/* HEAP_CHANUSER */
@@ -35,18 +37,20 @@ static BlockHeap *metadata_heap;	/* HEAP_CHANUSER */
 void init_accounts(void)
 {
 	myuser_heap = BlockHeapCreate(sizeof(myuser_t), HEAP_USER);
+	mynick_heap = BlockHeapCreate(sizeof(myuser_t), HEAP_USER);
 	mychan_heap = BlockHeapCreate(sizeof(mychan_t), HEAP_CHANNEL);
 	chanacs_heap = BlockHeapCreate(sizeof(chanacs_t), HEAP_CHANUSER);
 	metadata_heap = BlockHeapCreate(sizeof(metadata_t), HEAP_CHANUSER);
 
-	if (myuser_heap == NULL || mychan_heap == NULL || chanacs_heap == NULL
-			|| metadata_heap == NULL)
+	if (myuser_heap == NULL || mynick_heap == NULL || mychan_heap == NULL
+			|| chanacs_heap == NULL || metadata_heap == NULL)
 	{
 		slog(LG_ERROR, "init_accounts(): block allocator failure.");
 		exit(EXIT_FAILURE);
 	}
 
 	mulist = dictionary_create("myuser", HASH_USER, irccasecmp);
+	nicklist = dictionary_create("mynick", HASH_USER, irccasecmp);
 	mclist = dictionary_create("mychan", HASH_CHANNEL, irccasecmp);
 }
 
@@ -68,6 +72,10 @@ void init_accounts(void)
  * Side Effects:
  *      - the created account is added to the accounts DTree,
  *        this may be undesirable for a factory.
+ *
+ * Caveats:
+ *      - if nicksvs.no_nick_ownership is not enabled, the caller is
+ *        responsible for adding a nick with the same name
  */
 myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags)
 {
@@ -137,6 +145,7 @@ void myuser_delete(myuser_t *mu)
 {
 	myuser_t *successor;
 	mychan_t *mc;
+	mynick_t *mn;
 	chanacs_t *ca;
 	user_t *u;
 	node_t *n, *tn;
@@ -221,6 +230,13 @@ void myuser_delete(myuser_t *mu)
 	/* kill any authcookies */
 	authcookie_destroy_all(mu);
 
+	/* delete their nicks */
+	LIST_FOREACH_SAFE(n, tn, mu->nicks.head)
+	{
+		mn = (mynick_t *)n->data;
+		mynick_delete(mn);
+	}
+
 	/* mu->name is the index for this dtree */
 	dictionary_delete(mulist, mu->name);
 
@@ -251,10 +267,11 @@ myuser_t *myuser_find(const char *name)
 /*
  * myuser_find_ext(const char *name)
  *
- * Same as myuser_find() but with undernet-style `=nick' expansion.
+ * Same as myuser_find() but with nick group support and undernet-style
+ * `=nick' expansion.
  *
  * Inputs:
- *      - account name to retrieve or =nick notation for wanted account.
+ *      - account name/nick to retrieve or =nick notation for wanted account.
  *
  * Outputs:
  *      - account wanted or NULL if it's not in the DTree.
@@ -265,6 +282,7 @@ myuser_t *myuser_find(const char *name)
 myuser_t *myuser_find_ext(const char *name)
 {
 	user_t *u;
+	mynick_t *mn;
 
 	if (name == NULL)
 		return NULL;
@@ -274,8 +292,13 @@ myuser_t *myuser_find_ext(const char *name)
 		u = user_find(name + 1);
 		return u != NULL ? u->myuser : NULL;
 	}
-	else
+	else if (nicksvs.no_nick_ownership)
 		return myuser_find(name);
+	else
+	{
+		mn = mynick_find(name);
+		return mn != NULL ? mn->owner : NULL;
+	}
 }
 
 /*
@@ -473,6 +496,106 @@ myuser_access_delete(myuser_t *mu, char *mask)
 			return;
 		}
 	}
+}
+
+/***************
+ * M Y N I C K *
+ ***************/
+
+/*
+ * mynick_add(myuser_t *mu, const char *name)
+ *
+ * Creates a nick registration for the given account and adds it to the
+ * nicks DTree.
+ *
+ * Inputs:
+ *      - an account pointer
+ *      - a nickname
+ *
+ * Outputs:
+ *      - on success, a new mynick_t object
+ *      - on failure, NULL.
+ *
+ * Side Effects:
+ *      - the created nick is added to the nick DTree and to the
+ *        account's list.
+ */
+mynick_t *mynick_add(myuser_t *mu, const char *name)
+{
+	mynick_t *mn;
+
+	mn = mynick_find(name);
+	if (mn)
+	{
+		slog(LG_DEBUG, "mynick_add(): mynick already exists: %s", name);
+		return mn;
+	}
+
+	slog(LG_DEBUG, "mynick_add(): %s -> %s", name, mu->name);
+
+	mn = BlockHeapAlloc(mynick_heap);
+
+	strlcpy(mn->nick, name, NICKLEN);
+	mn->owner = mu;
+	mn->registered = CURRTIME;
+
+	dictionary_add(nicklist, mn->nick, mn);
+	node_add(mn, &mn->node, &mu->nicks);
+
+	cnt.mynick++;
+
+	return mn;
+}
+
+/*
+ * mynick_delete(mynick_t *mn)
+ *
+ * Destroys and removes a nick from the nicks DTree and the account.
+ *
+ * Inputs:
+ *      - nick to destroy
+ *
+ * Outputs:
+ *      - nothing
+ *
+ * Side Effects:
+ *      - a nick is destroyed and removed from the nicks DTree and the account.
+ */
+void mynick_delete(mynick_t *mn)
+{
+	if (!mn)
+	{
+		slog(LG_DEBUG, "mynick_delete(): called for NULL myuser");
+		return;
+	}
+
+	slog(LG_DEBUG, "mynick_delete(): %s", mn->nick);
+
+	dictionary_delete(nicklist, mn->nick);
+	node_del(&mn->node, &mn->owner->nicks);
+
+	BlockHeapFree(mynick_heap, mn);
+
+	cnt.mynick--;
+}
+
+/*
+ * mynick_find(const char *name)
+ *
+ * Retrieves a nick from the nicks DTree.
+ *
+ * Inputs:
+ *      - nickname to retrieve
+ *
+ * Outputs:
+ *      - nick wanted or NULL if it's not in the DTree.
+ *
+ * Side Effects:
+ *      - none
+ */
+mynick_t *mynick_find(const char *name)
+{
+	return dictionary_retrieve(nicklist, name);
 }
 
 /***************
@@ -1325,12 +1448,33 @@ void expire_check(void *arg)
 static int check_myuser_cb(dictionary_elem_t *delem, void *unused)
 {
 	myuser_t *mu = (myuser_t *) delem->node.data;
+	mynick_t *mn;
 
 	if (MU_OLD_ALIAS & mu->flags)
 	{
 		slog(LG_INFO, "db_check(): converting previously linked nick %s to a standalone nick", mu->name);
 		mu->flags &= ~MU_OLD_ALIAS;
 		metadata_delete(mu, METADATA_USER, "private:alias:parent");
+	}
+
+	if (!nicksvs.no_nick_ownership)
+	{
+		mn = mynick_find(mu->name);
+		if (mn == NULL)
+		{
+			slog(LG_DEBUG, "db_check(): adding missing nick %s", mu->name);
+			mn = mynick_add(mu, mu->name);
+			mn->registered = mu->registered;
+			mn->lastseen = mu->lastlogin;
+		}
+		else if (mn->owner != mu)
+		{
+			slog(LG_INFO, "db_check(): replacing nick %s owned by %s with %s", mn->nick, mn->owner->name, mu->name);
+			mynick_delete(mn);
+			mn = mynick_add(mu, mu->name);
+			mn->registered = mu->registered;
+			mn->lastseen = mu->lastlogin;
+		}
 	}
 
 	return 0;
