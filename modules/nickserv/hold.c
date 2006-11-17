@@ -4,7 +4,7 @@
  *
  * Controls noexpire options for nicknames.
  *
- * $Id: hold.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: hold.c 7185 2006-11-17 21:02:46Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/hold", FALSE, _modinit, _moddeinit,
-	"$Id: hold.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: hold.c 7185 2006-11-17 21:02:46Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,7 +20,7 @@ static void ns_cmd_hold(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_hold = {
 	"HOLD",
-	"Prevents a nickname from expiring.",
+	"Prevents an account from expiring.",
 	PRIV_HOLD,
 	2,
 	ns_cmd_hold
@@ -52,7 +52,7 @@ static void ns_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 	if (!target || !action)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "HOLD");
-		command_fail(si, fault_needmoreparams, "Usage: HOLD <nickname> <ON|OFF>");
+		command_fail(si, fault_needmoreparams, "Usage: HOLD <account> <ON|OFF>");
 		return;
 	}
 
@@ -72,7 +72,7 @@ static void ns_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 
 		mu->flags |= MU_HOLD;
 
-		wallops("%s set the HOLD option for the nickname \2%s\2.", get_oper_name(si), target);
+		wallops("%s set the HOLD option for the account \2%s\2.", get_oper_name(si), target);
 		logcommand(si, CMDLOG_ADMIN, "HOLD %s ON", target);
 		command_success_nodata(si, "\2%s\2 is now held.", target);
 	}
@@ -86,13 +86,13 @@ static void ns_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 
 		mu->flags &= ~MU_HOLD;
 
-		wallops("%s removed the HOLD option on the nickname \2%s\2.", get_oper_name(si), target);
+		wallops("%s removed the HOLD option on the account \2%s\2.", get_oper_name(si), target);
 		logcommand(si, CMDLOG_ADMIN, "HOLD %s OFF", target);
 		command_success_nodata(si, "\2%s\2 is no longer held.", target);
 	}
 	else
 	{
 		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "HOLD");
-		command_fail(si, fault_needmoreparams, "Usage: HOLD <nickname> <ON|OFF>");
+		command_fail(si, fault_needmoreparams, "Usage: HOLD <account> <ON|OFF>");
 	}
 }

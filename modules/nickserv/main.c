@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6979 2006-10-27 21:29:51Z jilles $
+ * $Id: main.c 7185 2006-11-17 21:02:46Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6979 2006-10-27 21:29:51Z jilles $",
+	"$Id: main.c 7185 2006-11-17 21:02:46Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -58,30 +58,18 @@ struct
 } nick_account_trans[] =
 {
 	/* command descriptions */
-	{ "Drops a nickname registration.", "Drops an account registration." },
 	{ "Reclaims use of a nickname.", "Disconnects an old session." },
 	{ "Prevents a nickname from expiring.", "Prevents an account from expiring." },
 	{ "Registers a nickname.", "Registers an account." },
 	{ "Lists nicknames registered matching a given pattern.", "Lists accounts matching a given pattern." },
 	{ "Lists nicknames registered to an e-mail address.", "Lists accounts registered to an e-mail address." },
-	{ "Freezes a nickname.", "Freezes an account." },
 	{ "Resets a nickname password.", "Resets an account password." },
 	{ "Returns a nickname to its owner.", "Returns a account to its owner." },
 	{ "Verifies a nickname registration.", "Verifies an account registration." },
 
 	/* messages */
-	{ "Syntax: DROP <nickname> <password>", "Syntax: DROP <account> <password>" },
-	{ "%s dropped the nickname \2%s\2", "%s dropped the account \2%s\2" },
-	{ "The nickname \2%s\2 has been dropped.", "The account \2%s\2 has been dropped." },
 	{ "Usage: FREEZE <nickname> <ON|OFF> [reason]", "Usage: FREEZE <account> <ON|OFF> [reason]" },
 	{ "\2%s\2 is not a registered nickname.", "\2%s\2 is not a registered account." },
-	{ "Usage: FREEZE <nickname> ON <reason>", "Usage: FREEZE <account> ON <reason>" },
-	{ "The nickname \2%s\2 belongs to a services operator; it cannot be frozen.", "The account \2%s\2 belongs to a services operator; it cannot be frozen." },
-	{ "%s froze the nickname \2%s\2 (%s).", "%s froze the account \2%s\2 (%s)." },
-	{ "%s thawed the nickname \2%s\2.", "%s thawed the account \2%s\2." },
-	{ "Usage: HOLD <nickname> <ON|OFF>", "Usage: HOLD <account> <ON|OFF>" },
-	{ "%s set the HOLD option for the nickname \2%s\2.", "%s set the HOLD option for the account \2%s\2." },
-	{ "%s removed the HOLD option on the nickname \2%s\2.", "%s removed the HOLD option on the account \2%s\2." },
 	{ "Syntax: INFO <nickname>", "Syntax: INFO <account>" },
 	{ "No nicknames matched pattern \2%s\2", "No accounts matched pattern \2%s\2" },
 	{ "Nicknames matching e-mail address \2%s\2:", "Accounts matching e-mail address \2%s\2:" },

@@ -4,7 +4,7 @@
  *
  * This file contains code for the nickserv DROP function.
  *
- * $Id: drop.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: drop.c 7185 2006-11-17 21:02:46Z jilles $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: drop.c 7185 2006-11-17 21:02:46Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_drop = { "DROP", "Drops a nickname registration.", AC_NONE, 2, ns_cmd_drop };
+command_t ns_drop = { "DROP", "Drops an account registration.", AC_NONE, 2, ns_cmd_drop };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -46,7 +46,7 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 	if (!acc)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DROP");
-		command_fail(si, fault_needmoreparams, "Syntax: DROP <nickname> <password>");
+		command_fail(si, fault_needmoreparams, "Syntax: DROP <account> <password>");
 		return;
 	}
 
@@ -64,16 +64,16 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 
 	if (is_soper(mu))
 	{
-		command_fail(si, fault_badparams, "The nickname \2%s\2 belongs to a services operator; it cannot be dropped.", acc);
+		command_fail(si, fault_noprivs, "The nickname \2%s\2 belongs to a services operator; it cannot be dropped.", acc);
 		return;
 	}
 
 	if (!pass)
-		wallops("%s dropped the nickname \2%s\2", get_oper_name(si), mu->name);
+		wallops("%s dropped the account \2%s\2", get_oper_name(si), mu->name);
 
 	snoop("DROP: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
 	logcommand(si, pass ? CMDLOG_REGISTER : CMDLOG_ADMIN, "DROP %s%s", mu->name, pass ? "" : " (admin)");
 	hook_call_event("user_drop", mu);
-	command_success_nodata(si, "The nickname \2%s\2 has been dropped.", mu->name);
+	command_success_nodata(si, "The account \2%s\2 has been dropped.", mu->name);
 	myuser_delete(mu);
 }

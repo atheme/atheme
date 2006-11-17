@@ -4,7 +4,7 @@
  *
  * Gives services the ability to freeze nicknames
  *
- * $Id: freeze.c 6639 2006-10-02 15:44:53Z jilles $
+ * $Id: freeze.c 7185 2006-11-17 21:02:46Z jilles $
  */
 
 #include "atheme.h"
@@ -12,14 +12,14 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/freeze", FALSE, _modinit, _moddeinit,
-	"$Id: freeze.c 6639 2006-10-02 15:44:53Z jilles $",
+	"$Id: freeze.c 7185 2006-11-17 21:02:46Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[]);
 
 /* FREEZE ON|OFF -- don't pollute the root with THAW */
-command_t ns_freeze = { "FREEZE", "Freezes a nickname.", PRIV_USER_ADMIN, 3, ns_cmd_freeze };
+command_t ns_freeze = { "FREEZE", "Freezes an account.", PRIV_USER_ADMIN, 3, ns_cmd_freeze };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -56,7 +56,7 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!mu)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not a registered nickname.", target);
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", target);
 		return;
 	}
 
@@ -71,7 +71,7 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 
 		if (is_soper(mu))
 		{
-			command_fail(si, fault_badparams, "The nickname \2%s\2 belongs to a services operator; it cannot be frozen.", target);
+			command_fail(si, fault_badparams, "The account \2%s\2 belongs to a services operator; it cannot be frozen.", target);
 			return;
 		}
 
@@ -85,7 +85,7 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 		metadata_add(mu, METADATA_USER, "private:freeze:reason", reason);
 		metadata_add(mu, METADATA_USER, "private:freeze:timestamp", itoa(CURRTIME));
 
-		wallops("%s froze the nickname \2%s\2 (%s).", get_oper_name(si), target, reason);
+		wallops("%s froze the account \2%s\2 (%s).", get_oper_name(si), target, reason);
 		logcommand(si, CMDLOG_ADMIN, "FREEZE %s ON", target);
 		command_success_nodata(si, "\2%s\2 is now frozen.", target);
 	}
@@ -101,13 +101,13 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 		metadata_delete(mu, METADATA_USER, "private:freeze:reason");
 		metadata_delete(mu, METADATA_USER, "private:freeze:timestamp");
 
-		wallops("%s thawed the nickname \2%s\2.", get_oper_name(si), target);
+		wallops("%s thawed the account \2%s\2.", get_oper_name(si), target);
 		logcommand(si, CMDLOG_ADMIN, "FREEZE %s OFF", target);
 		command_success_nodata(si, "\2%s\2 has been thawed", target);
 	}
 	else
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FREEZE");
-		command_fail(si, fault_needmoreparams, "Usage: FREEZE <nickname> <ON|OFF> [reason]");
+		command_fail(si, fault_needmoreparams, "Usage: FREEZE <account> <ON|OFF> [reason]");
 	}
 }

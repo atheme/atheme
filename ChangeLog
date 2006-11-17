@@ -1,3 +1,31 @@
+jilles      2006/11/17 20:38:15 UTC	(20061117-7183)
+  Log:
+  Helpfile updates for grouping.
+  nickserv/userserv mark: this is for accounts only, not channels
+  
+
+  Changes:	Modified:
+  +8 -8		trunk/help/nickserv/drop (File Modified) 
+  +4 -4		trunk/help/nickserv/freeze (File Modified) 
+  +2 -2		trunk/help/nickserv/ghost (File Modified) 
+  +2 -0		trunk/help/nickserv/group (File Modified) 
+  +3 -3		trunk/help/nickserv/hold (File Modified) 
+  +3 -1		trunk/help/nickserv/info (File Modified) 
+  +1 -1		trunk/help/nickserv/logout (File Modified) 
+  +4 -4		trunk/help/nickserv/mark (File Modified) 
+  +1 -1		trunk/help/nickserv/resetpass (File Modified) 
+  +1 -1		trunk/help/nickserv/return (File Modified) 
+  +1 -1		trunk/help/nickserv/set_email (File Modified) 
+  +1 -1		trunk/help/nickserv/set_emailmemos (File Modified) 
+  +2 -2		trunk/help/nickserv/set_enforce (File Modified) 
+  +1 -1		trunk/help/nickserv/set_hidemail (File Modified) 
+  +1 -1		trunk/help/nickserv/set_password (File Modified) 
+  +1 -1		trunk/help/nickserv/set_property (File Modified) 
+  +1 -1		trunk/help/nickserv/verify (File Modified) 
+  +1 -1		trunk/help/nickserv/vhost (File Modified) 
+  +4 -4		trunk/help/userserv/mark (File Modified) 
+
+
 jilles      2006/11/17 20:21:46 UTC	(20061117-7181)
   Log:
   typo fix
