@@ -1,10 +1,13 @@
 Help for REGISTER:
 
-This will register your current nickname with NickServ. This
-means that only you can have access to this nickname, unless
-you give access to others. The password is a case-sensitive
-password that you make up. Please write down or memorize
-your password! You will need it later to change settings.
+This will register your current nickname with &nick&.
+This will allow you to assert some form of identity on
+the network and to be added to access lists. Furthermore,
+&nick& will warn users using your nick without
+identifying and allow you to kill ghosts.
+The password is a case-sensitive password that you make
+up. Please write down or memorize your password! You
+will need it later to change settings.
 
 You may be required to confirm the email address. To do this,
 follow the instructions in the message sent to the email

@@ -1,3 +1,13 @@
+jilles      2006/11/16 18:15:27 UTC	(20061116-7175)
+  Log:
+  chanserv ftransfer: Show account name of new founder
+  instead of the passed string (which could be =<nick>)
+  
+
+  Changes:	Modified:
+  +6 -6		trunk/modules/chanserv/ftransfer.c (File Modified) 
+
+
 jilles      2006/11/15 19:27:49 UTC	(20061115-7171)
   Log:
   Add /cs fflags, allows chan:admin services opers to force
