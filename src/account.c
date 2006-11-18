@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7193 2006-11-18 02:16:26Z jilles $
+ * $Id: account.c 7195 2006-11-18 02:19:54Z jilles $
  */
 
 #include "atheme.h"
@@ -289,7 +289,7 @@ myuser_t *myuser_find_ext(const char *name)
 
 	if (*name == '=')
 	{
-		u = user_find(name + 1);
+		u = user_find_named(name + 1);
 		return u != NULL ? u->myuser : NULL;
 	}
 	else if (nicksvs.no_nick_ownership)

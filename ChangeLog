@@ -1,3 +1,12 @@
+jilles      2006/11/18 02:16:26 UTC	(20061118-7193)
+  Log:
+  Expire grouped nicks (but not the account name) separately.
+  
+
+  Changes:	Modified:
+  +27 -0	trunk/src/account.c (File Modified) 
+
+
 jilles      2006/11/18 00:09:00 UTC	(20061118-7191)
   Log:
   If nickname ownership is enabled and the UNGROUP command exists:
