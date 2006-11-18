@@ -1,3 +1,12 @@
+jilles      2006/11/18 14:02:11 UTC	(20061118-7205)
+  Log:
+  Mention fantasy commands in /cs help.
+  
+
+  Changes:	Modified:
+  +7 -0		trunk/modules/chanserv/help.c (File Modified) 
+
+
 jilles      2006/11/18 13:48:55 UTC	(20061118-7203)
   Log:
   Change /cs why to work in a more sane way with flags.

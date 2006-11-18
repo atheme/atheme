@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 7179 2006-11-17 19:58:40Z jilles $
+ * $Id: ptasks.c 7207 2006-11-18 14:03:53Z jilles $
  */
 
 #include "atheme.h"
@@ -364,12 +364,6 @@ void handle_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *m
 		if (cdata.c == NULL)
 			return;
 		hook_call_event("channel_message", &cdata);
-
-		/* If target is a channel but command is no fantasy command,
-		 * it will be normal chatter
-		 */
-		if (*message != '!' && *message != '.' && *message != '@')
-			return;
 	}
 
 	if (si->service == NULL)
