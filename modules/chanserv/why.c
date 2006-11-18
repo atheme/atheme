@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 William Pitcock
+ * Copyright (c) 2005-2006 William Pitcock, et al.
  * Rights to this code are as documented in doc/LICENSE.
  *
- * This file contains code for the NickServ MYACCESS function.
+ * This file contains code for the ChanServ WHY function.
  *
- * $Id: why.c 6911 2006-10-23 00:23:32Z jilles $
+ * $Id: why.c 7203 2006-11-18 13:48:55Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/why", FALSE, _modinit, _moddeinit,
-	"$Id: why.c 6911 2006-10-23 00:23:32Z jilles $",
+	"$Id: why.c 7203 2006-11-18 13:48:55Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -50,6 +50,7 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 	node_t *n;
 	chanacs_t *ca;
 	int operoverride = 0;
+	int32_t fl = 0;
 
 	if (!chan || !targ)
 	{
@@ -94,13 +95,6 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (mu == NULL)
-	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.",
-			targ);
-		return;
-	}
-
 	if (operoverride)
 		logcommand(si, CMDLOG_ADMIN, "%s WHY %s!%s@%s (oper override)", mc->name, u->nick, u->user, u->vhost);
 	else
@@ -112,28 +106,24 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 	{
        	        ca = (chanacs_t *)n->data;
 
-		if (ca->myuser != mu && match(ca->host, host))
-			continue;
-
-		if ((ca->level & CA_AUTOVOICE) == CA_AUTOVOICE)
+		if (ca->myuser != NULL && ca->myuser == mu)
+		{
+			fl |= ca->level;
 			command_success_nodata(si,
-				"\2%s\2 was granted voice in \2%s\2 because they have identified to the nickname %s which has the autovoice privilege.", 
-				targ, chan, ca->myuser);
-
-		if ((ca->level & CA_AUTOHALFOP) == CA_AUTOHALFOP)
+				"\2%s\2 has flags \2%s\2 in \2%s\2 because they are logged in as \2%s\2.",
+				u->nick, bitmask_to_flags2(ca->level, 0, chanacs_flags), mc->name, mu->name);
+		}
+		else if (ca->myuser == NULL && !match(ca->host, host))
+		{
+			fl |= ca->level;
 			command_success_nodata(si,
-				"\2%s\2 was granted halfops in \2%s\2 because they have identified to the nickname %s which has the autohalfop privilege.",
-				targ, chan, ca->myuser);
-
-		if ((ca->level & CA_AUTOOP) == CA_AUTOOP)
-			command_success_nodata(si,
-				"\2%s\2 was granted channel ops in \2%s\2 because they have identified to the nickname %s which has the autoop privilege.",
-				targ, chan, ca->myuser);
-
-		if ((ca->level & CA_AKICK) == CA_AKICK)
-			command_success_nodata(si,
-				"\2%s\2 is autokicked from \2%s\2 because they match the mask \2%s\2 that is on the channel akick list.",
-				targ, chan, ca->host);
-
+				"\2%s\2 has flags \2%s\2 in \2%s\2 because they match the mask \2%s\2.",
+				u->nick, bitmask_to_flags2(ca->level, 0, chanacs_flags), mc->name, ca->host);
+		}
 	}
+	if ((fl & (CA_AKICK | CA_REMOVE)) == (CA_AKICK | CA_REMOVE))
+		command_success_nodata(si, "+r exempts from +b.");
+	else if (fl == 0)
+		command_success_nodata(si, "\2%s\2 has no special access to \2%s\2.",
+				u->nick, mc->name);
 }

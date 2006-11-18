@@ -1,3 +1,12 @@
+nenolod     2006/11/18 05:27:38 UTC	(20061118-7201)
+  Log:
+  - show GUARD in /cs info if enabled
+  
+
+  Changes:	Modified:
+  +8 -0		trunk/modules/chanserv/info.c (File Modified) 
+
+
 nenolod     2006/11/18 05:10:57 UTC	(20061118-7199)
   Log:
   Make ChanServ inhabitation optional:
