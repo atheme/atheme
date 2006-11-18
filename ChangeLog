@@ -1,3 +1,12 @@
+jilles      2006/11/18 13:48:55 UTC	(20061118-7203)
+  Log:
+  Change /cs why to work in a more sane way with flags.
+  
+
+  Changes:	Modified:
+  +20 -30	trunk/modules/chanserv/why.c (File Modified) 
+
+
 nenolod     2006/11/18 05:27:38 UTC	(20061118-7201)
   Log:
   - show GUARD in /cs info if enabled

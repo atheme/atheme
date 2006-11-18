@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 6727 2006-10-20 18:48:53Z jilles $
+ * $Id: help.c 7205 2006-11-18 14:02:11Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 6727 2006-10-20 18:48:53Z jilles $",
+	"$Id: help.c 7205 2006-11-18 14:02:11Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -74,6 +74,13 @@ static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "people may be chosen depending on their access");
 		command_success_nodata(si, "level and activity.");
 		command_success_nodata(si, " ");
+		if (chansvs.fantasy && config_options.join_chans && chansvs.trigger != '\0')
+		{
+			command_success_nodata(si, "Commands can also be given on channel by prefixing with '%c'", chansvs.trigger);
+			command_success_nodata(si, "and omitting the channel name. These are called \"fantasy\"");
+			command_success_nodata(si, "commands and can also be disabled on a per-channel basis.");
+			command_success_nodata(si, " ");
+		}
 		command_success_nodata(si, "For more information on a command, type:");
 		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
 		command_success_nodata(si, " ");
