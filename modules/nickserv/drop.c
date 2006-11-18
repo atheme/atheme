@@ -4,7 +4,7 @@
  *
  * This file contains code for the nickserv DROP function.
  *
- * $Id: drop.c 7185 2006-11-17 21:02:46Z jilles $
+ * $Id: drop.c 7191 2006-11-18 00:09:00Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 7185 2006-11-17 21:02:46Z jilles $",
+	"$Id: drop.c 7191 2006-11-18 00:09:00Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -40,6 +40,7 @@ void _moddeinit()
 static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
+	mynick_t *mn;
 	char *acc = parv[0];
 	char *pass = parv[1];
 
@@ -52,6 +53,15 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mu = myuser_find(acc)))
 	{
+		if (!nicksvs.no_nick_ownership)
+		{
+			mn = mynick_find(acc);
+			if (mn != NULL && command_find(si->service->cmdtree, "UNGROUP"))
+			{
+				command_fail(si, fault_nosuch_target, "\2%s\2 is a grouped nick, use UNGROUP to remove it.", acc);
+				return;
+			}
+		}
 		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", acc);
 		return;
 	}
@@ -59,6 +69,15 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 	if ((pass || !has_priv(si, PRIV_USER_ADMIN)) && !verify_password(mu, pass))
 	{
 		command_fail(si, fault_authfail, "Authentication failed. Invalid password for \2%s\2.", mu->name);
+		return;
+	}
+
+	if (!nicksvs.no_nick_ownership && pass &&
+			LIST_LENGTH(&mu->nicks) > 1 &&
+			command_find(si->service->cmdtree, "UNGROUP"))
+	{
+		command_fail(si, fault_noprivs, "Account \2%s\2 has %d other nick(s) grouped to it, remove those first.",
+				mu->name, LIST_LENGTH(&mu->nicks) - 1);
 		return;
 	}
 

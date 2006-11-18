@@ -1,3 +1,13 @@
+jilles      2006/11/17 23:05:39 UTC	(20061117-7189)
+  Log:
+  chanserv hold help file: mention that HOLD will not stop
+  a channel without eligible successors from expiring
+  
+
+  Changes:	Modified:
+  +3 -1		trunk/help/cservice/hold (File Modified) 
+
+
 jilles      2006/11/17 21:09:58 UTC	(20061117-7187)
   Log:
   List GROUP and UNGROUP verbosely in /ns help.
