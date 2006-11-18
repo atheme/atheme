@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService SYNC functions.
  *
- * $Id: cs_sync.c 7129 2006-11-11 15:25:32Z jilles $
+ * $Id: cs_sync.c 7199 2006-11-18 05:10:57Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/sync", FALSE, _modinit, _moddeinit,
-	"$Id: cs_sync.c 7129 2006-11-11 15:25:32Z jilles $",
+	"$Id: cs_sync.c 7199 2006-11-18 05:10:57Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -91,10 +91,10 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
 		fl = chanacs_user_flags(mc, cu->user);
 		if (fl & CA_AKICK && !(fl & CA_REMOVE))
 		{
-			if (mc->chan->nummembers <= (config_options.join_chans ? 2 : 1))
+			if (mc->chan->nummembers <= (mc->flags & MC_GUARD ? 2 : 1))
 			{
 				mc->flags |= MC_INHABIT;
-				if (!config_options.join_chans)
+				if (!(mc->flags & MC_GUARD))
 					join(mc->name, chansvs.nick);
 			}
 			/* XXX duplicate the whole thing in cs_join()? */

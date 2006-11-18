@@ -4,7 +4,7 @@
  *
  * This file contains code for the ChanServ CLEAR USERS function.
  *
- * $Id: clear_users.c 6935 2006-10-25 00:43:03Z jilles $
+ * $Id: clear_users.c 7199 2006-11-18 05:10:57Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/clear_users", FALSE, _modinit, _moddeinit,
-	"$Id: clear_users.c 6935 2006-10-25 00:43:03Z jilles $",
+	"$Id: clear_users.c 7199 2006-11-18 05:10:57Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -100,7 +100,7 @@ static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[])
 	c = channel_find(channel);
 	if (c != NULL)
 	{
-		if (config_options.join_chans && !config_options.leave_chans
+		if ((mc->flags & MC_GUARD) && !config_options.leave_chans
 				&& c != NULL && !chanuser_find(c, si->su))
 		{
 			/* Always cycle it if the requester is not on channel

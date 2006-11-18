@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY and LOGIN functions.
  *
- * $Id: identify.c 7179 2006-11-17 19:58:40Z jilles $
+ * $Id: identify.c 7199 2006-11-18 05:10:57Z nenolod $
  */
 
 #include "atheme.h"
@@ -21,7 +21,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/" COMMAND_LC, FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 7179 2006-11-17 19:58:40Z jilles $",
+	"$Id: identify.c 7199 2006-11-18 05:10:57Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -239,10 +239,10 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 				if (ca->level & CA_AKICK && !(ca->level & CA_REMOVE))
 				{
 					/* Stay on channel if this would empty it -- jilles */
-					if (ca->mychan->chan->nummembers <= (config_options.join_chans ? 2 : 1))
+					if (ca->mychan->chan->nummembers <= (ca->mychan->flags & MC_GUARD ? 2 : 1))
 					{
 						ca->mychan->flags |= MC_INHABIT;
-						if (!config_options.join_chans)
+						if (!(ca->mychan->flags & MC_GUARD))
 							join(cu->chan->name, chansvs.nick);
 					}
 					ban(chansvs.me->me, ca->mychan->chan, u);

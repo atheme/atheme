@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 7197 2006-11-18 04:03:22Z nenolod $
+ * $Id: main.c 7199 2006-11-18 05:10:57Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 7197 2006-11-18 04:03:22Z nenolod $",
+	"$Id: main.c 7199 2006-11-18 05:10:57Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -38,6 +38,9 @@ static void join_registered(boolean_t all)
 
 	DICTIONARY_FOREACH(mc, &state, mclist)
 	{
+		if (!(mc->flags & MC_GUARD))
+			continue;
+
 		if (all)
 		{
 			join(mc->name, chansvs.nick);
@@ -156,7 +159,7 @@ static void chanserv_config_ready(void *unused)
 	if (chansvs.fantasy)
 		fcmd_agent = chansvs.me;
 
-	if (me.connected && config_options.join_chans)
+	if (me.connected)
 		join_registered(!config_options.leave_chans);
 
 	hook_del_hook("config_ready", chanserv_config_ready);
@@ -174,7 +177,7 @@ void _modinit(module_t *m)
 		if (chansvs.fantasy)
 			fcmd_agent = chansvs.me;
 
-		if (me.connected && config_options.join_chans)
+		if (me.connected)
 			join_registered(!config_options.leave_chans);
 	}
 
@@ -242,7 +245,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	if (mc->flags & MC_SECURE || (!chansvs.changets && chan->nummembers == 1 && chan->ts > CURRTIME - 300))
 		secure = TRUE;
 
-	if (chan->nummembers == 1 && config_options.join_chans)
+	if (chan->nummembers == 1 && mc->flags & MC_GUARD)
 		join(chan->name, chansvs.nick);
 
 	flags = chanacs_user_flags(mc, u);
@@ -253,10 +256,10 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	if ((mc->flags & MC_STAFFONLY) && !has_priv_user(u, PRIV_JOIN_STAFFONLY))
 	{
 		/* Stay on channel if this would empty it -- jilles */
-		if (chan->nummembers <= (config_options.join_chans ? 2 : 1))
+		if (chan->nummembers <= (mc->flags & MC_GUARD ? 2 : 1))
 		{
 			mc->flags |= MC_INHABIT;
-			if (!config_options.join_chans)
+			if (!(mc->flags & MC_GUARD))
 				join(chan->name, chansvs.nick);
 		}
 		ban(chansvs.me->me, chan, u);
@@ -269,10 +272,10 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	if (flags & CA_AKICK && !(flags & CA_REMOVE))
 	{
 		/* Stay on channel if this would empty it -- jilles */
-		if (chan->nummembers <= (config_options.join_chans ? 2 : 1))
+		if (chan->nummembers <= (mc->flags & MC_GUARD ? 2 : 1))
 		{
 			mc->flags |= MC_INHABIT;
-			if (!config_options.join_chans)
+			if (!(mc->flags & MC_GUARD))
 				join(chan->name, chansvs.nick);
 		}
 		/* use a user-given ban mask if possible -- jilles */
@@ -302,7 +305,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	if (mc->flags & MC_INHABIT)
 	{
 		mc->flags &= ~MC_INHABIT;
-		if (!config_options.join_chans && (!config_options.chan || irccmp(chan->name, config_options.chan)) && chanuser_find(chan, chansvs.me->me))
+		if (!(mc->flags & MC_GUARD) && (!config_options.chan || irccmp(chan->name, config_options.chan)) && chanuser_find(chan, chansvs.me->me))
 			part(chan->name, chansvs.nick);
 	}
 
@@ -417,7 +420,7 @@ static void cs_part(hook_channel_joinpart_t *hdata)
 	 * Do not part if we're enforcing an akick/close in an otherwise
 	 * empty channel (MC_INHABIT). -- jilles
 	 */
-	if (config_options.join_chans
+	if ((mc->flags & MC_GUARD)
 		&& config_options.leave_chans
 		&& !(mc->flags & MC_INHABIT)
 		&& (cu->chan->nummembers <= 2)
@@ -429,7 +432,7 @@ static void cs_register(mychan_t *mc)
 {
 	if (mc->chan)
 	{
-		if (config_options.join_chans)
+		if (mc->flags & MC_GUARD)
 			join(mc->name, chansvs.nick);
 
 		check_modes(mc, TRUE);
@@ -617,7 +620,7 @@ static void cs_leave_empty(void *unused)
 		mc->flags &= ~MC_INHABIT;
 		if (mc->chan != NULL &&
 				(!config_options.chan || irccmp(mc->name, config_options.chan)) &&
-				(!config_options.join_chans ||
+				(!(mc->flags & MC_GUARD) ||
 				 (config_options.leave_chans && mc->chan->nummembers == 1) ||
 				 metadata_find(mc, METADATA_CHANNEL, "private:close:closer")) &&
 				chanuser_find(mc->chan, chansvs.me->me))

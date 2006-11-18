@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 6895 2006-10-22 21:07:24Z jilles $
+ * $Id: set.c 7199 2006-11-18 05:10:57Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 6895 2006-10-22 21:07:24Z jilles $",
+	"$Id: set.c 7199 2006-11-18 05:10:57Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -31,6 +31,7 @@ static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_staffonly(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_set = { "SET", "Sets various control flags.",
                         AC_NONE, 3, cs_cmd_set };
@@ -45,6 +46,7 @@ command_t cs_set_property  = { "PROPERTY",  "Manipulates channel metadata.",    
 command_t cs_set_email     = { "EMAIL",     "Sets the channel e-mail address.",                             AC_NONE, 2, cs_cmd_set_email      };
 command_t cs_set_keeptopic = { "KEEPTOPIC", "Enables topic retention.",                                     AC_NONE, 2, cs_cmd_set_keeptopic  };
 command_t cs_set_topiclock = { "TOPICLOCK", "Restricts who can change the topic.",                          AC_NONE, 2, cs_cmd_set_topiclock  };
+command_t cs_set_guard     = { "GUARD",     "Sets whether or not services will inhabit the channel.",       AC_NONE, 2, cs_cmd_set_guard      };
 command_t cs_set_fantasy   = { "FANTASY",   "Allows or disallows in-channel commands.",                     AC_NONE, 2, cs_cmd_set_fantasy    };
 command_t cs_set_staffonly = { "STAFFONLY", "Sets the channel as staff-only. (Non staff is kickbanned.)",   PRIV_CHAN_ADMIN, 2, cs_cmd_set_staffonly  };
 
@@ -59,6 +61,7 @@ command_t *cs_set_commands[] = {
 	&cs_set_email,
 	&cs_set_keeptopic,
 	&cs_set_topiclock,
+	&cs_set_guard,
 	&cs_set_fantasy,
 	&cs_set_staffonly,
 	NULL
@@ -89,6 +92,7 @@ void _modinit(module_t *m)
 	help_addentry(cs_helptree, "SET KEEPTOPIC", "help/cservice/set_keeptopic", NULL);
 	help_addentry(cs_helptree, "SET TOPICLOCK", "help/cservice/set_topiclock", NULL);
 	help_addentry(cs_helptree, "SET FANTASY", "help/cservice/set_fantasy", NULL);
+	help_addentry(cs_helptree, "SET GUARD", "help/cservice/set_guard", NULL);
 }
 
 void _moddeinit()
@@ -109,6 +113,7 @@ void _moddeinit()
 	help_delentry(cs_helptree, "SET KEEPTOPIC");
 	help_delentry(cs_helptree, "SET TOPICLOCK");
 	help_delentry(cs_helptree, "SET FANTASY");
+	help_delentry(cs_helptree, "SET GUARD");
 }
 
 static void cs_help_set(sourceinfo_t *si)
@@ -986,6 +991,75 @@ static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "FANTASY");
 		return;
 	}
+}
+
+static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])
+{
+	mychan_t *mc;
+
+	if (config_options.join_chans == FALSE && !has_priv(si, PRIV_ADMIN))
+	{
+		command_fail(si, fault_noprivs, "\2GUARD\2 is not available to users.");
+		return;
+	}
+
+	if (!(mc = mychan_find(parv[0])))
+	{
+		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", parv[0]);
+		return;
+	}
+
+	if (!chanacs_source_has_flag(mc, si, CA_SET))
+	{
+		command_fail(si, fault_noprivs, "You are not authorized to perform this command.");
+		return;
+	}
+
+	if (!strcasecmp("ON", parv[1]))
+	{
+		if (MC_GUARD & mc->flags)
+                {
+                        command_fail(si, fault_nochange, "The \2GUARD\2 flag is already set for \2%s\2.", mc->name);
+                        return;
+                }
+
+		logcommand(si, CMDLOG_SET, "%s SET GUARD ON", mc->name);
+
+                mc->flags |= MC_GUARD;
+
+		if (!(mc->flags & MC_INHABIT))
+			join(mc->name, chansvs.nick);
+
+                command_success_nodata(si, "The \2GUARD\2 flag has been set for \2%s\2.", mc->name);
+
+                return;
+        }
+
+        else if (!strcasecmp("OFF", parv[1]))
+        {
+                if (!(MC_GUARD & mc->flags))
+                {
+                        command_fail(si, fault_nochange, "The \2GUARD\2 flag is not set for \2%s\2.", mc->name);
+                        return;
+                }
+
+		logcommand(si, CMDLOG_SET, "%s SET GUARD OFF", mc->name);
+
+                mc->flags &= ~MC_GUARD;
+
+		if (!(mc->flags & MC_INHABIT))
+			part(mc->name, chansvs.nick);
+
+                command_success_nodata(si, "The \2GUARD\2 flag has been removed for \2%s\2.", mc->name);
+
+                return;
+        }
+
+        else
+        {
+                command_fail(si, fault_badparams, STR_INVALID_PARAMS, "GUARD");
+                return;
+        }
 }
 
 static void cs_cmd_set_staffonly(sourceinfo_t *si, int parc, char *parv[])

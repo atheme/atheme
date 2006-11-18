@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 7179 2006-11-17 19:58:40Z jilles $
+ * $Id: flatfile.c 7199 2006-11-18 05:10:57Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 7179 2006-11-17 19:58:40Z jilles $",
+	"$Id: flatfile.c 7199 2006-11-18 05:10:57Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -115,7 +115,7 @@ static void flatfile_db_save(void *arg)
 	}
 
 	/* write the database version */
-	fprintf(f, "DBV 4\n");
+	fprintf(f, "DBV 5\n");
 
 	slog(LG_DEBUG, "db_save(): saving myusers");
 
@@ -286,7 +286,7 @@ static void flatfile_db_load(void)
 		if (!strcmp("DBV", item))
 		{
 			i = atoi(strtok(NULL, " "));
-			if (i > 4)
+			if (i > 5)
 			{
 				slog(LG_INFO, "db_load(): database version is %d; i only understand 4 (Atheme 0.2), 3 (Atheme 0.2 without CA_ACLVIEW), 2 (Atheme 0.1) or 1 (Shrike)", i);
 				exit(EXIT_FAILURE);
@@ -508,6 +508,9 @@ static void flatfile_db_load(void)
 					if (*s != '\0' && *s != ':' && !strchr(s, ','))
 						mc->mlock_key = sstrdup(s);
 				}
+
+				if (i < 5 && config_options.join_chans)
+					mc->flags |= MC_GUARD;
 			}
 		}
 

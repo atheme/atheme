@@ -1,3 +1,15 @@
+nenolod     2006/11/18 04:03:22 UTC	(20061118-7197)
+  Log:
+  - make the prefix used for in-channel commands customizable (closes #623).
+  
+
+  Changes:	Modified:
+  +9 -0		trunk/dist/example.conf (File Modified) 
+  +2 -0		trunk/include/services.h (File Modified) 
+  +1 -1		trunk/modules/chanserv/main.c (File Modified) 
+  +15 -0	trunk/src/conf.c (File Modified) 
+
+
 jilles      2006/11/18 02:19:54 UTC	(20061118-7195)
   Log:
   Don't allow =<uid>.
