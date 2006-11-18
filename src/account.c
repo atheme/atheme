@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7179 2006-11-17 19:58:40Z jilles $
+ * $Id: account.c 7193 2006-11-18 02:16:26Z jilles $
  */
 
 #include "atheme.h"
@@ -1398,7 +1398,9 @@ static int expire_myuser_cb(dictionary_elem_t *delem, void *unused)
 void expire_check(void *arg)
 {
 	uint32_t i;
+	mynick_t *mn;
 	mychan_t *mc;
+	user_t *u;
 	dictionary_iteration_state_t state;
 
 	/* Let them know about this and the likely subsequent db_save()
@@ -1409,6 +1411,31 @@ void expire_check(void *arg)
 		return;
 
 	dictionary_foreach(mulist, expire_myuser_cb, NULL);
+
+	DICTIONARY_FOREACH(mn, &state, nicklist)
+	{
+		if ((CURRTIME - mn->lastseen) >= config_options.expire)
+		{
+			if (MU_HOLD & mn->owner->flags)
+				continue;
+
+			/* do not drop main nick like this */
+			if (!irccmp(mn->nick, mn->owner->name))
+				continue;
+
+			u = user_find_named(mn->nick);
+			if (u != NULL && u->myuser == mn->owner)
+			{
+				/* still logged in, bleh */
+				mn->lastseen = CURRTIME;
+				mn->owner->lastlogin = CURRTIME;
+				continue;
+			}
+
+			snoop("EXPIRE: \2%s\2 from \2%s\2", mn->nick, mn->owner->name);
+			mynick_delete(mn);
+		}
+	}
 
 	DICTIONARY_FOREACH(mc, &state, mclist)
 	{

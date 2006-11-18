@@ -1,3 +1,16 @@
+jilles      2006/11/18 00:09:00 UTC	(20061118-7191)
+  Log:
+  If nickname ownership is enabled and the UNGROUP command exists:
+  - give a clearer error message when trying to drop a grouped
+    nick (which is not an account)
+  - do not allow normal users to drop accounts with other nicks
+    grouped to them
+  
+
+  Changes:	Modified:
+  +19 -0	trunk/modules/nickserv/drop.c (File Modified) 
+
+
 jilles      2006/11/17 23:05:39 UTC	(20061117-7189)
   Log:
   chanserv hold help file: mention that HOLD will not stop
