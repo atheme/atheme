@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 7037 2006-11-02 23:07:34Z jilles $
+ * $Id: conf.c 7197 2006-11-18 04:03:22Z nenolod $
  */
 
 #include "atheme.h"
@@ -66,6 +66,7 @@ static int c_ci_hop(CONFIGENTRY *);
 static int c_ci_aop(CONFIGENTRY *);
 static int c_ci_sop(CONFIGENTRY *);
 static int c_ci_changets(CONFIGENTRY *);
+static int c_ci_trigger(CONFIGENTRY *);
 
 /* GService client information. */
 static int c_gl_nick(CONFIGENTRY *);
@@ -520,6 +521,7 @@ void init_newconf(void)
 	add_conf_item("AOP", &conf_ci_table, c_ci_aop);
 	add_conf_item("SOP", &conf_ci_table, c_ci_sop);
 	add_conf_item("CHANGETS", &conf_ci_table, c_ci_changets);
+	add_conf_item("TRIGGER", &conf_ci_table, c_ci_trigger);
 
 	/* global{} block */
 	add_conf_item("NICK", &conf_gl_table, c_gl_nick);
@@ -1221,6 +1223,16 @@ static int c_ci_changets(CONFIGENTRY *ce)
 	return 0;
 }
 
+static int c_ci_trigger(CONFIGENTRY *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	chansvs.trigger = *ce->ce_vardata;
+
+	return 0;
+}
+
 static int c_gi_chan(CONFIGENTRY *ce)
 {
 	if (ce->ce_vardata == NULL)
@@ -1851,6 +1863,9 @@ boolean_t conf_check(void)
 	if (config_options.flood_msgs && !config_options.flood_time)
 		config_options.flood_time = 10;
 
+
+	if (!chansvs.trigger)
+		chansvs.trigger = '!';
 
 	/* recall that commit_interval is in seconds */
 	if ((!config_options.commit_interval) || (config_options.commit_interval < 60) || (config_options.commit_interval > 3600))
