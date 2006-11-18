@@ -1,3 +1,12 @@
+jilles      2006/11/18 14:19:13 UTC	(20061118-7211)
+  Log:
+  Show /cs set fantasy status in /cs info.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/modules/chanserv/info.c (File Modified) 
+
+
 jilles      2006/11/18 14:16:40 UTC	(20061118-7209)
   Log:
   Add help file for /cs set guard.

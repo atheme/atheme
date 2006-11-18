@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 7199 2006-11-18 05:10:57Z nenolod $
+ * $Id: conf.c 7213 2006-11-18 14:21:58Z jilles $
  */
 
 #include "atheme.h"
@@ -263,6 +263,7 @@ void conf_init(void)
 	chansvs.ca_aop = CA_AOP_DEF;
 	chansvs.ca_sop = CA_SOP_DEF;
 	chansvs.changets = FALSE;
+	chansvs.trigger = '!';
 
 	if (!(runflags & RF_REHASHING))
 	{
@@ -1226,7 +1227,7 @@ static int c_ci_changets(CONFIGENTRY *ce)
 
 static int c_ci_trigger(CONFIGENTRY *ce)
 {
-	if (ce->ce_vardata == NULL)
+	if (ce->ce_vardata == NULL || strlen(ce->ce_vardata) != 1)
 		PARAM_ERROR(ce);
 
 	chansvs.trigger = *ce->ce_vardata;
@@ -1863,10 +1864,6 @@ boolean_t conf_check(void)
 
 	if (config_options.flood_msgs && !config_options.flood_time)
 		config_options.flood_time = 10;
-
-
-	if (!chansvs.trigger)
-		chansvs.trigger = '!';
 
 	/* recall that commit_interval is in seconds */
 	if ((!config_options.commit_interval) || (config_options.commit_interval < 60) || (config_options.commit_interval > 3600))
