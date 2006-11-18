@@ -1,3 +1,14 @@
+jilles      2006/11/18 14:21:58 UTC	(20061118-7213)
+  Log:
+  chanserv::trigger setting:
+  - if not given, use the default, even if another value was previously used
+  - give an error message if more than one character is given
+  
+
+  Changes:	Modified:
+  +2 -5		trunk/src/conf.c (File Modified) 
+
+
 jilles      2006/11/18 14:19:13 UTC	(20061118-7211)
   Log:
   Show /cs set fantasy status in /cs info.

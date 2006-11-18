@@ -1,0 +1,9 @@
+Help for WHY:
+
+The WHY command shows the access entries an online
+user matches.
+
+Syntax: WHY <#channel> <nickname>
+
+Examples:
+    /msg &nick& WHY #atheme jilles^
