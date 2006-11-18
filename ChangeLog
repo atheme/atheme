@@ -1,3 +1,15 @@
+jilles      2006/11/18 14:03:53 UTC	(20061118-7207)
+  Log:
+  Allow other values for chanserv::trigger than '!', '@' or '.',
+  by removing the check for those in command processing.
+  That check is no longer needed as chanserv now checks the
+  first character before engaging in lengthy processing.
+  
+
+  Changes:	Modified:
+  +0 -6		trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2006/11/18 14:02:11 UTC	(20061118-7205)
   Log:
   Mention fantasy commands in /cs help.
