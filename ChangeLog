@@ -1,3 +1,12 @@
+jilles      2006/11/18 14:16:40 UTC	(20061118-7209)
+  Log:
+  Add help file for /cs set guard.
+  
+
+  Changes:	Modified:
+  +9 -0		trunk/help/cservice/set_guard (File Added) 
+
+
 jilles      2006/11/18 14:03:53 UTC	(20061118-7207)
   Log:
   Allow other values for chanserv::trigger than '!', '@' or '.',

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INFO functions.
  *
- * $Id: info.c 7201 2006-11-18 05:27:38Z nenolod $
+ * $Id: info.c 7211 2006-11-18 14:19:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 7201 2006-11-18 05:27:38Z nenolod $",
+	"$Id: info.c 7211 2006-11-18 14:19:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -266,6 +266,9 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 			strcat(buf, " ");
 
 		strcat(buf, "GUARD");
+
+		if (chansvs.fantasy && !metadata_find(mc, METADATA_CHANNEL, "disable_fantasy"))
+			strcat(buf, " FANTASY");
 	}
 
 	if (*buf)
