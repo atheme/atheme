@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 7235 2006-11-19 20:02:08Z jilles $
+ * $Id: ptasks.c 7239 2006-11-19 20:22:27Z jilles $
  */
 
 #include "atheme.h"
@@ -503,10 +503,7 @@ void handle_kill(sourceinfo_t *si, char *victim, char *reason)
 	static time_t lastkill = 0;
 	static unsigned int killcount = 0;
 
-	if (si->s != NULL)
-		source = si->s->name;
-	else
-		source = si->su->nick;
+	source = get_oper_name(si);
 
 	u = user_find(victim);
 	if (u == NULL)
