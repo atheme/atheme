@@ -1,3 +1,15 @@
+jilles      2006/11/19 20:02:08 UTC	(20061119-7235)
+  Log:
+  Implement LG_NETWORK, shows notices about servers
+  joining, leaving and confirming end of burst.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/tools.h (File Modified) 
+  +1 -1		trunk/src/ptasks.c (File Modified) 
+  +5 -2		trunk/src/servers.c (File Modified) 
+
+
 jilles      2006/11/19 19:25:53 UTC	(20061119-7233)
   Log:
   Change the logging system (requires recompiling all

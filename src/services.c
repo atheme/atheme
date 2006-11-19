@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 7233 2006-11-19 19:25:53Z jilles $
+ * $Id: services.c 7237 2006-11-19 20:21:25Z jilles $
  */
 
 #include "atheme.h"
@@ -503,6 +503,8 @@ const char *get_source_name(sourceinfo_t *si)
 			snprintf(result, sizeof result, "%s(%s)", si->su->nick,
 					si->smu ? si->smu->name : "");
 	}
+	else if (si->s != NULL)
+		snprintf(result, sizeof result, "%s", si->s->name);
 	else
 	{
 		snprintf(result, sizeof result, "<%s>%s", si->v->description,
@@ -520,6 +522,8 @@ const char *get_source_mask(sourceinfo_t *si)
 		snprintf(result, sizeof result, "%s!%s@%s", si->su->nick,
 				si->su->user, si->su->vhost);
 	}
+	else if (si->s != NULL)
+		snprintf(result, sizeof result, "%s", si->s->name);
 	else
 	{
 		snprintf(result, sizeof result, "<%s>%s", si->v->description,
@@ -544,6 +548,8 @@ const char *get_oper_name(sourceinfo_t *si)
 			snprintf(result, sizeof result, "%s(%s)", si->su->nick,
 					si->smu ? si->smu->name : "");
 	}
+	else if (si->s != NULL)
+		snprintf(result, sizeof result, "%s", si->s->name);
 	else
 	{
 		snprintf(result, sizeof result, "<%s>%s", si->v->description,
