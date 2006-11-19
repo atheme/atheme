@@ -1,4 +1,42 @@
-$Id: RELEASE 7031 2006-11-02 17:22:21Z jilles $
+$Id: RELEASE 7243 2006-11-19 21:03:52Z jilles $
+
+Atheme 2.1 Release Notes
+========================
+ircd protocol
+- The inspircd11 protocol module now sends wallops as server notices
+  and no longer needs m_globops.so (but still uses it if loaded).
+- When sending a notice to a channel as a server notice (because the
+  service is not on channel and the ircd would not allow the notice),
+  prepend it with "[<service>:<channel>] " instead of "<service>: "
+nickserv
+- Add nickname grouping, this allows users to register multiple nicks
+  to one account. The GROUP and UNGROUP commands add and remove additional
+  nicks. Additional nicks expire separately from the main account.
+- The ACCESS ADD command now converts masks like 1.2.3.* to CIDR masks
+  instead of rejecting them.
+chanserv
+- The TEMPLATE command now allows updating all channel access entries
+  matching the template with a template change, by prefixing a flag
+  change with an '!'.
+- Add SYNC command to contrib, makes channel status agree with flags.
+- Add FFLAGS command, allows opers to force a flags change on any channel.
+- On newly registered channels, only mlock -l if no limit is set
+  and only mlock -k if no key is set.
+- Show channel email address in INFO.
+- Add chanserv::trigger option, allows changing the '!' in fantasy commands
+  to something else. The special case for '.flags' has been removed.
+- Add SET GUARD, allows toggling whether ChanServ joins the channel on a
+  per-channel basis. The general::join_chans option determines whether
+  SET GUARD can be used.
+- Make the WHY command show all flags.
+oper
+- Add /os soper, allows adding services operators at run time.
+- Add operclass::needoper option, denies giving any privilege to IRC users
+  matching this operclass who are not IRCops.
+- Add some more log levels and generally clean up logging, for example
+  allow disabling logging of all commands.
+documentation
+- Add some missing help files.
 
 Atheme 2.0 Release Notes
 ========================
