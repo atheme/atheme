@@ -1,3 +1,12 @@
+jilles      2006/11/19 16:04:38 UTC	(20061119-7227)
+  Log:
+  Make /os jupe CMDLOG_ADMIN instead of CMDLOG_SET.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/operserv/jupe.c (File Modified) 
+
+
 jilles      2006/11/19 15:44:42 UTC	(20061119-7225)
   Log:
   Add operclass::needoper, denies giving any privilege

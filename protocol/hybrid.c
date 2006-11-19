@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 7165 2006-11-15 17:39:43Z jilles $
+ * $Id: hybrid.c 7229 2006-11-19 17:14:33Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 7165 2006-11-15 17:39:43Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 7229 2006-11-19 17:14:33Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -586,7 +586,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 				cu->modes = 0;
 		}
 
-		slog(LG_INFO, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
+		slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
 
 		c->ts = ts;
 		hook_call_event("channel_tschange", c);
@@ -682,7 +682,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 			else
 				cu->modes = 0;
 		}
-		slog(LG_INFO, "m_join(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
+		slog(LG_DEBUG, "m_join(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
 		c->ts = ts;
 		hook_call_event("channel_tschange", c);
 	}
