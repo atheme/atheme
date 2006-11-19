@@ -36,9 +36,10 @@ To all services operators:
 	operations like drop, sendpass and return are restricted
 
 All IRCops get the privileges in the "ircop" operclass. Services operators
-get the privileges in the operclass in their operator{} block or the operclass
-set with /os soper. If both conditions apply, the union of the privileges is
-granted.
+get the privileges in the operclass in their operator{} block or the
+operclass set with /os soper. However, if the operclass has the needoper
+flag set, privileges are only granted to IRC users if they are IRCops. If
+both conditions apply, the union of the privileges is granted.
 
 The OperServ SPECS command shows the privileges granted to an online user
 or operclass, in a somewhat wordy format. /stats o and SOPER LIST show all
@@ -110,4 +111,4 @@ operserv:global
 operserv:grant
 	use /os soper add/del
 
-$Id: PRIVILEGES 7093 2006-11-05 17:20:21Z jilles $
+$Id: PRIVILEGES 7225 2006-11-19 15:44:42Z jilles $

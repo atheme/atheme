@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 7213 2006-11-18 14:21:58Z jilles $
+ * $Id: conf.c 7225 2006-11-19 15:44:42Z jilles $
  */
 
 #include "atheme.h"
@@ -697,8 +697,10 @@ static int c_uplink(CONFIGENTRY *ce)
 
 static int c_operclass(CONFIGENTRY *ce)
 {
+	operclass_t *operclass;
 	char *name;
 	char *privs = NULL, *newprivs;
+	int flags = 0;
 
 	if (ce->ce_vardata == NULL)
 		PARAM_ERROR(ce);
@@ -756,6 +758,8 @@ static int c_operclass(CONFIGENTRY *ce)
 				}
 			}
 		}
+		else if (!strcasecmp("NEEDOPER", ce->ce_varname))
+			flags |= OPERCLASS_NEEDOPER;
 		else
 		{
 			slog(LG_ERROR, "%s:%d: Invalid configuration option operclass::%s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
@@ -763,7 +767,9 @@ static int c_operclass(CONFIGENTRY *ce)
 		}
 	}
 
-	operclass_add(name, privs ? privs : "");
+	operclass = operclass_add(name, privs ? privs : "");
+	if (operclass != NULL)
+		operclass->flags |= flags;
 	free(privs);
 	return 0;
 }

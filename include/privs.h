@@ -4,7 +4,7 @@
  *
  * Fine grained services operator privileges
  *
- * $Id: privs.h 7169 2006-11-15 17:56:41Z jilles $
+ * $Id: privs.h 7225 2006-11-19 15:44:42Z jilles $
  */
 
 #ifndef PRIVS_H
@@ -49,7 +49,10 @@
 struct operclass_ {
   char *name;
   char *privs; /* priv1 priv2 priv3... */
+  int flags;
 };
+
+#define OPERCLASS_NEEDOPER	0x1 /* only give privs to IRCops */
 
 /* soper list struct */
 struct soper_ {

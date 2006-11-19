@@ -4,7 +4,7 @@
  *
  * See doc/LICENSE for licensing information.
  *
- * $Id: privs.c 7091 2006-11-05 17:09:33Z jilles $
+ * $Id: privs.c 7225 2006-11-19 15:44:42Z jilles $
  */
 
 #include "atheme.h"
@@ -302,6 +302,8 @@ boolean_t has_priv_user(user_t *u, const char *priv)
 	{
 		operclass = u->myuser->soper->operclass;
 		if (operclass == NULL)
+			return FALSE;
+		if (operclass->flags & OPERCLASS_NEEDOPER && !is_ircop(u))
 			return FALSE;
 		if (string_in_list(operclass->privs, priv))
 			return TRUE;
