@@ -5,7 +5,7 @@
  *
  * Misc tools
  *
- * $Id: tools.h 7233 2006-11-19 19:25:53Z jilles $
+ * $Id: tools.h 7235 2006-11-19 20:02:08Z jilles $
  */
 
 #ifndef _TOOLS_H
@@ -49,7 +49,7 @@ E int log_force;
 #define LG_CMD_LOGIN    0x00001000 /* login/logout */
 #define LG_CMD_GET      0x00002000 /* query information */
 /* other */
-#define LG_NETWORK      0x00010000 /* NOTYET netsplit/netjoin */
+#define LG_NETWORK      0x00010000 /* netsplit/netjoin */
 #define LG_WALLOPS      0x00020000 /* NOTYET wallops from opers/other servers */
 #define LG_RAWDATA      0x00040000 /* all data sent/received */
 

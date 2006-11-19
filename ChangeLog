@@ -1,3 +1,27 @@
+jilles      2006/11/19 19:25:53 UTC	(20061119-7233)
+  Log:
+  Change the logging system (requires recompiling all
+  modules, but no source changes).
+  Treat the original LG_DEBUG, LG_INFO and LG_ERROR and
+  CMDLOG_* as categories, and add some more: LG_RAWDATA,
+  LG_NETWORK (future: netsplit/join), LG_WALLOPS (future).
+  The loglevel directive in atheme.conf now accepts some
+  more values, and only DEBUG and TRACE log all commands.
+  Each value selects a certain subset of categories.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/dist/example.conf (File Modified) 
+  +1 -1		trunk/include/global.h (File Modified) 
+  +24 -7	trunk/include/tools.h (File Modified) 
+  +1 -1		trunk/src/atheme.c (File Modified) 
+  +10 -10	trunk/src/conf.c (File Modified) 
+  +6 -3		trunk/src/function.c (File Modified) 
+  +2 -2		trunk/src/parse.c (File Modified) 
+  +1 -1		trunk/src/send.c (File Modified) 
+  +2 -1		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/11/19 19:02:41 UTC	(20061119-7231)
   Log:
   Change /os mode from CMDLOG_SET to CMDLOG_ADMIN.
