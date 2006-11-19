@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 6807 2006-10-21 19:43:43Z jilles $
+ * $Id: atheme.c 7233 2006-11-19 19:25:53Z jilles $
  */
 
 #include "atheme.h"
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 			  have_conf = TRUE;
 			  break;
 		  case 'd':
-			  me.loglevel |= LG_DEBUG;
+			  log_force = TRUE;
 			  break;
 		  case 'h':
 			  print_help();

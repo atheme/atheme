@@ -5,7 +5,7 @@
  *
  * Misc tools
  *
- * $Id: tools.h 6895 2006-10-22 21:07:24Z jilles $
+ * $Id: tools.h 7233 2006-11-19 19:25:53Z jilles $
  */
 
 #ifndef _TOOLS_H
@@ -38,14 +38,31 @@ E int sendemail(user_t *from, int type, myuser_t *mu, const char *param);
 /* logging stuff */
 E FILE *log_file;
 E char *log_path;
+E int log_force;
 
-/* command log levels */
-#define CMDLOG_ADMIN    1 /* oper-only commands */
-#define CMDLOG_REGISTER 2 /* register/drop */
-#define CMDLOG_SET      3 /* change properties of static data */
-#define CMDLOG_DO       4 /* change properties of dynamic data */
-#define CMDLOG_LOGIN    5 /* login/logout */
-#define CMDLOG_GET      6 /* query information */
+/* claro-defined log levels are 0x1F */
+/* commands */
+#define LG_CMD_ADMIN    0x00000100 /* oper-only commands */
+#define LG_CMD_REGISTER 0x00000200 /* register/drop */
+#define LG_CMD_SET      0x00000400 /* change properties of static data */
+#define LG_CMD_DO       0x00000800 /* change properties of dynamic data */
+#define LG_CMD_LOGIN    0x00001000 /* login/logout */
+#define LG_CMD_GET      0x00002000 /* query information */
+/* other */
+#define LG_NETWORK      0x00010000 /* NOTYET netsplit/netjoin */
+#define LG_WALLOPS      0x00020000 /* NOTYET wallops from opers/other servers */
+#define LG_RAWDATA      0x00040000 /* all data sent/received */
+
+#define LG_CMD_ALL      0x0000FF00
+#define LG_ALL          0xFFFFFFFF
+
+/* aliases for use with logcommand() */
+#define CMDLOG_ADMIN    LG_CMD_ADMIN
+#define CMDLOG_REGISTER LG_CMD_REGISTER
+#define CMDLOG_SET      LG_CMD_SET
+#define CMDLOG_DO       LG_CMD_DO
+#define CMDLOG_LOGIN    LG_CMD_LOGIN
+#define CMDLOG_GET      LG_CMD_GET
 
 E void log_open(void);
 E void slog(uint32_t level, const char *fmt, ...);

@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 7225 2006-11-19 15:44:42Z jilles $
+ * $Id: conf.c 7233 2006-11-19 19:25:53Z jilles $
  */
 
 #include "atheme.h"
@@ -1038,19 +1038,19 @@ static int c_si_loglevel(CONFIGENTRY *ce)
 		PARAM_ERROR(ce);
 
 	if (!strcasecmp("DEBUG", ce->ce_vardata))
-		me.loglevel |= LG_DEBUG;
-
-	else if (!strcasecmp("ERROR", ce->ce_vardata))
-		me.loglevel |= LG_ERROR;
-
+		me.loglevel = LG_ALL;
+	else if (!strcasecmp("TRACE", ce->ce_vardata))
+		me.loglevel = LG_INFO | LG_ERROR | LG_CMD_ALL | LG_NETWORK | LG_WALLOPS;
 	else if (!strcasecmp("INFO", ce->ce_vardata))
-		me.loglevel |= LG_INFO;
-
+		me.loglevel = LG_INFO | LG_ERROR | LG_CMD_ADMIN | LG_CMD_REGISTER | LG_CMD_SET | LG_NETWORK | LG_WALLOPS;
+	else if (!strcasecmp("NOTICE", ce->ce_vardata))
+		me.loglevel = LG_INFO | LG_ERROR | LG_CMD_ADMIN | LG_CMD_REGISTER | LG_NETWORK;
+	else if (!strcasecmp("ERROR", ce->ce_vardata))
+		me.loglevel = LG_ERROR | LG_CMD_ADMIN;
 	else if (!strcasecmp("NONE", ce->ce_vardata))
-		me.loglevel |= LG_NONE;
-
+		me.loglevel = 0;
 	else
-		me.loglevel |= LG_ERROR;
+		me.loglevel = LG_ERROR | LG_CMD_ADMIN;
 
 	return 0;
 }
