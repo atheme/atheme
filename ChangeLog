@@ -1,3 +1,19 @@
+jilles      2006/11/19 15:44:42 UTC	(20061119-7225)
+  Log:
+  Add operclass::needoper, denies giving any privilege
+  to IRC users matching this operclass who are not IRCops.
+  
+
+  Changes:	Modified:
+  +7 -0		trunk/dist/example.conf (File Modified) 
+  +4 -3		trunk/doc/PRIVILEGES (File Modified) 
+  +3 -0		trunk/include/privs.h (File Modified) 
+  +2 -1		trunk/modules/operserv/soper.c (File Modified) 
+  +7 -1		trunk/src/conf.c (File Modified) 
+  +2 -0		trunk/src/privs.c (File Modified) 
+  +11 -3	trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2006/11/18 16:43:46 UTC	(20061118-7215)
   Log:
   Add chanserv why help file.
