@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 7199 2006-11-18 05:10:57Z nenolod $
+ * $Id: set.c 7245 2006-11-19 21:09:03Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 7199 2006-11-18 05:10:57Z nenolod $",
+	"$Id: set.c 7245 2006-11-19 21:09:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -1047,7 +1047,7 @@ static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])
 
                 mc->flags &= ~MC_GUARD;
 
-		if (!(mc->flags & MC_INHABIT))
+		if (!(mc->flags & MC_INHABIT) && (!config_options.chan || irccmp(config_options.chan, mc->name)))
 			part(mc->name, chansvs.nick);
 
                 command_success_nodata(si, "The \2GUARD\2 flag has been removed for \2%s\2.", mc->name);
