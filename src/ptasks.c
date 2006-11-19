@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 7239 2006-11-19 20:22:27Z jilles $
+ * $Id: ptasks.c 7241 2006-11-19 20:25:04Z jilles $
  */
 
 #include "atheme.h"
@@ -498,7 +498,7 @@ void handle_topic(channel_t *c, char *setter, time_t ts, char *topic)
 
 void handle_kill(sourceinfo_t *si, char *victim, char *reason)
 {
-	char *source;
+	const char *source;
 	user_t *u;
 	static time_t lastkill = 0;
 	static unsigned int killcount = 0;

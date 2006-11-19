@@ -1,3 +1,12 @@
+jilles      2006/11/19 20:22:27 UTC	(20061119-7239)
+  Log:
+  handle_kill(): use get_oper_name()
+  
+
+  Changes:	Modified:
+  +1 -4		trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2006/11/19 20:21:25 UTC	(20061119-7237)
   Log:
   Allow server sourceinfo_t's in get_source_name(),
