@@ -4,7 +4,7 @@
  *
  * Server stuff.
  *
- * $Id: servers.c 7235 2006-11-19 20:02:08Z jilles $
+ * $Id: servers.c 7247 2006-11-20 01:08:16Z jilles $
  */
 
 #include "atheme.h"
@@ -159,7 +159,9 @@ void server_delete(const char *name)
 		return;
 	}
 
-	slog(me.connected ? LG_NETWORK : LG_DEBUG, "server_delete(): %s, uplink %s", s->name, s->uplink != NULL ? s->uplink->name : "<none>");
+	slog(me.connected ? LG_NETWORK : LG_DEBUG, "server_delete(): %s, uplink %s (%d users)",
+			s->name, s->uplink != NULL ? s->uplink->name : "<none>",
+			s->users);
 
 	/* first go through it's users and kill all of them */
 	LIST_FOREACH_SAFE(n, tn, s->userlist.head)
