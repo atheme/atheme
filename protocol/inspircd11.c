@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 7141 2006-11-14 23:19:37Z jilles $
+ * $Id: inspircd11.c 7249 2006-11-21 15:54:04Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7141 2006-11-14 23:19:37Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7249 2006-11-21 15:54:04Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -761,6 +761,7 @@ static void m_fmode(sourceinfo_t *si, int parc, char *parv[])
 		if (c == NULL)
 		{
 			slog(LG_DEBUG, "m_fmode(): nonexistant channel: %s", parv[0]);
+			return;
 		}
 		ts = atoi(parv[1]);
 		if (ts == c->ts)

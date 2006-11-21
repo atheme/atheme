@@ -1,3 +1,13 @@
+jilles      2006/11/20 01:08:16 UTC	(20061120-7247)
+  Log:
+  Show usercounts in LG_NETWORK notices.
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/src/ptasks.c (File Modified) 
+  +3 -1		trunk/src/servers.c (File Modified) 
+
+
 jilles      2006/11/19 21:09:03 UTC	(20061119-7245)
   Log:
   Do not part the snoop channel when disabling GUARD on it.
