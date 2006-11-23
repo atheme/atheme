@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 7255 2006-11-23 16:47:36Z jilles $
+ * $Id: connection.c 7257 2006-11-23 17:04:28Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -369,7 +369,13 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 
 	socket_setnonblocking(s);
 
-	connect(s, (struct sockaddr *)&sa, sizeof(sa));
+	if (connect(s, (struct sockaddr *)&sa, sizeof(sa)) == -1 &&
+			errno != EINPROGRESS && errno != EINTR)
+	{
+		clog(LG_ERROR, "connection_open_tcp(): failed to connect to %s: %s", host, strerror(errno));
+		close(s);
+		return NULL;
+	}
 
 	cptr = connection_add(buf, s, CF_CONNECTING, read_handler, write_handler);
 

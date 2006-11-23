@@ -1,3 +1,14 @@
+jilles      2006/11/23 16:47:36 UTC	(20061123-7255)
+  Log:
+  Move some error messages about connections from
+  LG_DEBUG/LG_IOERROR to LG_ERROR or LG_INFO.
+  
+
+  Changes:	Modified:
+  +11 -13	trunk/libatheme/connection.c (File Modified) 
+  +2 -1		trunk/libatheme/datastream.c (File Modified) 
+
+
 jilles      2006/11/23 16:40:10 UTC	(20061123-7253)
   Log:
   If connection_open_tcp() detects an error, don't
