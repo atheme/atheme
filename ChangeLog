@@ -1,3 +1,13 @@
+jilles      2006/11/21 15:54:04 UTC	(20061121-7249)
+  Log:
+  inspircd11: don't crash if FMODE target channel does not exist
+  (it checked for this condition, but continued anyway).
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/protocol/inspircd11.c (File Modified) 
+
+
 jilles      2006/11/20 01:08:16 UTC	(20061120-7247)
   Log:
   Show usercounts in LG_NETWORK notices.

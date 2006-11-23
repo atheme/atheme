@@ -4,7 +4,7 @@
  *
  * Uplink management stuff.
  *
- * $Id: uplink.c 6957 2006-10-26 13:09:57Z w00t $
+ * $Id: uplink.c 7253 2006-11-23 16:40:10Z jilles $
  */
 
 #include "atheme.h"
@@ -132,7 +132,10 @@ void uplink_connect(void)
 	u = curr_uplink;
 	
 	curr_uplink->conn = connection_open_tcp(u->host, u->vhost, u->port, recvq_put, sendq_flush);
-	curr_uplink->conn->close_handler = uplink_close;
+	if (curr_uplink->conn != NULL)
+		curr_uplink->conn->close_handler = uplink_close;
+	else
+		event_add_once("reconn", reconn, NULL, me.recontime);
 }
 
 /*
