@@ -1,3 +1,13 @@
+jilles      2006/11/23 17:04:28 UTC	(20061123-7257)
+  Log:
+  Fail connection_open_tcp() if connect(2) detects an error locally.
+  This gives cleaner error messages.
+  
+
+  Changes:	Modified:
+  +7 -1		trunk/libatheme/connection.c (File Modified) 
+
+
 jilles      2006/11/23 16:47:36 UTC	(20061123-7255)
   Log:
   Move some error messages about connections from

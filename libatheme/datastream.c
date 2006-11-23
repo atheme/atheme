@@ -4,7 +4,7 @@
  *
  * Datastream stuff.
  *
- * $Id: datastream.c 7255 2006-11-23 16:47:36Z jilles $
+ * $Id: datastream.c 7259 2006-11-23 17:06:47Z jilles $
  */
 #include <org.atheme.claro.base>
 
@@ -97,8 +97,7 @@ void sendq_flush(connection_t * cptr)
                 {
                         if (errno != EAGAIN)
 			{
-				clog(cptr->flags & CF_UPLINK ? LG_ERROR : LG_INFO,
-						"sendq_flush(): write error %d (%s) on connection %s[%d]",
+				clog(LG_DEBUG, "sendq_flush(): write error %d (%s) on connection %s[%d]",
 						errno, strerror(errno),
 						cptr->name, cptr->fd);
 				cptr->flags |= CF_DEAD;
