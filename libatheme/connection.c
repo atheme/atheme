@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 6929 2006-10-24 15:30:53Z jilles $
+ * $Id: connection.c 7255 2006-11-23 16:47:36Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -13,9 +13,6 @@ static BlockHeap *sa_heap;
 static BlockHeap *connection_heap;
 
 list_t connection_list;
-
-#undef LG_IOERROR
-#define LG_IOERROR LG_DEBUG
 
 void init_netio(void)
 {
@@ -179,7 +176,8 @@ void connection_close(connection_t *cptr)
 #endif
 
 	if (errno1)
-		clog(LG_IOERROR, "connection_close(): connection %s[%d] closed due to error %d (%s)",
+		clog(cptr->flags & CF_UPLINK ? LG_ERROR : LG_INFO,
+				"connection_close(): connection %s[%d] closed due to error %d (%s)",
 				cptr->name, cptr->fd, errno1, strerror(errno1));
 
 	if (cptr->close_handler)
@@ -317,7 +315,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 
 	if (!(s = socket(AF_INET, SOCK_STREAM, 0)))
 	{
-		clog(LG_IOERROR, "connection_open_tcp(): unable to create socket.");
+		clog(LG_ERROR, "connection_open_tcp(): unable to create socket.");
 		return NULL;
 	}
 
@@ -335,7 +333,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 
 		if ((hp = gethostbyname(vhost)) == NULL)
 		{
-			clog(LG_IOERROR, "connection_open_tcp(): cant resolve vhost %s", vhost);
+			clog(LG_ERROR, "connection_open_tcp(): cant resolve vhost %s", vhost);
 			close(s);
 			return NULL;
 		}
@@ -350,7 +348,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 		if (bind(s, (struct sockaddr *)&sa, sizeof(sa)) < 0)
 		{
 			close(s);
-			clog(LG_IOERROR, "connection_open_tcp(): unable to bind to vhost %s", vhost);
+			clog(LG_ERROR, "connection_open_tcp(): unable to bind to vhost %s", vhost);
 			return NULL;
 		}
 	}
@@ -359,7 +357,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 	/* resolve it */
 	if ((hp = gethostbyname(host)) == NULL)
 	{
-		clog(LG_IOERROR, "connection_open_tcp(): Unable to resolve %s", host);
+		clog(LG_ERROR, "connection_open_tcp(): unable to resolve %s", host);
 		close(s);
 		return NULL;
 	}
@@ -405,7 +403,7 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 
 	if (!(s = socket(AF_INET, SOCK_STREAM, 0)))
 	{
-		clog(LG_IOERROR, "connection_open_listener_tcp(): unable to create socket.");
+		clog(LG_ERROR, "connection_open_listener_tcp(): unable to create socket.");
 		return NULL;
 	}
 
@@ -420,7 +418,7 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 
 	if ((hp = gethostbyname(host)) == NULL)
 	{
-		clog(LG_IOERROR, "connection_open_listener_tcp(): cant resolve host %s", host);
+		clog(LG_ERROR, "connection_open_listener_tcp(): cant resolve host %s", host);
 		close(s);
 		return NULL;
 	}
@@ -436,7 +434,7 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 	if (bind(s, (struct sockaddr *)&sa, sizeof(sa)) < 0)
 	{
 		close(s);
-		clog(LG_IOERROR, "connection_open_listener_tcp(): unable to bind listener %s[%d], errno [%d]", host, port,
+		clog(LG_ERROR, "connection_open_listener_tcp(): unable to bind listener %s[%d], errno [%d]", host, port,
 			errno);
 		return NULL;
 	}
@@ -447,7 +445,7 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 	if (listen(s, 5) < 0)
 	{
 		close(s);
-		clog(LG_IOERROR, "connection_open_listener_tcp(): error: %s", strerror(errno));
+		clog(LG_ERROR, "connection_open_listener_tcp(): error: %s", strerror(errno));
 		return NULL;
 	}
 
@@ -479,7 +477,7 @@ connection_t *connection_accept_tcp(connection_t *cptr,
 
 	if (!(s = accept(cptr->fd, NULL, NULL)))
 	{
-		clog(LG_IOERROR, "connection_accept_tcp(): accept failed");
+		clog(LG_INFO, "connection_accept_tcp(): accept failed");
 		return NULL;
 	}
 
