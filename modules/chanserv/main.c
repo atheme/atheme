@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 7199 2006-11-18 05:10:57Z nenolod $
+ * $Id: main.c 7263 2006-11-24 22:55:12Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 7199 2006-11-18 05:10:57Z nenolod $",
+	"$Id: main.c 7263 2006-11-24 22:55:12Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -305,7 +305,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	if (mc->flags & MC_INHABIT)
 	{
 		mc->flags &= ~MC_INHABIT;
-		if (!(mc->flags & MC_GUARD) && (!config_options.chan || irccmp(chan->name, config_options.chan)) && chanuser_find(chan, chansvs.me->me))
+		if (!(mc->flags & MC_GUARD) && (!config_options.chan || irccasecmp(chan->name, config_options.chan)) && chanuser_find(chan, chansvs.me->me))
 			part(chan->name, chansvs.nick);
 	}
 
@@ -619,7 +619,7 @@ static void cs_leave_empty(void *unused)
 			continue;
 		mc->flags &= ~MC_INHABIT;
 		if (mc->chan != NULL &&
-				(!config_options.chan || irccmp(mc->name, config_options.chan)) &&
+				(!config_options.chan || irccasecmp(mc->name, config_options.chan)) &&
 				(!(mc->flags & MC_GUARD) ||
 				 (config_options.leave_chans && mc->chan->nummembers == 1) ||
 				 metadata_find(mc, METADATA_CHANNEL, "private:close:closer")) &&

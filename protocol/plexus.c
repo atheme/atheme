@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 7229 2006-11-19 17:14:33Z jilles $
+ * $Id: plexus.c 7263 2006-11-24 22:55:12Z jilles $
  */
 
 /* option: set the netadmin umode +N */
@@ -16,7 +16,7 @@
 #include "pmodule.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 7229 2006-11-19 17:14:33Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 7263 2006-11-24 22:55:12Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -701,7 +701,7 @@ static void m_encap(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
 
-	if (!irccmp("CHGHOST", parv[1]))
+	if (!irccasecmp("CHGHOST", parv[1]))
 	{
 		u = user_find(parv[2]);
 

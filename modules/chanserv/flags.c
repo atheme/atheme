@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 7163 2006-11-15 17:02:05Z jilles $
+ * $Id: flags.c 7263 2006-11-24 22:55:12Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 7163 2006-11-15 17:02:05Z jilles $",
+	"$Id: flags.c 7263 2006-11-24 22:55:12Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -178,7 +178,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				 * even without +f */
 				if (restrictflags & CA_AKICK ||
 						si->smu == NULL ||
-						irccmp(target, si->smu->name) ||
+						irccasecmp(target, si->smu->name) ||
 						strcmp(flagstr, "-*"))
 				{
 					command_fail(si, fault_noprivs, "You are not authorized to execute this command.");

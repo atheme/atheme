@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ GROUP command.
  *
- * $Id: group.c 7179 2006-11-17 19:58:40Z jilles $
+ * $Id: group.c 7263 2006-11-24 22:55:12Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/group", FALSE, _modinit, _moddeinit,
-	"$Id: group.c 7179 2006-11-17 19:58:40Z jilles $",
+	"$Id: group.c 7263 2006-11-24 22:55:12Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -119,7 +119,7 @@ static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, "Nick \2%s\2 is not registered to your account.", mn->nick);
 		return;
 	}
-	if (!irccmp(mn->nick, si->smu->name))
+	if (!irccasecmp(mn->nick, si->smu->name))
 	{
 		command_fail(si, fault_noprivs, "Nick \2%s\2 is your account name; you may not remove it.", mn->nick);
 		return;

@@ -1,3 +1,13 @@
+jilles      2006/11/24 14:02:47 UTC	(20061124-7261)
+  Log:
+  Correct buffer length passed to snprintf().
+  Pointed out by darix. Found with gcc -D_FORTFIY_SOURCE=2.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/src/account.c (File Modified) 
+
+
 jilles      2006/11/23 17:06:47 UTC	(20061123-7259)
   Log:
   Move sendq_flush() write error log message back to LG_DEBUG,

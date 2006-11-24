@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7261 2006-11-24 14:02:47Z jilles $
+ * $Id: account.c 7263 2006-11-24 22:55:12Z jilles $
  */
 
 #include "atheme.h"
@@ -1420,7 +1420,7 @@ void expire_check(void *arg)
 				continue;
 
 			/* do not drop main nick like this */
-			if (!irccmp(mn->nick, mn->owner->name))
+			if (!irccasecmp(mn->nick, mn->owner->name))
 				continue;
 
 			u = user_find_named(mn->nick);

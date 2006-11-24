@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv SEND function
  *
- * $Id: send.c 6627 2006-10-02 09:36:29Z jilles $
+ * $Id: send.c 7263 2006-11-24 22:55:12Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/send", FALSE, _modinit, _moddeinit,
-	"$Id: send.c 6627 2006-10-02 09:36:29Z jilles $",
+	"$Id: send.c 7263 2006-11-24 22:55:12Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -178,7 +178,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 	{
 		command_success_nodata(si, "%s is currently online, and you may talk directly, by sending a private message.", target);
 	}
-	if (si->su == NULL || !irccmp(si->su->nick, si->smu->name))
+	if (si->su == NULL || !irccasecmp(si->su->nick, si->smu->name))
 		myuser_notice(memosvs.nick, tmu, "You have a new memo from %s.", si->smu->name);
 	else
 		myuser_notice(memosvs.nick, tmu, "You have a new memo from %s (nick: %s).", si->smu->name, si->su->nick);

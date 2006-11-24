@@ -4,7 +4,7 @@
  *
  * Channel stuff.
  *
- * $Id: channels.c 6933 2006-10-24 22:03:31Z jilles $
+ * $Id: channels.c 7263 2006-11-24 22:55:12Z jilles $
  */
 
 #include "atheme.h"
@@ -104,7 +104,7 @@ channel_t *channel_add(const char *name, uint32_t ts)
 
 	hook_call_event("channel_add", c);
 
-	if (config_options.chan != NULL && !irccmp(config_options.chan, name))
+	if (config_options.chan != NULL && !irccasecmp(config_options.chan, name))
 		joinall(config_options.chan);
 
 	return c;
