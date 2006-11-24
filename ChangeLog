@@ -1,3 +1,14 @@
+jilles      2006/11/23 17:06:47 UTC	(20061123-7259)
+  Log:
+  Move sendq_flush() write error log message back to LG_DEBUG,
+  this will kill the connection anyway and give another log
+  message later.
+  
+
+  Changes:	Modified:
+  +1 -2		trunk/libatheme/datastream.c (File Modified) 
+
+
 jilles      2006/11/23 17:04:28 UTC	(20061123-7257)
   Log:
   Fail connection_open_tcp() if connect(2) detects an error locally.

@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7195 2006-11-18 02:19:54Z jilles $
+ * $Id: account.c 7261 2006-11-24 14:02:47Z jilles $
  */
 
 #include "atheme.h"
@@ -372,9 +372,9 @@ myuser_access_verify(user_t *u, myuser_t *mu)
 	if (!use_myuser_access)
 		return FALSE;
 
-	snprintf(buf, BUFSIZE, "%s@%s", u->user, u->vhost);
-	snprintf(buf2, BUFSIZE, "%s@%s", u->user, u->host);
-	snprintf(buf3, BUFSIZE, "%s@%s", u->user, u->ip);
+	snprintf(buf, sizeof buf, "%s@%s", u->user, u->vhost);
+	snprintf(buf2, sizeof buf2, "%s@%s", u->user, u->host);
+	snprintf(buf3, sizeof buf3, "%s@%s", u->user, u->ip);
 
 	LIST_FOREACH(n, mu->access_list.head)
 	{
