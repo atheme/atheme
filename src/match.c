@@ -6,7 +6,7 @@
  * This file contains customized casemapping functions.
  * This code was mostly lifted from ircd 2.10.
  *
- * $Id: match.c 6931 2006-10-24 16:53:07Z jilles $
+ * $Id: match.c 7265 2006-11-24 22:56:04Z jilles $
  */
 
 #include "atheme.h"
@@ -258,28 +258,6 @@ int irccasecmp(const char *s1, const char *s2)
 	return (res);
 }
 
-int irccmp(const char *s1, const char *s2)
-{
-	const unsigned char *str1 = (const unsigned char *)s1;
-	const unsigned char *str2 = (const unsigned char *)s2;
-	int res;
-
-	if (!s1 || !s2)
-		return -1;
-
-	if (match_mapping == MATCH_ASCII)
-		return strcmp(s1, s2);
-
-	while ((res = *str1 - *str2) == 0)
-	{
-		if (*str1 == '\0')
-			return 0;
-		str1++;
-		str2++;
-	}
-	return (res);
-}
-
 int ircncasecmp(const char *str1, const char *str2, int n)
 {
 	const unsigned char *s1 = (const unsigned char *)str1;
@@ -290,26 +268,6 @@ int ircncasecmp(const char *str1, const char *str2, int n)
 		return strncasecmp(str1, str2, n);
 
 	while ((res = ToUpper(*s1) - ToUpper(*s2)) == 0)
-	{
-		s1++;
-		s2++;
-		n--;
-		if (n == 0 || (*s1 == '\0' && *s2 == '\0'))
-			return 0;
-	}
-	return (res);
-}
-
-int ircncmp(const char *str1, const char *str2, int n)
-{
-	const unsigned char *s1 = (const unsigned char *)str1;
-	const unsigned char *s2 = (const unsigned char *)str2;
-	int res;
-
-	if (match_mapping == MATCH_ASCII)
-		return strncmp(str1, str2, n);
-
-	while ((res = *s1 - *s2) == 0)
 	{
 		s1++;
 		s2++;

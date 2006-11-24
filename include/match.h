@@ -5,7 +5,7 @@
  *
  * String matching
  *
- * $Id: match.h 6159 2006-08-19 23:27:19Z jilles $
+ * $Id: match.h 7265 2006-11-24 22:56:04Z jilles $
  */
 
 #ifndef _MATCH_H
@@ -42,9 +42,7 @@ void set_match_mapping(int);
 E int ToLower(int);
 E int ToUpper(int);
 
-E int irccmp(const char *, const char *);
 E int irccasecmp(const char *, const char *);
-E int ircncmp(const char *, const char *, int);
 E int ircncasecmp(const char *, const char *, int);
 
 E int match(const char *, const char *);

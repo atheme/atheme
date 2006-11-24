@@ -1,3 +1,23 @@
+jilles      2006/11/24 22:55:12 UTC	(20061124-7263)
+  Log:
+  Replace irccmp() uses with irccasecmp().
+  irccmp() is going away and whenever it was used it
+  should have been irccasecmp().
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/flags.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/main.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/set.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/forward.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/send.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/group.c (File Modified) 
+  +1 -1		trunk/protocol/plexus.c (File Modified) 
+  +1 -1		trunk/src/account.c (File Modified) 
+  +1 -1		trunk/src/channels.c (File Modified) 
+  +2 -2		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/11/24 14:02:47 UTC	(20061124-7261)
   Log:
   Correct buffer length passed to snprintf().
