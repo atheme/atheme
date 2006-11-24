@@ -1,3 +1,15 @@
+jilles      2006/11/24 22:56:04 UTC	(20061124-7265)
+  Log:
+  Remove irccmp() and ircncmp().
+  They were basically equivalent to strcmp() and strncmp()
+  in complicated ways.
+  
+
+  Changes:	Modified:
+  +0 -2		trunk/include/match.h (File Modified) 
+  +0 -42	trunk/src/match.c (File Modified) 
+
+
 jilles      2006/11/24 22:55:12 UTC	(20061124-7263)
   Log:
   Replace irccmp() uses with irccasecmp().
