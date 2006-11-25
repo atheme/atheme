@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 7025 2006-11-01 22:43:33Z jilles $
+dnl $Id: configure.ac 7283 2006-11-25 14:27:10Z jilles $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, 2.1, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 7025 2006-11-01 22:43:33Z jilles $])
+AC_COPYRIGHT([$Id: configure.ac 7283 2006-11-25 14:27:10Z jilles $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -148,6 +148,9 @@ echo " "
 DOCDIR='${prefix}/doc'
 MODDIR='${exec_prefix}'
 SHAREDIR='${prefix}'
+LOGDIR="var"
+DATADIR="etc"
+RUNDIR="var"
 
 FHSPATHS="no"
 AC_MSG_CHECKING(if you want FHS-like pathnames)
@@ -160,6 +163,9 @@ AC_HELP_STRING([--enable-fhs-paths],[ Use more FHS-like pathnames.]),
     DOCDIR='${datadir}/doc/atheme'
     MODDIR='${libdir}/atheme'
     SHAREDIR='${datadir}/atheme'
+    LOGDIR='${localstatedir}/log/atheme'
+    DATADIR='${localstatedir}/lib/atheme'
+    RUNDIR='${localstatedir}/run/atheme'
     ;;
   no)
     FHSPATHS="no"
@@ -170,6 +176,9 @@ AC_MSG_RESULT($FHSPATHS)
 AC_SUBST(DOCDIR)
 AC_SUBST(MODDIR)
 AC_SUBST(SHAREDIR)
+AC_SUBST(DATADIR)
+AC_SUBST(LOGDIR)
+AC_SUBST(RUNDIR)
 dnl the following is wrong! -- jilles
 dnl AC_DEFINE_UNQUOTED([MODDIR], "${MODDIR}", [Module root directory.])
 
@@ -541,7 +550,7 @@ ac_save_LDFLAGS="${LDFLAGS} -pg"
 LDFLAGS=${ac_save_LDFLAGS}
 ])
 
-ac_save_CFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS} -DPREFIX=\\\"\${prefix}\\\" -DMODDIR=\\\"\${MODDIR}\\\" -DSHAREDIR=\\\"${SHAREDIR}\\\""
+ac_save_CFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS} -DPREFIX=\\\"\${prefix}\\\" -DMODDIR=\\\"\${MODDIR}\\\" -DSHAREDIR=\\\"${SHAREDIR}\\\" -DSYSCONFDIR=\\\"${sysconfdir}\\\" -DLOGDIR=\\\"${LOGDIR}\\\" -DRUNDIR=\\\"${RUNDIR}\\\" -DDATADIR=\\\"${DATADIR}\\\""
 CFLAGS=${ac_save_CFLAGS}
 dnl export CFLAGS
 
@@ -572,6 +581,10 @@ Configuration:
         Atheme version       : ${PACKAGE_VERSION}
         Installation prefix  : ${prefix}
         Module root directory: `eval echo $d`
+        Config directory     : ${sysconfdir}
+        Logfile directory    : ${LOGDIR}
+        Data directory       : ${DATADIR}
+        PID directory        : ${RUNDIR}
         Large network support: ${LARGENET}
         PostgreSQL support   : ${POSTGRESQL}
         OpenSSL SASL support : ${SSL}

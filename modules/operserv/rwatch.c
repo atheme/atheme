@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ RWATCH.
  *
- * $Id: rwatch.c 6655 2006-10-04 20:52:27Z jilles $
+ * $Id: rwatch.c 7283 2006-11-25 14:27:10Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rwatch", FALSE, _modinit, _moddeinit,
-	"$Id: rwatch.c 6655 2006-10-04 20:52:27Z jilles $",
+	"$Id: rwatch.c 7283 2006-11-25 14:27:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -109,7 +109,7 @@ static void write_rwatchdb(void)
 	node_t *n;
 	rwatch_t *rw;
 
-	if (!(f = fopen("etc/rwatch.db.new", "w")))
+	if (!(f = fopen(DATADIR "/rwatch.db.new", "w")))
 	{
 		slog(LG_ERROR, "write_rwatchdb(): cannot write rwatch database: %s", strerror(errno));
 		return;
@@ -124,7 +124,7 @@ static void write_rwatchdb(void)
 
 	fclose(f);
 
-	if ((rename("etc/rwatch.db.new", "etc/rwatch.db")) < 0)
+	if ((rename(DATADIR "/rwatch.db.new", DATADIR "/rwatch.db")) < 0)
 	{
 		slog(LG_ERROR, "write_rwatchdb(): couldn't rename rwatch database.");
 		return;
@@ -137,7 +137,7 @@ static void load_rwatchdb(void)
 	char *item, rBuf[BUFSIZE * 2];
 	rwatch_t *rw = NULL;
 
-	if (!(f = fopen("etc/rwatch.db", "r")))
+	if (!(f = fopen(DATADIR "/rwatch.db", "r")))
 	{
 		slog(LG_DEBUG, "load_rwatchdb(): cannot open rwatch database: %s", strerror(errno));
 		return;

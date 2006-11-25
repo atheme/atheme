@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 7267 2006-11-24 23:03:31Z jilles $
+ * $Id: atheme.c 7283 2006-11-25 14:27:10Z jilles $
  */
 
 #include "atheme.h"
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 	char buf[32];
 	int i, pid, r;
 	FILE *pid_file;
-	char *pidfilename = "var/atheme.pid";
+	char *pidfilename = RUNDIR "/atheme.pid";
 #ifndef _WIN32
 	struct rlimit rlim;
 #endif
@@ -121,10 +121,10 @@ int main(int argc, char *argv[])
 	}
 
 	if (have_conf == FALSE)
-		config_file = sstrdup("etc/atheme.conf");
+		config_file = sstrdup(SYSCONFDIR "/atheme.conf");
 
 	if (have_log == FALSE)
-		log_path = sstrdup("var/atheme.log");
+		log_path = sstrdup(LOGDIR "/atheme.log");
 
 	cold_start = TRUE;
 

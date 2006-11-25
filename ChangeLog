@@ -1,3 +1,31 @@
+jilles      2006/11/25 02:01:13 UTC	(20061125-7281)
+  Log:
+  Remove more unused variables.
+  
+
+  Changes:	Modified:
+  +0 -2		trunk/protocol/asuka.c (File Modified) 
+  +0 -2		trunk/protocol/bahamut.c (File Modified) 
+  +0 -2		trunk/protocol/bircd.c (File Modified) 
+  +0 -2		trunk/protocol/charybdis.c (File Modified) 
+  +0 -2		trunk/protocol/dreamforge.c (File Modified) 
+  +0 -2		trunk/protocol/hybrid.c (File Modified) 
+  +0 -2		trunk/protocol/hyperion.c (File Modified) 
+  +0 -2		trunk/protocol/inspircd10.c (File Modified) 
+  +0 -3		trunk/protocol/inspircd11.c (File Modified) 
+  +0 -3		trunk/protocol/ircnet.c (File Modified) 
+  +0 -2		trunk/protocol/nefarious.c (File Modified) 
+  +0 -2		trunk/protocol/plexus.c (File Modified) 
+  +0 -2		trunk/protocol/ptlink.c (File Modified) 
+  +0 -2		trunk/protocol/ratbox.c (File Modified) 
+  +0 -2		trunk/protocol/shadowircd.c (File Modified) 
+  +0 -2		trunk/protocol/solidircd.c (File Modified) 
+  +0 -2		trunk/protocol/sorcery.c (File Modified) 
+  +0 -2		trunk/protocol/ultimate3.c (File Modified) 
+  +0 -2		trunk/protocol/undernet.c (File Modified) 
+  +0 -2		trunk/protocol/unreal.c (File Modified) 
+
+
 jilles      2006/11/25 01:52:02 UTC	(20061125-7279)
   Log:
   warning fixes for enforce (unused variables, parentheses

@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 7247 2006-11-20 01:08:16Z jilles $
+ * $Id: ptasks.c 7283 2006-11-25 14:27:10Z jilles $
  */
 
 #include "atheme.h"
@@ -318,7 +318,7 @@ void handle_motd(user_t *u)
 	if (floodcheck(u, NULL))
 		return;
 
-	f = fopen("etc/atheme.motd", "r");
+	f = fopen(SYSCONFDIR "/atheme.motd", "r");
 	if (!f)
 	{
 		numeric_sts(me.name, 422, u->nick, ":The MOTD file is unavailable.");

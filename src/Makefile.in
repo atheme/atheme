@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 6891 2006-10-22 19:08:29Z lu_zero $
+# $Id: Makefile.in 7283 2006-11-25 14:27:10Z jilles $
 #
 
 CC		= @CC@
@@ -18,8 +18,12 @@ datadir		= @datadir@
 sysconfdir	= @sysconfdir@
 libdir		= @libdir@
 sbindir		= @sbindir@
+localstatedir	= @localstatedir@
 DOCDIR		= @DOCDIR@
 MODDIR		= @MODDIR@
+DATADIR		= @DATADIR@
+RUNDIR		= @RUNDIR@
+LOGDIR		= @LOGDIR@
 SHAREDIR	= @SHAREDIR@
 BIN		= atheme@EXEEXT@
 MKDEP		= @MKDEP@
@@ -101,16 +105,19 @@ atheme: $(OBJS) ../libatheme/liborg.atheme.claro.base.a
 
 install: build
 	$(INSTALL) -m 755 -d $(DESTDIR)$(prefix)
-	$(INSTALL) -m 755 -d $(DESTDIR)$(prefix)/bin
-	$(INSTALL) -m 755 -d $(DESTDIR)$(prefix)/etc
-	$(INSTALL) -m 755 -d $(DESTDIR)$(prefix)/var
+	$(INSTALL) -m 755 -d $(DESTDIR)$(bindir)
+	$(INSTALL) -m 755 -d $(DESTDIR)$(sysconfdir)
+	$(INSTALL) -m 755 -d $(DESTDIR)$(localstatedir)
 	$(INSTALL) -m 755 -d $(DESTDIR)$(DOCDIR)
+	$(INSTALL) -m 755 -d $(DESTDIR)$(LOGDIR)
+	$(INSTALL) -m 755 -d $(DESTDIR)$(RUNDIR)
+	$(INSTALL) -m 755 -d $(DESTDIR)$(DATADIR)
 	$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/help
-	$(INSTALL) -m 755 -c $(BIN) $(DESTDIR)$(prefix)/bin
-	$(INSTALL) -m 640 -c ../dist/example.conf $(DESTDIR)$(prefix)/etc
-	$(INSTALL) -m 640 -c ../dist/example.motd $(DESTDIR)$(prefix)/etc
-	$(INSTALL) -m 640 -c ../dist/example.userserv.conf $(DESTDIR)$(prefix)/etc
-	$(INSTALL) -m 640 -c ../dist/atheme.chk $(DESTDIR)$(prefix)/etc/atheme.chk.sample
+	$(INSTALL) -m 755 -c $(BIN) $(DESTDIR)$(bindir)
+	$(INSTALL) -m 640 -c ../dist/example.conf $(DESTDIR)$(sysconfdir)
+	$(INSTALL) -m 640 -c ../dist/example.motd $(DESTDIR)$(sysconfdir)
+	$(INSTALL) -m 640 -c ../dist/example.userserv.conf $(DESTDIR)$(sysconfdir)
+	$(INSTALL) -m 640 -c ../dist/atheme.chk $(DESTDIR)$(sysconfdir)/atheme.chk.sample
 	(cd ../doc; for i in *; do $(INSTALL) -m 644 $$i $(DESTDIR)$(DOCDIR); done)
 	(cd ../help; for i in *; do \
 		[ -f $$i ] && $(INSTALL) -m 644 $$i $(DESTDIR)$(SHAREDIR)/help; \

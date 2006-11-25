@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 7277 2006-11-25 01:41:18Z jilles $
+ * $Id: flatfile.c 7283 2006-11-25 14:27:10Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 7277 2006-11-25 01:41:18Z jilles $",
+	"$Id: flatfile.c 7283 2006-11-25 14:27:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -104,7 +104,7 @@ static void flatfile_db_save(void *arg)
 	muout = 0, mcout = 0, caout = 0, kout = 0;
 
 	/* write to a temporary file first */
-	if (!(f = fopen("etc/atheme.db.new", "w")))
+	if (!(f = fopen(DATADIR "/atheme.db.new", "w")))
 	{
 		errno1 = errno;
 		slog(LG_ERROR, "db_save(): cannot create atheme.db.new: %s", strerror(errno1));
@@ -236,10 +236,10 @@ static void flatfile_db_save(void *arg)
 	/* now, replace the old database with the new one, using an atomic rename */
 	
 #ifdef _WIN32
-	unlink( "etc/atheme.db" );
+	unlink(DATADIR "/atheme.db" );
 #endif
 	
-	if ((rename("etc/atheme.db.new", "etc/atheme.db")) < 0)
+	if ((rename(DATADIR "/atheme.db.new", DATADIR "/atheme.db")) < 0)
 	{
 		errno1 = errno;
 		slog(LG_ERROR, "db_save(): cannot rename atheme.db.new to atheme.db: %s", strerror(errno1));
@@ -260,7 +260,7 @@ static void flatfile_db_load(void)
 	FILE *f;
 	char *item, *s, dBuf[BUFSIZE];
 
-	f = fopen("etc/atheme.db", "r");
+	f = fopen(DATADIR "/atheme.db", "r");
 	if (f == NULL)
 	{
 		slog(LG_ERROR, "db_load(): can't open atheme.db for reading: %s", strerror(errno));

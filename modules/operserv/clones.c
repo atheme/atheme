@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing clone detection.
  *
- * $Id: clones.c 7041 2006-11-02 23:36:06Z jilles $
+ * $Id: clones.c 7283 2006-11-25 14:27:10Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 7041 2006-11-02 23:36:06Z jilles $",
+	"$Id: clones.c 7283 2006-11-25 14:27:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -153,7 +153,7 @@ static void write_exemptdb(void)
 	node_t *n;
 	cexcept_t *c;
 
-	if (!(f = fopen("etc/exempts.db.new", "w")))
+	if (!(f = fopen(DATADIR "/exempts.db.new", "w")))
 	{
 		slog(LG_ERROR, "write_exemptdb(): cannot write exempt database: %s", strerror(errno));
 		return;
@@ -168,7 +168,7 @@ static void write_exemptdb(void)
 
 	fclose(f);
 
-	if ((rename("etc/exempts.db.new", "etc/exempts.db")) < 0)
+	if ((rename(DATADIR "/exempts.db.new", DATADIR "/exempts.db")) < 0)
 	{
 		slog(LG_ERROR, "write_exemptdb(): couldn't rename exempts database.");
 		return;
@@ -180,7 +180,7 @@ static void load_exemptdb(void)
 	FILE *f;
 	char *item, rBuf[BUFSIZE * 2], *p;
 
-	if (!(f = fopen("etc/exempts.db", "r")))
+	if (!(f = fopen(DATADIR "/exempts.db", "r")))
 	{
 		slog(LG_DEBUG, "load_exemptdb(): cannot open exempt database: %s", strerror(errno));
 		return;
