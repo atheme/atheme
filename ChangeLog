@@ -1,3 +1,20 @@
+jilles      2006/11/25 00:25:20 UTC	(20061125-7273)
+  Log:
+  Rename clog to claro_log, as clog is a function specified
+  by SUSv3 (complex logarithm).
+  
+
+  Changes:	Modified:
+  +6 -6		trunk/libatheme/balloc.c (File Modified) 
+  +4 -4		trunk/libatheme/claro.c (File Modified) 
+  +1 -1		trunk/libatheme/claro_internal.h (File Modified) 
+  +16 -16	trunk/libatheme/connection.c (File Modified) 
+  +7 -7		trunk/libatheme/datastream.c (File Modified) 
+  +2 -2		trunk/libatheme/dlink.c (File Modified) 
+  +5 -5		trunk/libatheme/event.c (File Modified) 
+  +1 -1		trunk/libatheme/hook.c (File Modified) 
+
+
 jilles      2006/11/25 00:08:57 UTC	(20061125-7271)
   Log:
   Move some stuff only used by libatheme/*.c to libatheme/claro_internal.h.
