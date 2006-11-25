@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 7277 2006-11-25 01:41:18Z jilles $
+ * $Id: set.c 7291 2006-11-25 21:25:35Z jilles $
  */
 
 #include "atheme.h"
@@ -12,9 +12,11 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 7277 2006-11-25 01:41:18Z jilles $",
+	"$Id: set.c 7291 2006-11-25 21:25:35Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
+
+static void cs_set_config_ready(void *unused);
 
 static void cs_help_set(sourceinfo_t *si);
 static void cs_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
@@ -93,6 +95,9 @@ void _modinit(module_t *m)
 	help_addentry(cs_helptree, "SET TOPICLOCK", "help/cservice/set_topiclock", NULL);
 	help_addentry(cs_helptree, "SET FANTASY", "help/cservice/set_fantasy", NULL);
 	help_addentry(cs_helptree, "SET GUARD", "help/cservice/set_guard", NULL);
+
+	hook_add_event("config_ready");
+	hook_add_hook("config_ready", cs_set_config_ready);
 }
 
 void _moddeinit()
@@ -114,6 +119,16 @@ void _moddeinit()
 	help_delentry(cs_helptree, "SET TOPICLOCK");
 	help_delentry(cs_helptree, "SET FANTASY");
 	help_delentry(cs_helptree, "SET GUARD");
+
+	hook_del_hook("config_ready", cs_set_config_ready);
+}
+
+static void cs_set_config_ready(void *unused)
+{
+	if (config_options.join_chans)
+		cs_set_guard.access = NULL;
+	else
+		cs_set_guard.access = PRIV_ADMIN;
 }
 
 static void cs_help_set(sourceinfo_t *si)
@@ -995,12 +1010,6 @@ static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc;
-
-	if (config_options.join_chans == FALSE && !has_priv(si, PRIV_ADMIN))
-	{
-		command_fail(si, fault_noprivs, "\2GUARD\2 is not available to users.");
-		return;
-	}
 
 	if (!(mc = mychan_find(parv[0])))
 	{
