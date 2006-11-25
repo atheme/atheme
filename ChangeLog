@@ -1,3 +1,23 @@
+jilles      2006/11/25 01:41:18 UTC	(20061125-7277)
+  Log:
+  Remove various unused variables and an unused static function.
+  
+
+  Changes:	Modified:
+  +0 -3		trunk/backend/flatfile.c (File Modified) 
+  +0 -1		trunk/modules/chanserv/main.c (File Modified) 
+  +1 -2		trunk/modules/chanserv/register.c (File Modified) 
+  +0 -1		trunk/modules/chanserv/set.c (File Modified) 
+  +0 -1		trunk/modules/global/main.c (File Modified) 
+  +0 -1		trunk/modules/operserv/rakill.c (File Modified) 
+  +0 -1		trunk/modules/operserv/rmatch.c (File Modified) 
+  +0 -1		trunk/modules/xmlrpc/channel.c (File Modified) 
+  +0 -10	trunk/modules/xmlrpc/main.c (File Modified) 
+  +2 -4		trunk/src/account.c (File Modified) 
+  +0 -3		trunk/src/culture.c (File Modified) 
+  +0 -3		trunk/src/users.c (File Modified) 
+
+
 jilles      2006/11/25 01:39:42 UTC	(20061125-7275)
   Log:
   dump_buffer(): add a return value here, even though
