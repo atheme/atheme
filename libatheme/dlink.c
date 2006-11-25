@@ -4,7 +4,7 @@
  *
  * Linked list stuff.
  *
- * $Id: dlink.c 7271 2006-11-25 00:08:57Z jilles $
+ * $Id: dlink.c 7273 2006-11-25 00:25:20Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -18,7 +18,7 @@ void init_dlink_nodes(void)
 
 	if (!node_heap)
 	{
-		clog(LG_INFO, "init_dlink_nodes(): block allocator failure.");
+		claro_log(LG_INFO, "init_dlink_nodes(): block allocator failure.");
 		exit(EXIT_FAILURE);
 	}
 }
@@ -130,7 +130,7 @@ void node_del(node_t *n, list_t *l)
         /* do we even have a node? */
         if (!n)
         {
-                clog(LG_DEBUG, "node_del(): called with NULL node");
+                claro_log(LG_DEBUG, "node_del(): called with NULL node");
                 return;
         }
 

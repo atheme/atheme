@@ -4,11 +4,11 @@
  *
  * stuff for internal use by libatheme.
  *
- * $Id: claro_internal.h 7271 2006-11-25 00:08:57Z jilles $
+ * $Id: claro_internal.h 7273 2006-11-25 00:25:20Z jilles $
  */
 
 /* log function pointer */
-E void (*clog)(uint32_t, const char *, ...);
+E void (*claro_log)(uint32_t, const char *, ...);
 
 /* internal functions */
 E void event_init(void);

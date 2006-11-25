@@ -5,7 +5,7 @@
  * This file contains routines that interface the event system.
  * This code is based on ircd-ratbox's event.c with modifications.
  *
- * $Id: event.c 7271 2006-11-25 00:08:57Z jilles $
+ * $Id: event.c 7273 2006-11-25 00:25:20Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -35,7 +35,7 @@ uint32_t event_add(const char *name, EVH *func, void *arg, time_t when)
 			if ((event_table[i].when < event_time_min) || (event_time_min == -1))
 				event_time_min = event_table[i].when;
 
-			clog(LG_DEBUG, "event_add(): \"%s\"", name);
+			claro_log(LG_DEBUG, "event_add(): \"%s\"", name);
 
 			claro_state.event++;
 
@@ -44,7 +44,7 @@ uint32_t event_add(const char *name, EVH *func, void *arg, time_t when)
 	}
 
 	/* failed to add it... */
-	clog(LG_DEBUG, "event_add(): failed to add \"%s\" to event table", name);
+	claro_log(LG_DEBUG, "event_add(): failed to add \"%s\" to event table", name);
 
 	return -1;
 }
@@ -69,7 +69,7 @@ uint32_t event_add_once(const char *name, EVH *func, void *arg, time_t when)
 			if ((event_table[i].when < event_time_min) || (event_time_min == -1))
 				event_time_min = event_table[i].when;
 
-			clog(LG_DEBUG, "event_add_once(): \"%s\"", name);
+			claro_log(LG_DEBUG, "event_add_once(): \"%s\"", name);
 
 			claro_state.event++;
 
@@ -78,7 +78,7 @@ uint32_t event_add_once(const char *name, EVH *func, void *arg, time_t when)
 	}
 
 	/* failed to add it... */
-	clog(LG_DEBUG, "event_add(): failed to add \"%s\" to event table", name);
+	claro_log(LG_DEBUG, "event_add(): failed to add \"%s\" to event table", name);
 
 	return -1;
 }
@@ -91,7 +91,7 @@ void event_delete(EVH *func, void *arg)
 	if (i == -1)
 		return;
 
-	clog(LG_DEBUG, "event_delete(): removing \"%s\"", event_table[i].name);
+	claro_log(LG_DEBUG, "event_delete(): removing \"%s\"", event_table[i].name);
 
 	event_table[i].name = NULL;
 	event_table[i].func = NULL;

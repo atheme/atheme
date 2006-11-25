@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 7271 2006-11-25 00:08:57Z jilles $
+ * $Id: connection.c 7273 2006-11-25 00:25:20Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -29,7 +29,7 @@ void init_netio(void)
 
 	if (!connection_heap || !sa_heap)
 	{
-		clog(LG_INFO, "init_netio(): blockheap failure");
+		claro_log(LG_INFO, "init_netio(): blockheap failure");
 		exit(EXIT_FAILURE);
 	}
 }
@@ -55,12 +55,12 @@ connection_t *connection_add(const char *name, int32_t fd, uint32_t flags,
 
 	if ((cptr = connection_find(fd)))
 	{
-		clog(LG_DEBUG, "connection_add(): connection %d is already registered as %s",
+		claro_log(LG_DEBUG, "connection_add(): connection %d is already registered as %s",
 				fd, cptr->name);
 		return NULL;
 	}
 
-	clog(LG_DEBUG, "connection_add(): adding connection '%s', fd=%d", name, fd);
+	claro_log(LG_DEBUG, "connection_add(): adding connection '%s', fd=%d", name, fd);
 
 	cptr = BlockHeapAlloc(connection_heap);
 
@@ -155,14 +155,14 @@ void connection_close(connection_t *cptr)
 
 	if (!cptr)
 	{
-		clog(LG_DEBUG, "connection_close(): no connection to close!");
+		claro_log(LG_DEBUG, "connection_close(): no connection to close!");
 		return;
 	}
 
 	nptr = node_find(cptr, &connection_list);
 	if (!nptr)
 	{
-		clog(LG_DEBUG, "connection_close(): connection %p is not registered!",
+		claro_log(LG_DEBUG, "connection_close(): connection %p is not registered!",
 			cptr);
 		return;
 	}
@@ -177,7 +177,7 @@ void connection_close(connection_t *cptr)
 #endif
 
 	if (errno1)
-		clog(cptr->flags & CF_UPLINK ? LG_ERROR : LG_INFO,
+		claro_log(cptr->flags & CF_UPLINK ? LG_ERROR : LG_INFO,
 				"connection_close(): connection %s[%d] closed due to error %d (%s)",
 				cptr->name, cptr->fd, errno1, strerror(errno1));
 
@@ -316,7 +316,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 
 	if (!(s = socket(AF_INET, SOCK_STREAM, 0)))
 	{
-		clog(LG_ERROR, "connection_open_tcp(): unable to create socket.");
+		claro_log(LG_ERROR, "connection_open_tcp(): unable to create socket.");
 		return NULL;
 	}
 
@@ -334,7 +334,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 
 		if ((hp = gethostbyname(vhost)) == NULL)
 		{
-			clog(LG_ERROR, "connection_open_tcp(): cant resolve vhost %s", vhost);
+			claro_log(LG_ERROR, "connection_open_tcp(): cant resolve vhost %s", vhost);
 			close(s);
 			return NULL;
 		}
@@ -349,7 +349,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 		if (bind(s, (struct sockaddr *)&sa, sizeof(sa)) < 0)
 		{
 			close(s);
-			clog(LG_ERROR, "connection_open_tcp(): unable to bind to vhost %s", vhost);
+			claro_log(LG_ERROR, "connection_open_tcp(): unable to bind to vhost %s", vhost);
 			return NULL;
 		}
 	}
@@ -358,7 +358,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 	/* resolve it */
 	if ((hp = gethostbyname(host)) == NULL)
 	{
-		clog(LG_ERROR, "connection_open_tcp(): unable to resolve %s", host);
+		claro_log(LG_ERROR, "connection_open_tcp(): unable to resolve %s", host);
 		close(s);
 		return NULL;
 	}
@@ -373,7 +373,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 	if (connect(s, (struct sockaddr *)&sa, sizeof(sa)) == -1 &&
 			errno != EINPROGRESS && errno != EINTR)
 	{
-		clog(LG_ERROR, "connection_open_tcp(): failed to connect to %s: %s", host, strerror(errno));
+		claro_log(LG_ERROR, "connection_open_tcp(): failed to connect to %s: %s", host, strerror(errno));
 		close(s);
 		return NULL;
 	}
@@ -410,7 +410,7 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 
 	if (!(s = socket(AF_INET, SOCK_STREAM, 0)))
 	{
-		clog(LG_ERROR, "connection_open_listener_tcp(): unable to create socket.");
+		claro_log(LG_ERROR, "connection_open_listener_tcp(): unable to create socket.");
 		return NULL;
 	}
 
@@ -425,7 +425,7 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 
 	if ((hp = gethostbyname(host)) == NULL)
 	{
-		clog(LG_ERROR, "connection_open_listener_tcp(): cant resolve host %s", host);
+		claro_log(LG_ERROR, "connection_open_listener_tcp(): cant resolve host %s", host);
 		close(s);
 		return NULL;
 	}
@@ -441,7 +441,7 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 	if (bind(s, (struct sockaddr *)&sa, sizeof(sa)) < 0)
 	{
 		close(s);
-		clog(LG_ERROR, "connection_open_listener_tcp(): unable to bind listener %s[%d], errno [%d]", host, port,
+		claro_log(LG_ERROR, "connection_open_listener_tcp(): unable to bind listener %s[%d], errno [%d]", host, port,
 			errno);
 		return NULL;
 	}
@@ -452,7 +452,7 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 	if (listen(s, 5) < 0)
 	{
 		close(s);
-		clog(LG_ERROR, "connection_open_listener_tcp(): error: %s", strerror(errno));
+		claro_log(LG_ERROR, "connection_open_listener_tcp(): error: %s", strerror(errno));
 		return NULL;
 	}
 
@@ -484,7 +484,7 @@ connection_t *connection_accept_tcp(connection_t *cptr,
 
 	if (!(s = accept(cptr->fd, NULL, NULL)))
 	{
-		clog(LG_INFO, "connection_accept_tcp(): accept failed");
+		claro_log(LG_INFO, "connection_accept_tcp(): accept failed");
 		return NULL;
 	}
 

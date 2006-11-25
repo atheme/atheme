@@ -4,7 +4,7 @@
  *
  * A hook system. Idea taken from hybrid.
  *
- * $Id: hook.c 7271 2006-11-25 00:08:57Z jilles $
+ * $Id: hook.c 7273 2006-11-25 00:25:20Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -20,7 +20,7 @@ void hooks_init()
 
 	if (!hook_heap)
 	{
-		clog(LG_INFO, "hooks_init(): block allocator failed.");
+		claro_log(LG_INFO, "hooks_init(): block allocator failed.");
 		exit(EXIT_SUCCESS);
 	}
 }

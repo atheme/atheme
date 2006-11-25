@@ -4,7 +4,7 @@
  *
  * Initialization functions.
  *
- * $Id: claro.c 7271 2006-11-25 00:08:57Z jilles $
+ * $Id: claro.c 7273 2006-11-25 00:25:20Z jilles $
  */
 
 #include <org.atheme.claro.base>
@@ -14,7 +14,7 @@ DECLARE_CLARO_ASSEMBLY_V1
 (
 	"org.atheme.claro.base",
 	"Atheme Development Group <http://www.libclaro.org>",
-	"$Id: claro.c 7271 2006-11-25 00:08:57Z jilles $",
+	"$Id: claro.c 7273 2006-11-25 00:25:20Z jilles $",
 	"20051020"
 );
 
@@ -22,7 +22,7 @@ int runflags;
 claro_state_t claro_state;
 
 static void generic_claro_log(uint32_t, const char *format, ...);
-void (*clog)(uint32_t, const char *format, ...) = generic_claro_log;
+void (*claro_log)(uint32_t, const char *format, ...) = generic_claro_log;
 
 static void generic_claro_log(uint32_t level, const char *format, ...)
 {
@@ -39,9 +39,9 @@ static void generic_claro_log(uint32_t level, const char *format, ...)
 void libclaro_init(void (*ilog)(uint32_t, const char *format, ...))
 {
 	if (ilog)
-		clog = ilog;
+		claro_log = ilog;
 
-	clog(LG_DEBUG, "claro: starting up base code...");
+	claro_log(LG_DEBUG, "claro: starting up base code...");
 
 	event_init();
 	initBlockHeap();
@@ -50,6 +50,6 @@ void libclaro_init(void (*ilog)(uint32_t, const char *format, ...))
 	init_netio();
 	init_socket_queues();
 
-	clog(LG_DEBUG, "claro: .. done");
+	claro_log(LG_DEBUG, "claro: .. done");
 }
 	

@@ -1,3 +1,30 @@
+jilles      2006/11/25 00:08:57 UTC	(20061125-7271)
+  Log:
+  Move some stuff only used by libatheme/*.c to libatheme/claro_internal.h.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/libatheme/balloc.c (File Modified) 
+  +1 -0		trunk/libatheme/claro.c (File Modified) 
+  +18 -0	trunk/libatheme/claro_internal.h (File Added) 
+  +1 -0		trunk/libatheme/connection.c (File Modified) 
+  +0 -1		trunk/libatheme/connection.h (File Modified) 
+  +2 -0		trunk/libatheme/datastream.c (File Modified) 
+  +1 -0		trunk/libatheme/dlink.c (File Modified) 
+  +1 -0		trunk/libatheme/event.c (File Modified) 
+  +0 -1		trunk/libatheme/event.h (File Modified) 
+  +1 -0		trunk/libatheme/hook.c (File Modified) 
+  +0 -1		trunk/libatheme/hook.h (File Modified) 
+  +1 -0		trunk/libatheme/linker.c (File Modified) 
+  +1 -0		trunk/libatheme/memory.c (File Modified) 
+  +0 -3		trunk/libatheme/org.atheme.claro.base (File Modified) 
+  +1 -0		trunk/libatheme/poll.c (File Modified) 
+  +1 -0		trunk/libatheme/select.c (File Modified) 
+  +1 -0		trunk/libatheme/sockio.c (File Modified) 
+  +1 -0		trunk/libatheme/string.c (File Modified) 
+  +1 -0		trunk/libatheme/win32.c (File Modified) 
+
+
 jilles      2006/11/24 23:03:31 UTC	(20061124-7267)
   Log:
   Swap me.connected assignment and initial uplink_connect() call.
