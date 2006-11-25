@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 7263 2006-11-24 22:55:12Z jilles $
+ * $Id: main.c 7277 2006-11-25 01:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 7263 2006-11-24 22:55:12Z jilles $",
+	"$Id: main.c 7277 2006-11-25 01:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -32,7 +32,6 @@ E list_t mychan;
 
 static void join_registered(boolean_t all)
 {
-	node_t *n;
 	mychan_t *mc;
 	dictionary_iteration_state_t state;
 

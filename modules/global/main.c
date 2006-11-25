@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6657 2006-10-04 21:22:47Z jilles $
+ * $Id: main.c 7277 2006-11-25 01:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"global/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6657 2006-10-04 21:22:47Z jilles $",
+	"$Id: main.c 7277 2006-11-25 01:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -71,7 +71,6 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 	struct global_ *global;
 	static list_t globlist;
 	node_t *n, *tn;
-	tld_t *tld;
 	char *params = parv[0];
 	static char *sender = NULL;
 	boolean_t isfirst;

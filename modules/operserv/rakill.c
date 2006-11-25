@@ -4,7 +4,7 @@
  *
  * Regexp-based AKILL implementation.
  *
- * $Id: rakill.c 7095 2006-11-05 22:04:32Z jilles $
+ * $Id: rakill.c 7277 2006-11-25 01:41:18Z jilles $
  */
 
 /*
@@ -17,7 +17,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rakill", FALSE, _modinit, _moddeinit,
-	"$Id: rakill.c 7095 2006-11-05 22:04:32Z jilles $",
+	"$Id: rakill.c 7277 2006-11-25 01:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,7 +48,6 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 	regex_t *regex;
 	char usermask[512];
 	uint32_t matches = 0;
-	uint32_t i = 0;
 	dictionary_iteration_state_t state;
 	user_t *u;
 	char *args = parv[0];

@@ -4,7 +4,7 @@
  *
  * XMLRPC channel management functions.
  *
- * $Id: channel.c 6895 2006-10-22 21:07:24Z jilles $
+ * $Id: channel.c 7277 2006-11-25 01:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/channel", FALSE, _modinit, _moddeinit,
-	"$Id: channel.c 6895 2006-10-22 21:07:24Z jilles $",
+	"$Id: channel.c 7277 2006-11-25 01:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -39,7 +39,6 @@ static int channel_register(void *conn, int parc, char *parv[])
 {
 	myuser_t *mu;
 	mychan_t *mc, *tmc;
-	node_t *n;
 	uint32_t tcnt;
 	static char buf[XMLRPC_BUFSIZE];
 	dictionary_iteration_state_t state;

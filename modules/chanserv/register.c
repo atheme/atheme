@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService REGISTER function.
  *
- * $Id: register.c 7131 2006-11-11 19:48:21Z jilles $
+ * $Id: register.c 7277 2006-11-25 01:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 7131 2006-11-11 19:48:21Z jilles $",
+	"$Id: register.c 7277 2006-11-25 01:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -44,9 +44,8 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	channel_t *c;
 	chanuser_t *cu;
 	mychan_t *mc, *tmc;
-	node_t *n;
 	char *name = parv[0];
-	uint32_t i, tcnt;
+	uint32_t tcnt;
 	char str[21];
 	dictionary_iteration_state_t state;
 

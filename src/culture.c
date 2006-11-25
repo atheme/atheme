@@ -4,7 +4,7 @@
  *
  * Translation framework.
  *
- * $Id: culture.c 6809 2006-10-21 19:47:41Z jilles $
+ * $Id: culture.c 7277 2006-11-25 01:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -48,7 +48,6 @@ void translation_init(void)
  */
 const char *translation_get(const char *str)
 {
-	node_t *n;
 	translation_t *t;
 
 	/* See if an internal substitution is present. */
@@ -97,7 +96,6 @@ void itranslation_create(char *str, char *trans)
  */
 void itranslation_destroy(char *str)
 {
-	node_t *n, *tn;
 	translation_t *t = dictionary_delete(itranslation_tree, str);
 
 	if (t == NULL)
@@ -152,7 +150,6 @@ void translation_create(char *str, char *trans)
  */
 void translation_destroy(char *str)
 {
-	node_t *n, *tn;
 	translation_t *t = dictionary_delete(translation_tree, str);
 
 	if (t == NULL)

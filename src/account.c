@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7263 2006-11-24 22:55:12Z jilles $
+ * $Id: account.c 7277 2006-11-25 01:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -691,8 +691,8 @@ boolean_t mychan_isused(mychan_t *mc)
 /* Find a user fulfilling the conditions who can take another channel */
 myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t minlevel, int maxtime)
 {
-	int j, tcnt;
-	node_t *n, *n2;
+	int tcnt;
+	node_t *n;
 	chanacs_t *ca;
 	mychan_t *tmc;
 	myuser_t *mu;
@@ -1397,7 +1397,6 @@ static int expire_myuser_cb(dictionary_elem_t *delem, void *unused)
 
 void expire_check(void *arg)
 {
-	uint32_t i;
 	mynick_t *mn;
 	mychan_t *mc;
 	user_t *u;
@@ -1509,7 +1508,6 @@ static int check_myuser_cb(dictionary_elem_t *delem, void *unused)
 
 void db_check()
 {
-	uint32_t i;
 	mychan_t *mc;
 	dictionary_iteration_state_t state;
 

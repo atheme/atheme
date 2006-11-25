@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 7263 2006-11-24 22:55:12Z jilles $
+ * $Id: set.c 7277 2006-11-25 01:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 7263 2006-11-24 22:55:12Z jilles $",
+	"$Id: set.c 7277 2006-11-25 01:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -354,7 +354,6 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 			&& (atol(md->value) >= si->smu->registered))
 		{
 			mychan_t *tmc;
-			node_t *n;
 			uint32_t tcnt;
 			dictionary_iteration_state_t state;
 

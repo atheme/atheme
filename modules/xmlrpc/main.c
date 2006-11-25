@@ -4,7 +4,7 @@
  *
  * New xmlrpc implementation
  *
- * $Id: main.c 7275 2006-11-25 01:39:42Z jilles $
+ * $Id: main.c 7277 2006-11-25 01:41:18Z jilles $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 7275 2006-11-25 01:39:42Z jilles $",
+	"$Id: main.c 7277 2006-11-25 01:41:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -140,15 +140,6 @@ static void process_header(connection_t *cptr, char *line)
 	{
 		hd->expect_100_continue = !strcasecmp(p, "100-continue");
 	}
-}
-
-static void check_close(connection_t *cptr)
-{
-	struct httpddata *hd;
-
-	hd = cptr->userdata;
-	if (hd->connection_close)
-		sendq_add_eof(cptr);
 }
 
 static void send_error(connection_t *cptr, int errorcode, const char *text, boolean_t sendentity)
@@ -421,7 +412,6 @@ static void xmlrpc_command_success_nodata(sourceinfo_t *si, const char *message)
 {
 	connection_t *cptr;
 	struct httpddata *hd;
-	char buf[XMLRPC_BUFSIZE];
 	char *p;
 	const char *q;
 
