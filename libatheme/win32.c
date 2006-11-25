@@ -4,10 +4,11 @@
  *
  * Win32 special functions
  *
- * $Id: win32.c 3607 2005-11-06 23:57:17Z jilles $
+ * $Id: win32.c 7271 2006-11-25 00:08:57Z jilles $
  */
 
 #include <org.atheme.claro.base>
+#include "claro_internal.h"
 
 /* Undefine our gethostbyname() macro to stop a likely horrible death */
 #undef gethostbyname

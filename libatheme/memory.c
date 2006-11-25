@@ -4,10 +4,11 @@
  *
  * Memory functions.
  *
- * $Id: memory.c 4757 2006-02-01 20:02:16Z nenolod $
+ * $Id: memory.c 7271 2006-11-25 00:08:57Z jilles $
  */
 
 #include <org.atheme.claro.base>
+#include "claro_internal.h"
 
 #ifdef _WIN32
 #define SIGUSR1 0

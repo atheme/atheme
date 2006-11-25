@@ -4,7 +4,7 @@
  *
  * This contains the connection_t structure.
  *
- * $Id: connection.h 6819 2006-10-21 21:24:10Z jilles $
+ * $Id: connection.h 7271 2006-11-25 00:08:57Z jilles $
  */
 
 #ifndef CONNECTION_H
@@ -62,7 +62,6 @@ struct connection_
 #define CF_IS_CONNECTING(x) ((x)->flags & CF_CONNECTING)
 #define CF_IS_LISTENING(x) ((x)->flags & CF_LISTENING)
 
-extern void init_netio(void);
 extern connection_t *connection_add(const char *, int32_t, uint32_t,
 	void(*)(connection_t *),
 	void(*)(connection_t *));

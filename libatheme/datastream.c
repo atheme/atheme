@@ -4,9 +4,11 @@
  *
  * Datastream stuff.
  *
- * $Id: datastream.c 7259 2006-11-23 17:06:47Z jilles $
+ * $Id: datastream.c 7271 2006-11-25 00:08:57Z jilles $
  */
+
 #include <org.atheme.claro.base>
+#include "claro_internal.h"
 
 #define SENDQSIZE (4096 - 40)
 

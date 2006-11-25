@@ -4,10 +4,11 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 7257 2006-11-23 17:04:28Z jilles $
+ * $Id: connection.c 7271 2006-11-25 00:08:57Z jilles $
  */
 
 #include <org.atheme.claro.base>
+#include "claro_internal.h"
 
 static BlockHeap *sa_heap;
 static BlockHeap *connection_heap;

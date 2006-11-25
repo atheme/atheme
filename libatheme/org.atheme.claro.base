@@ -4,7 +4,7 @@
  *
  * libatheme stuff.
  *
- * $Id: org.atheme.claro.base 3851 2005-11-11 12:55:45Z jilles $
+ * $Id: org.atheme.claro.base 7271 2006-11-25 00:08:57Z jilles $
  */
 
 #ifndef __CLAROBASE
@@ -83,10 +83,7 @@ E claro_state_t claro_state;
 
 E int runflags;
 
-E void (*clog)(uint32_t, const char *, ...);
 E void libclaro_init(void (*ilog)(uint32_t, const char *, ...));
-E void init_dlink_nodes(void);
-E void init_socket_queues(void);
 
 #ifdef _WIN32
 

@@ -4,10 +4,11 @@
  *
  * String functions.
  *
- * $Id: string.c 6829 2006-10-22 00:40:48Z nenolod $
+ * $Id: string.c 7271 2006-11-25 00:08:57Z jilles $
  */
 
 #include <org.atheme.claro.base>
+#include "claro_internal.h"
 
 #ifndef HAVE_STRLCAT
 /* These functions are taken from Linux. */

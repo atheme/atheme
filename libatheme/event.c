@@ -5,10 +5,11 @@
  * This file contains routines that interface the event system.
  * This code is based on ircd-ratbox's event.c with modifications.
  *
- * $Id: event.c 3047 2005-10-20 04:37:13Z nenolod $
+ * $Id: event.c 7271 2006-11-25 00:08:57Z jilles $
  */
 
 #include <org.atheme.claro.base>
+#include "claro_internal.h"
 
 const char *last_event_ran = NULL;
 struct ev_entry event_table[MAX_EVENTS];

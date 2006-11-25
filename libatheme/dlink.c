@@ -4,10 +4,11 @@
  *
  * Linked list stuff.
  *
- * $Id: dlink.c 6929 2006-10-24 15:30:53Z jilles $
+ * $Id: dlink.c 7271 2006-11-25 00:08:57Z jilles $
  */
 
 #include <org.atheme.claro.base>
+#include "claro_internal.h"
 
 static BlockHeap *node_heap;
 

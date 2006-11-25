@@ -1,3 +1,12 @@
+jilles      2006/11/24 23:03:31 UTC	(20061124-7267)
+  Log:
+  Swap me.connected assignment and initial uplink_connect() call.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/atheme.c (File Modified) 
+
+
 jilles      2006/11/24 22:56:04 UTC	(20061124-7265)
   Log:
   Remove irccmp() and ircncmp().
