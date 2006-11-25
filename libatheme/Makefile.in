@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in 6039 2006-08-14 15:02:26Z jilles $
+# $Id: Makefile.in 7293 2006-11-25 22:13:28Z jilles $
 #
 
 CC		= @CC@
@@ -19,6 +19,7 @@ datadir		= @datadir@
 sysconfdir	= @sysconfdir@
 libdir		= @libdir@
 sbindir		= @sbindir@
+localstatedir	= @localstatedir@
 DOCDIR		= @DOCDIR@
 MODDIR		= @MODDIR@
 SHAREDIR	= @SHAREDIR@

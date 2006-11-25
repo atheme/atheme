@@ -18,6 +18,7 @@ datadir		= @datadir@
 sysconfdir	= @sysconfdir@
 libdir		= @libdir@
 sbindir		= @sbindir@
+localstatedir	= @localstatedir@
 DOCDIR		= @DOCDIR@
 MODDIR		= @MODDIR@
 SHAREDIR	= @SHAREDIR@

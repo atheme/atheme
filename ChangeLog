@@ -1,3 +1,14 @@
+jilles      2006/11/25 21:25:35 UTC	(20061125-7291)
+  Log:
+  If join_chans is disabled, disable /cs set guard
+  via command_t.access using a config_ready hook,
+  so it does not appear if a user does /cs help set.
+  
+
+  Changes:	Modified:
+  +15 -6	trunk/modules/chanserv/set.c (File Modified) 
+
+
 jilles      2006/11/25 19:18:57 UTC	(20061125-7289)
   Log:
   Make /ns list list nicknames, not just accounts.
