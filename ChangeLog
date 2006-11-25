@@ -1,3 +1,13 @@
+jilles      2006/11/25 01:52:02 UTC	(20061125-7279)
+  Log:
+  warning fixes for enforce (unused variables, parentheses
+  around assignment in if)
+  
+
+  Changes:	Modified:
+  +7 -23	trunk/modules/nickserv/enforce.c (File Modified) 
+
+
 jilles      2006/11/25 01:41:18 UTC	(20061125-7277)
   Log:
   Remove various unused variables and an unused static function.

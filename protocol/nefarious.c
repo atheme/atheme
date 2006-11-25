@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
  *
- * $Id: nefarious.c 7229 2006-11-19 17:14:33Z jilles $
+ * $Id: nefarious.c 7281 2006-11-25 02:01:13Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 7229 2006-11-19 17:14:33Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 7281 2006-11-25 02:01:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -723,8 +723,6 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	/* if it's only 2 then it's a nickname change */
 	else if (parc == 2)
 	{
-		node_t *n;
-
                 if (!si->su)
                 {       
                         slog(LG_DEBUG, "m_nick(): server trying to change nick: %s", si->s != NULL ? si->s->name : "<none>");

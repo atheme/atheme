@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 7249 2006-11-21 15:54:04Z jilles $
+ * $Id: inspircd11.c 7281 2006-11-25 02:01:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7249 2006-11-21 15:54:04Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7281 2006-11-25 02:01:13Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -546,7 +546,6 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 	char *userv[256];
 	char prefixandnick[51];
 	time_t ts;
-	char *bounce;
 
 	c = channel_find(parv[0]);
 	ts = atol(parv[1]);
@@ -702,8 +701,6 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	/* if it's only 1 then it's a nickname change */
 	else if (parc == 1)
 	{
-		node_t *n;
-
                 if (!si->su)
                 {       
                         slog(LG_DEBUG, "m_nick(): server trying to change nick: %s", si->s != NULL ? si->s->name : "<none>");

@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 7229 2006-11-19 17:14:33Z jilles $
+ * $Id: ultimate3.c 7281 2006-11-25 02:01:13Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 7229 2006-11-19 17:14:33Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 7281 2006-11-25 02:01:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -555,8 +555,6 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	/* if it's only 2 then it's a nickname change */
 	else if (parc == 2)
 	{
-		node_t *n;
-
 		if (!si->su)
 		{
 			slog(LG_DEBUG, "m_nick(): server trying to change nick: %s", si->s != NULL ? si->s->name : "<none>");
