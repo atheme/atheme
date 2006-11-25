@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# $Id: configure.ac 7025 2006-11-01 22:43:33Z jilles $
+# $Id: configure.ac 7283 2006-11-25 14:27:10Z jilles $
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -313,7 +313,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA RM MV CP AR RANLIB SET_MAKE MKDEP CPP EGREP SOCKET_ENGINE POSIX_CRYPTC DOCDIR MODDIR SHAREDIR POSTGRESQL_C PGINC PQLIB SSL_LIBS PICFLAGS LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA RM MV CP AR RANLIB SET_MAKE MKDEP CPP EGREP SOCKET_ENGINE POSIX_CRYPTC DOCDIR MODDIR SHAREDIR DATADIR LOGDIR RUNDIR POSTGRESQL_C PGINC PQLIB SSL_LIBS PICFLAGS LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -974,7 +974,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-$Id: configure.ac 7025 2006-11-01 22:43:33Z jilles $
+$Id: configure.ac 7283 2006-11-25 14:27:10Z jilles $
 _ACEOF
   exit 0
 fi
@@ -9492,6 +9492,9 @@ echo " "
 DOCDIR='${prefix}/doc'
 MODDIR='${exec_prefix}'
 SHAREDIR='${prefix}'
+LOGDIR="var"
+DATADIR="etc"
+RUNDIR="var"
 
 FHSPATHS="no"
 echo "$as_me:$LINENO: checking if you want FHS-like pathnames" >&5
@@ -9506,6 +9509,9 @@ if test "${enable_fhs_paths+set}" = set; then
     DOCDIR='${datadir}/doc/atheme'
     MODDIR='${libdir}/atheme'
     SHAREDIR='${datadir}/atheme'
+    LOGDIR='${localstatedir}/log/atheme'
+    DATADIR='${localstatedir}/lib/atheme'
+    RUNDIR='${localstatedir}/run/atheme'
     ;;
   no)
     FHSPATHS="no"
@@ -9515,6 +9521,9 @@ if test "${enable_fhs_paths+set}" = set; then
 fi;
 echo "$as_me:$LINENO: result: $FHSPATHS" >&5
 echo "${ECHO_T}$FHSPATHS" >&6
+
+
+
 
 
 
@@ -13800,7 +13809,7 @@ LDFLAGS=${ac_save_LDFLAGS}
 
 fi;
 
-ac_save_CFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS} -DPREFIX=\\\"\${prefix}\\\" -DMODDIR=\\\"\${MODDIR}\\\" -DSHAREDIR=\\\"${SHAREDIR}\\\""
+ac_save_CFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS} -DPREFIX=\\\"\${prefix}\\\" -DMODDIR=\\\"\${MODDIR}\\\" -DSHAREDIR=\\\"${SHAREDIR}\\\" -DSYSCONFDIR=\\\"${sysconfdir}\\\" -DLOGDIR=\\\"${LOGDIR}\\\" -DRUNDIR=\\\"${RUNDIR}\\\" -DDATADIR=\\\"${DATADIR}\\\""
 CFLAGS=${ac_save_CFLAGS}
 
 echo " "
@@ -14457,6 +14466,9 @@ s,@POSIX_CRYPTC@,$POSIX_CRYPTC,;t t
 s,@DOCDIR@,$DOCDIR,;t t
 s,@MODDIR@,$MODDIR,;t t
 s,@SHAREDIR@,$SHAREDIR,;t t
+s,@DATADIR@,$DATADIR,;t t
+s,@LOGDIR@,$LOGDIR,;t t
+s,@RUNDIR@,$RUNDIR,;t t
 s,@POSTGRESQL_C@,$POSTGRESQL_C,;t t
 s,@PGINC@,$PGINC,;t t
 s,@PQLIB@,$PQLIB,;t t
@@ -14985,6 +14997,10 @@ Configuration:
         Atheme version       : ${PACKAGE_VERSION}
         Installation prefix  : ${prefix}
         Module root directory: `eval echo $d`
+        Config directory     : ${sysconfdir}
+        Logfile directory    : ${LOGDIR}
+        Data directory       : ${DATADIR}
+        PID directory        : ${RUNDIR}
         Large network support: ${LARGENET}
         PostgreSQL support   : ${POSTGRESQL}
         OpenSSL SASL support : ${SSL}

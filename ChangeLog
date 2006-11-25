@@ -1,3 +1,23 @@
+jilles      2006/11/25 14:27:10 UTC	(20061125-7283)
+  Log:
+  Have --enable-fhs-paths affect the location of the
+  log file, data files and pid file also.
+  Note that for data files to work with --enable-fhs-paths,
+  they need to use DATADIR instead of "etc".
+  Submitted by darix.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/Makefile.in (File Modified) 
+  +4 -4		trunk/backend/flatfile.c (File Modified) 
+  +14 -1	trunk/configure.ac (File Modified) 
+  +3 -3		trunk/modules/operserv/clones.c (File Modified) 
+  +3 -3		trunk/modules/operserv/rwatch.c (File Modified) 
+  +15 -8	trunk/src/Makefile.in (File Modified) 
+  +3 -3		trunk/src/atheme.c (File Modified) 
+  +1 -1		trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2006/11/25 02:01:13 UTC	(20061125-7281)
   Log:
   Remove more unused variables.
