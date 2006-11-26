@@ -1,3 +1,25 @@
+jilles      2006/11/25 22:13:28 UTC	(20061125-7293)
+  Log:
+  Add localstatedir to all the other Makefile.in's.
+  This fixes those pathnames for --enable-fhs-paths.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/backend/Makefile.in (File Modified) 
+  +1 -0		trunk/contrib/Makefile.in (File Modified) 
+  +1 -0		trunk/crypto/Makefile.in (File Modified) 
+  +1 -0		trunk/libatheme/Makefile.in (File Modified) 
+  +1 -0		trunk/modules/Makefile.in (File Modified) 
+  +1 -0		trunk/modules/chanserv/Makefile.in (File Modified) 
+  +1 -0		trunk/modules/global/Makefile.in (File Modified) 
+  +1 -0		trunk/modules/memoserv/Makefile.in (File Modified) 
+  +1 -0		trunk/modules/nickserv/Makefile.in (File Modified) 
+  +1 -0		trunk/modules/operserv/Makefile.in (File Modified) 
+  +1 -0		trunk/modules/saslserv/Makefile.in (File Modified) 
+  +1 -0		trunk/modules/xmlrpc/Makefile.in (File Modified) 
+  +1 -0		trunk/protocol/Makefile.in (File Modified) 
+
+
 jilles      2006/11/25 21:25:35 UTC	(20061125-7291)
   Log:
   If join_chans is disabled, disable /cs set guard

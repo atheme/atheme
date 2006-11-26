@@ -1,0 +1,11 @@
+Help for LISTVHOST:
+
+LISTVHOST shows accounts which have a vhost set
+on them. If a pattern is given, only accounts
+with vhosts matching the pattern are shown.
+
+Syntax: LISTVHOST [pattern]
+
+Examples:
+    /msg &nick& LISTVHOST
+    /msg &nick& LISTVHOST *staff*

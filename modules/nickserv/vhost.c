@@ -4,7 +4,7 @@
  *
  * Allows setting a vhost on an account
  *
- * $Id: vhost.c 6955 2006-10-26 11:37:10Z jilles $
+ * $Id: vhost.c 7295 2006-11-26 17:53:12Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 6955 2006-10-26 11:37:10Z jilles $",
+	"$Id: vhost.c 7295 2006-11-26 17:53:12Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,8 +20,10 @@ list_t *ns_cmdtree, *ns_helptree;
 
 static void vhost_on_identify(void *vptr);
 static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_vhost = { "VHOST", "Manages user virtualhosts.", PRIV_USER_VHOST, 2, ns_cmd_vhost };
+command_t ns_listvhost = { "LISTVHOST", "Lists user virtualhosts.", PRIV_USER_AUSPEX, 1, ns_cmd_listvhost };
 
 void _modinit(module_t *m)
 {
@@ -31,14 +33,18 @@ void _modinit(module_t *m)
 	hook_add_event("user_identify");
 	hook_add_hook("user_identify", vhost_on_identify);
 	command_add(&ns_vhost, ns_cmdtree);
+	command_add(&ns_listvhost, ns_cmdtree);
 	help_addentry(ns_helptree, "VHOST", "help/nickserv/vhost", NULL);
+	help_addentry(ns_helptree, "LISTVHOST", "help/nickserv/listvhost", NULL);
 }
 
 void _moddeinit(void)
 {
 	hook_del_hook("user_identify", vhost_on_identify);
 	command_delete(&ns_vhost, ns_cmdtree);
+	command_delete(&ns_listvhost, ns_cmdtree);
 	help_delentry(ns_helptree, "VHOST");
+	help_delentry(ns_helptree, "LISTVHOST");
 }
 
 static void do_sethost_all(myuser_t *mu, char *host)
@@ -164,6 +170,36 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 			mu->name, host);
 	do_sethost_all(mu, host);
 	return;
+}
+
+static void ns_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
+{
+	const char *pattern;
+	dictionary_iteration_state_t state;
+	myuser_t *mu;
+	metadata_t *md;
+	int matches = 0;
+
+	pattern = parc >= 1 ? parv[0] : "*";
+
+	snoop("LISTVHOST: \2%s\2 by \2%s\2", pattern, get_oper_name(si));
+	DICTIONARY_FOREACH(mu, &state, mulist)
+	{
+		md = metadata_find(mu, METADATA_USER, "private:usercloak");
+		if (md == NULL)
+			continue;
+		if (!match(pattern, md->value))
+		{
+			command_success_nodata(si, "- %-30s %s", mu->name, md->value);
+			matches++;
+		}
+	}
+
+	logcommand(si, CMDLOG_ADMIN, "LISTVHOST %s (%d matches)", pattern, matches);
+	if (matches == 0)
+		command_success_nodata(si, "No vhosts matched pattern \2%s\2", pattern);
+	else
+		command_success_nodata(si, "\2%d\2 match%s for pattern \2%s\2", matches, matches != 1 ? "es" : "", pattern);
 }
 
 static void vhost_on_identify(void *vptr)
