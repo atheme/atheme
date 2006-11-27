@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: xop.c 7305 2006-11-27 23:56:16Z jilles $
  */
 
 #include "atheme.h"
@@ -12,14 +12,14 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: xop.c 7305 2006-11-27 23:56:16Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 /* the individual command stuff, now that we've reworked, hardcode ;) --w00t */
-static void cs_xop_do_list(mychan_t *mc, char *origin, uint32_t level, char *leveldesc, int operoverride);
-static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level, char *leveldesc, uint32_t restrictflags);
-static void cs_xop_do_del(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level, char *leveldesc);
+static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *target, uint32_t level, char *leveldesc, uint32_t restrictflags);
+static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *target, uint32_t level, char *leveldesc);
+static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, uint32_t level, char *leveldesc, int operoverride);
 
 static void cs_cmd_sop(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_aop(sourceinfo_t *si, int parc, char *parv[]);
@@ -147,7 +147,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 			command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 			return;
 		}
-		cs_xop_do_add(mc, mu, si->su->nick, uname, level, leveldesc, restrictflags);
+		cs_xop_do_add(si, mc, mu, uname, level, leveldesc, restrictflags);
 	}
 
 	else if (!strcasecmp("DEL", cmd))
@@ -172,7 +172,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 			command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
 			return;
 		}
-		cs_xop_do_del(mc, mu, si->su->nick, uname, level, leveldesc);
+		cs_xop_do_del(si, mc, mu, uname, level, leveldesc);
 	}
 
 	else if (!strcasecmp("LIST", cmd))
@@ -187,7 +187,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 				return;
 			}
 		}
-		cs_xop_do_list(mc, si->su->nick, level, leveldesc, operoverride);
+		cs_xop_do_list(si, mc, level, leveldesc, operoverride);
 	}
 }
 
@@ -219,7 +219,7 @@ static void cs_cmd_hop(sourceinfo_t *si, int parc, char *parv[])
 }
 
 
-static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level, char *leveldesc, uint32_t restrictflags)
+static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *target, uint32_t level, char *leveldesc, uint32_t restrictflags)
 {
 	char hostbuf[BUFSIZE];
 	chanuser_t *cu;
@@ -231,7 +231,7 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 		/* we might be adding a hostmask */
 		if (!validhostmask(target))
 		{
-			notice(chansvs.nick, origin, "\2%s\2 is neither a nickname nor a hostmask.", target);
+			command_fail(si, fault_badparams, "\2%s\2 is neither a nickname nor a hostmask.", target);
 			return;
 		}
 
@@ -239,7 +239,7 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 		ca = chanacs_find_host_literal(mc, target, CA_NONE);
 		if (ca != NULL && ca->level == level)
 		{
-			notice(chansvs.nick, origin, "\2%s\2 is already on the %s list for \2%s\2", target, leveldesc, mc->name);
+			command_fail(si, fault_nochange, "\2%s\2 is already on the %s list for \2%s\2", target, leveldesc, mc->name);
 			return;
 		}
 
@@ -247,20 +247,20 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 		{
 			if (ca->level & ~restrictflags)
 			{
-				notice(chansvs.nick, origin, "You are not authorized to modify the access entry for \2%s\2 on \2%s\2.", target, mc->name);
+				command_fail(si, fault_noprivs, "You are not authorized to modify the access entry for \2%s\2 on \2%s\2.", target, mc->name);
 				return;
 			}
 			/* they have access? change it! */
-			logcommand_user(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s %s ADD %s (changed access)", mc->name, leveldesc, target);
-			notice(chansvs.nick, origin, "\2%s\2's access on \2%s\2 has been changed to \2%s\2.", target, mc->name, leveldesc);
-			verbose(mc, "\2%s\2 changed \2%s\2's access to \2%s\2.", origin, target, leveldesc);
+			logcommand(si, CMDLOG_SET, "%s %s ADD %s (changed access)", mc->name, leveldesc, target);
+			command_success_nodata(si, "\2%s\2's access on \2%s\2 has been changed to \2%s\2.", target, mc->name, leveldesc);
+			verbose(mc, "\2%s\2 changed \2%s\2's access to \2%s\2.", get_source_name(si), target, leveldesc);
 			ca->level = level;
 		}
 		else
 		{
-			logcommand_user(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s %s ADD %s", mc->name, leveldesc, target);
-			notice(chansvs.nick, origin, "\2%s\2 has been added to the %s list for \2%s\2.", target, leveldesc, mc->name);
-			verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", origin, target, leveldesc);
+			logcommand(si, CMDLOG_SET, "%s %s ADD %s", mc->name, leveldesc, target);
+			command_success_nodata(si, "\2%s\2 has been added to the %s list for \2%s\2.", target, leveldesc, mc->name);
+			verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", get_source_name(si), target, leveldesc);
 			chanacs_add_host(mc, target, level);
 		}
 
@@ -312,14 +312,14 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 
 	if (mu == mc->founder)
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is the founder for \2%s\2 and may not be added to the %s list.", mu->name, mc->name, leveldesc);
+		command_fail(si, fault_noprivs, "\2%s\2 is the founder for \2%s\2 and may not be added to the %s list.", mu->name, mc->name, leveldesc);
 		return;
 	}
 
 	ca = chanacs_find(mc, mu, CA_NONE);
 	if (ca != NULL && ca->level == level)
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is already on the %s list for \2%s\2.", mu->name, leveldesc, mc->name);
+		command_fail(si, fault_nochange, "\2%s\2 is already on the %s list for \2%s\2.", mu->name, leveldesc, mc->name);
 		return;
 	}
 
@@ -328,7 +328,7 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 	 * -- jilles */
 	if (MU_NEVEROP & mu->flags && (ca == NULL || ca->level == CA_AKICK))
 	{
-		notice(chansvs.nick, origin, "\2%s\2 does not wish to be added to access lists (NEVEROP set).", mu->name);
+		command_fail(si, fault_noprivs, "\2%s\2 does not wish to be added to access lists (NEVEROP set).", mu->name);
 		return;
 	}
 	/*
@@ -342,21 +342,21 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 	{
 		if (ca->level & ~restrictflags)
 		{
-			notice(chansvs.nick, origin, "You are not authorized to modify the access entry for \2%s\2 on \2%s\2.", mu->name, mc->name);
+			command_fail(si, fault_noprivs, "You are not authorized to modify the access entry for \2%s\2 on \2%s\2.", mu->name, mc->name);
 			return;
 		}
 		/* they have access? change it! */
-		logcommand_user(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s %s ADD %s (changed access)", mc->name, leveldesc, mu->name);
-		notice(chansvs.nick, origin, "\2%s\2's access on \2%s\2 has been changed to \2%s\2.", mu->name, mc->name, leveldesc);
-		verbose(mc, "\2%s\2 changed \2%s\2's access to \2%s\2.", origin, mu->name, leveldesc);
+		logcommand(si, CMDLOG_SET, "%s %s ADD %s (changed access)", mc->name, leveldesc, mu->name);
+		command_success_nodata(si, "\2%s\2's access on \2%s\2 has been changed to \2%s\2.", mu->name, mc->name, leveldesc);
+		verbose(mc, "\2%s\2 changed \2%s\2's access to \2%s\2.", get_source_name(si), mu->name, leveldesc);
 		ca->level = level;
 	}
 	else
 	{
 		/* they have no access, add */
-		logcommand_user(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s %s ADD %s", mc->name, leveldesc, mu->name);
-		notice(chansvs.nick, origin, "\2%s\2 has been added to the %s list for \2%s\2.", mu->name, leveldesc, mc->name);
-		verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", origin, mu->name, leveldesc);
+		logcommand(si, CMDLOG_SET, "%s %s ADD %s", mc->name, leveldesc, mu->name);
+		command_success_nodata(si, "\2%s\2 has been added to the %s list for \2%s\2.", mu->name, leveldesc, mc->name);
+		verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", get_source_name(si), mu->name, leveldesc);
 		chanacs_add(mc, mu, level);
 	}
 	/* run through the channel's user list and do it */
@@ -398,7 +398,7 @@ static void cs_xop_do_add(mychan_t *mc, myuser_t *mu, char *origin, char *target
 	}
 }
 
-static void cs_xop_do_del(mychan_t *mc, myuser_t *mu, char *origin, char *target, uint32_t level, char *leveldesc)
+static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *target, uint32_t level, char *leveldesc)
 {
 	chanacs_t *ca;
 	
@@ -408,50 +408,50 @@ static void cs_xop_do_del(mychan_t *mc, myuser_t *mu, char *origin, char *target
 		/* we might be deleting a hostmask */
 		if (!validhostmask(target))
 		{
-			notice(chansvs.nick, origin, "\2%s\2 is neither a nickname nor a hostmask.", target);
+			command_fail(si, fault_badparams, "\2%s\2 is neither a nickname nor a hostmask.", target);
 			return;
 		}
 
 		if (!chanacs_find_host_literal(mc, target, level))
 		{
-			notice(chansvs.nick, origin, "\2%s\2 is not on the %s list for \2%s\2.", target, leveldesc, mc->name);
+			command_fail(si, fault_nochange, "\2%s\2 is not on the %s list for \2%s\2.", target, leveldesc, mc->name);
 			return;
 		}
 
 		chanacs_delete_host(mc, target, level);
-		verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", origin, target, leveldesc);
-		logcommand_user(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s %s DEL %s", mc->name, leveldesc, target);
-		notice(chansvs.nick, origin, "\2%s\2 has been removed from the %s list for \2%s\2.", target, leveldesc, mc->name);
+		verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", get_source_name(si), target, leveldesc);
+		logcommand(si, CMDLOG_SET, "%s %s DEL %s", mc->name, leveldesc, target);
+		command_success_nodata(si, "\2%s\2 has been removed from the %s list for \2%s\2.", target, leveldesc, mc->name);
 		return;
 	}
 
 	if (!(ca = chanacs_find(mc, mu, level)) || ca->level != level)
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is not on the %s list for \2%s\2.", mu->name, leveldesc, mc->name);
+		command_fail(si, fault_nochange, "\2%s\2 is not on the %s list for \2%s\2.", mu->name, leveldesc, mc->name);
 		return;
 	}
 
 	/* just in case... -- jilles */
 	if (mu == mc->founder)
 	{
-		notice(chansvs.nick, origin, "\2%s\2 is the founder for \2%s\2 and may not be removed from the %s list.", mu->name, mc->name, leveldesc);
+		command_fail(si, fault_noprivs, "\2%s\2 is the founder for \2%s\2 and may not be removed from the %s list.", mu->name, mc->name, leveldesc);
 		return;
 	}
 
 	chanacs_delete(mc, mu, level);
-	notice(chansvs.nick, origin, "\2%s\2 has been removed from the %s list for \2%s\2.", mu->name, leveldesc, mc->name);
-	logcommand_user(chansvs.me, user_find_named(origin), CMDLOG_SET, "%s %s DEL %s", mc->name, leveldesc, mu->name);
-	verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", origin, mu->name, leveldesc);
+	command_success_nodata(si, "\2%s\2 has been removed from the %s list for \2%s\2.", mu->name, leveldesc, mc->name);
+	logcommand(si, CMDLOG_SET, "%s %s DEL %s", mc->name, leveldesc, mu->name);
+	verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", get_source_name(si), mu->name, leveldesc);
 }
 
 
-static void cs_xop_do_list(mychan_t *mc, char *origin, uint32_t level, char *leveldesc, int operoverride)
+static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, uint32_t level, char *leveldesc, int operoverride)
 {
 	chanacs_t *ca;
 	uint8_t i = 0;
 	node_t *n;
 
-	notice(chansvs.nick, origin, "%s list for \2%s\2:", leveldesc ,mc->name);
+	command_success_nodata(si, "%s list for \2%s\2:", leveldesc ,mc->name);
 	LIST_FOREACH(n, mc->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
@@ -459,19 +459,19 @@ static void cs_xop_do_list(mychan_t *mc, char *origin, uint32_t level, char *lev
 		if (ca->myuser != mc->founder && ca->level == level)
 		{
 			if (!ca->myuser)
-				notice(chansvs.nick, origin, "%d: \2%s\2", ++i, ca->host);
+				command_success_nodata(si, "%d: \2%s\2", ++i, ca->host);
 			else if (LIST_LENGTH(&ca->myuser->logins))
-				notice(chansvs.nick, origin, "%d: \2%s\2 (logged in)", ++i, ca->myuser->name);
+				command_success_nodata(si, "%d: \2%s\2 (logged in)", ++i, ca->myuser->name);
 			else
-				notice(chansvs.nick, origin, "%d: \2%s\2 (not logged in)", ++i, ca->myuser->name);
+				command_success_nodata(si, "%d: \2%s\2 (not logged in)", ++i, ca->myuser->name);
 		}
 	}
 	/* XXX */
-	notice(chansvs.nick, origin, "Total of \2%d\2 %s in %s list of \2%s\2.", i, (i == 1) ? "entry" : "entries", leveldesc, mc->name);
+	command_success_nodata(si, "Total of \2%d\2 %s in %s list of \2%s\2.", i, (i == 1) ? "entry" : "entries", leveldesc, mc->name);
 	if (operoverride)
-		logcommand_user(chansvs.me, user_find_named(origin), CMDLOG_ADMIN, "%s %s LIST (oper override)", mc->name, leveldesc);
+		logcommand(si, CMDLOG_ADMIN, "%s %s LIST (oper override)", mc->name, leveldesc);
 	else
-		logcommand_user(chansvs.me, user_find_named(origin), CMDLOG_GET, "%s %s LIST", mc->name, leveldesc);
+		logcommand(si, CMDLOG_GET, "%s %s LIST", mc->name, leveldesc);
 }
 
 static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])

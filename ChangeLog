@@ -1,3 +1,12 @@
+jilles      2006/11/27 10:53:46 UTC	(20061127-7301)
+  Log:
+  Update release notes.
+  
+
+  Changes:	Modified:
+  +12 -0	trunk/doc/RELEASE (File Modified) 
+
+
 jilles      2006/11/27 10:30:15 UTC	(20061127-7299)
   Log:
   Add 't' version letter for chansvs::changets.
