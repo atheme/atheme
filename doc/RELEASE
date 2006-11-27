@@ -1,4 +1,4 @@
-$Id: RELEASE 7243 2006-11-19 21:03:52Z jilles $
+$Id: RELEASE 7301 2006-11-27 10:53:46Z jilles $
 
 Atheme 2.1 Release Notes
 ========================
@@ -14,6 +14,7 @@ nickserv
   nicks. Additional nicks expire separately from the main account.
 - The ACCESS ADD command now converts masks like 1.2.3.* to CIDR masks
   instead of rejecting them.
+- Add LISTVHOST command.
 chanserv
 - The TEMPLATE command now allows updating all channel access entries
   matching the template with a template change, by prefixing a flag
@@ -35,8 +36,19 @@ oper
   matching this operclass who are not IRCops.
 - Add some more log levels and generally clean up logging, for example
   allow disabling logging of all commands.
+code
+- Remove irccmp() and ircncmp(). These functions were equivalent to strcmp()
+  and strncmp(). IRC-style case-insensitive comparisons are irccasecmp() and
+  ircncasecmp().
+- Make clog unavailable outside libatheme/ and rename it. Other code should
+  use slog(), logcommand(), etc. to log things.
 documentation
 - Add some missing help files.
+other
+- chanserv::changets is now shown as 't' in version replies
+- Make --enable-fhs-paths also affect the location of the log file, data
+  files and pid file. Note that for data files to work with
+  --enable-fhs-paths, they need to use DATADIR instead of "etc".
 
 Atheme 2.0 Release Notes
 ========================
