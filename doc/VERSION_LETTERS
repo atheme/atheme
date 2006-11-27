@@ -10,8 +10,9 @@ e - nick/account registration requires email verification
 F - flood checking is enabled
 l - leave_chans is enabled
 j - join_chans is enabled
+t - changets is enabled (shown as of 2.1)
 R - RFC1459 casemapping is used
 r - operserv raw can be used
 n - services is attached to a terminal
 
-$Id: VERSION_LETTERS 4755 2006-02-01 15:02:08Z jilles $
+$Id: VERSION_LETTERS 7299 2006-11-27 10:30:15Z jilles $

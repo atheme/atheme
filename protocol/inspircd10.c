@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree stable branch inspircd.
  *
- * $Id: inspircd10.c 7297 2006-11-27 10:27:15Z jilles $
+ * $Id: inspircd10.c 7299 2006-11-27 10:30:15Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 7297 2006-11-27 10:27:15Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 7299 2006-11-27 10:30:15Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -153,12 +153,13 @@ static uint8_t inspircd_server_login(void)
 	me.bursting = TRUE;
 	sts("BURST");
 	/* XXX: Being able to get this data as a char* would be nice - Brain */
-        sts(":%s VERSION :atheme-%s. %s %s%s%s%s%s%s%s%s%s",me.name, version, me.name, (match_mapping) ? "A" : "",
+        sts(":%s VERSION :atheme-%s. %s %s%s%s%s%s%s%s%s%s%s",me.name, version, me.name, (match_mapping) ? "A" : "",
 								                      (log_force || me.loglevel & (LG_DEBUG | LG_RAWDATA)) ? "d" : "",
 							                              (me.auth) ? "e" : "",
 										      (config_options.flood_msgs) ? "F" : "",
 										      (config_options.leave_chans) ? "l" : "",
 										      (config_options.join_chans) ? "j" : "",
+										      (chansvs.changets) ? "t" : "",
 										      (!match_mapping) ? "R" : "",
 										      (config_options.raw) ? "r" : "",
 										      (runflags & RF_LIVE) ? "n" : "");

@@ -1,3 +1,15 @@
+jilles      2006/11/27 10:27:15 UTC	(20061127-7297)
+  Log:
+  Fix 'd' version letter for log system changes.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/protocol/inspircd10.c (File Modified) 
+  +1 -1		trunk/protocol/inspircd11.c (File Modified) 
+  +1 -1		trunk/src/ctcp-common.c (File Modified) 
+  +1 -1		trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2006/11/26 17:53:12 UTC	(20061126-7295)
   Log:
   Add /ns listvhost command.
