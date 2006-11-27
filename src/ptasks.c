@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 7283 2006-11-25 14:27:10Z jilles $
+ * $Id: ptasks.c 7297 2006-11-27 10:27:15Z jilles $
  */
 
 #include "atheme.h"
@@ -37,7 +37,7 @@ void handle_version(user_t *u)
 	numeric_sts(me.name, 351, u->nick, ":atheme-%s. %s %s%s%s%s%s%s%s%s%s [%s]",
 		    version, me.name, 
 		    (match_mapping) ? "A" : "",
-		    (me.loglevel & LG_DEBUG) ? "d" : "",
+		    (log_force || me.loglevel & (LG_DEBUG | LG_RAWDATA)) ? "d" : "",
 		    (me.auth) ? "e" : "",
 		    (config_options.flood_msgs) ? "F" : "",
 		    (config_options.leave_chans) ? "l" : "", 
