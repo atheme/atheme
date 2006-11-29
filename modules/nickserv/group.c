@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ GROUP command.
  *
- * $Id: group.c 7263 2006-11-24 22:55:12Z jilles $
+ * $Id: group.c 7309 2006-11-29 17:43:12Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/group", FALSE, _modinit, _moddeinit,
-	"$Id: group.c 7263 2006-11-24 22:55:12Z jilles $",
+	"$Id: group.c 7309 2006-11-29 17:43:12Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -79,6 +79,12 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_nochange, "Nick \2%s\2 is already registered to your account.", mn->nick);
 		else
 			command_fail(si, fault_alreadyexists, "Nick \2%s\2 is already registered to \2%s\2.", mn->nick, mn->owner->name);
+		return;
+	}
+
+	if (IsDigit(si->su->nick[0]))
+	{
+		command_fail(si, fault_badparams, "For security reasons, you can't register your UID.");
 		return;
 	}
 
