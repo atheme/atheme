@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 7281 2006-11-25 02:01:13Z jilles $
+ * $Id: ircnet.c 7307 2006-11-29 00:47:32Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 7281 2006-11-25 02:01:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 7307 2006-11-29 00:47:32Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -549,7 +549,7 @@ static void m_save(sourceinfo_t *si, int parc, char *parv[])
 	{
 		slog(LG_DEBUG, "m_save(): nickname change for `%s': %s", u->nick, u->uid);
 
-		user_changenick(si->su, parv[0], 0);
+		user_changenick(u, u->uid, 0);
 
 		handle_nickchange(u);
 	}

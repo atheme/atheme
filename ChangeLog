@@ -1,3 +1,12 @@
+jilles      2006/11/27 23:56:16 UTC	(20061127-7305)
+  Log:
+  Convert xop commands to sourceinfo more fully.
+  
+
+  Changes:	Modified:
+  +45 -45	trunk/modules/chanserv/xop.c (File Modified) 
+
+
 jilles      2006/11/27 10:53:46 UTC	(20061127-7301)
   Log:
   Update release notes.
