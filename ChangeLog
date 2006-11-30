@@ -1,3 +1,13 @@
+jilles      2006/11/30 01:26:09 UTC	(20061130-7311)
+  Log:
+  New motd replacement &mynicks&, number of registered
+  nicknames. Always zero if nickname ownership is disabled.
+  
+
+  Changes:	Modified:
+  +6 -3		trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2006/11/29 17:43:12 UTC	(20061129-7309)
   Log:
   nickserv group: don't allow registering a UID

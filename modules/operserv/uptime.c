@@ -4,7 +4,7 @@
  *
  * This file contains code for OS UPTIME
  *
- * $Id: uptime.c 6927 2006-10-24 15:22:05Z jilles $
+ * $Id: uptime.c 7313 2006-11-30 01:35:29Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/uptime", FALSE, _modinit, _moddeinit,
-	"$Id: uptime.c 6927 2006-10-24 15:22:05Z jilles $",
+	"$Id: uptime.c 7313 2006-11-30 01:35:29Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -44,7 +44,9 @@ static void os_cmd_uptime(sourceinfo_t *si, int parc, char *parv[])
 
         command_success_nodata(si, "atheme-%s [%s] #%s", version, revision, generation);
         command_success_nodata(si, "Services have been up for %s", timediff(CURRTIME - me.start));
-        command_success_nodata(si, "Registered nicknames: %d", cnt.myuser);
+        command_success_nodata(si, "Registered accounts: %d", cnt.myuser);
+	if (!nicksvs.no_nick_ownership)
+        	command_success_nodata(si, "Registered nicknames: %d", cnt.mynick);
         command_success_nodata(si, "Registered channels: %d", cnt.mychan);
         command_success_nodata(si, "Users currently online: %d", cnt.user - me.me->users);
 }
