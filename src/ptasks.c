@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 7299 2006-11-27 10:30:15Z jilles $
+ * $Id: ptasks.c 7311 2006-11-30 01:26:09Z jilles $
  */
 
 #include "atheme.h"
@@ -311,8 +311,9 @@ void handle_motd(user_t *u)
 	FILE *f;
 	char lbuf[BUFSIZE];
 	char ebuf[BUFSIZE];
-	char nbuf[BUFSIZE];
+	char ubuf[BUFSIZE];
 	char cbuf[BUFSIZE];
+	char nbuf[BUFSIZE];
 
 	if (u == NULL)
 		return;
@@ -327,7 +328,8 @@ void handle_motd(user_t *u)
 	}
 
 	snprintf(ebuf, BUFSIZE, "%d", config_options.expire / 86400);
-	snprintf(nbuf, BUFSIZE, "%d", cnt.myuser);
+	snprintf(ubuf, BUFSIZE, "%d", cnt.myuser);
+	snprintf(nbuf, BUFSIZE, "%d", nicksvs.no_nick_ownership ? 0 : cnt.mynick);
 	snprintf(cbuf, BUFSIZE, "%d", cnt.mychan);
 
 	numeric_sts(me.name, 375, u->nick, ":- %s Message of the Day -", me.name);
@@ -338,7 +340,8 @@ void handle_motd(user_t *u)
 
 		replace(lbuf, BUFSIZE, "&network&", me.netname);
 		replace(lbuf, BUFSIZE, "&expiry&", ebuf);
-		replace(lbuf, BUFSIZE, "&myusers&", nbuf);
+		replace(lbuf, BUFSIZE, "&myusers&", ubuf);
+		replace(lbuf, BUFSIZE, "&mynicks&", nbuf);
 		replace(lbuf, BUFSIZE, "&mychans&", cbuf);
 
 		numeric_sts(me.name, 372, u->nick, ":- %s", lbuf);
