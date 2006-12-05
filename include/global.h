@@ -5,7 +5,7 @@
  *
  * Global data
  *
- * $Id: global.h 7233 2006-11-19 19:25:53Z jilles $
+ * $Id: global.h 7317 2006-12-05 00:14:26Z jilles $
  */
 
 #ifndef _GLOBAL_H
@@ -120,6 +120,7 @@ struct cnt
   uint32_t bout;
   uint32_t uplink;
   uint32_t operclass;
+  uint32_t myuser_access;
 };
 
 E struct cnt cnt;
