@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7317 2006-12-05 00:14:26Z jilles $
+ * $Id: account.c 7319 2006-12-05 00:20:01Z jilles $
  */
 
 #include "atheme.h"
@@ -497,6 +497,7 @@ myuser_access_delete(myuser_t *mu, char *mask)
 		if (!strcasecmp(entry, mask))
 		{
 			node_del(n, &mu->access_list);
+			node_free(n);
 			free(entry);
 
 			cnt.myuser_access--;

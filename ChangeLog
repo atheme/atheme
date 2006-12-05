@@ -1,3 +1,14 @@
+jilles      2006/12/05 00:14:26 UTC	(20061205-7317)
+  Log:
+  Show total number of nickname access entries in /stats t.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/global.h (File Modified) 
+  +4 -0		trunk/src/account.c (File Modified) 
+  +1 -0		trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2006/12/05 00:12:47 UTC	(20061205-7315)
   Log:
   Delete access list when deleting an account.
