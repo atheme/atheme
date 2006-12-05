@@ -1,3 +1,12 @@
+jilles      2006/12/05 01:08:00 UTC	(20061205-7323)
+  Log:
+  mychan_delete(): free the metadata
+  
+
+  Changes:	Modified:
+  +8 -0		trunk/src/account.c (File Modified) 
+
+
 jilles      2006/12/05 00:41:51 UTC	(20061205-7321)
   Log:
   myuser_add(): don't create a node that will not be used and leaks
