@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7319 2006-12-05 00:20:01Z jilles $
+ * $Id: account.c 7321 2006-12-05 00:41:51Z jilles $
  */
 
 #include "atheme.h"
@@ -80,7 +80,6 @@ void init_accounts(void)
 myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags)
 {
 	myuser_t *mu;
-	node_t *n;
 	soper_t *soper;
 
 	mu = myuser_find(name);
@@ -93,7 +92,6 @@ myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags)
 
 	slog(LG_DEBUG, "myuser_add(): %s -> %s", name, email);
 
-	n = node_create();
 	mu = BlockHeapAlloc(myuser_heap);
 
 	/* set the password later */
