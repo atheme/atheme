@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7321 2006-12-05 00:41:51Z jilles $
+ * $Id: account.c 7323 2006-12-05 01:08:00Z jilles $
  */
 
 #include "atheme.h"
@@ -641,6 +641,7 @@ void mychan_delete(char *name)
 {
 	mychan_t *mc = mychan_find(name);
 	chanacs_t *ca;
+	metadata_t *md;
 	node_t *n, *tn;
 
 	if (!mc)
@@ -660,6 +661,13 @@ void mychan_delete(char *name)
 			chanacs_delete(ca->mychan, ca->myuser, ca->level);
 		else
 			chanacs_delete_host(ca->mychan, ca->host, ca->level);
+	}
+
+	/* delete the metadata */
+	LIST_FOREACH_SAFE(n, tn, mc->metadata.head)
+	{
+		md = (metadata_t *) n->data;
+		metadata_delete(mc, METADATA_CHANNEL, md->name);
 	}
 
 	dictionary_delete(mclist, mc->name);
