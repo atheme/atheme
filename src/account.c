@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7277 2006-11-25 01:41:18Z jilles $
+ * $Id: account.c 7315 2006-12-05 00:12:47Z jilles $
  */
 
 #include "atheme.h"
@@ -229,6 +229,10 @@ void myuser_delete(myuser_t *mu)
 
 	/* kill any authcookies */
 	authcookie_destroy_all(mu);
+
+	/* delete access entries */
+	LIST_FOREACH_SAFE(n, tn, mu->access_list.head)
+		myuser_access_delete(mu, (char *)n->data);
 
 	/* delete their nicks */
 	LIST_FOREACH_SAFE(n, tn, mu->nicks.head)

@@ -1,3 +1,14 @@
+jilles      2006/11/30 01:35:29 UTC	(20061130-7313)
+  Log:
+  operserv uptime: show both account and nick count and label
+  them properly; if nickname ownership is disabled, nick
+  count is not shown
+  
+
+  Changes:	Modified:
+  +3 -1		trunk/modules/operserv/uptime.c (File Modified) 
+
+
 jilles      2006/11/30 01:26:09 UTC	(20061130-7311)
   Log:
   New motd replacement &mynicks&, number of registered
