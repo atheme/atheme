@@ -1,3 +1,12 @@
+jilles      2006/12/06 15:32:15 UTC	(20061206-7331)
+  Log:
+  Free memos when deleting an account.
+  
+
+  Changes:	Modified:
+  +11 -0	trunk/src/account.c (File Modified) 
+
+
 jilles      2006/12/05 12:00:28 UTC	(20061205-7325)
   Log:
   2.0 is the current stable branch.

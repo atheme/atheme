@@ -35,7 +35,12 @@
  * (this requires using the ircservices crypto module) */
 #define CONVERT_CRYPTPASS
 
-extern NickAlias *nalists[1024];
+/* operclass names */
+#define OPERCLASS_ROOT "sra"
+#define OPERCLASS_ADMIN "admin"
+#define OPERCLASS_OPER "oper"
+
+extern NickCore *nclists[1024];
 extern ChannelInfo *chanlists[256];
 extern SList akills;
 int muout = 0, mcout = 0, caout = 0, klnout = 0;
@@ -44,7 +49,9 @@ FILE *f;
 void write_accounts(void)
 {
 	int i, ii;
-	NickAlias *na;
+	NickCore *nc;
+	NickAlias *na, *na2;
+	time_t registered;
 	int athemeflags;
 	char passwdbuf[33];
 	char *passwd;
@@ -52,17 +59,29 @@ void write_accounts(void)
 	if (!f)
 		return;
 
+	/* NickCore is myuser_t, NickAlias is mynick_t */
 	for (i = 0; i < 1024; i++) {
-		for (na = nalists[i]; na; na = na->next) {
-			if (na->status & NS_VERBOTEN)
-				continue;
-
+		for (nc = nclists[i]; nc; nc = nc->next) {
 			athemeflags = 0;
-			if (na->status & NS_NO_EXPIRE)
-				athemeflags |= 0x1; /* MU_HOLD */
-			if (na->nc->flags & NI_HIDE_EMAIL)
+			na = nc->aliases.list[0];
+			registered = na->time_registered;
+			for (ii = 1; ii < nc->aliases.count; ii++)
+			{
+				na2 = nc->aliases.list[ii];
+				if (na2->status & NS_NO_EXPIRE)
+					athemeflags |= 0x1; /* MU_HOLD */
+				if (na2->last_seen > na->last_seen)
+					na = na2;
+				if (na2->time_registered < registered)
+					registered = na2->time_registered;
+			}
+			if (nc->flags & NI_HIDE_EMAIL)
 				athemeflags |= 0x10; /* MU_HIDEMAIL */
-			if (na->nc->flags & NI_ENCRYPTEDPW)
+#ifdef NI_AUTOOP
+			if (!(nc->flags & NI_AUTOOP))
+				athemeflags |= 0x4; /* MU_NOOP */
+#endif
+			if (nc->flags & NI_ENCRYPTEDPW)
 			{
 #ifdef CONVERT_CRYPTPASS
 				athemeflags |= 0x100; /* MU_CRYPTPASS */
@@ -77,28 +96,47 @@ void write_accounts(void)
 							255 & (int)na->nc->pass[ii]);
 				passwd = passwdbuf;
 #else
-				passwd = na->nick;
+				passwd = nc->display;
 #endif
 			}
 			else
-				passwd = na->nc->pass;
-			if (na->nc->memos.memomax == 0)
+				passwd = nc->pass;
+			if (nc->memos.memomax == 0)
 				athemeflags |= 0x40; /* MU_NOMEMO */
-			fprintf(f, "MU %s %s %s %lu %lu 0 0 0 %d\n", na->nick,
-					passwd, na->nc->email, (unsigned long)na->time_registered,
-					(unsigned long)na->last_seen, athemeflags);
+			fprintf(f, "MU %s %s %s %lu %lu 0 0 0 %d\n",
+					nc->display, passwd, nc->email,
+					(unsigned long)registered,
+					(unsigned long)na->last_seen,
+					athemeflags);
 			if (na->last_usermask != NULL)
 			{
-				/*fprintf(f, "MD U %s private:host:actual %s", na->nick, na->last_usermask);*/
-				fprintf(f, "MD U %s private:host:vhost %s\n", na->nick, na->last_usermask);
+				/*fprintf(f, "MD U %s private:host:actual %s", nc->display, na->last_usermask);*/
+				fprintf(f, "MD U %s private:host:vhost %s\n", nc->display, na->last_usermask);
 			}
-			if (na->nc->greet)
-				fprintf(f, "MD U %s greet %s\n", na->nick, na->nc->greet);
-			if (na->nc->icq)
-				fprintf(f, "MD U %s icq %u\n", na->nick, (unsigned int)na->nc->icq);
-			if (na->nc->url)
-				fprintf(f, "MD U %s url %s\n", na->nick, na->nc->url);
-						
+			if (nc->greet)
+				fprintf(f, "MD U %s greet %s\n", nc->display, nc->greet);
+			if (nc->icq)
+				fprintf(f, "MD U %s icq %u\n", nc->display, (unsigned int)nc->icq);
+			if (nc->url)
+				fprintf(f, "MD U %s url %s\n", nc->display, nc->url);
+			if (nc->flags & NI_SERVICES_ROOT)
+				fprintf(f, "SO %s %s 0\n", nc->display, OPERCLASS_ROOT);
+			else if (nc->flags & NI_SERVICES_ADMIN)
+				fprintf(f, "SO %s %s 0\n", nc->display, OPERCLASS_ADMIN);
+			else if (nc->flags & NI_SERVICES_OPER)
+				fprintf(f, "SO %s %s 0\n", nc->display, OPERCLASS_OPER);
+
+			for (ii = 0; ii < nc->accesscount; ii++)
+				fprintf(f, "AC %s %s\n", nc->display,
+						nc->access[ii]);
+			for (ii = 0; ii < nc->aliases.count; ii++)
+			{
+				na = nc->aliases.list[ii];
+				fprintf(f, "MN %s %s %ld %ld\n", nc->display,
+						na->nick, (unsigned long)na->time_registered,
+						(unsigned long)na->last_seen);
+			}
+
 			muout++;
 		}
 	}
