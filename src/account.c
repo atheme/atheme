@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7323 2006-12-05 01:08:00Z jilles $
+ * $Id: account.c 7331 2006-12-06 15:32:15Z jilles $
  */
 
 #include "atheme.h"
@@ -148,6 +148,7 @@ void myuser_delete(myuser_t *mu)
 	user_t *u;
 	node_t *n, *tn;
 	metadata_t *md;
+	mymemo_t *memo;
 	dictionary_iteration_state_t state;
 
 	if (!mu)
@@ -227,6 +228,16 @@ void myuser_delete(myuser_t *mu)
 
 	/* kill any authcookies */
 	authcookie_destroy_all(mu);
+
+	/* delete memos */
+	LIST_FOREACH_SAFE(n, tn, mu->memos.head)
+	{
+		memo = (mymemo_t *)n->data;
+
+		node_del(n, &mu->memos);
+		node_free(n);
+		free(memo);
+	}
 
 	/* delete access entries */
 	LIST_FOREACH_SAFE(n, tn, mu->access_list.head)
