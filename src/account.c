@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7331 2006-12-06 15:32:15Z jilles $
+ * $Id: account.c 7339 2006-12-07 20:02:49Z jilles $
  */
 
 #include "atheme.h"
@@ -160,17 +160,14 @@ void myuser_delete(myuser_t *mu)
 	slog(LG_DEBUG, "myuser_delete(): %s", mu->name);
 
 	/* log them out */
-	if (authservice_loaded)
+	LIST_FOREACH_SAFE(n, tn, mu->logins.head)
 	{
-		LIST_FOREACH_SAFE(n, tn, mu->logins.head)
+		u = (user_t *)n->data;
+		if (!authservice_loaded || !ircd_on_logout(u->nick, mu->name, NULL))
 		{
-			u = (user_t *)n->data;
-			if (!ircd_on_logout(u->nick, mu->name, NULL))
-			{
-				u->myuser = NULL;
-				node_del(n, &mu->logins);
-				node_free(n);
-			}
+			u->myuser = NULL;
+			node_del(n, &mu->logins);
+			node_free(n);
 		}
 	}
 
