@@ -4,7 +4,7 @@
  *
  * Channel stuff.
  *
- * $Id: channels.c 7263 2006-11-24 22:55:12Z jilles $
+ * $Id: channels.c 7337 2006-12-07 19:36:28Z jilles $
  */
 
 #include "atheme.h"
@@ -167,8 +167,14 @@ void channel_delete(const char *name)
 		mc->chan = NULL;
 
 	clear_simple_modes(c);
+	chanban_clear(c);
 
 	free(c->name);
+	if (c->topic != NULL)
+		free(c->topic);
+	if (c->topic_setter != NULL)
+		free(c->topic_setter);
+
 	BlockHeapFree(chan_heap, c);
 
 	cnt.chan--;

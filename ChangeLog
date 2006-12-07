@@ -1,3 +1,13 @@
+jilles      2006/12/07 00:27:57 UTC	(20061207-7335)
+  Log:
+  Add sourceinfo pointer to hook_channel_req_t (channel_info hook).
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/account.h (File Modified) 
+  +1 -0		trunk/modules/chanserv/info.c (File Modified) 
+
+
 jilles      2006/12/06 22:43:21 UTC	(20061206-7333)
   Log:
   anope->atheme conversion tool:
