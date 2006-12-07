@@ -1,3 +1,16 @@
+jilles      2006/12/06 22:43:21 UTC	(20061206-7333)
+  Log:
+  anope->atheme conversion tool:
+  - support new anope nick "autoop" flag (set atheme NOOP if it is not set)
+  - convert services roots/admins/opers
+  - convert nickname access lists
+  - support nickname grouping
+  
+
+  Changes:	Modified:
+  +63 -25	trunk/contrib/anope_convert.c (File Modified) 
+
+
 jilles      2006/12/06 15:32:15 UTC	(20061206-7331)
   Log:
   Free memos when deleting an account.
