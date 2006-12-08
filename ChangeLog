@@ -1,3 +1,12 @@
+jilles      2006/12/08 14:07:52 UTC	(20061208-7345)
+  Log:
+  Update release notes.
+  
+
+  Changes:	Modified:
+  +8 -0		trunk/doc/RELEASE (File Modified) 
+
+
 jilles      2006/12/08 13:58:23 UTC	(20061208-7343)
   Log:
   gen_vhostonreg: if the account name contains invalid

@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 7335 2006-12-07 00:27:57Z jilles $
+ * $Id: account.h 7347 2006-12-08 19:46:02Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -210,6 +210,12 @@ typedef struct {
 	mychan_t *mc;
 	sourceinfo_t *si;
 } hook_channel_req_t;
+
+typedef struct {
+	sourceinfo_t *si;
+	myuser_t *mu;
+	mynick_t *mn;
+} hook_user_req_t;
 
 /* pmodule.c XXX */
 E boolean_t backend_loaded;

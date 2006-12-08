@@ -1,4 +1,4 @@
-$Id: HOOKS 6687 2006-10-14 15:15:05Z jilles $
+$Id: HOOKS 7347 2006-12-08 19:46:02Z jilles $
 
 Atheme hooks system
 
@@ -36,4 +36,5 @@ channel_register   mychan_t *
 sasl_input         sasl_message_t *
 user_drop          myuser_t *
 user_identify      user_t *
+user_info          hook_user_req_t *
 user_register      myuser_t *
