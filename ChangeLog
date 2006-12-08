@@ -1,3 +1,16 @@
+jilles      2006/12/08 13:58:23 UTC	(20061208-7343)
+  Log:
+  gen_vhostonreg: if the account name contains invalid
+  characters or would cause a too long vhost, strip
+  the invalid characters or truncate it, and add a
+  five-digit number to make it unique. Warn the user
+  about this.
+  
+
+  Changes:	Modified:
+  +44 -3	trunk/contrib/gen_vhostonreg.c (File Modified) 
+
+
 jilles      2006/12/08 00:01:54 UTC	(20061208-7341)
   Log:
   Update comments for channel_delete().
