@@ -4,7 +4,7 @@
  *
  * Channel stuff.
  *
- * $Id: channels.c 7337 2006-12-07 19:36:28Z jilles $
+ * $Id: channels.c 7341 2006-12-08 00:01:54Z jilles $
  */
 
 #include "atheme.h"
@@ -123,7 +123,7 @@ channel_t *channel_add(const char *name, uint32_t ts)
  *
  * Side Effects:
  *     - channel_delete hook is called
- *     - a channel and its members are recursively destroyed
+ *     - a channel and all attached structures are destroyed
  *     - no protocol messages are sent for any remaining members
  */
 void channel_delete(const char *name)
@@ -158,8 +158,6 @@ void channel_delete(const char *name)
 	c->nummembers = 0;
 
 	hook_call_event("channel_delete", c);
-
-	/* we assume all lists should be null */
 
 	dictionary_delete(chanlist, c->name);
 
