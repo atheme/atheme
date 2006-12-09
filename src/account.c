@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7339 2006-12-07 20:02:49Z jilles $
+ * $Id: account.c 7353 2006-12-09 23:28:18Z jilles $
  */
 
 #include "atheme.h"
@@ -715,11 +715,9 @@ boolean_t mychan_isused(mychan_t *mc)
 myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t minlevel, int maxtime)
 {
 	int tcnt;
-	node_t *n;
-	chanacs_t *ca;
-	mychan_t *tmc;
+	node_t *n, *n2;
+	chanacs_t *ca, *ca2;
 	myuser_t *mu;
-	dictionary_iteration_state_t state;
 
 	LIST_FOREACH(n, mc->chanacs.head)
 	{
@@ -734,12 +732,13 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t minlevel, int maxtime)
 			if (has_priv_myuser(mu, PRIV_REG_NOLIMIT))
 				return mu;
 			tcnt = 0;
-			DICTIONARY_FOREACH(tmc, &state, mclist)
+			LIST_FOREACH(n2, mu->chanacs.head)
 			{
-				if (is_founder(tmc, mu))
+				ca2 = n2->data;
+				if (is_founder(ca2->mychan, mu))
 					tcnt++;
 			}
-		
+
 			if (tcnt < me.maxchans)
 				return mu;
 		}

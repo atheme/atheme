@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 7291 2006-11-25 21:25:35Z jilles $
+ * $Id: set.c 7353 2006-12-09 23:28:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 7291 2006-11-25 21:25:35Z jilles $",
+	"$Id: set.c 7353 2006-12-09 23:28:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -368,15 +368,16 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 			&& (md = metadata_find(mc, METADATA_CHANNEL, "private:verify:founderchg:timestamp"))
 			&& (atol(md->value) >= si->smu->registered))
 		{
-			mychan_t *tmc;
+			node_t *n;
+			chanacs_t *ca;
 			uint32_t tcnt;
-			dictionary_iteration_state_t state;
 
 			/* make sure they're within limits (from cs_cmd_register) */
 			tcnt = 0;
-			DICTIONARY_FOREACH(tmc, &state, mclist)
+			LIST_FOREACH(n, tmu->chanacs.head)
 			{
-				if (is_founder(tmc, tmu))
+				ca = n->data;
+				if (is_founder(ca->mychan, tmu))
 					tcnt++;
 			}
 

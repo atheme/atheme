@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService REGISTER function.
  *
- * $Id: register.c 7277 2006-11-25 01:41:18Z jilles $
+ * $Id: register.c 7353 2006-12-09 23:28:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 7277 2006-11-25 01:41:18Z jilles $",
+	"$Id: register.c 7353 2006-12-09 23:28:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -43,11 +43,12 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c;
 	chanuser_t *cu;
-	mychan_t *mc, *tmc;
+	mychan_t *mc;
 	char *name = parv[0];
 	uint32_t tcnt;
 	char str[21];
-	dictionary_iteration_state_t state;
+	node_t *n;
+	chanacs_t *ca;
 
 	if (!name)
 	{
@@ -106,9 +107,10 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 
 	/* make sure they're within limits */
 	tcnt = 0;
-	DICTIONARY_FOREACH(tmc, &state, mclist)
+	LIST_FOREACH(n, si->smu->chanacs.head)
 	{
-		if (is_founder(tmc, si->smu))
+		ca = n->data;
+		if (is_founder(ca->mychan, si->smu))
 			tcnt++;
 	}
 
