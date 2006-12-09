@@ -23,7 +23,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/enforce",FALSE, _modinit, _moddeinit,
-	"$Id: enforce.c 7279 2006-11-25 01:52:02Z jilles $",
+	"$Id: enforce.c 7351 2006-12-09 20:54:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -31,6 +31,7 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[]);
 static void reg_check(void *arg);
 static void remove_idcheck(void *vuser);
+static void show_enforce(void *vdata);
 
 command_t ns_set_enforce = { "ENFORCE", "Enables or disables automatic protection of a nickname.", AC_NONE, 1, ns_cmd_set_enforce }; 
 command_t ns_release = { "RELEASE", "Releases a services enforcer.", AC_NONE, 2, ns_cmd_release };
@@ -283,6 +284,14 @@ static void remove_idcheck(void *vuser)
 	u->flags &= ~UF_NICK_WARNED;
 }
 
+static void show_enforce(void *vdata)
+{
+	hook_user_req_t *hdata = vdata;
+
+	if (metadata_find(hdata->mu, METADATA_USER, "private:doenforce"))
+		command_success_nodata(hdata->si, "%s has enabled nick protection", hdata->mu->name);
+}
+
 static int idcheck_foreach_cb(dictionary_elem_t *delem, void *privdata)
 {
 	metadata_t *md;
@@ -313,6 +322,8 @@ void _modinit(module_t *m)
 	help_addentry(ns_helptree, "SET ENFORCE", "help/nickserv/set_enforce", NULL);
 	hook_add_event("user_identify");
 	hook_add_hook("user_identify", remove_idcheck);
+	hook_add_event("user_info");
+	hook_add_hook("user_info", show_enforce);
 }
 
 void _moddeinit()
@@ -324,4 +335,5 @@ void _moddeinit()
 	help_delentry(ns_helptree, "RELEASE");
 	help_delentry(ns_helptree, "SET ENFORCE");
 	hook_del_hook("user_identify", remove_idcheck);
+	hook_del_hook("user_info", show_enforce);
 }

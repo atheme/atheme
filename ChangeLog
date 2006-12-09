@@ -1,3 +1,12 @@
+jilles      2006/12/08 21:14:05 UTC	(20061208-7349)
+  Log:
+  Mention channel_can_change_topic hook.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/doc/HOOKS (File Modified) 
+
+
 jilles      2006/12/08 19:46:02 UTC	(20061208-7347)
   Log:
   Add user_info hook, allows modules to add things to /ns info.
