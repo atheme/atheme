@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
  *
- * $Id: nefarious.c 7281 2006-11-25 02:01:13Z jilles $
+ * $Id: nefarious.c 7357 2006-12-10 22:15:34Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 7281 2006-11-25 02:01:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 7357 2006-12-10 22:15:34Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -202,7 +202,7 @@ static void nefarious_notice_global_sts(user_t *from, const char *mask, const ch
 		LIST_FOREACH(n, tldlist.head)
 		{
 			tld = n->data;
-			sts(":%s O %s*%s :%s", from ? from->uid : me.numeric, ircd->tldprefix, tld->name, text);
+			sts("%s O %s*%s :%s", from ? from->uid : me.numeric, ircd->tldprefix, tld->name, text);
 		}
 	}
 	else
@@ -212,9 +212,9 @@ static void nefarious_notice_global_sts(user_t *from, const char *mask, const ch
 static void nefarious_notice_channel_sts(user_t *from, channel_t *target, const char *text)
 {
 	if (from == NULL || chanuser_find(target, from))
-		sts(":%s O %s :%s", from ? from->uid : me.numeric, target->name, text);
+		sts("%s O %s :%s", from ? from->uid : me.numeric, target->name, text);
 	else
-		sts(":%s O %s :[%s:%s] %s", me.numeric, target->name, from->nick, target->name, text);
+		sts("%s O %s :[%s:%s] %s", me.numeric, target->name, from->nick, target->name, text);
 }
 
 static void nefarious_wallchops(user_t *sender, channel_t *channel, char *message)

@@ -1,3 +1,14 @@
+jilles      2006/12/10 00:02:49 UTC	(20061210-7355)
+  Log:
+  nickserv register: show who registered the nick/account
+  if nickname registration is disabled or the command did
+  not come from IRC.
+  
+
+  Changes:	Modified:
+  +5 -1		trunk/modules/nickserv/register.c (File Modified) 
+
+
 jilles      2006/12/09 23:28:18 UTC	(20061209-7353)
   Log:
   When checking whether a user has too many channels
