@@ -1,3 +1,20 @@
+jilles      2006/12/09 23:28:18 UTC	(20061209-7353)
+  Log:
+  When checking whether a user has too many channels
+  registered, iterate over their channel access instead
+  of over all registered channels (happens when an
+  account is dropped and a new founder has to be sought
+  for their channels, when a channel is registered and
+  when foundership is transferred with /cs set founder).
+  Legacy xmlrpc code unchanged.
+  
+
+  Changes:	Modified:
+  +6 -4		trunk/modules/chanserv/register.c (File Modified) 
+  +5 -4		trunk/modules/chanserv/set.c (File Modified) 
+  +6 -7		trunk/src/account.c (File Modified) 
+
+
 jilles      2006/12/09 20:54:13 UTC	(20061209-7351)
   Log:
   Show an extra line in /ns info (to all users)

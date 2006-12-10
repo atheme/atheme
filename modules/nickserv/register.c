@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 7179 2006-11-17 19:58:40Z jilles $
+ * $Id: register.c 7355 2006-12-10 00:02:49Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 7179 2006-11-17 19:58:40Z jilles $",
+	"$Id: register.c 7355 2006-12-10 00:02:49Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -189,7 +189,11 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 			ircd_on_login(si->su->nick, mu->name, NULL);
 	}
 
-	snoop("REGISTER: \2%s\2 to \2%s\2", account, email);
+	if (!nicksvs.no_nick_ownership && si->su != NULL)
+		snoop("REGISTER: \2%s\2 to \2%s\2", account, email);
+	else
+		snoop("REGISTER: \2%s\2 to \2%s\2 by \2%s\2", account, email,
+				si->su != NULL ? si->su->nick : get_source_name(si));
 	logcommand(si, CMDLOG_REGISTER, "REGISTER to %s", email);
 	if (is_soper(mu))
 	{
