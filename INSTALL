@@ -19,8 +19,11 @@ You should also read the README and FAQ files.
 1. INSTALLATION
 ---------------
 
-IMPORTANT NOTE: it is not recommended to use (and therefore install) Atheme as
-root. Use an unprivileged user account.
+NOTE: if you are using a third party package of Atheme, most of this section
+will not apply.
+
+IMPORTANT NOTE: it is not recommended to use and install Atheme as root.
+Use an unprivileged user account.
 
 Atheme should compile and run on most POSIX compliant systems.  The list of
 platforms that Atheme has been tested on includes:
@@ -71,6 +74,9 @@ Atheme will compile. To install, type:
 
 The newly-compiled binary and several supporting files will be copied to the
 directory you specified in the "configure" script.
+
+It is recommended to keep the source directory; you will need it to
+(re)compile modules later.
 
 Next, you'll want to go to the directory you specified in "configure" and edit
 etc/atheme.conf. You'll need to change every setting or Atheme will not work.
