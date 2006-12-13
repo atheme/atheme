@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 7233 2006-11-19 19:25:53Z jilles $
+ * $Id: conf.c 7363 2006-12-13 00:49:59Z jilles $
  */
 
 #include "atheme.h"
@@ -48,6 +48,7 @@ static int c_si_mta(CONFIGENTRY *);
 static int c_si_loglevel(CONFIGENTRY *);
 static int c_si_maxlogins(CONFIGENTRY *);
 static int c_si_maxusers(CONFIGENTRY *);
+static int c_si_maxnicks(CONFIGENTRY *);
 static int c_si_maxchans(CONFIGENTRY *);
 static int c_si_emaillimit(CONFIGENTRY *);
 static int c_si_emailtime(CONFIGENTRY *);
@@ -242,7 +243,7 @@ void conf_init(void)
 	me.netname = me.hidehostsuffix = me.adminname = me.adminemail = me.mta = chansvs.nick = config_options.chan = 
 		config_options.global = config_options.languagefile = NULL;
 
-	me.recontime = me.restarttime = me.maxlogins = me.maxusers = me.maxchans = me.emaillimit = me.emailtime = 
+	me.recontime = me.restarttime = me.maxlogins = me.maxusers = me.maxnicks = me.maxchans = me.emaillimit = me.emailtime = 
 		config_options.flood_msgs = config_options.flood_time = config_options.kline_time = config_options.commit_interval =
 		config_options.expire = 0;
 
@@ -488,6 +489,7 @@ void init_newconf(void)
 	add_conf_item("LOGLEVEL", &conf_si_table, c_si_loglevel);
 	add_conf_item("MAXLOGINS", &conf_si_table, c_si_maxlogins);
 	add_conf_item("MAXUSERS", &conf_si_table, c_si_maxusers);
+	add_conf_item("MAXNICKS", &conf_si_table, c_si_maxnicks);
 	add_conf_item("MAXCHANS", &conf_si_table, c_si_maxchans);
 	add_conf_item("EMAILLIMIT", &conf_si_table, c_si_emaillimit);
 	add_conf_item("EMAILTIME", &conf_si_table, c_si_emailtime);
@@ -1077,6 +1079,16 @@ static int c_si_maxusers(CONFIGENTRY *ce)
 
 }
 
+static int c_si_maxnicks(CONFIGENTRY *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	me.maxnicks = ce->ce_vardatanum;
+
+	return 0;
+}
+
 static int c_si_maxchans(CONFIGENTRY *ce)
 {
 	if (ce->ce_vardata == NULL)
@@ -1664,6 +1676,7 @@ static void copy_me(struct me *src, struct me *dst)
 	dst->loglevel = src->loglevel;
 	dst->maxlogins = src->maxlogins;
 	dst->maxusers = src->maxusers;
+	dst->maxnicks = src->maxnicks;
 	dst->maxchans = src->maxchans;
 	dst->emaillimit = src->emaillimit;
 	dst->emailtime = src->emailtime;
@@ -1815,6 +1828,13 @@ boolean_t conf_check(void)
 	{
 		slog(LG_INFO, "conf_check(): no `maxusers' set in %s; " "defaulting to 5", config_file);
 		me.maxusers = 5;
+	}
+
+	if (!me.maxnicks)
+	{
+		if (!nicksvs.no_nick_ownership)
+			slog(LG_INFO, "conf_check(): no `maxnicks' set in %s; " "defaulting to 5", config_file);
+		me.maxnicks = 5;
 	}
 
 	if (!me.maxchans)

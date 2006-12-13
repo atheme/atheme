@@ -1,3 +1,15 @@
+jilles      2006/12/10 22:15:34 UTC	(20061210-7357)
+  Log:
+  P10: remove colons on prefixes (channel, global notices)
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/protocol/asuka.c (File Modified) 
+  +3 -3		trunk/protocol/bircd.c (File Modified) 
+  +3 -3		trunk/protocol/nefarious.c (File Modified) 
+  +3 -3		trunk/protocol/undernet.c (File Modified) 
+
+
 jilles      2006/12/10 00:02:49 UTC	(20061210-7355)
   Log:
   nickserv register: show who registered the nick/account

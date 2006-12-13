@@ -5,7 +5,7 @@
  *
  * Global data
  *
- * $Id: global.h 7317 2006-12-05 00:14:26Z jilles $
+ * $Id: global.h 7363 2006-12-13 00:49:59Z jilles $
  */
 
 #ifndef _GLOBAL_H
@@ -43,6 +43,7 @@ struct me
 
   uint16_t maxlogins;           /* maximum logins per username        */
   uint16_t maxusers;            /* maximum usernames from one email   */
+  uint16_t maxnicks;            /* maximum nicks from one username    */
   uint16_t maxchans;            /* maximum chans from one username    */
   uint8_t auth;                 /* registration auth type             */
   uint16_t emaillimit;          /* maximum number of emails sent      */

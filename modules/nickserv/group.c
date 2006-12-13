@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ GROUP command.
  *
- * $Id: group.c 7309 2006-11-29 17:43:12Z jilles $
+ * $Id: group.c 7363 2006-12-13 00:49:59Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/group", FALSE, _modinit, _moddeinit,
-	"$Id: group.c 7309 2006-11-29 17:43:12Z jilles $",
+	"$Id: group.c 7363 2006-12-13 00:49:59Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -65,8 +65,7 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	/* XXX */
-	if (LIST_LENGTH(&si->smu->nicks) >= me.maxusers && !has_priv(si, PRIV_REG_NOLIMIT))
+	if (LIST_LENGTH(&si->smu->nicks) >= me.maxnicks && !has_priv(si, PRIV_REG_NOLIMIT))
 	{
 		command_fail(si, fault_noprivs, "You have too many nicks registered already.");
 		return;
