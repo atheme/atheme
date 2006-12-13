@@ -4,7 +4,7 @@ This prevents people from being able to send you
 a memo. If you do not want to receive memos, you
 can just turn them off for your nick.
 
-Syntax: SET NOMEMO [ON|OFF]
+Syntax: SET NOMEMO ON|OFF
 
 Example:
     /msg &nick& SET NOMEMO ON
