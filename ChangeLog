@@ -1,3 +1,13 @@
+jilles      2006/12/13 01:47:57 UTC	(20061213-7367)
+  Log:
+  Helpfile consistency fixes.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/help/nickserv/release (File Modified) 
+  +1 -1		trunk/help/nickserv/set_nomemo (File Modified) 
+
+
 jilles      2006/12/13 01:22:38 UTC	(20061213-7365)
   Log:
   Clarify maxlogins (per username, not nickname).

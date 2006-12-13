@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 7283 2006-11-25 14:27:10Z jilles $
+dnl $Id: configure.ac 7369 2006-12-13 18:29:51Z jilles $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.57)
 AC_INIT(atheme, 2.1, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 7283 2006-11-25 14:27:10Z jilles $])
+AC_COPYRIGHT([$Id: configure.ac 7369 2006-12-13 18:29:51Z jilles $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -155,7 +155,7 @@ RUNDIR="var"
 FHSPATHS="no"
 AC_MSG_CHECKING(if you want FHS-like pathnames)
 AC_ARG_ENABLE(fhs-paths,
-AC_HELP_STRING([--enable-fhs-paths],[ Use more FHS-like pathnames.]),
+AC_HELP_STRING([--enable-fhs-paths],[ Use more FHS-like pathnames (for packagers).]),
 [
   case "$enableval" in
   yes)
