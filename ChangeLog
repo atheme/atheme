@@ -1,3 +1,12 @@
+jilles      2006/12/13 18:29:51 UTC	(20061213-7369)
+  Log:
+  Clarify that --enable-fhs-paths is only meant for packagers.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/configure.ac (File Modified) 
+
+
 jilles      2006/12/13 01:47:57 UTC	(20061213-7367)
   Log:
   Helpfile consistency fixes.

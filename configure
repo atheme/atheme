@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# $Id: configure.ac 7283 2006-11-25 14:27:10Z jilles $
+# $Id: configure.ac 7369 2006-12-13 18:29:51Z jilles $
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -846,7 +846,7 @@ if test -n "$ac_init_help"; then
 Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enable-fhs-paths      Use more FHS-like pathnames.
+  --enable-fhs-paths      Use more FHS-like pathnames (for packagers).
   --enable-large-net      Enable large network support.
   --disable-balloc        Disable the block allocator.
   --disable-ssl           don't use OpenSSL to provide more SASL mechanisms
@@ -974,7 +974,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-$Id: configure.ac 7283 2006-11-25 14:27:10Z jilles $
+$Id: configure.ac 7369 2006-12-13 18:29:51Z jilles $
 _ACEOF
   exit 0
 fi
