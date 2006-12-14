@@ -1,3 +1,15 @@
+jilles      2006/12/13 19:39:27 UTC	(20061213-7373)
+  Log:
+  INSTALL:
+  - add note about packages
+  - stronger recommendation against installing as root
+  - recommend keeping the source directory
+  
+
+  Changes:	Modified:
+  +8 -2		trunk/INSTALL (File Modified) 
+
+
 jilles      2006/12/13 18:30:11 UTC	(20061213-7371)
   Log:
   Rerun autoconf.
