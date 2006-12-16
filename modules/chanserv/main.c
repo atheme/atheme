@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 7277 2006-11-25 01:41:18Z jilles $
+ * $Id: main.c 7377 2006-12-16 15:59:44Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 7277 2006-11-25 01:41:18Z jilles $",
+	"$Id: main.c 7377 2006-12-16 15:59:44Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -59,7 +59,6 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc = NULL;
 	char orig[BUFSIZE];
 	char newargs[BUFSIZE];
-	uint32_t oldflags;
 	char *cmd;
 	char *args;
 
@@ -115,7 +114,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 		command_exec_split(si->service, si, cmd, strtok(NULL, ""), &cs_cmdtree);
 	else
 	{
-		if (strlen(cmd) > 2 && cmd[0] == chansvs.trigger && strcasecmp(cmd + 1, "set") && isalpha(cmd[1]))
+		if (strlen(cmd) > 2 && cmd[0] == chansvs.trigger && isalpha(cmd[1]))
 		{
 			/* XXX not really nice to look up the command twice
 			 * -- jilles */
@@ -134,14 +133,11 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 			/* let the command know it's called as fantasy cmd */
 			si->c = mc->chan;
 			/* fantasy commands are always verbose
-			 * (due to the way this works, we can't allow !set)
+			 * (a little ugly but this way we can !set verbose)
 			 */
-			oldflags = mc->flags & MC_VERBOSE_MASK;
-			mc->flags &= ~MC_VERBOSE_MASK;
-			mc->flags |= MC_VERBOSE;
+			mc->flags |= MC_FORCEVERBOSE;
 			command_exec_split(si->service, si, cmd + 1, newargs, &cs_cmdtree);
-			mc->flags &= ~MC_VERBOSE_MASK;
-			mc->flags |= oldflags;
+			mc->flags &= ~MC_FORCEVERBOSE;
 		}
 	}
 }

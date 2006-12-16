@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 7263 2006-11-24 22:55:12Z jilles $
+ * $Id: services.c 7377 2006-12-16 15:59:44Z jilles $
  */
 
 #include "atheme.h"
@@ -228,7 +228,7 @@ void verbose(mychan_t *mychan, char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	if (MC_VERBOSE & mychan->flags)
+	if ((MC_VERBOSE | MC_FORCEVERBOSE) & mychan->flags)
 		notice(chansvs.nick, mychan->name, "%s", buf);
 	else if (MC_VERBOSE_OPS & mychan->flags)
 		wallchops(chansvs.me->me, mychan->chan, buf);
