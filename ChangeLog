@@ -1,3 +1,14 @@
+jilles      2006/12/16 15:59:44 UTC	(20061216-7377)
+  Log:
+  Add MC_FORCEVERBOSE mychan flag so SET can be used as a fantasy command.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/account.h (File Modified) 
+  +4 -8		trunk/modules/chanserv/main.c (File Modified) 
+  +1 -1		trunk/src/services.c (File Modified) 
+
+
 jilles      2006/12/14 18:54:38 UTC	(20061214-7375)
   Log:
   Add a ruby example for atheme xmlrpc.

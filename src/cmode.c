@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 6963 2006-10-26 22:30:51Z jilles $
+ * $Id: cmode.c 7379 2006-12-17 23:03:52Z jilles $
  */
 
 #include "atheme.h"
@@ -42,13 +42,14 @@ int32_t mode_to_flag(char c)
 void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 {
 	boolean_t matched = FALSE;
-	boolean_t chanserv_reopped = FALSE;
 	boolean_t simple_modes_changed = FALSE;
 	int i, parpos = 0, whatt = MTYPE_NUL;
 	uint32_t newlimit;
 	const char *pos = parv[0];
 	mychan_t *mc;
 	chanuser_t *cu = NULL;
+	user_t *first_deopped_service = NULL;
+	node_t *n;
 
 	if ((!pos) || (*pos == '\0'))
 		return;
@@ -271,15 +272,36 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 				{
 					if (cu->user->server == me.me && status_mode_list[i].value == CMODE_OP)
 					{
-						if (source == NULL && (chansvs.me == NULL || cu->user != chansvs.me->me || chanserv_reopped == FALSE))
+						if (source == NULL)
 						{
-							slog(LG_DEBUG, "channel_mode(): deopped on %s, rejoining", cu->chan->name);
+							if (first_deopped_service == NULL)
+							{
+								if (chan->nummembers > 1)
+								{
+									slog(LG_DEBUG, "channel_mode(): %s deopped on %s, rejoining", cu->user->nick, cu->chan->name);
+									part(cu->chan->name, cu->user->nick);
+									join(cu->chan->name, cu->user->nick);
+								}
+								else
+								{
+									slog(LG_DEBUG, "channel_mode(): %s deopped on %s, opping from other service", cu->user->nick, cu->chan->name);
+									LIST_FOREACH(n, me.me->userlist.head)
+									{
+										if (n->data != cu->user)
+										{
+											modestack_mode_param(((user_t *)n->data)->nick, chan->name, MTYPE_ADD, *pos, CLIENT_NAME(cu->user));
+											break;
+										}
+									}
+								}
+								first_deopped_service = cu->user;
+							}
+							else if (first_deopped_service != cu->user)
+							{
+								slog(LG_DEBUG, "channel_mode(): %s deopped on %s, opping from %s", cu->user->nick, cu->chan->name, first_deopped_service->nick);
+								modestack_mode_param(first_deopped_service->nick, chan->name, MTYPE_ADD, *pos, CLIENT_NAME(cu->user));
+							}
 
-							part(cu->chan->name, cu->user->nick);
-							join(cu->chan->name, cu->user->nick);
-
-							if (chansvs.me != NULL && cu->user == chansvs.me->me)
-								chanserv_reopped = TRUE;
 						}
 
 						continue;
