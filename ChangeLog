@@ -1,3 +1,15 @@
+jilles      2006/12/23 22:53:28 UTC	(20061223-7381)
+  Log:
+  Add user_can_register hook, allows modules to abort
+  account registrations before they go through.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/doc/HOOKS (File Modified) 
+  +7 -0		trunk/include/account.h (File Modified) 
+  +9 -0		trunk/modules/nickserv/register.c (File Modified) 
+
+
 jilles      2006/12/17 23:03:52 UTC	(20061217-7379)
   Log:
   Change what happens when a service is deopped:
