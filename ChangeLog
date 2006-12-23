@@ -1,3 +1,21 @@
+jilles      2006/12/17 23:03:52 UTC	(20061217-7379)
+  Log:
+  Change what happens when a service is deopped:
+  - if a service has already been deopped in this mode change,
+    skip it if it is the same service, otherwise reop from that service
+  - otherwise, if the service is alone in the channel, reop it from
+    another service (the protocol module will arrange for this to work,
+    e.g. by sending from the server if necessary)
+  - otherwise, part and join as before
+  
+  Note that this has nothing to do with deops implicit
+  in lowerTS BURST/FJOIN/JOIN/SJOIN.
+  
+
+  Changes:	Modified:
+  +30 -8	trunk/src/cmode.c (File Modified) 
+
+
 jilles      2006/12/16 15:59:44 UTC	(20061216-7377)
   Log:
   Add MC_FORCEVERBOSE mychan flag so SET can be used as a fantasy command.

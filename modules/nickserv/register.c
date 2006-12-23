@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 7355 2006-12-10 00:02:49Z jilles $
+ * $Id: register.c 7381 2006-12-23 22:53:28Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 7355 2006-12-10 00:02:49Z jilles $",
+	"$Id: register.c 7381 2006-12-23 22:53:28Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -63,6 +63,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	char *pass = parv[0];
 	char *email = parv[1];
 	char lau[BUFSIZE], lao[BUFSIZE];
+	hook_user_register_check_t hdata;
 
 	if (si->smu)
 	{
@@ -135,6 +136,14 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_alreadyexists, "\2%s\2 is already registered.", account);
 		return;
 	}
+
+	hdata.si = si;
+	hdata.account = account;
+	hdata.email = email;
+	hdata.approved = 0;
+	hook_call_event("user_can_register", &hdata);
+	if (hdata.approved != 0)
+		return;
 
 	/* make sure they're within limits */
 	tcnt = 0;

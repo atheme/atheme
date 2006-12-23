@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 7377 2006-12-16 15:59:44Z jilles $
+ * $Id: account.h 7381 2006-12-23 22:53:28Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -217,6 +217,13 @@ typedef struct {
 	myuser_t *mu;
 	mynick_t *mn;
 } hook_user_req_t;
+
+typedef struct {
+	sourceinfo_t *si;
+	const char *account;
+	const char *email;
+	int approved; /* Write non-zero here to disallow the registration */
+} hook_user_register_check_t;
 
 /* pmodule.c XXX */
 E boolean_t backend_loaded;
