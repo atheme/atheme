@@ -99,7 +99,9 @@ network, you'll need to add some lines in your IRCd's configuration. Atheme
 connects to IRCd, not the other way around.
 
 This is where I can't help you. Every IRCd is different. Look for documentation
-for "connect{}" or "link{}" or "C/N lines" for your IRCd.
+for "connect{}" or "link{}" or "C/N lines" for your IRCd. You need to allow
+Atheme to introduce other servers (e.g. "hub_mask" or "H line"), otherwise
+it will probably be disconnected when the OperServ JUPE command is used.
 
 To be perfectly honest, if you can't figure this out you should be running
 neither IRCd nor services.
