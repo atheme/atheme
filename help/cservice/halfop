@@ -1,4 +1,4 @@
-Help for OP|DEOP|VOICE|DEVOICE:
+Help for HALFOP|DEHALFOP:
 
 These commands perform status mode changes on a channel.
 
@@ -8,9 +8,7 @@ notified that you did it.
 If the last parameter is omitted the action is performed
 on the person requesting the command.
 
-Syntax: OP|DEOP <#channel> [nickname]
-Syntax: VOICE|DEVOICE <#channel> [nickname]
+Syntax: HALFOP|DEHALFOP <#channel> [nickname]
 
 Examples:
-    /msg &nick& OP #foo bar
-    /msg &nick& DEVOICE #foo
+    /msg &nick& HALFOP #foo

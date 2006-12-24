@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: halfop.c 7035 2006-11-02 20:13:35Z jilles $
+ * $Id: halfop.c 7387 2006-12-24 17:48:16Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/halfop", FALSE, _modinit, _moddeinit,
-	"$Id: halfop.c 7035 2006-11-02 20:13:35Z jilles $",
+	"$Id: halfop.c 7387 2006-12-24 17:48:16Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -35,8 +35,8 @@ void _modinit(module_t *m)
         command_add(&cs_halfop, cs_cmdtree);
         command_add(&cs_dehalfop, cs_cmdtree);
 
-	help_addentry(cs_helptree, "HALFOP", "help/cservice/op_voice", NULL);
-	help_addentry(cs_helptree, "DEHALFOP", "help/cservice/op_voice", NULL);
+	help_addentry(cs_helptree, "HALFOP", "help/cservice/halfop", NULL);
+	help_addentry(cs_helptree, "DEHALFOP", "help/cservice/halfop", NULL);
 }
 
 void _moddeinit()
