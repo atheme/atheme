@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7391 2006-12-25 12:25:15Z jilles $
+ * $Id: account.c 7393 2006-12-25 12:26:27Z jilles $
  */
 
 #include "atheme.h"
@@ -891,6 +891,8 @@ void chanacs_delete(mychan_t *mychan, myuser_t *myuser, uint32_t level)
 				md = n->data;
 				metadata_delete(ca, METADATA_CHANACS, md->name);
 			}
+
+			BlockHeapFree(chanacs_heap, ca);
 
 			cnt.chanacs--;
 
