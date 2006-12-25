@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7353 2006-12-09 23:28:18Z jilles $
+ * $Id: account.c 7391 2006-12-25 12:25:15Z jilles $
  */
 
 #include "atheme.h"
@@ -863,7 +863,8 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, char *host, uint32_t level)
 void chanacs_delete(mychan_t *mychan, myuser_t *myuser, uint32_t level)
 {
 	chanacs_t *ca;
-	node_t *n, *tn, *n2;
+	node_t *n, *tn, *n2, *tn2;
+	metadata_t *md;
 
 	if (!mychan || !myuser)
 	{
@@ -885,6 +886,12 @@ void chanacs_delete(mychan_t *mychan, myuser_t *myuser, uint32_t level)
 			node_del(n2, &myuser->chanacs);
 			node_free(n2);
 
+			LIST_FOREACH_SAFE(n2, tn2, ca->metadata.head)
+			{
+				md = n->data;
+				metadata_delete(ca, METADATA_CHANACS, md->name);
+			}
+
 			cnt.chanacs--;
 
 			return;
@@ -895,7 +902,8 @@ void chanacs_delete(mychan_t *mychan, myuser_t *myuser, uint32_t level)
 void chanacs_delete_host(mychan_t *mychan, char *host, uint32_t level)
 {
 	chanacs_t *ca;
-	node_t *n, *tn;
+	node_t *n, *tn, *n2, *tn2;
+	metadata_t *md;
 
 	if (!mychan || !host)
 	{
@@ -913,6 +921,12 @@ void chanacs_delete_host(mychan_t *mychan, char *host, uint32_t level)
 
 			node_del(n, &mychan->chanacs);
 			node_free(n);
+
+			LIST_FOREACH_SAFE(n2, tn2, ca->metadata.head)
+			{
+				md = n->data;
+				metadata_delete(ca, METADATA_CHANACS, md->name);
+			}
 
 			BlockHeapFree(chanacs_heap, ca);
 
