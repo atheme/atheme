@@ -1,3 +1,16 @@
+jilles      2006/12/24 17:48:16 UTC	(20061224-7387)
+  Log:
+  Move help for /cs halfop to a separate helpfile
+  so it doesn't clutter up the help for ircds that
+  don't support halfops.
+  
+
+  Changes:	Modified:
+  +14 -0	trunk/help/cservice/halfop (File Added) 
+  +1 -4		trunk/help/cservice/op_voice (File Modified) 
+  +2 -2		trunk/modules/chanserv/halfop.c (File Modified) 
+
+
 jilles      2006/12/24 17:47:33 UTC	(20061224-7385)
   Log:
   Mention hub_mask or similar for ircd configuration.
