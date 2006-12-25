@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7393 2006-12-25 12:26:27Z jilles $
+ * $Id: account.c 7395 2006-12-25 16:32:51Z jilles $
  */
 
 #include "atheme.h"
@@ -888,7 +888,7 @@ void chanacs_delete(mychan_t *mychan, myuser_t *myuser, uint32_t level)
 
 			LIST_FOREACH_SAFE(n2, tn2, ca->metadata.head)
 			{
-				md = n->data;
+				md = n2->data;
 				metadata_delete(ca, METADATA_CHANACS, md->name);
 			}
 
@@ -926,7 +926,7 @@ void chanacs_delete_host(mychan_t *mychan, char *host, uint32_t level)
 
 			LIST_FOREACH_SAFE(n2, tn2, ca->metadata.head)
 			{
-				md = n->data;
+				md = n2->data;
 				metadata_delete(ca, METADATA_CHANACS, md->name);
 			}
 
