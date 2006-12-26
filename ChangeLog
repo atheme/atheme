@@ -1,3 +1,13 @@
+jilles      2006/12/26 11:58:18 UTC	(20061226-7397)
+  Log:
+  Fix reading chanacs metadata for channels containing ':'
+  from flatfile. Access entries cannot contain ':'.
+  
+
+  Changes:	Modified:
+  +9 -5		trunk/backend/flatfile.c (File Modified) 
+
+
 jilles      2006/12/25 16:32:51 UTC	(20061225-7395)
   Log:
   Fix deleting chanacs metadata when removing chanacs.

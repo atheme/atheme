@@ -1,4 +1,4 @@
-$Id: RELEASE 7345 2006-12-08 14:07:52Z jilles $
+$Id: RELEASE 7399 2006-12-26 17:31:14Z jilles $
 
 Atheme 2.1 Release Notes
 ========================
@@ -8,6 +8,7 @@ ircd protocol
 - When sending a notice to a channel as a server notice (because the
   service is not on channel and the ircd would not allow the notice),
   prepend it with "[<service>:<channel>] " instead of "<service>: "
+- Clean up handling of services deopped on channels.
 nickserv
 - Add nickname grouping, this allows users to register multiple nicks
   to one account. The GROUP and UNGROUP commands add and remove additional
@@ -18,6 +19,12 @@ nickserv
 - Make the gen_vhostonreg contrib module also generate a valid (although
   ugly) vhost for account names which contain characters not valid in
   hostnames.
+- Add user_info hook, allows modules to add things to /ns info.
+- Show ENFORCE status in /ns info (to all users).
+- Snoop notices for registrations now show the source name explicitly
+  if appropriate.
+- Add user_can_register hook, allows modules to abort account
+  registrations before they go through.
 chanserv
 - The TEMPLATE command now allows updating all channel access entries
   matching the template with a template change, by prefixing a flag
@@ -34,6 +41,12 @@ chanserv
   SET GUARD can be used.
 - Make the WHY command show all flags.
 - Allow using the xOP commands via non-IRC.
+- Allow using SET as a fantasy command.
+- Move help for /cs halfop to a separate help file.
+- Make channel access entry metadata work. This allows modules to associate
+  name/value pairs with channel access entries. There is currently no
+  facility to read/write channel access entry metadata directly like there
+  is for user and channel metadata.
 oper
 - Add /os soper, allows adding services operators at run time.
 - Add operclass::needoper option, denies giving any privilege to IRC users
@@ -48,6 +61,7 @@ code
   use slog(), logcommand(), etc. to log things.
 documentation
 - Add some missing help files.
+- Clarify some things in the installation documentation.
 other
 - chanserv::changets is now shown as 't' in version replies
 - Make --enable-fhs-paths also affect the location of the log file, data
