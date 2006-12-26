@@ -1,3 +1,12 @@
+jilles      2006/12/26 17:38:25 UTC	(20061226-7405)
+  Log:
+  Rerun autoconf.
+  
+
+  Changes:	Modified:
+  +11 -11	trunk/configure (File Modified) 
+
+
 jilles      2006/12/26 17:36:54 UTC	(20061226-7403)
   Log:
   Version bump on trunk to 2.2.
