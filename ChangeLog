@@ -1,3 +1,12 @@
+jilles      2006/12/25 16:32:51 UTC	(20061225-7395)
+  Log:
+  Fix deleting chanacs metadata when removing chanacs.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/src/account.c (File Modified) 
+
+
 jilles      2006/12/25 12:26:27 UTC	(20061225-7393)
   Log:
   Free chanacs struct when removing account access entries.
