@@ -4,7 +4,7 @@
  *
  * Protocol handlers, both generic and the actual declarations themselves.
  *
- * $Id: phandler.h 6515 2006-09-27 17:13:42Z jilles $
+ * $Id: phandler.h 7415 2006-12-30 17:18:45Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -158,7 +158,9 @@ E boolean_t (*ircd_on_logout)(char *origin, char *user, char *wantedhost);
 /* introduce a fake server
  * it is ok to use opersvs to squit the old server */
 E void (*jupe)(char *server, char *reason);
-/* set a dynamic spoof on a user */
+/* set a dynamic spoof on a user
+ * if the ircd does not notify the user of this, do
+ * notice(source, target, "Setting your host to \2%s\2.", host); */
 E void (*sethost_sts)(char *source, char *target, char *host);
 /* force a nickchange for a user
  * possible values for type:

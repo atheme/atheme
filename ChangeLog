@@ -1,3 +1,21 @@
+jilles      2006/12/30 15:24:51 UTC	(20061230-7413)
+  Log:
+  Move "Setting your host to \2%s\2." notice to protocol
+  modules that need it, so that it is not sent for ircds
+  which already notify users of a host change (e.g. charybdis).
+  
+
+  Changes:	Modified:
+  +0 -6		trunk/modules/nickserv/vhost.c (File Modified) 
+  +1 -0		trunk/protocol/hybrid.c (File Modified) 
+  +1 -0		trunk/protocol/inspircd10.c (File Modified) 
+  +1 -0		trunk/protocol/inspircd11.c (File Modified) 
+  +1 -0		trunk/protocol/plexus.c (File Modified) 
+  +1 -0		trunk/protocol/solidircd.c (File Modified) 
+  +1 -0		trunk/protocol/ultimate3.c (File Modified) 
+  +1 -0		trunk/protocol/unreal.c (File Modified) 
+
+
 jilles      2006/12/30 00:28:22 UTC	(20061230-7411)
   Log:
   gen_vhostonreg contrib module: prevent negative counter
