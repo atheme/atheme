@@ -1,3 +1,12 @@
+nenolod     2006/12/26 18:00:29 UTC	(20061226-7409)
+  Log:
+  - remove the incomplete atheme testsuite
+  
+
+  Changes:	Modified:
+  + -		trunk/testsuite/ (File Deleted) 
+
+
 jilles      2006/12/26 17:38:25 UTC	(20061226-7405)
   Log:
   Rerun autoconf.

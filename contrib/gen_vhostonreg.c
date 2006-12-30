@@ -4,7 +4,7 @@
  *
  * Sets usercloak metadata on register.
  *
- * $Id: gen_vhostonreg.c 7343 2006-12-08 13:58:23Z jilles $
+ * $Id: gen_vhostonreg.c 7411 2006-12-30 00:28:22Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"misc/vhostonreg", FALSE, _modinit, _moddeinit,
-	"$Revision: 7343 $",
+	"$Revision: 7411 $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -28,6 +28,8 @@ void _modinit(module_t *m)
 	hook_add_event("user_register");
 	hook_add_hook("user_register", handle_register);
 	counter = (CURRTIME << 8) % 100000;
+	if (counter < 0)
+		counter += 100000;
 }
 
 void _moddeinit(void)
