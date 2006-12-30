@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 7281 2006-11-25 02:01:13Z jilles $
+ * $Id: plexus.c 7413 2006-12-30 15:24:51Z jilles $
  */
 
 /* option: set the netadmin umode +N */
@@ -16,7 +16,7 @@
 #include "pmodule.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 7281 2006-11-25 02:01:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 7413 2006-12-30 15:24:51Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -359,6 +359,7 @@ static void plexus_sethost_sts(char *source, char *target, char *host)
 	if (!me.connected)
 		return;
 
+	notice(source, target, "Setting your host to \2%s\2.", host);
 	sts(":%s ENCAP * CHGHOST %s :%s", ME, target, host);
 }
 

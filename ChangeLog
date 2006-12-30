@@ -1,3 +1,13 @@
+jilles      2006/12/30 00:28:22 UTC	(20061230-7411)
+  Log:
+  gen_vhostonreg contrib module: prevent negative counter
+  values which would cause "--" in vhosts
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/contrib/gen_vhostonreg.c (File Modified) 
+
+
 nenolod     2006/12/26 18:00:29 UTC	(20061226-7409)
   Log:
   - remove the incomplete atheme testsuite

@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 7281 2006-11-25 02:01:13Z jilles $
+ * $Id: ultimate3.c 7413 2006-12-30 15:24:51Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 7281 2006-11-25 02:01:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 7413 2006-12-30 15:24:51Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -320,6 +320,7 @@ static void ultimate3_sethost_sts(char *source, char *target, char *host)
 	if (!me.connected)
 		return;
 
+	notice(source, target, "Setting your host to \2%s\2.", host);
 	sts(":%s SVSMODE %s +x", source, target);
 	sts(":%s SETHOST %s :%s", me.name, target, host);
 }

@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree stable branch inspircd.
  *
- * $Id: inspircd10.c 7299 2006-11-27 10:30:15Z jilles $
+ * $Id: inspircd10.c 7413 2006-12-30 15:24:51Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 7299 2006-11-27 10:30:15Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 7413 2006-12-30 15:24:51Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -412,6 +412,7 @@ static void inspircd_sethost_sts(char *source, char *target, char *host)
 	if (!me.connected)
 		return;
 
+	notice(source, target, "Setting your host to \2%s\2.", host);
 	sts(":%s CHGHOST %s %s", source, target, host);
 }
 

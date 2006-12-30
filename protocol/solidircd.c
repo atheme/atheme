@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for solidircd.
  *
- * $Id: solidircd.c 7281 2006-11-25 02:01:13Z jilles $
+ * $Id: solidircd.c 7413 2006-12-30 15:24:51Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/solidircd.h"
 
-DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 7281 2006-11-25 02:01:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 7413 2006-12-30 15:24:51Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -344,6 +344,7 @@ static void solidircd_sethost_sts(char *source, char *target, char *host)
 	if (!me.connected)
 		return;
 
+	notice(source, target, "Setting your host to \2%s\2.", host);
 	sts(":%s SVSMODE %s +v", source, target);
 	sts(":%s SVHOST %s :%s", me.name, target, host);
 }

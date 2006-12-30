@@ -4,7 +4,7 @@
  *
  * Allows setting a vhost on an account
  *
- * $Id: vhost.c 7295 2006-11-26 17:53:12Z jilles $
+ * $Id: vhost.c 7413 2006-12-30 15:24:51Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 7295 2006-11-26 17:53:12Z jilles $",
+	"$Id: vhost.c 7413 2006-12-30 15:24:51Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -60,8 +60,6 @@ static void do_sethost_all(myuser_t *mu, char *host)
 		if (!strcmp(u->vhost, host))
 			continue;
 		strlcpy(u->vhost, host, HOSTLEN);
-		notice(nicksvs.nick, u->nick, "Setting your host to \2%s\2.",
-			u->vhost);
 		sethost_sts(nicksvs.nick, u->nick, u->vhost);
 		strlcpy(luhost, u->user, BUFSIZE);
 		strlcat(luhost, "@", BUFSIZE);
@@ -77,8 +75,6 @@ static void do_sethost(user_t *u, char *host)
 	if (!strcmp(u->vhost, host))
 		return;
 	strlcpy(u->vhost, host, HOSTLEN);
-	notice(nicksvs.nick, u->nick, "Setting your host to \2%s\2.",
-		u->vhost);
 	sethost_sts(nicksvs.nick, u->nick, u->vhost);
 	strlcpy(luhost, u->user, BUFSIZE);
 	strlcat(luhost, "@", BUFSIZE);
@@ -99,8 +95,6 @@ static void do_restorehost_all(myuser_t *mu)
 		if (!strcmp(u->vhost, u->host))
 			continue;
 		strlcpy(u->vhost, u->host, HOSTLEN);
-		notice(nicksvs.nick, u->nick, "Setting your host to \2%s\2.",
-			u->host);
 		sethost_sts(nicksvs.nick, u->nick, u->host);
 		strlcpy(luhost, u->user, BUFSIZE);
 		strlcat(luhost, "@", BUFSIZE);
