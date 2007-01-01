@@ -6,7 +6,7 @@
 # This file generates version.c.
 # Stolen from ircd-ratbox.
 #
-# $Id: version.sh 7155 2006-11-15 13:56:23Z jilles $
+# $Id: version.sh 7419 2007-01-01 14:09:36Z jilles $
 #
 
 spitshell=cat
@@ -34,12 +34,12 @@ awk '{if (NF == 6) \
 else \
          { print $1 " "  $2 " " $3 " " $7 " at " $4 " " $5 " " $6 }}'`
 
-buildid=`echo "\$Revision: 7155 $" | \
+buildid=`echo "\$Revision: 7419 $" | \
 	awk '{ print $2 }'`;
 
 $spitshell >version.c <<!SUB!THIS!
 /*
- * Copyright (c) 2005-2006 Atheme Development Group
+ * Copyright (c) 2005-2007 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains version information.
@@ -58,7 +58,7 @@ const char *osinfo = "$osinfo";
 const char *infotext[] =
 {
   "Atheme IRC Services --",
-  "Copyright (c) 2005-2006 Atheme Development Group",
+  "Copyright (c) 2005-2007 Atheme Development Group",
   " ",
   "All rights reserved.",
   " ",
