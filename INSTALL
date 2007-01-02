@@ -86,6 +86,9 @@ etc/atheme.conf. You'll need to change every setting or Atheme will not work.
 
 IMPORTANT NOTE: backup your configuration file and database!
 
+All custom modules should be recompiled as well. Loading old modules can
+cause Atheme to crash.
+
 Sometimes upgrading requires more than recompiling and reinstalling. Be sure to
 read doc/RELEASE for important notes concerning the release. This file will
 let you know if you need to change your configuration or convert your database

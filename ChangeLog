@@ -1,3 +1,14 @@
+jilles      2007/01/01 14:09:36 UTC	(20070101-7419)
+  Log:
+  Extend some copyrights to 2007.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/COPYING (File Modified) 
+  +1 -1		trunk/doc/LICENSE (File Modified) 
+  +2 -2		trunk/src/version.sh (File Modified) 
+
+
 jilles      2006/12/30 17:18:45 UTC	(20061230-7415)
   Log:
   Update requirements documentation for sethost_sts().
