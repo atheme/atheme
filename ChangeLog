@@ -1,3 +1,12 @@
+jilles      2007/01/02 20:40:03 UTC	(20070102-7421)
+  Log:
+  When upgrading custom modules need to be recompiled as well.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/INSTALL (File Modified) 
+
+
 jilles      2007/01/01 14:09:36 UTC	(20070101-7419)
   Log:
   Extend some copyrights to 2007.
