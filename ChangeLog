@@ -1,3 +1,12 @@
+jilles      2007/01/10 15:03:01 UTC	(20070110-7431)
+  Log:
+  Set Id and Revision keywords on os_logonnews.c.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/contrib/os_logonnews.c (File Modified) (Property Modified)
+
+
 w00t        2007/01/10 13:30:08 UTC	(20070110-7429)
   Log:
   Add nenolod/jilles' os_logonnews to contrib/
