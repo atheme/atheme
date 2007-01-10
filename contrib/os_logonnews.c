@@ -4,7 +4,7 @@
  *
  * Logon News stuff...
  *
- * $Id: os_logonnews.c 222 2006-10-31 18:07:58Z jilles $
+ * $Id: os_logonnews.c 7431 2007-01-10 15:03:01Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/logonnews", FALSE, _modinit, _moddeinit,
-	"$Revision: 222 $",
+	"$Revision: 7431 $",
 	"William Pitcock <nenolod -at- nenolod.net>"
 );
 
