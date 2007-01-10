@@ -1,3 +1,12 @@
+jilles      2007/01/06 00:26:17 UTC	(20070106-7423)
+  Log:
+  Add documentation for SASL client protocol.
+  
+
+  Changes:	Modified:
+  +113 -1	trunk/doc/SASL (File Modified) 
+
+
 jilles      2007/01/02 20:40:03 UTC	(20070102-7421)
   Log:
   When upgrading custom modules need to be recompiled as well.
