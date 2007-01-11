@@ -1,3 +1,13 @@
+nenolod     2007/01/11 11:10:44 UTC	(20070111-7439)
+  Log:
+  - some fixes
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/main.c (File Modified) 
+  +0 -1		trunk/src/conf.c (File Modified) 
+
+
 nenolod     2007/01/11 10:52:34 UTC	(20070111-7437)
   Log:
   - fix help wrt these changes

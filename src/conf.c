@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 7439 2007-01-11 11:10:44Z nenolod $
+ * $Id: conf.c 7441 2007-01-11 11:38:23Z nenolod $
  */
 
 #include "atheme.h"
@@ -1244,7 +1244,7 @@ static int c_ci_changets(CONFIGENTRY *ce)
 
 static int c_ci_trigger(CONFIGENTRY *ce)
 {
-	if (ce->ce_vardata == NULL || strlen(ce->ce_vardata) != 1)
+	if (ce->ce_vardata == NULL)
 		PARAM_ERROR(ce);
 
 	chansvs.trigger = sstrdup(ce->ce_vardata);
