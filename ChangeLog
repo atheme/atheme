@@ -1,3 +1,15 @@
+nenolod     2007/01/11 10:39:36 UTC	(20070111-7435)
+  Log:
+  - allow multiple triggers to be defined by using strpbrk instead of a literal compare
+    (also change char trigger into char* trigger to accomplish this)
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/services.h (File Modified) 
+  +1 -1		trunk/modules/chanserv/main.c (File Modified) 
+  +2 -2		trunk/src/conf.c (File Modified) 
+
+
 w00t        2007/01/10 16:58:00 UTC	(20070110-7433)
   Log:
   Remove restriction on self memoing, remove flood restriction for users with general:flood
