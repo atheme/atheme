@@ -1,3 +1,12 @@
+nenolod     2007/01/11 10:52:34 UTC	(20070111-7437)
+  Log:
+  - fix help wrt these changes
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/help.c (File Modified) 
+
+
 nenolod     2007/01/11 10:39:36 UTC	(20070111-7435)
   Log:
   - allow multiple triggers to be defined by using strpbrk instead of a literal compare
