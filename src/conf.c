@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 7363 2006-12-13 00:49:59Z jilles $
+ * $Id: conf.c 7435 2007-01-11 10:39:36Z nenolod $
  */
 
 #include "atheme.h"
@@ -264,7 +264,7 @@ void conf_init(void)
 	chansvs.ca_aop = CA_AOP_DEF;
 	chansvs.ca_sop = CA_SOP_DEF;
 	chansvs.changets = FALSE;
-	chansvs.trigger = '!';
+	chansvs.trigger = sstrdup("!");
 
 	if (!(runflags & RF_REHASHING))
 	{
@@ -1248,7 +1248,7 @@ static int c_ci_trigger(CONFIGENTRY *ce)
 	if (ce->ce_vardata == NULL || strlen(ce->ce_vardata) != 1)
 		PARAM_ERROR(ce);
 
-	chansvs.trigger = *ce->ce_vardata;
+	chansvs.trigger = sstrdup(ce->ce_vardata);
 
 	return 0;
 }

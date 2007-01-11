@@ -1,3 +1,11 @@
+w00t        2007/01/10 16:58:00 UTC	(20070110-7433)
+  Log:
+  Remove restriction on self memoing, remove flood restriction for users with general:flood
+
+  Changes:	Modified:
+  +1 -8		trunk/modules/memoserv/send.c (File Modified) 
+
+
 jilles      2007/01/10 15:03:01 UTC	(20070110-7431)
   Log:
   Set Id and Revision keywords on os_logonnews.c.

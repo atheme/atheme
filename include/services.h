@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 7197 2006-11-18 04:03:22Z nenolod $
+ * $Id: services.h 7435 2007-01-11 10:39:36Z nenolod $
  */
 
 #ifndef SERVICES_H
@@ -33,7 +33,7 @@ struct chansvs_
   uint32_t ca_aop;
   uint32_t ca_sop;
 
-  char trigger;			/* trigger, e.g. !, ` or .    */
+  char *trigger;		/* trigger, e.g. !, ` or .    */
 
   boolean_t changets;		/* use TS to better deop people */
 
