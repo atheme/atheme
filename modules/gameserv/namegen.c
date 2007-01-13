@@ -2,7 +2,7 @@
  * Copyright (c) 2005-2006 William Pitcock <nenolod@nenolod.net> et al
  * Rights to this code are documented in doc/LICENSE.
  *
- * SorceryNet-compatible name generator.
+ * Name generator.
  *
  * $Id: dice.c 7449 2007-01-13 04:00:04Z nenolod $
  */
@@ -64,22 +64,8 @@ static void gs_command_report(sourceinfo_t *si, char *fmt, ...)
 static void command_namegen(sourceinfo_t *si, int parc, char *parv[])
 {
 	unsigned int iter;
-	unsigned int amt;
+	unsigned int amt = 20;
 	char buf[BUFSIZE];
-
-	/* Give 5 names by default. */
-	if ((si->c != NULL ? parv[1] : parv[0]) == NULL)
-		amt = 5;
-	else
-	{
-		amt = atoi(si->c != NULL ? parv[1] : parv[0]);
-
-		if (amt > 10)
-		{
-			gs_command_report(si, "You have requested more than 10 names; truncating.");
-			amt = 10;
-		}
-	}
 
 	*buf = '\0';
 
