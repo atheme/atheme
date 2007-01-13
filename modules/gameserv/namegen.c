@@ -68,11 +68,11 @@ static void command_namegen(sourceinfo_t *si, int parc, char *parv[])
 	char buf[BUFSIZE];
 
 	/* Give 5 names by default. */
-	if (!parv[0])
+	if ((si->c != NULL ? parv[1] : parv[0]) == NULL)
 		amt = 5;
 	else
 	{
-		amt = atoi(parv[0]);
+		amt = atoi(si->c != NULL ? parv[1] : parv[0]);
 
 		if (amt > 10)
 		{
