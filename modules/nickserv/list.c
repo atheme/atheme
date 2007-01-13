@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2005-2006 Robin Burchell, et al.
+ * Copyright (c) 2005-2007 Robin Burchell, et al.
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the NickServ LIST function.
  * Based on Alex Lambert's LISTEMAIL.
  *
- * $Id: list.c 7289 2006-11-25 19:18:57Z jilles $
+ * $Id: list.c 7445 2007-01-13 00:49:42Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 7289 2006-11-25 19:18:57Z jilles $",
+	"$Id: list.c 7445 2007-01-13 00:49:42Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -67,47 +67,88 @@ static int list_one(sourceinfo_t *si, myuser_t *mu, mynick_t *mn)
 
 static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *nickpattern = parv[0];
+	char pat[512], *nickpattern = NULL, *hostpattern = NULL, *p;
+	boolean_t hostmatch;
 	dictionary_iteration_state_t state;
 	myuser_t *mu;
 	mynick_t *mn;
+	metadata_t *md;
 	int matches = 0;
 
-	if (!nickpattern)
+	if (parc < 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "LIST");
-		command_fail(si, fault_needmoreparams, "Syntax: LIST <pattern>");
+		command_fail(si, fault_needmoreparams, "Syntax: LIST <pattern>[!<user@host>]");
 		return;
 	}
+	strlcpy(pat, parv[0], sizeof pat);
+	p = strrchr(pat, ' ');
+	if (p == NULL)
+		p = strrchr(pat, '!');
+	if (p != NULL)
+	{
+		*p++ = '\0';
+		nickpattern = pat;
+		hostpattern = p;
+	}
+	else if (strchr(pat, '@'))
+		hostpattern = pat;
+	else
+		nickpattern = pat;
+	if (nickpattern && !strcmp(nickpattern, "*"))
+		nickpattern = NULL;
 
 	if (nicksvs.no_nick_ownership)
 	{
-		snoop("LIST:ACCOUNTS: \2%s\2 by \2%s\2", nickpattern, get_oper_name(si));
+		snoop("LIST:ACCOUNTS: \2%s\2 by \2%s\2", parv[0], get_oper_name(si));
 		DICTIONARY_FOREACH(mu, &state, mulist)
 		{
-			if (!match(nickpattern, mu->name))
+			if (nickpattern && match(nickpattern, mu->name))
+				continue;
+			if (hostpattern)
 			{
-				list_one(si, mu, NULL);
-				matches++;
+				hostmatch = FALSE;
+				md = metadata_find(mu, METADATA_USER, "private:host:actual");
+				if (md != NULL && !match(hostpattern, md->value))
+					hostmatch = TRUE;
+				md = metadata_find(mu, METADATA_USER, "private:host:vhost");
+				if (md != NULL && !match(hostpattern, md->value))
+					hostmatch = TRUE;
+				if (!hostmatch)
+					continue;
 			}
+			list_one(si, mu, NULL);
+			matches++;
 		}
 	}
 	else
 	{
-		snoop("LIST:NICKS: \2%s\2 by \2%s\2", nickpattern, get_oper_name(si));
+		snoop("LIST:NICKS: \2%s\2 by \2%s\2", parv[0], get_oper_name(si));
 		DICTIONARY_FOREACH(mn, &state, nicklist)
 		{
-			if (!match(nickpattern, mn->nick))
+			if (nickpattern && match(nickpattern, mn->nick))
+				continue;
+			mu = mn->owner;
+			if (hostpattern)
 			{
-				list_one(si, NULL, mn);
-				matches++;
+				hostmatch = FALSE;
+				md = metadata_find(mu, METADATA_USER, "private:host:actual");
+				if (md != NULL && !match(hostpattern, md->value))
+					hostmatch = TRUE;
+				md = metadata_find(mu, METADATA_USER, "private:host:vhost");
+				if (md != NULL && !match(hostpattern, md->value))
+					hostmatch = TRUE;
+				if (!hostmatch)
+					continue;
 			}
+			list_one(si, NULL, mn);
+			matches++;
 		}
 	}
 
-	logcommand(si, CMDLOG_ADMIN, "LIST %s (%d matches)", nickpattern, matches);
+	logcommand(si, CMDLOG_ADMIN, "LIST %s (%d matches)", parv[0], matches);
 	if (matches == 0)
-		command_success_nodata(si, "No nicknames matched pattern \2%s\2", nickpattern);
+		command_success_nodata(si, "No nicknames matched pattern \2%s\2", parv[0]);
 	else
-		command_success_nodata(si, "\2%d\2 match%s for pattern \2%s\2", matches, matches != 1 ? "es" : "", nickpattern);
+		command_success_nodata(si, "\2%d\2 match%s for pattern \2%s\2", matches, matches != 1 ? "es" : "", parv[0]);
 }
