@@ -1,3 +1,12 @@
+nenolod     2007/01/13 11:38:20 UTC	(20070113-7457)
+  Log:
+  - send 20 at a time, drop the sorcerynet-services compatibility claim (max 10 there)
+  
+
+  Changes:	Modified:
+  +2 -16	trunk/modules/gameserv/namegen.c (File Modified) 
+
+
 nenolod     2007/01/13 11:22:13 UTC	(20070113-7455)
   Log:
   - make !namegen 10 work

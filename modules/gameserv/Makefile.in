@@ -36,6 +36,7 @@ default: all
 BASE_SRCS = 		\
 	main.c		\
 	dice.c		\
+	eightball.c	\
 	help.c		\
 	namegen.c
 
