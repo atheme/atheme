@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 7435 2007-01-11 10:39:36Z nenolod $
+ * $Id: services.h 7447 2007-01-13 03:52:16Z nenolod $
  */
 
 #ifndef SERVICES_H
@@ -16,6 +16,7 @@ typedef struct opersvs_ opersvs_t;
 typedef struct memosvs_ memosvs_t;
 typedef struct nicksvs_ nicksvs_t;
 typedef struct saslsvs_ saslsvs_t;
+typedef struct gamesvs_ gamesvs_t;
 
 /* core services */
 struct chansvs_
@@ -101,6 +102,17 @@ struct saslsvs_
   service_t *me;
 };
 
+struct gamesvs_
+{
+  char   *nick;
+  char   *user;
+  char   *host;
+  char   *real;
+  char   *disp;			/* the IRC client's dispname  */
+
+  service_t *me;
+};
+
 /* help us keep consistent messages */
 #define STR_INSUFFICIENT_PARAMS "Insufficient parameters for \2%s\2."
 #define STR_INVALID_PARAMS "Invalid parameters for \2%s\2."
@@ -112,6 +124,7 @@ E opersvs_t opersvs;
 E memosvs_t memosvs;
 E nicksvs_t nicksvs;
 E saslsvs_t saslsvs;
+E gamesvs_t gamesvs;
 
 /* servtree.c */
 E service_t *fcmd_agent;

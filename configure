@@ -13816,7 +13816,7 @@ echo " "
 echo "Makefile generation"
 echo " "
 
-                                                                                                                                                      ac_config_files="$ac_config_files Makefile libatheme/Makefile backend/Makefile contrib/Makefile crypto/Makefile modules/Makefile modules/chanserv/Makefile modules/global/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/xmlrpc/Makefile modules/memoserv/Makefile modules/saslserv/Makefile protocol/Makefile src/Makefile"
+                                                                                                                                                                ac_config_files="$ac_config_files Makefile libatheme/Makefile backend/Makefile contrib/Makefile crypto/Makefile modules/Makefile modules/chanserv/Makefile modules/global/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/xmlrpc/Makefile modules/memoserv/Makefile modules/saslserv/Makefile modules/gameserv/Makefile protocol/Makefile src/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -14355,6 +14355,7 @@ do
   "modules/xmlrpc/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/xmlrpc/Makefile" ;;
   "modules/memoserv/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/memoserv/Makefile" ;;
   "modules/saslserv/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/saslserv/Makefile" ;;
+  "modules/gameserv/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/gameserv/Makefile" ;;
   "protocol/Makefile" ) CONFIG_FILES="$CONFIG_FILES protocol/Makefile" ;;
   "src/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
   "include/sysconf.h" ) CONFIG_HEADERS="$CONFIG_HEADERS include/sysconf.h" ;;

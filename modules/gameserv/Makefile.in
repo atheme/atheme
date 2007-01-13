@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7447 2007-01-13 03:52:16Z nenolod $
+# $Id: Makefile.in 7293 2006-11-25 22:13:28Z jilles $
 #
 
 CC		= @CC@
@@ -23,9 +23,9 @@ DOCDIR		= @DOCDIR@
 MODDIR		= @MODDIR@
 SHAREDIR	= @SHAREDIR@
 BIN		= atheme@EXEEXT@
-MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../include -I../libatheme @PGINC@
+MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include -I../../libatheme @PGINC@
 PICFLAGS	= @PICFLAGS@
-CFLAGS		= @CFLAGS@ -I../include @PGINC@ -I../libatheme
+CFLAGS		= @CFLAGS@ -I../../include -I../../libatheme @PGINC@
 
 LIBS		= @LIBS@ @PQLIB@
 LDFLAGS		= @LDFLAGS@
@@ -33,34 +33,24 @@ CPPFLAGS	= @CPPFLAGS@
 
 default: all
 
-SRCS = \
-	cs_kickdots.c		\
-	cs_ping.c		\
-	cs_sync.c		\
-	gen_echoserver.c	\
-	gen_httpd.c		\
-	gen_listenerdemo.c	\
-	gen_vhostonreg.c	\
-	ircd_catserv.c		\
-	ircd_nohalfops.c	\
-	ircd_noowner.c		\
-	ircd_noprotect.c	\
-	ns_generatepass.c	\
-	os_pingspam.c		\
-	os_testcmd.c		\
-	os_logonnews.c
+BASE_SRCS = 		\
+	main.c		\
+	dice.c		\
+	help.c
 
-# To compile your own modules, add them to SRCS or make blegh.so
-# Note: anope_convert.c cannot be compiled with this Makefile as it is
-# an anope module, not an atheme module.
+SRCS = ${BASE_SRCS}
 
 OBJS = ${SRCS:.c=.so}
 
-all: ${OBJS}
+all: modules
 
-install:
-	${INSTALL} -d $(DESTDIR)${MODDIR}/contrib
-	${INSTALL} -m 755 *.so $(DESTDIR)${MODDIR}/contrib
+build: all
+
+install: build
+	${INSTALL} -d $(DESTDIR)${MODDIR}/modules/gameserv
+	${INSTALL} -m 755 *.so $(DESTDIR)${MODDIR}/modules/gameserv
+
+modules: $(OBJS)
 
 .SUFFIXES: .so
 
@@ -70,7 +60,7 @@ install:
 .PHONY: depend clean distclean
 # This sed command sucks but I don't know a better way -- jilles
 depend:
-	${MKDEP} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} ${SRCS} | sed -e 's/\.o:/.so:/' > .depend
+	${MKDEP} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} ${BASE_SRCS} | sed -e 's/\.o:/.so:/' > .depend
 
 clean:
 	${RM} -f *.so

@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 7283 2006-11-25 14:27:10Z jilles $
+ * $Id: atheme.c 7447 2007-01-13 03:52:16Z nenolod $
  */
 
 #include "atheme.h"
@@ -17,6 +17,7 @@ opersvs_t opersvs;
 memosvs_t memosvs;
 nicksvs_t nicksvs;
 saslsvs_t saslsvs;
+gamesvs_t gamesvs;
 
 me_t me;
 struct cnt cnt;

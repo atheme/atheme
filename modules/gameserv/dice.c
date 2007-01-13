@@ -2,17 +2,17 @@
  * Copyright (c) 2005-2006 William Pitcock <nenolod@nenolod.net> et al
  * Rights to this code are documented in doc/LICENSE.
  *
- * Dice generator fantasy command.
+ * Dice generator.
  *
- * $Id: fc_dice.c 6745 2006-10-20 19:46:45Z jilles $
+ * $Id: dice.c 7447 2007-01-13 03:52:16Z nenolod $
  */
 
 #include "atheme.h"
 
 DECLARE_MODULE_V1
 (
-	"contrib/fc_dice", FALSE, _modinit, _moddeinit,
-	"$Id: fc_dice.c 6745 2006-10-20 19:46:45Z jilles $",
+	"gameserv/dice", FALSE, _modinit, _moddeinit,
+	"$Id: dice.c 7447 2007-01-13 03:52:16Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,24 +22,53 @@ static void command_wod(sourceinfo_t *si, int parc, char *parv[]);
 command_t cmd_dice = { "ROLL", "Rolls one or more dice.", AC_NONE, 2, command_dice };
 command_t cmd_wod = { "WOD", "WOD-style dice generation.", AC_NONE, 7, command_wod };
 
+list_t *gs_cmdtree;
 list_t *cs_cmdtree;
 
 void _modinit(module_t * m)
 {
-	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
+	MODULE_USE_SYMBOL(gs_cmdtree, "gameserv/main", "gs_cmdtree");
+	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");	/* fantasy commands */
+
+	command_add(&cmd_dice, gs_cmdtree);
+	command_add(&cmd_wod, gs_cmdtree);
+
 	command_add(&cmd_dice, cs_cmdtree);
 	command_add(&cmd_wod, cs_cmdtree);
 }
 
 void _moddeinit()
 {
+	command_delete(&cmd_dice, gs_cmdtree);
+	command_delete(&cmd_wod, gs_cmdtree);
+
 	command_delete(&cmd_dice, cs_cmdtree);
 	command_delete(&cmd_wod, cs_cmdtree);
 }
 
+/*
+ * Handle reporting for both fantasy commands and normal commands in GameServ
+ * quickly and easily. Of course, sourceinfo has a vtable that can be manipulated,
+ * but this is quicker and easier...                                  -- nenolod
+ */
+static void gs_command_report(sourceinfo_t *si, char *fmt, ...)
+{
+	va_list args;
+	char buf[BUFSIZE];
+
+	va_start(args, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, args);
+	va_end(args);
+
+	if (si->c != NULL)
+		msg(chansvs.nick, si->c->name, "%s", buf);
+	else
+		command_success_nodata(si, "%s", buf);
+}
+
 static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *arg = parv[1];
+	char *arg = si->c != NULL ? parv[1] : parv[0];
 	int32_t dice, sides, i, roll = 1;
 
 	/* this command is only available on channel */
@@ -73,12 +102,12 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 	for (i = 0; i < dice; i++)
 		roll += (rand() % sides);
 
-	msg(chansvs.nick, parv[0], "Your roll: \2%d\2", roll);
+	gs_command_report(si, "Your roll: \2%d\2", roll);
 }
 
 static void command_wod(sourceinfo_t *si, int parc, char *parv[])
 {
-	int ii = 1;
+	int ii = si->c != NULL ? 1 : 0;
 	char *arg_dice = parv[ii++];
 	char *arg_difficulty = parv[ii++];
 
@@ -89,18 +118,11 @@ static void command_wod(sourceinfo_t *si, int parc, char *parv[])
 	static char buf[BUFSIZE];
 	char *end_p;
 
-	/* this command is only available on channel */
-	if (!si->c)
-	{
-		command_fail(si, fault_noprivs, "This command is only available on channel.");
-		return;
-	}
-
 	srand(CURRTIME);
 
 	if (arg_dice == NULL || arg_difficulty == NULL)
 	{
-		command_fail(si, fault_needmoreparams, "Syntax: !wod <dice> <difficulty>");
+		command_fail(si, fault_needmoreparams, "Syntax: WOD <dice> <difficulty>");
 		return;
 	}
 
@@ -149,19 +171,15 @@ static void command_wod(sourceinfo_t *si, int parc, char *parv[])
 			rerolls = rerolls - botches;
 			total = success - botches;
 
-			msg(chansvs.nick, parv[0], "%s rolls %d dice at difficulty %d: %s", si->su->nick, dice, difficulty, buf);
+			gs_command_report(si, "%s rolls %d dice at difficulty %d: %s", si->su->nick, dice, difficulty, buf);
 
 			if (rerolls > 0)
-			{
-				msg(chansvs.nick, parv[0], "Successes: %d, Failures: %d, Botches: %d, Total: %d. "
+				gs_command_report(si, "Successes: %d, Failures: %d, Botches: %d, Total: %d. "
 					"You may reroll %d if you have a specialty.",
 					success, failure, botches, total, rerolls);
-			}
 			else
-			{
-				msg(chansvs.nick, parv[0], "Successes: %d, Failures: %d, Botches: %d, Total: %d.",
+				gs_command_report(si, "Successes: %d, Failures: %d, Botches: %d, Total: %d.",
 					success, failure, botches, total);
-			}
 		}
 
 		/* prepare for another go. */

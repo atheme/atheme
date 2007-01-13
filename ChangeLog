@@ -1,3 +1,14 @@
+jilles      2007/01/13 00:49:42 UTC	(20070113-7445)
+  Log:
+  nickserv list: allow searching by last host/vhost.
+  
+
+  Changes:	Modified:
+  +5 -0		trunk/help/nickserv/list (File Modified) 
+  +5 -0		trunk/help/userserv/list (File Modified) 
+  +56 -15	trunk/modules/nickserv/list.c (File Modified) 
+
+
 jilles      2007/01/12 16:07:59 UTC	(20070112-7443)
   Log:
   chanserv::trigger
