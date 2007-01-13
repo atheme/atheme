@@ -1,3 +1,13 @@
+nenolod     2007/01/13 11:57:00 UTC	(20070113-7459)
+  Log:
+  - add magic 8-ball
+  
+
+  Changes:	Modified:
+  +98 -0	trunk/modules/gameserv/Makefile.in (File Modified) 
+  + -		trunk/modules/gameserv/eightball.c (File Added) 
+
+
 nenolod     2007/01/13 11:38:20 UTC	(20070113-7457)
   Log:
   - send 20 at a time, drop the sorcerynet-services compatibility claim (max 10 there)

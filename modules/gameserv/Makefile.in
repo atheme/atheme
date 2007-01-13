@@ -38,7 +38,8 @@ BASE_SRCS = 		\
 	dice.c		\
 	eightball.c	\
 	help.c		\
-	namegen.c
+	namegen.c	\
+	rps.c
 
 SRCS = ${BASE_SRCS}
 
