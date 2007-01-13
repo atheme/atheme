@@ -36,7 +36,8 @@ default: all
 BASE_SRCS = 		\
 	main.c		\
 	dice.c		\
-	help.c
+	help.c		\
+	namegen.c
 
 SRCS = ${BASE_SRCS}
 
