@@ -4,7 +4,7 @@
  *
  * Dice generator.
  *
- * $Id: dice.c 7447 2007-01-13 03:52:16Z nenolod $
+ * $Id: dice.c 7449 2007-01-13 04:00:04Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"gameserv/dice", FALSE, _modinit, _moddeinit,
-	"$Id: dice.c 7447 2007-01-13 03:52:16Z nenolod $",
+	"$Id: dice.c 7449 2007-01-13 04:00:04Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -70,13 +70,6 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *arg = si->c != NULL ? parv[1] : parv[0];
 	int32_t dice, sides, i, roll = 1;
-
-	/* this command is only available on channel */
-	if (!si->c)
-	{
-		command_fail(si, fault_noprivs, "This command is only available on channel.");
-		return;
-	}
 
 	if (!arg)
 		return;

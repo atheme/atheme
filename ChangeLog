@@ -1,3 +1,25 @@
+nenolod     2007/01/13 03:52:16 UTC	(20070113-7447)
+  Log:
+  - gameserv, all commands are implemented yet, some will follow later.
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/configure (File Modified) 
+  +1 -0		trunk/configure.ac (File Modified) 
+  +0 -1		trunk/contrib/Makefile.in (File Modified) 
+  +0 -171	trunk/contrib/fc_dice.c (File Deleted) 
+  +37 -0	trunk/dist/example.conf (File Modified) 
+  +13 -0	trunk/include/services.h (File Modified) 
+  +1 -2		trunk/modules/Makefile.in (File Modified) 
+  + -		trunk/modules/gameserv/ (File Added) 
+  +260 -0	trunk/modules/gameserv/Makefile.in (File Added) 
+  + -		trunk/modules/gameserv/dice.c (File Added) 
+  +63 -0	trunk/modules/gameserv/help.c (File Added) 
+  +89 -0	trunk/modules/gameserv/main.c (File Added) 
+  +1 -0		trunk/src/atheme.c (File Modified) 
+  +61 -0	trunk/src/conf.c (File Modified) 
+
+
 jilles      2007/01/13 00:49:42 UTC	(20070113-7445)
   Log:
   nickserv list: allow searching by last host/vhost.
