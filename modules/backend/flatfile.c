@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 7397 2006-12-26 11:58:18Z jilles $
+ * $Id: flatfile.c 7495 2007-01-14 09:31:33Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 7397 2006-12-26 11:58:18Z jilles $",
+	"$Id: flatfile.c 7495 2007-01-14 09:31:33Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -487,7 +487,7 @@ static void flatfile_db_load(void)
 				if (!mc->founder)
 				{
 					slog(LG_DEBUG, "db_load(): channel %s has no founder, dropping.", mc->name);
-					mychan_delete(mc->name);
+					object_unref(mc);
 					continue;
 				}
 

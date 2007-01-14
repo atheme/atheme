@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 7491 2007-01-14 08:50:33Z nenolod $
+ * $Id: account.h 7495 2007-01-14 09:31:33Z nenolod $
  */
 
 #ifndef ACCOUNT_H
@@ -102,6 +102,8 @@ struct mynick_
 
 struct mychan_
 {
+  object_t parent;
+
   char name[CHANNELLEN];
 
   myuser_t *founder;
@@ -141,6 +143,8 @@ struct mychan_
 /* struct for channel access list */
 struct chanacs_
 {
+	object_t parent;
+
 	myuser_t *myuser;
 	mychan_t *mychan;
 	char      host[HOSTLEN];
@@ -277,7 +281,6 @@ E void mynick_delete(mynick_t *mn);
 E mynick_t *mynick_find(const char *name);
 
 E mychan_t *mychan_add(char *name);
-E void mychan_delete(char *name);
 E mychan_t *mychan_find(const char *name);
 E boolean_t mychan_isused(mychan_t *mc);
 E myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t minlevel, int maxtime);
@@ -285,8 +288,8 @@ E myuser_t *mychan_pick_successor(mychan_t *mc);
 
 E chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, uint32_t level);
 E chanacs_t *chanacs_add_host(mychan_t *mychan, char *host, uint32_t level);
-E void chanacs_delete(mychan_t *mychan, myuser_t *myuser, uint32_t level);
-E void chanacs_delete_host(mychan_t *mychan, char *host, uint32_t level);
+E void chanacs_unref(mychan_t *mychan, myuser_t *myuser, uint32_t level);
+E void chanacs_unref_host(mychan_t *mychan, char *host, uint32_t level);
 E chanacs_t *chanacs_find(mychan_t *mychan, myuser_t *myuser, uint32_t level);
 E chanacs_t *chanacs_find_host(mychan_t *mychan, char *host, uint32_t level);
 E uint32_t chanacs_host_flags(mychan_t *mychan, char *host);

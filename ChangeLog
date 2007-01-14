@@ -1,3 +1,16 @@
+nenolod     2007/01/14 08:53:26 UTC	(20070114-7493)
+  Log:
+  - myuser_delete, mynick_delete -> object_unref
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/drop.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/group.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/register.c (File Modified) 
+  +1 -1		trunk/modules/xmlrpc/account.c (File Modified) 
+  +2 -2		trunk/src/account.c (File Modified) 
+
+
 nenolod     2007/01/14 08:50:33 UTC	(20070114-7491)
   Log:
   - myuser/mynick -> child of object

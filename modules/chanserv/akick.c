@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 7103 2006-11-06 11:22:38Z jilles $
+ * $Id: akick.c 7495 2007-01-14 09:31:33Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@ static void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[]);
 DECLARE_MODULE_V1
 (
 	"chanserv/akick", FALSE, _modinit, _moddeinit,
-	"$Id: akick.c 7103 2006-11-06 11:22:38Z jilles $",
+	"$Id: akick.c 7495 2007-01-14 09:31:33Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -188,7 +188,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
-			chanacs_delete_host(mc, uname, CA_AKICK);
+			chanacs_unref_host(mc, uname, CA_AKICK);
 
 			verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", get_source_name(si), uname);
 			logcommand(si, CMDLOG_SET, "%s AKICK DEL %s", mc->name, uname);
@@ -204,7 +204,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		chanacs_delete(mc, mu, CA_AKICK);
+		chanacs_unref(mc, mu, CA_AKICK);
 
 		command_success_nodata(si, "\2%s\2 has been removed from the AKICK list for \2%s\2.", mu->name, mc->name);
 		logcommand(si, CMDLOG_SET, "%s AKICK DEL %s", mc->name, mu->name);
