@@ -4,7 +4,7 @@
  *
  * Object management.
  *
- * $Id: object.c 7485 2007-01-14 08:24:01Z nenolod $
+ * $Id: object.c 7487 2007-01-14 08:34:12Z nenolod $
  */
 
 #include "atheme.h"
@@ -25,12 +25,12 @@
  * Side Effects:
  *      - none
  */
-void object_init(object_t *obj, char *name, destructor_t des)
+void object_init(object_t *obj, const char *name, destructor_t des)
 {
 	return_if_fail(obj != NULL);
 	return_if_fail(name != NULL);
 
-	obj->name = name;
+	obj->name = sstrdup(name);
 	obj->destructor = des;
 	obj->refcount = 1;
 }
@@ -49,13 +49,13 @@ void object_init(object_t *obj, char *name, destructor_t des)
  * Side Effects:
  *      - none
  */
-void * object_ref(object_t *obj)
+void * object_ref(void *object)
 {
-	return_if_fail(obj != NULL);
+	return_if_fail(object != NULL);
 
-	obj->refcount++;
+	object(object)->refcount++;
 
-	return obj;
+	return object;
 }
 
 /*
@@ -72,14 +72,17 @@ void * object_ref(object_t *obj)
  * Side Effects:
  *      - if the refcount is 0, the object is destroyed.
  */
-void object_unref(object_t *obj)
+void object_unref(void *object)
 {
-	return_if_fail(obj != NULL);
+	return_if_fail(object != NULL);
+	object_t *obj = object(object);
 
 	obj->refcount--;
 
 	if (obj->refcount <= 0)
 	{
+		free(obj->name);
+
 		if (obj->destructor != NULL)
 			obj->destructor(obj);
 		else

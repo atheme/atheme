@@ -5,7 +5,7 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id: dictionary.c 6833 2006-10-22 01:55:56Z nenolod $
+ * $Id: dictionary.c 7487 2007-01-14 08:34:12Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,8 @@ list_t dictionarylist;
 
 struct dictionary_tree_
 {
-	const char *name;
+	object_t parent;
+
 	int resolution;
 	list_t *hashv;		/* dynamically allocated by dictionary_create() */
 	int (*compare_cb)(const char *a, const char *b);
@@ -43,7 +44,7 @@ dictionary_tree_t *dictionary_create(const char *name, int resolution, int (*com
 {
 	dictionary_tree_t *dtree = smalloc(sizeof(dictionary_tree_t));
 
-	dtree->name       = name;
+	object_init(&dtree->parent, name, NULL);
 	dtree->resolution = resolution;
 	dtree->hashv      = smalloc(sizeof(list_t) * resolution);
 	dtree->compare_cb = compare_cb;
@@ -477,8 +478,8 @@ void dictionary_stats(void (*stats_cb)(const char *line, void *privdata), void *
 
 	LIST_FOREACH(n, dictionarylist.head)
 	{
-		dtree = n->data;
-		snprintf(buf, sizeof buf, "Hash statistics for %s", dtree->name);
+		dtree = object_ref(n->data);
+		snprintf(buf, sizeof buf, "Hash statistics for %s", object(dtree)->name);
 		stats_cb(buf, privdata);
 		for (i = 0; i <= MAXCOUNT; i++)
 			counts[i] = 0;
@@ -504,5 +505,6 @@ void dictionary_stats(void (*stats_cb)(const char *line, void *privdata), void *
 					counts[i]);
 			stats_cb(buf, privdata);
 		}
+		object_unref(dtree);
 	}
 }

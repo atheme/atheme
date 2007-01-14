@@ -1,3 +1,13 @@
+nenolod     2007/01/14 08:24:01 UTC	(20070114-7485)
+  Log:
+  - change object_ref() to return a pointer to the ref'd object.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/object.h (File Modified) 
+  +3 -1		trunk/src/object.c (File Modified) 
+
+
 nenolod     2007/01/14 08:22:28 UTC	(20070114-7483)
   Log:
   - add object(x) macro for safely casting to a base object
