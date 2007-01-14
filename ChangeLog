@@ -1,3 +1,12 @@
+nenolod     2007/01/14 09:36:40 UTC	(20070114-7499)
+  Log:
+  - alphabetize source list
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/Makefile.in (File Modified) 
+
+
 nenolod     2007/01/14 09:34:40 UTC	(20070114-7497)
   Log:
   - warning/error fixes

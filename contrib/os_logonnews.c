@@ -4,7 +4,7 @@
  *
  * Logon News stuff...
  *
- * $Id: os_logonnews.c 7431 2007-01-10 15:03:01Z jilles $
+ * $Id: os_logonnews.c 7501 2007-01-14 10:38:55Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/logonnews", FALSE, _modinit, _moddeinit,
-	"$Revision: 7431 $",
+	"$Revision: 7501 $",
 	"William Pitcock <nenolod -at- nenolod.net>"
 );
 
@@ -130,6 +130,10 @@ static void display_news(void *vptr)
 	char dBuf[BUFSIZE];
 	struct tm tm;
 	int count = 0;
+
+	/* abort if it's an internal client */
+	if (is_internal_client(u))
+		return;
 
 	if (logon_news.count > 0)
 	{
