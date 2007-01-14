@@ -4,7 +4,7 @@
  *
  * Object management.
  *
- * $Id: object.c 7481 2007-01-14 08:19:09Z nenolod $
+ * $Id: object.c 7485 2007-01-14 08:24:01Z nenolod $
  */
 
 #include "atheme.h"
@@ -49,11 +49,13 @@ void object_init(object_t *obj, char *name, destructor_t des)
  * Side Effects:
  *      - none
  */
-void object_ref(object_t *obj)
+void * object_ref(object_t *obj)
 {
 	return_if_fail(obj != NULL);
 
 	obj->refcount++;
+
+	return obj;
 }
 
 /*
