@@ -4,7 +4,7 @@
  *
  * Memory stuff.
  *
- * $Id: org.atheme.claro.base.memory 3021 2005-10-19 05:23:38Z nenolod $
+ * $Id: atheme_memory.h 7467 2007-01-14 03:25:42Z nenolod $
  */
 
 #ifndef __CLAROBASEMEMORY

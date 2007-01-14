@@ -4,11 +4,10 @@
  *
  * Datastream stuff.
  *
- * $Id: datastream.c 7273 2006-11-25 00:25:20Z jilles $
+ * $Id: datastream.c 7467 2007-01-14 03:25:42Z nenolod $
  */
 
-#include <org.atheme.claro.base>
-#include "claro_internal.h"
+#include "atheme.h"
 
 #define SENDQSIZE (4096 - 40)
 
@@ -31,7 +30,7 @@ void sendq_add(connection_t * cptr, char *buf, int len)
 		return;
 	if (cptr->flags & (CF_DEAD | CF_SEND_EOF))
 	{
-		claro_log(LG_DEBUG, "sendq_add(): attempted to send to fd %d which is already dead", cptr->fd);
+		slog(LG_DEBUG, "sendq_add(): attempted to send to fd %d which is already dead", cptr->fd);
 		return;
 	}
 
@@ -69,7 +68,7 @@ void sendq_add_eof(connection_t * cptr)
 		return;
 	if (cptr->flags & (CF_DEAD | CF_SEND_EOF))
 	{
-		claro_log(LG_DEBUG, "sendq_add(): attempted to send to fd %d which is already dead", cptr->fd);
+		slog(LG_DEBUG, "sendq_add(): attempted to send to fd %d which is already dead", cptr->fd);
 		return;
 	}
 	cptr->flags |= CF_SEND_EOF;
@@ -99,7 +98,7 @@ void sendq_flush(connection_t * cptr)
                 {
                         if (errno != EAGAIN)
 			{
-				claro_log(LG_DEBUG, "sendq_flush(): write error %d (%s) on connection %s[%d]",
+				slog(LG_DEBUG, "sendq_flush(): write error %d (%s) on connection %s[%d]",
 						errno, strerror(errno),
 						cptr->name, cptr->fd);
 				cptr->flags |= CF_DEAD;
@@ -211,22 +210,22 @@ void recvq_put(connection_t *cptr)
 	if (l == 0 || (l < 0 && errno != EWOULDBLOCK && errno != EAGAIN && errno != EALREADY && errno != EINTR && errno != ENOBUFS))
 	{
 		if (l == 0)
-			claro_log(LG_INFO, "recvq_put(): fd %d closed the connection", cptr->fd);
+			slog(LG_INFO, "recvq_put(): fd %d closed the connection", cptr->fd);
 		else
-			claro_log(LG_INFO, "recvq_put(): lost connection on fd %d", cptr->fd);
+			slog(LG_INFO, "recvq_put(): lost connection on fd %d", cptr->fd);
 		connection_close(cptr);
 		return;
 	}
 	else if (l > 0)
 		sq->firstfree += l;
 
-	claro_log(LG_DEBUG, "recvq_put(): %d bytes received, %d now in recvq", l, recvq_length(cptr));
+	slog(LG_DEBUG, "recvq_put(): %d bytes received, %d now in recvq", l, recvq_length(cptr));
 	if (cptr->recvq_handler)
 	{
 		l = recvq_length(cptr);
 		do /* call handler until it consumes nothing */
 		{
-			claro_log(LG_DEBUG, "recvq_put(): calling handler with %d in recvq", l);
+			slog(LG_DEBUG, "recvq_put(): calling handler with %d in recvq", l);
 			cptr->recvq_handler(cptr);
 			ll = l;
 			l = recvq_length(cptr);

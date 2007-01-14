@@ -4,11 +4,10 @@
  *
  * Dynamic linker.
  *
- * $Id: linker.c 7271 2006-11-25 00:08:57Z jilles $
+ * $Id: linker.c 7467 2007-01-14 03:25:42Z nenolod $
  */
 
-#include <org.atheme.claro.base>
-#include "claro_internal.h"
+#include "atheme.h"
 
 #ifndef _WIN32
 #include <dlfcn.h>

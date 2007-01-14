@@ -4,7 +4,7 @@
  *
  * A hook system.
  *
- * $Id: hook.h 7271 2006-11-25 00:08:57Z jilles $
+ * $Id: hook.h 7467 2007-01-14 03:25:42Z nenolod $
  */
 #ifndef HOOK_H
 #define HOOK_H

@@ -4,7 +4,7 @@
  *
  * This contains the connection_t structure.
  *
- * $Id: connection.h 7271 2006-11-25 00:08:57Z jilles $
+ * $Id: connection.h 7467 2007-01-14 03:25:42Z nenolod $
  */
 
 #ifndef CONNECTION_H

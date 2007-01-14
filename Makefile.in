@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7283 2006-11-25 14:27:10Z jilles $
+# $Id: Makefile.in 7467 2007-01-14 03:25:42Z nenolod $
 #
 
 CC		= @CC@
@@ -25,7 +25,7 @@ SHAREDIR	= @SHAREDIR@
 BIN		= atheme@EXEEXT@
 
 SHELL=/bin/sh
-SUBDIRS=libatheme crypto backend modules protocol src
+SUBDIRS=crypto backend modules protocol src
 CLEANDIRS = ${SUBDIRS}
 
 all: depend build

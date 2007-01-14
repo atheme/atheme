@@ -1,3 +1,21 @@
+nenolod     2007/01/14 02:50:26 UTC	(20070114-7465)
+  Log:
+  - rework handle_ctcp_common() to use sourceinfo instead of passing redundant references around
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/contrib/ircd_catserv.c (File Modified) 
+  +1 -1		trunk/include/services.h (File Modified) 
+  +1 -1		trunk/modules/chanserv/main.c (File Modified) 
+  +1 -1		trunk/modules/gameserv/main.c (File Modified) 
+  +1 -1		trunk/modules/global/main.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/main.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/main.c (File Modified) 
+  +1 -1		trunk/modules/operserv/main.c (File Modified) 
+  +1 -1		trunk/modules/saslserv/main.c (File Modified) 
+  +2 -2		trunk/src/ctcp-common.c (File Modified) 
+
+
 jilles      2007/01/14 00:30:59 UTC	(20070114-7463)
   Log:
   MemoServ -> GameServ in GameServ description

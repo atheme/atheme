@@ -4,7 +4,7 @@
  *
  * Dynamic linker.
  *
- * $Id: linker.h 3001 2005-10-19 04:40:25Z nenolod $
+ * $Id: linker.h 7467 2007-01-14 03:25:42Z nenolod $
  */
 
 #ifndef LINKER_H

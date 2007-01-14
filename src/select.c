@@ -4,11 +4,10 @@
  *
  * Socketengine implementing select().
  *
- * $Id: select.c 7271 2006-11-25 00:08:57Z jilles $
+ * $Id: select.c 7467 2007-01-14 03:25:42Z nenolod $
  */
 
-#include <org.atheme.claro.base>
-#include "claro_internal.h"
+#include "atheme.h"
 
 extern list_t connection_list; /* this lives in connection.c */
 fd_set readfds, writefds;

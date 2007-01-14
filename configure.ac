@@ -3,16 +3,16 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 7447 2007-01-13 03:52:16Z nenolod $
+dnl $Id: configure.ac 7467 2007-01-14 03:25:42Z nenolod $
 
 dnl Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.57)
+AC_PREREQ(2.59)
 
 AC_INIT(atheme, 2.2, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 7447 2007-01-13 03:52:16Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 7467 2007-01-14 03:25:42Z nenolod $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -558,22 +558,23 @@ echo " "
 echo "Makefile generation"
 echo " "
 
-AC_OUTPUT(Makefile \
-	libatheme/Makefile \
-	backend/Makefile \
-	contrib/Makefile \
-	crypto/Makefile \
-	modules/Makefile \
-	modules/chanserv/Makefile \
-	modules/global/Makefile \
-	modules/nickserv/Makefile \
-	modules/operserv/Makefile \
-	modules/xmlrpc/Makefile \
-	modules/memoserv/Makefile \
-	modules/saslserv/Makefile \
-	modules/gameserv/Makefile \
-	protocol/Makefile \
-	src/Makefile)
+AC_OUTPUT([
+	Makefile
+	backend/Makefile
+	contrib/Makefile
+	crypto/Makefile
+	modules/Makefile
+	modules/chanserv/Makefile
+	modules/global/Makefile
+	modules/nickserv/Makefile
+	modules/operserv/Makefile
+	modules/xmlrpc/Makefile
+	modules/memoserv/Makefile
+	modules/saslserv/Makefile
+	modules/gameserv/Makefile
+	protocol/Makefile
+	src/Makefile
+])
 
 d=`eval echo ${MODDIR}`
 d=`eval echo $d`

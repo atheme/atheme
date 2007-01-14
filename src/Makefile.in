@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7283 2006-11-25 14:27:10Z jilles $
+# $Id: Makefile.in 7467 2007-01-14 03:25:42Z nenolod $
 #
 
 CC		= @CC@
@@ -27,13 +27,14 @@ LOGDIR		= @LOGDIR@
 SHAREDIR	= @SHAREDIR@
 BIN		= atheme@EXEEXT@
 MKDEP		= @MKDEP@
-CFLAGS		= @CFLAGS@ -I../include -I../libatheme @PGINC@
+CFLAGS		= @CFLAGS@ -I../include @PGINC@
 
 VERSION		= @PACKAGE_VERSION@
 
-LIBS		= @LIBS@ @PQLIB@ -L../libatheme -lorg.atheme.claro.base
+LIBS		= @LIBS@ @PQLIB@
 LDFLAGS		= @LDFLAGS@
 CPPFLAGS	= @CPPFLAGS@
+SOCKET_ENGINE   = @SOCKET_ENGINE@.c
 
 default: all
 
@@ -41,6 +42,7 @@ BASE_SRCS =		\
 	account.c	\
 	atheme.c	\
 	authcookie.c	\
+	balloc.c        \
 	base64.c	\
 	channels.c	\
 	cidr.c		\
@@ -49,15 +51,22 @@ BASE_SRCS =		\
 	ctcp-common.c	\
 	conf.c		\
 	confparse.c	\
+	connection.c    \
 	crypto.c	\
 	culture.c	\
+	datastream.c	\
 	dbhandler.c	\
 	dictionary.c	\
+	dlink.c         \
+	event.c		\
 	flags.c		\
 	function.c	\
 	help.c		\
+	hook.c		\
+	linker.c	\
 	match.c		\
 	md5.c		\
+	memory.c	\
 	module.c	\
 	node.c		\
 	packet.c	\
@@ -71,6 +80,8 @@ BASE_SRCS =		\
 	services.c	\
 	servtree.c	\
 	signal.c	\
+	sockio.c	\
+	string.c	\
 	svsignore.c	\
 	template.c	\
 	tokenize.c	\
@@ -78,7 +89,8 @@ BASE_SRCS =		\
 	users.c		\
 	uid.c		\
 	uplink.c	\
-	xmlrpc.c
+	xmlrpc.c	\
+	${SOCKET_ENGINE}
 
 SRCS = ${BASE_SRCS} version.c
 
@@ -88,7 +100,7 @@ all: atheme ../dist/example.userserv.conf
 
 build: all
 
-atheme: $(OBJS) ../libatheme/liborg.atheme.claro.base.a
+atheme: $(OBJS)
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ ${OBJS} ${LIBS}
 	$(MV) version.c version.c.last
 

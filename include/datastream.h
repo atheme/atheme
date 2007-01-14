@@ -4,7 +4,7 @@
  *
  * Datastream query stuff.
  *
- * $Id: org.atheme.claro.base.datastream 6379 2006-09-13 21:53:18Z jilles $
+ * $Id: datastream.h 7467 2007-01-14 03:25:42Z nenolod $
  */
 #ifndef __CLARODATASTREAM
 #define __CLARODATASTREAM

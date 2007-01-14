@@ -4,7 +4,7 @@
  *
  * Platform-independent network I/O layer.
  *
- * $Id: sockio.h 3325 2005-10-31 03:27:49Z nenolod $
+ * $Id: sockio.h 7467 2007-01-14 03:25:42Z nenolod $
  */
 
 #ifndef SOCKIO_H

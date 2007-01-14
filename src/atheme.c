@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 7447 2007-01-13 03:52:16Z nenolod $
+ * $Id: atheme.c 7467 2007-01-14 03:25:42Z nenolod $
  */
 
 #include "atheme.h"
@@ -21,6 +21,10 @@ gamesvs_t gamesvs;
 
 me_t me;
 struct cnt cnt;
+
+/* XXX */
+claro_state_t claro_state;
+int runflags;
 
 char *config_file;
 char *log_path;
@@ -189,7 +193,12 @@ int main(int argc, char *argv[])
 	umask(077);
 #endif
 
-	libclaro_init(slog);
+        event_init();
+        initBlockHeap();
+        init_dlink_nodes();
+        hooks_init();
+        init_netio();
+        init_socket_queues();
 
 	translation_init();
 	init_nodes();

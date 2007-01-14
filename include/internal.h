@@ -2,9 +2,9 @@
  * Copyright (c) 2005-2006 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
- * stuff for internal use by libatheme.
+ * Stuff for internal use in Atheme.
  *
- * $Id: claro_internal.h 7273 2006-11-25 00:25:20Z jilles $
+ * $Id: internal.h 7467 2007-01-14 03:25:42Z nenolod $
  */
 
 /* log function pointer */

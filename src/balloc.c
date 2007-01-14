@@ -4,11 +4,10 @@
  *
  * This file contains the block allocator.
  *
- * $Id: balloc.c 7273 2006-11-25 00:25:20Z jilles $
+ * $Id: balloc.c 7467 2007-01-14 03:25:42Z nenolod $
  */
 
-#include <org.atheme.claro.base>
-#include "claro_internal.h"
+#include "atheme.h"
 
 /* please no IOCCC entries --nenolod */
 #ifndef _WIN32
@@ -41,7 +40,7 @@ static list_t heap_lists;
 
 static void _blockheap_fail(const char *reason, const char *file, int line)
 {
-	claro_log(LG_INFO, "Blockheap failure: %s (%s:%d)", reason, file, line);
+	slog(LG_INFO, "Blockheap failure: %s (%s:%d)", reason, file, line);
 	runflags |= RF_SHUTDOWN;
 }
 
@@ -226,7 +225,7 @@ BlockHeap *BlockHeapCreate(size_t elemsize, int elemsperblock)
 	
 	if (bh == NULL)
 	{
-		claro_log(LG_INFO, "Attempt to calloc() failed: (%s:%d)", __FILE__, __LINE__);
+		slog(LG_INFO, "Attempt to calloc() failed: (%s:%d)", __FILE__, __LINE__);
 		runflags |= RF_SHUTDOWN;
 	}
 
@@ -248,7 +247,7 @@ BlockHeap *BlockHeapCreate(size_t elemsize, int elemsperblock)
 	{
 		if (bh != NULL)
 			free(bh);
-		claro_log(LG_INFO, "newblock() failed");
+		slog(LG_INFO, "newblock() failed");
 		runflags |= RF_SHUTDOWN;
 	}
 
@@ -293,7 +292,7 @@ void *BlockHeapAlloc(BlockHeap *bh)
 			BlockHeapGarbageCollect(bh);
 			if (bh->freeElems == 0)
 			{
-				claro_log(LG_INFO, "newblock() failed and garbage collection didn't help");
+				slog(LG_INFO, "newblock() failed and garbage collection didn't help");
 				runflags |= RF_SHUTDOWN;
 			}
 		}
@@ -336,13 +335,13 @@ int BlockHeapFree(BlockHeap *bh, void *ptr)
 	if (bh == NULL)
 	{
 
-		claro_log(LG_DEBUG, "balloc.c:BlockHeapFree() bh == NULL");
+		slog(LG_DEBUG, "balloc.c:BlockHeapFree() bh == NULL");
 		return (1);
 	}
 
 	if (ptr == NULL)
 	{
-		claro_log(LG_DEBUG, "balloc.c:BlockHeapFree() ptr == NULL");
+		slog(LG_DEBUG, "balloc.c:BlockHeapFree() ptr == NULL");
 		return (1);
 	}
 

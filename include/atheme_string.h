@@ -4,7 +4,7 @@
  *
  * String stuff.
  *
- * $Id: org.atheme.claro.base.string 6829 2006-10-22 00:40:48Z nenolod $
+ * $Id: atheme_string.h 7467 2007-01-14 03:25:42Z nenolod $
  */
 
 #ifndef __CLAROSTRING

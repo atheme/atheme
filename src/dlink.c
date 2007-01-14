@@ -4,11 +4,10 @@
  *
  * Linked list stuff.
  *
- * $Id: dlink.c 7273 2006-11-25 00:25:20Z jilles $
+ * $Id: dlink.c 7467 2007-01-14 03:25:42Z nenolod $
  */
 
-#include <org.atheme.claro.base>
-#include "claro_internal.h"
+#include "atheme.h"
 
 static BlockHeap *node_heap;
 
@@ -18,7 +17,7 @@ void init_dlink_nodes(void)
 
 	if (!node_heap)
 	{
-		claro_log(LG_INFO, "init_dlink_nodes(): block allocator failure.");
+		slog(LG_INFO, "init_dlink_nodes(): block allocator failure.");
 		exit(EXIT_FAILURE);
 	}
 }
@@ -130,7 +129,7 @@ void node_del(node_t *n, list_t *l)
         /* do we even have a node? */
         if (!n)
         {
-                claro_log(LG_DEBUG, "node_del(): called with NULL node");
+                slog(LG_DEBUG, "node_del(): called with NULL node");
                 return;
         }
 

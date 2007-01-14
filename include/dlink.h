@@ -4,7 +4,7 @@
  *
  * Data structures and macros for manipulating linked lists.
  *
- * $Id: dlink.h 6681 2006-10-14 13:53:31Z jilles $
+ * $Id: dlink.h 7467 2007-01-14 03:25:42Z nenolod $
  */
 
 #ifndef NODE_H
