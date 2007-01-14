@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7495 2007-01-14 09:31:33Z nenolod $
+ * $Id: account.c 7497 2007-01-14 09:34:40Z nenolod $
  */
 
 #include "atheme.h"
@@ -632,7 +632,7 @@ mychan_t *mychan_add(char *name)
 
 	mc = BlockHeapAlloc(mychan_heap);
 
-	object_init(object(mc), NULL, mychan_delete);
+	object_init(object(mc), NULL, (destructor_t) mychan_delete);
 	strlcpy(mc->name, name, CHANNELLEN);
 	mc->founder = NULL;
 	mc->registered = CURRTIME;
@@ -771,7 +771,7 @@ static void chanacs_delete(chanacs_t *ca)
 
 	LIST_FOREACH_SAFE(n, tn, ca->metadata.head)
 	{
-		md = n->data;
+		metadata_t *md = n->data;
 		metadata_delete(ca, METADATA_CHANACS, md->name);
 	}
 

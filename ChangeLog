@@ -1,3 +1,23 @@
+nenolod     2007/01/14 09:31:33 UTC	(20070114-7495)
+  Log:
+  - chanacs_t, mychan_t -> child of object_t
+  - chanacs_delete[_host] -> chanacs_unref[_host]
+  - chanacs_delete: private destructor for chanacs_t
+  - mychan_delete: reworked as private destructor for chanacs_t
+  - in source: mychan_delete -> object_unref
+  
+
+  Changes:	Modified:
+  +6 -3		trunk/include/account.h (File Modified) 
+  +1 -1		trunk/modules/backend/flatfile.c (File Modified) 
+  +1 -1		trunk/modules/backend/postgresql.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/akick.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/drop.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/template.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/xop.c (File Modified) 
+  +93 -136	trunk/src/account.c (File Modified) 
+
+
 nenolod     2007/01/14 08:53:26 UTC	(20070114-7493)
   Log:
   - myuser_delete, mynick_delete -> object_unref
