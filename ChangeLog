@@ -1,3 +1,16 @@
+nenolod     2007/01/14 08:34:12 UTC	(20070114-7487)
+  Log:
+  - make object ref/unref use void * + internal cast (to avoid spurious warnings)
+  - use char instead of const char for the object's name
+  - make dictionary.c use object_t, but don't make use of the refcounting (mainly for style)
+  
+
+  Changes:	Modified:
+  +4 -3		trunk/include/object.h (File Modified) 
+  +6 -4		trunk/src/dictionary.c (File Modified) 
+  +11 -8	trunk/src/object.c (File Modified) 
+
+
 nenolod     2007/01/14 08:24:01 UTC	(20070114-7485)
   Log:
   - change object_ref() to return a pointer to the ref'd object.

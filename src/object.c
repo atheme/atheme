@@ -4,7 +4,7 @@
  *
  * Object management.
  *
- * $Id: object.c 7487 2007-01-14 08:34:12Z nenolod $
+ * $Id: object.c 7489 2007-01-14 08:35:03Z nenolod $
  */
 
 #include "atheme.h"
@@ -16,7 +16,7 @@
  *
  * Inputs:
  *      - pointer to object manager area
- *      - name of object
+ *      - (optional) name of object
  *      - (optional) custom destructor
  *
  * Outputs:
@@ -28,9 +28,10 @@
 void object_init(object_t *obj, const char *name, destructor_t des)
 {
 	return_if_fail(obj != NULL);
-	return_if_fail(name != NULL);
 
-	obj->name = sstrdup(name);
+	if (name != NULL)
+		obj->name = sstrdup(name);
+
 	obj->destructor = des;
 	obj->refcount = 1;
 }
@@ -81,7 +82,8 @@ void object_unref(void *object)
 
 	if (obj->refcount <= 0)
 	{
-		free(obj->name);
+		if (obj->name != NULL)
+			free(obj->name);
 
 		if (obj->destructor != NULL)
 			obj->destructor(obj);
