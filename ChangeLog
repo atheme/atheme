@@ -1,3 +1,13 @@
+nenolod     2007/01/14 03:28:55 UTC	(20070114-7471)
+  Log:
+  - rename SQL directory to schemas
+  
+
+  Changes:	Modified:
+  + -		trunk/SQL/ (File Deleted) 
+  + -		trunk/schemas/ (File Added) 
+
+
 nenolod     2007/01/14 03:26:53 UTC	(20070114-7469)
   Log:
   - remove libatheme dir

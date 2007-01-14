@@ -1,9 +1,9 @@
-# Copyright (c) 2003-2005 E. Will et al.
+# Copyright (c) 2003-2004 E. Will et al.
 # Rights to this code are documented in doc/LICENSE.
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 1773 2005-08-18 19:37:23Z nenolod $
+# $Id: Makefile.in 7473 2007-01-14 03:37:24Z nenolod $
 #
 
 CC		= @CC@
@@ -23,17 +23,37 @@ DOCDIR		= @DOCDIR@
 MODDIR		= @MODDIR@
 SHAREDIR	= @SHAREDIR@
 BIN		= atheme@EXEEXT@
-MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../include -I../libatheme @PGINC@
+MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include
 PICFLAGS	= @PICFLAGS@
-CFLAGS		= @CFLAGS@ -I../include -I../libatheme @PGINC@
+CFLAGS		= @CFLAGS@ -I../../include @PGINC@
 
-LIBS		= @LIBS@ @PQLIB@
+LIBS		= @LIBS@
 LDFLAGS		= @LDFLAGS@
 CPPFLAGS	= @CPPFLAGS@
 
 default: all
 
-BASE_SRCS = @POSIX_CRYPTC@ ircservices.c sorservices.c
+BASE_SRCS = 		\
+	asuka.c         \
+	bahamut.c       \
+	bircd.c         \
+	charybdis.c	\
+	dreamforge.c    \
+	hybrid.c	\
+	hyperion.c      \
+	inspircd10.c      \
+	inspircd11.c	\
+	ircnet.c        \
+	nefarious.c	\
+	plexus.c        \
+	ptlink.c	\
+	ratbox.c        \
+	shadowircd.c    \
+	solidircd.c	\
+	sorcery.c       \
+	ultimate3.c	\
+	undernet.c      \
+	unreal.c
 
 SRCS = ${BASE_SRCS}
 
@@ -44,8 +64,8 @@ all: protocols
 build: all
 
 install: build
-	${INSTALL} -d $(DESTDIR)${MODDIR}/crypto
-	${INSTALL} -m 755 *.so $(DESTDIR)${MODDIR}/crypto
+	${INSTALL} -d $(DESTDIR)${MODDIR}/modules/protocol
+	${INSTALL} -m 755 *.so $(DESTDIR)${MODDIR}/modules/protocol
 
 protocols: $(OBJS)
 

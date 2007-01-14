@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7293 2006-11-25 22:13:28Z jilles $
+# $Id: Makefile.in 7473 2007-01-14 03:37:24Z nenolod $
 #
 
 CC		= @CC@
@@ -25,7 +25,7 @@ SHAREDIR	= @SHAREDIR@
 BIN		= atheme@EXEEXT@
 MKDEP		= @MKDEP@
 PICFLAGS	= @PICFLAGS@
-CFLAGS		= @CFLAGS@ -I../include -I../libatheme @PGINC@
+CFLAGS		= @CFLAGS@ -I../../include @PGINC@
 
 LIBS		= @LIBS@ @PQLIB@
 LDFLAGS		= @LDFLAGS@
@@ -44,8 +44,8 @@ all: protocols
 build: all
 
 install: build
-	${INSTALL} -d $(DESTDIR)${MODDIR}/backend
-	${INSTALL} -m 755 *.so $(DESTDIR)${MODDIR}/backend
+	${INSTALL} -d $(DESTDIR)${MODDIR}/modules/backend
+	${INSTALL} -m 755 *.so $(DESTDIR)${MODDIR}/modules/backend
 
 protocols: $(OBJS)
 

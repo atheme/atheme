@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7447 2007-01-13 03:52:16Z nenolod $
+# $Id: Makefile.in 7473 2007-01-14 03:37:24Z nenolod $
 #
 
 CC		= @CC@
@@ -39,7 +39,7 @@ SRCS = ${BASE_SRCS}
 
 OBJS = ${SRCS:.c=.so}
 
-SUBDIRS = chanserv nickserv global operserv xmlrpc memoserv saslserv gameserv
+SUBDIRS = backend crypto protocol chanserv nickserv global operserv xmlrpc memoserv saslserv gameserv
 
 all: modules
 

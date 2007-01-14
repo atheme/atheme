@@ -1,9 +1,9 @@
-# Copyright (c) 2003-2004 E. Will et al.
+# Copyright (c) 2003-2005 E. Will et al.
 # Rights to this code are documented in doc/LICENSE.
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7293 2006-11-25 22:13:28Z jilles $
+# $Id: Makefile.in 1773 2005-08-18 19:37:23Z nenolod $
 #
 
 CC		= @CC@
@@ -23,37 +23,17 @@ DOCDIR		= @DOCDIR@
 MODDIR		= @MODDIR@
 SHAREDIR	= @SHAREDIR@
 BIN		= atheme@EXEEXT@
-MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../include
+MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include @PGINC@
 PICFLAGS	= @PICFLAGS@
-CFLAGS		= @CFLAGS@ -I../include -I../libatheme @PGINC@
+CFLAGS		= @CFLAGS@ -I../../include @PGINC@
 
-LIBS		= @LIBS@
+LIBS		= @LIBS@ @PQLIB@
 LDFLAGS		= @LDFLAGS@
 CPPFLAGS	= @CPPFLAGS@
 
 default: all
 
-BASE_SRCS = 		\
-	asuka.c         \
-	bahamut.c       \
-	bircd.c         \
-	charybdis.c	\
-	dreamforge.c    \
-	hybrid.c	\
-	hyperion.c      \
-	inspircd10.c      \
-	inspircd11.c	\
-	ircnet.c        \
-	nefarious.c	\
-	plexus.c        \
-	ptlink.c	\
-	ratbox.c        \
-	shadowircd.c    \
-	solidircd.c	\
-	sorcery.c       \
-	ultimate3.c	\
-	undernet.c      \
-	unreal.c
+BASE_SRCS = @POSIX_CRYPTC@ ircservices.c sorservices.c
 
 SRCS = ${BASE_SRCS}
 
@@ -64,8 +44,8 @@ all: protocols
 build: all
 
 install: build
-	${INSTALL} -d $(DESTDIR)${MODDIR}/protocol
-	${INSTALL} -m 755 *.so $(DESTDIR)${MODDIR}/protocol
+	${INSTALL} -d $(DESTDIR)${MODDIR}/modules/crypto
+	${INSTALL} -m 755 *.so $(DESTDIR)${MODDIR}/modules/crypto
 
 protocols: $(OBJS)
 
