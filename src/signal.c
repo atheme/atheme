@@ -4,52 +4,118 @@
  *
  * This file contains the signal handling routines.
  *
- * $Id: signal.c 6931 2006-10-24 16:53:07Z jilles $
+ * $Id: signal.c 7477 2007-01-14 03:58:28Z nenolod $
  */
 
 #include "atheme.h"
 #include "uplink.h"
 
-#ifdef _WIN32
-#define SIGHUP 0
-#define SIGUSR1 0
-#define SIGUSR2 0
-#endif
-
 static int got_sighup, got_sigint, got_sigterm, got_sigusr2;
 
-void sighandler(int signum)
+typedef void (*signal_handler_t) (int);
+
+static signal_handler_t
+signal_install_handler_full(int signum, signal_handler_t handler,
+			    int *sigblock, size_t sigblocksize)
 {
-	if (signum == SIGHUP)
-		got_sighup = 1;
-	else if (signum == SIGINT)
-		got_sigint = 1;
-	else if (signum == SIGTERM)
-		got_sigterm = 1;
-	else if (signum == SIGUSR1)
+	struct sigaction action, old_action;
+	size_t i;
+
+	action.sa_handler = handler;
+	action.sa_flags = SA_RESTART;
+
+	sigemptyset(&action.sa_mask);
+
+	for (i = 0; i < sigblocksize; i++)
+		sigaddset(&action.sa_mask, sigblock[i]);
+
+	if (sigaction(signum, &action, &old_action) == -1)
 	{
-		/* XXX */
-		if (log_file != NULL)
-			write(fileno(log_file), "Out of memory!\n", 15);
-		if (me.connected && curr_uplink != NULL &&
-				curr_uplink->conn != NULL)
-		{
-			if (chansvs.nick != NULL)
-			{
-				write(curr_uplink->conn->fd, ":", 1);
-				write(curr_uplink->conn->fd, chansvs.nick, strlen(chansvs.nick));
-				write(curr_uplink->conn->fd, " QUIT :Out of memory!\r\n", 23);
-			}
-			write(curr_uplink->conn->fd, "ERROR :Panic! Out of memory.\r\n", 30);
-		}
-		if (runflags & (RF_LIVE | RF_STARTING))
-			write(2, "Out of memory!\n", 15);
-		abort();
+		slog(LG_DEBUG, "Failed to install signal handler for signal %d", signum);
+		return NULL;
 	}
-	else if (signum == SIGUSR2)
-		got_sigusr2 = 1;
+
+	return old_action.sa_handler;
 }
 
+/*
+ * A version of signal(2) that works more reliably across different
+ * platforms.
+ *
+ * It restarts interrupted system calls, does not reset the handler,
+ * and blocks the same signal from within the handler.
+ */
+static signal_handler_t
+signal_install_handler(int signum, signal_handler_t handler)
+{
+	return signal_install_handler_full(signum, handler, NULL, 0);
+}
+
+static void
+signal_empty_handler(int signum)
+{
+	/* do nothing */
+}
+
+static void
+signal_hup_handler(int signum)
+{
+	got_sighup = 1;
+}
+
+static void
+signal_int_handler(int signum)
+{
+	got_sigint = 1;
+}
+
+static void
+signal_term_handler(int signum)
+{
+	got_sigterm = 1;
+}
+
+static void
+signal_usr2_handler(int signum)
+{
+	got_sigusr2 = 1;
+}
+
+/* XXX */
+static void
+signal_usr1_handler(int signum)
+{
+	if (log_file != NULL)
+		write(fileno(log_file), "Out of memory!\n", 15);
+
+	if (me.connected && curr_uplink != NULL &&
+		curr_uplink->conn != NULL)
+	{
+		if (chansvs.nick != NULL)
+		{
+			write(curr_uplink->conn->fd, ":", 1);
+			write(curr_uplink->conn->fd, chansvs.nick, strlen(chansvs.nick));
+			write(curr_uplink->conn->fd, " QUIT :Out of memory!\r\n", 23);
+		}
+		write(curr_uplink->conn->fd, "ERROR: Panic! Out of memory.\r\n", 30);
+	}
+	if (runflags & (RF_LIVE | RF_STARTING))
+		write(2, "Out of memory!\n", 15);
+	abort();
+}
+
+void init_signal_handlers(void)
+{
+	signal_install_handler(SIGHUP, signal_hup_handler);
+	signal_install_handler(SIGINT, signal_int_handler);
+	signal_install_handler(SIGTERM, signal_term_handler);
+	signal_install_handler(SIGPIPE, signal_empty_handler);
+
+	signal_install_handler(SIGUSR1, signal_usr1_handler);
+	signal_install_handler(SIGUSR2, signal_usr2_handler);
+}
+
+/* XXX: we can integrate this into the handlers now --nenolod */
 void check_signals(void)
 {
 	/* rehash */
@@ -69,7 +135,7 @@ void check_signals(void)
 		wallops("Rehashing \2%s\2 by request of \2%s\2.", config_file, "system console");
 
 		if (!conf_rehash())
-			wallops("REHASH of \2%s\2 failed. Please corrrect any errors in the " "file and try again.", config_file);
+			wallops("REHASH of \2%s\2 failed. Please correct any errors in the file and try again.", config_file);
 
 		/* reopen log file -- jilles */
 		if (log_file != NULL)
@@ -116,17 +182,6 @@ void check_signals(void)
 		runflags |= RF_SHUTDOWN;
 	}
 
-#if 0
-	if (signum == SIGUSR1)
-	{
-		wallops("Panic! Out of memory.");
-		if (chansvs.me != NULL && chansvs.me->me != NULL)
-			quit_sts(chansvs.me->me, "out of memory!");
-		me.connected = FALSE;
-		slog(LG_INFO, "sighandler(): out of memory; exiting");
-		runflags |= RF_SHUTDOWN;
-	}
-#endif
 	if (got_sigusr2)
 	{
 		got_sigusr2 = 0;

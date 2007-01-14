@@ -4,7 +4,7 @@
  *
  * Stuff for internal use in Atheme.
  *
- * $Id: internal.h 7467 2007-01-14 03:25:42Z nenolod $
+ * $Id: internal.h 7477 2007-01-14 03:58:28Z nenolod $
  */
 
 /* log function pointer */
@@ -16,3 +16,5 @@ E void hooks_init(void);
 E void init_dlink_nodes(void);
 E void init_netio(void);
 E void init_socket_queues(void);
+E void init_signal_handlers(void);
+

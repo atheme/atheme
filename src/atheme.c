@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 7467 2007-01-14 03:25:42Z nenolod $
+ * $Id: atheme.c 7477 2007-01-14 03:58:28Z nenolod $
  */
 
 #include "atheme.h"
@@ -139,25 +139,8 @@ int main(int argc, char *argv[])
 	CURRTIME = me.start;
 	me.execname = argv[0];
 
-	/* set signal handlers, first part */
-	signal(SIGFPE, sighandler);
-	signal(SIGILL, sighandler);
-#ifndef _WIN32
-	signal(SIGPIPE, SIG_IGN);
-	signal(SIGQUIT, sighandler);
-	/* on daemonizing, we may get a SIGHUP if the parent exits,
-	 * and it's a controlling process -- jilles */
-	signal(SIGHUP, SIG_IGN);
-	signal(SIGTRAP, sighandler);
-	signal(SIGIOT, sighandler);
-	signal(SIGALRM, SIG_IGN);
-	signal(SIGCHLD, SIG_IGN);
-	signal(SIGWINCH, SIG_IGN);
-	signal(SIGTTIN, SIG_IGN);
-	signal(SIGTTOU, SIG_IGN);
-	signal(SIGTSTP, SIG_IGN);
-	signal(SIGUSR1, sighandler);
-#endif
+	/* set signal handlers */
+	init_signal_handlers();
 
 	/* open log */
 	log_open();
@@ -307,14 +290,6 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 #endif
-	/* rest of signal handlers now we're started more fully -- jilles */
-	signal(SIGINT, sighandler);
-	signal(SIGTERM, sighandler);
-#ifndef _WIN32
-	signal(SIGHUP, sighandler);
-	signal(SIGUSR2, sighandler);
-#endif
-
 	/* no longer starting */
 	runflags &= ~RF_STARTING;
 
