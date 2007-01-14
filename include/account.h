@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 7381 2006-12-23 22:53:28Z jilles $
+ * $Id: account.h 7491 2007-01-14 08:50:33Z nenolod $
  */
 
 #ifndef ACCOUNT_H
@@ -41,6 +41,8 @@ struct svsignore_ {
 /* services accounts */
 struct myuser_
 {
+  object_t parent;
+
   char name[NICKLEN];
   char pass[NICKLEN];
   char email[EMAILLEN];
@@ -86,6 +88,8 @@ struct myuser_
 /* registered nick */
 struct mynick_
 {
+  object_t parent;
+
   char nick[NICKLEN];
 
   myuser_t *owner;

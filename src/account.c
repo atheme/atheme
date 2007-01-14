@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7395 2006-12-25 16:32:51Z jilles $
+ * $Id: account.c 7491 2007-01-14 08:50:33Z nenolod $
  */
 
 #include "atheme.h"
@@ -82,21 +82,16 @@ myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags)
 	myuser_t *mu;
 	soper_t *soper;
 
-	mu = myuser_find(name);
-
-	if (mu)
-	{
-		slog(LG_DEBUG, "myuser_add(): myuser already exists: %s", name);
-		return mu;
-	}
+	return_val_if_fail((mu = myuser_find(name)) == NULL, mu);
 
 	slog(LG_DEBUG, "myuser_add(): %s -> %s", name, email);
 
 	mu = BlockHeapAlloc(myuser_heap);
+	object_init(object(mu), NULL, (destructor_t) myuser_delete);
 
-	/* set the password later */
 	strlcpy(mu->name, name, NICKLEN);
 	strlcpy(mu->email, email, EMAILLEN);
+
 	mu->registered = CURRTIME;
 	mu->flags = flags;
 
@@ -151,11 +146,7 @@ void myuser_delete(myuser_t *mu)
 	mymemo_t *memo;
 	dictionary_iteration_state_t state;
 
-	if (!mu)
-	{
-		slog(LG_DEBUG, "myuser_delete(): called for NULL myuser");
-		return;
-	}
+	return_if_fail(mu != NULL);
 
 	slog(LG_DEBUG, "myuser_delete(): %s", mu->name);
 
@@ -242,10 +233,7 @@ void myuser_delete(myuser_t *mu)
 
 	/* delete their nicks */
 	LIST_FOREACH_SAFE(n, tn, mu->nicks.head)
-	{
-		mn = (mynick_t *)n->data;
-		mynick_delete(mn);
-	}
+		object_unref(n->data);
 
 	/* mu->name is the index for this dtree */
 	dictionary_delete(mulist, mu->name);
@@ -539,16 +527,12 @@ mynick_t *mynick_add(myuser_t *mu, const char *name)
 {
 	mynick_t *mn;
 
-	mn = mynick_find(name);
-	if (mn)
-	{
-		slog(LG_DEBUG, "mynick_add(): mynick already exists: %s", name);
-		return mn;
-	}
+	return_val_if_fail((mn = mynick_find(name)) == NULL, mn);
 
 	slog(LG_DEBUG, "mynick_add(): %s -> %s", name, mu->name);
 
 	mn = BlockHeapAlloc(mynick_heap);
+	object_init(object(mn), NULL, (destructor_t) mynick_delete);
 
 	strlcpy(mn->nick, name, NICKLEN);
 	mn->owner = mu;
@@ -578,11 +562,7 @@ mynick_t *mynick_add(myuser_t *mu, const char *name)
  */
 void mynick_delete(mynick_t *mn)
 {
-	if (!mn)
-	{
-		slog(LG_DEBUG, "mynick_delete(): called for NULL myuser");
-		return;
-	}
+	return_if_fail(mn != NULL);
 
 	slog(LG_DEBUG, "mynick_delete(): %s", mn->nick);
 
@@ -1427,7 +1407,7 @@ static int expire_myuser_cb(dictionary_elem_t *delem, void *unused)
 			return 0;
 
 		snoop("EXPIRE: \2%s\2 from \2%s\2 ", mu->name, mu->email);
-		myuser_delete(mu);
+		object_unref(mu);
 	}
 
 	return 0;

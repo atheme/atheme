@@ -4,7 +4,7 @@
  *
  * Includes most headers usually needed.
  *
- * $Id: atheme.h 7481 2007-01-14 08:19:09Z nenolod $
+ * $Id: atheme.h 7491 2007-01-14 08:50:33Z nenolod $
  */
 
 #ifndef ATHEME_H
@@ -43,6 +43,7 @@
 
 #define HEAP_NODE       1024
 
+#include "object.h"
 #include "sysconf.h"
 #include "stdinc.h"
 #include "dlink.h"
@@ -82,7 +83,6 @@
 #include "sourceinfo.h"
 #include "authcookie.h"
 #include "privs.h"
-#include "object.h"
 
 #ifdef _WIN32
 

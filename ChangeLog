@@ -1,3 +1,12 @@
+nenolod     2007/01/14 08:35:03 UTC	(20070114-7489)
+  Log:
+  - make object naming optional
+  
+
+  Changes:	Modified:
+  +6 -4		trunk/src/object.c (File Modified) 
+
+
 nenolod     2007/01/14 08:34:12 UTC	(20070114-7487)
   Log:
   - make object ref/unref use void * + internal cast (to avoid spurious warnings)
