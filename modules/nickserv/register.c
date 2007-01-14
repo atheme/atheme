@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 7381 2006-12-23 22:53:28Z jilles $
+ * $Id: register.c 7493 2007-01-14 08:53:26Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 7381 2006-12-23 22:53:28Z jilles $",
+	"$Id: register.c 7493 2007-01-14 08:53:26Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -176,7 +176,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		if (!sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_REGISTER, mu, key))
 		{
 			command_fail(si, fault_emailfail, "Sending email failed, sorry! Registration aborted.");
-			myuser_delete(mu);
+			object_unref(mu);
 			free(key);
 			return;
 		}

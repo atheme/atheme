@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7491 2007-01-14 08:50:33Z nenolod $
+ * $Id: account.c 7493 2007-01-14 08:53:26Z nenolod $
  */
 
 #include "atheme.h"
@@ -1450,7 +1450,7 @@ void expire_check(void *arg)
 			}
 
 			snoop("EXPIRE: \2%s\2 from \2%s\2", mn->nick, mn->owner->name);
-			mynick_delete(mn);
+			object_unref(mn);
 		}
 	}
 
@@ -1514,7 +1514,7 @@ static int check_myuser_cb(dictionary_elem_t *delem, void *unused)
 		else if (mn->owner != mu)
 		{
 			slog(LG_INFO, "db_check(): replacing nick %s owned by %s with %s", mn->nick, mn->owner->name, mu->name);
-			mynick_delete(mn);
+			object_unref(mn);
 			mn = mynick_add(mu, mu->name);
 			mn->registered = mu->registered;
 			mn->lastseen = mu->lastlogin;
