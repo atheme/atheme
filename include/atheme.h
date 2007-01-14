@@ -4,7 +4,7 @@
  *
  * Includes most headers usually needed.
  *
- * $Id: atheme.h 7467 2007-01-14 03:25:42Z nenolod $
+ * $Id: atheme.h 7481 2007-01-14 08:19:09Z nenolod $
  */
 
 #ifndef ATHEME_H
@@ -82,6 +82,7 @@
 #include "sourceinfo.h"
 #include "authcookie.h"
 #include "privs.h"
+#include "object.h"
 
 #ifdef _WIN32
 
@@ -108,5 +109,72 @@ typedef struct claro_state_ {
 E claro_state_t claro_state;
 
 E int runflags;
+
+/*
+ * Performs a soft assertion. If the assertion fails, we wallops() and log.
+ */
+#ifdef __GNUC__
+#define soft_assert(x)								\
+	if (!(x)) { 								\
+		slog(LG_INFO, "%s(%d) [%s]: critical: Assertion '%s' failed.",	\
+			__FILE__, __LINE__, __PRETTY_FUNCTION__, #x);		\
+		wallops("%s(%d) [%s]: critical: Assertion '%s' failed.",	\
+			__FILE__, __LINE__, __PRETTY_FUNCTION__, #x);		\
+	}
+#else
+#define soft_assert(x)								\
+	if (!(x)) { 								\
+		slog(LG_INFO, "%s(%d): critical: Assertion '%s' failed.",	\
+			__FILE__, __LINE__, #x);				\
+		wallops("%s(%d): critical: Assertion '%s' failed.",		\
+			__FILE__, __LINE__, #x);				\
+	}
+#endif
+
+/*
+ * Same as soft_assert, but returns if an assertion fails.
+ */
+#ifdef __GNUC__
+#define return_if_fail(x)							\
+	if (!(x)) { 								\
+		slog(LG_INFO, "%s(%d) [%s]: critical: Assertion '%s' failed.",	\
+			__FILE__, __LINE__, __PRETTY_FUNCTION__, #x);		\
+		wallops("%s(%d) [%s]: critical: Assertion '%s' failed.",	\
+			__FILE__, __LINE__, __PRETTY_FUNCTION__, #x);		\
+		return;								\
+	}
+#else
+#define return_if_fail(x)							\
+	if (!(x)) { 								\
+		slog(LG_INFO, "%s(%d): critical: Assertion '%s' failed.",	\
+			__FILE__, __LINE__, #x);				\
+		wallops("%s(%d): critical: Assertion '%s' failed.",		\
+			__FILE__, __LINE__, #x);				\
+		return;								\
+	}
+#endif
+
+/*
+ * Same as soft_assert, but returns a given value if an assertion fails.
+ */
+#ifdef __GNUC__
+#define return_val_if_fail(x, y)						\
+	if (!(x)) { 								\
+		slog(LG_INFO, "%s(%d) [%s]: critical: Assertion '%s' failed.",	\
+			__FILE__, __LINE__, __PRETTY_FUNCTION__, #x);		\
+		wallops("%s(%d) [%s]: critical: Assertion '%s' failed.",	\
+			__FILE__, __LINE__, __PRETTY_FUNCTION__, #x);		\
+		return (y);							\
+	}
+#else
+#define return_val_if_fail(x, y)						\
+	if (!(x)) { 								\
+		slog(LG_INFO, "%s(%d): critical: Assertion '%s' failed.",	\
+			__FILE__, __LINE__, #x);				\
+		wallops("%s(%d): critical: Assertion '%s' failed.",		\
+			__FILE__, __LINE__, #x);				\
+		return (y);							\
+	}
+#endif
 
 #endif /* ATHEME_H */
