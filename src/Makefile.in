@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7481 2007-01-14 08:19:09Z nenolod $
+# $Id: Makefile.in 7499 2007-01-14 09:36:40Z nenolod $
 #
 
 CC		= @CC@
@@ -69,6 +69,7 @@ BASE_SRCS =		\
 	memory.c	\
 	module.c	\
 	node.c		\
+	object.c	\
 	packet.c	\
 	parse.c		\
 	phandler.c	\
@@ -89,7 +90,6 @@ BASE_SRCS =		\
 	users.c		\
 	uid.c		\
 	uplink.c	\
-	object.c	\
 	xmlrpc.c	\
 	${SOCKET_ENGINE}
 
