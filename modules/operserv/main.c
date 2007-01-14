@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6927 2006-10-24 15:22:05Z jilles $
+ * $Id: main.c 7465 2007-01-14 02:50:26Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6927 2006-10-24 15:22:05Z jilles $",
+	"$Id: main.c 7465 2007-01-14 02:50:26Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -44,7 +44,7 @@ static void oservice(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	if (*cmd == '\001')
 	{
-		handle_ctcp_common(cmd, text, si->su->nick, opersvs.nick);
+		handle_ctcp_common(si, cmd, text);
 		return;
 	}
 

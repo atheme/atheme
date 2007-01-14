@@ -44,7 +44,7 @@ static void gameserv(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	if (*cmd == '\001')
 	{
-		handle_ctcp_common(cmd, text, si->su->nick, gamesvs.nick);
+		handle_ctcp_common(si, cmd, text);
 		return;
 	}
 

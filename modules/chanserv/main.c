@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 7439 2007-01-11 11:10:44Z nenolod $
+ * $Id: main.c 7465 2007-01-14 02:50:26Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 7439 2007-01-11 11:10:44Z nenolod $",
+	"$Id: main.c 7465 2007-01-14 02:50:26Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -105,7 +105,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	if (*cmd == '\001')
 	{
-		handle_ctcp_common(cmd, strtok(NULL, ""), si->su->nick, chansvs.nick);
+		handle_ctcp_common(si, cmd, strtok(NULL, ""));
 		return;
 	}
 

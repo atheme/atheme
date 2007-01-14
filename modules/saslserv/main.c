@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 6625 2006-10-02 09:29:08Z jilles $
+ * $Id: main.c 7465 2007-01-14 02:50:26Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 6625 2006-10-02 09:29:08Z jilles $",
+	"$Id: main.c 7465 2007-01-14 02:50:26Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -54,7 +54,7 @@ static void saslserv(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	if (*cmd == '\001')
 	{
-		handle_ctcp_common(cmd, text, si->su->nick, saslsvs.nick);
+		handle_ctcp_common(si, cmd, text);
 		return;
 	}
 

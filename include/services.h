@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 7447 2007-01-13 03:52:16Z nenolod $
+ * $Id: services.h 7465 2007-01-14 02:50:26Z nenolod $
  */
 
 #ifndef SERVICES_H
@@ -157,6 +157,6 @@ E int floodcheck(user_t *, user_t *);
 
 /* ctcp-common.c */
 E void common_ctcp_init(void);
-E unsigned int handle_ctcp_common(char *, char *, char *, char *);
+E unsigned int handle_ctcp_common(sourceinfo_t *si, char *, char *);
 
 #endif

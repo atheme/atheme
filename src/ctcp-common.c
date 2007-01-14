@@ -4,7 +4,7 @@
  *
  * This file contains IRC interaction routines.
  *
- * $Id: ctcp-common.c 7299 2006-11-27 10:30:15Z jilles $
+ * $Id: ctcp-common.c 7465 2007-01-14 02:50:26Z nenolod $
  */
 
 #include "atheme.h"
@@ -56,7 +56,7 @@ void common_ctcp_init(void)
 	dictionary_add(ctcptree, "\001CLIENTINFO\001", ctcp_clientinfo_handler);
 }
 
-unsigned int handle_ctcp_common(char *cmd, char *args, char *origin, char *svsnick)
+unsigned int handle_ctcp_common(sourceinfo_t *si, char *cmd, char *args)
 {
 	void (*handler)(char *, char *, char *, char *);
 
@@ -64,7 +64,7 @@ unsigned int handle_ctcp_common(char *cmd, char *args, char *origin, char *svsni
 
 	if (handler != NULL)
 	{
-		handler(cmd, args, origin, svsnick);
+		handler(cmd, args, si->su->nick, si->service->name);
 		return 1;
 	}
 

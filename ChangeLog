@@ -1,3 +1,12 @@
+jilles      2007/01/14 00:30:59 UTC	(20070114-7463)
+  Log:
+  MemoServ -> GameServ in GameServ description
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/dist/example.conf (File Modified) 
+
+
 nenolod     2007/01/13 11:59:40 UTC	(20070113-7461)
   Log:
   - the next logical progression, rock paper scissors
