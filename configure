@@ -8,7 +8,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# $Id: configure.ac 7447 2007-01-13 03:52:16Z nenolod $
+# $Id: configure.ac 7473 2007-01-14 03:37:24Z nenolod $
 ## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -974,7 +974,7 @@ Copyright (C) 2003 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-$Id: configure.ac 7447 2007-01-13 03:52:16Z nenolod $
+$Id: configure.ac 7473 2007-01-14 03:37:24Z nenolod $
 _ACEOF
   exit 0
 fi
@@ -13816,7 +13816,7 @@ echo " "
 echo "Makefile generation"
 echo " "
 
-                                                                                                                                                      ac_config_files="$ac_config_files Makefile backend/Makefile contrib/Makefile crypto/Makefile modules/Makefile modules/chanserv/Makefile modules/global/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/xmlrpc/Makefile modules/memoserv/Makefile modules/saslserv/Makefile modules/gameserv/Makefile protocol/Makefile src/Makefile"
+                                                                                                                                                      ac_config_files="$ac_config_files Makefile contrib/Makefile modules/Makefile modules/backend/Makefile modules/crypto/Makefile modules/chanserv/Makefile modules/global/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/xmlrpc/Makefile modules/memoserv/Makefile modules/saslserv/Makefile modules/gameserv/Makefile modules/protocol/Makefile src/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -14343,10 +14343,10 @@ do
   case "$ac_config_target" in
   # Handling of arguments.
   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-  "backend/Makefile" ) CONFIG_FILES="$CONFIG_FILES backend/Makefile" ;;
   "contrib/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/Makefile" ;;
-  "crypto/Makefile" ) CONFIG_FILES="$CONFIG_FILES crypto/Makefile" ;;
   "modules/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/Makefile" ;;
+  "modules/backend/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/backend/Makefile" ;;
+  "modules/crypto/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/crypto/Makefile" ;;
   "modules/chanserv/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/chanserv/Makefile" ;;
   "modules/global/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/global/Makefile" ;;
   "modules/nickserv/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/nickserv/Makefile" ;;
@@ -14355,7 +14355,7 @@ do
   "modules/memoserv/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/memoserv/Makefile" ;;
   "modules/saslserv/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/saslserv/Makefile" ;;
   "modules/gameserv/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/gameserv/Makefile" ;;
-  "protocol/Makefile" ) CONFIG_FILES="$CONFIG_FILES protocol/Makefile" ;;
+  "modules/protocol/Makefile" ) CONFIG_FILES="$CONFIG_FILES modules/protocol/Makefile" ;;
   "src/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
   "include/sysconf.h" ) CONFIG_HEADERS="$CONFIG_HEADERS include/sysconf.h" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5

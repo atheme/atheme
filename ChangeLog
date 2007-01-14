@@ -1,3 +1,25 @@
+nenolod     2007/01/14 03:37:24 UTC	(20070114-7473)
+  Log:
+  - crypto/backend/protocol -> modules
+  - update documentation
+  - note that the postgresql backend is no longer supported and will likely be removed
+  
+
+  Changes:	Modified:
+  + -		trunk/backend/ (File Deleted) 
+  +3 -3		trunk/configure.ac (File Modified) 
+  + -		trunk/crypto/ (File Deleted) 
+  +29 -27	trunk/dist/example.conf (File Modified) 
+  +1 -1		trunk/modules/Makefile.in (File Modified) 
+  + -		trunk/modules/backend/ (File Added) 
+  +3 -3		trunk/modules/backend/Makefile.in (File Modified) 
+  + -		trunk/modules/crypto/ (File Added) 
+  +4 -4		trunk/modules/crypto/Makefile.in (File Modified) 
+  + -		trunk/modules/protocol/ (File Added) 
+  +4 -4		trunk/modules/protocol/Makefile.in (File Modified) 
+  + -		trunk/protocol/ (File Deleted) 
+
+
 nenolod     2007/01/14 03:28:55 UTC	(20070114-7471)
   Log:
   - rename SQL directory to schemas
