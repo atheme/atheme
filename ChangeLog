@@ -1,3 +1,13 @@
+nenolod     2007/01/13 11:59:40 UTC	(20070113-7461)
+  Log:
+  - the next logical progression, rock paper scissors
+  
+
+  Changes:	Modified:
+  +74 -1	trunk/modules/gameserv/Makefile.in (File Modified) 
+  + -		trunk/modules/gameserv/rps.c (File Added) 
+
+
 nenolod     2007/01/13 11:57:00 UTC	(20070113-7459)
   Log:
   - add magic 8-ball
