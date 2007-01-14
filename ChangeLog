@@ -1,3 +1,16 @@
+nenolod     2007/01/14 08:19:09 UTC	(20070114-7481)
+  Log:
+  - object manager
+  - fancy new assertion macros: soft_assert(), return_if_fail(), return_val_if_fail().
+  
+
+  Changes:	Modified:
+  +68 -0	trunk/include/atheme.h (File Modified) 
+  +24 -0	trunk/include/object.h (File Added) 
+  +1 -0		trunk/src/Makefile.in (File Modified) 
+  +87 -0	trunk/src/object.c (File Added) 
+
+
 nenolod     2007/01/14 04:14:47 UTC	(20070114-7479)
   Log:
   - update toplevel Makefile

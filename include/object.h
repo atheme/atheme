@@ -4,7 +4,7 @@
  *
  * Object management.
  *
- * $Id: object.h 7481 2007-01-14 08:19:09Z nenolod $
+ * $Id: object.h 7483 2007-01-14 08:22:28Z nenolod $
  */
 
 #ifndef __ATHEME_OBJECT_H__
@@ -20,5 +20,7 @@ typedef struct {
 E void object_init(object_t *, char *name, destructor_t destructor);
 E void object_ref(object_t *);
 E void object_unref(object_t *);
+
+#define object(x) ((object_t *) x)
 
 #endif
