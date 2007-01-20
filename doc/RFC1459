@@ -1,16 +1,3 @@
-/*
- * Copyright (c) 2003-2004 E. Will et al.
- * Rights to this code are documented in doc/LICENSE.
- *
- * This file contains the IRC protocol specification.
- *
- * $Id: RFC1459 59 2002-02-25 21:27:06Z nenolod $
- */
-
-
-
-
-
 Network Working Group                                      J. Oikarinen
 Request for Comments: 1459                                      D. Reed
                                                                May 1993
