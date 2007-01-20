@@ -4,7 +4,7 @@
  *
  * Linked list stuff.
  *
- * $Id: dlink.c 7467 2007-01-14 03:25:42Z nenolod $
+ * $Id: dlink.c 7509 2007-01-20 03:29:34Z nenolod $
  */
 
 #include "atheme.h"
@@ -43,6 +43,8 @@ node_t *node_create(void)
 /* frees a node */
 void node_free(node_t *n)
 {
+	return_if_fail(n != NULL);
+
         /* free it */
         BlockHeapFree(node_heap, n);
 
@@ -54,6 +56,9 @@ void node_free(node_t *n)
 void node_add(void *data, node_t *n, list_t *l)
 {
         node_t *tn;
+
+	return_if_fail(n != NULL);
+	return_if_fail(l != NULL);
 
         n->next = n->prev = NULL;
         n->data = data;
@@ -88,6 +93,9 @@ void node_add_head(void *data, node_t *n, list_t *l)
 {
 	node_t *tn;
 
+	return_if_fail(n != NULL);
+	return_if_fail(l != NULL);
+
 	n->next = n->prev = NULL;
 	n->data = data;
 
@@ -110,6 +118,9 @@ void node_add_head(void *data, node_t *n, list_t *l)
 /* adds a node to a list before another node, or to the end */
 void node_add_before(void *data, node_t *n, list_t *l, node_t *before)
 {
+	return_if_fail(n != NULL);
+	return_if_fail(l != NULL);
+
 	if (before == NULL)
 		node_add(data, n, l);
 	else if (before == l->head)
@@ -126,12 +137,8 @@ void node_add_before(void *data, node_t *n, list_t *l, node_t *before)
 
 void node_del(node_t *n, list_t *l)
 {
-        /* do we even have a node? */
-        if (!n)
-        {
-                slog(LG_DEBUG, "node_del(): called with NULL node");
-                return;
-        }
+	return_if_fail(n != NULL);
+	return_if_fail(l != NULL);
 
         /* are we the head? */
         if (!n->prev)
@@ -154,6 +161,8 @@ node_t *node_find(void *data, list_t *l)
 {
         node_t *n;
 
+	return_val_if_fail(l != NULL, NULL);
+
         LIST_FOREACH(n, l->head) if (n->data == data)
                 return n;
 
@@ -162,6 +171,10 @@ node_t *node_find(void *data, list_t *l)
 
 void node_move(node_t *m, list_t *oldlist, list_t *newlist)
 {
+	return_if_fail(m != NULL);
+	return_if_fail(oldlist != NULL);
+	return_if_fail(newlist != NULL);
+
         /* Assumption: If m->next == NULL, then list->tail == m
          *      and:   If m->prev == NULL, then list->head == m
          */

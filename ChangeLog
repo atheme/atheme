@@ -1,3 +1,12 @@
+nenolod     2007/01/20 03:25:41 UTC	(20070120-7507)
+  Log:
+  - remove copyright on this file, since it's a public-domain RFC.
+  
+
+  Changes:	Modified:
+  +0 -13	trunk/doc/RFC1459 (File Modified) 
+
+
 nenolod     2007/01/14 10:38:55 UTC	(20070114-7501)
   Log:
   - fix contrib/os_logonnews.c's stupidity regarding to when atheme starts up
