@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv FORWARD function
  *
- * $Id: forward.c 7263 2006-11-24 22:55:12Z jilles $
+ * $Id: forward.c 7511 2007-01-23 16:35:31Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/forward", FALSE, _modinit, _moddeinit,
-	"$Id: forward.c 7263 2006-11-24 22:55:12Z jilles $",
+	"$Id: forward.c 7511 2007-01-23 16:35:31Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -134,7 +134,7 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 	/* rate limit it -- jilles */
 	if (CURRTIME - si->smu->memo_ratelimit_time > MEMO_MAX_TIME)
 		si->smu->memo_ratelimit_num = 0;
-	if (si->smu->memo_ratelimit_num > MEMO_MAX_NUM)
+	if (si->smu->memo_ratelimit_num > MEMO_MAX_NUM && !has_priv(si, PRIV_FLOOD))
 	{
 		command_fail(si, fault_toomany, "Too many memos; please wait a while and try again");
 		return;

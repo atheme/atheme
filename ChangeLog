@@ -1,3 +1,12 @@
+nenolod     2007/01/20 03:29:34 UTC	(20070120-7509)
+  Log:
+  - add sanity-checking assertions
+  
+
+  Changes:	Modified:
+  +19 -6	trunk/src/dlink.c (File Modified) 
+
+
 nenolod     2007/01/20 03:25:41 UTC	(20070120-7507)
   Log:
   - remove copyright on this file, since it's a public-domain RFC.
