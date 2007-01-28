@@ -1,3 +1,15 @@
+nenolod     2007/01/28 21:30:06 UTC	(20070128-7523)
+  Log:
+  - remove utterly-fucked postgresql storage backend that has not worked 
+    properly since 1.2
+  
+
+  Changes:	Modified:
+  +6 -64	trunk/configure.ac (File Modified) 
+  +0 -544	trunk/modules/backend/postgresql.c (File Deleted) 
+  + -		trunk/schemas/ (File Deleted) 
+
+
 jilles      2007/01/23 16:35:31 UTC	(20070123-7511)
   Log:
   Make PRIV_FLOOD exempt from memo rate limiting in /ms forward also.
