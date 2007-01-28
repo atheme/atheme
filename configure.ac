@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 7473 2007-01-14 03:37:24Z nenolod $
+dnl $Id: configure.ac 7523 2007-01-28 21:30:06Z nenolod $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,12 +12,18 @@ AC_PREREQ(2.59)
 AC_INIT(atheme, 2.2, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 7473 2007-01-14 03:37:24Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 7523 2007-01-28 21:30:06Z nenolod $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
 AC_CONFIG_HEADER(include/sysconf.h)
 AC_PREFIX_DEFAULT(~/atheme)
+
+PGINC=""
+PQLIB=""
+
+AC_SUBST(PGINC)
+AC_SUBST(PQLIB)
 
 AC_GNU_SOURCE
 
@@ -209,69 +215,6 @@ if test "$balloc" = no; then
         AC_DEFINE([NOBALLOC], 1, [Define to 1 if you wish to disable the block allocator.])
 fi
 AC_MSG_RESULT($balloc)
-
-echo " "
-echo "PostgreSQL support"
-echo " "
-
-POSTGRESQL="yes"
-
-AC_ARG_WITH(postgresql,
-AC_HELP_STRING([--with-postgresql],[ Enables PostgreSQL backend support.]),
-[
-       case "$withval" in
-               yes|no)
-                       POSTGRESQL="$withval"
-                       ;;
-               *)
-                       AC_MSG_ERROR([Invalid argument to --with-postgresql (expecting either 'yes' or 'no')])
-                       ;;
-       esac
-])
-
-if test "x$POSTGRESQL" = xyes; then
-       AC_MSG_CHECKING(for PostgreSQL include directory)
-       if test -d /usr/include/pgsql ; then
-               pg_inc_dir="/usr/include/pgsql"
-       elif test -f /usr/local/include/libpq-fe.h ; then
-               # kludge for freebsd ports, found on liveharmony boxes. --nenolod
-               pg_inc_dir="/usr/local/include"
-               LDFLAGS="-L/usr/local/lib"
-       elif test -d /usr/include/postgresql ; then
-               pg_inc_dir="/usr/include/postgresql"
-       elif test -d /usr/local/psql/include ; then
-               pg_inc_dir="/usr/local/psql/include"
-       elif test -d /usr/local/include/postgresql ; then
-               pg_inc_dir="/usr/local/include/postgresql"
-       elif test -d /usr/local/pgsql/include ; then
-               pg_inc_dir="/usr/local/pgsql/include"
-       elif test -d /usr/local/include/psql ; then
-               pg_inc_dir="/usr/local/include/psql"
-       elif test -d /opt/psql/include ; then
-               pg_inc_dir="/opt/psql/include"
-       else
-               pg_inc_dir="no"
-               PQLIB=""
-               POSTGRESQL="no"
-       fi
-       POSTGRESQL_C=""
-
-       AC_MSG_RESULT($pg_inc_dir)
-
-       if test "$pg_inc_dir" != "no"; then
-               AC_CHECK_HEADER($pg_inc_dir/libpq-fe.h, [
-                       PGINC="-I$pg_inc_dir"
-               AC_CHECK_LIB(pq, PQconnectdb, PQLIB="-lpq"
-                            POSTGRESQL_C="postgresql.c")
-               ])
-       else
-               POSTGRESQL="no"
-       fi
-fi
-
-AC_SUBST(POSTGRESQL_C)
-AC_SUBST(PGINC)
-AC_SUBST(PQLIB)
 
 echo " "
 echo "OpenSSL-based SASL support"
@@ -588,7 +531,6 @@ Configuration:
         Data directory       : ${DATADIR}
         PID directory        : ${RUNDIR}
         Large network support: ${LARGENET}
-        PostgreSQL support   : ${POSTGRESQL}
         OpenSSL SASL support : ${SSL}
         Socket Engine        : ${SOCKET_ENGINE}
         Block Allocator      : ${balloc}
