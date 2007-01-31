@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7473 2007-01-14 03:37:24Z nenolod $
+# $Id: Makefile.in 7533 2007-01-31 12:35:02Z jilles $
 #
 
 CC		= @CC@
@@ -33,7 +33,7 @@ CPPFLAGS	= @CPPFLAGS@
 
 default: all
 
-BASE_SRCS = flatfile.c @POSTGRESQL_C@
+BASE_SRCS = flatfile.c
 
 SRCS = ${BASE_SRCS}
 
