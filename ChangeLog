@@ -1,3 +1,13 @@
+jilles      2007/01/31 12:24:24 UTC	(20070131-7529)
+  Log:
+  example.conf: change protocol module line to charybdis and
+  comment it out to force people to change it
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/dist/example.conf (File Modified) 
+
+
 nenolod     2007/01/28 21:30:59 UTC	(20070128-7525)
   Log:
   - remove that line
