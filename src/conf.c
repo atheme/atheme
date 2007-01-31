@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 7535 2007-01-31 12:35:45Z jilles $
+ * $Id: conf.c 7537 2007-01-31 15:51:51Z jilles $
  */
 
 #include "atheme.h"
@@ -1830,11 +1830,16 @@ boolean_t conf_check(void)
 		return FALSE;
 	}
 
-	if (!strchr(me.name, '.'))
+	/* The following checks could perhaps be stricter */
+	if (!strchr(me.name, '.') || strchr("!\"#$%&+,-./:@", me.name[0]) ||
+			strchr(me.name, ' '))
 	{
 		slog(LG_INFO, "conf_check(): bogus `name' in %s (did you specify a valid server name?)", config_file);
 		return FALSE;
 	}
+
+	if (isdigit(me.name[0]))
+		slog(LG_INFO, "conf_check(): `name' in %s starts with a digit, probably invalid (continuing anyway)", config_file);
 
 	if (!me.desc)
 		me.desc = sstrdup("Atheme IRC Services");

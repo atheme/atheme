@@ -1,3 +1,13 @@
+jilles      2007/01/31 12:35:45 UTC	(20070131-7535)
+  Log:
+  Remove unused me.uplink and serverinfo::uplink.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/include/global.h (File Modified) 
+  +1 -15	trunk/src/conf.c (File Modified) 
+
+
 jilles      2007/01/31 12:35:02 UTC	(20070131-7533)
   Log:
   Complete postgresql removal.
