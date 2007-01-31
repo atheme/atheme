@@ -5,7 +5,7 @@
  *
  * Global data
  *
- * $Id: global.h 7363 2006-12-13 00:49:59Z jilles $
+ * $Id: global.h 7535 2007-01-31 12:35:45Z jilles $
  */
 
 #ifndef _GLOBAL_H
@@ -20,7 +20,6 @@ struct me
 {
   char *name;                   /* server's name on IRC               */
   char *desc;                   /* server's description               */
-  char *uplink;                 /* the server we connect to           */
   char *actual;                 /* the reported name of the uplink    */
   char *vhost;                  /* IP we bind outgoing stuff to       */
   uint16_t recontime;           /* time between reconnection attempts */

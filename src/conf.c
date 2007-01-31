@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 7447 2007-01-13 03:52:16Z nenolod $
+ * $Id: conf.c 7535 2007-01-31 12:35:45Z jilles $
  */
 
 #include "atheme.h"
@@ -36,7 +36,6 @@ static int c_string(CONFIGENTRY *);
 
 static int c_si_name(CONFIGENTRY *);
 static int c_si_desc(CONFIGENTRY *);
-static int c_si_uplink(CONFIGENTRY *);
 static int c_si_numeric(CONFIGENTRY *);
 static int c_si_vhost(CONFIGENTRY *);
 static int c_si_recontime(CONFIGENTRY *);
@@ -282,8 +281,6 @@ void conf_init(void)
 			free(me.name);
 		if (me.desc)
 			free(me.desc);
-		if (me.uplink)
-			free(me.uplink);
 		if (me.vhost)
 			free(me.vhost);
 		if (chansvs.user)
@@ -293,7 +290,7 @@ void conf_init(void)
 		if (chansvs.real)
 			free(chansvs.real);
 
-		me.name = me.desc = me.uplink = me.vhost = chansvs.user = chansvs.host = chansvs.real = NULL;
+		me.name = me.desc = me.vhost = chansvs.user = chansvs.host = chansvs.real = NULL;
 
 		set_match_mapping(MATCH_RFC1459);	/* default to RFC compliancy */
 	}
@@ -486,7 +483,6 @@ void init_newconf(void)
 	/* Now we fill in the information */
 	add_conf_item("NAME", &conf_si_table, c_si_name);
 	add_conf_item("DESC", &conf_si_table, c_si_desc);
-	add_conf_item("UPLINK", &conf_si_table, c_si_uplink);
 	add_conf_item("NUMERIC", &conf_si_table, c_si_numeric);
 	add_conf_item("VHOST", &conf_si_table, c_si_vhost);
 	add_conf_item("RECONTIME", &conf_si_table, c_si_recontime);
@@ -942,16 +938,6 @@ static int c_si_desc(CONFIGENTRY *ce)
 		PARAM_ERROR(ce);
 
 	me.desc = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_si_uplink(CONFIGENTRY *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	me.uplink = sstrdup(ce->ce_vardata);
 
 	return 0;
 }
