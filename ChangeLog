@@ -1,3 +1,12 @@
+jilles      2007/01/31 15:51:51 UTC	(20070131-7537)
+  Log:
+  Add a few checks to serverinfo::name.
+  
+
+  Changes:	Modified:
+  +6 -1		trunk/src/conf.c (File Modified) 
+
+
 jilles      2007/01/31 12:35:45 UTC	(20070131-7535)
   Log:
   Remove unused me.uplink and serverinfo::uplink.

@@ -1,0 +1,10 @@
+Help for FUNGROUP:
+
+FUNGROUP forcefully unregisters the given nickname
+from the account it is registered to. You cannot
+ungroup account names.
+
+Syntax: FUNGROUP <nickname>
+
+Examples:
+    /msg &nick& FUNGROUP SomeNick
