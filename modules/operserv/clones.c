@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing clone detection.
  *
- * $Id: clones.c 7543 2007-02-02 18:57:47Z jilles $
+ * $Id: clones.c 7545 2007-02-02 21:04:01Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 7543 2007-02-02 18:57:47Z jilles $",
+	"$Id: clones.c 7545 2007-02-02 21:04:01Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -336,9 +336,9 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 	char *clonesstr = parv[1];
 	int clones;
 	char *reason = parv[2];
-	cexcept_t *c;
+	cexcept_t *c = NULL;
 
-	if (!ip || !clonesstr || !reason)
+	if (!ip || !clonesstr)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLONES ADDEXEMPT");
 		command_fail(si, fault_needmoreparams, "Syntax: CLONES ADDEXEMPT <ip> <clones> <reason>");
@@ -357,22 +357,36 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 		cexcept_t *t = n->data;
 
 		if (!strcmp(ip, t->ip))
-		{
-			command_fail(si, fault_alreadyexists, "\2%s\2 already found in exempt list; not adding.", ip);
-			return;
-		}
+			c = t;
 	}
 
-	c = malloc(sizeof(cexcept_t));
-
-	c->ip = sstrdup(ip);
+	if (c == NULL)
+	{
+		if (!reason)
+		{
+			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLONES ADDEXEMPT");
+			command_fail(si, fault_needmoreparams, "Syntax: CLONES ADDEXEMPT <ip> <clones> <reason>");
+			return;
+		}
+		c = smalloc(sizeof(cexcept_t));
+		c->ip = sstrdup(ip);
+		c->reason = sstrdup(reason);
+		node_add(c, node_create(), &clone_exempts);
+		command_success_nodata(si, "Added \2%s\2 to clone exempt list.", ip);
+	}
+	else
+	{
+		if (reason)
+		{
+			free(c->reason);
+			c->reason = sstrdup(reason);
+		}
+		command_success_nodata(si, "Updated \2%s\2 in clone exempt list.", ip);
+	}
 	c->clones = clones;
-	c->reason = sstrdup(reason);
 
-	node_add(c, node_create(), &clone_exempts);
-	command_success_nodata(si, "Added \2%s\2 to clone exempt list.", ip);
-	snoop("CLONES:ADDEXEMPT: \2%s\2 \2%d\2 (%s) by \2%s\2", ip, clones, reason, get_oper_name(si));
-	logcommand(si, CMDLOG_ADMIN, "CLONES ADDEXEMPT %s %d %s", ip, clones, reason);
+	snoop("CLONES:ADDEXEMPT: \2%s\2 \2%d\2 (%s) by \2%s\2", ip, clones, c->reason, get_oper_name(si));
+	logcommand(si, CMDLOG_ADMIN, "CLONES ADDEXEMPT %s %d %s", ip, clones, c->reason);
 	write_exemptdb();
 }
 

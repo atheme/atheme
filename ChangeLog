@@ -1,3 +1,14 @@
+jilles      2007/02/02 18:57:47 UTC	(20070202-7543)
+  Log:
+  operserv clones:
+  - more complete logging for ADDEXEMPT
+  - snoop for ADDEXEMPT/DELEXEMPT
+  
+
+  Changes:	Modified:
+  +3 -1		trunk/modules/operserv/clones.c (File Modified) 
+
+
 jilles      2007/01/31 17:15:36 UTC	(20070131-7539)
   Log:
   Add /ns fungroup, allows admins with user:admin privilege
