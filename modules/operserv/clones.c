@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing clone detection.
  *
- * $Id: clones.c 7283 2006-11-25 14:27:10Z jilles $
+ * $Id: clones.c 7543 2007-02-02 18:57:47Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 7283 2006-11-25 14:27:10Z jilles $",
+	"$Id: clones.c 7543 2007-02-02 18:57:47Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -371,7 +371,8 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 
 	node_add(c, node_create(), &clone_exempts);
 	command_success_nodata(si, "Added \2%s\2 to clone exempt list.", ip);
-	logcommand(si, CMDLOG_ADMIN, "CLONES ADDEXEMPT %s", ip);
+	snoop("CLONES:ADDEXEMPT: \2%s\2 \2%d\2 (%s) by \2%s\2", ip, clones, reason, get_oper_name(si));
+	logcommand(si, CMDLOG_ADMIN, "CLONES ADDEXEMPT %s %d %s", ip, clones, reason);
 	write_exemptdb();
 }
 
@@ -395,6 +396,7 @@ static void os_cmd_clones_delexempt(sourceinfo_t *si, int parc, char *parv[])
 			node_del(n, &clone_exempts);
 			node_free(n);
 			command_success_nodata(si, "Removed \2%s\2 from clone exempt list.", arg);
+			snoop("CLONES:DELEXEMPT: \2%s\2 by \2%s\2", arg, get_oper_name(si));
 			logcommand(si, CMDLOG_ADMIN, "CLONES DELEXEMPT %s", arg);
 			write_exemptdb();
 			return;
