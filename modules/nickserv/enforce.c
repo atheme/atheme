@@ -23,7 +23,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/enforce",FALSE, _modinit, _moddeinit,
-	"$Id: enforce.c 7351 2006-12-09 20:54:13Z jilles $",
+	"$Id: enforce.c 7547 2007-02-04 21:21:06Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -292,6 +292,19 @@ static void show_enforce(void *vdata)
 		command_success_nodata(hdata->si, "%s has enabled nick protection", hdata->mu->name);
 }
 
+static void check_registration(void *vdata)
+{
+	hook_user_register_check_t *hdata = vdata;
+
+	if (hdata->approved)
+		return;
+	if (!strncasecmp(hdata->account, "Guest", 5) && isdigit(hdata->account[5]))
+	{
+		command_fail(hdata->si, fault_badparams, "The nick \2%s\2 is reserved and cannot be registered.", hdata->account);
+		hdata->approved = 1;
+	}
+}
+
 static int idcheck_foreach_cb(dictionary_elem_t *delem, void *privdata)
 {
 	metadata_t *md;
@@ -324,6 +337,8 @@ void _modinit(module_t *m)
 	hook_add_hook("user_identify", remove_idcheck);
 	hook_add_event("user_info");
 	hook_add_hook("user_info", show_enforce);
+	hook_add_event("user_can_register");
+	hook_add_hook("user_can_register", check_registration);
 }
 
 void _moddeinit()
@@ -336,4 +351,5 @@ void _moddeinit()
 	help_delentry(ns_helptree, "SET ENFORCE");
 	hook_del_hook("user_identify", remove_idcheck);
 	hook_del_hook("user_info", show_enforce);
+	hook_del_hook("user_can_register", check_registration);
 }
