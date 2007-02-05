@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2006 Atheme Development Group
+ * Copyright (c) 2006-2007 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Changes and shows nickname access lists.
  *
- * $Id: access.c 7049 2006-11-03 15:39:24Z jilles $
+ * $Id: access.c 7549 2007-02-05 00:55:04Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/access", FALSE, _modinit, _moddeinit,
-	"$Id: access.c 7049 2006-11-03 15:39:24Z jilles $",
+	"$Id: access.c 7549 2007-02-05 00:55:04Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -39,6 +39,79 @@ void _moddeinit()
 	help_delentry(ns_helptree, "ACCESS");
 
 	use_myuser_access--;
+}
+
+static boolean_t username_is_random(const char *name)
+{
+	const char *p;
+	int lower = 0, upper = 0, digit = 0;
+
+	if (*name == '~')
+		name++;
+	if (strlen(name) < 9)
+		return FALSE;
+	p = name;
+	while (*p != '\0')
+	{
+		if (isdigit(*p))
+			digit++;
+		else if (isupper(*p))
+			upper++;
+		else if (islower(*p))
+			lower++;
+		p++;
+	}
+	if (digit >= 4 && lower + upper > 1)
+		return TRUE;
+	if (lower == 0 || upper == 0 || (upper <= 2 && isupper(*name)))
+		return FALSE;
+	return TRUE;
+}
+
+static char *construct_mask(user_t *u)
+{
+	static char mask[USERLEN+HOSTLEN];
+	const char *dynhosts[] = { "*dyn*.*", "*dial*.*.*", "*dhcp*.*.*",
+		"*.t-online.??", "*.t-online.???",
+		"*.t-dialin.??", "*.t-dialin.???",
+		"*.t-ipconnect.??", "*.t-ipconnect.???",
+		"*.ipt.aol.com", NULL };
+	int i;
+	boolean_t hostisdyn = FALSE, havedigits;
+	const char *p, *prevdot, *lastdot;
+
+	for (i = 0; dynhosts[i] != NULL; i++)
+		if (!match(dynhosts[i], u->host))
+			hostisdyn = TRUE;
+	if (hostisdyn)
+	{
+		/* note that all dyn patterns contain a dot */
+		p = u->host;
+		prevdot = u->host;
+		lastdot = strrchr(u->host, '.');
+		havedigits = TRUE;
+		while (*p)
+		{
+			if (*p == '.')
+			{
+				if (!havedigits || p == lastdot || !strcasecmp(p, ".Level3.net"))
+					break;
+				prevdot = p;
+				havedigits = FALSE;
+			}
+			else if (isdigit(*p))
+				havedigits = TRUE;
+			p++;
+		}
+		snprintf(mask, sizeof mask, "%s@*%s", u->user, prevdot);
+	}
+	else if (username_is_random(u->user))
+		snprintf(mask, sizeof mask, "*@%s", u->host);
+	else if (!strcmp(u->host, u->ip) && (p = strrchr(u->ip, '.')) != NULL)
+		snprintf(mask, sizeof mask, "%s@%.*s.0/24", u->user, (int)(p - u->ip), u->ip);
+	else
+		snprintf(mask, sizeof mask, "%s@%s", u->user, u->host);
+	return mask;
 }
 
 static boolean_t mangle_wildcard_to_cidr(const char *host, char *dest, int destlen)
@@ -146,14 +219,20 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (!strcasecmp(parv[0], "ADD"))
 	{
+		mu = si->smu;
 		if (parc < 2)
 		{
-			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ACCESS ADD");
-			command_fail(si, fault_needmoreparams, "Syntax: ACCESS ADD <mask>");
-			return;
+			if (si->su == NULL)
+			{
+				command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ACCESS ADD");
+				command_fail(si, fault_needmoreparams, "Syntax: ACCESS ADD <mask>");
+				return;
+			}
+			else
+				mask = construct_mask(si->su);
 		}
-		mu = si->smu;
-		mask = parv[1];
+		else
+			mask = parv[1];
 		if (mu == NULL)
 		{
 			command_fail(si, fault_noprivs, "You are not logged in.");
