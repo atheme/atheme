@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005-2006 Atheme Development Group.
+ * Copyright (c) 2005-2007 Atheme Development Group.
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 7477 2007-01-14 03:58:28Z nenolod $
+ * $Id: atheme.c 7567 2007-02-05 23:40:44Z jilles $
  */
 
 #include "atheme.h"
@@ -51,7 +51,7 @@ static void print_version(void)
 {
 	printf("Atheme IRC Services (atheme-%s)\n"
 	       "Compiled %s, build-id %s, build %s\n\n"
-	       "Copyright (c) 2005-2006 Atheme Development Group\n"
+	       "Copyright (c) 2005-2007 Atheme Development Group\n"
 	       "Rights to this code are documented in doc/LICENSE.\n",
 	       version, creation, revision, generation);
 }

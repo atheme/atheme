@@ -1,3 +1,15 @@
+jilles      2007/02/05 23:33:48 UTC	(20070205-7565)
+  Log:
+  Change some error messages in the inspircd protocol modules
+  from fprintf(stderr) to slog(), so they are also visible
+  when atheme is run without -n.
+  
+
+  Changes:	Modified:
+  +5 -5		trunk/modules/protocol/inspircd10.c (File Modified) 
+  +4 -4		trunk/modules/protocol/inspircd11.c (File Modified) 
+
+
 jilles      2007/02/05 23:26:59 UTC	(20070205-7563)
   Log:
   Change loglevel from error to info in example.conf.
