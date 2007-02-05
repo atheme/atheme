@@ -1,3 +1,12 @@
+jilles      2007/02/05 14:31:34 UTC	(20070205-7553)
+  Log:
+  Get rid of signedness warnings.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/chanserv/template.c (File Modified) 
+
+
 jilles      2007/02/05 14:01:33 UTC	(20070205-7551)
   Log:
   nickserv ghost: omit source's user@vhost from kill message
