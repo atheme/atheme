@@ -1,3 +1,12 @@
+jilles      2007/02/05 23:26:59 UTC	(20070205-7563)
+  Log:
+  Change loglevel from error to info in example.conf.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/dist/example.conf (File Modified) 
+
+
 jilles      2007/02/05 23:26:22 UTC	(20070205-7561)
   Log:
   Change some LG_INFO to LG_ERROR.

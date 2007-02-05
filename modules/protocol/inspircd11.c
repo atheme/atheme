@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 7413 2006-12-30 15:24:51Z jilles $
+ * $Id: inspircd11.c 7565 2007-02-05 23:33:48Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7413 2006-12-30 15:24:51Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7565 2007-02-05 23:33:48Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -1021,19 +1021,19 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (has_globopsmod == false && has_protocol < PROTOCOL_SNONOTICE)
 		{
-			fprintf(stderr, "atheme: you didn't load m_globops into inspircd. atheme support requires this module. exiting.\n");
+			slog(LG_ERROR, "m_capab(): you didn't load m_globops into inspircd. atheme support requires this module. exiting.");
 			exit(EXIT_FAILURE);
 		}
 
 		if (has_servicesmod == false)
 		{
-			fprintf(stderr, "atheme: you didn't load m_services_account into inspircd. atheme support requires this module. exiting.\n");
-			exit(EXIT_FAILURE);	
+			slog(LG_ERROR, "m_capab(): you didn't load m_services_account into inspircd. atheme support requires this module. exiting.");
+			exit(EXIT_FAILURE);
 		}
 
 		if (has_svshold == false)
 		{
-			fprintf(stderr, "atheme: you didn't load m_svshold into inspircd. nickname enforcers will not work.\n");
+			slog(LG_INFO, "m_capab(): you didn't load m_svshold into inspircd. nickname enforcers will not work.");
 		}
 	}
 	else
