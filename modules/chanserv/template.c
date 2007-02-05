@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TEMPLATE functions.
  *
- * $Id: template.c 7495 2007-01-14 09:31:33Z nenolod $
+ * $Id: template.c 7553 2007-02-05 14:31:34Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/template", FALSE, _modinit, _moddeinit,
-	"$Id: template.c 7495 2007-01-14 09:31:33Z nenolod $",
+	"$Id: template.c 7553 2007-02-05 14:31:34Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -118,7 +118,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 				if (q == NULL)
 					break;
 				r = strchr(q, ' ');
-				command_success_nodata(si, "%-20.*s %.*s", (q - p), p, r != NULL ? (r - q - 1) : strlen(q + 1), q + 1);
+				command_success_nodata(si, "%-20.*s %.*s", (q - p), p, r != NULL ? (r - q - 1) : (int)strlen(q + 1), q + 1);
 				i++;
 				p = r;
 			}
@@ -233,7 +233,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 					break;
 				r = strchr(q, ' ');
 				strlcpy(ss, q, sizeof ss);
-				if (r != NULL && r - q < (sizeof ss - 1))
+				if (r != NULL && r - q < (int)(sizeof ss - 1))
 				{
 					ss[r - q] = '\0';
 				}

@@ -1,3 +1,13 @@
+jilles      2007/02/05 14:01:33 UTC	(20070205-7551)
+  Log:
+  nickserv ghost: omit source's user@vhost from kill message
+  if it is the same as target's user@vhost.
+  
+
+  Changes:	Modified:
+  +3 -2		trunk/modules/nickserv/ghost.c (File Modified) 
+
+
 jilles      2007/02/05 00:55:04 UTC	(20070205-7549)
   Log:
   Allow /ns access add without mask and generate one matching the user.
