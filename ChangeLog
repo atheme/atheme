@@ -1,3 +1,13 @@
+jilles      2007/02/05 00:55:04 UTC	(20070205-7549)
+  Log:
+  Allow /ns access add without mask and generate one matching the user.
+  
+
+  Changes:	Modified:
+  +4 -2		trunk/help/nickserv/access (File Modified) 
+  +85 -6	trunk/modules/nickserv/access.c (File Modified) 
+
+
 jilles      2007/02/04 21:21:06 UTC	(20070204-7547)
   Log:
   Disallow registering accounts starting with Guest<digit>.
