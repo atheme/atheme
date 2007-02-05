@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 William Pitcock, et al.
+ * Copyright (c) 2005-2007 William Pitcock, et al.
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 7263 2006-11-24 22:55:12Z jilles $
+ * $Id: flags.c 7557 2007-02-05 14:44:17Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 7263 2006-11-24 22:55:12Z jilles $",
+	"$Id: flags.c 7557 2007-02-05 14:44:17Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -38,6 +38,55 @@ void _moddeinit()
 {
 	command_delete(&cs_flags, cs_cmdtree);
 	help_delentry(cs_helptree, "FLAGS");
+}
+
+static const char *get_template_name(mychan_t *mc, uint32_t level)
+{
+	metadata_t *md;
+	const char *p, *q, *r;
+	char *s;
+	char ss[40];
+	static char flagname[400];
+
+	md = metadata_find(mc, METADATA_CHANNEL, "private:templates");
+	if (md != NULL)
+	{
+		p = md->value;
+		while (p != NULL)
+		{
+			while (*p == ' ')
+				p++;
+			q = strchr(p, '=');
+			if (q == NULL)
+				break;
+			r = strchr(q, ' ');
+			if (r != NULL && r < q)
+				break;
+			strlcpy(ss, q, sizeof ss);
+			if (r != NULL && r - q < (int)(sizeof ss - 1))
+			{
+				ss[r - q] = '\0';
+			}
+			if (level == flags_to_bitmask(ss, chanacs_flags, 0))
+			{
+				strlcpy(flagname, p, sizeof flagname);
+				s = strchr(flagname, '=');
+				if (s != NULL)
+					*s = '\0';
+				return flagname;
+			}
+			p = r;
+		}
+	}
+	if (level == chansvs.ca_sop)
+		return "SOP";
+	if (level == chansvs.ca_aop)
+		return "AOP";
+	if (level == chansvs.ca_hop)
+		return "HOP";
+	if (level == chansvs.ca_vop)
+		return "VOP";
+	return NULL;
 }
 
 /* FLAGS <channel> [user] [flags] */
@@ -92,7 +141,11 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		LIST_FOREACH(n, mc->chanacs.head)
 		{
 			ca = n->data;
-			command_success_nodata(si, "%-5d %-22s %s", i, ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level, chanacs_flags));
+			str1 = get_template_name(mc, ca->level);
+			if (str1 != NULL)
+				command_success_nodata(si, "%-5d %-22s %s (%s)", i, ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level, chanacs_flags), str1);
+			else
+				command_success_nodata(si, "%-5d %-22s %s", i, ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level, chanacs_flags));
 			i++;
 		}
 
