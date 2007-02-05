@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 7537 2007-01-31 15:51:51Z jilles $
+ * $Id: conf.c 7561 2007-02-05 23:26:22Z jilles $
  */
 
 #include "atheme.h"
@@ -455,7 +455,7 @@ void init_newconf(void)
 
 	if (!conftable_heap)
 	{
-		slog(LG_INFO, "init_newconf(): block allocator failure.");
+		slog(LG_ERROR, "init_newconf(): block allocator failure.");
 		exit(EXIT_FAILURE);
 	}
 
@@ -1759,7 +1759,7 @@ boolean_t conf_rehash(void)
 	cfp = config_load(config_file);
 	if (cfp == NULL)
 	{
-		slog(LG_INFO, "conf_rehash(): unable to load configuration file: %s, aborting rehash", strerror(errno));
+		slog(LG_ERROR, "conf_rehash(): unable to load configuration file: %s, aborting rehash", strerror(errno));
 		runflags &= ~RF_REHASHING;
 		return FALSE;
 	}
@@ -1782,7 +1782,7 @@ boolean_t conf_rehash(void)
 	/* now recheck */
 	if (!conf_check())
 	{
-		slog(LG_INFO, "conf_rehash(): conf file was malformed, aborting rehash");
+		slog(LG_ERROR, "conf_rehash(): conf file was malformed, aborting rehash");
 
 		/* freeing the new conf strings */
 		free_cstructs(&me, &chansvs);
@@ -1826,7 +1826,7 @@ boolean_t conf_check(void)
 {
 	if (!me.name)
 	{
-		slog(LG_INFO, "conf_check(): no `name' set in %s", config_file);
+		slog(LG_ERROR, "conf_check(): no `name' set in %s", config_file);
 		return FALSE;
 	}
 
@@ -1834,12 +1834,12 @@ boolean_t conf_check(void)
 	if (!strchr(me.name, '.') || strchr("!\"#$%&+,-./:@", me.name[0]) ||
 			strchr(me.name, ' '))
 	{
-		slog(LG_INFO, "conf_check(): bogus `name' in %s (did you specify a valid server name?)", config_file);
+		slog(LG_ERROR, "conf_check(): bogus `name' in %s (did you specify a valid server name?)", config_file);
 		return FALSE;
 	}
 
 	if (isdigit(me.name[0]))
-		slog(LG_INFO, "conf_check(): `name' in %s starts with a digit, probably invalid (continuing anyway)", config_file);
+		slog(LG_ERROR, "conf_check(): `name' in %s starts with a digit, probably invalid (continuing anyway)", config_file);
 
 	if (!me.desc)
 		me.desc = sstrdup("Atheme IRC Services");
@@ -1919,13 +1919,13 @@ boolean_t conf_check(void)
 
 	if (!chansvs.nick || !chansvs.user || !chansvs.host || !chansvs.real)
 	{
-		slog(LG_INFO, "conf_check(): invalid chanserv{} block in %s", config_file);
+		slog(LG_ERROR, "conf_check(): invalid chanserv{} block in %s", config_file);
 		return FALSE;
 	}
 
 	if ((strchr(chansvs.user, ' ')) || (strlen(chansvs.user) > 10))
 	{
-		slog(LG_INFO, "conf_check(): invalid `chanserv::user' in %s", config_file);
+		slog(LG_ERROR, "conf_check(): invalid `chanserv::user' in %s", config_file);
 		return FALSE;
 	}
 

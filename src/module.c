@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 6931 2006-10-24 16:53:07Z jilles $
+ * $Id: module.c 7561 2007-02-05 23:26:22Z jilles $
  */
 
 #include "atheme.h"
@@ -31,7 +31,7 @@ void modules_init(void)
 
 	if (!module_heap)
 	{
-		slog(LG_INFO, "modules_init(): block allocator failed.");
+		slog(LG_ERROR, "modules_init(): block allocator failed.");
 		exit(EXIT_FAILURE);
 	}
 
@@ -71,7 +71,7 @@ module_t *module_load(char *filespec)
 	if (!handle)
 	{
 		char *errp = sstrdup(dlerror());
-		slog(LG_INFO, "module_load(): error: %s", errp);
+		slog(LG_ERROR, "module_load(): error: %s", errp);
 		if (me.connected)
 			snoop("MODLOAD:ERROR: loading module \2%s\2: %s", filespec, errp);
 		free(errp);
@@ -123,7 +123,7 @@ module_t *module_load(char *filespec)
 
 	if (m->mflags & MODTYPE_FAIL)
 	{
-		slog(LG_INFO, "module_load(): module %s init failed", filespec);
+		slog(LG_ERROR, "module_load(): module %s init failed", filespec);
 		if (me.connected)
 			snoop("MODLOAD:ERROR: Init failed while loading module \2%s\2", filespec);
 		module_unload(m);
@@ -166,7 +166,7 @@ void module_load_dir(char *dirspec)
 
 	if (!module_dir)
 	{
-		slog(LG_INFO, "module_load_dir(): %s: %s", dirspec, strerror(errno));
+		slog(LG_ERROR, "module_load_dir(): %s: %s", dirspec, strerror(errno));
 		return;
 	}
 
@@ -205,7 +205,7 @@ void module_load_dir_match(char *dirspec, char *pattern)
 
 	if (!module_dir)
 	{
-		slog(LG_INFO, "module_load_dir(): %s: %s", dirspec, strerror(errno));
+		slog(LG_ERROR, "module_load_dir(): %s: %s", dirspec, strerror(errno));
 		return;
 	}
 
