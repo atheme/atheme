@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY and LOGIN functions.
  *
- * $Id: identify.c 7199 2006-11-18 05:10:57Z nenolod $
+ * $Id: identify.c 7573 2007-02-06 09:19:26Z jilles $
  */
 
 #include "atheme.h"
@@ -21,7 +21,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/" COMMAND_LC, FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 7199 2006-11-18 05:10:57Z nenolod $",
+	"$Id: identify.c 7573 2007-02-06 09:19:26Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -257,13 +257,13 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 				if (ca->mychan->flags & MC_NOOP || mu->flags & MU_NOOP)
 					continue;
 
-				if (ircd->uses_owner && !(cu->modes & ircd->owner_mode) && should_owner(ca->mychan, ca->myuser))
+				if (ircd->uses_owner && !(cu->modes & ircd->owner_mode) && ca->level & CA_AUTOOP && should_owner(ca->mychan, ca->myuser))
 				{
 					modestack_mode_param(chansvs.nick, ca->mychan->name, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(u));
 					cu->modes |= ircd->owner_mode;
 				}
 
-				if (ircd->uses_protect && !(cu->modes & ircd->protect_mode) && should_protect(ca->mychan, ca->myuser))
+				if (ircd->uses_protect && !(cu->modes & ircd->protect_mode) && ca->level & CA_AUTOOP && should_protect(ca->mychan, ca->myuser))
 				{
 					modestack_mode_param(chansvs.nick, ca->mychan->name, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(u));
 					cu->modes |= ircd->protect_mode;
