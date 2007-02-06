@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 7523 2007-01-28 21:30:06Z nenolod $
+dnl $Id: configure.ac 7575 2007-02-06 12:01:19Z jilles $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.59)
 AC_INIT(atheme, 2.2, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 7523 2007-01-28 21:30:06Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 7575 2007-02-06 12:01:19Z jilles $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -145,7 +145,8 @@ else
   AC_MSG_ERROR([Cannot find a type with size of 64 bits])
 fi
 
-AC_CHECK_TYPE(socklen_t, unsigned int)
+dnl socklen_t check removed, it does not properly detect socklen_t
+dnl on macos x, and systems without socklen_t are obsolete -- jilles
 
 echo " "
 echo "Tweaks"
