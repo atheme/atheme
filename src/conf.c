@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 7561 2007-02-05 23:26:22Z jilles $
+ * $Id: conf.c 7583 2007-02-06 23:06:16Z jilles $
  */
 
 #include "atheme.h"
@@ -672,6 +672,13 @@ static int c_uplink(CONFIGENTRY *ce)
 
 	if (ce->ce_vardata == NULL)
 		PARAM_ERROR(ce);
+
+	if (me.name != NULL && !irccasecmp(ce->ce_vardata, me.name))
+		slog(LG_ERROR, "%s:%d: uplink's server name %s should not be the same as our server name, continuing anyway", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_vardata);
+	else if (!strchr(ce->ce_vardata, '.'))
+		slog(LG_ERROR, "%s:%d: uplink's server name %s is invalid, continuing anyway", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_vardata);
+	else if (isdigit(ce->ce_vardata[0]))
+		slog(LG_ERROR, "%s:%d: uplink's server name %s starts with a digit, probably invalid (continuing anyway)", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_vardata);
 
 	name = sstrdup(ce->ce_vardata);
 

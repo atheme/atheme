@@ -1,3 +1,12 @@
+jilles      2007/02/06 15:45:39 UTC	(20070206-7581)
+  Log:
+  Make a usage message more consistent.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/atheme.c (File Modified) 
+
+
 jilles      2007/02/06 14:39:51 UTC	(20070206-7579)
   Log:
   os_logonnews: use DATADIR
