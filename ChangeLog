@@ -1,3 +1,12 @@
+jilles      2007/02/06 12:02:14 UTC	(20070206-7577)
+  Log:
+  Rerun autoconf.
+  
+
+  Changes:	Modified:
+  +2 -68	trunk/configure (File Modified) 
+
+
 jilles      2007/02/06 12:01:19 UTC	(20070206-7575)
   Log:
   Remove socklen_t check from configure, it does not properly
