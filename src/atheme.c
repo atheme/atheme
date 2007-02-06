@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 7567 2007-02-05 23:40:44Z jilles $
+ * $Id: atheme.c 7581 2007-02-06 15:45:39Z jilles $
  */
 
 #include "atheme.h"
@@ -37,7 +37,7 @@ extern char **environ;
 /* *INDENT-OFF* */
 static void print_help(void)
 {
-	printf("usage: atheme [-dhnv] [-c config] [-p pidfile]\n\n"
+	printf("usage: atheme [-dhnv] [-c conf] [-l logfile] [-p pidfile]\n\n"
 	       "-c <file>    Specify the config file\n"
 	       "-d           Start in debugging mode\n"
 	       "-h           Print this message and exit\n"

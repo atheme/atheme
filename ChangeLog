@@ -1,3 +1,12 @@
+jilles      2007/02/06 14:39:51 UTC	(20070206-7579)
+  Log:
+  os_logonnews: use DATADIR
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/contrib/os_logonnews.c (File Modified) 
+
+
 jilles      2007/02/06 12:02:14 UTC	(20070206-7577)
   Log:
   Rerun autoconf.
