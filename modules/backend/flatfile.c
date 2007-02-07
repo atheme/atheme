@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 7495 2007-01-14 09:31:33Z nenolod $
+ * $Id: flatfile.c 7585 2007-02-07 01:36:35Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 7495 2007-01-14 09:31:33Z nenolod $",
+	"$Id: flatfile.c 7585 2007-02-07 01:36:35Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -263,8 +263,17 @@ static void flatfile_db_load(void)
 	f = fopen(DATADIR "/atheme.db", "r");
 	if (f == NULL)
 	{
-		slog(LG_ERROR, "db_load(): can't open atheme.db for reading: %s", strerror(errno));
-		return;
+		if (errno == ENOENT)
+		{
+			slog(LG_ERROR, "db_load(): %s does not exist, creating it", DATADIR "/atheme.db");
+			return;
+		}
+		else
+		{
+			slog(LG_ERROR, "db_load(): can't open %s for reading: %s", DATADIR "/atheme.db", strerror(errno));
+			slog(LG_ERROR, "db_load(): exiting to avoid data loss");
+			exit(1);
+		}
 	}
 
 	slog(LG_DEBUG, "db_load(): ----------------------- loading ------------------------");

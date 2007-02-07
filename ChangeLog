@@ -1,3 +1,15 @@
+jilles      2007/02/06 23:06:16 UTC	(20070206-7583)
+  Log:
+  Check uplink{} server name and log error messages if it
+  is invalid; for now, accept the uplink block anyway since
+  the name is currently not much more than an identifier in
+  logfiles and /stats c.
+  
+
+  Changes:	Modified:
+  +7 -0		trunk/src/conf.c (File Modified) 
+
+
 jilles      2007/02/06 15:45:39 UTC	(20070206-7581)
   Log:
   Make a usage message more consistent.
