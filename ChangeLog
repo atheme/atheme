@@ -1,3 +1,15 @@
+jilles      2007/02/07 01:36:35 UTC	(20070207-7585)
+  Log:
+  Exit atheme if atheme.db cannot be opened for reading
+  for any reason other than it not existing, to avoid
+  overwriting it with an empty database later.
+  Clarify the error message.
+  
+
+  Changes:	Modified:
+  +11 -2	trunk/modules/backend/flatfile.c (File Modified) 
+
+
 jilles      2007/02/06 23:06:16 UTC	(20070206-7583)
   Log:
   Check uplink{} server name and log error messages if it
