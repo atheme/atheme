@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for ratbox-based ircd.
  *
- * $Id: ratbox.c 7281 2006-11-25 02:01:13Z jilles $
+ * $Id: ratbox.c 7619 2007-02-08 23:29:50Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/ratbox.h"
 
-DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 7281 2006-11-25 02:01:13Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ratbox", TRUE, _modinit, NULL, "$Id: ratbox.c 7619 2007-02-08 23:29:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -901,39 +901,35 @@ static void m_squit(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_server(sourceinfo_t *si, int parc, char *parv[])
 {
-	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
-	server_add(parv[0], atoi(parv[1]), si->s ? si->s->name : me.name, si->s || !ircd->uses_uid ? NULL : ts6sid, parv[2]);
+	server_t *s;
 
-	if (cnt.server == 2)
-		me.actual = sstrdup(parv[0]);
-	else
+	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
+	s = handle_server(si, parv[0], si->s || !ircd->uses_uid ? NULL : ts6sid, atoi(parv[1]), parv[2]);
+
+	if (s != NULL && s->uplink != me.me)
 	{
 		/* elicit PONG for EOB detection; pinging uplink is
 		 * already done elsewhere -- jilles
 		 */
-		sts(":%s PING %s %s", ME, me.name, parv[0]);
+		sts(":%s PING %s %s", ME, me.name, s->name);
 	}
-
-	me.recvsvr = TRUE;
 }
 
 static void m_sid(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* -> :1JJ SID file. 2 00F :telnet server */
-	slog(LG_DEBUG, "m_sid(): new server: %s", parv[0]);
-	server_add(parv[0], atoi(parv[1]), si->s ? si->s->name : me.name, parv[2], parv[3]);
+	server_t *s;
 
-	if (cnt.server == 2)
-		me.actual = sstrdup(parv[0]);
-	else
+	slog(LG_DEBUG, "m_sid(): new server: %s", parv[0]);
+	s = handle_server(si, parv[0], parv[2], atoi(parv[1]), parv[3]);
+
+	if (s != NULL && s->uplink != me.me)
 	{
 		/* elicit PONG for EOB detection; pinging uplink is
 		 * already done elsewhere -- jilles
 		 */
-		sts(":%s PING %s %s", ME, me.name, parv[2]);
+		sts(":%s PING %s %s", ME, me.name, s->sid);
 	}
-
-	me.recvsvr = TRUE;
 }
 
 static void m_stats(sourceinfo_t *si, int parc, char *parv[])

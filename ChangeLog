@@ -1,3 +1,12 @@
+jilles      2007/02/08 22:14:10 UTC	(20070208-7617)
+  Log:
+  Get updated release notes from 2.1 branch.
+  
+
+  Changes:	Modified:
+  +12 -2	trunk/doc/RELEASE (File Modified) 
+
+
 jilles      2007/02/08 22:10:52 UTC	(20070208-7615)
   Log:
   Remove declaration of claro_log (it is not used anymore).

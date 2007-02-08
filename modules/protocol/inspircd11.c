@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 7565 2007-02-05 23:33:48Z jilles $
+ * $Id: inspircd11.c 7619 2007-02-08 23:29:50Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7565 2007-02-05 23:33:48Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7619 2007-02-08 23:29:50Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -847,20 +847,18 @@ static void m_squit(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_server(sourceinfo_t *si, int parc, char *parv[])
 {
-	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
-	server_add(parv[0], atoi(parv[2]), si->s ? si->s->name : me.name, NULL, parv[3]);
+	server_t *s;
 
-	if (cnt.server == 2)
-		me.actual = sstrdup(parv[0]);
-	else
+	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
+	s = handle_server(si, parv[0], NULL, atoi(parv[2]), parv[3]);
+
+	if (s != NULL && s->uplink != me.me)
 	{
 		/* elicit PONG for EOB detection; pinging uplink is
 		 * already done elsewhere -- jilles
 		 */
-		sts(":%s PING %s %s", me.name, me.name, parv[0]);
+		sts(":%s PING %s %s", me.name, me.name, s->name);
 	}
-
-	me.recvsvr = TRUE;
 }
 
 static void m_stats(sourceinfo_t *si, int parc, char *parv[])

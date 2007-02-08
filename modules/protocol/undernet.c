@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: undernet.c 7357 2006-12-10 22:15:34Z jilles $
+ * $Id: undernet.c 7619 2007-02-08 23:29:50Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 7357 2006-12-10 22:15:34Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 7619 2007-02-08 23:29:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -843,19 +843,14 @@ static void m_server(sourceinfo_t *si, int parc, char *parv[])
 	slog(LG_DEBUG, "m_server(): new server: %s, id %s, %s",
 			parv[0], parv[5],
 			parv[4][0] == 'P' ? "eob" : "bursting");
-	s = server_add(parv[0], atoi(parv[1]), si->s ? si->s->name : me.name, parv[5], parv[7]);
-
-	if (cnt.server == 2)
-		me.actual = sstrdup(parv[0]);
+	s = handle_server(si, parv[0], parv[5], atoi(parv[1]), parv[7]);
 
 	/* SF_EOB may only be set when we have all users on the server.
 	 * so store the fact that they are EOB in another flag.
 	 * handle_eob() will set SF_EOB when the uplink has finished bursting.
 	 * -- jilles */
-	if (parv[4][0] == 'P')
+	if (s != NULL && parv[4][0] == 'P')
 		s->flags |= SF_EOB2;
-
-	me.recvsvr = TRUE;
 }
 
 static void m_stats(sourceinfo_t *si, int parc, char *parv[])

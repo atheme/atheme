@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 7317 2006-12-05 00:14:26Z jilles $
+ * $Id: ptasks.c 7619 2007-02-08 23:29:50Z jilles $
  */
 
 #include "atheme.h"
@@ -534,6 +534,28 @@ void handle_kill(sourceinfo_t *si, char *victim, char *reason)
 		slog(LG_DEBUG, "handle_kill(): %s killed user %s (%s)", source, u->nick, reason);
 		user_delete(u);
 	}
+}
+
+server_t *handle_server(sourceinfo_t *si, const char *name, const char *sid,
+		int hops, const char *desc)
+{
+	server_t *s = NULL;
+
+	if (si->s != NULL)
+	{
+		/* A server introducing another server */
+		s = server_add(name, hops, si->s->name, sid, desc);
+	}
+	else if (cnt.server == 1)
+	{
+		/* Our uplink introducing itself */
+		s = server_add(name, hops, me.name, sid, desc);
+		me.actual = s->name;
+		me.recvsvr = TRUE;
+	}
+	else
+		slog(LG_ERROR, "handle_server(): unregistered/unknown server attempting to introduce another server %s", name);
+	return s;
 }
 
 void handle_eob(server_t *s)

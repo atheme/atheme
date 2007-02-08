@@ -5,7 +5,7 @@
  * This file contains socket routines.
  * Based off of W. Campbell's code.
  *
- * $Id: send.c 7233 2006-11-19 19:25:53Z jilles $
+ * $Id: send.c 7619 2007-02-08 23:29:50Z jilles $
  */
 
 #include "atheme.h"
@@ -55,6 +55,7 @@ void reconn(void *arg)
 	 * it deletes its users
 	 */
 	server_delete(me.actual);
+	me.actual = NULL;
 	/* remove all the channels left */
 	DICTIONARY_FOREACH(c, &state, chanlist)
 	{

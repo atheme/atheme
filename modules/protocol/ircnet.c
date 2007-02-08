@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 7307 2006-11-29 00:47:32Z jilles $
+ * $Id: ircnet.c 7619 2007-02-08 23:29:50Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 7307 2006-11-29 00:47:32Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 7619 2007-02-08 23:29:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -630,12 +630,7 @@ static void m_squit(sourceinfo_t *si, int parc, char *parv[])
 static void m_server(sourceinfo_t *si, int parc, char *parv[])
 {
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
-	server_add(parv[0], atoi(parv[1]), si->s ? si->s->name : me.name, parv[2], parv[parc - 1]);
-
-	if (cnt.server == 2)
-		me.actual = sstrdup(parv[0]);
-
-	me.recvsvr = TRUE;
+	handle_server(si, parv[0], parv[2], atoi(parv[1]), parv[parc - 1]);
 }
 
 static void m_stats(sourceinfo_t *si, int parc, char *parv[])
