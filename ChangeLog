@@ -1,3 +1,12 @@
+jilles      2007/02/07 23:31:36 UTC	(20070207-7591)
+  Log:
+  Rerun autoheader (for socklen_t change).
+  
+
+  Changes:	Modified:
+  +0 -3		trunk/include/sysconf.h.in (File Modified) 
+
+
 jilles      2007/02/07 17:05:23 UTC	(20070207-7587)
   Log:
   Add more information about serverinfo::name.

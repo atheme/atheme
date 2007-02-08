@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7497 2007-01-14 09:34:40Z nenolod $
+ * $Id: account.c 7599 2007-02-08 20:30:43Z jilles $
  */
 
 #include "atheme.h"
@@ -173,6 +173,11 @@ void myuser_delete(myuser_t *mu)
 		if (mc->founder == mu && (successor = mychan_pick_successor(mc)) != NULL)
 		{
 			snoop("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2", successor->name, mc->name, mc->founder->name);
+			slog(LG_INFO, "myuser_delete(): giving channel %s to %s (unused %ds, founder %s, chanacs %d)",
+					mc->name, successor->name,
+					CURRTIME - mc->used,
+					mc->founder->name,
+					LIST_LENGTH(&mc->chanacs));
 			if (chansvs.me != NULL)
 				verbose(mc, "Foundership changed to \2%s\2 because \2%s\2 was dropped.", successor->name, mc->founder->name);
 
@@ -187,6 +192,10 @@ void myuser_delete(myuser_t *mu)
 		if (mc->founder == mu)
 		{
 			snoop("DELETE: \2%s\2 from \2%s\2", mc->name, mu->name);
+			slog(LG_INFO, "myuser_delete(): deleting channel %s (unused %ds, founder %s, chanacs %d)",
+					mc->name, CURRTIME - mc->used,
+					mc->founder->name,
+					LIST_LENGTH(&mc->chanacs));
 
 			hook_call_event("channel_drop", mc);
 			if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
@@ -1364,6 +1373,10 @@ static int expire_myuser_cb(dictionary_elem_t *delem, void *unused)
 			return 0;
 
 		snoop("EXPIRE: \2%s\2 from \2%s\2 ", mu->name, mu->email);
+		slog(LG_INFO, "expire_check(): expiring account %s (unused %ds, email %s, nicks %d, chanacs %d)",
+				mu->name, (int)(CURRTIME - mu->lastlogin),
+				mu->email, LIST_LENGTH(&mu->nicks),
+				LIST_LENGTH(&mu->chanacs));
 		object_unref(mu);
 	}
 
@@ -1407,6 +1420,9 @@ void expire_check(void *arg)
 			}
 
 			snoop("EXPIRE: \2%s\2 from \2%s\2", mn->nick, mn->owner->name);
+			slog(LG_INFO, "expire_check(): expiring nick %s (unused %ds, account %s)",
+					mn->nick, CURRTIME - mn->lastseen,
+					mn->owner->name);
 			object_unref(mn);
 		}
 	}
@@ -1436,6 +1452,10 @@ void expire_check(void *arg)
 				continue;
 
 			snoop("EXPIRE: \2%s\2 from \2%s\2", mc->name, mc->founder->name);
+			slog(LG_INFO, "expire_check(): expiring channel %s (unused %ds, founder %s, chanacs %d)",
+					mc->name, CURRTIME - mc->used,
+					mc->founder->name,
+					LIST_LENGTH(&mc->chanacs));
 
 			hook_call_event("channel_drop", mc);
 			if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
