@@ -1,3 +1,39 @@
+jilles      2007/02/08 23:29:50 UTC	(20070208-7619)
+  Log:
+  - Move some of the special logic from m_server() in the
+    protocol modules to a new function handle_server() in
+    ptasks.c.
+  - Make me.actual point to the uplink's server_t.name
+    and reset it to NULL after removing the uplink before
+    reconnecting.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/pmodule.h (File Modified) 
+  +2 -7		trunk/modules/protocol/asuka.c (File Modified) 
+  +5 -7		trunk/modules/protocol/bahamut.c (File Modified) 
+  +2 -7		trunk/modules/protocol/bircd.c (File Modified) 
+  +10 -14	trunk/modules/protocol/charybdis.c (File Modified) 
+  +5 -7		trunk/modules/protocol/dreamforge.c (File Modified) 
+  +10 -14	trunk/modules/protocol/hybrid.c (File Modified) 
+  +5 -8		trunk/modules/protocol/hyperion.c (File Modified) 
+  +5 -7		trunk/modules/protocol/inspircd10.c (File Modified) 
+  +5 -7		trunk/modules/protocol/inspircd11.c (File Modified) 
+  +1 -6		trunk/modules/protocol/ircnet.c (File Modified) 
+  +2 -7		trunk/modules/protocol/nefarious.c (File Modified) 
+  +5 -7		trunk/modules/protocol/plexus.c (File Modified) 
+  +5 -7		trunk/modules/protocol/ptlink.c (File Modified) 
+  +10 -14	trunk/modules/protocol/ratbox.c (File Modified) 
+  +5 -7		trunk/modules/protocol/shadowircd.c (File Modified) 
+  +5 -7		trunk/modules/protocol/solidircd.c (File Modified) 
+  +5 -7		trunk/modules/protocol/sorcery.c (File Modified) 
+  +5 -7		trunk/modules/protocol/ultimate3.c (File Modified) 
+  +2 -7		trunk/modules/protocol/undernet.c (File Modified) 
+  +5 -7		trunk/modules/protocol/unreal.c (File Modified) 
+  +22 -0	trunk/src/ptasks.c (File Modified) 
+  +1 -0		trunk/src/send.c (File Modified) 
+
+
 jilles      2007/02/08 22:14:10 UTC	(20070208-7617)
   Log:
   Get updated release notes from 2.1 branch.

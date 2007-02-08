@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 7619 2007-02-08 23:29:50Z jilles $
+ * $Id: ptasks.c 7621 2007-02-08 23:39:06Z jilles $
  */
 
 #include "atheme.h"
@@ -549,6 +549,8 @@ server_t *handle_server(sourceinfo_t *si, const char *name, const char *sid,
 	else if (cnt.server == 1)
 	{
 		/* Our uplink introducing itself */
+		if (irccasecmp(name, curr_uplink->name))
+			slog(LG_ERROR, "handle_server(): uplink %s actually has name %s, continuing anyway", curr_uplink->name, name);
 		s = server_add(name, hops, me.name, sid, desc);
 		me.actual = s->name;
 		me.recvsvr = TRUE;
