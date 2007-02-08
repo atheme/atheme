@@ -1,4 +1,4 @@
-$Id: RELEASE 7399 2006-12-26 17:31:14Z jilles $
+$Id: RELEASE 7617 2007-02-08 22:14:10Z jilles $
 
 Atheme 2.1 Release Notes
 ========================
@@ -12,7 +12,8 @@ ircd protocol
 nickserv
 - Add nickname grouping, this allows users to register multiple nicks
   to one account. The GROUP and UNGROUP commands add and remove additional
-  nicks. Additional nicks expire separately from the main account.
+  nicks. Additional nicks expire separately from the main account. Admins
+  can use FUNGROUP to remove additional nicks from any account.
 - The ACCESS ADD command now converts masks like 1.2.3.* to CIDR masks
   instead of rejecting them.
 - Add LISTVHOST command.
@@ -25,6 +26,9 @@ nickserv
   if appropriate.
 - Add user_can_register hook, allows modules to abort account
   registrations before they go through.
+memoserv
+- Allow sending a memo to oneself.
+- Remove rate limiting for users with general:flood privilege.
 chanserv
 - The TEMPLATE command now allows updating all channel access entries
   matching the template with a template change, by prefixing a flag
@@ -52,7 +56,9 @@ oper
 - Add operclass::needoper option, denies giving any privilege to IRC users
   matching this operclass who are not IRCops.
 - Add some more log levels and generally clean up logging, for example
-  allow disabling logging of all commands.
+  allow disabling logging of all commands. Note that loglevel error logs
+  much less now, use loglevel info for moderate logging.
+- Add os_logonnews contrib module to send text to all connecting users.
 code
 - Remove irccmp() and ircncmp(). These functions were equivalent to strcmp()
   and strncmp(). IRC-style case-insensitive comparisons are irccasecmp() and
@@ -62,6 +68,7 @@ code
 documentation
 - Add some missing help files.
 - Clarify some things in the installation documentation.
+- Add documentation for the SASL client protocol.
 other
 - chanserv::changets is now shown as 't' in version replies
 - Make --enable-fhs-paths also affect the location of the log file, data
@@ -71,6 +78,9 @@ other
 - Fix various memory leaks.
 - Add support for converting services operators, nickname access lists
   and nickname grouping in anope_convert.c.
+- Using the postgresql backend is now officially discouraged; it will be
+  removed in 2.2.x and newer.
+- Remove socklen_t check from configure.
 
 Atheme 2.0 Release Notes
 ========================
