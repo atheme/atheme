@@ -4,10 +4,11 @@
  *
  * A hook system. Idea taken from hybrid.
  *
- * $Id: hook.c 7467 2007-01-14 03:25:42Z nenolod $
+ * $Id: hook.c 7613 2007-02-08 22:09:15Z jilles $
  */
 
 #include "atheme.h"
+#include "internal.h"
 
 list_t hooks;
 static BlockHeap *hook_heap;

@@ -4,10 +4,11 @@
  *
  * Linked list stuff.
  *
- * $Id: dlink.c 7509 2007-01-20 03:29:34Z nenolod $
+ * $Id: dlink.c 7613 2007-02-08 22:09:15Z jilles $
  */
 
 #include "atheme.h"
+#include "internal.h"
 
 static BlockHeap *node_heap;
 

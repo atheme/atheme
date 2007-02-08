@@ -1,3 +1,12 @@
+jilles      2007/02/08 22:04:42 UTC	(20070208-7611)
+  Log:
+  Rename 'sigblock' to get rid of warning about shadowed declaration.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/src/signal.c (File Modified) 
+
+
 jilles      2007/02/08 21:59:55 UTC	(20070208-7609)
   Log:
   Clean up header files, integrating the old libatheme a bit better.

@@ -4,10 +4,11 @@
  *
  * Socketengine implementing select().
  *
- * $Id: select.c 7467 2007-01-14 03:25:42Z nenolod $
+ * $Id: select.c 7613 2007-02-08 22:09:15Z jilles $
  */
 
 #include "atheme.h"
+#include "internal.h"
 
 extern list_t connection_list; /* this lives in connection.c */
 fd_set readfds, writefds;

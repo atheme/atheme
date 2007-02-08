@@ -5,10 +5,11 @@
  * This file contains routines that interface the event system.
  * This code is based on ircd-ratbox's event.c with modifications.
  *
- * $Id: event.c 7467 2007-01-14 03:25:42Z nenolod $
+ * $Id: event.c 7613 2007-02-08 22:09:15Z jilles $
  */
 
 #include "atheme.h"
+#include "internal.h"
 
 const char *last_event_ran = NULL;
 struct ev_entry event_table[MAX_EVENTS];

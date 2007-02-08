@@ -4,11 +4,12 @@
  *
  * This file contains the signal handling routines.
  *
- * $Id: signal.c 7611 2007-02-08 22:04:42Z jilles $
+ * $Id: signal.c 7613 2007-02-08 22:09:15Z jilles $
  */
 
 #include "atheme.h"
 #include "uplink.h"
+#include "internal.h"
 
 static int got_sighup, got_sigint, got_sigterm, got_sigusr2;
 

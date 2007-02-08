@@ -4,12 +4,13 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 7581 2007-02-06 15:45:39Z jilles $
+ * $Id: atheme.c 7613 2007-02-08 22:09:15Z jilles $
  */
 
 #include "atheme.h"
 #include "uplink.h"
 #include "pmodule.h" /* pcommand_init */
+#include "internal.h"
 
 chansvs_t chansvs;
 globsvs_t globsvs;
