@@ -4,7 +4,7 @@
  *
  * Defines needed by multiple header files.
  *
- * $Id: common.h 7179 2006-11-17 19:58:40Z jilles $
+ * $Id: common.h 7609 2007-02-08 21:59:55Z jilles $
  */
 
 #ifndef COMMON_H
@@ -13,8 +13,10 @@
 /* D E F I N E S */
 #define BUFSIZE 1024            /* maximum size of a buffer */
 #define MAXMODES 4
+#define MAX_EVENTS	1024	 /* that's enough events, really! */
 
 /* lengths of buffers (string length is 1 less) */
+#define HOSTLEN  64		 /* seems good enough */
 #define NICKLEN 51
 #define IDLEN 10
 #define CHANNELLEN 201
@@ -39,6 +41,7 @@
 #endif
 
 #ifdef LARGE_NETWORK
+#define HEAP_NODE       1024
 #define HEAP_CHANNEL    1024
 #define HEAP_CHANUSER   1024
 #define HEAP_USER       1024
@@ -48,6 +51,7 @@
 #define HASH_CHANNEL    32768
 #define HASH_SERVER     128
 #else
+#define HEAP_NODE       1024
 #define HEAP_CHANNEL    64
 #define HEAP_CHANUSER   128
 #define HEAP_USER       128

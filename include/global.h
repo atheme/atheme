@@ -5,7 +5,7 @@
  *
  * Global data
  *
- * $Id: global.h 7535 2007-01-31 12:35:45Z jilles $
+ * $Id: global.h 7609 2007-02-08 21:59:55Z jilles $
  */
 
 #ifndef _GLOBAL_H
@@ -124,6 +124,26 @@ struct cnt
 };
 
 E struct cnt cnt;
+
+typedef struct claro_state_ {
+	uint32_t node;
+	uint32_t event;
+	time_t currtime;
+	uint16_t maxfd;
+} claro_state_t;
+
+E claro_state_t claro_state;
+
+#define CURRTIME claro_state.currtime
+
+/* run flags */
+E int runflags;
+
+#define RF_LIVE         0x00000001      /* don't fork  */
+#define RF_SHUTDOWN     0x00000002      /* shut down   */
+#define RF_STARTING     0x00000004      /* starting up */
+#define RF_RESTART      0x00000008      /* restart     */
+#define RF_REHASHING    0x00000010      /* rehashing   */
 
 /* conf.c */
 E boolean_t conf_parse(char *);

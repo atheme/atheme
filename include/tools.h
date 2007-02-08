@@ -5,11 +5,78 @@
  *
  * Misc tools
  *
- * $Id: tools.h 7235 2006-11-19 20:02:08Z jilles $
+ * $Id: tools.h 7609 2007-02-08 21:59:55Z jilles $
  */
 
 #ifndef _TOOLS_H
 #define _TOOLS_H
+
+/*
+ * Performs a soft assertion. If the assertion fails, we wallops() and log.
+ */
+#ifdef __GNUC__
+#define soft_assert(x)								\
+	if (!(x)) { 								\
+		slog(LG_INFO, "%s(%d) [%s]: critical: Assertion '%s' failed.",	\
+			__FILE__, __LINE__, __PRETTY_FUNCTION__, #x);		\
+		wallops("%s(%d) [%s]: critical: Assertion '%s' failed.",	\
+			__FILE__, __LINE__, __PRETTY_FUNCTION__, #x);		\
+	}
+#else
+#define soft_assert(x)								\
+	if (!(x)) { 								\
+		slog(LG_INFO, "%s(%d): critical: Assertion '%s' failed.",	\
+			__FILE__, __LINE__, #x);				\
+		wallops("%s(%d): critical: Assertion '%s' failed.",		\
+			__FILE__, __LINE__, #x);				\
+	}
+#endif
+
+/*
+ * Same as soft_assert, but returns if an assertion fails.
+ */
+#ifdef __GNUC__
+#define return_if_fail(x)							\
+	if (!(x)) { 								\
+		slog(LG_INFO, "%s(%d) [%s]: critical: Assertion '%s' failed.",	\
+			__FILE__, __LINE__, __PRETTY_FUNCTION__, #x);		\
+		wallops("%s(%d) [%s]: critical: Assertion '%s' failed.",	\
+			__FILE__, __LINE__, __PRETTY_FUNCTION__, #x);		\
+		return;								\
+	}
+#else
+#define return_if_fail(x)							\
+	if (!(x)) { 								\
+		slog(LG_INFO, "%s(%d): critical: Assertion '%s' failed.",	\
+			__FILE__, __LINE__, #x);				\
+		wallops("%s(%d): critical: Assertion '%s' failed.",		\
+			__FILE__, __LINE__, #x);				\
+		return;								\
+	}
+#endif
+
+/*
+ * Same as soft_assert, but returns a given value if an assertion fails.
+ */
+#ifdef __GNUC__
+#define return_val_if_fail(x, y)						\
+	if (!(x)) { 								\
+		slog(LG_INFO, "%s(%d) [%s]: critical: Assertion '%s' failed.",	\
+			__FILE__, __LINE__, __PRETTY_FUNCTION__, #x);		\
+		wallops("%s(%d) [%s]: critical: Assertion '%s' failed.",	\
+			__FILE__, __LINE__, __PRETTY_FUNCTION__, #x);		\
+		return (y);							\
+	}
+#else
+#define return_val_if_fail(x, y)						\
+	if (!(x)) { 								\
+		slog(LG_INFO, "%s(%d): critical: Assertion '%s' failed.",	\
+			__FILE__, __LINE__, #x);				\
+		wallops("%s(%d): critical: Assertion '%s' failed.",		\
+			__FILE__, __LINE__, #x);				\
+		return (y);							\
+	}
+#endif
 
 /* email stuff */
 /* the following struct is not used yet */
@@ -40,7 +107,12 @@ E FILE *log_file;
 E char *log_path;
 E int log_force;
 
-/* claro-defined log levels are 0x1F */
+/* general */
+#define LG_NONE         0x00000001      /* don't log                */
+#define LG_INFO         0x00000002      /* log general info         */
+#define LG_ERROR        0x00000004      /* log real important stuff */
+#define LG_IOERROR      0x00000008      /* log I/O errors. */
+#define LG_DEBUG        0x00000010      /* log debugging stuff      */
 /* commands */
 #define LG_CMD_ADMIN    0x00000100 /* oper-only commands */
 #define LG_CMD_REGISTER 0x00000200 /* register/drop */

@@ -1,3 +1,13 @@
+jilles      2007/02/08 20:30:43 UTC	(20070208-7599)
+  Log:
+  Log at LG_INFO level: channel succession, channel deletion due
+  to no eligible channel succession and account/nick/channel expiry.
+  
+
+  Changes:	Modified:
+  +20 -0	trunk/src/account.c (File Modified) 
+
+
 jilles      2007/02/07 23:31:36 UTC	(20070207-7591)
   Log:
   Rerun autoheader (for socklen_t change).

@@ -4,7 +4,7 @@
  *
  * Includes most headers usually needed.
  *
- * $Id: atheme.h 7491 2007-01-14 08:50:33Z nenolod $
+ * $Id: atheme.h 7609 2007-02-08 21:59:55Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -25,28 +25,11 @@
 #       define DLE
 #endif
 
-#define RF_LIVE         0x00000001      /* don't fork  */
-#define RF_SHUTDOWN     0x00000002      /* shut down   */
-#define RF_STARTING     0x00000004      /* starting up */
-#define RF_RESTART      0x00000008      /* restart     */
-#define RF_REHASHING    0x00000010      /* rehashing   */
-
-#define LG_NONE         0x00000001      /* don't log                */
-#define LG_INFO         0x00000002      /* log general info         */
-#define LG_ERROR        0x00000004      /* log real important stuff */
-#define LG_IOERROR      0x00000008      /* log I/O errors. */
-#define LG_DEBUG        0x00000010      /* log debugging stuff      */
-
-#define BUFSIZE  1024            /* maximum size of a buffer */
-#define HOSTLEN  64		 /* seems good enough */
-#define MAX_EVENTS	1024	 /* that's enough events, really! */
-
-#define HEAP_NODE       1024
-
-#include "object.h"
 #include "sysconf.h"
 #include "stdinc.h"
+#include "common.h"
 #include "dlink.h"
+#include "object.h"
 #include "event.h"
 #include "balloc.h"
 #include "connection.h"
@@ -56,7 +39,6 @@
 #include "atheme_string.h"
 #include "atheme_memory.h"
 #include "datastream.h"
-#include "common.h"
 #include "dictionary.h"
 #include "servers.h"
 #include "channels.h"
@@ -95,86 +77,6 @@ void _moddeinit(void);
 /* Windows has an extremely stupid gethostbyname() function. Oof! */
 #define gethostbyname(a) gethostbyname_layer(a)
 
-#endif
-
-#define CURRTIME claro_state.currtime
-
-typedef struct claro_state_ {
-	uint32_t node;
-	uint32_t event;
-	time_t currtime;
-	uint16_t maxfd;
-} claro_state_t;
-
-E claro_state_t claro_state;
-
-E int runflags;
-
-/*
- * Performs a soft assertion. If the assertion fails, we wallops() and log.
- */
-#ifdef __GNUC__
-#define soft_assert(x)								\
-	if (!(x)) { 								\
-		slog(LG_INFO, "%s(%d) [%s]: critical: Assertion '%s' failed.",	\
-			__FILE__, __LINE__, __PRETTY_FUNCTION__, #x);		\
-		wallops("%s(%d) [%s]: critical: Assertion '%s' failed.",	\
-			__FILE__, __LINE__, __PRETTY_FUNCTION__, #x);		\
-	}
-#else
-#define soft_assert(x)								\
-	if (!(x)) { 								\
-		slog(LG_INFO, "%s(%d): critical: Assertion '%s' failed.",	\
-			__FILE__, __LINE__, #x);				\
-		wallops("%s(%d): critical: Assertion '%s' failed.",		\
-			__FILE__, __LINE__, #x);				\
-	}
-#endif
-
-/*
- * Same as soft_assert, but returns if an assertion fails.
- */
-#ifdef __GNUC__
-#define return_if_fail(x)							\
-	if (!(x)) { 								\
-		slog(LG_INFO, "%s(%d) [%s]: critical: Assertion '%s' failed.",	\
-			__FILE__, __LINE__, __PRETTY_FUNCTION__, #x);		\
-		wallops("%s(%d) [%s]: critical: Assertion '%s' failed.",	\
-			__FILE__, __LINE__, __PRETTY_FUNCTION__, #x);		\
-		return;								\
-	}
-#else
-#define return_if_fail(x)							\
-	if (!(x)) { 								\
-		slog(LG_INFO, "%s(%d): critical: Assertion '%s' failed.",	\
-			__FILE__, __LINE__, #x);				\
-		wallops("%s(%d): critical: Assertion '%s' failed.",		\
-			__FILE__, __LINE__, #x);				\
-		return;								\
-	}
-#endif
-
-/*
- * Same as soft_assert, but returns a given value if an assertion fails.
- */
-#ifdef __GNUC__
-#define return_val_if_fail(x, y)						\
-	if (!(x)) { 								\
-		slog(LG_INFO, "%s(%d) [%s]: critical: Assertion '%s' failed.",	\
-			__FILE__, __LINE__, __PRETTY_FUNCTION__, #x);		\
-		wallops("%s(%d) [%s]: critical: Assertion '%s' failed.",	\
-			__FILE__, __LINE__, __PRETTY_FUNCTION__, #x);		\
-		return (y);							\
-	}
-#else
-#define return_val_if_fail(x, y)						\
-	if (!(x)) { 								\
-		slog(LG_INFO, "%s(%d): critical: Assertion '%s' failed.",	\
-			__FILE__, __LINE__, #x);				\
-		wallops("%s(%d): critical: Assertion '%s' failed.",		\
-			__FILE__, __LINE__, #x);				\
-		return (y);							\
-	}
 #endif
 
 #endif /* ATHEME_H */
