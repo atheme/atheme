@@ -4,7 +4,7 @@
  *
  * This file contains the signal handling routines.
  *
- * $Id: signal.c 7477 2007-01-14 03:58:28Z nenolod $
+ * $Id: signal.c 7611 2007-02-08 22:04:42Z jilles $
  */
 
 #include "atheme.h"
@@ -16,7 +16,7 @@ typedef void (*signal_handler_t) (int);
 
 static signal_handler_t
 signal_install_handler_full(int signum, signal_handler_t handler,
-			    int *sigblock, size_t sigblocksize)
+			    int *sigtoblock, size_t sigtoblocksize)
 {
 	struct sigaction action, old_action;
 	size_t i;
@@ -26,8 +26,8 @@ signal_install_handler_full(int signum, signal_handler_t handler,
 
 	sigemptyset(&action.sa_mask);
 
-	for (i = 0; i < sigblocksize; i++)
-		sigaddset(&action.sa_mask, sigblock[i]);
+	for (i = 0; i < sigtoblocksize; i++)
+		sigaddset(&action.sa_mask, sigtoblock[i]);
 
 	if (sigaction(signum, &action, &old_action) == -1)
 	{
