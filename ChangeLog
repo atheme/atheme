@@ -1,3 +1,19 @@
+jilles      2007/02/08 22:09:15 UTC	(20070208-7613)
+  Log:
+  Include internal.h where needed.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/src/atheme.c (File Modified) 
+  +1 -0		trunk/src/connection.c (File Modified) 
+  +1 -0		trunk/src/dlink.c (File Modified) 
+  +1 -0		trunk/src/event.c (File Modified) 
+  +1 -0		trunk/src/hook.c (File Modified) 
+  +1 -0		trunk/src/poll.c (File Modified) 
+  +1 -0		trunk/src/select.c (File Modified) 
+  +1 -0		trunk/src/signal.c (File Modified) 
+
+
 jilles      2007/02/08 22:04:42 UTC	(20070208-7611)
   Log:
   Rename 'sigblock' to get rid of warning about shadowed declaration.

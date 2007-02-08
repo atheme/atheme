@@ -4,11 +4,8 @@
  *
  * Stuff for internal use in Atheme.
  *
- * $Id: internal.h 7477 2007-01-14 03:58:28Z nenolod $
+ * $Id: internal.h 7615 2007-02-08 22:10:52Z jilles $
  */
-
-/* log function pointer */
-E void (*claro_log)(uint32_t, const char *, ...);
 
 /* internal functions */
 E void event_init(void);
