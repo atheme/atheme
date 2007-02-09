@@ -1,3 +1,15 @@
+jilles      2007/02/09 19:20:38 UTC	(20070209-7623)
+  Log:
+  Add /ns fverify to nickserv/verify, allows admins with
+  user:admin privilege to verify any account without
+  knowing the verification key from the email.
+  
+
+  Changes:	Modified:
+  +11 -0	trunk/help/nickserv/fverify (File Added) 
+  +83 -0	trunk/modules/nickserv/verify.c (File Modified) 
+
+
 jilles      2007/02/08 23:39:06 UTC	(20070208-7621)
   Log:
   Log an error message if the name in the uplink block

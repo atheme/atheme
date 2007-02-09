@@ -1,4 +1,58 @@
-$Id: RELEASE 7617 2007-02-08 22:14:10Z jilles $
+$Id: RELEASE 7625 2007-02-09 20:09:55Z jilles $
+
+Atheme 2.2 Release Notes
+========================
+ircd protocol
+- Don't send "Setting your host to \2%s\2." notice if the ircd already
+  notifies users of host changes, by sending this notice from the protocol
+  module.
+nickserv
+- The LIST command now allows searching by last host/vhost.
+- If ENFORCE is loaded, disallow registering accounts starting with
+  Guest<digit>.
+- ACCESS ADD now allows omitting the mask and generates one matching the
+  user if so.
+- GHOST now omit the source's user@vhost from the kill message if it is the
+  same as the target's user@vhost.
+- Add FVERIFY command to allow admins with user:admin privilege to verify
+  any account without needing the verification email.
+chanserv
+- Allow multiple trigger characters for fantasy commands.
+- In a flags listing, show the template name, if any, in parentheses after
+  the flags.
+- Only set owner/protect on identify if they also have +O flag. Setting on
+  join already behaved this way.
+- Log at LG_INFO level: channel succession, channel deletion due to no
+  eligible channel successors and account/nick/channel expiry.
+gameserv
+- Add game services, works as fantasy commands and in /msg.
+oper
+- CLONES ADDEXEMPT/DELEXEMPT now have better accountability.
+- CLONES now allows editing an exemption without removing it first.
+code
+- Remove the incomplete atheme testsuite.
+- Rework handle_ctcp_common() to use sourceinfo instead of passing
+  redundant references around.
+- Move all code under libatheme/ to src/.
+- Add an object framework.
+- Add some new assertion macros that send wallops if the assertion fails.
+- Remove unused me.uplink and serverinfo::uplink.
+- Move some of the m_server() logic to a new function handle_server() in
+  src/ptasks.c.
+documentation
+other
+- Move crypto, backend and protocol directories to modules/. This requires
+  changes to atheme.conf.
+- Remove the PostgreSQL backend. If you were using this, first start the old
+  version with backend/postgresql, then load a supported backend like
+  backend/flatfile and /msg operserv update, to convert your data. See
+  doc/SQL for more information.
+- Add various checks to server names which should give clearer warnings
+  about several misconfigurations.
+- Various corrections to log levels.
+- The os_logonnews contrib module now uses DATADIR to find its file.
+- Exit atheme if atheme.db cannot be opened for reading for any reason other
+  than it not existing, to avoid overwriting it with an empty database later.
 
 Atheme 2.1 Release Notes
 ========================
