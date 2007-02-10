@@ -59,6 +59,9 @@ user:admin
 	administer users
 user:vhost
 	set vhosts
+user:fregister
+	use /ns fregister (contrib module) to register accounts on behalf of
+	someone else
 
 chan:auspex
 	see the invisible about channels and channel registrations,
@@ -111,4 +114,4 @@ operserv:global
 operserv:grant
 	use /os soper add/del
 
-$Id: PRIVILEGES 7225 2006-11-19 15:44:42Z jilles $
+$Id: PRIVILEGES 7627 2007-02-10 20:43:51Z jilles $

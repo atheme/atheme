@@ -4,7 +4,7 @@
  *
  * Fine grained services operator privileges
  *
- * $Id: privs.h 7225 2006-11-19 15:44:42Z jilles $
+ * $Id: privs.h 7627 2007-02-10 20:43:51Z jilles $
  */
 
 #ifndef PRIVS_H
@@ -16,6 +16,7 @@
 #define PRIV_USER_AUSPEX     "user:auspex"
 #define PRIV_USER_ADMIN      "user:admin"
 #define PRIV_USER_VHOST      "user:vhost"
+#define PRIV_USER_FREGISTER  "user:fregister"
 /* chanserv */
 #define PRIV_CHAN_AUSPEX     "chan:auspex"
 #define PRIV_CHAN_ADMIN      "chan:admin"
