@@ -1,3 +1,17 @@
+jilles      2007/02/10 20:47:41 UTC	(20070210-7629)
+  Log:
+  Add ns_fregister contrib module, allows creating accounts
+  with little checking and pre-crypted passwords.
+  Added as contrib module because this seems related to
+  synchronizing accounts with another system but only
+  handles a small part of that.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/contrib/Makefile.in (File Modified) 
+  +126 -0	trunk/contrib/ns_fregister.c (File Added) 
+
+
 jilles      2007/02/10 20:43:51 UTC	(20070210-7627)
   Log:
   Add user:fregister privilege for upcoming /ns fregister command.

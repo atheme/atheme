@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7499 2007-01-14 09:36:40Z nenolod $
+# $Id: Makefile.in 7631 2007-02-10 21:01:21Z jilles $
 #
 
 CC		= @CC@
@@ -27,11 +27,11 @@ LOGDIR		= @LOGDIR@
 SHAREDIR	= @SHAREDIR@
 BIN		= atheme@EXEEXT@
 MKDEP		= @MKDEP@
-CFLAGS		= @CFLAGS@ -I../include @PGINC@
+CFLAGS		= @CFLAGS@ -I../include
 
 VERSION		= @PACKAGE_VERSION@
 
-LIBS		= @LIBS@ @PQLIB@
+LIBS		= @LIBS@
 LDFLAGS		= @LDFLAGS@
 CPPFLAGS	= @CPPFLAGS@
 SOCKET_ENGINE   = @SOCKET_ENGINE@.c

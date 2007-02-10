@@ -23,11 +23,11 @@ DOCDIR		= @DOCDIR@
 MODDIR		= @MODDIR@
 SHAREDIR	= @SHAREDIR@
 BIN		= atheme@EXEEXT@
-MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include @PGINC@
+MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include
 PICFLAGS	= @PICFLAGS@
-CFLAGS		= @CFLAGS@ -I../../include -I../../libatheme @PGINC@ @SSL_LIBS@
+CFLAGS		= @CFLAGS@ -I../../include @SSL_LIBS@
 
-LIBS		= @LIBS@ @PQLIB@
+LIBS		= @LIBS@
 LDFLAGS		= @LDFLAGS@
 CPPFLAGS	= @CPPFLAGS@
 
