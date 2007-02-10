@@ -6,7 +6,7 @@
  * This file contains functionality which implements
  * the OperServ AKILL command.
  *
- * $Id: akill.c 6927 2006-10-24 15:22:05Z jilles $
+ * $Id: akill.c 7635 2007-02-10 21:45:17Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 6927 2006-10-24 15:22:05Z jilles $",
+	"$Id: akill.c 7635 2007-02-10 21:45:17Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -119,6 +119,8 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 	user_t *u;
         char *target = parv[0];
 	char *token = strtok(parv[1], " ");
+	char star[] = "*";
+	char *kuser, *khost;
 	char *treason, reason[BUFSIZE];
 	long duration;
 	char *s;
@@ -208,30 +210,25 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 		if (is_internal_client(u))
 			return;
 
-		if ((k = kline_find("*", u->host)))
-		{
-			command_fail(si, fault_nochange, "AKILL \2*@%s\2 is already matched in the database.", u->host);
-			return;
-		}
-
-		k = kline_add("*", u->host, reason, duration);
-		k->setby = sstrdup(get_oper_name(si));
+		kuser = star;
+		khost = u->host;
 	}
 	else
 	{
-		char *userbuf = strtok(target, "@");
-		char *hostbuf = strtok(NULL, "");
 		char *p;
 		int i = 0;
 
-		if (!userbuf || !hostbuf)
+		kuser = strtok(target, "@");
+		khost = strtok(NULL, "");
+
+		if (!kuser || !khost)
 		{
 			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKILL ADD");
 			command_fail(si, fault_needmoreparams, "Syntax: AKILL ADD <user>@<host> [options] <reason>");
 			return;
 		}
 
-		if (strchr(hostbuf,'@'))
+		if (strchr(khost,'@'))
 		{
 			command_fail(si, fault_badparams, "Too many '%c' in user@host.", '@');
 			command_fail(si, fault_badparams, "Syntax: AKILL ADD <user>@<host> [options] <reason>");
@@ -239,12 +236,12 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		/* make sure there's at least 4 non-wildcards */
-		for (p = userbuf; *p; p++)
+		for (p = kuser; *p; p++)
 		{
 			if (*p != '*' && *p != '?' && *p != '.')
 				i++;
 		}
-		for (p = hostbuf; *p; p++)
+		for (p = khost; *p; p++)
 		{
 			if (*p != '*' && *p != '?' && *p != '.')
 				i++;
@@ -252,19 +249,19 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 
 		if (i < 4)
 		{
-			command_fail(si, fault_badparams, "Invalid user@host: \2%s@%s\2. At least four non-wildcard characters are required.", userbuf, hostbuf);
+			command_fail(si, fault_badparams, "Invalid user@host: \2%s@%s\2. At least four non-wildcard characters are required.", kuser, khost);
 			return;
 		}
-
-		if ((k = kline_find(userbuf, hostbuf)))
-		{
-			command_fail(si, fault_nochange, "AKILL \2%s@%s\2 is already matched in the database.", userbuf, hostbuf);
-			return;
-		}
-
-		k = kline_add(userbuf, hostbuf, reason, duration);
-		k->setby = sstrdup(get_oper_name(si));
 	}
+
+	if ((k = kline_find(kuser, khost)))
+	{
+		command_fail(si, fault_nochange, "AKILL \2%s@%s\2 is already matched in the database.", kuser, khost);
+		return;
+	}
+
+	k = kline_add(kuser, khost, reason, duration);
+	k->setby = sstrdup(get_oper_name(si));
 
 	if (duration)
 		command_success_nodata(si, "Timed AKILL on \2%s@%s\2 was successfully added and will expire in %s.", k->user, k->host, timediff(duration));
