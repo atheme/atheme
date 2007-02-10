@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7447 2007-01-13 03:52:16Z nenolod $
+# $Id: Makefile.in 7629 2007-02-10 20:47:41Z jilles $
 #
 
 CC		= @CC@
@@ -45,6 +45,7 @@ SRCS = \
 	ircd_nohalfops.c	\
 	ircd_noowner.c		\
 	ircd_noprotect.c	\
+	ns_fregister.c		\
 	ns_generatepass.c	\
 	os_pingspam.c		\
 	os_testcmd.c		\
