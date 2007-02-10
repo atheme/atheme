@@ -6,7 +6,7 @@
  * This file contains functionality which implements
  * the OperServ AKILL command.
  *
- * $Id: akill.c 7635 2007-02-10 21:45:17Z jilles $
+ * $Id: akill.c 7637 2007-02-10 22:56:06Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 7635 2007-02-10 21:45:17Z jilles $",
+	"$Id: akill.c 7637 2007-02-10 22:56:06Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -207,7 +207,7 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		if (is_internal_client(u))
+		if (is_internal_client(u) || u == si->su)
 			return;
 
 		kuser = star;
@@ -218,8 +218,8 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 		char *p;
 		int i = 0;
 
-		kuser = strtok(target, "@");
-		khost = strtok(NULL, "");
+		kuser = collapse(strtok(target, "@"));
+		khost = collapse(strtok(NULL, ""));
 
 		if (!kuser || !khost)
 		{
@@ -250,6 +250,25 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 		if (i < 4)
 		{
 			command_fail(si, fault_badparams, "Invalid user@host: \2%s@%s\2. At least four non-wildcard characters are required.", kuser, khost);
+			return;
+		}
+	}
+
+	if (!strcmp(kuser, "*"))
+	{
+		boolean_t unsafe = FALSE;
+		char *p;
+
+		if (!match(khost, "127.0.0.1") || !match_ips(khost, "127.0.0.1"))
+			unsafe = TRUE;
+		else if (me.vhost != NULL && (!match(khost, me.vhost) || !match_ips(khost, me.vhost)))
+			unsafe = TRUE;
+		else if ((p = strrchr(khost, '/')) != NULL && IsDigit(p[1]) && atoi(p + 1) < 4)
+			unsafe = TRUE;
+		if (unsafe)
+		{
+			command_fail(si, fault_badparams, "Invalid user@host: \2%s@%s\2. This mask is unsafe.", kuser, khost);
+			logcommand(si, CMDLOG_ADMIN, "failed AKILL ADD %s@%s (unsafe mask)", kuser, khost);
 			return;
 		}
 	}
