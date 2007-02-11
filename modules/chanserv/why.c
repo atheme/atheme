@@ -4,7 +4,7 @@
  *
  * This file contains code for the ChanServ WHY function.
  *
- * $Id: why.c 7215 2006-11-18 16:43:46Z jilles $
+ * $Id: why.c 7641 2007-02-11 15:19:54Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/why", FALSE, _modinit, _moddeinit,
-	"$Id: why.c 7215 2006-11-18 16:43:46Z jilles $",
+	"$Id: why.c 7641 2007-02-11 15:19:54Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -107,6 +107,12 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 
 	snprintf(host, BUFSIZE, "%s!%s@%s", u->nick, u->user, u->vhost);
 
+	if (is_founder(mc, mu))
+	{
+		command_success_nodata(si,
+			"\2%s\2 has founder access to \2%s\2 because they are logged in as \2%s\2.",
+			u->nick, mc->name, mu->name);
+	}
 	LIST_FOREACH(n, mc->chanacs.head)
 	{
        	        ca = (chanacs_t *)n->data;
