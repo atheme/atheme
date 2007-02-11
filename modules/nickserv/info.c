@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 7347 2006-12-08 19:46:02Z jilles $
+ * $Id: info.c 7639 2007-02-11 14:22:07Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 7347 2006-12-08 19:46:02Z jilles $",
+	"$Id: info.c 7639 2007-02-11 14:22:07Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -226,7 +226,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "%s was \2MARKED\2 by %s on %s (%s)", mu->name, setter, strfbuf, reason);
 	}
 
-	if ((MU_WAITAUTH & mu->flags) && has_priv(si, PRIV_USER_AUSPEX))
+	if (MU_WAITAUTH & mu->flags)
 		command_success_nodata(si, "%s has not completed registration verification", mu->name);
 
 	req.si = si;

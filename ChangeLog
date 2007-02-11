@@ -1,3 +1,15 @@
+jilles      2007/02/10 22:56:06 UTC	(20070210-7637)
+  Log:
+  akill add:
+  - ignore an oper trying to akill add <nick> himself
+  - collapse akill masks (** to * etc)
+  - refuse some akill masks that may disconnect servers on some ircds
+  
+
+  Changes:	Modified:
+  +22 -3	trunk/modules/operserv/akill.c (File Modified) 
+
+
 jilles      2007/02/10 21:45:17 UTC	(20070210-7635)
   Log:
   akill add: remove some code duplication
