@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 7619 2007-02-08 23:29:50Z jilles $
+ * $Id: charybdis.c 7643 2007-02-11 16:35:50Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 7619 2007-02-08 23:29:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 7643 2007-02-11 16:35:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -461,7 +461,7 @@ static void charybdis_jupe(char *server, char *reason)
 		return;
 
 	sts(":%s SQUIT %s :%s", CLIENT_NAME(opersvs.me->me), server, reason);
-	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
+	sts(":%s SERVER %s 2 :(H) %s", me.name, server, reason);
 }
 
 static void charybdis_sethost_sts(char *source, char *target, char *host)

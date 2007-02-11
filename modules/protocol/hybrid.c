@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 7619 2007-02-08 23:29:50Z jilles $
+ * $Id: hybrid.c 7643 2007-02-11 16:35:50Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 7619 2007-02-08 23:29:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 7643 2007-02-11 16:35:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -395,7 +395,7 @@ static void hybrid_jupe(char *server, char *reason)
 		return;
 
 	sts(":%s SQUIT %s :%s", CLIENT_NAME(opersvs.me->me), server, reason);
-	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
+	sts(":%s SERVER %s 2 :(H) %s", me.name, server, reason);
 }
 
 static void hybrid_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
