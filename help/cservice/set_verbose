@@ -6,6 +6,9 @@ makes changes to the access lists.
 SET VERBOSE OPS sends a notice to the channel operators when
 someone makes changes to the access lists.
 
+Fantasy commands are always executed as if SET VERBOSE ON is
+in effect.
+
 Syntax: SET <#channel> VERBOSE ON|OPS|OFF
 
 Example:

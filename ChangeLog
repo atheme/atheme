@@ -1,3 +1,12 @@
+jilles      2007/02/12 16:31:48 UTC	(20070212-7645)
+  Log:
+  Add my hybserv to atheme conversion tool to contrib.
+  
+
+  Changes:	Modified:
+  +309 -0	trunk/contrib/hybservtoatheme.pl (File Added) 
+
+
 jilles      2007/02/11 16:35:50 UTC	(20070211-7643)
   Log:
   charybdis/ratbox/hybrid: hide jupes from a flattened /links
