@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 7233 2006-11-19 19:25:53Z jilles $
+ * $Id: function.c 7649 2007-02-14 23:53:52Z jilles $
  */
 
 #include "atheme.h"
@@ -385,7 +385,7 @@ unsigned long makekey(void)
 {
 	unsigned long i, j, k;
 
-	i = rand() % (CURRTIME / cnt.user + 1);
+	i = rand() % (CURRTIME / (cnt.user + 1) + 1);
 	j = rand() % (me.start * cnt.chan + 1);
 
 	if (i > j)
