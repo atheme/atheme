@@ -4,7 +4,7 @@
  *
  * Datastream stuff.
  *
- * $Id: datastream.c 7467 2007-01-14 03:25:42Z nenolod $
+ * $Id: datastream.c 7655 2007-02-15 00:42:54Z w00t $
  */
 
 #include "atheme.h"
@@ -219,13 +219,11 @@ void recvq_put(connection_t *cptr)
 	else if (l > 0)
 		sq->firstfree += l;
 
-	slog(LG_DEBUG, "recvq_put(): %d bytes received, %d now in recvq", l, recvq_length(cptr));
 	if (cptr->recvq_handler)
 	{
 		l = recvq_length(cptr);
 		do /* call handler until it consumes nothing */
 		{
-			slog(LG_DEBUG, "recvq_put(): calling handler with %d in recvq", l);
 			cptr->recvq_handler(cptr);
 			ll = l;
 			l = recvq_length(cptr);
