@@ -1,3 +1,12 @@
+jilles      2007/02/14 23:53:52 UTC	(20070214-7649)
+  Log:
+  makekey(): prevent potential division by zero
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/function.c (File Modified) 
+
+
 jilles      2007/02/13 14:52:23 UTC	(20070213-7647)
   Log:
   Add in /cs set verbose help file:
