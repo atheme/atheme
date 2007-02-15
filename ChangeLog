@@ -1,3 +1,21 @@
+jilles      2007/02/15 11:54:27 UTC	(20070215-7663)
+  Log:
+  Make configure check for arc4random(). If the system does
+  not have it, use a slightly tweaked version of freebsd's
+  arc4random(), using gettimeofday(), getpid() and
+  /dev/urandom for initial seeding (and stack garbage if
+  /dev/urandom doesn't work).
+  
+  The code is originally from openbsd,
+  Copyright 1996 David Mazieres <dm@lcs.mit.edu>.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/configure.ac (File Modified) 
+  +1 -0		trunk/src/Makefile.in (File Modified) 
+  +194 -0	trunk/src/arc4random.c (File Added) 
+
+
 jilles      2007/02/15 10:39:35 UTC	(20070215-7661)
   Log:
   New srand() policy: seed once at startup and at uplink EOB,
