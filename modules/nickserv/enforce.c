@@ -23,7 +23,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/enforce",FALSE, _modinit, _moddeinit,
-	"$Id: enforce.c 7547 2007-02-04 21:21:06Z jilles $",
+	"$Id: enforce.c 7667 2007-02-15 12:06:12Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -189,7 +189,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 			i = 0;
 			for (i = 0; i < 30; i++)
 			{
-				snprintf( ign, BUFSIZE, "Guest%d", rand( )%99999 );
+				snprintf( ign, BUFSIZE, "Guest%d", arc4random()%99999 );
 				gnick = ign;
 				if (!user_find_named(ign))
 					break;
@@ -252,7 +252,7 @@ void reg_check(void *arg)
 				 * you shouldn't use this module. */
 				for (x = 0; x < 30; x++)
 				{
-					snprintf( ign, BUFSIZE, "Guest%d", rand( )%99999 );
+					snprintf( ign, BUFSIZE, "Guest%d", arc4random()%99999 );
 					gnick = ign;
 					if (!user_find_named(ign))
 						break;

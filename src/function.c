@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 7661 2007-02-15 10:39:35Z jilles $
+ * $Id: function.c 7667 2007-02-15 12:06:12Z jilles $
  */
 
 #include "atheme.h"
@@ -29,7 +29,7 @@ char *gen_pw(int8_t sz)
 
 	for (i = 0; i < sz; i++)
 	{
-		buf[i] = ch[rand() % 26];
+		buf[i] = ch[arc4random() % 26];
 	}
 
 	buf[sz] = 0;
@@ -381,15 +381,9 @@ char *timediff(time_t seconds)
 /* generate a random number, for use as a key */
 unsigned long makekey(void)
 {
-	unsigned long i, j, k;
+	unsigned long k;
 
-	i = rand() % (CURRTIME / (cnt.user + 1) + 1);
-	j = rand() % (me.start * cnt.chan + 1);
-
-	if (i > j)
-		k = (i - j) + strlen(chansvs.user);
-	else
-		k = (j - i) + strlen(chansvs.host);
+	k = arc4random() & 0x7FFFFFFF;
 
 	/* shorten or pad it to 9 digits */
 	if (k > 1000000000)
