@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 7649 2007-02-14 23:53:52Z jilles $
+ * $Id: function.c 7661 2007-02-15 10:39:35Z jilles $
  */
 
 #include "atheme.h"
@@ -26,8 +26,6 @@ char *gen_pw(int8_t sz)
 {
 	int8_t i;
 	char *buf = smalloc(sz + 1); /* padding */
-
-	srand(CURRTIME);
 
 	for (i = 0; i < sz; i++)
 	{

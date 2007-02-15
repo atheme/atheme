@@ -4,7 +4,7 @@
  *
  * CRYPT mechanism provider
  *
- * $Id: crypt.c 6829 2006-10-22 00:40:48Z nenolod $
+ * $Id: crypt.c 7661 2007-02-15 10:39:35Z jilles $
  */
 
 /******************************* WARNING ******************************************
@@ -19,7 +19,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/crypt", FALSE, _modinit, _moddeinit,
-	"$Id: crypt.c 6829 2006-10-22 00:40:48Z nenolod $",
+	"$Id: crypt.c 7661 2007-02-15 10:39:35Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -71,7 +71,6 @@ static int mech_start(sasl_session_t *p, char **out, int *out_len)
 	s->password = NULL;
 
 	/* Generate server's random data */
-	srand(time(NULL));
 	for(i = 0;i < 16;i++)
 		s->server_data[i] = (unsigned char)(rand() % 256);
 

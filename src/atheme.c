@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 7613 2007-02-08 22:09:15Z jilles $
+ * $Id: atheme.c 7661 2007-02-15 10:39:35Z jilles $
  */
 
 #include "atheme.h"
@@ -138,6 +138,7 @@ int main(int argc, char *argv[])
 
 	me.start = time(NULL);
 	CURRTIME = me.start;
+	srand(CURRTIME ^ (getpid() << 10));
 	me.execname = argv[0];
 
 	/* set signal handlers */
