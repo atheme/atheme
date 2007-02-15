@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 7661 2007-02-15 10:39:35Z jilles $
+ * $Id: atheme.c 7669 2007-02-15 12:14:10Z jilles $
  */
 
 #include "atheme.h"
@@ -57,6 +57,12 @@ static void print_version(void)
 	       version, creation, revision, generation);
 }
 /* *INDENT-ON* */
+
+static void rng_reseed(void *unused)
+{
+	(void)unused;
+	arc4random_addrandom((uint8_t *)&cnt, sizeof cnt);
+}
 
 int main(int argc, char *argv[])
 {
@@ -309,6 +315,9 @@ int main(int argc, char *argv[])
 
 	/* check authcookie expires every ten minutes */
 	event_add("authcookie_expire", authcookie_expire, NULL, 600);
+
+	/* reseed rng a little every five minutes */
+	event_add("rng_reseed", rng_reseed, NULL, 300);
 
 	me.connected = FALSE;
 	uplink_connect();

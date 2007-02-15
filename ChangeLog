@@ -1,3 +1,15 @@
+jilles      2007/02/15 12:06:12 UTC	(20070215-7667)
+  Log:
+  Use arc4random() for generated passwords, authcookies,
+  validation keys, guest nicknames and sasl crypt randomness.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/nickserv/enforce.c (File Modified) 
+  +1 -1		trunk/modules/saslserv/crypt.c (File Modified) 
+  +3 -9		trunk/src/function.c (File Modified) 
+
+
 jilles      2007/02/15 11:55:07 UTC	(20070215-7665)
   Log:
   Rerun autoconf and autoheader.
