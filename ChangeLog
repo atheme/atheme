@@ -1,3 +1,12 @@
+jilles      2007/02/15 12:14:10 UTC	(20070215-7669)
+  Log:
+  Periodically reseed arc4random() using struct cnt.
+  
+
+  Changes:	Modified:
+  +9 -0		trunk/src/atheme.c (File Modified) 
+
+
 jilles      2007/02/15 12:06:12 UTC	(20070215-7667)
   Log:
   Use arc4random() for generated passwords, authcookies,
