@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7599 2007-02-08 20:30:43Z jilles $
+ * $Id: account.c 7653 2007-02-15 00:37:07Z w00t $
  */
 
 #include "atheme.h"
@@ -84,7 +84,8 @@ myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags)
 
 	return_val_if_fail((mu = myuser_find(name)) == NULL, mu);
 
-	slog(LG_DEBUG, "myuser_add(): %s -> %s", name, email);
+	if (!(runflags & RF_STARTING))
+		slog(LG_DEBUG, "myuser_add(): %s -> %s", name, email);
 
 	mu = BlockHeapAlloc(myuser_heap);
 	object_init(object(mu), NULL, (destructor_t) myuser_delete);
@@ -148,7 +149,8 @@ void myuser_delete(myuser_t *mu)
 
 	return_if_fail(mu != NULL);
 
-	slog(LG_DEBUG, "myuser_delete(): %s", mu->name);
+	if (!(runflags & RF_STARTING))
+		slog(LG_DEBUG, "myuser_delete(): %s", mu->name);
 
 	/* log them out */
 	LIST_FOREACH_SAFE(n, tn, mu->logins.head)
@@ -534,7 +536,8 @@ mynick_t *mynick_add(myuser_t *mu, const char *name)
 
 	return_val_if_fail((mn = mynick_find(name)) == NULL, mn);
 
-	slog(LG_DEBUG, "mynick_add(): %s -> %s", name, mu->name);
+	if (!(runflags & RF_STARTING))
+		slog(LG_DEBUG, "mynick_add(): %s -> %s", name, mu->name);
 
 	mn = BlockHeapAlloc(mynick_heap);
 	object_init(object(mn), NULL, (destructor_t) mynick_delete);
@@ -569,7 +572,8 @@ void mynick_delete(mynick_t *mn)
 {
 	return_if_fail(mn != NULL);
 
-	slog(LG_DEBUG, "mynick_delete(): %s", mn->nick);
+	if (!(runflags & RF_STARTING))
+		slog(LG_DEBUG, "mynick_delete(): %s", mn->nick);
 
 	dictionary_delete(nicklist, mn->nick);
 	node_del(&mn->node, &mn->owner->nicks);
@@ -611,7 +615,8 @@ static void mychan_delete(mychan_t *mc)
 
 	return_if_fail(mc != NULL);
 
-	slog(LG_DEBUG, "mychan_delete(): %s", mc->name);
+	if (!(runflags & RF_STARTING))
+		slog(LG_DEBUG, "mychan_delete(): %s", mc->name);
 
 	/* remove the chanacs shiz */
 	LIST_FOREACH_SAFE(n, tn, mc->chanacs.head)
@@ -637,7 +642,8 @@ mychan_t *mychan_add(char *name)
 
 	return_val_if_fail((mc = mychan_find(name)) == NULL, mc);
 
-	slog(LG_DEBUG, "mychan_add(): %s", name);
+	if (!(runflags & RF_STARTING))
+		slog(LG_DEBUG, "mychan_add(): %s", name);
 
 	mc = BlockHeapAlloc(mychan_heap);
 
@@ -765,8 +771,9 @@ static void chanacs_delete(chanacs_t *ca)
 	return_if_fail(ca != NULL);
 	return_if_fail(ca->mychan != NULL);
 
-	slog(LG_DEBUG, "chanacs_delete(): %s -> %s", ca->mychan->name,
-		ca->myuser != NULL ? ca->myuser->name : ca->host);
+	if (!(runflags & RF_STARTING))
+		slog(LG_DEBUG, "chanacs_delete(): %s -> %s", ca->mychan->name,
+			ca->myuser != NULL ? ca->myuser->name : ca->host);
 	n = node_find(ca, &ca->mychan->chanacs);
 	node_del(n, &ca->mychan->chanacs);
 	node_free(n);
@@ -803,7 +810,8 @@ chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, uint32_t level)
 		return NULL;
 	}
 
-	slog(LG_DEBUG, "chanacs_add(): %s -> %s", mychan->name, myuser->name);
+	if (!(runflags & RF_STARTING))
+		slog(LG_DEBUG, "chanacs_add(): %s -> %s", mychan->name, myuser->name);
 
 	n1 = node_create();
 	n2 = node_create();
@@ -836,7 +844,8 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, char *host, uint32_t level)
 		return NULL;
 	}
 
-	slog(LG_DEBUG, "chanacs_add_host(): %s -> %s", mychan->name, host);
+	if (!(runflags & RF_STARTING))
+		slog(LG_DEBUG, "chanacs_add_host(): %s -> %s", mychan->name, host);
 
 	n = node_create();
 
