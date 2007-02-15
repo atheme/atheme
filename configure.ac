@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 7631 2007-02-10 21:01:21Z jilles $
+dnl $Id: configure.ac 7663 2007-02-15 11:54:27Z jilles $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.59)
 AC_INIT(atheme, 2.2, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 7631 2007-02-10 21:01:21Z jilles $])
+AC_COPYRIGHT([$Id: configure.ac 7663 2007-02-15 11:54:27Z jilles $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -74,7 +74,7 @@ echo " "
 dnl Checks for library functions.
 AC_TYPE_SIGNAL
 AC_FUNC_STRFTIME
-AC_CHECK_FUNCS(strdup strlcpy strlcat inet_pton inet_ntop gettimeofday umask mmap)
+AC_CHECK_FUNCS(strdup strlcpy strlcat inet_pton inet_ntop gettimeofday umask mmap arc4random)
 AC_CHECK_FUNC(socket,, AC_CHECK_LIB(socket, socket))
 AC_CHECK_FUNC(gethostbyname,, AC_CHECK_LIB(nsl, gethostbyname))
 AC_CHECK_FUNC(select, SOCKET_ENGINE="select",)
