@@ -5,7 +5,7 @@
  * This file contains code for the NickServ LIST function.
  * Based on Alex Lambert's LISTEMAIL.
  *
- * $Id: list.c 7445 2007-01-13 00:49:42Z jilles $
+ * $Id: list.c 7683 2007-02-17 12:13:57Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 7445 2007-01-13 00:49:42Z jilles $",
+	"$Id: list.c 7683 2007-02-17 12:13:57Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -57,6 +57,18 @@ static int list_one(sourceinfo_t *si, myuser_t *mu, mynick_t *mn)
 			strlcat(buf, " ", BUFSIZE);
 
 		strlcat(buf, "\2[marked]\2", BUFSIZE);
+	}
+	if (mu->flags & MU_HOLD) {
+		if (*buf)
+			strlcat(buf, " ", BUFSIZE);
+
+		strlcat(buf, "\2[held]\2", BUFSIZE);
+	}
+	if (mu->flags & MU_WAITAUTH) {
+		if (*buf)
+			strlcat(buf, " ", BUFSIZE);
+
+		strlcat(buf, "\2[unverified]\2", BUFSIZE);
 	}
 
 	if (mn == NULL || !irccasecmp(mn->nick, mu->name))

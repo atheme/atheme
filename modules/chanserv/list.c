@@ -4,7 +4,7 @@
  *
  * This file contains code for the ChanServ LIST function.
  *
- * $Id: list.c 6895 2006-10-22 21:07:24Z jilles $
+ * $Id: list.c 7683 2007-02-17 12:13:57Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 6895 2006-10-22 21:07:24Z jilles $",
+	"$Id: list.c 7683 2007-02-17 12:13:57Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -71,6 +71,12 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 					strlcat(buf, " ", BUFSIZE);
 
 				strlcat(buf, "\2[closed]\2", BUFSIZE);
+			}
+			if (mc->flags & MC_HOLD) {
+				if (*buf)
+					strlcat(buf, " ", BUFSIZE);
+
+				strlcat(buf, "\2[held]\2", BUFSIZE);
 			}
 
 			command_success_nodata(si, "- %s (%s) %s", mc->name, mc->founder->name, buf);

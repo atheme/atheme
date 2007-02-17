@@ -1,3 +1,13 @@
+nenolod     2007/02/17 07:00:49 UTC	(20070217-7681)
+  Log:
+  - basic support for IRCXPRO/OfficeIRC. (yes, it is reverse engineered).
+  
+
+  Changes:	Modified:
+  +790 -1	trunk/modules/protocol/Makefile.in (File Modified) 
+  + -		trunk/modules/protocol/officeirc.c (File Added) 
+
+
 nenolod     2007/02/17 06:40:39 UTC	(20070217-7679)
   Log:
   - handle tld-less networks without crashing
