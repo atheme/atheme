@@ -1,3 +1,14 @@
+jilles      2007/02/17 12:13:57 UTC	(20070217-7683)
+  Log:
+  nickserv list: show hold/waitauth flags also
+  chanserv list: show hold flag also
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/chanserv/list.c (File Modified) 
+  +12 -0	trunk/modules/nickserv/list.c (File Modified) 
+
+
 nenolod     2007/02/17 07:00:49 UTC	(20070217-7681)
   Log:
   - basic support for IRCXPRO/OfficeIRC. (yes, it is reverse engineered).
