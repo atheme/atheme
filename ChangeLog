@@ -1,3 +1,12 @@
+nenolod     2007/02/17 06:40:39 UTC	(20070217-7679)
+  Log:
+  - handle tld-less networks without crashing
+  
+
+  Changes:	Modified:
+  +8 -2		trunk/src/servers.c (File Modified) 
+
+
 jilles      2007/02/15 12:16:15 UTC	(20070215-7671)
   Log:
   Use arc4random() for initial rand() seeding.

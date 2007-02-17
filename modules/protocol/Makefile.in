@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7631 2007-02-10 21:01:21Z jilles $
+# $Id: Makefile.in 7681 2007-02-17 07:00:49Z nenolod $
 #
 
 CC		= @CC@
@@ -41,10 +41,11 @@ BASE_SRCS = 		\
 	dreamforge.c    \
 	hybrid.c	\
 	hyperion.c      \
-	inspircd10.c      \
+	inspircd10.c	\
 	inspircd11.c	\
 	ircnet.c        \
 	nefarious.c	\
+	officeirc.c	\
 	plexus.c        \
 	ptlink.c	\
 	ratbox.c        \
