@@ -4,7 +4,7 @@
  *
  * Server stuff.
  *
- * $Id: servers.c 7247 2006-11-20 01:08:16Z jilles $
+ * $Id: servers.c 7679 2007-02-17 06:40:39Z nenolod $
  */
 
 #include "atheme.h"
@@ -114,8 +114,11 @@ server_t *server_add(const char *name, uint8_t hops, const char *uplink, const c
 	/* tld list for global noticer */
 	tld = strrchr(name, '.');
 
-	if (!tld_find(tld))
-		tld_add(tld);
+	if (tld != NULL)
+	{
+		if (!tld_find(tld))
+			tld_add(tld);
+	}
 
 	cnt.server++;
 
@@ -319,6 +322,9 @@ tld_t *tld_find(const char *name)
 {
         tld_t *tld;
         node_t *n;
+
+	if (name == NULL)
+		return NULL;
 
         LIST_FOREACH(n, tldlist.head)
         {
