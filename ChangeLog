@@ -1,3 +1,13 @@
+nenolod     2007/02/18 00:47:15 UTC	(20070218-7687)
+  Log:
+  - add protocol/officeirc.h
+  
+
+  Changes:	Modified:
+  +25 -0	trunk/include/phandler.h (File Modified) 
+  + -		trunk/include/protocol/officeirc.h (File Added) 
+
+
 jilles      2007/02/17 16:44:25 UTC	(20070217-7685)
   Log:
   chanban_add(): check for NULL, empty and space-containing masks

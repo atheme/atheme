@@ -26,7 +26,7 @@
 /*
  * $FreeBSD: /usr/local/www/cvsroot/FreeBSD/src/lib/libc/gen/arc4random.c,v 1.10.8.1 2006/11/18 21:35:13 ache Exp $
  * Modified for Atheme by Jilles Tjoelker
- * $Id: arc4random.c 7663 2007-02-15 11:54:27Z jilles $
+ * $Id: arc4random.c 7689 2007-02-18 02:20:03Z nenolod $
  */
 
 #include "atheme.h"
@@ -50,8 +50,7 @@ static inline uint8_t arc4_getbyte(struct arc4_stream *);
 static void arc4_stir(struct arc4_stream *);
 
 static inline void
-arc4_init(as)
-	struct arc4_stream *as;
+arc4_init(struct arc4_stream *as)
 {
 	int     n;
 
@@ -62,10 +61,7 @@ arc4_init(as)
 }
 
 static inline void
-arc4_addrandom(as, dat, datlen)
-	struct arc4_stream *as;
-	uint8_t *dat;
-	int     datlen;
+arc4_addrandom(struct arc4_stream *as, uint8_t *dat, int datlen)
 {
 	int     n;
 	uint8_t si;
@@ -81,8 +77,7 @@ arc4_addrandom(as, dat, datlen)
 }
 
 static void
-arc4_stir(as)
-	struct arc4_stream *as;
+arc4_stir(struct arc4_stream *as)
 {
 	int     fd, n;
 	struct {
@@ -116,8 +111,7 @@ arc4_stir(as)
 }
 
 static inline uint8_t
-arc4_getbyte(as)
-	struct arc4_stream *as;
+arc4_getbyte(struct arc4_stream *as)
 {
 	uint8_t si, sj;
 
@@ -132,8 +126,7 @@ arc4_getbyte(as)
 }
 
 static inline uint32_t
-arc4_getword(as)
-	struct arc4_stream *as;
+arc4_getword(struct arc4_stream *as)
 {
 	uint32_t val;
 
@@ -148,10 +141,11 @@ arc4_getword(as)
 static void
 arc4_check_init(void)
 {
-	if (!rs_initialized) {
-		arc4_init(&rs);
-		rs_initialized = 1;
-	}
+	if (rs_initialized)
+		return;
+
+	arc4_init(&rs);
+	rs_initialized = 1;
 }
 
 static void
@@ -171,9 +165,7 @@ arc4random_stir()
 }
 
 void
-arc4random_addrandom(dat, datlen)
-	uint8_t *dat;
-	int     datlen;
+arc4random_addrandom(uint8_t *dat, int datlen)
 {
 	arc4_check_init();
 	arc4_check_stir();
@@ -181,7 +173,7 @@ arc4random_addrandom(dat, datlen)
 }
 
 uint32_t
-arc4random()
+arc4random(void)
 {
 	uint32_t rnd;
 
