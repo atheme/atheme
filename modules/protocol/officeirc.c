@@ -5,7 +5,7 @@
  *
  * This file contains reverse-engineered IRCXPRO 1.2/OfficeIRC support.
  *
- * $Id: officeirc.c 7681 2007-02-17 07:00:49Z nenolod $
+ * $Id: officeirc.c 7691 2007-02-18 02:27:08Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/officeirc.h"
 
-DECLARE_MODULE_V1("protocol/officeirc", TRUE, _modinit, NULL, "$Id: officeirc.c 7681 2007-02-17 07:00:49Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/officeirc", TRUE, _modinit, NULL, "$Id: officeirc.c 7691 2007-02-18 02:27:08Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -240,7 +240,9 @@ static void officeirc_kline_sts(char *server, char *user, char *host, long durat
 	if (!me.connected)
 		return;
 
-	sts(":%s AKILL %s %s %ld %s %ld :%s", me.name, host, user, duration, opersvs.nick, time(NULL), reason);
+	sts(":%s ACCESS * ADD AKILL 0 *!%s@%s$* %ld 0 %s %ld 0 :%s", 
+		opersvs.nick, host, user, time(NULL), 
+		opersvs.nick, duration, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
@@ -249,7 +251,9 @@ static void officeirc_unkline_sts(char *server, char *user, char *host)
 	if (!me.connected)
 		return;
 
-	sts(":%s RAKILL %s %s", me.name, host, user);
+	sts(":%s ACCESS * DELETE AKILL 0 *!%s@%s$* %ld 0 %s 0 0 :", 
+		opersvs.nick, host, user, time(NULL), 
+		opersvs.nick);
 }
 
 /* topic wrapper */
