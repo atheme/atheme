@@ -1,3 +1,12 @@
+jilles      2007/02/17 16:44:25 UTC	(20070217-7685)
+  Log:
+  chanban_add(): check for NULL, empty and space-containing masks
+  
+
+  Changes:	Modified:
+  +12 -0	trunk/src/channels.c (File Modified) 
+
+
 jilles      2007/02/17 12:13:57 UTC	(20070217-7683)
   Log:
   nickserv list: show hold/waitauth flags also

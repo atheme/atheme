@@ -4,7 +4,7 @@
  *
  * Protocol handlers, both generic and the actual declarations themselves.
  *
- * $Id: phandler.h 7415 2006-12-30 17:18:45Z jilles $
+ * $Id: phandler.h 7687 2007-02-18 00:47:15Z nenolod $
  */
 
 #ifndef PHANDLER_H
@@ -60,6 +60,7 @@ typedef struct ircd_ ircd_t;
 #define PROTOCOL_UNREAL			17
 #define PROTOCOL_SOLIDIRCD		18
 #define PROTOCOL_NEFARIOUS		19
+#define PROTOCOL_OFFICEIRC		20
 
 #define PROTOCOL_OTHER			255
 
