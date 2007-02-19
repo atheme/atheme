@@ -1,3 +1,12 @@
+jilles      2007/02/19 17:25:00 UTC	(20070219-7695)
+  Log:
+  Add a small officeirc section to doc/IRCD.
+  
+
+  Changes:	Modified:
+  +7 -0		trunk/doc/IRCD (File Modified) 
+
+
 jilles      2007/02/19 17:16:06 UTC	(20070219-7693)
   Log:
   Add a little information about ircd setup.

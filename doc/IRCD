@@ -1,4 +1,4 @@
-$Id: IRCD 7695 2007-02-19 17:25:00Z jilles $
+$Id: IRCD 7697 2007-02-19 17:26:17Z jilles $
 
 IRCD-specific notes
 -------------------
@@ -297,4 +297,5 @@ Atheme does not support oplevels; they should be disabled.
 unreal
 ------
 
-You need ulines{} for services on all servers on the network.
+You need ulines{} for services on all servers on the network. If a server lacks
+U:lines, a storm of mode changes may result.
