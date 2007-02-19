@@ -1,4 +1,4 @@
-$Id: IRCD 7145 2006-11-14 23:29:46Z jilles $
+$Id: IRCD 7695 2007-02-19 17:25:00Z jilles $
 
 IRCD-specific notes
 -------------------
@@ -174,6 +174,13 @@ before -h.
 
 Ban exceptions are supported, although some Nefarious versions have bugs where
 they are not sent properly.
+
+officeirc
+---------
+
+Unlike other IRCds, OfficeIRC server names do not necessarily have a period in
+them; this may cause some warnings about the config file which can safely be
+ignored.
 
 plexus
 ------
