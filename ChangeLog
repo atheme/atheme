@@ -1,3 +1,12 @@
+nenolod     2007/02/18 02:27:08 UTC	(20070218-7691)
+  Log:
+  - officeirc akill support
+  
+
+  Changes:	Modified:
+  +6 -2		trunk/modules/protocol/officeirc.c (File Modified) 
+
+
 nenolod     2007/02/18 02:20:03 UTC	(20070218-7689)
   Log:
   - C99 prototypes

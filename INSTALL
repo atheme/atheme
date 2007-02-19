@@ -101,10 +101,15 @@ Atheme acts as an IRC server with pseudo-clients on it. To link it to your
 network, you'll need to add some lines in your IRCd's configuration. Atheme
 connects to IRCd, not the other way around.
 
-This is where I can't help you. Every IRCd is different. Look for documentation
-for "connect{}" or "link{}" or "C/N lines" for your IRCd. You need to allow
-Atheme to introduce other servers (e.g. "hub_mask" or "H line"), otherwise
-it will probably be disconnected when the OperServ JUPE command is used.
+It is suggested that you set up your IRCd (IRC operator access, etc) before
+trying to connect Atheme. Many IRCds do not log much about server connections,
+so it is best to connect as an IRC operator and watch the server notices.
+
+As for the actual lines that need to be added, every IRCd is different. Look
+for documentation for "connect{}" or "link{}" or "C/N lines" for your IRCd. You
+need to allow Atheme to introduce other servers (e.g. "hub_mask" or "H line"),
+otherwise it will probably be disconnected when the OperServ JUPE command is
+used.
 
 To be perfectly honest, if you can't figure this out you should be running
 neither IRCd nor services.
