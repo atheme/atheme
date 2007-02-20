@@ -1,3 +1,12 @@
+jilles      2007/02/19 20:39:37 UTC	(20070219-7699)
+  Log:
+  Add a line for officeirc to example.conf.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/dist/example.conf (File Modified) 
+
+
 jilles      2007/02/19 17:26:17 UTC	(20070219-7697)
   Log:
   doc/IRCD: unreal with missing U:lines can cause storms like dreamforge
