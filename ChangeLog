@@ -1,3 +1,12 @@
+jilles      2007/02/20 15:35:01 UTC	(20070220-7701)
+  Log:
+  inspircd11: don't pass a too high parc to channel_mode().
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/protocol/inspircd11.c (File Modified) 
+
+
 jilles      2007/02/19 20:39:37 UTC	(20070219-7699)
   Log:
   Add a line for officeirc to example.conf.
