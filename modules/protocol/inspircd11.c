@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 7711 2007-02-21 20:28:21Z w00t $
+ * $Id: inspircd11.c 7713 2007-02-21 21:40:55Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7711 2007-02-21 20:28:21Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7713 2007-02-21 21:40:55Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -987,6 +987,18 @@ static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
+/*
+ * rsquit:
+ *  remote/request squit
+ *  when squitting a remote server, inspircd sends RSQUIT along the tree until it reaches the server that has
+ *  the server to be squit as a local connection, which should then close it's connection and send SQUIT back
+ *  to the rest of the network.
+ */
+static void m_rsquit(sourceinfo_t *si, int parc, char *parv[])
+{
+	sts(":%s SQUIT %s :Jupe removed by %s", me.name, parv[0], si->su->nick);
+}
+
 static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 {
 	int i, varc;
@@ -1116,6 +1128,7 @@ void _modinit(module_t * m)
 	pcommand_add("KICK", m_kick, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("KILL", m_kill, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("SQUIT", m_squit, 1, MSRC_USER | MSRC_SERVER);
+	pcommand_add("RSQUIT", m_rsquit, 1, MSRC_USER);
 	pcommand_add("SERVER", m_server, 4, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add("STATS", m_stats, 2, MSRC_USER);
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
