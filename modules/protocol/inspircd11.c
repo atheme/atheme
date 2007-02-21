@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 7701 2007-02-20 15:35:01Z jilles $
+ * $Id: inspircd11.c 7711 2007-02-21 20:28:21Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7701 2007-02-20 15:35:01Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7711 2007-02-21 20:28:21Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -738,6 +738,16 @@ static void m_quit(sourceinfo_t *si, int parc, char *parv[])
 	user_delete(si->su);
 }
 
+static void m_saquit(sourceinfo_t *si, int parc, char *parv[])
+{
+	user_t *u = user_find(parv[0]);
+
+	slog(LG_DEBUG, "m_saquit(): user leaving: %s", parv[0]);
+
+	/* user_delete() takes care of removing channels and so forth */
+	user_delete(u);
+}
+
 static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (*parv[0] == '#')
@@ -1102,6 +1112,7 @@ void _modinit(module_t * m)
 	pcommand_add("SAJOIN", m_sajoin, 2, MSRC_USER);
 	pcommand_add("SAPART", m_sapart, 2, MSRC_USER);
 	pcommand_add("SANICK", m_sanick, 2, MSRC_USER);
+	pcommand_add("SAQUIT", m_saquit, 1, MSRC_USER);
 	pcommand_add("KICK", m_kick, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("KILL", m_kill, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("SQUIT", m_squit, 1, MSRC_USER | MSRC_SERVER);
