@@ -1,3 +1,11 @@
+w00t        2007/02/21 21:40:55 UTC	(20070221-7713)
+  Log:
+  Support RSQUIT so that jupes can be removed from the network
+
+  Changes:	Modified:
+  +13 -0	trunk/modules/protocol/inspircd11.c (File Modified) 
+
+
 w00t        2007/02/21 20:28:21 UTC	(20070221-7711)
   Log:
   Add a (long overdue) handler for SAQUIT to stop us 'losing' people in the hash

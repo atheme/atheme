@@ -5,10 +5,11 @@
  *
  * This file contains IRC interaction routines.
  *
- * $Id: tokenize.c 6323 2006-09-06 23:59:05Z pippijn $
+ * $Id: tokenize.c 7717 2007-02-22 14:41:58Z jilles $
  */
 
 #include "atheme.h"
+#include "pmodule.h"
 
 int8_t sjtoken(char *message, char delimiter, char **parv)
 {
@@ -115,7 +116,7 @@ int8_t tokenize(char *message, char **parv)
 
 	while (*next)
 	{
-		if (count == 19)
+		if (count == MAXPARC)
 		{
 			/* we've reached one less than our max limit
 			 * to handle the parameter we already ripped off

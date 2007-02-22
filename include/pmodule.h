@@ -5,7 +5,7 @@
  * Protocol module stuff.
  * Modules usually do not need this.
  *
- * $Id: pmodule.h 7619 2007-02-08 23:29:50Z jilles $
+ * $Id: pmodule.h 7717 2007-02-22 14:41:58Z jilles $
  */
 
 #ifndef PMODULE_H
@@ -24,6 +24,8 @@ struct pcommand_ {
 #define MSRC_UNREG	1 /* before SERVER is sent */
 #define MSRC_USER	2 /* from users */
 #define MSRC_SERVER	4 /* from servers */
+
+#define MAXPARC		19 /* max # params to protocol command */
 
 /* pmodule.c */
 E BlockHeap *pcommand_heap;
