@@ -1,3 +1,49 @@
+jilles      2007/02/24 16:53:16 UTC	(20070224-7723)
+  Log:
+  Change topic handling:
+  - topic_sts() takes channel_t pointer instead of channel name
+    and has an extra parameter, the previous topicTS
+  - use this extra parameter to optimize the choice of topic
+    command and avoid sending topic changes that will be ignored
+  - ignoring topic changes from bursting uplink while we already
+    have a topic moved to protocol modules which always accept
+    our topic; other protocols (e.g. inspircd, TS6) don't do this
+    anymore
+  - ptlink topic reception fixed
+  - conditions on topicTS added in P10/inspircd topic reception
+  
+
+  Changes:	Modified:
+  +7 -3		trunk/include/phandler.h (File Modified) 
+  +1 -1		trunk/modules/chanserv/main.c (File Modified) 
+  +6 -2		trunk/modules/chanserv/topic.c (File Modified) 
+  +15 -12	trunk/modules/protocol/asuka.c (File Modified) 
+  +10 -3	trunk/modules/protocol/bahamut.c (File Modified) 
+  +15 -12	trunk/modules/protocol/bircd.c (File Modified) 
+  +27 -10	trunk/modules/protocol/charybdis.c (File Modified) 
+  +14 -2	trunk/modules/protocol/dreamforge.c (File Modified) 
+  +27 -10	trunk/modules/protocol/hybrid.c (File Modified) 
+  +10 -3	trunk/modules/protocol/hyperion.c (File Modified) 
+  +30 -12	trunk/modules/protocol/inspircd10.c (File Modified) 
+  +30 -12	trunk/modules/protocol/inspircd11.c (File Modified) 
+  +4 -6		trunk/modules/protocol/ircnet.c (File Modified) 
+  +14 -14	trunk/modules/protocol/nefarious.c (File Modified) 
+  +14 -2	trunk/modules/protocol/officeirc.c (File Modified) 
+  +3 -3		trunk/modules/protocol/plexus.c (File Modified) 
+  +13 -7	trunk/modules/protocol/ptlink.c (File Modified) 
+  +27 -10	trunk/modules/protocol/ratbox.c (File Modified) 
+  +3 -3		trunk/modules/protocol/shadowircd.c (File Modified) 
+  +10 -3	trunk/modules/protocol/solidircd.c (File Modified) 
+  +14 -2	trunk/modules/protocol/sorcery.c (File Modified) 
+  +10 -3	trunk/modules/protocol/ultimate3.c (File Modified) 
+  +15 -12	trunk/modules/protocol/undernet.c (File Modified) 
+  +10 -3	trunk/modules/protocol/unreal.c (File Modified) 
+  +6 -2		trunk/modules/xmlrpc/channel.c (File Modified) 
+  +2 -2		trunk/src/phandler.c (File Modified) 
+  +4 -12	trunk/src/ptasks.c (File Modified) 
+  +1 -1		trunk/src/services.c (File Modified) 
+
+
 jilles      2007/02/22 14:41:58 UTC	(20070222-7717)
   Log:
   Make maximum parameter count for protocol commands a #define.

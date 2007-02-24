@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 7723 2007-02-24 16:53:16Z jilles $
+ * $Id: inspircd11.c 7725 2007-02-24 22:42:27Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7723 2007-02-24 16:53:16Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7725 2007-02-24 22:42:27Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -381,14 +381,14 @@ static void inspircd_topic_sts(channel_t *c, char *setter, time_t ts, time_t pre
 	/* Restoring old topic */
 	if (ts > prevts + 60 || prevts == 0)
 	{
-		sts(":%s FTOPIC %s %ld %s :%s", me.name, c->name, ts, setter, topic);
+		sts(":%s FTOPIC %s %ld %s :%s", chansvs.nick, c->name, ts, setter, topic);
 		return;
 	}
 	/* Tweaking a topic */
 	else if (ts == prevts)
 	{
 		ts += 60;
-		sts(":%s FTOPIC %s %ld %s :%s", me.name, c->name, ts, setter, topic);
+		sts(":%s FTOPIC %s %ld %s :%s", chansvs.nick, c->name, ts, setter, topic);
 		c->topicts = ts;
 		return;
 	}
