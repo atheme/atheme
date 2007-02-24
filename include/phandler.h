@@ -4,7 +4,7 @@
  *
  * Protocol handlers, both generic and the actual declarations themselves.
  *
- * $Id: phandler.h 7687 2007-02-18 00:47:15Z nenolod $
+ * $Id: phandler.h 7723 2007-02-24 16:53:16Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -139,8 +139,12 @@ E void (*kline_sts)(char *server, char *user, char *host, long duration, char *r
 E void (*unkline_sts)(char *server, char *user, char *host);
 /* make chanserv set a topic on a channel
  * setter and ts should be used if the ircd supports topics to be set
- * with a given topicsetter and topicts; ts is not a channelts */
-E void (*topic_sts)(char *channel, char *setter, time_t ts, char *topic);
+ * with a given topicsetter and topicts; ts is not a channelts
+ * prevts is the topicts of the old topic or 0 if there was no topic,
+ * useful in optimizing which form of topic change to use
+ * if the given topicts was not set and topicts is used on the ircd,
+ * set c->topicts to the value used */
+E void (*topic_sts)(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic);
 /* set modes on a channel by the given sender; sender must be a client
  * on the services server; sender may or may not be on channel */
 E void (*mode_sts)(char *sender, char *target, char *modes);
@@ -198,7 +202,7 @@ E void generic_skill(char *from, char *nick, char *fmt, ...);
 E void generic_part(char *chan, char *nick);
 E void generic_kline_sts(char *server, char *user, char *host, long duration, char *reason);
 E void generic_unkline_sts(char *server, char *user, char *host);
-E void generic_topic_sts(char *channel, char *setter, time_t ts, char *topic);
+E void generic_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic);
 E void generic_mode_sts(char *sender, char *target, char *modes);
 E void generic_ping_sts(void);
 E void generic_on_login(char *origin, char *user, char *wantedhost);

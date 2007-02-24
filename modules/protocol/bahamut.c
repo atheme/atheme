@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: bahamut.c 7619 2007-02-08 23:29:50Z jilles $
+ * $Id: bahamut.c 7723 2007-02-24 16:53:16Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/bahamut.h"
 
-DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 7619 2007-02-08 23:29:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 7723 2007-02-24 16:53:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -269,12 +269,12 @@ static void bahamut_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void bahamut_topic_sts(char *channel, char *setter, time_t ts, char *topic)
+static void bahamut_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic)
 {
-	if (!me.connected)
+	if (!me.connected || !c)
 		return;
 
-	sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, channel, setter, ts, topic);
+	sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, c->name, setter, ts, topic);
 }
 
 /* mode wrapper */
@@ -352,6 +352,13 @@ static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 	channel_t *c = channel_find(parv[0]);
 
 	if (!c)
+		return;
+
+	/* Our uplink is trying to change the topic during burst,
+	 * and we have already set a topic. Assume our change won.
+	 * -- jilles */
+	if (si->s != NULL && si->s->uplink == me.me &&
+			!(si->s->flags & SF_EOB) && c->topic != NULL)
 		return;
 
 	handle_topic_from(si, c, parv[1], atol(parv[2]), parv[3]);

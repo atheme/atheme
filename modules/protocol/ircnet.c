@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 7619 2007-02-08 23:29:50Z jilles $
+ * $Id: ircnet.c 7723 2007-02-24 16:53:16Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 7619 2007-02-08 23:29:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 7723 2007-02-24 16:53:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -266,24 +266,22 @@ static void ircnet_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void ircnet_topic_sts(char *channel, char *setter, time_t ts, char *topic)
+static void ircnet_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic)
 {
-	channel_t *c;
 	int joined = 0;
 
-	c = channel_find(channel);
 	if (!me.connected || !c)
 		return;
 
 	/* Need to join to set topic -- jilles */
 	if (!chanuser_find(c, chansvs.me->me))
 	{
-		sts(":%s NJOIN %s :@%s", ME, channel, CLIENT_NAME(chansvs.me->me));
+		sts(":%s NJOIN %s :@%s", ME, c->name, CLIENT_NAME(chansvs.me->me));
 		joined = 1;
 	}
-	sts(":%s TOPIC %s :%s", CLIENT_NAME(chansvs.me->me), channel, topic);
+	sts(":%s TOPIC %s :%s", CLIENT_NAME(chansvs.me->me), c->name, topic);
 	if (joined)
-		sts(":%s PART %s :Topic set", CLIENT_NAME(chansvs.me->me), channel);
+		sts(":%s PART %s :Topic set", CLIENT_NAME(chansvs.me->me), c->name);
 }
 
 /* mode wrapper */

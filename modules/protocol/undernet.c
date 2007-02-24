@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: undernet.c 7619 2007-02-08 23:29:50Z jilles $
+ * $Id: undernet.c 7723 2007-02-24 16:53:16Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 7619 2007-02-08 23:29:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 7723 2007-02-24 16:53:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -282,16 +282,21 @@ static void undernet_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void undernet_topic_sts(char *channel, char *setter, time_t ts, char *topic)
+static void undernet_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic)
 {
-	channel_t *c;
-
-	c = channel_find(channel);
-	if (c == NULL)
+	if (!me.connected || !c)
 		return;
-	/* P10 ircds only accept topics with newer topicTS, ever,
-	 * so send the current time -- jilles */
-	sts("%s T %s %ld %ld :%s", chansvs.me->me->uid, channel, c->ts, CURRTIME, topic);
+
+	if (ts > prevts || prevts == 0)
+		sts("%s T %s %ld %ld :%s", chansvs.me->me->uid, c->name, c->ts, ts, topic);
+	else
+	{
+		ts = CURRTIME;
+		if (ts < prevts)
+			ts = prevts + 1;
+		sts("%s T %s %ld %ld :%s", chansvs.me->me->uid, c->name, c->ts, ts, topic);
+		c->topicts = ts;
+	}
 }
 
 /* mode wrapper */
@@ -371,14 +376,12 @@ static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 	else
 		source = si->su->nick;
 
-	/* Let's accept any topic
-	 * The criteria asuka uses for acceptance are broken,
-	 * and it will not propagate anything not accepted
-	 * -- jilles */
 	if (parc > 2)
 		ts = atoi(parv[parc - 2]);
 	if (ts == 0)
 		ts = CURRTIME;
+	else if (c->topic != NULL && ts < c->topicts)
+		return;
 	handle_topic_from(si, c, source, ts, parv[parc - 1]);
 }
 

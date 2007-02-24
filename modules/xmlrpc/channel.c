@@ -4,7 +4,7 @@
  *
  * XMLRPC channel management functions.
  *
- * $Id: channel.c 7277 2006-11-25 01:41:18Z jilles $
+ * $Id: channel.c 7723 2007-02-24 16:53:16Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/channel", FALSE, _modinit, _moddeinit,
-	"$Id: channel.c 7277 2006-11-25 01:41:18Z jilles $",
+	"$Id: channel.c 7723 2007-02-24 16:53:16Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -352,6 +352,7 @@ static int do_topic_set(void *conn, int parc, char *parv[])
 	mychan_t *mc;
 	channel_t *c;
 	char buf[XMLRPC_BUFSIZE];
+	time_t prevtopicts;
  
 	if (parc < 4)
 	{
@@ -392,8 +393,9 @@ static int do_topic_set(void *conn, int parc, char *parv[])
 	if(!(c = channel_find(parv[2])))
 		return 0;
 
+	prevtopicts = c->topicts;
 	handle_topic(c, parv[1], CURRTIME, parv[3]);
-	topic_sts(parv[2], parv[1], CURRTIME, parv[3]);
+	topic_sts(c, parv[1], CURRTIME, prevtopicts, parv[3]);
  
 	logcommand_external(chansvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "%s TOPIC %s", mc->name, parv[2]);
  
@@ -426,6 +428,7 @@ static int do_topic_append(void *conn, int parc, char *parv[])
 	mychan_t *mc;
 	channel_t *c;
 	char buf[XMLRPC_BUFSIZE], topicbuf[BUFSIZE];
+	time_t prevtopicts;
  
 	if (parc < 4)
 	{
@@ -475,8 +478,9 @@ static int do_topic_append(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
+	prevtopicts = c->topicts;
 	handle_topic(c, parv[1], CURRTIME, topicbuf);
-	topic_sts(parv[2], parv[1], CURRTIME, topicbuf);
+	topic_sts(c, parv[1], CURRTIME, prevtopicts, topicbuf);
  
 	logcommand_external(chansvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "%s TOPICAPPEND %s", mc->name, parv[2]);
  

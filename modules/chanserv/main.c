@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 7465 2007-01-14 02:50:26Z nenolod $
+ * $Id: main.c 7723 2007-02-24 16:53:16Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 7465 2007-01-14 02:50:26Z nenolod $",
+	"$Id: main.c 7723 2007-02-24 16:53:16Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -582,7 +582,7 @@ static void cs_newchan(channel_t *c)
 	topicts = atol(md->value);
 
 	handle_topic(c, setter, topicts, text);
-	topic_sts(c->name, setter, topicts, text);
+	topic_sts(c, setter, topicts, 0, text);
 }
 
 static void cs_tschange(channel_t *c)

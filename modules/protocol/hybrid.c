@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 7643 2007-02-11 16:35:50Z jilles $
+ * $Id: hybrid.c 7723 2007-02-24 16:53:16Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 7643 2007-02-11 16:35:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 7723 2007-02-24 16:53:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -316,20 +316,36 @@ static void hybrid_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void hybrid_topic_sts(char *channel, char *setter, time_t ts, char *topic)
+static void hybrid_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic)
 {
-	channel_t *c;
 	int joined = 0;
 
-	c = channel_find(channel);
 	if (!me.connected || !c)
 		return;
 
-	/* If restoring an older topic, try to use TB -- jilles */
-	if (use_tb && ts < CURRTIME && *topic != '\0')
+	/* If possible, try to use TB
+	 * Note that because TOPIC does not contain topicTS, it may be
+	 * off a few seconds on other servers, hence the 60 seconds here.
+	 * -- jilles */
+	if (use_tb && *topic != '\0')
 	{
-		sts(":%s TB %s %ld %s :%s", ME, channel, ts, setter, topic);
-		return;
+		/* Restoring old topic */
+		if (ts < prevts || prevts == 0)
+		{
+			if (ts + 60 > prevts)
+				ts = prevts - 60;
+			sts(":%s TB %s %ld %s :%s", ME, c->name, ts, setter, topic);
+			c->topicts = ts;
+			return;
+		}
+		/* Tweaking a topic */
+		else if (ts == prevts)
+		{
+			ts -= 60;
+			sts(":%s TB %s %ld %s :%s", ME, c->name, ts, setter, topic);
+			c->topicts = ts;
+			return;
+		}
 	}
 	/* We have to be on channel to change topic.
 	 * We cannot nicely change topic from the server:
@@ -339,12 +355,13 @@ static void hybrid_topic_sts(char *channel, char *setter, time_t ts, char *topic
 	 */
 	if (!chanuser_find(c, chansvs.me->me))
 	{
-		sts(":%s SJOIN %ld %s + :@%s", ME, c->ts, channel, CLIENT_NAME(chansvs.me->me));
+		sts(":%s SJOIN %ld %s + :@%s", ME, c->ts, c->name, CLIENT_NAME(chansvs.me->me));
 		joined = 1;
 	}
-	sts(":%s TOPIC %s :%s", CLIENT_NAME(chansvs.me->me), channel, topic);
+	sts(":%s TOPIC %s :%s", CLIENT_NAME(chansvs.me->me), c->name, topic);
 	if (joined)
-		sts(":%s PART %s :Topic set", CLIENT_NAME(chansvs.me->me), channel);
+		sts(":%s PART %s :Topic set", CLIENT_NAME(chansvs.me->me), c->name);
+	c->topicts = CURRTIME;
 }
 
 /* mode wrapper */

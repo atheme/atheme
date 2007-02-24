@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: sorcery.c 7619 2007-02-08 23:29:50Z jilles $
+ * $Id: sorcery.c 7723 2007-02-24 16:53:16Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/sorcery.h"
 
-DECLARE_MODULE_V1("protocol/sorcery", TRUE, _modinit, NULL, "$Id: sorcery.c 7619 2007-02-08 23:29:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/sorcery", TRUE, _modinit, NULL, "$Id: sorcery.c 7723 2007-02-24 16:53:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -251,12 +251,24 @@ static void sorcery_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void sorcery_topic_sts(char *channel, char *setter, time_t ts, char *topic)
+static void sorcery_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic)
 {
 	if (!me.connected)
 		return;
 
-	sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, channel, setter, ts, topic);
+	if (ts < prevts || prevts == 0)
+		sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, c->name, setter, ts, topic);
+	else if (prevts > 1)
+	{
+		ts = prevts - 1;
+		sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, c->name, "topictime.wrong", ts, topic);
+		c->topicts = ts;
+	}
+	else
+	{
+		notice(chansvs.nick, c->name, "Unable to change topic to: %s", topic);
+		c->topicts = 1;
+	}
 }
 
 /* mode wrapper */

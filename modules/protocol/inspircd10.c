@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree stable branch inspircd.
  *
- * $Id: inspircd10.c 7619 2007-02-08 23:29:50Z jilles $
+ * $Id: inspircd10.c 7723 2007-02-24 16:53:16Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 7619 2007-02-08 23:29:50Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 7723 2007-02-24 16:53:16Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -346,20 +346,31 @@ static void inspircd_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void inspircd_topic_sts(char *channel, char *setter, time_t ts, char *topic)
+static void inspircd_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic)
 {
-	if (!me.connected)
+	if (!me.connected || !c)
 		return;
 
-	if (ts > CURRTIME)
-		/*
-		 * Restoring an old topic, can set proper setter/ts -- jilles
-		 * No, on inspircd, newer topic TS wins -- w00t
-		 */
-		sts(":%s FTOPIC %s %ld %s :%s", me.name, channel, ts, setter, topic);
-	else
-		/* FTOPIC would require us to set an older topicts */
-		sts(":%s TOPIC %s :%s", chansvs.nick, channel, topic);
+	/* If possible, try to use FTOPIC
+	 * Note that because TOPIC does not contain topicTS, it may be
+	 * off a few seconds on other servers, hence the 60 seconds here.
+	 * -- jilles */
+	/* Restoring old topic */
+	if (ts > prevts + 60 || prevts == 0)
+	{
+		sts(":%s FTOPIC %s %ld %s :%s", me.name, c->name, ts, setter, topic);
+		return;
+	}
+	/* Tweaking a topic */
+	else if (ts == prevts)
+	{
+		ts += 60;
+		sts(":%s FTOPIC %s %ld %s :%s", me.name, c->name, ts, setter, topic);
+		c->topicts = ts;
+		return;
+	}
+	sts(":%s TOPIC %s :%s", chansvs.nick, c->name, topic);
+	c->topicts = CURRTIME;
 }
 
 /* mode wrapper */
@@ -443,11 +454,18 @@ static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 static void m_ftopic(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
+	time_t ts = atol(parv[1]);
 
 	if (!c)
 		return;
 
-	handle_topic_from(si, c, parv[2], atol(parv[1]), parv[3]);
+	if (c->topic != NULL && c->topicts >= ts)
+	{
+		slog(LG_DEBUG, "m_ftopic(): ignoring older topic on %s", c->name);
+		return;
+	}
+
+	handle_topic_from(si, c, parv[2], ts, parv[3]);
 }
 
 static void m_ping(sourceinfo_t *si, int parc, char *parv[])

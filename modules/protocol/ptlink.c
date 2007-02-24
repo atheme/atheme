@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for ptlink ircd.
  *
- * $Id: ptlink.c 7619 2007-02-08 23:29:50Z jilles $
+ * $Id: ptlink.c 7723 2007-02-24 16:53:16Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/ptlink.h"
 
-DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 7619 2007-02-08 23:29:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 7723 2007-02-24 16:53:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -273,12 +273,12 @@ static void ptlink_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void ptlink_topic_sts(char *channel, char *setter, time_t ts, char *topic)
+static void ptlink_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic)
 {
-	if (!me.connected)
+	if (!me.connected || !c)
 		return;
 
-	sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, channel, setter, ts, topic);
+	sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, c->name, setter, ts, topic);
 }
 
 /* mode wrapper */
@@ -349,12 +349,18 @@ static void ptlink_sethost_sts(char *source, char *target, char *host)
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
-	user_t *u = si->su;
 
-	if (!c || !u)
+	if (!c)
 		return;
 
-	handle_topic_from(si, c, u->nick, CURRTIME, parv[1]);
+	/* Our uplink is trying to change the topic during burst,
+	 * and we have already set a topic. Assume our change won.
+	 * -- jilles */
+	if (si->s != NULL && si->s->uplink == me.me &&
+			!(si->s->flags & SF_EOB) && c->topic != NULL)
+		return;
+
+	handle_topic_from(si, c, parv[1], atol(parv[2]), parv[3]);
 }
 
 static void m_ping(sourceinfo_t *si, int parc, char *parv[])
@@ -791,7 +797,7 @@ void _modinit(module_t * m)
 	pcommand_add("JOIN", m_join, 1, MSRC_USER);
 	pcommand_add("PASS", m_pass, 1, MSRC_UNREG);
 	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);
-	pcommand_add("TOPIC", m_topic, 2, MSRC_USER);
+	pcommand_add("TOPIC", m_topic, 4, MSRC_USER | MSRC_SERVER);
 	pcommand_add("NEWMASK", m_newmask, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
 

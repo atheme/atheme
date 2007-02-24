@@ -1,3 +1,14 @@
+jilles      2007/02/22 14:41:58 UTC	(20070222-7717)
+  Log:
+  Make maximum parameter count for protocol commands a #define.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/include/pmodule.h (File Modified) 
+  +4 -4		trunk/src/parse.c (File Modified) 
+  +2 -1		trunk/src/tokenize.c (File Modified) 
+
+
 w00t        2007/02/21 21:40:55 UTC	(20070221-7713)
   Log:
   Support RSQUIT so that jupes can be removed from the network

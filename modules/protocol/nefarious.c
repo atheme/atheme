@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
  *
- * $Id: nefarious.c 7619 2007-02-08 23:29:50Z jilles $
+ * $Id: nefarious.c 7723 2007-02-24 16:53:16Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 7619 2007-02-08 23:29:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 7723 2007-02-24 16:53:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -297,20 +297,22 @@ static void nefarious_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void nefarious_topic_sts(char *channel, char *setter, time_t ts, char *topic)
+static void nefarious_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic)
 {
-	channel_t *c;
-
-	c = channel_find(channel);
-	if (c == NULL)
+	if (!me.connected || !c)
 		return;
-	/* P10 ircds only accept topics with newer topicTS, ever,
-	 * so send the current time -- jilles */
+
 	/* for nefarious, set topicsetter iff we can set the proper topicTS */
-	if (ts == CURRTIME)
-		sts("%s T %s %s %ld %ld :%s", chansvs.me->me->uid, channel, setter, c->ts, ts, topic);
+	if (ts > prevts || prevts == 0)
+		sts("%s T %s %s %ld %ld :%s", chansvs.me->me->uid, c->name, setter, c->ts, ts, topic);
 	else
-		sts("%s T %s %ld %ld :%s", chansvs.me->me->uid, channel, c->ts, CURRTIME, topic);
+	{
+		ts = CURRTIME;
+		if (ts < prevts)
+			ts = prevts + 1;
+		sts("%s T %s %ld %ld :%s", chansvs.me->me->uid, c->name, c->ts, CURRTIME, topic);
+		c->topicts = ts;
+	}
 }
 
 /* mode wrapper */
@@ -397,14 +399,12 @@ static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 	else
 		source = si->su->nick;
 
-	/* Let's accept any topic
-	 * The criteria nefarious uses for acceptance are broken,
-	 * and it will not propagate anything not accepted
-	 * -- jilles */
 	if (parc > 2)
 		ts = atoi(parv[parc - 2]);
 	if (ts == 0)
 		ts = CURRTIME;
+	else if (c->topic != NULL && ts < c->topicts)
+		return;
 	handle_topic_from(si, c, parc > 4 ? parv[parc - 4] : source, ts, parv[parc - 1]);
 }
 

@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 7619 2007-02-08 23:29:50Z jilles $
+ * $Id: plexus.c 7723 2007-02-24 16:53:16Z jilles $
  */
 
 /* option: set the netadmin umode +N */
@@ -16,7 +16,7 @@
 #include "pmodule.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 7619 2007-02-08 23:29:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 7723 2007-02-24 16:53:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -268,12 +268,12 @@ static void plexus_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void plexus_topic_sts(char *channel, char *setter, time_t ts, char *topic)
+static void plexus_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic)
 {
-	if (!me.connected)
+	if (!me.connected || !c)
 		return;
 
-	sts(":%s TOPIC %s :%s", chansvs.nick, channel, topic);
+	sts(":%s TOPIC %s :%s", chansvs.nick, c->name, topic);
 }
 
 /* mode wrapper */

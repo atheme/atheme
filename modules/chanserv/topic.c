@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TOPIC functions.
  *
- * $Id: topic.c 6727 2006-10-20 18:48:53Z jilles $
+ * $Id: topic.c 7723 2007-02-24 16:53:16Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/topic", FALSE, _modinit, _moddeinit,
-	"$Id: topic.c 6727 2006-10-20 18:48:53Z jilles $",
+	"$Id: topic.c 7723 2007-02-24 16:53:16Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -55,6 +55,7 @@ static void cs_cmd_topic(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
 	channel_t *c;
 	char *topicsetter;
+	time_t prevtopicts;
 
 	if (!chan || !topic)
 	{
@@ -95,8 +96,9 @@ static void cs_cmd_topic(sourceinfo_t *si, int parc, char *parv[])
 		topicsetter = si->smu->name;
 	else
 		topicsetter = "unknown";
+	prevtopicts = c->topicts;
 	handle_topic(c, topicsetter, CURRTIME, topic);
-	topic_sts(chan, topicsetter, CURRTIME, topic);
+	topic_sts(c, topicsetter, CURRTIME, prevtopicts, topic);
 
 	logcommand(si, CMDLOG_SET, "%s TOPIC", mc->name);
 	if (!chanuser_find(c, si->su))
@@ -111,6 +113,7 @@ static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[])
 	char topicbuf[BUFSIZE];
 	channel_t *c;
 	char *topicsetter;
+	time_t prevtopicts;
 
         if (!chan || !topic)
         {
@@ -162,8 +165,9 @@ static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[])
 		topicsetter = si->smu->name;
 	else
 		topicsetter = "unknown";
+	prevtopicts = c->topicts;
 	handle_topic(c, topicsetter, CURRTIME, topicbuf);
-	topic_sts(chan, topicsetter, CURRTIME, topicbuf);
+	topic_sts(c, topicsetter, CURRTIME, prevtopicts, topicbuf);
 
 	logcommand(si, CMDLOG_SET, "%s TOPICAPPEND", mc->name);
 	if (!chanuser_find(c, si->su))

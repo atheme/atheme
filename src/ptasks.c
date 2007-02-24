@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 7661 2007-02-15 10:39:35Z jilles $
+ * $Id: ptasks.c 7723 2007-02-24 16:53:16Z jilles $
  */
 
 #include "atheme.h"
@@ -429,12 +429,6 @@ void handle_topic_from(sourceinfo_t *si, channel_t *c, char *setter, time_t ts, 
 	hdata.ts = ts;
 	hdata.topic = topic;
 	hdata.approved = 0;
-	if (hdata.s != NULL && hdata.s->uplink == me.me &&
-			!(hdata.s->flags & SF_EOB) && c->topic != NULL)
-		/* Our uplink is trying to change the topic during burst,
-		 * and we have already set a topic. Assume our change won.
-		 * -- jilles */
-		return;
 	if (topic != NULL ? c->topic == NULL || strcmp(topic, c->topic) : c->topic != NULL)
 	{
 		/* Only call the hook if the topic actually changed */
@@ -442,27 +436,25 @@ void handle_topic_from(sourceinfo_t *si, channel_t *c, char *setter, time_t ts, 
 	}
 	if (hdata.approved == 0)
 	{
-		if (topic == hdata.topic)
+		if (topic == hdata.topic || !strcmp(topic, hdata.topic))
 			/* Allowed, process the change further */
 			handle_topic(c, setter, ts, topic);
 		else
 		{
 			/* Allowed, but topic tweaked */
-			ts -= 60; /* for TS6, use TB and hopefully ensure
-				     it's accepted -- jilles */
 			handle_topic(c, setter, ts, hdata.topic);
-			topic_sts(c->name, setter, ts, hdata.topic);
+			topic_sts(c, setter, ts, ts, hdata.topic);
 		}
 	}
 	else
 	{
 		/* Not allowed, change it back */
 		if (c->topic != NULL)
-			topic_sts(c->name, c->topic_setter, c->topicts, c->topic);
+			topic_sts(c, c->topic_setter, c->topicts, ts, c->topic);
 		else
 		{
 			/* Ick, there was no topic */
-			topic_sts(c->name, chansvs.nick != NULL ? chansvs.nick : me.name, ts - 1, "");
+			topic_sts(c, chansvs.nick != NULL ? chansvs.nick : me.name, ts - 1, ts, "");
 		}
 	}
 }
