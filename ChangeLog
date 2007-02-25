@@ -1,3 +1,15 @@
+jilles      2007/02/25 01:13:39 UTC	(20070225-7735)
+  Log:
+  officeirc: Cannot assume NJOIN is followed by a MODE so
+  always check mode locks.
+  Further note that the point of r7733 is that if it's not
+  burst, we are checking mode locks now (necessary since r7729).
+  
+
+  Changes:	Modified:
+  +1 -5		trunk/modules/protocol/officeirc.c (File Modified) 
+
+
 jilles      2007/02/25 01:10:10 UTC	(20070225-7733)
   Log:
   dreamforge/sorcery/officeirc:
