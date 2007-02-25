@@ -1,3 +1,13 @@
+jilles      2007/02/25 01:23:01 UTC	(20070225-7737)
+  Log:
+  inspircd11 SVSHOLD: add missing argument for duration
+  (previously the duration was stack garbage)
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/protocol/inspircd11.c (File Modified) 
+
+
 jilles      2007/02/25 01:13:39 UTC	(20070225-7735)
   Log:
   officeirc: Cannot assume NJOIN is followed by a MODE so
