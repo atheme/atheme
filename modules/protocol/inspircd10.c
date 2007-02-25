@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree stable branch inspircd.
  *
- * $Id: inspircd10.c 7723 2007-02-24 16:53:16Z jilles $
+ * $Id: inspircd10.c 7731 2007-02-25 00:51:36Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 7723 2007-02-24 16:53:16Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 7731 2007-02-25 00:51:36Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -533,7 +533,7 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 		c = channel_add(parv[0], ts);
 		/* Tell the core to check mode locks now,
 		 * otherwise it may only happen after the next
-		 * join if everyone is akicked.
+		 * mode change.
 		 * Inspircd does not allow any redundant modes
 		 * so this will not look ugly. -- jilles */
 		channel_mode_va(NULL, c, 1, "+");

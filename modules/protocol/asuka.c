@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: asuka.c 7723 2007-02-24 16:53:16Z jilles $
+ * $Id: asuka.c 7731 2007-02-25 00:51:36Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 7723 2007-02-24 16:53:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 7731 2007-02-25 00:51:36Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -464,7 +464,7 @@ static void m_create(sourceinfo_t *si, int parc, char *parv[])
 
 		/* Tell the core to check mode locks now,
 		 * otherwise it may only happen after the next
-		 * join if everyone is akicked.
+		 * mode change.
 		 * P10 does not allow any redundant modes
 		 * so this will not look ugly. -- jilles */
 		channel_mode_va(NULL, c, 1, "+");
@@ -573,7 +573,7 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 	{
 		/* Tell the core to check mode locks now,
 		 * otherwise it may only happen after the next
-		 * join if everyone is akicked. -- jilles */
+		 * mode change. -- jilles */
 		channel_mode_va(NULL, c, 1, "+");
 	}
 
