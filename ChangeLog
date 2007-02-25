@@ -1,3 +1,17 @@
+jilles      2007/02/25 01:10:10 UTC	(20070225-7733)
+  Log:
+  dreamforge/sorcery/officeirc:
+  Similar to r7727, JOIN/NJOIN in a burst is always followed
+  by a MODE, so we don't have to check mode locks directly
+  after a JOIN/NJOIN in the burst from our uplink.
+  
+
+  Changes:	Modified:
+  +10 -0	trunk/modules/protocol/dreamforge.c (File Modified) 
+  +20 -0	trunk/modules/protocol/officeirc.c (File Modified) 
+  +10 -0	trunk/modules/protocol/sorcery.c (File Modified) 
+
+
 jilles      2007/02/25 00:51:36 UTC	(20070225-7731)
   Log:
   Comment changes to protocol modules for r7729.

@@ -5,7 +5,7 @@
  *
  * This file contains reverse-engineered IRCXPRO 1.2/OfficeIRC support.
  *
- * $Id: officeirc.c 7733 2007-02-25 01:10:10Z jilles $
+ * $Id: officeirc.c 7735 2007-02-25 01:13:39Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/officeirc.h"
 
-DECLARE_MODULE_V1("protocol/officeirc", TRUE, _modinit, NULL, "$Id: officeirc.c 7733 2007-02-25 01:10:10Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/officeirc", TRUE, _modinit, NULL, "$Id: officeirc.c 7735 2007-02-25 01:13:39Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -694,11 +694,7 @@ static void m_njoin(sourceinfo_t *si, int parc, char *parv[])
 		 * mode change.
 		 * DreamForge does not allow any redundant modes
 		 * so this will not look ugly. -- jilles */
-		/* If this is in a burst, a MODE with the
-		 * simple modes will follow so we can skip
-		 * this. -- jilles */
-		if (!me.bursting)
-			channel_mode_va(NULL, c, 1, "+");
+		channel_mode_va(NULL, c, 1, "+");
 	}
 
 	if (ts == 0 || c->ts == 0)
