@@ -1,3 +1,14 @@
+jilles      2007/02/25 00:45:57 UTC	(20070225-7727)
+  Log:
+  As discussed with Brain, an FJOIN in a burst will always
+  be followed by an FMODE, so we don't have to check mode
+  locks directly after an FJOIN in the burst from our uplink.
+  
+
+  Changes:	Modified:
+  +5 -1		trunk/modules/protocol/inspircd11.c (File Modified) 
+
+
 jilles      2007/02/24 22:42:27 UTC	(20070224-7725)
   Log:
   iinspircd11: Brain says FTOPIC can come from a client too,

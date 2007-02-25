@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 7723 2007-02-24 16:53:16Z jilles $
+ * $Id: main.c 7729 2007-02-25 00:51:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 7723 2007-02-24 16:53:16Z jilles $",
+	"$Id: main.c 7729 2007-02-25 00:51:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -385,9 +385,6 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	if (u->server->flags & SF_EOB && (md = metadata_find(mc, METADATA_CHANNEL, "url")))
 		numeric_sts(me.name, 328, cu->user->nick, "%s :%s", mc->name, md->value);
 
-	if (mc->flags & MC_MLOCK_CHECK)
-		check_modes(mc, TRUE);
-	
 	if (flags & CA_USEDUPDATE)
 		mc->used = CURRTIME;
 }
