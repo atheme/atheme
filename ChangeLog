@@ -1,3 +1,17 @@
+jilles      2007/02/25 00:51:36 UTC	(20070225-7731)
+  Log:
+  Comment changes to protocol modules for r7729.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/protocol/asuka.c (File Modified) 
+  +2 -2		trunk/modules/protocol/bircd.c (File Modified) 
+  +1 -1		trunk/modules/protocol/inspircd10.c (File Modified) 
+  +1 -1		trunk/modules/protocol/inspircd11.c (File Modified) 
+  +2 -2		trunk/modules/protocol/nefarious.c (File Modified) 
+  +2 -2		trunk/modules/protocol/undernet.c (File Modified) 
+
+
 jilles      2007/02/25 00:51:13 UTC	(20070225-7729)
   Log:
   Stop checking mode locks when a non-akicked user joins.

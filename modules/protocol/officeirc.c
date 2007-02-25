@@ -5,7 +5,7 @@
  *
  * This file contains reverse-engineered IRCXPRO 1.2/OfficeIRC support.
  *
- * $Id: officeirc.c 7723 2007-02-24 16:53:16Z jilles $
+ * $Id: officeirc.c 7733 2007-02-25 01:10:10Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/officeirc.h"
 
-DECLARE_MODULE_V1("protocol/officeirc", TRUE, _modinit, NULL, "$Id: officeirc.c 7723 2007-02-24 16:53:16Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/officeirc", TRUE, _modinit, NULL, "$Id: officeirc.c 7733 2007-02-25 01:10:10Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -631,6 +631,16 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 			{
 				slog(LG_DEBUG, "m_join(): new channel: %s", parv[0]);
 				c = channel_add(chanv[i], CURRTIME);
+				/* Tell the core to check mode locks now,
+				 * otherwise it may only happen after the next
+				 * mode change.
+				 * DreamForge does not allow any redundant modes
+				 * so this will not look ugly. -- jilles */
+				/* If this is in a burst, a MODE with the
+				 * simple modes will follow so we can skip
+				 * this. -- jilles */
+				if (!me.bursting)
+					channel_mode_va(NULL, c, 1, "+");
 			}
 			chanuser_add(c, si->su->nick);
 		}
@@ -679,6 +689,16 @@ static void m_njoin(sourceinfo_t *si, int parc, char *parv[])
 	{
 		slog(LG_DEBUG, "m_njoin(): new channel: %s", parv[1]);
 		c = channel_add(parv[0], ts);
+		/* Tell the core to check mode locks now,
+		 * otherwise it may only happen after the next
+		 * mode change.
+		 * DreamForge does not allow any redundant modes
+		 * so this will not look ugly. -- jilles */
+		/* If this is in a burst, a MODE with the
+		 * simple modes will follow so we can skip
+		 * this. -- jilles */
+		if (!me.bursting)
+			channel_mode_va(NULL, c, 1, "+");
 	}
 
 	if (ts == 0 || c->ts == 0)
