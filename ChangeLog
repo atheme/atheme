@@ -1,3 +1,12 @@
+jilles      2007/02/25 01:52:16 UTC	(20070225-7739)
+  Log:
+  Increase maxparc a little.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/pmodule.h (File Modified) 
+
+
 jilles      2007/02/25 01:23:01 UTC	(20070225-7737)
   Log:
   inspircd11 SVSHOLD: add missing argument for duration

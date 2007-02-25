@@ -1,13 +1,27 @@
-$Id: RELEASE 7625 2007-02-09 20:09:55Z jilles $
+$Id: RELEASE 7749 2007-02-25 15:59:39Z jilles $
 
 Atheme 2.2 Release Notes
 ========================
+[MERGED] indicates items merged to the 2.1 branch
 ircd protocol
 - Don't send "Setting your host to \2%s\2." notice if the ircd already
   notifies users of host changes, by sending this notice from the protocol
   module.
+- Fix some potential crashes and desyncs with inspircd and channel
+  bans. [MERGED]
+- Allow for SAQUIT in inspircd11. [MERGED]
+- Allow for RSQUIT in inspircd11 to allow /squit on jupes. [MERGED]
+- Increase maximum parameter count for protocol commands from 19 to
+  35. [MERGED]
+- In charybdis/ratbox/hybrid, hide jupes from a flattened /links.
+- Add basic support for IRCXPRO/OfficeIRC.
+- Improve topic changing support (prevent our topic changes to be ignored
+  in some cases and allow topicsetter/topicTS to be set more often). This
+  is done by adding a prevts parameter to the topic_sts() protocol module
+  function.
 nickserv
-- The LIST command now allows searching by last host/vhost.
+- The LIST command now allows searching by last host/vhost, and shows
+  hold/waitauth status also.
 - If ENFORCE is loaded, disallow registering accounts starting with
   Guest<digit>.
 - ACCESS ADD now allows omitting the mask and generates one matching the
@@ -16,7 +30,12 @@ nickserv
   same as the target's user@vhost.
 - Add FVERIFY command to allow admins with user:admin privilege to verify
   any account without needing the verification email.
+- Add FREGISTER command to contrib, allows creating accounts with little
+  checking and pre-crypted passwords.
+- In INFO, show to everyone if the account has not completed registration
+  verification (MU_WAITAUTH).
 chanserv
+- Fix a crash in /cs set mlock. [MERGED]
 - Allow multiple trigger characters for fantasy commands.
 - In a flags listing, show the template name, if any, in parentheses after
   the flags.
@@ -24,11 +43,16 @@ chanserv
   join already behaved this way.
 - Log at LG_INFO level: channel succession, channel deletion due to no
   eligible channel successors and account/nick/channel expiry.
+- In WHY, also show founder access explicitly.
+- The LIST command now shows hold status also.
+- Get rid of some unnecessary mode lock checks.
 gameserv
 - Add game services, works as fantasy commands and in /msg.
 oper
 - CLONES ADDEXEMPT/DELEXEMPT now have better accountability.
 - CLONES now allows editing an exemption without removing it first.
+- Add some more checking on AKILL masks.
+- The os_logonnews contrib module now uses DATADIR to find its file. [MERGED]
 code
 - Remove the incomplete atheme testsuite.
 - Rework handle_ctcp_common() to use sourceinfo instead of passing
@@ -40,7 +64,10 @@ code
 - Move some of the m_server() logic to a new function handle_server() in
   src/ptasks.c.
 documentation
+- Update documentation a little. [MERGED]
 other
+- Fix a potential division by zero. [MERGED]
+- Improve random number generation. [partly MERGED]
 - Move crypto, backend and protocol directories to modules/. This requires
   changes to atheme.conf.
 - Remove the PostgreSQL backend. If you were using this, first start the old
@@ -50,9 +77,11 @@ other
 - Add various checks to server names which should give clearer warnings
   about several misconfigurations.
 - Various corrections to log levels.
-- The os_logonnews contrib module now uses DATADIR to find its file.
 - Exit atheme if atheme.db cannot be opened for reading for any reason other
   than it not existing, to avoid overwriting it with an empty database later.
+- Add a hybserv to atheme conversion tool to contrib.
+- Tone down debug logging a little so it is a bit more usable on large
+  networks.
 
 Atheme 2.1 Release Notes
 ========================
