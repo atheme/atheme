@@ -5,7 +5,7 @@
  *
  * Misc tools
  *
- * $Id: tools.h 7609 2007-02-08 21:59:55Z jilles $
+ * $Id: tools.h 7751 2007-02-26 11:51:21Z jilles $
  */
 
 #ifndef _TOOLS_H
@@ -100,6 +100,13 @@ E int sendemail(user_t *from, int type, myuser_t *mu, const char *param);
 #define EMAIL_SENDPASS 2 /* send a password to a user (password) */
 #define EMAIL_SETEMAIL 3 /* change email address (verification code) */
 #define EMAIL_MEMO     4 /* emailed memos (memo text) */
+
+/* arc4random.c */
+#ifndef HAVE_ARC4RANDOM
+E void arc4random_stir();
+E void arc4random_addrandom(uint8_t *dat, int datlen);
+E uint32_t arc4random(void);
+#endif /* !HAVE_ARC4RANDOM */
 
 /* function.c */
 /* logging stuff */
