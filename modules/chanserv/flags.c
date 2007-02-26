@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 7557 2007-02-05 14:44:17Z jilles $
+ * $Id: flags.c 7753 2007-02-26 15:28:07Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 7557 2007-02-05 14:44:17Z jilles $",
+	"$Id: flags.c 7753 2007-02-26 15:28:07Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -82,10 +82,11 @@ static const char *get_template_name(mychan_t *mc, uint32_t level)
 		return "SOP";
 	if (level == chansvs.ca_aop)
 		return "AOP";
-	if (level == chansvs.ca_hop)
-		return "HOP";
+	/* if vop==hop, prefer vop */
 	if (level == chansvs.ca_vop)
 		return "VOP";
+	if (level == chansvs.ca_hop)
+		return "HOP";
 	return NULL;
 }
 
@@ -221,7 +222,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 		/* founder may always set flags -- jilles */
 		if (is_founder(mc, si->smu))
-			restrictflags = CA_ALL;
+			restrictflags = ca_all;
 		else
 		{
 			restrictflags = chanacs_source_flags(mc, si);
@@ -262,7 +263,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 					command_fail(si, fault_badparams, "Invalid template name given, use /%s%s TEMPLATE %s for a list", ircd->uses_rcommand ? "" : "msg ", chansvs.disp, mc->name);
 				return;
 			}
-			removeflags = CA_ALL & ~addflags;
+			removeflags = ca_all & ~addflags;
 		}
 
 		if (!validhostmask(target))

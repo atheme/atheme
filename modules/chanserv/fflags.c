@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FFLAGS functions.
  *
- * $Id: fflags.c 7171 2006-11-15 19:27:49Z jilles $
+ * $Id: fflags.c 7753 2007-02-26 15:28:07Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/fflags", FALSE, _modinit, _moddeinit,
-	"$Id: fflags.c 7171 2006-11-15 19:27:49Z jilles $",
+	"$Id: fflags.c 7753 2007-02-26 15:28:07Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -88,7 +88,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 				command_fail(si, fault_badparams, "Invalid template name given, use /%s%s TEMPLATE %s for a list", ircd->uses_rcommand ? "" : "msg ", chansvs.disp, mc->name);
 			return;
 		}
-		removeflags = CA_ALL & ~addflags;
+		removeflags = ca_all & ~addflags;
 	}
 
 	if (!validhostmask(target))
@@ -118,7 +118,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		if (!chanacs_change(mc, tmu, NULL, &addflags, &removeflags, CA_ALL))
+		if (!chanacs_change(mc, tmu, NULL, &addflags, &removeflags, ca_all))
 		{
 			/* this shouldn't happen */
 			command_fail(si, fault_noprivs, "You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2.", bitmask_to_flags2(addflags, removeflags, chanacs_flags), tmu->name, mc->name);
@@ -127,7 +127,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 	{
-		if (!chanacs_change(mc, NULL, target, &addflags, &removeflags, CA_ALL))
+		if (!chanacs_change(mc, NULL, target, &addflags, &removeflags, ca_all))
 		{
 			/* this shouldn't happen */
 			command_fail(si, fault_noprivs, "You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2.", bitmask_to_flags2(addflags, removeflags, chanacs_flags), target, mc->name);

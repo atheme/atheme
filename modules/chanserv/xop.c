@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 7495 2007-01-14 09:31:33Z nenolod $
+ * $Id: xop.c 7753 2007-02-26 15:28:07Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 7495 2007-01-14 09:31:33Z nenolod $",
+	"$Id: xop.c 7753 2007-02-26 15:28:07Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -47,14 +47,16 @@ void _modinit(module_t *m)
 
         command_add(&cs_aop, cs_cmdtree);
         command_add(&cs_sop, cs_cmdtree);
-	command_add(&cs_hop, cs_cmdtree);
+	if (chansvs.ca_hop != chansvs.ca_vop)
+		command_add(&cs_hop, cs_cmdtree);
         command_add(&cs_vop, cs_cmdtree);
 	command_add(&cs_forcexop, cs_cmdtree);
 
 	help_addentry(cs_helptree, "SOP", "help/cservice/xop", NULL);
 	help_addentry(cs_helptree, "AOP", "help/cservice/xop", NULL);
 	help_addentry(cs_helptree, "VOP", "help/cservice/xop", NULL);
-	help_addentry(cs_helptree, "HOP", "help/cservice/xop", NULL);
+	if (chansvs.ca_hop != chansvs.ca_vop)
+		help_addentry(cs_helptree, "HOP", "help/cservice/xop", NULL);
 	help_addentry(cs_helptree, "FORCEXOP", "help/cservice/forcexop", NULL);
 }
 
@@ -131,7 +133,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 
 		/* As in /cs flags, allow founder to do anything */
 		if (is_founder(mc, si->smu))
-			restrictflags = CA_ALL;
+			restrictflags = ca_all;
 		else
 			restrictflags = chanacs_source_flags(mc, si);
 		/* The following is a bit complicated, to allow for
@@ -156,7 +158,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 
 		/* As in /cs flags, allow founder to do anything -- fix for #64: allow self removal. */
 		if (is_founder(mc, si->smu) || mu == si->smu)
-			restrictflags = CA_ALL;
+			restrictflags = ca_all;
 		else
 			restrictflags = chanacs_source_flags(mc, si);
 		/* The following is a bit complicated, to allow for
@@ -531,7 +533,12 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 		else if (ca->level & (CA_OP | CA_AUTOOP | CA_REMOVE))
 			newlevel = chansvs.ca_aop, desc = "AOP";
 		else if (ca->level & (CA_HALFOP | CA_AUTOHALFOP | CA_TOPIC))
-			newlevel = chansvs.ca_hop, desc = "HOP";
+		{
+			if (chansvs.ca_hop == chansvs.ca_vop)
+				newlevel = chansvs.ca_aop, desc = "AOP";
+			else
+				newlevel = chansvs.ca_hop, desc = "HOP";
+		}
 		else /*if (ca->level & CA_AUTOVOICE)*/
 			newlevel = chansvs.ca_vop, desc = "VOP";
 #if 0

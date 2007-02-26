@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TEMPLATE functions.
  *
- * $Id: template.c 7555 2007-02-05 14:42:52Z jilles $
+ * $Id: template.c 7753 2007-02-26 15:28:07Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/template", FALSE, _modinit, _moddeinit,
-	"$Id: template.c 7555 2007-02-05 14:42:52Z jilles $",
+	"$Id: template.c 7753 2007-02-26 15:28:07Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,7 +48,8 @@ static void list_generic_flags(sourceinfo_t *si)
 	command_success_nodata(si, "%-20s %s", "--------------------", "-----");
 	command_success_nodata(si, "%-20s %s", "SOP", bitmask_to_flags(chansvs.ca_sop, chanacs_flags));
 	command_success_nodata(si, "%-20s %s", "AOP", bitmask_to_flags(chansvs.ca_aop, chanacs_flags));
-	command_success_nodata(si, "%-20s %s", "HOP", bitmask_to_flags(chansvs.ca_hop, chanacs_flags));
+	if (chansvs.ca_hop != chansvs.ca_vop)
+		command_success_nodata(si, "%-20s %s", "HOP", bitmask_to_flags(chansvs.ca_hop, chanacs_flags));
 	command_success_nodata(si, "%-20s %s", "VOP", bitmask_to_flags(chansvs.ca_vop, chanacs_flags));
 	command_success_nodata(si, "%-20s %s", "--------------------", "-----");
 	command_success_nodata(si, "End of network wide template list.");
@@ -146,7 +147,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 		/* probably no need to special-case founder here -- jilles */
 #if 0
 		if (is_founder(mc, si->smu))
-			restrictflags = CA_ALL;
+			restrictflags = ca_all;
 		else
 #endif
 		{
@@ -213,7 +214,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 				command_fail(si, fault_nosuch_key, "Invalid template name given, use /%s%s TEMPLATE %s for a list", ircd->uses_rcommand ? "" : "msg ", chansvs.disp, mc->name);
 				return;
 			}
-			removeflags = CA_ALL & ~addflags;
+			removeflags = ca_all & ~addflags;
 		}
 
 		found = denied = FALSE;

@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 7583 2007-02-06 23:06:16Z jilles $
+ * $Id: conf.c 7753 2007-02-26 15:28:07Z jilles $
  */
 
 #include "atheme.h"
@@ -266,10 +266,10 @@ void conf_init(void)
 	chansvs.fantasy = FALSE;
 	if (chansvs.me != NULL && fcmd_agent == chansvs.me)
 		fcmd_agent = NULL;
-	chansvs.ca_vop = CA_VOP_DEF;
-	chansvs.ca_hop = CA_HOP_DEF;
-	chansvs.ca_aop = CA_AOP_DEF;
-	chansvs.ca_sop = CA_SOP_DEF;
+	chansvs.ca_vop = CA_VOP_DEF & ca_all;
+	chansvs.ca_hop = CA_HOP_DEF & ca_all;
+	chansvs.ca_aop = CA_AOP_DEF & ca_all;
+	chansvs.ca_sop = CA_SOP_DEF & ca_all;
 	chansvs.changets = FALSE;
 	if (chansvs.trigger != NULL)
 		free(chansvs.trigger);
@@ -1936,8 +1936,14 @@ boolean_t conf_check(void)
 		return FALSE;
 	}
 
+	/* we know ca_all now */
+	chansvs.ca_vop &= ca_all;
+	chansvs.ca_hop &= ca_all;
+	chansvs.ca_aop &= ca_all;
+	chansvs.ca_sop &= ca_all;
+	/* chansvs.ca_hop may be equal to chansvs.ca_vop to disable HOP */
 	if (!chansvs.ca_vop || !chansvs.ca_hop || !chansvs.ca_aop ||
-			!chansvs.ca_sop || chansvs.ca_vop == chansvs.ca_hop ||
+			!chansvs.ca_sop ||
 			chansvs.ca_vop == chansvs.ca_aop ||
 			chansvs.ca_vop == chansvs.ca_sop ||
 			chansvs.ca_hop == chansvs.ca_aop ||
@@ -1945,10 +1951,10 @@ boolean_t conf_check(void)
 			chansvs.ca_aop == chansvs.ca_sop)
 	{
 		slog(LG_INFO, "conf_check(): invalid xop levels in %s, using defaults", config_file);
-		chansvs.ca_vop = CA_VOP_DEF;
-		chansvs.ca_hop = CA_HOP_DEF;
-		chansvs.ca_aop = CA_AOP_DEF;
-		chansvs.ca_sop = CA_SOP_DEF;
+		chansvs.ca_vop = CA_VOP_DEF & ca_all;
+		chansvs.ca_hop = CA_HOP_DEF & ca_all;
+		chansvs.ca_aop = CA_AOP_DEF & ca_all;
+		chansvs.ca_sop = CA_SOP_DEF & ca_all;
 	}
 
 	if (config_options.flood_msgs && !config_options.flood_time)

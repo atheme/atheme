@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 7495 2007-01-14 09:31:33Z nenolod $
+ * $Id: account.h 7753 2007-02-26 15:28:07Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -188,7 +188,7 @@ struct chanacs_
 /* joining with one of these flags updates used time */
 #define CA_USEDUPDATE    (CA_VOICE | CA_OP | CA_AUTOOP | CA_SET | CA_REMOVE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_AUTOHALFOP)
 #define CA_ALLPRIVS      (CA_VOICE | CA_AUTOVOICE | CA_OP | CA_AUTOOP | CA_TOPIC | CA_SET | CA_REMOVE | CA_INVITE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_AUTOHALFOP | CA_ACLVIEW)
-#define CA_ALL           (CA_ALLPRIVS | CA_AKICK)
+#define CA_ALL_ALL       (CA_ALLPRIVS | CA_AKICK)
 
 /* old CA_ flags */
 #define OLD_CA_AOP           (CA_VOICE | CA_OP | CA_AUTOOP | CA_TOPIC)
@@ -302,7 +302,7 @@ E uint32_t chanacs_user_flags(mychan_t *mychan, user_t *u);
 E boolean_t chanacs_source_has_flag(mychan_t *mychan, sourceinfo_t *si, uint32_t level);
 E uint32_t chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si);
 E boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_t *addflags, uint32_t *removeflags, uint32_t restrictflags);
-E boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_t addflags, uint32_t removeflags, uint32_t restrictflags);
+E boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_t addflags, uint32_t removeflags);
 
 E void expire_check(void *arg);
 /* Check the database for (version) problems common to all backends */

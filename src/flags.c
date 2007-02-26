@@ -1,11 +1,16 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2007 Atheme Development Group
  * flags.c: Functions to convert a flags table into a bitmask.
  *
  * See doc/LICENSE for licensing information.
  */
 
 #include "atheme.h"
+
+#define FLAGS_ADD       0x1
+#define FLAGS_DEL       0x2
+
+uint32_t ca_all = CA_ALL_ALL;
 
 static char flags_buf[128];
 
@@ -63,7 +68,7 @@ void flags_make_bitmasks(const char *string, struct flags_table table[], uint32_
 				  /* If this is chanacs_flags[], remove the ban flag. */
 				  if (table == chanacs_flags)
 				  {
-					  *addflags &= CA_ALLPRIVS;
+					  *addflags &= CA_ALLPRIVS & ca_all;
 					  *removeflags |= CA_AKICK;
 				  }
 			  }
@@ -127,7 +132,7 @@ uint32_t flags_to_bitmask(const char *string, struct flags_table table[], uint32
 
 				  /* If this is chanacs_flags[], do privs only */
 				  if (table == chanacs_flags)
-					  bitmask &= CA_ALLPRIVS;
+					  bitmask &= CA_ALLPRIVS & ca_all;
 			  }
 			  else if (status == FLAGS_DEL)
 				  bitmask = 0;
@@ -208,4 +213,13 @@ uint32_t allow_flags(uint32_t flags)
 	if (flags & CA_VOICE)
 		flags |= CA_AUTOVOICE;
 	return flags;
+}
+
+void update_chanacs_flags(void)
+{
+	ca_all = CA_ALL_ALL;
+#ifdef NOTYET
+	if (!ircd->uses_halfops)
+		ca_all &= ~(CA_HALFOP | CA_AUTOHALFOP);
+#endif
 }

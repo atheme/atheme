@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: halfop.c 7387 2006-12-24 17:48:16Z jilles $
+ * $Id: halfop.c 7753 2007-02-26 15:28:07Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/halfop", FALSE, _modinit, _moddeinit,
-	"$Id: halfop.c 7387 2006-12-24 17:48:16Z jilles $",
+	"$Id: halfop.c 7753 2007-02-26 15:28:07Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -29,6 +29,13 @@ list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
+	if (!ircd->uses_halfops)
+	{
+		slog(LG_INFO, "Module %s requires halfop support, refusing to load.", m->name);
+		m->mflags = MODTYPE_FAIL;
+		return;
+	}
+
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 

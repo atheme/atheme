@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7653 2007-02-15 00:37:07Z w00t $
+ * $Id: account.c 7753 2007-02-26 15:28:07Z jilles $
  */
 
 #include "atheme.h"
@@ -183,7 +183,7 @@ void myuser_delete(myuser_t *mu)
 			if (chansvs.me != NULL)
 				verbose(mc, "Foundership changed to \2%s\2 because \2%s\2 was dropped.", successor->name, mc->founder->name);
 
-			chanacs_change_simple(mc, successor, NULL, CA_FOUNDER_0, 0, CA_ALL);
+			chanacs_change_simple(mc, successor, NULL, CA_FOUNDER_0, 0);
 			mc->founder = successor;
 
 			if (chansvs.me != NULL)
@@ -731,10 +731,10 @@ myuser_t *mychan_pick_successor(mychan_t *mc)
 	myuser_t *mu;
 
 	/* full privs? */
-	mu = mychan_pick_candidate(mc, CA_FOUNDER_0, 7*86400);
+	mu = mychan_pick_candidate(mc, CA_FOUNDER_0 & ca_all, 7*86400);
 	if (mu != NULL)
 		return mu;
-	mu = mychan_pick_candidate(mc, CA_FOUNDER_0, 0);
+	mu = mychan_pick_candidate(mc, CA_FOUNDER_0 & ca_all, 0);
 	if (mu != NULL)
 		return mu;
 	/* someone with +R then? (old successor has this, but not sop) */
@@ -821,7 +821,7 @@ chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, uint32_t level)
 	object_init(object(ca), NULL, (destructor_t) chanacs_delete);
 	ca->mychan = mychan;
 	ca->myuser = myuser;
-	ca->level = level & CA_ALL;
+	ca->level = level & ca_all;
 
 	node_add(ca, n1, &mychan->chanacs);
 	node_add(ca, n2, &myuser->chanacs);
@@ -1198,13 +1198,13 @@ boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_
 }
 
 /* version that doesn't return the changes made */
-boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_t addflags, uint32_t removeflags, uint32_t restrictflags)
+boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_t addflags, uint32_t removeflags)
 {
 	uint32_t a, r;
 
-	a = addflags;
-	r = removeflags;
-	return chanacs_change(mychan, mu, hostmask, &a, &r, restrictflags);
+	a = addflags & ca_all;
+	r = removeflags & ca_all;
+	return chanacs_change(mychan, mu, hostmask, &a, &r, ca_all);
 }
 
 /*******************
@@ -1522,7 +1522,7 @@ void db_check()
 		if (!chanacs_find(mc, mc->founder, CA_FLAGS))
 		{
 			slog(LG_INFO, "db_check(): adding access for founder on channel %s", mc->name);
-			chanacs_change_simple(mc, mc->founder, NULL, CA_FOUNDER_0, 0, CA_ALL);
+			chanacs_change_simple(mc, mc->founder, NULL, CA_FOUNDER_0, 0);
 		}
 	}
 }
