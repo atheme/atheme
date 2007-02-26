@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 7585 2007-02-07 01:36:35Z jilles $
+ * $Id: flatfile.c 7755 2007-02-26 17:50:11Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 7585 2007-02-07 01:36:35Z jilles $",
+	"$Id: flatfile.c 7755 2007-02-26 17:50:11Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -115,6 +115,7 @@ static void flatfile_db_save(void *arg)
 
 	/* write the database version */
 	fprintf(f, "DBV 5\n");
+	fprintf(f, "CF %s\n", bitmask_to_flags(ca_all, chanacs_flags));
 
 	slog(LG_DEBUG, "db_save(): saving myusers");
 
@@ -259,6 +260,7 @@ static void flatfile_db_load(void)
 	uint32_t i = 0, linecnt = 0, muin = 0, mcin = 0, cain = 0, kin = 0;
 	FILE *f;
 	char *item, *s, dBuf[BUFSIZE];
+	uint32_t their_ca_all = ca_all;
 
 	f = fopen(DATADIR "/atheme.db", "r");
 	if (f == NULL)
@@ -298,6 +300,26 @@ static void flatfile_db_load(void)
 			{
 				slog(LG_INFO, "db_load(): database version is %d; i only understand 4 (Atheme 0.2), 3 (Atheme 0.2 without CA_ACLVIEW), 2 (Atheme 0.1) or 1 (Shrike)", i);
 				exit(EXIT_FAILURE);
+			}
+		}
+
+		/* enabled chanacs flags */
+		if (!strcmp("CF", item))
+		{
+			s = strtok(NULL, " ");
+			if (s == NULL)
+				slog(LG_INFO, "db_load(): missing param to CF");
+			else
+			{
+				their_ca_all = flags_to_bitmask(s, chanacs_flags, 0);
+				if (their_ca_all & ~ca_all)
+				{
+					slog(LG_ERROR, "db_load(): losing flags %s from file", bitmask_to_flags(their_ca_all & ~ca_all, chanacs_flags));
+				}
+				if (~their_ca_all & ca_all)
+				{
+					slog(LG_ERROR, "db_load(): making up flags %s not present in file", bitmask_to_flags(~their_ca_all & ca_all, chanacs_flags));
+				}
 			}
 		}
 
@@ -638,6 +660,14 @@ static void flatfile_db_load(void)
 						if (!(fl & CA_AKICK))
 							fl |= CA_ACLVIEW;
 
+					/* Grant +h if they have +o,
+					 * the file does not have +h enabled
+					 * and we currently have +h enabled.
+					 * This preserves AOP, SOP and +*.
+					 */
+					if (fl & CA_OP && !(their_ca_all & CA_HALFOP) && ca_all & CA_HALFOP)
+						fl |= CA_HALFOP;
+
 					if ((!mu) && (validhostmask(causer)))
 						ca = chanacs_add_host(mc, causer, fl);
 					else
@@ -653,7 +683,7 @@ static void flatfile_db_load(void)
 					  case SHRIKE_CA_VOP:
 						  fl2 = chansvs.ca_vop;
 					  case SHRIKE_CA_AOP:
-						  fl2 = chansvs.ca_hop;
+						  fl2 = chansvs.ca_aop;
 					  case SHRIKE_CA_SOP:
 						  fl2 = chansvs.ca_sop;
 					  case SHRIKE_CA_SUCCESSOR:
