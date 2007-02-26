@@ -218,8 +218,6 @@ uint32_t allow_flags(uint32_t flags)
 void update_chanacs_flags(void)
 {
 	ca_all = CA_ALL_ALL;
-#ifdef NOTYET
 	if (!ircd->uses_halfops)
 		ca_all &= ~(CA_HALFOP | CA_AUTOHALFOP);
-#endif
 }

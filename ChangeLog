@@ -1,3 +1,16 @@
+jilles      2007/02/26 17:50:11 UTC	(20070226-7755)
+  Log:
+  Save the enabled channel access flags in atheme.db.
+  When loading, if it differs from the currently enabled
+  flags, log a warning, and if the current flags include +h
+  and the file's flags do not, grant +h to all entries
+  with +o.
+  
+
+  Changes:	Modified:
+  +31 -1	trunk/modules/backend/flatfile.c (File Modified) 
+
+
 jilles      2007/02/26 15:28:07 UTC	(20070226-7753)
   Log:
   - Allow disabling HOP by setting it to the same value as VOP
