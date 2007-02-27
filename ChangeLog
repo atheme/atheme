@@ -1,3 +1,15 @@
+jilles      2007/02/26 23:50:46 UTC	(20070226-7757)
+  Log:
+  Enable the code that removes +hH channel access flags
+  when the ircd does not support halfops.
+  This also forgets the state of those flags from the
+  database, make sure to have backups.
+  
+
+  Changes:	Modified:
+  +0 -2		trunk/src/flags.c (File Modified) 
+
+
 jilles      2007/02/26 17:50:11 UTC	(20070226-7755)
   Log:
   Save the enabled channel access flags in atheme.db.

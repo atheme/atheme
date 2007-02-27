@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 7737 2007-02-25 01:23:01Z jilles $
+ * $Id: inspircd11.c 7759 2007-02-27 14:44:25Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7737 2007-02-25 01:23:01Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7759 2007-02-27 14:44:25Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -243,7 +243,7 @@ static void inspircd_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *mo
 {
 	if (isnew)
 	{
-		sts(":s FJOIN %s %ld :@,%s", me.name, c->name, c->ts, u->nick);
+		sts(":%s FJOIN %s %ld :@,%s", me.name, c->name, c->ts, u->nick);
 		if (modes[0] && modes[1])
 			sts(":%s FMODE %s %ld %s", me.name, c->name, c->ts, modes);
 	}
