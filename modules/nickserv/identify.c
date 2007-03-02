@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY and LOGIN functions.
  *
- * $Id: identify.c 7573 2007-02-06 09:19:26Z jilles $
+ * $Id: identify.c 7765 2007-03-02 23:50:32Z jilles $
  */
 
 #include "atheme.h"
@@ -21,7 +21,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/" COMMAND_LC, FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 7573 2007-02-06 09:19:26Z jilles $",
+	"$Id: identify.c 7765 2007-03-02 23:50:32Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -124,7 +124,12 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 
 	if (u->myuser == mu)
 	{
-		command_fail(si, fault_authfail, "You are already logged in as \2%s\2.", mu->name);
+		command_fail(si, fault_nochange, "You are already logged in as \2%s\2.", u->myuser->name);
+		return;
+	}
+	else if (u->myuser != NULL && !command_find(si->service->cmdtree, "LOGOUT"))
+	{
+		command_fail(si, fault_alreadyexists, "You are already logged in as \2%s\2.", u->myuser->name);
 		return;
 	}
 	else if (u->myuser != NULL && ircd_on_logout(u->nick, u->myuser->name, NULL))

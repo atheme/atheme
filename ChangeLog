@@ -1,3 +1,16 @@
+jilles      2007/02/28 20:45:07 UTC	(20070228-7763)
+  Log:
+  Add ns_ratelimitreg contrib module, rate limits account
+  registrations. The amount/time is hardcoded right now.
+  
+  Tracker #612
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/contrib/Makefile.in (File Modified) 
+  +81 -0	trunk/contrib/ns_ratelimitreg.c (File Added) 
+
+
 jilles      2007/02/27 14:44:25 UTC	(20070227-7759)
   Log:
   inspircd11: fix crash when a service creates a channel
