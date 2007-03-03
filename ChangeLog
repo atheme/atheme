@@ -1,3 +1,12 @@
+jilles      2007/03/03 13:35:31 UTC	(20070303-7775)
+  Log:
+  Mark autogen.sh as executable.
+  
+
+  Changes:	Modified:
+  + -		trunk/autogen.sh  (Property Modified)
+
+
 pippijn     2007/03/03 12:59:48 UTC	(20070303-7773)
   Log:
   Added autogen.sh, removed generated files
