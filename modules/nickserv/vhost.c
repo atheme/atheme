@@ -4,7 +4,7 @@
  *
  * Allows setting a vhost on an account
  *
- * $Id: vhost.c 7413 2006-12-30 15:24:51Z jilles $
+ * $Id: vhost.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 7413 2006-12-30 15:24:51Z jilles $",
+	"$Id: vhost.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -208,3 +208,7 @@ static void vhost_on_identify(void *vptr)
 
 	do_sethost(u, md->value);
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

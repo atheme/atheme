@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree stable branch inspircd.
  *
- * $Id: inspircd10.c 7731 2007-02-25 00:51:36Z jilles $
+ * $Id: inspircd10.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 7731 2007-02-25 00:51:36Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 7771 2007-03-03 12:46:36Z pippijn $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -904,3 +904,7 @@ void _modinit(module_t * m)
 
 	pmodule_loaded = TRUE;
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

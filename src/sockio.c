@@ -4,7 +4,7 @@
  *
  * Platform-independent Network I/O layer.
  *
- * $Id: sockio.c 7467 2007-01-14 03:25:42Z nenolod $
+ * $Id: sockio.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -91,5 +91,9 @@ int socket_setnonblocking(socket_t sck)
 	u_long i = 1;
 	return (!ioctlsocket(sck, FIONBIO, &i) ? -1 : 1);
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */
 
 #endif

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INVITE functions.
  *
- * $Id: invite.c 7075 2006-11-04 23:55:32Z jilles $
+ * $Id: invite.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/invite", FALSE, _modinit, _moddeinit,
-	"$Id: invite.c 7075 2006-11-04 23:55:32Z jilles $",
+	"$Id: invite.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -92,3 +92,7 @@ static void cs_cmd_invite(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_SET, "%s INVITE", mc->name);
 	command_success_nodata(si, "You have been invited to \2%s\2.", mc->name);
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

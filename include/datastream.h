@@ -4,7 +4,7 @@
  *
  * Datastream query stuff.
  *
- * $Id: datastream.h 7467 2007-01-14 03:25:42Z nenolod $
+ * $Id: datastream.h 7771 2007-03-03 12:46:36Z pippijn $
  */
 #ifndef __CLARODATASTREAM
 #define __CLARODATASTREAM
@@ -22,3 +22,7 @@ E int recvq_getline(connection_t *cptr, char *buf, int len);
 E void sendqrecvq_free(connection_t *cptr);
 
 #endif
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

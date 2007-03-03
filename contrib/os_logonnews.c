@@ -4,7 +4,7 @@
  *
  * Logon News stuff...
  *
- * $Id: os_logonnews.c 7579 2007-02-06 14:39:51Z jilles $
+ * $Id: os_logonnews.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/logonnews", FALSE, _modinit, _moddeinit,
-	"$Revision: 7579 $",
+	"$Revision: 7771 $",
 	"William Pitcock <nenolod -at- nenolod.net>"
 );
 
@@ -269,3 +269,7 @@ static void os_cmd_logonnews(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

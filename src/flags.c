@@ -221,3 +221,7 @@ void update_chanacs_flags(void)
 	if (!ircd->uses_halfops)
 		ca_all &= ~(CA_HALFOP | CA_AUTOHALFOP);
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

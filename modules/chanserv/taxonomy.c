@@ -4,7 +4,7 @@
  *
  * Lists object properties via their metadata table.
  *
- * $Id: taxonomy.c 6617 2006-10-01 22:11:49Z jilles $
+ * $Id: taxonomy.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/taxonomy", FALSE, _modinit, _moddeinit,
-	"$Id: taxonomy.c 6617 2006-10-01 22:11:49Z jilles $",
+	"$Id: taxonomy.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -78,3 +78,7 @@ void cs_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, "End of \2%s\2 taxonomy.", target);
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 7465 2007-01-14 02:50:26Z nenolod $
+ * $Id: main.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"global/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 7465 2007-01-14 02:50:26Z nenolod $",
+	"$Id: main.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -281,3 +281,6 @@ void _moddeinit(void)
 	command_delete(&gs_help, &gs_cmdtree);
 }
 
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

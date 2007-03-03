@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService DROP function.
  *
- * $Id: drop.c 7495 2007-01-14 09:31:33Z nenolod $
+ * $Id: drop.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 7495 2007-01-14 09:31:33Z nenolod $",
+	"$Id: drop.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -100,3 +100,7 @@ static void cs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, "The channel \2%s\2 has been dropped.", name);
 	return;
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

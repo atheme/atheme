@@ -79,3 +79,7 @@ static void handle_register(void *vptr)
 		ratelimitreg_count = 0, ratelimitreg_firsttime = CURRTIME;
 	ratelimitreg_count++;
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

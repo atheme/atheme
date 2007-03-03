@@ -4,7 +4,7 @@
  *
  * Data structures for flags to bitmask processing routines.
  *
- * $Id: confparse.h 6105 2006-08-18 00:24:46Z jilles $
+ * $Id: confparse.h 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #ifndef CONFPARSE_H
@@ -66,3 +66,7 @@ extern int token_to_value(struct Token token_table[], char *token);
 #define TOKEN_ERROR -2
 
 #endif
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

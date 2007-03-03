@@ -23,7 +23,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/enforce",FALSE, _modinit, _moddeinit,
-	"$Id: enforce.c 7667 2007-02-15 12:06:12Z jilles $",
+	"$Id: enforce.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -353,3 +353,7 @@ void _moddeinit()
 	hook_del_hook("user_info", show_enforce);
 	hook_del_hook("user_can_register", check_registration);
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

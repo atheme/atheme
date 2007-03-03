@@ -4,7 +4,7 @@
  *
  * See doc/LICENSE for licensing information.
  *
- * $Id: template.c 4175 2005-12-21 19:23:17Z jilles $
+ * $Id: template.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -63,3 +63,7 @@ uint32_t get_template_flags(mychan_t *mc, char *name)
 	}
 	return 0;
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

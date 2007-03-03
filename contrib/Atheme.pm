@@ -251,4 +251,12 @@ sub logout {
    $self->{dispatch}{ref $self->{result} || 'other'}->()
 }
 
+=head1 AUTHORS
+
+Author: Pippijn van Steenhoven <pip88nl@gmail.com>
+
+This package is part of the Atheme IRC Services.
+
+=cut
+
 1

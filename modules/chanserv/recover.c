@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService RECOVER functions.
  *
- * $Id: recover.c 6657 2006-10-04 21:22:47Z jilles $
+ * $Id: recover.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/recover", FALSE, _modinit, _moddeinit,
-	"$Id: recover.c 6657 2006-10-04 21:22:47Z jilles $",
+	"$Id: recover.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -191,3 +191,7 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, "Recover complete for \2%s\2.", mc->chan->name);
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

@@ -4,7 +4,7 @@
  *
  * Metadata information.
  *
- * $Id: metadata.h 6641 2006-10-02 15:49:12Z jilles $
+ * $Id: metadata.h 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #ifndef METADATA_H
@@ -28,3 +28,6 @@ E metadata_t *metadata_find(void *target, int32_t type, const char *name);
 
 #endif
 
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

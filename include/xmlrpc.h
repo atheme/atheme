@@ -4,7 +4,7 @@
  *
  * XMLRPC library header, hacked up for Atheme.
  *
- * $Id: xmlrpc.h 6653 2006-10-04 16:42:42Z jilles $
+ * $Id: xmlrpc.h 7771 2007-03-03 12:46:36Z pippijn $
  */
 #ifndef XMLRPC_H
 #define XMLRPC_H
@@ -103,3 +103,7 @@ E char *xmlrpc_char_encode(char *outbuffer, const char *s1);
 E char *xmlrpc_decode_string(char *buf);
 
 #endif
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

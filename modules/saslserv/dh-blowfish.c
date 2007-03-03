@@ -4,7 +4,7 @@
  *
  * DH-BLOWFISH mechanism provider
  *
- * $Id: dh-blowfish.c 7661 2007-02-15 10:39:35Z jilles $
+ * $Id: dh-blowfish.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -19,7 +19,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/dh-blowfish", FALSE, _modinit, _moddeinit,
-	"$Id: dh-blowfish.c 7661 2007-02-15 10:39:35Z jilles $",
+	"$Id: dh-blowfish.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -159,5 +159,9 @@ static void mech_finish(sasl_session_t *p)
 		p->mechdata = NULL;
 	}
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */
 
 #endif /* HAVE_OPENSSL */

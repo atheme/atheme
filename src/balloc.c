@@ -4,7 +4,7 @@
  *
  * This file contains the block allocator.
  *
- * $Id: balloc.c 7467 2007-01-14 03:25:42Z nenolod $
+ * $Id: balloc.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -477,3 +477,7 @@ void BlockHeapUsage(BlockHeap *bh, size_t * bused, size_t * bfree, size_t * bmem
 	if (bmemusage != NULL)
 		*bmemusage = memusage;
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

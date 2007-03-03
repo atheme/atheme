@@ -4,7 +4,7 @@
  *
  * This file contains code for the ChanServ CLEAR USERS function.
  *
- * $Id: clear_users.c 7199 2006-11-18 05:10:57Z nenolod $
+ * $Id: clear_users.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/clear_users", FALSE, _modinit, _moddeinit,
-	"$Id: clear_users.c 7199 2006-11-18 05:10:57Z nenolod $",
+	"$Id: clear_users.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -122,3 +122,7 @@ static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, "Cleared users from \2%s\2.", channel);
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

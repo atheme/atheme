@@ -4,7 +4,7 @@
  *
  * This is the header which includes all of the system stuff.
  *
- * $Id: stdinc.h 7467 2007-01-14 03:25:42Z nenolod $
+ * $Id: stdinc.h 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #ifndef STDINC_H
@@ -83,3 +83,7 @@ typedef int l_boolean_t;
 #endif
 
 #endif
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

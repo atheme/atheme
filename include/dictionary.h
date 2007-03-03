@@ -5,7 +5,7 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id: dictionary.h 6317 2006-09-06 20:03:32Z pippijn $
+ * $Id: dictionary.h 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #ifndef _DICTIONARY_H
@@ -129,3 +129,7 @@ E void dictionary_stats(void (*stats_cb)(const char *line, void *privdata),
 		void *privdata);
 
 #endif
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

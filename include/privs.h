@@ -4,7 +4,7 @@
  *
  * Fine grained services operator privileges
  *
- * $Id: privs.h 7627 2007-02-10 20:43:51Z jilles $
+ * $Id: privs.h 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #ifndef PRIVS_H
@@ -101,3 +101,7 @@ E boolean_t has_priv_operclass(operclass_t *, const char *);
 E boolean_t has_all_operclass(sourceinfo_t *, operclass_t *);
 
 #endif /* PRIVS_H */
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

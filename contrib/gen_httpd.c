@@ -4,7 +4,7 @@
  *
  * A simple web server
  *
- * $Id: gen_httpd.c 6785 2006-10-21 15:22:55Z jilles $
+ * $Id: gen_httpd.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"contrib/gen_httpd", FALSE, _modinit, _moddeinit,
-	"$Id: gen_httpd.c 6785 2006-10-21 15:22:55Z jilles $",
+	"$Id: gen_httpd.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Jilles Tjoelker <jilles -at- stack.nl>"
 );
 
@@ -286,3 +286,7 @@ void _moddeinit(void)
 	event_delete(httpd_checkidle, NULL);
 	connection_close_soon_children(listener);
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

@@ -1,3 +1,20 @@
+pippijn     2007/03/03 10:13:53 UTC	(20070303-7769)
+  Log:
+  minor cleanups
+  
+
+  Changes:	Modified:
+  +0 -2		trunk/modules/chanserv/fflags.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/list.c (File Modified) 
+  +0 -1		trunk/modules/operserv/clones.c (File Modified) 
+  +0 -2		trunk/modules/operserv/soper.c (File Modified) 
+  +1 -1		trunk/modules/xmlrpc/main.c (File Modified) 
+  +2 -7		trunk/src/account.c (File Modified) 
+  +1 -1		trunk/src/base64.c (File Modified) 
+  +0 -1		trunk/src/servers.c (File Modified) 
+  +0 -1		trunk/src/services.c (File Modified) 
+
+
 pippijn     2007/03/03 10:04:24 UTC	(20070303-7767)
   Log:
   Added perl modules abstracting atheme's XML-RPC interface

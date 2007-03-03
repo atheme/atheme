@@ -4,7 +4,7 @@
  *
  * Dice generator.
  *
- * $Id: dice.c 7661 2007-02-15 10:39:35Z jilles $
+ * $Id: dice.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"gameserv/dice", FALSE, _modinit, _moddeinit,
-	"$Id: dice.c 7661 2007-02-15 10:39:35Z jilles $",
+	"$Id: dice.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -176,3 +176,7 @@ static void command_wod(sourceinfo_t *si, int parc, char *parv[])
 		arg_difficulty = parv[ii++];
 	}
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

@@ -4,7 +4,7 @@
  *
  * Headers to MD5 hash functions
  * 
- * $Id: md5.h 5107 2006-04-17 17:48:00Z gxti $
+ * $Id: md5.h 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #ifndef MD5_H
@@ -24,3 +24,7 @@ void MD5Update(MD5_CTX *context, unsigned const char *input, unsigned int inputL
 void MD5Final(unsigned char digest[16], MD5_CTX *context);
 
 #endif
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

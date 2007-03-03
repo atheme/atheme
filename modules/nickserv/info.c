@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 7639 2007-02-11 14:22:07Z jilles $
+ * $Id: info.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 7639 2007-02-11 14:22:07Z jilles $",
+	"$Id: info.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -238,3 +238,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_GET, "INFO %s", mu->name);
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

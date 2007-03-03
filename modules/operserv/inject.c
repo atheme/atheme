@@ -5,7 +5,7 @@
  *
  * This file contains functionality which implements the OService INJECT command.
  *
- * $Id: inject.c 6927 2006-10-24 15:22:05Z jilles $
+ * $Id: inject.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/inject", FALSE, _modinit, _moddeinit,
-	"$Id: inject.c 6927 2006-10-24 15:22:05Z jilles $",
+	"$Id: inject.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -71,3 +71,7 @@ static void os_cmd_inject(sourceinfo_t *si, int parc, char *parv[])
 	irc_parse(inject);
 	injecting = FALSE;
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

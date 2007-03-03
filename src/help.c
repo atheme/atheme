@@ -4,7 +4,7 @@
  *
  * This file contains a generic help system implementation.
  *
- * $Id: help.c 6981 2006-10-27 21:38:25Z jilles $
+ * $Id: help.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -141,3 +141,7 @@ void help_delentry(list_t *list, char *name)
 		}
 	}
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

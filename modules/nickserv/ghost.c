@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ GHOST function.
  *
- * $Id: ghost.c 7551 2007-02-05 14:01:33Z jilles $
+ * $Id: ghost.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/ghost", FALSE, _modinit, _moddeinit,
-	"$Id: ghost.c 7551 2007-02-05 14:01:33Z jilles $",
+	"$Id: ghost.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -112,3 +112,7 @@ void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, "You may not ghost \2%s\2.", target);
 	}
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

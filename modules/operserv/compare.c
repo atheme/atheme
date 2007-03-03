@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ COMPARE.
  *
- * $Id: compare.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: compare.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/compare", FALSE, _modinit, _moddeinit,
-	"$Id: compare.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: compare.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Robin Burchell <surreal.w00t@gmail.com>"
 );
 
@@ -180,3 +180,7 @@ static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "COMPARE %s to %s (%d matches)", object1, object2, matches);
 	snoop("COMPARE: \2%s\2 to \2%s\2 by \2%s\2", object1, object2, get_oper_name(si));
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

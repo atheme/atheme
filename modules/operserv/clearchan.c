@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ CLEARCHAN.
  *
- * $Id: clearchan.c 6639 2006-10-02 15:44:53Z jilles $
+ * $Id: clearchan.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clearchan", FALSE, _modinit, _moddeinit,
-	"$Id: clearchan.c 6639 2006-10-02 15:44:53Z jilles $",
+	"$Id: clearchan.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Robin Burchell <surreal.w00t@gmail.com>"
 );
 
@@ -135,3 +135,7 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, "\2%d\2 matches, \2%d\2 ignores for \2%s\2 on \2%s\2", matches, ignores, actionstr, targchan);
 	logcommand(si, CMDLOG_ADMIN, "CLEARCHAN %s %s %s (%d matches, %d ignores)", actionstr, targchan, treason, matches, ignores);
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

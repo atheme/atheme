@@ -4,7 +4,7 @@
  *
  * PLAIN mechanism provider
  *
- * $Id: plain.c 6829 2006-10-22 00:40:48Z nenolod $
+ * $Id: plain.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/plain", FALSE, _modinit, _moddeinit,
-	"$Id: plain.c 6829 2006-10-22 00:40:48Z nenolod $",
+	"$Id: plain.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -78,3 +78,6 @@ static void mech_finish(sasl_session_t *p)
 {
 }
 
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

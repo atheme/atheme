@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ RNC.
  *
- * $Id: rnc.c 6849 2006-10-22 06:00:10Z nenolod $
+ * $Id: rnc.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rnc", FALSE, _modinit, _moddeinit,
-	"$Id: rnc.c 6849 2006-10-22 06:00:10Z nenolod $",
+	"$Id: rnc.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Robin Burchell <surreal.w00t@gmail.com>"
 );
 
@@ -128,3 +128,6 @@ static void os_cmd_rnc(sourceinfo_t *si, int parc, char *parv[])
 	snoop("RNC: by \2%s\2", get_oper_name(si));
 }
 
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

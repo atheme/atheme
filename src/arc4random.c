@@ -26,7 +26,7 @@
 /*
  * $FreeBSD: /usr/local/www/cvsroot/FreeBSD/src/lib/libc/gen/arc4random.c,v 1.10.8.1 2006/11/18 21:35:13 ache Exp $
  * Modified for Atheme by Jilles Tjoelker
- * $Id: arc4random.c 7689 2007-02-18 02:20:03Z nenolod $
+ * $Id: arc4random.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -183,4 +183,9 @@ arc4random(void)
 
 	return (rnd);
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */
+
 #endif /* !HAVE_ARC4RANDOM */

@@ -5,7 +5,7 @@
  *
  * Misc tools
  *
- * $Id: tools.h 7751 2007-02-26 11:51:21Z jilles $
+ * $Id: tools.h 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #ifndef _TOOLS_H
@@ -196,3 +196,7 @@ E const char* uinttobase64(char* buf, uint64_t v, int64_t count);
 E uint32_t base64touint(char* buf);
 
 #endif
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 7613 2007-02-08 22:09:15Z jilles $
+ * $Id: connection.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -613,3 +613,7 @@ void connection_write_raw(connection_t *to, char *data)
 {
 	sendq_add(to, data, strlen(data));
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

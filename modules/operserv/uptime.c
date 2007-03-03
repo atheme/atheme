@@ -4,7 +4,7 @@
  *
  * This file contains code for OS UPTIME
  *
- * $Id: uptime.c 7313 2006-11-30 01:35:29Z jilles $
+ * $Id: uptime.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/uptime", FALSE, _modinit, _moddeinit,
-	"$Id: uptime.c 7313 2006-11-30 01:35:29Z jilles $",
+	"$Id: uptime.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -51,3 +51,6 @@ static void os_cmd_uptime(sourceinfo_t *si, int parc, char *parv[])
         command_success_nodata(si, "Users currently online: %d", cnt.user - me.me->users);
 }
 
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

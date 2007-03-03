@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 7753 2007-02-26 15:28:07Z jilles $
+ * $Id: set.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 7753 2007-02-26 15:28:07Z jilles $",
+	"$Id: set.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -1191,3 +1191,7 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_SET, "%s SET PROPERTY %s to %s", mc->name, property, value);
 	command_success_nodata(si, "Metadata entry \2%s\2 added.", property);
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

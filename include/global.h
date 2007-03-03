@@ -5,7 +5,7 @@
  *
  * Global data
  *
- * $Id: global.h 7609 2007-02-08 21:59:55Z jilles $
+ * $Id: global.h 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #ifndef _GLOBAL_H
@@ -181,3 +181,7 @@ E void sighandler(int signum);
 E void check_signals(void);
 
 #endif
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

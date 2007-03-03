@@ -4,7 +4,7 @@
  *
  * Data structures for channel information.
  *
- * $Id: channels.h 6963 2006-10-26 22:30:51Z jilles $
+ * $Id: channels.h 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #ifndef CHANNELS_H
@@ -140,3 +140,7 @@ E chanban_t *chanban_find(channel_t *chan, const char *mask, int type);
 E void chanban_clear(channel_t *chan);
 
 #endif
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

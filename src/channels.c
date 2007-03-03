@@ -4,7 +4,7 @@
  *
  * Channel stuff.
  *
- * $Id: channels.c 7703 2007-02-20 23:02:05Z jilles $
+ * $Id: channels.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -559,3 +559,7 @@ chanuser_t *chanuser_find(channel_t *chan, user_t *user)
 
 	return NULL;
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

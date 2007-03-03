@@ -6,7 +6,7 @@
  * This file contains functionality which implements
  * the OperServ AKILL command.
  *
- * $Id: akill.c 7637 2007-02-10 22:56:06Z jilles $
+ * $Id: akill.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 7637 2007-02-10 22:56:06Z jilles $",
+	"$Id: akill.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -505,3 +505,7 @@ static void os_cmd_akill_sync(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, "AKILL list synchronized to servers.");
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

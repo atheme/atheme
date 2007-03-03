@@ -4,7 +4,7 @@
  * 
  * LoveServ implementation.
  *
- * $Id: ircd_loveserv.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: ircd_loveserv.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
         "contrib/ircd_loveserv", FALSE, _modinit, _moddeinit,
-        "$Id: ircd_loveserv.c 6337 2006-09-10 15:54:41Z pippijn $",
+        "$Id: ircd_loveserv.c 7771 2007-03-03 12:46:36Z pippijn $",
         "Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -351,3 +351,7 @@ void _moddeinit()
 
         del_service(loveserv);
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

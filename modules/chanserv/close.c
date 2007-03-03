@@ -4,7 +4,7 @@
  *
  * Closing for channels.
  *
- * $Id: close.c 6685 2006-10-14 14:48:01Z jilles $
+ * $Id: close.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/close", FALSE, _modinit, _moddeinit,
-	"$Id: close.c 6685 2006-10-14 14:48:01Z jilles $",
+	"$Id: close.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -183,3 +183,7 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, "Usage: CLOSE <#channel> <ON|OFF> [reason]");
 	}
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

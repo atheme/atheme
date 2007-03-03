@@ -4,7 +4,7 @@
  *
  * This file contains IRC interaction routines.
  *
- * $Id: ctcp-common.c 7465 2007-01-14 02:50:26Z nenolod $
+ * $Id: ctcp-common.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -70,3 +70,7 @@ unsigned int handle_ctcp_common(sourceinfo_t *si, char *cmd, char *args)
 
 	return 0;
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

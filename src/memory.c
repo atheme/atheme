@@ -4,7 +4,7 @@
  *
  * Memory functions.
  *
- * $Id: memory.c 7467 2007-01-14 03:25:42Z nenolod $
+ * $Id: memory.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -58,3 +58,6 @@ char *sstrdup(const char *s)
 	return t;
 }
 
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

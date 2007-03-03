@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 7755 2007-02-26 17:50:11Z jilles $
+ * $Id: flatfile.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 7755 2007-02-26 17:50:11Z jilles $",
+	"$Id: flatfile.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -783,3 +783,7 @@ void _modinit(module_t *m)
 
 	backend_loaded = TRUE;
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

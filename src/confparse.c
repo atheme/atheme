@@ -6,7 +6,7 @@
  * This file contains config file parsing routines.
  * This code was taken from Sentinel: copyright W. Campbell.
  *
- * $Id: confparse.c 5468 2006-06-20 23:31:25Z jilles $
+ * $Id: confparse.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -391,3 +391,7 @@ CONFIGENTRY *config_find(CONFIGENTRY *ceptr, char *name)
 			break;
 	return ceptr;
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

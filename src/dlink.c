@@ -4,7 +4,7 @@
  *
  * Linked list stuff.
  *
- * $Id: dlink.c 7613 2007-02-08 22:09:15Z jilles $
+ * $Id: dlink.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -201,3 +201,6 @@ void node_move(node_t *m, list_t *oldlist, list_t *newlist)
         newlist->count++;
 }
 
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

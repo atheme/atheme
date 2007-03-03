@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FFLAGS functions.
  *
- * $Id: fflags.c 7769 2007-03-03 10:13:53Z pippijn $
+ * $Id: fflags.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/fflags", FALSE, _modinit, _moddeinit,
-	"$Id: fflags.c 7769 2007-03-03 10:13:53Z pippijn $",
+	"$Id: fflags.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -146,3 +146,6 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 	verbose(mc, "\2%s\2 forced flags change \2%s\2 on \2%s\2.", get_source_name(si), flagstr, target);
 }
 
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

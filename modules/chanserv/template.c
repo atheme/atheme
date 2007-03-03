@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TEMPLATE functions.
  *
- * $Id: template.c 7753 2007-02-26 15:28:07Z jilles $
+ * $Id: template.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/template", FALSE, _modinit, _moddeinit,
-	"$Id: template.c 7753 2007-02-26 15:28:07Z jilles $",
+	"$Id: template.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -362,3 +362,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 		/*verbose(mc, "Flags \2%s\2 were set on template \2%s\2 in \2%s\2.", flagstr, target, channel);*/
 	}
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

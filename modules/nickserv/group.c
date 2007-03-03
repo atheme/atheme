@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ GROUP command.
  *
- * $Id: group.c 7539 2007-01-31 17:15:36Z jilles $
+ * $Id: group.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/group", FALSE, _modinit, _moddeinit,
-	"$Id: group.c 7539 2007-01-31 17:15:36Z jilles $",
+	"$Id: group.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -175,3 +175,7 @@ static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, "Nick \2%s\2 has been removed from account \2%s\2.", mn->nick, mu->name);
 	object_unref(mn);
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

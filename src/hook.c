@@ -4,7 +4,7 @@
  *
  * A hook system. Idea taken from hybrid.
  *
- * $Id: hook.c 7613 2007-02-08 22:09:15Z jilles $
+ * $Id: hook.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -162,4 +162,9 @@ void hook_exec_event(const char *event, ...)
 		va_end(ap);
 	}
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */
+
 #endif

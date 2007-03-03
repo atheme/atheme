@@ -4,7 +4,7 @@
  *
  * This file contains code for nickserv RESETPASS
  *
- * $Id: resetpass.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: resetpass.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/resetpass", FALSE, _modinit, _moddeinit,
-	"$Id: resetpass.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: resetpass.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -92,3 +92,7 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 	snoop("RESETPASS: \2%s\2 reset the password for \2%s\2", get_oper_name(si), name);
 	logcommand(si, CMDLOG_ADMIN, "RESETPASS %s", name);
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

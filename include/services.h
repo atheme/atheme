@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 7465 2007-01-14 02:50:26Z nenolod $
+ * $Id: services.h 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #ifndef SERVICES_H
@@ -160,3 +160,7 @@ E void common_ctcp_init(void);
 E unsigned int handle_ctcp_common(sourceinfo_t *si, char *, char *);
 
 #endif
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

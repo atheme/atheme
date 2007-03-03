@@ -5,7 +5,7 @@
  * This file contains socket routines.
  * Based off of W. Campbell's code.
  *
- * $Id: send.c 7619 2007-02-08 23:29:50Z jilles $
+ * $Id: send.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -101,3 +101,7 @@ void io_loop(void)
 		check_signals();
 	}
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

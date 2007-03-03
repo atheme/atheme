@@ -4,7 +4,7 @@
  *
  * Dynamic services operator privileges
  *
- * $Id: soper.c 7769 2007-03-03 10:13:53Z pippijn $
+ * $Id: soper.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/soper", FALSE, _modinit, _moddeinit,
-	"$Id: soper.c 7769 2007-03-03 10:13:53Z pippijn $",
+	"$Id: soper.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -232,3 +232,7 @@ static void os_cmd_soper_del(sourceinfo_t *si, int parc, char *parv[])
 	soper_delete(mu->soper);
 	command_success_nodata(si, "Removed class for \2%s\2.", mu->name);
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

@@ -4,7 +4,7 @@
  *
  * Data structures for flags to bitmask processing routines.
  *
- * $Id: flags.h 7753 2007-02-26 15:28:07Z jilles $
+ * $Id: flags.h 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #ifndef FLAGS_H
@@ -28,3 +28,7 @@ E uint32_t allow_flags(uint32_t flags);
 E void update_chanacs_flags(void);
 
 #endif
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

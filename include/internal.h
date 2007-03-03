@@ -4,8 +4,11 @@
  *
  * Stuff for internal use in Atheme.
  *
- * $Id: internal.h 7615 2007-02-08 22:10:52Z jilles $
+ * $Id: internal.h 7771 2007-03-03 12:46:36Z pippijn $
  */
+
+#ifndef LINKER_H
+#define LINKER_H
 
 /* internal functions */
 E void event_init(void);
@@ -15,3 +18,8 @@ E void init_netio(void);
 E void init_socket_queues(void);
 E void init_signal_handlers(void);
 
+#endif
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

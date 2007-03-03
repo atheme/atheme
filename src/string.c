@@ -4,7 +4,7 @@
  *
  * String functions.
  *
- * $Id: string.c 7467 2007-01-14 03:25:42Z nenolod $
+ * $Id: string.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -58,4 +58,6 @@ void strip(char *line)
         }
 }
 
-
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

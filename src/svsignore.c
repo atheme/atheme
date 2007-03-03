@@ -4,7 +4,7 @@
  *
  * Services ignorelist functions.
  *
- * $Id: svsignore.c 6839 2006-10-22 03:56:35Z nenolod $
+ * $Id: svsignore.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -113,3 +113,7 @@ void svsignore_delete(svsignore_t *svsignore)
 	free(svsignore->reason);
 	free(svsignore);
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

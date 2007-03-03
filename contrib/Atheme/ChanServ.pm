@@ -1106,4 +1106,12 @@ sub why {
    $self->call_svs ($args)
 }
 
+=head1 AUTHORS
+
+Author: Pippijn van Steenhoven <pip88nl@gmail.com>
+
+This package is part of the Atheme IRC Services.
+
+=cut
+
 1

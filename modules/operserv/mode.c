@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService MODE command.
  *
- * $Id: mode.c 7231 2006-11-19 19:02:41Z jilles $
+ * $Id: mode.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/mode", FALSE, _modinit, _moddeinit,
-	"$Id: mode.c 7231 2006-11-19 19:02:41Z jilles $",
+	"$Id: mode.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -71,3 +71,6 @@ static void os_cmd_mode(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, "Set modes \2%s\2 on \2%s\2.", mode, channel);
 }
 
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

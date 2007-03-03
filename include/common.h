@@ -4,7 +4,7 @@
  *
  * Defines needed by multiple header files.
  *
- * $Id: common.h 7609 2007-02-08 21:59:55Z jilles $
+ * $Id: common.h 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #ifndef COMMON_H
@@ -114,3 +114,7 @@ enum faultcode_
 typedef enum faultcode_ faultcode_t;
 
 #endif
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

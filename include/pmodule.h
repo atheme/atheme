@@ -5,7 +5,7 @@
  * Protocol module stuff.
  * Modules usually do not need this.
  *
- * $Id: pmodule.h 7739 2007-02-25 01:52:16Z jilles $
+ * $Id: pmodule.h 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #ifndef PMODULE_H
@@ -62,3 +62,7 @@ E void handle_nickchange(user_t *u);
 E void handle_burstlogin(user_t *u, char *login);
 
 #endif
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

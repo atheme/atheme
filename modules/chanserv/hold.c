@@ -4,7 +4,7 @@
  *
  * Controls noexpire options for channels.
  *
- * $Id: hold.c 6631 2006-10-02 10:24:13Z jilles $
+ * $Id: hold.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/hold", FALSE, _modinit, _moddeinit,
-	"$Id: hold.c 6631 2006-10-02 10:24:13Z jilles $",
+	"$Id: hold.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -98,3 +98,7 @@ static void cs_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, "Usage: HOLD <#channel> <ON|OFF>");
 	}
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

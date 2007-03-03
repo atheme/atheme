@@ -4,7 +4,7 @@
  *
  * Implements nickserv RETURN.
  *
- * $Id: return.c 7067 2006-11-04 20:14:57Z jilles $
+ * $Id: return.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/return", FALSE, _modinit, _moddeinit,
-	"$Id: return.c 7067 2006-11-04 20:14:57Z jilles $",
+	"$Id: return.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -99,3 +99,7 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, "A random password has been set; it has been sent to \2%s\2.",
 						newmail);
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

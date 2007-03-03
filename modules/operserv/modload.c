@@ -4,7 +4,7 @@
  *
  * Loads a new module in.
  *
- * $Id: modload.c 6927 2006-10-24 15:22:05Z jilles $
+ * $Id: modload.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modload", FALSE, _modinit, _moddeinit,
-	"$Id: modload.c 6927 2006-10-24 15:22:05Z jilles $",
+	"$Id: modload.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -77,3 +77,7 @@ static void os_cmd_modload(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_nosuch_target, "Module \2%s\2 failed to load.", module);
 	}
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

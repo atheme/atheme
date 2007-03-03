@@ -4,7 +4,7 @@
  *
  * Listener code demo.
  *
- * $Id: gen_listenerdemo.c 2411 2005-09-28 02:32:46Z nenolod $
+ * $Id: gen_listenerdemo.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"contrib/gen_listenerdemo", FALSE, _modinit, _moddeinit,
-	"$Id: gen_listenerdemo.c 2411 2005-09-28 02:32:46Z nenolod $",
+	"$Id: gen_listenerdemo.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"William Pitcock <nenolod -at- nenolod.net>"
 );
 
@@ -84,3 +84,7 @@ void _moddeinit(void)
 {
 	connection_close(listener);
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

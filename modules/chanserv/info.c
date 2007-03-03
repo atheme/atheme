@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INFO functions.
  *
- * $Id: info.c 7335 2006-12-07 00:27:57Z jilles $
+ * $Id: info.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 7335 2006-12-07 00:27:57Z jilles $",
+	"$Id: info.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -321,3 +321,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, "\2*** End of Info ***\2");
 	logcommand(si, CMDLOG_GET, "%s INFO", mc->name);
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

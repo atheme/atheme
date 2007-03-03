@@ -4,7 +4,7 @@
  *
  * IRCServices's weird password encryption thingy, taken from Anope 1.6.3.
  *
- * $Id: ircservices.c 6337 2006-09-10 15:54:41Z pippijn $
+ * $Id: ircservices.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 /* Include file for high-level encryption routines.
  *
@@ -108,7 +108,7 @@ static int check_password(const char *plaintext, const char *password)
 DECLARE_MODULE_V1
 (
 	"crypto/ircservices", FALSE, _modinit, _moddeinit,
-	"$Id: ircservices.c 6337 2006-09-10 15:54:41Z pippijn $",
+	"$Id: ircservices.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Jilles Tjoelker <jilles@stack.nl>"
 );
 
@@ -142,3 +142,7 @@ void _moddeinit(void)
 
 	crypto_module_loaded = FALSE;
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

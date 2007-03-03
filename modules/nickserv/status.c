@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService STATUS function.
  *
- * $Id: status.c 7179 2006-11-17 19:58:40Z jilles $
+ * $Id: status.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/status", FALSE, _modinit, _moddeinit,
-	"$Id: status.c 7179 2006-11-17 19:58:40Z jilles $",
+	"$Id: status.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -122,3 +122,6 @@ static void ns_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "You are an IRC operator.");
 }
 
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

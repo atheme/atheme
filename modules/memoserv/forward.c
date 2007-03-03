@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv FORWARD function
  *
- * $Id: forward.c 7511 2007-01-23 16:35:31Z jilles $
+ * $Id: forward.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/forward", FALSE, _modinit, _moddeinit,
-	"$Id: forward.c 7511 2007-01-23 16:35:31Z jilles $",
+	"$Id: forward.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -203,3 +203,7 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, "The memo has been successfully forwarded to %s.", target);
 	return;
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

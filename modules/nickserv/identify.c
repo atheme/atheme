@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY and LOGIN functions.
  *
- * $Id: identify.c 7765 2007-03-02 23:50:32Z jilles $
+ * $Id: identify.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -21,7 +21,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/" COMMAND_LC, FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 7765 2007-03-02 23:50:32Z jilles $",
+	"$Id: identify.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -323,3 +323,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		wallops("Warning: Numerous failed login attempts to \2%s\2. Last attempt received from \2%s\2 on %s.", mu->name, buf, strfbuf);
 	}
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

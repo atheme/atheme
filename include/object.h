@@ -4,7 +4,7 @@
  *
  * Object management.
  *
- * $Id: object.h 7487 2007-01-14 08:34:12Z nenolod $
+ * $Id: object.h 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #ifndef __ATHEME_OBJECT_H__
@@ -25,3 +25,7 @@ E void object_unref(void *);
 #define object(x) ((object_t *) x)
 
 #endif
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

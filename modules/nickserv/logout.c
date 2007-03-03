@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGOUT functions.
  *
- * $Id: logout.c 6825 2006-10-21 23:32:38Z jilles $
+ * $Id: logout.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/logout", FALSE, _modinit, _moddeinit,
-	"$Id: logout.c 6825 2006-10-21 23:32:38Z jilles $",
+	"$Id: logout.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -113,3 +113,7 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 		si->su->myuser = NULL;
 	}
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService RAW command.
  *
- * $Id: restart.c 6927 2006-10-24 15:22:05Z jilles $
+ * $Id: restart.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/restart", FALSE, _modinit, _moddeinit,
-	"$Id: restart.c 6927 2006-10-24 15:22:05Z jilles $",
+	"$Id: restart.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -51,3 +51,7 @@ static void os_cmd_restart(sourceinfo_t *si, int parc, char *parv[])
 
 	runflags |= RF_RESTART;
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

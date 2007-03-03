@@ -4,7 +4,7 @@
  *
  * Datastream stuff.
  *
- * $Id: datastream.c 7655 2007-02-15 00:42:54Z w00t $
+ * $Id: datastream.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -352,3 +352,7 @@ void sendqrecvq_free(connection_t *cptr)
 		free(sq);
 	}
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ RWATCH.
  *
- * $Id: rwatch.c 7283 2006-11-25 14:27:10Z jilles $
+ * $Id: rwatch.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rwatch", FALSE, _modinit, _moddeinit,
-	"$Id: rwatch.c 7283 2006-11-25 14:27:10Z jilles $",
+	"$Id: rwatch.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -473,3 +473,7 @@ static void rwatch_newuser(void *vptr)
 		}
 	}
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

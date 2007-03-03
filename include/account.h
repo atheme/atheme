@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 7753 2007-02-26 15:28:07Z jilles $
+ * $Id: account.h 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #ifndef ACCOUNT_H
@@ -316,3 +316,7 @@ E svsignore_t *svsignore_add(char *mask, char *reason);
 E void svsignore_delete(svsignore_t *svsignore);
 
 #endif
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

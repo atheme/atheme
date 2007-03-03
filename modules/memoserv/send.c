@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv SEND function
  *
- * $Id: send.c 7433 2007-01-10 16:58:00Z w00t $
+ * $Id: send.c 7771 2007-03-03 12:46:36Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/send", FALSE, _modinit, _moddeinit,
-	"$Id: send.c 7433 2007-01-10 16:58:00Z w00t $",
+	"$Id: send.c 7771 2007-03-03 12:46:36Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -180,3 +180,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, "The memo has been successfully sent to %s.", target);
 	return;
 }	
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */

@@ -92,3 +92,7 @@ static void command_namegen(sourceinfo_t *si, int parc, char *parv[])
 
 	gs_command_report(si, "Some names to ponder: %s", buf);
 }
+
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:noexpandtab
+ */
