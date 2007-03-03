@@ -1,3 +1,16 @@
+jilles      2007/03/03 14:29:36 UTC	(20070303-7781)
+  Log:
+  Add 'make dist' to build tarballs. The tarball contains
+  all files in SVN, plus configure, aclocal.m4 and
+  include/sysconf.h.in.
+  Note that this requires gtar or bsdtar.
+  
+
+  Changes:	Modified:
+  +16 -0	trunk/Makefile.in (File Modified) 
+  +2 -0		trunk/configure.ac (File Modified) 
+
+
 pippijn     2007/03/03 13:55:42 UTC	(20070303-7779)
   Log:
   added missing vim options

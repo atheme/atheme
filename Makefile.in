@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7781 2007-03-03 14:29:36Z jilles $
+# $Id: Makefile.in 7783 2007-03-03 14:55:59Z jilles $
 #
 
 CC		= @CC@
@@ -93,5 +93,5 @@ dist:
 	@echo "Creating $(DISTNAME).tar.gz"
 	$(RM) -f $(DISTNAME)
 	$(LN) -s . $(DISTNAME)
-	svn stat -v | awk '/^ / { print "$(DISTNAME)/"$$4; } /^M/ { print "$(DISTNAME)/"$$5; } END { print "$(DISTNAME)/configure"; print "$(DISTNAME)/aclocal.m4"; print "$(DISTNAME)/include/sysconf.h.in"; }' | $(TAR) -chnzf $(DISTNAME).tar.gz -T /dev/stdin
+	svn stat -v | sed -ne '/^[^D?]/s/^......//p' | awk '{ print "$(DISTNAME)/"$$4; } END { print "$(DISTNAME)/configure"; print "$(DISTNAME)/aclocal.m4"; print "$(DISTNAME)/include/sysconf.h.in"; }' | $(TAR) -chnzf $(DISTNAME).tar.gz -T /dev/stdin
 	$(RM) $(DISTNAME)
