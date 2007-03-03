@@ -4,7 +4,7 @@
  *
  * Generates a new password, either n digits long (w/ nickserv arg), or 7 digits
  *
- * $Id: ns_generatepass.c 7771 2007-03-03 12:46:36Z pippijn $
+ * $Id: ns_generatepass.c 7785 2007-03-03 15:54:32Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/generatepass", FALSE, _modinit, _moddeinit,
-	"$Id: ns_generatepass.c 7771 2007-03-03 12:46:36Z pippijn $",
+	"$Id: ns_generatepass.c 7785 2007-03-03 15:54:32Z pippijn $",
 	"Epiphanic Networks <http://www.epiphanic.org>"
 );
 
@@ -59,5 +59,7 @@ static void ns_cmd_generatepass(sourceinfo_t *si, int parc, char *parv[])
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:ts=8
+ * vim:sw=8
  * vim:noexpandtab
  */

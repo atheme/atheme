@@ -5,7 +5,7 @@
 #
 # This file is a simple setup script.
 #
-# $Id: setup 5786 2006-07-08 22:44:15Z jilles $
+# $Id: setup 7785 2007-03-03 15:54:32Z pippijn $
 
 PREFIX="$HOME/atheme"
 LARGENET="no"
@@ -110,6 +110,7 @@ while [ $ok -eq 0 ] ; do
 done
 ARGS="$ARGS $INPUT"
 
+if [ ! -f configure ]; then sh autogen.sh; fi
 sh configure $ARGS
 if [ $? != 0 ]; then
 	echo "Configure failed"

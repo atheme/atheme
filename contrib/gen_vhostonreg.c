@@ -4,7 +4,7 @@
  *
  * Sets usercloak metadata on register.
  *
- * $Id: gen_vhostonreg.c 7771 2007-03-03 12:46:36Z pippijn $
+ * $Id: gen_vhostonreg.c 7785 2007-03-03 15:54:32Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"misc/vhostonreg", FALSE, _modinit, _moddeinit,
-	"$Revision: 7771 $",
+	"$Revision: 7785 $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -94,5 +94,7 @@ static void handle_register(void *vptr)
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:ts=8
+ * vim:sw=8
  * vim:noexpandtab
  */
