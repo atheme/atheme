@@ -1,3 +1,13 @@
+jilles      2007/03/02 23:50:32 UTC	(20070302-7765)
+  Log:
+  Don't allow implicit logout by LOGIN/IDENTIFY as another
+  account if the LOGOUT command is not loaded.
+  
+
+  Changes:	Modified:
+  +6 -1		trunk/modules/nickserv/identify.c (File Modified) 
+
+
 jilles      2007/02/28 20:45:07 UTC	(20070228-7763)
   Log:
   Add ns_ratelimitreg contrib module, rate limits account
