@@ -1,3 +1,15 @@
+pippijn     2007/03/03 12:59:48 UTC	(20070303-7773)
+  Log:
+  Added autogen.sh, removed generated files
+  
+
+  Changes:	Modified:
+  +0 -7131	trunk/aclocal.m4 (File Deleted) 
+  +85 -0	trunk/autogen.sh (File Added) 
+  +0 -14659	trunk/configure (File Deleted) 
+  +0 -199	trunk/include/sysconf.h.in (File Deleted) 
+
+
 pippijn     2007/03/03 12:46:36 UTC	(20070303-7771)
   Log:
   added vim options to the end of each C file
