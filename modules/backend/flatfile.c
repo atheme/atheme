@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: flatfile.c 7787 2007-03-03 22:17:40Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: flatfile.c 7787 2007-03-03 22:17:40Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -36,18 +36,9 @@ static int flatfile_db_save_myusers_cb(dictionary_elem_t *delem, void *privdata)
 	 *  * failnum, lastfail, and lastfailon are deprecated (moved to metadata)
 	 */
 	fprintf(f, "MU %s %s %s %ld", mu->name, mu->pass, mu->email, (long)mu->registered);
-
-	if (mu->lastlogin)
-		fprintf(f, " %ld", (long)mu->lastlogin);
-	else
-		fprintf(f, " 0");
-
+	fprintf(f, " %ld", (long)mu->lastlogin);
 	fprintf(f, " 0 0 0");
-
-	if (mu->flags)
-		fprintf(f, " %d\n", mu->flags);
-	else
-		fprintf(f, " 0\n");
+	fprintf(f, " %d\n", mu->flags);
 
 	muout++;
 
@@ -130,26 +121,10 @@ static void flatfile_db_save(void *arg)
 		 * PASS is now ignored -- replaced with a "0" to avoid having to special-case this version
 		 */
 		fprintf(f, "MC %s %s %s %ld %ld", mc->name, "0", mc->founder->name, (long)mc->registered, (long)mc->used);
-
-		if (mc->flags)
-			fprintf(f, " %d", mc->flags);
-		else
-			fprintf(f, " 0");
-
-		if (mc->mlock_on)
-			fprintf(f, " %d", mc->mlock_on);
-		else
-			fprintf(f, " 0");
-
-		if (mc->mlock_off)
-			fprintf(f, " %d", mc->mlock_off);
-		else
-			fprintf(f, " 0");
-
-		if (mc->mlock_limit)
-			fprintf(f, " %d", mc->mlock_limit);
-		else
-			fprintf(f, " 0");
+		fprintf(f, " %d", mc->flags);
+		fprintf(f, " %d", mc->mlock_on);
+		fprintf(f, " %d", mc->mlock_off);
+		fprintf(f, " %d", mc->mlock_limit);
 
 		if (mc->mlock_key)
 			fprintf(f, " %s\n", mc->mlock_key);

@@ -1,3 +1,34 @@
+pippijn     2007/03/03 15:54:32 UTC	(20070303-7785)
+  Log:
+  - added autogen.sh to setup
+  - added missing vimopts to contrib
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/contrib/anope_convert.c (File Modified) 
+  +2 -0		trunk/contrib/cs_kickdots.c (File Modified) 
+  +2 -0		trunk/contrib/cs_ping.c (File Modified) 
+  +2 -0		trunk/contrib/cs_sync.c (File Modified) 
+  +2 -0		trunk/contrib/gen_echoserver.c (File Modified) 
+  +2 -0		trunk/contrib/gen_httpd.c (File Modified) 
+  +2 -0		trunk/contrib/gen_listenerdemo.c (File Modified) 
+  +2 -0		trunk/contrib/gen_regcheckemail.c (File Modified) 
+  +2 -0		trunk/contrib/gen_vhostonreg.c (File Modified) 
+  +2 -0		trunk/contrib/ircd_catserv.c (File Modified) 
+  +2 -0		trunk/contrib/ircd_loveserv.c (File Modified) 
+  +2 -0		trunk/contrib/ircd_nohalfops.c (File Modified) 
+  +2 -0		trunk/contrib/ircd_noowner.c (File Modified) 
+  +2 -0		trunk/contrib/ircd_noprotect.c (File Modified) 
+  +2 -0		trunk/contrib/ns_fregister.c (File Modified) 
+  +2 -0		trunk/contrib/ns_generatepass.c (File Modified) 
+  +2 -0		trunk/contrib/ns_ratelimitreg.c (File Modified) 
+  +2 -0		trunk/contrib/os_logonnews.c (File Modified) 
+  +2 -0		trunk/contrib/os_pingspam.c (File Modified) 
+  +2 -0		trunk/contrib/os_testcmd.c (File Modified) 
+  +2 -0		trunk/contrib/wumpus.c (File Modified) 
+  +1 -0		trunk/setup (File Modified) 
+
+
 jilles      2007/03/03 14:55:59 UTC	(20070303-7783)
   Log:
   Make 'make dist' more reliable with weird svn states.
