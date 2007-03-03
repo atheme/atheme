@@ -1,3 +1,14 @@
+jilles      2007/03/03 13:46:11 UTC	(20070303-7777)
+  Log:
+  Make it run aclocal properly. Although aclocal is part
+  of autoconf, not automake, hence undesirable, it must
+  be run to avoid breaking configure.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/autogen.sh (File Modified) 
+
+
 jilles      2007/03/03 13:35:31 UTC	(20070303-7775)
   Log:
   Mark autogen.sh as executable.

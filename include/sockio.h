@@ -4,7 +4,7 @@
  *
  * Platform-independent network I/O layer.
  *
- * $Id: sockio.h 7771 2007-03-03 12:46:36Z pippijn $
+ * $Id: sockio.h 7779 2007-03-03 13:55:42Z pippijn $
  */
 
 #ifndef SOCKIO_H
@@ -38,5 +38,7 @@ extern int socket_setnonblocking(socket_t sock);
 #endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:ts=8
+ * vim:sw=8
  * vim:noexpandtab
  */

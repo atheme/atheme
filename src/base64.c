@@ -15,7 +15,7 @@
    along with this program; if not, write to the Free Software Foundation,
    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-   $Id: base64.c 7771 2007-03-03 12:46:36Z pippijn $ */
+   $Id: base64.c 7779 2007-03-03 13:55:42Z pippijn $ */
 
 /* Written by Simon Josefsson.  Partially adapted from GNU MailUtils
  * (mailbox/filter_trans.c, as of 2004-11-28).  Improved by review
@@ -412,5 +412,7 @@ base64_decode_alloc (const char *in, size_t inlen, char **out,
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:ts=8
+ * vim:sw=8
  * vim:noexpandtab
  */

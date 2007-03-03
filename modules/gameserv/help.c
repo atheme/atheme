@@ -63,5 +63,7 @@ void gs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:ts=8
+ * vim:sw=8
  * vim:noexpandtab
  */

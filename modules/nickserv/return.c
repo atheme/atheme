@@ -4,7 +4,7 @@
  *
  * Implements nickserv RETURN.
  *
- * $Id: return.c 7771 2007-03-03 12:46:36Z pippijn $
+ * $Id: return.c 7779 2007-03-03 13:55:42Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/return", FALSE, _modinit, _moddeinit,
-	"$Id: return.c 7771 2007-03-03 12:46:36Z pippijn $",
+	"$Id: return.c 7779 2007-03-03 13:55:42Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -101,5 +101,7 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:ts=8
+ * vim:sw=8
  * vim:noexpandtab
  */

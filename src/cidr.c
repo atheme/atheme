@@ -11,7 +11,7 @@
  * src/irc_string.c. It provides CIDR matching for IPv4 and IPv6 without
  * special OS support.
  *
- * $Id: cidr.c 7771 2007-03-03 12:46:36Z pippijn $
+ * $Id: cidr.c 7779 2007-03-03 13:55:42Z pippijn $
  */
 
 #include "atheme.h"
@@ -354,5 +354,7 @@ match_cidr(const char *s1, const char *s2)
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:ts=8
+ * vim:sw=8
  * vim:noexpandtab
  */

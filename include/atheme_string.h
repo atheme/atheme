@@ -4,7 +4,7 @@
  *
  * String stuff.
  *
- * $Id: atheme_string.h 7771 2007-03-03 12:46:36Z pippijn $
+ * $Id: atheme_string.h 7779 2007-03-03 13:55:42Z pippijn $
  */
 
 #ifndef __CLAROSTRING
@@ -22,5 +22,7 @@ E void strip(char *line);
 #endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:ts=8
+ * vim:sw=8
  * vim:noexpandtab
  */

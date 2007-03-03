@@ -4,7 +4,7 @@
  *
  * This contains the connection_t structure.
  *
- * $Id: connection.h 7771 2007-03-03 12:46:36Z pippijn $
+ * $Id: connection.h 7779 2007-03-03 13:55:42Z pippijn $
  */
 
 #ifndef CONNECTION_H
@@ -89,5 +89,7 @@ extern int connection_count(void);
 #endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:ts=8
+ * vim:sw=8
  * vim:noexpandtab
  */

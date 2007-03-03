@@ -4,7 +4,7 @@
  *
  * Protocol handling stuff.
  *
- * $Id: pmodule.c 7771 2007-03-03 12:46:36Z pippijn $
+ * $Id: pmodule.c 7779 2007-03-03 13:55:42Z pippijn $
  */
 
 #include "atheme.h"
@@ -76,5 +76,7 @@ pcommand_t *pcommand_find(char *token)
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:ts=8
+ * vim:sw=8
  * vim:noexpandtab
  */

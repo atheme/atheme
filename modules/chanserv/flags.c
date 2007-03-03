@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 7771 2007-03-03 12:46:36Z pippijn $
+ * $Id: flags.c 7779 2007-03-03 13:55:42Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 7771 2007-03-03 12:46:36Z pippijn $",
+	"$Id: flags.c 7779 2007-03-03 13:55:42Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -30,7 +30,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-        command_add(&cs_flags, cs_cmdtree);
+	command_add(&cs_flags, cs_cmdtree);
 	help_addentry(cs_helptree, "FLAGS", "help/cservice/flags", NULL);
 }
 
@@ -293,7 +293,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 
 			if (!chanacs_change(mc, tmu, NULL, &addflags, &removeflags, restrictflags))
 			{
-		                command_fail(si, fault_noprivs, "You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2.", bitmask_to_flags2(addflags, removeflags, chanacs_flags), tmu->name, mc->name);
+				command_fail(si, fault_noprivs, "You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2.", bitmask_to_flags2(addflags, removeflags, chanacs_flags), tmu->name, mc->name);
 				return;
 			}
 		}
@@ -319,5 +319,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:ts=8
+ * vim:sw=8
  * vim:noexpandtab
  */

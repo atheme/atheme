@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 7771 2007-03-03 12:46:36Z pippijn $
+ * $Id: hyperion.c 7779 2007-03-03 13:55:42Z pippijn $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -17,7 +17,7 @@
 #include "pmodule.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 7771 2007-03-03 12:46:36Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 7779 2007-03-03 13:55:42Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -970,5 +970,7 @@ void _modinit(module_t * m)
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
+ * vim:ts=8
+ * vim:sw=8
  * vim:noexpandtab
  */
