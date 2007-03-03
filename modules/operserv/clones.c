@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing clone detection.
  *
- * $Id: clones.c 7545 2007-02-02 21:04:01Z jilles $
+ * $Id: clones.c 7769 2007-03-03 10:13:53Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 7545 2007-02-02 21:04:01Z jilles $",
+	"$Id: clones.c 7769 2007-03-03 10:13:53Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -67,7 +67,6 @@ command_t os_clones_listexempt = { "LISTEXEMPT", "Lists clones exemptions.", AC_
 
 void _modinit(module_t *m)
 {
-	int i;
 	user_t *u;
 	dictionary_iteration_state_t state;
 

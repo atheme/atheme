@@ -1,3 +1,18 @@
+pippijn     2007/03/03 10:04:24 UTC	(20070303-7767)
+  Log:
+  Added perl modules abstracting atheme's XML-RPC interface
+  
+
+  Changes:	Modified:
+  + -		trunk/contrib/Atheme/ (File Added) 
+  +1109 -0	trunk/contrib/Atheme/ChanServ.pm (File Added) 
+  +191 -0	trunk/contrib/Atheme/GameServ.pm (File Added) 
+  +289 -0	trunk/contrib/Atheme/MemoServ.pm (File Added) 
+  +838 -0	trunk/contrib/Atheme/NickServ.pm (File Added) 
+  +1119 -0	trunk/contrib/Atheme/OperServ.pm (File Added) 
+  +254 -0	trunk/contrib/Atheme.pm (File Added) 
+
+
 jilles      2007/03/02 23:50:32 UTC	(20070302-7765)
   Log:
   Don't allow implicit logout by LOGIN/IDENTIFY as another

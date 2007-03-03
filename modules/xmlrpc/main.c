@@ -4,7 +4,7 @@
  *
  * New xmlrpc implementation
  *
- * $Id: main.c 7277 2006-11-25 01:41:18Z jilles $
+ * $Id: main.c 7769 2007-03-03 10:13:53Z pippijn $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 7277 2006-11-25 01:41:18Z jilles $",
+	"$Id: main.c 7769 2007-03-03 10:13:53Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -155,7 +155,7 @@ static void send_error(connection_t *cptr, int errorcode, const char *text, bool
 	snprintf(buf1, sizeof buf1, "HTTP/1.1 %d %s\r\n"
 			"Server: Atheme/%s\r\n"
 			"Content-Type: text/plain\r\n"
-			"Content-Length: %d\r\n\r\n%s",
+			"Content-Length: %ld\r\n\r\n%s",
 			errorcode, text, version, strlen(buf2),
 			sendentity ? buf2 : "");
 	sendq_add(cptr, buf1, strlen(buf1));

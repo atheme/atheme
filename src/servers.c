@@ -4,7 +4,7 @@
  *
  * Server stuff.
  *
- * $Id: servers.c 7679 2007-02-17 06:40:39Z nenolod $
+ * $Id: servers.c 7769 2007-03-03 10:13:53Z pippijn $
  */
 
 #include "atheme.h"
@@ -220,7 +220,6 @@ void server_delete(const char *name)
 server_t *server_find(const char *name)
 {
 	server_t *s;
-	node_t *n;
 
 	if (ircd->uses_uid)
 	{

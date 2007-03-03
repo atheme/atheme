@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7753 2007-02-26 15:28:07Z jilles $
+ * $Id: account.c 7769 2007-03-03 10:13:53Z pippijn $
  */
 
 #include "atheme.h"
@@ -139,8 +139,6 @@ void myuser_delete(myuser_t *mu)
 {
 	myuser_t *successor;
 	mychan_t *mc;
-	mynick_t *mn;
-	chanacs_t *ca;
 	user_t *u;
 	node_t *n, *tn;
 	metadata_t *md;
@@ -609,7 +607,6 @@ mynick_t *mynick_find(const char *name)
 /* private destructor for mychan_t. */
 static void mychan_delete(mychan_t *mc)
 {
-	chanacs_t *ca;
 	metadata_t *md;
 	node_t *n, *tn;
 
@@ -867,8 +864,7 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, char *host, uint32_t level)
 void chanacs_unref(mychan_t *mychan, myuser_t *myuser, uint32_t level)
 {
 	chanacs_t *ca;
-	node_t *n, *tn, *n2, *tn2;
-	metadata_t *md;
+	node_t *n, *tn;
 
 	return_if_fail(mychan != NULL && myuser != NULL);
 
@@ -888,8 +884,7 @@ void chanacs_unref(mychan_t *mychan, myuser_t *myuser, uint32_t level)
 void chanacs_unref_host(mychan_t *mychan, char *host, uint32_t level)
 {
 	chanacs_t *ca;
-	node_t *n, *tn, *n2, *tn2;
-	metadata_t *md;
+	node_t *n, *tn;
 
 	return_if_fail(mychan != NULL && host != NULL);
 

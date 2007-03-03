@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 7723 2007-02-24 16:53:16Z jilles $
+ * $Id: services.c 7769 2007-03-03 10:13:53Z pippijn $
  */
 
 #include "atheme.h"
@@ -259,7 +259,6 @@ void snoop(char *fmt, ...)
 void handle_nickchange(user_t *u)
 {
 	mynick_t *mn;
-	node_t *n;
 
 	if (u == NULL)
 		return;

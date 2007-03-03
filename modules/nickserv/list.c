@@ -5,7 +5,7 @@
  * This file contains code for the NickServ LIST function.
  * Based on Alex Lambert's LISTEMAIL.
  *
- * $Id: list.c 7683 2007-02-17 12:13:57Z jilles $
+ * $Id: list.c 7769 2007-03-03 10:13:53Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 7683 2007-02-17 12:13:57Z jilles $",
+	"$Id: list.c 7769 2007-03-03 10:13:53Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -38,7 +38,7 @@ void _moddeinit()
 	help_delentry(ns_helptree, "LIST");
 }
 
-static int list_one(sourceinfo_t *si, myuser_t *mu, mynick_t *mn)
+static void list_one(sourceinfo_t *si, myuser_t *mu, mynick_t *mn)
 {
 	char buf[BUFSIZE];
 

@@ -15,7 +15,7 @@
    along with this program; if not, write to the Free Software Foundation,
    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-   $Id: base64.c 5454 2006-06-19 14:49:19Z jilles $ */
+   $Id: base64.c 7769 2007-03-03 10:13:53Z pippijn $ */
 
 /* Written by Simon Josefsson.  Partially adapted from GNU MailUtils
  * (mailbox/filter_trans.c, as of 2004-11-28).  Improved by review
@@ -51,7 +51,7 @@
 #include <limits.h>
 
 /* C89 compliant way to cast 'char' to 'unsigned char'. */
-static inline unsigned char
+static unsigned char
 to_uchar (char ch)
 {
   return ch;
