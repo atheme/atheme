@@ -3,13 +3,15 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7479 2007-01-14 04:14:47Z nenolod $
+# $Id: Makefile.in 7781 2007-03-03 14:29:36Z jilles $
 #
 
 CC		= @CC@
 RM		= @RM@
 MV		= @MV@
 CP		= @CP@
+LN		= @LN@
+TAR		= @TAR@
 INSTALL		= @INSTALL@
 prefix		= @prefix@
 exec_prefix	= @exec_prefix@
@@ -23,10 +25,13 @@ DOCDIR		= @DOCDIR@
 MODDIR		= @MODDIR@
 SHAREDIR	= @SHAREDIR@
 BIN		= atheme@EXEEXT@
+DISTNAME	= @PACKAGE_NAME@-@PACKAGE_VERSION@
 
 SHELL=/bin/sh
 SUBDIRS=modules src
 CLEANDIRS = ${SUBDIRS}
+
+.PHONY: dist
 
 all: depend build
 
@@ -79,3 +84,14 @@ install: build
 		${MAKE} install; \
 		cd ..; \
 	done
+
+dist:
+	@if [ ! -d .svn ]; then \
+		echo "make dist only works from a subversion checkout"; \
+		false; \
+	fi
+	@echo "Creating $(DISTNAME).tar.gz"
+	$(RM) -f $(DISTNAME)
+	$(LN) -s . $(DISTNAME)
+	svn stat -v | awk '/^ / { print "$(DISTNAME)/"$$4; } /^M/ { print "$(DISTNAME)/"$$5; } END { print "$(DISTNAME)/configure"; print "$(DISTNAME)/aclocal.m4"; print "$(DISTNAME)/include/sysconf.h.in"; }' | $(TAR) -chnzf $(DISTNAME).tar.gz -T /dev/stdin
+	$(RM) $(DISTNAME)

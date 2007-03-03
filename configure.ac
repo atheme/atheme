@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 7663 2007-02-15 11:54:27Z jilles $
+dnl $Id: configure.ac 7781 2007-03-03 14:29:36Z jilles $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.59)
 AC_INIT(atheme, 2.2, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 7663 2007-02-15 11:54:27Z jilles $])
+AC_COPYRIGHT([$Id: configure.ac 7781 2007-03-03 14:29:36Z jilles $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -36,6 +36,8 @@ AC_EXEEXT
 AC_PATH_PROG(RM, rm)
 AC_PATH_PROG(MV, mv)
 AC_PATH_PROG(CP, cp)
+AC_PATH_PROG(LN, ln)
+AC_PATH_PROG(TAR, tar)
 AC_PATH_PROG(AR, ar)
 AC_PATH_PROG(RANLIB, ranlib)
 AC_C_INLINE
