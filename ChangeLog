@@ -1,3 +1,13 @@
+jilles      2007/03/04 22:09:32 UTC	(20070304-7805)
+  Log:
+  nickserv resetpass/return: clear setpass key
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/nickserv/resetpass.c (File Modified) 
+  +1 -0		trunk/modules/nickserv/return.c (File Modified) 
+
+
 jilles      2007/03/04 22:06:37 UTC	(20070304-7803)
   Log:
   nickserv
