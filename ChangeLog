@@ -1,3 +1,26 @@
+jilles      2007/03/04 00:00:48 UTC	(20070304-7789)
+  Log:
+  Add MU_NOBURSTLOGIN, marks accounts that have never had
+  a user split (or online while services quits).
+  Refuse bursted logins for accounts with this flag.
+  Logout all sessions from the account on /ns return and
+  also set MU_NOBURSTLOGIN.
+  
+  This cuts down on split hacking with dropped/recreated
+  accounts but does not completely prevent it.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/contrib/ns_fregister.c (File Modified) 
+  +1 -0		trunk/include/account.h (File Modified) 
+  +4 -1		trunk/modules/backend/flatfile.c (File Modified) 
+  +1 -1		trunk/modules/nickserv/register.c (File Modified) 
+  +14 -0	trunk/modules/nickserv/return.c (File Modified) 
+  +1 -1		trunk/modules/xmlrpc/account.c (File Modified) 
+  +5 -0		trunk/src/servers.c (File Modified) 
+  +10 -0	trunk/src/services.c (File Modified) 
+
+
 jilles      2007/03/03 22:17:40 UTC	(20070303-7787)
   Log:
   Some obvious simplifications.

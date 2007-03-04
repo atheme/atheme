@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 Patrick Fish, et al.
+ * Copyright (c) 2005-2007 Patrick Fish, et al.
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Gives services the ability to freeze nicknames
  *
- * $Id: freeze.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: freeze.c 7791 2007-03-04 00:39:56Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/freeze", FALSE, _modinit, _moddeinit,
-	"$Id: freeze.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: freeze.c 7791 2007-03-04 00:39:56Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -44,6 +44,8 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 	char *target = parv[0];
 	char *action = parv[1];
 	char *reason = parv[2];
+	user_t *u;
+	node_t *n, *tn;
 
 	if (!target || !action)
 	{
@@ -84,6 +86,18 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 		metadata_add(mu, METADATA_USER, "private:freeze:freezer", get_oper_name(si));
 		metadata_add(mu, METADATA_USER, "private:freeze:reason", reason);
 		metadata_add(mu, METADATA_USER, "private:freeze:timestamp", itoa(CURRTIME));
+		/* log them out */
+		LIST_FOREACH_SAFE(n, tn, mu->logins.head)
+		{
+			u = (user_t *)n->data;
+			if (!ircd_on_logout(u->nick, mu->name, NULL))
+			{
+				u->myuser = NULL;
+				node_del(n, &mu->logins);
+				node_free(n);
+			}
+		}
+		mu->flags |= MU_NOBURSTLOGIN;
 
 		wallops("%s froze the account \2%s\2 (%s).", get_oper_name(si), target, reason);
 		logcommand(si, CMDLOG_ADMIN, "FREEZE %s ON", target);
