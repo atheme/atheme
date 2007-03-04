@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService SPECS command.
  *
- * $Id: specs.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: specs.c 7795 2007-03-04 15:54:18Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/specs", FALSE, _modinit, _moddeinit,
-	"$Id: specs.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: specs.c 7795 2007-03-04 15:54:18Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -46,7 +46,8 @@ struct
 {
 	/* NickServ/UserServ */
 	{ PRIV_USER_AUSPEX, "view concealed information", NULL, NULL, NULL },
-	{ PRIV_USER_ADMIN, "drop accounts, freeze accounts, reset passwords, send passwords", NULL, NULL, NULL },
+	{ PRIV_USER_ADMIN, "drop accounts, freeze accounts, reset passwords", NULL, NULL, NULL },
+	{ PRIV_USER_SENDPASS, "send passwords", NULL, NULL, NULL },
 	{ PRIV_USER_VHOST, "set vhosts", NULL, NULL, NULL },
 	{ PRIV_USER_FREGISTER, "register accounts on behalf of another user", NULL, NULL, NULL },
 	/* ChanServ */

@@ -4,7 +4,7 @@
  *
  * Fine grained services operator privileges
  *
- * $Id: privs.h 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: privs.h 7795 2007-03-04 15:54:18Z jilles $
  */
 
 #ifndef PRIVS_H
@@ -15,6 +15,7 @@
 /* nickserv/userserv */
 #define PRIV_USER_AUSPEX     "user:auspex"
 #define PRIV_USER_ADMIN      "user:admin"
+#define PRIV_USER_SENDPASS   "user:sendpass"
 #define PRIV_USER_VHOST      "user:vhost"
 #define PRIV_USER_FREGISTER  "user:fregister"
 /* chanserv */

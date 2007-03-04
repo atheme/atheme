@@ -1,3 +1,14 @@
+jilles      2007/03/04 00:49:01 UTC	(20070304-7793)
+  Log:
+  nickserv return/freeze help files: mention that these
+  commands will logout all sessions
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/help/nickserv/freeze (File Modified) 
+  +2 -1		trunk/help/nickserv/return (File Modified) 
+
+
 jilles      2007/03/04 00:39:56 UTC	(20070304-7791)
   Log:
   nickserv freeze: log out all sessions and set MU_NOBURSTLOGIN
