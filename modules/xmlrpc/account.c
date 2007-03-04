@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: account.c 7789 2007-03-04 00:00:48Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: account.c 7789 2007-03-04 00:00:48Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -139,7 +139,7 @@ static int account_register(void *conn, int parc, char *parv[])
 
 	snoop("REGISTER: \2%s\2 to \2%s\2 (via \2xmlrpc\2)", parv[0], parv[2]);
 
-	mu = myuser_add(parv[0], parv[1], parv[2], config_options.defuflags);
+	mu = myuser_add(parv[0], parv[1], parv[2], config_options.defuflags | MU_NOBURSTLOGIN);
 	mu->registered = CURRTIME;
 	mu->lastlogin = CURRTIME;
 

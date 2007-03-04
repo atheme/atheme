@@ -4,7 +4,7 @@
  *
  * Implements nickserv RETURN.
  *
- * $Id: return.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: return.c 7789 2007-03-04 00:00:48Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/return", FALSE, _modinit, _moddeinit,
-	"$Id: return.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: return.c 7789 2007-03-04 00:00:48Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -44,6 +44,8 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 	char *newpass;
 	char oldmail[EMAILLEN];
 	myuser_t *mu;
+	user_t *u;
+	node_t *n, *tn;
 
 	if (!target || !newmail)
 	{
@@ -91,6 +93,18 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 	metadata_delete(mu, METADATA_USER, "private:verify:emailchg:key");
 	metadata_delete(mu, METADATA_USER, "private:verify:emailchg:newemail");
 	metadata_delete(mu, METADATA_USER, "private:verify:emailchg:timestamp");
+	/* log them out */
+	LIST_FOREACH_SAFE(n, tn, mu->logins.head)
+	{
+		u = (user_t *)n->data;
+		if (!ircd_on_logout(u->nick, mu->name, NULL))
+		{
+			u->myuser = NULL;
+			node_del(n, &mu->logins);
+			node_free(n);
+		}
+	}
+	mu->flags |= MU_NOBURSTLOGIN;
 
 	wallops("%s returned the nickname \2%s\2 to \2%s\2", get_oper_name(si), target, newmail);
 	logcommand(si, CMDLOG_ADMIN, "RETURN %s to %s", target, newmail);

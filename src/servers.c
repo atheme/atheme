@@ -4,7 +4,7 @@
  *
  * Server stuff.
  *
- * $Id: servers.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: servers.c 7789 2007-03-04 00:00:48Z jilles $
  */
 
 #include "atheme.h"
@@ -170,6 +170,11 @@ void server_delete(const char *name)
 	LIST_FOREACH_SAFE(n, tn, s->userlist.head)
 	{
 		u = (user_t *)n->data;
+		/* This user split, allow bursted logins for the account.
+		 * XXX should we do this here?
+		 * -- jilles */
+		if (u->myuser != NULL)
+			u->myuser->flags &= ~MU_NOBURSTLOGIN;
 		user_delete(u);
 	}
 

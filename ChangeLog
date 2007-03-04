@@ -1,3 +1,12 @@
+jilles      2007/03/03 22:17:40 UTC	(20070303-7787)
+  Log:
+  Some obvious simplifications.
+  
+
+  Changes:	Modified:
+  +6 -31	trunk/modules/backend/flatfile.c (File Modified) 
+
+
 pippijn     2007/03/03 15:54:32 UTC	(20070303-7785)
   Log:
   - added autogen.sh to setup

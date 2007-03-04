@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ FREGISTER function.
  *
- * $Id: ns_fregister.c 7785 2007-03-03 15:54:32Z pippijn $
+ * $Id: ns_fregister.c 7789 2007-03-04 00:00:48Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/fregister", FALSE, _modinit, _moddeinit,
-	"$Id: ns_fregister.c 7785 2007-03-03 15:54:32Z pippijn $",
+	"$Id: ns_fregister.c 7789 2007-03-04 00:00:48Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -102,7 +102,7 @@ static void ns_cmd_fregister(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	mu = myuser_add(account, pass, email, uflags | config_options.defuflags);
+	mu = myuser_add(account, pass, email, uflags | config_options.defuflags | MU_NOBURSTLOGIN);
 	mu->registered = CURRTIME;
 	mu->lastlogin = CURRTIME;
 	if (!nicksvs.no_nick_ownership)

@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: services.c 7789 2007-03-04 00:00:48Z jilles $
  */
 
 #include "atheme.h"
@@ -345,6 +345,16 @@ void handle_burstlogin(user_t *u, char *login)
 	}
 	if (u->myuser != NULL)	/* already logged in, hmm */
 		return;
+	if (mu->flags & MU_NOBURSTLOGIN && authservice_loaded)
+	{
+		/* no splits for this account, this bursted login cannot
+		 * be legit...
+		 * if we have an authentication service, log them out */
+		slog(LG_INFO, "handle_burstlogin(): got illegit login %s for user %s", login, u->nick);
+		notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, "Login to account %s seems invalid, forcing logout", login);
+		ircd_on_logout(u->nick, login, NULL);
+		return;
+	}
 	u->myuser = mu;
 	n = node_create();
 	node_add(u, n, &mu->logins);
