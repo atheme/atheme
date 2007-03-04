@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService SENDPASS function.
  *
- * $Id: sendpass.c 7801 2007-03-04 21:53:13Z jilles $
+ * $Id: sendpass.c 7803 2007-03-04 22:06:37Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/sendpass", FALSE, _modinit, _moddeinit,
-	"$Id: sendpass.c 7801 2007-03-04 21:53:13Z jilles $",
+	"$Id: sendpass.c 7803 2007-03-04 22:06:37Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -72,6 +72,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		{
 			metadata_add(mu, METADATA_USER, "private:setpass:key", crypt_string(key, gen_salt()));
 			logcommand(si, CMDLOG_ADMIN, "SENDPASS %s (change key)", name);
+			snoop("SENDPASS: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
 			command_success_nodata(si, "The password change key for \2%s\2 has been sent to \2%s\2.", mu->name, mu->email);
 		}
 		else
@@ -92,6 +93,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 	if (sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_SENDPASS, mu, (newpass == NULL) ? mu->pass : newpass))
 	{
 		logcommand(si, CMDLOG_ADMIN, "SENDPASS %s", name);
+		snoop("SENDPASS: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
 		command_success_nodata(si, "The password for \2%s\2 has been sent to \2%s\2.", mu->name, mu->email);
 	}
 	else

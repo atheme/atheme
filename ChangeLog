@@ -1,3 +1,24 @@
+jilles      2007/03/04 21:53:13 UTC	(20070304-7801)
+  Log:
+  Add /ns setpass, an alternative method of password retrieval.
+  When setpass is loaded, sendpass will send a code that
+  can be used to set a new password with setpass, only
+  affecting the old password when that happens.
+  Identifying using the old password will invalidate
+  the key.
+  The key is encrypted in the database like passwords.
+  
+
+  Changes:	Modified:
+  +8 -0		trunk/help/nickserv/setpass (File Added) 
+  +8 -0		trunk/help/userserv/setpass (File Added) 
+  +1 -0		trunk/include/tools.h (File Modified) 
+  +1 -0		trunk/modules/nickserv/Makefile.in (File Modified) 
+  +17 -0	trunk/modules/nickserv/sendpass.c (File Modified) 
+  +115 -0	trunk/modules/nickserv/setpass.c (File Added) 
+  +7 -2		trunk/src/function.c (File Modified) 
+
+
 jilles      2007/03/04 17:09:29 UTC	(20070304-7799)
   Log:
   Remove HOLD, add SENDPASS to verbose part of /ns help.

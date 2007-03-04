@@ -4,7 +4,7 @@
  *
  * Implements nickserv RETURN.
  *
- * $Id: return.c 7789 2007-03-04 00:00:48Z jilles $
+ * $Id: return.c 7803 2007-03-04 22:06:37Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/return", FALSE, _modinit, _moddeinit,
-	"$Id: return.c 7789 2007-03-04 00:00:48Z jilles $",
+	"$Id: return.c 7803 2007-03-04 22:06:37Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -107,6 +107,7 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 	mu->flags |= MU_NOBURSTLOGIN;
 
 	wallops("%s returned the nickname \2%s\2 to \2%s\2", get_oper_name(si), target, newmail);
+	snoop("RETURN: \2%s\2 to \2%s\2 by \2%s\2", target, newmail, get_oper_name(si));
 	logcommand(si, CMDLOG_ADMIN, "RETURN %s to %s", target, newmail);
 	command_success_nodata(si, "The e-mail address for \2%s\2 has been set to \2%s\2",
 						target, newmail);
