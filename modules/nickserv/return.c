@@ -4,7 +4,7 @@
  *
  * Implements nickserv RETURN.
  *
- * $Id: return.c 7803 2007-03-04 22:06:37Z jilles $
+ * $Id: return.c 7805 2007-03-04 22:09:32Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/return", FALSE, _modinit, _moddeinit,
-	"$Id: return.c 7803 2007-03-04 22:06:37Z jilles $",
+	"$Id: return.c 7805 2007-03-04 22:09:32Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -93,6 +93,7 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 	metadata_delete(mu, METADATA_USER, "private:verify:emailchg:key");
 	metadata_delete(mu, METADATA_USER, "private:verify:emailchg:newemail");
 	metadata_delete(mu, METADATA_USER, "private:verify:emailchg:timestamp");
+	metadata_delete(mu, METADATA_USER, "private:setpass:key");
 	/* log them out */
 	LIST_FOREACH_SAFE(n, tn, mu->logins.head)
 	{
