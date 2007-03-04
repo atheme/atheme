@@ -1,3 +1,15 @@
+jilles      2007/03/04 22:27:17 UTC	(20070304-7807)
+  Log:
+  setpass help files: mention that SET PASSWORD, not SETPASS,
+  should be used to set a new password if the current
+  password is known.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/help/nickserv/setpass (File Modified) 
+  +3 -0		trunk/help/userserv/setpass (File Modified) 
+
+
 jilles      2007/03/04 22:09:32 UTC	(20070304-7805)
   Log:
   nickserv resetpass/return: clear setpass key

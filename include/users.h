@@ -4,7 +4,7 @@
  *
  * Data structures for connected clients.
  *
- * $Id: users.h 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: users.h 7809 2007-03-04 23:16:56Z jilles $
  */
 
 #ifndef USERS_H
@@ -34,10 +34,8 @@ struct user_
 	uint32_t ts;
 };
 
-#define UF_ISOPER      0x00000001
-#define UF_ISAWAY      0x00000002
+#define UF_AWAY        0x00000002
 #define UF_INVIS       0x00000004
-#define UF_LOGGEDIN    0x00000008
 #define UF_IRCOP       0x00000010
 #define UF_ADMIN       0x00000020
 #define UF_SEENINFO    0x00000080
