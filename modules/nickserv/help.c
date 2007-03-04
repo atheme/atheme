@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the NickServ HELP command.
  *
- * $Id: help.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: help.c 7799 2007-03-04 17:09:29Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: help.c 7799 2007-03-04 17:09:29Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -64,7 +64,7 @@ void ns_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.disp);
 		command_success_nodata(si, " ");
 
-		command_help_short(si, ns_cmdtree, "REGISTER IDENTIFY GHOST RELEASE INFO LISTCHANS SET GROUP UNGROUP HOLD MARK FREEZE");
+		command_help_short(si, ns_cmdtree, "REGISTER IDENTIFY GHOST RELEASE INFO LISTCHANS SET GROUP UNGROUP MARK FREEZE SENDPASS");
 
 		command_success_nodata(si, "***** \2End of Help\2 *****");
 		return;

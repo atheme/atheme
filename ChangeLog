@@ -1,3 +1,15 @@
+jilles      2007/03/04 16:45:36 UTC	(20070304-7797)
+  Log:
+  chanserv close:
+  cu==NULL (previous hook kicked user), is_internal_client(cu->user)
+  and mychan_find(cu->chan->name) are all normal (not bugs)
+  so do not cause wallops if they are not true.
+  
+
+  Changes:	Modified:
+  +5 -2		trunk/modules/chanserv/close.c (File Modified) 
+
+
 jilles      2007/03/04 15:54:18 UTC	(20070304-7795)
   Log:
   Split out /ns sendpass from user:admin to its own
