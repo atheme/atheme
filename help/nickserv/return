@@ -2,7 +2,8 @@ Help for RETURN:
 
 RETURN resets the specified account
 password and sends it to the email address
-specified.
+specified. Any current sessions logged in
+to the account are logged out.
 
 Syntax: RETURN <nickname> <e-mail>
 
