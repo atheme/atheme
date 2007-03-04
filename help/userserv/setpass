@@ -1,0 +1,8 @@
+Help for SETPASS:
+
+SETPASS allows you to set a new password
+using a key emailed to you. The key is
+valid for one time only, and also becomes
+invalid if you identify with your old password.
+
+Syntax: SETPASS <account> <key> <password>

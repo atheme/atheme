@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService SENDPASS function.
  *
- * $Id: sendpass.c 7795 2007-03-04 15:54:18Z jilles $
+ * $Id: sendpass.c 7801 2007-03-04 21:53:13Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/sendpass", FALSE, _modinit, _moddeinit,
-	"$Id: sendpass.c 7795 2007-03-04 15:54:18Z jilles $",
+	"$Id: sendpass.c 7801 2007-03-04 21:53:13Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -42,6 +42,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 	myuser_t *mu;
 	char *name = parv[0];
 	char *newpass = NULL;
+	char *key;
 
 	if (!name)
 	{
@@ -60,6 +61,22 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 	{
 		logcommand(si, CMDLOG_ADMIN, "failed SENDPASS %s (is SOPER)", name);
 		command_fail(si, fault_badparams, "\2%s\2 belongs to a services operator; you need %s privilege to send the password.", name, PRIV_ADMIN);
+		return;
+	}
+
+	/* alternative, safer method? */
+	if (command_find(si->service->cmdtree, "SETPASS"))
+	{
+		key = gen_pw(12);
+		if (sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_SETPASS, mu, key))
+		{
+			metadata_add(mu, METADATA_USER, "private:setpass:key", crypt_string(key, gen_salt()));
+			logcommand(si, CMDLOG_ADMIN, "SENDPASS %s (change key)", name);
+			command_success_nodata(si, "The password change key for \2%s\2 has been sent to \2%s\2.", mu->name, mu->email);
+		}
+		else
+			command_fail(si, fault_emailfail, "Email send failed.");
+		free(key);
 		return;
 	}
 

@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: function.c 7801 2007-03-04 21:53:13Z jilles $
  */
 
 #include "atheme.h"
@@ -549,7 +549,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 			strlcat(subject, "Account Registration", sizeof subject);
 		else
 			strlcat(subject, "Nickname Registration", sizeof subject);
-	else if (type == EMAIL_SENDPASS)
+	else if (type == EMAIL_SENDPASS || type == EMAIL_SETPASS)
 		strlcat(subject, "Password Retrieval", sizeof subject);
 	else if (type == EMAIL_SETEMAIL)
 		strlcat(subject, "Change Email Confirmation", sizeof subject);
@@ -607,7 +607,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 		fprintf(out, "In order to complete your email change, you must send\n" "the following command on IRC:\n");
 		fprintf(out, "/MSG %s VERIFY EMAILCHG %s %s\n\n", nicksvs.nick, mu->name, param);
 	}
-	if (type == EMAIL_MEMO)
+	else if (type == EMAIL_MEMO)
 	{
 		if (u->myuser != NULL)
 			fprintf(out,"You have a new memo from %s.\n\n", u->myuser->name);
@@ -615,6 +615,11 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 			/* shouldn't happen */
 			fprintf(out,"You have a new memo from %s (unregistered?).\n\n", u->nick);
 		fprintf(out,"%s\n\n", param);
+	}
+	else if (type == EMAIL_SETPASS)
+	{
+		fprintf(out, "In order to set a new password, you must send\n" "the following command on IRC:\n");
+		fprintf(out, "/MSG %s SETPASS %s %s <password>\n\n", nicksvs.nick, mu->name, param);
 	}
 
 	fprintf(out, "Thank you for your interest in the %s IRC network.\n", me.netname);
