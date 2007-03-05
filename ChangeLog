@@ -1,3 +1,54 @@
+pippijn     2007/03/05 23:20:25 UTC	(20070305-7823)
+  Log:
+  - gettextised the core
+  - fixed some typoes
+  - micro-cleanups
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/Makefile.in (File Modified) 
+  +5 -1		trunk/configure.ac (File Modified) 
+  +4 -0		trunk/include/stdinc.h (File Modified) 
+  +0 -1		trunk/modules/nickserv/setpass.c (File Modified) 
+  +3 -1		trunk/src/Makefile.in (File Modified) 
+  +39 -39	trunk/src/account.c (File Modified) 
+  +42 -34	trunk/src/atheme.c (File Modified) 
+  +1 -1		trunk/src/authcookie.c (File Modified) 
+  +15 -15	trunk/src/balloc.c (File Modified) 
+  +15 -15	trunk/src/channels.c (File Modified) 
+  +11 -11	trunk/src/cmode.c (File Modified) 
+  +11 -11	trunk/src/commandtree.c (File Modified) 
+  +44 -44	trunk/src/conf.c (File Modified) 
+  +20 -20	trunk/src/confparse.c (File Modified) 
+  +19 -19	trunk/src/connection.c (File Modified) 
+  +5 -5		trunk/src/datastream.c (File Modified) 
+  +7 -7		trunk/src/dictionary.c (File Modified) 
+  +1 -1		trunk/src/dlink.c (File Modified) 
+  +4 -4		trunk/src/event.c (File Modified) 
+  +35 -38	trunk/src/function.c (File Modified) 
+  +9 -9		trunk/src/help.c (File Modified) 
+  +1 -1		trunk/src/hook.c (File Modified) 
+  +1 -1		trunk/src/match.c (File Modified) 
+  +21 -20	trunk/src/md5.c (File Modified) 
+  +18 -18	trunk/src/module.c (File Modified) 
+  +4 -4		trunk/src/node.c (File Modified) 
+  +3 -3		trunk/src/packet.c (File Modified) 
+  +12 -12	trunk/src/parse.c (File Modified) 
+  +7 -7		trunk/src/phandler.c (File Modified) 
+  +3 -3		trunk/src/pmodule.c (File Modified) 
+  +6 -6		trunk/src/privs.c (File Modified) 
+  +23 -24	trunk/src/ptasks.c (File Modified) 
+  +5 -5		trunk/src/servers.c (File Modified) 
+  +10 -11	trunk/src/services.c (File Modified) 
+  +5 -5		trunk/src/servtree.c (File Modified) 
+  +29 -29	trunk/src/signal.c (File Modified) 
+  +1 -1		trunk/src/sockio.c (File Modified) 
+  +2 -2		trunk/src/tokenize.c (File Modified) 
+  +8 -8		trunk/src/uplink.c (File Modified) 
+  +8 -8		trunk/src/users.c (File Modified) 
+  +6 -6		trunk/src/xmlrpc.c (File Modified) 
+
+
 jilles      2007/03/05 23:17:07 UTC	(20070305-7821)
   Log:
   wallops(), verbose_wallops(): don't crash if we are not
