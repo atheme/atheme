@@ -1,3 +1,16 @@
+pippijn     2007/03/05 23:55:19 UTC	(20070305-7831)
+  Log:
+  Reverted some gettext logs and removed debug lines
+  
+
+  Changes:	Modified:
+  +34 -34	trunk/modules/backend/flatfile.c (File Modified) 
+  +7 -8		trunk/modules/gameserv/dice.c (File Modified) 
+  +3 -3		trunk/modules/gameserv/help.c (File Modified) 
+  +32 -32	trunk/src/account.c (File Modified) 
+  +21 -24	trunk/src/atheme.c (File Modified) 
+
+
 nenolod     2007/03/05 23:54:51 UTC	(20070305-7829)
   Log:
   - missed one
