@@ -1,3 +1,16 @@
+nenolod     2007/03/05 23:44:42 UTC	(20070305-7825)
+  Log:
+  - move m4 macro files to m4/, which is more correct than dumping them in 
+    autoconf/
+  
+
+  Changes:	Modified:
+  +0 -36	trunk/autoconf/atheme-c.m4 (File Deleted) 
+  +37 -1	trunk/autogen.sh (File Modified) 
+  + -		trunk/m4/ (File Added) 
+  + -		trunk/m4/atheme-c.m4 (File Added) 
+
+
 pippijn     2007/03/05 23:20:25 UTC	(20070305-7823)
   Log:
   - gettextised the core
