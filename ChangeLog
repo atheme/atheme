@@ -1,3 +1,13 @@
+jilles      2007/03/05 16:52:20 UTC	(20070305-7817)
+  Log:
+  If user is unsetting away and logged in or recognized,
+  notify them of new memos.
+  
+
+  Changes:	Modified:
+  +28 -0	trunk/modules/memoserv/main.c (File Modified) 
+
+
 jilles      2007/03/05 16:42:26 UTC	(20070305-7815)
   Log:
   Away tracking in protocol modules.

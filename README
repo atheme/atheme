@@ -9,7 +9,7 @@ Information about Atheme may be found at http://www.atheme.net/.
 TABLE OF CONTENTS
 -----------------
   1. Credits
-  2. Presentation
+  2. Presentation, and what Atheme is not
   3. Installation
   4. Command line options
   5. Getting support
@@ -26,8 +26,8 @@ Information about Shrike can be found at http://shrike.malkier.net/.
 Information about Sentinel can be found at http://ircd.botbay.net/sentinel/.
 Information about ircd-ratbox can be found at http://www.ircd-ratbox.org/.
 
-2. PRESENTATION
----------------
+2. PRESENTATION AND WHAT ATHEME IS NOT
+--------------------------------------
 
 Atheme is a set of Services for IRC networks that allows users to
 manage their channels in a secure and efficient way and allows operators to
@@ -45,6 +45,13 @@ the authors, except Church truly understand. Atheme was written
 completely from scratch with the more complex concepts taken from 
 various modern ircd packages, including ircu, ircd-ratbox, hybrid and 
 bahamut.
+
+Atheme is not a drop-in replacement for Anope or Andy Church's IRC 
+Services. It is designed with an entirely different set of goals and as 
+such should not be migrated to with the expectation that it will behave 
+exactly like what was previously implemented. Atheme is designed to act 
+as a directory server, with alternative ways of getting to the data 
+implemented as well as the IRC presence.
 
 3. INSTALLATION
 ---------------
