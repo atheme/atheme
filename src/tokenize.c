@@ -5,7 +5,7 @@
  *
  * This file contains IRC interaction routines.
  *
- * $Id: tokenize.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: tokenize.c 7823 2007-03-05 23:20:25Z pippijn $
  */
 
 #include "atheme.h"
@@ -40,7 +40,7 @@ int8_t sjtoken(char *message, char delimiter, char **parv)
 		if (count == 256)
 		{
 			/* we've reached our limit */
-			slog(LG_DEBUG, "sjtokenize(): reached param limit");
+			slog(LG_DEBUG, gettext("sjtoken(): reached param limit"));
 			return count;
 		}
 
@@ -121,7 +121,7 @@ int8_t tokenize(char *message, char **parv)
 			/* we've reached one less than our max limit
 			 * to handle the parameter we already ripped off
 			 */
-			slog(LG_DEBUG, "tokenize(): reached para limit");
+			slog(LG_DEBUG, gettext("tokenize(): reached param limit"));
 			return count;
 		}
 		if (*next == ' ')

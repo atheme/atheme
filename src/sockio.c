@@ -4,7 +4,7 @@
  *
  * Platform-independent Network I/O layer.
  *
- * $Id: sockio.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: sockio.c 7823 2007-03-05 23:20:25Z pippijn $
  */
 
 #include "atheme.h"
@@ -83,7 +83,7 @@ void socket_seterror(int eno)
 
 char *socket_strerror(int eno)
 {
-	return "Unknown error, this Windows port is still uncompleted.";
+	return gettext("Unknown error, this Windows port is still uncompleted.");
 }
 
 int socket_setnonblocking(socket_t sck)

@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7811 2007-03-05 13:31:26Z pippijn $
+# $Id: Makefile.in 7823 2007-03-05 23:20:25Z pippijn $
 #
 
 CC		= @CC@
@@ -70,7 +70,7 @@ distclean:
 
 maintainer-clean: distclean
 	${RM} -rf autom4te.cache
-	${RM} -f configure
+	${RM} -f configure aclocal.m4
 
 depend:
 	@for i in $(SUBDIRS); do \

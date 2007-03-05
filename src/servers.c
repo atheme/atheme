@@ -4,7 +4,7 @@
  *
  * Server stuff.
  *
- * $Id: servers.c 7789 2007-03-04 00:00:48Z jilles $
+ * $Id: servers.c 7823 2007-03-05 23:20:25Z pippijn $
  */
 
 #include "atheme.h"
@@ -38,7 +38,7 @@ void init_servers(void)
 
 	if (serv_heap == NULL || tld_heap == NULL)
 	{
-		slog(LG_INFO, "init_servers(): block allocator failure.");
+		slog(LG_INFO, gettext("init_servers(): block allocator failure."));
 		exit(EXIT_FAILURE);
 	}
 
@@ -148,7 +148,7 @@ void server_delete(const char *name)
 
 	if (!s)
 	{
-		slog(LG_DEBUG, "server_delete(): called for nonexistant server: %s", name);
+		slog(LG_DEBUG, gettext("server_delete(): called for nonexistant server: %s"), name);
 
 		return;
 	}
@@ -158,11 +158,11 @@ void server_delete(const char *name)
 		 * Some ircds send SQUIT <myname> when atheme is squitted.
 		 * -- jilles
 		 */
-		slog(LG_DEBUG, "server_delete(): tried to delete myself");
+		slog(LG_DEBUG, gettext("server_delete(): tried to delete myself"));
 		return;
 	}
 
-	slog(me.connected ? LG_NETWORK : LG_DEBUG, "server_delete(): %s, uplink %s (%d users)",
+	slog(me.connected ? LG_NETWORK : LG_DEBUG, gettext("server_delete(): %s, uplink %s (%d users)"),
 			s->name, s->uplink != NULL ? s->uplink->name : "<none>",
 			s->users);
 
@@ -290,7 +290,7 @@ void tld_delete(const char *name)
 
         if (!tld)
         {
-                slog(LG_DEBUG, "tld_delete(): called for nonexistant tld: %s", name);
+                slog(LG_DEBUG, gettext("tld_delete(): called for nonexistant tld: %s"), name);
 
                 return;
         }

@@ -4,7 +4,7 @@
  *
  * Remote authentication cookie handling. (think kerberos.)
  *
- * $Id: authcookie.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: authcookie.c 7823 2007-03-05 23:20:25Z pippijn $
  */
 
 #include "atheme.h"
@@ -18,7 +18,7 @@ void authcookie_init(void)
 
 	if (!authcookie_heap)
 	{
-		slog(LG_ERROR, "authcookie_init(): cannot initialize block allocator.");
+		slog(LG_ERROR, gettext("authcookie_init(): cannot initialize block allocator."));
 		exit(EXIT_FAILURE);
 	}
 }

@@ -4,7 +4,7 @@
  *
  * A hook system. Idea taken from hybrid.
  *
- * $Id: hook.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: hook.c 7823 2007-03-05 23:20:25Z pippijn $
  */
 
 #include "atheme.h"
@@ -20,7 +20,7 @@ void hooks_init()
 
 	if (!hook_heap)
 	{
-		slog(LG_INFO, "hooks_init(): block allocator failed.");
+		slog(LG_INFO, gettext("hooks_init(): block allocator failed."));
 		exit(EXIT_SUCCESS);
 	}
 }

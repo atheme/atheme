@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: atheme.c 7823 2007-03-05 23:20:25Z pippijn $
  */
 
 #include "atheme.h"
@@ -38,23 +38,23 @@ extern char **environ;
 /* *INDENT-OFF* */
 static void print_help(void)
 {
-	printf("usage: atheme [-dhnv] [-c conf] [-l logfile] [-p pidfile]\n\n"
-	       "-c <file>    Specify the config file\n"
-	       "-d           Start in debugging mode\n"
-	       "-h           Print this message and exit\n"
-	       "-l <file>    Specify the log file\n"
-	       "-n           Don't fork into the background (log screen + log file)\n"
-	       "-p <file>    Specify the pid file (will be overwritten)\n"
-	       "-v           Print version information and exit\n");
+	printf(gettext("usage: atheme [-dhnv] [-c conf] [-l logfile] [-p pidfile]\n\n"
+		       "-c <file>    Specify the config file\n"
+		       "-d           Start in debugging mode\n"
+		       "-h           Print this message and exit\n"
+		       "-l <file>    Specify the log file\n"
+		       "-n           Don't fork into the background (log screen + log file)\n"
+		       "-p <file>    Specify the pid file (will be overwritten)\n"
+		       "-v           Print version information and exit\n"));
 }
 
 static void print_version(void)
 {
-	printf("Atheme IRC Services (atheme-%s)\n"
-	       "Compiled %s, build-id %s, build %s\n\n"
-	       "Copyright (c) 2005-2007 Atheme Development Group\n"
-	       "Rights to this code are documented in doc/LICENSE.\n",
-	       version, creation, revision, generation);
+	printf(gettext("Atheme IRC Services (atheme-%s)\n"
+		       "Compiled %s, build-id %s, build %s\n\n"
+		       "Copyright (c) 2005-2007 Atheme Development Group\n"
+		       "Rights to this code are documented in doc/LICENSE.\n"),
+		       version, creation, revision, generation);
 }
 /* *INDENT-ON* */
 
@@ -66,6 +66,14 @@ static void rng_reseed(void *unused)
 
 int main(int argc, char *argv[])
 {
+	/* Prepare gettext */
+	setlocale(LC_ALL, "");
+	/*bindtextdomain(PACKAGE_NAME, LOCALEDIR);
+	textdomain(PACKAGE_NAME);*/
+	bindtextdomain("atheme", "/home/pippijn/share/locale");
+	textdomain("atheme");
+	printf(gettext("Moo I am a cow!"));
+
 	boolean_t have_conf = FALSE;
 	boolean_t have_log = FALSE;
 	char buf[32];
@@ -126,7 +134,7 @@ int main(int argc, char *argv[])
 			  exit(EXIT_SUCCESS);
 			  break;
 		  default:
-			  printf("usage: atheme [-dhnv] [-c conf] [-l logfile] [-p pidfile]\n");
+			  printf(gettext("usage: atheme [-dhnv] [-c conf] [-l logfile] [-p pidfile]\n"));
 			  exit(EXIT_SUCCESS);
 			  break;
 		}
@@ -153,14 +161,14 @@ int main(int argc, char *argv[])
 	/* open log */
 	log_open();
 	if (log_file == NULL)
-		fprintf(stderr, "atheme: unable to open log file!\n");
+		fprintf(stderr, gettext("atheme: unable to open log file!\n"));
 
 	/* since me.loglevel isn't there until after the
 	 * config routines run, we set the default here
 	 */
 	me.loglevel |= LG_ERROR;
 
-	printf("atheme: version atheme-%s\n", version);
+	printf(gettext("atheme: version atheme-%s\n"), version);
 
 	/* check for pid file */
 	if ((pid_file = fopen(pidfilename, "r")))
@@ -171,7 +179,7 @@ int main(int argc, char *argv[])
 
 			if (!kill(pid, 0))
 			{
-				fprintf(stderr, "atheme: daemon is already running\n");
+				fprintf(stderr, gettext("atheme: daemon is already running\n"));
 				exit(EXIT_FAILURE);
 			}
 		}
@@ -203,16 +211,16 @@ int main(int argc, char *argv[])
 	conf_init();
 	if (!conf_parse(config_file))
 	{
-		slog(LG_ERROR, "Error loading config file %s, aborting",
+		slog(LG_ERROR, gettext("Error loading config file %s, aborting"),
 				config_file);
 		exit(EXIT_FAILURE);
 	}
 
 	if (config_options.languagefile)
 	{
-		slog(LG_DEBUG, "Using language: %s", config_options.languagefile);
+		slog(LG_DEBUG, gettext("Using language: %s"), config_options.languagefile);
 		if (!conf_parse(config_options.languagefile))
-			slog(LG_INFO, "Error loading language file %s, continuing",
+			slog(LG_INFO, gettext("Error loading language file %s, continuing"),
 					config_options.languagefile);
 	}
 
@@ -222,7 +230,7 @@ int main(int argc, char *argv[])
 
 	if (!backend_loaded)
 	{
-		fprintf(stderr, "atheme: no backend modules loaded, see your configuration file.\n");
+		fprintf(stderr, gettext("atheme: no backend modules loaded, see your configuration file.\n"));
 		exit(EXIT_FAILURE);
 	}
 
@@ -239,7 +247,7 @@ int main(int argc, char *argv[])
 	else
 	{
 		/* XXX: We should have bailed by now! --nenolod */
-		fprintf(stderr, "atheme: no backend modules loaded, see your configuration file.\n");
+		fprintf(stderr, gettext("atheme: no backend modules loaded, see your configuration file.\n"));
 		exit(EXIT_FAILURE);
 	}
 	db_check();
@@ -251,27 +259,27 @@ int main(int argc, char *argv[])
 		close(0);
 		if (open("/dev/null", O_RDWR) != 0)
 		{
-			fprintf(stderr, "atheme: unable to open /dev/null??\n");
+			fprintf(stderr, gettext("atheme: unable to open /dev/null??\n"));
 			exit(EXIT_FAILURE);
 		}
 		if ((i = fork()) < 0)
 		{
-			fprintf(stderr, "atheme: can't fork into the background\n");
+			fprintf(stderr, gettext("atheme: can't fork into the background\n"));
 			exit(EXIT_FAILURE);
 		}
 
 		/* parent */
 		else if (i != 0)
 		{
-			printf("atheme: pid %d\n", i);
-			printf("atheme: running in background mode from %s\n", PREFIX);
+			printf(gettext("atheme: pid %d\n"), i);
+			printf(gettext("atheme: running in background mode from %s\n"), PREFIX);
 			exit(EXIT_SUCCESS);
 		}
 
 		/* parent is gone, just us now */
 		if (setsid() < 0)
 		{
-			fprintf(stderr, "atheme: unable to create new session\n");
+			fprintf(stderr, gettext("atheme: unable to create new session\n"));
 			exit(EXIT_FAILURE);
 		}
 		dup2(0, 1);
@@ -279,11 +287,11 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		printf("atheme: pid %d\n", getpid());
-		printf("atheme: running in foreground mode from %s\n", PREFIX);
+		printf(gettext("atheme: pid %d\n"), getpid());
+		printf(gettext("atheme: running in foreground mode from %s\n"), PREFIX);
 	}
 #else
-	printf("atheme: running in foreground mode from %s\n", PREFIX);
+	printf(gettext("atheme: running in foreground mode from %s\n"), PREFIX);
 #endif
 
 #ifndef _WIN32
@@ -295,7 +303,7 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		fprintf(stderr, "atheme: unable to write pid file\n");
+		fprintf(stderr, gettext("atheme: unable to write pid file\n"));
 		exit(EXIT_FAILURE);
 	}
 #endif
@@ -329,7 +337,7 @@ int main(int argc, char *argv[])
 	/* we're shutting down */
 	db_save(NULL);
 	if (chansvs.me != NULL && chansvs.me->me != NULL)
-		quit_sts(chansvs.me->me, "shutting down");
+		quit_sts(chansvs.me->me, gettext("shutting down"));
 
 	remove(pidfilename);
 	errno = 0;
@@ -341,14 +349,14 @@ int main(int argc, char *argv[])
 	/* should we restart? */
 	if (runflags & RF_RESTART)
 	{
-		slog(LG_INFO, "main(): restarting");
+		slog(LG_INFO, gettext("main(): restarting"));
 
 #ifndef _WIN32
 		execve("bin/atheme", argv, environ);
 #endif
 	}
 
-	slog(LG_INFO, "main(): shutting down");
+	slog(LG_INFO, gettext("main(): shutting down"));
 
 	if (log_file != NULL)
 		fclose(log_file);

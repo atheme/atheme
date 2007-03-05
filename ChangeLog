@@ -1,3 +1,14 @@
+jilles      2007/03/05 23:17:07 UTC	(20070305-7821)
+  Log:
+  wallops(), verbose_wallops(): don't crash if we are not
+  connected to the server yet
+  reported by satmd
+  
+
+  Changes:	Modified:
+  +8 -2		trunk/src/services.c (File Modified) 
+
+
 nenolod     2007/03/05 22:26:47 UTC	(20070305-7819)
   Log:
   - people who keep thinking that Atheme will be like a traditional IRC 

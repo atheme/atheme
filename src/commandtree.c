@@ -4,7 +4,7 @@
  *
  * Commandtree manipulation routines.
  *
- * $Id: commandtree.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: commandtree.c 7823 2007-03-05 23:20:25Z pippijn $
  */
 
 #include "atheme.h"
@@ -17,7 +17,7 @@ void command_add(command_t *cmd, list_t *commandtree)
 
 	if ((n = node_find(cmd, commandtree)))
 	{
-		slog(LG_INFO, "command_add(): command %s already in the list", cmd->name);
+		slog(LG_INFO, gettext("command_add(): command %s already in the list"), cmd->name);
 		return;
 	}
 
@@ -52,7 +52,7 @@ void command_delete(command_t *cmd, list_t *commandtree)
 
 	if (!(n = node_find(cmd, commandtree)))
 	{
-		slog(LG_INFO, "command_delete(): command %s was not registered.", cmd->name);
+		slog(LG_INFO, gettext("command_delete(): command %s was not registered."), cmd->name);
 		return;
 	}
 
@@ -106,10 +106,10 @@ void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char
 	}
 
 	if (has_any_privs(si))
-		command_fail(si, fault_noprivs, "You do not have %s privilege.", c->access);
+		command_fail(si, fault_noprivs, gettext("You do not have %s privilege."), c->access);
 	else
-		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
-	/*snoop("DENIED CMD: \2%s\2 used %s %s", origin, svs->name, cmd);*/
+		command_fail(si, fault_noprivs, gettext("You are not authorized to perform this operation."));
+	/*snoop(gettext("DENIED CMD: \2%s\2 used %s %s"), origin, svs->name, cmd);*/
 }
 
 void command_exec_split(service_t *svs, sourceinfo_t *si, char *cmd, char *text, list_t *commandtree)
@@ -127,7 +127,7 @@ void command_exec_split(service_t *svs, sourceinfo_t *si, char *cmd, char *text,
 	}
 	else
 	{
-		notice(svs->name, si->su->nick, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", svs->disp);
+		notice(svs->name, si->su->nick, gettext("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", svs->disp);
 	}
 }
 
@@ -147,9 +147,9 @@ void command_help(sourceinfo_t *si, list_t *commandtree)
 	node_t *n;
 
 	if (si->service == NULL || si->service->cmdtree == commandtree)
-		command_success_nodata(si, "The following commands are available:");
+		command_success_nodata(si, gettext("The following commands are available:"));
 	else
-		command_success_nodata(si, "The following subcommands are available:");
+		command_success_nodata(si, gettext("The following subcommands are available:"));
 
 	LIST_FOREACH(n, commandtree->head)
 	{
@@ -206,9 +206,9 @@ void command_help_short(sourceinfo_t *si, list_t *commandtree, char *maincmds)
 	char buf[256];
 
 	if (si->service == NULL || si->service->cmdtree == commandtree)
-		command_success_nodata(si, "The following commands are available:");
+		command_success_nodata(si, gettext("The following commands are available:"));
 	else
-		command_success_nodata(si, "The following subcommands are available:");
+		command_success_nodata(si, gettext("The following subcommands are available:"));
 
 	LIST_FOREACH(n, commandtree->head)
 	{
@@ -222,7 +222,7 @@ void command_help_short(sourceinfo_t *si, list_t *commandtree, char *maincmds)
 	}
 
 	command_success_nodata(si, " ");
-	strlcpy(buf, translation_get("Other commands: "), sizeof buf);
+	strlcpy(buf, translation_get(gettext("Other commands: ")), sizeof buf);
 	l = strlen(buf);
 	LIST_FOREACH(n, commandtree->head)
 	{

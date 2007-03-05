@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 7781 2007-03-03 14:29:36Z jilles $
+dnl $Id: configure.ac 7823 2007-03-05 23:20:25Z pippijn $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.59)
 AC_INIT(atheme, 2.2, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 7781 2007-03-03 14:29:36Z jilles $])
+AC_COPYRIGHT([$Id: configure.ac 7823 2007-03-05 23:20:25Z pippijn $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -184,6 +184,10 @@ AC_SUBST(LOGDIR)
 AC_SUBST(RUNDIR)
 dnl the following is wrong! -- jilles
 dnl AC_DEFINE_UNQUOTED([MODDIR], "${MODDIR}", [Module root directory.])
+
+dnl gettext
+LOCALEDIR='${datadir}/locale'
+AC_SUBST(LOCALEDIR)
 
 LARGENET="no"
 AC_MSG_CHECKING(if you want large network support)
@@ -490,7 +494,7 @@ ac_save_LDFLAGS="${LDFLAGS} -pg"
 LDFLAGS=${ac_save_LDFLAGS}
 ])
 
-ac_save_CFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS} -DPREFIX=\\\"\${prefix}\\\" -DMODDIR=\\\"\${MODDIR}\\\" -DSHAREDIR=\\\"${SHAREDIR}\\\" -DSYSCONFDIR=\\\"${sysconfdir}\\\" -DLOGDIR=\\\"${LOGDIR}\\\" -DRUNDIR=\\\"${RUNDIR}\\\" -DDATADIR=\\\"${DATADIR}\\\""
+ac_save_CFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS} -DPREFIX=\\\"\${prefix}\\\" -DLOCALEDIR=\\\"\${LOCALEDIR}\\\" -DMODDIR=\\\"\${MODDIR}\\\" -DSHAREDIR=\\\"${SHAREDIR}\\\" -DSYSCONFDIR=\\\"${sysconfdir}\\\" -DLOGDIR=\\\"${LOGDIR}\\\" -DRUNDIR=\\\"${RUNDIR}\\\" -DDATADIR=\\\"${DATADIR}\\\""
 CFLAGS=${ac_save_CFLAGS}
 dnl export CFLAGS
 

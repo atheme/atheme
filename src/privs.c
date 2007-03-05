@@ -4,7 +4,7 @@
  *
  * See doc/LICENSE for licensing information.
  *
- * $Id: privs.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: privs.c 7823 2007-03-05 23:20:25Z pippijn $
  */
 
 #include "atheme.h"
@@ -21,7 +21,7 @@ void init_privs(void)
 	soper_heap = BlockHeapCreate(sizeof(soper_t), 2);
 	if (!operclass_heap || !soper_heap)
 	{
-		slog(LG_INFO, "init_privs(): block allocator failed.");
+		slog(LG_INFO, gettext("init_privs(): block allocator failed."));
 		exit(EXIT_FAILURE);
 	}
 }
@@ -37,7 +37,7 @@ operclass_t *operclass_add(char *name, char *privs)
 	operclass = operclass_find(name);
 	if (operclass != NULL)
 	{
-		slog(LG_DEBUG, "operclass_add(): duplicate class %s", name);
+		slog(LG_DEBUG, gettext("operclass_add(): duplicate class %s"), name);
 		return NULL;
 	}
 	slog(LG_DEBUG, "operclass_add(): %s [%s]", name, privs);
@@ -110,17 +110,17 @@ soper_t *soper_add(char *name, char *classname, int flags)
 	{
 		if (flags & SOPER_CONF && !(soper->flags & SOPER_CONF))
 		{
-			slog(LG_INFO, "soper_add(): conf soper %s (%s) is replacing DB soper with class %s", name, classname, soper->classname);
+			slog(LG_INFO, gettext("soper_add(): conf soper %s (%s) is replacing DB soper with class %s"), name, classname, soper->classname);
 			soper_delete(soper);
 		}
 		else if (!(flags & SOPER_CONF) && soper->flags & SOPER_CONF)
 		{
-			slog(LG_INFO, "soper_add(): ignoring DB soper %s (%s) because of conf soper with class %s", name, classname, soper->classname);
+			slog(LG_INFO, gettext("soper_add(): ignoring DB soper %s (%s) because of conf soper with class %s"), name, classname, soper->classname);
 			return NULL;
 		}
 		else
 		{
-			slog(LG_INFO, "soper_add(): duplicate soper %s", name);
+			slog(LG_INFO, gettext("soper_add(): duplicate soper %s"), name);
 			return NULL;
 		}
 	}
@@ -157,7 +157,7 @@ void soper_delete(soper_t *soper)
 
 	if (!soper)
 	{
-		slog(LG_DEBUG, "soper_delete(): called for null soper");
+		slog(LG_DEBUG, gettext("soper_delete(): called for null soper"));
 
 		return;
 	}

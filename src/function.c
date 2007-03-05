@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 7801 2007-03-04 21:53:13Z jilles $
+ * $Id: function.c 7823 2007-03-05 23:20:25Z pippijn $
  */
 
 #include "atheme.h"
@@ -87,7 +87,7 @@ void log_open(void)
 		if (me.connected && lastfail + 3600 < CURRTIME)
 		{
 			lastfail = CURRTIME;
-			wallops("Could not open log file (%s), log entries will be missing!", strerror(errno)); 
+			wallops(gettext("Could not open log file (%s), log entries will be missing!"), strerror(errno)); 
 		}
 		return;
 	}
@@ -143,7 +143,7 @@ void logcommand(sourceinfo_t *si, int level, const char *fmt, ...)
 	if (si->su != NULL)
 		logcommand_user(si->service, si->su, level, "%s", lbuf);
 	else
-		logcommand_external(si->service, si->v != NULL ? si->v->description : "unknown", si->connection, si->sourcedesc, si->smu, level, "%s", lbuf);
+		logcommand_external(si->service, si->v != NULL ? si->v->description : gettext("unknown"), si->connection, si->sourcedesc, si->smu, level, "%s", lbuf);
 }
 
 void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt, ...)
@@ -345,17 +345,17 @@ char *time_ago(time_t event)
 
 	if (years)
 		snprintf(ret, sizeof(ret),
-			 "%d year%s, %d week%s, %d day%s, %02d:%02d:%02d", years, years == 1 ? "" : "s", weeks, weeks == 1 ? "" : "s", days, days == 1 ? "" : "s", hours, minutes, seconds);
+			 gettext("%d year%s, %d week%s, %d day%s, %02d:%02d:%02d"), years, years == 1 ? "" : "s", weeks, weeks == 1 ? "" : "s", days, days == 1 ? "" : "s", hours, minutes, seconds);
 	else if (weeks)
-		snprintf(ret, sizeof(ret), "%d week%s, %d day%s, %02d:%02d:%02d", weeks, weeks == 1 ? "" : "s", days, days == 1 ? "" : "s", hours, minutes, seconds);
+		snprintf(ret, sizeof(ret), gettext("%d week%s, %d day%s, %02d:%02d:%02d"), weeks, weeks == 1 ? "" : "s", days, days == 1 ? "" : "s", hours, minutes, seconds);
 	else if (days)
-		snprintf(ret, sizeof(ret), "%d day%s, %02d:%02d:%02d", days, days == 1 ? "" : "s", hours, minutes, seconds);
+		snprintf(ret, sizeof(ret), gettext("%d day%s, %02d:%02d:%02d"), days, days == 1 ? "" : "s", hours, minutes, seconds);
 	else if (hours)
-		snprintf(ret, sizeof(ret), "%d hour%s, %d minute%s, %d second%s", hours, hours == 1 ? "" : "s", minutes, minutes == 1 ? "" : "s", seconds, seconds == 1 ? "" : "s");
+		snprintf(ret, sizeof(ret), gettext("%d hour%s, %d minute%s, %d second%s"), hours, hours == 1 ? "" : "s", minutes, minutes == 1 ? "" : "s", seconds, seconds == 1 ? "" : "s");
 	else if (minutes)
-		snprintf(ret, sizeof(ret), "%d minute%s, %d second%s", minutes, minutes == 1 ? "" : "s", seconds, seconds == 1 ? "" : "s");
+		snprintf(ret, sizeof(ret), gettext("%d minute%s, %d second%s"), minutes, minutes == 1 ? "" : "s", seconds, seconds == 1 ? "" : "s");
 	else
-		snprintf(ret, sizeof(ret), "%d second%s", seconds, seconds == 1 ? "" : "s");
+		snprintf(ret, sizeof(ret), gettext("%d second%s"), seconds, seconds == 1 ? "" : "s");
 
 	return ret;
 }
@@ -373,7 +373,7 @@ char *timediff(time_t seconds)
 	minutes %= 60;
 	seconds %= 60;
 
-	snprintf(buf, sizeof(buf), "%lu day%s, %lu:%02lu:%02lu", days, (days == 1) ? "" : "s", hours, minutes, (long unsigned) seconds);
+	snprintf(buf, sizeof(buf), gettext("%lu day%s, %lu:%02lu:%02lu"), days, (days == 1) ? "" : gettext("s"), hours, minutes, (long unsigned) seconds);
 
 	return buf;
 }
@@ -485,7 +485,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	if (me.mta == NULL)
 	{
 		if (type != EMAIL_MEMO && !is_internal_client(u))
-			notice(opersvs.me ? opersvs.nick : me.name, u->nick, "Sending email is administratively disabled.");
+			notice(opersvs.me ? opersvs.nick : me.name, u->nick, gettext("Sending email is administratively disabled."));
 		return 0;
 	}
 
@@ -498,7 +498,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 			email = md->value;
 		else		/* should NEVER happen */
 		{
-			slog(LG_ERROR, "sendemail(): got email change request, but newemail unset!");
+			slog(LG_ERROR, gettext("sendemail(): got email change request, but newemail unset!"));
 			return 0;
 		}
 	}
@@ -515,10 +515,10 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	{
 		if (CURRTIME - lastwallops > 60)
 		{
-			wallops("Rejecting email for %s[%s@%s] due to too high load (type %d to %s <%s>)",
+			wallops(gettext("Rejecting email for %s[%s@%s] due to too high load (type %d to %s <%s>)"),
 					u->nick, u->user, u->vhost,
 					type, mu->name, email);
-			slog(LG_ERROR, "sendemail(): rejecting email for %s[%s@%s] (%s) due to too high load (type %d to %s <%s>)",
+			slog(LG_ERROR, gettext("sendemail(): rejecting email for %s[%s@%s] (%s) due to too high load (type %d to %s <%s>)"),
 					u->nick, u->user, u->vhost,
 					u->ip[0] ? u->ip : u->host,
 					type, mu->name, email);
@@ -527,7 +527,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 		return 0;
 	}
 
-	slog(LG_INFO, "sendemail(): email for %s[%s@%s] (%s) type %d to %s <%s>",
+	slog(LG_INFO, gettext("sendemail(): email for %s[%s@%s] (%s) type %d to %s <%s>"),
 			u->nick, u->user, u->vhost, u->ip[0] ? u->ip : u->host,
 			type, mu->name, email);
 
@@ -545,16 +545,13 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	strlcpy(subject, me.netname, sizeof subject);
 	strlcat(subject, " ", sizeof subject);
 	if (type == EMAIL_REGISTER)
-		if (nicksvs.no_nick_ownership)
-			strlcat(subject, "Account Registration", sizeof subject);
-		else
-			strlcat(subject, "Nickname Registration", sizeof subject);
+		strlcat(subject, nicksvs.no_nick_ownership ? gettext("Account Registration") : gettext("Nickname Registration"), sizeof subject);
 	else if (type == EMAIL_SENDPASS || type == EMAIL_SETPASS)
-		strlcat(subject, "Password Retrieval", sizeof subject);
+		strlcat(subject, gettext("Password Retrieval"), sizeof subject);
 	else if (type == EMAIL_SETEMAIL)
-		strlcat(subject, "Change Email Confirmation", sizeof subject);
+		strlcat(subject, gettext("Change Email Confirmation"), sizeof subject);
 	else if (type == EMAIL_MEMO)
-		strlcat(subject, "New memo", sizeof subject);
+		strlcat(subject, gettext("New memo"), sizeof subject);
 	
 	/* now set up the email */
 	sprintf(cmdbuf, "%s %s", me.mta, email);
@@ -592,40 +589,40 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 
 	if (type == EMAIL_REGISTER)
 	{
-		fprintf(out, "In order to complete your registration, you must send the following\ncommand on IRC:\n");
-		fprintf(out, "/MSG %s VERIFY REGISTER %s %s\n\n", nicksvs.nick, mu->name, param);
-		fprintf(out, "Thank you for registering your %s on the %s IRC " "network!\n\n",
-				(nicksvs.nick ? "nickname" : "account"), me.netname);
+		fprintf(out, gettext("In order to complete your registration, you must send the following\ncommand on IRC:\n"));
+		fprintf(out, gettext("/MSG %s VERIFY REGISTER %s %s\n\n"), nicksvs.nick, mu->name, param);
+		fprintf(out, gettext("Thank you for registering your %s on the %s IRC network!\n\n"),
+				(nicksvs.nick ? gettext("nickname") : gettext("account")), me.netname);
 	}
 	else if (type == EMAIL_SENDPASS)
 	{
-		fprintf(out, "Someone has requested the password for %s be sent to the\n" "corresponding email address. If you did not request this action\n" "please let us know.\n\n", mu->name);
-		fprintf(out, "The password for %s is %s. Please write this down for " "future reference.\n\n", mu->name, param);
+		fprintf(out, gettext("Someone has requested the password for %s be sent to the\ncorresponding email address. If you did not request this action\nplease let us know.\n\n"), mu->name);
+		fprintf(out, gettext("The password for %s is %s. Please write this down for future reference.\n\n"), mu->name, param);
 	}
 	else if (type == EMAIL_SETEMAIL)
 	{
-		fprintf(out, "In order to complete your email change, you must send\n" "the following command on IRC:\n");
-		fprintf(out, "/MSG %s VERIFY EMAILCHG %s %s\n\n", nicksvs.nick, mu->name, param);
+		fprintf(out, gettext("In order to complete your email change, you must send\nthe following command on IRC:\n"));
+		fprintf(out, gettext("/MSG %s VERIFY EMAILCHG %s %s\n\n"), nicksvs.nick, mu->name, param);
 	}
 	else if (type == EMAIL_MEMO)
 	{
 		if (u->myuser != NULL)
-			fprintf(out,"You have a new memo from %s.\n\n", u->myuser->name);
+			fprintf(out, gettext("You have a new memo from %s.\n\n"), u->myuser->name);
 		else
 			/* shouldn't happen */
-			fprintf(out,"You have a new memo from %s (unregistered?).\n\n", u->nick);
+			fprintf(out, gettext("You have a new memo from %s (unregistered?).\n\n"), u->nick);
 		fprintf(out,"%s\n\n", param);
 	}
 	else if (type == EMAIL_SETPASS)
 	{
-		fprintf(out, "In order to set a new password, you must send\n" "the following command on IRC:\n");
-		fprintf(out, "/MSG %s SETPASS %s %s <password>\n\n", nicksvs.nick, mu->name, param);
+		fprintf(out, gettext("In order to set a new password, you must send\nthe following command on IRC:\n"));
+		fprintf(out, gettext("/MSG %s SETPASS %s %s <password>\n\n"), nicksvs.nick, mu->name, param);
 	}
 
-	fprintf(out, "Thank you for your interest in the %s IRC network.\n", me.netname);
+	fprintf(out, gettext("Thank you for your interest in the %s IRC network.\n"), me.netname);
 	if (u->server != me.me)
-		fprintf(out, "\nThis email was sent due to a command from %s[%s@%s]\nat %s.\n", u->nick, u->user, u->vhost, date);
-	fprintf(out, "If this message is spam, please contact %s\nwith a full copy.\n",
+		fprintf(out, gettext("\nThis email was sent due to a command from %s[%s@%s]\nat %s.\n"), u->nick, u->user, u->vhost, date);
+	fprintf(out, gettext("If this message is spam, please contact %s\nwith a full copy.\n"),
 			me.adminemail);
 	fprintf(out, ".\n");
 	rc = 1;
@@ -634,7 +631,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	if (fclose(out) < 0)
 		rc = 0;
 	if (rc == 0)
-		slog(LG_ERROR, "sendemail(): mta failure");
+		slog(LG_ERROR, gettext("sendemail(): mta failure"));
 	return rc;
 #else
 	return 0;
@@ -731,7 +728,7 @@ boolean_t verify_password(myuser_t *mu, char *password)
 			return crypt_verify_password(password, mu->pass);
 		else
 		{	/* not good! */
-			slog(LG_ERROR, "check_password(): can't check crypted password -- no crypto module!");
+			slog(LG_ERROR, gettext("check_password(): can't check crypted password -- no crypto module!"));
 			return FALSE;
 		}
 	else

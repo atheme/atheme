@@ -4,7 +4,7 @@
  *
  * This file contains IRC interaction routines.
  *
- * $Id: parse.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: parse.c 7823 2007-03-05 23:20:25Z pippijn $
  */
 
 #include "atheme.h"
@@ -102,7 +102,7 @@ void irc_parse(char *line)
 		}
                 if (!si.s && !si.su && me.recvsvr)
                 {
-                        slog(LG_INFO, "irc_parse(): got message from nonexistant user or server: %s", origin);
+                        slog(LG_INFO, gettext("irc_parse(): got message from nonexistant user or server: %s"), origin);
                         return;
                 }
 		si.smu = si.su != NULL ? si.su->myuser : NULL;
@@ -130,7 +130,7 @@ void irc_parse(char *line)
 		 */
 		if (!command)
 		{
-			slog(LG_DEBUG, "irc_parse(): command not found: %s", coreLine);
+			slog(LG_DEBUG, gettext("irc_parse(): command not found: %s"), coreLine);
 			return;
 		}
 
@@ -139,22 +139,22 @@ void irc_parse(char *line)
 		{
 			if (si.su && !(pcmd->sourcetype & MSRC_USER))
 			{
-				slog(LG_INFO, "irc_parse(): user %s sent disallowed command %s", si.su->nick, pcmd->token);
+				slog(LG_INFO, gettext("irc_parse(): user %s sent disallowed command %s"), si.su->nick, pcmd->token);
 				return;
 			}
 			else if (si.s && !(pcmd->sourcetype & MSRC_SERVER))
 			{
-				slog(LG_INFO, "irc_parse(): server %s sent disallowed command %s", si.s->name, pcmd->token);
+				slog(LG_INFO, gettext("irc_parse(): server %s sent disallowed command %s"), si.s->name, pcmd->token);
 				return;
 			}
 			else if (!me.recvsvr && !(pcmd->sourcetype & MSRC_UNREG))
 			{
-				slog(LG_INFO, "irc_parse(): unregistered server sent disallowed command %s", pcmd->token);
+				slog(LG_INFO, gettext("irc_parse(): unregistered server sent disallowed command %s"), pcmd->token);
 				return;
 			}
 			if (parc < pcmd->minparc)
 			{
-				slog(LG_INFO, "irc_parse(): insufficient parameters for command %s", pcmd->token);
+				slog(LG_INFO, gettext("irc_parse(): insufficient parameters for command %s"), pcmd->token);
 				return;
 			}
 			if (pcmd->handler)
@@ -247,7 +247,7 @@ void p10_parse(char *line)
 
                 if (!si.s && !si.su && me.recvsvr)
                 {
-                        slog(LG_DEBUG, "irc_parse(): got message from nonexistant user or server: %s", origin);
+                        slog(LG_DEBUG, gettext("irc_parse(): got message from nonexistant user or server: %s"), origin);
                         return;
                 }
 		si.smu = si.su != NULL ? si.su->myuser : NULL;
@@ -275,7 +275,7 @@ void p10_parse(char *line)
 		 */
 		if (!command)
 		{
-			slog(LG_DEBUG, "irc_parse(): command not found: %s", coreLine);
+			slog(LG_DEBUG, gettext("irc_parse(): command not found: %s"), coreLine);
 			return;
 		}
 
@@ -284,22 +284,22 @@ void p10_parse(char *line)
 		{
 			if (si.su && !(pcmd->sourcetype & MSRC_USER))
 			{
-				slog(LG_INFO, "irc_parse(): user %s sent disallowed command %s", si.su->nick, pcmd->token);
+				slog(LG_INFO, gettext("irc_parse(): user %s sent disallowed command %s"), si.su->nick, pcmd->token);
 				return;
 			}
 			else if (si.s && !(pcmd->sourcetype & MSRC_SERVER))
 			{
-				slog(LG_INFO, "irc_parse(): server %s sent disallowed command %s", si.s->name, pcmd->token);
+				slog(LG_INFO, gettext("irc_parse(): server %s sent disallowed command %s"), si.s->name, pcmd->token);
 				return;
 			}
 			else if (!me.recvsvr && !(pcmd->sourcetype & MSRC_UNREG))
 			{
-				slog(LG_INFO, "irc_parse(): unregistered server sent disallowed command %s", pcmd->token);
+				slog(LG_INFO, gettext("irc_parse(): unregistered server sent disallowed command %s"), pcmd->token);
 				return;
 			}
 			if (parc < pcmd->minparc)
 			{
-				slog(LG_INFO, "irc_parse(): insufficient parameters for command %s", pcmd->token);
+				slog(LG_INFO, gettext("irc_parse(): insufficient parameters for command %s"), pcmd->token);
 				return;
 			}
 			if (pcmd->handler)

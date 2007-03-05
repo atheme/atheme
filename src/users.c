@@ -4,7 +4,7 @@
  *
  * User management functions.
  *
- * $Id: users.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: users.c 7823 2007-03-05 23:20:25Z pippijn $
  */
 
 #include "atheme.h"
@@ -34,7 +34,7 @@ void init_users(void)
 
 	if (user_heap == NULL)
 	{
-		slog(LG_DEBUG, "init_users(): block allocator failure.");
+		slog(LG_DEBUG, gettext("init_users(): block allocator failure."));
 		exit(EXIT_FAILURE);
 	}
 
@@ -74,7 +74,7 @@ user_t *user_add(const char *nick, const char *user, const char *host, const cha
 {
 	user_t *u;
 
-	slog(LG_DEBUG, "user_add(): %s (%s@%s) -> %s", nick, user, host, server->name);
+	slog(LG_DEBUG, gettext("user_add(): %s (%s@%s) -> %s"), nick, user, host, server->name);
 
 	u = BlockHeapAlloc(user_heap);
 
@@ -137,11 +137,11 @@ void user_delete(user_t *u)
 
 	if (!u)
 	{
-		slog(LG_DEBUG, "user_delete(): called for NULL user");
+		slog(LG_DEBUG, gettext("user_delete(): called for NULL user"));
 		return;
 	}
 
-	slog(LG_DEBUG, "user_delete(): removing user: %s -> %s", u->nick, u->server->name);
+	slog(LG_DEBUG, gettext("user_delete(): removing user: %s -> %s"), u->nick, u->server->name);
 
 	hook_call_event("user_delete", u);
 
@@ -226,7 +226,7 @@ user_t *user_find(const char *nick)
 	if (u != NULL)
 	{
 		if (ircd->uses_p10)
-			wallops("user_find() found user %s by nick!", nick);
+			wallops(gettext("user_find(): found user %s by nick!"), nick);
 		return u;
 	}
 
@@ -334,7 +334,7 @@ void user_mode(user_t *user, char *modes)
 
 	if (!user)
 	{
-		slog(LG_DEBUG, "user_mode(): called for nonexistant user");
+		slog(LG_DEBUG, gettext("user_mode(): called for nonexistant user"));
 		return;
 	}
 
@@ -368,7 +368,7 @@ void user_mode(user_t *user, char *modes)
 				  if (!is_ircop(user))
 				  {
 					  user->flags |= UF_IRCOP;
-					  slog(LG_DEBUG, "user_mode(): %s is now an IRCop", user->nick);
+					  slog(LG_DEBUG, gettext("user_mode(): %s is now an IRCop"), user->nick);
 					  snoop("OPER: %s (%s)", user->nick, user->server->name);
 					  user->server->opers++;
 					  hook_call_event("user_oper", user);
@@ -379,7 +379,7 @@ void user_mode(user_t *user, char *modes)
 				  if (is_ircop(user))
 				  {
 					  user->flags &= ~UF_IRCOP;
-					  slog(LG_DEBUG, "user_mode(): %s is no longer an IRCop", user->nick);
+					  slog(LG_DEBUG, gettext("user_mode(): %s is no longer an IRCop"), user->nick);
 					  snoop("DEOPER: %s (%s)", user->nick, user->server->name);
 					  user->server->opers--;
 					  hook_call_event("user_deoper", user);

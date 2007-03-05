@@ -4,7 +4,7 @@
  *
  * Protocol handling stuff.
  *
- * $Id: pmodule.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: pmodule.c 7823 2007-03-05 23:20:25Z pippijn $
  */
 
 #include "atheme.h"
@@ -27,7 +27,7 @@ void pcommand_init(void)
 
 	if (!pcommand_heap)
 	{
-		slog(LG_INFO, "pcommand_init(): block allocator failed.");
+		slog(LG_INFO, gettext("pcommand_init(): block allocator failed."));
 		exit(EXIT_FAILURE);
 	}
 
@@ -40,7 +40,7 @@ void pcommand_add(char *token, void (*handler) (sourceinfo_t *si, int parc, char
 
 	if ((pcmd = pcommand_find(token)))
 	{
-		slog(LG_INFO, "pcommand_add(): token %s is already registered", token);
+		slog(LG_INFO, gettext("pcommand_add(): token %s is already registered"), token);
 		return;
 	}
 	
@@ -59,7 +59,7 @@ void pcommand_delete(char *token)
 
 	if (!(pcmd = pcommand_find(token)))
 	{
-		slog(LG_INFO, "pcommand_delete(): token %s is not registered", token);
+		slog(LG_INFO, gettext("pcommand_delete(): token %s is not registered"), token);
 		return;
 	}
 

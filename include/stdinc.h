@@ -4,7 +4,7 @@
  *
  * This is the header which includes all of the system stuff.
  *
- * $Id: stdinc.h 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: stdinc.h 7823 2007-03-05 23:20:25Z pippijn $
  */
 
 #ifndef STDINC_H
@@ -22,6 +22,10 @@
 #include <sys/stat.h>
 #include <ctype.h>
 #include <regex.h>
+
+/* gettext */
+#include <locale.h>
+#include <libintl.h>
 
 #ifdef HAVE_GETOPT_H
 #include <getopt.h>

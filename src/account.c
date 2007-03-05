@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: account.c 7823 2007-03-05 23:20:25Z pippijn $
  */
 
 #include "atheme.h"
@@ -45,7 +45,7 @@ void init_accounts(void)
 	if (myuser_heap == NULL || mynick_heap == NULL || mychan_heap == NULL
 			|| chanacs_heap == NULL || metadata_heap == NULL)
 	{
-		slog(LG_ERROR, "init_accounts(): block allocator failure.");
+		slog(LG_ERROR, gettext("init_accounts(): block allocator failure."));
 		exit(EXIT_FAILURE);
 	}
 
@@ -85,7 +85,7 @@ myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags)
 	return_val_if_fail((mu = myuser_find(name)) == NULL, mu);
 
 	if (!(runflags & RF_STARTING))
-		slog(LG_DEBUG, "myuser_add(): %s -> %s", name, email);
+		slog(LG_DEBUG, gettext("myuser_add(): %s -> %s"), name, email);
 
 	mu = BlockHeapAlloc(myuser_heap);
 	object_init(object(mu), NULL, (destructor_t) myuser_delete);
@@ -111,7 +111,7 @@ myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags)
 
 	if ((soper = soper_find_named(mu->name)) != NULL)
 	{
-		slog(LG_DEBUG, "myuser_add(): user `%s' has been declared as soper, activating privileges.", mu->name);
+		slog(LG_DEBUG, gettext("myuser_add(): user `%s' has been declared as soper, activating privileges."), mu->name);
 		soper->myuser = mu;
 		mu->soper = soper;
 	}
@@ -148,7 +148,7 @@ void myuser_delete(myuser_t *mu)
 	return_if_fail(mu != NULL);
 
 	if (!(runflags & RF_STARTING))
-		slog(LG_DEBUG, "myuser_delete(): %s", mu->name);
+		slog(LG_DEBUG, gettext("myuser_delete(): %s"), mu->name);
 
 	/* log them out */
 	LIST_FOREACH_SAFE(n, tn, mu->logins.head)
@@ -172,27 +172,27 @@ void myuser_delete(myuser_t *mu)
 		/* attempt succession */
 		if (mc->founder == mu && (successor = mychan_pick_successor(mc)) != NULL)
 		{
-			snoop("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2", successor->name, mc->name, mc->founder->name);
-			slog(LG_INFO, "myuser_delete(): giving channel %s to %s (unused %ds, founder %s, chanacs %d)",
+			snoop(gettext("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2"), successor->name, mc->name, mc->founder->name);
+			slog(LG_INFO, gettext("myuser_delete(): giving channel %s to %s (unused %ds, founder %s, chanacs %d)"),
 					mc->name, successor->name,
 					CURRTIME - mc->used,
 					mc->founder->name,
 					LIST_LENGTH(&mc->chanacs));
 			if (chansvs.me != NULL)
-				verbose(mc, "Foundership changed to \2%s\2 because \2%s\2 was dropped.", successor->name, mc->founder->name);
+				verbose(mc, gettext("Foundership changed to \2%s\2 because \2%s\2 was dropped."), successor->name, mc->founder->name);
 
 			chanacs_change_simple(mc, successor, NULL, CA_FOUNDER_0, 0);
 			mc->founder = successor;
 
 			if (chansvs.me != NULL)
-				myuser_notice(chansvs.nick, mc->founder, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, mc->founder->name);
+				myuser_notice(chansvs.nick, mc->founder, gettext("You are now founder on \2%s\2 (as \2%s\2)."), mc->name, mc->founder->name);
 		}
 
 		/* no successor found */
 		if (mc->founder == mu)
 		{
-			snoop("DELETE: \2%s\2 from \2%s\2", mc->name, mu->name);
-			slog(LG_INFO, "myuser_delete(): deleting channel %s (unused %ds, founder %s, chanacs %d)",
+			snoop(gettext("DELETE: \2%s\2 from \2%s\2"), mc->name, mu->name);
+			slog(LG_INFO, gettext("myuser_delete(): deleting channel %s (unused %ds, founder %s, chanacs %d)"),
 					mc->name, CURRTIME - mc->used,
 					mc->founder->name,
 					LIST_LENGTH(&mc->chanacs));
@@ -368,7 +368,7 @@ myuser_access_verify(user_t *u, myuser_t *mu)
 
 	if (u == NULL || mu == NULL)
 	{
-		slog(LG_DEBUG, "myuser_access_verify(): invalid parameters: u = %p, mu = %p", u, mu);
+		slog(LG_DEBUG, gettext("myuser_access_verify(): invalid parameters: u = %p, mu = %p"), u, mu);
 		return FALSE;
 	}
 
@@ -414,13 +414,13 @@ myuser_access_add(myuser_t *mu, char *mask)
 
 	if (mu == NULL || mask == NULL)
 	{
-		slog(LG_DEBUG, "myuser_access_add(): invalid parameters: mu = %p, mask = %p", mu, mask);
+		slog(LG_DEBUG, gettext("myuser_access_add(): invalid parameters: mu = %p, mask = %p"), mu, mask);
 		return FALSE;
 	}
 
 	if (LIST_LENGTH(&mu->access_list) > me.mdlimit)
 	{
-		slog(LG_DEBUG, "myuser_access_add(): access entry limit reached for %s", mu->name);
+		slog(LG_DEBUG, gettext("myuser_access_add(): access entry limit reached for %s"), mu->name);
 		return FALSE;
 	}
 
@@ -452,7 +452,7 @@ myuser_access_find(myuser_t *mu, char *mask)
 
 	if (mu == NULL || mask == NULL)
 	{
-		slog(LG_DEBUG, "myuser_access_find(): invalid parameters: mu = %p, mask = %p", mu, mask);
+		slog(LG_DEBUG, gettext("myuser_access_find(): invalid parameters: mu = %p, mask = %p"), mu, mask);
 		return NULL;
 	}
 
@@ -485,7 +485,7 @@ myuser_access_delete(myuser_t *mu, char *mask)
 
 	if (mu == NULL || mask == NULL)
 	{
-		slog(LG_DEBUG, "myuser_access_delete(): invalid parameters: mu = %p, mask = %p", mu, mask);
+		slog(LG_DEBUG, gettext("myuser_access_delete(): invalid parameters: mu = %p, mask = %p"), mu, mask);
 		return;
 	}
 
@@ -535,7 +535,7 @@ mynick_t *mynick_add(myuser_t *mu, const char *name)
 	return_val_if_fail((mn = mynick_find(name)) == NULL, mn);
 
 	if (!(runflags & RF_STARTING))
-		slog(LG_DEBUG, "mynick_add(): %s -> %s", name, mu->name);
+		slog(LG_DEBUG, gettext("mynick_add(): %s -> %s"), name, mu->name);
 
 	mn = BlockHeapAlloc(mynick_heap);
 	object_init(object(mn), NULL, (destructor_t) mynick_delete);
@@ -571,7 +571,7 @@ void mynick_delete(mynick_t *mn)
 	return_if_fail(mn != NULL);
 
 	if (!(runflags & RF_STARTING))
-		slog(LG_DEBUG, "mynick_delete(): %s", mn->nick);
+		slog(LG_DEBUG, gettext("mynick_delete(): %s"), mn->nick);
 
 	dictionary_delete(nicklist, mn->nick);
 	node_del(&mn->node, &mn->owner->nicks);
@@ -613,7 +613,7 @@ static void mychan_delete(mychan_t *mc)
 	return_if_fail(mc != NULL);
 
 	if (!(runflags & RF_STARTING))
-		slog(LG_DEBUG, "mychan_delete(): %s", mc->name);
+		slog(LG_DEBUG, gettext("mychan_delete(): %s"), mc->name);
 
 	/* remove the chanacs shiz */
 	LIST_FOREACH_SAFE(n, tn, mc->chanacs.head)
@@ -640,7 +640,7 @@ mychan_t *mychan_add(char *name)
 	return_val_if_fail((mc = mychan_find(name)) == NULL, mc);
 
 	if (!(runflags & RF_STARTING))
-		slog(LG_DEBUG, "mychan_add(): %s", name);
+		slog(LG_DEBUG, gettext("mychan_add(): %s"), name);
 
 	mc = BlockHeapAlloc(mychan_heap);
 
@@ -769,7 +769,7 @@ static void chanacs_delete(chanacs_t *ca)
 	return_if_fail(ca->mychan != NULL);
 
 	if (!(runflags & RF_STARTING))
-		slog(LG_DEBUG, "chanacs_delete(): %s -> %s", ca->mychan->name,
+		slog(LG_DEBUG, gettext("chanacs_delete(): %s -> %s"), ca->mychan->name,
 			ca->myuser != NULL ? ca->myuser->name : ca->host);
 	n = node_find(ca, &ca->mychan->chanacs);
 	node_del(n, &ca->mychan->chanacs);
@@ -803,12 +803,12 @@ chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, uint32_t level)
 
 	if (*mychan->name != '#')
 	{
-		slog(LG_DEBUG, "chanacs_add(): got non #channel: %s", mychan->name);
+		slog(LG_DEBUG, gettext("chanacs_add(): got non #channel: %s"), mychan->name);
 		return NULL;
 	}
 
 	if (!(runflags & RF_STARTING))
-		slog(LG_DEBUG, "chanacs_add(): %s -> %s", mychan->name, myuser->name);
+		slog(LG_DEBUG, gettext("chanacs_add(): %s -> %s"), mychan->name, myuser->name);
 
 	n1 = node_create();
 	n2 = node_create();
@@ -837,12 +837,12 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, char *host, uint32_t level)
 
 	if (*mychan->name != '#')
 	{
-		slog(LG_DEBUG, "chanacs_add_host(): got non #channel: %s", mychan->name);
+		slog(LG_DEBUG, gettext("chanacs_add_host(): got non #channel: %s"), mychan->name);
 		return NULL;
 	}
 
 	if (!(runflags & RF_STARTING))
-		slog(LG_DEBUG, "chanacs_add_host(): %s -> %s", mychan->name, host);
+		slog(LG_DEBUG, gettext("chanacs_add_host(): %s -> %s"), mychan->name, host);
 
 	n = node_create();
 
@@ -1225,7 +1225,7 @@ metadata_t *metadata_add(void *target, int32_t type, const char *name, const cha
 		ca = target;
 	else
 	{
-		slog(LG_DEBUG, "metadata_add(): called on unknown type %d", type);
+		slog(LG_DEBUG, gettext("metadata_add(): called on unknown type %d"), type);
 		return NULL;
 	}
 
@@ -1247,7 +1247,7 @@ metadata_t *metadata_add(void *target, int32_t type, const char *name, const cha
 		node_add(md, n, &ca->metadata);
 	else
 	{
-		slog(LG_DEBUG, "metadata_add(): trying to add metadata to unknown type %d", type);
+		slog(LG_DEBUG, gettext("metadata_add(): trying to add metadata to unknown type %d"), type);
 
 		free(md->name);
 		free(md->value);
@@ -1296,7 +1296,7 @@ void metadata_delete(void *target, int32_t type, const char *name)
 	}
 	else
 	{
-		slog(LG_DEBUG, "metadata_delete(): trying to delete metadata from unknown type %d", type);
+		slog(LG_DEBUG, gettext("metadata_delete(): trying to delete metadata from unknown type %d"), type);
 		return;
 	}
 
@@ -1335,7 +1335,7 @@ metadata_t *metadata_find(void *target, int32_t type, const char *name)
 	}
 	else
 	{
-		slog(LG_DEBUG, "metadata_find(): trying to lookup metadata on unknown type %d", type);
+		slog(LG_DEBUG, gettext("metadata_find(): trying to lookup metadata on unknown type %d"), type);
 		return NULL;
 	}
 
@@ -1376,8 +1376,8 @@ static int expire_myuser_cb(dictionary_elem_t *delem, void *unused)
 		if (is_conf_soper(mu))
 			return 0;
 
-		snoop("EXPIRE: \2%s\2 from \2%s\2 ", mu->name, mu->email);
-		slog(LG_INFO, "expire_check(): expiring account %s (unused %ds, email %s, nicks %d, chanacs %d)",
+		snoop(gettext("EXPIRE: \2%s\2 from \2%s\2 "), mu->name, mu->email);
+		slog(LG_INFO, gettext("expire_check(): expiring account %s (unused %ds, email %s, nicks %d, chanacs %d)"),
 				mu->name, (int)(CURRTIME - mu->lastlogin),
 				mu->email, LIST_LENGTH(&mu->nicks),
 				LIST_LENGTH(&mu->chanacs));
@@ -1423,8 +1423,8 @@ void expire_check(void *arg)
 				continue;
 			}
 
-			snoop("EXPIRE: \2%s\2 from \2%s\2", mn->nick, mn->owner->name);
-			slog(LG_INFO, "expire_check(): expiring nick %s (unused %ds, account %s)",
+			snoop(gettext("EXPIRE: \2%s\2 from \2%s\2"), mn->nick, mn->owner->name);
+			slog(LG_INFO, gettext("expire_check(): expiring nick %s (unused %ds, account %s)"),
 					mn->nick, CURRTIME - mn->lastseen,
 					mn->owner->name);
 			object_unref(mn);
@@ -1442,7 +1442,7 @@ void expire_check(void *arg)
 			if (mychan_isused(mc))
 			{
 				mc->used = CURRTIME;
-				slog(LG_DEBUG, "expire_check(): updating last used time on %s because it appears to be still in use", mc->name);
+				slog(LG_DEBUG, gettext("expire_check(): updating last used time on %s because it appears to be still in use"), mc->name);
 				continue;
 			}
 		}
@@ -1455,8 +1455,8 @@ void expire_check(void *arg)
 			if (MC_HOLD & mc->flags)
 				continue;
 
-			snoop("EXPIRE: \2%s\2 from \2%s\2", mc->name, mc->founder->name);
-			slog(LG_INFO, "expire_check(): expiring channel %s (unused %ds, founder %s, chanacs %d)",
+			snoop(gettext("EXPIRE: \2%s\2 from \2%s\2"), mc->name, mc->founder->name);
+			slog(LG_INFO, gettext("expire_check(): expiring channel %s (unused %ds, founder %s, chanacs %d)"),
 					mc->name, CURRTIME - mc->used,
 					mc->founder->name,
 					LIST_LENGTH(&mc->chanacs));
@@ -1477,7 +1477,7 @@ static int check_myuser_cb(dictionary_elem_t *delem, void *unused)
 
 	if (MU_OLD_ALIAS & mu->flags)
 	{
-		slog(LG_INFO, "db_check(): converting previously linked nick %s to a standalone nick", mu->name);
+		slog(LG_INFO, gettext("db_check(): converting previously linked nick %s to a standalone nick"), mu->name);
 		mu->flags &= ~MU_OLD_ALIAS;
 		metadata_delete(mu, METADATA_USER, "private:alias:parent");
 	}
@@ -1487,14 +1487,14 @@ static int check_myuser_cb(dictionary_elem_t *delem, void *unused)
 		mn = mynick_find(mu->name);
 		if (mn == NULL)
 		{
-			slog(LG_DEBUG, "db_check(): adding missing nick %s", mu->name);
+			slog(LG_DEBUG, gettext("db_check(): adding missing nick %s"), mu->name);
 			mn = mynick_add(mu, mu->name);
 			mn->registered = mu->registered;
 			mn->lastseen = mu->lastlogin;
 		}
 		else if (mn->owner != mu)
 		{
-			slog(LG_INFO, "db_check(): replacing nick %s owned by %s with %s", mn->nick, mn->owner->name, mu->name);
+			slog(LG_INFO, gettext("db_check(): replacing nick %s owned by %s with %s"), mn->nick, mn->owner->name, mu->name);
 			object_unref(mn);
 			mn = mynick_add(mu, mu->name);
 			mn->registered = mu->registered;
@@ -1516,7 +1516,7 @@ void db_check()
 	{
 		if (!chanacs_find(mc, mc->founder, CA_FLAGS))
 		{
-			slog(LG_INFO, "db_check(): adding access for founder on channel %s", mc->name);
+			slog(LG_INFO, gettext("db_check(): adding access for founder on channel %s"), mc->name);
 			chanacs_change_simple(mc, mc->founder, NULL, CA_FOUNDER_0, 0);
 		}
 	}

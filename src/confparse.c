@@ -6,7 +6,7 @@
  * This file contains config file parsing routines.
  * This code was taken from Sentinel: copyright W. Campbell.
  *
- * $Id: confparse.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: confparse.c 7823 2007-03-05 23:20:25Z pippijn $
  */
 
 #include "atheme.h"
@@ -66,7 +66,7 @@ static CONFIGFILE *config_parse(char *filename, char *confdata)
 		  case ';':
 			  if (!curce)
 			  {
-				  config_error("%s:%i Ignoring extra semicolon\n", filename, linenumber);
+				  config_error(gettext("%s:%i Ignoring extra semicolon\n"), filename, linenumber);
 				  break;
 			  }
 			  if (!strcmp(curce->ce_varname, "include"))
@@ -75,7 +75,7 @@ static CONFIGFILE *config_parse(char *filename, char *confdata)
 
 				  if (!curce->ce_vardata)
 				  {
-					  config_error("%s:%i Ignoring \"include\": No filename given\n", filename, linenumber);
+					  config_error(gettext("%s:%i Ignoring \"include\": No filename given\n"), filename, linenumber);
 					  config_entry_free(curce);
 					  curce = NULL;
 					  continue;
@@ -100,12 +100,12 @@ static CONFIGFILE *config_parse(char *filename, char *confdata)
 		  case '{':
 			  if (!curce)
 			  {
-				  config_error("%s:%i: No name for section start\n", filename, linenumber);
+				  config_error(gettext("%s:%i: No name for section start\n"), filename, linenumber);
 				  continue;
 			  }
 			  else if (curce->ce_entries)
 			  {
-				  config_error("%s:%i: Ignoring extra section start\n", filename, linenumber);
+				  config_error(gettext("%s:%i: Ignoring extra section start\n"), filename, linenumber);
 				  continue;
 			  }
 			  curce->ce_sectlinenum = linenumber;
@@ -116,14 +116,14 @@ static CONFIGFILE *config_parse(char *filename, char *confdata)
 		  case '}':
 			  if (curce)
 			  {
-				  config_error("%s:%i: Missing semicolon before close brace\n", filename, linenumber);
+				  config_error(gettext("%s:%i: Missing semicolon before close brace\n"), filename, linenumber);
 				  config_entry_free(curce);
 				  config_free(curcf);
 				  return NULL;
 			  }
 			  else if (!cursection)
 			  {
-				  config_error("%s:%i: Ignoring extra close brace\n", filename, linenumber);
+				  config_error(gettext("%s:%i: Ignoring extra close brace\n"), filename, linenumber);
 				  continue;
 			  }
 			  curce = cursection;
@@ -163,7 +163,7 @@ static CONFIGFILE *config_parse(char *filename, char *confdata)
 				  }
 				  if (!*ptr)
 				  {
-					  config_error("%s:%i Comment on this line does not end\n", filename, commentstart);
+					  config_error(gettext("%s:%i Comment on this line does not end\n"), filename, commentstart);
 					  config_entry_free(curce);
 					  config_free(curcf);
 					  return NULL;
@@ -185,7 +185,7 @@ static CONFIGFILE *config_parse(char *filename, char *confdata)
 			  }
 			  if (!*ptr || (*ptr == '\n'))
 			  {
-				  config_error("%s:%i: Unterminated quote found\n", filename, linenumber);
+				  config_error(gettext("%s:%i: Unterminated quote found\n"), filename, linenumber);
 				  config_entry_free(curce);
 				  config_free(curcf);
 				  return NULL;
@@ -194,7 +194,7 @@ static CONFIGFILE *config_parse(char *filename, char *confdata)
 			  {
 				  if (curce->ce_vardata)
 				  {
-					  config_error("%s:%i: Ignoring extra data\n", filename, linenumber);
+					  config_error(gettext("%s:%i: Ignoring extra data\n"), filename, linenumber);
 				  }
 				  else
 				  {
@@ -232,7 +232,7 @@ static CONFIGFILE *config_parse(char *filename, char *confdata)
 		  default:
 			  if ((*ptr == '*') && (*(ptr + 1) == '/'))
 			  {
-				  config_error("%s:%i Ignoring extra end comment\n", filename, linenumber);
+				  config_error(gettext("%s:%i Ignoring extra end comment\n"), filename, linenumber);
 				  ptr++;
 				  break;
 			  }
@@ -245,11 +245,11 @@ static CONFIGFILE *config_parse(char *filename, char *confdata)
 			  if (!*ptr)
 			  {
 				  if (curce)
-					  config_error("%s: Unexpected EOF for variable starting at %i\n", filename, curce->ce_varlinenum);
+					  config_error(gettext("%s: Unexpected EOF for variable starting at %i\n"), filename, curce->ce_varlinenum);
 				  else if (cursection)
-					  config_error("%s: Unexpected EOF for section starting at %i\n", filename, curce->ce_sectlinenum);
+					  config_error(gettext("%s: Unexpected EOF for section starting at %i\n"), filename, curce->ce_sectlinenum);
 				  else
-					  config_error("%s: Unexpected EOF.\n", filename);
+					  config_error(gettext("%s: Unexpected EOF.\n"), filename);
 				  config_entry_free(curce);
 				  config_free(curcf);
 				  return NULL;
@@ -258,7 +258,7 @@ static CONFIGFILE *config_parse(char *filename, char *confdata)
 			  {
 				  if (curce->ce_vardata)
 				  {
-					  config_error("%s:%i: Ignoring extra data\n", filename, linenumber);
+					  config_error(gettext("%s:%i: Ignoring extra data\n"), filename, linenumber);
 				  }
 				  else
 				  {
@@ -291,14 +291,14 @@ static CONFIGFILE *config_parse(char *filename, char *confdata)
 	}			/* for */
 	if (curce)
 	{
-		config_error("%s: Unexpected EOF for variable starting on line %i\n", filename, curce->ce_varlinenum);
+		config_error(gettext("%s: Unexpected EOF for variable starting on line %i\n"), filename, curce->ce_varlinenum);
 		config_entry_free(curce);
 		config_free(curcf);
 		return NULL;
 	}
 	else if (cursection)
 	{
-		config_error("%s: Unexpected EOF for section starting on line %i\n", filename, cursection->ce_sectlinenum);
+		config_error(gettext("%s: Unexpected EOF for section starting on line %i\n"), filename, cursection->ce_sectlinenum);
 		config_free(curcf);
 		return NULL;
 	}
@@ -348,12 +348,12 @@ CONFIGFILE *config_load(char *filename)
 	fd = fopen(filename, "rb");
 	if (!fd)
 	{
-		config_error("Couldn't open \"%s\": %s\n", filename, strerror(errno));
+		config_error(gettext("Couldn't open \"%s\": %s\n"), filename, strerror(errno));
 		return NULL;
 	}
 	if (stat(filename, &sb) == -1)
 	{
-		config_error("Couldn't fstat \"%s\": %s\n", filename, strerror(errno));
+		config_error(gettext("Couldn't fstat \"%s\": %s\n"), filename, strerror(errno));
 		fclose(fd);
 		return NULL;
 	}
@@ -365,14 +365,14 @@ CONFIGFILE *config_load(char *filename)
 	buf = (char *)smalloc(sb.st_size + 1);
 	if (buf == NULL)
 	{
-		config_error("Out of memory trying to load \"%s\"\n", filename);
+		config_error(gettext("Out of memory trying to load \"%s\"\n"), filename);
 		fclose(fd);
 		return NULL;
 	}
 	ret = fread(buf, 1, sb.st_size, fd);
 	if (ret != sb.st_size)
 	{
-		config_error("Error reading \"%s\": %s\n", filename, ret == -1 ? strerror(errno) : strerror(EFAULT));
+		config_error(gettext("Error reading \"%s\": %s\n"), filename, ret == -1 ? strerror(errno) : strerror(EFAULT));
 		free(buf);
 		fclose(fd);
 		return NULL;

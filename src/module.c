@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: module.c 7823 2007-03-05 23:20:25Z pippijn $
  */
 
 #include "atheme.h"
@@ -31,7 +31,7 @@ void modules_init(void)
 
 	if (!module_heap)
 	{
-		slog(LG_ERROR, "modules_init(): block allocator failed.");
+		slog(LG_ERROR, gettext("modules_init(): block allocator failed."));
 		exit(EXIT_FAILURE);
 	}
 
@@ -62,7 +62,7 @@ module_t *module_load(char *filespec)
 
 	if ((m = module_find(filespec)))
 	{
-		slog(LG_INFO, "module_load(): module %s is already loaded [at 0x%lx]", filespec, m->address);
+		slog(LG_INFO, gettext("module_load(): module %s is already loaded [at 0x%lx]"), filespec, m->address);
 		return NULL;
 	}
 
@@ -71,9 +71,9 @@ module_t *module_load(char *filespec)
 	if (!handle)
 	{
 		char *errp = sstrdup(dlerror());
-		slog(LG_ERROR, "module_load(): error: %s", errp);
+		slog(LG_ERROR, gettext("module_load(): error: %s"), errp);
 		if (me.connected)
-			snoop("MODLOAD:ERROR: loading module \2%s\2: %s", filespec, errp);
+			snoop(gettext("MODLOAD:ERROR: loading module \2%s\2: %s"), filespec, errp);
 		free(errp);
 		return NULL;
 	}
@@ -85,10 +85,10 @@ module_t *module_load(char *filespec)
 
 	if (h->atheme_mod != MAPI_ATHEME_MAGIC)
 	{
-		slog(LG_DEBUG, "module_load(): %s: Attempted to load an incompatible module. Aborting.", filespec);
+		slog(LG_DEBUG, gettext("module_load(): %s: Attempted to load an incompatible module. Aborting."), filespec);
 
 		if (me.connected)
-			snoop("MODLOAD:ERROR: Module \2%s\2 is not a valid atheme module.", filespec);
+			snoop(gettext("MODLOAD:ERROR: Module \2%s\2 is not a valid atheme module."), filespec);
 
 		linker_close(handle);
 		return NULL;
@@ -123,9 +123,9 @@ module_t *module_load(char *filespec)
 
 	if (m->mflags & MODTYPE_FAIL)
 	{
-		slog(LG_ERROR, "module_load(): module %s init failed", filespec);
+		slog(LG_ERROR, gettext("module_load(): module %s init failed"), filespec);
 		if (me.connected)
-			snoop("MODLOAD:ERROR: Init failed while loading module \2%s\2", filespec);
+			snoop(gettext("MODLOAD:ERROR: Init failed while loading module \2%s\2"), filespec);
 		module_unload(m);
 		return NULL;
 	}
@@ -133,12 +133,12 @@ module_t *module_load(char *filespec)
 	n = node_create();
 	node_add(m, n, &modules);
 
-	slog(LG_DEBUG, "module_load(): loaded %s [at 0x%lx; MAPI version %d]", h->name, m->address, h->abi_ver);
+	slog(LG_DEBUG, gettext("module_load(): loaded %s [at 0x%lx; MAPI version %d]"), h->name, m->address, h->abi_ver);
 
 	if (me.connected && !cold_start)
 	{
-		wallops("Module %s loaded [at 0x%lx; MAPI version %d]", h->name, m->address, h->abi_ver);
-		snoop("MODLOAD: \2%s\2 [at 0x%lx; MAPI version %d]", h->name, m->address, h->abi_ver);
+		wallops(gettext("Module %s loaded [at 0x%lx; MAPI version %d]"), h->name, m->address, h->abi_ver);
+		snoop(gettext("MODLOAD: \2%s\2 [at 0x%lx; MAPI version %d]"), h->name, m->address, h->abi_ver);
 	}
 
 	return m;
@@ -166,7 +166,7 @@ void module_load_dir(char *dirspec)
 
 	if (!module_dir)
 	{
-		slog(LG_ERROR, "module_load_dir(): %s: %s", dirspec, strerror(errno));
+		slog(LG_ERROR, gettext("module_load_dir(): %s: %s"), dirspec, strerror(errno));
 		return;
 	}
 
@@ -259,11 +259,11 @@ void module_unload(module_t * m)
 	n = node_find(m, &modules);
 	if (n != NULL)
 	{
-		slog(LG_INFO, "module_unload(): unloaded %s", m->header->name);
+		slog(LG_INFO, gettext("module_unload(): unloaded %s"), m->header->name);
 		if (me.connected)
 		{
-			wallops("Module %s unloaded.", m->header->name);
-			snoop("MODUNLOAD: \2%s\2", m->header->name);
+			wallops(gettext("Module %s unloaded."), m->header->name);
+			snoop(gettext("MODUNLOAD: \2%s\2"), m->header->name);
 		}
 
 		if (m->header->deinit)
@@ -295,13 +295,13 @@ void *module_locate_symbol(char *modname, char *sym)
 
 	if (!(m = module_find_published(modname)))
 	{
-		slog(LG_ERROR, "module_locate_symbol(): %s is not loaded.", modname);
+		slog(LG_ERROR, gettext("module_locate_symbol(): %s is not loaded."), modname);
 		return NULL;
 	}
 
 	if (modtarget != NULL && !node_find(m, &modtarget->deplist))
 	{
-		slog(LG_DEBUG, "module_locate_symbol(): %s added as a dependency for %s (symbol: %s)",
+		slog(LG_DEBUG, gettext("module_locate_symbol(): %s added as a dependency for %s (symbol: %s)"),
 			m->header->name, modtarget->header->name, sym);
 		node_add(m, node_create(), &modtarget->deplist);
 		node_add(modtarget, node_create(), &m->dephost);
@@ -310,7 +310,7 @@ void *module_locate_symbol(char *modname, char *sym)
 	symptr = linker_getsym(m->handle, sym);
 
 	if (symptr == NULL)
-		slog(LG_ERROR, "module_locate_symbol(): could not find symbol %s in module %s.", sym, modname);
+		slog(LG_ERROR, gettext("module_locate_symbol(): could not find symbol %s in module %s."), sym, modname);
 	return symptr;
 }
 

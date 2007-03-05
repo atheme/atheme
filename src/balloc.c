@@ -4,7 +4,7 @@
  *
  * This file contains the block allocator.
  *
- * $Id: balloc.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: balloc.c 7823 2007-03-05 23:20:25Z pippijn $
  */
 
 #include "atheme.h"
@@ -40,7 +40,7 @@ static list_t heap_lists;
 
 static void _blockheap_fail(const char *reason, const char *file, int line)
 {
-	slog(LG_INFO, "Blockheap failure: %s (%s:%d)", reason, file, line);
+	slog(LG_INFO, gettext("Blockheap failure: %s (%s:%d)"), reason, file, line);
 	runflags |= RF_SHUTDOWN;
 }
 
@@ -59,7 +59,7 @@ static void *mmap(void *hint, size_t len, uint32_t prot,
 	void *ptr = smalloc(len);
 
 	if (!ptr)
-		blockheap_fail("smalloc() failed.");
+		blockheap_fail(gettext("smalloc() failed."));
 	
 	memset(ptr, 0, len);
 	
@@ -76,7 +76,7 @@ static void *mmap(void *hint, size_t len, uint32_t prot,
 static void munmap(void *addr, size_t len)
 {
 	if (!addr)
-		blockheap_fail("no address to unmap.");
+		blockheap_fail(gettext("no address to unmap."));
 
 	free(addr);
 }
@@ -217,7 +217,7 @@ BlockHeap *BlockHeapCreate(size_t elemsize, int elemsperblock)
 	/* Catch idiotic requests up front */
 	if ((elemsize <= 0) || (elemsperblock <= 0))
 	{
-		blockheap_fail("Attempting to BlockHeapCreate idiotic sizes");
+		blockheap_fail(gettext("Attempting to BlockHeapCreate idiotic sizes"));
 	}
 
 	/* Allocate our new BlockHeap */
@@ -225,7 +225,7 @@ BlockHeap *BlockHeapCreate(size_t elemsize, int elemsperblock)
 	
 	if (bh == NULL)
 	{
-		slog(LG_INFO, "Attempt to calloc() failed: (%s:%d)", __FILE__, __LINE__);
+		slog(LG_INFO, gettext("Attempt to calloc() failed: (%s:%d)"), __FILE__, __LINE__);
 		runflags |= RF_SHUTDOWN;
 	}
 
@@ -247,13 +247,13 @@ BlockHeap *BlockHeapCreate(size_t elemsize, int elemsperblock)
 	{
 		if (bh != NULL)
 			free(bh);
-		slog(LG_INFO, "newblock() failed");
+		slog(LG_INFO, gettext("newblock() failed"));
 		runflags |= RF_SHUTDOWN;
 	}
 
 	if (bh == NULL)
 	{
-		blockheap_fail("bh == NULL when it shouldn't be");
+		blockheap_fail(gettext("bh == NULL when it shouldn't be"));
 	}
 	node_add(bh, &bh->hlist, &heap_lists);
 	return (bh);
@@ -278,7 +278,7 @@ void *BlockHeapAlloc(BlockHeap *bh)
 
 	if (bh == NULL)
 	{
-		blockheap_fail("Cannot allocate if bh == NULL");
+		blockheap_fail(gettext("Cannot allocate if bh == NULL"));
 	}
 
 	if (bh->freeElems == 0)
@@ -292,7 +292,7 @@ void *BlockHeapAlloc(BlockHeap *bh)
 			BlockHeapGarbageCollect(bh);
 			if (bh->freeElems == 0)
 			{
-				slog(LG_INFO, "newblock() failed and garbage collection didn't help");
+				slog(LG_INFO, gettext("newblock() failed and garbage collection didn't help"));
 				runflags |= RF_SHUTDOWN;
 			}
 		}
@@ -306,12 +306,12 @@ void *BlockHeapAlloc(BlockHeap *bh)
 			new_node = walker->free_list.head;
 			node_move(new_node, &walker->free_list, &walker->used_list);
 			if (new_node->data == NULL)
-				blockheap_fail("new_node->data is NULL and that shouldn't happen!!!");
+				blockheap_fail(gettext("new_node->data is NULL and that shouldn't happen!!!"));
 			memset(new_node->data, 0, bh->elemSize);
 			return (new_node->data);
 		}
 	}
-	blockheap_fail("BlockHeapAlloc failed, giving up");
+	blockheap_fail(gettext("BlockHeapAlloc failed, giving up"));
 	return NULL;
 }
 
@@ -335,13 +335,13 @@ int BlockHeapFree(BlockHeap *bh, void *ptr)
 	if (bh == NULL)
 	{
 
-		slog(LG_DEBUG, "balloc.c:BlockHeapFree() bh == NULL");
+		slog(LG_DEBUG, gettext("balloc.c:BlockHeapFree() bh == NULL"));
 		return (1);
 	}
 
 	if (ptr == NULL)
 	{
-		slog(LG_DEBUG, "balloc.c:BlockHeapFree() ptr == NULL");
+		slog(LG_DEBUG, gettext("balloc.c:BlockHeapFree() ptr == NULL"));
 		return (1);
 	}
 
@@ -349,13 +349,13 @@ int BlockHeapFree(BlockHeap *bh, void *ptr)
 #ifdef DEBUG_BALLOC
 	if (memblock->magic != BALLOC_MAGIC)
 	{
-		blockheap_fail("memblock->magic != BALLOC_MAGIC");
+		blockheap_fail(gettext("memblock->magic != BALLOC_MAGIC"));
 		runflags |= RF_SHUTDOWN;
 	}
 #endif
 	if (memblock->block == NULL)
 	{
-		blockheap_fail("memblock->block == NULL, not a valid block?");
+		blockheap_fail(gettext("memblock->block == NULL, not a valid block?"));
 		runflags |= RF_SHUTDOWN;
 	}
 
