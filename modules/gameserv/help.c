@@ -45,10 +45,10 @@ void gs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!command)
 	{
-		command_success_nodata(si, "***** \2%s Help\2 *****", gamesvs.nick);
-		command_success_nodata(si, "\2%s\2 provides games and tools for playing games to the network.", gamesvs.nick);
+		command_success_nodata(si, gettext("***** \2%s Help\2 *****"), gamesvs.nick);
+		command_success_nodata(si, gettext("\2%s\2 provides games and tools for playing games to the network."), gamesvs.nick);
 		command_success_nodata(si, " ");
-		command_success_nodata(si, "For more information on a command, type:");
+		command_success_nodata(si, gettext("For more information on a command, type:"));
 		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", gamesvs.disp);
 		command_success_nodata(si, " ");
 

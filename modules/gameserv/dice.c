@@ -4,7 +4,7 @@
  *
  * Dice generator.
  *
- * $Id: dice.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: dice.c 7831 2007-03-05 23:55:19Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"gameserv/dice", FALSE, _modinit, _moddeinit,
-	"$Id: dice.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: dice.c 7831 2007-03-05 23:55:19Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -93,7 +93,7 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 	for (i = 0; i < dice; i++)
 		roll += (rand() % sides);
 
-	gs_command_report(si, "Your roll: \2%d\2", roll);
+	gs_command_report(si, gettext("Your roll: \2%d\2"), roll);
 }
 
 static void command_wod(sourceinfo_t *si, int parc, char *parv[])
@@ -111,7 +111,7 @@ static void command_wod(sourceinfo_t *si, int parc, char *parv[])
 
 	if (arg_dice == NULL || arg_difficulty == NULL)
 	{
-		command_fail(si, fault_needmoreparams, "Syntax: WOD <dice> <difficulty>");
+		command_fail(si, fault_needmoreparams, gettext("Syntax: WOD <dice> <difficulty>"));
 		return;
 	}
 
@@ -125,12 +125,12 @@ static void command_wod(sourceinfo_t *si, int parc, char *parv[])
 
 		if (dice > 30 || dice < 1)
 		{
-			command_fail(si, fault_badparams, "Only 1-30 dice may be thrown at one time.");
+			command_fail(si, fault_badparams, gettext("Only 1-30 dice may be thrown at one time."));
 			return;
 		}
 		else if (difficulty > 10 || difficulty < 1)
 		{
-			command_fail(si, fault_badparams, "Difficulty setting must be between 1 and 10.");
+			command_fail(si, fault_badparams, gettext("Difficulty setting must be between 1 and 10."));
 			return;
 		}
 		else
@@ -160,14 +160,13 @@ static void command_wod(sourceinfo_t *si, int parc, char *parv[])
 			rerolls = rerolls - botches;
 			total = success - botches;
 
-			gs_command_report(si, "%s rolls %d dice at difficulty %d: %s", si->su->nick, dice, difficulty, buf);
+			gs_command_report(si, gettext("%s rolls %d dice at difficulty %d: %s"), si->su->nick, dice, difficulty, buf);
 
 			if (rerolls > 0)
-				gs_command_report(si, "Successes: %d, Failures: %d, Botches: %d, Total: %d. "
-					"You may reroll %d if you have a specialty.",
+				gs_command_report(si, gettext("Successes: %d, Failures: %d, Botches: %d, Total: %d. You may reroll %d if you have a specialty."),
 					success, failure, botches, total, rerolls);
 			else
-				gs_command_report(si, "Successes: %d, Failures: %d, Botches: %d, Total: %d.",
+				gs_command_report(si, gettext("Successes: %d, Failures: %d, Botches: %d, Total: %d."),
 					success, failure, botches, total);
 		}
 

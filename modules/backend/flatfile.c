@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 7789 2007-03-04 00:00:48Z jilles $
+ * $Id: flatfile.c 7831 2007-03-05 23:55:19Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 7789 2007-03-04 00:00:48Z jilles $",
+	"$Id: flatfile.c 7831 2007-03-05 23:55:19Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -101,9 +101,9 @@ static void flatfile_db_save(void *arg)
 	if (!(f = fopen(DATADIR "/atheme.db.new", "w")))
 	{
 		errno1 = errno;
-		slog(LG_ERROR, "db_save(): cannot create atheme.db.new: %s", strerror(errno1));
-		wallops("\2DATABASE ERROR\2: db_save(): cannot create atheme.db.new: %s", strerror(errno1));
-		snoop("\2DATABASE ERROR\2: db_save(): cannot create atheme.db.new: %s", strerror(errno1));
+		slog(LG_ERROR, gettext("db_save(): cannot create atheme.db.new: %s"), strerror(errno1));
+		wallops(gettext("\2DATABASE ERROR\2: db_save(): cannot create atheme.db.new: %s"), strerror(errno1));
+		snoop(gettext("\2DATABASE ERROR\2: db_save(): cannot create atheme.db.new: %s"), strerror(errno1));
 		return;
 	}
 
@@ -111,11 +111,11 @@ static void flatfile_db_save(void *arg)
 	fprintf(f, "DBV 5\n");
 	fprintf(f, "CF %s\n", bitmask_to_flags(ca_all, chanacs_flags));
 
-	slog(LG_DEBUG, "db_save(): saving myusers");
+	slog(LG_DEBUG, gettext("db_save(): saving myusers"));
 
 	dictionary_foreach(mulist, flatfile_db_save_myusers_cb, f);
 
-	slog(LG_DEBUG, "db_save(): saving mychans");
+	slog(LG_DEBUG, gettext("db_save(): saving mychans"));
 
 	DICTIONARY_FOREACH(mc, &state, mclist)
 	{
@@ -163,7 +163,7 @@ static void flatfile_db_save(void *arg)
 	}
 
 	/* Services ignores */
-	slog(LG_DEBUG, "db_save(): saving svsignores");
+	slog(LG_DEBUG, gettext("db_save(): saving svsignores"));
 
 	LIST_FOREACH(n, svs_ignore_list.head)
 	{
@@ -174,7 +174,7 @@ static void flatfile_db_save(void *arg)
 	}
 
 	/* Services operators */
-	slog(LG_DEBUG, "db_save(): saving sopers");
+	slog(LG_DEBUG, gettext("db_save(): saving sopers"));
 
 	LIST_FOREACH(n, soperlist.head)
 	{
@@ -187,7 +187,7 @@ static void flatfile_db_save(void *arg)
 		fprintf(f, "SO %s %s %d\n", soper->myuser->name, soper->classname, soper->flags);
 	}
 
-	slog(LG_DEBUG, "db_save(): saving klines");
+	slog(LG_DEBUG, gettext("db_save(): saving klines"));
 
 	LIST_FOREACH(n, klnlist.head)
 	{
@@ -207,9 +207,9 @@ static void flatfile_db_save(void *arg)
 	if (was_errored)
 	{
 		errno1 = errno;
-		slog(LG_ERROR, "db_save(): cannot write to atheme.db.new: %s", strerror(errno1));
-		wallops("\2DATABASE ERROR\2: db_save(): cannot write to atheme.db.new: %s", strerror(errno1));
-		snoop("\2DATABASE ERROR\2: db_save(): cannot write to atheme.db.new: %s", strerror(errno1));
+		slog(LG_ERROR, gettext("db_save(): cannot write to atheme.db.new: %s"), strerror(errno1));
+		wallops(gettext("\2DATABASE ERROR\2: db_save(): cannot write to atheme.db.new: %s"), strerror(errno1));
+		snoop(gettext("\2DATABASE ERROR\2: db_save(): cannot write to atheme.db.new: %s"), strerror(errno1));
 		return;
 	}
 	/* now, replace the old database with the new one, using an atomic rename */
@@ -221,9 +221,9 @@ static void flatfile_db_save(void *arg)
 	if ((rename(DATADIR "/atheme.db.new", DATADIR "/atheme.db")) < 0)
 	{
 		errno1 = errno;
-		slog(LG_ERROR, "db_save(): cannot rename atheme.db.new to atheme.db: %s", strerror(errno1));
-		wallops("\2DATABASE ERROR\2: db_save(): cannot rename atheme.db.new to atheme.db: %s", strerror(errno1));
-		snoop("\2DATABASE ERROR\2: db_save(): cannot rename atheme.db.new to atheme.db: %s", strerror(errno1));
+		slog(LG_ERROR, gettext("db_save(): cannot rename atheme.db.new to atheme.db: %s"), strerror(errno1));
+		wallops(gettext("\2DATABASE ERROR\2: db_save(): cannot rename atheme.db.new to atheme.db: %s"), strerror(errno1));
+		snoop(gettext("\2DATABASE ERROR\2: db_save(): cannot rename atheme.db.new to atheme.db: %s"), strerror(errno1));
 		return;
 	}
 }
@@ -245,18 +245,18 @@ static void flatfile_db_load(void)
 	{
 		if (errno == ENOENT)
 		{
-			slog(LG_ERROR, "db_load(): %s does not exist, creating it", DATADIR "/atheme.db");
+			slog(LG_ERROR, gettext("db_load(): %s does not exist, creating it"), DATADIR "/atheme.db");
 			return;
 		}
 		else
 		{
-			slog(LG_ERROR, "db_load(): can't open %s for reading: %s", DATADIR "/atheme.db", strerror(errno));
-			slog(LG_ERROR, "db_load(): exiting to avoid data loss");
+			slog(LG_ERROR, gettext("db_load(): can't open %s for reading: %s"), DATADIR "/atheme.db", strerror(errno));
+			slog(LG_ERROR, gettext("db_load(): exiting to avoid data loss"));
 			exit(1);
 		}
 	}
 
-	slog(LG_DEBUG, "db_load(): ----------------------- loading ------------------------");
+	slog(LG_DEBUG, gettext("db_load(): ----------------------- loading ------------------------"));
 
 	/* start reading it, one line at a time */
 	while (fgets(dBuf, BUFSIZE, f))
@@ -276,7 +276,7 @@ static void flatfile_db_load(void)
 			i = atoi(strtok(NULL, " "));
 			if (i > 5)
 			{
-				slog(LG_INFO, "db_load(): database version is %d; i only understand 4 (Atheme 0.2), 3 (Atheme 0.2 without CA_ACLVIEW), 2 (Atheme 0.1) or 1 (Shrike)", i);
+				slog(LG_INFO, gettext("db_load(): database version is %d; i only understand 4 (Atheme 0.2), 3 (Atheme 0.2 without CA_ACLVIEW), 2 (Atheme 0.1) or 1 (Shrike)"), i);
 				exit(EXIT_FAILURE);
 			}
 		}
@@ -286,17 +286,17 @@ static void flatfile_db_load(void)
 		{
 			s = strtok(NULL, " ");
 			if (s == NULL)
-				slog(LG_INFO, "db_load(): missing param to CF");
+				slog(LG_INFO, gettext("db_load(): missing param to CF"));
 			else
 			{
 				their_ca_all = flags_to_bitmask(s, chanacs_flags, 0);
 				if (their_ca_all & ~ca_all)
 				{
-					slog(LG_ERROR, "db_load(): losing flags %s from file", bitmask_to_flags(their_ca_all & ~ca_all, chanacs_flags));
+					slog(LG_ERROR, gettext("db_load(): losing flags %s from file"), bitmask_to_flags(their_ca_all & ~ca_all, chanacs_flags));
 				}
 				if (~their_ca_all & ca_all)
 				{
-					slog(LG_ERROR, "db_load(): making up flags %s not present in file", bitmask_to_flags(~their_ca_all & ca_all, chanacs_flags));
+					slog(LG_ERROR, gettext("db_load(): making up flags %s not present in file"), bitmask_to_flags(~their_ca_all & ca_all, chanacs_flags));
 				}
 			}
 		}
@@ -372,7 +372,7 @@ static void flatfile_db_load(void)
 
 			if (!mu)
 			{
-				slog(LG_DEBUG, "db_load(): WTF -- memo for unknown account");
+				slog(LG_DEBUG, gettext("db_load(): memo for unknown account"));
 				continue;
 			}
 
@@ -403,7 +403,7 @@ static void flatfile_db_load(void)
 			
 			if (!mu)
 			{
-				slog(LG_DEBUG, "db_load(): invalid ignore (MI %s %s)",user,target);
+				slog(LG_DEBUG, gettext("db_load(): invalid ignore (MI %s %s)"),user,target);
 				continue;
 			}
 			
@@ -424,7 +424,7 @@ static void flatfile_db_load(void)
 
 			if (mu == NULL)
 			{
-				slog(LG_DEBUG, "db_load(): invalid access entry<%s> for unknown user<%s>", mask, user);
+				slog(LG_DEBUG, gettext("db_load(): invalid access entry<%s> for unknown user<%s>"), mask, user);
 				continue;
 			}
 
@@ -445,7 +445,7 @@ static void flatfile_db_load(void)
 			mu = myuser_find(user);
 			if (mu == NULL || nick == NULL || tseen == NULL)
 			{
-				slog(LG_DEBUG, "db_load(): invalid registered nick<%s> for user<%s>", nick, user);
+				slog(LG_DEBUG, gettext("db_load(): invalid registered nick<%s> for user<%s>"), nick, user);
 				continue;
 			}
 
@@ -467,7 +467,7 @@ static void flatfile_db_load(void)
 
 			if (!mu || !class || !flagstr)
 			{
-				slog(LG_DEBUG, "db_load(): invalid services oper (SO %s %s %s)", user, class, flagstr);
+				slog(LG_DEBUG, gettext("db_load(): invalid services oper (SO %s %s %s)"), user, class, flagstr);
 				continue;
 			}
 			soper_add(mu->name, class, atoi(flagstr) & ~SOPER_CONF);
@@ -495,7 +495,7 @@ static void flatfile_db_load(void)
 
 				if (!mc->founder)
 				{
-					slog(LG_DEBUG, "db_load(): channel %s has no founder, dropping.", mc->name);
+					slog(LG_DEBUG, gettext("db_load(): channel %s has no founder, dropping."), mc->name);
 					object_unref(mc);
 					continue;
 				}
@@ -615,7 +615,7 @@ static void flatfile_db_load(void)
 
 				if (mc == NULL || (mu == NULL && !validhostmask(causer)))
 				{
-					slog(LG_ERROR, "db_load(): invalid chanacs (line %d)",linecnt);
+					slog(LG_ERROR, gettext("db_load(): invalid chanacs (line %d)"),linecnt);
 					continue;
 				}
 
@@ -731,25 +731,25 @@ static void flatfile_db_load(void)
 		{
 			i = atoi(strtok(NULL, " "));
 			if (i != muin)
-				slog(LG_ERROR, "db_load(): got %d myusers; expected %d", muin, i);
+				slog(LG_ERROR, gettext("db_load(): got %d myusers; expected %d"), muin, i);
 
 			i = atoi(strtok(NULL, " "));
 			if (i != mcin)
-				slog(LG_ERROR, "db_load(): got %d mychans; expected %d", mcin, i);
+				slog(LG_ERROR, gettext("db_load(): got %d mychans; expected %d"), mcin, i);
 
 			i = atoi(strtok(NULL, " "));
 			if (i != cain)
-				slog(LG_ERROR, "db_load(): got %d chanacs; expected %d", cain, i);
+				slog(LG_ERROR, gettext("db_load(): got %d chanacs; expected %d"), cain, i);
 
 			if ((s = strtok(NULL, " ")))
 				if ((i = atoi(s)) != kin)
-					slog(LG_ERROR, "db_load(): got %d klines; expected %d", kin, i);
+					slog(LG_ERROR, gettext("db_load(): got %d klines; expected %d"), kin, i);
 		}
 	}
 
 	fclose(f);
 
-	slog(LG_DEBUG, "db_load(): ------------------------- done -------------------------");
+	slog(LG_DEBUG, gettext("db_load(): ------------------------- done -------------------------"));
 }
 
 void _modinit(module_t *m)
