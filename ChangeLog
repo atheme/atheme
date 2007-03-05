@@ -1,3 +1,12 @@
+nenolod     2007/03/05 23:56:30 UTC	(20070305-7833)
+  Log:
+  - needed due to changes
+  
+
+  Changes:	Modified:
+  +614 -0	trunk/autoconf/config.rpath (File Added) 
+
+
 pippijn     2007/03/05 23:55:19 UTC	(20070305-7831)
   Log:
   Reverted some gettext logs and removed debug lines
