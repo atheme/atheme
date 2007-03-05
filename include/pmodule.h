@@ -5,7 +5,7 @@
  * Protocol module stuff.
  * Modules usually do not need this.
  *
- * $Id: pmodule.h 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: pmodule.h 7813 2007-03-05 16:27:02Z jilles $
  */
 
 #ifndef PMODULE_H
@@ -49,6 +49,7 @@ E void handle_stats(user_t *, char);
 E void handle_whois(user_t *, char *);
 E void handle_trace(user_t *, char *, char *);
 E void handle_motd(user_t *);
+E void handle_away(user_t *, const char *);
 E void handle_message(sourceinfo_t *, char *, boolean_t, char *);
 E void handle_topic_from(sourceinfo_t *, channel_t *, char *, time_t, char *);
 E void handle_kill(sourceinfo_t *, char *, char *);

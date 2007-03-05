@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: ptasks.c 7813 2007-03-05 16:27:02Z jilles $
  */
 
 #include "atheme.h"
@@ -251,6 +251,8 @@ void handle_whois(user_t *u, char *target)
 		numeric_sts(me.name, 311, u->nick, "%s %s %s * :%s", t->nick, t->user, t->vhost, t->gecos);
 		/* channels purposely omitted */
 		numeric_sts(me.name, 312, u->nick, "%s %s :%s", t->nick, t->server->name, t->server->desc);
+		if (t->flags & UF_AWAY)
+			numeric_sts(me.name, 301, u->nick, "%s :Gone", t->nick);
 		if (is_ircop(t))
 			numeric_sts(me.name, 313, u->nick, "%s :%s", t->nick, is_internal_client(t) ? "is a Network Service" : "is an IRC Operator");
 		if (t->myuser)
@@ -351,6 +353,26 @@ void handle_motd(user_t *u)
 	numeric_sts(me.name, 376, u->nick, ":End of the message of the day.");
 
 	fclose(f);
+}
+
+void handle_away(user_t *u, const char *message)
+{
+	if (message == NULL || *message == '\0')
+	{
+		if (u->flags & UF_AWAY)
+		{
+			u->flags &= ~UF_AWAY;
+			hook_call_event("user_away", u);
+		}
+	}
+	else
+	{
+		if (!(u->flags & UF_AWAY))
+		{
+			u->flags |= UF_AWAY;
+			hook_call_event("user_away", u);
+		}
+	}
 }
 
 void handle_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *message)
