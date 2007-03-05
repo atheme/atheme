@@ -1,3 +1,27 @@
+nenolod     2007/03/05 23:48:01 UTC	(20070305-7827)
+  Log:
+  - add a bunch of autoconf m4 files
+  
+
+  Changes:	Modified:
+  +23 -0	trunk/m4/codeset.m4 (File Added) 
+  +418 -0	trunk/m4/gettext.m4 (File Added) 
+  +103 -0	trunk/m4/iconv.m4 (File Added) 
+  +32 -0	trunk/m4/inttypes-pri.m4 (File Added) 
+  +27 -0	trunk/m4/inttypes.m4 (File Added) 
+  +28 -0	trunk/m4/inttypes_h.m4 (File Added) 
+  +32 -0	trunk/m4/lcmessage.m4 (File Added) 
+  +110 -0	trunk/m4/lib-ld.m4 (File Added) 
+  +547 -0	trunk/m4/lib-link.m4 (File Added) 
+  +155 -0	trunk/m4/lib-prefix.m4 (File Added) 
+  +49 -0	trunk/m4/nls.m4 (File Added) 
+  +197 -0	trunk/m4/po.m4 (File Added) 
+  +91 -0	trunk/m4/progtest.m4 (File Added) 
+  +28 -0	trunk/m4/stdint_h.m4 (File Added) 
+  +32 -0	trunk/m4/uintmax_t.m4 (File Added) 
+  +23 -0	trunk/m4/ulonglong.m4 (File Added) 
+
+
 nenolod     2007/03/05 23:44:42 UTC	(20070305-7825)
   Log:
   - move m4 macro files to m4/, which is more correct than dumping them in 
