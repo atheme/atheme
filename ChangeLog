@@ -1,3 +1,32 @@
+jilles      2007/03/05 16:42:26 UTC	(20070305-7815)
+  Log:
+  Away tracking in protocol modules.
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/protocol/asuka.c (File Modified) 
+  +6 -0		trunk/modules/protocol/bahamut.c (File Modified) 
+  +6 -0		trunk/modules/protocol/bircd.c (File Modified) 
+  +6 -0		trunk/modules/protocol/charybdis.c (File Modified) 
+  +6 -0		trunk/modules/protocol/dreamforge.c (File Modified) 
+  +6 -0		trunk/modules/protocol/hybrid.c (File Modified) 
+  +6 -0		trunk/modules/protocol/hyperion.c (File Modified) 
+  +6 -0		trunk/modules/protocol/inspircd10.c (File Modified) 
+  +6 -0		trunk/modules/protocol/inspircd11.c (File Modified) 
+  +10 -0	trunk/modules/protocol/ircnet.c (File Modified) 
+  +6 -0		trunk/modules/protocol/nefarious.c (File Modified) 
+  +6 -0		trunk/modules/protocol/officeirc.c (File Modified) 
+  +6 -0		trunk/modules/protocol/plexus.c (File Modified) 
+  +6 -0		trunk/modules/protocol/ptlink.c (File Modified) 
+  +6 -0		trunk/modules/protocol/ratbox.c (File Modified) 
+  +6 -0		trunk/modules/protocol/shadowircd.c (File Modified) 
+  +6 -0		trunk/modules/protocol/solidircd.c (File Modified) 
+  +6 -0		trunk/modules/protocol/sorcery.c (File Modified) 
+  +6 -0		trunk/modules/protocol/ultimate3.c (File Modified) 
+  +6 -0		trunk/modules/protocol/undernet.c (File Modified) 
+  +9 -0		trunk/modules/protocol/unreal.c (File Modified) 
+
+
 jilles      2007/03/05 16:27:02 UTC	(20070305-7813)
   Log:
   Add core away tracking support.

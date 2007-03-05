@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: main.c 7817 2007-03-05 16:52:20Z jilles $
  */
 
 #include "atheme.h"
@@ -12,11 +12,12 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: main.c 7817 2007-03-05 16:52:20Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void on_user_identify(void *vptr);
+static void on_user_away(void *vptr);
 
 list_t ms_cmdtree;
 list_t ms_helptree;
@@ -75,6 +76,9 @@ void _modinit(module_t *m)
 	hook_add_event("user_identify");
 	hook_add_hook("user_identify", on_user_identify);
 
+	hook_add_event("user_away");
+	hook_add_hook("user_away", on_user_away);
+
         if (!cold_start)
         {
                 memosvs.me = add_service(memosvs.nick, memosvs.user,
@@ -97,6 +101,30 @@ static void on_user_identify(void *vptr)
 	user_t *u = vptr;
 	myuser_t *mu = u->myuser;
 	
+	if (mu->memoct_new > 0)
+	{
+		notice(memosvs.nick, u->nick, "You have %d new memo%s.",
+			mu->memoct_new, mu->memoct_new > 1 ? "s" : "");
+	}
+}
+
+static void on_user_away(void *vptr)
+{
+	user_t *u = vptr;
+	myuser_t *mu;
+	mynick_t *mn;
+
+	if (u->flags & UF_AWAY)
+		return;
+	mu = u->myuser;
+	if (mu == NULL)
+	{
+		mn = mynick_find(u->nick);
+		if (mn != NULL && myuser_access_verify(u, mn->owner))
+			mu = mn->owner;
+	}
+	if (mu == NULL)
+		return;
 	if (mu->memoct_new > 0)
 	{
 		notice(memosvs.nick, u->nick, "You have %d new memo%s.",
