@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: ircnet.c 7815 2007-03-05 16:42:26Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 7779 2007-03-03 13:55:42Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 7815 2007-03-05 16:42:26Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -496,6 +496,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		u = user_add(parv[0], parv[2], parv[3], NULL, parv[4], parv[1], parv[6], si->s, 0);
 
 		user_mode(u, parv[5]);
+		if (strchr(parv[5], 'a'))
+			handle_away(u, "Gone");
 
 		handle_nickchange(u);
 	}
@@ -563,8 +565,16 @@ static void m_quit(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 {
+	/* The following is hackish, but it works, because user MODE
+	 * is not used in bursts and users are not allowed to change away
+	 * status using MODE.
+	 * -- jilles */
 	if (*parv[0] == '#')
 		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
+	else if (!strcmp(parv[1], "-a"))
+		handle_away(user_find(parv[0]), NULL);
+	else if (!strcmp(parv[1], "+a"))
+		handle_away(user_find(parv[0]), "Gone");
 	else
 		user_mode(user_find(parv[0]), parv[1]);
 }

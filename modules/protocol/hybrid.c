@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: hybrid.c 7815 2007-03-05 16:42:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 7779 2007-03-03 13:55:42Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 7815 2007-03-05 16:42:26Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -990,6 +990,11 @@ static void m_trace(sourceinfo_t *si, int parc, char *parv[])
 	handle_trace(si->su, parv[0], parc >= 2 ? parv[1] : NULL);
 }
 
+static void m_away(sourceinfo_t *si, int parc, char *parv[])
+{
+	handle_away(si->su, parc >= 1 ? parv[0] : NULL);
+}
+
 static void m_pass(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* TS5: PASS mypassword :TS
@@ -1159,6 +1164,7 @@ void _modinit(module_t * m)
 	pcommand_add("INFO", m_info, 1, MSRC_USER);
 	pcommand_add("WHOIS", m_whois, 2, MSRC_USER);
 	pcommand_add("TRACE", m_trace, 1, MSRC_USER);
+	pcommand_add("AWAY", m_away, 0, MSRC_USER);
 	pcommand_add("JOIN", m_join, 1, MSRC_USER);
 	pcommand_add("PASS", m_pass, 1, MSRC_UNREG);
 	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);

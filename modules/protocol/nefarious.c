@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
  *
- * $Id: nefarious.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: nefarious.c 7815 2007-03-05 16:42:26Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 7779 2007-03-03 13:55:42Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 7815 2007-03-05 16:42:26Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -992,6 +992,11 @@ static void m_trace(sourceinfo_t *si, int parc, char *parv[])
 	handle_trace(si->su, parv[0], parc >= 2 ? parv[1] : NULL);
 }
 
+static void m_away(sourceinfo_t *si, int parc, char *parv[])
+{
+	handle_away(si->su, parc >= 1 ? parv[0] : NULL);
+}
+
 static void m_pass(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (strcmp(curr_uplink->pass, parv[0]))
@@ -1103,6 +1108,7 @@ void _modinit(module_t * m)
 	pcommand_add("F", m_info, 1, MSRC_USER);
 	pcommand_add("W", m_whois, 2, MSRC_USER);
 	pcommand_add("TR", m_trace, 1, MSRC_USER);
+	pcommand_add("A", m_away, 0, MSRC_USER);
 	pcommand_add("PASS", m_pass, 1, MSRC_UNREG);
 	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add("T", m_topic, 2, MSRC_USER | MSRC_SERVER);

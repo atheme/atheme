@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree stable branch inspircd.
  *
- * $Id: inspircd10.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: inspircd10.c 7815 2007-03-05 16:42:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 7779 2007-03-03 13:55:42Z pippijn $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 7815 2007-03-05 16:42:26Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -763,6 +763,11 @@ static void m_idle(sourceinfo_t *si, int parc, char* parv[])
 	}
 }
 
+static void m_away(sourceinfo_t *si, int parc, char *parv[])
+{
+	handle_away(si->su, parc >= 1 ? parv[0] : NULL);
+}
+
 static void m_opertype(sourceinfo_t *si, int parc, char* parv[])
 {
 	/*
@@ -893,6 +898,7 @@ void _modinit(module_t * m)
 	pcommand_add("TOPIC", m_topic, 2, MSRC_USER);
 	pcommand_add("FHOST", m_fhost, 1, MSRC_USER);
 	pcommand_add("IDLE", m_idle, 1, MSRC_USER | MSRC_SERVER);
+	pcommand_add("AWAY", m_away, 0, MSRC_USER);
 	pcommand_add("OPERTYPE", m_opertype, 1, MSRC_USER);
 	pcommand_add("METADATA", m_metadata, 3, MSRC_SERVER);
 	pcommand_add("CAPAB", m_capab, 1, MSRC_UNREG);

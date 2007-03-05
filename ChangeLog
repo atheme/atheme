@@ -1,3 +1,13 @@
+jilles      2007/03/05 16:27:02 UTC	(20070305-7813)
+  Log:
+  Add core away tracking support.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/pmodule.h (File Modified) 
+  +22 -0	trunk/src/ptasks.c (File Modified) 
+
+
 pippijn     2007/03/05 13:31:26 UTC	(20070305-7811)
   Log:
   Added a maintainer-clean make target deleting all generated files.
