@@ -1,3 +1,14 @@
+nenolod     2007/03/05 22:26:47 UTC	(20070305-7819)
+  Log:
+  - people who keep thinking that Atheme will be like a traditional IRC 
+    service make nenolod a sad panda. strongly clarify that we are not a 
+    traditional irc service.
+  
+
+  Changes:	Modified:
+  +10 -3	trunk/README (File Modified) 
+
+
 jilles      2007/03/05 16:52:20 UTC	(20070305-7817)
   Log:
   If user is unsetting away and logged in or recognized,

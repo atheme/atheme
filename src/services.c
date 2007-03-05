@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 7789 2007-03-04 00:00:48Z jilles $
+ * $Id: services.c 7821 2007-03-05 23:17:07Z jilles $
  */
 
 #include "atheme.h"
@@ -579,7 +579,10 @@ void wallops(char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, translation_get(fmt), args);
 	va_end(args);
 
-	wallops_sts(buf);
+	if (me.me != NULL && me.connected)
+		wallops_sts(buf);
+	else
+		slog(LG_ERROR, "wallops(): unable to send: %s", buf);
 }
 
 void verbose_wallops(char *fmt, ...)
@@ -594,7 +597,10 @@ void verbose_wallops(char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, translation_get(fmt), args);
 	va_end(args);
 
-	wallops_sts(buf);
+	if (me.me != NULL && me.connected)
+		wallops_sts(buf);
+	else
+		slog(LG_ERROR, "verbose_wallops(): unable to send: %s", buf);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
