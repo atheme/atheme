@@ -1,3 +1,12 @@
+nenolod     2007/03/06 12:26:59 UTC	(20070306-7897)
+  Log:
+  - mark some additional strings as translatable.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/src/services.c (File Modified) 
+
+
 pippijn     2007/03/06 02:40:03 UTC	(20070306-7895)
   Log:
   Added gettext's _() around command_fail and command_success_* calls
