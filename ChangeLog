@@ -1,3 +1,12 @@
+nenolod     2007/03/06 01:14:21 UTC	(20070306-7857)
+  Log:
+  - add P_() which provides a plural version of _().
+  
+
+  Changes:	Modified:
+  +4 -2		trunk/include/i18n.h (File Modified) 
+
+
 pippijn     2007/03/06 00:43:08 UTC	(20070306-7855)
   Log:
   Added N_() around all command descriptions
