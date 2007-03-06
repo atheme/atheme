@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 7859 2007-03-06 01:16:59Z nenolod $
+dnl $Id: configure.ac 7873 2007-03-06 01:29:02Z nenolod $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.59)
 AC_INIT(atheme, 2.2, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 7859 2007-03-06 01:16:59Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 7873 2007-03-06 01:29:02Z nenolod $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -30,7 +30,8 @@ AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [Version number of package])
 
 dnl GNU gettext
 
-AM_GNU_GETTEXT
+dnl Uncomment this if we choose to provide our own libintl.
+dnl AM_GNU_GETTEXT
 AM_GNU_GETTEXT_VERSION([0.12.1])
 
 if test "$prefix" = "NONE"; then
