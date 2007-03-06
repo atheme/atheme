@@ -1,3 +1,12 @@
+nenolod     2007/03/06 02:04:52 UTC	(20070306-7891)
+  Log:
+  - add documentation on the current state of i18n in Atheme.
+  
+
+  Changes:	Modified:
+  +30 -0	trunk/doc/TRANSLATION (File Added) 
+
+
 nenolod     2007/03/06 01:55:42 UTC	(20070306-7889)
   Log:
   - add translation template

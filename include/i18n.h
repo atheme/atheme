@@ -4,7 +4,7 @@
  *
  * This is the header which includes all of the internationalization stuff.
  *
- * $Id: i18n.h 7869 2007-03-06 01:23:46Z jilles $
+ * $Id: i18n.h 7893 2007-03-06 02:31:59Z nenolod $
  */
 
 #ifndef __ATHEME_INTL_H__
@@ -13,11 +13,15 @@
 #ifdef ENABLE_NLS
 # include <locale.h>
 # include <libintl.h>
-# define P_(x,y,z)	ngettext(x, y, z)
+# define _(String) gettext (String)
+# ifdef gettext_noop
+#  define N_(String) gettext_noop (String)
+# else
+# define N_(String) (String)
+# endif
 #else
 # define _(x)     	(x)
 # define N_(x)    	(x)
-# define P_(x,y,z)	((z) != 1 ? (x) : (y))
 #endif
 
 #endif
