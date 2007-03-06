@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 7839 2007-03-06 00:09:30Z pippijn $
+ * $Id: function.c 7849 2007-03-06 00:27:39Z pippijn $
  */
 
 #include "atheme.h"
@@ -87,7 +87,7 @@ void log_open(void)
 		if (me.connected && lastfail + 3600 < CURRTIME)
 		{
 			lastfail = CURRTIME;
-			wallops("Could not open log file (%s), log entries will be missing!", strerror(errno)); 
+			wallops(_("Could not open log file (%s), log entries will be missing!"), strerror(errno)); 
 		}
 		return;
 	}
@@ -515,7 +515,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	{
 		if (CURRTIME - lastwallops > 60)
 		{
-			wallops("Rejecting email for %s[%s@%s] due to too high load (type %d to %s <%s>)",
+			wallops(_("Rejecting email for %s[%s@%s] due to too high load (type %d to %s <%s>)"),
 					u->nick, u->user, u->vhost,
 					type, mu->name, email);
 			slog(LG_ERROR, "sendemail(): rejecting email for %s[%s@%s] (%s) due to too high load (type %d to %s <%s>)",

@@ -1,3 +1,16 @@
+pippijn     2007/03/06 00:17:22 UTC	(20070306-7847)
+  Log:
+  Added _() around snoop() strings
+  
+
+  Changes:	Modified:
+  +5 -5		trunk/src/account.c (File Modified) 
+  +1 -1		trunk/src/commandtree.c (File Modified) 
+  +4 -4		trunk/src/module.c (File Modified) 
+  +1 -1		trunk/src/node.c (File Modified) 
+  +1 -1		trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2007/03/06 00:16:14 UTC	(20070306-7845)
   Log:
   Unbreak build without ENABLE_NLS.

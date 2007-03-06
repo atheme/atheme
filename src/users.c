@@ -4,7 +4,7 @@
  *
  * User management functions.
  *
- * $Id: users.c 7839 2007-03-06 00:09:30Z pippijn $
+ * $Id: users.c 7849 2007-03-06 00:27:39Z pippijn $
  */
 
 #include "atheme.h"
@@ -226,7 +226,7 @@ user_t *user_find(const char *nick)
 	if (u != NULL)
 	{
 		if (ircd->uses_p10)
-			wallops("user_find() found user %s by nick!", nick);
+			wallops(_("user_find(): found user %s by nick!"), nick);
 		return u;
 	}
 

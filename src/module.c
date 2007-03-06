@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 7847 2007-03-06 00:17:22Z pippijn $
+ * $Id: module.c 7849 2007-03-06 00:27:39Z pippijn $
  */
 
 #include "atheme.h"
@@ -137,7 +137,7 @@ module_t *module_load(char *filespec)
 
 	if (me.connected && !cold_start)
 	{
-		wallops("Module %s loaded [at 0x%lx; MAPI version %d]", h->name, m->address, h->abi_ver);
+		wallops(_("Module %s loaded [at 0x%lx; MAPI version %d]"), h->name, m->address, h->abi_ver);
 		snoop(_("MODLOAD: \2%s\2 [at 0x%lx; MAPI version %d]"), h->name, m->address, h->abi_ver);
 	}
 
@@ -262,7 +262,7 @@ void module_unload(module_t * m)
 		slog(LG_INFO, "module_unload(): unloaded %s", m->header->name);
 		if (me.connected)
 		{
-			wallops("Module %s unloaded.", m->header->name);
+			wallops(_("Module %s unloaded."), m->header->name);
 			snoop("MODUNLOAD: \2%s\2", m->header->name);
 		}
 
