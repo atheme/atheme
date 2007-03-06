@@ -1,3 +1,12 @@
+nenolod     2007/03/06 01:53:32 UTC	(20070306-7887)
+  Log:
+  - some WTF here, anyway it's fixed now
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/po/Makefile.in.in (File Modified) 
+
+
 nenolod     2007/03/06 01:51:54 UTC	(20070306-7885)
   Log:
   - fill in POTFILES.in using intltool-update -m
