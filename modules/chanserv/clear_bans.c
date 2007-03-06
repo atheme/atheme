@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: clear_bans.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: clear_bans.c 7913 2007-03-06 23:39:47Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/clear_bans", FALSE, _modinit, _moddeinit,
-	"$Id: clear_bans.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: clear_bans.c 7913 2007-03-06 23:39:47Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -69,15 +69,15 @@ static void cs_cmd_clear_bans(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!(c = channel_find(parv[0])))
+	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 does not exist."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
-	if (!mc)
+	if (!(c = channel_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), c->name);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), parv[0]);
 		return;
 	}
 

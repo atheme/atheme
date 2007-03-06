@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService RECOVER functions.
  *
- * $Id: recover.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: recover.c 7913 2007-03-06 23:39:47Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/recover", FALSE, _modinit, _moddeinit,
-	"$Id: recover.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: recover.c 7913 2007-03-06 23:39:47Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -72,7 +72,7 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!mc->chan)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 does not exist."), name);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), name);
 		return;
 	}
 

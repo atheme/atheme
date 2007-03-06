@@ -4,7 +4,7 @@
  *
  * This file contains code for the ChanServ CLEAR USERS function.
  *
- * $Id: clear_users.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: clear_users.c 7913 2007-03-06 23:39:47Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/clear_users", FALSE, _modinit, _moddeinit,
-	"$Id: clear_users.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: clear_users.c 7913 2007-03-06 23:39:47Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -50,12 +50,6 @@ static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[])
 	node_t *n, *tn;
 	int oldlimit;
 
-	if (!(c = channel_find(channel)))
-	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 does not exist."), channel);
-		return;
-	}
-
 	if (parc >= 2)
 		snprintf(fullreason, sizeof fullreason, "CLEAR USERS used by %s: %s", get_source_name(si), parv[1]);
 	else
@@ -63,7 +57,13 @@ static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), c->name);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), channel);
+		return;
+	}
+
+	if (!(c = channel_find(channel)))
+	{
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), channel);
 		return;
 	}
 

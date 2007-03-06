@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ CLEARCHAN.
  *
- * $Id: clearchan.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: clearchan.c 7913 2007-03-06 23:39:47Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clearchan", FALSE, _modinit, _moddeinit,
-	"$Id: clearchan.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: clearchan.c 7913 2007-03-06 23:39:47Z jilles $",
 	"Robin Burchell <surreal.w00t@gmail.com>"
 );
 
@@ -66,7 +66,7 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!c)
 	{
-		command_fail(si, fault_nosuch_target, _("The channel must exist for CLEARCHAN."));
+                command_fail(si, fault_nosuch_target, _("Channel \2%s\2 does not exist."), targchan);
  		return;
 	}
 
