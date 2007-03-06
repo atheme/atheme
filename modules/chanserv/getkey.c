@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService GETKEY functions.
  *
- * $Id: getkey.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: getkey.c 7905 2007-03-06 23:02:59Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/getkey", FALSE, _modinit, _moddeinit,
-	"$Id: getkey.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: getkey.c 7905 2007-03-06 23:02:59Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -60,7 +60,7 @@ static void cs_cmd_getkey(sourceinfo_t *si, int parc, char *parv[])
 
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		command_fail(si, fault_noprivs, _("Cannot GETKEY: \2%s\2 is closed."), chan);
+		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
 		return;
 	}
 
