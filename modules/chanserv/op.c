@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: op.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: op.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,16 +12,16 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/op", FALSE, _modinit, _moddeinit,
-	"$Id: op.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: op.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_cmd_op(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_deop(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_op = { "OP", "Gives channel ops to a user.",
+command_t cs_op = { "OP", N_("Gives channel ops to a user."),
                         AC_NONE, 2, cs_cmd_op };
-command_t cs_deop = { "DEOP", "Removes channel ops from a user.",
+command_t cs_deop = { "DEOP", N_("Removes channel ops from a user."),
                         AC_NONE, 2, cs_cmd_deop };
 
 list_t *cs_cmdtree;

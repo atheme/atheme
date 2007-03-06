@@ -6,7 +6,7 @@
  * This file contains functionality which implements
  * the OperServ AKILL command.
  *
- * $Id: akill.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: akill.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: akill.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -27,12 +27,12 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_akill_sync(sourceinfo_t *si, int parc, char *parv[]);
 
 
-command_t os_akill = { "AKILL", "Manages network bans.", PRIV_AKILL, 3, os_cmd_akill };
+command_t os_akill = { "AKILL", N_("Manages network bans."), PRIV_AKILL, 3, os_cmd_akill };
 
-command_t os_akill_add = { "ADD", "Adds a network ban", AC_NONE, 2, os_cmd_akill_add };
-command_t os_akill_del = { "DEL", "Deletes a network ban", AC_NONE, 1, os_cmd_akill_del };
-command_t os_akill_list = { "LIST", "Lists all network bans", AC_NONE, 1, os_cmd_akill_list };
-command_t os_akill_sync = { "SYNC", "Synchronises network bans to servers", AC_NONE, 0, os_cmd_akill_sync };
+command_t os_akill_add = { "ADD", N_("Adds a network ban"), AC_NONE, 2, os_cmd_akill_add };
+command_t os_akill_del = { "DEL", N_("Deletes a network ban"), AC_NONE, 1, os_cmd_akill_del };
+command_t os_akill_list = { "LIST", N_("Lists all network bans"), AC_NONE, 1, os_cmd_akill_list };
+command_t os_akill_sync = { "SYNC", N_("Synchronises network bans to servers"), AC_NONE, 0, os_cmd_akill_sync };
 
 list_t *os_cmdtree;
 list_t *os_helptree;

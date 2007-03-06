@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv IGNORE functions
  *
- * $Id: ignore.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: ignore.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: ignore.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,11 +22,11 @@ static void ms_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[]);
 static void ms_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[]);
 static void ms_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ms_ignore = { "IGNORE", "Ignores memos.", AC_NONE, 2, ms_cmd_ignore };
-command_t ms_ignore_add = { "ADD", "Ignores memos from a user.", AC_NONE, 1, ms_cmd_ignore_add };
-command_t ms_ignore_del = { "DEL", "Stops ignoring memos from a user.", AC_NONE, 1, ms_cmd_ignore_del };
-command_t ms_ignore_clear = { "CLEAR", "Clears your memo ignore list.", AC_NONE, 1, ms_cmd_ignore_clear };
-command_t ms_ignore_list = { "LIST", "Shows all users you are ignoring memos from.", AC_NONE, 1, ms_cmd_ignore_list };
+command_t ms_ignore = { "IGNORE", N_(N_("Ignores memos.")), AC_NONE, 2, ms_cmd_ignore };
+command_t ms_ignore_add = { "ADD", N_(N_("Ignores memos from a user.")), AC_NONE, 1, ms_cmd_ignore_add };
+command_t ms_ignore_del = { "DEL", N_(N_("Stops ignoring memos from a user.")), AC_NONE, 1, ms_cmd_ignore_del };
+command_t ms_ignore_clear = { "CLEAR", N_(N_("Clears your memo ignore list.")), AC_NONE, 1, ms_cmd_ignore_clear };
+command_t ms_ignore_list = { "LIST", N_(N_("Shows all users you are ignoring memos from.")), AC_NONE, 1, ms_cmd_ignore_list };
 
 list_t *ms_cmdtree;
 list_t *ms_helptree;

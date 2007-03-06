@@ -4,7 +4,7 @@
  *
  * Dice generator.
  *
- * $Id: dice.c 7843 2007-03-06 00:12:28Z pippijn $
+ * $Id: dice.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,15 +12,15 @@
 DECLARE_MODULE_V1
 (
 	"gameserv/dice", FALSE, _modinit, _moddeinit,
-	"$Id: dice.c 7843 2007-03-06 00:12:28Z pippijn $",
+	"$Id: dice.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void command_dice(sourceinfo_t *si, int parc, char *parv[]);
 static void command_wod(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cmd_dice = { "ROLL", "Rolls one or more dice.", AC_NONE, 2, command_dice };
-command_t cmd_wod = { "WOD", "WOD-style dice generation.", AC_NONE, 7, command_wod };
+command_t cmd_dice = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 2, command_dice };
+command_t cmd_wod = { "WOD", N_("WOD-style dice generation."), AC_NONE, 7, command_wod };
 
 list_t *gs_cmdtree;
 list_t *cs_cmdtree;

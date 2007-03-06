@@ -4,7 +4,7 @@
  *
  * Lists object properties via their metadata table.
  *
- * $Id: taxonomy.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: taxonomy.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/taxonomy", FALSE, _modinit, _moddeinit,
-	"$Id: taxonomy.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: taxonomy.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_taxonomy = { "TAXONOMY", "Displays a user's metadata.", AC_NONE, 1, ns_cmd_taxonomy };
+command_t ns_taxonomy = { "TAXONOMY", N_("Displays a user's metadata."), AC_NONE, 1, ns_cmd_taxonomy };
 
 list_t *ns_cmdtree, *ns_helptree;
 

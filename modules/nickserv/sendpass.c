@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService SENDPASS function.
  *
- * $Id: sendpass.c 7803 2007-03-04 22:06:37Z jilles $
+ * $Id: sendpass.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/sendpass", FALSE, _modinit, _moddeinit,
-	"$Id: sendpass.c 7803 2007-03-04 22:06:37Z jilles $",
+	"$Id: sendpass.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_sendpass = { "SENDPASS", "Email registration passwords.", PRIV_USER_SENDPASS, 1, ns_cmd_sendpass };
+command_t ns_sendpass = { "SENDPASS", N_("Email registration passwords."), PRIV_USER_SENDPASS, 1, ns_cmd_sendpass };
 
 list_t *ns_cmdtree, *ns_helptree;
 

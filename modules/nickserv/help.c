@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the NickServ HELP command.
  *
- * $Id: help.c 7799 2007-03-04 17:09:29Z jilles $
+ * $Id: help.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 7799 2007-03-04 17:09:29Z jilles $",
+	"$Id: help.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,7 +20,7 @@ list_t *ns_cmdtree, *ns_helptree;
 
 static void ns_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_help = { "HELP", "Displays contextual help information.", AC_NONE, 1, ns_cmd_help };
+command_t ns_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 1, ns_cmd_help };
 
 void _modinit(module_t *m)
 {

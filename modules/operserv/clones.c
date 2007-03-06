@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing clone detection.
  *
- * $Id: clones.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: clones.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: clones.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -57,13 +57,13 @@ struct hostentry_
 	list_t clients;
 };
 
-command_t os_clones = { "CLONES", "Manages network wide clones.", PRIV_AKILL, 4, os_cmd_clones };
+command_t os_clones = { "CLONES", N_("Manages network wide clones."), PRIV_AKILL, 4, os_cmd_clones };
 
-command_t os_clones_kline = { "KLINE", "Enables/disables klines for excessive clones.", AC_NONE, 1, os_cmd_clones_kline };
-command_t os_clones_list = { "LIST", "Lists clones on the network.", AC_NONE, 0, os_cmd_clones_list };
-command_t os_clones_addexempt = { "ADDEXEMPT", "Adds a clones exemption.", AC_NONE, 3, os_cmd_clones_addexempt };
-command_t os_clones_delexempt = { "DELEXEMPT", "Deletes a clones exemption.", AC_NONE, 1, os_cmd_clones_delexempt };
-command_t os_clones_listexempt = { "LISTEXEMPT", "Lists clones exemptions.", AC_NONE, 0, os_cmd_clones_listexempt };
+command_t os_clones_kline = { "KLINE", N_("Enables/disables klines for excessive clones."), AC_NONE, 1, os_cmd_clones_kline };
+command_t os_clones_list = { "LIST", N_("Lists clones on the network."), AC_NONE, 0, os_cmd_clones_list };
+command_t os_clones_addexempt = { "ADDEXEMPT", N_("Adds a clones exemption."), AC_NONE, 3, os_cmd_clones_addexempt };
+command_t os_clones_delexempt = { "DELEXEMPT", N_("Deletes a clones exemption."), AC_NONE, 1, os_cmd_clones_delexempt };
+command_t os_clones_listexempt = { "LISTEXEMPT", N_("Lists clones exemptions."), AC_NONE, 0, os_cmd_clones_listexempt };
 
 void _modinit(module_t *m)
 {

@@ -4,7 +4,7 @@
  *
  * This file contains code for nickserv RESETPASS
  *
- * $Id: resetpass.c 7805 2007-03-04 22:09:32Z jilles $
+ * $Id: resetpass.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/resetpass", FALSE, _modinit, _moddeinit,
-	"$Id: resetpass.c 7805 2007-03-04 22:09:32Z jilles $",
+	"$Id: resetpass.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_resetpass = { "RESETPASS", "Resets a nickname password.", PRIV_USER_ADMIN, 1, ns_cmd_resetpass };
+command_t ns_resetpass = { "RESETPASS", N_("Resets a nickname password."), PRIV_USER_ADMIN, 1, ns_cmd_resetpass };
 
 list_t *ns_cmdtree, *ns_helptree;
 

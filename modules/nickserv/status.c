@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService STATUS function.
  *
- * $Id: status.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: status.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,15 +12,15 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/status", FALSE, _modinit, _moddeinit,
-	"$Id: status.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: status.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void ns_cmd_acc(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_status(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_status = { "STATUS", "Displays session information.", AC_NONE, 0, ns_cmd_status };
-command_t ns_acc = { "ACC", "Displays parsable session information", AC_NONE, 2, ns_cmd_acc };
+command_t ns_status = { "STATUS", N_("Displays session information."), AC_NONE, 0, ns_cmd_status };
+command_t ns_acc = { "ACC", N_("Displays parsable session information"), AC_NONE, 2, ns_cmd_acc };
 
 list_t *ns_cmdtree, *ns_helptree;
 

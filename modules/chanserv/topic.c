@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TOPIC functions.
  *
- * $Id: topic.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: topic.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,16 +12,16 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/topic", FALSE, _modinit, _moddeinit,
-	"$Id: topic.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: topic.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_cmd_topic(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_topic = { "TOPIC", "Sets a topic on a channel.",
+command_t cs_topic = { "TOPIC", N_("Sets a topic on a channel."),
                         AC_NONE, 2, cs_cmd_topic };
-command_t cs_topicappend = { "TOPICAPPEND", "Appends a topic on a channel.",
+command_t cs_topicappend = { "TOPICAPPEND", N_("Appends a topic on a channel."),
                         AC_NONE, 2, cs_cmd_topicappend };
 
 list_t *cs_cmdtree;

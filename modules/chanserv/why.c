@@ -4,7 +4,7 @@
  *
  * This file contains code for the ChanServ WHY function.
  *
- * $Id: why.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: why.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,19 +12,14 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/why", FALSE, _modinit, _moddeinit,
-	"$Id: why.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: why.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_why = {
-	"WHY",
-	"Explains channel access logic.",
-	AC_NONE,
-	2,
-	cs_cmd_why
-};
+command_t cs_why = { "WHY", N_("Explains channel access logic."),
+		     AC_NONE, 2, cs_cmd_why };
 
 list_t *cs_cmdtree;
 list_t *cs_helptree;

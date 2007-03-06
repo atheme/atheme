@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: halfop.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: halfop.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,16 +12,16 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/halfop", FALSE, _modinit, _moddeinit,
-	"$Id: halfop.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: halfop.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_cmd_halfop(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_dehalfop(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_halfop = { "HALFOP", "Gives channel halfops to a user.",
+command_t cs_halfop = { "HALFOP", N_("Gives channel halfops to a user."),
                         AC_NONE, 2, cs_cmd_halfop };
-command_t cs_dehalfop = { "DEHALFOP", "Removes channel halfops from a user.",
+command_t cs_dehalfop = { "DEHALFOP", N_("Removes channel halfops from a user."),
                         AC_NONE, 2, cs_cmd_dehalfop };
 
 list_t *cs_cmdtree;

@@ -4,7 +4,7 @@
  *
  * Rock Paper Scissors
  *
- * $Id: rps.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: rps.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"gameserv/rps", FALSE, _modinit, _moddeinit,
-	"$Id: rps.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: rps.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void command_rps(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cmd_rps = { "RPS", "Ask the 8-Ball a question.", AC_NONE, 0, command_rps };
+command_t cmd_rps = { "RPS", N_("Ask the 8-Ball a question."), AC_NONE, 0, command_rps };
 
 list_t *gs_cmdtree;
 list_t *cs_cmdtree;

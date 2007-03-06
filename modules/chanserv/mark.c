@@ -4,7 +4,7 @@
  *
  * Marking for channels.
  *
- * $Id: mark.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: mark.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/mark", FALSE, _modinit, _moddeinit,
-	"$Id: mark.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: mark.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_cmd_mark(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_mark = { "MARK", "Adds a note to a channel.",
+command_t cs_mark = { "MARK", N_("Adds a note to a channel."),
 			PRIV_MARK, 3, cs_cmd_mark };
 
 list_t *cs_cmdtree;

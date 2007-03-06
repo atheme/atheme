@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv DELETE function
  *
- * $Id: delete.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: delete.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,15 +12,15 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/delete", FALSE, _modinit, _moddeinit,
-	"$Id: delete.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: delete.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ms_delete = { "DELETE", "Deletes memos.",
+command_t ms_delete = { "DELETE", N_("Deletes memos."),
                         AC_NONE, 1, ms_cmd_delete };
-command_t ms_del = { "DEL", "Alias for DELETE",
+command_t ms_del = { "DEL", N_("Alias for DELETE"),
 			AC_NONE, 1, ms_cmd_delete };
 
 list_t *ms_cmdtree;

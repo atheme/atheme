@@ -4,7 +4,7 @@
  *
  * Dynamic services operator privileges
  *
- * $Id: soper.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: soper.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/soper", FALSE, _modinit, _moddeinit,
-	"$Id: soper.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: soper.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,12 +22,12 @@ static void os_cmd_soper_listclass(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_soper_del(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_soper = { "SOPER", "Shows and changes services operator privileges.", AC_NONE, 3, os_cmd_soper };
+command_t os_soper = { "SOPER", N_("Shows and changes services operator privileges."), AC_NONE, 3, os_cmd_soper };
 
-command_t os_soper_list = { "LIST", "Lists services operators.", PRIV_VIEWPRIVS, 0, os_cmd_soper_list };
-command_t os_soper_listclass = { "LISTCLASS", "Lists operclasses.", PRIV_VIEWPRIVS, 0, os_cmd_soper_listclass };
-command_t os_soper_add = { "ADD", "Grants services operator privileges to an account.", PRIV_GRANT, 2, os_cmd_soper_add };
-command_t os_soper_del = { "DEL", "Removes services operator privileges from an account.", PRIV_GRANT, 1, os_cmd_soper_del };
+command_t os_soper_list = { "LIST", N_("Lists services operators."), PRIV_VIEWPRIVS, 0, os_cmd_soper_list };
+command_t os_soper_listclass = { "LISTCLASS", N_("Lists operclasses."), PRIV_VIEWPRIVS, 0, os_cmd_soper_listclass };
+command_t os_soper_add = { "ADD", N_("Grants services operator privileges to an account."), PRIV_GRANT, 2, os_cmd_soper_add };
+command_t os_soper_del = { "DEL", N_("Removes services operator privileges from an account."), PRIV_GRANT, 1, os_cmd_soper_del };
 
 list_t *os_cmdtree;
 list_t *os_helptree;

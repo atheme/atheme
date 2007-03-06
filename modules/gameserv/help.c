@@ -21,7 +21,7 @@ list_t *gs_helptree;
 
 static void gs_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t gs_help = { "HELP", "Displays contextual help information.", AC_NONE, 2, gs_cmd_help };
+command_t gs_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 2, gs_cmd_help };
 
 void _modinit(module_t *m)
 {

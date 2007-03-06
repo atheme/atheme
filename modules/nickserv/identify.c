@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY and LOGIN functions.
  *
- * $Id: identify.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: identify.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -21,17 +21,17 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/" COMMAND_LC, FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: identify.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[]);
 
 #ifdef NICKSERV_LOGIN
-command_t ns_login = { "LOGIN", "Authenticates to a services account.", AC_NONE, 2, ns_cmd_login };
+command_t ns_login = { "LOGIN", N_("Authenticates to a services account."), AC_NONE, 2, ns_cmd_login };
 #else
-command_t ns_identify = { "IDENTIFY", "Identifies to services for a nickname.", AC_NONE, 2, ns_cmd_login };
-command_t ns_id = { "ID", "Alias for IDENTIFY", AC_NONE, 2, ns_cmd_login };
+command_t ns_identify = { "IDENTIFY", N_("Identifies to services for a nickname."), AC_NONE, 2, ns_cmd_login };
+command_t ns_id = { "ID", N_("Alias for IDENTIFY"), AC_NONE, 2, ns_cmd_login };
 #endif
 
 list_t *ns_cmdtree, *ns_helptree, *ms_cmdtree;

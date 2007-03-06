@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FFLAGS functions.
  *
- * $Id: fflags.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: fflags.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,13 +13,13 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/fflags", FALSE, _modinit, _moddeinit,
-	"$Id: fflags.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: fflags.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_fflags = { "FFLAGS", "Forces a flags change on a channel.",
+command_t cs_fflags = { "FFLAGS", N_("Forces a flags change on a channel."),
                         PRIV_CHAN_ADMIN, 3, cs_cmd_fflags };
 
 list_t *cs_cmdtree;

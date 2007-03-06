@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService SHUTDOWN command.
  *
- * $Id: shutdown.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: shutdown.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"operserv/shutdown", FALSE, _modinit, _moddeinit,
-	"$Id: shutdown.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: shutdown.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void os_cmd_shutdown(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_shutdown = { "SHUTDOWN", "Shuts down services.", PRIV_ADMIN, 0, os_cmd_shutdown };
+command_t os_shutdown = { "SHUTDOWN", N_("Shuts down services."), PRIV_ADMIN, 0, os_cmd_shutdown };
 
 list_t *os_cmdtree;
 list_t *os_helptree;

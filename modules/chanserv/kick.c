@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: kick.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: kick.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,16 +12,16 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/kick", FALSE, _modinit, _moddeinit,
-	"$Id: kick.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: kick.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_cmd_kick(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_kickban(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_kick = { "KICK", "Removes a user from a channel.",
+command_t cs_kick = { "KICK", N_("Removes a user from a channel."),
                         AC_NONE, 3, cs_cmd_kick };
-command_t cs_kickban = { "KICKBAN", "Removes and bans a user from a channel.",
+command_t cs_kickban = { "KICKBAN", N_("Removes and bans a user from a channel."),
 			AC_NONE, 3, cs_cmd_kickban };
 
 list_t *cs_cmdtree;

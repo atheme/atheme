@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: set.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: set.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -35,22 +35,22 @@ static void cs_cmd_set_staffonly(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_set = { "SET", "Sets various control flags.",
+command_t cs_set = { "SET", N_("Sets various control flags."),
                         AC_NONE, 3, cs_cmd_set };
 
-command_t cs_set_founder   = { "FOUNDER",   "Transfers foundership of a channel.",                          AC_NONE, 2, cs_cmd_set_founder    };
-command_t cs_set_mlock     = { "MLOCK",     "Sets channel mode lock.",                                      AC_NONE, 2, cs_cmd_set_mlock      };
-command_t cs_set_secure    = { "SECURE",    "Prevents unauthorized users from gaining operator status.",    AC_NONE, 2, cs_cmd_set_secure     };
-command_t cs_set_verbose   = { "VERBOSE",   "Notifies channel about access list modifications.",            AC_NONE, 2, cs_cmd_set_verbose    };
-command_t cs_set_url       = { "URL",       "Sets the channel URL.",                                        AC_NONE, 2, cs_cmd_set_url        };
-command_t cs_set_entrymsg  = { "ENTRYMSG",  "Sets the channel's entry message.",                            AC_NONE, 2, cs_cmd_set_entrymsg   };
-command_t cs_set_property  = { "PROPERTY",  "Manipulates channel metadata.",                                AC_NONE, 2, cs_cmd_set_property   };
-command_t cs_set_email     = { "EMAIL",     "Sets the channel e-mail address.",                             AC_NONE, 2, cs_cmd_set_email      };
-command_t cs_set_keeptopic = { "KEEPTOPIC", "Enables topic retention.",                                     AC_NONE, 2, cs_cmd_set_keeptopic  };
-command_t cs_set_topiclock = { "TOPICLOCK", "Restricts who can change the topic.",                          AC_NONE, 2, cs_cmd_set_topiclock  };
-command_t cs_set_guard     = { "GUARD",     "Sets whether or not services will inhabit the channel.",       AC_NONE, 2, cs_cmd_set_guard      };
-command_t cs_set_fantasy   = { "FANTASY",   "Allows or disallows in-channel commands.",                     AC_NONE, 2, cs_cmd_set_fantasy    };
-command_t cs_set_staffonly = { "STAFFONLY", "Sets the channel as staff-only. (Non staff is kickbanned.)",   PRIV_CHAN_ADMIN, 2, cs_cmd_set_staffonly  };
+command_t cs_set_founder   = { "FOUNDER",   N_("Transfers foundership of a channel."),                          AC_NONE, 2, cs_cmd_set_founder    };
+command_t cs_set_mlock     = { "MLOCK",     N_("Sets channel mode lock."),                                      AC_NONE, 2, cs_cmd_set_mlock      };
+command_t cs_set_secure    = { "SECURE",    N_("Prevents unauthorized users from gaining operator status."),    AC_NONE, 2, cs_cmd_set_secure     };
+command_t cs_set_verbose   = { "VERBOSE",   N_("Notifies channel about access list modifications."),            AC_NONE, 2, cs_cmd_set_verbose    };
+command_t cs_set_url       = { "URL",       N_("Sets the channel URL."),                                        AC_NONE, 2, cs_cmd_set_url        };
+command_t cs_set_entrymsg  = { "ENTRYMSG",  N_("Sets the channel's entry message."),                            AC_NONE, 2, cs_cmd_set_entrymsg   };
+command_t cs_set_property  = { "PROPERTY",  N_("Manipulates channel metadata."),                                AC_NONE, 2, cs_cmd_set_property   };
+command_t cs_set_email     = { "EMAIL",     N_("Sets the channel e-mail address."),                             AC_NONE, 2, cs_cmd_set_email      };
+command_t cs_set_keeptopic = { "KEEPTOPIC", N_("Enables topic retention."),                                     AC_NONE, 2, cs_cmd_set_keeptopic  };
+command_t cs_set_topiclock = { "TOPICLOCK", N_("Restricts who can change the topic."),                          AC_NONE, 2, cs_cmd_set_topiclock  };
+command_t cs_set_guard     = { "GUARD",     N_("Sets whether or not services will inhabit the channel."),       AC_NONE, 2, cs_cmd_set_guard      };
+command_t cs_set_fantasy   = { "FANTASY",   N_("Allows or disallows in-channel commands."),                     AC_NONE, 2, cs_cmd_set_fantasy    };
+command_t cs_set_staffonly = { "STAFFONLY", N_("Sets the channel as staff-only. (Non staff is kickbanned.)"),   PRIV_CHAN_ADMIN, 2, cs_cmd_set_staffonly  };
 
 command_t *cs_set_commands[] = {
 	&cs_set_founder,

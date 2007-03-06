@@ -4,7 +4,7 @@
  *
  * Marking for nicknames.
  *
- * $Id: mark.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: mark.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/mark", FALSE, _modinit, _moddeinit,
-	"$Id: mark.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: mark.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_mark = { "MARK", "Adds a note to a user.", PRIV_MARK, 3, ns_cmd_mark };
+command_t ns_mark = { "MARK", N_("Adds a note to a user."), PRIV_MARK, 3, ns_cmd_mark };
 
 list_t *ns_cmdtree, *ns_helptree;
 

@@ -1,3 +1,12 @@
+jilles      2007/03/06 00:31:04 UTC	(20070306-7851)
+  Log:
+  Add missing '1' to ubase64 table.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/ubase64.c (File Modified) 
+
+
 pippijn     2007/03/06 00:27:39 UTC	(20070306-7849)
   Log:
   - gettextised wallops

@@ -5,7 +5,7 @@
  *
  * This file contains routines to handle the OService HELP command.
  *
- * $Id: help.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: help.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,13 +13,13 @@
 DECLARE_MODULE_V1
 (
 	"operserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: help.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void os_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_help = { "HELP", "Displays contextual help information.", AC_NONE, 1, os_cmd_help };
+command_t os_help = { "HELP", N_("Displays contextual help information."), AC_NONE, 1, os_cmd_help };
 
 list_t *os_cmdtree;
 list_t *os_helptree;

@@ -4,7 +4,7 @@
  *
  * This file contains code for OS UPTIME
  *
- * $Id: uptime.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: uptime.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"operserv/uptime", FALSE, _modinit, _moddeinit,
-	"$Id: uptime.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: uptime.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void os_cmd_uptime(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_uptime = { "UPTIME", "Shows services uptime and the number of registered nicks and channels.", PRIV_SERVER_AUSPEX, 1, os_cmd_uptime };
+command_t os_uptime = { "UPTIME", N_("Shows services uptime and the number of registered nicks and channels."), PRIV_SERVER_AUSPEX, 1, os_cmd_uptime };
 
 list_t *os_cmdtree;
 list_t *os_helptree;

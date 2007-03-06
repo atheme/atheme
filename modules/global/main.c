@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: main.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"global/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: main.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -30,20 +30,10 @@ list_t *os_helptree;
 static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[]);
 static void gs_cmd_help(sourceinfo_t *si, const int parc, char *parv[]);
 
-command_t gs_help = {
-	"HELP",
-	"Displays contextual help information.",
-	PRIV_GLOBAL,
-	1,
-	gs_cmd_help
-};
-command_t gs_global = {
-	"GLOBAL",
-	"Sends a global notice.",
-	PRIV_GLOBAL,
-        1,
-	gs_cmd_global
-};
+command_t gs_help = { "HELP", N_("Displays contextual help information."),
+		      PRIV_GLOBAL, 1, gs_cmd_help };
+command_t gs_global = { "GLOBAL", N_("Sends a global notice."),
+			PRIV_GLOBAL, 1, gs_cmd_global };
 
 /* *INDENT-ON* */
 

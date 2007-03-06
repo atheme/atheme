@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService RECOVER functions.
  *
- * $Id: recover.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: recover.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/recover", FALSE, _modinit, _moddeinit,
-	"$Id: recover.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: recover.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_recover = { "RECOVER", "Regain control of your channel.",
+command_t cs_recover = { "RECOVER", N_("Regain control of your channel."),
                         AC_NONE, 1, cs_cmd_recover };
 
 list_t *cs_cmdtree;

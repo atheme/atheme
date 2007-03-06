@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ RWATCH.
  *
- * $Id: rwatch.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: rwatch.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rwatch", FALSE, _modinit, _moddeinit,
-	"$Id: rwatch.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: rwatch.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -46,12 +46,12 @@ struct rwatch_
 	regex_t *re;
 };
 
-command_t os_rwatch = { "RWATCH", "Performs actions on connecting clients matching regexes.", PRIV_USER_AUSPEX, 2, os_cmd_rwatch };
+command_t os_rwatch = { "RWATCH", N_("Performs actions on connecting clients matching regexes."), PRIV_USER_AUSPEX, 2, os_cmd_rwatch };
 
-command_t os_rwatch_add = { "ADD", "Adds an entry to the regex watch list.", AC_NONE, 1, os_cmd_rwatch_add };
-command_t os_rwatch_del = { "DEL", "Removes an entry from the regex watch list.", AC_NONE, 1, os_cmd_rwatch_del };
-command_t os_rwatch_list = { "LIST", "Displays the regex watch list.", AC_NONE, 1, os_cmd_rwatch_list };
-command_t os_rwatch_set = { "SET", "Changes actions on an entry in the regex watch list", AC_NONE, 1, os_cmd_rwatch_set };
+command_t os_rwatch_add = { "ADD", N_("Adds an entry to the regex watch list."), AC_NONE, 1, os_cmd_rwatch_add };
+command_t os_rwatch_del = { "DEL", N_("Removes an entry from the regex watch list."), AC_NONE, 1, os_cmd_rwatch_del };
+command_t os_rwatch_list = { "LIST", N_("Displays the regex watch list."), AC_NONE, 1, os_cmd_rwatch_list };
+command_t os_rwatch_set = { "SET", N_("Changes actions on an entry in the regex watch list"), AC_NONE, 1, os_cmd_rwatch_set };
 
 void _modinit(module_t *m)
 {

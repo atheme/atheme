@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService IGNORE command.
  *
- * $Id: ignore.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: ignore.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: ignore.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,11 +22,11 @@ static void os_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_ignore = { "IGNORE", "Ignore a mask from services.", PRIV_ADMIN, 3, os_cmd_ignore };
-command_t os_ignore_add = { "ADD", "Add services ignore", PRIV_ADMIN, 2, os_cmd_ignore_add };
-command_t os_ignore_del = { "DEL", "Delete services ignore", PRIV_ADMIN, 1, os_cmd_ignore_del };
-command_t os_ignore_list = { "LIST", "List services ignores", PRIV_ADMIN, 0, os_cmd_ignore_list };
-command_t os_ignore_clear = { "CLEAR", "Clear all services ignores", PRIV_ADMIN, 0, os_cmd_ignore_clear };
+command_t os_ignore = { "IGNORE", N_("Ignore a mask from services."), PRIV_ADMIN, 3, os_cmd_ignore };
+command_t os_ignore_add = { "ADD", N_("Add services ignore"), PRIV_ADMIN, 2, os_cmd_ignore_add };
+command_t os_ignore_del = { "DEL", N_("Delete services ignore"), PRIV_ADMIN, 1, os_cmd_ignore_del };
+command_t os_ignore_list = { "LIST", N_("List services ignores"), PRIV_ADMIN, 0, os_cmd_ignore_list };
+command_t os_ignore_clear = { "CLEAR", N_("Clear all services ignores"), PRIV_ADMIN, 0, os_cmd_ignore_clear };
 
 list_t *os_cmdtree;
 list_t *os_helptree;

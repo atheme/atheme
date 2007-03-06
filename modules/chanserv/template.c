@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TEMPLATE functions.
  *
- * $Id: template.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: template.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/template", FALSE, _modinit, _moddeinit,
-	"$Id: template.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: template.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -21,7 +21,7 @@ static void list_generic_flags(sourceinfo_t *si);
 
 static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_flags = { "TEMPLATE", "Manipulates predefined sets of flags.",
+command_t cs_flags = { "TEMPLATE", N_("Manipulates predefined sets of flags."),
                         AC_NONE, 3, cs_cmd_template };
 
 list_t *cs_cmdtree;

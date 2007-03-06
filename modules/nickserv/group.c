@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ GROUP command.
  *
- * $Id: group.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: group.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/group", FALSE, _modinit, _moddeinit,
-	"$Id: group.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: group.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,9 +20,9 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_group = { "GROUP", "Adds a nickname to your account.", AC_NONE, 0, ns_cmd_group };
-command_t ns_ungroup = { "UNGROUP", "Removes a nickname from your account.", AC_NONE, 1, ns_cmd_ungroup };
-command_t ns_fungroup = { "FUNGROUP", "Forces removal of a nickname from an account.", PRIV_USER_ADMIN, 1, ns_cmd_fungroup };
+command_t ns_group = { "GROUP", N_("Adds a nickname to your account."), AC_NONE, 0, ns_cmd_group };
+command_t ns_ungroup = { "UNGROUP", N_("Removes a nickname from your account."), AC_NONE, 1, ns_cmd_ungroup };
+command_t ns_fungroup = { "FUNGROUP", N_("Forces removal of a nickname from an account."), PRIV_USER_ADMIN, 1, ns_cmd_fungroup };
 
 list_t *ns_cmdtree, *ns_helptree;
 

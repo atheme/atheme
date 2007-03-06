@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FTRANSFER function.
  *
- * $Id: ftransfer.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: ftransfer.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ftransfer", FALSE, _modinit, _moddeinit,
-	"$Id: ftransfer.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: ftransfer.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_ftransfer = { "FTRANSFER", "Forces foundership transfer of a channel.",
+command_t cs_ftransfer = { "FTRANSFER", N_("Forces foundership transfer of a channel."),
                            PRIV_CHAN_ADMIN, 2, cs_cmd_ftransfer };
                                                                                    
 list_t *cs_cmdtree;

@@ -4,7 +4,7 @@
  *
  * Regex usersearch feature.
  *
- * $Id: rmatch.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: rmatch.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 /*
@@ -16,7 +16,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rmatch", FALSE, _modinit, _moddeinit,
-	"$Id: rmatch.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: rmatch.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -25,7 +25,7 @@ list_t *os_helptree;
 
 static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_rmatch = { "RMATCH", "Scans the network for users based on a specific regex pattern.", PRIV_USER_AUSPEX, 1, os_cmd_rmatch };
+command_t os_rmatch = { "RMATCH", N_("Scans the network for users based on a specific regex pattern."), PRIV_USER_AUSPEX, 1, os_cmd_rmatch };
 
 void _modinit(module_t *m)
 {

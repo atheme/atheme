@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService VOICE functions.
  *
- * $Id: voice.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: voice.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,16 +12,16 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/voice", FALSE, _modinit, _moddeinit,
-	"$Id: voice.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: voice.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_devoice(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t cs_voice = { "VOICE", "Gives channel voice to a user.",
+command_t cs_voice = { "VOICE", N_("Gives channel voice to a user."),
                          AC_NONE, 2, cs_cmd_voice };
-command_t cs_devoice = { "DEVOICE", "Removes channel voice from a user.",
+command_t cs_devoice = { "DEVOICE", N_("Removes channel voice from a user."),
                          AC_NONE, 2, cs_cmd_devoice };
 
 list_t *cs_cmdtree;

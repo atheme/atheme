@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ COMPARE.
  *
- * $Id: compare.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: compare.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,13 +12,13 @@
 DECLARE_MODULE_V1
 (
 	"operserv/compare", FALSE, _modinit, _moddeinit,
-	"$Id: compare.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: compare.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Robin Burchell <surreal.w00t@gmail.com>"
 );
 
 static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t os_compare = { "COMPARE", "Compares two users or channels.", PRIV_CHAN_AUSPEX, 2, os_cmd_compare };
+command_t os_compare = { "COMPARE", N_("Compares two users or channels."), PRIV_CHAN_AUSPEX, 2, os_cmd_compare };
 
 list_t *os_cmdtree;
 list_t *os_helptree;

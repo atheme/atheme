@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: set.c 7855 2007-03-06 00:43:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: set.c 7855 2007-03-06 00:43:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -20,7 +20,7 @@ static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[]);
 
 list_t *ns_cmdtree, *ns_helptree;
 
-command_t ns_set = { "SET", "Sets various control flags.", AC_NONE, 2, ns_cmd_set };
+command_t ns_set = { "SET", N_("Sets various control flags."), AC_NONE, 2, ns_cmd_set };
 
 list_t ns_set_cmdtree;
 
@@ -142,7 +142,7 @@ static void _ns_setemail(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, "The email address for \2%s\2 has been changed to \2%s\2.", si->smu->name, si->smu->email);
 }
 
-command_t ns_set_email = { "EMAIL", "Changes your e-mail address.", AC_NONE, 1, _ns_setemail };
+command_t ns_set_email = { "EMAIL", N_("Changes your e-mail address."), AC_NONE, 1, _ns_setemail };
 
 /* SET HIDEMAIL [ON|OFF] */
 static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
@@ -197,7 +197,7 @@ static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-command_t ns_set_hidemail = { "HIDEMAIL", "Hides your e-mail address.", AC_NONE, 1, _ns_sethidemail };
+command_t ns_set_hidemail = { "HIDEMAIL", N_("Hides your e-mail address."), AC_NONE, 1, _ns_sethidemail };
 
 static void _ns_setemailmemos(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -257,7 +257,7 @@ static void _ns_setemailmemos(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-command_t ns_set_emailmemos = { "EMAILMEMOS", "Forwards incoming memos to your e-mail address.", AC_NONE, 1, _ns_setemailmemos };
+command_t ns_set_emailmemos = { "EMAILMEMOS", N_("Forwards incoming memos to your e-mail address."), AC_NONE, 1, _ns_setemailmemos };
 
 static void _ns_setnomemo(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -306,7 +306,7 @@ static void _ns_setnomemo(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-command_t ns_set_nomemo = { "NOMEMO", "Disables the ability to recieve memos.", AC_NONE, 1, _ns_setnomemo };
+command_t ns_set_nomemo = { "NOMEMO", N_("Disables the ability to recieve memos."), AC_NONE, 1, _ns_setnomemo };
 
 static void _ns_setneverop(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -362,7 +362,7 @@ static void _ns_setneverop(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-command_t ns_set_neverop = { "NEVEROP", "Prevents you from being added to access lists.", AC_NONE, 1, _ns_setneverop };
+command_t ns_set_neverop = { "NEVEROP", N_("Prevents you from being added to access lists."), AC_NONE, 1, _ns_setneverop };
 
 static void _ns_setnoop(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -417,7 +417,7 @@ static void _ns_setnoop(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-command_t ns_set_noop = { "NOOP", "Prevents services from setting modes upon you automatically.", AC_NONE, 1, _ns_setnoop };
+command_t ns_set_noop = { "NOOP", N_("Prevents services from setting modes upon you automatically."), AC_NONE, 1, _ns_setnoop };
 
 static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -476,7 +476,7 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, "Metadata entry \2%s\2 added.", property);
 }
 
-command_t ns_set_property = { "PROPERTY", "Manipulates metadata entries associated with a nickname.", AC_NONE, 2, _ns_setproperty };
+command_t ns_set_property = { "PROPERTY", N_("Manipulates metadata entries associated with a nickname."), AC_NONE, 2, _ns_setproperty };
 
 static void _ns_setpassword(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -514,7 +514,7 @@ static void _ns_setpassword(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-command_t ns_set_password = { "PASSWORD", "Changes the password associated with your nickname.", AC_NONE, 1, _ns_setpassword };
+command_t ns_set_password = { "PASSWORD", N_("Changes the password associated with your nickname."), AC_NONE, 1, _ns_setpassword };
 
 command_t *ns_set_commands[] = {
 	&ns_set_email,
