@@ -5,7 +5,7 @@
 #
 # This file is a simple setup script.
 #
-# $Id: setup 7865 2007-03-06 01:22:17Z nenolod $
+# $Id: setup 7867 2007-03-06 01:23:36Z nenolod $
 
 PREFIX="$HOME/atheme"
 LARGENET="no"
@@ -110,7 +110,7 @@ while [ $ok -eq 0 ] ; do
     ok=1
   fi
 done
-$NLS=$INPUT
+NLS=$INPUT
 
 case "$NLS" in
   [Yy])
