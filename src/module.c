@@ -4,7 +4,7 @@
  *
  * Module management.
  *
- * $Id: module.c 7839 2007-03-06 00:09:30Z pippijn $
+ * $Id: module.c 7847 2007-03-06 00:17:22Z pippijn $
  */
 
 #include "atheme.h"
@@ -73,7 +73,7 @@ module_t *module_load(char *filespec)
 		char *errp = sstrdup(dlerror());
 		slog(LG_ERROR, "module_load(): error: %s", errp);
 		if (me.connected)
-			snoop("MODLOAD:ERROR: loading module \2%s\2: %s", filespec, errp);
+			snoop(_("MODLOAD:ERROR: loading module \2%s\2: %s"), filespec, errp);
 		free(errp);
 		return NULL;
 	}
@@ -88,7 +88,7 @@ module_t *module_load(char *filespec)
 		slog(LG_DEBUG, "module_load(): %s: Attempted to load an incompatible module. Aborting.", filespec);
 
 		if (me.connected)
-			snoop("MODLOAD:ERROR: Module \2%s\2 is not a valid atheme module.", filespec);
+			snoop(_("MODLOAD:ERROR: Module \2%s\2 is not a valid atheme module."), filespec);
 
 		linker_close(handle);
 		return NULL;
@@ -125,7 +125,7 @@ module_t *module_load(char *filespec)
 	{
 		slog(LG_ERROR, "module_load(): module %s init failed", filespec);
 		if (me.connected)
-			snoop("MODLOAD:ERROR: Init failed while loading module \2%s\2", filespec);
+			snoop(_("MODLOAD:ERROR: Init failed while loading module \2%s\2"), filespec);
 		module_unload(m);
 		return NULL;
 	}
@@ -138,7 +138,7 @@ module_t *module_load(char *filespec)
 	if (me.connected && !cold_start)
 	{
 		wallops("Module %s loaded [at 0x%lx; MAPI version %d]", h->name, m->address, h->abi_ver);
-		snoop("MODLOAD: \2%s\2 [at 0x%lx; MAPI version %d]", h->name, m->address, h->abi_ver);
+		snoop(_("MODLOAD: \2%s\2 [at 0x%lx; MAPI version %d]"), h->name, m->address, h->abi_ver);
 	}
 
 	return m;

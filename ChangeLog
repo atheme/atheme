@@ -1,3 +1,12 @@
+jilles      2007/03/06 00:16:14 UTC	(20070306-7845)
+  Log:
+  Unbreak build without ENABLE_NLS.
+  
+
+  Changes:	Modified:
+  +7 -5		trunk/src/atheme.c (File Modified) 
+
+
 pippijn     2007/03/06 00:12:28 UTC	(20070306-7843)
   Log:
   gettext() => _()

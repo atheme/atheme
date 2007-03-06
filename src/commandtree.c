@@ -4,7 +4,7 @@
  *
  * Commandtree manipulation routines.
  *
- * $Id: commandtree.c 7839 2007-03-06 00:09:30Z pippijn $
+ * $Id: commandtree.c 7847 2007-03-06 00:17:22Z pippijn $
  */
 
 #include "atheme.h"
@@ -109,7 +109,7 @@ void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char
 		command_fail(si, fault_noprivs, "You do not have %s privilege.", c->access);
 	else
 		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
-	/*snoop("DENIED CMD: \2%s\2 used %s %s", origin, svs->name, cmd);*/
+	/*snoop(_("DENIED CMD: \2%s\2 used %s %s"), origin, svs->name, cmd);*/
 }
 
 void command_exec_split(service_t *svs, sourceinfo_t *si, char *cmd, char *text, list_t *commandtree)

@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7839 2007-03-06 00:09:30Z pippijn $
+ * $Id: account.c 7847 2007-03-06 00:17:22Z pippijn $
  */
 
 #include "atheme.h"
@@ -172,7 +172,7 @@ void myuser_delete(myuser_t *mu)
 		/* attempt succession */
 		if (mc->founder == mu && (successor = mychan_pick_successor(mc)) != NULL)
 		{
-			snoop("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2", successor->name, mc->name, mc->founder->name);
+			snoop(_("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2"), successor->name, mc->name, mc->founder->name);
 			slog(LG_INFO, "myuser_delete(): giving channel %s to %s (unused %ds, founder %s, chanacs %d)",
 					mc->name, successor->name,
 					CURRTIME - mc->used,
@@ -191,7 +191,7 @@ void myuser_delete(myuser_t *mu)
 		/* no successor found */
 		if (mc->founder == mu)
 		{
-			snoop("DELETE: \2%s\2 from \2%s\2", mc->name, mu->name);
+			snoop(_("DELETE: \2%s\2 from \2%s\2"), mc->name, mu->name);
 			slog(LG_INFO, "myuser_delete(): deleting channel %s (unused %ds, founder %s, chanacs %d)",
 					mc->name, CURRTIME - mc->used,
 					mc->founder->name,
@@ -1376,7 +1376,7 @@ static int expire_myuser_cb(dictionary_elem_t *delem, void *unused)
 		if (is_conf_soper(mu))
 			return 0;
 
-		snoop("EXPIRE: \2%s\2 from \2%s\2 ", mu->name, mu->email);
+		snoop(_("EXPIRE: \2%s\2 from \2%s\2 "), mu->name, mu->email);
 		slog(LG_INFO, "expire_check(): expiring account %s (unused %ds, email %s, nicks %d, chanacs %d)",
 				mu->name, (int)(CURRTIME - mu->lastlogin),
 				mu->email, LIST_LENGTH(&mu->nicks),
@@ -1423,7 +1423,7 @@ void expire_check(void *arg)
 				continue;
 			}
 
-			snoop("EXPIRE: \2%s\2 from \2%s\2", mn->nick, mn->owner->name);
+			snoop(_("EXPIRE: \2%s\2 from \2%s\2"), mn->nick, mn->owner->name);
 			slog(LG_INFO, "expire_check(): expiring nick %s (unused %ds, account %s)",
 					mn->nick, CURRTIME - mn->lastseen,
 					mn->owner->name);
@@ -1455,7 +1455,7 @@ void expire_check(void *arg)
 			if (MC_HOLD & mc->flags)
 				continue;
 
-			snoop("EXPIRE: \2%s\2 from \2%s\2", mc->name, mc->founder->name);
+			snoop(_("EXPIRE: \2%s\2 from \2%s\2"), mc->name, mc->founder->name);
 			slog(LG_INFO, "expire_check(): expiring channel %s (unused %ds, founder %s, chanacs %d)",
 					mc->name, CURRTIME - mc->used,
 					mc->founder->name,
