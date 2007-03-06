@@ -1,3 +1,19 @@
+pippijn     2007/03/06 00:27:39 UTC	(20070306-7849)
+  Log:
+  - gettextised wallops
+  - changed _ definition in ubase64.c to __
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/src/function.c (File Modified) 
+  +2 -2		trunk/src/module.c (File Modified) 
+  +1 -1		trunk/src/node.c (File Modified) 
+  +1 -1		trunk/src/ptasks.c (File Modified) 
+  +12 -12	trunk/src/signal.c (File Modified) 
+  +18 -18	trunk/src/ubase64.c (File Modified) 
+  +1 -1		trunk/src/users.c (File Modified) 
+
+
 pippijn     2007/03/06 00:17:22 UTC	(20070306-7847)
   Log:
   Added _() around snoop() strings
