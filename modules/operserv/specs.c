@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService SPECS command.
  *
- * $Id: specs.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: specs.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/specs", FALSE, _modinit, _moddeinit,
-	"$Id: specs.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: specs.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -88,7 +88,7 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!has_any_privs(si))
 	{
-		command_fail(si, fault_noprivs, "You are not authorized to use %s.", opersvs.nick);
+		command_fail(si, fault_noprivs, _("You are not authorized to use %s."), opersvs.nick);
 		return;
 	}
 
@@ -96,7 +96,7 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!has_priv(si, PRIV_VIEWPRIVS))
 		{
-			command_fail(si, fault_noprivs, "You do not have %s privilege.", PRIV_VIEWPRIVS);
+			command_fail(si, fault_noprivs, _("You do not have %s privilege."), PRIV_VIEWPRIVS);
 			return;
 		}
 		if (target == NULL)
@@ -106,7 +106,7 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 			tu = user_find_named(target);
 			if (tu == NULL)
 			{
-				command_fail(si, fault_nosuch_target, "\2%s\2 is not on IRC.", target);
+				command_fail(si, fault_nosuch_target, _("\2%s\2 is not on IRC."), target);
 				return;
 			}
 			if (!has_any_privs_user(tu))
@@ -116,7 +116,7 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 			}
 			if (is_internal_client(tu))
 			{
-				command_fail(si, fault_noprivs, "\2%s\2 is an internal client.", tu->nick);
+				command_fail(si, fault_noprivs, _("\2%s\2 is an internal client."), tu->nick);
 				return;
 			}
 		}
@@ -125,13 +125,13 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 			cl = operclass_find(target);
 			if (cl == NULL)
 			{
-				command_fail(si, fault_nosuch_target, "No such oper class \2%s\2.", target);
+				command_fail(si, fault_nosuch_target, _("No such oper class \2%s\2."), target);
 				return;
 			}
 		}
 		else
 		{
-			command_fail(si, fault_badparams, "Valid target types: USER, OPERCLASS.");
+			command_fail(si, fault_badparams, _("Valid target types: USER, OPERCLASS."));
 			return;
 		}
 	}

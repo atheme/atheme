@@ -5,7 +5,7 @@
  *
  * This file contains functionality which implements the OService INJECT command.
  *
- * $Id: inject.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: inject.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/inject", FALSE, _modinit, _moddeinit,
-	"$Id: inject.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: inject.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -52,7 +52,7 @@ static void os_cmd_inject(sourceinfo_t *si, int parc, char *parv[])
 	if (!inject)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "INJECT");
-		command_fail(si, fault_needmoreparams, "Syntax: INJECT <parameters>");
+		command_fail(si, fault_needmoreparams, _("Syntax: INJECT <parameters>"));
 		return;
 	}
 
@@ -63,7 +63,7 @@ static void os_cmd_inject(sourceinfo_t *si, int parc, char *parv[])
 	 */
 	if (injecting == TRUE)
 	{
-		command_fail(si, fault_noprivs, "You cannot inject an INJECT command.");
+		command_fail(si, fault_noprivs, _("You cannot inject an INJECT command."));
 		return;
 	}
 

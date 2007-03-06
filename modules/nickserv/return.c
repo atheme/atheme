@@ -4,7 +4,7 @@
  *
  * Implements nickserv RETURN.
  *
- * $Id: return.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: return.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/return", FALSE, _modinit, _moddeinit,
-	"$Id: return.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: return.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -50,26 +50,26 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 	if (!target || !newmail)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RETURN");
-		command_fail(si, fault_needmoreparams, "Usage: RETURN <nickname> <e-mail address>");
+		command_fail(si, fault_needmoreparams, _("Usage: RETURN <nickname> <e-mail address>"));
 		return;
 	}
 
 	if (!(mu = myuser_find(target)))
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", target);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 		return;
 	}
 
 	if (is_soper(mu))
 	{
 		logcommand(si, CMDLOG_ADMIN, "failed RETURN %s to %s (is SOPER)", target, newmail);
-		command_fail(si, fault_badparams, "\2%s\2 belongs to a services operator; it cannot be returned.", target);
+		command_fail(si, fault_badparams, _("\2%s\2 belongs to a services operator; it cannot be returned."), target);
 		return;
 	}
 
 	if ((strlen(newmail) > 32) || !validemail(newmail))
 	{
-		command_fail(si, fault_badparams, "\2%s\2 is not a valid e-mail address.", newmail);
+		command_fail(si, fault_badparams, _("\2%s\2 is not a valid e-mail address."), newmail);
 		return;
 	}
 
@@ -80,7 +80,7 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 	if (!sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_SENDPASS, mu, newpass))
 	{
 		strlcpy(mu->email, oldmail, EMAILLEN);
-		command_fail(si, fault_emailfail, "Sending email failed, nickname \2%s\2 remains with \2%s\2.",
+		command_fail(si, fault_emailfail, _("Sending email failed, nickname \2%s\2 remains with \2%s\2."),
 				mu->name, mu->email);
 		return;
 	}

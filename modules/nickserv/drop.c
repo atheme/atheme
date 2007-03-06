@@ -4,7 +4,7 @@
  *
  * This file contains code for the nickserv DROP function.
  *
- * $Id: drop.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: drop.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/drop", FALSE, _modinit, _moddeinit,
-	"$Id: drop.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: drop.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -47,7 +47,7 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 	if (!acc)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DROP");
-		command_fail(si, fault_needmoreparams, "Syntax: DROP <account> <password>");
+		command_fail(si, fault_needmoreparams, _("Syntax: DROP <account> <password>"));
 		return;
 	}
 
@@ -58,17 +58,17 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 			mn = mynick_find(acc);
 			if (mn != NULL && command_find(si->service->cmdtree, "UNGROUP"))
 			{
-				command_fail(si, fault_nosuch_target, "\2%s\2 is a grouped nick, use UNGROUP to remove it.", acc);
+				command_fail(si, fault_nosuch_target, _("\2%s\2 is a grouped nick, use UNGROUP to remove it."), acc);
 				return;
 			}
 		}
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", acc);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), acc);
 		return;
 	}
 
 	if ((pass || !has_priv(si, PRIV_USER_ADMIN)) && !verify_password(mu, pass))
 	{
-		command_fail(si, fault_authfail, "Authentication failed. Invalid password for \2%s\2.", mu->name);
+		command_fail(si, fault_authfail, _("Authentication failed. Invalid password for \2%s\2."), mu->name);
 		return;
 	}
 
@@ -76,14 +76,14 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 			LIST_LENGTH(&mu->nicks) > 1 &&
 			command_find(si->service->cmdtree, "UNGROUP"))
 	{
-		command_fail(si, fault_noprivs, "Account \2%s\2 has %d other nick(s) grouped to it, remove those first.",
+		command_fail(si, fault_noprivs, _("Account \2%s\2 has %d other nick(s) grouped to it, remove those first."),
 				mu->name, LIST_LENGTH(&mu->nicks) - 1);
 		return;
 	}
 
 	if (is_soper(mu))
 	{
-		command_fail(si, fault_noprivs, "The nickname \2%s\2 belongs to a services operator; it cannot be dropped.", acc);
+		command_fail(si, fault_noprivs, _("The nickname \2%s\2 belongs to a services operator; it cannot be dropped."), acc);
 		return;
 	}
 

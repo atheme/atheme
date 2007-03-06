@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService IGNORE command.
  *
- * $Id: ignore.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: ignore.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: ignore.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -73,14 +73,14 @@ static void os_cmd_ignore(sourceinfo_t *si, int parc, char *parv[])
 	if (!cmd)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "IGNORE");
-		command_fail(si, fault_needmoreparams, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <mask>");
+		command_fail(si, fault_needmoreparams, _("Syntax: IGNORE ADD|DEL|LIST|CLEAR <mask>"));
 		return;
 	}
 
         c = command_find(&os_ignore_cmds, cmd);
 	if (c == NULL)
 	{
-		command_fail(si, fault_badparams, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", opersvs.me->disp);
+		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", opersvs.me->disp);
 		return;
 	}
 
@@ -98,13 +98,13 @@ static void os_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 	if (target == NULL)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "IGNORE");
-		command_fail(si, fault_needmoreparams, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <mask>");
+		command_fail(si, fault_needmoreparams, _("Syntax: IGNORE ADD|DEL|LIST|CLEAR <mask>"));
 		return;
 	}
 
 	if (!validhostmask(target))
 	{
-		command_fail(si, fault_badparams, "Invalid host mask, %s", target);
+		command_fail(si, fault_badparams, _("Invalid host mask, %s"), target);
 		return;
 	}
 
@@ -116,7 +116,7 @@ static void os_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 		/* We're here */
 		if (!strcasecmp(svsignore->mask, target))
 		{
-			command_fail(si, fault_nochange, "The mask \2%s\2 already exists on the services ignore list.", svsignore->mask);
+			command_fail(si, fault_nochange, _("The mask \2%s\2 already exists on the services ignore list."), svsignore->mask);
 			return;
 		}
 	}
@@ -143,7 +143,7 @@ static void os_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[])
 	if (target == NULL)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "IGNORE");
-		command_fail(si, fault_needmoreparams, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <mask>");
+		command_fail(si, fault_needmoreparams, _("Syntax: IGNORE ADD|DEL|LIST|CLEAR <mask>"));
 		return;
 	}
 
@@ -165,7 +165,7 @@ static void os_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	command_fail(si, fault_nosuch_target, "\2%s\2 was not found on the services ignore list.", target);
+	command_fail(si, fault_nosuch_target, _("\2%s\2 was not found on the services ignore list."), target);
 	return;
 }
 

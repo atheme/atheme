@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TOPIC functions.
  *
- * $Id: topic.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: topic.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/topic", FALSE, _modinit, _moddeinit,
-	"$Id: topic.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: topic.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -60,33 +60,33 @@ static void cs_cmd_topic(sourceinfo_t *si, int parc, char *parv[])
 	if (!chan || !topic)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "TOPIC");
-		command_fail(si, fault_needmoreparams, "Syntax: TOPIC <#channel> <topic>");
+		command_fail(si, fault_needmoreparams, _("Syntax: TOPIC <#channel> <topic>"));
 		return;
 	}
 
 	c = channel_find(chan);
 	if (!c)
 	{
-                command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", chan);
+                command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), chan);
                 return;
         }
 
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, "Channel \2%s\2 is not registered.", chan);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
 		return;
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		command_fail(si, fault_noprivs, "\2%s\2 is closed.", chan);
+		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
 		return;
 	}
 
 	if (!chanacs_source_has_flag(mc, si, CA_TOPIC))
 	{
-		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
 	}
 
@@ -118,33 +118,33 @@ static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[])
         if (!chan || !topic)
         {
                 command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "TOPICAPPEND");
-                command_fail(si, fault_needmoreparams, "Syntax: TOPICAPPEND <#channel> <topic>");
+                command_fail(si, fault_needmoreparams, _("Syntax: TOPICAPPEND <#channel> <topic>"));
                 return;
         }
 
 	c = channel_find(chan);
 	if (!c)
 	{
-                command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", chan);
+                command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), chan);
                 return;
         }
 
         mc = mychan_find(chan);
         if (!mc)
         {
-                command_fail(si, fault_nosuch_target, "Channel \2%s\2 is not registered.", chan);
+                command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
                 return;
         }
 
         if (!chanacs_source_has_flag(mc, si, CA_TOPIC))
         {
-                command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+                command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
                 return;
         }
         
         if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		command_fail(si, fault_noprivs, "\2%s\2 is closed.", chan);
+		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
 		return;
 	}
 

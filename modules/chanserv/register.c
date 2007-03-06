@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService REGISTER function.
  *
- * $Id: register.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: register.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: register.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -53,55 +53,55 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	if (!name)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "REGISTER");
-		command_fail(si, fault_needmoreparams, "To register a channel: REGISTER <#channel>");
+		command_fail(si, fault_needmoreparams, _("To register a channel: REGISTER <#channel>"));
 		return;
 	}
 
 	if (*name != '#')
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "REGISTER");
-		command_fail(si, fault_badparams, "Syntax: REGISTER <#channel>");
+		command_fail(si, fault_badparams, _("Syntax: REGISTER <#channel>"));
 		return;
 	}
 
 	/* make sure they're logged in */
 	if (!si->smu)
 	{
-		command_fail(si, fault_noprivs, "You are not logged in.");
+		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 
 	if (si->smu->flags & MU_WAITAUTH)
 	{
-		command_fail(si, fault_notverified, "You need to verify your email address before you may register channels.");
+		command_fail(si, fault_notverified, _("You need to verify your email address before you may register channels."));
 		return;
 	}
 	
 	/* make sure it isn't already registered */
 	if ((mc = mychan_find(name)))
 	{
-		command_fail(si, fault_alreadyexists, "\2%s\2 is already registered to \2%s\2.", mc->name, mc->founder->name);
+		command_fail(si, fault_alreadyexists, _("\2%s\2 is already registered to \2%s\2."), mc->name, mc->founder->name);
 		return;
 	}
 
 	/* make sure the channel exists */
 	if (!(c = channel_find(name)))
 	{
-		command_fail(si, fault_nosuch_target, "The channel \2%s\2 must exist in order to register it.", name);
+		command_fail(si, fault_nosuch_target, _("The channel \2%s\2 must exist in order to register it."), name);
 		return;
 	}
 
 	/* make sure they're in it */
 	if (!(cu = chanuser_find(c, si->su)))
 	{
-		command_fail(si, fault_noprivs, "You must be in \2%s\2 in order to register it.", name);
+		command_fail(si, fault_noprivs, _("You must be in \2%s\2 in order to register it."), name);
 		return;
 	}
 
 	/* make sure they're opped */
 	if (!(CMODE_OP & cu->modes))
 	{
-		command_fail(si, fault_noprivs, "You must be a channel operator in \2%s\2 in order to " "register it.", name);
+		command_fail(si, fault_noprivs, _("You must be a channel operator in \2%s\2 in order to register it."), name);
 		return;
 	}
 
@@ -116,7 +116,7 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 
 	if ((tcnt >= me.maxchans) && !has_priv(si, PRIV_REG_NOLIMIT))
 	{
-		command_fail(si, fault_toomany, "You have too many channels registered.");
+		command_fail(si, fault_toomany, _("You have too many channels registered."));
 		return;
 	}
 

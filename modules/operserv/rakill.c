@@ -4,7 +4,7 @@
  *
  * Regexp-based AKILL implementation.
  *
- * $Id: rakill.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: rakill.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 /*
@@ -17,7 +17,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rakill", FALSE, _modinit, _moddeinit,
-	"$Id: rakill.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: rakill.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -59,14 +59,14 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 	/* make sure they could have done RMATCH */
 	if (!has_priv(si, PRIV_USER_AUSPEX))
 	{
-		command_fail(si, fault_noprivs, "You do not have %s privilege.", PRIV_USER_AUSPEX);
+		command_fail(si, fault_noprivs, _("You do not have %s privilege."), PRIV_USER_AUSPEX);
 		return;
 	}
 
 	if (args == NULL)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RAKILL");
-		command_fail(si, fault_needmoreparams, "Syntax: RAKILL /<regex>/[i] <reason>");
+		command_fail(si, fault_needmoreparams, _("Syntax: RAKILL /<regex>/[i] <reason>"));
 		return;
 	}
 
@@ -74,7 +74,7 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 	if (pattern == NULL)
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "RAKILL");
-		command_fail(si, fault_badparams, "Syntax: RAKILL /<regex>/[i] <reason>");
+		command_fail(si, fault_badparams, _("Syntax: RAKILL /<regex>/[i] <reason>"));
 		return;
 	}
 
@@ -84,14 +84,14 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 	if (*reason == '\0')
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RAKILL");
-		command_fail(si, fault_needmoreparams, "Syntax: RAKILL /<regex>/[i] <reason>");
+		command_fail(si, fault_needmoreparams, _("Syntax: RAKILL /<regex>/[i] <reason>"));
 		return;
 	}
 
 	regex = regex_create(pattern, flags);
 	if (regex == NULL)
 	{
-		command_fail(si, fault_badparams, "The provided regex \2%s\2 is invalid.", pattern);
+		command_fail(si, fault_badparams, _("The provided regex \2%s\2 is invalid."), pattern);
 		return;
 	}
 
@@ -104,7 +104,7 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 	if (regex_match(regex, (char *)usermask))
 	{
 		regex_destroy(regex);
-		command_fail(si, fault_noprivs, "The provided regex matches you, refusing RAKILL.");
+		command_fail(si, fault_noprivs, _("The provided regex matches you, refusing RAKILL."));
 		snoop("RAKILL:REFUSED: \2%s\2 by \2%s\2 (%s) (matches self)", pattern, get_oper_name(si), reason);
 		wallops("\2%s\2 attempted to do RAKILL on \2%s\2 matching self",
 				get_oper_name(si), pattern);

@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ VERIFY function.
  *
- * $Id: verify.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: verify.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/verify", FALSE, _modinit, _moddeinit,
-	"$Id: verify.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: verify.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -55,13 +55,13 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 	if (!op || !nick || !key)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "VERIFY");
-		command_fail(si, fault_needmoreparams, "Syntax: VERIFY <operation> <nickname> <key>");
+		command_fail(si, fault_needmoreparams, _("Syntax: VERIFY <operation> <nickname> <key>"));
 		return;
 	}
 
 	if (!(mu = myuser_find(nick)))
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", nick);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), nick);
 		return;
 	}
 
@@ -70,7 +70,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 	 */
 	if (!(si->smu == mu))
 	{
-		command_fail(si, fault_badparams, "Please log in before attempting to verify your registration.");
+		command_fail(si, fault_badparams, _("Please log in before attempting to verify your registration."));
 		return;
 	}
 
@@ -78,7 +78,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(mu->flags & MU_WAITAUTH) || !(md = metadata_find(mu, METADATA_USER, "private:verify:register:key")))
 		{
-			command_fail(si, fault_badparams, "\2%s\2 is not awaiting authorization.", nick);
+			command_fail(si, fault_badparams, _("\2%s\2 is not awaiting authorization."), nick);
 			return;
 		}
 
@@ -106,7 +106,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 
 		snoop("REGISTER:VF: \2%s\2 by \2%s\2", mu->email, get_source_name(si));
 		logcommand(si, CMDLOG_SET, "failed VERIFY REGISTER (invalid key)");
-		command_fail(si, fault_badparams, "Verification failed. Invalid key for \2%s\2.", 
+		command_fail(si, fault_badparams, _("Verification failed. Invalid key for \2%s\2."), 
 			mu->name);
 
 		return;
@@ -115,7 +115,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:key")))
 		{
-			command_fail(si, fault_badparams, "\2%s\2 is not awaiting authorization.", nick);
+			command_fail(si, fault_badparams, _("\2%s\2 is not awaiting authorization."), nick);
 			return;
 		}
 
@@ -139,15 +139,15 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 
 		snoop("REGISTER:VF: \2%s\2 by \2%s\2", mu->email, get_source_name(si));
 		logcommand(si, CMDLOG_SET, "failed VERIFY EMAILCHG (invalid key)");
-		command_fail(si, fault_badparams, "Verification failed. Invalid key for \2%s\2.", 
+		command_fail(si, fault_badparams, _("Verification failed. Invalid key for \2%s\2."), 
 			mu->name);
 
 		return;
 	}
 	else
 	{
-		command_fail(si, fault_badparams, "Invalid operation specified for \2VERIFY\2.");
-		command_fail(si, fault_badparams, "Please double-check your verification e-mail.");
+		command_fail(si, fault_badparams, _("Invalid operation specified for \2VERIFY\2."));
+		command_fail(si, fault_badparams, _("Please double-check your verification e-mail."));
 		return;
 	}
 }
@@ -163,13 +163,13 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 	if (!op || !nick)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FVERIFY");
-		command_fail(si, fault_needmoreparams, "Syntax: FVERIFY <operation> <nickname>");
+		command_fail(si, fault_needmoreparams, _("Syntax: FVERIFY <operation> <nickname>"));
 		return;
 	}
 
 	if (!(mu = myuser_find(nick)))
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", nick);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), nick);
 		return;
 	}
 
@@ -177,7 +177,7 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(mu->flags & MU_WAITAUTH) || !(md = metadata_find(mu, METADATA_USER, "private:verify:register:key")))
 		{
-			command_fail(si, fault_badparams, "\2%s\2 is not awaiting authorization.", nick);
+			command_fail(si, fault_badparams, _("\2%s\2 is not awaiting authorization."), nick);
 			return;
 		}
 
@@ -202,7 +202,7 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:key")))
 		{
-			command_fail(si, fault_badparams, "\2%s\2 is not awaiting authorization.", nick);
+			command_fail(si, fault_badparams, _("\2%s\2 is not awaiting authorization."), nick);
 			return;
 		}
 
@@ -223,8 +223,8 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 	{
-		command_fail(si, fault_badparams, "Invalid operation specified for \2FVERIFY\2.");
-		command_fail(si, fault_badparams, "Valid operations are REGISTER and EMAILCHG.");
+		command_fail(si, fault_badparams, _("Invalid operation specified for \2FVERIFY\2."));
+		command_fail(si, fault_badparams, _("Valid operations are REGISTER and EMAILCHG."));
 		return;
 	}
 }

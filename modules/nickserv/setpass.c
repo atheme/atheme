@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ SETPASS function.
  *
- * $Id: setpass.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: setpass.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/setpass", FALSE, _modinit, _moddeinit,
-	"$Id: setpass.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: setpass.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -52,13 +52,13 @@ static void ns_cmd_setpass(sourceinfo_t *si, int parc, char *parv[])
 	if (!nick || !key || !password)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SETPASS");
-		command_fail(si, fault_needmoreparams, "Syntax: SETPASS <account> <key> <newpass>");
+		command_fail(si, fault_needmoreparams, _("Syntax: SETPASS <account> <key> <newpass>"));
 		return;
 	}
 
 	if (!(mu = myuser_find(nick)))
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", nick);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), nick);
 		return;
 	}
 
@@ -70,8 +70,8 @@ static void ns_cmd_setpass(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!strcasecmp(password, mu->name))
 	{
-		command_fail(si, fault_badparams, "You cannot use your nickname as a password.");
-		command_fail(si, fault_badparams, "Syntax: SETPASS <account> <key> <newpass>");
+		command_fail(si, fault_badparams, _("You cannot use your nickname as a password."));
+		command_fail(si, fault_badparams, _("Syntax: SETPASS <account> <key> <newpass>"));
 		return;
 	}
 
@@ -93,7 +93,7 @@ static void ns_cmd_setpass(sourceinfo_t *si, int parc, char *parv[])
 		snoop("SETPASS:VF: \2%s\2 by \2%s\2", mu->name, get_source_name(si));
 		logcommand(si, CMDLOG_SET, "failed SETPASS (invalid key)");
 	}
-	command_fail(si, fault_badparams, "Verification failed. Invalid key for \2%s\2.", 
+	command_fail(si, fault_badparams, _("Verification failed. Invalid key for \2%s\2."), 
 		mu->name);
 
 	return;

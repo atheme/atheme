@@ -4,7 +4,7 @@
  *
  * Changes and shows nickname access lists.
  *
- * $Id: access.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: access.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/access", FALSE, _modinit, _moddeinit,
-	"$Id: access.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: access.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -172,7 +172,7 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 	if (parc < 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ACCESS");
-		command_fail(si, fault_needmoreparams, "Syntax: ACCESS ADD|DEL|LIST [mask]");
+		command_fail(si, fault_needmoreparams, _("Syntax: ACCESS ADD|DEL|LIST [mask]"));
 		return;
 	}
 
@@ -183,7 +183,7 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 			mu = si->smu;
 			if (mu == NULL)
 			{
-				command_fail(si, fault_noprivs, "You are not logged in.");
+				command_fail(si, fault_noprivs, _("You are not logged in."));
 				return;
 			}
 		}
@@ -191,13 +191,13 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 		{
 			if (!has_priv(si, PRIV_USER_AUSPEX))
 			{
-				command_fail(si, fault_noprivs, "You are not authorized to use the target argument.");
+				command_fail(si, fault_noprivs, _("You are not authorized to use the target argument."));
 				return;
 			}
 
 			if (!(mu = myuser_find_ext(parv[1])))
 			{
-				command_fail(si, fault_badparams, "\2%s\2 is not registered.", parv[1]);
+				command_fail(si, fault_badparams, _("\2%s\2 is not registered."), parv[1]);
 				return;
 			}
 		}
@@ -225,7 +225,7 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 			if (si->su == NULL)
 			{
 				command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ACCESS ADD");
-				command_fail(si, fault_needmoreparams, "Syntax: ACCESS ADD <mask>");
+				command_fail(si, fault_needmoreparams, _("Syntax: ACCESS ADD <mask>"));
 				return;
 			}
 			else
@@ -235,14 +235,14 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 			mask = parv[1];
 		if (mu == NULL)
 		{
-			command_fail(si, fault_noprivs, "You are not logged in.");
+			command_fail(si, fault_noprivs, _("You are not logged in."));
 			return;
 		}
 		if (mask[0] == '*' && mask[1] == '!')
 			mask += 2;
 		if (strlen(mask) >= USERLEN + HOSTLEN)
 		{
-			command_fail(si, fault_badparams, "Invalid mask \2%s\2.", parv[1]);
+			command_fail(si, fault_badparams, _("Invalid mask \2%s\2."), parv[1]);
 			return;
 		}
 		p = mask;
@@ -250,7 +250,7 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 		{
 			if (!isprint(*p) || *p == ' ' || *p == '!')
 			{
-				command_fail(si, fault_badparams, "Invalid mask \2%s\2.", parv[1]);
+				command_fail(si, fault_badparams, _("Invalid mask \2%s\2."), parv[1]);
 				return;
 			}
 			p++;
@@ -258,7 +258,7 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 		host = strchr(mask, '@');
 		if (host == NULL) /* account name access masks? */
 		{
-			command_fail(si, fault_badparams, "Invalid mask \2%s\2.", parv[1]);
+			command_fail(si, fault_badparams, _("Invalid mask \2%s\2."), parv[1]);
 			return;
 		}
 		host++;
@@ -271,25 +271,25 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 			; /* it's their host, allow it */
 		else if (host[0] == '.' || host[0] == ':' || host[0] == '\0' || host[1] == '\0' || host == mask + 1 || strchr(host, '@') || strstr(host, ".."))
 		{
-			command_fail(si, fault_badparams, "Invalid mask \2%s\2.", parv[1]);
+			command_fail(si, fault_badparams, _("Invalid mask \2%s\2."), parv[1]);
 			return;
 		}
 		else if ((strchr(host, '*') || strchr(host, '?')) && (mask[0] == '*' && mask[1] == '@'))
 		{
 			/* can't use * username and wildcarded host */
-			command_fail(si, fault_badparams, "Too wide mask \2%s\2.", parv[1]);
+			command_fail(si, fault_badparams, _("Too wide mask \2%s\2."), parv[1]);
 			return;
 		}
 		else if ((p = strrchr(host, '/')) != NULL)
 		{
 			if (isdigit(p[1]) && (atoi(p + 1) < 16 || (mask[0] == '*' && mask[1] == '@')))
 			{
-				command_fail(si, fault_badparams, "Too wide mask \2%s\2.", parv[1]);
+				command_fail(si, fault_badparams, _("Too wide mask \2%s\2."), parv[1]);
 				return;
 			}
 			if (host[0] == '*')
 			{
-				command_fail(si, fault_badparams, "Too wide mask \2%s\2.", parv[1]);
+				command_fail(si, fault_badparams, _("Too wide mask \2%s\2."), parv[1]);
 				return;
 			}
 		}
@@ -301,14 +301,14 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 				/* No wildcarded IPs */
 				if (isdigit(p[1]) && (strchr(host, '*') || strchr(host, '?')))
 				{
-					command_fail(si, fault_badparams, "Too wide mask \2%s\2.", parv[1]);
+					command_fail(si, fault_badparams, _("Too wide mask \2%s\2."), parv[1]);
 					return;
 				}
 				/* Require non-wildcard top and second level
 				 * domain */
 				if (strchr(p, '?') || strchr(p, '*'))
 				{
-					command_fail(si, fault_badparams, "Too wide mask \2%s\2.", parv[1]);
+					command_fail(si, fault_badparams, _("Too wide mask \2%s\2."), parv[1]);
 					return;
 				}
 				p--;
@@ -316,7 +316,7 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 				{
 					if (*p == '?' || *p == '*')
 					{
-						command_fail(si, fault_badparams, "Too wide mask \2%s\2.", parv[1]);
+						command_fail(si, fault_badparams, _("Too wide mask \2%s\2."), parv[1]);
 						return;
 					}
 					p--;
@@ -327,19 +327,19 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 				/* No wildcarded IPs */
 				if (strchr(host, '?') || strchr(host, '*'))
 				{
-					command_fail(si, fault_badparams, "Too wide mask \2%s\2.", parv[1]);
+					command_fail(si, fault_badparams, _("Too wide mask \2%s\2."), parv[1]);
 					return;
 				}
 			}
 			else /* no '.' or ':' */
 			{
-				command_fail(si, fault_badparams, "Invalid mask \2%s\2.", parv[1]);
+				command_fail(si, fault_badparams, _("Invalid mask \2%s\2."), parv[1]);
 				return;
 			}
 		}
 		if (myuser_access_find(mu, mask))
 		{
-			command_fail(si, fault_nochange, "Mask \2%s\2 is already on your access list.", mask);
+			command_fail(si, fault_nochange, _("Mask \2%s\2 is already on your access list."), mask);
 			return;
 		}
 		if (myuser_access_add(mu, mask))
@@ -348,25 +348,25 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 			logcommand(si, CMDLOG_SET, "ACCESS ADD %s", mask);
 		}
 		else
-			command_fail(si, fault_toomany, "Your access list is full.");
+			command_fail(si, fault_toomany, _("Your access list is full."));
 	}
 	else if (!strcasecmp(parv[0], "DEL"))
 	{
 		if (parc < 2)
 		{
 			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ACCESS DEL");
-			command_fail(si, fault_needmoreparams, "Syntax: ACCESS DEL <mask>");
+			command_fail(si, fault_needmoreparams, _("Syntax: ACCESS DEL <mask>"));
 			return;
 		}
 		mu = si->smu;
 		if (mu == NULL)
 		{
-			command_fail(si, fault_noprivs, "You are not logged in.");
+			command_fail(si, fault_noprivs, _("You are not logged in."));
 			return;
 		}
 		if ((mask = myuser_access_find(mu, parv[1])) == NULL)
 		{
-			command_fail(si, fault_nochange, "Mask \2%s\2 is not on your access list.", parv[1]);
+			command_fail(si, fault_nochange, _("Mask \2%s\2 is not on your access list."), parv[1]);
 			return;
 		}
 		command_success_nodata(si, "Deleted mask \2%s\2 from your access list.", mask);
@@ -376,7 +376,7 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "ACCESS");
-		command_fail(si, fault_needmoreparams, "Syntax: ACCESS ADD|DEL|LIST [mask]");
+		command_fail(si, fault_needmoreparams, _("Syntax: ACCESS ADD|DEL|LIST [mask]"));
 		return;
 	}
 }

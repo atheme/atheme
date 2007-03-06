@@ -23,7 +23,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/enforce",FALSE, _modinit, _moddeinit,
-	"$Id: enforce.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: enforce.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -87,13 +87,13 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 	if (!setting)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ENFORCE");
-		command_fail(si, fault_needmoreparams, "Syntax: SET ENFORCE ON|OFF");
+		command_fail(si, fault_needmoreparams, _("Syntax: SET ENFORCE ON|OFF"));
 		return;
 	}
 
 	if (!si->smu)
 	{
-		command_fail(si, fault_noprivs, "You are not logged in.");
+		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 
@@ -101,7 +101,7 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if ((md = metadata_find(si->smu, METADATA_USER, "private:doenforce")) != NULL)
 		{
-			command_fail(si, fault_nochange, "ENFORCE is already enabled.");
+			command_fail(si, fault_nochange, _("ENFORCE is already enabled."));
 		}
 		else
 		{
@@ -118,12 +118,12 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 		}
 		else
 		{
-			command_fail(si, fault_nochange, "ENFORCE is already disabled.");
+			command_fail(si, fault_nochange, _("ENFORCE is already disabled."));
 		}
 	}
 	else
 	{
-		command_fail(si, fault_badparams, "Unknown value for ENFORCE. Expected values are ON or OFF.");
+		command_fail(si, fault_badparams, _("Unknown value for ENFORCE. Expected values are ON or OFF."));
 	}
 }
 
@@ -142,7 +142,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 	 * are not considered owned */
 	if (nicksvs.no_nick_ownership)
 	{
-		command_fail(si, fault_noprivs, "RELEASE is disabled.");
+		command_fail(si, fault_noprivs, _("RELEASE is disabled."));
 		return;
 	}
 
@@ -151,7 +151,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 	if (!target)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RELEASE");
-		command_fail(si, fault_needmoreparams, "Syntax: RELEASE <nick> [password]");
+		command_fail(si, fault_needmoreparams, _("Syntax: RELEASE <nick> [password]"));
 		return;
 	}
 
@@ -160,13 +160,13 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 	
 	if (!mn)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not a registered nickname.", target);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered nickname."), target);
 		return;
 	}
 	
 	if (u == si->su)
 	{
-		command_fail(si, fault_noprivs, "You cannot RELEASE yourself.");
+		command_fail(si, fault_noprivs, _("You cannot RELEASE yourself."));
 		return;
 	}
 	if ((si->smu == mn->owner) || verify_password(mn->owner, password))
@@ -204,13 +204,13 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 	if (!password)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RELEASE");
-		command_fail(si, fault_needmoreparams, "Syntax: RELEASE <nickname> [password]");
+		command_fail(si, fault_needmoreparams, _("Syntax: RELEASE <nickname> [password]"));
 		return;
 	}
 	else
 	{
 		logcommand(si, CMDLOG_DO, "failed RELEASE %s (bad password)", target);
-		command_fail(si, fault_authfail, "Invalid password for \2%s\2.", target);
+		command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), target);
 	}
 }
 

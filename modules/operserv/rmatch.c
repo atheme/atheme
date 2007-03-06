@@ -4,7 +4,7 @@
  *
  * Regex usersearch feature.
  *
- * $Id: rmatch.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: rmatch.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 /*
@@ -16,7 +16,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rmatch", FALSE, _modinit, _moddeinit,
-	"$Id: rmatch.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: rmatch.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -56,7 +56,7 @@ static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 	if (args == NULL)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RMATCH");
-		command_fail(si, fault_needmoreparams, "Syntax: RMATCH /<regex>/[i]");
+		command_fail(si, fault_needmoreparams, _("Syntax: RMATCH /<regex>/[i]"));
 		return;
 	}
 
@@ -64,7 +64,7 @@ static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 	if (pattern == NULL)
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "RMATCH");
-		command_fail(si, fault_badparams, "Syntax: RMATCH /<regex>/[i]");
+		command_fail(si, fault_badparams, _("Syntax: RMATCH /<regex>/[i]"));
 		return;
 	}
 
@@ -72,7 +72,7 @@ static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 	
 	if (regex == NULL)
 	{
-		command_fail(si, fault_badparams, "The provided regex \2%s\2 is invalid.", pattern);
+		command_fail(si, fault_badparams, _("The provided regex \2%s\2 is invalid."), pattern);
 		return;
 	}
 		

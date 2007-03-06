@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INFO functions.
  *
- * $Id: info.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: info.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: info.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -53,26 +53,26 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	if (!name)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "INFO");
-		command_fail(si, fault_needmoreparams, "Syntax: INFO <#channel>");
+		command_fail(si, fault_needmoreparams, _("Syntax: INFO <#channel>"));
 		return;
 	}
 
 	if (*name != '#')
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "INFO");
-		command_fail(si, fault_badparams, "Syntax: INFO <#channel>");
+		command_fail(si, fault_badparams, _("Syntax: INFO <#channel>"));
 		return;
 	}
 
 	if (!(mc = mychan_find(name)))
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", name);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), name);
 		return;
 	}
 
 	if (!has_priv(si, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, METADATA_CHANNEL, "private:close:closer")))
 	{
-		command_fail(si, fault_noprivs, "\2%s\2 has been closed down by the %s administration.", mc->name, me.netname);
+		command_fail(si, fault_noprivs, _("\2%s\2 has been closed down by the %s administration."), mc->name, me.netname);
 		return;
 	}
 

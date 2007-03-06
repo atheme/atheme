@@ -4,7 +4,7 @@
  *
  * Allows setting a vhost on an account
  *
- * $Id: vhost.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: vhost.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: vhost.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -114,14 +114,14 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	if (!target)
 	{
 		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "VHOST");
-		command_fail(si, fault_needmoreparams, "Syntax: VHOST <nick> [vhost]");
+		command_fail(si, fault_needmoreparams, _("Syntax: VHOST <nick> [vhost]"));
 		return;
 	}
 
 	/* find the user... */
 	if (!(mu = myuser_find_ext(target)))
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", target);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 		return;
 	}
 
@@ -140,18 +140,18 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	if (strchr(host, '@') || strchr(host, '!') || strchr(host, '?') ||
 			strchr(host, '*'))
 	{
-		command_fail(si, fault_badparams, "The vhost provided contains invalid characters.");
+		command_fail(si, fault_badparams, _("The vhost provided contains invalid characters."));
 		return;
 	}
 	if (strlen(host) >= HOSTLEN)
 	{
-		command_fail(si, fault_badparams, "The vhost provided is too long.");
+		command_fail(si, fault_badparams, _("The vhost provided is too long."));
 		return;
 	}
 	p = strrchr(host, '/');
 	if (p != NULL && isdigit(p[1]))
 	{
-		command_fail(si, fault_badparams, "The vhost provided looks like a CIDR mask.");
+		command_fail(si, fault_badparams, _("The vhost provided looks like a CIDR mask."));
 		return;
 	}
 	/* XXX more checks here, perhaps as a configurable regexp? */

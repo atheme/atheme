@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: op.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: op.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/op", FALSE, _modinit, _moddeinit,
-	"$Id: op.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: op.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -59,26 +59,26 @@ static void cs_cmd_op(sourceinfo_t *si, int parc, char *parv[])
 	if (!chan)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "OP");
-		command_fail(si, fault_needmoreparams, "Syntax: OP <#channel> [nickname]");
+		command_fail(si, fault_needmoreparams, _("Syntax: OP <#channel> [nickname]"));
 		return;
 	}
 
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", chan);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), chan);
 		return;
 	}
 
 	if (!chanacs_source_has_flag(mc, si, CA_OP))
 	{
-		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		command_fail(si, fault_noprivs, "\2%s\2 is closed.", chan);
+		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
 		return;
 	}
 
@@ -89,7 +89,7 @@ static void cs_cmd_op(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(tu = user_find_named(nick)))
 		{
-			command_fail(si, fault_nosuch_target, "\2%s\2 is not online.", nick);
+			command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), nick);
 			return;
 		}
 	}
@@ -100,15 +100,15 @@ static void cs_cmd_op(sourceinfo_t *si, int parc, char *parv[])
 	/* SECURE check; we can skip this if sender == target, because we already verified */
 	if ((si->su != tu) && (mc->flags & MC_SECURE) && !chanacs_user_has_flag(mc, tu, CA_OP) && !chanacs_user_has_flag(mc, tu, CA_AUTOOP))
 	{
-		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.", mc->name);
-		command_fail(si, fault_noprivs, "\2%s\2 has the SECURE option enabled, and \2%s\2 does not have appropriate access.", mc->name, tu->nick);
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."), mc->name);
+		command_fail(si, fault_noprivs, _("\2%s\2 has the SECURE option enabled, and \2%s\2 does not have appropriate access."), mc->name, tu->nick);
 		return;
 	}
 
 	cu = chanuser_find(mc->chan, tu);
 	if (!cu)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not on \2%s\2.", tu->nick, mc->name);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not on \2%s\2."), tu->nick, mc->name);
 		return;
 	}
 
@@ -134,26 +134,26 @@ static void cs_cmd_deop(sourceinfo_t *si, int parc, char *parv[])
 	if (!chan)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DEOP");
-		command_fail(si, fault_needmoreparams, "Syntax: DEOP <#channel> [nickname]");
+		command_fail(si, fault_needmoreparams, _("Syntax: DEOP <#channel> [nickname]"));
 		return;
 	}
 
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", chan);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), chan);
 		return;
 	}
 
 	if (!chanacs_source_has_flag(mc, si, CA_OP))
 	{
-		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		command_fail(si, fault_noprivs, "\2%s\2 is closed.", chan);
+		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
 		return;
 	}
 
@@ -164,7 +164,7 @@ static void cs_cmd_deop(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(tu = user_find_named(nick)))
 		{
-			command_fail(si, fault_nosuch_target, "\2%s\2 is not online.", nick);
+			command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), nick);
 			return;
 		}
 	}
@@ -175,7 +175,7 @@ static void cs_cmd_deop(sourceinfo_t *si, int parc, char *parv[])
 	cu = chanuser_find(mc->chan, tu);
 	if (!cu)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not on \2%s\2.", tu->nick, mc->name);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not on \2%s\2."), tu->nick, mc->name);
 		return;
 	}
 

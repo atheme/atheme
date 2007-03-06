@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService MODE command.
  *
- * $Id: mode.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: mode.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/mode", FALSE, _modinit, _moddeinit,
-	"$Id: mode.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: mode.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -49,14 +49,14 @@ static void os_cmd_mode(sourceinfo_t *si, int parc, char *parv[])
         if (!channel || !mode)
         {
                 command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MODE");
-                command_fail(si, fault_needmoreparams, "Syntax: MODE <channel> <parameters>");
+                command_fail(si, fault_needmoreparams, _("Syntax: MODE <channel> <parameters>"));
                 return;
         }
 
 	c = channel_find(channel);
 	if (!c)
 	{
-                command_fail(si, fault_nosuch_target, "Channel \2%s\2 does not exist.", channel);
+                command_fail(si, fault_nosuch_target, _("Channel \2%s\2 does not exist."), channel);
                 return;
 	}
 

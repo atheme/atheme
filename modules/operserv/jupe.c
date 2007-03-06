@@ -4,7 +4,7 @@
  *
  * Jupiters a server.
  *
- * $Id: jupe.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: jupe.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/jupe", FALSE, _modinit, _moddeinit,
-	"$Id: jupe.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: jupe.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -46,25 +46,25 @@ static void os_cmd_jupe(sourceinfo_t *si, int parc, char *parv[])
 	if (!server || !reason)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "JUPE");
-		command_fail(si, fault_needmoreparams, "Usage: JUPE <server> <reason>");
+		command_fail(si, fault_needmoreparams, _("Usage: JUPE <server> <reason>"));
 		return;
 	}
 
 	if (!strchr(server, '.'))
 	{
-		command_fail(si, fault_badparams, "\2%s\2 is not a valid server name.", server);
+		command_fail(si, fault_badparams, _("\2%s\2 is not a valid server name."), server);
 		return;
 	}
 
 	if (!irccasecmp(server, me.name))
 	{
-		command_fail(si, fault_noprivs, "\2%s\2 is the services server; it cannot be jupitered!", server);
+		command_fail(si, fault_noprivs, _("\2%s\2 is the services server; it cannot be jupitered!"), server);
 		return;
 	}
 
 	if (!irccasecmp(server, me.actual))
 	{
-		command_fail(si, fault_noprivs, "\2%s\2 is the current uplink; it cannot be jupitered!", server);
+		command_fail(si, fault_noprivs, _("\2%s\2 is the current uplink; it cannot be jupitered!"), server);
 		return;
 	}
 

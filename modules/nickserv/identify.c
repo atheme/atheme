@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY and LOGIN functions.
  *
- * $Id: identify.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: identify.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -21,7 +21,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/" COMMAND_LC, FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: identify.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -82,7 +82,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 
 	if (si->su == NULL)
 	{
-		command_fail(si, fault_noprivs, "\2%s\2 can only be executed via IRC.", COMMAND_UC);
+		command_fail(si, fault_noprivs, _("\2%s\2 can only be executed via IRC."), COMMAND_UC);
 		return;
 	}
 
@@ -111,7 +111,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!mu)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not a registered nickname.", target);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered nickname."), target);
 		return;
 	}
 
@@ -124,12 +124,12 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 
 	if (u->myuser == mu)
 	{
-		command_fail(si, fault_nochange, "You are already logged in as \2%s\2.", u->myuser->name);
+		command_fail(si, fault_nochange, _("You are already logged in as \2%s\2."), u->myuser->name);
 		return;
 	}
 	else if (u->myuser != NULL && !command_find(si->service->cmdtree, "LOGOUT"))
 	{
-		command_fail(si, fault_alreadyexists, "You are already logged in as \2%s\2.", u->myuser->name);
+		command_fail(si, fault_alreadyexists, _("You are already logged in as \2%s\2."), u->myuser->name);
 		return;
 	}
 	else if (u->myuser != NULL && ircd_on_logout(u->nick, u->myuser->name, NULL))
@@ -143,7 +143,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
 		{
-			command_fail(si, fault_toomany, "There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d).", LIST_LENGTH(&mu->logins), mu->name, me.maxlogins);
+			command_fail(si, fault_toomany, _("There are already \2%d\2 sessions logged in to \2%s\2 (maximum allowed: %d)."), LIST_LENGTH(&mu->logins), mu->name, me.maxlogins);
 			logcommand(si, CMDLOG_LOGIN, "failed " COMMAND_UC " to %s (too many logins)", mu->name);
 			return;
 		}
@@ -299,7 +299,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_LOGIN, "failed " COMMAND_UC " to %s (bad password)", mu->name);
 
-	command_fail(si, fault_authfail, "Invalid password for \2%s\2.", mu->name);
+	command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), mu->name);
 
 	/* record the failed attempts */
 	/* note that we reuse this buffer later when warning opers about failed logins */

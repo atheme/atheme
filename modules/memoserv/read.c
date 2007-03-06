@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv READ function
  *
- * $Id: read.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: read.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/read", FALSE, _modinit, _moddeinit,
-	"$Id: read.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: read.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -58,7 +58,7 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, 
 			STR_INSUFFICIENT_PARAMS, "READ");
 		
-		command_fail(si, fault_needmoreparams, "Syntax: READ <memo number>");
+		command_fail(si, fault_needmoreparams, _("Syntax: READ <memo number>"));
 		return;
 	}
 	else
@@ -67,28 +67,28 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 	/* user logged in? */
 	if (si->smu == NULL)
 	{
-		command_fail(si, fault_noprivs, "You are not logged in.");
+		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 	
 	/* Check to see if any memos */
 	if (!si->smu->memos.count)
 	{
-		command_fail(si, fault_nosuch_key, "You have no memos.");
+		command_fail(si, fault_nosuch_key, _("You have no memos."));
 		return;
 	}
 	
 	/* Is arg1 an int? */
 	if (!memonum)
 	{
-		command_fail(si, fault_badparams, "Invalid message index.");
+		command_fail(si, fault_badparams, _("Invalid message index."));
 		return;
 	}
 	
 	/* Check to see if memonum is greater than memocount */
 	if (memonum > si->smu->memos.count)
 	{
-		command_fail(si, fault_nosuch_key, "Invalid message index.");
+		command_fail(si, fault_nosuch_key, _("Invalid message index."));
 		return;
 	}
 

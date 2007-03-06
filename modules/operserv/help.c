@@ -5,7 +5,7 @@
  *
  * This file contains routines to handle the OService HELP command.
  *
- * $Id: help.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: help.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: help.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -46,7 +46,7 @@ static void os_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!has_any_privs(si))
 	{
-		command_fail(si, fault_noprivs, "You are not authorized to use %s.", opersvs.nick);
+		command_fail(si, fault_noprivs, _("You are not authorized to use %s."), opersvs.nick);
 		return;
 	}
 

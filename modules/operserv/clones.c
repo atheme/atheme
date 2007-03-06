@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing clone detection.
  *
- * $Id: clones.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: clones.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: clones.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -247,14 +247,14 @@ static void os_cmd_clones(sourceinfo_t *si, int parc, char *parv[])
 	if (!cmd)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLONES");
-		command_fail(si, fault_needmoreparams, "Syntax: CLONES KLINE|LIST|ADDEXEMPT|DELEXEMPT|LISTEXEMPT [parameters]");
+		command_fail(si, fault_needmoreparams, _("Syntax: CLONES KLINE|LIST|ADDEXEMPT|DELEXEMPT|LISTEXEMPT [parameters]"));
 		return;
 	}
 	
 	c = command_find(&os_clones_cmds, cmd);
 	if (c == NULL)
 	{
-		command_fail(si, fault_badparams, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", opersvs.me->disp);
+		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", opersvs.me->disp);
 		return;
 	}
 
@@ -272,7 +272,7 @@ static void os_cmd_clones_kline(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (kline_enabled)
 		{
-			command_fail(si, fault_nochange, "CLONES klines are already enabled.");
+			command_fail(si, fault_nochange, _("CLONES klines are already enabled."));
 			return;
 		}
 		kline_enabled = TRUE;
@@ -286,7 +286,7 @@ static void os_cmd_clones_kline(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!kline_enabled)
 		{
-			command_fail(si, fault_nochange, "CLONES klines are already disabled.");
+			command_fail(si, fault_nochange, _("CLONES klines are already disabled."));
 			return;
 		}
 		kline_enabled = FALSE;
@@ -340,14 +340,14 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 	if (!ip || !clonesstr)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLONES ADDEXEMPT");
-		command_fail(si, fault_needmoreparams, "Syntax: CLONES ADDEXEMPT <ip> <clones> <reason>");
+		command_fail(si, fault_needmoreparams, _("Syntax: CLONES ADDEXEMPT <ip> <clones> <reason>"));
 		return;
 	}
 
 	clones = atoi(clonesstr);
 	if (clones <= DEFAULT_WARN_CLONES)
 	{
-		command_fail(si, fault_badparams, "Allowed clones count must be more than %d", DEFAULT_WARN_CLONES);
+		command_fail(si, fault_badparams, _("Allowed clones count must be more than %d"), DEFAULT_WARN_CLONES);
 		return;
 	}
 
@@ -364,7 +364,7 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 		if (!reason)
 		{
 			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLONES ADDEXEMPT");
-			command_fail(si, fault_needmoreparams, "Syntax: CLONES ADDEXEMPT <ip> <clones> <reason>");
+			command_fail(si, fault_needmoreparams, _("Syntax: CLONES ADDEXEMPT <ip> <clones> <reason>"));
 			return;
 		}
 		c = smalloc(sizeof(cexcept_t));
@@ -416,7 +416,7 @@ static void os_cmd_clones_delexempt(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	command_fail(si, fault_nosuch_target, "\2%s\2 not found in clone exempt list.", arg);
+	command_fail(si, fault_nosuch_target, _("\2%s\2 not found in clone exempt list."), arg);
 }
 
 static void os_cmd_clones_listexempt(sourceinfo_t *si, int parc, char *parv[])

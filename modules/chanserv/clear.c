@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: clear.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: clear.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/clear", FALSE, _modinit, _moddeinit,
-	"$Id: clear.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: clear.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -62,7 +62,7 @@ static void cs_cmd_clear(sourceinfo_t *si, int parc, char *parv[])
 	if (parc < 2)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLEAR");
-		command_fail(si, fault_needmoreparams, "Syntax: CLEAR <#channel> <command> [parameters]");
+		command_fail(si, fault_needmoreparams, _("Syntax: CLEAR <#channel> <command> [parameters]"));
 		return;
 	}
 	
@@ -73,14 +73,14 @@ static void cs_cmd_clear(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "CLEAR");
-		command_fail(si, fault_badparams, "Syntax: CLEAR <#channel> <command> [parameters]");
+		command_fail(si, fault_badparams, _("Syntax: CLEAR <#channel> <command> [parameters]"));
 		return;
 	}
 
 	c = command_find(&cs_clear_cmds, cmd);
 	if (c == NULL)
 	{
-		command_fail(si, fault_badparams, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", si->service->disp);
+		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", si->service->disp);
 		return;
 	}
 

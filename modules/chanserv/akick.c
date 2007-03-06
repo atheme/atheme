@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: akick.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@ static void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[]);
 DECLARE_MODULE_V1
 (
 	"chanserv/akick", FALSE, _modinit, _moddeinit,
-	"$Id: akick.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: akick.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -54,14 +54,14 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 	if (!cmd || !chan)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKICK");
-		command_fail(si, fault_needmoreparams, "Syntax: AKICK <#channel> ADD|DEL|LIST <nickname|hostmask>");
+		command_fail(si, fault_needmoreparams, _("Syntax: AKICK <#channel> ADD|DEL|LIST <nickname|hostmask>"));
 		return;
 	}
 
 	if ((strcasecmp("LIST", cmd)) && (!uname))
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKICK");
-		command_fail(si, fault_needmoreparams, "Syntax: AKICK <#channel> ADD|DEL|LIST <nickname|hostmask>");
+		command_fail(si, fault_needmoreparams, _("Syntax: AKICK <#channel> ADD|DEL|LIST <nickname|hostmask>"));
 		return;
 	}
 
@@ -74,7 +74,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 		/* if they're opers and just want to LIST, they don't have to log in */
 		if (!(has_priv(si, PRIV_CHAN_AUSPEX) && !strcasecmp("LIST", cmd)))
 		{
-			command_fail(si, fault_noprivs, "You are not logged in.");
+			command_fail(si, fault_noprivs, _("You are not logged in."));
 			return;
 		}
 	}
@@ -82,13 +82,13 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", chan);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), chan);
 		return;
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		command_fail(si, fault_noprivs, "\2%s\2 is closed.", chan);
+		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
 		return;
 	}
 
@@ -97,7 +97,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if ((chanacs_source_flags(mc, si) & (CA_FLAGS | CA_REMOVE)) != (CA_FLAGS | CA_REMOVE))
 		{
-			command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 			return;
 		}
 
@@ -107,7 +107,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			/* we might be adding a hostmask */
 			if (!validhostmask(uname))
 			{
-				command_fail(si, fault_badparams, "\2%s\2 is neither a nickname nor a hostmask.", uname);
+				command_fail(si, fault_badparams, _("\2%s\2 is neither a nickname nor a hostmask."), uname);
 				return;
 			}
 
@@ -117,16 +117,16 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			if (ca != NULL)
 			{
 				if (ca->level & CA_AKICK)
-					command_fail(si, fault_nochange, "\2%s\2 is already on the AKICK list for \2%s\2", uname, mc->name);
+					command_fail(si, fault_nochange, _("\2%s\2 is already on the AKICK list for \2%s\2"), uname, mc->name);
 				else
-					command_fail(si, fault_alreadyexists, "\2%s\2 already has flags \2%s\2 on \2%s\2", uname, bitmask_to_flags(ca->level, chanacs_flags), mc->name);
+					command_fail(si, fault_alreadyexists, _("\2%s\2 already has flags \2%s\2 on \2%s\2"), uname, bitmask_to_flags(ca->level, chanacs_flags), mc->name);
 				return;
 			}
 
 			ca = chanacs_find_host(mc, uname, CA_AKICK);
 			if (ca != NULL)
 			{
-				command_fail(si, fault_nochange, "The more general mask \2%s\2 is already on the AKICK list for \2%s\2", ca->host, mc->name);
+				command_fail(si, fault_nochange, _("The more general mask \2%s\2 is already on the AKICK list for \2%s\2"), ca->host, mc->name);
 				return;
 			}
 
@@ -148,9 +148,9 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			if ((ca = chanacs_find(mc, mu, 0x0)))
 			{
 				if (ca->level & CA_AKICK)
-					command_fail(si, fault_nochange, "\2%s\2 is already on the AKICK list for \2%s\2", mu->name, mc->name);
+					command_fail(si, fault_nochange, _("\2%s\2 is already on the AKICK list for \2%s\2"), mu->name, mc->name);
 				else
-					command_fail(si, fault_alreadyexists, "\2%s\2 already has flags \2%s\2 on \2%s\2", mu->name, bitmask_to_flags(ca->level, chanacs_flags), mc->name);
+					command_fail(si, fault_alreadyexists, _("\2%s\2 already has flags \2%s\2 on \2%s\2"), mu->name, bitmask_to_flags(ca->level, chanacs_flags), mc->name);
 				return;
 			}
 
@@ -170,7 +170,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if ((chanacs_source_flags(mc, si) & (CA_FLAGS | CA_REMOVE)) != (CA_FLAGS | CA_REMOVE))
 		{
-			command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 			return;
 		}
 
@@ -182,9 +182,9 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			{
 				ca = chanacs_find_host(mc, uname, CA_AKICK);
 				if (ca != NULL)
-					command_fail(si, fault_nosuch_key, "\2%s\2 is not on the AKICK list for \2%s\2, however \2%s\2 is.", uname, mc->name, ca->host);
+					command_fail(si, fault_nosuch_key, _("\2%s\2 is not on the AKICK list for \2%s\2, however \2%s\2 is."), uname, mc->name, ca->host);
 				else
-					command_fail(si, fault_nosuch_key, "\2%s\2 is not on the AKICK list for \2%s\2.", uname, mc->name);
+					command_fail(si, fault_nosuch_key, _("\2%s\2 is not on the AKICK list for \2%s\2."), uname, mc->name);
 				return;
 			}
 
@@ -200,7 +200,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!(ca = chanacs_find(mc, mu, CA_AKICK)))
 		{
-			command_fail(si, fault_nosuch_key, "\2%s\2 is not on the AKICK list for \2%s\2.", mu->name, mc->name);
+			command_fail(si, fault_nosuch_key, _("\2%s\2 is not on the AKICK list for \2%s\2."), mu->name, mc->name);
 			return;
 		}
 
@@ -223,7 +223,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 				operoverride = 1;
 			else
 			{
-				command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+				command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 				return;
 			}
 		}

@@ -4,7 +4,7 @@
  *
  * Dynamic services operator privileges
  *
- * $Id: soper.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: soper.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/soper", FALSE, _modinit, _moddeinit,
-	"$Id: soper.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: soper.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -64,21 +64,21 @@ static void os_cmd_soper(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!has_any_privs(si))
 	{
-		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
 	}
 
 	if (parc < 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SOPER");
-		command_fail(si, fault_needmoreparams, "Syntax: SOPER LIST|LISTCLASS|ADD|DEL [account] [operclass]");
+		command_fail(si, fault_needmoreparams, _("Syntax: SOPER LIST|LISTCLASS|ADD|DEL [account] [operclass]"));
 		return;
 	}
 
 	c = command_find(&os_soper_cmds, parv[0]);
 	if (c == NULL)
 	{
-		command_fail(si, fault_badparams, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", si->service->disp);
+		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", si->service->disp);
 		return;
 	}
 
@@ -138,43 +138,43 @@ static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[])
 	if (parc < 2)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SOPER ADD");
-		command_fail(si, fault_needmoreparams, "Syntax: SOPER ADD <account> <operclass>");
+		command_fail(si, fault_needmoreparams, _("Syntax: SOPER ADD <account> <operclass>"));
 		return;
 	}
 
 	mu = myuser_find_ext(parv[0]);
 	if (mu == NULL)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", parv[0]);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
 	if (is_conf_soper(mu))
 	{
-		command_fail(si, fault_noprivs, "You may not modify \2%s\2's operclass as it is defined in the configuration file.", mu->name);
+		command_fail(si, fault_noprivs, _("You may not modify \2%s\2's operclass as it is defined in the configuration file."), mu->name);
 		return;
 	}
 
 	operclass = operclass_find(parv[1]);
 	if (operclass == NULL)
 	{
-		command_fail(si, fault_nosuch_target, "No such oper class \2%s\2.", parv[1]);
+		command_fail(si, fault_nosuch_target, _("No such oper class \2%s\2."), parv[1]);
 		return;
 	}
 	else if (mu->soper != NULL && mu->soper->operclass == operclass)
 	{
-		command_fail(si, fault_nochange, "Oper class for \2%s\2 is already set to \2%s\2.", mu->name, operclass->name);
+		command_fail(si, fault_nochange, _("Oper class for \2%s\2 is already set to \2%s\2."), mu->name, operclass->name);
 		return;
 	}
 
 	if (!has_all_operclass(si, operclass))
 	{
-		command_fail(si, fault_noprivs, "Oper class \2%s\2 has more privileges than you.", operclass->name);
+		command_fail(si, fault_noprivs, _("Oper class \2%s\2 has more privileges than you."), operclass->name);
 		return;
 	}
 	else if (mu->soper != NULL && mu->soper->operclass != NULL && !has_all_operclass(si, mu->soper->operclass))
 	{
-		command_fail(si, fault_noprivs, "Oper class for \2%s\2 is set to \2%s\2 which you are not authorized to change.",
+		command_fail(si, fault_noprivs, _("Oper class for \2%s\2 is set to \2%s\2 which you are not authorized to change."),
 				mu->name, mu->soper->operclass->name);
 		return;
 	}
@@ -196,31 +196,31 @@ static void os_cmd_soper_del(sourceinfo_t *si, int parc, char *parv[])
 	if (parc < 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SOPER DEL");
-		command_fail(si, fault_needmoreparams, "Syntax: SOPER DEL <account>");
+		command_fail(si, fault_needmoreparams, _("Syntax: SOPER DEL <account>"));
 		return;
 	}
 
 	mu = myuser_find_ext(parv[0]);
 	if (mu == NULL)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", parv[0]);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
 	if (is_conf_soper(mu))
 	{
-		command_fail(si, fault_noprivs, "You may not modify \2%s\2's operclass as it is defined in the configuration file.", mu->name);
+		command_fail(si, fault_noprivs, _("You may not modify \2%s\2's operclass as it is defined in the configuration file."), mu->name);
 		return;
 	}
 
 	if (!is_soper(mu))
 	{
-		command_fail(si, fault_nochange, "\2%s\2 does not have an operclass set.", mu->name);
+		command_fail(si, fault_nochange, _("\2%s\2 does not have an operclass set."), mu->name);
 		return;
 	}
 	else if (mu->soper->operclass != NULL && !has_all_operclass(si, mu->soper->operclass))
 	{
-		command_fail(si, fault_noprivs, "Oper class for \2%s\2 is set to \2%s\2 which you are not authorized to change.",
+		command_fail(si, fault_noprivs, _("Oper class for \2%s\2 is set to \2%s\2 which you are not authorized to change."),
 				mu->name, mu->soper->operclass->name);
 		return;
 	}

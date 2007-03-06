@@ -4,7 +4,7 @@
  *
  * Removes a module from memory.
  *
- * $Id: modunload.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: modunload.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modunload", FALSE, _modinit, _moddeinit,
-	"$Id: modunload.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: modunload.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,7 +48,7 @@ static void os_cmd_modunload(sourceinfo_t *si, int parc, char *parv[])
 	if (parc < 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MODUNLOAD");
-		command_fail(si, fault_needmoreparams, "Syntax: MODUNLOAD <module...>");
+		command_fail(si, fault_needmoreparams, _("Syntax: MODUNLOAD <module...>"));
 		return;
 	}
 	i = 0;
@@ -59,8 +59,7 @@ static void os_cmd_modunload(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!m)
 		{
-			command_fail(si, fault_nosuch_target, "\2%s\2 is not loaded; "
-					"it cannot be unloaded.", module);
+			command_fail(si, fault_nosuch_target, _("\2%s\2 is not loaded; it cannot be unloaded."), module);
 			continue;
 		}
 
@@ -68,14 +67,13 @@ static void os_cmd_modunload(sourceinfo_t *si, int parc, char *parv[])
 		{
 			slog(LG_INFO, "%s tried to unload a permanent module",
 				get_oper_name(si));
-			command_fail(si, fault_noprivs, "\2%s\2 is an permanent module; "
-					"it cannot be unloaded.", module);
+			command_fail(si, fault_noprivs, _("\2%s\2 is an permanent module; it cannot be unloaded."), module);
 			continue;
 		}
 
 		if (!strcmp(m->header->name, "operserv/main") || !strcmp(m->header->name, "operserv/modload") || !strcmp(m->header->name, "operserv/modunload"))
 		{
-			command_fail(si, fault_noprivs, "Refusing to unload \2%s\2.",
+			command_fail(si, fault_noprivs, _("Refusing to unload \2%s\2."),
 					module);
 			continue;
 		}

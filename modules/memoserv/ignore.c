@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv IGNORE functions
  *
- * $Id: ignore.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: ignore.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: ignore.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -71,21 +71,21 @@ static void ms_cmd_ignore(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, 
 			STR_INSUFFICIENT_PARAMS, "IGNORE");
 
-		command_fail(si, fault_needmoreparams, "Syntax: IGNORE ADD|DEL|LIST|CLEAR [account]");
+		command_fail(si, fault_needmoreparams, _("Syntax: IGNORE ADD|DEL|LIST|CLEAR [account]"));
 		return;
 	}
 
 	/* User logged in? */
 	if (si->smu == NULL)
 	{
-		command_fail(si, fault_noprivs, "You are not logged in.");
+		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 
 	c = command_find(&ms_ignore_cmds, cmd);
 	if (c == NULL)
 	{
-		command_fail(si, fault_badparams, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", memosvs.me->disp);
+		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", memosvs.me->disp);
 		return;
 	}
 
@@ -103,28 +103,28 @@ static void ms_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "IGNORE");
 
-		command_fail(si, fault_needmoreparams, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <account>");
+		command_fail(si, fault_needmoreparams, _("Syntax: IGNORE ADD|DEL|LIST|CLEAR <account>"));
 		return;
 	}
 
 	/* User attempting to ignore themself? */
 	if (!irccasecmp(parv[0], si->smu->name))
 	{
-		command_fail(si, fault_badparams, "Silly wabbit, you can't ignore yourself.");
+		command_fail(si, fault_badparams, _("Silly wabbit, you can't ignore yourself."));
 		return;
 	}
 
 	/* Does the target account exist? */
 	if (!(tmu = myuser_find_ext(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, "%s is not registered.", parv[0]);
+		command_fail(si, fault_nosuch_target, _("%s is not registered."), parv[0]);
 		return;
 	}
 
 	/* Ignore list is full */
 	if (si->smu->memo_ignores.count >= MAXMSIGNORES)
 	{
-		command_fail(si, fault_toomany, "Your ignore list is full, please DEL an account.");
+		command_fail(si, fault_toomany, _("Your ignore list is full, please DEL an account."));
 		return;
 	}
 
@@ -136,7 +136,7 @@ static void ms_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 		/* Already in the list */
 		if (!irccasecmp(temp, parv[0]))
 		{
-			command_fail(si, fault_nochange, "Account %s is already in your ignore list.", temp);
+			command_fail(si, fault_nochange, _("Account %s is already in your ignore list."), temp);
 			return;
 		}
 	}
@@ -158,7 +158,7 @@ static void ms_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[])
 	if (parc < 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "IGNORE");
-		command_fail(si, fault_needmoreparams, "Syntax: IGNORE ADD|DEL|LIST|CLEAR <account>");
+		command_fail(si, fault_needmoreparams, _("Syntax: IGNORE ADD|DEL|LIST|CLEAR <account>"));
 		return;
 	}
 
@@ -180,7 +180,7 @@ static void ms_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	command_fail(si, fault_nosuch_target, "%s is not in your ignore list.", parv[0]);
+	command_fail(si, fault_nosuch_target, _("%s is not in your ignore list."), parv[0]);
 	return;
 }
 
@@ -190,7 +190,7 @@ static void ms_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[])
 
 	if (LIST_LENGTH(&si->smu->memo_ignores) == 0)
 	{
-		command_fail(si, fault_nochange, "Ignore list already empty.");
+		command_fail(si, fault_nochange, _("Ignore list already empty."));
 		return;
 	}
 

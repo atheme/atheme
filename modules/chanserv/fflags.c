@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FFLAGS functions.
  *
- * $Id: fflags.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: fflags.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/fflags", FALSE, _modinit, _moddeinit,
-	"$Id: fflags.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: fflags.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -54,14 +54,14 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 	if (parc < 3)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FFLAGS");
-		command_fail(si, fault_needmoreparams, "Syntax: FFLAGS <channel> <target> <flags>");
+		command_fail(si, fault_needmoreparams, _("Syntax: FFLAGS <channel> <target> <flags>"));
 		return;
 	}
 
 
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", channel);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), channel);
 		return;
 	}
 	
@@ -70,7 +70,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 		flags_make_bitmasks(flagstr, chanacs_flags, &addflags, &removeflags);
 		if (addflags == 0 && removeflags == 0)
 		{
-			command_fail(si, fault_badparams, "No valid flags given, use /%s%s HELP FLAGS for a list", ircd->uses_rcommand ? "" : "msg ", chansvs.disp);
+			command_fail(si, fault_badparams, _("No valid flags given, use /%s%s HELP FLAGS for a list"), ircd->uses_rcommand ? "" : "msg ", chansvs.disp);
 			return;
 		}
 	}
@@ -81,9 +81,9 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 		{
 			/* Hack -- jilles */
 			if (*target == '+' || *target == '-' || *target == '=')
-				command_fail(si, fault_badparams, "Usage: FFLAGS %s <target> <flags>", mc->name);
+				command_fail(si, fault_badparams, _("Usage: FFLAGS %s <target> <flags>"), mc->name);
 			else
-				command_fail(si, fault_badparams, "Invalid template name given, use /%s%s TEMPLATE %s for a list", ircd->uses_rcommand ? "" : "msg ", chansvs.disp, mc->name);
+				command_fail(si, fault_badparams, _("Invalid template name given, use /%s%s TEMPLATE %s for a list"), ircd->uses_rcommand ? "" : "msg ", chansvs.disp, mc->name);
 			return;
 		}
 		removeflags = ca_all & ~addflags;
@@ -93,7 +93,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(tmu = myuser_find_ext(target)))
 		{
-			command_fail(si, fault_nosuch_target, "The nickname \2%s\2 is not registered.", target);
+			command_fail(si, fault_nosuch_target, _("The nickname \2%s\2 is not registered."), target);
 			return;
 		}
 		target = tmu->name;
@@ -102,7 +102,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 		 * is always on access */
 		if (tmu == mc->founder && removeflags & CA_FLAGS)
 		{
-			command_fail(si, fault_noprivs, "You may not remove the founder's +f access.");
+			command_fail(si, fault_noprivs, _("You may not remove the founder's +f access."));
 			return;
 		}
 
@@ -112,14 +112,14 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 		 * -- jilles */
 		if (MU_NEVEROP & tmu->flags && addflags != CA_AKICK && addflags != 0 && ((ca = chanacs_find(mc, tmu, 0)) == NULL || ca->level == CA_AKICK))
 		{
-			command_fail(si, fault_noprivs, "\2%s\2 does not wish to be added to access lists (NEVEROP set).", tmu->name);
+			command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to access lists (NEVEROP set)."), tmu->name);
 			return;
 		}
 
 		if (!chanacs_change(mc, tmu, NULL, &addflags, &removeflags, ca_all))
 		{
 			/* this shouldn't happen */
-			command_fail(si, fault_noprivs, "You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2.", bitmask_to_flags2(addflags, removeflags, chanacs_flags), tmu->name, mc->name);
+			command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags, chanacs_flags), tmu->name, mc->name);
 			return;
 		}
 	}
@@ -128,14 +128,14 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 		if (!chanacs_change(mc, NULL, target, &addflags, &removeflags, ca_all))
 		{
 			/* this shouldn't happen */
-			command_fail(si, fault_noprivs, "You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2.", bitmask_to_flags2(addflags, removeflags, chanacs_flags), target, mc->name);
+			command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags, chanacs_flags), target, mc->name);
 			return;
 		}
 	}
 
 	if ((addflags | removeflags) == 0)
 	{
-		command_fail(si, fault_nochange, "Channel access to \2%s\2 for \2%s\2 unchanged.", channel, target);
+		command_fail(si, fault_nochange, _("Channel access to \2%s\2 for \2%s\2 unchanged."), channel, target);
 		return;
 	}
 	flagstr = bitmask_to_flags2(addflags, removeflags, chanacs_flags);

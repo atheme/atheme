@@ -6,7 +6,7 @@
  * This file contains functionality which implements
  * the OperServ AKILL command.
  *
- * $Id: akill.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: akill.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: akill.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -100,14 +100,14 @@ static void os_cmd_akill(sourceinfo_t *si, int parc, char *parv[])
 	if (!cmd)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKILL");
-		command_fail(si, fault_needmoreparams, "Syntax: AKILL ADD|DEL|LIST");
+		command_fail(si, fault_needmoreparams, _("Syntax: AKILL ADD|DEL|LIST"));
 		return;
 	}
 
         c = command_find(&os_akill_cmds, cmd);
 	if (c == NULL)
 	{
-		command_fail(si, fault_badparams, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", opersvs.me->disp);
+		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", opersvs.me->disp);
 		return;
 	}
 
@@ -129,7 +129,7 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 	if (!target || !token)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKILL ADD");
-		command_fail(si, fault_needmoreparams, "Syntax: AKILL ADD <nick|hostmask> [!P|!T <minutes>] <reason>");
+		command_fail(si, fault_needmoreparams, _("Syntax: AKILL ADD <nick|hostmask> [!P|!T <minutes>] <reason>"));
 		return;
 	}
 
@@ -168,14 +168,14 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 				duration = 0;
 			if (duration == 0)
 			{
-				command_fail(si, fault_badparams, "Invalid duration given.");
-				command_fail(si, fault_badparams, "Syntax: AKILL ADD <nick|hostmask> [!P|!T <minutes>] " "<reason>");
+				command_fail(si, fault_badparams, _("Invalid duration given."));
+				command_fail(si, fault_badparams, _("Syntax: AKILL ADD <nick|hostmask> [!P|!T <minutes>] <reason>"));
 				return;
 			}
 		}
 		else {
 			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKILL ADD");
-			command_fail(si, fault_needmoreparams, "Syntax: AKILL ADD <nick|hostmask> [!P|!T <minutes>] " "<reason>");
+			command_fail(si, fault_needmoreparams, _("Syntax: AKILL ADD <nick|hostmask> [!P|!T <minutes>] <reason>"));
 			return;
 		}
 
@@ -195,7 +195,7 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 
 	if (strchr(target,'!'))
 	{
-		command_fail(si, fault_badparams, "Invalid character '%c' in user@host.", '!');
+		command_fail(si, fault_badparams, _("Invalid character '%c' in user@host."), '!');
 		return;
 	}
 
@@ -203,7 +203,7 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(u = user_find_named(target)))
 		{
-			command_fail(si, fault_nosuch_target, "\2%s\2 is not on IRC.", target);
+			command_fail(si, fault_nosuch_target, _("\2%s\2 is not on IRC."), target);
 			return;
 		}
 
@@ -224,14 +224,14 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 		if (!kuser || !khost)
 		{
 			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKILL ADD");
-			command_fail(si, fault_needmoreparams, "Syntax: AKILL ADD <user>@<host> [options] <reason>");
+			command_fail(si, fault_needmoreparams, _("Syntax: AKILL ADD <user>@<host> [options] <reason>"));
 			return;
 		}
 
 		if (strchr(khost,'@'))
 		{
-			command_fail(si, fault_badparams, "Too many '%c' in user@host.", '@');
-			command_fail(si, fault_badparams, "Syntax: AKILL ADD <user>@<host> [options] <reason>");
+			command_fail(si, fault_badparams, _("Too many '%c' in user@host."), '@');
+			command_fail(si, fault_badparams, _("Syntax: AKILL ADD <user>@<host> [options] <reason>"));
 			return;
 		}
 
@@ -249,7 +249,7 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 
 		if (i < 4)
 		{
-			command_fail(si, fault_badparams, "Invalid user@host: \2%s@%s\2. At least four non-wildcard characters are required.", kuser, khost);
+			command_fail(si, fault_badparams, _("Invalid user@host: \2%s@%s\2. At least four non-wildcard characters are required."), kuser, khost);
 			return;
 		}
 	}
@@ -267,7 +267,7 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 			unsafe = TRUE;
 		if (unsafe)
 		{
-			command_fail(si, fault_badparams, "Invalid user@host: \2%s@%s\2. This mask is unsafe.", kuser, khost);
+			command_fail(si, fault_badparams, _("Invalid user@host: \2%s@%s\2. This mask is unsafe."), kuser, khost);
 			logcommand(si, CMDLOG_ADMIN, "failed AKILL ADD %s@%s (unsafe mask)", kuser, khost);
 			return;
 		}
@@ -275,7 +275,7 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 
 	if ((k = kline_find(kuser, khost)))
 	{
-		command_fail(si, fault_nochange, "AKILL \2%s@%s\2 is already matched in the database.", kuser, khost);
+		command_fail(si, fault_nochange, _("AKILL \2%s@%s\2 is already matched in the database."), kuser, khost);
 		return;
 	}
 
@@ -305,7 +305,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 	if (!target)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKILL DEL");
-		command_fail(si, fault_needmoreparams, "Syntax: AKILL DEL <hostmask>");
+		command_fail(si, fault_needmoreparams, _("Syntax: AKILL DEL <hostmask>"));
 		return;
 	}
 
@@ -338,7 +338,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 				{
 					if (!(k = kline_find_num(i)))
 					{
-						command_fail(si, fault_nosuch_target, "No such AKILL with number \2%d\2.", i);
+						command_fail(si, fault_nosuch_target, _("No such AKILL with number \2%d\2."), i);
 						continue;
 					}
 
@@ -358,7 +358,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 
 			if (!(k = kline_find_num(number)))
 			{
-				command_fail(si, fault_nosuch_target, "No such AKILL with number \2%d\2.", number);
+				command_fail(si, fault_nosuch_target, _("No such AKILL with number \2%d\2."), number);
 				return;
 			}
 
@@ -399,7 +399,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 			{
 				if (!(k = kline_find_num(i)))
 				{
-					command_fail(si, fault_nosuch_target, "No such AKILL with number \2%d\2.", i);
+					command_fail(si, fault_nosuch_target, _("No such AKILL with number \2%d\2."), i);
 					continue;
 				}
 
@@ -418,7 +418,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!(k = kline_find_num(number)))
 		{
-			command_fail(si, fault_nosuch_target, "No such AKILL with number \2%d\2.", number);
+			command_fail(si, fault_nosuch_target, _("No such AKILL with number \2%d\2."), number);
 			return;
 		}
 
@@ -438,7 +438,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(k = kline_find(userbuf, hostbuf)))
 	{
-		command_fail(si, fault_nosuch_target, "No such AKILL: \2%s@%s\2.", userbuf, hostbuf);
+		command_fail(si, fault_nosuch_target, _("No such AKILL: \2%s@%s\2."), userbuf, hostbuf);
 		return;
 	}
 

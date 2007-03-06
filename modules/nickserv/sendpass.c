@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService SENDPASS function.
  *
- * $Id: sendpass.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: sendpass.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/sendpass", FALSE, _modinit, _moddeinit,
-	"$Id: sendpass.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: sendpass.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -47,20 +47,20 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 	if (!name)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SENDPASS");
-		command_fail(si, fault_needmoreparams, "Syntax: SENDPASS <nickname>");
+		command_fail(si, fault_needmoreparams, _("Syntax: SENDPASS <nickname>"));
 		return;
 	}
 
 	if (!(mu = myuser_find(name)))
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", name);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), name);
 		return;
 	}
 
 	if (is_soper(mu) && !has_priv(si, PRIV_ADMIN))
 	{
 		logcommand(si, CMDLOG_ADMIN, "failed SENDPASS %s (is SOPER)", name);
-		command_fail(si, fault_badparams, "\2%s\2 belongs to a services operator; you need %s privilege to send the password.", name, PRIV_ADMIN);
+		command_fail(si, fault_badparams, _("\2%s\2 belongs to a services operator; you need %s privilege to send the password."), name, PRIV_ADMIN);
 		return;
 	}
 
@@ -76,7 +76,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, "The password change key for \2%s\2 has been sent to \2%s\2.", mu->name, mu->email);
 		}
 		else
-			command_fail(si, fault_emailfail, "Email send failed.");
+			command_fail(si, fault_emailfail, _("Email send failed."));
 		free(key);
 		return;
 	}
@@ -97,7 +97,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "The password for \2%s\2 has been sent to \2%s\2.", mu->name, mu->email);
 	}
 	else
-		command_fail(si, fault_emailfail, "Email send failed.");
+		command_fail(si, fault_emailfail, _("Email send failed."));
 
 	if (newpass != NULL)
 		free(newpass);

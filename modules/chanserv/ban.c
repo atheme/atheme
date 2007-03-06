@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: ban.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", FALSE, _modinit, _moddeinit,
-	"$Id: ban.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: ban.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -60,37 +60,37 @@ static void cs_cmd_ban(sourceinfo_t *si, int parc, char *parv[])
 	if (!channel || !target)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "BAN");
-		command_fail(si, fault_needmoreparams, "Syntax: BAN <#channel> <nickname|hostmask>");
+		command_fail(si, fault_needmoreparams, _("Syntax: BAN <#channel> <nickname|hostmask>"));
 		return;
 	}
 
 	if (!c)
 	{
-		command_fail(si, fault_nosuch_target, "Channel \2%s\2 does not exist.", channel);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 does not exist."), channel);
 		return;
 	}
 
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", channel);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), channel);
 		return;
 	}
 
 	if (!si->smu)
 	{
-		command_fail(si, fault_noprivs, "You are not logged in.");
+		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 
 	if (!chanacs_source_has_flag(mc, si, CA_REMOVE))
 	{
-		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		command_fail(si, fault_noprivs, "\2%s\2 is closed.", channel);
+		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), channel);
 		return;
 	}
 
@@ -121,8 +121,8 @@ static void cs_cmd_ban(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 	{
-		command_fail(si, fault_badparams, "Invalid nickname/hostmask provided: \2%s\2", target);
-		command_fail(si, fault_badparams, "Syntax: BAN <#channel> <nickname|hostmask>");
+		command_fail(si, fault_badparams, _("Invalid nickname/hostmask provided: \2%s\2"), target);
+		command_fail(si, fault_badparams, _("Syntax: BAN <#channel> <nickname|hostmask>"));
 		return;
 	}
 }
@@ -139,7 +139,7 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
 	if (!channel)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "UNBAN");
-		command_fail(si, fault_needmoreparams, "Syntax: UNBAN <#channel> <nickname|hostmask>");
+		command_fail(si, fault_needmoreparams, _("Syntax: UNBAN <#channel> <nickname|hostmask>"));
 		return;
 	}
 
@@ -148,7 +148,7 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
 		if (si->su == NULL)
 		{
 			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "UNBAN");
-			command_fail(si, fault_needmoreparams, "Syntax: UNBAN <#channel> <nickname|hostmask>");
+			command_fail(si, fault_needmoreparams, _("Syntax: UNBAN <#channel> <nickname|hostmask>"));
 			return;
 		}
 		target = si->su->nick;
@@ -156,25 +156,25 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!c)
 	{
-		command_fail(si, fault_nosuch_target, "Channel \2%s\2 does not exist.", channel);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 does not exist."), channel);
 		return;
 	}
 
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, "Channel \2%s\2 is not registered.", channel);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
 		return;
 	}
 
 	if (!si->smu)
 	{
-		command_fail(si, fault_noprivs, "You are not logged in.");
+		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 
 	if (!chanacs_source_has_flag(mc, si, CA_REMOVE))
 	{
-		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
 	}
 
@@ -223,14 +223,14 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
 				command_success_nodata(si, "Unbanned \2%s\2 on \2%s\2.", target, channel);
 		}
 		else
-			command_fail(si, fault_nosuch_key, "No such ban \2%s\2 on \2%s\2.", target, channel);
+			command_fail(si, fault_nosuch_key, _("No such ban \2%s\2 on \2%s\2."), target, channel);
 
 		return;
 	}
         else
         {
-		command_fail(si, fault_badparams, "Invalid nickname/hostmask provided: \2%s\2", target);
-		command_fail(si, fault_badparams, "Syntax: UNBAN <#channel> [nickname|hostmask]");
+		command_fail(si, fault_badparams, _("Invalid nickname/hostmask provided: \2%s\2"), target);
+		command_fail(si, fault_badparams, _("Syntax: UNBAN <#channel> [nickname|hostmask]"));
 		return;
         }
 }

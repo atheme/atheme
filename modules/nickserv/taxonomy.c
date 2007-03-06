@@ -4,7 +4,7 @@
  *
  * Lists object properties via their metadata table.
  *
- * $Id: taxonomy.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: taxonomy.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/taxonomy", FALSE, _modinit, _moddeinit,
-	"$Id: taxonomy.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: taxonomy.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -47,13 +47,13 @@ static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 	if (!target)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "TAXONOMY");
-		command_fail(si, fault_needmoreparams, "Syntax: TAXONOMY <nick>");
+		command_fail(si, fault_needmoreparams, _("Syntax: TAXONOMY <nick>"));
 		return;
 	}
 
 	if (!(mu = myuser_find_ext(target)))
 	{
-		command_fail(si, fault_badparams, "\2%s\2 is not registered.", target);
+		command_fail(si, fault_badparams, _("\2%s\2 is not registered."), target);
 		return;
 	}
 

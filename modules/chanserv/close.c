@@ -4,7 +4,7 @@
  *
  * Closing for channels.
  *
- * $Id: close.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: close.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/close", FALSE, _modinit, _moddeinit,
-	"$Id: close.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: close.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -87,13 +87,13 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 	if (!target || !action)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLOSE");
-		command_fail(si, fault_needmoreparams, "Usage: CLOSE <#channel> <ON|OFF> [reason]");
+		command_fail(si, fault_needmoreparams, _("Usage: CLOSE <#channel> <ON|OFF> [reason]"));
 		return;
 	}
 
 	if (!(mc = mychan_find(target)))
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", target);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 		return;
 	}
 
@@ -102,19 +102,19 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 		if (!reason)
 		{
 			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLOSE");
-			command_fail(si, fault_needmoreparams, "Usage: CLOSE <#channel> ON <reason>");
+			command_fail(si, fault_needmoreparams, _("Usage: CLOSE <#channel> ON <reason>"));
 			return;
 		}
 
 		if (config_options.chan && !irccasecmp(config_options.chan, target))
 		{
-			command_fail(si, fault_noprivs, "\2%s\2 cannot be closed.", target);
+			command_fail(si, fault_noprivs, _("\2%s\2 cannot be closed."), target);
 			return;
 		}
 
 		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 		{
-			command_fail(si, fault_nochange, "\2%s\2 is already closed.", target);
+			command_fail(si, fault_nochange, _("\2%s\2 is already closed."), target);
 			return;
 		}
 
@@ -152,7 +152,7 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 		{
-			command_fail(si, fault_nochange, "\2%s\2 is not closed.", target);
+			command_fail(si, fault_nochange, _("\2%s\2 is not closed."), target);
 			return;
 		}
 
@@ -180,7 +180,7 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "CLOSE");
-		command_fail(si, fault_badparams, "Usage: CLOSE <#channel> <ON|OFF> [reason]");
+		command_fail(si, fault_badparams, _("Usage: CLOSE <#channel> <ON|OFF> [reason]"));
 	}
 }
 

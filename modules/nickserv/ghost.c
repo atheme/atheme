@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ GHOST function.
  *
- * $Id: ghost.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: ghost.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/ghost", FALSE, _modinit, _moddeinit,
-	"$Id: ghost.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: ghost.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,7 +48,7 @@ void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])
 	if (!target)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "GHOST");
-		command_fail(si, fault_needmoreparams, "Syntax: GHOST <target> [password]");
+		command_fail(si, fault_needmoreparams, _("Syntax: GHOST <target> [password]"));
 		return;
 	}
 
@@ -62,18 +62,18 @@ void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])
 	target_u = user_find_named(target);
 	if (!mu && (!target_u || !target_u->myuser))
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not a registered nickname.", target);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered nickname."), target);
 		return;
 	}
 
 	if (!target_u)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not online.", target);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not online."), target);
 		return;
 	}
 	else if (target_u == si->su)
 	{
-		command_fail(si, fault_badparams, "You may not ghost yourself.");
+		command_fail(si, fault_badparams, _("You may not ghost yourself."));
 		return;
 	}
 
@@ -104,12 +104,12 @@ void ns_cmd_ghost(sourceinfo_t *si, int parc, char *parv[])
 	if (password && mu)
 	{
 		logcommand(si, CMDLOG_DO, "failed GHOST %s (bad password)", target);
-		command_fail(si, fault_authfail, "Invalid password for \2%s\2.", mu->name);
+		command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), mu->name);
 	}
 	else
 	{
 		logcommand(si, CMDLOG_DO, "failed GHOST %s (invalid login)", target);
-		command_fail(si, fault_noprivs, "You may not ghost \2%s\2.", target);
+		command_fail(si, fault_noprivs, _("You may not ghost \2%s\2."), target);
 	}
 }
 

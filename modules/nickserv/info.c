@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: info.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: info.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -52,13 +52,13 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	if (!name)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "INFO");
-		command_fail(si, fault_needmoreparams, "Syntax: INFO <nickname>");
+		command_fail(si, fault_needmoreparams, _("Syntax: INFO <nickname>"));
 		return;
 	}
 
 	if (!(mu = myuser_find_ext(name)))
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", name);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), name);
 		return;
 	}
 

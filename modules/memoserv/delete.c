@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv DELETE function
  *
- * $Id: delete.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: delete.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/delete", FALSE, _modinit, _moddeinit,
-	"$Id: delete.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: delete.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -59,21 +59,21 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, 
 			STR_INSUFFICIENT_PARAMS, "DELETE");
 		
-		command_fail(si, fault_needmoreparams, "Syntax: DELETE ALL|message id");
+		command_fail(si, fault_needmoreparams, _("Syntax: DELETE ALL|message id"));
 		return;
 	}
 	
 	/* user logged in? */
 	if (si->smu == NULL)
 	{
-		command_fail(si, fault_noprivs, "You are not logged in.");
+		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 	
 	/* Do we have any memos? */
 	if (!si->smu->memos.count)
 	{
-		command_fail(si, fault_nochange, "You have no memos to delete.");
+		command_fail(si, fault_nochange, _("You have no memos to delete."));
 		return;
 	}
 	
@@ -90,14 +90,14 @@ static void ms_cmd_delete(sourceinfo_t *si, int parc, char *parv[])
 		/* Make sure they didn't slip us an alphabetic index */
 		if (!memonum)
 		{
-			command_fail(si, fault_badparams, "Invalid message index.");
+			command_fail(si, fault_badparams, _("Invalid message index."));
 			return;
 		}
 		
 		/* If int, does that index exist? And do we have something to delete? */
 		if (memonum > si->smu->memos.count)
 		{
-			command_fail(si, fault_nosuch_key, "The specified memo doesn't exist.");
+			command_fail(si, fault_nosuch_key, _("The specified memo doesn't exist."));
 			return;
 		}
 	}

@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv SEND function
  *
- * $Id: send.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: send.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/send", FALSE, _modinit, _moddeinit,
-	"$Id: send.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: send.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -66,13 +66,13 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 	/* user logged in? */
 	if (!si->smu)
 	{
-		command_fail(si, fault_noprivs, "You are not logged in.");
+		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 
 	if (si->smu->flags & MU_WAITAUTH)
 	{
-		command_fail(si, fault_notverified, "You need to verify your email address before you may send memos.");
+		command_fail(si, fault_notverified, _("You need to verify your email address before you may send memos."));
 		return;
 	}
 	
@@ -105,14 +105,14 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 
 	if (*m == '\001')
 	{
-		command_fail(si, fault_badparams, "Your memo contains invalid characters.");
+		command_fail(si, fault_badparams, _("Your memo contains invalid characters."));
 		return;
 	}
 	
 	/* Check to make sure target inbox not full */
 	if (tmu->memos.count >= me.mdlimit)
 	{
-		command_fail(si, fault_toomany, "%s's inbox is full", target);
+		command_fail(si, fault_toomany, _("%s's inbox is full"), target);
 		logcommand(si, CMDLOG_SET, "failed SEND to %s (target inbox full)", tmu->name);
 		return;
 	}
@@ -122,7 +122,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		si->smu->memo_ratelimit_num = 0;
 	if (si->smu->memo_ratelimit_num > MEMO_MAX_NUM && !has_priv(si, PRIV_FLOOD))
 	{
-		command_fail(si, fault_toomany, "Too many memos; please wait a while and try again");
+		command_fail(si, fault_toomany, _("Too many memos; please wait a while and try again"));
 		return;
 	}
 	si->smu->memo_ratelimit_num++;

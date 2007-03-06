@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService REHASH command.
  *
- * $Id: rehash.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: rehash.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rehash", FALSE, _modinit, _moddeinit,
-	"$Id: rehash.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: rehash.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -53,7 +53,7 @@ void os_cmd_rehash(sourceinfo_t *si, int parc, char *parv[])
 	if (conf_rehash())
 		command_success_nodata(si, "REHASH completed.");
 	else
-		command_fail(si, fault_nosuch_target, "REHASH of \2%s\2 failed. Please corrrect any errors in the file and try again.", config_file);
+		command_fail(si, fault_nosuch_target, _("REHASH of \2%s\2 failed. Please corrrect any errors in the file and try again."), config_file);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

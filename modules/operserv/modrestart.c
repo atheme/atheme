@@ -4,7 +4,7 @@
  *
  * Module restart.
  *
- * $Id: modrestart.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: modrestart.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modrestart", TRUE, _modinit, _moddeinit,
-	"$Id: modrestart.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: modrestart.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -94,7 +94,7 @@ static void os_cmd_modrestart(sourceinfo_t *si, int parc, char *parv[])
 	if (fail1)
 	{
 		wallops("Module restart failed, functionality will be very limited");
-		command_fail(si, fault_nosuch_target, "Module restart failed, fix it and try again or restart");
+		command_fail(si, fault_nosuch_target, _("Module restart failed, fix it and try again or restart"));
 	}
 	else
 	{

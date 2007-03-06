@@ -5,7 +5,7 @@
  * This file contains code for the NickServ LIST function.
  * Based on Alex Lambert's LISTEMAIL.
  *
- * $Id: list.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: list.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: list.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -90,7 +90,7 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	if (parc < 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "LIST");
-		command_fail(si, fault_needmoreparams, "Syntax: LIST <pattern>[!<user@host>]");
+		command_fail(si, fault_needmoreparams, _("Syntax: LIST <pattern>[!<user@host>]"));
 		return;
 	}
 	strlcpy(pat, parv[0], sizeof pat);

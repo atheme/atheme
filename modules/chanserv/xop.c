@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: xop.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: xop.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -88,14 +88,14 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 	if (!cmd || !chan)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "xOP");
-		command_fail(si, fault_needmoreparams, "Syntax: SOP|AOP|HOP|VOP <#channel> ADD|DEL|LIST <nickname>");
+		command_fail(si, fault_needmoreparams, _("Syntax: SOP|AOP|HOP|VOP <#channel> ADD|DEL|LIST <nickname>"));
 		return;
 	}
 
 	if ((strcasecmp("LIST", cmd)) && (!uname))
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "xOP");
-		command_fail(si, fault_needmoreparams, "Syntax: SOP|AOP|HOP|VOP <#channel> ADD|DEL|LIST <nickname>");
+		command_fail(si, fault_needmoreparams, _("Syntax: SOP|AOP|HOP|VOP <#channel> ADD|DEL|LIST <nickname>"));
 		return;
 	}
 
@@ -108,7 +108,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 		/* if they're opers and just want to LIST, they don't have to log in */
 		if (!(has_priv(si, PRIV_CHAN_AUSPEX) && !strcasecmp("LIST", cmd)))
 		{
-			command_fail(si, fault_noprivs, "You are not logged in.");
+			command_fail(si, fault_noprivs, _("You are not logged in."));
 			return;
 		}
 	}
@@ -116,13 +116,13 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, "The channel \2%s\2 is not registered.", chan);
+		command_fail(si, fault_nosuch_target, _("The channel \2%s\2 is not registered."), chan);
 		return;
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && (!has_priv(si, PRIV_CHAN_AUSPEX) || strcasecmp("LIST", cmd)))
 	{
-		command_fail(si, fault_noprivs, "\2%s\2 is closed.", chan);
+		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
 		return;
 	}
 
@@ -140,13 +140,13 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 		 * possible future denial of granting +f */
 		if (!(restrictflags & CA_FLAGS))
 		{
-			command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 			return;
 		}
 		restrictflags = allow_flags(restrictflags);
 		if ((restrictflags & level) != level)
 		{
-			command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 			return;
 		}
 		cs_xop_do_add(si, mc, mu, uname, level, leveldesc, restrictflags);
@@ -165,13 +165,13 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 		 * possible future denial of granting +f */
 		if (!(restrictflags & CA_FLAGS))
 		{
-			command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 			return;
 		}
 		restrictflags = allow_flags(restrictflags);
 		if ((restrictflags & level) != level)
 		{
-			command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 			return;
 		}
 		cs_xop_do_del(si, mc, mu, uname, level, leveldesc);
@@ -185,7 +185,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 				operoverride = 1;
 			else
 			{
-				command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+				command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 				return;
 			}
 		}
@@ -233,7 +233,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		/* we might be adding a hostmask */
 		if (!validhostmask(target))
 		{
-			command_fail(si, fault_badparams, "\2%s\2 is neither a nickname nor a hostmask.", target);
+			command_fail(si, fault_badparams, _("\2%s\2 is neither a nickname nor a hostmask."), target);
 			return;
 		}
 
@@ -241,7 +241,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		ca = chanacs_find_host_literal(mc, target, CA_NONE);
 		if (ca != NULL && ca->level == level)
 		{
-			command_fail(si, fault_nochange, "\2%s\2 is already on the %s list for \2%s\2", target, leveldesc, mc->name);
+			command_fail(si, fault_nochange, _("\2%s\2 is already on the %s list for \2%s\2"), target, leveldesc, mc->name);
 			return;
 		}
 
@@ -249,7 +249,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		{
 			if (ca->level & ~restrictflags)
 			{
-				command_fail(si, fault_noprivs, "You are not authorized to modify the access entry for \2%s\2 on \2%s\2.", target, mc->name);
+				command_fail(si, fault_noprivs, _("You are not authorized to modify the access entry for \2%s\2 on \2%s\2."), target, mc->name);
 				return;
 			}
 			/* they have access? change it! */
@@ -314,14 +314,14 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 
 	if (mu == mc->founder)
 	{
-		command_fail(si, fault_noprivs, "\2%s\2 is the founder for \2%s\2 and may not be added to the %s list.", mu->name, mc->name, leveldesc);
+		command_fail(si, fault_noprivs, _("\2%s\2 is the founder for \2%s\2 and may not be added to the %s list."), mu->name, mc->name, leveldesc);
 		return;
 	}
 
 	ca = chanacs_find(mc, mu, CA_NONE);
 	if (ca != NULL && ca->level == level)
 	{
-		command_fail(si, fault_nochange, "\2%s\2 is already on the %s list for \2%s\2.", mu->name, leveldesc, mc->name);
+		command_fail(si, fault_nochange, _("\2%s\2 is already on the %s list for \2%s\2."), mu->name, leveldesc, mc->name);
 		return;
 	}
 
@@ -330,7 +330,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 	 * -- jilles */
 	if (MU_NEVEROP & mu->flags && (ca == NULL || ca->level == CA_AKICK))
 	{
-		command_fail(si, fault_noprivs, "\2%s\2 does not wish to be added to access lists (NEVEROP set).", mu->name);
+		command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to access lists (NEVEROP set)."), mu->name);
 		return;
 	}
 	/*
@@ -344,7 +344,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 	{
 		if (ca->level & ~restrictflags)
 		{
-			command_fail(si, fault_noprivs, "You are not authorized to modify the access entry for \2%s\2 on \2%s\2.", mu->name, mc->name);
+			command_fail(si, fault_noprivs, _("You are not authorized to modify the access entry for \2%s\2 on \2%s\2."), mu->name, mc->name);
 			return;
 		}
 		/* they have access? change it! */
@@ -410,13 +410,13 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		/* we might be deleting a hostmask */
 		if (!validhostmask(target))
 		{
-			command_fail(si, fault_badparams, "\2%s\2 is neither a nickname nor a hostmask.", target);
+			command_fail(si, fault_badparams, _("\2%s\2 is neither a nickname nor a hostmask."), target);
 			return;
 		}
 
 		if (!chanacs_find_host_literal(mc, target, level))
 		{
-			command_fail(si, fault_nochange, "\2%s\2 is not on the %s list for \2%s\2.", target, leveldesc, mc->name);
+			command_fail(si, fault_nochange, _("\2%s\2 is not on the %s list for \2%s\2."), target, leveldesc, mc->name);
 			return;
 		}
 
@@ -429,14 +429,14 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 
 	if (!(ca = chanacs_find(mc, mu, level)) || ca->level != level)
 	{
-		command_fail(si, fault_nochange, "\2%s\2 is not on the %s list for \2%s\2.", mu->name, leveldesc, mc->name);
+		command_fail(si, fault_nochange, _("\2%s\2 is not on the %s list for \2%s\2."), mu->name, leveldesc, mc->name);
 		return;
 	}
 
 	/* just in case... -- jilles */
 	if (mu == mc->founder)
 	{
-		command_fail(si, fault_noprivs, "\2%s\2 is the founder for \2%s\2 and may not be removed from the %s list.", mu->name, mc->name, leveldesc);
+		command_fail(si, fault_noprivs, _("\2%s\2 is the founder for \2%s\2 and may not be removed from the %s list."), mu->name, mc->name, leveldesc);
 		return;
 	}
 
@@ -489,25 +489,25 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 	if (!chan)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FORCEXOP");
-		command_fail(si, fault_needmoreparams, "Syntax: FORCEXOP <#channel>");
+		command_fail(si, fault_needmoreparams, _("Syntax: FORCEXOP <#channel>"));
 		return;
 	}
 
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", chan);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), chan);
 		return;
 	}
 
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		command_fail(si, fault_noprivs, "\2%s\2 is closed.", chan);
+		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
 		return;
 	}
 
 	if (!is_founder(mc, si->smu))
 	{
-		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
 	}
 

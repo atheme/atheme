@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: main.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"global/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: main.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -69,7 +69,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 	if (!params)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "GLOBAL");
-		command_fail(si, fault_needmoreparams, "Syntax: GLOBAL <parameters>|SEND|CLEAR");
+		command_fail(si, fault_needmoreparams, _("Syntax: GLOBAL <parameters>|SEND|CLEAR"));
 		return;
 	}
 
@@ -77,7 +77,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 	{
 		if (!globlist.count)
 		{
-			command_fail(si, fault_nochange, "No message to clear.");
+			command_fail(si, fault_nochange, _("No message to clear."));
 			return;
 		}
 
@@ -105,7 +105,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 	{
 		if (!globlist.count)
 		{
-			command_fail(si, fault_nosuch_target, "No message to send.");
+			command_fail(si, fault_nosuch_target, _("No message to send."));
 			return;
 		}
 
@@ -158,7 +158,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 
 	if (irccasecmp(sender, si->su->nick))
 	{
-		command_fail(si, fault_noprivs, "There is already a GLOBAL in progress by \2%s\2.", sender);
+		command_fail(si, fault_noprivs, _("There is already a GLOBAL in progress by \2%s\2."), sender);
 		return;
 	}
 

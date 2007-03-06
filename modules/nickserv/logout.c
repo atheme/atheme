@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService LOGOUT functions.
  *
- * $Id: logout.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: logout.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/logout", FALSE, _modinit, _moddeinit,
-	"$Id: logout.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: logout.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -46,7 +46,7 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 
 	if ((!si->smu) && (!user || !pass))
 	{
-		command_fail(si, fault_nochange, "You are not logged in.");
+		command_fail(si, fault_nochange, _("You are not logged in."));
 		return;
 	}
 
@@ -56,7 +56,7 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!mu)
 		{
-			command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", user);
+			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), user);
 			return;
 		}
 
@@ -68,18 +68,18 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 		}
 		else
 		{
-			command_fail(si, fault_authfail, "Authentication failed. Invalid password for \2%s\2.", mu->name);
+			command_fail(si, fault_authfail, _("Authentication failed. Invalid password for \2%s\2."), mu->name);
 			return;
 		}
 #endif
 		/* remove this for now -- jilles */
-		command_fail(si, fault_unimplemented, "External logout is not yet implemented.");
+		command_fail(si, fault_unimplemented, _("External logout is not yet implemented."));
 		return;
 	}
 	else if (si->su == NULL)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "LOGOUT");
-		command_fail(si, fault_needmoreparams, "Syntax: LOGOUT <target> <password>");
+		command_fail(si, fault_needmoreparams, _("Syntax: LOGOUT <target> <password>"));
 		return;
 	}
 

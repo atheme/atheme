@@ -4,7 +4,7 @@
  *
  * Gives services the ability to freeze nicknames
  *
- * $Id: freeze.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: freeze.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/freeze", FALSE, _modinit, _moddeinit,
-	"$Id: freeze.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: freeze.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -50,7 +50,7 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 	if (!target || !action)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FREEZE");
-		command_fail(si, fault_needmoreparams, "Usage: FREEZE <nickname> <ON|OFF> [reason]");
+		command_fail(si, fault_needmoreparams, _("Usage: FREEZE <nickname> <ON|OFF> [reason]"));
 		return;
 	}
 
@@ -58,7 +58,7 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!mu)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", target);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 		return;
 	}
 
@@ -67,19 +67,19 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 		if (!reason)
 		{
 			command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FREEZE");
-			command_fail(si, fault_needmoreparams, "Usage: FREEZE <nickname> ON <reason>");
+			command_fail(si, fault_needmoreparams, _("Usage: FREEZE <nickname> ON <reason>"));
 			return;
 		}
 
 		if (is_soper(mu))
 		{
-			command_fail(si, fault_badparams, "The account \2%s\2 belongs to a services operator; it cannot be frozen.", target);
+			command_fail(si, fault_badparams, _("The account \2%s\2 belongs to a services operator; it cannot be frozen."), target);
 			return;
 		}
 
 		if (metadata_find(mu, METADATA_USER, "private:freeze:freezer"))
 		{
-			command_fail(si, fault_badparams, "\2%s\2 is already frozen.", target);
+			command_fail(si, fault_badparams, _("\2%s\2 is already frozen."), target);
 			return;
 		}
 
@@ -107,7 +107,7 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!metadata_find(mu, METADATA_USER, "private:freeze:freezer"))
 		{
-			command_fail(si, fault_badparams, "\2%s\2 is not frozen.", target);
+			command_fail(si, fault_badparams, _("\2%s\2 is not frozen."), target);
 			return;
 		}
 
@@ -122,7 +122,7 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FREEZE");
-		command_fail(si, fault_needmoreparams, "Usage: FREEZE <account> <ON|OFF> [reason]");
+		command_fail(si, fault_needmoreparams, _("Usage: FREEZE <account> <ON|OFF> [reason]"));
 	}
 }
 

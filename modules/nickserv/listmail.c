@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ LISTMAIL function.
  *
- * $Id: listmail.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: listmail.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/listmail", FALSE, _modinit, _moddeinit,
-	"$Id: listmail.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: listmail.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -70,7 +70,7 @@ static void ns_cmd_listmail(sourceinfo_t *si, int parc, char *parv[])
 	if (!email)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "LISTMAIL");
-		command_fail(si, fault_needmoreparams, "Syntax: LISTMAIL <email>");
+		command_fail(si, fault_needmoreparams, _("Syntax: LISTMAIL <email>"));
 		return;
 	}
 

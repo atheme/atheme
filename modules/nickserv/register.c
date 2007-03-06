@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: register.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: register.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -67,7 +67,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 
 	if (si->smu)
 	{
-		command_fail(si, fault_already_authed, "You are already logged in.");
+		command_fail(si, fault_already_authed, _("You are already logged in."));
 		return;
 	}
 
@@ -80,9 +80,9 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "REGISTER");
 		if (nicksvs.no_nick_ownership || si->su == NULL)
-			command_fail(si, fault_needmoreparams, "Syntax: REGISTER <account> <password> <email>");
+			command_fail(si, fault_needmoreparams, _("Syntax: REGISTER <account> <password> <email>"));
 		else
-			command_fail(si, fault_needmoreparams, "Syntax: REGISTER <password> <email>");
+			command_fail(si, fault_needmoreparams, _("Syntax: REGISTER <password> <email>"));
 		return;
 	}
 
@@ -94,14 +94,14 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!nicksvs.no_nick_ownership && si->su == NULL && user_find_named(account))
 	{
-		command_fail(si, fault_noprivs, "A user matching this account is already on IRC.");
+		command_fail(si, fault_noprivs, _("A user matching this account is already on IRC."));
 		return;
 	}
 
 	if (!nicksvs.no_nick_ownership && IsDigit(*account))
 	{
-		command_fail(si, fault_badparams, "For security reasons, you can't register your UID.");
-		command_fail(si, fault_badparams, "Please change to a real nickname, and try again.");
+		command_fail(si, fault_badparams, _("For security reasons, you can't register your UID."));
+		command_fail(si, fault_badparams, _("Please change to a real nickname, and try again."));
 		return;
 	}
 
@@ -109,31 +109,31 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (strchr(account, ' ') || strchr(account, '\n') || strchr(account, '\r') || account[0] == '=' || account[0] == '#' || account[0] == '@' || account[0] == '+' || account[0] == '%' || account[0] == '!' || strchr(account, ','))
 		{
-			command_fail(si, fault_badparams, "The account name \2%s\2 is invalid.", account);
+			command_fail(si, fault_badparams, _("The account name \2%s\2 is invalid."), account);
 			return;
 		}
 	}
 
 	if ((si->su != NULL && !strcasecmp(pass, si->su->nick)) || !strcasecmp(pass, account))
 	{
-		command_fail(si, fault_badparams, "You cannot use your nickname as a password.");
+		command_fail(si, fault_badparams, _("You cannot use your nickname as a password."));
 		if (nicksvs.no_nick_ownership || si->su == NULL)
-			command_fail(si, fault_needmoreparams, "Syntax: REGISTER <account> <password> <email>");
+			command_fail(si, fault_needmoreparams, _("Syntax: REGISTER <account> <password> <email>"));
 		else
-			command_fail(si, fault_needmoreparams, "Syntax: REGISTER <password> <email>");
+			command_fail(si, fault_needmoreparams, _("Syntax: REGISTER <password> <email>"));
 		return;
 	}
 
 	if (!validemail(email))
 	{
-		command_fail(si, fault_badparams, "\2%s\2 is not a valid email address.", email);
+		command_fail(si, fault_badparams, _("\2%s\2 is not a valid email address."), email);
 		return;
 	}
 
 	/* make sure it isn't registered already */
 	if (nicksvs.no_nick_ownership ? myuser_find(account) != NULL : mynick_find(account) != NULL)
 	{
-		command_fail(si, fault_alreadyexists, "\2%s\2 is already registered.", account);
+		command_fail(si, fault_alreadyexists, _("\2%s\2 is already registered."), account);
 		return;
 	}
 
@@ -151,7 +151,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 
 	if (tcnt >= me.maxusers)
 	{
-		command_fail(si, fault_toomany, "\2%s\2 has too many nicknames registered.", email);
+		command_fail(si, fault_toomany, _("\2%s\2 has too many nicknames registered."), email);
 		return;
 	}
 
@@ -175,7 +175,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_REGISTER, mu, key))
 		{
-			command_fail(si, fault_emailfail, "Sending email failed, sorry! Registration aborted.");
+			command_fail(si, fault_emailfail, _("Sending email failed, sorry! Registration aborted."));
 			object_unref(mu);
 			free(key);
 			return;

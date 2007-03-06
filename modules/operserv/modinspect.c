@@ -4,7 +4,7 @@
  *
  * A simple module inspector.
  *
- * $Id: modinspect.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: modinspect.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modinspect", FALSE, _modinit, _moddeinit,
-	"$Id: modinspect.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: modinspect.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -46,7 +46,7 @@ static void os_cmd_modinspect(sourceinfo_t *si, int parc, char *parv[])
 	if (!mname)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "MODINSPECT");
-		command_fail(si, fault_needmoreparams, "Syntax: MODINSPECT <module>");
+		command_fail(si, fault_needmoreparams, _("Syntax: MODINSPECT <module>"));
 		return;
 	}
 
@@ -56,14 +56,14 @@ static void os_cmd_modinspect(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!m)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not loaded.", mname);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not loaded."), mname);
 		return;
 	}
 
 	/* Is there a header? */
 	if (!m->header)
 	{
-		command_fail(si, fault_unimplemented, "\2%s\2 cannot be inspected.", mname);
+		command_fail(si, fault_unimplemented, _("\2%s\2 cannot be inspected."), mname);
 		return;
 	}
 

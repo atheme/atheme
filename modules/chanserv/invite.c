@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INVITE functions.
  *
- * $Id: invite.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: invite.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/invite", FALSE, _modinit, _moddeinit,
-	"$Id: invite.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: invite.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -46,45 +46,45 @@ static void cs_cmd_invite(sourceinfo_t *si, int parc, char *parv[])
 
 	if (si->su == NULL)
 	{
-		command_fail(si, fault_noprivs, "\2%s\2 can only be executed via IRC.", "INVITE");
+		command_fail(si, fault_noprivs, _("\2%s\2 can only be executed via IRC."), "INVITE");
 		return;
 	}
 
 	if (!chan)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "INVITE");
-		command_fail(si, fault_needmoreparams, "Syntax: INVITE <#channel>");
+		command_fail(si, fault_needmoreparams, _("Syntax: INVITE <#channel>"));
 		return;
 	}
 
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", chan);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), chan);
 		return;
 	}
 
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		command_fail(si, fault_noprivs, "Cannot INVITE: \2%s\2 is closed.", chan);
+		command_fail(si, fault_noprivs, _("Cannot INVITE: \2%s\2 is closed."), chan);
 		return;
 	}
 
 	if (!chanacs_source_has_flag(mc, si, CA_INVITE))
 	{
-		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
 	}
 
 	if (chanuser_find(mc->chan, si->su))
 	{
-		command_fail(si, fault_noprivs, "You're already on \2%s\2.", mc->name);
+		command_fail(si, fault_noprivs, _("You're already on \2%s\2."), mc->name);
 		return;
 	}
 
 	if (!mc->chan)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is currently empty.", mc->name);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), mc->name);
 		return;
 	}
 

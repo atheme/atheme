@@ -4,7 +4,7 @@
  *
  * Controls noexpire options for channels.
  *
- * $Id: hold.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: hold.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/hold", FALSE, _modinit, _moddeinit,
-	"$Id: hold.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: hold.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,7 +48,7 @@ static void cs_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 	if (!target || !action)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "HOLD");
-		command_fail(si, fault_needmoreparams, "Usage: HOLD <#channel> <ON|OFF>");
+		command_fail(si, fault_needmoreparams, _("Usage: HOLD <#channel> <ON|OFF>"));
 		return;
 	}
 
@@ -60,7 +60,7 @@ static void cs_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(target)))
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", target);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 		return;
 	}
 	
@@ -68,7 +68,7 @@ static void cs_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (mc->flags & MC_HOLD)
 		{
-			command_fail(si, fault_nochange, "\2%s\2 is already held.", target);
+			command_fail(si, fault_nochange, _("\2%s\2 is already held."), target);
 			return;
 		}
 
@@ -82,7 +82,7 @@ static void cs_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(mc->flags & MC_HOLD))
 		{
-			command_fail(si, fault_nochange, "\2%s\2 is not held.", target);
+			command_fail(si, fault_nochange, _("\2%s\2 is not held."), target);
 			return;
 		}
 
@@ -95,7 +95,7 @@ static void cs_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "HOLD");
-		command_fail(si, fault_badparams, "Usage: HOLD <#channel> <ON|OFF>");
+		command_fail(si, fault_badparams, _("Usage: HOLD <#channel> <ON|OFF>"));
 	}
 }
 

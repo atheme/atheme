@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService COUNT functions.
  *
- * $Id: count.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: count.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/count", FALSE, _modinit, _moddeinit,
-	"$Id: count.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: count.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -53,13 +53,13 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 	if (!chan)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "COUNT");
-		command_fail(si, fault_needmoreparams, "Syntax: COUNT <#channel>");
+		command_fail(si, fault_needmoreparams, _("Syntax: COUNT <#channel>"));
 		return;
 	}
 
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", chan);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), chan);
 		return;
 	}
 
@@ -69,14 +69,14 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 			operoverride = 1;
 		else
 		{
-			command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+			command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 			return;
 		}
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		command_fail(si, fault_noprivs, "\2%s\2 is closed.", chan);
+		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
 		return;
 	}
 

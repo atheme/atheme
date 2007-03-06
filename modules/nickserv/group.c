@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ GROUP command.
  *
- * $Id: group.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: group.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/group", FALSE, _modinit, _moddeinit,
-	"$Id: group.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: group.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -55,25 +55,25 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 
 	if (si->su == NULL)
 	{
-		command_fail(si, fault_noprivs, "\2%s\2 can only be executed via IRC.", "GROUP");
+		command_fail(si, fault_noprivs, _("\2%s\2 can only be executed via IRC."), "GROUP");
 		return;
 	}
 
 	if (nicksvs.no_nick_ownership)
 	{
-		command_fail(si, fault_noprivs, "Nickname ownership is disabled.");
+		command_fail(si, fault_noprivs, _("Nickname ownership is disabled."));
 		return;
 	}
 
 	if (si->smu == NULL)
 	{
-		command_fail(si, fault_noprivs, "You are not logged in.");
+		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 
 	if (LIST_LENGTH(&si->smu->nicks) >= me.maxnicks && !has_priv(si, PRIV_REG_NOLIMIT))
 	{
-		command_fail(si, fault_noprivs, "You have too many nicks registered already.");
+		command_fail(si, fault_noprivs, _("You have too many nicks registered already."));
 		return;
 	}
 
@@ -81,15 +81,15 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 	if (mn != NULL)
 	{
 		if (mn->owner == si->smu)
-			command_fail(si, fault_nochange, "Nick \2%s\2 is already registered to your account.", mn->nick);
+			command_fail(si, fault_nochange, _("Nick \2%s\2 is already registered to your account."), mn->nick);
 		else
-			command_fail(si, fault_alreadyexists, "Nick \2%s\2 is already registered to \2%s\2.", mn->nick, mn->owner->name);
+			command_fail(si, fault_alreadyexists, _("Nick \2%s\2 is already registered to \2%s\2."), mn->nick, mn->owner->name);
 		return;
 	}
 
 	if (IsDigit(si->su->nick[0]))
 	{
-		command_fail(si, fault_badparams, "For security reasons, you can't register your UID.");
+		command_fail(si, fault_badparams, _("For security reasons, you can't register your UID."));
 		return;
 	}
 
@@ -108,7 +108,7 @@ static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[])
 
 	if (si->smu == NULL)
 	{
-		command_fail(si, fault_noprivs, "You are not logged in.");
+		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 
@@ -122,17 +122,17 @@ static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[])
 	mn = mynick_find(target);
 	if (mn == NULL)
 	{
-		command_fail(si, fault_nosuch_target, "Nick \2%s\2 is not registered.", target);
+		command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), target);
 		return;
 	}
 	if (mn->owner != si->smu)
 	{
-		command_fail(si, fault_noprivs, "Nick \2%s\2 is not registered to your account.", mn->nick);
+		command_fail(si, fault_noprivs, _("Nick \2%s\2 is not registered to your account."), mn->nick);
 		return;
 	}
 	if (!irccasecmp(mn->nick, si->smu->name))
 	{
-		command_fail(si, fault_noprivs, "Nick \2%s\2 is your account name; you may not remove it.", mn->nick);
+		command_fail(si, fault_noprivs, _("Nick \2%s\2 is your account name; you may not remove it."), mn->nick);
 		return;
 	}
 
@@ -150,20 +150,20 @@ static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[])
 	if (parc < 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FUNGROUP");
-		command_fail(si, fault_needmoreparams, "Syntax: FUNGROUP <nickname>");
+		command_fail(si, fault_needmoreparams, _("Syntax: FUNGROUP <nickname>"));
 		return;
 	}
 
 	mn = mynick_find(parv[0]);
 	if (mn == NULL)
 	{
-		command_fail(si, fault_nosuch_target, "Nick \2%s\2 is not registered.", parv[0]);
+		command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 	mu = mn->owner;
 	if (!irccasecmp(mn->nick, mu->name))
 	{
-		command_fail(si, fault_noprivs, "Nick \2%s\2 is an account name; you may not remove it.", mn->nick);
+		command_fail(si, fault_noprivs, _("Nick \2%s\2 is an account name; you may not remove it."), mn->nick);
 		return;
 	}
 

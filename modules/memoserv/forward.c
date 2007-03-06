@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv FORWARD function
  *
- * $Id: forward.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: forward.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/forward", FALSE, _modinit, _moddeinit,
-	"$Id: forward.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: forward.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -69,41 +69,41 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 	/* user logged in? */
 	if (si->smu == NULL)
 	{
-		command_fail(si, fault_noprivs, "You are not logged in.");
+		command_fail(si, fault_noprivs, _("You are not logged in."));
 		return;
 	}
 	
 	if (si->smu->flags & MU_WAITAUTH)
 	{
-		command_fail(si, fault_notverified, "You need to verify your email address before you may send memos.");
+		command_fail(si, fault_notverified, _("You need to verify your email address before you may send memos."));
 		return;
 	}
 
 	/* Check to see if any memos */
 	if (!si->smu->memos.count)
 	{
-		command_fail(si, fault_nosuch_key, "You have no memos to forward.");
+		command_fail(si, fault_nosuch_key, _("You have no memos to forward."));
 		return;
 	}
 
 	/* Check to see if target user exists */
 	if (!(tmu = myuser_find_ext(target)))
 	{
-		command_fail(si, fault_nosuch_target, "%s is not registered.", target);
+		command_fail(si, fault_nosuch_target, _("%s is not registered."), target);
 		return;
 	}
 	
 	/* Make sure target isn't sender */
 	if (si->smu == tmu)
 	{
-		command_fail(si, fault_noprivs, "You cannot send yourself a memo.");
+		command_fail(si, fault_noprivs, _("You cannot send yourself a memo."));
 		return;
 	}
 	
 	/* Make sure arg is an int */
 	if (!memonum)
 	{
-		command_fail(si, fault_badparams, "Invalid message index.");
+		command_fail(si, fault_badparams, _("Invalid message index."));
 		return;
 	}
 	
@@ -119,14 +119,14 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 	/* Check to see if memo n exists */
 	if (memonum > si->smu->memos.count)
 	{
-		command_fail(si, fault_nosuch_key, "Invalid memo number.");
+		command_fail(si, fault_nosuch_key, _("Invalid memo number."));
 		return;
 	}
 	
 	/* Check to make sure target inbox not full */
 	if (tmu->memos.count >= me.mdlimit)
 	{
-		command_fail(si, fault_toomany, "Target inbox is full.");
+		command_fail(si, fault_toomany, _("Target inbox is full."));
 		logcommand(si, CMDLOG_SET, "failed FORWARD to %s (target inbox full)", tmu->name);
 		return;
 	}
@@ -136,7 +136,7 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 		si->smu->memo_ratelimit_num = 0;
 	if (si->smu->memo_ratelimit_num > MEMO_MAX_NUM && !has_priv(si, PRIV_FLOOD))
 	{
-		command_fail(si, fault_toomany, "Too many memos; please wait a while and try again");
+		command_fail(si, fault_toomany, _("Too many memos; please wait a while and try again"));
 		return;
 	}
 	si->smu->memo_ratelimit_num++;

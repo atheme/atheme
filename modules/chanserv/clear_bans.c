@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: clear_bans.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: clear_bans.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/clear_bans", FALSE, _modinit, _moddeinit,
-	"$Id: clear_bans.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: clear_bans.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -59,37 +59,37 @@ static void cs_cmd_clear_bans(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!strchr(ircd->ban_like_modes, *p))
 		{
-			command_fail(si, fault_badparams, "Invalid mode; valid ones are %s.", ircd->ban_like_modes);
+			command_fail(si, fault_badparams, _("Invalid mode; valid ones are %s."), ircd->ban_like_modes);
 			return;
 		}
 	}
 	if (*item == '\0')
 	{
-		command_fail(si, fault_badparams, "Invalid mode; valid ones are %s.", ircd->ban_like_modes);
+		command_fail(si, fault_badparams, _("Invalid mode; valid ones are %s."), ircd->ban_like_modes);
 		return;
 	}
 
 	if (!(c = channel_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 does not exist.", parv[0]);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 does not exist."), parv[0]);
 		return;
 	}
 
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", c->name);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), c->name);
 		return;
 	}
 
 	if (!chanacs_source_has_flag(mc, si, CA_RECOVER))
 	{
-		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
 	}
 	
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
-		command_fail(si, fault_noprivs, "\2%s\2 is closed.", parv[0]);
+		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), parv[0]);
 		return;
 	}
 

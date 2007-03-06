@@ -4,7 +4,7 @@
  *
  * Lists object properties via their metadata table.
  *
- * $Id: taxonomy.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: taxonomy.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/taxonomy", FALSE, _modinit, _moddeinit,
-	"$Id: taxonomy.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: taxonomy.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -49,13 +49,13 @@ void cs_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 	if (!target || *target != '#')
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "TAXONOMY");
-		command_fail(si, fault_needmoreparams, "Syntax: TAXONOMY <#channel>");
+		command_fail(si, fault_needmoreparams, _("Syntax: TAXONOMY <#channel>"));
 		return;
 	}
 
 	if (!(mc = mychan_find(target)))
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not a registered channel.", target);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not a registered channel."), target);
 		return;
 	}
 

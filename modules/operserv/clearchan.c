@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ CLEARCHAN.
  *
- * $Id: clearchan.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: clearchan.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clearchan", FALSE, _modinit, _moddeinit,
-	"$Id: clearchan.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: clearchan.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Robin Burchell <surreal.w00t@gmail.com>"
 );
 
@@ -58,7 +58,7 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 	if (!actionstr || !targchan || !treason)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "CLEARCHAN");
-		command_fail(si, fault_needmoreparams, "Syntax: CLEARCHAN KICK|KILL|GLINE <#channel> <reason>");
+		command_fail(si, fault_needmoreparams, _("Syntax: CLEARCHAN KICK|KILL|GLINE <#channel> <reason>"));
  		return;
 	}
 
@@ -66,7 +66,7 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!c)
 	{
-		command_fail(si, fault_nosuch_target, "The channel must exist for CLEARCHAN.");
+		command_fail(si, fault_nosuch_target, _("The channel must exist for CLEARCHAN."));
  		return;
 	}
 
@@ -80,13 +80,13 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		/* not valid! */
-		command_fail(si, fault_badparams, "\2%s\2 is not a valid action", actionstr);
+		command_fail(si, fault_badparams, _("\2%s\2 is not a valid action"), actionstr);
  		return;				
 	}
 
 	if (action != CLEAR_KICK && !has_priv(si, PRIV_MASS_AKILL))
 	{
-		command_fail(si, fault_noprivs, "You do not have %s privilege.", PRIV_MASS_AKILL);
+		command_fail(si, fault_noprivs, _("You do not have %s privilege."), PRIV_MASS_AKILL);
 		return;
 	}
 

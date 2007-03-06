@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService STATUS function.
  *
- * $Id: status.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: status.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/status", FALSE, _modinit, _moddeinit,
-	"$Id: status.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: status.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -61,7 +61,7 @@ static void ns_cmd_acc(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!u)
 	{
-		command_fail(si, fault_nosuch_target, "%s%s%s ACC 0 (offline)", targuser, parc >= 2 ? " -> " : "", parc >= 2 ? targaccount : "");
+		command_fail(si, fault_nosuch_target, _("%s%s%s ACC 0 (offline)"), targuser, parc >= 2 ? " -> " : "", parc >= 2 ? targaccount : "");
 		return;
 	}
 
@@ -74,7 +74,7 @@ static void ns_cmd_acc(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!mu)
 	{
-		command_fail(si, fault_nosuch_target, "%s%s%s ACC 0 (not registered)", u->nick, parc >= 2 ? " -> " : "", parc >= 2 ? targaccount : "");
+		command_fail(si, fault_nosuch_target, _("%s%s%s ACC 0 (not registered)"), u->nick, parc >= 2 ? " -> " : "", parc >= 2 ? targaccount : "");
 		return;
 	}
 

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FTRANSFER function.
  *
- * $Id: ftransfer.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: ftransfer.c 7877 2007-03-06 01:43:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ftransfer", FALSE, _modinit, _moddeinit,
-	"$Id: ftransfer.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: ftransfer.c 7877 2007-03-06 01:43:05Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -49,25 +49,25 @@ static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[])
 	if (!name || !newfndr)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FTRANSFER");
-		command_fail(si, fault_needmoreparams, "Syntax: FTRANSFER <#channel> <newfounder>");
+		command_fail(si, fault_needmoreparams, _("Syntax: FTRANSFER <#channel> <newfounder>"));
 		return;
 	}
 
 	if (!(tmu = myuser_find_ext(newfndr)))
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", newfndr);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), newfndr);
 		return;
 	}
 
 	if (!(mc = mychan_find(name)))
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", name);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), name);
 		return;
 	}
 	
 	if (tmu == mc->founder)
 	{
-		command_fail(si, fault_nochange, "\2%s\2 is already the founder of \2%s\2.", tmu->name, name);
+		command_fail(si, fault_nochange, _("\2%s\2 is already the founder of \2%s\2."), tmu->name, name);
 		return;
 	}
 
