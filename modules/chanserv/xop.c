@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: xop.c 7915 2007-03-06 23:56:03Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: xop.c 7915 2007-03-06 23:56:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -116,7 +116,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, cha
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("The channel \2%s\2 is not registered."), chan);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), chan);
 		return;
 	}
 	

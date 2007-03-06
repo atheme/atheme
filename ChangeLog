@@ -1,3 +1,18 @@
+jilles      2007/03/06 23:39:47 UTC	(20070306-7913)
+  Log:
+  - Make some messages more consistent
+  - For some cases where a command needs a channel to be registered
+    and existent on IRC, check first if it is registered
+  
+
+  Changes:	Modified:
+  +8 -8		trunk/modules/chanserv/ban.c (File Modified) 
+  +4 -4		trunk/modules/chanserv/clear_bans.c (File Modified) 
+  +7 -7		trunk/modules/chanserv/clear_users.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/recover.c (File Modified) 
+  +1 -1		trunk/modules/operserv/clearchan.c (File Modified) 
+
+
 jilles      2007/03/06 23:17:38 UTC	(20070306-7911)
   Log:
   Update atheme.pot.

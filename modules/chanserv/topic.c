@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TOPIC functions.
  *
- * $Id: topic.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: topic.c 7915 2007-03-06 23:56:03Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/topic", FALSE, _modinit, _moddeinit,
-	"$Id: topic.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: topic.c 7915 2007-03-06 23:56:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -64,20 +64,20 @@ static void cs_cmd_topic(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	c = channel_find(chan);
-	if (!c)
-	{
-                command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), chan);
-                return;
-        }
-
 	mc = mychan_find(chan);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), chan);
 		return;
 	}
 	
+	c = channel_find(chan);
+	if (!c)
+	{
+                command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), chan);
+                return;
+        }
+
 	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
@@ -122,17 +122,17 @@ static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[])
                 return;
         }
 
-	c = channel_find(chan);
-	if (!c)
-	{
+        mc = mychan_find(chan);
+        if (!mc)
+        {
                 command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), chan);
                 return;
         }
 
-        mc = mychan_find(chan);
-        if (!mc)
-        {
-                command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), chan);
+	c = channel_find(chan);
+	if (!c)
+	{
+                command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), chan);
                 return;
         }
 
