@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7839 2007-03-06 00:09:30Z pippijn $
+# $Id: Makefile.in 7901 2007-03-06 21:52:04Z jilles $
 #
 
 CC		= @CC@
@@ -32,7 +32,7 @@ CFLAGS		= @CFLAGS@ -I../include
 VERSION		= @PACKAGE_VERSION@
 
 LIBS		= @LIBS@
-LDFLAGS		= @LDFLAGS@
+LDFLAGS		= @LDFLAGS@ @LTLIBINTL@
 CPPFLAGS	= @CPPFLAGS@
 SOCKET_ENGINE   = @SOCKET_ENGINE@.c
 
