@@ -1,3 +1,48 @@
+pippijn     2007/03/06 00:09:30 UTC	(20070306-7839)
+  Log:
+  reverted gettext change
+  
+
+  Changes:	Modified:
+  +1 -3		trunk/src/Makefile.in (File Modified) 
+  +7 -7		trunk/src/account.c (File Modified) 
+  +15 -15	trunk/src/atheme.c (File Modified) 
+  +1 -1		trunk/src/authcookie.c (File Modified) 
+  +15 -15	trunk/src/balloc.c (File Modified) 
+  +15 -15	trunk/src/channels.c (File Modified) 
+  +11 -11	trunk/src/cmode.c (File Modified) 
+  +11 -11	trunk/src/commandtree.c (File Modified) 
+  +44 -44	trunk/src/conf.c (File Modified) 
+  +20 -20	trunk/src/confparse.c (File Modified) 
+  +19 -19	trunk/src/connection.c (File Modified) 
+  +5 -5		trunk/src/datastream.c (File Modified) 
+  +7 -7		trunk/src/dictionary.c (File Modified) 
+  +1 -1		trunk/src/dlink.c (File Modified) 
+  +4 -4		trunk/src/event.c (File Modified) 
+  +38 -35	trunk/src/function.c (File Modified) 
+  +9 -9		trunk/src/help.c (File Modified) 
+  +1 -1		trunk/src/hook.c (File Modified) 
+  +1 -1		trunk/src/match.c (File Modified) 
+  +20 -21	trunk/src/md5.c (File Modified) 
+  +18 -18	trunk/src/module.c (File Modified) 
+  +4 -4		trunk/src/node.c (File Modified) 
+  +3 -3		trunk/src/packet.c (File Modified) 
+  +12 -12	trunk/src/parse.c (File Modified) 
+  +7 -7		trunk/src/phandler.c (File Modified) 
+  +3 -3		trunk/src/pmodule.c (File Modified) 
+  +6 -6		trunk/src/privs.c (File Modified) 
+  +24 -23	trunk/src/ptasks.c (File Modified) 
+  +5 -5		trunk/src/servers.c (File Modified) 
+  +11 -10	trunk/src/services.c (File Modified) 
+  +5 -5		trunk/src/servtree.c (File Modified) 
+  +29 -29	trunk/src/signal.c (File Modified) 
+  +1 -1		trunk/src/sockio.c (File Modified) 
+  +2 -2		trunk/src/tokenize.c (File Modified) 
+  +8 -8		trunk/src/uplink.c (File Modified) 
+  +8 -8		trunk/src/users.c (File Modified) 
+  +6 -6		trunk/src/xmlrpc.c (File Modified) 
+
+
 nenolod     2007/03/06 00:06:49 UTC	(20070306-7837)
   Log:
   - proper i18n support

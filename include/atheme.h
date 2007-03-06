@@ -4,7 +4,7 @@
  *
  * Includes most headers usually needed.
  *
- * $Id: atheme.h 7837 2007-03-06 00:06:49Z nenolod $
+ * $Id: atheme.h 7841 2007-03-06 00:11:45Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -26,6 +26,7 @@
 #endif
 
 #include "sysconf.h"
+#include "stdinc.h"
 #include "i18n.h"
 #include "common.h"
 #include "dlink.h"

@@ -4,11 +4,11 @@
  *
  * This is the header which includes all of the internationalization stuff.
  *
- * $Id: i18n.h 7837 2007-03-06 00:06:49Z nenolod $
+ * $Id: i18n.h 7841 2007-03-06 00:11:45Z jilles $
  */
 
-#ifndef 
-__ATHEME_INTL_H__
+#ifndef __ATHEME_INTL_H__
+#define __ATHEME_INTL_H__
 
 #ifdef ENABLE_NLS
 # include <locale.h>
