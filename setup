@@ -5,7 +5,7 @@
 #
 # This file is a simple setup script.
 #
-# $Id: setup 7785 2007-03-03 15:54:32Z pippijn $
+# $Id: setup 7861 2007-03-06 01:19:20Z nenolod $
 
 PREFIX="$HOME/atheme"
 LARGENET="no"
@@ -94,6 +94,36 @@ case "$LARGENET" in
 esac
 
 echo ""
+
+ok=0
+echo "Would you like to enable support for internationalization of"
+echo "the messages used by Services? This will require gettext to be
+echo "installed."
+while [ $ok -eq 0 ] ; do
+  echo -n "[$LARGENET] "
+  if read INPUT ; then : ; else echo "" ; exit 1 ; fi
+  if [ ! "$INPUT" ] ; then
+    INPUT=$LARGENET
+    ok=1
+  else
+    ok=1
+  fi
+done
+LARGENET=$INPUT
+
+ARGS="--prefix=$PREFIX"
+
+case "$LARGENET" in
+  [Yy])
+    ARGS="--prefix=$PREFIX --enable-nls"
+    ;;
+  Yes)
+    ARGS="--prefix=$PREFIX --enable-nls"
+    ;;
+  yes)
+    ARGS="--prefix=$PREFIX --enable-nls"
+    ;;
+esac
 
 ok=0
 echo "Would you like to pass any additional options to configure? If so,"

@@ -1,3 +1,12 @@
+nenolod     2007/03/06 01:16:59 UTC	(20070306-7859)
+  Log:
+  - merge some autoconf requirements for gettext
+  
+
+  Changes:	Modified:
+  +12 -0	trunk/configure.ac (File Modified) 
+
+
 nenolod     2007/03/06 01:14:21 UTC	(20070306-7857)
   Log:
   - add P_() which provides a plural version of _().
