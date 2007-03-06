@@ -5,7 +5,7 @@
 #
 # This file is a simple setup script.
 #
-# $Id: setup 7861 2007-03-06 01:19:20Z nenolod $
+# $Id: setup 7863 2007-03-06 01:19:57Z nenolod $
 
 PREFIX="$HOME/atheme"
 LARGENET="no"
@@ -97,7 +97,7 @@ echo ""
 
 ok=0
 echo "Would you like to enable support for internationalization of"
-echo "the messages used by Services? This will require gettext to be
+echo "the messages used by Services? This will require gettext to be"
 echo "installed."
 while [ $ok -eq 0 ] ; do
   echo -n "[$LARGENET] "
