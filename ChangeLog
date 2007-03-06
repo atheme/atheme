@@ -1,3 +1,12 @@
+nenolod     2007/03/06 01:19:57 UTC	(20070306-7863)
+  Log:
+  - fix typo
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/setup (File Modified) 
+
+
 nenolod     2007/03/06 01:19:20 UTC	(20070306-7861)
   Log:
   - add NLS question to interactive setup tool

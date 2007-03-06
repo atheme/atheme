@@ -5,10 +5,11 @@
 #
 # This file is a simple setup script.
 #
-# $Id: setup 7863 2007-03-06 01:19:57Z nenolod $
+# $Id: setup 7865 2007-03-06 01:22:17Z nenolod $
 
 PREFIX="$HOME/atheme"
 LARGENET="no"
+NLS="yes"
 SASL="yes"
 VERSION=`grep AC_INIT configure.ac | awk '{print \$2}' | sed s:\,::g`
 
@@ -83,13 +84,13 @@ ARGS="--prefix=$PREFIX"
 
 case "$LARGENET" in
   [Yy])
-    ARGS="--prefix=$PREFIX --enable-large-net"
+    ARGS="$ARGS --enable-large-net"
     ;;
   Yes)
-    ARGS="--prefix=$PREFIX --enable-large-net"
+    ARGS="$ARGS --enable-large-net"
     ;;
   yes)
-    ARGS="--prefix=$PREFIX --enable-large-net"
+    ARGS="$ARGS --enable-large-net"
     ;;
 esac
 
@@ -100,28 +101,26 @@ echo "Would you like to enable support for internationalization of"
 echo "the messages used by Services? This will require gettext to be"
 echo "installed."
 while [ $ok -eq 0 ] ; do
-  echo -n "[$LARGENET] "
+  echo -n "[$NLS] "
   if read INPUT ; then : ; else echo "" ; exit 1 ; fi
   if [ ! "$INPUT" ] ; then
-    INPUT=$LARGENET
+    INPUT=$NLS
     ok=1
   else
     ok=1
   fi
 done
-LARGENET=$INPUT
+$NLS=$INPUT
 
-ARGS="--prefix=$PREFIX"
-
-case "$LARGENET" in
+case "$NLS" in
   [Yy])
-    ARGS="--prefix=$PREFIX --enable-nls"
+    ARGS="$ARGS --enable-nls"
     ;;
   Yes)
-    ARGS="--prefix=$PREFIX --enable-nls"
+    ARGS="$ARGS --enable-nls"
     ;;
   yes)
-    ARGS="--prefix=$PREFIX --enable-nls"
+    ARGS="$ARGS --enable-nls"
     ;;
 esac
 
