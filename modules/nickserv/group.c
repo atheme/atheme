@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ GROUP command.
  *
- * $Id: group.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: group.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/group", FALSE, _modinit, _moddeinit,
-	"$Id: group.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: group.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -98,7 +98,7 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 	mn = mynick_add(si->smu, si->su->nick);
 	mn->registered = CURRTIME;
 	mn->lastseen = CURRTIME;
-	command_success_nodata(si, "Nick \2%s\2 is now registered to your account.", mn->nick);
+	command_success_nodata(si, _("Nick \2%s\2 is now registered to your account."), mn->nick);
 }
 
 static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[])
@@ -138,7 +138,7 @@ static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_REGISTER, "UNGROUP %s", mn->nick);
 	snoop("UNGROUP: \2%s\2 by \2%s\2", target, get_source_name(si));
-	command_success_nodata(si, "Nick \2%s\2 has been removed from your account.", mn->nick);
+	command_success_nodata(si, _("Nick \2%s\2 has been removed from your account."), mn->nick);
 	object_unref(mn);
 }
 
@@ -172,7 +172,7 @@ static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[])
 			get_oper_name(si), mn->nick, mu->name);
 	snoop("FUNGROUP: \2%s\2 from \2%s\2 by \2%s\2",
 			mn->nick, mu->name, get_source_name(si));
-	command_success_nodata(si, "Nick \2%s\2 has been removed from account \2%s\2.", mn->nick, mu->name);
+	command_success_nodata(si, _("Nick \2%s\2 has been removed from account \2%s\2."), mn->nick, mu->name);
 	object_unref(mn);
 }
 

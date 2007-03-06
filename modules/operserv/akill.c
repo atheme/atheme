@@ -6,7 +6,7 @@
  * This file contains functionality which implements
  * the OperServ AKILL command.
  *
- * $Id: akill.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: akill.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/akill", FALSE, _modinit, _moddeinit,
-	"$Id: akill.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: akill.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -283,9 +283,9 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 	k->setby = sstrdup(get_oper_name(si));
 
 	if (duration)
-		command_success_nodata(si, "Timed AKILL on \2%s@%s\2 was successfully added and will expire in %s.", k->user, k->host, timediff(duration));
+		command_success_nodata(si, _("Timed AKILL on \2%s@%s\2 was successfully added and will expire in %s."), k->user, k->host, timediff(duration));
 	else
-		command_success_nodata(si, "AKILL on \2%s@%s\2 was successfully added.", k->user, k->host);
+		command_success_nodata(si, _("AKILL on \2%s@%s\2 was successfully added."), k->user, k->host);
 
 	snoop("AKILL:ADD: \2%s@%s\2 by \2%s\2 for \2%s\2", k->user, k->host, get_oper_name(si), k->reason);
 
@@ -342,7 +342,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 						continue;
 					}
 
-					command_success_nodata(si, "AKILL on \2%s@%s\2 has been successfully removed.", k->user, k->host);
+					command_success_nodata(si, _("AKILL on \2%s@%s\2 has been successfully removed."), k->user, k->host);
 					verbose_wallops("\2%s\2 is \2removing\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2",
 						get_oper_name(si), k->user, k->host, k->reason);
 
@@ -362,7 +362,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
-			command_success_nodata(si, "AKILL on \2%s@%s\2 has been successfully removed.", k->user, k->host);
+			command_success_nodata(si, _("AKILL on \2%s@%s\2 has been successfully removed."), k->user, k->host);
 			verbose_wallops("\2%s\2 is \2removing\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2",
 				get_oper_name(si), k->user, k->host, k->reason);
 
@@ -403,7 +403,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 					continue;
 				}
 
-				command_success_nodata(si, "AKILL on \2%s@%s\2 has been successfully removed.", k->user, k->host);
+				command_success_nodata(si, _("AKILL on \2%s@%s\2 has been successfully removed."), k->user, k->host);
 				verbose_wallops("\2%s\2 is \2removing\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2",
 					get_oper_name(si), k->user, k->host, k->reason);
 
@@ -422,7 +422,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		command_success_nodata(si, "AKILL on \2%s@%s\2 has been successfully removed.", k->user, k->host);
+		command_success_nodata(si, _("AKILL on \2%s@%s\2 has been successfully removed."), k->user, k->host);
 
 		verbose_wallops("\2%s\2 is \2removing\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2",
 			get_oper_name(si), k->user, k->host, k->reason);
@@ -442,7 +442,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	command_success_nodata(si, "AKILL on \2%s@%s\2 has been successfully removed.", userbuf, hostbuf);
+	command_success_nodata(si, _("AKILL on \2%s@%s\2 has been successfully removed."), userbuf, hostbuf);
 
 	verbose_wallops("\2%s\2 is \2removing\2 an \2AKILL\2 for \2%s@%s\2 -- reason: \2%s\2",
 		get_oper_name(si), k->user, k->host, k->reason);
@@ -463,25 +463,25 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[])
 		full = TRUE;
 	
 	if (full)
-		command_success_nodata(si, "AKILL list (with reasons):");
+		command_success_nodata(si, _("AKILL list (with reasons):"));
 	else
-		command_success_nodata(si, "AKILL list:");
+		command_success_nodata(si, _("AKILL list:"));
 
 	LIST_FOREACH(n, klnlist.head)
 	{
 		k = (kline_t *)n->data;
 
 		if (k->duration && full)
-			command_success_nodata(si, "%d: %s@%s - by \2%s\2 - expires in \2%s\2 - (%s)", k->number, k->user, k->host, k->setby, timediff(k->expires > CURRTIME ? k->expires - CURRTIME : 0), k->reason);
+			command_success_nodata(si, _("%d: %s@%s - by \2%s\2 - expires in \2%s\2 - (%s)"), k->number, k->user, k->host, k->setby, timediff(k->expires > CURRTIME ? k->expires - CURRTIME : 0), k->reason);
 		else if (k->duration && !full)
-			command_success_nodata(si, "%d: %s@%s - by \2%s\2 - expires in \2%s\2", k->number, k->user, k->host, k->setby, timediff(k->expires > CURRTIME ? k->expires - CURRTIME : 0));
+			command_success_nodata(si, _("%d: %s@%s - by \2%s\2 - expires in \2%s\2"), k->number, k->user, k->host, k->setby, timediff(k->expires > CURRTIME ? k->expires - CURRTIME : 0));
 		else if (!k->duration && full)
-			command_success_nodata(si, "%d: %s@%s - by \2%s\2 - \2permanent\2 - (%s)", k->number, k->user, k->host, k->setby, k->reason);
+			command_success_nodata(si, _("%d: %s@%s - by \2%s\2 - \2permanent\2 - (%s)"), k->number, k->user, k->host, k->setby, k->reason);
 		else
-			command_success_nodata(si, "%d: %s@%s - by \2%s\2 - \2permanent\2", k->number, k->user, k->host, k->setby);
+			command_success_nodata(si, _("%d: %s@%s - by \2%s\2 - \2permanent\2"), k->number, k->user, k->host, k->setby);
 	}
 
-	command_success_nodata(si, "Total of \2%d\2 %s in AKILL list.", klnlist.count, (klnlist.count == 1) ? "entry" : "entries");
+	command_success_nodata(si, _("Total of \2%d\2 %s in AKILL list."), klnlist.count, (klnlist.count == 1) ? "entry" : "entries");
 	logcommand(si, CMDLOG_GET, "AKILL LIST%s", full ? " FULL" : "");
 }
 
@@ -503,7 +503,7 @@ static void os_cmd_akill_sync(sourceinfo_t *si, int parc, char *parv[])
 			kline_sts("*", k->user, k->host, k->expires - CURRTIME, k->reason);
 	}
 
-	command_success_nodata(si, "AKILL list synchronized to servers.");
+	command_success_nodata(si, _("AKILL list synchronized to servers."));
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

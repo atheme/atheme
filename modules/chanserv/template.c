@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TEMPLATE functions.
  *
- * $Id: template.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: template.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/template", FALSE, _modinit, _moddeinit,
-	"$Id: template.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: template.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -44,7 +44,7 @@ void _moddeinit()
 
 static void list_generic_flags(sourceinfo_t *si)
 {
-	command_success_nodata(si, "%-20s %s", "Name", "Flags");
+	command_success_nodata(si, "%-20s %s", _("Name"), _("Flags"));
 	command_success_nodata(si, "%-20s %s", "--------------------", "-----");
 	command_success_nodata(si, "%-20s %s", "SOP", bitmask_to_flags(chansvs.ca_sop, chanacs_flags));
 	command_success_nodata(si, "%-20s %s", "AOP", bitmask_to_flags(chansvs.ca_aop, chanacs_flags));
@@ -52,7 +52,7 @@ static void list_generic_flags(sourceinfo_t *si)
 		command_success_nodata(si, "%-20s %s", "HOP", bitmask_to_flags(chansvs.ca_hop, chanacs_flags));
 	command_success_nodata(si, "%-20s %s", "VOP", bitmask_to_flags(chansvs.ca_vop, chanacs_flags));
 	command_success_nodata(si, "%-20s %s", "--------------------", "-----");
-	command_success_nodata(si, "End of network wide template list.");
+	command_success_nodata(si, _("End of network wide template list."));
 }
 
 /* TEMPLATE [channel] [template] [flags] */
@@ -107,7 +107,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 
 		if (md != NULL)
 		{
-			command_success_nodata(si, "%-20s %s", "Name", "Flags");
+			command_success_nodata(si, "%-20s %s", _("Name"), _("Flags"));
 			command_success_nodata(si, "%-20s %s", "--------------------", "-----");
 
 			p = md->value;
@@ -125,10 +125,10 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 			}
 
 			command_success_nodata(si, "%-20s %s", "--------------------", "-----");
-			command_success_nodata(si, "End of \2%s\2 TEMPLATE listing.", mc->name);
+			command_success_nodata(si, _("End of \2%s\2 TEMPLATE listing."), mc->name);
 		}
 		else
-			command_success_nodata(si, "No templates set on channel \2%s\2.", mc->name);
+			command_success_nodata(si, _("No templates set on channel \2%s\2."), mc->name);
 		if (operoverride)
 			logcommand(si, CMDLOG_ADMIN, "%s TEMPLATE (oper override)", mc->name);
 		else
@@ -316,11 +316,11 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 		else
 			metadata_add(mc, METADATA_CHANNEL, "private:templates", newstr);
 		if (oldflags == 0)
-			command_success_nodata(si, "Added template \2%s\2 with flags \2%s\2 in \2%s\2.", target, bitmask_to_flags(newflags, chanacs_flags), channel);
+			command_success_nodata(si, _("Added template \2%s\2 with flags \2%s\2 in \2%s\2."), target, bitmask_to_flags(newflags, chanacs_flags), channel);
 		else if (newflags == 0)
-			command_success_nodata(si, "Removed template \2%s\2 from \2%s\2.", target, channel);
+			command_success_nodata(si, _("Removed template \2%s\2 from \2%s\2."), target, channel);
 		else
-			command_success_nodata(si, "Changed template \2%s\2 to \2%s\2 in \2%s\2.", target, bitmask_to_flags(newflags, chanacs_flags), channel);
+			command_success_nodata(si, _("Changed template \2%s\2 to \2%s\2 in \2%s\2."), target, bitmask_to_flags(newflags, chanacs_flags), channel);
 
 		flagstr = bitmask_to_flags2(addflags, removeflags, chanacs_flags);
 		if (changechanacs)
@@ -353,9 +353,9 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 			strlcpy(flagstr2, flagstr, sizeof flagstr2);
 			if (changes > 0)
 				verbose(mc, "\2%s\2 set \2%s\2 on %d access entries with flags \2%s\2.", get_source_name(si), flagstr2, changes, bitmask_to_flags(oldflags, chanacs_flags));
-			command_success_nodata(si, "%d access entries updated accordingly.", changes);
+			command_success_nodata(si, _("%d access entries updated accordingly."), changes);
 			if (founderskipped)
-				command_success_nodata(si, "The access entry for %s was not updated because they are channel founder.", mc->founder->name);
+				command_success_nodata(si, _("The access entry for %s was not updated because they are channel founder."), mc->founder->name);
 		}
 		else
 			logcommand(si, CMDLOG_SET, "%s TEMPLATE %s %s", mc->name, target, flagstr);

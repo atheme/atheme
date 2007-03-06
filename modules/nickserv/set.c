@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: set.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: set.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -27,18 +27,18 @@ list_t ns_set_cmdtree;
 /* HELP SET */
 static void ns_help_set(sourceinfo_t *si)
 {
-	command_success_nodata(si, "Help for \2SET\2:");
+	command_success_nodata(si, _("Help for \2SET\2:"));
 	command_success_nodata(si, " ");
-	command_success_nodata(si, "SET allows you to set various control flags");
+	command_success_nodata(si, _("SET allows you to set various control flags"));
 	if (nicksvs.no_nick_ownership)
-		command_success_nodata(si, "for accounts that change the way certain operations");
+		command_success_nodata(si, _("for accounts that change the way certain operations"));
 	else
-		command_success_nodata(si, "for nicknames that change the way certain operations");
-	command_success_nodata(si, "are performed on them.");
+		command_success_nodata(si, _("for nicknames that change the way certain operations"));
+	command_success_nodata(si, _("are performed on them."));
 	command_success_nodata(si, " ");
 	command_help(si, &ns_set_cmdtree);
 	command_success_nodata(si, " ");
-	command_success_nodata(si, "For more information, use \2/msg %s HELP SET \37command\37\2.", nicksvs.nick);
+	command_success_nodata(si, _("For more information, use \2/msg %s HELP SET \37command\37\2."), nicksvs.nick);
 }
 
 /* SET <setting> <parameters> */
@@ -130,8 +130,8 @@ static void _ns_setemail(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		logcommand(si, CMDLOG_SET, "SET EMAIL %s (awaiting verification)", email);
-		command_success_nodata(si, "An email containing email changing instructions has been sent to \2%s\2.", email);
-		command_success_nodata(si, "Your email address will not be changed until you follow these instructions.");
+		command_success_nodata(si, _("An email containing email changing instructions has been sent to \2%s\2."), email);
+		command_success_nodata(si, _("Your email address will not be changed until you follow these instructions."));
 
 		return;
 	}
@@ -139,7 +139,7 @@ static void _ns_setemail(sourceinfo_t *si, int parc, char *parv[])
 	strlcpy(si->smu->email, email, EMAILLEN);
 
 	logcommand(si, CMDLOG_SET, "SET EMAIL %s", email);
-	command_success_nodata(si, "The email address for \2%s\2 has been changed to \2%s\2.", si->smu->name, si->smu->email);
+	command_success_nodata(si, _("The email address for \2%s\2 has been changed to \2%s\2."), si->smu->name, si->smu->email);
 }
 
 command_t ns_set_email = { "EMAIL", N_("Changes your e-mail address."), AC_NONE, 1, _ns_setemail };
@@ -170,7 +170,7 @@ static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 
 		si->smu->flags |= MU_HIDEMAIL;
 
-		command_success_nodata(si, "The \2HIDEMAIL\2 flag has been set for \2%s\2.", si->smu->name);
+		command_success_nodata(si, _("The \2HIDEMAIL\2 flag has been set for \2%s\2."), si->smu->name);
 
 		return;
 	}
@@ -186,7 +186,7 @@ static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 
 		si->smu->flags &= ~MU_HIDEMAIL;
 
-		command_success_nodata(si, "The \2HIDEMAIL\2 flag has been removed for \2%s\2.", si->smu->name);
+		command_success_nodata(si, _("The \2HIDEMAIL\2 flag has been removed for \2%s\2."), si->smu->name);
 
 		return;
 	}
@@ -233,7 +233,7 @@ static void _ns_setemailmemos(sourceinfo_t *si, int parc, char *parv[])
 
 		logcommand(si, CMDLOG_SET, "SET EMAILMEMOS ON");
 		si->smu->flags |= MU_EMAILMEMOS;
-		command_success_nodata(si, "The \2EMAILMEMOS\2 flag has been set for \2%s\2.", si->smu->name);
+		command_success_nodata(si, _("The \2EMAILMEMOS\2 flag has been set for \2%s\2."), si->smu->name);
 		return;
 	}
 
@@ -247,7 +247,7 @@ static void _ns_setemailmemos(sourceinfo_t *si, int parc, char *parv[])
 
 		logcommand(si, CMDLOG_SET, "SET EMAILMEMOS OFF");
 		si->smu->flags &= ~MU_EMAILMEMOS;
-		command_success_nodata(si, "The \2EMAILMEMOS\2 flag has been removed for \2%s\2.", si->smu->name);
+		command_success_nodata(si, _("The \2EMAILMEMOS\2 flag has been removed for \2%s\2."), si->smu->name);
 		return;
 	}
 	else
@@ -282,7 +282,7 @@ static void _ns_setnomemo(sourceinfo_t *si, int parc, char *parv[])
 
 		logcommand(si, CMDLOG_SET, "SET NOMEMO ON");
 		si->smu->flags |= MU_NOMEMO;
-		command_success_nodata(si, "The \2NOMEMO\2 flag has been set for \2%s\2.", si->smu->name);
+		command_success_nodata(si, _("The \2NOMEMO\2 flag has been set for \2%s\2."), si->smu->name);
 		return;
 	}
 
@@ -296,7 +296,7 @@ static void _ns_setnomemo(sourceinfo_t *si, int parc, char *parv[])
 
 		logcommand(si, CMDLOG_SET, "SET NOMEMO OFF");
 		si->smu->flags &= ~MU_NOMEMO;
-		command_success_nodata(si, "The \2NOMEMO\2 flag has been removed for \2%s\2.", si->smu->name);
+		command_success_nodata(si, _("The \2NOMEMO\2 flag has been removed for \2%s\2."), si->smu->name);
 		return;
 	}
 	else
@@ -333,7 +333,7 @@ static void _ns_setneverop(sourceinfo_t *si, int parc, char *parv[])
 
 		si->smu->flags |= MU_NEVEROP;
 
-		command_success_nodata(si, "The \2NEVEROP\2 flag has been set for \2%s\2.", si->smu->name);
+		command_success_nodata(si, _("The \2NEVEROP\2 flag has been set for \2%s\2."), si->smu->name);
 
 		return;
 	}
@@ -350,7 +350,7 @@ static void _ns_setneverop(sourceinfo_t *si, int parc, char *parv[])
 
 		si->smu->flags &= ~MU_NEVEROP;
 
-		command_success_nodata(si, "The \2NEVEROP\2 flag has been removed for \2%s\2.", si->smu->name);
+		command_success_nodata(si, _("The \2NEVEROP\2 flag has been removed for \2%s\2."), si->smu->name);
 
 		return;
 	}
@@ -389,7 +389,7 @@ static void _ns_setnoop(sourceinfo_t *si, int parc, char *parv[])
 
 		si->smu->flags |= MU_NOOP;
 
-		command_success_nodata(si, "The \2NOOP\2 flag has been set for \2%s\2.", si->smu->name);
+		command_success_nodata(si, _("The \2NOOP\2 flag has been set for \2%s\2."), si->smu->name);
 
 		return;
 	}
@@ -405,7 +405,7 @@ static void _ns_setnoop(sourceinfo_t *si, int parc, char *parv[])
 
 		si->smu->flags &= ~MU_NOOP;
 
-		command_success_nodata(si, "The \2NOOP\2 flag has been removed for \2%s\2.", si->smu->name);
+		command_success_nodata(si, _("The \2NOOP\2 flag has been removed for \2%s\2."), si->smu->name);
 
 		return;
 	}
@@ -461,7 +461,7 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 
 		metadata_delete(si->smu, METADATA_USER, property);
 		logcommand(si, CMDLOG_SET, "SET PROPERTY %s (deleted)", property);
-		command_success_nodata(si, "Metadata entry \2%s\2 has been deleted.", property);
+		command_success_nodata(si, _("Metadata entry \2%s\2 has been deleted."), property);
 		return;
 	}
 
@@ -473,7 +473,7 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 
 	metadata_add(si->smu, METADATA_USER, property, value);
 	logcommand(si, CMDLOG_SET, "SET PROPERTY %s to %s", property, value);
-	command_success_nodata(si, "Metadata entry \2%s\2 added.", property);
+	command_success_nodata(si, _("Metadata entry \2%s\2 added."), property);
 }
 
 command_t ns_set_property = { "PROPERTY", N_("Manipulates metadata entries associated with a nickname."), AC_NONE, 2, _ns_setproperty };
@@ -509,7 +509,7 @@ static void _ns_setpassword(sourceinfo_t *si, int parc, char *parv[])
 
 	set_password(si->smu, password);
 
-	command_success_nodata(si, "The password for \2%s\2 has been changed to \2%s\2. Please write this down for future reference.", si->smu->name, password);
+	command_success_nodata(si, _("The password for \2%s\2 has been changed to \2%s\2. Please write this down for future reference."), si->smu->name, password);
 
 	return;
 }

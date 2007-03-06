@@ -4,7 +4,7 @@
  *
  * This file contains code for the ChanServ WHY function.
  *
- * $Id: why.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: why.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/why", FALSE, _modinit, _moddeinit,
-	"$Id: why.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: why.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -128,9 +128,9 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 	if ((fl & (CA_AKICK | CA_REMOVE)) == (CA_AKICK | CA_REMOVE))
-		command_success_nodata(si, "+r exempts from +b.");
+		command_success_nodata(si, _("+r exempts from +b."));
 	else if (fl == 0)
-		command_success_nodata(si, "\2%s\2 has no special access to \2%s\2.",
+		command_success_nodata(si, _("\2%s\2 has no special access to \2%s\2."),
 				u->nick, mc->name);
 }
 

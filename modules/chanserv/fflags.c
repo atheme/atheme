@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FFLAGS functions.
  *
- * $Id: fflags.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: fflags.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/fflags", FALSE, _modinit, _moddeinit,
-	"$Id: fflags.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: fflags.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -141,7 +141,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 	flagstr = bitmask_to_flags2(addflags, removeflags, chanacs_flags);
 	wallops("\2%s\2 is forcing flags change \2%s\2 on \2%s\2 in \2%s\2.", get_oper_name(si), flagstr, target, mc->name);
 	snoop("FFLAGS: \2%s\2 \2%s\2 \2%s\2 by \2%s\2", channel, target, flagstr, get_oper_name(si));
-	command_success_nodata(si, "Flags \2%s\2 were set on \2%s\2 in \2%s\2.", flagstr, target, channel);
+	command_success_nodata(si, _("Flags \2%s\2 were set on \2%s\2 in \2%s\2."), flagstr, target, channel);
 	logcommand(si, CMDLOG_ADMIN, "%s FFLAGS %s %s", mc->name, target, flagstr);
 	verbose(mc, "\2%s\2 forced flags change \2%s\2 on \2%s\2.", get_source_name(si), flagstr, target);
 }

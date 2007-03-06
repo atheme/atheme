@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ RNC.
  *
- * $Id: rnc.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: rnc.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rnc", FALSE, _modinit, _moddeinit,
-	"$Id: rnc.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: rnc.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Robin Burchell <surreal.w00t@gmail.com>"
 );
 
@@ -105,7 +105,7 @@ static void os_cmd_rnc(sourceinfo_t *si, int parc, char *parv[])
 		if (biggest == NULL)
 			break;
 
-		command_success_nodata(si, "\2%d\2: \2%d\2 matches for realname \2%s\2", i, ((rnc_t *)(biggest->data))->count, ((rnc_t *)biggest->data)->gecos);
+		command_success_nodata(si, _("\2%d\2: \2%d\2 matches for realname \2%s\2"), i, ((rnc_t *)(biggest->data))->count, ((rnc_t *)biggest->data)->gecos);
 		free(biggest->data);
 		node_del(biggest, &realnames);
 		node_free(biggest);

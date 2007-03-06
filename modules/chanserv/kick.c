@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: kick.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: kick.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/kick", FALSE, _modinit, _moddeinit,
-	"$Id: kick.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: kick.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -106,7 +106,7 @@ static void cs_cmd_kick(sourceinfo_t *si, int parc, char *parv[])
 	kick(chansvs.nick, chan, tu->nick, reasonbuf);
 	logcommand(si, CMDLOG_SET, "%s KICK %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (si->su != tu && !chanuser_find(mc->chan, si->su))
-		command_success_nodata(si, "\2%s\2 has been kicked from \2%s\2.", tu->nick, mc->name);
+		command_success_nodata(si, _("\2%s\2 has been kicked from \2%s\2."), tu->nick, mc->name);
 }
 
 static void cs_cmd_kickban(sourceinfo_t *si, int parc, char *parv[])
@@ -162,11 +162,11 @@ static void cs_cmd_kickban(sourceinfo_t *si, int parc, char *parv[])
 	ban(si->service->me, mc->chan, tu);
 	n = remove_ban_exceptions(si->service->me, mc->chan, tu);
 	if (n > 0)
-		command_success_nodata(si, "To avoid rejoin, %d ban exception(s) matching \2%s\2 have been removed from \2%s\2.", n, tu->nick, mc->name);
+		command_success_nodata(si, _("To avoid rejoin, %d ban exception(s) matching \2%s\2 have been removed from \2%s\2."), n, tu->nick, mc->name);
 	kick(chansvs.nick, chan, tu->nick, reasonbuf);
 	logcommand(si, CMDLOG_SET, "%s KICKBAN %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (si->su != tu && !chanuser_find(mc->chan, si->su))
-		command_success_nodata(si, "\2%s\2 has been kickbanned from \2%s\2.", tu->nick, mc->name);
+		command_success_nodata(si, _("\2%s\2 has been kickbanned from \2%s\2."), tu->nick, mc->name);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

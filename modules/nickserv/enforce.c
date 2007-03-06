@@ -23,7 +23,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/enforce",FALSE, _modinit, _moddeinit,
-	"$Id: enforce.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: enforce.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -106,7 +106,7 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 		else
 		{
 			metadata_add(si->smu, METADATA_USER, "private:doenforce", "1");
-			command_success_nodata(si, "ENFORCE is now enabled.");
+			command_success_nodata(si, _("ENFORCE is now enabled."));
 		}
 	}
 	else if (strcasecmp(setting, "OFF") == 0)
@@ -114,7 +114,7 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 		if ((md = metadata_find(si->smu, METADATA_USER, "private:doenforce")) != NULL)
 		{
 			metadata_delete(si->smu, METADATA_USER, "private:doenforce");
-			command_success_nodata(si, "ENFORCE is now disabled.");
+			command_success_nodata(si, _("ENFORCE is now disabled."));
 		}
 		else
 		{
@@ -177,7 +177,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 				metadata_delete(mn->owner, METADATA_USER, "private:enforcer");
 			logcommand(si, CMDLOG_DO, "RELEASE %s", target);
 			holdnick_sts(si->service->me, 0, target, mn->owner);
-			command_success_nodata(si, "\2%s\2 has been released.", target);
+			command_success_nodata(si, _("\2%s\2 has been released."), target);
 			/*hook_call_event("user_identify", u);*/
 		}
 		else
@@ -195,7 +195,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 					break;
 			}
 			fnc_sts(si->service->me, u, gnick, FNC_FORCE);
-			command_success_nodata(si, "%s has been released.", target);
+			command_success_nodata(si, _("%s has been released."), target);
 			logcommand(si, CMDLOG_DO, "RELEASE %s!%s@%s", u->nick, u->user, u->vhost);
 			/*hook_call_event("user_identify", u);*/
 		}

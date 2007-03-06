@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ INFO functions.
  *
- * $Id: info.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: info.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: info.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -67,16 +67,16 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	tm2 = *localtime(&mu->lastlogin);
 	strftime(lastlogin, sizeof(lastlogin) -1, "%b %d %H:%M:%S %Y", &tm2);
 
-	command_success_nodata(si, "Information on \2%s\2:", mu->name);
+	command_success_nodata(si, _("Information on \2%s\2:"), mu->name);
 
-	command_success_nodata(si, "Registered: %s (%s ago)", strfbuf, time_ago(mu->registered));
+	command_success_nodata(si, _("Registered: %s (%s ago)"), strfbuf, time_ago(mu->registered));
 	if (has_priv(si, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:host:actual")))
-		command_success_nodata(si, "Last address: %s", md->value);
+		command_success_nodata(si, _("Last address: %s"), md->value);
 	else if ((md = metadata_find(mu, METADATA_USER, "private:host:vhost")))
-		command_success_nodata(si, "Last address: %s", md->value);
+		command_success_nodata(si, _("Last address: %s"), md->value);
 
 	if (LIST_LENGTH(&mu->logins) == 0)
-		command_success_nodata(si, "Last seen: %s (%s ago)", lastlogin, time_ago(mu->lastlogin));
+		command_success_nodata(si, _("Last seen: %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
 	else if (mu == si->smu || has_priv(si, PRIV_USER_AUSPEX))
 	{
 		buf[0] = '\0';
@@ -84,7 +84,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		{
 			if (strlen(buf) > 80)
 			{
-				command_success_nodata(si, "Logins from: %s", buf);
+				command_success_nodata(si, _("Logins from: %s"), buf);
 				buf[0] = '\0';
 			}
 			if (buf[0])
@@ -92,10 +92,10 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 			strcat(buf, ((user_t *)(n->data))->nick);
 		}
 		if (buf[0])
-			command_success_nodata(si, "Logins from: %s", buf);
+			command_success_nodata(si, _("Logins from: %s"), buf);
 	}
 	else
-		command_success_nodata(si, "Logins from: <hidden>");
+		command_success_nodata(si, _("Logins from: <hidden>"));
 
 	if (!nicksvs.no_nick_ownership)
 	{
@@ -105,15 +105,15 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		{
 			tm = *localtime(&mn->registered);
 			strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
-			command_success_nodata(si, "Nick %s registered: %s (%s ago)", mn->nick, strfbuf, time_ago(mn->registered));
+			command_success_nodata(si, _("Nick %s registered: %s (%s ago)"), mn->nick, strfbuf, time_ago(mn->registered));
 			u = user_find_named(mn->nick);
 			if (u != NULL && u->myuser == mu)
-				command_success_nodata(si, "Nick %s is currently online", mn->nick);
+				command_success_nodata(si, _("Nick %s is currently online"), mn->nick);
 			else
 			{
 				tm = *localtime(&mn->lastseen);
 				strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
-				command_success_nodata(si, "Nick %s last seen: %s (%s ago)", mn->nick, strfbuf, time_ago(mn->lastseen));
+				command_success_nodata(si, _("Nick %s last seen: %s (%s ago)"), mn->nick, strfbuf, time_ago(mn->lastseen));
 			}
 		}
 		/* list registered nicks if privileged */
@@ -124,7 +124,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 			{
 				if (strlen(buf) > 80)
 				{
-					command_success_nodata(si, "Registered nicks: %s", buf);
+					command_success_nodata(si, _("Registered nicks: %s"), buf);
 					buf[0] = '\0';
 				}
 				if (buf[0])
@@ -132,13 +132,13 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 				strcat(buf, ((mynick_t *)(n->data))->nick);
 			}
 			if (buf[0])
-				command_success_nodata(si, "Registered nicks: %s", buf);
+				command_success_nodata(si, _("Registered nicks: %s"), buf);
 		}
 	}
 
 	if (!(mu->flags & MU_HIDEMAIL)
 		|| (si->smu == mu || has_priv(si, PRIV_USER_AUSPEX)))
-		command_success_nodata(si, "Email: %s%s", mu->email,
+		command_success_nodata(si, _("Email: %s%s"), mu->email,
 					(mu->flags & MU_HIDEMAIL) ? " (hidden)": "");
 
 	*buf = '\0';
@@ -183,11 +183,11 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (*buf)
-		command_success_nodata(si, "Flags: %s", buf);
+		command_success_nodata(si, _("Flags: %s"), buf);
 
 	if (mu->soper && (mu == si->smu || has_priv(si, PRIV_VIEWPRIVS)))
 	{
-		command_success_nodata(si, "Oper class: %s", mu->soper->operclass ? mu->soper->operclass->name : mu->soper->classname);
+		command_success_nodata(si, _("Oper class: %s"), mu->soper->operclass ? mu->soper->operclass->name : mu->soper->classname);
 	}
 
 	if (has_priv(si, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
@@ -205,7 +205,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		tm = *localtime(&ts);
 		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-		command_success_nodata(si, "%s was \2FROZEN\2 by %s on %s (%s)", mu->name, setter, strfbuf, reason);
+		command_success_nodata(si, _("%s was \2FROZEN\2 by %s on %s (%s)"), mu->name, setter, strfbuf, reason);
 	}
 
 	if (has_priv(si, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:mark:setter")))
@@ -223,18 +223,18 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		tm = *localtime(&ts);
 		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-		command_success_nodata(si, "%s was \2MARKED\2 by %s on %s (%s)", mu->name, setter, strfbuf, reason);
+		command_success_nodata(si, _("%s was \2MARKED\2 by %s on %s (%s)"), mu->name, setter, strfbuf, reason);
 	}
 
 	if (MU_WAITAUTH & mu->flags)
-		command_success_nodata(si, "%s has not completed registration verification", mu->name);
+		command_success_nodata(si, _("%s has not completed registration verification"), mu->name);
 
 	req.si = si;
 	req.mu = mu;
 	req.mn = mn;
 	hook_call_event("user_info", &req);
 
-	command_success_nodata(si, "*** \2End of Info\2 ***");
+	command_success_nodata(si, _("*** \2End of Info\2 ***"));
 
 	logcommand(si, CMDLOG_GET, "INFO %s", mu->name);
 }

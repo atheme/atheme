@@ -4,7 +4,7 @@
  *
  * Dynamic services operator privileges
  *
- * $Id: soper.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: soper.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/soper", FALSE, _modinit, _moddeinit,
-	"$Id: soper.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: soper.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -92,7 +92,7 @@ static void os_cmd_soper_list(sourceinfo_t *si, int parc, char *parv[])
 	const char *typestr;
 
 	logcommand(si, CMDLOG_GET, "SOPER LIST");
-	command_success_nodata(si, "%-20s %-5s %-20s", "Account", "Type", "Operclass");
+	command_success_nodata(si, "%-20s %-5s %-20s", _("Account"), _("Type"), _("Operclass"));
 	command_success_nodata(si, "%-20s %-5s %-20s", "--------------------", "-----", "--------------------");
 	LIST_FOREACH(n, soperlist.head)
 	{
@@ -109,7 +109,7 @@ static void os_cmd_soper_list(sourceinfo_t *si, int parc, char *parv[])
 				soper->classname);
 	}
 	command_success_nodata(si, "%-20s %-5s %-20s", "--------------------", "-----", "--------------------");
-	command_success_nodata(si, "End of services operator list");
+	command_success_nodata(si, _("End of services operator list"));
 }
 
 static void os_cmd_soper_listclass(sourceinfo_t *si, int parc, char *parv[])
@@ -118,7 +118,7 @@ static void os_cmd_soper_listclass(sourceinfo_t *si, int parc, char *parv[])
 	operclass_t *operclass;
 
 	logcommand(si, CMDLOG_GET, "SOPER LISTCLASS");
-	command_success_nodata(si, "Oper class list:");
+	command_success_nodata(si, _("Oper class list:"));
 	LIST_FOREACH(n, operclasslist.head)
 	{
 		operclass = n->data;
@@ -127,7 +127,7 @@ static void os_cmd_soper_listclass(sourceinfo_t *si, int parc, char *parv[])
 				operclass->flags & OPERCLASS_NEEDOPER ? '*' : ' ',
 				operclass->name);
 	}
-	command_success_nodata(si, "End of oper class list");
+	command_success_nodata(si, _("End of oper class list"));
 }
 
 static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[])
@@ -186,7 +186,7 @@ static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[])
 	if (is_soper(mu))
 		soper_delete(mu->soper);
 	soper_add(mu->name, operclass->name, 0);
-	command_success_nodata(si, "Set class for \2%s\2 to \2%s\2.", mu->name, operclass->name);
+	command_success_nodata(si, _("Set class for \2%s\2 to \2%s\2."), mu->name, operclass->name);
 }
 
 static void os_cmd_soper_del(sourceinfo_t *si, int parc, char *parv[])
@@ -230,7 +230,7 @@ static void os_cmd_soper_del(sourceinfo_t *si, int parc, char *parv[])
 	snoop("SOPER:DELETE: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
 	logcommand(si, CMDLOG_ADMIN, "SOPER DEL %s", mu->name);
 	soper_delete(mu->soper);
-	command_success_nodata(si, "Removed class for \2%s\2.", mu->name);
+	command_success_nodata(si, _("Removed class for \2%s\2."), mu->name);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

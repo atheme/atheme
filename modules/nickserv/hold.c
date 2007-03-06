@@ -4,7 +4,7 @@
  *
  * Controls noexpire options for nicknames.
  *
- * $Id: hold.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: hold.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/hold", FALSE, _modinit, _moddeinit,
-	"$Id: hold.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: hold.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -69,7 +69,7 @@ static void ns_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 
 		wallops("%s set the HOLD option for the account \2%s\2.", get_oper_name(si), target);
 		logcommand(si, CMDLOG_ADMIN, "HOLD %s ON", target);
-		command_success_nodata(si, "\2%s\2 is now held.", target);
+		command_success_nodata(si, _("\2%s\2 is now held."), target);
 	}
 	else if (!strcasecmp(action, "OFF"))
 	{
@@ -83,7 +83,7 @@ static void ns_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 
 		wallops("%s removed the HOLD option on the account \2%s\2.", get_oper_name(si), target);
 		logcommand(si, CMDLOG_ADMIN, "HOLD %s OFF", target);
-		command_success_nodata(si, "\2%s\2 is no longer held.", target);
+		command_success_nodata(si, _("\2%s\2 is no longer held."), target);
 	}
 	else
 	{

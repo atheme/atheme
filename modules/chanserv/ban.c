@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: ban.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", FALSE, _modinit, _moddeinit,
-	"$Id: ban.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: ban.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -100,7 +100,7 @@ static void cs_cmd_ban(sourceinfo_t *si, int parc, char *parv[])
 		chanban_add(c, target, 'b');
 		logcommand(si, CMDLOG_DO, "%s BAN %s", mc->name, target);
 		if (!chanuser_find(mc->chan, si->su))
-			command_success_nodata(si, "Banned \2%s\2 on \2%s\2.", target, channel);
+			command_success_nodata(si, _("Banned \2%s\2 on \2%s\2."), target, channel);
 		return;
 	}
 	else if ((tu = user_find_named(target)))
@@ -116,7 +116,7 @@ static void cs_cmd_ban(sourceinfo_t *si, int parc, char *parv[])
 		chanban_add(c, hostbuf, 'b');
 		logcommand(si, CMDLOG_DO, "%s BAN %s (for user %s!%s@%s)", mc->name, hostbuf, tu->nick, tu->user, tu->vhost);
 		if (!chanuser_find(mc->chan, si->su))
-			command_success_nodata(si, "Banned \2%s\2 on \2%s\2.", target, channel);
+			command_success_nodata(si, _("Banned \2%s\2 on \2%s\2."), target, channel);
 		return;
 	}
 	else
@@ -206,10 +206,10 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
 			}
 		}
 		if (count > 0)
-			command_success_nodata(si, "Unbanned \2%s\2 on \2%s\2 (%d ban%s removed).",
+			command_success_nodata(si, _("Unbanned \2%s\2 on \2%s\2 (%d ban%s removed)."),
 				target, channel, count, (count != 1 ? "s" : ""));
 		else
-			command_success_nodata(si, "No bans found matching \2%s\2 on \2%s\2.", target, channel);
+			command_success_nodata(si, _("No bans found matching \2%s\2 on \2%s\2."), target, channel);
 		return;
 	}
 	else if ((cb = chanban_find(c, target, 'b')) != NULL || validhostmask(target))
@@ -220,7 +220,7 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
 			chanban_delete(cb);
 			logcommand(si, CMDLOG_DO, "%s UNBAN %s", mc->name, target);
 			if (!chanuser_find(mc->chan, si->su))
-				command_success_nodata(si, "Unbanned \2%s\2 on \2%s\2.", target, channel);
+				command_success_nodata(si, _("Unbanned \2%s\2 on \2%s\2."), target, channel);
 		}
 		else
 			command_fail(si, fault_nosuch_key, _("No such ban \2%s\2 on \2%s\2."), target, channel);

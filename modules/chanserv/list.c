@@ -4,7 +4,7 @@
  *
  * This file contains code for the ChanServ LIST function.
  *
- * $Id: list.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: list.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: list.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -54,7 +54,7 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	snoop("LIST:CHANNELS: \2%s\2 by \2%s\2", chanpattern, get_oper_name(si));
-	command_success_nodata(si, "Channels matching pattern \2%s\2:", chanpattern);
+	command_success_nodata(si, _("Channels matching pattern \2%s\2:"), chanpattern);
 
 	DICTIONARY_FOREACH(mc, &state, mclist)
 	{
@@ -86,9 +86,9 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_ADMIN, "LIST %s (%d matches)", chanpattern, matches);
 	if (matches == 0)
-		command_success_nodata(si, "No channel matched pattern \2%s\2", chanpattern);
+		command_success_nodata(si, _("No channel matched pattern \2%s\2"), chanpattern);
 	else
-		command_success_nodata(si, "\2%d\2 match%s for pattern \2%s\2", matches, matches != 1 ? "es" : "", chanpattern);
+		command_success_nodata(si, ngettext(N_("\2%d\2 match for pattern \2%s\2"), N_("\2%d\2 matches for pattern \2%s\2"), matches), matches, chanpattern);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

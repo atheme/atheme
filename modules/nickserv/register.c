@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: register.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: register.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -181,8 +181,8 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		command_success_nodata(si, "An email containing nickname activation instructions has been sent to \2%s\2.", mu->email);
-		command_success_nodata(si, "If you do not complete registration within one day your nickname will expire.");
+		command_success_nodata(si, _("An email containing nickname activation instructions has been sent to \2%s\2."), mu->email);
+		command_success_nodata(si, _("If you do not complete registration within one day your nickname will expire."));
 
 		free(key);
 	}
@@ -210,8 +210,8 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		snoop("SOPER: \2%s\2 as \2%s\2", get_oper_name(si), mu->name);
 	}
 
-	command_success_nodata(si, "\2%s\2 is now registered to \2%s\2.", mu->name, mu->email);
-	command_success_nodata(si, "The password is \2%s\2. Please write this down for future reference.", pass);
+	command_success_nodata(si, _("\2%s\2 is now registered to \2%s\2."), mu->name, mu->email);
+	command_success_nodata(si, _("The password is \2%s\2. Please write this down for future reference."), pass);
 	hook_call_event("user_register", mu);
 
 	if (si->su != NULL)

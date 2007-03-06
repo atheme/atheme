@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INFO functions.
  *
- * $Id: info.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: info.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: info.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -79,20 +79,20 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	tm = *localtime(&mc->registered);
 	strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-	command_success_nodata(si, "Information on \2%s\2:", mc->name);
+	command_success_nodata(si, _("Information on \2%s\2:"), mc->name);
 
 	if (LIST_LENGTH(&mc->founder->logins))
-		command_success_nodata(si, "Founder    : %s (logged in)", mc->founder->name);
+		command_success_nodata(si, _("Founder    : %s (logged in)"), mc->founder->name);
 	else
-		command_success_nodata(si, "Founder    : %s (not logged in)", mc->founder->name);
+		command_success_nodata(si, _("Founder    : %s (not logged in)"), mc->founder->name);
 
-	command_success_nodata(si, "Registered : %s (%s ago)", strfbuf, time_ago(mc->registered));
+	command_success_nodata(si, _("Registered : %s (%s ago)"), strfbuf, time_ago(mc->registered));
 
 	if (CURRTIME - mc->used >= 86400)
 	{
 		tm = *localtime(&mc->used);
 		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
-		command_success_nodata(si, "Last used  : %s (%s ago)", strfbuf, time_ago(mc->used));
+		command_success_nodata(si, _("Last used  : %s (%s ago)"), strfbuf, time_ago(mc->used));
 	}
 
 	md = metadata_find(mc, METADATA_CHANNEL, "private:mlockext");
@@ -103,7 +103,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		if (md != NULL && strlen(md->value) > 450)
 		{
 			/* Be safe */
-			command_success_nodata(si, "Mode lock is too long, not entirely shown");
+			command_success_nodata(si, _("Mode lock is too long, not entirely shown"));
 			md = NULL;
 		}
 
@@ -198,7 +198,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		if (*buf)
-			command_success_nodata(si, "Mode lock  : %s%s", buf, (params) ? params : "");
+			command_success_nodata(si, _("Mode lock  : %s%s"), buf, (params) ? params : "");
 	}
 
 
@@ -272,7 +272,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (*buf)
-		command_success_nodata(si, "Flags      : %s", buf);
+		command_success_nodata(si, _("Flags      : %s"), buf);
 
 	if (has_priv(si, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, METADATA_CHANNEL, "private:mark:setter")))
 	{
@@ -289,11 +289,11 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		tm = *localtime(&ts);
 		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-		command_success_nodata(si, "%s was \2MARKED\2 by %s on %s (%s)", mc->name, setter, strfbuf, reason);
+		command_success_nodata(si, _("%s was \2MARKED\2 by %s on %s (%s)"), mc->name, setter, strfbuf, reason);
 	}
 
 	if (has_priv(si, PRIV_CHAN_AUSPEX) && (MC_INHABIT & mc->flags))
-		command_success_nodata(si, "%s is temporarily holding this channel.", chansvs.nick);
+		command_success_nodata(si, _("%s is temporarily holding this channel."), chansvs.nick);
 
 	if (has_priv(si, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, METADATA_CHANNEL, "private:close:closer")))
 	{
@@ -310,7 +310,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		tm = *localtime(&ts);
 		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-		command_success_nodata(si, "%s was \2CLOSED\2 by %s on %s (%s)", mc->name, setter, strfbuf, reason);
+		command_success_nodata(si, _("%s was \2CLOSED\2 by %s on %s (%s)"), mc->name, setter, strfbuf, reason);
 	}
 
 	req.u = si->su;
@@ -318,7 +318,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	req.si = si;
 	hook_call_event("channel_info", &req);
 
-	command_success_nodata(si, "\2*** End of Info ***\2");
+	command_success_nodata(si, _("\2*** End of Info ***\2"));
 	logcommand(si, CMDLOG_GET, "%s INFO", mc->name);
 }
 

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: flags.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: flags.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -136,7 +136,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		command_success_nodata(si, "Entry Nickname/Host          Flags");
+		command_success_nodata(si, _("Entry Nickname/Host          Flags"));
 		command_success_nodata(si, "----- ---------------------- -----");
 
 		LIST_FOREACH(n, mc->chanacs.head)
@@ -151,7 +151,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		command_success_nodata(si, "----- ---------------------- -----");
-		command_success_nodata(si, "End of \2%s\2 FLAGS listing.", channel);
+		command_success_nodata(si, _("End of \2%s\2 FLAGS listing."), channel);
 		if (operoverride)
 			logcommand(si, CMDLOG_ADMIN, "%s FLAGS (oper override)", mc->name);
 		else
@@ -209,12 +209,12 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			if (ca != NULL)
 			{
 				str1 = bitmask_to_flags2(ca->level, 0, chanacs_flags);
-				command_success_string(si, str1, "Flags for \2%s\2 in \2%s\2 are \2%s\2.",
+				command_success_string(si, str1, _("Flags for \2%s\2 in \2%s\2 are \2%s\2."),
 						target, channel,
 						str1);
 			}
 			else
-				command_success_string(si, "", "No flags for \2%s\2 in \2%s\2.",
+				command_success_string(si, "", _("No flags for \2%s\2 in \2%s\2."),
 						target, channel);
 			logcommand(si, CMDLOG_GET, "%s FLAGS %s", mc->name, target);
 			return;
@@ -312,7 +312,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 		flagstr = bitmask_to_flags2(addflags, removeflags, chanacs_flags);
-		command_success_nodata(si, "Flags \2%s\2 were set on \2%s\2 in \2%s\2.", flagstr, target, channel);
+		command_success_nodata(si, _("Flags \2%s\2 were set on \2%s\2 in \2%s\2."), flagstr, target, channel);
 		logcommand(si, CMDLOG_SET, "%s FLAGS %s %s", mc->name, target, flagstr);
 		verbose(mc, "\2%s\2 set flags \2%s\2 on \2%s\2.", get_source_name(si), flagstr, target);
 	}

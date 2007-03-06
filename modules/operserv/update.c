@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService UPDATE command.
  *
- * $Id: update.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: update.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/update", FALSE, _modinit, _moddeinit,
-	"$Id: update.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: update.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -46,7 +46,7 @@ void os_cmd_update(sourceinfo_t *si, int parc, char *parv[])
 	expire_check(NULL);
 	db_save(NULL);
 	/* db_save() will wallops/snoop/log the error */
-	command_success_nodata(si, "UPDATE completed.");
+	command_success_nodata(si, _("UPDATE completed."));
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

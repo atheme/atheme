@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ CLEARCHAN.
  *
- * $Id: clearchan.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: clearchan.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clearchan", FALSE, _modinit, _moddeinit,
-	"$Id: clearchan.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: clearchan.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Robin Burchell <surreal.w00t@gmail.com>"
 );
 
@@ -98,7 +98,7 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 	wallops("\2%s\2 is clearing channel %s with %s",
 			get_oper_name(si), targchan, actionstr);
 	snoop("CLEARCHAN: %s on \2%s\2 by \2%s\2", actionstr, targchan, get_oper_name(si));
-	command_success_nodata(si, "Clearing \2%s\2 with \2%s\2", targchan, actionstr);
+	command_success_nodata(si, _("Clearing \2%s\2 with \2%s\2"), targchan, actionstr);
 
 	/* iterate over the users in channel */
 	LIST_FOREACH(n, c->members.head)
@@ -109,12 +109,12 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 			;
 		else if (is_ircop(cu->user))
 		{
-			command_success_nodata(si, "\2CLEARCHAN\2: Ignoring IRC Operator \2%s\2!%s@%s {%s}", cu->user->nick, cu->user->user, cu->user->host, cu->user->gecos);
+			command_success_nodata(si, _("\2CLEARCHAN\2: Ignoring IRC Operator \2%s\2!%s@%s {%s}"), cu->user->nick, cu->user->user, cu->user->host, cu->user->gecos);
 			ignores++;
 		}
 		else
 		{
-			command_success_nodata(si, "\2CLEARCHAN\2: \2%s\2 hit \2%s\2!%s@%s {%s}", actionstr, cu->user->nick, cu->user->user, cu->user->host, cu->user->gecos);
+			command_success_nodata(si, _("\2CLEARCHAN\2: \2%s\2 hit \2%s\2!%s@%s {%s}"), actionstr, cu->user->nick, cu->user->user, cu->user->host, cu->user->gecos);
 			matches++;
 
 			switch (action)
@@ -132,7 +132,7 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	command_success_nodata(si, "\2%d\2 matches, \2%d\2 ignores for \2%s\2 on \2%s\2", matches, ignores, actionstr, targchan);
+	command_success_nodata(si, _("\2%d\2 matches, \2%d\2 ignores for \2%s\2 on \2%s\2"), matches, ignores, actionstr, targchan);
 	logcommand(si, CMDLOG_ADMIN, "CLEARCHAN %s %s %s (%d matches, %d ignores)", actionstr, targchan, treason, matches, ignores);
 }
 

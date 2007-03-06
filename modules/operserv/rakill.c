@@ -4,7 +4,7 @@
  *
  * Regexp-based AKILL implementation.
  *
- * $Id: rakill.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: rakill.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 /*
@@ -17,7 +17,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rakill", FALSE, _modinit, _moddeinit,
-	"$Id: rakill.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: rakill.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -121,14 +121,14 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 		if (regex_match(regex, (char *)usermask))
 		{
 			/* match */
-			command_success_nodata(si, "\2Match:\2  %s!%s@%s %s - akilling", u->nick, u->user, u->host, u->gecos);
+			command_success_nodata(si, _("\2Match:\2  %s!%s@%s %s - akilling"), u->nick, u->user, u->host, u->gecos);
 			kline_sts("*", "*", u->host, 604800, reason);
 			matches++;
 		}
 	}
 	
 	regex_destroy(regex);
-	command_success_nodata(si, "\2%d\2 matches for %s akilled.", matches, pattern);
+	command_success_nodata(si, _("\2%d\2 matches for %s akilled."), matches, pattern);
 	logcommand(si, CMDLOG_ADMIN, "RAKILL %s %s (%d matches)", pattern, reason, matches);
 }
 

@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv SEND function
  *
- * $Id: send.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: send.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/send", FALSE, _modinit, _moddeinit,
-	"$Id: send.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: send.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -135,7 +135,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		{
 			/* Lie... change this if you want it to fail silent */
 			logcommand(si, CMDLOG_SET, "failed SEND to %s (on ignore list)", tmu->name);
-			command_success_nodata(si, "The memo has been successfully forwarded to %s.", target);
+			command_success_nodata(si, _("The memo has been successfully forwarded to %s."), target);
 			return;
 		}
 	}
@@ -158,7 +158,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (sendemail(si->su, EMAIL_MEMO, tmu, memo->text))
 		{
-			command_success_nodata(si, "Your memo has been emailed to %s.", target);
+			command_success_nodata(si, _("Your memo has been emailed to %s."), target);
                 	return;
 		}
         }
@@ -169,7 +169,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 	tu = user_find_named(target);
 	if (tu != NULL && tu->myuser == tmu)
 	{
-		command_success_nodata(si, "%s is currently online, and you may talk directly, by sending a private message.", target);
+		command_success_nodata(si, _("%s is currently online, and you may talk directly, by sending a private message."), target);
 	}
 	if (si->su == NULL || !irccasecmp(si->su->nick, si->smu->name))
 		myuser_notice(memosvs.nick, tmu, "You have a new memo from %s.", si->smu->name);
@@ -177,7 +177,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		myuser_notice(memosvs.nick, tmu, "You have a new memo from %s (nick: %s).", si->smu->name, si->su->nick);
 
 	/* Tell user memo sent, return */
-	command_success_nodata(si, "The memo has been successfully sent to %s.", target);
+	command_success_nodata(si, _("The memo has been successfully sent to %s."), target);
 	return;
 }	
 

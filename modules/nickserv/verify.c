@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ VERIFY function.
  *
- * $Id: verify.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: verify.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/verify", FALSE, _modinit, _moddeinit,
-	"$Id: verify.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: verify.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -92,9 +92,8 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 			metadata_delete(mu, METADATA_USER, "private:verify:register:key");
 			metadata_delete(mu, METADATA_USER, "private:verify:register:timestamp");
 
-			command_success_nodata(si, "\2%s\2 has now been verified.", mu->name);
-			command_success_nodata(si, "Thank you for verifying your e-mail address! You have taken steps in "
-				"ensuring that your registrations are not exploited.");
+			command_success_nodata(si, _("\2%s\2 has now been verified."), mu->name);
+			command_success_nodata(si, _("Thank you for verifying your e-mail address! You have taken steps in ensuring that your registrations are not exploited."));
 			LIST_FOREACH(n, mu->logins.head)
 			{
 				user_t *u = n->data;
@@ -132,7 +131,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:newemail");
 			metadata_delete(mu, METADATA_USER, "private:verify:emailchg:timestamp");
 
-			command_success_nodata(si, "\2%s\2 has now been verified.", mu->email);
+			command_success_nodata(si, _("\2%s\2 has now been verified."), mu->email);
 
 			return;
 		}
@@ -189,7 +188,7 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 		metadata_delete(mu, METADATA_USER, "private:verify:register:key");
 		metadata_delete(mu, METADATA_USER, "private:verify:register:timestamp");
 
-		command_success_nodata(si, "\2%s\2 has now been verified.", mu->name);
+		command_success_nodata(si, _("\2%s\2 has now been verified."), mu->name);
 		LIST_FOREACH(n, mu->logins.head)
 		{
 			user_t *u = n->data;
@@ -217,7 +216,7 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 		metadata_delete(mu, METADATA_USER, "private:verify:emailchg:newemail");
 		metadata_delete(mu, METADATA_USER, "private:verify:emailchg:timestamp");
 
-		command_success_nodata(si, "\2%s\2 has now been verified.", mu->email);
+		command_success_nodata(si, _("\2%s\2 has now been verified."), mu->email);
 
 		return;
 	}

@@ -4,7 +4,7 @@
  *
  * Regex usersearch feature.
  *
- * $Id: rmatch.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: rmatch.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 /*
@@ -16,7 +16,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rmatch", FALSE, _modinit, _moddeinit,
-	"$Id: rmatch.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: rmatch.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -83,13 +83,13 @@ static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 		if (regex_match(regex, usermask) == TRUE)
 		{
 			/* match */
-			command_success_nodata(si, "\2Match:\2  %s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
+			command_success_nodata(si, _("\2Match:\2  %s!%s@%s %s"), u->nick, u->user, u->host, u->gecos);
 			matches++;
 		}
 	}
 	
 	regex_destroy(regex);
-	command_success_nodata(si, "\2%d\2 matches for %s", matches, pattern);
+	command_success_nodata(si, _("\2%d\2 matches for %s"), matches, pattern);
 	logcommand(si, CMDLOG_ADMIN, "RMATCH %s (%d matches)", pattern, matches);
 	snoop("RMATCH: \2%s\2 by \2%s\2", pattern, get_oper_name(si));
 }

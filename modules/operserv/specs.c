@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService SPECS command.
  *
- * $Id: specs.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: specs.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/specs", FALSE, _modinit, _moddeinit,
-	"$Id: specs.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: specs.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -111,7 +111,7 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 			}
 			if (!has_any_privs_user(tu))
 			{
-				command_success_nodata(si, "\2%s\2 is unprivileged.", tu->nick);
+				command_success_nodata(si, _("\2%s\2 is unprivileged."), tu->nick);
 				return;
 			}
 			if (is_internal_client(tu))
@@ -173,21 +173,21 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (targettype == NULL)
-		command_success_nodata(si, "Privileges for \2%s\2:", get_source_name(si));
+		command_success_nodata(si, _("Privileges for \2%s\2:"), get_source_name(si));
 	else if (tu)
-		command_success_nodata(si, "Privileges for \2%s\2:", tu->nick);
+		command_success_nodata(si, _("Privileges for \2%s\2:"), tu->nick);
 	else
-		command_success_nodata(si, "Privileges for oper class \2%s\2:", cl->name);
+		command_success_nodata(si, _("Privileges for oper class \2%s\2:"), cl->name);
 
 	if (*nprivs)
-		command_success_nodata(si, "\2Nicknames/accounts\2: %s", nprivs);
+		command_success_nodata(si, _("\2Nicknames/accounts\2: %s"), nprivs);
 	if (*cprivs)
-		command_success_nodata(si, "\2Channels\2: %s", cprivs);
+		command_success_nodata(si, _("\2Channels\2: %s"), cprivs);
 	if (*gprivs)
-		command_success_nodata(si, "\2General\2: %s", gprivs);
+		command_success_nodata(si, _("\2General\2: %s"), gprivs);
 	if (*oprivs)
-		command_success_nodata(si, "\2OperServ\2: %s", oprivs);
-	command_success_nodata(si, "End of privileges");
+		command_success_nodata(si, _("\2OperServ\2: %s"), oprivs);
+	command_success_nodata(si, _("End of privileges"));
 
 	if (targettype == NULL)
 		logcommand(si, CMDLOG_ADMIN, "SPECS");

@@ -4,7 +4,7 @@
  *
  * Gives services the ability to freeze nicknames
  *
- * $Id: freeze.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: freeze.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/freeze", FALSE, _modinit, _moddeinit,
-	"$Id: freeze.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: freeze.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -101,7 +101,7 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 
 		wallops("%s froze the account \2%s\2 (%s).", get_oper_name(si), target, reason);
 		logcommand(si, CMDLOG_ADMIN, "FREEZE %s ON", target);
-		command_success_nodata(si, "\2%s\2 is now frozen.", target);
+		command_success_nodata(si, _("\2%s\2 is now frozen."), target);
 	}
 	else if (!strcasecmp(action, "OFF"))
 	{
@@ -117,7 +117,7 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 
 		wallops("%s thawed the account \2%s\2.", get_oper_name(si), target);
 		logcommand(si, CMDLOG_ADMIN, "FREEZE %s OFF", target);
-		command_success_nodata(si, "\2%s\2 has been thawed", target);
+		command_success_nodata(si, _("\2%s\2 has been thawed"), target);
 	}
 	else
 	{

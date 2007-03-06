@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService STATUS function.
  *
- * $Id: status.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: status.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/status", FALSE, _modinit, _moddeinit,
-	"$Id: status.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: status.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -92,16 +92,16 @@ static void ns_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_GET, "STATUS");
 
 	if (!si->smu)
-		command_success_nodata(si, "You are not logged in.");
+		command_success_nodata(si, _("You are not logged in."));
 	else
 	{
-		command_success_nodata(si, "You are logged in as \2%s\2.", si->smu->name);
+		command_success_nodata(si, _("You are logged in as \2%s\2."), si->smu->name);
 
 		if (is_soper(si->smu))
 		{
 			soper_t *soper = si->smu->soper;
 
-			command_success_nodata(si, "You are a services operator of class %s.", soper->operclass ? soper->operclass->name : soper->classname);
+			command_success_nodata(si, _("You are a services operator of class %s."), soper->operclass ? soper->operclass->name : soper->classname);
 		}
 	}
 
@@ -112,14 +112,14 @@ static void ns_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 		mn = mynick_find(si->su->nick);
 		if (mn != NULL && mn->owner != si->smu &&
 				myuser_access_verify(si->su, mn->owner))
-			command_success_nodata(si, "You are recognized as \2%s\2.", mn->owner->name);
+			command_success_nodata(si, _("You are recognized as \2%s\2."), mn->owner->name);
 	}
 
 	if (si->su != NULL && is_admin(si->su))
-		command_success_nodata(si, "You are a server administrator.");
+		command_success_nodata(si, _("You are a server administrator."));
 
 	if (si->su != NULL && is_ircop(si->su))
-		command_success_nodata(si, "You are an IRC operator.");
+		command_success_nodata(si, _("You are an IRC operator."));
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv IGNORE functions
  *
- * $Id: ignore.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: ignore.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: ignore.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -145,7 +145,7 @@ static void ms_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 	temp = sstrdup(tmu->name);
 	node_add(temp, node_create(), &si->smu->memo_ignores);
 	logcommand(si, CMDLOG_SET, "IGNORE ADD %s", tmu->name);
-	command_success_nodata(si, "Account %s added to your ignore list.", tmu->name);
+	command_success_nodata(si, _("Account %s added to your ignore list."), tmu->name);
 	return;
 }
 
@@ -171,7 +171,7 @@ static void ms_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[])
 		if (!irccasecmp(temp, parv[0]))
 		{
 			logcommand(si, CMDLOG_SET, "IGNORE DEL %s", temp);
-			command_success_nodata(si, "Account %s removed from ignore list.", temp);
+			command_success_nodata(si, _("Account %s removed from ignore list."), temp);
 			node_del(n, &si->smu->memo_ignores);
 			node_free(n);
 			free(temp);
@@ -202,7 +202,7 @@ static void ms_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* Let them know list is clear */
-	command_success_nodata(si, "Ignore list cleared.");
+	command_success_nodata(si, _("Ignore list cleared."));
 	logcommand(si, CMDLOG_SET, "IGNORE CLEAR");
 	return;
 }
@@ -213,7 +213,7 @@ static void ms_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[])
 	uint8_t i = 1;
 
 	/* Throw in list header */
-	command_success_nodata(si, "Ignore list:");
+	command_success_nodata(si, _("Ignore list:"));
 	command_success_nodata(si, "-------------------------");
 
 	/* Iterate through list, make sure they're not in it, if last node append */
@@ -225,7 +225,7 @@ static void ms_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[])
 
 	/* Ignore list footer */
 	if (i == 1)
-		command_success_nodata(si, "list empty");
+		command_success_nodata(si, _("list empty"));
 
 	command_success_nodata(si, "-------------------------");
 	return;

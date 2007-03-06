@@ -4,7 +4,7 @@
  *
  * Changes and shows nickname access lists.
  *
- * $Id: access.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: access.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/access", FALSE, _modinit, _moddeinit,
-	"$Id: access.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: access.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -207,7 +207,7 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 		else
 			logcommand(si, CMDLOG_GET, "ACCESS LIST");
 
-		command_success_nodata(si, "Access list for \2%s\2:", mu->name);
+		command_success_nodata(si, _("Access list for \2%s\2:"), mu->name);
 
 		LIST_FOREACH(n, mu->access_list.head)
 		{
@@ -215,7 +215,7 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, "- %s", mask);
 		}
 
-		command_success_nodata(si, "End of \2%s\2 access list.", mu->name);
+		command_success_nodata(si, _("End of \2%s\2 access list."), mu->name);
 	}
 	else if (!strcasecmp(parv[0], "ADD"))
 	{
@@ -344,7 +344,7 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 		}
 		if (myuser_access_add(mu, mask))
 		{
-			command_success_nodata(si, "Added mask \2%s\2 to your access list.", mask);
+			command_success_nodata(si, _("Added mask \2%s\2 to your access list."), mask);
 			logcommand(si, CMDLOG_SET, "ACCESS ADD %s", mask);
 		}
 		else
@@ -369,7 +369,7 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_nochange, _("Mask \2%s\2 is not on your access list."), parv[1]);
 			return;
 		}
-		command_success_nodata(si, "Deleted mask \2%s\2 from your access list.", mask);
+		command_success_nodata(si, _("Deleted mask \2%s\2 from your access list."), mask);
 		logcommand(si, CMDLOG_SET, "ACCESS DEL %s", mask);
 		myuser_access_delete(mu, mask);
 	}

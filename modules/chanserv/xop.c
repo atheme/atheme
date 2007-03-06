@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: xop.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: xop.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -254,14 +254,14 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 			}
 			/* they have access? change it! */
 			logcommand(si, CMDLOG_SET, "%s %s ADD %s (changed access)", mc->name, leveldesc, target);
-			command_success_nodata(si, "\2%s\2's access on \2%s\2 has been changed to \2%s\2.", target, mc->name, leveldesc);
+			command_success_nodata(si, _("\2%s\2's access on \2%s\2 has been changed to \2%s\2."), target, mc->name, leveldesc);
 			verbose(mc, "\2%s\2 changed \2%s\2's access to \2%s\2.", get_source_name(si), target, leveldesc);
 			ca->level = level;
 		}
 		else
 		{
 			logcommand(si, CMDLOG_SET, "%s %s ADD %s", mc->name, leveldesc, target);
-			command_success_nodata(si, "\2%s\2 has been added to the %s list for \2%s\2.", target, leveldesc, mc->name);
+			command_success_nodata(si, _("\2%s\2 has been added to the %s list for \2%s\2."), target, leveldesc, mc->name);
 			verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", get_source_name(si), target, leveldesc);
 			chanacs_add_host(mc, target, level);
 		}
@@ -349,7 +349,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		}
 		/* they have access? change it! */
 		logcommand(si, CMDLOG_SET, "%s %s ADD %s (changed access)", mc->name, leveldesc, mu->name);
-		command_success_nodata(si, "\2%s\2's access on \2%s\2 has been changed to \2%s\2.", mu->name, mc->name, leveldesc);
+		command_success_nodata(si, _("\2%s\2's access on \2%s\2 has been changed to \2%s\2."), mu->name, mc->name, leveldesc);
 		verbose(mc, "\2%s\2 changed \2%s\2's access to \2%s\2.", get_source_name(si), mu->name, leveldesc);
 		ca->level = level;
 	}
@@ -357,7 +357,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 	{
 		/* they have no access, add */
 		logcommand(si, CMDLOG_SET, "%s %s ADD %s", mc->name, leveldesc, mu->name);
-		command_success_nodata(si, "\2%s\2 has been added to the %s list for \2%s\2.", mu->name, leveldesc, mc->name);
+		command_success_nodata(si, _("\2%s\2 has been added to the %s list for \2%s\2."), mu->name, leveldesc, mc->name);
 		verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", get_source_name(si), mu->name, leveldesc);
 		chanacs_add(mc, mu, level);
 	}
@@ -423,7 +423,7 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		chanacs_unref_host(mc, target, level);
 		verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", get_source_name(si), target, leveldesc);
 		logcommand(si, CMDLOG_SET, "%s %s DEL %s", mc->name, leveldesc, target);
-		command_success_nodata(si, "\2%s\2 has been removed from the %s list for \2%s\2.", target, leveldesc, mc->name);
+		command_success_nodata(si, _("\2%s\2 has been removed from the %s list for \2%s\2."), target, leveldesc, mc->name);
 		return;
 	}
 
@@ -441,7 +441,7 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 	}
 
 	chanacs_unref(mc, mu, level);
-	command_success_nodata(si, "\2%s\2 has been removed from the %s list for \2%s\2.", mu->name, leveldesc, mc->name);
+	command_success_nodata(si, _("\2%s\2 has been removed from the %s list for \2%s\2."), mu->name, leveldesc, mc->name);
 	logcommand(si, CMDLOG_SET, "%s %s DEL %s", mc->name, leveldesc, mu->name);
 	verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", get_source_name(si), mu->name, leveldesc);
 }
@@ -453,7 +453,7 @@ static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, uint32_t level, char 
 	uint8_t i = 0;
 	node_t *n;
 
-	command_success_nodata(si, "%s list for \2%s\2:", leveldesc ,mc->name);
+	command_success_nodata(si, _("%s list for \2%s\2:"), leveldesc ,mc->name);
 	LIST_FOREACH(n, mc->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
@@ -463,13 +463,13 @@ static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, uint32_t level, char 
 			if (!ca->myuser)
 				command_success_nodata(si, "%d: \2%s\2", ++i, ca->host);
 			else if (LIST_LENGTH(&ca->myuser->logins))
-				command_success_nodata(si, "%d: \2%s\2 (logged in)", ++i, ca->myuser->name);
+				command_success_nodata(si, _("%d: \2%s\2 (logged in)"), ++i, ca->myuser->name);
 			else
-				command_success_nodata(si, "%d: \2%s\2 (not logged in)", ++i, ca->myuser->name);
+				command_success_nodata(si, _("%d: \2%s\2 (not logged in)"), ++i, ca->myuser->name);
 		}
 	}
 	/* XXX */
-	command_success_nodata(si, "Total of \2%d\2 %s in %s list of \2%s\2.", i, (i == 1) ? "entry" : "entries", leveldesc, mc->name);
+	command_success_nodata(si, _("Total of \2%d\2 %s in %s list of \2%s\2."), i, (i == 1) ? "entry" : "entries", leveldesc, mc->name);
 	if (operoverride)
 		logcommand(si, CMDLOG_ADMIN, "%s %s LIST (oper override)", mc->name, leveldesc);
 	else
@@ -551,7 +551,7 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "%s: %s -> %s", ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level, chanacs_flags), desc);
 		ca->level = newlevel;
 	}
-	command_success_nodata(si, "FORCEXOP \2%s\2 done (\2%d\2 changes)", mc->name, changes);
+	command_success_nodata(si, _("FORCEXOP \2%s\2 done (\2%d\2 changes)"), mc->name, changes);
 	if (changes > 0)
 		verbose(mc, "\2%s\2 reset access levels to xOP (\2%d\2 changes)", get_source_name(si), changes);
 	logcommand(si, CMDLOG_SET, "%s FORCEXOP (%d changes)", mc->name, changes);

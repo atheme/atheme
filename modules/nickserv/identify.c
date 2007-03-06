@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY and LOGIN functions.
  *
- * $Id: identify.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: identify.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -21,7 +21,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/" COMMAND_LC, FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: identify.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -200,7 +200,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 			tm = *localtime(&mu->lastlogin);
 			strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-			command_success_nodata(si, "\2%d\2 failed %s since %s.",
+			command_success_nodata(si, _("\2%d\2 failed %s since %s."),
 				atoi(md_failnum->value), (atoi(md_failnum->value) == 1) ? "login" : "logins", strfbuf);
 
 			md_failtime = metadata_find(mu, METADATA_USER, "private:loginfail:lastfailtime");
@@ -210,7 +210,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 			tm = *localtime(&ts);
 			strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
-			command_success_nodata(si, "Last failed attempt from: \2%s\2 on %s.",
+			command_success_nodata(si, _("Last failed attempt from: \2%s\2 on %s."),
 				md_failaddr->value, strfbuf);
 
 			metadata_delete(mu, METADATA_USER, "private:loginfail:failnum");	/* md_failnum now invalid */

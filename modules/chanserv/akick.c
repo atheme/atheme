@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: akick.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@ static void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[]);
 DECLARE_MODULE_V1
 (
 	"chanserv/akick", FALSE, _modinit, _moddeinit,
-	"$Id: akick.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: akick.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -139,7 +139,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", get_source_name(si), uname);
 			logcommand(si, CMDLOG_SET, "%s AKICK ADD %s", mc->name, uname);
 
-			command_success_nodata(si, "\2%s\2 has been added to the AKICK list for \2%s\2.", uname, mc->name);
+			command_success_nodata(si, _("\2%s\2 has been added to the AKICK list for \2%s\2."), uname, mc->name);
 
 			return;
 		}
@@ -158,7 +158,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 
 			hook_call_event("channel_akick_add", ca2);
 
-			command_success_nodata(si, "\2%s\2 has been added to the AKICK list for \2%s\2.", mu->name, mc->name);
+			command_success_nodata(si, _("\2%s\2 has been added to the AKICK list for \2%s\2."), mu->name, mc->name);
 
 			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", get_source_name(si), mu->name);
 			logcommand(si, CMDLOG_SET, "%s AKICK ADD %s", mc->name, mu->name);
@@ -193,7 +193,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", get_source_name(si), uname);
 			logcommand(si, CMDLOG_SET, "%s AKICK DEL %s", mc->name, uname);
 
-			command_success_nodata(si, "\2%s\2 has been removed from the AKICK list for \2%s\2.", uname, mc->name);
+			command_success_nodata(si, _("\2%s\2 has been removed from the AKICK list for \2%s\2."), uname, mc->name);
 
 			return;
 		}
@@ -206,7 +206,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 
 		chanacs_unref(mc, mu, CA_AKICK);
 
-		command_success_nodata(si, "\2%s\2 has been removed from the AKICK list for \2%s\2.", mu->name, mc->name);
+		command_success_nodata(si, _("\2%s\2 has been removed from the AKICK list for \2%s\2."), mu->name, mc->name);
 		logcommand(si, CMDLOG_SET, "%s AKICK DEL %s", mc->name, mu->name);
 
 		verbose(mc, "\2%s\2 removed \2%s\2 from the AKICK list.", get_source_name(si), mu->name);
@@ -227,7 +227,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 		}
-		command_success_nodata(si, "AKICK list for \2%s\2:", mc->name);
+		command_success_nodata(si, _("AKICK list for \2%s\2:"), mc->name);
 
 		LIST_FOREACH(n, mc->chanacs.head)
 		{
@@ -237,16 +237,15 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			{
 				if (ca->myuser == NULL)
 					command_success_nodata(si, "%d: \2%s\2", ++i, ca->host);
-
 				else if (LIST_LENGTH(&ca->myuser->logins) > 0)
-					command_success_nodata(si, "%d: \2%s\2 (logged in)", ++i, ca->myuser->name);
+					command_success_nodata(si, _("%d: \2%s\2 (logged in)"), ++i, ca->myuser->name);
 				else
-					command_success_nodata(si, "%d: \2%s\2 (not logged in)", ++i, ca->myuser->name);
+					command_success_nodata(si, _("%d: \2%s\2 (not logged in)"), ++i, ca->myuser->name);
 			}
 
 		}
 
-		command_success_nodata(si, "Total of \2%d\2 %s in \2%s\2's AKICK list.", i, (i == 1) ? "entry" : "entries", mc->name);
+		command_success_nodata(si, _("Total of \2%d\2 %s in \2%s\2's AKICK list."), i, (i == 1) ? "entry" : "entries", mc->name);
 		if (operoverride)
 			logcommand(si, CMDLOG_ADMIN, "%s AKICK LIST (oper override)", mc->name);
 		else

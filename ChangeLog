@@ -1,3 +1,13 @@
+nenolod     2007/03/06 02:31:59 UTC	(20070306-7893)
+  Log:
+  - remove _P.
+  - fix missing _(), N_().
+  
+
+  Changes:	Modified:
+  +6 -2		trunk/include/i18n.h (File Modified) 
+
+
 nenolod     2007/03/06 02:04:52 UTC	(20070306-7891)
   Log:
   - add documentation on the current state of i18n in Atheme.

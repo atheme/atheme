@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService SENDPASS function.
  *
- * $Id: sendpass.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: sendpass.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/sendpass", FALSE, _modinit, _moddeinit,
-	"$Id: sendpass.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: sendpass.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -73,7 +73,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 			metadata_add(mu, METADATA_USER, "private:setpass:key", crypt_string(key, gen_salt()));
 			logcommand(si, CMDLOG_ADMIN, "SENDPASS %s (change key)", name);
 			snoop("SENDPASS: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
-			command_success_nodata(si, "The password change key for \2%s\2 has been sent to \2%s\2.", mu->name, mu->email);
+			command_success_nodata(si, _("The password change key for \2%s\2 has been sent to \2%s\2."), mu->name, mu->email);
 		}
 		else
 			command_fail(si, fault_emailfail, _("Email send failed."));
@@ -84,8 +84,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 	/* this is not without controversy... :) */
 	if (mu->flags & MU_CRYPTPASS)
 	{
-		command_success_nodata(si, "The password for the nickname \2%s\2 is encrypted; "
-						"a new password will be assigned and sent.", name);
+		command_success_nodata(si, _("The password for the nickname \2%s\2 is encrypted; a new password will be assigned and sent."), name);
 		newpass = gen_pw(12);
 		set_password(mu, newpass);
 	}
@@ -94,7 +93,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 	{
 		logcommand(si, CMDLOG_ADMIN, "SENDPASS %s", name);
 		snoop("SENDPASS: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
-		command_success_nodata(si, "The password for \2%s\2 has been sent to \2%s\2.", mu->name, mu->email);
+		command_success_nodata(si, _("The password for \2%s\2 has been sent to \2%s\2."), mu->name, mu->email);
 	}
 	else
 		command_fail(si, fault_emailfail, _("Email send failed."));

@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing clone detection.
  *
- * $Id: clones.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: clones.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: clones.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -276,7 +276,7 @@ static void os_cmd_clones_kline(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 		kline_enabled = TRUE;
-		command_success_nodata(si, "Enabled CLONES klines.");
+		command_success_nodata(si, _("Enabled CLONES klines."));
 		wallops("\2%s\2 enabled CLONES klines", get_oper_name(si));
 		snoop("CLONES:KLINE:ON: \2%s\2", get_oper_name(si));
 		logcommand(si, CMDLOG_ADMIN, "CLONES KLINE ON");
@@ -290,7 +290,7 @@ static void os_cmd_clones_kline(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 		kline_enabled = FALSE;
-		command_success_nodata(si, "Disabled CLONES klines.");
+		command_success_nodata(si, _("Disabled CLONES klines."));
 		wallops("\2%s\2 disabled CLONES klines", get_oper_name(si));
 		snoop("CLONES:KLINE:OFF: \2%s\2", get_oper_name(si));
 		logcommand(si, CMDLOG_ADMIN, "CLONES KLINE OFF");
@@ -299,9 +299,9 @@ static void os_cmd_clones_kline(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		if (kline_enabled)
-			command_success_string(si, "ON", "CLONES klines are currently enabled.");
+			command_success_string(si, "ON", _("CLONES klines are currently enabled."));
 		else
-			command_success_string(si, "OFF", "CLONES klines are currently disabled.");
+			command_success_string(si, "OFF", _("CLONES klines are currently disabled."));
 	}
 }
 
@@ -319,12 +319,12 @@ static void os_cmd_clones_list(sourceinfo_t *si, int parc, char *parv[])
 		if (k > 3)
 		{
 			if ((allowed = is_exempt(he->ip)))
-				command_success_nodata(si, "%d from %s (\2EXEMPT\2; allowed %d)", k, he->ip, allowed);
+				command_success_nodata(si, _("%d from %s (\2EXEMPT\2; allowed %d)"), k, he->ip, allowed);
 			else
-				command_success_nodata(si, "%d from %s", k, he->ip);
+				command_success_nodata(si, _("%d from %s"), k, he->ip);
 		}
 	}
-	command_success_nodata(si, "End of CLONES LIST");
+	command_success_nodata(si, _("End of CLONES LIST"));
 	logcommand(si, CMDLOG_ADMIN, "CLONES LIST");
 }
 
@@ -371,7 +371,7 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 		c->ip = sstrdup(ip);
 		c->reason = sstrdup(reason);
 		node_add(c, node_create(), &clone_exempts);
-		command_success_nodata(si, "Added \2%s\2 to clone exempt list.", ip);
+		command_success_nodata(si, _("Added \2%s\2 to clone exempt list."), ip);
 	}
 	else
 	{
@@ -380,7 +380,7 @@ static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[])
 			free(c->reason);
 			c->reason = sstrdup(reason);
 		}
-		command_success_nodata(si, "Updated \2%s\2 in clone exempt list.", ip);
+		command_success_nodata(si, _("Updated \2%s\2 in clone exempt list."), ip);
 	}
 	c->clones = clones;
 
@@ -408,7 +408,7 @@ static void os_cmd_clones_delexempt(sourceinfo_t *si, int parc, char *parv[])
 			free(c);
 			node_del(n, &clone_exempts);
 			node_free(n);
-			command_success_nodata(si, "Removed \2%s\2 from clone exempt list.", arg);
+			command_success_nodata(si, _("Removed \2%s\2 from clone exempt list."), arg);
 			snoop("CLONES:DELEXEMPT: \2%s\2 by \2%s\2", arg, get_oper_name(si));
 			logcommand(si, CMDLOG_ADMIN, "CLONES DELEXEMPT %s", arg);
 			write_exemptdb();
@@ -429,7 +429,7 @@ static void os_cmd_clones_listexempt(sourceinfo_t *si, int parc, char *parv[])
 
 		command_success_nodata(si, "%s (%d, %s)", c->ip, c->clones, c->reason);
 	}
-	command_success_nodata(si, "End of CLONES LISTEXEMPT");
+	command_success_nodata(si, _("End of CLONES LISTEXEMPT"));
 	logcommand(si, CMDLOG_ADMIN, "CLONES LISTEXEMPT");
 }
 

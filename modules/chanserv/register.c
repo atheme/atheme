@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService REGISTER function.
  *
- * $Id: register.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: register.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: register.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -142,7 +142,7 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		metadata_add(mc, METADATA_CHANNEL, "private:channelts", str);
 	}
 
-	command_success_nodata(si, "\2%s\2 is now registered to \2%s\2.", mc->name, mc->founder->name);
+	command_success_nodata(si, _("\2%s\2 is now registered to \2%s\2."), mc->name, mc->founder->name);
 
 	hook_call_event("channel_register", mc);
 }

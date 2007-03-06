@@ -4,7 +4,7 @@
  *
  * Allows setting a vhost on an account
  *
- * $Id: vhost.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: vhost.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: vhost.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -129,7 +129,7 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	if (!host)
 	{
 		metadata_delete(mu, METADATA_USER, "private:usercloak");
-		command_success_nodata(si, "Deleted vhost for \2%s\2.", mu->name);
+		command_success_nodata(si, _("Deleted vhost for \2%s\2."), mu->name);
 		snoop("VHOST:REMOVE: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
 		logcommand(si, CMDLOG_ADMIN, "VHOST REMOVE %s", mu->name);
 		do_restorehost_all(mu);
@@ -157,7 +157,7 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	/* XXX more checks here, perhaps as a configurable regexp? */
 
 	metadata_add(mu, METADATA_USER, "private:usercloak", host);
-	command_success_nodata(si, "Assigned vhost \2%s\2 to \2%s\2.",
+	command_success_nodata(si, _("Assigned vhost \2%s\2 to \2%s\2."),
 			host, mu->name);
 	snoop("VHOST:ASSIGN: \2%s\2 to \2%s\2 by \2%s\2", host, mu->name, get_oper_name(si));
 	logcommand(si, CMDLOG_ADMIN, "VHOST ASSIGN %s %s",
@@ -191,9 +191,10 @@ static void ns_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_ADMIN, "LISTVHOST %s (%d matches)", pattern, matches);
 	if (matches == 0)
-		command_success_nodata(si, "No vhosts matched pattern \2%s\2", pattern);
+		command_success_nodata(si, _("No vhosts matched pattern \2%s\2"), pattern);
 	else
-		command_success_nodata(si, "\2%d\2 match%s for pattern \2%s\2", matches, matches != 1 ? "es" : "", pattern);
+		command_success_nodata(si, ngettext(N_("\2%d\2 match for pattern \2%s\2"),
+						    N_("\2%d\2 matches for pattern \2%s\2"), matches), matches, pattern);
 }
 
 static void vhost_on_identify(void *vptr)

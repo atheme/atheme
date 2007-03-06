@@ -4,7 +4,7 @@
  *
  * Marking for nicknames.
  *
- * $Id: mark.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: mark.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/mark", FALSE, _modinit, _moddeinit,
-	"$Id: mark.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: mark.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -78,7 +78,7 @@ static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 
 		wallops("%s marked the nickname \2%s\2.", get_oper_name(si), target);
 		logcommand(si, CMDLOG_ADMIN, "MARK %s ON (reason: %s)", target, info);
-		command_success_nodata(si, "\2%s\2 is now marked.", target);
+		command_success_nodata(si, _("\2%s\2 is now marked."), target);
 	}
 	else if (!strcasecmp(action, "OFF"))
 	{
@@ -94,7 +94,7 @@ static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 
 		wallops("%s unmarked the nickname \2%s\2.", get_oper_name(si), target);
 		logcommand(si, CMDLOG_ADMIN, "MARK %s OFF", target);
-		command_success_nodata(si, "\2%s\2 is now unmarked.", target);
+		command_success_nodata(si, _("\2%s\2 is now unmarked."), target);
 	}
 	else
 	{

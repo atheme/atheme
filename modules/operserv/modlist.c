@@ -4,7 +4,7 @@
  *
  * Module listing.
  *
- * $Id: modlist.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: modlist.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/modlist", FALSE, _modinit, _moddeinit,
-	"$Id: modlist.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: modlist.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -43,17 +43,17 @@ static void os_cmd_modlist(sourceinfo_t *si, int parc, char *parv[])
 {
 	node_t *n;
 	uint16_t i = 0;
-	command_success_nodata(si, "Loaded modules:");
+	command_success_nodata(si, _("Loaded modules:"));
 
 	LIST_FOREACH(n, modules.head)
 	{
 		module_t *m = n->data;
 
-		command_success_nodata(si, "%2d: %-20s [loaded at 0x%lx]",
+		command_success_nodata(si, _("%2d: %-20s [loaded at 0x%lx]"),
 			++i, m->header->name, m->address);
 	}
 
-	command_success_nodata(si, "\2%d\2 modules loaded.", i);
+	command_success_nodata(si, _("\2%d\2 modules loaded."), i);
 	logcommand(si, CMDLOG_GET, "MODLIST");
 }
 

@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ COMPARE.
  *
- * $Id: compare.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: compare.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/compare", FALSE, _modinit, _moddeinit,
-	"$Id: compare.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: compare.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Robin Burchell <surreal.w00t@gmail.com>"
 );
 
@@ -76,7 +76,7 @@ static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[])
 				return;				
 			}
 
-			command_success_nodata(si, "Common users in \2%s\2 and \2%s\2", object1, object2);
+			command_success_nodata(si, _("Common users in \2%s\2 and \2%s\2"), object1, object2);
 
 			/* iterate over the users in channel 1 */
 			LIST_FOREACH(n1, c1->members.head)
@@ -137,7 +137,7 @@ static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[])
 				return;				
 			}
 
-			command_success_nodata(si, "Common channels for \2%s\2 and \2%s\2", object1, object2);
+			command_success_nodata(si, _("Common channels for \2%s\2 and \2%s\2"), object1, object2);
 
 			/* iterate over the channels of user 1 */
 			LIST_FOREACH(n1, u1->channels.head)
@@ -176,7 +176,7 @@ static void os_cmd_compare(sourceinfo_t *si, int parc, char *parv[])
 	if (buf[0] != 0)
 		command_success_nodata(si, "%s", buf);
 
-	command_success_nodata(si, "\2%d\2 matches comparing %s and %s", matches, object1, object2);
+	command_success_nodata(si, _("\2%d\2 matches comparing %s and %s"), matches, object1, object2);
 	logcommand(si, CMDLOG_ADMIN, "COMPARE %s to %s (%d matches)", object1, object2, matches);
 	snoop("COMPARE: \2%s\2 to \2%s\2 by \2%s\2", object1, object2, get_oper_name(si));
 }

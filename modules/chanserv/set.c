@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: set.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: set.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -133,15 +133,15 @@ static void cs_set_config_ready(void *unused)
 
 static void cs_help_set(sourceinfo_t *si)
 {
-	command_success_nodata(si, "Help for \2SET\2:");
+	command_success_nodata(si, _("Help for \2SET\2:"));
 	command_success_nodata(si, " ");
-	command_success_nodata(si, "SET allows you to set various control flags");
-	command_success_nodata(si, "for channels that change the way certain");
-	command_success_nodata(si, "operations are performed on them.");
+	command_success_nodata(si, _("SET allows you to set various control flags"));
+	command_success_nodata(si, _("for channels that change the way certain"));
+	command_success_nodata(si, _("operations are performed on them."));
 	command_success_nodata(si, " ");
 	command_help(si, &cs_set_cmdtree);
 	command_success_nodata(si, " ");
-	command_success_nodata(si, "For more specific help use \2/msg %s HELP SET \37command\37\2.", si->service->disp);
+	command_success_nodata(si, _("For more specific help use \2/msg %s HELP SET \37command\37\2."), si->service->disp);
 }
 
 /* SET <#channel> <setting> <parameters> */
@@ -202,7 +202,7 @@ static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
                 if (metadata_find(mc, METADATA_CHANNEL, "email"))
                 {
                         metadata_delete(mc, METADATA_CHANNEL, "email");
-                        command_success_nodata(si, "The e-mail address for \2%s\2 was deleted.", mc->name);
+                        command_success_nodata(si, _("The e-mail address for \2%s\2 was deleted."), mc->name);
 			logcommand(si, CMDLOG_SET, "%s SET EMAIL NONE", mc->name);
                         return;
                 }
@@ -227,7 +227,7 @@ static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
         metadata_add(mc, METADATA_CHANNEL, "email", mail);
 
 	logcommand(si, CMDLOG_SET, "%s SET EMAIL %s", mc->name, mail);
-        command_success_nodata(si, "The e-mail address for \2%s\2 has been set to \2%s\2.", parv[0], mail);
+        command_success_nodata(si, _("The e-mail address for \2%s\2 has been set to \2%s\2."), parv[0], mail);
 }
 
 static void cs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[])
@@ -257,7 +257,7 @@ static void cs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[])
 		{
 			metadata_delete(mc, METADATA_CHANNEL, "url");
 			logcommand(si, CMDLOG_SET, "%s SET URL NONE", mc->name);
-			command_success_nodata(si, "The URL for \2%s\2 has been cleared.", parv[0]);
+			command_success_nodata(si, _("The URL for \2%s\2 has been cleared."), parv[0]);
 			return;
 		}
 
@@ -269,7 +269,7 @@ static void cs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[])
 	metadata_add(mc, METADATA_CHANNEL, "url", url);
 
 	logcommand(si, CMDLOG_SET, "%s SET URL %s", mc->name, url);
-	command_success_nodata(si, "The URL of \2%s\2 has been set to \2%s\2.", parv[0], url);
+	command_success_nodata(si, _("The URL of \2%s\2 has been set to \2%s\2."), parv[0], url);
 }
 
 static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[])
@@ -298,7 +298,7 @@ static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[])
 		{
 			metadata_delete(mc, METADATA_CHANNEL, "private:entrymsg");
 			logcommand(si, CMDLOG_SET, "%s SET ENTRYMSG NONE", mc->name, parv[1]);
-			command_success_nodata(si, "The entry message for \2%s\2 has been cleared.", parv[0]);
+			command_success_nodata(si, _("The entry message for \2%s\2 has been cleared."), parv[0]);
 			return;
 		}
 
@@ -310,7 +310,7 @@ static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[])
 	metadata_add(mc, METADATA_CHANNEL, "private:entrymsg", parv[1]);
 
 	logcommand(si, CMDLOG_SET, "%s SET ENTRYMSG %s", mc->name, parv[1]);
-	command_success_nodata(si, "The entry message for \2%s\2 has been set to \2%s\2", parv[0], parv[1]);
+	command_success_nodata(si, _("The entry message for \2%s\2 has been set to \2%s\2"), parv[0], parv[1]);
 }
 
 /*
@@ -406,8 +406,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 
 			/* done! */
 			snoop("SET:FOUNDER: \2%s\2 -> \2%s\2", mc->name, tmu->name);
-			command_success_nodata(si, "Transfer complete: "
-				"\2%s\2 has been set as founder for \2%s\2.", tmu->name, mc->name);
+			command_success_nodata(si, _("Transfer complete: \2%s\2 has been set as founder for \2%s\2."), tmu->name, mc->name);
 
 			return;
 		}
@@ -429,7 +428,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 			metadata_delete(mc, METADATA_CHANNEL, "private:verify:founderchg:timestamp");
 
 			logcommand(si, CMDLOG_SET, "%s SET FOUNDER %s (cancelling transfer)", mc->name, tmu->name);
-			command_success_nodata(si, "The transfer of \2%s\2 has been cancelled.", mc->name);
+			command_success_nodata(si, _("The transfer of \2%s\2 has been cancelled."), mc->name);
 
 			return;
 		}
@@ -442,7 +441,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 	if (metadata_find(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder"))
 	{
 		logcommand(si, CMDLOG_SET, "%s SET FOUNDER %s (cancelling old transfer and initializing transfer)", mc->name, tmu->name);
-		command_success_nodata(si, "The previous transfer request for \2%s\2 has been cancelled.", mc->name);
+		command_success_nodata(si, _("The previous transfer request for \2%s\2 has been cancelled."), mc->name);
 	}
 	else
 		logcommand(si, CMDLOG_SET, "%s SET FOUNDER %s (initializing transfer)", mc->name, tmu->name);
@@ -450,11 +449,11 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 	metadata_add(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder", tmu->name);
 	metadata_add(mc, METADATA_CHANNEL, "private:verify:founderchg:timestamp", itoa(time(NULL)));
 
-	command_success_nodata(si, "\2%s\2 can now take ownership of \2%s\2.", tmu->name, mc->name);
-	command_success_nodata(si, "In order to complete the transfer, \2%s\2 must perform the following command:", tmu->name);
+	command_success_nodata(si, _("\2%s\2 can now take ownership of \2%s\2."), tmu->name, mc->name);
+	command_success_nodata(si, _("In order to complete the transfer, \2%s\2 must perform the following command:"), tmu->name);
 	command_success_nodata(si, "   \2/msg %s SET %s FOUNDER %s\2", chansvs.nick, mc->name, tmu->name);
-	command_success_nodata(si, "After that command is issued, the channel will be transferred.", mc->name);
-	command_success_nodata(si, "To cancel the transfer, use \2/msg %s SET %s FOUNDER %s\2", chansvs.nick, mc->name, mc->founder->name);
+	command_success_nodata(si, _("After that command is issued, the channel will be transferred."), mc->name);
+	command_success_nodata(si, _("To cancel the transfer, use \2/msg %s SET %s FOUNDER %s\2"), chansvs.nick, mc->name, mc->founder->name);
 }
 
 static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
@@ -678,12 +677,12 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 
 	if (*modebuf)
 	{
-		command_success_nodata(si, "The MLOCK for \2%s\2 has been set to \2%s\2.", mc->name, modebuf);
+		command_success_nodata(si, _("The MLOCK for \2%s\2 has been set to \2%s\2."), mc->name, modebuf);
 		logcommand(si, CMDLOG_SET, "%s SET MLOCK %s", mc->name, modebuf);
 	}
 	else
 	{
-		command_success_nodata(si, "The MLOCK for \2%s\2 has been removed.", mc->name);
+		command_success_nodata(si, _("The MLOCK for \2%s\2 has been removed."), mc->name);
 		logcommand(si, CMDLOG_SET, "%s SET MLOCK NONE", mc->name);
 	}
 
@@ -720,7 +719,7 @@ static void cs_cmd_set_keeptopic(sourceinfo_t *si, int parc, char *parv[])
 
                 mc->flags |= MC_KEEPTOPIC;
 
-                command_success_nodata(si, "The \2KEEPTOPIC\2 flag has been set for \2%s\2.", mc->name);
+                command_success_nodata(si, _("The \2KEEPTOPIC\2 flag has been set for \2%s\2."), mc->name);
 
                 return;
         }
@@ -737,7 +736,7 @@ static void cs_cmd_set_keeptopic(sourceinfo_t *si, int parc, char *parv[])
 
                 mc->flags &= ~(MC_KEEPTOPIC | MC_TOPICLOCK);
 
-                command_success_nodata(si, "The \2KEEPTOPIC\2 flag has been removed for \2%s\2.", mc->name);
+                command_success_nodata(si, _("The \2KEEPTOPIC\2 flag has been removed for \2%s\2."), mc->name);
 
                 return;
         }
@@ -777,7 +776,7 @@ static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[])
 
                 mc->flags |= MC_KEEPTOPIC | MC_TOPICLOCK;
 
-                command_success_nodata(si, "The \2TOPICLOCK\2 flag has been set for \2%s\2.", mc->name);
+                command_success_nodata(si, _("The \2TOPICLOCK\2 flag has been set for \2%s\2."), mc->name);
 
                 return;
         }
@@ -794,7 +793,7 @@ static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[])
 
                 mc->flags &= ~MC_TOPICLOCK;
 
-                command_success_nodata(si, "The \2TOPICLOCK\2 flag has been removed for \2%s\2.", mc->name);
+                command_success_nodata(si, _("The \2TOPICLOCK\2 flag has been removed for \2%s\2."), mc->name);
 
                 return;
         }
@@ -834,7 +833,7 @@ static void cs_cmd_set_secure(sourceinfo_t *si, int parc, char *parv[])
 
 		mc->flags |= MC_SECURE;
 
-		command_success_nodata(si, "The \2SECURE\2 flag has been set for \2%s\2.", mc->name);
+		command_success_nodata(si, _("The \2SECURE\2 flag has been set for \2%s\2."), mc->name);
 
 		return;
 	}
@@ -851,7 +850,7 @@ static void cs_cmd_set_secure(sourceinfo_t *si, int parc, char *parv[])
 
 		mc->flags &= ~MC_SECURE;
 
-		command_success_nodata(si, "The \2SECURE\2 flag has been removed for \2%s\2.", mc->name);
+		command_success_nodata(si, _("The \2SECURE\2 flag has been removed for \2%s\2."), mc->name);
 
 		return;
 	}
@@ -893,7 +892,7 @@ static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[])
  		mc->flags |= MC_VERBOSE;
 
 		verbose(mc, "\2%s\2 enabled the VERBOSE flag", get_source_name(si));
-		command_success_nodata(si, "The \2VERBOSE\2 flag has been set for \2%s\2.", mc->name);
+		command_success_nodata(si, _("The \2VERBOSE\2 flag has been set for \2%s\2."), mc->name);
 
 		return;
 	}
@@ -920,7 +919,7 @@ static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[])
 			verbose(mc, "\2%s\2 enabled the VERBOSE_OPS flag", get_source_name(si));
 		}
 
-		command_success_nodata(si, "The \2VERBOSE_OPS\2 flag has been set for \2%s\2.", mc->name);
+		command_success_nodata(si, _("The \2VERBOSE_OPS\2 flag has been set for \2%s\2."), mc->name);
 
 		return;
 	}
@@ -940,7 +939,7 @@ static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[])
 			verbose(mc, "\2%s\2 disabled the VERBOSE_OPS flag", get_source_name(si));
 		mc->flags &= ~(MC_VERBOSE | MC_VERBOSE_OPS);
 
-		command_success_nodata(si, "The \2VERBOSE\2 flag has been removed for \2%s\2.", mc->name);
+		command_success_nodata(si, _("The \2VERBOSE\2 flag has been removed for \2%s\2."), mc->name);
 
 		return;
 	}
@@ -981,7 +980,7 @@ static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 		metadata_delete(mc, METADATA_CHANNEL, "disable_fantasy");
 
 		logcommand(si, CMDLOG_SET, "%s SET FANTASY ON", mc->name);
-		command_success_nodata(si, "The \2FANTASY\2 flag has been set for \2%s\2.", mc->name);
+		command_success_nodata(si, _("The \2FANTASY\2 flag has been set for \2%s\2."), mc->name);
 		return;
 	}
 	else if (!strcasecmp("OFF", parv[1]))
@@ -997,7 +996,7 @@ static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 		metadata_add(mc, METADATA_CHANNEL, "disable_fantasy", "on");
 
 		logcommand(si, CMDLOG_SET, "%s SET FANTASY OFF", mc->name);
-		command_success_nodata(si, "The \2FANTASY\2 flag has been removed for \2%s\2.", mc->name);
+		command_success_nodata(si, _("The \2FANTASY\2 flag has been removed for \2%s\2."), mc->name);
 		return;
 	}
 
@@ -1039,7 +1038,7 @@ static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])
 		if (!(mc->flags & MC_INHABIT))
 			join(mc->name, chansvs.nick);
 
-                command_success_nodata(si, "The \2GUARD\2 flag has been set for \2%s\2.", mc->name);
+                command_success_nodata(si, _("The \2GUARD\2 flag has been set for \2%s\2."), mc->name);
 
                 return;
         }
@@ -1059,7 +1058,7 @@ static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])
 		if (!(mc->flags & MC_INHABIT) && (!config_options.chan || irccasecmp(config_options.chan, mc->name)))
 			part(mc->name, chansvs.nick);
 
-                command_success_nodata(si, "The \2GUARD\2 flag has been removed for \2%s\2.", mc->name);
+                command_success_nodata(si, _("The \2GUARD\2 flag has been removed for \2%s\2."), mc->name);
 
                 return;
         }
@@ -1094,7 +1093,7 @@ static void cs_cmd_set_staffonly(sourceinfo_t *si, int parc, char *parv[])
 
 		mc->flags |= MC_STAFFONLY;
 
-		command_success_nodata(si, "The \2STAFFONLY\2 flag has been set for \2%s\2.", mc->name);
+		command_success_nodata(si, _("The \2STAFFONLY\2 flag has been set for \2%s\2."), mc->name);
 
 		return;
 	}
@@ -1112,7 +1111,7 @@ static void cs_cmd_set_staffonly(sourceinfo_t *si, int parc, char *parv[])
 
 		mc->flags &= ~MC_STAFFONLY;
 
-		command_success_nodata(si, "The \2STAFFONLY\2 flag has been removed for \2%s\2.", mc->name);
+		command_success_nodata(si, _("The \2STAFFONLY\2 flag has been removed for \2%s\2."), mc->name);
 
 		return;
 	}
@@ -1177,7 +1176,7 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 
 		metadata_delete(mc, METADATA_CHANNEL, property);
 		logcommand(si, CMDLOG_SET, "%s SET PROPERTY %s (deleted)", mc->name, property);
-		command_success_nodata(si, "Metadata entry \2%s\2 has been deleted.", property);
+		command_success_nodata(si, _("Metadata entry \2%s\2 has been deleted."), property);
 		return;
 	}
 
@@ -1189,7 +1188,7 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 
 	metadata_add(mc, METADATA_CHANNEL, property, value);
 	logcommand(si, CMDLOG_SET, "%s SET PROPERTY %s to %s", mc->name, property, value);
-	command_success_nodata(si, "Metadata entry \2%s\2 added.", property);
+	command_success_nodata(si, _("Metadata entry \2%s\2 added."), property);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

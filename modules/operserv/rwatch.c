@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ RWATCH.
  *
- * $Id: rwatch.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: rwatch.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rwatch", FALSE, _modinit, _moddeinit,
-	"$Id: rwatch.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: rwatch.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -269,7 +269,7 @@ static void os_cmd_rwatch_add(sourceinfo_t *si, int parc, char *parv[])
 	rw->re = regex;
 
 	node_add(rw, node_create(), &rwatch_list);
-	command_success_nodata(si, "Added \2%s\2 to regex watch list.", pattern);
+	command_success_nodata(si, _("Added \2%s\2 to regex watch list."), pattern);
 	snoop("RWATCH:ADD: \2%s\2 by \2%s\2", pattern, get_oper_name(si));
 	logcommand(si, CMDLOG_ADMIN, "RWATCH ADD %s %s", pattern, reason);
 	write_rwatchdb();
@@ -319,7 +319,7 @@ static void os_cmd_rwatch_del(sourceinfo_t *si, int parc, char *parv[])
 			free(rw);
 			node_del(n, &rwatch_list);
 			node_free(n);
-			command_success_nodata(si, "Removed \2%s\2 from regex watch list.", pattern);
+			command_success_nodata(si, _("Removed \2%s\2 from regex watch list."), pattern);
 			snoop("RWATCH:DEL: \2%s\2 by \2%s\2", pattern, get_oper_name(si));
 			logcommand(si, CMDLOG_ADMIN, "RWATCH DEL %s", pattern);
 			write_rwatchdb();
@@ -345,7 +345,7 @@ static void os_cmd_rwatch_list(sourceinfo_t *si, int parc, char *parv[])
 				rw->actions & RWACT_KLINE ? "\2K\2" : "",
 				rw->reason);
 	}
-	command_success_nodata(si, "End of RWATCH LIST");
+	command_success_nodata(si, _("End of RWATCH LIST"));
 	logcommand(si, CMDLOG_GET, "RWATCH LIST");
 }
 
@@ -423,7 +423,7 @@ static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[])
 			}
 			rw->actions |= addflags;
 			rw->actions &= ~removeflags;
-			command_success_nodata(si, "Set options \2%s\2 on \2%s\2.", opts, pattern);
+			command_success_nodata(si, _("Set options \2%s\2 on \2%s\2."), opts, pattern);
 			snoop("RWATCH:SET: \2%s\2 \2%s\2 by \2%s\2", pattern, opts, get_oper_name(si));
 			if (addflags & RWACT_KLINE)
 				wallops("\2%s\2 enabled kline on regex watch pattern \2%s\2", get_oper_name(si), pattern);

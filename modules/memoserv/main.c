@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 7817 2007-03-05 16:52:20Z jilles $
+ * $Id: main.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 7817 2007-03-05 16:52:20Z jilles $",
+	"$Id: main.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -103,8 +103,9 @@ static void on_user_identify(void *vptr)
 	
 	if (mu->memoct_new > 0)
 	{
-		notice(memosvs.nick, u->nick, "You have %d new memo%s.",
-			mu->memoct_new, mu->memoct_new > 1 ? "s" : "");
+		notice(memosvs.nick, u->nick, ngettext(N_("You have %d new memo."),
+						       N_("You have %d new memos."),
+						       mu->memoct_new), mu->memoct_new);
 	}
 }
 
@@ -127,8 +128,9 @@ static void on_user_away(void *vptr)
 		return;
 	if (mu->memoct_new > 0)
 	{
-		notice(memosvs.nick, u->nick, "You have %d new memo%s.",
-			mu->memoct_new, mu->memoct_new > 1 ? "s" : "");
+		notice(memosvs.nick, u->nick, ngettext(N_("You have %d new memo."),
+						       N_("You have %d new memos."),
+						       mu->memoct_new), mu->memoct_new);
 	}
 }
 

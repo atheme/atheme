@@ -4,7 +4,7 @@
  *
  * This file contains code for OS UPTIME
  *
- * $Id: uptime.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: uptime.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/uptime", FALSE, _modinit, _moddeinit,
-	"$Id: uptime.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: uptime.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -43,12 +43,12 @@ static void os_cmd_uptime(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_GET, "UPTIME");
 
         command_success_nodata(si, "atheme-%s [%s] #%s", version, revision, generation);
-        command_success_nodata(si, "Services have been up for %s", timediff(CURRTIME - me.start));
-        command_success_nodata(si, "Registered accounts: %d", cnt.myuser);
+        command_success_nodata(si, _("Services have been up for %s"), timediff(CURRTIME - me.start));
+        command_success_nodata(si, _("Registered accounts: %d"), cnt.myuser);
 	if (!nicksvs.no_nick_ownership)
-        	command_success_nodata(si, "Registered nicknames: %d", cnt.mynick);
-        command_success_nodata(si, "Registered channels: %d", cnt.mychan);
-        command_success_nodata(si, "Users currently online: %d", cnt.user - me.me->users);
+        	command_success_nodata(si, _("Registered nicknames: %d"), cnt.mynick);
+        command_success_nodata(si, _("Registered channels: %d"), cnt.mychan);
+        command_success_nodata(si, _("Users currently online: %d"), cnt.user - me.me->users);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

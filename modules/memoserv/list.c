@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv LIST function
  *
- * $Id: list.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: list.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: list.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -56,10 +56,9 @@ static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	}
 		
 	
-	command_success_nodata(si, "You have %d memo%s (%d new).",
-		si->smu->memos.count, 
-		(!si->smu->memos.count || si->smu->memos.count > 1) ? "s":"",
-		si->smu->memoct_new);
+	command_success_nodata(si, ngettext(N_("You have %d memo (%d new)."),
+					    N_("You have %d memos (%d new)."),
+					    si->smu->memos.count), si->smu->memos.count, si->smu->memoct_new);
 	
 	/* Check to see if any memos */
 	if (!si->smu->memos.count)
@@ -78,9 +77,9 @@ static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 			"%b %d %H:%M:%S %Y", &tm);
 		
 		if (memo->status == MEMO_NEW)
-			command_success_nodata(si, "- %d From: %s Sent: %s [unread]",i,memo->sender,strfbuf);
+			command_success_nodata(si, _("- %d From: %s Sent: %s [unread]"), i, memo->sender, strfbuf);
 		else
-			command_success_nodata(si, "- %d From: %s Sent: %s",i,memo->sender,strfbuf);
+			command_success_nodata(si, _("- %d From: %s Sent: %s"), i, memo->sender, strfbuf);
 	}
 	
 	return;

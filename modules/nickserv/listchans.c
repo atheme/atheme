@@ -5,7 +5,7 @@
  * This file contains code for the nickserv LISTCHANS function.
  *   -- Contains an alias "MYACCESS" for legacy users
  *
- * $Id: listchans.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: listchans.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/listchans", FALSE, _modinit, _moddeinit,
-	"$Id: listchans.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: listchans.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -93,7 +93,7 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 
 	if (mu->chanacs.count == 0)
 	{
-		command_success_nodata(si, "No channel access was found for the nickname \2%s\2.", mu->name);
+		command_success_nodata(si, _("No channel access was found for the nickname \2%s\2."), mu->name);
 		return;
 	}
 
@@ -102,14 +102,14 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 		ca = (chanacs_t *)n->data;
 
 		if (is_founder(ca->mychan, mu))
-			command_success_nodata(si, "Founder of %s", ca->mychan->name);
+			command_success_nodata(si, _("Founder of %s"), ca->mychan->name);
 
 		switch (ca->level)
 		{
 			default:
 				/* don't tell users they're akicked (flag +b) */
 				if (!(ca->level & CA_AKICK))
-					command_success_nodata(si, "Access flag(s) %s in %s", bitmask_to_flags(ca->level, chanacs_flags), ca->mychan->name);
+					command_success_nodata(si, _("Access flag(s) %s in %s"), bitmask_to_flags(ca->level, chanacs_flags), ca->mychan->name);
 				else
 					akicks++;
 		}
@@ -118,10 +118,11 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 	i = mu->chanacs.count - akicks;
 
 	if (i == 0)
-		command_success_nodata(si, "No channel access was found for the nickname \2%s\2.", mu->name);
+		command_success_nodata(si, _("No channel access was found for the nickname \2%s\2."), mu->name);
 	else
-		command_success_nodata(si, "\2%d\2 channel access match%s for the nickname \2%s\2",
-							i, (i > 1) ? "es" : "", mu->name);
+		command_success_nodata(si, ngettext(N_("\2%d\2 channel access match for the nickname \2%s\2"),
+						    N_("\2%d\2 channel access matches for the nickname \2%s\2"), i),
+						    i, mu->name);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

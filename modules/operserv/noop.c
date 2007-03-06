@@ -4,7 +4,7 @@
  *
  * OperServ NOOP command.
  *
- * $Id: noop.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: noop.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/noop", TRUE, _modinit, _moddeinit,
-	"$Id: noop.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: noop.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -158,7 +158,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 			node_add(np, n, &noop_hostmask_list);
 
 			logcommand(si, CMDLOG_ADMIN, "NOOP ADD HOSTMASK %s %s", np->target, np->reason);
-			command_success_nodata(si, "Added \2%s\2 to the hostmask NOOP list.", mask);
+			command_success_nodata(si, _("Added \2%s\2 to the hostmask NOOP list."), mask);
 
 			return;
 		}
@@ -190,7 +190,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 			node_add(np, n, &noop_server_list);
 
 			logcommand(si, CMDLOG_ADMIN, "NOOP ADD SERVER %s %s", np->target, np->reason);
-			command_success_nodata(si, "Added \2%s\2 to the server NOOP list.", mask);
+			command_success_nodata(si, _("Added \2%s\2 to the server NOOP list."), mask);
 
 			return;
 		}
@@ -217,7 +217,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 			}
 
 			logcommand(si, CMDLOG_ADMIN, "NOOP DEL HOSTMASK %s", np->target);
-			command_success_nodata(si, "Removed \2%s\2 from the hostmask NOOP list.", np->target);
+			command_success_nodata(si, _("Removed \2%s\2 from the hostmask NOOP list."), np->target);
 
 			n = node_find(np, &noop_hostmask_list);
 
@@ -240,7 +240,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 			}
 
 			logcommand(si, CMDLOG_ADMIN, "NOOP DEL SERVER %s", np->target);
-			command_success_nodata(si, "Removed \2%s\2 from the server NOOP list.", np->target);
+			command_success_nodata(si, _("Removed \2%s\2 from the server NOOP list."), np->target);
 
 			n = node_find(np, &noop_server_list);
 
@@ -266,9 +266,9 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 		{
 			uint16_t i = 1;
 			logcommand(si, CMDLOG_GET, "NOOP LIST HOSTMASK");
-			command_success_nodata(si, "Hostmask NOOP list (%d entries):", noop_hostmask_list.count);
+			command_success_nodata(si, _("Hostmask NOOP list (%d entries):"), noop_hostmask_list.count);
 			command_success_nodata(si, " ");
-			command_success_nodata(si, "Entry Hostmask                        Adder                 Reason");
+			command_success_nodata(si, _("Entry Hostmask                        Adder                 Reason"));
 			command_success_nodata(si, "----- ------------------------------- --------------------- --------------------------");
 
 			LIST_FOREACH(n, noop_hostmask_list.head)
@@ -280,15 +280,15 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 			}
 
 			command_success_nodata(si, "----- ------------------------------- --------------------- --------------------------");
-			command_success_nodata(si, "End of Hostmask NOOP list.");
+			command_success_nodata(si, _("End of Hostmask NOOP list."));
 		}
 		else if (!strcasecmp(type, "SERVER"))
 		{
 			uint16_t i = 1;
 			logcommand(si, CMDLOG_GET, "NOOP LIST SERVER");
-			command_success_nodata(si, "Server NOOP list (%d entries):", noop_server_list.count);
+			command_success_nodata(si, _("Server NOOP list (%d entries):"), noop_server_list.count);
 			command_success_nodata(si, " ");
-			command_success_nodata(si, "Entry Hostmask                        Adder                 Reason");
+			command_success_nodata(si, _("Entry Hostmask                        Adder                 Reason"));
 			command_success_nodata(si, "----- ------------------------------- --------------------- --------------------------");
 
 			LIST_FOREACH(n, noop_server_list.head)
@@ -300,7 +300,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 			}
 
 			command_success_nodata(si, "----- ------------------------------- --------------------- --------------------------");
-			command_success_nodata(si, "End of Server NOOP list.");
+			command_success_nodata(si, _("End of Server NOOP list."));
 		}
 		else
 		{

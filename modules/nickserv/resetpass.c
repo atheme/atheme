@@ -4,7 +4,7 @@
  *
  * This file contains code for nickserv RESETPASS
  *
- * $Id: resetpass.c 7877 2007-03-06 01:43:05Z pippijn $
+ * $Id: resetpass.c 7895 2007-03-06 02:40:03Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/resetpass", FALSE, _modinit, _moddeinit,
-	"$Id: resetpass.c 7877 2007-03-06 01:43:05Z pippijn $",
+	"$Id: resetpass.c 7895 2007-03-06 02:40:03Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -67,9 +67,9 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 	if ((md = metadata_find(mu, METADATA_USER, "private:mark:setter")) && has_priv(si, PRIV_MARK))
 	{
 		logcommand(si, CMDLOG_ADMIN, "RESETPASS %s (overriding mark by %s)", name, md->value);
-		command_success_nodata(si, "Overriding MARK placed by %s on the nickname %s.", md->value, name);
+		command_success_nodata(si, _("Overriding MARK placed by %s on the nickname %s."), md->value, name);
 		newpass = gen_pw(12);
-		command_success_nodata(si, "The password for the nickname %s has been changed to %s.", name, newpass);
+		command_success_nodata(si, _("The password for the nickname %s has been changed to %s."), name, newpass);
 		set_password(mu, newpass);
 		free(newpass);
 		wallops("%s reset the password for the \2MARKED\2 nickname %s.", get_oper_name(si), name);
@@ -85,7 +85,7 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	newpass = gen_pw(12);
-	command_success_nodata(si, "The password for the nickname %s has been changed to %s.", name, newpass);
+	command_success_nodata(si, _("The password for the nickname %s has been changed to %s."), name, newpass);
 	set_password(mu, newpass);
 	free(newpass);
 	metadata_delete(mu, METADATA_USER, "private:setpass:key");
