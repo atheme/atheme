@@ -4,7 +4,7 @@
  *
  * This file contains a generic help system implementation.
  *
- * $Id: help.c 7823 2007-03-05 23:20:25Z pippijn $
+ * $Id: help.c 7839 2007-03-06 00:09:30Z pippijn $
  */
 
 #include "atheme.h"
@@ -22,7 +22,7 @@ static helpentry_t *help_cmd_find(sourceinfo_t *si, char *cmd, list_t *list)
 			return c;
 	}
 
-	command_fail(si, fault_nosuch_target, gettext("No help available for \2%s\2."), cmd);
+	command_fail(si, fault_nosuch_target, "No help available for \2%s\2.", cmd);
 	return NULL;
 }
 
@@ -49,11 +49,11 @@ void help_display(sourceinfo_t *si, char *command, list_t *list)
 
 			if (!help_file)
 			{
-				command_fail(si, fault_nosuch_target, gettext("Could not get help file for \2%s\2."), command);
+				command_fail(si, fault_nosuch_target, "Could not get help file for \2%s\2.", command);
 				return;
 			}
 
-			command_success_nodata(si, gettext("***** \2%s Help\2 *****"), si->service->name);
+			command_success_nodata(si, "***** \2%s Help\2 *****", si->service->name);
 
 			while (fgets(buf, BUFSIZE, help_file))
 			{
@@ -69,18 +69,18 @@ void help_display(sourceinfo_t *si, char *command, list_t *list)
 
 			fclose(help_file);
 
-			command_success_nodata(si, gettext("***** \2End of Help\2 *****"));
+			command_success_nodata(si, "***** \2End of Help\2 *****");
 		}
 		else if (c->func)
 		{
-			command_success_nodata(si, gettext("***** \2%s Help\2 *****"), si->service->name);
+			command_success_nodata(si, "***** \2%s Help\2 *****", si->service->name);
 
 			c->func(si);
 
-			command_success_nodata(si, gettext("***** \2End of Help\2 *****"));
+			command_success_nodata(si, "***** \2End of Help\2 *****");
 		}
 		else
-			command_fail(si, fault_nosuch_target, gettext("No help available for \2%s\2."), command);
+			command_fail(si, fault_nosuch_target, "No help available for \2%s\2.", command);
 	}
 }
 
@@ -94,14 +94,14 @@ void help_addentry(list_t *list, char *topic, char *fname,
 
 	if (!list && !topic && !func && !fname)
 	{
-		slog(LG_DEBUG, gettext("help_addentry(): invalid params"));
+		slog(LG_DEBUG, "help_addentry(): invalid params");
 		return;
 	}
 
 	/* further paranoia */
 	if (!func && !fname)
 	{
-		slog(LG_DEBUG, gettext("help_addentry(): invalid params"));
+		slog(LG_DEBUG, "help_addentry(): invalid params");
 		return;
 	}
 

@@ -4,7 +4,7 @@
  *
  * Datastream stuff.
  *
- * $Id: datastream.c 7823 2007-03-05 23:20:25Z pippijn $
+ * $Id: datastream.c 7839 2007-03-06 00:09:30Z pippijn $
  */
 
 #include "atheme.h"
@@ -30,7 +30,7 @@ void sendq_add(connection_t * cptr, char *buf, int len)
 		return;
 	if (cptr->flags & (CF_DEAD | CF_SEND_EOF))
 	{
-		slog(LG_DEBUG, gettext("sendq_add(): attempted to send to fd %d which is already dead"), cptr->fd);
+		slog(LG_DEBUG, "sendq_add(): attempted to send to fd %d which is already dead", cptr->fd);
 		return;
 	}
 
@@ -68,7 +68,7 @@ void sendq_add_eof(connection_t * cptr)
 		return;
 	if (cptr->flags & (CF_DEAD | CF_SEND_EOF))
 	{
-		slog(LG_DEBUG, gettext("sendq_add(): attempted to send to fd %d which is already dead"), cptr->fd);
+		slog(LG_DEBUG, "sendq_add(): attempted to send to fd %d which is already dead", cptr->fd);
 		return;
 	}
 	cptr->flags |= CF_SEND_EOF;
@@ -98,7 +98,7 @@ void sendq_flush(connection_t * cptr)
                 {
                         if (errno != EAGAIN)
 			{
-				slog(LG_DEBUG, gettext("sendq_flush(): write error %d (%s) on connection %s[%d]"),
+				slog(LG_DEBUG, "sendq_flush(): write error %d (%s) on connection %s[%d]",
 						errno, strerror(errno),
 						cptr->name, cptr->fd);
 				cptr->flags |= CF_DEAD;
@@ -210,9 +210,9 @@ void recvq_put(connection_t *cptr)
 	if (l == 0 || (l < 0 && errno != EWOULDBLOCK && errno != EAGAIN && errno != EALREADY && errno != EINTR && errno != ENOBUFS))
 	{
 		if (l == 0)
-			slog(LG_INFO, gettext("recvq_put(): fd %d closed the connection"), cptr->fd);
+			slog(LG_INFO, "recvq_put(): fd %d closed the connection", cptr->fd);
 		else
-			slog(LG_INFO, gettext("recvq_put(): lost connection on fd %d"), cptr->fd);
+			slog(LG_INFO, "recvq_put(): lost connection on fd %d", cptr->fd);
 		connection_close(cptr);
 		return;
 	}

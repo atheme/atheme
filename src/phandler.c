@@ -4,7 +4,7 @@
  *
  * Generic protocol event handlers.
  *
- * $Id: phandler.c 7823 2007-03-05 23:20:25Z pippijn $
+ * $Id: phandler.c 7839 2007-03-06 00:09:30Z pippijn $
  */
 
 #include "atheme.h"
@@ -52,7 +52,7 @@ void generic_introduce_nick(user_t *u)
 
 void generic_wallops_sts(const char *text)
 {
-	slog(LG_INFO, gettext("Don't know how to send wallops: %s"), text);
+	slog(LG_INFO, "Don't know how to send wallops: %s", text);
 }
 
 void generic_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
@@ -62,7 +62,7 @@ void generic_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
 
 void generic_chan_lowerts(channel_t *c, user_t *u)
 {
-	slog(LG_ERROR, gettext("chan_lowerts() called but not supported!"));
+	slog(LG_ERROR, "chan_lowerts() called but not supported!");
 	join_sts(c, u, TRUE, channel_modes(c, TRUE));
 }
 
@@ -80,22 +80,22 @@ void generic_msg(char *from, char *target, char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	slog(LG_INFO, gettext("Cannot send message to %s (%s): don't know how. Load a protocol module perhaps?"), target, buf);
+	slog(LG_INFO, "Cannot send message to %s (%s): don't know how. Load a protocol module perhaps?", target, buf);
 }
 
 void generic_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
-	slog(LG_INFO, gettext("Cannot send notice to %s (%s): don't know how. Load a protocol module perhaps?"), target->nick, text);
+	slog(LG_INFO, "Cannot send notice to %s (%s): don't know how. Load a protocol module perhaps?", target->nick, text);
 }
 
 void generic_notice_global_sts(user_t *from, const char *mask, const char *text)
 {
-	slog(LG_INFO, gettext("Cannot send global notice to %s (%s): don't know how. Load a protocol module perhaps?"), mask, text);
+	slog(LG_INFO, "Cannot send global notice to %s (%s): don't know how. Load a protocol module perhaps?", mask, text);
 }
 
 void generic_notice_channel_sts(user_t *from, channel_t *target, const char *text)
 {
-	slog(LG_INFO, gettext("Cannot send notice to %s (%s): don't know how. Load a protocol module perhaps?"), target->name, text);
+	slog(LG_INFO, "Cannot send notice to %s (%s): don't know how. Load a protocol module perhaps?", target->name, text);
 }
 
 void generic_wallchops(user_t *sender, channel_t *channel, char *message)	
@@ -181,7 +181,7 @@ void generic_sethost_sts(char *source, char *target, char *host)
 void generic_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
 {
 	if (type == FNC_FORCE)
-		skill(source->nick, u->nick, gettext("Nickname enforcement (%s)"), u->nick);
+		skill(source->nick, u->nick, "Nickname enforcement (%s)", u->nick);
 }
 
 E void generic_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account)

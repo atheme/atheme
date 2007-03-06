@@ -5,7 +5,7 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id: dictionary.c 7823 2007-03-05 23:20:25Z pippijn $
+ * $Id: dictionary.c 7839 2007-03-06 00:09:30Z pippijn $
  */
 
 #include "atheme.h"
@@ -285,7 +285,7 @@ void dictionary_foreach_next(dictionary_tree_t *dtree,
 {
 	if (state->cur == NULL)
 	{
-		slog(LG_DEBUG, gettext("dictionary_foreach_next(): called again after iteration finished on dtree<%p>"), dtree);
+		slog(LG_DEBUG, "dictionary_foreach_next(): called again after iteration finished on dtree<%p>", dtree);
 		return;
 	}
 	state->cur = state->next;
@@ -367,7 +367,7 @@ dictionary_elem_t *dictionary_add(dictionary_tree_t *dtree, const char *key, voi
 
 	if (dictionary_find(dtree, key) != NULL)
 	{
-		slog(LG_DEBUG, gettext("dictionary_add(): entry already exists in dtree<%p> for key '%s'!"),
+		slog(LG_DEBUG, "dictionary_add(): entry already exists in dtree<%p> for key '%s'!",
 			dtree, key);
 		return NULL;
 	}
@@ -409,7 +409,7 @@ void *dictionary_delete(dictionary_tree_t *dtree, const char *key)
 
 	if (delem == NULL)
 	{
-		slog(LG_DEBUG, gettext("dictionary_delete(): entry '%s' does not exist in dtree<%p>!"),
+		slog(LG_DEBUG, "dictionary_delete(): entry '%s' does not exist in dtree<%p>!",
 			key, dtree);
 		return NULL;
 	}
@@ -479,7 +479,7 @@ void dictionary_stats(void (*stats_cb)(const char *line, void *privdata), void *
 	LIST_FOREACH(n, dictionarylist.head)
 	{
 		dtree = object_ref(n->data);
-		snprintf(buf, sizeof buf, gettext("Hash statistics for %s"), object(dtree)->name);
+		snprintf(buf, sizeof buf, "Hash statistics for %s", object(dtree)->name);
 		stats_cb(buf, privdata);
 		for (i = 0; i <= MAXCOUNT; i++)
 			counts[i] = 0;
@@ -495,13 +495,13 @@ void dictionary_stats(void (*stats_cb)(const char *line, void *privdata), void *
 				count1 = MAXCOUNT;
 			counts[count1]++;
 		}
-		snprintf(buf, sizeof buf, gettext("Size: %d  Items: %d  Max depth: %d"),
+		snprintf(buf, sizeof buf, "Size: %d  Items: %d  Max depth: %d",
 				dtree->resolution, totalcount, maxdepth);
 		stats_cb(buf, privdata);
 		for (i = 0; i <= MAXCOUNT; i++)
 		{
-			snprintf(buf, sizeof buf, gettext("Nodes with %d%s entries: %d"),
-					i, i == MAXCOUNT ? gettext(" or more") : "",
+			snprintf(buf, sizeof buf, "Nodes with %d%s entries: %d",
+					i, i == MAXCOUNT ? " or more" : "",
 					counts[i]);
 			stats_cb(buf, privdata);
 		}

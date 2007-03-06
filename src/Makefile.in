@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7823 2007-03-05 23:20:25Z pippijn $
+# $Id: Makefile.in 7839 2007-03-06 00:09:30Z pippijn $
 #
 
 CC		= @CC@
@@ -26,10 +26,8 @@ RUNDIR		= @RUNDIR@
 LOGDIR		= @LOGDIR@
 SHAREDIR	= @SHAREDIR@
 BIN		= atheme@EXEEXT@
-LOCALEDIR 	= @LOCALEDIR@
-
 MKDEP		= @MKDEP@
-CFLAGS		= @CFLAGS@ -I../include -I../intl
+CFLAGS		= @CFLAGS@ -I../include
 
 VERSION		= @PACKAGE_VERSION@
 

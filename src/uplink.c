@@ -4,7 +4,7 @@
  *
  * Uplink management stuff.
  *
- * $Id: uplink.c 7823 2007-03-05 23:20:25Z pippijn $
+ * $Id: uplink.c 7839 2007-03-06 00:09:30Z pippijn $
  */
 
 #include "atheme.h"
@@ -22,7 +22,7 @@ void init_uplinks(void)
 	uplink_heap = BlockHeapCreate(sizeof(uplink_t), 4);
 	if (!uplink_heap)
 	{
-		slog(LG_INFO, gettext("init_uplinks(): block allocator failed."));
+		slog(LG_INFO, "init_uplinks(): block allocator failed.");
 		exit(EXIT_FAILURE);
 	}
 }
@@ -46,7 +46,7 @@ uplink_t *uplink_add(char *name, char *host, char *password, char *vhost, int po
 		}
 		else
 		{
-			slog(LG_INFO, gettext("Duplicate uplink %s."), name);
+			slog(LG_INFO, "Duplicate uplink %s.", name);
 			return NULL;
 		}
 	}
@@ -110,23 +110,23 @@ void uplink_connect(void)
 	{
 		if (uplinks.head == NULL)
 		{
-			slog(LG_ERROR, gettext("uplink_connect(): no uplinks configured, exiting. Make sure to have at least one uplink{} block in your configuration file."));
+			slog(LG_ERROR, "uplink_connect(): no uplinks configured, exiting. Make sure to have at least one uplink{} block in your configuration file.");
 			exit(EXIT_FAILURE);
 		}
 		curr_uplink = uplinks.head->data;
-		slog(LG_INFO, gettext("uplink_connect(): connecting to first entry %s[%s]:%d."), curr_uplink->name, curr_uplink->host, curr_uplink->port);
+		slog(LG_INFO, "uplink_connect(): connecting to first entry %s[%s]:%d.", curr_uplink->name, curr_uplink->host, curr_uplink->port);
 	}
 	else if (curr_uplink->node->next)
 	{
 		u = curr_uplink->node->next->data;
 
 		curr_uplink = u;
-		slog(LG_INFO, gettext("uplink_connect(): trying alternate uplink %s[%s]:%d"), curr_uplink->name, curr_uplink->host, curr_uplink->port);
+		slog(LG_INFO, "uplink_connect(): trying alternate uplink %s[%s]:%d", curr_uplink->name, curr_uplink->host, curr_uplink->port);
 	}
 	else
 	{
 		curr_uplink = uplinks.head->data;
-		slog(LG_INFO, gettext("uplink_connect(): trying again first entry %s[%s]:%d"), curr_uplink->name, curr_uplink->host, curr_uplink->port);
+		slog(LG_INFO, "uplink_connect(): trying again first entry %s[%s]:%d", curr_uplink->name, curr_uplink->host, curr_uplink->port);
 	}
 
 	u = curr_uplink;
@@ -161,11 +161,11 @@ static void uplink_close(connection_t *cptr)
 
 	if (curr_uplink->flags & UPF_ILLEGAL)
 	{
-		slog(LG_INFO, gettext("uplink_close(): %s was removed from configuration, deleting"), curr_uplink->name);
+		slog(LG_INFO, "uplink_close(): %s was removed from configuration, deleting", curr_uplink->name);
 		uplink_delete(curr_uplink);
 		if (uplinks.head == NULL)
 		{
-			slog(LG_ERROR, gettext("uplink_close(): last uplink deleted, exiting."));
+			slog(LG_ERROR, "uplink_close(): last uplink deleted, exiting.");
 			exit(EXIT_FAILURE);
 		}
 		curr_uplink = uplinks.head->data;

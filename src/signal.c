@@ -4,7 +4,7 @@
  *
  * This file contains the signal handling routines.
  *
- * $Id: signal.c 7823 2007-03-05 23:20:25Z pippijn $
+ * $Id: signal.c 7839 2007-03-06 00:09:30Z pippijn $
  */
 
 #include "atheme.h"
@@ -32,7 +32,7 @@ signal_install_handler_full(int signum, signal_handler_t handler,
 
 	if (sigaction(signum, &action, &old_action) == -1)
 	{
-		slog(LG_DEBUG, gettext("Failed to install signal handler for signal %d"), signum);
+		slog(LG_DEBUG, "Failed to install signal handler for signal %d", signum);
 		return NULL;
 	}
 
@@ -87,7 +87,7 @@ static void
 signal_usr1_handler(int signum)
 {
 	if (log_file != NULL)
-		write(fileno(log_file), gettext("Out of memory!\n"), 15);
+		write(fileno(log_file), "Out of memory!\n", 15);
 
 	if (me.connected && curr_uplink != NULL &&
 		curr_uplink->conn != NULL)
@@ -96,12 +96,12 @@ signal_usr1_handler(int signum)
 		{
 			write(curr_uplink->conn->fd, ":", 1);
 			write(curr_uplink->conn->fd, chansvs.nick, strlen(chansvs.nick));
-			write(curr_uplink->conn->fd, gettext(" QUIT :Out of memory!\r\n"), 23);
+			write(curr_uplink->conn->fd, " QUIT :Out of memory!\r\n", 23);
 		}
-		write(curr_uplink->conn->fd, gettext("ERROR: Panic! Out of memory.\r\n"), 30);
+		write(curr_uplink->conn->fd, "ERROR: Panic! Out of memory.\r\n", 30);
 	}
 	if (runflags & (RF_LIVE | RF_STARTING))
-		write(2, gettext("Out of memory!\n"), 15);
+		write(2, "Out of memory!\n", 15);
 	abort();
 }
 
@@ -123,20 +123,20 @@ void check_signals(void)
 	if (got_sighup)
 	{
 		got_sighup = 0;
-		slog(LG_INFO, gettext("sighandler(): got SIGHUP, rehashing %s"), config_file);
+		slog(LG_INFO, "sighandler(): got SIGHUP, rehashing %s", config_file);
 
-		wallops(gettext("Got SIGHUP; reloading \2%s\2."), config_file);
+		wallops("Got SIGHUP; reloading \2%s\2.", config_file);
 
-		snoop("UPDATE: \2%s\2", gettext("system console"));
-		wallops(gettext("Updating database by request of \2%s\2."), gettext("system console"));
+		snoop("UPDATE: \2%s\2", "system console");
+		wallops("Updating database by request of \2%s\2.", "system console");
 		expire_check(NULL);
 		db_save(NULL);
 
-		snoop("REHASH: \2%s\2", gettext("system console"));
-		wallops(gettext("Rehashing \2%s\2 by request of \2%s\2."), config_file, gettext("system console"));
+		snoop("REHASH: \2%s\2", "system console");
+		wallops("Rehashing \2%s\2 by request of \2%s\2.", config_file, "system console");
 
 		if (!conf_rehash())
-			wallops(gettext("REHASH of \2%s\2 failed. Please correct any errors in the file and try again."), config_file);
+			wallops("REHASH of \2%s\2 failed. Please correct any errors in the file and try again.", config_file);
 
 		/* reopen log file -- jilles */
 		if (log_file != NULL)
@@ -151,52 +151,52 @@ void check_signals(void)
 	if (got_sigint && (runflags & RF_LIVE))
 	{
 		got_sigint = 0;
-		wallops(gettext("Exiting on signal %d."), SIGINT);
+		wallops("Exiting on signal %d.", SIGINT);
 		if (chansvs.me != NULL && chansvs.me->me != NULL)
-			quit_sts(chansvs.me->me, gettext("caught interrupt"));
+			quit_sts(chansvs.me->me, "caught interrupt");
 		me.connected = FALSE;
-		slog(LG_INFO, gettext("sighandler(): caught interrupt; exiting..."));
+		slog(LG_INFO, "sighandler(): caught interrupt; exiting...");
 		runflags |= RF_SHUTDOWN;
 	}
 	else if (got_sigint && !(runflags & RF_LIVE))
 	{
 		got_sigint = 0;
-		wallops(gettext("Got SIGINT; restarting."));
+		wallops("Got SIGINT; restarting.");
 
-		snoop("UPDATE: \2%s\2", gettext("system console"));
-		wallops(gettext("Updating database by request of \2%s\2."), gettext("system console"));
+		snoop("UPDATE: \2%s\2", "system console");
+		wallops("Updating database by request of \2%s\2.", "system console");
 		expire_check(NULL);
 		db_save(NULL);
 
-		snoop("RESTART: \2%s\2", gettext("system console"));
-		wallops(gettext("Restarting by request of \2%s\2."), gettext("system console"));
+		snoop("RESTART: \2%s\2", "system console");
+		wallops("Restarting by request of \2%s\2.", "system console");
 
-		slog(LG_INFO, gettext("sighandler(): restarting..."));
+		slog(LG_INFO, "sighandler(): restarting...");
 		runflags |= RF_RESTART;
 	}
 
 	if (got_sigterm)
 	{
 		got_sigterm = 0;
-		wallops(gettext("Exiting on signal %d."), SIGTERM);
-		slog(LG_INFO, gettext("sighandler(): got SIGTERM; exiting..."));
+		wallops("Exiting on signal %d.", SIGTERM);
+		slog(LG_INFO, "sighandler(): got SIGTERM; exiting...");
 		runflags |= RF_SHUTDOWN;
 	}
 
 	if (got_sigusr2)
 	{
 		got_sigusr2 = 0;
-		wallops(gettext("Got SIGUSR2; restarting."));
+		wallops("Got SIGUSR2; restarting.");
 
-		snoop("UPDATE: \2%s\2", gettext("system console"));
-		wallops(gettext("Updating database by request of \2%s\2."), gettext("system console"));
+		snoop("UPDATE: \2%s\2", "system console");
+		wallops("Updating database by request of \2%s\2.", "system console");
 		expire_check(NULL);
 		db_save(NULL);
 
-		snoop("RESTART: \2%s\2", gettext("system console"));
-		wallops(gettext("Restarting by request of \2%s\2."), gettext("system console"));
+		snoop("RESTART: \2%s\2", "system console");
+		wallops("Restarting by request of \2%s\2.", "system console");
 
-		slog(LG_INFO, gettext("sighandler(): restarting..."));
+		slog(LG_INFO, "sighandler(): restarting...");
 		runflags |= RF_RESTART;
 	}
 }

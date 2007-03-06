@@ -4,7 +4,7 @@
  *
  * Channel stuff.
  *
- * $Id: channels.c 7823 2007-03-05 23:20:25Z pippijn $
+ * $Id: channels.c 7839 2007-03-06 00:09:30Z pippijn $
  */
 
 #include "atheme.h"
@@ -37,7 +37,7 @@ void init_channels(void)
 
 	if (chan_heap == NULL || chanuser_heap == NULL || chanban_heap == NULL)
 	{
-		slog(LG_INFO, gettext("init_channels(): block allocator failure."));
+		slog(LG_INFO, "init_channels(): block allocator failure.");
 		exit(EXIT_FAILURE);
 	}
 
@@ -69,7 +69,7 @@ channel_t *channel_add(const char *name, uint32_t ts)
 
 	if (*name != '#')
 	{
-		slog(LG_DEBUG, gettext("channel_add(): got non #channel: %s"), name);
+		slog(LG_DEBUG, "channel_add(): got non #channel: %s", name);
 		return NULL;
 	}
 
@@ -77,7 +77,7 @@ channel_t *channel_add(const char *name, uint32_t ts)
 
 	if (c)
 	{
-		slog(LG_DEBUG, gettext("channel_add(): channel already exists: %s"), name);
+		slog(LG_DEBUG, "channel_add(): channel already exists: %s", name);
 		return c;
 	}
 
@@ -136,7 +136,7 @@ void channel_delete(const char *name)
 
 	if (!c)
 	{
-		slog(LG_DEBUG, gettext("channel_delete(): called for nonexistant channel: %s"), name);
+		slog(LG_DEBUG, "channel_delete(): called for nonexistant channel: %s", name);
 		return;
 	}
 
@@ -222,13 +222,13 @@ chanban_t *chanban_add(channel_t *chan, const char *mask, int type)
 
 	if (mask == NULL)
 	{
-		slog(LG_ERROR, gettext("chanban_add(): NULL +%c mask"), type);
+		slog(LG_ERROR, "chanban_add(): NULL +%c mask", type);
 		return NULL;
 	}
 	/* this would break protocol and/or cause crashes */
 	if (*mask == '\0' || *mask == ':' || strchr(mask, ' '))
 	{
-		slog(LG_ERROR, gettext("chanban_add(): trying to add invalid +%c %s to channel %s"), type, mask, chan->name);
+		slog(LG_ERROR, "chanban_add(): trying to add invalid +%c %s to channel %s", type, mask, chan->name);
 		return NULL;
 	}
 
@@ -236,7 +236,7 @@ chanban_t *chanban_add(channel_t *chan, const char *mask, int type)
 
 	if (c)
 	{
-		slog(LG_DEBUG, gettext("chanban_add(): channel ban %s:%s already exists"), chan->name, c->mask);
+		slog(LG_DEBUG, "chanban_add(): channel ban %s:%s already exists", chan->name, c->mask);
 		return NULL;
 	}
 
@@ -274,7 +274,7 @@ void chanban_delete(chanban_t * c)
 
 	if (!c)
 	{
-		slog(LG_DEBUG, gettext("chanban_delete(): called for nonexistant ban"));
+		slog(LG_DEBUG, "chanban_delete(): called for nonexistant ban");
 		return;
 	}
 
@@ -391,7 +391,7 @@ chanuser_t *chanuser_add(channel_t *chan, const char *nick)
 
 	if (*chan->name != '#')
 	{
-		slog(LG_DEBUG, gettext("chanuser_add(): got non #channel: %s"), chan->name);
+		slog(LG_DEBUG, "chanuser_add(): got non #channel: %s", chan->name);
 		return NULL;
 	}
 
@@ -411,14 +411,14 @@ chanuser_t *chanuser_add(channel_t *chan, const char *nick)
 	u = user_find(nick);
 	if (u == NULL)
 	{
-		slog(LG_DEBUG, gettext("chanuser_add(): nonexist user: %s"), nick);
+		slog(LG_DEBUG, "chanuser_add(): nonexist user: %s", nick);
 		return NULL;
 	}
 
 	tcu = chanuser_find(chan, u);
 	if (tcu != NULL)
 	{
-		slog(LG_DEBUG, gettext("chanuser_add(): user is already present: %s -> %s"), chan->name, u->nick);
+		slog(LG_DEBUG, "chanuser_add(): user is already present: %s -> %s", chan->name, u->nick);
 
 		/* could be an OPME or other desyncher... */
 		tcu->modes |= flags;
@@ -426,7 +426,7 @@ chanuser_t *chanuser_add(channel_t *chan, const char *nick)
 		return tcu;
 	}
 
-	slog(LG_DEBUG, gettext("chanuser_add(): %s -> %s"), chan->name, u->nick);
+	slog(LG_DEBUG, "chanuser_add(): %s -> %s", chan->name, u->nick);
 
 	n1 = node_create();
 	n2 = node_create();
@@ -479,13 +479,13 @@ void chanuser_delete(channel_t *chan, user_t *user)
 
 	if (!chan)
 	{
-		slog(LG_DEBUG, gettext("chanuser_delete(): called with NULL chan"));
+		slog(LG_DEBUG, "chanuser_delete(): called with NULL chan");
 		return;
 	}
 
 	if (!user)
 	{
-		slog(LG_DEBUG, gettext("chanuser_delete(): called with NULL user"));
+		slog(LG_DEBUG, "chanuser_delete(): called with NULL user");
 		return;
 	}
 
@@ -515,7 +515,7 @@ void chanuser_delete(channel_t *chan, user_t *user)
 			if (chan->nummembers == 0 && !(chan->modes & ircd->perm_mode))
 			{
 				/* empty channels die */
-				slog(LG_DEBUG, gettext("chanuser_delete(): `%s' is empty, removing"), chan->name);
+				slog(LG_DEBUG, "chanuser_delete(): `%s' is empty, removing", chan->name);
 
 				channel_delete(chan->name);
 			}

@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 7823 2007-03-05 23:20:25Z pippijn $
+ * $Id: ptasks.c 7839 2007-03-06 00:09:30Z pippijn $
  */
 
 #include "atheme.h"
@@ -122,7 +122,7 @@ void handle_stats(user_t *u, char req)
 		  for (i = 0; i < MAX_EVENTS; i++)
 		  {
 			  if (event_table[i].active)
-				  numeric_sts(me.name, 249, u->nick, gettext("E :%-28s %4d seconds (%d)"), event_table[i].name, event_table[i].when - CURRTIME, event_table[i].frequency);
+				  numeric_sts(me.name, 249, u->nick, "E :%-28s %4d seconds (%d)", event_table[i].name, event_table[i].when - CURRTIME, event_table[i].frequency);
 		  }
 
 		  break;
@@ -225,7 +225,7 @@ void handle_stats(user_t *u, char req)
 
 		  /* we received this command from the uplink, so,
 		   * hmm, it is not idle */
-		  numeric_sts(me.name, 249, u->nick, gettext("V :%s (AutoConn.!*@*) Idle: 0 SendQ: ? Connected: %s"),
+		  numeric_sts(me.name, 249, u->nick, "V :%s (AutoConn.!*@*) Idle: 0 SendQ: ? Connected: %s",
 				  curr_uplink->name,
 				  timediff(CURRTIME - curr_uplink->conn->first_recv));
 		  break;
@@ -252,11 +252,11 @@ void handle_whois(user_t *u, char *target)
 		/* channels purposely omitted */
 		numeric_sts(me.name, 312, u->nick, "%s %s :%s", t->nick, t->server->name, t->server->desc);
 		if (t->flags & UF_AWAY)
-			numeric_sts(me.name, 301, u->nick, gettext("%s :Gone"), t->nick);
+			numeric_sts(me.name, 301, u->nick, "%s :Gone", t->nick);
 		if (is_ircop(t))
-			numeric_sts(me.name, 313, u->nick, "%s :%s", t->nick, is_internal_client(t) ? gettext("is a Network Service") : gettext("is an IRC Operator"));
+			numeric_sts(me.name, 313, u->nick, "%s :%s", t->nick, is_internal_client(t) ? "is a Network Service" : "is an IRC Operator");
 		if (t->myuser)
-			numeric_sts(me.name, 330, u->nick, gettext("%s %s :is logged in as"), t->nick, t->myuser->name);
+			numeric_sts(me.name, 330, u->nick, "%s %s :is logged in as", t->nick, t->myuser->name);
 	}
 	else
 		numeric_sts(me.name, 401, u->nick, "%s :No such nick", target);
@@ -266,9 +266,9 @@ void handle_whois(user_t *u, char *target)
 static void single_trace(user_t *u, user_t *t)
 {
 	if (is_ircop(t))
-		numeric_sts(me.name, 204, u->nick, gettext("Oper service %s[%s@%s] (255.255.255.255) 0 0"), t->nick, t->user, t->vhost);
+		numeric_sts(me.name, 204, u->nick, "Oper service %s[%s@%s] (255.255.255.255) 0 0", t->nick, t->user, t->vhost);
 	else
-		numeric_sts(me.name, 205, u->nick, gettext("User service %s[%s@%s] (255.255.255.255) 0 0"), t->nick, t->user, t->vhost);
+		numeric_sts(me.name, 205, u->nick, "User service %s[%s@%s] (255.255.255.255) 0 0", t->nick, t->user, t->vhost);
 }
 
 /* target -> object to trace
@@ -423,7 +423,8 @@ void handle_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *m
 
 	if (!is_notice && config_options.secure && *target != '#' && irccasecmp(target, si->service->disp))
 	{
-		notice(si->service->me->nick, si->su->nick, gettext("For security reasons, \2/msg %s\2 has been disabled. Use \2/%s%s <command>\2 to send a command."),
+		notice(si->service->me->nick, si->su->nick, "For security reasons, \2/msg %s\2 has been disabled."
+				" Use \2/%s%s <command>\2 to send a command.",
 				si->service->me->nick, (ircd->uses_rcommand ? "" : "msg "), si->service->disp);
 		return;
 	}
@@ -525,10 +526,10 @@ void handle_kill(sourceinfo_t *si, char *victim, char *reason)
 
 	u = user_find(victim);
 	if (u == NULL)
-		slog(LG_DEBUG, gettext("handle_kill(): %s killed unknown user %s (%s)"), source, victim, reason);
+		slog(LG_DEBUG, "handle_kill(): %s killed unknown user %s (%s)", source, victim, reason);
 	else if (u->server == me.me)
 	{
-		slog(LG_INFO, gettext("handle_kill(): %s killed service %s (%s)"), source, u->nick, reason);
+		slog(LG_INFO, "handle_kill(): %s killed service %s (%s)", source, u->nick, reason);
 		if (lastkill != CURRTIME && killcount < 5 + me.me->users)
 			killcount = 0, lastkill = CURRTIME;
 		killcount++;
@@ -536,15 +537,15 @@ void handle_kill(sourceinfo_t *si, char *victim, char *reason)
 			reintroduce_user(u);
 		else
 		{
-			slog(LG_ERROR, gettext("handle_kill(): services kill fight (%s -> %s), shutting down"), source, u->nick);
-			wallops(gettext("Services kill fight (%s -> %s), shutting down!"), source, u->nick);
-			snoop(gettext("ERROR: Services kill fight (%s -> %s), shutting down!"), source, u->nick);
+			slog(LG_ERROR, "handle_kill(): services kill fight (%s -> %s), shutting down", source, u->nick);
+			wallops("Services kill fight (%s -> %s), shutting down!", source, u->nick);
+			snoop("ERROR: Services kill fight (%s -> %s), shutting down!", source, u->nick);
 			runflags |= RF_SHUTDOWN;
 		}
 	}
 	else
 	{
-		slog(LG_DEBUG, gettext("handle_kill(): %s killed user %s (%s)"), source, u->nick, reason);
+		slog(LG_DEBUG, "handle_kill(): %s killed user %s (%s)", source, u->nick, reason);
 		user_delete(u);
 	}
 }
@@ -563,13 +564,13 @@ server_t *handle_server(sourceinfo_t *si, const char *name, const char *sid,
 	{
 		/* Our uplink introducing itself */
 		if (irccasecmp(name, curr_uplink->name))
-			slog(LG_ERROR, gettext("handle_server(): uplink %s actually has name %s, continuing anyway"), curr_uplink->name, name);
+			slog(LG_ERROR, "handle_server(): uplink %s actually has name %s, continuing anyway", curr_uplink->name, name);
 		s = server_add(name, hops, me.name, sid, desc);
 		me.actual = s->name;
 		me.recvsvr = TRUE;
 	}
 	else
-		slog(LG_ERROR, gettext(gettext("handle_server(): unregistered/unknown server attempting to introduce another server %s")), name);
+		slog(LG_ERROR, "handle_server(): unregistered/unknown server attempting to introduce another server %s", name);
 	return s;
 }
 
@@ -582,7 +583,7 @@ void handle_eob(server_t *s)
 		return;
 	if (s->flags & SF_EOB)
 		return;
-	slog(LG_NETWORK, gettext(gettext("handle_eob(): end of burst from %s (%d users)")),
+	slog(LG_NETWORK, "handle_eob(): end of burst from %s (%d users)",
 			s->name, s->users);
 	hook_call_event("server_eob", s);
 	s->flags |= SF_EOB;
@@ -614,7 +615,7 @@ int floodcheck(user_t *u, user_t *t)
 		from = t->nick;
 	else
 	{
-		slog(LG_ERROR, gettext("BUG: tried to floodcheck message to non-service %s"), t->nick);
+		slog(LG_ERROR, "BUG: tried to floodcheck message to non-service %s", t->nick);
 		return 0;
 	}
 
@@ -663,8 +664,8 @@ int floodcheck(user_t *u, user_t *t)
 
 				/* ok to use nick here, notice() will
 				 * change it to UID if necessary -- jilles */
-				notice(from, u->nick, gettext("You have triggered services flood protection."));
-				notice(from, u->nick, gettext("This is your first offense. You will be ignored for 30 seconds."));
+				notice(from, u->nick, "You have triggered services flood protection.");
+				notice(from, u->nick, "This is your first offense. You will be ignored for 30 seconds.");
 
 				snoop("FLOOD: \2%s\2", u->nick);
 
@@ -678,8 +679,8 @@ int floodcheck(user_t *u, user_t *t)
 				u->msgs = 0;
 				u->offenses = 12;
 
-				notice(from, u->nick, gettext("You have triggered services flood protection."));
-				notice(from, u->nick, gettext("This is your last warning. You will be ignored for 30 seconds."));
+				notice(from, u->nick, "You have triggered services flood protection.");
+				notice(from, u->nick, "This is your last warning. You will be ignored for 30 seconds.");
 
 				snoop("FLOOD: \2%s\2", u->nick);
 
@@ -691,7 +692,7 @@ int floodcheck(user_t *u, user_t *t)
 				kline_t *k;
 
 				/* kline them the third time */
-				k = kline_add("*", u->host, gettext("ten minute ban: flooding services"), 600);
+				k = kline_add("*", u->host, "ten minute ban: flooding services", 600);
 				k->setby = sstrdup(chansvs.nick);
 
 				snoop("FLOOD:KLINE: \2%s\2", u->nick);

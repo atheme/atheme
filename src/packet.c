@@ -4,7 +4,7 @@
  *
  * IRC packet handling.
  *
- * $Id: packet.c 7823 2007-03-05 23:20:25Z pippijn $
+ * $Id: packet.c 7839 2007-03-06 00:09:30Z pippijn $
  */
 
 #include "atheme.h"
@@ -50,8 +50,8 @@ static void ping_uplink(void *arg)
 
 		if (diff >= 600)
 		{
-			slog(LG_INFO, gettext("ping_uplink(): uplink appears to be dead, disconnecting"));
-			sts(gettext("ERROR :Closing Link: 127.0.0.1 (Ping timeout: %d seconds)"), diff);
+			slog(LG_INFO, "ping_uplink(): uplink appears to be dead, disconnecting");
+			sts("ERROR :Closing Link: 127.0.0.1 (Ping timeout: %d seconds)", diff);
 			sendq_flush(curr_uplink->conn);
 			if (me.connected)
 			{
@@ -79,7 +79,7 @@ static void irc_handle_connect(void *vptr)
 		/* no SERVER message received */
 		me.recvsvr = FALSE;
 
-		slog(LG_INFO, gettext("irc_handle_connect(): connection to uplink established"));
+		slog(LG_INFO, "irc_handle_connect(): connection to uplink established");
 
 		server_login();
 

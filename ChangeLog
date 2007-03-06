@@ -1,3 +1,14 @@
+nenolod     2007/03/06 00:06:49 UTC	(20070306-7837)
+  Log:
+  - proper i18n support
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/atheme.h (File Modified) 
+  +21 -0	trunk/include/i18n.h (File Added) 
+  +0 -6		trunk/include/stdinc.h (File Modified) 
+
+
 nenolod     2007/03/05 23:59:44 UTC	(20070305-7835)
   Log:
   - only include libintl.h if NLS is requested.

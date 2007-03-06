@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 7823 2007-03-05 23:20:25Z pippijn $
+ * $Id: cmode.c 7839 2007-03-06 00:09:30Z pippijn $
  */
 
 #include "atheme.h"
@@ -278,13 +278,13 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 							{
 								if (chan->nummembers > 1)
 								{
-									slog(LG_DEBUG, gettext("channel_mode(): %s deopped on %s, rejoining"), cu->user->nick, cu->chan->name);
+									slog(LG_DEBUG, "channel_mode(): %s deopped on %s, rejoining", cu->user->nick, cu->chan->name);
 									part(cu->chan->name, cu->user->nick);
 									join(cu->chan->name, cu->user->nick);
 								}
 								else
 								{
-									slog(LG_DEBUG, gettext("channel_mode(): %s deopped on %s, opping from other service"), cu->user->nick, cu->chan->name);
+									slog(LG_DEBUG, "channel_mode(): %s deopped on %s, opping from other service", cu->user->nick, cu->chan->name);
 									LIST_FOREACH(n, me.me->userlist.head)
 									{
 										if (n->data != cu->user)
@@ -298,7 +298,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 							}
 							else if (first_deopped_service != cu->user)
 							{
-								slog(LG_DEBUG, gettext("channel_mode(): %s deopped on %s, opping from %s"), cu->user->nick, cu->chan->name, first_deopped_service->nick);
+								slog(LG_DEBUG, "channel_mode(): %s deopped on %s, opping from %s", cu->user->nick, cu->chan->name, first_deopped_service->nick);
 								modestack_mode_param(first_deopped_service->nick, chan->name, MTYPE_ADD, *pos, CLIENT_NAME(cu->user));
 							}
 
@@ -319,7 +319,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 		if (matched)
 			continue;
 
-		slog(LG_DEBUG, gettext("channel_mode(): mode %c not matched"), *pos);
+		slog(LG_DEBUG, "channel_mode(): mode %c not matched", *pos);
 	}
 
 	if (source == NULL && chansvs.me != NULL)
@@ -497,12 +497,12 @@ static void modestack_flush(struct modestackdata *md)
 	/* all mode letters done, now for some checks */
 	if (p == buf)
 	{
-		/*slog(LG_DEBUG, gettext("modestack_flush(): nothing to do"));*/
+		/*slog(LG_DEBUG, "modestack_flush(): nothing to do");*/
 		return;
 	}
 	if (p + md->totalparamslen >= end)
 	{
-		slog(LG_ERROR, gettext("modestack_flush(): overflow: %s"), buf);
+		slog(LG_ERROR, "modestack_flush() overflow: %s", buf);
 		modestack_debugprint(md);
 		modestack_clear(md);
 		return;
@@ -535,7 +535,7 @@ static struct modestackdata *modestack_init(char *source, char *channel)
 {
 	if (irccasecmp(source, modestackdata.source) || irccasecmp(channel, modestackdata.channel))
 	{
-		/*slog(LG_DEBUG, gettext("modestack_init(): new source/channel, flushing"));*/
+		/*slog(LG_DEBUG, "modestack_init(): new source/channel, flushing");*/
 		modestack_flush(&modestackdata);
 	}
 	strlcpy(modestackdata.source, source, sizeof modestackdata.source);
@@ -550,7 +550,7 @@ static void modestack_add_simple(struct modestackdata *md, int dir, int32_t flag
 	else if (dir == MTYPE_DEL)
 		md->modes_off |= flags, md->modes_on &= ~flags;
 	else
-		slog(LG_ERROR, gettext("modestack_add_simple(): invalid direction"));
+		slog(LG_ERROR, "modestack_add_simple(): invalid direction");
 }
 
 static void modestack_add_limit(struct modestackdata *md, int dir, uint32_t limit)
@@ -568,7 +568,7 @@ static void modestack_add_limit(struct modestackdata *md, int dir, uint32_t limi
 	else if (dir == MTYPE_DEL)
 		md->limit = 0;
 	else
-		slog(LG_ERROR, gettext("modestack_add_limit(): invalid direction"));
+		slog(LG_ERROR, "modestack_add_limit(): invalid direction");
 	md->limitused = 1;
 }
 
@@ -587,7 +587,7 @@ static void modestack_add_ext(struct modestackdata *md, int dir, int i, const ch
 	else if (dir == MTYPE_DEL)
 		md->extmodes[i][0] = '\0';
 	else
-		slog(LG_ERROR, gettext("modestack_add_ext(): invalid direction"));
+		slog(LG_ERROR, "modestack_add_ext(): invalid direction");
 	md->extmodesused[i] = 1;
 }
 
@@ -686,7 +686,7 @@ void modestack_mode_ext(char *source, char *channel, int dir, int i, const char 
 	md = modestack_init(source, channel);
 	if (i < 0 || i >= MAXEXTMODES)
 	{
-		slog(LG_ERROR, gettext("modestack_mode_ext(): i=%d out of range (value=\"%s\")"),
+		slog(LG_ERROR, "modestack_mode_ext(): i=%d out of range (value=\"%s\")",
 				i, value);
 		return;
 	}

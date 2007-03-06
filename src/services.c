@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 7823 2007-03-05 23:20:25Z pippijn $
+ * $Id: services.c 7839 2007-03-06 00:09:30Z pippijn $
  */
 
 #include "atheme.h"
@@ -121,7 +121,7 @@ void join(char *chan, char *nick)
 	}
 	else if ((cu = chanuser_find(c, u)))
 	{
-		slog(LG_DEBUG, gettext("join(): I'm already in `%s'"), c->name);
+		slog(LG_DEBUG, "join(): i'm already in `%s'", c->name);
 		return;
 	}
 	cu = chanuser_add(c, CLIENT_NAME(u));
@@ -190,7 +190,7 @@ void reintroduce_user(user_t *u)
 	svs = find_service(u->nick);
 	if (svs == NULL)
 	{
-		slog(LG_DEBUG, gettext("tried to reintroduce_user non-service %s"), u->nick);
+		slog(LG_DEBUG, "tried to reintroduce_user non-service %s", u->nick);
 		return;
 	}
 	introduce_nick(u);
@@ -265,7 +265,7 @@ void handle_nickchange(user_t *u)
 
 	if ((log_force || (me.loglevel & (LG_DEBUG | LG_RAWDATA))) &&
 			runflags & RF_LIVE)
-		notice(globsvs.nick, u->nick, gettext("Services are presently running in debug mode, attached to a console. You should take extra caution when utilizing your services passwords."));
+		notice(globsvs.nick, u->nick, "Services are presently running in debug mode, attached to a console. You should take extra caution when utilizing your services passwords.");
 
 	/* Only do the following checks if nicks are considered owned -- jilles */
 	if (nicksvs.me == NULL || nicksvs.no_nick_ownership)
@@ -286,7 +286,8 @@ void handle_nickchange(user_t *u)
 
 		if (!(u->flags & UF_SEENINFO))
 		{
-			notice(nicksvs.nick, u->nick, gettext("Welcome to %s, %s! Here on %s, we provide services to enable the registration of nicknames and channels! For details, type \2/%s%s help\2 and \2/%s%s help\2."),
+			notice(nicksvs.nick, u->nick, "Welcome to %s, %s! Here on %s, we provide services to enable the "
+			       "registration of nicknames and channels! For details, type \2/%s%s help\2 and \2/%s%s help\2.",
 			       me.netname, u->nick, me.netname, (ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.disp, (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
 
 			u->flags |= UF_SEENINFO;
@@ -308,7 +309,7 @@ void handle_nickchange(user_t *u)
 		return;
 	}
 
-	notice(nicksvs.nick, u->nick, gettext("This nickname is registered. Please choose a different nickname, or identify via \2/%s%s identify <password>\2."),
+	notice(nicksvs.nick, u->nick, "This nickname is registered. Please choose a different nickname, or identify via \2/%s%s identify <password>\2.",
 	       (ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.disp);
 }
 
@@ -334,10 +335,10 @@ void handle_burstlogin(user_t *u, char *login)
 	{
 		/* account dropped during split...
 		 * if we have an authentication service, log them out */
-		slog(LG_DEBUG, gettext("handle_burstlogin(): got nonexistent login %s for user %s"), login, u->nick);
+		slog(LG_DEBUG, "handle_burstlogin(): got nonexistent login %s for user %s", login, u->nick);
 		if (authservice_loaded)
 		{
-			notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, gettext("Account %s dropped, forcing logout"), login);
+			notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, "Account %s dropped, forcing logout", login);
 			ircd_on_logout(u->nick, login, NULL);
 		}
 		return;
@@ -349,15 +350,15 @@ void handle_burstlogin(user_t *u, char *login)
 		/* no splits for this account, this bursted login cannot
 		 * be legit...
 		 * if we have an authentication service, log them out */
-		slog(LG_INFO, gettext("handle_burstlogin(): got illegit login %s for user %s"), login, u->nick);
-		notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, gettext("Login to account %s seems invalid, forcing logout"), login);
+		slog(LG_INFO, "handle_burstlogin(): got illegit login %s for user %s", login, u->nick);
+		notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, "Login to account %s seems invalid, forcing logout", login);
 		ircd_on_logout(u->nick, login, NULL);
 		return;
 	}
 	u->myuser = mu;
 	n = node_create();
 	node_add(u, n, &mu->logins);
-	slog(LG_DEBUG, gettext("handle_burstlogin(): automatically identified %s as %s"), u->nick, login);
+	slog(LG_DEBUG, "handle_burstlogin(): automatically identified %s as %s", u->nick, login);
 }
 
 /* this could be done with more finesse, but hey! */

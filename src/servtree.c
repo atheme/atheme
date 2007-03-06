@@ -4,7 +4,7 @@
  *
  * Services binary tree manipulation. (add_service, del_service, et al.)
  *
- * $Id: servtree.c 7823 2007-03-05 23:20:25Z pippijn $
+ * $Id: servtree.c 7839 2007-03-06 00:09:30Z pippijn $
  */
 
 #include "atheme.h"
@@ -25,7 +25,7 @@ void servtree_init(void)
 
 	if (!service_heap)
 	{
-		slog(LG_INFO, gettext("servtree_init(): Block allocator failed."));
+		slog(LG_INFO, "servtree_init(): Block allocator failed.");
 		exit(EXIT_FAILURE);
 	}
 }
@@ -47,13 +47,13 @@ service_t *add_service(char *name, char *user, char *host, char *real, void (*ha
 	
 	if ( name == NULL )
 	{
-		slog(LG_INFO, gettext("add_service(): Bad error! We were given a NULL pointer for service name!"));
+		slog(LG_INFO, "add_service(): Bad error! We were given a NULL pointer for service name!");
 		return NULL;
 	}
 
 	if ((sptr = find_service(name)))
 	{
-		slog(LG_DEBUG, gettext("add_service(): Service `%s' already exists."), name);
+		slog(LG_DEBUG, "add_service(): Service `%s' already exists.", name);
 		return NULL;
 	}
 
@@ -80,7 +80,7 @@ service_t *add_service(char *name, char *user, char *host, char *real, void (*ha
 		u = user_find_named(name);
 		if (u != NULL)
 		{
-			skill(me.name, u->nick, gettext("Nick taken by service"));
+			skill(me.name, u->nick, "Nick taken by service");
 			user_delete(u);
 		}
 	}
@@ -105,7 +105,7 @@ void del_service(service_t * sptr)
 {
 	dictionary_delete(services, sptr->name);
 
-	quit_sts(sptr->me, gettext("Service unloaded."));
+	quit_sts(sptr->me, "Service unloaded.");
 	user_delete(sptr->me);
 	sptr->me = NULL;
 	sptr->handler = NULL;

@@ -4,7 +4,7 @@
  *
  * Linked list stuff.
  *
- * $Id: dlink.c 7823 2007-03-05 23:20:25Z pippijn $
+ * $Id: dlink.c 7839 2007-03-06 00:09:30Z pippijn $
  */
 
 #include "atheme.h"
@@ -18,7 +18,7 @@ void init_dlink_nodes(void)
 
 	if (!node_heap)
 	{
-		slog(LG_INFO, gettext("init_dlink_nodes(): block allocator failure."));
+		slog(LG_INFO, "init_dlink_nodes(): block allocator failure.");
 		exit(EXIT_FAILURE);
 	}
 }

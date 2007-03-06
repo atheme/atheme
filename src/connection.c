@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 7823 2007-03-05 23:20:25Z pippijn $
+ * $Id: connection.c 7839 2007-03-06 00:09:30Z pippijn $
  */
 
 #include "atheme.h"
@@ -29,7 +29,7 @@ void init_netio(void)
 
 	if (!connection_heap || !sa_heap)
 	{
-		slog(LG_INFO, gettext("init_netio(): blockheap failure"));
+		slog(LG_INFO, "init_netio(): blockheap failure");
 		exit(EXIT_FAILURE);
 	}
 }
@@ -55,12 +55,12 @@ connection_t *connection_add(const char *name, int32_t fd, uint32_t flags,
 
 	if ((cptr = connection_find(fd)))
 	{
-		slog(LG_DEBUG, gettext("connection_add(): connection %d is already registered as %s"),
+		slog(LG_DEBUG, "connection_add(): connection %d is already registered as %s",
 				fd, cptr->name);
 		return NULL;
 	}
 
-	slog(LG_DEBUG, gettext("connection_add(): adding connection '%s', fd=%d"), name, fd);
+	slog(LG_DEBUG, "connection_add(): adding connection '%s', fd=%d", name, fd);
 
 	cptr = BlockHeapAlloc(connection_heap);
 
@@ -155,14 +155,14 @@ void connection_close(connection_t *cptr)
 
 	if (!cptr)
 	{
-		slog(LG_DEBUG, gettext("connection_close(): no connection to close!"));
+		slog(LG_DEBUG, "connection_close(): no connection to close!");
 		return;
 	}
 
 	nptr = node_find(cptr, &connection_list);
 	if (!nptr)
 	{
-		slog(LG_DEBUG, gettext("connection_close(): connection %p is not registered!"),
+		slog(LG_DEBUG, "connection_close(): connection %p is not registered!",
 			cptr);
 		return;
 	}
@@ -178,7 +178,7 @@ void connection_close(connection_t *cptr)
 
 	if (errno1)
 		slog(cptr->flags & CF_UPLINK ? LG_ERROR : LG_INFO,
-				gettext("connection_close(): connection %s[%d] closed due to error %d (%s)"),
+				"connection_close(): connection %s[%d] closed due to error %d (%s)",
 				cptr->name, cptr->fd, errno1, strerror(errno1));
 
 	if (cptr->close_handler)
@@ -316,7 +316,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 
 	if (!(s = socket(AF_INET, SOCK_STREAM, 0)))
 	{
-		slog(LG_ERROR, gettext("connection_open_tcp(): unable to create socket."));
+		slog(LG_ERROR, "connection_open_tcp(): unable to create socket.");
 		return NULL;
 	}
 
@@ -324,7 +324,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 	if (s > claro_state.maxfd)
 		claro_state.maxfd = s;
 
-	snprintf(buf, BUFSIZE, gettext("tcp connection: %s"), host);
+	snprintf(buf, BUFSIZE, "tcp connection: %s", host);
 
 #ifndef _WIN32
 	if (vhost)
@@ -334,7 +334,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 
 		if ((hp = gethostbyname(vhost)) == NULL)
 		{
-			slog(LG_ERROR, gettext("connection_open_tcp(): cant resolve vhost %s"), vhost);
+			slog(LG_ERROR, "connection_open_tcp(): cant resolve vhost %s", vhost);
 			close(s);
 			return NULL;
 		}
@@ -349,7 +349,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 		if (bind(s, (struct sockaddr *)&sa, sizeof(sa)) < 0)
 		{
 			close(s);
-			slog(LG_ERROR, gettext("connection_open_tcp(): unable to bind to vhost %s"), vhost);
+			slog(LG_ERROR, "connection_open_tcp(): unable to bind to vhost %s", vhost);
 			return NULL;
 		}
 	}
@@ -358,7 +358,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 	/* resolve it */
 	if ((hp = gethostbyname(host)) == NULL)
 	{
-		slog(LG_ERROR, gettext("connection_open_tcp(): unable to resolve %s"), host);
+		slog(LG_ERROR, "connection_open_tcp(): unable to resolve %s", host);
 		close(s);
 		return NULL;
 	}
@@ -373,7 +373,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 	if (connect(s, (struct sockaddr *)&sa, sizeof(sa)) == -1 &&
 			errno != EINPROGRESS && errno != EINTR)
 	{
-		slog(LG_ERROR, gettext("connection_open_tcp(): failed to connect to %s: %s"), host, strerror(errno));
+		slog(LG_ERROR, "connection_open_tcp(): failed to connect to %s: %s", host, strerror(errno));
 		close(s);
 		return NULL;
 	}
@@ -410,7 +410,7 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 
 	if (!(s = socket(AF_INET, SOCK_STREAM, 0)))
 	{
-		slog(LG_ERROR, gettext("connection_open_listener_tcp(): unable to create socket."));
+		slog(LG_ERROR, "connection_open_listener_tcp(): unable to create socket.");
 		return NULL;
 	}
 
@@ -418,14 +418,14 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 	if (s > claro_state.maxfd)
 		claro_state.maxfd = s;
 
-	snprintf(buf, BUFSIZE, gettext("listener: %s[%d]"), host, port);
+	snprintf(buf, BUFSIZE, "listener: %s[%d]", host, port);
 
 	memset(&sa, 0, sizeof(sa));
 	sa.sin_family = AF_INET;
 
 	if ((hp = gethostbyname(host)) == NULL)
 	{
-		slog(LG_ERROR, gettext("connection_open_listener_tcp(): cant resolve host %s"), host);
+		slog(LG_ERROR, "connection_open_listener_tcp(): cant resolve host %s", host);
 		close(s);
 		return NULL;
 	}
@@ -441,7 +441,7 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 	if (bind(s, (struct sockaddr *)&sa, sizeof(sa)) < 0)
 	{
 		close(s);
-		slog(LG_ERROR, gettext("connection_open_listener_tcp(): unable to bind listener %s[%d], errno [%d]"), host, port,
+		slog(LG_ERROR, "connection_open_listener_tcp(): unable to bind listener %s[%d], errno [%d]", host, port,
 			errno);
 		return NULL;
 	}
@@ -452,7 +452,7 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 	if (listen(s, 5) < 0)
 	{
 		close(s);
-		slog(LG_ERROR, gettext("connection_open_listener_tcp(): error: %s"), strerror(errno));
+		slog(LG_ERROR, "connection_open_listener_tcp(): error: %s", strerror(errno));
 		return NULL;
 	}
 
@@ -484,7 +484,7 @@ connection_t *connection_accept_tcp(connection_t *cptr,
 
 	if (!(s = accept(cptr->fd, NULL, NULL)))
 	{
-		slog(LG_INFO, gettext("connection_accept_tcp(): accept failed"));
+		slog(LG_INFO, "connection_accept_tcp(): accept failed");
 		return NULL;
 	}
 
@@ -494,7 +494,7 @@ connection_t *connection_accept_tcp(connection_t *cptr,
 
 	socket_setnonblocking(s);
 
-	strlcpy(buf, gettext("incoming connection"), BUFSIZE);
+	strlcpy(buf, "incoming connection", BUFSIZE);
 	newptr = connection_add(buf, s, 0, read_handler, write_handler);
 	newptr->listener = cptr;
 	return newptr;

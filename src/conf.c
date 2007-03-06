@@ -4,15 +4,15 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 7823 2007-03-05 23:20:25Z pippijn $
+ * $Id: conf.c 7839 2007-03-06 00:09:30Z pippijn $
  */
 
 #include "atheme.h"
 #include "uplink.h"
 #include "pmodule.h"
 
-#define PARAM_ERROR(ce) { slog(LG_INFO, gettext("%s:%i: no parameter for " \
-                          "configuration option: %s"), \
+#define PARAM_ERROR(ce) { slog(LG_INFO, "%s:%i: no parameter for " \
+                          "configuration option: %s", \
                           (ce)->ce_fileptr->cf_filename, \
                           (ce)->ce_varlinenum, (ce)->ce_varname); \
   return 1; }
@@ -196,7 +196,7 @@ static void conf_process(CONFIGFILE *cfp)
 				}
 			}
 			if (!ct)
-				slog(LG_INFO, gettext("conf_process(): %s:%d: invalid configuration option: %s"), ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
+				slog(LG_INFO, "%s:%d: invalid configuration option: %s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
 		}
 	}
 }
@@ -208,7 +208,7 @@ boolean_t conf_parse(char *file)
 	cfp = config_load(file);
 	if (cfp == NULL)
 	{
-		slog(LG_ERROR, gettext("conf_parse(): unable to load configuration file: %s"), strerror(errno));
+		slog(LG_ERROR, "conf_parse(): unable to load configuration file: %s", strerror(errno));
 
 		return FALSE;
 	}
@@ -218,7 +218,7 @@ boolean_t conf_parse(char *file)
 
 	if (!pmodule_loaded)
 	{
-		slog(LG_ERROR, gettext("No protocol module loaded, aborting"));
+		slog(LG_ERROR, "No protocol module loaded, aborting");
 		exit(EXIT_FAILURE);
 	}
 
@@ -314,7 +314,7 @@ int subblock_handler(CONFIGENTRY *ce, list_t *entries)
 			}
 		}
 		if (!ct)
-			slog(LG_INFO, gettext("subblock_handler(): %s:%d: invalid configuration option: %s"), ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
+			slog(LG_INFO, "%s:%d: invalid configuration option: %s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
 	}
 	return 0;
 }
@@ -357,7 +357,7 @@ void add_top_conf(char *name, int (*handler) (CONFIGENTRY *ce))
 
 	if ((ct = find_top_conf(name)))
 	{
-		slog(LG_DEBUG, gettext("add_top_conf(): duplicate config block '%s'."), name);
+		slog(LG_DEBUG, "add_top_conf(): duplicate config block '%s'.", name);
 		return;
 	}
 
@@ -376,7 +376,7 @@ void add_conf_item(char *name, list_t *conflist, int (*handler) (CONFIGENTRY *ce
 
 	if ((ct = find_conf_item(name, conflist)))
 	{
-		slog(LG_DEBUG, gettext("add_conf_item(): duplicate item %s"), name);
+		slog(LG_DEBUG, "add_conf_item(): duplicate item %s", name);
 		return;
 	}
 
@@ -396,7 +396,7 @@ void del_top_conf(char *name)
 
 	if (!(ct = find_top_conf(name)))
 	{
-		slog(LG_DEBUG, gettext("del_top_conf(): cannot delete nonexistant block %s"), name);
+		slog(LG_DEBUG, "del_top_conf(): cannot delete nonexistant block %s", name);
 		return;
 	}
 
@@ -415,7 +415,7 @@ void del_conf_item(char *name, list_t *conflist)
 
 	if (!(ct = find_conf_item(name, conflist)))
 	{
-		slog(LG_DEBUG, gettext("del_conf_item(): cannot delete nonexistant item %s"), name);
+		slog(LG_DEBUG, "del_conf_item(): cannot delete nonexistant item %s", name);
 		return;
 	}
 
@@ -455,7 +455,7 @@ void init_newconf(void)
 
 	if (!conftable_heap)
 	{
-		slog(LG_ERROR, gettext("init_newconf(): block allocator failure."));
+		slog(LG_ERROR, "init_newconf(): block allocator failure.");
 		exit(EXIT_FAILURE);
 	}
 
@@ -674,11 +674,11 @@ static int c_uplink(CONFIGENTRY *ce)
 		PARAM_ERROR(ce);
 
 	if (me.name != NULL && !irccasecmp(ce->ce_vardata, me.name))
-		slog(LG_ERROR, gettext("%s:%d: uplink's server name %s should not be the same as our server name, continuing anyway"), ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_vardata);
+		slog(LG_ERROR, "%s:%d: uplink's server name %s should not be the same as our server name, continuing anyway", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_vardata);
 	else if (!strchr(ce->ce_vardata, '.'))
-		slog(LG_ERROR, gettext("%s:%d: uplink's server name %s is invalid, continuing anyway"), ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_vardata);
+		slog(LG_ERROR, "%s:%d: uplink's server name %s is invalid, continuing anyway", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_vardata);
 	else if (isdigit(ce->ce_vardata[0]))
-		slog(LG_ERROR, gettext("%s:%d: uplink's server name %s starts with a digit, probably invalid (continuing anyway)"), ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_vardata);
+		slog(LG_ERROR, "%s:%d: uplink's server name %s starts with a digit, probably invalid (continuing anyway)", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_vardata);
 
 	name = sstrdup(ce->ce_vardata);
 
@@ -714,7 +714,7 @@ static int c_uplink(CONFIGENTRY *ce)
 		}
 		else
 		{
-			slog(LG_ERROR, gettext("%s:%d: Invalid configuration option uplink::%s"), ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
+			slog(LG_ERROR, "%s:%d: Invalid configuration option uplink::%s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
 			continue;
 		}
 	}
@@ -790,7 +790,7 @@ static int c_operclass(CONFIGENTRY *ce)
 			flags |= OPERCLASS_NEEDOPER;
 		else
 		{
-			slog(LG_ERROR, gettext("%s:%d: Invalid configuration option operclass::%s"), ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
+			slog(LG_ERROR, "%s:%d: Invalid configuration option operclass::%s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
 			continue;
 		}
 	}
@@ -823,12 +823,12 @@ static int c_operator(CONFIGENTRY *ce)
 
 			operclass = operclass_find(ce->ce_vardata);
 			if (operclass == NULL)
-				slog(LG_ERROR, gettext("%s:%d: invalid operclass %s for operator %s"),
+				slog(LG_ERROR, "%s:%d: invalid operclass %s for operator %s",
 						ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_vardata, name);
 		}
 		else
 		{
-			slog(LG_ERROR, gettext("%s:%d: Invalid configuration option operator::%s"), ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
+			slog(LG_ERROR, "%s:%d: Invalid configuration option operator::%s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
 			continue;
 		}
 	}
@@ -836,7 +836,7 @@ static int c_operator(CONFIGENTRY *ce)
 	if (operclass != NULL)
 		soper_add(name, operclass->name, SOPER_CONF);
 	else
-		slog(LG_ERROR, gettext("%s:%d: skipping operator %s because of bad/missing parameters"),
+		slog(LG_ERROR, "%s:%d: skipping operator %s because of bad/missing parameters",
 						topce->ce_fileptr->cf_filename, topce->ce_varlinenum, name);
 	return 0;
 }
@@ -896,7 +896,7 @@ static int c_string(CONFIGENTRY *ce)
 		}
 		else
 		{
-			slog(LG_ERROR, gettext("%s:%d: Invalid configuration option string::%s"), ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
+			slog(LG_ERROR, "%s:%d: Invalid configuration option string::%s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
 			continue;
 		}
 	}
@@ -1332,7 +1332,7 @@ static int c_gi_uflags(CONFIGENTRY *ce)
 
 		else
 		{
-			slog(LG_INFO, gettext("%s:%d: unknown flag: %s"), flce->ce_fileptr->cf_filename, flce->ce_varlinenum, flce->ce_varname);
+			slog(LG_INFO, "%s:%d: unknown flag: %s", flce->ce_fileptr->cf_filename, flce->ce_varlinenum, flce->ce_varname);
 		}
 	}
 
@@ -1354,7 +1354,7 @@ static int c_gi_cflags(CONFIGENTRY *ce)
 
 		else
 		{
-			slog(LG_INFO, gettext("%s:%d: unknown flag: %s"), flce->ce_fileptr->cf_filename, flce->ce_varlinenum, flce->ce_varname);
+			slog(LG_INFO, "%s:%d: unknown flag: %s", flce->ce_fileptr->cf_filename, flce->ce_varlinenum, flce->ce_varname);
 		}
 	}
 
@@ -1759,14 +1759,14 @@ boolean_t conf_rehash(void)
 	CONFIGFILE *cfp;
 
 	/* we're rehashing */
-	slog(LG_INFO, gettext("conf_rehash(): rehashing"));
+	slog(LG_INFO, "conf_rehash(): rehashing");
 	runflags |= RF_REHASHING;
 
 	errno = 0;
 	cfp = config_load(config_file);
 	if (cfp == NULL)
 	{
-		slog(LG_ERROR, gettext("conf_rehash(): unable to load configuration file: %s, aborting rehash"), strerror(errno));
+		slog(LG_ERROR, "conf_rehash(): unable to load configuration file: %s, aborting rehash", strerror(errno));
 		runflags &= ~RF_REHASHING;
 		return FALSE;
 	}
@@ -1789,7 +1789,7 @@ boolean_t conf_rehash(void)
 	/* now recheck */
 	if (!conf_check())
 	{
-		slog(LG_ERROR, gettext("conf_rehash(): conf file was malformed, aborting rehash"));
+		slog(LG_ERROR, "conf_rehash(): conf file was malformed, aborting rehash");
 
 		/* freeing the new conf strings */
 		free_cstructs(&me, &chansvs);
@@ -1833,7 +1833,7 @@ boolean_t conf_check(void)
 {
 	if (!me.name)
 	{
-		slog(LG_ERROR, gettext("conf_check(): no `name' set in %s"), config_file);
+		slog(LG_ERROR, "conf_check(): no `name' set in %s", config_file);
 		return FALSE;
 	}
 
@@ -1841,98 +1841,98 @@ boolean_t conf_check(void)
 	if (!strchr(me.name, '.') || strchr("!\"#$%&+,-./:@", me.name[0]) ||
 			strchr(me.name, ' '))
 	{
-		slog(LG_ERROR, gettext("conf_check(): bogus `name' in %s (did you specify a valid server name?)"), config_file);
+		slog(LG_ERROR, "conf_check(): bogus `name' in %s (did you specify a valid server name?)", config_file);
 		return FALSE;
 	}
 
 	if (isdigit(me.name[0]))
-		slog(LG_ERROR, gettext("conf_check(): `name' in %s starts with a digit, probably invalid (continuing anyway)"), config_file);
+		slog(LG_ERROR, "conf_check(): `name' in %s starts with a digit, probably invalid (continuing anyway)", config_file);
 
 	if (!me.desc)
 		me.desc = sstrdup("Atheme IRC Services");
 
 	if ((!me.recontime) || (me.recontime < 10))
 	{
-		slog(LG_INFO, gettext("conf_check(): invalid `recontime' set in %s; defaulting to 10"), config_file);
+		slog(LG_INFO, "conf_check(): invalid `recontime' set in %s; " "defaulting to 10", config_file);
 		me.recontime = 10;
 	}
 
 	if (!me.netname)
 	{
-		slog(LG_INFO, gettext("conf_check(): no `netname' set in %s"), config_file);
+		slog(LG_INFO, "conf_check(): no `netname' set in %s", config_file);
 		return FALSE;
 	}
 
 	if (!me.adminname)
 	{
-		slog(LG_INFO, gettext("conf_check(): no `adminname' set in %s"), config_file);
+		slog(LG_INFO, "conf_check(): no `adminname' set in %s", config_file);
 		return FALSE;
 	}
 
 	if (!me.adminemail)
 	{
-		slog(LG_INFO, gettext("conf_check(): no `adminemail' set in %s"), config_file);
+		slog(LG_INFO, "conf_check(): no `adminemail' set in %s", config_file);
 		return FALSE;
 	}
 
 	if (!me.mta && me.auth == AUTH_EMAIL)
 	{
-		slog(LG_INFO, gettext("conf_check(): no `mta' set in %s (but `auth' is email)"), config_file);
+		slog(LG_INFO, "conf_check(): no `mta' set in %s (but `auth' is email)", config_file);
 		return FALSE;
 	}
 
 	if (!me.maxlogins)
 	{
-		slog(LG_INFO, gettext("conf_check(): no `maxlogins' set in %s; defaulting to 5"), config_file);
+		slog(LG_INFO, "conf_check(): no `maxlogins' set in %s; " "defaulting to 5", config_file);
 		me.maxlogins = 5;
 	}
 
 	if (!me.maxusers)
 	{
-		slog(LG_INFO, gettext("conf_check(): no `maxusers' set in %s; defaulting to 5"), config_file);
+		slog(LG_INFO, "conf_check(): no `maxusers' set in %s; " "defaulting to 5", config_file);
 		me.maxusers = 5;
 	}
 
 	if (!me.maxnicks)
 	{
 		if (!nicksvs.no_nick_ownership)
-			slog(LG_INFO, gettext("conf_check(): no `maxnicks' set in %s; defaulting to 5"), config_file);
+			slog(LG_INFO, "conf_check(): no `maxnicks' set in %s; " "defaulting to 5", config_file);
 		me.maxnicks = 5;
 	}
 
 	if (!me.maxchans)
 	{
-		slog(LG_INFO, gettext("conf_check(): no `maxchans' set in %s; defaulting to 5"), config_file);
+		slog(LG_INFO, "conf_check(): no `maxchans' set in %s; " "defaulting to 5", config_file);
 		me.maxchans = 5;
 	}
 
 	if (!me.emaillimit)
 	{
-		slog(LG_INFO, gettext("conf_check(): no `emaillimit' set in %s; defaulting to 10"), config_file);
+		slog(LG_INFO, "conf_check(): no `emaillimit' set in %s; " "defaulting to 10", config_file);
 		me.emaillimit = 10;
 	}
 
 	if (!me.emailtime)
 	{
-		slog(LG_INFO, gettext("conf_check(): no `emailtime' set in %s; defaulting to 300"), config_file);
+		slog(LG_INFO, "conf_check(): no `emailtime' set in %s; " "defaulting to 300", config_file);
 		me.emailtime = 300;
 	}
 
 	if (me.auth != 0 && me.auth != 1)
 	{
-		slog(LG_INFO, gettext("conf_check(): no `auth' set in %s; defaulting to NONE"), config_file);
+		slog(LG_INFO, "conf_check(): no `auth' set in %s; " "defaulting to NONE", config_file);
 		me.auth = AUTH_NONE;
 	}
 
 	if (!chansvs.nick || !chansvs.user || !chansvs.host || !chansvs.real)
 	{
-		slog(LG_ERROR, gettext("conf_check(): invalid chanserv{} block in %s"), config_file);
+		slog(LG_ERROR, "conf_check(): invalid chanserv{} block in %s", config_file);
 		return FALSE;
 	}
 
 	if ((strchr(chansvs.user, ' ')) || (strlen(chansvs.user) > 10))
 	{
-		slog(LG_ERROR, gettext("conf_check(): invalid `chanserv::user' in %s"), config_file);
+		slog(LG_ERROR, "conf_check(): invalid `chanserv::user' in %s", config_file);
 		return FALSE;
 	}
 
@@ -1950,7 +1950,7 @@ boolean_t conf_check(void)
 			chansvs.ca_hop == chansvs.ca_sop ||
 			chansvs.ca_aop == chansvs.ca_sop)
 	{
-		slog(LG_INFO, gettext("conf_check(): invalid xop levels in %s, using defaults"), config_file);
+		slog(LG_INFO, "conf_check(): invalid xop levels in %s, using defaults", config_file);
 		chansvs.ca_vop = CA_VOP_DEF & ca_all;
 		chansvs.ca_hop = CA_HOP_DEF & ca_all;
 		chansvs.ca_aop = CA_AOP_DEF & ca_all;
@@ -1963,7 +1963,7 @@ boolean_t conf_check(void)
 	/* recall that commit_interval is in seconds */
 	if ((!config_options.commit_interval) || (config_options.commit_interval < 60) || (config_options.commit_interval > 3600))
 	{
-		slog(LG_INFO, gettext("conf_check(): invalid `commit_interval' set in %s; defaulting to 5 minutes"), config_file);
+		slog(LG_INFO, "conf_check(): invalid `commit_interval' set in %s; " "defaulting to 5 minutes", config_file);
 		config_options.commit_interval = 300;
 	}
 

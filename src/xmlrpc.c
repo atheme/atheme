@@ -103,31 +103,31 @@ void xmlrpc_process(char *buffer, void *userdata)
 					else
 					{	/* we assume that XMLRPC_STOP means the handler has given no output */
 						xmlrpc_error_code = -7;
-						xmlrpc_generic_error(xmlrpc_error_code, gettext("XMLRPC error: First eligible function returned XMLRPC_STOP"));
+						xmlrpc_generic_error(xmlrpc_error_code, "XMLRPC error: First eligible function returned XMLRPC_STOP");
 					}
 				}
 				else
 				{
 					xmlrpc_error_code = -6;
-					xmlrpc_generic_error(xmlrpc_error_code, gettext("XMLRPC error: Method has no registered function"));
+					xmlrpc_generic_error(xmlrpc_error_code, "XMLRPC error: Method has no registered function");
 				}
 			}
 			else
 			{
 				xmlrpc_error_code = -4;
-				xmlrpc_generic_error(xmlrpc_error_code, gettext("XMLRPC error: Unknown routine called"));
+				xmlrpc_generic_error(xmlrpc_error_code, "XMLRPC error: Unknown routine called");
 			}
 		}
 		else
 		{
 			xmlrpc_error_code = -3;
-			xmlrpc_generic_error(xmlrpc_error_code, gettext("XMLRPC error: Missing methodRequest or methodName."));
+			xmlrpc_generic_error(xmlrpc_error_code, "XMLRPC error: Missing methodRequest or methodName.");
 		}
 	}
 	else
 	{
 		xmlrpc_error_code = -2;
-		xmlrpc_generic_error(xmlrpc_error_code, gettext("XMLRPC error: Invalid document end at line 1"));
+		xmlrpc_generic_error(xmlrpc_error_code, "XMLRPC error: Invalid document end at line 1");
 	}
 	if (ac)
 	{
@@ -398,7 +398,7 @@ char *xmlrpc_write_header(int length)
 	tm = *localtime(&ts);
 	strftime(timebuf, XMLRPC_BUFSIZE - 1, "%Y-%m-%d %H:%M:%S", &tm);
 
-	snprintf(buf, XMLRPC_BUFSIZE, "HTTP/1.1 200 OK\r\nConnection: close\r\nContent-Length: %d\r\nContent-Type: text/xml\r\nDate: %s\r\nServer: Atheme/%s\r\n\r\n", length, timebuf, version);
+	snprintf(buf, XMLRPC_BUFSIZE, "HTTP/1.1 200 OK\r\nConnection: close\r\n" "Content-Length: %d\r\n" "Content-Type: text/xml\r\n" "Date: %s\r\n" "Server: Atheme/%s\r\n\r\n", length, timebuf, version);
 	return xmlrpc_strdup(buf);
 }
 

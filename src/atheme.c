@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 7831 2007-03-05 23:55:19Z pippijn $
+ * $Id: atheme.c 7839 2007-03-06 00:09:30Z pippijn $
  */
 
 #include "atheme.h"
@@ -38,23 +38,23 @@ extern char **environ;
 /* *INDENT-OFF* */
 static void print_help(void)
 {
-	printf(gettext("usage: atheme [-dhnv] [-c conf] [-l logfile] [-p pidfile]\n\n"
-		       "-c <file>    Specify the config file\n"
-		       "-d           Start in debugging mode\n"
-		       "-h           Print this message and exit\n"
-		       "-l <file>    Specify the log file\n"
-		       "-n           Don't fork into the background (log screen + log file)\n"
-		       "-p <file>    Specify the pid file (will be overwritten)\n"
-		       "-v           Print version information and exit\n"));
+	printf("usage: atheme [-dhnv] [-c conf] [-l logfile] [-p pidfile]\n\n"
+	       "-c <file>    Specify the config file\n"
+	       "-d           Start in debugging mode\n"
+	       "-h           Print this message and exit\n"
+	       "-l <file>    Specify the log file\n"
+	       "-n           Don't fork into the background (log screen + log file)\n"
+	       "-p <file>    Specify the pid file (will be overwritten)\n"
+	       "-v           Print version information and exit\n");
 }
 
 static void print_version(void)
 {
-	printf(gettext("Atheme IRC Services (atheme-%s)\n"
-		       "Compiled %s, build-id %s, build %s\n\n"
-		       "Copyright (c) 2005-2007 Atheme Development Group\n"
-		       "Rights to this code are documented in doc/LICENSE.\n"),
-		       version, creation, revision, generation);
+	printf("Atheme IRC Services (atheme-%s)\n"
+	       "Compiled %s, build-id %s, build %s\n\n"
+	       "Copyright (c) 2005-2007 Atheme Development Group\n"
+	       "Rights to this code are documented in doc/LICENSE.\n",
+	       version, creation, revision, generation);
 }
 /* *INDENT-ON* */
 
@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
 			  exit(EXIT_SUCCESS);
 			  break;
 		  default:
-			  printf(gettext("usage: atheme [-dhnv] [-c conf] [-l logfile] [-p pidfile]\n"));
+			  printf("usage: atheme [-dhnv] [-c conf] [-l logfile] [-p pidfile]\n");
 			  exit(EXIT_SUCCESS);
 			  break;
 		}
@@ -334,7 +334,7 @@ int main(int argc, char *argv[])
 	/* we're shutting down */
 	db_save(NULL);
 	if (chansvs.me != NULL && chansvs.me->me != NULL)
-		quit_sts(chansvs.me->me, gettext("shutting down"));
+		quit_sts(chansvs.me->me, "shutting down");
 
 	remove(pidfilename);
 	errno = 0;

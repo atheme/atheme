@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 7823 2007-03-05 23:20:25Z pippijn $
+ * $Id: node.c 7839 2007-03-06 00:09:30Z pippijn $
  */
 
 #include "atheme.h"
@@ -25,7 +25,7 @@ void init_nodes(void)
 
 	if (kline_heap == NULL)
 	{
-		slog(LG_INFO, gettext("init_nodes(): block allocator failed."));
+		slog(LG_INFO, "init_nodes(): block allocator failed.");
 		exit(EXIT_FAILURE);
 	}
 
@@ -131,7 +131,7 @@ void kline_delete(const char *user, const char *host)
 
 	if (!k)
 	{
-		slog(LG_DEBUG, gettext("kline_delete(): called for nonexistant kline: %s@%s"), user, host);
+		slog(LG_DEBUG, "kline_delete(): called for nonexistant kline: %s@%s", user, host);
 
 		return;
 	}
@@ -219,10 +219,10 @@ void kline_expire(void *arg)
 
 		if (k->expires <= CURRTIME)
 		{
-			snoop(gettext("KLINE:EXPIRE: \2%s@%s\2 set \2%s\2 ago by \2%s\2"),
+			snoop("KLINE:EXPIRE: \2%s@%s\2 set \2%s\2 ago by \2%s\2",
 				k->user, k->host, time_ago(k->settime), k->setby);
 
-			verbose_wallops(gettext("AKILL expired on \2%s@%s\2, set by \2%s\2"),
+			verbose_wallops("AKILL expired on \2%s@%s\2, set by \2%s\2",
 				k->user, k->host, k->setby);
 
 			kline_delete(k->user, k->host);

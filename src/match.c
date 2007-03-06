@@ -6,7 +6,7 @@
  * This file contains customized casemapping functions.
  * This code was mostly lifted from ircd 2.10.
  *
- * $Id: match.c 7823 2007-03-05 23:20:25Z pippijn $
+ * $Id: match.c 7839 2007-03-06 00:09:30Z pippijn $
  */
 
 #include "atheme.h"
@@ -612,7 +612,7 @@ boolean_t regex_match(regex_t *preg, char *string)
 	
 	if (preg == NULL || string == NULL)
 	{
-		slog(LG_ERROR, gettext("regex_match(): we were given NULL string or pattern, bad!"));
+		slog(LG_ERROR, "regex_match(): we were given NULL string or pattern, bad!");
 		return FALSE;
 	}
 
