@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 7839 2007-03-06 00:09:30Z pippijn $
+ * $Id: services.c 7897 2007-03-06 12:26:59Z nenolod $
  */
 
 #include "atheme.h"
@@ -309,7 +309,7 @@ void handle_nickchange(user_t *u)
 		return;
 	}
 
-	notice(nicksvs.nick, u->nick, "This nickname is registered. Please choose a different nickname, or identify via \2/%s%s identify <password>\2.",
+	notice(nicksvs.nick, u->nick, _("This nickname is registered. Please choose a different nickname, or identify via \2/%s%s identify <password>\2."),
 	       (ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.disp);
 }
 
@@ -338,7 +338,7 @@ void handle_burstlogin(user_t *u, char *login)
 		slog(LG_DEBUG, "handle_burstlogin(): got nonexistent login %s for user %s", login, u->nick);
 		if (authservice_loaded)
 		{
-			notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, "Account %s dropped, forcing logout", login);
+			notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, _("Account %s dropped, forcing logout"), login);
 			ircd_on_logout(u->nick, login, NULL);
 		}
 		return;
@@ -351,7 +351,7 @@ void handle_burstlogin(user_t *u, char *login)
 		 * be legit...
 		 * if we have an authentication service, log them out */
 		slog(LG_INFO, "handle_burstlogin(): got illegit login %s for user %s", login, u->nick);
-		notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, "Login to account %s seems invalid, forcing logout", login);
+		notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, _("Login to account %s seems invalid, forcing logout"), login);
 		ircd_on_logout(u->nick, login, NULL);
 		return;
 	}
