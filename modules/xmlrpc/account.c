@@ -4,7 +4,7 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 7789 2007-03-04 00:00:48Z jilles $
+ * $Id: account.c 7907 2007-03-06 23:10:26Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 7789 2007-03-04 00:00:48Z jilles $",
+	"$Id: account.c 7907 2007-03-06 23:10:26Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -283,8 +283,6 @@ static int account_verify(void *conn, int parc, char *parv[])
 		xmlrpc_generic_error(2, "Invalid verification operation requested.");
 		return 0;
 	}
-
-	return 0;
 }
 
 /*

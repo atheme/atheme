@@ -4,7 +4,7 @@
  *
  * Object management.
  *
- * $Id: object.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: object.c 7907 2007-03-06 23:10:26Z pippijn $
  */
 
 #include "atheme.h"
@@ -52,7 +52,7 @@ void object_init(object_t *obj, const char *name, destructor_t des)
  */
 void * object_ref(void *object)
 {
-	return_if_fail(object != NULL);
+	return_val_if_fail(object != NULL, NULL);
 
 	object(object)->refcount++;
 

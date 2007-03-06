@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: set.c 7907 2007-03-06 23:10:26Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: set.c 7907 2007-03-06 23:10:26Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -162,7 +162,7 @@ static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MU_HIDEMAIL & si->smu->flags)
 		{
-			command_fail(si, fault_nochange, _("The \2HIDEMAIL\2 flag is already set for \2%s\2."), si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "HIDEMAIL", si->smu->name);
 			return;
 		}
 
@@ -170,7 +170,7 @@ static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 
 		si->smu->flags |= MU_HIDEMAIL;
 
-		command_success_nodata(si, _("The \2HIDEMAIL\2 flag has been set for \2%s\2."), si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "HIDEMAIL" ,si->smu->name);
 
 		return;
 	}
@@ -178,7 +178,7 @@ static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(MU_HIDEMAIL & si->smu->flags))
 		{
-			command_fail(si, fault_nochange, _("The \2HIDEMAIL\2 flag is not set for \2%s\2."), si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "HIDEMAIL", si->smu->name);
 			return;
 		}
 
@@ -186,7 +186,7 @@ static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 
 		si->smu->flags &= ~MU_HIDEMAIL;
 
-		command_success_nodata(si, _("The \2HIDEMAIL\2 flag has been removed for \2%s\2."), si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "HIDEMAIL", si->smu->name);
 
 		return;
 	}
@@ -227,13 +227,13 @@ static void _ns_setemailmemos(sourceinfo_t *si, int parc, char *parv[])
 		}
 		if (MU_EMAILMEMOS & si->smu->flags)
 		{
-			command_fail(si, fault_nochange, _("The \2EMAILMEMOS\2 flag is already set for \2%s\2."), si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "EMAILMEMOS", si->smu->name);
 			return;
 		}
 
 		logcommand(si, CMDLOG_SET, "SET EMAILMEMOS ON");
 		si->smu->flags |= MU_EMAILMEMOS;
-		command_success_nodata(si, _("The \2EMAILMEMOS\2 flag has been set for \2%s\2."), si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "EMAILMEMOS", si->smu->name);
 		return;
 	}
 
@@ -241,13 +241,13 @@ static void _ns_setemailmemos(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(MU_EMAILMEMOS & si->smu->flags))
 		{
-			command_fail(si, fault_nochange, _("The \2EMAILMEMOS\2 flag is not set for \2%s\2."), si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "EMAILMEMOS", si->smu->name);
 			return;
 		}
 
 		logcommand(si, CMDLOG_SET, "SET EMAILMEMOS OFF");
 		si->smu->flags &= ~MU_EMAILMEMOS;
-		command_success_nodata(si, _("The \2EMAILMEMOS\2 flag has been removed for \2%s\2."), si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "EMAILMEMOS", si->smu->name);
 		return;
 	}
 	else
@@ -276,13 +276,13 @@ static void _ns_setnomemo(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MU_NOMEMO & si->smu->flags)
 		{
-			command_fail(si, fault_nochange, _("The \2NOMEMO\2 flag is already set for \2%s\2."), si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "NOMEMO", si->smu->name);
 			return;
 		}
 
 		logcommand(si, CMDLOG_SET, "SET NOMEMO ON");
 		si->smu->flags |= MU_NOMEMO;
-		command_success_nodata(si, _("The \2NOMEMO\2 flag has been set for \2%s\2."), si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "NOMEMO", si->smu->name);
 		return;
 	}
 
@@ -290,13 +290,13 @@ static void _ns_setnomemo(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(MU_NOMEMO & si->smu->flags))
 		{
-			command_fail(si, fault_nochange, _("The \2NOMEMO\2 flag is not set for \2%s\2."), si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "NOMEMO", si->smu->name);
 			return;
 		}
 
 		logcommand(si, CMDLOG_SET, "SET NOMEMO OFF");
 		si->smu->flags &= ~MU_NOMEMO;
-		command_success_nodata(si, _("The \2NOMEMO\2 flag has been removed for \2%s\2."), si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "NOMEMO", si->smu->name);
 		return;
 	}
 	else
@@ -325,7 +325,7 @@ static void _ns_setneverop(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MU_NEVEROP & si->smu->flags)
 		{
-			command_fail(si, fault_nochange, _("The \2NEVEROP\2 flag is already set for \2%s\2."), si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "NEVEROP", si->smu->name);
 			return;
 		}
 
@@ -333,7 +333,7 @@ static void _ns_setneverop(sourceinfo_t *si, int parc, char *parv[])
 
 		si->smu->flags |= MU_NEVEROP;
 
-		command_success_nodata(si, _("The \2NEVEROP\2 flag has been set for \2%s\2."), si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "NEVEROP", si->smu->name);
 
 		return;
 	}
@@ -342,7 +342,7 @@ static void _ns_setneverop(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(MU_NEVEROP & si->smu->flags))
 		{
-			command_fail(si, fault_nochange, _("The \2NEVEROP\2 flag is not set for \2%s\2."), si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "NEVEROP", si->smu->name);
 			return;
 		}
 
@@ -350,7 +350,7 @@ static void _ns_setneverop(sourceinfo_t *si, int parc, char *parv[])
 
 		si->smu->flags &= ~MU_NEVEROP;
 
-		command_success_nodata(si, _("The \2NEVEROP\2 flag has been removed for \2%s\2."), si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "NEVEROP", si->smu->name);
 
 		return;
 	}
@@ -381,7 +381,7 @@ static void _ns_setnoop(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MU_NOOP & si->smu->flags)
 		{
-			command_fail(si, fault_nochange, _("The \2NOOP\2 flag is already set for \2%s\2."), si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "NOOP", si->smu->name);
 			return;
 		}
 
@@ -389,7 +389,7 @@ static void _ns_setnoop(sourceinfo_t *si, int parc, char *parv[])
 
 		si->smu->flags |= MU_NOOP;
 
-		command_success_nodata(si, _("The \2NOOP\2 flag has been set for \2%s\2."), si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "NOOP", si->smu->name);
 
 		return;
 	}
@@ -397,7 +397,7 @@ static void _ns_setnoop(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(MU_NOOP & si->smu->flags))
 		{
-			command_fail(si, fault_nochange, _("The \2NOOP\2 flag is not set for \2%s\2."), si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "NOOP", si->smu->name);
 			return;
 		}
 
@@ -405,7 +405,7 @@ static void _ns_setnoop(sourceinfo_t *si, int parc, char *parv[])
 
 		si->smu->flags &= ~MU_NOOP;
 
-		command_success_nodata(si, _("The \2NOOP\2 flag has been removed for \2%s\2."), si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "NOOP", si->smu->name);
 
 		return;
 	}
