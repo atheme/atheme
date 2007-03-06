@@ -1,3 +1,13 @@
+jilles      2007/03/06 00:11:45 UTC	(20070306-7841)
+  Log:
+  Some repairs to include files, build is still broken.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/atheme.h (File Modified) 
+  +2 -2		trunk/include/i18n.h (File Modified) 
+
+
 pippijn     2007/03/06 00:09:30 UTC	(20070306-7839)
   Log:
   reverted gettext change
