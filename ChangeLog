@@ -1,3 +1,12 @@
+nenolod     2007/03/06 01:55:42 UTC	(20070306-7889)
+  Log:
+  - add translation template
+  
+
+  Changes:	Modified:
+  +2576 -0	trunk/po/atheme.pot (File Added) 
+
+
 nenolod     2007/03/06 01:53:32 UTC	(20070306-7887)
   Log:
   - some WTF here, anyway it's fixed now

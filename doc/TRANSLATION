@@ -1,0 +1,30 @@
+Atheme 2.2 uses GNU Gettext for translation of strings that are
+user-visible. This allows for networks to change the language that
+atheme uses for it's interface.
+
+Support for multiple concurrent languages is planned, but this is
+not yet realized entirely. This probably won't be accomplished in
+2.2.
+
+We would like your help with translating Atheme into your native
+language. In order to do this, I suggest installing a po-file
+editor such as poEdit. poEdit is a lot nicer for translation work
+than a traditional text editor, although that will do as well, as
+long as the file is in UTF-8.
+
+To start the translation, you should open atheme.pot in a text
+editor or poEdit. In poEdit, you can start a new project using the
+pot, which is more useful than just editing it, but that is not
+covered here.
+
+Once you have completed the translation, you should file a bug on
+the atheme bugtracker, and attach the file.
+
+By default, Atheme will run in the locale that you have chosen in
+your environment. It is planned to have a configuration setting
+to override the system locale before 2.2 is released, however.
+
+   -- nenolod
+
+--
+$Id$
