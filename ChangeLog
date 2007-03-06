@@ -1,3 +1,24 @@
+nenolod     2007/03/06 01:44:51 UTC	(20070306-7879)
+  Log:
+  - gettextize
+  
+
+  Changes:	Modified:
+  +4 -3		trunk/configure.ac (File Modified) 
+  + -		trunk/po/ (File Added) 
+  +12 -0	trunk/po/ChangeLog (File Added) 
+  +403 -0	trunk/po/Makefile.in.in (File Added) 
+  +41 -0	trunk/po/Makevars (File Added) 
+  +1 -0		trunk/po/POTFILES.in (File Added) 
+  +47 -0	trunk/po/Rules-quot (File Added) 
+  +10 -0	trunk/po/boldquot.sed (File Added) 
+  +25 -0	trunk/po/en@boldquot.header (File Added) 
+  +22 -0	trunk/po/en@quot.header (File Added) 
+  +23 -0	trunk/po/insert-header.sin (File Added) 
+  +6 -0		trunk/po/quot.sed (File Added) 
+  +19 -0	trunk/po/remove-potcdate.sin (File Added) 
+
+
 pippijn     2007/03/06 01:43:05 UTC	(20070306-7877)
   Log:
   command_fails to gettext

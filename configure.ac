@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 7879 2007-03-06 01:44:51Z nenolod $
+dnl $Id: configure.ac 7881 2007-03-06 01:46:33Z nenolod $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.59)
 AC_INIT(atheme, 2.2, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 7879 2007-03-06 01:44:51Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 7881 2007-03-06 01:46:33Z nenolod $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -531,7 +531,6 @@ AC_OUTPUT([ po/Makefile.in
 	modules/gameserv/Makefile
 	modules/protocol/Makefile
 	src/Makefile
-	po/Makefile.in
 ])
 
 d=`eval echo ${MODDIR}`
