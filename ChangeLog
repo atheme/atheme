@@ -1,3 +1,12 @@
+nenolod     2007/03/05 23:59:44 UTC	(20070305-7835)
+  Log:
+  - only include libintl.h if NLS is requested.
+  
+
+  Changes:	Modified:
+  +4 -2		trunk/include/stdinc.h (File Modified) 
+
+
 nenolod     2007/03/05 23:56:30 UTC	(20070305-7833)
   Log:
   - needed due to changes
