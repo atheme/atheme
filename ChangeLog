@@ -1,3 +1,14 @@
+pippijn     2007/03/06 00:12:28 UTC	(20070306-7843)
+  Log:
+  gettext() => _()
+  
+
+  Changes:	Modified:
+  +34 -34	trunk/modules/backend/flatfile.c (File Modified) 
+  +7 -7		trunk/modules/gameserv/dice.c (File Modified) 
+  +3 -3		trunk/modules/gameserv/help.c (File Modified) 
+
+
 jilles      2007/03/06 00:11:45 UTC	(20070306-7841)
   Log:
   Some repairs to include files, build is still broken.

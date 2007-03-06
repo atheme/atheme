@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 7839 2007-03-06 00:09:30Z pippijn $
+ * $Id: atheme.c 7845 2007-03-06 00:16:14Z jilles $
  */
 
 #include "atheme.h"
@@ -66,11 +66,6 @@ static void rng_reseed(void *unused)
 
 int main(int argc, char *argv[])
 {
-	/* Prepare gettext */
-	setlocale(LC_ALL, "");
-	bindtextdomain(PACKAGE_NAME, LOCALEDIR);
-	textdomain(PACKAGE_NAME);
-
 	boolean_t have_conf = FALSE;
 	boolean_t have_log = FALSE;
 	char buf[32];
@@ -81,6 +76,13 @@ int main(int argc, char *argv[])
 	struct rlimit rlim;
 #endif
 	curr_uplink = NULL;
+
+	/* Prepare gettext */
+#ifdef ENABLE_NLS
+	setlocale(LC_ALL, "");
+	bindtextdomain(PACKAGE_NAME, LOCALEDIR);
+	textdomain(PACKAGE_NAME);
+#endif
 
 	/* change to our local directory */
 	if (chdir(PREFIX) < 0)
