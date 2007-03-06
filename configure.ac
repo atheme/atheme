@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 7875 2007-03-06 01:33:27Z nenolod $
+dnl $Id: configure.ac 7879 2007-03-06 01:44:51Z nenolod $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.59)
 AC_INIT(atheme, 2.2, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 7875 2007-03-06 01:33:27Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 7879 2007-03-06 01:44:51Z nenolod $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -31,8 +31,8 @@ AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [Version number of package])
 dnl GNU gettext
 
 dnl Uncomment this if we choose to provide our own libintl.
-AM_GNU_GETTEXT
-AM_GNU_GETTEXT_VERSION([0.12.1])
+AM_GNU_GETTEXT([external])
+AM_GNU_GETTEXT_VERSION([0.16.1])
 
 if test "$prefix" = "NONE"; then
 	prefix="${ac_default_prefix}"
@@ -515,7 +515,7 @@ echo " "
 echo "Makefile generation"
 echo " "
 
-AC_OUTPUT([
+AC_OUTPUT([ po/Makefile.in
 	Makefile
 	contrib/Makefile
 	modules/Makefile
@@ -531,6 +531,7 @@ AC_OUTPUT([
 	modules/gameserv/Makefile
 	modules/protocol/Makefile
 	src/Makefile
+	po/Makefile.in
 ])
 
 d=`eval echo ${MODDIR}`
