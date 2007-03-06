@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: bugs@atheme.org\n"
-"POT-Creation-Date: 2007-03-06 06:29-0600\n"
+"POT-Creation-Date: 2007-03-07 00:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,8 +94,9 @@ msgstr ""
 #: modules/chanserv/akick.c:91 modules/chanserv/ban.c:93
 #: modules/chanserv/clear_bans.c:92 modules/chanserv/clear_users.c:78
 #: modules/chanserv/count.c:79 modules/chanserv/flags.c:135
-#: modules/chanserv/flags.c:180 modules/chanserv/halfop.c:94
-#: modules/chanserv/halfop.c:175 modules/chanserv/kick.c:83
+#: modules/chanserv/flags.c:180 modules/chanserv/getkey.c:63
+#: modules/chanserv/halfop.c:94 modules/chanserv/halfop.c:175
+#: modules/chanserv/invite.c:69 modules/chanserv/kick.c:83
 #: modules/chanserv/op.c:81 modules/chanserv/op.c:156
 #: modules/chanserv/recover.c:69 modules/chanserv/status.c:67
 #: modules/chanserv/template.c:102 modules/chanserv/template.c:165
@@ -502,11 +503,6 @@ msgstr ""
 msgid "Syntax: GETKEY <#channel>"
 msgstr ""
 
-#: modules/chanserv/getkey.c:63
-#, c-format
-msgid "Cannot GETKEY: %s is closed."
-msgstr ""
-
 #: modules/chanserv/getkey.c:75 modules/chanserv/invite.c:87
 #, c-format
 msgid "%s is currently empty."
@@ -788,11 +784,6 @@ msgstr ""
 
 #: modules/chanserv/invite.c:56
 msgid "Syntax: INVITE <#channel>"
-msgstr ""
-
-#: modules/chanserv/invite.c:69
-#, c-format
-msgid "Cannot INVITE: %s is closed."
 msgstr ""
 
 #: modules/chanserv/invite.c:81
@@ -1221,154 +1212,46 @@ msgstr ""
 msgid "The MLOCK for %s has been removed."
 msgstr ""
 
-#: modules/chanserv/set.c:714
+#: modules/chanserv/set.c:714 modules/chanserv/set.c:771
+#: modules/chanserv/set.c:828 modules/chanserv/set.c:885
+#: modules/chanserv/set.c:904 modules/chanserv/set.c:976
+#: modules/chanserv/set.c:1030 modules/chanserv/set.c:1087
+#: modules/nickserv/set.c:165 modules/nickserv/set.c:230
+#: modules/nickserv/set.c:279 modules/nickserv/set.c:328
+#: modules/nickserv/set.c:384
 #, c-format
-msgid "The KEEPTOPIC flag is already set for %s."
+msgid "The %s flag is already set for %s."
 msgstr ""
 
-#: modules/chanserv/set.c:722
+#: modules/chanserv/set.c:722 modules/chanserv/set.c:779
+#: modules/chanserv/set.c:836 modules/chanserv/set.c:895
+#: modules/chanserv/set.c:922 modules/chanserv/set.c:983
+#: modules/chanserv/set.c:1041 modules/chanserv/set.c:1096
+#: modules/nickserv/set.c:173 modules/nickserv/set.c:236
+#: modules/nickserv/set.c:285 modules/nickserv/set.c:336
+#: modules/nickserv/set.c:392
 #, c-format
-msgid "The KEEPTOPIC flag has been set for %s."
+msgid "The %s flag has been set for %s."
 msgstr ""
 
-#: modules/chanserv/set.c:731
+#: modules/chanserv/set.c:731 modules/chanserv/set.c:788
+#: modules/chanserv/set.c:845 modules/chanserv/set.c:930
+#: modules/chanserv/set.c:992 modules/chanserv/set.c:1050
+#: modules/chanserv/set.c:1105 modules/nickserv/set.c:181
+#: modules/nickserv/set.c:244 modules/nickserv/set.c:293
+#: modules/nickserv/set.c:345 modules/nickserv/set.c:400
 #, c-format
-msgid "The KEEPTOPIC flag is not set for %s."
+msgid "The %s flag is not set for %s."
 msgstr ""
 
-#: modules/chanserv/set.c:739
+#: modules/chanserv/set.c:739 modules/chanserv/set.c:796
+#: modules/chanserv/set.c:853 modules/chanserv/set.c:942
+#: modules/chanserv/set.c:999 modules/chanserv/set.c:1061
+#: modules/chanserv/set.c:1114 modules/nickserv/set.c:189
+#: modules/nickserv/set.c:250 modules/nickserv/set.c:299
+#: modules/nickserv/set.c:353 modules/nickserv/set.c:408
 #, c-format
-msgid "The KEEPTOPIC flag has been removed for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:771
-#, c-format
-msgid "The TOPICLOCK flag is already set for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:779
-#, c-format
-msgid "The TOPICLOCK flag has been set for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:788
-#, c-format
-msgid "The TOPICLOCK flag is not set for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:796
-#, c-format
-msgid "The TOPICLOCK flag has been removed for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:828
-#, c-format
-msgid "The SECURE flag is already set for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:836
-#, c-format
-msgid "The SECURE flag has been set for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:845
-#, c-format
-msgid "The SECURE flag is not set for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:853
-#, c-format
-msgid "The SECURE flag has been removed for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:885
-#, c-format
-msgid "The VERBOSE flag is already set for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:895
-#, c-format
-msgid "The VERBOSE flag has been set for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:904
-#, c-format
-msgid "The VERBOSE_OPS flag is already set for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:922
-#, c-format
-msgid "The VERBOSE_OPS flag has been set for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:930
-#, c-format
-msgid "The VERBOSE flag is not set for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:942
-#, c-format
-msgid "The VERBOSE flag has been removed for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:976
-#, c-format
-msgid "Fantasy is already enabled on %s."
-msgstr ""
-
-#: modules/chanserv/set.c:983
-#, c-format
-msgid "The FANTASY flag has been set for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:992
-#, c-format
-msgid "Fantasy is already disabled on %s."
-msgstr ""
-
-#: modules/chanserv/set.c:999
-#, c-format
-msgid "The FANTASY flag has been removed for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:1030
-#, c-format
-msgid "The GUARD flag is already set for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:1041
-#, c-format
-msgid "The GUARD flag has been set for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:1050
-#, c-format
-msgid "The GUARD flag is not set for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:1061
-#, c-format
-msgid "The GUARD flag has been removed for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:1087
-#, c-format
-msgid "The STAFFONLY flag is already set for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:1096
-#, c-format
-msgid "The STAFFONLY flag has been set for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:1105
-#, c-format
-msgid "The STAFFONLY flag is not set for %s."
-msgstr ""
-
-#: modules/chanserv/set.c:1114
-#, c-format
-msgid "The STAFFONLY flag has been removed for %s."
+msgid "The %s flag has been removed for %s."
 msgstr ""
 
 #: modules/chanserv/set.c:1134
@@ -2933,26 +2816,6 @@ msgstr ""
 msgid "Changes your e-mail address."
 msgstr ""
 
-#: modules/nickserv/set.c:165
-#, c-format
-msgid "The HIDEMAIL flag is already set for %s."
-msgstr ""
-
-#: modules/nickserv/set.c:173
-#, c-format
-msgid "The HIDEMAIL flag has been set for %s."
-msgstr ""
-
-#: modules/nickserv/set.c:181
-#, c-format
-msgid "The HIDEMAIL flag is not set for %s."
-msgstr ""
-
-#: modules/nickserv/set.c:189
-#, c-format
-msgid "The HIDEMAIL flag has been removed for %s."
-msgstr ""
-
 #: modules/nickserv/set.c:200
 msgid "Hides your e-mail address."
 msgstr ""
@@ -2966,96 +2829,16 @@ msgstr ""
 msgid "Sending email is administratively disabled."
 msgstr ""
 
-#: modules/nickserv/set.c:230
-#, c-format
-msgid "The EMAILMEMOS flag is already set for %s."
-msgstr ""
-
-#: modules/nickserv/set.c:236
-#, c-format
-msgid "The EMAILMEMOS flag has been set for %s."
-msgstr ""
-
-#: modules/nickserv/set.c:244
-#, c-format
-msgid "The EMAILMEMOS flag is not set for %s."
-msgstr ""
-
-#: modules/nickserv/set.c:250
-#, c-format
-msgid "The EMAILMEMOS flag has been removed for %s."
-msgstr ""
-
 #: modules/nickserv/set.c:260
 msgid "Forwards incoming memos to your e-mail address."
-msgstr ""
-
-#: modules/nickserv/set.c:279
-#, c-format
-msgid "The NOMEMO flag is already set for %s."
-msgstr ""
-
-#: modules/nickserv/set.c:285
-#, c-format
-msgid "The NOMEMO flag has been set for %s."
-msgstr ""
-
-#: modules/nickserv/set.c:293
-#, c-format
-msgid "The NOMEMO flag is not set for %s."
-msgstr ""
-
-#: modules/nickserv/set.c:299
-#, c-format
-msgid "The NOMEMO flag has been removed for %s."
 msgstr ""
 
 #: modules/nickserv/set.c:309
 msgid "Disables the ability to recieve memos."
 msgstr ""
 
-#: modules/nickserv/set.c:328
-#, c-format
-msgid "The NEVEROP flag is already set for %s."
-msgstr ""
-
-#: modules/nickserv/set.c:336
-#, c-format
-msgid "The NEVEROP flag has been set for %s."
-msgstr ""
-
-#: modules/nickserv/set.c:345
-#, c-format
-msgid "The NEVEROP flag is not set for %s."
-msgstr ""
-
-#: modules/nickserv/set.c:353
-#, c-format
-msgid "The NEVEROP flag has been removed for %s."
-msgstr ""
-
 #: modules/nickserv/set.c:365
 msgid "Prevents you from being added to access lists."
-msgstr ""
-
-#: modules/nickserv/set.c:384
-#, c-format
-msgid "The NOOP flag is already set for %s."
-msgstr ""
-
-#: modules/nickserv/set.c:392
-#, c-format
-msgid "The NOOP flag has been set for %s."
-msgstr ""
-
-#: modules/nickserv/set.c:400
-#, c-format
-msgid "The NOOP flag is not set for %s."
-msgstr ""
-
-#: modules/nickserv/set.c:408
-#, c-format
-msgid "The NOOP flag has been removed for %s."
 msgstr ""
 
 #: modules/nickserv/set.c:420
