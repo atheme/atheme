@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: set.c 7909 2007-03-06 23:14:44Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: set.c 7909 2007-03-06 23:14:44Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -711,7 +711,7 @@ static void cs_cmd_set_keeptopic(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MC_KEEPTOPIC & mc->flags)
                 {
-                        command_fail(si, fault_nochange, _("The \2KEEPTOPIC\2 flag is already set for \2%s\2."), mc->name);
+                        command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "KEEPTOPIC", mc->name);
                         return;
                 }
 
@@ -719,7 +719,7 @@ static void cs_cmd_set_keeptopic(sourceinfo_t *si, int parc, char *parv[])
 
                 mc->flags |= MC_KEEPTOPIC;
 
-                command_success_nodata(si, _("The \2KEEPTOPIC\2 flag has been set for \2%s\2."), mc->name);
+                command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "KEEPTOPIC", mc->name);
 
                 return;
         }
@@ -728,7 +728,7 @@ static void cs_cmd_set_keeptopic(sourceinfo_t *si, int parc, char *parv[])
         {
                 if (!(MC_KEEPTOPIC & mc->flags))
                 {
-                        command_fail(si, fault_nochange, _("The \2KEEPTOPIC\2 flag is not set for \2%s\2."), mc->name);
+                        command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "KEEPTOPIC", mc->name);
                         return;
                 }
 
@@ -736,7 +736,7 @@ static void cs_cmd_set_keeptopic(sourceinfo_t *si, int parc, char *parv[])
 
                 mc->flags &= ~(MC_KEEPTOPIC | MC_TOPICLOCK);
 
-                command_success_nodata(si, _("The \2KEEPTOPIC\2 flag has been removed for \2%s\2."), mc->name);
+                command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "KEEPTOPIC", mc->name);
 
                 return;
         }
@@ -768,7 +768,7 @@ static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MC_TOPICLOCK & mc->flags)
                 {
-                        command_fail(si, fault_nochange, _("The \2TOPICLOCK\2 flag is already set for \2%s\2."), mc->name);
+                        command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "TOPICLOCK", mc->name);
                         return;
                 }
 
@@ -776,7 +776,7 @@ static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[])
 
                 mc->flags |= MC_KEEPTOPIC | MC_TOPICLOCK;
 
-                command_success_nodata(si, _("The \2TOPICLOCK\2 flag has been set for \2%s\2."), mc->name);
+                command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "TOPICLOCK", mc->name);
 
                 return;
         }
@@ -785,7 +785,7 @@ static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[])
         {
                 if (!(MC_TOPICLOCK & mc->flags))
                 {
-                        command_fail(si, fault_nochange, _("The \2TOPICLOCK\2 flag is not set for \2%s\2."), mc->name);
+                        command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "TOPICLOCK", mc->name);
                         return;
                 }
 
@@ -793,7 +793,7 @@ static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[])
 
                 mc->flags &= ~MC_TOPICLOCK;
 
-                command_success_nodata(si, _("The \2TOPICLOCK\2 flag has been removed for \2%s\2."), mc->name);
+                command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "TOPICLOCK", mc->name);
 
                 return;
         }
@@ -825,7 +825,7 @@ static void cs_cmd_set_secure(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MC_SECURE & mc->flags)
 		{
-			command_fail(si, fault_nochange, _("The \2SECURE\2 flag is already set for \2%s\2."), mc->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "SECURE", mc->name);
 			return;
 		}
 
@@ -833,7 +833,7 @@ static void cs_cmd_set_secure(sourceinfo_t *si, int parc, char *parv[])
 
 		mc->flags |= MC_SECURE;
 
-		command_success_nodata(si, _("The \2SECURE\2 flag has been set for \2%s\2."), mc->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "SECURE", mc->name);
 
 		return;
 	}
@@ -842,7 +842,7 @@ static void cs_cmd_set_secure(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(MC_SECURE & mc->flags))
 		{
-			command_fail(si, fault_nochange, _("The \2SECURE\2 flag is not set for \2%s\2."), mc->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "SECURE", mc->name);
 			return;
 		}
 
@@ -850,7 +850,7 @@ static void cs_cmd_set_secure(sourceinfo_t *si, int parc, char *parv[])
 
 		mc->flags &= ~MC_SECURE;
 
-		command_success_nodata(si, _("The \2SECURE\2 flag has been removed for \2%s\2."), mc->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "SECURE", mc->name);
 
 		return;
 	}
@@ -882,7 +882,7 @@ static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MC_VERBOSE & mc->flags)
 		{
-			command_fail(si, fault_nochange, _("The \2VERBOSE\2 flag is already set for \2%s\2."), mc->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "VERBOSE", mc->name);
 			return;
 		}
 
@@ -892,7 +892,7 @@ static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[])
  		mc->flags |= MC_VERBOSE;
 
 		verbose(mc, "\2%s\2 enabled the VERBOSE flag", get_source_name(si));
-		command_success_nodata(si, _("The \2VERBOSE\2 flag has been set for \2%s\2."), mc->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "VERBOSE", mc->name);
 
 		return;
 	}
@@ -901,7 +901,7 @@ static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MC_VERBOSE_OPS & mc->flags)
 		{
-			command_fail(si, fault_nochange, _("The \2VERBOSE_OPS\2 flag is already set for \2%s\2."), mc->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "VERBOSE_OPS", mc->name);
 			return;
 		}
 
@@ -919,7 +919,7 @@ static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[])
 			verbose(mc, "\2%s\2 enabled the VERBOSE_OPS flag", get_source_name(si));
 		}
 
-		command_success_nodata(si, _("The \2VERBOSE_OPS\2 flag has been set for \2%s\2."), mc->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "VERBOSE_OPS", mc->name);
 
 		return;
 	}
@@ -927,7 +927,7 @@ static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!((MC_VERBOSE | MC_VERBOSE_OPS) & mc->flags))
 		{
-			command_fail(si, fault_nochange, _("The \2VERBOSE\2 flag is not set for \2%s\2."), mc->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "VERBOSE", mc->name);
 			return;
 		}
 
@@ -939,7 +939,7 @@ static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[])
 			verbose(mc, "\2%s\2 disabled the VERBOSE_OPS flag", get_source_name(si));
 		mc->flags &= ~(MC_VERBOSE | MC_VERBOSE_OPS);
 
-		command_success_nodata(si, _("The \2VERBOSE\2 flag has been removed for \2%s\2."), mc->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "VERBOSE", mc->name);
 
 		return;
 	}
@@ -973,14 +973,14 @@ static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!md)
 		{
-			command_fail(si, fault_nochange, _("Fantasy is already enabled on \2%s\2."), mc->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "FANTASY", mc->name);
 			return;
 		}
 
 		metadata_delete(mc, METADATA_CHANNEL, "disable_fantasy");
 
 		logcommand(si, CMDLOG_SET, "%s SET FANTASY ON", mc->name);
-		command_success_nodata(si, _("The \2FANTASY\2 flag has been set for \2%s\2."), mc->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "FANTASY", mc->name);
 		return;
 	}
 	else if (!strcasecmp("OFF", parv[1]))
@@ -989,14 +989,14 @@ static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 
 		if (md)
 		{
-			command_fail(si, fault_nochange, _("Fantasy is already disabled on \2%s\2."), mc->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "FANTASY", mc->name);
 			return;
 		}
 
 		metadata_add(mc, METADATA_CHANNEL, "disable_fantasy", "on");
 
 		logcommand(si, CMDLOG_SET, "%s SET FANTASY OFF", mc->name);
-		command_success_nodata(si, _("The \2FANTASY\2 flag has been removed for \2%s\2."), mc->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "FANTASY", mc->name);
 		return;
 	}
 
@@ -1027,7 +1027,7 @@ static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MC_GUARD & mc->flags)
                 {
-                        command_fail(si, fault_nochange, _("The \2GUARD\2 flag is already set for \2%s\2."), mc->name);
+                        command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "GUARD", mc->name);
                         return;
                 }
 
@@ -1038,7 +1038,7 @@ static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])
 		if (!(mc->flags & MC_INHABIT))
 			join(mc->name, chansvs.nick);
 
-                command_success_nodata(si, _("The \2GUARD\2 flag has been set for \2%s\2."), mc->name);
+                command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "GUARD", mc->name);
 
                 return;
         }
@@ -1047,7 +1047,7 @@ static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])
         {
                 if (!(MC_GUARD & mc->flags))
                 {
-                        command_fail(si, fault_nochange, _("The \2GUARD\2 flag is not set for \2%s\2."), mc->name);
+                        command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "GUARD", mc->name);
                         return;
                 }
 
@@ -1058,7 +1058,7 @@ static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])
 		if (!(mc->flags & MC_INHABIT) && (!config_options.chan || irccasecmp(config_options.chan, mc->name)))
 			part(mc->name, chansvs.nick);
 
-                command_success_nodata(si, _("The \2GUARD\2 flag has been removed for \2%s\2."), mc->name);
+                command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "GUARD", mc->name);
 
                 return;
         }
@@ -1084,7 +1084,7 @@ static void cs_cmd_set_staffonly(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MC_STAFFONLY & mc->flags)
 		{
-			command_fail(si, fault_nochange, _("The \2STAFFONLY\2 flag is already set for \2%s\2."), mc->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "STAFFONLY", mc->name);
 			return;
 		}
 
@@ -1093,7 +1093,7 @@ static void cs_cmd_set_staffonly(sourceinfo_t *si, int parc, char *parv[])
 
 		mc->flags |= MC_STAFFONLY;
 
-		command_success_nodata(si, _("The \2STAFFONLY\2 flag has been set for \2%s\2."), mc->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "STAFFONLY", mc->name);
 
 		return;
 	}
@@ -1102,7 +1102,7 @@ static void cs_cmd_set_staffonly(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(MC_STAFFONLY & mc->flags))
 		{
-			command_fail(si, fault_nochange, _("The \2STAFFONLY\2 flag is not set for \2%s\2."), mc->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "STAFFONLY", mc->name);
 			return;
 		}
 
@@ -1111,7 +1111,7 @@ static void cs_cmd_set_staffonly(sourceinfo_t *si, int parc, char *parv[])
 
 		mc->flags &= ~MC_STAFFONLY;
 
-		command_success_nodata(si, _("The \2STAFFONLY\2 flag has been removed for \2%s\2."), mc->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "STAFFONLY", mc->name);
 
 		return;
 	}

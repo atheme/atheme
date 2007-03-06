@@ -1,3 +1,15 @@
+pippijn     2007/03/06 23:10:26 UTC	(20070306-7907)
+  Log:
+  Remove a few more gratuitous differences in messages.
+  
+
+  Changes:	Modified:
+  +20 -20	trunk/modules/nickserv/set.c (File Modified) 
+  +0 -1		trunk/modules/protocol/inspircd10.c (File Modified) 
+  +0 -2		trunk/modules/xmlrpc/account.c (File Modified) 
+  +1 -1		trunk/src/object.c (File Modified) 
+
+
 jilles      2007/03/06 23:02:59 UTC	(20070306-7905)
   Log:
   Remove a few gratuitous differences in messages.
