@@ -1,3 +1,12 @@
+nenolod     2007/03/06 01:29:02 UTC	(20070306-7873)
+  Log:
+  - disable the checks for internal libintl since we don't have one yet.
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/configure.ac (File Modified) 
+
+
 nenolod     2007/03/06 01:24:00 UTC	(20070306-7871)
   Log:
   - some cosmetic fixes
