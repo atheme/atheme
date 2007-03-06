@@ -5,7 +5,7 @@
 #
 # This file is a simple setup script.
 #
-# $Id: setup 7867 2007-03-06 01:23:36Z nenolod $
+# $Id: setup 7871 2007-03-06 01:24:00Z nenolod $
 
 PREFIX="$HOME/atheme"
 LARGENET="no"
@@ -123,6 +123,8 @@ case "$NLS" in
     ARGS="$ARGS --enable-nls"
     ;;
 esac
+
+echo ""
 
 ok=0
 echo "Would you like to pass any additional options to configure? If so,"
