@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService STATUS function.
  *
- * $Id: status.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: status.c 7921 2007-03-07 00:12:47Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/status", FALSE, _modinit, _moddeinit,
-	"$Id: status.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: status.c 7921 2007-03-07 00:12:47Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -79,7 +79,7 @@ static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("You have access flags \2%s\2 on \2%s\2."), bitmask_to_flags(flags, chanacs_flags), mc->name);
 		}
 		else
-			command_success_nodata(si, _("You are a normal user on \2%s\2."), mc->name);
+			command_success_nodata(si, _("You have no special access to \2%s\2."), mc->name);
 
 		return;
 	}
