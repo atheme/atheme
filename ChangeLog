@@ -1,3 +1,14 @@
+jilles      2007/03/07 00:19:21 UTC	(20070307-7923)
+  Log:
+  memoserv: add some bolding
+  
+
+  Changes:	Modified:
+  +4 -4		trunk/modules/memoserv/forward.c (File Modified) 
+  +5 -5		trunk/modules/memoserv/ignore.c (File Modified) 
+  +3 -3		trunk/modules/memoserv/send.c (File Modified) 
+
+
 jilles      2007/03/07 00:12:47 UTC	(20070307-7921)
   Log:
   chanserv status:

@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: undernet.c 7815 2007-03-05 16:42:26Z jilles $
+ * $Id: undernet.c 7925 2007-03-07 01:05:56Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 7815 2007-03-05 16:42:26Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 7925 2007-03-07 01:05:56Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -985,7 +985,8 @@ void _modinit(module_t * m)
 	pcommand_add("G", m_ping, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("Z", m_pong, 1, MSRC_SERVER);
 	pcommand_add("P", m_privmsg, 2, MSRC_USER);
-	pcommand_add("O", m_notice, 2, MSRC_UNREG | MSRC_USER | MSRC_SERVER);
+	pcommand_add("O", m_notice, 2, MSRC_USER | MSRC_SERVER);
+	pcommand_add("NOTICE", m_notice, 2, MSRC_UNREG);
 	pcommand_add("C", m_create, 1, MSRC_USER);
 	pcommand_add("J", m_join, 1, MSRC_USER);
 	pcommand_add("EB", m_eos, 0, MSRC_SERVER);
@@ -999,8 +1000,8 @@ void _modinit(module_t * m)
 	pcommand_add("K", m_kick, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("D", m_kill, 1, MSRC_USER | MSRC_SERVER);
 	pcommand_add("SQ", m_squit, 1, MSRC_USER | MSRC_SERVER);
-	pcommand_add("S", m_server, 8, MSRC_UNREG | MSRC_SERVER);
-	pcommand_add("SERVER", m_server, 8, MSRC_UNREG | MSRC_SERVER);
+	pcommand_add("S", m_server, 8, MSRC_SERVER);
+	pcommand_add("SERVER", m_server, 8, MSRC_UNREG);
 	pcommand_add("R", m_stats, 2, MSRC_USER);
 	pcommand_add("AD", m_admin, 1, MSRC_USER);
 	pcommand_add("V", m_version, 1, MSRC_USER);
@@ -1009,6 +1010,7 @@ void _modinit(module_t * m)
 	pcommand_add("TR", m_trace, 1, MSRC_USER);
 	pcommand_add("A", m_away, 0, MSRC_USER);
 	pcommand_add("PASS", m_pass, 1, MSRC_UNREG);
+	pcommand_add("Y", m_error, 1, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add("T", m_topic, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("MO", m_motd, 1, MSRC_USER);
