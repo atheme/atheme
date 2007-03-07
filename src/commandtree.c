@@ -4,7 +4,7 @@
  *
  * Commandtree manipulation routines.
  *
- * $Id: commandtree.c 7847 2007-03-06 00:17:22Z pippijn $
+ * $Id: commandtree.c 7917 2007-03-07 00:03:41Z jilles $
  */
 
 #include "atheme.h"
@@ -106,9 +106,9 @@ void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char
 	}
 
 	if (has_any_privs(si))
-		command_fail(si, fault_noprivs, "You do not have %s privilege.", c->access);
+		command_fail(si, fault_noprivs, _("You do not have %s privilege."), c->access);
 	else
-		command_fail(si, fault_noprivs, "You are not authorized to perform this operation.");
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 	/*snoop(_("DENIED CMD: \2%s\2 used %s %s"), origin, svs->name, cmd);*/
 }
 
@@ -127,7 +127,7 @@ void command_exec_split(service_t *svs, sourceinfo_t *si, char *cmd, char *text,
 	}
 	else
 	{
-		notice(svs->name, si->su->nick, "Invalid command. Use \2/%s%s help\2 for a command listing.", (ircd->uses_rcommand == FALSE) ? "msg " : "", svs->disp);
+		notice(svs->name, si->su->nick, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", svs->disp);
 	}
 }
 
@@ -147,9 +147,9 @@ void command_help(sourceinfo_t *si, list_t *commandtree)
 	node_t *n;
 
 	if (si->service == NULL || si->service->cmdtree == commandtree)
-		command_success_nodata(si, "The following commands are available:");
+		command_success_nodata(si, _("The following commands are available:"));
 	else
-		command_success_nodata(si, "The following subcommands are available:");
+		command_success_nodata(si, _("The following subcommands are available:"));
 
 	LIST_FOREACH(n, commandtree->head)
 	{
@@ -206,9 +206,9 @@ void command_help_short(sourceinfo_t *si, list_t *commandtree, char *maincmds)
 	char buf[256];
 
 	if (si->service == NULL || si->service->cmdtree == commandtree)
-		command_success_nodata(si, "The following commands are available:");
+		command_success_nodata(si, _("The following commands are available:"));
 	else
-		command_success_nodata(si, "The following subcommands are available:");
+		command_success_nodata(si, _("The following subcommands are available:"));
 
 	LIST_FOREACH(n, commandtree->head)
 	{
@@ -222,7 +222,7 @@ void command_help_short(sourceinfo_t *si, list_t *commandtree, char *maincmds)
 	}
 
 	command_success_nodata(si, " ");
-	strlcpy(buf, translation_get("Other commands: "), sizeof buf);
+	strlcpy(buf, translation_get(_("Other commands: ")), sizeof buf);
 	l = strlen(buf);
 	LIST_FOREACH(n, commandtree->head)
 	{
