@@ -1,3 +1,14 @@
+jilles      2007/03/07 00:12:47 UTC	(20070307-7921)
+  Log:
+  chanserv status:
+  "You are a normal user on <channel>."
+  -> "You have no special access to <channel>."
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/status.c (File Modified) 
+
+
 jilles      2007/03/07 00:08:06 UTC	(20070307-7919)
   Log:
   Add src/commandtree.c and src/help.c to POTFILES.in.

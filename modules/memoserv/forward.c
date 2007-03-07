@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv FORWARD function
  *
- * $Id: forward.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: forward.c 7923 2007-03-07 00:19:21Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/forward", FALSE, _modinit, _moddeinit,
-	"$Id: forward.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: forward.c 7923 2007-03-07 00:19:21Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -89,7 +89,7 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 	/* Check to see if target user exists */
 	if (!(tmu = myuser_find_ext(target)))
 	{
-		command_fail(si, fault_nosuch_target, _("%s is not registered."), target);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
 		return;
 	}
 	
@@ -149,7 +149,7 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 		{
 			/* Lie... change this if you want it to fail silent */
 			logcommand(si, CMDLOG_SET, "failed FORWARD to %s (on ignore list)", tmu->name);
-			command_success_nodata(si, _("The memo has been successfully forwarded to %s."), target);
+			command_success_nodata(si, _("The memo has been successfully forwarded to \2%s\2."), target);
 			return;
 		}
 	}
@@ -180,7 +180,7 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 			{
 				if (sendemail(si->su, EMAIL_MEMO, tmu, memo->text))
 				{
-					command_success_nodata(si, _("Your memo has been emailed to %s."), target);
+					command_success_nodata(si, _("Your memo has been emailed to \2%s\2."), target);
 					return;
 				}
 			}
@@ -200,7 +200,7 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 	else
 		myuser_notice(memosvs.nick, tmu, "You have a new forwarded memo from %s (nick: %s).", si->smu->name, si->su->nick);
 
-	command_success_nodata(si, _("The memo has been successfully forwarded to %s."), target);
+	command_success_nodata(si, _("The memo has been successfully forwarded to \2%s\2."), target);
 	return;
 }
 

@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv IGNORE functions
  *
- * $Id: ignore.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: ignore.c 7923 2007-03-07 00:19:21Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: ignore.c 7923 2007-03-07 00:19:21Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -117,7 +117,7 @@ static void ms_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 	/* Does the target account exist? */
 	if (!(tmu = myuser_find_ext(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("%s is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -136,7 +136,7 @@ static void ms_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 		/* Already in the list */
 		if (!irccasecmp(temp, parv[0]))
 		{
-			command_fail(si, fault_nochange, _("Account %s is already in your ignore list."), temp);
+			command_fail(si, fault_nochange, _("Account \2%s\2 is already in your ignore list."), temp);
 			return;
 		}
 	}
@@ -145,7 +145,7 @@ static void ms_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 	temp = sstrdup(tmu->name);
 	node_add(temp, node_create(), &si->smu->memo_ignores);
 	logcommand(si, CMDLOG_SET, "IGNORE ADD %s", tmu->name);
-	command_success_nodata(si, _("Account %s added to your ignore list."), tmu->name);
+	command_success_nodata(si, _("Account \2%s\2 added to your ignore list."), tmu->name);
 	return;
 }
 
@@ -171,7 +171,7 @@ static void ms_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[])
 		if (!irccasecmp(temp, parv[0]))
 		{
 			logcommand(si, CMDLOG_SET, "IGNORE DEL %s", temp);
-			command_success_nodata(si, _("Account %s removed from ignore list."), temp);
+			command_success_nodata(si, _("Account \2%s\2 removed from ignore list."), temp);
 			node_del(n, &si->smu->memo_ignores);
 			node_free(n);
 			free(temp);
@@ -180,7 +180,7 @@ static void ms_cmd_ignore_del(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	command_fail(si, fault_nosuch_target, _("%s is not in your ignore list."), parv[0]);
+	command_fail(si, fault_nosuch_target, _("\2%s\2 is not in your ignore list."), parv[0]);
 	return;
 }
 
