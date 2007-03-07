@@ -1,3 +1,13 @@
+jilles      2007/03/07 00:03:41 UTC	(20070307-7917)
+  Log:
+  gettextify src/commandtree.c and src/help.c.
+  
+
+  Changes:	Modified:
+  +8 -8		trunk/src/commandtree.c (File Modified) 
+  +7 -7		trunk/src/help.c (File Modified) 
+
+
 jilles      2007/03/06 23:56:03 UTC	(20070306-7915)
   Log:
   More reductions of gratuitous differences in messages,

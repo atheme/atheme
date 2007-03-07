@@ -114,7 +114,9 @@ modules/operserv/uptime.c
 
 # Atheme Core
 src/account.c
+src/commandtree.c
 src/function.c
+src/help.c
 src/module.c
 src/node.c
 src/ptasks.c
