@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 7815 2007-03-05 16:42:26Z jilles $
+ * $Id: ircnet.c 7927 2007-03-08 00:52:56Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 7815 2007-03-05 16:42:26Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 7927 2007-03-08 00:52:56Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -456,6 +456,9 @@ static void m_njoin(sourceinfo_t *si, int parc, char *parv[])
 		/* Give channels created during burst an older "TS"
 		 * so they won't be deopped -- jilles */
 		c = channel_add(parv[0], si->s->flags & SF_EOB ? CURRTIME : CURRTIME - 601);
+		/* if !/+ channel, we don't want to do anything with it */
+		if (c == NULL)
+			return;
 		/* Check mode locks */
 		channel_mode_va(NULL, c, 1, "+");
 	}
