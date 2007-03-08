@@ -1,3 +1,16 @@
+jilles      2007/03/08 18:50:21 UTC	(20070308-7929)
+  Log:
+  Don't use uint8_t for counting access entries, it overflows above 255.
+  The template listing does not use the counter at all, so remove the counter.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/akick.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/count.c (File Modified) 
+  +0 -3		trunk/modules/chanserv/template.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/xop.c (File Modified) 
+
+
 jilles      2007/03/08 00:52:56 UTC	(20070308-7927)
   Log:
   ircnet: don't crash for !/+ channels (don't send wallops
