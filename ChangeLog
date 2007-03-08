@@ -1,3 +1,12 @@
+jilles      2007/03/08 18:58:41 UTC	(20070308-7931)
+  Log:
+  Update atheme.pot.
+  
+
+  Changes:	Modified:
+  +79 -80	trunk/po/atheme.pot (File Modified) 
+
+
 jilles      2007/03/08 18:50:21 UTC	(20070308-7929)
   Log:
   Don't use uint8_t for counting access entries, it overflows above 255.
