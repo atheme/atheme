@@ -1,3 +1,13 @@
+jilles      2007/03/08 00:52:56 UTC	(20070308-7927)
+  Log:
+  ircnet: don't crash for !/+ channels (don't send wallops
+  either, as this is a normal event)
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/modules/protocol/ircnet.c (File Modified) 
+
+
 jilles      2007/03/07 01:05:56 UTC	(20070307-7925)
   Log:
   P10:

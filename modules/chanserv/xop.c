@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 7915 2007-03-06 23:56:03Z jilles $
+ * $Id: xop.c 7929 2007-03-08 18:50:21Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 7915 2007-03-06 23:56:03Z jilles $",
+	"$Id: xop.c 7929 2007-03-08 18:50:21Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -450,7 +450,7 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, uint32_t level, char *leveldesc, int operoverride)
 {
 	chanacs_t *ca;
-	uint8_t i = 0;
+	int i = 0;
 	node_t *n;
 
 	command_success_nodata(si, _("%s list for \2%s\2:"), leveldesc ,mc->name);

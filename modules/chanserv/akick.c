@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: akick.c 7929 2007-03-08 18:50:21Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@ static void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[]);
 DECLARE_MODULE_V1
 (
 	"chanserv/akick", FALSE, _modinit, _moddeinit,
-	"$Id: akick.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: akick.c 7929 2007-03-08 18:50:21Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -215,7 +215,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (!strcasecmp("LIST", cmd))
 	{
-		uint8_t i = 0;
+		int i = 0;
 
 		if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 		{
