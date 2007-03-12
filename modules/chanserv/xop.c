@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 7929 2007-03-08 18:50:21Z jilles $
+ * $Id: xop.c 7935 2007-03-12 15:06:10Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 7929 2007-03-08 18:50:21Z jilles $",
+	"$Id: xop.c 7935 2007-03-12 15:06:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -414,13 +414,14 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 			return;
 		}
 
-		if (!chanacs_find_host_literal(mc, target, level))
+		ca = chanacs_find_host_literal(mc, target, level);
+		if (ca == NULL || ca->level != level)
 		{
 			command_fail(si, fault_nochange, _("\2%s\2 is not on the %s list for \2%s\2."), target, leveldesc, mc->name);
 			return;
 		}
 
-		chanacs_unref_host(mc, target, level);
+		object_unref(ca);
 		verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", get_source_name(si), target, leveldesc);
 		logcommand(si, CMDLOG_SET, "%s %s DEL %s", mc->name, leveldesc, target);
 		command_success_nodata(si, _("\2%s\2 has been removed from the %s list for \2%s\2."), target, leveldesc, mc->name);
@@ -440,7 +441,7 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		return;
 	}
 
-	chanacs_unref(mc, mu, level);
+	object_unref(ca);
 	command_success_nodata(si, _("\2%s\2 has been removed from the %s list for \2%s\2."), mu->name, leveldesc, mc->name);
 	logcommand(si, CMDLOG_SET, "%s %s DEL %s", mc->name, leveldesc, mu->name);
 	verbose(mc, "\2%s\2 removed \2%s\2 from the %s list.", get_source_name(si), mu->name, leveldesc);

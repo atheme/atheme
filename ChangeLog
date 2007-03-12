@@ -1,3 +1,12 @@
+jilles      2007/03/08 19:22:22 UTC	(20070308-7933)
+  Log:
+  Stop /memoserv delete 257 deleting memo 1 and the like.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/memoserv/delete.c (File Modified) 
+
+
 jilles      2007/03/08 18:58:41 UTC	(20070308-7931)
   Log:
   Update atheme.pot.
