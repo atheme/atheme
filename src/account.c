@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7847 2007-03-06 00:17:22Z pippijn $
+ * $Id: account.c 7937 2007-03-12 15:19:26Z jilles $
  */
 
 #include "atheme.h"
@@ -859,46 +859,6 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, char *host, uint32_t level)
 	cnt.chanacs++;
 
 	return ca;
-}
-
-void chanacs_unref(mychan_t *mychan, myuser_t *myuser, uint32_t level)
-{
-	chanacs_t *ca;
-	node_t *n, *tn;
-
-	return_if_fail(mychan != NULL && myuser != NULL);
-
-	LIST_FOREACH_SAFE(n, tn, mychan->chanacs.head)
-	{
-		ca = (chanacs_t *)n->data;
-
-		if ((ca->myuser == myuser) && (ca->level == level))
-		{
-			object_unref(ca);
-
-			return;
-		}
-	}
-}
-
-void chanacs_unref_host(mychan_t *mychan, char *host, uint32_t level)
-{
-	chanacs_t *ca;
-	node_t *n, *tn;
-
-	return_if_fail(mychan != NULL && host != NULL);
-
-	LIST_FOREACH_SAFE(n, tn, mychan->chanacs.head)
-	{
-		ca = (chanacs_t *)n->data;
-
-		if ((ca->myuser == NULL) && (!irccasecmp(host, ca->host)) && (ca->level == level))
-		{
-			object_unref(ca);
-
-			return;
-		}
-	}
 }
 
 chanacs_t *chanacs_find(mychan_t *mychan, myuser_t *myuser, uint32_t level)

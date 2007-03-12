@@ -1,3 +1,17 @@
+jilles      2007/03/12 15:06:10 UTC	(20070312-7935)
+  Log:
+  Use object_unref() on the found ca pointer instead of
+  chanacs_unref()/chanacs_unref_host(). Also slightly
+  improve handling of akick/xop remove of entries with
+  different access than only +b/that xop value.
+  
+
+  Changes:	Modified:
+  +8 -3		trunk/modules/chanserv/akick.c (File Modified) 
+  +1 -4		trunk/modules/chanserv/template.c (File Modified) 
+  +4 -3		trunk/modules/chanserv/xop.c (File Modified) 
+
+
 jilles      2007/03/08 19:22:22 UTC	(20070308-7933)
   Log:
   Stop /memoserv delete 257 deleting memo 1 and the like.

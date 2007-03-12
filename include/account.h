@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 7789 2007-03-04 00:00:48Z jilles $
+ * $Id: account.h 7937 2007-03-12 15:19:26Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -289,8 +289,6 @@ E myuser_t *mychan_pick_successor(mychan_t *mc);
 
 E chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, uint32_t level);
 E chanacs_t *chanacs_add_host(mychan_t *mychan, char *host, uint32_t level);
-E void chanacs_unref(mychan_t *mychan, myuser_t *myuser, uint32_t level);
-E void chanacs_unref_host(mychan_t *mychan, char *host, uint32_t level);
 E chanacs_t *chanacs_find(mychan_t *mychan, myuser_t *myuser, uint32_t level);
 E chanacs_t *chanacs_find_host(mychan_t *mychan, char *host, uint32_t level);
 E uint32_t chanacs_host_flags(mychan_t *mychan, char *host);
