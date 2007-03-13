@@ -1,3 +1,19 @@
+jilles      2007/03/12 15:19:26 UTC	(20070312-7937)
+  Log:
+  Remove chanacs_unref() and chanacs_unref_host(), formerly
+  chanacs_delete() and chanacs_delete_host().
+  Instead, use chanacs_find()/chanacs_find_host_literal()
+  and object_unref(). Note that chanacs_unref() and
+  chanacs_unref_host() deleted only an exact match of the
+  flags, while chanacs_find() and chanacs_find_host_literal()
+  return entries which have at least the given flags.
+  
+
+  Changes:	Modified:
+  +0 -2		trunk/include/account.h (File Modified) 
+  +0 -40	trunk/src/account.c (File Modified) 
+
+
 jilles      2007/03/12 15:06:10 UTC	(20070312-7935)
   Log:
   Use object_unref() on the found ca pointer instead of
