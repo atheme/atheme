@@ -1,3 +1,12 @@
+nenolod     2007/03/13 06:01:13 UTC	(20070313-7939)
+  Log:
+  - add some documentation on gettext
+  
+
+  Changes:	Modified:
+  +1101 -0	trunk/ABOUT-NLS (File Added) 
+
+
 jilles      2007/03/12 15:19:26 UTC	(20070312-7937)
   Log:
   Remove chanacs_unref() and chanacs_unref_host(), formerly

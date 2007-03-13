@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7901 2007-03-06 21:52:04Z jilles $
+# $Id: Makefile.in 7941 2007-03-13 07:16:52Z nenolod $
 #
 
 CC		= @CC@
@@ -85,6 +85,7 @@ BASE_SRCS =		\
 	sockio.c	\
 	string.c	\
 	svsignore.c	\
+	table.c		\
 	template.c	\
 	tokenize.c	\
 	ubase64.c	\

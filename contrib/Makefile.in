@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7763 2007-02-28 20:45:07Z jilles $
+# $Id: Makefile.in 7941 2007-03-13 07:16:52Z nenolod $
 #
 
 CC		= @CC@
@@ -50,7 +50,8 @@ SRCS = \
 	ns_ratelimitreg.c	\
 	os_pingspam.c		\
 	os_testcmd.c		\
-	os_logonnews.c
+	os_logonnews.c		\
+	os_tabletest.c
 
 # To compile your own modules, add them to SRCS or make blegh.so
 # Note: anope_convert.c cannot be compiled with this Makefile as it is
