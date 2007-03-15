@@ -1,3 +1,14 @@
+jilles      2007/03/15 14:51:58 UTC	(20070315-7943)
+  Log:
+  chanserv forcexop: if halfops are not used, don't give
+  the founder +h as that leads to various inappropriate
+  permission denied errors.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/xop.c (File Modified) 
+
+
 nenolod     2007/03/13 07:16:52 UTC	(20070313-7941)
   Log:
   - a table rendering class which assumes a lot.
