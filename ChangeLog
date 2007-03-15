@@ -1,3 +1,17 @@
+nenolod     2007/03/13 07:16:52 UTC	(20070313-7941)
+  Log:
+  - a table rendering class which assumes a lot.
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/contrib/Makefile.in (File Modified) 
+  +57 -0	trunk/contrib/os_tabletest.c (File Added) 
+  +1 -0		trunk/include/atheme.h (File Modified) 
+  +49 -0	trunk/include/table.h (File Added) 
+  +1 -0		trunk/src/Makefile.in (File Modified) 
+  +245 -0	trunk/src/table.c (File Added) 
+
+
 nenolod     2007/03/13 06:01:13 UTC	(20070313-7939)
   Log:
   - add some documentation on gettext

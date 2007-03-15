@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 7935 2007-03-12 15:06:10Z jilles $
+ * $Id: xop.c 7943 2007-03-15 14:51:58Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 7935 2007-03-12 15:06:10Z jilles $",
+	"$Id: xop.c 7943 2007-03-15 14:51:58Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -520,7 +520,7 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 		if (ca->level & CA_AKICK)
 			continue;
 		if (ca->myuser && is_founder(mc, ca->myuser))
-			newlevel = CA_INITIAL, desc = "Founder";
+			newlevel = CA_INITIAL & ca_all, desc = "Founder";
 		else if (!(~ca->level & chansvs.ca_sop))
 			newlevel = chansvs.ca_sop, desc = "SOP";
 		else if (ca->level == chansvs.ca_aop)
