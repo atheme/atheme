@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ SETPASS function.
  *
- * $Id: setpass.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: setpass.c 7947 2007-03-15 18:47:51Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/setpass", FALSE, _modinit, _moddeinit,
-	"$Id: setpass.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: setpass.c 7947 2007-03-15 18:47:51Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -53,6 +53,13 @@ static void ns_cmd_setpass(sourceinfo_t *si, int parc, char *parv[])
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SETPASS");
 		command_fail(si, fault_needmoreparams, _("Syntax: SETPASS <account> <key> <newpass>"));
+		return;
+	}
+
+	if (strchr(password, ' '))
+	{
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SETPASS");
+		command_fail(si, fault_badparams, _("Syntax: SETPASS <account> <key> <newpass>"));
 		return;
 	}
 

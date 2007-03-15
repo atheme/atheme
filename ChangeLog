@@ -1,3 +1,12 @@
+jilles      2007/03/15 15:30:51 UTC	(20070315-7945)
+  Log:
+  Add nickserv/setpass to example.conf, enabled by default.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/dist/example.conf (File Modified) 
+
+
 jilles      2007/03/15 14:51:58 UTC	(20070315-7943)
   Log:
   chanserv forcexop: if halfops are not used, don't give
