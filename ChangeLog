@@ -1,3 +1,12 @@
+jilles      2007/03/15 18:47:51 UTC	(20070315-7947)
+  Log:
+  nickserv setpass: do not allow setting a password containing spaces
+  
+
+  Changes:	Modified:
+  +7 -0		trunk/modules/nickserv/setpass.c (File Modified) 
+
+
 jilles      2007/03/15 15:30:51 UTC	(20070315-7945)
   Log:
   Add nickserv/setpass to example.conf, enabled by default.

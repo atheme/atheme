@@ -113,6 +113,7 @@ modules/operserv/update.c
 modules/operserv/uptime.c
 
 # Atheme Core
+include/services.h
 src/account.c
 src/commandtree.c
 src/function.c

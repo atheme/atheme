@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: services.h 7949 2007-03-15 18:53:51Z jilles $
  */
 
 #ifndef SERVICES_H
@@ -114,8 +114,8 @@ struct gamesvs_
 };
 
 /* help us keep consistent messages */
-#define STR_INSUFFICIENT_PARAMS "Insufficient parameters for \2%s\2."
-#define STR_INVALID_PARAMS "Invalid parameters for \2%s\2."
+#define STR_INSUFFICIENT_PARAMS _("Insufficient parameters for \2%s\2.")
+#define STR_INVALID_PARAMS _("Invalid parameters for \2%s\2.")
 
 /* atheme.c */
 E chansvs_t chansvs;
