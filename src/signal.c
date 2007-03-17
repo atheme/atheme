@@ -4,7 +4,7 @@
  *
  * This file contains the signal handling routines.
  *
- * $Id: signal.c 7849 2007-03-06 00:27:39Z pippijn $
+ * $Id: signal.c 7953 2007-03-17 12:59:48Z jilles $
  */
 
 #include "atheme.h"
@@ -98,7 +98,7 @@ signal_usr1_handler(int signum)
 			write(curr_uplink->conn->fd, chansvs.nick, strlen(chansvs.nick));
 			write(curr_uplink->conn->fd, " QUIT :Out of memory!\r\n", 23);
 		}
-		write(curr_uplink->conn->fd, "ERROR: Panic! Out of memory.\r\n", 30);
+		write(curr_uplink->conn->fd, "ERROR :Panic! Out of memory.\r\n", 30);
 	}
 	if (runflags & (RF_LIVE | RF_STARTING))
 		write(2, "Out of memory!\n", 15);

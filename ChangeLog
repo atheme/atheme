@@ -1,3 +1,13 @@
+jilles      2007/03/17 11:52:11 UTC	(20070317-7951)
+  Log:
+  bahamut/solidircd: add +j (join throttling) support
+  
+
+  Changes:	Modified:
+  +48 -0	trunk/modules/protocol/bahamut.c (File Modified) 
+  +48 -0	trunk/modules/protocol/solidircd.c (File Modified) 
+
+
 jilles      2007/03/15 18:53:51 UTC	(20070315-7949)
   Log:
   Gettextize STR_INSUFFICIENT_PARAMS and STR_INVALID_PARAMS;
