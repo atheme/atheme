@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: bahamut.c 7815 2007-03-05 16:42:26Z jilles $
+ * $Id: bahamut.c 7951 2007-03-17 11:52:11Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/bahamut.h"
 
-DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 7815 2007-03-05 16:42:26Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 7951 2007-03-17 11:52:11Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -55,7 +55,10 @@ struct cmode_ bahamut_mode_list[] = {
   { '\0', 0 }
 };
 
+static boolean_t check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+
 struct extmode bahamut_ignore_mode_list[] = {
+  { 'j', check_jointhrottle },
   { '\0', 0 }
 };
 
@@ -72,6 +75,51 @@ struct cmode_ bahamut_prefix_mode_list[] = {
 };
 
 /* *INDENT-ON* */
+
+static boolean_t check_jointhrottle(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+{
+	const char *p, *arg2;
+	int num, timeslice, v;
+
+	if (!strcmp(value, "0") && u == NULL && mu == NULL)
+		return TRUE;
+	p = value, arg2 = NULL;
+	while (*p != '\0')
+	{
+		if (*p == ':')
+		{
+			if (arg2 != NULL)
+				return FALSE;
+			arg2 = p + 1;
+		}
+		else if (!isdigit(*p))
+			return FALSE;
+		p++;
+	}
+	if (arg2 == NULL)
+		return FALSE;
+	if (p - arg2 > 3 || arg2 - value - 1 > 3)
+		return FALSE;
+	num = atoi(value);
+	timeslice = atoi(arg2);
+	if (num <= 0 || num > 127 || timeslice <= 0 || timeslice > 127)
+		return FALSE;
+	if (u != NULL || mu != NULL)
+	{
+		/* the following are the same restrictions bahamut
+		 * applies to local clients
+		 */
+		if (num < 2 || num > 20 || timeslice > 60)
+			return FALSE;
+		v = (timeslice - 1) / 8 + 1;
+		if (num < v)
+			return FALSE;
+		v = num / 2;
+		if (timeslice < v)
+			return FALSE;
+	}
+	return TRUE;
+}
 
 /* login to our uplink */
 static uint8_t bahamut_server_login(void)
