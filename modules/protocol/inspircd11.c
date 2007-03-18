@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 7903 2007-03-06 22:50:07Z jilles $
+ * $Id: inspircd11.c 7955 2007-03-18 18:43:23Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7903 2007-03-06 22:50:07Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7955 2007-03-18 18:43:23Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -98,7 +98,9 @@ static boolean_t has_globopsmod = false;
 static boolean_t has_svshold = false;
 static int has_protocol = 0;
 
-#define PROTOCOL_SNONOTICE 1102
+#define PROTOCOL_SNONOTICE 1102 /* has SNONOTICE and OPERNOTICE commands */
+#define PROTOCOL_NEWTS 1104 /* does not send "confirming" FMODEs on TS changes and uses clear/ignore semantics also for FMODE */
+#define PROTOCOL_FMODEUSER 1105 /* usefully accepts FMODE from users */
 
 /* *INDENT-ON* */
 
@@ -600,6 +602,11 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 		 * as well as lowering the channel ts. Do both. -- w00t
 		 */
 
+		if (has_protocol >= PROTOCOL_NEWTS)
+		{
+			clear_simple_modes(c);
+			chanban_clear(c);
+		}
 		LIST_FOREACH(n, c->members.head)
 		{
 			cu = (chanuser_t *)n->data;
@@ -796,7 +803,7 @@ static void m_fmode(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 		ts = atoi(parv[1]);
-		if (ts == c->ts)
+		if (ts == c->ts && has_protocol < PROTOCOL_NEWTS)
 		{
 			onlydeop = TRUE;
 			p = parv[2];
@@ -820,10 +827,12 @@ static void m_fmode(sourceinfo_t *si, int parc, char *parv[])
 		}
 		else if (ts > c->ts)
 		{
-			/* XXX */
-			slog(LG_DEBUG, "m_fmode(): accepting but should bounce %s %s: incoming TS %ld is newer than our TS %ld", parv[0], parv[2], ts, c->ts);
+			if (has_protocol < PROTOCOL_NEWTS)
+				slog(LG_DEBUG, "m_fmode(): accepting but should bounce %s %s: incoming TS %ld is newer than our TS %ld", parv[0], parv[2], ts, c->ts);
+			else
+				return;
 		}
-		else
+		else if (ts < c->ts)
 			slog(LG_DEBUG, "m_fmode(): %s %s: incoming TS %ld is older than our TS %ld, possible desync", parv[0], parv[2], ts, c->ts);
 		channel_mode(NULL, c, parc - 2, &parv[2]);
 	}

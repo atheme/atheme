@@ -1,3 +1,14 @@
+jilles      2007/03/17 12:59:48 UTC	(20070317-7953)
+  Log:
+  Fix ERROR message sent to the server on out of memory.
+  This broke during gettext conversion and the breakage
+  was kept when that was reverted.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/signal.c (File Modified) 
+
+
 jilles      2007/03/17 11:52:11 UTC	(20070317-7951)
   Log:
   bahamut/solidircd: add +j (join throttling) support
