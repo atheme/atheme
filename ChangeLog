@@ -1,3 +1,12 @@
+jilles      2007/03/18 18:43:23 UTC	(20070318-7955)
+  Log:
+  inspircd11: updates for protocol revision 1104 (channelTS changes)
+  
+
+  Changes:	Modified:
+  +14 -5	trunk/modules/protocol/inspircd11.c (File Modified) 
+
+
 jilles      2007/03/17 12:59:48 UTC	(20070317-7953)
   Log:
   Fix ERROR message sent to the server on out of memory.

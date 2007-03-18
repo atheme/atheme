@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 7955 2007-03-18 18:43:23Z jilles $
+ * $Id: inspircd11.c 7957 2007-03-18 19:47:02Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7955 2007-03-18 18:43:23Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7957 2007-03-18 19:47:02Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -930,8 +930,8 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 	c = channel_find(parv[0]);
 	if (!c)
 	{
-		slog(LG_DEBUG, "m_join(): new channel: %s (TS and modes lost)", parv[0]);
-		c = channel_add(parv[0], CURRTIME);
+		slog(LG_DEBUG, "m_join(): new channel: %s (modes lost)", parv[0]);
+		c = channel_add(parv[0], parc > 1 ? atol(parv[1]) : CURRTIME);
 		return_if_fail(c != NULL);
 		channel_mode_va(NULL, c, 1, "+");
 	}
