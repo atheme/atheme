@@ -5,7 +5,7 @@
  * This file contains socket routines.
  * Based off of W. Campbell's code.
  *
- * $Id: send.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: send.c 7961 2007-03-20 17:11:45Z jilles $
  */
 
 #include "atheme.h"
@@ -42,28 +42,8 @@ int8_t sts(char *fmt, ...)
 
 void reconn(void *arg)
 {
-	channel_t *c;
-	dictionary_iteration_state_t state;
-
 	if (me.connected)
 		return;
-
-	slog(LG_DEBUG, "reconn(): ----------------------- clearing -----------------------");
-
-	/* we have to kill everything.
-	 * we do not clear users here because when you delete a server,
-	 * it deletes its users
-	 */
-	server_delete(me.actual);
-	me.actual = NULL;
-	/* remove all the channels left */
-	DICTIONARY_FOREACH(c, &state, chanlist)
-	{
-		channel_delete(c->name);
-	}
-	/* this leaves me.me and all users on it (i.e. services) */
-
-	slog(LG_DEBUG, "reconn(): ------------------------- done -------------------------");
 
 	uplink_connect();
 }

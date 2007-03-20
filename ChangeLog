@@ -1,3 +1,12 @@
+jilles      2007/03/20 12:25:45 UTC	(20070320-7959)
+  Log:
+  operserv rwatch: fix truncation of n!u@h g in matching
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/operserv/rwatch.c (File Modified) 
+
+
 jilles      2007/03/18 19:47:02 UTC	(20070318-7957)
   Log:
   Use TS parameter in JOIN if present (not for SAJOIN e.g.).
