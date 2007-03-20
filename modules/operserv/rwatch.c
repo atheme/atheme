@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing OperServ RWATCH.
  *
- * $Id: rwatch.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: rwatch.c 7959 2007-03-20 12:25:45Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rwatch", FALSE, _modinit, _moddeinit,
-	"$Id: rwatch.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: rwatch.c 7959 2007-03-20 12:25:45Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -441,7 +441,7 @@ static void os_cmd_rwatch_set(sourceinfo_t *si, int parc, char *parv[])
 static void rwatch_newuser(void *vptr)
 {
 	user_t *u = vptr;
-	char usermask[NICKLEN+USERLEN+HOSTLEN];
+	char usermask[NICKLEN+USERLEN+HOSTLEN+GECOSLEN];
 	node_t *n;
 	rwatch_t *rw;
 
