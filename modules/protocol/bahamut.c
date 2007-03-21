@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: bahamut.c 7951 2007-03-17 11:52:11Z jilles $
+ * $Id: bahamut.c 7963 2007-03-21 20:55:17Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/bahamut.h"
 
-DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 7951 2007-03-17 11:52:11Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 7963 2007-03-21 20:55:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -281,21 +281,9 @@ static void bahamut_skill(char *from, char *nick, char *fmt, ...)
 }
 
 /* PART wrapper */
-static void bahamut_part(char *chan, char *nick)
+static void bahamut_part_sts(channel_t *c, user_t *u)
 {
-	user_t *u = user_find(nick);
-	channel_t *c = channel_find(chan);
-	chanuser_t *cu;
-
-	if (!u || !c)
-		return;
-
-	if (!(cu = chanuser_find(c, u)))
-		return;
-
 	sts(":%s PART %s", u->nick, c->name);
-
-	chanuser_delete(c, u);
 }
 
 /* server-to-server KLINE wrapper */
@@ -873,7 +861,7 @@ void _modinit(module_t * m)
 	wallchops = &bahamut_wallchops;
 	numeric_sts = &bahamut_numeric_sts;
 	skill = &bahamut_skill;
-	part = &bahamut_part;
+	part_sts = &bahamut_part_sts;
 	kline_sts = &bahamut_kline_sts;
 	unkline_sts = &bahamut_unkline_sts;
 	topic_sts = &bahamut_topic_sts;

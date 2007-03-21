@@ -4,7 +4,7 @@
  *
  * Protocol handlers, both generic and the actual declarations themselves.
  *
- * $Id: phandler.h 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: phandler.h 7963 2007-03-21 20:55:17Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -129,7 +129,7 @@ E void (*numeric_sts)(char *from, int numeric, char *target, char *fmt, ...);
  * it is recommended to change an invalid source to ME */
 E void (*skill)(char *from, char *nick, char *fmt, ...);
 /* part a channel with a client on the services server */
-E void (*part)(char *chan, char *nick);
+E void (*part_sts)(channel_t *c, user_t *u);
 /* add a kline on the servers matching the given mask
  * duration is in seconds, 0 for a permanent kline
  * if the ircd requires klines to be sent from users, use opersvs */
@@ -199,7 +199,7 @@ E void generic_notice_channel_sts(user_t *from, channel_t *target, const char *t
 E void generic_wallchops(user_t *source, channel_t *target, char *message);
 E void generic_numeric_sts(char *from, int numeric, char *target, char *fmt, ...);
 E void generic_skill(char *from, char *nick, char *fmt, ...);
-E void generic_part(char *chan, char *nick);
+E void generic_part_sts(channel_t *c, user_t *u);
 E void generic_kline_sts(char *server, char *user, char *host, long duration, char *reason);
 E void generic_unkline_sts(char *server, char *user, char *host);
 E void generic_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic);

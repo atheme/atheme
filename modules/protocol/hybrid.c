@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 7815 2007-03-05 16:42:26Z jilles $
+ * $Id: hybrid.c 7963 2007-03-21 20:55:17Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 7815 2007-03-05 16:42:26Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 7963 2007-03-21 20:55:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -280,21 +280,9 @@ static void hybrid_skill(char *from, char *nick, char *fmt, ...)
 }
 
 /* PART wrapper */
-static void hybrid_part(char *chan, char *nick)
+static void hybrid_part_sts(channel_t *c, user_t *u)
 {
-	user_t *u = user_find(nick);
-	channel_t *c = channel_find(chan);
-	chanuser_t *cu;
-
-	if (!u || !c)
-		return;
-
-	if (!(cu = chanuser_find(c, u)))
-		return;
-
 	sts(":%s PART %s", CLIENT_NAME(u), c->name);
-
-	chanuser_delete(c, u);
 }
 
 /* server-to-server KLINE wrapper */
@@ -1124,7 +1112,7 @@ void _modinit(module_t * m)
 	wallchops = &hybrid_wallchops;
 	numeric_sts = &hybrid_numeric_sts;
 	skill = &hybrid_skill;
-	part = &hybrid_part;
+	part_sts = &hybrid_part_sts;
 	kline_sts = &hybrid_kline_sts;
 	unkline_sts = &hybrid_unkline_sts;
 	topic_sts = &hybrid_topic_sts;

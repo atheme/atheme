@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: bircd.c 7925 2007-03-07 01:05:56Z jilles $
+ * $Id: bircd.c 7963 2007-03-21 20:55:17Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 7925 2007-03-07 01:05:56Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 7963 2007-03-21 20:55:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -247,21 +247,9 @@ static void asuka_skill(char *from, char *nick, char *fmt, ...)
 }
 
 /* PART wrapper */
-static void asuka_part(char *chan, char *nick)
+static void asuka_part_sts(channel_t *c, user_t *u)
 {
-	user_t *u = user_find_named(nick);
-	channel_t *c = channel_find(chan);
-	chanuser_t *cu;
-
-	if (!u || !c)
-		return;
-
-	if (!(cu = chanuser_find(c, u)))
-		return;
-
 	sts("%s L %s", u->uid, c->name);
-
-	chanuser_delete(c, u);
 }
 
 /* server-to-server KLINE wrapper */
@@ -964,7 +952,7 @@ void _modinit(module_t * m)
 	wallchops = &asuka_wallchops;
 	numeric_sts = &asuka_numeric_sts;
 	skill = &asuka_skill;
-	part = &asuka_part;
+	part_sts = &asuka_part_sts;
 	kline_sts = &asuka_kline_sts;
 	unkline_sts = &asuka_unkline_sts;
 	topic_sts = &asuka_topic_sts;

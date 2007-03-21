@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree stable branch inspircd.
  *
- * $Id: inspircd10.c 7907 2007-03-06 23:10:26Z pippijn $
+ * $Id: inspircd10.c 7963 2007-03-21 20:55:17Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 7907 2007-03-06 23:10:26Z pippijn $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 7963 2007-03-21 20:55:17Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -307,21 +307,9 @@ static void inspircd_skill(char *from, char *nick, char *fmt, ...)
 }
 
 /* PART wrapper */
-static void inspircd_part(char *chan, char *nick)
+static void inspircd_part_sts(channel_t *c, user_t *u)
 {
-	user_t *u = user_find(nick);
-	channel_t *c = channel_find(chan);
-	chanuser_t *cu;
-
-	if (!u || !c)
-		return;
-
-	if (!(cu = chanuser_find(c, u)))
-		return;
-
 	sts(":%s PART %s :Leaving", u->nick, c->name);
-
-	chanuser_delete(c, u);
 }
 
 /* server-to-server KLINE wrapper */
@@ -855,7 +843,7 @@ void _modinit(module_t * m)
 	notice_channel_sts = &inspircd_notice_channel_sts;
 	numeric_sts = &inspircd_numeric_sts;
 	skill = &inspircd_skill;
-	part = &inspircd_part;
+	part_sts = &inspircd_part_sts;
 	kline_sts = &inspircd_kline_sts;
 	unkline_sts = &inspircd_unkline_sts;
 	topic_sts = &inspircd_topic_sts;

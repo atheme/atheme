@@ -4,7 +4,7 @@
  *
  * Generic protocol event handlers.
  *
- * $Id: phandler.c 7839 2007-03-06 00:09:30Z pippijn $
+ * $Id: phandler.c 7963 2007-03-21 20:55:17Z jilles $
  */
 
 #include "atheme.h"
@@ -22,7 +22,7 @@ void (*notice_channel_sts) (user_t *from, channel_t *target, const char *text) =
 void (*wallchops) (user_t *source, channel_t *target, char *message) = generic_wallchops;
 void (*numeric_sts) (char *from, int numeric, char *target, char *fmt, ...) = generic_numeric_sts;
 void (*skill) (char *from, char *nick, char *fmt, ...) = generic_skill;
-void (*part) (char *chan, char *nick) = generic_part;
+void (*part_sts) (channel_t *c, user_t *u) = generic_part_sts;
 void (*kline_sts) (char *server, char *user, char *host, long duration, char *reason) = generic_kline_sts;
 void (*unkline_sts) (char *server, char *user, char *host) = generic_unkline_sts;
 void (*topic_sts) (channel_t *c, char *setter, time_t ts, time_t prevts, char *topic) = generic_topic_sts;
@@ -122,7 +122,7 @@ void generic_skill(char *from, char *nick, char *fmt, ...)
 	/* cant do anything here. bail. */
 }
 
-void generic_part(char *chan, char *nick)
+void generic_part_sts(channel_t *c, user_t *u)
 {
 	/* cant do anything here. bail. */
 }

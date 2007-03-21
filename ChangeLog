@@ -1,3 +1,14 @@
+jilles      2007/03/20 17:11:45 UTC	(20070320-7961)
+  Log:
+  Move removal of old servers/users/channels from just before
+  reconnecting to just after disconnecting.
+  
+
+  Changes:	Modified:
+  +0 -20	trunk/src/send.c (File Modified) 
+  +20 -0	trunk/src/uplink.c (File Modified) 
+
+
 jilles      2007/03/20 12:25:45 UTC	(20070320-7959)
   Log:
   operserv rwatch: fix truncation of n!u@h g in matching

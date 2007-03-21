@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 7897 2007-03-06 12:26:59Z nenolod $
+ * $Id: services.c 7963 2007-03-21 20:55:17Z jilles $
  */
 
 #include "atheme.h"
@@ -127,6 +127,20 @@ void join(char *chan, char *nick)
 	cu = chanuser_add(c, CLIENT_NAME(u));
 	cu->modes |= CMODE_OP;
 	join_sts(c, u, isnew, channel_modes(c, TRUE));
+}
+
+/* part a channel */
+void part(char *chan, char *nick)
+{
+	channel_t *c = channel_find(chan);
+	user_t *u = user_find_named(nick);
+
+	if (!u || !c)
+		return;
+	if (!chanuser_find(c, u))
+		return;
+	part_sts(c, u);
+	chanuser_delete(c, u);
 }
 
 void services_init(void)

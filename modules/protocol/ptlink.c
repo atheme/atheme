@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for ptlink ircd.
  *
- * $Id: ptlink.c 7815 2007-03-05 16:42:26Z jilles $
+ * $Id: ptlink.c 7963 2007-03-21 20:55:17Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/ptlink.h"
 
-DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 7815 2007-03-05 16:42:26Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 7963 2007-03-21 20:55:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -236,21 +236,9 @@ static void ptlink_skill(char *from, char *nick, char *fmt, ...)
 }
 
 /* PART wrapper */
-static void ptlink_part(char *chan, char *nick)
+static void ptlink_part_sts(channel_t *c, user_t *u)
 {
-	user_t *u = user_find(nick);
-	channel_t *c = channel_find(chan);
-	chanuser_t *cu;
-
-	if (!u || !c)
-		return;
-
-	if (!(cu = chanuser_find(c, u)))
-		return;
-
 	sts(":%s PART %s", u->nick, c->name);
-
-	chanuser_delete(c, u);
 }
 
 /* server-to-server KLINE wrapper */
@@ -759,7 +747,7 @@ void _modinit(module_t * m)
 	notice_channel_sts = &ptlink_notice_channel_sts;
 	numeric_sts = &ptlink_numeric_sts;
 	skill = &ptlink_skill;
-	part = &ptlink_part;
+	part_sts = &ptlink_part_sts;
 	kline_sts = &ptlink_kline_sts;
 	unkline_sts = &ptlink_unkline_sts;
 	topic_sts = &ptlink_topic_sts;

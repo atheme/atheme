@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
  *
- * $Id: nefarious.c 7925 2007-03-07 01:05:56Z jilles $
+ * $Id: nefarious.c 7963 2007-03-21 20:55:17Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 7925 2007-03-07 01:05:56Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 7963 2007-03-21 20:55:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -260,21 +260,9 @@ static void nefarious_skill(char *from, char *nick, char *fmt, ...)
 }
 
 /* PART wrapper */
-static void nefarious_part(char *chan, char *nick)
+static void nefarious_part_sts(channel_t *c, user_t *u)
 {
-	user_t *u = user_find_named(nick);
-	channel_t *c = channel_find(chan);
-	chanuser_t *cu;
-
-	if (!u || !c)
-		return;
-
-	if (!(cu = chanuser_find(c, u)))
-		return;
-
 	sts("%s L %s", u->uid, c->name);
-
-	chanuser_delete(c, u);
 }
 
 /* server-to-server KLINE wrapper */
@@ -1063,7 +1051,7 @@ void _modinit(module_t * m)
 	wallchops = &nefarious_wallchops;
 	numeric_sts = &nefarious_numeric_sts;
 	skill = &nefarious_skill;
-	part = &nefarious_part;
+	part_sts = &nefarious_part_sts;
 	kline_sts = &nefarious_kline_sts;
 	unkline_sts = &nefarious_unkline_sts;
 	topic_sts = &nefarious_topic_sts;

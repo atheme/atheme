@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 7815 2007-03-05 16:42:26Z jilles $
+ * $Id: plexus.c 7963 2007-03-21 20:55:17Z jilles $
  */
 
 /* option: set the netadmin umode +N */
@@ -16,7 +16,7 @@
 #include "pmodule.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 7815 2007-03-05 16:42:26Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 7963 2007-03-21 20:55:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -232,21 +232,9 @@ static void plexus_skill(char *from, char *nick, char *fmt, ...)
 }
 
 /* PART wrapper */
-static void plexus_part(char *chan, char *nick)
+static void plexus_part_sts(channel_t *c, user_t *u)
 {
-	user_t *u = user_find(nick);
-	channel_t *c = channel_find(chan);
-	chanuser_t *cu;
-
-	if (!u || !c)
-		return;
-
-	if (!(cu = chanuser_find(c, u)))
-		return;
-
 	sts(":%s PART %s", u->nick, c->name);
-
-	chanuser_delete(c, u);
 }
 
 /* server-to-server KLINE wrapper */
@@ -735,7 +723,7 @@ void _modinit(module_t * m)
 	wallchops = &plexus_wallchops;
 	numeric_sts = &plexus_numeric_sts;
 	skill = &plexus_skill;
-	part = &plexus_part;
+	part_sts = &plexus_part_sts;
 	kline_sts = &plexus_kline_sts;
 	unkline_sts = &plexus_unkline_sts;
 	topic_sts = &plexus_topic_sts;

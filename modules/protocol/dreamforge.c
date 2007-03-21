@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: dreamforge.c 7815 2007-03-05 16:42:26Z jilles $
+ * $Id: dreamforge.c 7963 2007-03-21 20:55:17Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/dreamforge.h"
 
-DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 7815 2007-03-05 16:42:26Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 7963 2007-03-21 20:55:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -214,21 +214,9 @@ static void dreamforge_skill(char *from, char *nick, char *fmt, ...)
 }
 
 /* PART wrapper */
-static void dreamforge_part(char *chan, char *nick)
+static void dreamforge_part_sts(channel_t *c, user_t *u)
 {
-	user_t *u = user_find(nick);
-	channel_t *c = channel_find(chan);
-	chanuser_t *cu;
-
-	if (!u || !c)
-		return;
-
-	if (!(cu = chanuser_find(c, u)))
-		return;
-
 	sts(":%s PART %s", u->nick, c->name);
-
-	chanuser_delete(c, u);
 }
 
 /* server-to-server KLINE wrapper */
@@ -663,7 +651,7 @@ void _modinit(module_t * m)
 	notice_channel_sts = &dreamforge_notice_channel_sts;
 	numeric_sts = &dreamforge_numeric_sts;
 	skill = &dreamforge_skill;
-	part = &dreamforge_part;
+	part_sts = &dreamforge_part_sts;
 	kline_sts = &dreamforge_kline_sts;
 	unkline_sts = &dreamforge_unkline_sts;
 	topic_sts = &dreamforge_topic_sts;

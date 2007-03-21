@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: undernet.c 7925 2007-03-07 01:05:56Z jilles $
+ * $Id: undernet.c 7963 2007-03-21 20:55:17Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 7925 2007-03-07 01:05:56Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 7963 2007-03-21 20:55:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -245,21 +245,9 @@ static void undernet_skill(char *from, char *nick, char *fmt, ...)
 }
 
 /* PART wrapper */
-static void undernet_part(char *chan, char *nick)
+static void undernet_part_sts(channel_t *c, user_t *u)
 {
-	user_t *u = user_find_named(nick);
-	channel_t *c = channel_find(chan);
-	chanuser_t *cu;
-
-	if (!u || !c)
-		return;
-
-	if (!(cu = chanuser_find(c, u)))
-		return;
-
 	sts("%s L %s", u->uid, c->name);
-
-	chanuser_delete(c, u);
 }
 
 /* server-to-server KLINE wrapper */
@@ -962,7 +950,7 @@ void _modinit(module_t * m)
 	wallchops = &undernet_wallchops;
 	numeric_sts = &undernet_numeric_sts;
 	skill = &undernet_skill;
-	part = &undernet_part;
+	part_sts = &undernet_part_sts;
 	kline_sts = &undernet_kline_sts;
 	unkline_sts = &undernet_unkline_sts;
 	topic_sts = &undernet_topic_sts;

@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 7949 2007-03-15 18:53:51Z jilles $
+ * $Id: services.h 7963 2007-03-21 20:55:17Z jilles $
  */
 
 #ifndef SERVICES_H
@@ -138,6 +138,7 @@ E int ban(user_t *source, channel_t *chan, user_t *target);
 E int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target);
 E void join(char *chan, char *nick);
 E void joinall(char *name);
+E void part(char *chan, char *nick);
 E void partall(char *name);
 E void verbose(mychan_t *mychan, char *fmt, ...);
 E void snoop(char *fmt, ...);

@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for solidircd.
  *
- * $Id: solidircd.c 7951 2007-03-17 11:52:11Z jilles $
+ * $Id: solidircd.c 7963 2007-03-21 20:55:17Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/solidircd.h"
 
-DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 7951 2007-03-17 11:52:11Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 7963 2007-03-21 20:55:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -285,21 +285,9 @@ static void solidircd_skill(char *from, char *nick, char *fmt, ...)
 }
 
 /* PART wrapper */
-static void solidircd_part(char *chan, char *nick)
+static void solidircd_part_sts(channel_t *c, user_t *u)
 {
-	user_t *u = user_find(nick);
-	channel_t *c = channel_find(chan);
-	chanuser_t *cu;
-
-	if (!u || !c)
-		return;
-
-	if (!(cu = chanuser_find(c, u)))
-		return;
-
 	sts(":%s PART %s", u->nick, c->name);
-
-	chanuser_delete(c, u);
 }
 
 /* server-to-server KLINE wrapper */
@@ -898,7 +886,7 @@ void _modinit(module_t * m)
 	wallchops = &solidircd_wallchops;
 	numeric_sts = &solidircd_numeric_sts;
 	skill = &solidircd_skill;
-	part = &solidircd_part;
+	part_sts = &solidircd_part_sts;
 	kline_sts = &solidircd_kline_sts;
 	unkline_sts = &solidircd_unkline_sts;
 	topic_sts = &solidircd_topic_sts;

@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 7815 2007-03-05 16:42:26Z jilles $
+ * $Id: hyperion.c 7963 2007-03-21 20:55:17Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -17,7 +17,7 @@
 #include "pmodule.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 7815 2007-03-05 16:42:26Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 7963 2007-03-21 20:55:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -276,21 +276,9 @@ static void hyperion_skill(char *from, char *nick, char *fmt, ...)
 }
 
 /* PART wrapper */
-static void hyperion_part(char *chan, char *nick)
+static void hyperion_part_sts(channel_t *c, user_t *u)
 {
-	user_t *u = user_find(nick);
-	channel_t *c = channel_find(chan);
-	chanuser_t *cu;
-
-	if (!u || !c)
-		return;
-
-	if (!(cu = chanuser_find(c, u)))
-		return;
-
 	sts(":%s PART %s", u->nick, c->name);
-
-	chanuser_delete(c, u);
 }
 
 /* server-to-server KLINE wrapper */
@@ -915,7 +903,7 @@ void _modinit(module_t * m)
 	wallchops = &hyperion_wallchops;
 	numeric_sts = &hyperion_numeric_sts;
 	skill = &hyperion_skill;
-	part = &hyperion_part;
+	part_sts = &hyperion_part_sts;
 	kline_sts = &hyperion_kline_sts;
 	unkline_sts = &hyperion_unkline_sts;
 	topic_sts = &hyperion_topic_sts;
