@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 7963 2007-03-21 20:55:17Z jilles $
+ * $Id: ultimate3.c 7965 2007-03-21 23:42:57Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 7963 2007-03-21 20:55:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 7965 2007-03-21 23:42:57Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -87,7 +87,7 @@ static uint8_t ultimate3_server_login(void)
 
 	me.bursting = TRUE;
 
-	sts("CAPAB TS5 NOQUIT SSJ5 BURST UNCONNECT TSMODE NICKIP CLIENT");
+	sts("CAPAB TS5 NOQUIT SSJ5 BURST TSMODE NICKIP CLIENT");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
 	sts("SVINFO 5 3 0 :%ld", CURRTIME);
 
@@ -296,11 +296,20 @@ static boolean_t ultimate3_on_logout(char *origin, char *user, char *wantedhost)
 
 static void ultimate3_jupe(char *server, char *reason)
 {
+	server_t *s;
+
 	if (!me.connected)
 		return;
 
 	sts(":%s SQUIT %s :%s", opersvs.nick, server, reason);
-	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
+	s = server_find(server);
+	/* If the server is not directly connected to our uplink, we
+	 * need to wait for its uplink to process the SQUIT :(
+	 * -- jilles */
+	if (s != NULL && s->uplink != NULL && s->uplink->uplink != me.me)
+		s->flags |= SF_JUPE_PENDING;
+	else
+		sts(":%s SERVER %s 2 :%s", me.name, server, reason);
 }
 
 static void ultimate3_sethost_sts(char *source, char *target, char *host)

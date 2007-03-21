@@ -4,7 +4,7 @@
  *
  * Server stuff.
  *
- * $Id: servers.c 7839 2007-03-06 00:09:30Z pippijn $
+ * $Id: servers.c 7965 2007-03-21 23:42:57Z jilles $
  */
 
 #include "atheme.h"
@@ -196,6 +196,12 @@ void server_delete(const char *name)
 		node_del(n, &s->uplink->children);
 		node_free(n);
 	}
+
+	/* If unconnect semantics SQUIT was confirmed, introduce the jupe
+	 * now. This must be after removing the server from the dtrees.
+	 * -- jilles */
+	if (s->flags & SF_JUPE_PENDING)
+		jupe(s->name, "Juped");
 
 	free(s->name);
 	free(s->desc);

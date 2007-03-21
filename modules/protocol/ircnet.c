@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 7963 2007-03-21 20:55:17Z jilles $
+ * $Id: ircnet.c 7965 2007-03-21 23:42:57Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 7963 2007-03-21 20:55:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 7965 2007-03-21 23:42:57Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -314,11 +314,19 @@ static void ircnet_jupe(char *server, char *reason)
 {
 	static char sid[4+1];
 	int i;
+	server_t *s;
 
 	if (!me.connected)
 		return;
 
 	sts(":%s SQUIT %s :%s", opersvs.nick, server, reason);
+	s = server_find(server);
+	/* We need to wait for the SQUIT to be processed -- jilles */
+	if (s != NULL)
+	{
+		s->flags |= SF_JUPE_PENDING;
+		return;
+	}
 
 	/* dirty dirty make up some sid */
 	if (sid[0] == '\0')

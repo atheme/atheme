@@ -4,7 +4,7 @@
  *
  * Data structures related to network servers.
  *
- * $Id: servers.h 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: servers.h 7965 2007-03-21 23:42:57Z jilles $
  */
 
 #ifndef SERVERS_H
@@ -37,6 +37,7 @@ struct server_
 #define SF_HIDE        0x00000001
 #define SF_EOB         0x00000002 /* Burst finished (we have all users/channels) -- jilles */
 #define SF_EOB2        0x00000004 /* Is EOB but an uplink is not (for P10) */
+#define SF_JUPE_PENDING 0x00000008 /* Sent SQUIT request, will introduce jupe when it dies (unconnect semantics) */
 
 /* tld list struct */
 struct tld_ {

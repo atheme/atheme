@@ -4,7 +4,7 @@
  *
  * Protocol handlers, both generic and the actual declarations themselves.
  *
- * $Id: phandler.h 7963 2007-03-21 20:55:17Z jilles $
+ * $Id: phandler.h 7965 2007-03-21 23:42:57Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -161,7 +161,12 @@ E void (*ircd_on_login)(char *origin, char *user, char *wantedhost);
  * return TRUE if the user was killed to force logout (P10) */
 E boolean_t (*ircd_on_logout)(char *origin, char *user, char *wantedhost);
 /* introduce a fake server
- * it is ok to use opersvs to squit the old server */
+ * it is ok to use opersvs to squit the old server
+ * if SQUIT uses kill semantics (e.g. charybdis), server_delete() the server
+ * and continue
+ * if SQUIT uses unconnect semantics (e.g. bahamut), set SF_JUPE_PENDING on
+ * the server and return; you will be called again when the server is really
+ * deleted */
 E void (*jupe)(char *server, char *reason);
 /* set a dynamic spoof on a user
  * if the ircd does not notify the user of this, do

@@ -5,7 +5,7 @@
  *
  * This file contains reverse-engineered IRCXPRO 1.2/OfficeIRC support.
  *
- * $Id: officeirc.c 7963 2007-03-21 20:55:17Z jilles $
+ * $Id: officeirc.c 7965 2007-03-21 23:42:57Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/officeirc.h"
 
-DECLARE_MODULE_V1("protocol/officeirc", TRUE, _modinit, NULL, "$Id: officeirc.c 7963 2007-03-21 20:55:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/officeirc", TRUE, _modinit, NULL, "$Id: officeirc.c 7965 2007-03-21 23:42:57Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -316,6 +316,7 @@ static void officeirc_jupe(char *server, char *reason)
 	if (!me.connected)
 		return;
 
+	server_delete(server);
 	sts(":%s SQUIT %s :%s", opersvs.nick, server, reason);
 	sts(":%s SERVER %s 2 :%s", me.name, server, reason);
 }

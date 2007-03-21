@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree stable branch inspircd.
  *
- * $Id: inspircd10.c 7963 2007-03-21 20:55:17Z jilles $
+ * $Id: inspircd10.c 7965 2007-03-21 23:42:57Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 7963 2007-03-21 20:55:17Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 7965 2007-03-21 23:42:57Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -402,6 +402,12 @@ static void inspircd_jupe(char *server, char *reason)
 	if (!me.connected)
 		return;
 
+	if (server_find(server))
+	{
+		wallops("Cannot jupe existing server %s (%s)", server, reason);
+		return;
+	}
+	sts(":%s SQUIT %s :%s", me.name, server, reason);
 	sts(":%s SERVER %s * 1 :%s", me.name, server, reason);
 }
 

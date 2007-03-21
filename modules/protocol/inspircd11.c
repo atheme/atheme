@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 7963 2007-03-21 20:55:17Z jilles $
+ * $Id: inspircd11.c 7965 2007-03-21 23:42:57Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7963 2007-03-21 20:55:17Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7965 2007-03-21 23:42:57Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -426,10 +426,23 @@ static boolean_t inspircd_on_logout(char *origin, char *user, char *wantedhost)
 
 static void inspircd_jupe(char *server, char *reason)
 {
+	server_t *s;
 	if (!me.connected)
 		return;
 
-	sts(":%s SERVER %s * 1 :%s", me.name, server, reason);
+	s = server_find(server);
+	if (s != NULL)
+	{
+		/* We need to wait for the RSQUIT to be processed -- jilles */
+		sts(":%s RSQUIT :%s", opersvs.nick, server);
+		s->flags |= SF_JUPE_PENDING;
+	}
+	else
+	{
+		/* Remove any previous jupe first */
+		sts(":%s SQUIT %s :%s", me.name, server, reason);
+		sts(":%s SERVER %s * 1 :%s", me.name, server, reason);
+	}
 }
 
 static void inspircd_sethost_sts(char *source, char *target, char *host)
