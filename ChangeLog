@@ -1,3 +1,37 @@
+jilles      2007/03/21 23:42:57 UTC	(20070321-7965)
+  Log:
+  Make /os jupe work on existing servers for ircds using
+  unconnect semantics on SQUIT (bahamut, ultimate3,
+  solidircd, inspircd11). This sets a flag SF_JUPE_PENDING
+  on the server and introduces the jupe when it finally
+  goes away.
+  The JUPE command no longer calls server_delete() directly.
+  
+
+  Changes:	Modified:
+  +6 -1		trunk/include/phandler.h (File Modified) 
+  +1 -0		trunk/include/servers.h (File Modified) 
+  +0 -1		trunk/modules/operserv/jupe.c (File Modified) 
+  +10 -1	trunk/modules/protocol/bahamut.c (File Modified) 
+  +1 -0		trunk/modules/protocol/charybdis.c (File Modified) 
+  +1 -0		trunk/modules/protocol/dreamforge.c (File Modified) 
+  +1 -0		trunk/modules/protocol/hybrid.c (File Modified) 
+  +1 -0		trunk/modules/protocol/hyperion.c (File Modified) 
+  +6 -0		trunk/modules/protocol/inspircd10.c (File Modified) 
+  +14 -1	trunk/modules/protocol/inspircd11.c (File Modified) 
+  +8 -0		trunk/modules/protocol/ircnet.c (File Modified) 
+  +1 -0		trunk/modules/protocol/officeirc.c (File Modified) 
+  +1 -0		trunk/modules/protocol/plexus.c (File Modified) 
+  +1 -0		trunk/modules/protocol/ptlink.c (File Modified) 
+  +1 -0		trunk/modules/protocol/ratbox.c (File Modified) 
+  +1 -0		trunk/modules/protocol/shadowircd.c (File Modified) 
+  +10 -1	trunk/modules/protocol/solidircd.c (File Modified) 
+  +1 -0		trunk/modules/protocol/sorcery.c (File Modified) 
+  +11 -2	trunk/modules/protocol/ultimate3.c (File Modified) 
+  +1 -0		trunk/modules/protocol/unreal.c (File Modified) 
+  +6 -0		trunk/src/servers.c (File Modified) 
+
+
 jilles      2007/03/21 20:55:17 UTC	(20070321-7963)
   Log:
   part() protocol module function -> part_sts()

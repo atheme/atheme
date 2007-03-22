@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
  *
- * $Id: nefarious.c 7963 2007-03-21 20:55:17Z jilles $
+ * $Id: nefarious.c 7967 2007-03-22 01:06:14Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 7963 2007-03-21 20:55:17Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 7967 2007-03-22 01:06:14Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -367,10 +367,17 @@ static boolean_t nefarious_on_logout(char *origin, char *user, char *wantedhost)
 
 static void nefarious_jupe(char *server, char *reason)
 {
+	server_t *s;
+
 	if (!me.connected)
 		return;
 
-	sts("%s JU * !+%s %ld :%s", me.numeric, server, CURRTIME, reason);
+	/* hold it for a day (arbitrary) -- jilles */
+	/* get rid of local deactivation too */
+	s = server_find(server);
+	if (s != NULL && s->uplink != NULL)
+		sts("%s JU %s +%s %d %ld :%s", me.numeric, s->uplink->sid, server, 86400, CURRTIME, reason);
+	sts("%s JU * +%s %d %ld :%s", me.numeric, server, 86400, CURRTIME, reason);
 }
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
