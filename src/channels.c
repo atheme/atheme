@@ -4,7 +4,7 @@
  *
  * Channel stuff.
  *
- * $Id: channels.c 7839 2007-03-06 00:09:30Z pippijn $
+ * $Id: channels.c 7969 2007-03-23 19:19:38Z jilles $
  */
 
 #include "atheme.h"
@@ -141,6 +141,8 @@ void channel_delete(const char *name)
 	}
 
 	slog(LG_DEBUG, "channel_delete(): %s", c->name);
+	
+	modestack_finalize_channel(c);
 
 	/* channels with services may not be empty, kick them out -- jilles */
 	LIST_FOREACH_SAFE(n, tn, c->members.head)

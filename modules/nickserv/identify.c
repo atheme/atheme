@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ IDENTIFY and LOGIN functions.
  *
- * $Id: identify.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: identify.c 7969 2007-03-23 19:19:38Z jilles $
  */
 
 #include "atheme.h"
@@ -21,7 +21,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/" COMMAND_LC, FALSE, _modinit, _moddeinit,
-	"$Id: identify.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: identify.c 7969 2007-03-23 19:19:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -264,31 +264,31 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 
 				if (ircd->uses_owner && !(cu->modes & ircd->owner_mode) && ca->level & CA_AUTOOP && should_owner(ca->mychan, ca->myuser))
 				{
-					modestack_mode_param(chansvs.nick, ca->mychan->name, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(u));
+					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(u));
 					cu->modes |= ircd->owner_mode;
 				}
 
 				if (ircd->uses_protect && !(cu->modes & ircd->protect_mode) && ca->level & CA_AUTOOP && should_protect(ca->mychan, ca->myuser))
 				{
-					modestack_mode_param(chansvs.nick, ca->mychan->name, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(u));
+					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(u));
 					cu->modes |= ircd->protect_mode;
 				}
 
 				if (!(cu->modes & CMODE_OP) && ca->level & CA_AUTOOP)
 				{
-					modestack_mode_param(chansvs.nick, ca->mychan->name, MTYPE_ADD, 'o', CLIENT_NAME(u));
+					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, 'o', CLIENT_NAME(u));
 					cu->modes |= CMODE_OP;
 				}
 
 				if (ircd->uses_halfops && !(cu->modes & (CMODE_OP | ircd->halfops_mode)) && ca->level & CA_AUTOHALFOP)
 				{
-					modestack_mode_param(chansvs.nick, ca->mychan->name, MTYPE_ADD, 'h', CLIENT_NAME(u));
+					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, 'h', CLIENT_NAME(u));
 					cu->modes |= ircd->halfops_mode;
 				}
 
 				if (!(cu->modes & (CMODE_OP | ircd->halfops_mode | CMODE_VOICE)) && ca->level & CA_AUTOVOICE)
 				{
-					modestack_mode_param(chansvs.nick, ca->mychan->name, MTYPE_ADD, 'v', CLIENT_NAME(u));
+					modestack_mode_param(chansvs.nick, ca->mychan->chan, MTYPE_ADD, 'v', CLIENT_NAME(u));
 					cu->modes |= CMODE_VOICE;
 				}
 			}

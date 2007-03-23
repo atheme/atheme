@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService BAN/UNBAN function.
  *
- * $Id: ban.c 7915 2007-03-06 23:56:03Z jilles $
+ * $Id: ban.c 7969 2007-03-23 19:19:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/ban", FALSE, _modinit, _moddeinit,
-	"$Id: ban.c 7915 2007-03-06 23:56:03Z jilles $",
+	"$Id: ban.c 7969 2007-03-23 19:19:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -96,7 +96,7 @@ static void cs_cmd_ban(sourceinfo_t *si, int parc, char *parv[])
 
 	if (validhostmask(target))
 	{
-		modestack_mode_param(chansvs.nick, c->name, MTYPE_ADD, 'b', target);
+		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'b', target);
 		chanban_add(c, target, 'b');
 		logcommand(si, CMDLOG_DO, "%s BAN %s", mc->name, target);
 		if (!chanuser_find(mc->chan, si->su))
@@ -112,7 +112,7 @@ static void cs_cmd_ban(sourceinfo_t *si, int parc, char *parv[])
 		strlcat(hostbuf, "*!*@", BUFSIZE);
 		strlcat(hostbuf, tu->vhost, BUFSIZE);
 
-		modestack_mode_param(chansvs.nick, c->name, MTYPE_ADD, 'b', hostbuf);
+		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'b', hostbuf);
 		chanban_add(c, hostbuf, 'b');
 		logcommand(si, CMDLOG_DO, "%s BAN %s (for user %s!%s@%s)", mc->name, hostbuf, tu->nick, tu->user, tu->vhost);
 		if (!chanuser_find(mc->chan, si->su))
@@ -200,7 +200,7 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
 			if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2) || !match(cb->mask, hostbuf3) || !match_cidr(cb->mask, hostbuf3))
 			{
 				logcommand(si, CMDLOG_DO, "%s UNBAN %s (for user %s)", mc->name, cb->mask, hostbuf2);
-				modestack_mode_param(chansvs.nick, c->name, MTYPE_DEL, 'b', cb->mask);
+				modestack_mode_param(chansvs.nick, c, MTYPE_DEL, 'b', cb->mask);
 				chanban_delete(cb);
 				count++;
 			}
@@ -216,7 +216,7 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (cb)
 		{
-			modestack_mode_param(chansvs.nick, c->name, MTYPE_DEL, 'b', target);
+			modestack_mode_param(chansvs.nick, c, MTYPE_DEL, 'b', target);
 			chanban_delete(cb);
 			logcommand(si, CMDLOG_DO, "%s UNBAN %s", mc->name, target);
 			if (!chanuser_find(mc->chan, si->su))

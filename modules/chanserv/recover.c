@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService RECOVER functions.
  *
- * $Id: recover.c 7913 2007-03-06 23:39:47Z jilles $
+ * $Id: recover.c 7969 2007-03-23 19:19:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/recover", FALSE, _modinit, _moddeinit,
-	"$Id: recover.c 7913 2007-03-06 23:39:47Z jilles $",
+	"$Id: recover.c 7969 2007-03-23 19:19:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -98,12 +98,12 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 		{
 			if ((CMODE_OP & cu->modes))
 			{
-				modestack_mode_param(chansvs.nick, mc->chan->name, MTYPE_DEL, 'o', CLIENT_NAME(cu->user));
+				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'o', CLIENT_NAME(cu->user));
 				cu->modes &= ~CMODE_OP;
 			}
 			if (ircd->uses_halfops && (ircd->halfops_mode & cu->modes))
 			{
-				modestack_mode_param(chansvs.nick, mc->chan->name, MTYPE_DEL, ircd->halfops_mchar[1], CLIENT_NAME(cu->user));
+				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, ircd->halfops_mchar[1], CLIENT_NAME(cu->user));
 				cu->modes &= ~ircd->halfops_mode;
 			}
 		}
@@ -133,7 +133,7 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		if (!(CMODE_OP & origin_cu->modes))
-			modestack_mode_param(chansvs.nick, mc->chan->name, MTYPE_ADD, 'o', CLIENT_NAME(si->su));
+			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'o', CLIENT_NAME(si->su));
 		origin_cu->modes |= CMODE_OP;
 	}
 
@@ -160,7 +160,7 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 			continue;
 		if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2) || !match(cb->mask, hostbuf3) || !match_cidr(cb->mask, hostbuf3))
 		{
-			modestack_mode_param(chansvs.nick, mc->chan->name, MTYPE_DEL, 'b', cb->mask);
+			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'b', cb->mask);
 			chanban_delete(cb);
 		}
 	}
@@ -174,13 +174,13 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 			if (!chanban_find(mc->chan, hostbuf2, e))
 			{
 				chanban_add(mc->chan, hostbuf2, e);
-				modestack_mode_param(chansvs.nick, mc->chan->name, MTYPE_ADD, e, hostbuf2);
+				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, e, hostbuf2);
 				added_exempt = TRUE;
 			}
 		}
 	}
 
-	modestack_flush_channel(mc->chan->name);
+	modestack_flush_channel(mc->chan);
 
 	/* invite them back. must have sent +i before this */
 	if (origin_cu == NULL)

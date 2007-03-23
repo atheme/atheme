@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService OP functions.
  *
- * $Id: op.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: op.c 7969 2007-03-23 19:19:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/op", FALSE, _modinit, _moddeinit,
-	"$Id: op.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: op.c 7969 2007-03-23 19:19:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -112,7 +112,7 @@ static void cs_cmd_op(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'o', CLIENT_NAME(tu));
+	modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'o', CLIENT_NAME(tu));
 	cu->modes |= CMODE_OP;
 
 	if (si->c == NULL && tu != si->su)
@@ -179,7 +179,7 @@ static void cs_cmd_deop(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'o', CLIENT_NAME(tu));
+	modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'o', CLIENT_NAME(tu));
 	cu->modes &= ~CMODE_OP;
 
 	if (si->c == NULL && tu != si->su)

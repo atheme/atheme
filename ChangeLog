@@ -1,3 +1,16 @@
+jilles      2007/03/22 01:06:14 UTC	(20070322-7967)
+  Log:
+  P10: make /os jupe work (add required expiration time, 1 day)
+  If the server exists, also get rid of local deactivation on its uplink.
+  
+
+  Changes:	Modified:
+  +8 -1		trunk/modules/protocol/asuka.c (File Modified) 
+  +8 -1		trunk/modules/protocol/bircd.c (File Modified) 
+  +8 -1		trunk/modules/protocol/nefarious.c (File Modified) 
+  +8 -1		trunk/modules/protocol/undernet.c (File Modified) 
+
+
 jilles      2007/03/21 23:42:57 UTC	(20070321-7965)
   Log:
   Make /os jupe work on existing servers for ircds using

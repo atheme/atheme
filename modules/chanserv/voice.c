@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService VOICE functions.
  *
- * $Id: voice.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: voice.c 7969 2007-03-23 19:19:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/voice", FALSE, _modinit, _moddeinit,
-	"$Id: voice.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: voice.c 7969 2007-03-23 19:19:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -104,7 +104,7 @@ static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'v', CLIENT_NAME(tu));
+	modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'v', CLIENT_NAME(tu));
 	cu->modes |= CMODE_VOICE;
 
 	if (si->c == NULL && tu != si->su)
@@ -165,7 +165,7 @@ static void cs_cmd_devoice(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'v', CLIENT_NAME(tu));
+	modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'v', CLIENT_NAME(tu));
 	cu->modes &= ~CMODE_VOICE;
 
 	if (si->c == NULL && tu != si->su)

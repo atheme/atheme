@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService KICK functions.
  *
- * $Id: clear_bans.c 7913 2007-03-06 23:39:47Z jilles $
+ * $Id: clear_bans.c 7969 2007-03-23 19:19:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/clear_bans", FALSE, _modinit, _moddeinit,
-	"$Id: clear_bans.c 7913 2007-03-06 23:39:47Z jilles $",
+	"$Id: clear_bans.c 7969 2007-03-23 19:19:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -99,7 +99,7 @@ static void cs_cmd_clear_bans(sourceinfo_t *si, int parc, char *parv[])
 		cb = n->data;
 		if (!strchr(item, cb->type))
 			continue;
-		modestack_mode_param(chansvs.nick, c->name, MTYPE_DEL, cb->type, cb->mask);
+		modestack_mode_param(chansvs.nick, c, MTYPE_DEL, cb->type, cb->mask);
 		chanban_delete(cb);
 		hits++;
 	}

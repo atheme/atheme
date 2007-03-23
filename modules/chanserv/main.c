@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: main.c 7969 2007-03-23 19:19:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: main.c 7969 2007-03-23 19:19:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -310,13 +310,13 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 		{
 			if (flags & CA_AUTOOP && !(noop || cu->modes & ircd->owner_mode))
 			{
-				modestack_mode_param(chansvs.nick, chan->name, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(u));
+				modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(u));
 				cu->modes |= ircd->owner_mode;
 			}
 		}
 		else if (secure && (cu->modes & ircd->owner_mode))
 		{
-			modestack_mode_param(chansvs.nick, chan->name, MTYPE_DEL, ircd->owner_mchar[1], CLIENT_NAME(u));
+			modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, ircd->owner_mchar[1], CLIENT_NAME(u));
 			cu->modes &= ~ircd->owner_mode;
 		}
 	}
@@ -328,13 +328,13 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 		{
 			if (flags & CA_AUTOOP && !(noop || cu->modes & ircd->protect_mode))
 			{
-				modestack_mode_param(chansvs.nick, chan->name, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(u));
+				modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(u));
 				cu->modes |= ircd->protect_mode;
 			}
 		}
 		else if (secure && (cu->modes & ircd->protect_mode))
 		{
-			modestack_mode_param(chansvs.nick, chan->name, MTYPE_DEL, ircd->protect_mchar[1], CLIENT_NAME(u));
+			modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, ircd->protect_mchar[1], CLIENT_NAME(u));
 			cu->modes &= ~ircd->protect_mode;
 		}
 	}
@@ -343,13 +343,13 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	{
 		if (!(noop || cu->modes & CMODE_OP))
 		{
-			modestack_mode_param(chansvs.nick, chan->name, MTYPE_ADD, 'o', CLIENT_NAME(u));
+			modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'o', CLIENT_NAME(u));
 			cu->modes |= CMODE_OP;
 		}
 	}
 	else if (secure && (cu->modes & CMODE_OP) && !(flags & CA_OP))
 	{
-		modestack_mode_param(chansvs.nick, chan->name, MTYPE_DEL, 'o', CLIENT_NAME(u));
+		modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'o', CLIENT_NAME(u));
 		cu->modes &= ~CMODE_OP;
 	}
 
@@ -359,13 +359,13 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 		{
 			if (!(noop || cu->modes & (CMODE_OP | ircd->halfops_mode)))
 			{
-				modestack_mode_param(chansvs.nick, chan->name, MTYPE_ADD, 'h', CLIENT_NAME(u));
+				modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'h', CLIENT_NAME(u));
 				cu->modes |= ircd->halfops_mode;
 			}
 		}
 		else if (secure && (cu->modes & ircd->halfops_mode) && !(flags & CA_HALFOP))
 		{
-			modestack_mode_param(chansvs.nick, chan->name, MTYPE_DEL, 'h', CLIENT_NAME(u));
+			modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'h', CLIENT_NAME(u));
 			cu->modes &= ~ircd->halfops_mode;
 		}
 	}
@@ -374,7 +374,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	{
 		if (!(noop || cu->modes & (CMODE_OP | ircd->halfops_mode | CMODE_VOICE)))
 		{
-			modestack_mode_param(chansvs.nick, chan->name, MTYPE_ADD, 'v', CLIENT_NAME(u));
+			modestack_mode_param(chansvs.nick, chan, MTYPE_ADD, 'v', CLIENT_NAME(u));
 			cu->modes |= CMODE_VOICE;
 		}
 	}

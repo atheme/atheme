@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 7839 2007-03-06 00:09:30Z pippijn $
+ * $Id: cmode.c 7969 2007-03-23 19:19:38Z jilles $
  */
 
 #include "atheme.h"
@@ -96,7 +96,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 				}
 
 				if (source)
-					modestack_mode_simple(source->nick, chan->name, whatt, mode_list[i].value);
+					modestack_mode_simple(source->nick, chan, whatt, mode_list[i].value);
 
 				break;
 			}
@@ -125,7 +125,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 						simple_modes_changed = TRUE;
 					chan->extmodes[i] = sstrdup(parv[parpos]);
 					if (source)
-						modestack_mode_ext(source->nick, chan->name, MTYPE_ADD, i, chan->extmodes[i]);
+						modestack_mode_ext(source->nick, chan, MTYPE_ADD, i, chan->extmodes[i]);
 				}
 				else
 				{
@@ -136,7 +136,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 						chan->extmodes[i] = NULL;
 					}
 					if (source)
-						modestack_mode_ext(source->nick, chan->name, MTYPE_DEL, i, NULL);
+						modestack_mode_ext(source->nick, chan, MTYPE_DEL, i, NULL);
 				}
 				break;
 			}
@@ -156,7 +156,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 					simple_modes_changed = TRUE;
 				chan->limit = newlimit;
 				if (source)
-					modestack_mode_limit(source->nick, chan->name, MTYPE_ADD, chan->limit);
+					modestack_mode_limit(source->nick, chan, MTYPE_ADD, chan->limit);
 			}
 			else
 			{
@@ -165,7 +165,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 					simple_modes_changed = TRUE;
 				chan->limit = 0;
 				if (source)
-					modestack_mode_limit(source->nick, chan->name, MTYPE_DEL, 0);
+					modestack_mode_limit(source->nick, chan, MTYPE_DEL, 0);
 			}
 			continue;
 		}
@@ -187,7 +187,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 					simple_modes_changed = TRUE;
 				chan->key = sstrdup(parv[parpos]);
 				if (source)
-					modestack_mode_param(source->nick, chan->name, MTYPE_ADD, 'k', chan->key);
+					modestack_mode_param(source->nick, chan, MTYPE_ADD, 'k', chan->key);
 			}
 			else
 			{
@@ -195,7 +195,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 					simple_modes_changed = TRUE;
 				chan->modes &= ~CMODE_KEY;
 				if (source)
-					modestack_mode_param(source->nick, chan->name, MTYPE_DEL, 'k', chan->key ? chan->key : "*");
+					modestack_mode_param(source->nick, chan, MTYPE_DEL, 'k', chan->key ? chan->key : "*");
 				free(chan->key);
 				chan->key = NULL;
 				/* ratbox typically sends either the key or a `*' on -k, so you
@@ -214,7 +214,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 			{
 				chanban_add(chan, parv[parpos], *pos);
 				if (source)
-					modestack_mode_param(source->nick, chan->name, MTYPE_ADD, *pos, parv[parpos]);
+					modestack_mode_param(source->nick, chan, MTYPE_ADD, *pos, parv[parpos]);
 			}
 			else
 			{
@@ -223,7 +223,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 				c = chanban_find(chan, parv[parpos], *pos);
 				chanban_delete(c);
 				if (source)
-					modestack_mode_param(source->nick, chan->name, MTYPE_DEL, *pos, parv[parpos]);
+					modestack_mode_param(source->nick, chan, MTYPE_DEL, *pos, parv[parpos]);
 			}
 			continue;
 		}
@@ -249,7 +249,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 					cu->modes |= status_mode_list[i].value;
 
 					if (source)
-						modestack_mode_param(source->nick, chan->name, MTYPE_ADD, *pos, CLIENT_NAME(cu->user));
+						modestack_mode_param(source->nick, chan, MTYPE_ADD, *pos, CLIENT_NAME(cu->user));
 
 					/* see if they did something we have to undo */
 					if (source == NULL && cu->user->server != me.me && chansvs.me != NULL && (mc = mychan_find(cu->chan->name)) && mc->flags & MC_SECURE)
@@ -257,13 +257,13 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 						if (status_mode_list[i].mode == 'o' && !(chanacs_user_flags(mc, cu->user) & (CA_OP | CA_AUTOOP)))
 						{
 							/* they were opped and aren't on the list, deop them */
-							modestack_mode_param(chansvs.nick, mc->name, MTYPE_DEL, 'o', CLIENT_NAME(cu->user));
+							modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, 'o', CLIENT_NAME(cu->user));
 							cu->modes &= ~status_mode_list[i].value;
 						}
 						else if (ircd->uses_halfops && status_mode_list[i].mode == ircd->halfops_mchar[1] && !(chanacs_user_flags(mc, cu->user) & (CA_HALFOP | CA_AUTOHALFOP)))
 						{
 							/* same for halfops -- jilles */
-							modestack_mode_param(chansvs.nick, mc->name, MTYPE_DEL, ircd->halfops_mchar[1], CLIENT_NAME(cu->user));
+							modestack_mode_param(chansvs.nick, chan, MTYPE_DEL, ircd->halfops_mchar[1], CLIENT_NAME(cu->user));
 							cu->modes &= ~status_mode_list[i].value;
 						}
 					}
@@ -289,7 +289,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 									{
 										if (n->data != cu->user)
 										{
-											modestack_mode_param(((user_t *)n->data)->nick, chan->name, MTYPE_ADD, *pos, CLIENT_NAME(cu->user));
+											modestack_mode_param(((user_t *)n->data)->nick, chan, MTYPE_ADD, *pos, CLIENT_NAME(cu->user));
 											break;
 										}
 									}
@@ -299,7 +299,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 							else if (first_deopped_service != cu->user)
 							{
 								slog(LG_DEBUG, "channel_mode(): %s deopped on %s, opping from %s", cu->user->nick, cu->chan->name, first_deopped_service->nick);
-								modestack_mode_param(first_deopped_service->nick, chan->name, MTYPE_ADD, *pos, CLIENT_NAME(cu->user));
+								modestack_mode_param(first_deopped_service->nick, chan, MTYPE_ADD, *pos, CLIENT_NAME(cu->user));
 							}
 
 						}
@@ -308,7 +308,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 					}
 
 					if (source)
-						modestack_mode_param(source->nick, chan->name, MTYPE_DEL, *pos, CLIENT_NAME(cu->user));
+						modestack_mode_param(source->nick, chan, MTYPE_DEL, *pos, CLIENT_NAME(cu->user));
 
 					cu->modes &= ~status_mode_list[i].value;
 				}
@@ -357,7 +357,7 @@ void channel_mode_va(user_t *source, channel_t *chan, int parc, char *parv0, ...
 
 static struct modestackdata {
 	char source[HOSTLEN]; /* name */
-	char channel[CHANNELLEN];
+	channel_t *channel;
 	int32_t modes_on;
 	int32_t modes_off;
 	uint32_t limit;
@@ -378,7 +378,7 @@ static void modestack_debugprint(struct modestackdata *md)
 {
 	int i;
 
-	slog(LG_DEBUG, "modestack_debugprint(): %s MODE %s", md->source, md->channel);
+	slog(LG_DEBUG, "modestack_debugprint(): %s MODE %s", md->source, md->channel->name);
 	slog(LG_DEBUG, "simple %x/%x", md->modes_on, md->modes_off);
 	if (md->limitused)
 		slog(LG_DEBUG, "limit %u", (unsigned)md->limit);
@@ -397,7 +397,7 @@ static void modestack_calclen(struct modestackdata *md)
 	const char *p;
 
 	md->totallen = strlen(md->source) + USERLEN + HOSTLEN + 1 + 4 + 1 +
-		10 + strlen(md->channel) + 1;
+		10 + strlen(md->channel->name) + 1;
 	md->totallen += 2 + 32 + strlen(md->pmodes);
 	md->totalparamslen = 0;
 	md->paramcount = (md->limitused != 0);
@@ -527,19 +527,19 @@ static void modestack_flush(struct modestackdata *md)
 		strlcpy(p, md->params, end - p);
 		p += strlen(p);
 	}
-	mode_sts(md->source, md->channel, buf);
+	mode_sts(md->source, md->channel->name, buf);
 	modestack_clear(md);
 }
 
-static struct modestackdata *modestack_init(char *source, char *channel)
+static struct modestackdata *modestack_init(char *source, channel_t *channel)
 {
-	if (irccasecmp(source, modestackdata.source) || irccasecmp(channel, modestackdata.channel))
+	if (irccasecmp(source, modestackdata.source) || channel != modestackdata.channel)
 	{
 		/*slog(LG_DEBUG, "modestack_init(): new source/channel, flushing");*/
 		modestack_flush(&modestackdata);
 	}
 	strlcpy(modestackdata.source, source, sizeof modestackdata.source);
-	strlcpy(modestackdata.channel, channel, sizeof modestackdata.channel);
+	modestackdata.channel = channel;
 	return &modestackdata;
 }
 
@@ -641,21 +641,44 @@ static void modestack_flush_callback(void *arg)
 }
 
 /* flush pending modes for a certain channel */
-void modestack_flush_channel(char *channel)
+void modestack_flush_channel(channel_t *channel)
 {
-	if (channel == NULL || !irccasecmp(channel, modestackdata.channel))
+	if (channel == NULL || channel == modestackdata.channel)
 		modestack_flush(&modestackdata);
 }
 
 /* forget pending modes for a certain channel */
-void modestack_forget_channel(char *channel)
+void modestack_forget_channel(channel_t *channel)
 {
-	if (channel == NULL || !irccasecmp(channel, modestackdata.channel))
+	if (channel == NULL || channel == modestackdata.channel)
 		modestack_clear(&modestackdata);
 }
 
+/* handle a channel that is going to be destroyed */
+void modestack_finalize_channel(channel_t *channel)
+{
+	user_t *u;
+
+	if (channel == modestackdata.channel)
+	{
+		if (modestackdata.modes_off & ircd->perm_mode)
+		{
+			/* A mode change is not a good way to destroy a channel */
+			slog(LG_DEBUG, "modestack_finalize_channel(): flushing modes for %s to clear perm mode", channel->name);
+			u = user_find_named(modestackdata.source);
+			if (u != NULL)
+				join_sts(channel, u, FALSE, channel_modes(channel, TRUE));
+			modestack_flush(&modestackdata);
+			if (u != NULL)
+				part_sts(channel, u);
+		}
+		else
+			modestack_clear(&modestackdata);
+	}
+}
+
 /* stack simple modes without parameters */
-void modestack_mode_simple(char *source, char *channel, int dir, int32_t flags)
+void modestack_mode_simple(char *source, channel_t *channel, int dir, int32_t flags)
 {
 	struct modestackdata *md;
 
@@ -668,7 +691,7 @@ void modestack_mode_simple(char *source, char *channel, int dir, int32_t flags)
 }
 
 /* stack a limit */
-void modestack_mode_limit(char *source, char *channel, int dir, uint32_t limit)
+void modestack_mode_limit(char *source, channel_t *channel, int dir, uint32_t limit)
 {
 	struct modestackdata *md;
 
@@ -679,7 +702,7 @@ void modestack_mode_limit(char *source, char *channel, int dir, uint32_t limit)
 }
 
 /* stack a non-standard type C mode */
-void modestack_mode_ext(char *source, char *channel, int dir, int i, const char *value)
+void modestack_mode_ext(char *source, channel_t *channel, int dir, int i, const char *value)
 {
 	struct modestackdata *md;
 
@@ -696,7 +719,7 @@ void modestack_mode_ext(char *source, char *channel, int dir, int i, const char 
 }
 
 /* stack a type A, B or E mode */
-void modestack_mode_param(char *source, char *channel, int dir, char type, const char *value)
+void modestack_mode_param(char *source, channel_t *channel, int dir, char type, const char *value)
 {
 	struct modestackdata *md;
 
@@ -798,14 +821,14 @@ void check_modes(mychan_t *mychan, boolean_t sendnow)
 	modes = ~mychan->chan->modes & mychan->mlock_on;
 	modes &= ~(CMODE_KEY | CMODE_LIMIT);
 	if (sendnow)
-		modestack_mode_simple(chansvs.nick, mychan->name, MTYPE_ADD, modes);
+		modestack_mode_simple(chansvs.nick, mychan->chan, MTYPE_ADD, modes);
 	mychan->chan->modes |= modes;
 
 	if (mychan->mlock_limit && mychan->mlock_limit != mychan->chan->limit)
 	{
 		mychan->chan->limit = mychan->mlock_limit;
 		if (sendnow)
-			modestack_mode_limit(chansvs.nick, mychan->name, MTYPE_ADD, mychan->mlock_limit);
+			modestack_mode_limit(chansvs.nick, mychan->chan, MTYPE_ADD, mychan->mlock_limit);
 	}
 
 	if (mychan->mlock_key)
@@ -814,7 +837,7 @@ void check_modes(mychan_t *mychan, boolean_t sendnow)
 		{
 			/* some ircds still need this... :\ -- jilles */
 			if (sendnow)
-				modestack_mode_param(chansvs.nick, mychan->name, MTYPE_DEL, 'k', mychan->chan->key);
+				modestack_mode_param(chansvs.nick, mychan->chan, MTYPE_DEL, 'k', mychan->chan->key);
 			free(mychan->chan->key);
 			mychan->chan->key = NULL;
 		}
@@ -823,7 +846,7 @@ void check_modes(mychan_t *mychan, boolean_t sendnow)
 		{
 			mychan->chan->key = sstrdup(mychan->mlock_key);
 			if (sendnow)
-				modestack_mode_param(chansvs.nick, mychan->name, MTYPE_ADD, 'k', mychan->mlock_key);
+				modestack_mode_param(chansvs.nick, mychan->chan, MTYPE_ADD, 'k', mychan->mlock_key);
 		}
 	}
 
@@ -831,20 +854,20 @@ void check_modes(mychan_t *mychan, boolean_t sendnow)
 	modes = mychan->chan->modes & mychan->mlock_off;
 	modes &= ~(CMODE_KEY | CMODE_LIMIT);
 	if (sendnow)
-		modestack_mode_simple(chansvs.nick, mychan->name, MTYPE_DEL, modes);
+		modestack_mode_simple(chansvs.nick, mychan->chan, MTYPE_DEL, modes);
 	mychan->chan->modes &= ~modes;
 
 	if (mychan->chan->limit && (mychan->mlock_off & CMODE_LIMIT))
 	{
 		if (sendnow)
-			modestack_mode_limit(chansvs.nick, mychan->name, MTYPE_DEL, 0);
+			modestack_mode_limit(chansvs.nick, mychan->chan, MTYPE_DEL, 0);
 		mychan->chan->limit = 0;
 	}
 
 	if (mychan->chan->key && (mychan->mlock_off & CMODE_KEY))
 	{
 		if (sendnow)
-			modestack_mode_param(chansvs.nick, mychan->name, MTYPE_DEL, 'k', mychan->chan->key);
+			modestack_mode_param(chansvs.nick, mychan->chan, MTYPE_DEL, 'k', mychan->chan->key);
 		free(mychan->chan->key);
 		mychan->chan->key = NULL;
 	}
@@ -865,7 +888,7 @@ void check_modes(mychan_t *mychan, boolean_t sendnow)
 						free(mychan->chan->extmodes[i]);
 						mychan->chan->extmodes[i] = NULL;
 						if (sendnow)
-							modestack_mode_ext(chansvs.nick, mychan->name, MTYPE_DEL, i, NULL);
+							modestack_mode_ext(chansvs.nick, mychan->chan, MTYPE_DEL, i, NULL);
 					}
 					else if (p[1] != ' ' && p[1] != '\0')
 					{
@@ -879,7 +902,7 @@ void check_modes(mychan_t *mychan, boolean_t sendnow)
 								free(mychan->chan->extmodes[i]);
 							mychan->chan->extmodes[i] = sstrdup(str2);
 							if (sendnow)
-								modestack_mode_ext(chansvs.nick, mychan->name, MTYPE_ADD, i, mychan->chan->extmodes[i]);
+								modestack_mode_ext(chansvs.nick, mychan->chan, MTYPE_ADD, i, mychan->chan->extmodes[i]);
 						}
 					}
 				}
