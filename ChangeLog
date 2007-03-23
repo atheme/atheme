@@ -1,3 +1,28 @@
+jilles      2007/03/23 19:19:38 UTC	(20070323-7969)
+  Log:
+  Move modestacker from channel names to channel_t pointers.
+  Add modestack_finalize_channel() to clear/flush modes on
+  channels that are deleted (in particular, flush out -P or
+  similar).
+  
+
+  Changes:	Modified:
+  +10 -10	trunk/contrib/cs_sync.c (File Modified) 
+  +7 -6		trunk/include/channels.h (File Modified) 
+  +4 -4		trunk/modules/chanserv/ban.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/clear_bans.c (File Modified) 
+  +4 -4		trunk/modules/chanserv/clear_users.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/halfop.c (File Modified) 
+  +9 -9		trunk/modules/chanserv/main.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/op.c (File Modified) 
+  +6 -6		trunk/modules/chanserv/recover.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/voice.c (File Modified) 
+  +6 -6		trunk/modules/chanserv/xop.c (File Modified) 
+  +5 -5		trunk/modules/nickserv/identify.c (File Modified) 
+  +2 -0		trunk/src/channels.c (File Modified) 
+  +62 -39	trunk/src/cmode.c (File Modified) 
+
+
 jilles      2007/03/22 01:06:14 UTC	(20070322-7967)
   Log:
   P10: make /os jupe work (add required expiration time, 1 day)
