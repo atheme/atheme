@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 7971 2007-03-23 19:46:47Z jilles $
+ * $Id: hybrid.c 7973 2007-03-23 21:45:12Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 7971 2007-03-23 19:46:47Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 7973 2007-03-23 21:45:12Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -353,13 +353,17 @@ static void hybrid_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevt
 }
 
 /* mode wrapper */
-static void hybrid_mode_sts(char *sender, char *target, char *modes)
+static void hybrid_mode_sts(char *sender, channel_t *target, char *modes)
 {
 	user_t *u = user_find(sender);
-	if (!me.connected)
+
+	if (!me.connected || !u)
 		return;
 
-	sts(":%s MODE %s %s", CLIENT_NAME(u), target, modes);
+	if (ircd->uses_uid)
+		sts(":%s TMODE %ld %s %s", CLIENT_NAME(u), target->ts, target->name, modes);
+	else
+		sts(":%s MODE %s %s", CLIENT_NAME(u), target->name, modes);
 }
 
 /* ping wrapper */

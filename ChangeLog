@@ -1,3 +1,15 @@
+jilles      2007/03/23 19:46:47 UTC	(20070323-7971)
+  Log:
+  TS6: fix topicts when TB is used to set a topic (was set to
+  something in 2038).
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/protocol/charybdis.c (File Modified) 
+  +1 -1		trunk/modules/protocol/hybrid.c (File Modified) 
+  +1 -1		trunk/modules/protocol/ratbox.c (File Modified) 
+
+
 jilles      2007/03/23 19:19:38 UTC	(20070323-7969)
   Log:
   Move modestacker from channel names to channel_t pointers.

@@ -4,7 +4,7 @@
  *
  * Protocol handlers, both generic and the actual declarations themselves.
  *
- * $Id: phandler.h 7965 2007-03-21 23:42:57Z jilles $
+ * $Id: phandler.h 7973 2007-03-23 21:45:12Z jilles $
  */
 
 #ifndef PHANDLER_H
@@ -147,7 +147,7 @@ E void (*unkline_sts)(char *server, char *user, char *host);
 E void (*topic_sts)(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic);
 /* set modes on a channel by the given sender; sender must be a client
  * on the services server; sender may or may not be on channel */
-E void (*mode_sts)(char *sender, char *target, char *modes);
+E void (*mode_sts)(char *sender, channel_t *target, char *modes);
 /* ping the uplink
  * first check if me.connected is true and bail if not */
 E void (*ping_sts)(void);
@@ -208,7 +208,7 @@ E void generic_part_sts(channel_t *c, user_t *u);
 E void generic_kline_sts(char *server, char *user, char *host, long duration, char *reason);
 E void generic_unkline_sts(char *server, char *user, char *host);
 E void generic_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic);
-E void generic_mode_sts(char *sender, char *target, char *modes);
+E void generic_mode_sts(char *sender, channel_t *target, char *modes);
 E void generic_ping_sts(void);
 E void generic_on_login(char *origin, char *user, char *wantedhost);
 E boolean_t generic_on_logout(char *origin, char *user, char *wantedhost);

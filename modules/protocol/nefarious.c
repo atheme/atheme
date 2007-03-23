@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
  *
- * $Id: nefarious.c 7967 2007-03-22 01:06:14Z jilles $
+ * $Id: nefarious.c 7973 2007-03-23 21:45:12Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 7967 2007-03-22 01:06:14Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 7973 2007-03-23 21:45:12Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -304,18 +304,17 @@ static void nefarious_topic_sts(channel_t *c, char *setter, time_t ts, time_t pr
 }
 
 /* mode wrapper */
-static void nefarious_mode_sts(char *sender, char *target, char *modes)
+static void nefarious_mode_sts(char *sender, channel_t *target, char *modes)
 {
 	user_t *fptr = user_find_named(sender);
-	channel_t *cptr = channel_find(target);
 
-	if (!fptr || !cptr)
+	if (!fptr)
 		return;
 
-	if (chanuser_find(cptr, fptr))
-		sts("%s M %s %s", fptr->uid, target, modes);
+	if (chanuser_find(target, fptr))
+		sts("%s M %s %s", fptr->uid, target->name, modes);
 	else
-		sts("%s M %s %s", me.numeric, target, modes);
+		sts("%s M %s %s", me.numeric, target->name, modes);
 }
 
 /* ping wrapper */

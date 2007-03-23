@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 7965 2007-03-21 23:42:57Z jilles $
+ * $Id: plexus.c 7973 2007-03-23 21:45:12Z jilles $
  */
 
 /* option: set the netadmin umode +N */
@@ -16,7 +16,7 @@
 #include "pmodule.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 7965 2007-03-21 23:42:57Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 7973 2007-03-23 21:45:12Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -265,12 +265,12 @@ static void plexus_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevt
 }
 
 /* mode wrapper */
-static void plexus_mode_sts(char *sender, char *target, char *modes)
+static void plexus_mode_sts(char *sender, channel_t *target, char *modes)
 {
 	if (!me.connected)
 		return;
 
-	sts(":%s MODE %s %s", sender, target, modes);
+	sts(":%s MODE %s %s", sender, target->name, modes);
 }
 
 /* ping wrapper */

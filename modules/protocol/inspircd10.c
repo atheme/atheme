@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree stable branch inspircd.
  *
- * $Id: inspircd10.c 7965 2007-03-21 23:42:57Z jilles $
+ * $Id: inspircd10.c 7973 2007-03-23 21:45:12Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 7965 2007-03-21 23:42:57Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 7973 2007-03-23 21:45:12Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -361,12 +361,12 @@ static void inspircd_topic_sts(channel_t *c, char *setter, time_t ts, time_t pre
 }
 
 /* mode wrapper */
-static void inspircd_mode_sts(char *sender, char *target, char *modes)
+static void inspircd_mode_sts(char *sender, channel_t *target, char *modes)
 {
 	if (!me.connected)
 		return;
 
-	sts(":%s MODE %s %s", sender, target, modes);
+	sts(":%s MODE %s %s", sender, target->name, modes);
 }
 
 /* ping wrapper */

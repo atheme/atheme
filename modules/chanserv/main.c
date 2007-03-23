@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 7969 2007-03-23 19:19:38Z jilles $
+ * $Id: main.c 7973 2007-03-23 21:45:12Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 7969 2007-03-23 19:19:38Z jilles $",
+	"$Id: main.c 7973 2007-03-23 21:45:12Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -284,7 +284,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 				chanban_add(chan, ca2->host, 'b');
 				snprintf(str, sizeof str, "+b %s", ca2->host);
 				/* ban immediately */
-				mode_sts(chansvs.nick, chan->name, str);
+				mode_sts(chansvs.nick, chan, str);
 			}
 		}
 		else

@@ -4,7 +4,7 @@
  *
  * Generic protocol event handlers.
  *
- * $Id: phandler.c 7963 2007-03-21 20:55:17Z jilles $
+ * $Id: phandler.c 7973 2007-03-23 21:45:12Z jilles $
  */
 
 #include "atheme.h"
@@ -26,7 +26,7 @@ void (*part_sts) (channel_t *c, user_t *u) = generic_part_sts;
 void (*kline_sts) (char *server, char *user, char *host, long duration, char *reason) = generic_kline_sts;
 void (*unkline_sts) (char *server, char *user, char *host) = generic_unkline_sts;
 void (*topic_sts) (channel_t *c, char *setter, time_t ts, time_t prevts, char *topic) = generic_topic_sts;
-void (*mode_sts) (char *sender, char *target, char *modes) = generic_mode_sts;
+void (*mode_sts) (char *sender, channel_t *target, char *modes) = generic_mode_sts;
 void (*ping_sts) (void) = generic_ping_sts;
 void (*quit_sts) (user_t *u, char *reason) = generic_quit_sts;
 void (*ircd_on_login) (char *origin, char *user, char *wantedhost) = generic_on_login;
@@ -142,7 +142,7 @@ void generic_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, cha
 	/* cant do anything here. bail. */
 }
 
-void generic_mode_sts(char *sender, char *target, char *modes)
+void generic_mode_sts(char *sender, channel_t *target, char *modes)
 {
 	/* cant do anything here. bail. */
 }

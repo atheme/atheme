@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 7963 2007-03-21 20:55:17Z jilles $
+ * $Id: services.c 7973 2007-03-23 21:45:12Z jilles $
  */
 
 #include "atheme.h"
@@ -40,7 +40,7 @@ int ban(user_t *sender, channel_t *c, user_t *user)
 
 	chanban_add(c, mask, 'b');
 
-	mode_sts(sender->nick, c->name, modemask);
+	mode_sts(sender->nick, c, modemask);
 	return 1;
 }
 
@@ -73,7 +73,7 @@ int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target)
 		if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2) || !match(cb->mask, hostbuf3) || !match_cidr(cb->mask, hostbuf3))
 		{
 			snprintf(change, sizeof change, "-%c %s", e, cb->mask);
-			mode_sts(source->nick, chan->name, change);
+			mode_sts(source->nick, chan, change);
 			chanban_delete(cb);
 			count++;
 		}

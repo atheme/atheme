@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 7965 2007-03-21 23:42:57Z jilles $
+ * $Id: ircnet.c 7973 2007-03-23 21:45:12Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 7965 2007-03-21 23:42:57Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 7973 2007-03-23 21:45:12Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -273,7 +273,7 @@ static void ircnet_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevt
 }
 
 /* mode wrapper */
-static void ircnet_mode_sts(char *sender, char *target, char *modes)
+static void ircnet_mode_sts(char *sender, channel_t *target, char *modes)
 {
 	user_t *u;
 
@@ -284,7 +284,7 @@ static void ircnet_mode_sts(char *sender, char *target, char *modes)
 
 	/* send it from the server if that service isn't on channel
 	 * -- jilles */
-	sts(":%s MODE %s %s", chanuser_find(channel_find(target), u) ? CLIENT_NAME(u) : ME, target, modes);
+	sts(":%s MODE %s %s", chanuser_find(target, u) ? CLIENT_NAME(u) : ME, target->name, modes);
 }
 
 /* ping wrapper */

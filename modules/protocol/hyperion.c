@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 7965 2007-03-21 23:42:57Z jilles $
+ * $Id: hyperion.c 7973 2007-03-23 21:45:12Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -17,7 +17,7 @@
 #include "pmodule.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 7965 2007-03-21 23:42:57Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 7973 2007-03-23 21:45:12Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -313,12 +313,12 @@ static void hyperion_topic_sts(channel_t *c, char *setter, time_t ts, time_t pre
 }
 
 /* mode wrapper */
-static void hyperion_mode_sts(char *sender, char *target, char *modes)
+static void hyperion_mode_sts(char *sender, channel_t *target, char *modes)
 {
 	if (!me.connected)
 		return;
 
-	sts(":%s MODE %s %s", sender, target, modes);
+	sts(":%s MODE %s %s", sender, target->name, modes);
 }
 
 /* ping wrapper */
