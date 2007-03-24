@@ -1,3 +1,14 @@
+jilles      2007/03/24 22:27:06 UTC	(20070324-7975)
+  Log:
+  Add a rough /cs userinfo module.
+  Tracker #847
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/contrib/Makefile.in (File Modified) 
+  +165 -0	trunk/contrib/cs_userinfo.c (File Added) 
+
+
 jilles      2007/03/23 21:45:12 UTC	(20070323-7973)
   Log:
   - Move mode_sts() protocol module function from

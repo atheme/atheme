@@ -4,7 +4,7 @@
  *
  * This file contains functionality implementing clone detection.
  *
- * $Id: clones.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: clones.c 7977 2007-03-24 22:39:38Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/clones", FALSE, _modinit, _moddeinit,
-	"$Id: clones.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: clones.c 7977 2007-03-24 22:39:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -55,6 +55,8 @@ struct hostentry_
 {
 	char ip[HOSTIPLEN];
 	list_t clients;
+	time_t lastaction;
+	int lastaction_clones;
 };
 
 command_t os_clones = { "CLONES", N_("Manages network wide clones."), PRIV_AKILL, 4, os_cmd_clones };
@@ -460,6 +462,13 @@ static void clones_newuser(void *vptr)
 
 		if (allowed == 0 || i > allowed)
 		{
+			if (he->lastaction + 300 < CURRTIME)
+				he->lastaction_clones = i;
+			else if (i <= he->lastaction_clones)
+				return;
+			else
+				he->lastaction_clones = i;
+			he->lastaction = CURRTIME;
 			if (allowed == 0 && i < DEFAULT_KLINE_CLONES)
 				snoop("CLONES: %d clones on %s (%s!%s@%s)", i, u->ip, u->nick, u->user, u->host);
 			else if (allowed != 0 && i < allowed + EXEMPT_GRACE)
