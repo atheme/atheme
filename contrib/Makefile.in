@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7941 2007-03-13 07:16:52Z nenolod $
+# $Id: Makefile.in 7975 2007-03-24 22:27:06Z jilles $
 #
 
 CC		= @CC@
@@ -37,6 +37,7 @@ SRCS = \
 	cs_kickdots.c		\
 	cs_ping.c		\
 	cs_sync.c		\
+	cs_userinfo.c		\
 	gen_echoserver.c	\
 	gen_httpd.c		\
 	gen_listenerdemo.c	\
