@@ -4,7 +4,7 @@
  *
  * DH-BLOWFISH mechanism provider
  *
- * $Id: dh-blowfish.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: dh-blowfish.c 7981 2007-03-25 15:17:17Z pippijn $
  */
 
 #include "atheme.h"
@@ -19,7 +19,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/dh-blowfish", FALSE, _modinit, _moddeinit,
-	"$Id: dh-blowfish.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: dh-blowfish.c 7981 2007-03-25 15:17:17Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -49,10 +49,10 @@ static int mech_start(sasl_session_t *p, char **out, int *out_len)
 	DH *dh;
 	char *ptr;
 
-	if((dh = DH_generate_parameters(256, 5, NULL, NULL)) == NULL)
+	if ((dh = DH_generate_parameters(256, 5, NULL, NULL)) == NULL)
 		return ASASL_FAIL;
 
-	if(!DH_generate_key(dh))
+	if (!DH_generate_key(dh))
 	{
 		DH_free(dh);
 		return ASASL_FAIL;
@@ -64,18 +64,18 @@ static int mech_start(sasl_session_t *p, char **out, int *out_len)
 	ptr = *out;
 
 	/* p */
-	*((uint16_t*)ptr) = htons(BN_num_bytes(dh->p));
-	BN_bn2bin(dh->p, ptr + 2);
+	*((uint16_t *)ptr) = htons(BN_num_bytes(dh->p));
+	BN_bn2bin(dh->p, (unsigned char *)ptr + 2);
 	ptr += 2 + BN_num_bytes(dh->p);
 
 	/* g */
-	*((uint16_t*)ptr) = htons(BN_num_bytes(dh->g));
-	BN_bn2bin(dh->g, ptr + 2);
+	*((uint16_t *)ptr) = htons(BN_num_bytes(dh->g));
+	BN_bn2bin(dh->g, (unsigned char *)ptr + 2);
 	ptr += 2 + BN_num_bytes(dh->g);
 
 	/* pub_key */
-	*((uint16_t*)ptr) = htons(BN_num_bytes(dh->pub_key));
-	BN_bn2bin(dh->pub_key, ptr + 2);
+	*((uint16_t *)ptr) = htons(BN_num_bytes(dh->pub_key));
+	BN_bn2bin(dh->pub_key, (unsigned char *)ptr + 2);
 	ptr += 2 + BN_num_bytes(dh->pub_key);
 
 	p->mechdata = dh;
@@ -91,60 +91,60 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 	char *ptr, *secret = NULL, *password = NULL;
 	int size, ret = ASASL_FAIL;
 
-	if(!p->mechdata)
+	if (!p->mechdata)
 		return ASASL_FAIL;
 	dh = (DH*)p->mechdata;
 
 	/* Their pub_key */
-	if(len < 2)
+	if (len < 2)
 		goto end;
 	size = ntohs(*(uint16_t*)message);
 	message += 2;
 	len -= 2;
-	if(size > len)
+	if (size > len)
 		goto end;
-	if((their_key = BN_bin2bn(message, size, NULL)) == NULL)
+	if ((their_key = BN_bin2bn((unsigned char *)message, size, NULL)) == NULL)
 		goto end;
 	message += size;
 	len -= size;
-
+	
 	/* Username */
 	size = strlen(message);
-	if(size >= NICKLEN) /* our base64 routines null-terminate - how polite */
+	if (size >= NICKLEN) /* our base64 routines null-terminate - how polite */
 		goto end;
 	p->username = strdup(message);
 	message += size + 1;
 	len -= size + 1;
-	if((mu = myuser_find(p->username)) == NULL)
+	if ((mu = myuser_find(p->username)) == NULL)
 		goto end;
 	/* AES-encrypted password remains */
 
 	/* Compute shared secret */
 	secret = (char*)malloc(DH_size(dh));
-	if((size = DH_compute_key(secret, their_key, dh)) == -1)
+	if ((size = DH_compute_key((unsigned char *)secret, their_key, dh)) == -1)
 		goto end;
 
 	/* Data must be multiple of block size, and let's be reasonable about size */
-	if(len == 0 || len % 8 || len > 128)
+	if (len == 0 || len % 8 || len > 128)
 		goto end;
 
 	/* Decrypt! */
-	BF_set_key(&key, size, secret);
+	BF_set_key(&key, size, (unsigned char *)secret);
 	ptr = password = (char*)malloc(len + 1);
-    password[len] = '\0';
-	while(len)
+	password[len] = '\0';
+	while (len)
 	{
-		BF_ecb_encrypt(message, ptr, &key, BF_DECRYPT);
+		BF_ecb_encrypt((unsigned char *)message, (unsigned char *)ptr, &key, BF_DECRYPT);
 		message += 8;
 		ptr += 8;
 		len -= 8;
 	}
 
-	if(verify_password(mu, password))
+	if (verify_password(mu, password))
 		ret = ASASL_DONE;
-
+	
 end:
-	if(their_key)
+	if (their_key)
 		BN_free(their_key);
 	free(secret);
 	free(password);
@@ -153,7 +153,7 @@ end:
 
 static void mech_finish(sasl_session_t *p)
 {
-	if(p && p->mechdata)
+	if (p && p->mechdata)
 	{
 		DH_free((DH*)p->mechdata);
 		p->mechdata = NULL;

@@ -4,7 +4,7 @@
  *
  * Table rendering class.
  *
- * $Id: table.c 7941 2007-03-13 07:16:52Z nenolod $
+ * $Id: table.c 7981 2007-03-25 15:17:17Z pippijn $
  */
 
 #include "atheme.h"
@@ -176,10 +176,10 @@ void table_render(table_t *t, void (*callback)(const char *line, void *data), vo
 			c  = (table_cell_t *) n2->data;
 			rc = (table_cell_t *) rn->data;
 
-			if ((sz = strlen(c->name)) > rc->width)
+			if ((sz = strlen(c->name)) > (size_t)rc->width)
 				rc->width = sz;
 
-			if ((sz = strlen(c->value)) > rc->width)
+			if ((sz = strlen(c->value)) > (size_t)rc->width)
 				rc->width = sz;		
 		}
 	}

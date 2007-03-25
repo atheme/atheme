@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for ptlink ircd.
  *
- * $Id: ptlink.c 7973 2007-03-23 21:45:12Z jilles $
+ * $Id: ptlink.c 7981 2007-03-25 15:17:17Z pippijn $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/ptlink.h"
 
-DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 7973 2007-03-23 21:45:12Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 7981 2007-03-25 15:17:17Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -716,7 +716,7 @@ static void m_newmask(sourceinfo_t *si, int parc, char *parv[])
 	if (p != NULL)
 	{
 		strlcpy(target->vhost, p + 1, sizeof target->vhost);
-		if (p - parv[0] < sizeof target->user && p > parv[0])
+		if ((size_t)(p - parv[0]) < sizeof target->user && p > parv[0])
 		{
 			memcpy(target->user, parv[0], p - parv[0]);
 			target->user[p - parv[0]] = '\0';

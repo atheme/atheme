@@ -1,3 +1,16 @@
+jilles      2007/03/25 14:12:08 UTC	(20070325-7979)
+  Log:
+  Add command_success_table() for returning tables.
+  No sourceinfo_vtable entry for this yet.
+  
+
+  Changes:	Modified:
+  +1 -8		trunk/contrib/os_tabletest.c (File Modified) 
+  +1 -1		trunk/include/atheme.h (File Modified) 
+  +1 -0		trunk/include/services.h (File Modified) 
+  +4 -32	trunk/src/services.c (File Modified) 
+
+
 jilles      2007/03/24 22:39:38 UTC	(20070324-7977)
   Log:
   operserv clones: don't send more than one warning per IP
