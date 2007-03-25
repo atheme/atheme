@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService SENDPASS function.
  *
- * $Id: sendpass.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: sendpass.c 7985 2007-03-25 20:13:20Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/sendpass", FALSE, _modinit, _moddeinit,
-	"$Id: sendpass.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: sendpass.c 7985 2007-03-25 20:13:20Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -43,6 +43,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 	char *name = parv[0];
 	char *newpass = NULL;
 	char *key;
+	metadata_t *md;
 
 	if (!name)
 	{
@@ -62,6 +63,21 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_ADMIN, "failed SENDPASS %s (is SOPER)", name);
 		command_fail(si, fault_badparams, _("\2%s\2 belongs to a services operator; you need %s privilege to send the password."), name, PRIV_ADMIN);
 		return;
+	}
+
+	if ((md = metadata_find(mu, METADATA_USER, "private:mark:setter")))
+	{
+		if (has_priv(si, PRIV_MARK))
+		{
+			command_success_nodata(si, _("Overriding MARK placed by %s on the nickname %s."), md->value, mu->name);
+			wallops("%s sent the password for the \2MARKED\2 nickname %s.", get_oper_name(si), mu->name);
+		}
+		else
+		{
+			logcommand(si, CMDLOG_ADMIN, "failed SENDPASS %s (marked by %s)", mu->name, md->value);
+			command_fail(si, fault_badparams, _("This operation cannot be performed on %s, because the nickname has been marked by %s."), mu->name, md->value);
+			return;
+		}
 	}
 
 	/* alternative, safer method? */
