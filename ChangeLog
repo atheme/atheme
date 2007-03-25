@@ -1,3 +1,15 @@
+pippijn     2007/03/25 15:17:17 UTC	(20070325-7981)
+  Log:
+  Fixed some compiler warnings regarding signedness.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/protocol/ptlink.c (File Modified) 
+  +2 -2		trunk/modules/saslserv/crypt.c (File Modified) 
+  +25 -25	trunk/modules/saslserv/dh-blowfish.c (File Modified) 
+  +2 -2		trunk/src/table.c (File Modified) 
+
+
 jilles      2007/03/25 14:12:08 UTC	(20070325-7979)
   Log:
   Add command_success_table() for returning tables.
