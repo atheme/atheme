@@ -25,13 +25,6 @@ void _moddeinit()
 	command_delete(&os_tabletest, os_cmdtree);
 }
 
-static void render_callback(const char *line, void *data)
-{
-	sourceinfo_t *si = (sourceinfo_t *) data;
-
-	command_success_nodata(si, "%s", line);
-}
-
 static void os_cmd_tabletest(sourceinfo_t *si, int parc, char *parv[])
 {
 	table_t *t = table_new("Table \2test\2");
@@ -45,7 +38,7 @@ static void os_cmd_tabletest(sourceinfo_t *si, int parc, char *parv[])
 	table_cell_associate(r, "foo", "one");
 	table_cell_associate(r, "baz", "two");
 
-	table_render(t, render_callback, si);
+	command_success_table(si, t);
 
 	object_unref(t);
 }

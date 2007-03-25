@@ -4,7 +4,7 @@
  *
  * Includes most headers usually needed.
  *
- * $Id: atheme.h 7941 2007-03-13 07:16:52Z nenolod $
+ * $Id: atheme.h 7979 2007-03-25 14:12:08Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -41,6 +41,7 @@
 #include "atheme_memory.h"
 #include "datastream.h"
 #include "dictionary.h"
+#include "table.h"
 #include "servers.h"
 #include "channels.h"
 #include "module.h"
@@ -66,7 +67,6 @@
 #include "sourceinfo.h"
 #include "authcookie.h"
 #include "privs.h"
-#include "table.h"
 
 #ifdef _WIN32
 

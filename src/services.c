@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 7973 2007-03-23 21:45:12Z jilles $
+ * $Id: services.c 7979 2007-03-25 14:12:08Z jilles $
  */
 
 #include "atheme.h"
@@ -476,43 +476,15 @@ void command_success_string(sourceinfo_t *si, const char *result, const char *fm
 		notice_user_sts(si->service->me, si->su, buf);
 }
 
-#if 0
-/* TBD */
-void command_success_struct(sourceinfo_t *si, char *name, char *value)
+static void command_table_cb(const char *line, void *data)
 {
-	const char *name1 = translation_get(name);
-
-	if (config_options.use_privmsg)
-		msg(si->service->name, si->su->nick, "%-16s: %s", name, value);
-	else
-		notice_user_sts(si->service->me, si->su, buf);
+	command_success_nodata(data, "%s", line);
 }
 
-void command_success_table_init(sourceinfo_t *si, int count, ...)
+void command_success_table(sourceinfo_t *si, table_t *table)
 {
-	va_list args;
-	char *name, *name1;
-	char buf[BUFSIZE];
-	int i;
-	int size;
-
-	va_start(args, count);
-	buf[0] = '\0';
-	for (i = 0; i < count; i++)
-	{
-		name = va_arg(args, char *);
-		name1 = translation_get(name);
-		size = va_arg(args, int);
-		snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf),
-				"%-*s ", size, name1);
-	}
-	va_end(args);
-	if (config_options.use_privmsg)
-		msg(si->service->name, si->su->nick, "%s", buf);
-	else
-		notice_user_sts(si->service->me, si->su, buf);
+	table_render(table, command_table_cb, si);
 }
-#endif
 
 const char *get_source_name(sourceinfo_t *si)
 {

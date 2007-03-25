@@ -1,3 +1,14 @@
+jilles      2007/03/24 22:39:38 UTC	(20070324-7977)
+  Log:
+  operserv clones: don't send more than one warning per IP
+  per 5 minutes unless the number of clones is increasing
+  (or the number of connections fell to 0)
+  
+
+  Changes:	Modified:
+  +9 -0		trunk/modules/operserv/clones.c (File Modified) 
+
+
 jilles      2007/03/24 22:27:06 UTC	(20070324-7975)
   Log:
   Add a rough /cs userinfo module.

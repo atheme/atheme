@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 7963 2007-03-21 20:55:17Z jilles $
+ * $Id: services.h 7979 2007-03-25 14:12:08Z jilles $
  */
 
 #ifndef SERVICES_H
@@ -146,6 +146,7 @@ E void notice(char *from, char *to, char *message, ...);
 E void command_fail(sourceinfo_t *si, faultcode_t code, const char *fmt, ...);
 E void command_success_nodata(sourceinfo_t *si, const char *fmt, ...);
 E void command_success_string(sourceinfo_t *si, const char *result, const char *fmt, ...);
+E void command_success_table(sourceinfo_t *si, table_t *table);
 E const char *get_source_name(sourceinfo_t *si);
 E const char *get_source_mask(sourceinfo_t *si);
 E const char *get_oper_name(sourceinfo_t *si);
