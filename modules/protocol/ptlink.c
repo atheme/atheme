@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for ptlink ircd.
  *
- * $Id: ptlink.c 7981 2007-03-25 15:17:17Z pippijn $
+ * $Id: ptlink.c 7989 2007-03-27 16:58:54Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/ptlink.h"
 
-DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 7981 2007-03-25 15:17:17Z pippijn $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 7989 2007-03-27 16:58:54Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -672,20 +672,16 @@ static void m_away(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_join(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = si->su;
 	chanuser_t *cu;
 	node_t *n, *tn;
-
-	if (!u)
-		return;
 
 	/* JOIN 0 is really a part from all channels */
 	if (parv[0][0] == '0')
 	{
-		LIST_FOREACH_SAFE(n, tn, u->channels.head)
+		LIST_FOREACH_SAFE(n, tn, si->su->channels.head)
 		{
 			cu = (chanuser_t *)n->data;
-			chanuser_delete(cu->chan, u);
+			chanuser_delete(cu->chan, si->su);
 		}
 	}
 }

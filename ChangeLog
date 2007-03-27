@@ -1,3 +1,16 @@
+jilles      2007/03/27 16:37:24 UTC	(20070327-7987)
+  Log:
+  charybdis/hybrid/ratbox:
+  Remove various NULL checks already done via MSRC_ flags.
+  Remove some variables containing copies of si->su or si->s.
+  
+
+  Changes:	Modified:
+  +6 -20	trunk/modules/protocol/charybdis.c (File Modified) 
+  +6 -20	trunk/modules/protocol/hybrid.c (File Modified) 
+  +6 -20	trunk/modules/protocol/ratbox.c (File Modified) 
+
+
 jilles      2007/03/25 20:13:20 UTC	(20070325-7985)
   Log:
   Don't allow those without user:mark privilege to

@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 7973 2007-03-23 21:45:12Z jilles $
+ * $Id: ultimate3.c 7989 2007-03-27 16:58:54Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 7973 2007-03-23 21:45:12Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 7989 2007-03-27 16:58:54Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -712,20 +712,16 @@ static void m_away(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_join(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u = si->su;
 	chanuser_t *cu;
 	node_t *n, *tn;
-
-	if (!u)
-		return;
 
 	/* JOIN 0 is really a part from all channels */
 	if (parv[0][0] == '0')
 	{
-		LIST_FOREACH_SAFE(n, tn, u->channels.head)
+		LIST_FOREACH_SAFE(n, tn, si->su->channels.head)
 		{
 			cu = (chanuser_t *)n->data;
-			chanuser_delete(cu->chan, u);
+			chanuser_delete(cu->chan, si->su);
 		}
 	}
 }
