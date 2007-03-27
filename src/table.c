@@ -4,7 +4,7 @@
  *
  * Table rendering class.
  *
- * $Id: table.c 7981 2007-03-25 15:17:17Z pippijn $
+ * $Id: table.c 7991 2007-03-27 21:36:28Z jilles $
  */
 
 #include "atheme.h"
@@ -227,7 +227,7 @@ void table_render(table_t *t, void (*callback)(const char *line, void *data), vo
 			rc = (table_cell_t *) rn->data;
 
 			/* dynamically generate the format string based on width. */
-			snprintf(fmtbuf, 12, n2->next != NULL ? "%%-%ds | " : "%%-%ds", c->width);
+			snprintf(fmtbuf, 12, n2->next != NULL ? "%%-%ds | " : "%%-%ds", rc->width);
 			snprintf(buf2, 1024, fmtbuf, c->value);
 
 			strlcat(buf, buf2, bufsz);

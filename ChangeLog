@@ -1,3 +1,16 @@
+jilles      2007/03/27 16:58:54 UTC	(20070327-7989)
+  Log:
+  Remove some more redundant si->su checks and variables.
+  
+
+  Changes:	Modified:
+  +2 -6		trunk/modules/protocol/bahamut.c (File Modified) 
+  +2 -6		trunk/modules/protocol/ptlink.c (File Modified) 
+  +4 -9		trunk/modules/protocol/shadowircd.c (File Modified) 
+  +2 -6		trunk/modules/protocol/solidircd.c (File Modified) 
+  +2 -6		trunk/modules/protocol/ultimate3.c (File Modified) 
+
+
 jilles      2007/03/27 16:37:24 UTC	(20070327-7987)
   Log:
   charybdis/hybrid/ratbox:
