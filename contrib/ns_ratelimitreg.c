@@ -4,7 +4,7 @@
  *
  * Rate limits account registrations.
  *
- * $Id$
+ * $Id: ns_ratelimitreg.c 7997 2007-03-27 22:04:33Z jilles $
  */
 
 #include "atheme.h"

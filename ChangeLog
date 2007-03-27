@@ -1,3 +1,12 @@
+jilles      2007/03/27 22:02:37 UTC	(20070327-7995)
+  Log:
+  Extend os_tabletest a little.
+  
+
+  Changes:	Modified:
+  +10 -2	trunk/contrib/os_tabletest.c (File Modified) 
+
+
 jilles      2007/03/27 21:56:27 UTC	(20070327-7993)
   Log:
   table:
