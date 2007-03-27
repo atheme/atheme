@@ -1,3 +1,13 @@
+jilles      2007/03/25 20:13:20 UTC	(20070325-7985)
+  Log:
+  Don't allow those without user:mark privilege to
+  sendpass marked nicknames.
+  
+
+  Changes:	Modified:
+  +16 -0	trunk/modules/nickserv/sendpass.c (File Modified) 
+
+
 jilles      2007/03/25 19:29:48 UTC	(20070325-7983)
   Log:
   Add  datarootdir = @datarootdir@  to all Makefile.in

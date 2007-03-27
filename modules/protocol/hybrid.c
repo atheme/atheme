@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 7973 2007-03-23 21:45:12Z jilles $
+ * $Id: hybrid.c 7987 2007-03-27 16:37:24Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 7973 2007-03-23 21:45:12Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 7987 2007-03-27 16:37:24Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -445,27 +445,20 @@ static void hybrid_holdnick_sts(user_t *source, int duration, const char *nick, 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
-	user_t *u = si->su;
 
-	if (!c || !u)
+	if (c == NULL)
 		return;
 
-	handle_topic_from(si, c, u->nick, CURRTIME, parv[1]);
+	handle_topic_from(si, c, si->su->nick, CURRTIME, parv[1]);
 }
 
 static void m_tb(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
 	time_t ts = atol(parv[1]);
-	server_t *source = si->s;
 
 	if (c == NULL)
 		return;
-
-	if (source == NULL)
-		source = server_find(me.actual);
-	if (source == NULL)
-		source = me.me;
 
 	if (c->topic != NULL && c->topicts <= ts)
 	{
@@ -473,7 +466,7 @@ static void m_tb(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	handle_topic_from(si, c, parc > 3 ? parv[2] : source->name, ts, parv[parc - 1]);
+	handle_topic_from(si, c, parc > 3 ? parv[2] : si->s->name, ts, parv[parc - 1]);
 }
 
 static void m_ping(sourceinfo_t *si, int parc, char *parv[])
@@ -546,9 +539,6 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 	char *p;
 
 	/* :origin SJOIN ts chan modestr [key or limits] :users */
-	if (si->s == NULL)
-		return;
-
 	c = channel_find(parv[1]);
 	ts = atol(parv[0]);
 
@@ -632,24 +622,20 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 static void m_join(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* -> :1JJAAAAAB JOIN 1127474195 #test +tn */
-	user_t *u = si->su;
 	boolean_t keep_new_modes = TRUE;
 	node_t *n, *tn;
 	channel_t *c;
 	chanuser_t *cu;
 	time_t ts;
 
-	if (!u)
-		return;
-
 	/* JOIN 0 is really a part from all channels */
 	/* be sure to allow joins to TS 0 channels -- jilles */
 	if (parv[0][0] == '0' && parc <= 2)
 	{
-		LIST_FOREACH_SAFE(n, tn, u->channels.head)
+		LIST_FOREACH_SAFE(n, tn, si->su->channels.head)
 		{
 			cu = (chanuser_t *)n->data;
-			chanuser_delete(cu->chan, u);
+			chanuser_delete(cu->chan, si->su);
 		}
 		return;
 	}
@@ -667,7 +653,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 	if (ts == 0 || c->ts == 0)
 	{
 		if (c->ts != 0)
-			slog(LG_INFO, "m_join(): server %s changing TS on %s from %ld to 0", u->server->name, c->name, (long)c->ts);
+			slog(LG_INFO, "m_join(): server %s changing TS on %s from %ld to 0", si->su->server->name, c->name, (long)c->ts);
 		c->ts = 0;
 		hook_call_event("channel_tschange", c);
 	}
