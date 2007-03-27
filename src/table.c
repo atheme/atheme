@@ -4,7 +4,7 @@
  *
  * Table rendering class.
  *
- * $Id: table.c 7991 2007-03-27 21:36:28Z jilles $
+ * $Id: table.c 7993 2007-03-27 21:56:27Z jilles $
  */
 
 #include "atheme.h"
@@ -155,6 +155,8 @@ void table_render(table_t *t, void (*callback)(const char *line, void *data), vo
 	table_row_t *f;
 	size_t bufsz = 0;
 	char *buf = NULL;
+	char *p;
+	int i;
 
 	return_if_fail(t != NULL);
 	return_if_fail(callback != NULL);
@@ -188,7 +190,7 @@ void table_render(table_t *t, void (*callback)(const char *line, void *data), vo
 	LIST_FOREACH(n, f->cells.head)
 	{
 		table_cell_t *c = (table_cell_t *) n->data;
-		bufsz += c->width + 3; /* for " | " */
+		bufsz += c->width + 1;
 	}
 
 	buf = smalloc(bufsz);
@@ -203,11 +205,31 @@ void table_render(table_t *t, void (*callback)(const char *line, void *data), vo
 		char buf2[1024];
 
 		/* dynamically generate the format string based on width. */
-		snprintf(fmtbuf, 12, n->next != NULL ? "%%-%ds | " : "%%-%ds", c->width);
+		snprintf(fmtbuf, 12, n->next != NULL ? "%%-%ds " : "%%s", c->width);
 		snprintf(buf2, 1024, fmtbuf, c->name);
 
 		strlcat(buf, buf2, bufsz);
 	}
+	callback(buf, data);
+	*buf = '\0';
+
+	/* separator line */
+	p = buf;
+	LIST_FOREACH(n, f->cells.head)
+	{
+		table_cell_t *c = (table_cell_t *) n->data;
+
+		if (n->next != NULL)
+		{
+			for (i = 0; i < c->width; i++)
+				*p++ = '-';
+			*p++ = ' ';
+		}
+		else
+			for (i = 0; i < (int)strlen(c->name); i++)
+				*p++ = '-';
+	}
+	*p = '\0';
 	callback(buf, data);
 	*buf = '\0';
 
@@ -227,7 +249,7 @@ void table_render(table_t *t, void (*callback)(const char *line, void *data), vo
 			rc = (table_cell_t *) rn->data;
 
 			/* dynamically generate the format string based on width. */
-			snprintf(fmtbuf, 12, n2->next != NULL ? "%%-%ds | " : "%%-%ds", rc->width);
+			snprintf(fmtbuf, 12, n2->next != NULL ? "%%-%ds " : "%%s", rc->width);
 			snprintf(buf2, 1024, fmtbuf, c->value);
 
 			strlcat(buf, buf2, bufsz);
@@ -235,6 +257,26 @@ void table_render(table_t *t, void (*callback)(const char *line, void *data), vo
 		callback(buf, data);
 		*buf = '\0';
 	}
+
+	/* separator line */
+	p = buf;
+	LIST_FOREACH(n, f->cells.head)
+	{
+		table_cell_t *c = (table_cell_t *) n->data;
+
+		if (n->next != NULL)
+		{
+			for (i = 0; i < c->width; i++)
+				*p++ = '-';
+			*p++ = ' ';
+		}
+		else
+			for (i = 0; i < (int)strlen(c->name); i++)
+				*p++ = '-';
+	}
+	*p = '\0';
+	callback(buf, data);
+	*buf = '\0';
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

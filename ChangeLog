@@ -1,3 +1,12 @@
+jilles      2007/03/27 21:36:28 UTC	(20070327-7991)
+  Log:
+  table: fix spacing in rows other than the first
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/table.c (File Modified) 
+
+
 jilles      2007/03/27 16:58:54 UTC	(20070327-7989)
   Log:
   Remove some more redundant si->su checks and variables.
