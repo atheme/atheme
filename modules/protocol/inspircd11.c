@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 7973 2007-03-23 21:45:12Z jilles $
+ * $Id: inspircd11.c 8003 2007-03-29 17:54:50Z w00t $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 7973 2007-03-23 21:45:12Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 8003 2007-03-29 17:54:50Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -66,11 +66,13 @@ struct cmode_ inspircd_mode_list[] = {
 static boolean_t check_flood(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 static boolean_t check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 static boolean_t check_forward(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+static boolean_t check_rejoindelay(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 
 struct extmode inspircd_ignore_mode_list[] = {
   { 'f', check_flood },
   { 'j', check_jointhrottle },
   { 'L', check_forward },
+  { 'J', check_rejoindelay },
   { '\0', 0 }
 };
 
@@ -149,6 +151,28 @@ static boolean_t check_forward(const char *value, channel_t *c, mychan_t *mc, us
 		return FALSE;
 	return TRUE;
 }
+
+static boolean_t check_rejoindelay(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+{
+	const char *ch = value;
+
+	while (*ch)
+	{
+		if (!isdigit(*ch))
+			return false;
+		ch++;
+	}
+
+	if (atoi(value) <= 0)
+	{
+		return FALSE;
+	}
+	else
+	{
+		return TRUE;
+	}
+}
+
 
 /* login to our uplink */
 static uint8_t inspircd_server_login(void)
@@ -392,8 +416,15 @@ static void inspircd_mode_sts(char *sender, channel_t *target, char *modes)
 	if (!me.connected)
 		return;
 
-	sts(":%s FMODE %s %ld %s", sender, target->name, target->ts, modes);
-
+	if (has_protocol >= PROTOCOL_FMODEUSER)
+	{
+		/* FMODE from user is ok, use it */
+		sts(":%s FMODE %s %ld %s", sender, target->name, target->ts, modes);
+	}
+	else
+	{
+		sts(":%s MODE %s %s", sender, target->name, modes);
+	}
 }
 
 /* ping wrapper */

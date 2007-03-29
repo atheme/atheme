@@ -1,3 +1,13 @@
+w00t        2007/03/29 16:48:49 UTC	(20070329-8001)
+  Log:
+  Re-add automake generated files (no, the whole world does not have automake and friends installed, relying on this is not nice)
+
+  Changes:	Modified:
+  +22 -0	trunk/aclocal.m4 (File Added) 
+  +16892 -0	trunk/configure (File Added) 
+  +219 -0	trunk/include/sysconf.h.in (File Added) 
+
+
 jilles      2007/03/29 15:37:57 UTC	(20070329-7999)
   Log:
   Update doc/MODES for r7729 (no more mlock checks on join).
