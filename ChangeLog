@@ -1,3 +1,12 @@
+jilles      2007/03/29 15:37:57 UTC	(20070329-7999)
+  Log:
+  Update doc/MODES for r7729 (no more mlock checks on join).
+  
+
+  Changes:	Modified:
+  +0 -3		trunk/doc/MODES (File Modified) 
+
+
 jilles      2007/03/27 22:04:33 UTC	(20070327-7997)
   Log:
   Add some Id keywords.
