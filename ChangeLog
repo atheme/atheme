@@ -1,3 +1,12 @@
+jilles      2007/03/29 22:27:21 UTC	(20070329-8005)
+  Log:
+  Add a #define for ngettext() for !ENABLE_NLS.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/i18n.h (File Modified) 
+
+
 w00t        2007/03/29 17:54:50 UTC	(20070329-8003)
   Log:
   Allow mlocking of +J on inspircd11, check for PROTOCOL_FMODEUSER before using FMODE in mode_sts(), otherwise use safe (but crappy) MODE

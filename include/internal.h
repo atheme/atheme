@@ -4,11 +4,11 @@
  *
  * Stuff for internal use in Atheme.
  *
- * $Id: internal.h 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: internal.h 8007 2007-03-29 22:36:47Z jilles $
  */
 
-#ifndef LINKER_H
-#define LINKER_H
+#ifndef INTERNAL_H
+#define INTERNAL_H
 
 /* internal functions */
 E void event_init(void);
