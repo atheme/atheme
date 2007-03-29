@@ -91,11 +91,8 @@ all supported ircds:
 - on creation of a channel, if it is possible that no mode changes (according
   to the previous item) are sent for this channel, check mode locks right away
   (this is done by faking an incoming mode change "+")
-- when a user joins and is not kicked by chanserv, if the channel registration
-  is marked MC_MLOCK_CHECK, check the mode locks (this is probably not that
-  useful)
 - when a channel is registered or the mode locks are changed, check the
   mode locks right away
 - on any mode lock check, clear MC_MLOCK_CHECK if it is set
 
-$Id: MODES 7013 2006-10-31 22:29:23Z jilles $
+$Id: MODES 7999 2007-03-29 15:37:57Z jilles $

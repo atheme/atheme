@@ -1,3 +1,13 @@
+jilles      2007/03/27 22:04:33 UTC	(20070327-7997)
+  Log:
+  Add some Id keywords.
+  
+
+  Changes:	Modified:
+  + -		trunk/contrib/ns_ratelimitreg.c  (Property Modified)
+  + -		trunk/contrib/os_tabletest.c  (Property Modified)
+
+
 jilles      2007/03/27 22:02:37 UTC	(20070327-7995)
   Log:
   Extend os_tabletest a little.
