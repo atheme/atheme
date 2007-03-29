@@ -1,3 +1,11 @@
+w00t        2007/03/29 17:54:50 UTC	(20070329-8003)
+  Log:
+  Allow mlocking of +J on inspircd11, check for PROTOCOL_FMODEUSER before using FMODE in mode_sts(), otherwise use safe (but crappy) MODE
+
+  Changes:	Modified:
+  +33 -2	trunk/modules/protocol/inspircd11.c (File Modified) 
+
+
 w00t        2007/03/29 16:48:49 UTC	(20070329-8001)
   Log:
   Re-add automake generated files (no, the whole world does not have automake and friends installed, relying on this is not nice)

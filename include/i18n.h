@@ -4,7 +4,7 @@
  *
  * This is the header which includes all of the internationalization stuff.
  *
- * $Id: i18n.h 7893 2007-03-06 02:31:59Z nenolod $
+ * $Id: i18n.h 8005 2007-03-29 22:27:21Z jilles $
  */
 
 #ifndef __ATHEME_INTL_H__
@@ -22,6 +22,7 @@
 #else
 # define _(x)     	(x)
 # define N_(x)    	(x)
+# define ngettext(s1, sn, n) ((n) == 1 ? (s1) : (sn))
 #endif
 
 #endif
