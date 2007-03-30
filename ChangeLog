@@ -1,3 +1,13 @@
+jilles      2007/03/29 22:36:47 UTC	(20070329-8007)
+  Log:
+  Fix multiple-include guard in internal.h so it's not the
+  same as in linker.h.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/include/internal.h (File Modified) 
+
+
 jilles      2007/03/29 22:27:21 UTC	(20070329-8005)
   Log:
   Add a #define for ngettext() for !ENABLE_NLS.
