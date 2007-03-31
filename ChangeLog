@@ -1,3 +1,15 @@
+jilles      2007/03/31 15:24:26 UTC	(20070331-8013)
+  Log:
+  inspircd11:
+  If lowerTS FJOIN is received, reop with :<server> FMODE
+  and not :<service> MODE, because sending MODE
+  server-server is deprecated.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/protocol/inspircd11.c (File Modified) 
+
+
 jilles      2007/03/31 14:08:53 UTC	(20070331-8011)
   Log:
   sendemail():

@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 8011 2007-03-31 14:08:53Z jilles $
+ * $Id: function.c 8015 2007-03-31 15:44:37Z jilles $
  */
 
 #include "atheme.h"
@@ -611,7 +611,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	else if (type == EMAIL_SETPASS)
 	{
 		fprintf(out, "In order to set a new password, you must send\n" "the following command on IRC:\n");
-		fprintf(out, "/MSG %s SETPASS %s %s <password>\n\n", nicksvs.nick, mu->name, param);
+		fprintf(out, "/MSG %s SETPASS %s %s <password>\nwhere <password> is your desired new password.\n\n", nicksvs.nick, mu->name, param);
 	}
 
 	fprintf(out, "Thank you for your interest in the %s IRC network.\n", me.netname);
