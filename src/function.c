@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 7849 2007-03-06 00:27:39Z pippijn $
+ * $Id: function.c 8011 2007-03-31 14:08:53Z jilles $
  */
 
 #include "atheme.h"
@@ -450,19 +450,11 @@ boolean_t validhostmask(char *host)
 
 /* send the specified type of email.
  *
- * what is what we're sending to, a nickname.
- *
- * param is an extra parameter; email, key, etc.
- *
- * assume that we are either using NickServ or UserServ
- *
  * u is whoever caused this to be called, the corresponding service
  *   in case of xmlrpc
  * type is EMAIL_*, see include/tools.h
  * mu is the recipient user
  * param depends on type, also see include/tools.h
- *
- * XXX -- sendemail() is broken on Windows.
  */
 int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 {
@@ -595,7 +587,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 		fprintf(out, "In order to complete your registration, you must send the following\ncommand on IRC:\n");
 		fprintf(out, "/MSG %s VERIFY REGISTER %s %s\n\n", nicksvs.nick, mu->name, param);
 		fprintf(out, "Thank you for registering your %s on the %s IRC " "network!\n\n",
-				(nicksvs.nick ? "nickname" : "account"), me.netname);
+				(nicksvs.no_nick_ownership ? "account" : "nickname"), me.netname);
 	}
 	else if (type == EMAIL_SENDPASS)
 	{

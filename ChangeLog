@@ -1,3 +1,14 @@
+nenolod     2007/03/30 03:03:27 UTC	(20070330-8009)
+  Log:
+  - revert r8001.
+  
+
+  Changes:	Modified:
+  +0 -22	trunk/aclocal.m4 (File Deleted) 
+  +0 -16892	trunk/configure (File Deleted) 
+  +0 -219	trunk/include/sysconf.h.in (File Deleted) 
+
+
 jilles      2007/03/29 22:36:47 UTC	(20070329-8007)
   Log:
   Fix multiple-include guard in internal.h so it's not the
