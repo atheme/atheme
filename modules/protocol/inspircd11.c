@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 8003 2007-03-29 17:54:50Z w00t $
+ * $Id: inspircd11.c 8013 2007-03-31 15:24:26Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 8003 2007-03-29 17:54:50Z w00t $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 8013 2007-03-31 15:24:26Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -645,7 +645,7 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 			if (cu->user->server == me.me)
 			{
 				/* it's a service, reop */
-				sts(":%s MODE %s +o %s", cu->user->nick, c->name, cu->user->nick);
+				sts(":%s FMODE %s %ld +o %s", me.name, c->name, ts, cu->user->nick);
 				cu->modes = CMODE_OP;
 			}
 			else
