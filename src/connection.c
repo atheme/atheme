@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: connection.c 8079 2007-04-02 17:37:39Z nenolod $
  */
 
 #include "atheme.h"
@@ -17,13 +17,6 @@ list_t connection_list;
 
 void init_netio(void)
 {
-#ifdef _WIN32
-	WORD sockVersion = MAKEWORD( 1, 1 );
-	WSADATA wsaData;
-
-	WSAStartup( sockVersion, &wsaData );
-#endif
-
 	connection_heap = BlockHeapCreate(sizeof(connection_t), 16);
 	sa_heap = BlockHeapCreate(sizeof(struct sockaddr_in), 16);
 
@@ -326,7 +319,6 @@ connection_t *connection_open_tcp(char *host, char *vhost, unsigned int port,
 
 	snprintf(buf, BUFSIZE, "tcp connection: %s", host);
 
-#ifndef _WIN32
 	if (vhost)
 	{
 		memset(&sa, 0, sizeof(sa));
@@ -353,7 +345,6 @@ connection_t *connection_open_tcp(char *host, char *vhost, unsigned int port,
 			return NULL;
 		}
 	}
-#endif
 
 	/* resolve it */
 	if ((hp = gethostbyname(host)) == NULL)

@@ -4,26 +4,17 @@
  *
  * Module management.
  *
- * $Id: module.c 7849 2007-03-06 00:27:39Z pippijn $
+ * $Id: module.c 8079 2007-04-02 17:37:39Z nenolod $
  */
 
 #include "atheme.h"
 
-#ifndef _WIN32
 #include <dlfcn.h>
-#endif
 
 static BlockHeap *module_heap;
 list_t modules;
 
 module_t *modtarget = NULL;
-
-/* Microsoft's POSIX API is a joke. */
-#ifdef _WIN32
-
-#define dlerror() ""
-
-#endif
 
 void modules_init(void)
 {

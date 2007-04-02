@@ -817,23 +817,10 @@ static char *xmlrpc_strdup(const char *src)
 
 	if (src)
 	{
-#ifdef __STRICT_ANSI__
-		if ((ret = (char *)malloc(strlen(src) + 1)))
-		{
+		if ((ret = (char *)malloc(strlen(src) + 1)) != NULL)
 			strcpy(ret, src);
-		}
-#else
-		if ((ret = (char *)malloc(strlen(src) + 1)))
-		{
-			strcpy(ret, src);
-		}
-#endif
-		if (!ret)
-#ifndef _WIN32
+		else
 			raise(SIGUSR1);
-#else
-			abort();
-#endif
 	}
 	return ret;
 }

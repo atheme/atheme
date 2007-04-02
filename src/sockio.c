@@ -4,12 +4,10 @@
  *
  * Platform-independent Network I/O layer.
  *
- * $Id: sockio.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: sockio.c 8079 2007-04-02 17:37:39Z nenolod $
  */
 
 #include "atheme.h"
-
-#if !defined(_WIN32)
 
 int socket_read(socket_t sck, char *buf, size_t len)
 {
@@ -54,48 +52,8 @@ int socket_setnonblocking(socket_t sck)
 	return 0;
 }
 
-#else
-
-int socket_read(socket_t sck, char *buf, size_t len)
-{
-	return recv(sck, buf, len, 0);
-}
-
-int socket_write(socket_t sck, char *buf, size_t len)
-{
-	return send(sck, buf, len, 0);
-}
-
-int socket_close(socket_t sck)
-{
-	return closesocket(sck);
-}
-
-int socket_geterror(void)
-{
-	return WSAGetLastError();
-}
-
-void socket_seterror(int eno)
-{
-	WSASetLastError(eno);
-}
-
-char *socket_strerror(int eno)
-{
-	return "Unknown error, this Windows port is still uncompleted.";
-}
-
-int socket_setnonblocking(socket_t sck)
-{
-	u_long i = 1;
-	return (!ioctlsocket(sck, FIONBIO, &i) ? -1 : 1);
-}
-
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8
  * vim:sw=8
  * vim:noexpandtab
  */
-
-#endif

@@ -4,15 +4,10 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 8043 2007-04-02 11:13:30Z nenolod $
+ * $Id: function.c 8079 2007-04-02 17:37:39Z nenolod $
  */
 
 #include "atheme.h"
-
-/* there is no way windows has this command. */
-#ifdef _WIN32
-# undef HAVE_GETTIMEOFDAY
-#endif
 
 char ch[27] = "abcdefghijklmnopqrstuvwxyz";
 
@@ -127,21 +122,12 @@ char *replace(char *s, int size, const char *old, const char *new)
 }
 
 /* reverse of atoi() */
-#ifndef _WIN32
 char *itoa(int num)
 {
 	static char ret[32];
 	sprintf(ret, "%d", num);
 	return ret;
 }
-#else
-char *r_itoa(int num)
-{
-	static char ret[32];
-	sprintf(ret, "%d", num);
-	return ret;
-}
-#endif
 
 /* return the time elapsed since an event */
 char *time_ago(time_t event)
@@ -295,7 +281,6 @@ boolean_t validhostmask(char *host)
  */
 int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 {
-#ifndef _WIN32
 	char *email, *date = NULL;
 	char cmdbuf[512], timebuf[256], to[128], from[128], subject[128];
 	FILE *out;
@@ -465,9 +450,6 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	if (rc == 0)
 		slog(LG_ERROR, "sendemail(): mta failure");
 	return rc;
-#else
-	return 0;
-#endif
 }
 
 /* various access level checkers */

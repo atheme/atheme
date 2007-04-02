@@ -1,3 +1,15 @@
+nenolod     2007/04/02 15:56:57 UTC	(20070402-8077)
+  Log:
+  - check for fork, getpid, getenv
+  - use sockio layer instead of _WIN32 #ifdefs
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/configure.ac (File Modified) 
+  +4 -4		trunk/src/atheme.c (File Modified) 
+  +3 -10	trunk/src/datastream.c (File Modified) 
+
+
 nenolod     2007/04/02 15:50:27 UTC	(20070402-8075)
   Log:
   - check for getrlimit() in configure. change improper #ifndef _WIN32 accordingly.

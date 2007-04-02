@@ -4,7 +4,7 @@
  *
  * Includes most headers usually needed.
  *
- * $Id: atheme.h 7979 2007-03-25 14:12:08Z jilles $
+ * $Id: atheme.h 8079 2007-04-02 17:37:39Z nenolod $
  */
 
 #ifndef ATHEME_H
@@ -12,18 +12,8 @@
 
 /* *INDENT-OFF* */
 
-#ifdef _WIN32                   /* Windows */
-#       ifdef I_AM_A_MODULE
-#               define DLE __declspec (dllimport)
-#               define E extern DLE
-#       else
-#               define DLE __declspec (dllexport)
-#               define E extern DLE
-#       endif
-#else                           /* POSIX */
-#       define E extern
-#       define DLE
-#endif
+#define E extern
+#define DLE
 
 #include "sysconf.h"
 #include "stdinc.h"
@@ -67,19 +57,6 @@
 #include "sourceinfo.h"
 #include "authcookie.h"
 #include "privs.h"
-
-#ifdef _WIN32
-
-/* Windows + Module -> needs these to be declared before using them */
-#ifdef I_AM_A_MODULE
-void _modinit(module_t *m);
-void _moddeinit(void);
-#endif
-
-/* Windows has an extremely stupid gethostbyname() function. Oof! */
-#define gethostbyname(a) gethostbyname_layer(a)
-
-#endif
 
 #endif /* ATHEME_H */
 

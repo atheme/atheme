@@ -5,7 +5,7 @@
  *
  * Misc tools
  *
- * $Id: tools.h 8069 2007-04-02 15:27:16Z jilles $
+ * $Id: tools.h 8079 2007-04-02 17:37:39Z nenolod $
  */
 
 #ifndef _TOOLS_H
@@ -164,9 +164,7 @@ E void logcommand_external(service_t *svs, const char *type, connection_t *sourc
 E char *gen_pw(int sz);
 E void tb2sp(char *line);
 E char *replace(char *s, int size, const char *old, const char *new);
-#ifndef _WIN32
 E char *itoa(int num);
-#endif
 E int validemail(char *email);
 E boolean_t validhostmask(char *host);
 E char *sbytes(float x);

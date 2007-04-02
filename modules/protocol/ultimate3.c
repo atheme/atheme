@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: ultimate3.c 8079 2007-04-02 17:37:39Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 8027 2007-04-02 10:47:18Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 8079 2007-04-02 17:37:39Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -522,12 +522,9 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
 
 		addr.s_addr = htonl(strtoul(parv[10], NULL, 0));
-#ifndef _WIN32
 		ipbuf = inet_ntoa(addr);
 		u = user_add(parv[0], parv[5], parv[6], parv[7], ipbuf, NULL, parv[11], s, atoi(parv[2]));
-#else
-		u = user_add(parv[0], parv[5], parv[6], parv[7], inet_ntoa(addr), NULL, parv[11], s, atoi(parv[2]));
-#endif
+
 		/* user modes */
 		user_mode(u, parv[3]);
 		/* Oper Mode */

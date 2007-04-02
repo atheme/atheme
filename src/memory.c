@@ -4,14 +4,10 @@
  *
  * Memory functions.
  *
- * $Id: memory.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: memory.c 8079 2007-04-02 17:37:39Z nenolod $
  */
 
 #include "atheme.h"
-
-#ifdef _WIN32
-#define SIGUSR1 0
-#endif
 
 /* does malloc()'s job and dies if malloc() fails */
 void *smalloc(size_t size)

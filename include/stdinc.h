@@ -4,7 +4,7 @@
  *
  * This is the header which includes all of the system stuff.
  *
- * $Id: stdinc.h 7837 2007-03-06 00:06:49Z nenolod $
+ * $Id: stdinc.h 8079 2007-04-02 17:37:39Z nenolod $
  */
 
 #ifndef STDINC_H
@@ -32,55 +32,26 @@
 #endif
 
 /* socket stuff */
-#ifndef _WIN32
-# include <netdb.h>
-# include <netinet/in.h>
-# include <unistd.h>
-# include <grp.h>
-# include <sys/time.h>
-# include <sys/wait.h>
-# include <sys/resource.h>
-# include <sys/socket.h>
-# include <fcntl.h>
-# include <arpa/inet.h>
-#else
-# include <windows.h>
-# include <winsock.h>
-# include <sys/timeb.h>
-# include <direct.h>
-# include <io.h>
-# include <fcntl.h>
-#endif
+#include <netdb.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <grp.h>
+#include <sys/time.h>
+#include <sys/wait.h>
+#include <sys/resource.h>
+#include <sys/socket.h>
+#include <fcntl.h>
+#include <arpa/inet.h>
 
 #include <sys/types.h>
 
-#ifndef _WIN32
 #include <libgen.h>
-#endif
 #include <dirent.h>
 
-#ifndef _WIN32
 typedef enum { FALSE, TRUE } l_boolean_t;
-#else
-typedef int l_boolean_t;
-#define FALSE 0
-#define TRUE 1
-#endif
 
 #undef boolean_t
 #define boolean_t l_boolean_t
-
-/* XXX these are all 32-bit types, not that I care. */
-#ifdef _WIN32
-
-#define itoa(num) r_itoa(num)
-#define kill(n,m) 0
-
-#define inet_ntop(a,b,c,d) strncpy( c, inet_ntoa( *((struct in_addr*)b) ), d);
-
-/* XXX Microsoft headers are broken */
-#define snprintf _snprintf
-#endif
 
 #endif
 

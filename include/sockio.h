@@ -4,28 +4,13 @@
  *
  * Platform-independent network I/O layer.
  *
- * $Id: sockio.h 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: sockio.h 8079 2007-04-02 17:37:39Z nenolod $
  */
 
 #ifndef SOCKIO_H
 #define SOCKIO_H
 
-#ifdef _WIN32
-typedef SOCKET socket_t;
-
-/* stupid microsoft errno collides us */
-#undef EBADF
-#undef EINTR
-#undef EINVAL
-#undef EINPROGRESS
-
-#define EBADF		WSAENOTSOCK
-#define EINTR		WSAEINTR
-#define EINVAL		WSAEINVAL
-#define EINPROGRESS	WSAEINPROGRESS
-#else
 typedef int socket_t;
-#endif
 
 extern int socket_read(socket_t sock, char *buf, size_t len);
 extern int socket_write(socket_t sock, char *buf, size_t len);

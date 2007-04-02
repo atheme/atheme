@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 8073 2007-04-02 15:28:57Z jilles $
+ * $Id: flatfile.c 8079 2007-04-02 17:37:39Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 8073 2007-04-02 15:28:57Z jilles $",
+	"$Id: flatfile.c 8079 2007-04-02 17:37:39Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -212,11 +212,9 @@ static void flatfile_db_save(void *arg)
 		snoop(_("\2DATABASE ERROR\2: db_save(): cannot write to atheme.db.new: %s"), strerror(errno1));
 		return;
 	}
+
 	/* now, replace the old database with the new one, using an atomic rename */
-	
-#ifdef _WIN32
 	unlink(DATADIR "/atheme.db" );
-#endif
 	
 	if ((rename(DATADIR "/atheme.db.new", DATADIR "/atheme.db")) < 0)
 	{

@@ -4,31 +4,24 @@
  *
  * This file contains the block allocator.
  *
- * $Id: balloc.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: balloc.c 8079 2007-04-02 17:37:39Z nenolod $
  */
 
 #include "atheme.h"
 
-/* please no IOCCC entries --nenolod */
-#ifndef _WIN32
-#  ifdef HAVE_MMAP		/* We've got mmap() that is good */
-#   include <sys/mman.h>
-#  ifdef MAP_ANONYMOUS
-#   ifndef MAP_ANON
-#    define MAP_ANON MAP_ANONYMOUS
-#   endif
+#ifdef HAVE_MMAP		/* We've got mmap() that is good */
+# include <sys/mman.h>
+# ifdef MAP_ANONYMOUS
+#  ifndef MAP_ANON
+#   define MAP_ANON MAP_ANONYMOUS
 #  endif
 # endif
 #else
-# undef HAVE_MMAP		/* broken on windows */
-#endif
-
-#ifndef HAVE_MMAP
-#define MAP_PRIVATE 0
-#define MAP_ANON 0
-#define MAP_FAILED 0
-#define PROT_READ 0
-#define PROT_WRITE 0
+# define MAP_PRIVATE 0
+# define MAP_ANON 0
+# define MAP_FAILED 0
+# define PROT_READ 0
+# define PROT_WRITE 0
 #endif
 
 static int newblock(BlockHeap *bh);
