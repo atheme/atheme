@@ -1,3 +1,14 @@
+jilles      2007/04/02 11:00:39 UTC	(20070402-8035)
+  Log:
+  Revert arc4random part of r8027. arc4random actually
+  breaks if uint8_t is replaced with a larger type.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/include/tools.h (File Modified) 
+  +14 -14	trunk/src/arc4random.c (File Modified) 
+
+
 nenolod     2007/04/02 10:58:32 UTC	(20070402-8033)
   Log:
   - this stuff is also out of date like whoa

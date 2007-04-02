@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: atheme.c 8037 2007-04-02 11:03:07Z jilles $
  */
 
 #include "atheme.h"
@@ -61,7 +61,7 @@ static void print_version(void)
 static void rng_reseed(void *unused)
 {
 	(void)unused;
-	arc4random_addrandom((unsigned int *)&cnt, sizeof cnt);
+	arc4random_addrandom((uint8_t *)&cnt, sizeof cnt);
 }
 
 int main(int argc, char *argv[])
