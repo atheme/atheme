@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 8051 2007-04-02 14:11:06Z nenolod $
+ * $Id: akick.c 8059 2007-04-02 14:28:15Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@ static void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[]);
 DECLARE_MODULE_V1
 (
 	"chanserv/akick", FALSE, _modinit, _moddeinit,
-	"$Id: akick.c 8051 2007-04-02 14:11:06Z nenolod $",
+	"$Id: akick.c 8059 2007-04-02 14:28:15Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -241,11 +241,11 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			if (ca->level == CA_AKICK)
 			{
 				if (ca->myuser == NULL)
-					command_success_nodata(si, "%d: \2%s\2", ++i, ca->host);
+					command_success_nodata(si, _("%d: \2%s\2 [modified: %s]"), ++i, ca->host, time_ago(ca->ts));
 				else if (LIST_LENGTH(&ca->myuser->logins) > 0)
-					command_success_nodata(si, _("%d: \2%s\2 (logged in)"), ++i, ca->myuser->name);
+					command_success_nodata(si, _("%d: \2%s\2 (logged in) [modified: %s]"), ++i, ca->myuser->name, time_ago(ca->ts));
 				else
-					command_success_nodata(si, _("%d: \2%s\2 (not logged in)"), ++i, ca->myuser->name);
+					command_success_nodata(si, _("%d: \2%s\2 (not logged in) [modified: %s]"), ++i, ca->myuser->name, time_ago(ca->ts));
 			}
 
 		}
