@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: main.c 8049 2007-04-02 12:40:41Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: main.c 8049 2007-04-02 12:40:41Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -403,27 +403,9 @@ static void sasl_logcommand(char *source, int level, const char *fmt, ...)
 	char datetime[64];
 	char lbuf[BUFSIZE];
 
-	/* XXX use level */
-
 	va_start(args, fmt);
-
-	time(&t);
-	tm = *localtime(&t);
-	strftime(datetime, sizeof(datetime) - 1, "[%d/%m/%Y %H:%M:%S]", &tm);
-
 	vsnprintf(lbuf, BUFSIZE, fmt, args);
-
-	if (!log_file)
-		log_open();
-
-	if (log_file)
-	{
-		fprintf(log_file, "%s sasl_agent %s %s\n",
-				datetime, source, lbuf);
-
-		fflush(log_file);
-	}
-
+	slog(level, "sasl_agent %s %s\n", source, lbuf);
 	va_end(args);
 }
 

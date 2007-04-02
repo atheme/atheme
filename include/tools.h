@@ -5,7 +5,7 @@
  *
  * Misc tools
  *
- * $Id: tools.h 8047 2007-04-02 11:49:10Z jilles $
+ * $Id: tools.h 8049 2007-04-02 12:40:41Z nenolod $
  */
 
 #ifndef _TOOLS_H
@@ -110,9 +110,19 @@ E unsigned int arc4random(void);
 #endif /* !HAVE_ARC4RANDOM */
 
 /* logger.c */
-E FILE *log_file;
-E char *log_path;
+typedef struct logfile_ {
+	object_t parent;
+	node_t node;
+
+	FILE *log_file;
+	char *log_path;
+	unsigned int log_mask;
+} logfile_t;
+
+E char *log_path; /* contains path to default log. */
 E int log_force;
+
+E logfile_t *logfile_new(const char *log_path, unsigned int log_mask);
 
 /* general */
 #define LG_NONE         0x00000001      /* don't log                */

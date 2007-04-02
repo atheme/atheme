@@ -4,7 +4,7 @@
  *
  * This file contains the signal handling routines.
  *
- * $Id: signal.c 7953 2007-03-17 12:59:48Z jilles $
+ * $Id: signal.c 8049 2007-04-02 12:40:41Z nenolod $
  */
 
 #include "atheme.h"
@@ -86,9 +86,6 @@ signal_usr2_handler(int signum)
 static void
 signal_usr1_handler(int signum)
 {
-	if (log_file != NULL)
-		write(fileno(log_file), "Out of memory!\n", 15);
-
 	if (me.connected && curr_uplink != NULL &&
 		curr_uplink->conn != NULL)
 	{
@@ -135,14 +132,13 @@ void check_signals(void)
 		snoop("REHASH: \2%s\2", "system console");
 		wallops(_("Rehashing \2%s\2 by request of \2%s\2."), config_file, "system console");
 
+		/* reinitialize the logging subsystem. */
+		log_shutdown();
+		log_open();
+
+		/* reload the config, opening other logs besides the core log if needed. */
 		if (!conf_rehash())
 			wallops(_("REHASH of \2%s\2 failed. Please correct any errors in the file and try again."), config_file);
-
-		/* reopen log file -- jilles */
-		if (log_file != NULL)
-			fclose(log_file);
-		log_file = NULL;
-		log_open();
 
 		return;
 	}

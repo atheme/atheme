@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: conf.c 8049 2007-04-02 12:40:41Z nenolod $
  */
 
 #include "atheme.h"
@@ -33,6 +33,7 @@ static int c_operclass(CONFIGENTRY *);
 static int c_operator(CONFIGENTRY *);
 static int c_language(CONFIGENTRY *);
 static int c_string(CONFIGENTRY *);
+static int c_logfile(CONFIGENTRY *);
 
 static int c_si_name(CONFIGENTRY *);
 static int c_si_desc(CONFIGENTRY *);
@@ -157,6 +158,24 @@ static struct Token cflags[] = {
   { "GUARD",	   MC_GUARD	  },
   { "NONE",        0              },
   { NULL, 0 }
+};
+
+static struct Token logflags[] = {
+  { "DEBUG",       LG_ALL                                                                                     },
+  { "TRACE",       LG_INFO | LG_ERROR | LG_CMD_ALL | LG_NETWORK | LG_WALLOPS                                  },
+  { "MISC",        LG_INFO | LG_ERROR | LG_CMD_ADMIN | LG_CMD_REGISTER | LG_CMD_SET | LG_NETWORK | LG_WALLOPS },
+  { "NOTICE",      LG_INFO | LG_ERROR | LG_CMD_ADMIN | LG_CMD_REGISTER | LG_NETWORK                           },
+  { "ALL",         LG_ALL                                                                                     },
+  { "INFO",        LG_INFO                                                                                    },
+  { "ERROR",       LG_ERROR                                                                                   },
+  { "COMMANDS",    LG_CMD_ALL                                                                                 },
+  { "ADMIN",       LG_CMD_ADMIN                                                                               },
+  { "REGISTER",    LG_CMD_REGISTER                                                                            },
+  { "SET",         LG_CMD_SET                                                                                 },
+  { "NETWORK",     LG_NETWORK                                                                                 },
+  { "WALLOPS",     LG_WALLOPS                                                                                 },
+  { "RAWDATA",     LG_RAWDATA                                                                                 },
+  { NULL,          0                                                                                          }
 };
 
 list_t confblocks;
@@ -479,6 +498,7 @@ void init_newconf(void)
 	add_top_conf("OPERATOR", c_operator);
 	add_top_conf("LANGUAGE", c_language);
 	add_top_conf("STRING", c_string);
+	add_top_conf("LOGFILE", c_logfile);
 
 	/* Now we fill in the information */
 	add_conf_item("NAME", &conf_si_table, c_si_name);
@@ -1052,23 +1072,21 @@ static int c_si_mta(CONFIGENTRY *ce)
 
 static int c_si_loglevel(CONFIGENTRY *ce)
 {
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
+	CONFIGENTRY *flce;
 
-	if (!strcasecmp("DEBUG", ce->ce_vardata))
-		me.loglevel = LG_ALL;
-	else if (!strcasecmp("TRACE", ce->ce_vardata))
-		me.loglevel = LG_INFO | LG_ERROR | LG_CMD_ALL | LG_NETWORK | LG_WALLOPS;
-	else if (!strcasecmp("INFO", ce->ce_vardata))
-		me.loglevel = LG_INFO | LG_ERROR | LG_CMD_ADMIN | LG_CMD_REGISTER | LG_CMD_SET | LG_NETWORK | LG_WALLOPS;
-	else if (!strcasecmp("NOTICE", ce->ce_vardata))
-		me.loglevel = LG_INFO | LG_ERROR | LG_CMD_ADMIN | LG_CMD_REGISTER | LG_NETWORK;
-	else if (!strcasecmp("ERROR", ce->ce_vardata))
-		me.loglevel = LG_ERROR | LG_CMD_ADMIN;
-	else if (!strcasecmp("NONE", ce->ce_vardata))
-		me.loglevel = 0;
-	else
-		me.loglevel = LG_ERROR | LG_CMD_ADMIN;
+	for (flce = ce->ce_entries; flce; flce = flce->ce_next)
+	{
+		int val;
+
+		val = token_to_value(logflags, flce->ce_varname);
+
+		if ((val != TOKEN_UNMATCHED) && (val != TOKEN_ERROR))
+			me.loglevel |= val;
+		else
+		{
+			slog(LG_INFO, "%s:%d: unknown flag: %s", flce->ce_fileptr->cf_filename, flce->ce_varlinenum, flce->ce_varname);
+		}
+	}
 
 	return 0;
 }
@@ -1718,6 +1736,33 @@ static int c_db_port(CONFIGENTRY *ce)
 		PARAM_ERROR(ce);
 
 	database_options.port = ce->ce_vardatanum;
+
+	return 0;
+}
+
+static int c_logfile(CONFIGENTRY *ce)
+{
+	CONFIGENTRY *flce;
+	unsigned int logval = 0;
+
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	for (flce = ce->ce_entries; flce; flce = flce->ce_next)
+	{
+		int val;
+
+		val = token_to_value(logflags, flce->ce_varname);
+
+		if ((val != TOKEN_UNMATCHED) && (val != TOKEN_ERROR))
+			logval |= val;
+		else
+		{
+			slog(LG_INFO, "%s:%d: unknown flag: %s", flce->ce_fileptr->cf_filename, flce->ce_varlinenum, flce->ce_varname);
+		}
+	}
+
+	logfile_new(ce->ce_vardata, logval);
 
 	return 0;
 }
