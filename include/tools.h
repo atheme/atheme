@@ -5,7 +5,7 @@
  *
  * Misc tools
  *
- * $Id: tools.h 8041 2007-04-02 11:05:33Z nenolod $
+ * $Id: tools.h 8047 2007-04-02 11:49:10Z jilles $
  */
 
 #ifndef _TOOLS_H
@@ -109,8 +109,7 @@ E void arc4random_addrandom(unsigned char *dat, int datlen);
 E unsigned int arc4random(void);
 #endif /* !HAVE_ARC4RANDOM */
 
-/* function.c */
-/* logging stuff */
+/* logger.c */
 E FILE *log_file;
 E char *log_path;
 E int log_force;
@@ -150,6 +149,7 @@ E void logcommand(sourceinfo_t *si, int level, const char *fmt, ...);
 E void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt, ...);
 E void logcommand_external(service_t *svs, const char *type, connection_t *source, const char *sourcedesc, myuser_t *login, int level, const char *fmt, ...);
 
+/* function.c */
 /* misc string stuff */
 E char *gen_pw(int sz);
 E void tb2sp(char *line);

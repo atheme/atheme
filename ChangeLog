@@ -1,3 +1,12 @@
+nenolod     2007/04/02 11:14:11 UTC	(20070402-8045)
+  Log:
+  - enable $Id$ expansion.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/logger.c (File Modified) (Property Modified)
+
+
 nenolod     2007/04/02 11:13:30 UTC	(20070402-8043)
   Log:
   - split out logging functions into logger.c.
