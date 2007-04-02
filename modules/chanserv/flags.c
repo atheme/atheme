@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 8065 2007-04-02 14:41:59Z nenolod $
+ * $Id: flags.c 8073 2007-04-02 15:28:57Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 8065 2007-04-02 14:41:59Z nenolod $",
+	"$Id: flags.c 8073 2007-04-02 15:28:57Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -98,7 +98,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	int operoverride = 0;
 	char *channel = parv[0];
 	char *target = parv[1];
-	const char *str1;
+	const char *str1, *str2;
 	unsigned int addflags, removeflags, restrictflags;
 
 	if (parc < 1)
@@ -143,12 +143,13 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		{
 			ca = n->data;
 			str1 = get_template_name(mc, ca->level);
+			str2 = ca->ts ? time_ago(ca->ts) : "?";
 			if (str1 != NULL)
 				command_success_nodata(si, _("%-5d %-22s %s (%s) [modified %s ago]"), i, ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level, chanacs_flags), str1,
-					time_ago(ca->ts));
+					str2);
 			else
 				command_success_nodata(si, _("%-5d %-22s %s [modified %s ago]"), i, ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level, chanacs_flags),
-					time_ago(ca->ts));
+					str2);
 			i++;
 		}
 

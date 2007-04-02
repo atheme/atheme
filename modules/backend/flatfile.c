@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 8051 2007-04-02 14:11:06Z nenolod $
+ * $Id: flatfile.c 8073 2007-04-02 15:28:57Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 8051 2007-04-02 14:11:06Z nenolod $",
+	"$Id: flatfile.c 8073 2007-04-02 15:28:57Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -625,7 +625,8 @@ static void flatfile_db_load(void)
 				if (i >= DB_ATHEME)
 				{
 					unsigned int fl = flags_to_bitmask(strtok(NULL, " "), chanacs_flags, 0x0);
-					time_t ts = CURRTIME;
+					const char *tsstr;
+					time_t ts = 0;
 
 					/* Compatibility with oldworld Atheme db's. --nenolod */
 					/* arbitrary cutoff to avoid touching newer +voOt entries -- jilles */
@@ -634,11 +635,12 @@ static void flatfile_db_load(void)
 
 					/* 
 					 * If the database revision is version 6 or newer, CA entries are
-					 * timestamped... otherwise we use CURRTIME as the last modified TS
-					 *    --nenolod
+					 * timestamped... otherwise we use 0 as the last modified TS
+					 *    --nenolod/jilles
 					 */
-					if (i >= 6)
-						ts = atoi(strtok(NULL, " "));
+					tsstr = strtok(NULL, " ");
+					if (tsstr != NULL)
+						ts = atoi(tsstr);
 
 					/* previous to CA_ACLVIEW, everyone could view
 					 * access lists. If they aren't AKICKed, upgrade

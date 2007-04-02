@@ -1,3 +1,12 @@
+jilles      2007/04/02 15:27:41 UTC	(20070402-8071)
+  Log:
+  Use absolute paths also in !FHS_PATHS mode.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/configure.ac (File Modified) 
+
+
 jilles      2007/04/02 15:27:16 UTC	(20070402-8069)
   Log:
   Fix duplicate name.
