@@ -1,3 +1,16 @@
+jilles      2007/04/02 15:28:57 UTC	(20070402-8073)
+  Log:
+  Parse last modified time field on chanacs entries when
+  it is present, instead of when the DB version is high
+  enough. If it is not present, store 0 instead of the
+  current time. The value 0 appears as ? in /cs flags.
+  
+
+  Changes:	Modified:
+  +7 -5		trunk/modules/backend/flatfile.c (File Modified) 
+  +4 -3		trunk/modules/chanserv/flags.c (File Modified) 
+
+
 jilles      2007/04/02 15:27:41 UTC	(20070402-8071)
   Log:
   Use absolute paths also in !FHS_PATHS mode.

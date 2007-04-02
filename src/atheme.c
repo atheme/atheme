@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 8049 2007-04-02 12:40:41Z nenolod $
+ * $Id: atheme.c 8075 2007-04-02 15:50:27Z nenolod $
  */
 
 #include "atheme.h"
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 	int i, pid, r;
 	FILE *pid_file;
 	char *pidfilename = RUNDIR "/atheme.pid";
-#ifndef _WIN32
+#ifdef HAVE_GETRLIMIT
 	struct rlimit rlim;
 #endif
 	curr_uplink = NULL;
@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
 		return 20;
 	}
 
-#ifndef _WIN32
+#ifdef HAVE_GETRLIMIT
 	/* it appears certian systems *ahem*linux*ahem*
 	 * don't dump cores by default, so we do this here.
 	 */
