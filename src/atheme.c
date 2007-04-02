@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 8075 2007-04-02 15:50:27Z nenolod $
+ * $Id: atheme.c 8077 2007-04-02 15:56:57Z nenolod $
  */
 
 #include "atheme.h"
@@ -31,7 +31,7 @@ char *config_file;
 char *log_path;
 boolean_t cold_start = FALSE;
 
-#ifndef _WIN32
+#ifndef HAVE_GETENV
 extern char **environ;
 #endif
 
@@ -249,7 +249,7 @@ int main(int argc, char *argv[])
 	}
 	db_check();
 
-#ifndef _WIN32
+#ifdef HAVE_FORK
 	/* fork into the background */
 	if (!(runflags & RF_LIVE))
 	{
@@ -291,7 +291,7 @@ int main(int argc, char *argv[])
 	printf("atheme: running in foreground mode from %s\n", PREFIX);
 #endif
 
-#ifndef _WIN32
+#ifdef HAVE_GETPID
 	/* write pid */
 	if ((pid_file = fopen(pidfilename, "w")))
 	{
@@ -348,7 +348,7 @@ int main(int argc, char *argv[])
 	{
 		slog(LG_INFO, "main(): restarting");
 
-#ifndef _WIN32
+#ifdef HAVE_EXECVE
 		execve("bin/atheme", argv, environ);
 #endif
 	}

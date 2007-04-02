@@ -1,3 +1,13 @@
+nenolod     2007/04/02 15:50:27 UTC	(20070402-8075)
+  Log:
+  - check for getrlimit() in configure. change improper #ifndef _WIN32 accordingly.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/configure.ac (File Modified) 
+  +2 -2		trunk/src/atheme.c (File Modified) 
+
+
 jilles      2007/04/02 15:28:57 UTC	(20070402-8073)
   Log:
   Parse last modified time field on chanacs entries when
