@@ -4,34 +4,21 @@
  *
  * Dynamic linker.
  *
- * $Id: linker.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: linker.c 8081 2007-04-02 17:41:58Z nenolod $
  */
 
 #include "atheme.h"
 
-#ifndef _WIN32
 #include <dlfcn.h>
-#endif
 
 #ifdef __OpenBSD__
 # define RTLD_NOW RTLD_LAZY
 #endif
 
-#if !defined(_WIN32) && !defined(__OS2__)
-# ifndef __HPUX__
-#  define PLATFORM_SUFFIX ".so"
-# else
-#  define PLATFORM_SUFFIX ".sl"
-# endif
+#ifndef __HPUX__
+# define PLATFORM_SUFFIX ".so"
 #else
-# define PLATFORM_SUFFIX ".dll"
-#endif
-
-/* Simple hack to make dl*() work on Windows */
-#ifdef _WIN32
-#define dlopen(f,n) LoadLibrary(f)
-#define dlsym GetProcAddress
-#define dlclose FreeLibrary
+# define PLATFORM_SUFFIX ".sl"
 #endif
 
 /*

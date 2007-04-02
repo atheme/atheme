@@ -1,3 +1,25 @@
+nenolod     2007/04/02 17:37:39 UTC	(20070402-8079)
+  Log:
+  - get rid of most _WIN32 crap
+  
+
+  Changes:	Modified:
+  +2 -25	trunk/include/atheme.h (File Modified) 
+  +0 -15	trunk/include/sockio.h (File Modified) 
+  +10 -39	trunk/include/stdinc.h (File Modified) 
+  +0 -2		trunk/include/tools.h (File Modified) 
+  +1 -3		trunk/modules/backend/flatfile.c (File Modified) 
+  +0 -4		trunk/modules/operserv/modrestart.c (File Modified) 
+  +1 -4		trunk/modules/protocol/ultimate3.c (File Modified) 
+  +10 -17	trunk/src/balloc.c (File Modified) 
+  +0 -9		trunk/src/connection.c (File Modified) 
+  +0 -18	trunk/src/function.c (File Modified) 
+  +0 -4		trunk/src/memory.c (File Modified) 
+  +0 -9		trunk/src/module.c (File Modified) 
+  +0 -42	trunk/src/sockio.c (File Modified) 
+  +2 -15	trunk/src/xmlrpc.c (File Modified) 
+
+
 nenolod     2007/04/02 15:56:57 UTC	(20070402-8077)
   Log:
   - check for fork, getpid, getenv
