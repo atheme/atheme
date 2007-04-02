@@ -5,7 +5,7 @@
  *
  * Misc tools
  *
- * $Id: tools.h 8049 2007-04-02 12:40:41Z nenolod $
+ * $Id: tools.h 8069 2007-04-02 15:27:16Z jilles $
  */
 
 #ifndef _TOOLS_H
@@ -122,7 +122,7 @@ typedef struct logfile_ {
 E char *log_path; /* contains path to default log. */
 E int log_force;
 
-E logfile_t *logfile_new(const char *log_path, unsigned int log_mask);
+E logfile_t *logfile_new(const char *log_path_, unsigned int log_mask);
 
 /* general */
 #define LG_NONE         0x00000001      /* don't log                */
