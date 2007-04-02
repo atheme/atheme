@@ -1,3 +1,13 @@
+jilles      2007/04/02 09:27:15 UTC	(20070402-8019)
+  Log:
+  chanserv topicprepend: don't put TOPICAPPEND in not
+  enough parameters message
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/modules/chanserv/topic.c (File Modified) 
+
+
 nenolod     2007/04/02 07:07:35 UTC	(20070402-8017)
   Log:
   - add TOPICPREPEND command.

@@ -4,7 +4,7 @@
  *
  * User management functions.
  *
- * $Id: users.c 7849 2007-03-06 00:27:39Z pippijn $
+ * $Id: users.c 8021 2007-04-02 10:20:19Z nenolod $
  */
 
 #include "atheme.h"
@@ -44,7 +44,7 @@ void init_users(void)
 
 /*
  * user_add(const char *nick, const char *user, const char *host, const char *vhost, const char *ip,
- *          const char *uid, const char *gecos, server_t *server, uint32_t ts);
+ *          const char *uid, const char *gecos, server_t *server, time_t ts);
  *
  * User object factory.
  *
@@ -67,10 +67,11 @@ void init_users(void)
  *     - if successful, a user is created and added to the users DTree.
  *
  * Bugs:
- *     - user timestamps should be time_t, not uint32_t.
  *     - this function does not check if a user object by this name already exists
  */
-user_t *user_add(const char *nick, const char *user, const char *host, const char *vhost, const char *ip, const char *uid, const char *gecos, server_t *server, uint32_t ts)
+user_t *user_add(const char *nick, const char *user, const char *host, 
+	const char *vhost, const char *ip, const char *uid, const char *gecos, 
+	server_t *server, time_t ts)
 {
 	user_t *u;
 
@@ -295,7 +296,7 @@ void user_changeuid(user_t *u, const char *uid)
  * Side Effects:
  *     - a user object's nick and TS is changed.
  */
-void user_changenick(user_t *u, const char *nick, uint32_t ts)
+void user_changenick(user_t *u, const char *nick, time_t ts)
 {
 	mynick_t *mn;
 

@@ -4,7 +4,7 @@
  *
  * Data structures for connected clients.
  *
- * $Id: users.h 7809 2007-03-04 23:16:56Z jilles $
+ * $Id: users.h 8021 2007-04-02 10:20:19Z nenolod $
  */
 
 #ifndef USERS_H
@@ -31,7 +31,7 @@ struct user_
 
 	uint32_t flags;
 
-	uint32_t ts;
+	time_t ts;
 };
 
 #define UF_AWAY        0x00000002
@@ -55,12 +55,12 @@ E dictionary_tree_t *uidlist;
 
 E void init_users(void);
 
-E user_t *user_add(const char *nick, const char *user, const char *host, const char *vhost, const char *ip, const char *uid, const char *gecos, server_t *server, uint32_t ts);
+E user_t *user_add(const char *nick, const char *user, const char *host, const char *vhost, const char *ip, const char *uid, const char *gecos, server_t *server, time_t ts);
 E void user_delete(user_t *u);
 E user_t *user_find(const char *nick);
 E user_t *user_find_named(const char *nick);
 E void user_changeuid(user_t *u, const char *uid);
-E void user_changenick(user_t *u, const char *nick, uint32_t ts);
+E void user_changenick(user_t *u, const char *nick, time_t ts);
 E void user_mode(user_t *user, char *modes);
 
 /* uid.c */
