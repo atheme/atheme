@@ -4,7 +4,7 @@
  *
  * This file contains logging routines.
  *
- * $Id: logger.c 8061 2007-04-02 14:38:31Z nenolod $
+ * $Id: logger.c 8063 2007-04-02 14:39:56Z nenolod $
  */
 
 #include "atheme.h"
@@ -232,7 +232,7 @@ void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt,
 	va_start(args, fmt);
 	vsnprintf(lbuf, BUFSIZE, fmt, args);
 
-	slog(level, "%s %s:%s!%s@%s[%s] %s\n",
+	slog(level, "%s %s:%s!%s@%s[%s] %s",
 			svs != NULL ? svs->name : me.name,
 			source->myuser != NULL ? source->myuser->name : "",
 			source->nick, source->user, source->vhost,
@@ -274,7 +274,7 @@ void logcommand_external(service_t *svs, const char *type, connection_t *source,
 	va_start(args, fmt);
 	vsnprintf(lbuf, BUFSIZE, fmt, args);
 
-	slog(level, "%s %s:%s(%s)[%s] %s\n",
+	slog(level, "%s %s:%s(%s)[%s] %s",
 			svs != NULL ? svs->name : me.name,
 			login != NULL ? login->name : "",
 			type,

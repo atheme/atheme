@@ -1,3 +1,12 @@
+nenolod     2007/04/02 14:38:31 UTC	(20070402-8061)
+  Log:
+  - fix a logging issue where the inverse targets are being logged
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/logger.c (File Modified) 
+
+
 nenolod     2007/04/02 14:28:15 UTC	(20070402-8059)
   Log:
   - show last modified time
