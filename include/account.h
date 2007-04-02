@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: account.h 8051 2007-04-02 14:11:06Z nenolod $
  */
 
 #ifndef ACCOUNT_H
@@ -151,6 +151,7 @@ struct chanacs_
 	char      host[HOSTLEN];
 	unsigned int  level;
 	list_t	  metadata;
+	time_t    ts;
 };
 
 /* the new atheme-style channel flags */

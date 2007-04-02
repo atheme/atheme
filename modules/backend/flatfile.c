@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: flatfile.c 8051 2007-04-02 14:11:06Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 8027 2007-04-02 10:47:18Z nenolod $",
+	"$Id: flatfile.c 8051 2007-04-02 14:11:06Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -108,7 +108,7 @@ static void flatfile_db_save(void *arg)
 	}
 
 	/* write the database version */
-	fprintf(f, "DBV 5\n");
+	fprintf(f, "DBV 6\n");
 	fprintf(f, "CF %s\n", bitmask_to_flags(ca_all, chanacs_flags));
 
 	slog(LG_DEBUG, "db_save(): saving myusers");
@@ -140,8 +140,8 @@ static void flatfile_db_save(void *arg)
 		{
 			ca = (chanacs_t *)tn->data;
 
-			fprintf(f, "CA %s %s %s\n", ca->mychan->name, ca->myuser ? ca->myuser->name : ca->host,
-					bitmask_to_flags(ca->level, chanacs_flags));
+			fprintf(f, "CA %s %s %s %ld\n", ca->mychan->name, ca->myuser ? ca->myuser->name : ca->host,
+					bitmask_to_flags(ca->level, chanacs_flags), ca->ts);
 
 			LIST_FOREACH(tn2, ca->metadata.head)
 			{
@@ -274,9 +274,10 @@ static void flatfile_db_load(void)
 		if (!strcmp("DBV", item))
 		{
 			i = atoi(strtok(NULL, " "));
-			if (i > 5)
+			if (i > 6)
 			{
-				slog(LG_INFO, "db_load(): database version is %d; i only understand 4 (Atheme 0.2), 3 (Atheme 0.2 without CA_ACLVIEW), 2 (Atheme 0.1) or 1 (Shrike)", i);
+				slog(LG_INFO, "db_load(): database version is %d; i only understand 5 (Atheme 2.0, 2.1), "
+					"4 (Atheme 0.2), 3 (Atheme 0.2 without CA_ACLVIEW), 2 (Atheme 0.1) or 1 (Shrike)", i);
 				exit(EXIT_FAILURE);
 			}
 		}
@@ -624,11 +625,20 @@ static void flatfile_db_load(void)
 				if (i >= DB_ATHEME)
 				{
 					unsigned int fl = flags_to_bitmask(strtok(NULL, " "), chanacs_flags, 0x0);
+					time_t ts = CURRTIME;
 
 					/* Compatibility with oldworld Atheme db's. --nenolod */
 					/* arbitrary cutoff to avoid touching newer +voOt entries -- jilles */
 					if (fl == OLD_CA_AOP && i < 4)
 						fl = CA_AOP_DEF;
+
+					/* 
+					 * If the database revision is version 6 or newer, CA entries are
+					 * timestamped... otherwise we use CURRTIME as the last modified TS
+					 *    --nenolod
+					 */
+					if (i >= 6)
+						ts = atoi(strtok(NULL, " "));
 
 					/* previous to CA_ACLVIEW, everyone could view
 					 * access lists. If they aren't AKICKed, upgrade
@@ -647,14 +657,15 @@ static void flatfile_db_load(void)
 						fl |= CA_HALFOP;
 
 					if ((!mu) && (validhostmask(causer)))
-						ca = chanacs_add_host(mc, causer, fl);
+						ca = chanacs_add_host(mc, causer, fl, ts);
 					else
-						ca = chanacs_add(mc, mu, fl);
+						ca = chanacs_add(mc, mu, fl, ts);
 				}
 				else if (i == DB_SHRIKE)	/* DB_SHRIKE */
 				{
 					unsigned int fl = atol(strtok(NULL, " "));
 					unsigned int fl2 = 0x0;
+					time_t ts = CURRTIME;
 
 					switch (fl)
 					{
@@ -671,9 +682,9 @@ static void flatfile_db_load(void)
 					}
 
 					if ((!mu) && (validhostmask(causer)))
-						ca = chanacs_add_host(mc, causer, fl2);
+						ca = chanacs_add_host(mc, causer, fl2, ts);
 					else
-						ca = chanacs_add(mc, mu, fl2);
+						ca = chanacs_add(mc, mu, fl2, ts);
 				}
 			}
 		}

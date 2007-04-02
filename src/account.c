@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: account.c 8051 2007-04-02 14:11:06Z nenolod $
  */
 
 #include "atheme.h"
@@ -793,7 +793,24 @@ static void chanacs_delete(chanacs_t *ca)
 	cnt.chanacs--;
 }
 
-chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level)
+/*
+ * chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level, time_t ts)
+ *
+ * Creates an access entry mapping between a user and channel.
+ *
+ * Inputs:
+ *       - a channel to create a mapping for
+ *       - a user to create a mapping for
+ *       - a bitmask which describes the access entry's privileges
+ *       - a timestamp for this access entry
+ *
+ * Outputs:
+ *       - a chanacs_t object which describes the mapping
+ *
+ * Side Effects:
+ *       - the channel access list is updated for mychan.
+ */
+chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level, time_t ts)
 {
 	chanacs_t *ca;
 	node_t *n1;
@@ -819,6 +836,7 @@ chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level)
 	ca->mychan = mychan;
 	ca->myuser = myuser;
 	ca->level = level & ca_all;
+	ca->ts = ts;
 
 	node_add(ca, n1, &mychan->chanacs);
 	node_add(ca, n2, &myuser->chanacs);
@@ -828,7 +846,24 @@ chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level)
 	return ca;
 }
 
-chanacs_t *chanacs_add_host(mychan_t *mychan, char *host, unsigned int level)
+/*
+ * chanacs_add_host(mychan_t *mychan, char *host, unsigned int level, time_t ts)
+ *
+ * Creates an access entry mapping between a hostmask and channel.
+ *
+ * Inputs:
+ *       - a channel to create a mapping for
+ *       - a hostmask to create a mapping for
+ *       - a bitmask which describes the access entry's privileges
+ *       - a timestamp for this access entry
+ *
+ * Outputs:
+ *       - a chanacs_t object which describes the mapping
+ *
+ * Side Effects:
+ *       - the channel access list is updated for mychan.
+ */
+chanacs_t *chanacs_add_host(mychan_t *mychan, char *host, unsigned int level, time_t ts)
 {
 	chanacs_t *ca;
 	node_t *n;
@@ -853,6 +888,7 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, char *host, unsigned int level)
 	ca->myuser = NULL;
 	strlcpy(ca->host, host, HOSTLEN);
 	ca->level |= level;
+	ca->ts = ts;
 
 	node_add(ca, n, &mychan->chanacs);
 
@@ -1091,7 +1127,7 @@ boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, unsigne
 			/* attempting to add bad flag? */
 			if (~restrictflags & *addflags)
 				return FALSE;
-			chanacs_add(mychan, mu, *addflags);
+			chanacs_add(mychan, mu, *addflags, CURRTIME);
 		}
 		else
 		{
@@ -1110,6 +1146,7 @@ boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, unsigne
 			if (~restrictflags & ca->level)
 				return FALSE;
 			ca->level = (ca->level | *addflags) & ~*removeflags;
+			ca->ts = CURRTIME;
 			if (ca->level == 0)
 				object_unref(ca);
 		}
@@ -1126,7 +1163,7 @@ boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, unsigne
 			/* attempting to add bad flag? */
 			if (~restrictflags & *addflags)
 				return FALSE;
-			chanacs_add_host(mychan, hostmask, *addflags);
+			chanacs_add_host(mychan, hostmask, *addflags, CURRTIME);
 		}
 		else
 		{
@@ -1145,6 +1182,7 @@ boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, unsigne
 			if (~restrictflags & ca->level)
 				return FALSE;
 			ca->level = (ca->level | *addflags) & ~*removeflags;
+			ca->ts = CURRTIME;
 			if (ca->level == 0)
 				object_unref(ca);
 		}

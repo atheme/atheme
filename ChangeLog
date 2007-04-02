@@ -1,3 +1,18 @@
+nenolod     2007/04/02 12:40:41 UTC	(20070402-8049)
+  Log:
+  - rewrite the logging system.
+  
+
+  Changes:	Modified:
+  +51 -4	trunk/dist/example.conf (File Modified) 
+  +12 -2	trunk/include/tools.h (File Modified) 
+  +1 -19	trunk/modules/saslserv/main.c (File Modified) 
+  +1 -4		trunk/src/atheme.c (File Modified) 
+  +61 -16	trunk/src/conf.c (File Modified) 
+  +202 -89	trunk/src/logger.c (File Modified) 
+  +5 -9		trunk/src/signal.c (File Modified) 
+
+
 jilles      2007/04/02 11:49:10 UTC	(20070402-8047)
   Log:
   Update comments in tools.h.

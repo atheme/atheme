@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: xop.c 8051 2007-04-02 14:11:06Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 8027 2007-04-02 10:47:18Z nenolod $",
+	"$Id: xop.c 8051 2007-04-02 14:11:06Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -263,7 +263,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 			logcommand(si, CMDLOG_SET, "%s %s ADD %s", mc->name, leveldesc, target);
 			command_success_nodata(si, _("\2%s\2 has been added to the %s list for \2%s\2."), target, leveldesc, mc->name);
 			verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", get_source_name(si), target, leveldesc);
-			chanacs_add_host(mc, target, level);
+			chanacs_add_host(mc, target, level, CURRTIME);
 		}
 
 		/* run through the channel's user list and do it */
@@ -359,7 +359,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		logcommand(si, CMDLOG_SET, "%s %s ADD %s", mc->name, leveldesc, mu->name);
 		command_success_nodata(si, _("\2%s\2 has been added to the %s list for \2%s\2."), mu->name, leveldesc, mc->name);
 		verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", get_source_name(si), mu->name, leveldesc);
-		chanacs_add(mc, mu, level);
+		chanacs_add(mc, mu, level, CURRTIME);
 	}
 	/* run through the channel's user list and do it */
 	/* make sure the channel exists */
