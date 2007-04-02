@@ -1,3 +1,13 @@
+nenolod     2007/04/02 14:41:59 UTC	(20070402-8065)
+  Log:
+  - modified %s -> modified %s ago
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/modules/chanserv/akick.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/flags.c (File Modified) 
+
+
 nenolod     2007/04/02 14:39:56 UTC	(20070402-8063)
   Log:
   - remove duplicate newlines
