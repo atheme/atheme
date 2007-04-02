@@ -4,7 +4,7 @@
  *
  * Socketengine implementing select().
  *
- * $Id: select.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: select.c 8023 2007-04-02 10:22:01Z nenolod $
  */
 
 #include "atheme.h"
@@ -80,7 +80,7 @@ static void update_select_sets(void)
  * side effects:
  *       registered sockets and their associated handlers are acted on.
  */
-void connection_select(uint32_t delay)
+void connection_select(time_t delay)
 {
 	int8_t sr;
 	node_t *n, *tn;

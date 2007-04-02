@@ -1,3 +1,13 @@
+nenolod     2007/04/02 10:20:19 UTC	(20070402-8021)
+  Log:
+  - store timestamps as time_t and not as uint32_t.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/include/users.h (File Modified) 
+  +5 -4		trunk/src/users.c (File Modified) 
+
+
 jilles      2007/04/02 09:27:15 UTC	(20070402-8019)
   Log:
   chanserv topicprepend: don't put TOPICAPPEND in not

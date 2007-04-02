@@ -4,7 +4,7 @@
  *
  * Socketengine implementing poll().
  *
- * $Id: poll.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: poll.c 8023 2007-04-02 10:22:01Z nenolod $
  */
 
 #include <sys/poll.h>
@@ -96,7 +96,7 @@ static void update_poll_fds(void)
  * side effects:
  *       registered sockets and their associated handlers are acted on.
  */
-void connection_select(uint32_t delay)
+void connection_select(time_t delay)
 {
 	int32_t sr;
 	node_t *n, *tn;
