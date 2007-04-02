@@ -4,7 +4,7 @@
  *
  * This file contains logging routines.
  *
- * $Id: function.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: logger.c 8045 2007-04-02 11:14:11Z nenolod $
  */
 
 #include "atheme.h"
