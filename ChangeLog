@@ -1,3 +1,18 @@
+nenolod     2007/04/02 14:11:06 UTC	(20070402-8051)
+  Log:
+  - add tracking of last modified TS
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/account.h (File Modified) 
+  +20 -9	trunk/modules/backend/flatfile.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/akick.c (File Modified) 
+  +4 -2		trunk/modules/chanserv/flags.c (File Modified) 
+  +1 -1		trunk/modules/chanserv/register.c (File Modified) 
+  +2 -2		trunk/modules/chanserv/xop.c (File Modified) 
+  +42 -4	trunk/src/account.c (File Modified) 
+
+
 nenolod     2007/04/02 12:40:41 UTC	(20070402-8049)
   Log:
   - rewrite the logging system.
