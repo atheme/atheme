@@ -1,3 +1,12 @@
+nenolod     2007/04/02 11:05:33 UTC	(20070402-8041)
+  Log:
+  - chase r8039.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/include/tools.h (File Modified) 
+
+
 nenolod     2007/04/02 11:04:24 UTC	(20070402-8039)
   Log:
   - uint8_t -> unsigned char
