@@ -4,7 +4,7 @@
  *
  * Per-channel userinfo thingie
  *
- * $Id: cs_userinfo.c 8025 2007-04-02 10:36:56Z jilles $
+ * $Id: cs_userinfo.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/userinfo", FALSE, _modinit, _moddeinit,
-	"$Id: cs_userinfo.c 8025 2007-04-02 10:36:56Z jilles $",
+	"$Id: cs_userinfo.c 8027 2007-04-02 10:47:18Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -50,7 +50,7 @@ static void cs_cmd_userinfo(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
 	chanacs_t *ca;
 	metadata_t *md;
-	uint32_t restrictflags;
+	unsigned int restrictflags;
 
 	if (parc < 1)
 	{

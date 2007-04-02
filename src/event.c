@@ -5,7 +5,7 @@
  * This file contains routines that interface the event system.
  * This code is based on ircd-ratbox's event.c with modifications.
  *
- * $Id: event.c 7839 2007-03-06 00:09:30Z pippijn $
+ * $Id: event.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -16,9 +16,9 @@ struct ev_entry event_table[MAX_EVENTS];
 static time_t event_time_min = -1;
 
 /* add an event to the table to be continually ran */
-uint32_t event_add(const char *name, EVH *func, void *arg, time_t when)
+unsigned int event_add(const char *name, EVH *func, void *arg, time_t when)
 {
-	uint32_t i;
+	unsigned int i;
 
 	/* find the first inactive index */
 	for (i = 0; i < MAX_EVENTS; i++)
@@ -50,9 +50,9 @@ uint32_t event_add(const char *name, EVH *func, void *arg, time_t when)
 }
 
 /* adds an event to the table to be ran only once */
-uint32_t event_add_once(const char *name, EVH *func, void *arg, time_t when)
+unsigned int event_add_once(const char *name, EVH *func, void *arg, time_t when)
 {
-	uint32_t i;
+	unsigned int i;
 
 	/* find the first inactive index */
 	for (i = 0; i < MAX_EVENTS; i++)
@@ -86,7 +86,7 @@ uint32_t event_add_once(const char *name, EVH *func, void *arg, time_t when)
 /* delete an event from the table */
 void event_delete(EVH *func, void *arg)
 {
-	int32_t i = event_find(func, arg);
+	int i = event_find(func, arg);
 
 	if (i == -1)
 		return;
@@ -104,7 +104,7 @@ void event_delete(EVH *func, void *arg)
 /* checks all pending events */
 void event_run(void)
 {
-	uint32_t i;
+	unsigned int i;
 
 	for (i = 0; i < MAX_EVENTS; i++)
 	{
@@ -134,7 +134,7 @@ void event_run(void)
 /* returns the time the next event_run() should happen */
 time_t event_next_time(void)
 {
-	uint32_t i;
+	unsigned int i;
 
 	if (event_time_min == -1)
 	{
@@ -156,9 +156,9 @@ void event_init(void)
 }
 
 /* finds an event in the table */
-uint32_t event_find(EVH *func, void *arg)
+unsigned int event_find(EVH *func, void *arg)
 {
-	uint32_t i;
+	unsigned int i;
 
 	for (i = 0; i < MAX_EVENTS; i++)
 	{

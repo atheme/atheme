@@ -4,7 +4,7 @@
  *
  * Data structures related to network servers.
  *
- * $Id: servers.h 7965 2007-03-21 23:42:57Z jilles $
+ * $Id: servers.h 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #ifndef SERVERS_H
@@ -19,15 +19,15 @@ struct server_
 	char *desc;
 	char *sid;
 
-	uint8_t hops;
-	uint32_t users;
-	uint32_t invis;
-	uint32_t opers;
-	uint32_t away;
+	unsigned int hops;
+	unsigned int users;
+	unsigned int invis;
+	unsigned int opers;
+	unsigned int away;
 
 	time_t connected_since;
 
-	uint32_t flags;
+	unsigned int flags;
 
 	server_t *uplink; /* uplink server */
 	list_t children;  /* children linked to me */
@@ -57,7 +57,7 @@ E tld_t *tld_add(const char *name);
 E void tld_delete(const char *name);
 E tld_t *tld_find(const char *name);
 
-E server_t *server_add(const char *name, uint8_t hops, const char *uplink, const char *id, const char *desc);
+E server_t *server_add(const char *name, unsigned int hops, const char *uplink, const char *id, const char *desc);
 E void server_delete(const char *name);
 E server_t *server_find(const char *name);
 

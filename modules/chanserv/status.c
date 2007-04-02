@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService STATUS function.
  *
- * $Id: status.c 7921 2007-03-07 00:12:47Z jilles $
+ * $Id: status.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/status", FALSE, _modinit, _moddeinit,
-	"$Id: status.c 7921 2007-03-07 00:12:47Z jilles $",
+	"$Id: status.c 8027 2007-04-02 10:47:18Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -46,7 +46,7 @@ static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 	if (chan)
 	{
 		mychan_t *mc = mychan_find(chan);
-		uint32_t flags;
+		unsigned int flags;
 
 		if (*chan != '#')
 		{

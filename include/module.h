@@ -4,7 +4,7 @@
  *
  * This file contains data structures concerning modules.
  *
- * $Id: module.h 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: module.h 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #ifndef MODULE_H
@@ -18,7 +18,7 @@ struct module_ {
 	char modpath[BUFSIZE];
 	moduleheader_t *header;
 
-	uint16_t mflags;
+	unsigned int mflags;
 
 	void *address;
 	void *handle;
@@ -35,8 +35,8 @@ struct module_ {
 #define MAPI_ATHEME_V1		1
 
 struct moduleheader_ {
-	uint32_t atheme_mod;
-	uint32_t abi_ver;
+	unsigned int atheme_mod;
+	unsigned int abi_ver;
 	char *name;
 	boolean_t norestart;
 	void (*modinit)(module_t *m);

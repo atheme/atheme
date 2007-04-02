@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: sorcery.c 7973 2007-03-23 21:45:12Z jilles $
+ * $Id: sorcery.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/sorcery.h"
 
-DECLARE_MODULE_V1("protocol/sorcery", TRUE, _modinit, NULL, "$Id: sorcery.c 7973 2007-03-23 21:45:12Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/sorcery", TRUE, _modinit, NULL, "$Id: sorcery.c 8027 2007-04-02 10:47:18Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -73,9 +73,9 @@ struct cmode_ sorcery_prefix_mode_list[] = {
 /* *INDENT-ON* */
 
 /* login to our uplink */
-static uint8_t sorcery_server_login(void)
+static unsigned int sorcery_server_login(void)
 {
-	int8_t ret;
+	int ret;
 
 	ret = sts("PASS %s", curr_uplink->pass);
 	if (ret == 1)
@@ -375,7 +375,7 @@ static void m_notice(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_part(sourceinfo_t *si, int parc, char *parv[])
 {
-	uint8_t chanc;
+	unsigned int chanc;
 	char *chanv[256];
 	int i;
 
@@ -552,7 +552,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanuser_t *cu;
 	node_t *n, *tn;
-	uint8_t chanc;
+	unsigned int chanc;
 	char *chanv[256];
 	int i;
 

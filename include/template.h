@@ -4,14 +4,14 @@
  *
  * Predefined flags collections
  *
- * $Id: template.h 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: template.h 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #ifndef TEMPLATE_H
 #define TEMPLATE_H
 
 E char *getitem(char *str, char *name);
-E uint32_t get_template_flags(mychan_t *mc, char *name);
+E unsigned int get_template_flags(mychan_t *mc, char *name);
 
 #endif /* TEMPLATE_H */
 

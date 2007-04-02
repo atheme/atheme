@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 7979 2007-03-25 14:12:08Z jilles $
+ * $Id: services.h 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #ifndef SERVICES_H
@@ -29,10 +29,10 @@ struct chansvs_
 
   boolean_t fantasy;		/* enable fantasy commands    */
 
-  uint32_t ca_vop;		/* xop access levels */
-  uint32_t ca_hop;
-  uint32_t ca_aop;
-  uint32_t ca_sop;
+  unsigned int ca_vop;		/* xop access levels */
+  unsigned int ca_hop;
+  unsigned int ca_aop;
+  unsigned int ca_sop;
 
   char *trigger;		/* trigger, e.g. !, ` or .    */
 

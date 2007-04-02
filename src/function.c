@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 8015 2007-03-31 15:44:37Z jilles $
+ * $Id: function.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -22,9 +22,9 @@ char ch[27] = "abcdefghijklmnopqrstuvwxyz";
 /* This function uses smalloc() to allocate memory.
  * You MUST free the result when you are done with it!
  */
-char *gen_pw(int8_t sz)
+char *gen_pw(int sz)
 {
-	int8_t i;
+	int i;
 	char *buf = smalloc(sz + 1); /* padding */
 
 	for (i = 0; i < sz; i++)
@@ -58,9 +58,9 @@ void e_time(struct timeval sttime, struct timeval *ttime)
 
 #ifdef HAVE_GETTIMEOFDAY
 /* translates microseconds into miliseconds */
-int32_t tv2ms(struct timeval *tv)
+int tv2ms(struct timeval *tv)
 {
-	return (tv->tv_sec * 1000) + (int32_t) (tv->tv_usec / 1000);
+	return (tv->tv_sec * 1000) + (int) (tv->tv_usec / 1000);
 }
 #endif
 
@@ -97,7 +97,7 @@ void log_open(void)
 }
 
 /* logs something to shrike.log */
-void slog(uint32_t level, const char *fmt, ...)
+void slog(unsigned int level, const char *fmt, ...)
 {
 	va_list args;
 	time_t t;
@@ -241,7 +241,7 @@ void logcommand_external(service_t *svs, const char *type, connection_t *source,
  * that FNV uses a random key for toasting, we just use
  * 16 instead.
  */
-uint32_t shash(const unsigned char *p)
+unsigned int shash(const unsigned char *p)
 {
 	unsigned int hval = HASHINIT;
 
@@ -257,14 +257,14 @@ uint32_t shash(const unsigned char *p)
 }
 
 /* replace all occurances of 'old' with 'new' */
-char *replace(char *s, int32_t size, const char *old, const char *new)
+char *replace(char *s, int size, const char *old, const char *new)
 {
 	char *ptr = s;
-	int32_t left = strlen(s);
-	int32_t avail = size - (left + 1);
-	int32_t oldlen = strlen(old);
-	int32_t newlen = strlen(new);
-	int32_t diff = newlen - oldlen;
+	int left = strlen(s);
+	int avail = size - (left + 1);
+	int oldlen = strlen(old);
+	int newlen = strlen(new);
+	int diff = newlen - oldlen;
 
 	while (left >= oldlen)
 	{

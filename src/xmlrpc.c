@@ -41,7 +41,7 @@ XMLRPCCmd *next_xmlrpccmd(void);
 XMLRPCCmdHash *first_xmlrpchash(void);
 XMLRPCCmdHash *next_xmlrpchash(void);
 int destroyxmlrpchash(XMLRPCCmdHash * mh);
-char *xmlrcp_strnrepl(char *s, int32_t size, const char *old, const char *new);
+char *xmlrcp_strnrepl(char *s, int size, const char *old, const char *new);
 int xmlrpc_myNumToken(const char *str, const char dilim);
 
 /*************************************************************************/
@@ -1236,14 +1236,14 @@ char *xmlrpc_decode_string(char *buf)
 	return buf;
 }
 
-char *xmlrcp_strnrepl(char *s, int32_t size, const char *old, const char *new)
+char *xmlrcp_strnrepl(char *s, int size, const char *old, const char *new)
 {
 	char *ptr = s;
-	int32_t left = strlen(s);
-	int32_t avail = size - (left + 1);
-	int32_t oldlen = strlen(old);
-	int32_t newlen = strlen(new);
-	int32_t diff = newlen - oldlen;
+	int left = strlen(s);
+	int avail = size - (left + 1);
+	int oldlen = strlen(old);
+	int newlen = strlen(new);
+	int diff = newlen - oldlen;
 
 	while (left >= oldlen)
 	{

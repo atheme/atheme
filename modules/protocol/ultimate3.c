@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 7989 2007-03-27 16:58:54Z jilles $
+ * $Id: ultimate3.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 7989 2007-03-27 16:58:54Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 8027 2007-04-02 10:47:18Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -77,9 +77,9 @@ struct cmode_ ultimate3_prefix_mode_list[] = {
 /* *INDENT-ON* */
 
 /* login to our uplink */
-static uint8_t ultimate3_server_login(void)
+static unsigned int ultimate3_server_login(void)
 {
-	int8_t ret;
+	int ret;
 
 	ret = sts("PASS %s :TS", curr_uplink->pass);
 	if (ret == 1)
@@ -403,9 +403,9 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 	 */
 
 	channel_t *c;
-	uint8_t userc;
+	unsigned int userc;
 	char *userv[256];
-	uint8_t i;
+	unsigned int i;
 	time_t ts;
 
 	if (parc >= 4 && si->s != NULL)
@@ -490,7 +490,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_part(sourceinfo_t *si, int parc, char *parv[])
 {
-	uint8_t chanc;
+	unsigned int chanc;
 	char *chanv[256];
 	int i;
 

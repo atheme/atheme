@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 7937 2007-03-12 15:19:26Z jilles $
+ * $Id: account.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -55,7 +55,7 @@ void init_accounts(void)
 }
 
 /*
- * myuser_add(char *name, char *pass, char *email, uint32_t flags)
+ * myuser_add(char *name, char *pass, char *email, unsigned int flags)
  *
  * Creates an account and adds it to the accounts DTree.
  *
@@ -77,7 +77,7 @@ void init_accounts(void)
  *      - if nicksvs.no_nick_ownership is not enabled, the caller is
  *        responsible for adding a nick with the same name
  */
-myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags)
+myuser_t *myuser_add(char *name, char *pass, char *email, unsigned int flags)
 {
 	myuser_t *mu;
 	soper_t *soper;
@@ -684,7 +684,7 @@ boolean_t mychan_isused(mychan_t *mc)
 }
 
 /* Find a user fulfilling the conditions who can take another channel */
-myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t minlevel, int maxtime)
+myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel, int maxtime)
 {
 	int tcnt;
 	node_t *n, *n2;
@@ -793,7 +793,7 @@ static void chanacs_delete(chanacs_t *ca)
 	cnt.chanacs--;
 }
 
-chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, uint32_t level)
+chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level)
 {
 	chanacs_t *ca;
 	node_t *n1;
@@ -828,7 +828,7 @@ chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, uint32_t level)
 	return ca;
 }
 
-chanacs_t *chanacs_add_host(mychan_t *mychan, char *host, uint32_t level)
+chanacs_t *chanacs_add_host(mychan_t *mychan, char *host, unsigned int level)
 {
 	chanacs_t *ca;
 	node_t *n;
@@ -861,7 +861,7 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, char *host, uint32_t level)
 	return ca;
 }
 
-chanacs_t *chanacs_find(mychan_t *mychan, myuser_t *myuser, uint32_t level)
+chanacs_t *chanacs_find(mychan_t *mychan, myuser_t *myuser, unsigned int level)
 {
 	node_t *n;
 	chanacs_t *ca;
@@ -884,7 +884,7 @@ chanacs_t *chanacs_find(mychan_t *mychan, myuser_t *myuser, uint32_t level)
 	return NULL;
 }
 
-chanacs_t *chanacs_find_host(mychan_t *mychan, char *host, uint32_t level)
+chanacs_t *chanacs_find_host(mychan_t *mychan, char *host, unsigned int level)
 {
 	node_t *n;
 	chanacs_t *ca;
@@ -907,11 +907,11 @@ chanacs_t *chanacs_find_host(mychan_t *mychan, char *host, uint32_t level)
 	return NULL;
 }
 
-uint32_t chanacs_host_flags(mychan_t *mychan, char *host)
+unsigned int chanacs_host_flags(mychan_t *mychan, char *host)
 {
 	node_t *n;
 	chanacs_t *ca;
-	uint32_t result = 0;
+	unsigned int result = 0;
 
 	return_val_if_fail(mychan != NULL && host != NULL, 0);
 
@@ -926,7 +926,7 @@ uint32_t chanacs_host_flags(mychan_t *mychan, char *host)
 	return result;
 }
 
-chanacs_t *chanacs_find_host_literal(mychan_t *mychan, char *host, uint32_t level)
+chanacs_t *chanacs_find_host_literal(mychan_t *mychan, char *host, unsigned int level)
 {
 	node_t *n;
 	chanacs_t *ca;
@@ -950,7 +950,7 @@ chanacs_t *chanacs_find_host_literal(mychan_t *mychan, char *host, uint32_t leve
 	return NULL;
 }
 
-chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, uint32_t level)
+chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, unsigned int level)
 {
 	char host[BUFSIZE];
 
@@ -966,7 +966,7 @@ chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, uint32_t level
 	return chanacs_find_host(mychan, host, level);
 }
 
-uint32_t chanacs_host_flags_by_user(mychan_t *mychan, user_t *u)
+unsigned int chanacs_host_flags_by_user(mychan_t *mychan, user_t *u)
 {
 	char host[BUFSIZE];
 
@@ -982,7 +982,7 @@ uint32_t chanacs_host_flags_by_user(mychan_t *mychan, user_t *u)
 	return chanacs_host_flags(mychan, host);
 }
 
-chanacs_t *chanacs_find_by_mask(mychan_t *mychan, char *mask, uint32_t level)
+chanacs_t *chanacs_find_by_mask(mychan_t *mychan, char *mask, unsigned int level)
 {
 	myuser_t *mu;
 	chanacs_t *ca;
@@ -1002,7 +1002,7 @@ chanacs_t *chanacs_find_by_mask(mychan_t *mychan, char *mask, uint32_t level)
 	return chanacs_find_host_literal(mychan, mask, level);
 }
 
-boolean_t chanacs_user_has_flag(mychan_t *mychan, user_t *u, uint32_t level)
+boolean_t chanacs_user_has_flag(mychan_t *mychan, user_t *u, unsigned int level)
 {
 	myuser_t *mu;
 
@@ -1021,11 +1021,11 @@ boolean_t chanacs_user_has_flag(mychan_t *mychan, user_t *u, uint32_t level)
 	return FALSE;
 }
 
-uint32_t chanacs_user_flags(mychan_t *mychan, user_t *u)
+unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u)
 {
 	myuser_t *mu;
 	chanacs_t *ca;
-	uint32_t result = 0;
+	unsigned int result = 0;
 
 	return_val_if_fail(mychan != NULL && u != NULL, 0);
 
@@ -1042,13 +1042,13 @@ uint32_t chanacs_user_flags(mychan_t *mychan, user_t *u)
 	return result;
 }
 
-boolean_t chanacs_source_has_flag(mychan_t *mychan, sourceinfo_t *si, uint32_t level)
+boolean_t chanacs_source_has_flag(mychan_t *mychan, sourceinfo_t *si, unsigned int level)
 {
 	return si->su != NULL ? chanacs_user_has_flag(mychan, si->su, level) :
 		chanacs_find(mychan, si->smu, level) != NULL;
 }
 
-uint32_t chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si)
+unsigned int chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si)
 {
 	chanacs_t *ca;
 
@@ -1070,7 +1070,7 @@ uint32_t chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si)
  * these to reflect the actual change. Only allow changes to restrictflags.
  * Returns true if successful, false if an unallowed change was attempted.
  * -- jilles */
-boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_t *addflags, uint32_t *removeflags, uint32_t restrictflags)
+boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags)
 {
 	chanacs_t *ca;
 
@@ -1153,9 +1153,9 @@ boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_
 }
 
 /* version that doesn't return the changes made */
-boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_t addflags, uint32_t removeflags)
+boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, char *hostmask, unsigned int addflags, unsigned int removeflags)
 {
-	uint32_t a, r;
+	unsigned int a, r;
 
 	a = addflags & ca_all;
 	r = removeflags & ca_all;
@@ -1166,7 +1166,7 @@ boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, char *hostmask, 
  * M E T A D A T A *
  *******************/
 
-metadata_t *metadata_add(void *target, int32_t type, const char *name, const char *value)
+metadata_t *metadata_add(void *target, int type, const char *name, const char *value)
 {
 	myuser_t *mu = NULL;
 	mychan_t *mc = NULL;
@@ -1222,7 +1222,7 @@ metadata_t *metadata_add(void *target, int32_t type, const char *name, const cha
 	return md;
 }
 
-void metadata_delete(void *target, int32_t type, const char *name)
+void metadata_delete(void *target, int type, const char *name)
 {
 	node_t *n;
 	myuser_t *mu;
@@ -1266,7 +1266,7 @@ void metadata_delete(void *target, int32_t type, const char *name)
 	BlockHeapFree(metadata_heap, md);
 }
 
-metadata_t *metadata_find(void *target, int32_t type, const char *name)
+metadata_t *metadata_find(void *target, int type, const char *name)
 {
 	node_t *n;
 	myuser_t *mu;

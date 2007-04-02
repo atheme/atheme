@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService SET command.
  *
- * $Id: set.c 7909 2007-03-06 23:14:44Z jilles $
+ * $Id: set.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/set", FALSE, _modinit, _moddeinit,
-	"$Id: set.c 7909 2007-03-06 23:14:44Z jilles $",
+	"$Id: set.c 8027 2007-04-02 10:47:18Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -370,7 +370,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 		{
 			node_t *n;
 			chanacs_t *ca;
-			uint32_t tcnt;
+			unsigned int tcnt;
 
 			/* make sure they're within limits (from cs_cmd_register) */
 			tcnt = 0;
@@ -461,8 +461,8 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
 	char modebuf[32], *end, c;
 	int add = -1;
-	int32_t newlock_on = 0, newlock_off = 0, newlock_limit = 0, flag = 0;
-	int32_t mask;
+	int newlock_on = 0, newlock_off = 0, newlock_limit = 0, flag = 0;
+	int mask;
 	char newlock_key[KEYLEN];
 	char newlock_ext[MAXEXTMODES][512];
 	boolean_t newlock_ext_off[MAXEXTMODES];

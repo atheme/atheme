@@ -4,7 +4,7 @@
  *
  * This contains the connection_t structure.
  *
- * $Id: connection.h 8023 2007-04-02 10:22:01Z nenolod $
+ * $Id: connection.h 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #ifndef CONNECTION_H
@@ -20,20 +20,20 @@ struct connection_
 	list_t recvq;
 	list_t sendq;
 
-	int32_t fd;
-	int32_t pollslot;
+	int fd;
+	int pollslot;
 
 	time_t first_recv;
 	time_t last_recv;
 
 	struct sockaddr_in *sa;
 	struct sockaddr saddr;
-	uint32_t saddr_size;
+	unsigned int saddr_size;
 
 	void (*read_handler)(connection_t *);
 	void (*write_handler)(connection_t *);
 
-	uint32_t flags;
+	unsigned int flags;
 
 	void (*recvq_handler)(connection_t *);
 	void (*close_handler)(connection_t *);
@@ -62,13 +62,13 @@ struct connection_
 #define CF_IS_CONNECTING(x) ((x)->flags & CF_CONNECTING)
 #define CF_IS_LISTENING(x) ((x)->flags & CF_LISTENING)
 
-extern connection_t *connection_add(const char *, int32_t, uint32_t,
+extern connection_t *connection_add(const char *, int, unsigned int,
 	void(*)(connection_t *),
 	void(*)(connection_t *));
-extern connection_t *connection_open_tcp(char *, char *, uint32_t,
+extern connection_t *connection_open_tcp(char *, char *, unsigned int,
 	void(*)(connection_t *),
 	void(*)(connection_t *));
-extern connection_t *connection_open_listener_tcp(char *, uint32_t,
+extern connection_t *connection_open_listener_tcp(char *, unsigned int,
 	void(*)(connection_t *));
 extern connection_t *connection_accept_tcp(connection_t *,
 	void(*)(connection_t *),
@@ -82,7 +82,7 @@ extern void connection_close_all(void);
 extern void connection_stats(void (*)(const char *, void *), void *);
 extern void connection_write(connection_t *to, char *format, ...);
 extern void connection_write_raw(connection_t *to, char *data);
-extern connection_t *connection_find(int32_t);
+extern connection_t *connection_find(int);
 extern void connection_select(time_t delay);
 extern int connection_count(void);
 

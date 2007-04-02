@@ -5,7 +5,7 @@
  * Data structures related to our uplink.
  * Modules usually don't need this.
  *
- * $Id: uplink.h 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: uplink.h 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #ifndef _UPLINK_H
@@ -22,11 +22,11 @@ struct uplink_
 
 	node_t	*node;
 
-	uint32_t port;
+	unsigned int port;
 
 	connection_t *conn;
 
-	uint32_t flags;
+	unsigned int flags;
 };
 
 #define UPF_ILLEGAL 0x80000000 /* not in conf anymore, delete when disconnected */
@@ -55,7 +55,7 @@ E void irc_parse(char *line);
 E void p10_parse(char *line);
 
 /* send.c */
-E int8_t sts(char *fmt, ...);
+E int sts(char *fmt, ...);
 E void reconn(void *arg);
 E void io_loop(void);
 

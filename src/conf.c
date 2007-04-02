@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 7839 2007-03-06 00:09:30Z pippijn $
+ * $Id: conf.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -668,7 +668,7 @@ static int c_uplink(CONFIGENTRY *ce)
 {
 	char *name;
 	char *host = NULL, *vhost = NULL, *password = NULL;
-	uint32_t port = 0;
+	unsigned int port = 0;
 
 	if (ce->ce_vardata == NULL)
 		PARAM_ERROR(ce);

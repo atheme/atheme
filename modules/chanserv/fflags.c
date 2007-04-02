@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FFLAGS functions.
  *
- * $Id: fflags.c 7915 2007-03-06 23:56:03Z jilles $
+ * $Id: fflags.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/fflags", FALSE, _modinit, _moddeinit,
-	"$Id: fflags.c 7915 2007-03-06 23:56:03Z jilles $",
+	"$Id: fflags.c 8027 2007-04-02 10:47:18Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -49,7 +49,7 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 	char *flagstr = parv[2];
 	mychan_t *mc = mychan_find(channel);
 	myuser_t *tmu;
-	uint32_t addflags, removeflags;
+	unsigned int addflags, removeflags;
 
 	if (parc < 3)
 	{

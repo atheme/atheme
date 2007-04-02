@@ -26,7 +26,7 @@
 /*
  * $FreeBSD: /usr/local/www/cvsroot/FreeBSD/src/lib/libc/gen/arc4random.c,v 1.10.8.1 2006/11/18 21:35:13 ache Exp $
  * Modified for Atheme by Jilles Tjoelker
- * $Id: arc4random.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: arc4random.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -34,9 +34,9 @@
 #ifndef HAVE_ARC4RANDOM
 
 struct arc4_stream {
-	uint8_t i;
-	uint8_t j;
-	uint8_t s[256];
+	unsigned int i;
+	unsigned int j;
+	unsigned int s[256];
 };
 
 #define	RANDOMDEV	"/dev/urandom"
@@ -46,7 +46,7 @@ static int rs_initialized;
 static int rs_stired;
 static int arc4_count;
 
-static inline uint8_t arc4_getbyte(struct arc4_stream *);
+static inline unsigned int arc4_getbyte(struct arc4_stream *);
 static void arc4_stir(struct arc4_stream *);
 
 static inline void
@@ -61,10 +61,10 @@ arc4_init(struct arc4_stream *as)
 }
 
 static inline void
-arc4_addrandom(struct arc4_stream *as, uint8_t *dat, int datlen)
+arc4_addrandom(struct arc4_stream *as, unsigned int *dat, int datlen)
 {
 	int     n;
-	uint8_t si;
+	unsigned int si;
 
 	as->i--;
 	for (n = 0; n < 256; n++) {
@@ -83,7 +83,7 @@ arc4_stir(struct arc4_stream *as)
 	struct {
 		struct timeval tv;
 		pid_t pid;
-		uint8_t rnd[128 - sizeof(struct timeval) - sizeof(pid_t)];
+		unsigned int rnd[128 - sizeof(struct timeval) - sizeof(pid_t)];
 	}       rdat;
 
 	gettimeofday(&rdat.tv, NULL);
@@ -110,10 +110,10 @@ arc4_stir(struct arc4_stream *as)
 	arc4_count = 400000;
 }
 
-static inline uint8_t
+static inline unsigned int
 arc4_getbyte(struct arc4_stream *as)
 {
-	uint8_t si, sj;
+	unsigned int si, sj;
 
 	as->i = (as->i + 1);
 	si = as->s[as->i];
@@ -125,10 +125,10 @@ arc4_getbyte(struct arc4_stream *as)
 	return (as->s[(si + sj) & 0xff]);
 }
 
-static inline uint32_t
+static inline unsigned int
 arc4_getword(struct arc4_stream *as)
 {
-	uint32_t val;
+	unsigned int val;
 
 	val = arc4_getbyte(as) << 24;
 	val |= arc4_getbyte(as) << 16;
@@ -165,17 +165,17 @@ arc4random_stir()
 }
 
 void
-arc4random_addrandom(uint8_t *dat, int datlen)
+arc4random_addrandom(unsigned int *dat, int datlen)
 {
 	arc4_check_init();
 	arc4_check_stir();
 	arc4_addrandom(&rs, dat, datlen);
 }
 
-uint32_t
+unsigned int
 arc4random(void)
 {
-	uint32_t rnd;
+	unsigned int rnd;
 
 	arc4_check_init();
 	arc4_check_stir();

@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for solidircd.
  *
- * $Id: solidircd.c 7989 2007-03-27 16:58:54Z jilles $
+ * $Id: solidircd.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/solidircd.h"
 
-DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 7989 2007-03-27 16:58:54Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 8027 2007-04-02 10:47:18Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -126,9 +126,9 @@ static boolean_t check_jointhrottle(const char *value, channel_t *c, mychan_t *m
 }
 
 /* login to our uplink */
-static uint8_t solidircd_server_login(void)
+static unsigned int solidircd_server_login(void)
 {
-	int8_t ret;
+	int ret;
 
 	ret = sts("PASS %s :TS", curr_uplink->pass);
 	if (ret == 1)
@@ -505,9 +505,9 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 
 	channel_t *c;
 	boolean_t keep_new_modes = TRUE;
-	uint8_t userc;
+	unsigned int userc;
 	char *userv[256];
-	uint8_t i;
+	unsigned int i;
 	time_t ts;
 	char *p;
 
@@ -614,7 +614,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_part(sourceinfo_t *si, int parc, char *parv[])
 {
-	uint8_t chanc;
+	unsigned int chanc;
 	char *chanv[256];
 	int i;
 

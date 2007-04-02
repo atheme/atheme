@@ -4,12 +4,12 @@
  *
  * Generic protocol event handlers.
  *
- * $Id: phandler.c 7973 2007-03-23 21:45:12Z jilles $
+ * $Id: phandler.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
 
-uint8_t(*server_login) (void) = generic_server_login;
+unsigned int(*server_login) (void) = generic_server_login;
 void (*introduce_nick) (user_t *u) = generic_introduce_nick;
 void (*wallops_sts) (const char *text) = generic_wallops_sts;
 void (*join_sts) (channel_t *c, user_t *u, boolean_t isnew, char *modes) = generic_join_sts;
@@ -39,7 +39,7 @@ void (*invite_sts) (user_t *source, user_t *target, channel_t *channel) = generi
 void (*svslogin_sts) (char *target, char *nick, char *user, char *host, char *login) = generic_svslogin_sts;
 void (*sasl_sts) (char *target, char mode, char *data) = generic_sasl_sts;
 
-uint8_t generic_server_login(void)
+unsigned int generic_server_login(void)
 {
 	/* Nothing to do here. */
 	return 0;

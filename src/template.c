@@ -4,7 +4,7 @@
  *
  * See doc/LICENSE for licensing information.
  *
- * $Id: template.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: template.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -39,7 +39,7 @@ char *getitem(char *str, char *name)
 	}
 }
 
-uint32_t get_template_flags(mychan_t *mc, char *name)
+unsigned int get_template_flags(mychan_t *mc, char *name)
 {
 	metadata_t *md;
 	char *d;

@@ -4,7 +4,7 @@
  *
  * Server stuff.
  *
- * $Id: servers.c 7965 2007-03-21 23:42:57Z jilles $
+ * $Id: servers.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -47,7 +47,7 @@ void init_servers(void)
 }
 
 /*
- * server_add(const char *name, uint8_t hops, const char *uplink,
+ * server_add(const char *name, unsigned int hops, const char *uplink,
  *            const char *id, const char *desc)
  *
  * Server object factory.
@@ -65,7 +65,7 @@ void init_servers(void)
  * Side Effects:
  *     - the new server object is added to the server and sid DTree.
  */
-server_t *server_add(const char *name, uint8_t hops, const char *uplink, const char *id, const char *desc)
+server_t *server_add(const char *name, unsigned int hops, const char *uplink, const char *id, const char *desc)
 {
 	server_t *s, *u = NULL;
 	const char *tld;

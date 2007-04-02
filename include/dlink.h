@@ -4,7 +4,7 @@
  *
  * Data structures and macros for manipulating linked lists.
  *
- * $Id: dlink.h 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: dlink.h 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #ifndef NODE_H
@@ -33,7 +33,7 @@ struct node_
 struct list_
 {
   node_t *head, *tail;
-  uint32_t count;                    /* how many entries in the list */
+  unsigned int count;                    /* how many entries in the list */
 };
 
 E node_t *node_create(void);

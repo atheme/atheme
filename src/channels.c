@@ -4,7 +4,7 @@
  *
  * Channel stuff.
  *
- * $Id: channels.c 7969 2007-03-23 19:19:38Z jilles $
+ * $Id: channels.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -45,7 +45,7 @@ void init_channels(void)
 }
 
 /*
- * channel_add(const char *name, uint32_t ts)
+ * channel_add(const char *name, unsigned int ts)
  *
  * Channel object factory.
  *
@@ -62,7 +62,7 @@ void init_channels(void)
  *     - channel_add hook is called
  *     - all services are joined if this is the snoop channel
  */
-channel_t *channel_add(const char *name, uint32_t ts)
+channel_t *channel_add(const char *name, unsigned int ts)
 {
 	channel_t *c;
 	mychan_t *mc;
@@ -384,7 +384,7 @@ chanuser_t *chanuser_add(channel_t *chan, const char *nick)
 	node_t *n1;
 	node_t *n2;
 	chanuser_t *cu, *tcu;
-	uint32_t flags = 0;
+	unsigned int flags = 0;
 	int i = 0;
 	hook_channel_joinpart_t hdata;
 

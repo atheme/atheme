@@ -1,3 +1,13 @@
+jilles      2007/04/02 10:36:56 UTC	(20070402-8025)
+  Log:
+  Add a help file for the cs_userinfo contrib module.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/contrib/cs_userinfo.c (File Modified) 
+  +22 -0	trunk/help/cservice/userinfo (File Added) 
+
+
 nenolod     2007/04/02 10:22:01 UTC	(20070402-8023)
   Log:
   - use time_t for connection_select() instead of uint32_t.

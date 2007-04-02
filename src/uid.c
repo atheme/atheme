@@ -4,17 +4,17 @@
  *
  * Hybrid's UID code, adopted to be as generic as possible.
  *
- * $Id: uid.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: uid.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
 
 static char new_uid[9];		/* allow for \0 */
-static uint32_t uindex = 0;
+static unsigned int uindex = 0;
 
 void init_uid(void)
 {
-	uint32_t i;
+	unsigned int i;
 	char buf[BUFSIZE];
 
 	if (ircd->uses_p10 == TRUE)
@@ -41,7 +41,7 @@ void init_uid(void)
 		new_uid[i] = 'A';
 }
 
-static void add_one_to_uid(uint32_t i)
+static void add_one_to_uid(unsigned int i)
 {
 	if (i != strlen(me.numeric))	/* Not reached server SID portion yet? */
 	{

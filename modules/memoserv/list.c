@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv LIST function
  *
- * $Id: list.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: list.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: list.c 8027 2007-04-02 10:47:18Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -44,7 +44,7 @@ static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	/* Misc structs etc */
 	mymemo_t *memo;
 	node_t *n;
-	uint8_t i = 0;
+	unsigned int i = 0;
 	char strfbuf[32];
 	struct tm tm;
 	

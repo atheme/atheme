@@ -5,7 +5,7 @@
  * This file contains the implementation of the Atheme 0.1
  * flatfile database format, with metadata extensions.
  *
- * $Id: flatfile.c 7855 2007-03-06 00:43:08Z pippijn $
+ * $Id: flatfile.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"backend/flatfile", TRUE, _modinit, NULL,
-	"$Id: flatfile.c 7855 2007-03-06 00:43:08Z pippijn $",
+	"$Id: flatfile.c 8027 2007-04-02 10:47:18Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -235,10 +235,10 @@ static void flatfile_db_load(void)
 	mychan_t *mc;
 	kline_t *k;
 	svsignore_t *svsignore;
-	uint32_t i = 0, linecnt = 0, muin = 0, mcin = 0, cain = 0, kin = 0;
+	unsigned int i = 0, linecnt = 0, muin = 0, mcin = 0, cain = 0, kin = 0;
 	FILE *f;
 	char *item, *s, dBuf[BUFSIZE];
-	uint32_t their_ca_all = ca_all;
+	unsigned int their_ca_all = ca_all;
 
 	f = fopen(DATADIR "/atheme.db", "r");
 	if (f == NULL)
@@ -311,7 +311,7 @@ static void flatfile_db_load(void)
 				/* We need to know the flags before we myuser_add,
 				 * so we need a few temporary places to put stuff.
 				 */
-				uint32_t registered, lastlogin;
+				unsigned int registered, lastlogin;
 				char *failnum, *lastfailaddr, *lastfailtime;
 
 				if ((mu = myuser_find(s)))
@@ -361,7 +361,7 @@ static void flatfile_db_load(void)
 		{
 			char *sender, *text;
 			time_t mtime;
-			uint32_t status;
+			unsigned int status;
 			mymemo_t *mz;
 
 			mu = myuser_find(strtok(NULL, " "));
@@ -623,7 +623,7 @@ static void flatfile_db_load(void)
 
 				if (i >= DB_ATHEME)
 				{
-					uint32_t fl = flags_to_bitmask(strtok(NULL, " "), chanacs_flags, 0x0);
+					unsigned int fl = flags_to_bitmask(strtok(NULL, " "), chanacs_flags, 0x0);
 
 					/* Compatibility with oldworld Atheme db's. --nenolod */
 					/* arbitrary cutoff to avoid touching newer +voOt entries -- jilles */
@@ -653,8 +653,8 @@ static void flatfile_db_load(void)
 				}
 				else if (i == DB_SHRIKE)	/* DB_SHRIKE */
 				{
-					uint32_t fl = atol(strtok(NULL, " "));
-					uint32_t fl2 = 0x0;
+					unsigned int fl = atol(strtok(NULL, " "));
+					unsigned int fl2 = 0x0;
 
 					switch (fl)
 					{

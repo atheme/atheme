@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService SYNC functions.
  *
- * $Id: cs_sync.c 7969 2007-03-23 19:19:38Z jilles $
+ * $Id: cs_sync.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/sync", FALSE, _modinit, _moddeinit,
-	"$Id: cs_sync.c 7969 2007-03-23 19:19:38Z jilles $",
+	"$Id: cs_sync.c 8027 2007-04-02 10:47:18Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -45,7 +45,7 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
 	node_t *n, *tn;
 	char *name = parv[0];
-	int32_t fl;
+	int fl;
 
 	if (!name)
 	{

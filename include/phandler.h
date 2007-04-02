@@ -4,7 +4,7 @@
  *
  * Protocol handlers, both generic and the actual declarations themselves.
  *
- * $Id: phandler.h 7973 2007-03-23 21:45:12Z jilles $
+ * $Id: phandler.h 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #ifndef PHANDLER_H
@@ -20,15 +20,15 @@ struct ircd_ {
 	boolean_t uses_halfops;
 	boolean_t uses_p10;		/* Parser hackhack. */
 	boolean_t uses_vhost;		/* Do we use vHosts? */
-	uint32_t oper_only_modes;
-	uint32_t owner_mode;
-	uint32_t protect_mode;
-	uint32_t halfops_mode;
+	unsigned int oper_only_modes;
+	unsigned int owner_mode;
+	unsigned int protect_mode;
+	unsigned int halfops_mode;
 	char *owner_mchar;
 	char *protect_mchar;
 	char *halfops_mchar;
-	uint8_t type;
-	uint32_t perm_mode;		/* Modes to not disappear when empty */
+	unsigned int type;
+	unsigned int perm_mode;		/* Modes to not disappear when empty */
 	char *ban_like_modes;		/* e.g. "beI" */
 	char except_mchar;
 	char invex_mchar;
@@ -72,7 +72,7 @@ typedef struct ircd_ ircd_t;
  * you can still change ircd->uses_uid at this point
  * set me.bursting = TRUE
  * return 1 if sts() failed (by returning 1), otherwise 0 */
-E uint8_t (*server_login)(void);
+E unsigned int (*server_login)(void);
 /* introduce a client on the services server */
 E void (*introduce_nick)(user_t *u);
 /* send an invite for a given user to a channel
@@ -189,7 +189,7 @@ E void (*svslogin_sts)(char *target, char *nick, char *user, char *host, char *l
 /* send sasl message */
 E void (*sasl_sts) (char *target, char mode, char *data);
 
-E uint8_t generic_server_login(void);
+E unsigned int generic_server_login(void);
 E void generic_introduce_nick(user_t *u);
 E void generic_invite_sts(user_t *source, user_t *target, channel_t *channel);
 E void generic_quit_sts(user_t *u, char *reason);

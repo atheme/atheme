@@ -5,7 +5,7 @@
  *
  * Misc tools
  *
- * $Id: tools.h 7801 2007-03-04 21:53:13Z jilles $
+ * $Id: tools.h 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #ifndef _TOOLS_H
@@ -105,8 +105,8 @@ E int sendemail(user_t *from, int type, myuser_t *mu, const char *param);
 /* arc4random.c */
 #ifndef HAVE_ARC4RANDOM
 E void arc4random_stir();
-E void arc4random_addrandom(uint8_t *dat, int datlen);
-E uint32_t arc4random(void);
+E void arc4random_addrandom(unsigned int *dat, int datlen);
+E unsigned int arc4random(void);
 #endif /* !HAVE_ARC4RANDOM */
 
 /* function.c */
@@ -145,15 +145,15 @@ E int log_force;
 #define CMDLOG_GET      LG_CMD_GET
 
 E void log_open(void);
-E void slog(uint32_t level, const char *fmt, ...);
+E void slog(unsigned int level, const char *fmt, ...);
 E void logcommand(sourceinfo_t *si, int level, const char *fmt, ...);
 E void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt, ...);
 E void logcommand_external(service_t *svs, const char *type, connection_t *source, const char *sourcedesc, myuser_t *login, int level, const char *fmt, ...);
 
 /* misc string stuff */
-E char *gen_pw(int8_t sz);
+E char *gen_pw(int sz);
 E void tb2sp(char *line);
-E char *replace(char *s, int32_t size, const char *old, const char *new);
+E char *replace(char *s, int size, const char *old, const char *new);
 #ifndef _WIN32
 E char *itoa(int num);
 #endif
@@ -165,13 +165,13 @@ E float bytes(float x);
 E unsigned long makekey(void);
 
 /* the hash function */
-E uint32_t shash(const unsigned char *text);
+E unsigned int shash(const unsigned char *text);
 
 /* time stuff */
 #if HAVE_GETTIMEOFDAY
 E void s_time(struct timeval *sttime);
 E void e_time(struct timeval sttime, struct timeval *ttime);
-E int32_t tv2ms(struct timeval *tv);
+E int tv2ms(struct timeval *tv);
 #endif
 E char *time_ago(time_t event);
 E char *timediff(time_t seconds);
@@ -189,12 +189,12 @@ E char *timediff(time_t seconds);
 #endif
 
 /* tokenize.c */
-E int8_t sjtoken(char *message, char delimiter, char **parv);
-E int8_t tokenize(char *message, char **parv);
+E int sjtoken(char *message, char delimiter, char **parv);
+E int tokenize(char *message, char **parv);
 
 /* ubase64.c */
 E const char* uinttobase64(char* buf, uint64_t v, int64_t count);
-E uint32_t base64touint(char* buf);
+E unsigned int base64touint(char* buf);
 
 #endif
 

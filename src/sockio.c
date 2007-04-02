@@ -4,7 +4,7 @@
  *
  * Platform-independent Network I/O layer.
  *
- * $Id: sockio.c 7839 2007-03-06 00:09:30Z pippijn $
+ * $Id: sockio.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -43,7 +43,7 @@ char *socket_strerror(int eno)
 
 int socket_setnonblocking(socket_t sck)
 {
-	int32_t flags;
+	int flags;
 
 	flags = fcntl(sck, F_GETFL, 0);
 	flags |= O_NONBLOCK;

@@ -4,7 +4,7 @@
  *
  * Regex usersearch feature.
  *
- * $Id: rmatch.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: rmatch.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 /*
@@ -16,7 +16,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/rmatch", FALSE, _modinit, _moddeinit,
-	"$Id: rmatch.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: rmatch.c 8027 2007-04-02 10:47:18Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -46,7 +46,7 @@ static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 {
 	regex_t *regex;
 	char usermask[512];
-	uint32_t matches = 0;
+	unsigned int matches = 0;
 	dictionary_iteration_state_t state;
 	user_t *u;
 	char *args = parv[0];

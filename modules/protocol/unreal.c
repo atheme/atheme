@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 7973 2007-03-23 21:45:12Z jilles $
+ * $Id: unreal.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 7973 2007-03-23 21:45:12Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 8027 2007-04-02 10:47:18Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -118,9 +118,9 @@ static boolean_t check_jointhrottle(const char *value, channel_t *c, mychan_t *m
 }
 
 /* login to our uplink */
-static uint8_t unreal_server_login(void)
+static unsigned int unreal_server_login(void)
 {
-	int8_t ret;
+	int ret;
 
 	ret = sts("PASS %s", curr_uplink->pass);
 	if (ret == 1)
@@ -475,9 +475,9 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 	 */
 
 	channel_t *c;
-	uint8_t userc;
+	unsigned int userc;
 	char *userv[256];
-	uint8_t i;
+	unsigned int i;
 	time_t ts;
 
 	if (parc >= 4)
@@ -579,7 +579,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_part(sourceinfo_t *si, int parc, char *parv[])
 {
-	uint8_t chanc;
+	unsigned int chanc;
 	char *chanv[256];
 	int i;
 
@@ -614,7 +614,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		/* If the user's SVID is equal to their nick TS,
 		 * they're properly logged in -- jilles */
-		if (u->ts > 100 && (uint32_t)atoi(parv[6]) == u->ts)
+		if (u->ts > 100 && (unsigned int)atoi(parv[6]) == u->ts)
 			handle_burstlogin(u, parv[0]);
 
 		handle_nickchange(u);

@@ -4,7 +4,7 @@
  *
  * Socketengine implementing select().
  *
- * $Id: select.c 8023 2007-04-02 10:22:01Z nenolod $
+ * $Id: select.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -82,7 +82,7 @@ static void update_select_sets(void)
  */
 void connection_select(time_t delay)
 {
-	int8_t sr;
+	int sr;
 	node_t *n, *tn;
 	connection_t *cptr;
 	struct timeval to;

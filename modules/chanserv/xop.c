@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 7969 2007-03-23 19:19:38Z jilles $
+ * $Id: xop.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,14 +12,14 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 7969 2007-03-23 19:19:38Z jilles $",
+	"$Id: xop.c 8027 2007-04-02 10:47:18Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 /* the individual command stuff, now that we've reworked, hardcode ;) --w00t */
-static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *target, uint32_t level, char *leveldesc, uint32_t restrictflags);
-static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *target, uint32_t level, char *leveldesc);
-static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, uint32_t level, char *leveldesc, int operoverride);
+static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *target, unsigned int level, char *leveldesc, unsigned int restrictflags);
+static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *target, unsigned int level, char *leveldesc);
+static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, unsigned int level, char *leveldesc, int operoverride);
 
 static void cs_cmd_sop(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_aop(sourceinfo_t *si, int parc, char *parv[]);
@@ -75,12 +75,12 @@ void _moddeinit()
 	help_delentry(cs_helptree, "FORCEXOP");
 }
 
-static void cs_xop(sourceinfo_t *si, int parc, char *parv[], uint32_t level, char *leveldesc)
+static void cs_xop(sourceinfo_t *si, int parc, char *parv[], unsigned int level, char *leveldesc)
 {
 	myuser_t *mu;
 	mychan_t *mc;
 	int operoverride = 0;
-	uint32_t restrictflags;
+	unsigned int restrictflags;
 	char *chan = parv[0];
 	char *cmd = parv[1];
 	char *uname = parv[2];
@@ -221,7 +221,7 @@ static void cs_cmd_hop(sourceinfo_t *si, int parc, char *parv[])
 }
 
 
-static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *target, uint32_t level, char *leveldesc, uint32_t restrictflags)
+static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *target, unsigned int level, char *leveldesc, unsigned int restrictflags)
 {
 	char hostbuf[BUFSIZE];
 	chanuser_t *cu;
@@ -400,7 +400,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 	}
 }
 
-static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *target, uint32_t level, char *leveldesc)
+static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *target, unsigned int level, char *leveldesc)
 {
 	chanacs_t *ca;
 	
@@ -448,7 +448,7 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 }
 
 
-static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, uint32_t level, char *leveldesc, int operoverride)
+static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, unsigned int level, char *leveldesc, int operoverride)
 {
 	chanacs_t *ca;
 	int i = 0;
@@ -484,7 +484,7 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc = mychan_find(chan);
 	node_t *n;
 	int changes;
-	uint32_t newlevel;
+	unsigned int newlevel;
 	char *desc;
 
 	if (!chan)

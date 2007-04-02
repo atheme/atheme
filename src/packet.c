@@ -4,7 +4,7 @@
  *
  * IRC packet handling.
  *
- * $Id: packet.c 7839 2007-03-06 00:09:30Z pippijn $
+ * $Id: packet.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -40,7 +40,7 @@ static void irc_recvq_handler(connection_t *cptr)
 
 static void ping_uplink(void *arg)
 {
-	uint32_t diff;
+	unsigned int diff;
 
 	if (me.connected)
 	{

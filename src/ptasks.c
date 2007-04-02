@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 7849 2007-03-06 00:27:39Z pippijn $
+ * $Id: ptasks.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 
 void handle_info(user_t *u)
 {
-	uint8_t i;
+	unsigned int i;
 
 	if (u == NULL)
 		return;

@@ -4,7 +4,7 @@
  *
  * DH-BLOWFISH mechanism provider
  *
- * $Id: dh-blowfish.c 7981 2007-03-25 15:17:17Z pippijn $
+ * $Id: dh-blowfish.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -19,7 +19,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/dh-blowfish", FALSE, _modinit, _moddeinit,
-	"$Id: dh-blowfish.c 7981 2007-03-25 15:17:17Z pippijn $",
+	"$Id: dh-blowfish.c 8027 2007-04-02 10:47:18Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -64,17 +64,17 @@ static int mech_start(sasl_session_t *p, char **out, int *out_len)
 	ptr = *out;
 
 	/* p */
-	*((uint16_t *)ptr) = htons(BN_num_bytes(dh->p));
+	*((unsigned int *)ptr) = htons(BN_num_bytes(dh->p));
 	BN_bn2bin(dh->p, (unsigned char *)ptr + 2);
 	ptr += 2 + BN_num_bytes(dh->p);
 
 	/* g */
-	*((uint16_t *)ptr) = htons(BN_num_bytes(dh->g));
+	*((unsigned int *)ptr) = htons(BN_num_bytes(dh->g));
 	BN_bn2bin(dh->g, (unsigned char *)ptr + 2);
 	ptr += 2 + BN_num_bytes(dh->g);
 
 	/* pub_key */
-	*((uint16_t *)ptr) = htons(BN_num_bytes(dh->pub_key));
+	*((unsigned int *)ptr) = htons(BN_num_bytes(dh->pub_key));
 	BN_bn2bin(dh->pub_key, (unsigned char *)ptr + 2);
 	ptr += 2 + BN_num_bytes(dh->pub_key);
 
@@ -98,7 +98,7 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 	/* Their pub_key */
 	if (len < 2)
 		goto end;
-	size = ntohs(*(uint16_t*)message);
+	size = ntohs(*(unsigned int*)message);
 	message += 2;
 	len -= 2;
 	if (size > len)

@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 7937 2007-03-12 15:19:26Z jilles $
+ * $Id: account.h 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #ifndef ACCOUNT_H
@@ -22,7 +22,7 @@ struct kline_ {
   char *reason;
   char *setby;
 
-  uint16_t number;
+  unsigned int number;
   long duration;
   time_t settime;
   time_t expires;
@@ -56,11 +56,11 @@ struct myuser_
 
   list_t metadata;
 
-  uint32_t flags;
+  unsigned int flags;
   
   list_t memos; /* store memos */
-  uint8_t memoct_new;
-  uint8_t memo_ratelimit_num; /* memos sent recently */
+  unsigned int memoct_new;
+  unsigned int memo_ratelimit_num; /* memos sent recently */
   time_t memo_ratelimit_time; /* last time a memo was sent */
   list_t memo_ignores;
 
@@ -115,10 +115,10 @@ struct mychan_
 
   int mlock_on;
   int mlock_off;
-  uint32_t mlock_limit;
+  unsigned int mlock_limit;
   char *mlock_key;
 
-  uint32_t flags;
+  unsigned int flags;
 
   list_t metadata;
 };
@@ -149,7 +149,7 @@ struct chanacs_
 	myuser_t *myuser;
 	mychan_t *mychan;
 	char      host[HOSTLEN];
-	uint32_t  level;
+	unsigned int  level;
 	list_t	  metadata;
 };
 
@@ -206,7 +206,7 @@ struct mymemo_ {
 	char	 sender[NICKLEN];
 	char 	 text[MEMOLEN];
 	time_t	 sent;
-	uint32_t status;
+	unsigned int status;
 	list_t	 metadata;
 };
 
@@ -255,7 +255,7 @@ E list_t klnlist;
 E kline_t *kline_add(char *user, char *host, char *reason, long duration);
 E void kline_delete(const char *user, const char *host);
 E kline_t *kline_find(const char *user, const char *host);
-E kline_t *kline_find_num(uint32_t number);
+E kline_t *kline_find_num(unsigned int number);
 E kline_t *kline_find_user(user_t *u);
 E void kline_expire(void *arg);
 
@@ -266,7 +266,7 @@ E dictionary_tree_t *mclist;
 
 E void init_accounts(void);
 
-E myuser_t *myuser_add(char *name, char *pass, char *email, uint32_t flags);
+E myuser_t *myuser_add(char *name, char *pass, char *email, unsigned int flags);
 E void myuser_delete(myuser_t *mu);
 E myuser_t *myuser_find(const char *name);
 E myuser_t *myuser_find_ext(const char *name);
@@ -284,24 +284,24 @@ E mynick_t *mynick_find(const char *name);
 E mychan_t *mychan_add(char *name);
 E mychan_t *mychan_find(const char *name);
 E boolean_t mychan_isused(mychan_t *mc);
-E myuser_t *mychan_pick_candidate(mychan_t *mc, uint32_t minlevel, int maxtime);
+E myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel, int maxtime);
 E myuser_t *mychan_pick_successor(mychan_t *mc);
 
-E chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, uint32_t level);
-E chanacs_t *chanacs_add_host(mychan_t *mychan, char *host, uint32_t level);
-E chanacs_t *chanacs_find(mychan_t *mychan, myuser_t *myuser, uint32_t level);
-E chanacs_t *chanacs_find_host(mychan_t *mychan, char *host, uint32_t level);
-E uint32_t chanacs_host_flags(mychan_t *mychan, char *host);
-E chanacs_t *chanacs_find_host_literal(mychan_t *mychan, char *host, uint32_t level);
-E chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, uint32_t level);
-E uint32_t chanacs_host_flags_by_user(mychan_t *mychan, user_t *u);
-E chanacs_t *chanacs_find_by_mask(mychan_t *mychan, char *mask, uint32_t level);
-E boolean_t chanacs_user_has_flag(mychan_t *mychan, user_t *u, uint32_t level);
-E uint32_t chanacs_user_flags(mychan_t *mychan, user_t *u);
-E boolean_t chanacs_source_has_flag(mychan_t *mychan, sourceinfo_t *si, uint32_t level);
-E uint32_t chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si);
-E boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_t *addflags, uint32_t *removeflags, uint32_t restrictflags);
-E boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, char *hostmask, uint32_t addflags, uint32_t removeflags);
+E chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level);
+E chanacs_t *chanacs_add_host(mychan_t *mychan, char *host, unsigned int level);
+E chanacs_t *chanacs_find(mychan_t *mychan, myuser_t *myuser, unsigned int level);
+E chanacs_t *chanacs_find_host(mychan_t *mychan, char *host, unsigned int level);
+E unsigned int chanacs_host_flags(mychan_t *mychan, char *host);
+E chanacs_t *chanacs_find_host_literal(mychan_t *mychan, char *host, unsigned int level);
+E chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, unsigned int level);
+E unsigned int chanacs_host_flags_by_user(mychan_t *mychan, user_t *u);
+E chanacs_t *chanacs_find_by_mask(mychan_t *mychan, char *mask, unsigned int level);
+E boolean_t chanacs_user_has_flag(mychan_t *mychan, user_t *u, unsigned int level);
+E unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u);
+E boolean_t chanacs_source_has_flag(mychan_t *mychan, sourceinfo_t *si, unsigned int level);
+E unsigned int chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si);
+E boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags);
+E boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, char *hostmask, unsigned int addflags, unsigned int removeflags);
 
 E void expire_check(void *arg);
 /* Check the database for (version) problems common to all backends */

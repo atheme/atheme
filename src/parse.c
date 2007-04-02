@@ -4,7 +4,7 @@
  *
  * This file contains IRC interaction routines.
  *
- * $Id: parse.c 7839 2007-03-06 00:09:30Z pippijn $
+ * $Id: parse.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -25,7 +25,7 @@ void irc_parse(char *line)
 	char *parv[MAXPARC + 1];
 	static char coreLine[BUFSIZE];
 	int parc = 0;
-	uint8_t i;
+	unsigned int i;
 	pcommand_t *pcmd;
 
 	/* clear the parv */
@@ -176,7 +176,7 @@ void p10_parse(char *line)
 	char *parv[MAXPARC + 1];
 	static char coreLine[BUFSIZE];
 	int parc = 0;
-	uint8_t i;
+	unsigned int i;
 	pcommand_t *pcmd;
 
 	/* clear the parv */

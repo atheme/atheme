@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 7973 2007-03-23 21:45:12Z jilles $
+ * $Id: hyperion.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -17,7 +17,7 @@
 #include "pmodule.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 7973 2007-03-23 21:45:12Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 8027 2007-04-02 10:47:18Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -130,9 +130,9 @@ static boolean_t check_jointhrottle(const char *value, channel_t *c, mychan_t *m
 }
 
 /* login to our uplink */
-static uint8_t hyperion_server_login(void)
+static unsigned int hyperion_server_login(void)
 {
-	int8_t ret;
+	int ret;
 
 	ret = sts("PASS %s :TS", curr_uplink->pass);
 	if (ret == 1)
@@ -495,9 +495,9 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 	/* -> :proteus.malkier.net SJOIN 1073516550 #shrike +tn :@sycobuny @+rakaur */
 
 	channel_t *c;
-	uint8_t userc;
+	unsigned int userc;
 	char *userv[256];
-	uint8_t i;
+	unsigned int i;
 	time_t ts;
 
 	/* :origin SJOIN ts chan modestr [key or limits] :users */
@@ -555,7 +555,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_part(sourceinfo_t *si, int parc, char *parv[])
 {
-	uint8_t chanc;
+	unsigned int chanc;
 	char *chanv[256];
 	int i;
 

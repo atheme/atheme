@@ -4,7 +4,7 @@
  *
  * This file contains the block allocator.
  *
- * $Id: balloc.c 7839 2007-03-06 00:09:30Z pippijn $
+ * $Id: balloc.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -46,15 +46,15 @@ static void _blockheap_fail(const char *reason, const char *file, int line)
 
 #ifndef HAVE_MMAP
 /*
- * static void mmap(void *hint, size_t len, uint32_t prot,
- *                  uint32_t flags, uint16_t fd, uint16_t off)
+ * static void mmap(void *hint, size_t len, unsigned int prot,
+ *                  unsigned int flags, unsigned int fd, unsigned int off)
  *
  * Inputs       - mmap style arguments.
  * Output       - None
  * Side Effects - Memory is allocated to the block allocator.
  */
-static void *mmap(void *hint, size_t len, uint32_t prot,
-		  uint32_t flags, uint16_t fd, uint16_t off)
+static void *mmap(void *hint, size_t len, unsigned int prot,
+		  unsigned int flags, unsigned int fd, unsigned int off)
 {
 	void *ptr = smalloc(len);
 

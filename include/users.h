@@ -4,7 +4,7 @@
  *
  * Data structures for connected clients.
  *
- * $Id: users.h 8021 2007-04-02 10:20:19Z nenolod $
+ * $Id: users.h 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #ifndef USERS_H
@@ -25,11 +25,11 @@ struct user_
 	server_t *server;
 	myuser_t *myuser;
 
-	uint8_t offenses;
-	uint8_t msgs;
+	unsigned int offenses;
+	unsigned int msgs;
 	time_t lastmsg;
 
-	uint32_t flags;
+	unsigned int flags;
 
 	time_t ts;
 };

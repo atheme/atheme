@@ -4,7 +4,7 @@
  *
  * Data structures for flags to bitmask processing routines.
  *
- * $Id: flags.h 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: flags.h 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #ifndef FLAGS_H
@@ -17,14 +17,14 @@ struct flags_table
 	int value;
 };
 
-E uint32_t ca_all;
+E unsigned int ca_all;
 E struct flags_table chanacs_flags[];
 
-E void flags_make_bitmasks(const char *string, struct flags_table table[], uint32_t *addflags, uint32_t *removeflags);
-E uint32_t flags_to_bitmask(const char *, struct flags_table[], uint32_t flags);
-E char *bitmask_to_flags(uint32_t, struct flags_table[]);
-E char *bitmask_to_flags2(uint32_t, uint32_t, struct flags_table[]);
-E uint32_t allow_flags(uint32_t flags);
+E void flags_make_bitmasks(const char *string, struct flags_table table[], unsigned int *addflags, unsigned int *removeflags);
+E unsigned int flags_to_bitmask(const char *, struct flags_table[], unsigned int flags);
+E char *bitmask_to_flags(unsigned int, struct flags_table[]);
+E char *bitmask_to_flags2(unsigned int, unsigned int, struct flags_table[]);
+E unsigned int allow_flags(unsigned int flags);
 E void update_chanacs_flags(void);
 
 #endif

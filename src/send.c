@@ -5,18 +5,18 @@
  * This file contains socket routines.
  * Based off of W. Campbell's code.
  *
- * $Id: send.c 7961 2007-03-20 17:11:45Z jilles $
+ * $Id: send.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
 #include "uplink.h"
 
 /* send a line to the server, append the \r\n */
-int8_t sts(char *fmt, ...)
+int sts(char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
-	int16_t len;
+	int len;
 
 	/* glibc sucks. */
 	if (!fmt)

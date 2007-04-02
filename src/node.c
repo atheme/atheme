@@ -5,7 +5,7 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 7849 2007-03-06 00:27:39Z pippijn $
+ * $Id: node.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -101,7 +101,7 @@ kline_t *kline_add(char *user, char *host, char *reason, long duration)
 {
 	kline_t *k;
 	node_t *n = node_create();
-	static uint32_t kcnt = 0;
+	static unsigned int kcnt = 0;
 
 	slog(LG_DEBUG, "kline_add(): %s@%s -> %s (%ld)", user, host, reason, duration);
 
@@ -171,7 +171,7 @@ kline_t *kline_find(const char *user, const char *host)
 	return NULL;
 }
 
-kline_t *kline_find_num(uint32_t number)
+kline_t *kline_find_num(unsigned int number)
 {
 	kline_t *k;
 	node_t *n;

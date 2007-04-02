@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: undernet.c 7973 2007-03-23 21:45:12Z jilles $
+ * $Id: undernet.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 7973 2007-03-23 21:45:12Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 8027 2007-04-02 10:47:18Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -74,9 +74,9 @@ static void check_hidehost(user_t *u);
 /* *INDENT-ON* */
 
 /* login to our uplink */
-static uint8_t undernet_server_login(void)
+static unsigned int undernet_server_login(void)
 {
-	int8_t ret;
+	int ret;
 
 	ret = sts("PASS :%s", curr_uplink->pass);
 	if (ret == 1)
@@ -427,9 +427,9 @@ static void m_notice(sourceinfo_t *si, int parc, char *parv[])
 static void m_create(sourceinfo_t *si, int parc, char *parv[])
 {
 	char buf[BUFSIZE];
-	uint8_t chanc;
+	unsigned int chanc;
 	char *chanv[256];
-	uint8_t i;
+	unsigned int i;
 
 	chanc = sjtoken(parv[0], ',', chanv);
 
@@ -455,9 +455,9 @@ static void m_create(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_join(sourceinfo_t *si, int parc, char *parv[])
 {
-	uint8_t chanc;
+	unsigned int chanc;
 	char *chanv[256];
-	uint8_t i;
+	unsigned int i;
 	node_t *n, *tn;
 	chanuser_t *cu;
 
@@ -493,11 +493,11 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c;
-	uint8_t modec;
+	unsigned int modec;
 	char *modev[16];
-	uint8_t userc;
+	unsigned int userc;
 	char *userv[256];
-	uint8_t i;
+	unsigned int i;
 	int j;
 	char prefix[16];
 	char newnick[16+NICKLEN];
@@ -608,7 +608,7 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_part(sourceinfo_t *si, int parc, char *parv[])
 {
-	uint8_t chanc;
+	unsigned int chanc;
 	char *chanv[256];
 	int i;
 

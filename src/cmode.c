@@ -4,13 +4,13 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 7973 2007-03-23 21:45:12Z jilles $
+ * $Id: cmode.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
 
 /* convert mode flags to a text mode string */
-char *flags_to_string(int32_t flags)
+char *flags_to_string(int flags)
 {
 	static char buf[32];
 	char *s = buf;
@@ -26,7 +26,7 @@ char *flags_to_string(int32_t flags)
 }
 
 /* convert a mode character to a flag. */
-int32_t mode_to_flag(char c)
+int mode_to_flag(char c)
 {
 	int i;
 
@@ -44,7 +44,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 	boolean_t matched = FALSE;
 	boolean_t simple_modes_changed = FALSE;
 	int i, parpos = 0, whatt = MTYPE_NUL;
-	uint32_t newlimit;
+	unsigned int newlimit;
 	const char *pos = parv[0];
 	mychan_t *mc;
 	chanuser_t *cu = NULL;
@@ -358,9 +358,9 @@ void channel_mode_va(user_t *source, channel_t *chan, int parc, char *parv0, ...
 static struct modestackdata {
 	char source[HOSTLEN]; /* name */
 	channel_t *channel;
-	int32_t modes_on;
-	int32_t modes_off;
-	uint32_t limit;
+	int modes_on;
+	int modes_off;
+	unsigned int limit;
 	char extmodes[MAXEXTMODES][512];
 	boolean_t limitused, extmodesused[MAXEXTMODES];
 	char pmodes[2*MAXMODES+2];
@@ -369,7 +369,7 @@ static struct modestackdata {
 	int totallen;
 	int paramcount;
 
-	uint32_t event;
+	unsigned int event;
 } modestackdata;
 
 static void modestack_calclen(struct modestackdata *md);
@@ -543,7 +543,7 @@ static struct modestackdata *modestack_init(char *source, channel_t *channel)
 	return &modestackdata;
 }
 
-static void modestack_add_simple(struct modestackdata *md, int dir, int32_t flags)
+static void modestack_add_simple(struct modestackdata *md, int dir, int flags)
 {
 	if (dir == MTYPE_ADD)
 		md->modes_on |= flags, md->modes_off &= ~flags;
@@ -553,7 +553,7 @@ static void modestack_add_simple(struct modestackdata *md, int dir, int32_t flag
 		slog(LG_ERROR, "modestack_add_simple(): invalid direction");
 }
 
-static void modestack_add_limit(struct modestackdata *md, int dir, uint32_t limit)
+static void modestack_add_limit(struct modestackdata *md, int dir, unsigned int limit)
 {
 	md->limitused = 0;
 	modestack_calclen(md);
@@ -678,7 +678,7 @@ void modestack_finalize_channel(channel_t *channel)
 }
 
 /* stack simple modes without parameters */
-void modestack_mode_simple(char *source, channel_t *channel, int dir, int32_t flags)
+void modestack_mode_simple(char *source, channel_t *channel, int dir, int flags)
 {
 	struct modestackdata *md;
 
@@ -691,7 +691,7 @@ void modestack_mode_simple(char *source, channel_t *channel, int dir, int32_t fl
 }
 
 /* stack a limit */
-void modestack_mode_limit(char *source, channel_t *channel, int dir, uint32_t limit)
+void modestack_mode_limit(char *source, channel_t *channel, int dir, unsigned int limit)
 {
 	struct modestackdata *md;
 

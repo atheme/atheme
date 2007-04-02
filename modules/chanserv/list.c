@@ -4,7 +4,7 @@
  *
  * This file contains code for the ChanServ LIST function.
  *
- * $Id: list.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: list.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: list.c 8027 2007-04-02 10:47:18Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -43,7 +43,7 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
 	char *chanpattern = parv[0];
 	char buf[BUFSIZE];
-	uint32_t matches = 0;
+	unsigned int matches = 0;
 	dictionary_iteration_state_t state;
 
 	if (!chanpattern)

@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 7973 2007-03-23 21:45:12Z jilles $
+ * $Id: ircnet.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 7973 2007-03-23 21:45:12Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 8027 2007-04-02 10:47:18Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -71,9 +71,9 @@ struct cmode_ ircnet_prefix_mode_list[] = {
 /* *INDENT-ON* */
 
 /* login to our uplink */
-static uint8_t ircnet_server_login(void)
+static unsigned int ircnet_server_login(void)
 {
-	int8_t ret;
+	int ret;
 
 	ret = sts("PASS %s 0211010000 IRC|aDEFiIJMuw P", curr_uplink->pass);
 	if (ret == 1)
@@ -440,9 +440,9 @@ static void m_notice(sourceinfo_t *si, int parc, char *parv[])
 static void m_njoin(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c;
-	uint8_t userc;
+	unsigned int userc;
 	char *userv[256];
-	uint8_t i;
+	unsigned int i;
 
 	c = channel_find(parv[0]);
 
@@ -470,7 +470,7 @@ static void m_njoin(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_part(sourceinfo_t *si, int parc, char *parv[])
 {
-	uint8_t chanc;
+	unsigned int chanc;
 	char *chanv[256];
 	int i;
 

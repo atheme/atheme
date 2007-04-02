@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 7973 2007-03-23 21:45:12Z jilles $
+ * $Id: main.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 7973 2007-03-23 21:45:12Z jilles $",
+	"$Id: main.c 8027 2007-04-02 10:47:18Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -219,7 +219,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	user_t *u;
 	channel_t *chan;
 	mychan_t *mc;
-	uint32_t flags;
+	unsigned int flags;
 	metadata_t *md;
 	boolean_t noop;
 	chanacs_t *ca2;
@@ -476,7 +476,7 @@ static void cs_keeptopic_topicset(channel_t *c)
 static void cs_topiccheck(hook_channel_topic_check_t *data)
 {
 	mychan_t *mc;
-	uint32_t accessfl = 0;
+	unsigned int accessfl = 0;
 
 	mc = mychan_find(data->c->name);
 	if (mc == NULL)

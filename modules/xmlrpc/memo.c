@@ -4,7 +4,7 @@
  *
  * XMLRPC memo management functions.
  *
- * $Id: memo.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: memo.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/memo", FALSE, _modinit, _moddeinit,
-	"$Id: memo.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: memo.c 8027 2007-04-02 10:47:18Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -183,7 +183,7 @@ static int memo_forward(void *conn, int parc, char *parv[])
 	myuser_t *mu = u->myuser, *tmu = NULL;
 	mymemo_t *memo = NULL, *forward = NULL;
 	node_t *n = NULL;
-	uint8_t i = 1, memonum = atoi(parv[3]);
+	unsigned int i = 1, memonum = atoi(parv[3]);
 	static char buf[XMLRPC_BUFSIZE] = "";
 
 	*buf = '\0';
@@ -325,7 +325,7 @@ static int memo_delete(void *conn, int parc, char *parv[])
 	myuser_t *mu;
 	mymemo_t *memo = NULL;
 	node_t *n = NULL, *tn = NULL;
-	uint8_t i = 0, delcount = 0, memonum = 0, deleteall = 0;
+	unsigned int i = 0, delcount = 0, memonum = 0, deleteall = 0;
 	static char buf[XMLRPC_BUFSIZE] = "";
 
 	*buf = '\0';
@@ -421,7 +421,7 @@ static int memo_list(void *conn, int parc, char *parv[])
 	myuser_t *mu;
 	mymemo_t *memo = NULL;
 	node_t *n = NULL;
-	uint8_t i = 0;
+	unsigned int i = 0;
 	char timebuf[16] = "", memobuf[64] = "", sendbuf[XMLRPC_BUFSIZE - 1] = "";
 	struct tm memotime;
 	static char buf[XMLRPC_BUFSIZE] = "";
@@ -505,7 +505,7 @@ static int memo_read(void *conn, int parc, char *parv[])
 	myuser_t *mu;
 	mymemo_t *memo = NULL, *receipt = NULL;
 	node_t *n = NULL;
-	uint32_t i = 1, memonum = 0;
+	unsigned int i = 1, memonum = 0;
 	struct tm memotime;
 	char timebuf[16] = "", sendbuf[XMLRPC_BUFSIZE - 1] = "", strfbuf[32] = "";
 	static char buf[XMLRPC_BUFSIZE] = "";
@@ -837,7 +837,7 @@ static int memo_ignore_list(void *conn, int parc, char *parv[])
 	/* Define and initialise structs and variables */
 	myuser_t *mu;
 	node_t *n;
-	uint8_t i = 1;
+	unsigned int i = 1;
 	char sendbuf[XMLRPC_BUFSIZE - 1] = "", ignorebuf[64] = "";
 	static char buf[XMLRPC_BUFSIZE] = "";
 

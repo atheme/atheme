@@ -4,7 +4,7 @@
  *
  * Socketengine implementing poll().
  *
- * $Id: poll.c 8023 2007-04-02 10:22:01Z nenolod $
+ * $Id: poll.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include <sys/poll.h>
@@ -98,7 +98,7 @@ static void update_poll_fds(void)
  */
 void connection_select(time_t delay)
 {
-	int32_t sr;
+	int sr;
 	node_t *n, *tn;
 	connection_t *cptr;
 	int slot;

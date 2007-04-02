@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree stable branch inspircd.
  *
- * $Id: inspircd10.c 7973 2007-03-23 21:45:12Z jilles $
+ * $Id: inspircd10.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 7973 2007-03-23 21:45:12Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 8027 2007-04-02 10:47:18Z nenolod $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -141,9 +141,9 @@ static boolean_t check_forward(const char *value, channel_t *c, mychan_t *mc, us
 }
 
 /* login to our uplink */
-static uint8_t inspircd_server_login(void)
+static unsigned int inspircd_server_login(void)
 {
-	int8_t ret;
+	int ret;
 
 	ret = sts("SERVER %s %s 0 :%s", me.name, curr_uplink->pass, me.desc);
 	if (ret == 1)
@@ -514,7 +514,7 @@ static void m_notice(sourceinfo_t *si, int parc, char *parv[])
 static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c;
-	uint8_t i;
+	unsigned int i;
 	time_t ts;
 
 	c = channel_find(parv[0]);
@@ -552,7 +552,7 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_part(sourceinfo_t *si, int parc, char *parv[])
 {
-	uint8_t chanc;
+	unsigned int chanc;
 	char *chanv[256];
 	int i;
 
@@ -574,7 +574,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	{
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", si->s->name, parv[1]);
 
-		/* char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, uint32_t ts */
+		/* char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, unsigned int ts */
 		u = user_add(parv[1], parv[4], parv[2], parv[3], parv[6], NULL, parv[7], si->s, atol(parv[0]));
 		user_mode(u, parv[5]);
 

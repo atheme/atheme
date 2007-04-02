@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for ptlink ircd.
  *
- * $Id: ptlink.c 7989 2007-03-27 16:58:54Z jilles $
+ * $Id: ptlink.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/ptlink.h"
 
-DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 7989 2007-03-27 16:58:54Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 8027 2007-04-02 10:47:18Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -110,9 +110,9 @@ static boolean_t check_flood(const char *value, channel_t *c, mychan_t *mc, user
 }
 
 /* login to our uplink */
-static uint8_t ptlink_server_login(void)
+static unsigned int ptlink_server_login(void)
 {
-	int8_t ret;
+	int ret;
 
 	ret = sts("PASS %s :TS", curr_uplink->pass);
 	if (ret == 1)
@@ -414,9 +414,9 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 	/* -> :proteus.malkier.net SJOIN 1073516550 #shrike +tn :@sycobuny @+rakaur */
 
 	channel_t *c;
-	uint8_t userc;
+	unsigned int userc;
 	char *userv[256];
-	uint8_t i;
+	unsigned int i;
 	time_t ts;
 
 	/* :origin SJOIN ts chan modestr [key or limits] :users */
@@ -475,7 +475,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_part(sourceinfo_t *si, int parc, char *parv[])
 {
-	uint8_t chanc;
+	unsigned int chanc;
 	char *chanv[256];
 	int i;
 

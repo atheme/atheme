@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 7839 2007-03-06 00:09:30Z pippijn $
+ * $Id: connection.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -47,7 +47,7 @@ void init_netio(void)
  * side effects:
  *       a connection is added to the socket queue.
  */
-connection_t *connection_add(const char *name, int32_t fd, uint32_t flags,
+connection_t *connection_add(const char *name, int fd, unsigned int flags,
 	void (*read_handler)(connection_t *),
 	void (*write_handler)(connection_t *))
 {
@@ -100,7 +100,7 @@ connection_t *connection_add(const char *name, int32_t fd, uint32_t flags,
  * side effects:
  *       none
  */
-connection_t *connection_find(int32_t fd)
+connection_t *connection_find(int fd)
 {
 	connection_t *cptr;
 	node_t *nptr;
@@ -302,7 +302,7 @@ void connection_close_all(void)
  *       a TCP/IP connection is opened to the host,
  *       and interest is registered in read/write events.
  */
-connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
+connection_t *connection_open_tcp(char *host, char *vhost, unsigned int port,
 	void (*read_handler)(connection_t *),
 	void (*write_handler)(connection_t *))
 {
@@ -312,7 +312,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
 	struct sockaddr_in sa;
 	struct in_addr *in;
 	socket_t s;
-	uint32_t optval;
+	unsigned int optval;
 
 	if (!(s = socket(AF_INET, SOCK_STREAM, 0)))
 	{
@@ -397,7 +397,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, uint32_t port,
  *       a TCP/IP connection is opened to the host,
  *       and interest is registered in read/write events.
  */
-connection_t *connection_open_listener_tcp(char *host, uint32_t port,
+connection_t *connection_open_listener_tcp(char *host, unsigned int port,
 	void (*read_handler)(connection_t *))
 {
 	connection_t *cptr;
@@ -406,7 +406,7 @@ connection_t *connection_open_listener_tcp(char *host, uint32_t port,
 	struct sockaddr_in sa;
 	struct in_addr *in;
 	socket_t s;
-	uint32_t optval;
+	unsigned int optval;
 
 	if (!(s = socket(AF_INET, SOCK_STREAM, 0)))
 	{
@@ -583,7 +583,7 @@ void connection_write(connection_t *to, char *format, ...)
 {
 	char buf[BUFSIZE * 12];
 	va_list args;
-	uint16_t len;
+	unsigned int len;
 
 	va_start(args, format);
 	vsnprintf(buf, BUFSIZE * 12, format, args);

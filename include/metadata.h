@@ -4,7 +4,7 @@
  *
  * Metadata information.
  *
- * $Id: metadata.h 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: metadata.h 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #ifndef METADATA_H
@@ -18,9 +18,9 @@ struct metadata_ {
 
 typedef struct metadata_ metadata_t;
 
-E metadata_t *metadata_add(void *target, int32_t type, const char *name, const char *value);
-E void metadata_delete(void *target, int32_t type, const char *name);
-E metadata_t *metadata_find(void *target, int32_t type, const char *name);
+E metadata_t *metadata_add(void *target, int type, const char *name, const char *value);
+E void metadata_delete(void *target, int type, const char *name);
+E metadata_t *metadata_find(void *target, int type, const char *name);
 
 #define METADATA_USER		1
 #define METADATA_CHANNEL	2

@@ -4,7 +4,7 @@
  *
  * OperServ NOOP command.
  *
- * $Id: noop.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: noop.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/noop", TRUE, _modinit, _moddeinit,
-	"$Id: noop.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: noop.c 8027 2007-04-02 10:47:18Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -264,7 +264,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!strcasecmp(type, "HOSTMASK"))
 		{
-			uint16_t i = 1;
+			unsigned int i = 1;
 			logcommand(si, CMDLOG_GET, "NOOP LIST HOSTMASK");
 			command_success_nodata(si, _("Hostmask NOOP list (%d entries):"), noop_hostmask_list.count);
 			command_success_nodata(si, " ");
@@ -284,7 +284,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 		}
 		else if (!strcasecmp(type, "SERVER"))
 		{
-			uint16_t i = 1;
+			unsigned int i = 1;
 			logcommand(si, CMDLOG_GET, "NOOP LIST SERVER");
 			command_success_nodata(si, _("Server NOOP list (%d entries):"), noop_server_list.count);
 			command_success_nodata(si, " ");

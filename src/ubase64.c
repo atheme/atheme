@@ -4,7 +4,7 @@
  *
  * Undernet base64 routine.
  *
- * $Id: ubase64.c 7851 2007-03-06 00:31:04Z jilles $
+ * $Id: ubase64.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -47,10 +47,10 @@ const char *uinttobase64(char *buf, uint64_t v, int64_t count)
 	return buf;
 }
 
-uint32_t base64touint(char *buf)
+unsigned int base64touint(char *buf)
 {
 	int bits;
-	uint32_t v = 0;
+	unsigned int v = 0;
 	int count = 6;
 
 	while (--count >= 0 && (bits = ub64_lookuptab[255 & *buf++]) != '\377')

@@ -4,7 +4,7 @@
  *
  * This file contains functionality which implements the OService IGNORE command.
  *
- * $Id: ignore.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: ignore.c 8027 2007-04-02 10:47:18Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/ignore", FALSE, _modinit, _moddeinit,
-	"$Id: ignore.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: ignore.c 8027 2007-04-02 10:47:18Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -206,7 +206,7 @@ static void os_cmd_ignore_clear(sourceinfo_t *si, int parc, char *parv[])
 static void os_cmd_ignore_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	node_t *n;
-	uint8_t i = 1;
+	unsigned int i = 1;
 	svsignore_t *svsignore;
 	char strfbuf[32];
 	struct tm tm;
