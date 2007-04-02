@@ -5,7 +5,7 @@
  *
  * Misc tools
  *
- * $Id: tools.h 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: tools.h 8035 2007-04-02 11:00:39Z jilles $
  */
 
 #ifndef _TOOLS_H
@@ -105,8 +105,8 @@ E int sendemail(user_t *from, int type, myuser_t *mu, const char *param);
 /* arc4random.c */
 #ifndef HAVE_ARC4RANDOM
 E void arc4random_stir();
-E void arc4random_addrandom(unsigned int *dat, int datlen);
-E unsigned int arc4random(void);
+E void arc4random_addrandom(uint8_t *dat, int datlen);
+E uint32_t arc4random(void);
 #endif /* !HAVE_ARC4RANDOM */
 
 /* function.c */
