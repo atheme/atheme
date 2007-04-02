@@ -1,3 +1,13 @@
+nenolod     2007/04/02 11:04:24 UTC	(20070402-8039)
+  Log:
+  - uint8_t -> unsigned char
+  - uint32_t -> unsigned int
+  
+
+  Changes:	Modified:
+  +14 -14	trunk/src/arc4random.c (File Modified) 
+
+
 jilles      2007/04/02 11:03:07 UTC	(20070402-8037)
   Log:
   Chase r8035.
