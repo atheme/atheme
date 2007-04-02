@@ -1,3 +1,13 @@
+nenolod     2007/04/02 07:07:35 UTC	(20070402-8017)
+  Log:
+  - add TOPICPREPEND command.
+  
+
+  Changes:	Modified:
+  + -		trunk/help/cservice/topicprepend (File Added) 
+  +76 -0	trunk/modules/chanserv/topic.c (File Modified) 
+
+
 jilles      2007/03/31 15:44:37 UTC	(20070331-8015)
   Log:
   Clarify SETPASS email a little.

@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TOPIC functions.
  *
- * $Id: topic.c 8017 2007-04-02 07:07:35Z nenolod $
+ * $Id: topic.c 8019 2007-04-02 09:27:15Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/topic", FALSE, _modinit, _moddeinit,
-	"$Id: topic.c 8017 2007-04-02 07:07:35Z nenolod $",
+	"$Id: topic.c 8019 2007-04-02 09:27:15Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -193,8 +193,8 @@ static void cs_cmd_topicprepend(sourceinfo_t *si, int parc, char *parv[])
 
         if (!chan || !topic)
         {
-                command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "TOPICAPPEND");
-                command_fail(si, fault_needmoreparams, _("Syntax: TOPICAPPEND <#channel> <topic>"));
+                command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "TOPICPREPEND");
+                command_fail(si, fault_needmoreparams, _("Syntax: TOPICPREPEND <#channel> <topic>"));
                 return;
         }
 
