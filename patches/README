@@ -1,5 +1,0 @@
-This directory contains patches that are works in progress, and cannot
-yet be integrated into the tree.
-
-- balloc.patch: A patch implementing a more modernized block allocator
-  (currently too slow to implement in trunk -- by nenolod)
