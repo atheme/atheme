@@ -1,3 +1,14 @@
+nenolod     2007/04/02 10:22:01 UTC	(20070402-8023)
+  Log:
+  - use time_t for connection_select() instead of uint32_t.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/connection.h (File Modified) 
+  +1 -1		trunk/src/poll.c (File Modified) 
+  +1 -1		trunk/src/select.c (File Modified) 
+
+
 nenolod     2007/04/02 10:20:19 UTC	(20070402-8021)
   Log:
   - store timestamps as time_t and not as uint32_t.

@@ -4,7 +4,7 @@
  *
  * Per-channel userinfo thingie
  *
- * $Id: cs_userinfo.c 7975 2007-03-24 22:27:06Z jilles $
+ * $Id: cs_userinfo.c 8025 2007-04-02 10:36:56Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/userinfo", FALSE, _modinit, _moddeinit,
-	"$Id: cs_userinfo.c 7975 2007-03-24 22:27:06Z jilles $",
+	"$Id: cs_userinfo.c 8025 2007-04-02 10:36:56Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -32,14 +32,14 @@ void _modinit(module_t *m)
 	hook_add_event("channel_join");
 	hook_add_hook("channel_join", userinfo_check_join);
 	command_add(&cs_userinfo, cs_cmdtree);
-	/*help_addentry(cs_helptree, "USERINFO", "help/chanserv/userinfo", NULL);*/
+	help_addentry(cs_helptree, "USERINFO", "help/cservice/userinfo", NULL);
 }
 
 void _moddeinit(void)
 {
 	hook_del_hook("channel_join", userinfo_check_join);
 	command_delete(&cs_userinfo, cs_cmdtree);
-	/*help_delentry(cs_helptree, "USERINFO");*/
+	help_delentry(cs_helptree, "USERINFO");
 }
 
 /* USERINFO <channel> [user] [message] */
