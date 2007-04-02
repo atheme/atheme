@@ -4,7 +4,7 @@
  *
  * This file contains logging routines.
  *
- * $Id: logger.c 8049 2007-04-02 12:40:41Z nenolod $
+ * $Id: logger.c 8061 2007-04-02 14:38:31Z nenolod $
  */
 
 #include "atheme.h"
@@ -152,7 +152,7 @@ void slog(unsigned int level, const char *fmt, ...)
 	{
 		logfile_t *lf = (logfile_t *) n->data;
 
-		if ((level & lf->log_mask) && !log_force)
+		if (!(level & lf->log_mask) && !log_force)
 			continue;
 
 		return_if_fail(lf->log_file != NULL);
