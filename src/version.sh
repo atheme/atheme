@@ -6,7 +6,7 @@
 # This file generates version.c.
 # Stolen from ircd-ratbox.
 #
-# $Id: version.sh 7419 2007-01-01 14:09:36Z jilles $
+# $Id: version.sh 8031 2007-04-02 10:55:00Z nenolod $
 #
 
 spitshell=cat
@@ -34,7 +34,7 @@ awk '{if (NF == 6) \
 else \
          { print $1 " "  $2 " " $3 " " $7 " at " $4 " " $5 " " $6 }}'`
 
-buildid=`echo "\$Revision: 7419 $" | \
+buildid=`echo "\$Revision: 8031 $" | \
 	awk '{ print $2 }'`;
 
 $spitshell >version.c <<!SUB!THIS!
@@ -107,7 +107,7 @@ const char *infotext[] =
   "  gxti, Michael Tharp <gxti@partiallystapled.com>",
   "  jilles, Jilles Tjoelker <jilles@stack.nl>",
   "  nenolod, William Pitcock <nenolod@nenolod.net>",
-  "  w00t, Robin Burchell <viroteck@viroteck.net>",
+  "  pippijn, Pippijn van Steenhoven <pippijn@one09.net>",
   " ",
   "The following people have contributed blood, sweat and tears to",
   "this Atheme release:",
@@ -120,6 +120,7 @@ const char *infotext[] =
   "  pfish, Patrick Fish <pofish@gmail.com>",
   "  terminal, Theo Julienne <admin@ozweb.nu>",
   "  Trystan, Trystan Scott Lee <trystan@nomadirc.net>",
+  "  w00t, Robin Burchell <viroteck@viroteck.net>",
   "  zparta, Jens Holmqvist <zparta@hispan.se>",
   " ",
   "Visit our website at http://www.atheme.net",
