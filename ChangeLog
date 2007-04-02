@@ -1,3 +1,12 @@
+jilles      2007/04/02 15:27:16 UTC	(20070402-8069)
+  Log:
+  Fix duplicate name.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/tools.h (File Modified) 
+
+
 jilles      2007/04/02 15:16:19 UTC	(20070402-8067)
   Log:
   Comment out gameserv modules, these are a specialty and
