@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 8053 2007-04-02 14:15:42Z nenolod $
+ * $Id: account.h 8093 2007-04-03 15:17:50Z nenolod $
  */
 
 #ifndef ACCOUNT_H
@@ -169,6 +169,7 @@ struct chanacs_
 #define CA_AUTOHALFOP	 0x00000800 /* Gain halfops automatically upon entry. */
 #define CA_ACLVIEW	 0x00001000 /* Can view access lists */
 
+#define CA_SUSPENDED	 0x40000000 /* Suspended access entry. */
 #define CA_AKICK         0x80000000 /* Automatic kick */
 
 #define CA_NONE          0x0
@@ -190,7 +191,7 @@ struct chanacs_
 /* joining with one of these flags updates used time */
 #define CA_USEDUPDATE    (CA_VOICE | CA_OP | CA_AUTOOP | CA_SET | CA_REMOVE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_AUTOHALFOP)
 #define CA_ALLPRIVS      (CA_VOICE | CA_AUTOVOICE | CA_OP | CA_AUTOOP | CA_TOPIC | CA_SET | CA_REMOVE | CA_INVITE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_AUTOHALFOP | CA_ACLVIEW)
-#define CA_ALL_ALL       (CA_ALLPRIVS | CA_AKICK)
+#define CA_ALL_ALL       (CA_ALLPRIVS | CA_SUSPENDED | CA_AKICK)
 
 /* old CA_ flags */
 #define OLD_CA_AOP           (CA_VOICE | CA_OP | CA_AUTOOP | CA_TOPIC)

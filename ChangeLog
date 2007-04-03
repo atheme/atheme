@@ -1,3 +1,12 @@
+nenolod     2007/04/03 15:02:14 UTC	(20070403-8091)
+  Log:
+  - allow sending memos to channels
+  
+
+  Changes:	Modified:
+  +146 -67	trunk/modules/memoserv/send.c (File Modified) 
+
+
 nenolod     2007/04/03 11:25:07 UTC	(20070403-8089)
   Log:
   - or not

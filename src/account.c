@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 8051 2007-04-02 14:11:06Z nenolod $
+ * $Id: account.c 8093 2007-04-03 15:17:50Z nenolod $
  */
 
 #include "atheme.h"
@@ -694,7 +694,7 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel, int maxtime
 	LIST_FOREACH(n, mc->chanacs.head)
 	{
 		ca = n->data;
-		if (ca->level & CA_AKICK)
+		if (ca->level & CA_AKICK || ca->level & CA_SUSPENDED)
 			continue;
 		mu = ca->myuser;
 		if (mu == NULL || mu == mc->founder)
@@ -908,6 +908,9 @@ chanacs_t *chanacs_find(mychan_t *mychan, myuser_t *myuser, unsigned int level)
 	{
 		ca = (chanacs_t *)n->data;
 
+		if (ca->level & CA_SUSPENDED)
+			continue;
+
 		if (level != 0x0)
 		{
 			if ((ca->myuser == myuser) && ((ca->level & level) == level))
@@ -930,6 +933,9 @@ chanacs_t *chanacs_find_host(mychan_t *mychan, char *host, unsigned int level)
 	LIST_FOREACH(n, mychan->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
+
+		if (ca->level & CA_SUSPENDED)
+			continue;
 
 		if (level != 0x0)
 		{
@@ -973,6 +979,9 @@ chanacs_t *chanacs_find_host_literal(mychan_t *mychan, char *host, unsigned int 
 	LIST_FOREACH(n, mychan->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
+
+		if (ca->level & CA_SUSPENDED)
+			continue;
 
 		if (level != 0x0)
 		{
