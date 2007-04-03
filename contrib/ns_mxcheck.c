@@ -56,7 +56,7 @@ static void check_registration(void *vptr)
                 "REGISTER failed", domain);
             command_fail(hdata->si, fault_noprivs, "Sorry, \2%s\2 does not exist, "
                 "I can't send mail there. Please check and try again.");
-            hdata->approved = 1;    
+            hdata->approved = 0;
             return;
         }
     }

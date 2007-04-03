@@ -1,3 +1,13 @@
+nenolod     2007/04/03 11:23:38 UTC	(20070403-8085)
+  Log:
+  - add ns_mxcheck.c from jamie@slacked.org -- checks if an e-mail has a valid MX record associated to it's domain.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/contrib/Makefile.in (File Modified) 
+  +83 -0	trunk/contrib/ns_mxcheck.c (File Added) 
+
+
 nenolod     2007/04/03 11:08:36 UTC	(20070403-8083)
   Log:
   - add documentation on SET EMAIL NONE. closes #876.
