@@ -1,3 +1,12 @@
+nenolod     2007/04/03 11:24:49 UTC	(20070403-8087)
+  Log:
+  - apparently hdata->approved should be 0 and not 1.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/contrib/ns_mxcheck.c (File Modified) 
+
+
 nenolod     2007/04/03 11:23:38 UTC	(20070403-8085)
   Log:
   - add ns_mxcheck.c from jamie@slacked.org -- checks if an e-mail has a valid MX record associated to it's domain.
