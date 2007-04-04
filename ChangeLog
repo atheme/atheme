@@ -1,3 +1,15 @@
+nenolod     2007/04/03 15:17:50 UTC	(20070403-8093)
+  Log:
+  - add a new flag, +X, which can be used to suspend access entries.
+  
+
+  Changes:	Modified:
+  +4 -2		trunk/help/cservice/flags (File Modified) 
+  +2 -1		trunk/include/account.h (File Modified) 
+  +10 -1	trunk/src/account.c (File Modified) 
+  +2 -1		trunk/src/flags.c (File Modified) 
+
+
 nenolod     2007/04/03 15:02:14 UTC	(20070403-8091)
   Log:
   - allow sending memos to channels

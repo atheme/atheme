@@ -4,7 +4,7 @@
  *
  * This file contains logging routines.
  *
- * $Id: logger.c 8063 2007-04-02 14:39:56Z nenolod $
+ * $Id: logger.c 8095 2007-04-04 21:27:46Z jilles $
  */
 
 #include "atheme.h"
@@ -41,13 +41,13 @@ static void logfile_delete(void *vdata)
  * Side Effects:
  *       - log_files is populated with the newly created logfile_t.
  */
-logfile_t *logfile_new(const char *log_path, unsigned int log_mask)
+logfile_t *logfile_new(const char *path, unsigned int log_mask)
 {
 	static time_t lastfail = 0;
 	logfile_t *lf = scalloc(sizeof(logfile_t), 1);
 
-	object_init(object(lf), log_path, logfile_delete);
-	if ((lf->log_file = fopen(log_path, "a")) == NULL)
+	object_init(object(lf), path, logfile_delete);
+	if ((lf->log_file = fopen(path, "a")) == NULL)
 	{
 		free(lf);
 
@@ -63,7 +63,7 @@ logfile_t *logfile_new(const char *log_path, unsigned int log_mask)
 	fcntl(fileno(lf->log_file), F_SETFD, FD_CLOEXEC);
 #endif
 
-	lf->log_path = sstrdup(log_path);
+	lf->log_path = sstrdup(path);
 	lf->log_mask = log_mask;
 
 	node_add(lf, &lf->node, &log_files);
