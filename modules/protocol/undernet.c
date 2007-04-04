@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: undernet.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: undernet.c 8097 2007-04-04 21:48:03Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 8027 2007-04-02 10:47:18Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 8097 2007-04-04 21:48:03Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -427,9 +427,9 @@ static void m_notice(sourceinfo_t *si, int parc, char *parv[])
 static void m_create(sourceinfo_t *si, int parc, char *parv[])
 {
 	char buf[BUFSIZE];
-	unsigned int chanc;
+	int chanc;
 	char *chanv[256];
-	unsigned int i;
+	int i;
 
 	chanc = sjtoken(parv[0], ',', chanv);
 
@@ -455,9 +455,9 @@ static void m_create(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_join(sourceinfo_t *si, int parc, char *parv[])
 {
-	unsigned int chanc;
+	int chanc;
 	char *chanv[256];
-	unsigned int i;
+	int i;
 	node_t *n, *tn;
 	chanuser_t *cu;
 
@@ -608,7 +608,7 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_part(sourceinfo_t *si, int parc, char *parv[])
 {
-	unsigned int chanc;
+	int chanc;
 	char *chanv[256];
 	int i;
 

@@ -1,3 +1,12 @@
+jilles      2007/04/04 21:27:46 UTC	(20070404-8095)
+  Log:
+  Fix shadowing of global variable in logger.c.
+  
+
+  Changes:	Modified:
+  +4 -4		trunk/src/logger.c (File Modified) 
+
+
 nenolod     2007/04/03 15:17:50 UTC	(20070403-8093)
   Log:
   - add a new flag, +X, which can be used to suspend access entries.

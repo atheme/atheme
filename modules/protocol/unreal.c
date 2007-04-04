@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: unreal.c 8097 2007-04-04 21:48:03Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 8027 2007-04-02 10:47:18Z nenolod $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 8097 2007-04-04 21:48:03Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -579,7 +579,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_part(sourceinfo_t *si, int parc, char *parv[])
 {
-	unsigned int chanc;
+	int chanc;
 	char *chanv[256];
 	int i;
 
@@ -614,7 +614,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		/* If the user's SVID is equal to their nick TS,
 		 * they're properly logged in -- jilles */
-		if (u->ts > 100 && (unsigned int)atoi(parv[6]) == u->ts)
+		if (u->ts > 100 && (time_t)atoi(parv[6]) == u->ts)
 			handle_burstlogin(u, parv[0]);
 
 		handle_nickchange(u);
