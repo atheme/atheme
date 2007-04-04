@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 8093 2007-04-03 15:17:50Z nenolod $
+ * $Id: account.h 8099 2007-04-04 21:54:25Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -291,6 +291,7 @@ E myuser_t *mychan_pick_successor(mychan_t *mc);
 
 E chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level, time_t ts);
 E chanacs_t *chanacs_add_host(mychan_t *mychan, char *host, unsigned int level, time_t ts);
+
 E chanacs_t *chanacs_find(mychan_t *mychan, myuser_t *myuser, unsigned int level);
 E chanacs_t *chanacs_find_host(mychan_t *mychan, char *host, unsigned int level);
 E unsigned int chanacs_host_flags(mychan_t *mychan, char *host);
@@ -302,6 +303,12 @@ E boolean_t chanacs_user_has_flag(mychan_t *mychan, user_t *u, unsigned int leve
 E unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u);
 E boolean_t chanacs_source_has_flag(mychan_t *mychan, sourceinfo_t *si, unsigned int level);
 E unsigned int chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si);
+
+chanacs_t *chanacs_open(mychan_t *mychan, myuser_t *mu, const char *hostmask, boolean_t create);
+void chanacs_close(chanacs_t *ca);
+boolean_t chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags);
+boolean_t chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int removeflags);
+
 E boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags);
 E boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, char *hostmask, unsigned int addflags, unsigned int removeflags);
 

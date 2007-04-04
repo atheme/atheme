@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 8093 2007-04-03 15:17:50Z nenolod $
+ * $Id: account.c 8099 2007-04-04 21:54:25Z jilles $
  */
 
 #include "atheme.h"
@@ -1106,6 +1106,86 @@ unsigned int chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si)
 		ca = chanacs_find(mychan, si->smu, 0);
 		return ca != NULL ? ca->level : 0;
 	}
+}
+
+/* Look for the chanacs exactly matching mu or host (exactly one of mu and
+ * host must be non-NULL). If not found, and create is TRUE, create a new
+ * chanacs with no flags.
+ */
+chanacs_t *chanacs_open(mychan_t *mychan, myuser_t *mu, const char *hostmask, boolean_t create)
+{
+	chanacs_t *ca;
+
+	/* wrt the second assert: only one of mu or hostmask can be not-NULL --nenolod */
+	return_val_if_fail(mychan != NULL, FALSE);
+	return_val_if_fail((mu != NULL && hostmask == NULL) || (mu == NULL && hostmask != NULL), FALSE); 
+
+	if (mu != NULL)
+	{
+		ca = chanacs_find(mychan, mu, 0);
+		if (ca != NULL)
+			return ca;
+		else if (create)
+			return chanacs_add(mychan, mu, 0, CURRTIME);
+	}
+	else
+	{
+		ca = chanacs_find_host_literal(mychan, hostmask, 0);
+		if (ca != NULL)
+			return ca;
+		else if (create)
+			return chanacs_add_host(mychan, hostmask, 0, CURRTIME);
+	}
+	return NULL;
+}
+
+/* Destroy a chanacs if it has no flags */
+void chanacs_close(chanacs_t *ca)
+{
+	if (ca->level == 0)
+		object_unref(ca);
+}
+
+/* Change channel access
+ *
+ * Either mu or hostmask must be specified.
+ * Add the flags in *addflags and remove the flags in *removeflags, updating
+ * these to reflect the actual change. Only allow changes to restrictflags.
+ * Returns true if successful, false if an unallowed change was attempted.
+ * -- jilles */
+boolean_t chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags)
+{
+	return_val_if_fail(ca != NULL, FALSE);
+	return_val_if_fail(addflags != NULL && removeflags != NULL, FALSE);
+
+	*addflags &= ~ca->level;
+	*removeflags &= ca->level & ~*addflags;
+	/* no change? */
+	if ((*addflags | *removeflags) == 0)
+		return TRUE;
+	/* attempting to add bad flag? */
+	if (~restrictflags & *addflags)
+		return FALSE;
+	/* attempting to remove bad flag? */
+	if (~restrictflags & *removeflags)
+		return FALSE;
+	/* attempting to manipulate user with more privs? */
+	if (~restrictflags & ca->level)
+		return FALSE;
+	ca->level = (ca->level | *addflags) & ~*removeflags;
+	ca->ts = CURRTIME;
+
+	return TRUE;
+}
+
+/* version that doesn't return the changes made */
+boolean_t chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int removeflags)
+{
+	unsigned int a, r;
+
+	a = addflags & ca_all;
+	r = removeflags & ca_all;
+	return chanacs_modify(ca, &a, &r, ca_all);
 }
 
 /* Change channel access

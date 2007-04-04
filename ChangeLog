@@ -1,3 +1,32 @@
+jilles      2007/04/04 21:48:03 UTC	(20070404-8097)
+  Log:
+  Get rid of some signedness warnings in protocol modules.
+  
+
+  Changes:	Modified:
+  +5 -5		trunk/modules/protocol/asuka.c (File Modified) 
+  +1 -1		trunk/modules/protocol/bahamut.c (File Modified) 
+  +5 -5		trunk/modules/protocol/bircd.c (File Modified) 
+  +1 -1		trunk/modules/protocol/charybdis.c (File Modified) 
+  +2 -2		trunk/modules/protocol/dreamforge.c (File Modified) 
+  +1 -1		trunk/modules/protocol/hybrid.c (File Modified) 
+  +1 -1		trunk/modules/protocol/hyperion.c (File Modified) 
+  +2 -2		trunk/modules/protocol/inspircd10.c (File Modified) 
+  +1 -1		trunk/modules/protocol/inspircd11.c (File Modified) 
+  +1 -1		trunk/modules/protocol/ircnet.c (File Modified) 
+  +5 -5		trunk/modules/protocol/nefarious.c (File Modified) 
+  +2 -2		trunk/modules/protocol/officeirc.c (File Modified) 
+  +1 -1		trunk/modules/protocol/plexus.c (File Modified) 
+  +1 -1		trunk/modules/protocol/ptlink.c (File Modified) 
+  +1 -1		trunk/modules/protocol/ratbox.c (File Modified) 
+  +1 -1		trunk/modules/protocol/shadowircd.c (File Modified) 
+  +1 -1		trunk/modules/protocol/solidircd.c (File Modified) 
+  +2 -2		trunk/modules/protocol/sorcery.c (File Modified) 
+  +1 -1		trunk/modules/protocol/ultimate3.c (File Modified) 
+  +5 -5		trunk/modules/protocol/undernet.c (File Modified) 
+  +2 -2		trunk/modules/protocol/unreal.c (File Modified) 
+
+
 jilles      2007/04/04 21:27:46 UTC	(20070404-8095)
   Log:
   Fix shadowing of global variable in logger.c.
