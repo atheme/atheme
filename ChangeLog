@@ -1,3 +1,15 @@
+jilles      2007/04/04 21:54:25 UTC	(20070404-8099)
+  Log:
+  Add some functions from new_chanacs_api:
+  chanacs_open(), chanacs_close(), chanacs_modify(),
+  chanacs_modify_simple().
+  
+
+  Changes:	Modified:
+  +7 -0		trunk/include/account.h (File Modified) 
+  +80 -0	trunk/src/account.c (File Modified) 
+
+
 jilles      2007/04/04 21:48:03 UTC	(20070404-8097)
   Log:
   Get rid of some signedness warnings in protocol modules.

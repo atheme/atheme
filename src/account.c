@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 8099 2007-04-04 21:54:25Z jilles $
+ * $Id: account.c 8101 2007-04-04 21:57:49Z jilles $
  */
 
 #include "atheme.h"
@@ -863,7 +863,7 @@ chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level, t
  * Side Effects:
  *       - the channel access list is updated for mychan.
  */
-chanacs_t *chanacs_add_host(mychan_t *mychan, char *host, unsigned int level, time_t ts)
+chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int level, time_t ts)
 {
 	chanacs_t *ca;
 	node_t *n;
@@ -923,7 +923,7 @@ chanacs_t *chanacs_find(mychan_t *mychan, myuser_t *myuser, unsigned int level)
 	return NULL;
 }
 
-chanacs_t *chanacs_find_host(mychan_t *mychan, char *host, unsigned int level)
+chanacs_t *chanacs_find_host(mychan_t *mychan, const char *host, unsigned int level)
 {
 	node_t *n;
 	chanacs_t *ca;
@@ -949,7 +949,7 @@ chanacs_t *chanacs_find_host(mychan_t *mychan, char *host, unsigned int level)
 	return NULL;
 }
 
-unsigned int chanacs_host_flags(mychan_t *mychan, char *host)
+unsigned int chanacs_host_flags(mychan_t *mychan, const char *host)
 {
 	node_t *n;
 	chanacs_t *ca;
@@ -968,7 +968,7 @@ unsigned int chanacs_host_flags(mychan_t *mychan, char *host)
 	return result;
 }
 
-chanacs_t *chanacs_find_host_literal(mychan_t *mychan, char *host, unsigned int level)
+chanacs_t *chanacs_find_host_literal(mychan_t *mychan, const char *host, unsigned int level)
 {
 	node_t *n;
 	chanacs_t *ca;
@@ -1027,7 +1027,7 @@ unsigned int chanacs_host_flags_by_user(mychan_t *mychan, user_t *u)
 	return chanacs_host_flags(mychan, host);
 }
 
-chanacs_t *chanacs_find_by_mask(mychan_t *mychan, char *mask, unsigned int level)
+chanacs_t *chanacs_find_by_mask(mychan_t *mychan, const char *mask, unsigned int level)
 {
 	myuser_t *mu;
 	chanacs_t *ca;
@@ -1195,7 +1195,7 @@ boolean_t chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned i
  * these to reflect the actual change. Only allow changes to restrictflags.
  * Returns true if successful, false if an unallowed change was attempted.
  * -- jilles */
-boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags)
+boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags)
 {
 	chanacs_t *ca;
 
@@ -1280,7 +1280,7 @@ boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, char *hostmask, unsigne
 }
 
 /* version that doesn't return the changes made */
-boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, char *hostmask, unsigned int addflags, unsigned int removeflags)
+boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, const char *hostmask, unsigned int addflags, unsigned int removeflags)
 {
 	unsigned int a, r;
 
