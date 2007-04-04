@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TEMPLATE functions.
  *
- * $Id: template.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: template.c 8103 2007-04-04 22:51:10Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/template", FALSE, _modinit, _moddeinit,
-	"$Id: template.c 8027 2007-04-02 10:47:18Z nenolod $",
+	"$Id: template.c 8103 2007-04-04 22:51:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -338,10 +338,8 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 					continue;
 				}
 				changes++;
-				if (newflags == 0)
-					object_unref(ca);
-				else
-					ca->level = newflags;
+				chanacs_modify_simple(ca, newflags, ~newflags);
+				chanacs_close(ca);
 			}
 			logcommand(si, CMDLOG_SET, "%s TEMPLATE %s !%s (%d changes)", mc->name, target, flagstr, changes);
 			strlcpy(flagstr2, flagstr, sizeof flagstr2);

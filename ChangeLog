@@ -1,3 +1,13 @@
+jilles      2007/04/04 21:57:49 UTC	(20070404-8101)
+  Log:
+  Constify chanacs functions some more.
+  
+
+  Changes:	Modified:
+  +7 -7		trunk/include/account.h (File Modified) 
+  +7 -7		trunk/src/account.c (File Modified) 
+
+
 jilles      2007/04/04 21:54:25 UTC	(20070404-8099)
   Log:
   Add some functions from new_chanacs_api:

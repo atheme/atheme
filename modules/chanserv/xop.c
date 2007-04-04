@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 8051 2007-04-02 14:11:06Z nenolod $
+ * $Id: xop.c 8103 2007-04-04 22:51:10Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 8051 2007-04-02 14:11:06Z nenolod $",
+	"$Id: xop.c 8103 2007-04-04 22:51:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -227,6 +227,8 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 	chanuser_t *cu;
 	chanacs_t *ca;
 	node_t *n;
+	unsigned int addflags = level, removeflags = ~level;
+	boolean_t isnew;
 
 	if (!mu)
 	{
@@ -238,32 +240,33 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		}
 
 		target = collapse(target);
-		ca = chanacs_find_host_literal(mc, target, CA_NONE);
-		if (ca != NULL && ca->level == level)
+		ca = chanacs_open(mc, NULL, target, TRUE);
+		if (ca->level == level)
 		{
 			command_fail(si, fault_nochange, _("\2%s\2 is already on the %s list for \2%s\2"), target, leveldesc, mc->name);
 			return;
 		}
+		isnew = ca->level == 0;
 
-		if (ca != NULL)
+		if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags))
 		{
-			if (ca->level & ~restrictflags)
-			{
-				command_fail(si, fault_noprivs, _("You are not authorized to modify the access entry for \2%s\2 on \2%s\2."), target, mc->name);
-				return;
-			}
+			command_fail(si, fault_noprivs, _("You are not authorized to modify the access entry for \2%s\2 on \2%s\2."), target, mc->name);
+			chanacs_close(ca);
+			return;
+		}
+		chanacs_close(ca);
+		if (!isnew)
+		{
 			/* they have access? change it! */
 			logcommand(si, CMDLOG_SET, "%s %s ADD %s (changed access)", mc->name, leveldesc, target);
 			command_success_nodata(si, _("\2%s\2's access on \2%s\2 has been changed to \2%s\2."), target, mc->name, leveldesc);
 			verbose(mc, "\2%s\2 changed \2%s\2's access to \2%s\2.", get_source_name(si), target, leveldesc);
-			ca->level = level;
 		}
 		else
 		{
 			logcommand(si, CMDLOG_SET, "%s %s ADD %s", mc->name, leveldesc, target);
 			command_success_nodata(si, _("\2%s\2 has been added to the %s list for \2%s\2."), target, leveldesc, mc->name);
 			verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", get_source_name(si), target, leveldesc);
-			chanacs_add_host(mc, target, level, CURRTIME);
 		}
 
 		/* run through the channel's user list and do it */
@@ -318,8 +321,8 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		return;
 	}
 
-	ca = chanacs_find(mc, mu, CA_NONE);
-	if (ca != NULL && ca->level == level)
+	ca = chanacs_open(mc, mu, NULL, TRUE);
+	if (ca->level == level)
 	{
 		command_fail(si, fault_nochange, _("\2%s\2 is already on the %s list for \2%s\2."), mu->name, leveldesc, mc->name);
 		return;
@@ -328,11 +331,13 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 	/* NEVEROP logic moved here
 	 * Allow changing access level, but not adding
 	 * -- jilles */
-	if (MU_NEVEROP & mu->flags && (ca == NULL || ca->level == CA_AKICK))
+	if (MU_NEVEROP & mu->flags && (ca->level == 0 || ca->level == CA_AKICK))
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to access lists (NEVEROP set)."), mu->name);
+		chanacs_close(ca);
 		return;
 	}
+
 	/*
 	 * this is a little more cryptic than it used to be, but much cleaner. Functionally should be
 	 * the same, with the exception that if they had access before, now it doesn't tell what it got
@@ -340,18 +345,22 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 	 */
 	/* just assume there's just one entry for that user -- jilles */
 
-	if (ca != NULL)
+	isnew = ca->level == 0;
+
+	if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags))
 	{
-		if (ca->level & ~restrictflags)
-		{
-			command_fail(si, fault_noprivs, _("You are not authorized to modify the access entry for \2%s\2 on \2%s\2."), mu->name, mc->name);
-			return;
-		}
+		command_fail(si, fault_noprivs, _("You are not authorized to modify the access entry for \2%s\2 on \2%s\2."), mu->name, mc->name);
+		chanacs_close(ca);
+		return;
+	}
+	chanacs_close(ca);
+
+	if (!isnew)
+	{
 		/* they have access? change it! */
 		logcommand(si, CMDLOG_SET, "%s %s ADD %s (changed access)", mc->name, leveldesc, mu->name);
 		command_success_nodata(si, _("\2%s\2's access on \2%s\2 has been changed to \2%s\2."), mu->name, mc->name, leveldesc);
 		verbose(mc, "\2%s\2 changed \2%s\2's access to \2%s\2.", get_source_name(si), mu->name, leveldesc);
-		ca->level = level;
 	}
 	else
 	{
@@ -359,8 +368,8 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		logcommand(si, CMDLOG_SET, "%s %s ADD %s", mc->name, leveldesc, mu->name);
 		command_success_nodata(si, _("\2%s\2 has been added to the %s list for \2%s\2."), mu->name, leveldesc, mc->name);
 		verbose(mc, "\2%s\2 added \2%s\2 to the %s list.", get_source_name(si), mu->name, leveldesc);
-		chanacs_add(mc, mu, level, CURRTIME);
 	}
+
 	/* run through the channel's user list and do it */
 	/* make sure the channel exists */
 	if (mc->chan == NULL)
@@ -550,7 +559,7 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 			continue;
 		changes++;
 		command_success_nodata(si, "%s: %s -> %s", ca->myuser ? ca->myuser->name : ca->host, bitmask_to_flags(ca->level, chanacs_flags), desc);
-		ca->level = newlevel;
+		chanacs_modify_simple(ca, newlevel, ~newlevel);
 	}
 	command_success_nodata(si, _("FORCEXOP \2%s\2 done (\2%d\2 changes)"), mc->name, changes);
 	if (changes > 0)

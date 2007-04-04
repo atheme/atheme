@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService FLAGS functions.
  *
- * $Id: flags.c 8073 2007-04-02 15:28:57Z jilles $
+ * $Id: flags.c 8103 2007-04-04 22:51:10Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/flags", FALSE, _modinit, _moddeinit,
-	"$Id: flags.c 8073 2007-04-02 15:28:57Z jilles $",
+	"$Id: flags.c 8103 2007-04-04 22:51:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -284,29 +284,37 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
+			ca = chanacs_open(mc, tmu, NULL, TRUE);
+
 			/* If NEVEROP is set, don't allow adding new entries
 			 * except sole +b. Adding flags if the current level
 			 * is +b counts as adding an entry.
 			 * -- jilles */
-			if (MU_NEVEROP & tmu->flags && addflags != CA_AKICK && addflags != 0 && ((ca = chanacs_find(mc, tmu, 0)) == NULL || ca->level == CA_AKICK))
+			if (MU_NEVEROP & tmu->flags && addflags != CA_AKICK && addflags != 0 && (ca->level == 0 || ca->level == CA_AKICK))
 			{
 				command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to access lists (NEVEROP set)."), tmu->name);
+				chanacs_close(ca);
 				return;
 			}
 
-			if (!chanacs_change(mc, tmu, NULL, &addflags, &removeflags, restrictflags))
+			if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags))
 			{
 				command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags, chanacs_flags), tmu->name, mc->name);
+				chanacs_close(ca);
 				return;
 			}
+			chanacs_close(ca);
 		}
 		else
 		{
-			if (!chanacs_change(mc, NULL, target, &addflags, &removeflags, restrictflags))
+			ca = chanacs_open(mc, NULL, target, TRUE);
+			if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags))
 			{
 		                command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags, chanacs_flags), target, mc->name);
+				chanacs_close(ca);
 				return;
 			}
+			chanacs_close(ca);
 		}
 
 		if ((addflags | removeflags) == 0)
