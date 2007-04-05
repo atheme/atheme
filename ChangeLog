@@ -1,3 +1,13 @@
+jilles      2007/04/05 22:14:55 UTC	(20070405-8111)
+  Log:
+  Add PATH tweaks so it works out of the box on freebsd
+  boxes with autoconf259 and automake19 from ports.
+  
+
+  Changes:	Modified:
+  +4 -0		trunk/autogen.sh (File Modified) 
+
+
 jilles      2007/04/05 16:28:02 UTC	(20070405-8109)
   Log:
   Remove the incomplete sockio layer.

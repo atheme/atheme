@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 8077 2007-04-02 15:56:57Z nenolod $
+ * $Id: atheme.c 8113 2007-04-05 22:21:12Z jilles $
  */
 
 #include "atheme.h"
@@ -31,9 +31,7 @@ char *config_file;
 char *log_path;
 boolean_t cold_start = FALSE;
 
-#ifndef HAVE_GETENV
 extern char **environ;
-#endif
 
 /* *INDENT-OFF* */
 static void print_help(void)
