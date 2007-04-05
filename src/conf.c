@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 8049 2007-04-02 12:40:41Z nenolod $
+ * $Id: conf.c 8115 2007-04-05 22:38:42Z jilles $
  */
 
 #include "atheme.h"
@@ -1073,11 +1073,22 @@ static int c_si_mta(CONFIGENTRY *ce)
 static int c_si_loglevel(CONFIGENTRY *ce)
 {
 	CONFIGENTRY *flce;
+	int val;
 
+	me.loglevel = 0;
+	if (ce->ce_vardata != NULL)
+	{
+		val = token_to_value(logflags, ce->ce_vardata);
+
+		if ((val != TOKEN_UNMATCHED) && (val != TOKEN_ERROR))
+			me.loglevel |= val;
+		else
+		{
+			slog(LG_INFO, "%s:%d: unknown flag: %s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_vardata);
+		}
+	}
 	for (flce = ce->ce_entries; flce; flce = flce->ce_next)
 	{
-		int val;
-
 		val = token_to_value(logflags, flce->ce_varname);
 
 		if ((val != TOKEN_UNMATCHED) && (val != TOKEN_ERROR))

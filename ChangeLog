@@ -1,3 +1,12 @@
+jilles      2007/04/05 22:21:12 UTC	(20070405-8113)
+  Log:
+  We need to declare extern char **environ; in all cases.
+  
+
+  Changes:	Modified:
+  +0 -2		trunk/src/atheme.c (File Modified) 
+
+
 jilles      2007/04/05 22:14:55 UTC	(20070405-8111)
   Log:
   Add PATH tweaks so it works out of the box on freebsd
