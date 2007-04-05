@@ -1,3 +1,21 @@
+jilles      2007/04/05 16:28:02 UTC	(20070405-8109)
+  Log:
+  Remove the incomplete sockio layer.
+  This just wrapped a few functions, blurring what's
+  actually happening. The only nontrivial function was
+  socket_setnonblocking(), only used by src/connection.c
+  so move it there and make it static.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/include/atheme.h (File Modified) 
+  +0 -29	trunk/include/sockio.h (File Deleted) 
+  +0 -1		trunk/src/Makefile.in (File Modified) 
+  +16 -3	trunk/src/connection.c (File Modified) 
+  +2 -2		trunk/src/datastream.c (File Modified) 
+  +0 -59	trunk/src/sockio.c (File Deleted) 
+
+
 jilles      2007/04/05 16:04:37 UTC	(20070405-8107)
   Log:
   Move channel memos to their own module SENDOPS. Only send

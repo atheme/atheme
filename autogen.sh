@@ -8,6 +8,10 @@ if test ! -f $TOP_DIR/configure.ac ; then
    exit 1
 fi
 
+# hack for freebsd -- jilles
+[ -d /usr/local/libexec/autoconf259 ] && PATH="$PATH:/usr/local/libexec/autoconf259"
+[ -d /usr/local/libexec/automake19 ] && PATH="$PATH:/usr/local/libexec/automake19"
+
 AUTOCONF=${AUTOCONF:-autoconf}
 ACLOCAL=${ACLOCAL:-aclocal}
 AUTOHEADER=${AUTOHEADER:-autoheader}
