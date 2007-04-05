@@ -4,7 +4,7 @@
  *
  * This file contains logging routines.
  *
- * $Id: logger.c 8095 2007-04-04 21:27:46Z jilles $
+ * $Id: logger.c 8117 2007-04-05 22:54:33Z jilles $
  */
 
 #include "atheme.h"
@@ -114,6 +114,36 @@ void log_shutdown(void)
 }
 
 /*
+ * log_debug_enabled(void)
+ *
+ * Determines whether debug logging (LG_DEBUG and/or LG_RAWDATA) is enabled.
+ *
+ * Inputs:
+ *       - none
+ *
+ * Outputs:
+ *       - boolean
+ *
+ * Side Effects:
+ *       - none
+ */
+boolean_t log_debug_enabled(void)
+{
+	node_t *n;
+	logfile_t *lf;
+
+	if (log_force || me.loglevel & (LG_DEBUG | LG_RAWDATA))
+		return TRUE;
+	LIST_FOREACH(n, log_files.head)
+	{
+		lf = n->data;
+		if (lf != log_file && lf->log_mask & (LG_DEBUG | LG_RAWDATA))
+			return TRUE;
+	}
+	return FALSE;
+}
+
+/*
  * slog(unsigned int level, const char *fmt, ...)
  *
  * Handles the basic logging of log messages to the log files defined
@@ -152,7 +182,7 @@ void slog(unsigned int level, const char *fmt, ...)
 	{
 		logfile_t *lf = (logfile_t *) n->data;
 
-		if (!(level & lf->log_mask) && !log_force)
+		if (lf == log_file ? !(level & me.loglevel) && !log_force : !(level & lf->log_mask))
 			continue;
 
 		return_if_fail(lf->log_file != NULL);

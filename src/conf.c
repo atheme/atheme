@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 8115 2007-04-05 22:38:42Z jilles $
+ * $Id: conf.c 8117 2007-04-05 22:54:33Z jilles $
  */
 
 #include "atheme.h"
@@ -1834,10 +1834,11 @@ boolean_t conf_rehash(void)
 
 	/* reset everything */
 	conf_init();
-
 	mark_all_illegal();
+	log_shutdown();
 
 	/* now reload */
+	log_open();
 	conf_process(cfp);
 	config_free(cfp);
 	hook_call_event("config_ready", NULL);

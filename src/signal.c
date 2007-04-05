@@ -4,7 +4,7 @@
  *
  * This file contains the signal handling routines.
  *
- * $Id: signal.c 8049 2007-04-02 12:40:41Z nenolod $
+ * $Id: signal.c 8117 2007-04-05 22:54:33Z jilles $
  */
 
 #include "atheme.h"
@@ -131,10 +131,6 @@ void check_signals(void)
 
 		snoop("REHASH: \2%s\2", "system console");
 		wallops(_("Rehashing \2%s\2 by request of \2%s\2."), config_file, "system console");
-
-		/* reinitialize the logging subsystem. */
-		log_shutdown();
-		log_open();
 
 		/* reload the config, opening other logs besides the core log if needed. */
 		if (!conf_rehash())

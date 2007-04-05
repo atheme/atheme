@@ -5,7 +5,7 @@
  *
  * Misc tools
  *
- * $Id: tools.h 8079 2007-04-02 17:37:39Z nenolod $
+ * $Id: tools.h 8117 2007-04-05 22:54:33Z jilles $
  */
 
 #ifndef _TOOLS_H
@@ -154,6 +154,8 @@ E logfile_t *logfile_new(const char *log_path_, unsigned int log_mask);
 #define CMDLOG_GET      LG_CMD_GET
 
 E void log_open(void);
+E void log_shutdown(void);
+E boolean_t log_debug_enabled(void);
 E void slog(unsigned int level, const char *fmt, ...);
 E void logcommand(sourceinfo_t *si, int level, const char *fmt, ...);
 E void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt, ...);

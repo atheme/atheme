@@ -1,3 +1,15 @@
+jilles      2007/04/05 22:38:42 UTC	(20070405-8115)
+  Log:
+  - Restore previous behaviour of overwriting the loglevel
+    setting on rehash.
+  - Allow loglevel = <value>; as before (as well as the new
+    { item; item; } way).
+  
+
+  Changes:	Modified:
+  +13 -2	trunk/src/conf.c (File Modified) 
+
+
 jilles      2007/04/05 22:21:12 UTC	(20070405-8113)
   Log:
   We need to declare extern char **environ; in all cases.
