@@ -4,7 +4,7 @@
  *
  * This file contains IRC interaction routines.
  *
- * $Id: ctcp-common.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: ctcp-common.c 8119 2007-04-05 23:04:06Z jilles $
  */
 
 #include "atheme.h"
@@ -30,7 +30,7 @@ static void ctcp_version_handler(char *cmd, char *args, char *origin, char *svsn
 		"\001VERSION atheme-%s. %s %s %s%s%s%s%s%s%s%s%s%s [%s]\001",
 		version, revision, me.name,
 		(match_mapping) ? "A" : "",
-		(log_force || me.loglevel & (LG_DEBUG | LG_RAWDATA)) ? "d" : "",
+		log_debug_enabled() ? "d" : "",
 		(me.auth) ? "e" : "",
 		(config_options.flood_msgs) ? "F" : "",
 		(config_options.leave_chans) ? "l" : "",

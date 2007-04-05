@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree stable branch inspircd.
  *
- * $Id: inspircd10.c 8097 2007-04-04 21:48:03Z jilles $
+ * $Id: inspircd10.c 8119 2007-04-05 23:04:06Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 8097 2007-04-04 21:48:03Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 8119 2007-04-05 23:04:06Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -153,7 +153,7 @@ static unsigned int inspircd_server_login(void)
 	sts("BURST");
 	/* XXX: Being able to get this data as a char* would be nice - Brain */
         sts(":%s VERSION :atheme-%s. %s %s%s%s%s%s%s%s%s%s%s",me.name, version, me.name, (match_mapping) ? "A" : "",
-								                      (log_force || me.loglevel & (LG_DEBUG | LG_RAWDATA)) ? "d" : "",
+								                      log_debug_enabled() ? "d" : "",
 							                              (me.auth) ? "e" : "",
 										      (config_options.flood_msgs) ? "F" : "",
 										      (config_options.leave_chans) ? "l" : "",

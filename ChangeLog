@@ -1,3 +1,22 @@
+jilles      2007/04/05 22:54:33 UTC	(20070405-8117)
+  Log:
+  - Reopen the main log file on all rehashes, not just
+    SIGHUP-induced ones. This is because the other log
+    files are specified in the configuration file.
+  - Use me.loglevel for the main log file, not the
+    (obsolete) loglevel in the logfile_t.
+  - Add a function log_debug_enabled() that returns
+    whether debug logging is enabled, but don't use
+    it yet.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/include/tools.h (File Modified) 
+  +2 -1		trunk/src/conf.c (File Modified) 
+  +31 -1	trunk/src/logger.c (File Modified) 
+  +0 -4		trunk/src/signal.c (File Modified) 
+
+
 jilles      2007/04/05 22:38:42 UTC	(20070405-8115)
   Log:
   - Restore previous behaviour of overwriting the loglevel
