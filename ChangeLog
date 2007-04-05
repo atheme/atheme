@@ -1,3 +1,12 @@
+nenolod     2007/04/05 16:02:05 UTC	(20070405-8105)
+  Log:
+  - record the name of the person who did the jupe as part of the jupe reason
+  
+
+  Changes:	Modified:
+  +3 -1		trunk/modules/operserv/jupe.c (File Modified) 
+
+
 jilles      2007/04/04 22:51:10 UTC	(20070404-8103)
   Log:
   Use new chanacs functions in modules/chanserv/* to remove
