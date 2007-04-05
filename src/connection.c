@@ -4,7 +4,7 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 8079 2007-04-02 17:37:39Z nenolod $
+ * $Id: connection.c 8109 2007-04-05 16:28:02Z jilles $
  */
 
 #include "atheme.h"
@@ -25,6 +25,19 @@ void init_netio(void)
 		slog(LG_INFO, "init_netio(): blockheap failure");
 		exit(EXIT_FAILURE);
 	}
+}
+
+static int socket_setnonblocking(int sck)
+{
+	int flags;
+
+	flags = fcntl(sck, F_GETFL, 0);
+	flags |= O_NONBLOCK;
+
+	if (fcntl(sck, F_SETFL, flags))
+		return -1;
+
+	return 0;
 }
 
 /*
@@ -304,7 +317,7 @@ connection_t *connection_open_tcp(char *host, char *vhost, unsigned int port,
 	struct hostent *hp;
 	struct sockaddr_in sa;
 	struct in_addr *in;
-	socket_t s;
+	int s;
 	unsigned int optval;
 
 	if (!(s = socket(AF_INET, SOCK_STREAM, 0)))
@@ -396,7 +409,7 @@ connection_t *connection_open_listener_tcp(char *host, unsigned int port,
 	struct hostent *hp;
 	struct sockaddr_in sa;
 	struct in_addr *in;
-	socket_t s;
+	int s;
 	unsigned int optval;
 
 	if (!(s = socket(AF_INET, SOCK_STREAM, 0)))
@@ -471,7 +484,7 @@ connection_t *connection_accept_tcp(connection_t *cptr,
 {
 	char buf[BUFSIZE];
 	connection_t *newptr;
-	socket_t s;
+	int s;
 
 	if (!(s = accept(cptr->fd, NULL, NULL)))
 	{

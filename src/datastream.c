@@ -4,7 +4,7 @@
  *
  * Datastream stuff.
  *
- * $Id: datastream.c 8077 2007-04-02 15:56:57Z nenolod $
+ * $Id: datastream.c 8109 2007-04-05 16:28:02Z jilles $
  */
 
 #include "atheme.h"
@@ -90,7 +90,7 @@ void sendq_flush(connection_t * cptr)
                 if (sq->firstused == sq->firstfree)
                         break;
 
-                if ((l = socket_write(cptr->fd, sq->buf + sq->firstused, sq->firstfree - sq->firstused)) == -1)
+                if ((l = write(cptr->fd, sq->buf + sq->firstused, sq->firstfree - sq->firstused)) == -1)
                 {
                         if (errno != EAGAIN)
 			{
@@ -199,7 +199,7 @@ void recvq_put(connection_t *cptr)
 	}
 	errno = 0;
 
-	l = socket_read(cptr->fd, sq->buf + sq->firstfree, l);
+	l = read(cptr->fd, sq->buf + sq->firstfree, l);
 	if (l == 0 || (l < 0 && errno != EWOULDBLOCK && errno != EAGAIN && errno != EALREADY && errno != EINTR && errno != ENOBUFS))
 	{
 		if (l == 0)

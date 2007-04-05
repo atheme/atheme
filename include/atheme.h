@@ -4,7 +4,7 @@
  *
  * Includes most headers usually needed.
  *
- * $Id: atheme.h 8079 2007-04-02 17:37:39Z nenolod $
+ * $Id: atheme.h 8109 2007-04-05 16:28:02Z jilles $
  */
 
 #ifndef ATHEME_H
@@ -24,7 +24,6 @@
 #include "event.h"
 #include "balloc.h"
 #include "connection.h"
-#include "sockio.h"
 #include "hook.h"
 #include "linker.h"
 #include "atheme_string.h"

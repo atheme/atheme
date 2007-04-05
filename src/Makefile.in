@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 8043 2007-04-02 11:13:30Z nenolod $
+# $Id: Makefile.in 8109 2007-04-05 16:28:02Z jilles $
 #
 
 CC		= @CC@
@@ -84,7 +84,6 @@ BASE_SRCS =		\
 	services.c	\
 	servtree.c	\
 	signal.c	\
-	sockio.c	\
 	string.c	\
 	svsignore.c	\
 	table.c		\

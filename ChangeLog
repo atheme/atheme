@@ -1,3 +1,17 @@
+jilles      2007/04/05 16:04:37 UTC	(20070405-8107)
+  Log:
+  Move channel memos to their own module SENDOPS. Only send
+  channel memos to access entries with +o and/or +O which are
+  not hostmasks and not to accounts with NOMEMO.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/dist/example.conf (File Modified) 
+  +1 -0		trunk/modules/memoserv/Makefile.in (File Modified) 
+  +202 -70	trunk/modules/memoserv/send.c (File Modified) 
+  + -		trunk/modules/memoserv/sendops.c (File Added) 
+
+
 nenolod     2007/04/05 16:02:05 UTC	(20070405-8105)
   Log:
   - record the name of the person who did the jupe as part of the jupe reason
