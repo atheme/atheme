@@ -1,3 +1,18 @@
+jilles      2007/04/04 22:51:10 UTC	(20070404-8103)
+  Log:
+  Use new chanacs functions in modules/chanserv/* to remove
+  all writes to chanacs_t.level from there. This ensures
+  that the last-modified time of chanacs entries is always
+  updated if needed.
+  
+
+  Changes:	Modified:
+  +4 -6		trunk/modules/chanserv/akick.c (File Modified) 
+  +11 -3	trunk/modules/chanserv/flags.c (File Modified) 
+  +2 -4		trunk/modules/chanserv/template.c (File Modified) 
+  +31 -22	trunk/modules/chanserv/xop.c (File Modified) 
+
+
 jilles      2007/04/04 21:57:49 UTC	(20070404-8101)
   Log:
   Constify chanacs functions some more.
