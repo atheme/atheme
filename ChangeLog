@@ -1,3 +1,12 @@
+nenolod     2007/04/06 01:43:05 UTC	(20070406-8125)
+  Log:
+  - track dice rolls. requested by drazak.
+  
+
+  Changes:	Modified:
+  +14 -2	trunk/modules/gameserv/dice.c (File Modified) 
+
+
 jilles      2007/04/06 00:58:34 UTC	(20070406-8123)
   Log:
   Remove me.loglevel and only use log_file->log_mask.
