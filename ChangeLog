@@ -1,3 +1,12 @@
+nenolod     2007/04/06 02:09:53 UTC	(20070406-8131)
+  Log:
+  - use arc4random() instead to deliver more random results
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/gameserv/dice.c (File Modified) 
+
+
 nenolod     2007/04/06 02:07:51 UTC	(20070406-8129)
   Log:
   - support d6+3 notation and 2d6+3 notation... if anyone wants to rewrite 
