@@ -4,7 +4,7 @@
  *
  * Dice generator.
  *
- * $Id: dice.c 8129 2007-04-06 02:07:51Z nenolod $
+ * $Id: dice.c 8131 2007-04-06 02:09:53Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"gameserv/dice", FALSE, _modinit, _moddeinit,
-	"$Id: dice.c 8129 2007-04-06 02:07:51Z nenolod $",
+	"$Id: dice.c 8131 2007-04-06 02:09:53Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -109,7 +109,7 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 		char buf2[BUFSIZE];
 
 		while (y == 0)
-			y = (rand() % sides);
+			y = (arc4random() % sides);
 
 		if (*buf != '\0')
 		{
