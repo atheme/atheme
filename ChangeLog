@@ -1,3 +1,17 @@
+jilles      2007/04/06 00:58:34 UTC	(20070406-8123)
+  Log:
+  Remove me.loglevel and only use log_file->log_mask.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/include/global.h (File Modified) 
+  +1 -0		trunk/include/tools.h (File Modified) 
+  +0 -5		trunk/src/atheme.c (File Modified) 
+  +4 -5		trunk/src/conf.c (File Modified) 
+  +29 -7	trunk/src/logger.c (File Modified) 
+  +1 -2		trunk/src/services.c (File Modified) 
+
+
 jilles      2007/04/06 00:40:42 UTC	(20070406-8121)
   Log:
   Make me.maxfd signed to get rid of warnings.

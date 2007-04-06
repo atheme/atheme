@@ -4,7 +4,7 @@
  *
  * Dice generator.
  *
- * $Id: dice.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: dice.c 8125 2007-04-06 01:43:05Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"gameserv/dice", FALSE, _modinit, _moddeinit,
-	"$Id: dice.c 8027 2007-04-02 10:47:18Z nenolod $",
+	"$Id: dice.c 8125 2007-04-06 01:43:05Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -70,6 +70,7 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *arg = si->c != NULL ? parv[1] : parv[0];
 	int dice, sides, i, roll = 1;
+	char buf[BUFSIZE];
 
 	if (!arg)
 		return;
@@ -90,10 +91,21 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 		sides = 1;
 	}
 
-	for (i = 0; i < dice; i++)
-		roll += (rand() % sides);
+	*buf = '\0';
 
-	gs_command_report(si, _("Your roll: \2%d\2"), roll);
+	for (i = 0; i < dice; i++)
+	{
+		int i = (rand() % sides);
+
+		if (*buf != '\0')
+			snprintf(buf, BUFSIZE, "%s, %d", buf, i);
+		else
+			snprintf(buf, BUFSIZE, "%d", i);
+
+		roll += i;
+	}
+
+	gs_command_report(si, "%s == \2%d\2", buf, roll);
 }
 
 static void command_wod(sourceinfo_t *si, int parc, char *parv[])
