@@ -1,3 +1,12 @@
+nenolod     2007/04/06 16:29:45 UTC	(20070406-8149)
+  Log:
+  - update TODO
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/modules/gameserv/TODO (File Modified) 
+
+
 jilles      2007/04/06 16:25:36 UTC	(20070406-8147)
   Log:
   gameserv dice: limit dice and sides to 100, disallow negative values

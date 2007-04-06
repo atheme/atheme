@@ -4,7 +4,7 @@
  *
  * This file contains logging routines.
  *
- * $Id: logger.c 8123 2007-04-06 00:58:34Z jilles $
+ * $Id: logger.c 8151 2007-04-06 18:46:49Z nenolod $
  */
 
 #include "atheme.h"
@@ -24,6 +24,58 @@ static void logfile_delete(void *vdata)
 	fclose(lf->log_file);
 	free(lf->log_path);
 	free(lf);
+}
+
+/*
+ * logfile_write(logfile_t *lf, const char *buf)
+ *
+ * Writes an I/O stream to a static file.
+ *
+ * Inputs:
+ *       - logfile_t representing the I/O stream.
+ *       - data to write to the file
+ *
+ * Outputs:
+ *       - none
+ *
+ * Side Effects:
+ *       - none
+ */
+void logfile_write(logfile_t *lf, const char *buf)
+{
+	char datetime[64];
+	time_t t;
+	struct tm tm;
+
+	return_if_fail(lf != NULL);
+	return_if_fail(lf->log_file != NULL);
+	return_if_fail(buf != NULL);
+
+	time(&t);
+	tm = *localtime(&t);
+	strftime(datetime, sizeof(datetime) - 1, "[%d/%m/%Y %H:%M:%S]", &tm);
+
+	fprintf((FILE *) lf->log_file, "%s %s\n", datetime, buf);
+	fflush((FILE *) lf->log_file);
+}
+
+/*
+ * logfile_register(logfile_t *lf)
+ *
+ * Registers a log I/O stream.
+ *
+ * Inputs:
+ *       - logfile_t representing the I/O stream.
+ *
+ * Outputs:
+ *       - none
+ *
+ * Side Effects:
+ *       - log_files is populated with the given object.
+ */
+void logfile_register(logfile_t *lf)
+{
+	node_add(lf, &lf->node, &log_files);
 }
 
 /*
@@ -62,11 +114,9 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
 #ifdef FD_CLOEXEC
 	fcntl(fileno(lf->log_file), F_SETFD, FD_CLOEXEC);
 #endif
-
 	lf->log_path = sstrdup(path);
 	lf->log_mask = log_mask;
-
-	node_add(lf, &lf->node, &log_files);
+	lf->write_func = logfile_write;
 
 	return lf;
 }
@@ -186,19 +236,19 @@ void log_master_set_mask(unsigned int mask)
 void slog(unsigned int level, const char *fmt, ...)
 {
 	va_list args;
-	time_t t;
-	struct tm tm;
-	char datetime[64];
 	char buf[BUFSIZE];
 	node_t *n;
+	char datetime[64];
+	time_t t;
+	struct tm tm;
 
 	va_start(args, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, args);
+	va_end(args);
 
 	time(&t);
 	tm = *localtime(&t);
 	strftime(datetime, sizeof(datetime) - 1, "[%d/%m/%Y %H:%M:%S]", &tm);
-
-	vsnprintf(buf, BUFSIZE, fmt, args);
 
 	LIST_FOREACH(n, log_files.head)
 	{
@@ -207,10 +257,9 @@ void slog(unsigned int level, const char *fmt, ...)
 		if ((lf != log_file || !log_force) && !(level & lf->log_mask))
 			continue;
 
-		return_if_fail(lf->log_file != NULL);
+		return_if_fail(lf->write_func != NULL);
 
-		fprintf(lf->log_file, "%s %s\n", datetime, buf);
-		fflush(lf->log_file);
+		lf->write_func(lf, buf);
 	}
 
 	/* 
@@ -220,8 +269,6 @@ void slog(unsigned int level, const char *fmt, ...)
 	if ((runflags & (RF_LIVE | RF_STARTING)) && (log_file != NULL ? log_file->log_mask : LG_ERROR | LG_INFO) & level ||
 		((runflags & RF_LIVE) && log_force))
 		fprintf(stderr, "%s %s\n", datetime, buf);
-
-	va_end(args);
 }
 
 /*
@@ -283,6 +330,7 @@ void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt,
 
 	va_start(args, fmt);
 	vsnprintf(lbuf, BUFSIZE, fmt, args);
+	va_end(args);
 
 	slog(level, "%s %s:%s!%s@%s[%s] %s",
 			svs != NULL ? svs->name : me.name,
@@ -290,8 +338,6 @@ void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt,
 			source->nick, source->user, source->vhost,
 			source->ip[0] != '\0' ? source->ip : source->host,
 			lbuf);
-
-	va_end(args);
 }
 
 /*
@@ -325,6 +371,7 @@ void logcommand_external(service_t *svs, const char *type, connection_t *source,
 
 	va_start(args, fmt);
 	vsnprintf(lbuf, BUFSIZE, fmt, args);
+	va_end(args);
 
 	slog(level, "%s %s:%s(%s)[%s] %s",
 			svs != NULL ? svs->name : me.name,
@@ -333,8 +380,6 @@ void logcommand_external(service_t *svs, const char *type, connection_t *source,
 			source != NULL ? source->hbuf : "<noconn>",
 			sourcedesc != NULL ? sourcedesc : "<unknown>",
 			lbuf);
-
-	va_end(args);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

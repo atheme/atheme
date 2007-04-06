@@ -5,7 +5,7 @@
  *
  * Misc tools
  *
- * $Id: tools.h 8123 2007-04-06 00:58:34Z jilles $
+ * $Id: tools.h 8151 2007-04-06 18:46:49Z nenolod $
  */
 
 #ifndef _TOOLS_H
@@ -109,20 +109,28 @@ E void arc4random_addrandom(unsigned char *dat, int datlen);
 E unsigned int arc4random(void);
 #endif /* !HAVE_ARC4RANDOM */
 
+typedef struct logfile_ logfile_t;
+
+/* logstreams API --nenolod */
+typedef void (*log_write_func_t)(logfile_t *lf, const char *buf);
+
 /* logger.c */
-typedef struct logfile_ {
+struct logfile_ {
 	object_t parent;
 	node_t node;
 
-	FILE *log_file;
+	void *log_file;		/* opaque: can either be mychan_t or FILE --nenolod */
 	char *log_path;
 	unsigned int log_mask;
-} logfile_t;
+
+	log_write_func_t write_func;
+};
 
 E char *log_path; /* contains path to default log. */
 E int log_force;
 
 E logfile_t *logfile_new(const char *log_path_, unsigned int log_mask);
+E void logfile_write(logfile_t *lf, const char *buf);
 
 /* general */
 #define LG_NONE         0x00000001      /* don't log                */
