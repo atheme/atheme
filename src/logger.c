@@ -4,7 +4,7 @@
  *
  * This file contains logging routines.
  *
- * $Id: logger.c 8151 2007-04-06 18:46:49Z nenolod $
+ * $Id: logger.c 8153 2007-04-06 18:57:00Z nenolod $
  */
 
 #include "atheme.h"
@@ -19,7 +19,7 @@ static void logfile_delete(void *vdata)
 {
 	logfile_t *lf = (logfile_t *) vdata;
 
-	node_del(&lf->node, &log_files);
+	logfile_unregister(lf);
 
 	fclose(lf->log_file);
 	free(lf->log_path);
@@ -79,6 +79,25 @@ void logfile_register(logfile_t *lf)
 }
 
 /*
+ * logfile_unregister(logfile_t *lf)
+ *
+ * Registers a log I/O stream.
+ *
+ * Inputs:
+ *       - logfile_t representing the I/O stream.
+ *
+ * Outputs:
+ *       - none
+ *
+ * Side Effects:
+ *       - log_files is populated with the given object.
+ */
+void logfile_unregister(logfile_t *lf)
+{
+	node_del(&lf->node, &log_files);
+}
+
+/*
  * logfile_new(const char *log_path, unsigned int log_mask)
  *
  * Logfile object factory.
@@ -117,6 +136,8 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
 	lf->log_path = sstrdup(path);
 	lf->log_mask = log_mask;
 	lf->write_func = logfile_write;
+
+	logfile_register(lf);
 
 	return lf;
 }

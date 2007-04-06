@@ -5,7 +5,7 @@
  *
  * Misc tools
  *
- * $Id: tools.h 8151 2007-04-06 18:46:49Z nenolod $
+ * $Id: tools.h 8153 2007-04-06 18:57:00Z nenolod $
  */
 
 #ifndef _TOOLS_H
@@ -131,6 +131,8 @@ E int log_force;
 
 E logfile_t *logfile_new(const char *log_path_, unsigned int log_mask);
 E void logfile_write(logfile_t *lf, const char *buf);
+E void logfile_register(logfile_t *lf);
+E void logfile_unregister(logfile_t *lf);
 
 /* general */
 #define LG_NONE         0x00000001      /* don't log                */
