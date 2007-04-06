@@ -1,0 +1,9 @@
+?: uncertainty, -: subcategory stuff
+
+[ ] special chanacs flag that allows for gameserv use?
+[-] dice generation
+  [x] fudge-style dicegen
+  [x] old-wod (but what about new-wod?)
+  [ ] dice calc which does not suck -- probably will need bison/flex for this?
+[-] other games?
+  --- no ideas here yet

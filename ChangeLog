@@ -1,3 +1,12 @@
+nenolod     2007/04/06 02:39:49 UTC	(20070406-8135)
+  Log:
+  - add fudge-style dice generation. requested by drazak.
+  
+
+  Changes:	Modified:
+  +40 -1	trunk/modules/gameserv/dice.c (File Modified) 
+
+
 nenolod     2007/04/06 02:16:27 UTC	(20070406-8133)
   Log:
   - wod: use arc4random()
