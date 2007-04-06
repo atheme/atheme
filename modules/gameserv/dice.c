@@ -4,7 +4,7 @@
  *
  * Dice generator.
  *
- * $Id: dice.c 8127 2007-04-06 01:56:08Z nenolod $
+ * $Id: dice.c 8129 2007-04-06 02:07:51Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"gameserv/dice", FALSE, _modinit, _moddeinit,
-	"$Id: dice.c 8127 2007-04-06 01:56:08Z nenolod $",
+	"$Id: dice.c 8129 2007-04-06 02:07:51Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -69,17 +69,27 @@ static void gs_command_report(sourceinfo_t *si, char *fmt, ...)
 static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *arg = si->c != NULL ? parv[1] : parv[0];
-	int dice, sides, i, roll = 1;
+	int dice = 0, sides = 0, i = 0, roll = 0, modifier = 0;
 	char buf[BUFSIZE];
 
 	if (!arg)
 		return;
-	sscanf(arg, "%dd%d", &dice, &sides);
+	sscanf(arg, "%dd%d+%d", &dice, &sides, &modifier);
 
 	if (dice <= 0)
 	{
-		dice = 1;
-		sscanf(arg, "d%d", &sides);
+		modifier = 0;
+		sscanf(arg, "%dd%d", &dice, &sides);
+
+		if (dice <= 0)
+		{
+			dice = 1;
+
+			sscanf(arg, "d%d+%d", &sides, &modifier);
+
+			if (sides <= 0)
+				sscanf(arg, "d%d", &sides);
+		}
 	}
 
 	if (dice > 256)
@@ -95,24 +105,30 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 
 	for (i = 0; i < dice; i++)
 	{
-		int i = (rand() % sides);
+		int y = 0;
 		char buf2[BUFSIZE];
+
+		while (y == 0)
+			y = (rand() % sides);
 
 		if (*buf != '\0')
 		{
-			snprintf(buf2, BUFSIZE, ", %d", i);
+			snprintf(buf2, BUFSIZE, ", %d", y);
 			strlcat(buf, buf2, BUFSIZE);
 		}
 		else
 		{
-			snprintf(buf2, BUFSIZE, "%d", i);
+			snprintf(buf2, BUFSIZE, "%d", y);
 			strlcpy(buf, buf2, BUFSIZE);
 		}
 
-		roll += i;
+		roll += y;
 	}
 
-	gs_command_report(si, "%s == \2%d\2", buf, roll);
+	if (modifier != 0)
+		gs_command_report(si, "(%s) + %d == \2%d\2", buf, modifier, (roll + modifier));
+	else
+		gs_command_report(si, "%s == \2%d\2", buf, roll);
 }
 
 static void command_wod(sourceinfo_t *si, int parc, char *parv[])

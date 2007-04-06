@@ -1,3 +1,12 @@
+nenolod     2007/04/06 01:56:08 UTC	(20070406-8127)
+  Log:
+  - make it behave properly with -D_FORTIFY_SOURCE=2
+  
+
+  Changes:	Modified:
+  +9 -2		trunk/modules/gameserv/dice.c (File Modified) 
+
+
 nenolod     2007/04/06 01:43:05 UTC	(20070406-8125)
   Log:
   - track dice rolls. requested by drazak.
