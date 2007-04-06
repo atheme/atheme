@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 7979 2007-03-25 14:12:08Z jilles $
+ * $Id: services.c 8123 2007-04-06 00:58:34Z jilles $
  */
 
 #include "atheme.h"
@@ -277,8 +277,7 @@ void handle_nickchange(user_t *u)
 	if (u == NULL)
 		return;
 
-	if ((log_force || (me.loglevel & (LG_DEBUG | LG_RAWDATA))) &&
-			runflags & RF_LIVE)
+	if (runflags & RF_LIVE && log_debug_enabled())
 		notice(globsvs.nick, u->nick, "Services are presently running in debug mode, attached to a console. You should take extra caution when utilizing your services passwords.");
 
 	/* Only do the following checks if nicks are considered owned -- jilles */

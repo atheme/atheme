@@ -4,15 +4,15 @@
  *
  * This file contains logging routines.
  *
- * $Id: logger.c 8117 2007-04-05 22:54:33Z jilles $
+ * $Id: logger.c 8123 2007-04-06 00:58:34Z jilles $
  */
 
 #include "atheme.h"
 
-logfile_t *log_file;
+static logfile_t *log_file;
 int log_force;
 
-list_t log_files = { NULL, NULL, 0 };
+static list_t log_files = { NULL, NULL, 0 };
 
 /* private destructor function for logfile_t. */
 static void logfile_delete(void *vdata)
@@ -88,7 +88,7 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
  */
 void log_open(void)
 {
-	log_file = logfile_new(log_path, me.loglevel);
+	log_file = logfile_new(log_path, LG_ERROR | LG_INFO | LG_CMD_ADMIN);
 }
 
 /*
@@ -132,15 +132,37 @@ boolean_t log_debug_enabled(void)
 	node_t *n;
 	logfile_t *lf;
 
-	if (log_force || me.loglevel & (LG_DEBUG | LG_RAWDATA))
+	if (log_force)
 		return TRUE;
 	LIST_FOREACH(n, log_files.head)
 	{
 		lf = n->data;
-		if (lf != log_file && lf->log_mask & (LG_DEBUG | LG_RAWDATA))
+		if (lf->log_mask & (LG_DEBUG | LG_RAWDATA))
 			return TRUE;
 	}
 	return FALSE;
+}
+
+/*
+ * log_master_set_mask(unsigned int mask)
+ *
+ * Sets the logging mask for the main log file.
+ *
+ * Inputs:
+ *       - mask
+ *
+ * Outputs:
+ *       - none
+ *
+ * Side Effects:
+ *       - logging mask updated
+ */
+void log_master_set_mask(unsigned int mask)
+{
+	/* couldn't be opened etc */
+	if (log_file == NULL)
+		return;
+	log_file->log_mask = mask;
 }
 
 /*
@@ -182,7 +204,7 @@ void slog(unsigned int level, const char *fmt, ...)
 	{
 		logfile_t *lf = (logfile_t *) n->data;
 
-		if (lf == log_file ? !(level & me.loglevel) && !log_force : !(level & lf->log_mask))
+		if ((lf != log_file || !log_force) && !(level & lf->log_mask))
 			continue;
 
 		return_if_fail(lf->log_file != NULL);
@@ -195,7 +217,7 @@ void slog(unsigned int level, const char *fmt, ...)
 	 * if the event is in the default loglevel, and we are starting, then
 	 * display it in the controlling terminal.
 	 */
-	if ((runflags & (RF_LIVE | RF_STARTING)) && me.loglevel & level ||
+	if ((runflags & (RF_LIVE | RF_STARTING)) && (log_file != NULL ? log_file->log_mask : LG_ERROR | LG_INFO) & level ||
 		((runflags & RF_LIVE) && log_force))
 		fprintf(stderr, "%s %s\n", datetime, buf);
 

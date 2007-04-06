@@ -5,7 +5,7 @@
  *
  * Global data
  *
- * $Id: global.h 8121 2007-04-06 00:40:42Z jilles $
+ * $Id: global.h 8123 2007-04-06 00:58:34Z jilles $
  */
 
 #ifndef _GLOBAL_H
@@ -31,7 +31,6 @@ struct me
   char *mta;                    /* path to mta program                */
   char *numeric;		/* server numeric		      */
 
-  unsigned int loglevel;            /* logging level                      */
   int maxfd;                    /* how many fds do we have?           */
   unsigned int mdlimit;		/* metadata entry limit		      */
   time_t start;                 /* starting time                      */

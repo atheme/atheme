@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 8113 2007-04-05 22:21:12Z jilles $
+ * $Id: atheme.c 8123 2007-04-06 00:58:34Z jilles $
  */
 
 #include "atheme.h"
@@ -157,11 +157,6 @@ int main(int argc, char *argv[])
 
 	/* open log */
 	log_open();
-
-	/* since me.loglevel isn't there until after the
-	 * config routines run, we set the default here
-	 */
-	me.loglevel |= LG_ERROR;
 
 	printf("atheme: version atheme-%s\n", version);
 

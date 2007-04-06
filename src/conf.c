@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 8117 2007-04-05 22:54:33Z jilles $
+ * $Id: conf.c 8123 2007-04-06 00:58:34Z jilles $
  */
 
 #include "atheme.h"
@@ -273,7 +273,6 @@ void conf_init(void)
 		config_options.flood_msgs = config_options.flood_time = config_options.kline_time = config_options.commit_interval =
 		config_options.expire = 0;
 
-	/* we don't reset loglevel because too much stuff uses it */
 	config_options.defuflags = config_options.defcflags = 0x00000000;
 
 	config_options.silent = config_options.join_chans = config_options.leave_chans = config_options.raw = FALSE;
@@ -1074,14 +1073,14 @@ static int c_si_loglevel(CONFIGENTRY *ce)
 {
 	CONFIGENTRY *flce;
 	int val;
+	int mask = 0;
 
-	me.loglevel = 0;
 	if (ce->ce_vardata != NULL)
 	{
 		val = token_to_value(logflags, ce->ce_vardata);
 
 		if ((val != TOKEN_UNMATCHED) && (val != TOKEN_ERROR))
-			me.loglevel |= val;
+			mask |= val;
 		else
 		{
 			slog(LG_INFO, "%s:%d: unknown flag: %s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_vardata);
@@ -1092,12 +1091,13 @@ static int c_si_loglevel(CONFIGENTRY *ce)
 		val = token_to_value(logflags, flce->ce_varname);
 
 		if ((val != TOKEN_UNMATCHED) && (val != TOKEN_ERROR))
-			me.loglevel |= val;
+			mask |= val;
 		else
 		{
 			slog(LG_INFO, "%s:%d: unknown flag: %s", flce->ce_fileptr->cf_filename, flce->ce_varlinenum, flce->ce_varname);
 		}
 	}
+	log_master_set_mask(mask);
 
 	return 0;
 }
@@ -1787,7 +1787,6 @@ static void copy_me(struct me *src, struct me *dst)
 	dst->adminname = sstrdup(src->adminname);
 	dst->adminemail = sstrdup(src->adminemail);
 	dst->mta = src->mta ? sstrdup(src->mta) : NULL;
-	dst->loglevel = src->loglevel;
 	dst->maxlogins = src->maxlogins;
 	dst->maxusers = src->maxusers;
 	dst->maxnicks = src->maxnicks;
