@@ -1,3 +1,12 @@
+nenolod     2007/04/06 19:09:10 UTC	(20070406-8155)
+  Log:
+  - add prototype logstreams on IRC demo
+  
+
+  Changes:	Modified:
+  + -		trunk/contrib/os_logstream.c (File Added) 
+
+
 nenolod     2007/04/06 18:57:00 UTC	(20070406-8153)
   Log:
   - improve on this

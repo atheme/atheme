@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 8085 2007-04-03 11:23:38Z nenolod $
+# $Id: Makefile.in 8157 2007-04-06 19:09:32Z nenolod $
 #
 
 CC		= @CC@
@@ -54,6 +54,7 @@ SRCS = \
 	os_pingspam.c		\
 	os_testcmd.c		\
 	os_logonnews.c		\
+	os_logstream.c		\
 	os_tabletest.c
 
 # To compile your own modules, add them to SRCS or make blegh.so
