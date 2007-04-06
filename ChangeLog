@@ -1,3 +1,12 @@
+nenolod     2007/04/06 16:09:36 UTC	(20070406-8143)
+  Log:
+  - use unsigned int to store the number instead of int.
+  
+
+  Changes:	Modified:
+  +1 -4		trunk/modules/gameserv/dice.c (File Modified) 
+
+
 nenolod     2007/04/06 16:02:08 UTC	(20070406-8141)
   Log:
   - work around the fact that arc4random() occasionally runs out of entropy
