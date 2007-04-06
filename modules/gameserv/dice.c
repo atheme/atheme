@@ -1,10 +1,12 @@
 /*
- * Copyright (c) 2005-2006 William Pitcock <nenolod@nenolod.net> et al
+ * Copyright (c) 2005-2007 William Pitcock <nenolod@nenolod.net>
+ * Copyright (c) 2006-2007 Jilles Tjoelker <jilles@stack.nl>
+ * 
  * Rights to this code are documented in doc/LICENSE.
  *
  * Dice generator.
  *
- * $Id: dice.c 8133 2007-04-06 02:16:27Z nenolod $
+ * $Id: dice.c 8135 2007-04-06 02:39:49Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,15 +14,17 @@
 DECLARE_MODULE_V1
 (
 	"gameserv/dice", FALSE, _modinit, _moddeinit,
-	"$Id: dice.c 8133 2007-04-06 02:16:27Z nenolod $",
+	"$Id: dice.c 8135 2007-04-06 02:39:49Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void command_dice(sourceinfo_t *si, int parc, char *parv[]);
 static void command_wod(sourceinfo_t *si, int parc, char *parv[]);
+static void command_df(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cmd_dice = { "ROLL", N_("Rolls one or more dice."), AC_NONE, 2, command_dice };
 command_t cmd_wod = { "WOD", N_("WOD-style dice generation."), AC_NONE, 7, command_wod };
+command_t cmd_df = { "DF", N_("Fudge-style dice generation."), AC_NONE, 2, command_df };
 
 list_t *gs_cmdtree;
 list_t *cs_cmdtree;
@@ -32,18 +36,22 @@ void _modinit(module_t * m)
 
 	command_add(&cmd_dice, gs_cmdtree);
 	command_add(&cmd_wod, gs_cmdtree);
+	command_add(&cmd_df, gs_cmdtree);
 
 	command_add(&cmd_dice, cs_cmdtree);
 	command_add(&cmd_wod, cs_cmdtree);
+	command_add(&cmd_df, cs_cmdtree);
 }
 
 void _moddeinit()
 {
 	command_delete(&cmd_dice, gs_cmdtree);
 	command_delete(&cmd_wod, gs_cmdtree);
+	command_delete(&cmd_df, cs_cmdtree);
 
 	command_delete(&cmd_dice, cs_cmdtree);
 	command_delete(&cmd_wod, cs_cmdtree);
+	command_delete(&cmd_df, cs_cmdtree);
 }
 
 /*
@@ -209,6 +217,37 @@ static void command_wod(sourceinfo_t *si, int parc, char *parv[])
 		arg_dice = parv[ii++];
 		arg_difficulty = parv[ii++];
 	}
+}
+
+static char *df_dice_table[3] = { "[-]", "[ ]", "[+]" };
+
+static void command_df(sourceinfo_t *si, int parc, char *parv[])
+{
+	int ii = si->c != NULL ? 1 : 0;
+	char *arg_dice = parv[ii++];
+	char buf[BUFSIZE];
+	int i, dice;
+
+	if (arg_dice == NULL)
+	{
+		command_fail(si, fault_needmoreparams, _("Syntax: DF <dice>"));
+		return;
+	}
+
+	dice = atoi(arg_dice);
+	*buf = '\0';
+
+	for (i = 0; i < dice; i++)
+	{
+		int roll = arc4random() % 3;
+
+		if (*buf != '\0')
+			strlcat(buf, df_dice_table[roll], BUFSIZE);
+		else
+			strlcpy(buf, df_dice_table[roll], BUFSIZE);
+	}
+
+	gs_command_report(si, _("Result: %s"), buf);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
