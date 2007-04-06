@@ -1,3 +1,15 @@
+jilles      2007/04/05 23:04:06 UTC	(20070405-8119)
+  Log:
+  Use log_debug_enabled() where appropriate.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/protocol/inspircd10.c (File Modified) 
+  +1 -1		trunk/modules/protocol/inspircd11.c (File Modified) 
+  +1 -1		trunk/src/ctcp-common.c (File Modified) 
+  +1 -1		trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2007/04/05 22:54:33 UTC	(20070405-8117)
   Log:
   - Reopen the main log file on all rehashes, not just

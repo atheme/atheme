@@ -5,7 +5,7 @@
  *
  * Global data
  *
- * $Id: global.h 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: global.h 8121 2007-04-06 00:40:42Z jilles $
  */
 
 #ifndef _GLOBAL_H
@@ -32,7 +32,7 @@ struct me
   char *numeric;		/* server numeric		      */
 
   unsigned int loglevel;            /* logging level                      */
-  unsigned int maxfd;               /* how many fds do we have?           */
+  int maxfd;                    /* how many fds do we have?           */
   unsigned int mdlimit;		/* metadata entry limit		      */
   time_t start;                 /* starting time                      */
   server_t *me;                 /* pointer to our server struct       */
