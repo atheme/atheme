@@ -1,3 +1,12 @@
+nenolod     2007/04/06 16:02:08 UTC	(20070406-8141)
+  Log:
+  - work around the fact that arc4random() occasionally runs out of entropy
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/gameserv/dice.c (File Modified) 
+
+
 jilles      2007/04/06 11:14:55 UTC	(20070406-8139)
   Log:
   Reseed rng every 293 instead of 300 seconds so it does
