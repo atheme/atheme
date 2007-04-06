@@ -1,3 +1,13 @@
+jilles      2007/04/06 11:14:55 UTC	(20070406-8139)
+  Log:
+  Reseed rng every 293 instead of 300 seconds so it does
+  not synchronize with other things.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/atheme.c (File Modified) 
+
+
 nenolod     2007/04/06 03:00:11 UTC	(20070406-8137)
   Log:
   - add a TODO
