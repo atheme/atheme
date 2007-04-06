@@ -1,3 +1,12 @@
+nenolod     2007/04/06 19:20:32 UTC	(20070406-8159)
+  Log:
+  - add some errors and make it work ;p
+  
+
+  Changes:	Modified:
+  +7 -1		trunk/contrib/os_logstream.c (File Modified) 
+
+
 nenolod     2007/04/06 19:09:32 UTC	(20070406-8157)
   Log:
   - update Makefile.in

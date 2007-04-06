@@ -4,7 +4,7 @@
  *
  * This file contains logging routines.
  *
- * $Id: logger.c 8153 2007-04-06 18:57:00Z nenolod $
+ * $Id: logger.c 8161 2007-04-06 23:51:53Z jilles $
  */
 
 #include "atheme.h"
@@ -131,7 +131,7 @@ logfile_t *logfile_new(const char *path, unsigned int log_mask)
 		return NULL;
 	}
 #ifdef FD_CLOEXEC
-	fcntl(fileno(lf->log_file), F_SETFD, FD_CLOEXEC);
+	fcntl(fileno((FILE *)lf->log_file), F_SETFD, FD_CLOEXEC);
 #endif
 	lf->log_path = sstrdup(path);
 	lf->log_mask = log_mask;
