@@ -1,3 +1,12 @@
+jilles      2007/04/06 16:25:36 UTC	(20070406-8147)
+  Log:
+  gameserv dice: limit dice and sides to 100, disallow negative values
+  
+
+  Changes:	Modified:
+  +5 -3		trunk/modules/gameserv/dice.c (File Modified) 
+
+
 jilles      2007/04/06 16:14:40 UTC	(20070406-8145)
   Log:
   gameserv dice: dN means 1..N not 0..N-1.
