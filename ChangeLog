@@ -1,3 +1,13 @@
+nenolod     2007/04/06 18:57:00 UTC	(20070406-8153)
+  Log:
+  - improve on this
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/include/tools.h (File Modified) 
+  +22 -1	trunk/src/logger.c (File Modified) 
+
+
 nenolod     2007/04/06 18:46:49 UTC	(20070406-8151)
   Log:
   - allow logfile_t to represent other forms of I/O besides disk I/O.
