@@ -6,7 +6,7 @@
  *
  * Dice generator.
  *
- * $Id: dice.c 8145 2007-04-06 16:14:40Z jilles $
+ * $Id: dice.c 8147 2007-04-06 16:25:36Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"gameserv/dice", FALSE, _modinit, _moddeinit,
-	"$Id: dice.c 8145 2007-04-06 16:14:40Z jilles $",
+	"$Id: dice.c 8147 2007-04-06 16:25:36Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -100,10 +100,12 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	if (dice > 256)
-		dice = 256;
+	if (dice > 100)
+		dice = 100;
+	if (sides > 100)
+		sides = 100;
 
-	if (!dice || !sides)
+	if (dice <= 0 || sides <= 0)
 	{
 		dice = 1;
 		sides = 1;

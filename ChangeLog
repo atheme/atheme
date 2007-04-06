@@ -1,3 +1,12 @@
+jilles      2007/04/06 16:14:40 UTC	(20070406-8145)
+  Log:
+  gameserv dice: dN means 1..N not 0..N-1.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/gameserv/dice.c (File Modified) 
+
+
 nenolod     2007/04/06 16:09:36 UTC	(20070406-8143)
   Log:
   - use unsigned int to store the number instead of int.
