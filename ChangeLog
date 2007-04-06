@@ -1,3 +1,12 @@
+nenolod     2007/04/06 19:09:32 UTC	(20070406-8157)
+  Log:
+  - update Makefile.in
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/contrib/Makefile.in (File Modified) 
+
+
 nenolod     2007/04/06 19:09:10 UTC	(20070406-8155)
   Log:
   - add prototype logstreams on IRC demo

@@ -3,7 +3,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/logstream", FALSE, _modinit, _moddeinit,
-	"$Id: os_logstream.c 8155 2007-04-06 19:09:10Z nenolod $",
+	"$Id: os_logstream.c 8159 2007-04-06 19:20:32Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -81,12 +81,15 @@ static logfile_t *irc_logstream_new(const char *channel, unsigned int mask)
 
 static void os_cmd_logstream(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *chan = parv[1];
+	char *chan = parv[0];
 	node_t *n, *tn;
 	logfile_t *lf;
 
 	if (!chan)
+	{
+		command_success_nodata(si, "No channel given");
 		return;
+	}
 
 	LIST_FOREACH_SAFE(n, tn, irc_logstreams.head)
 	{
@@ -98,6 +101,8 @@ static void os_cmd_logstream(sourceinfo_t *si, int parc, char *parv[])
 			node_del(n, &irc_logstreams);
 			node_free(n);
 
+			command_success_nodata(si, "Removed \2%s\2.", chan);
+
 			return;
 		}
 	}
@@ -105,6 +110,7 @@ static void os_cmd_logstream(sourceinfo_t *si, int parc, char *parv[])
 	lf = irc_logstream_new(chan, LG_CMD_ADMIN | LG_DEBUG);
 	n = node_create();
 	node_add(lf, n, &irc_logstreams);
+	command_success_nodata(si, "Added \2%s\2.", chan);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
