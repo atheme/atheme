@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 8119 2007-04-05 23:04:06Z jilles $
+ * $Id: inspircd11.c 8165 2007-04-07 14:49:05Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 8119 2007-04-05 23:04:06Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 8165 2007-04-07 14:49:05Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -208,7 +208,7 @@ static void inspircd_introduce_nick(user_t *u)
 	sts(":%s OPERTYPE Services", u->nick);
 }
 
-static void inspircd_quit_sts(user_t *u, char *reason)
+static void inspircd_quit_sts(user_t *u, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -303,7 +303,7 @@ static void inspircd_kick(char *from, char *channel, char *to, char *reason)
 }
 
 /* PRIVMSG wrapper */
-static void inspircd_msg(char *from, char *target, char *fmt, ...)
+static void inspircd_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -383,7 +383,7 @@ static void inspircd_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void inspircd_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic)
+static void inspircd_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	if (!me.connected || !c)
 		return;
@@ -455,7 +455,7 @@ static boolean_t inspircd_on_logout(char *origin, char *user, char *wantedhost)
 	return FALSE;
 }
 
-static void inspircd_jupe(char *server, char *reason)
+static void inspircd_jupe(const char *server, const char *reason)
 {
 	server_t *s;
 	if (!me.connected)

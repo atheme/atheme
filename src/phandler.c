@@ -4,7 +4,7 @@
  *
  * Generic protocol event handlers.
  *
- * $Id: phandler.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: phandler.c 8165 2007-04-07 14:49:05Z jilles $
  */
 
 #include "atheme.h"
@@ -15,23 +15,23 @@ void (*wallops_sts) (const char *text) = generic_wallops_sts;
 void (*join_sts) (channel_t *c, user_t *u, boolean_t isnew, char *modes) = generic_join_sts;
 void (*chan_lowerts) (channel_t *c, user_t *u) = generic_chan_lowerts;
 void (*kick) (char *from, char *channel, char *to, char *reason) = generic_kick;
-void (*msg) (char *from, char *target, char *fmt, ...) = generic_msg;
+void (*msg) (const char *from, const char *target, const char *fmt, ...) = generic_msg;
 void (*notice_user_sts) (user_t *from, user_t *target, const char *text) = generic_notice_user_sts;
 void (*notice_global_sts) (user_t *from, const char *mask, const char *text) = generic_notice_global_sts;
 void (*notice_channel_sts) (user_t *from, channel_t *target, const char *text) = generic_notice_channel_sts;
-void (*wallchops) (user_t *source, channel_t *target, char *message) = generic_wallchops;
+void (*wallchops) (user_t *source, channel_t *target, const char *message) = generic_wallchops;
 void (*numeric_sts) (char *from, int numeric, char *target, char *fmt, ...) = generic_numeric_sts;
 void (*skill) (char *from, char *nick, char *fmt, ...) = generic_skill;
 void (*part_sts) (channel_t *c, user_t *u) = generic_part_sts;
 void (*kline_sts) (char *server, char *user, char *host, long duration, char *reason) = generic_kline_sts;
 void (*unkline_sts) (char *server, char *user, char *host) = generic_unkline_sts;
-void (*topic_sts) (channel_t *c, char *setter, time_t ts, time_t prevts, char *topic) = generic_topic_sts;
+void (*topic_sts) (channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic) = generic_topic_sts;
 void (*mode_sts) (char *sender, channel_t *target, char *modes) = generic_mode_sts;
 void (*ping_sts) (void) = generic_ping_sts;
-void (*quit_sts) (user_t *u, char *reason) = generic_quit_sts;
+void (*quit_sts) (user_t *u, const char *reason) = generic_quit_sts;
 void (*ircd_on_login) (char *origin, char *user, char *wantedhost) = generic_on_login;
 boolean_t (*ircd_on_logout) (char *origin, char *user, char *wantedhost) = generic_on_logout;
-void (*jupe) (char *server, char *reason) = generic_jupe;
+void (*jupe) (const char *server, const char *reason) = generic_jupe;
 void (*sethost_sts) (char *source, char *target, char *host) = generic_sethost_sts;
 void (*fnc_sts) (user_t *source, user_t *u, char *newnick, int type) = generic_fnc_sts;
 void (*holdnick_sts)(user_t *source, int duration, const char *nick, myuser_t *account) = generic_holdnick_sts;
@@ -71,7 +71,7 @@ void generic_kick(char *from, char *channel, char *to, char *reason)
 	/* We can't do anything here. Bail. */
 }
 
-void generic_msg(char *from, char *target, char *fmt, ...)
+void generic_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -98,7 +98,7 @@ void generic_notice_channel_sts(user_t *from, channel_t *target, const char *tex
 	slog(LG_INFO, "Cannot send notice to %s (%s): don't know how. Load a protocol module perhaps?", target->name, text);
 }
 
-void generic_wallchops(user_t *sender, channel_t *channel, char *message)	
+void generic_wallchops(user_t *sender, channel_t *channel, const char *message)	
 {
 	/* ugly, but always works -- jilles */
 	node_t *n;
@@ -137,7 +137,7 @@ void generic_unkline_sts(char *server, char *user, char *host)
 	/* cant do anything here. bail. */
 }
 
-void generic_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic)
+void generic_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	/* cant do anything here. bail. */
 }
@@ -152,7 +152,7 @@ void generic_ping_sts(void)
 	/* cant do anything here. bail. */
 }
 
-void generic_quit_sts(user_t *u, char *reason)
+void generic_quit_sts(user_t *u, const char *reason)
 {
 	/* cant do anything here. bail. */
 }
@@ -168,7 +168,7 @@ boolean_t generic_on_logout(char *origin, char *user, char *wantedhost)
 	return FALSE;
 }
 
-void generic_jupe(char *server, char *reason)
+void generic_jupe(const char *server, const char *reason)
 {
 	/* nothing to do here. */
 }

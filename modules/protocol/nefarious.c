@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
  *
- * $Id: nefarious.c 8097 2007-04-04 21:48:03Z jilles $
+ * $Id: nefarious.c 8165 2007-04-07 14:49:05Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 8097 2007-04-04 21:48:03Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 8165 2007-04-07 14:49:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -123,7 +123,7 @@ static void nefarious_invite_sts(user_t *sender, user_t *target, channel_t *chan
 	sts("%s I %s %s", sender->uid, target->nick, channel->name);
 }
 
-static void nefarious_quit_sts(user_t *u, char *reason)
+static void nefarious_quit_sts(user_t *u, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -170,7 +170,7 @@ static void nefarious_kick(char *from, char *channel, char *to, char *reason)
 }
 
 /* PRIVMSG wrapper */
-static void nefarious_msg(char *from, char *target, char *fmt, ...)
+static void nefarious_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	user_t *u = user_find_named(from);
@@ -217,7 +217,7 @@ static void nefarious_notice_channel_sts(user_t *from, channel_t *target, const 
 		sts("%s O %s :[%s:%s] %s", me.numeric, target->name, from->nick, target->name, text);
 }
 
-static void nefarious_wallchops(user_t *sender, channel_t *channel, char *message)
+static void nefarious_wallchops(user_t *sender, channel_t *channel, const char *message)
 {
 	sts("%s WC %s :%s", sender->uid, channel->name, message);
 }
@@ -285,7 +285,7 @@ static void nefarious_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void nefarious_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic)
+static void nefarious_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	if (!me.connected || !c)
 		return;
@@ -364,7 +364,7 @@ static boolean_t nefarious_on_logout(char *origin, char *user, char *wantedhost)
 	return FALSE;
 }
 
-static void nefarious_jupe(char *server, char *reason)
+static void nefarious_jupe(const char *server, const char *reason)
 {
 	server_t *s;
 

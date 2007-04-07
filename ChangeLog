@@ -1,3 +1,14 @@
+jilles      2007/04/07 00:28:09 UTC	(20070407-8163)
+  Log:
+  os_logstream contrib module:
+  - fix a fault code
+  - join log channels with operserv
+  
+
+  Changes:	Modified:
+  +5 -1		trunk/contrib/os_logstream.c (File Modified) 
+
+
 jilles      2007/04/06 23:51:53 UTC	(20070406-8161)
   Log:
   Fix compile on FreeBSD (and probably other BSDs):

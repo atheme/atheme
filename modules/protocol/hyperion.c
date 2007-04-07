@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 8097 2007-04-04 21:48:03Z jilles $
+ * $Id: hyperion.c 8165 2007-04-07 14:49:05Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -17,7 +17,7 @@
 #include "pmodule.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 8097 2007-04-04 21:48:03Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 8165 2007-04-07 14:49:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -170,7 +170,7 @@ static void hyperion_invite_sts(user_t *sender, user_t *target, channel_t *chann
 	sts(":%s INVITE %s %s", sender->nick, target->nick, channel->name);
 }
 
-static void hyperion_quit_sts(user_t *u, char *reason)
+static void hyperion_quit_sts(user_t *u, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -211,7 +211,7 @@ static void hyperion_kick(char *from, char *channel, char *to, char *reason)
 }
 
 /* PRIVMSG wrapper */
-static void hyperion_msg(char *from, char *target, char *fmt, ...)
+static void hyperion_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -239,7 +239,7 @@ static void hyperion_notice_channel_sts(user_t *from, channel_t *target, const c
 	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->name, text);
 }
 
-static void hyperion_wallchops(user_t *sender, channel_t *channel, char *message)
+static void hyperion_wallchops(user_t *sender, channel_t *channel, const char *message)
 {
 	/* +p does not grant the ability to send to @#channel (!) */
 	if (chanuser_find(channel, sender))
@@ -303,7 +303,7 @@ static void hyperion_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void hyperion_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic)
+static void hyperion_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	if (!me.connected || !c)
 		return;
@@ -374,7 +374,7 @@ static boolean_t hyperion_on_logout(char *origin, char *user, char *wantedhost)
 	return FALSE;
 }
 
-static void hyperion_jupe(char *server, char *reason)
+static void hyperion_jupe(const char *server, const char *reason)
 {
 	if (!me.connected)
 		return;

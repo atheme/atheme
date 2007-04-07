@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: undernet.c 8097 2007-04-04 21:48:03Z jilles $
+ * $Id: undernet.c 8165 2007-04-07 14:49:05Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 8097 2007-04-04 21:48:03Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 8165 2007-04-07 14:49:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -107,7 +107,7 @@ static void undernet_invite_sts(user_t *sender, user_t *target, channel_t *chann
 	sts("%s I %s %s", sender->uid, target->nick, channel->name);
 }
 
-static void undernet_quit_sts(user_t *u, char *reason)
+static void undernet_quit_sts(user_t *u, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -154,7 +154,7 @@ static void undernet_kick(char *from, char *channel, char *to, char *reason)
 }
 
 /* PRIVMSG wrapper */
-static void undernet_msg(char *from, char *target, char *fmt, ...)
+static void undernet_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	user_t *u = user_find_named(from);
@@ -201,7 +201,7 @@ static void undernet_notice_channel_sts(user_t *from, channel_t *target, const c
 		sts("%s O %s :[%s:%s] %s", me.numeric, target->name, from->nick, target->name, text);
 }
 
-static void undernet_wallchops(user_t *sender, channel_t *channel, char *message)
+static void undernet_wallchops(user_t *sender, channel_t *channel, const char *message)
 {
 	sts("%s WC %s :%s", sender->uid, channel->name, message);
 }
@@ -270,7 +270,7 @@ static void undernet_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void undernet_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic)
+static void undernet_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	if (!me.connected || !c)
 		return;
@@ -341,7 +341,7 @@ static boolean_t undernet_on_logout(char *origin, char *user, char *wantedhost)
 		return FALSE;
 }
 
-static void undernet_jupe(char *server, char *reason)
+static void undernet_jupe(const char *server, const char *reason)
 {
 	server_t *s;
 

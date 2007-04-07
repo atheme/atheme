@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 8097 2007-04-04 21:48:03Z jilles $
+ * $Id: plexus.c 8165 2007-04-07 14:49:05Z jilles $
  */
 
 /* option: set the netadmin umode +N */
@@ -16,7 +16,7 @@
 #include "pmodule.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 8097 2007-04-04 21:48:03Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 8165 2007-04-07 14:49:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -115,7 +115,7 @@ static void plexus_invite_sts(user_t *sender, user_t *target, channel_t *channel
 	sts(":%s INVITE %s %s", sender->nick, target->nick, channel->name);
 }
 
-static void plexus_quit_sts(user_t *u, char *reason)
+static void plexus_quit_sts(user_t *u, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -155,7 +155,7 @@ static void plexus_kick(char *from, char *channel, char *to, char *reason)
 }
 
 /* PRIVMSG wrapper */
-static void plexus_msg(char *from, char *target, char *fmt, ...)
+static void plexus_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -195,7 +195,7 @@ static void plexus_notice_channel_sts(user_t *from, channel_t *target, const cha
 	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->name, text);
 }
 
-static void plexus_wallchops(user_t *sender, channel_t *channel, char *message)
+static void plexus_wallchops(user_t *sender, channel_t *channel, const char *message)
 {
 	/* not sure if we need to be on channel, oh well */
 	if (chanuser_find(channel, sender))
@@ -256,7 +256,7 @@ static void plexus_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void plexus_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic)
+static void plexus_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	if (!me.connected || !c)
 		return;
@@ -333,7 +333,7 @@ static boolean_t plexus_on_logout(char *origin, char *user, char *wantedhost)
 	return FALSE;
 }
 
-static void plexus_jupe(char *server, char *reason)
+static void plexus_jupe(const char *server, const char *reason)
 {
 	if (!me.connected)
 		return;

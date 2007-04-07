@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: dreamforge.c 8097 2007-04-04 21:48:03Z jilles $
+ * $Id: dreamforge.c 8165 2007-04-07 14:49:05Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/dreamforge.h"
 
-DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 8097 2007-04-04 21:48:03Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 8165 2007-04-07 14:49:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -103,7 +103,7 @@ static void dreamforge_invite_sts(user_t *sender, user_t *target, channel_t *cha
 	sts(":%s INVITE %s %s", sender->nick, target->nick, channel->name);
 }
 
-static void dreamforge_quit_sts(user_t *u, char *reason)
+static void dreamforge_quit_sts(user_t *u, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -148,7 +148,7 @@ static void dreamforge_kick(char *from, char *channel, char *to, char *reason)
 }
 
 /* PRIVMSG wrapper */
-static void dreamforge_msg(char *from, char *target, char *fmt, ...)
+static void dreamforge_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -238,7 +238,7 @@ static void dreamforge_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void dreamforge_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic)
+static void dreamforge_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	if (!me.connected)
 		return;
@@ -304,7 +304,7 @@ static boolean_t dreamforge_on_logout(char *origin, char *user, char *wantedhost
 	return FALSE;
 }
 
-static void dreamforge_jupe(char *server, char *reason)
+static void dreamforge_jupe(const char *server, const char *reason)
 {
 	if (!me.connected)
 		return;

@@ -6,7 +6,7 @@
  * Derived mainly from the documentation (or lack thereof)
  * in my protocol bridge.
  *
- * $Id: ircnet.c 8097 2007-04-04 21:48:03Z jilles $
+ * $Id: ircnet.c 8165 2007-04-07 14:49:05Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/ircnet.h"
 
-DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 8097 2007-04-04 21:48:03Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ircnet", TRUE, _modinit, NULL, "$Id: ircnet.c 8165 2007-04-07 14:49:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -114,7 +114,7 @@ static void ircnet_invite_sts(user_t *sender, user_t *target, channel_t *channel
 		sts(":%s PART %s :Invited %s", CLIENT_NAME(sender), channel->name, target->nick);
 }
 
-static void ircnet_quit_sts(user_t *u, char *reason)
+static void ircnet_quit_sts(user_t *u, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -154,7 +154,7 @@ static void ircnet_kick(char *from, char *channel, char *to, char *reason)
 }
 
 /* PRIVMSG wrapper */
-static void ircnet_msg(char *from, char *target, char *fmt, ...)
+static void ircnet_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -254,7 +254,7 @@ static void ircnet_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void ircnet_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic)
+static void ircnet_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	int joined = 0;
 
@@ -310,7 +310,7 @@ static boolean_t ircnet_on_logout(char *origin, char *user, char *wantedhost)
 	return FALSE;
 }
 
-static void ircnet_jupe(char *server, char *reason)
+static void ircnet_jupe(const char *server, const char *reason)
 {
 	static char sid[4+1];
 	int i;

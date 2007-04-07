@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for shadowircd-based ircd.
  *
- * $Id: shadowircd.c 8097 2007-04-04 21:48:03Z jilles $
+ * $Id: shadowircd.c 8165 2007-04-07 14:49:05Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/shadowircd.h"
 
-DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 8097 2007-04-04 21:48:03Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 8165 2007-04-07 14:49:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -112,7 +112,7 @@ static void shadowircd_invite_sts(user_t *sender, user_t *target, channel_t *cha
 	sts(":%s INVITE %s %s", sender->nick, target->nick, channel->name);
 }
 
-static void shadowircd_quit_sts(user_t *u, char *reason)
+static void shadowircd_quit_sts(user_t *u, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -152,7 +152,7 @@ static void shadowircd_kick(char *from, char *channel, char *to, char *reason)
 }
 
 /* PRIVMSG wrapper */
-static void shadowircd_msg(char *from, char *target, char *fmt, ...)
+static void shadowircd_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -180,7 +180,7 @@ static void shadowircd_notice_channel_sts(user_t *from, channel_t *target, const
 	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->name, text);
 }
 
-static void shadowircd_wallchops(user_t *sender, channel_t *channel, char *message)
+static void shadowircd_wallchops(user_t *sender, channel_t *channel, const char *message)
 {
 	if (chanuser_find(channel, sender))
 		sts(":%s NOTICE @%s :%s", CLIENT_NAME(sender), channel->name,
@@ -240,7 +240,7 @@ static void shadowircd_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void shadowircd_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic)
+static void shadowircd_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	if (!me.connected || !c)
 		return;
@@ -294,7 +294,7 @@ static boolean_t shadowircd_on_logout(char *origin, char *user, char *wantedhost
 	return FALSE;
 }
 
-static void shadowircd_jupe(char *server, char *reason)
+static void shadowircd_jupe(const char *server, const char *reason)
 {
 	if (!me.connected)
 		return;

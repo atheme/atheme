@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for charybdis-based ircd.
  *
- * $Id: charybdis.c 8097 2007-04-04 21:48:03Z jilles $
+ * $Id: charybdis.c 8165 2007-04-07 14:49:05Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/charybdis.h"
 
-DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 8097 2007-04-04 21:48:03Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/charybdis", TRUE, _modinit, NULL, "$Id: charybdis.c 8165 2007-04-07 14:49:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -197,7 +197,7 @@ static void charybdis_invite_sts(user_t *sender, user_t *target, channel_t *chan
 	sts(":%s INVITE %s %s", CLIENT_NAME(sender), CLIENT_NAME(target), channel->name);
 }
 
-static void charybdis_quit_sts(user_t *u, char *reason)
+static void charybdis_quit_sts(user_t *u, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -248,7 +248,7 @@ static void charybdis_kick(char *from, char *channel, char *to, char *reason)
 }
 
 /* PRIVMSG wrapper */
-static void charybdis_msg(char *from, char *target, char *fmt, ...)
+static void charybdis_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -303,7 +303,7 @@ static void charybdis_notice_channel_sts(user_t *from, channel_t *target, const 
 		sts(":%s NOTICE %s :[%s:%s] %s", ME, target->name, from->nick, target->name, text);
 }
 
-static void charybdis_wallchops(user_t *sender, channel_t *channel, char *message)
+static void charybdis_wallchops(user_t *sender, channel_t *channel, const char *message)
 {
 	if (chanuser_find(channel, sender))
 		sts(":%s NOTICE @%s :%s", CLIENT_NAME(sender), channel->name,
@@ -366,7 +366,7 @@ static void charybdis_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void charybdis_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic)
+static void charybdis_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	int joined = 0;
 
@@ -464,7 +464,7 @@ static boolean_t charybdis_on_logout(char *origin, char *user, char *wantedhost)
  * serverside like in P10?
  *       --nenolod
  */
-static void charybdis_jupe(char *server, char *reason)
+static void charybdis_jupe(const char *server, const char *reason)
 {
 	if (!me.connected)
 		return;

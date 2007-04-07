@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: bahamut.c 8097 2007-04-04 21:48:03Z jilles $
+ * $Id: bahamut.c 8165 2007-04-07 14:49:05Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/bahamut.h"
 
-DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 8097 2007-04-04 21:48:03Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 8165 2007-04-07 14:49:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -153,7 +153,7 @@ static void bahamut_invite_sts(user_t *sender, user_t *target, channel_t *channe
 	sts(":%s INVITE %s %s", sender->nick, target->nick, channel->name);
 }
 
-static void bahamut_quit_sts(user_t *u, char *reason)
+static void bahamut_quit_sts(user_t *u, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -210,7 +210,7 @@ static void bahamut_kick(char *from, char *channel, char *to, char *reason)
 }
 
 /* PRIVMSG wrapper */
-static void bahamut_msg(char *from, char *target, char *fmt, ...)
+static void bahamut_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -250,7 +250,7 @@ static void bahamut_notice_channel_sts(user_t *from, channel_t *target, const ch
 	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->name, text);
 }
 
-static void bahamut_wallchops(user_t *sender, channel_t *channel, char *message)
+static void bahamut_wallchops(user_t *sender, channel_t *channel, const char *message)
 {
 	sts(":%s NOTICE @%s :%s", sender->nick, channel->name, message);
 }
@@ -305,7 +305,7 @@ static void bahamut_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void bahamut_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic)
+static void bahamut_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	if (!me.connected || !c)
 		return;
@@ -359,7 +359,7 @@ static boolean_t bahamut_on_logout(char *origin, char *user, char *wantedhost)
 	return FALSE;
 }
 
-static void bahamut_jupe(char *server, char *reason)
+static void bahamut_jupe(const char *server, const char *reason)
 {
 	server_t *s;
 

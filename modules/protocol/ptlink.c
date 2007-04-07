@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for ptlink ircd.
  *
- * $Id: ptlink.c 8097 2007-04-04 21:48:03Z jilles $
+ * $Id: ptlink.c 8165 2007-04-07 14:49:05Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/ptlink.h"
 
-DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 8097 2007-04-04 21:48:03Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ptlink", TRUE, _modinit, NULL, "$Id: ptlink.c 8165 2007-04-07 14:49:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -141,7 +141,7 @@ static void ptlink_invite_sts(user_t *sender, user_t *target, channel_t *channel
 	sts(":%s INVITE %s %s", sender->nick, target->nick, channel->name);
 }
 
-static void ptlink_quit_sts(user_t *u, char *reason)
+static void ptlink_quit_sts(user_t *u, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -181,7 +181,7 @@ static void ptlink_kick(char *from, char *channel, char *to, char *reason)
 }
 
 /* PRIVMSG wrapper */
-static void ptlink_msg(char *from, char *target, char *fmt, ...)
+static void ptlink_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -261,7 +261,7 @@ static void ptlink_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void ptlink_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic)
+static void ptlink_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	if (!me.connected || !c)
 		return;
@@ -315,7 +315,7 @@ static boolean_t ptlink_on_logout(char *origin, char *user, char *wantedhost)
 	return FALSE;
 }
 
-static void ptlink_jupe(char *server, char *reason)
+static void ptlink_jupe(const char *server, const char *reason)
 {
 	if (!me.connected)
 		return;

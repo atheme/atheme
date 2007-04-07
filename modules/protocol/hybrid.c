@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 8097 2007-04-04 21:48:03Z jilles $
+ * $Id: hybrid.c 8165 2007-04-07 14:49:05Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 8097 2007-04-04 21:48:03Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 8165 2007-04-07 14:49:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -132,7 +132,7 @@ static void hybrid_invite_sts(user_t *sender, user_t *target, channel_t *channel
 	sts(":%s INVITE %s %s", CLIENT_NAME(sender), CLIENT_NAME(target), channel->name);
 }
 
-static void hybrid_quit_sts(user_t *u, char *reason)
+static void hybrid_quit_sts(user_t *u, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -183,7 +183,7 @@ static void hybrid_kick(char *from, char *channel, char *to, char *reason)
 }
 
 /* PRIVMSG wrapper */
-static void hybrid_msg(char *from, char *target, char *fmt, ...)
+static void hybrid_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -241,7 +241,7 @@ static void hybrid_notice_channel_sts(user_t *from, channel_t *target, const cha
 		sts(":%s NOTICE %s :[%s:%s]: %s", ME, target->name, from->nick, target->name, text);
 }
 
-static void hybrid_wallchops(user_t *sender, channel_t *channel, char *message)
+static void hybrid_wallchops(user_t *sender, channel_t *channel, const char *message)
 {
 	if (chanuser_find(channel, sender))
 		sts(":%s NOTICE @%s :%s", CLIENT_NAME(sender), channel->name,
@@ -304,7 +304,7 @@ static void hybrid_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void hybrid_topic_sts(channel_t *c, char *setter, time_t ts, time_t prevts, char *topic)
+static void hybrid_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	int joined = 0;
 
@@ -398,7 +398,7 @@ static boolean_t hybrid_on_logout(char *origin, char *user, char *wantedhost)
 	return FALSE;
 }
 
-static void hybrid_jupe(char *server, char *reason)
+static void hybrid_jupe(const char *server, const char *reason)
 {
 	if (!me.connected)
 		return;
