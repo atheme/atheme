@@ -1,3 +1,13 @@
+jilles      2007/04/06 23:51:53 UTC	(20070406-8161)
+  Log:
+  Fix compile on FreeBSD (and probably other BSDs):
+  fileno is a macro and must be passed a FILE * (not void *).
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/logger.c (File Modified) 
+
+
 nenolod     2007/04/06 19:20:32 UTC	(20070406-8159)
   Log:
   - add some errors and make it work ;p

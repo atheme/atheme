@@ -3,7 +3,7 @@
 DECLARE_MODULE_V1
 (
 	"operserv/logstream", FALSE, _modinit, _moddeinit,
-	"$Id: os_logstream.c 8159 2007-04-06 19:20:32Z nenolod $",
+	"$Id: os_logstream.c 8163 2007-04-07 00:28:09Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -87,7 +87,7 @@ static void os_cmd_logstream(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!chan)
 	{
-		command_success_nodata(si, "No channel given");
+		command_fail(si, fault_needmoreparams, "No channel given");
 		return;
 	}
 
@@ -101,12 +101,16 @@ static void os_cmd_logstream(sourceinfo_t *si, int parc, char *parv[])
 			node_del(n, &irc_logstreams);
 			node_free(n);
 
+			if (irccasecmp(config_options.chan, chan))
+				part(chan, si->service->name);
+
 			command_success_nodata(si, "Removed \2%s\2.", chan);
 
 			return;
 		}
 	}
 
+	join(chan, si->service->name);
 	lf = irc_logstream_new(chan, LG_CMD_ADMIN | LG_DEBUG);
 	n = node_create();
 	node_add(lf, n, &irc_logstreams);
