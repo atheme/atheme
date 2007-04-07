@@ -1,3 +1,34 @@
+jilles      2007/04/07 14:49:05 UTC	(20070407-8165)
+  Log:
+  Constify various protocol module functions.
+  
+
+  Changes:	Modified:
+  +10 -10	trunk/include/phandler.h (File Modified) 
+  +5 -5		trunk/modules/protocol/asuka.c (File Modified) 
+  +5 -5		trunk/modules/protocol/bahamut.c (File Modified) 
+  +5 -5		trunk/modules/protocol/bircd.c (File Modified) 
+  +5 -5		trunk/modules/protocol/charybdis.c (File Modified) 
+  +4 -4		trunk/modules/protocol/dreamforge.c (File Modified) 
+  +5 -5		trunk/modules/protocol/hybrid.c (File Modified) 
+  +5 -5		trunk/modules/protocol/hyperion.c (File Modified) 
+  +4 -4		trunk/modules/protocol/inspircd10.c (File Modified) 
+  +4 -4		trunk/modules/protocol/inspircd11.c (File Modified) 
+  +4 -4		trunk/modules/protocol/ircnet.c (File Modified) 
+  +5 -5		trunk/modules/protocol/nefarious.c (File Modified) 
+  +4 -4		trunk/modules/protocol/officeirc.c (File Modified) 
+  +5 -5		trunk/modules/protocol/plexus.c (File Modified) 
+  +4 -4		trunk/modules/protocol/ptlink.c (File Modified) 
+  +5 -5		trunk/modules/protocol/ratbox.c (File Modified) 
+  +5 -5		trunk/modules/protocol/shadowircd.c (File Modified) 
+  +5 -5		trunk/modules/protocol/solidircd.c (File Modified) 
+  +4 -4		trunk/modules/protocol/sorcery.c (File Modified) 
+  +4 -4		trunk/modules/protocol/ultimate3.c (File Modified) 
+  +5 -5		trunk/modules/protocol/undernet.c (File Modified) 
+  +4 -4		trunk/modules/protocol/unreal.c (File Modified) 
+  +10 -10	trunk/src/phandler.c (File Modified) 
+
+
 jilles      2007/04/07 00:28:09 UTC	(20070407-8163)
   Log:
   os_logstream contrib module:
