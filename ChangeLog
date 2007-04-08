@@ -1,3 +1,12 @@
+jilles      2007/04/08 00:36:27 UTC	(20070408-8171)
+  Log:
+  Fix warning: %.*... arg should be an int not ptrdiff_t.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/modules/nickserv/access.c (File Modified) 
+
+
 jilles      2007/04/07 15:30:15 UTC	(20070407-8169)
   Log:
   Add #include <arpa/nameser.h> to fix compilation on some systems.
