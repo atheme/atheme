@@ -1,3 +1,14 @@
+jilles      2007/04/08 22:31:56 UTC	(20070408-8179)
+  Log:
+  Nefarious: we can always send mode changes from our
+  services, as Nefarious allows all modes from +k clients,
+  i.e. this does not even require a U:line.
+  
+
+  Changes:	Modified:
+  +1 -4		trunk/modules/protocol/nefarious.c (File Modified) 
+
+
 jilles      2007/04/08 22:24:02 UTC	(20070408-8177)
   Log:
   asuka/bircd/undernet:

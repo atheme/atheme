@@ -4,7 +4,7 @@
  *
  * This file contains channel mode tracking routines.
  *
- * $Id: cmode.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: cmode.c 8181 2007-04-08 23:34:43Z jilles $
  */
 
 #include "atheme.h"
@@ -252,7 +252,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 						modestack_mode_param(source->nick, chan, MTYPE_ADD, *pos, CLIENT_NAME(cu->user));
 
 					/* see if they did something we have to undo */
-					if (source == NULL && cu->user->server != me.me && chansvs.me != NULL && (mc = mychan_find(cu->chan->name)) && mc->flags & MC_SECURE)
+					if (source == NULL && cu->user->server != me.me && chansvs.me != NULL && (mc = mychan_find(chan->name)) && mc->flags & MC_SECURE)
 					{
 						if (status_mode_list[i].mode == 'o' && !(chanacs_user_flags(mc, cu->user) & (CA_OP | CA_AUTOOP)))
 						{
@@ -278,13 +278,13 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 							{
 								if (chan->nummembers > 1)
 								{
-									slog(LG_DEBUG, "channel_mode(): %s deopped on %s, rejoining", cu->user->nick, cu->chan->name);
-									part(cu->chan->name, cu->user->nick);
-									join(cu->chan->name, cu->user->nick);
+									slog(LG_DEBUG, "channel_mode(): %s deopped on %s, rejoining", cu->user->nick, chan->name);
+									part_sts(chan, cu->user);
+									join_sts(chan, cu->user, FALSE, channel_modes(chan, TRUE));
 								}
 								else
 								{
-									slog(LG_DEBUG, "channel_mode(): %s deopped on %s, opping from other service", cu->user->nick, cu->chan->name);
+									slog(LG_DEBUG, "channel_mode(): %s deopped on %s, opping from other service", cu->user->nick, chan->name);
 									LIST_FOREACH(n, me.me->userlist.head)
 									{
 										if (n->data != cu->user)
@@ -298,7 +298,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 							}
 							else if (first_deopped_service != cu->user)
 							{
-								slog(LG_DEBUG, "channel_mode(): %s deopped on %s, opping from %s", cu->user->nick, cu->chan->name, first_deopped_service->nick);
+								slog(LG_DEBUG, "channel_mode(): %s deopped on %s, opping from %s", cu->user->nick, chan->name, first_deopped_service->nick);
 								modestack_mode_param(first_deopped_service->nick, chan, MTYPE_ADD, *pos, CLIENT_NAME(cu->user));
 							}
 
