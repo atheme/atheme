@@ -4,7 +4,7 @@
  *
  * Changes and shows nickname access lists.
  *
- * $Id: access.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: access.c 8171 2007-04-08 00:36:27Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/access", FALSE, _modinit, _moddeinit,
-	"$Id: access.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: access.c 8171 2007-04-08 00:36:27Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -129,7 +129,7 @@ static boolean_t mangle_wildcard_to_cidr(const char *host, char *dest, int destl
 		return FALSE;
 	if (p[0] == '*' && p[1] == '\0')
 	{
-		snprintf(dest, destlen, "%.*s0.0.0/8", p - host, host);
+		snprintf(dest, destlen, "%.*s0.0.0/8", (int)(p - host), host);
 		return TRUE;
 	}
 
@@ -141,7 +141,7 @@ static boolean_t mangle_wildcard_to_cidr(const char *host, char *dest, int destl
 		return FALSE;
 	if (p[0] == '*' && (p[1] == '\0' || (p[1] == '.' && p[2] == '*' && p[3] == '\0')))
 	{
-		snprintf(dest, destlen, "%.*s0.0/16", p - host, host);
+		snprintf(dest, destlen, "%.*s0.0/16", (int)(p - host), host);
 		return TRUE;
 	}
 
@@ -153,7 +153,7 @@ static boolean_t mangle_wildcard_to_cidr(const char *host, char *dest, int destl
 		return FALSE;
 	if (p[0] == '*' && p[1] == '\0')
 	{
-		snprintf(dest, destlen, "%.*s0/24", p - host, host);
+		snprintf(dest, destlen, "%.*s0/24", (int)(p - host), host);
 		return TRUE;
 	}
 
