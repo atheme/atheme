@@ -1,4 +1,4 @@
-$Id: IRCD 7697 2007-02-19 17:26:17Z jilles $
+$Id: IRCD 8175 2007-04-08 22:00:18Z jilles $
 
 IRCD-specific notes
 -------------------
@@ -293,6 +293,10 @@ Atheme does not support IPv6 (neither IPv6 connections nor IPv6 IPs in P10
 protocol). IPs of IPv6 clients will not be stored or logged.
 
 Atheme does not support oplevels; they should be disabled.
+
+chanserv::changets can be used with ircu version 2.10.12.06 or newer; if any
+server on the network is 2.10.11.x, netsplits will occur whenever Atheme tries
+to lower TS.
 
 unreal
 ------

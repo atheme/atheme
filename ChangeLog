@@ -1,3 +1,15 @@
+jilles      2007/04/08 13:12:06 UTC	(20070408-8173)
+  Log:
+  Use configured --bindir for restart.
+  
+  Submitted by darix.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/Makefile.in (File Modified) 
+  +1 -1		trunk/src/atheme.c (File Modified) 
+
+
 jilles      2007/04/08 00:36:27 UTC	(20070408-8171)
   Log:
   Fix warning: %.*... arg should be an int not ptrdiff_t.

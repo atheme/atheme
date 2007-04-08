@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: undernet.c 8165 2007-04-07 14:49:05Z jilles $
+ * $Id: undernet.c 8175 2007-04-08 22:00:18Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 8165 2007-04-07 14:49:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 8175 2007-04-08 22:00:18Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -136,6 +136,15 @@ static void undernet_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *mo
 		sts("%s J %s %ld", u->uid, c->name, c->ts);
 		sts("%s M %s +o %s", me.numeric, c->name, u->uid);
 	}
+}
+
+static void undernet_chan_lowerts(channel_t *c, user_t *u)
+{
+	slog(LG_DEBUG, "undernet_chan_lowerts(): lowering TS for %s to %ld",
+			c->name, (long)c->ts);
+	sts("%s B %s %ld %s %s:o", me.numeric, c->name, c->ts,
+			channel_modes(c, TRUE), u->uid);
+	chanban_clear(c);
 }
 
 /* kicks a user from a channel */
@@ -430,12 +439,13 @@ static void m_create(sourceinfo_t *si, int parc, char *parv[])
 	int chanc;
 	char *chanv[256];
 	int i;
+	time_t ts;
 
 	chanc = sjtoken(parv[0], ',', chanv);
 
 	for (i = 0; i < chanc; i++)
 	{
-		channel_t *c = channel_add(chanv[i], atoi(parv[1]));
+		channel_t *c = channel_add(chanv[i], ts = atoi(parv[1]));
 
 		/* Tell the core to check mode locks now,
 		 * otherwise it may only happen after the next
@@ -444,8 +454,13 @@ static void m_create(sourceinfo_t *si, int parc, char *parv[])
 		 * so this will not look ugly. -- jilles */
 		channel_mode_va(NULL, c, 1, "+");
 
-		buf[0] = '@';
-		buf[1] = '\0';
+		if (ts <= c->ts)
+		{
+			buf[0] = '@';
+			buf[1] = '\0';
+		}
+		else
+			buf[0] = '\0';
 
 		strlcat(buf, si->su->uid, BUFSIZE);
 
@@ -503,6 +518,7 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 	char newnick[16+NICKLEN];
 	char *p;
 	time_t ts;
+	boolean_t keep_new_modes = TRUE;
 
 	/* S BURST <channel> <ts> [parameters]
 	 * parameters can be:
@@ -519,7 +535,7 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_burst(): new channel: %s", parv[0]);
 		c = channel_add(parv[0], ts);
 	}
-	else if (ts < c->ts)
+	if (ts < c->ts)
 	{
 		chanuser_t *cu;
 		node_t *n;
@@ -544,6 +560,8 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 		c->ts = ts;
 		hook_call_event("channel_tschange", c);
 	}
+	else if (ts > c->ts)
+		keep_new_modes = FALSE;
 	if (parc < 3 || parv[2][0] != '+')
 	{
 		/* Tell the core to check mode locks now,
@@ -563,13 +581,15 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 				modev[modec++] = parv[j++];
 			if (strchr(modev[0], 'l') && j < parc)
 				modev[modec++] = parv[j++];
-			channel_mode(NULL, c, modec, modev);
+			if (keep_new_modes)
+				channel_mode(NULL, c, modec, modev);
 		}
 		else if (parv[j][0] == '%')
 		{
 			userc = sjtoken(parv[j++] + 1, ' ', userv);
-			for (i = 0; i < userc; i++)
-				chanban_add(c, userv[i], 'b');
+			if (keep_new_modes)
+				for (i = 0; i < userc; i++)
+					chanban_add(c, userv[i], 'b');
 		}
 		else
 		{
@@ -586,14 +606,15 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 					prefix[1] = '\0';
 					prefix[2] = '\0';
 					p++;
-					while (*p)
-					{
-						if (*p == 'o')
-							prefix[prefix[0] ? 1 : 0] = '@';
-						else if (*p == 'v')
-							prefix[prefix[0] ? 1 : 0] = '+';
-						p++;
-					}
+					if (keep_new_modes)
+						while (*p)
+						{
+							if (*p == 'o')
+								prefix[prefix[0] ? 1 : 0] = '@';
+							else if (*p == 'v')
+								prefix[prefix[0] ? 1 : 0] = '+';
+							p++;
+						}
 				}
 				strlcpy(newnick, prefix, sizeof newnick);
 				strlcat(newnick, userv[i], sizeof newnick);
@@ -699,9 +720,42 @@ static void m_quit(sourceinfo_t *si, int parc, char *parv[])
 static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
+	channel_t *c;
+	int i;
+	char *p;
+	int dir = MTYPE_ADD;
+	time_t ts;
 
 	if (*parv[0] == '#')
-		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
+	{
+		c = channel_find(parv[0]);
+		if (c == NULL)
+			return;
+		i = 2;
+		for (p = parv[1]; *p != '\0'; p++)
+		{
+			switch (*p)
+			{
+				case '+': dir = MTYPE_ADD; break;
+				case '-': dir = MTYPE_DEL; break;
+				case 'l':
+					  if (dir == MTYPE_DEL)
+						  break;
+					  /* FALLTHROUGH */
+				case 'b': case 'k': case 'o': case 'v':
+					  i++;
+			}
+		}
+		if (i < parc && (ts = atoi(parv[i])) != 0)
+		{
+			if (ts > c->ts)
+			{
+				slog(LG_DEBUG, "m_mode(): ignoring mode on %s (%ld > %ld)", c->name, ts, c->ts);
+				return;
+			}
+		}
+		channel_mode(NULL, c, parc - 1, &parv[1]);
+	}
 	else
 	{
 		/* Yes this is a nick and not a UID -- jilles */
@@ -948,6 +1002,7 @@ void _modinit(module_t * m)
 	quit_sts = &undernet_quit_sts;
 	wallops_sts = &undernet_wallops_sts;
 	join_sts = &undernet_join_sts;
+	chan_lowerts = &undernet_chan_lowerts;
 	kick = &undernet_kick;
 	msg = &undernet_msg;
 	notice_user_sts = &undernet_notice_user_sts;
