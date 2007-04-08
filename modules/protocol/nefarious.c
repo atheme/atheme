@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by nefarious.
  *
- * $Id: nefarious.c 8165 2007-04-07 14:49:05Z jilles $
+ * $Id: nefarious.c 8179 2007-04-08 22:31:56Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/nefarious.h"
 
-DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 8165 2007-04-07 14:49:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/nefarious", TRUE, _modinit, NULL, "$Id: nefarious.c 8179 2007-04-08 22:31:56Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -311,10 +311,7 @@ static void nefarious_mode_sts(char *sender, channel_t *target, char *modes)
 	if (!fptr)
 		return;
 
-	if (chanuser_find(target, fptr))
-		sts("%s M %s %s", fptr->uid, target->name, modes);
-	else
-		sts("%s M %s %s", me.numeric, target->name, modes);
+	sts("%s M %s %s", fptr->uid, target->name, modes);
 }
 
 /* ping wrapper */

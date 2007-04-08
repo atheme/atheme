@@ -1,3 +1,16 @@
+jilles      2007/04/08 22:24:02 UTC	(20070408-8177)
+  Log:
+  asuka/bircd/undernet:
+  Send kick from server if the source is not on the channel;
+  it would be bounced otherwise. Nefarious does not need this.
+  
+
+  Changes:	Modified:
+  +4 -1		trunk/modules/protocol/asuka.c (File Modified) 
+  +4 -1		trunk/modules/protocol/bircd.c (File Modified) 
+  +4 -1		trunk/modules/protocol/undernet.c (File Modified) 
+
+
 jilles      2007/04/08 22:00:18 UTC	(20070408-8175)
   Log:
   Add chanserv::changets support for ircu 2.10.12.06 or newer.
