@@ -1,3 +1,15 @@
+jilles      2007/04/08 22:00:18 UTC	(20070408-8175)
+  Log:
+  Add chanserv::changets support for ircu 2.10.12.06 or newer.
+  Note that this must not be enabled if any 2.10.11.x servers
+  are on the network.
+  
+
+  Changes:	Modified:
+  +4 -0		trunk/doc/IRCD (File Modified) 
+  +71 -16	trunk/modules/protocol/undernet.c (File Modified) 
+
+
 jilles      2007/04/08 13:12:06 UTC	(20070408-8173)
   Log:
   Use configured --bindir for restart.

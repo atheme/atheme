@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: undernet.c 8175 2007-04-08 22:00:18Z jilles $
+ * $Id: undernet.c 8177 2007-04-08 22:24:02Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/undernet.h"
 
-DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 8175 2007-04-08 22:00:18Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/undernet", TRUE, _modinit, NULL, "$Id: undernet.c 8177 2007-04-08 22:24:02Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -157,7 +157,10 @@ static void undernet_kick(char *from, char *channel, char *to, char *reason)
 	if (!chan || !user || !fptr)
 		return;
 
-	sts("%s K %s %s :%s", fptr->uid, channel, user->uid, reason);
+	if (chanuser_find(chan, fptr))
+		sts("%s K %s %s :%s", fptr->uid, channel, user->uid, reason);
+	else
+		sts("%s K %s %s :%s", me.numeric, channel, user->uid, reason);
 
 	chanuser_delete(chan, user);
 }
