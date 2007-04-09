@@ -1,3 +1,15 @@
+jilles      2007/04/08 23:34:43 UTC	(20070408-8181)
+  Log:
+  - Use part_sts/join_sts instead of part/join when
+    reopping a service. This avoids referencing freed
+    memory (chanuser_t).
+  - Simplify a bit: use chan instead of cu->chan.
+  
+
+  Changes:	Modified:
+  +6 -6		trunk/src/cmode.c (File Modified) 
+
+
 jilles      2007/04/08 22:31:56 UTC	(20070408-8179)
   Log:
   Nefarious: we can always send mode changes from our
