@@ -1,3 +1,13 @@
+jilles      2007/04/09 10:01:04 UTC	(20070409-8183)
+  Log:
+  Nefarious: we can send notices to channels without being
+  on them, no need to send them from the server
+  
+
+  Changes:	Modified:
+  +1 -4		trunk/modules/protocol/nefarious.c (File Modified) 
+
+
 jilles      2007/04/08 23:34:43 UTC	(20070408-8181)
   Log:
   - Use part_sts/join_sts instead of part/join when

@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 8173 2007-04-08 13:12:06Z jilles $
+# $Id: Makefile.in 8185 2007-04-11 00:42:47Z nenolod $
 #
 
 CC		= @CC@
@@ -26,7 +26,7 @@ DATADIR		= @DATADIR@
 RUNDIR		= @RUNDIR@
 LOGDIR		= @LOGDIR@
 SHAREDIR	= @SHAREDIR@
-BIN		= atheme@EXEEXT@
+BIN		= atheme-services@EXEEXT@
 MKDEP		= @MKDEP@
 CFLAGS		= @CFLAGS@ -I../include -DBINDIR=\"$(bindir)\"
 
@@ -100,11 +100,11 @@ SRCS = ${BASE_SRCS} version.c
 
 OBJS = ${SRCS:.c=.o}
 
-all: atheme ../dist/example.userserv.conf
+all: atheme-services ../dist/example.userserv.conf
 
 build: all
 
-atheme: $(OBJS)
+atheme-services: $(OBJS)
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ ${OBJS} ${LIBS}
 	$(MV) version.c version.c.last
 
@@ -167,7 +167,7 @@ depend:
 	${MKDEP} ${CPPFLAGS} ${CFLAGS} ${BASE_SRCS} > .depend
 
 clean:
-	${RM} -f *.o *.exe *~ version.c atheme.core core atheme ../dist/example.userserv.conf
+	${RM} -f *.o *.exe *~ version.c atheme-services.core core atheme-services ../dist/example.userserv.conf
 
 distclean: clean
 	${RM} -f Makefile version.c.last

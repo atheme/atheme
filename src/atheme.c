@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 8173 2007-04-08 13:12:06Z jilles $
+ * $Id: atheme.c 8185 2007-04-11 00:42:47Z nenolod $
  */
 
 #include "atheme.h"
@@ -342,7 +342,7 @@ int main(int argc, char *argv[])
 		slog(LG_INFO, "main(): restarting");
 
 #ifdef HAVE_EXECVE
-		execve(BINDIR "/atheme", argv, environ);
+		execve(BINDIR "/atheme-services", argv, environ);
 #endif
 	}
 
