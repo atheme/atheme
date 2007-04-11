@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 8185 2007-04-11 00:42:47Z nenolod $
+# $Id: Makefile.in 8187 2007-04-11 15:34:23Z nenolod $
 #
 
 CC		= @CC@
@@ -134,6 +134,7 @@ install: build
 	$(INSTALL) -m 640 -c ../dist/example.motd $(DESTDIR)$(sysconfdir)
 	$(INSTALL) -m 640 -c ../dist/example.userserv.conf $(DESTDIR)$(sysconfdir)
 	$(INSTALL) -m 640 -c ../dist/atheme.chk $(DESTDIR)$(sysconfdir)/atheme.chk.sample
+	[ -f ${DESTDIR}${bindir}/atheme ] && rm ${DESTDIR}${bindir}/atheme
 	(cd ../doc; for i in *; do $(INSTALL) -m 644 $$i $(DESTDIR)$(DOCDIR); done)
 	(cd ../help; for i in *; do \
 		[ -f $$i ] && $(INSTALL) -m 644 $$i $(DESTDIR)$(SHAREDIR)/help; \

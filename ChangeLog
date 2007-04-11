@@ -1,3 +1,14 @@
+nenolod     2007/04/11 00:42:47 UTC	(20070411-8185)
+  Log:
+  - rename services binary to atheme-services so hopefully people will 
+    quit calling it just "atheme"
+  
+
+  Changes:	Modified:
+  +4 -4		trunk/src/Makefile.in (File Modified) 
+  +1 -1		trunk/src/atheme.c (File Modified) 
+
+
 jilles      2007/04/09 10:01:04 UTC	(20070409-8183)
   Log:
   Nefarious: we can send notices to channels without being
