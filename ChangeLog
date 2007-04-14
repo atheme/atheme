@@ -1,3 +1,12 @@
+jilles      2007/04/14 23:29:44 UTC	(20070414-8189)
+  Log:
+  saslserv: remove extraneous newline in log messages
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/saslserv/main.c (File Modified) 
+
+
 nenolod     2007/04/11 15:34:23 UTC	(20070411-8187)
   Log:
   - delete old atheme binary to enforce rename

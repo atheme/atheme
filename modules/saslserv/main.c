@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 8189 2007-04-14 23:29:44Z jilles $
+ * $Id: main.c 8191 2007-04-14 23:56:43Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 8189 2007-04-14 23:29:44Z jilles $",
+	"$Id: main.c 8191 2007-04-14 23:56:43Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -395,7 +395,7 @@ static void sasl_write(char *target, char *data, int length)
 		sasl_sts(target, 'C', "+");
 }
 
-static void sasl_logcommand(char *source, int level, const char *fmt, ...)
+static void sasl_logcommand(sasl_session_t *p, myuser_t *login, int level, const char *fmt, ...)
 {
 	va_list args;
 	time_t t;
@@ -405,7 +405,8 @@ static void sasl_logcommand(char *source, int level, const char *fmt, ...)
 
 	va_start(args, fmt);
 	vsnprintf(lbuf, BUFSIZE, fmt, args);
-	slog(level, "sasl_agent %s %s", source, lbuf);
+	slog(level, "sasl_agent %s:%s %s", login ? login->name : "",
+			p->uid, lbuf);
 	va_end(args);
 }
 
@@ -414,24 +415,23 @@ int login_user(sasl_session_t *p)
 {
 	myuser_t *mu = myuser_find(p->username);
 	metadata_t *md;
-	char *target = p->uid;
 
 	if(mu == NULL) /* WTF? */
 		return 0;
 
  	if ((md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
 	{
-		sasl_logcommand(target, CMDLOG_LOGIN, "failed IDENTIFY to %s (frozen)", mu->name);
+		sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed IDENTIFY to %s (frozen)", mu->name);
 		return 0;
 	}
 
 	if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
 	{
-		sasl_logcommand(target, CMDLOG_LOGIN, "failed IDENTIFY to %s (too many logins)", mu->name);
+		sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed IDENTIFY to %s (too many logins)", mu->name);
 		return 0;
 	}
 
-	sasl_logcommand(target, CMDLOG_LOGIN, "IDENTIFY");
+	sasl_logcommand(p, mu, CMDLOG_LOGIN, "IDENTIFY");
 
 	return 1;
 }
