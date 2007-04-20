@@ -1,3 +1,13 @@
+jilles      2007/04/14 23:56:43 UTC	(20070414-8191)
+  Log:
+  saslserv: reformat log messages to be more like nickserv,
+  show account name for successful login
+  
+
+  Changes:	Modified:
+  +6 -6		trunk/modules/saslserv/main.c (File Modified) 
+
+
 jilles      2007/04/14 23:29:44 UTC	(20070414-8189)
   Log:
   saslserv: remove extraneous newline in log messages
