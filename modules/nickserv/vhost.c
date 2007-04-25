@@ -4,7 +4,7 @@
  *
  * Allows setting a vhost on an account
  *
- * $Id: vhost.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: vhost.c 8195 2007-04-25 16:27:08Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/vhost", FALSE, _modinit, _moddeinit,
-	"$Id: vhost.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: vhost.c 8195 2007-04-25 16:27:08Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -137,8 +137,10 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* Never ever allow @!?* as they have special meaning in all ircds */
+	/* Empty, space anywhere and colon at the start break the protocol */
 	if (strchr(host, '@') || strchr(host, '!') || strchr(host, '?') ||
-			strchr(host, '*'))
+			strchr(host, '*') || strchr(host, ' ') ||
+			*host == ':' || *host == '\0')
 	{
 		command_fail(si, fault_badparams, _("The vhost provided contains invalid characters."));
 		return;
