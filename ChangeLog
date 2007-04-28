@@ -1,3 +1,14 @@
+jilles      2007/04/28 20:42:06 UTC	(20070428-8199)
+  Log:
+  chanserv set email help file: use empty lines instead of
+  lines with a single space, this makes the html helpfiles
+  look nicer
+  
+
+  Changes:	Modified:
+  +7 -7		trunk/help/cservice/set_email (File Modified) 
+
+
 jilles      2007/04/25 16:27:08 UTC	(20070425-8195)
   Log:
   nickserv vhost: deny some spoofs that would break the protocol
