@@ -40,10 +40,9 @@ Permissions:
     +t - Enables use of the topic and topicappend commands.
     +A - Enables viewing of channel access lists.
     +b - Enables automatic kickban.
-    +X - Marks the access entry as suspended.
 
-The special permission +* adds all permissions except +b and +X.
-The special permission -* removes all permissions including +b and +X.
+The special permission +* adds all permissions except +b.
+The special permission -* removes all permissions including +b.
 
 Examples:
     /msg &nick& FLAGS #foo
@@ -52,4 +51,3 @@ Examples:
     /msg &nick& FLAGS #foo foo!*@bar.com -*
     /msg &nick& FLAGS #foo foo +oOtsi
     /msg &nick& FLAGS #foo TroubleUser!*@*.troubleisp.net +b
-    /msg &nick& FLAGS #foo ProblemOp +X

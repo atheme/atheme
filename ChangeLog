@@ -1,3 +1,13 @@
+jilles      2007/04/29 18:13:34 UTC	(20070429-8205)
+  Log:
+  Remove various +X checks since they also prevent you
+  from changing the access entry again in any way.
+  
+
+  Changes:	Modified:
+  +0 -9		trunk/src/account.c (File Modified) 
+
+
 jilles      2007/04/29 16:05:50 UTC	(20070429-8203)
   Log:
   Fix services creating channels:
