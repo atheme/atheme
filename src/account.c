@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 8101 2007-04-04 21:57:49Z jilles $
+ * $Id: account.c 8205 2007-04-29 18:13:34Z jilles $
  */
 
 #include "atheme.h"
@@ -908,9 +908,6 @@ chanacs_t *chanacs_find(mychan_t *mychan, myuser_t *myuser, unsigned int level)
 	{
 		ca = (chanacs_t *)n->data;
 
-		if (ca->level & CA_SUSPENDED)
-			continue;
-
 		if (level != 0x0)
 		{
 			if ((ca->myuser == myuser) && ((ca->level & level) == level))
@@ -933,9 +930,6 @@ chanacs_t *chanacs_find_host(mychan_t *mychan, const char *host, unsigned int le
 	LIST_FOREACH(n, mychan->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
-
-		if (ca->level & CA_SUSPENDED)
-			continue;
 
 		if (level != 0x0)
 		{
@@ -979,9 +973,6 @@ chanacs_t *chanacs_find_host_literal(mychan_t *mychan, const char *host, unsigne
 	LIST_FOREACH(n, mychan->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
-
-		if (ca->level & CA_SUSPENDED)
-			continue;
 
 		if (level != 0x0)
 		{

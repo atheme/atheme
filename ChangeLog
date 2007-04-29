@@ -1,3 +1,46 @@
+jilles      2007/04/29 16:05:50 UTC	(20070429-8203)
+  Log:
+  Fix services creating channels:
+  - add an argument server_t *creator to channel_add(), and
+    apply special treatment if it is equal to me.me
+  - if a service is creating a channel, first call
+    join_sts(), then channel_join hook, finally channel_add
+    hook; this means the service will be in the channel in
+    the channel_add hook
+  - always restore topic if the service is in the channel at
+    channel_add time
+  
+  Tracker #883
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/channels.h (File Modified) 
+  +3 -1		trunk/modules/chanserv/main.c (File Modified) 
+  +3 -3		trunk/modules/protocol/asuka.c (File Modified) 
+  +1 -1		trunk/modules/protocol/bahamut.c (File Modified) 
+  +3 -3		trunk/modules/protocol/bircd.c (File Modified) 
+  +2 -2		trunk/modules/protocol/charybdis.c (File Modified) 
+  +1 -1		trunk/modules/protocol/dreamforge.c (File Modified) 
+  +2 -2		trunk/modules/protocol/hybrid.c (File Modified) 
+  +1 -1		trunk/modules/protocol/hyperion.c (File Modified) 
+  +2 -2		trunk/modules/protocol/inspircd10.c (File Modified) 
+  +2 -2		trunk/modules/protocol/inspircd11.c (File Modified) 
+  +1 -1		trunk/modules/protocol/ircnet.c (File Modified) 
+  +3 -3		trunk/modules/protocol/nefarious.c (File Modified) 
+  +2 -2		trunk/modules/protocol/officeirc.c (File Modified) 
+  +1 -1		trunk/modules/protocol/plexus.c (File Modified) 
+  +1 -1		trunk/modules/protocol/ptlink.c (File Modified) 
+  +2 -2		trunk/modules/protocol/ratbox.c (File Modified) 
+  +1 -1		trunk/modules/protocol/shadowircd.c (File Modified) 
+  +1 -1		trunk/modules/protocol/solidircd.c (File Modified) 
+  +1 -1		trunk/modules/protocol/sorcery.c (File Modified) 
+  +1 -1		trunk/modules/protocol/ultimate3.c (File Modified) 
+  +3 -3		trunk/modules/protocol/undernet.c (File Modified) 
+  +3 -3		trunk/modules/protocol/unreal.c (File Modified) 
+  +15 -8	trunk/src/channels.c (File Modified) 
+  +8 -2		trunk/src/services.c (File Modified) 
+
+
 jilles      2007/04/28 20:59:47 UTC	(20070428-8201)
   Log:
   Use empty lines instead of lines with two or more spaces in helpfiles.
