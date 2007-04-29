@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: bircd.c 8177 2007-04-08 22:24:02Z jilles $
+ * $Id: bircd.c 8203 2007-04-29 16:05:50Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 8177 2007-04-08 22:24:02Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: bircd.c 8203 2007-04-29 16:05:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -440,7 +440,7 @@ static void m_create(sourceinfo_t *si, int parc, char *parv[])
 
 	for (i = 0; i < chanc; i++)
 	{
-		channel_t *c = channel_add(chanv[i], atoi(parv[1]));
+		channel_t *c = channel_add(chanv[i], atoi(parv[1]), si->su->server);
 
 		/* Tell the core to check mode locks now,
 		 * otherwise it may only happen after the next
@@ -487,7 +487,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!c)
 		{
-			c = channel_add(chanv[i], atoi(parv[1]));
+			c = channel_add(chanv[i], atoi(parv[1]), si->su->server);
 			channel_mode_va(NULL, c, 1, "+");
 		}
 
@@ -522,7 +522,7 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 	if (c == NULL)
 	{
 		slog(LG_DEBUG, "m_burst(): new channel: %s", parv[0]);
-		c = channel_add(parv[0], ts);
+		c = channel_add(parv[0], ts, si->s);
 	}
 	else if (ts < c->ts)
 	{

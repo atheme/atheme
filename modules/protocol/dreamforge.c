@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: dreamforge.c 8165 2007-04-07 14:49:05Z jilles $
+ * $Id: dreamforge.c 8203 2007-04-29 16:05:50Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/dreamforge.h"
 
-DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 8165 2007-04-07 14:49:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/dreamforge", TRUE, _modinit, NULL, "$Id: dreamforge.c 8203 2007-04-29 16:05:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -601,7 +601,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 			if (!c)
 			{
 				slog(LG_DEBUG, "m_join(): new channel: %s", parv[0]);
-				c = channel_add(chanv[i], CURRTIME);
+				c = channel_add(chanv[i], CURRTIME, si->su->server);
 				/* Tell the core to check mode locks now,
 				 * otherwise it may only happen after the next
 				 * mode change.

@@ -1,3 +1,13 @@
+jilles      2007/04/28 20:59:47 UTC	(20070428-8201)
+  Log:
+  Use empty lines instead of lines with two or more spaces in helpfiles.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/help/nickserv/drop (File Modified) 
+  +1 -1		trunk/help/userserv/register (File Modified) 
+
+
 jilles      2007/04/28 20:42:06 UTC	(20070428-8199)
   Log:
   chanserv set email help file: use empty lines instead of

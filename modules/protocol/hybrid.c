@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hybrid-based ircd.
  *
- * $Id: hybrid.c 8165 2007-04-07 14:49:05Z jilles $
+ * $Id: hybrid.c 8203 2007-04-29 16:05:50Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/hybrid.h"
 
-DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 8165 2007-04-07 14:49:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hybrid", TRUE, _modinit, NULL, "$Id: hybrid.c 8203 2007-04-29 16:05:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -545,7 +545,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 	if (!c)
 	{
 		slog(LG_DEBUG, "m_sjoin(): new channel: %s", parv[1]);
-		c = channel_add(parv[1], ts);
+		c = channel_add(parv[1], ts, si->s);
 	}
 
 	if (ts == 0 || c->ts == 0)
@@ -647,7 +647,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 	if (!c)
 	{
 		slog(LG_DEBUG, "m_join(): new channel: %s", parv[1]);
-		c = channel_add(parv[1], ts);
+		c = channel_add(parv[1], ts, si->su->server);
 	}
 
 	if (ts == 0 || c->ts == 0)

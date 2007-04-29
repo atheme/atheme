@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: main.c 8203 2007-04-29 16:05:50Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 8027 2007-04-02 10:47:18Z nenolod $",
+	"$Id: main.c 8203 2007-04-29 16:05:50Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -553,10 +553,12 @@ static void cs_newchan(channel_t *c)
 		snprintf(str, sizeof str, "%lu", (unsigned long)c->ts);
 		metadata_add(mc, METADATA_CHANNEL, "private:channelts", str);
 	}
-	else if (!(MC_TOPICLOCK & mc->flags))
+	else if (!(MC_TOPICLOCK & mc->flags) && LIST_LENGTH(&c->members) == 0)
 		/* Same channel, let's assume ircd has kept topic.
 		 * However, if topiclock is enabled, we must change it back
 		 * regardless.
+		 * Also, if there is someone in this channel already, it is
+		 * being created by a service and we must restore.
 		 * -- jilles */
 		return;
 

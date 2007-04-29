@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree stable branch inspircd.
  *
- * $Id: inspircd10.c 8165 2007-04-07 14:49:05Z jilles $
+ * $Id: inspircd10.c 8203 2007-04-29 16:05:50Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 8165 2007-04-07 14:49:05Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 8203 2007-04-29 16:05:50Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -523,7 +523,7 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 	if (!c)
 	{
 		slog(LG_DEBUG, "m_fjoin(): new channel: %s", parv[0]);
-		c = channel_add(parv[0], ts);
+		c = channel_add(parv[0], ts, si->s);
 		return_if_fail(c != NULL);
 		/* Tell the core to check mode locks now,
 		 * otherwise it may only happen after the next
@@ -703,7 +703,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 	if (!c)
 	{
 		slog(LG_DEBUG, "m_join(): new channel: %s (TS and modes lost)", parv[0]);
-		c = channel_add(parv[0], CURRTIME);
+		c = channel_add(parv[0], CURRTIME, si->su->server);
 		return_if_fail(c != NULL);
 		channel_mode_va(NULL, c, 1, "+");
 	}

@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: bahamut.c 8165 2007-04-07 14:49:05Z jilles $
+ * $Id: bahamut.c 8203 2007-04-29 16:05:50Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/bahamut.h"
 
-DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 8165 2007-04-07 14:49:05Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 8203 2007-04-29 16:05:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -505,7 +505,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 		if (!c)
 		{
 			slog(LG_DEBUG, "m_sjoin(): new channel: %s", parv[1]);
-			c = channel_add(parv[1], ts);
+			c = channel_add(parv[1], ts, si->s);
 		}
 
 		if (ts == 0 || c->ts == 0)

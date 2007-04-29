@@ -4,7 +4,7 @@
  *
  * Channel stuff.
  *
- * $Id: channels.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: channels.c 8203 2007-04-29 16:05:50Z jilles $
  */
 
 #include "atheme.h"
@@ -45,13 +45,14 @@ void init_channels(void)
 }
 
 /*
- * channel_add(const char *name, unsigned int ts)
+ * channel_add(const char *name, unsigned int ts, server_t *creator)
  *
  * Channel object factory.
  *
  * Inputs:
  *     - channel name
  *     - timestamp of channel creation
+ *     - server that is creating the channel
  *
  * Outputs:
  *     - on success, a channel object
@@ -59,10 +60,13 @@ void init_channels(void)
  *
  * Side Effects:
  *     - the channel is automatically inserted into the channel DTree
- *     - channel_add hook is called
- *     - all services are joined if this is the snoop channel
+ *     - if the creator is not me.me:
+ *       - channel_add hook is called
+ *       - all services are joined if this is the snoop channel
+ *     - if the creator is me.me these actions must be performed by the
+ *       caller (i.e. join()) after joining the service
  */
-channel_t *channel_add(const char *name, unsigned int ts)
+channel_t *channel_add(const char *name, unsigned int ts, server_t *creator)
 {
 	channel_t *c;
 	mychan_t *mc;
@@ -81,7 +85,7 @@ channel_t *channel_add(const char *name, unsigned int ts)
 		return c;
 	}
 
-	slog(LG_DEBUG, "channel_add(): %s", name);
+	slog(LG_DEBUG, "channel_add(): %s by %s", name, creator->name);
 
 	c = BlockHeapAlloc(chan_heap);
 
@@ -102,10 +106,13 @@ channel_t *channel_add(const char *name, unsigned int ts)
 
 	cnt.chan++;
 
-	hook_call_event("channel_add", c);
+	if (creator != me.me)
+	{
+		hook_call_event("channel_add", c);
 
-	if (config_options.chan != NULL && !irccasecmp(config_options.chan, name))
-		joinall(config_options.chan);
+		if (config_options.chan != NULL && !irccasecmp(config_options.chan, name))
+			joinall(config_options.chan);
+	}
 
 	return c;
 }

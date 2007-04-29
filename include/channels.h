@@ -4,7 +4,7 @@
  *
  * Data structures for channel information.
  *
- * $Id: channels.h 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: channels.h 8203 2007-04-29 16:05:50Z jilles $
  */
 
 #ifndef CHANNELS_H
@@ -127,7 +127,7 @@ E dictionary_tree_t *chanlist;
 
 E void init_channels(void);
 
-E channel_t *channel_add(const char *name, unsigned int ts);
+E channel_t *channel_add(const char *name, unsigned int ts, server_t *creator);
 E void channel_delete(const char *name);
 E channel_t *channel_find(const char *name);
 
