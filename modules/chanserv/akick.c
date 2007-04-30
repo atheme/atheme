@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 8209 2007-04-30 00:14:52Z jilles $
+ * $Id: akick.c 8211 2007-04-30 00:42:27Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@ static void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[]);
 DECLARE_MODULE_V1
 (
 	"chanserv/akick", FALSE, _modinit, _moddeinit,
-	"$Id: akick.c 8209 2007-04-30 00:14:52Z jilles $",
+	"$Id: akick.c 8211 2007-04-30 00:42:27Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,15 +48,26 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 	metadata_t *md;
 	node_t *n;
 	int operoverride = 0;
-	char *chan = parv[0];
-	char *cmd = parv[1];
+	char *chan;
+	char *cmd;
 	char *uname = parv[2];
 	char *reason = parv[3];
 
-	if (!cmd || !chan)
+	if (parc < 2)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKICK");
 		command_fail(si, fault_needmoreparams, _("Syntax: AKICK <#channel> ADD|DEL|LIST <nickname|hostmask> [reason]"));
+		return;
+	}
+
+	if (parv[0][0] == '#')
+		chan = parv[0], cmd = parv[1];
+	else if (parv[1][0] == '#')
+		cmd = parv[0], chan = parv[1];
+	else
+	{
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "AKICK");
+		command_fail(si, fault_badparams, _("Syntax: AKICK <#channel> ADD|DEL|LIST <nickname|hostmask> [reason]"));
 		return;
 	}
 
@@ -267,6 +278,8 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 		else
 			logcommand(si, CMDLOG_GET, "%s AKICK LIST", mc->name);
 	}
+	else
+		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", si->service->disp);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

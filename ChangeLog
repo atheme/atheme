@@ -1,3 +1,19 @@
+jilles      2007/04/30 00:14:52 UTC	(20070430-8209)
+  Log:
+  Add akick reasons, stored in "reason" chanacs metadata.
+  Akick reasons can be set in AKICK ADD, and are visible
+  in kick reasons, AKICK LIST and WHY. In a way similar to
+  ircd klines, the part of the reason after a '|' character
+  is not shown publicly.
+  
+
+  Changes:	Modified:
+  +8 -3		trunk/help/cservice/akick (File Modified) 
+  +19 -6	trunk/modules/chanserv/akick.c (File Modified) 
+  +26 -1	trunk/modules/chanserv/main.c (File Modified) 
+  +13 -0	trunk/modules/chanserv/why.c (File Modified) 
+
+
 jilles      2007/04/29 18:27:56 UTC	(20070429-8207)
   Log:
   Don't document +X for now as it doesn't work.
