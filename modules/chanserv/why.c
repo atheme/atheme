@@ -4,7 +4,7 @@
  *
  * This file contains code for the ChanServ WHY function.
  *
- * $Id: why.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: why.c 8209 2007-04-30 00:14:52Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/why", FALSE, _modinit, _moddeinit,
-	"$Id: why.c 8027 2007-04-02 10:47:18Z nenolod $",
+	"$Id: why.c 8209 2007-04-30 00:14:52Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -49,6 +49,7 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 	myuser_t *mu;
 	node_t *n;
 	chanacs_t *ca;
+	metadata_t *md;
 	int operoverride = 0;
 	int fl = 0;
 
@@ -118,6 +119,12 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si,
 				"\2%s\2 has flags \2%s\2 in \2%s\2 because they are logged in as \2%s\2.",
 				u->nick, bitmask_to_flags2(ca->level, 0, chanacs_flags), mc->name, mu->name);
+			if (ca->level & CA_AKICK)
+			{
+				md = metadata_find(ca, METADATA_CHANACS, "reason");
+				if (md != NULL)
+					command_success_nodata(si, "Ban reason: %s", md->value);
+			}
 		}
 		else if (ca->myuser == NULL && !match(ca->host, host))
 		{
@@ -125,6 +132,12 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si,
 				"\2%s\2 has flags \2%s\2 in \2%s\2 because they match the mask \2%s\2.",
 				u->nick, bitmask_to_flags2(ca->level, 0, chanacs_flags), mc->name, ca->host);
+			if (ca->level & CA_AKICK)
+			{
+				md = metadata_find(ca, METADATA_CHANACS, "reason");
+				if (md != NULL)
+					command_success_nodata(si, "Ban reason: %s", md->value);
+			}
 		}
 	}
 	if ((fl & (CA_AKICK | CA_REMOVE)) == (CA_AKICK | CA_REMOVE))

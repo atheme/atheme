@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService AKICK functions.
  *
- * $Id: akick.c 8103 2007-04-04 22:51:10Z jilles $
+ * $Id: akick.c 8209 2007-04-30 00:14:52Z jilles $
  */
 
 #include "atheme.h"
@@ -14,12 +14,12 @@ static void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[]);
 DECLARE_MODULE_V1
 (
 	"chanserv/akick", FALSE, _modinit, _moddeinit,
-	"$Id: akick.c 8103 2007-04-04 22:51:10Z jilles $",
+	"$Id: akick.c 8209 2007-04-30 00:14:52Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 command_t cs_akick = { "AKICK", N_("Manipulates a channel's AKICK list."),
-                        AC_NONE, 3, cs_cmd_akick };
+                        AC_NONE, 4, cs_cmd_akick };
 
 list_t *cs_cmdtree;
 list_t *cs_helptree;
@@ -45,23 +45,25 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 	myuser_t *mu;
 	mychan_t *mc;
 	chanacs_t *ca, *ca2;
+	metadata_t *md;
 	node_t *n;
 	int operoverride = 0;
 	char *chan = parv[0];
 	char *cmd = parv[1];
 	char *uname = parv[2];
+	char *reason = parv[3];
 
 	if (!cmd || !chan)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKICK");
-		command_fail(si, fault_needmoreparams, _("Syntax: AKICK <#channel> ADD|DEL|LIST <nickname|hostmask>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: AKICK <#channel> ADD|DEL|LIST <nickname|hostmask> [reason]"));
 		return;
 	}
 
 	if ((strcasecmp("LIST", cmd)) && (!uname))
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "AKICK");
-		command_fail(si, fault_needmoreparams, _("Syntax: AKICK <#channel> ADD|DEL|LIST <nickname|hostmask>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: AKICK <#channel> ADD|DEL|LIST <nickname|hostmask> [reason]"));
 		return;
 	}
 
@@ -133,6 +135,8 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			/* ok to use chanacs_add_host() here, already
 			 * verified it doesn't exist yet */
 			ca2 = chanacs_add_host(mc, uname, CA_AKICK, CURRTIME);
+			if (reason != NULL)
+				metadata_add(ca2, METADATA_CHANACS, "reason", reason);
 
 			hook_call_event("channel_akick_add", ca2);
 
@@ -155,6 +159,8 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			}
 
 			ca2 = chanacs_add(mc, mu, CA_AKICK, CURRTIME);
+			if (reason != NULL)
+				metadata_add(ca2, METADATA_CHANACS, "reason", reason);
 
 			hook_call_event("channel_akick_add", ca2);
 
@@ -238,12 +244,19 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 
 			if (ca->level == CA_AKICK)
 			{
+				md = metadata_find(ca, METADATA_CHANACS, "reason");
 				if (ca->myuser == NULL)
-					command_success_nodata(si, _("%d: \2%s\2 [modified: %s ago]"), ++i, ca->host, time_ago(ca->ts));
+					command_success_nodata(si, _("%d: \2%s\2  %s [modified: %s ago]"),
+							++i, ca->host,
+							md ? md->value : "", time_ago(ca->ts));
 				else if (LIST_LENGTH(&ca->myuser->logins) > 0)
-					command_success_nodata(si, _("%d: \2%s\2 (logged in) [modified: %s ago]"), ++i, ca->myuser->name, time_ago(ca->ts));
+					command_success_nodata(si, _("%d: \2%s\2 (logged in)  %s [modified: %s ago]"),
+							++i, ca->myuser->name,
+							md ? md->value : "", time_ago(ca->ts));
 				else
-					command_success_nodata(si, _("%d: \2%s\2 (not logged in) [modified: %s ago]"), ++i, ca->myuser->name, time_ago(ca->ts));
+					command_success_nodata(si, _("%d: \2%s\2 (not logged in)  %s [modified: %s ago]"),
+							++i, ca->myuser->name,
+							md ? md->value : "", time_ago(ca->ts));
 			}
 
 		}

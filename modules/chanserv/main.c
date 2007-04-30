@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 8203 2007-04-29 16:05:50Z jilles $
+ * $Id: main.c 8209 2007-04-30 00:14:52Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 8203 2007-04-29 16:05:50Z jilles $",
+	"$Id: main.c 8209 2007-04-30 00:14:52Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -224,6 +224,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	boolean_t noop;
 	chanacs_t *ca2;
 	boolean_t secure = FALSE;
+	char akickreason[120] = "User is banned from this channel", *p;
 
 	if (cu == NULL || is_internal_client(cu->user))
 		return;
@@ -288,9 +289,33 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 			}
 		}
 		else
+		{
+			/* XXX this could be done more efficiently */
+			ca2 = chanacs_find(mc, u->myuser, CA_AKICK);
 			ban(chansvs.me->me, chan, u);
+		}
 		remove_ban_exceptions(chansvs.me->me, chan, u);
-		kick(chansvs.nick, chan->name, u->nick, "User is banned from this channel");
+		if (ca2 != NULL)
+		{
+			md = metadata_find(ca2, METADATA_CHANACS, "reason");
+			if (md != NULL && *md->value != '|')
+			{
+				snprintf(akickreason, sizeof akickreason,
+						"Banned: %s", md->value);
+				p = strchr(akickreason, '|');
+				if (p != NULL)
+					*p = '\0';
+				else
+					p = akickreason + strlen(akickreason);
+				/* strip trailing spaces, so as not to
+				 * disclose the existence of an oper reason */
+				p--;
+				while (p > akickreason && *p == ' ')
+					p--;
+				p[1] = '\0';
+			}
+		}
+		kick(chansvs.nick, chan->name, u->nick, akickreason);
 		hdata->cu = NULL;
 		return;
 	}
