@@ -1,3 +1,15 @@
+jilles      2007/04/30 00:42:27 UTC	(20070430-8211)
+  Log:
+  chanserv akick:
+  - allow /cs akick <subcommand> <channel> ... in addition
+    to /cs akick <channel> <subcommand> ...
+  - always give an error message if the subcommand is unknown
+  
+
+  Changes:	Modified:
+  +16 -3	trunk/modules/chanserv/akick.c (File Modified) 
+
+
 jilles      2007/04/30 00:14:52 UTC	(20070430-8209)
   Log:
   Add akick reasons, stored in "reason" chanacs metadata.
