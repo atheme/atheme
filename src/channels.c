@@ -4,7 +4,7 @@
  *
  * Channel stuff.
  *
- * $Id: channels.c 8203 2007-04-29 16:05:50Z jilles $
+ * $Id: channels.c 8217 2007-05-04 23:50:18Z jilles $
  */
 
 #include "atheme.h"
@@ -156,11 +156,8 @@ void channel_delete(const char *name)
 	{
 		cu = n->data;
 		u = cu->user;
-		node_del(n, &c->members);
-		node_free(n);
-		n2 = node_find(cu, &u->channels);
-		node_del(n2, &u->channels);
-		node_free(n2);
+		node_del(&cu->cnode, &c->members);
+		node_del(&cu->unode, &u->channels);
 		BlockHeapFree(chanuser_heap, cu);
 		cnt.chanuser--;
 	}
@@ -388,8 +385,6 @@ void chanban_clear(channel_t *chan)
 chanuser_t *chanuser_add(channel_t *chan, const char *nick)
 {
 	user_t *u;
-	node_t *n1;
-	node_t *n2;
 	chanuser_t *cu, *tcu;
 	unsigned int flags = 0;
 	int i = 0;
@@ -437,9 +432,6 @@ chanuser_t *chanuser_add(channel_t *chan, const char *nick)
 
 	slog(LG_DEBUG, "chanuser_add(): %s -> %s", chan->name, u->nick);
 
-	n1 = node_create();
-	n2 = node_create();
-
 	cu = BlockHeapAlloc(chanuser_heap);
 
 	cu->chan = chan;
@@ -448,8 +440,8 @@ chanuser_t *chanuser_add(channel_t *chan, const char *nick)
 
 	chan->nummembers++;
 
-	node_add(cu, n1, &chan->members);
-	node_add(cu, n2, &u->channels);
+	node_add(cu, &cu->cnode, &chan->members);
+	node_add(cu, &cu->unode, &u->channels);
 
 	cnt.chanuser++;
 
@@ -483,7 +475,7 @@ chanuser_t *chanuser_add(channel_t *chan, const char *nick)
 void chanuser_delete(channel_t *chan, user_t *user)
 {
 	chanuser_t *cu;
-	node_t *n, *tn, *n2;
+	node_t *n, *tn;
 	hook_channel_joinpart_t hdata;
 
 	if (!chan)
@@ -498,6 +490,7 @@ void chanuser_delete(channel_t *chan, user_t *user)
 		return;
 	}
 
+	/* XXX in most cases the user's list is shorter */
 	LIST_FOREACH_SAFE(n, tn, chan->members.head)
 	{
 		cu = (chanuser_t *)n->data;
@@ -509,12 +502,9 @@ void chanuser_delete(channel_t *chan, user_t *user)
 			hook_call_event("channel_part", &hdata);
 
 			slog(LG_DEBUG, "chanuser_delete(): %s -> %s (%d)", cu->chan->name, cu->user->nick, cu->chan->nummembers - 1);
-			node_del(n, &chan->members);
-			node_free(n);
 
-			n2 = node_find(cu, &user->channels);
-			node_del(n2, &user->channels);
-			node_free(n2);
+			node_del(&cu->cnode, &chan->members);
+			node_del(&cu->unode, &user->channels);
 
 			BlockHeapFree(chanuser_heap, cu);
 

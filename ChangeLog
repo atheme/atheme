@@ -1,3 +1,12 @@
+nenolod     2007/05/04 09:26:32 UTC	(20070504-8215)
+  Log:
+  - try to make the rpath stuff work right
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/configure.ac (File Modified) 
+
+
 nenolod     2007/05/03 00:57:30 UTC	(20070503-8213)
   Log:
   - use -Wl,-rpath,LIBDIR to allow for future transition to the Mowgli framework if a systemwide install of Mowgli is not available.

@@ -4,7 +4,7 @@
  *
  * Data structures for channel information.
  *
- * $Id: channels.h 8203 2007-04-29 16:05:50Z jilles $
+ * $Id: channels.h 8217 2007-05-04 23:50:18Z jilles $
  */
 
 #ifndef CHANNELS_H
@@ -33,12 +33,14 @@ struct channel_
   list_t bans;
 };
 
-/* struct for channel users */
+/* struct for channel memberships */
 struct chanuser_
 {
   channel_t *chan;
   user_t *user;
   unsigned int modes;
+  node_t unode;
+  node_t cnode;
 };
 
 struct chanban_
