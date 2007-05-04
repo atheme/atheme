@@ -1,3 +1,13 @@
+nenolod     2007/05/03 00:57:30 UTC	(20070503-8213)
+  Log:
+  - use -Wl,-rpath,LIBDIR to allow for future transition to the Mowgli framework if a systemwide install of Mowgli is not available.
+  
+
+  Changes:	Modified:
+  +12 -0	trunk/configure.ac (File Modified) 
+  +2 -1		trunk/src/Makefile.in (File Modified) 
+
+
 jilles      2007/04/30 00:42:27 UTC	(20070430-8211)
   Log:
   chanserv akick:

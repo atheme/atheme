@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 8213 2007-05-03 00:57:30Z nenolod $
+dnl $Id: configure.ac 8215 2007-05-04 09:26:32Z nenolod $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.59)
 AC_INIT(atheme, 2.2, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 8213 2007-05-03 00:57:30Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 8215 2007-05-04 09:26:32Z nenolod $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -462,7 +462,7 @@ dnl export CFLAGS
 disable_rpath="no"
 AC_ARG_ENABLE(rpath,
 AC_HELP_STRING([--disable-rpath],[Disable use of -Wl,-rpath= during linking.]),
-[], [disable_rpath="yes"])
+[disable_rpath="no"], [disable_rpath="yes"])
 
 RPATH=""
 if test "x$disable_rpath" = "xno"; then
