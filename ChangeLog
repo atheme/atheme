@@ -1,3 +1,33 @@
+jilles      2007/05/05 12:58:06 UTC	(20070505-8223)
+  Log:
+  Make channel_delete() take a channel_t pointer instead of a name.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/channels.h (File Modified) 
+  +1 -1		trunk/modules/protocol/asuka.c (File Modified) 
+  +1 -1		trunk/modules/protocol/bahamut.c (File Modified) 
+  +1 -1		trunk/modules/protocol/bircd.c (File Modified) 
+  +1 -1		trunk/modules/protocol/charybdis.c (File Modified) 
+  +1 -1		trunk/modules/protocol/hybrid.c (File Modified) 
+  +1 -1		trunk/modules/protocol/hyperion.c (File Modified) 
+  +1 -1		trunk/modules/protocol/inspircd10.c (File Modified) 
+  +1 -1		trunk/modules/protocol/inspircd11.c (File Modified) 
+  +1 -1		trunk/modules/protocol/ircnet.c (File Modified) 
+  +1 -1		trunk/modules/protocol/nefarious.c (File Modified) 
+  +1 -1		trunk/modules/protocol/officeirc.c (File Modified) 
+  +1 -1		trunk/modules/protocol/plexus.c (File Modified) 
+  +1 -1		trunk/modules/protocol/ptlink.c (File Modified) 
+  +1 -1		trunk/modules/protocol/ratbox.c (File Modified) 
+  +1 -1		trunk/modules/protocol/shadowircd.c (File Modified) 
+  +1 -1		trunk/modules/protocol/solidircd.c (File Modified) 
+  +1 -1		trunk/modules/protocol/ultimate3.c (File Modified) 
+  +1 -1		trunk/modules/protocol/undernet.c (File Modified) 
+  +1 -1		trunk/modules/protocol/unreal.c (File Modified) 
+  +5 -10	trunk/src/channels.c (File Modified) 
+  +1 -1		trunk/src/uplink.c (File Modified) 
+
+
 jilles      2007/05/05 12:39:05 UTC	(20070505-8221)
   Log:
   Show chanuser count in /stats t.

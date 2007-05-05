@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 8203 2007-04-29 16:05:50Z jilles $
+ * $Id: services.c 8225 2007-05-05 13:12:57Z jilles $
  */
 
 #include "atheme.h"
@@ -204,7 +204,6 @@ void reintroduce_user(user_t *u)
 {
 	node_t *n;
 	channel_t *c;
-	/*char chname[256];*/
 	service_t *svs;
 
 	svs = find_service(u->nick);
@@ -227,11 +226,6 @@ void reintroduce_user(user_t *u)
 			join_sts(c, u, 1, channel_modes(c, TRUE));
 			if (c->topic != NULL)
 				topic_sts(c, c->topic_setter, c->topicts, 0, c->topic);
-#if 0
-			strlcpy(chname, c->name, sizeof chname);
-			chanuser_delete(c, u);
-			join(chname, u->nick);
-#endif
 		}
 	}
 }
