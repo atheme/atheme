@@ -1,3 +1,15 @@
+jilles      2007/05/05 13:12:57 UTC	(20070505-8225)
+  Log:
+  reintroduce_user(): remove commented out bit that
+  reintroduces a service to channels with chanuser_delete()
+  and join(); this will not work and is inferior to the
+  current approach with join_sts() and friends.
+  
+
+  Changes:	Modified:
+  +0 -6		trunk/src/services.c (File Modified) 
+
+
 jilles      2007/05/05 12:58:06 UTC	(20070505-8223)
   Log:
   Make channel_delete() take a channel_t pointer instead of a name.

@@ -4,7 +4,7 @@
  *
  * Channel stuff.
  *
- * $Id: channels.c 8223 2007-05-05 12:58:06Z jilles $
+ * $Id: channels.c 8227 2007-05-05 15:19:38Z jilles $
  */
 
 #include "atheme.h"
@@ -146,13 +146,16 @@ void channel_delete(channel_t *c)
 	
 	modestack_finalize_channel(c);
 
-	/* channels with services may not be empty, kick them out -- jilles */
+	/* If this is called from uplink_close(), there may still be services
+	 * in the channel. Remove them. Calling chanuser_delete() could lead
+	 * to a recursive call, so don't do that.
+	 * -- jilles */
 	LIST_FOREACH_SAFE(n, tn, c->members.head)
 	{
 		cu = n->data;
-		u = cu->user;
+		soft_assert(is_internal_client(cu->user) && !me.connected);
 		node_del(&cu->cnode, &c->members);
-		node_del(&cu->unode, &u->channels);
+		node_del(&cu->unode, &cu->user->channels);
 		BlockHeapFree(chanuser_heap, cu);
 		cnt.chanuser--;
 	}
