@@ -4,7 +4,7 @@
  *
  * Channel stuff.
  *
- * $Id: channels.c 8219 2007-05-05 12:33:30Z jilles $
+ * $Id: channels.c 8223 2007-05-05 12:58:06Z jilles $
  */
 
 #include "atheme.h"
@@ -118,12 +118,12 @@ channel_t *channel_add(const char *name, unsigned int ts, server_t *creator)
 }
 
 /*
- * channel_delete(const char *name)
+ * channel_delete(channel_t *c)
  *
  * Destroys a channel object and its children member objects.
  *
  * Inputs:
- *     - name of channel object to find and destroy
+ *     - channel object to destroy
  *
  * Outputs:
  *     - nothing
@@ -133,19 +133,14 @@ channel_t *channel_add(const char *name, unsigned int ts, server_t *creator)
  *     - a channel and all attached structures are destroyed
  *     - no protocol messages are sent for any remaining members
  */
-void channel_delete(const char *name)
+void channel_delete(channel_t *c)
 {
-	channel_t *c = channel_find(name);
 	mychan_t *mc;
 	node_t *n, *tn, *n2;
 	user_t *u;
 	chanuser_t *cu;
 
-	if (!c)
-	{
-		slog(LG_DEBUG, "channel_delete(): called for nonexistant channel: %s", name);
-		return;
-	}
+	return_if_fail(c != NULL);
 
 	slog(LG_DEBUG, "channel_delete(): %s", c->name);
 	
@@ -513,7 +508,7 @@ void chanuser_delete(channel_t *chan, user_t *user)
 		/* empty channels die */
 		slog(LG_DEBUG, "chanuser_delete(): `%s' is empty, removing", chan->name);
 
-		channel_delete(chan->name);
+		channel_delete(chan);
 	}
 }
 

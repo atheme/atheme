@@ -4,7 +4,7 @@
  *
  * Uplink management stuff.
  *
- * $Id: uplink.c 7961 2007-03-20 17:11:45Z jilles $
+ * $Id: uplink.c 8223 2007-05-05 12:58:06Z jilles $
  */
 
 #include "atheme.h"
@@ -186,7 +186,7 @@ static void uplink_close(connection_t *cptr)
 	/* remove all the channels left */
 	DICTIONARY_FOREACH(c, &state, chanlist)
 	{
-		channel_delete(c->name);
+		channel_delete(c);
 	}
 	/* this leaves me.me and all users on it (i.e. services) */
 

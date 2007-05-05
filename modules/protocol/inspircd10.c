@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree stable branch inspircd.
  *
- * $Id: inspircd10.c 8203 2007-04-29 16:05:50Z jilles $
+ * $Id: inspircd10.c 8223 2007-05-05 12:58:06Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 8203 2007-04-29 16:05:50Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd10.c 8223 2007-05-05 12:58:06Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -547,7 +547,7 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 		chanuser_add(c, parv[i]);
 
 	if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))
-		channel_delete(c->name);
+		channel_delete(c);
 }
 
 static void m_part(sourceinfo_t *si, int parc, char *parv[])

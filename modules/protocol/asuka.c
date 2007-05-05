@@ -6,7 +6,7 @@
  * Some sources used: Run's documentation, beware's description,
  * raw data sent by asuka.
  *
- * $Id: asuka.c 8203 2007-04-29 16:05:50Z jilles $
+ * $Id: asuka.c 8223 2007-05-05 12:58:06Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 #include "pmodule.h"
 #include "protocol/asuka.h"
 
-DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 8203 2007-04-29 16:05:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/asuka", TRUE, _modinit, NULL, "$Id: asuka.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -625,7 +625,7 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))
-		channel_delete(c->name);
+		channel_delete(c);
 }
 
 static void m_part(sourceinfo_t *si, int parc, char *parv[])

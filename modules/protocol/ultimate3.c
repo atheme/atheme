@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for Ultimate3 ircd.
  *
- * $Id: ultimate3.c 8203 2007-04-29 16:05:50Z jilles $
+ * $Id: ultimate3.c 8223 2007-05-05 12:58:06Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/ultimate3.h"
 
-DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 8203 2007-04-29 16:05:50Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/ultimate3", TRUE, _modinit, NULL, "$Id: ultimate3.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -462,7 +462,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 			chanuser_add(c, userv[i]);
 
 		if (c->nummembers == 0 && !(c->modes & ircd->perm_mode))
-			channel_delete(c->name);
+			channel_delete(c);
 	}
 	else if (parc >= 2 && si->su != NULL)
 	{
