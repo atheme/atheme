@@ -1,3 +1,13 @@
+jilles      2007/05/05 12:33:30 UTC	(20070505-8219)
+  Log:
+  chanuser_find(): search shortest list (user's or channel's)
+  chanuser_delete(): use chanuser_find() to find chanuser_t
+  
+
+  Changes:	Modified:
+  +35 -28	trunk/src/channels.c (File Modified) 
+
+
 jilles      2007/05/04 23:50:18 UTC	(20070504-8217)
   Log:
   Move chanuser_t's nodes into the chanuser_t itself.
