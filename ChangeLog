@@ -1,3 +1,17 @@
+jilles      2007/05/04 23:50:18 UTC	(20070504-8217)
+  Log:
+  Move chanuser_t's nodes into the chanuser_t itself.
+  This saves some separate blockheap allocates and removes
+  the need to search both the user's and channel's list
+  to remove a chanuser_t. (We currently always search the
+  channel's list.)
+  
+
+  Changes:	Modified:
+  +3 -1		trunk/include/channels.h (File Modified) 
+  +8 -18	trunk/src/channels.c (File Modified) 
+
+
 nenolod     2007/05/04 09:26:32 UTC	(20070504-8215)
   Log:
   - try to make the rpath stuff work right

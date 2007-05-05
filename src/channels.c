@@ -4,7 +4,7 @@
  *
  * Channel stuff.
  *
- * $Id: channels.c 8217 2007-05-04 23:50:18Z jilles $
+ * $Id: channels.c 8219 2007-05-05 12:33:30Z jilles $
  */
 
 #include "atheme.h"
@@ -490,37 +490,30 @@ void chanuser_delete(channel_t *chan, user_t *user)
 		return;
 	}
 
-	/* XXX in most cases the user's list is shorter */
-	LIST_FOREACH_SAFE(n, tn, chan->members.head)
+	cu = chanuser_find(chan, user);
+	if (cu == NULL)
+		return;
+
+	/* this is called BEFORE we remove the user */
+	hdata.cu = cu;
+	hook_call_event("channel_part", &hdata);
+
+	slog(LG_DEBUG, "chanuser_delete(): %s -> %s (%d)", cu->chan->name, cu->user->nick, cu->chan->nummembers - 1);
+
+	node_del(&cu->cnode, &chan->members);
+	node_del(&cu->unode, &user->channels);
+
+	BlockHeapFree(chanuser_heap, cu);
+
+	chan->nummembers--;
+	cnt.chanuser--;
+
+	if (chan->nummembers == 0 && !(chan->modes & ircd->perm_mode))
 	{
-		cu = (chanuser_t *)n->data;
+		/* empty channels die */
+		slog(LG_DEBUG, "chanuser_delete(): `%s' is empty, removing", chan->name);
 
-		if (cu->user == user)
-		{
-			/* this is called BEFORE we remove the user */
-			hdata.cu = cu;
-			hook_call_event("channel_part", &hdata);
-
-			slog(LG_DEBUG, "chanuser_delete(): %s -> %s (%d)", cu->chan->name, cu->user->nick, cu->chan->nummembers - 1);
-
-			node_del(&cu->cnode, &chan->members);
-			node_del(&cu->unode, &user->channels);
-
-			BlockHeapFree(chanuser_heap, cu);
-
-			chan->nummembers--;
-			cnt.chanuser--;
-
-			if (chan->nummembers == 0 && !(chan->modes & ircd->perm_mode))
-			{
-				/* empty channels die */
-				slog(LG_DEBUG, "chanuser_delete(): `%s' is empty, removing", chan->name);
-
-				channel_delete(chan->name);
-			}
-
-			return;
-		}
+		channel_delete(chan->name);
 	}
 }
 
@@ -548,12 +541,26 @@ chanuser_t *chanuser_find(channel_t *chan, user_t *user)
 	if ((!chan) || (!user))
 		return NULL;
 
-	LIST_FOREACH(n, chan->members.head)
+	/* choose shortest list to search -- jilles */
+	if (LIST_LENGTH(&user->channels) < LIST_LENGTH(&chan->members))
 	{
-		cu = (chanuser_t *)n->data;
+		LIST_FOREACH(n, user->channels.head)
+		{
+			cu = (chanuser_t *)n->data;
 
-		if (cu->user == user)
-			return cu;
+			if (cu->chan == chan)
+				return cu;
+		}
+	}
+	else
+	{
+		LIST_FOREACH(n, chan->members.head)
+		{
+			cu = (chanuser_t *)n->data;
+
+			if (cu->user == user)
+				return cu;
+		}
 	}
 
 	return NULL;
