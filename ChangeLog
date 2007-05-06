@@ -1,3 +1,15 @@
+jilles      2007/05/05 15:19:38 UTC	(20070505-8227)
+  Log:
+  channel_delete(): add a soft_assert that if there are
+  still members in the channel, they are services and
+  me.connected is FALSE (channel_delete() called from
+  uplink_close()).
+  
+
+  Changes:	Modified:
+  +6 -3		trunk/src/channels.c (File Modified) 
+
+
 jilles      2007/05/05 13:12:57 UTC	(20070505-8225)
   Log:
   reintroduce_user(): remove commented out bit that

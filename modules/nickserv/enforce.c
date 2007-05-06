@@ -23,7 +23,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/enforce",FALSE, _modinit, _moddeinit,
-	"$Id: enforce.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: enforce.c 8229 2007-05-06 13:14:45Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -37,47 +37,6 @@ command_t ns_set_enforce = { "ENFORCE", N_("Enables or disables automatic protec
 command_t ns_release = { "RELEASE", N_("Releases a services enforcer."), AC_NONE, 2, ns_cmd_release };
 
 list_t *ns_cmdtree, *ns_set_cmdtree, *ns_helptree;
-
-#if 0
-void manage_bots(void *arg)
-{
-	user_t *u;
-	node_t *n, *tn;
-	myuser_t *mu;
-	metadata_t *md;
-	int i = 0;
-	
-	for (i = 0; i < HASHSIZE; i++) 
-	{
-		LIST_FOREACH_SAFE(n, tn, userlist[i].head)
-		{
-			u = (user_t *)n->data;
-			if ((mu = myuser_find(u->nick)))
-			{
-			if (is_internal_client(u))
-			{
-				if (md = metadata_find(mu, METADATA_USER, "private:enforcer"))
-				{
-					int x = atoi(md->value);
-					if(x < 5)
-					{
-						x++;
-						char buf[32];
-						sprintf(buf, "%d", x);
-						metadata_add(mu, METADATA_USER, "private:enforcer", buf);
-					}
-					else
-					{
-						metadata_delete(mu, METADATA_USER, "private:enforcer");
-						quit_sts(u, "timed out svs enforcer");
-					}
-				}
-			}
-			}
-		}
-	}
-}
-#endif
 
 static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -259,11 +218,6 @@ void reg_check(void *arg)
 				}
 				fnc_sts(nicksvs.me->me, u, gnick, FNC_FORCE);
 				holdnick_sts(nicksvs.me->me, 3600, u->nick, mu);
-#if 0 /* can't do this, need to wait for SVSNICK to complete! -- jilles */
-				uid = uid_get();
-				introduce_nick(u->nick, "enforcer", "services.hold", "Services Enforcer", uid);
-				user_add(u->nick, "enforcer", "services.hold", NULL, NULL, uid, "Services Enforcer", me.me, CURRTIME);
-#endif
 				u->flags &= ~UF_NICK_WARNED;
 				metadata_add(mu, METADATA_USER, "private:enforcer", "1");
 			}
