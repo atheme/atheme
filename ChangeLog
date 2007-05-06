@@ -1,3 +1,27 @@
+jilles      2007/05/06 22:31:50 UTC	(20070506-8231)
+  Log:
+  Rework nickserv enforcement:
+  - stop checking all online nicks to see whether they are
+    authorized to use that nick every 30 seconds
+  - instead, check after user introductions and nick changes,
+    just after sending "please identify"; at that point
+    store the (nick, host) pair and if after 30 seconds that
+    nick is still online from that host and not authorized
+    to use that nick, force a nick change and introduce an
+    enforcer (holdnick_sts())
+  - this means LOGOUT, ACCESS DEL do not cause ENFORCE to
+    act anymore, the latter should probably be fixed
+  - FREEZE-ENFORCE interaction is wrong anyway
+  - the UF_NICK_WARNED flag is no longer used
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/doc/HOOKS (File Modified) 
+  +5 -0		trunk/include/account.h (File Modified) 
+  +145 -71	trunk/modules/nickserv/enforce.c (File Modified) 
+  +4 -0		trunk/src/services.c (File Modified) 
+
+
 jilles      2007/05/06 13:14:45 UTC	(20070506-8229)
   Log:
   nickserv enforce: rip out #if 0'ed code for non-svshold

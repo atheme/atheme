@@ -23,7 +23,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/enforce",FALSE, _modinit, _moddeinit,
-	"$Id: enforce.c 8231 2007-05-06 22:31:50Z jilles $",
+	"$Id: enforce.c 8233 2007-05-06 22:47:38Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -46,7 +46,6 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[]);
 
 static void enforce_timeout_check(void *arg);
-static void remove_idcheck(void *vuser);
 static void show_enforce(void *vdata);
 static void check_registration(void *vdata);
 static void check_enforce(void *vdata);
@@ -239,14 +238,6 @@ void enforce_timeout_check(void *arg)
 	}
 }
 
-static void remove_idcheck(void *vuser)
-{
-	user_t *u;
-
-	u = vuser;
-	u->flags &= ~UF_NICK_WARNED;
-}
-
 static void show_enforce(void *vdata)
 {
 	hook_user_req_t *hdata = vdata;
@@ -358,8 +349,6 @@ void _modinit(module_t *m)
 	command_add(&ns_set_enforce, ns_set_cmdtree);
 	help_addentry(ns_helptree, "RELEASE", "help/nickserv/release", NULL);
 	help_addentry(ns_helptree, "SET ENFORCE", "help/nickserv/set_enforce", NULL);
-	hook_add_event("user_identify");
-	hook_add_hook("user_identify", remove_idcheck);
 	hook_add_event("user_info");
 	hook_add_hook("user_info", show_enforce);
 	hook_add_event("user_can_register");
@@ -375,7 +364,6 @@ void _moddeinit()
 	command_delete(&ns_set_enforce, ns_set_cmdtree);
 	help_delentry(ns_helptree, "RELEASE");
 	help_delentry(ns_helptree, "SET ENFORCE");
-	hook_del_hook("user_identify", remove_idcheck);
 	hook_del_hook("user_info", show_enforce);
 	hook_del_hook("user_can_register", check_registration);
 	hook_del_hook("nick_enforce", check_enforce);
