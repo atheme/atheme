@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 8225 2007-05-05 13:12:57Z jilles $
+ * $Id: services.c 8231 2007-05-06 22:31:50Z jilles $
  */
 
 #include "atheme.h"
@@ -273,6 +273,7 @@ void snoop(char *fmt, ...)
 void handle_nickchange(user_t *u)
 {
 	mynick_t *mn;
+	hook_nick_enforce_t hdata;
 
 	if (u == NULL)
 		return;
@@ -324,6 +325,9 @@ void handle_nickchange(user_t *u)
 
 	notice(nicksvs.nick, u->nick, _("This nickname is registered. Please choose a different nickname, or identify via \2/%s%s identify <password>\2."),
 	       (ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.disp);
+	hdata.u = u;
+	hdata.mn = mn;
+	hook_call_event("nick_enforce", &hdata);
 }
 
 /* User u is bursted as being logged in to login
