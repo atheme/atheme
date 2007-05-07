@@ -1,11 +1,11 @@
 Help for READ:
 
 READ allows you to read a memo that another
-user has sent you. You can obtain a list of
-memos from the LIST command, or delete a 
-memo with the DELETE command.
+user has sent you. You can either read a memo
+by number or read your new memos.
 
 Syntax: READ <memo number>
+Syntax: READ NEW
 
 Examples:
     /msg &nick& READ 1

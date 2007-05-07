@@ -1,3 +1,12 @@
+jilles      2007/05/06 22:54:53 UTC	(20070506-8235)
+  Log:
+  Remove UF_NICK_WARNED.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/include/users.h (File Modified) 
+
+
 jilles      2007/05/06 22:47:38 UTC	(20070506-8233)
   Log:
   nickserv enforce: remove effectively dead code

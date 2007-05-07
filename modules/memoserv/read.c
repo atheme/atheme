@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2007 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the Memoserv READ function
  *
- * $Id: read.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: read.c 8237 2007-05-07 16:42:10Z jilles $
  */
 
 #include "atheme.h"
@@ -12,9 +12,11 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/read", FALSE, _modinit, _moddeinit,
-	"$Id: read.c 8027 2007-04-02 10:47:18Z nenolod $",
+	"$Id: read.c 8237 2007-05-07 16:42:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
+
+#define MAX_READ_AT_ONCE 5
 
 static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -45,14 +47,14 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 	myuser_t *tmu;
 	mymemo_t *memo, *receipt;
 	node_t *n;
-	unsigned int i = 1, memonum = 0;
+	unsigned int i = 1, memonum = 0, numread = 0;
 	char strfbuf[32];
 	struct tm tm;
+	boolean_t readnew;
 	
 	/* Grab arg */
 	char *arg1 = parv[0];
 	
-	/* Bad/missing arg -- how do I make sure it's a digit they fed me? */
 	if (!arg1)
 	{
 		command_fail(si, fault_needmoreparams, 
@@ -61,8 +63,6 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_needmoreparams, _("Syntax: READ <memo number>"));
 		return;
 	}
-	else
-		memonum = atoi(arg1);
 	
 	/* user logged in? */
 	if (si->smu == NULL)
@@ -78,8 +78,9 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	
-	/* Is arg1 an int? */
-	if (!memonum)
+	memonum = atoi(arg1);
+	readnew = !strcasecmp(arg1, "NEW");
+	if (!readnew && !memonum)
 	{
 		command_fail(si, fault_badparams, _("Invalid message index."));
 		return;
@@ -95,9 +96,9 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 	/* Go to reading memos */	
 	LIST_FOREACH(n, si->smu->memos.head)
 	{
-		if (i == memonum)
+		memo = (mymemo_t *)n->data;
+		if (i == memonum || (readnew && memo->status == MEMO_NEW))
 		{
-			memo = (mymemo_t*) n->data;
 			tm = *localtime(&memo->sent);
 			strftime(strfbuf, sizeof(strfbuf) - 1, 
 				"%b %d %H:%M:%S %Y", &tm);
@@ -139,11 +140,21 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 			
 			command_success_nodata(si, "%s", memo->text);
 			
-			return;
+			if (!readnew)
+				return;
+			if (++numread >= MAX_READ_AT_ONCE && si->smu->memoct_new > 0)
+			{
+				command_success_nodata(si, _("Stopping command after %d memos."), numread);
+				return;
+			}
 		}
-		
 		i++;
 	}
+
+	if (readnew && numread == 0)
+		command_fail(si, fault_nosuch_key, _("You have no new memos."));
+	else if (readnew)
+		command_success_nodata(si, _("Read %d memos."), numread);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
