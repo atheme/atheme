@@ -1,3 +1,13 @@
+jilles      2007/05/07 16:42:10 UTC	(20070507-8237)
+  Log:
+  Add /memoserv read new which reads upto 5 unread memos.
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/help/memoserv/read (File Modified) 
+  +22 -11	trunk/modules/memoserv/read.c (File Modified) 
+
+
 jilles      2007/05/06 22:54:53 UTC	(20070506-8235)
   Log:
   Remove UF_NICK_WARNED.

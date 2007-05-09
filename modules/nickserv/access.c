@@ -4,7 +4,7 @@
  *
  * Changes and shows nickname access lists.
  *
- * $Id: access.c 8171 2007-04-08 00:36:27Z jilles $
+ * $Id: access.c 8239 2007-05-09 20:05:03Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/access", FALSE, _modinit, _moddeinit,
-	"$Id: access.c 8171 2007-04-08 00:36:27Z jilles $",
+	"$Id: access.c 8239 2007-05-09 20:05:03Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -158,6 +158,43 @@ static boolean_t mangle_wildcard_to_cidr(const char *host, char *dest, int destl
 	}
 
 	return FALSE;
+}
+
+void myuser_access_delete_enforce(myuser_t *mu, char *mask)
+{
+	list_t l = {NULL, NULL, 0};
+	node_t *n, *tn;
+	mynick_t *mn;
+	user_t *u;
+	hook_nick_enforce_t hdata;
+
+	/* find users who get access via the access list */
+	LIST_FOREACH(n, mu->nicks.head)
+	{
+		mn = n->data;
+		u = user_find_named(mn->nick);
+		if (u != NULL && u->myuser != mu && myuser_access_verify(u, mu))
+			node_add(u, node_create(), &l);
+	}
+	/* remove mask */
+	myuser_access_delete(mu, mask);
+	/* check if those users still have access */
+	LIST_FOREACH_SAFE(n, tn, l.head)
+	{
+		u = n->data;
+		node_del(n, &l);
+		node_free(n);
+		if (!myuser_access_verify(u, mu))
+		{
+			mn = mynick_find(u->nick);
+			if (mn != NULL)
+			{
+				hdata.u = u;
+				hdata.mn = mn;
+				hook_call_event("nick_enforce", &hdata);
+			}
+		}
+	}
 }
 
 static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
@@ -371,7 +408,7 @@ static void ns_cmd_access(sourceinfo_t *si, int parc, char *parv[])
 		}
 		command_success_nodata(si, _("Deleted mask \2%s\2 from your access list."), mask);
 		logcommand(si, CMDLOG_SET, "ACCESS DEL %s", mask);
-		myuser_access_delete(mu, mask);
+		myuser_access_delete_enforce(mu, mask);
 	}
 	else
 	{
