@@ -1,3 +1,15 @@
+jilles      2007/05/09 20:05:03 UTC	(20070509-8239)
+  Log:
+  nickserv access: If enforce is enabled and deleting an
+  access mask, check if online users still have access to use
+  the grouped nicks. This puts back a part of pre-r8231
+  behaviour.
+  
+
+  Changes:	Modified:
+  +38 -1	trunk/modules/nickserv/access.c (File Modified) 
+
+
 jilles      2007/05/07 16:42:10 UTC	(20070507-8237)
   Log:
   Add /memoserv read new which reads upto 5 unread memos.

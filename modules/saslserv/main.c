@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 8191 2007-04-14 23:56:43Z jilles $
+ * $Id: main.c 8241 2007-05-09 23:09:36Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 8191 2007-04-14 23:56:43Z jilles $",
+	"$Id: main.c 8241 2007-05-09 23:09:36Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -82,7 +82,7 @@ void _modinit(module_t *m)
 	hook_add_hook("sasl_input", sasl_input);
 	hook_add_event("user_add");
 	hook_add_hook("user_add", sasl_newuser);
-	event_add("sasl_delete_stale", delete_stale, NULL, 15);
+	event_add("sasl_delete_stale", delete_stale, NULL, 30);
 
         if (!cold_start)
         {
