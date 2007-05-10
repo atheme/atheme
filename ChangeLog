@@ -1,3 +1,16 @@
+jilles      2007/05/10 20:18:42 UTC	(20070510-8243)
+  Log:
+  - log successful sasl logins when the user is introduced,
+    so full nick/username/host/ip is available (if no user
+    introduction comes, log it after the session timeout)
+  - fix a comment
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/sasl.h (File Modified) 
+  +21 -6	trunk/modules/saslserv/main.c (File Modified) 
+
+
 jilles      2007/05/09 23:09:36 UTC	(20070509-8241)
   Log:
   Keep sasl sessions around a little longer (30-60 instead

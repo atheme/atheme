@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: services.h 8245 2007-05-10 20:48:23Z jilles $
  */
 
 #ifndef SERVICES_H
@@ -91,8 +91,6 @@ struct nicksvs_
 
 struct saslsvs_
 {
-  list_t pending;
-
   char   *nick;
   char   *user;
   char   *host;

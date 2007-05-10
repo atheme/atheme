@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 8243 2007-05-10 20:18:42Z jilles $
+ * $Id: main.c 8245 2007-05-10 20:48:23Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 8243 2007-05-10 20:18:42Z jilles $",
+	"$Id: main.c 8245 2007-05-10 20:48:23Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -112,13 +112,6 @@ void _moddeinit(void)
 	{
 		destroy_session(n->data);
 		node_del(n, &sessions);
-		node_free(n);
-	}
-
-	LIST_FOREACH_SAFE(n, tn, saslsvs.pending.head)
-	{
-		free(n->data);
-		node_del(n, &saslsvs.pending);
 		node_free(n);
 	}
 }
@@ -274,7 +267,6 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 	char mech[21];
 	int out_len = 0;
 	metadata_t *md;
-	node_t *n;
 
 	/* First piece of data in a session is the name of
 	 * the SASL mechanism that will be used.
@@ -297,6 +289,7 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 /*			
 			char temp[400], *ptr = temp;
 			int l = 0;
+			node_t *n;
 
 			LIST_FOREACH(n, sasl_mechanisms.head)
 			{
@@ -343,9 +336,6 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 
 			svslogin_sts(p->uid, "*", "*", cloak, mu->name);
 			sasl_sts(p->uid, 'D', "S");
-
-            n = node_create();
-            node_add(strdup(p->uid), n, &saslsvs.pending);
 		}
 		else
 			sasl_sts(p->uid, 'D', "F");
@@ -458,17 +448,6 @@ static void sasl_newuser(void *vptr)
 	myuser_t *mu;
 	node_t *n, *tn;
 
-	/* Remove any pending login marker. */
-	LIST_FOREACH_SAFE(n, tn, saslsvs.pending.head)
-	{
-		if(!strcmp((char*)n->data, u->uid))
-		{
-			node_del(n, &saslsvs.pending);
-			free(n->data);
-			node_free(n);
-		}
-	}
-
 	/* Not concerned unless it's a SASL login. */
 	if(p == NULL)
 		return;
@@ -567,17 +546,6 @@ static void delete_stale(void *vptr)
 		p = n->data;
 		if(p->flags & ASASL_MARKED_FOR_DELETION)
 		{
-			/* Remove any pending login marker. */
-			LIST_FOREACH_SAFE(m, tm, saslsvs.pending.head)
-			{
-				if(!strcmp((char*)m->data, p->uid))
-				{
-					node_del(m, &saslsvs.pending);
-					free(m->data);
-					node_free(m);
-				}
-			}
-
 			node_del(n, &sessions);
 			destroy_session(p);
 			node_free(n);
