@@ -1,3 +1,16 @@
+jilles      2007/05/09 23:09:36 UTC	(20070509-8241)
+  Log:
+  Keep sasl sessions around a little longer (30-60 instead
+  of 15-30 seconds). They're not that expensive and I do
+  not want them to time out while the unknown connection
+  to the ircd still lives. Typing passwords or other auth
+  duties can take a while.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/saslserv/main.c (File Modified) 
+
+
 jilles      2007/05/09 20:05:03 UTC	(20070509-8239)
   Log:
   nickserv access: If enforce is enabled and deleting an

@@ -4,7 +4,7 @@
  *
  * Data structures for SASL plugin use.
  *
- * $Id: sasl.h 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: sasl.h 8243 2007-05-10 20:18:42Z jilles $
  */
 
 #ifndef SASL_H
@@ -43,6 +43,7 @@ struct sasl_mechanism_ {
 #define ASASL_DONE 2 /* client successfully authenticated */
 
 #define ASASL_MARKED_FOR_DELETION   1 /* see delete_stale() in saslserv/main.c */
+#define ASASL_NEED_LOG              2 /* user auth success needs to be logged still */
 
 #endif
 

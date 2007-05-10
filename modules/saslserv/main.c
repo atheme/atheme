@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 8241 2007-05-09 23:09:36Z jilles $
+ * $Id: main.c 8243 2007-05-10 20:18:42Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 8241 2007-05-09 23:09:36Z jilles $",
+	"$Id: main.c 8243 2007-05-10 20:18:42Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -22,6 +22,7 @@ list_t sasl_mechanisms;
 sasl_session_t *find_session(char *uid);
 sasl_session_t *make_session(char *uid);
 void destroy_session(sasl_session_t *p);
+static void sasl_logcommand(sasl_session_t *p, myuser_t *login, int level, const char *fmt, ...);
 static void sasl_input(void *vptr);
 static void sasl_packet(sasl_session_t *p, char *buf, int len);
 static void sasl_write(char *target, char *data, int length);
@@ -165,6 +166,14 @@ sasl_session_t *make_session(char *uid)
 void destroy_session(sasl_session_t *p)
 {
 	node_t *n, *tn;
+	myuser_t *mu;
+
+	if (p->flags & ASASL_NEED_LOG && p->username != NULL)
+	{
+		mu = myuser_find(p->username);
+		if (mu != NULL)
+			sasl_logcommand(p, mu, CMDLOG_LOGIN, "LOGIN (session timed out)");
+	}
 
 	LIST_FOREACH_SAFE(n, tn, sessions.head)
 	{
@@ -405,7 +414,7 @@ static void sasl_logcommand(sasl_session_t *p, myuser_t *login, int level, const
 
 	va_start(args, fmt);
 	vsnprintf(lbuf, BUFSIZE, fmt, args);
-	slog(level, "sasl_agent %s:%s %s", login ? login->name : "",
+	slog(level, "%s %s:%s %s", saslsvs.nick, login ? login->name : "",
 			p->uid, lbuf);
 	va_end(args);
 }
@@ -421,17 +430,18 @@ int login_user(sasl_session_t *p)
 
  	if ((md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
 	{
-		sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed IDENTIFY to %s (frozen)", mu->name);
+		sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed LOGIN to %s (frozen)", mu->name);
 		return 0;
 	}
 
 	if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
 	{
-		sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed IDENTIFY to %s (too many logins)", mu->name);
+		sasl_logcommand(p, NULL, CMDLOG_LOGIN, "failed LOGIN to %s (too many logins)", mu->name);
 		return 0;
 	}
 
-	sasl_logcommand(p, mu, CMDLOG_LOGIN, "IDENTIFY");
+	/* Log it with the full n!u@h later */
+	p->flags |= ASASL_NEED_LOG;
 
 	return 1;
 }
@@ -462,6 +472,9 @@ static void sasl_newuser(void *vptr)
 	/* Not concerned unless it's a SASL login. */
 	if(p == NULL)
 		return;
+
+	/* We will log it ourselves, if needed */
+	p->flags &= ~ASASL_NEED_LOG;
 
 	/* Find the account */
 	mu = p->username ? myuser_find(p->username) : NULL;
@@ -506,6 +519,8 @@ static void sasl_newuser(void *vptr)
 		strlcat(lao, u->host, BUFSIZE);
 	metadata_add(mu, METADATA_USER, "private:host:actual", lao);
 
+	logcommand_user(saslsvs.me, u, CMDLOG_LOGIN, "LOGIN");
+
 	/* check for failed attempts and let them know */
 	if ((md_failnum = metadata_find(mu, METADATA_USER, "private:loginfail:failnum")) && (atoi(md_failnum->value) > 0))
 	{
@@ -537,10 +552,10 @@ static void sasl_newuser(void *vptr)
 	hook_call_event("user_identify", u);
 }
 
-/* This function is run approximately once every 15 seconds.
+/* This function is run approximately once every 30 seconds.
  * It looks for flagged sessions, and deletes them, while
  * flagging all the others. This way stale sessions are deleted
- * after no more than 30 seconds.
+ * after no more than 60 seconds.
  */
 static void delete_stale(void *vptr)
 {
