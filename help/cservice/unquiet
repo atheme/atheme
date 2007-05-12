@@ -1,0 +1,11 @@
+Help for UNQUIET:
+
+The UNQUIET command allows you to unmute a user or hostmask
+in a channel. If no nickname or hostmask is specified,
+you are unquieted.
+
+Syntax: UNQUIET <#channel> [nickname|hostmask]
+
+Examples:
+    /msg &nick& UNQUIET #chat Diablo-D3
+    /msg &nick& UNQUIET #chat *!*@*.trilug.org

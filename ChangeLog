@@ -1,3 +1,15 @@
+jilles      2007/05/10 20:48:23 UTC	(20070510-8245)
+  Log:
+  Remove saslsvs.pending. With keeping around the
+  sasl_session_t until the user shows up on IRC or
+  timeout, this is not useful.
+  
+
+  Changes:	Modified:
+  +0 -2		trunk/include/services.h (File Modified) 
+  +1 -33	trunk/modules/saslserv/main.c (File Modified) 
+
+
 jilles      2007/05/10 20:18:42 UTC	(20070510-8243)
   Log:
   - log successful sasl logins when the user is introduced,
