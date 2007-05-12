@@ -1,3 +1,16 @@
+gxti        2007/05/12 20:43:38 UTC	(20070512-8247)
+  Log:
+  New module chanserv/quiet (implements +q)
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/dist/example.conf (File Modified) 
+  +10 -0	trunk/help/cservice/quiet (File Added) 
+  +11 -0	trunk/help/cservice/unquiet (File Added) 
+  +1 -0		trunk/modules/chanserv/Makefile.in (File Modified) 
+  +242 -0	trunk/modules/chanserv/quiet.c (File Added) 
+
+
 jilles      2007/05/10 20:48:23 UTC	(20070510-8245)
   Log:
   Remove saslsvs.pending. With keeping around the

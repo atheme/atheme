@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 # 
-#  Copyright (c) 2005-2006, Jilles Tjoelker
+#  Copyright (c) 2005-2007, Jilles Tjoelker
 #  All rights reserved.
 # 
 #  Redistribution and use in source and binary forms, with
@@ -31,7 +31,7 @@
 #  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 #  OF SUCH DAMAGE.
 #
-# $Id: hybservtoatheme.pl 7645 2007-02-12 16:31:48Z jilles $
+# $Id: hybservtoatheme.pl 8249 2007-05-12 20:48:13Z jilles $
 #
 # HybServ2/dancer-services to Atheme database converter
 # - Reads nick.db and chan.db from the current directory.
@@ -45,9 +45,9 @@
 #   hybserv/include/{nick,chan}serv.h.
 # - Access levels cannot be fully converted, but the code here could be
 #   improved a bit.
-# - Master nicks are converted to usernames/nicknames; any linked nicks
-#   are thrown away. This means users should use SET MASTER an appropriate
-#   nick in HybServ2; this cannot be easily changed later.
+# - Master nicks are converted to accounts; any linked nicks are converted
+#   to nicks attached to that account. This means users should use SET MASTER
+#   an appropriate nick in HybServ2; this cannot be easily changed later.
 # - Available flags are different; there is information loss here.
 # - The script is probably easy to adapt to other HybServ2 derivatives,
 #   please send me the patch if you do.
@@ -56,16 +56,20 @@
 # <jilles@stack.nl>
 # http://www.stack.nl/~jilles/irc/
 
-print "# hybservtoatheme.pl Copyright 2005-2006 Jilles Tjoelker\n";
+print "# hybservtoatheme.pl Copyright 2005-2007 Jilles Tjoelker\n";
 print "DBV 4\n";
+print "CF +vVhHoOtsriRfAb\n";
 
 $fakets = time() || 2147483647;
+$istheia = 0;
 
 print "# Converting nick.db\n";
 open(NICKDB, "<nick.db");
 $nick = '';
 $password = '';
 $email = '';
+$cloak = '';
+@access = ();
 while (<NICKDB>) {
 	if (/^->([a-zA-Z]+) (.*)$/) {
 		$word = $1;
@@ -77,17 +81,24 @@ while (<NICKDB>) {
 		} elsif ($word eq 'LINK') {
 			# Store master nick, might be wrong in channel
 			# access list :(
-			$masternick{$word} = $args;
-			# XXX
+			$masternick{$nick} = $args;
+			print "MN $args $nick $regtime $lastseentime\n";
 			$nick = '';
 		} elsif ($word eq 'LASTUH') {
 			$lastuh = $args;
 			$lastuh =~ s/ /@/;
+		} elsif ($word eq 'CLOAK') {
+			$cloak = $args;
+		} elsif ($word eq 'HOST') {
+			push @access, $args;
 		}
 	} elsif (/^([^ ]+) ([0-9]+) ([0-9]+) ([0-9]+)$/) {
 		if ($nick ne '') {
 			print "MU $nick $password $email $regtime $lastseentime 0 0 0 $athflags\n";
 			print "MD U $nick private:host:vhost $lastuh\n" if ($lastuh ne '');
+			print "MD U $nick private:usercloak $cloak\n" if ($cloak ne '');
+			print "AC $nick $_\n" for @access;
+			print "MN $nick $nick $regtime $lastseentime\n";
 			$masternick{$nick} = $nick;
 		}
 		$nick = $1;
@@ -97,6 +108,8 @@ while (<NICKDB>) {
 		$password = '*';
 		$email = 'noemail';
 		$lastuh = '';
+		$cloak = '';
+		@access = ();
 		$athflags = 0;
 		#$athflags |= ? if ($hsflags & 16); # private
 		$athflags |= 1 if ($hsflags & 4); # operator/hold
@@ -106,6 +119,9 @@ while (<NICKDB>) {
 		# transform either of noregister and nochanops to suspend
 		# hope atheme doesn't mind we don't know the suspender...
 		#$athflags |= 1 if ($hsflags & 0x300000);
+		# theia:
+		# 0x00800000 unfiltered
+		# 0x01000000 extendchans
 		# many other flags unused, see hybserv/include/nickserv.h
 		if ($hsflags & 0x80) {
 			# "forbidden" nick, hybserv will kill
@@ -115,6 +131,8 @@ while (<NICKDB>) {
 		}
 	} elsif (/^;( ?)(.*)$/) {
 		print "# $2\n";
+		$istheia = 1 if $2 =~ /^(theia|dancer)/i;
+		print "# theia/dancer detected\n" if $istheia;
 	} else {
 		print STDERR "Unrecognized line $. in nick.db:\n";
 		print STDERR $_;
@@ -124,6 +142,9 @@ while (<NICKDB>) {
 if ($nick ne '') {
 	print "MU $nick $password $email $regtime $lastseentime 0 0 0 $athflags\n";
 	print "MD U $nick private:host:vhost $lastuh\n" if ($lastuh ne '');
+	print "MD U $nick private:usercloak $cloak\n" if ($cloak ne '');
+	print "AC $nick $_\n" for @access;
+	print "MN $nick $nick $regtime $lastseentime\n";
 	$masternick{$nick} = $nick;
 }
 close(NICKDB);
@@ -227,9 +248,9 @@ while (<CHANDB>) {
 				$setlvl = $11;
 				$superoplvl = $12;
 				$founderlvl = $13;
-				$topiclvl = $14;
 				$autohalfoplvl = $autooplvl;
 				$halfoplvl = $oplvl;
+				$topiclvl = $oplvl;
 			} else {
 				print STDERR "Unrecognized access level line $. in chan.db channel $chan\n";
 				exit(1);
@@ -242,6 +263,8 @@ while (<CHANDB>) {
 			$nick = $1;
 			$hslevel = $2;
 			$athlevel = '';
+			# transform autodeop to akick
+			$athlevel .= 'b' if ($hslevel <= $nooplvl);
 			$athlevel .= 'A' if ($hslevel >= 1);
 			$athlevel .= 'i' if ($hslevel >= $invitelvl);
 			$athlevel .= 'v' if ($hslevel >= $voicelvl);
@@ -274,10 +297,11 @@ while (<CHANDB>) {
 		} elsif ($word eq 'AKICK') {
 			$args =~ /^([^ ]+) :(.*)$/;
 			$banmask = $1;
-			#$reason = $2;
+			$reason = $2;
 			print "CA $chan $banmask +b\n";
+			print "MD A $chan:$banmask reason $reason\n";
 		}
-	} elsif (/^(\#[^ ]+) ([0-9]+) ([0-9]+) ([0-9]+)$/) {
+	} elsif (/^(\#[^ ]*) ([0-9]+) ([0-9]+) ([0-9]+)$/) {
 		$chan = $1;
 		$hsflags = $2;
 		$regtime = $3;
@@ -296,7 +320,8 @@ while (<CHANDB>) {
 		$athflags |= 1 if ($hsflags & 0x200); # noexpire/hold
 		$athflags |= 8 if ($hsflags & 8); # secureops/secure
 		$athflags |= 16 if ($hsflags & 0x1000); # verbose
-		$athflags |= 64 if ($hsflags & 2); # topiclock/keeptopic
+		$athflags |= 320 if ($hsflags & 2); # topiclock/topiclock+keeptopic
+		$athflags |= 512 if ($hsflags & 0x400); # guard
 	} elsif (/^;( ?)(.*)$/) {
 		print "# $2\n";
 	} else {
