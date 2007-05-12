@@ -1,3 +1,15 @@
+jilles      2007/05/12 21:10:06 UTC	(20070512-8251)
+  Log:
+  chanserv quiet: refuse to load if there is no ban-like mode +q
+  chanserv halfop: fix error message when we refuse to load
+  because of no halfop support
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/halfop.c (File Modified) 
+  +7 -0		trunk/modules/chanserv/quiet.c (File Modified) 
+
+
 jilles      2007/05/12 20:48:13 UTC	(20070512-8249)
   Log:
   hybserv/theia/dancer-services conversion tool:

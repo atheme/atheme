@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: help.c 8253 2007-05-12 21:38:58Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: help.c 8253 2007-05-12 21:38:58Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -63,7 +63,7 @@ static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		{
 			command_success_nodata(si, _("Please note that channels will expire after %d days of inactivity,"), (config_options.expire / 86400));
 			command_success_nodata(si, _("or if there are no eligible channel successors."));
-			command_success_nodata(si, _("Activity is defined as a user with one of +vhHoOsrRf being on the channel."));
+			command_success_nodata(si, _("Activity is defined as a user with one of %s being on the channel."), bitmask_to_flags2(CA_USEDUPDATE & ca_all, 0, chanacs_flags));
 		}
 		else
 		{
