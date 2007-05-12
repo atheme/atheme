@@ -1,3 +1,13 @@
+jilles      2007/05/12 20:48:13 UTC	(20070512-8249)
+  Log:
+  hybserv/theia/dancer-services conversion tool:
+  many fixes/additions, tested with simple theia DB
+  
+
+  Changes:	Modified:
+  +36 -11	trunk/contrib/hybservtoatheme.pl (File Modified) 
+
+
 gxti        2007/05/12 20:43:38 UTC	(20070512-8247)
   Log:
   New module chanserv/quiet (implements +q)
