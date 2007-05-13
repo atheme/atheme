@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService RECOVER functions.
  *
- * $Id: recover.c 7969 2007-03-23 19:19:38Z jilles $
+ * $Id: recover.c 8257 2007-05-13 14:09:51Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/recover", FALSE, _modinit, _moddeinit,
-	"$Id: recover.c 7969 2007-03-23 19:19:38Z jilles $",
+	"$Id: recover.c 8257 2007-05-13 14:09:51Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -96,6 +96,16 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 			;
 		else
 		{
+			if (ircd->uses_owner && (ircd->owner_mode & cu->modes))
+			{
+				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, ircd->owner_mchar[1], CLIENT_NAME(cu->user));
+				cu->modes &= ~ircd->owner_mode;
+			}
+			if (ircd->uses_protect && (ircd->protect_mode & cu->modes))
+			{
+				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, ircd->protect_mchar[1], CLIENT_NAME(cu->user));
+				cu->modes &= ~ircd->protect_mode;
+			}
 			if ((CMODE_OP & cu->modes))
 			{
 				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'o', CLIENT_NAME(cu->user));

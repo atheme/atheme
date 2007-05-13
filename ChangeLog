@@ -1,3 +1,13 @@
+jilles      2007/05/13 13:48:49 UTC	(20070513-8255)
+  Log:
+  Mention that encrypting thousands of passwords at once
+  may take quite a lot of time.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/dist/example.conf (File Modified) 
+
+
 jilles      2007/05/12 21:38:58 UTC	(20070512-8253)
   Log:
   Take "activity" description in /cs help from
