@@ -1,3 +1,12 @@
+jilles      2007/05/13 14:09:51 UTC	(20070513-8257)
+  Log:
+  chanserv recover: also clear all owner/protect statuses
+  
+
+  Changes:	Modified:
+  +10 -0	trunk/modules/chanserv/recover.c (File Modified) 
+
+
 jilles      2007/05/13 13:48:49 UTC	(20070513-8255)
   Log:
   Mention that encrypting thousands of passwords at once

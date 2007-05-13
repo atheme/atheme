@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 8223 2007-05-05 12:58:06Z jilles $
+ * $Id: hyperion.c 8259 2007-05-13 21:10:42Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -17,7 +17,7 @@
 #include "pmodule.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 8259 2007-05-13 21:10:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -94,7 +94,7 @@ static boolean_t check_forward(const char *value, channel_t *c, mychan_t *mc, us
 	channel_t *target_c;
 	mychan_t *target_mc;
 
-	if (*value != '#' || strlen(value) > 50)
+	if (*value != '#' || strlen(value) > 30)
 		return FALSE;
 	if (u == NULL && mu == NULL)
 		return TRUE;
