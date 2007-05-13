@@ -1,3 +1,13 @@
+jilles      2007/05/12 21:38:58 UTC	(20070512-8253)
+  Log:
+  Take "activity" description in /cs help from
+  CA_USEDUPDATE & ca_all instead of hardcoding it.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/help.c (File Modified) 
+
+
 jilles      2007/05/12 21:10:06 UTC	(20070512-8251)
   Log:
   chanserv quiet: refuse to load if there is no ban-like mode +q
