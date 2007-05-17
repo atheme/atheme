@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 8259 2007-05-13 21:10:42Z jilles $
+ * $Id: hyperion.c 8265 2007-05-17 23:06:48Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -17,7 +17,7 @@
 #include "pmodule.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 8259 2007-05-13 21:10:42Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 8265 2007-05-17 23:06:48Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -347,10 +347,8 @@ static void hyperion_on_login(char *origin, char *user, char *wantedhost)
 	 * to change the fields yet */
 
 	/* set +e if they're identified to the nick they are using */
-	if (nicksvs.no_nick_ownership || irccasecmp(origin, user))
-		return;
-
-	sts(":%s MODE %s +e", me.name, origin);
+	if (should_reg_umode(u))
+		sts(":%s MODE %s +e", me.name, origin);
 }
 
 /* protocol-specific stuff to do on login */
@@ -367,10 +365,9 @@ static boolean_t hyperion_on_logout(char *origin, char *user, char *wantedhost)
 	if (use_svslogin)
 		sts(":%s SVSLOGIN %s %s %s %s %s %s", me.name, u->server->name, origin, "0", origin, u->user, wantedhost ? u->host : u->vhost);
 
-	if (nicksvs.no_nick_ownership || irccasecmp(origin, user))
-		return FALSE;
+	if (!nicksvs.no_nick_ownership)
+		sts(":%s MODE %s -e", me.name, origin);
 
-	sts(":%s MODE %s -e", me.name, origin);
 	return FALSE;
 }
 
@@ -572,6 +569,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 {
 	server_t *s;
 	user_t *u;
+	boolean_t realchange;
 
 	/* got the right number of args for an introduction? */
 	if (parc == 9)
@@ -592,7 +590,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		/* umode +e: identified to current nick */
 		/* As hyperion clears +e on nick changes, this is safe. */
 		if (!use_svslogin && strchr(parv[3], 'e'))
-			handle_burstlogin(u, parv[0]);
+			handle_burstlogin(u, NULL);
 
 		/* if the server supports SIGNON, we will get an SNICK
 		 * for this user, potentially with a login name
@@ -612,12 +610,14 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
-		/* fix up +e if necessary -- jilles */
-		if (nicksvs.me != NULL && si->su->myuser != NULL && !(si->su->myuser->flags & MU_WAITAUTH) && irccasecmp(si->su->nick, parv[0]) && !irccasecmp(parv[0], si->su->myuser->name))
-			/* changed nick to registered one, reset +e */
-			sts(":%s MODE %s +e", me.name, parv[0]);
+		realchange = irccasecmp(si->su->nick, parv[0]);
 
 		user_changenick(si->su, parv[0], atoi(parv[1]));
+
+		/* fix up +e if necessary -- jilles */
+		if (realchange && should_reg_umode(si->su))
+			/* changed nick to registered one, reset +e */
+			sts(":%s MODE %s +e", me.name, parv[0]);
 
 		handle_nickchange(si->su);
 	}

@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for shadowircd-based ircd.
  *
- * $Id: shadowircd.c 8223 2007-05-05 12:58:06Z jilles $
+ * $Id: shadowircd.c 8265 2007-05-17 23:06:48Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/shadowircd.h"
 
-DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/shadowircd", TRUE, _modinit, NULL, "$Id: shadowircd.c 8265 2007-05-17 23:06:48Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -269,16 +269,16 @@ static void shadowircd_ping_sts(void)
 /* protocol-specific stuff to do on login */
 static void shadowircd_on_login(char *origin, char *user, char *wantedhost)
 {
-	if (!me.connected)
+	user_t *u = user_find(origin);
+
+	if (!me.connected || u == NULL)
 		return;
 
 	/* Can only do this for nickserv, and can only record identified
 	 * state if logged in to correct nick, sorry -- jilles
 	 */
-	if (nicksvs.no_nick_ownership || irccasecmp(origin, user))
-		return;
-
-	sts(":%s MODE %s +e", me.name, origin);
+	if (should_reg_umode(u))
+		sts(":%s MODE %s +e", me.name, origin);
 }
 
 /* protocol-specific stuff to do on login */
@@ -287,10 +287,9 @@ static boolean_t shadowircd_on_logout(char *origin, char *user, char *wantedhost
 	if (!me.connected)
 		return FALSE;
 
-	if (nicksvs.no_nick_ownership || irccasecmp(origin, user))
-		return FALSE;
+	if (!nicksvs.no_nick_ownership)
+		sts(":%s MODE %s -e", me.name, origin);
 
-	sts(":%s MODE %s -e", me.name, origin);
 	return FALSE;
 }
 

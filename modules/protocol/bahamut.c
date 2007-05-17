@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: bahamut.c 8223 2007-05-05 12:58:06Z jilles $
+ * $Id: bahamut.c 8265 2007-05-17 23:06:48Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/bahamut.h"
 
-DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/bahamut", TRUE, _modinit, NULL, "$Id: bahamut.c 8265 2007-05-17 23:06:48Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -334,16 +334,16 @@ static void bahamut_ping_sts(void)
 /* protocol-specific stuff to do on login */
 static void bahamut_on_login(char *origin, char *user, char *wantedhost)
 {
-	if (!me.connected)
+	user_t *u = user_find(origin);
+
+	if (!me.connected || u == NULL)
 		return;
 
 	/* Can only do this for nickserv, and can only record identified
 	 * state if logged in to correct nick, sorry -- jilles
 	 */
-	if (nicksvs.no_nick_ownership || irccasecmp(origin, user))
-		return;
-
-	sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, origin, time(NULL));
+	if (should_reg_umode(u))
+		sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, origin, time(NULL));
 }
 
 /* protocol-specific stuff to do on login */
@@ -352,10 +352,8 @@ static boolean_t bahamut_on_logout(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return FALSE;
 
-	if (nicksvs.no_nick_ownership || irccasecmp(origin, user))
-		return FALSE;
-
-	sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, origin, time(NULL));
+	if (!nicksvs.no_nick_ownership)
+		sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, origin, time(NULL));
 	return FALSE;
 }
 
@@ -618,6 +616,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 	user_t *u;
 	struct in_addr ip;
 	char ipstring[64];
+	boolean_t realchange;
 
 	/* -> NICK jilles 1 1136143909 +oi ~jilles 192.168.1.5 jaguar.test 0 3232235781 :Jilles Tjoelker */
 	if (parc == 10)
@@ -651,7 +650,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		/* This is ok because this ircd clears +r on nick changes
 		 * -- jilles */
 		if (strchr(parv[3], 'r'))
-			handle_burstlogin(u, parv[0]);
+			handle_burstlogin(u, NULL);
 
 		handle_nickchange(u);
 	}
@@ -667,12 +666,14 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
-		/* fix up +r if necessary -- jilles */
-		if (nicksvs.me != NULL && si->su->myuser != NULL && !(si->su->myuser->flags & MU_WAITAUTH) && irccasecmp(si->su->nick, parv[0]) && !irccasecmp(parv[0], si->su->myuser->name))
-			/* changed nick to registered one, reset +r */
-			sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, parv[0], time(NULL));
+		realchange = irccasecmp(si->su->nick, parv[0]);
 
 		user_changenick(si->su, parv[0], atoi(parv[1]));
+
+		/* fix up +r if necessary -- jilles */
+		if (realchange && should_reg_umode(si->su))
+			/* changed nick to registered one, reset +r */
+			sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, parv[0], time(NULL));
 
 		handle_nickchange(si->su);
 	}

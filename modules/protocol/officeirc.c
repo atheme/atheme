@@ -5,7 +5,7 @@
  *
  * This file contains reverse-engineered IRCXPRO 1.2/OfficeIRC support.
  *
- * $Id: officeirc.c 8223 2007-05-05 12:58:06Z jilles $
+ * $Id: officeirc.c 8265 2007-05-17 23:06:48Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/officeirc.h"
 
-DECLARE_MODULE_V1("protocol/officeirc", TRUE, _modinit, NULL, "$Id: officeirc.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/officeirc", TRUE, _modinit, NULL, "$Id: officeirc.c 8265 2007-05-17 23:06:48Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -286,16 +286,16 @@ static void officeirc_ping_sts(void)
 /* protocol-specific stuff to do on login */
 static void officeirc_on_login(char *origin, char *user, char *wantedhost)
 {
-	if (!me.connected)
+	user_t *u = user_find(origin);
+
+	if (!me.connected || u == NULL)
 		return;
 
 	/* Can only do this for nickserv, and can only record identified
 	 * state if logged in to correct nick, sorry -- jilles
 	 */
-	if (nicksvs.no_nick_ownership || irccasecmp(origin, user))
-		return;
-
-	sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, origin, time(NULL));
+	if (should_reg_umode(u))
+		sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, origin, time(NULL));
 }
 
 /* protocol-specific stuff to do on login */
@@ -304,10 +304,8 @@ static boolean_t officeirc_on_logout(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return FALSE;
 
-	if (nicksvs.no_nick_ownership || irccasecmp(origin, user))
-		return FALSE;
-
-	sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, origin, time(NULL));
+	if (!nicksvs.no_nick_ownership)
+		sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, origin, time(NULL));
 	return FALSE;
 }
 
@@ -406,6 +404,7 @@ static void m_part(sourceinfo_t *si, int parc, char *parv[])
 static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 {
 	server_t *s;
+	boolean_t realchange;
 
 	if (parc == 8)
 	{
@@ -453,18 +452,20 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
+		realchange = irccasecmp(si->su->nick, parv[0]);
+
+		user_changenick(si->su, parv[0], atoi(parv[1]));
+
 		/* fix up +r if necessary -- jilles */
-		if (nicksvs.me != NULL && si->su->myuser != NULL && !(si->su->myuser->flags & MU_WAITAUTH) && irccasecmp(si->su->nick, parv[0]))
+		if (realchange && !nicksvs.no_nick_ownership)
 		{
-			if (!irccasecmp(parv[0], si->su->myuser->name))
+			if (should_reg_umode(si->su))
 				/* changed nick to registered one, reset +r */
 				sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, parv[0], CURRTIME);
-			else if (!irccasecmp(si->su->nick, si->su->myuser->name))
+			else
 				/* changed from registered nick, remove +r */
 				sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, parv[0], CURRTIME);
 		}
-
-		user_changenick(si->su, parv[0], atoi(parv[1]));
 
 		handle_nickchange(si->su);
 	}

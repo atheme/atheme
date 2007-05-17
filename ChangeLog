@@ -1,3 +1,15 @@
+jilles      2007/05/17 22:31:56 UTC	(20070517-8263)
+  Log:
+  Add boolean_t should_reg_umode(user_t *u), checks if
+  a user is logged in and using a nickname registered to
+  their account.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/pmodule.h (File Modified) 
+  +11 -0	trunk/src/ptasks.c (File Modified) 
+
+
 jilles      2007/05/17 22:14:41 UTC	(20070517-8261)
   Log:
   A guessed fix for the MODE/FMODE complaints.

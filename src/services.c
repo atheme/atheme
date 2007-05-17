@@ -4,7 +4,7 @@
  *
  * This file contains client interaction routines.
  *
- * $Id: services.c 8231 2007-05-06 22:31:50Z jilles $
+ * $Id: services.c 8265 2007-05-17 23:06:48Z jilles $
  */
 
 #include "atheme.h"
@@ -330,7 +330,8 @@ void handle_nickchange(user_t *u)
 	hook_call_event("nick_enforce", &hdata);
 }
 
-/* User u is bursted as being logged in to login
+/* User u is bursted as being logged in to login (if not NULL) or as
+ * being identified to their current nick (if login is NULL)
  * Update the administration or log them out on ircd
  * How to use this in protocol modules:
  * 1. if login info is bursted in a command that always occurs, call
@@ -343,11 +344,19 @@ void handle_nickchange(user_t *u)
  */
 void handle_burstlogin(user_t *u, char *login)
 {
+	mynick_t *mn;
 	myuser_t *mu;
 	node_t *n;
 
-	/* don't allow alias nicks here -- jilles */
-	mu = myuser_find(login);
+	if (login != NULL)
+		/* don't allow alias nicks here -- jilles */
+		mu = myuser_find(login);
+	else
+	{
+		mn = mynick_find(u->nick);
+		mu = mn != NULL ? mn->owner : NULL;
+		login = mu != NULL ? mu->name : u->nick;
+	}
 	if (mu == NULL)
 	{
 		/* account dropped during split...

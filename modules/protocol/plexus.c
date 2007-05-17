@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 8223 2007-05-05 12:58:06Z jilles $
+ * $Id: plexus.c 8265 2007-05-17 23:06:48Z jilles $
  */
 
 /* option: set the netadmin umode +N */
@@ -16,7 +16,7 @@
 #include "pmodule.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 8223 2007-05-05 12:58:06Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 8265 2007-05-17 23:06:48Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -290,16 +290,15 @@ static void plexus_on_login(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return;
 
+	u = user_find(origin);
+	if (u == NULL)
+		return;		/* realistically, this should never happen --nenolod */
+
 	/* Can only do this for nickserv, and can only record identified
 	 * state if logged in to correct nick, sorry -- jilles
 	 */
-	if (nicksvs.no_nick_ownership || irccasecmp(origin, user))
+	if (!should_reg_umode(u))
 		return;
-
-	u = user_find(origin);
-
-	if (u == NULL)
-		return;		/* realistically, this should never happen --nenolod */
 
 #ifdef USE_NETADMIN
 	if (has_priv(u, PRIV_ADMIN))
@@ -317,7 +316,7 @@ static boolean_t plexus_on_logout(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return FALSE;
 
-	if (nicksvs.no_nick_ownership || irccasecmp(origin, user))
+	if (nicksvs.no_nick_ownership)
 		return FALSE;
 
 	u = user_find(origin);
