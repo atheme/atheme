@@ -4,7 +4,7 @@
  *
  * Protocol tasks, such as handle_stats().
  *
- * $Id: ptasks.c 8221 2007-05-05 12:39:05Z jilles $
+ * $Id: ptasks.c 8263 2007-05-17 22:31:56Z jilles $
  */
 
 #include "atheme.h"
@@ -704,6 +704,17 @@ int floodcheck(user_t *u, user_t *t)
 	}
 
 	return 0;
+}
+
+boolean_t should_reg_umode(user_t *u)
+{
+	mynick_t *mn;
+
+	if (nicksvs.me == NULL || nicksvs.no_nick_ownership ||
+			u->myuser == NULL || u->myuser->flags & MU_WAITAUTH)
+		return FALSE;
+	mn = mynick_find(u->nick);
+	return mn != NULL && mn->owner == u->myuser;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

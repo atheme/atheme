@@ -1,3 +1,12 @@
+jilles      2007/05/17 22:14:41 UTC	(20070517-8261)
+  Log:
+  A guessed fix for the MODE/FMODE complaints.
+  
+
+  Changes:	Modified:
+  +1 -2		trunk/modules/protocol/inspircd11.c (File Modified) 
+
+
 jilles      2007/05/13 21:10:42 UTC	(20070513-8259)
   Log:
   hyperion +f check: hyperion's CHANNELLEN is 30, not 50
