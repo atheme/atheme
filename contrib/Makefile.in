@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 8157 2007-04-06 19:09:32Z nenolod $
+# $Id: Makefile.in 8267 2007-05-17 23:57:54Z jilles $
 #
 
 CC		= @CC@
@@ -43,6 +43,7 @@ SRCS = \
 	gen_httpd.c		\
 	gen_listenerdemo.c	\
 	gen_vhostonreg.c	\
+	ircd_alis.c		\
 	ircd_catserv.c		\
 	ircd_nohalfops.c	\
 	ircd_noowner.c		\
