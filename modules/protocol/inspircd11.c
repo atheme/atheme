@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 8223 2007-05-05 12:58:06Z jilles $
+ * $Id: inspircd11.c 8261 2007-05-17 22:14:41Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 8223 2007-05-05 12:58:06Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 8261 2007-05-17 22:14:41Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -102,7 +102,6 @@ static int has_protocol = 0;
 
 #define PROTOCOL_SNONOTICE 1102 /* has SNONOTICE and OPERNOTICE commands */
 #define PROTOCOL_NEWTS 1104 /* does not send "confirming" FMODEs on TS changes and uses clear/ignore semantics also for FMODE */
-#define PROTOCOL_FMODEUSER 1105 /* usefully accepts FMODE from users */
 
 /* *INDENT-ON* */
 
@@ -416,7 +415,7 @@ static void inspircd_mode_sts(char *sender, channel_t *target, char *modes)
 	if (!me.connected)
 		return;
 
-	if (has_protocol >= PROTOCOL_FMODEUSER)
+	if (has_protocol >= PROTOCOL_NEWTS)
 	{
 		/* FMODE from user is ok, use it */
 		sts(":%s FMODE %s %ld %s", sender, target->name, target->ts, modes);

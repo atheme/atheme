@@ -1,3 +1,12 @@
+jilles      2007/05/13 21:10:42 UTC	(20070513-8259)
+  Log:
+  hyperion +f check: hyperion's CHANNELLEN is 30, not 50
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/protocol/hyperion.c (File Modified) 
+
+
 jilles      2007/05/13 14:09:51 UTC	(20070513-8257)
   Log:
   chanserv recover: also clear all owner/protect statuses
