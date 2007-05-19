@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 8275 2007-05-19 05:34:42Z nenolod $
+ * $Id: main.c 8277 2007-05-19 06:30:38Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 8275 2007-05-19 05:34:42Z nenolod $",
+	"$Id: main.c 8277 2007-05-19 06:30:38Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -114,9 +114,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 		command_exec_split(si->service, si, cmd, strtok(NULL, ""), &cs_cmdtree);
 	else
 	{
-		if (strlen(cmd) > 2
-		    && (strchr(chansvs.trigger, cmd[0]) != NULL && isalpha(*++cmd)) /* !foo */
-		    || (strcasestr(cmd, chansvs.nick) != NULL) && (cmd = strtok(cmd, " ")) != NULL) /* ChanServ: foo */
+		if (strlen(cmd) > 2 && (strchr(chansvs.trigger, *cmd) != NULL && isalpha(*++cmd)))
 		{
 			/* XXX not really nice to look up the command twice
 			 * -- jilles */
@@ -134,6 +132,33 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 			}
 			/* let the command know it's called as fantasy cmd */
 			si->c = mc->chan;
+			/* fantasy commands are always verbose
+			 * (a little ugly but this way we can !set verbose)
+			 */
+			mc->flags |= MC_FORCEVERBOSE;
+			command_exec_split(si->service, si, cmd, newargs, &cs_cmdtree);
+			mc->flags &= ~MC_FORCEVERBOSE;
+		}
+		else if ((strcasestr(cmd, chansvs.nick) != NULL) && (cmd = strtok(NULL, "")) != NULL)
+		{
+			char *pcmd = cmd, *pptr;
+
+			strlcpy(newargs, parv[parc - 2], sizeof newargs);
+			if ((pptr = strchr(cmd, ' ')) != NULL)
+			{
+				*pptr = '\0';
+
+				strlcat(newargs, " ", sizeof newargs);
+				strlcat(newargs, ++pptr, sizeof newargs);
+			}
+
+			if (command_find(&cs_cmdtree, cmd) == NULL)
+				return;
+			if (floodcheck(si->su, si->service->me))
+				return;
+
+			si->c = mc->chan;
+
 			/* fantasy commands are always verbose
 			 * (a little ugly but this way we can !set verbose)
 			 */

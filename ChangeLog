@@ -1,3 +1,12 @@
+nenolod     2007/05/19 05:34:42 UTC	(20070519-8275)
+  Log:
+  - fix "ChanServ:" commands
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/main.c (File Modified) 
+
+
 nenolod     2007/05/19 05:31:46 UTC	(20070519-8273)
   Log:
   - unbreak !commands
