@@ -1,3 +1,15 @@
+jilles      2007/05/17 23:57:54 UTC	(20070517-8267)
+  Log:
+  Add alis (advanced list service) from atheme-modules,
+  fixed so it works with current atheme and has a full copy
+  of the ratbox-services copyright notice.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/contrib/Makefile.in (File Modified) 
+  +418 -0	trunk/contrib/ircd_alis.c (File Added) 
+
+
 jilles      2007/05/17 23:06:48 UTC	(20070517-8265)
   Log:
   For ircds that use a umode for registered nicks, also set

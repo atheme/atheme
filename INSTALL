@@ -1,32 +1,32 @@
-Atheme -- a set of services for IRC networks
-============================================
+atheme-services -- a set of services for IRC networks
+=====================================================
 
 This program is free but copyrighted software; see the LICENSE file for
 details.
 
-Information about Atheme may be found at http://www.atheme.net/.
+Information about Services may be found at http://www.atheme.net/.
 
 TABLE OF CONTENTS
 -----------------
   1. Installation
   2. Upgrading
   3. Setting up IRCd
-  4. Starting Atheme
-  5. Setting up crontab entry
+  4. Starting Services
+  5. Setting up a crontab entry
 
 You should also read the README and FAQ files.
 
 1. INSTALLATION
 ---------------
 
-NOTE: if you are using a third party package of Atheme, most of this section
+NOTE: if you are using a third party package of Services, most of this section
 will not apply.
 
-IMPORTANT NOTE: it is not recommended to use and install Atheme as root.
+IMPORTANT NOTE: it is not recommended to use and install services as root.
 Use an unprivileged user account.
 
-Atheme should compile and run on most POSIX compliant systems.  The list of
-platforms that Atheme has been tested on includes:
+Services should compile and run on most POSIX compliant systems.  The list of
+platforms that atheme-services has been tested on includes:
 	FreeBSD 4.[8,9,10,11]
 	FreeBSD 5.[0,1,2,3,4]
 	FreeBSD 6.[0]
@@ -44,13 +44,14 @@ platforms that Atheme has been tested on includes:
 Other BSD-based systems will probably work. Other SysV-based systems *might*
 work provided they support BSD sockets and POSIX function calls.
 
-Atheme requires a runtime linker. Systems which do not have a runtime linker
-will not be able to run Atheme. However, most systems include a runtime
-linker these days, so compilation and installation should be a breeze.
+Services requires a runtime linker. Systems which do not have a runtime linker
+will not be able to run services. However, most systems include a runtime
+linker these days.
 
-IRCd's known to be supported by Atheme are listed in the example config
-(dist/example.conf). The recommended ones are charybdis, ratbox, inspircd,
-asuka, beware ircd (bircd), nefarious and undernet-ircu (undernet).
+IRCd's known to be supported by Services are listed in the example 
+config (dist/example.conf). The recommended ones are charybdis, ratbox, 
+inspircd, asuka, beware ircd (bircd), nefarious and undernet-ircu 
+(undernet).
 
 The easy way: run the "setup" script. This does it all for you:
 	$ ./setup
@@ -62,14 +63,15 @@ The slightly less easy but more traditional way:
 Run the "configure" script:
 	$ ./configure --prefix=/path/to/install/
 
-If you're running a large network (more than 2000 users) I suggest passing the
---enable-large-net switch to configure.
+If you're running a large network (more than 2000 users), you should 
+pass the --enable-large-net switch to configure for enhanced performance.
 
 The "configure" script will run several tests, write several files, and exit.
-Once this is done you will want to compile Atheme. To do this, simply type:
+Once this is done you will want to compile services. To do this, simply 
+type:
 	$ make
 
-Atheme will compile. To install, type:
+Services will compile. To install, type:
 	$ make install
 
 The newly-compiled binary and several supporting files will be copied to the
@@ -79,7 +81,8 @@ It is recommended to keep the source directory; you will need it to
 (re)compile modules later.
 
 Next, you'll want to go to the directory you specified in "configure" and edit
-etc/atheme.conf. You'll need to change every setting or Atheme will not work.
+etc/atheme.conf. You'll need to change every setting or services will 
+not work.
 
 2. UPGRADING
 ------------
@@ -87,7 +90,7 @@ etc/atheme.conf. You'll need to change every setting or Atheme will not work.
 IMPORTANT NOTE: backup your configuration file and database!
 
 All custom modules should be recompiled as well. Loading old modules can
-cause Atheme to crash.
+cause services to crash.
 
 Sometimes upgrading requires more than recompiling and reinstalling. Be sure to
 read doc/RELEASE for important notes concerning the release. This file will
@@ -97,49 +100,54 @@ to a new format.
 3. SETTING UP IRCD
 ------------------
 
-Atheme acts as an IRC server with pseudo-clients on it. To link it to your
-network, you'll need to add some lines in your IRCd's configuration. Atheme
-connects to IRCd, not the other way around.
+Services acts as an IRC server with pseudo-clients on it. To link it to 
+your network, you'll need to add some lines in your IRCd's 
+configuration. Services connects to your IRCd, not the other way around.
 
 It is suggested that you set up your IRCd (IRC operator access, etc) before
-trying to connect Atheme. Many IRCds do not log much about server connections,
-so it is best to connect as an IRC operator and watch the server notices.
+trying to connect services. Many IRCds do not log much about server 
+connections, so it is best to connect as an IRC operator and watch the 
+server notices.
 
 As for the actual lines that need to be added, every IRCd is different. Look
 for documentation for "connect{}" or "link{}" or "C/N lines" for your IRCd. You
-need to allow Atheme to introduce other servers (e.g. "hub_mask" or "H line"),
-otherwise it will probably be disconnected when the OperServ JUPE command is
-used.
+need to allow services to introduce other servers (e.g. "hub_mask" or "H 
+line"), otherwise it will probably be disconnected when the OperServ 
+JUPE command is used.
 
 To be perfectly honest, if you can't figure this out you should be running
 neither IRCd nor services.
 
 Additionally, you need to do some configuration on all servers on the network.
-You need to reserve ("resv{}", "/resv", "Q line", etc) all nicks Atheme uses
-to avoid normal users taking those nicks and causing trouble. Also, many IRCds
-need to be configured to grant special privileges to Atheme ("service{}",
-"shared{}", "ulines{}", "U lines", etc).
+You need to reserve ("resv{}", "/resv", "Q line", etc) all nicks 
+services uses to avoid normal users taking those nicks and causing 
+trouble. Also, many IRCds need to be configured to grant special 
+privileges to services ("service{}", "shared{}", "ulines{}", "U lines", 
+etc).
 
-See doc/IRCD for more details.
+See doc/IRCD for more details concerning IRCd-specific requirements for 
+running services.
 
-4. STARTING ATHEME
-------------------
+4. STARTING SERVICES
+--------------------
 
-Go into the directory where you installed Atheme (by default, ~/atheme/).
-Type ./bin/atheme to launch Atheme.
+Go into the directory where you installed atheme-services (by default, 
+~/atheme/). Type ./bin/atheme-services to launch services.
 
-Atheme will report any errors and/or detach into the background.
+Services will report any errors and/or detach into the background.
 
-If Atheme doesn't link and/or terminates without warning check the log
+If services doesn't link and/or terminates without warning check the log
 file (var/atheme.log) to see what happened. If this tells you nothing try
-rerunning Atheme via ./bin/atheme -dn for more verbose information.
+rerunning services via ./bin/atheme-services -dn for more verbose 
+information.
 
 5. SETTING UP A CRONTAB ENTRY
 -----------------------------
 
-A crontab entry will allow you to check periodically whether Atheme is still
-running, and restart it if not. You'll need to have Atheme binaries and data
-installed in the same directory for this to work without modification.
+A crontab entry will allow you to check periodically whether services is 
+still running, and restart it if not. You'll need to have atheme-services 
+binaries and data installed in the same directory for this to work 
+without modification.
 
 First rename the dist/atheme.chk script that is in Atheme path (by default, 
 ~/atheme/) and edit it. You'll need to modify the "cd" part of the file.

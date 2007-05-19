@@ -1,15 +1,15 @@
-Atheme -- a set of services for IRC networks
-============================================
+atheme-services -- a set of services for IRC networks
+=====================================================
 
 This program is free but copyrighted software; see the LICENSE file for
 details.
 
-Information about Atheme may be found at http://www.atheme.net/.
+Information about atheme-services may be found at http://www.atheme.net/.
 
 TABLE OF CONTENTS
 -----------------
   1. Credits
-  2. Presentation, and what Atheme is not
+  2. Presentation, and what atheme-services is not
   3. Installation
   4. Command line options
   5. Getting support
@@ -18,35 +18,35 @@ TABLE OF CONTENTS
 1. CREDITS
 ----------
 
-Atheme was originally based on Shrike, however, this has almost all been
-rewritten now. Atheme has also borrowed some code from Sentinel and
-ircd-ratbox.
+atheme-services was originally based on Shrike, however, this has almost 
+all been rewritten now. We have also borrowed some code from Sentinel 
+and ircd-ratbox.
 
 Information about Shrike can be found at http://shrike.malkier.net/.
 Information about Sentinel can be found at http://ircd.botbay.net/sentinel/.
 Information about ircd-ratbox can be found at http://www.ircd-ratbox.org/.
 
-2. PRESENTATION AND WHAT ATHEME IS NOT
---------------------------------------
+2. PRESENTATION AND WHAT ATHEME-SERVICES IS NOT
+-----------------------------------------------
 
-Atheme is a set of Services for IRC networks that allows users to
+atheme-services is a set of Services for IRC networks that allows users to
 manage their channels in a secure and efficient way and allows operators to
 manage various things about their networks. Unlike it's predecessor, Shrike,
-Atheme has a completely reworked form of channel management that feels somewhat
-like eggdrop and is somewhat more useful.
+services has a completely reworked form of channel management that feels 
+somewhat like eggdrop and is somewhat more useful.
 
-Atheme currently works with many irc daemons. More details are available
-in the config file.
+Services currently works with many irc daemons. More details are 
+available in the config file.
 
-Internally, Atheme shares more similarities with ircd than it does with 
-IRCServices. Anope/Epona, Cygnus, OperStats, Hybserv, Theia, etc are all 
-based on IRCServices and as such have very old legacy code that none of 
-the authors, except Church truly understand. Atheme was written 
+Internally, atheme-services shares more similarities with ircd than it 
+does with IRCServices. Anope/Epona, Cygnus, OperStats, Hybserv, Theia, etc
+are all based on IRCServices and as such have very old legacy code that 
+none of the authors, except Church truly understand. Atheme was written 
 completely from scratch with the more complex concepts taken from 
 various modern ircd packages, including ircu, ircd-ratbox, hybrid and 
 bahamut.
 
-Atheme is not a drop-in replacement for Anope or Andy Church's IRC 
+atheme-services is not a drop-in replacement for Anope or Andy Church's IRC 
 Services. It is designed with an entirely different set of goals and as 
 such should not be migrated to with the expectation that it will behave 
 exactly like what was previously implemented. Atheme is designed to act 
@@ -61,10 +61,11 @@ See the INSTALL file.
 4. COMMAND LINE OPTIONS
 -----------------------
 
-Normally, Atheme can be run simply by invoking the "atheme" executable.  Atheme
-will then use the defaults specified in the configuraiton file and connect
-to the specified uplink server. Alternatively, any of the following
-command-line options can be specified to change the default behavior:
+Normally, services can be run simply by invoking the "atheme-services" 
+executable.  Services will then use the defaults specified in the 
+configuraiton file and connect to the specified uplink server. 
+Alternatively, any of the following command-line options can be 
+specified to change the default behavior:
 
   -c </path/to/file> - specify the configuration file
   -d                 - start in debugging mode
@@ -72,16 +73,17 @@ command-line options can be specified to change the default behavior:
   -n                 - do not fork into the background
   -v                 - print the version information and exit
 
-Atheme also handles the following signals:
+Services also handles the following signals:
   HUP  - force a REHASH
   INT  - force a RESTART
   TERM - force a SHUTDOWN
 
-Upon starting, Atheme will parse its command-line arguments, open its log file,
-parse its configuration file, load its database, connect to the uplink,
-and (assuming -n is not specified) detach into the background.  If Atheme
-encounters an error while parsing the configuration or database files it will
-terminate immediately. Otherwise, it will run until killed or otherwise stopped.
+Upon starting, atheme-services will parse its command-line arguments, 
+open its log file, parse its configuration file, load its database, 
+connect to the uplink, and (assuming -n is not specified) detach into 
+the background.  If services encounters an error while parsing the 
+configuration or database files it will terminate immediately. 
+Otherwise, it will run until killed or otherwise stopped.
 
 5. GETTING SUPPORT
 ------------------
@@ -93,8 +95,8 @@ To access this channel, connect to irc.atheme.org, and join #atheme.
 6. REPORTING BUGS
 -----------------
 
-If you find a bug in Atheme, you must report it via the bugtracker; our
-developers have a tendency to forget things. Your bug is not actually a
-bug until it's reported.
+If you find a bug in services, you must report it via the bugtracker; 
+our developers have a tendency to forget things. Your bug is not 
+actually a bug until it's reported.
 
 Report bugs at http://bugs-meta.atheme.org/.
