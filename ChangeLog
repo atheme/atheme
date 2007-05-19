@@ -1,3 +1,13 @@
+nenolod     2007/05/19 00:32:20 UTC	(20070519-8269)
+  Log:
+  - these were outdated like whoa
+  
+
+  Changes:	Modified:
+  +52 -44	trunk/INSTALL (File Modified) 
+  +34 -32	trunk/README (File Modified) 
+
+
 jilles      2007/05/17 23:57:54 UTC	(20070517-8267)
   Log:
   Add alis (advanced list service) from atheme-modules,
