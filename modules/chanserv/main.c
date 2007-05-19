@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 8271 2007-05-19 05:16:25Z nenolod $
+ * $Id: main.c 8273 2007-05-19 05:31:46Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 8271 2007-05-19 05:16:25Z nenolod $",
+	"$Id: main.c 8273 2007-05-19 05:31:46Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -138,7 +138,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 			 * (a little ugly but this way we can !set verbose)
 			 */
 			mc->flags |= MC_FORCEVERBOSE;
-			command_exec_split(si->service, si, cmd + 1, newargs, &cs_cmdtree);
+			command_exec_split(si->service, si, cmd, newargs, &cs_cmdtree);
 			mc->flags &= ~MC_FORCEVERBOSE;
 		}
 	}
