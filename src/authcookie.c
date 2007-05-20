@@ -4,7 +4,7 @@
  *
  * Remote authentication cookie handling. (think kerberos.)
  *
- * $Id: authcookie.c 8283 2007-05-20 07:44:08Z nenolod $
+ * $Id: authcookie.c 8293 2007-05-20 08:20:35Z nenolod $
  */
 
 #include "atheme.h"
@@ -66,7 +66,7 @@ authcookie_t *authcookie_find(char *ticket, myuser_t *myuser)
 	authcookie_t *ac;
 
 	/* at least one must be specified */
-	return_val_if_fail(ticket != NULL || myuser != NULL);
+	return_val_if_fail(ticket != NULL || myuser != NULL, NULL);
 
 	if (!myuser)		/* must have ticket */
 	{

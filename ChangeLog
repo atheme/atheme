@@ -1,3 +1,12 @@
+nenolod     2007/05/20 08:16:25 UTC	(20070520-8291)
+  Log:
+  - configure cleanups, we don't support HP-UX and never have
+  
+
+  Changes:	Modified:
+  +4 -18	trunk/configure.ac (File Modified) 
+
+
 nenolod     2007/05/20 08:10:53 UTC	(20070520-8289)
   Log:
   - back out -Wl,-rpath stuff for now.
