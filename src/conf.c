@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 8123 2007-04-06 00:58:34Z jilles $
+ * $Id: conf.c 8295 2007-05-20 08:31:47Z nenolod $
  */
 
 #include "atheme.h"
@@ -193,6 +193,21 @@ list_t conf_gs_table;
 
 /* *INDENT-ON* */
 
+static void conf_report_error(CONFIGENTRY *ce, const char *fmt, ...)
+{
+	va_list va;
+	char buf[BUFSIZE];
+
+	return_if_fail(ce != NULL);
+	return_if_fail(fmt != NULL);
+
+	va_start(va, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, va);
+	va_end(va);
+
+	slog(LG_INFO, "%s:%d: configuration error - %s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, buf);
+}
+
 static void conf_process(CONFIGFILE *cfp)
 {
 	CONFIGFILE *cfptr;
@@ -214,8 +229,9 @@ static void conf_process(CONFIGFILE *cfp)
 					break;
 				}
 			}
-			if (!ct)
-				slog(LG_INFO, "%s:%d: invalid configuration option: %s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
+
+			if (ct == NULL)
+				conf_report_error(ce, "invalid configuration option: %s", ce->ce_varname);
 		}
 	}
 }
@@ -331,8 +347,9 @@ int subblock_handler(CONFIGENTRY *ce, list_t *entries)
 				break;
 			}
 		}
-		if (!ct)
-			slog(LG_INFO, "%s:%d: invalid configuration option: %s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
+
+		if (ct == NULL)
+			conf_report_error(ce, "invalid configuration option: %s", ce->ce_varname);
 	}
 	return 0;
 }
