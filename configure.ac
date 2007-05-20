@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 8289 2007-05-20 08:10:53Z nenolod $
+dnl $Id: configure.ac 8291 2007-05-20 08:16:25Z nenolod $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.59)
 AC_INIT(atheme, 2.2, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 8289 2007-05-20 08:10:53Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 8291 2007-05-20 08:16:25Z nenolod $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -211,32 +211,18 @@ shared_modules="yes"
 dnl Second stage: check for functions and headers.
 if test "$shared_modules" = yes; then
 	AC_CHECK_HEADERS(dlfcn.h)
-	AC_SEARCH_LIBS(shl_load, dld, 
+        AC_SEARCH_LIBS(dlopen, [dl c_r],
 	[
-	  AC_DEFINE(HAVE_SHL_LOAD, 1, [Define if the shl_load function is available.])
-	  SUFFIX=".sl"
-	  MOD_TARGET=hpux_shared
-	  SEDOBJ="s/\.o/.sl/g"  
-	],
-	dnl !shl_load:
-	[
-          dnl standard dlopen
-          AC_SEARCH_LIBS(dlopen, [dl c_r],
-	  [
 	    AC_DEFINE(HAVE_DLOPEN, 1, [Define if the dlopen function is available.])
-	    SUFFIX=".so"
-	    MOD_TARGET=shared_modules
-	    SEDOBJ="s/\.o/.so/g"
 	    AC_CHECK_FUNC(dlsym, ,
 	    [
 	      AC_ERROR([shared modules unavailable, Atheme will not work on your system])
 	    ])
 	    AC_CHECK_FUNCS(dlfunc)
 	    AC_CHECK_FUNCS(dlinfo)
-	  ],
-	  [
+	],
+	[
 	    AC_ERROR([shared modules unavailable, Atheme will not work on your system])
-	  ])
 	])
 fi
 
@@ -378,7 +364,7 @@ int main(int argc, char *argv[[]]) {
 }
 void _modinit(void) { return; }
 EOF
-		$CC $CPPFLAGS $IRC_CFLAGS -o conftest conftest.c $nlist_lib >/dev/null 2>&1
+		$CC $CPPFLAGS $CFLAGS -o conftest conftest.c $nlist_lib >/dev/null 2>&1
 		symbol_underscores=`./conftest conftest`
 		AC_MSG_RESULT($symbol_underscores)
 		$RM -f conftest conftest.c
