@@ -1,3 +1,12 @@
+nenolod     2007/05/20 07:50:24 UTC	(20070520-8285)
+  Log:
+  - generic_numeric_sts(): implement function from stub, will work for non-UID irc servers
+  
+
+  Changes:	Modified:
+  +8 -1		trunk/src/phandler.c (File Modified) 
+
+
 nenolod     2007/05/20 07:44:08 UTC	(20070520-8283)
   Log:
   - convert checks into assertions like in r8279.

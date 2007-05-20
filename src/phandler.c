@@ -4,7 +4,7 @@
  *
  * Generic protocol event handlers.
  *
- * $Id: phandler.c 8285 2007-05-20 07:50:24Z nenolod $
+ * $Id: phandler.c 8287 2007-05-20 07:52:31Z nenolod $
  */
 
 #include "atheme.h"
@@ -191,7 +191,7 @@ void generic_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
 		skill(source->nick, u->nick, "Nickname enforcement (%s)", u->nick);
 }
 
-E void generic_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account)
+void generic_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account)
 {
 	/* nothing to do here. */	
 }
