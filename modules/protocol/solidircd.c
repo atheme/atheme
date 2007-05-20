@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for solidircd.
  *
- * $Id: solidircd.c 8265 2007-05-17 23:06:48Z jilles $
+ * $Id: solidircd.c 8301 2007-05-20 13:22:15Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/solidircd.h"
 
-DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 8265 2007-05-17 23:06:48Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/solidircd", TRUE, _modinit, NULL, "$Id: solidircd.c 8301 2007-05-20 13:22:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -873,6 +873,24 @@ static void m_svhost(sourceinfo_t *si, int parc, char *parv[])
 	strlcpy(u->vhost, parv[1], HOSTLEN);
 }
 
+static void nick_group(hook_user_req_t *hdata)
+{
+	user_t *u;
+
+	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
+	if (u != NULL && should_reg_umode(u))
+		sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, u->nick, time(NULL));
+}
+
+static void nick_ungroup(hook_user_req_t *hdata)
+{
+	user_t *u;
+
+	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
+	if (u != NULL && !nicksvs.no_nick_ownership)
+		sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, u->nick, time(NULL));
+}
+
 void _modinit(module_t * m)
 {
 	/* Symbol relocation voodoo. */
@@ -938,6 +956,11 @@ void _modinit(module_t * m)
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
 	pcommand_add("BURST", m_burst, 0, MSRC_SERVER);
 	pcommand_add("SVHOST", m_svhost, 2, MSRC_USER | MSRC_SERVER);
+
+	hook_add_event("nick_group");
+	hook_add_hook("nick_group", (void (*)(void *))nick_group);
+	hook_add_event("nick_ungroup");
+	hook_add_hook("nick_ungroup", (void (*)(void *))nick_ungroup);
 
 	m->mflags = MODTYPE_CORE;
 

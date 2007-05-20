@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for plexus-based ircd.
  *
- * $Id: plexus.c 8265 2007-05-17 23:06:48Z jilles $
+ * $Id: plexus.c 8301 2007-05-20 13:22:15Z jilles $
  */
 
 /* option: set the netadmin umode +N */
@@ -16,7 +16,7 @@
 #include "pmodule.h"
 #include "protocol/plexus.h"
 
-DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 8265 2007-05-17 23:06:48Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/plexus", TRUE, _modinit, NULL, "$Id: plexus.c 8301 2007-05-20 13:22:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -707,6 +707,24 @@ static void m_motd(sourceinfo_t *si, int parc, char *parv[])
 	handle_motd(si->su);
 }
 
+static void nick_group(hook_user_req_t *hdata)
+{
+	user_t *u;
+
+	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
+	if (u != NULL && should_reg_umode(u))
+		sts(":%s ENCAP * SVSMODE %s %ld +rd %ld", nicksvs.nick, u->nick, (unsigned long)u->ts, CURRTIME);
+}
+
+static void nick_ungroup(hook_user_req_t *hdata)
+{
+	user_t *u;
+
+	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
+	if (u != NULL && !nicksvs.no_nick_ownership)
+		sts(":%s ENCAP * SVSMODE %s %ld -r", nicksvs.nick, u->nick, (unsigned long)u->ts);
+}
+
 void _modinit(module_t * m)
 {
 	/* Symbol relocation voodoo. */
@@ -769,6 +787,11 @@ void _modinit(module_t * m)
 	pcommand_add("CAPAB", m_capab, 1, MSRC_UNREG);
 	pcommand_add("ENCAP", m_encap, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("MOTD", m_motd, 1, MSRC_USER);
+
+	hook_add_event("nick_group");
+	hook_add_hook("nick_group", (void (*)(void *))nick_group);
+	hook_add_event("nick_ungroup");
+	hook_add_hook("nick_ungroup", (void (*)(void *))nick_ungroup);
 
 	m->mflags = MODTYPE_CORE;
 

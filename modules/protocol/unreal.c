@@ -5,7 +5,7 @@
  *
  * This file contains protocol support for bahamut-based ircd.
  *
- * $Id: unreal.c 8265 2007-05-17 23:06:48Z jilles $
+ * $Id: unreal.c 8301 2007-05-20 13:22:15Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 #include "pmodule.h"
 #include "protocol/unreal.h"
 
-DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 8265 2007-05-17 23:06:48Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/unreal", TRUE, _modinit, NULL, "$Id: unreal.c 8301 2007-05-20 13:22:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -820,6 +820,24 @@ static void m_motd(sourceinfo_t *si, int parc, char *parv[])
 	handle_motd(si->su);
 }
 
+static void nick_group(hook_user_req_t *hdata)
+{
+	user_t *u;
+
+	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
+	if (u != NULL && should_reg_umode(u))
+		sts(":%s SVS2MODE %s +rd %ld", nicksvs.nick, u->nick, u->ts);
+}
+
+static void nick_ungroup(hook_user_req_t *hdata)
+{
+	user_t *u;
+
+	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
+	if (u != NULL && !nicksvs.no_nick_ownership)
+		sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, u->nick);
+}
+
 void _modinit(module_t * m)
 {
 	/* Symbol relocation voodoo. */
@@ -921,6 +939,11 @@ void _modinit(module_t * m)
 	pcommand_add(")", m_topic, 4, MSRC_USER | MSRC_SERVER);
 	pcommand_add("AL", m_chghost, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("F", m_motd, 1, MSRC_USER);
+
+	hook_add_event("nick_group");
+	hook_add_hook("nick_group", (void (*)(void *))nick_group);
+	hook_add_event("nick_ungroup");
+	hook_add_hook("nick_ungroup", (void (*)(void *))nick_ungroup);
 
 	m->mflags = MODTYPE_CORE;
 
