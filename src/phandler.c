@@ -4,7 +4,7 @@
  *
  * Generic protocol event handlers.
  *
- * $Id: phandler.c 8165 2007-04-07 14:49:05Z jilles $
+ * $Id: phandler.c 8285 2007-05-20 07:50:24Z nenolod $
  */
 
 #include "atheme.h"
@@ -114,7 +114,14 @@ void generic_wallchops(user_t *sender, channel_t *channel, const char *message)
 
 void generic_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
 {
-	/* cant do anything here. bail. */
+	va_list va;
+	char buf[BUFSIZE];
+
+	va_start(va, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, va);
+	va_end(va);
+
+	sts(":%s %d %s %s", from, numeric, target, buf);
 }
 
 void generic_skill(char *from, char *nick, char *fmt, ...)

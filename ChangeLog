@@ -1,3 +1,12 @@
+nenolod     2007/05/20 07:44:08 UTC	(20070520-8283)
+  Log:
+  - convert checks into assertions like in r8279.
+  
+
+  Changes:	Modified:
+  +4 -3		trunk/src/authcookie.c (File Modified) 
+
+
 nenolod     2007/05/20 07:40:43 UTC	(20070520-8281)
   Log:
   - if (!cptr) return -> return_if_fail(cptr != NULL). sendq/recvq 
