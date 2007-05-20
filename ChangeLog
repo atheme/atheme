@@ -1,3 +1,12 @@
+nenolod     2007/05/20 06:47:41 UTC	(20070520-8279)
+  Log:
+  - fix grammatical error in temporary registration text
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/nickserv/register.c (File Modified) 
+
+
 nenolod     2007/05/19 06:30:38 UTC	(20070519-8277)
   Log:
   - ok, really make this chanserv: stuff work

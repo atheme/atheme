@@ -4,7 +4,7 @@
  *
  * Datastream stuff.
  *
- * $Id: datastream.c 8109 2007-04-05 16:28:02Z jilles $
+ * $Id: datastream.c 8281 2007-05-20 07:40:43Z nenolod $
  */
 
 #include "atheme.h"
@@ -26,8 +26,8 @@ void sendq_add(connection_t * cptr, char *buf, int len)
 	int l;
 	int pos = 0;
 
-	if (!cptr)
-		return;
+	return_if_fail(cptr != NULL);
+
 	if (cptr->flags & (CF_DEAD | CF_SEND_EOF))
 	{
 		slog(LG_DEBUG, "sendq_add(): attempted to send to fd %d which is already dead", cptr->fd);
@@ -64,8 +64,8 @@ void sendq_add(connection_t * cptr, char *buf, int len)
 
 void sendq_add_eof(connection_t * cptr)
 {
-	if (!cptr)
-		return;
+	return_if_fail(cptr != NULL);
+
 	if (cptr->flags & (CF_DEAD | CF_SEND_EOF))
 	{
 		slog(LG_DEBUG, "sendq_add(): attempted to send to fd %d which is already dead", cptr->fd);
@@ -80,8 +80,7 @@ void sendq_flush(connection_t * cptr)
         struct sendq *sq;
         int l;
 
-	if (!cptr)
-		return;
+	return_if_fail(cptr != NULL);
 
         LIST_FOREACH_SAFE(n, tn, cptr->sendq.head)
         {
@@ -166,8 +165,8 @@ void recvq_put(connection_t *cptr)
 	struct sendq *sq = NULL;
 	int l, ll;
 
-	if (!cptr)
-		return;
+	return_if_fail(cptr != NULL);
+
 	if (cptr->flags & (CF_DEAD | CF_SEND_DEAD))
 	{
 		/* If CF_SEND_DEAD:
@@ -232,8 +231,7 @@ int recvq_get(connection_t *cptr, char *buf, int len)
 	int l;
 	char *p = buf;
 
-	if (!cptr)
-		return 0;
+	return_if_fail(cptr != NULL);
 
 	LIST_FOREACH_SAFE(n, tn, cptr->recvq.head)
 	{
@@ -275,8 +273,7 @@ int recvq_getline(connection_t *cptr, char *buf, int len)
 	char *p = buf;
 	char *newline = NULL;
 
-	if (!cptr)
-		return 0;
+	return_if_fail(cptr != NULL);
 
 	LIST_FOREACH(n, cptr->recvq.head)
 	{
