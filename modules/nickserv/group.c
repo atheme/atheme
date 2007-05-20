@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ GROUP command.
  *
- * $Id: group.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: group.c 8299 2007-05-20 12:43:02Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/group", FALSE, _modinit, _moddeinit,
-	"$Id: group.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: group.c 8299 2007-05-20 12:43:02Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -52,6 +52,7 @@ void _moddeinit()
 static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 {
 	mynick_t *mn;
+	hook_user_req_t hdata;
 
 	if (si->su == NULL)
 	{
@@ -99,12 +100,17 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 	mn->registered = CURRTIME;
 	mn->lastseen = CURRTIME;
 	command_success_nodata(si, _("Nick \2%s\2 is now registered to your account."), mn->nick);
+	hdata.si = si;
+	hdata.mu = si->smu;
+	hdata.mn = mn;
+	hook_call_event("nick_group", &hdata);
 }
 
 static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[])
 {
 	mynick_t *mn;
 	char *target;
+	hook_user_req_t hdata;
 
 	if (si->smu == NULL)
 	{
@@ -138,6 +144,10 @@ static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[])
 
 	logcommand(si, CMDLOG_REGISTER, "UNGROUP %s", mn->nick);
 	snoop("UNGROUP: \2%s\2 by \2%s\2", target, get_source_name(si));
+	hdata.si = si;
+	hdata.mu = si->smu;
+	hdata.mn = mn;
+	hook_call_event("nick_ungroup", &hdata);
 	command_success_nodata(si, _("Nick \2%s\2 has been removed from your account."), mn->nick);
 	object_unref(mn);
 }
@@ -146,6 +156,7 @@ static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[])
 {
 	mynick_t *mn;
 	myuser_t *mu;
+	hook_user_req_t hdata;
 
 	if (parc < 1)
 	{
@@ -172,6 +183,10 @@ static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[])
 			get_oper_name(si), mn->nick, mu->name);
 	snoop("FUNGROUP: \2%s\2 from \2%s\2 by \2%s\2",
 			mn->nick, mu->name, get_source_name(si));
+	hdata.si = si;
+	hdata.mu = mu;
+	hdata.mn = mn;
+	hook_call_event("nick_ungroup", &hdata);
 	command_success_nodata(si, _("Nick \2%s\2 has been removed from account \2%s\2."), mn->nick, mu->name);
 	object_unref(mn);
 }
