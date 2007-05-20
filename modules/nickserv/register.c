@@ -4,7 +4,7 @@
  *
  * This file contains code for the NickServ REGISTER function.
  *
- * $Id: register.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: register.c 8279 2007-05-20 06:47:41Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/register", FALSE, _modinit, _moddeinit,
-	"$Id: register.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: register.c 8279 2007-05-20 06:47:41Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -182,7 +182,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		command_success_nodata(si, _("An email containing nickname activation instructions has been sent to \2%s\2."), mu->email);
-		command_success_nodata(si, _("If you do not complete registration within one day your nickname will expire."));
+		command_success_nodata(si, _("If you do not complete registration within one day, your nickname will expire."));
 
 		free(key);
 	}
