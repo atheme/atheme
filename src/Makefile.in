@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 8213 2007-05-03 00:57:30Z nenolod $
+# $Id: Makefile.in 8289 2007-05-20 08:10:53Z nenolod $
 #
 
 CC		= @CC@
@@ -34,7 +34,7 @@ VERSION		= @PACKAGE_VERSION@
 
 LIBS		= @LIBS@
 LDFLAGS		= @LDFLAGS@ @LTLIBINTL@
-RPATH		= @RPATH@
+#RPATH		= @RPATH@
 CPPFLAGS	= @CPPFLAGS@
 SOCKET_ENGINE   = @SOCKET_ENGINE@.c
 
@@ -106,7 +106,7 @@ all: atheme-services ../dist/example.userserv.conf
 build: all
 
 atheme-services: $(OBJS)
-	${CC} ${CFLAGS} ${LDFLAGS} ${RPATH} -o $@ ${OBJS} ${LIBS}
+	${CC} ${CFLAGS} ${LDFLAGS} -o $@ ${OBJS} ${LIBS}
 	$(MV) version.c version.c.last
 
 ../dist/example.userserv.conf: ../dist/example.conf

@@ -1,3 +1,12 @@
+nenolod     2007/05/20 07:52:31 UTC	(20070520-8287)
+  Log:
+  - one of the stubs was marked extern... how the hell does that work?
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/phandler.c (File Modified) 
+
+
 nenolod     2007/05/20 07:50:24 UTC	(20070520-8285)
   Log:
   - generic_numeric_sts(): implement function from stub, will work for non-UID irc servers

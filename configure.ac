@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 8215 2007-05-04 09:26:32Z nenolod $
+dnl $Id: configure.ac 8289 2007-05-20 08:10:53Z nenolod $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.59)
 AC_INIT(atheme, 2.2, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 8215 2007-05-04 09:26:32Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 8289 2007-05-20 08:10:53Z nenolod $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -459,17 +459,18 @@ ac_save_CFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS} -DPREFIX=\\\"\${prefix}\\\" -
 CFLAGS=${ac_save_CFLAGS}
 dnl export CFLAGS
 
-disable_rpath="no"
-AC_ARG_ENABLE(rpath,
-AC_HELP_STRING([--disable-rpath],[Disable use of -Wl,-rpath= during linking.]),
-[disable_rpath="no"], [disable_rpath="yes"])
+dnl This is for Atheme 2.3.
+dnl disable_rpath="no"
+dnl AC_ARG_ENABLE(rpath,
+dnl AC_HELP_STRING([--disable-rpath],[Disable use of -Wl,-rpath= during linking.]),
+dnl [disable_rpath="no"], [disable_rpath="yes"])
 
-RPATH=""
-if test "x$disable_rpath" = "xno"; then
-	RPATH="-Wl,-rpath,${libdir}"
-fi
+dnl RPATH=""
+dnl if test "x$disable_rpath" = "xno"; then
+dnl    RPATH="-Wl,-rpath,${libdir}"
+dnl fi
 
-AC_SUBST(RPATH)
+dnl AC_SUBST(RPATH)
 
 echo " "
 echo "Makefile generation"
