@@ -1,4 +1,4 @@
-/* $$Id: .indent.pro 4293 2005-12-29 02:57:23Z jilles $ */
+/* $$Id: .indent.pro 8297 2007-05-20 08:56:59Z nenolod $ */
 
 /* copy this file to the source dir then run indent file.c */
 
@@ -40,8 +40,8 @@
 -T myuser_t
 -T mychan_t
 -T chanacs_t
--T CONFIGENTRY
--T CONFIGFILE
+-T config_entry_t
+-T config_file_t
 -T Block
 -T MemBlock
 -T BlockHeap

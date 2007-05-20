@@ -1,3 +1,13 @@
+nenolod     2007/05/20 08:31:47 UTC	(20070520-8295)
+  Log:
+  - add static conf_report_error() function.
+  - convert some slog() calls to use that instead.
+  
+
+  Changes:	Modified:
+  +21 -4	trunk/src/conf.c (File Modified) 
+
+
 nenolod     2007/05/20 08:20:35 UTC	(20070520-8293)
   Log:
   - return_val_if_fail() wants a value to return, i forgot to provide it with one

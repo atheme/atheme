@@ -4,7 +4,7 @@
  *
  * New xmlrpc implementation
  *
- * $Id: main.c 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: main.c 8297 2007-05-20 08:56:59Z nenolod $
  */
 
 #include "atheme.h"
@@ -15,7 +15,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 7779 2007-03-03 13:55:42Z pippijn $",
+	"$Id: main.c 8297 2007-05-20 08:56:59Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -40,7 +40,7 @@ struct xmlrpc_configuration
 	int port;
 } xmlrpc_config;
 
-static int conf_xmlrpc_host(CONFIGENTRY *ce)
+static int conf_xmlrpc_host(config_entry_t *ce)
 {
 	if (!ce->ce_vardata)
 		return -1;
@@ -50,7 +50,7 @@ static int conf_xmlrpc_host(CONFIGENTRY *ce)
 	return 0;
 }
 
-static int conf_xmlrpc_port(CONFIGENTRY *ce)
+static int conf_xmlrpc_port(config_entry_t *ce)
 {
 	if (!ce->ce_vardata)
 		return -1;
@@ -60,7 +60,7 @@ static int conf_xmlrpc_port(CONFIGENTRY *ce)
 	return 0;
 }
 
-static int conf_xmlrpc(CONFIGENTRY *ce)
+static int conf_xmlrpc(config_entry_t *ce)
 {
 	subblock_handler(ce, &conf_xmlrpc_table);
 	return 0;

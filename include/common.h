@@ -4,7 +4,7 @@
  *
  * Defines needed by multiple header files.
  *
- * $Id: common.h 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: common.h 8297 2007-05-20 08:56:59Z nenolod $
  */
 
 #ifndef COMMON_H
@@ -90,8 +90,8 @@ typedef struct service_ service_t;
 
 typedef struct sourceinfo_ sourceinfo_t;
 
-typedef struct _configfile CONFIGFILE;
-typedef struct _configentry CONFIGENTRY;
+typedef struct _configfile config_file_t;
+typedef struct _configentry config_entry_t;
 
 /* fault codes */
 enum faultcode_

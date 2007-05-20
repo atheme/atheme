@@ -4,7 +4,7 @@
  *
  * Data structures for flags to bitmask processing routines.
  *
- * $Id: confparse.h 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: confparse.h 8297 2007-05-20 08:56:59Z nenolod $
  */
 
 #ifndef CONFPARSE_H
@@ -13,13 +13,13 @@
 struct _configfile
 {
 	char *cf_filename;
-	CONFIGENTRY *cf_entries;
-	CONFIGFILE *cf_next;
+	config_entry_t *cf_entries;
+	config_file_t *cf_next;
 };
 
 struct _configentry
 {
-	CONFIGFILE    *ce_fileptr;
+	config_file_t    *ce_fileptr;
 
 	int ce_varlinenum;
 	char *ce_varname;
@@ -29,11 +29,11 @@ struct _configentry
 	int ce_fileposend;
 
 	int ce_sectlinenum;
-	CONFIGENTRY *ce_entries;
+	config_entry_t *ce_entries;
 
-	CONFIGENTRY *ce_prevlevel;
+	config_entry_t *ce_prevlevel;
 
-	CONFIGENTRY *ce_next;
+	config_entry_t *ce_next;
 };
 
 struct Token
@@ -46,7 +46,7 @@ struct ConfTable
 {
         char *name;
         int rehashable;
-        int (*handler) (CONFIGENTRY *);
+        int (*handler) (config_entry_t *);
 	char *str_val;
 	int *int_val;
 };
@@ -54,11 +54,11 @@ struct ConfTable
 extern void init_newconf(void);
 extern struct ConfTable *find_top_conf(char *name);
 extern struct ConfTable *find_conf_item(char *name, list_t *conflist);
-extern void add_top_conf(char *name, int (*handler)(CONFIGENTRY *ce));
-extern void add_conf_item(char *name, list_t *conflist, int (*handler)(CONFIGENTRY *ce));
+extern void add_top_conf(char *name, int (*handler)(config_entry_t *ce));
+extern void add_conf_item(char *name, list_t *conflist, int (*handler)(config_entry_t *ce));
 extern void del_top_conf(char *name);
 extern void del_conf_item(char *name, list_t *conflist);
-extern int subblock_handler(CONFIGENTRY *ce, list_t *entries);
+extern int subblock_handler(config_entry_t *ce, list_t *entries);
 
 extern int token_to_value(struct Token token_table[], char *token);
 /* special return values for token_to_value */

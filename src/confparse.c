@@ -6,14 +6,14 @@
  * This file contains config file parsing routines.
  * This code was taken from Sentinel: copyright W. Campbell.
  *
- * $Id: confparse.c 7839 2007-03-06 00:09:30Z pippijn $
+ * $Id: confparse.c 8297 2007-05-20 08:56:59Z nenolod $
  */
 
 #include "atheme.h"
 
 static void config_error(char *format, ...);
-static CONFIGFILE *config_parse(char *filename, char *confdata);
-static void config_entry_free(CONFIGENTRY *ceptr);
+static config_file_t *config_parse(char *filename, char *confdata);
+static void config_entry_free(config_entry_t *ceptr);
 
 static void config_error(char *format, ...)
 {
@@ -29,20 +29,20 @@ static void config_error(char *format, ...)
 	slog(LG_ERROR, "config_parse(): %s", buffer);
 }
 
-static CONFIGFILE *config_parse(char *filename, char *confdata)
+static config_file_t *config_parse(char *filename, char *confdata)
 {
 	char *ptr;
 	char *start;
 	int linenumber = 1;
-	CONFIGENTRY *curce;
-	CONFIGENTRY **lastce;
-	CONFIGENTRY *cursection;
+	config_entry_t *curce;
+	config_entry_t **lastce;
+	config_entry_t *cursection;
 
-	CONFIGFILE *curcf;
-	CONFIGFILE *lastcf;
+	config_file_t *curcf;
+	config_file_t *lastcf;
 
-	lastcf = curcf = (CONFIGFILE *)smalloc(sizeof(CONFIGFILE));
-	memset(curcf, 0, sizeof(CONFIGFILE));
+	lastcf = curcf = (config_file_t *)smalloc(sizeof(config_file_t));
+	memset(curcf, 0, sizeof(config_file_t));
 	curcf->cf_filename = sstrdup(filename);
 	lastce = &(curcf->cf_entries);
 	curce = NULL;
@@ -71,7 +71,7 @@ static CONFIGFILE *config_parse(char *filename, char *confdata)
 			  }
 			  if (!strcmp(curce->ce_varname, "include"))
 			  {
-				  CONFIGFILE *cfptr;
+				  config_file_t *cfptr;
 
 				  if (!curce->ce_vardata)
 				  {
@@ -211,8 +211,8 @@ static CONFIGFILE *config_parse(char *filename, char *confdata)
 			  }
 			  else
 			  {
-				  curce = (CONFIGENTRY *)smalloc(sizeof(CONFIGENTRY));
-				  memset(curce, 0, sizeof(CONFIGENTRY));
+				  curce = (config_entry_t *)smalloc(sizeof(config_entry_t));
+				  memset(curce, 0, sizeof(config_entry_t));
 				  curce->ce_varname = (char *)smalloc(ptr - start + 1);
 				  strlcpy(curce->ce_varname, start, ptr - start + 1);
 				  curce->ce_varlinenum = linenumber;
@@ -275,8 +275,8 @@ static CONFIGFILE *config_parse(char *filename, char *confdata)
 			  }
 			  else
 			  {
-				  curce = (CONFIGENTRY *)smalloc(sizeof(CONFIGENTRY));
-				  memset(curce, 0, sizeof(CONFIGENTRY));
+				  curce = (config_entry_t *)smalloc(sizeof(config_entry_t));
+				  memset(curce, 0, sizeof(config_entry_t));
 				  curce->ce_varname = (char *)smalloc(ptr - start + 1);
 				  strlcpy(curce->ce_varname, start, ptr - start + 1);
 				  curce->ce_varlinenum = linenumber;
@@ -305,9 +305,9 @@ static CONFIGFILE *config_parse(char *filename, char *confdata)
 	return curcf;
 }
 
-static void config_entry_free(CONFIGENTRY *ceptr)
+static void config_entry_free(config_entry_t *ceptr)
 {
-	CONFIGENTRY *nptr;
+	config_entry_t *nptr;
 
 	for (; ceptr; ceptr = nptr)
 	{
@@ -322,9 +322,9 @@ static void config_entry_free(CONFIGENTRY *ceptr)
 	}
 }
 
-void config_free(CONFIGFILE *cfptr)
+void config_free(config_file_t *cfptr)
 {
-	CONFIGFILE *nptr;
+	config_file_t *nptr;
 
 	for (; cfptr; cfptr = nptr)
 	{
@@ -337,13 +337,13 @@ void config_free(CONFIGFILE *cfptr)
 	}
 }
 
-CONFIGFILE *config_load(char *filename)
+config_file_t *config_load(char *filename)
 {
 	struct stat sb;
 	FILE *fd;
 	int ret;
 	char *buf = NULL;
-	CONFIGFILE *cfptr;
+	config_file_t *cfptr;
 
 	fd = fopen(filename, "rb");
 	if (!fd)
@@ -384,7 +384,7 @@ CONFIGFILE *config_load(char *filename)
 	return cfptr;
 }
 
-CONFIGENTRY *config_find(CONFIGENTRY *ceptr, char *name)
+config_entry_t *config_find(config_entry_t *ceptr, char *name)
 {
 	for (; ceptr; ceptr = ceptr->ce_next)
 		if (!strcmp(ceptr->ce_varname, name))

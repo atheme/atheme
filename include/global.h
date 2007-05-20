@@ -5,7 +5,7 @@
  *
  * Global data
  *
- * $Id: global.h 8123 2007-04-06 00:58:34Z jilles $
+ * $Id: global.h 8297 2007-05-20 08:56:59Z nenolod $
  */
 
 #ifndef _GLOBAL_H
@@ -151,9 +151,9 @@ E boolean_t conf_rehash(void);
 E boolean_t conf_check(void);
 
 /* confp.c */
-E void config_free(CONFIGFILE *cfptr);
-E CONFIGFILE *config_load(char *filename);
-E CONFIGENTRY *config_find(CONFIGENTRY *ceptr, char *name);
+E void config_free(config_file_t *cfptr);
+E config_file_t *config_load(char *filename);
+E config_entry_t *config_find(config_entry_t *ceptr, char *name);
 
 /* node.c */
 E void init_nodes(void);
