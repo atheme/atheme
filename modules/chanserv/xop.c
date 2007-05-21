@@ -1,18 +1,19 @@
 /*
- * Copyright (c) 2005 Atheme Development Group
+ * Copyright (c) 2005-2007 Atheme Development Group
  * Rights to this code are as documented in doc/LICENSE.
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 8103 2007-04-04 22:51:10Z jilles $
+ * $Id: xop.c 8307 2007-05-21 22:51:44Z jilles $
  */
 
 #include "atheme.h"
+#include "template.h"
 
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 8103 2007-04-04 22:51:10Z jilles $",
+	"$Id: xop.c 8307 2007-05-21 22:51:44Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -75,7 +76,7 @@ void _moddeinit()
 	help_delentry(cs_helptree, "FORCEXOP");
 }
 
-static void cs_xop(sourceinfo_t *si, int parc, char *parv[], unsigned int level, char *leveldesc)
+static void cs_xop(sourceinfo_t *si, int parc, char *parv[], char *leveldesc)
 {
 	myuser_t *mu;
 	mychan_t *mc;
@@ -84,6 +85,7 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], unsigned int level,
 	char *chan = parv[0];
 	char *cmd = parv[1];
 	char *uname = parv[2];
+	unsigned int level;
 
 	if (!cmd || !chan)
 	{
@@ -125,6 +127,8 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], unsigned int level,
 		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), chan);
 		return;
 	}
+
+	level = get_template_flags(mc, leveldesc);
 
 	/* ADD */
 	if (!strcasecmp("ADD", cmd))
@@ -195,17 +199,17 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], unsigned int level,
 
 static void cs_cmd_sop(sourceinfo_t *si, int parc, char *parv[])
 {
-	cs_xop(si, parc, parv, chansvs.ca_sop, "SOP");
+	cs_xop(si, parc, parv, "SOP");
 }
 
 static void cs_cmd_aop(sourceinfo_t *si, int parc, char *parv[])
 {
-	cs_xop(si, parc, parv, chansvs.ca_aop, "AOP");
+	cs_xop(si, parc, parv, "AOP");
 }
 
 static void cs_cmd_vop(sourceinfo_t *si, int parc, char *parv[])
 {
-	cs_xop(si, parc, parv, chansvs.ca_vop, "VOP");
+	cs_xop(si, parc, parv, "VOP");
 }
 
 static void cs_cmd_hop(sourceinfo_t *si, int parc, char *parv[])
@@ -217,7 +221,7 @@ static void cs_cmd_hop(sourceinfo_t *si, int parc, char *parv[])
 	if (!ircd->uses_halfops && si->su != NULL)
 		notice(chansvs.nick, si->su->nick, "Warning: Your IRC server does not support halfops.");
 
-	cs_xop(si, parc, parv, chansvs.ca_hop, "HOP");
+	cs_xop(si, parc, parv, "HOP");
 }
 
 
@@ -495,6 +499,7 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 	int changes;
 	unsigned int newlevel;
 	char *desc;
+	unsigned int ca_sop, ca_aop, ca_hop, ca_vop;
 
 	if (!chan)
 	{
@@ -521,6 +526,11 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	ca_sop = get_template_flags(mc, "SOP");
+	ca_aop = get_template_flags(mc, "AOP");
+	ca_hop = get_template_flags(mc, "HOP");
+	ca_vop = get_template_flags(mc, "VOP");
+
 	changes = 0;
 	LIST_FOREACH(n, mc->chanacs.head)
 	{
@@ -530,27 +540,27 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 			continue;
 		if (ca->myuser && is_founder(mc, ca->myuser))
 			newlevel = CA_INITIAL & ca_all, desc = "Founder";
-		else if (!(~ca->level & chansvs.ca_sop))
-			newlevel = chansvs.ca_sop, desc = "SOP";
-		else if (ca->level == chansvs.ca_aop)
-			newlevel = chansvs.ca_aop, desc = "AOP";
-		else if (ca->level == chansvs.ca_hop)
-			newlevel = chansvs.ca_hop, desc = "HOP";
-		else if (ca->level == chansvs.ca_vop)
-			newlevel = chansvs.ca_vop, desc = "VOP";
+		else if (!(~ca->level & ca_sop))
+			newlevel = ca_sop, desc = "SOP";
+		else if (ca->level == ca_aop)
+			newlevel = ca_aop, desc = "AOP";
+		else if (ca->level == ca_hop)
+			newlevel = ca_hop, desc = "HOP";
+		else if (ca->level == ca_vop)
+			newlevel = ca_vop, desc = "VOP";
 		else if (ca->level & (CA_SET | CA_RECOVER | CA_FLAGS))
-			newlevel = chansvs.ca_sop, desc = "SOP";
+			newlevel = ca_sop, desc = "SOP";
 		else if (ca->level & (CA_OP | CA_AUTOOP | CA_REMOVE))
-			newlevel = chansvs.ca_aop, desc = "AOP";
+			newlevel = ca_aop, desc = "AOP";
 		else if (ca->level & (CA_HALFOP | CA_AUTOHALFOP | CA_TOPIC))
 		{
-			if (chansvs.ca_hop == chansvs.ca_vop)
-				newlevel = chansvs.ca_aop, desc = "AOP";
+			if (ca_hop == ca_vop)
+				newlevel = ca_aop, desc = "AOP";
 			else
-				newlevel = chansvs.ca_hop, desc = "HOP";
+				newlevel = ca_hop, desc = "HOP";
 		}
 		else /*if (ca->level & CA_AUTOVOICE)*/
-			newlevel = chansvs.ca_vop, desc = "VOP";
+			newlevel = ca_vop, desc = "VOP";
 #if 0
 		else
 			newlevel = 0;

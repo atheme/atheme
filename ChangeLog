@@ -1,3 +1,13 @@
+nenolod     2007/05/21 17:28:01 UTC	(20070521-8305)
+  Log:
+  - note that services no longer supports postgresql due to lack of time 
+  to fix it.
+  
+
+  Changes:	Modified:
+  +10 -0	trunk/doc/SQL (File Modified) 
+
+
 jilles      2007/05/20 13:27:40 UTC	(20070520-8303)
   Log:
   Fix assertion failure when shutting down while not connected.
