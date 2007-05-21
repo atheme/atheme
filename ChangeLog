@@ -1,3 +1,12 @@
+jilles      2007/05/20 13:27:40 UTC	(20070520-8303)
+  Log:
+  Fix assertion failure when shutting down while not connected.
+  
+
+  Changes:	Modified:
+  +2 -1		trunk/src/atheme.c (File Modified) 
+
+
 jilles      2007/05/20 13:22:15 UTC	(20070520-8301)
   Log:
   Fix up +e/+r on group/ungroup.

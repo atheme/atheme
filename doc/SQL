@@ -1,4 +1,12 @@
-$Id: SQL 7059 2006-11-03 19:26:47Z jilles $
+$Id: SQL 8305 2007-05-21 17:28:01Z nenolod $
+
+Read this first
+---------------
+
+As of version 2.2, Services no longer supports SQL databases. The 
+documentation concern SQL is available below. To use Services 2.2, you 
+will need to switch to the flatfile backend.
+
 
 SQL Notes
 ---------
@@ -20,6 +28,7 @@ Schema files are available in the SQL/ directory.
 
 Note that during 0.3 development, several columns changed from
 VARCHAR to TEXT.
+
 
 PostgreSQL
 ----------
@@ -56,6 +65,7 @@ The PostgreSQL FAQ has this to say on changing a column's data type:
 	the disk space used by the expired rows.
 
 (http://www.postgresql.org/docs/faqs.FAQ.html#4.3)
+
 
 Switching to a SQL backend
 --------------------------
