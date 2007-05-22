@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService XOP functions.
  *
- * $Id: xop.c 8307 2007-05-21 22:51:44Z jilles $
+ * $Id: xop.c 8309 2007-05-22 20:37:44Z nenolod $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/xop", FALSE, _modinit, _moddeinit,
-	"$Id: xop.c 8307 2007-05-21 22:51:44Z jilles $",
+	"$Id: xop.c 8309 2007-05-22 20:37:44Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -239,7 +239,7 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		/* we might be adding a hostmask */
 		if (!validhostmask(target))
 		{
-			command_fail(si, fault_badparams, _("\2%s\2 is neither a nickname nor a hostmask."), target);
+			command_fail(si, fault_badparams, _("\2%s\2 is neither a registered account nor a hostmask."), target);
 			return;
 		}
 

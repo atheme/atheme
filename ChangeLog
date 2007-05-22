@@ -1,3 +1,13 @@
+jilles      2007/05/21 22:51:44 UTC	(20070521-8307)
+  Log:
+  chanserv xop: use get_template_flags() instead of
+  accessing chansvs.ca_*op directly
+  
+
+  Changes:	Modified:
+  +30 -20	trunk/modules/chanserv/xop.c (File Modified) 
+
+
 nenolod     2007/05/21 17:28:01 UTC	(20070521-8305)
   Log:
   - note that services no longer supports postgresql due to lack of time 
