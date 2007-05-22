@@ -18,14 +18,16 @@
 
 /* define this if you use an anope that has everything in root, i.e. "pre CAPAB", 1.7.4 or lower. */
 /* anope 1.7.x before 1.7.13 will probably not work */
-#define ANOPE_16X
+/*#define ANOPE_16X*/
 
 #ifndef ANOPE_16X
 #include "services.h"
 #include "pseudo.h"
+#include "version.h"
 #else
 #include "../services.h"
 #include "../pseudo.h"
+#include "../version.h"
 #endif
 
 /* define this if you want to convert forbids */
@@ -53,6 +55,9 @@ void write_accounts(void)
 	NickAlias *na, *na2;
 	time_t registered;
 	int athemeflags;
+#if VERSION_BUILD >= 1185
+	char decr_pass[PASSMAX];
+#endif
 	char passwdbuf[33];
 	char *passwd;
 
@@ -81,7 +86,11 @@ void write_accounts(void)
 			if (!(nc->flags & NI_AUTOOP))
 				athemeflags |= 0x4; /* MU_NOOP */
 #endif
+#if VERSION_BUILD >= 1185
+			if (enc_decrypt(nc->pass,decr_pass,PASSMAX)!=1)
+#else
 			if (nc->flags & NI_ENCRYPTEDPW)
+#endif
 			{
 #ifdef CONVERT_CRYPTPASS
 				athemeflags |= 0x100; /* MU_CRYPTPASS */
@@ -100,7 +109,11 @@ void write_accounts(void)
 #endif
 			}
 			else
+#if VERSION_BUILD >= 1185
+				passwd = decr_pass;
+#else
 				passwd = nc->pass;
+#endif
 			if (nc->memos.memomax == 0)
 				athemeflags |= 0x40; /* MU_NOMEMO */
 			fprintf(f, "MU %s %s %s %lu %lu 0 0 0 %d\n",

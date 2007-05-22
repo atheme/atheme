@@ -1,3 +1,12 @@
+jilles      2007/05/22 22:02:34 UTC	(20070522-8311)
+  Log:
+  Convert theia extendchans flag.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/contrib/hybservtoatheme.pl (File Modified) 
+
+
 nenolod     2007/05/22 20:37:44 UTC	(20070522-8309)
   Log:
   - clarify that we are looking for a registered account, not just any nickname. 
