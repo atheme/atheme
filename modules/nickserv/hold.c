@@ -4,7 +4,7 @@
  *
  * Controls noexpire options for nicknames.
  *
- * $Id: hold.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: hold.c 8317 2007-05-24 20:02:59Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/hold", FALSE, _modinit, _moddeinit,
-	"$Id: hold.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: hold.c 8317 2007-05-24 20:02:59Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -61,29 +61,29 @@ static void ns_cmd_hold(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (mu->flags & MU_HOLD)
 		{
-			command_fail(si, fault_badparams, _("\2%s\2 is already held."), target);
+			command_fail(si, fault_badparams, _("\2%s\2 is already held."), mu->name);
 			return;
 		}
 
 		mu->flags |= MU_HOLD;
 
-		wallops("%s set the HOLD option for the account \2%s\2.", get_oper_name(si), target);
-		logcommand(si, CMDLOG_ADMIN, "HOLD %s ON", target);
-		command_success_nodata(si, _("\2%s\2 is now held."), target);
+		wallops("%s set the HOLD option for the account \2%s\2.", get_oper_name(si), mu->name);
+		logcommand(si, CMDLOG_ADMIN, "HOLD %s ON", mu->name);
+		command_success_nodata(si, _("\2%s\2 is now held."), mu->name);
 	}
 	else if (!strcasecmp(action, "OFF"))
 	{
 		if (!(mu->flags & MU_HOLD))
 		{
-			command_fail(si, fault_badparams, _("\2%s\2 is not held."), target);
+			command_fail(si, fault_badparams, _("\2%s\2 is not held."), mu->name);
 			return;
 		}
 
 		mu->flags &= ~MU_HOLD;
 
-		wallops("%s removed the HOLD option on the account \2%s\2.", get_oper_name(si), target);
-		logcommand(si, CMDLOG_ADMIN, "HOLD %s OFF", target);
-		command_success_nodata(si, _("\2%s\2 is no longer held."), target);
+		wallops("%s removed the HOLD option on the account \2%s\2.", get_oper_name(si), mu->name);
+		logcommand(si, CMDLOG_ADMIN, "HOLD %s OFF", mu->name);
+		command_success_nodata(si, _("\2%s\2 is no longer held."), mu->name);
 	}
 	else
 	{

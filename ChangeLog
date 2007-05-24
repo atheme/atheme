@@ -1,3 +1,12 @@
+jilles      2007/05/24 16:45:39 UTC	(20070524-8315)
+  Log:
+  Convert disabled cloaks to marks.
+  
+
+  Changes:	Modified:
+  +18 -2	trunk/contrib/hybservtoatheme.pl (File Modified) 
+
+
 jilles      2007/05/22 22:30:16 UTC	(20070522-8313)
   Log:
   anope_convert:
