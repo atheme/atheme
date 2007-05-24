@@ -1,3 +1,14 @@
+jilles      2007/05/24 20:09:37 UTC	(20070524-8319)
+  Log:
+  Allow per-channel redefinition of xOP templates.
+  (Because of r8307, this also affects the xOP commands.)
+  
+
+  Changes:	Modified:
+  +23 -15	trunk/modules/chanserv/template.c (File Modified) 
+  +10 -7	trunk/src/template.c (File Modified) 
+
+
 jilles      2007/05/24 20:02:59 UTC	(20070524-8317)
   Log:
   nickserv hold: use account name, not specified name in
