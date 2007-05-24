@@ -1,3 +1,14 @@
+jilles      2007/05/22 22:30:16 UTC	(20070522-8313)
+  Log:
+  anope_convert:
+  - fix enc_old passwords with anope 1.7.18
+  - default to 1.7.x instead of 1.6.x
+  
+
+  Changes:	Modified:
+  +14 -1	trunk/contrib/anope_convert.c (File Modified) 
+
+
 jilles      2007/05/22 22:02:34 UTC	(20070522-8311)
   Log:
   Convert theia extendchans flag.

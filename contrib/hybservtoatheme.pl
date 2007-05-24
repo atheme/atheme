@@ -31,7 +31,7 @@
 #  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 #  OF SUCH DAMAGE.
 #
-# $Id: hybservtoatheme.pl 8311 2007-05-22 22:02:34Z jilles $
+# $Id: hybservtoatheme.pl 8315 2007-05-24 16:45:39Z jilles $
 #
 # HybServ2/dancer-services to Atheme database converter
 # - Reads nick.db and chan.db from the current directory.
@@ -96,7 +96,15 @@ while (<NICKDB>) {
 		if ($nick ne '') {
 			print "MU $nick $password $email $regtime $lastseentime 0 0 0 $athflags\n";
 			print "MD U $nick private:host:vhost $lastuh\n" if ($lastuh ne '');
-			print "MD U $nick private:usercloak $cloak\n" if ($cloak ne '');
+			if ($cloak ne '') {
+				if ($hsflags & 0x00400000) {
+					print "MD U $nick private:usercloak $cloak\n";
+				} else {
+					# disabled cloaks are used as marks
+					print "MD U $nick private:mark:setter unknown\n";
+					print "MD U $nick private:mark:reason $cloak\n";
+				}
+			}
 			print "MD U $nick private:extendchans 1\n" if ($hsflags & 0x01000000) && $istheia;
 			print "AC $nick $_\n" for @access;
 			print "MN $nick $nick $regtime $lastseentime\n";
@@ -143,7 +151,15 @@ while (<NICKDB>) {
 if ($nick ne '') {
 	print "MU $nick $password $email $regtime $lastseentime 0 0 0 $athflags\n";
 	print "MD U $nick private:host:vhost $lastuh\n" if ($lastuh ne '');
-	print "MD U $nick private:usercloak $cloak\n" if ($cloak ne '');
+	if ($cloak ne '') {
+		if ($hsflags & 0x00400000) {
+			print "MD U $nick private:usercloak $cloak\n";
+		} else {
+			# disabled cloaks are used as marks
+			print "MD U $nick private:mark:setter unknown\n";
+			print "MD U $nick private:mark:reason $cloak\n";
+		}
+	}
 	print "MD U $nick private:extendchans 1\n" if ($hsflags & 0x01000000) && $istheia;
 	print "AC $nick $_\n" for @access;
 	print "MN $nick $nick $regtime $lastseentime\n";
