@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService TEMPLATE functions.
  *
- * $Id: template.c 8103 2007-04-04 22:51:10Z jilles $
+ * $Id: template.c 8319 2007-05-24 20:09:37Z jilles $
  */
 
 #include "atheme.h"
@@ -13,7 +13,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/template", FALSE, _modinit, _moddeinit,
-	"$Id: template.c 8103 2007-04-04 22:51:10Z jilles $",
+	"$Id: template.c 8319 2007-05-24 20:09:37Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -175,17 +175,6 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 		l = strlen(target);
-		/* don't allow redefining xop
-		 * redefinition of future per-network other templates
-		 * could be ok though */
-		if (l == 3 && (!strcasecmp(target, "SOP") ||
-					!strcasecmp(target, "AOP") ||
-					!strcasecmp(target, "HOP") ||
-					!strcasecmp(target, "VOP")))
-		{
-			command_fail(si, fault_noprivs, _("Cannot redefine built-in template \2%s\2."), target);
-			return;
-		}
 
 		if (*flagstr == '!' && (flagstr[1] == '+' || flagstr[1] == '-' || flagstr[1] == '='))
 		{
@@ -279,14 +268,33 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 		}
 		if (!found)
 		{
-			removeflags = 0;
-			newflags = addflags;
+			if (l == 3 && (!strcasecmp(target, "SOP") ||
+						!strcasecmp(target, "AOP") ||
+						!strcasecmp(target, "HOP") ||
+						!strcasecmp(target, "VOP")))
+			{
+				oldflags = get_template_flags(NULL, target);
+				addflags &= ~oldflags;
+				removeflags &= oldflags & ~addflags;
+				newflags = (oldflags | addflags) & ~removeflags;
+				if (newflags == 0)
+					removeflags = 0;
+				if ((addflags | removeflags) != 0)
+					command_success_nodata(si, _("Redefining built-in template \2%s\2."), target);
+			}
+			else
+			{
+				removeflags = 0;
+				newflags = addflags;
+			}
 			if ((addflags | removeflags) == 0)
 				;
-			else if (~restrictflags & addflags)
+			else if (~restrictflags & addflags ||
+					~restrictflags & removeflags ||
+					~restrictflags & oldflags)
 				denied = TRUE;
 			else if (md != NULL)
-				snprintf(newstr + strlen(newstr), sizeof newstr - strlen(newstr), " %s=%s", target, bitmask_to_flags(addflags, chanacs_flags));
+				snprintf(newstr + strlen(newstr), sizeof newstr - strlen(newstr), " %s=%s", target, bitmask_to_flags(newflags, chanacs_flags));
 			else
 				snprintf(newstr, sizeof newstr, "%s=%s", target, bitmask_to_flags(newflags, chanacs_flags));
 		}

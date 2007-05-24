@@ -1,3 +1,13 @@
+jilles      2007/05/24 20:02:59 UTC	(20070524-8317)
+  Log:
+  nickserv hold: use account name, not specified name in
+  messages/logs.
+  
+
+  Changes:	Modified:
+  +8 -8		trunk/modules/nickserv/hold.c (File Modified) 
+
+
 jilles      2007/05/24 16:45:39 UTC	(20070524-8315)
   Log:
   Convert disabled cloaks to marks.

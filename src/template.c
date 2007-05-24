@@ -4,7 +4,7 @@
  *
  * See doc/LICENSE for licensing information.
  *
- * $Id: template.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: template.c 8319 2007-05-24 20:09:37Z jilles $
  */
 
 #include "atheme.h"
@@ -44,6 +44,16 @@ unsigned int get_template_flags(mychan_t *mc, char *name)
 	metadata_t *md;
 	char *d;
 
+	if (mc != NULL)
+	{
+		md = metadata_find(mc, METADATA_CHANNEL, "private:templates");
+		if (md != NULL)
+		{
+			d = getitem(md->value, name);
+			if (d != NULL)
+				return flags_to_bitmask(d, chanacs_flags, 0);
+		}
+	}
 	if (*name != '\0' && !strcasecmp(name + 1, "op"))
 	{
 		switch (*name)
@@ -53,13 +63,6 @@ unsigned int get_template_flags(mychan_t *mc, char *name)
 			case 'h': case 'H': return chansvs.ca_hop;
 			case 'v': case 'V': return chansvs.ca_vop;
 		}
-	}
-	md = metadata_find(mc, METADATA_CHANNEL, "private:templates");
-	if (md != NULL)
-	{
-		d = getitem(md->value, name);
-		if (d != NULL)
-			return flags_to_bitmask(d, chanacs_flags, 0);
 	}
 	return 0;
 }
