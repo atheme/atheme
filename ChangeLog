@@ -1,3 +1,13 @@
+jilles      2007/05/24 20:10:59 UTC	(20070524-8321)
+  Log:
+  Don't allow dropping an account or channel with the HOLD flag set.
+  
+
+  Changes:	Modified:
+  +6 -0		trunk/modules/chanserv/drop.c (File Modified) 
+  +6 -0		trunk/modules/nickserv/drop.c (File Modified) 
+
+
 jilles      2007/05/24 20:09:37 UTC	(20070524-8319)
   Log:
   Allow per-channel redefinition of xOP templates.
