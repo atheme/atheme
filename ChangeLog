@@ -1,3 +1,17 @@
+jilles      2007/05/24 23:44:48 UTC	(20070524-8323)
+  Log:
+  In the "address chanserv" style of fantasy commands,
+  require the first word to start with chanserv's nick
+  instead of just containing it. This ensures stuff like
+  /chanserv op #somechan (e.g. for helping users with
+  chanserv commands) is not interpreted as a fantasy
+  command.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/chanserv/main.c (File Modified) 
+
+
 jilles      2007/05/24 20:10:59 UTC	(20070524-8321)
   Log:
   Don't allow dropping an account or channel with the HOLD flag set.

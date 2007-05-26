@@ -4,7 +4,7 @@
  *
  * Rate limits account registrations.
  *
- * $Id: ns_ratelimitreg.c 7997 2007-03-27 22:04:33Z jilles $
+ * $Id: ns_ratelimitreg.c 8325 2007-05-26 03:42:03Z nenolod $
  */
 
 #include "atheme.h"
@@ -63,7 +63,7 @@ static void check_registration(void *vptr)
 				hdata->si->su != NULL ? hdata->si->su->nick : get_source_name(hdata->si));
 		if (lastwallops + ratelimitreg_wallops_period < CURRTIME)
 		{
-			wallops("Registration %s by %s throttled.",
+			wallops("Registration of %s by %s was throttled.",
 					hdata->account,
 					get_oper_name(hdata->si));
 			lastwallops = CURRTIME;
