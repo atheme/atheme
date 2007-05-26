@@ -1,3 +1,12 @@
+nenolod     2007/05/26 03:42:03 UTC	(20070526-8325)
+  Log:
+  - fix grammar in wallops notice
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/contrib/ns_ratelimitreg.c (File Modified) 
+
+
 jilles      2007/05/24 23:44:48 UTC	(20070524-8323)
   Log:
   In the "address chanserv" style of fantasy commands,
