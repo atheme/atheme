@@ -1,3 +1,17 @@
+jilles      2007/05/27 14:13:44 UTC	(20070527-8331)
+  Log:
+  Add special flag for channel memos. Channel memos do not
+  generate read receipts, and show the channel in /ms list.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/include/account.h (File Modified) 
+  +21 -3	trunk/modules/memoserv/list.c (File Modified) 
+  +4 -1		trunk/modules/memoserv/read.c (File Modified) 
+  +2 -2		trunk/modules/memoserv/sendops.c (File Modified) 
+  +3 -1		trunk/modules/xmlrpc/memo.c (File Modified) 
+
+
 jilles      2007/05/27 13:31:59 UTC	(20070527-8329)
   Log:
   Make MEMO_READ a flag, allowing the other bits of

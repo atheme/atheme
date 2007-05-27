@@ -4,7 +4,7 @@
  *
  * Memory functions.
  *
- * $Id: memory.c 8079 2007-04-02 17:37:39Z nenolod $
+ * $Id: memory.c 8333 2007-05-27 21:48:24Z jilles $
  */
 
 #include "atheme.h"
@@ -45,7 +45,7 @@ char *sstrdup(const char *s)
 {
 	char *t;
 
-	if (!s || strlen(s) == 0)
+	if (s == NULL)
 		return NULL;
 
 	t = smalloc(strlen(s) + 1);
