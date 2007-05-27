@@ -4,7 +4,7 @@
  *
  * XMLRPC memo management functions.
  *
- * $Id: memo.c 8329 2007-05-27 13:31:59Z jilles $
+ * $Id: memo.c 8331 2007-05-27 14:13:44Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/memo", FALSE, _modinit, _moddeinit,
-	"$Id: memo.c 8329 2007-05-27 13:31:59Z jilles $",
+	"$Id: memo.c 8331 2007-05-27 14:13:44Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -565,7 +565,9 @@ static int memo_read(void *conn, int parc, char *parv[])
 				mu = myuser_find(memo->sender);
 
 				/* If the sender's inbox is not full and is not MemoServ */
-				if ((mu != NULL) && (mu->memos.count < me.mdlimit) && strcasecmp(memosvs.nick, memo->sender))
+				if (memo->status & MEMO_CHANNEL)
+					;
+				else if ((mu != NULL) && (mu->memos.count < me.mdlimit) && strcasecmp(memosvs.nick, memo->sender))
 				{       
 					receipt = smalloc(sizeof(mymemo_t));
 					receipt->sent = CURRTIME;

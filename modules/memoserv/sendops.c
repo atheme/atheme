@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv SENDOPS function
  *
- * $Id: sendops.c 8329 2007-05-27 13:31:59Z jilles $
+ * $Id: sendops.c 8331 2007-05-27 14:13:44Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/sendops", FALSE, _modinit, _moddeinit,
-	"$Id: sendops.c 8329 2007-05-27 13:31:59Z jilles $",
+	"$Id: sendops.c 8331 2007-05-27 14:13:44Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -156,9 +156,9 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 		/* Malloc and populate struct */
 		memo = smalloc(sizeof(mymemo_t));
 		memo->sent = CURRTIME;
-		memo->status = 0;
+		memo->status = MEMO_CHANNEL;
 		strlcpy(memo->sender,si->smu->name,NICKLEN);
-		strlcpy(memo->text,m,MEMOLEN);
+		snprintf(memo->text, MEMOLEN, "%s %s", mc->name, m);
 
 		/* Create a linked list node and add to memos */
 		n = node_create();

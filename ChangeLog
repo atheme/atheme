@@ -1,3 +1,21 @@
+jilles      2007/05/27 13:31:59 UTC	(20070527-8329)
+  Log:
+  Make MEMO_READ a flag, allowing the other bits of
+  mymemo_t.status to be used for other flags.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/include/account.h (File Modified) 
+  +1 -1		trunk/modules/backend/flatfile.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/delete.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/forward.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/list.c (File Modified) 
+  +4 -4		trunk/modules/memoserv/read.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/send.c (File Modified) 
+  +1 -1		trunk/modules/memoserv/sendops.c (File Modified) 
+  +7 -7		trunk/modules/xmlrpc/memo.c (File Modified) 
+
+
 jilles      2007/05/26 11:19:15 UTC	(20070526-8327)
   Log:
   memoserv sendops: show proper help file

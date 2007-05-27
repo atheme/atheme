@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv LIST function
  *
- * $Id: list.c 8329 2007-05-27 13:31:59Z jilles $
+ * $Id: list.c 8331 2007-05-27 14:13:44Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 8329 2007-05-27 13:31:59Z jilles $",
+	"$Id: list.c 8331 2007-05-27 14:13:44Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -47,6 +47,9 @@ static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	unsigned int i = 0;
 	char strfbuf[32];
 	struct tm tm;
+	char line[512];
+	char chan[CHANNELLEN];
+	char *p;
 	
 	/* user logged in? */
 	if (si->smu == NULL)
@@ -76,10 +79,25 @@ static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		strftime(strfbuf, sizeof(strfbuf) - 1, 
 			"%b %d %H:%M:%S %Y", &tm);
 		
+		snprintf(line, sizeof line, _("- %d From: %s Sent: %s"),
+				i, memo->sender, strfbuf);
+		if (memo->status & MEMO_CHANNEL && *memo->text == '#')
+		{
+			strlcat(line, " ", sizeof line);
+			strlcat(line, _("To:"), sizeof line);
+			strlcat(line, " ", sizeof line);
+			strlcpy(chan, memo->text, sizeof chan);
+			p = strchr(chan, ' ');
+			if (p != NULL)
+				*p = '\0';
+			strlcat(line, chan, sizeof line);
+		}
 		if (!(memo->status & MEMO_READ))
-			command_success_nodata(si, _("- %d From: %s Sent: %s [unread]"), i, memo->sender, strfbuf);
-		else
-			command_success_nodata(si, _("- %d From: %s Sent: %s"), i, memo->sender, strfbuf);
+		{
+			strlcat(line, " ", sizeof line);
+			strlcat(line, _("[unread]"), sizeof line);
+		}
+		command_success_nodata(si, "%s", line);
 	}
 	
 	return;
