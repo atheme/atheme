@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv FORWARD function
  *
- * $Id: forward.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: forward.c 8329 2007-05-27 13:31:59Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/forward", FALSE, _modinit, _moddeinit,
-	"$Id: forward.c 8027 2007-04-02 10:47:18Z nenolod $",
+	"$Id: forward.c 8329 2007-05-27 13:31:59Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -166,7 +166,7 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 			
 			/* Create memo */
 			newmemo->sent = CURRTIME;
-			newmemo->status = MEMO_NEW;
+			newmemo->status = 0;
 			strlcpy(newmemo->sender,si->smu->name,NICKLEN);
 			strlcpy(newmemo->text,memo->text,MEMOLEN);
 			

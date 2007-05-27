@@ -1,3 +1,13 @@
+jilles      2007/05/26 11:19:15 UTC	(20070526-8327)
+  Log:
+  memoserv sendops: show proper help file
+  tracker #960 (part)
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/memoserv/sendops.c (File Modified) 
+
+
 nenolod     2007/05/26 03:42:03 UTC	(20070526-8325)
   Log:
   - fix grammar in wallops notice

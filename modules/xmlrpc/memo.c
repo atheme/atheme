@@ -4,7 +4,7 @@
  *
  * XMLRPC memo management functions.
  *
- * $Id: memo.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: memo.c 8329 2007-05-27 13:31:59Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/memo", FALSE, _modinit, _moddeinit,
-	"$Id: memo.c 8027 2007-04-02 10:47:18Z nenolod $",
+	"$Id: memo.c 8329 2007-05-27 13:31:59Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -138,7 +138,7 @@ static int memo_send(void *conn, int parc, char *parv[])
 
 	memo = smalloc(sizeof(mymemo_t));
 	memo->sent = CURRTIME;
-	memo->status = MEMO_NEW;
+	memo->status = 0;
 	strlcpy (memo->sender, mu->name, NICKLEN);
 	strlcpy (memo->text, m, MEMOLEN);
 
@@ -280,7 +280,7 @@ static int memo_forward(void *conn, int parc, char *parv[])
 
 			/* Duplicate memo */
 			memo->sent = CURRTIME;
-			memo->status = MEMO_NEW;
+			memo->status = 0;
 			strlcpy (forward->sender, mu->name, NICKLEN);
 			strlcpy (forward->text, memo->text, MEMOLEN);
 
@@ -384,7 +384,7 @@ static int memo_delete(void *conn, int parc, char *parv[])
 			
 			memo = (mymemo_t*) n->data;
 			
-			if (memo->status == MEMO_NEW)
+			if (!(memo->status & MEMO_READ))
 				mu->memoct_new--; /* Decrease memocount */
 			
 			node_del(n,&mu->memos);
@@ -470,7 +470,7 @@ static int memo_list(void *conn, int parc, char *parv[])
 		memotime = *localtime(&memo->sent);
 		snprintf(timebuf, 16, "%lu", (long unsigned) mktime(&memotime));
 		
-		if (memo->status == MEMO_NEW)
+		if (!(memo->status & MEMO_READ))
 			snprintf(memobuf, 64, "%d:%s:%s:1\n", i, memo->sender, timebuf);
 		else
 			snprintf(memobuf, 64, "%d:%s:%s:0\n", i, memo->sender, timebuf);
@@ -556,10 +556,10 @@ static int memo_read(void *conn, int parc, char *parv[])
 			strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &memotime);
 
 			/* If the memo is unread, */
-			if (memo->status == MEMO_NEW)
+			if (!(memo->status & MEMO_READ))
 			{
 				/* mark it as read */
-				memo->status = MEMO_READ;
+				memo->status |= MEMO_READ;
 				/* and decrease "new memos" count */
 				mu->memoct_new--;
 				mu = myuser_find(memo->sender);
@@ -569,7 +569,7 @@ static int memo_read(void *conn, int parc, char *parv[])
 				{       
 					receipt = smalloc(sizeof(mymemo_t));
 					receipt->sent = CURRTIME;
-					receipt->status = MEMO_NEW;
+					receipt->status = 0;
 					strlcpy(receipt->sender, memosvs.nick, NICKLEN);
 					snprintf(receipt->text, MEMOLEN, "%s has read a memo from you sent at %s", mu->name, strfbuf);
 

@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv LIST function
  *
- * $Id: list.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: list.c 8329 2007-05-27 13:31:59Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/list", FALSE, _modinit, _moddeinit,
-	"$Id: list.c 8027 2007-04-02 10:47:18Z nenolod $",
+	"$Id: list.c 8329 2007-05-27 13:31:59Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -76,7 +76,7 @@ static void ms_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 		strftime(strfbuf, sizeof(strfbuf) - 1, 
 			"%b %d %H:%M:%S %Y", &tm);
 		
-		if (memo->status == MEMO_NEW)
+		if (!(memo->status & MEMO_READ))
 			command_success_nodata(si, _("- %d From: %s Sent: %s [unread]"), i, memo->sender, strfbuf);
 		else
 			command_success_nodata(si, _("- %d From: %s Sent: %s"), i, memo->sender, strfbuf);

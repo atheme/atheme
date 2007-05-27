@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv READ function
  *
- * $Id: read.c 8237 2007-05-07 16:42:10Z jilles $
+ * $Id: read.c 8329 2007-05-27 13:31:59Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/read", FALSE, _modinit, _moddeinit,
-	"$Id: read.c 8237 2007-05-07 16:42:10Z jilles $",
+	"$Id: read.c 8329 2007-05-27 13:31:59Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -97,15 +97,15 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 	LIST_FOREACH(n, si->smu->memos.head)
 	{
 		memo = (mymemo_t *)n->data;
-		if (i == memonum || (readnew && memo->status == MEMO_NEW))
+		if (i == memonum || (readnew && !(memo->status & MEMO_READ)))
 		{
 			tm = *localtime(&memo->sent);
 			strftime(strfbuf, sizeof(strfbuf) - 1, 
 				"%b %d %H:%M:%S %Y", &tm);
 			
-			if (memo->status == MEMO_NEW)
+			if (!(memo->status & MEMO_READ))
 			{
-				memo->status = MEMO_READ;
+				memo->status |= MEMO_READ;
 				si->smu->memoct_new--;
 				tmu = myuser_find(memo->sender);
 				
@@ -120,7 +120,7 @@ static void ms_cmd_read(sourceinfo_t *si, int parc, char *parv[])
 						/* Malloc and populate memo struct */
 						receipt = smalloc(sizeof(mymemo_t));
 						receipt->sent = CURRTIME;
-						receipt->status = MEMO_NEW;
+						receipt->status = 0;
 						strlcpy(receipt->sender,memosvs.nick,NICKLEN);
 						snprintf(receipt->text, MEMOLEN, "%s has read a memo from you sent at %s", si->smu->name, strfbuf);
 						

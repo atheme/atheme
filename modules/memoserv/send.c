@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv SEND function
  *
- * $Id: send.c 8107 2007-04-05 16:04:37Z jilles $
+ * $Id: send.c 8329 2007-05-27 13:31:59Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/send", FALSE, _modinit, _moddeinit,
-	"$Id: send.c 8107 2007-04-05 16:04:37Z jilles $",
+	"$Id: send.c 8329 2007-05-27 13:31:59Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -150,7 +150,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		/* Malloc and populate struct */
 		memo = smalloc(sizeof(mymemo_t));
 		memo->sent = CURRTIME;
-		memo->status = MEMO_NEW;
+		memo->status = 0;
 		strlcpy(memo->sender,si->smu->name,NICKLEN);
 		strlcpy(memo->text,m,MEMOLEN);
 	
