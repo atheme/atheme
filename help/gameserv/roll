@@ -1,0 +1,10 @@
+Help for ROLL:
+
+Roll lets you roll a series of virtual dice
+and display the result to either yourself or
+a channel.
+
+Syntax: ROLL <#dice>d<#sides>
+
+Example:
+    /msg GameServ ROLL 2d16

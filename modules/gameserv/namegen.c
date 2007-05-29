@@ -24,21 +24,28 @@ command_t cmd_namegen = { "NAMEGEN", N_("Generates some names to ponder."), AC_N
 list_t *gs_cmdtree;
 list_t *cs_cmdtree;
 
+list_t *gs_helptree;
+list_t *cs_helptree;
+
 void _modinit(module_t * m)
 {
 	MODULE_USE_SYMBOL(gs_cmdtree, "gameserv/main", "gs_cmdtree");
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");	/* fantasy commands */
 
 	command_add(&cmd_namegen, gs_cmdtree);
-
 	command_add(&cmd_namegen, cs_cmdtree);
+
+	help_addentry(gs_helptree, "NAMEGEN", "help/gameserv/namegen", NULL);
+	help_addentry(cs_helptree, "NAMEGEN", "help/gameserv/namegen", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&cmd_namegen, gs_cmdtree);
-
 	command_delete(&cmd_namegen, cs_cmdtree);
+
+	help_delentry(gs_helptree, "NAMEGEN");
+	help_delentry(cs_helptree, "NAMEGEN");
 }
 
 /*

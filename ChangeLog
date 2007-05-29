@@ -1,3 +1,14 @@
+jilles      2007/05/27 21:48:24 UTC	(20070527-8333)
+  Log:
+  Make sstrdup() work for empty strings.
+  In particular, this is useful to allow chanserv::trigger empty
+  (only allow fantasy commands by addressing chanserv).
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/src/memory.c (File Modified) 
+
+
 jilles      2007/05/27 14:13:44 UTC	(20070527-8331)
   Log:
   Add special flag for channel memos. Channel memos do not
