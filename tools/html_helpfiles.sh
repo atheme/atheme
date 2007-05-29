@@ -6,7 +6,7 @@
 
 htmldir=${1:-tools/htmlhelp}
 helpdir=${2:-help}
-idstring='$Id: html_helpfiles.sh 7009 2006-10-29 00:29:33Z jilles $'
+idstring='$Id: html_helpfiles.sh 8337 2007-05-29 15:48:57Z jilles $'
 
 mkdir -p "$htmldir"
 
@@ -27,6 +27,7 @@ for d in $helpdir/*; do
 		nickserv) service=NickServ ;;
 		oservice) service=OperServ ;;
 		userserv) service=UserServ ;;
+		gameserv) service=GameServ ;;
 		*) continue ;;
 	esac
 	echo "<li><a href=\"$service.html\">$service</a>"

@@ -1,3 +1,16 @@
+nenolod     2007/05/29 07:11:00 UTC	(20070529-8335)
+  Log:
+  - gameserv help (part 1)
+  
+
+  Changes:	Modified:
+  + -		trunk/help/gameserv/ (File Added) 
+  +12 -0	trunk/help/gameserv/namegen (File Added) 
+  +10 -0	trunk/help/gameserv/roll (File Added) 
+  +12 -0	trunk/modules/gameserv/dice.c (File Modified) 
+  +9 -2		trunk/modules/gameserv/namegen.c (File Modified) 
+
+
 jilles      2007/05/27 21:48:24 UTC	(20070527-8333)
   Log:
   Make sstrdup() work for empty strings.
