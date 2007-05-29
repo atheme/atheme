@@ -31,6 +31,8 @@ void _modinit(module_t * m)
 {
 	MODULE_USE_SYMBOL(gs_cmdtree, "gameserv/main", "gs_cmdtree");
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");	/* fantasy commands */
+	MODULE_USE_SYMBOL(gs_helptree, "gameserv/main", "gs_helptree");
+	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");	/* fantasy commands */
 
 	command_add(&cmd_namegen, gs_cmdtree);
 	command_add(&cmd_namegen, cs_cmdtree);

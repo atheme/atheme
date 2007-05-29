@@ -1,3 +1,15 @@
+jilles      2007/05/29 15:48:57 UTC	(20070529-8337)
+  Log:
+  - add gameserv to html help files
+  - tweak namegen to appear better in html (empty lines
+    should be really empty and should not contain a space)
+  
+
+  Changes:	Modified:
+  +4 -4		trunk/help/gameserv/namegen (File Modified) 
+  +1 -0		trunk/tools/html_helpfiles.sh (File Modified) 
+
+
 nenolod     2007/05/29 07:11:00 UTC	(20070529-8335)
   Log:
   - gameserv help (part 1)

@@ -23,21 +23,31 @@ command_t cmd_eightball = { "EIGHTBALL", N_("Ask the 8-Ball a question."), AC_NO
 list_t *gs_cmdtree;
 list_t *cs_cmdtree;
 
+list_t *gs_helptree;
+list_t *cs_helptree;
+
 void _modinit(module_t * m)
 {
 	MODULE_USE_SYMBOL(gs_cmdtree, "gameserv/main", "gs_cmdtree");
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");	/* fantasy commands */
 
-	command_add(&cmd_eightball, gs_cmdtree);
+	MODULE_USE_SYMBOL(gs_helptree, "gameserv/main", "gs_helptree");
+	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");	/* fantasy commands */
 
+	command_add(&cmd_eightball, gs_cmdtree);
 	command_add(&cmd_eightball, cs_cmdtree);
+
+	help_addentry(gs_helptree, "EIGHTBALL", "help/gameserv/eightball", NULL);
+	help_addentry(cs_helptree, "EIGHTBALL", "help/gameserv/eightball", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&cmd_eightball, gs_cmdtree);
-
 	command_delete(&cmd_eightball, cs_cmdtree);
+
+	help_delentry(gs_helptree, "EIGHTBALL");
+	help_delentry(cs_helptree, "EIGHTBALL");
 }
 
 /*

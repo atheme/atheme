@@ -1,0 +1,8 @@
+Help for EIGHTBALL:
+
+Asks the magic 8-ball a question.
+
+Syntax: EIGHTBALL
+
+Example:
+    /msg GameServ EIGHTBALL

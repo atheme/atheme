@@ -6,7 +6,7 @@
  *
  * Dice generator.
  *
- * $Id: dice.c 8335 2007-05-29 07:11:00Z nenolod $
+ * $Id: dice.c 8339 2007-05-29 22:13:10Z jilles $
  */
 
 #include "atheme.h"
@@ -14,7 +14,7 @@
 DECLARE_MODULE_V1
 (
 	"gameserv/dice", FALSE, _modinit, _moddeinit,
-	"$Id: dice.c 8335 2007-05-29 07:11:00Z nenolod $",
+	"$Id: dice.c 8339 2007-05-29 22:13:10Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -38,7 +38,7 @@ void _modinit(module_t * m)
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");	/* fantasy commands */
 
 	MODULE_USE_SYMBOL(gs_helptree, "gameserv/main", "gs_helptree");
-	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helpree");	/* fantasy commands */
+	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");	/* fantasy commands */
 
 	command_add(&cmd_dice, gs_cmdtree);
 	command_add(&cmd_wod, gs_cmdtree);
