@@ -3,8 +3,10 @@
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Table rendering class.
+ * NOTE: This is a work in progress and will probably change considerably
+ * later on.
  *
- * $Id: table.c 7993 2007-03-27 21:56:27Z jilles $
+ * $Id: table.c 8343 2007-05-30 22:58:47Z jilles $
  */
 
 #include "atheme.h"

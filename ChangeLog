@@ -1,3 +1,12 @@
+jilles      2007/05/30 22:52:15 UTC	(20070530-8341)
+  Log:
+  Update atheme.pot.
+  
+
+  Changes:	Modified:
+  +407 -313	trunk/po/atheme.pot (File Modified) 
+
+
 jilles      2007/05/29 22:13:10 UTC	(20070529-8339)
   Log:
   Fix the existing gameserv help files and add one for eightball.
