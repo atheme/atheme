@@ -1,3 +1,16 @@
+jilles      2007/05/29 22:13:10 UTC	(20070529-8339)
+  Log:
+  Fix the existing gameserv help files and add one for eightball.
+  
+
+  Changes:	Modified:
+  +8 -0		trunk/help/gameserv/eightball (File Added) 
+  +1 -1		trunk/modules/gameserv/dice.c (File Modified) 
+  +12 -2	trunk/modules/gameserv/eightball.c (File Modified) 
+  +2 -0		trunk/modules/gameserv/namegen.c (File Modified) 
+  +1 -1		trunk/modules/gameserv/rps.c (File Modified) 
+
+
 jilles      2007/05/29 15:48:57 UTC	(20070529-8337)
   Log:
   - add gameserv to html help files
