@@ -1,3 +1,12 @@
+jilles      2007/05/30 22:58:47 UTC	(20070530-8343)
+  Log:
+  Note that table is a work in progress.
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/src/table.c (File Modified) 
+
+
 jilles      2007/05/30 22:52:15 UTC	(20070530-8341)
   Log:
   Update atheme.pot.

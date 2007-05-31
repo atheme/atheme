@@ -1,4 +1,4 @@
-$Id: RELEASE 7749 2007-02-25 15:59:39Z jilles $
+$Id: RELEASE 8345 2007-05-31 09:22:35Z jilles $
 
 Atheme 2.2 Release Notes
 ========================
@@ -19,6 +19,20 @@ ircd protocol
   in some cases and allow topicsetter/topicTS to be set more often). This
   is done by adding a prevts parameter to the topic_sts() protocol module
   function.
+- Track /away status (but not away messages).
+- Support join throttling (+j) in bahamut and solidircd.
+- Make /os jupe work on existing servers for ircds using unconnect semantics
+  on SQUIT (bahamut, ircnet, ultimate3, solidircd, inspircd11). This marks the
+  server as "pending jupe" and introduces the jupe when it really goes away.
+- Make /os jupe work on P10.
+- Use TMODE in TS6 and use FMODE in inspircd11 (reduces desyncs).
+- Support channel mode +J in inspircd11.
+- Add chanserv::changets support for ircu 2.10.12.06 or newer (undernet).
+- Ensure kicks are accepted if the service is not on the channel in
+  asuka, bircd and undernet.
+- Allow services to create channels.
+- For ircds that use a umode for registered nicks, also set and recognize (for
+  some) that umode for grouped nicks other than the account name.
 nickserv
 - The LIST command now allows searching by last host/vhost, and shows
   hold/waitauth status also.
@@ -34,6 +48,22 @@ nickserv
   checking and pre-crypted passwords.
 - In INFO, show to everyone if the account has not completed registration
   verification (MU_WAITAUTH).
+- Add ns_ratelimitreg contrib module, rate limits account registrations.
+  The amount/time is hardcoded.
+- Don't allow implicit logout by LOGIN/IDENTIFY as another account if the
+  LOGOUT command is not loaded.
+- Make it less likely that a user will be recognized as a recreated account.
+- Make FREEZE and RETURN log out all sessions.
+- Split out SENDPASS from user:admin to its own privilege user:sendpass.
+- Add SETPASS, an alternative method of password retrieval. When setpass is
+  loaded, SENDPASS will send a code that can be used to set a new password
+  with setpass, only affecting the old password when that happens.
+- Deny certain spoofs that would break the protocol in VHOST.
+- Make ENFORCE more efficient and accurate.
+- Do not allow dropping an account with the HOLD flag set.
+saslserv
+- Improve logging.
+- Increase the grace time.
 chanserv
 - Fix a crash in /cs set mlock. [MERGED]
 - Allow multiple trigger characters for fantasy commands.
@@ -46,6 +76,27 @@ chanserv
 - In WHY, also show founder access explicitly.
 - The LIST command now shows hold status also.
 - Get rid of some unnecessary mode lock checks.
+- Allow disabling HOP by setting it to the same value as VOP.
+- Disable and remove +hH access flags if the ircd does not support halfops.
+- Add cs_userinfo contrib module, allows setting an info text on users with
+  access to a channel, which is shown to the channel on join.
+- Add TOPICPREPEND command.
+- Track when channel access entries were last modified.
+- Add a reason field to AKICK. The part of the reason after a '|' character
+  is not shown publicly.
+- Add QUIET and UNQUIET commands for +q modes in charybdis and hyperion.
+- Make RECOVER also clear all owner/protect statuses on ircds that support
+  those.
+- Add a new type of fantasy command: addressing ChanServ by name, for example
+  "ChanServ: kick somenick reason here".
+- Do not allow dropping a channel with the HOLD flag set.
+- Allow per-channel redefinition of xOP templates.
+memoserv
+- If a user unsets away and is logged in or recognized, notify them of new
+  memos.
+- Add SENDOPS command for channel memos (sent to all channel ops). If this
+  is loaded, SEND also accepts channel names.
+- Add READ NEW which reads upto 5 unread memos.
 gameserv
 - Add game services, works as fantasy commands and in /msg.
 oper
@@ -53,16 +104,36 @@ oper
 - CLONES now allows editing an exemption without removing it first.
 - Add some more checking on AKILL masks.
 - The os_logonnews contrib module now uses DATADIR to find its file. [MERGED]
+- Make CLONES not send more than one warning per IP per 5 minutes unless the
+  number of clones is increasing.
+- Make the log subsystem more flexible.
+- Make jupes record who placed them.
+- Use configured --bindir for restart.
 code
 - Remove the incomplete atheme testsuite.
 - Rework handle_ctcp_common() to use sourceinfo instead of passing
   redundant references around.
 - Move all code under libatheme/ to src/.
-- Add an object framework.
+- Add an object framework and overhaul account management to use it.
 - Add some new assertion macros that send wallops if the assertion fails.
 - Remove unused me.uplink and serverinfo::uplink.
 - Move some of the m_server() logic to a new function handle_server() in
   src/ptasks.c.
+- Add vim options to the end of each C file.
+- Remove generated files from SVN, you now need autoconf and automake (only
+  for aclocal) to compile the SVN version.
+- Add a 'dist' target to the Makefile to build tarballs.
+- Move the modestacker from channel names to channel_t pointers.
+- Move part() to src/services.c. The protocol module function is now called
+  part_sts() and takes channel_t and user_t pointers.
+- Move mode_sts() protocol module function from channel names to channel_t
+  pointers.
+- Stop using <stdint.h> types.
+- Remove remnants of Windows support.
+- Make channel_delete() take a channel_t pointer instead of a name.
+- Various optimizations and cleanups.
+xmlrpc
+- Added perl modules abstracting atheme's XML-RPC interface.
 documentation
 - Update documentation a little. [MERGED]
 other
@@ -79,9 +150,16 @@ other
 - Various corrections to log levels.
 - Exit atheme if atheme.db cannot be opened for reading for any reason other
   than it not existing, to avoid overwriting it with an empty database later.
-- Add a hybserv to atheme conversion tool to contrib.
+- Add a hybserv/theia to atheme conversion tool to contrib.
 - Tone down debug logging a little so it is a bit more usable on large
   networks.
+- Add gettext support (see doc/TRANSLATION).
+- Move removal of old servers/users/channels from just before reconnecting
+  to just after disconnecting.
+- Rename the services binary to atheme-services.
+- Add alis (advanced list service) to contrib; this is a port of
+  ratbox-services's alis.
+- Update anope_convert for anope 1.7.18.
 
 Atheme 2.1 Release Notes
 ========================
