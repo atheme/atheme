@@ -1,3 +1,12 @@
+jilles      2007/05/31 16:37:59 UTC	(20070531-8349)
+  Log:
+  Add missing userserv/fverify help file.
+  
+
+  Changes:	Modified:
+  + -		trunk/help/userserv/fverify (File Added) 
+
+
 jilles      2007/05/31 09:22:35 UTC	(20070531-8345)
   Log:
   Update release notes.
