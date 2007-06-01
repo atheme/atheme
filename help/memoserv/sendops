@@ -4,7 +4,7 @@ SENDOPS allows you to send a memo to all ops
 on a channel. Only users allowed to view the
 access list can do this.
 
-Syntax: SENDOPS <channel> <text>
+Syntax: SENDOPS <#channel> <text>
 
 Examples:
     /msg &nick& SENDOPS #chat beware of badguy

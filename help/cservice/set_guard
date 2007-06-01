@@ -3,7 +3,7 @@ Help for SET GUARD:
 SET GUARD allows you to have &nick& join your channel.
 Fantasy commands will only work if this is enabled.
 
-Syntax: SET <channel> GUARD ON|OFF
+Syntax: SET <#channel> GUARD ON|OFF
 
 Example:
     /msg &nick& SET #atheme GUARD ON
