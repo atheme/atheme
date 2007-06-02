@@ -1,3 +1,14 @@
+jilles      2007/06/02 22:18:05 UTC	(20070602-8365)
+  Log:
+  Disable +X entirely, it would be confusing otherwise.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/include/account.h (File Modified) 
+  +1 -1		trunk/src/account.c (File Modified) 
+  +1 -2		trunk/src/flags.c (File Modified) 
+
+
 jilles      2007/06/02 22:17:28 UTC	(20070602-8363)
   Log:
   Ensure LG_ALL is not equal to TOKEN_UNMATCHED (-1), so
