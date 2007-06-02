@@ -28,7 +28,6 @@ struct flags_table chanacs_flags[] = {
 	{'h', CA_HALFOP},
 	{'H', CA_AUTOHALFOP},
 	{'A', CA_ACLVIEW},
-	{'X', CA_SUSPENDED},
 	{'b', CA_AKICK},
 	{0, 0}
 };
@@ -70,7 +69,7 @@ void flags_make_bitmasks(const char *string, struct flags_table table[], unsigne
 				  if (table == chanacs_flags)
 				  {
 					  *addflags &= CA_ALLPRIVS & ca_all;
-					  *removeflags |= CA_AKICK | CA_SUSPENDED;
+					  *removeflags |= CA_AKICK;
 				  }
 			  }
 			  else if (status == FLAGS_DEL)

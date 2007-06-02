@@ -1,3 +1,14 @@
+jilles      2007/06/02 22:17:28 UTC	(20070602-8363)
+  Log:
+  Ensure LG_ALL is not equal to TOKEN_UNMATCHED (-1), so
+  debug loglevels actually work in atheme.conf. This may
+  have already worked on certain 64-bit machines.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/include/tools.h (File Modified) 
+
+
 jilles      2007/06/02 22:03:28 UTC	(20070602-8361)
   Log:
   Wait for 3 seconds after connection before sending SERVER,

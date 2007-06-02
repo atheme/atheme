@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 8205 2007-04-29 18:13:34Z jilles $
+ * $Id: account.c 8365 2007-06-02 22:18:05Z jilles $
  */
 
 #include "atheme.h"
@@ -694,7 +694,7 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel, int maxtime
 	LIST_FOREACH(n, mc->chanacs.head)
 	{
 		ca = n->data;
-		if (ca->level & CA_AKICK || ca->level & CA_SUSPENDED)
+		if (ca->level & CA_AKICK)
 			continue;
 		mu = ca->myuser;
 		if (mu == NULL || mu == mc->founder)
