@@ -1,3 +1,18 @@
+pippijn     2007/06/01 13:39:26 UTC	(20070601-8359)
+  Log:
+  Replaced <channel> with <#channel>. This format is used in most helpfiles.
+  
+
+  Changes:	Modified:
+  +2 -2		trunk/help/cservice/set_email (File Modified) 
+  +1 -1		trunk/help/cservice/set_entrymsg (File Modified) 
+  +1 -1		trunk/help/cservice/set_fantasy (File Modified) 
+  +1 -1		trunk/help/cservice/set_guard (File Modified) 
+  +1 -1		trunk/help/cservice/set_property (File Modified) 
+  +1 -1		trunk/help/cservice/set_url (File Modified) 
+  +1 -1		trunk/help/memoserv/sendops (File Modified) 
+
+
 jilles      2007/06/01 11:43:20 UTC	(20070601-8355)
   Log:
   Add missing SENDOPS help file.

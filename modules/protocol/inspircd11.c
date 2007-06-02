@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for spanning tree 1.1 branch inspircd.
  *
- * $Id: inspircd11.c 8261 2007-05-17 22:14:41Z jilles $
+ * $Id: inspircd11.c 8361 2007-06-02 22:03:28Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 #include "pmodule.h"
 #include "protocol/inspircd.h"
 
-DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 8261 2007-05-17 22:14:41Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
+DECLARE_MODULE_V1("protocol/inspircd", TRUE, _modinit, NULL, "$Id: inspircd11.c 8361 2007-06-02 22:03:28Z jilles $", "InspIRCd Core Team <http://www.inspircd.org/>");
 
 /* *INDENT-OFF* */
 
@@ -177,6 +177,9 @@ static boolean_t check_rejoindelay(const char *value, channel_t *c, mychan_t *mc
 static unsigned int inspircd_server_login(void)
 {
 	int ret;
+
+	/* XXX This is a horrible hack, but I don't know how else */
+	sleep(3);
 
 	ret = sts("SERVER %s %s 0 :%s", me.name, curr_uplink->pass, me.desc);
 	if (ret == 1)
