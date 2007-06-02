@@ -1,3 +1,16 @@
+jilles      2007/06/02 22:03:28 UTC	(20070602-8361)
+  Log:
+  Wait for 3 seconds after connection before sending SERVER,
+  to work around CAPAB strangeness. This freezes atheme
+  entirely for that time, oh well.
+  
+  Tested by owine.
+  
+
+  Changes:	Modified:
+  +3 -0		trunk/modules/protocol/inspircd11.c (File Modified) 
+
+
 pippijn     2007/06/01 13:39:26 UTC	(20070601-8359)
   Log:
   Replaced <channel> with <#channel>. This format is used in most helpfiles.
