@@ -1,3 +1,14 @@
+jilles      2007/06/03 21:34:06 UTC	(20070603-8403)
+  Log:
+  Update path in xmlrpc examples.
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/contrib/perlxmlrpc.pl (File Modified) 
+  +1 -1		trunk/contrib/rubyxmlrpc.rb (File Modified) 
+  +2 -2		trunk/contrib/xmlrpc_explorer.php (File Modified) 
+
+
 pippijn     2007/06/03 21:33:22 UTC	(20070603-8401)
   Log:
   Made www_root for the httpd configurable.

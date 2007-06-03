@@ -4,7 +4,7 @@
  *
  * New xmlrpc implementation
  *
- * $Id: main.c 8399 2007-06-03 21:26:08Z pippijn $
+ * $Id: main.c 8405 2007-06-03 21:40:48Z pippijn $
  */
 
 #include "atheme.h"
@@ -16,7 +16,7 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 8399 2007-06-03 21:26:08Z pippijn $",
+	"$Id: main.c 8405 2007-06-03 21:40:48Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -94,7 +94,10 @@ static void xmlrpc_config_ready(void *vptr)
 {
 	node_t *n;
 
-	if (handle_xmlrpc.handler != NULL && handle_xmlrpc.path != NULL)
+	if (handle_xmlrpc.path == NULL)
+		handle_xmlrpc.path = "/xmlrpc";
+
+	if (handle_xmlrpc.handler != NULL)
 	{
 		if ((n = node_find(&handle_xmlrpc, httpd_path_handlers)))
 		{
