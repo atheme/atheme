@@ -1,3 +1,13 @@
+jilles      2007/06/03 20:33:21 UTC	(20070603-8385)
+  Log:
+  Fix make depend.
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/modules/Makefile.in (File Modified) 
+  +1 -1		trunk/modules/xmlrpc/Makefile.in (File Modified) 
+
+
 pippijn     2007/06/03 20:28:34 UTC	(20070603-8383)
   Log:
   MKDEP is not makedepend
