@@ -34,10 +34,8 @@ modules: $(EXTRA_OBJS) $(OBJS)
 
 .PHONY: depend clean distclean
 
-depend: .depend
-
 # This sed command sucks but I don't know a better way -- jilles
-.depend:
+depend:
 	${MKDEP} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} ${SRCS} | sed -e 's|\([^.]*\)\.o:|$(SRCDIR)/\1.so:|' > .depend
 
 clean:

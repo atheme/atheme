@@ -1,3 +1,15 @@
+pippijn     2007/06/03 20:18:27 UTC	(20070603-8377)
+  Log:
+  Solved the absolute paths issue more portably
+  
+
+  Changes:	Modified:
+  +3 -3		trunk/configure.ac (File Modified) 
+  +2 -5		trunk/contrib/Makefile.in (File Modified) 
+  +2 -4		trunk/modules/Makefile.defs.in (File Modified) 
+  +3 -5		trunk/src/Makefile.in (File Modified) 
+
+
 pippijn     2007/06/03 20:03:26 UTC	(20070603-8375)
   Log:
   - Allow for absolute paths in Makefiles by passing --enable-absolute-paths to the configure script

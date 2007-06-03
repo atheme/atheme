@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 8377 2007-06-03 20:18:27Z pippijn $
+# $Id: Makefile.in 8379 2007-06-03 20:26:51Z pippijn $
 #
 
 CC		= @CC@
@@ -88,9 +88,7 @@ install:
 
 .PHONY: depend clean distclean
 # This sed command sucks but I don't know a better way -- jilles
-depend: .depend
-
-.depend:
+depend:
 	${MKDEP} ${CPPFLAGS} ${CFLAGS} ${BASE_SRCS} > .depend
 
 clean:

@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
+# $Id: Makefile.in 8379 2007-06-03 20:26:51Z pippijn $
 #
 
 CC		= @CC@
@@ -79,6 +79,7 @@ depend:
 	@for i in $(SUBDIRS); do \
 		echo "depend ==> $$i"; \
 		cd $$i; \
+		touch .depend; \
 		${MAKE} depend; cd ..; \
 	done
 	@echo "depend ==> contrib"; cd contrib; touch .depend && ${MAKE} depend || echo '(error ignored)'; cd ..
