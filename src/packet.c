@@ -4,11 +4,12 @@
  *
  * IRC packet handling.
  *
- * $Id: packet.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: packet.c 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #include "atheme.h"
 #include "uplink.h"
+#include "datastream.h"
 
 /* bursting timer */
 #if HAVE_GETTIMEOFDAY

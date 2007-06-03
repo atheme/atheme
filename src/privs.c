@@ -4,10 +4,11 @@
  *
  * See doc/LICENSE for licensing information.
  *
- * $Id: privs.c 7839 2007-03-06 00:09:30Z pippijn $
+ * $Id: privs.c 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #include "atheme.h"
+#include "privs.h"
 
 list_t operclasslist;
 list_t soperlist;

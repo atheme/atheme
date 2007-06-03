@@ -5,11 +5,12 @@
  * This file contains socket routines.
  * Based off of W. Campbell's code.
  *
- * $Id: send.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: send.c 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #include "atheme.h"
 #include "uplink.h"
+#include "datastream.h"
 
 /* send a line to the server, append the \r\n */
 int sts(char *fmt, ...)

@@ -3,101 +3,50 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 8247 2007-05-12 20:43:38Z gxti $
+# $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
 #
 
-CC		= @CC@
-RM		= @RM@
-MV		= @MV@
-CP		= @CP@
-INSTALL		= @INSTALL@
-prefix		= @prefix@
-exec_prefix	= @exec_prefix@
-datarootdir	= @datarootdir@
-bindir		= @bindir@
-datadir		= @datadir@
-sysconfdir	= @sysconfdir@
-libdir		= @libdir@
-sbindir		= @sbindir@
-localstatedir	= @localstatedir@
-DOCDIR		= @DOCDIR@
-MODDIR		= @MODDIR@
-SHAREDIR	= @SHAREDIR@
-BIN		= atheme@EXEEXT@
+MODULE = chanserv
+
+include ../Makefile.defs
+
 MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include
-PICFLAGS	= @PICFLAGS@
 CFLAGS		= @CFLAGS@ -I../../include
 
-LIBS		= @LIBS@
-LDFLAGS		= @LDFLAGS@
-CPPFLAGS	= @CPPFLAGS@
+BASE_SRCS =			\
+	$(SRCDIR)/main.c	\
+	$(SRCDIR)/akick.c	\
+	$(SRCDIR)/ban.c		\
+	$(SRCDIR)/clear.c	\
+	$(SRCDIR)/clear_bans.c	\
+	$(SRCDIR)/clear_users.c	\
+	$(SRCDIR)/close.c	\
+	$(SRCDIR)/count.c	\
+	$(SRCDIR)/drop.c	\
+	$(SRCDIR)/fflags.c	\
+	$(SRCDIR)/flags.c	\
+	$(SRCDIR)/ftransfer.c	\
+	$(SRCDIR)/getkey.c	\
+	$(SRCDIR)/halfop.c	\
+	$(SRCDIR)/help.c	\
+	$(SRCDIR)/hold.c	\
+	$(SRCDIR)/info.c	\
+	$(SRCDIR)/invite.c	\
+	$(SRCDIR)/kick.c	\
+	$(SRCDIR)/list.c	\
+	$(SRCDIR)/mark.c	\
+	$(SRCDIR)/op.c		\
+	$(SRCDIR)/quiet.c	\
+	$(SRCDIR)/recover.c	\
+	$(SRCDIR)/register.c	\
+	$(SRCDIR)/set.c		\
+	$(SRCDIR)/status.c	\
+	$(SRCDIR)/taxonomy.c	\
+	$(SRCDIR)/template.c	\
+	$(SRCDIR)/topic.c	\
+	$(SRCDIR)/version.c	\
+	$(SRCDIR)/voice.c	\
+	$(SRCDIR)/why.c		\
+	$(SRCDIR)/xop.c
 
-default: all
-
-BASE_SRCS = 		\
-	main.c		\
-	akick.c		\
-	ban.c		\
-	clear.c		\
-	clear_bans.c	\
-	clear_users.c	\
-	close.c		\
-	count.c		\
-	drop.c		\
-	fflags.c	\
-	flags.c		\
-	ftransfer.c	\
-	getkey.c	\
-	halfop.c	\
-	help.c		\
-	hold.c		\
-	info.c		\
-	invite.c	\
-	kick.c		\
-	list.c		\
-	mark.c		\
-	op.c		\
-	quiet.c		\
-	recover.c	\
-	register.c	\
-	set.c		\
-	status.c	\
-	taxonomy.c	\
-	template.c	\
-	topic.c		\
-	version.c	\
-	voice.c		\
-	why.c		\
-	xop.c
-
-SRCS = ${BASE_SRCS}
-
-OBJS = ${SRCS:.c=.so}
-
-all: modules
-
-build: all
-
-install: build
-	${INSTALL} -d $(DESTDIR)${MODDIR}/modules/chanserv
-	${INSTALL} -m 755 *.so $(DESTDIR)${MODDIR}/modules/chanserv
-
-modules: $(OBJS)
-
-.SUFFIXES: .so
-
-.c.so:
-	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@
-
-.PHONY: depend clean distclean
-# This sed command sucks but I don't know a better way -- jilles
-depend:
-	${MKDEP} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} ${BASE_SRCS} | sed -e 's/\.o:/.so:/' > .depend
-
-clean:
-	${RM} -f *.so
-
-distclean: clean
-	${RM} -f Makefile version.c.last
-
-include .depend
+include ../Makefile.common

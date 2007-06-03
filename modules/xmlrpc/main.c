@@ -4,20 +4,29 @@
  *
  * New xmlrpc implementation
  *
- * $Id: main.c 8297 2007-05-20 08:56:59Z nenolod $
+ * $Id: main.c 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #include "atheme.h"
-
-#define REQUEST_MAX 65536 /* maximum size of one call */
-#define CONTENT_TYPE "text/xml"
+#include "httpd.h"
+#include "xmlrpc.h"
+#include "datastream.h"
+#include "authcookie.h"
 
 DECLARE_MODULE_V1
 (
 	"xmlrpc/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 8297 2007-05-20 08:56:59Z nenolod $",
+	"$Id: main.c 8375 2007-06-03 20:03:26Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
+
+static void handle_request(connection_t *cptr, void *requestbuf);
+
+path_handler_t handle_xmlrpc = { "/xmlrpc", handle_request };
+
+connection_t *current_cptr; /* XXX: Hack: src/xmlrpc.c requires us to do this */
+
+list_t *httpd_path_handlers;
 
 static void xmlrpc_command_fail(sourceinfo_t *si, faultcode_t code, const char *message);
 static void xmlrpc_command_success_nodata(sourceinfo_t *si, const char *message);
@@ -27,297 +36,12 @@ static int xmlrpcmethod_login(void *conn, int parc, char *parv[]);
 static int xmlrpcmethod_logout(void *conn, int parc, char *parv[]);
 static int xmlrpcmethod_command(void *conn, int parc, char *parv[]);
 
-connection_t *listener;
-connection_t *current_cptr; /* Hack: src/xmlrpc.c requires us to do this */
-
-struct sourceinfo_vtable xmlrpc_vtable = { "xmlrpc", xmlrpc_command_fail, xmlrpc_command_success_nodata, xmlrpc_command_success_string };
-
-/* conf stuff */
-list_t conf_xmlrpc_table;
-struct xmlrpc_configuration
-{
-	char *host;
-	int port;
-} xmlrpc_config;
-
-static int conf_xmlrpc_host(config_entry_t *ce)
-{
-	if (!ce->ce_vardata)
-		return -1;
-
-	xmlrpc_config.host = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int conf_xmlrpc_port(config_entry_t *ce)
-{
-	if (!ce->ce_vardata)
-		return -1;
-
-	xmlrpc_config.port = ce->ce_vardatanum;
-
-	return 0;
-}
-
-static int conf_xmlrpc(config_entry_t *ce)
-{
-	subblock_handler(ce, &conf_xmlrpc_table);
-	return 0;
-}
-
-struct httpddata
-{
-	char method[64];
-	char filename[256];
-	char *requestbuf;
-	char *replybuf;
-	int length;
-	int lengthdone;
-	boolean_t connection_close;
-	boolean_t correct_content_type;
-	boolean_t expect_100_continue;
-	boolean_t sent_reply;
+struct sourceinfo_vtable xmlrpc_vtable = {
+	"xmlrpc",
+	xmlrpc_command_fail,
+	xmlrpc_command_success_nodata,
+	xmlrpc_command_success_string
 };
-
-static void clear_httpddata(struct httpddata *hd)
-{
-	hd->method[0] = '\0';
-	hd->filename[0] = '\0';
-	if (hd->requestbuf != NULL)
-	{
-		free(hd->requestbuf);
-		hd->requestbuf = NULL;
-	}
-	if (hd->replybuf != NULL)
-	{
-		free(hd->replybuf);
-		hd->replybuf = NULL;
-	}
-	hd->length = 0;
-	hd->lengthdone = 0;
-	hd->correct_content_type = FALSE;
-	hd->expect_100_continue = FALSE;
-	hd->sent_reply = FALSE;
-}
-
-static void process_header(connection_t *cptr, char *line)
-{
-	struct httpddata *hd;
-	char *p;
-
-	hd = cptr->userdata;
-	p = strchr(line, ':');
-	if (p == NULL)
-		return;
-	*p = '\0';
-	p++;
-	while (*p == ' ')
-		p++;
-	if (!strcasecmp(line, "Connection"))
-	{
-		p = strtok(p, ", \t");
-		while (p != NULL)
-		{
-			if (!strcasecmp(p, "close"))
-			{
-				slog(LG_DEBUG, "process_header(): Connection: close requested by fd %d", cptr->fd);
-				hd->connection_close = TRUE;
-			}
-			p = strtok(NULL, ", \t");
-		}
-	}
-	else if (!strcasecmp(line, "Content-Length"))
-	{
-		hd->length = atoi(p);
-	}
-	else if (!strcasecmp(line, "Content-Type"))
-	{
-		p = strtok(p, "; \t");
-		hd->correct_content_type = p != NULL && !strcasecmp(p, CONTENT_TYPE);
-	}
-	else if (!strcasecmp(line, "Expect"))
-	{
-		hd->expect_100_continue = !strcasecmp(p, "100-continue");
-	}
-}
-
-static void send_error(connection_t *cptr, int errorcode, const char *text, boolean_t sendentity)
-{
-	struct httpddata *hd;
-	char buf1[300];
-	char buf2[700];
-
-	hd = cptr->userdata;
-	if (errorcode < 100 || errorcode > 999)
-		errorcode = 500;
-	snprintf(buf2, sizeof buf2, "HTTP/1.1 %d %s\r\nAtheme XMLRPC HTTPD\r\n", errorcode, text);
-	snprintf(buf1, sizeof buf1, "HTTP/1.1 %d %s\r\n"
-			"Server: Atheme/%s\r\n"
-			"Content-Type: text/plain\r\n"
-			"Content-Length: %ld\r\n\r\n%s",
-			errorcode, text, version, strlen(buf2),
-			sendentity ? buf2 : "");
-	sendq_add(cptr, buf1, strlen(buf1));
-}
-
-static void httpd_recvqhandler(connection_t *cptr)
-{
-	char buf[BUFSIZE * 2];
-	char outbuf[BUFSIZE * 2];
-	int count;
-	struct httpddata *hd;
-	char *p;
-
-	hd = cptr->userdata;
-
-	if (hd->requestbuf != NULL)
-	{
-		count = recvq_get(cptr, hd->requestbuf + hd->lengthdone, hd->length - hd->lengthdone);
-		if (count <= 0)
-			return;
-		hd->lengthdone += count;
-		if (hd->lengthdone != hd->length)
-			return;
-		hd->requestbuf[hd->length] = '\0';
-		current_cptr = cptr;
-		xmlrpc_process(hd->requestbuf, cptr);
-		current_cptr = NULL;
-		clear_httpddata(hd);
-		return;
-	}
-
-	count = recvq_getline(cptr, buf, sizeof buf - 1);
-	if (count <= 0)
-		return;
-	if (cptr->flags & CF_NONEWLINE)
-	{
-		slog(LG_INFO, "httpd_recvqhandler(): throwing out fd %d (%s) for excessive line length", cptr->fd, cptr->hbuf);
-		send_error(cptr, 400, "Bad request", TRUE);
-		sendq_add_eof(cptr);
-		return;
-	}
-	cnt.bin += count;
-	if (buf[count - 1] == '\n')
-		count--;
-	if (count > 0 && buf[count - 1] == '\r')
-		count--;
-	buf[count] = '\0';
-	if (hd->method[0] == '\0')
-	{
-		/* make sure they're not sending more requests after
-		 * declaring they're not sending any more */
-		if (hd->connection_close)
-			return;
-		p = strtok(buf, " ");
-		if (p == NULL)
-			return;
-		strlcpy(hd->method, p, sizeof hd->method);
-		p = strtok(NULL, " ");
-		if (p == NULL)
-			return;
-		strlcpy(hd->filename, p, sizeof hd->filename);
-		p = strtok(NULL, "");
-		if (p == NULL || !strcmp(p, "HTTP/1.0"))
-			hd->connection_close = TRUE;
-		slog(LG_DEBUG, "httpd_recvqhandler(): request %s for %s", hd->method, hd->filename);
-	}
-	else if (count == 0)
-	{
-		if (strcmp(hd->method, "POST"))
-		{
-			send_error(cptr, 501, "Method Not Implemented", TRUE);
-			sendq_add_eof(cptr);
-			return;
-		}
-		if (hd->length <= 0)
-		{
-			send_error(cptr, 411, "Length Required", TRUE);
-			sendq_add_eof(cptr);
-			return;
-		}
-		if (hd->length > REQUEST_MAX)
-		{
-			send_error(cptr, 413, "Request Entity Too Large", TRUE);
-			sendq_add_eof(cptr);
-			return;
-		}
-		if (!hd->correct_content_type)
-		{
-			send_error(cptr, 415, "Unsupported Media Type", TRUE);
-			sendq_add_eof(cptr);
-			return;
-		}
-		if (hd->expect_100_continue)
-		{
-			snprintf(outbuf, sizeof outbuf,
-					"HTTP/1.1 100 Continue\r\nServer: Atheme/%s\r\n\r\n",
-					version);
-			sendq_add(cptr, outbuf, strlen(outbuf));
-		}
-		hd->requestbuf = smalloc(hd->length + 1);
-	}
-	else
-		process_header(cptr, buf);
-}
-
-static void httpd_closehandler(connection_t *cptr)
-{
-	struct httpddata *hd;
-
-	slog(LG_DEBUG, "httpd_closehandler(): fd %d (%s) closed", cptr->fd, cptr->hbuf);
-	hd = cptr->userdata;
-	if (hd != NULL)
-	{
-		free(hd->requestbuf);
-		free(hd);
-	}
-	cptr->userdata = NULL;
-}
-
-static void do_listen(connection_t *cptr)
-{
-	connection_t *newptr;
-	struct httpddata *hd;
-
-	newptr = connection_accept_tcp(cptr, recvq_put, sendq_flush);
-	slog(LG_DEBUG, "do_listen(): accepted httpd from %s fd %d", newptr->hbuf, newptr->fd);
-	hd = smalloc(sizeof(*hd));
-	hd->requestbuf = NULL;
-	hd->replybuf = NULL;
-	hd->connection_close = FALSE;
-	clear_httpddata(hd);
-	newptr->userdata = hd;
-	newptr->recvq_handler = httpd_recvqhandler;
-	newptr->close_handler = httpd_closehandler;
-}
-
-extern list_t connection_list; /* XXX ? */
-
-static void httpd_checkidle(void *arg)
-{
-	node_t *n;
-	connection_t *cptr;
-
-	(void)arg;
-	if (listener == NULL)
-		return;
-	LIST_FOREACH(n, connection_list.head)
-	{
-		cptr = n->data;
-		if (cptr->listener == listener && cptr->last_recv + 300 < CURRTIME)
-		{
-			if (sendq_nonempty(cptr))
-				cptr->last_recv = CURRTIME;
-			else
-				/* from a timeout function,
-				 * connection_close_soon() may take quite
-				 * a while, and connection_close() is safe
-				 * -- jilles */
-				connection_close(cptr);
-		}
-	}
-}
 
 static char *dump_buffer(char *buf, int length)
 {
@@ -339,32 +63,29 @@ static char *dump_buffer(char *buf, int length)
 	return buf;
 }
 
-static void xmlrpc_config_ready(void *vptr)
+static void handle_request(connection_t *cptr, void *requestbuf)
 {
-	if (xmlrpc_config.host != NULL && xmlrpc_config.port != 0)
-	{
-		listener = connection_open_listener_tcp(xmlrpc_config.host,
-			xmlrpc_config.port, do_listen);
-		if (listener == NULL)
-			slog(LG_ERROR, "xmlrpc_config_ready(): failed to open listener on host %s port %d", xmlrpc_config.host, xmlrpc_config.port);
-		hook_del_hook("config_ready", xmlrpc_config_ready);
-	}
-	else
-		slog(LG_ERROR, "xmlrpc_config_ready(): xmlrpc{} block missing or invalid");
+	current_cptr = cptr;
+	xmlrpc_process(requestbuf, cptr);
+	current_cptr = NULL;
+
+	return; 
 }
 
 void _modinit(module_t *m)
 {
-	event_add("httpd_checkidle", httpd_checkidle, NULL, 60);
+	node_t *n;
 
-	/* This module needs a rehash to initialize fully if loaded
-	 * at run time */
-	hook_add_event("config_ready");
-	hook_add_hook("config_ready", xmlrpc_config_ready);
+	MODULE_USE_SYMBOL(httpd_path_handlers, "misc/httpd", "httpd_path_handlers");
 
-	add_top_conf("XMLRPC", conf_xmlrpc);
-	add_conf_item("HOST", &conf_xmlrpc_table, conf_xmlrpc_host);
-	add_conf_item("PORT", &conf_xmlrpc_table, conf_xmlrpc_port);
+	if ((n = node_find(&handle_xmlrpc, httpd_path_handlers)))
+	{
+		slog(LG_INFO, "xmlrpc/main.c: handler already in the list");
+		return;
+	}
+
+	n = node_create();
+	node_add(&handle_xmlrpc, node_create(), httpd_path_handlers);
 
 	xmlrpc_set_buffer(dump_buffer);
 	xmlrpc_set_options(XMLRPC_HTTP_HEADER, XMLRPC_OFF);
@@ -375,14 +96,20 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
-	event_delete(httpd_checkidle, NULL);
-	connection_close_soon_children(listener);
+	node_t *n;
+
 	xmlrpc_unregister_method("atheme.login");
 	xmlrpc_unregister_method("atheme.logout");
 	xmlrpc_unregister_method("atheme.command");
-	del_conf_item("HOST", &conf_xmlrpc_table);
-	del_conf_item("PORT", &conf_xmlrpc_table);
-	del_top_conf("XMLRPC");
+
+	if (!(n = node_find(&handle_xmlrpc, httpd_path_handlers)))
+	{
+		slog(LG_INFO, "xmlrpc/main.c: handler was not registered.");
+		return;
+	}
+
+	node_del(n, httpd_path_handlers);
+	node_free(n);
 }
 
 static void xmlrpc_command_fail(sourceinfo_t *si, faultcode_t code, const char *message)
@@ -667,8 +394,5 @@ static int xmlrpcmethod_command(void *conn, int parc, char *parv[])
 	return 0;
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs ts=8 sw=8 noexpandtab
  */

@@ -6,64 +6,16 @@
 # $Id: Makefile.in 1773 2005-08-18 19:37:23Z nenolod $
 #
 
-CC		= @CC@
-RM		= @RM@
-MV		= @MV@
-CP		= @CP@
-INSTALL		= @INSTALL@
-prefix		= @prefix@
-exec_prefix	= @exec_prefix@
-datarootdir	= @datarootdir@
-bindir		= @bindir@
-datadir		= @datadir@
-sysconfdir	= @sysconfdir@
-libdir		= @libdir@
-sbindir		= @sbindir@
-localstatedir	= @localstatedir@
-DOCDIR		= @DOCDIR@
-MODDIR		= @MODDIR@
-SHAREDIR	= @SHAREDIR@
-BIN		= atheme@EXEEXT@
+MODULE = crypto
+
+include ../Makefile.defs
+
 MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include
-PICFLAGS	= @PICFLAGS@
 CFLAGS		= @CFLAGS@ -I../../include
 
-LIBS		= @LIBS@
-LDFLAGS		= @LDFLAGS@
-CPPFLAGS	= @CPPFLAGS@
+BASE_SRCS =				\
+	$(SRCDIR)/@POSIX_CRYPTC@	\
+	$(SRCDIR)/ircservices.c		\
+	$(SRCDIR)/sorservices.c
 
-default: all
-
-BASE_SRCS = @POSIX_CRYPTC@ ircservices.c sorservices.c
-
-SRCS = ${BASE_SRCS}
-
-OBJS = ${SRCS:.c=.so}
-
-all: protocols
-
-build: all
-
-install: build
-	${INSTALL} -d $(DESTDIR)${MODDIR}/modules/crypto
-	${INSTALL} -m 755 *.so $(DESTDIR)${MODDIR}/modules/crypto
-
-protocols: $(OBJS)
-
-.SUFFIXES: .so
-
-.c.so:
-	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@
-
-.PHONY: depend clean distclean
-# This sed command sucks but I don't know a better way -- jilles
-depend:
-	${MKDEP} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} ${BASE_SRCS} | sed -e 's/\.o:/.so:/' > .depend
-
-clean:
-	${RM} -f *.so
-
-distclean: clean
-	${RM} -f Makefile version.c.last
-
-include .depend
+include ../Makefile.common

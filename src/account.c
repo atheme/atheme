@@ -4,11 +4,14 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 8365 2007-06-02 22:18:05Z jilles $
+ * $Id: account.c 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #include "atheme.h"
 #include "uplink.h" /* XXX, for sendq_flush(curr_uplink->conn); */
+#include "datastream.h"
+#include "privs.h"
+#include "authcookie.h"
 
 dictionary_tree_t *mulist;
 dictionary_tree_t *nicklist;

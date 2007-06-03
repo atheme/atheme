@@ -4,13 +4,15 @@
  *
  * This file contains the main() routine.
  *
- * $Id: atheme.c 8303 2007-05-20 13:27:40Z jilles $
+ * $Id: atheme.c 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #include "atheme.h"
 #include "uplink.h"
 #include "pmodule.h" /* pcommand_init */
 #include "internal.h"
+#include "datastream.h"
+#include "authcookie.h"
 
 chansvs_t chansvs;
 globsvs_t globsvs;

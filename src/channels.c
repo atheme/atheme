@@ -4,7 +4,7 @@
  *
  * Channel stuff.
  *
- * $Id: channels.c 8227 2007-05-05 15:19:38Z jilles $
+ * $Id: channels.c 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #include "atheme.h"
@@ -136,8 +136,7 @@ channel_t *channel_add(const char *name, unsigned int ts, server_t *creator)
 void channel_delete(channel_t *c)
 {
 	mychan_t *mc;
-	node_t *n, *tn, *n2;
-	user_t *u;
+	node_t *n, *tn;
 	chanuser_t *cu;
 
 	return_if_fail(c != NULL);
@@ -473,7 +472,6 @@ chanuser_t *chanuser_add(channel_t *chan, const char *nick)
 void chanuser_delete(channel_t *chan, user_t *user)
 {
 	chanuser_t *cu;
-	node_t *n, *tn;
 	hook_channel_joinpart_t hdata;
 
 	if (!chan)

@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 8291 2007-05-20 08:16:25Z nenolod $
+dnl $Id: configure.ac 8375 2007-06-03 20:03:26Z pippijn $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.59)
 AC_INIT(atheme, 2.2, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 8291 2007-05-20 08:16:25Z nenolod $])
+AC_COPYRIGHT([$Id: configure.ac 8375 2007-06-03 20:03:26Z pippijn $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -116,6 +116,33 @@ LOGDIR='${prefix}/var'
 DATADIR='${prefix}/etc'
 RUNDIR='${prefix}/var'
 
+ABSPATHS="no"
+AC_MSG_CHECKING(if you want to use absolute paths when building)
+AC_ARG_ENABLE(absolute-paths,
+AC_HELP_STRING([--enable-absolute-paths],[ Use absolute paths when building.]),
+[
+   case "$enableval" in
+   yes)
+      case "$srcdir" in
+         /*)
+         ;;
+         *)
+            oldsrcdir="$srcdir"
+            srcdir="`cd \"$srcdir\";pwd`"
+         ;;
+      esac
+      ABSPATHS="yes"
+      ;;
+   no)
+      ABSPATHS="no"
+      ;;
+   esac
+])
+AC_MSG_RESULT($ABSPATHS)
+
+SRCDIR="$srcdir"
+BUILDDIR=`pwd`
+
 FHSPATHS="no"
 AC_MSG_CHECKING(if you want FHS-like pathnames)
 AC_ARG_ENABLE(fhs-paths,
@@ -143,6 +170,9 @@ AC_SUBST(SHAREDIR)
 AC_SUBST(DATADIR)
 AC_SUBST(LOGDIR)
 AC_SUBST(RUNDIR)
+AC_SUBST(ABSPATHS)
+AC_SUBST(SRCDIR)
+AC_SUBST(BUILDDIR)
 dnl the following is wrong! -- jilles
 dnl AC_DEFINE_UNQUOTED([MODDIR], "${MODDIR}", [Module root directory.])
 
@@ -174,7 +204,7 @@ AC_HELP_STRING([--disable-balloc],[Disable the block allocator.]),
 [balloc=$enableval], [balloc=yes])
 
 if test "$balloc" = no; then
-        AC_DEFINE([NOBALLOC], 1, [Define to 1 if you wish to disable the block allocator.])
+	AC_DEFINE([NOBALLOC], 1, [Define to 1 if you wish to disable the block allocator.])
 fi
 AC_MSG_RESULT($balloc)
 
@@ -211,7 +241,7 @@ shared_modules="yes"
 dnl Second stage: check for functions and headers.
 if test "$shared_modules" = yes; then
 	AC_CHECK_HEADERS(dlfcn.h)
-        AC_SEARCH_LIBS(dlopen, [dl c_r],
+	AC_SEARCH_LIBS(dlopen, [dl c_r],
 	[
 	    AC_DEFINE(HAVE_DLOPEN, 1, [Define if the dlopen function is available.])
 	    AC_CHECK_FUNC(dlsym, ,
@@ -321,9 +351,9 @@ if test "$shared_modules" = yes; then
 		)
 	)
 
-        dnl We need to find out whether underscores are appended to symbol
-        dnl names in executable files.  First, though, we need to see
-        dnl where nlist.h is hiding.
+	dnl We need to find out whether underscores are appended to symbol
+	dnl names in executable files.  First, though, we need to see
+	dnl where nlist.h is hiding.
 	AC_CHECK_HEADER(libelf/nlist.h, [ nlist_h="libelf/nlist.h" ], )
 	AC_CHECK_HEADER(elf/nlist.h, [ nlist_h="elf/nlist.h" ], )
 	AC_CHECK_HEADER(nlist.h, [ nlist_h="nlist.h" ], )
@@ -466,17 +496,21 @@ AC_OUTPUT([ po/Makefile.in
 	Makefile
 	contrib/Makefile
 	modules/Makefile
+	modules/Makefile.common
+	modules/Makefile.defs
 	modules/backend/Makefile
-	modules/crypto/Makefile
 	modules/chanserv/Makefile
+	modules/crypto/Makefile
+	modules/gameserv/Makefile
 	modules/global/Makefile
+	modules/jsonrpc/Makefile
+	modules/memoserv/Makefile
+	modules/misc/Makefile
 	modules/nickserv/Makefile
 	modules/operserv/Makefile
-	modules/xmlrpc/Makefile
-	modules/memoserv/Makefile
-	modules/saslserv/Makefile
-	modules/gameserv/Makefile
 	modules/protocol/Makefile
+	modules/saslserv/Makefile
+	modules/xmlrpc/Makefile
 	src/Makefile
 ])
 
@@ -484,18 +518,18 @@ d=`eval echo ${MODDIR}`
 d=`eval echo $d`
 echo "
 Configuration:
-        Atheme version       : ${PACKAGE_VERSION}
-        Installation prefix  : ${prefix}
-        Module root directory: `eval echo $d`
-        Config directory     : ${sysconfdir}
-        Logfile directory    : ${LOGDIR}
-        Data directory       : ${DATADIR}
-        PID directory        : ${RUNDIR}
-        Large network support: ${LARGENET}
-        OpenSSL SASL support : ${SSL}
-        Socket Engine        : ${SOCKET_ENGINE}
-        Block Allocator      : ${balloc}
-        CFLAGS               : ${CFLAGS}
+	Atheme version       : ${PACKAGE_VERSION}
+	Installation prefix  : ${prefix}
+	Module root directory: `eval echo $d`
+	Config directory     : ${sysconfdir}
+	Logfile directory    : ${LOGDIR}
+	Data directory       : ${DATADIR}
+	PID directory        : ${RUNDIR}
+	Large network support: ${LARGENET}
+	OpenSSL SASL support : ${SSL}
+	Socket Engine        : ${SOCKET_ENGINE}
+	Block Allocator      : ${balloc}
+	CFLAGS               : ${CFLAGS}
 
 Type make to build Atheme, and make install to install it."
 

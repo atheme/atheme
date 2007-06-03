@@ -4,12 +4,13 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 8297 2007-05-20 08:56:59Z nenolod $
+ * $Id: conf.c 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #include "atheme.h"
 #include "uplink.h"
 #include "pmodule.h"
+#include "privs.h"
 
 #define PARAM_ERROR(ce) { slog(LG_INFO, "%s:%i: no parameter for " \
                           "configuration option: %s", \

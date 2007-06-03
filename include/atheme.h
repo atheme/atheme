@@ -4,7 +4,7 @@
  *
  * Includes most headers usually needed.
  *
- * $Id: atheme.h 8109 2007-04-05 16:28:02Z jilles $
+ * $Id: atheme.h 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #ifndef ATHEME_H
@@ -28,7 +28,6 @@
 #include "linker.h"
 #include "atheme_string.h"
 #include "atheme_memory.h"
-#include "datastream.h"
 #include "dictionary.h"
 #include "table.h"
 #include "servers.h"
@@ -36,7 +35,6 @@
 #include "module.h"
 #include "crypto.h"
 #include "culture.h"
-#include "xmlrpc.h"
 #include "base64.h"
 #include "md5.h"
 #include "sasl.h"
@@ -54,13 +52,8 @@
 #include "commandtree.h"
 #include "users.h"
 #include "sourceinfo.h"
-#include "authcookie.h"
-#include "privs.h"
 
 #endif /* ATHEME_H */
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs ts=8 sw=8 noexpandtab
  */

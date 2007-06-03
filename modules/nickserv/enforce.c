@@ -23,7 +23,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/enforce",FALSE, _modinit, _moddeinit,
-	"$Id: enforce.c 8233 2007-05-06 22:47:38Z jilles $",
+	"$Id: enforce.c 8375 2007-06-03 20:03:26Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -125,7 +125,6 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 {
 	mynick_t *mn;
-	metadata_t *md;
 	char *target = parv[0];
 	char *password = parv[1];
 	user_t *u;
@@ -262,8 +261,10 @@ static void check_registration(void *vdata)
 static void check_enforce(void *vdata)
 {
 	hook_nick_enforce_t *hdata = vdata;
-	enforce_timeout_t *timeout, *timeout2;
-	node_t *n;
+	enforce_timeout_t *timeout;
+#ifdef SHOW_CORRECT_TIMEOUT_BUT_BE_SLOW
+	enforce_timeout_t *timeout2;
+#endif
 
 	/* nick is a service, ignore it */
 	if (is_internal_client(hdata->u))
@@ -275,7 +276,7 @@ static void check_enforce(void *vdata)
 	/* check if it's already in enforce_list */
 	timeout = NULL;
 #ifdef SHOW_CORRECT_TIMEOUT_BUT_BE_SLOW
-	/* don't do this now, it's O(N^2) in the number of users using
+	/* don't do this now, it's O(n^2) in the number of users using
 	 * a nick without access at a time */
 	LIST_FOREACH(n, enforce_list.head)
 	{

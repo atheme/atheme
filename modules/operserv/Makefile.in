@@ -3,95 +3,44 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7983 2007-03-25 19:29:48Z jilles $
+# $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
 #
 
-CC		= @CC@
-RM		= @RM@
-MV		= @MV@
-CP		= @CP@
-INSTALL		= @INSTALL@
-prefix		= @prefix@
-exec_prefix	= @exec_prefix@
-datarootdir	= @datarootdir@
-bindir		= @bindir@
-datadir		= @datadir@
-sysconfdir	= @sysconfdir@
-libdir		= @libdir@
-sbindir		= @sbindir@
-localstatedir	= @localstatedir@
-DOCDIR		= @DOCDIR@
-MODDIR		= @MODDIR@
-SHAREDIR	= @SHAREDIR@
-BIN		= atheme@EXEEXT@
+MODULE = operserv
+
+include ../Makefile.defs
+
 MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include
-PICFLAGS	= @PICFLAGS@
 CFLAGS		= @CFLAGS@ -I../../include
 
-LIBS		= @LIBS@
-LDFLAGS		= @LDFLAGS@
-CPPFLAGS	= @CPPFLAGS@
+BASE_SRCS =			\
+	$(SRCDIR)/main.c	\
+	$(SRCDIR)/akill.c	\
+	$(SRCDIR)/clearchan.c	\
+	$(SRCDIR)/clones.c	\
+	$(SRCDIR)/compare.c	\
+	$(SRCDIR)/help.c	\
+	$(SRCDIR)/ignore.c	\
+	$(SRCDIR)/inject.c	\
+	$(SRCDIR)/jupe.c	\
+	$(SRCDIR)/mode.c	\
+	$(SRCDIR)/modinspect.c	\
+	$(SRCDIR)/modlist.c	\
+	$(SRCDIR)/modload.c	\
+	$(SRCDIR)/modrestart.c	\
+	$(SRCDIR)/modunload.c	\
+	$(SRCDIR)/noop.c	\
+	$(SRCDIR)/raw.c		\
+	$(SRCDIR)/rakill.c	\
+	$(SRCDIR)/rmatch.c	\
+	$(SRCDIR)/rehash.c	\
+	$(SRCDIR)/restart.c	\
+	$(SRCDIR)/rnc.c		\
+	$(SRCDIR)/rwatch.c	\
+	$(SRCDIR)/shutdown.c	\
+	$(SRCDIR)/soper.c	\
+	$(SRCDIR)/specs.c	\
+	$(SRCDIR)/uptime.c	\
+	$(SRCDIR)/update.c
 
-default: all
-
-BASE_SRCS = 		\
-	main.c		\
-	akill.c		\
-	clearchan.c	\
-	clones.c	\
-	compare.c	\
-	help.c		\
-	ignore.c	\
-	inject.c	\
-	jupe.c		\
-	mode.c		\
-	modinspect.c	\
-	modlist.c	\
-	modload.c	\
-	modrestart.c	\
-	modunload.c	\
-	noop.c		\
-	raw.c		\
-	rakill.c	\
-	rmatch.c	\
-	rehash.c	\
-	restart.c	\
-	rnc.c		\
-	rwatch.c	\
-	shutdown.c	\
-	soper.c		\
-	specs.c		\
-	uptime.c	\
-	update.c
-	
-SRCS = ${BASE_SRCS}
-
-OBJS = ${SRCS:.c=.so}
-
-all: modules
-
-build: all
-
-install: build
-	${INSTALL} -d $(DESTDIR)${MODDIR}/modules/operserv
-	${INSTALL} -m 755 *.so $(DESTDIR)${MODDIR}/modules/operserv
-
-modules: $(OBJS)
-
-.SUFFIXES: .so
-
-.c.so:
-	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@
-
-.PHONY: depend clean distclean
-# This sed command sucks but I don't know a better way -- jilles
-depend:
-	${MKDEP} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} ${BASE_SRCS} | sed -e 's/\.o:/.so:/' > .depend
-
-clean:
-	${RM} -f *.so
-
-distclean: clean
-	${RM} -f Makefile version.c.last
-
-include .depend
+include ../Makefile.common

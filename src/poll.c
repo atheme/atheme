@@ -4,13 +4,14 @@
  *
  * Socketengine implementing poll().
  *
- * $Id: poll.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: poll.c 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #include <sys/poll.h>
 
 #include "atheme.h"
 #include "internal.h"
+#include "datastream.h"
 
 extern list_t connection_list; /* this lives in connection.c */
 

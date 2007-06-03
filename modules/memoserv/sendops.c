@@ -4,7 +4,7 @@
  *
  * This file contains code for the Memoserv SENDOPS function
  *
- * $Id: sendops.c 8331 2007-05-27 14:13:44Z jilles $
+ * $Id: sendops.c 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"memoserv/sendops", FALSE, _modinit, _moddeinit,
-	"$Id: sendops.c 8331 2007-05-27 14:13:44Z jilles $",
+	"$Id: sendops.c 8375 2007-06-03 20:03:26Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -42,7 +42,6 @@ void _moddeinit()
 static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* misc structs etc */
-	user_t *tu;
 	myuser_t *tmu;
 	node_t *n, *tn;
 	mymemo_t *memo;

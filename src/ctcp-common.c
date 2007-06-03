@@ -4,10 +4,12 @@
  *
  * This file contains IRC interaction routines.
  *
- * $Id: ctcp-common.c 8119 2007-04-05 23:04:06Z jilles $
+ * $Id: ctcp-common.c 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #include "atheme.h"
+#include "datastream.h"
+#include "privs.h"
 
 dictionary_tree_t *ctcptree;
 

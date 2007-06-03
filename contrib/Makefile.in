@@ -3,13 +3,16 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 8267 2007-05-17 23:57:54Z jilles $
+# $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
 #
 
 CC		= @CC@
 RM		= @RM@
 MV		= @MV@
 CP		= @CP@
+LN		= @LN@
+TAR		= @TAR@
+SHELL		= /bin/sh
 INSTALL		= @INSTALL@
 prefix		= @prefix@
 exec_prefix	= @exec_prefix@
@@ -23,7 +26,18 @@ localstatedir	= @localstatedir@
 DOCDIR		= @DOCDIR@
 MODDIR		= @MODDIR@
 SHAREDIR	= @SHAREDIR@
+
+# Want absolute paths?
+ABSPATHS	= @ABSPATHS@
+ifeq ($(ABSPATHS), "yes")
+SRCDIR		= @SRCDIR@/contrib
+else
+SRCDIR		= .
+endif
+BUILDDIR	= @BUILDDIR@
+
 BIN		= atheme@EXEEXT@
+
 MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../include
 PICFLAGS	= @PICFLAGS@
 CFLAGS		= @CFLAGS@ -I../include
@@ -34,29 +48,29 @@ CPPFLAGS	= @CPPFLAGS@
 
 default: all
 
-SRCS = \
-	cs_kickdots.c		\
-	cs_ping.c		\
-	cs_sync.c		\
-	cs_userinfo.c		\
-	gen_echoserver.c	\
-	gen_httpd.c		\
-	gen_listenerdemo.c	\
-	gen_vhostonreg.c	\
-	ircd_alis.c		\
-	ircd_catserv.c		\
-	ircd_nohalfops.c	\
-	ircd_noowner.c		\
-	ircd_noprotect.c	\
-	ns_fregister.c		\
-	ns_generatepass.c	\
-	ns_mxcheck.c		\
-	ns_ratelimitreg.c	\
-	os_pingspam.c		\
-	os_testcmd.c		\
-	os_logonnews.c		\
-	os_logstream.c		\
-	os_tabletest.c
+SRCS =					\
+	$(SRCDIR)/cs_kickdots.c		\
+	$(SRCDIR)/cs_ping.c		\
+	$(SRCDIR)/cs_sync.c		\
+	$(SRCDIR)/cs_userinfo.c		\
+	$(SRCDIR)/gen_echoserver.c	\
+	$(SRCDIR)/gen_httpd.c		\
+	$(SRCDIR)/gen_listenerdemo.c	\
+	$(SRCDIR)/gen_vhostonreg.c	\
+	$(SRCDIR)/ircd_alis.c		\
+	$(SRCDIR)/ircd_catserv.c	\
+	$(SRCDIR)/ircd_nohalfops.c	\
+	$(SRCDIR)/ircd_noowner.c	\
+	$(SRCDIR)/ircd_noprotect.c	\
+	$(SRCDIR)/ns_fregister.c	\
+	$(SRCDIR)/ns_generatepass.c	\
+	$(SRCDIR)/ns_mxcheck.c		\
+	$(SRCDIR)/ns_ratelimitreg.c	\
+	$(SRCDIR)/os_pingspam.c		\
+	$(SRCDIR)/os_testcmd.c		\
+	$(SRCDIR)/os_logonnews.c	\
+	$(SRCDIR)/os_logstream.c	\
+	$(SRCDIR)/os_tabletest.c
 
 # To compile your own modules, add them to SRCS or make blegh.so
 # Note: anope_convert.c cannot be compiled with this Makefile as it is
@@ -77,8 +91,10 @@ install:
 
 .PHONY: depend clean distclean
 # This sed command sucks but I don't know a better way -- jilles
-depend:
-	${MKDEP} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} ${SRCS} | sed -e 's/\.o:/.so:/' > .depend
+depend: .depend
+
+.depend:
+	${MKDEP} ${CPPFLAGS} ${CFLAGS} ${BASE_SRCS} > .depend
 
 clean:
 	${RM} -f *.so

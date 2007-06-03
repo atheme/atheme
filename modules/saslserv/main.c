@@ -4,7 +4,7 @@
  *
  * This file contains the main() routine.
  *
- * $Id: main.c 8245 2007-05-10 20:48:23Z jilles $
+ * $Id: main.c 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"saslserv/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 8245 2007-05-10 20:48:23Z jilles $",
+	"$Id: main.c 8375 2007-06-03 20:03:26Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -34,23 +34,23 @@ static void delete_stale(void *vptr);
 static void saslserv(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *cmd;
-        char *text;
+	char *text;
 	char orig[BUFSIZE];
-
+	
 	/* this should never happen */
 	if (parv[0][0] == '&')
 	{
 		slog(LG_ERROR, "services(): got parv with local channel: %s", parv[0]);
 		return;
 	}
-
+	
 	/* make a copy of the original for debugging */
 	strlcpy(orig, parv[parc - 1], BUFSIZE);
-
+	
 	/* lets go through this to get the command */
 	cmd = strtok(parv[parc - 1], " ");
-        text = strtok(NULL, "");
-
+	text = strtok(NULL, "");
+	
 	if (!cmd)
 		return;
 	if (*cmd == '\001')
@@ -58,7 +58,7 @@ static void saslserv(sourceinfo_t *si, int parc, char *parv[])
 		handle_ctcp_common(si, cmd, text);
 		return;
 	}
-
+	
 	command_fail(si, fault_noprivs, "This service exists to identify "
 			"connecting clients to the network. It has no "
 			"public interface.");
@@ -384,7 +384,7 @@ static void sasl_write(char *target, char *data, int length)
 		rem -= nbytes;
 		last = nbytes;
 	}
-
+	
 	/* The end of a packet is indicated by a string not of length 400.
 	 * If last piece is exactly 400 in size, send an empty string to
 	 * finish the transaction.
@@ -397,11 +397,8 @@ static void sasl_write(char *target, char *data, int length)
 static void sasl_logcommand(sasl_session_t *p, myuser_t *login, int level, const char *fmt, ...)
 {
 	va_list args;
-	time_t t;
-	struct tm tm;
-	char datetime[64];
 	char lbuf[BUFSIZE];
-
+	
 	va_start(args, fmt);
 	vsnprintf(lbuf, BUFSIZE, fmt, args);
 	slog(level, "%s %s:%s %s", saslsvs.nick, login ? login->name : "",
@@ -446,7 +443,7 @@ static void sasl_newuser(void *vptr)
 	char strfbuf[BUFSIZE];
 	struct tm tm;
 	myuser_t *mu;
-	node_t *n, *tn;
+	node_t *n;
 
 	/* Not concerned unless it's a SASL login. */
 	if(p == NULL)
@@ -539,7 +536,7 @@ static void sasl_newuser(void *vptr)
 static void delete_stale(void *vptr)
 {
 	sasl_session_t *p;
-	node_t *n, *tn, *m, *tm;
+	node_t *n, *tn;
 
 	LIST_FOREACH_SAFE(n, tn, sessions.head)
 	{

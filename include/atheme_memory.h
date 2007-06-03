@@ -4,7 +4,7 @@
  *
  * Memory stuff.
  *
- * $Id: atheme_memory.h 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: atheme_memory.h 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #ifndef __CLAROBASEMEMORY
@@ -14,6 +14,7 @@ E void *smalloc(size_t size);
 E void *scalloc(size_t elsize, size_t els);
 E void *srealloc(void *oldptr, size_t newsize);
 E char *sstrdup(const char *s);
+E char *sstrndup(const char *s, int len);
 
 #endif
 

@@ -1,0 +1,34 @@
+# Copyright (c) 2003-2004 E. Will et al.
+# Rights to this code are documented in doc/LICENSE.
+#
+# This file contains build instructions.
+#
+# $Id: Makefile.in 7983 2007-03-25 19:29:48Z jilles $
+#
+
+MODULE = jsonrpc
+
+include ../Makefile.defs
+
+MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include
+CFLAGS		= @CFLAGS@ -I../../include
+
+BASE_SRCS =			\
+	$(SRCDIR)/main.c
+
+EXTRA_SRCS =					\
+	$(SRCDIR)/json/arraylist.c		\
+	$(SRCDIR)/json/debug.c			\
+	$(SRCDIR)/json/json_object.c		\
+	$(SRCDIR)/json/json_tokener.c		\
+	$(SRCDIR)/json/json_util.c		\
+	$(SRCDIR)/json/linkhash.c		\
+	$(SRCDIR)/json/printbuf.c		\
+	$(SRCDIR)/json/rpc/circular_buffer.c	\
+	$(SRCDIR)/json/rpc/hashmap.c		\
+	$(SRCDIR)/json/rpc/jsonrpc.c
+
+include ../Makefile.common
+
+${SRCDIR}/main.so: main.c ${EXTRA_OBJS}
+	${CC} ${EXTRA_OBJS} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@

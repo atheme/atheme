@@ -4,7 +4,7 @@
  *
  * Object management.
  *
- * $Id: object.c 7907 2007-03-06 23:10:26Z pippijn $
+ * $Id: object.c 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #include "atheme.h"
@@ -75,8 +75,10 @@ void * object_ref(void *object)
  */
 void object_unref(void *object)
 {
+	object_t *obj;
+
 	return_if_fail(object != NULL);
-	object_t *obj = object(object);
+	obj = object(object);
 
 	obj->refcount--;
 

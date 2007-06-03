@@ -4,10 +4,11 @@
  *
  * Generic protocol event handlers.
  *
- * $Id: phandler.c 8287 2007-05-20 07:52:31Z nenolod $
+ * $Id: phandler.c 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #include "atheme.h"
+#include "uplink.h"
 
 unsigned int(*server_login) (void) = generic_server_login;
 void (*introduce_nick) (user_t *u) = generic_introduce_nick;

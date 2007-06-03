@@ -4,11 +4,12 @@
  *
  * Connection and I/O management.
  *
- * $Id: connection.c 8109 2007-04-05 16:28:02Z jilles $
+ * $Id: connection.c 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #include "atheme.h"
 #include "internal.h"
+#include "datastream.h"
 
 static BlockHeap *sa_heap;
 static BlockHeap *connection_heap;

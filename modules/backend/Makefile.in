@@ -3,67 +3,17 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7983 2007-03-25 19:29:48Z jilles $
+# $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
 #
 
-CC		= @CC@
-RM		= @RM@
-MV		= @MV@
-CP		= @CP@
-INSTALL		= @INSTALL@
-prefix		= @prefix@
-exec_prefix	= @exec_prefix@
-datarootdir	= @datarootdir@
-bindir		= @bindir@
-datadir		= @datadir@
-sysconfdir	= @sysconfdir@
-libdir		= @libdir@
-sbindir		= @sbindir@
-localstatedir	= @localstatedir@
-DOCDIR		= @DOCDIR@
-MODDIR		= @MODDIR@
-SHAREDIR	= @SHAREDIR@
-BIN		= atheme@EXEEXT@
+MODULE = backend
+
+include ../Makefile.defs
+
 MKDEP		= @MKDEP@
-PICFLAGS	= @PICFLAGS@
 CFLAGS		= @CFLAGS@ -I../../include
 
-LIBS		= @LIBS@
-LDFLAGS		= @LDFLAGS@
-CPPFLAGS	= @CPPFLAGS@
+BASE_SRCS =			\
+	$(SRCDIR)/flatfile.c
 
-default: all
-
-BASE_SRCS = flatfile.c
-
-SRCS = ${BASE_SRCS}
-
-OBJS = ${SRCS:.c=.so}
-
-all: protocols
-
-build: all
-
-install: build
-	${INSTALL} -d $(DESTDIR)${MODDIR}/modules/backend
-	${INSTALL} -m 755 *.so $(DESTDIR)${MODDIR}/modules/backend
-
-protocols: $(OBJS)
-
-.SUFFIXES: .so
-
-.c.so:
-	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@
-
-.PHONY: depend clean distclean
-# This sed command sucks but I don't know a better way -- jilles
-depend:
-	${MKDEP} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} ${BASE_SRCS} | sed -e 's/\.o:/.so:/' > .depend
-
-clean:
-	${RM} -f *.so
-
-distclean: clean
-	${RM} -f Makefile version.c.last
-
-include .depend
+include ../Makefile.common

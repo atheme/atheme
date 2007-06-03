@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 8289 2007-05-20 08:10:53Z nenolod $
+# $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
 #
 
 CC		= @CC@
@@ -36,68 +36,77 @@ LIBS		= @LIBS@
 LDFLAGS		= @LDFLAGS@ @LTLIBINTL@
 #RPATH		= @RPATH@
 CPPFLAGS	= @CPPFLAGS@
-SOCKET_ENGINE   = @SOCKET_ENGINE@.c
+SOCKET_ENGINE	= @SOCKET_ENGINE@.c
+
+# Do we want absolute paths?
+ifeq (@ABSPATHS@, yes)
+SRCDIR		= @SRCDIR@/src
+else
+SRCDIR		= .
+endif
+BUILDDIR	= @BUILDDIR@
 
 default: all
 
-BASE_SRCS =		\
-	account.c	\
-	atheme.c	\
-	arc4random.c	\
-	authcookie.c	\
-	balloc.c        \
-	base64.c	\
-	channels.c	\
-	cidr.c		\
-	cmode.c		\
-	commandtree.c	\
-	ctcp-common.c	\
-	conf.c		\
-	confparse.c	\
-	connection.c    \
-	crypto.c	\
-	culture.c	\
-	datastream.c	\
-	dbhandler.c	\
-	dictionary.c	\
-	dlink.c         \
-	event.c		\
-	flags.c		\
-	function.c	\
-	help.c		\
-	hook.c		\
-	linker.c	\
-	logger.c	\
-	match.c		\
-	md5.c		\
-	memory.c	\
-	module.c	\
-	node.c		\
-	object.c	\
-	packet.c	\
-	parse.c		\
-	phandler.c	\
-	pmodule.c	\
-	privs.c		\
-	ptasks.c	\
-	send.c		\
-	servers.c	\
-	services.c	\
-	servtree.c	\
-	signal.c	\
-	string.c	\
-	svsignore.c	\
-	table.c		\
-	template.c	\
-	tokenize.c	\
-	ubase64.c	\
-	users.c		\
-	uid.c		\
-	uplink.c	\
-	xmlrpc.c	\
-	${SOCKET_ENGINE}
+BASE_SRCS =				\
+	$(SRCDIR)/account.c		\
+	$(SRCDIR)/atheme.c		\
+	$(SRCDIR)/arc4random.c		\
+	$(SRCDIR)/authcookie.c		\
+	$(SRCDIR)/balloc.c		\
+	$(SRCDIR)/base64.c		\
+	$(SRCDIR)/channels.c		\
+	$(SRCDIR)/cidr.c		\
+	$(SRCDIR)/cmode.c		\
+	$(SRCDIR)/commandtree.c		\
+	$(SRCDIR)/ctcp-common.c		\
+	$(SRCDIR)/conf.c		\
+	$(SRCDIR)/confparse.c		\
+	$(SRCDIR)/connection.c		\
+	$(SRCDIR)/crypto.c		\
+	$(SRCDIR)/culture.c		\
+	$(SRCDIR)/datastream.c		\
+	$(SRCDIR)/dbhandler.c		\
+	$(SRCDIR)/dictionary.c		\
+	$(SRCDIR)/dlink.c		\
+	$(SRCDIR)/event.c		\
+	$(SRCDIR)/flags.c		\
+	$(SRCDIR)/function.c		\
+	$(SRCDIR)/help.c		\
+	$(SRCDIR)/hook.c		\
+	$(SRCDIR)/jsonrpc.c		\
+	$(SRCDIR)/linker.c		\
+	$(SRCDIR)/logger.c		\
+	$(SRCDIR)/match.c		\
+	$(SRCDIR)/md5.c			\
+	$(SRCDIR)/memory.c		\
+	$(SRCDIR)/module.c		\
+	$(SRCDIR)/node.c		\
+	$(SRCDIR)/object.c		\
+	$(SRCDIR)/packet.c		\
+	$(SRCDIR)/parse.c		\
+	$(SRCDIR)/phandler.c		\
+	$(SRCDIR)/pmodule.c		\
+	$(SRCDIR)/privs.c		\
+	$(SRCDIR)/ptasks.c		\
+	$(SRCDIR)/send.c		\
+	$(SRCDIR)/servers.c		\
+	$(SRCDIR)/services.c		\
+	$(SRCDIR)/servtree.c		\
+	$(SRCDIR)/signal.c		\
+	$(SRCDIR)/string.c		\
+	$(SRCDIR)/svsignore.c		\
+	$(SRCDIR)/table.c		\
+	$(SRCDIR)/template.c		\
+	$(SRCDIR)/tokenize.c		\
+	$(SRCDIR)/ubase64.c		\
+	$(SRCDIR)/users.c		\
+	$(SRCDIR)/uid.c			\
+	$(SRCDIR)/uplink.c		\
+	$(SRCDIR)/xmlrpc.c		\
+	$(SRCDIR)/${SOCKET_ENGINE}
 
-SRCS = ${BASE_SRCS} version.c
+SRCS = ${BASE_SRCS} $(SRCDIR)/version.c
 
 OBJS = ${SRCS:.c=.o}
 
@@ -165,13 +174,16 @@ version.c:
 	${CC} ${CPPFLAGS} ${CFLAGS} -c $< -o $@
 
 .PHONY: depend clean distclean
-depend:
-	${MKDEP} ${CPPFLAGS} ${CFLAGS} ${BASE_SRCS} > .depend
+depend: .depend
+
+# This sed command sucks but I don't know a better way -- jilles
+.depend:
+	${MKDEP} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} ${SRCS} | sed -e 's|\([^.]*\.o\):|$(SRCDIR)/\1:|' > .depend
 
 clean:
 	${RM} -f *.o *.exe *~ version.c atheme-services.core core atheme-services ../dist/example.userserv.conf
 
 distclean: clean
-	${RM} -f Makefile version.c.last
+	${RM} -f Makefile version.c.last .depend
 
 include .depend

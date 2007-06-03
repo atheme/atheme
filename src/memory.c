@@ -4,7 +4,7 @@
  *
  * Memory functions.
  *
- * $Id: memory.c 8333 2007-05-27 21:48:24Z jilles $
+ * $Id: memory.c 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #include "atheme.h"
@@ -51,6 +51,20 @@ char *sstrdup(const char *s)
 	t = smalloc(strlen(s) + 1);
 
 	strcpy(t, s);
+	return t;
+}
+
+/* does strndup()'s job, only with the above memory functions */
+char *sstrndup(const char *s, int len)
+{
+	char *t;
+
+	if (s == NULL)
+		return NULL;
+
+	t = smalloc(len + 1);
+
+	strlcpy(t, s, len);
 	return t;
 }
 

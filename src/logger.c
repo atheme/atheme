@@ -4,7 +4,7 @@
  *
  * This file contains logging routines.
  *
- * $Id: logger.c 8161 2007-04-06 23:51:53Z jilles $
+ * $Id: logger.c 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #include "atheme.h"
@@ -287,7 +287,7 @@ void slog(unsigned int level, const char *fmt, ...)
 	 * if the event is in the default loglevel, and we are starting, then
 	 * display it in the controlling terminal.
 	 */
-	if ((runflags & (RF_LIVE | RF_STARTING)) && (log_file != NULL ? log_file->log_mask : LG_ERROR | LG_INFO) & level ||
+	if (((runflags & (RF_LIVE | RF_STARTING)) && (log_file != NULL ? log_file->log_mask : LG_ERROR | LG_INFO) & level) ||
 		((runflags & RF_LIVE) && log_force))
 		fprintf(stderr, "%s %s\n", datetime, buf);
 }
@@ -345,8 +345,6 @@ void logcommand(sourceinfo_t *si, int level, const char *fmt, ...)
 void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt, ...)
 {
 	va_list args;
-	time_t t;
-	struct tm tm;
 	char lbuf[BUFSIZE];
 
 	va_start(args, fmt);
@@ -386,8 +384,6 @@ void logcommand_user(service_t *svs, user_t *source, int level, const char *fmt,
 void logcommand_external(service_t *svs, const char *type, connection_t *source, const char *sourcedesc, myuser_t *login, int level, const char *fmt, ...)
 {
 	va_list args;
-	time_t t;
-	struct tm tm;
 	char lbuf[BUFSIZE];
 
 	va_start(args, fmt);

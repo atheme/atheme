@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7983 2007-03-25 19:29:48Z jilles $
+# $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
 #
 
 CC		= @CC@
@@ -12,6 +12,7 @@ MV		= @MV@
 CP		= @CP@
 LN		= @LN@
 TAR		= @TAR@
+SHELL		= /bin/sh
 INSTALL		= @INSTALL@
 prefix		= @prefix@
 exec_prefix	= @exec_prefix@
@@ -25,10 +26,11 @@ localstatedir	= @localstatedir@
 DOCDIR		= @DOCDIR@
 MODDIR		= @MODDIR@
 SHAREDIR	= @SHAREDIR@
+SRCDIR		= @SRCDIR@
+BUILDDIR	= @BUILDDIR@
 BIN		= atheme@EXEEXT@
 DISTNAME	= @PACKAGE_NAME@-@PACKAGE_VERSION@
 
-SHELL=/bin/sh
 SUBDIRS=modules src
 CLEANDIRS = ${SUBDIRS}
 
@@ -77,7 +79,6 @@ depend:
 	@for i in $(SUBDIRS); do \
 		echo "depend ==> $$i"; \
 		cd $$i; \
-		touch .depend; \
 		${MAKE} depend; cd ..; \
 	done
 	@echo "depend ==> contrib"; cd contrib; touch .depend && ${MAKE} depend || echo '(error ignored)'; cd ..

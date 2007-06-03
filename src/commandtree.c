@@ -4,10 +4,11 @@
  *
  * Commandtree manipulation routines.
  *
- * $Id: commandtree.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: commandtree.c 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #include "atheme.h"
+#include "privs.h"
 
 static int text_to_parv(char *text, int maxparc, char **parv);
 

@@ -5,11 +5,12 @@
  * This file contains data structures, and functions to
  * manipulate them.
  *
- * $Id: node.c 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: node.c 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #include "atheme.h"
 #include "uplink.h"
+#include "privs.h"
 
 list_t klnlist;
 

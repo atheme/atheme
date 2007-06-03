@@ -6,70 +6,24 @@
 # $Id: Makefile.in 7293 2006-11-25 22:13:28Z jilles $
 #
 
-CC		= @CC@
-RM		= @RM@
-MV		= @MV@
-CP		= @CP@
-INSTALL		= @INSTALL@
-prefix		= @prefix@
-exec_prefix	= @exec_prefix@
-datarootdir	= @datarootdir@
-bindir		= @bindir@
-datadir		= @datadir@
-sysconfdir	= @sysconfdir@
-libdir		= @libdir@
-sbindir		= @sbindir@
-localstatedir	= @localstatedir@
-DOCDIR		= @DOCDIR@
-MODDIR		= @MODDIR@
-SHAREDIR	= @SHAREDIR@
-BIN		= atheme@EXEEXT@
-MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include
-PICFLAGS	= @PICFLAGS@
-CFLAGS		= @CFLAGS@ -I../../include
+MODULE = gameserv
 
-LIBS		= @LIBS@
-LDFLAGS		= @LDFLAGS@
-CPPFLAGS	= @CPPFLAGS@
+include ../Makefile.defs
 
-default: all
+MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I$(SRCDIR)/../../include
+CFLAGS		= @CFLAGS@ -I$(SRCDIR)/../../include
 
-BASE_SRCS = 		\
-	main.c		\
-	dice.c		\
-	eightball.c	\
-	help.c		\
-	namegen.c	\
-	rps.c
+BASE_SRCS =			\
+	$(SRCDIR)/main.c	\
+	$(SRCDIR)/dice.c	\
+	$(SRCDIR)/eightball.c	\
+	$(SRCDIR)/help.c	\
+	$(SRCDIR)/namegen.c	\
+	$(SRCDIR)/rps.c
 
-SRCS = ${BASE_SRCS}
+#MAINTAINERCLEANFILES = namegen_tab.h
 
-OBJS = ${SRCS:.c=.so}
+include ../Makefile.common
 
-all: modules
-
-build: all
-
-install: build
-	${INSTALL} -d $(DESTDIR)${MODDIR}/modules/gameserv
-	${INSTALL} -m 755 *.so $(DESTDIR)${MODDIR}/modules/gameserv
-
-modules: $(OBJS)
-
-.SUFFIXES: .so
-
-.c.so:
-	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@
-
-.PHONY: depend clean distclean
-# This sed command sucks but I don't know a better way -- jilles
-depend:
-	${MKDEP} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} ${BASE_SRCS} | sed -e 's/\.o:/.so:/' > .depend
-
-clean:
-	${RM} -f *.so
-
-distclean: clean
-	${RM} -f Makefile version.c.last
-
-include .depend
+$(SRCDIR)/namegen_tab.h: $(SRCDIR)/names/default $(SRCDIR)/gen_namegen_tab.pl
+	perl gen_namegen_tab.pl > namegen_tab.h

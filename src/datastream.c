@@ -4,7 +4,7 @@
  *
  * Datastream stuff.
  *
- * $Id: datastream.c 8281 2007-05-20 07:40:43Z nenolod $
+ * $Id: datastream.c 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #include "atheme.h"
@@ -231,7 +231,7 @@ int recvq_get(connection_t *cptr, char *buf, int len)
 	int l;
 	char *p = buf;
 
-	return_if_fail(cptr != NULL);
+	return_val_if_fail(cptr != NULL, 0);
 
 	LIST_FOREACH_SAFE(n, tn, cptr->recvq.head)
 	{
@@ -273,7 +273,7 @@ int recvq_getline(connection_t *cptr, char *buf, int len)
 	char *p = buf;
 	char *newline = NULL;
 
-	return_if_fail(cptr != NULL);
+	return_val_if_fail(cptr != NULL, 0);
 
 	LIST_FOREACH(n, cptr->recvq.head)
 	{

@@ -4,11 +4,13 @@
  *
  * This file contains data structures concerning modules.
  *
- * $Id: module.h 8027 2007-04-02 10:47:18Z nenolod $
+ * $Id: module.h 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #ifndef MODULE_H
 #define MODULE_H
+
+#include "privs.h"
 
 typedef struct module_ module_t;
 typedef struct moduleheader_ moduleheader_t;

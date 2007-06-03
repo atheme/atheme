@@ -3,88 +3,37 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 7983 2007-03-25 19:29:48Z jilles $
+# $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
 #
 
-CC		= @CC@
-RM		= @RM@
-MV		= @MV@
-CP		= @CP@
-INSTALL		= @INSTALL@
-prefix		= @prefix@
-exec_prefix	= @exec_prefix@
-datarootdir	= @datarootdir@
-bindir		= @bindir@
-datadir		= @datadir@
-sysconfdir	= @sysconfdir@
-libdir		= @libdir@
-sbindir		= @sbindir@
-localstatedir	= @localstatedir@
-DOCDIR		= @DOCDIR@
-MODDIR		= @MODDIR@
-SHAREDIR	= @SHAREDIR@
-BIN		= atheme@EXEEXT@
+MODULE = protocol
+
+include ../Makefile.defs
+
 MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include
-PICFLAGS	= @PICFLAGS@
 CFLAGS		= @CFLAGS@ -I../../include
 
-LIBS		= @LIBS@
-LDFLAGS		= @LDFLAGS@
-CPPFLAGS	= @CPPFLAGS@
+BASE_SRCS =			\
+	$(SRCDIR)/asuka.c	\
+	$(SRCDIR)/bahamut.c	\
+	$(SRCDIR)/bircd.c	\
+	$(SRCDIR)/charybdis.c	\
+	$(SRCDIR)/dreamforge.c	\
+	$(SRCDIR)/hybrid.c	\
+	$(SRCDIR)/hyperion.c	\
+	$(SRCDIR)/inspircd10.c	\
+	$(SRCDIR)/inspircd11.c	\
+	$(SRCDIR)/ircnet.c	\
+	$(SRCDIR)/nefarious.c	\
+	$(SRCDIR)/officeirc.c	\
+	$(SRCDIR)/plexus.c	\
+	$(SRCDIR)/ptlink.c	\
+	$(SRCDIR)/ratbox.c	\
+	$(SRCDIR)/shadowircd.c	\
+	$(SRCDIR)/solidircd.c	\
+	$(SRCDIR)/sorcery.c	\
+	$(SRCDIR)/ultimate3.c	\
+	$(SRCDIR)/undernet.c	\
+	$(SRCDIR)/unreal.c
 
-default: all
-
-BASE_SRCS = 		\
-	asuka.c         \
-	bahamut.c       \
-	bircd.c         \
-	charybdis.c	\
-	dreamforge.c    \
-	hybrid.c	\
-	hyperion.c      \
-	inspircd10.c	\
-	inspircd11.c	\
-	ircnet.c        \
-	nefarious.c	\
-	officeirc.c	\
-	plexus.c        \
-	ptlink.c	\
-	ratbox.c        \
-	shadowircd.c    \
-	solidircd.c	\
-	sorcery.c       \
-	ultimate3.c	\
-	undernet.c      \
-	unreal.c
-
-SRCS = ${BASE_SRCS}
-
-OBJS = ${SRCS:.c=.so}
-
-all: protocols
-
-build: all
-
-install: build
-	${INSTALL} -d $(DESTDIR)${MODDIR}/modules/protocol
-	${INSTALL} -m 755 *.so $(DESTDIR)${MODDIR}/modules/protocol
-
-protocols: $(OBJS)
-
-.SUFFIXES: .so
-
-.c.so:
-	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@
-
-.PHONY: depend clean distclean
-# This sed command sucks but I don't know a better way -- jilles
-depend:
-	${MKDEP} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} ${BASE_SRCS} | sed -e 's/\.o:/.so:/' > .depend
-
-clean:
-	${RM} -f *.so
-
-distclean: clean
-	${RM} -f Makefile version.c.last
-
-include .depend
+include ../Makefile.common

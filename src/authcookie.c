@@ -4,10 +4,11 @@
  *
  * Remote authentication cookie handling. (think kerberos.)
  *
- * $Id: authcookie.c 8293 2007-05-20 08:20:35Z nenolod $
+ * $Id: authcookie.c 8375 2007-06-03 20:03:26Z pippijn $
  */
 
 #include "atheme.h"
+#include "authcookie.h"
 
 list_t authcookie_list;
 static BlockHeap *authcookie_heap;
