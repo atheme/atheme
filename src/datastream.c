@@ -4,10 +4,11 @@
  *
  * Datastream stuff.
  *
- * $Id: datastream.c 8375 2007-06-03 20:03:26Z pippijn $
+ * $Id: datastream.c 8391 2007-06-03 20:38:50Z jilles $
  */
 
 #include "atheme.h"
+#include "datastream.h"
 
 #define SENDQSIZE (4096 - 40)
 

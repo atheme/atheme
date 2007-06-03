@@ -1,3 +1,14 @@
+pippijn     2007/06/03 20:36:51 UTC	(20070603-8389)
+  Log:
+  Added missing includes
+  
+
+  Changes:	Modified:
+  +2 -0		trunk/modules/xmlrpc/account.c (File Modified) 
+  +1 -0		trunk/modules/xmlrpc/channel.c (File Modified) 
+  +1 -0		trunk/modules/xmlrpc/memo.c (File Modified) 
+
+
 pippijn     2007/06/03 20:33:38 UTC	(20070603-8387)
   Log:
   Added missing file

@@ -4,16 +4,17 @@
  *
  * XMLRPC memo management functions.
  *
- * $Id: memo.c 8389 2007-06-03 20:36:51Z pippijn $
+ * $Id: memo.c 8391 2007-06-03 20:38:50Z jilles $
  */
 
 #include "atheme.h"
 #include "xmlrpc.h"
+#include "authcookie.h"
 
 DECLARE_MODULE_V1
 (
 	"xmlrpc/memo", FALSE, _modinit, _moddeinit,
-	"$Id: memo.c 8389 2007-06-03 20:36:51Z pippijn $",
+	"$Id: memo.c 8391 2007-06-03 20:38:50Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
