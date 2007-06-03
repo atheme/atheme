@@ -11,7 +11,6 @@
 #include "httpd.h"
 #include "datastream.h"
 
-#define WWW_ROOT "/var/www"
 #define REQUEST_MAX 65536 /* maximum size of one call */
 #define CONTENT_TYPE "text/xml"
 
@@ -30,6 +29,7 @@ list_t conf_httpd_table;
 struct httpd_configuration
 {
 	char *host;
+	char *www_root;
 	int port;
 } httpd_config;
 
@@ -39,6 +39,16 @@ static int conf_httpd_host(config_entry_t *ce)
 		return -1;
 
 	httpd_config.host = sstrdup(ce->ce_vardata);
+
+	return 0;
+}
+
+static int conf_httpd_www_root(config_entry_t *ce)
+{
+	if (!ce->ce_vardata)
+		return -1;
+
+	httpd_config.www_root = sstrdup(ce->ce_vardata);
 
 	return 0;
 }
@@ -88,7 +98,7 @@ static int open_file(const char *filename)
 		return -1;
 	if (!strcmp(filename, "/"))
 		filename = "/index.html";
-	snprintf(fname, sizeof fname, "%s/%s", WWW_ROOT, filename);
+	snprintf(fname, sizeof fname, "%s/%s", httpd_config.www_root, filename);
 	return open(fname, O_RDONLY);
 }
 
@@ -435,6 +445,7 @@ void _modinit(module_t *m)
 
 	add_top_conf("HTTPD", conf_httpd);
 	add_conf_item("HOST", &conf_httpd_table, conf_httpd_host);
+	add_conf_item("WWW_ROOT", &conf_httpd_table, conf_httpd_www_root);
 	add_conf_item("PORT", &conf_httpd_table, conf_httpd_port);
 }
 
@@ -443,6 +454,7 @@ void _moddeinit(void)
 	event_delete(httpd_checkidle, NULL);
 	connection_close_soon_children(listener);
 	del_conf_item("HOST", &conf_httpd_table);
+	del_conf_item("WWW_ROOT", &conf_httpd_table);
 	del_conf_item("PORT", &conf_httpd_table);
 	del_top_conf("HTTPD");
 }

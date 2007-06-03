@@ -1,3 +1,13 @@
+pippijn     2007/06/03 21:26:08 UTC	(20070603-8399)
+  Log:
+  Make the xmlrpc handler path configurable.
+  
+
+  Changes:	Modified:
+  +250 -227	trunk/dist/example.conf (File Modified) 
+  +44 -9	trunk/modules/xmlrpc/main.c (File Modified) 
+
+
 jilles      2007/06/03 20:45:09 UTC	(20070603-8397)
   Log:
   As before, make depend in src not use version.c as it normally doesn't exist.
