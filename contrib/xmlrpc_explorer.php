@@ -5,7 +5,7 @@
  *
  * An XML-RPC testing script.
  *
- * $Id: xmlrpc_explorer.php 5207 2006-05-03 15:02:49Z jilles $
+ * $Id: xmlrpc_explorer.php 8403 2007-06-03 21:34:06Z jilles $
  */
 
 /* This script requires XML-RPC for PHP 1.1
@@ -16,11 +16,11 @@ include('xmlrpc.inc');
 /* Set this appropriately. This needs to match
  * the information in your xmlrpc{} block.
  *
- * For Atheme, you can leave PATH set to '/'.
+ * PATH should be set to '/xmlrpc'.
  */
 define('HOST', 'some.xmlrpc.server');
 define('PORT', 8080);
-define('PATH', '/');
+define('PATH', '/xmlrpc');
 
 /* Here, you can set up the methods and their arguments.
  * 
@@ -101,4 +101,4 @@ switch ($_REQUEST['state'])
 
 ?>
 <hr>
-$Id: xmlrpc_explorer.php 5207 2006-05-03 15:02:49Z jilles $
+$Id: xmlrpc_explorer.php 8403 2007-06-03 21:34:06Z jilles $

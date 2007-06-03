@@ -1,3 +1,13 @@
+pippijn     2007/06/03 21:33:22 UTC	(20070603-8401)
+  Log:
+  Made www_root for the httpd configurable.
+  
+
+  Changes:	Modified:
+  +5 -0		trunk/dist/example.conf (File Modified) 
+  +14 -2	trunk/modules/misc/httpd.c (File Modified) 
+
+
 pippijn     2007/06/03 21:26:08 UTC	(20070603-8399)
   Log:
   Make the xmlrpc handler path configurable.
