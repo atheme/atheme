@@ -3,7 +3,7 @@
 #
 # This file contains common definitions.
 #
-# $Id$
+# $Id: Makefile.defs.in 8395 2007-06-03 20:43:56Z jilles $
 #
 
 CC		= @CC@

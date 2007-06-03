@@ -1,3 +1,12 @@
+pippijn     2007/06/03 20:39:46 UTC	(20070603-8393)
+  Log:
+  Fixed make depend in contrib
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/contrib/Makefile.in (File Modified) 
+
+
 jilles      2007/06/03 20:38:50 UTC	(20070603-8391)
   Log:
   Add more missing includes.
