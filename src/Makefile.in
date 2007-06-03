@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 8379 2007-06-03 20:26:51Z pippijn $
+# $Id: Makefile.in 8381 2007-06-03 20:27:44Z pippijn $
 #
 
 CC		= @CC@
@@ -165,7 +165,7 @@ install: build
 #		$(RM) -rf ${prefix}; \
 #	fi
 
-version.c:
+$(SRCDIR)/version.c:
 	/bin/sh ./version.sh $(VERSION)
 
 .c.o:

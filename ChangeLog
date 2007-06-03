@@ -1,3 +1,15 @@
+pippijn     2007/06/03 20:26:51 UTC	(20070603-8379)
+  Log:
+  Reverted the make depend change
+  
+
+  Changes:	Modified:
+  +1 -0		trunk/Makefile.in (File Modified) 
+  +1 -3		trunk/contrib/Makefile.in (File Modified) 
+  +1 -3		trunk/modules/Makefile.common.in (File Modified) 
+  +1 -3		trunk/src/Makefile.in (File Modified) 
+
+
 pippijn     2007/06/03 20:18:27 UTC	(20070603-8377)
   Log:
   Solved the absolute paths issue more portably
