@@ -3,14 +3,14 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
+# $Id: Makefile.in 8383 2007-06-03 20:28:34Z pippijn $
 #
 
 MODULE = global
 
 include ../Makefile.defs
 
-MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include -p$(SRCDIR)
+MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include
 CFLAGS		= @CFLAGS@ -I../../include
 
 BASE_SRCS =			\
