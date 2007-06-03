@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
+# $Id: Makefile.in 8377 2007-06-03 20:18:27Z pippijn $
 #
 
 CC		= @CC@
@@ -38,12 +38,10 @@ LDFLAGS		= @LDFLAGS@ @LTLIBINTL@
 CPPFLAGS	= @CPPFLAGS@
 SOCKET_ENGINE	= @SOCKET_ENGINE@.c
 
-# Do we want absolute paths?
-ifeq (@ABSPATHS@, yes)
-SRCDIR		= @SRCDIR@/src
-else
+# Want absolute paths?
 SRCDIR		= .
-endif
+@ABSPATHS@SRCDIR= @SRCDIR@/src
+
 BUILDDIR	= @BUILDDIR@
 
 default: all

@@ -25,11 +25,9 @@ MODDIR		= @MODDIR@
 SHAREDIR	= @SHAREDIR@
 
 # Want absolute paths?
-ifeq (@ABSPATHS@, yes)
-SRCDIR		= @SRCDIR@/modules/$(MODULE)
-else
 SRCDIR		= .
-endif
+@ABSPATHS@SRCDIR= @SRCDIR@/modules/$(MODULE)
+
 BUILDDIR	= @BUILDDIR@
 
 BIN		= atheme@EXEEXT@

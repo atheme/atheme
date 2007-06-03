@@ -3,7 +3,7 @@ dnl Rights to this code are documented in doc/LICENSE.
 dnl
 dnl This file is the autoconf stub.
 dnl
-dnl $Id: configure.ac 8375 2007-06-03 20:03:26Z pippijn $
+dnl $Id: configure.ac 8377 2007-06-03 20:18:27Z pippijn $
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -12,7 +12,7 @@ AC_PREREQ(2.59)
 AC_INIT(atheme, 2.2, bugs@atheme.org)
 
 dnl Sneaky way to get an id into the configure script.
-AC_COPYRIGHT([$Id: configure.ac 8375 2007-06-03 20:03:26Z pippijn $])
+AC_COPYRIGHT([$Id: configure.ac 8377 2007-06-03 20:18:27Z pippijn $])
 
 AC_CONFIG_AUX_DIR(autoconf)
 
@@ -116,7 +116,7 @@ LOGDIR='${prefix}/var'
 DATADIR='${prefix}/etc'
 RUNDIR='${prefix}/var'
 
-ABSPATHS="no"
+ABSPATHS="#"
 AC_MSG_CHECKING(if you want to use absolute paths when building)
 AC_ARG_ENABLE(absolute-paths,
 AC_HELP_STRING([--enable-absolute-paths],[ Use absolute paths when building.]),
@@ -131,10 +131,10 @@ AC_HELP_STRING([--enable-absolute-paths],[ Use absolute paths when building.]),
             srcdir="`cd \"$srcdir\";pwd`"
          ;;
       esac
-      ABSPATHS="yes"
+      ABSPATHS=""
       ;;
    no)
-      ABSPATHS="no"
+      ABSPATHS="#"
       ;;
    esac
 ])
