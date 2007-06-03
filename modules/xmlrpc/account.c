@@ -4,15 +4,17 @@
  *
  * XMLRPC account management functions.
  *
- * $Id: account.c 7907 2007-03-06 23:10:26Z pippijn $
+ * $Id: account.c 8389 2007-06-03 20:36:51Z pippijn $
  */
 
 #include "atheme.h"
+#include "authcookie.h"
+#include "xmlrpc.h"
 
 DECLARE_MODULE_V1
 (
 	"xmlrpc/account", FALSE, _modinit, _moddeinit,
-	"$Id: account.c 7907 2007-03-06 23:10:26Z pippijn $",
+	"$Id: account.c 8389 2007-06-03 20:36:51Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 

@@ -1,3 +1,12 @@
+pippijn     2007/06/03 20:33:38 UTC	(20070603-8387)
+  Log:
+  Added missing file
+  
+
+  Changes:	Modified:
+  +38 -0	trunk/include/httpd.h (File Added) 
+
+
 jilles      2007/06/03 20:33:21 UTC	(20070603-8385)
   Log:
   Fix make depend.
