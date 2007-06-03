@@ -1,3 +1,13 @@
+jilles      2007/06/03 16:15:00 UTC	(20070603-8371)
+  Log:
+  Add names/default for gameserv namegen.
+  
+
+  Changes:	Modified:
+  + -		trunk/modules/gameserv/names/ (File Added) 
+  +539 -0	trunk/modules/gameserv/names/default (File Added) 
+
+
 jilles      2007/06/02 22:56:52 UTC	(20070602-8369)
   Log:
   Add Id keyword.
