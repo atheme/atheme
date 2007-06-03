@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 8381 2007-06-03 20:27:44Z pippijn $
+# $Id: Makefile.in 8397 2007-06-03 20:45:09Z jilles $
 #
 
 CC		= @CC@
@@ -174,7 +174,7 @@ $(SRCDIR)/version.c:
 .PHONY: depend clean distclean
 # This sed command sucks but I don't know a better way -- jilles
 depend:
-	${MKDEP} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} ${SRCS} | sed -e 's|\([^.]*\.o\):|$(SRCDIR)/\1:|' > .depend
+	${MKDEP} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} ${BASE_SRCS} | sed -e 's|\([^.]*\.o\):|$(SRCDIR)/\1:|' > .depend
 
 clean:
 	${RM} -f *.o *.exe *~ version.c atheme-services.core core atheme-services ../dist/example.userserv.conf

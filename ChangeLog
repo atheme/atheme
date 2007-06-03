@@ -1,3 +1,13 @@
+jilles      2007/06/03 20:43:56 UTC	(20070603-8395)
+  Log:
+  Add Id keywords.
+  
+
+  Changes:	Modified:
+  + -		trunk/modules/Makefile.common.in  (Property Modified)
+  + -		trunk/modules/Makefile.defs.in  (Property Modified)
+
+
 pippijn     2007/06/03 20:39:46 UTC	(20070603-8393)
   Log:
   Fixed make depend in contrib
