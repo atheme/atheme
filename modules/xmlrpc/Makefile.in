@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
+# $Id: Makefile.in 8385 2007-06-03 20:33:21Z jilles $
 #
 
 MODULE = xmlrpc
@@ -16,7 +16,7 @@ CFLAGS		= @CFLAGS@ -I../../include
 default: all
 
 BASE_SRCS =			\
-	$(SRCDIR)/main.c	#\
+	$(SRCDIR)/main.c	\
 	$(SRCDIR)/account.c	\
 	$(SRCDIR)/channel.c	\
 	$(SRCDIR)/memo.c

@@ -3,7 +3,7 @@
 #
 # This file contains build instructions.
 #
-# $Id: Makefile.in 8375 2007-06-03 20:03:26Z pippijn $
+# $Id: Makefile.in 8385 2007-06-03 20:33:21Z jilles $
 #
 
 default: all
@@ -36,6 +36,7 @@ depend:
 	@for i in $(SUBDIRS); do \
 		echo "depend ==> $$i"; \
 		cd $$i; \
+		touch .depend; \
 		${MAKE} depend; cd ..; \
 	done
 

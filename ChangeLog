@@ -1,3 +1,12 @@
+pippijn     2007/06/03 20:28:34 UTC	(20070603-8383)
+  Log:
+  MKDEP is not makedepend
+  
+
+  Changes:	Modified:
+  +1 -1		trunk/modules/global/Makefile.in (File Modified) 
+
+
 pippijn     2007/06/03 20:27:44 UTC	(20070603-8381)
   Log:
   Forgot version.c..
