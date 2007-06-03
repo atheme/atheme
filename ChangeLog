@@ -1,3 +1,13 @@
+pippijn     2007/06/03 21:40:48 UTC	(20070603-8405)
+  Log:
+  Made the path setting for xmlrpc optional and removed its documentation.
+  
+
+  Changes:	Modified:
+  +1 -14	trunk/dist/example.conf (File Modified) 
+  +4 -1		trunk/modules/xmlrpc/main.c (File Modified) 
+
+
 jilles      2007/06/03 21:34:06 UTC	(20070603-8403)
   Log:
   Update path in xmlrpc examples.
