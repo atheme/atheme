@@ -4,7 +4,7 @@
  *
  * New xmlrpc implementation
  *
- * $Id: main.c 8375 2007-06-03 20:03:26Z pippijn $
+ * $Id: main.c 8399 2007-06-03 21:26:08Z pippijn $
  */
 
 #include "atheme.h"
@@ -16,13 +16,13 @@
 DECLARE_MODULE_V1
 (
 	"xmlrpc/main", FALSE, _modinit, _moddeinit,
-	"$Id: main.c 8375 2007-06-03 20:03:26Z pippijn $",
+	"$Id: main.c 8399 2007-06-03 21:26:08Z pippijn $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
 static void handle_request(connection_t *cptr, void *requestbuf);
 
-path_handler_t handle_xmlrpc = { "/xmlrpc", handle_request };
+path_handler_t handle_xmlrpc = { NULL, handle_request };
 
 connection_t *current_cptr; /* XXX: Hack: src/xmlrpc.c requires us to do this */
 
@@ -35,6 +35,24 @@ static void xmlrpc_command_success_string(sourceinfo_t *si, const char *result, 
 static int xmlrpcmethod_login(void *conn, int parc, char *parv[]);
 static int xmlrpcmethod_logout(void *conn, int parc, char *parv[]);
 static int xmlrpcmethod_command(void *conn, int parc, char *parv[]);
+
+/* Configuration */
+list_t conf_xmlrpc_table;
+static int conf_xmlrpc_path(config_entry_t *ce)
+{
+	if (!ce->ce_vardata)
+		return -1;
+
+	handle_xmlrpc.path = sstrdup(ce->ce_vardata);
+
+	return 0;
+}
+
+static int conf_xmlrpc(config_entry_t *ce)
+{
+	subblock_handler(ce, &conf_xmlrpc_table);
+	return 0;
+}
 
 struct sourceinfo_vtable xmlrpc_vtable = {
 	"xmlrpc",
@@ -72,20 +90,34 @@ static void handle_request(connection_t *cptr, void *requestbuf)
 	return; 
 }
 
-void _modinit(module_t *m)
+static void xmlrpc_config_ready(void *vptr)
 {
 	node_t *n;
 
+	if (handle_xmlrpc.handler != NULL && handle_xmlrpc.path != NULL)
+	{
+		if ((n = node_find(&handle_xmlrpc, httpd_path_handlers)))
+		{
+			slog(LG_INFO, "xmlrpc/main.c: handler already in the list");
+			return;
+		}
+		
+		n = node_create();
+		node_add(&handle_xmlrpc, node_create(), httpd_path_handlers);
+	}
+	else
+		slog(LG_ERROR, "xmlrpc_config_ready(): xmlrpc {} block missing or invalid");
+}
+
+void _modinit(module_t *m)
+{
 	MODULE_USE_SYMBOL(httpd_path_handlers, "misc/httpd", "httpd_path_handlers");
 
-	if ((n = node_find(&handle_xmlrpc, httpd_path_handlers)))
-	{
-		slog(LG_INFO, "xmlrpc/main.c: handler already in the list");
-		return;
-	}
+	hook_add_event("config_ready");
+	hook_add_hook("config_ready", xmlrpc_config_ready);
 
-	n = node_create();
-	node_add(&handle_xmlrpc, node_create(), httpd_path_handlers);
+	add_top_conf("XMLRPC", conf_xmlrpc);
+	add_conf_item("PATH", &conf_xmlrpc_table, conf_xmlrpc_path);
 
 	xmlrpc_set_buffer(dump_buffer);
 	xmlrpc_set_options(XMLRPC_HTTP_HEADER, XMLRPC_OFF);
@@ -110,6 +142,9 @@ void _moddeinit(void)
 
 	node_del(n, httpd_path_handlers);
 	node_free(n);
+
+	del_conf_item("PATH", &conf_xmlrpc_table);
+	del_top_conf("XMLRPC");
 }
 
 static void xmlrpc_command_fail(sourceinfo_t *si, faultcode_t code, const char *message)
