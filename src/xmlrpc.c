@@ -1244,7 +1244,7 @@ char *xmlrcp_strnrepl(char *s, int size, const char *old, const char *new)
 			break;
 		if (diff != 0)
 			memmove(ptr + oldlen + diff, ptr + oldlen, left + 1);
-		strncpy(ptr, new, newlen);
+		memcpy(ptr, new, newlen);
 		ptr += newlen;
 		left -= oldlen;
 	}

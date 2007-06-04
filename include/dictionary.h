@@ -5,7 +5,7 @@
  * A simple dictionary tree implementation.
  * See Knuth ACP, volume 1 for a more detailed explanation.
  *
- * $Id: dictionary.h 7779 2007-03-03 13:55:42Z pippijn $
+ * $Id: dictionary.h 8413 2007-06-04 18:45:05Z pippijn $
  */
 
 #ifndef _DICTIONARY_H
@@ -111,7 +111,7 @@ E dictionary_elem_t *dictionary_add(dictionary_tree_t *dtree, const char *key, v
 E dictionary_elem_t *dictionary_find(dictionary_tree_t *dtree, const char *key);
 
 /*
- * dictionary_find() returns data from a dtree for key 'key'.
+ * dictionary_retrieve() returns data from a dtree for key 'key'.
  */
 E void *dictionary_retrieve(dictionary_tree_t *dtree, const char *key);
 

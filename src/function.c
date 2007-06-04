@@ -4,7 +4,7 @@
  *
  * This file contains misc routines.
  *
- * $Id: function.c 8079 2007-04-02 17:37:39Z nenolod $
+ * $Id: function.c 8413 2007-06-04 18:45:05Z pippijn $
  */
 
 #include "atheme.h"
@@ -113,7 +113,7 @@ char *replace(char *s, int size, const char *old, const char *new)
 		if (diff != 0)
 			memmove(ptr + oldlen + diff, ptr + oldlen, left + 1);
 
-		strncpy(ptr, new, newlen);
+		memcpy(ptr, new, newlen);
 		ptr += newlen;
 		left -= oldlen;
 	}

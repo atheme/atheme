@@ -4,7 +4,7 @@
  *
  * This file contains data structures concerning modules.
  *
- * $Id: module.h 8375 2007-06-03 20:03:26Z pippijn $
+ * $Id: module.h 8413 2007-06-04 18:45:05Z pippijn $
  */
 
 #ifndef MODULE_H
@@ -35,6 +35,8 @@ struct module_ {
 
 #define MAPI_ATHEME_MAGIC	0xdeadbeef
 #define MAPI_ATHEME_V1		1
+
+#define MAX_CMD_PARC		20
 
 struct moduleheader_ {
 	unsigned int atheme_mod;

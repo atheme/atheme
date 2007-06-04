@@ -4,7 +4,7 @@
  *
  * Defines needed by multiple header files.
  *
- * $Id: common.h 8375 2007-06-03 20:03:26Z pippijn $
+ * $Id: common.h 8413 2007-06-04 18:45:05Z pippijn $
  */
 
 #ifndef COMMON_H
@@ -54,21 +54,21 @@
 #define HEAP_NODE		1024
 #define HEAP_CHANNEL		64
 #define HEAP_CHANUSER		128
-#define HEAP_USER 		128
-#define HEAP_SERVER 		8
+#define HEAP_USER		128
+#define HEAP_SERVER		8
 #define HEAP_CHANACS		128
-#define HASH_USER 		1024
+#define HASH_USER		1024
 #define HASH_CHANNEL		512
-#define HASH_SERVER 		32
+#define HASH_SERVER		32
 #endif
 
 #define HASH_COMMAND		256
 #define HASH_SMALL		32
-#define HASH_ITRANS 		128
+#define HASH_ITRANS		128
 #define HASH_TRANS		2048
 
-#define CACHEFILE_HEAP_SIZE 	32
-#define CACHELINE_HEAP_SIZE 	64
+#define CACHEFILE_HEAP_SIZE	32
+#define CACHELINE_HEAP_SIZE	64
 
 /* Make it possible to use pointers to these types everywhere
  * (for structures used in multiple header files) */
@@ -93,24 +93,24 @@ typedef struct sourceinfo_ sourceinfo_t;
 typedef struct _configfile config_file_t;
 typedef struct _configentry config_entry_t;
 
-/* fault codes */
 enum faultcode_
 {
-	fault_needmoreparams = 1,
-	fault_badparams = 2,
-	fault_nosuch_source = 3,
-	fault_nosuch_target = 4,
-	fault_authfail = 5,
-	fault_noprivs = 6,
-	fault_nosuch_key = 7,
-	fault_alreadyexists = 8,
-	fault_toomany = 9,
-	fault_emailfail = 10,
-	fault_notverified = 11,
-	fault_nochange = 12,
-	fault_already_authed = 13,
-	fault_unimplemented = 14
+	fault_needmoreparams	= 1,
+	fault_badparams		= 2,
+	fault_nosuch_source	= 3,
+	fault_nosuch_target	= 4,
+	fault_authfail		= 5,
+	fault_noprivs		= 6,
+	fault_nosuch_key	= 7,
+	fault_alreadyexists	= 8,
+	fault_toomany		= 9,
+	fault_emailfail		= 10,
+	fault_notverified	= 11,
+	fault_nochange		= 12,
+	fault_already_authed	= 13,
+	fault_unimplemented	= 14
 };
+
 typedef enum faultcode_ faultcode_t;
 
 #endif

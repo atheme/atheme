@@ -1,3 +1,15 @@
+pippijn     2007/06/04 18:42:24 UTC	(20070604-8411)
+  Log:
+  Removed json library and disabled jsonrpc module. Licensing issues.
+  
+
+  Changes:	Modified:
+  +4 -4		trunk/modules/jsonrpc/Makefile.in (File Modified) 
+  + -		trunk/modules/jsonrpc/json/ (File Deleted) 
+  +172 -99	trunk/modules/jsonrpc/main.c (File Modified) 
+  +3 -2		trunk/modules/misc/httpd.c (File Modified) 
+
+
 jilles      2007/06/03 22:35:28 UTC	(20070603-8407)
   Log:
   Version bump on trunk to 2.3.
