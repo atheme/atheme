@@ -12,7 +12,6 @@
 #include "datastream.h"
 
 #define REQUEST_MAX 65536 /* maximum size of one call */
-#define CONTENT_TYPE "text/xml"
 
 DECLARE_MODULE_V1
 (
@@ -135,7 +134,7 @@ static void process_header(connection_t *cptr, char *line)
 	else if (!strcasecmp(line, "Content-Type"))
 	{
 		p = strtok(p, "; \t");
-		hd->correct_content_type = p != NULL && !strcasecmp(p, CONTENT_TYPE);
+		hd->correct_content_type = p != NULL && (!strcasecmp(p, "text/xml") || !strcasecmp(p, "application/json"));
 	}
 	else if (!strcasecmp(line, "Expect"))
 	{
@@ -280,12 +279,14 @@ static void httpd_recvqhandler(connection_t *cptr)
 	{
 		is_get  = !strcmp(hd->method, "GET");
 		is_post = !strcmp(hd->method, "POST");
+
 		if (!is_post && !is_get)
 		{
 			send_error(cptr, 501, "Method Not Implemented", TRUE);
 			sendq_add_eof(cptr);
 			return;
 		}
+
 		hd->method[0] = '\0';
 
 		if (!handling_done)

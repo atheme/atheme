@@ -13,10 +13,10 @@ include ../Makefile.defs
 MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include
 CFLAGS		= @CFLAGS@ -I../../include
 
-BASE_SRCS =			\
-	$(SRCDIR)/main.c
+BASE_SRCS = $(SRCDIR)/main.c
 
 EXTRA_SRCS =					\
+	$(SRCDIR)/errors.c			\
 	$(SRCDIR)/json/arraylist.c		\
 	$(SRCDIR)/json/debug.c			\
 	$(SRCDIR)/json/json_object.c		\
@@ -30,5 +30,5 @@ EXTRA_SRCS =					\
 
 include ../Makefile.common
 
-${SRCDIR}/main.so: main.c ${EXTRA_OBJS}
-	${CC} ${EXTRA_OBJS} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} $< -o $@
+${SRCDIR}/main.so: $(SRCDIR)/main.c ${EXTRA_OBJS}
+	${CC} $< ${EXTRA_OBJS} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} -o $@
