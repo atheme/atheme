@@ -1,3 +1,20 @@
+pippijn     2007/06/04 18:45:05 UTC	(20070604-8413)
+  Log:
+  Also removed the header files.
+  
+
+  Changes:	Modified:
+  +22 -22	trunk/include/common.h (File Modified) 
+  +1 -1		trunk/include/dictionary.h (File Modified) 
+  + -		trunk/include/json/ (File Deleted) 
+  +12 -81	trunk/include/jsonrpc.h (File Modified) 
+  +2 -0		trunk/include/module.h (File Modified) 
+  +0 -1		trunk/src/Makefile.in (File Modified) 
+  +1 -1		trunk/src/function.c (File Modified) 
+  +0 -1278	trunk/src/jsonrpc.c (File Deleted) 
+  +1 -1		trunk/src/xmlrpc.c (File Modified) 
+
+
 pippijn     2007/06/04 18:42:24 UTC	(20070604-8411)
   Log:
   Removed json library and disabled jsonrpc module. Licensing issues.

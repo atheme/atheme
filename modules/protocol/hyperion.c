@@ -4,7 +4,7 @@
  *
  * This file contains protocol support for hyperion-based ircd.
  *
- * $Id: hyperion.c 8301 2007-05-20 13:22:15Z jilles $
+ * $Id: hyperion.c 8415 2007-06-06 22:34:07Z jilles $
  */
 
 /* option: use SVSLOGIN/SIGNON to remember users even if they're
@@ -17,7 +17,7 @@
 #include "pmodule.h"
 #include "protocol/hyperion.h"
 
-DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 8301 2007-05-20 13:22:15Z jilles $", "Atheme Development Group <http://www.atheme.org>");
+DECLARE_MODULE_V1("protocol/hyperion", TRUE, _modinit, NULL, "$Id: hyperion.c 8415 2007-06-06 22:34:07Z jilles $", "Atheme Development Group <http://www.atheme.org>");
 
 /* *INDENT-OFF* */
 
@@ -272,7 +272,17 @@ static void hyperion_skill(char *from, char *nick, char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
+#if 0
 	sts(":%s KILL %s :%s!%s!%s (%s)", from, nick, from, from, from, buf);
+#else
+	/* Use COLLIDE to cut down on server notices.
+	 * The current version of hyperion does not do COLLIDE reasons,
+	 * so fake it.
+	 */
+	sts(":%s NOTICE %s :*** Disconnecting you (%s (%s))", me.name,
+			nick, from, buf);
+	sts(":%s COLLIDE %s :(%s)", me.name, nick, buf);
+#endif
 }
 
 /* PART wrapper */
