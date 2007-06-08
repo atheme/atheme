@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 8417 2007-06-08 00:48:04Z nenolod $
+ * $Id: conf.c 8421 2007-06-08 13:23:17Z jilles $
  */
 
 #include "atheme.h"
@@ -70,6 +70,7 @@ static int c_ci_aop(config_entry_t *);
 static int c_ci_sop(config_entry_t *);
 static int c_ci_changets(config_entry_t *);
 static int c_ci_trigger(config_entry_t *);
+static int c_ci_expire(config_entry_t *);
 
 /* GService client information. */
 static int c_gl_nick(config_entry_t *);
@@ -90,6 +91,7 @@ static int c_ni_host(config_entry_t *);
 static int c_ni_real(config_entry_t *);
 static int c_ni_spam(config_entry_t *);
 static int c_ni_no_nick_ownership(config_entry_t *);
+static int c_ni_expire(config_entry_t *);
 
 /* SaslServ client information. */
 static int c_ss_nick(config_entry_t *);
