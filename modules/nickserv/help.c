@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the NickServ HELP command.
  *
- * $Id: help.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: help.c 8417 2007-06-08 00:48:04Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"nickserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: help.c 8417 2007-06-08 00:48:04Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -48,7 +48,7 @@ void ns_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		if (nicksvs.no_nick_ownership)
 		{
 			command_success_nodata(si, _("\2%s\2 allows users to \2'register'\2 an account for use with"), nicksvs.nick);
-			command_success_nodata(si, _("\2%s\2. If a registered account is not used by the owner for %d days,"), chansvs.nick, (config_options.expire / 86400));
+			command_success_nodata(si, _("\2%s\2. If a registered account is not used by the owner for %d days,"), chansvs.nick, (nicksvs.expiry / 86400));
 			command_success_nodata(si, _("\2%s\2 will drop the account, allowing it to be reregistered."), nicksvs.nick);
 		}
 		else
@@ -56,7 +56,7 @@ void ns_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("\2%s\2 allows users to \2'register'\2 a nickname, and stop"), nicksvs.nick);
 			command_success_nodata(si, _("others from using that nick. \2%s\2 allows the owner of a"), nicksvs.nick);
 			command_success_nodata(si, _("nickname to disconnect a user from the network that is using"), nicksvs.nick);
-			command_success_nodata(si, _("their nickname. If a registered nick is not used by the owner for %d days,"), (config_options.expire / 86400));
+			command_success_nodata(si, _("their nickname. If a registered nick is not used by the owner for %d days,"), (nicksvs.expiry / 86400));
 			command_success_nodata(si, _("\2%s\2 will drop the nickname, allowing it to be reregistered."), nicksvs.nick);
 		}
 		command_success_nodata(si, " ");

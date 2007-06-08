@@ -4,7 +4,7 @@
  *
  * This file contains the routines that deal with the configuration.
  *
- * $Id: conf.c 8375 2007-06-03 20:03:26Z pippijn $
+ * $Id: conf.c 8417 2007-06-08 00:48:04Z nenolod $
  */
 
 #include "atheme.h"
@@ -287,8 +287,9 @@ void conf_init(void)
 		config_options.global = config_options.languagefile = NULL;
 
 	me.recontime = me.restarttime = me.maxlogins = me.maxusers = me.maxnicks = me.maxchans = me.emaillimit = me.emailtime = 
-		config_options.flood_msgs = config_options.flood_time = config_options.kline_time = config_options.commit_interval =
-		config_options.expire = 0;
+		config_options.flood_msgs = config_options.flood_time = config_options.kline_time = config_options.commit_interval = 0;
+
+	nicksvs.expiry = chansvs.expiry = 0;
 
 	config_options.defuflags = config_options.defcflags = 0x00000000;
 
@@ -570,6 +571,7 @@ void init_newconf(void)
 	add_conf_item("SOP", &conf_ci_table, c_ci_sop);
 	add_conf_item("CHANGETS", &conf_ci_table, c_ci_changets);
 	add_conf_item("TRIGGER", &conf_ci_table, c_ci_trigger);
+	add_conf_item("EXPIRE", &conf_ci_table, c_ci_expire);
 
 	/* global{} block */
 	add_conf_item("NICK", &conf_gl_table, c_gl_nick);
@@ -590,6 +592,7 @@ void init_newconf(void)
 	add_conf_item("REAL", &conf_ni_table, c_ni_real);
 	add_conf_item("SPAM", &conf_ni_table, c_ni_spam);
 	add_conf_item("NO_NICK_OWNERSHIP", &conf_ni_table, c_ni_no_nick_ownership);
+	add_conf_item("EXPIRE", &conf_ni_table, c_ni_expire);
 
 	/* saslserv{} block */
 	add_conf_item("NICK", &conf_ss_table, c_ss_nick);
@@ -1318,6 +1321,16 @@ static int c_ci_trigger(config_entry_t *ce)
 	return 0;
 }
 
+static int c_ci_expire(config_entry_t *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	chansvs.expiry = (ce->ce_vardatanum * 60 * 60 * 24);
+
+	return 0;
+}
+
 static int c_gi_chan(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
@@ -1462,7 +1475,10 @@ static int c_gi_expire(config_entry_t *ce)
 	if (ce->ce_vardata == NULL)
 		PARAM_ERROR(ce);
 
-	config_options.expire = (ce->ce_vardatanum * 60 * 60 * 24);
+	slog(LG_INFO, "warning: general::expire has been deprecated. please use nickserv::expire and chanserv::expire respectively.");
+
+	nicksvs.expiry = (ce->ce_vardatanum * 60 * 60 * 24);
+	chansvs.expiry = (ce->ce_vardatanum * 60 * 60 * 24);
 
 	return 0;
 }
@@ -1556,6 +1572,16 @@ static int c_ni_spam(config_entry_t *ce)
 static int c_ni_no_nick_ownership(config_entry_t *ce)
 {
 	nicksvs.no_nick_ownership = TRUE;
+	return 0;
+}
+
+static int c_ni_expire(config_entry_t *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	nicksvs.expiry = (ce->ce_vardatanum * 60 * 60 * 24);
+
 	return 0;
 }
 

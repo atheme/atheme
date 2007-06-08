@@ -4,7 +4,7 @@
  *
  * This file contains routines to handle the CService HELP command.
  *
- * $Id: help.c 8253 2007-05-12 21:38:58Z jilles $
+ * $Id: help.c 8417 2007-06-08 00:48:04Z nenolod $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/help", FALSE, _modinit, _moddeinit,
-	"$Id: help.c 8253 2007-05-12 21:38:58Z jilles $",
+	"$Id: help.c 8417 2007-06-08 00:48:04Z nenolod $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -59,9 +59,9 @@ static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("virtually impossible when a channel is registered with \2%s\2."), chansvs.nick);
 		command_success_nodata(si, _("Registration is a quick and painless process. Once registered,"));
 		command_success_nodata(si, _("the founder can maintain complete and total control over the channel."));
-		if (config_options.expire > 0)
+		if (chansvs.expiry > 0)
 		{
-			command_success_nodata(si, _("Please note that channels will expire after %d days of inactivity,"), (config_options.expire / 86400));
+			command_success_nodata(si, _("Please note that channels will expire after %d days of inactivity,"), (chansvs.expiry / 86400));
 			command_success_nodata(si, _("or if there are no eligible channel successors."));
 			command_success_nodata(si, _("Activity is defined as a user with one of %s being on the channel."), bitmask_to_flags2(CA_USEDUPDATE & ca_all, 0, chanacs_flags));
 		}

@@ -4,7 +4,7 @@
  *
  * Data structures related to services psuedo-clients.
  *
- * $Id: services.h 8245 2007-05-10 20:48:23Z jilles $
+ * $Id: services.h 8417 2007-06-08 00:48:04Z nenolod $
  */
 
 #ifndef SERVICES_H
@@ -39,6 +39,8 @@ struct chansvs_
   boolean_t changets;		/* use TS to better deop people */
 
   service_t *me;                /* our user_t struct          */
+
+  unsigned int expiry;		/* expiry time                */
 };
 
 struct globsvs_
@@ -87,6 +89,8 @@ struct nicksvs_
   char   *disp;			/* the IRC client's dispname  */
 
   service_t *me;
+
+  unsigned int expiry;          /* expiry time                */
 };
 
 struct saslsvs_

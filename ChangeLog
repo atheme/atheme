@@ -1,3 +1,16 @@
+jilles      2007/06/06 22:34:07 UTC	(20070606-8415)
+  Log:
+  hyperion: Use COLLIDE instead of KILL, to cut down on +k
+  server notices. Unfortunately this also removes the reason
+  (e.g. containing who sent a GHOST command) from channels
+  and the victim; as a compensation, send a server notice
+  (conspicuous) with the reason to the victim first.
+  
+
+  Changes:	Modified:
+  +10 -0	trunk/modules/protocol/hyperion.c (File Modified) 
+
+
 pippijn     2007/06/04 18:45:05 UTC	(20070604-8413)
   Log:
   Also removed the header files.

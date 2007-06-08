@@ -4,7 +4,7 @@
  *
  * Account-related functions.
  *
- * $Id: account.c 8375 2007-06-03 20:03:26Z pippijn $
+ * $Id: account.c 8417 2007-06-08 00:48:04Z nenolod $
  */
 
 #include "atheme.h"
@@ -1449,7 +1449,7 @@ static int expire_myuser_cb(dictionary_elem_t *delem, void *unused)
 	if (MU_HOLD & mu->flags)
 		return 0;
 
-	if (((CURRTIME - mu->lastlogin) >= config_options.expire) || ((mu->flags & MU_WAITAUTH) && (CURRTIME - mu->registered >= 86400)))
+	if (((CURRTIME - mu->lastlogin) >= nicksvs.expiry) || ((mu->flags & MU_WAITAUTH) && (CURRTIME - mu->registered >= 86400)))
 	{
 		/* Don't expire accounts with privs on them in atheme.conf,
 		 * otherwise someone can reregister
@@ -1479,74 +1479,77 @@ void expire_check(void *arg)
 	 * right away -- jilles */
 	sendq_flush(curr_uplink->conn);
 
-	if (config_options.expire == 0)
-		return;
-
-	dictionary_foreach(mulist, expire_myuser_cb, NULL);
-
-	DICTIONARY_FOREACH(mn, &state, nicklist)
+	if (nicksvs.expiry != 0)
 	{
-		if ((CURRTIME - mn->lastseen) >= config_options.expire)
+		dictionary_foreach(mulist, expire_myuser_cb, NULL);
+
+		DICTIONARY_FOREACH(mn, &state, nicklist)
 		{
-			if (MU_HOLD & mn->owner->flags)
-				continue;
-
-			/* do not drop main nick like this */
-			if (!irccasecmp(mn->nick, mn->owner->name))
-				continue;
-
-			u = user_find_named(mn->nick);
-			if (u != NULL && u->myuser == mn->owner)
+			if ((CURRTIME - mn->lastseen) >= nicksvs.expiry)
 			{
-				/* still logged in, bleh */
-				mn->lastseen = CURRTIME;
-				mn->owner->lastlogin = CURRTIME;
-				continue;
-			}
+				if (MU_HOLD & mn->owner->flags)
+					continue;
 
-			snoop(_("EXPIRE: \2%s\2 from \2%s\2"), mn->nick, mn->owner->name);
-			slog(LG_INFO, "expire_check(): expiring nick %s (unused %ds, account %s)",
-					mn->nick, CURRTIME - mn->lastseen,
-					mn->owner->name);
-			object_unref(mn);
+				/* do not drop main nick like this */
+				if (!irccasecmp(mn->nick, mn->owner->name))
+					continue;
+
+				u = user_find_named(mn->nick);
+				if (u != NULL && u->myuser == mn->owner)
+				{
+					/* still logged in, bleh */
+					mn->lastseen = CURRTIME;
+					mn->owner->lastlogin = CURRTIME;
+					continue;
+				}
+
+				snoop(_("EXPIRE: \2%s\2 from \2%s\2"), mn->nick, mn->owner->name);
+				slog(LG_INFO, "expire_check(): expiring nick %s (unused %ds, account %s)",
+						mn->nick, CURRTIME - mn->lastseen,
+						mn->owner->name);
+				object_unref(mn);
+			}
 		}
 	}
 
-	DICTIONARY_FOREACH(mc, &state, mclist)
+	if (chansvs.expiry != 0)
 	{
-		if ((CURRTIME - mc->used) >= 86400 - 3660)
+		DICTIONARY_FOREACH(mc, &state, mclist)
 		{
-			/* keep last used time accurate to
-			 * within a day, making sure an active
-			 * channel will never get "Last used"
-			 * in /cs info -- jilles */
-			if (mychan_isused(mc))
+			if ((CURRTIME - mc->used) >= 86400 - 3660)
 			{
-				mc->used = CURRTIME;
-				slog(LG_DEBUG, "expire_check(): updating last used time on %s because it appears to be still in use", mc->name);
-				continue;
+				/* keep last used time accurate to
+				 * within a day, making sure an active
+				 * channel will never get "Last used"
+				 * in /cs info -- jilles */
+				if (mychan_isused(mc))
+				{
+					mc->used = CURRTIME;
+					slog(LG_DEBUG, "expire_check(): updating last used time on %s because it appears to be still in use", mc->name);
+					continue;
+				}
 			}
-		}
 
-		if ((CURRTIME - mc->used) >= config_options.expire)
-		{
-			if (MU_HOLD & mc->founder->flags)
-				continue;
+			if ((CURRTIME - mc->used) >= chansvs.expiry)
+			{
+				if (MU_HOLD & mc->founder->flags)
+					continue;
 
-			if (MC_HOLD & mc->flags)
-				continue;
+				if (MC_HOLD & mc->flags)
+					continue;
 
-			snoop(_("EXPIRE: \2%s\2 from \2%s\2"), mc->name, mc->founder->name);
-			slog(LG_INFO, "expire_check(): expiring channel %s (unused %ds, founder %s, chanacs %d)",
-					mc->name, CURRTIME - mc->used,
-					mc->founder->name,
-					LIST_LENGTH(&mc->chanacs));
+				snoop(_("EXPIRE: \2%s\2 from \2%s\2"), mc->name, mc->founder->name);
+				slog(LG_INFO, "expire_check(): expiring channel %s (unused %ds, founder %s, chanacs %d)",
+						mc->name, CURRTIME - mc->used,
+						mc->founder->name,
+						LIST_LENGTH(&mc->chanacs));
 
-			hook_call_event("channel_drop", mc);
-			if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
-				part(mc->name, chansvs.nick);
+				hook_call_event("channel_drop", mc);
+				if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
+					part(mc->name, chansvs.nick);
 
-			object_unref(mc);
+				object_unref(mc);
+			}
 		}
 	}
 }

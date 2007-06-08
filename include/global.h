@@ -5,7 +5,7 @@
  *
  * Global data
  *
- * $Id: global.h 8297 2007-05-20 08:56:59Z nenolod $
+ * $Id: global.h 8417 2007-06-08 00:48:04Z nenolod $
  */
 
 #ifndef _GLOBAL_H
@@ -70,7 +70,6 @@ struct ConfOption
   unsigned int flood_time;          /* time determining flood     */
   unsigned int kline_time;          /* default expire for klines  */
   unsigned int commit_interval;     /* interval between commits   */
-  int expire;               /* time before registrations expire */
 
   boolean_t silent;             /* stop sending WALLOPS?      */
   boolean_t join_chans;         /* join registered channels?  */
