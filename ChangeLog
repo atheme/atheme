@@ -1,3 +1,13 @@
+jilles      2007/06/09 19:58:46 UTC	(20070609-8423)
+  Log:
+  Remove redundant user_t pointer from hook_channel_req_t.
+  
+
+  Changes:	Modified:
+  +0 -1		trunk/include/account.h (File Modified) 
+  +0 -1		trunk/modules/chanserv/info.c (File Modified) 
+
+
 jilles      2007/06/08 13:23:17 UTC	(20070608-8421)
   Log:
   Unbreak compile.
