@@ -4,7 +4,7 @@
  *
  * This file contains code for the CService INFO functions.
  *
- * $Id: info.c 7895 2007-03-06 02:40:03Z pippijn $
+ * $Id: info.c 8423 2007-06-09 19:58:46Z jilles $
  */
 
 #include "atheme.h"
@@ -12,7 +12,7 @@
 DECLARE_MODULE_V1
 (
 	"chanserv/info", FALSE, _modinit, _moddeinit,
-	"$Id: info.c 7895 2007-03-06 02:40:03Z pippijn $",
+	"$Id: info.c 8423 2007-06-09 19:58:46Z jilles $",
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
@@ -313,7 +313,6 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("%s was \2CLOSED\2 by %s on %s (%s)"), mc->name, setter, strfbuf, reason);
 	}
 
-	req.u = si->su;
 	req.mc = mc;
 	req.si = si;
 	hook_call_event("channel_info", &req);

@@ -4,7 +4,7 @@
  *
  * Data structures for account information.
  *
- * $Id: account.h 8375 2007-06-03 20:03:26Z pippijn $
+ * $Id: account.h 8423 2007-06-09 19:58:46Z jilles $
  */
 
 #ifndef ACCOUNT_H
@@ -218,7 +218,6 @@ struct mymemo_ {
 
 /* account related hooks */
 typedef struct {
-	user_t *u;
 	mychan_t *mc;
 	sourceinfo_t *si;
 } hook_channel_req_t;
