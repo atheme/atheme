@@ -44,6 +44,9 @@ build:
 		echo "Doing so now."; \
 		sh configure; \
 	fi
+	@if [ -x /usr/bin/hg ] && [ -d .hg ] ; then \
+		hg tip --template '#define SERNO "#rev#:#node|short#"\n' >include/serno.h ; \
+	fi
 	@for i in $(SUBDIRS); do \
 		echo "build ==> $$i"; \
 		cd $$i; \
@@ -97,9 +100,7 @@ dist:
 		echo "make dist only works from a mercurial tree"; \
 		false; \
 	fi
-	@if [ -x /usr/bin/hg ] && [ -d .hg ] ; then \
-		hg tip --template '#define SERNO "#rev#:#node|short#"\n' >include/serno.h ; \
-	fi
+	hg tip --template '#define SERNO "#rev#:#node|short#"\n' >include/serno.h ; \
 	@echo "Creating $(DISTNAME).tar.gz"
 	$(RM) -f $(DISTNAME)
 	$(LN) -s . $(DISTNAME)
