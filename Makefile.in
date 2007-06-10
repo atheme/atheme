@@ -104,5 +104,5 @@ dist:
 	@echo "Creating $(DISTNAME).tar.gz"
 	$(RM) -f $(DISTNAME)
 	$(LN) -s . $(DISTNAME)
-	hg manifest | awk '{ print "$(DISTNAME)/"$$4; } END { print "$(DISTNAME)/configure"; print "$(DISTNAME)/aclocal.m4"; print "$(DISTNAME)/include/sysconf.h.in"; }' | $(TAR) -chnzf $(DISTNAME).tar.gz -T /dev/stdin
+	hg manifest | awk '{ print "$(DISTNAME)/"$$1; } END { print "$(DISTNAME)/configure"; print "$(DISTNAME)/aclocal.m4"; print "$(DISTNAME)/include/sysconf.h.in"; print "$(DISTNAME)/include/serno.h"; }' | $(TAR) -chnzf $(DISTNAME).tar.gz -T /dev/stdin
 	$(RM) $(DISTNAME)
