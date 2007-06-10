@@ -100,7 +100,7 @@ dist:
 		echo "make dist only works from a mercurial tree"; \
 		false; \
 	fi
-	hg tip --template '#define SERNO "#rev#:#node|short#"\n' >include/serno.h ; \
+	hg tip --template '#define SERNO "#rev#:#node|short#"\n' >include/serno.h
 	@echo "Creating $(DISTNAME).tar.gz"
 	$(RM) -f $(DISTNAME)
 	$(LN) -s . $(DISTNAME)
