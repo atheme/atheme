@@ -93,12 +93,15 @@ install: build
 	done
 
 dist:
-	@if [ ! -d .svn ]; then \
-		echo "make dist only works from a subversion checkout"; \
+	@if [ ! -d .hg ]; then \
+		echo "make dist only works from a mercurial tree"; \
 		false; \
+	fi
+	@if [ -x /usr/bin/hg ] && [ -d .hg ] ; then \
+		hg tip --template '#define SERNO "#rev#:#node|short#"\n' >include/serno.h ; \
 	fi
 	@echo "Creating $(DISTNAME).tar.gz"
 	$(RM) -f $(DISTNAME)
 	$(LN) -s . $(DISTNAME)
-	svn stat -v | sed -ne '/^[^D?]/s/^......//p' | awk '{ print "$(DISTNAME)/"$$4; } END { print "$(DISTNAME)/configure"; print "$(DISTNAME)/aclocal.m4"; print "$(DISTNAME)/include/sysconf.h.in"; }' | $(TAR) -chnzf $(DISTNAME).tar.gz -T /dev/stdin
+	hg manifest | awk '{ print "$(DISTNAME)/"$$4; } END { print "$(DISTNAME)/configure"; print "$(DISTNAME)/aclocal.m4"; print "$(DISTNAME)/include/sysconf.h.in"; }' | $(TAR) -chnzf $(DISTNAME).tar.gz -T /dev/stdin
 	$(RM) $(DISTNAME)
