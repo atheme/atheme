@@ -1096,19 +1096,18 @@ int xmlrpc_set_options(int type, const char *value)
 
 /*************************************************************************/
 
-char *xmlrpc_char_encode(char *outbuffer, const char *s1)
+void xmlrpc_char_encode(char *outbuffer, const char *s1)
 {
 	long unsigned int i;
 	unsigned char c;
 	char buf2[15];
-	char buf3[XMLRPC_BUFSIZE];
+	string_t *s = new_string();
 	*buf2 = '\0';
-	*buf3 = '\0';
 	*outbuffer = '\0';
 
 	if ((!(s1) || (*(s1) == '\0')))
 	{
-		return (char *)"";
+		return;
 	}
 
 	for (i = 0; i <= strlen(s1) - 1; i++)
@@ -1117,79 +1116,31 @@ char *xmlrpc_char_encode(char *outbuffer, const char *s1)
 		if (c > 127)
 		{
 			snprintf(buf2, 15, "&#%c;", c);
-			if (outbuffer)
-			{
-				snprintf(buf3, XMLRPC_BUFSIZE, "%s%s", outbuffer, buf2);
-			}
-			else
-			{
-				snprintf(buf3, XMLRPC_BUFSIZE, "%s", buf2);
-			}
-			snprintf(outbuffer, XMLRPC_BUFSIZE, "%s", buf3);
+			s->append(s, buf2, 15);
 		}
 		else if (c == '&')
 		{
-			if (outbuffer)
-			{
-				snprintf(buf3, XMLRPC_BUFSIZE, "%s%s", outbuffer, "&amp;");
-			}
-			else
-			{
-				snprintf(buf3, XMLRPC_BUFSIZE, "%s", "&amp;");
-			}
-			snprintf(outbuffer, XMLRPC_BUFSIZE, "%s", buf3);
+			s->append(s, "&amp;", 5);
 		}
 		else if (c == '<')
 		{
-			if (outbuffer)
-			{
-				snprintf(buf3, XMLRPC_BUFSIZE, "%s%s", outbuffer, "&lt;");
-			}
-			else
-			{
-				snprintf(buf3, XMLRPC_BUFSIZE, "%s", "&lt;");
-			}
-			snprintf(outbuffer, XMLRPC_BUFSIZE, "%s", buf3);
+			s->append(s, "&lt;", 4);
 		}
 		else if (c == '>')
 		{
-			if (outbuffer)
-			{
-				snprintf(buf3, XMLRPC_BUFSIZE, "%s%s", outbuffer, "&gt;");
-			}
-			else
-			{
-				snprintf(buf3, XMLRPC_BUFSIZE, "%s", "&gt;");
-			}
-			snprintf(outbuffer, XMLRPC_BUFSIZE, "%s", buf3);
+			s->append(s, "&gt;", 4);
 		}
 		else if (c == '"')
 		{
-			if (outbuffer)
-			{
-				snprintf(buf3, XMLRPC_BUFSIZE, "%s%s", outbuffer, "&quot;");
-			}
-			else
-			{
-				snprintf(buf3, XMLRPC_BUFSIZE, "%s", "&quot;");
-			}
-			snprintf(outbuffer, XMLRPC_BUFSIZE, "%s", buf3);
+			s->append(s, "&quot;", 6);
 		}
 		else
 		{
-			if (outbuffer)
-			{
-				snprintf(buf3, XMLRPC_BUFSIZE, "%s%c", outbuffer, c);
-			}
-			else
-			{
-				snprintf(buf3, XMLRPC_BUFSIZE, "%c", c);
-			}
-			snprintf(outbuffer, XMLRPC_BUFSIZE, "%s", buf3);
+			s->append_char(s, c);
 		}
 	}
 
-	return outbuffer;
+	memcpy(outbuffer, s->str, XMLRPC_BUFSIZE);
 }
 
 char *xmlrpc_decode_string(char *buf)

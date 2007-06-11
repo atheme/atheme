@@ -18,7 +18,7 @@ AUTOHEADER=${AUTOHEADER:-autoheader}
 
 dump_help_screen ()
 {
-   echo "Usage: gen-auto-scripts.sh [options]"
+   echo "Usage: $0 [options]"
    echo 
    echo "options:"
    echo "  -n           skip CVS changelog creation"
