@@ -4,7 +4,7 @@
  *
  * Memory stuff.
  *
- * $Id: atheme_memory.h 8427 2007-06-10 18:49:02Z pippijn $
+ * $Id: atheme_memory.h 8429 2007-06-10 18:51:23Z pippijn $
  */
 
 #ifndef __CLAROBASEMEMORY
@@ -36,7 +36,7 @@ E void string_append(string_t *this, const char *src, size_t n);
 E void string_append_char(string_t *this, const char c);
 E void string_reset(string_t *this);
 E void string_delete(string_t *this);
-E string_t *new_string();
+E string_t *new_string(size_t size);
 
 #endif
 

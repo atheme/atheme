@@ -1101,7 +1101,7 @@ void xmlrpc_char_encode(char *outbuffer, const char *s1)
 	long unsigned int i;
 	unsigned char c;
 	char buf2[15];
-	string_t *s = new_string();
+	string_t *s = new_string(XMLRPC_BUFSIZE);
 	*buf2 = '\0';
 	*outbuffer = '\0';
 

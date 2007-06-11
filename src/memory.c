@@ -4,7 +4,7 @@
  *
  * Memory functions.
  *
- * $Id: memory.c 8427 2007-06-10 18:49:02Z pippijn $
+ * $Id: memory.c 8429 2007-06-10 18:51:23Z pippijn $
  */
 
 #include "atheme.h"
@@ -111,13 +111,13 @@ void string_delete(string_t *this)
 	free (this);
 }
 
-string_t *new_string()
+string_t *new_string(size_t size)
 {
 	string_t *this = (string_t *)malloc(sizeof(string_t));
 
-	this->size = 64;
+	this->size = size;
 	this->pos  = 0;
-	this->str  = (char *)malloc(this->size);
+	this->str  = (char *)malloc(size);
 
 	/* Function pointers */
 	this->append      = &string_append;
