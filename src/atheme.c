@@ -35,6 +35,9 @@ boolean_t cold_start = FALSE;
 
 extern char **environ;
 
+void (*db_save) (void *arg) = NULL;
+void (*db_load) (void) = NULL;
+
 /* *INDENT-OFF* */
 static void print_help(void)
 {

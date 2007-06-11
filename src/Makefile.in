@@ -64,7 +64,6 @@ BASE_SRCS =				\
 	$(SRCDIR)/crypto.c		\
 	$(SRCDIR)/culture.c		\
 	$(SRCDIR)/datastream.c		\
-	$(SRCDIR)/dbhandler.c		\
 	$(SRCDIR)/dictionary.c		\
 	$(SRCDIR)/dlink.c		\
 	$(SRCDIR)/event.c		\
