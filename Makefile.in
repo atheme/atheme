@@ -44,8 +44,9 @@ build:
 		echo "Doing so now."; \
 		sh configure; \
 	fi
-	@if [ -x /usr/bin/hg ] && [ -d .hg ] ; then \
-		hg tip --template '#define SERNO "#rev#:#node|short#"\n' >include/serno.h ; \
+	@if [ -d .hg ] ; then \
+		revh=`hg tip --template '#define SERNO "#rev#:#node|short#"\n' 2>/dev/null`;\
+		[ -z "$$revh" ] || echo "$$revh" >include/serno.h ; \
 	fi
 	@for i in $(SUBDIRS); do \
 		echo "build ==> $$i"; \
