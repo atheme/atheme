@@ -145,7 +145,8 @@ void part(char *chan, char *nick)
 		return;
 	if (!chanuser_find(c, u))
 		return;
-	part_sts(c, u);
+	if (me.connected)
+		part_sts(c, u);
 	chanuser_delete(c, u);
 }
 
