@@ -8,6 +8,7 @@
  */
 
 #include "atheme.h"
+#include "datastream.h"
 
 DECLARE_MODULE_V1
 (

@@ -8,6 +8,7 @@
  */
 
 #include "atheme.h"
+#include "datastream.h"
 
 /*#define WWW_ROOT (SHAREDIR "/help")*/
 #define WWW_ROOT "/home/jilles/src/svn/atheme/tools/htmlhelp"
