@@ -231,7 +231,7 @@ node_t *generic_next_matching_ban(channel_t *c, user_t *u, int type, node_t *fir
 		cb = n->data;
 
 		if (cb->type == type &&
-				(!match(cb->mask, hostbuf) || !match(cb->mask, realbuf) || !match(cb->mask, ipbuf) || !match_cidr(cb->mask, ipbuf)))
+				(!match(cb->mask, hostbuf) || !match(cb->mask, realbuf) || !match(cb->mask, ipbuf) || (ircd->flags & IRCD_CIDR_BANS && !match_cidr(cb->mask, ipbuf))))
 			return n;
 	}
 	return NULL;
@@ -242,14 +242,19 @@ node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, node_t *firs
 	chanacs_t *ca;
 	node_t *n;
 	char hostbuf[NICKLEN+USERLEN+HOSTLEN];
+	char ipbuf[NICKLEN+USERLEN+HOSTLEN];
 
 	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
+	/* will be nick!user@ if ip unknown, doesn't matter */
+	snprintf(ipbuf, sizeof ipbuf, "%s!%s@%s", u->nick, u->user, u->ip);
 
 	LIST_FOREACH(n, first)
 	{
 		ca = n->data;
 
-		if (ca->myuser == NULL && !match(ca->host, hostbuf))
+		if (ca->myuser != NULL)
+		       continue;
+		if (!match(ca->host, hostbuf) || !match(ca->host, ipbuf) || (ircd->flags & IRCD_CIDR_BANS && !match_cidr(ca->host, ipbuf)))
 			return n;
 	}
 	return NULL;
