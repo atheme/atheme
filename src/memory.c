@@ -14,9 +14,8 @@
 /* does malloc()'s job and dies if malloc() fails */
 void *smalloc(size_t size)
 {
-        void *buf;
+        void *buf = calloc(size, 1);
 
-        buf = malloc(size);
         if (!buf)
                 raise(SIGUSR1);
         return buf;
