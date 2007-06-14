@@ -314,7 +314,10 @@ static void charybdis_kick(char *from, char *channel, char *to, char *reason)
 	if (!chan || !user)
 		return;
 
-	sts(":%s KICK %s %s :%s", CLIENT_NAME(from_p), channel, CLIENT_NAME(user), reason);
+	if (chan->ts != 0 || chanuser_find(chan, from_p))
+		sts(":%s KICK %s %s :%s", CLIENT_NAME(from_p), channel, CLIENT_NAME(user), reason);
+	else
+		sts(":%s KICK %s %s :%s", ME, channel, CLIENT_NAME(user), reason);
 
 	chanuser_delete(chan, user);
 }
