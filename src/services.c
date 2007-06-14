@@ -52,6 +52,7 @@ int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target)
 	char hostbuf[BUFSIZE], hostbuf2[BUFSIZE], hostbuf3[BUFSIZE];
 	int count = 0;
 	node_t *n, *tn;
+	chanban_t *cb;
 
 	e = ircd->except_mchar;
 	if (e == '\0')
@@ -63,20 +64,15 @@ int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target)
 	snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", target->nick, target->user, target->vhost);
 	/* will be nick!user@ if ip unknown, doesn't matter */
 	snprintf(hostbuf3, BUFSIZE, "%s!%s@%s", target->nick, target->user, target->ip);
-	LIST_FOREACH_SAFE(n, tn, chan->bans.head)
+	for (n = next_matching_ban(chan, target, e, chan->bans.head); n != NULL; n = next_matching_ban(chan, target, e, tn))
 	{
-		chanban_t *cb = n->data;
+		tn = n->next;
+		cb = n->data;
 
-		if (cb->type != e)
-			continue;
-
-		if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2) || !match(cb->mask, hostbuf3) || !match_cidr(cb->mask, hostbuf3))
-		{
-			snprintf(change, sizeof change, "-%c %s", e, cb->mask);
-			mode_sts(source->nick, chan, change);
-			chanban_delete(cb);
-			count++;
-		}
+		snprintf(change, sizeof change, "-%c %s", cb->type, cb->mask);
+		mode_sts(source->nick, chan, change);
+		chanban_delete(cb);
+		count++;
 	}
 	return count;
 }

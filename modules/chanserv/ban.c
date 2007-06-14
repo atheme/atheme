@@ -181,29 +181,19 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
 	if ((tu = user_find_named(target)))
 	{
 		node_t *n, *tn;
-		char hostbuf[BUFSIZE], hostbuf2[BUFSIZE], hostbuf3[BUFSIZE];
+		char hostbuf2[BUFSIZE];
 		int count = 0;
 
-		snprintf(hostbuf, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->host);
 		snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->vhost);
-		/* will be nick!user@ if ip unknown, doesn't matter */
-		snprintf(hostbuf3, BUFSIZE, "%s!%s@%s", tu->nick, tu->user, tu->ip);
-
-		LIST_FOREACH_SAFE(n, tn, c->bans.head)
+		for (n = next_matching_ban(c, tu, 'b', c->bans.head); n != NULL; n = next_matching_ban(c, tu, 'b', tn))
 		{
+			tn = n->next;
 			cb = n->data;
 
-			if (cb->type != 'b')
-				continue;
-			slog(LG_DEBUG, "cs_unban(): iterating %s on %s", cb->mask, c->name);
-
-			if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2) || !match(cb->mask, hostbuf3) || !match_cidr(cb->mask, hostbuf3))
-			{
-				logcommand(si, CMDLOG_DO, "%s UNBAN %s (for user %s)", mc->name, cb->mask, hostbuf2);
-				modestack_mode_param(chansvs.nick, c, MTYPE_DEL, 'b', cb->mask);
-				chanban_delete(cb);
-				count++;
-			}
+			logcommand(si, CMDLOG_DO, "%s UNBAN %s (for user %s)", mc->name, cb->mask, hostbuf2);
+			modestack_mode_param(chansvs.nick, c, MTYPE_DEL, cb->type, cb->mask);
+			chanban_delete(cb);
+			count++;
 		}
 		if (count > 0)
 			command_success_nodata(si, _("Unbanned \2%s\2 on \2%s\2 (%d ban%s removed)."),

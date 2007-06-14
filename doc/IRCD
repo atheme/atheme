@@ -91,10 +91,9 @@ modern one.
 hyperion
 --------
 
-The channel mode +D is not supported and will be ignored. Gecos bans (+d)
-are tracked but otherwise ignored. Bans with forward channels will also not
-be recognized properly. This may lead to problems like users still being
-banned after a chanserv unban command.
+The channel mode +D is not supported and will be ignored. Bans with forward
+channels will not be recognized properly. This may lead to problems like users
+still being banned after a chanserv unban command.
 
 There are two methods to allow services to remember users after a netsplit or
 restart and to enable things like channels only accessible for registered

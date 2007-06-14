@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2003-2004 E. Will et al.
- * Copyright (c) 2005-2006 Atheme Development Group
+ * Copyright (c) 2005-2007 Atheme Development Group
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains protocol support for charybdis-based ircd.
@@ -147,6 +147,77 @@ static boolean_t check_jointhrottle(const char *value, channel_t *c, mychan_t *m
 	if (p - arg2 > 10 || arg2 - value - 1 > 10 || !atoi(value) || !atoi(arg2))
 		return FALSE;
 	return TRUE;
+}
+
+node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int type, node_t *first)
+{
+	chanban_t *cb;
+	node_t *n;
+	char hostbuf[NICKLEN+USERLEN+HOSTLEN];
+	char realbuf[NICKLEN+USERLEN+HOSTLEN];
+	char ipbuf[NICKLEN+USERLEN+HOSTLEN];
+	const char *p;
+	boolean_t negate, matched;
+	int exttype;
+	channel_t *target_c;
+
+	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
+	snprintf(realbuf, sizeof realbuf, "%s!%s@%s", u->nick, u->user, u->host);
+	/* will be nick!user@ if ip unknown, doesn't matter */
+	snprintf(ipbuf, sizeof ipbuf, "%s!%s@%s", u->nick, u->user, u->ip);
+	LIST_FOREACH(n, first)
+	{
+		cb = n->data;
+
+		if (cb->type == type &&
+				(!match(cb->mask, hostbuf) || !match(cb->mask, realbuf) || !match(cb->mask, ipbuf) || !match_cidr(cb->mask, ipbuf)))
+			return n;
+		if (cb->type == type && cb->mask[0] == '$')
+		{
+			p = cb->mask + 1;
+			negate = *p == '~';
+			if (negate)
+				p++;
+			exttype = *p++;
+			if (exttype == '\0')
+				continue;
+			/* check parameter */
+			if (*p++ != ':')
+				p = NULL;
+			switch (exttype)
+			{
+				case 'a':
+					matched = u->myuser != NULL && (p == NULL || !match(p, u->myuser->name));
+					break;
+				case 'c':
+					if (p == NULL)
+						continue;
+					target_c = channel_find(p);
+					if (target_c == NULL || (target_c->modes & (CMODE_PRIV | CMODE_SEC)))
+						continue;
+					matched = chanuser_find(target_c, u) != NULL;
+					break;
+				case 'o':
+					matched = is_ircop(u);
+					break;
+				case 'r':
+					if (p == NULL)
+						continue;
+					matched = !match(p, u->gecos);
+					break;
+				case 's':
+					if (p == NULL)
+						continue;
+					matched = !match(p, u->server->name);
+					break;
+				default:
+					continue;
+			}
+			if (negate ^ matched)
+				return n;
+		}
+	}
+	return NULL;
 }
 
 /* login to our uplink */
@@ -1364,6 +1435,7 @@ void _modinit(module_t * m)
 	holdnick_sts = &charybdis_holdnick_sts;
 	svslogin_sts = &charybdis_svslogin_sts;
 	sasl_sts = &charybdis_sasl_sts;
+	next_matching_ban = &charybdis_next_matching_ban;
 
 	mode_list = charybdis_mode_list;
 	ignore_mode_list = charybdis_ignore_mode_list;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2006 William Pitcock, et al.
+ * Copyright (c) 2005-2007 William Pitcock, et al.
  * Rights to this code are documented in doc/LICENSE.
  *
  * This file contains protocol support for hyperion-based ircd.
@@ -127,6 +127,34 @@ static boolean_t check_jointhrottle(const char *value, channel_t *c, mychan_t *m
 	if (p - arg2 > 5 || arg2 - value - 1 > 5 || !atoi(value) || !atoi(arg2))
 		return FALSE;
 	return TRUE;
+}
+
+node_t *hyperion_next_matching_ban(channel_t *c, user_t *u, int type, node_t *first)
+{
+	chanban_t *cb;
+	node_t *n;
+	char hostbuf[NICKLEN+USERLEN+HOSTLEN];
+	char realbuf[NICKLEN+USERLEN+HOSTLEN];
+	char ipbuf[NICKLEN+USERLEN+HOSTLEN];
+	const char *p;
+	boolean_t negate, matched;
+	int exttype;
+
+	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
+	snprintf(realbuf, sizeof realbuf, "%s!%s@%s", u->nick, u->user, u->host);
+	/* will be nick!user@ if ip unknown, doesn't matter */
+	snprintf(ipbuf, sizeof ipbuf, "%s!%s@%s", u->nick, u->user, u->ip);
+	LIST_FOREACH(n, first)
+	{
+		cb = n->data;
+
+		if (cb->type == type &&
+				(!match(cb->mask, hostbuf) || !match(cb->mask, realbuf) || !match(cb->mask, ipbuf)))
+			return n;
+		if (cb->type == 'd' && type == 'b' && !match(cb->mask, u->gecos))
+			return n;
+	}
+	return NULL;
 }
 
 /* login to our uplink */
@@ -944,6 +972,7 @@ void _modinit(module_t * m)
 	sethost_sts = &hyperion_sethost_sts;
 	fnc_sts = &hyperion_fnc_sts;
 	invite_sts = &hyperion_invite_sts;
+	next_matching_ban = &hyperion_next_matching_ban;
 
 	mode_list = hyperion_mode_list;
 	ignore_mode_list = hyperion_ignore_mode_list;

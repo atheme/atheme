@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2006 Atheme Development Group
+ * Copyright (c) 2005-2007 Atheme Development Group
  * The rights to this code are as documented in doc/LICENSE.
  *
  * Generic protocol event handlers.
@@ -39,6 +39,8 @@ void (*holdnick_sts)(user_t *source, int duration, const char *nick, myuser_t *a
 void (*invite_sts) (user_t *source, user_t *target, channel_t *channel) = generic_invite_sts;
 void (*svslogin_sts) (char *target, char *nick, char *user, char *host, char *login) = generic_svslogin_sts;
 void (*sasl_sts) (char *target, char mode, char *data) = generic_sasl_sts;
+node_t *(*next_matching_ban)(channel_t *c, user_t *u, int type, node_t *first) = generic_next_matching_ban;
+node_t *(*next_matching_host_chanacs)(mychan_t *mc, user_t *u, node_t *first) = generic_next_matching_host_chanacs;
 
 unsigned int generic_server_login(void)
 {
@@ -210,6 +212,48 @@ void generic_svslogin_sts(char *target, char *nick, char *user, char *host, char
 void generic_sasl_sts(char *target, char mode, char *data)
 {
 	/* nothing to do here. */
+}
+
+node_t *generic_next_matching_ban(channel_t *c, user_t *u, int type, node_t *first)
+{
+	chanban_t *cb;
+	node_t *n;
+	char hostbuf[NICKLEN+USERLEN+HOSTLEN];
+	char realbuf[NICKLEN+USERLEN+HOSTLEN];
+	char ipbuf[NICKLEN+USERLEN+HOSTLEN];
+
+	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
+	snprintf(realbuf, sizeof realbuf, "%s!%s@%s", u->nick, u->user, u->host);
+	/* will be nick!user@ if ip unknown, doesn't matter */
+	snprintf(ipbuf, sizeof ipbuf, "%s!%s@%s", u->nick, u->user, u->ip);
+	LIST_FOREACH(n, first)
+	{
+		cb = n->data;
+
+		if (cb->type == type &&
+				(!match(cb->mask, hostbuf) || !match(cb->mask, realbuf) || !match(cb->mask, ipbuf) || !match_cidr(cb->mask, ipbuf)))
+			return n;
+	}
+	return NULL;
+}
+
+node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, node_t *first)
+{
+	chanacs_t *ca;
+	node_t *n;
+	char hostbuf[NICKLEN+USERLEN+HOSTLEN];
+
+	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
+
+	LIST_FOREACH(n, first)
+	{
+		ca = n->data;
+
+		if (ca->myuser == NULL && !match(ca->host, hostbuf))
+			return n;
+		n = n->next;
+	}
+	return NULL;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

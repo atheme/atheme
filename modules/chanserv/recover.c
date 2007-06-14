@@ -43,9 +43,10 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanuser_t *cu, *origin_cu = NULL;
 	mychan_t *mc;
-	node_t *n;
+	node_t *n, *tn;
+	chanban_t *cb;
 	char *name = parv[0];
-	char hostbuf[BUFSIZE], hostbuf2[BUFSIZE], hostbuf3[BUFSIZE];
+	char hostbuf2[BUFSIZE];
 	char e;
 	boolean_t added_exempt = FALSE;
 	int i;
@@ -158,21 +159,15 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* unban the user */
-	snprintf(hostbuf, BUFSIZE, "%s!%s@%s", si->su->nick, si->su->user, si->su->host);
 	snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", si->su->nick, si->su->user, si->su->vhost);
-	snprintf(hostbuf3, BUFSIZE, "%s!%s@%s", si->su->nick, si->su->user, si->su->ip);
 
-	LIST_FOREACH(n, mc->chan->bans.head)
+	for (n = next_matching_ban(mc->chan, si->su, 'b', mc->chan->bans.head); n != NULL; n = next_matching_ban(mc->chan, si->su, 'b', tn))
 	{
-		chanban_t *cb = n->data;
+		tn = n->next;
+		cb = n->data;
 
-		if (cb->type != 'b')
-			continue;
-		if (!match(cb->mask, hostbuf) || !match(cb->mask, hostbuf2) || !match(cb->mask, hostbuf3) || !match_cidr(cb->mask, hostbuf3))
-		{
-			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'b', cb->mask);
-			chanban_delete(cb);
-		}
+		modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, cb->type, cb->mask);
+		chanban_delete(cb);
 	}
 
 	if (origin_cu == NULL)
