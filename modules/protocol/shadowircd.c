@@ -38,7 +38,8 @@ ircd_t ShadowIRCd = {
 	CMODE_PERM,                     /* Permanent cmodes */
 	"beIqd",                        /* Ban-like cmodes */
 	'e',                            /* Except mchar */
-	'I'                             /* Invex mchar */
+	'I',                            /* Invex mchar */
+	0                               /* Flags */
 };
 
 struct cmode_ shadowircd_mode_list[] = {

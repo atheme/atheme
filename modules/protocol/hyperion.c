@@ -42,7 +42,8 @@ ircd_t Hyperion = {
 	CMODE_PERM | CMODE_JUPED,       /* Permanent cmodes */
 	"beIqd",                        /* Ban-like cmodes */
 	'e',                            /* Except mchar */
-	'I'                             /* Invex mchar */
+	'I',                            /* Invex mchar */
+	0                               /* Flags */
 };
 
 struct cmode_ hyperion_mode_list[] = {

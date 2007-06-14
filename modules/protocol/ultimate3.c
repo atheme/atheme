@@ -38,7 +38,8 @@ ircd_t ultimate3 = {
 	0,                              /* Permanent cmodes */
 	"be",                           /* Ban-like cmodes */
 	'e',                            /* Except mchar */
-	0                               /* Invex mchar */
+	0,                              /* Invex mchar */
+	0                               /* Flags */
 };
 
 struct cmode_ ultimate3_mode_list[] = {

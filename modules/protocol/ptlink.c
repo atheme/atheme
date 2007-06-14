@@ -38,7 +38,8 @@ ircd_t PTLink = {
 	0,                              /* Permanent cmodes */
 	"b",                            /* Ban-like cmodes */
 	0,                              /* Except mchar */
-	0                               /* Invex mchar */
+	0,                              /* Invex mchar */
+	0                               /* Flags */
 };
 
 struct cmode_ ptlink_mode_list[] = {

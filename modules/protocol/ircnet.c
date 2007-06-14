@@ -39,7 +39,8 @@ ircd_t IRCNet = {
 	0,                              /* Permanent cmodes */
 	"beIR",                         /* Ban-like cmodes */
 	'e',                            /* Except mchar */
-	'I'                             /* Invex mchar */
+	'I',                            /* Invex mchar */
+	IRCD_CIDR_BANS                  /* Flags */
 };
 
 struct cmode_ ircnet_mode_list[] = {

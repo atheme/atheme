@@ -39,7 +39,8 @@ ircd_t Undernet = {
 	0,                              /* Permanent cmodes */
 	"b",                            /* Ban-like cmodes */
 	0,                              /* Except mchar */
-	0                               /* Invex mchar */
+	0,                              /* Invex mchar */
+	IRCD_CIDR_BANS                  /* Flags */
 };
 
 struct cmode_ undernet_mode_list[] = {

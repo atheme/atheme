@@ -38,7 +38,8 @@ ircd_t Charybdis = {
 	CMODE_PERM,                     /* Permanent cmodes */
 	"beIq",                         /* Ban-like cmodes */
 	'e',                            /* Except mchar */
-	'I'                             /* Invex mchar */
+	'I',                            /* Invex mchar */
+	IRCD_CIDR_BANS                  /* Flags */
 };
 
 struct cmode_ charybdis_mode_list[] = {

@@ -41,7 +41,8 @@ ircd_t PleXusIRCd = {
 	0,                              /* Permanent cmodes */
 	"beI",                          /* Ban-like cmodes */
 	'e',                            /* Except mchar */
-	'I'                             /* Invex mchar */
+	'I',                            /* Invex mchar */
+	IRCD_CIDR_BANS                  /* Flags */
 };
 
 struct cmode_ plexus_mode_list[] = {

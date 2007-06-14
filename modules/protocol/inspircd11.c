@@ -37,7 +37,8 @@ ircd_t InspIRCd = {
 		0,                              /* Permanent cmodes */
 		"beIg",                         /* Ban-like cmodes */
 		'e',                            /* Except mchar */
-		'I'                             /* Invex mchar */
+		'I',                            /* Invex mchar */
+		IRCD_CIDR_BANS                  /* Flags */
 };
 
 struct cmode_ inspircd_mode_list[] = {

@@ -39,7 +39,8 @@ ircd_t Nefarious = {
 	CMODE_PERM,                     /* Permanent cmodes */
 	"be",                           /* Ban-like cmodes */
 	'e',                            /* Except mchar */
-	0                               /* Invex mchar */
+	0,                              /* Invex mchar */
+	IRCD_CIDR_BANS                  /* Flags */
 };
 
 struct cmode_ nefarious_mode_list[] = {

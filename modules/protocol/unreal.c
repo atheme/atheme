@@ -38,7 +38,8 @@ ircd_t Unreal = {
 	0,                              /* Permanent cmodes */
 	"beI",                          /* Ban-like cmodes */
 	'e',                            /* Except mchar */
-	'I'                             /* Invex mchar */
+	'I',                            /* Invex mchar */
+	0                               /* Flags */
 };
 
 struct cmode_ unreal_mode_list[] = {

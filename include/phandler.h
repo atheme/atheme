@@ -32,6 +32,7 @@ struct ircd_ {
 	char *ban_like_modes;		/* e.g. "beI" */
 	char except_mchar;
 	char invex_mchar;
+	int flags;
 };
 
 typedef struct ircd_ ircd_t;
@@ -63,6 +64,9 @@ typedef struct ircd_ ircd_t;
 #define PROTOCOL_OFFICEIRC		20
 
 #define PROTOCOL_OTHER			255
+
+/* values for flags */
+#define IRCD_CIDR_BANS			1
 
 /* forced nick change types */
 #define FNC_REGAIN 0 /* give a registered user their nick back */
