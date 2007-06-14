@@ -251,7 +251,6 @@ node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, node_t *firs
 
 		if (ca->myuser == NULL && !match(ca->host, hostbuf))
 			return n;
-		n = n->next;
 	}
 	return NULL;
 }

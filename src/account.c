@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2006 Atheme developers
+ * Copyright (c) 2005-2007 Atheme developers
  * Rights to this code are as documented in doc/LICENSE.
  *
  * Account-related functions.
@@ -991,34 +991,36 @@ chanacs_t *chanacs_find_host_literal(mychan_t *mychan, const char *host, unsigne
 
 chanacs_t *chanacs_find_host_by_user(mychan_t *mychan, user_t *u, unsigned int level)
 {
-	char host[BUFSIZE];
+	node_t *n;
+	chanacs_t *ca;
 
-	return_val_if_fail(mychan != NULL && u != NULL, NULL);
+	return_val_if_fail(mychan != NULL && u != NULL, 0);
 
-	/* construct buffer for user's host */
-	strlcpy(host, u->nick, BUFSIZE);
-	strlcat(host, "!", BUFSIZE);
-	strlcat(host, u->user, BUFSIZE);
-	strlcat(host, "@", BUFSIZE);
-	strlcat(host, u->vhost, BUFSIZE);
+	for (n = next_matching_host_chanacs(mychan, u, mychan->chanacs.head); n != NULL; n = next_matching_host_chanacs(mychan, u, n->next))
+	{
+		ca = n->data;
+		if ((ca->level & level) == level)
+			return ca;
+	}
 
-	return chanacs_find_host(mychan, host, level);
+	return NULL;
 }
 
 unsigned int chanacs_host_flags_by_user(mychan_t *mychan, user_t *u)
 {
-	char host[BUFSIZE];
+	node_t *n;
+	unsigned int result = 0;
+	chanacs_t *ca;
 
 	return_val_if_fail(mychan != NULL && u != NULL, 0);
 
-	/* construct buffer for user's host */
-	strlcpy(host, u->nick, BUFSIZE);
-	strlcat(host, "!", BUFSIZE);
-	strlcat(host, u->user, BUFSIZE);
-	strlcat(host, "@", BUFSIZE);
-	strlcat(host, u->vhost, BUFSIZE);
+	for (n = next_matching_host_chanacs(mychan, u, mychan->chanacs.head); n != NULL; n = next_matching_host_chanacs(mychan, u, n->next))
+	{
+		ca = n->data;
+		result |= ca->level;
+	}
 
-	return chanacs_host_flags(mychan, host);
+	return result;
 }
 
 chanacs_t *chanacs_find_by_mask(mychan_t *mychan, const char *mask, unsigned int level)

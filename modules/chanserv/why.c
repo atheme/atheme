@@ -126,20 +126,22 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 					command_success_nodata(si, "Ban reason: %s", md->value);
 			}
 		}
-		else if (ca->myuser == NULL && !match(ca->host, host))
-		{
-			fl |= ca->level;
-			command_success_nodata(si,
+	}
+	for (n = next_matching_host_chanacs(mc, u, mc->chanacs.head); n != NULL; n = next_matching_host_chanacs(mc, u, n->next))
+	{
+		ca = n->data;
+		fl |= ca->level;
+		command_success_nodata(si,
 				"\2%s\2 has flags \2%s\2 in \2%s\2 because they match the mask \2%s\2.",
 				u->nick, bitmask_to_flags2(ca->level, 0, chanacs_flags), mc->name, ca->host);
-			if (ca->level & CA_AKICK)
-			{
-				md = metadata_find(ca, METADATA_CHANACS, "reason");
-				if (md != NULL)
-					command_success_nodata(si, "Ban reason: %s", md->value);
-			}
+		if (ca->level & CA_AKICK)
+		{
+			md = metadata_find(ca, METADATA_CHANACS, "reason");
+			if (md != NULL)
+				command_success_nodata(si, "Ban reason: %s", md->value);
 		}
 	}
+
 	if ((fl & (CA_AKICK | CA_REMOVE)) == (CA_AKICK | CA_REMOVE))
 		command_success_nodata(si, _("+r exempts from +b."));
 	else if (fl == 0)
