@@ -546,9 +546,8 @@ static void delete_stale(void *vptr)
 			node_del(n, &sessions);
 			destroy_session(p);
 			node_free(n);
-		}
-
-		p->flags |= ASASL_MARKED_FOR_DELETION;
+		} else
+			p->flags |= ASASL_MARKED_FOR_DELETION;
 	}
 }
 
