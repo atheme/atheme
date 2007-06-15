@@ -960,10 +960,10 @@ chanacs_t *chanacs_find_host(mychan_t *mychan, const char *host, unsigned int le
 
 		if (level != 0x0)
 		{
-			if ((ca->myuser == NULL) && (!match(ca->host, host)) && ((ca->level & level) == level))
+			if ((ca->myuser == NULL) && (!match(ca->host, host) || !match_cidr(ca->host, host)) && ((ca->level & level) == level))
 				return ca;
 		}
-		else if ((ca->myuser == NULL) && (!match(ca->host, host)))
+		else if ((ca->myuser == NULL) && (!match(ca->host, host) || !match_cidr(ca->host, host)))
 			return ca;
 	}
 
@@ -982,7 +982,7 @@ unsigned int chanacs_host_flags(mychan_t *mychan, const char *host)
 	{
 		ca = (chanacs_t *)n->data;
 
-		if (ca->myuser == NULL && !match(ca->host, host))
+		if (ca->myuser == NULL && (!match(ca->host, host) || !match_cidr(ca->host, host)))
 			result |= ca->level;
 	}
 
