@@ -33,6 +33,7 @@
 
 #include "atheme.h"
 
+static char saltbuf[BUFSIZE];
 boolean_t crypto_module_loaded = FALSE;
 
 /*
