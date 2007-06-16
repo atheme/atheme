@@ -5,6 +5,7 @@
 #
 # $Id: Makefile.in 8385 2007-06-03 20:33:21Z jilles $
 #
+include Makefile.defs
 
 default: all
 
