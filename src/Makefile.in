@@ -92,6 +92,7 @@ BASE_SRCS =				\
 	$(SRCDIR)/signal.c		\
 	$(SRCDIR)/string.c		\
 	$(SRCDIR)/svsignore.c		\
+	$(SRCDIR)/symbolmatrix.c	\
 	$(SRCDIR)/table.c		\
 	$(SRCDIR)/template.c		\
 	$(SRCDIR)/tokenize.c		\
