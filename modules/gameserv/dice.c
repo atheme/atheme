@@ -56,7 +56,7 @@ void _moddeinit()
 {
 	command_delete(&cmd_dice, gs_cmdtree);
 	command_delete(&cmd_wod, gs_cmdtree);
-	command_delete(&cmd_df, cs_cmdtree);
+	command_delete(&cmd_df, gs_cmdtree);
 
 	command_delete(&cmd_dice, cs_cmdtree);
 	command_delete(&cmd_wod, cs_cmdtree);
