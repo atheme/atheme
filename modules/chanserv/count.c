@@ -43,6 +43,7 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 	char *chan = parv[0];
 	chanacs_t *ca;
 	mychan_t *mc = mychan_find(chan);
+	unsigned int ca_sop, ca_aop, ca_hop, ca_vop;
 	int vopcnt = 0, aopcnt = 0, hopcnt = 0, sopcnt = 0, akickcnt = 0;
 	int othercnt = 0;
 	int i;
@@ -80,25 +81,34 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	ca_sop = get_template_flags(mc, "SOP");
+	ca_aop = get_template_flags(mc, "AOP");
+	ca_hop = get_template_flags(mc, "HOP");
+	ca_vop = get_template_flags(mc, "VOP");
+
 	LIST_FOREACH(n, mc->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
 
-		if (ca->level == chansvs.ca_vop)
+		if (ca->level == ca_vop)
 			vopcnt++;
-		else if (ca->level == chansvs.ca_hop)
+		else if (ca->level == ca_hop)
 			hopcnt++;
-		else if (ca->level == chansvs.ca_aop)
+		else if (ca->level == ca_aop)
 			aopcnt++;
-		else if (ca->level == chansvs.ca_sop)
+		else if (ca->level == ca_sop)
 			sopcnt++;
 		else if (ca->level == CA_AKICK)
 			akickcnt++;
 		else if (ca->myuser != mc->founder)
 			othercnt++;
 	}
-	command_success_nodata(si, _("%s: VOp: %d, HOp: %d, AOp: %d, SOp: %d, AKick: %d, other: %d"),
-			chan, vopcnt, hopcnt, aopcnt, sopcnt, akickcnt, othercnt);
+	if (ca_hop == ca_vop)
+		command_success_nodata(si, _("%s: VOp: %d, AOp: %d, SOp: %d, AKick: %d, other: %d"),
+				chan, vopcnt, aopcnt, sopcnt, akickcnt, othercnt);
+	else
+		command_success_nodata(si, _("%s: VOp: %d, HOp: %d, AOp: %d, SOp: %d, AKick: %d, other: %d"),
+				chan, vopcnt, hopcnt, aopcnt, sopcnt, akickcnt, othercnt);
 	snprintf(str, sizeof str, "%s: ", chan);
 	for (i = 0; chanacs_flags[i].flag; i++)
 	{
