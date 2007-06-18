@@ -1320,6 +1320,7 @@ metadata_t *metadata_add(void *target, int type, const char *name, const char *v
 	chanacs_t *ca = NULL;
 	metadata_t *md;
 	node_t *n;
+	hook_metadata_change_t mdchange;
 
 	if (!name || !value)
 		return NULL;
@@ -1366,6 +1367,12 @@ metadata_t *metadata_add(void *target, int type, const char *name, const char *v
 	if (!strncmp("private:", md->name, 8))
 		md->private = TRUE;
 
+	mdchange.target = target;
+	mdchange.name = md->name;
+	mdchange.value = md->value;
+	mdchange.type = type;
+	hook_call_event("metadata_change", &mdchange);
+
 	return md;
 }
 
@@ -1376,9 +1383,16 @@ void metadata_delete(void *target, int type, const char *name)
 	mychan_t *mc;
 	chanacs_t *ca;
 	metadata_t *md = metadata_find(target, type, name);
+	hook_metadata_change_t mdchange;
 
 	if (!md)
 		return;
+
+	mdchange.target = target;
+	mdchange.name = name;
+	mdchange.value = NULL;
+	mdchange.type = type;
+	hook_call_event("metadata_change", &mdchange);
 
 	if (type == METADATA_USER)
 	{
