@@ -21,7 +21,6 @@ BASE_SRCS =			\
 	$(SRCDIR)/dreamforge.c	\
 	$(SRCDIR)/hybrid.c	\
 	$(SRCDIR)/hyperion.c	\
-	$(SRCDIR)/inspircd10.c	\
 	$(SRCDIR)/inspircd11.c	\
 	$(SRCDIR)/ircnet.c	\
 	$(SRCDIR)/nefarious.c	\

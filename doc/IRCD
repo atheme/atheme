@@ -115,7 +115,8 @@ will be properly stored and logged.
 inspircd
 --------
 
-There are inspircd10 for inspircd 1.0.x and inspircd11 for inspircd 1.1.x.
+You should use inspircd11 for inspircd 1.1.x. InspIRCd 1.0.x support 
+(inspircd10) has been dropped.
 
 You need <uline> tags for services on all servers on the network.
 
