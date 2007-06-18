@@ -69,7 +69,7 @@ module_t *module_load(char *filespec)
 {
 	node_t *n;
 	module_t *m;
-	moduleheader_t *h;
+	v1_moduleheader_t *h;
 	void *handle = NULL;
 #ifdef HAVE_DLINFO
 	struct link_map *map;
@@ -93,7 +93,7 @@ module_t *module_load(char *filespec)
 		return NULL;
 	}
 
-	h = (moduleheader_t *) linker_getsym(handle, "_header");
+	h = (v1_moduleheader_t *) linker_getsym(handle, "_header");
 
 	if (!h)
 		return NULL;
