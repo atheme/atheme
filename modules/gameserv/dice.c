@@ -56,7 +56,7 @@ void _moddeinit()
 {
 	command_delete(&cmd_dice, gs_cmdtree);
 	command_delete(&cmd_wod, gs_cmdtree);
-	command_delete(&cmd_df, cs_cmdtree);
+	command_delete(&cmd_df, gs_cmdtree);
 
 	command_delete(&cmd_dice, cs_cmdtree);
 	command_delete(&cmd_wod, cs_cmdtree);
@@ -247,6 +247,12 @@ static void command_df(sourceinfo_t *si, int parc, char *parv[])
 
 	dice = atoi(arg_dice);
 	*buf = '\0';
+
+	if (dice > 30 || dice < 1)
+	{
+		command_fail(si, fault_badparams, _("Only 1-30 dice may be thrown at one time."));
+		return;
+	}
 
 	for (i = 0; i < dice; i++)
 	{
