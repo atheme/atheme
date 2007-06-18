@@ -18,6 +18,12 @@ struct metadata_ {
 
 typedef struct metadata_ metadata_t;
 
+typedef struct {
+	void *object;
+	int type;
+	metadata_t *md;
+} hook_metadata_change_t;
+
 E metadata_t *metadata_add(void *target, int type, const char *name, const char *value);
 E void metadata_delete(void *target, int type, const char *name);
 E metadata_t *metadata_find(void *target, int type, const char *name);
