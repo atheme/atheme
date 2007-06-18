@@ -46,6 +46,6 @@ typedef struct module_symbol_source_ {
 } module_symbol_source_t;
 
 void *module_symbol_get(module_t *mod, char *sym);
-void *module_symbol_getn(module_symbol_source_t *source_map, size_t n);
+int module_symbol_getn(module_symbol_source_t *source_map, size_t n);
 
 #endif
