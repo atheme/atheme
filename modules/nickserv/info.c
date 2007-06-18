@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_info = { "INFO", N_("Displays information on registrations."), AC_NONE, 1, ns_cmd_info };
+command_t ns_info = { "INFO", N_("Displays information on registrations."), AC_NONE, 2, ns_cmd_info };
 
 list_t *ns_cmdtree, *ns_helptree;
 
