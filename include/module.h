@@ -18,7 +18,7 @@ typedef struct v1_moduleheader_ v1_moduleheader_t;
 struct module_ {
 	char name[BUFSIZE];
 	char modpath[BUFSIZE];
-	moduleheader_t *header;
+	v1_moduleheader_t *header;
 
 	unsigned int mflags;
 
