@@ -42,7 +42,7 @@ typedef struct module_symbol_ {
 
 typedef struct module_symbol_source_ {
 	char *mod;
-	module_symbol_t *modsym;
+	module_symbol_t sym;
 } module_symbol_source_t;
 
 void *module_symbol_get(module_t *mod, char *sym);
