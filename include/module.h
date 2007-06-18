@@ -27,6 +27,8 @@ struct module_ {
 
 	list_t dephost;
 	list_t deplist;
+
+	list_t symlist;		/* MAPIv2 symbol dependencies. */
 };
 
 #define MODTYPE_STANDARD	0
