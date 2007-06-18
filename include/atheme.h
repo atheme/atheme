@@ -52,6 +52,7 @@
 #include "commandtree.h"
 #include "users.h"
 #include "sourceinfo.h"
+#include "symbolmatrix.h"
 
 #endif /* ATHEME_H */
 
