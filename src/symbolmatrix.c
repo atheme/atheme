@@ -39,8 +39,9 @@ void *module_symbol_get(module_t *mod, module_symbol_t *sym)
 	return_val_if_fail(sym != NULL, NULL);
 	return_val_if_fail(sym->sym != NULL, NULL);
 
+	/* XXX sym->mod->header->name is wrong. :( */
 	sym->mod = mod;
-	sym->addr = module_lookup_symbol(sym->mod, sym->sym);
+	sym->addr = module_locate_symbol(sym->mod->header->name, sym->sym);
 
 	return sym->addr;
 }
