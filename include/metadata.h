@@ -19,9 +19,10 @@ struct metadata_ {
 typedef struct metadata_ metadata_t;
 
 typedef struct {
-	void *object;
+	void *target;
 	int type;
-	metadata_t *md;
+	char *name;
+	char *value;
 } hook_metadata_change_t;
 
 E metadata_t *metadata_add(void *target, int type, const char *name, const char *value);
