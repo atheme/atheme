@@ -13,7 +13,7 @@
 #include "privs.h"
 
 typedef struct module_ module_t;
-typedef struct moduleheader_ moduleheader_t;
+typedef struct v1_moduleheader_ v1_moduleheader_t;
 
 struct module_ {
 	char name[BUFSIZE];
@@ -38,7 +38,7 @@ struct module_ {
 
 #define MAX_CMD_PARC		20
 
-struct moduleheader_ {
+struct v1_moduleheader_ {
 	unsigned int atheme_mod;
 	unsigned int abi_ver;
 	char *name;
@@ -50,7 +50,7 @@ struct moduleheader_ {
 };
 
 #define DECLARE_MODULE_V1(name, norestart, modinit, deinit, ver, ven) \
-	moduleheader_t _header = { \
+	v1_moduleheader_t _header = { \
 		MAPI_ATHEME_MAGIC, MAPI_ATHEME_V1, \
 		name, norestart, modinit, deinit, ven, ver \
 	}
