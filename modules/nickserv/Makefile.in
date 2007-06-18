@@ -41,4 +41,11 @@ BASE_SRCS =			\
 	$(SRCDIR)/verify.c	\
 	$(SRCDIR)/vhost.c
 
+all: modules
+
+modules: login.so
+
+login.so: ${SRCDIR}/identify.c
+	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} -DNICKSERV_LOGIN ${SRCDIR}/identify.c -o login.so
+
 include ../Makefile.common

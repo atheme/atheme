@@ -924,7 +924,7 @@ static void check_hidehost(user_t *u)
 	static boolean_t warned = FALSE;
 
 	/* do they qualify? */
-	if (!(u->flags & UF_HIDEHOSTREQ) || u->myuser == NULL)
+	if (!(u->flags & UF_HIDEHOSTREQ) || u->myuser == NULL || (u->myuser->flags & MU_WAITAUTH))
 		return;
 	/* don't use this if they have some other kind of vhost */
 	if (strcmp(u->host, u->vhost))

@@ -150,6 +150,19 @@ static boolean_t check_jointhrottle(const char *value, channel_t *c, mychan_t *m
 	return TRUE;
 }
 
+/* this may be slow, but it is not used much */
+/* returns TRUE if it matches, FALSE if not */
+/* note that the host part matches differently from a regular ban */
+boolean_t extgecos_match(const char *mask, user_t *u)
+{
+	char hostgbuf[NICKLEN+USERLEN+HOSTLEN+GECOSLEN];
+	char realgbuf[NICKLEN+USERLEN+HOSTLEN+GECOSLEN];
+
+	snprintf(hostgbuf, sizeof hostgbuf, "%s!%s@%s#%s", u->nick, u->user, u->vhost, u->gecos);
+	snprintf(realgbuf, sizeof realgbuf, "%s!%s@%s#%s", u->nick, u->user, u->host, u->gecos);
+	return !match(mask, hostgbuf) || !match(mask, realgbuf);
+}
+
 node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int type, node_t *first)
 {
 	chanban_t *cb;
@@ -188,7 +201,7 @@ node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int type, node_t *f
 			switch (exttype)
 			{
 				case 'a':
-					matched = u->myuser != NULL && (p == NULL || !match(p, u->myuser->name));
+					matched = u->myuser != NULL && !(u->myuser->flags & MU_WAITAUTH) && (p == NULL || !match(p, u->myuser->name));
 					break;
 				case 'c':
 					if (p == NULL)
@@ -210,6 +223,11 @@ node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int type, node_t *f
 					if (p == NULL)
 						continue;
 					matched = !match(p, u->server->name);
+					break;
+				case 'x':
+					if (p == NULL)
+						continue;
+					matched = extgecos_match(p, u);
 					break;
 				default:
 					continue;
