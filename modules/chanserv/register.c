@@ -19,7 +19,7 @@ DECLARE_MODULE_V1
 static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_register = { "REGISTER", N_("Registers a channel."),
-                           AC_NONE, 1, cs_cmd_register };
+                           AC_NONE, 3, cs_cmd_register };
 
 list_t *cs_cmdtree;
 list_t *cs_helptree;
