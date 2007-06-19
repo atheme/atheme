@@ -169,13 +169,25 @@ static void flatfile_db_save(void *arg)
 
 	DICTIONARY_FOREACH(mu, &state, mulist)
 	{
-		myuser_t *subscriptor;
+		metadata_subscription_t *subscriptor;
 
 		LIST_FOREACH(n, mu->subscriptions.head)
 		{
-			subscriptor = (myuser_t *) n->data;
+			node_t *i;
+			string_t *str = new_string(64);
+			subscriptor = (metadata_subscription_t *) n->data;
 
-			fprintf(f, "SU %s %s\n", mu->name, subscriptor->name);
+			LIST_FOREACH(i, subscriptor->taglist.head)
+			{
+				str->append(str, i->data, strlen(i->data));
+
+				if (i->next)
+					str->append_char(str, ',');
+			}
+
+			fprintf(f, "SU %s %s %s\n", mu->name, subscriptor->mu->name, str->str);
+
+			string_delete(str);
 		}
 	}
 
@@ -473,16 +485,26 @@ static void flatfile_db_load(void)
 		/* subscriptions */
 		if (!strcmp("SU", item))
 		{
-			char *user, *sub_user;
+			char *user, *sub_user, *tags, *tag;
 			myuser_t *subscriptor;
+			metadata_subscription_t *md = smalloc(sizeof(metadata_subscription_t));
 
 			user = strtok(NULL, " ");
-			sub_user = strtok(NULL, "\n");
+			sub_user = strtok(NULL, " ");
+			tags = strtok(NULL, "\n");
 
-			strip(sub_user);
+			strip(tags);
 
 			mu = myuser_find(user);
 			subscriptor = myuser_find(sub_user);
+
+			md->mu = subscriptor;
+
+			tag = strtok(tags, ",");
+			do
+			{
+				node_add(sstrdup(tag), node_create(), &md->taglist);
+			} while ((tag = strtok(NULL, ",")) != NULL);
 
 			node_add(subscriptor, node_create(), &mu->subscriptions);
 		}
