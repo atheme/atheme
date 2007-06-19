@@ -43,13 +43,15 @@ DECLARE_MODULE_V1
 static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu = si->smu, *tmu;
-	char *name = parv[1];
+	char *name = parv[1], char *tag;
 	boolean_t remove = FALSE;
+	metadata_subscription_t *md;
+	node_t *i;
 
 	if (parc < 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SUBSCRIBE");
-		command_fail(si, fault_needmoreparams, _("Syntax: SUBSCRIBE [-]username"));
+		command_fail(si, fault_needmoreparams, _("Syntax: SUBSCRIBE [-]username [tags]"));
 
 		return;
 	}
@@ -76,15 +78,65 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 
 	if (remove)
 	{
-		node_t *n = node_find(mu, &tmu->subscriptions);
-		node_del(n, &tmu->subscriptions);
-		node_free(n);
+		node_t *n;
+		boolean_t found = FALSE;
 
-		command_success_nodata(si, _("\2%s\2 has been removed from your subscriptions."));
+		LIST_FOREACH(n, &tmu->subscriptions)
+		{
+			md = (metadata_subscription_t *) n->data;
+
+			if (md->mu == mu)
+			{
+				found = TRUE;
+				break;
+			}
+		}
+
+		if (found)
+		{
+			note_t *tn;
+
+			LIST_FOREACH_SAFE(n, tn, md->taglist.head)
+			{
+				free(n->data);
+
+				node_del(n, &md->taglist);
+				node_free(n);
+			}
+
+			free(md);
+
+			node_del(n, &tmu->subscriptions);
+			node_free(n);
+
+			command_success_nodata(si, _("\2%s\2 has been removed from your subscriptions."), name);
+			return;
+		}
+
+		command_fail(si, fault_badparams, _("\2%s\2 was not found on your subscription list.", name);
 		return;
 	}
 
-	node_add(mu, node_create(), &tmu->subscriptions);
+	/* tags are mandatory for new subscriptions */
+	if (parc < 2)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SUBSCRIBE");
+		command_fail(si, fault_needmoreparams, _("Syntax: SUBSCRIBE [-]username tags"));
+
+		return;
+	}
+
+	md = smalloc(sizeof(metadata_subscription_t));
+	md->mu = mu;
+
+	tag = strtok(parv[2], ",");
+	do
+	{
+		slog(LG_DEBUG, "subscription: parsing tag %s", tag);
+		node_add(sstrdup(tag), node_create(), &md->taglist);
+	} while ((tag = strtok(NULL, ",")) != NULL);
+
+	node_add(md, node_create(), &tmu->subscriptions);
 	command_success_nodata(si, _("\2%s\2 has been added to your subscriptions."));
 }
 

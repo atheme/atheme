@@ -27,8 +27,7 @@ typedef struct {
 
 typedef struct {
 	myuser_t *mu;
-	char **tags;
-	int tagcount;
+	list_t taglist;
 } metadata_subscription_t;
 
 E metadata_t *metadata_add(void *target, int type, const char *name, const char *value);
