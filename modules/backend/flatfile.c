@@ -484,7 +484,7 @@ static void flatfile_db_load(void)
 			mu = myuser_find(user);
 			subscriptor = myuser_find(sub_user);
 
-			node_add(mu, node_create(), &mu->subscriptions);
+			node_add(subscriptor, node_create(), &mu->subscriptions);
 		}
 
 		/* services oper */
