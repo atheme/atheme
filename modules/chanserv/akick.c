@@ -143,13 +143,20 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
-			/* ok to use chanacs_add_host() here, already
-			 * verified it doesn't exist yet */
-			ca2 = chanacs_add_host(mc, uname, CA_AKICK, CURRTIME);
+			/* new entry */
+			ca2 = chanacs_open(mc, NULL, uname, TRUE);
+			if (chanacs_is_table_full(ca2))
+			{
+				command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
+				chanacs_close(ca2);
+				return;
+			}
+			chanacs_modify_simple(ca2, CA_AKICK, 0);
 			if (reason != NULL)
 				metadata_add(ca2, METADATA_CHANACS, "reason", reason);
 
 			hook_call_event("channel_akick_add", ca2);
+			chanacs_close(ca2);
 
 			verbose(mc, "\2%s\2 added \2%s\2 to the AKICK list.", get_source_name(si), uname);
 			logcommand(si, CMDLOG_SET, "%s AKICK ADD %s", mc->name, uname);
@@ -169,11 +176,20 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
-			ca2 = chanacs_add(mc, mu, CA_AKICK, CURRTIME);
+			/* new entry */
+			ca2 = chanacs_open(mc, mu, NULL, TRUE);
+			if (chanacs_is_table_full(ca2))
+			{
+				command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
+				chanacs_close(ca2);
+				return;
+			}
+			chanacs_modify_simple(ca2, CA_AKICK, 0);
 			if (reason != NULL)
 				metadata_add(ca2, METADATA_CHANACS, "reason", reason);
 
 			hook_call_event("channel_akick_add", ca2);
+			chanacs_close(ca2);
 
 			command_success_nodata(si, _("\2%s\2 has been added to the AKICK list for \2%s\2."), mu->name, mc->name);
 

@@ -1166,6 +1166,13 @@ void chanacs_close(chanacs_t *ca)
 		object_unref(ca);
 }
 
+/* Call this with a chanacs_t with level==0 */
+boolean_t chanacs_is_table_full(chanacs_t *ca)
+{
+	return chansvs.maxchanacs > 0 &&
+		LIST_LENGTH(&ca->mychan->chanacs) > chansvs.maxchanacs;
+}
+
 /* Change channel access
  *
  * Either mu or hostmask must be specified.

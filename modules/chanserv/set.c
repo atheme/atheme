@@ -437,6 +437,25 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	/* If the target user does not have access yet, this may overflow
+	 * the access list. Check at this time because that is more convenient
+	 * for users.
+	 * -- jilles
+	 */
+	if (!chanacs_find(mc, tmu, 0))
+	{
+		chanacs_t *ca;
+
+		ca = chanacs_open(mc, tmu, NULL, TRUE);
+		if (ca->level == 0 && chanacs_is_table_full(ca))
+		{
+			command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
+			chanacs_close(ca);
+			return;
+		}
+		chanacs_close(ca);
+	}
+
 	/* check for lazy cancellation of outstanding requests */
 	if (metadata_find(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder"))
 	{

@@ -41,6 +41,8 @@ struct chansvs_
   service_t *me;                /* our user_t struct          */
 
   unsigned int expiry;		/* expiry time                */
+
+  unsigned int maxchanacs;	/* max entries in chanacs list */
 };
 
 struct globsvs_

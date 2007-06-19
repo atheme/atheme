@@ -297,6 +297,13 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
+			if (ca->level == 0 && chanacs_is_table_full(ca))
+			{
+				command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
+				chanacs_close(ca);
+				return;
+			}
+
 			if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags))
 			{
 				command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags, chanacs_flags), tmu->name, mc->name);
@@ -308,6 +315,12 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		else
 		{
 			ca = chanacs_open(mc, NULL, target, TRUE);
+			if (ca->level == 0 && chanacs_is_table_full(ca))
+			{
+				command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
+				chanacs_close(ca);
+				return;
+			}
 			if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags))
 			{
 		                command_fail(si, fault_noprivs, _("You are not allowed to set \2%s\2 on \2%s\2 in \2%s\2."), bitmask_to_flags2(addflags, removeflags, chanacs_flags), target, mc->name);

@@ -252,6 +252,13 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		}
 		isnew = ca->level == 0;
 
+		if (isnew && chanacs_is_table_full(ca))
+		{
+			command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
+			chanacs_close(ca);
+			return;
+		}
+
 		if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags))
 		{
 			command_fail(si, fault_noprivs, _("You are not authorized to modify the access entry for \2%s\2 on \2%s\2."), target, mc->name);
@@ -350,6 +357,12 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 	/* just assume there's just one entry for that user -- jilles */
 
 	isnew = ca->level == 0;
+	if (isnew && chanacs_is_table_full(ca))
+	{
+		command_fail(si, fault_toomany, _("Channel %s access list is full."), mc->name);
+		chanacs_close(ca);
+		return;
+	}
 
 	if (!chanacs_modify(ca, &addflags, &removeflags, restrictflags))
 	{
