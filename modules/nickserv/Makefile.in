@@ -37,6 +37,7 @@ BASE_SRCS =			\
 	$(SRCDIR)/set.c		\
 	$(SRCDIR)/setpass.c	\
 	$(SRCDIR)/status.c	\
+	$(SRCDIR)/subscribe.c	\
 	$(SRCDIR)/taxonomy.c	\
 	$(SRCDIR)/verify.c	\
 	$(SRCDIR)/vhost.c
