@@ -21,7 +21,7 @@ typedef struct metadata_ metadata_t;
 typedef struct {
 	void *target;
 	int type;
-	char *name;
+	const char *name;
 	char *value;
 } hook_metadata_change_t;
 

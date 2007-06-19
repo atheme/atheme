@@ -43,7 +43,7 @@ DECLARE_MODULE_V1
 static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu = si->smu, *tmu;
-	char *name = parv[1], char *tag;
+	char *name = parv[1], *tag;
 	boolean_t remove = FALSE;
 	metadata_subscription_t *md;
 	node_t *i;
@@ -81,7 +81,7 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 		node_t *n;
 		boolean_t found = FALSE;
 
-		LIST_FOREACH(n, &tmu->subscriptions)
+		LIST_FOREACH(n, tmu->subscriptions.head)
 		{
 			md = (metadata_subscription_t *) n->data;
 
@@ -94,7 +94,7 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 
 		if (found)
 		{
-			note_t *tn;
+			node_t *tn;
 
 			LIST_FOREACH_SAFE(n, tn, md->taglist.head)
 			{
@@ -113,7 +113,7 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		command_fail(si, fault_badparams, _("\2%s\2 was not found on your subscription list.", name);
+		command_fail(si, fault_badparams, _("\2%s\2 was not found on your subscription list."), name);
 		return;
 	}
 
