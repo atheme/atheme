@@ -144,14 +144,42 @@ command_t ns_subscribe = { "SUBSCRIBE", N_("Manages your subscription list."), A
 
 list_t *ns_cmdtree;
 
+static void hook_metadata_change(void *ptr)
+{
+	hook_metadata_change_t *md = (hook_metadata_change_t *) ptr;
+	myuser_t *mu;
+	node_t *n, *tn;
+
+	if (md->type != METADATA_USER)
+		return;
+
+	mu = (myuser_t *) md->target;
+
+	LIST_FOREACH(n, mu->subscriptions.head)
+	{
+		metadata_subscription_t *mds = n->data;
+
+		LIST_FOREACH(tn, mds->taglist.head)
+		{
+			if (!match(tn->data, md->name))
+				myuser_notice(nicksvs.nick, mds->mu, "\2%s\2 has changed \2%s\2 to \2%s\2.",
+					mu->name, md->name, md->value);
+		}
+	}
+}
+
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");
 
 	command_add(&ns_subscribe, ns_cmdtree);
+
+	hook_add_event("metadata_change");
+	hook_add_hook("metadata_change", hook_metadata_change);
 }
 
 void _moddeinit(void)
 {
 	command_delete(&ns_subscribe, ns_cmdtree);
+	hook_del_hook("metadata_change", hook_metadata_change);
 }
