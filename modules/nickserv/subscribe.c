@@ -150,6 +150,10 @@ static void hook_metadata_change(void *ptr)
 	myuser_t *mu;
 	node_t *n, *tn;
 
+	/* don't allow private metadata to be exposed to users. */
+	if (strchr(md->name, ':'))
+		return;
+
 	if (md->type != METADATA_USER)
 		return;
 
