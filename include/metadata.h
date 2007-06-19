@@ -25,6 +25,12 @@ typedef struct {
 	char *value;
 } hook_metadata_change_t;
 
+typedef struct {
+	myuser_t *mu;
+	char **tags;
+	int tagcount;
+} metadata_subscription_t;
+
 E metadata_t *metadata_add(void *target, int type, const char *name, const char *value);
 E void metadata_delete(void *target, int type, const char *name);
 E metadata_t *metadata_find(void *target, int type, const char *name);
