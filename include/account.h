@@ -315,6 +315,8 @@ void chanacs_close(chanacs_t *ca);
 boolean_t chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags);
 boolean_t chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int removeflags);
 
+boolean_t chanacs_is_table_full(chanacs_t *ca);
+
 E boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags);
 E boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, const char *hostmask, unsigned int addflags, unsigned int removeflags);
 
