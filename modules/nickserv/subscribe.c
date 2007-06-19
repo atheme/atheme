@@ -43,7 +43,7 @@ DECLARE_MODULE_V1
 static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu = si->smu, *tmu;
-	char *name = parv[1], *tag;
+	char *name = parv[0], *tag;
 	boolean_t remove = FALSE;
 	metadata_subscription_t *md;
 	node_t *i;
@@ -129,7 +129,7 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 	md = smalloc(sizeof(metadata_subscription_t));
 	md->mu = mu;
 
-	tag = strtok(parv[2], ",");
+	tag = strtok(parv[1], ",");
 	do
 	{
 		slog(LG_DEBUG, "subscription: parsing tag %s", tag);
@@ -140,7 +140,8 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%s\2 has been added to your subscriptions."));
 }
 
-command_t ns_subscribe = { "SUBSCRIBE", N_("Manages your subscription list."), AC_NONE, 1, cmd_subscribe };
+command_t ns_subscribe = { "SUBSCRIBE", N_("Manages your subscription 
+list."), AC_NONE, 2, cmd_subscribe };
 
 list_t *ns_cmdtree;
 
