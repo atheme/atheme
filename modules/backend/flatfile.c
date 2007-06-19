@@ -82,6 +82,7 @@ static int flatfile_db_save_myusers_cb(dictionary_elem_t *delem, void *privdata)
 /* write atheme.db */
 static void flatfile_db_save(void *arg)
 {
+	myuser_t *mu;
 	mychan_t *mc;
 	chanacs_t *ca;
 	kline_t *k;
@@ -159,6 +160,22 @@ static void flatfile_db_save(void *arg)
 			metadata_t *md = (metadata_t *)tn->data;
 
 			fprintf(f, "MD C %s %s %s\n", mc->name, md->name, md->value);
+		}
+	}
+
+	/* subscriptions -- we have to walk the myuser table again
+	   because otherwise we could encounter unknowns on restart. */
+	slog(LG_DEBUG, "db_save(): saving subscriptions");
+
+	DICTIONARY_FOREACH(mu, &state, mulist)
+	{
+		myuser_t *subscriptor;
+
+		LIST_FOREACH(n, mu->subscriptions.head)
+		{
+			subscriptor = (myuser_t *) n->data;
+
+			fprintf(f, "SU %s %s\n", mu->name, subscriptor->name);
 		}
 	}
 
@@ -451,6 +468,23 @@ static void flatfile_db_load(void)
 			mn = mynick_add(mu, nick);
 			mn->registered = atoi(treg);
 			mn->lastseen = atoi(tseen);
+		}
+
+		/* subscriptions */
+		if (!strcmp("SU", item))
+		{
+			char *user, *sub_user;
+			myuser_t *subscriptor;
+
+			user = strtok(NULL, " ");
+			sub_user = strtok(NULL, "\n");
+
+			strip(sub_user);
+
+			mu = myuser_find(user);
+			subscriptor = myuser_find(sub_user);
+
+			node_add(mu, node_create(), &mu->subscriptions);
 		}
 
 		/* services oper */
