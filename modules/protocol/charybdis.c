@@ -153,7 +153,7 @@ static boolean_t check_jointhrottle(const char *value, channel_t *c, mychan_t *m
 /* this may be slow, but it is not used much */
 /* returns TRUE if it matches, FALSE if not */
 /* note that the host part matches differently from a regular ban */
-boolean_t extgecos_match(const char *mask, user_t *u)
+static boolean_t extgecos_match(const char *mask, user_t *u)
 {
 	char hostgbuf[NICKLEN+USERLEN+HOSTLEN+GECOSLEN];
 	char realgbuf[NICKLEN+USERLEN+HOSTLEN+GECOSLEN];
