@@ -206,7 +206,8 @@ static void uplink_close(connection_t *cptr)
 	 * we do not clear users here because when you delete a server,
 	 * it deletes its users
 	 */
-	server_delete(me.actual);
+	if (me.actual != NULL)
+		server_delete(me.actual);
 	me.actual = NULL;
 	/* remove all the channels left */
 	DICTIONARY_FOREACH(c, &state, chanlist)
@@ -218,8 +219,5 @@ static void uplink_close(connection_t *cptr)
 	slog(LG_DEBUG, "uplink_close(): ------------------------- done -------------------------");
 }
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
- * vim:ts=8
- * vim:sw=8
- * vim:noexpandtab
+/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs ts=8 sw=8 noexpandtab
  */
