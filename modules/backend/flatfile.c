@@ -506,7 +506,7 @@ static void flatfile_db_load(void)
 				node_add(sstrdup(tag), node_create(), &md->taglist);
 			} while ((tag = strtok(NULL, ",")) != NULL);
 
-			node_add(subscriptor, node_create(), &mu->subscriptions);
+			node_add(md, node_create(), &mu->subscriptions);
 		}
 
 		/* services oper */
