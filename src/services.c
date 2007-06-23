@@ -72,7 +72,6 @@ int ban(user_t *sender, channel_t *c, user_t *user)
 int remove_banlike(user_t *source, channel_t *chan, int type, user_t *target)
 {
 	char change[MAX_BUF];
-	char hostbuf[BUFSIZE], hostbuf2[BUFSIZE], hostbuf3[BUFSIZE];
 	int count = 0;
 	node_t *n, *tn;
 	chanban_t *cb;
@@ -82,10 +81,6 @@ int remove_banlike(user_t *source, channel_t *chan, int type, user_t *target)
 	if (source == NULL || chan == NULL || target == NULL)
 		return 0;
 
-	snprintf(hostbuf, BUFSIZE, "%s!%s@%s", target->nick, target->user, target->host);
-	snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", target->nick, target->user, target->vhost);
-	/* will be nick!user@ if ip unknown, doesn't matter */
-	snprintf(hostbuf3, BUFSIZE, "%s!%s@%s", target->nick, target->user, target->ip);
 	for (n = next_matching_ban(chan, target, type, chan->bans.head); n != NULL; n = next_matching_ban(chan, target, type, tn))
 	{
 		tn = n->next;
