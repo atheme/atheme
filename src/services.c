@@ -68,18 +68,16 @@ int ban(user_t *sender, channel_t *c, user_t *user)
 	return 1;
 }
 
-/* returns number of exceptions removed -- jilles */
-int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target)
+/* returns number of modes removed -- jilles */
+int remove_banlike(user_t *source, channel_t *chan, int type, user_t *target)
 {
 	char change[MAX_BUF];
-	char e;
 	char hostbuf[BUFSIZE], hostbuf2[BUFSIZE], hostbuf3[BUFSIZE];
 	int count = 0;
 	node_t *n, *tn;
 	chanban_t *cb;
 
-	e = ircd->except_mchar;
-	if (e == '\0')
+	if (type == 0)
 		return 0;
 	if (source == NULL || chan == NULL || target == NULL)
 		return 0;
@@ -88,7 +86,7 @@ int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target)
 	snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", target->nick, target->user, target->vhost);
 	/* will be nick!user@ if ip unknown, doesn't matter */
 	snprintf(hostbuf3, BUFSIZE, "%s!%s@%s", target->nick, target->user, target->ip);
-	for (n = next_matching_ban(chan, target, e, chan->bans.head); n != NULL; n = next_matching_ban(chan, target, e, tn))
+	for (n = next_matching_ban(chan, target, type, chan->bans.head); n != NULL; n = next_matching_ban(chan, target, type, tn))
 	{
 		tn = n->next;
 		cb = n->data;
@@ -99,6 +97,12 @@ int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target)
 		count++;
 	}
 	return count;
+}
+
+/* returns number of exceptions removed -- jilles */
+int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target)
+{
+	return remove_banlike(source, chan, ircd->except_mchar, target);
 }
 
 /* join a channel, creating it if necessary */
