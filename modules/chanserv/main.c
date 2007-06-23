@@ -347,6 +347,33 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 		return;
 	}
 
+	/* Kick out users who may be recreating channels mlocked +i.
+	 * Users with +i flag are allowed to join, as are users matching
+	 * an invite exception (the latter only works if the channel already
+	 * exists because members are sent before invite exceptions).
+	 * Because most networks do not use kick_on_split_riding or
+	 * no_create_on_split, do not trust users coming back from splits.
+	 * Unfortunately, this kicks users who have been invited by a channel
+	 * operator, after a split or services restart.
+	 */
+	if (mc->mlock_on & CMODE_INVITE && !(flags & CA_INVITE) &&
+			(!(u->server->flags & SF_EOB) || (chan->nummembers <= 2 && (chan->nummembers <= 1 || chanuser_find(chan, chansvs.me->me)))) &&
+			(!ircd->invex_mchar || !next_matching_ban(chan, u, ircd->invex_mchar, chan->bans.head)))
+	{
+		if (chan->nummembers <= (mc->flags & MC_GUARD ? 2 : 1))
+		{
+			mc->flags |= MC_INHABIT;
+			if (!(mc->flags & MC_GUARD))
+				join(chan->name, chansvs.nick);
+		}
+		if (!(chan->modes & CMODE_INVITE))
+			check_modes(mc, TRUE);
+		modestack_flush_channel(chan);
+		kick(chansvs.nick, chan->name, u->nick, "Invite only channel");
+		hdata->cu = NULL;
+		return;
+	}
+
 	/* A user joined and was not kicked; we do not need
 	 * to stay on the channel artificially. */
 	if (mc->flags & MC_INHABIT)
