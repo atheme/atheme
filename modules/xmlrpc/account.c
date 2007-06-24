@@ -56,6 +56,7 @@ static int account_myuser_foreach_cb(dictionary_elem_t *delem, void *privdata)
 static int account_register(void *conn, int parc, char *parv[])
 {
 	myuser_t *mu;
+	mynick_t *mn;
 	static char buf[XMLRPC_BUFSIZE];
 
 	*buf = '\0';
@@ -144,6 +145,12 @@ static int account_register(void *conn, int parc, char *parv[])
 	mu = myuser_add(parv[0], parv[1], parv[2], config_options.defuflags | MU_NOBURSTLOGIN);
 	mu->registered = CURRTIME;
 	mu->lastlogin = CURRTIME;
+	if (!nicksvs.no_nick_ownership)
+	{
+		mn = mynick_add(mu, mu->name);
+		mn->registered = CURRTIME;
+		mn->lastseen = CURRTIME;
+	}
 
 	if (me.auth == AUTH_EMAIL)
 	{
