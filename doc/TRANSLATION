@@ -23,6 +23,3 @@ Atheme will run in the locale that you have chosen in your
 environment (LANG, LC_* environment variables).
 
    -- nenolod
-
---
-$Id: TRANSLATION 8373 2007-06-03 19:05:01Z jilles $

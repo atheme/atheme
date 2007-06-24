@@ -47,5 +47,3 @@ login name. Note that this works for all clients on the network, not just
 services and no channel information is shown. It is assumed that networks
 that want to hide which server users are on do not allow remote whois other
 than /whois <nick> <nick>.
-
-$Id: PCOMMANDS 6919 2006-10-23 09:18:14Z jilles $

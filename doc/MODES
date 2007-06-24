@@ -103,5 +103,3 @@ all supported ircds:
 - when kicking a user because of mlock +i and the channel is not +i yet, check
   the mode locks right away
 - on any mode lock check, clear MC_MLOCK_CHECK if it is set
-
-$Id: MODES 7999 2007-03-29 15:37:57Z jilles $

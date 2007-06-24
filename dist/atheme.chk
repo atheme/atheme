@@ -2,8 +2,6 @@
 #
 # crontab script for atheme
 #
-# $Id: atheme.chk 4195 2005-12-26 13:48:39Z jilles $
-#
 
 # Change this to the directory where you installed it
 prefix=$HOME/atheme/
