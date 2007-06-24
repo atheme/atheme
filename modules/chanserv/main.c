@@ -247,10 +247,10 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	channel_t *chan;
 	mychan_t *mc;
 	unsigned int flags;
-	metadata_t *md;
 	boolean_t noop;
+	boolean_t secure;
+	metadata_t *md;
 	chanacs_t *ca2;
-	boolean_t secure = FALSE;
 	char akickreason[120] = "User is banned from this channel", *p;
 
 	if (cu == NULL || is_internal_client(cu->user))
@@ -263,17 +263,16 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	if (mc == NULL)
 		return;
 
-	/* attempt to deop people recreating channels, if the more
-	 * sophisticated mechanism is disabled */
-	if (mc->flags & MC_SECURE || (!chansvs.changets && chan->nummembers == 1 && chan->ts > CURRTIME - 300))
-		secure = TRUE;
-
 	if (chan->nummembers == 1 && mc->flags & MC_GUARD)
 		join(chan->name, chansvs.nick);
 
 	flags = chanacs_user_flags(mc, u);
 	noop = mc->flags & MC_NOOP || (u->myuser != NULL &&
 			u->myuser->flags & MU_NOOP);
+	/* attempt to deop people recreating channels, if the more
+	 * sophisticated mechanism is disabled */
+	secure = mc->flags & MC_SECURE || (!chansvs.changets &&
+			chan->nummembers == 1 && chan->ts > CURRTIME - 300);
 
 	/* auto stuff */
 	if ((mc->flags & MC_STAFFONLY) && !has_priv_user(u, PRIV_JOIN_STAFFONLY))
