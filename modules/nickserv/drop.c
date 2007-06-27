@@ -97,7 +97,7 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 		wallops("%s dropped the account \2%s\2", get_oper_name(si), mu->name);
 
 	snoop("DROP: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
-	logcommand(si, pass ? CMDLOG_REGISTER : CMDLOG_ADMIN, "DROP %s%s", mu->name, pass ? "" : " (admin)");
+	logcommand(si, pass ? CMDLOG_REGISTER : CMDLOG_ADMIN | LG_REGISTER, "DROP %s%s", mu->name, pass ? "" : " (admin)");
 	hook_call_event("user_drop", mu);
 	command_success_nodata(si, _("The account \2%s\2 has been dropped."), mu->name);
 	object_unref(mu);

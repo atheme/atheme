@@ -393,7 +393,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
-			logcommand(si, CMDLOG_SET, "%s SET FOUNDER %s (completing transfer from %s)", mc->name, tmu->name, mc->founder->name);
+			logcommand(si, CMDLOG_REGISTER, "%s SET FOUNDER %s (completing transfer from %s)", mc->name, tmu->name, mc->founder->name);
 			verbose(mc, "Foundership transferred from \2%s\2 to \2%s\2.", mc->founder->name, tmu->name);
 
 			/* add target as founder... */
@@ -427,7 +427,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 			metadata_delete(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder");
 			metadata_delete(mc, METADATA_CHANNEL, "private:verify:founderchg:timestamp");
 
-			logcommand(si, CMDLOG_SET, "%s SET FOUNDER %s (cancelling transfer)", mc->name, tmu->name);
+			logcommand(si, CMDLOG_REGISTER, "%s SET FOUNDER %s (cancelling transfer)", mc->name, tmu->name);
 			command_success_nodata(si, _("The transfer of \2%s\2 has been cancelled."), mc->name);
 
 			return;
@@ -459,11 +459,11 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 	/* check for lazy cancellation of outstanding requests */
 	if (metadata_find(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder"))
 	{
-		logcommand(si, CMDLOG_SET, "%s SET FOUNDER %s (cancelling old transfer and initializing transfer)", mc->name, tmu->name);
+		logcommand(si, CMDLOG_REGISTER, "%s SET FOUNDER %s (cancelling old transfer and initializing transfer)", mc->name, tmu->name);
 		command_success_nodata(si, _("The previous transfer request for \2%s\2 has been cancelled."), mc->name);
 	}
 	else
-		logcommand(si, CMDLOG_SET, "%s SET FOUNDER %s (initializing transfer)", mc->name, tmu->name);
+		logcommand(si, CMDLOG_REGISTER, "%s SET FOUNDER %s (initializing transfer)", mc->name, tmu->name);
 
 	metadata_add(mc, METADATA_CHANNEL, "private:verify:founderchg:newfounder", tmu->name);
 	metadata_add(mc, METADATA_CHANNEL, "private:verify:founderchg:timestamp", itoa(time(NULL)));

@@ -151,13 +151,16 @@ E void logfile_unregister(logfile_t *lf);
 #define LG_NETWORK      0x00010000 /* netsplit/netjoin */
 #define LG_WALLOPS      0x00020000 /* NOTYET wallops from opers/other servers */
 #define LG_RAWDATA      0x00040000 /* all data sent/received */
+#define LG_REGISTER     0x00080000 /* all registration related messages */
+#define LG_WARN1        0x00100000 /* NOTYET messages formerly walloped */
+#define LG_WARN2        0x00100000 /* NOTYET messages formerly snooped */
 
 #define LG_CMD_ALL      0x0000FF00
 #define LG_ALL          0x7FFFFFFF /* XXX cannot use bit 31 as it would then be unequal to TOKEN_UNMATCHED */
 
 /* aliases for use with logcommand() */
 #define CMDLOG_ADMIN    LG_CMD_ADMIN
-#define CMDLOG_REGISTER LG_CMD_REGISTER
+#define CMDLOG_REGISTER (LG_CMD_REGISTER | LG_REGISTER)
 #define CMDLOG_SET      LG_CMD_SET
 #define CMDLOG_DO       LG_CMD_DO
 #define CMDLOG_LOGIN    LG_CMD_LOGIN

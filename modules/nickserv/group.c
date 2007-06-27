@@ -178,7 +178,7 @@ static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	logcommand(si, CMDLOG_ADMIN, "FUNGROUP %s", mn->nick);
+	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FUNGROUP %s", mn->nick);
 	wallops("%s dropped the nick \2%s\2 from %s",
 			get_oper_name(si), mn->nick, mu->name);
 	snoop("FUNGROUP: \2%s\2 from \2%s\2 by \2%s\2",

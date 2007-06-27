@@ -200,7 +200,7 @@ void myuser_delete(myuser_t *mu)
 		if (mc->founder == mu && (successor = mychan_pick_successor(mc)) != NULL)
 		{
 			snoop(_("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2"), successor->name, mc->name, mc->founder->name);
-			slog(LG_INFO, "myuser_delete(): giving channel %s to %s (unused %ds, founder %s, chanacs %d)",
+			slog(LG_REGISTER, "myuser_delete(): giving channel %s to %s (unused %ds, founder %s, chanacs %d)",
 					mc->name, successor->name,
 					CURRTIME - mc->used,
 					mc->founder->name,
@@ -219,7 +219,7 @@ void myuser_delete(myuser_t *mu)
 		if (mc->founder == mu)
 		{
 			snoop(_("DELETE: \2%s\2 from \2%s\2"), mc->name, mu->name);
-			slog(LG_INFO, "myuser_delete(): deleting channel %s (unused %ds, founder %s, chanacs %d)",
+			slog(LG_REGISTER, "myuser_delete(): deleting channel %s (unused %ds, founder %s, chanacs %d)",
 					mc->name, CURRTIME - mc->used,
 					mc->founder->name,
 					LIST_LENGTH(&mc->chanacs));
@@ -1505,7 +1505,7 @@ static int expire_myuser_cb(dictionary_elem_t *delem, void *unused)
 			return 0;
 
 		snoop(_("EXPIRE: \2%s\2 from \2%s\2 "), mu->name, mu->email);
-		slog(LG_INFO, "expire_check(): expiring account %s (unused %ds, email %s, nicks %d, chanacs %d)",
+		slog(LG_REGISTER, "expire_check(): expiring account %s (unused %ds, email %s, nicks %d, chanacs %d)",
 				mu->name, (int)(CURRTIME - mu->lastlogin),
 				mu->email, LIST_LENGTH(&mu->nicks),
 				LIST_LENGTH(&mu->chanacs));
@@ -1551,7 +1551,7 @@ void expire_check(void *arg)
 				}
 
 				snoop(_("EXPIRE: \2%s\2 from \2%s\2"), mn->nick, mn->owner->name);
-				slog(LG_INFO, "expire_check(): expiring nick %s (unused %ds, account %s)",
+				slog(LG_REGISTER, "expire_check(): expiring nick %s (unused %ds, account %s)",
 						mn->nick, CURRTIME - mn->lastseen,
 						mn->owner->name);
 				object_unref(mn);
@@ -1586,7 +1586,7 @@ void expire_check(void *arg)
 					continue;
 
 				snoop(_("EXPIRE: \2%s\2 from \2%s\2"), mc->name, mc->founder->name);
-				slog(LG_INFO, "expire_check(): expiring channel %s (unused %ds, founder %s, chanacs %d)",
+				slog(LG_REGISTER, "expire_check(): expiring channel %s (unused %ds, founder %s, chanacs %d)",
 						mc->name, CURRTIME - mc->used,
 						mc->founder->name,
 						LIST_LENGTH(&mc->chanacs));
@@ -1608,7 +1608,7 @@ static int check_myuser_cb(dictionary_elem_t *delem, void *unused)
 
 	if (MU_OLD_ALIAS & mu->flags)
 	{
-		slog(LG_INFO, "db_check(): converting previously linked nick %s to a standalone nick", mu->name);
+		slog(LG_REGISTER, "db_check(): converting previously linked nick %s to a standalone nick", mu->name);
 		mu->flags &= ~MU_OLD_ALIAS;
 		metadata_delete(mu, METADATA_USER, "private:alias:parent");
 	}
@@ -1618,14 +1618,14 @@ static int check_myuser_cb(dictionary_elem_t *delem, void *unused)
 		mn = mynick_find(mu->name);
 		if (mn == NULL)
 		{
-			slog(LG_DEBUG, "db_check(): adding missing nick %s", mu->name);
+			slog(LG_REGISTER, "db_check(): adding missing nick %s", mu->name);
 			mn = mynick_add(mu, mu->name);
 			mn->registered = mu->registered;
 			mn->lastseen = mu->lastlogin;
 		}
 		else if (mn->owner != mu)
 		{
-			slog(LG_INFO, "db_check(): replacing nick %s owned by %s with %s", mn->nick, mn->owner->name, mu->name);
+			slog(LG_REGISTER, "db_check(): replacing nick %s owned by %s with %s", mn->nick, mn->owner->name, mu->name);
 			object_unref(mn);
 			mn = mynick_add(mu, mu->name);
 			mn->registered = mu->registered;
@@ -1647,7 +1647,7 @@ void db_check()
 	{
 		if (!chanacs_find(mc, mc->founder, CA_FLAGS))
 		{
-			slog(LG_INFO, "db_check(): adding access for founder on channel %s", mc->name);
+			slog(LG_REGISTER, "db_check(): adding access for founder on channel %s", mc->name);
 			chanacs_change_simple(mc, mc->founder, NULL, CA_FOUNDER_0, 0);
 		}
 	}

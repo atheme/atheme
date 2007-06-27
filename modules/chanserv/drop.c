@@ -91,7 +91,7 @@ static void cs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!is_founder(mc, si->smu))
 	{
-		logcommand(si, CMDLOG_ADMIN, "%s DROP", mc->name);
+		logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "%s DROP", mc->name);
 		wallops("%s dropped the channel \2%s\2", get_oper_name(si), name);
 	}
 	else
