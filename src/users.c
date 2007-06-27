@@ -81,7 +81,7 @@ void init_users(void)
  *     - unique identifier (UID) of user if appliable otherwise NULL
  *     - gecos of new user
  *     - pointer to server new user is on
- *     - user's timestamp (XXX: this should be time_t, as timestamps actually ARE signed -- see POSIX)
+ *     - user's timestamp
  *
  * Outputs:
  *     - on success, a new user

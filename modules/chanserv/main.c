@@ -247,10 +247,10 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	channel_t *chan;
 	mychan_t *mc;
 	unsigned int flags;
-	metadata_t *md;
 	boolean_t noop;
+	boolean_t secure;
+	metadata_t *md;
 	chanacs_t *ca2;
-	boolean_t secure = FALSE;
 	char akickreason[120] = "User is banned from this channel", *p;
 
 	if (cu == NULL || is_internal_client(cu->user))
@@ -263,17 +263,16 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	if (mc == NULL)
 		return;
 
-	/* attempt to deop people recreating channels, if the more
-	 * sophisticated mechanism is disabled */
-	if (mc->flags & MC_SECURE || (!chansvs.changets && chan->nummembers == 1 && chan->ts > CURRTIME - 300))
-		secure = TRUE;
-
 	if (chan->nummembers == 1 && mc->flags & MC_GUARD)
 		join(chan->name, chansvs.nick);
 
 	flags = chanacs_user_flags(mc, u);
 	noop = mc->flags & MC_NOOP || (u->myuser != NULL &&
 			u->myuser->flags & MU_NOOP);
+	/* attempt to deop people recreating channels, if the more
+	 * sophisticated mechanism is disabled */
+	secure = mc->flags & MC_SECURE || (!chansvs.changets &&
+			chan->nummembers == 1 && chan->ts > CURRTIME - 300);
 
 	/* auto stuff */
 	if ((mc->flags & MC_STAFFONLY) && !has_priv_user(u, PRIV_JOIN_STAFFONLY))
@@ -343,6 +342,33 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 			}
 		}
 		kick(chansvs.nick, chan->name, u->nick, akickreason);
+		hdata->cu = NULL;
+		return;
+	}
+
+	/* Kick out users who may be recreating channels mlocked +i.
+	 * Users with +i flag are allowed to join, as are users matching
+	 * an invite exception (the latter only works if the channel already
+	 * exists because members are sent before invite exceptions).
+	 * Because most networks do not use kick_on_split_riding or
+	 * no_create_on_split, do not trust users coming back from splits.
+	 * Unfortunately, this kicks users who have been invited by a channel
+	 * operator, after a split or services restart.
+	 */
+	if (mc->mlock_on & CMODE_INVITE && !(flags & CA_INVITE) &&
+			(!(u->server->flags & SF_EOB) || (chan->nummembers <= 2 && (chan->nummembers <= 1 || chanuser_find(chan, chansvs.me->me)))) &&
+			(!ircd->invex_mchar || !next_matching_ban(chan, u, ircd->invex_mchar, chan->bans.head)))
+	{
+		if (chan->nummembers <= (mc->flags & MC_GUARD ? 2 : 1))
+		{
+			mc->flags |= MC_INHABIT;
+			if (!(mc->flags & MC_GUARD))
+				join(chan->name, chansvs.nick);
+		}
+		if (!(chan->modes & CMODE_INVITE))
+			check_modes(mc, TRUE);
+		modestack_flush_channel(chan);
+		kick(chansvs.nick, chan->name, u->nick, "Invite only channel");
 		hdata->cu = NULL;
 		return;
 	}

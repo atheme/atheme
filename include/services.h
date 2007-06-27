@@ -139,6 +139,7 @@ E int use_myuser_access;
 E int use_svsignore;
 
 E int ban(user_t *source, channel_t *chan, user_t *target);
+E int remove_banlike(user_t *source, channel_t *chan, int type, user_t *target);
 E int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target);
 E void join(char *chan, char *nick);
 E void joinall(char *name);

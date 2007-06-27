@@ -115,5 +115,3 @@ operserv:global
 	send global notices
 operserv:grant
 	use /os soper add/del
-
-$Id: PRIVILEGES 7795 2007-03-04 15:54:18Z jilles $

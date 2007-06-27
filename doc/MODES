@@ -47,6 +47,13 @@ E	halfop			ircd->uses_halfops, ircd->halfops_mode, ircd->halfops_mchar
 E	channel protection	ircd->uses_protect, ircd->protect_mode, ircd->protect_mchar
 E	channel founder		ircd->uses_owner, ircd->owner_mode, ircd->owner_mchar
 
+Ban exceptions are assumed to allow matching users in through bans but not
+through invite-only. Invite exceptions are assumed to allow matching users in
+through invite-only but not through bans. If one "exception" mode does both,
+put it both in ircd->except_mchar and ircd->invex_mchar (e.g. Nefarious).
+If multiple modes fulfill the same function but with different matching (e.g.
++b and +d bans in hyperion), use a custom next_matching_ban().
+
 The different types of modes are stored as follows:
 A	channel_t.bans
 B	channel_t.key
@@ -93,6 +100,6 @@ all supported ircds:
   (this is done by faking an incoming mode change "+")
 - when a channel is registered or the mode locks are changed, check the
   mode locks right away
+- when kicking a user because of mlock +i and the channel is not +i yet, check
+  the mode locks right away
 - on any mode lock check, clear MC_MLOCK_CHECK if it is set
-
-$Id: MODES 7999 2007-03-29 15:37:57Z jilles $

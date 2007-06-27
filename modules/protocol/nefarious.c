@@ -39,7 +39,7 @@ ircd_t Nefarious = {
 	CMODE_PERM,                     /* Permanent cmodes */
 	"be",                           /* Ban-like cmodes */
 	'e',                            /* Except mchar */
-	0,                              /* Invex mchar */
+	'e',                            /* Invex mchar (+e also exempts from +i in Nefarious) */
 	IRCD_CIDR_BANS                  /* Flags */
 };
 
