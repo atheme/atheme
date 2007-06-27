@@ -1215,7 +1215,7 @@ void _modinit(module_t * m)
 	pcommand_add("AWAY", m_away, 0, MSRC_USER);
 	pcommand_add("OPERTYPE", m_opertype, 1, MSRC_USER);
 	pcommand_add("METADATA", m_metadata, 3, MSRC_SERVER);
-	pcommand_add("CAPAB", m_capab, 1, MSRC_UNREG);
+	pcommand_add("CAPAB", m_capab, 1, MSRC_UNREG | MSRC_SERVER);
 
 	hook_add_event("server_eob");
 	hook_add_hook("server_eob", (void (*)(void *))server_eob);
