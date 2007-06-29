@@ -170,6 +170,7 @@ void myuser_delete(myuser_t *mu)
 	node_t *n, *tn;
 	metadata_t *md;
 	mymemo_t *memo;
+	chanacs_t *ca;
 	dictionary_iteration_state_t state;
 
 	return_if_fail(mu != NULL);
@@ -189,13 +190,12 @@ void myuser_delete(myuser_t *mu)
 		}
 	}
 
-	/* kill all their channels
-	 *
-	 * We CANNOT do this based soley on chanacs!
-	 * A founder could remove all of his flags.
-	 */
-	DICTIONARY_FOREACH(mc, &state, mclist)
+	/* kill all their channels and chanacs */
+	LIST_FOREACH_SAFE(n, tn, mu->chanacs.head)
 	{
+		ca = n->data;
+		mc = ca->mychan;
+
 		/* attempt succession */
 		if (mc->founder == mu && (successor = mychan_pick_successor(mc)) != NULL)
 		{
@@ -229,11 +229,9 @@ void myuser_delete(myuser_t *mu)
 				part(mc->name, chansvs.nick);
 			object_unref(mc);
 		}
+		else /* successor found, or not founder in the first place */
+			object_unref(ca);
 	}
-
-	/* remove their chanacs shiz */
-	LIST_FOREACH_SAFE(n, tn, mu->chanacs.head)
-		object_unref(n->data);
 
 	/* remove them from the soper list */
 	if (soper_find(mu))
