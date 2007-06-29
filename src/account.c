@@ -171,7 +171,6 @@ void myuser_delete(myuser_t *mu)
 	metadata_t *md;
 	mymemo_t *memo;
 	chanacs_t *ca;
-	dictionary_iteration_state_t state;
 
 	return_if_fail(mu != NULL);
 
@@ -711,7 +710,7 @@ boolean_t mychan_isused(mychan_t *mc)
 /* Find a user fulfilling the conditions who can take another channel */
 myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel, int maxtime)
 {
-	int tcnt;
+	unsigned int tcnt;
 	node_t *n, *n2;
 	chanacs_t *ca, *ca2;
 	myuser_t *mu;
