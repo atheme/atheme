@@ -134,17 +134,17 @@ static int mech_step(sasl_session_t *p, char *message, int len, char **out, int 
 	}
 	else if(s->stage == 2) /* C -> S: raw MD5 of server random data + client random data + crypted password */
 	{
-		MD5_CTX ctx;
+		md5_state_t ctx;
 		char hash[16];
 
 		if(len != 16)
 			return ASASL_FAIL;
 
-		MD5Init(&ctx);
-		MD5Update(&ctx, s->server_data, 16);
-		MD5Update(&ctx, s->client_data, 16);
-		MD5Update(&ctx, s->password, strlen((char *)s->password));
-		MD5Final((unsigned char *) hash, &ctx);
+		md5_init(&ctx);
+		md5_append(&ctx, s->server_data, 16);
+		md5_append(&ctx, s->client_data, 16);
+		md5_append(&ctx, s->password, strlen((char *)s->password));
+		md5_finish(&ctx, (unsigned char *) hash);
 
 		if(!memcmp(message, hash, 16))
 			return ASASL_DONE;
