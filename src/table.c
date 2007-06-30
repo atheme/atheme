@@ -87,17 +87,18 @@ static void table_destroy(void *obj)
 table_t *table_new(const char *fmt, ...)
 {
 	va_list vl;
-	char buf[BUFSIZE];
+	char *buf;
 	table_t *out;
 
 	return_val_if_fail(fmt != NULL, NULL);
 
 	va_start(vl, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, vl);
+	vasprintf(&buf, fmt, vl);
 	va_end(vl);
 
 	out = scalloc(sizeof(table_t), 1);
 	object_init(&out->parent, buf, table_destroy);
+	free(buf);
 
 	return out;
 }

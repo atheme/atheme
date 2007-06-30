@@ -101,13 +101,14 @@ void generic_kick(char *from, char *channel, char *to, char *reason)
 void generic_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
-	char buf[BUFSIZE];
+	char *buf;
 
 	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
+	vasprintf(&buf, fmt, ap);
 	va_end(ap);
 
 	slog(LG_INFO, "Cannot send message to %s (%s): don't know how. Load a protocol module perhaps?", target, buf);
+	free(buf);
 }
 
 void generic_notice_user_sts(user_t *from, user_t *target, const char *text)
@@ -142,13 +143,14 @@ void generic_wallchops(user_t *sender, channel_t *channel, const char *message)
 void generic_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
 {
 	va_list va;
-	char buf[BUFSIZE];
+	char *buf;
 
 	va_start(va, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, va);
+	vasprintf(&buf, fmt, va);
 	va_end(va);
 
 	sts(":%s %d %s %s", from, numeric, target, buf);
+	free(buf);
 }
 
 void generic_skill(char *from, char *nick, char *fmt, ...)
