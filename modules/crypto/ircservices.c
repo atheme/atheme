@@ -46,7 +46,7 @@ static int myencrypt(const char *src, int len, char *dest, int size)
 
 #ifdef ENCRYPT_MD5
 
-    MD5_CTX context;
+    md5_state_t context;
     char digest[33];
     char dest2[16];
     int i;
@@ -57,9 +57,9 @@ static int myencrypt(const char *src, int len, char *dest, int size)
     memset(&context, 0, sizeof(context));
     memset(&digest, 0, sizeof(digest));
 
-    MD5Init(&context);
-    MD5Update(&context, (unsigned const char *) src, (size_t) len);
-    MD5Final((unsigned char *) digest, &context);
+    md5_init(&context);
+    md5_append(&context, (unsigned const char *) src, (size_t) len);
+    md5_finish(&context, (unsigned char *) digest);
 
     for (i = 0; i < 32; i += 2)
         dest2[i / 2] = XTOI(digest[i]) << 4 | XTOI(digest[i + 1]);
