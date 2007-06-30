@@ -446,13 +446,12 @@ ac_save_CFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS} -DPREFIX=\\\"\${prefix}\\\" -
 CFLAGS=${ac_save_CFLAGS}
 dnl export CFLAGS
 
-disable_rpath="no"
+enablerpath="yes"
 AC_ARG_ENABLE(rpath,
 AC_HELP_STRING([--disable-rpath],[Disable use of -Wl,-rpath= during linking.]),
-   [disable_rpath="no"], [disable_rpath="yes"])
-
+   [enablerpath="$enableval"], [enablerpath="yes"])
 RPATH=""
-if test "x$disable_rpath" = "xno"; then
+if test "x$enablerpath" = "xyes"; then
     RPATH="-Wl,-rpath,${libdir}"
 fi
 
