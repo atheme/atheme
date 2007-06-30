@@ -82,10 +82,6 @@ AC_TYPE_SIZE_T
 AC_HEADER_TIME
 AC_STRUCT_TM
 
-echo " "
-echo "Library functions"
-echo " "
-
 dnl Checks for library functions.
 AC_TYPE_SIGNAL
 AC_FUNC_STRFTIME
@@ -104,10 +100,6 @@ AC_CHECK_LIB(crypt, crypt, [
 
 AC_SUBST(SOCKET_ENGINE)
 AC_SUBST(POSIX_CRYPTC)
-
-echo " "
-echo "Tweaks"
-echo " "
 
 DOCDIR='${prefix}/doc'
 MODDIR='${exec_prefix}'
@@ -208,10 +200,6 @@ if test "$balloc" = no; then
 fi
 AC_MSG_RESULT($balloc)
 
-echo " "
-echo "OpenSSL-based SASL support"
-echo " "
-
 AC_ARG_ENABLE(ssl,
 	AC_HELP_STRING([--disable-ssl], [don't use OpenSSL to provide more SASL mechanisms]),
 	,
@@ -231,10 +219,6 @@ if test "$enable_ssl" = "yes"; then
 		LIBS="$LIBS $SSL_LIBS"
 	fi
 fi
-
-echo " "
-echo "Module support"
-echo " "
 
 shared_modules="yes"
 
@@ -409,10 +393,6 @@ AC_SUBST(PICFLAGS)
 AC_ARG_ENABLE(warnings,
 AC_HELP_STRING([--enable-warnings],[ Enable compiler warnings]),
 [
-echo " "
-echo "Compiler warnings"
-echo " "
-
 dnl See what warnings we can get away with
 ATHEME_C_GCC_TRY_FLAGS([-Wall], atheme_cv_c_gcc_w_all)
 ATHEME_C_GCC_TRY_FLAGS([-Wpointer-arith], atheme_cv_c_gcc_w_pointer_arith)
@@ -446,13 +426,8 @@ dnl ATHEME_C_GCC_TRY_FLAGS([-Werror], atheme_cv_c_gcc_w_error)
 ])
 
 AC_ARG_ENABLE(propolice,
-AC_HELP_STRING([--disable-propolice],[ Disable propolice protections 
-(for debugging.)]),
+AC_HELP_STRING([--disable-propolice],[ Disable propolice protections (for debugging.)]),
 [
-echo " "
-echo "Disabling propolice."
-echo " "
-
 ATHEME_C_GCC_TRY_FLAGS([-fno-stack-protector-all], atheme_nspa)
 ATHEME_C_GCC_TRY_FLAGS([-fno-pie], atheme_npie)
 ATHEME_C_GCC_TRY_FLAGS([-nonow], atheme_nonow)
@@ -462,10 +437,6 @@ ATHEME_C_GCC_TRY_FLAGS([-norelro], atheme_no_relro)
 AC_ARG_ENABLE(profile,
 AC_HELP_STRING([--enable-profile],[ Enable profiling extensions]),
 [
-echo " "
-echo "Enabling profiling."
-echo " "
-
 ATHEME_C_GCC_TRY_FLAGS([-pg], atheme_pg)
 ac_save_LDFLAGS="${LDFLAGS} -pg"
 LDFLAGS=${ac_save_LDFLAGS}
@@ -475,24 +446,35 @@ ac_save_CFLAGS="${CFLAGS} ${orig_CFLAGS} ${CWARNS} -DPREFIX=\\\"\${prefix}\\\" -
 CFLAGS=${ac_save_CFLAGS}
 dnl export CFLAGS
 
-dnl This is for Atheme 2.3.
-dnl disable_rpath="no"
-dnl AC_ARG_ENABLE(rpath,
-dnl AC_HELP_STRING([--disable-rpath],[Disable use of -Wl,-rpath= during linking.]),
-dnl [disable_rpath="no"], [disable_rpath="yes"])
+disable_rpath="no"
+AC_ARG_ENABLE(rpath,
+AC_HELP_STRING([--disable-rpath],[Disable use of -Wl,-rpath= during linking.]),
+   [disable_rpath="no"], [disable_rpath="yes"])
 
-dnl RPATH=""
-dnl if test "x$disable_rpath" = "xno"; then
-dnl    RPATH="-Wl,-rpath,${libdir}"
-dnl fi
+RPATH=""
+if test "x$disable_rpath" = "xno"; then
+    RPATH="-Wl,-rpath,${libdir}"
+fi
 
-dnl AC_SUBST(RPATH)
+AC_SUBST(RPATH)
 
-echo " "
-echo "Makefile generation"
-echo " "
+PKG_CHECK_MODULES(MOWGLI, [libmowgli >= 0.2.0],
+	[MOWGLI_SOURCE="system"], [
+	MOWGLI_SOURCE="internal"
+	MOWGLI_CFLAGS="-I../libmowgli/src/libmowgli -I../../libmowgli/src/libmowgli -I../../../libmowgli/src/libmowgli"
+	MOWGLI_LIBS="-L../libmowgli/src/libmowgli -lmowgli"
+	LIBMOWGLI="libmowgli"
+	AC_CONFIG_SUBDIRS([libmowgli])
+])
 
-AC_OUTPUT([ po/Makefile.in
+CFLAGS="$CFLAGS $MOWGLI_CFLAGS"
+LIBS="$LIBS $MOWGLI_LIBS"
+
+AC_SUBST(MOWGLI_CFLAGS)
+AC_SUBST(MOWGLI_LIBS)
+AC_SUBST(LIBMOWGLI)
+
+AC_OUTPUT([po/Makefile.in
 	Makefile
 	contrib/Makefile
 	modules/Makefile
@@ -529,7 +511,7 @@ Configuration:
 	OpenSSL SASL support : ${SSL}
 	Socket Engine        : ${SOCKET_ENGINE}
 	Block Allocator      : ${balloc}
+	Mowgli installation  : ${MOWGLI_SOURCE}
 	CFLAGS               : ${CFLAGS}
 
 Type make to build Atheme, and make install to install it."
-

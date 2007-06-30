@@ -1,0 +1,15 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+datarootdir=@datarootdir@
+data_dir=@datadir@/@PACKAGE_NAME@
+
+version=@PACKAGE_VERSION@
+include_dir=@includedir@/libmowgli
+lib_dir=@libdir@
+
+Name: libmowgli
+Description: A library which contains many utility functions and classes.
+Version: @PACKAGE_VERSION@
+Libs: -L${lib_dir} -lmowgli
+Cflags: -I${include_dir}
+

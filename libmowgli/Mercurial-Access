@@ -1,0 +1,6 @@
+The atheme.org mercurial repository is available for anonymous read-only 
+access.
+
+To retrieve libmowgli from hg.atheme.org, do:
+   $ hg clone http://hg.atheme.org/libmowgli libmowgli-devel
+
