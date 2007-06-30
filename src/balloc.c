@@ -122,9 +122,12 @@ static void free_block(void *ptr, size_t size)
 
 void initBlockHeap(void)
 {
+#ifndef NOBALLOC
 	event_add("block_heap_gc", block_heap_gc, NULL, 60);
+#endif
 }
 
+#ifndef NOBALLOC
 /*
  * static void *get_block(size_t size)
  * 
@@ -210,7 +213,7 @@ static int newblock(BlockHeap *bh)
 
 	return (0);
 }
-
+#endif
 
 /* ************************************************************************ */
 /* FUNCTION DOCUMENTATION:                                                  */
@@ -246,12 +249,14 @@ BlockHeap *BlockHeapCreate(size_t elemsize, int elemsperblock)
 		runflags |= RF_SHUTDOWN;
 	}
 
+#ifndef NOBALLOC
 	if ((elemsize % sizeof(void *)) != 0)
 	{
 		/* Pad to even pointer boundary */
 		elemsize += sizeof(void *);
 		elemsize &= ~(sizeof(void *) - 1);
 	}
+#endif
 
 	bh->elemSize = elemsize;
 	bh->elemsPerBlock = elemsperblock;
@@ -259,6 +264,7 @@ BlockHeap *BlockHeapCreate(size_t elemsize, int elemsperblock)
 	bh->freeElems = 0;
 	bh->base = NULL;
 
+#ifndef NOBALLOC
 	/* Be sure our malloc was successful */
 	if (newblock(bh))
 	{
@@ -267,6 +273,7 @@ BlockHeap *BlockHeapCreate(size_t elemsize, int elemsperblock)
 		slog(LG_INFO, "newblock() failed");
 		runflags |= RF_SHUTDOWN;
 	}
+#endif
 
 	if (bh == NULL)
 	{
@@ -298,6 +305,9 @@ void *BlockHeapAlloc(BlockHeap *bh)
 		blockheap_fail("Cannot allocate if bh == NULL");
 	}
 
+#ifdef NOBALLOC
+	return smalloc(bh->elemSize);
+#else
 	if (bh->freeElems == 0)
 	{
 		/* Allocate new block and assign */
@@ -330,6 +340,7 @@ void *BlockHeapAlloc(BlockHeap *bh)
 	}
 	blockheap_fail("BlockHeapAlloc failed, giving up");
 	return NULL;
+#endif
 }
 
 
@@ -362,6 +373,9 @@ int BlockHeapFree(BlockHeap *bh, void *ptr)
 		return (1);
 	}
 
+#ifdef NOBALLOC
+	free(ptr);
+#else
 	memblock = (void *)((size_t) ptr - sizeof(MemBlock));
 #ifdef DEBUG_BALLOC
 	if (memblock->magic != BALLOC_MAGIC)
@@ -379,6 +393,7 @@ int BlockHeapFree(BlockHeap *bh, void *ptr)
 	block = memblock->block;
 	bh->freeElems++;
 	node_move(&memblock->self, &block->used_list, &block->free_list);
+#endif
 	return (0);
 }
 
@@ -396,6 +411,7 @@ int BlockHeapFree(BlockHeap *bh, void *ptr)
 /* ************************************************************************ */
 static int BlockHeapGarbageCollect(BlockHeap *bh)
 {
+#ifndef NOBALLOC
 	Block *walker, *last;
 	if (bh == NULL)
 	{
@@ -440,6 +456,7 @@ static int BlockHeapGarbageCollect(BlockHeap *bh)
 		}
 	}
 	return (0);
+#endif
 }
 
 /* ************************************************************************ */
@@ -461,6 +478,7 @@ int BlockHeapDestroy(BlockHeap *bh)
 		return (1);
 	}
 
+#ifndef NOBALLOC
 	for (walker = bh->base; walker != NULL; walker = next)
 	{
 		next = walker->next;
@@ -468,6 +486,7 @@ int BlockHeapDestroy(BlockHeap *bh)
 		if (walker != NULL)
 			free(walker);
 	}
+#endif
 	node_del(&bh->hlist, &heap_lists);
 	free(bh);
 	return (0);
@@ -483,9 +502,13 @@ void BlockHeapUsage(BlockHeap *bh, size_t * bused, size_t * bfree, size_t * bmem
 		return;
 	}
 
+#ifdef NOBALLOC
+	freem = used = memusage = 0;
+#else
 	freem = bh->freeElems;
 	used = (bh->blocksAllocated * bh->elemsPerBlock) - bh->freeElems;
 	memusage = used * (bh->elemSize + sizeof(MemBlock));
+#endif
 
 	if (bused != NULL)
 		*bused = used;

@@ -10,23 +10,6 @@
 #ifndef BALLOC_H
 #define BALLOC_H
 
-#ifdef NOBALLOC
-
-typedef struct BlockHeap BlockHeap;
-#define initBlockHeap()
-#define BlockHeapGarbageCollect(x)
-#define BlockHeapCreate(es, epb) ((BlockHeap*)(es))
-#define BlockHeapDestroy(x)
-#define BlockHeapAlloc(x) MyMalloc((int)x)
-#define BlockHeapFree(x,y) MyFree(y)
-#define BlockHeapUsage(bh, bused, bfree, bmemusage) do { if (bused) (*(size_t *)bused) = 0; if (bfree) *((size_t *)bfree) = 0; if (bmemusage) *((size_t *)bmemusage) = 0; } while(0)
-typedef struct MemBlock
-{
-        void *dummy;
-} MemBlock;
-
-#else
-
 struct Block
 {
   size_t alloc_size;
@@ -69,8 +52,6 @@ E int BlockHeapDestroy(BlockHeap *bh);
 E void initBlockHeap(void);
 E void BlockHeapUsage(BlockHeap *bh, size_t * bused, size_t * bfree,
                       size_t * bmemusage);
-
-#endif
 
 #endif
 
