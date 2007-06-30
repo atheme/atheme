@@ -39,13 +39,13 @@
 int sts(char *fmt, ...)
 {
 	va_list ap;
-	char *buf;
+	char buf[513];
 	int len;
 
 	return_val_if_fail(fmt != NULL, 1);
 
 	va_start(ap, fmt);
-	vasprintf(&buf, fmt, ap);
+	vsnprintf(buf, 511, fmt, ap); /* leave two bytes for \r\n */
 	va_end(ap);
 
 	slog(LG_RAWDATA, "<- %s", buf);
@@ -58,7 +58,6 @@ int sts(char *fmt, ...)
 	cnt.bout += len;
 
 	sendq_add(curr_uplink->conn, buf, len);
-	free(buf);
 
 	return 0;
 }
