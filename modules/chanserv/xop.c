@@ -48,7 +48,7 @@ void _modinit(module_t *m)
 
         command_add(&cs_aop, cs_cmdtree);
         command_add(&cs_sop, cs_cmdtree);
-	if (chansvs.ca_hop != chansvs.ca_vop)
+	if (ircd->uses_halfops)
 		command_add(&cs_hop, cs_cmdtree);
         command_add(&cs_vop, cs_cmdtree);
 	command_add(&cs_forcexop, cs_cmdtree);
