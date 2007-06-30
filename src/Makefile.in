@@ -34,7 +34,7 @@ VERSION		= @PACKAGE_VERSION@
 
 LIBS		= @LIBS@
 LDFLAGS		= @LDFLAGS@ @LTLIBINTL@
-#RPATH		= @RPATH@
+RPATH		= @RPATH@
 CPPFLAGS	= @CPPFLAGS@
 SOCKET_ENGINE	= @SOCKET_ENGINE@.c
 
@@ -112,7 +112,7 @@ all: atheme-services ../dist/example.userserv.conf
 build: all
 
 atheme-services: $(OBJS)
-	${CC} ${CFLAGS} ${LDFLAGS} -o $@ ${OBJS} ${LIBS}
+	${CC} ${CFLAGS} ${LDFLAGS} -o $@ ${OBJS} ${LIBS} ${RPATH}
 	$(MV) version.c version.c.last
 
 ../dist/example.userserv.conf: ../dist/example.conf
