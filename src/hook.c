@@ -167,28 +167,6 @@ void hook_call_event(const char *event, void *dptr)
 	}
 }
 
-#ifdef NOTYET
-void hook_exec_event(const char *event, ...)
-{
-	hook_t *h;
-	node_t *n;
-	void (*func)(void *data);
-	va_list ap;
-
-	if (!(h = find_hook(event)))
-		return;
-
-	LIST_FOREACH(n, h->hooks.head)
-	{
-		func = (void (*)(void *)) n->data;
-		va_start(ap, event);
-		func(&ap);
-		va_end(ap);
-	}
-}
-
-#endif
-
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
  * vim:ts=8
  * vim:sw=8
