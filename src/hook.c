@@ -154,13 +154,13 @@ void hook_add_hook_first(const char *event, void (*handler)(void *data))
 void hook_call_event(const char *event, void *dptr)
 {
 	hook_t *h;
-	node_t *n;
+	node_t *n, *tn;
 	void (*func)(void *data);
 
 	if (!(h = find_hook(event)))
 		return;
 
-	LIST_FOREACH(n, h->hooks.head)
+	LIST_FOREACH_SAFE(n, tn, h->hooks.head)
 	{
 		func = (void (*)(void *)) n->data;
 		func(dptr);
