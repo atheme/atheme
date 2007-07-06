@@ -104,7 +104,7 @@ E int sendemail(user_t *from, int type, myuser_t *mu, const char *param);
 
 /* arc4random.c */
 #ifndef HAVE_ARC4RANDOM
-E void arc4random_stir();
+E void arc4random_stir(void);
 E void arc4random_addrandom(unsigned char *dat, int datlen);
 E unsigned int arc4random(void);
 #endif /* !HAVE_ARC4RANDOM */
