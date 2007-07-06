@@ -69,8 +69,8 @@ static void write_channels_dot_file(void *arg)
 		return;
 	}
 
-	fprintf(f, "graph channels-graph {\n");
-	fprintf(f, "edge [color=blue w=5.0 len=1.5 fontsize=10]\n");
+	fprintf(f, "graph channels {\n");
+	fprintf(f, "edge [color=blue len=7.5 fontsize=10]\n");
 	fprintf(f, "node [fontsize=10]\n");
 
 	slog(LG_DEBUG, "graphtastical: dumping mychans");
@@ -104,7 +104,7 @@ static void write_channels_dot_file(void *arg)
 	if (was_errored)
 	{
 		errno1 = errno;
-		slog(LG_ERROR, "db_save(): cannot write to channels.dot.new: %s", strerror(errno1));
+		slog(LG_ERROR, "graphtastical: cannot write to channels.dot.new: %s", strerror(errno1));
 		return;
 	}
 
