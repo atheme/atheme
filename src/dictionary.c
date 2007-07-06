@@ -501,7 +501,7 @@ void dictionary_stats(void (*stats_cb)(const char *line, void *privdata), void *
 
 	LIST_FOREACH(n, dictionarylist.head)
 	{
-		dtree = object_ref(n->data);
+		dtree = n->data;
 		snprintf(buf, sizeof buf, "Hash statistics for %s", object(dtree)->name);
 		stats_cb(buf, privdata);
 		for (i = 0; i <= MAXCOUNT; i++)
@@ -528,7 +528,6 @@ void dictionary_stats(void (*stats_cb)(const char *line, void *privdata), void *
 					counts[i]);
 			stats_cb(buf, privdata);
 		}
-		object_unref(dtree);
 	}
 }
 
