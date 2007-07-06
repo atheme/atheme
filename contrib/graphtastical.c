@@ -4,6 +4,34 @@
  *
  * Creates a .dot file for use with neato which displays
  * user->channel relationships.
+ *
+ * == How to generate the graphs and How It Works ==
+ * Graphtastical creates a .dot file for graphviz's neato
+ * filter to use. The DOT language describes a graph's
+ * structure to graphviz in an opaque way.
+ *
+ * Because Graphviz nodes use unique identifiers for
+ * interconnection, the channels.dot file contains also
+ * information about social networks.
+ *
+ * Eventually Graphtastical will dump other graph datafiles
+ * too.
+ *
+ * To make a file from the data dumped by Graphtastical,
+ * the following commands will do:
+ *
+ * $ cat channels.dot | neato -Tgif -o map-channels.gif
+ * $ cat channels.dot | neato -Tsvg -o map-channels.svg
+ *
+ * Some maps (for larger networks) are going to be large,
+ * so you may want to provide links to both the GIF and
+ * SVG files as some people may only be able to make use of
+ * one or the other. Why that is, I'm not sure, and I'm not
+ * covering it here.
+ *
+ * == Privacy concerns ==
+ * If you are running Graphtastical on a network that has
+ * privacy concerns; you probably shouldn't.
  */
 
 #include "atheme.h"
