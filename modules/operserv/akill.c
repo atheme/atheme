@@ -236,6 +236,7 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		/* make sure there's at least 4 non-wildcards */
+		/* except if the user has no wildcards */
 		for (p = kuser; *p; p++)
 		{
 			if (*p != '*' && *p != '?' && *p != '.')
@@ -247,7 +248,7 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 				i++;
 		}
 
-		if (i < 4)
+		if (i < 4 && (strchr(kuser, '*') || strchr(kuser, '?')))
 		{
 			command_fail(si, fault_badparams, _("Invalid user@host: \2%s@%s\2. At least four non-wildcard characters are required."), kuser, khost);
 			return;
