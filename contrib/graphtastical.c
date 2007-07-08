@@ -46,13 +46,9 @@ DECLARE_MODULE_V1
 /* write channels.dot */
 static void write_channels_dot_file(void *arg)
 {
-	myuser_t *mu;
 	mychan_t *mc;
 	chanacs_t *ca;
-	kline_t *k;
-	svsignore_t *svsignore;
-	soper_t *soper;
-	node_t *n, *tn, *tn2;
+	node_t *tn;
 	FILE *f;
 	int errno1, was_errored = 0;
 	dictionary_iteration_state_t state;
@@ -70,8 +66,8 @@ static void write_channels_dot_file(void *arg)
 	}
 
 	fprintf(f, "graph channels {\n");
-	fprintf(f, "edge [color=blue len=7.5 fontsize=10]\n");
-	fprintf(f, "node [fontsize=10]\n");
+	fprintf(f, "edge [color=blue len=7.5 fontname=\"Verdana\" fontsize=8]\n");
+	fprintf(f, "node [fontname=\"Verdana\" fontsize=8]\n");
 
 	slog(LG_DEBUG, "graphtastical: dumping mychans");
 
@@ -84,7 +80,7 @@ static void write_channels_dot_file(void *arg)
 
 		pmc = mc;
 
-		fprintf(f, "[fontsize=10]\n");
+		fprintf(f, "[fontname=\"Verdana\" fontsize=8]\n");
 
 		LIST_FOREACH(tn, mc->chanacs.head)
 		{
@@ -93,7 +89,7 @@ static void write_channels_dot_file(void *arg)
 			if (ca->level & CA_AKICK)
 				continue;
 
-			fprintf(f, "\"%s\" -- \"%s\" [fontsize=10]\n", ca->myuser ? ca->myuser->name : ca->host, mc->name);
+			fprintf(f, "\"%s\" -- \"%s\" [fontname=\"Verdana\" fontsize=8]\n", ca->myuser ? ca->myuser->name : ca->host, mc->name);
 		}
 	}
 
@@ -119,16 +115,80 @@ static void write_channels_dot_file(void *arg)
 	}
 }
 
+/* write uchannels.dot */
+static void write_uchannels_dot_file(void *arg)
+{
+	channel_t *c;
+	chanuser_t *cu;
+	node_t *tn;
+	FILE *f;
+	int errno1, was_errored = 0;
+	dictionary_iteration_state_t state;
+
+	errno = 0;
+
+	/* write to a temporary file first */
+	if (!(f = fopen(DATADIR "/uchannels.dot.new", "w")))
+	{
+		errno1 = errno;
+		slog(LG_ERROR, "graphtastical: cannot create channels.dot.new: %s", strerror(errno1));
+		return;
+	}
+
+	fprintf(f, "graph uchannels {\n");
+	fprintf(f, "edge [color=blue len=7.5 fontname=\"Verdana\" fontsize=8]\n");
+	fprintf(f, "node [fontname=\"Verdana\" fontsize=8]\n");
+
+	slog(LG_DEBUG, "graphtastical: dumping chans");
+
+	DICTIONARY_FOREACH(c, &state, chanlist)
+	{
+		fprintf(f, "\"%s\"", c->name);
+
+		fprintf(f, "[fontname=\"Verdana\" fontsize=8]\n");
+
+		LIST_FOREACH(tn, c->members.head)
+		{
+			cu = (chanuser_t *)tn->data;
+
+			fprintf(f, "\"%s\" -- \"%s\" [fontname=\"Verdana\" fontsize=8]\n", cu->user->nick, c->name);
+		}
+	}
+
+	fprintf(f, "}\n");
+
+	was_errored = ferror(f);
+	was_errored |= fclose(f);
+	if (was_errored)
+	{
+		errno1 = errno;
+		slog(LG_ERROR, "graphtastical: cannot write to uchannels.dot.new: %s", strerror(errno1));
+		return;
+	}
+
+	/* now, replace the old database with the new one, using an atomic rename */
+	unlink(DATADIR "/uchannels.dot" );
+	
+	if ((rename(DATADIR "/uchannels.dot.new", DATADIR "/uchannels.dot")) < 0)
+	{
+		errno1 = errno;
+		slog(LG_ERROR, "graphtastical: cannot rename uchannels.dot.new to uchannels.dot: %s", strerror(errno1));
+		return;
+	}
+}
+
 void _modinit(module_t *m)
 {
 	write_channels_dot_file(NULL);
 
 	event_add("write_channels_dot_file", write_channels_dot_file, NULL, 60);
+	event_add("write_uchannels_dot_file", write_uchannels_dot_file, NULL, 60);
 }
 
 void _moddeinit(void)
 {
 	event_delete(write_channels_dot_file, NULL);
+	event_delete(write_uchannels_dot_file, NULL);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
