@@ -34,8 +34,8 @@
 #ifndef __MOWGLI_SIGNAL_H__
 #define __MOWGLI_SIGNAL_H__
 
-typedef void (*signal_handler_t) (int);
+typedef void (*mowgli_signal_handler_t) (int);
 
-extern signal_handler_t mowgli_signal_install_handler(int signum, signal_handler_t handler);
+extern mowgli_signal_handler_t mowgli_signal_install_handler(int signum, signal_handler_t handler);
 
 #endif

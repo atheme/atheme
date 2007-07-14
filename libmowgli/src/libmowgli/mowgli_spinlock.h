@@ -46,8 +46,8 @@ typedef enum {
 } mowgli_spinlock_lock_param_t;
 
 extern mowgli_spinlock_t *mowgli_spinlock_create(void);
-extern void mowgli_spinlock_lock(mowgli_spinlock_t *self, void *read, void *write);
-extern void mowgli_spinlock_unlock(mowgli_spinlock_t *self, void *read, void *write);
+extern void mowgli_spinlock_lock(mowgli_spinlock_t *self, void *r, void *w);
+extern void mowgli_spinlock_unlock(mowgli_spinlock_t *self, void *r, void *w);
 extern void mowgli_spinlock_wait(mowgli_spinlock_t *self, mowgli_spinlock_lock_param_t param);
 extern void mowgli_spinlock_timed_wait(mowgli_spinlock_t *self, mowgli_spinlock_lock_param_t param, struct timeval *tv);
 

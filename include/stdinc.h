@@ -50,10 +50,7 @@
 #include <libgen.h>
 #include <dirent.h>
 
-typedef enum { FALSE, TRUE } l_boolean_t;
-
-#undef boolean_t
-#define boolean_t l_boolean_t
+typedef mowgli_boolean_t boolean_t;
 
 #endif
 

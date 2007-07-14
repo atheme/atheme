@@ -33,7 +33,7 @@
 
 #include "mowgli.h"
 
-static signal_handler_t
+static mowgli_signal_handler_t
 mowgli_signal_install_handler_full(int signum, signal_handler_t handler,
 			    int *sigtoblock, size_t sigtoblocksize)
 {
