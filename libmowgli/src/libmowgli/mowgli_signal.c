@@ -64,8 +64,8 @@ mowgli_signal_install_handler_full(int signum, mowgli_signal_handler_t handler,
  * It restarts interrupted system calls, does not reset the handler,
  * and blocks the same signal from within the handler.
  */
-signal_handler_t
-mowgli_signal_install_handler(int signum, signal_handler_t handler)
+mowgli_signal_handler_t
+mowgli_signal_install_handler(int signum, mowgli_signal_handler_t handler)
 {
 	return mowgli_signal_install_handler_full(signum, handler, NULL, 0);
 }
