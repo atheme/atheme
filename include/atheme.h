@@ -28,7 +28,6 @@
 #include "linker.h"
 #include "atheme_string.h"
 #include "atheme_memory.h"
-#include "dictionary.h"
 #include "table.h"
 #include "servers.h"
 #include "channels.h"
