@@ -40,7 +40,7 @@
 
 chansvs_t chansvs;
 globsvs_t globsvs;
-opersvs_t opersvs;
+5~opersvs_t opersvs;
 memosvs_t memosvs;
 nicksvs_t nicksvs;
 saslsvs_t saslsvs;
@@ -103,6 +103,8 @@ int main(int argc, char *argv[])
 	struct rlimit rlim;
 #endif
 	curr_uplink = NULL;
+
+	mowgli_init();
 
 	/* Prepare gettext */
 #ifdef ENABLE_NLS
