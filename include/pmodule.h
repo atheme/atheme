@@ -30,7 +30,7 @@ struct pcommand_ {
 /* pmodule.c */
 E BlockHeap *pcommand_heap;
 E BlockHeap *messagetree_heap;
-E dictionary_tree_t *pcommands;
+E mowgli_dictionary_t *pcommands;
 
 E boolean_t pmodule_loaded;
 

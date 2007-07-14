@@ -181,7 +181,7 @@ void uplink_connect(void)
 static void uplink_close(connection_t *cptr)
 {
 	channel_t *c;
-	dictionary_iteration_state_t state;
+	mowgli_dictionary_iteration_state_t state;
 
 	event_add_once("reconn", reconn, NULL, me.recontime);
 
@@ -210,7 +210,7 @@ static void uplink_close(connection_t *cptr)
 		server_delete(me.actual);
 	me.actual = NULL;
 	/* remove all the channels left */
-	DICTIONARY_FOREACH(c, &state, chanlist)
+	MOWGLI_DICTIONARY_FOREACH(c, &state, chanlist)
 	{
 		channel_delete(c);
 	}

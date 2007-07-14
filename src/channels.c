@@ -33,7 +33,7 @@
 
 #include "atheme.h"
 
-dictionary_tree_t *chanlist;
+mowgli_dictionary_t *chanlist;
 
 static BlockHeap *chan_heap;
 static BlockHeap *chanuser_heap;
@@ -65,7 +65,7 @@ void init_channels(void)
 		exit(EXIT_FAILURE);
 	}
 
-	chanlist = dictionary_create("channel", HASH_CHANNEL, irccasecmp);
+	chanlist = mowgli_dictionary_create(irccasecmp);
 }
 
 /*
@@ -126,7 +126,7 @@ channel_t *channel_add(const char *name, unsigned int ts, server_t *creator)
 	if ((mc = mychan_find(c->name)))
 		mc->chan = c;
 
-	dictionary_add(chanlist, c->name, c);
+	mowgli_dictionary_add(chanlist, c->name, c);
 
 	cnt.chan++;
 
@@ -186,7 +186,7 @@ void channel_delete(channel_t *c)
 
 	hook_call_event("channel_delete", c);
 
-	dictionary_delete(chanlist, c->name);
+	mowgli_dictionary_delete(chanlist, c->name);
 
 	if ((mc = mychan_find(c->name)))
 		mc->chan = NULL;
@@ -222,7 +222,7 @@ void channel_delete(channel_t *c)
  */
 channel_t *channel_find(const char *name)
 {
-	return dictionary_retrieve(chanlist, name);
+	return mowgli_dictionary_retrieve(chanlist, name);
 }
 
 /*

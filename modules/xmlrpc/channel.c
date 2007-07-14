@@ -43,7 +43,7 @@ static int channel_register(void *conn, int parc, char *parv[])
 	mychan_t *mc, *tmc;
 	unsigned int tcnt;
 	static char buf[XMLRPC_BUFSIZE];
-	dictionary_iteration_state_t state;
+	mowgli_dictionary_iteration_state_t state;
 	hook_channel_req_t hdata;
 
 	*buf = '\0';
@@ -86,7 +86,7 @@ static int channel_register(void *conn, int parc, char *parv[])
 	}
 
 	tcnt = 0;
-	DICTIONARY_FOREACH(tmc, &state, mclist)
+	MOWGLI_DICTIONARY_FOREACH(tmc, &state, mclist)
 	{
 		if (is_founder(tmc, mu))
 			tcnt++;

@@ -33,8 +33,8 @@
 
 #include "atheme.h"
 
-dictionary_tree_t *sidlist;
-dictionary_tree_t *servlist;
+mowgli_dictionary_t *sidlist;
+mowgli_dictionary_t *servlist;
 list_t tldlist;
 
 static BlockHeap *serv_heap;
@@ -66,8 +66,8 @@ void init_servers(void)
 		exit(EXIT_FAILURE);
 	}
 
-	servlist = dictionary_create("server", HASH_SERVER, irccasecmp);
-	sidlist = dictionary_create("sid", HASH_SERVER, strcmp);
+	servlist = mowgli_dictionary_create(irccasecmp);
+	sidlist = mowgli_dictionary_create(strcmp);
 }
 
 /*
@@ -110,7 +110,7 @@ server_t *server_add(const char *name, unsigned int hops, const char *uplink, co
 	if (id != NULL)
 	{
 		s->sid = sstrdup(id);
-		dictionary_add(sidlist, s->sid, s);
+		mowgli_dictionary_add(sidlist, s->sid, s);
 	}
 
 	/* check to see if it's hidden */
@@ -127,7 +127,7 @@ server_t *server_add(const char *name, unsigned int hops, const char *uplink, co
 	s->hops = hops;
 	s->connected_since = CURRTIME;
 
-	dictionary_add(servlist, s->name, s);
+	mowgli_dictionary_add(servlist, s->name, s);
 
 	if (u)
 	{
@@ -209,10 +209,10 @@ void server_delete(const char *name)
 	}
 
 	/* now remove the server */
-	dictionary_delete(servlist, s->name);
+	mowgli_dictionary_delete(servlist, s->name);
 
 	if (s->sid)
-		dictionary_delete(sidlist, s->sid);
+		mowgli_dictionary_delete(sidlist, s->sid);
 
 	if (s->uplink)
 	{
@@ -258,12 +258,12 @@ server_t *server_find(const char *name)
 
 	if (ircd->uses_uid)
 	{
-		s = dictionary_retrieve(sidlist, name);
+		s = mowgli_dictionary_retrieve(sidlist, name);
 		if (s != NULL)
 			return s;
 	}
 
-	return dictionary_retrieve(servlist, name);
+	return mowgli_dictionary_retrieve(servlist, name);
 }
 
 /*

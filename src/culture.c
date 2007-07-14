@@ -33,8 +33,8 @@
 
 #include "atheme.h"
 
-dictionary_tree_t *itranslation_tree; /* internal translations, userserv/nickserv etc */
-dictionary_tree_t *translation_tree; /* language translations */
+mowgli_dictionary_t *itranslation_tree; /* internal translations, userserv/nickserv etc */
+mowgli_dictionary_t *translation_tree; /* language translations */
 
 /*
  * translation_init()
@@ -53,8 +53,8 @@ dictionary_tree_t *translation_tree; /* language translations */
  */
 void translation_init(void)
 {
-	itranslation_tree = dictionary_create("itranslation_tree", HASH_ITRANS, strcmp);
-	translation_tree = dictionary_create("translation_tree", HASH_TRANS, strcmp);
+	itranslation_tree = mowgli_dictionary_create(strcmp);
+	translation_tree = mowgli_dictionary_create(strcmp);
 }
 
 /*
@@ -75,10 +75,10 @@ const char *translation_get(const char *str)
 	translation_t *t;
 
 	/* See if an internal substitution is present. */
-	if ((t = dictionary_retrieve(itranslation_tree, str)) != NULL)
+	if ((t = mowgli_dictionary_retrieve(itranslation_tree, str)) != NULL)
 		str = t->replacement;
 
-	if ((t = dictionary_retrieve(translation_tree, str)) != NULL)
+	if ((t = mowgli_dictionary_retrieve(translation_tree, str)) != NULL)
 		return t->replacement;
 
 	return str;
@@ -103,7 +103,7 @@ void itranslation_create(char *str, char *trans)
 	t->name = sstrdup(str);
 	t->replacement = sstrdup(trans);
 
-	dictionary_add(itranslation_tree, t->name, t);
+	mowgli_dictionary_add(itranslation_tree, t->name, t);
 }
 
 /*
@@ -120,7 +120,7 @@ void itranslation_create(char *str, char *trans)
  */
 void itranslation_destroy(char *str)
 {
-	translation_t *t = dictionary_delete(itranslation_tree, str);
+	translation_t *t = mowgli_dictionary_delete(itranslation_tree, str);
 
 	if (t == NULL)
 		return;
@@ -157,7 +157,7 @@ void translation_create(char *str, char *trans)
 
 	t->replacement = sstrdup(buf);
 
-	dictionary_add(translation_tree, t->name, t);
+	mowgli_dictionary_add(translation_tree, t->name, t);
 }
 
 /*
@@ -174,7 +174,7 @@ void translation_create(char *str, char *trans)
  */
 void translation_destroy(char *str)
 {
-	translation_t *t = dictionary_delete(translation_tree, str);
+	translation_t *t = mowgli_dictionary_delete(translation_tree, str);
 
 	if (t == NULL)
 		return;

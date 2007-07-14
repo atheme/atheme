@@ -54,13 +54,13 @@ static void os_cmd_rnc(sourceinfo_t *si, int parc, char *parv[])
 	rnc_t *rnc;
 	list_t realnames;
 	int i, found = 0;
-	dictionary_iteration_state_t state;
+	mowgli_dictionary_iteration_state_t state;
 
 	realnames.head = NULL;
 	realnames.tail = NULL;
 	realnames.count = 0;
 
-	DICTIONARY_FOREACH(u, &state, userlist)
+	MOWGLI_DICTIONARY_FOREACH(u, &state, userlist)
 	{
 		LIST_FOREACH(n2, realnames.head)
 		{

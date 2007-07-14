@@ -48,7 +48,7 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 	regex_t *regex;
 	char usermask[512];
 	unsigned int matches = 0;
-	dictionary_iteration_state_t state;
+	mowgli_dictionary_iteration_state_t state;
 	user_t *u;
 	char *args = parv[0];
 	char *pattern;
@@ -114,7 +114,7 @@ static void os_cmd_rakill(sourceinfo_t *si, int parc, char *parv[])
 
 	snoop("RAKILL: \2%s\2 by \2%s\2 (%s)", pattern, get_oper_name(si), reason);
 
-	DICTIONARY_FOREACH(u, &state, userlist)
+	MOWGLI_DICTIONARY_FOREACH(u, &state, userlist)
 	{
 		sprintf(usermask, "%s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
 

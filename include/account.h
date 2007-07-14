@@ -268,9 +268,9 @@ E kline_t *kline_find_user(user_t *u);
 E void kline_expire(void *arg);
 
 /* account.c */
-E dictionary_tree_t *mulist;
-E dictionary_tree_t *nicklist;
-E dictionary_tree_t *mclist;
+E mowgli_dictionary_t *mulist;
+E mowgli_dictionary_t *nicklist;
+E mowgli_dictionary_t *mclist;
 
 E void init_accounts(void);
 

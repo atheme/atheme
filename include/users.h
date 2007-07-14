@@ -49,8 +49,8 @@ E boolean_t is_admin(user_t *user);
 E boolean_t is_internal_client(user_t *user);
 
 /* users.c */
-E dictionary_tree_t *userlist;
-E dictionary_tree_t *uidlist;
+E mowgli_dictionary_t *userlist;
+E mowgli_dictionary_t *uidlist;
 
 E void init_users(void);
 

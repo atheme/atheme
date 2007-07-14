@@ -92,7 +92,6 @@ void handle_admin(user_t *u)
 
 static void dictionary_stats_cb(const char *line, void *privdata)
 {
-
 	numeric_sts(me.name, 249, ((user_t *)privdata)->nick, "B :%s", line);
 }
 
@@ -117,13 +116,14 @@ void handle_stats(user_t *u, char req)
 
 	switch (req)
 	{
+#if 0
 	  case 'B':
 		  if (!has_priv_user(u, PRIV_SERVER_AUSPEX))
 			  break;
 
 		  dictionary_stats(dictionary_stats_cb, u);
 		  break;
-
+#endif
 	  case 'C':
 	  case 'c':
 		  if (!has_priv_user(u, PRIV_SERVER_AUSPEX))

@@ -33,9 +33,9 @@ E list_t mychan;
 static void join_registered(boolean_t all)
 {
 	mychan_t *mc;
-	dictionary_iteration_state_t state;
+	mowgli_dictionary_iteration_state_t state;
 
-	DICTIONARY_FOREACH(mc, &state, mclist)
+	MOWGLI_DICTIONARY_FOREACH(mc, &state, mclist)
 	{
 		if (!(mc->flags & MC_GUARD))
 			continue;
@@ -685,10 +685,10 @@ static void cs_tschange(channel_t *c)
 static void cs_leave_empty(void *unused)
 {
 	mychan_t *mc;
-	dictionary_iteration_state_t state;
+	mowgli_dictionary_iteration_state_t state;
 
 	(void)unused;
-	DICTIONARY_FOREACH(mc, &state, mclist)
+	MOWGLI_DICTIONARY_FOREACH(mc, &state, mclist)
 	{
 		if (!(mc->flags & MC_INHABIT))
 			continue;

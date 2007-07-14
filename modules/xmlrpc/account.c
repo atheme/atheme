@@ -22,9 +22,9 @@ static unsigned int tcnt = 0;
 
 /* support function for atheme.account.register. */
 
-static int account_myuser_foreach_cb(dictionary_elem_t *delem, void *privdata)
+static int account_myuser_foreach_cb(mowgli_dictionary_elem_t *delem, void *privdata)
 {
-	myuser_t *tmu = (myuser_t *) delem->node.data;
+	myuser_t *tmu = (myuser_t *) delem->data;
 	char *email = (char *) privdata;
 
 	if (!strcasecmp(email, tmu->email))
@@ -132,7 +132,7 @@ static int account_register(void *conn, int parc, char *parv[])
 	}
 
 	tcnt = 0;
-	dictionary_foreach(mulist, account_myuser_foreach_cb, parv[2]);
+	mowgli_dictionary_foreach(mulist, account_myuser_foreach_cb, parv[2]);
 
 	if (tcnt >= me.maxusers)
 	{

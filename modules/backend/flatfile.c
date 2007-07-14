@@ -24,10 +24,10 @@ DECLARE_MODULE_V1
 /* flatfile state */
 unsigned int muout = 0, mcout = 0, caout = 0, kout = 0;
 
-static int flatfile_db_save_myusers_cb(dictionary_elem_t *delem, void *privdata)
+static int flatfile_db_save_myusers_cb(mowgli_dictionary_elem_t *delem, void *privdata)
 {
 	FILE *f = (FILE *) privdata;
-	myuser_t *mu = (myuser_t *) delem->node.data;
+	myuser_t *mu = (myuser_t *) delem->data;
 	node_t *tn;
 
 	/* MU <name> <pass> <email> <registered> [lastlogin] [failnum*] [lastfail*]
@@ -91,7 +91,7 @@ static void flatfile_db_save(void *arg)
 	node_t *n, *tn, *tn2;
 	FILE *f;
 	int errno1, was_errored = 0;
-	dictionary_iteration_state_t state;
+	mowgli_dictionary_iteration_state_t state;
 
 	errno = 0;
 
@@ -114,11 +114,11 @@ static void flatfile_db_save(void *arg)
 
 	slog(LG_DEBUG, "db_save(): saving myusers");
 
-	dictionary_foreach(mulist, flatfile_db_save_myusers_cb, f);
+	mowgli_dictionary_foreach(mulist, flatfile_db_save_myusers_cb, f);
 
 	slog(LG_DEBUG, "db_save(): saving mychans");
 
-	DICTIONARY_FOREACH(mc, &state, mclist)
+	MOWGLI_DICTIONARY_FOREACH(mc, &state, mclist)
 	{
 		/* MC <name> <pass> <founder> <registered> [used] [flags]
 		 * [mlock_on] [mlock_off] [mlock_limit] [mlock_key]
@@ -167,7 +167,7 @@ static void flatfile_db_save(void *arg)
 	   because otherwise we could encounter unknowns on restart. */
 	slog(LG_DEBUG, "db_save(): saving subscriptions");
 
-	DICTIONARY_FOREACH(mu, &state, mulist)
+	MOWGLI_DICTIONARY_FOREACH(mu, &state, mulist)
 	{
 		metadata_subscription_t *subscriptor;
 

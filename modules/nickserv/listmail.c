@@ -44,10 +44,10 @@ struct listmail_state
 	int matches;
 };
 
-static int listmail_foreach_cb(dictionary_elem_t *delem, void *privdata)
+static int listmail_foreach_cb(mowgli_dictionary_elem_t *delem, void *privdata)
 {
 	struct listmail_state *state = (struct listmail_state *) privdata;
-	myuser_t *mu = (myuser_t *)delem->node.data;
+	myuser_t *mu = (myuser_t *)delem->data;
 
 	if (!match(state->pattern, mu->email))
 	{
@@ -79,7 +79,7 @@ static void ns_cmd_listmail(sourceinfo_t *si, int parc, char *parv[])
 	state.matches = 0;
 	state.pattern = email;
 	state.origin = si;
-	dictionary_foreach(mulist, listmail_foreach_cb, &state);
+	mowgli_dictionary_foreach(mulist, listmail_foreach_cb, &state);
 
 	logcommand(si, CMDLOG_ADMIN, "LISTMAIL %s (%d matches)", email, state.matches);
 	if (state.matches == 0)

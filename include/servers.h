@@ -48,7 +48,7 @@ struct tld_ {
 #define ME			(ircd->uses_uid ? me.numeric : me.name)
 
 /* servers.c */
-E dictionary_tree_t *servlist;
+E mowgli_dictionary_t *servlist;
 E list_t tldlist;
 
 E void init_servers(void);

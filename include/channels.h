@@ -125,7 +125,7 @@ E void modestack_mode_param(char *source, channel_t *channel, int dir, char type
 E void check_modes(mychan_t *mychan, boolean_t sendnow);
 
 /* channels.c */
-E dictionary_tree_t *chanlist;
+E mowgli_dictionary_t *chanlist;
 
 E void init_channels(void);
 

@@ -34,7 +34,7 @@
 #include "atheme.h"
 #include "pmodule.h"
 
-extern dictionary_tree_t *services;
+extern mowgli_dictionary_t *services;
 int authservice_loaded = 0;
 int use_myuser_access = 0;
 int use_svsignore = 0;
@@ -172,9 +172,9 @@ void part(char *chan, char *nick)
 void services_init(void)
 {
 	service_t *svs;
-	dictionary_iteration_state_t state;
+	mowgli_dictionary_iteration_state_t state;
 
-	DICTIONARY_FOREACH(svs, &state, services)
+	MOWGLI_DICTIONARY_FOREACH(svs, &state, services)
 	{
 		if (ircd->uses_uid && svs->me->uid[0] == '\0')
 			user_changeuid(svs->me, svs->uid);
@@ -187,12 +187,12 @@ void services_init(void)
 void joinall(char *name)
 {
 	service_t *svs;
-	dictionary_iteration_state_t state;
+	mowgli_dictionary_iteration_state_t state;
 
 	if (name == NULL)
 		return;
 
-	DICTIONARY_FOREACH(svs, &state, services)
+	MOWGLI_DICTIONARY_FOREACH(svs, &state, services)
 	{
 		join(name, svs->name);
 	}
@@ -200,14 +200,14 @@ void joinall(char *name)
 
 void partall(char *name)
 {
-	dictionary_iteration_state_t state;
+	mowgli_dictionary_iteration_state_t state;
 	service_t *svs;
 	mychan_t *mc;
 
 	if (name == NULL)
 		return;
 	mc = mychan_find(name);
-	DICTIONARY_FOREACH(svs, &state, services)
+	MOWGLI_DICTIONARY_FOREACH(svs, &state, services)
 	{
 		if (svs == chansvs.me && mc != NULL && config_options.join_chans)
 			continue;
