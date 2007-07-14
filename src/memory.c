@@ -33,8 +33,6 @@
 
 #include "atheme.h"
 
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
-
 /* does malloc()'s job and dies if malloc() fails */
 void *smalloc(size_t size)
 {
