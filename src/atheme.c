@@ -40,7 +40,7 @@
 
 chansvs_t chansvs;
 globsvs_t globsvs;
-5~opersvs_t opersvs;
+opersvs_t opersvs;
 memosvs_t memosvs;
 nicksvs_t nicksvs;
 saslsvs_t saslsvs;
