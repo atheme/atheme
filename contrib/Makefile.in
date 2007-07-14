@@ -90,7 +90,7 @@ install:
 .PHONY: depend clean distclean
 # This sed command sucks but I don't know a better way -- jilles
 depend:
-	${MKDEP} ${CPPFLAGS} ${CFLAGS} ${SRCS} > .depend
+	${MKDEP} ${CPPFLAGS} ${CFLAGS} ${SRCS} | sed -e 's|\([^.]*\)\.o:|$(SRCDIR)/\1.so:|' > .depend
 
 clean:
 	${RM} -f *.so
