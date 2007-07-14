@@ -35,9 +35,9 @@ void mowgli_init(void)
 {
 	mowgli_node_init();
 	mowgli_queue_init();
-	mowgli_random_init();
 	mowgli_argstack_init();
 	mowgli_bitvector_init();
 	mowgli_global_storage_init();
 	mowgli_hook_init();
+	mowgli_random_init();
 }

@@ -40,7 +40,7 @@ static mowgli_heap_t *mowgli_hook_item_heap;
 void
 mowgli_hook_init(void)
 {
-	mowgli_hooks = mowgli_dictionary_create(32, strcasecmp);
+	mowgli_hooks = mowgli_dictionary_create(strcasecmp);
 	mowgli_hook_item_heap = mowgli_heap_create(sizeof(mowgli_hook_item_t), 64, BH_NOW);
 }
 

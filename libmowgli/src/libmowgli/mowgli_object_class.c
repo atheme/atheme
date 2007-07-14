@@ -38,6 +38,10 @@ static mowgli_dictionary_t *mowgli_object_class_dict = NULL;
 
 void mowgli_object_class_init(mowgli_object_class_t *klass, const char *name, mowgli_destructor_t des, mowgli_boolean_t dynamic)
 {
+	/* if the object_class dictionary has not yet been initialized, we will want to do that. */
+	if (mowgli_object_class_dict == NULL)
+		mowgli_object_class_dict = mowgli_dictionary_create(strcasecmp);
+
 	if (klass == NULL)
 		mowgli_throw_exception_fatal(mowgli.object_class.invalid_object_class_exception);
 
@@ -57,10 +61,6 @@ void mowgli_object_class_init(mowgli_object_class_t *klass, const char *name, mo
 
 	/* initialize object_class::dynamic */
 	klass->dynamic = dynamic;
-
-	/* if the object_class dictionary has not yet been initialized, we will want to do that. */
-	if (mowgli_object_class_dict == NULL)
-		mowgli_object_class_dict = mowgli_dictionary_create(32, strcasecmp);
 
 	/* add to the object_class index */
 	mowgli_dictionary_add(mowgli_object_class_dict, klass->name, klass);

@@ -44,20 +44,20 @@ typedef struct mowgli_dictionary_ mowgli_dictionary_t;
  * node_t access is done by ((node_t *) delem)->next|prev,
  * or through delem->node.(next|prev).
  */
+typedef struct mowgli_dictionary_elem_ mowgli_dictionary_elem_t;
+
 struct mowgli_dictionary_elem_
 {
-	mowgli_node_t node;
+	mowgli_dictionary_elem_t *left, *right, *prev, *next;
+	void *data;
 	const char *key;
 };
-
-typedef struct mowgli_dictionary_elem_ mowgli_dictionary_elem_t;
 
 /*
  * mowgli_dictionary_iteration_state_t, private.
  */
 struct mowgli_dictionary_iteration_state_
 {
-	int bucket;
 	mowgli_dictionary_elem_t *cur, *next;
 };
 
@@ -70,11 +70,10 @@ typedef struct mowgli_dictionary_iteration_state_ mowgli_dictionary_iteration_st
 
 /*
  * mowgli_dictionary_create() creates a new dictionary tree of the defined resolution.
- * name is only used for statistical purposes.
  * compare_cb is the comparison function, typically strcmp, strcasecmp or
  * irccasecmp.
  */
-extern mowgli_dictionary_t *mowgli_dictionary_create(int resolution, int (*compare_cb)(const char *a, const char *b));
+extern mowgli_dictionary_t *mowgli_dictionary_create(int (*compare_cb)(const char *a, const char *b));
 
 /*
  * mowgli_dictionary_destroy() destroys all entries in a dtree, and also optionally calls

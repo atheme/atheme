@@ -36,10 +36,9 @@
 
 struct mowgli_dictionary_
 {
-	int resolution;
-	mowgli_list_t *hashv;		/* dynamically allocated by dictionary_create() */
 	int (*compare_cb)(const char *a, const char *b);
-	mowgli_node_t node;
+	mowgli_dictionary_elem_t *root, *head, *tail;
+	unsigned int count;
 };
 
 /*
@@ -49,8 +48,6 @@ struct mowgli_dictionary_
  * Dictionary object factory.
  *
  * Inputs:
- *     - name of dictionary tree
- *     - resolution of dictionary tree
  *     - function to use for comparing two entries in the dtree
  *
  * Outputs:
@@ -60,15 +57,242 @@ struct mowgli_dictionary_
  *     - if services runs out of memory and cannot allocate the object,
  *       the program will abort.
  */
-mowgli_dictionary_t *mowgli_dictionary_create(int resolution, int (*compare_cb)(const char *a, const char *b))
+mowgli_dictionary_t *mowgli_dictionary_create(int (*compare_cb)(const char *a, const char *b))
 {
 	mowgli_dictionary_t *dtree = (mowgli_dictionary_t *) mowgli_alloc(sizeof(mowgli_dictionary_t));
 
-	dtree->resolution = resolution;
-	dtree->hashv      = (mowgli_list_t *) mowgli_alloc_array(sizeof(mowgli_list_t), resolution);
 	dtree->compare_cb = compare_cb;
 
 	return dtree;
+}
+
+/*
+ * mowgli_dictionary_retune(mowgli_dictionary_t *dicy, const char *key)
+ *
+ * Rebalances the tree around the element which belongs to key.
+ *
+ * Inputs:
+ *     - node to begin search from
+ *
+ * Outputs:
+ *     - none
+ *
+ * Side Effects:
+ *     - the tree is rebalanced.
+ */
+void
+mowgli_dictionary_retune(mowgli_dictionary_t *dict, const char *key)
+{
+	mowgli_dictionary_elem_t n, *tn, *left, *right, *node;
+	int ret;
+
+	return_if_fail(dict != NULL);
+
+	if (dict->root == NULL)
+		return;
+
+	/*
+	 * we initialize n with known values, since it's on stack
+	 * memory. otherwise the dict would become corrupted.
+	 *
+ 	 * n is used for temporary storage while the tree is retuned.
+	 *    -nenolod
+	 */
+	n.left = n.right = NULL;
+	left = right = &n;
+
+	/* this for(;;) loop is the main workhorse of the rebalancing */
+	for (node = dict->root; ; )
+	{
+		if ((ret = dict->compare_cb(key, node->key)) == 0)
+			break;
+
+		if (ret < 0)
+		{
+			if (node->left == NULL)
+				break;
+
+			if ((ret = dict->compare_cb(key, node->left->key)) < 0)
+			{
+				tn = node->left;
+				node->left = tn->right;
+				tn->right = node;
+				node = tn;
+
+				if (node->left == NULL)
+					break;
+			}
+
+			right->left = node;
+			right = node;
+			node = node->left;
+		}
+		else
+		{
+			if (node->right == NULL)
+				break;
+
+			if ((ret = dict->compare_cb(key, node->right->key)) > 0)
+			{
+				tn = node->right;
+				node->right = tn->left;
+				tn->left = node;
+				node = tn;
+
+				if (node->right == NULL)
+					break;
+			}
+
+			left->right = node;
+			left = node;
+			node = node->right;
+		}
+	}
+
+	left->right = node->left;
+	right->left = node->right;
+
+	node->left = n.right;
+	node->right = n.left;
+
+	dict->root = node;
+}
+
+/*
+ * mowgli_dictionary_link(mowgli_dictionary_t *dict,
+ *     mowgli_dictionary_elem_t *delem)
+ *
+ * Links a dictionary tree element to the dictionary.
+ *
+ * Inputs:
+ *     - dictionary tree
+ *     - dictionary tree element
+ *
+ * Outputs:
+ *     - nothing
+ *
+ * Side Effects:
+ *     - a node is linked to the dictionary tree
+ */
+void
+mowgli_dictionary_link(mowgli_dictionary_t *dict,
+	mowgli_dictionary_elem_t *delem)
+{
+	return_if_fail(dict != NULL);
+	return_if_fail(delem != NULL);
+
+	dict->count++;
+
+	if (dict->root == NULL)
+	{
+		delem->left = delem->right = NULL;
+		delem->next = delem->prev = NULL;
+		dict->head = dict->tail = dict->root = delem;
+	}
+	else
+	{
+		int ret;
+
+		mowgli_dictionary_retune(dict, delem->key);
+
+		if ((ret = dict->compare_cb(delem->key, dict->root->key)) < 0)
+		{
+			delem->left = dict->root->left;
+			delem->right = dict->root;
+			dict->root->left = NULL;
+
+			if (dict->root->prev)
+				dict->root->prev->next = delem;
+			else
+				dict->head = delem;
+
+			delem->prev = dict->root->prev;
+			delem->next = dict->root;
+			dict->root->prev = delem;
+			dict->root = delem;
+		}
+		else if (ret > 0)
+		{
+			delem->right = dict->root->right;
+			delem->left = dict->root;
+			dict->root->right = NULL;
+
+			if (dict->root->next)
+				dict->root->next->prev = delem;
+			else
+				dict->tail = delem;
+
+			delem->next = dict->root->next;
+			delem->prev = dict->root;
+			dict->root->next = delem;
+			dict->root = delem;
+		}
+		else
+		{
+			dict->root->key = delem->key;
+			dict->root->data = delem->data;
+			dict->count--;
+
+			mowgli_free(delem);
+		}
+	}
+}
+
+/*
+ * mowgli_dictionary_unlink(mowgli_dictionary_t *dict,
+ *     mowgli_dictionary_elem_t *delem)
+ *
+ * Unlinks a dictionary tree element from the dictionary.
+ *
+ * Inputs:
+ *     - dictionary tree
+ *     - dictionary tree element
+ *
+ * Outputs:
+ *     - nothing
+ *
+ * Side Effects:
+ *     - a node is unlinked from the dictionary tree
+ */
+void
+mowgli_dictionary_unlink(mowgli_dictionary_t *dict,
+	mowgli_dictionary_elem_t *delem)
+{
+	mowgli_dictionary_elem_t *old_root, *new_root;
+
+	if (dict->root == NULL || delem == NULL)
+		return;
+
+	dict->root = delem;
+	if (dict->compare_cb(delem->key, dict->root->key) != 0)
+		return;
+
+	if (dict->root->left == NULL)
+		new_root = dict->root->right;
+	else
+	{
+		dict->root = dict->root->left;
+		mowgli_dictionary_retune(dict, delem->key);
+		new_root = dict->root;
+		new_root->right = dict->root->right;
+	}
+
+	/* linked list */
+	if (dict->root->prev != NULL)
+		dict->root->prev->next = dict->root->next;
+
+	if (dict->head == dict->root)
+		dict->head = dict->root->next;
+
+	if (dict->root->next)
+		dict->root->next->prev = dict->root->prev;
+
+	if (dict->tail == dict->root)
+		dict->tail = dict->root->prev;
+
+	old_root = dict->root;
+	dict->root = new_root;
+	dict->count--;
 }
 
 /*
@@ -97,28 +321,20 @@ void mowgli_dictionary_destroy(mowgli_dictionary_t *dtree,
 	void (*destroy_cb)(mowgli_dictionary_elem_t *delem, void *privdata),
 	void *privdata)
 {
-	mowgli_node_t *n, *tn;
+	mowgli_dictionary_elem_t *n, *tn;
 	int i;
 
 	return_if_fail(dtree != NULL);
 
-	for (i = 0; i < dtree->resolution; i++)
+	MOWGLI_LIST_FOREACH_SAFE(n, tn, dtree->head)
 	{
-		MOWGLI_LIST_FOREACH_SAFE(n, tn, dtree->hashv[i].head)
-		{
-			/* delem_t is a subclass of node_t. */
-			mowgli_dictionary_elem_t *delem = (mowgli_dictionary_elem_t *) n;
+		if (destroy_cb != NULL)
+			(*destroy_cb)(n, privdata);
 
-			if (destroy_cb != NULL)
-				(*destroy_cb)(delem, privdata);
-
-			mowgli_node_delete(&delem->node, &dtree->hashv[i]);
-
-			mowgli_free(delem);
-		}
+		mowgli_dictionary_unlink(dtree, n);
+		mowgli_free(n);
 	}
 
-	mowgli_free(dtree->hashv);
 	mowgli_free(dtree);
 }
 
@@ -144,21 +360,17 @@ void mowgli_dictionary_foreach(mowgli_dictionary_t *dtree,
 	int (*foreach_cb)(mowgli_dictionary_elem_t *delem, void *privdata),
 	void *privdata)
 {
-	mowgli_node_t *n, *tn;
-	int i, ret = 0;
+	mowgli_dictionary_elem_t *n, *tn;
 
 	return_if_fail(dtree != NULL);
 
-	for (i = 0; i < dtree->resolution && ret == 0; i++)
+	MOWGLI_LIST_FOREACH_SAFE(n, tn, dtree->head)
 	{
-		MOWGLI_LIST_FOREACH_SAFE(n, tn, dtree->hashv[i].head)
-		{
-			/* delem_t is a subclass of node_t. */
-			mowgli_dictionary_elem_t *delem = (mowgli_dictionary_elem_t *) n;
+		/* delem_t is a subclass of node_t. */
+		mowgli_dictionary_elem_t *delem = (mowgli_dictionary_elem_t *) n;
 
-			if (foreach_cb != NULL)
-				ret = (*foreach_cb)(delem, privdata);
-		}
+		if (foreach_cb != NULL)
+			(*foreach_cb)(delem, privdata);
 	}
 }
 
@@ -185,22 +397,22 @@ void *mowgli_dictionary_search(mowgli_dictionary_t *dtree,
 	void *(*foreach_cb)(mowgli_dictionary_elem_t *delem, void *privdata),
 	void *privdata)
 {
-	mowgli_node_t *n, *tn;
+	mowgli_dictionary_elem_t *n, *tn;
 	int i;
 	void *ret = NULL;
 
 	return_if_fail(dtree != NULL);
 
-	for (i = 0; i < dtree->resolution && ret == NULL; i++)
+	MOWGLI_LIST_FOREACH_SAFE(n, tn, dtree->head)
 	{
-		MOWGLI_LIST_FOREACH_SAFE(n, tn, dtree->hashv[i].head)
-		{
-			/* delem_t is a subclass of node_t. */
-			mowgli_dictionary_elem_t *delem = (mowgli_dictionary_elem_t *) n;
+		/* delem_t is a subclass of node_t. */
+		mowgli_dictionary_elem_t *delem = (mowgli_dictionary_elem_t *) n;
 
-			if (foreach_cb != NULL)
-				ret = (*foreach_cb)(delem, privdata);
-		}
+		if (foreach_cb != NULL)
+			ret = (*foreach_cb)(delem, privdata);
+
+		if (ret)
+			break;
 	}
 
 	return ret;
@@ -228,18 +440,11 @@ void mowgli_dictionary_foreach_start(mowgli_dictionary_t *dtree,
 	return_if_fail(dtree != NULL);
 	return_if_fail(state != NULL);
 
-	state->bucket = 0;
 	state->cur = NULL;
 	state->next = NULL;
 
 	/* find first item */
-	while (state->bucket < dtree->resolution)
-	{
-		state->cur = (mowgli_dictionary_elem_t *)dtree->hashv[state->bucket].head;
-		if (state->cur != NULL)
-			break;
-		state->bucket++;
-	}
+	state->cur = dtree->head;
 
 	if (state->cur == NULL)
 		return;
@@ -273,7 +478,7 @@ void *mowgli_dictionary_foreach_cur(mowgli_dictionary_t *dtree,
 	return_val_if_fail(dtree != NULL, NULL);
 	return_val_if_fail(state != NULL, NULL);
 
-	return state->cur != NULL ? state->cur->node.data : NULL;
+	return state->cur != NULL ? state->cur->data : NULL;
 }
 
 /*
@@ -303,18 +508,13 @@ void mowgli_dictionary_foreach_next(mowgli_dictionary_t *dtree,
 		mowgli_log("mowgli_dictionary_foreach_next(): called again after iteration finished on dtree<%p>", dtree);
 		return;
 	}
+
 	state->cur = state->next;
+
 	if (state->next == NULL)
 		return;
-	state->next = (mowgli_dictionary_elem_t *)state->next->node.next;
-	if (state->next != NULL)
-		return;
-	while (++state->bucket < dtree->resolution)
-	{
-		state->next = (mowgli_dictionary_elem_t *)dtree->hashv[state->bucket].head;
-		if (state->next != NULL)
-			return;
-	}
+
+	state->next = state->next->next;
 }
 
 /*
@@ -333,24 +533,16 @@ void mowgli_dictionary_foreach_next(mowgli_dictionary_t *dtree,
  * Side Effects:
  *     - none
  */
-mowgli_dictionary_elem_t *mowgli_dictionary_find(mowgli_dictionary_t *dtree, const char *key)
+mowgli_dictionary_elem_t *mowgli_dictionary_find(mowgli_dictionary_t *dict, const char *key)
 {
-	mowgli_node_t *n;
-	int i;
+	return_val_if_fail(dict != NULL, NULL);
+	return_val_if_fail(key != NULL, NULL);
 
-	if (dtree == NULL || key == NULL)
-		return NULL;
+	/* retune for key, key will be the tree's root if it's available */
+	mowgli_dictionary_retune(dict, key);
 
-	i = mowgli_fnv_hash_string(key) % dtree->resolution;
-
-	MOWGLI_LIST_FOREACH(n, dtree->hashv[i].head)
-	{
-		/* delem_t is a subclass of node_t. */
-		mowgli_dictionary_elem_t *delem = (mowgli_dictionary_elem_t *) n;
-
-		if (!dtree->compare_cb(key, delem->key))
-			return delem;
-	}
+	if (dict->root && !dict->compare_cb(key, dict->root->key))
+		return dict->root;
 
 	return NULL;
 }
@@ -372,21 +564,21 @@ mowgli_dictionary_elem_t *mowgli_dictionary_find(mowgli_dictionary_t *dtree, con
  * Side Effects:
  *     - data is inserted into the DTree.
  */
-mowgli_dictionary_elem_t *mowgli_dictionary_add(mowgli_dictionary_t *dtree, const char *key, void *data)
+mowgli_dictionary_elem_t *mowgli_dictionary_add(mowgli_dictionary_t *dict, const char *key, void *data)
 {
 	mowgli_dictionary_elem_t *delem;
 	int i;
 
-	return_val_if_fail(dtree != NULL, NULL);
+	return_val_if_fail(dict != NULL, NULL);
 	return_val_if_fail(key != NULL, NULL);
 	return_val_if_fail(data != NULL, NULL);
-	return_val_if_fail(mowgli_dictionary_find(dtree, key) == NULL, NULL);
+	return_val_if_fail(mowgli_dictionary_find(dict, key) == NULL, NULL);
 
-	i = mowgli_fnv_hash_string(key) % dtree->resolution;
 	delem = (mowgli_dictionary_elem_t *) mowgli_alloc(sizeof(mowgli_dictionary_elem_t));
-
 	delem->key = strdup(key);
-	mowgli_node_add(data, &delem->node, &dtree->hashv[i]);
+	delem->data = data;
+
+	mowgli_dictionary_link(dict, delem);
 
 	return delem;
 }
@@ -417,18 +609,11 @@ void *mowgli_dictionary_delete(mowgli_dictionary_t *dtree, const char *key)
 	int i;
 
 	if (delem == NULL)
-	{
-		mowgli_log("mowgli_dictionary_delete(): entry '%s' does not exist in dtree<%p>!",
-			key, dtree);
 		return NULL;
-	}
 
-	i = mowgli_fnv_hash_string(key) % dtree->resolution;
+	data = delem->data;
 
-	data = delem->node.data;
-
-	mowgli_node_delete(&delem->node, &dtree->hashv[i]);
-
+	mowgli_dictionary_unlink(dtree, delem);
 	mowgli_free(delem);	
 
 	return data;
@@ -455,7 +640,28 @@ void *mowgli_dictionary_retrieve(mowgli_dictionary_t *dtree, const char *key)
 	mowgli_dictionary_elem_t *delem = mowgli_dictionary_find(dtree, key);
 
 	if (delem != NULL)
-		return delem->node.data;
+		return delem->data;
 
 	return NULL;
+}
+
+/*
+ * mowgli_dictionary_size(mowgli_dictionary_t *dict)
+ *
+ * Returns the size of a dictionary.
+ *
+ * Inputs:
+ *     - dictionary tree object
+ *
+ * Outputs:
+ *     - size of dictionary
+ *
+ * Side Effects:
+ *     - none
+ */
+unsigned int mowgli_dictionary_size(mowgli_dictionary_t *dict)
+{
+	return_val_if_fail(dict != NULL, 0);
+
+	return dict->count;
 }

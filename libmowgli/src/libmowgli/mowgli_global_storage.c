@@ -39,7 +39,7 @@ static mowgli_spinlock_t *mowgli_global_storage_lock = NULL;
 void
 mowgli_global_storage_init(void)
 {
-	mowgli_global_storage_dict = mowgli_dictionary_create(128, strcasecmp);
+	mowgli_global_storage_dict = mowgli_dictionary_create(strcasecmp);
 	mowgli_global_storage_lock = mowgli_spinlock_create();
 }
 
