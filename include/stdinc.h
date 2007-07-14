@@ -11,6 +11,8 @@
 #define STDINC_H
 
 /* I N C L U D E S */
+#include <mowgli.h>
+
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
