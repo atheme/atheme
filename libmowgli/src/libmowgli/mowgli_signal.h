@@ -36,6 +36,6 @@
 
 typedef void (*mowgli_signal_handler_t) (int);
 
-extern mowgli_signal_handler_t mowgli_signal_install_handler(int signum, signal_handler_t handler);
+extern mowgli_signal_handler_t mowgli_signal_install_handler(int signum, mowgli_signal_handler_t handler);
 
 #endif
