@@ -28,10 +28,7 @@ information. The following letters are recognized:
 	u (-) Shows services uptime.
 	V (general:auspex) Shows current uplink name and connect duration.
 
-/squit <jupe> (-) Removes a jupe. This does not work on ircds that always use
-"unconnect" semantics (e.g. ircnet) where /squit is merely a request to the
-target's direct connection; in that case you have to /squit services itself
-to remove a jupe.
+/squit <jupe> (-) Removes a jupe.
 
 /trace <atheme> (-) Shows a listing of all services (with server name) or
 a single service. If listing all services, general:auspex also causes a line
