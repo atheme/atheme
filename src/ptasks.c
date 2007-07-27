@@ -59,7 +59,7 @@ void handle_version(user_t *u)
 	if (floodcheck(u, NULL))
 		return;
 
-	numeric_sts(me.name, 351, u->nick, ":atheme-%s. %s %s%s%s%s%s%s%s%s%s%s [%s]",
+	numeric_sts(me.name, 351, u->nick, "atheme-%s. %s :%s%s%s%s%s%s%s%s%s%s [%s]",
 		    version, me.name, 
 		    (match_mapping) ? "A" : "",
 		    log_debug_enabled() ? "d" : "",
