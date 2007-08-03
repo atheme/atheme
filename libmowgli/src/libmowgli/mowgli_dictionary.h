@@ -39,11 +39,6 @@ struct mowgli_dictionary_; /* defined in src/dictionary.c */
 
 typedef struct mowgli_dictionary_ mowgli_dictionary_t;
 
-/*
- * mowgli_dictionary_elem_t is a child of node_t, which adds a key field.
- * node_t access is done by ((node_t *) delem)->next|prev,
- * or through delem->node.(next|prev).
- */
 typedef struct mowgli_dictionary_elem_ mowgli_dictionary_elem_t;
 
 struct mowgli_dictionary_elem_

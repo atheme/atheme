@@ -313,64 +313,60 @@ mowgli_dictionary_link(mowgli_dictionary_t *dict,
 	}
 }
 
+/* recursive helper function for unlink */
+static mowgli_dictionary_elem_t *
+delem_combine(mowgli_dictionary_elem_t *left, mowgli_dictionary_elem_t *right)
+{
+	mowgli_dictionary_elem_t *lrrl;
+
+	if (left == NULL)
+		return right;
+	if (right == NULL)
+		return left;
+	lrrl = delem_combine(left->right, right->left);
+	left->right = right;
+	right->left = lrrl;
+	return left;
+}
+
 /*
- * mowgli_dictionary_unlink(mowgli_dictionary_t *dict,
- *     mowgli_dictionary_elem_t *delem)
+ * mowgli_dictionary_unlink_root(mowgli_dictionary_t *dict)
  *
- * Unlinks a dictionary tree element from the dictionary.
- *
- * This function simply forces a new tree root, and then
- * possibly retunes the tree. Otherwise, it just keeps
- * things in a state of dismay (for now at least).
+ * Unlinks the root dictionary tree element from the dictionary.
  *
  * Inputs:
  *     - dictionary tree
- *     - dictionary tree element
  *
  * Outputs:
  *     - nothing
  *
  * Side Effects:
- *     - a node is unlinked from the dictionary tree
+ *     - the root node is unlinked from the dictionary tree
  */
 void
-mowgli_dictionary_unlink(mowgli_dictionary_t *dict,
-	mowgli_dictionary_elem_t *delem)
+mowgli_dictionary_unlink_root(mowgli_dictionary_t *dict)
 {
-	mowgli_dictionary_elem_t *old_root, *new_root;
+	mowgli_dictionary_elem_t *delem, *old_root, *new_root;
 
-	if (dict->root == NULL || delem == NULL)
+	delem = dict->root;
+	if (delem == NULL)
 		return;
 
-	dict->root = delem;
-	if (dict->compare_cb(delem->key, dict->root->key) != 0)
-		return;
-
-	if (dict->root->left == NULL)
-		new_root = dict->root->right;
-	else
-	{
-		dict->root = dict->root->left;
-		mowgli_dictionary_retune(dict, delem->key);
-		new_root = dict->root;
-		new_root->right = dict->root->right;
-	}
+	dict->root = delem_combine(dict->root->left, dict->root->right);
 
 	/* linked list */
-	if (dict->root->prev != NULL)
-		dict->root->prev->next = dict->root->next;
+	if (delem->prev != NULL)
+		delem->prev->next = delem->next;
 
-	if (dict->head == dict->root)
-		dict->head = dict->root->next;
+	if (dict->head == delem)
+		dict->head = delem->next;
 
-	if (dict->root->next)
-		dict->root->next->prev = dict->root->prev;
+	if (delem->next)
+		delem->next->prev = delem->prev;
 
-	if (dict->tail == dict->root)
-		dict->tail = dict->root->prev;
+	if (dict->tail == delem)
+		dict->tail = delem->prev;
 
-	old_root = dict->root;
-	dict->root = new_root;
 	dict->count--;
 }
 
@@ -410,7 +406,6 @@ void mowgli_dictionary_destroy(mowgli_dictionary_t *dtree,
 		if (destroy_cb != NULL)
 			(*destroy_cb)(n, privdata);
 
-		mowgli_dictionary_unlink(dtree, n);
 		mowgli_free(n);
 	}
 
@@ -692,7 +687,7 @@ void *mowgli_dictionary_delete(mowgli_dictionary_t *dtree, const char *key)
 
 	data = delem->data;
 
-	mowgli_dictionary_unlink(dtree, delem);
+	mowgli_dictionary_unlink_root(dtree);
 	mowgli_heap_free(elem_heap, delem);	
 
 	return data;
