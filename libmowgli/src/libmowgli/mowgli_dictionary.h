@@ -141,4 +141,6 @@ extern void *mowgli_dictionary_retrieve(mowgli_dictionary_t *dtree, const char *
  */
 extern void *mowgli_dictionary_delete(mowgli_dictionary_t *dtree, const char *key);
 
+void mowgli_dictionary_stats(mowgli_dictionary_t *dict, void (*cb)(const char *line, void *privdata), void *privdata);
+
 #endif
