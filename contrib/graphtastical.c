@@ -51,7 +51,7 @@ static void write_channels_dot_file(void *arg)
 	node_t *tn;
 	FILE *f;
 	int errno1, was_errored = 0;
-	dictionary_iteration_state_t state;
+	mowgli_dictionary_iteration_state_t state;
 	int root = 1;
 	mychan_t *pmc;
 
@@ -71,7 +71,7 @@ static void write_channels_dot_file(void *arg)
 
 	slog(LG_DEBUG, "graphtastical: dumping mychans");
 
-	DICTIONARY_FOREACH(mc, &state, mclist)
+	MOWGLI_DICTIONARY_FOREACH(mc, &state, mclist)
 	{
 		fprintf(f, "\"%s\"", mc->name);
 
@@ -123,7 +123,7 @@ static void write_uchannels_dot_file(void *arg)
 	node_t *tn;
 	FILE *f;
 	int errno1, was_errored = 0;
-	dictionary_iteration_state_t state;
+	mowgli_dictionary_iteration_state_t state;
 
 	errno = 0;
 
@@ -141,7 +141,7 @@ static void write_uchannels_dot_file(void *arg)
 
 	slog(LG_DEBUG, "graphtastical: dumping chans");
 
-	DICTIONARY_FOREACH(c, &state, chanlist)
+	MOWGLI_DICTIONARY_FOREACH(c, &state, chanlist)
 	{
 		fprintf(f, "\"%s\"", c->name);
 
