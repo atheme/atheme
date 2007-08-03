@@ -58,6 +58,7 @@ HEADERS = \
 	mowgli_hook.h \
 	mowgli_init.h \
 	mowgli_ioevent.h \
+	mowgli_iterator.h \
 	mowgli_list.h \
 	mowgli_logger.h \
 	mowgli_mempool.h \

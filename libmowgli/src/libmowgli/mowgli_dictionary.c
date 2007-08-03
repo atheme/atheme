@@ -34,16 +34,18 @@
 
 #include "mowgli.h"
 
+static mowgli_heap_t *elem_heap = NULL;
+
 struct mowgli_dictionary_
 {
 	int (*compare_cb)(const char *a, const char *b);
 	mowgli_dictionary_elem_t *root, *head, *tail;
 	unsigned int count;
+	char *id;
 };
 
 /*
- * mowgli_dictionary_create(const char *name, int resolution,
- *                   int (*compare_cb)(const char *a, const char *b)
+ * mowgli_dictionary_create(int (*compare_cb)(const char *a, const char *b)
  *
  * Dictionary object factory.
  *
@@ -63,13 +65,81 @@ mowgli_dictionary_t *mowgli_dictionary_create(int (*compare_cb)(const char *a, c
 
 	dtree->compare_cb = compare_cb;
 
+	if (!elem_heap)
+		elem_heap = mowgli_heap_create(sizeof(mowgli_dictionary_elem_t), 1024, BH_NOW);
+
 	return dtree;
 }
 
 /*
- * mowgli_dictionary_retune(mowgli_dictionary_t *dicy, const char *key)
+ * mowgli_dictionary_create_named(const char *name, 
+ *     int (*compare_cb)(const char *a, const char *b)
  *
- * Rebalances the tree around the element which belongs to key.
+ * Dictionary object factory.
+ *
+ * Inputs:
+ *     - dictionary name
+ *     - function to use for comparing two entries in the dtree
+ *
+ * Outputs:
+ *     - on success, a new dictionary object.
+ *
+ * Side Effects:
+ *     - if services runs out of memory and cannot allocate the object,
+ *       the program will abort.
+ */
+mowgli_dictionary_t *mowgli_dictionary_create_named(const char *name,
+	int (*compare_cb)(const char *a, const char *b))
+{
+	mowgli_dictionary_t *dtree = (mowgli_dictionary_t *) mowgli_alloc(sizeof(mowgli_dictionary_t));
+
+	dtree->compare_cb = compare_cb;
+	dtree->id = strdup(name);
+
+	if (!elem_heap)
+		elem_heap = mowgli_heap_create(sizeof(mowgli_dictionary_elem_t), 1024, BH_NOW);
+
+	return dtree;
+}
+
+/*
+ * mowgli_dictionary_retune(mowgli_dictionary_t *dict, const char *key)
+ *
+ * Retunes the tree, self-optimizing for the element which belongs to key.
+ *
+ * Tuning the tree structure is a very complex operation. Unlike
+ * 2-3-4 trees and BTree/BTree+ structures, this structure is a
+ * constantly evolving algorithm.
+ *
+ * Instead of maintaining a balanced tree, we constantly adapt the
+ * tree by nominating a new root nearby the most recently looked up
+ * or added data. We are constantly retuning ourselves instead of
+ * doing massive O(n) rebalance operations as seen in BTrees,
+ * and the level of data stored in a tree is dynamic, instead of being
+ * held to a restricted design like other trees.
+ *
+ * Moreover, we are different than a radix/patricia tree, because we
+ * don't statically allocate positions. Radix trees have the advantage
+ * of not requiring tuning or balancing operations while having the
+ * disadvantage of requiring a large amount of memory to store
+ * large trees. Our efficiency as far as speed goes is not as
+ * fast as a radix tree; but is close to it.
+ *
+ * The retuning algorithm uses the comparison callback that is
+ * passed in the initialization of the tree container. If the
+ * comparator returns a value which is less than zero, we push the
+ * losing node out of the way, causing it to later be reparented
+ * with another node. The winning child of this comparison is always
+ * the right-most node.
+ *
+ * Once we have reached the key which has been targeted, or have reached
+ * a deadend, we nominate the nearest node as the new root of the tree.
+ * If an exact match has been found, the new root becomes the node which
+ * represents key.
+ *
+ * This results in a tree which can self-optimize for both critical
+ * conditions: nodes which are distant and similar and trees which
+ * have ordered lookups.
  *
  * Inputs:
  *     - node to begin search from
@@ -78,7 +148,7 @@ mowgli_dictionary_t *mowgli_dictionary_create(int (*compare_cb)(const char *a, c
  *     - none
  *
  * Side Effects:
- *     - the tree is rebalanced.
+ *     - a new root node is nominated.
  */
 void
 mowgli_dictionary_retune(mowgli_dictionary_t *dict, const char *key)
@@ -164,6 +234,11 @@ mowgli_dictionary_retune(mowgli_dictionary_t *dict, const char *key)
  *
  * Links a dictionary tree element to the dictionary.
  *
+ * When we add new nodes to the tree, it becomes the
+ * next nominated root. This is perhaps not a wise
+ * optimization because of automatic retuning, but
+ * it keeps the code simple.
+ *
  * Inputs:
  *     - dictionary tree
  *     - dictionary tree element
@@ -233,7 +308,7 @@ mowgli_dictionary_link(mowgli_dictionary_t *dict,
 			dict->root->data = delem->data;
 			dict->count--;
 
-			mowgli_free(delem);
+			mowgli_heap_free(elem_heap, delem);
 		}
 	}
 }
@@ -243,6 +318,10 @@ mowgli_dictionary_link(mowgli_dictionary_t *dict,
  *     mowgli_dictionary_elem_t *delem)
  *
  * Unlinks a dictionary tree element from the dictionary.
+ *
+ * This function simply forces a new tree root, and then
+ * possibly retunes the tree. Otherwise, it just keeps
+ * things in a state of dismay (for now at least).
  *
  * Inputs:
  *     - dictionary tree
@@ -574,7 +653,7 @@ mowgli_dictionary_elem_t *mowgli_dictionary_add(mowgli_dictionary_t *dict, const
 	return_val_if_fail(data != NULL, NULL);
 	return_val_if_fail(mowgli_dictionary_find(dict, key) == NULL, NULL);
 
-	delem = (mowgli_dictionary_elem_t *) mowgli_alloc(sizeof(mowgli_dictionary_elem_t));
+	delem = mowgli_heap_alloc(elem_heap);
 	delem->key = strdup(key);
 	delem->data = data;
 
@@ -614,7 +693,7 @@ void *mowgli_dictionary_delete(mowgli_dictionary_t *dtree, const char *key)
 	data = delem->data;
 
 	mowgli_dictionary_unlink(dtree, delem);
-	mowgli_free(delem);	
+	mowgli_heap_free(elem_heap, delem);	
 
 	return data;
 }

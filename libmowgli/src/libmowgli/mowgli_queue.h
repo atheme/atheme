@@ -34,10 +34,7 @@
 #ifndef __MOWGLI_QUEUE_H__
 #define __MOWGLI_QUEUE_H__
 
-typedef struct mowgli_queue_ {
-	struct mowgli_queue_ *prev, *next;
-	void *data;
-} mowgli_queue_t;
+typedef mowgli_iterator_t mowgli_queue_t;
 
 extern void mowgli_queue_init(void);
 extern mowgli_queue_t *mowgli_queue_push(mowgli_queue_t *head, void *data);

@@ -1,6 +1,6 @@
 /*
  * libmowgli: A collection of useful routines for programming.
- * mowgli.h: Base header for libmowgli. Includes everything.
+ * mowgli_iterator.h: Iterators.
  *
  * Copyright (c) 2007 William Pitcock <nenolod -at- sacredspiral.co.uk>
  *
@@ -31,55 +31,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef __MOWGLI_STAND_H__
-#define __MOWGLI_STAND_H__
+#ifndef __MOWGLI_ITERATOR_H__
+#define __MOWGLI_ITERATOR_H__
 
-#ifdef __cplusplus
-# define MOWGLI_DECLS_START extern "C" {
-# define MOWGLI_DECLS_END   };
-#else
-# define MOWGLI_DECLS_START
-# define MOWGLI_DECLS_END
-#endif
+typedef struct _mowgli_iterator {
+	struct _mowgli_iterator *prev, *next;
+	void *data;
+} mowgli_iterator_t;
 
-#ifdef MOWGLI_CORE
-# include "mowgli_config.h"
-#endif
-
-#include "mowgli_stdinc.h"
-
-MOWGLI_DECLS_START
-
-#include "mowgli_logger.h"
-#include "mowgli_assert.h"
-#include "mowgli_exception.h"
-#include "mowgli_iterator.h"
-
-#include "mowgli_alloc.h"
-#include "mowgli_spinlock.h"
-#include "mowgli_list.h"
-#include "mowgli_object_class.h"
-#include "mowgli_object.h"
-#include "mowgli_dictionary.h"
-#include "mowgli_mempool.h"
-#include "mowgli_module.h"
-#include "mowgli_queue.h"
-#include "mowgli_hash.h"
-#include "mowgli_heap.h"
-#include "mowgli_init.h"
-#include "mowgli_bitvector.h"
-#include "mowgli_hook.h"
-#include "mowgli_signal.h"
-#include "mowgli_error_backtrace.h"
-#include "mowgli_random.h"
-#include "mowgli_ioevent.h"
-#include "mowgli_argstack.h"
-#include "mowgli_object_messaging.h"
-#include "mowgli_object_metadata.h"
-#include "mowgli_global_storage.h"
-#include "mowgli_string.h"
-
-MOWGLI_DECLS_END
+/* The following are macros which can be used with iterators. */
+#define MOWGLI_ITER_FOREACH(n, head) for (n = (head); n; n = n->next)
+#define MOWGLI_ITER_FOREACH_NEXT(n, head) for (n = (head); n->next; n = n->next)
+#define MOWGLI_ITER_FOREACH_PREV(n, tail) for (n = (tail); n; n = n->prev)
+#define MOWGLI_ITER_FOREACH_SAFE(n, tn, head) for (n = (head), tn = n ? n->next : NULL; n != NULL; n = tn, tn = n ? n->next : NULL)
 
 #endif
-
