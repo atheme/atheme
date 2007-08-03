@@ -406,7 +406,8 @@ void mowgli_dictionary_destroy(mowgli_dictionary_t *dtree,
 		if (destroy_cb != NULL)
 			(*destroy_cb)(n, privdata);
 
-		mowgli_free(n);
+		mowgli_free(n->key);
+		mowgli_heap_free(elem_heap, n);
 	}
 
 	mowgli_free(dtree);
@@ -652,6 +653,13 @@ mowgli_dictionary_elem_t *mowgli_dictionary_add(mowgli_dictionary_t *dict, const
 	delem->key = strdup(key);
 	delem->data = data;
 
+	if (delem->key == NULL)
+	{
+		mowgli_log("major WTF: delem->key is NULL, not adding node.", key);
+		mowgli_heap_free(elem_heap, delem);
+		return NULL;
+	}
+
 	mowgli_dictionary_link(dict, delem);
 
 	return delem;
@@ -687,6 +695,7 @@ void *mowgli_dictionary_delete(mowgli_dictionary_t *dtree, const char *key)
 
 	data = delem->data;
 
+	mowgli_free(delem->key);
 	mowgli_dictionary_unlink_root(dtree);
 	mowgli_heap_free(elem_heap, delem);	
 

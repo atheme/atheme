@@ -45,7 +45,7 @@ struct mowgli_dictionary_elem_
 {
 	mowgli_dictionary_elem_t *left, *right, *prev, *next;
 	void *data;
-	const char *key;
+	char *key;
 };
 
 /*
