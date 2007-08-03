@@ -277,7 +277,7 @@ static void ultimate3_on_login(char *origin, char *user, char *wantedhost)
 	 * state if logged in to correct nick, sorry -- jilles
 	 */
 	if (should_reg_umode(u))
-		sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, origin, time(NULL));
+		sts(":%s SVSMODE %s +rd %ld", me.name, origin, time(NULL));
 }
 
 /* protocol-specific stuff to do on login */
@@ -287,7 +287,7 @@ static boolean_t ultimate3_on_logout(char *origin, char *user, char *wantedhost)
 		return FALSE;
 
 	if (!nicksvs.no_nick_ownership)
-		sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, origin, time(NULL));
+		sts(":%s SVSMODE %s -r+d %ld", me.name, origin, time(NULL));
 
 	return FALSE;
 }
@@ -316,7 +316,7 @@ static void ultimate3_sethost_sts(char *source, char *target, char *host)
 		return;
 
 	notice(source, target, "Setting your host to \2%s\2.", host);
-	sts(":%s SVSMODE %s +x", source, target);
+	sts(":%s SVSMODE %s +x", me.name, target);
 	sts(":%s SETHOST %s :%s", me.name, target, host);
 }
 
@@ -571,7 +571,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		/* fix up +r if necessary -- jilles */
 		if (realchange && should_reg_umode(si->su))
 			/* changed nick to registered one, reset +r */
-			sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, parv[0], time(NULL));
+			sts(":%s SVSMODE %s +rd %ld", me.name, parv[0], time(NULL));
 
 		handle_nickchange(si->su);
 	}
@@ -746,7 +746,7 @@ static void nick_group(hook_user_req_t *hdata)
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
 	if (u != NULL && should_reg_umode(u))
-		sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, u->nick, time(NULL));
+		sts(":%s SVSMODE %s +rd %ld", me.name, u->nick, time(NULL));
 }
 
 static void nick_ungroup(hook_user_req_t *hdata)
@@ -755,7 +755,7 @@ static void nick_ungroup(hook_user_req_t *hdata)
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
 	if (u != NULL && !nicksvs.no_nick_ownership)
-		sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, u->nick, time(NULL));
+		sts(":%s SVSMODE %s -r+d %ld", me.name, u->nick, time(NULL));
 }
 
 void _modinit(module_t * m)
