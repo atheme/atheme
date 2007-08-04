@@ -313,22 +313,6 @@ mowgli_dictionary_link(mowgli_dictionary_t *dict,
 	}
 }
 
-/* recursive helper function for unlink */
-static mowgli_dictionary_elem_t *
-delem_combine(mowgli_dictionary_elem_t *left, mowgli_dictionary_elem_t *right)
-{
-	mowgli_dictionary_elem_t *lrrl;
-
-	if (left == NULL)
-		return right;
-	if (right == NULL)
-		return left;
-	lrrl = delem_combine(left->right, right->left);
-	left->right = right;
-	right->left = lrrl;
-	return left;
-}
-
 /*
  * mowgli_dictionary_unlink_root(mowgli_dictionary_t *dict)
  *
@@ -346,13 +330,39 @@ delem_combine(mowgli_dictionary_elem_t *left, mowgli_dictionary_elem_t *right)
 void
 mowgli_dictionary_unlink_root(mowgli_dictionary_t *dict)
 {
-	mowgli_dictionary_elem_t *delem, *old_root, *new_root;
+	mowgli_dictionary_elem_t *delem, *nextnode, *parentofnext;
 
 	delem = dict->root;
 	if (delem == NULL)
 		return;
 
-	dict->root = delem_combine(dict->root->left, dict->root->right);
+	if (dict->root->left == NULL)
+		dict->root = dict->root->right;
+	else if (dict->root->right == NULL)
+		dict->root = dict->root->left;
+	else
+	{
+		/* Make the node with the next highest key the new root.
+		 * This node has a NULL left pointer. */
+		nextnode = delem->next;
+		soft_assert(nextnode->left == NULL);
+		if (nextnode == delem->right)
+		{
+			dict->root = nextnode;
+			dict->root->left = delem->left;
+		}
+		else
+		{
+			parentofnext = delem->right;
+			while (parentofnext->left != NULL && parentofnext->left != nextnode)
+				parentofnext = parentofnext->left;
+			soft_assert(parentofnext->left == nextnode);
+			parentofnext->left = nextnode->right;
+			dict->root = nextnode;
+			dict->root->left = delem->left;
+			dict->root->right = delem->right;
+		}
+	}
 
 	/* linked list */
 	if (delem->prev != NULL)
