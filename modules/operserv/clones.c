@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 Atheme Development Group
+ * Copyright (c) 2006-2007 Atheme Development Group
  * Rights to this code are documented in doc/LICENCE.
  *
  * This file contains functionality implementing clone detection.
@@ -229,11 +229,20 @@ static int is_exempt(const char *ip)
 {
 	node_t *n;
 
+	/* first check for an exact match */
 	LIST_FOREACH(n, clone_exempts.head)
 	{
 		cexcept_t *c = n->data;
 
 		if (!strcmp(ip, c->ip))
+			return c->clones;
+	}
+	/* then look for cidr */
+	LIST_FOREACH(n, clone_exempts.head)
+	{
+		cexcept_t *c = n->data;
+
+		if (!match_ips(c->ip, ip))
 			return c->clones;
 	}
 
