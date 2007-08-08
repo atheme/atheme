@@ -56,7 +56,7 @@ void _modinit(module_t *m)
 	help_addentry(cs_helptree, "SOP", "help/cservice/xop", NULL);
 	help_addentry(cs_helptree, "AOP", "help/cservice/xop", NULL);
 	help_addentry(cs_helptree, "VOP", "help/cservice/xop", NULL);
-	if (chansvs.ca_hop != chansvs.ca_vop)
+	if (ircd->uses_halfops)
 		help_addentry(cs_helptree, "HOP", "help/cservice/xop", NULL);
 	help_addentry(cs_helptree, "FORCEXOP", "help/cservice/forcexop", NULL);
 }
