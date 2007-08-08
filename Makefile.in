@@ -80,6 +80,7 @@ maintainer-clean: distclean
 	${RM} -f configure aclocal.m4
 
 depend:
+	@[ -f include/serno.h ] || echo '#define SERNO "unknown"' >include/serno.h
 	@for i in $(SUBDIRS); do \
 		echo "depend ==> $$i"; \
 		cd $$i; \
