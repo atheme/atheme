@@ -37,6 +37,7 @@
 #define PRIV_OMODE           "operserv:omode"
 #define PRIV_AKILL           "operserv:akill"
 #define PRIV_MASS_AKILL      "operserv:massakill"
+#define PRIV_AKILL_ANYMASK   "operserv:akill-anymask"
 #define PRIV_JUPE            "operserv:jupe"
 #define PRIV_NOOP            "operserv:noop"
 #define PRIV_GLOBAL          "operserv:global"

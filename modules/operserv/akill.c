@@ -248,7 +248,7 @@ static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 				i++;
 		}
 
-		if (i < 4 && (strchr(kuser, '*') || strchr(kuser, '?')))
+		if (i < 4 && (strchr(kuser, '*') || strchr(kuser, '?')) && !has_priv(si, PRIV_AKILL_ANYMASK))
 		{
 			command_fail(si, fault_badparams, _("Invalid user@host: \2%s@%s\2. At least four non-wildcard characters are required."), kuser, khost);
 			return;
