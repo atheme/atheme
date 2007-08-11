@@ -51,7 +51,6 @@ static void do_sethost_all(myuser_t *mu, char *host)
 {
 	node_t *n;
 	user_t *u;
-	char luhost[BUFSIZE];
 
 	LIST_FOREACH(n, mu->logins.head)
 	{
@@ -61,32 +60,21 @@ static void do_sethost_all(myuser_t *mu, char *host)
 			continue;
 		strlcpy(u->vhost, host, HOSTLEN);
 		sethost_sts(nicksvs.nick, u->nick, u->vhost);
-		strlcpy(luhost, u->user, BUFSIZE);
-		strlcat(luhost, "@", BUFSIZE);
-		strlcat(luhost, u->vhost, BUFSIZE);
-		metadata_add(mu, METADATA_USER, "private:host:vhost", luhost);
 	}
 }
 
 static void do_sethost(user_t *u, char *host)
 {
-	char luhost[BUFSIZE];
-
 	if (!strcmp(u->vhost, host))
 		return;
 	strlcpy(u->vhost, host, HOSTLEN);
 	sethost_sts(nicksvs.nick, u->nick, u->vhost);
-	strlcpy(luhost, u->user, BUFSIZE);
-	strlcat(luhost, "@", BUFSIZE);
-	strlcat(luhost, u->vhost, BUFSIZE);
-	metadata_add(u->myuser, METADATA_USER, "private:host:vhost", luhost);
 }
 
 static void do_restorehost_all(myuser_t *mu)
 {
 	node_t *n;
 	user_t *u;
-	char luhost[BUFSIZE];
 
 	LIST_FOREACH(n, mu->logins.head)
 	{
@@ -96,10 +84,6 @@ static void do_restorehost_all(myuser_t *mu)
 			continue;
 		strlcpy(u->vhost, u->host, HOSTLEN);
 		sethost_sts(nicksvs.nick, u->nick, u->host);
-		strlcpy(luhost, u->user, BUFSIZE);
-		strlcat(luhost, "@", BUFSIZE);
-		strlcat(luhost, u->host, BUFSIZE);
-		metadata_add(mu, METADATA_USER, "private:host:vhost", luhost);
 	}
 }
 

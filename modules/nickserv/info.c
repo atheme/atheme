@@ -43,7 +43,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	mynick_t *mn = NULL;
 	user_t *u;
 	char *name = parv[0];
-	char buf[BUFSIZE], strfbuf[32], lastlogin[32];
+	char buf[BUFSIZE], strfbuf[32], lastlogin[32], *p;
 	struct tm tm, tm2;
 	metadata_t *md;
 	node_t *n;
@@ -71,12 +71,24 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("Registered: %s (%s ago)"), strfbuf, time_ago(mu->registered));
 
+	if ((md = metadata_find(mu, METADATA_USER, "private:host:vhost")))
+	{
+		strlcpy(buf, md->value, sizeof buf);
+		if ((md = metadata_find(mu, METADATA_USER, "private:usercloak")))
+		{
+			p = strchr(buf, '@');
+			if (p == NULL)
+				p = buf;
+			else
+				p++;
+			strlcpy(p, md->value, sizeof buf - (p - buf));
+		}
+		command_success_nodata(si, _("Last address: %s"), buf);
+	}
 	if (has_priv(si, PRIV_USER_AUSPEX))
 	{
 		if ((md = metadata_find(mu, METADATA_USER, "private:host:actual")))
-			command_success_nodata(si, _("Last address: %s"), md->value);
-		if ((md = metadata_find(mu, METADATA_USER, "private:host:vhost")))
-			command_success_nodata(si, _("Last virtual address: %s"), md->value);
+			command_success_nodata(si, _("Last real address: %s"), md->value);
 	}
 
 	if (LIST_LENGTH(&mu->logins) == 0)
