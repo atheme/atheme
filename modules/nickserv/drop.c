@@ -66,6 +66,12 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (!has_priv(si, PRIV_USER_ADMIN) && metadata_find(mu, METADATA_USER, "private:freeze:freezer"))
+	{
+		command_fail(si, fault_authfail, nicksvs.no_nick_ownership ? "You cannot login as \2%s\2 because the account has been frozen." : "You cannot identify to \2%s\2 because the nickname has been frozen.", mu->name);
+		return;
+	}
+
 	if ((pass || !has_priv(si, PRIV_USER_ADMIN)) && !verify_password(mu, pass))
 	{
 		command_fail(si, fault_authfail, _("Authentication failed. Invalid password for \2%s\2."), mu->name);
