@@ -70,10 +70,14 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Information on \2%s\2:"), mu->name);
 
 	command_success_nodata(si, _("Registered: %s (%s ago)"), strfbuf, time_ago(mu->registered));
-	if (has_priv(si, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:host:actual")))
-		command_success_nodata(si, _("Last address: %s"), md->value);
-	else if ((md = metadata_find(mu, METADATA_USER, "private:host:vhost")))
-		command_success_nodata(si, _("Last address: %s"), md->value);
+
+	if (has_priv(si, PRIV_USER_AUSPEX))
+	{
+		if ((md = metadata_find(mu, METADATA_USER, "private:host:actual")))
+			command_success_nodata(si, _("Last address: %s"), md->value);
+		if ((md = metadata_find(mu, METADATA_USER, "private:host:vhost")))
+			command_success_nodata(si, _("Last virtual address: %s"), md->value);
+	}
 
 	if (LIST_LENGTH(&mu->logins) == 0)
 		command_success_nodata(si, _("Last seen: %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
