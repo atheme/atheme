@@ -1576,9 +1576,6 @@ void expire_check(void *arg)
 
 			if ((CURRTIME - mc->used) >= chansvs.expiry)
 			{
-				if (MU_HOLD & mc->founder->flags)
-					continue;
-
 				if (MC_HOLD & mc->flags)
 					continue;
 

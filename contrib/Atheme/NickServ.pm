@@ -280,8 +280,8 @@ sub help {
 
 =head2 hold
 
-HOLD prevents an account and all nicknames and channels
-registered to it from expiring.
+HOLD prevents an account and all nicknames registered
+to it from expiring.
 
 Syntax: HOLD <nick> ON|OFF
 

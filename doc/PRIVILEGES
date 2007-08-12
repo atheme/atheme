@@ -28,7 +28,7 @@ To all IRCops and services operators (has_any_priv()):
 	missing, ability to use /os help
 
 To all config services operators:
-	account does not expire (unlike HOLD, registered channels do);
+	account does not expire (unlike HOLD, extra grouped nicknames do);
 	this is to avoid someone else registering the account and taking
 	the privs
 
