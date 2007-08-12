@@ -641,6 +641,7 @@ void handle_eob(server_t *s)
 int floodcheck(user_t *u, user_t *t)
 {
 	char *from;
+	static time_t last_ignore_notice = 0;
 
 	if (t == NULL)
 		from = me.name;
@@ -654,7 +655,16 @@ int floodcheck(user_t *u, user_t *t)
 
 	/* Check if we match a services ignore */
 	if (svsignore_find(u))
+	{
+		if (u->msgs == 0 && last_ignore_notice != CURRTIME)
+		{
+			/* tell them once per session, don't flood */
+			u->msgs = 1;
+			last_ignore_notice = CURRTIME;
+			notice(from, u->nick, _("You are on services ignore. You may not use any service."));
+		}
 		return 1;
+	}
 
 	if (config_options.flood_msgs)
 	{
