@@ -6,7 +6,6 @@
 
 htmldir=${1:-tools/htmlhelp}
 helpdir=${2:-help}
-idstring='$Id: html_helpfiles.sh 8337 2007-05-29 15:48:57Z jilles $'
 
 mkdir -p "$htmldir"
 
@@ -45,6 +44,6 @@ for d in $helpdir/*; do
 	} > "$htmldir/$service.html"
 done
 echo "</ul>"
-echo "<p><i>$idstring</i>"
+echo "<p><i>Generated `LC_ALL=C date`</i>"
 echo "</body></html>"
 } > "$htmldir/index.html"
