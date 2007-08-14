@@ -65,12 +65,14 @@ struct cmode_ inspircd_mode_list[] = {
 };
 
 static boolean_t check_flood(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+static boolean_t check_nickflood(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 static boolean_t check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 static boolean_t check_forward(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 static boolean_t check_rejoindelay(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 
 struct extmode inspircd_ignore_mode_list[] = {
   { 'f', check_flood },
+  { 'F', check_nickflood },
   { 'j', check_jointhrottle },
   { 'L', check_forward },
   { 'J', check_rejoindelay },
@@ -108,7 +110,12 @@ static int has_protocol = 0;
 
 static boolean_t check_flood(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
 {
+	/* +F doesn't support *, so don't bother checking for it -- w00t */
+	return check_jointhrottle(value, c, mc, u, mu);
+}
 
+static boolean_t check_nickflood(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+{
 	return *value == '*' ? check_jointhrottle(value + 1, c, mc, u, mu) : check_jointhrottle(value, c, mc, u, mu);
 }
 
