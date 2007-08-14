@@ -86,6 +86,8 @@ struct ConfOption
 
   boolean_t verbose_wallops;	/* verbose wallops? :)        */
   boolean_t use_privmsg;        /* use privmsg instead of notice */
+
+  unsigned int default_clone_limit;  /* default clone limit */
 } config_options;
 
 struct Database

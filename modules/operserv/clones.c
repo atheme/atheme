@@ -17,7 +17,6 @@ DECLARE_MODULE_V1
 );
 
 #define DEFAULT_WARN_CLONES	3 /* IPs with more than this are warned about */
-#define DEFAULT_KLINE_CLONES	6 /* IPs with this or more are banned */
 #define EXEMPT_GRACE		10 /* exempt IPs exceeding their allowance by this are banned */
 
 static void clones_newuser(void *);
@@ -478,7 +477,7 @@ static void clones_newuser(void *vptr)
 			else
 				he->lastaction_clones = i;
 			he->lastaction = CURRTIME;
-			if (allowed == 0 && i < DEFAULT_KLINE_CLONES)
+			if (allowed == 0 && i < config_options.default_clone_limit)
 				snoop("CLONES: %d clones on %s (%s!%s@%s)", i, u->ip, u->nick, u->user, u->host);
 			else if (allowed != 0 && i < allowed + EXEMPT_GRACE)
 				snoop("CLONES: %d clones on %s (%s!%s@%s) (%d allowed)", i, u->ip, u->nick, u->user, u->host, allowed);

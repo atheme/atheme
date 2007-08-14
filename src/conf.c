@@ -162,6 +162,7 @@ static int c_gi_kline_time(config_entry_t *);
 static int c_gi_commit_interval(config_entry_t *);
 static int c_gi_expire(config_entry_t *);
 static int c_gi_secure(config_entry_t *);
+static int c_gi_default_clone_limit(config_entry_t *);
 
 static BlockHeap *conftable_heap;
 
@@ -314,7 +315,7 @@ void conf_init(void)
 		config_options.global = config_options.languagefile = NULL;
 
 	me.recontime = me.restarttime = me.maxlogins = me.maxusers = me.maxnicks = me.maxchans = me.emaillimit = me.emailtime = 
-		config_options.flood_msgs = config_options.flood_time = config_options.kline_time = config_options.commit_interval = 0;
+		config_options.flood_msgs = config_options.flood_time = config_options.kline_time = config_options.commit_interval = config_options.default_clone_limit = 0;
 
 	nicksvs.expiry = chansvs.expiry = 0;
 
@@ -586,6 +587,7 @@ void init_newconf(void)
 	add_conf_item("KLINE_TIME", &conf_gi_table, c_gi_kline_time);
 	add_conf_item("COMMIT_INTERVAL", &conf_gi_table, c_gi_commit_interval);
 	add_conf_item("EXPIRE", &conf_gi_table, c_gi_expire);
+	add_conf_item("DEFAULT_CLONE_LIMIT", &conf_gi_table, c_gi_default_clone_limit);
 
 	/* chanserv{} block */
 	add_conf_item("NICK", &conf_ci_table, c_ci_nick);
@@ -1479,6 +1481,16 @@ static int c_gi_flood_msgs(config_entry_t *ce)
 	return 0;
 }
 
+static int c_gi_default_clone_limit(config_entry_t *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	config_options.default_clone_limit = ce->ce_vardatanum;
+
+	return 0;
+}
+
 static int c_gi_flood_time(config_entry_t *ce)
 {
 	if (ce->ce_vardata == NULL)
@@ -2098,6 +2110,9 @@ boolean_t conf_check(void)
 
 	if (config_options.flood_msgs && !config_options.flood_time)
 		config_options.flood_time = 10;
+
+	if (!config_options.default_clone_limit)
+		config_options.default_clone_limit = 6;
 
 	/* recall that commit_interval is in seconds */
 	if ((!config_options.commit_interval) || (config_options.commit_interval < 60) || (config_options.commit_interval > 3600))
