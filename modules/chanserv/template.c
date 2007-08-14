@@ -141,14 +141,12 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		/* probably no need to special-case founder here -- jilles */
-#if 0
-		if (is_founder(mc, si->smu))
+		/* founder may always set flags -- jilles */
+		restrictflags = chanacs_source_flags(mc, si);
+		if (restrictflags & CA_FOUNDER)
 			restrictflags = ca_all;
 		else
-#endif
 		{
-			restrictflags = chanacs_source_flags(mc, si);
 			if (!(restrictflags & CA_FLAGS))
 			{
 				command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
