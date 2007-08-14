@@ -61,6 +61,7 @@ struct cmode_ inspircd_mode_list[] = {
   { 'P', CMODE_NOCAPS   },
   { 'z', CMODE_SSLONLY	},
   { 'T', CMODE_NONOTICE },
+  { 'u', CMODE_HIDING   },
   { '\0', 0 }
 };
 
