@@ -47,7 +47,6 @@ static int c_cservice(config_entry_t *);
 static int c_gservice(config_entry_t *);
 static int c_oservice(config_entry_t *);
 static int c_general(config_entry_t *);
-static int c_database(config_entry_t *);
 static int c_uplink(config_entry_t *);
 static int c_nickserv(config_entry_t *);
 static int c_saslserv(config_entry_t *);
@@ -136,13 +135,6 @@ static int c_gs_user(config_entry_t *);
 static int c_gs_host(config_entry_t *);
 static int c_gs_real(config_entry_t *);
 
-/* Database information. */
-static int c_db_user(config_entry_t *);
-static int c_db_host(config_entry_t *);
-static int c_db_password(config_entry_t *);
-static int c_db_database(config_entry_t *);
-static int c_db_port(config_entry_t *);
-
 /* language:: stuff */
 static int c_la_name(config_entry_t *);
 static int c_la_translator(config_entry_t *);
@@ -213,7 +205,6 @@ list_t conf_ci_table;
 list_t conf_gl_table;
 list_t conf_oi_table;
 list_t conf_ni_table;
-list_t conf_db_table;
 list_t conf_gi_table;
 list_t conf_ms_table;
 list_t conf_la_table;
@@ -539,7 +530,6 @@ void init_newconf(void)
 	add_top_conf("GAMESERV", c_gameserv);
 	add_top_conf("UPLINK", c_uplink);
 	add_top_conf("GENERAL", c_general);
-	add_top_conf("DATABASE", c_database);
 	add_top_conf("LOADMODULE", c_loadmodule);
 	add_top_conf("OPERCLASS", c_operclass);
 	add_top_conf("OPERATOR", c_operator);
@@ -643,13 +633,6 @@ void init_newconf(void)
 	add_conf_item("HOST", &conf_gs_table, c_gs_host);
 	add_conf_item("REAL", &conf_gs_table, c_gs_real);
 	
-	/* database{} block */
-	add_conf_item("USER", &conf_db_table, c_db_user);
-	add_conf_item("HOST", &conf_db_table, c_db_host);
-	add_conf_item("PASSWORD", &conf_db_table, c_db_password);
-	add_conf_item("DATABASE", &conf_db_table, c_db_database);
-	add_conf_item("PORT", &conf_db_table, c_db_port);
-
 	/* language:: stuff */
 	add_conf_item("NAME", &conf_la_table, c_la_name);
 	add_conf_item("TRANSLATOR", &conf_la_table, c_la_translator);
@@ -700,12 +683,6 @@ static int c_memoserv(config_entry_t *ce)
 static int c_gameserv(config_entry_t *ce)
 {
 	subblock_handler(ce, &conf_gs_table);
-	return 0;
-}
-
-static int c_database(config_entry_t *ce)
-{
-	subblock_handler(ce, &conf_db_table);
 	return 0;
 }
 
@@ -1792,56 +1769,6 @@ static int c_gl_real(config_entry_t *ce)
 		PARAM_ERROR(ce);
 
 	globsvs.real = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_db_user(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	database_options.user = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_db_host(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	database_options.host = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_db_password(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	database_options.pass = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_db_database(config_entry_t *ce)
-{
-	if (ce->ce_vardata == NULL)
-		PARAM_ERROR(ce);
-
-	database_options.database = sstrdup(ce->ce_vardata);
-
-	return 0;
-}
-
-static int c_db_port(config_entry_t *ce)
-{
-	if (ce->ce_vardatanum == 0)
-		PARAM_ERROR(ce);
-
-	database_options.port = ce->ce_vardatanum;
 
 	return 0;
 }

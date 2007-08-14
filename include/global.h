@@ -90,15 +90,6 @@ struct ConfOption
   unsigned int default_clone_limit;  /* default clone limit */
 } config_options;
 
-struct Database
-{
-  char *user;
-  char *pass;
-  char *database;
-  char *host;
-  unsigned int port;
-} database_options;
-
 /* keep track of how many of what we have */
 struct cnt
 {
