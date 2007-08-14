@@ -111,7 +111,7 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	LIST_FOREACH(n, si->smu->chanacs.head)
 	{
 		ca = n->data;
-		if (is_founder(ca->mychan, si->smu))
+		if (ca->level & CA_FOUNDER)
 			tcnt++;
 	}
 

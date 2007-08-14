@@ -377,7 +377,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 			LIST_FOREACH(n, tmu->chanacs.head)
 			{
 				ca = n->data;
-				if (is_founder(ca->mychan, tmu))
+				if (ca->level & CA_FOUNDER)
 					tcnt++;
 			}
 

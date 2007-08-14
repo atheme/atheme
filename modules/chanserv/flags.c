@@ -224,11 +224,11 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		/* founder may always set flags -- jilles */
-		if (is_founder(mc, si->smu))
+		restrictflags = chanacs_source_flags(mc, si);
+		if (restrictflags & CA_FOUNDER)
 			restrictflags = ca_all;
 		else
 		{
-			restrictflags = chanacs_source_flags(mc, si);
 			if (!(restrictflags & CA_FLAGS))
 			{
 				/* allow a user to remove their own access

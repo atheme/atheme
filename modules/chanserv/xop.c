@@ -141,10 +141,9 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], char *leveldesc)
 		mu = myuser_find_ext(uname);
 
 		/* As in /cs flags, allow founder to do anything */
-		if (is_founder(mc, si->smu))
+		restrictflags = chanacs_source_flags(mc, si);
+		if (restrictflags & CA_FOUNDER)
 			restrictflags = ca_all;
-		else
-			restrictflags = chanacs_source_flags(mc, si);
 		/* The following is a bit complicated, to allow for
 		 * possible future denial of granting +f */
 		if (!(restrictflags & CA_FLAGS))
@@ -166,10 +165,9 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], char *leveldesc)
 		mu = myuser_find_ext(uname);
 
 		/* As in /cs flags, allow founder to do anything -- fix for #64: allow self removal. */
-		if (is_founder(mc, si->smu) || mu == si->smu)
+		restrictflags = chanacs_source_flags(mc, si);
+		if (restrictflags & CA_FOUNDER || mu == si->smu)
 			restrictflags = ca_all;
-		else
-			restrictflags = chanacs_source_flags(mc, si);
 		/* The following is a bit complicated, to allow for
 		 * possible future denial of granting +f */
 		if (!(restrictflags & CA_FLAGS))
@@ -549,7 +547,7 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 
 		if (ca->level & CA_AKICK)
 			continue;
-		if (ca->myuser && is_founder(mc, ca->myuser))
+		if (ca->level & CA_FOUNDER)
 			newlevel = CA_INITIAL & ca_all, desc = "Founder";
 		else if (!(~ca->level & ca_sop))
 			newlevel = ca_sop, desc = "SOP";

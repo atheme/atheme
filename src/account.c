@@ -763,7 +763,7 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel, int maxtime
 			LIST_FOREACH(n2, mu->chanacs.head)
 			{
 				ca2 = n2->data;
-				if (is_founder(ca2->mychan, mu))
+				if (ca2->level & CA_FOUNDER)
 					tcnt++;
 			}
 

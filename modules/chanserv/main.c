@@ -384,7 +384,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 
 	if (ircd->uses_owner)
 	{
-		if (u->myuser != NULL && is_founder(mc, u->myuser))
+		if (flags & CA_FOUNDER)
 		{
 			if (flags & CA_AUTOOP && !(noop || cu->modes & ircd->owner_mode))
 			{
