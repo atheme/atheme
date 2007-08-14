@@ -68,9 +68,6 @@ static void cs_cmd_status(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		if (is_founder(mc, si->smu))
-			command_success_nodata(si, _("You are founder on \2%s\2."), mc->name);
-
 		flags = chanacs_source_flags(mc, si);
 		if (flags & CA_AKICK && !(flags & CA_REMOVE))
 			command_success_nodata(si, _("You are banned from \2%s\2."), mc->name);

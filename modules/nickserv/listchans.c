@@ -101,9 +101,6 @@ static void ns_cmd_listchans(sourceinfo_t *si, int parc, char *parv[])
 	{
 		ca = (chanacs_t *)n->data;
 
-		if (is_founder(ca->mychan, mu))
-			command_success_nodata(si, _("Founder of %s"), ca->mychan->name);
-
 		switch (ca->level)
 		{
 			default:
