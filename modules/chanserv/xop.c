@@ -129,6 +129,11 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], char *leveldesc)
 	}
 
 	level = get_template_flags(mc, leveldesc);
+	if (level & CA_FOUNDER)
+	{
+		command_fail(si, fault_noprivs, _("\2%s\2 %s template has founder flag, not allowing xOP command."), chan, leveldesc);
+		return;
+	}
 
 	/* ADD */
 	if (!strcasecmp("ADD", cmd))
@@ -326,13 +331,14 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		return;
 	}
 
-	if (mu == mc->founder)
+	ca = chanacs_open(mc, mu, NULL, TRUE);
+
+	if (ca->level & CA_FOUNDER)
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is the founder for \2%s\2 and may not be added to the %s list."), mu->name, mc->name, leveldesc);
 		return;
 	}
 
-	ca = chanacs_open(mc, mu, NULL, TRUE);
 	if (ca->level == level)
 	{
 		command_fail(si, fault_nochange, _("\2%s\2 is already on the %s list for \2%s\2."), mu->name, leveldesc, mc->name);
@@ -460,13 +466,6 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		return;
 	}
 
-	/* just in case... -- jilles */
-	if (mu == mc->founder)
-	{
-		command_fail(si, fault_noprivs, _("\2%s\2 is the founder for \2%s\2 and may not be removed from the %s list."), mu->name, mc->name, leveldesc);
-		return;
-	}
-
 	object_unref(ca);
 	command_success_nodata(si, _("\2%s\2 has been removed from the %s list for \2%s\2."), mu->name, leveldesc, mc->name);
 	logcommand(si, CMDLOG_SET, "%s %s DEL %s", mc->name, leveldesc, mu->name);
@@ -484,8 +483,7 @@ static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, unsigned int level, c
 	LIST_FOREACH(n, mc->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
-		/* founder is never on any xop list -- jilles */
-		if (ca->myuser != mc->founder && ca->level == level)
+		if (ca->level == level)
 		{
 			if (!ca->myuser)
 				command_success_nodata(si, "%d: \2%s\2", ++i, ca->host);

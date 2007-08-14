@@ -81,7 +81,7 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	/* make sure it isn't already registered */
 	if ((mc = mychan_find(name)))
 	{
-		command_fail(si, fault_alreadyexists, _("\2%s\2 is already registered to \2%s\2."), mc->name, mc->founder->name);
+		command_fail(si, fault_alreadyexists, _("\2%s\2 is already registered to \2%s\2."), mc->name, mychan_founder_names(mc));
 		return;
 	}
 
@@ -125,7 +125,6 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	snoop("REGISTER: \2%s\2 to \2%s\2 as \2%s\2", name, get_oper_name(si), si->smu->name);
 
 	mc = mychan_add(name);
-	mc->founder = si->smu;
 	mc->registered = CURRTIME;
 	mc->used = CURRTIME;
 	mc->mlock_on |= (CMODE_NOEXT | CMODE_TOPIC);
@@ -143,7 +142,7 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		metadata_add(mc, METADATA_CHANNEL, "private:channelts", str);
 	}
 
-	command_success_nodata(si, _("\2%s\2 is now registered to \2%s\2."), mc->name, mc->founder->name);
+	command_success_nodata(si, _("\2%s\2 is now registered to \2%s\2."), mc->name, si->smu->name);
 
 	hdata.si = si;
 	hdata.mc = mc;

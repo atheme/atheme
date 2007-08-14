@@ -101,7 +101,6 @@ static int channel_register(void *conn, int parc, char *parv[])
 	snoop("REGISTER: \2%s\2 to \2%s\2 (via \2xmlrpc\2)", parv[2], parv[1]);
 
 	mc = mychan_add(parv[2]);
-	mc->founder = mu;
 	mc->registered = CURRTIME;
 	mc->used = CURRTIME;
 	mc->mlock_on |= (CMODE_NOEXT | CMODE_TOPIC);

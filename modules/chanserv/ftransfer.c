@@ -43,8 +43,11 @@ static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *tmu;
 	mychan_t *mc;
+	node_t *n;
+	chanacs_t *ca;
 	char *name = parv[0];
 	char *newfndr = parv[1];
+	const char *oldfndr;
 
 	if (!name || !newfndr)
 	{
@@ -65,7 +68,8 @@ static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 	
-	if (tmu == mc->founder)
+	oldfndr = mychan_founder_names(mc);
+	if (!strcmp(tmu->name, oldfndr))
 	{
 		command_fail(si, fault_nochange, _("\2%s\2 is already the founder of \2%s\2."), tmu->name, name);
 		return;
@@ -73,14 +77,22 @@ static void cs_cmd_ftransfer(sourceinfo_t *si, int parc, char *parv[])
 
 	/* no maxchans check (intentional -- this is an oper command) */
 
-	snoop("FTRANSFER: %s transferred %s from %s to %s", get_oper_name(si), name, mc->founder->name, tmu->name);
-	wallops("%s transferred foundership of %s from %s to %s", get_oper_name(si), name, mc->founder->name, tmu->name);
-	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "%s FTRANSFER from %s to %s", mc->name, mc->founder->name, tmu->name);
-	verbose(mc, "Foundership transfer from \2%s\2 to \2%s\2 forced by %s administration.", mc->founder->name, tmu->name, me.netname);
+	snoop("FTRANSFER: %s transferred %s from %s to %s", get_oper_name(si), name, oldfndr, tmu->name);
+	wallops("%s transferred foundership of %s from %s to %s", get_oper_name(si), name, oldfndr, tmu->name);
+	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "%s FTRANSFER from %s to %s", mc->name, oldfndr, tmu->name);
+	verbose(mc, "Foundership transfer from \2%s\2 to \2%s\2 forced by %s administration.", oldfndr, tmu->name, me.netname);
 	command_success_nodata(si, _("Foundership of \2%s\2 has been transferred from \2%s\2 to \2%s\2."),
-		name, mc->founder->name, tmu->name);
+		name, oldfndr, tmu->name);
 
-	mc->founder = tmu;
+	LIST_FOREACH(n, mc->chanacs.head)
+	{
+		ca = n->data;
+		/* CA_FLAGS is always on if CA_FOUNDER is on, this just
+		 * ensures we don't crash if not -- jilles
+		 */
+		if (ca->myuser != NULL && ca->level & CA_FOUNDER)
+			chanacs_modify_simple(ca, CA_FLAGS, CA_FOUNDER);
+	}
 	mc->used = CURRTIME;
 	chanacs_change_simple(mc, tmu, NULL, CA_FOUNDER_0, 0);
 

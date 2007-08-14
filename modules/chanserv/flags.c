@@ -278,13 +278,26 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			}
 			target = tmu->name;
 
-			if (tmu == mc->founder && removeflags & CA_FLAGS)
+			ca = chanacs_open(mc, tmu, NULL, TRUE);
+
+			if (ca->level & CA_FOUNDER && removeflags & CA_FLAGS && !(removeflags & CA_FOUNDER))
 			{
-				command_fail(si, fault_noprivs, _("You may not remove the founder's +f access."));
+				command_fail(si, fault_noprivs, _("You may not remove a founder's +f access."));
 				return;
 			}
-
-			ca = chanacs_open(mc, tmu, NULL, TRUE);
+			if (ca->level & CA_FOUNDER && removeflags & CA_FOUNDER && mychan_num_founders(mc) == 1)
+			{
+				command_fail(si, fault_noprivs, _("You may not remove the last founder."));
+				return;
+			}
+			if (!(ca->level & CA_FOUNDER) && addflags & CA_FOUNDER && mychan_num_founders(mc) >= chansvs.maxfounders)
+			{
+				command_fail(si, fault_noprivs, _("Only %d founders allowed per channel."), chansvs.maxfounders);
+				chanacs_close(ca);
+				return;
+			}
+			if (addflags & CA_FOUNDER)
+				addflags |= CA_FLAGS, removeflags &= ~CA_FLAGS;
 
 			/* If NEVEROP is set, don't allow adding new entries
 			 * except sole +b. Adding flags if the current level
@@ -314,6 +327,11 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		}
 		else
 		{
+			if (addflags & CA_FOUNDER)
+			{
+		                command_fail(si, fault_badparams, _("You may not set founder status on a hostmask."));
+				return;
+			}
 			ca = chanacs_open(mc, NULL, target, TRUE);
 			if (ca->level == 0 && chanacs_is_table_full(ca))
 			{

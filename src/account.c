@@ -196,31 +196,29 @@ void myuser_delete(myuser_t *mu)
 		mc = ca->mychan;
 
 		/* attempt succession */
-		if (mc->founder == mu && (successor = mychan_pick_successor(mc)) != NULL)
+		if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1 && (successor = mychan_pick_successor(mc)) != NULL)
 		{
-			snoop(_("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2"), successor->name, mc->name, mc->founder->name);
+			snoop(_("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2"), successor->name, mc->name, mu->name);
 			slog(LG_REGISTER, "myuser_delete(): giving channel %s to %s (unused %ds, founder %s, chanacs %d)",
 					mc->name, successor->name,
 					CURRTIME - mc->used,
-					mc->founder->name,
+					mu->name,
 					LIST_LENGTH(&mc->chanacs));
 			if (chansvs.me != NULL)
-				verbose(mc, "Foundership changed to \2%s\2 because \2%s\2 was dropped.", successor->name, mc->founder->name);
+				verbose(mc, "Foundership changed to \2%s\2 because \2%s\2 was dropped.", successor->name, mu->name);
 
 			chanacs_change_simple(mc, successor, NULL, CA_FOUNDER_0, 0);
-			mc->founder = successor;
-
 			if (chansvs.me != NULL)
-				myuser_notice(chansvs.nick, mc->founder, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, mc->founder->name);
+				myuser_notice(chansvs.nick, successor, "You are now founder on \2%s\2 (as \2%s\2).", mc->name, successor->name);
+			object_unref(ca);
 		}
-
 		/* no successor found */
-		if (mc->founder == mu)
+		else if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1)
 		{
 			snoop(_("DELETE: \2%s\2 from \2%s\2"), mc->name, mu->name);
 			slog(LG_REGISTER, "myuser_delete(): deleting channel %s (unused %ds, founder %s, chanacs %d)",
 					mc->name, CURRTIME - mc->used,
-					mc->founder->name,
+					mu->name,
 					LIST_LENGTH(&mc->chanacs));
 
 			hook_call_event("channel_drop", mc);
@@ -228,7 +226,7 @@ void myuser_delete(myuser_t *mu)
 				part(mc->name, chansvs.nick);
 			object_unref(mc);
 		}
-		else /* successor found, or not founder in the first place */
+		else /* not founder */
 			object_unref(ca);
 	}
 
@@ -670,7 +668,6 @@ mychan_t *mychan_add(char *name)
 
 	object_init(object(mc), NULL, (destructor_t) mychan_delete);
 	strlcpy(mc->name, name, CHANNELLEN);
-	mc->founder = NULL;
 	mc->registered = CURRTIME;
 	mc->chan = channel_find(name);
 
@@ -707,6 +704,41 @@ boolean_t mychan_isused(mychan_t *mc)
 	return FALSE;
 }
 
+int mychan_num_founders(mychan_t *mc)
+{
+	node_t *n;
+	chanacs_t *ca;
+	int count = 0;
+
+	LIST_FOREACH(n, mc->chanacs.head)
+	{
+		ca = n->data;
+		if (ca->myuser != NULL && ca->level & CA_FOUNDER)
+			count++;
+	}
+	return count;
+}
+
+const char *mychan_founder_names(mychan_t *mc)
+{
+	node_t *n;
+	chanacs_t *ca;
+	static char names[512];
+
+	names[0] = '\0';
+	LIST_FOREACH(n, mc->chanacs.head)
+	{
+		ca = n->data;
+		if (ca->myuser != NULL && ca->level & CA_FOUNDER)
+		{
+			if (names[0] != '\0')
+				strlcat(names, ", ", sizeof names);
+			strlcat(names, ca->myuser->name, sizeof names);
+		}
+	}
+	return names;
+}
+
 /* Find a user fulfilling the conditions who can take another channel */
 myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel, int maxtime)
 {
@@ -721,7 +753,7 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel, int maxtime
 		if (ca->level & CA_AKICK)
 			continue;
 		mu = ca->myuser;
-		if (mu == NULL || mu == mc->founder)
+		if (mu == NULL || ca->level & CA_FOUNDER)
 			continue;
 		if ((ca->level & minlevel) == minlevel && (maxtime == 0 || LIST_LENGTH(&mu->logins) > 0 || CURRTIME - mu->lastlogin < maxtime))
 		{
@@ -1579,10 +1611,10 @@ void expire_check(void *arg)
 				if (MC_HOLD & mc->flags)
 					continue;
 
-				snoop(_("EXPIRE: \2%s\2 from \2%s\2"), mc->name, mc->founder->name);
+				snoop(_("EXPIRE: \2%s\2 from \2%s\2"), mc->name, mychan_founder_names(mc));
 				slog(LG_REGISTER, "expire_check(): expiring channel %s (unused %ds, founder %s, chanacs %d)",
 						mc->name, CURRTIME - mc->used,
-						mc->founder->name,
+						mychan_founder_names(mc),
 						LIST_LENGTH(&mc->chanacs));
 
 				hook_call_event("channel_drop", mc);
@@ -1636,15 +1668,6 @@ void db_check(void)
 	mowgli_dictionary_iteration_state_t state;
 
 	mowgli_dictionary_foreach(mulist, check_myuser_cb, NULL);
-
-	MOWGLI_DICTIONARY_FOREACH(mc, &state, mclist)
-	{
-		if (!chanacs_find(mc, mc->founder, CA_FLAGS))
-		{
-			slog(LG_REGISTER, "db_check(): adding access for founder on channel %s", mc->name);
-			chanacs_change_simple(mc, mc->founder, NULL, CA_FOUNDER_0, 0);
-		}
-	}
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

@@ -120,11 +120,22 @@ static void flatfile_db_save(void *arg)
 
 	MOWGLI_DICTIONARY_FOREACH(mc, &state, mclist)
 	{
+		/* find a founder */
+		mu = NULL;
+		LIST_FOREACH(tn, mc->chanacs.head)
+		{
+			ca = (chanacs_t *)tn->data;
+			if (ca->myuser != NULL && ca->level & CA_FOUNDER)
+			{
+				mu = ca->myuser;
+				break;
+			}
+		}
 		/* MC <name> <pass> <founder> <registered> [used] [flags]
 		 * [mlock_on] [mlock_off] [mlock_limit] [mlock_key]
 		 * PASS is now ignored -- replaced with a "0" to avoid having to special-case this version
 		 */
-		fprintf(f, "MC %s %s %s %ld %ld", mc->name, "0", mc->founder->name, (long)mc->registered, (long)mc->used);
+		fprintf(f, "MC %s %s %s %ld %ld", mc->name, "0", mu != NULL ? mu->name : "*", (long)mc->registered, (long)mc->used);
 		fprintf(f, " %d", mc->flags);
 		fprintf(f, " %d", mc->mlock_on);
 		fprintf(f, " %d", mc->mlock_off);
@@ -258,7 +269,7 @@ static void flatfile_db_save(void *arg)
 /* loads atheme.db */
 static void flatfile_db_load(void)
 {
-	myuser_t *mu;
+	myuser_t *mu, *founder = NULL;
 	mychan_t *mc;
 	kline_t *k;
 	svsignore_t *svsignore;
@@ -557,14 +568,7 @@ static void flatfile_db_load(void)
 
 				mc = mychan_add(mcname);
 
-				mc->founder = myuser_find(strtok(NULL, " "));
-
-				if (!mc->founder)
-				{
-					slog(LG_DEBUG, "db_load(): channel %s has no founder, dropping.", mc->name);
-					object_unref(mc);
-					continue;
-				}
+				founder = myuser_find(strtok(NULL, " "));
 
 				mc->registered = atoi(strtok(NULL, " "));
 				mc->used = atoi(strtok(NULL, " "));
@@ -722,6 +726,10 @@ static void flatfile_db_load(void)
 					 */
 					if (fl & CA_OP && !(their_ca_all & CA_HALFOP) && ca_all & CA_HALFOP)
 						fl |= CA_HALFOP;
+
+					/* Set new-style founder flag */
+					if (founder != NULL && mu == founder && !(their_ca_all & CA_FOUNDER))
+						fl |= CA_FOUNDER;
 
 					if ((!mu) && (validhostmask(causer)))
 						ca = chanacs_add_host(mc, causer, fl, ts);

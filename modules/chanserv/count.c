@@ -101,7 +101,7 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 			sopcnt++;
 		else if (ca->level == CA_AKICK)
 			akickcnt++;
-		else if (ca->myuser != mc->founder)
+		else
 			othercnt++;
 	}
 	if (ca_hop == ca_vop)

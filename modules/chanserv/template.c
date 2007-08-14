@@ -355,7 +355,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 				verbose(mc, "\2%s\2 set \2%s\2 on %d access entries with flags \2%s\2.", get_source_name(si), flagstr2, changes, bitmask_to_flags(oldflags, chanacs_flags));
 			command_success_nodata(si, _("%d access entries updated accordingly."), changes);
 			if (founderskipped)
-				command_success_nodata(si, _("The access entry for %s was not updated because they are channel founder."), mc->founder->name);
+				command_success_nodata(si, _("One or more access entries were not updated because they are channel founder."));
 		}
 		else
 			logcommand(si, CMDLOG_SET, "%s TEMPLATE %s %s", mc->name, target, flagstr);
