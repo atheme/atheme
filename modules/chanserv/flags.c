@@ -290,11 +290,19 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				command_fail(si, fault_noprivs, _("You may not remove the last founder."));
 				return;
 			}
-			if (!(ca->level & CA_FOUNDER) && addflags & CA_FOUNDER && mychan_num_founders(mc) >= chansvs.maxfounders)
+			if (!(ca->level & CA_FOUNDER) && addflags & CA_FOUNDER)
 			{
-				command_fail(si, fault_noprivs, _("Only %d founders allowed per channel."), chansvs.maxfounders);
-				chanacs_close(ca);
-				return;
+				if (mychan_num_founders(mc) >= chansvs.maxfounders)
+				{
+					command_fail(si, fault_noprivs, _("Only %d founders allowed per channel."), chansvs.maxfounders);
+					chanacs_close(ca);
+					return;
+				}
+				if ((myuser_num_channels(tmu) >= me.maxchans) && !has_priv_myuser(tmu, PRIV_REG_NOLIMIT))
+				{
+					command_fail(si, fault_toomany, _("\2%s\2 has too many channels registered."), tmu->name);
+					return;
+				}
 			}
 			if (addflags & CA_FOUNDER)
 				addflags |= CA_FLAGS, removeflags &= ~CA_FLAGS;
