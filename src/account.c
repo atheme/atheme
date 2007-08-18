@@ -791,10 +791,10 @@ myuser_t *mychan_pick_successor(mychan_t *mc)
 	myuser_t *mu;
 
 	/* full privs? */
-	mu = mychan_pick_candidate(mc, CA_FOUNDER_0 & ca_all, 7*86400);
+	mu = mychan_pick_candidate(mc, CA_FOUNDER_0 & ca_all & ~CA_FOUNDER, 7*86400);
 	if (mu != NULL)
 		return mu;
-	mu = mychan_pick_candidate(mc, CA_FOUNDER_0 & ca_all, 0);
+	mu = mychan_pick_candidate(mc, CA_FOUNDER_0 & ca_all & ~CA_FOUNDER, 0);
 	if (mu != NULL)
 		return mu;
 	/* someone with +R then? (old successor has this, but not sop) */
