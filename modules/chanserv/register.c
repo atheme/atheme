@@ -45,7 +45,6 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	chanuser_t *cu;
 	mychan_t *mc;
 	char *name = parv[0];
-	unsigned int tcnt;
 	char str[21];
 	node_t *n;
 	chanacs_t *ca;
@@ -106,16 +105,7 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	/* make sure they're within limits */
-	tcnt = 0;
-	LIST_FOREACH(n, si->smu->chanacs.head)
-	{
-		ca = n->data;
-		if (ca->level & CA_FOUNDER)
-			tcnt++;
-	}
-
-	if ((tcnt >= me.maxchans) && !has_priv(si, PRIV_REG_NOLIMIT))
+	if ((myuser_num_channels(si->smu) >= me.maxchans) && !has_priv(si, PRIV_REG_NOLIMIT))
 	{
 		command_fail(si, fault_toomany, _("You have too many channels registered."));
 		return;

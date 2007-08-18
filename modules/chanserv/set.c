@@ -370,18 +370,8 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 		{
 			node_t *n;
 			chanacs_t *ca;
-			unsigned int tcnt;
 
-			/* make sure they're within limits (from cs_cmd_register) */
-			tcnt = 0;
-			LIST_FOREACH(n, tmu->chanacs.head)
-			{
-				ca = n->data;
-				if (ca->level & CA_FOUNDER)
-					tcnt++;
-			}
-
-			if ((tcnt >= me.maxchans) && !has_priv_myuser(tmu, PRIV_REG_NOLIMIT))
+			if ((myuser_num_channels(tmu) >= me.maxchans) && !has_priv_myuser(tmu, PRIV_REG_NOLIMIT))
 			{
 				command_fail(si, fault_toomany, _("\2%s\2 has too many channels registered."), tmu->name);
 				return;

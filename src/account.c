@@ -367,6 +367,22 @@ void myuser_notice(char *from, myuser_t *target, char *fmt, ...)
 	}
 }
 
+int
+myuser_num_channels(myuser_t *mu)
+{
+	node_t *n;
+	chanacs_t *ca;
+	int count = 0;
+
+	LIST_FOREACH(n, mu->chanacs.head)
+	{
+		ca = n->data;
+		if (ca->level & CA_FOUNDER)
+			count++;
+	}
+	return count;
+}
+
 /*
  * myuser_access_verify()
  *
@@ -742,9 +758,8 @@ const char *mychan_founder_names(mychan_t *mc)
 /* Find a user fulfilling the conditions who can take another channel */
 myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel, int maxtime)
 {
-	unsigned int tcnt;
-	node_t *n, *n2;
-	chanacs_t *ca, *ca2;
+	node_t *n;
+	chanacs_t *ca;
 	myuser_t *mu;
 
 	LIST_FOREACH(n, mc->chanacs.head)
@@ -759,15 +774,7 @@ myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel, int maxtime
 		{
 			if (has_priv_myuser(mu, PRIV_REG_NOLIMIT))
 				return mu;
-			tcnt = 0;
-			LIST_FOREACH(n2, mu->chanacs.head)
-			{
-				ca2 = n2->data;
-				if (ca2->level & CA_FOUNDER)
-					tcnt++;
-			}
-
-			if (tcnt < me.maxchans)
+			if (myuser_num_channels(mu) < me.maxchans)
 				return mu;
 		}
 	}

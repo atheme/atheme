@@ -279,6 +279,7 @@ E void myuser_delete(myuser_t *mu);
 E myuser_t *myuser_find(const char *name);
 E myuser_t *myuser_find_ext(const char *name);
 E void myuser_notice(char *from, myuser_t *target, char *fmt, ...);
+E int myuser_num_channels(myuser_t *mu);
 
 E boolean_t myuser_access_verify(user_t *u, myuser_t *mu);
 E boolean_t myuser_access_add(myuser_t *mu, char *mask);
