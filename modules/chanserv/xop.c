@@ -48,7 +48,7 @@ void _modinit(module_t *m)
 
         command_add(&cs_aop, cs_cmdtree);
         command_add(&cs_sop, cs_cmdtree);
-	if (ircd->uses_halfops)
+	if (ircd != NULL && ircd->uses_halfops)
 		command_add(&cs_hop, cs_cmdtree);
         command_add(&cs_vop, cs_cmdtree);
 	command_add(&cs_forcexop, cs_cmdtree);
@@ -56,7 +56,7 @@ void _modinit(module_t *m)
 	help_addentry(cs_helptree, "SOP", "help/cservice/xop", NULL);
 	help_addentry(cs_helptree, "AOP", "help/cservice/xop", NULL);
 	help_addentry(cs_helptree, "VOP", "help/cservice/xop", NULL);
-	if (ircd->uses_halfops)
+	if (ircd != NULL && ircd->uses_halfops)
 		help_addentry(cs_helptree, "HOP", "help/cservice/xop", NULL);
 	help_addentry(cs_helptree, "FORCEXOP", "help/cservice/forcexop", NULL);
 }
