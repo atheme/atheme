@@ -98,11 +98,14 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 		}
 		target = tmu->name;
 
-		/* This check must stay as it ensures that the founder
-		 * is always on access */
-		if (tmu == mc->founder && removeflags & CA_FLAGS)
+		/* XXX this should be more like flags.c */
+		if (removeflags & CA_FLAGS)
+			removeflags |= CA_FOUNDER, addflags &= ~CA_FOUNDER;
+		else if (addflags & CA_FOUNDER)
+			addflags |= CA_FLAGS, removeflags &= ~CA_FLAGS;
+		if (is_founder(mc, tmu) && removeflags & CA_FOUNDER && mychan_num_founders(mc) == 1)
 		{
-			command_fail(si, fault_noprivs, _("You may not remove the founder's +f access."));
+			command_fail(si, fault_noprivs, _("You may not remove the last founder."));
 			return;
 		}
 
@@ -125,6 +128,11 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 	{
+		if (addflags & CA_FOUNDER)
+		{
+			command_fail(si, fault_badparams, _("You may not set founder status on a hostmask."));
+			return;
+		}
 		if (!chanacs_change(mc, NULL, target, &addflags, &removeflags, ca_all))
 		{
 			/* this shouldn't happen */

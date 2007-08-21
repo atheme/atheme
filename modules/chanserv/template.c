@@ -141,14 +141,12 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
-		/* probably no need to special-case founder here -- jilles */
-#if 0
-		if (is_founder(mc, si->smu))
+		/* founder may always set flags -- jilles */
+		restrictflags = chanacs_source_flags(mc, si);
+		if (restrictflags & CA_FOUNDER)
 			restrictflags = ca_all;
 		else
-#endif
 		{
-			restrictflags = chanacs_source_flags(mc, si);
 			if (!(restrictflags & CA_FLAGS))
 			{
 				command_fail(si, fault_noprivs, _("You are not authorized to execute this command."));
@@ -202,6 +200,13 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 			}
 			removeflags = ca_all & ~addflags;
 		}
+
+		/* if adding +F, also add +f */
+		if (addflags & CA_FOUNDER)
+			addflags |= CA_FLAGS, removeflags &= ~CA_FLAGS;
+		/* if removing +f, also remove +F */
+		else if (removeflags & CA_FLAGS)
+			removeflags |= CA_FOUNDER, addflags &= ~CA_FOUNDER;
 
 		found = denied = FALSE;
 		oldflags = 0;
@@ -340,9 +345,9 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 				ca = n->data;
 				if (ca->level != oldflags)
 					continue;
-				if (ca->myuser != NULL && is_founder(mc, ca->myuser) && !(newflags & CA_FLAGS))
+				if ((addflags | removeflags) & CA_FOUNDER)
 				{
-					founderskipped = 1;
+					founderskipped++;
 					continue;
 				}
 				changes++;
@@ -355,7 +360,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 				verbose(mc, "\2%s\2 set \2%s\2 on %d access entries with flags \2%s\2.", get_source_name(si), flagstr2, changes, bitmask_to_flags(oldflags, chanacs_flags));
 			command_success_nodata(si, _("%d access entries updated accordingly."), changes);
 			if (founderskipped)
-				command_success_nodata(si, _("The access entry for %s was not updated because they are channel founder."), mc->founder->name);
+				command_success_nodata(si, _("Not updating %d access entries involving founder status. Please do it manually."), founderskipped);
 		}
 		else
 			logcommand(si, CMDLOG_SET, "%s TEMPLATE %s %s", mc->name, target, flagstr);

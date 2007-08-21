@@ -43,6 +43,7 @@ struct chansvs_
   unsigned int expiry;		/* expiry time                */
 
   unsigned int maxchanacs;	/* max entries in chanacs list */
+  unsigned int maxfounders;	/* max founders per channel    */
 };
 
 struct globsvs_

@@ -103,12 +103,6 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 
 	snprintf(host, BUFSIZE, "%s!%s@%s", u->nick, u->user, u->vhost);
 
-	if (is_founder(mc, mu))
-	{
-		command_success_nodata(si,
-			"\2%s\2 has founder access to \2%s\2 because they are logged in as \2%s\2.",
-			u->nick, mc->name, mu->name);
-	}
 	LIST_FOREACH(n, mc->chanacs.head)
 	{
        	        ca = (chanacs_t *)n->data;

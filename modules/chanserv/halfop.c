@@ -29,7 +29,7 @@ list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
-	if (!ircd->uses_halfops)
+	if (ircd != NULL && !ircd->uses_halfops)
 	{
 		slog(LG_INFO, "Module %s requires halfop support, refusing to load.", m->header->name);
 		m->mflags = MODTYPE_FAIL;

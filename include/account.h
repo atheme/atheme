@@ -109,7 +109,6 @@ struct mychan_
 
   char name[CHANNELLEN];
 
-  myuser_t *founder;
   channel_t *chan;
   list_t chanacs;
   time_t registered;
@@ -170,6 +169,7 @@ struct chanacs_
 #define CA_HALFOP	 0x00000400 /* Ability to use /msg X halfop */
 #define CA_AUTOHALFOP	 0x00000800 /* Gain halfops automatically upon entry. */
 #define CA_ACLVIEW	 0x00001000 /* Can view access lists */
+#define CA_FOUNDER	 0x00002000 /* Is a channel founder */
 
 /*#define CA_SUSPENDED	 0x40000000 * Suspended access entry (not yet implemented) */
 #define CA_AKICK         0x80000000 /* Automatic kick */
@@ -186,13 +186,13 @@ struct chanacs_
 /* used in shrike flatfile conversion: */
 #define CA_SUCCESSOR_0   (CA_VOICE | CA_OP | CA_AUTOOP | CA_TOPIC | CA_SET | CA_REMOVE | CA_INVITE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_ACLVIEW)
 /* granted to new founder on transfer etc: */
-#define CA_FOUNDER_0     (CA_SUCCESSOR_0 | CA_FLAGS)
+#define CA_FOUNDER_0     (CA_SUCCESSOR_0 | CA_FLAGS | CA_FOUNDER)
 /* granted to founder on new channel: */
 #define CA_INITIAL       (CA_FOUNDER_0 | CA_AUTOOP)
 
 /* joining with one of these flags updates used time */
-#define CA_USEDUPDATE    (CA_VOICE | CA_OP | CA_AUTOOP | CA_SET | CA_REMOVE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_AUTOHALFOP)
-#define CA_ALLPRIVS      (CA_VOICE | CA_AUTOVOICE | CA_OP | CA_AUTOOP | CA_TOPIC | CA_SET | CA_REMOVE | CA_INVITE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_AUTOHALFOP | CA_ACLVIEW)
+#define CA_USEDUPDATE    (CA_VOICE | CA_OP | CA_AUTOOP | CA_SET | CA_REMOVE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_AUTOHALFOP | CA_FOUNDER)
+#define CA_ALLPRIVS      (CA_VOICE | CA_AUTOVOICE | CA_OP | CA_AUTOOP | CA_TOPIC | CA_SET | CA_REMOVE | CA_INVITE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_AUTOHALFOP | CA_ACLVIEW | CA_FOUNDER)
 #define CA_ALL_ALL       (CA_ALLPRIVS | CA_AKICK)
 
 /* old CA_ flags */
@@ -279,6 +279,7 @@ E void myuser_delete(myuser_t *mu);
 E myuser_t *myuser_find(const char *name);
 E myuser_t *myuser_find_ext(const char *name);
 E void myuser_notice(char *from, myuser_t *target, char *fmt, ...);
+E int myuser_num_channels(myuser_t *mu);
 
 E boolean_t myuser_access_verify(user_t *u, myuser_t *mu);
 E boolean_t myuser_access_add(myuser_t *mu, char *mask);
@@ -292,6 +293,8 @@ E mynick_t *mynick_find(const char *name);
 E mychan_t *mychan_add(char *name);
 E mychan_t *mychan_find(const char *name);
 E boolean_t mychan_isused(mychan_t *mc);
+E int mychan_num_founders(mychan_t *mc);
+E const char *mychan_founder_names(mychan_t *mc);
 E myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel, int maxtime);
 E myuser_t *mychan_pick_successor(mychan_t *mc);
 

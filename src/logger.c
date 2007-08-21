@@ -105,7 +105,7 @@ void logfile_register(logfile_t *lf)
 /*
  * logfile_unregister(logfile_t *lf)
  *
- * Registers a log I/O stream.
+ * Unregisters a log I/O stream.
  *
  * Inputs:
  *       - logfile_t representing the I/O stream.
@@ -114,7 +114,7 @@ void logfile_register(logfile_t *lf)
  *       - none
  *
  * Side Effects:
- *       - log_files is populated with the given object.
+ *       - the given object is removed from log_files, but remains valid.
  */
 void logfile_unregister(logfile_t *lf)
 {

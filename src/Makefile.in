@@ -141,7 +141,18 @@ install: build
 	$(INSTALL) -m 640 -c ../dist/example.userserv.conf $(DESTDIR)$(sysconfdir)
 	$(INSTALL) -m 640 -c ../dist/atheme.chk $(DESTDIR)$(sysconfdir)/atheme.chk.sample
 	[ -f ${DESTDIR}${bindir}/atheme ] && ${RM} ${DESTDIR}${bindir}/atheme || :
-	(cd ../doc; for i in *; do $(INSTALL) -m 644 $$i $(DESTDIR)$(DOCDIR); done)
+	-${RM} -f $(DESTDIR)${DOCDIR}/HOOKS $(DESTDIR)${DOCDIR}/MODES $(DESTDIR)${DOCDIR}/XMLRPCLIB
+	(cd ../doc; for i in *; do \
+		[ -f $$i ] && $(INSTALL) -m 644 $$i $(DESTDIR)$(DOCDIR); \
+		if [ -d $$i ]; then \
+			cd $$i; \
+			$(INSTALL) -m 755 -d $(DESTDIR)$(DOCDIR)/$$i; \
+			for j in *; do \
+				[ -f $$j ] && $(INSTALL) -m 644 $$j $(DESTDIR)$(DOCDIR)/$$i; \
+			done; \
+			cd ..; \
+		fi; \
+	done)
 	(cd ../help; for i in *; do \
 		[ -f $$i ] && $(INSTALL) -m 644 $$i $(DESTDIR)$(SHAREDIR)/help; \
 		if [ -d $$i ]; then \

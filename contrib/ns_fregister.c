@@ -22,8 +22,6 @@ command_t ns_fregister = { "FREGISTER", "Registers a nickname on behalf of anoth
 
 list_t *ns_cmdtree, *ns_helptree;
 
-unsigned int tcnt = 0;
-
 void _modinit(module_t *m)
 {
 	MODULE_USE_SYMBOL(ns_cmdtree, "nickserv/main", "ns_cmdtree");

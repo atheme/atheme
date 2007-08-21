@@ -81,10 +81,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("Information on \2%s\2:"), mc->name);
 
-	if (LIST_LENGTH(&mc->founder->logins))
-		command_success_nodata(si, _("Founder    : %s (logged in)"), mc->founder->name);
-	else
-		command_success_nodata(si, _("Founder    : %s (not logged in)"), mc->founder->name);
+	command_success_nodata(si, _("Founder    : %s"), mychan_founder_names(mc));
 
 	command_success_nodata(si, _("Registered : %s (%s ago)"), strfbuf, time_ago(mc->registered));
 

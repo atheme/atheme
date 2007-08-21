@@ -54,6 +54,7 @@ struct flags_table chanacs_flags[] = {
 	{'h', CA_HALFOP},
 	{'H', CA_AUTOHALFOP},
 	{'A', CA_ACLVIEW},
+	{'F', CA_FOUNDER},
 	{'b', CA_AKICK},
 	{0, 0}
 };
@@ -95,6 +96,7 @@ void flags_make_bitmasks(const char *string, struct flags_table table[], unsigne
 				  if (table == chanacs_flags)
 				  {
 					  *addflags &= CA_ALLPRIVS & ca_all;
+					  *addflags &= ~CA_FOUNDER;
 					  *removeflags |= CA_AKICK;
 				  }
 			  }
@@ -158,7 +160,7 @@ unsigned int flags_to_bitmask(const char *string, struct flags_table table[], un
 
 				  /* If this is chanacs_flags[], do privs only */
 				  if (table == chanacs_flags)
-					  bitmask &= CA_ALLPRIVS & ca_all;
+					  bitmask &= CA_ALLPRIVS & ca_all & ~CA_FOUNDER;
 			  }
 			  else if (status == FLAGS_DEL)
 				  bitmask = 0;

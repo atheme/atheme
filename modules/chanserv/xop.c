@@ -48,7 +48,7 @@ void _modinit(module_t *m)
 
         command_add(&cs_aop, cs_cmdtree);
         command_add(&cs_sop, cs_cmdtree);
-	if (ircd->uses_halfops)
+	if (ircd != NULL && ircd->uses_halfops)
 		command_add(&cs_hop, cs_cmdtree);
         command_add(&cs_vop, cs_cmdtree);
 	command_add(&cs_forcexop, cs_cmdtree);
@@ -56,7 +56,7 @@ void _modinit(module_t *m)
 	help_addentry(cs_helptree, "SOP", "help/cservice/xop", NULL);
 	help_addentry(cs_helptree, "AOP", "help/cservice/xop", NULL);
 	help_addentry(cs_helptree, "VOP", "help/cservice/xop", NULL);
-	if (ircd->uses_halfops)
+	if (ircd != NULL && ircd->uses_halfops)
 		help_addentry(cs_helptree, "HOP", "help/cservice/xop", NULL);
 	help_addentry(cs_helptree, "FORCEXOP", "help/cservice/forcexop", NULL);
 }
@@ -129,6 +129,11 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], char *leveldesc)
 	}
 
 	level = get_template_flags(mc, leveldesc);
+	if (level & CA_FOUNDER)
+	{
+		command_fail(si, fault_noprivs, _("\2%s\2 %s template has founder flag, not allowing xOP command."), chan, leveldesc);
+		return;
+	}
 
 	/* ADD */
 	if (!strcasecmp("ADD", cmd))
@@ -136,10 +141,9 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], char *leveldesc)
 		mu = myuser_find_ext(uname);
 
 		/* As in /cs flags, allow founder to do anything */
-		if (is_founder(mc, si->smu))
+		restrictflags = chanacs_source_flags(mc, si);
+		if (restrictflags & CA_FOUNDER)
 			restrictflags = ca_all;
-		else
-			restrictflags = chanacs_source_flags(mc, si);
 		/* The following is a bit complicated, to allow for
 		 * possible future denial of granting +f */
 		if (!(restrictflags & CA_FLAGS))
@@ -161,10 +165,9 @@ static void cs_xop(sourceinfo_t *si, int parc, char *parv[], char *leveldesc)
 		mu = myuser_find_ext(uname);
 
 		/* As in /cs flags, allow founder to do anything -- fix for #64: allow self removal. */
-		if (is_founder(mc, si->smu) || mu == si->smu)
+		restrictflags = chanacs_source_flags(mc, si);
+		if (restrictflags & CA_FOUNDER || mu == si->smu)
 			restrictflags = ca_all;
-		else
-			restrictflags = chanacs_source_flags(mc, si);
 		/* The following is a bit complicated, to allow for
 		 * possible future denial of granting +f */
 		if (!(restrictflags & CA_FLAGS))
@@ -326,13 +329,14 @@ static void cs_xop_do_add(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		return;
 	}
 
-	if (mu == mc->founder)
+	ca = chanacs_open(mc, mu, NULL, TRUE);
+
+	if (ca->level & CA_FOUNDER)
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 is the founder for \2%s\2 and may not be added to the %s list."), mu->name, mc->name, leveldesc);
 		return;
 	}
 
-	ca = chanacs_open(mc, mu, NULL, TRUE);
 	if (ca->level == level)
 	{
 		command_fail(si, fault_nochange, _("\2%s\2 is already on the %s list for \2%s\2."), mu->name, leveldesc, mc->name);
@@ -460,13 +464,6 @@ static void cs_xop_do_del(sourceinfo_t *si, mychan_t *mc, myuser_t *mu, char *ta
 		return;
 	}
 
-	/* just in case... -- jilles */
-	if (mu == mc->founder)
-	{
-		command_fail(si, fault_noprivs, _("\2%s\2 is the founder for \2%s\2 and may not be removed from the %s list."), mu->name, mc->name, leveldesc);
-		return;
-	}
-
 	object_unref(ca);
 	command_success_nodata(si, _("\2%s\2 has been removed from the %s list for \2%s\2."), mu->name, leveldesc, mc->name);
 	logcommand(si, CMDLOG_SET, "%s %s DEL %s", mc->name, leveldesc, mu->name);
@@ -484,8 +481,7 @@ static void cs_xop_do_list(sourceinfo_t *si, mychan_t *mc, unsigned int level, c
 	LIST_FOREACH(n, mc->chanacs.head)
 	{
 		ca = (chanacs_t *)n->data;
-		/* founder is never on any xop list -- jilles */
-		if (ca->myuser != mc->founder && ca->level == level)
+		if (ca->level == level)
 		{
 			if (!ca->myuser)
 				command_success_nodata(si, "%d: \2%s\2", ++i, ca->host);
@@ -551,7 +547,7 @@ static void cs_cmd_forcexop(sourceinfo_t *si, int parc, char *parv[])
 
 		if (ca->level & CA_AKICK)
 			continue;
-		if (ca->myuser && is_founder(mc, ca->myuser))
+		if (ca->level & CA_FOUNDER)
 			newlevel = CA_INITIAL & ca_all, desc = "Founder";
 		else if (!(~ca->level & ca_sop))
 			newlevel = ca_sop, desc = "SOP";

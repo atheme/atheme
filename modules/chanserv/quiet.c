@@ -33,7 +33,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
-	if (!strchr(ircd->ban_like_modes, 'q'))
+	if (ircd != NULL && !strchr(ircd->ban_like_modes, 'q'))
 	{
 		slog(LG_INFO, "Module %s requires a ban-like mode +q, refusing to load.", m->header->name);
 		m->mflags = MODTYPE_FAIL;

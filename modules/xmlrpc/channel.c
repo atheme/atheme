@@ -41,7 +41,6 @@ static int channel_register(void *conn, int parc, char *parv[])
 {
 	myuser_t *mu;
 	mychan_t *mc, *tmc;
-	unsigned int tcnt;
 	static char buf[XMLRPC_BUFSIZE];
 	mowgli_dictionary_iteration_state_t state;
 	hook_channel_req_t hdata;
@@ -85,14 +84,7 @@ static int channel_register(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	tcnt = 0;
-	MOWGLI_DICTIONARY_FOREACH(tmc, &state, mclist)
-	{
-		if (is_founder(tmc, mu))
-			tcnt++;
-	}
-
-	if (tcnt >= me.maxchans)
+	if (myuser_num_channels(mu) >= me.maxchans)
 	{
 		xmlrpc_generic_error(9, "Too many channels are associated with this account.");
 		return 0;
@@ -101,7 +93,6 @@ static int channel_register(void *conn, int parc, char *parv[])
 	snoop("REGISTER: \2%s\2 to \2%s\2 (via \2xmlrpc\2)", parv[2], parv[1]);
 
 	mc = mychan_add(parv[2]);
-	mc->founder = mu;
 	mc->registered = CURRTIME;
 	mc->used = CURRTIME;
 	mc->mlock_on |= (CMODE_NOEXT | CMODE_TOPIC);

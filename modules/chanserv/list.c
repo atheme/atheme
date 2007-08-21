@@ -79,7 +79,7 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 				strlcat(buf, "\2[held]\2", BUFSIZE);
 			}
 
-			command_success_nodata(si, "- %s (%s) %s", mc->name, mc->founder->name, buf);
+			command_success_nodata(si, "- %s (%s) %s", mc->name, mychan_founder_names(mc), buf);
 			matches++;
 		}
 	}

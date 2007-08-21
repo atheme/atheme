@@ -482,7 +482,7 @@ boolean_t is_founder(mychan_t *mychan, myuser_t *myuser)
 	if (!myuser)
 		return FALSE;
 
-	if (mychan->founder == myuser)
+	if (chanacs_find(mychan, myuser, CA_FOUNDER))
 		return TRUE;
 
 	return FALSE;

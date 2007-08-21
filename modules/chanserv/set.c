@@ -370,18 +370,8 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 		{
 			node_t *n;
 			chanacs_t *ca;
-			unsigned int tcnt;
 
-			/* make sure they're within limits (from cs_cmd_register) */
-			tcnt = 0;
-			LIST_FOREACH(n, tmu->chanacs.head)
-			{
-				ca = n->data;
-				if (is_founder(ca->mychan, tmu))
-					tcnt++;
-			}
-
-			if ((tcnt >= me.maxchans) && !has_priv_myuser(tmu, PRIV_REG_NOLIMIT))
+			if ((myuser_num_channels(tmu) >= me.maxchans) && !has_priv_myuser(tmu, PRIV_REG_NOLIMIT))
 			{
 				command_fail(si, fault_toomany, _("\2%s\2 has too many channels registered."), tmu->name);
 				return;
@@ -393,11 +383,19 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 				return;
 			}
 
-			logcommand(si, CMDLOG_REGISTER, "%s SET FOUNDER %s (completing transfer from %s)", mc->name, tmu->name, mc->founder->name);
-			verbose(mc, "Foundership transferred from \2%s\2 to \2%s\2.", mc->founder->name, tmu->name);
+			logcommand(si, CMDLOG_REGISTER, "%s SET FOUNDER %s (completing transfer from %s)", mc->name, tmu->name, mychan_founder_names(mc));
+			verbose(mc, "Foundership transferred from \2%s\2 to \2%s\2.", mychan_founder_names(mc), tmu->name);
 
 			/* add target as founder... */
-			mc->founder = tmu;
+			LIST_FOREACH(n, mc->chanacs.head)
+			{
+				ca = n->data;
+				/* CA_FLAGS is always on if CA_FOUNDER is on, this just
+				 * ensures we don't crash if not -- jilles
+				 */
+				if (ca->myuser != NULL && ca->level & CA_FOUNDER)
+					chanacs_modify_simple(ca, CA_FLAGS, CA_FOUNDER);
+			}
 			chanacs_change_simple(mc, tmu, NULL, CA_FOUNDER_0, 0);
 
 			/* delete transfer metadata */
@@ -472,7 +470,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("In order to complete the transfer, \2%s\2 must perform the following command:"), tmu->name);
 	command_success_nodata(si, "   \2/msg %s SET %s FOUNDER %s\2", chansvs.nick, mc->name, tmu->name);
 	command_success_nodata(si, _("After that command is issued, the channel will be transferred."), mc->name);
-	command_success_nodata(si, _("To cancel the transfer, use \2/msg %s SET %s FOUNDER %s\2"), chansvs.nick, mc->name, mc->founder->name);
+	command_success_nodata(si, _("To cancel the transfer, use \2/msg %s SET %s FOUNDER %s\2"), chansvs.nick, mc->name, si->smu->name);
 }
 
 static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
