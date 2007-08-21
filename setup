@@ -13,6 +13,10 @@ NLS="yes"
 SASL="yes"
 VERSION=`grep AC_INIT configure.ac | awk '{print \$2}' | sed s:\,::g`
 
+if [ "x$PAGER" = "x" ]; then
+	PAGER="more"
+fi
+
 export ok INPUT
 
 clear
@@ -30,7 +34,7 @@ if [ -f doc/RELEASE ] ; then
     if read INPUT ; then : ; else echo "" ; exit 1 ; fi
       if [ ! "$INPUT" ] ; then
         echo ""
-        more doc/RELEASE
+        $PAGER doc/RELEASE
         echo ""
         echo "-----"
         ok=1
@@ -38,7 +42,7 @@ if [ -f doc/RELEASE ] ; then
       case $INPUT in
         [Yy]*)
           echo ""
-          more doc/RELEASE
+          $PAGER doc/RELEASE
           ok=1
           ;;
         [Nn]*)
