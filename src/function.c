@@ -278,11 +278,16 @@ int validemail(char *email)
 
 boolean_t validhostmask(char *host)
 {
+	char *p, *q;
+
 	if (strchr(host, ' '))
 		return FALSE;
 
-	/* make sure it has ! and @ */
-	if (!strchr(host, '!') || !strchr(host, '@'))
+	/* make sure it has ! and @ in that order and only once */
+	p = strchr(host, '!');
+	q = strchr(host, '@');
+	if (p == NULL || q == NULL || p > q || strchr(p + 1, '!') ||
+			strchr(q + 1, '@'))
 		return FALSE;
 
 	/* XXX this NICKLEN is too long */
