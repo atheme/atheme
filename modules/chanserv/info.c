@@ -195,7 +195,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		}
 
 		if (*buf)
-			command_success_nodata(si, _("Mode lock  : %s%s"), buf, (params) ? params : "");
+			command_success_nodata(si, _("Mode lock  : %s%s"), buf, params);
 	}
 
 

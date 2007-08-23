@@ -124,7 +124,7 @@ void flags_make_bitmasks(const char *string, struct flags_table table[], unsigne
 				  }
 		}
 
-		(void)*string++;
+		string++;
 	}
 
 	return;
@@ -177,7 +177,7 @@ unsigned int flags_to_bitmask(const char *string, struct flags_table table[], un
 				  }
 		}
 
-		(void)*string++;
+		string++;
 	}
 
 	return bitmask;

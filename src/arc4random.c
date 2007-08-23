@@ -158,7 +158,7 @@ arc4_check_stir(void)
 }
 
 void
-arc4random_stir()
+arc4random_stir(void)
 {
 	arc4_check_init();
 	arc4_stir(&rs);
