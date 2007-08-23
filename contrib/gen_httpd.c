@@ -92,7 +92,7 @@ static void send_error(connection_t *cptr, int errorcode, const char *text, bool
 			"Server: Atheme/%s\r\n"
 			"Content-Type: text/plain\r\n"
 			"Content-Length: %d\r\n\r\n%s",
-			errorcode, text, version, strlen(buf2),
+			errorcode, text, version, (int)strlen(buf2),
 			sendentity ? buf2 : "");
 	sendq_add(cptr, buf1, strlen(buf1));
 }

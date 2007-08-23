@@ -41,7 +41,6 @@ static void ns_cmd_fregister(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	mynick_t *mn;
-	node_t *n;
 	char *account;
 	char *pass;
 	char *email;

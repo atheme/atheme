@@ -124,7 +124,6 @@ static int alis_parse_mode(const char *text, int *key, int *limit)
 static int parse_alis(sourceinfo_t *si, int parc, char *parv[], struct alis_query *query)
 {
 	int i = 0;
-	int param = 2;
 	char *opt = NULL, *arg = NULL;
 
 	while ((opt = parv[i++]))

@@ -104,11 +104,11 @@ static void load_newsdb(void)
 			char *target = strtok(NULL, " ");
 			char *news_ts = strtok(NULL, " ");
 			char *story = strtok(NULL, "");
-			logonnews_t *l = smalloc(sizeof(logonnews_t));
 
 			if (!nick || !target || !news_ts || !story)
 				continue;
 
+			l = smalloc(sizeof(logonnews_t));
 			l->nick = sstrdup(nick);
 			l->target = sstrdup(target);
 			l->news_ts = atol(news_ts);
