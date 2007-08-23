@@ -18,13 +18,15 @@ TABLE OF CONTENTS
 1. CREDITS
 ----------
 
-atheme-services was originally based on Shrike, however, this has almost 
-all been rewritten now. We have also borrowed some code from Sentinel 
-and ircd-ratbox.
+atheme-services contains code from Shrike, Sentinel and ircd-ratbox. 
+Some of the initial design was influenced by Shrike too.
 
 Information about Shrike can be found at http://shrike.malkier.net/.
 Information about Sentinel can be found at http://ircd.botbay.net/sentinel/.
 Information about ircd-ratbox can be found at http://www.ircd-ratbox.org/.
+
+For further information about our relationship with those projects, see 
+the Atheme FAQ: http://www.atheme.net/FAQ
 
 2. PRESENTATION AND WHAT ATHEME-SERVICES IS NOT
 -----------------------------------------------
