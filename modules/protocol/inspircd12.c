@@ -417,18 +417,18 @@ static void inspircd_topic_sts(channel_t *c, const char *setter, time_t ts, time
 	/* Restoring old topic */
 	if (ts > prevts + 60 || prevts == 0)
 	{
-		sts(":%s FTOPIC %s %ld %s :%s", chansvs.nick, c->name, ts, setter, topic);
+		sts(":%s FTOPIC %s %ld %s :%s", chansvs.me->me->uid, c->name, ts, setter, topic);
 		return;
 	}
 	/* Tweaking a topic */
 	else if (ts == prevts)
 	{
 		ts += 60;
-		sts(":%s FTOPIC %s %ld %s :%s", chansvs.nick, c->name, ts, setter, topic);
+		sts(":%s FTOPIC %s %ld %s :%s", chansvs.me->me->uid, c->name, ts, setter, topic);
 		c->topicts = ts;
 		return;
 	}
-	sts(":%s TOPIC %s :%s", chansvs.nick, c->name, topic);
+	sts(":%s TOPIC %s :%s", chansvs.me->me->uid, c->name, topic);
 	c->topicts = CURRTIME;
 }
 
