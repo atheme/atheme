@@ -438,17 +438,19 @@ static void inspircd_topic_sts(channel_t *c, const char *setter, time_t ts, time
 /* mode wrapper */
 static void inspircd_mode_sts(char *sender, channel_t *target, char *modes)
 {
+	user_t *sender_p = user_find(sender);
+
 	if (!me.connected)
 		return;
 
 	if (has_protocol >= PROTOCOL_NEWTS)
 	{
 		/* FMODE from user is ok, use it */
-		sts(":%s FMODE %s %ld %s", sender, target->name, target->ts, modes);
+		sts(":%s FMODE %s %ld %s", sender_p->uid, target->name, target->ts, modes);
 	}
 	else
 	{
-		sts(":%s MODE %s %s", sender, target->name, modes);
+		sts(":%s MODE %s %s", sender_p->uid, target->name, modes);
 	}
 }
 
