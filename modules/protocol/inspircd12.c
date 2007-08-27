@@ -330,7 +330,7 @@ static void inspircd_msg(const char *from, const char *target, const char *fmt, 
 {
 	va_list ap;
 	char buf[BUFSIZE];
-	user_t *user = user_find(to);
+	user_t *user = user_find(target);
 	user_t *from_p = user_find(from);
 
 	va_start(ap, fmt);
