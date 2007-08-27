@@ -22,6 +22,7 @@ BASE_SRCS =			\
 	$(SRCDIR)/hybrid.c	\
 	$(SRCDIR)/hyperion.c	\
 	$(SRCDIR)/inspircd11.c	\
+	$(SRCDIR)/inspircd12.c	\
 	$(SRCDIR)/ircnet.c	\
 	$(SRCDIR)/nefarious.c	\
 	$(SRCDIR)/officeirc.c	\
