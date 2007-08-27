@@ -766,17 +766,15 @@ static void m_part(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static void m_nick(sourceinfo_t *si, int parc, char *parv[])
+static void m_uid(sourceinfo_t *si, int parc, char *parv[])
 {
-	user_t *u;
-
-	/* :services-dev.chatspike.net NICK 1133994664 DevNull chatspike.net chatspike.net services +i 0.0.0.0 :/dev/null -- message sink */
-	if (parc == 8)
+	/* :3ZZ UID 3ZZAAAAAB 1133994664 nenolod petrie.ipv6.nenolod.net petrie.ipv6.nenolod.net nenolod +i 0.0.0.0 :William Pitcock */
+	if (parc == 9)
 	{
-		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", si->s->name, parv[1]);
+		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", si->s->name, parv[2]);
 
 		/* char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, unsigned int ts */
-		u = user_add(parv[1], parv[4], parv[2], parv[3], parv[6], NULL, parv[7], si->s, atol(parv[0]));
+		u = user_add(parv[2], parv[5], parv[3], parv[4], parv[7], parv[0], parv[8], si->s, atol(parv[1]));
 		user_mode(u, parv[5]);
 
 		/* If server is not yet EOB we will do this later.
@@ -784,8 +782,22 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		if (si->s->flags & SF_EOB)
 			handle_nickchange(u);
 	}
-	/* if it's only 1 then it's a nickname change */
-	else if (parc == 1)
+	else
+	{
+		int i;
+		slog(LG_DEBUG, "m_uid(): got UID with wrong number of params");
+
+		for (i = 0; i < parc; i++)
+			slog(LG_DEBUG, "m_uid():   parv[%d] = %s", i, parv[i]);
+	}
+}
+
+static void m_nick(sourceinfo_t *si, int parc, char *parv[])
+{
+	user_t *u;
+
+	/* if it's only 1 then it's a nickname change, if it's 2, it's a nickname change with a TS */
+	if (parc == 1 || parc == 2)
 	{
                 if (!si->su)
                 {       
@@ -946,7 +958,7 @@ static void m_server(sourceinfo_t *si, int parc, char *parv[])
 	server_t *s;
 
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
-	s = handle_server(si, parv[0], NULL, atoi(parv[2]), parv[3]);
+	s = handle_server(si, parv[0], parv[3], atoi(parv[2]), parv[4]);
 
 	if (s != NULL && s->uplink != me.me)
 	{
