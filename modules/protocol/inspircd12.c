@@ -315,11 +315,12 @@ static void inspircd_kick(char *from, char *channel, char *to, char *reason)
 {
 	channel_t *chan = channel_find(channel);
 	user_t *user = user_find(to);
+	user_t *from_p = user_find(from);
 
 	if (!chan || !user)
 		return;
 
-	sts(":%s KICK %s %s :%s", from, channel, to, reason);
+	sts(":%s KICK %s %s :%s", from_p->uid, channel, user->uid, reason);
 
 	chanuser_delete(chan, user);
 }
@@ -329,12 +330,14 @@ static void inspircd_msg(const char *from, const char *target, const char *fmt, 
 {
 	va_list ap;
 	char buf[BUFSIZE];
+	user_t *user = user_find(to);
+	user_t *from_p = user_find(from);
 
 	va_start(ap, fmt);
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s PRIVMSG %s :%s", from, target, buf);
+	sts(":%s PRIVMSG %s :%s", from_p->uid, *target != '#' ? user->uid : target, buf);
 }
 
 /* NOTICE wrapper */
