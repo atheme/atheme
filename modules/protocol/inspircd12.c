@@ -1223,6 +1223,7 @@ void _modinit(module_t * m)
 	pcommand_add("FJOIN", m_fjoin, 3, MSRC_SERVER);
 	pcommand_add("PART", m_part, 1, MSRC_USER);
 	pcommand_add("NICK", m_nick, 1, MSRC_USER | MSRC_SERVER);
+	pcommand_add("UID", m_uid, 9, MSRC_SERVER);
 	pcommand_add("QUIT", m_quit, 1, MSRC_USER);
 	pcommand_add("MODE", m_mode, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("FMODE", m_fmode, 3, MSRC_USER | MSRC_SERVER);
