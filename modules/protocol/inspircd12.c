@@ -340,17 +340,17 @@ static void inspircd_msg(const char *from, const char *target, const char *fmt, 
 /* NOTICE wrapper */
 static void inspircd_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
-	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->nick, text);
+	sts(":%s NOTICE %s :%s", from ? from->uid : me.name, target->uid, text);
 }
 
 static void inspircd_notice_global_sts(user_t *from, const char *mask, const char *text)
 {
-	sts(":%s NOTICE %s%s :%s", from ? from->nick : me.name, ircd->tldprefix, mask, text);
+	sts(":%s NOTICE %s%s :%s", from ? from->uid : me.name, ircd->tldprefix, mask, text);
 }
 
 static void inspircd_notice_channel_sts(user_t *from, channel_t *target, const char *text)
 {
-	sts(":%s NOTICE %s :%s", from ? from->nick : me.name, target->name, text);
+	sts(":%s NOTICE %s :%s", from ? from->uid : me.name, target->name, text);
 }
 
 static void inspircd_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
