@@ -225,7 +225,7 @@ static unsigned int inspircd_server_login(void)
 /* introduce a client */
 static void inspircd_introduce_nick(user_t *u)
 {
-	/* :services-dev.chatspike.net NICK 1133994664 OperServ chatspike.net chatspike.net services +oii 0.0.0.0 :Operator Server  */
+	/* :penguin.omega.org.za UID 497AAAAAB 1188302517 OperServ 127.0.0.1 127.0.0.1 OperServ +s 127.0.0.1 :Operator Server */
 	sts(":%s UID %s %ld %s %s %s %s +%s 0.0.0.0 :%s", me.name, u->uid, u->ts, u->nick, u->host, u->host, u->user, "io", u->gecos);
 	sts(":%s OPERTYPE Services", u->uid);
 }
