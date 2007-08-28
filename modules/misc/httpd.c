@@ -205,8 +205,8 @@ static void httpd_recvqhandler(connection_t *cptr)
 	struct stat sb;
 	off_t count1;
 	node_t *n;
-	path_handler_t *ph;
-	boolean_t is_get, is_post, handling_done;
+	path_handler_t *ph = NULL;
+	boolean_t is_get, is_post, handling_done = FALSE;
 
 	hd = cptr->userdata;
 

@@ -1671,9 +1671,6 @@ static int check_myuser_cb(mowgli_dictionary_elem_t *delem, void *unused)
 
 void db_check(void)
 {
-	mychan_t *mc;
-	mowgli_dictionary_iteration_state_t state;
-
 	mowgli_dictionary_foreach(mulist, check_myuser_cb, NULL);
 }
 

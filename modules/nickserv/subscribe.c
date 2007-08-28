@@ -46,7 +46,6 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 	char *name = parv[0], *tag;
 	boolean_t remove = FALSE;
 	metadata_subscription_t *md;
-	node_t *i;
 
 	if (parc < 1)
 	{

@@ -46,8 +46,6 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
 	char *name = parv[0];
 	char str[21];
-	node_t *n;
-	chanacs_t *ca;
 	hook_channel_req_t hdata;
 
 	if (!name)

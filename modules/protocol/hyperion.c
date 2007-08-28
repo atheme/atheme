@@ -137,9 +137,6 @@ node_t *hyperion_next_matching_ban(channel_t *c, user_t *u, int type, node_t *fi
 	char hostbuf[NICKLEN+USERLEN+HOSTLEN];
 	char realbuf[NICKLEN+USERLEN+HOSTLEN];
 	char ipbuf[NICKLEN+USERLEN+HOSTLEN];
-	const char *p;
-	boolean_t negate, matched;
-	int exttype;
 
 	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
 	snprintf(realbuf, sizeof realbuf, "%s!%s@%s", u->nick, u->user, u->host);

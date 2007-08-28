@@ -40,9 +40,8 @@ DECLARE_MODULE_V1
 static int channel_register(void *conn, int parc, char *parv[])
 {
 	myuser_t *mu;
-	mychan_t *mc, *tmc;
+	mychan_t *mc;
 	static char buf[XMLRPC_BUFSIZE];
-	mowgli_dictionary_iteration_state_t state;
 	hook_channel_req_t hdata;
 
 	*buf = '\0';
