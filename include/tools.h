@@ -89,7 +89,7 @@ E void logfile_unregister(logfile_t *lf);
 #define LG_WARN2        0x00100000 /* NOTYET messages formerly snooped */
 
 #define LG_CMD_ALL      0x0000FF00
-#define LG_ALL          0x7FFFFFFF /* XXX cannot use bit 31 as it would then be unequal to TOKEN_UNMATCHED */
+#define LG_ALL          0x7FFFFFFF /* XXX cannot use bit 31 as it would then be equal to TOKEN_UNMATCHED */
 
 /* aliases for use with logcommand() */
 #define CMDLOG_ADMIN    LG_CMD_ADMIN
