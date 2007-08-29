@@ -226,7 +226,7 @@ static unsigned int inspircd_server_login(void)
 static void inspircd_introduce_nick(user_t *u)
 {
 	/* :penguin.omega.org.za UID 497AAAAAB 1188302517 OperServ 127.0.0.1 127.0.0.1 OperServ +s 127.0.0.1 :Operator Server */
-	sts(":%s UID %s %ld %s %s %s %s +%s 0.0.0.0 :%s", me.name, u->uid, u->ts, u->nick, u->host, u->host, u->user, "io", u->gecos);
+	sts(":%s UID %s %ld %s %s %s %s +%s 0.0.0.0 %ld :%s", me.name, u->uid, u->ts, u->nick, u->host, u->host, u->user, "io", u->ts, u->gecos);
 	sts(":%s OPERTYPE Services", u->uid);
 }
 
@@ -775,13 +775,13 @@ static void m_uid(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
 
-	/* :3ZZ UID 3ZZAAAAAB 1133994664 nenolod petrie.ipv6.nenolod.net petrie.ipv6.nenolod.net nenolod +i 0.0.0.0 :William Pitcock */
+	/* :3ZZ UID 3ZZAAAAAB 1133994664 nenolod petrie.ipv6.nenolod.net petrie.ipv6.nenolod.net nenolod +i 0.0.0.0 1351531513 :William Pitcock */
 	if (parc == 9)
 	{
 		slog(LG_DEBUG, "m_uid(): new user on `%s': %s", si->s->name, parv[2]);
 
-		/* char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, unsigned int ts */
-		u = user_add(parv[2], parv[5], parv[3], parv[4], parv[7], parv[0], parv[8], si->s, atol(parv[1]));
+		/* char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, unsigned int ts */ 
+		u = user_add(parv[2], parv[5], parv[3], parv[4], parv[7], parv[0], parv[9], si->s, atol(parv[9]));
 		user_mode(u, parv[5]);
 
 		/* If server is not yet EOB we will do this later.
