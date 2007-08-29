@@ -226,7 +226,7 @@ static unsigned int inspircd_server_login(void)
 static void inspircd_introduce_nick(user_t *u)
 {
 	/* :penguin.omega.org.za UID 497AAAAAB 1188302517 OperServ 127.0.0.1 127.0.0.1 OperServ +s 127.0.0.1 :Operator Server */
-	sts(":%s UID %s %ld %s %s %s %s +%s 0.0.0.0 %ld :%s", me.name, u->uid, u->ts, u->nick, u->host, u->host, u->user, "io", u->ts, u->gecos);
+	sts(":%s UID %s %ld %s %s %s %s +%s 0.0.0.0 %ld :%s", me.numeric, u->uid, u->ts, u->nick, u->host, u->host, u->user, "io", u->ts, u->gecos);
 	sts(":%s OPERTYPE Services", u->uid);
 }
 
@@ -249,9 +249,9 @@ static void inspircd_wallops_sts(const char *text)
 	{
 		/* XXX */
 		if (has_globopsmod)
-			sts(":%s SNONOTICE g :%s", me.name, text);
+			sts(":%s SNONOTICE g :%s", me.numeric, text);
 		else
-			sts(":%s OPERNOTICE :%s", me.name, text);
+			sts(":%s OPERNOTICE :%s", me.numeric, text);
 		return;
 	}
 
@@ -291,13 +291,13 @@ static void inspircd_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *mo
 {
 	if (isnew)
 	{
-		sts(":%s FJOIN %s %ld :@,%s", me.name, c->name, c->ts, u->uid);
+		sts(":%s FJOIN %s %ld :@,%s", me.numeric, c->name, c->ts, u->uid);
 		if (modes[0] && modes[1])
-			sts(":%s FMODE %s %ld %s", me.name, c->name, c->ts, modes);
+			sts(":%s FMODE %s %ld %s", me.numeric, c->name, c->ts, modes);
 	}
 	else
 	{
-		sts(":%s FJOIN %s %ld :@,%s", me.name, c->name, c->ts, u->uid);
+		sts(":%s FJOIN %s %ld :@,%s", me.numeric, c->name, c->ts, u->uid);
 	}
 }
 
@@ -306,8 +306,8 @@ static void inspircd_chan_lowerts(channel_t *c, user_t *u)
 	slog(LG_DEBUG, "inspircd_chan_lowerts(): lowering TS for %s to %ld", 
 		c->name, (long)c->ts);
 
-	sts(":%s FJOIN %s %ld :@,%s", me.name, c->name, c->ts, u->uid);
-	sts(":%s FMODE %s %ld %s", me.name, c->name, c->ts, channel_modes(c, TRUE));
+	sts(":%s FJOIN %s %ld :@,%s", me.numeric, c->name, c->ts, u->uid);
+	sts(":%s FMODE %s %ld %s", me.numeric, c->name, c->ts, channel_modes(c, TRUE));
 }
 
 /* kicks a user from a channel */
@@ -343,17 +343,17 @@ static void inspircd_msg(const char *from, const char *target, const char *fmt, 
 /* NOTICE wrapper */
 static void inspircd_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
-	sts(":%s NOTICE %s :%s", from ? from->uid : me.name, target->uid, text);
+	sts(":%s NOTICE %s :%s", from ? from->uid : me.numeric, target->uid, text);
 }
 
 static void inspircd_notice_global_sts(user_t *from, const char *mask, const char *text)
 {
-	sts(":%s NOTICE %s%s :%s", from ? from->uid : me.name, ircd->tldprefix, mask, text);
+	sts(":%s NOTICE %s%s :%s", from ? from->uid : me.numeric, ircd->tldprefix, mask, text);
 }
 
 static void inspircd_notice_channel_sts(user_t *from, channel_t *target, const char *text)
 {
-	sts(":%s NOTICE %s :%s", from ? from->uid : me.name, target->name, text);
+	sts(":%s NOTICE %s :%s", from ? from->uid : me.numeric, target->name, text);
 }
 
 static void inspircd_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
@@ -365,7 +365,7 @@ static void inspircd_numeric_sts(char *from, int numeric, char *target, char *fm
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	sts(":%s PUSH %s ::%s %d %s %s", me.name, target, from, numeric, target, buf);
+	sts(":%s PUSH %s ::%s %d %s %s", me.numeric, target, from, numeric, target, buf);
 }
 
 /* KILL wrapper */
@@ -394,7 +394,7 @@ static void inspircd_kline_sts(char *server, char *user, char *host, long durati
 		return;
 
 	/* :services-dev.chatspike.net ADDLINE G test@test.com Brain 1133994664 0 :You are banned from this network */
-	sts(":%s ADDLINE G %s@%s %s %ld %ld :%s", me.name, user, host, opersvs.nick, time(NULL), duration, reason);
+	sts(":%s ADDLINE G %s@%s %s %ld %ld :%s", me.numeric, user, host, opersvs.nick, time(NULL), duration, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
@@ -460,7 +460,7 @@ static void inspircd_ping_sts(void)
 	if (!me.connected)
 		return;
 
-	sts(":%s PING :%s", me.name, curr_uplink->name);
+	sts(":%s PING :%s", me.numeric, curr_uplink->name);
 }
 
 /* protocol-specific stuff to do on login */
@@ -469,7 +469,7 @@ static void inspircd_on_login(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return;
 
-	sts(":%s METADATA %s accountname :%s", me.name, origin, user);
+	sts(":%s METADATA %s accountname :%s", me.numeric, origin, user);
 }
 
 /* protocol-specific stuff to do on logout */
@@ -478,7 +478,7 @@ static boolean_t inspircd_on_logout(char *origin, char *user, char *wantedhost)
 	if (!me.connected)
 		return FALSE;
 
-	sts(":%s METADATA %s accountname :", me.name, origin);
+	sts(":%s METADATA %s accountname :", me.numeric, origin);
 	return FALSE;
 }
 
@@ -498,8 +498,8 @@ static void inspircd_jupe(const char *server, const char *reason)
 	else
 	{
 		/* Remove any previous jupe first */
-		sts(":%s SQUIT %s :%s", me.name, server, reason);
-		sts(":%s SERVER %s * 1 :%s", me.name, server, reason);
+		sts(":%s SQUIT %s :%s", me.numeric, server, reason);
+		sts(":%s SERVER %s * 1 :%s", me.numeric, server, reason);
 	}
 }
 
@@ -515,7 +515,7 @@ static void inspircd_sethost_sts(char *source, char *target, char *host)
 static void inspircd_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
 {
 	/* svsnick can only be sent by a server */
-	sts(":%s SVSNICK %s %s %lu", me.name, u->uid, newnick,
+	sts(":%s SVSNICK %s %s %lu", me.numeric, u->uid, newnick,
 		(unsigned long)(CURRTIME - 60));
 }
 
@@ -569,7 +569,7 @@ static void m_ftopic(sourceinfo_t *si, int parc, char *parv[])
 static void m_ping(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* reply to PING's */
-	sts(":%s PONG %s", me.name, parv[0]);
+	sts(":%s PONG %s", me.numeric, parv[0]);
 }
 
 static void m_pong(sourceinfo_t *si, int parc, char *parv[])
@@ -672,7 +672,7 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 			if (cu->user->server == me.me)
 			{
 				/* it's a service, reop */
-				sts(":%s FMODE %s %ld +o %s", me.name, c->name, ts, cu->user->nick);
+				sts(":%s FMODE %s %ld +o %s", me.numeric, c->name, ts, cu->user->nick);
 				cu->modes = CMODE_OP;
 			}
 			else
@@ -970,7 +970,7 @@ static void m_server(sourceinfo_t *si, int parc, char *parv[])
 		/* elicit PONG for EOB detection; pinging uplink is
 		 * already done elsewhere -- jilles
 		 */
-		sts(":%s PING %s %s", me.name, me.name, s->name);
+		sts(":%s PING %s %s", me.numeric, me.numeric, s->name);
 	}
 }
 
@@ -1105,7 +1105,7 @@ static void m_metadata(sourceinfo_t *si, int parc, char *parv[])
  */
 static void m_rsquit(sourceinfo_t *si, int parc, char *parv[])
 {
-	sts(":%s SQUIT %s :Jupe removed by %s", me.name, parv[0], si->su->nick);
+	sts(":%s SQUIT %s :Jupe removed by %s", me.numeric, parv[0], si->su->nick);
 }
 
 static void m_capab(sourceinfo_t *si, int parc, char *parv[])
