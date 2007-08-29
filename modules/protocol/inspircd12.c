@@ -776,7 +776,7 @@ static void m_uid(sourceinfo_t *si, int parc, char *parv[])
 	user_t *u;
 
 	/* :3ZZ UID 3ZZAAAAAB 1133994664 nenolod petrie.ipv6.nenolod.net petrie.ipv6.nenolod.net nenolod +i 0.0.0.0 1351531513 :William Pitcock */
-	if (parc == 9)
+	if (parc == 10)
 	{
 		slog(LG_DEBUG, "m_uid(): new user on `%s': %s", si->s->name, parv[2]);
 
