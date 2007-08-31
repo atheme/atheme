@@ -408,31 +408,63 @@ void handle_away(user_t *u, const char *message)
 	}
 }
 
-void handle_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *message)
+void
+handle_channel_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *message)
 {
 	char *vec[3];
 	hook_cmessage_data_t cdata;
+	node_t *n;
+
+	/* Call hook here */
+	cdata.u = si->su;
+	cdata.c = channel_find(target);
+	cdata.msg = message;
+
+	/* No such channel, ignore... */
+	if (cdata.c == NULL)
+		return;
+
+	hook_call_event("channel_message", &cdata);
+
+	vec[0] = target;
+	vec[1] = message;
+	vec[2] = NULL;
+
+	LIST_FOREACH(n, cdata.c->members.head)
+	{
+		chanuser_t *cu = (chanuser_t *) n->data;
+
+		if (!is_internal_client(cu->user))
+			continue;
+
+		si->service = find_service(cu->user->nick);
+
+		if (si->service == NULL)
+			continue;
+
+		if (is_notice)
+			si->service->notice_handler(si, 2, vec);
+		else
+			si->service->handler(si, 2, vec);
+	}
+}
+
+void handle_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *message)
+{
+	char *vec[3];
 
 	/* message from server, ignore */
 	if (si->su == NULL)
 		return;
 
-	/* If target is a channel and fantasy commands are enabled,
-	 * this will return chanserv
-	 */
-	si->service = find_service(target);
-
+	/* if this is a channel, handle it differently. */
 	if (*target == '#')
 	{
-		/* Call hook here */
-		cdata.u = si->su;
-		cdata.c = channel_find(target);
-		cdata.msg = message;
-		/* No such channel, ignore... */
-		if (cdata.c == NULL)
-			return;
-		hook_call_event("channel_message", &cdata);
+		handle_channel_message(si, target, is_notice, message);
+		return;
 	}
+
+	si->service = find_service(target);
 
 	if (si->service == NULL)
 	{
@@ -451,10 +483,10 @@ void handle_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *m
 	/* Run it through flood checks. Channel commands are checked
 	 * separately.
 	 */
-	if (si->service->me != NULL && *target != '#' && floodcheck(si->su, si->service->me))
+	if (si->service->me != NULL && floodcheck(si->su, si->service->me))
 		return;
 
-	if (!is_notice && config_options.secure && *target != '#' && irccasecmp(target, si->service->disp))
+	if (!is_notice && config_options.secure && irccasecmp(target, si->service->disp))
 	{
 		notice(si->service->me->nick, si->su->nick, "For security reasons, \2/msg %s\2 has been disabled."
 				" Use \2/%s%s <command>\2 to send a command.",
