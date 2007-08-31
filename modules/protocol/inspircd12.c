@@ -21,8 +21,8 @@ ircd_t InspIRCd = {
         "$",                            /* TLD Prefix, used by Global. */
         TRUE,                           /* Whether or not we use IRCNet/TS6 UID */
         FALSE,                          /* Whether or not we use RCOMMAND */
-        TRUE,                           /* Whether or not we support channel owners. */
-        TRUE,                           /* Whether or not we support channel protection. */
+        FALSE,                          /* Whether or not we support channel owners. */
+        FALSE,                          /* Whether or not we support channel protection. */
         TRUE,                           /* Whether or not we support halfops. */
 		FALSE,				/* Whether or not we use P10 */
 		TRUE,				/* Whether or not we use vHosts. */
@@ -1144,6 +1144,11 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		if (strstr(parv[1], "m_svshold.so"))
 		{
 			has_svshold = true;
+		}
+		if (strstr(parv[1], "m_chanprotect.so"))
+		{
+			ircd->uses_owner = TRUE;
+			ircd->uses_protect = TRUE;
 		}
 	}
 	else if (strcasecmp(parv[0], "END") == 0)
