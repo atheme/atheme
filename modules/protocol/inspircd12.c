@@ -1149,8 +1149,6 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		{
 			ircd->uses_owner = TRUE;
 			ircd->uses_protect = TRUE;
-
-			update_chanacs_flags();
 		}
 	}
 	else if (strcasecmp(parv[0], "END") == 0)
