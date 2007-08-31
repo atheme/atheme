@@ -127,9 +127,6 @@ service_t *find_service(char *name)
 	char name2[NICKLEN];
 	mowgli_dictionary_iteration_state_t state;
 
-	if (name[0] == '#')
-		return fcmd_agent;
-
 	p = strchr(name, '@');
 	if (p != NULL)
 	{
