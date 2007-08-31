@@ -718,6 +718,7 @@ MOWGLI_CFLAGS
 MOWGLI_LIBS
 subdirs
 LIBMOWGLI
+BUILDROOT
 LIBOBJS
 LTLIBOBJS'
 ac_subst_files=''
@@ -11626,23 +11627,23 @@ fi
   else
      PKG_CONFIG_MIN_VERSION=0.9.0
      if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        { echo "$as_me:$LINENO: checking for libmowgli >= 0.2.0" >&5
-echo $ECHO_N "checking for libmowgli >= 0.2.0... $ECHO_C" >&6; }
+        { echo "$as_me:$LINENO: checking for libmowgli >= 0.4.0" >&5
+echo $ECHO_N "checking for libmowgli >= 0.4.0... $ECHO_C" >&6; }
 
-        if $PKG_CONFIG --exists "libmowgli >= 0.2.0" ; then
+        if $PKG_CONFIG --exists "libmowgli >= 0.4.0" ; then
             { echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
             succeeded=yes
 
             { echo "$as_me:$LINENO: checking MOWGLI_CFLAGS" >&5
 echo $ECHO_N "checking MOWGLI_CFLAGS... $ECHO_C" >&6; }
-            MOWGLI_CFLAGS=`$PKG_CONFIG --cflags "libmowgli >= 0.2.0"`
+            MOWGLI_CFLAGS=`$PKG_CONFIG --cflags "libmowgli >= 0.4.0"`
             { echo "$as_me:$LINENO: result: $MOWGLI_CFLAGS" >&5
 echo "${ECHO_T}$MOWGLI_CFLAGS" >&6; }
 
             { echo "$as_me:$LINENO: checking MOWGLI_LIBS" >&5
 echo $ECHO_N "checking MOWGLI_LIBS... $ECHO_C" >&6; }
-            MOWGLI_LIBS=`$PKG_CONFIG --libs "libmowgli >= 0.2.0"`
+            MOWGLI_LIBS=`$PKG_CONFIG --libs "libmowgli >= 0.4.0"`
             { echo "$as_me:$LINENO: result: $MOWGLI_LIBS" >&5
 echo "${ECHO_T}$MOWGLI_LIBS" >&6; }
         else
@@ -11652,7 +11653,7 @@ echo "${ECHO_T}no" >&6; }
             MOWGLI_LIBS=""
             ## If we have a custom action on failure, don't print errors, but
             ## do set a variable so people can do so.
-            MOWGLI_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libmowgli >= 0.2.0"`
+            MOWGLI_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libmowgli >= 0.4.0"`
 
         fi
 
@@ -11683,6 +11684,9 @@ LIBS="$LIBS $MOWGLI_LIBS"
 
 
 
+
+
+BUILDROOT=`pwd`
 
 
 ac_config_files="$ac_config_files po/Makefile.in Makefile contrib/Makefile modules/Makefile modules/Makefile.common modules/Makefile.defs modules/backend/Makefile modules/chanserv/Makefile modules/crypto/Makefile modules/gameserv/Makefile modules/global/Makefile modules/jsonrpc/Makefile modules/memoserv/Makefile modules/misc/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/protocol/Makefile modules/saslserv/Makefile modules/xmlrpc/Makefile src/Makefile"
@@ -12481,11 +12485,12 @@ MOWGLI_CFLAGS!$MOWGLI_CFLAGS$ac_delim
 MOWGLI_LIBS!$MOWGLI_LIBS$ac_delim
 subdirs!$subdirs$ac_delim
 LIBMOWGLI!$LIBMOWGLI$ac_delim
+BUILDROOT!$BUILDROOT$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 6; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 7; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
