@@ -131,7 +131,7 @@ E void init_channels(void);
 
 E channel_t *channel_add(const char *name, unsigned int ts, server_t *creator);
 E void channel_delete(channel_t *c);
-E channel_t *channel_find(const char *name);
+//inline channel_t *channel_find(const char *name);
 
 E chanuser_t *chanuser_add(channel_t *chan, const char *user);
 E void chanuser_delete(channel_t *chan, user_t *user);
@@ -140,7 +140,7 @@ E chanuser_t *chanuser_find(channel_t *chan, user_t *user);
 E chanban_t *chanban_add(channel_t *chan, const char *mask, int type);
 E void chanban_delete(chanban_t *c);
 E chanban_t *chanban_find(channel_t *chan, const char *mask, int type);
-E void chanban_clear(channel_t *chan);
+//inline void chanban_clear(channel_t *chan);
 
 #endif
 

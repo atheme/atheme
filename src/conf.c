@@ -36,11 +36,15 @@
 #include "pmodule.h"
 #include "privs.h"
 
-#define PARAM_ERROR(ce) { slog(LG_INFO, "%s:%i: no parameter for " \
-                          "configuration option: %s", \
-                          (ce)->ce_fileptr->cf_filename, \
-                          (ce)->ce_varlinenum, (ce)->ce_varname); \
-  return 1; }
+inline int
+PARAM_ERROR(config_entry_t *ce)
+{
+	slog(LG_INFO, "%s:%i: no parameter for configuration option: %s",
+	     ce->ce_fileptr->cf_filename,
+	     ce->ce_varlinenum,
+	     ce->ce_varname);
+	return 1;
+}
 
 static int c_serverinfo(config_entry_t *);
 static int c_cservice(config_entry_t *);
