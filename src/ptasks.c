@@ -408,7 +408,7 @@ void handle_away(user_t *u, const char *message)
 	}
 }
 
-void
+static void
 handle_channel_message(sourceinfo_t *si, char *target, boolean_t is_notice, char *message)
 {
 	char *vec[3];

@@ -271,25 +271,6 @@ void myuser_delete(myuser_t *mu)
 }
 
 /*
- * myuser_find(const char *name)
- *
- * Retrieves an account from the accounts DTree.
- *
- * Inputs:
- *      - account name to retrieve
- *
- * Outputs:
- *      - account wanted or NULL if it's not in the DTree.
- *
- * Side Effects:
- *      - none
- */
-myuser_t *myuser_find(const char *name)
-{
-	return mowgli_dictionary_retrieve(mulist, name);
-}
-
-/*
  * myuser_find_ext(const char *name)
  *
  * Same as myuser_find() but with nick group support and undernet-style
@@ -619,25 +600,6 @@ void mynick_delete(mynick_t *mn)
 	cnt.mynick--;
 }
 
-/*
- * mynick_find(const char *name)
- *
- * Retrieves a nick from the nicks DTree.
- *
- * Inputs:
- *      - nickname to retrieve
- *
- * Outputs:
- *      - nick wanted or NULL if it's not in the DTree.
- *
- * Side Effects:
- *      - none
- */
-mynick_t *mynick_find(const char *name)
-{
-	return mowgli_dictionary_retrieve(nicklist, name);
-}
-
 /***************
  * M Y C H A N *
  ***************/
@@ -694,10 +656,6 @@ mychan_t *mychan_add(char *name)
 	return mc;
 }
 
-mychan_t *mychan_find(const char *name)
-{
-	return mowgli_dictionary_retrieve(mclist, name);
-}
 
 /* Check if there is anyone on the channel fulfilling the conditions.
  * Fairly expensive, but this is sometimes necessary to avoid
@@ -1143,12 +1101,6 @@ unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u)
 	return result;
 }
 
-boolean_t chanacs_source_has_flag(mychan_t *mychan, sourceinfo_t *si, unsigned int level)
-{
-	return si->su != NULL ? chanacs_user_has_flag(mychan, si->su, level) :
-		chanacs_find(mychan, si->smu, level) != NULL;
-}
-
 unsigned int chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si)
 {
 	chanacs_t *ca;
@@ -1193,20 +1145,6 @@ chanacs_t *chanacs_open(mychan_t *mychan, myuser_t *mu, const char *hostmask, bo
 			return chanacs_add_host(mychan, hostmask, 0, CURRTIME);
 	}
 	return NULL;
-}
-
-/* Destroy a chanacs if it has no flags */
-void chanacs_close(chanacs_t *ca)
-{
-	if (ca->level == 0)
-		object_unref(ca);
-}
-
-/* Call this with a chanacs_t with level==0 */
-boolean_t chanacs_is_table_full(chanacs_t *ca)
-{
-	return chansvs.maxchanacs > 0 &&
-		LIST_LENGTH(&ca->mychan->chanacs) > chansvs.maxchanacs;
 }
 
 /* Change channel access

@@ -148,23 +148,6 @@ connection_t *connection_find(int fd)
 }
 
 /*
- * connection_count()
- *
- * inputs:
- *       none
- *
- * outputs:
- *       number of connections tracked
- *
- * side effects:
- *       none
- */
-int connection_count(void)
-{
-	return LIST_LENGTH(&connection_list);
-}
-
-/*
  * connection_close()
  *
  * inputs:
@@ -624,23 +607,6 @@ void connection_write(connection_t *to, char *format, ...)
 	buf[len] = '\0';
 
 	sendq_add(to, buf, len);
-}
-
-/*
- * connection_write_raw()
- *
- * inputs:
- *       connection_t to write to, raw string to write
- *
- * outputs:
- *       none
- *
- * side effects:
- *       data is added to the connection_t sendq cache.
- */
-void connection_write_raw(connection_t *to, char *data)
-{
-	sendq_add(to, data, strlen(data));
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

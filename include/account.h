@@ -276,7 +276,7 @@ E void init_accounts(void);
 
 E myuser_t *myuser_add(char *name, char *pass, char *email, unsigned int flags);
 E void myuser_delete(myuser_t *mu);
-E myuser_t *myuser_find(const char *name);
+//inline myuser_t *myuser_find(const char *name);
 E myuser_t *myuser_find_ext(const char *name);
 E void myuser_notice(char *from, myuser_t *target, char *fmt, ...);
 E int myuser_num_channels(myuser_t *mu);
@@ -288,10 +288,10 @@ E void myuser_access_delete(myuser_t *mu, char *mask);
 
 E mynick_t *mynick_add(myuser_t *mu, const char *name);
 E void mynick_delete(mynick_t *mn);
-E mynick_t *mynick_find(const char *name);
+//inline mynick_t *mynick_find(const char *name);
 
 E mychan_t *mychan_add(char *name);
-E mychan_t *mychan_find(const char *name);
+//inline mychan_t *mychan_find(const char *name);
 E boolean_t mychan_isused(mychan_t *mc);
 E int mychan_num_founders(mychan_t *mc);
 E const char *mychan_founder_names(mychan_t *mc);
@@ -310,15 +310,15 @@ E unsigned int chanacs_host_flags_by_user(mychan_t *mychan, user_t *u);
 E chanacs_t *chanacs_find_by_mask(mychan_t *mychan, const char *mask, unsigned int level);
 E boolean_t chanacs_user_has_flag(mychan_t *mychan, user_t *u, unsigned int level);
 E unsigned int chanacs_user_flags(mychan_t *mychan, user_t *u);
-E boolean_t chanacs_source_has_flag(mychan_t *mychan, sourceinfo_t *si, unsigned int level);
+//inline boolean_t chanacs_source_has_flag(mychan_t *mychan, sourceinfo_t *si, unsigned int level);
 E unsigned int chanacs_source_flags(mychan_t *mychan, sourceinfo_t *si);
 
-chanacs_t *chanacs_open(mychan_t *mychan, myuser_t *mu, const char *hostmask, boolean_t create);
-void chanacs_close(chanacs_t *ca);
-boolean_t chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags);
-boolean_t chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int removeflags);
+E chanacs_t *chanacs_open(mychan_t *mychan, myuser_t *mu, const char *hostmask, boolean_t create);
+//inline void chanacs_close(chanacs_t *ca);
+E boolean_t chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags);
+E boolean_t chanacs_modify_simple(chanacs_t *ca, unsigned int addflags, unsigned int removeflags);
 
-boolean_t chanacs_is_table_full(chanacs_t *ca);
+//inline boolean_t chanacs_is_table_full(chanacs_t *ca);
 
 E boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, const char *hostmask, unsigned int *addflags, unsigned int *removeflags, unsigned int restrictflags);
 E boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, const char *hostmask, unsigned int addflags, unsigned int removeflags);
@@ -336,5 +336,4 @@ E void svsignore_delete(svsignore_t *svsignore);
 
 #endif
 
-/* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs ts=8 sw=8 noexpandtab
- */
+// vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs ts=8 sw=8 noexpandtab

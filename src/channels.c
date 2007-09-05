@@ -206,26 +206,6 @@ void channel_delete(channel_t *c)
 }
 
 /*
- * channel_find(const char *name)
- *
- * Looks up a channel object.
- *
- * Inputs:
- *     - name of channel to look up
- *
- * Outputs:
- *     - on success, the channel object
- *     - on failure, NULL
- *
- * Side Effects:
- *     - none
- */
-channel_t *channel_find(const char *name)
-{
-	return mowgli_dictionary_retrieve(chanlist, name);
-}
-
-/*
  * chanban_add(channel_t *chan, const char *mask, int type)
  *
  * Channel ban factory.
@@ -344,32 +324,6 @@ chanban_t *chanban_find(channel_t *chan, const char *mask, int type)
 	}
 
 	return NULL;
-}
-
-/*
- * chanban_clear(channel_t *chan)
- *
- * Destroys all channel bans attached to a channel.
- *
- * Inputs:
- *     - channel to clear banlist on
- *
- * Outputs:
- *     - nothing
- *
- * Side Effects:
- *     - the banlist on the channel is cleared
- *     - no protocol messages are sent
- */
-void chanban_clear(channel_t *chan)
-{
-	node_t *n, *tn;
-
-	LIST_FOREACH_SAFE(n, tn, chan->bans.head)
-	{
-		/* inefficient but avoids code duplication -- jilles */
-		chanban_delete(n->data);
-	}
 }
 
 /*
