@@ -442,7 +442,7 @@ handle_channel_message(sourceinfo_t *si, char *target, boolean_t is_notice, char
 		if (si->service == NULL)
 			continue;
 
-		if (si->chanmsg == FALSE)
+		if (si->service->chanmsg == FALSE)
 			continue;
 
 		if (is_notice)
