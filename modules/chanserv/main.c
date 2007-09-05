@@ -181,6 +181,8 @@ static void chanserv_config_ready(void *unused)
 	if (chansvs.fantasy)
 		fcmd_agent = chansvs.me;
 
+	service_set_chanmsg(chansvs.me, TRUE);
+
 	if (me.connected)
 		join_registered(!config_options.leave_chans);
 
@@ -198,6 +200,8 @@ void _modinit(module_t *m)
 		chansvs.disp = chansvs.me->disp;
 		if (chansvs.fantasy)
 			fcmd_agent = chansvs.me;
+
+		service_set_chanmsg(chansvs.me, TRUE);
 
 		if (me.connected)
 			join_registered(!config_options.leave_chans);

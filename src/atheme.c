@@ -4,19 +4,9 @@
  *
  * Copyright (c) 2005-2007 Atheme Project (http://www.atheme.org)           
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
  *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -74,16 +64,19 @@ static void print_help(void)
 	       "-p <file>    Specify the pid file (will be overwritten)\n"
 	       "-v           Print version information and exit\n");
 }
+/* *INDENT-ON* */
 
 static void print_version(void)
 {
+	int i;
+
 	printf("Atheme IRC Services (atheme-%s)\n"
-	       "Compiled %s, build-id %s, build %s\n\n"
-	       "Copyright (c) 2005-2007 Atheme Development Group\n"
-	       "Rights to this code are documented in doc/LICENSE.\n",
+	       "Compiled %s, build-id %s, build %s\n\n",
 	       version, creation, revision, generation);
+
+	for (i = 0; infotext[i] != NULL; i++)
+		printf("%s\n", infotext[i]);
 }
-/* *INDENT-ON* */
 
 static void rng_reseed(void *unused)
 {
