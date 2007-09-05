@@ -25,10 +25,6 @@
 #include <ctype.h>
 #include <regex.h>
 
-#ifdef HAVE_GETOPT_H
-#include <getopt.h>
-#endif
-
 #ifdef HAVE_LINK_H
 #include <link.h>
 #endif

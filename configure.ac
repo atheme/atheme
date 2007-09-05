@@ -74,7 +74,7 @@ AC_SUBST(MKDEP)
 
 dnl Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS(sys/time.h sys/select.h getopt.h link.h)
+AC_CHECK_HEADERS(sys/time.h sys/select.h link.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
