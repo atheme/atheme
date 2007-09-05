@@ -43,7 +43,7 @@ static void do_packet(connection_t *cptr, char *buf)
                 *tmp = '\0';
 
 		slog(LG_DEBUG, "-{incoming}-> %s", buf2);
-		connection_write_raw(cptr, buf2);
+		sendq_add(cptr, buf2, strlen(buf2));
 
                 buf = ptr + 1;
         }
