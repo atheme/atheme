@@ -24,6 +24,8 @@ struct service_ {
 	void (*notice_handler)(sourceinfo_t *, int, char **);
 
 	list_t *cmdtree;
+
+	boolean_t chanmsg;
 };
 
 E void servtree_init(void);
@@ -33,6 +35,7 @@ E service_t *add_service(char *name, char *user, char *host, char *real,
 E void del_service(service_t *sptr);
 E service_t *find_service(char *name);
 E char *service_name(char *name);
+E void service_set_chanmsg(service_t *, boolean_t);
 
 #endif
 

@@ -74,6 +74,7 @@ service_t *add_service(char *name, char *user, char *host, char *real, void (*ha
 	sptr->notice_handler = dummy_handler;
 
 	sptr->cmdtree = cmdtree;
+	sptr->chanmsg = FALSE;
 
 	if (me.connected)
 	{
@@ -171,6 +172,13 @@ char *service_name(char *name)
 	snprintf(buf, BUFSIZE, "%s%s%s", name, (config_options.secure) ? "@" : "", (config_options.secure) ? me.name : "");
 
 	return buf;
+}
+
+void service_set_chanmsg(service_t *service, boolean_t chanmsg)
+{
+	return_if_fail(service != NULL);
+
+	service->chanmsg = chanmsg;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
