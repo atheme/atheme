@@ -64,16 +64,19 @@ static void print_help(void)
 	       "-p <file>    Specify the pid file (will be overwritten)\n"
 	       "-v           Print version information and exit\n");
 }
+/* *INDENT-ON* */
 
 static void print_version(void)
 {
+	int i;
+
 	printf("Atheme IRC Services (atheme-%s)\n"
-	       "Compiled %s, build-id %s, build %s\n\n"
-	       "Copyright (c) 2005-2007 Atheme Development Group\n"
-	       "Rights to this code are documented in doc/LICENSE.\n",
+	       "Compiled %s, build-id %s, build %s\n\n",
 	       version, creation, revision, generation);
+
+	for (i = 0; infotext[i] != NULL; i++)
+		printf("%s\n", infotext[i]);
 }
-/* *INDENT-ON* */
 
 static void rng_reseed(void *unused)
 {
