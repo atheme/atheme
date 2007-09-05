@@ -32,9 +32,6 @@
 /* Define to 1 if you have the `getenv' function. */
 #undef HAVE_GETENV
 
-/* Define to 1 if you have the <getopt.h> header file. */
-#undef HAVE_GETOPT_H
-
 /* Define to 1 if you have the `getpid' function. */
 #undef HAVE_GETPID
 
