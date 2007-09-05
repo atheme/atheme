@@ -73,17 +73,9 @@ fi
 AC_SUBST(MKDEP)
 
 dnl Checks for header files.
-AC_HEADER_STDC
-AC_CHECK_HEADERS(sys/time.h sys/select.h link.h)
-
-dnl Checks for typedefs, structures, and compiler characteristics.
-AC_C_CONST
-AC_TYPE_SIZE_T
-AC_HEADER_TIME
-AC_STRUCT_TM
+AC_CHECK_HEADERS(link.h)
 
 dnl Checks for library functions.
-AC_TYPE_SIGNAL
 AC_FUNC_STRFTIME
 AC_CHECK_FUNCS([strdup strlcpy strlcat inet_pton inet_ntop gettimeofday umask mmap arc4random getrlimit fork getpid execve])
 AC_CHECK_FUNC(socket,, AC_CHECK_LIB(socket, socket))
