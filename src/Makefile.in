@@ -137,9 +137,9 @@ install: build
 	$(INSTALL) -m 755 -d $(DESTDIR)$(SHAREDIR)/help
 	$(INSTALL) -m 755 -c $(BIN) $(DESTDIR)$(bindir)
 	$(INSTALL) -m 640 -c ../dist/atheme.conf.example $(DESTDIR)$(sysconfdir)
-	$(INSTALL) -m 640 -c ../dist/example.motd $(DESTDIR)$(sysconfdir)
+	$(INSTALL) -m 640 -c ../dist/atheme.motd.example $(DESTDIR)$(sysconfdir)
 	$(INSTALL) -m 640 -c ../dist/atheme.conf.userserv-example $(DESTDIR)$(sysconfdir)
-	$(INSTALL) -m 640 -c ../dist/atheme.chk $(DESTDIR)$(sysconfdir)/atheme.chk.sample
+	$(INSTALL) -m 640 -c ../dist/atheme.cron.example $(DESTDIR)$(sysconfdir)
 	[ -f ${DESTDIR}${bindir}/atheme ] && ${RM} ${DESTDIR}${bindir}/atheme || :
 	-${RM} -f $(DESTDIR)${DOCDIR}/HOOKS $(DESTDIR)${DOCDIR}/MODES $(DESTDIR)${DOCDIR}/XMLRPCLIB
 	(cd ../doc; for i in *; do \
