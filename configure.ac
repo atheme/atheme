@@ -73,7 +73,7 @@ fi
 AC_SUBST(MKDEP)
 
 dnl Checks for header files.
-AC_CHECK_HEADERS(link.h)
+AC_CHECK_HEADERS(link.h,,,[-])
 
 dnl Checks for library functions.
 AC_FUNC_STRFTIME
@@ -204,7 +204,7 @@ if test "$enable_ssl" = "yes"; then
 			SSL_LIBS="-lssl -lcrypto"
 			AC_SUBST(SSL_LIBS)
 			SSL=yes
-			])
+			],,[-])
 		],, -lcrypto)
 	if test "$SSL" = "yes"; then
 		AC_DEFINE(HAVE_OPENSSL,, Define to 1 if openssl is available)
@@ -216,7 +216,7 @@ shared_modules="yes"
 
 dnl Second stage: check for functions and headers.
 if test "$shared_modules" = yes; then
-	AC_CHECK_HEADERS(dlfcn.h)
+	AC_CHECK_HEADERS(dlfcn.h,,,[-])
 	AC_SEARCH_LIBS(dlopen, [dl c_r],
 	[
 	    AC_DEFINE(HAVE_DLOPEN, 1, [Define if the dlopen function is available.])
@@ -330,9 +330,9 @@ if test "$shared_modules" = yes; then
 	dnl We need to find out whether underscores are appended to symbol
 	dnl names in executable files.  First, though, we need to see
 	dnl where nlist.h is hiding.
-	AC_CHECK_HEADER(libelf/nlist.h, [ nlist_h="libelf/nlist.h" ], )
-	AC_CHECK_HEADER(elf/nlist.h, [ nlist_h="elf/nlist.h" ], )
-	AC_CHECK_HEADER(nlist.h, [ nlist_h="nlist.h" ], )
+	AC_CHECK_HEADER(libelf/nlist.h, [ nlist_h="libelf/nlist.h" ], ,[-])
+	AC_CHECK_HEADER(elf/nlist.h, [ nlist_h="elf/nlist.h" ], ,[-])
+	AC_CHECK_HEADER(nlist.h, [ nlist_h="nlist.h" ], ,[-])
 	if test x"$nlist_h" = "x"; then
 		AC_DEFINE_UNQUOTED(SYMBOL_PREFIX, "",
 			[String containing extra underscores prepended to symbols loaded from modules.])

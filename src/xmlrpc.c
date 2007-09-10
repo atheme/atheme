@@ -182,6 +182,8 @@ XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func)
 	}
 	xml->name = xmlrpc_strdup(name);
 	xml->func = func;
+	xml->mod_name = NULL;
+	xml->core = 0;
 	xml->next = NULL;
 	return xml;
 }
@@ -254,10 +256,38 @@ int addXMLCommand(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml)
 
 int xmlrpc_unregister_method(const char *method)
 {
-	XMLRPCCmd *xml;
+	int idx = 0;
+	XMLRPCCmdHash *current = NULL;
+	XMLRPCCmdHash *lastHash = NULL;
+	XMLRPCCmd *xml, *xml2;
 
-	xml = findXMLRPCCommand(XMLRPCCMD, method);
-	return destroyXMLRPCCommand(xml);
+	if (!method)
+	{
+		return XMLRPC_ERR_PARAMS;
+	}
+	idx = CMD_HASH(method);
+
+	for (current = XMLRPCCMD[idx]; current; current = current->next)
+	{
+		if (stricmp(method, current->name) == 0)
+		{
+			if (lastHash)
+				lastHash->next = current->next;
+			else
+				XMLRPCCMD[idx] = current->next;
+			for (xml = current->xml; xml; xml = xml2)
+			{
+				xml2 = xml->next;
+				destroyXMLRPCCommand(xml);
+			}
+			free(current->name);
+			free(current);
+			return XMLRPC_ERR_OK;
+		}
+		lastHash = current;
+	}
+
+	return XMLRPC_ERR_NOEXIST;
 }
 
 /*************************************************************************/
@@ -283,6 +313,7 @@ int destroyXMLRPCCommand(XMLRPCCmd * xml)
 		free(xml->mod_name);
 	}
 	xml->next = NULL;
+	free(xml);
 	return XMLRPC_ERR_OK;
 }
 

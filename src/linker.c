@@ -68,13 +68,16 @@ void *linker_open(char *path)
 void *linker_open_ext(char *path)
 {
 	char *buf = smalloc(strlen(path) + 20);
+	void *ret;
 	
 	strlcpy(buf, path, strlen(path) + 20);
 
 	if (!strstr(buf, PLATFORM_SUFFIX))
 		strlcat(buf, PLATFORM_SUFFIX, strlen(path) + 20);
 
-	return linker_open(buf);
+	ret = linker_open(buf);
+	free(buf);
+	return ret;
 }
 
 /*

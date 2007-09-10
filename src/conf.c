@@ -725,7 +725,7 @@ static int c_uplink(config_entry_t *ce)
 	else if (isdigit(ce->ce_vardata[0]))
 		slog(LG_ERROR, "%s:%d: uplink's server name %s starts with a digit, probably invalid (continuing anyway)", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_vardata);
 
-	name = sstrdup(ce->ce_vardata);
+	name = ce->ce_vardata;
 
 	for (ce = ce->ce_entries; ce; ce = ce->ce_next)
 	{
@@ -734,21 +734,21 @@ static int c_uplink(config_entry_t *ce)
 			if (ce->ce_vardata == NULL)
 				PARAM_ERROR(ce);
 
-			host = sstrdup(ce->ce_vardata);
+			host = ce->ce_vardata;
 		}
 		else if (!strcasecmp("VHOST", ce->ce_varname))
 		{
 			if (ce->ce_vardata == NULL)
 				PARAM_ERROR(ce);
 
-			vhost = sstrdup(ce->ce_vardata);
+			vhost = ce->ce_vardata;
 		}
 		else if (!strcasecmp("PASSWORD", ce->ce_varname))
 		{
 			if (ce->ce_vardata == NULL)
 				PARAM_ERROR(ce);
 
-			password = sstrdup(ce->ce_vardata);
+			password = ce->ce_vardata;
 		}
 		else if (!strcasecmp("PORT", ce->ce_varname))
 		{

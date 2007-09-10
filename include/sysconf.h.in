@@ -29,9 +29,6 @@
 /* Define to 1 if you have the `fork' function. */
 #undef HAVE_FORK
 
-/* Define to 1 if you have the `getenv' function. */
-#undef HAVE_GETENV
-
 /* Define to 1 if you have the `getpid' function. */
 #undef HAVE_GETPID
 
@@ -53,9 +50,6 @@
 /* Define to 1 if you have the `inet_pton' function. */
 #undef HAVE_INET_PTON
 
-/* Define to 1 if you have the <inttypes.h> header file. */
-#undef HAVE_INTTYPES_H
-
 /* Define to 1 if you have the `nsl' library (-lnsl). */
 #undef HAVE_LIBNSL
 
@@ -64,9 +58,6 @@
 
 /* Define to 1 if you have the <link.h> header file. */
 #undef HAVE_LINK_H
-
-/* Define to 1 if you have the <memory.h> header file. */
-#undef HAVE_MEMORY_H
 
 /* Define to 1 if you have the `mmap' function. */
 #undef HAVE_MMAP
@@ -80,23 +71,11 @@
 /* Define to 1 if you have the <openssl/ssl.h> header file. */
 #undef HAVE_OPENSSL_SSL_H
 
-/* Define to 1 if you have the <stdint.h> header file. */
-#undef HAVE_STDINT_H
-
-/* Define to 1 if you have the <stdlib.h> header file. */
-#undef HAVE_STDLIB_H
-
 /* Define to 1 if you have the `strdup' function. */
 #undef HAVE_STRDUP
 
 /* Define to 1 if you have the `strftime' function. */
 #undef HAVE_STRFTIME
-
-/* Define to 1 if you have the <strings.h> header file. */
-#undef HAVE_STRINGS_H
-
-/* Define to 1 if you have the <string.h> header file. */
-#undef HAVE_STRING_H
 
 /* Define to 1 if you have the `strlcat' function. */
 #undef HAVE_STRLCAT
@@ -104,23 +83,8 @@
 /* Define to 1 if you have the `strlcpy' function. */
 #undef HAVE_STRLCPY
 
-/* Define to 1 if you have the <sys/select.h> header file. */
-#undef HAVE_SYS_SELECT_H
-
-/* Define to 1 if you have the <sys/stat.h> header file. */
-#undef HAVE_SYS_STAT_H
-
-/* Define to 1 if you have the <sys/time.h> header file. */
-#undef HAVE_SYS_TIME_H
-
-/* Define to 1 if you have the <sys/types.h> header file. */
-#undef HAVE_SYS_TYPES_H
-
 /* Define to 1 if you have the `umask' function. */
 #undef HAVE_UMASK
-
-/* Define to 1 if you have the <unistd.h> header file. */
-#undef HAVE_UNISTD_H
 
 /* Uncomment to enable large network support. */
 #undef LARGE_NETWORK
@@ -146,21 +110,9 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
-/* Define as the return type of signal handlers (`int' or `void'). */
-#undef RETSIGTYPE
-
-/* Define to 1 if you have the ANSI C header files. */
-#undef STDC_HEADERS
-
 /* String containing extra underscores prepended to symbols loaded from
    modules. */
 #undef SYMBOL_PREFIX
-
-/* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
-#undef TIME_WITH_SYS_TIME
-
-/* Define to 1 if your <sys/time.h> declares `struct tm'. */
-#undef TM_IN_SYS_TIME
 
 /* Version number of package */
 #undef VERSION
@@ -170,14 +122,8 @@
 # undef _GNU_SOURCE
 #endif
 
-/* Define to empty if `const' does not conform to ANSI C. */
-#undef const
-
 /* Define to `__inline__' or `__inline' if that's what the C compiler
    calls it, or to nothing if 'inline' is not supported under any name.  */
 #ifndef __cplusplus
 #undef inline
 #endif
-
-/* Define to `unsigned int' if <sys/types.h> does not define. */
-#undef size_t
