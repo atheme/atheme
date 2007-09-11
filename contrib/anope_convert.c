@@ -80,6 +80,8 @@ void write_accounts(void)
 				if (na2->time_registered < registered)
 					registered = na2->time_registered;
 			}
+			if (na->status & NS_VERBOTEN)
+				continue;
 			if (nc->flags & NI_HIDE_EMAIL)
 				athemeflags |= 0x10; /* MU_HIDEMAIL */
 #ifdef NI_AUTOOP
