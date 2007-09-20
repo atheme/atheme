@@ -83,6 +83,7 @@ struct myuser_
 #define MU_CRYPTPASS   0x00000100
 #define MU_OLD_SASL    0x00000200 /* obsolete */
 #define MU_NOBURSTLOGIN 0x00000400
+#define MU_ENFORCE     0x00000800 /* XXX limited use at this time */
 
 /* memoserv rate limiting parameters */
 #define MEMO_MAX_NUM   5

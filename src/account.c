@@ -112,6 +112,11 @@ myuser_t *myuser_add(char *name, char *pass, char *email, unsigned int flags)
 
 	mu->registered = CURRTIME;
 	mu->flags = flags;
+	if (mu->flags & MU_ENFORCE)
+	{
+		mu->flags &= ~MU_ENFORCE;
+		metadata_add(mu, METADATA_USER, "private:doenforce", "1");
+	}
 
 	/* If it's already crypted, don't touch the password. Otherwise,
 	 * use set_password() to initialize it. Why? Because set_password
