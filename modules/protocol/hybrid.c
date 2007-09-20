@@ -69,6 +69,7 @@ struct cmode_ hybrid_prefix_mode_list[] = {
 
 static boolean_t use_rserv_support = FALSE;
 static boolean_t use_tb = FALSE;
+static boolean_t use_tburst = FALSE;
 static boolean_t use_rsfnc = FALSE;
 
 static void server_eob(server_t *s);
@@ -101,7 +102,7 @@ static unsigned int hybrid_server_login(void)
 
 	me.bursting = TRUE;
 
-	sts("CAPAB :QS EX IE KLN UNKLN ENCAP TB SERVICES");
+	sts("CAPAB :QS EX IE KLN UNKLN ENCAP TB SERVICES TBURST");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
 	sts("SVINFO %d 3 0 :%ld", ircd->uses_uid ? 6 : 5, CURRTIME);
 
@@ -315,6 +316,12 @@ static void hybrid_topic_sts(channel_t *c, const char *setter, time_t ts, time_t
 	if (!me.connected || !c)
 		return;
 
+	if (use_tburst && (c->ts > 0 || ts > prevts + 60))
+	{
+		/* send a channel TS of 0 to force our change to take */
+		sts(":%s TBURST 0 %s %ld %s :%s", ME, c->name, ts, setter, topic);
+		return;
+	}
 	/* If possible, try to use TB
 	 * Note that because TOPIC does not contain topicTS, it may be
 	 * off a few seconds on other servers, hence the 60 seconds here.
@@ -471,6 +478,31 @@ static void m_tb(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	handle_topic_from(si, c, parc > 3 ? parv[2] : si->s->name, ts, parv[parc - 1]);
+}
+
+static void m_tburst(sourceinfo_t *si, int parc, char *parv[])
+{
+	time_t chants = atol(parv[0]);
+	channel_t *c = channel_find(parv[1]);
+	time_t topicts = atol(parv[2]);
+
+	if (c == NULL)
+		return;
+
+	/* Our uplink is trying to change the topic during burst,
+	 * and we have already set a topic. Assume our change won.
+	 * -- jilles */
+	if (si->s != NULL && si->s->uplink == me.me &&
+			!(si->s->flags & SF_EOB) && c->topic != NULL)
+		return;
+
+	if (c->ts < chants || (c->ts == chants && c->topicts >= topicts))
+	{
+		slog(LG_DEBUG, "m_tburst(): ignoring topic on %s", c->name);
+		return;
+	}
+
+	handle_topic_from(si, c, parv[3], topicts, parv[4]);
 }
 
 static void m_ping(sourceinfo_t *si, int parc, char *parv[])
@@ -1037,6 +1069,7 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 
 	use_rserv_support = FALSE;
 	use_tb = FALSE;
+	use_tburst = FALSE;
 	use_rsfnc = FALSE;
 	for (p = strtok(parv[0], " "); p != NULL; p = strtok(NULL, " "))
 	{
@@ -1044,6 +1077,11 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		{
 			slog(LG_DEBUG, "m_capab(): uplink has rserv extensions, enabling support.");
 			use_rserv_support = TRUE;
+		}
+		if (!irccasecmp(p, "TBURST"))
+		{
+			slog(LG_DEBUG, "m_capab(): uplink does Hybrid-style topic bursting, using if appropriate.");
+			use_tburst = TRUE;
 		}
 		if (!irccasecmp(p, "TB"))
 		{
@@ -1153,6 +1191,7 @@ void _modinit(module_t * m)
 	pcommand_add("ERROR", m_error, 1, MSRC_UNREG | MSRC_SERVER);
 	pcommand_add("TOPIC", m_topic, 2, MSRC_USER);
 	pcommand_add("TB", m_tb, 3, MSRC_SERVER);
+	pcommand_add("TBURST", m_tburst, 5, MSRC_SERVER);
 	pcommand_add("ENCAP", m_encap, 2, MSRC_USER | MSRC_SERVER);
 	pcommand_add("CAPAB", m_capab, 1, MSRC_UNREG);
 	pcommand_add("UID", m_uid, 9, MSRC_SERVER);
