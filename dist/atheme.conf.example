@@ -124,7 +124,7 @@ loadmodule "modules/nickserv/main";
 #loadmodule "modules/nickserv/access";
 loadmodule "modules/nickserv/drop";
 loadmodule "modules/nickserv/ghost";
-#loadmodule "modules/nickserv/group";
+loadmodule "modules/nickserv/group";
 loadmodule "modules/nickserv/help";
 loadmodule "modules/nickserv/hold";
 loadmodule "modules/nickserv/identify";
