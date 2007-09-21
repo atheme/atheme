@@ -90,7 +90,7 @@ static void ns_cmd_setpass(sourceinfo_t *si, int parc, char *parv[])
 		set_password(mu, password);
 		metadata_delete(mu, METADATA_USER, "private:setpass:key");
 
-		command_success_nodata(si, _("The password for \2%s\2 has been changed to \2%s\2. Please write this down for future reference."), mu->name, password);
+		command_success_nodata(si, _("The password for \2%s\2 has been changed to \2%s\2."), mu->name, password);
 
 		return;
 	}

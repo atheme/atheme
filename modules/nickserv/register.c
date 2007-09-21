@@ -210,8 +210,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		snoop("SOPER: \2%s\2 as \2%s\2", get_oper_name(si), mu->name);
 	}
 
-	command_success_nodata(si, _("\2%s\2 is now registered to \2%s\2."), mu->name, mu->email);
-	command_success_nodata(si, _("The password is \2%s\2. Please write this down for future reference."), pass);
+	command_success_nodata(si, _("\2%s\2 is now registered to \2%s\2, with the password \2%s\2."), mu->name, mu->email, pass);
 	hook_call_event("user_register", mu);
 
 	if (si->su != NULL)

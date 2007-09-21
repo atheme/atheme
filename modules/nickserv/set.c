@@ -563,7 +563,7 @@ static void _ns_setpassword(sourceinfo_t *si, int parc, char *parv[])
 
 	set_password(si->smu, password);
 
-	command_success_nodata(si, _("The password for \2%s\2 has been changed to \2%s\2. Please write this down for future reference."), si->smu->name, password);
+	command_success_nodata(si, _("The password for \2%s\2 has been changed to \2%s\2."), si->smu->name, password);
 
 	return;
 }
