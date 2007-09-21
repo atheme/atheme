@@ -160,6 +160,8 @@ static struct Token uflags[] = {
   { "NEVEROP",  MU_NEVEROP  },
   { "NOOP",     MU_NOOP     },
   { "HIDEMAIL", MU_HIDEMAIL },
+  { "NOMEMO",   MU_NOMEMO   },
+  { "ENFORCE",  MU_ENFORCE  },
   { "NONE",     0           },
   { NULL, 0 }
 };

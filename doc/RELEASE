@@ -1,3 +1,76 @@
+Atheme 3.0 Release Notes
+========================
+ircd protocol
+- In hyperion, use COLLIDE instead of KILL (less noisy).
+- Allow channel ban and host channel access matching to be customized by
+  protocol modules. In particular, make charybdis extbans acorsx and hyperion
+  +d bans work.
+- Track if the ircd supports CIDR bans.
+- Some fixes for TS 0 channels in TS5/TS6.
+- Drop support for inspircd 1.0.
+- Add more explicit support for invite exceptions.
+- Fix SVSMODE in ultimate3.
+- Make /version reply (351 numeric) rfc1459 compliant.
+- Add support for mlocking various new modes in inspircd.
+- Add experimental support for inspircd 1.2.
+- Add TBURST support to hybrid protocol module, allows better topic setting.
+nickserv
+- Add nickserv/subscribe, allows users to be notified when metadata is
+  changed.
+- Disallow DROP of a frozen account except by admins.
+- Always show configured vhost to users, not any other host.
+- Allow ENFORCE and NOMEMO to be set on new accounts via uflags in the
+  configuration file.
+- Load nickserv/group by default in the example configuration file.
+saslserv
+chanserv
+- Change channel_register hook from mychan_t * to hook_channel_req_t *. This
+  makes it possible to send text to the person registering the channel in a
+  clean way.
+- Improve non-halfops behaviour somewhat.
+- Add chanserv::maxchanacs option, limits how many entries can be put in
+  channel access lists.
+- Add chanserv/unban_self, which only allows unbanning the source user.
+  This is intended to be loaded instead of chanserv/ban for the paranoid.
+- Kick out unauthorized users who may be recreating channels mlocked +i.
+- Disable xOP in the example configuration, it does not work well.
+- HOLD on an account no longer prevents channels from expiring.
+- Allow multiple founders on a channel, signified by a new flag +F.
+  All founders have the exact same privileges, including the privilege to
+  add/remove founders and drop the channel.
+memoserv
+gameserv
+oper
+- Add LG_REGISTER level for all registration related messages. This can be
+  used to create a log file containing all registrations and drops only.
+- Allow any akill without wildcards in the user part, like in charybdis 2.2.
+- Allow CIDR masks in the CLONES exempt list.
+- Add privilege operserv:akill-anymask, allows akilling masks with
+  insufficient non-wildcard characters.
+xmlrpc
+- Make xmlrpc faster.
+- Create a nick in addition to an account in the obsolete xmlrpc/account
+  module.
+- Fix crashes when unloading xmlrpc modules.
+code
+- Switch from Subversion to Mercurial.
+- Remove redundant user_t pointer from hook_channel_req_t.
+- Switch to non-copyleft BSD licensing.
+- Integrate libmowgli framework into the tree. Only mowgli_dictionary is
+  used for now.
+- Make --disable-balloc work and no longer change ABI.
+- Rework channel message handling.
+- Remove some unnecessary cruft from configure.
+documentation
+- Move developer documentation to doc/technical/.
+other
+- Split expiry setting into seperate nickserv::expiry and chanserv::expiry.
+- Add graphtastical contrib module, creates files to be processed with
+  graphviz.
+- Tell users on services ignore once per session that they are ignored.
+- Remove database{} configuration block.
+- Rename example files.
+
 Atheme 2.2 Release Notes
 ========================
 [MERGED] indicates items merged to the 2.1 branch
