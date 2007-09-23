@@ -12,7 +12,7 @@ SRCS = ${BASE_SRCS}
 
 OBJS = ${SRCS:.c=.so}
 
-EXTRA_OBJS = ${EXTRA_SRCS:.c=.o}
+EXTRA_OBJS = ${EXTRA_SRCS:.c=.so}
 
 all: modules
 
