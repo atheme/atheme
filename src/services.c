@@ -446,7 +446,7 @@ void command_fail(sourceinfo_t *si, faultcode_t code, const char *fmt, ...)
 		return;
 	}
 
-	if (config_options.use_privmsg)
+	if (config_options.use_privmsg || (si->smu != NULL && si->smu->flags & MU_USE_PRIVMSG))
 		msg(si->service->name, si->su->nick, "%s", buf);
 	else
 		notice_user_sts(si->service->me, si->su, buf);
@@ -469,7 +469,7 @@ void command_success_nodata(sourceinfo_t *si, const char *fmt, ...)
 		return;
 	}
 
-	if (config_options.use_privmsg)
+	if (config_options.use_privmsg || (si->smu != NULL && si->smu->flags & MU_USE_PRIVMSG))
 		msg(si->service->name, si->su->nick, "%s", buf);
 	else
 		notice_user_sts(si->service->me, si->su, buf);
@@ -492,7 +492,7 @@ void command_success_string(sourceinfo_t *si, const char *result, const char *fm
 		return;
 	}
 
-	if (config_options.use_privmsg)
+	if (config_options.use_privmsg || (si->smu != NULL && si->smu->flags & MU_USE_PRIVMSG))
 		msg(si->service->name, si->su->nick, "%s", buf);
 	else
 		notice_user_sts(si->service->me, si->su, buf);
