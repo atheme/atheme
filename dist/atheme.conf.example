@@ -112,6 +112,7 @@ loadmodule "modules/backend/flatfile";
  * Password return (RETURN command)		modules/nickserv/return
  * Password retrieval (SENDPASS command)	modules/nickserv/sendpass
  * SET command					modules/nickserv/set
+ * PRIVMSG instead of NOTICE (SET PRIVMSG cmd)	modules/nickserv/set_privmsg
  * Password retrieval uses code (SETPASS cmd)	modules/nickserv/setpass
  * Presence notifications (SUBSCRIBE command)   modules/nickserv/subscribe
  * Nickname enforcement				modules/nickserv/enforce
@@ -141,6 +142,7 @@ loadmodule "modules/nickserv/resetpass";
 loadmodule "modules/nickserv/return";
 loadmodule "modules/nickserv/sendpass";
 loadmodule "modules/nickserv/set";
+#loadmodule "modules/nickserv/set_privmsg";
 loadmodule "modules/nickserv/setpass";
 loadmodule "modules/nickserv/subscribe";
 #loadmodule "modules/nickserv/enforce";
@@ -880,21 +882,6 @@ general {
 	 * floods.
 	 */
 	#verbose_wallops;
-
-	/* (*)use_privmsg
-	 * If you want services to send messages via PRIVMSG instead of
-	 * NOTICE, uncomment this below. This could be useful for networks
-	 * with WEBTV users and various other improperly designed IRC clients
-	 * connecting to it, such as flash and java chat clients and IRC
-	 * clients for the physically handicapped.
-	 *
-	 * WARNING! It is against the IRC RFC to respond to PRIVMSG
-	 * automatically with another PRIVMSG, because it can cause
-	 * feedback loops between bots and services. You have been warned.
-	 * Some users may not like this feature very well, it
-	 * can be rather annoying.
-	 */
-	#use_privmsg;
 
 	/* (*)join_chans
 	 * Should ChanServ be allowed to join registered channels?

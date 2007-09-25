@@ -199,61 +199,6 @@ static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 
 command_t ns_set_hidemail = { "HIDEMAIL", N_("Hides your e-mail address."), AC_NONE, 1, _ns_sethidemail };
 
-/* SET HIDEMAIL [ON|OFF] */
-static void _ns_setprivmsg(sourceinfo_t *si, int parc, char *parv[])
-{
-	char *params = strtok(parv[0], " ");
-
-	if (si->smu == NULL)
-		return;
-
-	if (params == NULL)
-	{
-		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "PRIVMSG");
-		return;
-	}
-
-	if (!strcasecmp("ON", params))
-	{
-		if (MU_USE_PRIVMSG & si->smu->flags)
-		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "PRIVMSG", si->smu->name);
-			return;
-		}
-
-		logcommand(si, CMDLOG_SET, "SET PRIVMSG ON");
-
-		si->smu->flags |= MU_USE_PRIVMSG;
-
-		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "PRIVMSG" ,si->smu->name);
-
-		return;
-	}
-	else if (!strcasecmp("OFF", params))
-	{
-		if (!(MU_USE_PRIVMSG & si->smu->flags))
-		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "PRIVMSG", si->smu->name);
-			return;
-		}
-
-		logcommand(si, CMDLOG_SET, "SET PRIVMSG OFF");
-
-		si->smu->flags &= ~MU_USE_PRIVMSG;
-
-		command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "PRIVMSG", si->smu->name);
-
-		return;
-	}
-	else
-	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "PRIVMSG");
-		return;
-	}
-}
-
-command_t ns_set_privmsg = { "PRIVMSG", N_("Uses private messages instead of notices if enabled."), AC_NONE, 1, _ns_setprivmsg };
-
 static void _ns_setemailmemos(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *params = strtok(parv[0], " ");
@@ -629,7 +574,6 @@ command_t *ns_set_commands[] = {
 	&ns_set_email,
 	&ns_set_emailmemos,
 	&ns_set_hidemail,
-	&ns_set_privmsg,
 	&ns_set_nomemo,
 	&ns_set_noop,
 	&ns_set_neverop,
@@ -649,7 +593,6 @@ void _modinit(module_t *m)
 	help_addentry(ns_helptree, "SET EMAIL", "help/nickserv/set_email", NULL);
 	help_addentry(ns_helptree, "SET EMAILMEMOS", "help/nickserv/set_emailmemos", NULL);
 	help_addentry(ns_helptree, "SET HIDEMAIL", "help/nickserv/set_hidemail", NULL);
-	help_addentry(ns_helptree, "SET PRIVMSG", "help/nickserv/set_privmsg", NULL);
 	help_addentry(ns_helptree, "SET NOMEMO", "help/nickserv/set_nomemo", NULL);
 	help_addentry(ns_helptree, "SET NEVEROP", "help/nickserv/set_neverop", NULL);
 	help_addentry(ns_helptree, "SET NOOP", "help/nickserv/set_noop", NULL);
@@ -667,7 +610,6 @@ void _moddeinit()
 	help_delentry(ns_helptree, "SET EMAIL");
 	help_delentry(ns_helptree, "SET EMAILMEMOS");
 	help_delentry(ns_helptree, "SET HIDEMAIL");
-	help_delentry(ns_helptree, "SET PRIVMSG");
 	help_delentry(ns_helptree, "SET NOMEMO");
 	help_delentry(ns_helptree, "SET NEVEROP");
 	help_delentry(ns_helptree, "SET NOOP");

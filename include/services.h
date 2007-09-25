@@ -138,6 +138,7 @@ E service_t *fcmd_agent;
 E int authservice_loaded;
 E int use_myuser_access;
 E int use_svsignore;
+E int use_privmsg;
 
 E int ban(user_t *source, channel_t *chan, user_t *target);
 E int remove_banlike(user_t *source, channel_t *chan, int type, user_t *target);

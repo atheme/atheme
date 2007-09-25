@@ -28,6 +28,7 @@ extern mowgli_dictionary_t *services;
 int authservice_loaded = 0;
 int use_myuser_access = 0;
 int use_svsignore = 0;
+int use_privmsg = 0;
 
 #define MAX_BUF 256
 
@@ -410,20 +411,20 @@ void notice(char *from, char *to, char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, str, args);
 	va_end(args);
 
-	if (config_options.use_privmsg)
-		msg(from, to, "%s", buf);
+	if (*to == '#')
+	{
+		c = channel_find(to);
+		if (c != NULL)
+			notice_channel_sts(user_find_named(from), c, buf);
+	}
 	else
 	{
-		if (*to == '#')
+		u = user_find_named(to);
+		if (u != NULL)
 		{
-			c = channel_find(to);
-			if (c != NULL)
-				notice_channel_sts(user_find_named(from), c, buf);
-		}
-		else
-		{
-			u = user_find_named(to);
-			if (u != NULL)
+			if (u->myuser != NULL && u->myuser->flags & MU_USE_PRIVMSG)
+				msg(from, to, "%s", buf);
+			else
 				notice_user_sts(user_find_named(from), u, buf);
 		}
 	}
@@ -446,7 +447,7 @@ void command_fail(sourceinfo_t *si, faultcode_t code, const char *fmt, ...)
 		return;
 	}
 
-	if (config_options.use_privmsg || (si->smu != NULL && si->smu->flags & MU_USE_PRIVMSG))
+	if (use_privmsg && si->smu != NULL && si->smu->flags & MU_USE_PRIVMSG)
 		msg(si->service->name, si->su->nick, "%s", buf);
 	else
 		notice_user_sts(si->service->me, si->su, buf);
@@ -469,7 +470,7 @@ void command_success_nodata(sourceinfo_t *si, const char *fmt, ...)
 		return;
 	}
 
-	if (config_options.use_privmsg || (si->smu != NULL && si->smu->flags & MU_USE_PRIVMSG))
+	if (use_privmsg && si->smu != NULL && si->smu->flags & MU_USE_PRIVMSG)
 		msg(si->service->name, si->su->nick, "%s", buf);
 	else
 		notice_user_sts(si->service->me, si->su, buf);
@@ -492,7 +493,7 @@ void command_success_string(sourceinfo_t *si, const char *result, const char *fm
 		return;
 	}
 
-	if (config_options.use_privmsg || (si->smu != NULL && si->smu->flags & MU_USE_PRIVMSG))
+	if (use_privmsg && si->smu != NULL && si->smu->flags & MU_USE_PRIVMSG)
 		msg(si->service->name, si->su->nick, "%s", buf);
 	else
 		notice_user_sts(si->service->me, si->su, buf);

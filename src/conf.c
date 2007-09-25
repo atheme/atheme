@@ -137,7 +137,6 @@ static int c_la_translator(config_entry_t *);
 static int c_gi_chan(config_entry_t *);
 static int c_gi_silent(config_entry_t *);
 static int c_gi_verbose_wallops(config_entry_t *);
-static int c_gi_use_privmsg(config_entry_t *);
 static int c_gi_join_chans(config_entry_t *);
 static int c_gi_leave_chans(config_entry_t *);
 static int c_gi_uflags(config_entry_t *);
@@ -563,7 +562,6 @@ void init_newconf(void)
 	/* general{} block. */
 	add_conf_item("CHAN", &conf_gi_table, c_gi_chan);
 	add_conf_item("VERBOSE_WALLOPS", &conf_gi_table, c_gi_verbose_wallops);
-	add_conf_item("USE_PRIVMSG", &conf_gi_table, c_gi_use_privmsg);
 	add_conf_item("SILENT", &conf_gi_table, c_gi_silent);
 	add_conf_item("JOIN_CHANS", &conf_gi_table, c_gi_join_chans);
 	add_conf_item("LEAVE_CHANS", &conf_gi_table, c_gi_leave_chans);
@@ -1378,12 +1376,6 @@ static int c_gi_silent(config_entry_t *ce)
 static int c_gi_verbose_wallops(config_entry_t *ce)
 {
 	config_options.verbose_wallops = TRUE;
-	return 0;
-}
-
-static int c_gi_use_privmsg(config_entry_t *ce)
-{
-	config_options.use_privmsg = TRUE;
 	return 0;
 }
 
