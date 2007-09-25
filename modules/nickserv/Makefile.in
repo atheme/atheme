@@ -41,12 +41,9 @@ BASE_SRCS =			\
 	$(SRCDIR)/taxonomy.c	\
 	$(SRCDIR)/verify.c	\
 	$(SRCDIR)/vhost.c
+EXTRA_SRCS = $(SRCDIR)/login.c
 
-all: modules
-
-modules: login.so
-
-login.so: ${SRCDIR}/identify.c
+./login.so: ${SRCDIR}/identify.c
 	${CC} ${PICFLAGS} ${CPPFLAGS} ${CFLAGS} -DNICKSERV_LOGIN ${SRCDIR}/identify.c -o login.so
 
 include ../Makefile.common
