@@ -43,7 +43,6 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *chan = parv[0];
 	char *targ = parv[1];
-	char host[BUFSIZE];
 	mychan_t *mc;
 	user_t *u;
 	myuser_t *mu;
@@ -100,8 +99,6 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_ADMIN, "%s WHY %s!%s@%s (oper override)", mc->name, u->nick, u->user, u->vhost);
 	else
 		logcommand(si, CMDLOG_GET, "%s WHY %s!%s@%s", mc->name, u->nick, u->user, u->vhost);
-
-	snprintf(host, BUFSIZE, "%s!%s@%s", u->nick, u->user, u->vhost);
 
 	LIST_FOREACH(n, mc->chanacs.head)
 	{
