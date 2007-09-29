@@ -102,7 +102,7 @@ static void cs_cmd_kick(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	snprintf(reasonbuf, BUFSIZE, "%s (%s)", reason ? reason : "No reason given", get_source_name(si));
+	snprintf(reasonbuf, BUFSIZE, "(%s) %s", get_source_name(si), reason ? reason : "No reason given");
 	kick(chansvs.nick, chan, tu->nick, reasonbuf);
 	logcommand(si, CMDLOG_SET, "%s KICK %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (si->su != tu && !chanuser_find(mc->chan, si->su))
@@ -158,7 +158,7 @@ static void cs_cmd_kickban(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	snprintf(reasonbuf, BUFSIZE, "%s (%s)", reason ? reason : "No reason given", get_source_name(si));
+	snprintf(reasonbuf, BUFSIZE, "(%s) %s", get_source_name(si), reason ? reason : "No reason given");
 	ban(si->service->me, mc->chan, tu);
 	n = remove_ban_exceptions(si->service->me, mc->chan, tu);
 	if (n > 0)
