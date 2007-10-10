@@ -178,8 +178,6 @@ static void chanserv_config_ready(void *unused)
 				 chansvs.host, chansvs.real,
 				 chanserv, &cs_cmdtree);
 	chansvs.disp = chansvs.me->disp;
-	if (chansvs.fantasy)
-		fcmd_agent = chansvs.me;
 
 	service_set_chanmsg(chansvs.me, TRUE);
 
@@ -198,8 +196,6 @@ void _modinit(module_t *m)
 	{
 		chansvs.me = add_service(chansvs.nick, chansvs.user, chansvs.host, chansvs.real, chanserv, &cs_cmdtree);
 		chansvs.disp = chansvs.me->disp;
-		if (chansvs.fantasy)
-			fcmd_agent = chansvs.me;
 
 		service_set_chanmsg(chansvs.me, TRUE);
 
@@ -228,8 +224,6 @@ void _moddeinit(void)
 {
 	if (chansvs.me)
 	{
-		if (fcmd_agent == chansvs.me)
-			fcmd_agent = NULL;
 		del_service(chansvs.me);
 		chansvs.me = NULL;
 	}

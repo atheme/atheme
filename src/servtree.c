@@ -25,8 +25,6 @@
 mowgli_dictionary_t *services;
 static BlockHeap *service_heap;
 
-service_t *fcmd_agent = NULL;
-
 static void dummy_handler(sourceinfo_t *si, int parc, char **parv)
 {
 }

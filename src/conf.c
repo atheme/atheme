@@ -316,8 +316,6 @@ void conf_init(void)
 	me.mdlimit = 30;
 
 	chansvs.fantasy = FALSE;
-	if (chansvs.me != NULL && fcmd_agent == chansvs.me)
-		fcmd_agent = NULL;
 	chansvs.ca_vop = CA_VOP_DEF & ca_all;
 	chansvs.ca_hop = CA_HOP_DEF & ca_all;
 	chansvs.ca_aop = CA_AOP_DEF & ca_all;
@@ -1262,9 +1260,6 @@ static int c_ci_real(config_entry_t *ce)
 static int c_ci_fantasy(config_entry_t *ce)
 {
 	chansvs.fantasy = TRUE;
-	
-	if (chansvs.me != NULL)
-		fcmd_agent = chansvs.me;
 
 	return 0;
 }

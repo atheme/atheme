@@ -131,9 +131,6 @@ E nicksvs_t nicksvs;
 E saslsvs_t saslsvs;
 E gamesvs_t gamesvs;
 
-/* servtree.c */
-E service_t *fcmd_agent;
-
 /* services.c */
 E int authservice_loaded;
 E int use_myuser_access;
