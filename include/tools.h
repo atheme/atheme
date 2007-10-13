@@ -114,8 +114,8 @@ E char *gen_pw(int sz);
 E void tb2sp(char *line);
 E char *replace(char *s, int size, const char *old, const char *new);
 E char *itoa(int num);
-E int validemail(char *email);
-E boolean_t validhostmask(char *host);
+E int validemail(const char *email);
+E boolean_t validhostmask(const char *host);
 E char *sbytes(float x);
 E float bytes(float x);
 

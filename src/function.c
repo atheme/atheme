@@ -236,7 +236,7 @@ boolean_t is_internal_client(user_t *u)
 	return (u && (!u->server || u->server == me.me));
 }
 
-int validemail(char *email)
+int validemail(const char *email)
 {
 	int i, valid = 1, chars = 0;
 
@@ -266,7 +266,7 @@ int validemail(char *email)
 	return valid;
 }
 
-boolean_t validhostmask(char *host)
+boolean_t validhostmask(const char *host)
 {
 	char *p, *q;
 
