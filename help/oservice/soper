@@ -3,7 +3,7 @@ Help for SOPER:
 SOPER allows manipulation of services operator privileges.
 
 SOPER LIST shows all accounts with services operator
-privileges, both from the configuration file and the
+privileges, both from the configuration file and
 this command. It is similar to /stats o &nick&.
 
 SOPER LISTCLASS shows all defined oper classes. Use
