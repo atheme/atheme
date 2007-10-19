@@ -67,9 +67,13 @@ struct cmode_ unreal_mode_list[] = {
 };
 
 static boolean_t check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
+static boolean_t check_flood(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu);
+static boolean_t check_forward(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu);
 
 struct extmode unreal_ignore_mode_list[] = {
   { 'j', check_jointhrottle },
+  { 'f', check_flood },
+  { 'L', check_forward },
   { '\0', 0 }
 };
 
@@ -114,6 +118,28 @@ static boolean_t check_jointhrottle(const char *value, channel_t *c, mychan_t *m
 	if (arg2 == NULL)
 		return FALSE;
 	if (p - arg2 > 10 || arg2 - value - 1 > 10 || !atoi(value) || !atoi(arg2))
+		return FALSE;
+	return TRUE;
+}
+
+static boolean_t check_flood(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+{
+	/* way too complicated */
+	return FALSE;
+}
+
+static boolean_t check_forward(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
+{
+	channel_t *target_c;
+	mychan_t *target_mc;
+
+	if (*value != '#' || strlen(value) > 50)
+		return FALSE;
+	if (u == NULL && mu == NULL)
+		return TRUE;
+	target_c = channel_find(value);
+	target_mc = mychan_find(value);
+	if (target_c == NULL && target_mc == NULL)
 		return FALSE;
 	return TRUE;
 }
