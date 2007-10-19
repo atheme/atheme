@@ -498,7 +498,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 			hook_call_event("channel_tschange", c);
 		}
 
-		channel_mode(NULL, c, parc - 3, parv - 2);
+		channel_mode(NULL, c, parc - 3, parv + 2);
 		userc = sjtoken(parv[parc - 1], ' ', userv);
 
 		for (i = 0; i < userc; i++)
@@ -668,7 +668,7 @@ static void m_quit(sourceinfo_t *si, int parc, char *parv[])
 static void m_mode(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (*parv[0] == '#')
-		channel_mode(NULL, channel_find(parv[0]), parc - 2, &parv[1]);
+		channel_mode(NULL, channel_find(parv[0]), parc - 1, &parv[1]);
 	else
 		user_mode(user_find(parv[0]), parv[1]);
 }
