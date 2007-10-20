@@ -754,9 +754,14 @@ static void m_squit(sourceinfo_t *si, int parc, char *parv[])
 static void m_server(sourceinfo_t *si, int parc, char *parv[])
 {
 	server_t *s;
+	const char *inf;
 
 	slog(LG_DEBUG, "m_server(): new server: %s", parv[0]);
-	s = handle_server(si, parv[0], NULL, atoi(parv[1]), parv[2]);
+	if (si->s == NULL && (inf = strchr(parv[2], ' ')) != NULL)
+		inf++;
+	else
+		inf = parv[2];
+	s = handle_server(si, parv[0], NULL, atoi(parv[1]), inf);
 
 	if (s != NULL && s->uplink != me.me)
 	{
