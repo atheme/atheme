@@ -87,9 +87,8 @@ struct cmode_ unreal_status_mode_list[] = {
 };
 
 struct cmode_ unreal_prefix_mode_list[] = {
-  { '~', CMODE_OWNER   },
-  { '*', CMODE_PROTECT },
-  { '&', CMODE_PROTECT },
+  { '*', CMODE_OWNER   },
+  { '~', CMODE_PROTECT },
   { '@', CMODE_OP      },
   { '%', CMODE_HALFOP  },
   { '+', CMODE_VOICE   },
