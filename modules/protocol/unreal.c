@@ -291,7 +291,7 @@ static void unreal_kline_sts(char *server, char *user, char *host, long duration
 	if (!me.connected)
 		return;
 
-	sts(":%s TKL + G %s %s %s 0 %ld :%s", me.name, user, host, opersvs.nick, time(NULL), reason);
+	sts(":%s TKL + G %s %s %s %ld %ld :%s", me.name, user, host, opersvs.nick, duration > 0 ? CURRTIME + duration : 0, CURRTIME, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
