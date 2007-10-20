@@ -389,9 +389,14 @@ static void unreal_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
 
 static void unreal_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account)
 {
-	sts(":%s SVSHOLD %s %d :Reserved by %s for nickname owner (%s)",
-			source->nick, nick, duration, source->nick,
-			account != NULL ? account->name : nick);
+	if (duration > 0)
+		sts(":%s TKL + Q H %s %s %ld %ld :Reserved by %s for nickname owner (%s)",
+				me.name, nick, source->nick,
+				CURRTIME + duration, CURRTIME,
+				source->nick,
+				account != NULL ? account->name : nick);
+	else
+		sts(":%s TKL - Q H %s %s", me.name, nick, source->nick);
 }
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
