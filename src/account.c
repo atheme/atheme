@@ -1465,7 +1465,8 @@ static int expire_myuser_cb(mowgli_dictionary_elem_t *delem, void *unused)
 	if (MU_HOLD & mu->flags)
 		return 0;
 
-	if (((CURRTIME - mu->lastlogin) >= nicksvs.expiry) || ((mu->flags & MU_WAITAUTH) && (CURRTIME - mu->registered >= 86400)))
+	if ((nicksvs.expiry > 0 && CURRTIME - mu->lastlogin >= nicksvs.expiry) ||
+			(mu->flags & MU_WAITAUTH && CURRTIME - mu->registered >= 86400))
 	{
 		/* Don't expire accounts with privs on them in atheme.conf,
 		 * otherwise someone can reregister
@@ -1495,13 +1496,14 @@ void expire_check(void *arg)
 	 * right away -- jilles */
 	sendq_flush(curr_uplink->conn);
 
-	if (nicksvs.expiry != 0)
+	if (nicksvs.expiry >= 0)
 	{
 		mowgli_dictionary_foreach(mulist, expire_myuser_cb, NULL);
 
 		MOWGLI_DICTIONARY_FOREACH(mn, &state, nicklist)
 		{
-			if ((CURRTIME - mn->lastseen) >= nicksvs.expiry)
+			if (nicksvs.expiry > 0 &&
+					(CURRTIME - mn->lastseen) >= nicksvs.expiry)
 			{
 				if (MU_HOLD & mn->owner->flags)
 					continue;
@@ -1528,7 +1530,7 @@ void expire_check(void *arg)
 		}
 	}
 
-	if (chansvs.expiry != 0)
+	if (chansvs.expiry >= 0)
 	{
 		MOWGLI_DICTIONARY_FOREACH(mc, &state, mclist)
 		{
@@ -1546,7 +1548,8 @@ void expire_check(void *arg)
 				}
 			}
 
-			if ((CURRTIME - mc->used) >= chansvs.expiry)
+			if (chansvs.expiry > 0 &&
+					(CURRTIME - mc->used) >= chansvs.expiry)
 			{
 				if (MC_HOLD & mc->flags)
 					continue;
