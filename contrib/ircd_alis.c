@@ -154,7 +154,12 @@ static int parse_alis(sourceinfo_t *si, int parc, char *parv[], struct alis_quer
 		}
 		else if(!strcasecmp(opt, "-topic"))
 		{
-			query->topic = strtok(NULL, " ");
+			query->topic = parv[i++];
+			if (query->topic == NULL)
+			{
+				command_fail(si, fault_badparams, "Invalid -topic option");
+				return 0;
+			}
 		}
 		else if(!strcasecmp(opt, "-show"))
 		{
