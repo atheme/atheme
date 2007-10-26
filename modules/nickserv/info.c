@@ -206,6 +206,22 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Oper class: %s"), mu->soper->operclass ? mu->soper->operclass->name : mu->soper->classname);
 	}
 
+	if (has_priv(si, PRIV_CHAN_AUSPEX))
+	{
+		chanacs_t *ca;
+		int founder = 0, other = 0;
+
+		LIST_FOREACH(n, mu->chanacs.head)
+		{
+			ca = n->data;
+			if (ca->level & CA_FOUNDER)
+				founder++;
+			else if (ca->level != CA_AKICK)
+				other++;
+		}
+		command_success_nodata(si, _("Channel access: %d founder, %d other"), founder, other);
+	}
+
 	if (has_priv(si, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
 	{
 		char *setter = md->value;
