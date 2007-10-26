@@ -113,6 +113,8 @@ static void cs_cmd_count(sourceinfo_t *si, int parc, char *parv[])
 	snprintf(str, sizeof str, "%s: ", chan);
 	for (i = 0; chanacs_flags[i].flag; i++)
 	{
+		if (!(ca_all & chanacs_flags[i].value))
+			continue;
 		othercnt = 0;
 		LIST_FOREACH(n, mc->chanacs.head)
 		{
