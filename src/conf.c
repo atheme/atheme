@@ -162,6 +162,7 @@ static struct Token uflags[] = {
   { "NOMEMO",   MU_NOMEMO   },
   { "ENFORCE",  MU_ENFORCE  },
   { "PRIVMSG",  MU_USE_PRIVMSG  },
+  { "PRIVATE",  MU_PRIVATE  },
   { "NONE",     0           },
   { NULL, 0 }
 };

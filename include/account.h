@@ -85,6 +85,7 @@ struct myuser_
 #define MU_NOBURSTLOGIN 0x00000400
 #define MU_ENFORCE     0x00000800 /* XXX limited use at this time */
 #define MU_USE_PRIVMSG 0x00001000 /* use PRIVMSG */
+#define MU_PRIVATE     0x00002000
 
 /* memoserv rate limiting parameters */
 #define MEMO_MAX_NUM   5

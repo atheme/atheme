@@ -36,6 +36,7 @@ BASE_SRCS =			\
 	$(SRCDIR)/sendpass.c	\
 	$(SRCDIR)/set.c		\
 	$(SRCDIR)/set_privmsg.c	\
+	$(SRCDIR)/set_private.c	\
 	$(SRCDIR)/setpass.c	\
 	$(SRCDIR)/status.c	\
 	$(SRCDIR)/subscribe.c	\

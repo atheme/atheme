@@ -113,6 +113,7 @@ loadmodule "modules/backend/flatfile";
  * Password retrieval (SENDPASS command)	modules/nickserv/sendpass
  * SET command					modules/nickserv/set
  * PRIVMSG instead of NOTICE (SET PRIVMSG cmd)	modules/nickserv/set_privmsg
+ * Account info hiding (SET PRIVATE command)	modules/nickserv/set_private
  * Password retrieval uses code (SETPASS cmd)	modules/nickserv/setpass
  * Presence notifications (SUBSCRIBE command)   modules/nickserv/subscribe
  * Nickname enforcement				modules/nickserv/enforce
@@ -143,6 +144,7 @@ loadmodule "modules/nickserv/return";
 loadmodule "modules/nickserv/sendpass";
 loadmodule "modules/nickserv/set";
 #loadmodule "modules/nickserv/set_privmsg";
+#loadmodule "modules/nickserv/set_private";
 loadmodule "modules/nickserv/setpass";
 loadmodule "modules/nickserv/subscribe";
 #loadmodule "modules/nickserv/enforce";
@@ -921,7 +923,7 @@ general {
 	/* (*)uflags
 	 * The default flags to set for usernames upon registration.
 	 * Valid values are: hold, neverop, noop, hidemail, nomemo, enforce,
-	 * privmsg and none.
+	 * privmsg, private and none.
 	 */
 	uflags = { none; };
 

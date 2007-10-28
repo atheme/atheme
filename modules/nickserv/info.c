@@ -47,6 +47,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	struct tm tm, tm2;
 	metadata_t *md;
 	node_t *n;
+	bool hide_info;
 	hook_user_req_t req;
 
 	if (!name)
@@ -62,6 +63,9 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	hide_info = use_private && mu != si->smu &&
+		!has_priv(si, PRIV_USER_AUSPEX);
+
 	tm = *localtime(&mu->registered);
 	strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 	tm2 = *localtime(&mu->lastlogin);
@@ -71,7 +75,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("Registered: %s (%s ago)"), strfbuf, time_ago(mu->registered));
 
-	if ((md = metadata_find(mu, METADATA_USER, "private:host:vhost")))
+	if (!hide_info && (md = metadata_find(mu, METADATA_USER, "private:host:vhost")))
 	{
 		strlcpy(buf, md->value, sizeof buf);
 		if ((md = metadata_find(mu, METADATA_USER, "private:usercloak")))
@@ -92,7 +96,12 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (LIST_LENGTH(&mu->logins) == 0)
-		command_success_nodata(si, _("Last seen: %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
+	{
+		if (hide_info)
+			command_success_nodata(si, _("Last seen: (about %d weeks ago)"), (CURRTIME - mu->lastlogin) / 604800);
+		else
+			command_success_nodata(si, _("Last seen: %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
+	}
 	else if (mu == si->smu || has_priv(si, PRIV_USER_AUSPEX))
 	{
 		buf[0] = '\0';
@@ -125,6 +134,8 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 			u = user_find_named(mn->nick);
 			if (u != NULL && u->myuser == mu)
 				command_success_nodata(si, _("Nick %s is currently online"), mn->nick);
+			else if (hide_info)
+				command_success_nodata(si, _("Nick %s last seen: (about %d weeks ago)"), mn->nick, (CURRTIME - mn->lastseen) / 604800);
 			else
 			{
 				tm = *localtime(&mn->lastseen);
@@ -152,7 +163,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	if (!(mu->flags & MU_HIDEMAIL)
+	if ((!(mu->flags & MU_HIDEMAIL) && !hide_info)
 		|| (si->smu == mu || has_priv(si, PRIV_USER_AUSPEX)))
 		command_success_nodata(si, _("Email: %s%s"), mu->email,
 					(mu->flags & MU_HIDEMAIL) ? " (hidden)": "");
@@ -196,6 +207,13 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 			strcat(buf, ", ");
 
 		strcat(buf, "EMailMemos");
+	}
+	if (use_private && MU_PRIVATE & mu->flags)
+	{
+		if (*buf)
+			strcat(buf, ", ");
+
+		strcat(buf, "Private");
 	}
 
 	if (*buf)
