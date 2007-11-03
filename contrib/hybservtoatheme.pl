@@ -125,6 +125,9 @@ while (<NICKDB>) {
 		$athflags |= 0x10 if ($hsflags & 0x8000); # hideemail/hidemail
 		$athflags |= 0x40 if !($hsflags & 0x2000); # !memos/nomemo
 		$athflags |= 0x100; # cryptpass
+		$athflags |= 0x2010 if $hsflags & 0x4000; # hideall/private+hidemail
+		$athflags |= 0x2000 if $hsflags & 0x40000; # hideaddr/private
+		$athflags |= 0x2010 if $hsflags & 0x10; # private/private+hidemail
 		# transform either of noregister and nochanops to suspend
 		# hope atheme doesn't mind we don't know the suspender...
 		#$athflags |= 1 if ($hsflags & 0x300000);
@@ -340,6 +343,7 @@ while (<CHANDB>) {
 		$athflags |= 16 if ($hsflags & 0x1000); # verbose
 		$athflags |= 320 if ($hsflags & 2); # topiclock/topiclock+keeptopic
 		$athflags |= 512 if ($hsflags & 0x400); # guard
+		$athflags |= 1024 if ($hsflags & 0x1); # private
 	} elsif (/^;( ?)(.*)$/) {
 		print "# $2\n";
 	} else {
