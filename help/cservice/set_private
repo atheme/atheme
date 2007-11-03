@@ -1,0 +1,9 @@
+Help for SET PRIVATE:
+
+SET PRIVATE hides various information about
+the channel from other users.
+
+Syntax: SET <#channel> PRIVATE ON|OFF
+
+Example:
+    /msg &nick& SET #foo PRIVATE ON

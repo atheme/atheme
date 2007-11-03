@@ -78,7 +78,10 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	/* make sure it isn't already registered */
 	if ((mc = mychan_find(name)))
 	{
-		command_fail(si, fault_alreadyexists, _("\2%s\2 is already registered to \2%s\2."), mc->name, mychan_founder_names(mc));
+		if (!use_channel_private || !(mc->flags & MC_PRIVATE))
+			command_fail(si, fault_alreadyexists, _("\2%s\2 is already registered to \2%s\2."), mc->name, mychan_founder_names(mc));
+		else
+			command_fail(si, fault_alreadyexists, _("\2%s\2 is already registered."), mc->name);
 		return;
 	}
 

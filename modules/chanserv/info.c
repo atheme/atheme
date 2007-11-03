@@ -49,6 +49,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	hook_channel_req_t req;
 	char *p, *q, *qq;
 	int dir;
+	bool hide_info;
 
 	if (!name)
 	{
@@ -76,20 +77,30 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	hide_info = use_channel_private && mc->flags & MC_PRIVATE &&
+		!chanacs_source_has_flag(mc, si, CA_ACLVIEW) &&
+		!has_priv(si, PRIV_USER_AUSPEX);
+
 	tm = *localtime(&mc->registered);
 	strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 
 	command_success_nodata(si, _("Information on \2%s\2:"), mc->name);
 
-	command_success_nodata(si, _("Founder    : %s"), mychan_founder_names(mc));
+	if (!hide_info)
+		command_success_nodata(si, _("Founder    : %s"), mychan_founder_names(mc));
 
 	command_success_nodata(si, _("Registered : %s (%s ago)"), strfbuf, time_ago(mc->registered));
 
 	if (CURRTIME - mc->used >= 86400)
 	{
-		tm = *localtime(&mc->used);
-		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
-		command_success_nodata(si, _("Last used  : %s (%s ago)"), strfbuf, time_ago(mc->used));
+		if (hide_info)
+			command_success_nodata(si, _("Last used  : (about %d weeks ago)"), (CURRTIME - mc->used) / 604800);
+		else
+		{
+			tm = *localtime(&mc->used);
+			strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
+			command_success_nodata(si, _("Last used  : %s (%s ago)"), strfbuf, time_ago(mc->used));
+		}
 	}
 
 	md = metadata_find(mc, METADATA_CHANNEL, "private:mlockext");
@@ -199,10 +210,11 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 
-	if ((md = metadata_find(mc, METADATA_CHANNEL, "url")))
+	if ((!hide_info || chanuser_find(mc->chan, si->su)) &&
+			(md = metadata_find(mc, METADATA_CHANNEL, "url")))
 		command_success_nodata(si, "URL        : %s", md->value);
 
-	if ((md = metadata_find(mc, METADATA_CHANNEL, "email")))
+	if (!hide_info && (md = metadata_find(mc, METADATA_CHANNEL, "email")))
 		command_success_nodata(si, "Email      : %s", md->value);
 
 	*buf = '\0';
@@ -266,6 +278,14 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 		if (chansvs.fantasy && !metadata_find(mc, METADATA_CHANNEL, "disable_fantasy"))
 			strcat(buf, " FANTASY");
+	}
+
+	if (use_channel_private && MC_PRIVATE & mc->flags)
+	{
+		if (*buf)
+			strcat(buf, " ");
+
+		strcat(buf, "PRIVATE");
 	}
 
 	if (*buf)
