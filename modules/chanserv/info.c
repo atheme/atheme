@@ -79,7 +79,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	hide_info = use_channel_private && mc->flags & MC_PRIVATE &&
 		!chanacs_source_has_flag(mc, si, CA_ACLVIEW) &&
-		!has_priv(si, PRIV_USER_AUSPEX);
+		!has_priv(si, PRIV_CHAN_AUSPEX);
 
 	tm = *localtime(&mc->registered);
 	strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
