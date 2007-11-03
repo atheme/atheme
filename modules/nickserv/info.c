@@ -163,7 +163,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
-	if ((!(mu->flags & MU_HIDEMAIL) && !hide_info)
+	if (!(mu->flags & MU_HIDEMAIL)
 		|| (si->smu == mu || has_priv(si, PRIV_USER_AUSPEX)))
 		command_success_nodata(si, _("Email: %s%s"), mu->email,
 					(mu->flags & MU_HIDEMAIL) ? " (hidden)": "");

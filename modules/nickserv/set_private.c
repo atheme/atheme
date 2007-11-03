@@ -41,6 +41,7 @@ static void _ns_set_private(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_SET, "SET PRIVATE ON");
 
 		si->smu->flags |= MU_PRIVATE;
+		si->smu->flags |= MU_HIDEMAIL;
 
 		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "PRIVATE" ,si->smu->name);
 
