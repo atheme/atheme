@@ -63,8 +63,8 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	hide_info = use_account_private && mu != si->smu &&
-		!has_priv(si, PRIV_USER_AUSPEX);
+	hide_info = use_account_private && mu->flags & MU_PRIVATE &&
+		mu != si->smu && !has_priv(si, PRIV_USER_AUSPEX);
 
 	tm = *localtime(&mu->registered);
 	strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
