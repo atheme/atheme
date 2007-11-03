@@ -80,7 +80,7 @@ void _modinit(module_t *m)
 
 	help_addentry(ns_helptree, "SET PRIVATE", "help/nickserv/set_private", NULL);
 
-	use_private++;
+	use_account_private++;
 }
 
 void _moddeinit()
@@ -88,7 +88,7 @@ void _moddeinit()
 	command_delete(&ns_set_private, ns_set_cmdtree);
 	help_delentry(ns_helptree, "SET PRIVATE");
 
-	use_private--;
+	use_account_private--;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

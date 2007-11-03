@@ -29,7 +29,8 @@ int authservice_loaded = 0;
 int use_myuser_access = 0;
 int use_svsignore = 0;
 int use_privmsg = 0;
-int use_private = 0;
+int use_account_private = 0;
+int use_channel_private = 0;
 
 #define MAX_BUF 256
 

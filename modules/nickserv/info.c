@@ -63,7 +63,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	hide_info = use_private && mu != si->smu &&
+	hide_info = use_account_private && mu != si->smu &&
 		!has_priv(si, PRIV_USER_AUSPEX);
 
 	tm = *localtime(&mu->registered);
@@ -208,7 +208,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 		strcat(buf, "EMailMemos");
 	}
-	if (use_private && MU_PRIVATE & mu->flags)
+	if (use_account_private && MU_PRIVATE & mu->flags)
 	{
 		if (*buf)
 			strcat(buf, ", ");
