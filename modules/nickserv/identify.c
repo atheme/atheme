@@ -34,7 +34,7 @@ command_t ns_identify = { "IDENTIFY", N_("Identifies to services for a nickname.
 command_t ns_id = { "ID", N_("Alias for IDENTIFY"), AC_NONE, 2, ns_cmd_login };
 #endif
 
-list_t *ns_cmdtree, *ns_helptree, *ms_cmdtree;
+list_t *ns_cmdtree, *ns_helptree;
 
 void _modinit(module_t *m)
 {
