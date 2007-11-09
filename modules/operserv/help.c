@@ -53,9 +53,10 @@ static void os_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	if (!command)
 	{
 		command_success_nodata(si, _("***** \2%s Help\2 *****"), opersvs.nick);
-		command_success_nodata(si, _("\2%s\2 provides essential network management services, such as"), opersvs.nick);
-		command_success_nodata(si, _("routing manipulation and access restriction. Please do not abuse"));
-		command_success_nodata(si, _("your access to \2%s\2!"), opersvs.nick);
+		command_success_nodata(si, _("\2%s\2 provides essential network management services, such as\n"
+					"routing manipulation and access restriction. Please do not abuse\n"
+					"your access to \2%s\2!"),
+				opersvs.nick, opersvs.nick);
 		command_success_nodata(si, " ");
 		command_success_nodata(si, _("For information on a command, type:"));
 		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", opersvs.disp);

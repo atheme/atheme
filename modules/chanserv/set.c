@@ -135,9 +135,9 @@ static void cs_help_set(sourceinfo_t *si)
 {
 	command_success_nodata(si, _("Help for \2SET\2:"));
 	command_success_nodata(si, " ");
-	command_success_nodata(si, _("SET allows you to set various control flags"));
-	command_success_nodata(si, _("for channels that change the way certain"));
-	command_success_nodata(si, _("operations are performed on them."));
+	command_success_nodata(si, _("SET allows you to set various control flags\n"
+				"for channels that change the way certain\n"
+				"operations are performed on them."));
 	command_success_nodata(si, " ");
 	command_help(si, &cs_set_cmdtree);
 	command_success_nodata(si, " ");

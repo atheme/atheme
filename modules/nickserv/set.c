@@ -29,12 +29,14 @@ static void ns_help_set(sourceinfo_t *si)
 {
 	command_success_nodata(si, _("Help for \2SET\2:"));
 	command_success_nodata(si, " ");
-	command_success_nodata(si, _("SET allows you to set various control flags"));
 	if (nicksvs.no_nick_ownership)
-		command_success_nodata(si, _("for accounts that change the way certain operations"));
+		command_success_nodata(si, _("SET allows you to set various control flags\n"
+					"for accounts that change the way certain\n"
+					"operations are performed on them."));
 	else
-		command_success_nodata(si, _("for nicknames that change the way certain operations"));
-	command_success_nodata(si, _("are performed on them."));
+		command_success_nodata(si, _("SET allows you to set various control flags\n"
+					"for nicknames that change the way certain\n"
+					"operations are performed on them."));
 	command_success_nodata(si, " ");
 	command_help(si, &ns_set_cmdtree);
 	command_success_nodata(si, " ");

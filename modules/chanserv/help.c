@@ -54,31 +54,32 @@ static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 	if (!command)
 	{
 		command_success_nodata(si, _("***** \2%s Help\2 *****"), chansvs.nick);
-		command_success_nodata(si, _("\2%s\2 gives normal users the ability to maintain control"), chansvs.nick);
-		command_success_nodata(si, _("of a channel, without the need of a bot. Channel takeovers are"));
-		command_success_nodata(si, _("virtually impossible when a channel is registered with \2%s\2."), chansvs.nick);
-		command_success_nodata(si, _("Registration is a quick and painless process. Once registered,"));
-		command_success_nodata(si, _("the founder can maintain complete and total control over the channel."));
+		command_success_nodata(si, _("\2%s\2 gives normal users the ability to maintain control\n"
+					"of a channel, without the need of a bot. Channel takeovers are\n"
+					"virtually impossible when a channel is registered with \2%s\2.\n"
+					"Registration is a quick and painless process. Once registered,\n"
+					"the founder can maintain complete and total control over the channel."),
+				chansvs.nick, chansvs.nick);
 		if (chansvs.expiry > 0)
 		{
-			command_success_nodata(si, _("Please note that channels will expire after %d days of inactivity,"), (chansvs.expiry / 86400));
-			command_success_nodata(si, _("or if there are no eligible channel successors."));
-			command_success_nodata(si, _("Activity is defined as a user with one of %s being on the channel."), bitmask_to_flags2(CA_USEDUPDATE & ca_all, 0, chanacs_flags));
+			command_success_nodata(si, _("Please note that channels will expire after %d days of inactivity,\n"
+						"or if there are no eligible channel successors.\n"
+						"Activity is defined as a user with one of %s being on the channel."), (chansvs.expiry / 86400), bitmask_to_flags2(CA_USEDUPDATE & ca_all, 0, chanacs_flags));
 		}
 		else
 		{
 			command_success_nodata(si, _("Please note that channels will expire if there are no eligible channel successors."));
 		}
-		command_success_nodata(si, _("Successors are primarily those who have the +R flag"));
-		command_success_nodata(si, _("set on their account in the channel, although other"));
-		command_success_nodata(si, _("people may be chosen depending on their access"));
-		command_success_nodata(si, _("level and activity."));
+		command_success_nodata(si, _("Successors are primarily those who have the +R flag\n"
+					"set on their account in the channel, although other\n"
+					"people may be chosen depending on their access\n"
+					"level and activity."));
 		command_success_nodata(si, " ");
 		if (chansvs.fantasy && config_options.join_chans && chansvs.trigger != '\0')
 		{
-			command_success_nodata(si, _("Commands can also be given on channel by prefixing one of '%s'"), chansvs.trigger);
-			command_success_nodata(si, _("and omitting the channel name. These are called \"fantasy\""));
-			command_success_nodata(si, _("commands and can also be disabled on a per-channel basis."));
+			command_success_nodata(si, _("Commands can also be given on channel by prefixing one of '%s'\n"
+						"and omitting the channel name. These are called \"fantasy\"\n"
+						"commands and can also be disabled on a per-channel basis."), chansvs.trigger);
 			command_success_nodata(si, " ");
 		}
 		command_success_nodata(si, _("For more information on a command, type:"));

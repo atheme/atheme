@@ -47,27 +47,26 @@ void ns_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("***** \2%s Help\2 *****"), nicksvs.nick);
 		if (nicksvs.no_nick_ownership)
 		{
-			command_success_nodata(si, _("\2%s\2 allows users to \2'register'\2 an account for use with"), nicksvs.nick);
+			command_success_nodata(si, _("\2%s\2 allows users to \2'register'\2 an account for use with \2%s\2."), nicksvs.nick, chansvs.nick);
 			if (nicksvs.expiry > 0)
 			{
-				command_success_nodata(si, _("\2%s\2. If a registered account is not used by the owner for %d days,"), chansvs.nick, (nicksvs.expiry / 86400));
-				command_success_nodata(si, _("\2%s\2 will drop the account, allowing it to be reregistered."), nicksvs.nick);
+				command_success_nodata(si, _("If a registered account is not used by the owner for %d days,\n"
+							"\2%s\2 will drop the account, allowing it to be reregistered."),
+						(nicksvs.expiry / 86400), nicksvs.nick);
 			}
-			else
-				command_success_nodata(si, _("\2%s\2."), chansvs.nick);
 		}
 		else
 		{
-			command_success_nodata(si, _("\2%s\2 allows users to \2'register'\2 a nickname, and stop"), nicksvs.nick);
-			command_success_nodata(si, _("others from using that nick. \2%s\2 allows the owner of a"), nicksvs.nick);
-			command_success_nodata(si, _("nickname to disconnect a user from the network that is using"), nicksvs.nick);
+			command_success_nodata(si, _("\2%s\2 allows users to \2'register'\2 a nickname, and stop\n"
+						"others from using that nick. \2%s\2 allows the owner of a\n"
+						"nickname to disconnect a user from the network that is using\n"
+						"their nickname."), nicksvs.nick, nicksvs.nick);
 			if (nicksvs.expiry > 0)
 			{
-				command_success_nodata(si, _("their nickname. If a registered nick is not used by the owner for %d days,"), (nicksvs.expiry / 86400));
-				command_success_nodata(si, _("\2%s\2 will drop the nickname, allowing it to be reregistered."), nicksvs.nick);
+				command_success_nodata(si, _("If a registered nick is not used by the owner for %d days,\n"
+							"\2%s\2 will drop the nickname, allowing it to be reregistered."),
+						(nicksvs.expiry / 86400), nicksvs.nick);
 			}
-			else
-				command_success_nodata(si, _("their nickname."));
 		}
 		command_success_nodata(si, " ");
 		command_success_nodata(si, _("For more information on a command, type:"));
