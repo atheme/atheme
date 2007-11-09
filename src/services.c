@@ -460,6 +460,8 @@ void command_success_nodata(sourceinfo_t *si, const char *fmt, ...)
 	va_list args;
 	char buf[BUFSIZE];
 	const char *str = translation_get(fmt);
+	char *p, *q;
+	char space[] = " ";
 
 	va_start(args, fmt);
 	vsnprintf(buf, BUFSIZE, str, args);
@@ -472,10 +474,24 @@ void command_success_nodata(sourceinfo_t *si, const char *fmt, ...)
 		return;
 	}
 
-	if (use_privmsg && si->smu != NULL && si->smu->flags & MU_USE_PRIVMSG)
-		msg(si->service->name, si->su->nick, "%s", buf);
-	else
-		notice_user_sts(si->service->me, si->su, buf);
+	p = buf;
+	do
+	{
+		q = strchr(p, '\n');
+		if (q != NULL)
+		{
+			*q++ = '\0';
+			if (*q == '\0')
+				return; /* ending with \n */
+		}
+		if (*p == '\0')
+			p = space; /* replace empty lines with a space */
+		if (use_privmsg && si->smu != NULL && si->smu->flags & MU_USE_PRIVMSG)
+			msg(si->service->name, si->su->nick, "%s", p);
+		else
+			notice_user_sts(si->service->me, si->su, p);
+		p = q;
+	} while (p != NULL);
 }
 
 void command_success_string(sourceinfo_t *si, const char *result, const char *fmt, ...)
