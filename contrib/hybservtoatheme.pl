@@ -106,6 +106,7 @@ while (<NICKDB>) {
 				}
 			}
 			print "MD U $nick private:extendchans 1\n" if ($hsflags & 0x01000000) && $istheia;
+			print "MD U $nick private:unfiltered 1\n" if ($hsflags & 0x00800000) && $istheia;
 			print "AC $nick $_\n" for @access;
 			print "MN $nick $nick $regtime $lastseentime\n";
 			$masternick{$nick} = $nick;
@@ -164,6 +165,7 @@ if ($nick ne '') {
 		}
 	}
 	print "MD U $nick private:extendchans 1\n" if ($hsflags & 0x01000000) && $istheia;
+	print "MD U $nick private:unfiltered 1\n" if ($hsflags & 0x00800000) && $istheia;
 	print "AC $nick $_\n" for @access;
 	print "MN $nick $nick $regtime $lastseentime\n";
 	$masternick{$nick} = $nick;
