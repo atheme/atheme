@@ -14,6 +14,7 @@ ircd protocol
 - Add support for mlocking various new modes in inspircd.
 - Add experimental support for inspircd 1.2.
 - Add TBURST support to hybrid protocol module, allows better topic setting.
+- Improve support for unrealircd.
 nickserv
 - Add nickserv/subscribe, allows users to be notified when metadata is
   changed.
@@ -22,6 +23,11 @@ nickserv
 - Allow ENFORCE and NOMEMO to be set on new accounts via uflags in the
   configuration file.
 - Load nickserv/group by default in the example configuration file.
+- Add nickserv/set_privmsg, enables use of private messages on a per-account
+  basis.
+- INFO now shows chan:auspex opers a count of channel access.
+- Add nickserv/set_private, allows users to hide some information about
+  their account.
 saslserv
 chanserv
 - Change channel_register hook from mychan_t * to hook_channel_req_t *. This
@@ -38,6 +44,10 @@ chanserv
 - Allow multiple founders on a channel, signified by a new flag +F.
   All founders have the exact same privileges, including the privilege to
   add/remove founders and drop the channel.
+- When processing a kick command, put the kicking user before the user-given
+  reason.
+- Add chanserv/set_private, allows users to hide some information about
+  their channel.
 memoserv
 gameserv
 oper
@@ -61,15 +71,20 @@ code
 - Make --disable-balloc work and no longer change ABI.
 - Rework channel message handling.
 - Remove some unnecessary cruft from configure.
+- Change the way fantasy commands work.
 documentation
 - Move developer documentation to doc/technical/.
 other
 - Split expiry setting into seperate nickserv::expiry and chanserv::expiry.
+- Make expiry settings of 0 work more consistently as "do not expire
+  anything", and still update last used times.
 - Add graphtastical contrib module, creates files to be processed with
   graphviz.
 - Tell users on services ignore once per session that they are ignored.
 - Remove database{} configuration block.
 - Rename example files.
+- Put multiple line help texts in one gettext string.
+- Improve hybserv/theia conversion tool.
 
 Atheme 2.2 Release Notes
 ========================
