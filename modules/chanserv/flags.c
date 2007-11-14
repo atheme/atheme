@@ -301,6 +301,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 				if ((myuser_num_channels(tmu) >= me.maxchans) && !has_priv_myuser(tmu, PRIV_REG_NOLIMIT))
 				{
 					command_fail(si, fault_toomany, _("\2%s\2 has too many channels registered."), tmu->name);
+					chanacs_close(ca);
 					return;
 				}
 			}
