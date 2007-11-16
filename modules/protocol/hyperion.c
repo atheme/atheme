@@ -137,6 +137,7 @@ node_t *hyperion_next_matching_ban(channel_t *c, user_t *u, int type, node_t *fi
 	char hostbuf[NICKLEN+USERLEN+HOSTLEN];
 	char realbuf[NICKLEN+USERLEN+HOSTLEN];
 	char ipbuf[NICKLEN+USERLEN+HOSTLEN];
+	char *ex2;
 
 	snprintf(hostbuf, sizeof hostbuf, "%s!%s@%s", u->nick, u->user, u->vhost);
 	snprintf(realbuf, sizeof realbuf, "%s!%s@%s", u->nick, u->user, u->host);
@@ -146,9 +147,29 @@ node_t *hyperion_next_matching_ban(channel_t *c, user_t *u, int type, node_t *fi
 	{
 		cb = n->data;
 
-		if (cb->type == type &&
-				(!match(cb->mask, hostbuf) || !match(cb->mask, realbuf) || !match(cb->mask, ipbuf)))
-			return n;
+		if (cb->type == type)
+		{
+			ex2 = NULL;
+			if (type == 'b')
+			{
+				/* Look for forward channel and ignore it:
+				 * nick!user@host!#channel
+				 */
+				ex2 = strchr(cb->mask, '!');
+				if (ex2 != NULL)
+					ex2 = strchr(ex2 + 1, '!');
+			}
+			if (ex2 != NULL)
+				*ex2 = '\0';
+			if (!match(cb->mask, hostbuf) || !match(cb->mask, realbuf) || !match(cb->mask, ipbuf))
+			{
+				if (ex2 != NULL)
+					*ex2 = '!';
+				return n;
+			}
+			if (ex2 != NULL)
+				*ex2 = '!';
+		}
 		if (cb->type == 'd' && type == 'b' && !match(cb->mask, u->gecos))
 			return n;
 	}
