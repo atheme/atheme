@@ -26,7 +26,7 @@
 #include "pmodule.h"
 #include "privs.h"
 
-inline int
+static inline int
 PARAM_ERROR(config_entry_t *ce)
 {
 	slog(LG_INFO, "%s:%i: no parameter for configuration option: %s",
