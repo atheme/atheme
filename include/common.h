@@ -113,6 +113,16 @@ enum faultcode_
 
 typedef enum faultcode_ faultcode_t;
 
+#if defined(__GNUC__) || defined(__INTEL_COMPILER)
+#define PRINTFLIKE(fmtarg, firstvararg) \
+	__attribute__((__format__ (__printf__, fmtarg, firstvararg)))
+#define SCANFLIKE(fmtarg, firstvararg) \
+	__attribute__((__format__ (__scanf__, fmtarg, firstvararg)))
+#else
+#define PRINTFLIKE(fmtarg, firstvararg)
+#define SCANFLIKE(fmtarg, firstvararg)
+#endif /* defined(__INTEL_COMPILER) || defined(__GNUC__) */
+
 #endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs ts=8 sw=8 noexpandtab

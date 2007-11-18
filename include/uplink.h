@@ -55,7 +55,7 @@ E void irc_parse(char *line);
 E void p10_parse(char *line);
 
 /* send.c */
-E int sts(char *fmt, ...);
+E int sts(char *fmt, ...) PRINTFLIKE(1, 2);
 E void reconn(void *arg);
 E void io_loop(void);
 

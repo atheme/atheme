@@ -282,7 +282,7 @@ E myuser_t *myuser_add(char *name, char *pass, char *email, unsigned int flags);
 E void myuser_delete(myuser_t *mu);
 //inline myuser_t *myuser_find(const char *name);
 E myuser_t *myuser_find_ext(const char *name);
-E void myuser_notice(char *from, myuser_t *target, char *fmt, ...);
+E void myuser_notice(char *from, myuser_t *target, char *fmt, ...) PRINTFLIKE(3, 4);
 E int myuser_num_channels(myuser_t *mu);
 
 E boolean_t myuser_access_verify(user_t *u, myuser_t *mu);

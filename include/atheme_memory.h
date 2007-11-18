@@ -27,7 +27,7 @@ struct string_
 	void	(*reset)(struct string_ *this);
 	void	(*append)(struct string_ *this, const char *src, size_t n);
 	void	(*append_char)(struct string_ *this, const char c);
-	void	(*sprintf)(struct string_ *this, const char *format, ...);
+	void	(*sprintf)(struct string_ *this, const char *format, ...) PRINTFLIKE(2, 3);
 	void	(*delete)(struct string_ *this);
 };
 

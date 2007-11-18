@@ -106,7 +106,7 @@ E void (*chan_lowerts)(channel_t *c, user_t *u);
 E void (*kick)(char *from, char *channel, char *to, char *reason);
 /* send a privmsg
  * here it's ok to assume the source is able to send */
-E void (*msg)(const char *from, const char *target, const char *fmt, ...);
+E void (*msg)(const char *from, const char *target, const char *fmt, ...) PRINTFLIKE(3, 4);
 /* send a notice to a user
  * from can be a client on the services server or the services server
  * itself (NULL) */
@@ -126,12 +126,12 @@ E void (*notice_channel_sts)(user_t *from, channel_t *target, const char *text);
  * generic_wallchops() sends an individual notice to each channel operator */
 E void (*wallchops)(user_t *source, channel_t *target, const char *message);
 /* send a numeric from must be me.name or ME */
-E void (*numeric_sts)(char *from, int numeric, char *target, char *fmt, ...);
+E void (*numeric_sts)(char *from, int numeric, char *target, char *fmt, ...) PRINTFLIKE(4, 5);
 /* kill a user
  * from can be a client on the services server or the services server
  * itself (me.name or ME)
  * it is recommended to change an invalid source to ME */
-E void (*skill)(char *from, char *nick, char *fmt, ...);
+E void (*skill)(char *from, char *nick, char *fmt, ...) PRINTFLIKE(3, 4);
 /* part a channel with a client on the services server */
 E void (*part_sts)(channel_t *c, user_t *u);
 /* add a kline on the servers matching the given mask

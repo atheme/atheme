@@ -146,18 +146,18 @@ E void join(char *chan, char *nick);
 E void joinall(char *name);
 E void part(char *chan, char *nick);
 E void partall(char *name);
-E void verbose(mychan_t *mychan, char *fmt, ...);
-E void snoop(char *fmt, ...);
-E void notice(char *from, char *to, char *message, ...);
-E void command_fail(sourceinfo_t *si, faultcode_t code, const char *fmt, ...);
-E void command_success_nodata(sourceinfo_t *si, const char *fmt, ...);
-E void command_success_string(sourceinfo_t *si, const char *result, const char *fmt, ...);
+E void verbose(mychan_t *mychan, char *fmt, ...) PRINTFLIKE(2, 3);
+E void snoop(char *fmt, ...) PRINTFLIKE(1, 2);
+E void notice(char *from, char *to, char *message, ...) PRINTFLIKE(3, 4);
+E void command_fail(sourceinfo_t *si, faultcode_t code, const char *fmt, ...) PRINTFLIKE(3, 4);
+E void command_success_nodata(sourceinfo_t *si, const char *fmt, ...) PRINTFLIKE(2, 3);
+E void command_success_string(sourceinfo_t *si, const char *result, const char *fmt, ...) PRINTFLIKE(3, 4);
 E void command_success_table(sourceinfo_t *si, table_t *table);
 E const char *get_source_name(sourceinfo_t *si);
 E const char *get_source_mask(sourceinfo_t *si);
 E const char *get_oper_name(sourceinfo_t *si);
-E void wallops(char *, ...);
-E void verbose_wallops(char *, ...);
+E void wallops(char *, ...) PRINTFLIKE(1, 2);
+E void verbose_wallops(char *, ...) PRINTFLIKE(1, 2);
 
 /* ptasks.c */
 E void handle_topic(channel_t *, char *, time_t, char *);
