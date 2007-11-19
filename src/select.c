@@ -24,7 +24,6 @@
 #include "atheme.h"
 #include "internal.h"
 
-extern list_t connection_list; /* this lives in connection.c */
 fd_set readfds, writefds;
 
 /*

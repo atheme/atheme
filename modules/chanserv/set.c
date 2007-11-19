@@ -297,7 +297,7 @@ static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[])
 		if (metadata_find(mc, METADATA_CHANNEL, "private:entrymsg"))
 		{
 			metadata_delete(mc, METADATA_CHANNEL, "private:entrymsg");
-			logcommand(si, CMDLOG_SET, "%s SET ENTRYMSG NONE", mc->name, parv[1]);
+			logcommand(si, CMDLOG_SET, "%s SET ENTRYMSG NONE", mc->name);
 			command_success_nodata(si, _("The entry message for \2%s\2 has been cleared."), parv[0]);
 			return;
 		}
@@ -469,7 +469,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("\2%s\2 can now take ownership of \2%s\2."), tmu->name, mc->name);
 	command_success_nodata(si, _("In order to complete the transfer, \2%s\2 must perform the following command:"), tmu->name);
 	command_success_nodata(si, "   \2/msg %s SET %s FOUNDER %s\2", chansvs.nick, mc->name, tmu->name);
-	command_success_nodata(si, _("After that command is issued, the channel will be transferred."), mc->name);
+	command_success_nodata(si, _("After that command is issued, the channel will be transferred."));
 	command_success_nodata(si, _("To cancel the transfer, use \2/msg %s SET %s FOUNDER %s\2"), chansvs.nick, mc->name, si->smu->name);
 }
 

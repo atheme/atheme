@@ -164,8 +164,8 @@ static void send_error(connection_t *cptr, int errorcode, const char *text, bool
 	snprintf(buf1, sizeof buf1, "HTTP/1.1 %d %s\r\n"
 			"Server: Atheme/%s\r\n"
 			"Content-Type: text/plain\r\n"
-			"Content-Length: %ld\r\n\r\n%s",
-			errorcode, text, version, strlen(buf2),
+			"Content-Length: %lu\r\n\r\n%s",
+			errorcode, text, version, (unsigned long)strlen(buf2),
 			sendentity ? buf2 : "");
 	sendq_add(cptr, buf1, strlen(buf1));
 }
@@ -393,8 +393,6 @@ static void do_listen(connection_t *cptr)
 	newptr->recvq_handler = httpd_recvqhandler;
 	newptr->close_handler = httpd_closehandler;
 }
-
-extern list_t connection_list; /* XXX ? */
 
 static void httpd_checkidle(void *arg)
 {

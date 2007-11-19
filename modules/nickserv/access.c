@@ -160,7 +160,7 @@ static boolean_t mangle_wildcard_to_cidr(const char *host, char *dest, int destl
 	return FALSE;
 }
 
-void myuser_access_delete_enforce(myuser_t *mu, char *mask)
+static void myuser_access_delete_enforce(myuser_t *mu, char *mask)
 {
 	list_t l = {NULL, NULL, 0};
 	node_t *n, *tn;

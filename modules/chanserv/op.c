@@ -100,7 +100,7 @@ static void cs_cmd_op(sourceinfo_t *si, int parc, char *parv[])
 	/* SECURE check; we can skip this if sender == target, because we already verified */
 	if ((si->su != tu) && (mc->flags & MC_SECURE) && !chanacs_user_has_flag(mc, tu, CA_OP) && !chanacs_user_has_flag(mc, tu, CA_AUTOOP))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."), mc->name);
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		command_fail(si, fault_noprivs, _("\2%s\2 has the SECURE option enabled, and \2%s\2 does not have appropriate access."), mc->name, tu->nick);
 		return;
 	}

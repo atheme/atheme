@@ -27,8 +27,6 @@
 #include "internal.h"
 #include "datastream.h"
 
-extern list_t connection_list; /* this lives in connection.c */
-
 /*
  * linux does not provide POLLWRNORM by default, and we're not _XOPEN_SOURCE.
  * so.... we have to do this crap below.

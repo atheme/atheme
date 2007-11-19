@@ -44,7 +44,7 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu = si->smu, *tmu;
 	char *name = parv[0], *tag;
-	boolean_t remove = FALSE;
+	boolean_t do_remove = FALSE;
 	metadata_subscription_t *md;
 
 	if (parc < 1)
@@ -64,7 +64,7 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 
 	if (*name == '-')
 	{
-		remove = TRUE;
+		do_remove = TRUE;
 		name++;
 	}
 
@@ -75,7 +75,7 @@ static void cmd_subscribe(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (remove)
+	if (do_remove)
 	{
 		node_t *n;
 		boolean_t found = FALSE;

@@ -67,7 +67,7 @@ module_t *module_load(char *filespec)
 
 	if ((m = module_find(filespec)))
 	{
-		slog(LG_INFO, "module_load(): module %s is already loaded [at 0x%lx]", filespec, m->address);
+		slog(LG_INFO, "module_load(): module %s is already loaded [at 0x%lx]", filespec, (unsigned long)m->address);
 		return NULL;
 	}
 
@@ -138,12 +138,12 @@ module_t *module_load(char *filespec)
 	n = node_create();
 	node_add(m, n, &modules);
 
-	slog(LG_DEBUG, "module_load(): loaded %s [at 0x%lx; MAPI version %d]", h->name, m->address, h->abi_ver);
+	slog(LG_DEBUG, "module_load(): loaded %s [at 0x%lx; MAPI version %d]", h->name, (unsigned long)m->address, h->abi_ver);
 
 	if (me.connected && !cold_start)
 	{
-		wallops(_("Module %s loaded [at 0x%lx; MAPI version %d]"), h->name, m->address, h->abi_ver);
-		snoop(_("MODLOAD: \2%s\2 [at 0x%lx; MAPI version %d]"), h->name, m->address, h->abi_ver);
+		wallops(_("Module %s loaded [at 0x%lx; MAPI version %d]"), h->name, (unsigned long)m->address, h->abi_ver);
+		snoop(_("MODLOAD: \2%s\2 [at 0x%lx; MAPI version %d]"), h->name, (unsigned long)m->address, h->abi_ver);
 	}
 
 	return m;
