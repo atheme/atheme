@@ -456,6 +456,7 @@ static void charybdis_unkline_sts(char *server, char *user, char *host)
 		return;
 
 	sts(":%s UNKLINE %s %s %s", CLIENT_NAME(opersvs.me->me), server, user, host);
+	sts(":%s ENCAP %s REHASH REJECTCACHE", ME, server);
 }
 
 /* topic wrapper */
