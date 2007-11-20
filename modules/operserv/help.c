@@ -64,7 +64,7 @@ static void os_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 
 		command_help(si, os_cmdtree);
 
-		command_success_nodata(si, _("***** \2End of Help\2 *****"), opersvs.nick);
+		command_success_nodata(si, _("***** \2End of Help\2 *****"));
 		return;
 	}
 

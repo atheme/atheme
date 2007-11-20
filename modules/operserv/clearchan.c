@@ -123,7 +123,7 @@ static void os_cmd_clearchan(sourceinfo_t *si, int parc, char *parv[])
 					kick(opersvs.nick, targchan, cu->user->nick, reason);
 					break;
 				case CLEAR_KILL:
-					skill(opersvs.nick, cu->user->nick, reason);
+					skill(opersvs.nick, cu->user->nick, "%s", reason);
 					user_delete(cu->user);
 					break;
 				case CLEAR_GLINE:
