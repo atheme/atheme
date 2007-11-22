@@ -68,7 +68,7 @@ static void write_newsdb(void)
 	{
 		l = n->data;
 		fprintf(f, "GL %s %s %ld %s\n", l->nick, l->target,
-			l->news_ts, l->story);
+			(long)l->news_ts, l->story);
 	}
 
 	fclose(f);

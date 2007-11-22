@@ -52,7 +52,7 @@ void _moddeinit(void)
 
 static void irc_logstream_write(logfile_t *lf, const char *buf)
 {
-	msg(opersvs.nick, lf->log_path, buf);
+	msg(opersvs.nick, lf->log_path, "%s", buf);
 }
 
 static void irc_logstream_delete(void *vdata)

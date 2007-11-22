@@ -247,8 +247,6 @@ static void do_listen(connection_t *cptr)
 	newptr->close_handler = httpd_closehandler;
 }
 
-extern list_t connection_list; /* XXX ? */
-
 static void httpd_checkidle(void *arg)
 {
 	node_t *n;

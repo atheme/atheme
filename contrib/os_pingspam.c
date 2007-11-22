@@ -133,7 +133,7 @@ void pingspam(user_t *u)
 
 	if(*globsvs.nick)
 		for(i = 0;i < 6;i++)
-			notice(globsvs.nick, u->nick, notices[rand() % sizeof(notices) / sizeof(char*)]);
+			notice(globsvs.nick, u->nick, "%s", notices[rand() % sizeof(notices) / sizeof(char*)]);
 
 	LIST_FOREACH(n, me.me->userlist.head)
 	{
