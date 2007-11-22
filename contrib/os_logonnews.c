@@ -143,7 +143,7 @@ static void display_news(void *vptr)
 		{
 			l = n->data;
 			tm = *localtime(&l->news_ts);
-			strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%y", &tm);
+			strftime(dBuf, BUFSIZE, "%H:%M on %m/%d/%Y", &tm);
 			notice(globsvs.nick, u->nick, "[\2%s\2] Notice from %s, posted %s:",
 				l->target, l->nick, dBuf);
 			notice(globsvs.nick, u->nick, "%s", l->story);
