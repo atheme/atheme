@@ -265,11 +265,15 @@ static void print_channel(sourceinfo_t *si, channel_t *chptr, struct alis_query 
 			chptr->name, modestr,
 			LIST_LENGTH(&chptr->members),
 			chptr->topic, chptr->topic_setter);
-	else if(query->show_mode)
+	else if(query->show_mode && show_topic)
 		command_success_nodata(si, "%-50s %-8s %3d :%s",
 			chptr->name, modestr,
 			LIST_LENGTH(&chptr->members),
 			chptr->topic);
+	else if(query->show_mode)
+		command_success_nodata(si, "%-50s %-8s %3d",
+			chptr->name, modestr,
+			LIST_LENGTH(&chptr->members));
 	else if(show_topicwho && show_topic)
 		command_success_nodata(si, "%-50s %3d :%s (%s)",
 			chptr->name, LIST_LENGTH(&chptr->members),
