@@ -49,6 +49,39 @@ int mode_to_flag(char c)
 	return mode_list[i].value;
 }
 
+static void reop_service(channel_t *chan, user_t *victim, user_t **pfirst_deopped_service)
+{
+	node_t *n;
+
+	if (*pfirst_deopped_service == NULL)
+	{
+		if (chan->nummembers > 1)
+		{
+			slog(LG_DEBUG, "channel_mode(): %s deopped on %s, rejoining", victim->nick, chan->name);
+			part_sts(chan, victim);
+			join_sts(chan, victim, FALSE, channel_modes(chan, TRUE));
+		}
+		else
+		{
+			slog(LG_DEBUG, "channel_mode(): %s deopped on %s, opping from other service", victim->nick, chan->name);
+			LIST_FOREACH(n, me.me->userlist.head)
+			{
+				if (n->data != victim)
+				{
+					modestack_mode_param(((user_t *)n->data)->nick, chan, MTYPE_ADD, 'o', CLIENT_NAME(victim));
+					break;
+				}
+			}
+		}
+		*pfirst_deopped_service = victim;
+	}
+	else if (*pfirst_deopped_service != victim)
+	{
+		slog(LG_DEBUG, "channel_mode(): %s deopped on %s, opping from %s", victim->nick, chan->name, (*pfirst_deopped_service)->nick);
+		modestack_mode_param((*pfirst_deopped_service)->nick, chan, MTYPE_ADD, 'o', CLIENT_NAME(victim));
+	}
+}
+
 /* yeah, this should be fun. */
 /* If source == NULL, apply a mode change from outside to our structures
  * If source != NULL, apply the mode change and send it out from that user
@@ -63,7 +96,6 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 	mychan_t *mc;
 	chanuser_t *cu = NULL;
 	user_t *first_deopped_service = NULL;
-	node_t *n;
 
 	if ((!pos) || (*pos == '\0'))
 		return;
@@ -287,37 +319,7 @@ void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[])
 					if (cu->user->server == me.me && status_mode_list[i].value == CMODE_OP)
 					{
 						if (source == NULL)
-						{
-							if (first_deopped_service == NULL)
-							{
-								if (chan->nummembers > 1)
-								{
-									slog(LG_DEBUG, "channel_mode(): %s deopped on %s, rejoining", cu->user->nick, chan->name);
-									part_sts(chan, cu->user);
-									join_sts(chan, cu->user, FALSE, channel_modes(chan, TRUE));
-								}
-								else
-								{
-									slog(LG_DEBUG, "channel_mode(): %s deopped on %s, opping from other service", cu->user->nick, chan->name);
-									LIST_FOREACH(n, me.me->userlist.head)
-									{
-										if (n->data != cu->user)
-										{
-											modestack_mode_param(((user_t *)n->data)->nick, chan, MTYPE_ADD, *pos, CLIENT_NAME(cu->user));
-											break;
-										}
-									}
-								}
-								first_deopped_service = cu->user;
-							}
-							else if (first_deopped_service != cu->user)
-							{
-								slog(LG_DEBUG, "channel_mode(): %s deopped on %s, opping from %s", cu->user->nick, chan->name, first_deopped_service->nick);
-								modestack_mode_param(first_deopped_service->nick, chan, MTYPE_ADD, *pos, CLIENT_NAME(cu->user));
-							}
-
-						}
-
+							reop_service(chan, cu->user, &first_deopped_service);
 						continue;
 					}
 
