@@ -180,7 +180,9 @@ void handle_stats(user_t *u, char req)
 		  {
 			  k = (kline_t *)n->data;
 
-			  numeric_sts(me.name, 216, u->nick, "K %s * %s :%s", k->host, k->user, k->reason);
+			  numeric_sts(me.name, 216, u->nick, "%c %s * %s :%s",
+					  k->duration ? 'k' : 'K',
+					  k->host, k->user, k->reason);
 		  }
 
 		  break;
