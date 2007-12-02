@@ -346,8 +346,7 @@ static boolean_t undernet_on_logout(char *origin, char *user, char *wantedhost)
 
 	if (u != NULL)
 	{
-		skill(me.name, u->nick, "Forcing logout %s -> %s", u->nick, user);
-		user_delete(u);
+		kill_user(NULL, u, "Forcing logout %s -> %s", u->nick, user);
 		return TRUE;
 	}
 	else

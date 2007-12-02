@@ -92,8 +92,7 @@ service_t *add_service(char *name, char *user, char *host, char *real, void (*ha
 		u = user_find_named(name);
 		if (u != NULL)
 		{
-			skill(me.name, u->nick, "Nick taken by service");
-			user_delete(u);
+			kill_user(NULL, u, "Nick taken by service");
 		}
 	}
 
