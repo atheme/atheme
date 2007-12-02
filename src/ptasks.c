@@ -259,7 +259,7 @@ void handle_stats(user_t *u, char req)
 	numeric_sts(me.name, 219, u->nick, "%c :End of /STATS report", req);
 }
 
-void handle_whois(user_t *u, char *target)
+void handle_whois(user_t *u, const char *target)
 {
 	user_t *t = user_find_named(target);
 
@@ -296,7 +296,7 @@ static void single_trace(user_t *u, user_t *t)
 /* target -> object to trace
  * dest -> server to execute command on
  */
-void handle_trace(user_t *u, char *target, char *dest)
+void handle_trace(user_t *u, const char *target, const char *dest)
 {
 	user_t *t;
 	node_t *n;
@@ -575,7 +575,7 @@ void handle_topic(channel_t *c, char *setter, time_t ts, char *topic)
 	hook_call_event("channel_topic", c);
 }
 
-void handle_kill(sourceinfo_t *si, char *victim, char *reason)
+void handle_kill(sourceinfo_t *si, const char *victim, const char *reason)
 {
 	const char *source;
 	user_t *u;
