@@ -142,6 +142,7 @@ E int use_channel_private;
 E int ban(user_t *source, channel_t *chan, user_t *target);
 E int remove_banlike(user_t *source, channel_t *chan, int type, user_t *target);
 E int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target);
+E void kill_user(user_t *source, user_t *victim, const char *fmt, ...) PRINTFLIKE(3, 4);
 E void join(char *chan, char *nick);
 E void joinall(char *name);
 E void part(char *chan, char *nick);

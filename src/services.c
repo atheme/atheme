@@ -93,6 +93,24 @@ int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target)
 	return remove_banlike(source, chan, ircd->except_mchar, target);
 }
 
+/* sends a KILL message for a user and removes the user from the userlist
+ * source should be a service user or NULL for a server kill
+ */
+void kill_user(user_t *source, user_t *victim, const char *fmt, ...)
+{
+	va_list ap;
+	char buf[BUFSIZE];
+
+	return_if_fail(victim != NULL);
+
+	va_start(ap, fmt);
+	vsnprintf(buf, BUFSIZE, fmt, ap);
+	va_end(ap);
+
+	skill(source != NULL ? source->nick : me.name, victim->nick, "%s", buf);
+	user_delete(victim);
+}
+
 /* join a channel, creating it if necessary */
 void join(char *chan, char *nick)
 {
