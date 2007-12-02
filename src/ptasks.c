@@ -575,6 +575,23 @@ void handle_topic(channel_t *c, char *setter, time_t ts, char *topic)
 	hook_call_event("channel_topic", c);
 }
 
+static const char *skip_kill_path(const char *reason)
+{
+	const char *p;
+	bool have_dot = FALSE;
+
+	p = reason;
+	while (*p != ' ')
+	{
+		if (strchr("<>()#&?%$,;", *p) || *p == '\0')
+			return reason;
+		if (*p == '!' || *p == '.')
+			have_dot = TRUE;
+		p++;
+	}
+	return have_dot ? p + 1 : reason;
+}
+
 void handle_kill(sourceinfo_t *si, const char *victim, const char *reason)
 {
 	const char *source;
@@ -583,6 +600,7 @@ void handle_kill(sourceinfo_t *si, const char *victim, const char *reason)
 	static unsigned int killcount = 0;
 
 	source = get_oper_name(si);
+	reason = skip_kill_path(reason);
 
 	u = user_find(victim);
 	if (u == NULL)
