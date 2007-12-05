@@ -239,6 +239,18 @@ node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int type, node_t *f
 	return NULL;
 }
 
+static boolean_t charybdis_is_valid_host(const char *host)
+{
+	const char *p;
+
+	for (p = host; *p != '\0'; p++)
+		if (!((*p >= '0' && *p <= '9') || (*p >= 'A' && *p <= 'Z') ||
+					(*p >= 'a' && *p <= 'z') || *p == '.'
+					|| *p == ':' || *p == '-'))
+			return FALSE;
+	return TRUE;
+}
+
 /* login to our uplink */
 static unsigned int charybdis_server_login(void)
 {
@@ -1459,6 +1471,7 @@ void _modinit(module_t * m)
 	svslogin_sts = &charybdis_svslogin_sts;
 	sasl_sts = &charybdis_sasl_sts;
 	next_matching_ban = &charybdis_next_matching_ban;
+	is_valid_host = &charybdis_is_valid_host;
 
 	mode_list = charybdis_mode_list;
 	ignore_mode_list = charybdis_ignore_mode_list;

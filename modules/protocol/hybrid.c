@@ -78,6 +78,18 @@ static char ts6sid[3 + 1] = "";
 
 /* *INDENT-ON* */
 
+static boolean_t hybrid_is_valid_host(const char *host)
+{
+	const char *p;
+
+	for (p = host; *p != '\0'; p++)
+		if (!((*p >= '0' && *p <= '9') || (*p >= 'A' && *p <= 'Z') ||
+					(*p >= 'a' && *p <= 'z') || *p == '.'
+					|| *p == ':' || *p == '-'))
+			return FALSE;
+	return TRUE;
+}
+
 /* login to our uplink */
 static unsigned int hybrid_server_login(void)
 {
@@ -1158,6 +1170,7 @@ void _modinit(module_t * m)
 	invite_sts = &hybrid_invite_sts;
 	holdnick_sts = &hybrid_holdnick_sts;
 	sethost_sts = &hybrid_sethost_sts;
+	is_valid_host = &hybrid_is_valid_host;
 
 	mode_list = hybrid_mode_list;
 	ignore_mode_list = hybrid_ignore_mode_list;

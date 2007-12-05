@@ -55,6 +55,7 @@ void (*svslogin_sts) (char *target, char *nick, char *user, char *host, char *lo
 void (*sasl_sts) (char *target, char mode, char *data) = generic_sasl_sts;
 node_t *(*next_matching_ban)(channel_t *c, user_t *u, int type, node_t *first) = generic_next_matching_ban;
 node_t *(*next_matching_host_chanacs)(mychan_t *mc, user_t *u, node_t *first) = generic_next_matching_host_chanacs;
+boolean_t (*is_valid_host)(const char *host) = generic_is_valid_host;
 
 unsigned int generic_server_login(void)
 {
@@ -274,6 +275,12 @@ node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, node_t *firs
 			return n;
 	}
 	return NULL;
+}
+
+boolean_t generic_is_valid_host(const char *host)
+{
+	/* don't know what to do here */
+	return TRUE;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

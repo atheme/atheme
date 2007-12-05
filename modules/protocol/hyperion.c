@@ -176,6 +176,25 @@ node_t *hyperion_next_matching_ban(channel_t *c, user_t *u, int type, node_t *fi
 	return NULL;
 }
 
+static boolean_t hyperion_is_valid_host(const char *host)
+{
+	const char *p;
+	boolean_t dot = FALSE;
+
+	if (*host == '.' || *host == '/' || *host == ':')
+		return FALSE;
+
+	for (p = host; *p != '\0'; p++)
+	{
+		if (*p == '.' || *p == ':' || *p == '/')
+			dot = TRUE;
+		else if (!((*p >= '0' && *p <= '9') || (*p >= 'A' && *p <= 'Z') ||
+					(*p >= 'a' && *p <= 'z') || *p == '-'))
+			return FALSE;
+	}
+	return dot;
+}
+
 /* login to our uplink */
 static unsigned int hyperion_server_login(void)
 {
@@ -992,6 +1011,7 @@ void _modinit(module_t * m)
 	fnc_sts = &hyperion_fnc_sts;
 	invite_sts = &hyperion_invite_sts;
 	next_matching_ban = &hyperion_next_matching_ban;
+	is_valid_host = &hyperion_is_valid_host;
 
 	mode_list = hyperion_mode_list;
 	ignore_mode_list = hyperion_ignore_mode_list;

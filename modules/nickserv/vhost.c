@@ -140,7 +140,12 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("The vhost provided looks like a CIDR mask."));
 		return;
 	}
-	/* XXX more checks here, perhaps as a configurable regexp? */
+	if (!is_valid_host(host))
+	{
+		/* This can be stuff like missing dots too. */
+		command_fail(si, fault_badparams, _("The vhost provided is invalid."));
+		return;
+	}
 
 	metadata_add(mu, METADATA_USER, "private:usercloak", host);
 	command_success_nodata(si, _("Assigned vhost \2%s\2 to \2%s\2."),

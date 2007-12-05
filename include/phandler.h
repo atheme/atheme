@@ -196,6 +196,9 @@ E void (*sasl_sts) (char *target, char mode, char *data);
 E node_t *(*next_matching_ban)(channel_t *c, user_t *u, int type, node_t *first);
 /* find next host channel access matching user */
 E node_t *(*next_matching_host_chanacs)(mychan_t *mc, user_t *u, node_t *first);
+/* check a vhost for validity; the core will already have checked for
+ * @!?*, space, empty, : at start, length and cidr masks */
+E boolean_t (*is_valid_host)(const char *host);
 
 E unsigned int generic_server_login(void);
 E void generic_introduce_nick(user_t *u);
@@ -228,6 +231,7 @@ E void generic_svslogin_sts(char *target, char *nick, char *user, char *host, ch
 E void generic_sasl_sts(char *target, char mode, char *data);
 E node_t *generic_next_matching_ban(channel_t *c, user_t *u, int type, node_t *first);
 E node_t *generic_next_matching_host_chanacs(mychan_t *mc, user_t *u, node_t *first);
+E boolean_t generic_is_valid_host(const char *host);
 
 E struct cmode_ *mode_list;
 E struct extmode *ignore_mode_list;
