@@ -49,6 +49,9 @@ Description of the privileges in operclasses:
 
 special:ircop
 	bound to AC_IRCOP, if you still have modules using that
+special:disabled
+	for internal use, used to hide commands without meaning
+	do not add this to operclasses
 
 user:auspex
 	see the invisible about user registrations,

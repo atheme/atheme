@@ -43,8 +43,9 @@
 #define PRIV_GLOBAL          "operserv:global"
 #define PRIV_GRANT           "operserv:grant"
 
-/* obsolete access levels */
-#define AC_NONE NULL
+/* other access levels */
+#define AC_NONE NULL /* anyone */
+#define AC_DISABLED "special:disabled" /* noone */
 /* please do not use the following anymore */
 #define AC_IRCOP "special:ircop"
 #define AC_SRA "general:admin"
