@@ -130,7 +130,7 @@ static boolean_t check_jointhrottle(const char *value, channel_t *c, mychan_t *m
 	return TRUE;
 }
 
-node_t *hyperion_next_matching_ban(channel_t *c, user_t *u, int type, node_t *first)
+static node_t *hyperion_next_matching_ban(channel_t *c, user_t *u, int type, node_t *first)
 {
 	chanban_t *cb;
 	node_t *n;
