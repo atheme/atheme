@@ -129,6 +129,10 @@ static void cs_set_config_ready(void *unused)
 		cs_set_guard.access = NULL;
 	else
 		cs_set_guard.access = PRIV_ADMIN;
+	if (chansvs.fantasy)
+		cs_set_fantasy.access = NULL;
+	else
+		cs_set_fantasy.access = AC_DISABLED;
 }
 
 static void cs_help_set(sourceinfo_t *si)
