@@ -67,7 +67,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 
 	if (si->smu)
 	{
-		command_fail(si, fault_already_authed, _("You are already logged in."));
+		command_fail(si, fault_already_authed, _("You are already logged in as \2%s\2."), si->smu->name);
 		return;
 	}
 
