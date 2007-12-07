@@ -20,14 +20,14 @@ an !). Templates cannot be the empty set (making a
 template empty deletes it).
 
 If the ! form is used, all access entries which exactly
-match the template are changed accordingly, with the
-exception that it is not possible to remove the
-founder's +f access.
+match the template are changed accordingly. This is
+not supported if the template includes or included
+founder access (+F).
 
 There is a limit on the length of all templates on a
 channel.
 
-If you are not the founder, similar restrictions apply
+If you are not a founder, similar restrictions apply
 as in FLAGS.
 
 Syntax: TEMPLATE <#channel> [template oldtemplate]

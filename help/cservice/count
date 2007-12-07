@@ -2,7 +2,7 @@ Help for COUNT:
 
 This will give a count of how many entries are in each of
 the channel's xOP lists and how many entries on the access
-list do not match a xOP value (except the founder).
+list do not match a xOP value.
 
 The second line shows how many access entries have each flag.
 

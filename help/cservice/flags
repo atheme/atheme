@@ -14,7 +14,7 @@ specified by a template name (changes the access to the
 template) or a flags change (starts with + or -). See the
 TEMPLATE help entry for more information about templates.
 
-If you are not the founder, you may only manipulate flags you
+If you are not a founder, you may only manipulate flags you
 have yourself, and may not edit users that have flags you
 don't have. For this purpose, +v grants +V, +h grants +H,
 +o grants +O and +r grants +b.
