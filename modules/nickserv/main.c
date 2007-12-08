@@ -98,6 +98,62 @@ struct
 	{ NULL, NULL }
 };
 
+static void nickserv_handle_nickchange(void *user_p)
+{
+	user_t *u;
+	mynick_t *mn;
+	hook_nick_enforce_t hdata;
+
+	u = (user_t *) user_p;
+
+	if (nicksvs.me == NULL || nicksvs.no_nick_ownership)
+		return;
+
+	/* They're logged in, don't send them spam -- jilles */
+	if (u->myuser)
+		u->flags |= UF_SEENINFO;
+
+	/* Also don't send it if they came back from a split -- jilles */
+	if (!(u->server->flags & SF_EOB))
+		u->flags |= UF_SEENINFO;
+
+	if (!(mn = mynick_find(u->nick)))
+	{
+		if (!nicksvs.spam)
+			return;
+
+		if (!(u->flags & UF_SEENINFO))
+		{
+			notice(nicksvs.nick, u->nick, "Welcome to %s, %s! Here on %s, we provide services to enable the "
+			       "registration of nicknames and channels! For details, type \2/%s%s help\2 and \2/%s%s help\2.",
+			       me.netname, u->nick, me.netname, (ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.disp, (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
+
+			u->flags |= UF_SEENINFO;
+		}
+
+		return;
+	}
+
+	if (u->myuser == mn->owner)
+	{
+		mn->lastseen = CURRTIME;
+		return;
+	}
+
+	/* OpenServices: is user on access list? -nenolod */
+	if (myuser_access_verify(u, mn->owner))
+	{
+		mn->lastseen = CURRTIME;
+		return;
+	}
+
+	notice(nicksvs.nick, u->nick, _("This nickname is registered. Please choose a different nickname, or identify via \2/%s%s identify <password>\2."),
+		(ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.disp);
+	hdata.u = u;
+	hdata.mn = mn;
+	hook_call_event("nick_enforce", &hdata);
+}
+
 static void nickserv_config_ready(void *unused)
 {
 	int i;
@@ -125,6 +181,9 @@ void _modinit(module_t *m)
 {
         hook_add_event("config_ready");
         hook_add_hook("config_ready", nickserv_config_ready);
+
+        hook_add_event("nick_change");
+        hook_add_hook("nick_change", nickserv_handle_nickchange);
 
         if (!cold_start)
         {
