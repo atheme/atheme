@@ -79,9 +79,25 @@ struct alis_query
 	int skip;
 };
 
+static void alis_config_ready(void *unused)
+{
+	if (alis)
+		del_service(alis);
+
+	alis = add_service("ALIS", "alis", me.name, "Channel Directory", alis_handler, &alis_cmdtree);
+
+	hook_del_hook("config_ready", alis_config_ready);
+}
+
 void _modinit(module_t *m)
 {
-	alis = add_service("ALIS", "alis", me.name, "Channel Directory", alis_handler, &alis_cmdtree);
+	if (me.me != NULL)
+		alis_config_ready(NULL);
+	else
+	{
+		hook_add_event("config_ready");
+		hook_add_hook("config_ready", alis_config_ready);
+	}
 
 	command_add(&alis_list, &alis_cmdtree);
 	command_add(&alis_help, &alis_cmdtree);
@@ -89,6 +105,8 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
+	hook_del_hook("config_ready", alis_config_ready);
+
 	command_delete(&alis_list, &alis_cmdtree);
 	command_delete(&alis_help, &alis_cmdtree);
 
