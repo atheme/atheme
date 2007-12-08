@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (c) 2006 Jilles Tjoelker
+# Copyright (c) 2006-2007 Jilles Tjoelker
 # See doc/LICENSE for licensing terms
 #
 # Script to create simple HTML from the help files
@@ -38,7 +38,7 @@ for d in $helpdir/*; do
 		echo "<h1>$service</h1>"
 		for f in $d/*; do
 			[ -f "$f" ] || continue
-			sed -e 's/</\&lt;/g' -e 's/>/\&gt;/g' -e "s/&nick&/$service/g" -e 's#^Help for \(.*\).*#<a name="\1"><h2>\1</h2></a>#' -e 's#^Examples*:$#<strong>&</strong>#' -e 's#^Syntax: \(.*\)$#<strong>Syntax:</strong> <tt>\1</tt><br>#' -e 's#\([^]*\)#<b>\1</b>#g' -e 's#\([^]*\)#<u>\1</u>#g' -e 's#^$#<p>#' -e 's#^    \(.*\)$#<br><tt>\1</tt>#' $f
+			sed -e '/^#/d' -e 's/</\&lt;/g' -e 's/>/\&gt;/g' -e "s/&nick&/$service/g" -e 's#^Help for \(.*\).*#<a name="\1"><h2>\1</h2></a>#' -e 's#^Examples*:$#<strong>&</strong>#' -e 's#^Syntax: \(.*\)$#<strong>Syntax:</strong> <tt>\1</tt><br>#' -e 's#\([^]*\)#<b>\1</b>#g' -e 's#\([^]*\)#<u>\1</u>#g' -e 's#^$#<p>#' -e 's#^    \(.*\)$#<br><tt>\1</tt>#' $f
 		done
 		echo "</body></html>"
 	} > "$htmldir/$service.html"

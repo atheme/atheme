@@ -28,8 +28,10 @@ Syntax: FLAGS <#channel> [nickname|hostmask flag_changes]
 Permissions:
     +v - Enables use of the voice/devoice commands.
     +V - Enables automatic voice.
+#if halfops
     +h - Enables use of the halfop/dehalfop commands.
     +H - Enables automatic halfop.
+#endif
     +o - Enables use of the op/deop commands.
     +O - Enables automatic op.
     +s - Enables use of the set command.

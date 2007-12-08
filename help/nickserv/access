@@ -16,6 +16,13 @@ your current connection.
 Syntax: ACCESS LIST
 Syntax: ACCESS ADD [mask]
 Syntax: ACCESS DEL <mask>
+#if priv user:auspex
+
+Operators with user:auspex privilege can also
+view another user's access list.
+
+Syntax: ACCESS LIST <nick>
+#endif
 
 Examples:
     /msg &nick& ACCESS LIST

@@ -40,11 +40,44 @@ static helpentry_t *help_cmd_find(sourceinfo_t *si, char *cmd, list_t *list)
 	return NULL;
 }
 
+static boolean_t evaluate_condition(sourceinfo_t *si, const char *s)
+{
+	char word[80];
+	char *p, *q;
+
+	while (*s == ' ' || *s == '\t')
+		s++;
+	if (*s == '!')
+		return !evaluate_condition(si, s + 1);
+	strlcpy(word, s, sizeof word);
+	p = strchr(word, ' ');
+	if (p != NULL)
+	{
+		*p++ = '\0';
+		while (*p == ' ' || *p == '\t')
+			p++;
+	}
+	if (!strcmp(word, "halfops"))
+		return ircd->uses_halfops;
+	else if (!strcmp(word, "anyprivs"))
+		return has_any_privs(si);
+	else if (!strcmp(word, "priv"))
+	{
+		q = strchr(p, ' ');
+		if (q != NULL)
+			*q = '\0';
+		return has_priv(si, p);
+	}
+	else
+		return FALSE;
+}
+
 void help_display(sourceinfo_t *si, char *command, list_t *list)
 {
 	helpentry_t *c;
 	FILE *help_file;
 	char buf[BUFSIZE];
+	int ifnest, ifnest_false;
 
 	/* take the command through the hash table */
 	if ((c = help_cmd_find(si, command, list)))
@@ -69,11 +102,29 @@ void help_display(sourceinfo_t *si, char *command, list_t *list)
 
 			command_success_nodata(si, _("***** \2%s Help\2 *****"), si->service->name);
 
+			ifnest = ifnest_false = 0;
 			while (fgets(buf, BUFSIZE, help_file))
 			{
 				strip(buf);
 
 				replace(buf, sizeof(buf), "&nick&", si->service->disp);
+				if (!strncmp(buf, "#if", 3))
+				{
+					if (ifnest_false > 0 || !evaluate_condition(si, buf + 3))
+						ifnest_false++;
+					ifnest++;
+					continue;
+				}
+				else if (!strncmp(buf, "#endif", 6))
+				{
+					if (ifnest_false > 0)
+						ifnest_false--;
+					if (ifnest > 0)
+						ifnest--;
+					continue;
+				}
+				if (ifnest_false > 0)
+					continue;
 
 				if (buf[0])
 					command_success_nodata(si, "%s", buf);

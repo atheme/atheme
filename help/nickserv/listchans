@@ -6,6 +6,13 @@ to, including those that you own.
 AKICKs and host-based access are not shown.
 
 Syntax: LISTCHANS
+#if priv chan:auspex
+
+Operators with chan:auspex privilege can also
+check another user's access.
+
+Syntax: LISTCHANS <nick>
+#endif
 
 Example:
     /msg &nick& LISTCHANS
