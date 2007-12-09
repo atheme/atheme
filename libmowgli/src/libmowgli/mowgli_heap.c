@@ -53,10 +53,10 @@ static void mowgli_heap_expand(mowgli_heap_t *bh)
 	int a;
 	
 #if defined(HAVE_MMAP) && defined(MAP_ANON)
-	blp = mmap(NULL, sizeof(mowgli_block_t) + (bh->alloc_size * bh->mowgli_heap_elems),
+	blp = mmap(NULL, sizeof(mowgli_block_t) + (bh->alloc_size + sizeof(mowgli_node_t)) * bh->mowgli_heap_elems,
 		PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
 #else
-	blp = mowgli_alloc(sizeof(mowgli_block_t) + (bh->alloc_size * bh->mowgli_heap_elems));
+	blp = mowgli_alloc(sizeof(mowgli_block_t) + (bh->alloc_size + sizeof(mowgli_node_t)) * bh->mowgli_heap_elems);
 #endif
 	block = (mowgli_block_t *)blp;
 	
