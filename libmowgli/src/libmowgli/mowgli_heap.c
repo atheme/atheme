@@ -43,13 +43,21 @@
 # endif
 #endif
 
+typedef struct mowgli_heap_elem_header_ mowgli_heap_elem_header_t;
+
+struct mowgli_heap_elem_header_
+{
+	mowgli_block_t *block;
+	mowgli_heap_elem_header_t *next;
+};
+
 /* expands a mowgli_heap_t by 1 block */
 static void mowgli_heap_expand(mowgli_heap_t *bh)
 {
 	mowgli_block_t *block;
 	void *blp;
-	mowgli_node_t *node;
-	void *offset;
+	mowgli_heap_elem_header_t *node, *prev;
+	char *offset;
 	int a;
 	
 #if defined(HAVE_MMAP) && defined(MAP_ANON)
@@ -64,16 +72,19 @@ static void mowgli_heap_expand(mowgli_heap_t *bh)
 	block->data = offset;
 	block->heap = bh;
 
+	prev = NULL;
+
 	for (a = 0; a < bh->mowgli_heap_elems; a++)
 	{
-		node = (mowgli_node_t *)offset;
-		node->prev = node->next = NULL;
-
-		mowgli_node_add(offset + sizeof(mowgli_node_t), node, &block->free_list);
-
+		node = (mowgli_heap_elem_header_t *)offset;
+		node->block = block;
+		node->next = prev;
 		offset += bh->alloc_size;
+		prev = node;
 	}
 	
+	block->first_free = prev;
+
 	mowgli_node_add(block, &block->node, &bh->blocks);
 	
 	bh->free_elems += bh->mowgli_heap_elems;
@@ -86,7 +97,6 @@ static void mowgli_heap_shrink(mowgli_block_t *b)
 
 	return_if_fail(b != NULL);
 	return_if_fail(b->heap != NULL);
-	return_if_fail(MOWGLI_LIST_LENGTH(&b->used_list) == 0);
 
 	heap = b->heap;
 
@@ -110,7 +120,7 @@ mowgli_heap_t *mowgli_heap_create(size_t elem_size, size_t mowgli_heap_elems, un
 	bh->mowgli_heap_elems = mowgli_heap_elems;
 	bh->free_elems = 0;
 	
-	bh->alloc_size = bh->elem_size + sizeof(mowgli_node_t);
+	bh->alloc_size = bh->elem_size + sizeof(mowgli_heap_elem_header_t);
 	
 	bh->flags = flags;
 	
@@ -138,8 +148,9 @@ void mowgli_heap_destroy(mowgli_heap_t *heap)
 /* allocates a new item from a mowgli_heap_t */
 void *mowgli_heap_alloc(mowgli_heap_t *heap)
 {
-	mowgli_node_t *n, *fn;
+	mowgli_node_t *n;
 	mowgli_block_t *b;
+	mowgli_heap_elem_header_t *h;
 
 	/* no free space? */
 	if (heap->free_elems == 0)
@@ -152,25 +163,26 @@ void *mowgli_heap_alloc(mowgli_heap_t *heap)
 	MOWGLI_LIST_FOREACH(n, heap->blocks.head)
 	{
 		b = (mowgli_block_t *) n->data;
+
+		/* pull the first free node from the list */
+		h = b->first_free;
 		
-		if (MOWGLI_LIST_LENGTH(&b->free_list) == 0)
+		if (h == NULL)
 			continue;
 		
-		/* pull the first free node from the list */
-		fn = b->free_list.head;
-		
 		/* mark it as used */
-		mowgli_node_move(fn, &b->free_list, &b->used_list);
+		b->first_free = h->next;
 		
 		/* keep count */
 		heap->free_elems--;
+		b->num_allocated++;
 
 #ifdef HEAP_DEBUG		
 		/* debug */
 		mowgli_log("mowgli_heap_alloc(heap = @%p) -> %p", heap, fn->data);
 #endif
 		/* return pointer to it */
-		return fn->data;
+		return (char *)h + sizeof(mowgli_heap_elem_header_t);
 	}
 	
 	/* this should never happen */
@@ -182,42 +194,27 @@ void *mowgli_heap_alloc(mowgli_heap_t *heap)
 /* frees an item back to the mowgli_heap_t */
 void mowgli_heap_free(mowgli_heap_t *heap, void *data)
 {
-	mowgli_node_t *n, *tn, *dn;
 	mowgli_block_t *b;
+	mowgli_heap_elem_header_t *h;
 	
-	MOWGLI_LIST_FOREACH_SAFE(n, tn, heap->blocks.head)
-	{
-		b = (mowgli_block_t *) n->data;
+	h = (mowgli_heap_elem_header_t *)((char *)data - sizeof(mowgli_heap_elem_header_t));
+	b = h->block;
 
-		/* see if the element belongs to this list */
-		dn = mowgli_node_find(data, &b->used_list);
+	return_if_fail(b->heap == heap);
+	return_if_fail(b->num_allocated > 0);
 
-		if (dn != NULL)
-		{
-			/* mark it as free */
-			mowgli_node_move(dn, &b->used_list, &b->free_list);
+	/* mark it as free */
+	h->next = b->first_free;
+	b->first_free = h;
 
-			/* keep count */
-			heap->free_elems++;
+	/* keep count */
+	heap->free_elems++;
+	b->num_allocated--;
 #ifdef HEAP_DEBUG
-			/* debug */
-			mowgli_log("mowgli_heap_free(heap = @%p, data = %p)", heap, data);
+	/* debug */
+	mowgli_log("mowgli_heap_free(heap = @%p, data = %p)", heap, data);
 #endif
-			/* if this block is entirely unfree, free it. */
-			if (MOWGLI_LIST_LENGTH(&b->used_list) == 0 && MOWGLI_LIST_LENGTH(&heap->blocks) > 2)
-				mowgli_heap_shrink(b);
-
-			/* we're done */
-			return;
-		}
-		
-		/* and just in case, check it's not already free'd */
-		dn = mowgli_node_find(data, &b->free_list);
-		
-		if (dn != NULL)
-			mowgli_throw_exception(mowgli.heap.block_already_free_exception);
-	}
-	
-	/* this should never happen */
-	mowgli_throw_exception_fatal(mowgli.heap.invalid_pointer_exception);
+	/* if this block is entirely unfree, free it. */
+	if (b->num_allocated == 0 && MOWGLI_LIST_LENGTH(&heap->blocks) > 2)
+		mowgli_heap_shrink(b);
 }

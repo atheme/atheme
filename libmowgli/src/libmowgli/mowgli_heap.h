@@ -51,9 +51,10 @@ struct mowgli_block_
 	/* pointer to the first item */
 	void *data;
 	
-	/* lists of items */
-	mowgli_list_t free_list;
-	mowgli_list_t used_list;
+	/* singly linked list of free items */
+	void *first_free;
+
+	int num_allocated;
 };
 
 /* A pile of blocks */
