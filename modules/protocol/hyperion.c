@@ -881,9 +881,9 @@ static void m_snick(sourceinfo_t *si, int parc, char *parv[])
 	if (!u)
 		return;
 
-	if (strcmp(u->host, parv[2]))	/* User is not using spoofhost, assume no I:line spoof */
+	if (strcmp(u->vhost, parv[2]))	/* User is not using spoofhost, assume no I:line spoof */
 	{
-		strlcpy(u->vhost, parv[4], HOSTLEN);
+		strlcpy(u->host, parv[4], HOSTLEN);
 	}
 
 	if (use_svslogin)
