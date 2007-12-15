@@ -220,7 +220,7 @@ will be properly stored and logged.
 ratbox
 ------
 
-If you want to use operserv kline, you need shared{} blocks or U:lines
+If you want to use operserv akill, you need shared{} blocks or U:lines
 for services on all servers on the network. Note that only hybrid 7.1
 and ratbox support remote unkline, although it may appear to sort of
 work in hybrid 7.0.
@@ -272,7 +272,7 @@ You will need U:lines for services on all services on the network.
 undernet
 --------
 
-You need U:lines for services on all servers on the network.
+You need U:lines or UWorld entries for services on all servers on the network.
 
 You must enable join_chans as P10 is designed for services to work that way.
 
