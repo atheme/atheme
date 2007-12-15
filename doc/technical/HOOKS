@@ -33,6 +33,7 @@ channel_info       hook_channel_req_t *
 channel_message    hook_cmessage_data_t *
 channel_register   hook_channel_req_t *
 nick_group         hook_user_req_t *
+nick_check         user_t *
 nick_enforce       hook_nick_enforce_t *
 nick_ungroup       hook_user_req_t *
 sasl_input         sasl_message_t *

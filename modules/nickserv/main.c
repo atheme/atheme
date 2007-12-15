@@ -182,8 +182,8 @@ void _modinit(module_t *m)
         hook_add_event("config_ready");
         hook_add_hook("config_ready", nickserv_config_ready);
 
-        hook_add_event("nick_change");
-        hook_add_hook("nick_change", nickserv_handle_nickchange);
+        hook_add_event("nick_check");
+        hook_add_hook("nick_check", nickserv_handle_nickchange);
 
         if (!cold_start)
         {
