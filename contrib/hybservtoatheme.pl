@@ -78,6 +78,8 @@ while (<NICKDB>) {
 			$password = $args;
 		} elsif ($word eq 'EMAIL') {
 			$email = $args;
+			$email =~ s/^<//;
+			$email =~ s/>$//;
 		} elsif ($word eq 'LINK') {
 			# Store master nick, might be wrong in channel
 			# access list :(
