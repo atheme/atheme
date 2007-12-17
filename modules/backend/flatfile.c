@@ -30,8 +30,8 @@ static int flatfile_db_save_myusers_cb(mowgli_dictionary_elem_t *delem, void *pr
 	myuser_t *mu = (myuser_t *) delem->data;
 	node_t *tn;
 
-	/* MU <name> <pass> <email> <registered> [lastlogin] [failnum*] [lastfail*]
-	 * [lastfailon*] [flags]
+	/* MU <name> <pass> <email> <registered> <lastlogin> <failnum*> <lastfail*>
+	 * <lastfailon*> <flags>
 	 *
 	 *  * failnum, lastfail, and lastfailon are deprecated (moved to metadata)
 	 */
@@ -131,8 +131,8 @@ static void flatfile_db_save(void *arg)
 				break;
 			}
 		}
-		/* MC <name> <pass> <founder> <registered> [used] [flags]
-		 * [mlock_on] [mlock_off] [mlock_limit] [mlock_key]
+		/* MC <name> <pass> <founder> <registered> <used> <flags>
+		 * <mlock_on> <mlock_off> <mlock_limit> [mlock_key]
 		 * PASS is now ignored -- replaced with a "0" to avoid having to special-case this version
 		 */
 		fprintf(f, "MC %s %s %s %ld %ld", mc->name, "0", mu != NULL ? mu->name : "*", (long)mc->registered, (long)mc->used);
@@ -305,7 +305,7 @@ static void flatfile_db_load(void)
 		item = strtok(dBuf, " ");
 		strip(item);
 
-		if (*item == '#' || *item == '\n' || *item == '\t' || *item == ' ' || *item == '\0' || *item == '\r' || !*item)
+		if (item == NULL || *item == '#' || *item == '\n' || *item == '\t' || *item == ' ' || *item == '\0' || *item == '\r')
 			continue;
 
 		/* database version */
