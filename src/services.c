@@ -563,6 +563,25 @@ const char *get_oper_name(sourceinfo_t *si)
 	return result;
 }
 
+const char *get_storage_oper_name(sourceinfo_t *si)
+{
+	static char result[NICKLEN+USERLEN+HOSTLEN+NICKLEN+10];
+
+	if (si->smu != NULL)
+		snprintf(result, sizeof result, "%s", si->smu->name);
+	else if (si->su != NULL)
+	{
+		snprintf(result, sizeof result, "%s!%s@%s{%s}", si->su->nick,
+				si->su->user, si->su->vhost,
+				si->su->server->name);
+	}
+	else if (si->s != NULL)
+		snprintf(result, sizeof result, "%s", si->s->name);
+	else
+		snprintf(result, sizeof result, "<%s>", si->v->description);
+	return result;
+}
+
 void wallops(char *fmt, ...)
 {
 	va_list args;

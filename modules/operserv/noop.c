@@ -145,7 +145,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 			np = BlockHeapAlloc(noop_heap);
 
 			np->target = sstrdup(mask);
-			np->added_by = sstrdup(get_oper_name(si));
+			np->added_by = sstrdup(get_storage_oper_name(si));
 
 			if (reason)
 				np->reason = sstrdup(reason);
@@ -177,7 +177,7 @@ static void os_cmd_noop(sourceinfo_t *si, int parc, char *parv[])
 			np = BlockHeapAlloc(noop_heap);
 
 			np->target = sstrdup(mask);
-			np->added_by = sstrdup(get_oper_name(si));
+			np->added_by = sstrdup(get_storage_oper_name(si));
 
 			if (reason)
 				np->reason = sstrdup(reason);

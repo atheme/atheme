@@ -122,7 +122,7 @@ static void os_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	svsignore = svsignore_add(target, reason);
-	svsignore->setby = sstrdup(get_oper_name(si));
+	svsignore->setby = sstrdup(get_storage_oper_name(si));
 	svsignore->settime = CURRTIME;
 
 	command_success_nodata(si, _("\2%s\2 has been added to the services ignore list."), target);
