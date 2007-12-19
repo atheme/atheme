@@ -87,7 +87,6 @@ static void dictionary_stats_cb(const char *line, void *privdata)
 
 static void connection_stats_cb(const char *line, void *privdata)
 {
-
 	numeric_sts(me.name, 249, ((user_t *)privdata)->nick, "F :%s", line);
 }
 
