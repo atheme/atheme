@@ -90,6 +90,7 @@ static int c_ci_trigger(config_entry_t *);
 static int c_ci_expire(config_entry_t *);
 static int c_ci_maxchanacs(config_entry_t *);
 static int c_ci_maxfounders(config_entry_t *);
+static int c_ci_deftemplates(config_entry_t *);
 
 /* GService client information. */
 static int c_gl_nick(config_entry_t *);
@@ -327,6 +328,9 @@ void conf_init(void)
 	chansvs.trigger = sstrdup("!");
 	chansvs.maxchanacs = 0;
 	chansvs.maxfounders = 4;
+	if (chansvs.deftemplates != NULL)
+		free(chansvs.deftemplates);
+	chansvs.deftemplates = NULL;
 
 	if (!(runflags & RF_REHASHING))
 	{
@@ -590,6 +594,7 @@ void init_newconf(void)
 	add_conf_item("EXPIRE", &conf_ci_table, c_ci_expire);
 	add_conf_item("MAXCHANACS", &conf_ci_table, c_ci_maxchanacs);
 	add_conf_item("MAXFOUNDERS", &conf_ci_table, c_ci_maxfounders);
+	add_conf_item("DEFTEMPLATES", &conf_ci_table, c_ci_deftemplates);
 
 	/* global{} block */
 	add_conf_item("NICK", &conf_gl_table, c_gl_nick);
@@ -1349,6 +1354,18 @@ static int c_ci_maxfounders(config_entry_t *ce)
 		PARAM_ERROR(ce);
 
 	chansvs.maxfounders = ce->ce_vardatanum;
+
+	return 0;
+}
+
+static int c_ci_deftemplates(config_entry_t *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	if (chansvs.deftemplates != NULL)
+		free(chansvs.deftemplates);
+	chansvs.deftemplates = sstrdup(ce->ce_vardata);
 
 	return 0;
 }

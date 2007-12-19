@@ -44,6 +44,8 @@ struct chansvs_
 
   unsigned int maxchanacs;	/* max entries in chanacs list */
   unsigned int maxfounders;	/* max founders per channel    */
+
+  char *deftemplates;		/* default templates          */
 };
 
 struct globsvs_

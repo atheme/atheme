@@ -650,6 +650,14 @@ chanserv {
 	aop = "+vhoOtriA";
 	sop = "+vhoOtrsifA";
 
+	/* (*) deftemplates
+	 * Defines default templates to set on new channels, as a
+	 * space-separated list of name=+flags pairs.
+	 * Note: at this time no syntax checking is done on this; it
+	 * is your own responsibility to make sure it is correct.
+	 */
+	#deftemplates = "MEMBER=+iA OP=+voOtriA";
+
 	/* (*) changets
 	 * Change the channel TS to the registration time when someone
 	 * recreates a registered channel, ensuring that they are deopped

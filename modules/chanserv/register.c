@@ -133,6 +133,10 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		metadata_add(mc, METADATA_CHANNEL, "private:channelts", str);
 	}
 
+	if (chansvs.deftemplates != NULL && *chansvs.deftemplates != '\0')
+		metadata_add(mc, METADATA_CHANNEL, "private:templates",
+				chansvs.deftemplates);
+
 	command_success_nodata(si, _("\2%s\2 is now registered to \2%s\2."), mc->name, si->smu->name);
 
 	hdata.si = si;
