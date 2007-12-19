@@ -751,8 +751,8 @@ int floodcheck(user_t *u, user_t *t)
 
 				/* ok to use nick here, notice() will
 				 * change it to UID if necessary -- jilles */
-				notice(from, u->nick, "You have triggered services flood protection.");
-				notice(from, u->nick, "This is your first offense. You will be ignored for 30 seconds.");
+				notice(from, u->nick, _("You have triggered services flood protection."));
+				notice(from, u->nick, _("This is your first offense. You will be ignored for 30 seconds."));
 
 				snoop("FLOOD: \2%s\2", u->nick);
 
@@ -766,8 +766,8 @@ int floodcheck(user_t *u, user_t *t)
 				u->msgs = 0;
 				u->offenses = 12;
 
-				notice(from, u->nick, "You have triggered services flood protection.");
-				notice(from, u->nick, "This is your last warning. You will be ignored for 30 seconds.");
+				notice(from, u->nick, _("You have triggered services flood protection."));
+				notice(from, u->nick, _("This is your last warning. You will be ignored for 30 seconds."));
 
 				snoop("FLOOD: \2%s\2", u->nick);
 
