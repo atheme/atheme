@@ -1,4 +1,4 @@
-/* This is an example configuration for Atheme.
+/* This is an example configuration for Services.
  *
  * All statements end in semi-colons (';').
  * Shell style, C style, and C++ style comments may be used.
@@ -6,13 +6,23 @@
  * Items marked with "(*)" are reconfigurable at runtime via REHASH.
  */
 
+/******************************************************************************
+ * MODULES SECTION.                                                           *
+ ******************************************************************************/
+
 /*
- * These are the modules included with the core distribution of Atheme 3.
+ * These are the modules included with the core distribution of Services 3.
+ *
  * You may be interested in the atheme community modules distribution as 
  * well, which adds additional features that may or may not be compatible
- * with the project paradigms intended for maintainance of the Atheme core.
+ * with the project paradigms intended for maintainance of the core of
+ * atheme-services.
  *
- * Visit the Atheme website for more information and to download them.
+ * Visit the atheme-services website for more information and to download them.
+ *
+ * Modules marked [experimental] will taint your atheme-services instance. Do
+ * not file any bug reports with us about using Services with those modules;
+ * they will be ignored.
  */
 
 /* Protocol module.
@@ -395,9 +405,11 @@ loadmodule "modules/xmlrpc/main";
  */
 #loadmodule "contrib/fc_dice";
 
-/* The serverinfo{} block defines how we
- * appear on the IRC network.
- */
+/******************************************************************************
+ * SERVICES RUNTIME CONFIGURATION SECTION.                                    *
+ ******************************************************************************/
+
+/* The serverinfo{} block defines how we appear on the IRC network. */
 serverinfo {
 	/* name
 	 * The server name that this program uses on the IRC network.
@@ -555,8 +567,14 @@ uplink "irc.example.net" {
 	port = 6667;
 };
 
-/* The nickserv {} block defines settings specific to the nickname/username
- * registration services client on the IRC network.
+/* NickServ configuration.
+ *
+ * The nickserv {} block contains settings specific to the NickServ modules.
+ *
+ * NickServ provides nickname or username registration and authentication
+ * services. It provides necessary authentication features required for
+ * Services to operate correctly. You should make sure these settings
+ * are properly configured for your network.
  */
 nickserv {
 	// If you want NickServ to tell people about how great it is, enable the directive
@@ -599,8 +617,12 @@ nickserv {
 	expire = 30;
 };
 
-/* The chanserv {} block defines settings specific to the channel
- * services client on the IRC network.
+/* ChanServ configuration.
+ *
+ * The chanserv {} block contains settings specific to the ChanServ modules.
+ *
+ * ChanServ provides channel registration services, which allows users to own
+ * channels. It is not required, but is strongly recommended.
  */
 chanserv {
 	/* (*)nick
@@ -666,9 +688,10 @@ chanserv {
 	 * This also solves the "join-mode" problem where someone recreates
 	 * a registered channel and then sets some modes before they are
 	 * deopped.
-	 * This is currently supported for charybdis, hybrid, ratbox and
-	 * bahamut. For charybdis, hybrid and ratbox it only fully works
-	 * with TS6, with TS5 bans and last-moment modes will still apply.
+	 * This is currently supported for charybdis, hybrid, ratbox,
+	 * bahamut and inspircd 1.1+. For charybdis, hybrid and ratbox
+	 * it only fully works with TS6, with TS5 bans and last-moment modes
+	 * will still apply.
 	 * (That can also be used to advantage, when first enabling this.)
 	 */
 	#changets;
@@ -701,7 +724,12 @@ chanserv {
 	maxfounders = 4;
 };
 
-/* The global {} block defines settings concerning the global noticer. */
+/* Global noticing configuration.
+ *
+ * The global {} block contains settings specific to the Global notice modules.
+ *
+ * The Global notice modules provide the ability to mass-notify a network.
+ */
 global {
 	/* nick
 	 * Sets the nick used for sending out a global notice.
@@ -724,7 +752,13 @@ global {
 	real = "Network Announcements";
 };
 
-/* The operserv {} block defines settings concerning the operator service. */
+/* OperServ configuration.
+ *
+ * The operserv {} block contains settings specific to the OperServ modules.
+ *
+ * OperServ provides essential network management tools for IRC operators
+ * on the IRC network.
+ */
 operserv {
 	/* nick
 	 * The nickname we want the Operator Service to have.
@@ -747,51 +781,42 @@ operserv {
 	real = "Operator Services";
 };
 
-/* If you are using SASL, uncomment this */
-#saslserv {
-#	/* (*)nick
-#	 * The nickname we want SaslServ to have.
-#	 */
-#	nick = "SaslServ";
-#
-#	/* user
-#	 * The username we want SaslServ to have.
-#	 */
-#	user = "SaslServ";
-#
-#	/* host
-#	 * The hostname we want SaslServ to have.
-#	 */
-#	host = "services.int";
-#
-#	/* real
-#	 * The realname (gecos) information we want SaslServ to have.
-#	 */
-#	real = "SASL Authentication Agent";
-#};
-
-/* The httpd {} block defines configuration parameters for the
- * HTTP server.
+/* SaslServ configuration.
+ *
+ * The saslserv {} block contains settings specific to the SaslServ modules.
+ *
+ * SaslServ provides an authentication agent which is compatible with the
+ * SASL over IRC (SASL/IRC) protocol extension.
  */
-httpd {
+saslserv {
+	/* (*)nick
+	 * The nickname we want SaslServ to have.
+	 */
+	nick = "SaslServ";
+
+	/* user
+	 * The username we want SaslServ to have.
+	 */
+	user = "SaslServ";
+
 	/* host
-	 * The host that the HTTP server will listen on.
-	 * Use 0.0.0.0 if you want to listen on all available hosts.
+	 * The hostname we want SaslServ to have.
 	 */
-	host = "0.0.0.0";
+	host = "services.int";
 
-	/* www_root
-	 * The directory that contains the files that should be served by the httpd.
+	/* real
+	 * The realname (gecos) information we want SaslServ to have.
 	 */
-	www_root = "/var/www";
-
-	/* port
-	 * The port that the HTTP server will listen on.
-	 */
-	port = 8080;
+	real = "SASL Authentication Agent";
 };
 
-/* MemoServ */
+/* MemoServ configuration.
+ *
+ * The memoserv {} block contains settings specific to the MemoServ modules.
+ *
+ * MemoServ provides a note-taking service that you can use to send notes
+ * to offline users (provided they are registered with Services).
+ */
 memoserv {
 	/* (*)nick
 	 * The nickname we want MemoServ to have.
@@ -814,7 +839,12 @@ memoserv {
 	real = "Memo Services";
 };
 
-/* The gameserv {} block defines settings concerning GameServ. */
+/* GameServ configuration.
+ *
+ * The gameserv {} block contains settings specific to the GameServ modules.
+ *
+ * GameServ provides various in-channel commands for games.
+ */
 gameserv {
 	/* nick
 	 * The nickname we want GameServ to have.
@@ -836,6 +866,35 @@ gameserv {
 	 */
 	real = "Game Services";
 };
+
+/* HTTP server configuration.
+ *
+ * The httpd {} block contains settings specific to the HTTP server module.
+ *
+ * The HTTP server in Services is used for serving XMLRPC requests. It can
+ * also serve static documents and statistics pages.
+ */
+httpd {
+	/* host
+	 * The host that the HTTP server will listen on.
+	 * Use 0.0.0.0 if you want to listen on all available hosts.
+	 */
+	host = "0.0.0.0";
+
+	/* www_root
+	 * The directory that contains the files that should be served by the httpd.
+	 */
+	www_root = "/var/www";
+
+	/* port
+	 * The port that the HTTP server will listen on.
+	 */
+	port = 8080;
+};
+
+/******************************************************************************
+ * LOGGING SECTION.                                                           *
+ ******************************************************************************/
 
 /*
  * logfile{} blocks can be used to set up log files other than the master
@@ -868,6 +927,10 @@ logfile "var/account.log" { register; set; };
  * This block logs all command use to var/commands.log.
  */
 logfile "var/commands.log" { commands; };
+
+/******************************************************************************
+ * GENERAL PARAMETERS CONFIGURATION SECTION.                                  *
+ ******************************************************************************/
 
 /* The general {} block defines general configuration options. */
 general {
@@ -985,10 +1048,14 @@ general {
 	default_clone_limit = 5;
 };
 
+/******************************************************************************
+ * OPERATOR AND PRIVILEGES CONFIGURATION SECTION.                             *
+ ******************************************************************************/
+
 /* Operator configuration
  * See the PRIVILEGES document for more information.
  * NOTE: All changes apply immediately upon rehash. You may need
- * to send a signal to regain control.
+ * to send a signal (killall -HUP atheme-services) to regain control.
  */
 /* (*) Operclasses specify groups of services operator privileges */
 operclass "sra" {
@@ -1088,6 +1155,10 @@ operclass "ircop" {
 operator "jilles" {
 	operclass = "sra";
 };
+
+/******************************************************************************
+ * INCLUDE CONFIGURATION SECTION.                                             *
+ ******************************************************************************/
 
 /* You may also specify other files for inclusion.
  * For example:
