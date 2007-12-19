@@ -505,7 +505,7 @@ const char *get_source_name(sourceinfo_t *si)
 		if (si->smu && !irccasecmp(si->su->nick, si->smu->name))
 			snprintf(result, sizeof result, "%s", si->su->nick);
 		else
-			snprintf(result, sizeof result, "%s(%s)", si->su->nick,
+			snprintf(result, sizeof result, "%s (%s)", si->su->nick,
 					si->smu ? si->smu->name : "");
 	}
 	else if (si->s != NULL)
@@ -550,7 +550,7 @@ const char *get_oper_name(sourceinfo_t *si)
 		else if (!irccasecmp(si->su->nick, si->smu->name))
 			snprintf(result, sizeof result, "%s", si->su->nick);
 		else
-			snprintf(result, sizeof result, "%s(%s)", si->su->nick,
+			snprintf(result, sizeof result, "%s (%s)", si->su->nick,
 					si->smu ? si->smu->name : "");
 	}
 	else if (si->s != NULL)
