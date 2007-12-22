@@ -28,8 +28,6 @@ static void cs_leave_empty(void *unused);
 list_t cs_cmdtree;
 list_t cs_helptree;
 
-E list_t mychan;
-
 static void join_registered(boolean_t all)
 {
 	mychan_t *mc;
