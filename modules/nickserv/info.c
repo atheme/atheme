@@ -41,9 +41,10 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	mynick_t *mn = NULL;
-	user_t *u;
+	user_t *u = NULL;
 	char *name = parv[0];
 	char buf[BUFSIZE], strfbuf[32], lastlogin[32], *p;
+	time_t registered;
 	struct tm tm, tm2;
 	metadata_t *md;
 	node_t *n;
@@ -71,16 +72,29 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		mn = mynick_find(*name == '=' ? name + 1 : name);
 		if (mn != NULL && mn->owner != mu)
 			mn = NULL;
+		if (mn == NULL)
+			mn = mynick_find(mu->name);
+		u = user_find_named(mn->nick);
+		if (u != NULL && u->myuser != mu)
+			u = NULL;
 	}
 
-	tm = *localtime(&mu->registered);
+	if (mn != NULL)
+		command_success_nodata(si, _("Information on \2%s\2 (account \2%s\2):"), mn->nick, mu->name);
+	else
+		command_success_nodata(si, _("Information on \2%s\2:"), mu->name);
+
+	registered = mn != NULL ? mn->registered : mu->registered;
+	tm = *localtime(&registered);
 	strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
-	tm2 = *localtime(&mu->lastlogin);
-	strftime(lastlogin, sizeof(lastlogin) -1, "%b %d %H:%M:%S %Y", &tm2);
-
-	command_success_nodata(si, _("Information on \2%s\2:"), mu->name);
-
-	command_success_nodata(si, _("Registered : %s (%s ago)"), strfbuf, time_ago(mu->registered));
+	command_success_nodata(si, _("Registered : %s (%s ago)"), strfbuf, time_ago(registered));
+	/* show account's time if it's different from nick's time */
+	if (mu->registered != registered)
+	{
+		tm = *localtime(&mu->registered);
+		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
+		command_success_nodata(si, _("User reg.  : %s (%s ago)"), strfbuf, time_ago(mu->registered));
+	}
 
 	if (!hide_info && (md = metadata_find(mu, METADATA_USER, "private:host:vhost")))
 	{
@@ -102,13 +116,44 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("Real addr  : %s"), md->value);
 	}
 
+	/* show nick's lastseen/online, if we have a nick */
+	if (u != NULL)
+		command_success_nodata(si, _("Last seen  : now"));
+	else if (mn != NULL)
+	{
+		tm2 = *localtime(&mn->lastseen);
+		strftime(lastlogin, sizeof(lastlogin) -1, "%b %d %H:%M:%S %Y", &tm2);
+		if (hide_info)
+			command_success_nodata(si, _("Last seen  : (about %d weeks ago)"), (CURRTIME - mn->lastseen) / 604800);
+		else
+			command_success_nodata(si, _("Last seen  : %s (%s ago)"), lastlogin, time_ago(mn->lastseen));
+	}
+
+	/* if noone is logged in to this account, show account's lastseen,
+	 * unless we have a nick and it quit at the same time as the account
+	 */
 	if (LIST_LENGTH(&mu->logins) == 0)
 	{
-		if (hide_info)
-			command_success_nodata(si, _("Last seen  : (about %d weeks ago)"), (CURRTIME - mu->lastlogin) / 604800);
-		else
-			command_success_nodata(si, _("Last seen  : %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
+		tm2 = *localtime(&mu->lastlogin);
+		strftime(lastlogin, sizeof(lastlogin) -1, "%b %d %H:%M:%S %Y", &tm2);
+		if (mn == NULL)
+		{
+			if (hide_info)
+				command_success_nodata(si, _("Last seen  : (about %d weeks ago)"), (CURRTIME - mu->lastlogin) / 604800);
+			else
+				command_success_nodata(si, _("Last seen  : %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
+		}
+		else if (mn->lastseen != mu->lastlogin)
+		{
+			if (hide_info)
+				command_success_nodata(si, _("User seen  : (about %d weeks ago)"), (CURRTIME - mu->lastlogin) / 604800);
+			else
+				command_success_nodata(si, _("User seen  : %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
+		}
 	}
+	/* someone is logged in to this account
+	 * if they're privileged, show them the sessions
+	 */
 	else if (mu == si->smu || has_priv(si, PRIV_USER_AUSPEX))
 	{
 		buf[0] = '\0';
@@ -126,25 +171,15 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		if (buf[0])
 			command_success_nodata(si, _("Logins from: %s"), buf);
 	}
-	else
-		command_success_nodata(si, _("Logins from: <hidden>"));
-
-	if (mn != NULL)
+	/* tell them this account is online, but not which nick
+	 * unless we have already told them above
+	 */
+	else if (u == NULL)
 	{
-		tm = *localtime(&mn->registered);
-		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
-		command_success_nodata(si, _("Nick %s registered: %s (%s ago)"), mn->nick, strfbuf, time_ago(mn->registered));
-		u = user_find_named(mn->nick);
-		if (u != NULL && u->myuser == mu)
-			command_success_nodata(si, _("Nick %s is currently online"), mn->nick);
-		else if (hide_info)
-			command_success_nodata(si, _("Nick %s last seen: (about %d weeks ago)"), mn->nick, (CURRTIME - mn->lastseen) / 604800);
+		if (mn != NULL)
+			command_success_nodata(si, _("User seen  : now"));
 		else
-		{
-			tm = *localtime(&mn->lastseen);
-			strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
-			command_success_nodata(si, _("Nick %s last seen: %s (%s ago)"), mn->nick, strfbuf, time_ago(mn->lastseen));
-		}
+			command_success_nodata(si, _("Last seen  : now"));
 	}
 
 	if (!nicksvs.no_nick_ownership)
