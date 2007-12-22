@@ -66,6 +66,13 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	hide_info = use_account_private && mu->flags & MU_PRIVATE &&
 		mu != si->smu && !has_priv(si, PRIV_USER_AUSPEX);
 
+	if (!nicksvs.no_nick_ownership)
+	{
+		mn = mynick_find(*name == '=' ? name + 1 : name);
+		if (mn != NULL && mn->owner != mu)
+			mn = NULL;
+	}
+
 	tm = *localtime(&mu->registered);
 	strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
 	tm2 = *localtime(&mu->lastlogin);
@@ -122,27 +129,26 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	else
 		command_success_nodata(si, _("Logins from: <hidden>"));
 
+	if (mn != NULL)
+	{
+		tm = *localtime(&mn->registered);
+		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
+		command_success_nodata(si, _("Nick %s registered: %s (%s ago)"), mn->nick, strfbuf, time_ago(mn->registered));
+		u = user_find_named(mn->nick);
+		if (u != NULL && u->myuser == mu)
+			command_success_nodata(si, _("Nick %s is currently online"), mn->nick);
+		else if (hide_info)
+			command_success_nodata(si, _("Nick %s last seen: (about %d weeks ago)"), mn->nick, (CURRTIME - mn->lastseen) / 604800);
+		else
+		{
+			tm = *localtime(&mn->lastseen);
+			strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
+			command_success_nodata(si, _("Nick %s last seen: %s (%s ago)"), mn->nick, strfbuf, time_ago(mn->lastseen));
+		}
+	}
+
 	if (!nicksvs.no_nick_ownership)
 	{
-		/* describe queried nick */
-		mn = mynick_find(*name == '=' ? name + 1 : name);
-		if (mn != NULL && mn->owner == mu)
-		{
-			tm = *localtime(&mn->registered);
-			strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
-			command_success_nodata(si, _("Nick %s registered: %s (%s ago)"), mn->nick, strfbuf, time_ago(mn->registered));
-			u = user_find_named(mn->nick);
-			if (u != NULL && u->myuser == mu)
-				command_success_nodata(si, _("Nick %s is currently online"), mn->nick);
-			else if (hide_info)
-				command_success_nodata(si, _("Nick %s last seen: (about %d weeks ago)"), mn->nick, (CURRTIME - mn->lastseen) / 604800);
-			else
-			{
-				tm = *localtime(&mn->lastseen);
-				strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
-				command_success_nodata(si, _("Nick %s last seen: %s (%s ago)"), mn->nick, strfbuf, time_ago(mn->lastseen));
-			}
-		}
 		/* list registered nicks if privileged */
 		if (mu == si->smu || has_priv(si, PRIV_USER_AUSPEX))
 		{
