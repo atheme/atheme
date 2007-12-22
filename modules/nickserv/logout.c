@@ -41,6 +41,7 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u = si->su;
 	node_t *n, *tn;
+	mynick_t *mn;
 	char *user = parv[0];
 	char *pass = parv[1];
 
@@ -99,18 +100,24 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	si->smu->lastlogin = CURRTIME;
-	if (!ircd_on_logout(si->su->nick, si->smu->name, NULL))
+	if (si->su != NULL)
 	{
-		LIST_FOREACH_SAFE(n, tn, si->smu->logins.head)
+		mn = mynick_find(si->su->nick);
+		if (mn != NULL && mn->owner == si->smu)
+			mn->lastseen = CURRTIME;
+		if (!ircd_on_logout(si->su->nick, si->smu->name, NULL))
 		{
-			if (n->data == si->su)
+			LIST_FOREACH_SAFE(n, tn, si->smu->logins.head)
 			{
-				node_del(n, &si->smu->logins);
-				node_free(n);
-				break;
+				if (n->data == si->su)
+				{
+					node_del(n, &si->smu->logins);
+					node_free(n);
+					break;
+				}
 			}
+			si->su->myuser = NULL;
 		}
-		si->su->myuser = NULL;
 	}
 }
 
