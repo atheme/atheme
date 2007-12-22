@@ -80,7 +80,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("Information on \2%s\2:"), mu->name);
 
-	command_success_nodata(si, _("Registered: %s (%s ago)"), strfbuf, time_ago(mu->registered));
+	command_success_nodata(si, _("Registered : %s (%s ago)"), strfbuf, time_ago(mu->registered));
 
 	if (!hide_info && (md = metadata_find(mu, METADATA_USER, "private:host:vhost")))
 	{
@@ -94,20 +94,20 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 				p++;
 			strlcpy(p, md->value, sizeof buf - (p - buf));
 		}
-		command_success_nodata(si, _("Last address: %s"), buf);
+		command_success_nodata(si, _("Last addr  : %s"), buf);
 	}
 	if (has_priv(si, PRIV_USER_AUSPEX))
 	{
 		if ((md = metadata_find(mu, METADATA_USER, "private:host:actual")))
-			command_success_nodata(si, _("Last real address: %s"), md->value);
+			command_success_nodata(si, _("Real addr  : %s"), md->value);
 	}
 
 	if (LIST_LENGTH(&mu->logins) == 0)
 	{
 		if (hide_info)
-			command_success_nodata(si, _("Last seen: (about %d weeks ago)"), (CURRTIME - mu->lastlogin) / 604800);
+			command_success_nodata(si, _("Last seen  : (about %d weeks ago)"), (CURRTIME - mu->lastlogin) / 604800);
 		else
-			command_success_nodata(si, _("Last seen: %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
+			command_success_nodata(si, _("Last seen  : %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
 	}
 	else if (mu == si->smu || has_priv(si, PRIV_USER_AUSPEX))
 	{
@@ -157,7 +157,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 			{
 				if (strlen(buf) > 80)
 				{
-					command_success_nodata(si, _("Registered nicks: %s"), buf);
+					command_success_nodata(si, _("Nicks      : %s"), buf);
 					buf[0] = '\0';
 				}
 				if (buf[0])
@@ -165,13 +165,13 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 				strcat(buf, ((mynick_t *)(n->data))->nick);
 			}
 			if (buf[0])
-				command_success_nodata(si, _("Registered nicks: %s"), buf);
+				command_success_nodata(si, _("Nicks      : %s"), buf);
 		}
 	}
 
 	if (!(mu->flags & MU_HIDEMAIL)
 		|| (si->smu == mu || has_priv(si, PRIV_USER_AUSPEX)))
-		command_success_nodata(si, _("Email: %s%s"), mu->email,
+		command_success_nodata(si, _("Email      : %s%s"), mu->email,
 					(mu->flags & MU_HIDEMAIL) ? " (hidden)": "");
 
 	*buf = '\0';
@@ -223,11 +223,11 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (*buf)
-		command_success_nodata(si, _("Flags: %s"), buf);
+		command_success_nodata(si, _("Flags      : %s"), buf);
 
 	if (mu->soper && (mu == si->smu || has_priv(si, PRIV_VIEWPRIVS)))
 	{
-		command_success_nodata(si, _("Oper class: %s"), mu->soper->operclass ? mu->soper->operclass->name : mu->soper->classname);
+		command_success_nodata(si, _("Oper class : %s"), mu->soper->operclass ? mu->soper->operclass->name : mu->soper->classname);
 	}
 
 	if (has_priv(si, PRIV_USER_AUSPEX) || has_priv(si, PRIV_CHAN_AUSPEX))
@@ -243,7 +243,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 			else if (ca->level != CA_AKICK)
 				other++;
 		}
-		command_success_nodata(si, _("Channel access: %d founder, %d other"), founder, other);
+		command_success_nodata(si, _("Channels   : %d founder, %d other"), founder, other);
 	}
 
 	if (has_priv(si, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
