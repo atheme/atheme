@@ -34,7 +34,7 @@ void _modinit(module_t *m)
 
 	command_add(&cs_unban, cs_cmdtree);
 
-	help_addentry(cs_helptree, "UNBAN", "help/cservice/unban", NULL);
+	help_addentry(cs_helptree, "UNBAN", "help/cservice/unban_self", NULL);
 }
 
 void _moddeinit()
