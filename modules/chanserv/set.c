@@ -1175,13 +1175,6 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (mc->metadata.count >= me.mdlimit)
-	{
-		command_fail(si, fault_toomany, _("Cannot add \2%s\2 to \2%s\2 metadata table, it is full."),
-						property, parv[0]);
-		return;
-	}
-
         if (strchr(property, ':'))
         	snoop("SET:PROPERTY: \2%s\2: \2%s\2/\2%s\2", mc->name, property, value);
 
@@ -1198,6 +1191,13 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 		metadata_delete(mc, METADATA_CHANNEL, property);
 		logcommand(si, CMDLOG_SET, "%s SET PROPERTY %s (deleted)", mc->name, property);
 		command_success_nodata(si, _("Metadata entry \2%s\2 has been deleted."), property);
+		return;
+	}
+
+	if (mc->metadata.count >= me.mdlimit)
+	{
+		command_fail(si, fault_toomany, _("Cannot add \2%s\2 to \2%s\2 metadata table, it is full."),
+						property, parv[0]);
 		return;
 	}
 
