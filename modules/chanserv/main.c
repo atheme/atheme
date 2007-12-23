@@ -347,11 +347,14 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	 * an invite exception (the latter only works if the channel already
 	 * exists because members are sent before invite exceptions).
 	 * Because most networks do not use kick_on_split_riding or
-	 * no_create_on_split, do not trust users coming back from splits.
+	 * no_create_on_split, do not trust users coming back from splits;
+	 * with the exception of users coming back after a services
+	 * restart if the channel TS did not change.
 	 * Unfortunately, this kicks users who have been invited by a channel
-	 * operator, after a split or services restart.
+	 * operator, after a split.
 	 */
 	if (mc->mlock_on & CMODE_INVITE && !(flags & CA_INVITE) &&
+			(!me.bursting || mc->flags & MC_RECREATED) &&
 			(!(u->server->flags & SF_EOB) || (chan->nummembers <= 2 && (chan->nummembers <= 1 || chanuser_find(chan, chansvs.me->me)))) &&
 			(!ircd->invex_mchar || !next_matching_ban(chan, u, ircd->invex_mchar, chan->bans.head)))
 	{
@@ -610,6 +613,11 @@ static void cs_newchan(channel_t *c)
 		channelts = atol(md->value);
 	if (channelts == 0)
 		channelts = mc->registered;
+
+	if (c->ts > channelts && channelts > 0)
+		mc->flags |= MC_RECREATED;
+	else
+		mc->flags &= ~MC_RECREATED;
 
 	if (chansvs.changets && c->ts > channelts && channelts > 0)
 	{
