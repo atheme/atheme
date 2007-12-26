@@ -58,22 +58,22 @@ struct
 } nick_account_trans[] =
 {
 	/* command descriptions */
-	{ "Reclaims use of a nickname.", "Disconnects an old session." },
-	{ "Registers a nickname.", "Registers an account." },
-	{ "Lists nicknames registered matching a given pattern.", "Lists accounts matching a given pattern." },
-	{ "Lists nicknames registered to an e-mail address.", "Lists accounts registered to an e-mail address." },
+	{ "Reclaims use of a nickname.", N_("Disconnects an old session.") },
+	{ "Registers a nickname.", N_("Registers an account.") },
+	{ "Lists nicknames registered matching a given pattern.", N_("Lists accounts matching a given pattern.") },
+	{ "Lists nicknames registered to an e-mail address.", N_("Lists accounts registered to an e-mail address.") },
 
 	/* messages */
-	{ "\2%s\2 is not a registered nickname.", "\2%s\2 is not a registered account." },
-	{ "Syntax: INFO <nickname>", "Syntax: INFO <account>" },
-	{ "No nicknames matched pattern \2%s\2", "No accounts matched pattern \2%s\2" },
-	{ "Nicknames matching e-mail address \2%s\2:", "Accounts matching e-mail address \2%s\2:" },
-	{ "No nicknames matched e-mail address \2%s\2", "No accounts matched e-mail address \2%s\2" },
-	{ "\2%s\2 has too many nicknames registered.", "\2%s\2 has too many accounts registered." },
-	{ "An email containing nickname activation instructions has been sent to \2%s\2.", "An email containing account activation instructions has been sent to \2%s\2." },
-	{ "If you do not complete registration within one day your nickname will expire.", "If you do not complete registration within one day your account will expire." },
-	{ "%s registered the nick \2%s\2 and gained services operator privileges.", "%s registered the account \2%s\2 and gained services operator privileges." },
-	{ "You cannot use your nickname as a password.", "You cannot use your account name as a password." },
+	{ "\2%s\2 is not a registered nickname.", N_("\2%s\2 is not a registered account.") },
+	{ "Syntax: INFO <nickname>", N_("Syntax: INFO <account>") },
+	{ "No nicknames matched pattern \2%s\2", N_("No accounts matched pattern \2%s\2") },
+	{ "Nicknames matching e-mail address \2%s\2:", N_("Accounts matching e-mail address \2%s\2:") },
+	{ "No nicknames matched e-mail address \2%s\2", N_("No accounts matched e-mail address \2%s\2") },
+	{ "\2%s\2 has too many nicknames registered.", N_("\2%s\2 has too many accounts registered.") },
+	{ "An email containing nickname activation instructions has been sent to \2%s\2.", N_("An email containing account activation instructions has been sent to \2%s\2.") },
+	{ "If you do not complete registration within one day your nickname will expire.", N_("If you do not complete registration within one day your account will expire.") },
+	{ "%s registered the nick \2%s\2 and gained services operator privileges.", N_("%s registered the account \2%s\2 and gained services operator privileges.") },
+	{ "You cannot use your nickname as a password.", N_("You cannot use your account name as a password.") },
 	{ NULL, NULL }
 };
 
@@ -148,7 +148,7 @@ static void nickserv_config_ready(void *unused)
 	if (nicksvs.no_nick_ownership)
 		for (i = 0; nick_account_trans[i].nickstring != NULL; i++)
 			itranslation_create(nick_account_trans[i].nickstring,
-					nick_account_trans[i].accountstring);
+					_(nick_account_trans[i].accountstring));
 	else
 		for (i = 0; nick_account_trans[i].nickstring != NULL; i++)
 			itranslation_destroy(nick_account_trans[i].nickstring);
