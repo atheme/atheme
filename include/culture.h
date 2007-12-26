@@ -19,10 +19,10 @@ struct translation_
 typedef struct translation_ translation_t;
 
 E const char *translation_get(const char *name);
-E void itranslation_create(char *str, char *trans);
-E void itranslation_destroy(char *str);
-E void translation_create(char *str, char *trans);
-E void translation_destroy(char *str);
+E void itranslation_create(const char *str, const char *trans);
+E void itranslation_destroy(const char *str);
+E void translation_create(const char *str, const char *trans);
+E void translation_destroy(const char *str);
 E void translation_init(void);
 
 #endif

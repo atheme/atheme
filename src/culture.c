@@ -75,7 +75,7 @@ const char *translation_get(const char *str)
 }
 
 /*
- * itranslation_create(char *str, char *trans)
+ * itranslation_create(const char *str, const char *trans)
  *
  * Inputs:
  *     - string to translate, translation of the string
@@ -86,7 +86,7 @@ const char *translation_get(const char *str)
  * Side Effects:
  *     - a new translation is added to the cache
  */
-void itranslation_create(char *str, char *trans)
+void itranslation_create(const char *str, const char *trans)
 {
 	translation_t *t = smalloc(sizeof(translation_t));
 
@@ -97,7 +97,7 @@ void itranslation_create(char *str, char *trans)
 }
 
 /*
- * itranslation_destroy(char *str)
+ * itranslation_destroy(const char *str)
  *
  * Inputs:
  *     - string to remove from the translation cache
@@ -108,7 +108,7 @@ void itranslation_create(char *str, char *trans)
  * Side Effects:
  *     - a string is removed from the translation cache
  */
-void itranslation_destroy(char *str)
+void itranslation_destroy(const char *str)
 {
 	translation_t *t = mowgli_dictionary_delete(itranslation_tree, str);
 
@@ -121,7 +121,7 @@ void itranslation_destroy(char *str)
 }
 
 /*
- * translation_create(char *str, char *trans)
+ * translation_create(const char *str, const char *trans)
  *
  * Inputs:
  *     - string to translate, translation of the string
@@ -132,7 +132,7 @@ void itranslation_destroy(char *str)
  * Side Effects:
  *     - a new translation is added to the cache
  */
-void translation_create(char *str, char *trans)
+void translation_create(const char *str, const char *trans)
 {
 	char buf[BUFSIZE];
 	translation_t *t = smalloc(sizeof(translation_t));
@@ -151,7 +151,7 @@ void translation_create(char *str, char *trans)
 }
 
 /*
- * translation_destroy(char *str)
+ * translation_destroy(const char *str)
  *
  * Inputs:
  *     - string to remove from the translation cache
@@ -162,7 +162,7 @@ void translation_create(char *str, char *trans)
  * Side Effects:
  *     - a string is removed from the translation cache
  */
-void translation_destroy(char *str)
+void translation_destroy(const char *str)
 {
 	translation_t *t = mowgli_dictionary_delete(translation_tree, str);
 
