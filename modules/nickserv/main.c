@@ -54,7 +54,7 @@ static void nickserv(sourceinfo_t *si, int parc, char *parv[])
 
 struct
 {
-	char *nickstring, *accountstring;
+	const char *nickstring, *accountstring;
 } nick_account_trans[] =
 {
 	/* command descriptions */
