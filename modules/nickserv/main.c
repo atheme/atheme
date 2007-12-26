@@ -147,11 +147,11 @@ static void nickserv_config_ready(void *unused)
 
 	if (nicksvs.no_nick_ownership)
 		for (i = 0; nick_account_trans[i].nickstring != NULL; i++)
-			itranslation_create(nick_account_trans[i].nickstring,
+			itranslation_create(_(nick_account_trans[i].nickstring),
 					_(nick_account_trans[i].accountstring));
 	else
 		for (i = 0; nick_account_trans[i].nickstring != NULL; i++)
-			itranslation_destroy(nick_account_trans[i].nickstring);
+			itranslation_destroy(_(nick_account_trans[i].nickstring));
 
         hook_del_hook("config_ready", nickserv_config_ready);
 }
