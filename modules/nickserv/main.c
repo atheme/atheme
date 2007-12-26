@@ -59,7 +59,6 @@ struct
 {
 	/* command descriptions */
 	{ "Reclaims use of a nickname.", "Disconnects an old session." },
-	{ "Prevents a nickname from expiring.", "Prevents an account from expiring." },
 	{ "Registers a nickname.", "Registers an account." },
 	{ "Lists nicknames registered matching a given pattern.", "Lists accounts matching a given pattern." },
 	{ "Lists nicknames registered to an e-mail address.", "Lists accounts registered to an e-mail address." },
