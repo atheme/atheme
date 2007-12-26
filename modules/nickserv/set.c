@@ -478,7 +478,7 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Metadata entry \2%s\2 added."), property);
 }
 
-command_t ns_set_property = { "PROPERTY", N_("Manipulates metadata entries associated with a nickname."), AC_NONE, 2, _ns_setproperty };
+command_t ns_set_property = { "PROPERTY", N_("Manipulates metadata entries associated with an account."), AC_NONE, 2, _ns_setproperty };
 
 static void _ns_setqproperty(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -532,7 +532,7 @@ static void _ns_setqproperty(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_SET, "SET QPROPERTY %s to %s", property, value);
 }
 
-command_t ns_set_qproperty = { "QPROPERTY", N_("Quietly manipulates metadata entries associated with a nickname."), AC_NONE, 2, _ns_setqproperty };
+command_t ns_set_qproperty = { "QPROPERTY", N_("Quietly manipulates metadata entries associated with an account."), AC_NONE, 2, _ns_setqproperty };
 
 static void _ns_setpassword(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -570,7 +570,7 @@ static void _ns_setpassword(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-command_t ns_set_password = { "PASSWORD", N_("Changes the password associated with your nickname."), AC_NONE, 1, _ns_setpassword };
+command_t ns_set_password = { "PASSWORD", N_("Changes the password associated with your account."), AC_NONE, 1, _ns_setpassword };
 
 command_t *ns_set_commands[] = {
 	&ns_set_email,

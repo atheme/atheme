@@ -48,7 +48,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 	if (!name)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SENDPASS");
-		command_fail(si, fault_needmoreparams, _("Syntax: SENDPASS <nickname>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: SENDPASS <account>"));
 		return;
 	}
 
@@ -69,13 +69,13 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (has_priv(si, PRIV_MARK))
 		{
-			command_success_nodata(si, _("Overriding MARK placed by %s on the nickname %s."), md->value, mu->name);
-			wallops("%s sent the password for the \2MARKED\2 nickname %s.", get_oper_name(si), mu->name);
+			command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), md->value, mu->name);
+			wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), mu->name);
 		}
 		else
 		{
 			logcommand(si, CMDLOG_ADMIN, "failed SENDPASS %s (marked by %s)", mu->name, md->value);
-			command_fail(si, fault_badparams, _("This operation cannot be performed on %s, because the nickname has been marked by %s."), mu->name, md->value);
+			command_fail(si, fault_badparams, _("This operation cannot be performed on %s, because the account has been marked by %s."), mu->name, md->value);
 			return;
 		}
 	}
@@ -100,7 +100,7 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 	/* this is not without controversy... :) */
 	if (mu->flags & MU_CRYPTPASS)
 	{
-		command_success_nodata(si, _("The password for the nickname \2%s\2 is encrypted; a new password will be assigned and sent."), name);
+		command_success_nodata(si, _("The password for the account \2%s\2 is encrypted; a new password will be assigned and sent."), name);
 		newpass = gen_pw(12);
 		set_password(mu, newpass);
 	}

@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_return = { "RETURN", N_("Returns a nickname to its owner."), PRIV_USER_ADMIN, 2, ns_cmd_return };
+command_t ns_return = { "RETURN", N_("Returns an account to its owner."), PRIV_USER_ADMIN, 2, ns_cmd_return };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -50,7 +50,7 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 	if (!target || !newmail)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RETURN");
-		command_fail(si, fault_needmoreparams, _("Usage: RETURN <nickname> <e-mail address>"));
+		command_fail(si, fault_needmoreparams, _("Usage: RETURN <account> <e-mail address>"));
 		return;
 	}
 
@@ -80,7 +80,7 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 	if (!sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_SENDPASS, mu, newpass))
 	{
 		strlcpy(mu->email, oldmail, EMAILLEN);
-		command_fail(si, fault_emailfail, _("Sending email failed, nickname \2%s\2 remains with \2%s\2."),
+		command_fail(si, fault_emailfail, _("Sending email failed, account \2%s\2 remains with \2%s\2."),
 				mu->name, mu->email);
 		return;
 	}
@@ -107,7 +107,7 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 	}
 	mu->flags |= MU_NOBURSTLOGIN;
 
-	wallops("%s returned the nickname \2%s\2 to \2%s\2", get_oper_name(si), target, newmail);
+	wallops("%s returned the account \2%s\2 to \2%s\2", get_oper_name(si), target, newmail);
 	snoop("RETURN: \2%s\2 to \2%s\2 by \2%s\2", target, newmail, get_oper_name(si));
 	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "RETURN %s to %s", target, newmail);
 	command_success_nodata(si, _("The e-mail address for \2%s\2 has been set to \2%s\2"),

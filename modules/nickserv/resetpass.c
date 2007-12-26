@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_resetpass = { "RESETPASS", N_("Resets a nickname password."), PRIV_USER_ADMIN, 1, ns_cmd_resetpass };
+command_t ns_resetpass = { "RESETPASS", N_("Resets an account password."), PRIV_USER_ADMIN, 1, ns_cmd_resetpass };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -47,7 +47,7 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 	if (!name)
 	{
 		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "RESETPASS");
-		command_fail(si, fault_needmoreparams, _("Syntax: RESETPASS <nickname>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: RESETPASS <account>"));
 		return;
 	}
 
@@ -67,12 +67,12 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 	if ((md = metadata_find(mu, METADATA_USER, "private:mark:setter")) && has_priv(si, PRIV_MARK))
 	{
 		logcommand(si, CMDLOG_ADMIN, "RESETPASS %s (overriding mark by %s)", name, md->value);
-		command_success_nodata(si, _("Overriding MARK placed by %s on the nickname %s."), md->value, name);
+		command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), md->value, name);
 		newpass = gen_pw(12);
-		command_success_nodata(si, _("The password for the nickname %s has been changed to %s."), name, newpass);
+		command_success_nodata(si, _("The password for the account %s has been changed to %s."), name, newpass);
 		set_password(mu, newpass);
 		free(newpass);
-		wallops("%s reset the password for the \2MARKED\2 nickname %s.", get_oper_name(si), name);
+		wallops("%s reset the password for the \2MARKED\2 account %s.", get_oper_name(si), name);
 		snoop("RESETPASS: \2%s\2 by \2%s\2", name, get_oper_name(si));
 		return;
 	}
@@ -80,17 +80,17 @@ static void ns_cmd_resetpass(sourceinfo_t *si, int parc, char *parv[])
 	if ((md = metadata_find(mu, METADATA_USER, "private:mark:setter")))
 	{
 		logcommand(si, CMDLOG_ADMIN, "failed RESETPASS %s (marked by %s)", name, md->value);
-		command_fail(si, fault_badparams, _("This operation cannot be performed on %s, because the nickname has been marked by %s."), name, md->value);
+		command_fail(si, fault_badparams, _("This operation cannot be performed on %s, because the account has been marked by %s."), name, md->value);
 		return;
 	}
 
 	newpass = gen_pw(12);
-	command_success_nodata(si, _("The password for the nickname %s has been changed to %s."), name, newpass);
+	command_success_nodata(si, _("The password for the account %s has been changed to %s."), name, newpass);
 	set_password(mu, newpass);
 	free(newpass);
 	metadata_delete(mu, METADATA_USER, "private:setpass:key");
 
-	wallops("%s reset the password for the nickname %s", get_oper_name(si), name);
+	wallops("%s reset the password for the account %s", get_oper_name(si), name);
 	snoop("RESETPASS: \2%s\2 by \2%s\2", name, get_oper_name(si));
 	logcommand(si, CMDLOG_ADMIN, "RESETPASS %s", name);
 }
