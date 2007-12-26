@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: bugs@atheme.org\n"
-"POT-Creation-Date: 2007-12-24 14:03+0100\n"
+"POT-Creation-Date: 2007-12-26 21:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1069,12 +1069,12 @@ msgstr ""
 
 #: modules/chanserv/set.c:209
 #, c-format
-msgid "The e-mail address for %s was deleted."
+msgid "The e-mail address for channel %s was deleted."
 msgstr ""
 
 #: modules/chanserv/set.c:214
 #, c-format
-msgid "The e-mail address for %s was not set."
+msgid "The e-mail address for channel %s was not set."
 msgstr ""
 
 #: modules/chanserv/set.c:226 modules/nickserv/return.c:72
@@ -1084,7 +1084,7 @@ msgstr ""
 
 #: modules/chanserv/set.c:234
 #, c-format
-msgid "The e-mail address for %s has been set to %s."
+msgid "The e-mail address for channel %s has been set to %s."
 msgstr ""
 
 #: modules/chanserv/set.c:264
@@ -1218,42 +1218,32 @@ msgstr ""
 #: modules/chanserv/set.c:849 modules/chanserv/set.c:906
 #: modules/chanserv/set.c:925 modules/chanserv/set.c:997
 #: modules/chanserv/set.c:1051 modules/chanserv/set.c:1108
-#: modules/nickserv/set.c:167 modules/nickserv/set.c:232
-#: modules/nickserv/set.c:281 modules/nickserv/set.c:330
-#: modules/nickserv/set.c:386
 #, c-format
-msgid "The %s flag is already set for %s."
+msgid "The %s flag is already set for channel %s."
 msgstr ""
 
 #: modules/chanserv/set.c:743 modules/chanserv/set.c:800
 #: modules/chanserv/set.c:857 modules/chanserv/set.c:916
 #: modules/chanserv/set.c:943 modules/chanserv/set.c:1004
 #: modules/chanserv/set.c:1062 modules/chanserv/set.c:1117
-#: modules/nickserv/set.c:175 modules/nickserv/set.c:238
-#: modules/nickserv/set.c:287 modules/nickserv/set.c:338
-#: modules/nickserv/set.c:394
 #, c-format
-msgid "The %s flag has been set for %s."
+msgid "The %s flag has been set for channel %s."
 msgstr ""
 
 #: modules/chanserv/set.c:752 modules/chanserv/set.c:809
 #: modules/chanserv/set.c:866 modules/chanserv/set.c:951
 #: modules/chanserv/set.c:1013 modules/chanserv/set.c:1071
-#: modules/chanserv/set.c:1126 modules/nickserv/set.c:183
-#: modules/nickserv/set.c:246 modules/nickserv/set.c:295
-#: modules/nickserv/set.c:347 modules/nickserv/set.c:402
+#: modules/chanserv/set.c:1126
 #, c-format
-msgid "The %s flag is not set for %s."
+msgid "The %s flag is not set for channel %s."
 msgstr ""
 
 #: modules/chanserv/set.c:760 modules/chanserv/set.c:817
 #: modules/chanserv/set.c:874 modules/chanserv/set.c:963
 #: modules/chanserv/set.c:1020 modules/chanserv/set.c:1082
-#: modules/chanserv/set.c:1135 modules/nickserv/set.c:191
-#: modules/nickserv/set.c:252 modules/nickserv/set.c:301
-#: modules/nickserv/set.c:355 modules/nickserv/set.c:410
+#: modules/chanserv/set.c:1135
 #, c-format
-msgid "The %s flag has been removed for %s."
+msgid "The %s flag has been removed for channel %s."
 msgstr ""
 
 #: modules/chanserv/set.c:1155
@@ -2861,7 +2851,7 @@ msgstr ""
 
 #: modules/nickserv/set.c:111
 #, c-format
-msgid "The email address for %s is already set to %s."
+msgid "The email address for account %s is already set to %s."
 msgstr ""
 
 #: modules/nickserv/set.c:127
@@ -2880,11 +2870,39 @@ msgstr ""
 
 #: modules/nickserv/set.c:144
 #, c-format
-msgid "The email address for %s has been changed to %s."
+msgid "The email address for account %s has been changed to %s."
 msgstr ""
 
 #: modules/nickserv/set.c:147
 msgid "Changes your e-mail address."
+msgstr ""
+
+#: modules/nickserv/set.c:167 modules/nickserv/set.c:232
+#: modules/nickserv/set.c:281 modules/nickserv/set.c:330
+#: modules/nickserv/set.c:386
+#, c-format
+msgid "The %s flag is already set for account %s."
+msgstr ""
+
+#: modules/nickserv/set.c:175 modules/nickserv/set.c:238
+#: modules/nickserv/set.c:287 modules/nickserv/set.c:338
+#: modules/nickserv/set.c:394
+#, c-format
+msgid "The %s flag has been set for account %s."
+msgstr ""
+
+#: modules/nickserv/set.c:183 modules/nickserv/set.c:246
+#: modules/nickserv/set.c:295 modules/nickserv/set.c:347
+#: modules/nickserv/set.c:402
+#, c-format
+msgid "The %s flag is not set for account %s."
+msgstr ""
+
+#: modules/nickserv/set.c:191 modules/nickserv/set.c:252
+#: modules/nickserv/set.c:301 modules/nickserv/set.c:355
+#: modules/nickserv/set.c:410
+#, c-format
+msgid "The %s flag has been removed for account %s."
 msgstr ""
 
 #: modules/nickserv/set.c:202
