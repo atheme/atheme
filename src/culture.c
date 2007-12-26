@@ -23,8 +23,16 @@
 
 #include "atheme.h"
 
-mowgli_dictionary_t *itranslation_tree; /* internal translations, userserv/nickserv etc */
-mowgli_dictionary_t *translation_tree; /* language translations */
+struct translation_
+{
+	char *name;
+	char *replacement;
+};
+
+typedef struct translation_ translation_t;
+
+static mowgli_dictionary_t *itranslation_tree; /* internal translations, userserv/nickserv etc */
+static mowgli_dictionary_t *translation_tree; /* language translations */
 
 /*
  * translation_init()

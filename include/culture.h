@@ -10,14 +10,6 @@
 #ifndef CULTURE_H
 #define CULTURE_H
 
-struct translation_
-{
-	char *name;
-	char *replacement;
-};
-
-typedef struct translation_ translation_t;
-
 E const char *translation_get(const char *name);
 E void itranslation_create(const char *str, const char *trans);
 E void itranslation_destroy(const char *str);
