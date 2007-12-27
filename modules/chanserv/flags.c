@@ -100,6 +100,7 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	char *target = parv[1];
 	const char *str1, *str2;
 	unsigned int addflags, removeflags, restrictflags;
+	mychan_t *mc;
 
 	if (parc < 1)
 	{
@@ -108,16 +109,22 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	mc = mychan_find(channel);
+	if (!mc)
+	{
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), channel);
+		return;
+	}
+
+	if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && (target || !has_priv(si, PRIV_CHAN_AUSPEX)))
+	{
+		command_fail(si, fault_noprivs, _("\2%s\2 is closed."), channel);
+		return;
+	}
+
 	if (!target)
 	{
-		mychan_t *mc = mychan_find(channel);
 		unsigned int i = 1;
-
-		if (!mc)
-		{
-			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), channel);
-			return;
-		}
 
 		if (!chanacs_source_has_flag(mc, si, CA_ACLVIEW))
 		{
@@ -130,12 +137,6 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 			}
 		}
 		
-		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer") && !has_priv(si, PRIV_CHAN_AUSPEX))
-		{
-			command_fail(si, fault_noprivs, _("\2%s\2 is closed."), channel);
-			return;
-		}
-
 		command_success_nodata(si, _("Entry Nickname/Host          Flags"));
 		command_success_nodata(si, "----- ---------------------- -----");
 
@@ -162,31 +163,12 @@ static void cs_cmd_flags(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 	{
-		mychan_t *mc = mychan_find(channel);
 		myuser_t *tmu;
 		char *flagstr = parv[2];
 
 		if (!si->smu)
 		{
 			command_fail(si, fault_noprivs, _("You are not logged in."));
-			return;
-		}
-
-		if (!mc)
-		{
-			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), channel);
-			return;
-		}
-		
-		if (metadata_find(mc, METADATA_CHANNEL, "private:close:closer"))
-		{
-			command_fail(si, fault_noprivs, _("\2%s\2 is closed."), channel);
-			return;
-		}
-
-		if (!target)
-		{
-			command_fail(si, fault_needmoreparams, _("Usage: FLAGS %s [target] [flags]"), channel);
 			return;
 		}
 
