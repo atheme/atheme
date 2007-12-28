@@ -163,7 +163,7 @@ static boolean_t extgecos_match(const char *mask, user_t *u)
 	return !match(mask, hostgbuf) || !match(mask, realgbuf);
 }
 
-node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int type, node_t *first)
+static node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int type, node_t *first)
 {
 	chanban_t *cb;
 	node_t *n;
