@@ -79,17 +79,77 @@ void init_users(void)
  *
  * Side Effects:
  *     - if successful, a user is created and added to the users DTree.
- *
- * Bugs:
- *     - this function does not check if a user object by this name already exists
+ *     - if unsuccessful, a kill has been sent if necessary
  */
 user_t *user_add(const char *nick, const char *user, const char *host, 
 	const char *vhost, const char *ip, const char *uid, const char *gecos, 
 	server_t *server, time_t ts)
 {
-	user_t *u;
+	user_t *u, *u2;
 
 	slog(LG_DEBUG, "user_add(): %s (%s@%s) -> %s", nick, user, host, server->name);
+
+	u2 = user_find_named(nick);
+	if (u2 != NULL)
+	{
+		if (server == me.me)
+		{
+			/* caller should not let this happen */
+			slog(LG_ERROR, "user_add(): tried to add local nick %s which already exists", nick);
+			return NULL;
+		}
+		slog(LG_INFO, "user_add(): nick collision on %s", nick);
+		if (u2->server == me.me)
+		{
+			if (uid != NULL)
+			{
+				/* If the new client has a UID, our
+				 * client will have a UID too and the
+				 * remote server will send us a kill
+				 * if it kills our client.  So just kill
+				 * their client and continue.
+				 */
+				kill_id_sts(NULL, uid, "Nick collision with services (new)");
+				return NULL;
+			}
+			if (ts == u2->ts || (ts < u2->ts ^ (!irccasecmp(user, u2->user) && !irccasecmp(host, u2->host))))
+			{
+				/* If the TSes are equal, or if their TS
+				 * is less than our TS and the u@h differs,
+				 * or if our TS is less than their TS and
+				 * the u@h is equal, our client will be
+				 * killed.
+				 *
+				 * So kill their client as well.
+				 *
+				 * Then hope for a kill to arrive for our
+				 * client; we will reintroduce it then.
+				 */
+				kill_id_sts(NULL, nick, "Nick collision with services (new)");
+				return NULL;
+			}
+			else /* Our client will not be killed. */
+				return NULL;
+		}
+		else
+		{
+			wallops("Server %s is introducing nick %s which already exists on %s",
+					server->name, nick, u2->server->name);
+			if (uid != NULL && *u2->uid != '\0')
+			{
+				kill_id_sts(NULL, uid, "Ghost detected via nick collision (new)");
+				kill_id_sts(NULL, u2->uid, "Ghost detected via nick collision (old)");
+				user_delete(u2);
+			}
+			else
+			{
+				/* There is no way we can do this properly. */
+				kill_id_sts(NULL, nick, "Ghost detected via nick collision");
+				user_delete(u2);
+			}
+			return NULL;
+		}
+	}
 
 	u = BlockHeapAlloc(user_heap);
 
@@ -305,15 +365,92 @@ void user_changeuid(user_t *u, const char *uid)
  *     - new TS
  *
  * Outputs:
- *     - nothing
+ *     - whether the user was killed as result of the nick change
  *
  * Side Effects:
  *     - a user object's nick and TS is changed.
+ *     - in event of a collision, the user may be killed
  */
-void user_changenick(user_t *u, const char *nick, time_t ts)
+boolean_t user_changenick(user_t *u, const char *nick, time_t ts)
 {
 	mynick_t *mn;
+	user_t *u2;
 
+	u2 = user_find_named(nick);
+	if (u2 != NULL)
+	{
+		if (u->server == me.me)
+		{
+			/* caller should not let this happen */
+			slog(LG_ERROR, "user_changenick(): tried to change local nick %s to %s which already exists", u->nick, nick);
+			return FALSE;
+		}
+		slog(LG_INFO, "user_changenick(): nick collision on %s", nick);
+		if (u2->server == me.me)
+		{
+			if (*u->uid != '\0')
+			{
+				/* If the changing client has a UID, our
+				 * client will have a UID too and the
+				 * remote server will send us a kill
+				 * if it kills our client.  So just kill
+				 * their client and continue.
+				 */
+				kill_id_sts(NULL, u->uid, "Nick change collision with services");
+				user_delete(u);
+				return TRUE;
+			}
+			if (ts == u2->ts || (ts < u2->ts ^ (!irccasecmp(u->user, u2->user) && !irccasecmp(u->host, u2->host))))
+			{
+				/* If the TSes are equal, or if their TS
+				 * is less than our TS and the u@h differs,
+				 * or if our TS is less than their TS and
+				 * the u@h is equal, our client will be
+				 * killed.
+				 *
+				 * So kill their client as well.
+				 *
+				 * Then hope for a kill to arrive for our
+				 * client; we will reintroduce it then.
+				 */
+				kill_id_sts(NULL, nick, "Nick change collision with services");
+				user_delete(u);
+				return TRUE;
+			}
+			else
+			{
+				/* Our client will not be killed.
+				 * But kill the changing client using its
+				 * old nick.
+				 */
+				kill_id_sts(NULL, u->nick, "Nick change collision with services");
+				user_delete(u);
+				return TRUE;
+			}
+		}
+		else
+		{
+			wallops("Server %s is sending nick change from %s to %s which already exists on %s",
+					u->server->name, u->nick, nick,
+					u2->server->name);
+			if (*u->uid != '\0' && *u2->uid != '\0')
+			{
+				kill_id_sts(NULL, u->uid, "Ghost detected via nick change collision (new)");
+				kill_id_sts(NULL, u2->uid, "Ghost detected via nick change collision (old)");
+				user_delete(u);
+				user_delete(u2);
+			}
+			else
+			{
+				/* There is no way we can do this properly. */
+				kill_id_sts(NULL, u->nick, "Ghost detected via nick change collision");
+				kill_id_sts(NULL, nick, "Ghost detected via nick change collision");
+				user_delete(u);
+				user_delete(u2);
+			}
+			return TRUE;
+		}
+	}
 	if (u->myuser != NULL && (mn = mynick_find(u->nick)) != NULL &&
 			mn->owner == u->myuser)
 		mn->lastseen = CURRTIME;
@@ -323,6 +460,7 @@ void user_changenick(user_t *u, const char *nick, time_t ts)
 	u->ts = ts;
 
 	mowgli_dictionary_add(userlist, u->nick, u);
+	return FALSE;
 }
 
 /*

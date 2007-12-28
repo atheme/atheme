@@ -778,6 +778,8 @@ static void m_uid(sourceinfo_t *si, int parc, char *parv[])
 
 		/* char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, unsigned int ts */ 
 		u = user_add(parv[2], parv[5], parv[3], parv[4], parv[7], parv[0], parv[9], si->s, atol(parv[9]));
+		if (u == NULL)
+			return;
 		user_mode(u, parv[5]);
 
 		/* If server is not yet EOB we will do this later.
@@ -809,7 +811,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
 		/* No TS here for some reason, hmm */
-		user_changenick(si->su, parv[0], si->su->ts);
+		if (user_changenick(si->su, parv[0], si->su->ts))
+			return;
 
 		/* It could happen that our PING arrived late and the
 		 * server didn't acknowledge EOB yet even though it is

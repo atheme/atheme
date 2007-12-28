@@ -662,6 +662,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 				ipstring[0] = '\0';
 		}
 		u = user_add(parv[0], parv[3], parv[4], NULL, ipstring, parv[parc - 2], parv[parc - 1], si->s, atoi(parv[2]));
+		if (u == NULL)
+			return;
 
 		if (parv[5][0] == '+')
 		{
@@ -711,7 +713,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
-		user_changenick(si->su, parv[0], atoi(parv[1]));
+		if (user_changenick(si->su, parv[0], atoi(parv[1])))
+			return;
 
 		handle_nickchange(si->su);
 	}

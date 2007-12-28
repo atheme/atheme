@@ -521,6 +521,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		addr.s_addr = htonl(strtoul(parv[10], NULL, 0));
 		ipbuf = inet_ntoa(addr);
 		u = user_add(parv[0], parv[5], parv[6], parv[7], ipbuf, NULL, parv[11], s, atoi(parv[2]));
+		if (u == NULL)
+			return;
 
 		/* user modes */
 		user_mode(u, parv[3]);
@@ -562,7 +564,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		realchange = irccasecmp(si->su->nick, parv[0]);
 
-		user_changenick(si->su, parv[0], atoi(parv[1]));
+		if (user_changenick(si->su, parv[0], atoi(parv[1])))
+			return;
 
 		/* fix up +r if necessary -- jilles */
 		if (realchange && should_reg_umode(si->su))

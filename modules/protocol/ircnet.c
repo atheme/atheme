@@ -490,6 +490,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", si->s->name, parv[0]);
 
 		u = user_add(parv[0], parv[2], parv[3], NULL, parv[4], parv[1], parv[6], si->s, 0);
+		if (u == NULL)
+			return;
 
 		user_mode(u, parv[5]);
 		if (strchr(parv[5], 'a'))
@@ -509,7 +511,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
-		user_changenick(si->su, parv[0], 0);
+		if (user_changenick(si->su, parv[0], 0))
+			return;
 
 		handle_nickchange(si->su);
 	}
@@ -545,7 +548,8 @@ static void m_save(sourceinfo_t *si, int parc, char *parv[])
 	{
 		slog(LG_DEBUG, "m_save(): nickname change for `%s': %s", u->nick, u->uid);
 
-		user_changenick(u, u->uid, 0);
+		if (user_changenick(u, u->uid, 0))
+			return;
 
 		handle_nickchange(u);
 	}

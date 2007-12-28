@@ -59,7 +59,7 @@ E void user_delete(user_t *u);
 E user_t *user_find(const char *nick);
 E user_t *user_find_named(const char *nick);
 E void user_changeuid(user_t *u, const char *uid);
-E void user_changenick(user_t *u, const char *nick, time_t ts);
+E boolean_t user_changenick(user_t *u, const char *nick, time_t ts);
 E void user_mode(user_t *user, const char *modes);
 
 /* uid.c */

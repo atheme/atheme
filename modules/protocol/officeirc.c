@@ -451,7 +451,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		realchange = irccasecmp(si->su->nick, parv[0]);
 
-		user_changenick(si->su, parv[0], atoi(parv[1]));
+		if (user_changenick(si->su, parv[0], atoi(parv[1])))
+			return;
 
 		/* fix up +r if necessary -- jilles */
 		if (realchange && !nicksvs.no_nick_ownership)

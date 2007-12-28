@@ -647,6 +647,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		if (!inet_ntop(AF_INET, &ip, ipstring, sizeof ipstring))
 			ipstring[0] = '\0';
 		u = user_add(parv[0], parv[4], parv[5], NULL, ipstring, NULL, parv[9], s, atoi(parv[2]));
+		if (u == NULL)
+			return;
 
 		user_mode(u, parv[3]);
 
@@ -680,7 +682,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		realchange = irccasecmp(si->su->nick, parv[0]);
 
-		user_changenick(si->su, parv[0], atoi(parv[1]));
+		if (user_changenick(si->su, parv[0], atoi(parv[1])))
+			return;
 
 		/* fix up +r if necessary -- jilles */
 		if (realchange && should_reg_umode(si->su))

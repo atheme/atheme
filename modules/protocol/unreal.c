@@ -634,6 +634,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
 
 		u = user_add(parv[0], parv[3], parv[4], parv[8], NULL, NULL, parv[9], s, atoi(parv[2]));
+		if (u == NULL)
+			return;
 
 		user_mode(u, parv[7]);
 
@@ -658,7 +660,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		realchange = irccasecmp(si->su->nick, parv[0]);
 
-		user_changenick(si->su, parv[0], atoi(parv[1]));
+		if (user_changenick(si->su, parv[0], atoi(parv[1])))
+			return;
 
 		/* fix up +r if necessary -- jilles */
 		if (realchange && !nicksvs.no_nick_ownership)
