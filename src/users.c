@@ -326,7 +326,7 @@ void user_changenick(user_t *u, const char *nick, time_t ts)
 }
 
 /*
- * user_mode(user_t *user, char *modes)
+ * user_mode(user_t *user, const char *modes)
  *
  * Changes a user object's modes.
  *
@@ -343,7 +343,7 @@ void user_changenick(user_t *u, const char *nick, time_t ts)
  * Bugs:
  *     - this routine only tracks +i and +o usermode changes.
  */
-void user_mode(user_t *user, char *modes)
+void user_mode(user_t *user, const char *modes)
 {
 	int dir = MTYPE_ADD;
 

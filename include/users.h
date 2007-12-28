@@ -60,11 +60,11 @@ E user_t *user_find(const char *nick);
 E user_t *user_find_named(const char *nick);
 E void user_changeuid(user_t *u, const char *uid);
 E void user_changenick(user_t *u, const char *nick, time_t ts);
-E void user_mode(user_t *user, char *modes);
+E void user_mode(user_t *user, const char *modes);
 
 /* uid.c */
 E void init_uid(void);
-E char *uid_get(void);
+E const char *uid_get(void);
 
 #endif
 
