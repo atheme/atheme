@@ -243,6 +243,15 @@ void reintroduce_user(user_t *u)
 		slog(LG_DEBUG, "tried to reintroduce_user non-service %s", u->nick);
 		return;
 	}
+	/* Reintroduce with a new UID.  This avoids problems distinguishing
+	 * commands targeted at the old and new user.
+	 */
+	if (*u->uid)
+	{
+		user_changeuid(u, uid_get());
+		/* The following assumes that all UIDs have the same length. */
+		strcpy(svs->uid, u->uid);
+	}
 	introduce_nick(u);
 	LIST_FOREACH(n, u->channels.head)
 	{
