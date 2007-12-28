@@ -224,16 +224,12 @@ static void ptlink_numeric_sts(char *from, int numeric, char *target, char *fmt,
 }
 
 /* KILL wrapper */
-static void ptlink_skill(char *from, char *nick, char *fmt, ...)
+static void ptlink_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts(":%s KILL %s :%s!%s!%s (%s)", from, nick, from, from, from, buf);
+	if (killer != NULL)
+		sts(":%s KILL %s :%s!%s (%s)", killer->nick, id, killer->host, killer->nick, reason);
+	else
+		sts(":%s KILL %s :%s (%s)", me.name, id, me.name, reason);
 }
 
 /* PART wrapper */
@@ -764,7 +760,7 @@ void _modinit(module_t * m)
 	notice_global_sts = &ptlink_notice_global_sts;
 	notice_channel_sts = &ptlink_notice_channel_sts;
 	numeric_sts = &ptlink_numeric_sts;
-	skill = &ptlink_skill;
+	kill_id_sts = &ptlink_kill_id_sts;
 	part_sts = &ptlink_part_sts;
 	kline_sts = &ptlink_kline_sts;
 	unkline_sts = &ptlink_unkline_sts;

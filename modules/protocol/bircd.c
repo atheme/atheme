@@ -233,21 +233,12 @@ static void asuka_numeric_sts(char *from, int numeric, char *target, char *fmt, 
 }
 
 /* KILL wrapper */
-static void asuka_skill(char *from, char *nick, char *fmt, ...)
+static void asuka_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-	user_t *fptr = user_find_named(from);
-	user_t *tptr = user_find_named(nick);
-
-	if (!tptr)
-		return;
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts("%s D %s :%s!%s!%s (%s)", fptr ? fptr->uid : me.numeric, tptr->uid, from, from, from, buf);
+	if (killer != NULL)
+		sts("%s D %s :%s!%s (%s)", killer->uid, id, killer->host, killer->nick, reason);
+	else
+		sts("%s D %s :%s (%s)", me.numeric, id, me.name, reason);
 }
 
 /* PART wrapper */
@@ -960,7 +951,7 @@ void _modinit(module_t * m)
 	notice_channel_sts = &asuka_notice_channel_sts;
 	wallchops = &asuka_wallchops;
 	numeric_sts = &asuka_numeric_sts;
-	skill = &asuka_skill;
+	kill_id_sts = &asuka_kill_id_sts;
 	part_sts = &asuka_part_sts;
 	kline_sts = &asuka_kline_sts;
 	unkline_sts = &asuka_unkline_sts;

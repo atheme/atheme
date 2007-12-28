@@ -212,16 +212,12 @@ static void ircnet_numeric_sts(char *from, int numeric, char *target, char *fmt,
 }
 
 /* KILL wrapper */
-static void ircnet_skill(char *from, char *nick, char *fmt, ...)
+static void ircnet_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts(":%s KILL %s :%s!%s!%s (%s)", from, nick, from, from, from, buf);
+	if (killer != NULL)
+		sts(":%s KILL %s :%s!%s (%s)", CLIENT_NAME(killer), id, killer->host, killer->nick, reason);
+	else
+		sts(":%s KILL %s :%s (%s)", ME, id, me.name, reason);
 }
 
 /* PART wrapper */
@@ -721,7 +717,7 @@ void _modinit(module_t * m)
 	notice_channel_sts = &ircnet_notice_channel_sts;
 	/* no wallchops, ircnet ircd does not support this */
 	numeric_sts = &ircnet_numeric_sts;
-	skill = &ircnet_skill;
+	kill_id_sts = &ircnet_kill_id_sts;
 	part_sts = &ircnet_part_sts;
 	kline_sts = &ircnet_kline_sts;
 	unkline_sts = &ircnet_unkline_sts;

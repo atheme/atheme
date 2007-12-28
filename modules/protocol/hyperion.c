@@ -329,25 +329,21 @@ static void hyperion_numeric_sts(char *from, int numeric, char *target, char *fm
 }
 
 /* KILL wrapper */
-static void hyperion_skill(char *from, char *nick, char *fmt, ...)
+static void hyperion_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
 #if 0
-	sts(":%s KILL %s :%s!%s!%s (%s)", from, nick, from, from, from, buf);
+	if (killer != NULL)
+		sts(":%s KILL %s :%s!%s (%s)", killer->nick, id, killer->host, killer->nick, reason);
+	else
+		sts(":%s KILL %s :%s (%s)", me.name, id, me.name, reason);
 #else
 	/* Use COLLIDE to cut down on server notices.
 	 * The current version of hyperion does not do COLLIDE reasons,
 	 * so fake it.
 	 */
 	sts(":%s NOTICE %s :*** Disconnecting you (%s (%s))", me.name,
-			nick, from, buf);
-	sts(":%s COLLIDE %s :(%s)", me.name, nick, buf);
+			id, killer ? killer->nick : me.name, reason);
+	sts(":%s COLLIDE %s :(%s)", me.name, id, reason);
 #endif
 }
 
@@ -997,7 +993,7 @@ void _modinit(module_t * m)
 	notice_channel_sts = &hyperion_notice_channel_sts;
 	wallchops = &hyperion_wallchops;
 	numeric_sts = &hyperion_numeric_sts;
-	skill = &hyperion_skill;
+	kill_id_sts = &hyperion_kill_id_sts;
 	part_sts = &hyperion_part_sts;
 	kline_sts = &hyperion_kline_sts;
 	unkline_sts = &hyperion_unkline_sts;

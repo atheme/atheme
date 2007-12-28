@@ -36,7 +36,7 @@ void (*notice_global_sts) (user_t *from, const char *mask, const char *text) = g
 void (*notice_channel_sts) (user_t *from, channel_t *target, const char *text) = generic_notice_channel_sts;
 void (*wallchops) (user_t *source, channel_t *target, const char *message) = generic_wallchops;
 void (*numeric_sts) (char *from, int numeric, char *target, char *fmt, ...) = generic_numeric_sts;
-void (*skill) (char *from, char *nick, char *fmt, ...) = generic_skill;
+void (*kill_id_sts) (user_t *killer, const char *id, const char *reason) = generic_kill_id_sts;
 void (*part_sts) (channel_t *c, user_t *u) = generic_part_sts;
 void (*kline_sts) (char *server, char *user, char *host, long duration, char *reason) = generic_kline_sts;
 void (*unkline_sts) (char *server, char *user, char *host) = generic_unkline_sts;
@@ -144,7 +144,7 @@ void generic_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
 	free(buf);
 }
 
-void generic_skill(char *from, char *nick, char *fmt, ...)
+void generic_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
 	/* cant do anything here. bail. */
 }
@@ -207,8 +207,8 @@ void generic_sethost_sts(char *source, char *target, char *host)
 
 void generic_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
 {
-	if (type == FNC_FORCE)
-		skill(source->nick, u->nick, "Nickname enforcement (%s)", u->nick);
+	if (type == FNC_FORCE) /* XXX this does not work properly */
+		kill_id_sts(source, CLIENT_NAME(u), "Nickname enforcement");
 }
 
 void generic_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account)

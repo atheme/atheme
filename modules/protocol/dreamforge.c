@@ -202,16 +202,12 @@ static void dreamforge_numeric_sts(char *from, int numeric, char *target, char *
 }
 
 /* KILL wrapper */
-static void dreamforge_skill(char *from, char *nick, char *fmt, ...)
+static void dreamforge_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts(":%s KILL %s :%s!%s!%s (%s)", from, nick, from, from, from, buf);
+	if (killer != NULL)
+		sts(":%s KILL %s :%s!%s (%s)", killer->nick, id, killer->host, killer->nick, reason);
+	else
+		sts(":%s KILL %s :%s (%s)", me.name, id, me.name, reason);
 }
 
 /* PART wrapper */
@@ -672,7 +668,7 @@ void _modinit(module_t * m)
 	notice_global_sts = &dreamforge_notice_global_sts;
 	notice_channel_sts = &dreamforge_notice_channel_sts;
 	numeric_sts = &dreamforge_numeric_sts;
-	skill = &dreamforge_skill;
+	kill_id_sts = &dreamforge_kill_id_sts;
 	part_sts = &dreamforge_part_sts;
 	kline_sts = &dreamforge_kline_sts;
 	unkline_sts = &dreamforge_unkline_sts;

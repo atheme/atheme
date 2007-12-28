@@ -240,21 +240,12 @@ static void nefarious_numeric_sts(char *from, int numeric, char *target, char *f
 }
 
 /* KILL wrapper */
-static void nefarious_skill(char *from, char *nick, char *fmt, ...)
+static void nefarious_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-	user_t *fptr = user_find_named(from);
-	user_t *tptr = user_find_named(nick);
-
-	if (!tptr)
-		return;
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts("%s D %s :%s!%s!%s (%s)", fptr ? fptr->uid : me.numeric, tptr->uid, from, from, from, buf);
+	if (killer != NULL)
+		sts("%s D %s :%s!%s (%s)", killer->uid, id, killer->host, killer->nick, reason);
+	else
+		sts("%s D %s :%s (%s)", me.numeric, id, me.name, reason);
 }
 
 /* PART wrapper */
@@ -1051,7 +1042,7 @@ void _modinit(module_t * m)
 	notice_channel_sts = &nefarious_notice_channel_sts;
 	wallchops = &nefarious_wallchops;
 	numeric_sts = &nefarious_numeric_sts;
-	skill = &nefarious_skill;
+	kill_id_sts = &nefarious_kill_id_sts;
 	part_sts = &nefarious_part_sts;
 	kline_sts = &nefarious_kline_sts;
 	unkline_sts = &nefarious_unkline_sts;

@@ -107,7 +107,7 @@ void kill_user(user_t *source, user_t *victim, const char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	skill(source != NULL ? source->nick : me.name, victim->nick, "%s", buf);
+	kill_id_sts(source, CLIENT_NAME(victim), buf);
 	user_delete(victim);
 }
 

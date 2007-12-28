@@ -128,10 +128,11 @@ E void (*wallchops)(user_t *source, channel_t *target, const char *message);
 /* send a numeric from must be me.name or ME */
 E void (*numeric_sts)(char *from, int numeric, char *target, char *fmt, ...) PRINTFLIKE(4, 5);
 /* kill a user
- * from can be a client on the services server or the services server
- * itself (me.name or ME)
- * it is recommended to change an invalid source to ME */
-E void (*skill)(char *from, char *nick, char *fmt, ...) PRINTFLIKE(3, 4);
+ * killer can be a client on the services server or NULL for the
+ * services server itself
+ * unlike other functions, the target is specified by a UID or nick;
+ * do not call user_find(), user_find_named() or similar on it */
+E void (*kill_id_sts)(user_t *killer, const char *id, const char *reason);
 /* part a channel with a client on the services server */
 E void (*part_sts)(channel_t *c, user_t *u);
 /* add a kline on the servers matching the given mask
@@ -214,7 +215,7 @@ E void generic_notice_global_sts(user_t *from, const char *mask, const char *tex
 E void generic_notice_channel_sts(user_t *from, channel_t *target, const char *text);
 E void generic_wallchops(user_t *source, channel_t *target, const char *message);
 E void generic_numeric_sts(char *from, int numeric, char *target, char *fmt, ...);
-E void generic_skill(char *from, char *nick, char *fmt, ...);
+E void generic_kill_id_sts(user_t *killer, const char *id, const char *reason);
 E void generic_part_sts(channel_t *c, user_t *u);
 E void generic_kline_sts(char *server, char *user, char *host, long duration, char *reason);
 E void generic_unkline_sts(char *server, char *user, char *host);

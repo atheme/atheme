@@ -432,18 +432,12 @@ static void charybdis_numeric_sts(char *from, int numeric, char *target, char *f
 }
 
 /* KILL wrapper */
-static void charybdis_skill(char *from, char *nick, char *fmt, ...)
+static void charybdis_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-	user_t *killer = user_find(from);
-	user_t *victim = user_find(nick);
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts(":%s KILL %s :%s!%s!%s (%s)", killer ? CLIENT_NAME(killer) : ME, victim ? CLIENT_NAME(victim) : nick, from, from, from, buf);
+	if (killer != NULL)
+		sts(":%s KILL %s :%s!%s (%s)", CLIENT_NAME(killer), id, killer->host, killer->nick, reason);
+	else
+		sts(":%s KILL %s :%s (%s)", ME, id, me.name, reason);
 }
 
 /* PART wrapper */
@@ -1454,7 +1448,7 @@ void _modinit(module_t * m)
 	notice_channel_sts = &charybdis_notice_channel_sts;
 	wallchops = &charybdis_wallchops;
 	numeric_sts = &charybdis_numeric_sts;
-	skill = &charybdis_skill;
+	kill_id_sts = &charybdis_kill_id_sts;
 	part_sts = &charybdis_part_sts;
 	kline_sts = &charybdis_kline_sts;
 	unkline_sts = &charybdis_unkline_sts;

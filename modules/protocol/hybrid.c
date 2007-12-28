@@ -282,18 +282,12 @@ static void hybrid_numeric_sts(char *from, int numeric, char *target, char *fmt,
 }
 
 /* KILL wrapper */
-static void hybrid_skill(char *from, char *nick, char *fmt, ...)
+static void hybrid_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-	user_t *killer = user_find(from);
-	user_t *victim = user_find(nick);
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts(":%s KILL %s :%s!%s!%s (%s)", killer ? CLIENT_NAME(killer) : ME, victim ? CLIENT_NAME(victim) : nick, from, from, from, buf);
+	if (killer != NULL)
+		sts(":%s KILL %s :%s!%s (%s)", CLIENT_NAME(killer), id, killer->host, killer->nick, reason);
+	else
+		sts(":%s KILL %s :%s (%s)", ME, id, me.name, reason);
 }
 
 /* PART wrapper */
@@ -1156,7 +1150,7 @@ void _modinit(module_t * m)
 	notice_channel_sts = &hybrid_notice_channel_sts;
 	wallchops = &hybrid_wallchops;
 	numeric_sts = &hybrid_numeric_sts;
-	skill = &hybrid_skill;
+	kill_id_sts = &hybrid_kill_id_sts;
 	part_sts = &hybrid_part_sts;
 	kline_sts = &hybrid_kline_sts;
 	unkline_sts = &hybrid_unkline_sts;

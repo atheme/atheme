@@ -369,16 +369,12 @@ static void inspircd_numeric_sts(char *from, int numeric, char *target, char *fm
 }
 
 /* KILL wrapper */
-static void inspircd_skill(char *from, char *nick, char *fmt, ...)
+static void inspircd_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts(":%s KILL %s :[%s] Killed (%s (%s))", from, nick, me.name, from, buf);
+	if (killer != NULL)
+		sts(":%s KILL %s :[%s] Killed (%s (%s))", CLIENT_NAME(killer), id, me.name, killer->nick, reason);
+	else
+		sts(":%s KILL %s :[%s] Killed (%s (%s))", ME, id, me.name, me.name, reason);
 }
 
 /* PART wrapper */
@@ -1202,7 +1198,7 @@ void _modinit(module_t * m)
 	notice_global_sts = &inspircd_notice_global_sts;
 	notice_channel_sts = &inspircd_notice_channel_sts;
 	numeric_sts = &inspircd_numeric_sts;
-	skill = &inspircd_skill;
+	kill_id_sts = &inspircd_kill_id_sts;
 	part_sts = &inspircd_part_sts;
 	kline_sts = &inspircd_kline_sts;
 	unkline_sts = &inspircd_unkline_sts;
