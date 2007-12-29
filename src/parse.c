@@ -119,6 +119,16 @@ void irc_parse(char *line)
                         slog(LG_INFO, "irc_parse(): got message from nonexistant user or server: %s", origin);
                         return;
                 }
+		if (si.s == me.me)
+		{
+                        slog(LG_INFO, "irc_parse(): got message supposedly from myself: %s", si.s->name);
+                        return;
+		}
+		if (si.su != NULL && si.su->server == me.me)
+		{
+                        slog(LG_INFO, "irc_parse(): got message supposedly from my own client: %s", si.s->name);
+                        return;
+		}
 		si.smu = si.su != NULL ? si.su->myuser : NULL;
 
 		/* okay, the nasty part is over, now we need to make a
@@ -264,6 +274,16 @@ void p10_parse(char *line)
                         slog(LG_DEBUG, "p10_parse(): got message from nonexistant user or server: %s", origin);
                         return;
                 }
+		if (si.s == me.me)
+		{
+                        slog(LG_INFO, "p10_parse(): got message supposedly from myself: %s", si.s->name);
+                        return;
+		}
+		if (si.su != NULL && si.su->server == me.me)
+		{
+                        slog(LG_INFO, "p10_parse(): got message supposedly from my own client: %s", si.s->name);
+                        return;
+		}
 		si.smu = si.su != NULL ? si.su->myuser : NULL;
 
 		/* okay, the nasty part is over, now we need to make a
