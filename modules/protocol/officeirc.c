@@ -479,11 +479,6 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_quit(sourceinfo_t *si, int parc, char *parv[])
 {
-	if (si->su->server == me.me)
-	{
-		slog(LG_DEBUG, "m_quit(): not destroying own user %s (fake direction)", si->su->nick);
-		return;
-	}
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
 
 	/* user_delete() takes care of removing channels and so forth */
