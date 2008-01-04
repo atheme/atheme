@@ -85,8 +85,6 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_toomany, _("You have used this command too many times; please wait a while and try again."));
 		return;
 	}
-	si->smu->memo_ratelimit_num++;
-	si->smu->memo_ratelimit_time = CURRTIME;
 
 	/* Check for memo text length -- includes/common.h */
 	if (strlen(m) >= MEMOLEN)
@@ -116,6 +114,9 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		
 			return;
 		}
+
+		si->smu->memo_ratelimit_num++;
+		si->smu->memo_ratelimit_time = CURRTIME;
 	
 		/* Does the user allow memos? --pfish */
 		if (tmu->flags & MU_NOMEMO)
