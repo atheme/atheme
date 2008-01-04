@@ -78,7 +78,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 	mc = mychan_find(channel);
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), channel);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
 		return;
 	}
 

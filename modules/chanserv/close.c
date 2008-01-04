@@ -93,7 +93,7 @@ static void cs_cmd_close(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(target)))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), target);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), target);
 		return;
 	}
 

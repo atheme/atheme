@@ -111,7 +111,7 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 
 	if (mc == NULL)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", target);
+		command_fail(si, fault_nosuch_target, "Channel \2%s\2 is not registered.", target);
 		return;
 	}
 

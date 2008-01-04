@@ -73,7 +73,7 @@ static void cs_cmd_why(sourceinfo_t *si, int parc, char *parv[])
 
 	if (mc == NULL)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."),
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."),
 			chan);
 		return;
 	}

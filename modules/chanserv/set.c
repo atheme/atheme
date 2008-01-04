@@ -191,7 +191,7 @@ static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
 
         if (!(mc = mychan_find(parv[0])))
         {
-                command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+                command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
                 return;
         }
 
@@ -241,7 +241,7 @@ static void cs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -282,7 +282,7 @@ static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -354,7 +354,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -501,7 +501,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -718,7 +718,7 @@ static void cs_cmd_set_keeptopic(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -775,7 +775,7 @@ static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -832,7 +832,7 @@ static void cs_cmd_set_secure(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -889,7 +889,7 @@ static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -978,7 +978,7 @@ static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -1034,7 +1034,7 @@ static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -1097,7 +1097,7 @@ static void cs_cmd_set_staffonly(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -1165,7 +1165,7 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
