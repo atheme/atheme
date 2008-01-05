@@ -191,6 +191,8 @@ void services_init(void)
 			user_changeuid(svs->me, svs->uid);
 		else if (!ircd->uses_uid && svs->me->uid[0] != '\0')
 			user_changeuid(svs->me, NULL);
+		if (!ircd->uses_uid)
+			kill_id_sts(NULL, svs->name, "Attempt to use service nick");
 		introduce_nick(svs->me);
 	}
 }
@@ -251,6 +253,17 @@ void reintroduce_user(user_t *u)
 		user_changeuid(u, uid_get());
 		/* The following assumes that all UIDs have the same length. */
 		strcpy(svs->uid, u->uid);
+	}
+	else
+	{
+		/* Ensure it is really gone before introducing the new one.
+		 * This also helps with nick collisions.
+		 * With UID this is not necessary as we will
+		 * reintroduce with a new UID, and nick collisions
+		 * are unambiguous.
+		 */
+		if (!ircd->uses_uid)
+			kill_id_sts(NULL, u->nick, "Service nick");
 	}
 	introduce_nick(u);
 	LIST_FOREACH(n, u->channels.head)
