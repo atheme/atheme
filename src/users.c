@@ -120,12 +120,10 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 				 * the u@h is equal, our client will be
 				 * killed.
 				 *
-				 * So kill their client as well.
-				 *
-				 * Then hope for a kill to arrive for our
-				 * client; we will reintroduce it then.
+				 * Hope that a kill has arrived just before
+				 * for our client; we will have reintroduced
+				 * it.
 				 */
-				kill_id_sts(NULL, nick, "Nick collision with services (new)");
 				return NULL;
 			}
 			else /* Our client will not be killed. */
@@ -408,12 +406,13 @@ boolean_t user_changenick(user_t *u, const char *nick, time_t ts)
 				 * the u@h is equal, our client will be
 				 * killed.
 				 *
-				 * So kill their client as well.
-				 *
-				 * Then hope for a kill to arrive for our
-				 * client; we will reintroduce it then.
+				 * Hope that a kill has arrived just before
+				 * for our client; we will have reintroduced
+				 * it.
+				 * But kill the changing client using its
+				 * old nick.
 				 */
-				kill_id_sts(NULL, nick, "Nick change collision with services");
+				kill_id_sts(NULL, u->nick, "Nick change collision with services");
 				user_delete(u);
 				return TRUE;
 			}
