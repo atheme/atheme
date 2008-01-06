@@ -20,6 +20,7 @@ BASE_SRCS =			\
 	$(SRCDIR)/clones.c	\
 	$(SRCDIR)/compare.c	\
 	$(SRCDIR)/help.c	\
+	$(SRCDIR)/identify.c	\
 	$(SRCDIR)/ignore.c	\
 	$(SRCDIR)/inject.c	\
 	$(SRCDIR)/jupe.c	\

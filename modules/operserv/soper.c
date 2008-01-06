@@ -21,6 +21,7 @@ static void os_cmd_soper_list(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_soper_listclass(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_soper_del(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_soper = { "SOPER", N_("Shows and changes services operator privileges."), AC_NONE, 3, os_cmd_soper };
 
@@ -28,6 +29,7 @@ command_t os_soper_list = { "LIST", N_("Lists services operators."), PRIV_VIEWPR
 command_t os_soper_listclass = { "LISTCLASS", N_("Lists operclasses."), PRIV_VIEWPRIVS, 0, os_cmd_soper_listclass };
 command_t os_soper_add = { "ADD", N_("Grants services operator privileges to an account."), PRIV_GRANT, 2, os_cmd_soper_add };
 command_t os_soper_del = { "DEL", N_("Removes services operator privileges from an account."), PRIV_GRANT, 1, os_cmd_soper_del };
+command_t os_soper_setpass = { "SETPASS", N_("Changes a password for services operator privileges."), PRIV_GRANT, 2, os_cmd_soper_setpass };
 
 list_t *os_cmdtree;
 list_t *os_helptree;
@@ -43,6 +45,7 @@ void _modinit(module_t *m)
 	command_add(&os_soper_listclass, &os_soper_cmds);
 	command_add(&os_soper_add, &os_soper_cmds);
 	command_add(&os_soper_del, &os_soper_cmds);
+	command_add(&os_soper_setpass, &os_soper_cmds);
 
 	help_addentry(os_helptree, "SOPER", "help/oservice/soper", NULL);
 }
@@ -231,6 +234,79 @@ static void os_cmd_soper_del(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "SOPER DEL %s", mu->name);
 	soper_delete(mu->soper);
 	command_success_nodata(si, _("Removed class for \2%s\2."), mu->name);
+}
+
+static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[])
+{
+	myuser_t *mu;
+	operclass_t *operclass;
+	node_t *n;
+	user_t *u;
+
+	if (parc < 1)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SOPER SETPASS");
+		command_fail(si, fault_needmoreparams, _("Syntax: SOPER SETPASS <account> [password]"));
+		return;
+	}
+
+	mu = myuser_find_ext(parv[0]);
+	if (mu == NULL)
+	{
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		return;
+	}
+
+	if (is_conf_soper(mu))
+	{
+		command_fail(si, fault_noprivs, _("You may not modify \2%s\2's operclass as it is defined in the configuration file."), mu->name);
+		return;
+	}
+
+	if (!is_soper(mu))
+	{
+		command_fail(si, fault_nochange, _("\2%s\2 does not have an operclass set."), mu->name);
+		return;
+	}
+
+	if (mu->soper->operclass != NULL && !has_all_operclass(si, mu->soper->operclass))
+	{
+		command_fail(si, fault_noprivs, _("Oper class for \2%s\2 is set to \2%s\2 which you are not authorized to change."),
+				mu->name, mu->soper->operclass->name);
+		return;
+	}
+
+	if (parc >= 2)
+	{
+		wallops("\2%s\2 is changing services operator password for \2%s\2",
+				get_oper_name(si), mu->name);
+		snoop("SOPER:SETPASS: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
+		logcommand(si, CMDLOG_ADMIN, "SOPER SETPASS %s (set)", mu->name);
+		if (mu->soper->password)
+			free(mu->soper->password);
+		mu->soper->password = sstrdup(parv[1]);
+		command_success_nodata(si, _("Set password for \2%s\2 to \2%s\2."), mu->name, parv[1]);
+		LIST_FOREACH(n, mu->logins.head)
+		{
+			u = n->data;
+			if (u->flags & UF_SOPER_PASS)
+			{
+				u->flags &= ~UF_SOPER_PASS;
+				notice(si->service->name, u->nick, "You are no longer identified to %s.", si->service->name);
+			}
+		}
+	}
+	else
+	{
+		wallops("\2%s\2 is clearing services operator password for \2%s\2",
+				get_oper_name(si), mu->name);
+		snoop("SOPER:SETPASS:CLEAR: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
+		logcommand(si, CMDLOG_ADMIN, "SOPER SETPASS %s (clear)", mu->name);
+		if (mu->soper->password)
+			free(mu->soper->password);
+		mu->soper->password = NULL;
+		command_success_nodata(si, _("Cleared password for \2%s\2."), mu->name);
+	}
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

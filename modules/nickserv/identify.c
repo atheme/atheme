@@ -187,6 +187,9 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		strlcat(lao, u->host, BUFSIZE);
 		metadata_add(mu, METADATA_USER, "private:host:actual", lao);
 
+		/* They have not entered the services operator password. */
+		u->flags &= ~UF_SOPER_PASS;
+
 		logcommand(si, CMDLOG_LOGIN, COMMAND_UC);
 
 		command_success_nodata(si, nicksvs.no_nick_ownership ? "You are now logged in as \2%s\2." : "You are now identified for \2%s\2.", u->myuser->name);
