@@ -113,7 +113,7 @@ operclass_t *operclass_find(char *name)
  * S O P E R S *
  ***************/
 
-soper_t *soper_add(char *name, char *classname, int flags)
+soper_t *soper_add(char *name, char *classname, int flags, char *password)
 {
 	soper_t *soper;
 	myuser_t *mu = myuser_find(name);
@@ -160,6 +160,7 @@ soper_t *soper_add(char *name, char *classname, int flags)
 	soper->operclass = operclass;
 	soper->classname = sstrdup(classname);
 	soper->flags = flags;
+	soper->password = sstrdup(password);
 
 	cnt.soper++;
 
@@ -190,6 +191,7 @@ void soper_delete(soper_t *soper)
 		free(soper->name);
 
 	free(soper->classname);
+	free(soper->password);
 
 	BlockHeapFree(soper_heap, soper);
 

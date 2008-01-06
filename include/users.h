@@ -40,6 +40,7 @@ struct user_
 #define UF_ADMIN       0x00000020
 #define UF_SEENINFO    0x00000080
 #define UF_HIDEHOSTREQ 0x00000200 /* host hiding requested */
+#define UF_SOPER_PASS  0x00000400 /* services oper pass entered */
 
 #define CLIENT_NAME(user)	((user)->uid[0] ? (user)->uid : (user)->nick)
 

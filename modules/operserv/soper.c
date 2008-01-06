@@ -185,7 +185,7 @@ static void os_cmd_soper_add(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_ADMIN, "SOPER ADD %s %s", mu->name, operclass->name);
 	if (is_soper(mu))
 		soper_delete(mu->soper);
-	soper_add(mu->name, operclass->name, 0);
+	soper_add(mu->name, operclass->name, 0, NULL);
 	command_success_nodata(si, _("Set class for \2%s\2 to \2%s\2."), mu->name, operclass->name);
 }
 
