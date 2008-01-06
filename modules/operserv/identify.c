@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 static void os_cmd_identify(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t os_identify = { "IDENTIFY", N_("Authenticate for services operator privileges."), AC_NONE, 1, os_cmd_identify };
-command_t os_identify = { "IDENTIFY", N_("Alias for IDENTIFY"), AC_NONE, 1, os_cmd_identify };
+command_t os_id = { "ID", N_("Alias for IDENTIFY"), AC_NONE, 1, os_cmd_identify };
 
 list_t *os_cmdtree;
 list_t *os_helptree;
@@ -29,12 +29,14 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
 
         command_add(&os_identify, os_cmdtree);
+        command_add(&os_id, os_cmdtree);
 	help_addentry(os_helptree, "IDENTIFY", "help/oservice/identify", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&os_identify, os_cmdtree);
+	command_delete(&os_id, os_cmdtree);
 	help_delentry(os_helptree, "IDENTIFY");
 }
 
