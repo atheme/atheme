@@ -278,6 +278,12 @@ static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[])
 
 	if (parc >= 2)
 	{
+		if (mu->soper->password == NULL &&
+				!command_find(si->service->cmdtree, "IDENTIFY"))
+		{
+			command_fail(si, fault_noprivs, _("Refusing to set a services operator password if %s IDENTIFY is not loaded."), si->service->name);
+			return;
+		}
 		wallops("\2%s\2 is changing services operator password for \2%s\2",
 				get_oper_name(si), mu->name);
 		snoop("SOPER:SETPASS: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
