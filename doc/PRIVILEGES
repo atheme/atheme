@@ -38,8 +38,11 @@ To all services operators:
 All IRCops get the privileges in the "ircop" operclass. Services operators
 get the privileges in the operclass in their operator{} block or the
 operclass set with /os soper. However, if the operclass has the needoper
-flag set, privileges are only granted to IRC users if they are IRCops. If
-both conditions apply, the union of the privileges is granted.
+flag set, privileges are only granted to IRC users if they are IRCops, and
+if the operclass has the needpassword flag set or the services operator has
+a password set, privileges are only granted to IRC users if they have entered
+that password using the OperServ IDENTIFY command. If both conditions apply,
+the union of the privileges is granted.
 
 The OperServ SPECS command shows the privileges granted to an online user
 or operclass, in a somewhat wordy format. /stats o and SOPER LIST show all
