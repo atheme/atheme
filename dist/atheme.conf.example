@@ -257,6 +257,7 @@ loadmodule "modules/chanserv/why";
  * COMPARE command				modules/operserv/compare
  * HELP command					modules/operserv/help
  * IGNORE system				modules/operserv/ignore
+ * IDENTIFY command				modules/operserv/identify
  * INJECT command				modules/operserv/inject
  * JUPE command					modules/operserv/jupe
  * MODE command					modules/operserv/mode
@@ -285,6 +286,7 @@ loadmodule "modules/operserv/akill";
 #loadmodule "modules/operserv/clones";
 loadmodule "modules/operserv/compare";
 loadmodule "modules/operserv/help";
+loadmodule "modules/operserv/identify";
 loadmodule "modules/operserv/ignore";
 loadmodule "modules/operserv/jupe";
 loadmodule "modules/operserv/mode";
