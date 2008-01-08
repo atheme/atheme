@@ -1111,15 +1111,6 @@ operclass "sra" {
 	 * etc.) is unaffected by this.
 	 */
 	needoper;
-
-	/* needpassword
-	 * Only grant privileges to IRC users in this oper class if they
-	 * have entered an additional password for their account; other
-	 * use of privilege (channel succession, XMLRPC, etc.) is currently
-	 * unaffected by this. If the account has no services operator
-	 * password set, this effectively disables the privileges from IRC.
-	 */
-	#needpassword;
 };
 
 /* The "ircop" operclass specifies privileges all IRCops get.

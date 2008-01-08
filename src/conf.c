@@ -838,8 +838,6 @@ static int c_operclass(config_entry_t *ce)
 		}
 		else if (!strcasecmp("NEEDOPER", ce->ce_varname))
 			flags |= OPERCLASS_NEEDOPER;
-		else if (!strcasecmp("NEEDPASSWORD", ce->ce_varname))
-			flags |= OPERCLASS_NEEDPASSWORD;
 		else
 		{
 			slog(LG_ERROR, "%s:%d: Invalid configuration option operclass::%s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);

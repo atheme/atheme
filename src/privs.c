@@ -322,7 +322,7 @@ boolean_t has_priv_user(user_t *u, const char *priv)
 			return FALSE;
 		if (operclass->flags & OPERCLASS_NEEDOPER && !is_ircop(u))
 			return FALSE;
-		if ((u->myuser->soper->password != NULL || operclass->flags & OPERCLASS_NEEDPASSWORD) && !(u->flags & UF_SOPER_PASS))
+		if (u->myuser->soper->password != NULL && !(u->flags & UF_SOPER_PASS))
 			return FALSE;
 		if (string_in_list(operclass->privs, priv))
 			return TRUE;

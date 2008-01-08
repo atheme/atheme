@@ -57,7 +57,6 @@ struct operclass_ {
 };
 
 #define OPERCLASS_NEEDOPER	0x1 /* only give privs to IRCops */
-#define OPERCLASS_NEEDPASSWORD	0x2 /* only give privs with extra password */
 
 /* soper list struct */
 struct soper_ {
