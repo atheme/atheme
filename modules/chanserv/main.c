@@ -137,7 +137,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 			command_exec_split(si->service, si, cmd, newargs, &cs_cmdtree);
 			mc->flags &= ~MC_FORCEVERBOSE;
 		}
-		else if (!strncasecmp(cmd, chansvs.nick, strlen(chansvs.nick)) && !isalnum(cmd[strlen(chansvs.nick)]) && (cmd = strtok(NULL, "")) != NULL)
+		else if (!ircncasecmp(cmd, chansvs.nick, strlen(chansvs.nick)) && !isalnum(cmd[strlen(chansvs.nick)]) && (cmd = strtok(NULL, "")) != NULL)
 		{
 			char *pptr;
 
