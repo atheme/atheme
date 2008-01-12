@@ -3,8 +3,10 @@ Help for DELETE:
 DELETE allows you to delete memos from your
 inbox. You can either delete all memos with
 the all parameter, or specify a memo number.
+
 You can obtain a memo number by using the LIST
-command.
+command. Once you delete a memo, the numbers of
+all subsequent memos will change.
 
 You can also SEND, READ, LIST and FORWARD memos.
 
