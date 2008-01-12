@@ -108,7 +108,7 @@ static void _ns_setemail(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!strcasecmp(si->smu->email, email))
 	{
-		command_fail(si, fault_badparams, _("The email address for \2%s\2 is already set to \2%s\2."), si->smu->name, si->smu->email);
+		command_fail(si, fault_badparams, _("The email address for account \2%s\2 is already set to \2%s\2."), si->smu->name, si->smu->email);
 		return;
 	}
 
@@ -141,7 +141,7 @@ static void _ns_setemail(sourceinfo_t *si, int parc, char *parv[])
 	strlcpy(si->smu->email, email, EMAILLEN);
 
 	logcommand(si, CMDLOG_SET, "SET EMAIL %s", email);
-	command_success_nodata(si, _("The email address for \2%s\2 has been changed to \2%s\2."), si->smu->name, si->smu->email);
+	command_success_nodata(si, _("The email address for account \2%s\2 has been changed to \2%s\2."), si->smu->name, si->smu->email);
 }
 
 command_t ns_set_email = { "EMAIL", N_("Changes your e-mail address."), AC_NONE, 1, _ns_setemail };
@@ -164,7 +164,7 @@ static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MU_HIDEMAIL & si->smu->flags)
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "HIDEMAIL", si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for account \2%s\2."), "HIDEMAIL", si->smu->name);
 			return;
 		}
 
@@ -172,7 +172,7 @@ static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 
 		si->smu->flags |= MU_HIDEMAIL;
 
-		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "HIDEMAIL" ,si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "HIDEMAIL" ,si->smu->name);
 
 		return;
 	}
@@ -180,7 +180,7 @@ static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(MU_HIDEMAIL & si->smu->flags))
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "HIDEMAIL", si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "HIDEMAIL", si->smu->name);
 			return;
 		}
 
@@ -188,7 +188,7 @@ static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 
 		si->smu->flags &= ~MU_HIDEMAIL;
 
-		command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "HIDEMAIL", si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "HIDEMAIL", si->smu->name);
 
 		return;
 	}
@@ -229,13 +229,13 @@ static void _ns_setemailmemos(sourceinfo_t *si, int parc, char *parv[])
 		}
 		if (MU_EMAILMEMOS & si->smu->flags)
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "EMAILMEMOS", si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for account \2%s\2."), "EMAILMEMOS", si->smu->name);
 			return;
 		}
 
 		logcommand(si, CMDLOG_SET, "SET EMAILMEMOS ON");
 		si->smu->flags |= MU_EMAILMEMOS;
-		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "EMAILMEMOS", si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "EMAILMEMOS", si->smu->name);
 		return;
 	}
 
@@ -243,13 +243,13 @@ static void _ns_setemailmemos(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(MU_EMAILMEMOS & si->smu->flags))
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "EMAILMEMOS", si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "EMAILMEMOS", si->smu->name);
 			return;
 		}
 
 		logcommand(si, CMDLOG_SET, "SET EMAILMEMOS OFF");
 		si->smu->flags &= ~MU_EMAILMEMOS;
-		command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "EMAILMEMOS", si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "EMAILMEMOS", si->smu->name);
 		return;
 	}
 	else
@@ -278,13 +278,13 @@ static void _ns_setnomemo(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MU_NOMEMO & si->smu->flags)
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "NOMEMO", si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for account \2%s\2."), "NOMEMO", si->smu->name);
 			return;
 		}
 
 		logcommand(si, CMDLOG_SET, "SET NOMEMO ON");
 		si->smu->flags |= MU_NOMEMO;
-		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "NOMEMO", si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "NOMEMO", si->smu->name);
 		return;
 	}
 
@@ -292,13 +292,13 @@ static void _ns_setnomemo(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(MU_NOMEMO & si->smu->flags))
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "NOMEMO", si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "NOMEMO", si->smu->name);
 			return;
 		}
 
 		logcommand(si, CMDLOG_SET, "SET NOMEMO OFF");
 		si->smu->flags &= ~MU_NOMEMO;
-		command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "NOMEMO", si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "NOMEMO", si->smu->name);
 		return;
 	}
 	else
@@ -327,7 +327,7 @@ static void _ns_setneverop(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MU_NEVEROP & si->smu->flags)
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "NEVEROP", si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for account \2%s\2."), "NEVEROP", si->smu->name);
 			return;
 		}
 
@@ -335,7 +335,7 @@ static void _ns_setneverop(sourceinfo_t *si, int parc, char *parv[])
 
 		si->smu->flags |= MU_NEVEROP;
 
-		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "NEVEROP", si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "NEVEROP", si->smu->name);
 
 		return;
 	}
@@ -344,7 +344,7 @@ static void _ns_setneverop(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(MU_NEVEROP & si->smu->flags))
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "NEVEROP", si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "NEVEROP", si->smu->name);
 			return;
 		}
 
@@ -352,7 +352,7 @@ static void _ns_setneverop(sourceinfo_t *si, int parc, char *parv[])
 
 		si->smu->flags &= ~MU_NEVEROP;
 
-		command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "NEVEROP", si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "NEVEROP", si->smu->name);
 
 		return;
 	}
@@ -383,7 +383,7 @@ static void _ns_setnoop(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MU_NOOP & si->smu->flags)
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "NOOP", si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for account \2%s\2."), "NOOP", si->smu->name);
 			return;
 		}
 
@@ -391,7 +391,7 @@ static void _ns_setnoop(sourceinfo_t *si, int parc, char *parv[])
 
 		si->smu->flags |= MU_NOOP;
 
-		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "NOOP", si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "NOOP", si->smu->name);
 
 		return;
 	}
@@ -399,7 +399,7 @@ static void _ns_setnoop(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(MU_NOOP & si->smu->flags))
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "NOOP", si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "NOOP", si->smu->name);
 			return;
 		}
 
@@ -407,7 +407,7 @@ static void _ns_setnoop(sourceinfo_t *si, int parc, char *parv[])
 
 		si->smu->flags &= ~MU_NOOP;
 
-		command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "NOOP", si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "NOOP", si->smu->name);
 
 		return;
 	}
@@ -444,13 +444,6 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 	if (strchr(property, ':'))
 		snoop("SET:PROPERTY: \2%s\2: \2%s\2/\2%s\2", si->smu->name, property, value);
 
-	if (si->smu->metadata.count >= me.mdlimit)
-	{
-		command_fail(si, fault_toomany, _("Cannot add \2%s\2 to \2%s\2 metadata table, it is full."),
-					property, si->smu->name);
-		return;
-	}
-
 	if (!value)
 	{
 		metadata_t *md = metadata_find(si->smu, METADATA_USER, property);
@@ -467,6 +460,13 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (si->smu->metadata.count >= me.mdlimit)
+	{
+		command_fail(si, fault_toomany, _("Cannot add \2%s\2 to \2%s\2 metadata table, it is full."),
+					property, si->smu->name);
+		return;
+	}
+
 	if (strlen(property) > 32 || strlen(value) > 300)
 	{
 		command_fail(si, fault_badparams, _("Parameters are too long. Aborting."));
@@ -478,7 +478,7 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 	command_success_nodata(si, _("Metadata entry \2%s\2 added."), property);
 }
 
-command_t ns_set_property = { "PROPERTY", N_("Manipulates metadata entries associated with a nickname."), AC_NONE, 2, _ns_setproperty };
+command_t ns_set_property = { "PROPERTY", N_("Manipulates metadata entries associated with an account."), AC_NONE, 2, _ns_setproperty };
 
 static void _ns_setqproperty(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -503,13 +503,6 @@ static void _ns_setqproperty(sourceinfo_t *si, int parc, char *parv[])
 	if (strchr(property, ':'))
 		snoop("SET:PROPERTY: \2%s\2: \2%s\2/\2%s\2", si->smu->name, property, value);
 
-	if (si->smu->metadata.count >= me.mdlimit)
-	{
-		command_fail(si, fault_toomany, _("Cannot add \2%s\2 to \2%s\2 metadata table, it is full."),
-					property, si->smu->name);
-		return;
-	}
-
 	if (!value)
 	{
 		metadata_t *md = metadata_find(si->smu, METADATA_USER, property);
@@ -525,6 +518,13 @@ static void _ns_setqproperty(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (si->smu->metadata.count >= me.mdlimit)
+	{
+		command_fail(si, fault_toomany, _("Cannot add \2%s\2 to \2%s\2 metadata table, it is full."),
+					property, si->smu->name);
+		return;
+	}
+
 	if (strlen(property) > 32 || strlen(value) > 300)
 		return;
 
@@ -532,7 +532,7 @@ static void _ns_setqproperty(sourceinfo_t *si, int parc, char *parv[])
 	logcommand(si, CMDLOG_SET, "SET QPROPERTY %s to %s", property, value);
 }
 
-command_t ns_set_qproperty = { "QPROPERTY", N_("Quietly manipulates metadata entries associated with a nickname."), AC_NONE, 2, _ns_setqproperty };
+command_t ns_set_qproperty = { "QPROPERTY", N_("Quietly manipulates metadata entries associated with an account."), AC_NONE, 2, _ns_setqproperty };
 
 static void _ns_setpassword(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -570,7 +570,7 @@ static void _ns_setpassword(sourceinfo_t *si, int parc, char *parv[])
 	return;
 }
 
-command_t ns_set_password = { "PASSWORD", N_("Changes the password associated with your nickname."), AC_NONE, 1, _ns_setpassword };
+command_t ns_set_password = { "PASSWORD", N_("Changes the password associated with your account."), AC_NONE, 1, _ns_setpassword };
 
 command_t *ns_set_commands[] = {
 	&ns_set_email,

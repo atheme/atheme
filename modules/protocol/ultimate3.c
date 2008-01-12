@@ -202,16 +202,12 @@ static void ultimate3_numeric_sts(char *from, int numeric, char *target, char *f
 }
 
 /* KILL wrapper */
-static void ultimate3_skill(char *from, char *nick, char *fmt, ...)
+static void ultimate3_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts(":%s KILL %s :%s!%s!%s (%s)", from, nick, from, from, from, buf);
+	if (killer != NULL)
+		sts(":%s KILL %s :%s!%s (%s)", killer->nick, id, killer->host, killer->nick, reason);
+	else
+		sts(":%s KILL %s :%s (%s)", me.name, id, me.name, reason);
 }
 
 /* PART wrapper */
@@ -525,6 +521,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		addr.s_addr = htonl(strtoul(parv[10], NULL, 0));
 		ipbuf = inet_ntoa(addr);
 		u = user_add(parv[0], parv[5], parv[6], parv[7], ipbuf, NULL, parv[11], s, atoi(parv[2]));
+		if (u == NULL)
+			return;
 
 		/* user modes */
 		user_mode(u, parv[3]);
@@ -566,7 +564,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		realchange = irccasecmp(si->su->nick, parv[0]);
 
-		user_changenick(si->su, parv[0], atoi(parv[1]));
+		if (user_changenick(si->su, parv[0], atoi(parv[1])))
+			return;
 
 		/* fix up +r if necessary -- jilles */
 		if (realchange && should_reg_umode(si->su))
@@ -772,7 +771,7 @@ void _modinit(module_t * m)
 	notice_global_sts = &ultimate3_notice_global_sts;
 	notice_channel_sts = &ultimate3_notice_channel_sts;
 	numeric_sts = &ultimate3_numeric_sts;
-	skill = &ultimate3_skill;
+	kill_id_sts = &ultimate3_kill_id_sts;
 	part_sts = &ultimate3_part_sts;
 	kline_sts = &ultimate3_kline_sts;
 	unkline_sts = &ultimate3_unkline_sts;

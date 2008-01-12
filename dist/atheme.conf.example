@@ -259,6 +259,7 @@ loadmodule "modules/chanserv/why";
  * COMPARE command				modules/operserv/compare
  * HELP command					modules/operserv/help
  * IGNORE system				modules/operserv/ignore
+ * IDENTIFY command				modules/operserv/identify
  * INJECT command				modules/operserv/inject
  * JUPE command					modules/operserv/jupe
  * MODE command					modules/operserv/mode
@@ -287,6 +288,7 @@ loadmodule "modules/operserv/akill";
 #loadmodule "modules/operserv/clones";
 loadmodule "modules/operserv/compare";
 loadmodule "modules/operserv/help";
+loadmodule "modules/operserv/identify";
 loadmodule "modules/operserv/ignore";
 loadmodule "modules/operserv/jupe";
 loadmodule "modules/operserv/mode";
@@ -1155,7 +1157,14 @@ operclass "ircop" {
  * Oper classes must be defined before they are used in operator blocks.
  */
 operator "jilles" {
+	/* operclass */
 	operclass = "sra";
+	/* password
+	 * If specified, the user must use the OperServ IDENTIFY command
+	 * with the password before the privileges can be used.
+	 * The password must be encrypted if a crypto module is in use.
+	 */
+	#password = "$1$3gJMO9by$0G60YE6GqmuHVH3AnFPor1";
 };
 
 /******************************************************************************

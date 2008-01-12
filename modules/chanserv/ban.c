@@ -66,7 +66,7 @@ static void cs_cmd_ban(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), channel);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
 		return;
 	}
 
@@ -156,7 +156,7 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!mc)
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), channel);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), channel);
 		return;
 	}
 

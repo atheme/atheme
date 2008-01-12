@@ -205,16 +205,12 @@ static void officeirc_numeric_sts(char *from, int numeric, char *target, char *f
 }
 
 /* KILL wrapper */
-static void officeirc_skill(char *from, char *nick, char *fmt, ...)
+static void officeirc_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts(":%s KILL %s :%s!%s!%s (%s)", from, nick, from, from, from, buf);
+	if (killer != NULL)
+		sts(":%s KILL %s :%s!%s (%s)", killer->nick, id, killer->host, killer->nick, reason);
+	else
+		sts(":%s KILL %s :%s (%s)", me.name, id, me.name, reason);
 }
 
 /* PART wrapper */
@@ -455,7 +451,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		realchange = irccasecmp(si->su->nick, parv[0]);
 
-		user_changenick(si->su, parv[0], atoi(parv[1]));
+		if (user_changenick(si->su, parv[0], atoi(parv[1])))
+			return;
 
 		/* fix up +r if necessary -- jilles */
 		if (realchange && !nicksvs.no_nick_ownership)
@@ -482,11 +479,6 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 static void m_quit(sourceinfo_t *si, int parc, char *parv[])
 {
-	if (si->su->server == me.me)
-	{
-		slog(LG_DEBUG, "m_quit(): not destroying own user %s (fake direction)", si->su->nick);
-		return;
-	}
 	slog(LG_DEBUG, "m_quit(): user leaving: %s", si->su->nick);
 
 	/* user_delete() takes care of removing channels and so forth */
@@ -784,7 +776,7 @@ void _modinit(module_t * m)
 	notice_global_sts = &officeirc_notice_global_sts;
 	notice_channel_sts = &officeirc_notice_channel_sts;
 	numeric_sts = &officeirc_numeric_sts;
-	skill = &officeirc_skill;
+	kill_id_sts = &officeirc_kill_id_sts;
 	part_sts = &officeirc_part_sts;
 	kline_sts = &officeirc_kline_sts;
 	unkline_sts = &officeirc_unkline_sts;

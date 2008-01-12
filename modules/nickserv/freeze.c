@@ -50,7 +50,7 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 	if (!target || !action)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FREEZE");
-		command_fail(si, fault_needmoreparams, _("Usage: FREEZE <nickname> <ON|OFF> [reason]"));
+		command_fail(si, fault_needmoreparams, _("Usage: FREEZE <account> <ON|OFF> [reason]"));
 		return;
 	}
 

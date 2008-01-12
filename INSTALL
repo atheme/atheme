@@ -27,9 +27,8 @@ Use an unprivileged user account.
 
 Services should compile and run on most POSIX compliant systems.  The list of
 platforms that atheme-services has been tested on includes:
-	FreeBSD 4.[8,9,10,11]
-	FreeBSD 5.[0,1,2,3,4]
-	FreeBSD 6.[0]
+	FreeBSD 5.[0,1,2,3,4,5]
+	FreeBSD 6.[0,1,2]
 	FreeBSD 7.[0]
 	OpenBSD 3.[5,6,7,8]      (i386, amd64, sparc)
 	NetBSD 1.[5,6]           (i386, amd64, sparc)

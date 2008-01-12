@@ -86,8 +86,6 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_toomany, _("You have used this command too many times; please wait a while and try again."));
 		return;
 	}
-	si->smu->memo_ratelimit_num++;
-	si->smu->memo_ratelimit_time = CURRTIME;
 
 	/* Check for memo text length -- includes/common.h */
 	if (strlen(m) >= MEMOLEN)
@@ -111,7 +109,7 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 
 	if (mc == NULL)
 	{
-		command_fail(si, fault_nosuch_target, "\2%s\2 is not registered.", target);
+		command_fail(si, fault_nosuch_target, "Channel \2%s\2 is not registered.", target);
 		return;
 	}
 
@@ -120,6 +118,9 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
 	}
+
+	si->smu->memo_ratelimit_num++;
+	si->smu->memo_ratelimit_time = CURRTIME;
 
 	LIST_FOREACH(tn, mc->chanacs.head)
 	{

@@ -224,16 +224,12 @@ static void ptlink_numeric_sts(char *from, int numeric, char *target, char *fmt,
 }
 
 /* KILL wrapper */
-static void ptlink_skill(char *from, char *nick, char *fmt, ...)
+static void ptlink_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts(":%s KILL %s :%s!%s!%s (%s)", from, nick, from, from, from, buf);
+	if (killer != NULL)
+		sts(":%s KILL %s :%s!%s (%s)", killer->nick, id, killer->host, killer->nick, reason);
+	else
+		sts(":%s KILL %s :%s (%s)", me.name, id, me.name, reason);
 }
 
 /* PART wrapper */
@@ -507,6 +503,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
 
 		u = user_add(parv[0], parv[4], parv[5], parv[6], NULL, NULL, parv[8], s, atoi(parv[0]));
+		if (u == NULL)
+			return;
 
 		user_mode(u, parv[3]);
 
@@ -540,7 +538,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		realchange = irccasecmp(si->su->nick, parv[0]);
 
-		user_changenick(si->su, parv[0], atoi(parv[1]));
+		if (user_changenick(si->su, parv[0], atoi(parv[1])))
+			return;
 
 		/* fix up +r if necessary -- jilles */
 		if (realchange && should_reg_umode(si->su))
@@ -764,7 +763,7 @@ void _modinit(module_t * m)
 	notice_global_sts = &ptlink_notice_global_sts;
 	notice_channel_sts = &ptlink_notice_channel_sts;
 	numeric_sts = &ptlink_numeric_sts;
-	skill = &ptlink_skill;
+	kill_id_sts = &ptlink_kill_id_sts;
 	part_sts = &ptlink_part_sts;
 	kline_sts = &ptlink_kline_sts;
 	unkline_sts = &ptlink_unkline_sts;

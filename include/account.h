@@ -143,6 +143,7 @@ struct mychan_
 #define MC_INHABIT     0x80000000 /* we're on channel to enforce akick/staffonly/close */
 #define MC_MLOCK_CHECK 0x40000000 /* we need to check mode locks */
 #define MC_FORCEVERBOSE 0x20000000 /* fantasy cmd in progress, be verbose */
+#define MC_RECREATED   0x10000000 /* created with new channelTS */
 
 #define MC_VERBOSE_MASK (MC_VERBOSE | MC_VERBOSE_OPS)
 

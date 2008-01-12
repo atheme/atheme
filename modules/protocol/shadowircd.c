@@ -204,16 +204,12 @@ static void shadowircd_numeric_sts(char *from, int numeric, char *target, char *
 }
 
 /* KILL wrapper */
-static void shadowircd_skill(char *from, char *nick, char *fmt, ...)
+static void shadowircd_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts(":%s KILL %s :%s!%s!%s (%s)", from, nick, from, from, from, buf);
+	if (killer != NULL)
+		sts(":%s KILL %s :%s!%s (%s)", killer->nick, id, killer->host, killer->nick, reason);
+	else
+		sts(":%s KILL %s :%s (%s)", me.name, id, me.name, reason);
 }
 
 /* PART wrapper */
@@ -460,6 +456,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
 
 		u = user_add(parv[0], parv[4], parv[5], NULL, NULL, NULL, parv[7], s, atoi(parv[2]));
+		if (u == NULL)
+			return;
 
 		user_mode(u, parv[3]);
 
@@ -477,7 +475,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
-		user_changenick(si->su, parv[0], atoi(parv[1]));
+		if (user_changenick(si->su, parv[0], atoi(parv[1])))
+			return;
 
 		handle_nickchange(si->su);
 	}
@@ -689,7 +688,7 @@ void _modinit(module_t * m)
 	notice_channel_sts = &shadowircd_notice_channel_sts;
 	wallchops = &shadowircd_wallchops;
 	numeric_sts = &shadowircd_numeric_sts;
-	skill = &shadowircd_skill;
+	kill_id_sts = &shadowircd_kill_id_sts;
 	part_sts = &shadowircd_part_sts;
 	kline_sts = &shadowircd_kline_sts;
 	unkline_sts = &shadowircd_unkline_sts;

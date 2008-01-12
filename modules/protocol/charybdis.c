@@ -163,7 +163,7 @@ static boolean_t extgecos_match(const char *mask, user_t *u)
 	return !match(mask, hostgbuf) || !match(mask, realgbuf);
 }
 
-node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int type, node_t *first)
+static node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int type, node_t *first)
 {
 	chanban_t *cb;
 	node_t *n;
@@ -432,18 +432,12 @@ static void charybdis_numeric_sts(char *from, int numeric, char *target, char *f
 }
 
 /* KILL wrapper */
-static void charybdis_skill(char *from, char *nick, char *fmt, ...)
+static void charybdis_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-	user_t *killer = user_find(from);
-	user_t *victim = user_find(nick);
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts(":%s KILL %s :%s!%s!%s (%s)", killer ? CLIENT_NAME(killer) : ME, victim ? CLIENT_NAME(victim) : nick, from, from, from, buf);
+	if (killer != NULL)
+		sts(":%s KILL %s :%s!%s (%s)", CLIENT_NAME(killer), id, killer->host, killer->nick, reason);
+	else
+		sts(":%s KILL %s :%s (%s)", ME, id, me.name, reason);
 }
 
 /* PART wrapper */
@@ -967,6 +961,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
 
 		u = user_add(parv[0], parv[4], parv[5], NULL, NULL, NULL, parv[7], s, atoi(parv[2]));
+		if (u == NULL)
+			return;
 
 		user_mode(u, parv[3]);
 
@@ -987,7 +983,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
-		user_changenick(si->su, parv[0], atoi(parv[1]));
+		if (user_changenick(si->su, parv[0], atoi(parv[1])))
+			return;
 
 		/* It could happen that our PING arrived late and the
 		 * server didn't acknowledge EOB yet even though it is
@@ -1017,6 +1014,8 @@ static void m_uid(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_uid(): new user on `%s': %s", s->name, parv[0]);
 
 		u = user_add(parv[0], parv[4], parv[5], NULL, parv[6], parv[7], parv[8], s, atoi(parv[2]));
+		if (u == NULL)
+			return;
 
 		user_mode(u, parv[3]);
 
@@ -1056,6 +1055,8 @@ static void m_euid(sourceinfo_t *si, int parc, char *parv[])
 			parv[parc - 1],				/* gecos */
 			s,					/* object parent (server) */
 			atoi(parv[2]));				/* hopcount */
+		if (u == NULL)
+			return;
 
 		user_mode(u, parv[3]);
 		if (*parv[9] != '*')
@@ -1323,7 +1324,8 @@ static void m_signon(sourceinfo_t *si, int parc, char *parv[])
 		return;
 
 	/* NICK */
-	user_changenick(u, parv[0], atoi(parv[3]));
+	if (user_changenick(u, parv[0], atoi(parv[3])))
+		return;
 
 	handle_nickchange(u); /* If they're logging out, this will bug them about identifying. Or something. */
 
@@ -1454,7 +1456,7 @@ void _modinit(module_t * m)
 	notice_channel_sts = &charybdis_notice_channel_sts;
 	wallchops = &charybdis_wallchops;
 	numeric_sts = &charybdis_numeric_sts;
-	skill = &charybdis_skill;
+	kill_id_sts = &charybdis_kill_id_sts;
 	part_sts = &charybdis_part_sts;
 	kline_sts = &charybdis_kline_sts;
 	unkline_sts = &charybdis_unkline_sts;

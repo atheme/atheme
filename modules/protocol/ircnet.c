@@ -212,16 +212,12 @@ static void ircnet_numeric_sts(char *from, int numeric, char *target, char *fmt,
 }
 
 /* KILL wrapper */
-static void ircnet_skill(char *from, char *nick, char *fmt, ...)
+static void ircnet_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts(":%s KILL %s :%s!%s!%s (%s)", from, nick, from, from, from, buf);
+	if (killer != NULL)
+		sts(":%s KILL %s :%s!%s (%s)", CLIENT_NAME(killer), id, killer->host, killer->nick, reason);
+	else
+		sts(":%s KILL %s :%s (%s)", ME, id, me.name, reason);
 }
 
 /* PART wrapper */
@@ -494,6 +490,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", si->s->name, parv[0]);
 
 		u = user_add(parv[0], parv[2], parv[3], NULL, parv[4], parv[1], parv[6], si->s, 0);
+		if (u == NULL)
+			return;
 
 		user_mode(u, parv[5]);
 		if (strchr(parv[5], 'a'))
@@ -513,7 +511,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
-		user_changenick(si->su, parv[0], 0);
+		if (user_changenick(si->su, parv[0], 0))
+			return;
 
 		handle_nickchange(si->su);
 	}
@@ -549,7 +548,8 @@ static void m_save(sourceinfo_t *si, int parc, char *parv[])
 	{
 		slog(LG_DEBUG, "m_save(): nickname change for `%s': %s", u->nick, u->uid);
 
-		user_changenick(u, u->uid, 0);
+		if (user_changenick(u, u->uid, 0))
+			return;
 
 		handle_nickchange(u);
 	}
@@ -721,7 +721,7 @@ void _modinit(module_t * m)
 	notice_channel_sts = &ircnet_notice_channel_sts;
 	/* no wallchops, ircnet ircd does not support this */
 	numeric_sts = &ircnet_numeric_sts;
-	skill = &ircnet_skill;
+	kill_id_sts = &ircnet_kill_id_sts;
 	part_sts = &ircnet_part_sts;
 	kline_sts = &ircnet_kline_sts;
 	unkline_sts = &ircnet_unkline_sts;

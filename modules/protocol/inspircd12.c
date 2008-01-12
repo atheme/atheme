@@ -369,16 +369,12 @@ static void inspircd_numeric_sts(char *from, int numeric, char *target, char *fm
 }
 
 /* KILL wrapper */
-static void inspircd_skill(char *from, char *nick, char *fmt, ...)
+static void inspircd_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts(":%s KILL %s :[%s] Killed (%s (%s))", from, nick, me.name, from, buf);
+	if (killer != NULL)
+		sts(":%s KILL %s :[%s] Killed (%s (%s))", CLIENT_NAME(killer), id, me.name, killer->nick, reason);
+	else
+		sts(":%s KILL %s :[%s] Killed (%s (%s))", ME, id, me.name, me.name, reason);
 }
 
 /* PART wrapper */
@@ -782,6 +778,8 @@ static void m_uid(sourceinfo_t *si, int parc, char *parv[])
 
 		/* char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, unsigned int ts */ 
 		u = user_add(parv[2], parv[5], parv[3], parv[4], parv[7], parv[0], parv[9], si->s, atol(parv[9]));
+		if (u == NULL)
+			return;
 		user_mode(u, parv[5]);
 
 		/* If server is not yet EOB we will do this later.
@@ -813,7 +811,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
 		/* No TS here for some reason, hmm */
-		user_changenick(si->su, parv[0], si->su->ts);
+		if (user_changenick(si->su, parv[0], si->su->ts))
+			return;
 
 		/* It could happen that our PING arrived late and the
 		 * server didn't acknowledge EOB yet even though it is
@@ -1202,7 +1201,7 @@ void _modinit(module_t * m)
 	notice_global_sts = &inspircd_notice_global_sts;
 	notice_channel_sts = &inspircd_notice_channel_sts;
 	numeric_sts = &inspircd_numeric_sts;
-	skill = &inspircd_skill;
+	kill_id_sts = &inspircd_kill_id_sts;
 	part_sts = &inspircd_part_sts;
 	kline_sts = &inspircd_kline_sts;
 	unkline_sts = &inspircd_unkline_sts;

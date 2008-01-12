@@ -267,16 +267,12 @@ static void unreal_numeric_sts(char *from, int numeric, char *target, char *fmt,
 }
 
 /* KILL wrapper */
-static void unreal_skill(char *from, char *nick, char *fmt, ...)
+static void unreal_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts(":%s KILL %s :%s!%s!%s (%s)", from, nick, from, from, from, buf);
+	if (killer != NULL)
+		sts(":%s KILL %s :%s!%s (%s)", killer->nick, id, killer->host, killer->nick, reason);
+	else
+		sts(":%s KILL %s :%s (%s)", me.name, id, me.name, reason);
 }
 
 /* PART wrapper */
@@ -638,6 +634,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
 
 		u = user_add(parv[0], parv[3], parv[4], parv[8], NULL, NULL, parv[9], s, atoi(parv[2]));
+		if (u == NULL)
+			return;
 
 		user_mode(u, parv[7]);
 
@@ -662,7 +660,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		realchange = irccasecmp(si->su->nick, parv[0]);
 
-		user_changenick(si->su, parv[0], atoi(parv[1]));
+		if (user_changenick(si->su, parv[0], atoi(parv[1])))
+			return;
 
 		/* fix up +r if necessary -- jilles */
 		if (realchange && !nicksvs.no_nick_ownership)
@@ -888,7 +887,7 @@ void _modinit(module_t * m)
 	notice_global_sts = &unreal_notice_global_sts;
 	notice_channel_sts = &unreal_notice_channel_sts;
 	numeric_sts = &unreal_numeric_sts;
-	skill = &unreal_skill;
+	kill_id_sts = &unreal_kill_id_sts;
 	part_sts = &unreal_part_sts;
 	kline_sts = &unreal_kline_sts;
 	unkline_sts = &unreal_unkline_sts;

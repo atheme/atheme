@@ -101,6 +101,8 @@ service_t *add_service(char *name, char *user, char *host, char *real, void (*ha
 
 	if (me.connected)
 	{
+		if (!ircd->uses_uid)
+			kill_id_sts(NULL, sptr->name, "Attempt to use service nick");
 		introduce_nick(sptr->me);
 		/* if the snoop channel already exists, join it now */
 		if (config_options.chan != NULL && channel_find(config_options.chan) != NULL)

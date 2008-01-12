@@ -23,6 +23,7 @@ modules/chanserv/info.c
 modules/chanserv/invite.c
 modules/chanserv/kick.c
 modules/chanserv/list.c
+modules/chanserv/main.c
 modules/chanserv/mark.c
 modules/chanserv/op.c
 modules/chanserv/recover.c
@@ -41,6 +42,7 @@ modules/chanserv/xop.c
 modules/gameserv/dice.c
 modules/gameserv/eightball.c
 modules/gameserv/help.c
+modules/gameserv/main.c
 modules/gameserv/namegen.c
 modules/gameserv/rps.c
 
@@ -53,6 +55,7 @@ modules/memoserv/forward.c
 modules/memoserv/help.c
 modules/memoserv/ignore.c
 modules/memoserv/list.c
+modules/memoserv/main.c
 modules/memoserv/read.c
 modules/memoserv/send.c
 
@@ -71,6 +74,7 @@ modules/nickserv/list.c
 modules/nickserv/listchans.c
 modules/nickserv/listmail.c
 modules/nickserv/logout.c
+modules/nickserv/main.c
 modules/nickserv/mark.c
 modules/nickserv/register.c
 modules/nickserv/resetpass.c
@@ -92,6 +96,7 @@ modules/operserv/help.c
 modules/operserv/ignore.c
 modules/operserv/inject.c
 modules/operserv/jupe.c
+modules/operserv/main.c
 modules/operserv/mode.c
 modules/operserv/modinspect.c
 modules/operserv/modlist.c

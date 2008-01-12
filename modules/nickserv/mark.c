@@ -76,7 +76,7 @@ static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 		metadata_add(mu, METADATA_USER, "private:mark:reason", info);
 		metadata_add(mu, METADATA_USER, "private:mark:timestamp", itoa(time(NULL)));
 
-		wallops("%s marked the nickname \2%s\2.", get_oper_name(si), target);
+		wallops("%s marked the account \2%s\2.", get_oper_name(si), target);
 		logcommand(si, CMDLOG_ADMIN, "MARK %s ON (reason: %s)", target, info);
 		command_success_nodata(si, _("\2%s\2 is now marked."), target);
 	}
@@ -92,7 +92,7 @@ static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 		metadata_delete(mu, METADATA_USER, "private:mark:reason");
 		metadata_delete(mu, METADATA_USER, "private:mark:timestamp");
 
-		wallops("%s unmarked the nickname \2%s\2.", get_oper_name(si), target);
+		wallops("%s unmarked the account \2%s\2.", get_oper_name(si), target);
 		logcommand(si, CMDLOG_ADMIN, "MARK %s OFF", target);
 		command_success_nodata(si, _("\2%s\2 is now unmarked."), target);
 	}

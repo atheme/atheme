@@ -1,0 +1,10 @@
+Help for IDENTIFY:
+
+IDENTIFY authenticates for services operator
+privileges, if the operator or operator class
+has been defined as needing an additional
+password.
+
+You need to log in to your services account first.
+
+Syntax: IDENTIFY <password>

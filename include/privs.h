@@ -65,6 +65,7 @@ struct soper_ {
   operclass_t *operclass;
   char *classname;
   int flags;
+  char *password;
 };
 
 #define SOPER_CONF	0x1 /* oper is listed in atheme.conf */
@@ -79,7 +80,7 @@ E operclass_t *operclass_add(char *name, char *privs);
 E void operclass_delete(operclass_t *operclass);
 E operclass_t *operclass_find(char *name);
 
-E soper_t *soper_add(char *name, char *classname, int flags);
+E soper_t *soper_add(char *name, char *classname, int flags, char *password);
 E void soper_delete(soper_t *soper);
 E soper_t *soper_find(myuser_t *myuser);
 E soper_t *soper_find_named(char *name);

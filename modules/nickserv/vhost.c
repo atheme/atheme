@@ -87,7 +87,7 @@ static void do_restorehost_all(myuser_t *mu)
 	}
 }
 
-/* VHOST <nick> [host] */
+/* VHOST <account> [host] */
 static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *target = parv[0];
@@ -98,7 +98,7 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 	if (!target)
 	{
 		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "VHOST");
-		command_fail(si, fault_needmoreparams, _("Syntax: VHOST <nick> [vhost]"));
+		command_fail(si, fault_needmoreparams, _("Syntax: VHOST <account> [vhost]"));
 		return;
 	}
 

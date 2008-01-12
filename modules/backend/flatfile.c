@@ -223,8 +223,11 @@ static void flatfile_db_save(void *arg)
 		if (soper->flags & SOPER_CONF || soper->myuser == NULL)
 			continue;
 
-		/* SO <account> <operclass> <flags> */
-		fprintf(f, "SO %s %s %d\n", soper->myuser->name, soper->classname, soper->flags);
+		/* SO <account> <operclass> <flags> [password] */
+		if (soper->password != NULL)
+			fprintf(f, "SO %s %s %d %s\n", soper->myuser->name, soper->classname, soper->flags, soper->password);
+		else
+			fprintf(f, "SO %s %s %d\n", soper->myuser->name, soper->classname, soper->flags);
 	}
 
 	slog(LG_DEBUG, "db_save(): saving klines");
@@ -534,11 +537,12 @@ static void flatfile_db_load(void)
 		/* services oper */
 		if (!strcmp("SO", item))
 		{
-			char *user, *class, *flagstr;
+			char *user, *class, *flagstr, *password;
 
 			user = strtok(NULL, " ");
 			class = strtok(NULL, " ");
-			flagstr = strtok(NULL, "\n");
+			flagstr = strtok(NULL, " \n");
+			password = strtok(NULL, "\n");
 
 			mu = myuser_find(user);
 
@@ -547,7 +551,7 @@ static void flatfile_db_load(void)
 				slog(LG_DEBUG, "db_load(): invalid services oper (SO %s %s %s)", user, class, flagstr);
 				continue;
 			}
-			soper_add(mu->name, class, atoi(flagstr) & ~SOPER_CONF);
+			soper_add(mu->name, class, atoi(flagstr) & ~SOPER_CONF, password);
 		}
 
 		/* mychans */

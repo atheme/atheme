@@ -107,7 +107,7 @@ void kill_user(user_t *source, user_t *victim, const char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	skill(source != NULL ? source->nick : me.name, victim->nick, "%s", buf);
+	kill_id_sts(source, CLIENT_NAME(victim), buf);
 	user_delete(victim);
 }
 
@@ -191,6 +191,8 @@ void services_init(void)
 			user_changeuid(svs->me, svs->uid);
 		else if (!ircd->uses_uid && svs->me->uid[0] != '\0')
 			user_changeuid(svs->me, NULL);
+		if (!ircd->uses_uid)
+			kill_id_sts(NULL, svs->name, "Attempt to use service nick");
 		introduce_nick(svs->me);
 	}
 }
@@ -242,6 +244,26 @@ void reintroduce_user(user_t *u)
 	{
 		slog(LG_DEBUG, "tried to reintroduce_user non-service %s", u->nick);
 		return;
+	}
+	/* Reintroduce with a new UID.  This avoids problems distinguishing
+	 * commands targeted at the old and new user.
+	 */
+	if (*u->uid)
+	{
+		user_changeuid(u, uid_get());
+		/* The following assumes that all UIDs have the same length. */
+		strcpy(svs->uid, u->uid);
+	}
+	else
+	{
+		/* Ensure it is really gone before introducing the new one.
+		 * This also helps with nick collisions.
+		 * With UID this is not necessary as we will
+		 * reintroduce with a new UID, and nick collisions
+		 * are unambiguous.
+		 */
+		if (!ircd->uses_uid)
+			kill_id_sts(NULL, u->nick, "Service nick");
 	}
 	introduce_nick(u);
 	LIST_FOREACH(n, u->channels.head)
@@ -505,7 +527,7 @@ const char *get_source_name(sourceinfo_t *si)
 		if (si->smu && !irccasecmp(si->su->nick, si->smu->name))
 			snprintf(result, sizeof result, "%s", si->su->nick);
 		else
-			snprintf(result, sizeof result, "%s(%s)", si->su->nick,
+			snprintf(result, sizeof result, "%s (%s)", si->su->nick,
 					si->smu ? si->smu->name : "");
 	}
 	else if (si->s != NULL)
@@ -550,7 +572,7 @@ const char *get_oper_name(sourceinfo_t *si)
 		else if (!irccasecmp(si->su->nick, si->smu->name))
 			snprintf(result, sizeof result, "%s", si->su->nick);
 		else
-			snprintf(result, sizeof result, "%s(%s)", si->su->nick,
+			snprintf(result, sizeof result, "%s (%s)", si->su->nick,
 					si->smu ? si->smu->name : "");
 	}
 	else if (si->s != NULL)
@@ -560,6 +582,25 @@ const char *get_oper_name(sourceinfo_t *si)
 		snprintf(result, sizeof result, "<%s>%s", si->v->description,
 				si->smu ? si->smu->name : "");
 	}
+	return result;
+}
+
+const char *get_storage_oper_name(sourceinfo_t *si)
+{
+	static char result[NICKLEN+USERLEN+HOSTLEN+NICKLEN+10];
+
+	if (si->smu != NULL)
+		snprintf(result, sizeof result, "%s", si->smu->name);
+	else if (si->su != NULL)
+	{
+		snprintf(result, sizeof result, "%s!%s@%s{%s}", si->su->nick,
+				si->su->user, si->su->vhost,
+				si->su->server->name);
+	}
+	else if (si->s != NULL)
+		snprintf(result, sizeof result, "%s", si->s->name);
+	else
+		snprintf(result, sizeof result, "<%s>", si->v->description);
 	return result;
 }
 

@@ -855,6 +855,7 @@ static int c_operclass(config_entry_t *ce)
 static int c_operator(config_entry_t *ce)
 {
 	char *name;
+	char *password = NULL;
 	operclass_t *operclass = NULL;
 	config_entry_t *topce;
 
@@ -876,6 +877,13 @@ static int c_operator(config_entry_t *ce)
 				slog(LG_ERROR, "%s:%d: invalid operclass %s for operator %s",
 						ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_vardata, name);
 		}
+		else if (!strcasecmp("PASSWORD", ce->ce_varname))
+		{
+			if (ce->ce_vardata == NULL)
+				PARAM_ERROR(ce);
+
+			password = ce->ce_vardata;
+		}
 		else
 		{
 			slog(LG_ERROR, "%s:%d: Invalid configuration option operator::%s", ce->ce_fileptr->cf_filename, ce->ce_varlinenum, ce->ce_varname);
@@ -884,7 +892,7 @@ static int c_operator(config_entry_t *ce)
 	}
 
 	if (operclass != NULL)
-		soper_add(name, operclass->name, SOPER_CONF);
+		soper_add(name, operclass->name, SOPER_CONF, password);
 	else
 		slog(LG_ERROR, "%s:%d: skipping operator %s because of bad/missing parameters",
 						topce->ce_fileptr->cf_filename, topce->ce_varlinenum, name);

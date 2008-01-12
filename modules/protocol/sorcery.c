@@ -203,16 +203,12 @@ static void sorcery_numeric_sts(char *from, int numeric, char *target, char *fmt
 }
 
 /* KILL wrapper */
-static void sorcery_skill(char *from, char *nick, char *fmt, ...)
+static void sorcery_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
-	va_list ap;
-	char buf[BUFSIZE];
-
-	va_start(ap, fmt);
-	vsnprintf(buf, BUFSIZE, fmt, ap);
-	va_end(ap);
-
-	sts(":%s KILL %s :%s!%s!%s (%s)", from, nick, from, from, from, buf);
+	if (killer != NULL)
+		sts(":%s KILL %s :%s!%s (%s)", killer->nick, id, killer->host, killer->nick, reason);
+	else
+		sts(":%s KILL %s :%s (%s)", me.name, id, me.name, reason);
 }
 
 /* PART wrapper */
@@ -406,6 +402,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_nick(): new user on `%s': %s", s->name, parv[0]);
 
 		u = user_add(parv[0], parv[3], parv[4], NULL, NULL, NULL, parv[6], s, atoi(parv[2]));
+		if (u == NULL)
+			return;
 
 		handle_nickchange(u);
 	}
@@ -421,7 +419,8 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 
 		slog(LG_DEBUG, "m_nick(): nickname change from `%s': %s", si->su->nick, parv[0]);
 
-		user_changenick(si->su, parv[0], atoi(parv[1]));
+		if (user_changenick(si->su, parv[0], atoi(parv[1])))
+			return;
 
 		handle_nickchange(si->su);
 	}
@@ -621,7 +620,7 @@ void _modinit(module_t * m)
 	notice_global_sts = &sorcery_notice_global_sts;
 	notice_channel_sts = &sorcery_notice_channel_sts;
 	numeric_sts = &sorcery_numeric_sts;
-	skill = &sorcery_skill;
+	kill_id_sts = &sorcery_kill_id_sts;
 	part_sts = &sorcery_part_sts;
 	kline_sts = &sorcery_kline_sts;
 	unkline_sts = &sorcery_unkline_sts;

@@ -191,7 +191,7 @@ static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
 
         if (!(mc = mychan_find(parv[0])))
         {
-                command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+                command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
                 return;
         }
 
@@ -206,12 +206,12 @@ static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
                 if (metadata_find(mc, METADATA_CHANNEL, "email"))
                 {
                         metadata_delete(mc, METADATA_CHANNEL, "email");
-                        command_success_nodata(si, _("The e-mail address for \2%s\2 was deleted."), mc->name);
+                        command_success_nodata(si, _("The e-mail address for channel \2%s\2 was deleted."), mc->name);
 			logcommand(si, CMDLOG_SET, "%s SET EMAIL NONE", mc->name);
                         return;
                 }
 
-                command_fail(si, fault_nochange, _("The e-mail address for \2%s\2 was not set."), mc->name);
+                command_fail(si, fault_nochange, _("The e-mail address for channel \2%s\2 was not set."), mc->name);
                 return;
         }
 
@@ -231,7 +231,7 @@ static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
         metadata_add(mc, METADATA_CHANNEL, "email", mail);
 
 	logcommand(si, CMDLOG_SET, "%s SET EMAIL %s", mc->name, mail);
-        command_success_nodata(si, _("The e-mail address for \2%s\2 has been set to \2%s\2."), parv[0], mail);
+        command_success_nodata(si, _("The e-mail address for channel \2%s\2 has been set to \2%s\2."), parv[0], mail);
 }
 
 static void cs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[])
@@ -241,7 +241,7 @@ static void cs_cmd_set_url(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -282,7 +282,7 @@ static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -354,7 +354,7 @@ static void cs_cmd_set_founder(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -501,7 +501,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -718,7 +718,7 @@ static void cs_cmd_set_keeptopic(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -732,7 +732,7 @@ static void cs_cmd_set_keeptopic(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MC_KEEPTOPIC & mc->flags)
                 {
-                        command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "KEEPTOPIC", mc->name);
+                        command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for channel \2%s\2."), "KEEPTOPIC", mc->name);
                         return;
                 }
 
@@ -740,7 +740,7 @@ static void cs_cmd_set_keeptopic(sourceinfo_t *si, int parc, char *parv[])
 
                 mc->flags |= MC_KEEPTOPIC;
 
-                command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "KEEPTOPIC", mc->name);
+                command_success_nodata(si, _("The \2%s\2 flag has been set for channel \2%s\2."), "KEEPTOPIC", mc->name);
 
                 return;
         }
@@ -749,7 +749,7 @@ static void cs_cmd_set_keeptopic(sourceinfo_t *si, int parc, char *parv[])
         {
                 if (!(MC_KEEPTOPIC & mc->flags))
                 {
-                        command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "KEEPTOPIC", mc->name);
+                        command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for channel \2%s\2."), "KEEPTOPIC", mc->name);
                         return;
                 }
 
@@ -757,7 +757,7 @@ static void cs_cmd_set_keeptopic(sourceinfo_t *si, int parc, char *parv[])
 
                 mc->flags &= ~(MC_KEEPTOPIC | MC_TOPICLOCK);
 
-                command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "KEEPTOPIC", mc->name);
+                command_success_nodata(si, _("The \2%s\2 flag has been removed for channel \2%s\2."), "KEEPTOPIC", mc->name);
 
                 return;
         }
@@ -775,7 +775,7 @@ static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -789,7 +789,7 @@ static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MC_TOPICLOCK & mc->flags)
                 {
-                        command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "TOPICLOCK", mc->name);
+                        command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for channel \2%s\2."), "TOPICLOCK", mc->name);
                         return;
                 }
 
@@ -797,7 +797,7 @@ static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[])
 
                 mc->flags |= MC_KEEPTOPIC | MC_TOPICLOCK;
 
-                command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "TOPICLOCK", mc->name);
+                command_success_nodata(si, _("The \2%s\2 flag has been set for channel \2%s\2."), "TOPICLOCK", mc->name);
 
                 return;
         }
@@ -806,7 +806,7 @@ static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[])
         {
                 if (!(MC_TOPICLOCK & mc->flags))
                 {
-                        command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "TOPICLOCK", mc->name);
+                        command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for channel \2%s\2."), "TOPICLOCK", mc->name);
                         return;
                 }
 
@@ -814,7 +814,7 @@ static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[])
 
                 mc->flags &= ~MC_TOPICLOCK;
 
-                command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "TOPICLOCK", mc->name);
+                command_success_nodata(si, _("The \2%s\2 flag has been removed for channel \2%s\2."), "TOPICLOCK", mc->name);
 
                 return;
         }
@@ -832,7 +832,7 @@ static void cs_cmd_set_secure(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -846,7 +846,7 @@ static void cs_cmd_set_secure(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MC_SECURE & mc->flags)
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "SECURE", mc->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for channel \2%s\2."), "SECURE", mc->name);
 			return;
 		}
 
@@ -854,7 +854,7 @@ static void cs_cmd_set_secure(sourceinfo_t *si, int parc, char *parv[])
 
 		mc->flags |= MC_SECURE;
 
-		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "SECURE", mc->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for channel \2%s\2."), "SECURE", mc->name);
 
 		return;
 	}
@@ -863,7 +863,7 @@ static void cs_cmd_set_secure(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(MC_SECURE & mc->flags))
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "SECURE", mc->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for channel \2%s\2."), "SECURE", mc->name);
 			return;
 		}
 
@@ -871,7 +871,7 @@ static void cs_cmd_set_secure(sourceinfo_t *si, int parc, char *parv[])
 
 		mc->flags &= ~MC_SECURE;
 
-		command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "SECURE", mc->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for channel \2%s\2."), "SECURE", mc->name);
 
 		return;
 	}
@@ -889,7 +889,7 @@ static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -903,7 +903,7 @@ static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MC_VERBOSE & mc->flags)
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "VERBOSE", mc->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for channel \2%s\2."), "VERBOSE", mc->name);
 			return;
 		}
 
@@ -913,7 +913,7 @@ static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[])
  		mc->flags |= MC_VERBOSE;
 
 		verbose(mc, "\2%s\2 enabled the VERBOSE flag", get_source_name(si));
-		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "VERBOSE", mc->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for channel \2%s\2."), "VERBOSE", mc->name);
 
 		return;
 	}
@@ -922,7 +922,7 @@ static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MC_VERBOSE_OPS & mc->flags)
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "VERBOSE_OPS", mc->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for channel \2%s\2."), "VERBOSE_OPS", mc->name);
 			return;
 		}
 
@@ -940,7 +940,7 @@ static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[])
 			verbose(mc, "\2%s\2 enabled the VERBOSE_OPS flag", get_source_name(si));
 		}
 
-		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "VERBOSE_OPS", mc->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for channel \2%s\2."), "VERBOSE_OPS", mc->name);
 
 		return;
 	}
@@ -948,7 +948,7 @@ static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!((MC_VERBOSE | MC_VERBOSE_OPS) & mc->flags))
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "VERBOSE", mc->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for channel \2%s\2."), "VERBOSE", mc->name);
 			return;
 		}
 
@@ -960,7 +960,7 @@ static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[])
 			verbose(mc, "\2%s\2 disabled the VERBOSE_OPS flag", get_source_name(si));
 		mc->flags &= ~(MC_VERBOSE | MC_VERBOSE_OPS);
 
-		command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "VERBOSE", mc->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for channel \2%s\2."), "VERBOSE", mc->name);
 
 		return;
 	}
@@ -978,7 +978,7 @@ static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -994,14 +994,14 @@ static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 
 		if (!md)
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "FANTASY", mc->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for channel \2%s\2."), "FANTASY", mc->name);
 			return;
 		}
 
 		metadata_delete(mc, METADATA_CHANNEL, "disable_fantasy");
 
 		logcommand(si, CMDLOG_SET, "%s SET FANTASY ON", mc->name);
-		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "FANTASY", mc->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for channel \2%s\2."), "FANTASY", mc->name);
 		return;
 	}
 	else if (!strcasecmp("OFF", parv[1]))
@@ -1010,14 +1010,14 @@ static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[])
 
 		if (md)
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "FANTASY", mc->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for channel \2%s\2."), "FANTASY", mc->name);
 			return;
 		}
 
 		metadata_add(mc, METADATA_CHANNEL, "disable_fantasy", "on");
 
 		logcommand(si, CMDLOG_SET, "%s SET FANTASY OFF", mc->name);
-		command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "FANTASY", mc->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for channel \2%s\2."), "FANTASY", mc->name);
 		return;
 	}
 
@@ -1034,7 +1034,7 @@ static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -1048,7 +1048,7 @@ static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MC_GUARD & mc->flags)
                 {
-                        command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "GUARD", mc->name);
+                        command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for channel \2%s\2."), "GUARD", mc->name);
                         return;
                 }
 
@@ -1059,7 +1059,7 @@ static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])
 		if (!(mc->flags & MC_INHABIT))
 			join(mc->name, chansvs.nick);
 
-                command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "GUARD", mc->name);
+                command_success_nodata(si, _("The \2%s\2 flag has been set for channel \2%s\2."), "GUARD", mc->name);
 
                 return;
         }
@@ -1068,7 +1068,7 @@ static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])
         {
                 if (!(MC_GUARD & mc->flags))
                 {
-                        command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "GUARD", mc->name);
+                        command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for channel \2%s\2."), "GUARD", mc->name);
                         return;
                 }
 
@@ -1079,7 +1079,7 @@ static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])
 		if (!(mc->flags & MC_INHABIT) && (!config_options.chan || irccasecmp(config_options.chan, mc->name)))
 			part(mc->name, chansvs.nick);
 
-                command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "GUARD", mc->name);
+                command_success_nodata(si, _("The \2%s\2 flag has been removed for channel \2%s\2."), "GUARD", mc->name);
 
                 return;
         }
@@ -1097,7 +1097,7 @@ static void cs_cmd_set_staffonly(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
@@ -1105,7 +1105,7 @@ static void cs_cmd_set_staffonly(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (MC_STAFFONLY & mc->flags)
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for \2%s\2."), "STAFFONLY", mc->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for channel \2%s\2."), "STAFFONLY", mc->name);
 			return;
 		}
 
@@ -1114,7 +1114,7 @@ static void cs_cmd_set_staffonly(sourceinfo_t *si, int parc, char *parv[])
 
 		mc->flags |= MC_STAFFONLY;
 
-		command_success_nodata(si, _("The \2%s\2 flag has been set for \2%s\2."), "STAFFONLY", mc->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for channel \2%s\2."), "STAFFONLY", mc->name);
 
 		return;
 	}
@@ -1123,7 +1123,7 @@ static void cs_cmd_set_staffonly(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (!(MC_STAFFONLY & mc->flags))
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for \2%s\2."), "STAFFONLY", mc->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for channel \2%s\2."), "STAFFONLY", mc->name);
 			return;
 		}
 
@@ -1132,7 +1132,7 @@ static void cs_cmd_set_staffonly(sourceinfo_t *si, int parc, char *parv[])
 
 		mc->flags &= ~MC_STAFFONLY;
 
-		command_success_nodata(si, _("The \2%s\2 flag has been removed for \2%s\2."), "STAFFONLY", mc->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for channel \2%s\2."), "STAFFONLY", mc->name);
 
 		return;
 	}
@@ -1165,20 +1165,13 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mc = mychan_find(parv[0])))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
+		command_fail(si, fault_nosuch_target, _("Channel \2%s\2 is not registered."), parv[0]);
 		return;
 	}
 
 	if (!is_founder(mc, si->smu))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this command."));
-		return;
-	}
-
-	if (mc->metadata.count >= me.mdlimit)
-	{
-		command_fail(si, fault_toomany, _("Cannot add \2%s\2 to \2%s\2 metadata table, it is full."),
-						property, parv[0]);
 		return;
 	}
 
@@ -1198,6 +1191,13 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 		metadata_delete(mc, METADATA_CHANNEL, property);
 		logcommand(si, CMDLOG_SET, "%s SET PROPERTY %s (deleted)", mc->name, property);
 		command_success_nodata(si, _("Metadata entry \2%s\2 has been deleted."), property);
+		return;
+	}
+
+	if (mc->metadata.count >= me.mdlimit)
+	{
+		command_fail(si, fault_toomany, _("Cannot add \2%s\2 to \2%s\2 metadata table, it is full."),
+						property, parv[0]);
 		return;
 	}
 

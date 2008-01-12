@@ -19,8 +19,8 @@ DECLARE_MODULE_V1
 static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[]);
 static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_verify = { "VERIFY", N_("Verifies a nickname registration."), AC_NONE, 3, ns_cmd_verify };
-command_t ns_fverify = { "FVERIFY", N_("Forcefully verifies a nickname registration."), PRIV_USER_ADMIN, 2, ns_cmd_fverify };
+command_t ns_verify = { "VERIFY", N_("Verifies an account registration."), AC_NONE, 3, ns_cmd_verify };
+command_t ns_fverify = { "FVERIFY", N_("Forcefully verifies an account registration."), PRIV_USER_ADMIN, 2, ns_cmd_fverify };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -55,7 +55,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 	if (!op || !nick || !key)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "VERIFY");
-		command_fail(si, fault_needmoreparams, _("Syntax: VERIFY <operation> <nickname> <key>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: VERIFY <operation> <account> <key>"));
 		return;
 	}
 
@@ -162,7 +162,7 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 	if (!op || !nick)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FVERIFY");
-		command_fail(si, fault_needmoreparams, _("Syntax: FVERIFY <operation> <nickname>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: FVERIFY <operation> <account>"));
 		return;
 	}
 

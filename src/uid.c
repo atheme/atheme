@@ -79,7 +79,7 @@ static void add_one_to_uid(unsigned int i)
 	}
 }
 
-char *uid_get(void)
+const char *uid_get(void)
 {
 	add_one_to_uid(uindex - 1);	/* index from 0 */
 	return (new_uid);
