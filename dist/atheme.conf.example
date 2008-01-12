@@ -122,6 +122,7 @@ loadmodule "modules/backend/flatfile";
  * Password return (RETURN command)		modules/nickserv/return
  * Password retrieval (SENDPASS command)	modules/nickserv/sendpass
  * SET command					modules/nickserv/set
+ * Change primary nickname (SET ACCOUNTNAME)    modules/nickserv/set_accountname
  * PRIVMSG instead of NOTICE (SET PRIVMSG cmd)	modules/nickserv/set_privmsg
  * Account info hiding (SET PRIVATE command)	modules/nickserv/set_private
  * Password retrieval uses code (SETPASS cmd)	modules/nickserv/setpass
@@ -153,6 +154,7 @@ loadmodule "modules/nickserv/resetpass";
 loadmodule "modules/nickserv/return";
 loadmodule "modules/nickserv/sendpass";
 loadmodule "modules/nickserv/set";
+loadmodule "modules/nickserv/set_accountname";
 #loadmodule "modules/nickserv/set_privmsg";
 #loadmodule "modules/nickserv/set_private";
 loadmodule "modules/nickserv/setpass";
