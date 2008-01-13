@@ -34,6 +34,12 @@ Permissions:
 #endif
     +o - Enables use of the op/deop commands.
     +O - Enables automatic op.
+#if protect
+    +a - Enables use of the protect/deprotect commands.
+#endif
+#if owner
+    +q - Enables use of the owner/deowner commands.
+#endif
     +s - Enables use of the set command.
     +i - Enables use of the invite and getkey commands.
     +r - Enables use of the kick, ban, and kickban commands.
