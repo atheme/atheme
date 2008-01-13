@@ -27,8 +27,4 @@
 #define CMODE_PERM      0x00800000      /* unreal +z */
 #define CMODE_STICKY    0x01000000      /* unreal +N */
 
-#define CMODE_OWNER     0x10000000      /* unreal +q */
-#define CMODE_PROTECT   0x20000000      /* unreal +a */
-#define CMODE_HALFOP    0x40000000      /* unreal +h */
-
 #endif

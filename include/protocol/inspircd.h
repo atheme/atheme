@@ -28,8 +28,4 @@
 #define CMODE_CENSOR    0x02000000	/* Censor +G */
 #define CMODE_NOCAPS    0x04000000	/* No capitals */
 
-#define CMODE_OWNER     0x10000000      /* unreal +q */
-#define CMODE_PROTECT   0x20000000      /* unreal +a */
-#define CMODE_HALFOP    0x40000000      /* unreal +h */
-
 #endif
