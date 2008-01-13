@@ -483,40 +483,6 @@ boolean_t is_founder(mychan_t *mychan, myuser_t *myuser)
 	return FALSE;
 }
 
-boolean_t should_owner(mychan_t *mychan, myuser_t *myuser)
-{
-	if (!myuser)
-		return FALSE;
-
-	if (MC_NOOP & mychan->flags)
-		return FALSE;
-
-	if (MU_NOOP & myuser->flags)
-		return FALSE;
-
-	if (is_founder(mychan, myuser))
-		return TRUE;
-
-	return FALSE;
-}
-
-boolean_t should_protect(mychan_t *mychan, myuser_t *myuser)
-{
-	if (!myuser)
-		return FALSE;
-
-	if (MC_NOOP & mychan->flags)
-		return FALSE;
-
-	if (MU_NOOP & myuser->flags)
-		return FALSE;
-
-	if (chanacs_find(mychan, myuser, CA_SET))
-		return TRUE;
-
-	return FALSE;
-}
-
 boolean_t is_ircop(user_t *user)
 {
 	if (UF_IRCOP & user->flags)

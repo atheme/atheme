@@ -258,8 +258,6 @@ E void (*db_load)(void);
 
 /* function.c */
 E boolean_t is_founder(mychan_t *mychan, myuser_t *myuser);
-E boolean_t should_owner(mychan_t *mychan, myuser_t *myuser);
-E boolean_t should_protect(mychan_t *mychan, myuser_t *myuser);
 
 E void set_password(myuser_t *mu, char *newpassword);
 E boolean_t verify_password(myuser_t *mu, char *password);

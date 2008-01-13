@@ -103,9 +103,9 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
 		}
 		if (ircd->uses_owner)
 		{
-			if (should_owner(mc, cu->user->myuser))
+			if (fl & CA_USEOWNER)
 			{
-				if (!(ircd->owner_mode & cu->modes))
+				if (fl & CA_AUTOOP && !(ircd->owner_mode & cu->modes))
 				{
 					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(cu->user));
 					cu->modes |= ircd->owner_mode;
@@ -119,9 +119,9 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
 		}
 		if (ircd->uses_protect)
 		{
-			if (should_protect(mc, cu->user->myuser))
+			if (fl & CA_USEPROTECT)
 			{
-				if (!(ircd->protect_mode & cu->modes))
+				if (fl & CA_AUTOOP && !(ircd->protect_mode & cu->modes))
 				{
 					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(cu->user));
 					cu->modes |= ircd->protect_mode;
