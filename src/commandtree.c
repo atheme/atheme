@@ -174,7 +174,7 @@ void command_help(sourceinfo_t *si, list_t *commandtree)
 		 * (taken from command_exec())
 		 */
 		if (has_priv(si, c->access))
-			command_success_nodata(si, "\2%-15s\2 %s", c->name, translation_get(c->desc));
+			command_success_nodata(si, "\2%-15s\2 %s", c->name, translation_get(_(c->desc)));
 	}
 }
 
@@ -233,7 +233,7 @@ void command_help_short(sourceinfo_t *si, list_t *commandtree, char *maincmds)
 		 * (taken from command_exec())
 		 */
 		if (string_in_list(maincmds, c->name) && has_priv(si, c->access))
-			command_success_nodata(si, "\2%-15s\2 %s", c->name, translation_get(c->desc));
+			command_success_nodata(si, "\2%-15s\2 %s", c->name, translation_get(_(c->desc)));
 	}
 
 	command_success_nodata(si, " ");
