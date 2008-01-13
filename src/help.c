@@ -59,6 +59,10 @@ static boolean_t evaluate_condition(sourceinfo_t *si, const char *s)
 	}
 	if (!strcmp(word, "halfops"))
 		return ircd->uses_halfops;
+	else if (!strcmp(word, "owner"))
+		return ircd->uses_owner;
+	else if (!strcmp(word, "protect"))
+		return ircd->uses_protect;
 	else if (!strcmp(word, "anyprivs"))
 		return has_any_privs(si);
 	else if (!strcmp(word, "priv"))
