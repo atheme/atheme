@@ -33,7 +33,7 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
         command_add(&cs_protect, cs_cmdtree);
-        command_add(&cs_protect, cs_cmdtree);
+        command_add(&cs_deprotect, cs_cmdtree);
 
 	help_addentry(cs_helptree, "PROTECT", "help/cservice/op_voice", NULL);
 	help_addentry(cs_helptree, "DEPROTECT", "help/cservice/op_voice", NULL);
