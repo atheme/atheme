@@ -102,6 +102,12 @@ static void cs_cmd_kick(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (cu->modes & CMODE_OWNER || cu->modes & CMODE_PROTECT)
+	{
+		command_fail(si, fault_noprivs, _("\2%s\2 is protected from kicks; you cannot kick them."), tu->nick);
+		return;
+	}
+
 	snprintf(reasonbuf, BUFSIZE, "(%s) %s", get_source_name(si), reason ? reason : "No reason given");
 	kick(chansvs.nick, chan, tu->nick, reasonbuf);
 	logcommand(si, CMDLOG_SET, "%s KICK %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
@@ -155,6 +161,12 @@ static void cs_cmd_kickban(sourceinfo_t *si, int parc, char *parv[])
 	if (!cu)
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not on \2%s\2."), tu->nick, mc->name);
+		return;
+	}
+
+	if (cu->modes & CMODE_OWNER || cu->modes & CMODE_PROTECT)
+	{
+		command_fail(si, fault_noprivs, _("\2%s\2 is protected from kicks; you cannot kick them."), tu->nick);
 		return;
 	}
 

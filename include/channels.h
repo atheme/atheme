@@ -62,6 +62,10 @@ struct chanban_
 #define CMODE_SEC       0x00000080
 #define CMODE_TOPIC     0x00000100
 
+#define CMODE_OWNER     0x10000000      /* unreal/inspircd +q */
+#define CMODE_PROTECT   0x20000000      /* unreal/inspircd +a */
+#define CMODE_HALFOP    0x40000000      /* unreal/inspircd +h */
+
 #define MTYPE_NUL 0
 #define MTYPE_ADD 1
 #define MTYPE_DEL 2

@@ -28,8 +28,4 @@
 #define CMODE_JTHROT	0x02000000	/* unreal +j */
 #define CMODE_CENSOR    0x04000000	/* unreal +G */
 
-#define CMODE_OWNER     0x10000000      /* unreal +q */
-#define CMODE_PROTECT   0x20000000      /* unreal +a */
-#define CMODE_HALFOP    0x40000000      /* unreal +h */
-
 #endif
