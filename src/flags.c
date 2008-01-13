@@ -240,6 +240,10 @@ void update_chanacs_flags(void)
 	ca_all = CA_ALL_ALL;
 	if (!ircd->uses_halfops)
 		ca_all &= ~(CA_HALFOP | CA_AUTOHALFOP);
+	if (!ircd->uses_protect)
+		ca_all &= ~CA_USEPROTECT;
+	if (!ircd->uses_owner)
+		ca_all &= ~CA_USEOWNER;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
