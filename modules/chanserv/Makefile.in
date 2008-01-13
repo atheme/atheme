@@ -36,6 +36,8 @@ BASE_SRCS =			\
 	$(SRCDIR)/list.c	\
 	$(SRCDIR)/mark.c	\
 	$(SRCDIR)/op.c		\
+	$(SRCDIR)/owner.c	\
+	$(SRCDIR)/protect.c	\
 	$(SRCDIR)/quiet.c	\
 	$(SRCDIR)/recover.c	\
 	$(SRCDIR)/register.c	\

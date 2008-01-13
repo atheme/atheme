@@ -45,6 +45,8 @@ struct flags_table chanacs_flags[] = {
 	{'H', CA_AUTOHALFOP},
 	{'A', CA_ACLVIEW},
 	{'F', CA_FOUNDER},
+	{'q', CA_USEOWNER},
+	{'a', CA_USEPROTECT},
 	{'b', CA_AKICK},
 	{0, 0}
 };
