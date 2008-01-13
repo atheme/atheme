@@ -63,6 +63,13 @@ static void cs_cmd_op(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (nick && *nick == '-')
+	{
+		parv[1]++;
+		cs_cmd_deop(si, parc, parv);
+		return;
+	}
+
 	mc = mychan_find(chan);
 	if (!mc)
 	{
