@@ -163,11 +163,7 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		/* Should we email this? */
 	        if (tmu->flags & MU_EMAILMEMOS)
 		{
-			if (sendemail(si->su, EMAIL_MEMO, tmu, memo->text))
-			{
-				command_success_nodata(si, _("Your memo has been emailed to \2%s\2."), target);
-        	        	return;
-			}
+			sendemail(si->su, EMAIL_MEMO, tmu, memo->text);
 	        }
 	
 		/* Is the user online? If so, tell them about the new memo. */
