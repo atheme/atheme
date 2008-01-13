@@ -191,9 +191,9 @@ struct chanacs_
 
 /* special values for founder/successor -- jilles */
 /* used in shrike flatfile conversion: */
-#define CA_SUCCESSOR_0   (CA_VOICE | CA_OP | CA_AUTOOP | CA_TOPIC | CA_SET | CA_REMOVE | CA_INVITE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_ACLVIEW)
+#define CA_SUCCESSOR_0   (CA_VOICE | CA_OP | CA_AUTOOP | CA_TOPIC | CA_SET | CA_REMOVE | CA_INVITE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_ACLVIEW | CA_USEPROTECT)
 /* granted to new founder on transfer etc: */
-#define CA_FOUNDER_0     (CA_SUCCESSOR_0 | CA_FLAGS | CA_FOUNDER)
+#define CA_FOUNDER_0     (CA_SUCCESSOR_0 | CA_FLAGS | CA_USEOWNER | CA_FOUNDER)
 /* granted to founder on new channel: */
 #define CA_INITIAL       (CA_FOUNDER_0 | CA_AUTOOP)
 
