@@ -195,6 +195,8 @@ loadmodule "modules/nickserv/vhost";
  * LIST command					modules/chanserv/list
  * MARK command					modules/chanserv/mark
  * OP/DEOP commands				modules/chanserv/op
+ * OWNER/DEOWNER commands                       modules/chanserv/owner
+ * PROTECT/DEPROTECT commands                   modules/chanserv/protect
  * QUIET command (+q support)			modules/chanserv/quiet
  * Channel takeover recovery (RECOVER command)	modules/chanserv/recover
  * REGISTER command				modules/chanserv/register
