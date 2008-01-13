@@ -735,6 +735,12 @@ static void flatfile_db_load(void)
 					if (founder != NULL && mu == founder && !(their_ca_all & CA_FOUNDER))
 						fl |= CA_FOUNDER;
 
+					/* Set new-style +q and +a flags */
+					if (fl & CA_SET && fl & CA_OP && !(their_ca_all & CA_USEPROTECT) && ca_all & CA_USEPROTECT)
+						fl |= CA_USEPROTECT;
+					if (fl & CA_FOUNDER && !(their_ca_all & CA_USEOWNER) && ca_all & CA_USEOWNER)
+						fl |= CA_USEOWNER;
+
 					if ((!mu) && (validhostmask(causer)))
 						ca = chanacs_add_host(mc, causer, fl, ts);
 					else
