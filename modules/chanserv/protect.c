@@ -29,6 +29,13 @@ list_t *cs_helptree;
 
 void _modinit(module_t *m)
 {
+	if (ircd != NULL && !ircd->uses_protect)
+	{
+		slog(LG_INFO, "Module %s requires protect support, refusing to load.", m->header->name);
+		m->mflags = MODTYPE_FAIL;
+		return;
+	}
+
 	MODULE_USE_SYMBOL(cs_cmdtree, "chanserv/main", "cs_cmdtree");
 	MODULE_USE_SYMBOL(cs_helptree, "chanserv/main", "cs_helptree");
 
