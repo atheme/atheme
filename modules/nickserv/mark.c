@@ -79,7 +79,7 @@ static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 
 		if (metadata_find(mu, METADATA_USER, "private:mark:setter"))
 		{
-			command_fail(si, fault_badparams, _("\2%s\2 is already marked."), target);
+			command_fail(si, fault_badparams, _("\2%s\2 is already marked."), mu->name);
 			return;
 		}
 
@@ -87,15 +87,15 @@ static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 		metadata_add(mu, METADATA_USER, "private:mark:reason", info);
 		metadata_add(mu, METADATA_USER, "private:mark:timestamp", itoa(time(NULL)));
 
-		wallops("%s marked the account \2%s\2.", get_oper_name(si), target);
-		logcommand(si, CMDLOG_ADMIN, "MARK %s ON (reason: %s)", target, info);
-		command_success_nodata(si, _("\2%s\2 is now marked."), target);
+		wallops("%s marked the account \2%s\2.", get_oper_name(si), mu->name);
+		logcommand(si, CMDLOG_ADMIN, "MARK %s ON (reason: %s)", mu->name, info);
+		command_success_nodata(si, _("\2%s\2 is now marked."), mu->name);
 	}
 	else if (!strcasecmp(action, "OFF"))
 	{
 		if (!metadata_find(mu, METADATA_USER, "private:mark:setter"))
 		{
-			command_fail(si, fault_badparams, _("\2%s\2 is not marked."), target);
+			command_fail(si, fault_badparams, _("\2%s\2 is not marked."), mu->name);
 			return;
 		}
 
@@ -103,9 +103,9 @@ static void ns_cmd_mark(sourceinfo_t *si, int parc, char *parv[])
 		metadata_delete(mu, METADATA_USER, "private:mark:reason");
 		metadata_delete(mu, METADATA_USER, "private:mark:timestamp");
 
-		wallops("%s unmarked the account \2%s\2.", get_oper_name(si), target);
-		logcommand(si, CMDLOG_ADMIN, "MARK %s OFF", target);
-		command_success_nodata(si, _("\2%s\2 is now unmarked."), target);
+		wallops("%s unmarked the account \2%s\2.", get_oper_name(si), mu->name);
+		logcommand(si, CMDLOG_ADMIN, "MARK %s OFF", mu->name);
+		command_success_nodata(si, _("\2%s\2 is now unmarked."), mu->name);
 	}
 	else
 	{
