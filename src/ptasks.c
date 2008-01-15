@@ -228,6 +228,7 @@ void handle_stats(user_t *u, char req)
 		  numeric_sts(me.name, 249, u->nick, "T :myuser     %7d", cnt.myuser);
 		  numeric_sts(me.name, 249, u->nick, "T :myuser_acc %7d", cnt.myuser_access);
 		  numeric_sts(me.name, 249, u->nick, "T :mynick     %7d", cnt.mynick);
+		  numeric_sts(me.name, 249, u->nick, "T :myuser_nam %7d", cnt.myuser_name);
 		  numeric_sts(me.name, 249, u->nick, "T :mychan     %7d", cnt.mychan);
 		  numeric_sts(me.name, 249, u->nick, "T :chanacs    %7d", cnt.chanacs);
 

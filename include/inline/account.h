@@ -39,6 +39,25 @@ static inline mynick_t *mynick_find(const char *name)
 	return mowgli_dictionary_retrieve(nicklist, name);
 }
 
+/*
+ * myuser_name_find(const char *name)
+ *
+ * Retrieves a record from the oldnames DTree.
+ *
+ * Inputs:
+ *      - account name to retrieve
+ *
+ * Outputs:
+ *      - record wanted or NULL if it's not in the DTree.
+ *
+ * Side Effects:
+ *      - none
+ */
+static inline myuser_name_t *myuser_name_find(const char *name)
+{
+	return mowgli_dictionary_retrieve(oldnameslist, name);
+}
+
 static inline mychan_t *mychan_find(const char *name)
 {
 	return mowgli_dictionary_retrieve(mclist, name);

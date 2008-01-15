@@ -29,10 +29,12 @@
 
 mowgli_dictionary_t *mulist;
 mowgli_dictionary_t *nicklist;
+mowgli_dictionary_t *oldnameslist;
 mowgli_dictionary_t *mclist;
 
 static BlockHeap *myuser_heap;  /* HEAP_USER */
 static BlockHeap *mynick_heap;  /* HEAP_USER */
+static BlockHeap *myuser_name_heap;	/* HEAP_USER / 2 */
 static BlockHeap *mychan_heap;	/* HEAP_CHANNEL */
 static BlockHeap *chanacs_heap;	/* HEAP_CHANACS */
 static BlockHeap *metadata_heap;	/* HEAP_CHANUSER */
@@ -55,6 +57,7 @@ void init_accounts(void)
 {
 	myuser_heap = BlockHeapCreate(sizeof(myuser_t), HEAP_USER);
 	mynick_heap = BlockHeapCreate(sizeof(myuser_t), HEAP_USER);
+	myuser_name_heap = BlockHeapCreate(sizeof(myuser_name_t), HEAP_USER / 2);
 	mychan_heap = BlockHeapCreate(sizeof(mychan_t), HEAP_CHANNEL);
 	chanacs_heap = BlockHeapCreate(sizeof(chanacs_t), HEAP_CHANUSER);
 	metadata_heap = BlockHeapCreate(sizeof(metadata_t), HEAP_CHANUSER);
@@ -68,6 +71,7 @@ void init_accounts(void)
 
 	mulist = mowgli_dictionary_create(irccasecmp);
 	nicklist = mowgli_dictionary_create(irccasecmp);
+	oldnameslist = mowgli_dictionary_create(irccasecmp);
 	mclist = mowgli_dictionary_create(irccasecmp);
 }
 
@@ -138,6 +142,8 @@ myuser_t *myuser_add(char *name, char *pass, char *email, unsigned int flags)
 		mu->soper = soper;
 	}
 
+	myuser_name_restore(mu->name, mu);
+
 	cnt.myuser++;
 
 	return mu;
@@ -171,6 +177,8 @@ void myuser_delete(myuser_t *mu)
 
 	if (!(runflags & RF_STARTING))
 		slog(LG_DEBUG, "myuser_delete(): %s", mu->name);
+
+	myuser_name_remember(mu->name, mu);
 
 	/* log them out */
 	LIST_FOREACH_SAFE(n, tn, mu->logins.head)
@@ -561,6 +569,8 @@ mynick_t *mynick_add(myuser_t *mu, const char *name)
 	mowgli_dictionary_add(nicklist, mn->nick, mn);
 	node_add(mn, &mn->node, &mu->nicks);
 
+	myuser_name_restore(mn->nick, mu);
+
 	cnt.mynick++;
 
 	return mn;
@@ -587,12 +597,190 @@ void mynick_delete(mynick_t *mn)
 	if (!(runflags & RF_STARTING))
 		slog(LG_DEBUG, "mynick_delete(): %s", mn->nick);
 
+	myuser_name_remember(mn->nick, mn->owner);
+
 	mowgli_dictionary_delete(nicklist, mn->nick);
 	node_del(&mn->node, &mn->owner->nicks);
 
 	BlockHeapFree(mynick_heap, mn);
 
 	cnt.mynick--;
+}
+
+/*************************
+ * M Y U S E R _ N A M E *
+ *************************/
+
+static void myuser_name_delete(myuser_name_t *mun);
+
+/*
+ * myuser_name_add(const char *name)
+ *
+ * Creates a record for the given name and adds it to the oldnames DTree.
+ *
+ * Inputs:
+ *      - a nick or account name
+ *
+ * Outputs:
+ *      - on success, a new myuser_name_t object
+ *      - on failure, NULL.
+ *
+ * Side Effects:
+ *      - the created record is added to the oldnames DTree.
+ */
+myuser_name_t *myuser_name_add(const char *name)
+{
+	myuser_name_t *mun;
+
+	return_val_if_fail((mun = myuser_name_find(name)) == NULL, mun);
+
+	if (!(runflags & RF_STARTING))
+		slog(LG_DEBUG, "myuser_name_add(): %s", name);
+
+	mun = BlockHeapAlloc(myuser_name_heap);
+	object_init(object(mun), NULL, (destructor_t) myuser_name_delete);
+
+	strlcpy(mun->name, name, NICKLEN);
+
+	mowgli_dictionary_add(oldnameslist, mun->name, mun);
+
+	cnt.myuser_name++;
+
+	return mun;
+}
+
+/*
+ * myuser_name_delete(myuser_name_t *mun)
+ *
+ * Destroys and removes a name from the oldnames DTree.
+ *
+ * Inputs:
+ *      - record to destroy
+ *
+ * Outputs:
+ *      - nothing
+ *
+ * Side Effects:
+ *      - a record is destroyed and removed from the oldnames DTree.
+ */
+static void myuser_name_delete(myuser_name_t *mun)
+{
+	metadata_t *md;
+	node_t *n, *tn;
+
+	return_if_fail(mun != NULL);
+
+	if (!(runflags & RF_STARTING))
+		slog(LG_DEBUG, "myuser_name_delete(): %s", mun->name);
+
+	mowgli_dictionary_delete(oldnameslist, mun->name);
+
+	/* delete the metadata */
+	LIST_FOREACH_SAFE(n, tn, mun->metadata.head)
+	{
+		md = n->data;
+		metadata_delete(mun, METADATA_USER_NAME, md->name);
+	}
+
+	BlockHeapFree(myuser_name_heap, mun);
+
+	cnt.myuser_name--;
+}
+
+/*
+ * myuser_name_remember(const char *name, myuser_t *mu)
+ *
+ * If the given account has any information worth saving, creates a record
+ * for the given name and adds it to the oldnames DTree.
+ *
+ * Inputs:
+ *      - a nick or account name
+ *      - an account pointer
+ *
+ * Outputs:
+ *      - none
+ *
+ * Side Effects:
+ *      - a record may be added to the oldnames DTree.
+ */
+void myuser_name_remember(const char *name, myuser_t *mu)
+{
+	myuser_name_t *mun;
+	metadata_t *md;
+
+	if (myuser_name_find(name))
+		return;
+
+	md = metadata_find(mu, METADATA_USER, "private:mark:setter");
+	if (md == NULL)
+		return;
+
+	mun = myuser_name_add(name);
+
+	metadata_add(mun, METADATA_USER_NAME, md->name, md->value);
+	md = metadata_find(mu, METADATA_USER, "private:mark:reason");
+	if (md != NULL)
+		metadata_add(mun, METADATA_USER_NAME, md->name, md->value);
+	md = metadata_find(mu, METADATA_USER, "private:mark:timestamp");
+	if (md != NULL)
+		metadata_add(mun, METADATA_USER_NAME, md->name, md->value);
+
+	return;
+}
+
+/*
+ * myuser_name_restore(const char *name, myuser_t *mu)
+ *
+ * If the given name is in the oldnames DTree, restores information from it
+ * into the given account.
+ *
+ * Inputs:
+ *      - a nick or account name
+ *      - an account pointer
+ *
+ * Outputs:
+ *      - none
+ *
+ * Side Effects:
+ *      - if present, the record will be removed from the oldnames DTree.
+ */
+void myuser_name_restore(const char *name, myuser_t *mu)
+{
+	myuser_name_t *mun;
+	metadata_t *md, *md2;
+	node_t *n;
+
+	mun = myuser_name_find(name);
+	if (mun == NULL)
+		return;
+
+	md = metadata_find(mu, METADATA_USER, "private:mark:reason");
+	md2 = metadata_find(mun, METADATA_USER_NAME, "private:mark:reason");
+	if (md != NULL && md2 != NULL && strcmp(md->value, md2->value))
+	{
+		wallops(_("Not restoring mark \2\"%s\"\2 for account \2%s\2 (name \2%s\2) which is already marked"), md2->value, mu->name, name);
+		snoop(_("MARK:FORGET: \2\"%s\"\2 for \2%s (%s)\2 (already marked)"), md2->value, name, mu->name);
+		slog(LG_INFO, "myuser_name_restore(): not restoring mark \"%s\" for account %s (name %s) which is already marked",
+				md2->value, mu->name, name);
+	}
+	else if (md == NULL && md2 != NULL)
+	{
+		snoop(_("MARK:RESTORE: \2\"%s\"\2 for \2%s (%s)\2"), md2->value, name, mu->name);
+		slog(LG_INFO, "myuser_name_restore(): restoring mark \"%s\" for account %s (name %s)",
+				md2->value, mu->name, name);
+	}
+
+	LIST_FOREACH(n, mun->metadata.head)
+	{
+		md = n->data;
+		/* prefer current metadata to saved */
+		if (!metadata_find(mu, METADATA_USER, md->name))
+			metadata_add(mu, METADATA_USER, md->name, md->value);
+	}
+
+	object_unref(mun);
+
+	return;
 }
 
 /***************
@@ -1294,6 +1482,7 @@ metadata_t *metadata_add(void *target, int type, const char *name, const char *v
 	myuser_t *mu = NULL;
 	mychan_t *mc = NULL;
 	chanacs_t *ca = NULL;
+	myuser_name_t *mun = NULL;
 	metadata_t *md;
 	node_t *n;
 	hook_metadata_change_t mdchange;
@@ -1307,6 +1496,8 @@ metadata_t *metadata_add(void *target, int type, const char *name, const char *v
 		mc = target;
 	else if (type == METADATA_CHANACS)
 		ca = target;
+	else if (type == METADATA_USER_NAME)
+		mun = target;
 	else
 	{
 		slog(LG_DEBUG, "metadata_add(): called on unknown type %d", type);
@@ -1329,6 +1520,8 @@ metadata_t *metadata_add(void *target, int type, const char *name, const char *v
 		node_add(md, n, &mc->metadata);
 	else if (type == METADATA_CHANACS)
 		node_add(md, n, &ca->metadata);
+	else if (type == METADATA_USER_NAME)
+		node_add(md, n, &mun->metadata);
 	else
 	{
 		slog(LG_DEBUG, "metadata_add(): trying to add metadata to unknown type %d", type);
@@ -1358,6 +1551,7 @@ void metadata_delete(void *target, int type, const char *name)
 	myuser_t *mu;
 	mychan_t *mc;
 	chanacs_t *ca;
+	myuser_name_t *mun;
 	metadata_t *md = metadata_find(target, type, name);
 	hook_metadata_change_t mdchange;
 
@@ -1391,6 +1585,13 @@ void metadata_delete(void *target, int type, const char *name)
 		node_del(n, &ca->metadata);
 		node_free(n);
 	}
+	else if (type == METADATA_USER_NAME)
+	{
+		mun = target;
+		n = node_find(md, &mun->metadata);
+		node_del(n, &mun->metadata);
+		node_free(n);
+	}
 	else
 	{
 		slog(LG_DEBUG, "metadata_delete(): trying to delete metadata from unknown type %d", type);
@@ -1409,6 +1610,7 @@ metadata_t *metadata_find(void *target, int type, const char *name)
 	myuser_t *mu;
 	mychan_t *mc;
 	chanacs_t *ca;
+	myuser_name_t *mun;
 	list_t *l = NULL;
 	metadata_t *md;
 
@@ -1429,6 +1631,11 @@ metadata_t *metadata_find(void *target, int type, const char *name)
 	{
 		ca = target;
 		l = &ca->metadata;
+	}
+	else if (type == METADATA_USER_NAME)
+	{
+		mun = target;
+		l = &mun->metadata;
 	}
 	else
 	{

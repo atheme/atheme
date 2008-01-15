@@ -10,6 +10,7 @@
 #ifndef ACCOUNT_H
 #define ACCOUNT_H
 
+typedef struct myuser_name_ myuser_name_t;
 typedef struct chanacs_ chanacs_t;
 typedef struct kline_ kline_t;
 typedef struct mymemo_ mymemo_t;
@@ -104,6 +105,16 @@ struct mynick_
   time_t lastseen;
 
   node_t node; /* for myuser_t.nicks */
+};
+
+/* record about a name that used to exist */
+struct myuser_name_
+{
+  object_t parent;
+
+  char name[NICKLEN];
+
+  list_t metadata;
 };
 
 struct mychan_
@@ -275,6 +286,7 @@ E void kline_expire(void *arg);
 /* account.c */
 E mowgli_dictionary_t *mulist;
 E mowgli_dictionary_t *nicklist;
+E mowgli_dictionary_t *oldnameslist;
 E mowgli_dictionary_t *mclist;
 
 E void init_accounts(void);
@@ -294,6 +306,11 @@ E void myuser_access_delete(myuser_t *mu, char *mask);
 E mynick_t *mynick_add(myuser_t *mu, const char *name);
 E void mynick_delete(mynick_t *mn);
 //inline mynick_t *mynick_find(const char *name);
+
+E myuser_name_t *myuser_name_add(const char *name);
+//inline myuser_name_t *myuser_name_find(const char *name);
+E void myuser_name_remember(const char *name, myuser_t *mu);
+E void myuser_name_restore(const char *name, myuser_t *mu);
 
 E mychan_t *mychan_add(char *name);
 //inline mychan_t *mychan_find(const char *name);

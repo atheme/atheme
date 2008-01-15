@@ -41,6 +41,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
 	mynick_t *mn = NULL;
+	myuser_name_t *mun;
 	user_t *u = NULL;
 	char *name = parv[0];
 	char buf[BUFSIZE], strfbuf[32], lastlogin[32], *p;
@@ -60,7 +61,26 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!(mu = myuser_find_ext(name)))
 	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), name);
+		if (has_priv(si, PRIV_USER_AUSPEX) && (mun = myuser_name_find(name)) != NULL)
+		{
+			char *setter;
+			char *reason;
+			time_t ts;
+
+			md = metadata_find(mun, METADATA_USER_NAME, "private:mark:setter");
+			setter = md != NULL ? md->value : "unknown";
+			md = metadata_find(mun, METADATA_USER_NAME, "private:mark:reason");
+			reason = md != NULL ? md->value : "unknown";
+			md = metadata_find(mun, METADATA_USER_NAME, "private:mark:timestamp");
+			ts = md != NULL ? atoi(md->value) : 0;
+
+			tm = *localtime(&ts);
+			strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
+
+			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered anymore, but was marked by %s on %s (%s)."), mun->name, setter, strfbuf, reason);
+		}
+		else
+			command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), name);
 		return;
 	}
 

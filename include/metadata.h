@@ -37,6 +37,7 @@ E metadata_t *metadata_find(void *target, int type, const char *name);
 #define METADATA_USER		1
 #define METADATA_CHANNEL	2
 #define METADATA_CHANACS	3
+#define METADATA_USER_NAME	4
 
 #endif
 

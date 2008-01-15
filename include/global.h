@@ -111,6 +111,7 @@ struct cnt
   unsigned int uplink;
   unsigned int operclass;
   unsigned int myuser_access;
+  unsigned int myuser_name;
 };
 
 E struct cnt cnt;

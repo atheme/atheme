@@ -83,6 +83,7 @@ static int flatfile_db_save_myusers_cb(mowgli_dictionary_elem_t *delem, void *pr
 static void flatfile_db_save(void *arg)
 {
 	myuser_t *mu;
+	myuser_name_t *mun;
 	mychan_t *mc;
 	chanacs_t *ca;
 	kline_t *k;
@@ -202,6 +203,18 @@ static void flatfile_db_save(void *arg)
 		}
 	}
 
+	/* Old names */
+	MOWGLI_DICTIONARY_FOREACH(mun, &state, oldnameslist)
+	{
+		fprintf(f, "NAM %s\n", mun->name);
+		LIST_FOREACH(tn, mun->metadata.head)
+		{
+			metadata_t *md = (metadata_t *)tn->data;
+
+			fprintf(f, "MD N %s %s %s\n", mun->name, md->name, md->value);
+		}
+	}
+
 	/* Services ignores */
 	slog(LG_DEBUG, "db_save(): saving svsignores");
 
@@ -273,6 +286,7 @@ static void flatfile_db_save(void *arg)
 static void flatfile_db_load(void)
 {
 	myuser_t *mu, *founder = NULL;
+	myuser_name_t *mun;
 	mychan_t *mc;
 	kline_t *k;
 	svsignore_t *svsignore;
@@ -534,6 +548,20 @@ static void flatfile_db_load(void)
 			node_add(md, node_create(), &mu->subscriptions);
 		}
 
+		/* formerly registered name */
+		if (!strcmp("NAM", item))
+		{
+			char *user;
+
+			user = strtok(NULL, " \n");
+			if (!user)
+			{
+				slog(LG_INFO, "db_load(): invalid old name (line %d)", linecnt);
+				continue;
+			}
+			myuser_name_add(user);
+		}
+
 		/* services oper */
 		if (!strcmp("SO", item))
 		{
@@ -633,6 +661,14 @@ static void flatfile_db_load(void)
 						metadata_add(ca, METADATA_CHANACS, property, value);
 				}
 			}
+			else if (type[0] == 'N')
+			{
+				mun = myuser_name_find(name);
+				if (mun != NULL)
+					metadata_add(mun, METADATA_USER_NAME, property, value);
+			}
+			else
+				slog(LG_DEBUG, "db_load(): unknown metadata type %s", type);
 		}
 
 		/* Channel URLs */
