@@ -99,11 +99,8 @@ static void xmlrpc_config_ready(void *vptr)
 
 	if (handle_xmlrpc.handler != NULL)
 	{
-		if ((n = node_find(&handle_xmlrpc, httpd_path_handlers)))
-		{
-			slog(LG_INFO, "xmlrpc/main.c: handler already in the list");
+		if (node_find(&handle_xmlrpc, httpd_path_handlers))
 			return;
-		}
 		
 		n = node_create();
 		node_add(&handle_xmlrpc, node_create(), httpd_path_handlers);
@@ -137,17 +134,16 @@ void _moddeinit(void)
 	xmlrpc_unregister_method("atheme.logout");
 	xmlrpc_unregister_method("atheme.command");
 
-	if (!(n = node_find(&handle_xmlrpc, httpd_path_handlers)))
+	if ((n = node_find(&handle_xmlrpc, httpd_path_handlers)) != NULL)
 	{
-		slog(LG_INFO, "xmlrpc/main.c: handler was not registered.");
-		return;
+		node_del(n, httpd_path_handlers);
+		node_free(n);
 	}
-
-	node_del(n, httpd_path_handlers);
-	node_free(n);
 
 	del_conf_item("PATH", &conf_xmlrpc_table);
 	del_top_conf("XMLRPC");
+
+	hook_del_hook("config_ready", xmlrpc_config_ready);
 }
 
 static void xmlrpc_command_fail(sourceinfo_t *si, faultcode_t code, const char *message)
