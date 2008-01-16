@@ -336,7 +336,7 @@ loadmodule "modules/memoserv/list";
 loadmodule "modules/memoserv/read";
 loadmodule "modules/memoserv/forward";
 loadmodule "modules/memoserv/delete";
-#loadmodule "modules/memoserv/ignore";
+loadmodule "modules/memoserv/ignore";
 
 /* Global module.
  *
