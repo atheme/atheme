@@ -96,6 +96,7 @@ static void ms_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *tmu;
 	node_t *n;
+	const char *newnick;
 	char *temp;
 
 	/* Arg check */
@@ -120,6 +121,7 @@ static void ms_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), parv[0]);
 		return;
 	}
+	newnick = tmu->name;
 
 	/* Ignore list is full */
 	if (si->smu->memo_ignores.count >= MAXMSIGNORES)
@@ -134,7 +136,7 @@ static void ms_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 		temp = (char *)n->data;
 
 		/* Already in the list */
-		if (!irccasecmp(temp, parv[0]))
+		if (!irccasecmp(temp, newnick))
 		{
 			command_fail(si, fault_nochange, _("Account \2%s\2 is already in your ignore list."), temp);
 			return;
@@ -142,10 +144,10 @@ static void ms_cmd_ignore_add(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	/* Add to ignore list */
-	temp = sstrdup(tmu->name);
+	temp = sstrdup(newnick);
 	node_add(temp, node_create(), &si->smu->memo_ignores);
-	logcommand(si, CMDLOG_SET, "IGNORE ADD %s", tmu->name);
-	command_success_nodata(si, _("Account \2%s\2 added to your ignore list."), tmu->name);
+	logcommand(si, CMDLOG_SET, "IGNORE ADD %s", newnick);
+	command_success_nodata(si, _("Account \2%s\2 added to your ignore list."), newnick);
 	return;
 }
 
