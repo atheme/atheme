@@ -139,7 +139,17 @@ static void ms_cmd_send(sourceinfo_t *si, int parc, char *parv[])
 		/* Make sure we're not on ignore */
 		LIST_FOREACH(n, tmu->memo_ignores.head)
 		{
-			if (!strcasecmp((char *)n->data, si->smu->name))
+			mynick_t *mn;
+			myuser_t *mu;
+
+			if (nicksvs.no_nick_ownership)
+				mu = myuser_find((const char *)n->data);
+			else
+			{
+				mn = mynick_find((const char *)n->data);
+				mu = mn != NULL ? mn->owner : NULL;
+			}
+			if (mu == si->smu)
 			{
 				logcommand(si, CMDLOG_SET, "failed SEND to %s (on ignore list)", tmu->name);
 				command_success_nodata(si, _("The memo has been successfully sent to \2%s\2."), target);

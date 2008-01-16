@@ -145,7 +145,17 @@ static void ms_cmd_forward(sourceinfo_t *si, int parc, char *parv[])
 	/* Make sure we're not on ignore */
 	LIST_FOREACH(n, tmu->memo_ignores.head)
 	{
-		if (!strcasecmp((char *)n->data, si->smu->name))
+		mynick_t *mn;
+		myuser_t *mu;
+
+		if (nicksvs.no_nick_ownership)
+			mu = myuser_find((const char *)n->data);
+		else
+		{
+			mn = mynick_find((const char *)n->data);
+			mu = mn != NULL ? mn->owner : NULL;
+		}
+		if (mu == si->smu)
 		{
 			/* Lie... change this if you want it to fail silent */
 			logcommand(si, CMDLOG_SET, "failed FORWARD to %s (on ignore list)", tmu->name);

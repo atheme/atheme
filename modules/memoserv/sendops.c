@@ -147,7 +147,17 @@ static void ms_cmd_sendops(sourceinfo_t *si, int parc, char *parv[])
 		ignored = FALSE;
 		LIST_FOREACH(n, tmu->memo_ignores.head)
 		{
-			if (!strcasecmp((char *)n->data, si->smu->name))
+			mynick_t *mn;
+			myuser_t *mu;
+
+			if (nicksvs.no_nick_ownership)
+				mu = myuser_find((const char *)n->data);
+			else
+			{
+				mn = mynick_find((const char *)n->data);
+				mu = mn != NULL ? mn->owner : NULL;
+			}
+			if (mu == si->smu)
 				ignored = TRUE;
 		}
 		if (ignored)
