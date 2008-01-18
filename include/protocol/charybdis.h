@@ -21,6 +21,4 @@
 #define CMODE_FTARGET   0x00040000      /* charybdis +F */
 #define CMODE_DISFWD    0x00080000      /* charybdis +Q */
 
-#define CMODE_HALFOP	0x10000000
-
 #endif

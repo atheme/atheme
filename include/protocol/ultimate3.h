@@ -17,7 +17,4 @@
 #define CMODE_REGONLY	0x00004000	/* bahamut +R */
 #define CMODE_OPERONLY  0x00008000      /* bahamut +O */
 
-#define CMODE_PROTECT   0x20000000      /* unreal +a */
-#define CMODE_HALFOP    0x40000000      /* unreal +h */
-
 #endif

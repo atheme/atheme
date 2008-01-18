@@ -23,7 +23,4 @@
 #define CMODE_REGONLY	0x00080000
 #define CMODE_NOSPAM	0x00100000
 
-#define CMODE_PROTECT   0x20000000      /* unreal +a */
-#define CMODE_HALFOP    0x40000000      /* unreal +h */
-
 #endif

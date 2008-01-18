@@ -22,6 +22,4 @@
 #define CMODE_NONICK	0x00040000
 #define CMODE_RSL	0x00080000
 
-#define CMODE_HALFOP	0x40000000	/* solidircd +h */
-
 #endif
