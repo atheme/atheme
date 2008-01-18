@@ -1,5 +1,5 @@
-Atheme 3.0 Release Notes
-========================
+Atheme Services 3.0 Release Notes
+=================================
 ircd protocol
 - In hyperion, use COLLIDE instead of KILL (less noisy).
 - In hyperion, fix a bug in host/realhost processing.
