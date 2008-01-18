@@ -2,9 +2,10 @@ Atheme 3.0 Release Notes
 ========================
 ircd protocol
 - In hyperion, use COLLIDE instead of KILL (less noisy).
+- In hyperion, fix a bug in host/realhost processing.
 - Allow channel ban and host channel access matching to be customized by
   protocol modules. In particular, make charybdis extbans acorsx and hyperion
-  +d bans work.
+  +d and forwarding bans work.
 - Track if the ircd supports CIDR bans.
 - Some fixes for TS 0 channels in TS5/TS6.
 - Drop support for inspircd 1.0.
@@ -15,6 +16,8 @@ ircd protocol
 - Add experimental support for inspircd 1.2.
 - Add TBURST support to hybrid protocol module, allows better topic setting.
 - Improve support for unrealircd.
+- Improve handling of kills and nick collisions.
+- Improve support for +q/+a (owner/protect) channel statuses.
 nickserv
 - Add nickserv/subscribe, allows users to be notified when metadata is
   changed.
@@ -25,9 +28,16 @@ nickserv
 - Load nickserv/group by default in the example configuration file.
 - Add nickserv/set_privmsg, enables use of private messages on a per-account
   basis.
-- INFO now shows chan:auspex opers a count of channel access.
+- INFO now shows user:auspex or chan:auspex opers a count of channel access.
 - Add nickserv/set_private, allows users to hide some information about
   their account.
+- Check nickserv/vhost for validity for hyperion/charybdis/hybrid (Bugzilla #7).
+- When displaying nick(account), add a space in between.
+- Rework INFO so it is easier to understand and more readable.
+- Add nickserv/set_accountname, allows changing the account name to
+  another grouped nick (Bugzilla #102).
+- Save marks when nicks/accounts are dropped and restore them if they are
+  recreated.
 saslserv
 chanserv
 - Change channel_register hook from mychan_t * to hook_channel_req_t *. This
@@ -48,7 +58,15 @@ chanserv
   reason.
 - Add chanserv/set_private, allows users to hide some information about
   their channel.
+- Hide SET FANTASY from help if fantasy commands are disabled in atheme.conf.
+- Add chanserv::deftemplates config option to start channels off with some
+  templates.
+- For the "addressing chanserv" fantasy command, require a non-letter
+  after the nick.
+- Add chanserv/owner and chanserv/protect, to set/unset +q/+a modes.
 memoserv
+- Still notify online user if EMAILMEMOS is set.
+- Consider MemoServ ignores matched if any grouped nick of the sender matches.
 gameserv
 oper
 - Add LG_REGISTER level for all registration related messages. This can be
@@ -57,6 +75,7 @@ oper
 - Allow CIDR masks in the CLONES exempt list.
 - Add privilege operserv:akill-anymask, allows akilling masks with
   insufficient non-wildcard characters.
+- Allow requiring an additional password for services operators.
 xmlrpc
 - Make xmlrpc faster.
 - Create a nick in addition to an account in the obsolete xmlrpc/account
@@ -72,19 +91,27 @@ code
 - Rework channel message handling.
 - Remove some unnecessary cruft from configure.
 - Change the way fantasy commands work.
+- Enable GCC format string parameter checking.
+- Move nickname ownership nagging to the nickserv module.
 documentation
 - Move developer documentation to doc/technical/.
+- Add conditions to the help files, used to hide halfops/owner/protect/oper
+  information when it is not applicable.
 other
 - Split expiry setting into seperate nickserv::expiry and chanserv::expiry.
 - Make expiry settings of 0 work more consistently as "do not expire
   anything", and still update last used times.
 - Add graphtastical contrib module, creates files to be processed with
   graphviz.
+- Add mlocktweaker contrib module, adds or removes additional modes from
+  the default mlock.
 - Tell users on services ignore once per session that they are ignored.
 - Remove database{} configuration block.
 - Rename example files.
 - Put multiple line help texts in one gettext string.
 - Improve hybserv/theia conversion tool.
+- Add an ircservices conversion tool.
+- Tweak various strings for translation purposes.
 
 Atheme 2.2 Release Notes
 ========================
