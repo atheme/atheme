@@ -8,7 +8,8 @@ ircd protocol
   +d and forwarding bans work.
 - Track if the ircd supports CIDR bans.
 - Some fixes for TS 0 channels in TS5/TS6.
-- Drop support for inspircd 1.0.
+- Drop support for InspIRCd 1.0, you should use InspIRCd 1.1 as it is more
+  reliable. (Recommended by InspIRCd upstream.)
 - Add more explicit support for invite exceptions.
 - Fix SVSMODE in ultimate3.
 - Make /version reply (351 numeric) rfc1459 compliant.
