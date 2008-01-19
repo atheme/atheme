@@ -83,7 +83,9 @@ xmlrpc
   module.
 - Fix crashes when unloading xmlrpc modules.
 code
-- Switch from Subversion to Mercurial.
+- Switch from Subversion to Mercurial. As a result, the $Id$ fields in many
+  modules are no longer updated. We are examining other solutions for identifying
+  modules' revisions using Mercurial at this time.
 - Remove redundant user_t pointer from hook_channel_req_t.
 - Switch to non-copyleft BSD licensing.
 - Integrate libmowgli framework into the tree. Only mowgli_dictionary is
