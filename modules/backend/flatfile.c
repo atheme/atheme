@@ -293,7 +293,7 @@ static void flatfile_db_load(void)
 	unsigned int i = 0, linecnt = 0, muin = 0, mcin = 0, cain = 0, kin = 0;
 	FILE *f;
 	char *item, *s, dBuf[BUFSIZE];
-	unsigned int their_ca_all = ca_all;
+	unsigned int their_ca_all = 0;
 
 	f = fopen(DATADIR "/atheme.db", "r");
 	if (f == NULL)
@@ -758,6 +758,12 @@ static void flatfile_db_load(void)
 					if (i < 4)
 						if (!(fl & CA_AKICK))
 							fl |= CA_ACLVIEW;
+
+					if (their_ca_all == 0)
+					{
+						their_ca_all = CA_VOICE | CA_AUTOVOICE | CA_OP | CA_AUTOOP | CA_TOPIC | CA_SET | CA_REMOVE | CA_INVITE | CA_RECOVER | CA_FLAGS | CA_HALFOP | CA_AUTOHALFOP | CA_ACLVIEW;
+						slog(LG_INFO, "db_load(): old database, making up flags %s", bitmask_to_flags(~their_ca_all & ca_all, chanacs_flags));
+					}
 
 					/* Grant +h if they have +o,
 					 * the file does not have +h enabled
