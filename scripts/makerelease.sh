@@ -50,7 +50,7 @@ rm -rf autogen.sh autom4te.cache
 
 # Run application specific instructions here.
 if [ -x "$WRKDIR/application.sh" ]; then
-	source $WRKDIR/application.sh
+	. $WRKDIR/application.sh
 fi
 
 cd ..
