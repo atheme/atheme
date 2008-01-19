@@ -201,6 +201,10 @@ static unsigned int inspircd_server_login(void)
 	/* XXX is this REALLY necessary anymore? --nenolod */
 	sleep(3);
 
+	/* will be determined in CAPAB. */
+	ircd->uses_owner = FALSE;
+	ircd->uses_protect = FALSE;
+
 	ret = sts("SERVER %s %s 0 %s :%s", me.name, curr_uplink->pass, me.numeric, me.desc);
 	if (ret == 1)
 		return 1;
@@ -1111,9 +1115,6 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 {
 	int i, varc;
 	char *varv[256];
-
-	ircd->uses_owner = FALSE;
-	ircd->uses_protect = FALSE;
 
 	if (strcasecmp(parv[0], "START") == 0)
 	{
