@@ -21,8 +21,8 @@ ircd_t InspIRCd = {
         "$",                            /* TLD Prefix, used by Global. */
         TRUE,                           /* Whether or not we use IRCNet/TS6 UID */
         FALSE,                          /* Whether or not we use RCOMMAND */
-        FALSE,                          /* Whether or not we support channel owners. */
-        FALSE,                          /* Whether or not we support channel protection. */
+        TRUE,                          /* Whether or not we support channel owners. */
+        TRUE,                          /* Whether or not we support channel protection. */
         TRUE,                           /* Whether or not we support halfops. */
 		FALSE,				/* Whether or not we use P10 */
 		TRUE,				/* Whether or not we use vHosts. */
@@ -1111,6 +1111,9 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 {
 	int i, varc;
 	char *varv[256];
+
+	ircd->uses_owner = FALSE;
+	ircd->uses_protect = FALSE;
 
 	if (strcasecmp(parv[0], "START") == 0)
 	{
