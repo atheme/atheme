@@ -1,3 +1,7 @@
+Atheme Services 3.0.2 Release Notes
+===================================
+- Fix use of chanserv/{owner, protect} modules with InspIRCd.
+
 Atheme Services 3.0.1 Release Notes
 ===================================
 - Fix a bug causing problems when a user changes the case of their nick.
