@@ -375,7 +375,7 @@ boolean_t user_changenick(user_t *u, const char *nick, time_t ts)
 	user_t *u2;
 
 	u2 = user_find_named(nick);
-	if (u2 != NULL)
+	if (u2 != NULL && u2 != u)
 	{
 		if (u->server == me.me)
 		{
