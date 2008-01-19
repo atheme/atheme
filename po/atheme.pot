@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: bugs@atheme.org\n"
-"POT-Creation-Date: 2007-12-27 23:59+0100\n"
+"POT-Creation-Date: 2008-01-19 02:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,17 +16,17 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: modules/backend/flatfile.c:106 modules/backend/flatfile.c:107
+#: modules/backend/flatfile.c:107 modules/backend/flatfile.c:108
 #, c-format
 msgid "DATABASE ERROR: db_save(): cannot create atheme.db.new: %s"
 msgstr ""
 
-#: modules/backend/flatfile.c:251 modules/backend/flatfile.c:252
+#: modules/backend/flatfile.c:267 modules/backend/flatfile.c:268
 #, c-format
 msgid "DATABASE ERROR: db_save(): cannot write to atheme.db.new: %s"
 msgstr ""
 
-#: modules/backend/flatfile.c:263 modules/backend/flatfile.c:264
+#: modules/backend/flatfile.c:279 modules/backend/flatfile.c:280
 #, c-format
 msgid "DATABASE ERROR: db_save(): cannot rename atheme.db.new to atheme.db: %s"
 msgstr ""
@@ -60,40 +60,27 @@ msgstr ""
 #: modules/chanserv/ban.c:159 modules/chanserv/clear_bans.c:74
 #: modules/chanserv/clear_users.c:60 modules/chanserv/close.c:96
 #: modules/chanserv/count.c:64 modules/chanserv/drop.c:63
-#: modules/chanserv/fflags.c:64 modules/chanserv/fflags.c:96
-#: modules/chanserv/flags.c:115 modules/chanserv/flags.c:188
-#: modules/chanserv/flags.c:258 modules/chanserv/ftransfer.c:61
+#: modules/chanserv/fflags.c:64 modules/chanserv/flags.c:115
 #: modules/chanserv/ftransfer.c:67 modules/chanserv/getkey.c:57
 #: modules/chanserv/halfop.c:82 modules/chanserv/halfop.c:163
 #: modules/chanserv/hold.c:63 modules/chanserv/info.c:70
 #: modules/chanserv/invite.c:63 modules/chanserv/kick.c:71
-#: modules/chanserv/kick.c:133 modules/chanserv/mark.c:64
-#: modules/chanserv/op.c:69 modules/chanserv/op.c:144
+#: modules/chanserv/kick.c:139 modules/chanserv/mark.c:64
+#: modules/chanserv/op.c:76 modules/chanserv/op.c:151
 #: modules/chanserv/recover.c:64 modules/chanserv/set.c:194
 #: modules/chanserv/set.c:244 modules/chanserv/set.c:285
-#: modules/chanserv/set.c:351 modules/chanserv/set.c:357
-#: modules/chanserv/set.c:504 modules/chanserv/set.c:721
-#: modules/chanserv/set.c:778 modules/chanserv/set.c:835
-#: modules/chanserv/set.c:892 modules/chanserv/set.c:981
-#: modules/chanserv/set.c:1037 modules/chanserv/set.c:1100
-#: modules/chanserv/set.c:1168 modules/chanserv/status.c:59
-#: modules/chanserv/template.c:81 modules/chanserv/topic.c:77
-#: modules/chanserv/topic.c:135 modules/chanserv/topic.c:204
-#: modules/chanserv/voice.c:69 modules/chanserv/voice.c:136
-#: modules/chanserv/why.c:76 modules/chanserv/xop.c:121
-#: modules/chanserv/xop.c:522 modules/memoserv/forward.c:92
-#: modules/memoserv/ignore.c:120 modules/nickserv/access.c:237
-#: modules/nickserv/drop.c:65 modules/nickserv/freeze.c:61
-#: modules/nickserv/hold.c:56 modules/nickserv/info.c:63
-#: modules/nickserv/listchans.c:70 modules/nickserv/logout.c:60
-#: modules/nickserv/mark.c:56 modules/nickserv/resetpass.c:56
-#: modules/nickserv/return.c:59 modules/nickserv/sendpass.c:57
-#: modules/nickserv/setpass.c:68 modules/nickserv/taxonomy.c:56
-#: modules/nickserv/verify.c:64 modules/nickserv/verify.c:171
-#: modules/nickserv/vhost.c:108 modules/operserv/soper.c:148
-#: modules/operserv/soper.c:206
+#: modules/chanserv/set.c:357 modules/chanserv/set.c:504
+#: modules/chanserv/set.c:721 modules/chanserv/set.c:778
+#: modules/chanserv/set.c:835 modules/chanserv/set.c:892
+#: modules/chanserv/set.c:981 modules/chanserv/set.c:1037
+#: modules/chanserv/set.c:1100 modules/chanserv/set.c:1168
+#: modules/chanserv/status.c:59 modules/chanserv/template.c:81
+#: modules/chanserv/topic.c:77 modules/chanserv/topic.c:135
+#: modules/chanserv/topic.c:204 modules/chanserv/voice.c:76
+#: modules/chanserv/voice.c:143 modules/chanserv/why.c:76
+#: modules/chanserv/xop.c:121 modules/chanserv/xop.c:522
 #, c-format
-msgid "%s is not registered."
+msgid "Channel %s is not registered."
 msgstr ""
 
 #: modules/chanserv/akick.c:104 modules/chanserv/ban.c:93
@@ -101,12 +88,12 @@ msgstr ""
 #: modules/chanserv/count.c:81 modules/chanserv/flags.c:121
 #: modules/chanserv/getkey.c:63 modules/chanserv/halfop.c:94
 #: modules/chanserv/halfop.c:175 modules/chanserv/invite.c:69
-#: modules/chanserv/kick.c:83 modules/chanserv/op.c:81
-#: modules/chanserv/op.c:156 modules/chanserv/recover.c:70
+#: modules/chanserv/kick.c:83 modules/chanserv/op.c:88
+#: modules/chanserv/op.c:163 modules/chanserv/recover.c:70
 #: modules/chanserv/status.c:67 modules/chanserv/template.c:100
 #: modules/chanserv/template.c:160 modules/chanserv/topic.c:90
 #: modules/chanserv/topic.c:154 modules/chanserv/topic.c:223
-#: modules/chanserv/voice.c:75 modules/chanserv/why.c:94
+#: modules/chanserv/voice.c:82 modules/chanserv/why.c:94
 #: modules/chanserv/xop.c:127 modules/chanserv/xop.c:528
 #, c-format
 msgid "%s is closed."
@@ -120,16 +107,16 @@ msgstr ""
 #: modules/chanserv/getkey.c:69 modules/chanserv/halfop.c:88
 #: modules/chanserv/halfop.c:116 modules/chanserv/halfop.c:169
 #: modules/chanserv/invite.c:75 modules/chanserv/kick.c:77
-#: modules/chanserv/kick.c:139 modules/chanserv/op.c:75
-#: modules/chanserv/op.c:103 modules/chanserv/op.c:150
+#: modules/chanserv/kick.c:145 modules/chanserv/op.c:82
+#: modules/chanserv/op.c:110 modules/chanserv/op.c:157
 #: modules/chanserv/recover.c:82 modules/chanserv/template.c:93
 #: modules/chanserv/topic.c:96 modules/chanserv/topic.c:148
-#: modules/chanserv/topic.c:217 modules/chanserv/voice.c:81
-#: modules/chanserv/voice.c:142 modules/chanserv/why.c:87
+#: modules/chanserv/topic.c:217 modules/chanserv/voice.c:88
+#: modules/chanserv/voice.c:149 modules/chanserv/why.c:87
 #: modules/chanserv/xop.c:151 modules/chanserv/xop.c:157
 #: modules/chanserv/xop.c:175 modules/chanserv/xop.c:181
 #: modules/chanserv/xop.c:195 modules/chanserv/xop.c:534
-#: modules/operserv/soper.c:67 src/commandtree.c:126
+#: modules/operserv/soper.c:70 src/commandtree.c:126
 msgid "You are not authorized to perform this operation."
 msgstr ""
 
@@ -210,7 +197,7 @@ msgstr ""
 #: modules/chanserv/set.c:179 modules/memoserv/ignore.c:88
 #: modules/operserv/akill.c:110 modules/operserv/clones.c:267
 #: modules/operserv/ignore.c:83 modules/operserv/rwatch.c:204
-#: modules/operserv/soper.c:81 src/commandtree.c:145
+#: modules/operserv/soper.c:84 src/commandtree.c:145
 #, c-format
 msgid "Invalid command. Use /%s%s help for a command listing."
 msgstr ""
@@ -427,6 +414,23 @@ msgstr ""
 msgid "Invalid template name given, use /%s%s TEMPLATE %s for a list"
 msgstr ""
 
+#: modules/chanserv/fflags.c:96 modules/chanserv/flags.c:188
+#: modules/chanserv/flags.c:258 modules/chanserv/ftransfer.c:61
+#: modules/chanserv/set.c:351 modules/memoserv/forward.c:92
+#: modules/memoserv/ignore.c:121 modules/nickserv/access.c:237
+#: modules/nickserv/drop.c:65 modules/nickserv/freeze.c:61
+#: modules/nickserv/hold.c:56 modules/nickserv/info.c:83
+#: modules/nickserv/listchans.c:70 modules/nickserv/logout.c:60
+#: modules/nickserv/mark.c:67 modules/nickserv/resetpass.c:56
+#: modules/nickserv/return.c:59 modules/nickserv/sendpass.c:57
+#: modules/nickserv/setpass.c:68 modules/nickserv/taxonomy.c:56
+#: modules/nickserv/verify.c:64 modules/nickserv/verify.c:171
+#: modules/nickserv/vhost.c:108 modules/operserv/soper.c:151
+#: modules/operserv/soper.c:209 modules/operserv/soper.c:256
+#, c-format
+msgid "%s is not registered."
+msgstr ""
+
 #: modules/chanserv/fflags.c:108 modules/chanserv/flags.c:272
 msgid "You may not remove the last founder."
 msgstr ""
@@ -572,24 +576,24 @@ msgid "Syntax: HALFOP <#channel> [nickname]"
 msgstr ""
 
 #: modules/chanserv/halfop.c:105 modules/chanserv/halfop.c:186
-#: modules/chanserv/kick.c:90 modules/chanserv/kick.c:146
-#: modules/chanserv/op.c:92 modules/chanserv/op.c:167
-#: modules/chanserv/voice.c:92 modules/chanserv/voice.c:153
+#: modules/chanserv/kick.c:90 modules/chanserv/kick.c:152
+#: modules/chanserv/op.c:99 modules/chanserv/op.c:174
+#: modules/chanserv/voice.c:99 modules/chanserv/voice.c:160
 #: modules/chanserv/why.c:67 modules/nickserv/ghost.c:71
 #, c-format
 msgid "%s is not online."
 msgstr ""
 
-#: modules/chanserv/halfop.c:117 modules/chanserv/op.c:104
+#: modules/chanserv/halfop.c:117 modules/chanserv/op.c:111
 #, c-format
 msgid ""
 "%s has the SECURE option enabled, and %s does not have appropriate access."
 msgstr ""
 
 #: modules/chanserv/halfop.c:124 modules/chanserv/halfop.c:197
-#: modules/chanserv/kick.c:101 modules/chanserv/kick.c:157
-#: modules/chanserv/op.c:111 modules/chanserv/op.c:178
-#: modules/chanserv/voice.c:103 modules/chanserv/voice.c:164
+#: modules/chanserv/kick.c:101 modules/chanserv/kick.c:163
+#: modules/chanserv/op.c:118 modules/chanserv/op.c:185
+#: modules/chanserv/voice.c:110 modules/chanserv/voice.c:171
 #, c-format
 msgid "%s is not on %s."
 msgstr ""
@@ -617,7 +621,7 @@ msgstr ""
 #: modules/chanserv/help.c:56 modules/chanserv/help.c:100
 #: modules/gameserv/help.c:48 modules/memoserv/help.c:48
 #: modules/nickserv/help.c:47 modules/nickserv/help.c:84
-#: modules/operserv/help.c:55 src/help.c:103 src/help.c:141
+#: modules/operserv/help.c:55 src/help.c:107 src/help.c:145
 #, c-format
 msgid "***** %s Help *****"
 msgstr ""
@@ -674,7 +678,7 @@ msgstr ""
 #: modules/chanserv/help.c:94 modules/chanserv/help.c:102
 #: modules/gameserv/help.c:57 modules/memoserv/help.c:57
 #: modules/nickserv/help.c:78 modules/nickserv/help.c:86
-#: modules/operserv/help.c:67 src/help.c:137 src/help.c:145
+#: modules/operserv/help.c:67 src/help.c:141 src/help.c:149
 msgid "***** End of Help *****"
 msgstr ""
 
@@ -719,7 +723,7 @@ msgstr ""
 msgid "%s has been closed down by the %s administration."
 msgstr ""
 
-#: modules/chanserv/info.c:87 modules/nickserv/info.c:85
+#: modules/chanserv/info.c:87 modules/nickserv/info.c:105
 #: modules/operserv/modinspect.c:70
 #, c-format
 msgid "Information on %s:"
@@ -730,7 +734,7 @@ msgstr ""
 msgid "Founder    : %s"
 msgstr ""
 
-#: modules/chanserv/info.c:92 modules/nickserv/info.c:90
+#: modules/chanserv/info.c:92 modules/nickserv/info.c:110
 #, c-format
 msgid "Registered : %s (%s ago)"
 msgstr ""
@@ -754,12 +758,12 @@ msgstr ""
 msgid "Mode lock  : %s%s"
 msgstr ""
 
-#: modules/chanserv/info.c:292 modules/nickserv/info.c:261
+#: modules/chanserv/info.c:292 modules/nickserv/info.c:281
 #, c-format
 msgid "Flags      : %s"
 msgstr ""
 
-#: modules/chanserv/info.c:309 modules/nickserv/info.c:317
+#: modules/chanserv/info.c:309 modules/nickserv/info.c:337
 #, c-format
 msgid "%s was MARKED by %s on %s (%s)"
 msgstr ""
@@ -814,22 +818,27 @@ msgstr ""
 msgid "Syntax: KICK <#channel> <nickname> [reason]"
 msgstr ""
 
-#: modules/chanserv/kick.c:109
+#: modules/chanserv/kick.c:107 modules/chanserv/kick.c:169
+#, c-format
+msgid "%s is protected from kicks; you cannot kick them."
+msgstr ""
+
+#: modules/chanserv/kick.c:115
 #, c-format
 msgid "%s has been kicked from %s."
 msgstr ""
 
-#: modules/chanserv/kick.c:126
+#: modules/chanserv/kick.c:132
 msgid "Syntax: KICKBAN <#channel> <nickname> [reason]"
 msgstr ""
 
-#: modules/chanserv/kick.c:165
+#: modules/chanserv/kick.c:177
 #, c-format
 msgid ""
 "To avoid rejoin, %d ban exception(s) matching %s have been removed from %s."
 msgstr ""
 
-#: modules/chanserv/kick.c:169
+#: modules/chanserv/kick.c:181
 #, c-format
 msgid "%s has been kickbanned from %s."
 msgstr ""
@@ -876,22 +885,23 @@ msgstr ""
 msgid "Usage: MARK <#channel> ON <note>"
 msgstr ""
 
-#: modules/chanserv/mark.c:79 modules/nickserv/mark.c:71
+#: modules/chanserv/mark.c:79 modules/nickserv/mark.c:82
 #, c-format
 msgid "%s is already marked."
 msgstr ""
 
-#: modules/chanserv/mark.c:89 modules/nickserv/mark.c:81
+#: modules/chanserv/mark.c:89 modules/nickserv/mark.c:93
 #, c-format
 msgid "%s is now marked."
 msgstr ""
 
-#: modules/chanserv/mark.c:95 modules/nickserv/mark.c:87
+#: modules/chanserv/mark.c:95 modules/nickserv/mark.c:99
 #, c-format
 msgid "%s is not marked."
 msgstr ""
 
-#: modules/chanserv/mark.c:105 modules/nickserv/mark.c:97
+#: modules/chanserv/mark.c:105 modules/nickserv/mark.c:64
+#: modules/nickserv/mark.c:110
 #, c-format
 msgid "%s is now unmarked."
 msgstr ""
@@ -908,16 +918,16 @@ msgstr ""
 msgid "Syntax: OP <#channel> [nickname]"
 msgstr ""
 
-#: modules/chanserv/op.c:123
+#: modules/chanserv/op.c:130
 #, c-format
 msgid "%s has been opped on %s."
 msgstr ""
 
-#: modules/chanserv/op.c:137
+#: modules/chanserv/op.c:144
 msgid "Syntax: DEOP <#channel> [nickname]"
 msgstr ""
 
-#: modules/chanserv/op.c:190
+#: modules/chanserv/op.c:197
 #, c-format
 msgid "%s has been deopped on %s."
 msgstr ""
@@ -1484,16 +1494,16 @@ msgstr ""
 msgid "Syntax: VOICE <#channel> [nickname]"
 msgstr ""
 
-#: modules/chanserv/voice.c:115
+#: modules/chanserv/voice.c:122
 #, c-format
 msgid "%s has been voiced on %s."
 msgstr ""
 
-#: modules/chanserv/voice.c:129
+#: modules/chanserv/voice.c:136
 msgid "Syntax: DEVOICE <#channel> [nickname]"
 msgstr ""
 
-#: modules/chanserv/voice.c:176
+#: modules/chanserv/voice.c:183
 #, c-format
 msgid "%s has been devoiced on %s."
 msgstr ""
@@ -1893,17 +1903,12 @@ msgstr ""
 msgid "Too many memos; please wait a while and try again"
 msgstr ""
 
-#: modules/memoserv/forward.c:152 modules/memoserv/forward.c:203
+#: modules/memoserv/forward.c:162 modules/memoserv/forward.c:209
 #, c-format
 msgid "The memo has been successfully forwarded to %s."
 msgstr ""
 
-#: modules/memoserv/forward.c:183 modules/memoserv/send.c:167
-#, c-format
-msgid "Your memo has been emailed to %s."
-msgstr ""
-
-#: modules/memoserv/forward.c:196 modules/memoserv/send.c:181
+#: modules/memoserv/forward.c:202 modules/memoserv/send.c:188
 #, c-format
 msgid ""
 "%s is currently online, and you may talk directly, by sending a private "
@@ -1939,51 +1944,51 @@ msgstr ""
 msgid "Syntax: IGNORE ADD|DEL|LIST|CLEAR [account]"
 msgstr ""
 
-#: modules/memoserv/ignore.c:106 modules/memoserv/ignore.c:161
+#: modules/memoserv/ignore.c:107 modules/memoserv/ignore.c:163
 msgid "Syntax: IGNORE ADD|DEL|LIST|CLEAR <account>"
 msgstr ""
 
-#: modules/memoserv/ignore.c:113
+#: modules/memoserv/ignore.c:114
 msgid "Silly wabbit, you can't ignore yourself."
 msgstr ""
 
-#: modules/memoserv/ignore.c:127
+#: modules/memoserv/ignore.c:129
 msgid "Your ignore list is full, please DEL an account."
 msgstr ""
 
-#: modules/memoserv/ignore.c:139
+#: modules/memoserv/ignore.c:141
 #, c-format
 msgid "Account %s is already in your ignore list."
 msgstr ""
 
-#: modules/memoserv/ignore.c:148
+#: modules/memoserv/ignore.c:150
 #, c-format
 msgid "Account %s added to your ignore list."
 msgstr ""
 
-#: modules/memoserv/ignore.c:174
+#: modules/memoserv/ignore.c:176
 #, c-format
 msgid "Account %s removed from ignore list."
 msgstr ""
 
-#: modules/memoserv/ignore.c:183
+#: modules/memoserv/ignore.c:185
 #, c-format
 msgid "%s is not in your ignore list."
 msgstr ""
 
-#: modules/memoserv/ignore.c:193
+#: modules/memoserv/ignore.c:195
 msgid "Ignore list already empty."
 msgstr ""
 
-#: modules/memoserv/ignore.c:205
+#: modules/memoserv/ignore.c:207
 msgid "Ignore list cleared."
 msgstr ""
 
-#: modules/memoserv/ignore.c:216
+#: modules/memoserv/ignore.c:218
 msgid "Ignore list:"
 msgstr ""
 
-#: modules/memoserv/ignore.c:228
+#: modules/memoserv/ignore.c:230
 msgid "list empty"
 msgstr ""
 
@@ -2059,21 +2064,21 @@ msgid ""
 "You have used this command too many times; please wait a while and try again."
 msgstr ""
 
-#: modules/memoserv/send.c:105
+#: modules/memoserv/send.c:103
 msgid "Your memo contains invalid characters."
 msgstr ""
 
-#: modules/memoserv/send.c:132
+#: modules/memoserv/send.c:133
 #, c-format
 msgid "%s's inbox is full"
 msgstr ""
 
-#: modules/memoserv/send.c:144 modules/memoserv/send.c:189
+#: modules/memoserv/send.c:155 modules/memoserv/send.c:196
 #, c-format
 msgid "The memo has been successfully sent to %s."
 msgstr ""
 
-#: modules/memoserv/send.c:197
+#: modules/memoserv/send.c:204
 msgid "Channel memos are administratively disabled."
 msgstr ""
 
@@ -2249,7 +2254,7 @@ msgid "Syntax: RELEASE <nickname> [password]"
 msgstr ""
 
 #: modules/nickserv/enforce.c:201 modules/nickserv/ghost.c:106
-#: modules/nickserv/identify.c:302
+#: modules/nickserv/identify.c:305
 #, c-format
 msgid "Invalid password for %s."
 msgstr ""
@@ -2445,104 +2450,109 @@ msgstr ""
 msgid "There are already %d sessions logged in to %s (maximum allowed: %d)."
 msgstr ""
 
-#: modules/nickserv/identify.c:203
+#: modules/nickserv/identify.c:206
 #, c-format
 msgid "%d failed %s since %s."
 msgstr ""
 
-#: modules/nickserv/identify.c:213
+#: modules/nickserv/identify.c:216
 #, c-format
 msgid "Last failed attempt from: %s on %s."
 msgstr ""
 
-#: modules/nickserv/info.c:57
+#: modules/nickserv/info.c:58
 msgid "Syntax: INFO <nickname>"
 msgstr ""
 
-#: modules/nickserv/info.c:83
+#: modules/nickserv/info.c:80
+#, c-format
+msgid "%s is not registered anymore, but was marked by %s on %s (%s)."
+msgstr ""
+
+#: modules/nickserv/info.c:103
 #, c-format
 msgid "Information on %s (account %s):"
 msgstr ""
 
-#: modules/nickserv/info.c:96
+#: modules/nickserv/info.c:116
 #, c-format
 msgid "User reg.  : %s (%s ago)"
 msgstr ""
 
-#: modules/nickserv/info.c:111
+#: modules/nickserv/info.c:131
 #, c-format
 msgid "Last addr  : %s"
 msgstr ""
 
-#: modules/nickserv/info.c:116
+#: modules/nickserv/info.c:136
 #, c-format
 msgid "Real addr  : %s"
 msgstr ""
 
-#: modules/nickserv/info.c:121 modules/nickserv/info.c:182
+#: modules/nickserv/info.c:141 modules/nickserv/info.c:202
 msgid "Last seen  : now"
 msgstr ""
 
-#: modules/nickserv/info.c:127 modules/nickserv/info.c:142
+#: modules/nickserv/info.c:147 modules/nickserv/info.c:162
 #, c-format
 msgid "Last seen  : (about %d weeks ago)"
 msgstr ""
 
-#: modules/nickserv/info.c:129 modules/nickserv/info.c:144
+#: modules/nickserv/info.c:149 modules/nickserv/info.c:164
 #, c-format
 msgid "Last seen  : %s (%s ago)"
 msgstr ""
 
-#: modules/nickserv/info.c:149
+#: modules/nickserv/info.c:169
 #, c-format
 msgid "User seen  : (about %d weeks ago)"
 msgstr ""
 
-#: modules/nickserv/info.c:151
+#: modules/nickserv/info.c:171
 #, c-format
 msgid "User seen  : %s (%s ago)"
 msgstr ""
 
-#: modules/nickserv/info.c:164 modules/nickserv/info.c:172
+#: modules/nickserv/info.c:184 modules/nickserv/info.c:192
 #, c-format
 msgid "Logins from: %s"
 msgstr ""
 
-#: modules/nickserv/info.c:180
+#: modules/nickserv/info.c:200
 msgid "User seen  : now"
 msgstr ""
 
-#: modules/nickserv/info.c:195 modules/nickserv/info.c:203
+#: modules/nickserv/info.c:215 modules/nickserv/info.c:223
 #, c-format
 msgid "Nicks      : %s"
 msgstr ""
 
-#: modules/nickserv/info.c:209
+#: modules/nickserv/info.c:229
 #, c-format
 msgid "Email      : %s%s"
 msgstr ""
 
-#: modules/nickserv/info.c:265
+#: modules/nickserv/info.c:285
 #, c-format
 msgid "Oper class : %s"
 msgstr ""
 
-#: modules/nickserv/info.c:281
+#: modules/nickserv/info.c:301
 #, c-format
 msgid "Channels   : %d founder, %d other"
 msgstr ""
 
-#: modules/nickserv/info.c:299
+#: modules/nickserv/info.c:319
 #, c-format
 msgid "%s was FROZEN by %s on %s (%s)"
 msgstr ""
 
-#: modules/nickserv/info.c:321
+#: modules/nickserv/info.c:341
 #, c-format
 msgid "%s has not completed registration verification"
 msgstr ""
 
-#: modules/nickserv/info.c:328 modules/operserv/modinspect.c:77
+#: modules/nickserv/info.c:348 modules/operserv/modinspect.c:77
 msgid "*** End of Info ***"
 msgstr ""
 
@@ -2707,11 +2717,11 @@ msgstr ""
 msgid "Adds a note to a user."
 msgstr ""
 
-#: modules/nickserv/mark.c:50 modules/nickserv/mark.c:102
+#: modules/nickserv/mark.c:51 modules/nickserv/mark.c:115
 msgid "Usage: MARK <target> <ON|OFF> [note]"
 msgstr ""
 
-#: modules/nickserv/mark.c:65
+#: modules/nickserv/mark.c:76
 msgid "Usage: MARK <target> ON <note>"
 msgstr ""
 
@@ -3977,101 +3987,127 @@ msgstr ""
 msgid "Shuts down services."
 msgstr ""
 
-#: modules/operserv/soper.c:25
+#: modules/operserv/soper.c:26
 msgid "Shows and changes services operator privileges."
 msgstr ""
 
-#: modules/operserv/soper.c:27
+#: modules/operserv/soper.c:28
 msgid "Lists services operators."
 msgstr ""
 
-#: modules/operserv/soper.c:28
+#: modules/operserv/soper.c:29
 msgid "Lists operclasses."
 msgstr ""
 
-#: modules/operserv/soper.c:29
+#: modules/operserv/soper.c:30
 msgid "Grants services operator privileges to an account."
 msgstr ""
 
-#: modules/operserv/soper.c:30
+#: modules/operserv/soper.c:31
 msgid "Removes services operator privileges from an account."
 msgstr ""
 
-#: modules/operserv/soper.c:74
+#: modules/operserv/soper.c:32
+msgid "Changes a password for services operator privileges."
+msgstr ""
+
+#: modules/operserv/soper.c:77
 msgid "Syntax: SOPER LIST|LISTCLASS|ADD|DEL [account] [operclass]"
 msgstr ""
 
-#: modules/operserv/soper.c:95
+#: modules/operserv/soper.c:98
 msgid "Account"
 msgstr ""
 
-#: modules/operserv/soper.c:95
+#: modules/operserv/soper.c:98
 msgid "Type"
 msgstr ""
 
-#: modules/operserv/soper.c:95
+#: modules/operserv/soper.c:98
 msgid "Operclass"
 msgstr ""
 
-#: modules/operserv/soper.c:112
+#: modules/operserv/soper.c:115
 msgid "End of services operator list"
 msgstr ""
 
-#: modules/operserv/soper.c:121
+#: modules/operserv/soper.c:124
 msgid "Oper class list:"
 msgstr ""
 
-#: modules/operserv/soper.c:130
+#: modules/operserv/soper.c:133
 msgid "End of oper class list"
 msgstr ""
 
-#: modules/operserv/soper.c:141
+#: modules/operserv/soper.c:144
 msgid "Syntax: SOPER ADD <account> <operclass>"
 msgstr ""
 
-#: modules/operserv/soper.c:154 modules/operserv/soper.c:212
+#: modules/operserv/soper.c:157 modules/operserv/soper.c:215
+#: modules/operserv/soper.c:262
 #, c-format
 msgid ""
 "You may not modify %s's operclass as it is defined in the configuration file."
 msgstr ""
 
-#: modules/operserv/soper.c:161 modules/operserv/specs.c:128
+#: modules/operserv/soper.c:164 modules/operserv/specs.c:128
 #, c-format
 msgid "No such oper class %s."
 msgstr ""
 
-#: modules/operserv/soper.c:166
+#: modules/operserv/soper.c:169
 #, c-format
 msgid "Oper class for %s is already set to %s."
 msgstr ""
 
-#: modules/operserv/soper.c:172
+#: modules/operserv/soper.c:175
 #, c-format
 msgid "Oper class %s has more privileges than you."
 msgstr ""
 
-#: modules/operserv/soper.c:177 modules/operserv/soper.c:223
+#: modules/operserv/soper.c:180 modules/operserv/soper.c:226
+#: modules/operserv/soper.c:274
 #, c-format
 msgid "Oper class for %s is set to %s which you are not authorized to change."
 msgstr ""
 
-#: modules/operserv/soper.c:189
+#: modules/operserv/soper.c:192
 #, c-format
 msgid "Set class for %s to %s."
 msgstr ""
 
-#: modules/operserv/soper.c:199
+#: modules/operserv/soper.c:202
 msgid "Syntax: SOPER DEL <account>"
 msgstr ""
 
-#: modules/operserv/soper.c:218
+#: modules/operserv/soper.c:221 modules/operserv/soper.c:268
 #, c-format
 msgid "%s does not have an operclass set."
 msgstr ""
 
-#: modules/operserv/soper.c:233
+#: modules/operserv/soper.c:236
 #, c-format
 msgid "Removed class for %s."
+msgstr ""
+
+#: modules/operserv/soper.c:249
+msgid "Syntax: SOPER SETPASS <account> [password]"
+msgstr ""
+
+#: modules/operserv/soper.c:284
+#, c-format
+msgid ""
+"Refusing to set a services operator password if %s IDENTIFY is not loaded."
+msgstr ""
+
+#: modules/operserv/soper.c:294
+#, c-format
+msgid "Set password for %s to %s."
+msgstr ""
+
+#: modules/operserv/soper.c:314
+#, c-format
+msgid "Cleared password for %s."
 msgstr ""
 
 #: modules/operserv/specs.c:21
@@ -4173,22 +4209,38 @@ msgstr ""
 msgid "Invalid parameters for %s."
 msgstr ""
 
-#: src/account.c:196
+#: src/account.c:204
 #, c-format
 msgid "SUCCESSION: %s -> %s from %s"
 msgstr ""
 
-#: src/account.c:213
+#: src/account.c:221
 #, c-format
 msgid "DELETE: %s from %s"
 msgstr ""
 
-#: src/account.c:1477
+#: src/account.c:761
+#, c-format
+msgid ""
+"Not restoring mark \"%s\" for account %s (name %s) which is already marked"
+msgstr ""
+
+#: src/account.c:762
+#, c-format
+msgid "MARK:FORGET: \"%s\" for %s (%s) (already marked)"
+msgstr ""
+
+#: src/account.c:768
+#, c-format
+msgid "MARK:RESTORE: \"%s\" for %s (%s)"
+msgstr ""
+
+#: src/account.c:1684
 #, c-format
 msgid "EXPIRE: %s from %s "
 msgstr ""
 
-#: src/account.c:1524 src/account.c:1557
+#: src/account.c:1731 src/account.c:1764
 #, c-format
 msgid "EXPIRE: %s from %s"
 msgstr ""
@@ -4210,12 +4262,12 @@ msgstr ""
 msgid "Rejecting email for %s[%s@%s] due to too high load (type %d to %s <%s>)"
 msgstr ""
 
-#: src/help.c:39 src/help.c:148
+#: src/help.c:39 src/help.c:152
 #, c-format
 msgid "No help available for %s."
 msgstr ""
 
-#: src/help.c:99
+#: src/help.c:103
 #, c-format
 msgid "Could not get help file for %s."
 msgstr ""
@@ -4225,27 +4277,32 @@ msgstr ""
 msgid "MODLOAD:ERROR: loading module %s: %s"
 msgstr ""
 
-#: src/module.c:96
+#: src/module.c:93
 #, c-format
 msgid "MODLOAD:ERROR: Module %s is not a valid atheme module."
 msgstr ""
 
-#: src/module.c:133
+#: src/module.c:104
+#, c-format
+msgid "MODLOAD:ERROR: Module %s already exists while loading %s."
+msgstr ""
+
+#: src/module.c:141
 #, c-format
 msgid "MODLOAD:ERROR: Init failed while loading module %s"
 msgstr ""
 
-#: src/module.c:145
+#: src/module.c:153
 #, c-format
 msgid "Module %s loaded [at 0x%lx; MAPI version %d]"
 msgstr ""
 
-#: src/module.c:146
+#: src/module.c:154
 #, c-format
 msgid "MODLOAD: %s [at 0x%lx; MAPI version %d]"
 msgstr ""
 
-#: src/module.c:270
+#: src/module.c:278
 #, c-format
 msgid "Module %s unloaded."
 msgstr ""
@@ -4260,29 +4317,29 @@ msgstr ""
 msgid "AKILL expired on %s@%s, set by %s"
 msgstr ""
 
-#: src/ptasks.c:618
+#: src/ptasks.c:619
 #, c-format
 msgid "Services kill fight (%s -> %s), shutting down!"
 msgstr ""
 
-#: src/ptasks.c:619
+#: src/ptasks.c:620
 #, c-format
 msgid "ERROR: Services kill fight (%s -> %s), shutting down!"
 msgstr ""
 
-#: src/ptasks.c:708
+#: src/ptasks.c:709
 msgid "You are on services ignore. You may not use any service."
 msgstr ""
 
-#: src/ptasks.c:754 src/ptasks.c:769
+#: src/ptasks.c:755 src/ptasks.c:770
 msgid "You have triggered services flood protection."
 msgstr ""
 
-#: src/ptasks.c:755
+#: src/ptasks.c:756
 msgid "This is your first offense. You will be ignored for 30 seconds."
 msgstr ""
 
-#: src/ptasks.c:770
+#: src/ptasks.c:771
 msgid "This is your last warning. You will be ignored for 30 seconds."
 msgstr ""
 
@@ -4325,17 +4382,17 @@ msgstr ""
 msgid "Got SIGUSR2; restarting."
 msgstr ""
 
-#: src/users.c:244
+#: src/users.c:302
 #, c-format
 msgid "user_find(): found user %s by nick!"
 msgstr ""
 
-#: src/services.c:349
+#: src/services.c:371
 #, c-format
 msgid "Account %s dropped, forcing logout"
 msgstr ""
 
-#: src/services.c:362
+#: src/services.c:384
 #, c-format
 msgid "Login to account %s seems invalid, forcing logout"
 msgstr ""
