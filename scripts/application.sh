@@ -1,5 +1,5 @@
 #!/bin/sh
-# application.sh: Special package building rules for atheme-services.
+# application.sh: Special package building rules for audacious.
 #
 # Copyright (c) 2007 atheme.org
 #
@@ -24,9 +24,10 @@ if [ "x$TIP" = "x" ]; then
 	exit
 fi
 
-# Services wants the hg tip to be in include/serno.h.
-echo "[atheme-services] Generating include/serno.h for tip $TIP."
-cat << _EOF_ > include/serno.h
+# Audacious wants the hg tip to be in src/audacious/build_stamp.c
+echo "[audacious] Generating src/audacious/build_stamp.c for tip $TIP."
+cat << _EOF_ > src/audacious/build_stamp.c
 /* Generated automatically by makepackage. Any changes made here will be lost. */
-#define SERNO "$TIP"
+#include <glib.h>
+const gchar *svn_stamp = "$TIP";
 _EOF_
