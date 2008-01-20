@@ -121,12 +121,12 @@ void irc_parse(char *line)
                 }
 		if (si.s == me.me)
 		{
-                        slog(LG_INFO, "irc_parse(): got message supposedly from myself: %s", si.s->name);
+                        slog(LG_INFO, "irc_parse(): got message supposedly from myself %s: %s", si.s->name, coreLine);
                         return;
 		}
 		if (si.su != NULL && si.su->server == me.me)
 		{
-                        slog(LG_INFO, "irc_parse(): got message supposedly from my own client: %s", si.su->nick);
+                        slog(LG_INFO, "irc_parse(): got message supposedly from my own client %s: %s", si.su->nick, coreLine);
                         return;
 		}
 		si.smu = si.su != NULL ? si.su->myuser : NULL;
@@ -276,12 +276,12 @@ void p10_parse(char *line)
                 }
 		if (si.s == me.me)
 		{
-                        slog(LG_INFO, "p10_parse(): got message supposedly from myself: %s", si.s->name);
+                        slog(LG_INFO, "p10_parse(): got message supposedly from myself %s: %s", si.s->name, coreLine);
                         return;
 		}
 		if (si.su != NULL && si.su->server == me.me)
 		{
-                        slog(LG_INFO, "p10_parse(): got message supposedly from my own client: %s", si.su->nick);
+                        slog(LG_INFO, "p10_parse(): got message supposedly from my own client %s: %s", si.su->nick, coreLine);
                         return;
 		}
 		si.smu = si.su != NULL ? si.su->myuser : NULL;
