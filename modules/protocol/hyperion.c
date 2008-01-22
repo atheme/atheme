@@ -406,6 +406,7 @@ static void hyperion_ping_sts(void)
 static void hyperion_on_login(char *origin, char *user, char *wantedhost)
 {
 	user_t *u;
+	metadata_t *md;
 
 	if (!me.connected)
 		return;
@@ -414,9 +415,23 @@ static void hyperion_on_login(char *origin, char *user, char *wantedhost)
 	if (!u)
 		return;
 	if (use_svslogin)
+	{
+		/* XXX needed to avoid race */
+		if (!wantedhost && u->myuser)
+		{
+			md = metadata_find(u->myuser, METADATA_USER, "private:usercloak");
+			if (md)
+				wantedhost = md->value;
+		}
+		if (wantedhost && strlen(wantedhost) >= HOSTLEN)
+			wantedhost = NULL;
 		sts(":%s SVSLOGIN %s %s %s %s %s %s", me.name, u->server->name, origin, user, origin, u->user, wantedhost ? wantedhost : u->vhost);
-	/* we'll get a SIGNON confirming the changes later, no need
-	 * to change the fields yet */
+		/* we'll get a SIGNON confirming the changes later, no need
+		 * to change the fields yet */
+		/* XXX try to avoid a redundant SETHOST */
+		if (wantedhost)
+			strlcpy(u->vhost, wantedhost, HOSTLEN);
+	}
 
 	/* set +e if they're identified to the nick they are using */
 	if (should_reg_umode(u))
