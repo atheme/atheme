@@ -199,6 +199,15 @@ while (<CHANDB>) {
 			$lockedlimit = $args;
 		} elsif ($word eq 'KEY') {
 			$lockedkey = $args;
+		} elsif ($word eq 'FORWARD') {
+			$lockedext .= " f$args" if $args =~ /^#\S*$/;
+			$lockedext =~ s/^ //;
+		} elsif ($word eq 'THROTTLE') {
+			$lockedext .= " J$args" if $args =~ /^\d+,\d+$/;
+			$lockedext =~ s/^ //;
+		} elsif ($word eq 'DLINE') {
+			#$lockedext .= " D$args" if $args =~ /^\d+,\d+$/;
+			#$lockedext =~ s/^ //;
 		} elsif ($word eq 'MON') {
 			#$lockedon |= 0x4 if $args & 0x10; # l
 			#$lockedon |= 0x2 if $args & 0x20; # k
@@ -208,8 +217,16 @@ while (<CHANDB>) {
 			$lockedon |= 0x100 if $args & 0x200; # t
 			$lockedon |= 0x8 if $args & 0x400; # m
 			$lockedon |= 0x1 if $args & 0x800; # i
-			# regonly, specific to dancer-services
-			$lockedon |= 0x2000 if $args & 0x80000; # r
+			if ($istheia) {
+				$lockedon |= 0x1000 if $args & 0x1000; # c
+				$lockedon |= 0x8000 if $args & 0x4000; # g
+				$lockedon |= 0x20000 if $args & 0x20000; # P
+				$lockedon |= 0x80000 if $args & 0x40000; # Q
+				$lockedon |= 0x2000 if $args & 0x80000; # r
+				$lockedon |= 0x4000 if $args & 0x100000; # z
+				$lockedon |= 0x10000 if $args & 0x400000; # L
+				$lockedon |= 0x200000 if $args & 0x800000; # R
+			}
 			# anonops, hybrid7.0 only and often disabled
 			#$lockedon |= 'a' if $args & 0x4000; # a
 		} elsif ($word eq 'MOFF') {
@@ -221,8 +238,20 @@ while (<CHANDB>) {
 			$lockedoff |= 0x100 if $args & 0x200; # t
 			$lockedoff |= 0x8 if $args & 0x400; # m
 			$lockedoff |= 0x1 if $args & 0x800; # i
-			# regonly, specific to dancer-services
-			$lockedoff |= 0x2000 if $args & 0x80000; # r
+			if ($istheia) {
+				$lockedoff |= 0x1000 if $args & 0x1000; # c
+				$lockedoff |= 0x8000 if $args & 0x4000; # g
+				$lockedoff |= 0x20000 if $args & 0x20000; # P
+				$lockedoff |= 0x80000 if $args & 0x40000; # Q
+				$lockedoff |= 0x2000 if $args & 0x80000; # r
+				$lockedoff |= 0x4000 if $args & 0x100000; # z
+				$lockedoff |= 0x10000 if $args & 0x400000; # L
+				$lockedoff |= 0x200000 if $args & 0x800000; # R
+				$lockedext .= ' f' if $args & 0x2000; # f
+				$lockedext .= ' J' if $args & 0x10000; # J
+				#$lockedext .= ' D' if $args & 0x200000; # D
+				$lockedext =~ s/^ //;
+			}
 			# anonops, hybrid7.0 only and often disabled
 			#$lockedoff |= 'a' if $args & 0x4000; # a
 		} elsif ($word eq 'ENTRYMSG') {
@@ -244,6 +273,7 @@ while (<CHANDB>) {
 			print "MD C $chan private:entrymsg $entrymsg\n" if ($entrymsg ne '');
 			print "MD C $chan url $url\n" if ($url ne '');
 			print "MD C $chan email $email\n" if ($email ne '');
+			print "MD C $chan private:mlockext $lockedext\n" if ($lockedext ne '');
 			if ($args =~ /^(-?[0-9]+) (-?[0-9]+) (-?[0-9]+) (-?[0-9]+) (-?[0-9]+) (-?[0-9]+) (-?[0-9]+) (-?[0-9]+) (-?[0-9]+) (-?[0-9]+) (-?[0-9]+) (-?[0-9]+) (-?[0-9]+) (-?[0-9]+) (-?[0-9]+)$/) { # w/ halfops
 				$nooplvl = $1;
 				$autovoicelvl = $2;
@@ -342,6 +372,7 @@ while (<CHANDB>) {
 		$lockedkey = '';
 		$lockedon = 0;
 		$lockedoff = 0;
+		$lockedext = '';
 		$entrymsg = '';
 		$url = '';
 		$email = '';
