@@ -80,6 +80,7 @@ while (<NICKDB>) {
 			$email = $args;
 			$email =~ s/^<//;
 			$email =~ s/>$//;
+			$email = 'noemail' if ($email eq '');
 		} elsif ($word eq 'LINK') {
 			# Store master nick, might be wrong in channel
 			# access list :(
