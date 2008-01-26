@@ -1091,7 +1091,7 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int lev
 	ca->mychan = mychan;
 	ca->myuser = NULL;
 	strlcpy(ca->host, host, HOSTLEN);
-	ca->level |= level;
+	ca->level = level & ca_all;
 	ca->ts = ts;
 
 	node_add(ca, n, &mychan->chanacs);
