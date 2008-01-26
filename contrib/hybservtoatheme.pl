@@ -177,6 +177,7 @@ close(NICKDB);
 
 print "# Converting chan.db\n";
 open(CHANDB, "<chan.db");
+$missingfounderchanacs = '';
 while (<CHANDB>) {
 	if (/^->([a-zA-Z]+) (.*)$/) {
 		$word = $1;
@@ -316,6 +317,7 @@ while (<CHANDB>) {
 				$master = $masternick{$nick};
 				if (defined($master)) {
 					print "CA $chan $master +$athlevel\n";
+					$missingfounderchanacs = '' if $master eq $founder;
 				} else {
 					print "# Skipping access entry $chan $nick @ level $athlevel because of invalid nick\n";
 				}
@@ -328,6 +330,7 @@ while (<CHANDB>) {
 			print "MD A $chan:$banmask reason $reason\n";
 		}
 	} elsif (/^(\#[^ ]*) ([0-9]+) ([0-9]+) ([0-9]+)$/) {
+		print "CA $missingfounderchanacs $founder +AivrhtoRfs\n" if $missingfounderchanacs ne '';
 		$chan = $1;
 		$hsflags = $2;
 		$regtime = $3;
@@ -349,6 +352,7 @@ while (<CHANDB>) {
 		$athflags |= 320 if ($hsflags & 2); # topiclock/topiclock+keeptopic
 		$athflags |= 512 if ($hsflags & 0x400); # guard
 		$athflags |= 1024 if ($hsflags & 0x1); # private
+		$missingfounderchanacs = $chan;
 	} elsif (/^;( ?)(.*)$/) {
 		print "# $2\n";
 	} else {
@@ -357,5 +361,6 @@ while (<CHANDB>) {
 		exit(1);
 	}
 }
+print "CA $missingfounderchanacs $founder +AivrhtoRfs\n" if $missingfounderchanacs ne '';
 close(CHANDB);
 print "# End of hybservtoatheme.pl output\n";
