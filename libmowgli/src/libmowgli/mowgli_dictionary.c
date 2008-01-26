@@ -806,8 +806,13 @@ void mowgli_dictionary_stats(mowgli_dictionary_t *dict, void (*cb)(const char *l
 				dict, dict->count);
 	cb(str, privdata);
 	maxdepth = 0;
-	sum = stats_recurse(dict->root, 0, &maxdepth);
-	snprintf(str, sizeof str, "Depth sum %d Avg depth %d Max depth %d", sum, sum / dict->count, maxdepth);
+	if (dict->root != NULL)
+	{
+		sum = stats_recurse(dict->root, 0, &maxdepth);
+		snprintf(str, sizeof str, "Depth sum %d Avg depth %d Max depth %d", sum, sum / dict->count, maxdepth);
+	}
+	else
+		snprintf(str, sizeof str, "Depth sum 0 Avg depth 0 Max depth 0");
 	cb(str, privdata);
 	return;
 }
