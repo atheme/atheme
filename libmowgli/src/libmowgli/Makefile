@@ -8,7 +8,7 @@ OBJECTIVE_SONAME_SUFFIX = 1
 
 LIBADD += $(DYNAMIC_LD_LIBS)
 
-CFLAGS += $(PICFLAGS) -I.. -DMOWGLI_CORE
+CFLAGS += $(PICFLAGS) -I.. -DMOWGLI_CORE -ggdb -O0
 
 SOURCES = \
 	mowgli_alloc.c \
@@ -31,6 +31,7 @@ SOURCES = \
 	mowgli_object_class.c \
 	mowgli_object_messaging.c \
 	mowgli_object_metadata.c \
+	mowgli_patricia.c \
 	mowgli_queue.c \
 	mowgli_random.c \
 	mowgli_signal.c \

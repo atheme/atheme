@@ -61,6 +61,7 @@ MOWGLI_DECLS_START
 #include "mowgli_object_class.h"
 #include "mowgli_object.h"
 #include "mowgli_dictionary.h"
+#include "mowgli_patricia.h"
 #include "mowgli_mempool.h"
 #include "mowgli_module.h"
 #include "mowgli_queue.h"
