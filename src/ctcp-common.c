@@ -25,7 +25,7 @@
 #include "datastream.h"
 #include "privs.h"
 
-mowgli_dictionary_t *ctcptree;
+mowgli_patricia_t *ctcptree;
 
 static void ctcp_ping_handler(char *cmd, char *args, char *origin, char *svsnick)
 {
@@ -65,18 +65,18 @@ static void ctcp_clientinfo_handler(char *cmd, char *args, char *origin, char *s
 
 void common_ctcp_init(void)
 {
-	ctcptree = mowgli_dictionary_create(strcmp);
+	ctcptree = mowgli_patricia_create(noopcanon);
 
-	mowgli_dictionary_add(ctcptree, "\001PING", ctcp_ping_handler);
-	mowgli_dictionary_add(ctcptree, "\001VERSION\001", ctcp_version_handler);
-	mowgli_dictionary_add(ctcptree, "\001CLIENTINFO\001", ctcp_clientinfo_handler);
+	mowgli_patricia_add(ctcptree, "\001PING", ctcp_ping_handler);
+	mowgli_patricia_add(ctcptree, "\001VERSION\001", ctcp_version_handler);
+	mowgli_patricia_add(ctcptree, "\001CLIENTINFO\001", ctcp_clientinfo_handler);
 }
 
 unsigned int handle_ctcp_common(sourceinfo_t *si, char *cmd, char *args)
 {
 	void (*handler)(char *, char *, char *, char *);
 
-	handler = mowgli_dictionary_retrieve(ctcptree, cmd);
+	handler = mowgli_patricia_retrieve(ctcptree, cmd);
 
 	if (handler != NULL)
 	{

@@ -31,9 +31,9 @@ list_t cs_helptree;
 static void join_registered(boolean_t all)
 {
 	mychan_t *mc;
-	mowgli_dictionary_iteration_state_t state;
+	mowgli_patricia_iteration_state_t state;
 
-	MOWGLI_DICTIONARY_FOREACH(mc, &state, mclist)
+	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
 		if (!(mc->flags & MC_GUARD))
 			continue;
@@ -688,10 +688,10 @@ static void cs_tschange(channel_t *c)
 static void cs_leave_empty(void *unused)
 {
 	mychan_t *mc;
-	mowgli_dictionary_iteration_state_t state;
+	mowgli_patricia_iteration_state_t state;
 
 	(void)unused;
-	MOWGLI_DICTIONARY_FOREACH(mc, &state, mclist)
+	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
 		if (!(mc->flags & MC_INHABIT))
 			continue;

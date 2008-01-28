@@ -45,6 +45,10 @@ E int ToUpper(int);
 E int irccasecmp(const char *, const char *);
 E int ircncasecmp(const char *, const char *, int);
 
+E void irccasecanon(char *);
+E void strcasecanon(char *);
+E void noopcanon(char *);
+
 E int match(const char *, const char *);
 E char *collapse(char *);
 

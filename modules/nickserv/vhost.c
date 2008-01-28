@@ -160,7 +160,7 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 static void ns_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
 {
 	const char *pattern;
-	mowgli_dictionary_iteration_state_t state;
+	mowgli_patricia_iteration_state_t state;
 	myuser_t *mu;
 	metadata_t *md;
 	int matches = 0;
@@ -168,7 +168,7 @@ static void ns_cmd_listvhost(sourceinfo_t *si, int parc, char *parv[])
 	pattern = parc >= 1 ? parv[0] : "*";
 
 	snoop("LISTVHOST: \2%s\2 by \2%s\2", pattern, get_oper_name(si));
-	MOWGLI_DICTIONARY_FOREACH(mu, &state, mulist)
+	MOWGLI_PATRICIA_FOREACH(mu, &state, mulist)
 	{
 		md = metadata_find(mu, METADATA_USER, "private:usercloak");
 		if (md == NULL)

@@ -47,7 +47,7 @@ static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 	regex_t *regex;
 	char usermask[512];
 	unsigned int matches = 0;
-	mowgli_dictionary_iteration_state_t state;
+	mowgli_patricia_iteration_state_t state;
 	user_t *u;
 	char *args = parv[0];
 	char *pattern;
@@ -76,7 +76,7 @@ static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 		
-	MOWGLI_DICTIONARY_FOREACH(u, &state, userlist)
+	MOWGLI_PATRICIA_FOREACH(u, &state, userlist)
 	{
 		sprintf(usermask, "%s!%s@%s %s", u->nick, u->user, u->host, u->gecos);
 

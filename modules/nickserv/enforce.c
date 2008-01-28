@@ -304,7 +304,7 @@ static void check_enforce(void *vdata)
 	notice(nicksvs.nick, hdata->u->nick, "You have %d seconds to identify to your nickname before it is changed.", timeout->timelimit - CURRTIME);
 }
 
-static int idcheck_foreach_cb(mowgli_dictionary_elem_t *delem, void *privdata)
+static int idcheck_foreach_cb(mowgli_patricia_elem_t *delem, void *privdata)
 {
 	metadata_t *md;
 	myuser_t *mu = (myuser_t *) delem->data;
@@ -326,7 +326,7 @@ void _modinit(module_t *m)
 	/* Leave this for compatibility with old versions of this code
 	 * -- jilles
 	 */
-	mowgli_dictionary_foreach(mulist, idcheck_foreach_cb, NULL);
+	mowgli_patricia_foreach(mulist, idcheck_foreach_cb, NULL);
 
 	/* Absolutely do not do anything like this if nicks
 	 * are not considered owned */

@@ -24,7 +24,7 @@ DECLARE_MODULE_V1
 /* flatfile state */
 unsigned int muout = 0, mcout = 0, caout = 0, kout = 0;
 
-static int flatfile_db_save_myusers_cb(mowgli_dictionary_elem_t *delem, void *privdata)
+static int flatfile_db_save_myusers_cb(mowgli_patricia_elem_t *delem, void *privdata)
 {
 	FILE *f = (FILE *) privdata;
 	myuser_t *mu = (myuser_t *) delem->data;
@@ -92,7 +92,7 @@ static void flatfile_db_save(void *arg)
 	node_t *n, *tn, *tn2;
 	FILE *f;
 	int errno1, was_errored = 0;
-	mowgli_dictionary_iteration_state_t state;
+	mowgli_patricia_iteration_state_t state;
 
 	errno = 0;
 
@@ -115,11 +115,11 @@ static void flatfile_db_save(void *arg)
 
 	slog(LG_DEBUG, "db_save(): saving myusers");
 
-	mowgli_dictionary_foreach(mulist, flatfile_db_save_myusers_cb, f);
+	mowgli_patricia_foreach(mulist, flatfile_db_save_myusers_cb, f);
 
 	slog(LG_DEBUG, "db_save(): saving mychans");
 
-	MOWGLI_DICTIONARY_FOREACH(mc, &state, mclist)
+	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
 		/* find a founder */
 		mu = NULL;
@@ -179,7 +179,7 @@ static void flatfile_db_save(void *arg)
 	   because otherwise we could encounter unknowns on restart. */
 	slog(LG_DEBUG, "db_save(): saving subscriptions");
 
-	MOWGLI_DICTIONARY_FOREACH(mu, &state, mulist)
+	MOWGLI_PATRICIA_FOREACH(mu, &state, mulist)
 	{
 		metadata_subscription_t *subscriptor;
 
@@ -204,7 +204,7 @@ static void flatfile_db_save(void *arg)
 	}
 
 	/* Old names */
-	MOWGLI_DICTIONARY_FOREACH(mun, &state, oldnameslist)
+	MOWGLI_PATRICIA_FOREACH(mun, &state, oldnameslist)
 	{
 		fprintf(f, "NAM %s\n", mun->name);
 		LIST_FOREACH(tn, mun->metadata.head)

@@ -27,10 +27,10 @@
 #include "privs.h"
 #include "authcookie.h"
 
-mowgli_dictionary_t *mulist;
-mowgli_dictionary_t *nicklist;
-mowgli_dictionary_t *oldnameslist;
-mowgli_dictionary_t *mclist;
+mowgli_patricia_t *mulist;
+mowgli_patricia_t *nicklist;
+mowgli_patricia_t *oldnameslist;
+mowgli_patricia_t *mclist;
 
 static BlockHeap *myuser_heap;  /* HEAP_USER */
 static BlockHeap *mynick_heap;  /* HEAP_USER */
@@ -69,10 +69,10 @@ void init_accounts(void)
 		exit(EXIT_FAILURE);
 	}
 
-	mulist = mowgli_dictionary_create(irccasecmp);
-	nicklist = mowgli_dictionary_create(irccasecmp);
-	oldnameslist = mowgli_dictionary_create(irccasecmp);
-	mclist = mowgli_dictionary_create(irccasecmp);
+	mulist = mowgli_patricia_create(irccasecanon);
+	nicklist = mowgli_patricia_create(irccasecanon);
+	oldnameslist = mowgli_patricia_create(irccasecanon);
+	mclist = mowgli_patricia_create(irccasecanon);
 }
 
 /*
@@ -133,7 +133,7 @@ myuser_t *myuser_add(char *name, char *pass, char *email, unsigned int flags)
 	else
 		set_password(mu, pass);
 
-	mowgli_dictionary_add(mulist, mu->name, mu);
+	mowgli_patricia_add(mulist, mu->name, mu);
 
 	if ((soper = soper_find_named(mu->name)) != NULL)
 	{
@@ -266,7 +266,7 @@ void myuser_delete(myuser_t *mu)
 		object_unref(n->data);
 
 	/* mu->name is the index for this dtree */
-	mowgli_dictionary_delete(mulist, mu->name);
+	mowgli_patricia_delete(mulist, mu->name);
 
 	BlockHeapFree(myuser_heap, mu);
 
@@ -566,7 +566,7 @@ mynick_t *mynick_add(myuser_t *mu, const char *name)
 	mn->owner = mu;
 	mn->registered = CURRTIME;
 
-	mowgli_dictionary_add(nicklist, mn->nick, mn);
+	mowgli_patricia_add(nicklist, mn->nick, mn);
 	node_add(mn, &mn->node, &mu->nicks);
 
 	myuser_name_restore(mn->nick, mu);
@@ -599,7 +599,7 @@ void mynick_delete(mynick_t *mn)
 
 	myuser_name_remember(mn->nick, mn->owner);
 
-	mowgli_dictionary_delete(nicklist, mn->nick);
+	mowgli_patricia_delete(nicklist, mn->nick);
 	node_del(&mn->node, &mn->owner->nicks);
 
 	BlockHeapFree(mynick_heap, mn);
@@ -642,7 +642,7 @@ myuser_name_t *myuser_name_add(const char *name)
 
 	strlcpy(mun->name, name, NICKLEN);
 
-	mowgli_dictionary_add(oldnameslist, mun->name, mun);
+	mowgli_patricia_add(oldnameslist, mun->name, mun);
 
 	cnt.myuser_name++;
 
@@ -673,7 +673,7 @@ static void myuser_name_delete(myuser_name_t *mun)
 	if (!(runflags & RF_STARTING))
 		slog(LG_DEBUG, "myuser_name_delete(): %s", mun->name);
 
-	mowgli_dictionary_delete(oldnameslist, mun->name);
+	mowgli_patricia_delete(oldnameslist, mun->name);
 
 	/* delete the metadata */
 	LIST_FOREACH_SAFE(n, tn, mun->metadata.head)
@@ -809,7 +809,7 @@ static void mychan_delete(mychan_t *mc)
 		metadata_delete(mc, METADATA_CHANNEL, md->name);
 	}
 
-	mowgli_dictionary_delete(mclist, mc->name);
+	mowgli_patricia_delete(mclist, mc->name);
 
 	BlockHeapFree(mychan_heap, mc);
 
@@ -832,7 +832,7 @@ mychan_t *mychan_add(char *name)
 	mc->registered = CURRTIME;
 	mc->chan = channel_find(name);
 
-	mowgli_dictionary_add(mclist, mc->name, mc);
+	mowgli_patricia_add(mclist, mc->name, mc);
 
 	cnt.mychan++;
 
@@ -1654,7 +1654,7 @@ metadata_t *metadata_find(void *target, int type, const char *name)
 	return NULL;
 }
 
-static int expire_myuser_cb(mowgli_dictionary_elem_t *delem, void *unused)
+static int expire_myuser_cb(mowgli_patricia_elem_t *delem, void *unused)
 {
 	myuser_t *mu = (myuser_t *) delem->data;
 
@@ -1697,7 +1697,7 @@ void expire_check(void *arg)
 	mynick_t *mn;
 	mychan_t *mc;
 	user_t *u;
-	mowgli_dictionary_iteration_state_t state;
+	mowgli_patricia_iteration_state_t state;
 
 	/* Let them know about this and the likely subsequent db_save()
 	 * right away -- jilles */
@@ -1705,9 +1705,9 @@ void expire_check(void *arg)
 
 	if (nicksvs.expiry >= 0)
 	{
-		mowgli_dictionary_foreach(mulist, expire_myuser_cb, NULL);
+		mowgli_patricia_foreach(mulist, expire_myuser_cb, NULL);
 
-		MOWGLI_DICTIONARY_FOREACH(mn, &state, nicklist)
+		MOWGLI_PATRICIA_FOREACH(mn, &state, nicklist)
 		{
 			if (nicksvs.expiry > 0 &&
 					(CURRTIME - mn->lastseen) >= nicksvs.expiry)
@@ -1739,7 +1739,7 @@ void expire_check(void *arg)
 
 	if (chansvs.expiry >= 0)
 	{
-		MOWGLI_DICTIONARY_FOREACH(mc, &state, mclist)
+		MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 		{
 			if ((CURRTIME - mc->used) >= 86400 - 3660)
 			{
@@ -1777,7 +1777,7 @@ void expire_check(void *arg)
 	}
 }
 
-static int check_myuser_cb(mowgli_dictionary_elem_t *delem, void *unused)
+static int check_myuser_cb(mowgli_patricia_elem_t *delem, void *unused)
 {
 	myuser_t *mu = (myuser_t *) delem->data;
 	mynick_t *mn;
@@ -1814,7 +1814,7 @@ static int check_myuser_cb(mowgli_dictionary_elem_t *delem, void *unused)
 
 void db_check(void)
 {
-	mowgli_dictionary_foreach(mulist, check_myuser_cb, NULL);
+	mowgli_patricia_foreach(mulist, check_myuser_cb, NULL);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

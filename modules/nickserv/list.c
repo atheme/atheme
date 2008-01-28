@@ -81,7 +81,7 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	char pat[512], *nickpattern = NULL, *hostpattern = NULL, *p;
 	boolean_t hostmatch;
-	mowgli_dictionary_iteration_state_t state;
+	mowgli_patricia_iteration_state_t state;
 	myuser_t *mu;
 	mynick_t *mn;
 	metadata_t *md;
@@ -113,7 +113,7 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	if (nicksvs.no_nick_ownership)
 	{
 		snoop("LIST:ACCOUNTS: \2%s\2 by \2%s\2", parv[0], get_oper_name(si));
-		MOWGLI_DICTIONARY_FOREACH(mu, &state, mulist)
+		MOWGLI_PATRICIA_FOREACH(mu, &state, mulist)
 		{
 			if (nickpattern && match(nickpattern, mu->name))
 				continue;
@@ -136,7 +136,7 @@ static void ns_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	else
 	{
 		snoop("LIST:NICKS: \2%s\2 by \2%s\2", parv[0], get_oper_name(si));
-		MOWGLI_DICTIONARY_FOREACH(mn, &state, nicklist)
+		MOWGLI_PATRICIA_FOREACH(mn, &state, nicklist)
 		{
 			if (nickpattern && match(nickpattern, mn->nick))
 				continue;

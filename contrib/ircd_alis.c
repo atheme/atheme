@@ -368,7 +368,7 @@ static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *chptr;
 	struct alis_query query;
-	mowgli_dictionary_iteration_state_t state;
+	mowgli_patricia_iteration_state_t state;
 	int maxmatch = ALIS_MAX_MATCH;
 
 	memset(&query, 0, sizeof(struct alis_query));
@@ -396,7 +396,7 @@ static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[])
                 return;
         }
 
-	MOWGLI_DICTIONARY_FOREACH(chptr, &state, chanlist)
+	MOWGLI_PATRICIA_FOREACH(chptr, &state, chanlist)
 	{
 		/* matches, so show it */
 		if(show_channel(chptr, &query))

@@ -25,8 +25,8 @@
 
 static BlockHeap *user_heap;
 
-mowgli_dictionary_t *userlist;
-mowgli_dictionary_t *uidlist;
+mowgli_patricia_t *userlist;
+mowgli_patricia_t *uidlist;
 
 /*
  * init_users()
@@ -52,8 +52,8 @@ void init_users(void)
 		exit(EXIT_FAILURE);
 	}
 
-	userlist = mowgli_dictionary_create(irccasecmp);
-	uidlist = mowgli_dictionary_create(strcmp);
+	userlist = mowgli_patricia_create(irccasecanon);
+	uidlist = mowgli_patricia_create(noopcanon);
 }
 
 /*
@@ -154,7 +154,7 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 	if (uid != NULL)
 	{
 		strlcpy(u->uid, uid, IDLEN);
-		mowgli_dictionary_add(uidlist, u->uid, u);
+		mowgli_patricia_add(uidlist, u->uid, u);
 	}
 
 	strlcpy(u->nick, nick, NICKLEN);
@@ -179,7 +179,7 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 	else
 		u->ts = CURRTIME;
 
-	mowgli_dictionary_add(userlist, u->nick, u);
+	mowgli_patricia_add(userlist, u->nick, u);
 
 	cnt.user++;
 
@@ -232,10 +232,10 @@ void user_delete(user_t *u)
 		chanuser_delete(cu->chan, u);
 	}
 
-	mowgli_dictionary_delete(userlist, u->nick);
+	mowgli_patricia_delete(userlist, u->nick);
 
 	if (*u->uid)
-		mowgli_dictionary_delete(uidlist, u->uid);
+		mowgli_patricia_delete(uidlist, u->uid);
 
 	n = node_find(u, &u->server->userlist);
 	node_del(n, &u->server->userlist);
@@ -288,13 +288,13 @@ user_t *user_find(const char *nick)
 
 	if (ircd->uses_uid == TRUE)
 	{
-		u = mowgli_dictionary_retrieve(uidlist, nick);
+		u = mowgli_patricia_retrieve(uidlist, nick);
 
 		if (u != NULL)
 			return u;
 	}
 
-	u = mowgli_dictionary_retrieve(userlist, nick);
+	u = mowgli_patricia_retrieve(userlist, nick);
 
 	if (u != NULL)
 	{
@@ -323,7 +323,7 @@ user_t *user_find(const char *nick)
  */
 user_t *user_find_named(const char *nick)
 {
-	return mowgli_dictionary_retrieve(userlist, nick);
+	return mowgli_patricia_retrieve(userlist, nick);
 }
 
 /*
@@ -344,12 +344,12 @@ user_t *user_find_named(const char *nick)
 void user_changeuid(user_t *u, const char *uid)
 {
 	if (*u->uid)
-		mowgli_dictionary_delete(uidlist, u->uid);
+		mowgli_patricia_delete(uidlist, u->uid);
 
 	strlcpy(u->uid, uid ? uid : "", IDLEN);
 
 	if (*u->uid)
-		mowgli_dictionary_add(uidlist, u->uid, u);
+		mowgli_patricia_add(uidlist, u->uid, u);
 }
 
 /*
@@ -453,12 +453,12 @@ boolean_t user_changenick(user_t *u, const char *nick, time_t ts)
 	if (u->myuser != NULL && (mn = mynick_find(u->nick)) != NULL &&
 			mn->owner == u->myuser)
 		mn->lastseen = CURRTIME;
-	mowgli_dictionary_delete(userlist, u->nick);
+	mowgli_patricia_delete(userlist, u->nick);
 
 	strlcpy(u->nick, nick, NICKLEN);
 	u->ts = ts;
 
-	mowgli_dictionary_add(userlist, u->nick, u);
+	mowgli_patricia_add(userlist, u->nick, u);
 	return FALSE;
 }
 

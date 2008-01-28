@@ -284,10 +284,10 @@ E kline_t *kline_find_user(user_t *u);
 E void kline_expire(void *arg);
 
 /* account.c */
-E mowgli_dictionary_t *mulist;
-E mowgli_dictionary_t *nicklist;
-E mowgli_dictionary_t *oldnameslist;
-E mowgli_dictionary_t *mclist;
+E mowgli_patricia_t *mulist;
+E mowgli_patricia_t *nicklist;
+E mowgli_patricia_t *oldnameslist;
+E mowgli_patricia_t *mclist;
 
 E void init_accounts(void);
 

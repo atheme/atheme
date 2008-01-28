@@ -24,7 +24,7 @@
 #include "atheme.h"
 #include "pmodule.h"
 
-mowgli_dictionary_t *pcommands;
+mowgli_patricia_t *pcommands;
 BlockHeap *pcommand_heap;
 BlockHeap *messagetree_heap;
 struct cmode_ *mode_list;
@@ -45,7 +45,7 @@ void pcommand_init(void)
 		exit(EXIT_FAILURE);
 	}
 
-	pcommands = mowgli_dictionary_create(strcmp);
+	pcommands = mowgli_patricia_create(noopcanon);
 }
 
 void pcommand_add(char *token, void (*handler) (sourceinfo_t *si, int parc, char *parv[]), int minparc, int sourcetype)
@@ -64,7 +64,7 @@ void pcommand_add(char *token, void (*handler) (sourceinfo_t *si, int parc, char
 	pcmd->minparc = minparc;
 	pcmd->sourcetype = sourcetype;
 
-	mowgli_dictionary_add(pcommands, pcmd->token, pcmd);
+	mowgli_patricia_add(pcommands, pcmd->token, pcmd);
 }
 
 void pcommand_delete(char *token)
@@ -77,7 +77,7 @@ void pcommand_delete(char *token)
 		return;
 	}
 
-	mowgli_dictionary_delete(pcommands, pcmd->token);
+	mowgli_patricia_delete(pcommands, pcmd->token);
 
 	free(pcmd->token);
 	pcmd->handler = NULL;
@@ -86,7 +86,7 @@ void pcommand_delete(char *token)
 
 pcommand_t *pcommand_find(char *token)
 {
-	return mowgli_dictionary_retrieve(pcommands, token);
+	return mowgli_patricia_retrieve(pcommands, token);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

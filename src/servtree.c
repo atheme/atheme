@@ -22,7 +22,7 @@
 
 #include "atheme.h"
 
-mowgli_dictionary_t *services;
+mowgli_patricia_t *services;
 static BlockHeap *service_heap;
 
 static void dummy_handler(sourceinfo_t *si, int parc, char **parv)
@@ -32,7 +32,7 @@ static void dummy_handler(sourceinfo_t *si, int parc, char **parv)
 void servtree_init(void)
 {
 	service_heap = BlockHeapCreate(sizeof(service_t), 12);
-	services = mowgli_dictionary_create(strcasecmp);
+	services = mowgli_patricia_create(strcasecanon);
 
 	if (!service_heap)
 	{
@@ -109,14 +109,14 @@ service_t *add_service(char *name, char *user, char *host, char *real, void (*ha
 			join(config_options.chan, name);
 	}
 
-	mowgli_dictionary_add(services, sptr->name, sptr);
+	mowgli_patricia_add(services, sptr->name, sptr);
 
 	return sptr;
 }
 
 void del_service(service_t * sptr)
 {
-	mowgli_dictionary_delete(services, sptr->name);
+	mowgli_patricia_delete(services, sptr->name);
 
 	quit_sts(sptr->me, "Service unloaded.");
 	user_delete(sptr->me);
@@ -138,7 +138,7 @@ service_t *find_service(char *name)
 	user_t *u;
 	char *p;
 	char name2[NICKLEN];
-	mowgli_dictionary_iteration_state_t state;
+	mowgli_patricia_iteration_state_t state;
 
 	p = strchr(name, '@');
 	if (p != NULL)
@@ -150,10 +150,10 @@ service_t *find_service(char *name)
 		p = strchr(name2, '@');
 		if (p != NULL)
 			*p = '\0';
-		sptr = mowgli_dictionary_retrieve(services, name2);
+		sptr = mowgli_patricia_retrieve(services, name2);
 		if (sptr != NULL)
 			return sptr;
-		MOWGLI_DICTIONARY_FOREACH(sptr, &state, services)
+		MOWGLI_PATRICIA_FOREACH(sptr, &state, services)
 		{
 			if (sptr->me != NULL && !strcasecmp(name2, sptr->user))
 				return sptr;
@@ -161,7 +161,7 @@ service_t *find_service(char *name)
 	}
 	else
 	{
-		sptr = mowgli_dictionary_retrieve(services, name);
+		sptr = mowgli_patricia_retrieve(services, name);
 		if (sptr != NULL)
 			return sptr;
 
@@ -170,7 +170,7 @@ service_t *find_service(char *name)
 			/* yuck yuck -- but quite efficient -- jilles */
 			u = user_find(name);
 			if (u != NULL && u->server == me.me)
-				return mowgli_dictionary_retrieve(services, u->nick);
+				return mowgli_patricia_retrieve(services, u->nick);
 		}
 	}
 

@@ -39,7 +39,7 @@ void _moddeinit()
 	help_delentry(ns_helptree, "REGISTER");
 }
 
-static int register_foreach_cb(mowgli_dictionary_elem_t *delem, void *privdata)
+static int register_foreach_cb(mowgli_patricia_elem_t *delem, void *privdata)
 {
 	char *email = (char *) privdata;
 	myuser_t *tmu = (myuser_t *) delem->data;
@@ -147,7 +147,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 
 	/* make sure they're within limits */
 	tcnt = 0;
-	mowgli_dictionary_foreach(mulist, register_foreach_cb, email);
+	mowgli_patricia_foreach(mulist, register_foreach_cb, email);
 
 	if (tcnt >= me.maxusers)
 	{

@@ -23,8 +23,8 @@
 
 #include "atheme.h"
 
-mowgli_dictionary_t *sidlist;
-mowgli_dictionary_t *servlist;
+mowgli_patricia_t *sidlist;
+mowgli_patricia_t *servlist;
 list_t tldlist;
 
 static BlockHeap *serv_heap;
@@ -56,8 +56,8 @@ void init_servers(void)
 		exit(EXIT_FAILURE);
 	}
 
-	servlist = mowgli_dictionary_create(irccasecmp);
-	sidlist = mowgli_dictionary_create(strcmp);
+	servlist = mowgli_patricia_create(irccasecanon);
+	sidlist = mowgli_patricia_create(noopcanon);
 }
 
 /*
@@ -100,7 +100,7 @@ server_t *server_add(const char *name, unsigned int hops, const char *uplink, co
 	if (id != NULL)
 	{
 		s->sid = sstrdup(id);
-		mowgli_dictionary_add(sidlist, s->sid, s);
+		mowgli_patricia_add(sidlist, s->sid, s);
 	}
 
 	/* check to see if it's hidden */
@@ -117,7 +117,7 @@ server_t *server_add(const char *name, unsigned int hops, const char *uplink, co
 	s->hops = hops;
 	s->connected_since = CURRTIME;
 
-	mowgli_dictionary_add(servlist, s->name, s);
+	mowgli_patricia_add(servlist, s->name, s);
 
 	if (u)
 	{
@@ -199,10 +199,10 @@ void server_delete(const char *name)
 	}
 
 	/* now remove the server */
-	mowgli_dictionary_delete(servlist, s->name);
+	mowgli_patricia_delete(servlist, s->name);
 
 	if (s->sid)
-		mowgli_dictionary_delete(sidlist, s->sid);
+		mowgli_patricia_delete(sidlist, s->sid);
 
 	if (s->uplink)
 	{
@@ -248,12 +248,12 @@ server_t *server_find(const char *name)
 
 	if (ircd->uses_uid)
 	{
-		s = mowgli_dictionary_retrieve(sidlist, name);
+		s = mowgli_patricia_retrieve(sidlist, name);
 		if (s != NULL)
 			return s;
 	}
 
-	return mowgli_dictionary_retrieve(servlist, name);
+	return mowgli_patricia_retrieve(servlist, name);
 }
 
 /*

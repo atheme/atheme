@@ -44,7 +44,7 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	char *chanpattern = parv[0];
 	char buf[BUFSIZE];
 	unsigned int matches = 0;
-	mowgli_dictionary_iteration_state_t state;
+	mowgli_patricia_iteration_state_t state;
 
 	if (!chanpattern)
 	{
@@ -56,7 +56,7 @@ static void cs_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 	snoop("LIST:CHANNELS: \2%s\2 by \2%s\2", chanpattern, get_oper_name(si));
 	command_success_nodata(si, _("Channels matching pattern \2%s\2:"), chanpattern);
 
-	MOWGLI_DICTIONARY_FOREACH(mc, &state, mclist)
+	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
 		if (!match(chanpattern, mc->name))
 		{

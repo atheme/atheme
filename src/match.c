@@ -290,6 +290,31 @@ int ircncasecmp(const char *str1, const char *str2, int n)
 	return (res);
 }
 
+void irccasecanon(char *str)
+{
+	while (*str)
+	{
+		*str = ToUpper(*str);
+		str++;
+	}
+	return;
+}
+
+void strcasecanon(char *str)
+{
+	while (*str)
+	{
+		*str = toupper(*str);
+		str++;
+	}
+	return;
+}
+
+void noopcanon(char *str)
+{
+	return;
+}
+
 const unsigned int charattrs[] = {
 	/* 0  */ 0,
 	/* 1  */ 0,

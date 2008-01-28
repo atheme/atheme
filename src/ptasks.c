@@ -109,12 +109,12 @@ void handle_stats(user_t *u, char req)
 		  if (!has_priv_user(u, PRIV_SERVER_AUSPEX))
 			  break;
 
-		  mowgli_dictionary_stats(userlist, dictionary_stats_cb, u);
-		  mowgli_dictionary_stats(chanlist, dictionary_stats_cb, u);
-		  mowgli_dictionary_stats(servlist, dictionary_stats_cb, u);
-		  mowgli_dictionary_stats(mulist, dictionary_stats_cb, u);
-		  mowgli_dictionary_stats(nicklist, dictionary_stats_cb, u);
-		  mowgli_dictionary_stats(mclist, dictionary_stats_cb, u);
+		  mowgli_patricia_stats(userlist, dictionary_stats_cb, u);
+		  mowgli_patricia_stats(chanlist, dictionary_stats_cb, u);
+		  mowgli_patricia_stats(servlist, dictionary_stats_cb, u);
+		  mowgli_patricia_stats(mulist, dictionary_stats_cb, u);
+		  mowgli_patricia_stats(nicklist, dictionary_stats_cb, u);
+		  mowgli_patricia_stats(mclist, dictionary_stats_cb, u);
 		  break;
 
 	  case 'C':

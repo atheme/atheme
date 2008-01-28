@@ -38,7 +38,7 @@ list_t os_clones_cmds;
 
 static list_t clone_exempts;
 boolean_t kline_enabled;
-mowgli_dictionary_t *hostlist;
+mowgli_patricia_t *hostlist;
 BlockHeap *hostentry_heap;
 
 typedef struct cexcept_ cexcept_t;
@@ -69,7 +69,7 @@ command_t os_clones_listexempt = { "LISTEXEMPT", N_("Lists clones exemptions."),
 void _modinit(module_t *m)
 {
 	user_t *u;
-	mowgli_dictionary_iteration_state_t state;
+	mowgli_patricia_iteration_state_t state;
 
 	MODULE_USE_SYMBOL(os_cmdtree, "operserv/main", "os_cmdtree");
 	MODULE_USE_SYMBOL(os_helptree, "operserv/main", "os_helptree");
@@ -89,19 +89,19 @@ void _modinit(module_t *m)
 	hook_add_event("user_delete");
 	hook_add_hook("user_delete", clones_userquit);
 
-	hostlist = mowgli_dictionary_create(strcmp);
+	hostlist = mowgli_patricia_create(noopcanon);
 	hostentry_heap = BlockHeapCreate(sizeof(hostentry_t), HEAP_USER);
 
 	load_exemptdb();
 
 	/* add everyone to host hash */
-	MOWGLI_DICTIONARY_FOREACH(u, &state, userlist)
+	MOWGLI_PATRICIA_FOREACH(u, &state, userlist)
 	{
 		clones_newuser(u);
 	}
 }
 
-static void free_hostentry(mowgli_dictionary_elem_t *delem, void *privdata)
+static void free_hostentry(mowgli_patricia_elem_t *delem, void *privdata)
 {
 	node_t *n, *tn;
 	hostentry_t *he = delem->data;
@@ -118,7 +118,7 @@ void _moddeinit(void)
 {
 	node_t *n, *tn;
 
-	mowgli_dictionary_destroy(hostlist, free_hostentry, NULL);
+	mowgli_patricia_destroy(hostlist, free_hostentry, NULL);
 	BlockHeapDestroy(hostentry_heap);
 
 	LIST_FOREACH_SAFE(n, tn, clone_exempts.head)
@@ -319,10 +319,10 @@ static void os_cmd_clones_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	hostentry_t *he;
 	int k = 0;
-	mowgli_dictionary_iteration_state_t state;
+	mowgli_patricia_iteration_state_t state;
 	int allowed = 0;
 
-	MOWGLI_DICTIONARY_FOREACH(he, &state, hostlist)
+	MOWGLI_PATRICIA_FOREACH(he, &state, hostlist)
 	{
 		k = LIST_LENGTH(&he->clients);
 
@@ -454,12 +454,12 @@ static void clones_newuser(void *vptr)
 	if (is_internal_client(u) || *u->ip == '\0')
 		return;
 
-	he = mowgli_dictionary_retrieve(hostlist, u->ip);
+	he = mowgli_patricia_retrieve(hostlist, u->ip);
 	if (he == NULL)
 	{
 		he = BlockHeapAlloc(hostentry_heap);
 		strlcpy(he->ip, u->ip, sizeof he->ip);
-		mowgli_dictionary_add(hostlist, he->ip, he);
+		mowgli_patricia_add(hostlist, he->ip, he);
 	}
 	node_add(u, node_create(), &he->clients);
 	i = LIST_LENGTH(&he->clients);
@@ -504,7 +504,7 @@ static void clones_userquit(void *vptr)
 	if (is_internal_client(u) || *u->ip == '\0')
 		return;
 
-	he = mowgli_dictionary_retrieve(hostlist, u->ip);
+	he = mowgli_patricia_retrieve(hostlist, u->ip);
 	if (he == NULL)
 	{
 		slog(LG_DEBUG, "clones_userquit(): hostentry for %s not found??", u->ip);
@@ -517,7 +517,7 @@ static void clones_userquit(void *vptr)
 		node_free(n);
 		if (LIST_LENGTH(&he->clients) == 0)
 		{
-			mowgli_dictionary_delete(hostlist, he->ip);
+			mowgli_patricia_delete(hostlist, he->ip);
 			BlockHeapFree(hostentry_heap, he);
 		}
 	}

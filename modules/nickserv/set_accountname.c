@@ -52,9 +52,9 @@ static void myuser_rename(myuser_t *mu, const char *name)
 			ircd_on_logout(u->nick, mu->name, NULL);
 		}
 	}
-	mowgli_dictionary_delete(mulist, mu->name);
+	mowgli_patricia_delete(mulist, mu->name);
 	strlcpy(mu->name, name, NICKLEN);
-	mowgli_dictionary_add(mulist, mu->name, mu);
+	mowgli_patricia_add(mulist, mu->name, mu);
 	if (authservice_loaded)
 	{
 		LIST_FOREACH(n, mu->logins.head)

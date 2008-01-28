@@ -31,8 +31,8 @@ struct translation_
 
 typedef struct translation_ translation_t;
 
-static mowgli_dictionary_t *itranslation_tree; /* internal translations, userserv/nickserv etc */
-static mowgli_dictionary_t *translation_tree; /* language translations */
+static mowgli_patricia_t *itranslation_tree; /* internal translations, userserv/nickserv etc */
+static mowgli_patricia_t *translation_tree; /* language translations */
 
 /*
  * translation_init()
@@ -51,8 +51,8 @@ static mowgli_dictionary_t *translation_tree; /* language translations */
  */
 void translation_init(void)
 {
-	itranslation_tree = mowgli_dictionary_create(strcmp);
-	translation_tree = mowgli_dictionary_create(strcmp);
+	itranslation_tree = mowgli_patricia_create(noopcanon);
+	translation_tree = mowgli_patricia_create(noopcanon);
 }
 
 /*
@@ -73,10 +73,10 @@ const char *translation_get(const char *str)
 	translation_t *t;
 
 	/* See if an internal substitution is present. */
-	if ((t = mowgli_dictionary_retrieve(itranslation_tree, str)) != NULL)
+	if ((t = mowgli_patricia_retrieve(itranslation_tree, str)) != NULL)
 		str = t->replacement;
 
-	if ((t = mowgli_dictionary_retrieve(translation_tree, str)) != NULL)
+	if ((t = mowgli_patricia_retrieve(translation_tree, str)) != NULL)
 		return t->replacement;
 
 	return str;
@@ -101,7 +101,7 @@ void itranslation_create(const char *str, const char *trans)
 	t->name = sstrdup(str);
 	t->replacement = sstrdup(trans);
 
-	mowgli_dictionary_add(itranslation_tree, t->name, t);
+	mowgli_patricia_add(itranslation_tree, t->name, t);
 }
 
 /*
@@ -118,7 +118,7 @@ void itranslation_create(const char *str, const char *trans)
  */
 void itranslation_destroy(const char *str)
 {
-	translation_t *t = mowgli_dictionary_delete(itranslation_tree, str);
+	translation_t *t = mowgli_patricia_delete(itranslation_tree, str);
 
 	if (t == NULL)
 		return;
@@ -155,7 +155,7 @@ void translation_create(const char *str, const char *trans)
 
 	t->replacement = sstrdup(buf);
 
-	mowgli_dictionary_add(translation_tree, t->name, t);
+	mowgli_patricia_add(translation_tree, t->name, t);
 }
 
 /*
@@ -172,7 +172,7 @@ void translation_create(const char *str, const char *trans)
  */
 void translation_destroy(const char *str)
 {
-	translation_t *t = mowgli_dictionary_delete(translation_tree, str);
+	translation_t *t = mowgli_patricia_delete(translation_tree, str);
 
 	if (t == NULL)
 		return;

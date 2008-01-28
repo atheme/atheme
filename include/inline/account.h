@@ -17,7 +17,7 @@
  */
 static inline myuser_t *myuser_find(const char *name)
 {
-	return mowgli_dictionary_retrieve(mulist, name);
+	return mowgli_patricia_retrieve(mulist, name);
 }
 
 /*
@@ -36,7 +36,7 @@ static inline myuser_t *myuser_find(const char *name)
  */
 static inline mynick_t *mynick_find(const char *name)
 {
-	return mowgli_dictionary_retrieve(nicklist, name);
+	return mowgli_patricia_retrieve(nicklist, name);
 }
 
 /*
@@ -55,12 +55,12 @@ static inline mynick_t *mynick_find(const char *name)
  */
 static inline myuser_name_t *myuser_name_find(const char *name)
 {
-	return mowgli_dictionary_retrieve(oldnameslist, name);
+	return mowgli_patricia_retrieve(oldnameslist, name);
 }
 
 static inline mychan_t *mychan_find(const char *name)
 {
-	return mowgli_dictionary_retrieve(mclist, name);
+	return mowgli_patricia_retrieve(mclist, name);
 }
 
 static inline boolean_t chanacs_source_has_flag(mychan_t *mychan, sourceinfo_t *si, unsigned int level)
