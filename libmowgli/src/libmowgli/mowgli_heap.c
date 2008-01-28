@@ -85,7 +85,7 @@ static void mowgli_heap_expand(mowgli_heap_t *bh)
 	
 	block->first_free = prev;
 
-	mowgli_node_add(block, &block->node, &bh->blocks);
+	mowgli_node_add_head(block, &block->node, &bh->blocks);
 	
 	bh->free_elems += bh->mowgli_heap_elems;
 }
