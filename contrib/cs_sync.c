@@ -46,6 +46,7 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
 	node_t *n, *tn;
 	char *name = parv[0];
 	int fl;
+	boolean_t noop;
 
 	if (!name)
 	{
@@ -89,6 +90,9 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
 			continue;
 
 		fl = chanacs_user_flags(mc, cu->user);
+		noop = mc->flags & MC_NOOP || (cu->user->myuser != NULL &&
+				cu->user->myuser->flags & MU_NOOP);
+
 		if (fl & CA_AKICK && !(fl & CA_REMOVE))
 		{
 			if (mc->chan->nummembers <= (mc->flags & MC_GUARD ? 2 : 1))
@@ -105,7 +109,7 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
 		{
 			if (fl & CA_USEOWNER)
 			{
-				if (fl & CA_AUTOOP && !(ircd->owner_mode & cu->modes))
+				if (!noop && fl & CA_AUTOOP && !(ircd->owner_mode & cu->modes))
 				{
 					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(cu->user));
 					cu->modes |= ircd->owner_mode;
@@ -121,7 +125,7 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
 		{
 			if (fl & CA_USEPROTECT)
 			{
-				if (fl & CA_AUTOOP && !(ircd->protect_mode & cu->modes))
+				if (!noop && fl & CA_AUTOOP && !(ircd->protect_mode & cu->modes))
 				{
 					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(cu->user));
 					cu->modes |= ircd->protect_mode;
@@ -135,7 +139,7 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
 		}
 		if (fl & (CA_AUTOOP | CA_OP))
 		{
-			if (fl & CA_AUTOOP && !(CMODE_OP & cu->modes))
+			if (!noop && fl & CA_AUTOOP && !(CMODE_OP & cu->modes))
 			{
 				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'o', CLIENT_NAME(cu->user));
 				cu->modes |= CMODE_OP;
@@ -151,7 +155,7 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
 		{
 			if (fl & (CA_AUTOHALFOP | CA_HALFOP))
 			{
-				if (fl & CA_AUTOHALFOP && !(ircd->halfops_mode & cu->modes))
+				if (!noop && fl & CA_AUTOHALFOP && !(ircd->halfops_mode & cu->modes))
 				{
 					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->halfops_mchar[1], CLIENT_NAME(cu->user));
 					cu->modes |= ircd->halfops_mode;
@@ -166,7 +170,7 @@ static void cs_cmd_sync(sourceinfo_t *si, int parc, char *parv[])
 		}
 		if (fl & (CA_AUTOVOICE | CA_VOICE))
 		{
-			if (fl & CA_AUTOVOICE && !(CMODE_VOICE & cu->modes))
+			if (!noop && fl & CA_AUTOVOICE && !(CMODE_VOICE & cu->modes))
 			{
 				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'v', CLIENT_NAME(cu->user));
 				cu->modes |= CMODE_VOICE;
