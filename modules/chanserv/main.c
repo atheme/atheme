@@ -259,9 +259,6 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	if (mc == NULL)
 		return;
 
-	if (chan->nummembers == 1 && mc->flags & MC_GUARD)
-		join(chan->name, chansvs.nick);
-
 	flags = chanacs_user_flags(mc, u);
 	noop = mc->flags & MC_NOOP || (u->myuser != NULL &&
 			u->myuser->flags & MU_NOOP);
@@ -269,6 +266,9 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	 * sophisticated mechanism is disabled */
 	secure = mc->flags & MC_SECURE || (!chansvs.changets &&
 			chan->nummembers == 1 && chan->ts > CURRTIME - 300);
+
+	if (chan->nummembers == 1 && mc->flags & MC_GUARD)
+		join(chan->name, chansvs.nick);
 
 	/* auto stuff */
 	if ((mc->flags & MC_STAFFONLY) && !has_priv_user(u, PRIV_JOIN_STAFFONLY))
