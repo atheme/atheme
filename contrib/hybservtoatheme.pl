@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 # 
-#  Copyright (c) 2005-2007, Jilles Tjoelker
+#  Copyright (c) 2005-2008, Jilles Tjoelker
 #  All rights reserved.
 # 
 #  Redistribution and use in source and binary forms, with
@@ -56,7 +56,7 @@
 # <jilles@stack.nl>
 # http://www.stack.nl/~jilles/irc/
 
-print "# hybservtoatheme.pl Copyright 2005-2007 Jilles Tjoelker\n";
+print "# hybservtoatheme.pl Copyright 2005-2008 Jilles Tjoelker\n";
 print "DBV 5\n";
 print "CF +vVhHoOtsriRfAb\n";
 
