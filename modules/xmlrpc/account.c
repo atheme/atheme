@@ -22,9 +22,9 @@ static unsigned int tcnt = 0;
 
 /* support function for atheme.account.register. */
 
-static int account_myuser_foreach_cb(mowgli_patricia_elem_t *delem, void *privdata)
+static int account_myuser_foreach_cb(const char *key, void *data, void *privdata)
 {
-	myuser_t *tmu = (myuser_t *) delem->data;
+	myuser_t *tmu = (myuser_t *) data;
 	char *email = (char *) privdata;
 
 	if (!strcasecmp(email, tmu->email))

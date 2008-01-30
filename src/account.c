@@ -1654,9 +1654,9 @@ metadata_t *metadata_find(void *target, int type, const char *name)
 	return NULL;
 }
 
-static int expire_myuser_cb(mowgli_patricia_elem_t *delem, void *unused)
+static int expire_myuser_cb(const char *key, void *data, void *unused)
 {
-	myuser_t *mu = (myuser_t *) delem->data;
+	myuser_t *mu = (myuser_t *) data;
 
 	/* If they're logged in, update lastlogin time.
 	 * To decrease db traffic, may want to only do
@@ -1777,9 +1777,9 @@ void expire_check(void *arg)
 	}
 }
 
-static int check_myuser_cb(mowgli_patricia_elem_t *delem, void *unused)
+static int check_myuser_cb(const char *key, void *data, void *unused)
 {
-	myuser_t *mu = (myuser_t *) delem->data;
+	myuser_t *mu = (myuser_t *) data;
 	mynick_t *mn;
 
 	if (MU_OLD_ALIAS & mu->flags)

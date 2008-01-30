@@ -24,10 +24,10 @@ DECLARE_MODULE_V1
 /* flatfile state */
 unsigned int muout = 0, mcout = 0, caout = 0, kout = 0;
 
-static int flatfile_db_save_myusers_cb(mowgli_patricia_elem_t *delem, void *privdata)
+static int flatfile_db_save_myusers_cb(const char *key, void *data, void *privdata)
 {
 	FILE *f = (FILE *) privdata;
-	myuser_t *mu = (myuser_t *) delem->data;
+	myuser_t *mu = (myuser_t *) data;
 	node_t *tn;
 
 	/* MU <name> <pass> <email> <registered> <lastlogin> <failnum*> <lastfail*>

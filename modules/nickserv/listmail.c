@@ -44,10 +44,10 @@ struct listmail_state
 	int matches;
 };
 
-static int listmail_foreach_cb(mowgli_patricia_elem_t *delem, void *privdata)
+static int listmail_foreach_cb(const char *key, void *data, void *privdata)
 {
 	struct listmail_state *state = (struct listmail_state *) privdata;
-	myuser_t *mu = (myuser_t *)delem->data;
+	myuser_t *mu = (myuser_t *)data;
 
 	if (!match(state->pattern, mu->email))
 	{

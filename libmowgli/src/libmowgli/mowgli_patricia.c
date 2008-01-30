@@ -45,6 +45,15 @@ struct mowgli_patricia_
 	char *id;
 };
 
+struct mowgli_patricia_elem_
+{
+	int bitnum;
+	mowgli_patricia_elem_t *zero, *one;
+	mowgli_patricia_elem_t *next, *prev;
+	void *data;
+	char *key;
+};
+
 /*
  * mowgli_patricia_create(void (*canonize_cb)(char *key))
  *
@@ -124,7 +133,7 @@ mowgli_patricia_t *mowgli_patricia_create_named(const char *name,
 
 /*
  * mowgli_patricia_destroy(mowgli_patricia_t *dtree,
- *     void (*destroy_cb)(patricia_elem_t *delem, void *privdata),
+ *     void (*destroy_cb)(const char *key, void *data, void *privdata),
  *     void *privdata);
  *
  * Recursively destroys all nodes in a patricia tree.
@@ -145,7 +154,7 @@ mowgli_patricia_t *mowgli_patricia_create_named(const char *name,
  *       DTree will not be destroyed.
  */
 void mowgli_patricia_destroy(mowgli_patricia_t *dtree,
-	void (*destroy_cb)(mowgli_patricia_elem_t *delem, void *privdata),
+	void (*destroy_cb)(const char *key, void *data, void *privdata),
 	void *privdata)
 {
 	mowgli_patricia_elem_t *n, *tn;
@@ -156,7 +165,7 @@ void mowgli_patricia_destroy(mowgli_patricia_t *dtree,
 	MOWGLI_LIST_FOREACH_SAFE(n, tn, dtree->head)
 	{
 		if (destroy_cb != NULL)
-			(*destroy_cb)(n, privdata);
+			(*destroy_cb)(n->key, n->data, privdata);
 
 		mowgli_free(n->key);
 		mowgli_heap_free(elem_heap, n);
@@ -171,7 +180,7 @@ void mowgli_patricia_destroy(mowgli_patricia_t *dtree,
 
 /*
  * mowgli_patricia_foreach(mowgli_patricia_t *dtree,
- *     void (*destroy_cb)(patricia_elem_t *delem, void *privdata),
+ *     int (*foreach_cb)(const char *key, void *data, void *privdata),
  *     void *privdata);
  *
  * Iterates over all entries in a DTree.
@@ -188,7 +197,7 @@ void mowgli_patricia_destroy(mowgli_patricia_t *dtree,
  *     - on success, a dtree is iterated
  */
 void mowgli_patricia_foreach(mowgli_patricia_t *dtree,
-	int (*foreach_cb)(mowgli_patricia_elem_t *delem, void *privdata),
+	int (*foreach_cb)(const char *key, void *data, void *privdata),
 	void *privdata)
 {
 	mowgli_patricia_elem_t *n, *tn;
@@ -201,13 +210,13 @@ void mowgli_patricia_foreach(mowgli_patricia_t *dtree,
 		mowgli_patricia_elem_t *delem = (mowgli_patricia_elem_t *) n;
 
 		if (foreach_cb != NULL)
-			(*foreach_cb)(delem, privdata);
+			(*foreach_cb)(delem->key, delem->data, privdata);
 	}
 }
 
 /*
  * mowgli_patricia_search(mowgli_patricia_t *dtree,
- *     void (*destroy_cb)(mowgli_patricia_elem_t *delem, void *privdata),
+ *     void *(*foreach_cb)(const char *key, void *data, void *privdata),
  *     void *privdata);
  *
  * Searches all entries in a DTree using a custom callback.
@@ -225,7 +234,7 @@ void mowgli_patricia_foreach(mowgli_patricia_t *dtree,
  *     - a dtree is iterated until the requested conditions are met
  */
 void *mowgli_patricia_search(mowgli_patricia_t *dtree,
-	void *(*foreach_cb)(mowgli_patricia_elem_t *delem, void *privdata),
+	void *(*foreach_cb)(const char *key, void *data, void *privdata),
 	void *privdata)
 {
 	mowgli_patricia_elem_t *n, *tn;
@@ -240,7 +249,7 @@ void *mowgli_patricia_search(mowgli_patricia_t *dtree,
 		mowgli_patricia_elem_t *delem = (mowgli_patricia_elem_t *) n;
 
 		if (foreach_cb != NULL)
-			ret = (*foreach_cb)(delem, privdata);
+			ret = (*foreach_cb)(delem->key, delem->data, privdata);
 
 		if (ret)
 			break;
@@ -364,7 +373,7 @@ void mowgli_patricia_foreach_next(mowgli_patricia_t *dtree,
  * Side Effects:
  *     - none
  */
-mowgli_patricia_elem_t *mowgli_patricia_find(mowgli_patricia_t *dict, const char *key)
+static mowgli_patricia_elem_t *mowgli_patricia_find(mowgli_patricia_t *dict, const char *key)
 {
 	char ckey_store[256];
 	char *ckey;
@@ -415,29 +424,29 @@ mowgli_patricia_elem_t *mowgli_patricia_find(mowgli_patricia_t *dict, const char
  *     - data to bind to the new DTree node
  *
  * Outputs:
- *     - on success, a new DTree node
- *     - on failure, NULL
+ *     - on success, TRUE
+ *     - on failure, FALSE
  *
  * Side Effects:
  *     - data is inserted into the DTree.
  */
-mowgli_patricia_elem_t *mowgli_patricia_add(mowgli_patricia_t *dict, const char *key, void *data)
+mowgli_boolean_t mowgli_patricia_add(mowgli_patricia_t *dict, const char *key, void *data)
 {
 	char *ckey;
 	mowgli_patricia_elem_t *delem, *prev, *place, *newelem;
 	int bitval, keylen;
 	int i;
 
-	return_val_if_fail(dict != NULL, NULL);
-	return_val_if_fail(key != NULL, NULL);
-	return_val_if_fail(data != NULL, NULL);
+	return_val_if_fail(dict != NULL, FALSE);
+	return_val_if_fail(key != NULL, FALSE);
+	return_val_if_fail(data != NULL, FALSE);
 
 	keylen = strlen(key);
 	ckey = strdup(key);
 	if (ckey == NULL)
 	{
 		mowgli_log("major WTF: ckey is NULL, not adding node.");
-		return NULL;
+		return FALSE;
 	}
 	dict->canonize_cb(ckey);
 
@@ -456,7 +465,7 @@ mowgli_patricia_elem_t *mowgli_patricia_add(mowgli_patricia_t *dict, const char 
 	{
 		mowgli_log("Key is already in dict, ignoring duplicate");
 		free(ckey);
-		return NULL;
+		return FALSE;
 	}
 	place = delem;
 
@@ -511,7 +520,7 @@ mowgli_patricia_elem_t *mowgli_patricia_add(mowgli_patricia_t *dict, const char 
 
 	dict->count++;
 
-	return delem;
+	return TRUE;
 }
 
 /*

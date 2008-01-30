@@ -101,10 +101,10 @@ void _modinit(module_t *m)
 	}
 }
 
-static void free_hostentry(mowgli_patricia_elem_t *delem, void *privdata)
+static void free_hostentry(const char *key, void *data, void *privdata)
 {
 	node_t *n, *tn;
-	hostentry_t *he = delem->data;
+	hostentry_t *he = data;
 
 	LIST_FOREACH_SAFE(n, tn, he->clients.head)
 	{

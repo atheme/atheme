@@ -39,10 +39,10 @@ void _moddeinit()
 	help_delentry(ns_helptree, "REGISTER");
 }
 
-static int register_foreach_cb(mowgli_patricia_elem_t *delem, void *privdata)
+static int register_foreach_cb(const char *key, void *data, void *privdata)
 {
 	char *email = (char *) privdata;
-	myuser_t *tmu = (myuser_t *) delem->data;
+	myuser_t *tmu = (myuser_t *) data;
 
 	if (!strcasecmp(email, tmu->email))
 		tcnt++;

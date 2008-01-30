@@ -36,19 +36,10 @@
 #define __MOWGLI_PATRICIA_H__
 
 struct mowgli_patricia_; /* defined in src/patricia.c */
+struct mowgli_patricia_elem_; /* defined in src/patricia.c */
 
 typedef struct mowgli_patricia_ mowgli_patricia_t;
-
 typedef struct mowgli_patricia_elem_ mowgli_patricia_elem_t;
-
-struct mowgli_patricia_elem_
-{
-	int bitnum;
-	mowgli_patricia_elem_t *zero, *one;
-	mowgli_patricia_elem_t *next, *prev;
-	void *data;
-	char *key;
-};
 
 /*
  * mowgli_patricia_iteration_state_t, private.
@@ -76,7 +67,7 @@ extern mowgli_patricia_t *mowgli_patricia_create(void (*canonize_cb)(char *key))
  * a defined callback function to destroy any data attached to it.
  */
 extern void mowgli_patricia_destroy(mowgli_patricia_t *dtree,
-	void (*destroy_cb)(mowgli_patricia_elem_t *delem, void *privdata),
+	void (*destroy_cb)(const char *key, void *data, void *privdata),
 	void *privdata);
 
 /*
@@ -86,7 +77,7 @@ extern void mowgli_patricia_destroy(mowgli_patricia_t *dtree,
  * To shortcircuit iteration, return non-zero from the callback function.
  */
 extern void mowgli_patricia_foreach(mowgli_patricia_t *dtree,
-	int (*foreach_cb)(mowgli_patricia_elem_t *delem, void *privdata),
+	int (*foreach_cb)(const char *key, void *data, void *privdata),
 	void *privdata);
 
 /*
@@ -97,7 +88,7 @@ extern void mowgli_patricia_foreach(mowgli_patricia_t *dtree,
  * in that object being returned to the user.
  */
 extern void *mowgli_patricia_search(mowgli_patricia_t *dtree,
-	void *(*foreach_cb)(mowgli_patricia_elem_t *delem, void *privdata),
+	void *(*foreach_cb)(const char *key, void *data, void *privdata),
 	void *privdata);
 
 /*
@@ -125,12 +116,7 @@ extern void mowgli_patricia_foreach_next(mowgli_patricia_t *dtree,
 /*
  * mowgli_patricia_add() adds a key->value entry to the patricia tree.
  */
-extern mowgli_patricia_elem_t *mowgli_patricia_add(mowgli_patricia_t *dtree, const char *key, void *data);
-
-/*
- * mowgli_patricia_find() returns a mowgli_patricia_elem_t container from a dtree for key 'key'.
- */
-extern mowgli_patricia_elem_t *mowgli_patricia_find(mowgli_patricia_t *dtree, const char *key);
+extern mowgli_boolean_t mowgli_patricia_add(mowgli_patricia_t *dtree, const char *key, void *data);
 
 /*
  * mowgli_patricia_find() returns data from a dtree for key 'key'.

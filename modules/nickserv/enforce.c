@@ -304,10 +304,10 @@ static void check_enforce(void *vdata)
 	notice(nicksvs.nick, hdata->u->nick, "You have %d seconds to identify to your nickname before it is changed.", timeout->timelimit - CURRTIME);
 }
 
-static int idcheck_foreach_cb(mowgli_patricia_elem_t *delem, void *privdata)
+static int idcheck_foreach_cb(const char *key, void *data, void *privdata)
 {
 	metadata_t *md;
-	myuser_t *mu = (myuser_t *) delem->data;
+	myuser_t *mu = (myuser_t *) data;
 
 	if ((md = metadata_find(mu, METADATA_USER, "private:idcheck")))
 		metadata_delete(mu, METADATA_USER, "private:idcheck");
