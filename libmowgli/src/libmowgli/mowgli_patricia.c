@@ -36,10 +36,43 @@
 
 static mowgli_heap_t *elem_heap = NULL;
 
+/*
+ * Patricia tree.
+ *
+ * A radix trie that avoids one-way branching and redundant nodes.
+ *
+ * To find a node, the tree is traversed starting from the root. The
+ * bitnum in each node indicates which bit of the key needs to be
+ * tested, and the appropriate branch is taken. The keys in the nodes
+ * are not used during this descent.
+ *
+ * The bitnum values are strictly increasing while going down the tree.
+ * If the node pointed to has a lower or equal bitnum (an upward link),
+ * the key in this node is the only one that could match the requested key.
+ *
+ * When adding an entry, a node is inserted at the lowest bitnum where
+ * the key in the found node and the requested key differ. The new node
+ * contains the requested key and has an upward link to itself, while its
+ * other branch leads to the found node. Note that any other keys in that
+ * subtree will be equal on the new node's bitnum.
+ *
+ * When removing an entry, the node that has the upward link to the
+ * node with the requested key needs to be removed from the tree, because
+ * that bit test is no longer needed. If these two are the same node, it is
+ * simple; otherwise the node with the upward link needs to be moved to the
+ * node with the requested key.
+ *
+ * -- jilles
+ */
+
 struct mowgli_patricia_
 {
 	void (*canonize_cb)(char *key);
+	/* root node of the tree; this is a magic node with an
+	 * empty string as key
+	 */
 	mowgli_patricia_elem_t *root;
+	/* head and tail of linked list */
 	mowgli_patricia_elem_t *head, *tail;
 	unsigned int count;
 	char *id;
@@ -47,10 +80,15 @@ struct mowgli_patricia_
 
 struct mowgli_patricia_elem_
 {
+	/* bit number to test on (bit NUM%8 of byte NUM/8) */
 	int bitnum;
+	/* branches of the tree */
 	mowgli_patricia_elem_t *zero, *one;
+	/* linked list */
 	mowgli_patricia_elem_t *next, *prev;
+	/* data associated with the key */
 	void *data;
+	/* key (canonized copy) */
 	char *key;
 };
 
@@ -60,7 +98,9 @@ struct mowgli_patricia_elem_
  * Dictionary object factory.
  *
  * Inputs:
- *     - function to use for canonizing keys
+ *     - function to use for canonizing keys (for example, use
+ *       a function that makes the string upper case to create
+ *       a patricia with case-insensitive matching)
  *
  * Outputs:
  *     - on success, a new patricia object.
@@ -99,7 +139,9 @@ mowgli_patricia_t *mowgli_patricia_create(void (*canonize_cb)(char *key))
  *
  * Inputs:
  *     - patricia name
- *     - function to use for canonizing keys
+ *     - function to use for canonizing keys (for example, use
+ *       a function that makes the string upper case to create
+ *       a patricia with case-insensitive matching)
  *
  * Outputs:
  *     - on success, a new patricia object.
