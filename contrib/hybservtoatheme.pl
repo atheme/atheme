@@ -57,7 +57,7 @@
 # http://www.stack.nl/~jilles/irc/
 
 print "# hybservtoatheme.pl Copyright 2005-2007 Jilles Tjoelker\n";
-print "DBV 4\n";
+print "DBV 5\n";
 print "CF +vVhHoOtsriRfAb\n";
 
 $fakets = time() || 2147483647;
