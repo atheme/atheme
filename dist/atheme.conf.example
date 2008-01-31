@@ -126,7 +126,7 @@ loadmodule "modules/backend/flatfile";
  * PRIVMSG instead of NOTICE (SET PRIVMSG cmd)	modules/nickserv/set_privmsg
  * Account info hiding (SET PRIVATE command)	modules/nickserv/set_private
  * Password retrieval uses code (SETPASS cmd)	modules/nickserv/setpass
- * Presence notifications (SUBSCRIBE command)   modules/nickserv/subscribe
+ * Presence notifications (EXPERIMENTAL)        modules/nickserv/subscribe
  * Nickname enforcement				modules/nickserv/enforce
  * STATUS command				modules/nickserv/status
  * Nickname metadata viewer (TAXONOMY command)	modules/nickserv/taxonomy
@@ -158,7 +158,7 @@ loadmodule "modules/nickserv/set_accountname";
 #loadmodule "modules/nickserv/set_privmsg";
 #loadmodule "modules/nickserv/set_private";
 loadmodule "modules/nickserv/setpass";
-loadmodule "modules/nickserv/subscribe";
+#loadmodule "modules/nickserv/subscribe";
 #loadmodule "modules/nickserv/enforce";
 loadmodule "modules/nickserv/status";
 loadmodule "modules/nickserv/taxonomy";
