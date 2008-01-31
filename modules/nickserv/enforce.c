@@ -165,13 +165,16 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 	if ((si->smu == mn->owner) || verify_password(mn->owner, password))
 	{
 		/* if this (nick, host) is waiting to be enforced, remove it */
-		LIST_FOREACH_SAFE(n, tn, enforce_list.head)
+		if (si->su != NULL)
 		{
-			timeout = n->data;
-			if (!irccasecmp(mn->nick, timeout->nick) && (!strcmp(u->host, timeout->host) || !strcmp(u->vhost, timeout->host)))
+			LIST_FOREACH_SAFE(n, tn, enforce_list.head)
 			{
-				node_del(&timeout->node, &enforce_list);
-				BlockHeapFree(enforce_timeout_heap, timeout);
+				timeout = n->data;
+				if (!irccasecmp(mn->nick, timeout->nick) && (!strcmp(si->su->host, timeout->host) || !strcmp(si->su->vhost, timeout->host)))
+				{
+					node_del(&timeout->node, &enforce_list);
+					BlockHeapFree(enforce_timeout_heap, timeout);
+				}
 			}
 		}
 		if (u == NULL || is_internal_client(u))
