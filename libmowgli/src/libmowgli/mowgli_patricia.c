@@ -514,9 +514,13 @@ mowgli_boolean_t mowgli_patricia_add(mowgli_patricia_t *dict, const char *key, v
 	/* Find the first bit position where they differ */
 	/* XXX perhaps look up differing byte first, then bit */
 	/* Avoid bit 0 as it's already used by the magic root node,
-	 * but not necessarily tested? */
-	for (i = 1; !((ckey[i / 8] ^ place->key[i / 8]) & (1 << (i & 7))); i++)
-		;
+	 * but may still be distinct. A special case for "\1" is
+	 * needed. */
+	if (delem == dict->root && ckey[0] == '\1')
+		i = 1;
+	else
+		for (i = 1; !((ckey[i / 8] ^ place->key[i / 8]) & (1 << (i & 7))); i++)
+			;
 	/* Find where to insert the new node */
 	delem = dict->root;
 	do
