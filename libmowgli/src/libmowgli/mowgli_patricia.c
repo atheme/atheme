@@ -242,15 +242,12 @@ void mowgli_patricia_foreach(mowgli_patricia_t *dtree,
 	int (*foreach_cb)(const char *key, void *data, void *privdata),
 	void *privdata)
 {
-	mowgli_patricia_elem_t *n, *tn;
+	mowgli_patricia_elem_t *delem, *tn;
 
 	return_if_fail(dtree != NULL);
 
-	MOWGLI_LIST_FOREACH_SAFE(n, tn, dtree->head)
+	MOWGLI_LIST_FOREACH_SAFE(delem, tn, dtree->head)
 	{
-		/* delem_t is a subclass of node_t. */
-		mowgli_patricia_elem_t *delem = (mowgli_patricia_elem_t *) n;
-
 		if (foreach_cb != NULL)
 			(*foreach_cb)(delem->key, delem->data, privdata);
 	}
@@ -279,17 +276,14 @@ void *mowgli_patricia_search(mowgli_patricia_t *dtree,
 	void *(*foreach_cb)(const char *key, void *data, void *privdata),
 	void *privdata)
 {
-	mowgli_patricia_elem_t *n, *tn;
+	mowgli_patricia_elem_t *delem, *tn;
 	int i;
 	void *ret = NULL;
 
 	return_if_fail(dtree != NULL);
 
-	MOWGLI_LIST_FOREACH_SAFE(n, tn, dtree->head)
+	MOWGLI_LIST_FOREACH_SAFE(delem, tn, dtree->head)
 	{
-		/* delem_t is a subclass of node_t. */
-		mowgli_patricia_elem_t *delem = (mowgli_patricia_elem_t *) n;
-
 		if (foreach_cb != NULL)
 			ret = (*foreach_cb)(delem->key, delem->data, privdata);
 
