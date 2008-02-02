@@ -859,8 +859,7 @@ static void m_pass(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (strcmp(curr_uplink->pass, parv[0]))
 	{
-		slog(LG_INFO, "m_pass(): password mismatch from uplink; aborting");
-		runflags |= RF_SHUTDOWN;
+		slog(LG_INFO, "m_pass(): password mismatch from uplink; continuing anyway");
 	}
 }
 
