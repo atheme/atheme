@@ -173,7 +173,7 @@ static int newblock(BlockHeap *bh)
 	b->used_list.head = b->used_list.tail = NULL;
 	b->next = bh->base;
 
-	b->alloc_size = (bh->elemsPerBlock + 1) * (bh->elemSize + sizeof(MemBlock));
+	b->alloc_size = bh->elemsPerBlock * (bh->elemSize + sizeof(MemBlock));
 
 	b->elems = get_block(b->alloc_size);
 
