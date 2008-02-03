@@ -14,12 +14,16 @@ typedef void (*destructor_t)(void *);
 
 typedef struct {
 	char *name;
+#ifdef USE_OBJECT_REF
 	int refcount;
+#endif
 	destructor_t destructor;
 } object_t;
 
 E void object_init(object_t *, const char *name, destructor_t destructor);
+#ifdef USE_OBJECT_REF
 E void *object_ref(void *);
+#endif
 E void object_unref(void *);
 
 #define object(x) ((object_t *) x)

@@ -47,9 +47,12 @@ void object_init(object_t *obj, const char *name, destructor_t des)
 		obj->name = sstrdup(name);
 
 	obj->destructor = des;
+#ifdef USE_OBJECT_REF
 	obj->refcount = 1;
+#endif
 }
 
+#ifdef USE_OBJECT_REF
 /*
  * object_ref
  *
@@ -72,6 +75,7 @@ void * object_ref(void *object)
 
 	return object;
 }
+#endif
 
 /*
  * object_unref
@@ -94,9 +98,11 @@ void object_unref(void *object)
 	return_if_fail(object != NULL);
 	obj = object(object);
 
+#ifdef USE_OBJECT_REF
 	obj->refcount--;
 
 	if (obj->refcount <= 0)
+#endif
 	{
 		if (obj->name != NULL)
 			free(obj->name);
