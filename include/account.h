@@ -165,7 +165,7 @@ struct chanacs_
 
 	myuser_t *myuser;
 	mychan_t *mychan;
-	char      host[HOSTLEN];
+	char     *host;
 	unsigned int  level;
 	list_t	  metadata;
 	time_t    ts;

@@ -990,6 +990,8 @@ static void chanacs_delete(chanacs_t *ca)
 		metadata_delete(ca, METADATA_CHANACS, md->name);
 	}
 
+	free(ca->host);
+
 	BlockHeapFree(chanacs_heap, ca);
 
 	cnt.chanacs--;
@@ -1035,6 +1037,7 @@ chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level, t
 	object_init(object(ca), NULL, (destructor_t) chanacs_delete);
 	ca->mychan = mychan;
 	ca->myuser = myuser;
+	ca->host = NULL;
 	ca->level = level & ca_all;
 	ca->ts = ts;
 
@@ -1083,7 +1086,7 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int lev
 	object_init(object(ca), NULL, (destructor_t) chanacs_delete);
 	ca->mychan = mychan;
 	ca->myuser = NULL;
-	strlcpy(ca->host, host, HOSTLEN);
+	ca->host = sstrdup(host);
 	ca->level = level & ca_all;
 	ca->ts = ts;
 
