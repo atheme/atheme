@@ -550,13 +550,23 @@ mowgli_boolean_t mowgli_patricia_add(mowgli_patricia_t *dict, const char *key, v
 		newelem->zero = newelem, newelem->one = delem;
 
 	/* linked list - XXX still needed? */
-	newelem->next = NULL;
-	newelem->prev = dict->tail;
-	if (dict->tail != NULL)
-		dict->tail->next = newelem;
-	dict->tail = newelem;
-	if (dict->head == NULL)
-		dict->head = newelem;
+	if (place != NULL && place != dict->root && place->next != NULL)
+	{
+		newelem->next = place->next;
+		newelem->prev = place;
+		place->next->prev = newelem;
+		place->next = newelem;
+	}
+	else
+	{
+		newelem->next = NULL;
+		newelem->prev = dict->tail;
+		if (dict->tail != NULL)
+			dict->tail->next = newelem;
+		dict->tail = newelem;
+		if (dict->head == NULL)
+			dict->head = newelem;
+	}
 
 	dict->count++;
 
