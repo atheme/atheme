@@ -153,6 +153,11 @@ E int tokenize(char *message, char **parv);
 E const char* uinttobase64(char* buf, uint64_t v, int64_t count);
 E unsigned int base64touint(char* buf);
 
+/* strshare.c */
+void strshare_init(void);
+char *strshare_get(const char *str);
+void strshare_unref(char *str);
+
 #endif
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

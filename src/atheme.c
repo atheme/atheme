@@ -209,6 +209,7 @@ int main(int argc, char *argv[])
         event_init();
         initBlockHeap();
         init_dlink_nodes();
+	strshare_init();
         hooks_init();
         init_netio();
         init_socket_queues();
