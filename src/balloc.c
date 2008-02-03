@@ -48,8 +48,11 @@ struct MemBlock
 #ifdef DEBUG_BALLOC
   unsigned long magic;
 #endif
-  MemBlock *next;
-  Block *block;           /* Which block we belong to */
+  union
+  {
+    MemBlock *next;  /* for free memblocks: next free memblock */
+    Block *block;    /* for allocated memblocks: which block we belong to */
+  } un;
 };
 
 struct Block
@@ -218,14 +221,12 @@ static int newblock(BlockHeap *bh)
 	for (i = 0; i < bh->elemsPerBlock; i++)
 	{
 		newblk = (void *)offset;
-		newblk->next = NULL;
-		newblk->block = b;
+		newblk->un.next = NULL;
 #ifdef DEBUG_BALLOC
 		newblk->magic = BALLOC_MAGIC;
 #endif
-		newblk->block = b;
 		*pprev = newblk;
-		pprev = &newblk->next;
+		pprev = &newblk->un.next;
 		offset = (unsigned char *)((unsigned char *)offset + bh->elemSize + sizeof(MemBlock));
 	}
 
@@ -354,7 +355,8 @@ void *BlockHeapAlloc(BlockHeap *bh)
 			bh->freeElems--;
 			walker->used++;
 			new_node = walker->firstfree;
-			walker->firstfree = new_node->next;
+			walker->firstfree = new_node->un.next;
+			new_node->un.block = walker;
 			memset(new_node + 1, 0, bh->elemSize);
 			return new_node + 1;
 		}
@@ -405,16 +407,16 @@ int BlockHeapFree(BlockHeap *bh, void *ptr)
 		runflags |= RF_SHUTDOWN;
 	}
 #endif
-	if (memblock->block == NULL)
+	if (memblock->un.block == NULL)
 	{
 		blockheap_fail("memblock->block == NULL, not a valid block?");
 		runflags |= RF_SHUTDOWN;
 	}
 
-	block = memblock->block;
+	block = memblock->un.block;
 	bh->freeElems++;
 	block->used--;
-	memblock->next = block->firstfree;
+	memblock->un.next = block->firstfree;
 	block->firstfree = memblock;
 #endif
 	return (0);
