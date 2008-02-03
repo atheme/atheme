@@ -975,9 +975,7 @@ static void chanacs_delete(chanacs_t *ca)
 	if (!(runflags & RF_STARTING))
 		slog(LG_DEBUG, "chanacs_delete(): %s -> %s", ca->mychan->name,
 			ca->myuser != NULL ? ca->myuser->name : ca->host);
-	n = node_find(ca, &ca->mychan->chanacs);
-	node_del(n, &ca->mychan->chanacs);
-	node_free(n);
+	node_del(&ca->cnode, &ca->mychan->chanacs);
 
 	if (ca->myuser != NULL)
 	{
@@ -1017,8 +1015,7 @@ static void chanacs_delete(chanacs_t *ca)
 chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level, time_t ts)
 {
 	chanacs_t *ca;
-	node_t *n1;
-	node_t *n2;
+	node_t *n;
 
 	return_val_if_fail(mychan != NULL && myuser != NULL, NULL);
 
@@ -1031,8 +1028,7 @@ chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level, t
 	if (!(runflags & RF_STARTING))
 		slog(LG_DEBUG, "chanacs_add(): %s -> %s", mychan->name, myuser->name);
 
-	n1 = node_create();
-	n2 = node_create();
+	n = node_create();
 
 	ca = BlockHeapAlloc(chanacs_heap);
 
@@ -1042,8 +1038,8 @@ chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level, t
 	ca->level = level & ca_all;
 	ca->ts = ts;
 
-	node_add(ca, n1, &mychan->chanacs);
-	node_add(ca, n2, &myuser->chanacs);
+	node_add(ca, &ca->cnode, &mychan->chanacs);
+	node_add(ca, n, &myuser->chanacs);
 
 	cnt.chanacs++;
 
@@ -1070,7 +1066,6 @@ chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level, t
 chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int level, time_t ts)
 {
 	chanacs_t *ca;
-	node_t *n;
 
 	return_val_if_fail(mychan != NULL && host != NULL, NULL);
 
@@ -1083,8 +1078,6 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int lev
 	if (!(runflags & RF_STARTING))
 		slog(LG_DEBUG, "chanacs_add_host(): %s -> %s", mychan->name, host);
 
-	n = node_create();
-
 	ca = BlockHeapAlloc(chanacs_heap);
 
 	object_init(object(ca), NULL, (destructor_t) chanacs_delete);
@@ -1094,7 +1087,7 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int lev
 	ca->level = level & ca_all;
 	ca->ts = ts;
 
-	node_add(ca, n, &mychan->chanacs);
+	node_add(ca, &ca->cnode, &mychan->chanacs);
 
 	cnt.chanacs++;
 

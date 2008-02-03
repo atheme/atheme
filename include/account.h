@@ -169,6 +169,7 @@ struct chanacs_
 	unsigned int  level;
 	list_t	  metadata;
 	time_t    ts;
+	node_t    cnode;
 };
 
 /* the new atheme-style channel flags */
