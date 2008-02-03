@@ -38,13 +38,9 @@
 # define PROT_WRITE 0
 #endif
 
-struct Block
-{
-  size_t alloc_size;
-  struct Block *next;     /* Next in our chain of blocks */
-  void *elems;            /* Points to allocated memory */
-  list_t free_list;
-};
+struct MemBlock;
+typedef struct MemBlock MemBlock;
+struct Block;
 typedef struct Block Block;
 
 struct MemBlock
@@ -52,11 +48,18 @@ struct MemBlock
 #ifdef DEBUG_BALLOC
   unsigned long magic;
 #endif
-  node_t self;
+  MemBlock *next;
   Block *block;           /* Which block we belong to */
 };
 
-typedef struct MemBlock MemBlock;
+struct Block
+{
+  size_t alloc_size;
+  Block *next;            /* Next in our chain of blocks */
+  void *elems;            /* Points to allocated memory */
+  MemBlock *firstfree;
+  int used;
+};
 
 /* information for the root node of the heap */
 struct BlockHeap
@@ -188,7 +191,7 @@ static void block_heap_gc(void *unused)
 
 static int newblock(BlockHeap *bh)
 {
-	MemBlock *newblk;
+	MemBlock *newblk, **pprev;
 	Block *b;
 	unsigned long i;
 	void *offset;
@@ -199,30 +202,30 @@ static int newblock(BlockHeap *bh)
 	if (b == NULL)
 		return (1);
 
-	b->free_list.head = b->free_list.tail = NULL;
 	b->next = bh->base;
-
 	b->alloc_size = bh->elemsPerBlock * (bh->elemSize + sizeof(MemBlock));
-
 	b->elems = get_block(b->alloc_size);
+	b->firstfree = NULL;
+	b->used = 0;
 
 	if (b->elems == NULL)
 		return (1);
 
 	offset = b->elems;
+	pprev = &b->firstfree;
 
 	/* Setup our blocks now */
 	for (i = 0; i < bh->elemsPerBlock; i++)
 	{
-		void *data;
 		newblk = (void *)offset;
+		newblk->next = NULL;
 		newblk->block = b;
 #ifdef DEBUG_BALLOC
 		newblk->magic = BALLOC_MAGIC;
 #endif
-		data = (void *)((size_t) offset + sizeof(MemBlock));
 		newblk->block = b;
-		node_add(data, &newblk->self, &b->free_list);
+		*pprev = newblk;
+		pprev = &newblk->next;
 		offset = (unsigned char *)((unsigned char *)offset + bh->elemSize + sizeof(MemBlock));
 	}
 
@@ -317,7 +320,7 @@ BlockHeap *BlockHeapCreate(size_t elemsize, int elemsperblock)
 void *BlockHeapAlloc(BlockHeap *bh)
 {
 	Block *walker;
-	node_t *new_node;
+	MemBlock *new_node;
 
 	if (bh == NULL)
 	{
@@ -346,15 +349,14 @@ void *BlockHeapAlloc(BlockHeap *bh)
 
 	for (walker = bh->base; walker != NULL; walker = walker->next)
 	{
-		if (LIST_LENGTH(&walker->free_list) > 0)
+		if (walker->firstfree != NULL)
 		{
 			bh->freeElems--;
-			new_node = walker->free_list.head;
-			node_del(new_node, &walker->free_list);
-			if (new_node->data == NULL)
-				blockheap_fail("new_node->data is NULL and that shouldn't happen!!!");
-			memset(new_node->data, 0, bh->elemSize);
-			return (new_node->data);
+			walker->used++;
+			new_node = walker->firstfree;
+			walker->firstfree = new_node->next;
+			memset(new_node + 1, 0, bh->elemSize);
+			return new_node + 1;
 		}
 	}
 	blockheap_fail("BlockHeapAlloc failed, giving up");
@@ -395,7 +397,7 @@ int BlockHeapFree(BlockHeap *bh, void *ptr)
 #ifdef NOBALLOC
 	free(ptr);
 #else
-	memblock = (void *)((size_t) ptr - sizeof(MemBlock));
+	memblock = (void *)((char *) ptr - sizeof(MemBlock));
 #ifdef DEBUG_BALLOC
 	if (memblock->magic != BALLOC_MAGIC)
 	{
@@ -411,7 +413,9 @@ int BlockHeapFree(BlockHeap *bh, void *ptr)
 
 	block = memblock->block;
 	bh->freeElems++;
-	node_add(ptr, &memblock->self, &block->free_list);
+	block->used--;
+	memblock->next = block->firstfree;
+	block->firstfree = memblock;
 #endif
 	return (0);
 }
@@ -448,7 +452,7 @@ static int BlockHeapGarbageCollect(BlockHeap *bh)
 
 	while (walker != NULL)
 	{
-		if ((LIST_LENGTH(&walker->free_list) == bh->elemsPerBlock) != 0)
+		if (walker->used == 0)
 		{
 			free_block(walker->elems, walker->alloc_size);
 			if (last != NULL)
