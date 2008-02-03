@@ -14,6 +14,7 @@ struct metadata_ {
 	char *name;
 	char *value;
 	boolean_t private;
+	node_t node;
 };
 
 typedef struct metadata_ metadata_t;

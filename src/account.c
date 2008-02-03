@@ -1484,7 +1484,6 @@ metadata_t *metadata_add(void *target, int type, const char *name, const char *v
 	chanacs_t *ca = NULL;
 	myuser_name_t *mun = NULL;
 	metadata_t *md;
-	node_t *n;
 	hook_metadata_change_t mdchange;
 
 	if (!name || !value)
@@ -1512,16 +1511,14 @@ metadata_t *metadata_add(void *target, int type, const char *name, const char *v
 	md->name = sstrdup(name);
 	md->value = sstrdup(value);
 
-	n = node_create();
-
 	if (type == METADATA_USER)
-		node_add(md, n, &mu->metadata);
+		node_add(md, &md->node, &mu->metadata);
 	else if (type == METADATA_CHANNEL)
-		node_add(md, n, &mc->metadata);
+		node_add(md, &md->node, &mc->metadata);
 	else if (type == METADATA_CHANACS)
-		node_add(md, n, &ca->metadata);
+		node_add(md, &md->node, &ca->metadata);
 	else if (type == METADATA_USER_NAME)
-		node_add(md, n, &mun->metadata);
+		node_add(md, &md->node, &mun->metadata);
 	else
 	{
 		slog(LG_DEBUG, "metadata_add(): trying to add metadata to unknown type %d", type);
@@ -1547,7 +1544,6 @@ metadata_t *metadata_add(void *target, int type, const char *name, const char *v
 
 void metadata_delete(void *target, int type, const char *name)
 {
-	node_t *n;
 	myuser_t *mu;
 	mychan_t *mc;
 	chanacs_t *ca;
@@ -1567,30 +1563,22 @@ void metadata_delete(void *target, int type, const char *name)
 	if (type == METADATA_USER)
 	{
 		mu = target;
-		n = node_find(md, &mu->metadata);
-		node_del(n, &mu->metadata);
-		node_free(n);
+		node_del(&md->node, &mu->metadata);
 	}
 	else if (type == METADATA_CHANNEL)
 	{
 		mc = target;
-		n = node_find(md, &mc->metadata);
-		node_del(n, &mc->metadata);
-		node_free(n);
+		node_del(&md->node, &mc->metadata);
 	}
 	else if (type == METADATA_CHANACS)
 	{
 		ca = target;
-		n = node_find(md, &ca->metadata);
-		node_del(n, &ca->metadata);
-		node_free(n);
+		node_del(&md->node, &ca->metadata);
 	}
 	else if (type == METADATA_USER_NAME)
 	{
 		mun = target;
-		n = node_find(md, &mun->metadata);
-		node_del(n, &mun->metadata);
-		node_free(n);
+		node_del(&md->node, &mun->metadata);
 	}
 	else
 	{
