@@ -17,7 +17,7 @@
 
 /* lengths of buffers (string length is 1 less) */
 #define HOSTLEN			64		/* seems good enough */
-#define NICKLEN			51
+#define NICKLEN			31
 #define IDLEN			10
 #define CHANNELLEN		201
 #define USERLEN			11
