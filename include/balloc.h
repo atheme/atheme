@@ -16,7 +16,6 @@ struct Block
   struct Block *next;     /* Next in our chain of blocks */
   void *elems;            /* Points to allocated memory */
   list_t free_list;
-  list_t used_list;
 };
 typedef struct Block Block;
 

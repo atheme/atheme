@@ -170,7 +170,6 @@ static int newblock(BlockHeap *bh)
 		return (1);
 
 	b->free_list.head = b->free_list.tail = NULL;
-	b->used_list.head = b->used_list.tail = NULL;
 	b->next = bh->base;
 
 	b->alloc_size = bh->elemsPerBlock * (bh->elemSize + sizeof(MemBlock));
@@ -321,7 +320,7 @@ void *BlockHeapAlloc(BlockHeap *bh)
 		{
 			bh->freeElems--;
 			new_node = walker->free_list.head;
-			node_move(new_node, &walker->free_list, &walker->used_list);
+			node_del(new_node, &walker->free_list);
 			if (new_node->data == NULL)
 				blockheap_fail("new_node->data is NULL and that shouldn't happen!!!");
 			memset(new_node->data, 0, bh->elemSize);
@@ -382,7 +381,7 @@ int BlockHeapFree(BlockHeap *bh, void *ptr)
 
 	block = memblock->block;
 	bh->freeElems++;
-	node_move(&memblock->self, &block->used_list, &block->free_list);
+	node_add(ptr, &memblock->self, &block->free_list);
 #endif
 	return (0);
 }
