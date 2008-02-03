@@ -60,8 +60,8 @@ struct myuser_
   unsigned int flags;
   
   list_t memos; /* store memos */
-  unsigned int memoct_new;
-  unsigned int memo_ratelimit_num; /* memos sent recently */
+  unsigned short memoct_new;
+  unsigned short memo_ratelimit_num; /* memos sent recently */
   time_t memo_ratelimit_time; /* last time a memo was sent */
   list_t memo_ignores;
 
