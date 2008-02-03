@@ -111,7 +111,7 @@ static int account_register(void *conn, int parc, char *parv[])
 	}
 
 	if (strchr(parv[1], ' ') || strchr(parv[1], '\n') || strchr(parv[1], '\r')
-		|| !(strlen(parv[1]) <= (NICKLEN - 1)))
+		|| !(strlen(parv[1]) <= (PASSLEN - 1)))
 	{
 		xmlrpc_generic_error(2, "The password is invalid.");
 		return 0;

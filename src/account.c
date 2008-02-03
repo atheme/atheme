@@ -129,7 +129,7 @@ myuser_t *myuser_add(char *name, char *pass, char *email, unsigned int flags)
 	 * immediately converted the first time we start up with crypto.
 	 */
 	if (flags & MU_CRYPTPASS)
-		strlcpy(mu->pass, pass, NICKLEN);
+		strlcpy(mu->pass, pass, PASSLEN);
 	else
 		set_password(mu, pass);
 

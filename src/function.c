@@ -508,12 +508,12 @@ void set_password(myuser_t *mu, char *newpassword)
 	if (crypto_module_loaded == TRUE)
 	{
 		mu->flags |= MU_CRYPTPASS;
-		strlcpy(mu->pass, crypt_string(newpassword, gen_salt()), NICKLEN);
+		strlcpy(mu->pass, crypt_string(newpassword, gen_salt()), PASSLEN);
 	}
 	else
 	{
 		mu->flags &= ~MU_CRYPTPASS;			/* just in case */
-		strlcpy(mu->pass, newpassword, NICKLEN);
+		strlcpy(mu->pass, newpassword, PASSLEN);
 	}
 }
 

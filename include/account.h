@@ -45,7 +45,7 @@ struct myuser_
   object_t parent;
 
   char name[NICKLEN];
-  char pass[NICKLEN];
+  char pass[PASSLEN];
   char email[EMAILLEN];
 
   list_t logins; /* user_t's currently logged in to this */
