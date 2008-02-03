@@ -1501,7 +1501,7 @@ metadata_t *metadata_add(void *target, int type, const char *name, const char *v
 
 	md = BlockHeapAlloc(metadata_heap);
 
-	md->name = sstrdup(name);
+	md->name = strshare_get(name);
 	md->value = sstrdup(value);
 
 	if (type == METADATA_USER)
@@ -1516,7 +1516,7 @@ metadata_t *metadata_add(void *target, int type, const char *name, const char *v
 	{
 		slog(LG_DEBUG, "metadata_add(): trying to add metadata to unknown type %d", type);
 
-		free(md->name);
+		strshare_unref(md->name);
 		free(md->value);
 		BlockHeapFree(metadata_heap, md);
 
@@ -1579,7 +1579,7 @@ void metadata_delete(void *target, int type, const char *name)
 		return;
 	}
 
-	free(md->name);
+	strshare_unref(md->name);
 	free(md->value);
 
 	BlockHeapFree(metadata_heap, md);
