@@ -88,7 +88,7 @@ static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "\2/%s%s help commands\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
 		command_success_nodata(si, " ");
 
-		command_help_short(si, cs_cmdtree, "REGISTER OP INVITE UNBAN FLAGS RECOVER SET");
+		command_help_short(si, cs_cmdtree, "REGISTER OP INVITE UNBAN FLAGS RECOVER SET CLOSE FFLAGS FTRANSFER");
 
 		command_success_nodata(si, _("***** \2End of Help\2 *****"));
 		return;
