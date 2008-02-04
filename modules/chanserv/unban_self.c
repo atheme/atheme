@@ -73,6 +73,7 @@ static void cs_cmd_unban(sourceinfo_t *si, int parc, char *parv[])
 			command_fail(si, fault_noprivs, _("Try \2/mode %s -b %s\2"), channel, target);
 		return;
 	}
+	target = si->su->nick;
 
 	if (!mc)
 	{
