@@ -84,7 +84,6 @@ static void cs_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		}
 		command_success_nodata(si, _("For more information on a command, type:"));
 		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
-		command_success_nodata(si, " ");
 		command_success_nodata(si, _("For a verbose listing of all commands, type:"));
 		command_success_nodata(si, "\2/%s%s help commands\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", chansvs.disp);
 		command_success_nodata(si, " ");
