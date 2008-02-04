@@ -192,6 +192,9 @@ static boolean_t hyperion_is_valid_host(const char *host)
 					(*p >= 'a' && *p <= 'z') || *p == '-'))
 			return FALSE;
 	}
+	/* hyperion allows a trailing / but RichiH does not want it, whatever */
+	if (dot && p[-1] == '/')
+		return FALSE;
 	return dot;
 }
 
