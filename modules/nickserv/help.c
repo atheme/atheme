@@ -71,6 +71,8 @@ void ns_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, " ");
 		command_success_nodata(si, _("For more information on a command, type:"));
 		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.disp);
+		command_success_nodata(si, _("For a verbose listing of all commands, type:"));
+		command_success_nodata(si, "\2/%s%s help commands\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", nicksvs.disp);
 		command_success_nodata(si, " ");
 
 		command_help_short(si, ns_cmdtree, "REGISTER IDENTIFY GHOST RELEASE INFO LISTCHANS SET GROUP UNGROUP MARK FREEZE SENDPASS");
