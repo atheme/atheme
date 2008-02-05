@@ -47,8 +47,11 @@ typedef struct mowgli_heap_elem_header_ mowgli_heap_elem_header_t;
 
 struct mowgli_heap_elem_header_
 {
-	mowgli_block_t *block;
-	mowgli_heap_elem_header_t *next;
+	union
+	{
+		mowgli_block_t *block; /* for allocated elems: block ptr */
+		mowgli_heap_elem_header_t *next; /* for free elems: next free */
+	} un;
 };
 
 /* expands a mowgli_heap_t by 1 block */
@@ -77,8 +80,7 @@ static void mowgli_heap_expand(mowgli_heap_t *bh)
 	for (a = 0; a < bh->mowgli_heap_elems; a++)
 	{
 		node = (mowgli_heap_elem_header_t *)offset;
-		node->block = block;
-		node->next = prev;
+		node->un.next = prev;
 		offset += bh->alloc_size;
 		prev = node;
 	}
@@ -170,7 +172,8 @@ void *mowgli_heap_alloc(mowgli_heap_t *heap)
 			continue;
 		
 		/* mark it as used */
-		b->first_free = h->next;
+		b->first_free = h->un.next;
+		h->un.block = b;
 		
 		/* keep count */
 		heap->free_elems--;
@@ -197,13 +200,13 @@ void mowgli_heap_free(mowgli_heap_t *heap, void *data)
 	mowgli_heap_elem_header_t *h;
 	
 	h = (mowgli_heap_elem_header_t *)((char *)data - sizeof(mowgli_heap_elem_header_t));
-	b = h->block;
+	b = h->un.block;
 
 	return_if_fail(b->heap == heap);
 	return_if_fail(b->num_allocated > 0);
 
 	/* mark it as free */
-	h->next = b->first_free;
+	h->un.next = b->first_free;
 	b->first_free = h;
 
 	/* keep count */
