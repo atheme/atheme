@@ -117,12 +117,22 @@ static void mowgli_heap_shrink(mowgli_block_t *b)
 mowgli_heap_t *mowgli_heap_create(size_t elem_size, size_t mowgli_heap_elems, unsigned int flags)
 {
 	mowgli_heap_t *bh = mowgli_alloc(sizeof(mowgli_heap_t));
-	
+	int numpages, pagesize;
+
 	bh->elem_size = elem_size;
 	bh->mowgli_heap_elems = mowgli_heap_elems;
 	bh->free_elems = 0;
 	
 	bh->alloc_size = bh->elem_size + sizeof(mowgli_heap_elem_header_t);
+
+	/* don't waste part of a page */
+#ifdef HAVE_MMAP
+	pagesize = getpagesize();
+#else
+	pagesize = 4096;
+#endif
+	numpages = (sizeof(mowgli_block_t) + (bh->alloc_size * bh->mowgli_heap_elems) + pagesize - 1) / pagesize;
+	bh->mowgli_heap_elems = (numpages * pagesize - sizeof(mowgli_block_t)) / bh->alloc_size;
 	
 	bh->flags = flags;
 	
