@@ -103,7 +103,7 @@ static void load_newsdb(void)
 			char *nick = strtok(NULL, " ");
 			char *target = strtok(NULL, " ");
 			char *news_ts = strtok(NULL, " ");
-			char *story = strtok(NULL, "");
+			char *story = strtok(NULL, "\n");
 
 			if (!nick || !target || !news_ts || !story)
 				continue;
