@@ -71,16 +71,21 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!mc->chan)
-	{
-		command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), name);
-		return;
-	}
-
 	if (!chanacs_source_has_flag(mc, si, CA_RECOVER))
 	{
 		command_fail(si, fault_noprivs, _("You are not authorized to perform this operation."));
 		return;
+	}
+
+	if (!mc->chan)
+	{
+		join(mc->name, chansvs.nick);
+		mc->flags |= MC_INHABIT;
+		if (!mc->chan)
+		{
+			command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), name);
+			return;
+		}
 	}
 
 	verbose(mc, "\2%s\2 used RECOVER.", get_source_name(si));
