@@ -310,14 +310,6 @@ void mowgli_node_move(mowgli_node_t *m, mowgli_list_t *oldlist, mowgli_list_t *n
         newlist->count++;
 }
 
-/* returns a list node's parent list. */
-mowgli_list_t *mowgli_node_parent(mowgli_node_t *n)
-{
-	return_val_if_fail(n != NULL, NULL);
-
-	return n->parent;
-}
-
 /* creates a new list. */
 mowgli_list_t *mowgli_list_create(void)
 {
