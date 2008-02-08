@@ -811,6 +811,8 @@ static void mychan_delete(mychan_t *mc)
 
 	mowgli_patricia_delete(mclist, mc->name);
 
+	free(mc->name);
+
 	BlockHeapFree(mychan_heap, mc);
 
 	cnt.mychan--;
@@ -828,7 +830,7 @@ mychan_t *mychan_add(char *name)
 	mc = BlockHeapAlloc(mychan_heap);
 
 	object_init(object(mc), NULL, (destructor_t) mychan_delete);
-	strlcpy(mc->name, name, CHANNELLEN);
+	mc->name = sstrdup(name);
 	mc->registered = CURRTIME;
 	mc->chan = channel_find(name);
 

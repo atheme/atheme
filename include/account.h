@@ -121,7 +121,7 @@ struct mychan_
 {
   object_t parent;
 
-  char name[CHANNELLEN];
+  char *name;
 
   channel_t *chan;
   list_t chanacs;
