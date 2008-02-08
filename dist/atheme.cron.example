@@ -24,6 +24,6 @@ fi
 
 echo "$0: couldn't find atheme running, restarting..."
 
-./bin/atheme
+./bin/atheme-services
 
 exit 0
