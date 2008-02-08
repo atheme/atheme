@@ -75,11 +75,11 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 
 	newpass = gen_pw(12);
 	strlcpy(oldmail, mu->email, EMAILLEN);
-	strlcpy(mu->email, newmail, EMAILLEN);
+	myuser_set_email(mu, newmail);
 
 	if (!sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_SENDPASS, mu, newpass))
 	{
-		strlcpy(mu->email, oldmail, EMAILLEN);
+		myuser_set_email(mu, oldmail);
 		command_fail(si, fault_emailfail, _("Sending email failed, account \2%s\2 remains with \2%s\2."),
 				mu->name, mu->email);
 		return;

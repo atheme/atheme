@@ -266,7 +266,7 @@ static int account_verify(void *conn, int parc, char *parv[])
                 {
 			md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:newemail");
 
-			strlcpy(mu->email, md->value, EMAILLEN);
+			myuser_set_email(mu, md->value);
 
 			snoop("SET:EMAIL:VS: \2%s\2 via xmlrpc", mu->email);
 			logcommand_external(nicksvs.me, "xmlrpc", conn, NULL, mu, CMDLOG_SET, "VERIFY EMAILCHG (email: %s)", mu->email);

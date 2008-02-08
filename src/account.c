@@ -317,6 +317,26 @@ void myuser_rename(myuser_t *mu, const char *name)
 }
 
 /*
+ * myuser_set_email(myuser_t *mu, const char *name)
+ *
+ * Changes the email address of an account.
+ *
+ * Inputs:
+ *      - account to change
+ *      - new email address; this must be valid
+ *
+ * Outputs:
+ *      - nothing
+ *
+ * Side Effects:
+ *      - email address is changed
+ */
+void myuser_set_email(myuser_t *mu, const char *newemail)
+{
+	strlcpy(mu->email, newemail, EMAILLEN);
+}
+
+/*
  * myuser_find_ext(const char *name)
  *
  * Same as myuser_find() but with nick group support and undernet-style

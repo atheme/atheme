@@ -122,7 +122,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 		{
 			md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:newemail");
 
-			strlcpy(mu->email, md->value, EMAILLEN);
+			myuser_set_email(mu, md->value);
 
 			snoop("SET:EMAIL:VS: \2%s\2 by \2%s\2", mu->email, get_source_name(si));
 			logcommand(si, CMDLOG_SET, "VERIFY EMAILCHG (email: %s)", mu->email);
@@ -207,7 +207,7 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 
 		md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:newemail");
 
-		strlcpy(mu->email, md->value, EMAILLEN);
+		myuser_set_email(mu, md->value);
 
 		snoop("SET:EMAIL:VS: \2%s\2 for \2%s\2 by \2%s\2", mu->email, mu->name, get_source_name(si));
 		logcommand(si, CMDLOG_REGISTER, "FVERIFY EMAILCHG %s (email: %s)", mu->name, mu->email);

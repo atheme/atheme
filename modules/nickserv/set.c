@@ -132,7 +132,7 @@ static void _ns_setemail(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	strlcpy(si->smu->email, email, EMAILLEN);
+	myuser_set_email(si->smu, email);
 
 	logcommand(si, CMDLOG_SET, "SET EMAIL %s", email);
 	command_success_nodata(si, _("The email address for account \2%s\2 has been changed to \2%s\2."), si->smu->name, si->smu->email);
