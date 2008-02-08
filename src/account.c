@@ -112,7 +112,7 @@ myuser_t *myuser_add(char *name, char *pass, char *email, unsigned int flags)
 	object_init(object(mu), NULL, (destructor_t) myuser_delete);
 
 	strlcpy(mu->name, name, NICKLEN);
-	strlcpy(mu->email, email, EMAILLEN);
+	mu->email = sstrdup(email);
 
 	mu->registered = CURRTIME;
 	mu->flags = flags;
@@ -268,6 +268,8 @@ void myuser_delete(myuser_t *mu)
 	/* mu->name is the index for this dtree */
 	mowgli_patricia_delete(mulist, mu->name);
 
+	free(mu->email);
+
 	BlockHeapFree(myuser_heap, mu);
 
 	cnt.myuser--;
@@ -333,7 +335,8 @@ void myuser_rename(myuser_t *mu, const char *name)
  */
 void myuser_set_email(myuser_t *mu, const char *newemail)
 {
-	strlcpy(mu->email, newemail, EMAILLEN);
+	free(mu->email);
+	mu->email = sstrdup(newemail);
 }
 
 /*

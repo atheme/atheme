@@ -46,7 +46,7 @@ struct myuser_
 
   char name[NICKLEN];
   char pass[PASSLEN];
-  char email[EMAILLEN];
+  char *email;
 
   list_t logins; /* user_t's currently logged in to this */
   time_t registered;
