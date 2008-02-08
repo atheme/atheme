@@ -504,6 +504,7 @@ serverinfo {
 
 	/* (*)maxusers
 	 * What are the maximum usernames that one email address can register?
+	 * Set to 0 to disable this check (it can be slow currently).
 	 */
 	maxusers = 5;
 

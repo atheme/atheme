@@ -1988,12 +1988,6 @@ boolean_t conf_check(void)
 		me.maxlogins = 5;
 	}
 
-	if (!me.maxusers)
-	{
-		slog(LG_INFO, "conf_check(): no `maxusers' set in %s; " "defaulting to 5", config_file);
-		me.maxusers = 5;
-	}
-
 	if (!me.maxnicks)
 	{
 		if (!nicksvs.no_nick_ownership)

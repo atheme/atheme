@@ -131,13 +131,16 @@ static int account_register(void *conn, int parc, char *parv[])
 		return 0;
 	}
 
-	tcnt = 0;
-	mowgli_patricia_foreach(mulist, account_myuser_foreach_cb, parv[2]);
-
-	if (tcnt >= me.maxusers)
+	if (me.maxusers > 0)
 	{
-		xmlrpc_generic_error(9, "Too many accounts are associated with this e-mail address.");
-		return 0;
+		tcnt = 0;
+		mowgli_patricia_foreach(mulist, account_myuser_foreach_cb, parv[2]);
+
+		if (tcnt >= me.maxusers)
+		{
+			xmlrpc_generic_error(9, "Too many accounts are associated with this e-mail address.");
+			return 0;
+		}
 	}
 
 	snoop("REGISTER: \2%s\2 to \2%s\2 (via \2xmlrpc\2)", parv[0], parv[2]);

@@ -146,13 +146,16 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		return;
 
 	/* make sure they're within limits */
-	tcnt = 0;
-	mowgli_patricia_foreach(mulist, register_foreach_cb, email);
-
-	if (tcnt >= me.maxusers)
+	if (me.maxusers > 0)
 	{
-		command_fail(si, fault_toomany, _("\2%s\2 has too many nicknames registered."), email);
-		return;
+		tcnt = 0;
+		mowgli_patricia_foreach(mulist, register_foreach_cb, email);
+
+		if (tcnt >= me.maxusers)
+		{
+			command_fail(si, fault_toomany, _("\2%s\2 has too many nicknames registered."), email);
+			return;
+		}
 	}
 
 	mu = myuser_add(account, pass, email, config_options.defuflags | MU_NOBURSTLOGIN);
