@@ -39,32 +39,6 @@ void _moddeinit(void)
 	help_delentry(ns_helptree, "SET ACCOUNTNAME");
 }
 
-static void myuser_rename(myuser_t *mu, const char *name)
-{
-	node_t *n, *tn;
-	user_t *u;
-
-	if (authservice_loaded)
-	{
-		LIST_FOREACH_SAFE(n, tn, mu->logins.head)
-		{
-			u = n->data;
-			ircd_on_logout(u->nick, mu->name, NULL);
-		}
-	}
-	mowgli_patricia_delete(mulist, mu->name);
-	strlcpy(mu->name, name, NICKLEN);
-	mowgli_patricia_add(mulist, mu->name, mu);
-	if (authservice_loaded)
-	{
-		LIST_FOREACH(n, mu->logins.head)
-		{
-			u = n->data;
-			ircd_on_login(u->nick, mu->name, NULL);
-		}
-	}
-}
-
 /* SET ACCOUNTNAME <nick> */
 static void ns_cmd_set_accountname(sourceinfo_t *si, int parc, char *parv[])
 {

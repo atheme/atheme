@@ -274,6 +274,49 @@ void myuser_delete(myuser_t *mu)
 }
 
 /*
+ * myuser_rename(myuser_t *mu, const char *name)
+ *
+ * Renames an account in the accounts DTree.
+ *
+ * Inputs:
+ *      - account to rename
+ *      - new name; if nickname ownership is enabled, this must be
+ *        irccmp-equal to a nick registered to the account
+ *
+ * Outputs:
+ *      - nothing
+ *
+ * Side Effects:
+ *      - an account is renamed.
+ *      - online users are logged out and in again
+ */
+void myuser_rename(myuser_t *mu, const char *name)
+{
+	node_t *n, *tn;
+	user_t *u;
+
+	if (authservice_loaded)
+	{
+		LIST_FOREACH_SAFE(n, tn, mu->logins.head)
+		{
+			u = n->data;
+			ircd_on_logout(u->nick, mu->name, NULL);
+		}
+	}
+	mowgli_patricia_delete(mulist, mu->name);
+	strlcpy(mu->name, name, NICKLEN);
+	mowgli_patricia_add(mulist, mu->name, mu);
+	if (authservice_loaded)
+	{
+		LIST_FOREACH(n, mu->logins.head)
+		{
+			u = n->data;
+			ircd_on_login(u->nick, mu->name, NULL);
+		}
+	}
+}
+
+/*
  * myuser_find_ext(const char *name)
  *
  * Same as myuser_find() but with nick group support and undernet-style
