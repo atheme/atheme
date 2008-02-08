@@ -88,12 +88,6 @@ static void _ns_setemail(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (strlen(email) >= EMAILLEN)
-	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "EMAIL");
-		return;
-	}
-
 	if (si->smu->flags & MU_WAITAUTH)
 	{
 		command_fail(si, fault_noprivs, _("Please verify your original registration before changing your e-mail address."));

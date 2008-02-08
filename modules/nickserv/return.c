@@ -67,7 +67,7 @@ static void ns_cmd_return(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if ((strlen(newmail) > 32) || !validemail(newmail))
+	if (!validemail(newmail))
 	{
 		command_fail(si, fault_badparams, _("\2%s\2 is not a valid e-mail address."), newmail);
 		return;

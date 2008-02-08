@@ -67,8 +67,7 @@ static void ns_cmd_fregister(sourceinfo_t *si, int parc, char *parv[])
 			uflags |= MU_NEVEROP;
 	}
 
-	if ((!(uflags & MU_CRYPTPASS) && strlen(pass) > 32) ||
-			strlen(email) >= EMAILLEN)
+	if (!(uflags & MU_CRYPTPASS) && strlen(pass) > 32)
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "FREGISTER");
 		return;

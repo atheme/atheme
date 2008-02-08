@@ -215,12 +215,6 @@ static void cs_cmd_set_email(sourceinfo_t *si, int parc, char *parv[])
                 return;
         }
 
-        if (strlen(mail) >= EMAILLEN)
-        {
-                command_fail(si, fault_badparams, STR_INVALID_PARAMS, "EMAIL");
-                return;
-        }
-
         if (!validemail(mail))
         {
                 command_fail(si, fault_badparams, _("\2%s\2 is not a valid e-mail address."), mail);

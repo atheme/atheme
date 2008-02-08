@@ -86,7 +86,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if ((strlen(pass) > 32) || (strlen(email) >= EMAILLEN))
+	if (strlen(pass) > 32)
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "REGISTER");
 		return;

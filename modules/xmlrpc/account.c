@@ -119,7 +119,7 @@ static int account_register(void *conn, int parc, char *parv[])
 
 	/* see above comment on sanity-checking */
 	if (strchr(parv[2], ' ') || strchr(parv[2], '\n') || strchr(parv[2], '\r')
-		|| !validemail(parv[2]) || !(strlen(parv[2]) <= (EMAILLEN - 1)))
+		|| !validemail(parv[2]))
 	{
 		xmlrpc_generic_error(2, "The e-mail address is invalid.");
 		return 0;
