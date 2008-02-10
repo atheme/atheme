@@ -79,8 +79,12 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!mc->chan)
 	{
-		join(mc->name, chansvs.nick);
-		mc->flags |= MC_INHABIT;
+		if (chansvs.changets)
+		{
+			/* Otherwise, our modes are likely ignored. */
+			join(mc->name, chansvs.nick);
+			mc->flags |= MC_INHABIT;
+		}
 		if (!mc->chan)
 		{
 			command_fail(si, fault_nosuch_target, _("\2%s\2 is currently empty."), name);
