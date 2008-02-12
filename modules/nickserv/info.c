@@ -49,6 +49,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	struct tm tm, tm2;
 	metadata_t *md;
 	node_t *n;
+	const char *vhost;
 	bool hide_info;
 	hook_user_req_t req;
 
@@ -116,20 +117,26 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("User reg.  : %s (%s ago)"), strfbuf, time_ago(mu->registered));
 	}
 
+	if ((md = metadata_find(mu, METADATA_USER, "private:usercloak")))
+		vhost = md->value;
+	else
+		vhost = NULL;
 	if (!hide_info && (md = metadata_find(mu, METADATA_USER, "private:host:vhost")))
 	{
 		strlcpy(buf, md->value, sizeof buf);
-		if ((md = metadata_find(mu, METADATA_USER, "private:usercloak")))
+		if (vhost != NULL)
 		{
 			p = strchr(buf, '@');
 			if (p == NULL)
 				p = buf;
 			else
 				p++;
-			strlcpy(p, md->value, sizeof buf - (p - buf));
+			strlcpy(p, vhost, sizeof buf - (p - buf));
 		}
 		command_success_nodata(si, _("Last addr  : %s"), buf);
 	}
+	if (vhost && (si->smu == mu || has_priv(si, PRIV_USER_AUSPEX)))
+		command_success_nodata(si, _("vHost      : %s"), vhost);
 	if (has_priv(si, PRIV_USER_AUSPEX))
 	{
 		if ((md = metadata_find(mu, METADATA_USER, "private:host:actual")))
