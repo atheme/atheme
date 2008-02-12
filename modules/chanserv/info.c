@@ -19,7 +19,7 @@ DECLARE_MODULE_V1
 static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_info = { "INFO", N_("Displays information on registrations."),
-                        AC_NONE, 1, cs_cmd_info };
+                        AC_NONE, 2, cs_cmd_info };
 
 list_t *cs_cmdtree;
 list_t *cs_helptree;
