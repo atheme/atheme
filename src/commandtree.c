@@ -217,8 +217,8 @@ static boolean_t string_in_list(const char *str, const char *name)
 void command_help_short(sourceinfo_t *si, list_t *commandtree, char *maincmds)
 {
 	node_t *n;
-	unsigned int l;
-	char buf[256];
+	unsigned int l, lv;
+	char buf[256], *p;
 
 	if (si->service == NULL || si->service->cmdtree == commandtree)
 		command_success_nodata(si, _("The following commands are available:"));
@@ -237,8 +237,14 @@ void command_help_short(sourceinfo_t *si, list_t *commandtree, char *maincmds)
 	}
 
 	command_success_nodata(si, " ");
-	strlcpy(buf, translation_get(_("Other commands: ")), sizeof buf);
+	strlcpy(buf, translation_get(_("\2Other commands:\2 ")), sizeof buf);
 	l = strlen(buf);
+	lv = 0;
+	for (p = buf; *p != '\0'; p++)
+	{
+		if (!(*p >= '\1' && *p < ' '))
+			lv++;
+	}
 	LIST_FOREACH(n, commandtree->head)
 	{
 		command_t *c = n->data;
@@ -253,11 +259,12 @@ void command_help_short(sourceinfo_t *si, list_t *commandtree, char *maincmds)
 			if (strlen(buf) > 55)
 			{
 				command_success_nodata(si, "%s", buf);
-				buf[l] = '\0';
-				while (--l > 0)
-					buf[l] = ' ';
+				l = lv;
+				buf[lv] = '\0';
+				while (--lv > 0)
+					buf[lv] = ' ';
 				buf[0] = ' ';
-				l = strlen(buf);
+				lv = l;
 			}
 			strlcat(buf, c->name, sizeof buf);
 		}
