@@ -57,13 +57,14 @@ static int register_foreach_cb(const char *key, void *data, void *privdata)
 static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
-	mynick_t *mn;
+	mynick_t *mn = NULL;
 	node_t *n;
 	char *account;
 	char *pass = parv[0];
 	char *email = parv[1];
 	char lau[BUFSIZE], lao[BUFSIZE];
 	hook_user_register_check_t hdata;
+	hook_user_req_t req;
 
 	if (si->smu)
 	{
@@ -223,6 +224,14 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 
 		snprintf(lao, BUFSIZE, "%s@%s", si->su->user, si->su->host);
 		metadata_add(mu, METADATA_USER, "private:host:actual", lao);
+	}
+
+	if (!(mu->flags & MU_WAITAUTH))
+	{
+		req.si = si;
+		req.mu = mu;
+		req.mn = mn;
+		hook_call_event("user_verify_register", &req);
 	}
 }
 

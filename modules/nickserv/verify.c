@@ -51,6 +51,7 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 	char *op = parv[0];
 	char *nick = parv[1];
 	char *key = parv[2];
+	hook_user_req_t req;
 
 	if (!op || !nick || !key)
 	{
@@ -99,6 +100,12 @@ static void ns_cmd_verify(sourceinfo_t *si, int parc, char *parv[])
 				user_t *u = n->data;
 				ircd_on_login(u->nick, mu->name, NULL);
 			}
+
+			/* XXX should this indeed be after ircd_on_login? */
+			req.si = si;
+			req.mu = mu;
+			req.mn = mynick_find(mu->name);
+			hook_call_event("user_verify_register", &req);
 
 			return;
 		}
@@ -158,6 +165,7 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 	node_t *n;
 	char *op = parv[0];
 	char *nick = parv[1];
+	hook_user_req_t req;
 
 	if (!op || !nick)
 	{
@@ -194,6 +202,12 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 			user_t *u = n->data;
 			ircd_on_login(u->nick, mu->name, NULL);
 		}
+
+		/* XXX should this indeed be after ircd_on_login? */
+		req.si = si;
+		req.mu = mu;
+		req.mn = mynick_find(mu->name);
+		hook_call_event("user_verify_register", &req);
 
 		return;
 	}

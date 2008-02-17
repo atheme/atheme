@@ -40,11 +40,12 @@ void _moddeinit()
 static void ns_cmd_fregister(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
-	mynick_t *mn;
+	mynick_t *mn = NULL;
 	char *account;
 	char *pass;
 	char *email;
 	int i, uflags = 0;
+	hook_user_req_t req;
 
 	account = parv[0], pass = parv[1], email = parv[2];
 
@@ -119,6 +120,10 @@ static void ns_cmd_fregister(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, "\2%s\2 is now registered to \2%s\2.", mu->name, mu->email);
 	hook_call_event("user_register", mu);
+	req.si = si;
+	req.mu = mu;
+	req.mn = mn;
+	hook_call_event("user_verify_register", &req);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

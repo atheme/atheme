@@ -42,4 +42,5 @@ user_drop          myuser_t *
 user_identify      user_t *
 user_info          hook_user_req_t *
 user_register      myuser_t *
+user_verify_register  hook_user_req_t *
 metadata_change    hook_metadata_change_t *
