@@ -371,7 +371,10 @@ static void flatfile_db_load(void)
 				char *failnum, *lastfailaddr, *lastfailtime;
 
 				if ((mu = myuser_find(s)))
+				{
+					slog(LG_INFO, "db_load(): skipping duplicate account %s (line %d)", s, linecnt);
 					continue;
+				}
 
 				muin++;
 
@@ -505,6 +508,12 @@ static void flatfile_db_load(void)
 				continue;
 			}
 
+			if ((mynick_find(nick)))
+			{
+				slog(LG_INFO, "db_load(): skipping duplicate nick %s (account %s) (line %d)", nick, user, linecnt);
+				continue;
+			}
+
 			mn = mynick_add(mu, nick);
 			mn->registered = atoi(treg);
 			mn->lastseen = atoi(tseen);
@@ -590,7 +599,10 @@ static void flatfile_db_load(void)
 			if ((s = strtok(NULL, " ")))
 			{
 				if ((mc = mychan_find(s)))
+				{
+					slog(LG_INFO, "db_load(): skipping duplicate channel %s (line %d)", s, linecnt);
 					continue;
+				}
 
 				mcin++;
 
