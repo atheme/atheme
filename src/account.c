@@ -1832,7 +1832,8 @@ void expire_check(void *arg)
 static int check_myuser_cb(const char *key, void *data, void *unused)
 {
 	myuser_t *mu = (myuser_t *) data;
-	mynick_t *mn;
+	node_t *n;
+	mynick_t *mn, *mn1;
 
 	if (MU_OLD_ALIAS & mu->flags)
 	{
@@ -1843,7 +1844,18 @@ static int check_myuser_cb(const char *key, void *data, void *unused)
 
 	if (!nicksvs.no_nick_ownership)
 	{
-		mn = mynick_find(mu->name);
+		mn1 = NULL;
+		LIST_FOREACH(n, mu->nicks.head)
+		{
+			mn = n->data;
+			if (mn->registered < mu->registered)
+				mu->registered = mn->registered;
+			if (mn->lastseen > mu->lastlogin)
+				mu->lastlogin = mn->lastseen;
+			if (!irccasecmp(mu->name, mn->nick))
+				mn1 = mn;
+		}
+		mn = mn1 != NULL ? mn1 : mynick_find(mu->name);
 		if (mn == NULL)
 		{
 			slog(LG_REGISTER, "db_check(): adding missing nick %s", mu->name);
