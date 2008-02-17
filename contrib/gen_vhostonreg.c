@@ -21,12 +21,12 @@ DECLARE_MODULE_V1
 
 static int counter;
 
-static void handle_register(void *vptr);
+static void handle_verify_register(void *vptr);
 
 void _modinit(module_t *m)
 {
-	hook_add_event("user_register");
-	hook_add_hook("user_register", handle_register);
+	hook_add_event("user_verify_register");
+	hook_add_hook("user_verify_register", handle_verify_register);
 	counter = (CURRTIME << 8) % 100000;
 	if (counter < 0)
 		counter += 100000;
@@ -34,12 +34,13 @@ void _modinit(module_t *m)
 
 void _moddeinit(void)
 {
-	hook_del_hook("user_register", handle_register);
+	hook_del_hook("user_verify_register", handle_verify_register);
 }
 
-static void handle_register(void *vptr)
+static void handle_verify_register(void *vptr)
 {
-	myuser_t *mu = vptr;
+	hook_user_req_t *req = vptr;
+	myuser_t *mu = req->mu;
 	node_t *n;
 	user_t *u;
 	char newhost[HOSTLEN];
