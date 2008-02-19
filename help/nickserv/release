@@ -8,9 +8,6 @@ Enforcers are created when someone uses your
 nick without identifying and prevent all use
 of it.
 
-Not all ircds support removing enforcers. You will
-have to wait a few minutes then.
-
 If you are logged in to the nick, you need not specify
 a password, otherwise you have to.
 
