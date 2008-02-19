@@ -312,7 +312,8 @@ void handle_trace(user_t *u, const char *target, const char *dest)
 		LIST_FOREACH(n, me.me->userlist.head)
 		{
 			t = n->data;
-			single_trace(u, t);
+			if (is_ircop(t))
+				single_trace(u, t);
 			nusers--;
 		}
 		if (has_priv_user(u, PRIV_SERVER_AUSPEX))
