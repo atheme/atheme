@@ -53,6 +53,17 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	bool hide_info;
 	hook_user_req_t req;
 
+	/* On IRC, default the name to something.
+	 * Not currently documented.
+	 */
+	if (!name && si->su)
+	{
+		if (!nicksvs.no_nick_ownership)
+			name = si->su->nick;
+		else if (si->su->myuser)
+			name = si->su->myuser->name;
+	}
+
 	if (!name)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "INFO");
