@@ -112,15 +112,17 @@ static unsigned int ratbox_server_login(void)
 /* introduce a client */
 static void ratbox_introduce_nick(user_t *u)
 {
+	const char *omode = is_ircop(u) ? "o" : "";
+
 	if (ircd->uses_uid)
-		sts(":%s UID %s 1 %ld +%s%s%s %s %s 0 %s :%s",
-			me.numeric, u->nick, u->ts, "io",
+		sts(":%s UID %s 1 %ld +i%s%s%s %s %s 0 %s :%s",
+			me.numeric, u->nick, u->ts, omode,
 			chansvs.fantasy ? "" : "D",
 			use_rserv_support ? "S" : "", u->user, u->host, u->uid,
 			u->gecos);
 	else
-		sts("NICK %s 1 %ld +%s%s%s %s %s %s :%s",
-			u->nick, u->ts, "io", chansvs.fantasy ? "" : "D",
+		sts("NICK %s 1 %ld +i%s%s%s %s %s %s :%s",
+			u->nick, u->ts, omode, chansvs.fantasy ? "" : "D",
 			use_rserv_support ? "S" : "",
 			u->user, u->host, me.name, u->gecos);
 }

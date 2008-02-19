@@ -220,8 +220,11 @@ static unsigned int inspircd_server_login(void)
 static void inspircd_introduce_nick(user_t *u)
 {
 	/* :services-dev.chatspike.net NICK 1133994664 OperServ chatspike.net chatspike.net services +oii 0.0.0.0 :Operator Server  */
-	sts(":%s NICK %ld %s %s %s %s +%s 0.0.0.0 :%s", me.name, u->ts, u->nick, u->host, u->host, u->user, "io", u->gecos);
-	sts(":%s OPERTYPE Services", u->nick);
+	const char *omode = is_ircop(u) ? "o" : "";
+
+	sts(":%s NICK %ld %s %s %s %s +i%s 0.0.0.0 :%s", me.name, u->ts, u->nick, u->host, u->host, u->user, omode, u->gecos);
+	if (is_ircop(u))
+		sts(":%s OPERTYPE Services", u->nick);
 }
 
 static void inspircd_quit_sts(user_t *u, const char *reason)

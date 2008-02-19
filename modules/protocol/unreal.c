@@ -165,7 +165,9 @@ static unsigned int unreal_server_login(void)
 /* introduce a client */
 static void unreal_introduce_nick(user_t *u)
 {
-	sts("NICK %s 1 %ld %s %s %s 0 +%sS * :%s", u->nick, u->ts, u->user, u->host, me.name, "io", u->gecos);
+	const char *omode = is_ircop(u) ? "o" : "";
+
+	sts("NICK %s 1 %ld %s %s %s 0 +i%sS * :%s", u->nick, u->ts, u->user, u->host, me.name, omode, u->gecos);
 }
 
 /* invite a user to a channel */

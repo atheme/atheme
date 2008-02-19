@@ -285,12 +285,14 @@ static unsigned int charybdis_server_login(void)
 /* introduce a client */
 static void charybdis_introduce_nick(user_t *u)
 {
+	const char *omode = is_ircop(u) ? "o" : "";
+
 	if (ircd->uses_uid && use_euid)
-		sts(":%s EUID %s 1 %ld +%s%sS %s %s 0 %s * * :%s", me.numeric, u->nick, u->ts, "io", chansvs.fantasy ? "" : "D", u->user, u->host, u->uid, u->gecos);
+		sts(":%s EUID %s 1 %ld +i%s%sS %s %s 0 %s * * :%s", me.numeric, u->nick, u->ts, omode, chansvs.fantasy ? "" : "D", u->user, u->host, u->uid, u->gecos);
 	else if (ircd->uses_uid)
-		sts(":%s UID %s 1 %ld +%s%sS %s %s 0 %s :%s", me.numeric, u->nick, u->ts, "io", chansvs.fantasy ? "" : "D", u->user, u->host, u->uid, u->gecos);
+		sts(":%s UID %s 1 %ld +i%s%sS %s %s 0 %s :%s", me.numeric, u->nick, u->ts, omode, chansvs.fantasy ? "" : "D", u->user, u->host, u->uid, u->gecos);
 	else
-		sts("NICK %s 1 %ld +%s%sS %s %s %s :%s", u->nick, u->ts, "io", chansvs.fantasy ? "" : "D", u->user, u->host, me.name, u->gecos);
+		sts("NICK %s 1 %ld +i%s%sS %s %s %s :%s", u->nick, u->ts, omode, chansvs.fantasy ? "" : "D", u->user, u->host, me.name, u->gecos);
 }
 
 /* invite a user to a channel */

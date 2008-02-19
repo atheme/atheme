@@ -94,8 +94,10 @@ static unsigned int dreamforge_server_login(void)
 /* introduce a client */
 static void dreamforge_introduce_nick(user_t *u)
 {
+	const char *omode = is_ircop(u) ? "o" : "";
+
 	sts("NICK %s 1 %ld %s %s %s 0 :%s", u->nick, u->ts, u->user, u->host, me.name, u->gecos);
-	sts(":%s MODE %s +%s", u->nick, u->nick, "io");
+	sts(":%s MODE %s +i%s", u->nick, u->nick, omode);
 }
 
 /* invite a user to a channel */

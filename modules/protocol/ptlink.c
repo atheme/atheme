@@ -133,7 +133,9 @@ static unsigned int ptlink_server_login(void)
 /* introduce a client */
 static void ptlink_introduce_nick(user_t *u)
 {
-	sts("NICK %s 1 %ld +%sp %s %s %s %s :%s", u->nick, u->ts, "io", u->user, u->host, u->host, me.name, u->gecos);
+	const char *omode = is_ircop(u) ? "o" : "";
+
+	sts("NICK %s 1 %ld +i%sp %s %s %s %s :%s", u->nick, u->ts, omode, u->user, u->host, u->host, me.name, u->gecos);
 }
 
 /* invite a user to a channel */

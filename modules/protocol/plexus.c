@@ -107,7 +107,9 @@ static unsigned int plexus_server_login(void)
 /* introduce a client */
 static void plexus_introduce_nick(user_t *u)
 {
-	sts("NICK %s 1 %ld +%s %s %s %s 0 0 :%s", u->nick, u->ts, "io", u->user, u->host, me.name, u->gecos);
+	const char *omode = is_ircop(u) ? "o" : "";
+
+	sts("NICK %s 1 %ld +i%s %s %s %s 0 0 :%s", u->nick, u->ts, omode, u->user, u->host, me.name, u->gecos);
 }
 
 /* invite a user to a channel */

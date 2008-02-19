@@ -102,7 +102,9 @@ static unsigned int asuka_server_login(void)
 /* introduce a client */
 static void asuka_introduce_nick(user_t *u)
 {
-	sts("%s N %s 1 %ld %s %s +%s%sk ]]]]]] %s :%s", me.numeric, u->nick, u->ts, u->user, u->host, "io", chansvs.fantasy ? "" : "d", u->uid, u->gecos);
+	const char *omode = is_ircop(u) ? "o" : "";
+
+	sts("%s N %s 1 %ld %s %s +i%s%sk ]]]]]] %s :%s", me.numeric, u->nick, u->ts, u->user, u->host, omode, chansvs.fantasy ? "" : "d", u->uid, u->gecos);
 }
 
 /* invite a user to a channel */

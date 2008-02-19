@@ -100,7 +100,9 @@ static unsigned int ultimate3_server_login(void)
 /* introduce a client */
 static void ultimate3_introduce_nick(user_t *u)
 {
-	sts("CLIENT %s 1 %ld +%sS + %s %s * %s 0 0 :%s", u->nick, u->ts, "io", u->user, u->host, me.name, u->gecos);
+	const char *omode = is_ircop(u) ? "o" : "";
+
+	sts("CLIENT %s 1 %ld +i%sS + %s %s * %s 0 0 :%s", u->nick, u->ts, omode, u->user, u->host, me.name, u->gecos);
 }
 
 /* invite a user to a channel */

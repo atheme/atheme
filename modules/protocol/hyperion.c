@@ -228,9 +228,10 @@ static unsigned int hyperion_server_login(void)
  */
 static void hyperion_introduce_nick(user_t *u)
 {
-	const char *privs = "6@BFmMopPRUX";
+	const char *privs = is_ircop(u) ? "6@BFmMopPRUX" : "";
 	sts("NICK %s 1 %ld +ei%s %s %s %s 0.0.0.0 :%s", u->nick, u->ts, privs, u->user, u->host, me.name, u->gecos);
-	sts(":%s OPER %s +%s", me.name, u->nick, privs);
+	if (is_ircop(u))
+		sts(":%s OPER %s +%s", me.name, u->nick, privs);
 }
 
 /* invite a user to a channel */
