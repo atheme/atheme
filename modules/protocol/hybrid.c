@@ -38,7 +38,7 @@ ircd_t Hybrid = {
 	"beI",                          /* Ban-like cmodes */
 	'e',                            /* Except mchar */
 	'I',                            /* Invex mchar */
-	IRCD_CIDR_BANS | IRCD_HOLDNICK  /* Flags */
+	IRCD_CIDR_BANS                  /* Flags */
 };
 
 struct cmode_ hybrid_mode_list[] = {
