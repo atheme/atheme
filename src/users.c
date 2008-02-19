@@ -207,11 +207,20 @@ void user_delete(user_t *u)
 	node_t *n, *tn;
 	chanuser_t *cu;
 	mynick_t *mn;
+	char oldnick[NICKLEN];
+	boolean_t doenforcer = FALSE;
 
 	if (!u)
 	{
 		slog(LG_DEBUG, "user_delete(): called for NULL user");
 		return;
+	}
+
+	if (u->flags & UF_DOENFORCE)
+	{
+		doenforcer = TRUE;
+		strlcpy(oldnick, u->nick, sizeof oldnick);
+		u->flags &= ~UF_DOENFORCE;
 	}
 
 	slog(LG_DEBUG, "user_delete(): removing user: %s -> %s", u->nick, u->server->name);
@@ -262,6 +271,9 @@ void user_delete(user_t *u)
 	BlockHeapFree(user_heap, u);
 
 	cnt.user--;
+
+	if (doenforcer)
+		introduce_enforcer(oldnick);
 }
 
 /*
@@ -373,7 +385,15 @@ boolean_t user_changenick(user_t *u, const char *nick, time_t ts)
 {
 	mynick_t *mn;
 	user_t *u2;
+	char oldnick[NICKLEN];
+	boolean_t doenforcer = FALSE;
 
+	if (u->flags & UF_DOENFORCE)
+	{
+		doenforcer = TRUE;
+		strlcpy(oldnick, u->nick, sizeof oldnick);
+		u->flags &= ~UF_DOENFORCE;
+	}
 	u2 = user_find_named(nick);
 	if (u2 != NULL && u2 != u)
 	{
@@ -459,6 +479,10 @@ boolean_t user_changenick(user_t *u, const char *nick, time_t ts)
 	u->ts = ts;
 
 	mowgli_patricia_add(userlist, u->nick, u);
+
+	if (doenforcer)
+		introduce_enforcer(oldnick);
+
 	return FALSE;
 }
 

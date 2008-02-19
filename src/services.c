@@ -111,6 +111,19 @@ void kill_user(user_t *source, user_t *victim, const char *fmt, ...)
 	user_delete(victim);
 }
 
+void introduce_enforcer(const char *nick)
+{
+	user_t *u;
+
+	/* TS 1 to win nick collisions */
+	u = user_add(nick, "enforcer", me.name, NULL, NULL,
+			ircd->uses_uid ? uid_get() : NULL,
+			"Held for nickname owner", me.me, 1);
+	return_if_fail(u != NULL);
+	u->flags |= UF_INVIS | UF_ENFORCER;
+	introduce_nick(u);
+}
+
 /* join a channel, creating it if necessary */
 void join(char *chan, char *nick)
 {

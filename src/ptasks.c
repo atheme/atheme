@@ -287,10 +287,13 @@ void handle_whois(user_t *u, const char *target)
 
 static void single_trace(user_t *u, user_t *t)
 {
+	const char *classname;
+
+	classname = t->flags & UF_ENFORCER ? "enforcer" : "service";
 	if (is_ircop(t))
-		numeric_sts(me.name, 204, u->nick, "Oper service %s[%s@%s] (255.255.255.255) 0 0", t->nick, t->user, t->vhost);
+		numeric_sts(me.name, 204, u->nick, "Oper %s %s[%s@%s] (255.255.255.255) 0 0", classname, t->nick, t->user, t->vhost);
 	else
-		numeric_sts(me.name, 205, u->nick, "User service %s[%s@%s] (255.255.255.255) 0 0", t->nick, t->user, t->vhost);
+		numeric_sts(me.name, 205, u->nick, "User %s %s[%s@%s] (255.255.255.255) 0 0", classname, t->nick, t->user, t->vhost);
 }
 
 /* target -> object to trace
@@ -606,6 +609,11 @@ void handle_kill(sourceinfo_t *si, const char *victim, const char *reason)
 	u = user_find(victim);
 	if (u == NULL)
 		slog(LG_DEBUG, "handle_kill(): %s killed unknown user %s (%s)", source, victim, reason);
+	else if (u->flags & UF_ENFORCER)
+	{
+		slog(LG_INFO, "handle_kill(): %s killed enforcer %s (%s)", source, u->nick, reason);
+		user_delete(u);
+	}
 	else if (u->server == me.me)
 	{
 		slog(LG_INFO, "handle_kill(): %s killed service %s (%s)", source, u->nick, reason);

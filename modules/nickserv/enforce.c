@@ -181,6 +181,11 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 		{
 			logcommand(si, CMDLOG_DO, "RELEASE %s", target);
 			holdnick_sts(si->service->me, 0, target, mn->owner);
+			if (u != NULL && u->flags & UF_ENFORCER)
+			{
+				quit_sts(u, "RELEASE command");
+				user_delete(u);
+			}
 			command_success_nodata(si, _("\2%s\2 has been released."), target);
 		}
 		else
@@ -202,6 +207,22 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 	{
 		logcommand(si, CMDLOG_DO, "failed RELEASE %s (bad password)", target);
 		command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), target);
+	}
+}
+
+static void enforce_remove_enforcers(void *arg)
+{
+	node_t *n, *tn;
+	user_t *u;
+
+	LIST_FOREACH_SAFE(n, tn, me.me->userlist.head)
+	{
+		u = n->data;
+		if (u->flags & UF_ENFORCER)
+		{
+			quit_sts(u, "Timed out");
+			user_delete(u);
+		}
 	}
 }
 
@@ -236,7 +257,10 @@ void enforce_timeout_check(void *arg)
 
 		notice(nicksvs.nick, u->nick, "You failed to identify in time for the nickname %s", mn->nick);
 		guest_nickname(u);
-		holdnick_sts(nicksvs.me->me, 3600, u->nick, mn->owner);
+		if (ircd->flags & IRCD_HOLDNICK)
+			holdnick_sts(nicksvs.me->me, 3600, u->nick, mn->owner);
+		else
+			u->flags |= UF_DOENFORCE;
 	}
 }
 
@@ -348,7 +372,7 @@ void _modinit(module_t *m)
 	}
 
 	event_add("enforce_timeout_check", enforce_timeout_check, NULL, ENFORCE_CHECK_FREQ);
-	/*event_add("manage_bots", manage_bots, NULL, 30);*/
+	event_add("enforce_remove_enforcers", enforce_remove_enforcers, NULL, 300);
 	command_add(&ns_release, ns_cmdtree);
 	command_add(&ns_set_enforce, ns_set_cmdtree);
 	help_addentry(ns_helptree, "RELEASE", "help/nickserv/release", NULL);
@@ -363,6 +387,8 @@ void _modinit(module_t *m)
 
 void _moddeinit()
 {
+	enforce_remove_enforcers(NULL);
+	event_delete(enforce_remove_enforcers, NULL);
 	event_delete(enforce_timeout_check, NULL);
 	command_delete(&ns_release, ns_cmdtree);
 	command_delete(&ns_set_enforce, ns_set_cmdtree);

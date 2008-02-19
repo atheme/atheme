@@ -41,6 +41,8 @@ struct user_
 #define UF_SEENINFO    0x00000080
 #define UF_HIDEHOSTREQ 0x00000200 /* host hiding requested */
 #define UF_SOPER_PASS  0x00000400 /* services oper pass entered */
+#define UF_DOENFORCE   0x00000400 /* introduce enforcer when nick changes */
+#define UF_ENFORCER    0x00000800 /* this is an enforcer client */
 
 #define CLIENT_NAME(user)	((user)->uid[0] ? (user)->uid : (user)->nick)
 
