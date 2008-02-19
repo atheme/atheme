@@ -365,7 +365,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	command_success_nodata(si, _("*** \2End of Info\2 ***"));
 
-	logcommand(si, CMDLOG_GET, "INFO %s", mu->name);
+	logcommand(si, CMDLOG_GET, "INFO %s", mn != NULL ? mn->nick : mu->name);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
