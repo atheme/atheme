@@ -388,13 +388,13 @@ boolean_t user_changenick(user_t *u, const char *nick, time_t ts)
 	char oldnick[NICKLEN];
 	boolean_t doenforcer = FALSE;
 
-	if (u->flags & UF_DOENFORCE)
+	u2 = user_find_named(nick);
+	if (u->flags & UF_DOENFORCE && u2 != u)
 	{
 		doenforcer = TRUE;
 		strlcpy(oldnick, u->nick, sizeof oldnick);
 		u->flags &= ~UF_DOENFORCE;
 	}
-	u2 = user_find_named(nick);
 	if (u2 != NULL && u2 != u)
 	{
 		if (u->server == me.me)
