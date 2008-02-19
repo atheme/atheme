@@ -39,7 +39,7 @@ ircd_t Bahamut = {
 	"beI",                          /* Ban-like cmodes */
 	'e',                            /* Except mchar */
 	'I',                            /* Invex mchar */
-	0                               /* Flags */
+	IRCD_HOLDNICK                   /* Flags */
 };
 
 struct cmode_ bahamut_mode_list[] = {
