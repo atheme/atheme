@@ -96,6 +96,7 @@ struct nicksvs_
   service_t *me;
 
   unsigned int expiry;          /* expiry time                */
+  unsigned int enforce_expiry;  /* expiry time                */
 };
 
 struct saslsvs_

@@ -622,6 +622,12 @@ nickserv {
 	 * The number of days before inactive registrations are expired.
 	 */
 	expire = 30;
+
+	/* (*)enforce_expire
+	 * The number of days of no use after which to ignore enforcement
+	 * settings on nicks.
+	 */
+	#enforce_expire = 14;
 };
 
 /* ChanServ configuration.

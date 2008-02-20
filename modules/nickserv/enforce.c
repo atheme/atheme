@@ -303,6 +303,11 @@ static void check_enforce(void *vdata)
 
 	if (!metadata_find(hdata->mn->owner, METADATA_USER, "private:doenforce"))
 		return;
+	/* check if this nick has been used recently enough */
+	if (nicksvs.enforce_expiry > 0 &&
+			!(hdata->mn->owner->flags & MU_HOLD) &&
+			(unsigned int)(CURRTIME - hdata->mn->lastseen) > nicksvs.enforce_expiry)
+		return;
 
 	/* check if it's already in enforce_list */
 	timeout = NULL;
