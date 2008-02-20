@@ -192,6 +192,10 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 		{
 			notice(nicksvs.nick, target, "%s has released your nickname.", get_source_mask(si));
 			guest_nickname(u);
+			if (ircd->flags & IRCD_HOLDNICK)
+				holdnick_sts(nicksvs.me->me, 60, u->nick, mn->owner);
+			else
+				u->flags |= UF_DOENFORCE;
 			command_success_nodata(si, _("%s has been released."), target);
 			logcommand(si, CMDLOG_DO, "RELEASE %s!%s@%s", u->nick, u->user, u->vhost);
 		}
