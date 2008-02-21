@@ -418,7 +418,7 @@ int addCoreXMLRPCCmd(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml)
 
 char *xmlrpc_write_header(int length)
 {
-	char buf[XMLRPC_BUFSIZE];
+	char buf[512];
 	time_t ts;
 	char timebuf[64];
 	struct tm tm;
@@ -427,9 +427,9 @@ char *xmlrpc_write_header(int length)
 
 	ts = time(NULL);
 	tm = *localtime(&ts);
-	strftime(timebuf, XMLRPC_BUFSIZE - 1, "%Y-%m-%d %H:%M:%S", &tm);
+	strftime(timebuf, sizeof timebuf, "%Y-%m-%d %H:%M:%S", &tm);
 
-	snprintf(buf, XMLRPC_BUFSIZE, "HTTP/1.1 200 OK\r\nConnection: close\r\n" "Content-Length: %d\r\n" "Content-Type: text/xml\r\n" "Date: %s\r\n" "Server: Atheme/%s\r\n\r\n", length, timebuf, version);
+	snprintf(buf, sizeof buf, "HTTP/1.1 200 OK\r\nConnection: close\r\n" "Content-Length: %d\r\n" "Content-Type: text/xml\r\n" "Date: %s\r\n" "Server: Atheme/%s\r\n\r\n", length, timebuf, version);
 	return xmlrpc_strdup(buf);
 }
 
