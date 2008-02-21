@@ -157,7 +157,7 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 		origin_cu->modes |= CMODE_OP;
 	}
 
-	if (origin_cu != NULL || (chanacs_source_flags(mc, si) & (CA_OP | CA_AUTOOP)))
+	if (origin_cu != NULL || (si->su != NULL && chanacs_source_flags(mc, si) & (CA_OP | CA_AUTOOP)))
 	{
 
 		channel_mode_va(si->service->me, mc->chan, 1, "+im");
@@ -167,29 +167,32 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 		channel_mode_va(si->service->me, mc->chan, 1, "-i");
 	}
 
-	/* unban the user */
-	snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", si->su->nick, si->su->user, si->su->vhost);
-
-	for (n = next_matching_ban(mc->chan, si->su, 'b', mc->chan->bans.head); n != NULL; n = next_matching_ban(mc->chan, si->su, 'b', tn))
+	if (si->su != NULL)
 	{
-		tn = n->next;
-		cb = n->data;
+		/* unban the user */
+		snprintf(hostbuf2, BUFSIZE, "%s!%s@%s", si->su->nick, si->su->user, si->su->vhost);
 
-		modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, cb->type, cb->mask);
-		chanban_delete(cb);
-	}
-
-	if (origin_cu == NULL)
-	{
-		/* set an exempt on the user calling this */
-		e = ircd->except_mchar;
-		if (e != '\0')
+		for (n = next_matching_ban(mc->chan, si->su, 'b', mc->chan->bans.head); n != NULL; n = next_matching_ban(mc->chan, si->su, 'b', tn))
 		{
-			if (!chanban_find(mc->chan, hostbuf2, e))
+			tn = n->next;
+			cb = n->data;
+
+			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, cb->type, cb->mask);
+			chanban_delete(cb);
+		}
+
+		if (origin_cu == NULL)
+		{
+			/* set an exempt on the user calling this */
+			e = ircd->except_mchar;
+			if (e != '\0')
 			{
-				chanban_add(mc->chan, hostbuf2, e);
-				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, e, hostbuf2);
-				added_exempt = TRUE;
+				if (!chanban_find(mc->chan, hostbuf2, e))
+				{
+					chanban_add(mc->chan, hostbuf2, e);
+					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, e, hostbuf2);
+					added_exempt = TRUE;
+				}
 			}
 		}
 	}
@@ -197,7 +200,7 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 	modestack_flush_channel(mc->chan);
 
 	/* invite them back. must have sent +i before this */
-	if (origin_cu == NULL)
+	if (origin_cu == NULL && si->su != NULL)
 		invite_sts(si->service->me, si->su, mc->chan);
 
 	if (added_exempt)
