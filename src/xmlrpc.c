@@ -28,6 +28,7 @@ static char *xmlrpc_method(char *buffer);
 static char *xmlrpc_normalizeBuffer(char *buf);
 static char *xmlrpc_stristr(char *s1, char *s2);
 static int xmlrpc_split_buf(char *buffer, char ***argv);
+static void xmlrpc_append_char_encode(string_t *s, const char *s1);
 
 XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func);
 XMLRPCCmd *findXMLRPCCommand(XMLRPCCmdHash * hookEvtTable[], const char *name);
@@ -584,64 +585,62 @@ int xmlrpc_about(void *userdata, int ac, char **av)
 void xmlrpc_send(int argc, ...)
 {
 	va_list va;
-	char *a;
 	int idx = 0;
-	char *s = NULL;
 	int len;
-	char buf[XMLRPC_BUFSIZE];
-	char buf2[XMLRPC_BUFSIZE];
+	char buf[1024];
+	const char *ss;
+	string_t *s = new_string(XMLRPC_BUFSIZE);
+	char *s2;
 	char *header;
 
-	*buf = '\0';
-	*buf2 = '\0';
+	if (xmlrpc.encode)
+	{
+		snprintf(buf, sizeof buf, "<?xml version=\"1.0\" encoding=\"%s\" ?>\r\n<methodResponse>\r\n<params>\r\n", xmlrpc.encode);
+	}
+	else
+	{
+		snprintf(buf, sizeof buf, "<?xml version=\"1.0\"?>\r\n<methodResponse>\r\n<params>\r\n");
+	}
+	s->append(s, buf, strlen(buf));
 
 	va_start(va, argc);
 	for (idx = 0; idx < argc; idx++)
 	{
-		a = va_arg(va, char *);
-		if (!s)
-		{
-			snprintf(buf, XMLRPC_BUFSIZE, " <param>\r\n  <value>\r\n   %s\r\n  </value>\r\n </param>", a);
-			s = xmlrpc_strdup(buf);
-		}
-		else
-		{
-			snprintf(buf, XMLRPC_BUFSIZE, "%s\r\n <param>\r\n  <value>\r\n   %s\r\n  </value>\r\n </param>", s, a);
-			free(s);
-			s = xmlrpc_strdup(buf);
-		}
+		ss = " <param>\r\n  <value>\r\n   ";
+		s->append(s, ss, strlen(ss));
+		ss = va_arg(va, const char *);
+		s->append(s, ss, strlen(ss));
+		ss = "\r\n  </value>\r\n </param>\r\n";
+		s->append(s, ss, strlen(ss));
 	}
 	va_end(va);
 
-	if (xmlrpc.encode)
-	{
-		snprintf(buf, XMLRPC_BUFSIZE, "<?xml version=\"1.0\" encoding=\"%s\" ?>\r\n<methodResponse>\r\n<params>\r\n%s\r\n</params>\r\n</methodResponse>", xmlrpc.encode, s);
-	}
-	else
-	{
-		snprintf(buf, XMLRPC_BUFSIZE, "<?xml version=\"1.0\"?>\r\n<methodResponse>\r\n<params>\r\n%s\r\n</params>\r\n</methodResponse>", s);
-	}
-	len = strlen(buf);
+	ss = "</params>\r\n</methodResponse>";
+	s->append(s, ss, strlen(ss));
+
+	len = s->pos;
 
 	if (xmlrpc.httpheader)
 	{
 		header = xmlrpc_write_header(len);
-		snprintf(buf2, XMLRPC_BUFSIZE, "%s%s", header, buf);
+		s2 = smalloc(strlen(header) + len + 1);
+		strcpy(s2, header);
+		memcpy(s2 + strlen(header), s->str, len);
 		free(header);
-		len = strlen(buf2);
-		xmlrpc.setbuffer(buf2, len);
+		xmlrpc.setbuffer(s2, len + strlen(header));
+		free(s2);
 		xmlrpc.httpheader = 1;
 	}
 	else
 	{
-		xmlrpc.setbuffer(buf, len);
+		xmlrpc.setbuffer(s->str, len);
 	}
 	if (xmlrpc.encode)
 	{
 		free(xmlrpc.encode);
 		xmlrpc.encode = NULL;
 	}
-	free(s);
+	s->delete(s);
 }
 
 /*************************************************************************/
@@ -1172,6 +1171,48 @@ void xmlrpc_char_encode(char *outbuffer, const char *s1)
 	}
 
 	memcpy(outbuffer, s->str, XMLRPC_BUFSIZE);
+}
+
+static void xmlrpc_append_char_encode(string_t *s, const char *s1)
+{
+	long unsigned int i;
+	unsigned char c;
+	char buf2[15];
+
+	if ((!(s1) || (*(s1) == '\0')))
+	{
+		return;
+	}
+
+	for (i = 0; i <= strlen(s1) - 1; i++)
+	{
+		c = s1[i];
+		if (c > 127)
+		{
+			snprintf(buf2, sizeof buf2, "&#%d;", c);
+			s->append(s, buf2, strlen(buf2));
+		}
+		else if (c == '&')
+		{
+			s->append(s, "&amp;", 5);
+		}
+		else if (c == '<')
+		{
+			s->append(s, "&lt;", 4);
+		}
+		else if (c == '>')
+		{
+			s->append(s, "&gt;", 4);
+		}
+		else if (c == '"')
+		{
+			s->append(s, "&quot;", 6);
+		}
+		else
+		{
+			s->append_char(s, c);
+		}
+	}
 }
 
 char *xmlrpc_decode_string(char *buf)
