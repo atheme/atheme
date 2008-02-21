@@ -124,11 +124,11 @@ void string_delete(string_t *this)
 
 string_t *new_string(size_t size)
 {
-	string_t *this = (string_t *)malloc(sizeof(string_t));
+	string_t *this = (string_t *)smalloc(sizeof(string_t));
 
 	this->size = size;
 	this->pos  = 0;
-	this->str  = (char *)malloc(size);
+	this->str  = (char *)smalloc(size);
 
 	/* Function pointers */
 	this->append      = &string_append;
