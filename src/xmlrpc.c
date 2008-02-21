@@ -1146,8 +1146,8 @@ void xmlrpc_char_encode(char *outbuffer, const char *s1)
 		c = s1[i];
 		if (c > 127)
 		{
-			snprintf(buf2, 15, "&#%c;", c);
-			s->append(s, buf2, 15);
+			snprintf(buf2, sizeof buf2, "&#%d;", c);
+			s->append(s, buf2, strlen(buf2));
 		}
 		else if (c == '&')
 		{
