@@ -35,7 +35,7 @@
  * Header that defines much of the xml/xmlrpc library
  */
 
-#define XMLRPC_BUFSIZE         1024
+#define XMLRPC_BUFSIZE         4096
 #define XMLLIB_VERSION		 "1.0.0"
 #define XMLLIB_AUTHOR		 "Trystan Scott Lee <trystan@nomadirc.net>"
 
