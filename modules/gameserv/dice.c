@@ -93,7 +93,12 @@ static void command_dice(sourceinfo_t *si, int parc, char *parv[])
 	char buf[BUFSIZE];
 
 	if (!arg)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "ROLL");
+		command_fail(si, fault_needmoreparams, _("Syntax: ROLL [dice]d<sides>"));
 		return;
+	}
+
 	sscanf(arg, "%dd%d+%d", &dice, &sides, &modifier);
 
 	if (dice <= 0)
@@ -165,6 +170,7 @@ static void command_wod(sourceinfo_t *si, int parc, char *parv[])
 
 	if (arg_dice == NULL || arg_difficulty == NULL)
 	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "WOD");
 		command_fail(si, fault_needmoreparams, _("Syntax: WOD <dice> <difficulty>"));
 		return;
 	}
@@ -241,6 +247,7 @@ static void command_df(sourceinfo_t *si, int parc, char *parv[])
 
 	if (arg_dice == NULL)
 	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DF");
 		command_fail(si, fault_needmoreparams, _("Syntax: DF <dice>"));
 		return;
 	}
