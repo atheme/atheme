@@ -8,6 +8,7 @@
  */
 
 #include "atheme.h"
+#include "authcookie.h"
 
 DECLARE_MODULE_V1
 (
@@ -98,6 +99,7 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 			}
 		}
 		mu->flags |= MU_NOBURSTLOGIN;
+		authcookie_destroy_all(mu);
 
 		wallops("%s froze the account \2%s\2 (%s).", get_oper_name(si), target, reason);
 		logcommand(si, CMDLOG_ADMIN, "FREEZE %s ON", target);
