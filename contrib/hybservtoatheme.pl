@@ -321,7 +321,7 @@ while (<CHANDB>) {
 			$hslevel = $2;
 			$athlevel = '';
 			# transform autodeop to akick
-			$athlevel .= 'b' if ($hslevel <= $nooplvl);
+			$athlevel .= 'b' if ($hslevel <= $nooplvl && $nooplvl != 51);
 			$athlevel .= 'A' if ($hslevel >= 1);
 			$athlevel .= 'i' if ($hslevel >= $invitelvl);
 			$athlevel .= 'v' if ($hslevel >= $voicelvl);
