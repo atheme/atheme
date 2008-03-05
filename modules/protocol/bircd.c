@@ -381,7 +381,12 @@ static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 static void m_ping(sourceinfo_t *si, int parc, char *parv[])
 {
 	/* reply to PING's */
-	sts("%s Z %s %s %s", me.numeric, parv[0], parv[1], parv[2]);
+	if (si->su != NULL)
+		sts("%s Z %s %s", me.numeric, me.numeric, si->su->nick);
+	else if (parv[0][0] != '!')
+		sts("%s Z %s %s", me.numeric, me.numeric, si->s->name);
+	else
+		sts("%s Z %s %s", me.numeric, me.numeric, parv[0]);
 }
 
 static void m_pong(sourceinfo_t *si, int parc, char *parv[])
