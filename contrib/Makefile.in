@@ -25,6 +25,7 @@ sbindir		= @sbindir@
 localstatedir	= @localstatedir@
 DOCDIR		= @DOCDIR@
 MODDIR		= @MODDIR@
+LOCALEDIR	= @LOCALEDIR@
 SHAREDIR	= @SHAREDIR@
 
 # Want absolute paths?
