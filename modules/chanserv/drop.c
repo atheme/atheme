@@ -97,7 +97,7 @@ static void cs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 	else
 		logcommand(si, CMDLOG_REGISTER, "%s DROP", mc->name);
 
-	snoop("DROP: \2%s\2 by \2%s\2 as \2%s\2", mc->name, get_oper_name(si), si->smu->name);
+	snoop("DROP: \2%s\2 by \2%s\2", mc->name, get_oper_name(si));
 
 	hook_call_event("channel_drop", mc);
 	if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)

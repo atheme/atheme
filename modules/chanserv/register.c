@@ -113,7 +113,7 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	logcommand(si, CMDLOG_REGISTER, "%s REGISTER", name);
-	snoop("REGISTER: \2%s\2 to \2%s\2 as \2%s\2", name, get_oper_name(si), si->smu->name);
+	snoop("REGISTER: \2%s\2 to \2%s\2", name, get_oper_name(si));
 
 	mc = mychan_add(name);
 	mc->registered = CURRTIME;
