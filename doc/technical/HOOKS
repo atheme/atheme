@@ -32,6 +32,7 @@ channel_drop       mychan_t *
 channel_info       hook_channel_req_t *
 channel_message    hook_cmessage_data_t *
 channel_register   hook_channel_req_t *
+nick_can_register  hook_user_register_check_t *
 nick_group         hook_user_req_t *
 nick_check         user_t *
 nick_enforce       hook_nick_enforce_t *

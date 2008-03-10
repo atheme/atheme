@@ -388,8 +388,8 @@ void _modinit(module_t *m)
 	help_addentry(ns_helptree, "SET ENFORCE", "help/nickserv/set_enforce", NULL);
 	hook_add_event("user_info");
 	hook_add_hook("user_info", show_enforce);
-	hook_add_event("user_can_register");
-	hook_add_hook("user_can_register", check_registration);
+	hook_add_event("nick_can_register");
+	hook_add_hook("nick_can_register", check_registration);
 	hook_add_event("nick_enforce");
 	hook_add_hook("nick_enforce", check_enforce);
 }

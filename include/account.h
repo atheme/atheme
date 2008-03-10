@@ -251,7 +251,7 @@ typedef struct {
 
 typedef struct {
 	sourceinfo_t *si;
-	const char *account;
+	const char *account; /* or nick */
 	const char *email;
 	int approved; /* Write non-zero here to disallow the registration */
 } hook_user_register_check_t;

@@ -145,6 +145,12 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	hook_call_event("user_can_register", &hdata);
 	if (hdata.approved != 0)
 		return;
+	if (!nicksvs.no_nick_ownership)
+	{
+		hook_call_event("nick_can_register", &hdata);
+		if (hdata.approved != 0)
+			return;
+	}
 
 	/* make sure they're within limits */
 	if (me.maxusers > 0)

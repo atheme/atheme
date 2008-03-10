@@ -54,6 +54,7 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 	mynick_t *mn;
 	hook_user_req_t hdata;
 	hook_user_register_check_t hdata_reg;
+
 	if (si->su == NULL)
 	{
 		command_fail(si, fault_noprivs, _("\2%s\2 can only be executed via IRC."), "GROUP");
@@ -93,15 +94,12 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_badparams, _("For security reasons, you can't register your UID."));
 		return;
 	}
-	hdata_reg.si = si;
-	if (nicksvs.no_nick_ownership || si->su == NULL)
-		hdata_reg.account = parv[0];
-	else
-		hdata_reg.account = si->su->nick;
 
+	hdata_reg.si = si;
+	hdata_reg.account = si->su->nick;
 	hdata_reg.email = si->smu->email;
 	hdata_reg.approved = 0;
-	hook_call_event("user_can_register", &hdata_reg);
+	hook_call_event("nick_can_register", &hdata_reg);
 	if (hdata_reg.approved != 0)
 		return;
 
