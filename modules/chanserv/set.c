@@ -540,7 +540,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 				  arg = strtok(NULL, " ");
 				  if (!arg)
 				  {
-					  command_fail(si, fault_badparams, _("You need to specify which key to MLOCK."));
+					  command_fail(si, fault_badparams, _("You need to specify a value for mode +%c."), 'k');
 					  return;
 				  }
 				  else if (strlen(arg) >= KEYLEN)
@@ -571,7 +571,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 				  arg = strtok(NULL, " ");
 				  if(!arg)
 				  {
-					  command_fail(si, fault_badparams, _("You need to specify what limit to MLOCK."));
+					  command_fail(si, fault_badparams, _("You need to specify a value for mode +%c."), 'l');
 					  return;
 				  }
 
