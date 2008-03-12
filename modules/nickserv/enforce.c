@@ -96,12 +96,12 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if ((md = metadata_find(si->smu, METADATA_USER, "private:doenforce")) != NULL)
 		{
-			command_fail(si, fault_nochange, _("ENFORCE is already enabled."));
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for account \2%s\2."), "ENFORCE", si->smu->name);
 		}
 		else
 		{
 			metadata_add(si->smu, METADATA_USER, "private:doenforce", "1");
-			command_success_nodata(si, _("ENFORCE is now enabled."));
+			command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "ENFORCE", si->smu->name);
 		}
 	}
 	else if (strcasecmp(setting, "OFF") == 0)
@@ -109,16 +109,16 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 		if ((md = metadata_find(si->smu, METADATA_USER, "private:doenforce")) != NULL)
 		{
 			metadata_delete(si->smu, METADATA_USER, "private:doenforce");
-			command_success_nodata(si, _("ENFORCE is now disabled."));
+			command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "ENFORCE", si->smu->name);
 		}
 		else
 		{
-			command_fail(si, fault_nochange, _("ENFORCE is already disabled."));
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "ENFORCE", si->smu->name);
 		}
 	}
 	else
 	{
-		command_fail(si, fault_badparams, _("Unknown value for ENFORCE. Expected values are ON or OFF."));
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "ENFORCE");
 	}
 }
 
