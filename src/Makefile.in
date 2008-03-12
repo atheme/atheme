@@ -154,7 +154,7 @@ install: build
 			done; \
 			cd ..; \
 		fi; \
-	done)
+	done; install -m 644 ../NEWS $(DESTDIR)$(DOCDIR)/RELEASE)
 	(cd ../help; for i in *; do \
 		[ -f $$i ] && $(INSTALL) -m 644 $$i $(DESTDIR)$(SHAREDIR)/help; \
 		if [ -d $$i ]; then \
