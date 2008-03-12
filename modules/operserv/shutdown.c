@@ -40,11 +40,6 @@ void _moddeinit()
 
 static void os_cmd_shutdown(sourceinfo_t *si, int parc, char *parv[])
 {
-	snoop("UPDATE: \2%s\2", get_oper_name(si));
-	wallops("Updating database by request of \2%s\2.", get_oper_name(si));
-	expire_check(NULL);
-	db_save(NULL);
-
 	logcommand(si, CMDLOG_ADMIN, "SHUTDOWN");
 	snoop("SHUTDOWN: \2%s\2", get_oper_name(si));
 	wallops("Shutting down by request of \2%s\2.", get_oper_name(si));

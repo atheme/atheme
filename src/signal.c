@@ -140,7 +140,6 @@ void check_signals(void)
 
 		snoop("UPDATE: \2%s\2", "system console");
 		wallops(_("Updating database by request of \2%s\2."), "system console");
-		expire_check(NULL);
 		db_save(NULL);
 
 		snoop("REHASH: \2%s\2", "system console");
@@ -169,11 +168,6 @@ void check_signals(void)
 		got_sigint = 0;
 		wallops(_("Got SIGINT; restarting."));
 
-		snoop("UPDATE: \2%s\2", "system console");
-		wallops(_("Updating database by request of \2%s\2."), "system console");
-		expire_check(NULL);
-		db_save(NULL);
-
 		snoop("RESTART: \2%s\2", "system console");
 		wallops(_("Restarting by request of \2%s\2."), "system console");
 
@@ -193,11 +187,6 @@ void check_signals(void)
 	{
 		got_sigusr2 = 0;
 		wallops(_("Got SIGUSR2; restarting."));
-
-		snoop("UPDATE: \2%s\2", "system console");
-		wallops(_("Updating database by request of \2%s\2."), "system console");
-		expire_check(NULL);
-		db_save(NULL);
 
 		snoop("RESTART: \2%s\2", "system console");
 		wallops(_("Restarting by request of \2%s\2."), "system console");
