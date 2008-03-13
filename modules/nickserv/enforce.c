@@ -100,6 +100,7 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 		}
 		else
 		{
+			logcommand(si, CMDLOG_SET, "SET ENFORCE ON");
 			metadata_add(si->smu, METADATA_USER, "private:doenforce", "1");
 			command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "ENFORCE", si->smu->name);
 		}
@@ -108,6 +109,7 @@ static void ns_cmd_set_enforce(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if ((md = metadata_find(si->smu, METADATA_USER, "private:doenforce")) != NULL)
 		{
+			logcommand(si, CMDLOG_SET, "SET ENFORCE OFF");
 			metadata_delete(si->smu, METADATA_USER, "private:doenforce");
 			command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "ENFORCE", si->smu->name);
 		}
