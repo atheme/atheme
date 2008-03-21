@@ -24,21 +24,21 @@ ircd_t InspIRCd = {
         TRUE,                          /* Whether or not we support channel owners. */
         TRUE,                          /* Whether or not we support channel protection. */
         TRUE,                           /* Whether or not we support halfops. */
-		FALSE,				/* Whether or not we use P10 */
-		TRUE,				/* Whether or not we use vHosts. */
-		CMODE_OPERONLY,			/* Oper-only cmodes */
+	FALSE,				/* Whether or not we use P10 */
+	TRUE,				/* Whether or not we use vHosts. */
+	CMODE_OPERONLY,			/* Oper-only cmodes */
         CMODE_OWNER,                    /* Integer flag for owner channel flag. */
         CMODE_PROTECT,                  /* Integer flag for protect channel flag. */
         CMODE_HALFOP,                   /* Integer flag for halfops. */
         "+q",                           /* Mode we set for owner. */
         "+a",                           /* Mode we set for protect. */
         "+h",                           /* Mode we set for halfops. */
-		PROTOCOL_INSPIRCD,		/* Protocol type */
-		0,                              /* Permanent cmodes */
-		"beIg",                         /* Ban-like cmodes */
-		'e',                            /* Except mchar */
-		'I',                            /* Invex mchar */
-		IRCD_CIDR_BANS | IRCD_HOLDNICK  /* Flags */
+	PROTOCOL_INSPIRCD,		/* Protocol type */
+	0,                              /* Permanent cmodes */
+	"beIg",                         /* Ban-like cmodes */
+	'e',                            /* Except mchar */
+	'I',                            /* Invex mchar */
+	IRCD_CIDR_BANS | IRCD_HOLDNICK  /* Flags */
 };
 
 struct cmode_ inspircd_mode_list[] = {
@@ -526,7 +526,7 @@ static void inspircd_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
 /* invite a user to a channel */
 static void inspircd_invite_sts(user_t *sender, user_t *target, channel_t *channel)
 {
-	sts(":%s INVITE %s %s", sender->nick, target->nick, channel->name);
+	sts(":%s INVITE %s %s", sender->uid, target->uid, channel->name);
 }
 
 static void inspircd_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account)
@@ -534,11 +534,11 @@ static void inspircd_holdnick_sts(user_t *source, int duration, const char *nick
 	if (duration == 0)
 	{
 		/* remove SVSHOLD */
-		sts(":%s SVSHOLD %s", source->nick, nick);
+		sts(":%s SVSHOLD %s", source->uid, nick);
 	}
 	else
 	{
-		sts(":%s SVSHOLD %s %ds :Registered nickname.", source->nick, nick, duration);
+		sts(":%s SVSHOLD %s %ds :Registered nickname.", source->uid, nick, duration);
 	}
 }
 
@@ -675,7 +675,7 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 			if (cu->user->server == me.me)
 			{
 				/* it's a service, reop */
-				sts(":%s FMODE %s %ld +o %s", me.numeric, c->name, ts, cu->user->nick);
+				sts(":%s FMODE %s %ld +o %s", me.numeric, c->name, ts, cu->user->uid);
 				cu->modes = CMODE_OP;
 			}
 			else
