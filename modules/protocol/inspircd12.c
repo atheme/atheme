@@ -563,7 +563,7 @@ static void inspircd_svslogin_sts(char *target, char *nick, char *user, char *ho
 	else
 		return;
 
-	sts(":%s METADATA %s accountname :%s", me.numeric, tu->uid, user);
+	sts(":%s METADATA %s accountname :%s", me.numeric, target, login);
 }
 
 static void inspircd_sasl_sts(char *target, char mode, char *data)
