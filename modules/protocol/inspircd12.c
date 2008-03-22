@@ -407,7 +407,7 @@ static void inspircd_unkline_sts(char *server, char *user, char *host)
 		return;
 
 	/* I know this looks wrong, but it's really not. Trust me. --w00t */
-	sts(":%s GLINE %s@%s",opersvs.nick, user, host);
+	sts(":%s GLINE %s@%s", opersvs.me->me->uid, user, host);
 }
 
 /* topic wrapper */
@@ -495,7 +495,7 @@ static void inspircd_jupe(const char *server, const char *reason)
 	if (s != NULL)
 	{
 		/* We need to wait for the RSQUIT to be processed -- jilles */
-		sts(":%s RSQUIT :%s", opersvs.nick, server);
+		sts(":%s RSQUIT :%s", opersvs.me->me->uid, server);
 		s->flags |= SF_JUPE_PENDING;
 	}
 	else
