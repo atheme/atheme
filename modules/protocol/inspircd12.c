@@ -108,6 +108,15 @@ static int has_protocol = 0;
 #define PROTOCOL_SNONOTICE 1102 /* has SNONOTICE and OPERNOTICE commands */
 #define PROTOCOL_NEWTS 1104 /* does not send "confirming" FMODEs on TS changes and uses clear/ignore semantics also for FMODE */
 
+/* find a user's server by extracting the SID and looking that up. --nenolod */
+static server_t *sid_find(char *name)
+{
+	char sid[4];
+	strlcpy(sid, name, 4);
+	return server_find(sid);
+}
+
+
 /* *INDENT-ON* */
 
 static boolean_t check_flood(const char *value, channel_t *c, mychan_t *mc, user_t *u, myuser_t *mu)
@@ -540,6 +549,31 @@ static void inspircd_holdnick_sts(user_t *source, int duration, const char *nick
 	{
 		sts(":%s SVSHOLD %s %ds :Registered nickname.", source->uid, nick, duration);
 	}
+}
+
+static void inspircd_svslogin_sts(char *target, char *nick, char *user, char *host, char *login)
+{
+	user_t *tu = user_find(target);
+	server_t *s;
+
+	if(tu)
+		s = tu->server;
+	else if(ircd->uses_uid) /* Non-announced UID - must be a SASL client. */
+		s = sid_find(target);
+	else
+		return;
+
+	sts(":%s METADATA %s accountname :%s", me.numeric, tu->uid, user);
+}
+
+static void inspircd_sasl_sts(char *target, char mode, char *data)
+{
+	server_t *s = sid_find(target);
+
+	return_if_fail(s != NULL);
+	return_if_fail(saslsvs.me != NULL);
+
+	sts(":%s ENCAP %s SASL %s %s %c %s", ME, s->sid, saslsvs.me->uid, target, mode, data);
 }
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
@@ -1078,6 +1112,23 @@ static void m_fhost(sourceinfo_t *si, int parc, char *parv[])
 	strlcpy(si->su->vhost, parv[0], HOSTLEN);
 }
 
+static void m_encap(sourceinfo_t *si, int parc, char *parv[])
+{
+	if (!irccasecmp(parv[1], "SASL"))
+	{
+		/* :08C ENCAP * SASL 08CAAAAAE * S d29vTklOSkFTAGRhdGEgaW4gZmlyc3QgbGluZQ== */
+		sasl_message_t smsg;
+
+		if (parc < 6)
+			return;
+
+		smsg.uid = parv[2];
+		smsg.mode = *parv[4];
+		smsg.buf = parv[5];
+		hook_call_event("sasl_input", &smsg);
+	}
+}
+
 /*
  * :<source server> METADATA <channel|user> <key> :<value>
  * The sole piece of metadata we're interested in is 'accountname', set by Services,
@@ -1222,6 +1273,8 @@ void _modinit(module_t * m)
 	fnc_sts = &inspircd_fnc_sts;
 	invite_sts = &inspircd_invite_sts;
 	holdnick_sts = &inspircd_holdnick_sts;
+	svslogin_sts = &inspircd_svslogin_sts;
+	sasl_sts = &inspircd_sasl_sts;
 
 	mode_list = inspircd_mode_list;
 	ignore_mode_list = inspircd_ignore_mode_list;
@@ -1264,6 +1317,7 @@ void _modinit(module_t * m)
 	pcommand_add("OPERTYPE", m_opertype, 1, MSRC_USER);
 	pcommand_add("METADATA", m_metadata, 3, MSRC_SERVER);
 	pcommand_add("CAPAB", m_capab, 1, MSRC_UNREG | MSRC_SERVER);
+	pcommand_add("ENCAP", m_encap, 2, MSRC_USER | MSRC_SERVER);
 
 	hook_add_event("server_eob");
 	hook_add_hook("server_eob", (void (*)(void *))server_eob);
