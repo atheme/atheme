@@ -382,6 +382,8 @@ fi
 
 AC_SUBST(PICFLAGS)
 
+ATHEME_C_GCC_TRY_FLAGS([-std=gnu99], atheme_cv_c_gcc_std_gnu99)
+
 AC_ARG_ENABLE(warnings,
 AC_HELP_STRING([--enable-warnings],[ Enable compiler warnings]),
 [
