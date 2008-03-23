@@ -15,7 +15,7 @@ DECLARE_MODULE_V1
 (
 	"freenode/ns_set_accountname", FALSE, _modinit, _moddeinit,
 	"$Id$",
-	"freenode <http://www.freenode.net>"
+	"Atheme Development Group <http://www.atheme.org>"
 );
 
 list_t *ns_set_cmdtree, *ns_helptree;
