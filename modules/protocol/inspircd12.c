@@ -660,9 +660,32 @@ static void m_notice(sourceinfo_t *si, int parc, char *parv[])
 	handle_message(si, parv[0], TRUE, parv[1]);
 }
 
+static void map_a_prefix(char prefix, char* prefixandnick, unsigned int *nlen)
+{
+	size_t j, k;
+
+	/* does this char match a known prefix? */
+	for (j = 0; status_mode_list[j].mode; j++)
+	{
+		/* yup. add it to the 'final' combination (@%w00t) */
+		if (prefix == status_mode_list[j].mode)
+		{
+			for (k = 0; prefix_mode_list[k].mode; k++)
+			{
+				if (status_mode_list[j].value == prefix_mode_list[k].value)
+				{
+					prefixandnick[*nlen] = prefix_mode_list[k].mode;
+					(*nlen)++;
+					return;
+				}
+			}
+		}
+	}
+}
+
 static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 {
-	/* FJOIN #flaps 1234 :@,fanny +%,arse ,tits ,breasts &~,poontang */
+	/* :08X FJOIN #flaps 1234 +nt vh,0F8XXXXN ,08XGH75C ,001CCCC3 aq,00ABBBB1 */
 	channel_t *c;
 	unsigned int userc;
 	unsigned int i;
@@ -682,16 +705,6 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 		slog(LG_DEBUG, "m_fjoin(): new channel: %s", parv[0]);
 		c = channel_add(parv[0], ts, si->s);
 		return_if_fail(c != NULL);
-		/* Tell the core to check mode locks now,
-		 * otherwise it may only happen after the next
-		 * mode change.
-		 * Inspircd does not allow any redundant modes
-		 * so this will not look ugly. -- jilles */
-		/* As discussed with Brain, if this is in a burst,
-		 * an FMODE with the simple modes will follow so we
-		 * can skip this. -- jilles */
-		if (!me.bursting)
-			channel_mode_va(NULL, c, 1, "+");
 	}
 
 	if (ts < c->ts)
@@ -742,6 +755,11 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 	 */
 	userc = sjtoken(parv[parc - 1], ' ', userv);
 
+	if (keep_new_modes)
+	{
+		channel_mode(NULL, c, parc - 3, parv + 2);
+	}
+
 	/* loop over all the users in this fjoin */
 	for (i = 0; i < userc; i++)
 	{
@@ -756,16 +774,7 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 		 */
 		for (; *userv[i]; userv[i]++)
 		{
-			/* does this char match a known prefix? */
-			for (j = 0; prefix_mode_list[j].mode; j++)
-			{
-				/* yup. add it to the 'final' combination (@%w00t) */
-				if (*userv[i] == prefix_mode_list[j].mode)
-				{
-					prefixandnick[nlen++] = *userv[i];
-					continue;
-				}
-			}
+			map_a_prefix(*userv[i], prefixandnick, &nlen);
 
 			/* it's not a known prefix char, have we reached the end of the prefixes? */
 			if (*userv[i] == ',')
