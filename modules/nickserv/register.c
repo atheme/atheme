@@ -125,12 +125,6 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!validemail(email))
-	{
-		command_fail(si, fault_badparams, _("\2%s\2 is not a valid email address."), email);
-		return;
-	}
-
 	/* make sure it isn't registered already */
 	if (nicksvs.no_nick_ownership ? myuser_find(account) != NULL : mynick_find(account) != NULL)
 	{
@@ -150,6 +144,12 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		hook_call_event("nick_can_register", &hdata);
 		if (hdata.approved != 0)
 			return;
+	}
+
+	if (!validemail(email))
+	{
+		command_fail(si, fault_badparams, _("\2%s\2 is not a valid email address."), email);
+		return;
 	}
 
 	/* make sure they're within limits */
