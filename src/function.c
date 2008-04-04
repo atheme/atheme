@@ -238,28 +238,60 @@ boolean_t is_internal_client(user_t *u)
 
 int validemail(const char *email)
 {
-	int i, valid = 1, chars = 0;
+	int i, valid = 1, chars = 0, atcnt = 0, dotcnt1 = 0;
+	char c;
+	const char *lastdot = NULL;
 
 	/* sane length */
 	if (strlen(email) >= EMAILLEN)
 		valid = 0;
 
-	/* make sure it has @ and . */
-	if (!strchr(email, '@') || !strchr(email, '.'))
+#if 0
+	/* RFC2822 */
+#define EXTRA_ATEXTCHARS "!#$%&'*+-/=?^_`{|}~"
+#else
+	/* commonly used subset */
+#define EXTRA_ATEXTCHARS "%+-=^_"
+#endif
+	/* note that we do not allow domain literals or quoted strings */
+	for (i = 0; email[i] != '\0'; i++)
+	{
+		c = email[i];
+		if (c == '.')
+		{
+			dotcnt1++;
+			lastdot = &email[i];
+			/* dot may not be first or last, no consecutive dots */
+			if (i == 0 || email[i - 1] == '.' ||
+					email[i - 1] == '@' ||
+					email[i + 1] == '\0' ||
+					email[i + 1] == '@')
+				valid = 0;
+		}
+		else if (c == '@')
+			atcnt++, dotcnt1 = 0;
+		else if ((c >= 'a' && c <= 'z') ||
+				(c >= 'A' && c <= 'Z') ||
+				(c >= '0' && c <= '9') ||
+				strchr(EXTRA_ATEXTCHARS, c))
+			chars++;
+		else
+			valid = 0;
+	}
+
+	/* must have exactly one @, and at least one . after the @ */
+	if (atcnt != 1 || dotcnt1 == 0)
 		valid = 0;
 
-	/* check for other bad things */
-	if (strchr(email, '\'') || strchr(email, ' ') || strchr(email, ',') || strchr(email, '$')
-	    || strchr(email, '/') || strchr(email, ';') || strchr(email, '<') || strchr(email, '>') || strchr(email, '&') || strchr(email, '"'))
+	/* no mail to IP addresses, this should be done using [10.2.3.4]
+	 * like syntax but we do not allow that either
+	 */
+	if (isdigit(lastdot[1]))
 		valid = 0;
 
 	/* make sure there are at least 6 characters besides the above
 	 * mentioned @ and .
 	 */
-	for (i = strlen(email) - 1; i > 0; i--)
-		if (!(email[i] == '@' || email[i] == '.'))
-			chars++;
-
 	if (chars < 6)
 		valid = 0;
 
@@ -337,6 +369,13 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	}
 	else
 		email = mu->email;
+
+	if (!validemail(email))
+	{
+		if (type != EMAIL_MEMO && !is_internal_client(u))
+			notice(opersvs.me ? opersvs.nick : me.name, u->nick, "The email address is considered invalid.");
+		return 0;
+	}
 
 	if (CURRTIME - period_start > me.emailtime)
 	{
