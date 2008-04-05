@@ -307,13 +307,13 @@ static void inspircd_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *mo
 {
 	if (isnew)
 	{
-		sts(":%s FJOIN %s %ld :@,%s", me.numeric, c->name, c->ts, u->uid);
+		sts(":%s FJOIN %s %ld + :o,%s", me.numeric, c->name, c->ts, u->uid);
 		if (modes[0] && modes[1])
 			sts(":%s FMODE %s %ld %s", me.numeric, c->name, c->ts, modes);
 	}
 	else
 	{
-		sts(":%s FJOIN %s %ld :@,%s", me.numeric, c->name, c->ts, u->uid);
+		sts(":%s FJOIN %s %ld + :o,%s", me.numeric, c->name, c->ts, u->uid);
 	}
 }
 
@@ -322,7 +322,7 @@ static void inspircd_chan_lowerts(channel_t *c, user_t *u)
 	slog(LG_DEBUG, "inspircd_chan_lowerts(): lowering TS for %s to %ld", 
 		c->name, (long)c->ts);
 
-	sts(":%s FJOIN %s %ld :@,%s", me.numeric, c->name, c->ts, u->uid);
+	sts(":%s FJOIN %s %ld + :o,%s", me.numeric, c->name, c->ts, u->uid);
 	sts(":%s FMODE %s %ld %s", me.numeric, c->name, c->ts, channel_modes(c, TRUE));
 }
 
