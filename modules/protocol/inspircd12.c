@@ -618,7 +618,7 @@ static void m_ping(sourceinfo_t *si, int parc, char *parv[])
 	if (parc == 1)
 		sts(":%s PONG %s", me.numeric, parv[0]);
 	else if (parc == 2)
-		sts(":%s PONG %s :%s", parv[1], parv[0]);
+		sts(":%s PONG %s :%s", me.numeric, parv[1], parv[0]);
 }
 
 static void m_pong(sourceinfo_t *si, int parc, char *parv[])
