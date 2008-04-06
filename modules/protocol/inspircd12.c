@@ -472,7 +472,10 @@ static void inspircd_ping_sts(void)
 	if (!me.connected)
 		return;
 
-	sts(":%s PING :%s", me.numeric, curr_uplink->name);
+	// XXX this is annoying, uplink_t contains no sid or link to server_t
+	server_t *u = server_find(curr_uplink->name);
+
+	sts(":%s PING :%s", me.numeric, u->sid);
 }
 
 /* protocol-specific stuff to do on login */
