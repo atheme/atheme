@@ -475,7 +475,10 @@ static void inspircd_ping_sts(void)
 	// XXX this is annoying, uplink_t contains no sid or link to server_t
 	server_t *u = server_find(curr_uplink->name);
 
-	sts(":%s PING :%s", me.numeric, u->sid);
+	if (!u)
+		return;
+
+	sts(":%s PING %s :%s", me.numeric, me.numeric, u->sid);
 }
 
 /* protocol-specific stuff to do on login */
@@ -1034,7 +1037,7 @@ static void m_server(sourceinfo_t *si, int parc, char *parv[])
 		/* elicit PONG for EOB detection; pinging uplink is
 		 * already done elsewhere -- jilles
 		 */
-		sts(":%s PING %s %s", me.numeric, me.numeric, s->name);
+		sts(":%s PING %s %s", me.numeric, me.numeric, s->sid);
 	}
 }
 
