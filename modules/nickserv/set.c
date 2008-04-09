@@ -474,60 +474,6 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 
 command_t ns_set_property = { "PROPERTY", N_("Manipulates metadata entries associated with an account."), AC_NONE, 2, _ns_setproperty };
 
-static void _ns_setqproperty(sourceinfo_t *si, int parc, char *parv[])
-{
-	char *property = strtok(parv[0], " ");
-	char *value = strtok(NULL, "");
-
-	if (si->smu == NULL)
-		return;
-
-	if (!property)
-	{
-		command_fail(si, fault_needmoreparams, _("Syntax: SET PROPERTY <property> [value]"));
-		return;
-	}
-
-	if (strchr(property, ':') && !has_priv(si, PRIV_METADATA))
-	{
-		command_fail(si, fault_badparams, _("Invalid property name."));
-		return;
-	}
-
-	if (strchr(property, ':'))
-		snoop("SET:PROPERTY: \2%s\2: \2%s\2/\2%s\2", si->smu->name, property, value);
-
-	if (!value)
-	{
-		metadata_t *md = metadata_find(si->smu, METADATA_USER, property);
-
-		if (!md)
-		{
-			command_fail(si, fault_nosuch_target, _("Metadata entry \2%s\2 was not set."), property);
-			return;
-		}
-
-		metadata_delete(si->smu, METADATA_USER, property);
-		logcommand(si, CMDLOG_SET, "SET PROPERTY %s (deleted)", property);
-		return;
-	}
-
-	if (si->smu->metadata.count >= me.mdlimit)
-	{
-		command_fail(si, fault_toomany, _("Cannot add \2%s\2 to \2%s\2 metadata table, it is full."),
-					property, si->smu->name);
-		return;
-	}
-
-	if (strlen(property) > 32 || strlen(value) > 300)
-		return;
-
-	metadata_add(si->smu, METADATA_USER, property, value);
-	logcommand(si, CMDLOG_SET, "SET QPROPERTY %s to %s", property, value);
-}
-
-command_t ns_set_qproperty = { "QPROPERTY", N_("Quietly manipulates metadata entries associated with an account."), AC_NONE, 2, _ns_setqproperty };
-
 static void _ns_setpassword(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *password = strtok(parv[0], " ");
@@ -575,7 +521,6 @@ command_t *ns_set_commands[] = {
 	&ns_set_neverop,
 	&ns_set_password,
 	&ns_set_property,
-	&ns_set_qproperty,
 	NULL
 };
 
