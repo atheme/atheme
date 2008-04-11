@@ -88,6 +88,12 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (mu->flags & MU_WAITAUTH)
+	{
+		command_fail(si, fault_badparams, _("\2%s\2 is not verified."), mu->name);
+		return;
+	}
+
 	if ((md = metadata_find(mu, METADATA_USER, "private:mark:setter")))
 	{
 		ismarked = true;
