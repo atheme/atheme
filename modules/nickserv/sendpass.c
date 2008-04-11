@@ -18,7 +18,7 @@ DECLARE_MODULE_V1
 
 static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[]);
 
-command_t ns_sendpass = { "SENDPASS", N_("Email registration passwords."), PRIV_USER_SENDPASS, 1, ns_cmd_sendpass };
+command_t ns_sendpass = { "SENDPASS", N_("Email registration passwords."), PRIV_USER_SENDPASS, 2, ns_cmd_sendpass };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -37,6 +37,13 @@ void _moddeinit()
 	help_delentry(ns_helptree, "SENDPASS");
 }
 
+enum specialoperation
+{
+	op_none,
+	op_force,
+	op_clear
+};
+
 static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
@@ -44,12 +51,28 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 	char *newpass = NULL;
 	char *key;
 	metadata_t *md;
+	enum specialoperation op = op_none;
+	bool ismarked = false;
 
 	if (!name)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "SENDPASS");
 		command_fail(si, fault_needmoreparams, _("Syntax: SENDPASS <account>"));
 		return;
+	}
+	
+	if (parc > 1)
+	{
+		if (!strcasecmp(parv[1], "FORCE"))
+			op = op_force;
+		else if (!strcasecmp(parv[1], "CLEAR"))
+			op = op_clear;
+		else
+		{
+			command_fail(si, fault_badparams, STR_INVALID_PARAMS, "SENDPASS");
+			command_fail(si, fault_badparams, _("Syntax: SENDPASS <account> [FORCE|CLEAR]"));
+			return;
+		}
 	}
 
 	if (!(mu = myuser_find(name)))
@@ -67,22 +90,46 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 
 	if ((md = metadata_find(mu, METADATA_USER, "private:mark:setter")))
 	{
-		if (has_priv(si, PRIV_MARK))
-		{
-			command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), md->value, mu->name);
-			wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), mu->name);
-		}
-		else
+		ismarked = true;
+		if (op == op_none)
 		{
 			logcommand(si, CMDLOG_ADMIN, "failed SENDPASS %s (marked by %s)", mu->name, md->value);
 			command_fail(si, fault_badparams, _("This operation cannot be performed on %s, because the account has been marked by %s."), mu->name, md->value);
+			if (has_priv(si, PRIV_MARK))
+				command_fail(si, fault_badparams, _("Use SENDPASS %s FORCE to override this restriction."), mu->name);
 			return;
 		}
+		else if (!has_priv(si, PRIV_MARK))
+		{
+			logcommand(si, CMDLOG_ADMIN, "failed SENDPASS %s (marked by %s)", mu->name, md->value);
+			command_fail(si, fault_noprivs, _("You do not have %s privilege."), PRIV_MARK);
+			return;
+		}
+	}
+
+	if (op == op_clear)
+	{
+		if (metadata_find(mu, METADATA_USER, "private:setpass:key"))
+		{
+			metadata_delete(mu, METADATA_USER, "private:setpass:key");
+			logcommand(si, CMDLOG_ADMIN, "SENDPASS %s CLEAR", mu->name);
+			snoop("SENDPASS:CLEAR: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
+			command_success_nodata(si, _("The password change key for \2%s\2 has been cleared."), mu->name);
+		}
+		else
+			command_fail(si, fault_nochange, _("\2%s\2 did not have a password change key outstanding."), mu->name);
+		return;
 	}
 
 	/* alternative, safer method? */
 	if (command_find(si->service->cmdtree, "SETPASS"))
 	{
+		if (metadata_find(mu, METADATA_USER, "private:setpass:key"))
+		{
+			command_fail(si, fault_alreadyexists, _("\2%s\2 already has a password change key outstanding."), mu->name);
+			command_fail(si, fault_alreadyexists, _("Use SENDPASS %s CLEAR to clear it so that a new one can be sent."), mu->name);
+			return;
+		}
 		key = gen_pw(12);
 		if (sendemail(si->su != NULL ? si->su : si->service->me, EMAIL_SETPASS, mu, key))
 		{
@@ -90,6 +137,11 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 			logcommand(si, CMDLOG_ADMIN, "SENDPASS %s (change key)", name);
 			snoop("SENDPASS: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
 			command_success_nodata(si, _("The password change key for \2%s\2 has been sent to \2%s\2."), mu->name, mu->email);
+			if (ismarked)
+			{
+				wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), mu->name);
+				command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), md->value, mu->name);
+			}
 		}
 		else
 			command_fail(si, fault_emailfail, _("Email send failed."));
@@ -110,6 +162,11 @@ static void ns_cmd_sendpass(sourceinfo_t *si, int parc, char *parv[])
 		logcommand(si, CMDLOG_ADMIN, "SENDPASS %s", name);
 		snoop("SENDPASS: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
 		command_success_nodata(si, _("The password for \2%s\2 has been sent to \2%s\2."), mu->name, mu->email);
+		if (ismarked)
+		{
+			wallops("%s sent the password for the \2MARKED\2 account %s.", get_oper_name(si), mu->name);
+			command_success_nodata(si, _("Overriding MARK placed by %s on the account %s."), md->value, mu->name);
+		}
 	}
 	else
 		command_fail(si, fault_emailfail, _("Email send failed."));

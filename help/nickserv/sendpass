@@ -2,8 +2,21 @@ Help for SENDPASS:
 
 SENDPASS emails the password for the specified
 nickname to the corresponding email address.
+If SETPASS is loaded, it will instead email a
+key that can be used to set a new password.
 
 Syntax: SENDPASS <nickname>
+
+If the nickname is marked, you can override this
+using the FORCE keyword.
+
+Syntax: SENDPASS <nickname> FORCE
+
+If a key for SETPASS has been emailed but not
+yet used, you can clear it using the CLEAR
+keyword.
+
+Syntax: SENDPASS <nickname> CLEAR
 
 Examples:
     /msg &nick& SENDPASS foo
