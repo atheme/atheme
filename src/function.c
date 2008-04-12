@@ -244,7 +244,7 @@ int validemail(const char *email)
 
 	/* sane length */
 	if (strlen(email) >= EMAILLEN)
-		valid = 0;
+		return 0;
 
 #if 0
 	/* RFC2822 */
@@ -266,7 +266,7 @@ int validemail(const char *email)
 					email[i - 1] == '@' ||
 					email[i + 1] == '\0' ||
 					email[i + 1] == '@')
-				valid = 0;
+				return 0;
 		}
 		else if (c == '@')
 			atcnt++, dotcnt1 = 0;
@@ -276,24 +276,24 @@ int validemail(const char *email)
 				strchr(EXTRA_ATEXTCHARS, c))
 			chars++;
 		else
-			valid = 0;
+			return 0;
 	}
 
 	/* must have exactly one @, and at least one . after the @ */
 	if (atcnt != 1 || dotcnt1 == 0)
-		valid = 0;
+		return 0;
 
 	/* no mail to IP addresses, this should be done using [10.2.3.4]
 	 * like syntax but we do not allow that either
 	 */
 	if (isdigit(lastdot[1]))
-		valid = 0;
+		return 0;
 
 	/* make sure there are at least 6 characters besides the above
 	 * mentioned @ and .
 	 */
 	if (chars < 6)
-		valid = 0;
+		return 0;
 
 	return valid;
 }
