@@ -23,11 +23,11 @@
 
 #include "atheme.h"
 
-static void config_error(char *format, ...);
-static config_file_t *config_parse(char *filename, char *confdata);
+static void config_error(const char *format, ...);
+static config_file_t *config_parse(const char *filename, char *confdata);
 static void config_entry_free(config_entry_t *ceptr);
 
-static void config_error(char *format, ...)
+static void config_error(const char *format, ...)
 {
 	va_list ap;
 	char buffer[1024];
@@ -41,7 +41,7 @@ static void config_error(char *format, ...)
 	slog(LG_ERROR, "config_parse(): %s", buffer);
 }
 
-static config_file_t *config_parse(char *filename, char *confdata)
+static config_file_t *config_parse(const char *filename, char *confdata)
 {
 	char *ptr;
 	char *start;
@@ -349,7 +349,7 @@ void config_free(config_file_t *cfptr)
 	}
 }
 
-config_file_t *config_load(char *filename)
+config_file_t *config_load(const char *filename)
 {
 	struct stat sb;
 	FILE *fd;
@@ -396,7 +396,7 @@ config_file_t *config_load(char *filename)
 	return cfptr;
 }
 
-config_entry_t *config_find(config_entry_t *ceptr, char *name)
+config_entry_t *config_find(config_entry_t *ceptr, const char *name)
 {
 	for (; ceptr; ceptr = ceptr->ce_next)
 		if (!strcmp(ceptr->ce_varname, name))

@@ -256,7 +256,7 @@ static void conf_process(config_file_t *cfp)
 	}
 }
 
-boolean_t conf_parse(char *file)
+boolean_t conf_parse(const char *file)
 {
 	config_file_t *cfp;
 
