@@ -239,7 +239,6 @@ static void os_cmd_soper_del(sourceinfo_t *si, int parc, char *parv[])
 static void os_cmd_soper_setpass(sourceinfo_t *si, int parc, char *parv[])
 {
 	myuser_t *mu;
-	operclass_t *operclass;
 	node_t *n;
 	user_t *u;
 

@@ -53,8 +53,6 @@ static boolean_t verify_operserv_password(soper_t *so, char *password)
 
 static void os_cmd_identify(sourceinfo_t *si, int parc, char *parv[])
 {
-	int i;
-
 	/* XXX use this with authcookie also */
 	if (si->su == NULL)
 	{
