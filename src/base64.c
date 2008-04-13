@@ -51,7 +51,7 @@
 #include <limits.h>
 
 /* C89 compliant way to cast 'char' to 'unsigned char'. */
-inline unsigned char
+static inline unsigned char
 to_uchar (char ch)
 {
   return ch;
