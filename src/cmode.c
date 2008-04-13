@@ -547,7 +547,7 @@ static void modestack_flush(struct modestackdata *md)
 	modestack_clear(md);
 }
 
-static struct modestackdata *modestack_init(char *source, channel_t *channel)
+static struct modestackdata *modestack_init(const char *source, channel_t *channel)
 {
 	if (irccasecmp(source, modestackdata.source) || channel != modestackdata.channel)
 	{
@@ -694,7 +694,7 @@ void modestack_finalize_channel(channel_t *channel)
 }
 
 /* stack simple modes without parameters */
-void modestack_mode_simple(char *source, channel_t *channel, int dir, int flags)
+void modestack_mode_simple(const char *source, channel_t *channel, int dir, int flags)
 {
 	struct modestackdata *md;
 
@@ -707,7 +707,7 @@ void modestack_mode_simple(char *source, channel_t *channel, int dir, int flags)
 }
 
 /* stack a limit */
-void modestack_mode_limit(char *source, channel_t *channel, int dir, unsigned int limit)
+void modestack_mode_limit(const char *source, channel_t *channel, int dir, unsigned int limit)
 {
 	struct modestackdata *md;
 
@@ -718,7 +718,7 @@ void modestack_mode_limit(char *source, channel_t *channel, int dir, unsigned in
 }
 
 /* stack a non-standard type C mode */
-void modestack_mode_ext(char *source, channel_t *channel, int dir, int i, const char *value)
+void modestack_mode_ext(const char *source, channel_t *channel, int dir, int i, const char *value)
 {
 	struct modestackdata *md;
 
@@ -735,7 +735,7 @@ void modestack_mode_ext(char *source, channel_t *channel, int dir, int i, const 
 }
 
 /* stack a type A, B or E mode */
-void modestack_mode_param(char *source, channel_t *channel, int dir, char type, const char *value)
+void modestack_mode_param(const char *source, channel_t *channel, int dir, char type, const char *value)
 {
 	struct modestackdata *md;
 
