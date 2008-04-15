@@ -1,0 +1,9 @@
+Help for EIGHTBALL:
+
+Позволяет задать вопрос о недалеком будущем
+восьми магическим шарам :D
+
+Синтаксис: EIGHTBALL
+
+Пример:
+    /msg GameServ EIGHTBALL

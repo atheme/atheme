@@ -1,0 +1,9 @@
+Помощь по SET HIDEMAIL:
+
+Команда SET HIDEMAIL скрывает вывод
+email-адреса в INFO аккаунта.
+
+Синтаксис: SET HIDEMAIL ON|OFF
+
+Пример:
+    /msg &nick& SET HIDEMAIL ON

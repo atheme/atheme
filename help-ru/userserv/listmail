@@ -1,0 +1,11 @@
+Помощь по LISTMAIL:
+
+Команда LISTMAIL выводит список всех аккаунтов,
+зарегистрированных на указанный email. Допустимо
+использование подстановочных знаков '*' и '?'.
+
+Синтаксис: LISTMAIL <маска_по_email>
+
+Пример:
+    /msg &nick& LISTMAIL indigo@yandex.ru
+    /msg &nick& LISTMAIL *ski@pisem.net.nu

@@ -1,0 +1,9 @@
+Помощь по TOPICPREPEND:
+
+Команда TOPICAPPEND позволяет вам добавлять текст
+к началу топика.
+
+Синтаксис: TOPICPREPEND <#канал> <текст>
+
+Пример:
+    /msg &nick& TOPICPREPEND #foo новый текст

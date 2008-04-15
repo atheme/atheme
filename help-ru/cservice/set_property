@@ -1,0 +1,13 @@
+Помощь по SET PROPERTY:
+
+Команда SET PROPERTY позволяеет ассоциировать
+или удалить метеданные канала.
+
+Для удаления записи, укажите ее <название> без
+[значения].
+
+Синтаксис: SET <#канал> PROPERTY <название> [значение]
+
+Примеры:
+    /msg &nick& SET #atheme PROPERTY URL http://www.atheme.org/
+    /msg &nick& SET #meat PROPERTY URL

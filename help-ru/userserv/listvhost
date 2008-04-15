@@ -1,0 +1,12 @@
+Помощь по LISTVHOST:
+
+Команда LISTVHOST позволяет получить список всех
+аккаунтов, у которых установлены vHost'ы.
+В качестве дополнительноо параметра можно
+указать маску vhost'а.
+
+Syntax: LISTVHOST [маска]
+
+Примеры:
+    /msg &nick& LISTVHOST
+    /msg &nick& LISTVHOST *dosug.nu

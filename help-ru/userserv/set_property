@@ -1,0 +1,14 @@
+Помощь по SET PROPERTY:
+
+Команда SET PROPERTY позволяет ассоциировать различные
+строки метаданных с вашим аккаунтом.
+
+Что бы удалить ассоциированные метаданные, просто
+укажите их название без дополнительного параметра.
+
+Синтаксис: SET PROPERTY <название> [значение]
+
+Примеры:
+    /msg &nick& SET PROPERTY URL http://primer.ru/aga.php
+    /msg &nick& SET PROPERTY GENDER Female
+    /msg &nick& SET PROPERTY ICQ

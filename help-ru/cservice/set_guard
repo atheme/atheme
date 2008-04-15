@@ -1,0 +1,10 @@
+Помощь по SET GUARD:
+
+Команда SET GUARD позволяет вам пригласить
+&nick& ваш канал.
+Только в этом случае будут работать fantasy-команды.
+
+Syntax: SET <#канал> GUARD ON|OFF
+
+Пример:
+    /msg &nick& SET #atheme GUARD ON

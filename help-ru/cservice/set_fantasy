@@ -1,0 +1,9 @@
+Помощь по SET FANTASY:
+
+Команда SET FANTASY позволяет вам включить или выключить
+поддержку fantasy-команд (!op, !deop, и т.п.) на канале.
+
+Синтаксис: SET <#канал> FANTASY ON|OFF
+
+Пример:
+    /msg &nick& SET #chatspike FANTASY ON

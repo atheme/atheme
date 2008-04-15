@@ -1,0 +1,9 @@
+Помощь по TOPICAPPEND:
+
+Команда TOPICAPPEND позволяет вам добавлять текст
+в конец топика.
+
+Синтаксис: TOPICAPPEND <#канал> <текст>
+
+Пример:
+    /msg &nick& TOPICAPPEND #foo новый текст
