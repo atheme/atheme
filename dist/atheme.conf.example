@@ -1171,8 +1171,12 @@ operator "jilles" {
 	/* operclass */
 	operclass = "sra";
 	/* password
-	 * If specified, the user must use the OperServ IDENTIFY command
-	 * with the password before the privileges can be used.
+	 * Normally, the user needs to identify/log in using the account's
+	 * password, and may need to be an IRCop (see operclass::needoper
+	 * above). If you consider this not secure enough, you can
+	 * specify an additional password here, which the user must enter
+	 * using the OperServ IDENTIFY command, before the privileges can
+	 * be used.
 	 * The password must be encrypted if a crypto module is in use.
 	 */
 	#password = "$1$3gJMO9by$0G60YE6GqmuHVH3AnFPor1";
