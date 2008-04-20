@@ -113,6 +113,7 @@ static int c_ni_spam(config_entry_t *);
 static int c_ni_no_nick_ownership(config_entry_t *);
 static int c_ni_expire(config_entry_t *);
 static int c_ni_enforce_expire(config_entry_t *);
+static int c_ni_enforce_delay(config_entry_t *);
 
 /* SaslServ client information. */
 static int c_ss_nick(config_entry_t *);
@@ -309,6 +310,7 @@ void conf_init(void)
 		config_options.flood_msgs = config_options.flood_time = config_options.kline_time = config_options.commit_interval = config_options.default_clone_limit = 0;
 
 	nicksvs.expiry = nicksvs.enforce_expiry = chansvs.expiry = 0;
+	nicksvs.enforce_delay = 30;
 
 	config_options.defuflags = config_options.defcflags = 0x00000000;
 
@@ -618,6 +620,7 @@ void init_newconf(void)
 	add_conf_item("NO_NICK_OWNERSHIP", &conf_ni_table, c_ni_no_nick_ownership);
 	add_conf_item("EXPIRE", &conf_ni_table, c_ni_expire);
 	add_conf_item("ENFORCE_EXPIRE", &conf_ni_table, c_ni_enforce_expire);
+	add_conf_item("ENFORCE_DELAY", &conf_ni_table, c_ni_enforce_delay);
 
 	/* saslserv{} block */
 	add_conf_item("NICK", &conf_ss_table, c_ss_nick);
@@ -1644,6 +1647,16 @@ static int c_ni_enforce_expire(config_entry_t *ce)
 		PARAM_ERROR(ce);
 
 	nicksvs.enforce_expiry = (ce->ce_vardatanum * 60 * 60 * 24);
+
+	return 0;
+}
+
+static int c_ni_enforce_delay(config_entry_t *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	nicksvs.enforce_delay = ce->ce_vardatanum;
 
 	return 0;
 }

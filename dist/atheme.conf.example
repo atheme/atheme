@@ -628,6 +628,12 @@ nickserv {
 	 * settings on nicks.
 	 */
 	#enforce_expire = 14;
+
+	/* (*)enforce_delay
+	 * The number of seconds to delay nickchange enforcement settings
+	 * on nicks.
+	 */
+	#enforce_delay = 30;
 };
 
 /* ChanServ configuration.

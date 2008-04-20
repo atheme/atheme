@@ -27,7 +27,6 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-#define ENFORCE_TIMEOUT 30
 #define ENFORCE_CHECK_FREQ 5
 
 typedef struct {
@@ -332,10 +331,8 @@ static void check_enforce(void *vdata)
 		timeout = BlockHeapAlloc(enforce_timeout_heap);
 		strlcpy(timeout->nick, hdata->mn->nick, sizeof timeout->nick);
 		strlcpy(timeout->host, hdata->u->host, sizeof timeout->host);
-		/* the following ENFORCE_TIMEOUT must be constant,
-		 * otherwise the timeouts will not be sorted and
-		 * enforce_timeout_check() will break */
-		timeout->timelimit = CURRTIME + ENFORCE_TIMEOUT;
+
+		timeout->timelimit = CURRTIME + nicksvs.enforce_delay;
 		node_add(timeout, &timeout->node, &enforce_list);
 	}
 

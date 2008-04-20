@@ -97,6 +97,7 @@ struct nicksvs_
 
   unsigned int expiry;          /* expiry time                */
   unsigned int enforce_expiry;  /* expiry time                */
+  unsigned int enforce_delay;   /* delay for nickname enforce */
 };
 
 struct saslsvs_
