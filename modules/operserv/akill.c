@@ -86,7 +86,7 @@ static void os_akill_newuser(void *vptr)
 		/* Server didn't have that kline, send it again.
 		 * To ensure kline exempt works on akills too, do
 		 * not send a KILL. -- jilles */
-		kline_sts(u->server->name, k->user, k->host, k->duration ? k->expires - CURRTIME : 0, k->reason);
+		kline_sts("*", k->user, k->host, k->duration ? k->expires - CURRTIME : 0, k->reason);
 	}
 }
 
