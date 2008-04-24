@@ -232,6 +232,7 @@ static unsigned int inspircd_server_login(void)
 										      (config_options.raw) ? "r" : "",
 										      (runflags & RF_LIVE) ? "n" : "");
 	services_init();
+	sts("ENDBURST");
 	return 0;
 }
 
