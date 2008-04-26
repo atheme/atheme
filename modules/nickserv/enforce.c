@@ -9,13 +9,8 @@
  * their nick changed to Guest<num>.
  * If the ircd or protocol module do not support forced nick changes,
  * they are killed instead.
- * Enforcement of the nick is only supported for ircds that support
- * holdnick_sts(), currently bahamut, charybdis, hybrid, inspircd11,
- * solidircd, ratbox and unreal (i.e. making sure they can't change back
- * immediately). Consequently this module is of little use for other ircds.
- * Note: For hybrid and ratbox, and charybdis before 2.1, the
- * RELEASE command to remove an enforcer prematurely is not supported,
- * although it pretends to be successful.
+ * Enforcement of the nick uses holdnick_sts() style enforcers if supported
+ * by the ircd, otherwise clients.
  */
 
 #include "atheme.h"
