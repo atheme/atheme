@@ -288,10 +288,8 @@ static void check_registration(void *vdata)
 static void check_enforce(void *vdata)
 {
 	hook_nick_enforce_t *hdata = vdata;
-	enforce_timeout_t *timeout;
-#ifdef SHOW_CORRECT_TIMEOUT_BUT_BE_SLOW
-	enforce_timeout_t *timeout2;
-#endif
+	enforce_timeout_t *timeout, *timeout2;
+	node_t *n;
 
 	/* nick is a service, ignore it */
 	if (is_internal_client(hdata->u))
@@ -328,7 +326,19 @@ static void check_enforce(void *vdata)
 		strlcpy(timeout->host, hdata->u->host, sizeof timeout->host);
 
 		timeout->timelimit = CURRTIME + nicksvs.enforce_delay;
-		node_add(timeout, &timeout->node, &enforce_list);
+		/* insert in sorted order */
+		LIST_FOREACH_PREV(n, enforce_list.tail)
+		{
+			timeout2 = n->data;
+			if (timeout2->timelimit <= timeout->timelimit)
+				break;
+		}
+		if (n == NULL)
+			node_add_head(timeout, &timeout->node, &enforce_list);
+		else if (n->next == NULL)
+			node_add(timeout, &timeout->node, &enforce_list);
+		else
+			node_add_before(timeout, &timeout->node, &enforce_list, n->next);
 	}
 
 	notice(nicksvs.nick, hdata->u->nick, "You have %d seconds to identify to your nickname before it is changed.", timeout->timelimit - CURRTIME);
