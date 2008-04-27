@@ -64,6 +64,35 @@ $fakets = time() || 2147483647;
 $istheia = 0;
 
 print "# Converting nick.db\n";
+# first pass to take care of emails on non-master nicks
+open(NICKDB, "<nick.db");
+$email = '';
+while (<NICKDB>) {
+	if (/^->EMAIL (.*)$/) {
+		$email = $1;
+		$email =~ s/^<//;
+		$email =~ s/>$//;
+		if ($email ne '' && !defined($anyemail{$nick})) {
+			$anyemail{$nick} = $email;
+		}
+	} elsif (/^->LINK (.*)$/) {
+		$master = $1;
+		if ($email ne '') {
+			if (!defined($anyemail{$master})) {
+				print "# Taking email for $master from $nick\n";
+				$anyemail{$master} = $email;
+			} elsif ($anyemail{$master} ne $email) {
+				print "# Ignoring extra email for $master from $nick\n";
+			}
+		}
+	} elsif (/^->/) {
+	} elsif (/^([^ ]+) ([0-9]+) ([0-9]+) ([0-9]+)$/) {
+		$nick = $1;
+		$email = '';
+	}
+}
+close(NICKDB);
+
 open(NICKDB, "<nick.db");
 $nick = '';
 $password = '';
@@ -76,11 +105,6 @@ while (<NICKDB>) {
 		$args = $2;
 		if ($word eq 'PASS') {
 			$password = $args;
-		} elsif ($word eq 'EMAIL') {
-			$email = $args;
-			$email =~ s/^<//;
-			$email =~ s/>$//;
-			$email = 'noemail' if ($email eq '');
 		} elsif ($word eq 'LINK') {
 			# Store master nick, might be wrong in channel
 			# access list :(
@@ -119,7 +143,11 @@ while (<NICKDB>) {
 		$regtime = $3;
 		$lastseentime = $4;
 		$password = '*';
-		$email = 'noemail';
+		if (defined($anyemail{$nick})) {
+			$email = $anyemail{$nick};
+		} else {
+			$email = 'noemail';
+		}
 		$lastuh = '';
 		$cloak = '';
 		@access = ();
