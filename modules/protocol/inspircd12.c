@@ -699,7 +699,6 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 	channel_t *c;
 	unsigned int userc;
 	unsigned int i;
-	unsigned int j;
 	unsigned int nlen;
 	boolean_t prefix = TRUE;
 	boolean_t keep_new_modes = TRUE;
