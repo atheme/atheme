@@ -167,7 +167,7 @@ static void unreal_introduce_nick(user_t *u)
 {
 	const char *omode = is_ircop(u) ? "o" : "";
 
-	sts("NICK %s 1 %ld %s %s %s 0 +i%sS * :%s", u->nick, u->ts, u->user, u->host, me.name, omode, u->gecos);
+	sts("NICK %s 1 %lu %s %s %s 0 +i%sS * :%s", u->nick, (unsigned long)u->ts, u->user, u->host, me.name, omode, u->gecos);
 }
 
 /* invite a user to a channel */
@@ -194,11 +194,11 @@ static void unreal_wallops_sts(const char *text)
 static void unreal_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
 {
 	if (isnew)
-		sts(":%s SJOIN %ld %s %s :@%s", me.name, c->ts, c->name,
-				modes, u->nick);
+		sts(":%s SJOIN %lu %s %s :@%s", me.name, (unsigned long)c->ts,
+				c->name, modes, u->nick);
 	else
-		sts(":%s SJOIN %ld %s + :@%s", me.name, c->ts, c->name,
-				u->nick);
+		sts(":%s SJOIN %lu %s + :@%s", me.name, (unsigned long)c->ts,
+				c->name, u->nick);
 }
 
 /* kicks a user from a channel */
@@ -289,7 +289,7 @@ static void unreal_kline_sts(char *server, char *user, char *host, long duration
 	if (!me.connected)
 		return;
 
-	sts(":%s TKL + G %s %s %s %ld %ld :%s", me.name, user, host, opersvs.nick, duration > 0 ? CURRTIME + duration : 0, CURRTIME, reason);
+	sts(":%s TKL + G %s %s %s %lu %lu :%s", me.name, user, host, opersvs.nick, (unsigned long)(duration > 0 ? CURRTIME + duration : 0), (unsigned long)CURRTIME, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
@@ -307,7 +307,7 @@ static void unreal_topic_sts(channel_t *c, const char *setter, time_t ts, time_t
 	if (!me.connected || !c)
 		return;
 
-	sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, c->name, setter, ts, topic);
+	sts(":%s TOPIC %s %s %lu :%s", chansvs.nick, c->name, setter, (unsigned long)ts, topic);
 }
 
 /* mode wrapper */
@@ -345,7 +345,7 @@ static void unreal_on_login(char *origin, char *user, char *wantedhost)
 	 */
 	/* imo, we should be using SVS2MODE to show the modechange here and on logout --w00t */
 	if (should_reg_umode(u))
-		sts(":%s SVS2MODE %s +rd %ld", nicksvs.nick, origin, u->ts);
+		sts(":%s SVS2MODE %s +rd %lu", nicksvs.nick, origin, (unsigned long)u->ts);
 }
 
 /* protocol-specific stuff to do on logout */
@@ -388,9 +388,10 @@ static void unreal_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
 static void unreal_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account)
 {
 	if (duration > 0)
-		sts(":%s TKL + Q H %s %s %ld %ld :Reserved by %s for nickname owner (%s)",
+		sts(":%s TKL + Q H %s %s %lu %lu :Reserved by %s for nickname owner (%s)",
 				me.name, nick, source->nick,
-				CURRTIME + duration, CURRTIME,
+				(unsigned long)(CURRTIME + duration),
+				(unsigned long)CURRTIME,
 				source->nick,
 				account != NULL ? account->name : nick);
 	else
@@ -521,7 +522,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 		if (ts < c->ts)
 		{
 			remove_our_modes(c);
-			slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
+			slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%lu -> %lu)", c->name, (unsigned long)c->ts, (unsigned long)ts);
 			c->ts = ts;
 			hook_call_event("channel_tschange", c);
 		}
@@ -554,7 +555,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 		if (ts < c->ts)
 		{
 			remove_our_modes(c);
-			slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
+			slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%lu -> %lu)", c->name, (unsigned long)c->ts, (unsigned long)ts);
 			c->ts = ts;
 			hook_call_event("channel_tschange", c);
 		}
@@ -586,7 +587,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 		if (ts < c->ts)
 		{
 			remove_our_modes(c);
-			slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
+			slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%lu -> %lu)", c->name, (unsigned long)c->ts, (unsigned long)ts);
 			c->ts = ts;
 			/* XXX lost modes! -- XXX - pardon? why do we worry about this? TS reset requires modes reset.. */
 			hook_call_event("channel_tschange", c);
@@ -670,7 +671,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		{
 			if (should_reg_umode(si->su))
 				/* changed nick to registered one, reset +r */
-				sts(":%s SVS2MODE %s +rd %ld", nicksvs.nick, parv[0], atoi(parv[1]));
+				sts(":%s SVS2MODE %s +rd %lu", nicksvs.nick, parv[0], atol(parv[1]));
 			else
 				/* changed from registered nick, remove +r */
 				sts(":%s SVS2MODE %s -r+d 0", nicksvs.nick, parv[0]);
@@ -863,7 +864,8 @@ static void nick_group(hook_user_req_t *hdata)
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
 	if (u != NULL && should_reg_umode(u))
-		sts(":%s SVS2MODE %s +rd %ld", nicksvs.nick, u->nick, u->ts);
+		sts(":%s SVS2MODE %s +rd %lu", nicksvs.nick, u->nick,
+				(unsigned long)u->ts);
 }
 
 static void nick_ungroup(hook_user_req_t *hdata)

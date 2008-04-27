@@ -139,7 +139,7 @@ static unsigned int solidircd_server_login(void)
 
 	sts("CAPAB SSJOIN NOQUIT BURST ZIP NICKIP TSMODE");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
-	sts("SVINFO 5 3 0 :%ld", CURRTIME);
+	sts("SVINFO 5 3 0 :%lu", (unsigned long)CURRTIME);
 
 	services_init();
 
@@ -151,7 +151,7 @@ static void solidircd_introduce_nick(user_t *u)
 {
 	const char *omode = is_ircop(u) ? "o" : "";
 
-	sts("NICK %s 1 %ld +i%s %s %s %s 0 0 :%s", u->nick, u->ts, omode, u->user, u->host, me.name, u->gecos);
+	sts("NICK %s 1 %lu +i%s %s %s %s 0 0 :%s", u->nick, (unsigned long)u->ts, omode, u->user, u->host, me.name, u->gecos);
 }
 
 /* invite a user to a channel */
@@ -178,18 +178,18 @@ static void solidircd_wallops_sts(const char *text)
 static void solidircd_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
 {
 	if (isnew)
-		sts(":%s SJOIN %ld %s %s :@%s", me.name, c->ts, c->name,
-				modes, u->nick);
+		sts(":%s SJOIN %lu %s %s :@%s", me.name, (unsigned long)c->ts,
+				c->name, modes, u->nick);
 	else
-		sts(":%s SJOIN %ld %s + :@%s", me.name, c->ts, c->name,
-				u->nick);
+		sts(":%s SJOIN %lu %s + :@%s", me.name, (unsigned long)c->ts,
+				c->name, u->nick);
 }
 
 static void solidircd_chan_lowerts(channel_t *c, user_t *u)
 {
-	slog(LG_DEBUG, "solidircd_chan_lowerts(): lowering TS for %s to %ld",
-			c->name, (long)c->ts);
-	sts(":%s SJOIN %ld %s %s :@%s", me.name, c->ts, c->name,
+	slog(LG_DEBUG, "solidircd_chan_lowerts(): lowering TS for %s to %lu",
+			c->name, (unsigned long)c->ts);
+	sts(":%s SJOIN %lu %s %s :@%s", me.name, (unsigned long)c->ts, c->name,
 				channel_modes(c, TRUE), u->nick);
 	chanban_clear(c);
 	/*handle_topic(c, "", 0, "");*/
@@ -295,7 +295,7 @@ static void solidircd_kline_sts(char *server, char *user, char *host, long durat
 	if (!me.connected)
 		return;
 
-	sts(":%s AKILL %s %s %ld %s %ld :%s", me.name, host, user, duration, opersvs.nick, time(NULL), reason);
+	sts(":%s AKILL %s %s %ld %s %lu :%s", me.name, host, user, duration, opersvs.nick, (unsigned long)CURRTIME, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
@@ -313,7 +313,7 @@ static void solidircd_topic_sts(channel_t *c, const char *setter, time_t ts, tim
 	if (!me.connected || !c)
 		return;
 
-	sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, c->name, setter, ts, topic);
+	sts(":%s TOPIC %s %s %lu :%s", chansvs.nick, c->name, setter, (unsigned long)ts, topic);
 }
 
 /* mode wrapper */
@@ -322,7 +322,7 @@ static void solidircd_mode_sts(char *sender, channel_t *target, char *modes)
 	if (!me.connected)
 		return;
 
-	sts(":%s MODE %s %ld %s", sender, target->name, target->ts, modes);
+	sts(":%s MODE %s %lu %s", sender, target->name, (unsigned long)target->ts, modes);
 }
 
 /* ping wrapper */
@@ -346,7 +346,7 @@ static void solidircd_on_login(char *origin, char *user, char *wantedhost)
 	 * state if logged in to correct nick, sorry -- jilles
 	 */
 	if (should_reg_umode(u))
-		sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, origin, time(NULL));
+		sts(":%s SVSMODE %s +rd %lu", nicksvs.nick, origin, (unsigned long)CURRTIME);
 }
 
 /* protocol-specific stuff to do on login */
@@ -356,7 +356,7 @@ static boolean_t solidircd_on_logout(char *origin, char *user, char *wantedhost)
 		return FALSE;
 
 	if (!nicksvs.no_nick_ownership)
-		sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, origin, time(NULL));
+		sts(":%s SVSMODE %s -r+d %lu", nicksvs.nick, origin, (unsigned long)CURRTIME);
 	return FALSE;
 }
 
@@ -523,7 +523,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 		if (ts == 0 || c->ts == 0)
 		{
 			if (c->ts != 0)
-				slog(LG_INFO, "m_sjoin(): server %s changing TS on %s from %ld to 0", si->s->name, c->name, (long)c->ts);
+				slog(LG_INFO, "m_sjoin(): server %s changing TS on %s from %lu to 0", si->s->name, c->name, (unsigned long)c->ts);
 			c->ts = 0;
 			hook_call_event("channel_tschange", c);
 		}
@@ -550,14 +550,14 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 				{
 					/* it's a service, reop */
 					sts(":%s PART %s :Reop", cu->user->nick, c->name);
-					sts(":%s SJOIN %ld %s + :@%s", me.name, ts, c->name, cu->user->nick);
+					sts(":%s SJOIN %lu %s + :@%s", me.name, (unsigned long)ts, c->name, cu->user->nick);
 					cu->modes = CMODE_OP;
 				}
 				else
 					cu->modes = 0;
 			}
 
-			slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
+			slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%lu -> %lu)", c->name, (unsigned long)c->ts, (unsigned long)ts);
 
 			c->ts = ts;
 			hook_call_event("channel_tschange", c);
@@ -690,7 +690,7 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		/* fix up +r if necessary -- jilles */
 		if (realchange && should_reg_umode(si->su))
 			/* changed nick to registered one, reset +r */
-			sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, parv[0], time(NULL));
+			sts(":%s SVSMODE %s +rd %lu", nicksvs.nick, parv[0], (unsigned long)CURRTIME);
 
 		handle_nickchange(si->su);
 	}
@@ -881,7 +881,7 @@ static void nick_group(hook_user_req_t *hdata)
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
 	if (u != NULL && should_reg_umode(u))
-		sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, u->nick, time(NULL));
+		sts(":%s SVSMODE %s +rd %lu", nicksvs.nick, u->nick, (unsigned long)CURRTIME);
 }
 
 static void nick_ungroup(hook_user_req_t *hdata)
@@ -890,7 +890,7 @@ static void nick_ungroup(hook_user_req_t *hdata)
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
 	if (u != NULL && !nicksvs.no_nick_ownership)
-		sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, u->nick, time(NULL));
+		sts(":%s SVSMODE %s -r+d %lu", nicksvs.nick, u->nick, (unsigned long)CURRTIME);
 }
 
 void _modinit(module_t * m)

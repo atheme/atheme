@@ -97,7 +97,7 @@ static void sorcery_introduce_nick(user_t *u)
 {
 	const char *omode = is_ircop(u) ? "o" : "";
 
-	sts("NICK %s 1 %ld %s %s %s :%s", u->nick, u->ts, u->user, u->host, me.name, u->gecos);
+	sts("NICK %s 1 %lu %s %s %s :%s", u->nick, (unsigned long)u->ts, u->user, u->host, me.name, u->gecos);
 	sts(":%s MODE %s +i%s", u->nick, u->nick, omode);
 }
 
@@ -134,7 +134,7 @@ static void sorcery_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *mod
 	{
 		sts(":%s JOIN %s", u->nick, c->name);
 	}
-	sts(":%s MODE %s +o %s %ld", u->nick, c->name, u->nick, c->ts);
+	sts(":%s MODE %s +o %s %lu", u->nick, c->name, u->nick, (unsigned long)c->ts);
 }
 
 /* kicks a user from a channel */
@@ -225,7 +225,7 @@ static void sorcery_kline_sts(char *server, char *user, char *host, long duratio
 	if (!me.connected)
 		return;
 
-	sts(":%s AKILL %s %s %ld %s %ld :%s", me.name, host, user, duration, opersvs.nick, time(NULL), reason);
+	sts(":%s AKILL %s %s %ld %s %lu :%s", me.name, host, user, duration, opersvs.nick, (unsigned long)CURRTIME, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
@@ -244,11 +244,11 @@ static void sorcery_topic_sts(channel_t *c, const char *setter, time_t ts, time_
 		return;
 
 	if (ts < prevts || prevts == 0)
-		sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, c->name, setter, ts, topic);
+		sts(":%s TOPIC %s %s %lu :%s", chansvs.nick, c->name, setter, (unsigned long)ts, topic);
 	else if (prevts > 1)
 	{
 		ts = prevts - 1;
-		sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, c->name, "topictime.wrong", ts, topic);
+		sts(":%s TOPIC %s %s %lu :%s", chansvs.nick, c->name, "topictime.wrong", (unsigned long)ts, topic);
 		c->topicts = ts;
 	}
 	else

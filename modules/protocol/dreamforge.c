@@ -96,7 +96,7 @@ static void dreamforge_introduce_nick(user_t *u)
 {
 	const char *omode = is_ircop(u) ? "o" : "";
 
-	sts("NICK %s 1 %ld %s %s %s 0 :%s", u->nick, u->ts, u->user, u->host, me.name, u->gecos);
+	sts("NICK %s 1 %lu %s %s %s 0 :%s", u->nick, (unsigned long)u->ts, u->user, u->host, me.name, u->gecos);
 	sts(":%s MODE %s +i%s", u->nick, u->nick, omode);
 }
 
@@ -133,7 +133,7 @@ static void dreamforge_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *
 	{
 		sts(":%s JOIN %s", u->nick, c->name);
 	}
-	sts(":%s MODE %s +o %s %ld", u->nick, c->name, u->nick, c->ts);
+	sts(":%s MODE %s +o %s %lu", u->nick, c->name, u->nick, (unsigned long)c->ts);
 }
 
 /* kicks a user from a channel */
@@ -224,7 +224,7 @@ static void dreamforge_kline_sts(char *server, char *user, char *host, long dura
 	if (!me.connected)
 		return;
 
-	sts(":%s AKILL %s %s %ld %s %ld :%s", me.name, host, user, duration, opersvs.nick, time(NULL), reason);
+	sts(":%s AKILL %s %s %ld %s %lu :%s", me.name, host, user, duration, opersvs.nick, (unsigned long)CURRTIME, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
@@ -243,11 +243,11 @@ static void dreamforge_topic_sts(channel_t *c, const char *setter, time_t ts, ti
 		return;
 
 	if (ts < prevts || prevts == 0)
-		sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, c->name, setter, ts, topic);
+		sts(":%s TOPIC %s %s %lu :%s", chansvs.nick, c->name, setter, (unsigned long)ts, topic);
 	else if (prevts > 1)
 	{
 		ts = prevts - 1;
-		sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, c->name, "topictime.wrong", ts, topic);
+		sts(":%s TOPIC %s %s %lu :%s", chansvs.nick, c->name, "topictime.wrong", (unsigned long)ts, topic);
 		c->topicts = ts;
 	}
 	else
@@ -287,7 +287,7 @@ static void dreamforge_on_login(char *origin, char *user, char *wantedhost)
 	 * state if logged in to correct nick, sorry -- jilles
 	 */
 	if (should_reg_umode(u))
-		sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, origin, time(NULL));
+		sts(":%s SVSMODE %s +rd %lu", nicksvs.nick, origin, (unsigned long)CURRTIME);
 }
 
 /* protocol-specific stuff to do on login */
@@ -297,7 +297,7 @@ static boolean_t dreamforge_on_logout(char *origin, char *user, char *wantedhost
 		return FALSE;
 
 	if (!nicksvs.no_nick_ownership)
-		sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, origin, time(NULL));
+		sts(":%s SVSMODE %s -r+d %lu", nicksvs.nick, origin, (unsigned long)CURRTIME);
 
 	return FALSE;
 }
@@ -439,10 +439,10 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		{
 			if (should_reg_umode(si->su))
 				/* changed nick to registered one, reset +r */
-				sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, parv[0], CURRTIME);
+				sts(":%s SVSMODE %s +rd %lu", nicksvs.nick, parv[0], (unsigned long)CURRTIME);
 			else
 				/* changed from registered nick, remove +r */
-				sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, parv[0], CURRTIME);
+				sts(":%s SVSMODE %s -r+d %lu", nicksvs.nick, parv[0], (unsigned long)CURRTIME);
 		}
 
 		handle_nickchange(si->su);
@@ -640,7 +640,7 @@ static void nick_group(hook_user_req_t *hdata)
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
 	if (u != NULL && should_reg_umode(u))
-		sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, u->nick, time(NULL));
+		sts(":%s SVSMODE %s +rd %lu", nicksvs.nick, u->nick, (unsigned long)CURRTIME);
 }
 
 static void nick_ungroup(hook_user_req_t *hdata)
@@ -649,7 +649,7 @@ static void nick_ungroup(hook_user_req_t *hdata)
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
 	if (u != NULL && !nicksvs.no_nick_ownership)
-		sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, u->nick, time(NULL));
+		sts(":%s SVSMODE %s -r+d %lu", nicksvs.nick, u->nick, (unsigned long)CURRTIME);
 }
 
 void _modinit(module_t * m)

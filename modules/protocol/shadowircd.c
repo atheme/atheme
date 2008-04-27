@@ -96,7 +96,7 @@ static unsigned int shadowircd_server_login(void)
 
 	sts("CAPAB :QS EX IE KLN UNKLN ENCAP SERVICES");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
-	sts("SVINFO 5 3 0 :%ld", CURRTIME);
+	sts("SVINFO 5 3 0 :%lu", (unsigned long)CURRTIME);
 
 	return 0;
 }
@@ -106,7 +106,7 @@ static void shadowircd_introduce_nick(user_t *u)
 {
 	const char *omode = is_ircop(u) ? "o" : "";
 
-	sts("NICK %s 1 %ld +i%sS %s %s %s :%s", u->nick, u->ts, omode, u->user, u->host, me.name, u->gecos);
+	sts("NICK %s 1 %lu +i%sS %s %s %s :%s", u->nick, (unsigned long)u->ts, omode, u->user, u->host, me.name, u->gecos);
 }
 
 /* invite a user to a channel */
@@ -133,11 +133,11 @@ static void shadowircd_wallops_sts(const char *text)
 static void shadowircd_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
 {
 	if (isnew)
-		sts(":%s SJOIN %ld %s %s :@%s", me.name, c->ts, c->name,
-				modes, u->nick);
+		sts(":%s SJOIN %lu %s %s :@%s", me.name, (unsigned long)c->ts,
+				c->name, modes, u->nick);
 	else
-		sts(":%s SJOIN %ld %s + :@%s", me.name, c->ts, c->name,
-				u->nick);
+		sts(":%s SJOIN %lu %s + :@%s", me.name, (unsigned long)c->ts,
+				c->name, u->nick);
 }
 
 /* kicks a user from a channel */
@@ -408,7 +408,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 			cu->modes = 0;
 		}
 
-		slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
+		slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%lu -> %lu)", c->name, (unsigned long)c->ts, (unsigned long)ts);
 
 		c->ts = ts;
 		hook_call_event("channel_tschange", c);

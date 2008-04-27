@@ -102,7 +102,7 @@ static unsigned int nefarious_server_login(void)
 	me.bursting = TRUE;
 
 	/* SERVER irc.undernet.org 1 933022556 947908144 J10 AA]]] :[127.0.0.1] A Undernet Server */
-	sts("SERVER %s 1 %ld %ld J10 %s]]] +s :%s", me.name, me.start, CURRTIME, me.numeric, me.desc);
+	sts("SERVER %s 1 %lu %lu J10 %s]]] +s :%s", me.name, (unsigned long)me.start, (unsigned long)CURRTIME, me.numeric, me.desc);
 
 	services_init();
 
@@ -116,7 +116,7 @@ static void nefarious_introduce_nick(user_t *u)
 {
 	const char *omode = is_ircop(u) ? "o" : "";
 
-	sts("%s N %s 1 %ld %s %s +i%s%sk ]]]]]] %s :%s", me.numeric, u->nick, u->ts, u->user, u->host, omode, chansvs.fantasy ? "" : "d", u->uid, u->gecos);
+	sts("%s N %s 1 %lu %s %s +i%s%sk ]]]]]] %s :%s", me.numeric, u->nick, (unsigned long)u->ts, u->user, u->host, omode, chansvs.fantasy ? "" : "d", u->uid, u->gecos);
 }
 
 /* invite a user to a channel */
@@ -146,13 +146,13 @@ static void nefarious_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *m
 	/* If the channel doesn't exist, we need to create it. */
 	if (isnew)
 	{
-		sts("%s C %s %ld", u->uid, c->name, c->ts);
+		sts("%s C %s %lu", u->uid, c->name, (unsigned long)c->ts);
 		if (modes[0] && modes[1])
 			sts("%s M %s %s", u->uid, c->name, modes);
 	}
 	else
 	{
-		sts("%s J %s %ld", u->uid, c->name, c->ts);
+		sts("%s J %s %lu", u->uid, c->name, (unsigned long)c->ts);
 		sts("%s M %s +o %s", me.numeric, c->name, u->uid);
 	}
 }
@@ -283,13 +283,13 @@ static void nefarious_topic_sts(channel_t *c, const char *setter, time_t ts, tim
 
 	/* for nefarious, set topicsetter iff we can set the proper topicTS */
 	if (ts > prevts || prevts == 0)
-		sts("%s T %s %s %ld %ld :%s", chansvs.me->me->uid, c->name, setter, c->ts, ts, topic);
+		sts("%s T %s %s %lu %lu :%s", chansvs.me->me->uid, c->name, setter, (unsigned long)c->ts, (unsigned long)ts, topic);
 	else
 	{
 		ts = CURRTIME;
 		if (ts < prevts)
 			ts = prevts + 1;
-		sts("%s T %s %ld %ld :%s", chansvs.me->me->uid, c->name, c->ts, CURRTIME, topic);
+		sts("%s T %s %lu %lu :%s", chansvs.me->me->uid, c->name, (unsigned long)c->ts, (unsigned long)CURRTIME, topic);
 		c->topicts = ts;
 	}
 }
@@ -311,7 +311,7 @@ static void nefarious_ping_sts(void)
 	if (!me.connected)
 		return;
 
-	sts("%s G !%ld %s %ld", me.numeric, CURRTIME, me.name, CURRTIME);
+	sts("%s G !%lu %s %lu", me.numeric, (unsigned long)CURRTIME, me.name, (unsigned long)CURRTIME);
 }
 
 /* protocol-specific stuff to do on login */
@@ -363,8 +363,8 @@ static void nefarious_jupe(const char *server, const char *reason)
 	/* get rid of local deactivation too */
 	s = server_find(server);
 	if (s != NULL && s->uplink != NULL)
-		sts("%s JU %s +%s %d %ld :%s", me.numeric, s->uplink->sid, server, 86400, CURRTIME, reason);
-	sts("%s JU * +%s %d %ld :%s", me.numeric, server, 86400, CURRTIME, reason);
+		sts("%s JU %s +%s %d %lu :%s", me.numeric, s->uplink->sid, server, 86400, (unsigned long)CURRTIME, reason);
+	sts("%s JU * +%s %d %lu :%s", me.numeric, server, 86400, (unsigned long)CURRTIME, reason);
 }
 
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
@@ -557,7 +557,7 @@ static void m_burst(sourceinfo_t *si, int parc, char *parv[])
 				cu->modes = 0;
 		}
 
-		slog(LG_DEBUG, "m_burst(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
+		slog(LG_DEBUG, "m_burst(): TS changed for %s (%lu -> %lu)", c->name, (unsigned long)c->ts, (unsigned long)ts);
 		c->ts = ts;
 		hook_call_event("channel_tschange", c);
 	}

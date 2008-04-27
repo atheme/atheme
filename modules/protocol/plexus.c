@@ -99,7 +99,7 @@ static unsigned int plexus_server_login(void)
 
 	sts("CAPAB :QS EX IE KLN UNKLN ENCAP SERVICES");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
-	sts("SVINFO 5 3 0 :%ld", CURRTIME);
+	sts("SVINFO 5 3 0 :%lu", (unsigned long)CURRTIME);
 
 	return 0;
 }
@@ -109,7 +109,7 @@ static void plexus_introduce_nick(user_t *u)
 {
 	const char *omode = is_ircop(u) ? "o" : "";
 
-	sts("NICK %s 1 %ld +i%s %s %s %s 0 0 :%s", u->nick, u->ts, omode, u->user, u->host, me.name, u->gecos);
+	sts("NICK %s 1 %lu +i%s %s %s %s 0 0 :%s", u->nick, (unsigned long)u->ts, omode, u->user, u->host, me.name, u->gecos);
 }
 
 /* invite a user to a channel */
@@ -136,11 +136,11 @@ static void plexus_wallops_sts(const char *text)
 static void plexus_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
 {
 	if (isnew)
-		sts(":%s SJOIN %ld %s %s :@%s", me.name, c->ts, c->name,
-				modes, u->nick);
+		sts(":%s SJOIN %lu %s %s :@%s", me.name, (unsigned long)c->ts,
+				c->name, modes, u->nick);
 	else
-		sts(":%s SJOIN %ld %s + :@%s", me.name, c->ts, c->name,
-				u->nick);
+		sts(":%s SJOIN %lu %s + :@%s", me.name, (unsigned long)c->ts,
+				c->name, u->nick);
 }
 
 /* kicks a user from a channel */
@@ -301,10 +301,10 @@ static void plexus_on_login(char *origin, char *user, char *wantedhost)
 
 #ifdef USE_NETADMIN
 	if (has_priv(u, PRIV_ADMIN))
-		sts(":%s ENCAP * SVSMODE %s %ld +rdN %ld", nicksvs.nick, origin, (unsigned long) u->ts, CURRTIME);
+		sts(":%s ENCAP * SVSMODE %s %lu +rdN %lu", nicksvs.nick, origin, (unsigned long)u->ts, (unsigned long)CURRTIME);
 	else
 #endif
-		sts(":%s ENCAP * SVSMODE %s %ld +rd %ld", nicksvs.nick, origin, (unsigned long) u->ts, CURRTIME);
+		sts(":%s ENCAP * SVSMODE %s %lu +rd %lu", nicksvs.nick, origin, (unsigned long)u->ts, (unsigned long)CURRTIME);
 }
 
 /* protocol-specific stuff to do on login */
@@ -324,9 +324,9 @@ static boolean_t plexus_on_logout(char *origin, char *user, char *wantedhost)
 		return FALSE;
 
 #ifdef USE_NETADMIN
-	sts(":%s ENCAP * SVSMODE %s %ld -rN", nicksvs.nick, origin, (unsigned long) u->ts, origin);
+	sts(":%s ENCAP * SVSMODE %s %lu -rN", nicksvs.nick, origin, (unsigned long)u->ts);
 #else
-	sts(":%s ENCAP * SVSMODE %s %ld -r", nicksvs.nick, origin, (unsigned long) u->ts, origin);
+	sts(":%s ENCAP * SVSMODE %s %lu -r", nicksvs.nick, origin, (unsigned long)u->ts);
 #endif
 	return FALSE;
 }
@@ -456,7 +456,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 			cu->modes = 0;
 		}
 
-		slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
+		slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%lu -> %lu)", c->name, (unsigned long)c->ts, (unsigned long)ts);
 
 		c->ts = ts;
 		hook_call_event("channel_tschange", c);
@@ -715,7 +715,7 @@ static void nick_group(hook_user_req_t *hdata)
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
 	if (u != NULL && should_reg_umode(u))
-		sts(":%s ENCAP * SVSMODE %s %ld +rd %ld", nicksvs.nick, u->nick, (unsigned long)u->ts, CURRTIME);
+		sts(":%s ENCAP * SVSMODE %s %lu +rd %lu", nicksvs.nick, u->nick, (unsigned long)u->ts, (unsigned long)CURRTIME);
 }
 
 static void nick_ungroup(hook_user_req_t *hdata)
@@ -724,7 +724,7 @@ static void nick_ungroup(hook_user_req_t *hdata)
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
 	if (u != NULL && !nicksvs.no_nick_ownership)
-		sts(":%s ENCAP * SVSMODE %s %ld -r", nicksvs.nick, u->nick, (unsigned long)u->ts);
+		sts(":%s ENCAP * SVSMODE %s %lu -r", nicksvs.nick, u->nick, (unsigned long)u->ts);
 }
 
 void _modinit(module_t * m)

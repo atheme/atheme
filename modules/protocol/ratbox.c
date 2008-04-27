@@ -104,7 +104,8 @@ static unsigned int ratbox_server_login(void)
 
 	sts("CAPAB :QS EX IE KLN UNKLN ENCAP TB SERVICES");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
-	sts("SVINFO %d 3 0 :%ld", ircd->uses_uid ? 6 : 5, CURRTIME);
+	sts("SVINFO %d 3 0 :%lu", ircd->uses_uid ? 6 : 5,
+			(unsigned long)CURRTIME);
 
 	return 0;
 }
@@ -115,14 +116,15 @@ static void ratbox_introduce_nick(user_t *u)
 	const char *omode = is_ircop(u) ? "o" : "";
 
 	if (ircd->uses_uid)
-		sts(":%s UID %s 1 %ld +i%s%s%s %s %s 0 %s :%s",
-			me.numeric, u->nick, u->ts, omode,
+		sts(":%s UID %s 1 %lu +i%s%s%s %s %s 0 %s :%s",
+			me.numeric, u->nick, (unsigned long)u->ts, omode,
 			chansvs.fantasy ? "" : "D",
 			use_rserv_support ? "S" : "", u->user, u->host, u->uid,
 			u->gecos);
 	else
-		sts("NICK %s 1 %ld +i%s%s%s %s %s %s :%s",
-			u->nick, u->ts, omode, chansvs.fantasy ? "" : "D",
+		sts("NICK %s 1 %lu +i%s%s%s %s %s %s :%s",
+			u->nick, (unsigned long)u->ts, omode,
+			chansvs.fantasy ? "" : "D",
 			use_rserv_support ? "S" : "",
 			u->user, u->host, me.name, u->gecos);
 }
@@ -154,18 +156,18 @@ static void ratbox_wallops_sts(const char *text)
 static void ratbox_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
 {
 	if (isnew)
-		sts(":%s SJOIN %ld %s %s :@%s", ME, c->ts, c->name,
-				modes, CLIENT_NAME(u));
+		sts(":%s SJOIN %lu %s %s :@%s", ME, (unsigned long)c->ts,
+				c->name, modes, CLIENT_NAME(u));
 	else
-		sts(":%s SJOIN %ld %s + :@%s", ME, c->ts, c->name,
-				CLIENT_NAME(u));
+		sts(":%s SJOIN %lu %s + :@%s", ME, (unsigned long)c->ts,
+				c->name, CLIENT_NAME(u));
 }
 
 static void ratbox_chan_lowerts(channel_t *c, user_t *u)
 {
-	slog(LG_DEBUG, "ratbox_chan_lowerts(): lowering TS for %s to %ld",
-			c->name, (long)c->ts);
-	sts(":%s SJOIN %ld %s %s :@%s", ME, c->ts, c->name,
+	slog(LG_DEBUG, "ratbox_chan_lowerts(): lowering TS for %s to %lu",
+			c->name, (unsigned long)c->ts);
+	sts(":%s SJOIN %lu %s %s :@%s", ME, (unsigned long)c->ts, c->name,
 				channel_modes(c, TRUE), CLIENT_NAME(u));
 	if (ircd->uses_uid)
 		chanban_clear(c);
@@ -323,7 +325,7 @@ static void ratbox_topic_sts(channel_t *c, const char *setter, time_t ts, time_t
 		{
 			if (prevts != 0 && ts + 60 > prevts)
 				ts = prevts - 60;
-			sts(":%s TB %s %ld %s :%s", ME, c->name, ts, setter, topic);
+			sts(":%s TB %s %lu %s :%s", ME, c->name, (unsigned long)ts, setter, topic);
 			c->topicts = ts;
 			return;
 		}
@@ -331,7 +333,7 @@ static void ratbox_topic_sts(channel_t *c, const char *setter, time_t ts, time_t
 		else if (ts == prevts)
 		{
 			ts -= 60;
-			sts(":%s TB %s %ld %s :%s", ME, c->name, ts, setter, topic);
+			sts(":%s TB %s %lu %s :%s", ME, c->name, (unsigned long)ts, setter, topic);
 			c->topicts = ts;
 			return;
 		}
@@ -344,7 +346,7 @@ static void ratbox_topic_sts(channel_t *c, const char *setter, time_t ts, time_t
 	 */
 	if (!chanuser_find(c, chansvs.me->me))
 	{
-		sts(":%s SJOIN %ld %s + :@%s", ME, c->ts, c->name, CLIENT_NAME(chansvs.me->me));
+		sts(":%s SJOIN %lu %s + :@%s", ME, (unsigned long)c->ts, c->name, CLIENT_NAME(chansvs.me->me));
 		joined = 1;
 	}
 	sts(":%s TOPIC %s :%s", CLIENT_NAME(chansvs.me->me), c->name, topic);
@@ -362,7 +364,7 @@ static void ratbox_mode_sts(char *sender, channel_t *target, char *modes)
 		return;
 
 	if (ircd->uses_uid)
-		sts(":%s TMODE %ld %s %s", CLIENT_NAME(u), target->ts, target->name, modes);
+		sts(":%s TMODE %lu %s %s", CLIENT_NAME(u), (unsigned long)target->ts, target->name, modes);
 	else
 		sts(":%s MODE %s %s", CLIENT_NAME(u), target->name, modes);
 }
@@ -541,7 +543,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 	if (ts == 0 || c->ts == 0)
 	{
 		if (c->ts != 0)
-			slog(LG_INFO, "m_sjoin(): server %s changing TS on %s from %ld to 0", si->s->name, c->name, (long)c->ts);
+			slog(LG_INFO, "m_sjoin(): server %s changing TS on %s from %lu to 0", si->s->name, c->name, (unsigned long)c->ts);
 		c->ts = 0;
 		hook_call_event("channel_tschange", c);
 	}
@@ -570,14 +572,14 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 			{
 				/* it's a service, reop */
 				sts(":%s PART %s :Reop", CLIENT_NAME(cu->user), c->name);
-				sts(":%s SJOIN %ld %s + :@%s", ME, ts, c->name, CLIENT_NAME(cu->user));
+				sts(":%s SJOIN %lu %s + :@%s", ME, (unsigned long)ts, c->name, CLIENT_NAME(cu->user));
 				cu->modes = CMODE_OP;
 			}
 			else
 				cu->modes = 0;
 		}
 
-		slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
+		slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%lu -> %lu)", c->name, (unsigned long)c->ts, (unsigned long)ts);
 
 		c->ts = ts;
 		hook_call_event("channel_tschange", c);
@@ -643,7 +645,7 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 	if (ts == 0 || c->ts == 0)
 	{
 		if (c->ts != 0)
-			slog(LG_INFO, "m_join(): server %s changing TS on %s from %ld to 0", si->su->server->name, c->name, (long)c->ts);
+			slog(LG_INFO, "m_join(): server %s changing TS on %s from %lu to 0", si->su->server->name, c->name, (unsigned long)c->ts);
 		c->ts = 0;
 		hook_call_event("channel_tschange", c);
 	}
@@ -663,13 +665,13 @@ static void m_join(sourceinfo_t *si, int parc, char *parv[])
 			{
 				/* it's a service, reop */
 				sts(":%s PART %s :Reop", CLIENT_NAME(cu->user), c->name);
-				sts(":%s SJOIN %ld %s + :@%s", ME, ts, c->name, CLIENT_NAME(cu->user));
+				sts(":%s SJOIN %lu %s + :@%s", ME, (unsigned long)ts, c->name, CLIENT_NAME(cu->user));
 				cu->modes = CMODE_OP;
 			}
 			else
 				cu->modes = 0;
 		}
-		slog(LG_DEBUG, "m_join(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
+		slog(LG_DEBUG, "m_join(): TS changed for %s (%lu -> %lu)", c->name, (unsigned long)c->ts, (unsigned long)ts);
 		c->ts = ts;
 		hook_call_event("channel_tschange", c);
 	}

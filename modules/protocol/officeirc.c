@@ -98,7 +98,7 @@ static void officeirc_introduce_nick(user_t *u)
 	/* NICK nenolod 1 1171690800 ~nenolod 69.60.119.15[69.60.119.15] ircxserver01 0 :Unknown */
 	const char *omode = is_ircop(u) ? "o" : "";
 
-	sts("NICK %s 1 %ld %s %s[0.0.0.0] %s 0 :%s", u->nick, u->ts, u->user, u->host, me.name, u->gecos);
+	sts("NICK %s 1 %lu %s %s[0.0.0.0] %s 0 :%s", u->nick, (unsigned long)u->ts, u->user, u->host, me.name, u->gecos);
 	sts(":%s MODE %s +i%s", u->nick, u->nick, omode);
 }
 
@@ -226,8 +226,8 @@ static void officeirc_kline_sts(char *server, char *user, char *host, long durat
 	if (!me.connected)
 		return;
 
-	sts(":%s ACCESS * ADD AKILL 0 *!%s@%s$* %ld 0 %s %ld 0 :%s", 
-		opersvs.nick, host, user, time(NULL), 
+	sts(":%s ACCESS * ADD AKILL 0 *!%s@%s$* %lu 0 %s %ld 0 :%s", 
+		opersvs.nick, host, user, (unsigned long)CURRTIME, 
 		opersvs.nick, duration, reason);
 }
 
@@ -238,7 +238,7 @@ static void officeirc_unkline_sts(char *server, char *user, char *host)
 		return;
 
 	sts(":%s ACCESS * DELETE AKILL 0 *!%s@%s$* %ld 0 %s 0 0 :", 
-		opersvs.nick, host, user, time(NULL), 
+		opersvs.nick, host, user, (unsigned long)CURRTIME, 
 		opersvs.nick);
 }
 
@@ -249,11 +249,11 @@ static void officeirc_topic_sts(channel_t *c, const char *setter, time_t ts, tim
 		return;
 
 	if (ts < prevts || prevts == 0)
-		sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, c->name, setter, ts, topic);
+		sts(":%s TOPIC %s %s %lu :%s", chansvs.nick, c->name, setter, (unsigned long)ts, topic);
 	else if (prevts > 1)
 	{
 		ts = prevts - 1;
-		sts(":%s TOPIC %s %s %ld :%s", chansvs.nick, c->name, "topictime.wrong", ts, topic);
+		sts(":%s TOPIC %s %s %lu :%s", chansvs.nick, c->name, "topictime.wrong", (unsigned long)ts, topic);
 		c->topicts = ts;
 	}
 	else
@@ -293,7 +293,7 @@ static void officeirc_on_login(char *origin, char *user, char *wantedhost)
 	 * state if logged in to correct nick, sorry -- jilles
 	 */
 	if (should_reg_umode(u))
-		sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, origin, time(NULL));
+		sts(":%s SVSMODE %s +rd %lu", nicksvs.nick, origin, (unsigned long)CURRTIME);
 }
 
 /* protocol-specific stuff to do on login */
@@ -303,7 +303,7 @@ static boolean_t officeirc_on_logout(char *origin, char *user, char *wantedhost)
 		return FALSE;
 
 	if (!nicksvs.no_nick_ownership)
-		sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, origin, time(NULL));
+		sts(":%s SVSMODE %s -r+d %lu", nicksvs.nick, origin, (unsigned long)CURRTIME);
 	return FALSE;
 }
 
@@ -460,10 +460,10 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 		{
 			if (should_reg_umode(si->su))
 				/* changed nick to registered one, reset +r */
-				sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, parv[0], CURRTIME);
+				sts(":%s SVSMODE %s +rd %lu", nicksvs.nick, parv[0], (unsigned long)CURRTIME);
 			else
 				/* changed from registered nick, remove +r */
-				sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, parv[0], CURRTIME);
+				sts(":%s SVSMODE %s -r+d %lu", nicksvs.nick, parv[0], (unsigned long)CURRTIME);
 		}
 
 		handle_nickchange(si->su);
@@ -719,7 +719,7 @@ static void m_njoin(sourceinfo_t *si, int parc, char *parv[])
 				cu->modes = 0;
 		}
 
-		slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
+		slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%lu -> %lu)", c->name, (unsigned long)c->ts, (unsigned long)ts);
 
 		c->ts = ts;
 		hook_call_event("channel_tschange", c);
@@ -751,7 +751,7 @@ static void nick_group(hook_user_req_t *hdata)
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
 	if (u != NULL && should_reg_umode(u))
-		sts(":%s SVSMODE %s +rd %ld", nicksvs.nick, u->nick, time(NULL));
+		sts(":%s SVSMODE %s +rd %lu", nicksvs.nick, u->nick, (unsigned long)CURRTIME);
 }
 
 static void nick_ungroup(hook_user_req_t *hdata)
@@ -760,7 +760,7 @@ static void nick_ungroup(hook_user_req_t *hdata)
 
 	u = hdata->si->su != NULL && !irccasecmp(hdata->si->su->nick, hdata->mn->nick) ? hdata->si->su : user_find_named(hdata->mn->nick);
 	if (u != NULL && !nicksvs.no_nick_ownership)
-		sts(":%s SVSMODE %s -r+d %ld", nicksvs.nick, u->nick, time(NULL));
+		sts(":%s SVSMODE %s -r+d %lu", nicksvs.nick, u->nick, (unsigned long)CURRTIME);
 }
 
 void _modinit(module_t * m)

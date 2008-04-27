@@ -211,7 +211,7 @@ static unsigned int hyperion_server_login(void)
 
 	sts("CAPAB :QS EX DE CHW IE QU DNCR SRV SIGNON");
 	sts("SERVER %s 1 :%s", me.name, me.desc);
-	sts("SVINFO 5 3 0 :%ld", CURRTIME);
+	sts("SVINFO 5 3 0 :%lu", (unsigned long)CURRTIME);
 
 	services_init();
 
@@ -229,7 +229,7 @@ static unsigned int hyperion_server_login(void)
 static void hyperion_introduce_nick(user_t *u)
 {
 	const char *privs = is_ircop(u) ? "6@BFmMopPRUX" : "";
-	sts("NICK %s 1 %ld +ei%s %s %s %s 0.0.0.0 :%s", u->nick, u->ts, privs, u->user, u->host, me.name, u->gecos);
+	sts("NICK %s 1 %lu +ei%s %s %s %s 0.0.0.0 :%s", u->nick, (unsigned long)u->ts, privs, u->user, u->host, me.name, u->gecos);
 	if (is_ircop(u))
 		sts(":%s OPER %s +%s", me.name, u->nick, privs);
 }
@@ -259,11 +259,11 @@ static void hyperion_wallops_sts(const char *text)
 static void hyperion_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
 {
 	if (isnew)
-		sts(":%s SJOIN %ld %s %s :@%s", me.name, c->ts, c->name,
-				modes, u->nick);
+		sts(":%s SJOIN %lu %s %s :@%s", me.name, (unsigned long)c->ts,
+				c->name, modes, u->nick);
 	else
-		sts(":%s SJOIN %ld %s + :@%s", me.name, c->ts, c->name,
-				u->nick);
+		sts(":%s SJOIN %lu %s + :@%s", me.name, (unsigned long)c->ts,
+				c->name, u->nick);
 }
 
 /* kicks a user from a channel */
@@ -375,7 +375,8 @@ static void hyperion_unkline_sts(char *server, char *user, char *host)
 	if (!me.connected)
 		return;
 
-	sts(":%s UNKLINE %s@%s %ld", opersvs.nick, user, host, CURRTIME);
+	sts(":%s UNKLINE %s@%s %lu", opersvs.nick, user, host,
+			(unsigned long)CURRTIME);
 }
 
 /* topic wrapper */
@@ -385,7 +386,8 @@ static void hyperion_topic_sts(channel_t *c, const char *setter, time_t ts, time
 		return;
 
 	/* Send 0 channelts so this will always be accepted */
-	sts(":%s STOPIC %s %s %ld 0 :%s", chansvs.nick, c->name, setter, ts, topic);
+	sts(":%s STOPIC %s %s %lu 0 :%s", chansvs.nick, c->name, setter,
+			(unsigned long)ts, topic);
 }
 
 /* mode wrapper */
@@ -624,7 +626,7 @@ static void m_sjoin(sourceinfo_t *si, int parc, char *parv[])
 				cu->modes = 0;
 		}
 
-		slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%ld -> %ld)", c->name, c->ts, ts);
+		slog(LG_DEBUG, "m_sjoin(): TS changed for %s (%lu -> %lu)", c->name, (unsigned long)c->ts, (unsigned long)ts);
 
 		c->ts = ts;
 		hook_call_event("channel_tschange", c);

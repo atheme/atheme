@@ -222,7 +222,7 @@ static void inspircd_introduce_nick(user_t *u)
 	/* :services-dev.chatspike.net NICK 1133994664 OperServ chatspike.net chatspike.net services +oii 0.0.0.0 :Operator Server  */
 	const char *omode = is_ircop(u) ? "o" : "";
 
-	sts(":%s NICK %ld %s %s %s %s +i%s 0.0.0.0 :%s", me.name, u->ts, u->nick, u->host, u->host, u->user, omode, u->gecos);
+	sts(":%s NICK %lu %s %s %s %s +i%s 0.0.0.0 :%s", me.name, (unsigned long)u->ts, u->nick, u->host, u->host, u->user, omode, u->gecos);
 	if (is_ircop(u))
 		sts(":%s OPERTYPE Services", u->nick);
 }
@@ -288,23 +288,23 @@ static void inspircd_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *mo
 {
 	if (isnew)
 	{
-		sts(":%s FJOIN %s %ld :@,%s", me.name, c->name, c->ts, u->nick);
+		sts(":%s FJOIN %s %lu :@,%s", me.name, c->name, (unsigned long)c->ts, u->nick);
 		if (modes[0] && modes[1])
-			sts(":%s FMODE %s %ld %s", me.name, c->name, c->ts, modes);
+			sts(":%s FMODE %s %lu %s", me.name, c->name, (unsigned long)c->ts, modes);
 	}
 	else
 	{
-		sts(":%s FJOIN %s %ld :@,%s", me.name, c->name, c->ts, u->nick);
+		sts(":%s FJOIN %s %lu :@,%s", me.name, c->name, (unsigned long)c->ts, u->nick);
 	}
 }
 
 static void inspircd_chan_lowerts(channel_t *c, user_t *u)
 {
-	slog(LG_DEBUG, "inspircd_chan_lowerts(): lowering TS for %s to %ld", 
-		c->name, (long)c->ts);
+	slog(LG_DEBUG, "inspircd_chan_lowerts(): lowering TS for %s to %lu", 
+		c->name, (unsigned long)c->ts);
 
-	sts(":%s FJOIN %s %ld :@,%s", me.name, c->name, c->ts, u->nick);
-	sts(":%s FMODE %s %ld %s", me.name, c->name, c->ts, channel_modes(c, TRUE));
+	sts(":%s FJOIN %s %lu :@,%s", me.name, c->name, (unsigned long)c->ts, u->nick);
+	sts(":%s FMODE %s %lu %s", me.name, c->name, (unsigned long)c->ts, channel_modes(c, TRUE));
 }
 
 /* kicks a user from a channel */
@@ -384,7 +384,7 @@ static void inspircd_kline_sts(char *server, char *user, char *host, long durati
 		return;
 
 	/* :services-dev.chatspike.net ADDLINE G test@test.com Brain 1133994664 0 :You are banned from this network */
-	sts(":%s ADDLINE G %s@%s %s %ld %ld :%s", me.name, user, host, opersvs.nick, time(NULL), duration, reason);
+	sts(":%s ADDLINE G %s@%s %s %lu %ld :%s", me.name, user, host, opersvs.nick, (unsigned long)CURRTIME, duration, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
@@ -410,14 +410,14 @@ static void inspircd_topic_sts(channel_t *c, const char *setter, time_t ts, time
 	/* Restoring old topic */
 	if (ts > prevts + 60 || prevts == 0)
 	{
-		sts(":%s FTOPIC %s %ld %s :%s", chansvs.nick, c->name, ts, setter, topic);
+		sts(":%s FTOPIC %s %lu %s :%s", chansvs.nick, c->name, (unsigned long)ts, setter, topic);
 		return;
 	}
 	/* Tweaking a topic */
 	else if (ts == prevts)
 	{
 		ts += 60;
-		sts(":%s FTOPIC %s %ld %s :%s", chansvs.nick, c->name, ts, setter, topic);
+		sts(":%s FTOPIC %s %lu %s :%s", chansvs.nick, c->name, (unsigned long)ts, setter, topic);
 		c->topicts = ts;
 		return;
 	}
@@ -434,7 +434,7 @@ static void inspircd_mode_sts(char *sender, channel_t *target, char *modes)
 	if (has_protocol >= PROTOCOL_NEWTS)
 	{
 		/* FMODE from user is ok, use it */
-		sts(":%s FMODE %s %ld %s", sender, target->name, target->ts, modes);
+		sts(":%s FMODE %s %lu %s", sender, target->name, (unsigned long)target->ts, modes);
 	}
 	else
 	{
@@ -660,7 +660,7 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 			if (cu->user->server == me.me)
 			{
 				/* it's a service, reop */
-				sts(":%s FMODE %s %ld +o %s", me.name, c->name, ts, cu->user->nick);
+				sts(":%s FMODE %s %lu +o %s", me.name, c->name, (unsigned long)ts, cu->user->nick);
 				cu->modes = CMODE_OP;
 			}
 			else
@@ -871,19 +871,19 @@ static void m_fmode(sourceinfo_t *si, int parc, char *parv[])
 				 * channel
 				 * XXX could this ignore other stuff too?
 				 * -- jilles */
-				slog(LG_DEBUG, "m_fmode(): ignoring %s %s: incoming TS %ld is equal to our TS %ld, and only deops", parv[0], parv[2], ts, c->ts);
+				slog(LG_DEBUG, "m_fmode(): ignoring %s %s: incoming TS %lu is equal to our TS %lu, and only deops", parv[0], parv[2], (unsigned long)ts, (unsigned long)c->ts);
 				return;
 			}
 		}
 		else if (ts > c->ts)
 		{
 			if (has_protocol < PROTOCOL_NEWTS)
-				slog(LG_DEBUG, "m_fmode(): accepting but should bounce %s %s: incoming TS %ld is newer than our TS %ld", parv[0], parv[2], ts, c->ts);
+				slog(LG_DEBUG, "m_fmode(): accepting but should bounce %s %s: incoming TS %lu is newer than our TS %lu", parv[0], parv[2], (unsigned long)ts, (unsigned long)c->ts);
 			else
 				return;
 		}
 		else if (ts < c->ts)
-			slog(LG_DEBUG, "m_fmode(): %s %s: incoming TS %ld is older than our TS %ld, possible desync", parv[0], parv[2], ts, c->ts);
+			slog(LG_DEBUG, "m_fmode(): %s %s: incoming TS %lu is older than our TS %lu, possible desync", parv[0], parv[2], (unsigned long)ts, (unsigned long)c->ts);
 		channel_mode(NULL, c, parc - 2, &parv[2]);
 	}
 	else
@@ -1028,7 +1028,7 @@ static void m_idle(sourceinfo_t *si, int parc, char *parv[])
 {
 	if (parc == 1 && si->su != NULL)
 	{
-		sts(":%s IDLE %s %ld 0", parv[0], si->su->nick, CURRTIME);
+		sts(":%s IDLE %s %lu 0", parv[0], si->su->nick, (unsigned long)CURRTIME);
 	}
 	else
 	{
