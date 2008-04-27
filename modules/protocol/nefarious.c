@@ -289,7 +289,7 @@ static void nefarious_topic_sts(channel_t *c, const char *setter, time_t ts, tim
 		ts = CURRTIME;
 		if (ts < prevts)
 			ts = prevts + 1;
-		sts("%s T %s %lu %lu :%s", chansvs.me->me->uid, c->name, (unsigned long)c->ts, (unsigned long)CURRTIME, topic);
+		sts("%s T %s %lu %lu :%s", chansvs.me->me->uid, c->name, (unsigned long)c->ts, (unsigned long)ts, topic);
 		c->topicts = ts;
 	}
 }
