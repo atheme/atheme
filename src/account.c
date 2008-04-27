@@ -417,12 +417,12 @@ void myuser_notice(char *from, myuser_t *target, char *fmt, ...)
 	}
 }
 
-int
+unsigned int
 myuser_num_channels(myuser_t *mu)
 {
 	node_t *n;
 	chanacs_t *ca;
-	int count = 0;
+	unsigned int count = 0;
 
 	LIST_FOREACH(n, mu->chanacs.head)
 	{
@@ -929,11 +929,11 @@ boolean_t mychan_isused(mychan_t *mc)
 	return FALSE;
 }
 
-int mychan_num_founders(mychan_t *mc)
+unsigned int mychan_num_founders(mychan_t *mc)
 {
 	node_t *n;
 	chanacs_t *ca;
-	int count = 0;
+	unsigned int count = 0;
 
 	LIST_FOREACH(n, mc->chanacs.head)
 	{

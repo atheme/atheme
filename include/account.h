@@ -299,7 +299,7 @@ E void myuser_rename(myuser_t *mu, const char *name);
 E void myuser_set_email(myuser_t *mu, const char *newemail);
 E myuser_t *myuser_find_ext(const char *name);
 E void myuser_notice(char *from, myuser_t *target, char *fmt, ...) PRINTFLIKE(3, 4);
-E int myuser_num_channels(myuser_t *mu);
+E unsigned int myuser_num_channels(myuser_t *mu);
 
 E boolean_t myuser_access_verify(user_t *u, myuser_t *mu);
 E boolean_t myuser_access_add(myuser_t *mu, char *mask);
@@ -318,7 +318,7 @@ E void myuser_name_restore(const char *name, myuser_t *mu);
 E mychan_t *mychan_add(char *name);
 //inline mychan_t *mychan_find(const char *name);
 E boolean_t mychan_isused(mychan_t *mc);
-E int mychan_num_founders(mychan_t *mc);
+E unsigned int mychan_num_founders(mychan_t *mc);
 E const char *mychan_founder_names(mychan_t *mc);
 E myuser_t *mychan_pick_candidate(mychan_t *mc, unsigned int minlevel, int maxtime);
 E myuser_t *mychan_pick_successor(mychan_t *mc);
