@@ -120,7 +120,7 @@ typedef struct claro_state_ {
 	unsigned int node;
 	unsigned int event;
 	time_t currtime;
-	unsigned int maxfd;
+	int maxfd;
 } claro_state_t;
 
 E claro_state_t claro_state;
