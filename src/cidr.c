@@ -90,9 +90,7 @@ comp_with_mask(void *addr, void *dest, u_int mask)
  *	Paul Vixie, 1996.
  */
 static int
-inet_pton4(src, dst)
-     const char *src;
-     u_char *dst;
+inet_pton4(const char *src, u_char *dst)
 {
 	int saw_digit, octets, ch;
 	u_char tmp[INADDRSZ], *tp;
@@ -147,9 +145,7 @@ inet_pton4(src, dst)
  *	Paul Vixie, 1996.
  */
 static int
-inet_pton6(src, dst)
-     const char *src;
-     u_char *dst;
+inet_pton6(const char *src, u_char *dst)
 {
 	static const char xdigits[] = "0123456789abcdef";
 	u_char tmp[IN6ADDRSZ], *tp, *endp, *colonp;
@@ -256,7 +252,7 @@ inet_pton6(src, dst)
  */
 int match_ips(const char *s1, const char *s2)
 {
-	char ipaddr[IN6ADDRSZ], maskaddr[IN6ADDRSZ];
+	unsigned char ipaddr[IN6ADDRSZ], maskaddr[IN6ADDRSZ];
 	char ipmask[BUFSIZE];
 	char ip[HOSTLEN + 1];
 	char *len;
@@ -308,7 +304,7 @@ int match_ips(const char *s1, const char *s2)
 int
 match_cidr(const char *s1, const char *s2)
 {
-	char ipaddr[IN6ADDRSZ], maskaddr[IN6ADDRSZ];
+	unsigned char ipaddr[IN6ADDRSZ], maskaddr[IN6ADDRSZ];
 	char mask[BUFSIZE];
 	char address[NICKLEN + USERLEN + HOSTLEN + 6];
 	char *ipmask;
