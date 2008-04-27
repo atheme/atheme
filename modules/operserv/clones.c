@@ -45,7 +45,7 @@ typedef struct cexcept_ cexcept_t;
 struct cexcept_
 {
 	char *ip;
-	int clones;
+	unsigned int clones;
 	char *reason;
 };
 
@@ -55,7 +55,7 @@ struct hostentry_
 	char ip[HOSTIPLEN];
 	list_t clients;
 	time_t lastaction;
-	int lastaction_clones;
+	unsigned int lastaction_clones;
 };
 
 command_t os_clones = { "CLONES", N_("Manages network wide clones."), PRIV_AKILL, 4, os_cmd_clones };
@@ -224,7 +224,7 @@ static void load_exemptdb(void)
 	fclose(f);
 }
 
-static int is_exempt(const char *ip)
+static unsigned int is_exempt(const char *ip)
 {
 	node_t *n;
 
@@ -445,10 +445,10 @@ static void os_cmd_clones_listexempt(sourceinfo_t *si, int parc, char *parv[])
 
 static void clones_newuser(void *vptr)
 {
-	int i;
+	unsigned int i;
 	user_t *u = vptr;
 	hostentry_t *he;
-	int allowed = 0;
+	unsigned int allowed = 0;
 
 	/* User has no IP, ignore him */
 	if (is_internal_client(u) || *u->ip == '\0')
