@@ -38,7 +38,7 @@ void *module_symbol_get(module_t *mod, module_symbol_t *sym)
 
 int module_symbol_getn(module_symbol_source_t *map, size_t n)
 {
-	int i;
+	size_t i;
 
 	return_val_if_fail(map != NULL, -1);
 	return_val_if_fail(n > 0, -1);

@@ -735,7 +735,7 @@ int floodcheck(user_t *u, user_t *t)
 				return 1;
 		}
 
-		if ((CURRTIME - u->lastmsg) > config_options.flood_time)
+		if ((unsigned int)(CURRTIME - u->lastmsg) > config_options.flood_time)
 		{
 			u->lastmsg = CURRTIME;
 			u->msgs = 0;

@@ -342,7 +342,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	int status;
 	int rc;
 	static time_t period_start = 0, lastwallops = 0;
-	static int emailcount = 0;
+	static unsigned int emailcount = 0;
 
 	if (u == NULL || mu == NULL)
 		return 0;
@@ -377,7 +377,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 		return 0;
 	}
 
-	if (CURRTIME - period_start > me.emailtime)
+	if ((unsigned int)(CURRTIME - period_start) > me.emailtime)
 	{
 		emailcount = 0;
 		period_start = CURRTIME;
