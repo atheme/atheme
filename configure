@@ -662,6 +662,7 @@ MKDEP
 CPP
 SOCKET_ENGINE
 POSIX_CRYPTC
+mkdir_p
 DOCDIR
 MODDIR
 SHAREDIR
@@ -6975,6 +6976,9 @@ fi
 
 
 
+mkdir_p="mkdir -p"
+
+
 DOCDIR='${prefix}/doc'
 MODDIR='${exec_prefix}'
 SHAREDIR='${prefix}'
@@ -11092,6 +11096,7 @@ MKDEP!$MKDEP$ac_delim
 CPP!$CPP$ac_delim
 SOCKET_ENGINE!$SOCKET_ENGINE$ac_delim
 POSIX_CRYPTC!$POSIX_CRYPTC$ac_delim
+mkdir_p!$mkdir_p$ac_delim
 DOCDIR!$DOCDIR$ac_delim
 MODDIR!$MODDIR$ac_delim
 SHAREDIR!$SHAREDIR$ac_delim
@@ -11107,7 +11112,6 @@ PICFLAGS!$PICFLAGS$ac_delim
 RPATH!$RPATH$ac_delim
 PKG_CONFIG!$PKG_CONFIG$ac_delim
 MOWGLI_CFLAGS!$MOWGLI_CFLAGS$ac_delim
-MOWGLI_LIBS!$MOWGLI_LIBS$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -11149,6 +11153,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+MOWGLI_LIBS!$MOWGLI_LIBS$ac_delim
 subdirs!$subdirs$ac_delim
 LIBMOWGLI!$LIBMOWGLI$ac_delim
 BUILDROOT!$BUILDROOT$ac_delim
@@ -11156,7 +11161,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 5; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 6; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
