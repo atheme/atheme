@@ -98,6 +98,10 @@ install: build
 		cd ..; \
 	done
 
+	@echo "----------------------------------------------------------------"
+	@echo ">>> Remember to cd to ${prefix} and edit your config file.";
+	@echo "----------------------------------------------------------------"
+
 dist:
 	@if [ ! -d .hg ]; then \
 		echo "make dist only works from a mercurial tree"; \

@@ -167,10 +167,6 @@ install: build
 		fi; \
 	done)
 
-	@echo "----------------------------------------------------------------"
-	@echo ">>> Remember to cd to ${prefix} and edit your config file.";
-	@echo "----------------------------------------------------------------"
-
 #deinstall:
 #	if [ -d ${prefix} ] ; then \
 #		$(RM) -rf ${prefix}; \
