@@ -93,6 +93,10 @@ AC_CHECK_LIB(crypt, crypt, [
 AC_SUBST(SOCKET_ENGINE)
 AC_SUBST(POSIX_CRYPTC)
 
+dnl gettextize's Makefile.in wants this
+mkdir_p="mkdir -p"
+AC_SUBST(mkdir_p)
+
 DOCDIR='${prefix}/doc'
 MODDIR='${exec_prefix}'
 SHAREDIR='${prefix}'
