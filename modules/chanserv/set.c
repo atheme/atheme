@@ -1143,6 +1143,9 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
         char *property = strtok(parv[1], " ");
         char *value = strtok(NULL, "");
+	unsigned int count;
+	node_t *n;
+	metadata_t *md;
 
         if (!property)
         {
@@ -1174,7 +1177,7 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!value)
 	{
-		metadata_t *md = metadata_find(mc, METADATA_CHANNEL, property);
+		md = metadata_find(mc, METADATA_CHANNEL, property);
 
 		if (!md)
 		{
@@ -1188,7 +1191,14 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (mc->metadata.count >= me.mdlimit)
+	count = 0;
+	LIST_FOREACH(n, mc->metadata.head)
+	{
+		md = n->data;
+		if (strchr(property, ':') ? md->private : !md->private)
+			count++;
+	}
+	if (count >= me.mdlimit)
 	{
 		command_fail(si, fault_toomany, _("Cannot add \2%s\2 to \2%s\2 metadata table, it is full."),
 						property, parv[0]);

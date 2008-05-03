@@ -419,6 +419,9 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *property = strtok(parv[0], " ");
 	char *value = strtok(NULL, "");
+	unsigned int count;
+	node_t *n;
+	metadata_t *md;
 
 	if (si->smu == NULL)
 		return;
@@ -440,7 +443,7 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!value)
 	{
-		metadata_t *md = metadata_find(si->smu, METADATA_USER, property);
+		md = metadata_find(si->smu, METADATA_USER, property);
 
 		if (!md)
 		{
@@ -454,7 +457,14 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (si->smu->metadata.count >= me.mdlimit)
+	count = 0;
+	LIST_FOREACH(n, si->smu->metadata.head)
+	{
+		md = n->data;
+		if (strchr(property, ':') ? md->private : !md->private)
+			count++;
+	}
+	if (count >= me.mdlimit)
 	{
 		command_fail(si, fault_toomany, _("Cannot add \2%s\2 to \2%s\2 metadata table, it is full."),
 					property, si->smu->name);
