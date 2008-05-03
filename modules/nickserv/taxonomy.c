@@ -44,6 +44,8 @@ static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 	node_t *n;
 	boolean_t isoper;
 
+	if (!target && si->smu)
+		target = si->smu->name;
 	if (!target)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "TAXONOMY");
@@ -59,11 +61,11 @@ static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 
 	isoper = has_priv(si, PRIV_USER_AUSPEX);
 	if (isoper)
-		logcommand(si, CMDLOG_ADMIN, "TAXONOMY %s (oper)", target);
+		logcommand(si, CMDLOG_ADMIN, "TAXONOMY %s (oper)", mu->name);
 	else
-		logcommand(si, CMDLOG_GET, "TAXONOMY %s", target);
+		logcommand(si, CMDLOG_GET, "TAXONOMY %s", mu->name);
 
-	command_success_nodata(si, _("Taxonomy for \2%s\2:"), target);
+	command_success_nodata(si, _("Taxonomy for \2%s\2:"), mu->name);
 
 	LIST_FOREACH(n, mu->metadata.head)
 	{
@@ -75,7 +77,7 @@ static void ns_cmd_taxonomy(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, "%-32s: %s", md->name, md->value);
 	}
 
-	command_success_nodata(si, _("End of \2%s\2 taxonomy."), target);
+	command_success_nodata(si, _("End of \2%s\2 taxonomy."), mu->name);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
