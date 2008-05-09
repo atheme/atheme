@@ -1755,7 +1755,6 @@ void expire_check(void *arg)
 	 * right away -- jilles */
 	sendq_flush(curr_uplink->conn);
 
-	if (nicksvs.expiry >= 0)
 	{
 		mowgli_patricia_foreach(mulist, expire_myuser_cb, NULL);
 
@@ -1789,7 +1788,6 @@ void expire_check(void *arg)
 		}
 	}
 
-	if (chansvs.expiry >= 0)
 	{
 		MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 		{
