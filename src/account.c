@@ -1755,74 +1755,70 @@ void expire_check(void *arg)
 	 * right away -- jilles */
 	sendq_flush(curr_uplink->conn);
 
+	mowgli_patricia_foreach(mulist, expire_myuser_cb, NULL);
+
+	MOWGLI_PATRICIA_FOREACH(mn, &state, nicklist)
 	{
-		mowgli_patricia_foreach(mulist, expire_myuser_cb, NULL);
-
-		MOWGLI_PATRICIA_FOREACH(mn, &state, nicklist)
+		if (nicksvs.expiry > 0 &&
+				(CURRTIME - mn->lastseen) >= nicksvs.expiry)
 		{
-			if (nicksvs.expiry > 0 &&
-					(CURRTIME - mn->lastseen) >= nicksvs.expiry)
+			if (MU_HOLD & mn->owner->flags)
+				continue;
+
+			/* do not drop main nick like this */
+			if (!irccasecmp(mn->nick, mn->owner->name))
+				continue;
+
+			u = user_find_named(mn->nick);
+			if (u != NULL && u->myuser == mn->owner)
 			{
-				if (MU_HOLD & mn->owner->flags)
-					continue;
-
-				/* do not drop main nick like this */
-				if (!irccasecmp(mn->nick, mn->owner->name))
-					continue;
-
-				u = user_find_named(mn->nick);
-				if (u != NULL && u->myuser == mn->owner)
-				{
-					/* still logged in, bleh */
-					mn->lastseen = CURRTIME;
-					mn->owner->lastlogin = CURRTIME;
-					continue;
-				}
-
-				snoop(_("EXPIRE: \2%s\2 from \2%s\2"), mn->nick, mn->owner->name);
-				slog(LG_REGISTER, "expire_check(): expiring nick %s (unused %ds, account %s)",
-						mn->nick, CURRTIME - mn->lastseen,
-						mn->owner->name);
-				object_unref(mn);
+				/* still logged in, bleh */
+				mn->lastseen = CURRTIME;
+				mn->owner->lastlogin = CURRTIME;
+				continue;
 			}
+
+			snoop(_("EXPIRE: \2%s\2 from \2%s\2"), mn->nick, mn->owner->name);
+			slog(LG_REGISTER, "expire_check(): expiring nick %s (unused %ds, account %s)",
+					mn->nick, CURRTIME - mn->lastseen,
+					mn->owner->name);
+			object_unref(mn);
 		}
 	}
 
+	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
-		MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
+		if ((CURRTIME - mc->used) >= 86400 - 3660)
 		{
-			if ((CURRTIME - mc->used) >= 86400 - 3660)
+			/* keep last used time accurate to
+			 * within a day, making sure an active
+			 * channel will never get "Last used"
+			 * in /cs info -- jilles */
+			if (mychan_isused(mc))
 			{
-				/* keep last used time accurate to
-				 * within a day, making sure an active
-				 * channel will never get "Last used"
-				 * in /cs info -- jilles */
-				if (mychan_isused(mc))
-				{
-					mc->used = CURRTIME;
-					slog(LG_DEBUG, "expire_check(): updating last used time on %s because it appears to be still in use", mc->name);
-					continue;
-				}
+				mc->used = CURRTIME;
+				slog(LG_DEBUG, "expire_check(): updating last used time on %s because it appears to be still in use", mc->name);
+				continue;
 			}
+		}
 
-			if (chansvs.expiry > 0 &&
-					(CURRTIME - mc->used) >= chansvs.expiry)
-			{
-				if (MC_HOLD & mc->flags)
-					continue;
+		if (chansvs.expiry > 0 &&
+				(CURRTIME - mc->used) >= chansvs.expiry)
+		{
+			if (MC_HOLD & mc->flags)
+				continue;
 
-				snoop(_("EXPIRE: \2%s\2 from \2%s\2"), mc->name, mychan_founder_names(mc));
-				slog(LG_REGISTER, "expire_check(): expiring channel %s (unused %ds, founder %s, chanacs %d)",
-						mc->name, CURRTIME - mc->used,
-						mychan_founder_names(mc),
-						LIST_LENGTH(&mc->chanacs));
+			snoop(_("EXPIRE: \2%s\2 from \2%s\2"), mc->name, mychan_founder_names(mc));
+			slog(LG_REGISTER, "expire_check(): expiring channel %s (unused %ds, founder %s, chanacs %d)",
+					mc->name, CURRTIME - mc->used,
+					mychan_founder_names(mc),
+					LIST_LENGTH(&mc->chanacs));
 
-				hook_call_event("channel_drop", mc);
-				if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
-					part(mc->name, chansvs.nick);
+			hook_call_event("channel_drop", mc);
+			if ((config_options.chan && irccasecmp(mc->name, config_options.chan)) || !config_options.chan)
+				part(mc->name, chansvs.nick);
 
-				object_unref(mc);
-			}
+			object_unref(mc);
 		}
 	}
 }
