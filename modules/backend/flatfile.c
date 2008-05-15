@@ -270,7 +270,9 @@ static void flatfile_db_save(void *arg)
 	}
 
 	/* now, replace the old database with the new one, using an atomic rename */
+#ifdef _WIN32
 	unlink(DATADIR "/atheme.db" );
+#endif
 	
 	if ((rename(DATADIR "/atheme.db.new", DATADIR "/atheme.db")) < 0)
 	{
