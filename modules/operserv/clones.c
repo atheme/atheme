@@ -152,10 +152,11 @@ static void write_exemptdb(void)
 	FILE *f;
 	node_t *n;
 	cexcept_t *c;
+	int was_errored;
 
 	if (!(f = fopen(DATADIR "/exempts.db.new", "w")))
 	{
-		slog(LG_ERROR, "write_exemptdb(): cannot write exempt database: %s", strerror(errno));
+		slog(LG_ERROR, "write_exemptdb(): cannot open exempts database for writing: %s", strerror(errno));
 		return;
 	}
 
@@ -166,11 +167,22 @@ static void write_exemptdb(void)
 		fprintf(f, "EX %s %d %s\n", c->ip, c->clones, c->reason);
 	}
 
-	fclose(f);
+	was_errored = ferror(f);
+	if (!was_errored)
+		was_errored = fflush(f);
+	/* fsync it before deleting the old */
+	if (!was_errored)
+		was_errored = fsync(fileno(f));
+	was_errored |= fclose(f);
+	if (was_errored)
+	{
+		slog(LG_ERROR, "write_exemptdb(): couldn't write exempts database: %s", strerror(errno));
+		return;
+	}
 
 	if ((rename(DATADIR "/exempts.db.new", DATADIR "/exempts.db")) < 0)
 	{
-		slog(LG_ERROR, "write_exemptdb(): couldn't rename exempts database.");
+		slog(LG_ERROR, "write_exemptdb(): couldn't rename exempts database: %s", strerror(errno));
 		return;
 	}
 }
