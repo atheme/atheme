@@ -259,6 +259,11 @@ static void flatfile_db_save(void *arg)
 	fprintf(f, "DE %d %d %d %d\n", muout, mcout, caout, kout);
 
 	was_errored = ferror(f);
+	if (!was_errored)
+		was_errored = fflush(f);
+	/* fsync it before deleting the old */
+	if (!was_errored)
+		was_errored = fsync(fileno(f));
 	was_errored |= fclose(f);
 	if (was_errored)
 	{
