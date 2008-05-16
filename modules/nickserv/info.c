@@ -75,8 +75,8 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	{
 		if (has_priv(si, PRIV_USER_AUSPEX) && (mun = myuser_name_find(name)) != NULL)
 		{
-			char *setter;
-			char *reason;
+			const char *setter;
+			const char *reason;
 			time_t ts;
 
 			md = metadata_find(mun, METADATA_USER_NAME, "private:mark:setter");
@@ -321,8 +321,8 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	if (has_priv(si, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:freeze:freezer")))
 	{
-		char *setter = md->value;
-		char *reason;
+		const char *setter = md->value;
+		const char *reason;
 		time_t ts;
 
 		md = metadata_find(mu, METADATA_USER, "private:freeze:reason");
@@ -339,8 +339,8 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	if (has_priv(si, PRIV_USER_AUSPEX) && (md = metadata_find(mu, METADATA_USER, "private:mark:setter")))
 	{
-		char *setter = md->value;
-		char *reason;
+		const char *setter = md->value;
+		const char *reason;
 		time_t ts;
 
 		md = metadata_find(mu, METADATA_USER, "private:mark:reason");

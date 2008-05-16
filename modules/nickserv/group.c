@@ -118,7 +118,7 @@ static void ns_cmd_group(sourceinfo_t *si, int parc, char *parv[])
 static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[])
 {
 	mynick_t *mn;
-	char *target;
+	const char *target;
 	hook_user_req_t hdata;
 
 	if (si->smu == NULL)

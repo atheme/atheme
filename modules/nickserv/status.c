@@ -45,8 +45,8 @@ void _moddeinit()
 
 static void ns_cmd_acc(sourceinfo_t *si, int parc, char *parv[])
 {
-	char *targuser = parv[0];
-	char *targaccount = parv[1];
+	const char *targuser = parv[0];
+	const char *targaccount = parv[1];
 	user_t *u;
 	myuser_t *mu;
 	mynick_t *mn;

@@ -377,7 +377,7 @@ myuser_t *myuser_find_ext(const char *name)
 }
 
 /*
- * myuser_notice(char *from, myuser_t *target, char *fmt, ...)
+ * myuser_notice(const char *from, myuser_t *target, const char *fmt, ...)
  *
  * Sends a notice to all users logged into an account.
  *
@@ -393,7 +393,7 @@ myuser_t *myuser_find_ext(const char *name)
  * Side Effects:
  *      - a notice is sent to all users logged into the account.
  */
-void myuser_notice(char *from, myuser_t *target, char *fmt, ...)
+void myuser_notice(const char *from, myuser_t *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];

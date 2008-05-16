@@ -298,7 +298,7 @@ E void myuser_delete(myuser_t *mu);
 E void myuser_rename(myuser_t *mu, const char *name);
 E void myuser_set_email(myuser_t *mu, const char *newemail);
 E myuser_t *myuser_find_ext(const char *name);
-E void myuser_notice(char *from, myuser_t *target, char *fmt, ...) PRINTFLIKE(3, 4);
+E void myuser_notice(const char *from, myuser_t *target, const char *fmt, ...) PRINTFLIKE(3, 4);
 E unsigned int myuser_num_channels(myuser_t *mu);
 
 E boolean_t myuser_access_verify(user_t *u, myuser_t *mu);
