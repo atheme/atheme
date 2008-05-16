@@ -55,7 +55,7 @@ void modules_init(void)
  * side effects:
  *       a module is loaded and necessary initialization code is run.
  */
-module_t *module_load(char *filespec)
+module_t *module_load(const char *filespec)
 {
 	node_t *n;
 	module_t *m;
@@ -169,7 +169,7 @@ module_t *module_load(char *filespec)
  * side effects:
  *       qualifying modules are passed to module_load().
  */
-void module_load_dir(char *dirspec)
+void module_load_dir(const char *dirspec)
 {
 	DIR *module_dir = NULL;
 	struct dirent *ldirent = NULL;
@@ -208,7 +208,7 @@ void module_load_dir(char *dirspec)
  * side effects:
  *       qualifying modules are passed to module_load().
  */
-void module_load_dir_match(char *dirspec, char *pattern)
+void module_load_dir_match(const char *dirspec, const char *pattern)
 {
 	DIR *module_dir = NULL;
 	struct dirent *ldirent = NULL;
@@ -301,7 +301,7 @@ void module_unload(module_t * m)
  * side effects:
  *       none
  */
-void *module_locate_symbol(char *modname, char *sym)
+void *module_locate_symbol(const char *modname, const char *sym)
 {
 	module_t *m;
 	void *symptr;
@@ -339,7 +339,7 @@ void *module_locate_symbol(char *modname, char *sym)
  * side effects:
  *       none
  */
-module_t *module_find(char *name)
+module_t *module_find(const char *name)
 {
 	node_t *n;
 
@@ -366,7 +366,7 @@ module_t *module_find(char *name)
  * side effects:
  *       none
  */
-module_t *module_find_published(char *name)
+module_t *module_find_published(const char *name)
 {
 	node_t *n;
 

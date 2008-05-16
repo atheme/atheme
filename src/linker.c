@@ -47,7 +47,7 @@
  * Side Effects:
  *       a shared module is loaded into the application's memory space
  */
-void *linker_open(char *path)
+void *linker_open(const char *path)
 {
 	return dlopen(path, RTLD_NOW);
 }
@@ -65,7 +65,7 @@ void *linker_open(char *path)
  *       the extension is appended if it's not already there.
  *       a shared module is loaded into the application's memory space
  */
-void *linker_open_ext(char *path)
+void *linker_open_ext(const char *path)
 {
 	char *buf = smalloc(strlen(path) + 20);
 	void *ret;
@@ -92,7 +92,7 @@ void *linker_open_ext(char *path)
  * Side Effects:
  *       none
  */
-void *linker_getsym(void *vptr, char *sym)
+void *linker_getsym(void *vptr, const char *sym)
 {
 	return dlsym(vptr, sym);
 }

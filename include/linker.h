@@ -10,9 +10,9 @@
 #ifndef LINKER_H
 #define LINKER_H
 
-extern void *linker_open(char *path);
-extern void *linker_open_ext(char *path);
-extern void *linker_getsym(void *vptr, char *sym);
+extern void *linker_open(const char *path);
+extern void *linker_open_ext(const char *path);
+extern void *linker_getsym(void *vptr, const char *sym);
 extern void linker_close(void *vptr);
 
 #endif

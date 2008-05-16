@@ -43,12 +43,12 @@ struct module_ {
 struct v1_moduleheader_ {
 	unsigned int atheme_mod;
 	unsigned int abi_ver;
-	char *name;
+	const char *name;
 	boolean_t norestart;
 	void (*modinit)(module_t *m);
 	void (*deinit)(void);
-	char *vendor;
-	char *version;
+	const char *vendor;
+	const char *version;
 };
 
 #define DECLARE_MODULE_V1(name, norestart, modinit, deinit, ver, ven) \
@@ -61,13 +61,13 @@ E void _modinit(module_t *m);
 E void _moddeinit(void);
 
 E void modules_init(void);
-E module_t *module_load(char *filespec);
-E void module_load_dir(char *dirspec);
-E void module_load_dir_match(char *dirspec, char *pattern);
-E void *module_locate_symbol(char *modname, char *sym);
+E module_t *module_load(const char *filespec);
+E void module_load_dir(const char *dirspec);
+E void module_load_dir_match(const char *dirspec, const char *pattern);
+E void *module_locate_symbol(const char *modname, const char *sym);
 E void module_unload(module_t *m);
-E module_t *module_find(char *name);
-E module_t *module_find_published(char *name);
+E module_t *module_find(const char *name);
+E module_t *module_find_published(const char *name);
 
 /* Use this macro in your _modinit() function to use symbols from
  * other modules. It will abort the _modinit() and unload your module
