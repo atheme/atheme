@@ -71,7 +71,7 @@ void _moddeinit()
  * quickly and easily. Of course, sourceinfo has a vtable that can be manipulated,
  * but this is quicker and easier...                                  -- nenolod
  */
-static void gs_command_report(sourceinfo_t *si, char *fmt, ...)
+static void gs_command_report(sourceinfo_t *si, const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
@@ -236,7 +236,7 @@ static void command_wod(sourceinfo_t *si, int parc, char *parv[])
 	}
 }
 
-static char *df_dice_table[3] = { "[-]", "[ ]", "[+]" };
+static const char *df_dice_table[3] = { "[-]", "[ ]", "[+]" };
 
 static void command_df(sourceinfo_t *si, int parc, char *parv[])
 {

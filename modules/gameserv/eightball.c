@@ -55,7 +55,7 @@ void _moddeinit()
  * quickly and easily. Of course, sourceinfo has a vtable that can be manipulated,
  * but this is quicker and easier...                                  -- nenolod
  */
-static void gs_command_report(sourceinfo_t *si, char *fmt, ...)
+static void gs_command_report(sourceinfo_t *si, const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
@@ -72,7 +72,7 @@ static void gs_command_report(sourceinfo_t *si, char *fmt, ...)
 
 static void command_eightball(sourceinfo_t *si, int parc, char *parv[])
 {
-	static char *eightball_responses[28] = {
+	static const char *eightball_responses[28] = {
 		N_("Absolutely yes!"),
 		N_("Prospect looks hopeful."),
 		N_("I'd like to think so."),

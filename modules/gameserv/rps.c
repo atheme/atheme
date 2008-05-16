@@ -45,7 +45,7 @@ void _moddeinit()
  * quickly and easily. Of course, sourceinfo has a vtable that can be manipulated,
  * but this is quicker and easier...                                  -- nenolod
  */
-static void gs_command_report(sourceinfo_t *si, char *fmt, ...)
+static void gs_command_report(sourceinfo_t *si, const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
@@ -62,7 +62,7 @@ static void gs_command_report(sourceinfo_t *si, char *fmt, ...)
 
 static void command_rps(sourceinfo_t *si, int parc, char *parv[])
 {
-	static char *rps_responses[3] = {
+	static const char *rps_responses[3] = {
 		N_("Rock"),
 		N_("Paper"),
 		N_("Scissors")
