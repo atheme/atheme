@@ -22,6 +22,7 @@
  */
 
 #include "atheme.h"
+#include "linker.h"
 
 #include <dlfcn.h>
 

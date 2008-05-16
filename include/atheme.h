@@ -25,7 +25,6 @@
 #include "balloc.h"
 #include "connection.h"
 #include "hook.h"
-#include "linker.h"
 #include "atheme_string.h"
 #include "atheme_memory.h"
 #include "table.h"
