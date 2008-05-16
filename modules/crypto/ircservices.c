@@ -70,9 +70,12 @@ static int myencrypt(const char *src, int len, char *dest, int size)
 	sprintf(dest + 13 + 2 * i, "%02x", 255 & dest2[i]);
     return 0;
 
-#endif
+#else
 
     return -1;                  /* unknown encryption algorithm */
+
+#endif
+
 }
 
 #if 0 /* unused */
