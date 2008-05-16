@@ -85,10 +85,7 @@ dnl this is broken right now
 AC_CHECK_FUNC(poll, SOCKET_ENGINE="poll",)
 
 POSIX_CRYPTC=""
-AC_CHECK_LIB(crypt, crypt, [
-	POSIX_CRYPTC="posix.c"
-	LIBS="$LIBS -lcrypt"
-])
+AC_SEARCH_LIBS(crypt, crypt, [POSIX_CRYPTC="posix.c"])
 
 AC_SUBST(SOCKET_ENGINE)
 AC_SUBST(POSIX_CRYPTC)
