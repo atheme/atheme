@@ -127,7 +127,10 @@ static char *ircservices_crypt_string(char *key, char *salt)
 		if (check_password(key, salt))
 			return salt;
 		else
-			return "";
+		{
+			output[0] = '\0';
+			return output;
+		}
 	}
 }
 
