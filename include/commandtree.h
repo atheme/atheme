@@ -20,16 +20,6 @@ struct commandentry_ {
 	void (*cmd)(sourceinfo_t *, const int parc, char *parv[]);
 };
 
-/* struct for help command hash table */
-struct help_command_
-{
-  char *name;
-  const char *access;
-  char *file;
-  void (*func)(sourceinfo_t *si);
-};
-typedef struct help_command_ helpentry_t;
-
 /* commandtree.c */
 E void command_add(command_t *cmd, list_t *commandtree);
 E void command_add_many(command_t **cmd, list_t *commandtree);

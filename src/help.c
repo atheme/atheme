@@ -23,6 +23,16 @@
 
 #include "atheme.h"
 
+/* struct for help command hash table */
+struct help_command_
+{
+  char *name;
+  const char *access;
+  char *file;
+  void (*func)(sourceinfo_t *si);
+};
+typedef struct help_command_ helpentry_t;
+
 static helpentry_t *help_cmd_find(sourceinfo_t *si, const char *cmd, list_t *list)
 {
 	node_t *n;
