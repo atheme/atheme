@@ -545,7 +545,7 @@ void handle_topic_from(sourceinfo_t *si, channel_t *c, char *setter, time_t ts, 
 	}
 }
 
-void handle_topic(channel_t *c, char *setter, time_t ts, char *topic)
+void handle_topic(channel_t *c, const char *setter, time_t ts, const char *topic)
 {
 	char newsetter[HOSTLEN], *p;
 

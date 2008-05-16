@@ -25,7 +25,7 @@
 #include "template.h"
 
 /* name1=value1 name2=value2 name3=value3... */
-char *getitem(char *str, char *name)
+const char *getitem(const char *str, const char *name)
 {
 	char *p;
 	static char result[300];
@@ -53,10 +53,10 @@ char *getitem(char *str, char *name)
 	}
 }
 
-unsigned int get_template_flags(mychan_t *mc, char *name)
+unsigned int get_template_flags(mychan_t *mc, const char *name)
 {
 	metadata_t *md;
-	char *d;
+	const char *d;
 
 	if (mc != NULL)
 	{

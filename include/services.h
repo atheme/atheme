@@ -167,7 +167,7 @@ E void wallops(const char *, ...) PRINTFLIKE(1, 2);
 E void verbose_wallops(const char *, ...) PRINTFLIKE(1, 2);
 
 /* ptasks.c */
-E void handle_topic(channel_t *, char *, time_t, char *);
+E void handle_topic(channel_t *, const char *, time_t, const char *);
 E int floodcheck(user_t *, user_t *);
 
 /* ctcp-common.c */

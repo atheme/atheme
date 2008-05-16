@@ -46,7 +46,7 @@ static void cs_cmd_clear_bans(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc = mychan_find(parv[0]);
 	chanban_t *cb;
 	node_t *n, *tn;
-	char *item = parv[1], *p;
+	const char *item = parv[1], *p;
 	int hits;
 
 	if (item == NULL)

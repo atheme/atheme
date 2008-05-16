@@ -10,8 +10,8 @@
 #ifndef TEMPLATE_H
 #define TEMPLATE_H
 
-E char *getitem(char *str, char *name);
-E unsigned int get_template_flags(mychan_t *mc, char *name);
+E const char *getitem(const char *str, const char *name);
+E unsigned int get_template_flags(mychan_t *mc, const char *name);
 
 #endif /* TEMPLATE_H */
 

@@ -293,8 +293,8 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	if (has_priv(si, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, METADATA_CHANNEL, "private:mark:setter")))
 	{
-		char *setter = md->value;
-		char *reason;
+		const char *setter = md->value;
+		const char *reason;
 		time_t ts;
 
 		md = metadata_find(mc, METADATA_CHANNEL, "private:mark:reason");
@@ -314,8 +314,8 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	if (has_priv(si, PRIV_CHAN_AUSPEX) && (md = metadata_find(mc, METADATA_CHANNEL, "private:close:closer")))
 	{
-		char *setter = md->value;
-		char *reason;
+		const char *setter = md->value;
+		const char *reason;
 		time_t ts;
 
 		md = metadata_find(mc, METADATA_CHANNEL, "private:close:reason");
