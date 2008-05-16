@@ -296,7 +296,7 @@ void reintroduce_user(user_t *u)
 	}
 }
 
-void verbose(mychan_t *mychan, char *fmt, ...)
+void verbose(mychan_t *mychan, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -314,7 +314,7 @@ void verbose(mychan_t *mychan, char *fmt, ...)
 		wallchops(chansvs.me->me, mychan->chan, buf);
 }
 
-void snoop(char *fmt, ...)
+void snoop(const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -405,7 +405,7 @@ void handle_burstlogin(user_t *u, char *login)
 }
 
 /* this could be done with more finesse, but hey! */
-void notice(char *from, char *to, char *fmt, ...)
+void notice(const char *from, const char *to, const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
@@ -617,7 +617,7 @@ const char *get_storage_oper_name(sourceinfo_t *si)
 	return result;
 }
 
-void wallops(char *fmt, ...)
+void wallops(const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];
@@ -635,7 +635,7 @@ void wallops(char *fmt, ...)
 		slog(LG_ERROR, "wallops(): unable to send: %s", buf);
 }
 
-void verbose_wallops(char *fmt, ...)
+void verbose_wallops(const char *fmt, ...)
 {
 	va_list args;
 	char buf[BUFSIZE];

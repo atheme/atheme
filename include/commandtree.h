@@ -37,15 +37,15 @@ E void command_delete(command_t *cmd, list_t *commandtree);
 E void command_delete_many(command_t **cmd, list_t *commandtree);
 E command_t *command_find(list_t *commandtree, const char *command);
 E void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char *parv[]);
-E void command_exec_split(service_t *svs, sourceinfo_t *si, char *cmd, char *text, list_t *commandtree);
+E void command_exec_split(service_t *svs, sourceinfo_t *si, const char *cmd, char *text, list_t *commandtree);
 E void command_help(sourceinfo_t *si, list_t *commandtree);
-E void command_help_short(sourceinfo_t *si, list_t *commandtree, char *maincmds);
+E void command_help_short(sourceinfo_t *si, list_t *commandtree, const char *maincmds);
 
 /* help.c */
-E void help_display(sourceinfo_t *si, char *command, list_t *list);
-E void help_addentry(list_t *list, char *topic, char *fname,
+E void help_display(sourceinfo_t *si, const char *command, list_t *list);
+E void help_addentry(list_t *list, const char *topic, const char *fname,
 	void (*func)(sourceinfo_t *si));
-E void help_delentry(list_t *list, char *name);
+E void help_delentry(list_t *list, const char *name);
 
 #endif
 

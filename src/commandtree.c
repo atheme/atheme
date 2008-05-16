@@ -127,7 +127,7 @@ void command_exec(service_t *svs, sourceinfo_t *si, command_t *c, int parc, char
 	/*snoop(_("DENIED CMD: \2%s\2 used %s %s"), origin, svs->name, cmd);*/
 }
 
-void command_exec_split(service_t *svs, sourceinfo_t *si, char *cmd, char *text, list_t *commandtree)
+void command_exec_split(service_t *svs, sourceinfo_t *si, const char *cmd, char *text, list_t *commandtree)
 {
 	int parc, i;
 	char *parv[20];
@@ -214,7 +214,7 @@ static boolean_t string_in_list(const char *str, const char *name)
  * outputs -
  *     A list of available commands.
  */
-void command_help_short(sourceinfo_t *si, list_t *commandtree, char *maincmds)
+void command_help_short(sourceinfo_t *si, list_t *commandtree, const char *maincmds)
 {
 	node_t *n;
 	unsigned int l, lv;

@@ -23,7 +23,7 @@
 
 #include "atheme.h"
 
-static helpentry_t *help_cmd_find(sourceinfo_t *si, char *cmd, list_t *list)
+static helpentry_t *help_cmd_find(sourceinfo_t *si, const char *cmd, list_t *list)
 {
 	node_t *n;
 	helpentry_t *c;
@@ -76,7 +76,7 @@ static boolean_t evaluate_condition(sourceinfo_t *si, const char *s)
 		return FALSE;
 }
 
-void help_display(sourceinfo_t *si, char *command, list_t *list)
+void help_display(sourceinfo_t *si, const char *command, list_t *list)
 {
 	helpentry_t *c;
 	FILE *help_file;
@@ -153,7 +153,7 @@ void help_display(sourceinfo_t *si, char *command, list_t *list)
 	}
 }
 
-void help_addentry(list_t *list, char *topic, char *fname,
+void help_addentry(list_t *list, const char *topic, const char *fname,
 	void (*func)(sourceinfo_t *si))
 {
 	helpentry_t *he = smalloc(sizeof(helpentry_t));
@@ -186,7 +186,7 @@ void help_addentry(list_t *list, char *topic, char *fname,
 	node_add(he, n, list);
 }
 
-void help_delentry(list_t *list, char *name)
+void help_delentry(list_t *list, const char *name)
 {
 	node_t *n, *tn;
 	helpentry_t *he;
