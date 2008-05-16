@@ -183,7 +183,7 @@ AC_HELP_STRING([--enable-large-net],[ Enable large network support.]),
 AC_MSG_RESULT($LARGENET)
 
 balloc="no"
-AC_MSG_CHECKING(if you want to disable the block allocator)
+AC_MSG_CHECKING(if you want to enable the block allocator)
 AC_ARG_ENABLE(balloc,
 AC_HELP_STRING([--disable-balloc],[Disable the block allocator.]),
 [balloc=$enableval], [balloc=yes])
