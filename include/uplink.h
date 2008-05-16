@@ -36,9 +36,9 @@ E list_t uplinks;
 E uplink_t *curr_uplink;
 
 E void init_uplinks(void);
-E uplink_t *uplink_add(char *name, char *host, char *password, char *vhost, int port);
+E uplink_t *uplink_add(const char *name, const char *host, const char *password, const char *vhost, int port);
 E void uplink_delete(uplink_t *u);
-E uplink_t *uplink_find(char *name);
+E uplink_t *uplink_find(const char *name);
 E void uplink_connect(void);
 
 /* packet.c */
@@ -55,7 +55,7 @@ E void irc_parse(char *line);
 E void p10_parse(char *line);
 
 /* send.c */
-E int sts(char *fmt, ...) PRINTFLIKE(1, 2);
+E int sts(const char *fmt, ...) PRINTFLIKE(1, 2);
 E void reconn(void *arg);
 E void io_loop(void);
 

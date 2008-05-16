@@ -48,7 +48,7 @@ void pcommand_init(void)
 	pcommands = mowgli_patricia_create(noopcanon);
 }
 
-void pcommand_add(char *token, void (*handler) (sourceinfo_t *si, int parc, char *parv[]), int minparc, int sourcetype)
+void pcommand_add(const char *token, void (*handler) (sourceinfo_t *si, int parc, char *parv[]), int minparc, int sourcetype)
 {
 	pcommand_t *pcmd;
 
@@ -67,7 +67,7 @@ void pcommand_add(char *token, void (*handler) (sourceinfo_t *si, int parc, char
 	mowgli_patricia_add(pcommands, pcmd->token, pcmd);
 }
 
-void pcommand_delete(char *token)
+void pcommand_delete(const char *token)
 {
 	pcommand_t *pcmd;
 
@@ -84,7 +84,7 @@ void pcommand_delete(char *token)
 	BlockHeapFree(pcommand_heap, pcmd);
 }
 
-pcommand_t *pcommand_find(char *token)
+pcommand_t *pcommand_find(const char *token)
 {
 	return mowgli_patricia_retrieve(pcommands, token);
 }

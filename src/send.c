@@ -26,7 +26,7 @@
 #include "datastream.h"
 
 /* send a line to the server, append the \r\n */
-int sts(char *fmt, ...)
+int sts(const char *fmt, ...)
 {
 	va_list ap;
 	char buf[513];

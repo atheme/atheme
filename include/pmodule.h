@@ -35,11 +35,11 @@ E mowgli_patricia_t *pcommands;
 E boolean_t pmodule_loaded;
 
 E void pcommand_init(void);
-E void pcommand_add(char *token,
+E void pcommand_add(const char *token,
 	void (*handler)(sourceinfo_t *si, int parc, char *parv[]),
 	int minparc, int sourcetype);
-E void pcommand_delete(char *token);
-E pcommand_t *pcommand_find(char *token);
+E void pcommand_delete(const char *token);
+E pcommand_t *pcommand_find(const char *token);
 
 /* ptasks.c */
 E void handle_version(user_t *);

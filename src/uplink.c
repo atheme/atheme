@@ -42,7 +42,7 @@ void init_uplinks(void)
 	}
 }
 
-uplink_t *uplink_add(char *name, char *host, char *password, char *vhost, int port)
+uplink_t *uplink_add(const char *name, const char *host, const char *password, const char *vhost, int port)
 {
 	uplink_t *u;
 	node_t *n;
@@ -102,7 +102,7 @@ void uplink_delete(uplink_t * u)
 	cnt.uplink--;
 }
 
-uplink_t *uplink_find(char *name)
+uplink_t *uplink_find(const char *name)
 {
 	node_t *n;
 
