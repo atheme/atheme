@@ -341,7 +341,7 @@ static void check_enforce(void *vdata)
 			node_add_before(timeout, &timeout->node, &enforce_list, n->next);
 	}
 
-	notice(nicksvs.nick, hdata->u->nick, "You have %d seconds to identify to your nickname before it is changed.", timeout->timelimit - CURRTIME);
+	notice(nicksvs.nick, hdata->u->nick, "You have %d seconds to identify to your nickname before it is changed.", (int)(timeout->timelimit - CURRTIME));
 }
 
 static int idcheck_foreach_cb(const char *key, void *data, void *privdata)

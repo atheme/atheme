@@ -202,9 +202,9 @@ void myuser_delete(myuser_t *mu)
 		if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1 && (successor = mychan_pick_successor(mc)) != NULL)
 		{
 			snoop(_("SUCCESSION: \2%s\2 -> \2%s\2 from \2%s\2"), successor->name, mc->name, mu->name);
-			slog(LG_REGISTER, "myuser_delete(): giving channel %s to %s (unused %ds, founder %s, chanacs %d)",
+			slog(LG_REGISTER, "myuser_delete(): giving channel %s to %s (unused %lds, founder %s, chanacs %d)",
 					mc->name, successor->name,
-					CURRTIME - mc->used,
+					(long)(CURRTIME - mc->used),
 					mu->name,
 					LIST_LENGTH(&mc->chanacs));
 			if (chansvs.me != NULL)
@@ -219,8 +219,8 @@ void myuser_delete(myuser_t *mu)
 		else if (ca->level & CA_FOUNDER && mychan_num_founders(mc) == 1)
 		{
 			snoop(_("DELETE: \2%s\2 from \2%s\2"), mc->name, mu->name);
-			slog(LG_REGISTER, "myuser_delete(): deleting channel %s (unused %ds, founder %s, chanacs %d)",
-					mc->name, CURRTIME - mc->used,
+			slog(LG_REGISTER, "myuser_delete(): deleting channel %s (unused %lds, founder %s, chanacs %d)",
+					mc->name, (long)(CURRTIME - mc->used),
 					mu->name,
 					LIST_LENGTH(&mc->chanacs));
 
@@ -1779,8 +1779,8 @@ void expire_check(void *arg)
 			}
 
 			snoop(_("EXPIRE: \2%s\2 from \2%s\2"), mn->nick, mn->owner->name);
-			slog(LG_REGISTER, "expire_check(): expiring nick %s (unused %ds, account %s)",
-					mn->nick, CURRTIME - mn->lastseen,
+			slog(LG_REGISTER, "expire_check(): expiring nick %s (unused %lds, account %s)",
+					mn->nick, (long)(CURRTIME - mn->lastseen),
 					mn->owner->name);
 			object_unref(mn);
 		}
@@ -1809,8 +1809,8 @@ void expire_check(void *arg)
 				continue;
 
 			snoop(_("EXPIRE: \2%s\2 from \2%s\2"), mc->name, mychan_founder_names(mc));
-			slog(LG_REGISTER, "expire_check(): expiring channel %s (unused %ds, founder %s, chanacs %d)",
-					mc->name, CURRTIME - mc->used,
+			slog(LG_REGISTER, "expire_check(): expiring channel %s (unused %lds, founder %s, chanacs %d)",
+					mc->name, (long)(CURRTIME - mc->used),
 					mychan_founder_names(mc),
 					LIST_LENGTH(&mc->chanacs));
 

@@ -140,7 +140,7 @@ void handle_stats(user_t *u, char req)
 		  for (i = 0; i < MAX_EVENTS; i++)
 		  {
 			  if (event_table[i].active)
-				  numeric_sts(me.name, 249, u->nick, "E :%-28s %4d seconds (%d)", event_table[i].name, event_table[i].when - CURRTIME, event_table[i].frequency);
+				  numeric_sts(me.name, 249, u->nick, "E :%-28s %4ld seconds (%ld)", event_table[i].name, (long)(event_table[i].when - CURRTIME), (long)event_table[i].frequency);
 		  }
 
 		  break;

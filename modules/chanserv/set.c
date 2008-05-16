@@ -545,7 +545,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 				  }
 				  else if (strlen(arg) >= KEYLEN)
 				  {
-					  command_fail(si, fault_badparams, _("MLOCK key is too long (%d > %d)."), strlen(arg), KEYLEN - 1);
+					  command_fail(si, fault_badparams, _("MLOCK key is too long (%d > %d)."), (int)strlen(arg), KEYLEN - 1);
 					  return;
 				  }
 				  else if (strchr(arg, ',') || arg[0] == ':')

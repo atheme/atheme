@@ -162,7 +162,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		tm2 = *localtime(&mn->lastseen);
 		strftime(lastlogin, sizeof(lastlogin) -1, "%b %d %H:%M:%S %Y", &tm2);
 		if (hide_info)
-			command_success_nodata(si, _("Last seen  : (about %d weeks ago)"), (CURRTIME - mn->lastseen) / 604800);
+			command_success_nodata(si, _("Last seen  : (about %d weeks ago)"), (int)((CURRTIME - mn->lastseen) / 604800));
 		else
 			command_success_nodata(si, _("Last seen  : %s (%s ago)"), lastlogin, time_ago(mn->lastseen));
 	}
@@ -177,14 +177,14 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		if (mn == NULL)
 		{
 			if (hide_info)
-				command_success_nodata(si, _("Last seen  : (about %d weeks ago)"), (CURRTIME - mu->lastlogin) / 604800);
+				command_success_nodata(si, _("Last seen  : (about %d weeks ago)"), (int)((CURRTIME - mu->lastlogin) / 604800));
 			else
 				command_success_nodata(si, _("Last seen  : %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
 		}
 		else if (mn->lastseen != mu->lastlogin)
 		{
 			if (hide_info)
-				command_success_nodata(si, _("User seen  : (about %d weeks ago)"), (CURRTIME - mu->lastlogin) / 604800);
+				command_success_nodata(si, _("User seen  : (about %d weeks ago)"), (int)((CURRTIME - mu->lastlogin) / 604800));
 			else
 				command_success_nodata(si, _("User seen  : %s (%s ago)"), lastlogin, time_ago(mu->lastlogin));
 		}
