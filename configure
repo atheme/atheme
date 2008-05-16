@@ -7096,8 +7096,8 @@ fi
 echo "${ECHO_T}$LARGENET" >&6; }
 
 balloc="no"
-{ echo "$as_me:$LINENO: checking if you want to disable the block allocator" >&5
-echo $ECHO_N "checking if you want to disable the block allocator... $ECHO_C" >&6; }
+{ echo "$as_me:$LINENO: checking if you want to enable the block allocator" >&5
+echo $ECHO_N "checking if you want to enable the block allocator... $ECHO_C" >&6; }
 # Check whether --enable-balloc was given.
 if test "${enable_balloc+set}" = set; then
   enableval=$enable_balloc; balloc=$enableval
@@ -9774,7 +9774,7 @@ echo "${ECHO_T}no" >&6; }
 echo $ECHO_N "checking GCC flag(s) -Wdisabled-optimization... $ECHO_C" >&6; }
  if test "${GCC-no}" = yes
  then
-  if test "${atheme_cv_c_gcc_w_format+set}" = set; then
+  if test "${atheme_cv_c_gcc_w_disabled_optimization+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
 
@@ -9818,24 +9818,24 @@ eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
 	 test -z "$ac_c_werror_flag" ||
 	 test ! -s conftest.err
        } && test -s conftest.$ac_objext; then
-  atheme_cv_c_gcc_w_format=yes
+  atheme_cv_c_gcc_w_disabled_optimization=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-	atheme_cv_c_gcc_w_format=no
+	atheme_cv_c_gcc_w_disabled_optimization=no
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
    CFLAGS="${oldcflags}"
 fi
 
-  if test "x$atheme_cv_c_gcc_w_format" = xyes; then
+  if test "x$atheme_cv_c_gcc_w_disabled_optimization" = xyes; then
    CWARNS="${CWARNS}-Wdisabled-optimization "
    { echo "$as_me:$LINENO: result: ok" >&5
 echo "${ECHO_T}ok" >&6; }
   else
-   atheme_cv_c_gcc_w_format=''
+   atheme_cv_c_gcc_w_disabled_optimization=''
    { echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }
   fi
