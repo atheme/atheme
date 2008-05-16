@@ -76,14 +76,14 @@ E list_t soperlist;
 
 E void init_privs(void);
 
-E operclass_t *operclass_add(char *name, char *privs);
+E operclass_t *operclass_add(const char *name, const char *privs);
 E void operclass_delete(operclass_t *operclass);
-E operclass_t *operclass_find(char *name);
+E operclass_t *operclass_find(const char *name);
 
-E soper_t *soper_add(char *name, char *classname, int flags, char *password);
+E soper_t *soper_add(const char *name, const char *classname, int flags, const char *password);
 E void soper_delete(soper_t *soper);
 E soper_t *soper_find(myuser_t *myuser);
-E soper_t *soper_find_named(char *name);
+E soper_t *soper_find_named(const char *name);
 
 E boolean_t is_soper(myuser_t *myuser);
 E boolean_t is_conf_soper(myuser_t *myuser);

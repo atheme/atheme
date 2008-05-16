@@ -40,8 +40,8 @@ void _moddeinit()
 
 struct
 {
-	char *priv;
-	char *npriv, *cpriv, *gpriv, *opriv;
+	const char *priv;
+	const char *npriv, *cpriv, *gpriv, *opriv;
 } privnames[] =
 {
 	/* NickServ/UserServ */
@@ -81,8 +81,8 @@ static void os_cmd_specs(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *tu = NULL;
 	operclass_t *cl = NULL;
-	char *targettype = parv[0];
-	char *target = parv[1];
+	const char *targettype = parv[0];
+	const char *target = parv[1];
 	char nprivs[BUFSIZE], cprivs[BUFSIZE], gprivs[BUFSIZE], oprivs[BUFSIZE];
 	int i;
 

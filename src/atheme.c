@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
 	char buf[32];
 	int i, pid, r;
 	FILE *pid_file;
-	char *pidfilename = RUNDIR "/atheme.pid";
+	const char *pidfilename = RUNDIR "/atheme.pid";
 #ifdef HAVE_GETRLIMIT
 	struct rlimit rlim;
 #endif

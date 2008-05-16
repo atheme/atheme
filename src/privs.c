@@ -44,7 +44,7 @@ void init_privs(void)
 /*************************
  * O P E R C L A S S E S *
  *************************/
-operclass_t *operclass_add(char *name, char *privs)
+operclass_t *operclass_add(const char *name, const char *privs)
 {
 	operclass_t *operclass;
 	node_t *n = node_create();
@@ -93,7 +93,7 @@ void operclass_delete(operclass_t *operclass)
 	cnt.operclass--;
 }
 
-operclass_t *operclass_find(char *name)
+operclass_t *operclass_find(const char *name)
 {
 	operclass_t *operclass;
 	node_t *n;
@@ -113,7 +113,7 @@ operclass_t *operclass_find(char *name)
  * S O P E R S *
  ***************/
 
-soper_t *soper_add(char *name, char *classname, int flags, char *password)
+soper_t *soper_add(const char *name, const char *classname, int flags, const char *password)
 {
 	soper_t *soper;
 	myuser_t *mu = myuser_find(name);
@@ -214,7 +214,7 @@ soper_t *soper_find(myuser_t *myuser)
 	return NULL;
 }
 
-soper_t *soper_find_named(char *name)
+soper_t *soper_find_named(const char *name)
 {
 	soper_t *soper;
 	node_t *n;
