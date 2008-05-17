@@ -46,6 +46,7 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc;
 	char *name = parv[0];
 	char str[21];
+	hook_channel_register_check_t hdatac;
 	hook_channel_req_t hdata;
 
 	if (!name)
@@ -105,6 +106,14 @@ static void cs_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 		command_fail(si, fault_noprivs, _("You must be a channel operator in \2%s\2 in order to register it."), name);
 		return;
 	}
+
+	hdatac.si = si;
+	hdatac.name = name;
+	hdatac.chan = c;
+	hdatac.approved = 0;
+	hook_call_event("channel_can_register", &hdatac);
+	if (hdatac.approved != 0)
+		return;
 
 	if ((myuser_num_channels(si->smu) >= me.maxchans) && !has_priv(si, PRIV_REG_NOLIMIT))
 	{

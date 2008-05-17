@@ -28,6 +28,7 @@ user_deoper        user_t *
 user_oper          user_t *
 (services)
 channel_akick_add  chanacs_t *
+channel_can_register hook_channel_register_check_t *
 channel_drop       mychan_t *
 channel_info       hook_channel_req_t *
 channel_message    hook_cmessage_data_t *
