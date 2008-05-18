@@ -1,3 +1,85 @@
+Atheme Services 3.1 Release Notes
+=================================
+[MERGED] indicates items merged to the 3.0 branch
+ircd protocol
+- Fix a crash that could happen with ircd bugs or nick collisions with
+  services. [MERGED]
+- Fix host changes in hyperion. [MERGED]
+- Do not check the server's password in the hyperion protocol module.
+- Do not allow spoofs ending in a slash in the hyperion protocol module.
+- Allow nickname enforcers which are clients.
+- Fix ping replies in P10.
+- Add support for InspIRCd 1.2.
+- Some ircds dislike colons in kline reasons, so don't use them for flood
+  klines.
+- When restoring an akill, send it to all servers on all protocols.
+  Formerly, on some protocols it was only sent to the server the banned
+  user was on.
+nickserv
+- Comment out nickserv/subscribe from the example configuration, because
+  it is experimental at this time. [MERGED]
+- Fix a possible crash in nickserv release (nickserv/enforce module). [MERGED]
+- Fix RETURN only accepting relatively short email addresses.
+- Allow disabling the possibly slow maxusers (accounts/email) check by
+  putting 0.
+- Show /ns vhost in /ns info. Appears to user self and user:auspex opers.
+- Adjust times so nicks cannot appear created before their account or used
+  after their account was last seen.
+- Add user_verify_register hook, called when a registration is verified.
+  This is after a successful VERIFY if email verification is enabled, after
+  a successful REGISTER if not.
+- Make gen_vhostonreg contrib module only grant vhost once it's verified.
+- Add clearer log messages for duplicate accounts/nicks/channels in atheme.db.
+- Make INFO default to the user's nick (owned nicks) or current account (no
+  owned nicks).
+- Also introduce an enforcer when FNCing a user via the RELEASE command.
+- Allow ignoring enforce on nicks unused for too long (nickserv::enforce_expire
+  config option). This does not affect held accounts.
+- Add nick_can_register hook and use it to block GROUP on guest nicks also.
+  This hook is called on both REGISTER and GROUP (if nickname ownership is
+  enabled).
+- In SENDPASS, require the new keyword FORCE to override marks and the new
+  keyword CLEAR to clear keys that were previously sent but not yet used.
+  If these keywords are needed, the oper will be warned.
+- Do not allow SENDPASS on unverified accounts.
+- Make the enforce delay settable in the config file.
+chanserv
+- Fix removing non-applicable flags (e.g. +hH) from host channel access.
+  [MERGED]
+- Fix ChanServ not deopping in some cases with guard on and changets off.
+  [MERGED]
+- Fix some ugly output in chanserv/unban_self. [MERGED]
+- Respect NOOP flag in cs_sync contrib module.
+- Allow calling RECOVER via xmlrpc.
+- Add channel_can_register hook to allow modules to block channel registrations.
+memoserv
+gameserv
+oper
+- Fix a possible crash in /stats B. [MERGED]
+- Fix slight damage to news items when reloading in contrib/os_logonnews.
+  [MERGED]
+xmlrpc
+- Some improvements to buffer and character set handling.
+code
+- Disable object_t refcount.
+- Fix various format string types, add many const keywords, hide a few
+  structs that should be private.
+other
+- Improve performance with large databases by changing the mowgli_heap
+  memory allocator. [partially MERGED]
+- Improve performance by changing the dictionary to a patricia algorithm.
+- Decrease memory usage for large networks.
+- Add LOCALEDIR to Makefile.in files, necessary for gettext. [MERGED]
+- Some improvements to the hybserv/theia conversion tool.
+- Change maximum nick length from 30 to 31.
+- Remove redundant expire_check and db_save in several places. This makes
+  restart, shutdown and rehash faster without threatening data integrity.
+- Add Russian help files from Kein/darkwire. Using these currently requires
+  manual copy/rename operations.
+- Add Russian translation from Kein/darkwire and fix the build system so it
+  is automatically installed if gettext is enabled.
+- Allow for crypt() in libc as well as libcrypt (MacOS X).
+
 Atheme Services 3.0.3 Release Notes
 ===================================
 - Fix use of chanserv/{owner, protect} modules with InspIRCd, AGAIN.
