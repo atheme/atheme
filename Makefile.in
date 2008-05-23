@@ -67,14 +67,14 @@ clean:
 	fi
 
 distclean:
-	${RM} -f Makefile *~ *.orig core atheme.core
-	${RM} -f config.status config.cache config.log
 	cd include; ${RM} -f sysconf.h *~ *.orig; cd ..
 	@for i in $(CLEANDIRS); do \
 		echo "distclean ==> $$i"; \
 		cd $$i; \
 		${MAKE} distclean; cd ..; \
 	done
+	${RM} -f Makefile *~ *.orig core atheme.core
+	${RM} -f config.status config.cache config.log
 
 maintainer-clean: distclean
 	${RM} -rf autom4te.cache
