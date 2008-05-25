@@ -23,6 +23,8 @@
 
 #include "atheme.h"
 
+#define MAX_INCLUDE_NESTING 16
+
 static void config_error(const char *format, ...);
 static config_file_t *config_parse(const char *filename, char *confdata);
 static void config_entry_free(config_entry_t *ceptr);
@@ -356,6 +358,13 @@ config_file_t *config_load(const char *filename)
 	int ret;
 	char *buf = NULL;
 	config_file_t *cfptr;
+	static int nestcnt;
+
+	if (nestcnt > MAX_INCLUDE_NESTING)
+	{
+		config_error("Includes nested too deep \"%s\"\n", filename);
+		return NULL;
+	}
 
 	fd = fopen(filename, "rb");
 	if (!fd)
@@ -391,7 +400,9 @@ config_file_t *config_load(const char *filename)
 	}
 	buf[ret] = '\0';
 	fclose(fd);
+	nestcnt++;
 	cfptr = config_parse(filename, buf);
+	nestcnt--;
 	free(buf);
 	return cfptr;
 }
