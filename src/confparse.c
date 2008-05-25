@@ -387,8 +387,9 @@ config_file_t *config_load(const char *filename)
 		fclose(fd);
 		return NULL;
 	}
-	if (!sb.st_size)
+	if (!S_ISREG(sb.st_mode))
 	{
+		config_error("Not a regular file: \"%s\"\n", filename);
 		fclose(fd);
 		return NULL;
 	}
@@ -399,14 +400,19 @@ config_file_t *config_load(const char *filename)
 		fclose(fd);
 		return NULL;
 	}
-	ret = fread(buf, 1, sb.st_size, fd);
-	if (ret != sb.st_size)
+	if (sb.st_size)
 	{
-		config_error("Error reading \"%s\": %s\n", filename, ret == -1 ? strerror(errno) : strerror(EFAULT));
-		free(buf);
-		fclose(fd);
-		return NULL;
+		ret = fread(buf, 1, sb.st_size, fd);
+		if (ret != sb.st_size)
+		{
+			config_error("Error reading \"%s\": %s\n", filename, ret == -1 ? strerror(errno) : strerror(EFAULT));
+			free(buf);
+			fclose(fd);
+			return NULL;
+		}
 	}
+	else
+		ret = 0;
 	buf[ret] = '\0';
 	fclose(fd);
 	nestcnt++;
