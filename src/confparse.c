@@ -80,7 +80,7 @@ static config_file_t *config_parse(const char *filename, char *confdata)
 		  case ';':
 			  if (!curce)
 			  {
-				  config_error("%s:%i Ignoring extra semicolon\n", filename, linenumber);
+				  config_error("%s:%i: Ignoring extra semicolon\n", filename, linenumber);
 				  break;
 			  }
 			  if (!cursection && !strcmp(curce->ce_varname, "include"))
@@ -89,7 +89,7 @@ static config_file_t *config_parse(const char *filename, char *confdata)
 
 				  if (!curce->ce_vardata)
 				  {
-					  config_error("%s:%i Ignoring \"include\": No filename given\n", filename, linenumber);
+					  config_error("%s:%i: Ignoring \"include\": No filename given\n", filename, linenumber);
 					  config_entry_free(curce);
 					  curce = NULL;
 					  continue;
@@ -186,7 +186,7 @@ static config_file_t *config_parse(const char *filename, char *confdata)
 				  }
 				  if (!*ptr)
 				  {
-					  config_error("%s:%i Comment on this line does not end\n", filename, commentstart);
+					  config_error("%s:%i: Comment on this line does not end\n", filename, commentstart);
 					  config_entry_free(curce);
 					  config_free(curcf);
 					  return NULL;
@@ -255,7 +255,7 @@ static config_file_t *config_parse(const char *filename, char *confdata)
 		  default:
 			  if ((*ptr == '*') && (*(ptr + 1) == '/'))
 			  {
-				  config_error("%s:%i Ignoring extra end comment\n", filename, linenumber);
+				  config_error("%s:%i: Ignoring extra end comment\n", filename, linenumber);
 				  ptr++;
 				  break;
 			  }
