@@ -104,6 +104,13 @@ static config_file_t *config_parse(const char *filename, char *confdata)
 					  while (lastcf->cf_next)
 						  lastcf = lastcf->cf_next;
 				  }
+				  else
+				  {
+					  config_error("%s:%i: ... included from here\n", filename, linenumber);
+					  config_entry_free(curce);
+					  config_free(curcf);
+					  return NULL;
+				  }
 				  config_entry_free(curce);
 				  curce = NULL;
 				  continue;
