@@ -263,11 +263,7 @@ boolean_t conf_parse(const char *file)
 
 	cfp = config_load(file);
 	if (cfp == NULL)
-	{
-		slog(LG_ERROR, "conf_parse(): unable to load configuration file: %s", strerror(errno));
-
 		return FALSE;
-	}
 
 	conf_process(cfp);
 	config_free(cfp);
@@ -1887,11 +1883,10 @@ boolean_t conf_rehash(void)
 	slog(LG_INFO, "conf_rehash(): rehashing");
 	runflags |= RF_REHASHING;
 
-	errno = 0;
 	cfp = config_load(config_file);
 	if (cfp == NULL)
 	{
-		slog(LG_ERROR, "conf_rehash(): unable to load configuration file: %s, aborting rehash", strerror(errno));
+		slog(LG_ERROR, "conf_rehash(): unable to load configuration file, aborting rehash");
 		runflags &= ~RF_REHASHING;
 		return FALSE;
 	}
