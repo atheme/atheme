@@ -81,7 +81,7 @@ static config_file_t *config_parse(const char *filename, char *confdata)
 				  config_error("%s:%i Ignoring extra semicolon\n", filename, linenumber);
 				  break;
 			  }
-			  if (!strcmp(curce->ce_varname, "include"))
+			  if (!cursection && !strcmp(curce->ce_varname, "include"))
 			  {
 				  config_file_t *cfptr;
 
