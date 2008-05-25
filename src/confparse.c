@@ -101,6 +101,8 @@ static config_file_t *config_parse(const char *filename, char *confdata)
 				  {
 					  lastcf->cf_next = cfptr;
 					  lastcf = cfptr;
+					  while (lastcf->cf_next)
+						  lastcf = lastcf->cf_next;
 				  }
 				  config_entry_free(curce);
 				  curce = NULL;
