@@ -394,12 +394,6 @@ config_file_t *config_load(const char *filename)
 		return NULL;
 	}
 	buf = (char *)smalloc(sb.st_size + 1);
-	if (buf == NULL)
-	{
-		config_error("Out of memory trying to load \"%s\"\n", filename);
-		fclose(fd);
-		return NULL;
-	}
 	if (sb.st_size)
 	{
 		ret = fread(buf, 1, sb.st_size, fd);
