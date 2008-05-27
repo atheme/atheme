@@ -1724,7 +1724,7 @@ static int expire_myuser_cb(const char *key, void *data, void *unused)
 	if (MU_HOLD & mu->flags)
 		return 0;
 
-	if ((nicksvs.expiry > 0 && CURRTIME - mu->lastlogin >= nicksvs.expiry) ||
+	if ((nicksvs.expiry > 0 && mu->lastlogin < CURRTIME && (unsigned int)(CURRTIME - mu->lastlogin) >= nicksvs.expiry) ||
 			(mu->flags & MU_WAITAUTH && CURRTIME - mu->registered >= 86400))
 	{
 		/* Don't expire accounts with privs on them in atheme.conf,
@@ -1759,8 +1759,8 @@ void expire_check(void *arg)
 
 	MOWGLI_PATRICIA_FOREACH(mn, &state, nicklist)
 	{
-		if (nicksvs.expiry > 0 &&
-				(CURRTIME - mn->lastseen) >= nicksvs.expiry)
+		if (nicksvs.expiry > 0 && mn->lastseen < CURRTIME &&
+				(unsigned int)(CURRTIME - mn->lastseen) >= nicksvs.expiry)
 		{
 			if (MU_HOLD & mn->owner->flags)
 				continue;
@@ -1802,8 +1802,8 @@ void expire_check(void *arg)
 			}
 		}
 
-		if (chansvs.expiry > 0 &&
-				(CURRTIME - mc->used) >= chansvs.expiry)
+		if (chansvs.expiry > 0 && mc->used < CURRTIME &&
+				(unsigned int)(CURRTIME - mc->used) >= chansvs.expiry)
 		{
 			if (MC_HOLD & mc->flags)
 				continue;
