@@ -324,6 +324,9 @@ static void sasl_packet(sasl_session_t *p, char *buf, int len)
 			rc = ASASL_FAIL;
 	}
 
+	/* Some progress has been made, reset timeout. */
+	p->flags &= ~ASASL_MARKED_FOR_DELETION;
+
 	if(rc == ASASL_DONE)
 	{
 		myuser_t *mu = myuser_find(p->username);
