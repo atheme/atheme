@@ -47,21 +47,6 @@ void _moddeinit(void)
 	help_delentry(ns_helptree, "LISTVHOST");
 }
 
-static void do_sethost_all(myuser_t *mu, char *host)
-{
-	node_t *n;
-	user_t *u;
-
-	LIST_FOREACH(n, mu->logins.head)
-	{
-		u = n->data;
-
-		if (!strcmp(u->vhost, host))
-			continue;
-		strlcpy(u->vhost, host, HOSTLEN);
-		sethost_sts(nicksvs.nick, u->nick, u->vhost);
-	}
-}
 
 static void do_sethost(user_t *u, char *host)
 {
@@ -71,7 +56,7 @@ static void do_sethost(user_t *u, char *host)
 	sethost_sts(nicksvs.nick, u->nick, u->vhost);
 }
 
-static void do_restorehost_all(myuser_t *mu)
+static void do_sethost_all(myuser_t *mu, char *host)
 {
 	node_t *n;
 	user_t *u;
@@ -80,10 +65,7 @@ static void do_restorehost_all(myuser_t *mu)
 	{
 		u = n->data;
 
-		if (!strcmp(u->vhost, u->host))
-			continue;
-		strlcpy(u->vhost, u->host, HOSTLEN);
-		sethost_sts(nicksvs.nick, u->nick, u->host);
+		do_sethost(u, host ? host : u->host);
 	}
 }
 
@@ -116,7 +98,7 @@ static void ns_cmd_vhost(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("Deleted vhost for \2%s\2."), mu->name);
 		snoop("VHOST:REMOVE: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
 		logcommand(si, CMDLOG_ADMIN, "VHOST REMOVE %s", mu->name);
-		do_restorehost_all(mu);
+		do_sethost_all(mu, NULL); // restore user vhost from user host
 		return;
 	}
 
