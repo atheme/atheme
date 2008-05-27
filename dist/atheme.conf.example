@@ -1019,7 +1019,7 @@ general {
 	 * Valid values are: hold, neverop, noop, hidemail, nomemo, enforce,
 	 * privmsg, private and none.
 	 */
-	uflags = { none; };
+	uflags = { hidemail; };
 
 	/* (*)cflags
 	 * The default flags to set for channels upon registration.
