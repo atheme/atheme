@@ -357,7 +357,7 @@ while (<CHANDB>) {
 			$athlevel .= 't' if ($hslevel >= $topiclvl);
 			$athlevel .= 'o' if ($hslevel >= $oplvl);
 			$athlevel .= 'R' if ($hslevel >= $clearlvl);
-			$athlevel .= 'f' if ($hslevel >= $accessmodlvl && $hslevel >= $clearlvl);
+			$athlevel .= 'f' if ($hslevel >= $accessmodlvl && ($istheia || $hslevel >= $clearlvl));
 			$athlevel .= 's' if ($hslevel >= $setlvl);
 			$athlevel = 'AivrhtoRfs' if ($nick eq $founder);
 			$athlevel .= 'V' if ($hslevel >= $autovoicelvl);
