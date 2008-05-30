@@ -44,4 +44,6 @@ typedef void (*mowgli_log_cb_t)(const char *);
 
 extern void mowgli_log_real(const char *file, int line, const char *func, const char *buf, ...);
 
+extern void mowgli_log_set_cb(mowgli_log_cb_t callback);
+
 #endif
