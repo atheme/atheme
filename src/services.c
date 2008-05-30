@@ -459,10 +459,10 @@ void change_notify(const char *from, user_t *to, const char *fmt, ...)
 	char buf[BUFSIZE];
 
 	va_start(args, fmt);
-	vsnprintf(buf, BUFSIZE, str, args);
+	vsnprintf(buf, BUFSIZE, fmt, args);
 	va_end(args);
 
-	if (u->myuser != NULL && u->myuser->flags & MU_NODEOPSPAM)
+	if (to->myuser != NULL && to->myuser->flags & MU_NODEOPSPAM)
 		return;
 
 	notice_user_sts(user_find_named(from), to, buf);

@@ -227,7 +227,7 @@ static void _ns_setnochgspam(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (!strcasecmp("OFF", params))
 	{
-		if (!(MU_HIDEMAIL & si->smu->flags))
+		if (!(MU_NODEOPSPAM & si->smu->flags))
 		{
 			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "NOCHGSPAM", si->smu->name);
 			return;
