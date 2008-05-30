@@ -129,7 +129,7 @@ static void cs_cmd_halfop(sourceinfo_t *si, int parc, char *parv[])
 	cu->modes |= ircd->halfops_mode;
 
 	if (si->c == NULL && tu != si->su)
-		notice(chansvs.nick, tu->nick, "You have been halfopped on %s by %s", mc->name, get_source_name(si));
+		change_notify(chansvs.nick, tu, "You have been halfopped on %s by %s", mc->name, get_source_name(si));
 
 	logcommand(si, CMDLOG_SET, "%s HALFOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (!chanuser_find(mc->chan, si->su))
@@ -202,7 +202,7 @@ static void cs_cmd_dehalfop(sourceinfo_t *si, int parc, char *parv[])
 	cu->modes &= ~ircd->halfops_mode;
 
 	if (si->c == NULL && tu != si->su)
-		notice(chansvs.nick, tu->nick, "You have been dehalfopped on %s by %s", mc->name, get_source_name(si));
+		change_notify(chansvs.nick, tu, "You have been dehalfopped on %s by %s", mc->name, get_source_name(si));
 
 	logcommand(si, CMDLOG_SET, "%s DEHALFOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (!chanuser_find(mc->chan, si->su))
