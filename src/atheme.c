@@ -84,6 +84,11 @@ static void rng_reseed(void *unused)
 	arc4random_addrandom((uint8_t *)&cnt, sizeof cnt);
 }
 
+static void process_mowgli_log(const char *line)
+{
+	slog(LG_INFO, "%s", line);
+}
+
 int main(int argc, char *argv[])
 {
 	boolean_t have_conf = FALSE;
@@ -181,6 +186,7 @@ int main(int argc, char *argv[])
 
 	/* open log */
 	log_open();
+	mowgli_log_set_cb(process_mowgli_log);
 
 	printf("atheme: version atheme-%s\n", version);
 
