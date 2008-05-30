@@ -107,7 +107,18 @@ void kill_user(user_t *source, user_t *victim, const char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, ap);
 	va_end(ap);
 
-	kill_id_sts(source, CLIENT_NAME(victim), buf);
+	if (victim->flags & UF_ENFORCER)
+		quit_sts(victim, buf);
+	else if (victim->server == me.me)
+	{
+		slog(LG_INFO, "kill_user(): not killing service %s (source %s, comment %s)",
+				victim->nick,
+				source != NULL ? source->nick : me.name,
+				buf);
+		return;
+	}
+	else
+		kill_id_sts(source, CLIENT_NAME(victim), buf);
 	user_delete(victim);
 }
 
