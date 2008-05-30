@@ -129,7 +129,7 @@ static void cs_cmd_owner(sourceinfo_t *si, int parc, char *parv[])
 	cu->modes |= CMODE_OWNER;
 
 	if (si->c == NULL && tu != si->su)
-		notice(chansvs.nick, tu->nick, "You have been set as owner on %s by %s", mc->name, get_source_name(si));
+		change_notify(chansvs.nick, tu, "You have been set as owner on %s by %s", mc->name, get_source_name(si));
 
 	logcommand(si, CMDLOG_SET, "%s OWNER %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (!chanuser_find(mc->chan, si->su))
@@ -202,7 +202,7 @@ static void cs_cmd_deowner(sourceinfo_t *si, int parc, char *parv[])
 	cu->modes &= ~CMODE_OWNER;
 
 	if (si->c == NULL && tu != si->su)
-		notice(chansvs.nick, tu->nick, "You have been unset as owner on %s by %s", mc->name, get_source_name(si));
+		change_notify(chansvs.nick, tu, "You have been unset as owner on %s by %s", mc->name, get_source_name(si));
 
 	logcommand(si, CMDLOG_SET, "%s DEOWNER %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (!chanuser_find(mc->chan, si->su))

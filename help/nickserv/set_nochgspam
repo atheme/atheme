@@ -1,0 +1,11 @@
+Help for SET NOCHGSPAM:
+
+SET NOCHGSPAM prevents services from automatically
+notifying you when ChanServ is used to affect your
+status in channels. When set to ON, Services will no
+longer send you messages of this nature.
+
+Syntax: SET NOCHGSPAM ON|OFF
+
+Example:
+    /msg &nick& SET NOOP ON

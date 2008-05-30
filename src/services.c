@@ -436,6 +436,38 @@ void notice(const char *from, const char *to, const char *fmt, ...)
 	}
 }
 
+/*
+ * change_notify()
+ *
+ * Sends a change notification to a user affected by that change, provided
+ * that he has not disabled the messages (MU_NODEOPSPAM is not set).
+ *
+ * Inputs:
+ *       - string representing source (for compatibility with notice())
+ *       - user_t object to send the notice to
+ *       - printf-style string containing the data to send and any args
+ *
+ * Outputs:
+ *       - nothing
+ *
+ * Side Effects:
+ *       - a notice is sent to a user if MU_NODEOPSPAM is not set.
+ */
+void change_notify(const char *from, user_t *to, const char *fmt, ...)
+{
+	va_list args;
+	char buf[BUFSIZE];
+
+	va_start(args, fmt);
+	vsnprintf(buf, BUFSIZE, str, args);
+	va_end(args);
+
+	if (u->myuser != NULL && u->myuser->flags & MU_NODEOPSPAM)
+		return;
+
+	notice_user_sts(user_find_named(from), to, buf);
+}
+
 void command_fail(sourceinfo_t *si, faultcode_t code, const char *fmt, ...)
 {
 	va_list args;

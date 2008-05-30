@@ -129,7 +129,7 @@ static void cs_cmd_protect(sourceinfo_t *si, int parc, char *parv[])
 	cu->modes |= CMODE_PROTECT;
 
 	if (si->c == NULL && tu != si->su)
-		notice(chansvs.nick, tu->nick, "You have been set as protected on %s by %s", mc->name, get_source_name(si));
+		change_notify(chansvs.nick, tu, "You have been set as protected on %s by %s", mc->name, get_source_name(si));
 
 	logcommand(si, CMDLOG_SET, "%s PROTECT %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (!chanuser_find(mc->chan, si->su))
@@ -202,7 +202,7 @@ static void cs_cmd_deprotect(sourceinfo_t *si, int parc, char *parv[])
 	cu->modes &= ~CMODE_PROTECT;
 
 	if (si->c == NULL && tu != si->su)
-		notice(chansvs.nick, tu->nick, "You have been unset as protected on %s by %s", mc->name, get_source_name(si));
+		change_notify(chansvs.nick, tu, "You have been unset as protected on %s by %s", mc->name, get_source_name(si));
 
 	logcommand(si, CMDLOG_SET, "%s DEPROTECT %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (!chanuser_find(mc->chan, si->su))

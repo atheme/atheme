@@ -158,15 +158,16 @@ static BlockHeap *conftable_heap;
 /* *INDENT-OFF* */
 
 static struct Token uflags[] = {
-  { "HOLD",     MU_HOLD     },
-  { "NEVEROP",  MU_NEVEROP  },
-  { "NOOP",     MU_NOOP     },
-  { "HIDEMAIL", MU_HIDEMAIL },
-  { "NOMEMO",   MU_NOMEMO   },
-  { "ENFORCE",  MU_ENFORCE  },
-  { "PRIVMSG",  MU_USE_PRIVMSG  },
-  { "PRIVATE",  MU_PRIVATE  },
-  { "NONE",     0           },
+  { "HOLD",      MU_HOLD         },
+  { "NEVEROP",   MU_NEVEROP      },
+  { "NOOP",      MU_NOOP         },
+  { "HIDEMAIL",  MU_HIDEMAIL     },
+  { "NOMEMO",    MU_NOMEMO       },
+  { "ENFORCE",   MU_ENFORCE      },
+  { "PRIVMSG",   MU_USE_PRIVMSG  },
+  { "PRIVATE",   MU_PRIVATE      },
+  { "NOCHGSPAM", MU_NODEOPSPAM   },
+  { "NONE",     0                },
   { NULL, 0 }
 };
 

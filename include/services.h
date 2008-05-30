@@ -155,6 +155,7 @@ E void partall(char *name);
 E void verbose(mychan_t *mychan, const char *fmt, ...) PRINTFLIKE(2, 3);
 E void snoop(const char *fmt, ...) PRINTFLIKE(1, 2);
 E void notice(const char *from, const char *to, const char *message, ...) PRINTFLIKE(3, 4);
+E void change_notify(const char *from, user_t *to, const char *message, ...) PRINTFLIKE(3, 4);
 E void command_fail(sourceinfo_t *si, faultcode_t code, const char *fmt, ...) PRINTFLIKE(3, 4);
 E void command_success_nodata(sourceinfo_t *si, const char *fmt, ...) PRINTFLIKE(2, 3);
 E void command_success_string(sourceinfo_t *si, const char *result, const char *fmt, ...) PRINTFLIKE(3, 4);

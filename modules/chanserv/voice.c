@@ -115,7 +115,7 @@ static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[])
 	cu->modes |= CMODE_VOICE;
 
 	if (si->c == NULL && tu != si->su)
-		notice(chansvs.nick, tu->nick, "You have been voiced on %s by %s", mc->name, get_source_name(si));
+		change_notify(chansvs.nick, tu, "You have been voiced on %s by %s", mc->name, get_source_name(si));
 
 	logcommand(si, CMDLOG_SET, "%s VOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (!chanuser_find(mc->chan, si->su))
@@ -176,7 +176,7 @@ static void cs_cmd_devoice(sourceinfo_t *si, int parc, char *parv[])
 	cu->modes &= ~CMODE_VOICE;
 
 	if (si->c == NULL && tu != si->su)
-		notice(chansvs.nick, tu->nick, "You have been devoiced on %s by %s", mc->name, get_source_name(si));
+		change_notify(chansvs.nick, tu, "You have been devoiced on %s by %s", mc->name, get_source_name(si));
 
 	logcommand(si, CMDLOG_SET, "%s DEVOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (!chanuser_find(mc->chan, si->su))
