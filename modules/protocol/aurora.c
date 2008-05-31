@@ -42,7 +42,7 @@ ircd_t Charybdis = {
 	IRCD_CIDR_BANS                  /* Flags */
 };
 
-struct cmode_ charybdis_mode_list[] = {
+struct cmode_ aurora_mode_list[] = {
   { 'i', CMODE_INVITE },
   { 'm', CMODE_MOD    },
   { 'n', CMODE_NOEXT  },
@@ -63,13 +63,13 @@ struct cmode_ charybdis_mode_list[] = {
 static boolean_t check_forward(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 static boolean_t check_jointhrottle(const char *, channel_t *, mychan_t *, user_t *, myuser_t *);
 
-struct extmode charybdis_ignore_mode_list[] = {
+struct extmode aurora_ignore_mode_list[] = {
   { 'f', check_forward },
   { 'j', check_jointhrottle },
   { '\0', 0 }
 };
 
-struct cmode_ charybdis_status_mode_list[] = {
+struct cmode_ aurora_status_mode_list[] = {
   { 'q', CMODE_OWNER   },
   { 'a', CMODE_PROTECT },
   { 'o', CMODE_OP      },
@@ -78,9 +78,9 @@ struct cmode_ charybdis_status_mode_list[] = {
   { '\0', 0 }
 };
 
-struct cmode_ charybdis_prefix_mode_list[] = {
-  { '*', CMODE_OWNER   },
-  { '~', CMODE_PROTECT },
+struct cmode_ aurora_prefix_mode_list[] = {
+  { '~', CMODE_OWNER   },
+  { '&', CMODE_PROTECT },
   { '@', CMODE_OP      },
   { '%', CMODE_HALFOP  },
   { '+', CMODE_VOICE   },
@@ -169,7 +169,7 @@ static boolean_t extgecos_match(const char *mask, user_t *u)
 	return !match(mask, hostgbuf) || !match(mask, realgbuf);
 }
 
-static node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int type, node_t *first)
+static node_t *aurora_next_matching_ban(channel_t *c, user_t *u, int type, node_t *first)
 {
 	chanban_t *cb;
 	node_t *n;
@@ -245,7 +245,7 @@ static node_t *charybdis_next_matching_ban(channel_t *c, user_t *u, int type, no
 	return NULL;
 }
 
-static boolean_t charybdis_is_valid_host(const char *host)
+static boolean_t aurora_is_valid_host(const char *host)
 {
 	const char *p;
 
@@ -258,7 +258,7 @@ static boolean_t charybdis_is_valid_host(const char *host)
 }
 
 /* login to our uplink */
-static unsigned int charybdis_server_login(void)
+static unsigned int aurora_server_login(void)
 {
 	int ret = 1;
 
@@ -289,7 +289,7 @@ static unsigned int charybdis_server_login(void)
 }
 
 /* introduce a client */
-static void charybdis_introduce_nick(user_t *u)
+static void aurora_introduce_nick(user_t *u)
 {
 	if (ircd->uses_uid && use_euid)
 		sts(":%s EUID %s 1 %ld +%s%sS %s %s 0 %s * * :%s", me.numeric, u->nick, u->ts, "io", chansvs.fantasy ? "" : "D", u->user, u->host, u->uid, u->gecos);
@@ -300,12 +300,12 @@ static void charybdis_introduce_nick(user_t *u)
 }
 
 /* invite a user to a channel */
-static void charybdis_invite_sts(user_t *sender, user_t *target, channel_t *channel)
+static void aurora_invite_sts(user_t *sender, user_t *target, channel_t *channel)
 {
 	sts(":%s INVITE %s %s", CLIENT_NAME(sender), CLIENT_NAME(target), channel->name);
 }
 
-static void charybdis_quit_sts(user_t *u, const char *reason)
+static void aurora_quit_sts(user_t *u, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -314,13 +314,13 @@ static void charybdis_quit_sts(user_t *u, const char *reason)
 }
 
 /* WALLOPS wrapper */
-static void charybdis_wallops_sts(const char *text)
+static void aurora_wallops_sts(const char *text)
 {
 	sts(":%s WALLOPS :%s", ME, text);
 }
 
 /* join a channel */
-static void charybdis_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
+static void aurora_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *modes)
 {
 	if (isnew)
 		sts(":%s SJOIN %ld %s %s :@%s", me.name, c->ts, c->name,
@@ -330,9 +330,9 @@ static void charybdis_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *m
 				u->nick);
 }
 
-static void charybdis_chan_lowerts(channel_t *c, user_t *u)
+static void aurora_chan_lowerts(channel_t *c, user_t *u)
 {
-	slog(LG_DEBUG, "charybdis_chan_lowerts(): lowering TS for %s to %ld",
+	slog(LG_DEBUG, "aurora_chan_lowerts(): lowering TS for %s to %ld",
 			c->name, (long)c->ts);
 	sts(":%s SJOIN %ld %s %s :@%s", ME, c->ts, c->name,
 				channel_modes(c, TRUE), CLIENT_NAME(u));
@@ -341,7 +341,7 @@ static void charybdis_chan_lowerts(channel_t *c, user_t *u)
 }
 
 /* kicks a user from a channel */
-static void charybdis_kick(char *from, char *channel, char *to, char *reason)
+static void aurora_kick(char *from, char *channel, char *to, char *reason)
 {
 	channel_t *chan = channel_find(channel);
 	user_t *user = user_find(to);
@@ -359,7 +359,7 @@ static void charybdis_kick(char *from, char *channel, char *to, char *reason)
 }
 
 /* PRIVMSG wrapper */
-static void charybdis_msg(const char *from, const char *target, const char *fmt, ...)
+static void aurora_msg(const char *from, const char *target, const char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -384,12 +384,12 @@ static void charybdis_msg(const char *from, const char *target, const char *fmt,
 }
 
 /* NOTICE wrapper */
-static void charybdis_notice_user_sts(user_t *from, user_t *target, const char *text)
+static void aurora_notice_user_sts(user_t *from, user_t *target, const char *text)
 {
 	sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, CLIENT_NAME(target), text);
 }
 
-static void charybdis_notice_global_sts(user_t *from, const char *mask, const char *text)
+static void aurora_notice_global_sts(user_t *from, const char *mask, const char *text)
 {
 	node_t *n;
 	tld_t *tld;
@@ -406,7 +406,7 @@ static void charybdis_notice_global_sts(user_t *from, const char *mask, const ch
 		sts(":%s NOTICE %s%s :%s", from ? CLIENT_NAME(from) : ME, ircd->tldprefix, mask, text);
 }
 
-static void charybdis_notice_channel_sts(user_t *from, channel_t *target, const char *text)
+static void aurora_notice_channel_sts(user_t *from, channel_t *target, const char *text)
 {
 	if (from == NULL || chanuser_find(target, from))
 		sts(":%s NOTICE %s :%s", from ? CLIENT_NAME(from) : ME, target->name, text);
@@ -414,7 +414,7 @@ static void charybdis_notice_channel_sts(user_t *from, channel_t *target, const 
 		sts(":%s NOTICE %s :[%s:%s] %s", ME, target->name, from->nick, target->name, text);
 }
 
-static void charybdis_wallchops(user_t *sender, channel_t *channel, const char *message)
+static void aurora_wallchops(user_t *sender, channel_t *channel, const char *message)
 {
 	if (chanuser_find(channel, sender))
 		sts(":%s NOTICE @%s :%s", CLIENT_NAME(sender), channel->name,
@@ -424,7 +424,7 @@ static void charybdis_wallchops(user_t *sender, channel_t *channel, const char *
 }
 
 /* numeric wrapper */
-static void charybdis_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
+static void aurora_numeric_sts(char *from, int numeric, char *target, char *fmt, ...)
 {
 	va_list ap;
 	char buf[BUFSIZE];
@@ -438,7 +438,7 @@ static void charybdis_numeric_sts(char *from, int numeric, char *target, char *f
 }
 
 /* KILL wrapper */
-static void charybdis_kill_id_sts(user_t *killer, const char *id, const char *reason)
+static void aurora_kill_id_sts(user_t *killer, const char *id, const char *reason)
 {
 	if (killer != NULL)
 		sts(":%s KILL %s :%s!%s (%s)", CLIENT_NAME(killer), id, killer->host, killer->nick, reason);
@@ -447,13 +447,13 @@ static void charybdis_kill_id_sts(user_t *killer, const char *id, const char *re
 }
 
 /* PART wrapper */
-static void charybdis_part_sts(channel_t *c, user_t *u)
+static void aurora_part_sts(channel_t *c, user_t *u)
 {
 	sts(":%s PART %s", CLIENT_NAME(u), c->name);
 }
 
 /* server-to-server KLINE wrapper */
-static void charybdis_kline_sts(char *server, char *user, char *host, long duration, char *reason)
+static void aurora_kline_sts(char *server, char *user, char *host, long duration, char *reason)
 {
 	if (!me.connected)
 		return;
@@ -462,7 +462,7 @@ static void charybdis_kline_sts(char *server, char *user, char *host, long durat
 }
 
 /* server-to-server UNKLINE wrapper */
-static void charybdis_unkline_sts(char *server, char *user, char *host)
+static void aurora_unkline_sts(char *server, char *user, char *host)
 {
 	if (!me.connected)
 		return;
@@ -472,7 +472,7 @@ static void charybdis_unkline_sts(char *server, char *user, char *host)
 }
 
 /* topic wrapper */
-static void charybdis_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
+static void aurora_topic_sts(channel_t *c, const char *setter, time_t ts, time_t prevts, const char *topic)
 {
 	int joined = 0;
 
@@ -521,7 +521,7 @@ static void charybdis_topic_sts(channel_t *c, const char *setter, time_t ts, tim
 }
 
 /* mode wrapper */
-static void charybdis_mode_sts(char *sender, channel_t *target, char *modes)
+static void aurora_mode_sts(char *sender, channel_t *target, char *modes)
 {
 	user_t *u = user_find(sender);
 
@@ -535,7 +535,7 @@ static void charybdis_mode_sts(char *sender, channel_t *target, char *modes)
 }
 
 /* ping wrapper */
-static void charybdis_ping_sts(void)
+static void aurora_ping_sts(void)
 {
 	if (!me.connected)
 		return;
@@ -544,7 +544,7 @@ static void charybdis_ping_sts(void)
 }
 
 /* protocol-specific stuff to do on login */
-static void charybdis_on_login(char *origin, char *user, char *wantedhost)
+static void aurora_on_login(char *origin, char *user, char *wantedhost)
 {
 	user_t *u = user_find(origin);
 
@@ -555,7 +555,7 @@ static void charybdis_on_login(char *origin, char *user, char *wantedhost)
 }
 
 /* protocol-specific stuff to do on login */
-static boolean_t charybdis_on_logout(char *origin, char *user, char *wantedhost)
+static boolean_t aurora_on_logout(char *origin, char *user, char *wantedhost)
 {
 	user_t *u = user_find(origin);
 
@@ -570,7 +570,7 @@ static boolean_t charybdis_on_logout(char *origin, char *user, char *wantedhost)
  * serverside like in P10?
  *       --nenolod
  */
-static void charybdis_jupe(const char *server, const char *reason)
+static void aurora_jupe(const char *server, const char *reason)
 {
 	if (!me.connected)
 		return;
@@ -580,7 +580,7 @@ static void charybdis_jupe(const char *server, const char *reason)
 	sts(":%s SERVER %s 2 :(H) %s", me.name, server, reason);
 }
 
-static void charybdis_sethost_sts(char *source, char *target, char *host)
+static void aurora_sethost_sts(char *source, char *target, char *host)
 {
 	user_t *tu = user_find(target);
 
@@ -593,7 +593,7 @@ static void charybdis_sethost_sts(char *source, char *target, char *host)
 		sts(":%s ENCAP * CHGHOST %s :%s", ME, tu->nick, host);
 }
 
-static void charybdis_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
+static void aurora_fnc_sts(user_t *source, user_t *u, char *newnick, int type)
 {
 	/* XXX assumes the server will accept this -- jilles */
 	sts(":%s ENCAP %s RSFNC %s %s %lu %lu", ME,
@@ -603,7 +603,7 @@ static void charybdis_fnc_sts(user_t *source, user_t *u, char *newnick, int type
 			(unsigned long)u->ts);
 }
 
-static void charybdis_svslogin_sts(char *target, char *nick, char *user, char *host, char *login)
+static void aurora_svslogin_sts(char *target, char *nick, char *user, char *host, char *login)
 {
 	user_t *tu = user_find(target);
 	server_t *s;
@@ -619,7 +619,7 @@ static void charybdis_svslogin_sts(char *target, char *nick, char *user, char *h
 			target, nick, user, host, login);
 }
 
-static void charybdis_sasl_sts(char *target, char mode, char *data)
+static void aurora_sasl_sts(char *target, char mode, char *data)
 {
 	server_t *s = sid_find(target);
 
@@ -628,7 +628,7 @@ static void charybdis_sasl_sts(char *target, char mode, char *data)
 
 	if (saslsvs.me == NULL)
 	{
-		slog(LG_ERROR, "charybdis_sasl_sts(): saslserv does not exist!");
+		slog(LG_ERROR, "aurora_sasl_sts(): saslserv does not exist!");
 		return;
 	}
 
@@ -639,7 +639,7 @@ static void charybdis_sasl_sts(char *target, char mode, char *data)
 			data);
 }
 
-static void charybdis_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account)
+static void aurora_holdnick_sts(user_t *source, int duration, const char *nick, myuser_t *account)
 {
 	if (use_euid)
 		sts(":%s ENCAP * NICKDELAY %d %s", ME, duration, nick);
@@ -1449,42 +1449,42 @@ static server_t *sid_find(char *name)
 void _modinit(module_t * m)
 {
 	/* Symbol relocation voodoo. */
-	server_login = &charybdis_server_login;
-	introduce_nick = &charybdis_introduce_nick;
-	quit_sts = &charybdis_quit_sts;
-	wallops_sts = &charybdis_wallops_sts;
-	join_sts = &charybdis_join_sts;
-	chan_lowerts = &charybdis_chan_lowerts;
-	kick = &charybdis_kick;
-	msg = &charybdis_msg;
-	notice_user_sts = &charybdis_notice_user_sts;
-	notice_global_sts = &charybdis_notice_global_sts;
-	notice_channel_sts = &charybdis_notice_channel_sts;
-	wallchops = &charybdis_wallchops;
-	numeric_sts = &charybdis_numeric_sts;
-	kill_id_sts = &charybdis_kill_id_sts;
-	part_sts = &charybdis_part_sts;
-	kline_sts = &charybdis_kline_sts;
-	unkline_sts = &charybdis_unkline_sts;
-	topic_sts = &charybdis_topic_sts;
-	mode_sts = &charybdis_mode_sts;
-	ping_sts = &charybdis_ping_sts;
-	ircd_on_login = &charybdis_on_login;
-	ircd_on_logout = &charybdis_on_logout;
-	jupe = &charybdis_jupe;
-	sethost_sts = &charybdis_sethost_sts;
-	fnc_sts = &charybdis_fnc_sts;
-	invite_sts = &charybdis_invite_sts;
-	holdnick_sts = &charybdis_holdnick_sts;
-	svslogin_sts = &charybdis_svslogin_sts;
-	sasl_sts = &charybdis_sasl_sts;
-	next_matching_ban = &charybdis_next_matching_ban;
-	is_valid_host = &charybdis_is_valid_host;
+	server_login = &aurora_server_login;
+	introduce_nick = &aurora_introduce_nick;
+	quit_sts = &aurora_quit_sts;
+	wallops_sts = &aurora_wallops_sts;
+	join_sts = &aurora_join_sts;
+	chan_lowerts = &aurora_chan_lowerts;
+	kick = &aurora_kick;
+	msg = &aurora_msg;
+	notice_user_sts = &aurora_notice_user_sts;
+	notice_global_sts = &aurora_notice_global_sts;
+	notice_channel_sts = &aurora_notice_channel_sts;
+	wallchops = &aurora_wallchops;
+	numeric_sts = &aurora_numeric_sts;
+	kill_id_sts = &aurora_kill_id_sts;
+	part_sts = &aurora_part_sts;
+	kline_sts = &aurora_kline_sts;
+	unkline_sts = &aurora_unkline_sts;
+	topic_sts = &aurora_topic_sts;
+	mode_sts = &aurora_mode_sts;
+	ping_sts = &aurora_ping_sts;
+	ircd_on_login = &aurora_on_login;
+	ircd_on_logout = &aurora_on_logout;
+	jupe = &aurora_jupe;
+	sethost_sts = &aurora_sethost_sts;
+	fnc_sts = &aurora_fnc_sts;
+	invite_sts = &aurora_invite_sts;
+	holdnick_sts = &aurora_holdnick_sts;
+	svslogin_sts = &aurora_svslogin_sts;
+	sasl_sts = &aurora_sasl_sts;
+	next_matching_ban = &aurora_next_matching_ban;
+	is_valid_host = &aurora_is_valid_host;
 
-	mode_list = charybdis_mode_list;
-	ignore_mode_list = charybdis_ignore_mode_list;
-	status_mode_list = charybdis_status_mode_list;
-	prefix_mode_list = charybdis_prefix_mode_list;
+	mode_list = aurora_mode_list;
+	ignore_mode_list = aurora_ignore_mode_list;
+	status_mode_list = aurora_status_mode_list;
+	prefix_mode_list = aurora_prefix_mode_list;
 
 	ircd = &Charybdis;
 
