@@ -42,7 +42,7 @@ $chans = array();
 
 $raw_lines = array();
 while (!feof(STDIN))
-	$raw_lines[] = fgets(STDIN);
+	$raw_lines[] = html_entity_decode(fgets(STDIN));
 
 
 /* Read in and parse IRCservices
