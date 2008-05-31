@@ -457,7 +457,7 @@ function read_channelinfo($line)
 		if ($parts[1] == 'mlock_limit')
 			$chans[$chan]['mlock_limit'] = $parts[2];
 	}
-	elseif ($section == 'levels' && preg_match('~^<([a-z_]+)>(.*)</\1>$~',$line,&$parts) > 0)
+	elseif ($section == 'levels' && preg_match('~.*<([a-zA-Z_]+)>(.+)</\1>.*~',$line,&$parts) > 0)
 	{
 		if ($parts[1] == 'CA_INVITE')		$levels['i'] = ($parts[2] == -1000 ? 1000 : $parts[2]);
 		if ($parts[1] == 'CA_SET')		$levels['s'] = ($parts[2] == -1000 ? 1000 : $parts[2]);
