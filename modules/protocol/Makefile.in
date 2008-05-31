@@ -15,6 +15,7 @@ CFLAGS		= @CFLAGS@ -I../../include
 
 BASE_SRCS =			\
 	$(SRCDIR)/asuka.c	\
+	$(SRCDIR)/aurora.c	\
 	$(SRCDIR)/bahamut.c	\
 	$(SRCDIR)/bircd.c	\
 	$(SRCDIR)/charybdis.c	\
