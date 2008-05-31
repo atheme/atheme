@@ -30,6 +30,9 @@ Program Activation Line:
 Password Location:
 MU nick CRYPTED_PW ...
 
+NOTE: if channels for some reason cannot be converted, errors.log will be populated with
+information about what channels & why.
+
 Bugs & Patches to Jason@WinSE.ath.cx
 */
 
@@ -140,6 +143,58 @@ foreach ($nicks as $id => $data)
 // Chans
 foreach ($chans as $name => $data)
 {
+	if (empty($name) || empty($nicks[$data['founder']]['mainnick']) ||
+			empty($data['time_registered']) || empty($data['time_used']) || 
+			empty($data['mlock_on']) || empty($data['mlock_off']) ||
+			empty($data['mlock_limit']))
+	{
+		$sErrors[] = "*** WARNING: potentially skipping entry for $name";
+
+		$bFatal = false;
+
+		if (empty($name))
+		{
+			$sErrors[] = "Name is empty."; // should never happen
+			$bFatal = true;
+		}
+		if (empty($nicks[$data['founder']]['mainnick']))
+		{
+			$sErrors[] = "Main nick is empty"; // forbidden channels can get this
+			$bFatal = true;
+		}
+		if (empty($data['time_registered']))
+		{
+			$sErrors[] = "Time registered is empty";
+			$bFatal = true;
+		}
+		if (empty($data['time_used']))
+		{
+			$sErrors[] = "Time used is empty";
+			$bFatal = true;
+		}
+		if (empty($data['mlock_on']))
+		{
+			$sErrors[] = "MLOCK on is empty";
+			$data['mlock_on'] = 0;
+		}
+		if (empty($data['mlock_off']))
+		{
+			$sErrors[] = "MLOCK off is empty";
+			$data['mlock_off'] = 0;
+		}
+		if (empty($data['mlock_limit']))
+		{
+			$sErrors[] = "MLOCK limit is empty";
+			$data['mlock_limit'] = 0;
+		}
+
+		if ($bFatal)
+		{
+			$sErrors[] = "Cannot write this channel, ignoring";
+			continue;
+		}
+	}
+
 	printf("MC %s 0 %s %u %u 64 %u %u %u\n",
 		$name,
 		$nicks[$data['founder']]['mainnick'],
@@ -196,6 +251,7 @@ printf("DE %d %d %d 0", $MUout, $MCout, $CAout );
 
 
 
+file_put_contents("errors.log", implode("\n", $sErrors));
 
 
 
