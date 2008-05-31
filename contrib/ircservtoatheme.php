@@ -464,6 +464,7 @@ function read_channelinfo($line)
 		if ($parts[1] == 'CA_AUTOOP')		$levels['O'] = ($parts[2] == -1000 ? 1000 : $parts[2]);
 		if ($parts[1] == 'CA_AUTOHALFOP')	$levels['H'] = ($parts[2] == -1000 ? 1000 : $parts[2]);
 		if ($parts[1] == 'CA_AUTOVOICE')	$levels['V'] = ($parts[2] == -1000 ? 1000 : $parts[2]);
+		if ($parts[1] == 'CA_AUTOPROTECT')		$levels['a'] = ($parts[2] == -1000 ? 1000 : $parts[2]);
 		if ($parts[1] == 'CA_OPDEOP')		$levels['o'] = ($parts[2] == -1000 ? 1000 : $parts[2]);
 		if ($parts[1] == 'CA_HALFOP')	{	$levels['h'] = ($parts[2] == -1000 ? 1000 : $parts[2]);
 							$levels['t'] = ($parts[2] == -1000 ? 1000 : $parts[2]);
