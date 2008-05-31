@@ -115,7 +115,7 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 			global = (struct global_ *)n->data;
 
 			snprintf(buf, sizeof buf, "[Network Notice] %s%s%s",
-					isfirst ? si->su->nick : "",
+					isfirst ? get_source_name(si) : "",
 					isfirst ? " - " : "",
 					global->text);
 			/* Cannot use si->service->me here, global notices
@@ -154,9 +154,9 @@ static void gs_cmd_global(sourceinfo_t *si, const int parc, char *parv[])
 		glob_heap = BlockHeapCreate(sizeof(struct global_), 5);
 
 	if (!sender)
-		sender = sstrdup(si->su->nick);
+		sender = sstrdup(get_source_name(si));
 
-	if (irccasecmp(sender, si->su->nick))
+	if (irccasecmp(sender, get_source_name(si)))
 	{
 		command_fail(si, fault_noprivs, _("There is already a GLOBAL in progress by \2%s\2."), sender);
 		return;
