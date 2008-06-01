@@ -56,7 +56,7 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 		if (!parv[1])
 		{
 			command_fail(si, fault_badparams, STR_INSUFFICIENT_PARAMS, "AJOIN");
-			command_fail(si, fault_badparams, "Syntax: AJOIN <list|add|del> [#channel]");
+			command_fail(si, fault_badparams, "Syntax: AJOIN <list|add|del|clear> [#channel]");
 			return;
 		}
 
@@ -94,12 +94,17 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 		}
 		command_success_nodata(si, "%s added to AJOIN successfully.", parv[1]);
 	}
+	else if (!strcasecmp(parv[0], "CLEAR"))
+	{
+		metadata_delete(si->smu, METADATA_USER, "private:autojoin");
+		command_success_nodata(si, "AJOIN list cleared successfully.");
+	}
 	else if (!strcasecmp(parv[0], "DEL"))
 	{
 		if (!parv[1])
 		{
 			command_fail(si, fault_badparams, STR_INSUFFICIENT_PARAMS, "AJOIN");
-			command_fail(si, fault_badparams, "Syntax: AJOIN <list|add|del> [#channel]");
+			command_fail(si, fault_badparams, "Syntax: AJOIN <list|add|del|clear> [#channel]");
 			return;
 		}
 
