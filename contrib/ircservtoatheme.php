@@ -138,6 +138,16 @@ foreach ($nicks as $id => $data)
 				$memo['read'],
 				$memo['text']
 			      );
+
+	$sAjoin = "";
+	if (isset($data['ajoin']))
+		foreach ($data['ajoin'] as $sChan)
+			$sAjoin .= $sChan . ",";
+
+	if (!empty($sAjoin))
+	{
+		printf("MD U %s private:autojoin %s\n", $data['mainnick'], $sAjoin);
+	}
 }
 
 // Chans
@@ -273,6 +283,8 @@ function read_nickgroupinfo($line)
 	if (substr($line,0,7) == '<nicks ')
 		$section = 'nicks';
 	if (substr($line,0,8) == '<access ')
+	if (substr($line, 0, 7) == '<ajoin ')
+		$section = 'ajoin';
 		$section = 'access';
 	if ($line == '</'. $section .'>')
 		$section = '';
@@ -315,6 +327,11 @@ function read_nickgroupinfo($line)
 	{
 		if ($parts[1] == 'array-element' && !isset($nicks[$id]['mainnick']))
 			$nicks[$id]['mainnick'] = $parts[2];
+	}
+	elseif ($section == 'ajoin' && preg_match('~^<([a-z_-]+)>(.*)</\1>$~',$line,&$parts) > 0)
+	{
+		if ($parts[1] == 'array-element')
+			$nicks[$id]['ajoin'][] = $parts[2];
 	}
 	elseif ($section == 'access' && preg_match('~^<([a-z_-]+)>(.*)</\1>$~',$line,&$parts) > 0)
 	{
