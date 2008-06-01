@@ -283,9 +283,9 @@ function read_nickgroupinfo($line)
 	if (substr($line,0,7) == '<nicks ')
 		$section = 'nicks';
 	if (substr($line,0,8) == '<access ')
+		$section = 'access';
 	if (substr($line, 0, 7) == '<ajoin ')
 		$section = 'ajoin';
-		$section = 'access';
 	if ($line == '</'. $section .'>')
 		$section = '';
 
