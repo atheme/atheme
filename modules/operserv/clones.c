@@ -28,6 +28,7 @@ static void os_cmd_clones_list(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_clones_addexempt(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_clones_delexempt(sourceinfo_t *si, int parc, char *parv[]);
 static void os_cmd_clones_listexempt(sourceinfo_t *si, int parc, char *parv[]);
+static void os_cmd_clones_duration(sourceinfo_t *si, int parc, char *parv[]);
 
 static void write_exemptdb(void);
 static void load_exemptdb(void);
@@ -40,6 +41,7 @@ static list_t clone_exempts;
 boolean_t kline_enabled;
 mowgli_patricia_t *hostlist;
 BlockHeap *hostentry_heap;
+static long kline_duration;
 
 typedef struct cexcept_ cexcept_t;
 struct cexcept_
@@ -58,6 +60,7 @@ struct hostentry_
 	unsigned int lastaction_clones;
 };
 
+
 command_t os_clones = { "CLONES", N_("Manages network wide clones."), PRIV_AKILL, 4, os_cmd_clones };
 
 command_t os_clones_kline = { "KLINE", N_("Enables/disables klines for excessive clones."), AC_NONE, 1, os_cmd_clones_kline };
@@ -65,6 +68,7 @@ command_t os_clones_list = { "LIST", N_("Lists clones on the network."), AC_NONE
 command_t os_clones_addexempt = { "ADDEXEMPT", N_("Adds a clones exemption."), AC_NONE, 3, os_cmd_clones_addexempt };
 command_t os_clones_delexempt = { "DELEXEMPT", N_("Deletes a clones exemption."), AC_NONE, 1, os_cmd_clones_delexempt };
 command_t os_clones_listexempt = { "LISTEXEMPT", N_("Lists clones exemptions."), AC_NONE, 0, os_cmd_clones_listexempt };
+command_t os_clones_duration = { "DURATION", N_("Sets a custom duration to ban clones for."), AC_NONE, 1, os_cmd_clones_duration };
 
 void _modinit(module_t *m)
 {
@@ -81,6 +85,7 @@ void _modinit(module_t *m)
 	command_add(&os_clones_addexempt, &os_clones_cmds);
 	command_add(&os_clones_delexempt, &os_clones_cmds);
 	command_add(&os_clones_listexempt, &os_clones_cmds);
+	command_add(&os_clones_duration, &os_clones_cmds);
 
 	help_addentry(os_helptree, "CLONES", "help/oservice/clones", NULL);
 
@@ -91,6 +96,8 @@ void _modinit(module_t *m)
 
 	hostlist = mowgli_patricia_create(noopcanon);
 	hostentry_heap = BlockHeapCreate(sizeof(hostentry_t), HEAP_USER);
+
+	kline_duration = 3600; // set a default
 
 	load_exemptdb();
 
@@ -140,6 +147,7 @@ void _moddeinit(void)
 	command_delete(&os_clones_addexempt, &os_clones_cmds);
 	command_delete(&os_clones_delexempt, &os_clones_cmds);
 	command_delete(&os_clones_listexempt, &os_clones_cmds);
+	command_delete(&os_clones_duration, &os_clones_cmds);
 
 	help_delentry(os_helptree, "CLONES");
 
@@ -161,6 +169,7 @@ static void write_exemptdb(void)
 	}
 
 	fprintf(f, "CK %d\n", kline_enabled ? 1 : 0);
+	fprintf(f, "CD %ul\n", kline_duration);
 	LIST_FOREACH(n, clone_exempts.head)
 	{
 		c = n->data;
@@ -203,6 +212,12 @@ static void load_exemptdb(void)
 		item = strtok(rBuf, " ");
 		strip(item);
 
+		if (!strcmp(item, "CD"))
+		{
+			char *s = strtok(NULL, " ");
+			if (s)
+				kline_duration = atol(s);
+		}
 		if (!strcmp(item, "EX"))
 		{
 			char *ip = strtok(NULL, " ");
@@ -441,6 +456,32 @@ static void os_cmd_clones_delexempt(sourceinfo_t *si, int parc, char *parv[])
 	command_fail(si, fault_nosuch_target, _("\2%s\2 not found in clone exempt list."), arg);
 }
 
+static void os_cmd_clones_duration(sourceinfo_t *si, int parc, char *parv[])
+{
+	char *s = parv[0];
+	long duration;
+
+	if (!s)
+		return;
+
+	duration = (atol(s) * 60);
+	while (isdigit(*s))
+		s++;
+	if (*s == 'h' || *s == 'H')
+		duration *= 60;
+	else if (*s == 'd' || *s == 'D')
+		duration *= 1440;
+	else if (*s == 'w' || *s == 'W')
+		duration *= 10080;
+	else if (*s == '\0' || *s == 'm' || *s == 'M')
+		;
+	else
+		duration = 0;
+
+	kline_duration = duration;
+	command_success_nodata(si, _("Clone ban duration set to \2%s\2 (%ld seconds)"), parv[0], kline_duration);
+}
+
 static void os_cmd_clones_listexempt(sourceinfo_t *si, int parc, char *parv[])
 {
 	node_t *n;
@@ -500,7 +541,7 @@ static void clones_newuser(void *vptr)
 				snoop("CLONES: %d clones on %s (%s!%s@%s) (TKLINE due to excess clones)", i, u->ip, u->nick, u->user, u->host);
 				slog(LG_INFO, "clones_newuser(): klining *@%s (user %s!%s@%s)",
 						u->ip, u->nick, u->user, u->host);
-				kline_sts("*", "*", u->ip, 3600, "Excessive clones");
+				kline_sts("*", "*", u->ip, kline_duration, "Excessive clones");
 			}
 		}
 	}
