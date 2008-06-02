@@ -54,3 +54,13 @@ Shows the clone exemption list with reasons.
 Example:
     /msg &nick& CLONES ADDEXEMPT 127.0.0.1 100 local
     /msg &nick& CLONES DELEXEMPT 192.168.1.2
+
+Syntax: CLONES DURATION
+
+Allows modifying the duration that hosts who clone
+are banned for. Defaults to one hour. Is saved between
+restarts.
+
+Example:
+    /msg &nick& CLONES DURATION 30m
+
