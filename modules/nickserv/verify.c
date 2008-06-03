@@ -174,7 +174,7 @@ static void ns_cmd_fverify(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!(mu = myuser_find(nick)))
+	if (!(mu = myuser_find_ext(nick)))
 	{
 		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), nick);
 		return;
