@@ -169,7 +169,7 @@ static void write_exemptdb(void)
 	}
 
 	fprintf(f, "CK %d\n", kline_enabled ? 1 : 0);
-	fprintf(f, "CD %ul\n", kline_duration);
+	fprintf(f, "CD %ld\n", kline_duration);
 	LIST_FOREACH(n, clone_exempts.head)
 	{
 		c = n->data;
