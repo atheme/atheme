@@ -462,7 +462,10 @@ static void os_cmd_clones_duration(sourceinfo_t *si, int parc, char *parv[])
 	long duration;
 
 	if (!s)
+	{
+		command_success_nodata(si, _("Clone ban duration set to \2%ld\2 (%ld seconds)"), kline_duration / 60, kline_duration);
 		return;
+	}
 
 	duration = (atol(s) * 60);
 	while (isdigit(*s))
@@ -477,6 +480,12 @@ static void os_cmd_clones_duration(sourceinfo_t *si, int parc, char *parv[])
 		;
 	else
 		duration = 0;
+
+	if (duration <= 0)
+	{
+		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "CLONES DURATION");
+		return;
+	}
 
 	kline_duration = duration;
 	command_success_nodata(si, _("Clone ban duration set to \2%s\2 (%ld seconds)"), parv[0], kline_duration);
