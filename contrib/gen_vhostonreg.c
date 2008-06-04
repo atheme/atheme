@@ -22,11 +22,14 @@ DECLARE_MODULE_V1
 static int counter;
 
 static void handle_verify_register(void *vptr);
+static void hook_user_identify(void *vptr);
 
 void _modinit(module_t *m)
 {
 	hook_add_event("user_verify_register");
 	hook_add_hook("user_verify_register", handle_verify_register);
+	hook_add_event("user_identify");
+	hook_add_hook("user_identify", hook_user_identify);
 	counter = (CURRTIME << 8) % 100000;
 	if (counter < 0)
 		counter += 100000;
@@ -35,21 +38,15 @@ void _modinit(module_t *m)
 void _moddeinit(void)
 {
 	hook_del_hook("user_verify_register", handle_verify_register);
+	hook_del_hook("user_identify", hook_user_identify);
 }
 
-static void handle_verify_register(void *vptr)
+static void user_add_host(myuser_t *mu)
 {
-	hook_user_req_t *req = vptr;
-	myuser_t *mu = req->mu;
-	node_t *n;
-	user_t *u;
-	char newhost[HOSTLEN];
 	int maxlen1, i;
-	boolean_t invalidchar = FALSE;
+	char newhost[HOSTLEN];
 	const char *p;
-
-	if (me.hidehostsuffix == NULL)
-		return;
+	boolean_t invalidchar = FALSE;
 
 	maxlen1 = HOSTLEN - 2 - strlen(me.hidehostsuffix);
 	if (maxlen1 < 9)
@@ -86,12 +83,37 @@ static void handle_verify_register(void *vptr)
 	strlcat(newhost, me.hidehostsuffix, sizeof newhost);
 
 	metadata_add(mu, METADATA_USER, "private:usercloak", newhost);
+}
+
+static void handle_verify_register(void *vptr)
+{
+	hook_user_req_t *req = vptr;
+	myuser_t *mu = req->mu;
+	node_t *n;
+	user_t *u;
+
+	if (me.hidehostsuffix == NULL)
+		return;
+
+	user_add_host(mu);
 
 	LIST_FOREACH(n, mu->logins.head)
 	{
 		u = n->data;
 		hook_call_event("user_identify", u); /* XXX */
 	}
+}
+
+static void hook_user_identify(void *vptr)
+{
+	user_t *u = vptr;
+
+	/* if they have an existing cloak, don't do anything */
+	if ((metadata_find(u->myuser, METADATA_USER, "private:usercloak")) || (me.hidehostsuffix == NULL))
+		return;	
+
+	/* they do not, add one. */
+	user_add_host(u->myuser);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
