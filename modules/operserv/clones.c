@@ -483,7 +483,7 @@ static void os_cmd_clones_duration(sourceinfo_t *si, int parc, char *parv[])
 
 	if (duration <= 0)
 	{
-		command_fail(si, fault_needmoreparams, STR_INVALID_PARAMS, "CLONES DURATION");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "CLONES DURATION");
 		return;
 	}
 
