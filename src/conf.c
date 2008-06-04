@@ -377,7 +377,7 @@ int subblock_handler(config_entry_t *ce, list_t *entries)
 	return 0;
 }
 
-struct ConfTable *find_top_conf(char *name)
+struct ConfTable *find_top_conf(const char *name)
 {
 	node_t *n;
 	struct ConfTable *ct;
@@ -393,7 +393,7 @@ struct ConfTable *find_top_conf(char *name)
 	return NULL;
 }
 
-struct ConfTable *find_conf_item(char *name, list_t *conflist)
+struct ConfTable *find_conf_item(const char *name, list_t *conflist)
 {
 	node_t *n;
 	struct ConfTable *ct;
@@ -409,7 +409,7 @@ struct ConfTable *find_conf_item(char *name, list_t *conflist)
 	return NULL;
 }
 
-void add_top_conf(char *name, int (*handler) (config_entry_t *ce))
+void add_top_conf(const char *name, int (*handler) (config_entry_t *ce))
 {
 	struct ConfTable *ct;
 
@@ -428,7 +428,7 @@ void add_top_conf(char *name, int (*handler) (config_entry_t *ce))
 	node_add(ct, node_create(), &confblocks);
 }
 
-void add_conf_item(char *name, list_t *conflist, int (*handler) (config_entry_t *ce))
+void add_conf_item(const char *name, list_t *conflist, int (*handler) (config_entry_t *ce))
 {
 	struct ConfTable *ct;
 
@@ -447,7 +447,7 @@ void add_conf_item(char *name, list_t *conflist, int (*handler) (config_entry_t 
 	node_add(ct, node_create(), conflist);
 }
 
-void del_top_conf(char *name)
+void del_top_conf(const char *name)
 {
 	node_t *n;
 	struct ConfTable *ct;
@@ -466,7 +466,7 @@ void del_top_conf(char *name)
 	BlockHeapFree(conftable_heap, ct);
 }
 
-void del_conf_item(char *name, list_t *conflist)
+void del_conf_item(const char *name, list_t *conflist)
 {
 	node_t *n;
 	struct ConfTable *ct;
@@ -486,7 +486,7 @@ void del_conf_item(char *name, list_t *conflist)
 }
 
 /* stolen from Sentinel */
-int token_to_value(struct Token token_table[], char *token)
+int token_to_value(struct Token token_table[], const char *token)
 {
 	int i;
 
