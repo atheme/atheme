@@ -196,7 +196,7 @@ static void _ns_sethidemail(sourceinfo_t *si, int parc, char *parv[])
 command_t ns_set_hidemail = { "HIDEMAIL", N_("Hides your e-mail address."), AC_NONE, 1, _ns_sethidemail };
 
 /* SET HIDEMAIL [ON|OFF] */
-static void _ns_setnochgspam(sourceinfo_t *si, int parc, char *parv[])
+static void _ns_setquietchg(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *params = strtok(parv[0], " ");
 
@@ -211,44 +211,44 @@ static void _ns_setnochgspam(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!strcasecmp("ON", params))
 	{
-		if (MU_NODEOPSPAM & si->smu->flags)
+		if (MU_QUIETCHG & si->smu->flags)
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for account \2%s\2."), "NOCHGSPAM", si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for account \2%s\2."), "QUIETCHG", si->smu->name);
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "SET NOCHGSPAM ON");
+		logcommand(si, CMDLOG_SET, "SET QUIETCHG ON");
 
-		si->smu->flags |= MU_NODEOPSPAM;
+		si->smu->flags |= MU_QUIETCHG;
 
-		command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "NOCHGSPAM" ,si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for account \2%s\2."), "QUIETCHG" ,si->smu->name);
 
 		return;
 	}
 	else if (!strcasecmp("OFF", params))
 	{
-		if (!(MU_NODEOPSPAM & si->smu->flags))
+		if (!(MU_QUIETCHG & si->smu->flags))
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "NOCHGSPAM", si->smu->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for account \2%s\2."), "QUIETCHG", si->smu->name);
 			return;
 		}
 
-		logcommand(si, CMDLOG_SET, "SET NOCHGSPAM OFF");
+		logcommand(si, CMDLOG_SET, "SET QUIETCHG OFF");
 
-		si->smu->flags &= ~MU_NODEOPSPAM;
+		si->smu->flags &= ~MU_QUIETCHG;
 
-		command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "NOCHGSPAM", si->smu->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for account \2%s\2."), "QUIETCHG", si->smu->name);
 
 		return;
 	}
 	else
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "NOCHGSPAM");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "QUIETCHG");
 		return;
 	}
 }
 
-command_t ns_set_nochgspam = { "NOCHGSPAM", N_("Allows you to opt-out of channel change messages."), AC_NONE, 1, _ns_setnochgspam };
+command_t ns_set_quietchg = { "QUIETCHG", N_("Allows you to opt-out of channel change messages."), AC_NONE, 1, _ns_setquietchg };
 
 static void _ns_setemailmemos(sourceinfo_t *si, int parc, char *parv[])
 {
@@ -581,7 +581,7 @@ command_t *ns_set_commands[] = {
 	&ns_set_email,
 	&ns_set_emailmemos,
 	&ns_set_hidemail,
-	&ns_set_nochgspam,
+	&ns_set_quietchg,
 	&ns_set_nomemo,
 	&ns_set_noop,
 	&ns_set_neverop,
@@ -602,7 +602,7 @@ void _modinit(module_t *m)
 	help_addentry(ns_helptree, "SET HIDEMAIL", "help/nickserv/set_hidemail", NULL);
 	help_addentry(ns_helptree, "SET NOMEMO", "help/nickserv/set_nomemo", NULL);
 	help_addentry(ns_helptree, "SET NEVEROP", "help/nickserv/set_neverop", NULL);
-	help_addentry(ns_helptree, "SET NOCHGSPAM", "help/nickserv/set_nochgspam", NULL);
+	help_addentry(ns_helptree, "SET QUIETCHG", "help/nickserv/set_quietchg", NULL);
 	help_addentry(ns_helptree, "SET NOOP", "help/nickserv/set_noop", NULL);
 	help_addentry(ns_helptree, "SET PASSWORD", "help/nickserv/set_password", NULL);
 	help_addentry(ns_helptree, "SET PROPERTY", "help/nickserv/set_property", NULL);

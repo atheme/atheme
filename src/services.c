@@ -451,7 +451,7 @@ void notice(const char *from, const char *to, const char *fmt, ...)
  * change_notify()
  *
  * Sends a change notification to a user affected by that change, provided
- * that he has not disabled the messages (MU_NODEOPSPAM is not set).
+ * that he has not disabled the messages (MU_QUIETCHG is not set).
  *
  * Inputs:
  *       - string representing source (for compatibility with notice())
@@ -462,7 +462,7 @@ void notice(const char *from, const char *to, const char *fmt, ...)
  *       - nothing
  *
  * Side Effects:
- *       - a notice is sent to a user if MU_NODEOPSPAM is not set.
+ *       - a notice is sent to a user if MU_QUIETCHG is not set.
  */
 void change_notify(const char *from, user_t *to, const char *fmt, ...)
 {
@@ -473,7 +473,7 @@ void change_notify(const char *from, user_t *to, const char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, args);
 	va_end(args);
 
-	if (to->myuser != NULL && to->myuser->flags & MU_NODEOPSPAM)
+	if (to->myuser != NULL && to->myuser->flags & MU_QUIETCHG)
 		return;
 
 	notice_user_sts(user_find_named(from), to, buf);
