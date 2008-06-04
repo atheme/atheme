@@ -55,7 +55,7 @@ static void user_add_host(myuser_t *mu)
 	i = 0;
 	while (i < maxlen1 && *p != '\0')
 	{
-		if (isalnum(*p) || strchr(VALID_SPECIALS, *p))
+		if (isalnum(tolower(*p)) || strchr(VALID_SPECIALS, *p))
 			newhost[i++] = *p;
 		else
 			invalidchar = TRUE;
