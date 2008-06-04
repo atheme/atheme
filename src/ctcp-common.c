@@ -34,10 +34,8 @@ static void ctcp_ping_handler(char *cmd, char *args, char *origin, char *svsnick
 	s = strtok(args, "\001");
 	if (s != NULL)
 		strip(s);
-	else
-		s = "pong!";
 
-	notice(svsnick, origin, "\001PING %.100s\001", s);
+	notice(svsnick, origin, "\001PING %.100s\001", s != NULL ? s : "pong!");
 }
 
 static void ctcp_version_handler(char *cmd, char *args, char *origin, char *svsnick)
