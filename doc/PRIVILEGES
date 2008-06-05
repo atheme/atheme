@@ -78,7 +78,7 @@ chan:admin
 chan:cmodes
 	change oper-only cmodes in mode locks (but only on own channels)
 chan:joinstaffonly
-	join channels set staffonly
+	join channels set restricted, even if not on the access list
 
 user:mark
 	use ns/us/cs mark and override marks

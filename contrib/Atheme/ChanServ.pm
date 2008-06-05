@@ -843,7 +843,7 @@ KEEPTOPIC       Enables topic retention.
 TOPICLOCK       Restricts who can change the topic.
 GUARD           Sets whether or not services will inhabit the channel.
 FANTASY         Allows or disallows in-channel commands.
-STAFFONLY       Sets the channel as staff-only. (Non staff is kickbanned.)
+RESTRICTED      Restricts access to the channel to users on the access list. (Other users are kickbanned.)
 
 =cut
 

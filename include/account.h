@@ -141,10 +141,10 @@ struct mychan_
 
 #define MC_HOLD        0x00000001
 #define MC_NOOP        0x00000002
-#define MC_RESTRICTED  0x00000004
+/* this isn't used. 0x00000004 */
 #define MC_SECURE      0x00000008
 #define MC_VERBOSE     0x00000010
-#define MC_STAFFONLY   0x00000020
+#define MC_RESTRICTED  0x00000020
 #define MC_KEEPTOPIC   0x00000040
 #define MC_VERBOSE_OPS 0x00000080
 #define MC_TOPICLOCK   0x00000100

@@ -245,12 +245,12 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		strcat(buf, "VERBOSE_OPS");
 	}
 
-	if (MC_STAFFONLY & mc->flags)
+	if (MC_RESTRICTED & mc->flags)
 	{
 		if (*buf)
 			strcat(buf, " ");
 
-		strcat(buf, "STAFFONLY");
+		strcat(buf, "RESTRICTED");
 	}
 
 	if (MC_KEEPTOPIC & mc->flags)

@@ -270,8 +270,11 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	if (chan->nummembers == 1 && mc->flags & MC_GUARD)
 		join(chan->name, chansvs.nick);
 
-	/* auto stuff */
-	if ((mc->flags & MC_STAFFONLY) && !has_priv_user(u, PRIV_JOIN_STAFFONLY))
+	/*
+	 * CS SET RESTRICTED: if they don't have any access (excluding AKICK)
+	 * or special privs to join restricted chans, boot them. -- w00t
+	 */
+	if ((mc->flags & MC_RESTRICTED) && !(flags & CA_ALLPRIVS) && !has_priv_user(u, PRIV_JOIN_STAFFONLY))
 	{
 		/* Stay on channel if this would empty it -- jilles */
 		if (chan->nummembers <= (mc->flags & MC_GUARD ? 2 : 1))

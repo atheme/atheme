@@ -994,7 +994,7 @@ general {
 	 *
 	 * Regardless of this option, ChanServ will temporarily join 
 	 * channels which would otherwise be empty if necessary to enforce
-	 * akick/staffonly/close, and to change the TS if changets is
+	 * akick/restricted/close, and to change the TS if changets is
 	 * enabled.
 	 */
 	join_chans;

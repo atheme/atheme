@@ -31,7 +31,7 @@ static void cs_cmd_set_topiclock(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_secure(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_verbose(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_fantasy(sourceinfo_t *si, int parc, char *parv[]);
-static void cs_cmd_set_staffonly(sourceinfo_t *si, int parc, char *parv[]);
+static void cs_cmd_set_restricted(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[]);
 
@@ -50,7 +50,7 @@ command_t cs_set_keeptopic = { "KEEPTOPIC", N_("Enables topic retention."),     
 command_t cs_set_topiclock = { "TOPICLOCK", N_("Restricts who can change the topic."),                          AC_NONE, 2, cs_cmd_set_topiclock  };
 command_t cs_set_guard     = { "GUARD",     N_("Sets whether or not services will inhabit the channel."),       AC_NONE, 2, cs_cmd_set_guard      };
 command_t cs_set_fantasy   = { "FANTASY",   N_("Allows or disallows in-channel commands."),                     AC_NONE, 2, cs_cmd_set_fantasy    };
-command_t cs_set_staffonly = { "STAFFONLY", N_("Sets the channel as staff-only. (Non staff is kickbanned.)"),   PRIV_CHAN_ADMIN, 2, cs_cmd_set_staffonly  };
+command_t cs_set_restricted = { "RESTRICTED", N_("Restricts access to the channel to users on the access list. (Other users are kickbanned.)"),   AC_NONE, 2, cs_cmd_set_restricted  };
 
 command_t *cs_set_commands[] = {
 	&cs_set_founder,
@@ -65,7 +65,7 @@ command_t *cs_set_commands[] = {
 	&cs_set_topiclock,
 	&cs_set_guard,
 	&cs_set_fantasy,
-	&cs_set_staffonly,
+	&cs_set_restricted,
 	NULL
 };
 
@@ -90,7 +90,7 @@ void _modinit(module_t *m)
 	help_addentry(cs_helptree, "SET EMAIL", "help/cservice/set_email", NULL);
 	help_addentry(cs_helptree, "SET ENTRYMSG", "help/cservice/set_entrymsg", NULL);
 	help_addentry(cs_helptree, "SET PROPERTY", "help/cservice/set_property", NULL);
-	help_addentry(cs_helptree, "SET STAFFONLY", "help/cservice/set_staffonly", NULL);
+	help_addentry(cs_helptree, "SET RESTRICTED", "help/cservice/set_restricted", NULL);
 	help_addentry(cs_helptree, "SET KEEPTOPIC", "help/cservice/set_keeptopic", NULL);
 	help_addentry(cs_helptree, "SET TOPICLOCK", "help/cservice/set_topiclock", NULL);
 	help_addentry(cs_helptree, "SET FANTASY", "help/cservice/set_fantasy", NULL);
@@ -114,7 +114,7 @@ void _moddeinit()
 	help_delentry(cs_helptree, "SET EMAIL");
 	help_delentry(cs_helptree, "SET ENTRYMSG");
 	help_delentry(cs_helptree, "SET PROPERTY");
-	help_delentry(cs_helptree, "SET STAFFONLY");
+	help_delentry(cs_helptree, "SET RESTRICTED");
 	help_delentry(cs_helptree, "SET KEEPTOPIC");
 	help_delentry(cs_helptree, "SET TOPICLOCK");
 	help_delentry(cs_helptree, "SET FANTASY");
@@ -290,7 +290,7 @@ static void cs_cmd_set_entrymsg(sourceinfo_t *si, int parc, char *parv[])
 	if (!parv[1] || !strcasecmp("OFF", parv[1]) || !strcasecmp("NONE", parv[1]))
 	{
 		/* entrymsg is private because users won't see it if they're AKICKED,
-		 * if the channel is +i, or if the channel is STAFFONLY
+		 * if the channel is +i, or if the channel is RESTRICTED
 		 */
 		if (metadata_find(mc, METADATA_CHANNEL, "private:entrymsg"))
 		{
@@ -1085,7 +1085,7 @@ static void cs_cmd_set_guard(sourceinfo_t *si, int parc, char *parv[])
         }
 }
 
-static void cs_cmd_set_staffonly(sourceinfo_t *si, int parc, char *parv[])
+static void cs_cmd_set_restricted(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 
@@ -1095,45 +1095,49 @@ static void cs_cmd_set_staffonly(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (!chanacs_source_has_flag(mc, si, CA_SET))
+	{
+		command_fail(si, fault_noprivs, _("You are not authorized to perform this command."));
+		return;
+	}
+
 	if (!strcasecmp("ON", parv[1]))
 	{
-		if (MC_STAFFONLY & mc->flags)
+		if (MC_RESTRICTED & mc->flags)
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for channel \2%s\2."), "STAFFONLY", mc->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is already set for channel \2%s\2."), "RESTRICTED", mc->name);
 			return;
 		}
 
-		snoop("SET:STAFFONLY:ON: for \2%s\2 by \2%s\2", mc->name, get_oper_name(si));
-		logcommand(si, CMDLOG_SET, "%s SET STAFFONLY ON", mc->name);
+		logcommand(si, CMDLOG_SET, "%s SET RESTRICTED ON", mc->name);
 
-		mc->flags |= MC_STAFFONLY;
+		mc->flags |= MC_RESTRICTED;
 
-		command_success_nodata(si, _("The \2%s\2 flag has been set for channel \2%s\2."), "STAFFONLY", mc->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been set for channel \2%s\2."), "RESTRICTED", mc->name);
 
 		return;
 	}
 
 	else if (!strcasecmp("OFF", parv[1]))
 	{
-		if (!(MC_STAFFONLY & mc->flags))
+		if (!(MC_RESTRICTED & mc->flags))
 		{
-			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for channel \2%s\2."), "STAFFONLY", mc->name);
+			command_fail(si, fault_nochange, _("The \2%s\2 flag is not set for channel \2%s\2."), "RESTRICTED", mc->name);
 			return;
 		}
 
-		snoop("SET:STAFFONLY:OFF: for \2%s\2 by \2%s\2", mc->name, get_oper_name(si));
-		logcommand(si, CMDLOG_SET, "%s SET STAFFONLY OFF", mc->name);
+		logcommand(si, CMDLOG_SET, "%s SET RESTRICTED OFF", mc->name);
 
-		mc->flags &= ~MC_STAFFONLY;
+		mc->flags &= ~MC_RESTRICTED;
 
-		command_success_nodata(si, _("The \2%s\2 flag has been removed for channel \2%s\2."), "STAFFONLY", mc->name);
+		command_success_nodata(si, _("The \2%s\2 flag has been removed for channel \2%s\2."), "RESTRICTED", mc->name);
 
 		return;
 	}
 
 	else
 	{
-		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "STAFFONLY");
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "RESTRICTED");
 		return;
 	}
 }
