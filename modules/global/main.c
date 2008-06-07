@@ -8,7 +8,6 @@
  */
 
 #include "atheme.h"
-#include "uplink.h" /* XXX direct use of sts() */
 
 DECLARE_MODULE_V1
 (
