@@ -283,8 +283,18 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 			if (!(mc->flags & MC_GUARD))
 				join(chan->name, chansvs.nick);
 		}
-		ban(chansvs.me->me, chan, u);
-		remove_ban_exceptions(chansvs.me->me, chan, u);
+		if (mc->mlock_on & CMODE_INVITE || chan->modes & CMODE_INVITE)
+		{
+			if (!(chan->modes & CMODE_INVITE))
+				check_modes(mc, TRUE);
+			remove_banlike(chansvs.me->me, chan, ircd->invex_mchar, u);
+			modestack_flush_channel(chan);
+		}
+		else
+		{
+			ban(chansvs.me->me, chan, u);
+			remove_ban_exceptions(chansvs.me->me, chan, u);
+		}
 		kick(chansvs.nick, chan->name, u->nick, "You are not authorized to be on this channel");
 		hdata->cu = NULL;
 		return;
