@@ -53,6 +53,7 @@ DECLARE_MODULE_V1
 
 service_t *alis;
 list_t alis_cmdtree;
+list_t alis_helptree;
 
 static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[]);
 static void alis_cmd_help(sourceinfo_t *si, int parc, char *parv[]);
@@ -101,6 +102,9 @@ void _modinit(module_t *m)
 
 	command_add(&alis_list, &alis_cmdtree);
 	command_add(&alis_help, &alis_cmdtree);
+
+	help_addentry(&alis_helptree, "HELP", "help/help", NULL);
+	help_addentry(&alis_helptree, "LIST", "help/alis/list", NULL);
 }
 
 void _moddeinit()
@@ -109,6 +113,9 @@ void _moddeinit()
 
 	command_delete(&alis_list, &alis_cmdtree);
 	command_delete(&alis_help, &alis_cmdtree);
+
+	help_delentry(&alis_helptree, "HELP");
+	help_delentry(&alis_helptree, "LIST");
 
 	del_service(alis);
 }
@@ -417,7 +424,24 @@ static void alis_cmd_list(sourceinfo_t *si, int parc, char *parv[])
 
 static void alis_cmd_help(sourceinfo_t *si, int parc, char *parv[])
 {
-	command_help(si, &alis_cmdtree);
+	const char *command = parv[0];
+
+	if (command == NULL)
+	{
+		command_success_nodata(si, _("***** \2%s Help\2 *****"), alis->name);
+		command_success_nodata(si, _("\2%s\2 allows searching for channels with more\n"
+					"flexibility than the /list command."),
+				alis->name);
+		command_success_nodata(si, " ");
+		command_success_nodata(si, _("For more information on a command, type:"));
+		command_success_nodata(si, "\2/%s%s help <command>\2", (ircd->uses_rcommand == FALSE) ? "msg " : "", alis->disp);
+		command_success_nodata(si, " ");
+		command_help(si, &alis_cmdtree);
+		command_success_nodata(si, _("***** \2End of Help\2 *****"));
+		return;
+	}
+
+	help_display(si, command, &alis_helptree);
 }
 
 static void alis_handler(sourceinfo_t *si, int parc, char *parv[])

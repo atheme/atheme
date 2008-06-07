@@ -20,6 +20,7 @@ for d in $helpdir/*; do
 	[ -d "$d" ] || continue
 	service="${d##*/}"
 	case "$service" in
+		alis) service=ALIS ;;
 		cservice) service=ChanServ ;;
 		gservice) service=Global ;;
 		memoserv) service=MemoServ ;;

@@ -1,0 +1,19 @@
+Help for LIST:
+
+LIST gives a list of channels matching the
+pattern, modified by the other options.
+
+The pattern can contain * and ? wildcards.
+
+Options are:
+    -min <n>: minimum users in channel
+    -max <n>: maximum users in channel
+    -skip <n>: skip first <n> matches
+    -show [m][t]: show modes/topicsetter
+    -mode <+|-|=><modes>: modes set/unset/equal
+    -topic <pattern>: topic matches pattern
+
+Syntax: LIST <pattern> [options]
+
+Examples:
+    /msg &nick& LIST * -min 50
