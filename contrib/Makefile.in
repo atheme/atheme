@@ -56,7 +56,6 @@ SRCS =					\
 	$(SRCDIR)/gen_listenerdemo.c	\
 	$(SRCDIR)/gen_vhostonreg.c	\
 	$(SRCDIR)/graphtastical.c	\
-	$(SRCDIR)/ircd_alis.c		\
 	$(SRCDIR)/ircd_catserv.c	\
 	$(SRCDIR)/ircd_nohalfops.c	\
 	$(SRCDIR)/ircd_noowner.c	\

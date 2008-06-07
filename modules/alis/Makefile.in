@@ -1,0 +1,19 @@
+# Copyright (c) 2003-2004 E. Will et al.
+# Rights to this code are documented in doc/LICENSE.
+#
+# This file contains build instructions.
+#
+# $Id: Makefile.in 8383 2007-06-03 20:28:34Z pippijn $
+#
+
+MODULE = alis
+
+include ../Makefile.defs
+
+MKDEP		= @MKDEP@ -DPREFIX=\"@prefix@\" -I../../include
+CFLAGS		= @CFLAGS@ -I../../include
+
+BASE_SRCS =			\
+	$(SRCDIR)/main.c
+
+include ../Makefile.common

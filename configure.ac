@@ -477,6 +477,7 @@ AC_OUTPUT([po/Makefile.in
 	modules/Makefile
 	modules/Makefile.common
 	modules/Makefile.defs
+	modules/alis/Makefile
 	modules/backend/Makefile
 	modules/chanserv/Makefile
 	modules/crypto/Makefile

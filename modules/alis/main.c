@@ -38,7 +38,7 @@
 
 DECLARE_MODULE_V1
 (
-	"alis", FALSE, _modinit, _moddeinit,
+	"alis/main", FALSE, _modinit, _moddeinit,
 	"$Revision$",
 	"William Pitcock <nenolod -at- nenolod.net>"
 );
