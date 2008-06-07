@@ -10376,7 +10376,7 @@ LIBS="$LIBS $MOWGLI_LIBS"
 BUILDROOT=`pwd`
 
 
-ac_config_files="$ac_config_files po/Makefile.in Makefile contrib/Makefile modules/Makefile modules/Makefile.common modules/Makefile.defs modules/backend/Makefile modules/chanserv/Makefile modules/crypto/Makefile modules/gameserv/Makefile modules/global/Makefile modules/jsonrpc/Makefile modules/memoserv/Makefile modules/misc/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/protocol/Makefile modules/saslserv/Makefile modules/xmlrpc/Makefile src/Makefile"
+ac_config_files="$ac_config_files po/Makefile.in Makefile contrib/Makefile modules/Makefile modules/Makefile.common modules/Makefile.defs modules/alis/Makefile modules/backend/Makefile modules/chanserv/Makefile modules/crypto/Makefile modules/gameserv/Makefile modules/global/Makefile modules/jsonrpc/Makefile modules/memoserv/Makefile modules/misc/Makefile modules/nickserv/Makefile modules/operserv/Makefile modules/protocol/Makefile modules/saslserv/Makefile modules/xmlrpc/Makefile src/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -10954,6 +10954,7 @@ do
     "modules/Makefile") CONFIG_FILES="$CONFIG_FILES modules/Makefile" ;;
     "modules/Makefile.common") CONFIG_FILES="$CONFIG_FILES modules/Makefile.common" ;;
     "modules/Makefile.defs") CONFIG_FILES="$CONFIG_FILES modules/Makefile.defs" ;;
+    "modules/alis/Makefile") CONFIG_FILES="$CONFIG_FILES modules/alis/Makefile" ;;
     "modules/backend/Makefile") CONFIG_FILES="$CONFIG_FILES modules/backend/Makefile" ;;
     "modules/chanserv/Makefile") CONFIG_FILES="$CONFIG_FILES modules/chanserv/Makefile" ;;
     "modules/crypto/Makefile") CONFIG_FILES="$CONFIG_FILES modules/crypto/Makefile" ;;
