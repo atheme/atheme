@@ -100,6 +100,8 @@ all supported ircds:
   (this is done by faking an incoming mode change "+")
 - when a channel is registered or the mode locks are changed, check the
   mode locks right away
+- when kicking a user because of restricted, the mlock includes +i and the
+  channel is not +i yet, check the mode locks right away
 - when kicking a user because of mlock +i and the channel is not +i yet, check
   the mode locks right away
 - on any mode lock check, clear MC_MLOCK_CHECK if it is set
