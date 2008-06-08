@@ -465,7 +465,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	if (type == EMAIL_REGISTER)
 	{
 		fprintf(out, "In order to complete your registration, you must send the following\ncommand on IRC:\n");
-		fprintf(out, "/MSG %s VERIFY REGISTER %s %s\n\n", nicksvs.nick, mu->name, param);
+		fprintf(out, "/msg %s VERIFY REGISTER %s %s\n\n", nicksvs.disp, mu->name, param);
 		fprintf(out, "Thank you for registering your %s on the %s IRC " "network!\n\n",
 				(nicksvs.no_nick_ownership ? "account" : "nickname"), me.netname);
 	}
@@ -477,7 +477,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	else if (type == EMAIL_SETEMAIL)
 	{
 		fprintf(out, "In order to complete your email change, you must send\n" "the following command on IRC:\n");
-		fprintf(out, "/MSG %s VERIFY EMAILCHG %s %s\n\n", nicksvs.nick, mu->name, param);
+		fprintf(out, "/msg %s VERIFY EMAILCHG %s %s\n\n", nicksvs.disp, mu->name, param);
 	}
 	else if (type == EMAIL_MEMO)
 	{
@@ -491,7 +491,7 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	else if (type == EMAIL_SETPASS)
 	{
 		fprintf(out, "In order to set a new password, you must send\n" "the following command on IRC:\n");
-		fprintf(out, "/MSG %s SETPASS %s %s <password>\nwhere <password> is your desired new password.\n\n", nicksvs.nick, mu->name, param);
+		fprintf(out, "/msg %s SETPASS %s %s <password>\nwhere <password> is your desired new password.\n\n", nicksvs.disp, mu->name, param);
 	}
 
 	fprintf(out, "Thank you for your interest in the %s IRC network.\n", me.netname);
