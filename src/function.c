@@ -322,6 +322,46 @@ boolean_t validhostmask(const char *host)
 	return TRUE;
 }
 
+boolean_t validtopic(const char *topic)
+{
+	int i;
+
+	/* Most server protocols support less than this (depending on
+	 * the lengths of the identifiers), but this should catch the
+	 * ludicrous stuff.
+	 */
+	if (strlen(topic) > 450)
+		return FALSE;
+	for (i = 0; topic[i] != '\0'; i++)
+	{
+		switch (topic[i])
+		{
+			case '\r':
+			case '\n':
+				return FALSE;
+		}
+	}
+	if (ircd->flags & IRCD_TOPIC_NOCOLOUR)
+	{
+		for (i = 0; topic[i] != '\0'; i++)
+		{
+			switch (topic[i])
+			{
+				case 2:
+				case 3:
+				case 6:
+				case 7:
+				case 22:
+				case 23:
+				case 27:
+				case 31:
+					return FALSE;
+			}
+		}
+	}
+	return TRUE;
+}
+
 /* send the specified type of email.
  *
  * u is whoever caused this to be called, the corresponding service

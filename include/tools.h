@@ -116,6 +116,7 @@ E char *replace(char *s, int size, const char *old, const char *new);
 E char *itoa(int num);
 E int validemail(const char *email);
 E boolean_t validhostmask(const char *host);
+E boolean_t validtopic(const char *topic);
 E char *sbytes(float x);
 E float bytes(float x);
 

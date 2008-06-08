@@ -358,6 +358,10 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	if (MU_WAITAUTH & mu->flags)
 		command_success_nodata(si, _("%s has not completed registration verification"), mu->name);
 
+	if ((mu == si->smu || has_priv(si, PRIV_USER_AUSPEX)) &&
+			(md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:newemail")))
+		command_success_nodata(si, _("%s has requested an email address change to %s"), mu->name, md->value);
+
 	req.si = si;
 	req.mu = mu;
 	req.mn = mn;

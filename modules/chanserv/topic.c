@@ -97,6 +97,12 @@ static void cs_cmd_topic(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (!validtopic(topic))
+	{
+		command_fail(si, fault_badparams, _("The new topic is invalid or too long."), chan);
+		return;
+	}
+
 	if (si->su != NULL)
 		topicsetter = si->su->nick;
 	else if (si->smu != NULL)
@@ -166,6 +172,12 @@ static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[])
 	else
 		strlcpy(topicbuf, topic, BUFSIZE);
 
+	if (!validtopic(topicbuf))
+	{
+		command_fail(si, fault_badparams, _("The new topic is invalid or too long."), chan);
+		return;
+	}
+
 	if (si->su != NULL)
 		topicsetter = si->su->nick;
 	else if (si->smu != NULL)
@@ -234,6 +246,12 @@ static void cs_cmd_topicprepend(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 		strlcpy(topicbuf, topic, BUFSIZE);
+
+	if (!validtopic(topicbuf))
+	{
+		command_fail(si, fault_badparams, _("The new topic is invalid or too long."), chan);
+		return;
+	}
 
 	if (si->su != NULL)
 		topicsetter = si->su->nick;

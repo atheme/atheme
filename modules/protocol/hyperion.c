@@ -43,7 +43,7 @@ ircd_t Hyperion = {
 	"beIqd",                        /* Ban-like cmodes */
 	'e',                            /* Except mchar */
 	'I',                            /* Invex mchar */
-	0                               /* Flags */
+	IRCD_TOPIC_NOCOLOUR             /* Flags */
 };
 
 struct cmode_ hyperion_mode_list[] = {
