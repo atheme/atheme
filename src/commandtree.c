@@ -291,6 +291,9 @@ static int text_to_parv(char *text, int maxparc, char **parv)
 	if ((parv[count] = strtok(p, "")) != NULL)
 	{
 		p = parv[count];
+		while (*p == ' ')
+			p++;
+		parv[count] = p;
 		if (*p != '\0')
 		{
 			p += strlen(p) - 1;
