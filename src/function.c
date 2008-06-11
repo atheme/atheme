@@ -539,7 +539,6 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 		fprintf(out, "\nThis email was sent due to a command from %s[%s@%s]\nat %s.\n", u->nick, u->user, u->vhost, date);
 	fprintf(out, "If this message is spam, please contact %s\nwith a full copy.\n",
 			me.adminemail);
-	fprintf(out, ".\n");
 	rc = 1;
 	if (ferror(out))
 		rc = 0;
