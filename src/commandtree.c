@@ -300,8 +300,8 @@ static int text_to_parv(char *text, int maxparc, char **parv)
 			while (*p == ' ' && p > parv[count])
 				p--;
 			p[1] = '\0';
+			count++;
 		}
-		count++;
 	}
 	return count;
 }
