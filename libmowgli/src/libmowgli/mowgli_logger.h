@@ -37,9 +37,9 @@
 typedef void (*mowgli_log_cb_t)(const char *);
 
 #ifdef __GNUC__
-# define mowgli_log(fmt, args ...) mowgli_log_real(__FILE__, __LINE__, __PRETTY_FUNCTION__, fmt, ## args)
+# define mowgli_log(...) mowgli_log_real(__FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
 #else
-# define mowgli_log(fmt, args ...) mowgli_log_real(__FILE__, __LINE__, "", fmt, ## args)
+# define mowgli_log(...) mowgli_log_real(__FILE__, __LINE__, __func__, __VA_ARGS__)
 #endif
 
 extern void mowgli_log_real(const char *file, int line, const char *func, const char *buf, ...);
