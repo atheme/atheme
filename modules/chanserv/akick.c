@@ -52,6 +52,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 	char *cmd;
 	char *uname = parv[2];
 	char *reason = parv[3];
+	const char *ago;
 
 	if (parc < 2)
 	{
@@ -272,18 +273,19 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			if (ca->level == CA_AKICK)
 			{
 				md = metadata_find(ca, METADATA_CHANACS, "reason");
+				ago = ca->ts ? time_ago(ca->ts) : "?";
 				if (ca->myuser == NULL)
 					command_success_nodata(si, _("%d: \2%s\2  %s [modified: %s ago]"),
 							++i, ca->host,
-							md ? md->value : "", time_ago(ca->ts));
+							md ? md->value : "", ago);
 				else if (LIST_LENGTH(&ca->myuser->logins) > 0)
 					command_success_nodata(si, _("%d: \2%s\2 (logged in)  %s [modified: %s ago]"),
 							++i, ca->myuser->name,
-							md ? md->value : "", time_ago(ca->ts));
+							md ? md->value : "", ago);
 				else
 					command_success_nodata(si, _("%d: \2%s\2 (not logged in)  %s [modified: %s ago]"),
 							++i, ca->myuser->name,
-							md ? md->value : "", time_ago(ca->ts));
+							md ? md->value : "", ago);
 			}
 
 		}
