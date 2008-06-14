@@ -77,6 +77,7 @@ static void ns_cmd_set(sourceinfo_t *si, int parc, char *parv[])
 static void _ns_setemail(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *email = parv[0];
+	metadata_t *md;
 
 	if (si->smu == NULL)
 		return;
@@ -94,15 +95,24 @@ static void _ns_setemail(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!validemail(email))
+	if (!strcasecmp(si->smu->email, email))
 	{
-		command_fail(si, fault_badparams, _("\2%s\2 is not a valid email address."), email);
+		md = metadata_find(si->smu, METADATA_USER, "private:verify:emailchg:newemail");
+		if (md != NULL)
+		{
+			command_success_nodata(si, _("The email address change to \2%s\2 has been cancelled."), md->value);
+			metadata_delete(si->smu, METADATA_USER, "private:verify:emailchg:key");
+			metadata_delete(si->smu, METADATA_USER, "private:verify:emailchg:newemail");
+			metadata_delete(si->smu, METADATA_USER, "private:verify:emailchg:timestamp");
+		}
+		else
+			command_fail(si, fault_nochange, _("The email address for account \2%s\2 is already set to \2%s\2."), si->smu->name, si->smu->email);
 		return;
 	}
 
-	if (!strcasecmp(si->smu->email, email))
+	if (!validemail(email))
 	{
-		command_fail(si, fault_badparams, _("The email address for account \2%s\2 is already set to \2%s\2."), si->smu->name, si->smu->email);
+		command_fail(si, fault_badparams, _("\2%s\2 is not a valid email address."), email);
 		return;
 	}
 
