@@ -360,7 +360,17 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	if ((mu == si->smu || has_priv(si, PRIV_USER_AUSPEX)) &&
 			(md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:newemail")))
-		command_success_nodata(si, _("%s has requested an email address change to %s"), mu->name, md->value);
+	{
+		const char *newemail = md->value;
+		time_t ts;
+
+		md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:timestamp");
+		ts = md != NULL ? atoi(md->value) : 0;
+		tm = *localtime(&ts);
+		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
+
+		command_success_nodata(si, _("%s has requested an email address change to %s on %s"), mu->name, newemail, strfbuf);
+	}
 
 	req.si = si;
 	req.mu = mu;
