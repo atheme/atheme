@@ -477,7 +477,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 	char modebuf[32], *end, c;
 	int add = -1;
 	int newlock_on = 0, newlock_off = 0, newlock_limit = 0, flag = 0;
-	int mask;
+	int mask, changed;
 	boolean_t mask_ext;
 	char newlock_key[KEYLEN];
 	char newlock_ext[MAXEXTMODES][512];
@@ -656,10 +656,12 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	/* note: the following does not treat +lk and extmodes correctly */
+	changed = ((newlock_on ^ mc->mlock_on) | (newlock_off ^ mc->mlock_off));
+	changed &= ~mask;
 	/* if they're only allowed to alter oper only modes, require
 	 * them to actually change such modes -- jilles */
-	if (!(((newlock_on ^ mc->mlock_on) | (newlock_off ^ mc->mlock_off)) &
-				~mask) && mask_ext)
+	if (!changed && mask_ext)
 	{
 		command_fail(si, fault_noprivs, _("You may only alter \2+%s\2 modes."), flags_to_string(~mask));
 		return;
@@ -745,6 +747,8 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, _("The MLOCK for \2%s\2 has been removed."), mc->name);
 		logcommand(si, CMDLOG_SET, "%s SET MLOCK NONE", mc->name);
 	}
+	if (changed & ircd->oper_only_modes)
+		snoop(_("SET:MLOCK: \2%s\2 to \2%s\2 by \2%s\2"), mc->name, *modebuf != '\0' ? modebuf : "+", get_oper_name(si));
 
 	check_modes(mc, TRUE);
 
