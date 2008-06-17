@@ -478,6 +478,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 	int add = -1;
 	int newlock_on = 0, newlock_off = 0, newlock_limit = 0, flag = 0;
 	int mask;
+	boolean_t mask_ext;
 	char newlock_key[KEYLEN];
 	char newlock_ext[MAXEXTMODES][512];
 	boolean_t newlock_ext_off[MAXEXTMODES];
@@ -486,6 +487,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 	int i;
 	char *letters = strtok(parv[1], " ");
 	char *arg;
+	metadata_t *md;
 
 	if (!letters)
 	{
@@ -501,8 +503,21 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!chanacs_source_has_flag(mc, si, CA_SET))
 	{
-		command_fail(si, fault_noprivs, _("You are not authorized to perform this command."));
-		return;
+		if (ircd->oper_only_modes == 0 ||
+				!has_priv(si, PRIV_CHAN_CMODES) ||
+				!has_priv(si, PRIV_CHAN_ADMIN))
+		{
+			command_fail(si, fault_noprivs, _("You are not authorized to perform this command."));
+			return;
+		}
+		mask = ~ircd->oper_only_modes;
+		mask_ext = TRUE;
+	}
+	else
+	{
+		mask = has_priv(si, PRIV_CHAN_CMODES) ? 0 : ircd->oper_only_modes;
+		mask_ext = FALSE;
+
 	}
 
 	for (i = 0; i < MAXEXTMODES; i++)
@@ -510,11 +525,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 		newlock_ext[i][0] = '\0';
 		newlock_ext_off[i] = FALSE;
 	}
-	ext_plus[0] = '\0';
-	ext_minus[0] = '\0';
 	newlock_key[0] = '\0';
-
-	mask = has_priv(si, PRIV_CHAN_CMODES) ? 0 : ircd->oper_only_modes;
 
 	while (*letters)
 	{
@@ -645,17 +656,50 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	/* if they're only allowed to alter oper only modes, require
+	 * them to actually change such modes -- jilles */
+	if (!(((newlock_on ^ mc->mlock_on) | (newlock_off ^ mc->mlock_off)) &
+				~mask) && mask_ext)
+	{
+		command_fail(si, fault_noprivs, _("You may only alter \2+%s\2 modes."), flags_to_string(~mask));
+		return;
+	}
+
 	/* save it to mychan */
 	/* leave the modes in mask unchanged -- jilles */
 	mc->mlock_on = (newlock_on & ~mask) | (mc->mlock_on & mask);
 	mc->mlock_off = (newlock_off & ~mask) | (mc->mlock_off & mask);
-	mc->mlock_limit = newlock_limit;
-
-	if (mc->mlock_key)
+	if (!(mask & CMODE_LIMIT))
+		mc->mlock_limit = newlock_limit;
+	if (!(mask & CMODE_KEY))
+	{
 		free(mc->mlock_key);
+		mc->mlock_key = *newlock_key != '\0' ? sstrdup(newlock_key) : NULL;
+	}
 
-	mc->mlock_key = *newlock_key != '\0' ? sstrdup(newlock_key) : NULL;
-
+	ext_plus[0] = '\0';
+	ext_minus[0] = '\0';
+	if (mask_ext)
+	{
+		md = metadata_find(mc, METADATA_CHANNEL, "private:mlockext");
+		if (md != NULL)
+		{
+			arg = md->value;
+			while (*arg != '\0')
+			{
+				modebuf[0] = *arg;
+				modebuf[1] = '\0';
+				strlcat(arg[1] == ' ' || arg[1] == '\0' ? ext_minus : ext_plus, modebuf, MAXEXTMODES + 1);
+				arg++;
+				while (*arg != ' ' && *arg != '\0')
+					arg++;
+				while (*arg == ' ')
+					arg++;
+			}
+		}
+	}
+	else
+	{
 	newext[0] = '\0';
 	for (i = 0; i < MAXEXTMODES; i++)
 	{
@@ -680,6 +724,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 		metadata_add(mc, METADATA_CHANNEL, "private:mlockext", newext);
 	else
 		metadata_delete(mc, METADATA_CHANNEL, "private:mlockext");
+	}
 
 	end = modebuf;
 	*end = 0;
