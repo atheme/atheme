@@ -700,30 +700,30 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else
 	{
-	newext[0] = '\0';
-	for (i = 0; i < MAXEXTMODES; i++)
-	{
-		if (newlock_ext[i][0] != '\0' || newlock_ext_off[i])
+		newext[0] = '\0';
+		for (i = 0; i < MAXEXTMODES; i++)
 		{
-			if (*newext != '\0')
+			if (newlock_ext[i][0] != '\0' || newlock_ext_off[i])
 			{
-				modebuf[0] = ' ';
+				if (*newext != '\0')
+				{
+					modebuf[0] = ' ';
+					modebuf[1] = '\0';
+					strlcat(newext, modebuf, sizeof newext);
+				}
+				modebuf[0] = ignore_mode_list[i].mode;
 				modebuf[1] = '\0';
 				strlcat(newext, modebuf, sizeof newext);
+				strlcat(newlock_ext_off[i] ? ext_minus : ext_plus,
+						modebuf, MAXEXTMODES + 1);
+				if (!newlock_ext_off[i])
+					strlcat(newext, newlock_ext[i], sizeof newext);
 			}
-			modebuf[0] = ignore_mode_list[i].mode;
-			modebuf[1] = '\0';
-			strlcat(newext, modebuf, sizeof newext);
-			strlcat(newlock_ext_off[i] ? ext_minus : ext_plus,
-					modebuf, MAXEXTMODES + 1);
-			if (!newlock_ext_off[i])
-				strlcat(newext, newlock_ext[i], sizeof newext);
 		}
-	}
-	if (newext[0] != '\0')
-		metadata_add(mc, METADATA_CHANNEL, "private:mlockext", newext);
-	else
-		metadata_delete(mc, METADATA_CHANNEL, "private:mlockext");
+		if (newext[0] != '\0')
+			metadata_add(mc, METADATA_CHANNEL, "private:mlockext", newext);
+		else
+			metadata_delete(mc, METADATA_CHANNEL, "private:mlockext");
 	}
 
 	end = modebuf;
