@@ -604,8 +604,12 @@ boolean_t verify_password(myuser_t *mu, char *password)
 		if (crypto_module_loaded == TRUE)
 			return crypt_verify_password(password, mu->pass);
 		else
-		{	/* not good! */
-			slog(LG_ERROR, "check_password(): can't check crypted password -- no crypto module!");
+		{	/* not good!
+			 * but don't complain about crypted password '*',
+			 * this is supposed to never match
+			 */
+			if (strcmp(password, "*"))
+				slog(LG_ERROR, "check_password(): can't check crypted password -- no crypto module!");
 			return FALSE;
 		}
 	else
