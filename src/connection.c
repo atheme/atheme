@@ -166,7 +166,7 @@ void connection_close(connection_t *cptr)
 	nptr = node_find(cptr, &connection_list);
 	if (!nptr)
 	{
-		slog(LG_DEBUG, "connection_close(): connection %p is not registered!",
+		slog(LG_ERROR, "connection_close(): connection %p is not registered!",
 			cptr);
 		return;
 	}
