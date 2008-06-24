@@ -3,8 +3,7 @@ Help for DROP:
 Using this command makes &nick& remove your account
 and stop watching your nick(s), If a nick is dropped,
 anyone else can register it. You will also lose all
-your channel access and memos. You must use the
-&nick& IDENTIFY command before doing this.
+your channel access and memos.
 
 When dropping and re-registering an account during a
 netsplit, users on the other side of the split may later
