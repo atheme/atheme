@@ -50,6 +50,7 @@ SRCS =					\
 	$(SRCDIR)/cs_kickdots.c		\
 	$(SRCDIR)/cs_ping.c		\
 	$(SRCDIR)/cs_sync.c		\
+	$(SRCDIR)/cs_updown.c		\
 	$(SRCDIR)/cs_userinfo.c		\
 	$(SRCDIR)/gen_echoserver.c	\
 	$(SRCDIR)/gen_httpd.c		\
