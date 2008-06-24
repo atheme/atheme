@@ -20,7 +20,7 @@ static void cs_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);
 static void cs_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t cs_drop = { "DROP", N_("Drops a channel registration."),
-                        AC_NONE, 1, cs_cmd_drop };
+                        AC_NONE, 2, cs_cmd_drop };
 command_t cs_fdrop = { "FDROP", N_("Forces dropping of a channel registration."),
                         PRIV_CHAN_ADMIN, 1, cs_cmd_fdrop };
 
@@ -46,10 +46,32 @@ void _moddeinit()
 	help_delentry(cs_helptree, "FDROP");
 }
 
+static void create_challenge(sourceinfo_t *si, const char *name, int v, char *dest)
+{
+	char buf[256];
+	int digest[4];
+	md5_state_t ctx;
+
+	snprintf(buf, sizeof buf, "%lu:%s:%s",
+			(unsigned long)(CURRTIME / 300) - v,
+			get_source_name(si),
+			name);
+	md5_init(&ctx);
+	md5_append(&ctx, (unsigned char *)buf, strlen(buf));
+	md5_finish(&ctx, (unsigned char *)digest);
+	/* note: this depends on byte order, but that's ok because
+	 * it's only going to work in the same atheme instance anyway
+	 */
+	snprintf(dest, 80, "%x:%x", digest[0], digest[1]);
+}
+
 static void cs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 {
 	mychan_t *mc;
 	char *name = parv[0];
+	char *key = parv[1];
+	char fullcmd[512];
+	char key0[80], key1[80];
 
 	if (!name)
 	{
@@ -93,6 +115,25 @@ static void cs_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 	if (mc->flags & MC_HOLD)
 	{
 		command_fail(si, fault_noprivs, _("The channel \2%s\2 is held; it cannot be dropped."), mc->name);
+		return;
+	}
+
+	if (!key)
+	{
+		create_challenge(si, mc->name, 0, key0);
+		snprintf(fullcmd, sizeof fullcmd, "/%s%s DROP %s %s",
+				(ircd->uses_rcommand == FALSE) ? "msg " : "",
+				chansvs.disp, mc->name, key0);
+		command_success_nodata(si, _("To avoid accidental use of this command, this operation has to be confirmed. Please confirm by replying with \2%s\2"),
+				fullcmd);
+		return;
+	}
+	/* accept current and previous key */
+	create_challenge(si, mc->name, 0, key0);
+	create_challenge(si, mc->name, 1, key1);
+	if (strcmp(key, key0) && strcmp(key, key1))
+	{
+		command_fail(si, fault_badparams, _("Invalid key for %s."), "DROP");
 		return;
 	}
 
