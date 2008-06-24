@@ -61,6 +61,7 @@ SRCS =					\
 	$(SRCDIR)/ircd_noowner.c	\
 	$(SRCDIR)/ircd_noprotect.c	\
 	$(SRCDIR)/ns_fregister.c	\
+	$(SRCDIR)/ns_forbid.c		\
 	$(SRCDIR)/ns_generatepass.c	\
 	$(SRCDIR)/ns_mxcheck.c		\
 	$(SRCDIR)/ns_ratelimitreg.c	\
