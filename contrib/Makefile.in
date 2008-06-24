@@ -68,6 +68,7 @@ SRCS =					\
 	$(SRCDIR)/ns_ratelimitreg.c	\
 	$(SRCDIR)/os_pingspam.c		\
 	$(SRCDIR)/os_testcmd.c		\
+	$(SRCDIR)/os_klinechan.c	\
 	$(SRCDIR)/os_logonnews.c	\
 	$(SRCDIR)/os_logstream.c	\
 	$(SRCDIR)/os_tabletest.c
