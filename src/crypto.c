@@ -31,9 +31,9 @@ boolean_t crypto_module_loaded = FALSE;
  * systems. Modules provide this function, otherwise
  * it returns the string unencrypted.
  */
-char *(*crypt_string) (char *str, char *salt) = &generic_crypt_string;
+const char *(*crypt_string) (const char *str, const char *salt) = &generic_crypt_string;
 
-char *generic_crypt_string(char *str, char *salt)
+const char *generic_crypt_string(const char *str, const char *salt)
 {
 	return str;
 }
@@ -41,9 +41,9 @@ char *generic_crypt_string(char *str, char *salt)
 /*
  * crypt_verify_password is a frontend to crypt_string().
  */
-boolean_t crypt_verify_password(char *uinput, char *pass)
+boolean_t crypt_verify_password(const char *uinput, const char *pass)
 {
-	char *cstr = crypt_string(uinput, pass);
+	const char *cstr = crypt_string(uinput, pass);
 
 	if (!strcmp(cstr, pass))
 		return TRUE;
@@ -51,7 +51,7 @@ boolean_t crypt_verify_password(char *uinput, char *pass)
 	return FALSE;
 }
 
-char *gen_salt(void)
+const char *gen_salt(void)
 {
 	char *ht = gen_pw(6);
 

@@ -577,7 +577,7 @@ boolean_t is_admin(user_t *user)
 	return FALSE;
 }
 
-void set_password(myuser_t *mu, char *newpassword)
+void set_password(myuser_t *mu, const char *newpassword)
 {
 	if (mu == NULL || newpassword == NULL)
 		return;
@@ -595,7 +595,7 @@ void set_password(myuser_t *mu, char *newpassword)
 	}
 }
 
-boolean_t verify_password(myuser_t *mu, char *password)
+boolean_t verify_password(myuser_t *mu, const char *password)
 {
 	if (mu == NULL || password == NULL)
 		return FALSE;

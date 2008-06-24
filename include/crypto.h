@@ -10,10 +10,10 @@
 #ifndef CRYPTO_H
 #define CRYPTO_H
 
-E char *(*crypt_string)(char *str, char *salt);
-E char *generic_crypt_string(char *str, char *salt);
-E boolean_t crypt_verify_password(char *uinput, char *pass);
-E char *gen_salt(void);
+E const char *(*crypt_string)(const char *str, const char *salt);
+E const char *generic_crypt_string(const char *str, const char *salt);
+E boolean_t crypt_verify_password(const char *uinput, const char *pass);
+E const char *gen_salt(void);
 E boolean_t crypto_module_loaded;
 
 #endif

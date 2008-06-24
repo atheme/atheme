@@ -76,7 +76,8 @@ void init_accounts(void)
 }
 
 /*
- * myuser_add(char *name, char *pass, char *email, unsigned int flags)
+ * myuser_add(const char *name, const char *pass, const char *email,
+ * unsigned int flags)
  *
  * Creates an account and adds it to the accounts DTree.
  *
@@ -98,7 +99,7 @@ void init_accounts(void)
  *      - if nicksvs.no_nick_ownership is not enabled, the caller is
  *        responsible for adding a nick with the same name
  */
-myuser_t *myuser_add(char *name, char *pass, char *email, unsigned int flags)
+myuser_t *myuser_add(const char *name, const char *pass, const char *email, unsigned int flags)
 {
 	myuser_t *mu;
 	soper_t *soper;
@@ -495,7 +496,7 @@ myuser_access_verify(user_t *u, myuser_t *mu)
  *     - an access mask is added to an account.
  */
 boolean_t
-myuser_access_add(myuser_t *mu, char *mask)
+myuser_access_add(myuser_t *mu, const char *mask)
 {
 	node_t *n;
 	char *msk;
@@ -534,7 +535,7 @@ myuser_access_add(myuser_t *mu, char *mask)
  *     - none
  */
 char *
-myuser_access_find(myuser_t *mu, char *mask)
+myuser_access_find(myuser_t *mu, const char *mask)
 {
 	node_t *n;
 
@@ -567,7 +568,7 @@ myuser_access_find(myuser_t *mu, char *mask)
  *     - an access mask is added to an account.
  */
 void
-myuser_access_delete(myuser_t *mu, char *mask)
+myuser_access_delete(myuser_t *mu, const char *mask)
 {
 	node_t *n, *tn;
 

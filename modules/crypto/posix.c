@@ -16,7 +16,7 @@ DECLARE_MODULE_V1
 	"Atheme Development Group <http://www.atheme.org>"
 );
 
-static char *posix_crypt_string(char *key, char *salt)
+static const char *posix_crypt_string(const char *key, const char *salt)
 {
 	return crypt(key, salt);
 }

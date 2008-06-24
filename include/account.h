@@ -279,8 +279,8 @@ E void (*db_load)(void);
 /* function.c */
 E boolean_t is_founder(mychan_t *mychan, myuser_t *myuser);
 
-E void set_password(myuser_t *mu, char *newpassword);
-E boolean_t verify_password(myuser_t *mu, char *password);
+E void set_password(myuser_t *mu, const char *newpassword);
+E boolean_t verify_password(myuser_t *mu, const char *password);
 
 /* node.c */
 E list_t klnlist;
@@ -300,7 +300,7 @@ E mowgli_patricia_t *mclist;
 
 E void init_accounts(void);
 
-E myuser_t *myuser_add(char *name, char *pass, char *email, unsigned int flags);
+E myuser_t *myuser_add(const char *name, const char *pass, const char *email, unsigned int flags);
 E void myuser_delete(myuser_t *mu);
 //inline myuser_t *myuser_find(const char *name);
 E void myuser_rename(myuser_t *mu, const char *name);
@@ -310,9 +310,9 @@ E void myuser_notice(const char *from, myuser_t *target, const char *fmt, ...) P
 E unsigned int myuser_num_channels(myuser_t *mu);
 
 E boolean_t myuser_access_verify(user_t *u, myuser_t *mu);
-E boolean_t myuser_access_add(myuser_t *mu, char *mask);
-E char *myuser_access_find(myuser_t *mu, char *mask);
-E void myuser_access_delete(myuser_t *mu, char *mask);
+E boolean_t myuser_access_add(myuser_t *mu, const char *mask);
+E char *myuser_access_find(myuser_t *mu, const char *mask);
+E void myuser_access_delete(myuser_t *mu, const char *mask);
 
 E mynick_t *mynick_add(myuser_t *mu, const char *name);
 E void mynick_delete(mynick_t *mn);

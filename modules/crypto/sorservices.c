@@ -288,12 +288,12 @@ MyMD5Transform(uint32 buf[4], uint32 const in[16])
     buf[3] += d;
 }
 
-static void md5_buffer(char *passwd, int len, char *target)
+static void md5_buffer(const char *passwd, int len, char *target)
 {
      struct MyMD5Context ctx;
  
      MyMD5Init(&ctx);
-     MyMD5Update(&ctx, (unsigned char *)passwd, len);
+     MyMD5Update(&ctx, (unsigned const char *)passwd, len);
      MyMD5Final((unsigned char *)target, &ctx);
 }
 
@@ -301,7 +301,7 @@ static void md5_buffer(char *passwd, int len, char *target)
  * \brief Get the MD5 hashed version of password
  * \param pw Password to hash
  */
-static char *md5_password(char *pw)
+static char *md5_password(const char *pw)
 {
   static char md5buffer[16 + 1];
   /* unsigned static char tresult[512]; */
@@ -316,7 +316,7 @@ static char *md5_password(char *pw)
   return md5buffer;
 }
 
-static char *sorservices_crypt_string(char *key, char *salt)
+static const char *sorservices_crypt_string(const char *key, const char *salt)
 {
 	static char outbuf[BUFSIZE], buf[BUFSIZE];
 
