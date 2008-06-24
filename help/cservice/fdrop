@@ -1,0 +1,13 @@
+Help for FDROP:
+
+FDROP allows dropping any registered channel,
+provided it is not set held (see help on HOLD).
+
+Once you FDROP a channel all of the data associated
+with it (access lists, etc) are removed and cannot
+be restored.
+
+Syntax: FDROP <#channel>
+
+Examples:
+    /msg &nick& FDROP #foo
