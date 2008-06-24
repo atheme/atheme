@@ -1,0 +1,13 @@
+Help for FDROP:
+
+FDROP forcefully removes the given account, including
+all nicknames, channel access and memos attached to it.
+
+When dropping and re-registering an account during a
+netsplit, users on the other side of the split may later
+be recognized as the new account.
+
+Syntax: FDROP <nickname>
+
+Examples:
+    /msg &nick& FDROP foo

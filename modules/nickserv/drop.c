@@ -17,8 +17,10 @@ DECLARE_MODULE_V1
 );
 
 static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[]);
+static void ns_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_drop = { "DROP", N_("Drops an account registration."), AC_NONE, 2, ns_cmd_drop };
+command_t ns_fdrop = { "FDROP", N_("Forces dropping an account registration."), PRIV_USER_ADMIN, 1, ns_cmd_fdrop };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -28,13 +30,17 @@ void _modinit(module_t *m)
 	MODULE_USE_SYMBOL(ns_helptree, "nickserv/main", "ns_helptree");
 
 	command_add(&ns_drop, ns_cmdtree);
+	command_add(&ns_fdrop, ns_cmdtree);
 	help_addentry(ns_helptree, "DROP", "help/nickserv/drop", NULL);
+	help_addentry(ns_helptree, "FDROP", "help/nickserv/fdrop", NULL);
 }
 
 void _moddeinit()
 {
 	command_delete(&ns_drop, ns_cmdtree);
+	command_delete(&ns_fdrop, ns_cmdtree);
 	help_delentry(ns_helptree, "DROP");
+	help_delentry(ns_helptree, "FDROP");
 }
 
 static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
@@ -44,7 +50,7 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 	char *acc = parv[0];
 	char *pass = parv[1];
 
-	if (!acc)
+	if (!acc || !pass)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "DROP");
 		command_fail(si, fault_needmoreparams, _("Syntax: DROP <account> <password>"));
@@ -58,7 +64,7 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 			mn = mynick_find(acc);
 			if (mn != NULL && command_find(si->service->cmdtree, "UNGROUP"))
 			{
-				command_fail(si, fault_nosuch_target, _("\2%s\2 is a grouped nick, use UNGROUP to remove it."), acc);
+				command_fail(si, fault_nosuch_target, _("\2%s\2 is a grouped nick, use %s to remove it."), acc, "UNGROUP");
 				return;
 			}
 		}
@@ -66,19 +72,19 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!has_priv(si, PRIV_USER_ADMIN) && metadata_find(mu, METADATA_USER, "private:freeze:freezer"))
+	if (metadata_find(mu, METADATA_USER, "private:freeze:freezer"))
 	{
 		command_fail(si, fault_authfail, nicksvs.no_nick_ownership ? "You cannot login as \2%s\2 because the account has been frozen." : "You cannot identify to \2%s\2 because the nickname has been frozen.", mu->name);
 		return;
 	}
 
-	if ((pass || !has_priv(si, PRIV_USER_ADMIN)) && !verify_password(mu, pass))
+	if (!verify_password(mu, pass))
 	{
 		command_fail(si, fault_authfail, _("Authentication failed. Invalid password for \2%s\2."), mu->name);
 		return;
 	}
 
-	if (!nicksvs.no_nick_ownership && pass &&
+	if (!nicksvs.no_nick_ownership &&
 			LIST_LENGTH(&mu->nicks) > 1 &&
 			command_find(si->service->cmdtree, "UNGROUP"))
 	{
@@ -99,11 +105,56 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (!pass)
-		wallops("%s dropped the account \2%s\2", get_oper_name(si), mu->name);
-
 	snoop("DROP: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
-	logcommand(si, pass ? CMDLOG_REGISTER : CMDLOG_ADMIN | LG_REGISTER, "DROP %s%s", mu->name, pass ? "" : " (admin)");
+	logcommand(si, CMDLOG_REGISTER, "DROP %s", mu->name);
+	hook_call_event("user_drop", mu);
+	command_success_nodata(si, _("The account \2%s\2 has been dropped."), mu->name);
+	object_unref(mu);
+}
+
+static void ns_cmd_fdrop(sourceinfo_t *si, int parc, char *parv[])
+{
+	myuser_t *mu;
+	mynick_t *mn;
+	char *acc = parv[0];
+
+	if (!acc)
+	{
+		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FDROP");
+		command_fail(si, fault_needmoreparams, _("Syntax: FDROP <account>"));
+		return;
+	}
+
+	if (!(mu = myuser_find(acc)))
+	{
+		if (!nicksvs.no_nick_ownership)
+		{
+			mn = mynick_find(acc);
+			if (mn != NULL && command_find(si->service->cmdtree, "FUNGROUP"))
+			{
+				command_fail(si, fault_nosuch_target, _("\2%s\2 is a grouped nick, use %s to remove it."), acc, "FUNGROUP");
+				return;
+			}
+		}
+		command_fail(si, fault_nosuch_target, _("\2%s\2 is not registered."), acc);
+		return;
+	}
+
+	if (is_soper(mu))
+	{
+		command_fail(si, fault_noprivs, _("The nickname \2%s\2 belongs to a services operator; it cannot be dropped."), acc);
+		return;
+	}
+
+	if (mu->flags & MU_HOLD)
+	{
+		command_fail(si, fault_noprivs, _("The account \2%s\2 is held; it cannot be dropped."), acc);
+		return;
+	}
+
+	wallops("%s dropped the account \2%s\2", get_oper_name(si), mu->name);
+	snoop("FDROP: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
+	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FDROP %s", mu->name);
 	hook_call_event("user_drop", mu);
 	command_success_nodata(si, _("The account \2%s\2 has been dropped."), mu->name);
 	object_unref(mu);
