@@ -42,8 +42,10 @@ static void cs_cmd_up(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanuser_t *cu;
 	mychan_t *mc;
+	node_t *n, *tn;
 	char *name = parv[0];
 	int fl;
+	boolean_t noop;
 
 	if (!name)
 	{
@@ -74,58 +76,67 @@ static void cs_cmd_up(sourceinfo_t *si, int parc, char *parv[])
 		return; // needs to be done over IRC
 
 	cu = chanuser_find(mc->chan, si->su);
+
+	if (!cu)
+	{
+		command_fail(si, fault_nosuch_target, "You are not on \2%s\2", mc->chan);
+		return;
+	}
+
 	fl = chanacs_user_flags(mc, cu->user);
 
-	if (cu)
+	// Don't check NOOP, because they are explicitly requesting status
+	if (ircd->uses_owner)
 	{
-		// Don't check NOOP, because they are explicitly requesting status
-		if (ircd->uses_owner)
+		if (fl & CA_USEOWNER)
 		{
-			if (fl & CA_USEOWNER)
+			if (fl & CA_AUTOOP && !(ircd->owner_mode & cu->modes))
 			{
-				if (!(ircd->owner_mode & cu->modes))
-				{
-					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(cu->user));
-					cu->modes |= ircd->owner_mode;
-				}
+				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->owner_mchar[1], CLIENT_NAME(cu->user));
+				cu->modes |= ircd->owner_mode;
 			}
 		}
+	}
 
-		if (ircd->uses_protect)
+	if (ircd->uses_protect)
+	{
+		if (fl & CA_USEPROTECT)
 		{
-			if (fl & CA_USEPROTECT)
+			if (fl & CA_AUTOOP && !(ircd->protect_mode & cu->modes))
 			{
-				if (!(ircd->protect_mode & cu->modes))
-				{
-					modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(cu->user));
-					cu->modes |= ircd->protect_mode;
-				}
+				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->protect_mchar[1], CLIENT_NAME(cu->user));
+				cu->modes |= ircd->protect_mode;
 			}
 		}
+	}
 
-		if (fl & CA_OP)
+	if (fl & (CA_AUTOOP | CA_OP))
+	{
+		if (fl & CA_AUTOOP && !(CMODE_OP & cu->modes))
 		{
-			if (!(CMODE_OP & cu->modes))
-			{
-				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'o', CLIENT_NAME(cu->user));
-				cu->modes |= CMODE_OP;
-			}
+			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'o', CLIENT_NAME(cu->user));
+			cu->modes |= CMODE_OP;
 		}
-		else if (ircd->uses_halfops && fl & CA_HALFOP)
+	}
+
+	if (ircd->uses_halfops)
+	{
+		if (fl & (CA_AUTOHALFOP | CA_HALFOP))
 		{
-			if (!(ircd->halfops_mode & cu->modes))
+			if (fl & CA_AUTOHALFOP && !(ircd->halfops_mode & cu->modes))
 			{
 				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, ircd->halfops_mchar[1], CLIENT_NAME(cu->user));
 				cu->modes |= ircd->halfops_mode;
 			}
 		}
-		else if (fl & CA_VOICE)
+	}
+
+	if (fl & (CA_AUTOVOICE | CA_VOICE))
+	{
+		if (fl & CA_AUTOVOICE && !(CMODE_VOICE & cu->modes))
 		{
-			if (!(CMODE_VOICE & cu->modes))
-			{
-				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'v', CLIENT_NAME(cu->user));
-				cu->modes |= CMODE_VOICE;
-			}
+			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_ADD, 'v', CLIENT_NAME(cu->user));
+			cu->modes |= CMODE_VOICE;
 		}
 	}
 
@@ -137,8 +148,10 @@ static void cs_cmd_down(sourceinfo_t *si, int parc, char *parv[])
 {
 	chanuser_t *cu;
 	mychan_t *mc;
+	node_t *n, *tn;
 	char *name = parv[0];
 	int fl;
+	boolean_t noop;
 
 	if (!name)
 	{
@@ -169,49 +182,53 @@ static void cs_cmd_down(sourceinfo_t *si, int parc, char *parv[])
 		return; // needs to be done over IRC
 
 	cu = chanuser_find(mc->chan, si->su);
+
+	if (!cu)
+	{
+		command_fail(si, fault_nosuch_target, "You are not on \2%s\2", mc->chan);
+		return;
+	}
+
 	fl = chanacs_user_flags(mc, cu->user);
 
-	if (cu)
+	// Don't check NOOP, because they are explicitly requesting status
+	if (ircd->uses_owner)
 	{
-		// Don't check NOOP, because they are explicitly requesting status
-		if (ircd->uses_owner)
+		if (ircd->owner_mode & cu->modes)
 		{
-			if (fl & CA_USEOWNER && ircd->owner_mode & cu->modes)
-			{
-				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, ircd->owner_mchar[1], CLIENT_NAME(cu->user));
-				cu->modes &= ~ircd->owner_mode;
-			}
+			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, ircd->owner_mchar[1], CLIENT_NAME(cu->user));
+			cu->modes &= ~ircd->owner_mode;
 		}
+	}
 
-		if (ircd->uses_protect)
+	if (ircd->uses_protect)
+	{
+		if (ircd->protect_mode & cu->modes)
 		{
-			if (fl & CA_USEPROTECT && ircd->protect_mode & cu->modes)
-			{
-				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, ircd->protect_mchar[1], CLIENT_NAME(cu->user));
-				cu->modes &= ~ircd->protect_mode;
-			}
+			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, ircd->protect_mchar[1], CLIENT_NAME(cu->user));
+			cu->modes &= ~ircd->protect_mode;
 		}
+	}
 
-		if (fl & CA_OP && CMODE_OP & cu->modes)
-		{
-			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'o', CLIENT_NAME(cu->user));
-			cu->modes &= ~CMODE_OP;
-		}
+	if ((CMODE_OP & cu->modes))
+	{
+		modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'o', CLIENT_NAME(cu->user));
+		cu->modes &= ~CMODE_OP;
+	}
 
-		if (ircd->uses_halfops)
+	if (ircd->uses_halfops)
+	{
+		if (ircd->halfops_mode & cu->modes)
 		{
-			if (fl & CA_HALFOP && ircd->halfops_mode & cu->modes)
-			{
-				modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, ircd->halfops_mchar[1], CLIENT_NAME(cu->user));
-				cu->modes &= ~ircd->halfops_mode;
-			}
+			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, ircd->halfops_mchar[1], CLIENT_NAME(cu->user));
+			cu->modes &= ~ircd->halfops_mode;
 		}
+	}
 
-		if (fl & CA_VOICE && CMODE_VOICE & cu->modes)
-		{
-			modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'v', CLIENT_NAME(cu->user));
-			cu->modes &= ~CMODE_VOICE;
-		}
+	if ((CMODE_VOICE & cu->modes))
+	{
+		modestack_mode_param(chansvs.nick, mc->chan, MTYPE_DEL, 'v', CLIENT_NAME(cu->user));
+		cu->modes &= ~CMODE_VOICE;
 	}
 
 	command_success_nodata(si, "Downed successfully on \2%s\2.", mc->name);
