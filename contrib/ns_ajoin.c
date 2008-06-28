@@ -35,6 +35,12 @@ static void ns_cmd_ajoin(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (!si->smu)
+	{
+		command_fail(si, fault_badparams, "You are not logged in.");
+		return;
+	}
+
 	if (!strcasecmp(parv[0], "LIST"))
 	{
 		command_success_nodata(si, "\2AJOIN LIST\2:");
