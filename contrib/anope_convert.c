@@ -37,6 +37,11 @@
  * (this requires using the ircservices crypto module) */
 #define CONVERT_CRYPTPASS
 
+/* define this if you want to convert not having the AUTOOP flag
+ * to having the NOOP flag. this is disabled by default because
+ * it often seems to mark everyone NOOP. */
+/* #define CONVERT_AUTOOP */
+
 /* operclass names */
 #define OPERCLASS_ROOT "sra"
 #define OPERCLASS_ADMIN "admin"
@@ -84,9 +89,11 @@ void write_accounts(void)
 				continue;
 			if (nc->flags & NI_HIDE_EMAIL)
 				athemeflags |= 0x10; /* MU_HIDEMAIL */
+#ifdef CONVERT_AUTOOP
 #ifdef NI_AUTOOP
 			if (!(nc->flags & NI_AUTOOP))
 				athemeflags |= 0x4; /* MU_NOOP */
+#endif
 #endif
 #if VERSION_BUILD >= 1185
 			if (enc_decrypt(nc->pass,decr_pass,PASSMAX)!=1)
