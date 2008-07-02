@@ -300,6 +300,9 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	if (is_soper(mu))
+		snoop("SOPER:AF: \2%s\2 as \2%s\2", u->nick, mu->name);
+
 	logcommand(si, CMDLOG_LOGIN, "failed " COMMAND_UC " to %s (bad password)", mu->name);
 
 	command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), mu->name);
