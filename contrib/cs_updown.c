@@ -79,7 +79,7 @@ static void cs_cmd_up(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!cu)
 	{
-		command_fail(si, fault_nosuch_target, "You are not on \2%s\2", mc->chan);
+		command_fail(si, fault_nosuch_target, "You are not on \2%s\2.", mc->name);
 		return;
 	}
 
@@ -185,7 +185,7 @@ static void cs_cmd_down(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!cu)
 	{
-		command_fail(si, fault_nosuch_target, "You are not on \2%s\2", mc->chan);
+		command_fail(si, fault_nosuch_target, "You are not on \2%s\2.", mc->name);
 		return;
 	}
 
