@@ -479,6 +479,59 @@ void change_notify(const char *from, user_t *to, const char *fmt, ...)
 	notice_user_sts(user_find_named(from), to, buf);
 }
 
+/*
+ * bad_password()
+ *
+ * Registers an attempt to authenticate with an incorrect password.
+ *
+ * Inputs:
+ *       - sourceinfo_t representing what sent the bad password
+ *       - myuser_t object attempt was against
+ *
+ * Outputs:
+ *       - whether the user was killed off the network
+ *
+ * Side Effects:
+ *       - attempt is registered in metadata
+ *       - opers warned if necessary
+ *
+ * Note:
+ *       - kills are currently not done
+ */
+boolean_t bad_password(sourceinfo_t *si, myuser_t *mu)
+{
+	const char *mask;
+	struct tm tm;
+	char numeric[21], strfbuf[32];
+	int count;
+	metadata_t *md_failnum;
+
+	mask = get_source_mask(si);
+
+	md_failnum = metadata_find(mu, METADATA_USER, "private:loginfail:failnum");
+	count = md_failnum ? atoi(md_failnum->value) : 0;
+	count++;
+	snprintf(numeric, sizeof numeric, "%d", count);
+	md_failnum = metadata_add(mu, METADATA_USER, "private:loginfail:failnum", numeric);
+	metadata_add(mu, METADATA_USER, "private:loginfail:lastfailaddr", mask);
+	snprintf(numeric, sizeof numeric, "%lu", (unsigned long)CURRTIME);
+	metadata_add(mu, METADATA_USER, "private:loginfail:lastfailtime", numeric);
+
+	if (is_soper(mu))
+		snoop("SOPER:AF: \2%s\2 as \2%s\2", get_source_name(si), mu->name);
+
+	if (atoi(md_failnum->value) == 10)
+	{
+		time_t ts = CURRTIME;
+		tm = *localtime(&ts);
+		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
+
+		wallops("Warning: Numerous failed login attempts to \2%s\2. Last attempt received from \2%s\2 on %s.", mu->name, mask, strfbuf);
+	}
+
+	return FALSE;
+}
+
 void command_fail(sourceinfo_t *si, faultcode_t code, const char *fmt, ...)
 {
 	va_list args;

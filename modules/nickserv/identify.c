@@ -136,9 +136,6 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		/* logout killed the user... */
 		return;
 
-	/* we use this in both cases, so set it up here. may be NULL. */
-	md_failnum = metadata_find(mu, METADATA_USER, "private:loginfail:failnum");
-
 	if (verify_password(mu, password))
 	{
 		if (LIST_LENGTH(&mu->logins) >= me.maxlogins)
@@ -195,6 +192,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		command_success_nodata(si, nicksvs.no_nick_ownership ? "You are now logged in as \2%s\2." : "You are now identified for \2%s\2.", u->myuser->name);
 
 		/* check for failed attempts and let them know */
+		md_failnum = metadata_find(mu, METADATA_USER, "private:loginfail:failnum");
 		if (md_failnum && (atoi(md_failnum->value) > 0))
 		{
 			metadata_t *md_failtime, *md_failaddr;
@@ -300,34 +298,10 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (is_soper(mu))
-		snoop("SOPER:AF: \2%s\2 as \2%s\2", u->nick, mu->name);
-
 	logcommand(si, CMDLOG_LOGIN, "failed " COMMAND_UC " to %s (bad password)", mu->name);
 
 	command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), mu->name);
-
-	/* record the failed attempts */
-	/* note that we reuse this buffer later when warning opers about failed logins */
-	snprintf(buf, sizeof buf, "%s!%s@%s", u->nick, u->user, u->vhost);
-
-	/* increment fail count */
-	if (md_failnum && (atoi(md_failnum->value) > 0))
-		md_failnum = metadata_add(mu, METADATA_USER, "private:loginfail:failnum",
-								itoa(atoi(md_failnum->value) + 1));
-	else
-		md_failnum = metadata_add(mu, METADATA_USER, "private:loginfail:failnum", "1");
-	metadata_add(mu, METADATA_USER, "private:loginfail:lastfailaddr", buf);
-	metadata_add(mu, METADATA_USER, "private:loginfail:lastfailtime", itoa(CURRTIME));
-
-	if (atoi(md_failnum->value) == 10)
-	{
-		time_t ts = CURRTIME;
-		tm = *localtime(&ts);
-		strftime(strfbuf, sizeof(strfbuf) - 1, "%b %d %H:%M:%S %Y", &tm);
-
-		wallops("Warning: Numerous failed login attempts to \2%s\2. Last attempt received from \2%s\2 on %s.", mu->name, buf, strfbuf);
-	}
+	bad_password(si, mu);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
