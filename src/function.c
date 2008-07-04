@@ -362,6 +362,16 @@ boolean_t validtopic(const char *topic)
 	return TRUE;
 }
 
+static void sendemail_waited(pid_t pid, int status, void *data)
+{
+	char *email;
+
+	email = data;
+	if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
+		slog(LG_INFO, "sendemail_waited(): email for %s failed", email);
+	free(email);
+}
+
 /* send the specified type of email.
  *
  * u is whoever caused this to be called, the corresponding service
@@ -379,7 +389,6 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 	struct tm tm;
 	int pipfds[2];
 	pid_t pid;
-	int status;
 	int rc;
 	static time_t period_start = 0, lastwallops = 0;
 	static unsigned int emailcount = 0;
@@ -479,20 +488,11 @@ int sendemail(user_t *u, int type, myuser_t *mu, const char *param)
 		case 0:
 			close(pipfds[1]);
 			dup2(pipfds[0], 0);
-			switch (fork())
-			{
-				/* fork again to avoid zombies -- jilles */
-				case -1:
-					_exit(255);
-				case 0:
-					execl("/bin/sh", "sh", "-c", cmdbuf, NULL);
-					_exit(255);
-				default:
-					_exit(0);
-			}
+			execl("/bin/sh", "sh", "-c", cmdbuf, NULL);
+			_exit(255);
 	}
 	close(pipfds[0]);
-	waitpid(pid, &status, 0);
+	childproc_add(pid, "email", sendemail_waited, sstrdup(email));
 	out = fdopen(pipfds[1], "w");
 
 	fprintf(out, "From: %s\n", from);
