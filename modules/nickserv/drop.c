@@ -81,6 +81,7 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 	if (!verify_password(mu, pass))
 	{
 		command_fail(si, fault_authfail, _("Authentication failed. Invalid password for \2%s\2."), mu->name);
+		bad_password(si, mu);
 		return;
 	}
 

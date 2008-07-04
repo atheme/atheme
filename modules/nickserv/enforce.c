@@ -207,6 +207,7 @@ static void ns_cmd_release(sourceinfo_t *si, int parc, char *parv[])
 	{
 		logcommand(si, CMDLOG_DO, "failed RELEASE %s (bad password)", target);
 		command_fail(si, fault_authfail, _("Invalid password for \2%s\2."), target);
+		bad_password(si, mn->owner);
 	}
 }
 

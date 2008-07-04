@@ -70,6 +70,7 @@ static void ns_cmd_logout(sourceinfo_t *si, int parc, char *parv[])
 		else
 		{
 			command_fail(si, fault_authfail, _("Authentication failed. Invalid password for \2%s\2."), mu->name);
+			bad_password(si, mu);
 			return;
 		}
 #endif
