@@ -381,10 +381,15 @@ static void solidircd_jupe(const char *server, const char *reason)
 
 static void solidircd_sethost_sts(char *source, char *target, char *host)
 {
-	if (!me.connected)
+	user_t *tu = user_find(target);
+
+	if (!me.connected || !tu)
 		return;
 
-	notice(source, target, "Setting your host to \2%s\2.", host);
+	if (irccasecmp(tu->host, host))
+		numeric_sts(me.name, 396, target, "%s :is now your hidden host (set by %s)", host, source);
+	else
+		numeric_sts(me.name, 396, target, "%s :hostname reset by %s", host, source);
 	sts(":%s SVSMODE %s +v", source, target);
 	sts(":%s SVHOST %s :%s", me.name, target, host);
 }

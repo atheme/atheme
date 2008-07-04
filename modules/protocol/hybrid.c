@@ -449,7 +449,10 @@ static void hybrid_sethost_sts(char *source, char *target, char *host)
 	if (!tu)
 		return;
 
-	notice(source, target, "Setting your host to \2%s\2.", host);
+	if (irccasecmp(tu->host, host))
+		numeric_sts(me.name, 396, target, "%s :is now your hidden host (set by %s)", host, source);
+	else
+		numeric_sts(me.name, 396, target, "%s :hostname reset by %s", host, source);
 	sts(":%s CHGHOST %s :%s", ME, tu->nick, host);
 }
 
