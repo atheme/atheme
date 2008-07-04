@@ -506,6 +506,12 @@ boolean_t bad_password(sourceinfo_t *si, myuser_t *mu)
 	int count;
 	metadata_t *md_failnum;
 
+	/* If the user is already logged in, no paranoia is needed,
+	 * as they could /ns set password anyway.
+	 */
+	if (si->smu == mu)
+		return FALSE;
+
 	mask = get_source_mask(si);
 
 	md_failnum = metadata_find(mu, METADATA_USER, "private:loginfail:failnum");
