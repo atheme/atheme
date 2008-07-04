@@ -25,7 +25,9 @@
 #include "uplink.h"
 #include "internal.h"
 
-static int got_sighup, got_sigint, got_sigterm, got_sigusr2;
+static void childproc_check(void);
+
+static int got_sighup, got_sigint, got_sigterm, got_sigchld, got_sigusr2;
 
 typedef void (*signal_handler_t) (int);
 
@@ -91,6 +93,12 @@ signal_term_handler(int signum)
 }
 
 static void
+signal_chld_handler(int signum)
+{
+	got_sigchld = 1;
+}
+
+static void
 signal_usr2_handler(int signum)
 {
 	got_sigusr2 = 1;
@@ -122,6 +130,7 @@ void init_signal_handlers(void)
 	signal_install_handler(SIGINT, signal_int_handler);
 	signal_install_handler(SIGTERM, signal_term_handler);
 	signal_install_handler(SIGPIPE, signal_empty_handler);
+	signal_install_handler(SIGCHLD, signal_chld_handler);
 
 	signal_install_handler(SIGUSR1, signal_usr1_handler);
 	signal_install_handler(SIGUSR2, signal_usr2_handler);
@@ -193,6 +202,88 @@ void check_signals(void)
 
 		slog(LG_INFO, "sighandler(): restarting...");
 		runflags |= RF_RESTART;
+	}
+
+	if (got_sigchld)
+	{
+		got_sigchld = 0;
+		childproc_check();
+	}
+}
+
+list_t childproc_list;
+
+struct childproc
+{
+	node_t node;
+	pid_t pid;
+	char *desc;
+	void (*cb)(pid_t pid, int status, void *data);
+	void *data;
+};
+
+/* Registers a child process.
+ * Will call cb(pid, status, data) after the process terminates
+ * where status is the status from waitpid(2).
+ */
+void childproc_add(pid_t pid, const char *desc, void (*cb)(pid_t pid, int status, void *data), void *data)
+{
+	struct childproc *p;
+
+	p = smalloc(sizeof(*p));
+	p->pid = pid;
+	p->desc = sstrdup(desc);
+	p->cb = cb;
+	p->data = data;
+	node_add(p, &p->node, &childproc_list);
+}
+
+static void childproc_free(struct childproc *p)
+{
+	free(p->desc);
+	free(p);
+}
+
+/* Forgets about all child processes with the given callback.
+ * Useful if the callback is in a module which is being unloaded.
+ */
+void childproc_delete_all(void (*cb)(pid_t pid, int status, void *data))
+{
+	node_t *n, *tn;
+	struct childproc *p;
+
+	LIST_FOREACH_SAFE(n, tn, childproc_list.head)
+	{
+		p = n->data;
+		if (p->cb == cb)
+		{
+			node_del(&p->node, &childproc_list);
+			childproc_free(p);
+		}
+	}
+}
+
+static void childproc_check(void)
+{
+	pid_t pid;
+	int status;
+	node_t *n;
+	struct childproc *p;
+
+	while ((pid = waitpid(-1, &status, WNOHANG)) > 0)
+	{
+		LIST_FOREACH(n, childproc_list.head)
+		{
+			p = n->data;
+			if (p->pid == pid)
+			{
+				node_del(&p->node, &childproc_list);
+				if (p->cb)
+					p->cb(pid, status, p->data);
+				childproc_free(p);
+				break;
+			}
+		}
 	}
 }
 
