@@ -259,9 +259,10 @@ void enforce_timeout_check(void *arg)
 		notice(nicksvs.nick, u->nick, "You failed to identify in time for the nickname %s", mn->nick);
 		guest_nickname(u);
 		if (ircd->flags & IRCD_HOLDNICK)
-			holdnick_sts(nicksvs.me->me, 3600, u->nick, mn->owner);
+			holdnick_sts(nicksvs.me->me, u->flags & UF_WASENFORCED ? 3600 : 30, u->nick, mn->owner);
 		else
 			u->flags |= UF_DOENFORCE;
+		u->flags |= UF_WASENFORCED;
 	}
 }
 
