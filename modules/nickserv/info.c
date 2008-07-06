@@ -356,7 +356,7 @@ static void ns_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	if (MU_WAITAUTH & mu->flags)
-		command_success_nodata(si, _("%s has not completed registration verification"), mu->name);
+		command_success_nodata(si, _("%s has \2NOT COMPLETED\2 registration verification"), mu->name);
 
 	if ((mu == si->smu || has_priv(si, PRIV_USER_AUSPEX)) &&
 			(md = metadata_find(mu, METADATA_USER, "private:verify:emailchg:newemail")))
