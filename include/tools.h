@@ -117,6 +117,7 @@ E char *itoa(int num);
 E int validemail(const char *email);
 E boolean_t validhostmask(const char *host);
 E boolean_t validtopic(const char *topic);
+E boolean_t has_ctrl_chars(const char *text);
 E char *sbytes(float x);
 E float bytes(float x);
 

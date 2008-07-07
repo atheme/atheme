@@ -303,6 +303,11 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 			else
 				snprintf(newstr, sizeof newstr, "%s=%s", target, bitmask_to_flags(newflags, chanacs_flags));
 		}
+		if (oldflags == 0 && has_ctrl_chars(target))
+		{
+			command_fail(si, fault_badparams, _("Invalid template name \2%s\2."), target);
+			return;
+		}
 		if ((addflags | removeflags) == 0)
 		{
 			if (oldflags != 0)

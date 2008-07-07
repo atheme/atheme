@@ -362,6 +362,18 @@ boolean_t validtopic(const char *topic)
 	return TRUE;
 }
 
+boolean_t has_ctrl_chars(const char *text)
+{
+	int i;
+
+	for (i = 0; text[i] != '\0'; i++)
+	{
+		if (text[i] > 0 && text[i] < 32)
+			return TRUE;
+	}
+	return FALSE;
+}
+
 static void sendemail_waited(pid_t pid, int status, void *data)
 {
 	char *email;
