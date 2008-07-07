@@ -51,7 +51,17 @@ Permissions:
 #endif
     +s - Enables use of the set command.
     +i - Enables use of the invite and getkey commands.
-    +r - Enables use of the kick, ban, and kickban commands.
+#if module chanserv/kick
+    +r - Enables use of the kick, kickban, ban and unban commands.
+#endif
+#if !module chanserv/kick
+#if !module chanserv/unban_self
+    +r - Enables use of the ban and unban commands.
+#endif
+#if module chanserv/unban_self
+    +r - Enables use of the unban command.
+#endif
+#endif
     +R - Enables use of the recover and clear commands.
     +f - Enables modification of channel access lists.
     +t - Enables use of the topic and topicappend commands.
