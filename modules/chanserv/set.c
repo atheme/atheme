@@ -1234,7 +1234,7 @@ static void cs_cmd_set_property(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	if (strlen(property) > 32 || strlen(value) > 300)
+	if (strlen(property) > 32 || strlen(value) > 300 || has_ctrl_chars(property))
 	{
 		command_fail(si, fault_badparams, _("Parameters are too long. Aborting."));
 		return;
