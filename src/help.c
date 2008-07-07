@@ -82,6 +82,13 @@ static boolean_t evaluate_condition(sourceinfo_t *si, const char *s)
 			*q = '\0';
 		return has_priv(si, p);
 	}
+	else if (!strcmp(word, "module"))
+	{
+		q = strchr(p, ' ');
+		if (q != NULL)
+			*q = '\0';
+		return module_find_published(p) != NULL;
+	}
 	else
 		return FALSE;
 }
