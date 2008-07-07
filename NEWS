@@ -15,6 +15,10 @@ ircd protocol
 - When restoring an akill, send it to all servers on all protocols.
   Formerly, on some protocols it was only sent to the server the banned
   user was on.
+- Add ircd-aurora protocol module. ircd-aurora is a patched version of
+  charybdis with +qah channel statuses.
+- For ircds that do not indicate host change to clients, send a 396 numeric
+  instead of a notice from the service. This is easier to parse for clients.
 nickserv
 - Comment out nickserv/subscribe from the example configuration, because
   it is experimental at this time. [MERGED]
@@ -28,7 +32,8 @@ nickserv
 - Add user_verify_register hook, called when a registration is verified.
   This is after a successful VERIFY if email verification is enabled, after
   a successful REGISTER if not.
-- Make gen_vhostonreg contrib module only grant vhost once it's verified.
+- Make gen_vhostonreg contrib module only grant vhost once it's verified,
+  and also set vhosts on users without vhost as they identify.
 - Add clearer log messages for duplicate accounts/nicks/channels in atheme.db.
 - Make INFO default to the user's nick (owned nicks) or current account (no
   owned nicks).
@@ -43,6 +48,15 @@ nickserv
   If these keywords are needed, the oper will be warned.
 - Do not allow SENDPASS on unverified accounts.
 - Make the enforce delay settable in the config file.
+- Make holdnick enforcer time variable, 30s the first time then 1h.
+- Add ns_ajoin contrib module to allow services-side autojoin.
+- Show a pending email address change in INFO, to user self and user:auspex
+  opers.
+- Add ns_forbid contrib module. This registers, enforces, holds and freezes
+  a nickname.
+- Split DROP into DROP (users) and FDROP (admins).
+- Send all failed password attempts for SOPER accounts to the snoop channel.
+- Make the text in INFO for unverified accounts more conspicuous.
 chanserv
 - Fix removing non-applicable flags (e.g. +hH) from host channel access.
   [MERGED]
@@ -52,12 +66,32 @@ chanserv
 - Respect NOOP flag in cs_sync contrib module.
 - Allow calling RECOVER via xmlrpc.
 - Add channel_can_register hook to allow modules to block channel registrations.
+- Add SET QUIETCHG (nickserv setting) which suppresses notices from OP,
+  VOICE, and the like by other users.
+- Add cs_updown contrib module. This provides UP and DOWN commands that add
+  and remove all modes a user is entitled to.
+- Change SET STAFFONLY to SET RESTRICTED. This kicks all users except those
+  with chan:joinstaffonly priv or any access (except +b) on the channel.
+  Also make it handle +i channels more effectively.
+- Allow admins to change oper only modes in mlocks even without +s flag.
+- Snoop changes to oper only modes in mlocks.
+- Split DROP into DROP (users) and FDROP (admins).
+- Add a confirmation step against accidental drops to DROP. This only
+  applies to commands via IRC.
+alis
+- Move ALIS from contrib to modules. The new atheme.conf line is
+  loadmodule "modules/alis/main";
 memoserv
 gameserv
 oper
 - Fix a possible crash in /stats B. [MERGED]
 - Fix slight damage to news items when reloading in contrib/os_logonnews.
   [MERGED]
+- Allow GLOBAL to be used from non-IRC.
+- Add CLONES DURATION to allow changing the duration of the network bans
+  set by the clones module.
+- Add os_klinechan contrib module. This allows setting channels to kline
+  any users joining them.
 xmlrpc
 - Some improvements to buffer and character set handling.
 code
@@ -71,6 +105,7 @@ other
 - Decrease memory usage for large networks.
 - Add LOCALEDIR to Makefile.in files, necessary for gettext. [MERGED]
 - Some improvements to the hybserv/theia conversion tool.
+- Some improvements to the ircservices conversion tool.
 - Change maximum nick length from 30 to 31.
 - Remove redundant expire_check and db_save in several places. This makes
   restart, shutdown and rehash faster without threatening data integrity.
@@ -79,6 +114,8 @@ other
 - Add Russian translation from Kein/darkwire and fix the build system so it
   is automatically installed if gettext is enabled.
 - Allow for crypt() in libc as well as libcrypt (MacOS X).
+- Fix nested includes in the configuration file.
+- Add child process tracking.
 
 Atheme Services 3.0.3 Release Notes
 ===================================
