@@ -168,7 +168,7 @@ void mowgli_ioevent_associate(mowgli_ioevent_handle_t *self, mowgli_ioevent_sour
 		events |= POLLRDNORM;
 
 	if (flags & MOWGLI_POLLWRNORM)
-		events |= EPOLLWRNORM;
+		events |= POLLWRNORM;
 
 	port_associate((int) self->impldata, PORT_SOURCE_FD, object, events, opaque);
 #endif
