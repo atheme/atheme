@@ -4,6 +4,34 @@
  *
  * Because sometimes premadonna assholes with large ignore lists
  * piss entire channels the hell off...
+ *
+ * So what does this do?
+ * =====================
+ *
+ * It repeats everything someone says and to be extra annoying, highlights
+ * the person who has public ignore notification spam.
+ *
+ * It was written for the purpose of mockery of someone on #atheme-project
+ * who makes claims like "I have the whole channel on ignore", etc.
+ *
+ * Pro tip: we don't care about your ignore list.
+ *
+ * How do I use it? I have an asshole on my channel too!
+ * =====================================================
+ *
+ * Load the module, set these options:
+ *
+ *  - babbler:enable to actually enable babbler
+ *  - babbler:nicks, the actual ignore list of the asshole
+ *  - babbler:target, the nick of the person who needs to be pwnt
+ *  - babbler:source, the nick of a psuedoclient to send the message
+ *    from.
+ *
+ * Will you make it PM them instead?
+ * =================================
+ *
+ * Absolutely not. Then it could be used for spambots, etc. That's a really
+ * bad idea.
  */
 
 #include "atheme.h"
