@@ -20,7 +20,7 @@ on_channel_message(void *p)
 {
 	hook_cmessage_data_t *data = p;
 
-	if (data != NULL && data->msg != NULL && !strncmp(data->msg, "...", 3))
+	if (data != NULL && data->msg != NULL)
 	{
 		mychan_t *mc = mychan_find(data->c->name);
 		metadata_t *md;
@@ -38,7 +38,6 @@ on_channel_message(void *p)
 		{
 			char *source = NULL;
 			char *target;
-			char buf[BUFSIZE];
 
 			if (!(md = metadata_find(mc, METADATA_CHANNEL, "babbler:target")))
 				return;
@@ -50,9 +49,7 @@ on_channel_message(void *p)
 			else
 				source = md->value;
 
-			snprintf(buf, BUFSIZE, "%s: <%s> %s", target, data->u->nick, data->msg);
-
-			msg(source, data->c->name, data->u->nick, buf);
+			msg(source, data->c->name, "%s: <%s> %s", target, data->u->nick, data->msg);
 		}
 	}
 }
