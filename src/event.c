@@ -45,7 +45,7 @@ unsigned int event_add(const char *name, EVH *func, void *arg, time_t when)
 			event_table[i].frequency = when;
 			event_table[i].active = TRUE;
 
-			if ((event_table[i].when < event_time_min) || (event_time_min == -1))
+			if (event_table[i].when < event_time_min && event_time_min != -1)
 				event_time_min = event_table[i].when;
 
 			slog(LG_DEBUG, "event_add(): \"%s\"", name);
@@ -79,7 +79,7 @@ unsigned int event_add_once(const char *name, EVH *func, void *arg, time_t when)
 			event_table[i].frequency = 0;
 			event_table[i].active = TRUE;
 
-			if ((event_table[i].when < event_time_min) || (event_time_min == -1))
+			if (event_table[i].when < event_time_min && event_time_min != -1)
 				event_time_min = event_table[i].when;
 
 			slog(LG_DEBUG, "event_add_once(): \"%s\"", name);
