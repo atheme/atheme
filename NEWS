@@ -116,6 +116,8 @@ other
 - Allow for crypt() in libc as well as libcrypt (MacOS X).
 - Fix nested includes in the configuration file.
 - Add child process tracking.
+- Make some help files depend on what modules are loaded.
+- Fix a bug that caused certain timed events to be executed too late.
 
 Atheme Services 3.0.3 Release Notes
 ===================================
