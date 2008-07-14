@@ -40,6 +40,10 @@ platforms that atheme-services has been tested on includes:
 	Solaris Express 10       (i86pc, sun4u)
 	MacOS 10.[3.5,4.1]       (intel, powerpc)
 
+For MacOS 10, install libmowgli (version 0.7.x) and pkg-config separately,
+possibly using a package/ports system. The included libmowgli does not
+work on MacOS 10.
+
 Other BSD-based systems will probably work. Other SysV-based systems *might*
 work provided they support BSD sockets and POSIX function calls.
 
