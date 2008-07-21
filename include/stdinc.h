@@ -13,26 +13,9 @@
 /* I N C L U D E S */
 #include <mowgli.h>
 
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <errno.h>
-#include <ctype.h>
-#include <regex.h>
-
 #ifdef HAVE_LINK_H
 #include <link.h>
 #endif
-
-/* socket stuff */
-#include <unistd.h>
-#include <sys/time.h>
-#include <sys/socket.h>
-#include <fcntl.h>
-
-#include <sys/types.h>
 
 typedef mowgli_boolean_t boolean_t;
 
