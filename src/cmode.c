@@ -24,7 +24,7 @@
 #include "atheme.h"
 
 /* convert mode flags to a text mode string */
-char *flags_to_string(int flags)
+char *flags_to_string(unsigned int flags)
 {
 	static char buf[32];
 	char *s = buf;
@@ -374,8 +374,8 @@ void channel_mode_va(user_t *source, channel_t *chan, int parc, char *parv0, ...
 static struct modestackdata {
 	char source[HOSTLEN]; /* name */
 	channel_t *channel;
-	int modes_on;
-	int modes_off;
+	unsigned int modes_on;
+	unsigned int modes_off;
 	unsigned int limit;
 	char extmodes[MAXEXTMODES][512];
 	boolean_t limitused, extmodesused[MAXEXTMODES];

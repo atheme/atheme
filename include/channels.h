@@ -113,7 +113,7 @@ typedef struct {
 } hook_channel_topic_check_t;
 
 /* cmode.c */
-E char *flags_to_string(int flags);
+E char *flags_to_string(unsigned int flags);
 E int mode_to_flag(char c);
 E void channel_mode(user_t *source, channel_t *chan, int parc, char *parv[]);
 E void channel_mode_va(user_t *source, channel_t *chan, int parc, char *parv0, ...);

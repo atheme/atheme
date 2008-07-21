@@ -477,7 +477,7 @@ static void cs_cmd_set_mlock(sourceinfo_t *si, int parc, char *parv[])
 	char modebuf[32], *end, c;
 	int add = -1;
 	int newlock_on = 0, newlock_off = 0, newlock_limit = 0, flag = 0;
-	int mask, changed;
+	unsigned int mask, changed;
 	boolean_t mask_ext;
 	char newlock_key[KEYLEN];
 	char newlock_ext[MAXEXTMODES][512];

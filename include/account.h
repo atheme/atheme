@@ -129,8 +129,8 @@ struct mychan_
   time_t registered;
   time_t used;
 
-  int mlock_on;
-  int mlock_off;
+  unsigned int mlock_on;
+  unsigned int mlock_off;
   unsigned int mlock_limit;
   char *mlock_key;
 
