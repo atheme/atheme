@@ -99,7 +99,7 @@ static void cs_cmd_topic(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!validtopic(topic))
 	{
-		command_fail(si, fault_badparams, _("The new topic is invalid or too long."), chan);
+		command_fail(si, fault_badparams, _("The new topic is invalid or too long."));
 		return;
 	}
 
@@ -174,7 +174,7 @@ static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!validtopic(topicbuf))
 	{
-		command_fail(si, fault_badparams, _("The new topic is invalid or too long."), chan);
+		command_fail(si, fault_badparams, _("The new topic is invalid or too long."));
 		return;
 	}
 
@@ -249,7 +249,7 @@ static void cs_cmd_topicprepend(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!validtopic(topicbuf))
 	{
-		command_fail(si, fault_badparams, _("The new topic is invalid or too long."), chan);
+		command_fail(si, fault_badparams, _("The new topic is invalid or too long."));
 		return;
 	}
 
