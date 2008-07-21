@@ -219,13 +219,9 @@ void table_render(table_t *t, void (*callback)(const char *line, void *data), vo
 	LIST_FOREACH(n, f->cells.head)
 	{
 		table_cell_t *c = (table_cell_t *) n->data;
-		char fmtbuf[12];
 		char buf2[1024];
 
-		/* dynamically generate the format string based on width. */
-		snprintf(fmtbuf, 12, n->next != NULL ? "%%-%ds " : "%%s", c->width);
-		snprintf(buf2, 1024, fmtbuf, c->name);
-
+		snprintf(buf2, 1024, "%-*s", n->next != NULL ? c->width + 1 : 0, c->name);
 		strlcat(buf, buf2, bufsz);
 	}
 	callback(buf, data);
@@ -260,16 +256,12 @@ void table_render(table_t *t, void (*callback)(const char *line, void *data), vo
 		     n2 != NULL && rn != NULL; n2 = n2->next, rn = rn->next)
 		{
 			table_cell_t *c, *rc;
-			char fmtbuf[12];
 			char buf2[1024];
 
 			c  = (table_cell_t *) n2->data;
 			rc = (table_cell_t *) rn->data;
 
-			/* dynamically generate the format string based on width. */
-			snprintf(fmtbuf, 12, n2->next != NULL ? "%%-%ds " : "%%s", rc->width);
-			snprintf(buf2, 1024, fmtbuf, c->value);
-
+			snprintf(buf2, 1024, "%-*s", n2->next != NULL ? rc->width + 1 : 0, c->value);
 			strlcat(buf, buf2, bufsz);
 		}
 		callback(buf, data);
