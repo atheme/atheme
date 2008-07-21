@@ -197,7 +197,7 @@ static config_file_t *config_parse(const char *filename, char *confdata)
 			  start = ++ptr;
 			  for (; *ptr; ptr++)
 			  {
-				  if ((*ptr == '\\') && (*(ptr + 1) == '\"'))
+				  if (*ptr == '\\' && (ptr[1] == '\"' || ptr[1] == '\\'))
 				  {
 					  char *tptr = ptr;
 					  while ((*tptr = *(tptr + 1)))
