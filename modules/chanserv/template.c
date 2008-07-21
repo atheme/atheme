@@ -232,7 +232,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 				{
 					ss[r - q] = '\0';
 				}
-				if (q - p == l && !strncasecmp(target, p, l))
+				if ((size_t)(q - p) == l && !strncasecmp(target, p, l))
 				{
 					found = TRUE;
 					oldflags = flags_to_bitmask(ss, chanacs_flags, 0);
