@@ -112,7 +112,7 @@ user_t *user_add(const char *nick, const char *user, const char *host,
 				kill_id_sts(NULL, uid, "Nick collision with services (new)");
 				return NULL;
 			}
-			if (ts == u2->ts || (ts < u2->ts ^ (!irccasecmp(user, u2->user) && !irccasecmp(host, u2->host))))
+			if (ts == u2->ts || ((ts < u2->ts) ^ (!irccasecmp(user, u2->user) && !irccasecmp(host, u2->host))))
 			{
 				/* If the TSes are equal, or if their TS
 				 * is less than our TS and the u@h differs,
@@ -418,7 +418,7 @@ boolean_t user_changenick(user_t *u, const char *nick, time_t ts)
 				user_delete(u);
 				return TRUE;
 			}
-			if (ts == u2->ts || (ts < u2->ts ^ (!irccasecmp(u->user, u2->user) && !irccasecmp(u->host, u2->host))))
+			if (ts == u2->ts || ((ts < u2->ts) ^ (!irccasecmp(u->user, u2->user) && !irccasecmp(u->host, u2->host))))
 			{
 				/* If the TSes are equal, or if their TS
 				 * is less than our TS and the u@h differs,

@@ -75,7 +75,7 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 	node_t *n, *tn;
 	char *target = parv[0];
 	char *password = parv[1];
-	char buf[BUFSIZE], strfbuf[32];
+	char strfbuf[32];
 	char lau[BUFSIZE], lao[BUFSIZE];
 	struct tm tm;
 	metadata_t *md_failnum;
