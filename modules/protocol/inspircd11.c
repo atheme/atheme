@@ -498,10 +498,6 @@ static void inspircd_sethost_sts(char *source, char *target, char *host)
 	if (!me.connected || !tu)
 		return;
 
-	if (irccasecmp(tu->host, host))
-		numeric_sts(me.name, 396, target, "%s :is now your hidden host (set by %s)", host, source);
-	else
-		numeric_sts(me.name, 396, target, "%s :hostname reset by %s", host, source);
 	sts(":%s CHGHOST %s %s", source, target, host);
 }
 
