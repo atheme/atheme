@@ -27,6 +27,7 @@
 #include "internal.h"
 #include "datastream.h"
 #include "authcookie.h"
+#include <sys/resource.h>
 
 chansvs_t chansvs;
 globsvs_t globsvs;

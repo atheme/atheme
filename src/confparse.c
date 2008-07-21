@@ -22,6 +22,7 @@
  */
 
 #include "atheme.h"
+#include <sys/stat.h>
 
 #define MAX_INCLUDE_NESTING 16
 

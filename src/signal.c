@@ -24,6 +24,8 @@
 #include "atheme.h"
 #include "uplink.h"
 #include "internal.h"
+#include <signal.h>
+#include <sys/wait.h>
 
 static void childproc_check(void);
 

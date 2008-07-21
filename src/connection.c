@@ -24,6 +24,9 @@
 #include "atheme.h"
 #include "internal.h"
 #include "datastream.h"
+#include <netdb.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 static BlockHeap *sa_heap;
 static BlockHeap *connection_heap;
