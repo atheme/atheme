@@ -114,7 +114,7 @@ static char *construct_mask(user_t *u)
 	return mask;
 }
 
-static boolean_t mangle_wildcard_to_cidr(const char *host, char *dest, int destlen)
+static boolean_t mangle_wildcard_to_cidr(const char *host, char *dest, size_t destlen)
 {
 	int i;
 	const char *p;
