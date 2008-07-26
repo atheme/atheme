@@ -534,9 +534,10 @@ serverinfo {
 
 	/* (*)auth
 	 * What type of username registration authorization do you want?
-	 * If "email," Atheme will send a confirmation email to the address to
-	 * ensure it's valid. If "none," no message will be sent and the username
-	 * will be fully registered.
+	 * If "email", Atheme will send a confirmation email to the address to
+	 * ensure it's valid. If registration is not completed within one day,
+	 * the username will expire. If "none", no message will be sent and
+	 * the username will be fully registered.
 	 * Valid values are: email, none.
 	 */
 	auth = none;
