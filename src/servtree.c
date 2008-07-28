@@ -179,11 +179,17 @@ service_t *find_service(char *name)
 
 char *service_name(char *name)
 {
-	char *buf = smalloc(BUFSIZE);
+	char *str;
 
-	snprintf(buf, BUFSIZE, "%s%s%s", name, (config_options.secure) ? "@" : "", (config_options.secure) ? me.name : "");
+	if (config_options.secure)
+	{
+		str = smalloc(strlen(name) + 1 + strlen(me.name) + 1);
+		sprintf(str, "%s@%s", name, me.name);
+	}
+	else
+		str = sstrdup(name);
 
-	return buf;
+	return str;
 }
 
 void service_set_chanmsg(service_t *service, boolean_t chanmsg)
