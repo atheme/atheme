@@ -45,7 +45,6 @@ static int xmlrpc_tolower(char c);
 static char *xmlrpc_GetToken(const char *str, const char dilim, int token_number);
 static char *xmlrpc_GetTokenRemainder(const char *str, const char dilim, int token_number);
 static char *xmlrpc_myStrSubString(const char *src, int start, int end);
-static char *xmlrpc_strdup(const char *src);
 static char *xmlrpc_parse(char *buffer);
 static char *xmlrpc_method(char *buffer);
 static char *xmlrpc_normalizeBuffer(char *buf);
@@ -184,11 +183,8 @@ static XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func)
 	{
 		return NULL;
 	}
-	if ((xml = malloc(sizeof(XMLRPCCmd))) == NULL)
-	{
-		return NULL;
-	}
-	xml->name = xmlrpc_strdup(name);
+	xml = smalloc(sizeof(XMLRPCCmd));
+	xml->name = sstrdup(name);
 	xml->func = func;
 	xml->mod_name = NULL;
 	xml->core = 0;
@@ -245,12 +241,9 @@ static int addXMLCommand(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml)
 		lastHash = current;
 	}
 
-	if ((newHash = malloc(sizeof(XMLRPCCmdHash))) == NULL)
-	{
-		return XMLRPC_ERR_OK;
-	}
+	newHash = smalloc(sizeof(XMLRPCCmdHash));
 	newHash->next = NULL;
-	newHash->name = xmlrpc_strdup(xml->name);
+	newHash->name = sstrdup(xml->name);
 	newHash->xml = xml;
 
 	if (lastHash == NULL)
@@ -341,7 +334,7 @@ static char *xmlrpc_write_header(int length)
 	strftime(timebuf, sizeof timebuf, "%Y-%m-%d %H:%M:%S", &tm);
 
 	snprintf(buf, sizeof buf, "HTTP/1.1 200 OK\r\nConnection: close\r\n" "Content-Length: %d\r\n" "Content-Type: text/xml\r\n" "Date: %s\r\n" "Server: Atheme/%s\r\n\r\n", length, timebuf, version);
-	return xmlrpc_strdup(buf);
+	return sstrdup(buf);
 }
 
 /*************************************************************************/
@@ -662,13 +655,13 @@ char *xmlrpc_array(int argc, ...)
 		if (!s)
 		{
 			snprintf(buf, XMLRPC_BUFSIZE, "   <value>%s</value>", a);
-			s = xmlrpc_strdup(buf);
+			s = sstrdup(buf);
 		}
 		else
 		{
 			snprintf(buf, XMLRPC_BUFSIZE, "%s\r\n     <value>%s</value>", s, a);
 			free(s);
-			s = xmlrpc_strdup(buf);
+			s = sstrdup(buf);
 		}
 	}
 	va_end(va);
@@ -676,23 +669,7 @@ char *xmlrpc_array(int argc, ...)
 	snprintf(buf, XMLRPC_BUFSIZE, "<array>\r\n    <data>\r\n  %s\r\n    </data>\r\n   </array>", s);
 	len = strlen(buf);
 	free(s);
-	return xmlrpc_strdup(buf);
-}
-
-/*************************************************************************/
-
-static char *xmlrpc_strdup(const char *src)
-{
-	char *ret = NULL;
-
-	if (src)
-	{
-		if ((ret = (char *)malloc(strlen(src) + 1)) != NULL)
-			strcpy(ret, src);
-		else
-			raise(SIGUSR1);
-	}
-	return ret;
+	return sstrdup(buf);
 }
 
 /*************************************************************************/
@@ -791,7 +768,7 @@ static char *xmlrpc_myStrSubString(const char *src, int start, int end)
 	len = strlen(src);
 	if (((start >= 0) && (end <= len)) && (end > start))
 	{
-		substring = (char *)malloc(sizeof(char) * ((end - start) + 1));
+		substring = (char *)smalloc(sizeof(char) * ((end - start) + 1));
 		for (idx = 0; idx <= end - start; idx++)
 		{
 			substring[idx] = src[start + idx];
@@ -809,7 +786,7 @@ static char *xmlrpc_normalizeBuffer(char *buf)
 	int i, len, j = 0;
 
 	len = strlen(buf);
-	newbuf = (char *)malloc(sizeof(char) * len + 1);
+	newbuf = (char *)smalloc(sizeof(char) * len + 1);
 
 	for (i = 0; i < len; i++)
 	{
@@ -945,20 +922,20 @@ int xmlrpc_set_options(int type, const char *value)
 	{
 		if (value)
 		{
-			xmlrpc.encode = xmlrpc_strdup(value);
+			xmlrpc.encode = sstrdup(value);
 		}
 	}
 	if (type == XMLRPC_INTTAG)
 	{
 		if (!stricmp(value, XMLRPC_I4))
 		{
-			xmlrpc.inttagstart = xmlrpc_strdup("<i4>");
-			xmlrpc.inttagend = xmlrpc_strdup("</i4>");
+			xmlrpc.inttagstart = sstrdup("<i4>");
+			xmlrpc.inttagend = sstrdup("</i4>");
 		}
 		if (!stricmp(value, XMLRPC_INT))
 		{
-			xmlrpc.inttagstart = xmlrpc_strdup("<int>");
-			xmlrpc.inttagend = xmlrpc_strdup("</int>");
+			xmlrpc.inttagstart = sstrdup("<int>");
+			xmlrpc.inttagend = sstrdup("</int>");
 		}
 	}
 	return 1;
