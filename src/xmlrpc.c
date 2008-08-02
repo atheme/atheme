@@ -12,11 +12,34 @@
 
 #include "xmlrpc.h"
 
-int xmlrpc_error_code;
+static int xmlrpc_error_code;
 
-XMLRPCCmdHash *XMLRPCCMD[MAX_CMD_HASH];
+typedef struct XMLRPCCmd_ XMLRPCCmd;
+typedef struct XMLRPCCmdHash_ XMLRPCCmdHash;
 
-XMLRPCSet xmlrpc;
+struct XMLRPCCmd_ {
+	XMLRPCMethodFunc func;
+	char *name;
+	int core;
+	char *mod_name;
+	XMLRPCCmd *next;
+};
+
+struct XMLRPCCmdHash_ {
+	char *name;
+	XMLRPCCmd *xml;
+	XMLRPCCmdHash *next;
+};
+
+static XMLRPCCmdHash *XMLRPCCMD[MAX_CMD_HASH];
+
+struct xmlrpc_settings {
+	char *(*setbuffer)(char *buffer, int len);
+	char *encode;
+	int httpheader;
+	char *inttagstart;
+	char *inttagend;
+} xmlrpc;
 
 static int xmlrpc_tolower(char c);
 static char *xmlrpc_GetToken(const char *str, const char dilim, int token_number);
@@ -40,14 +63,7 @@ static char *xmlrpc_write_header(int length);
 
 int xmlrpc_getlast_error(void)
 {
-	if (!xmlrpc_error_code)
-	{
-		return 0;
-	}
-	else
-	{
-		return xmlrpc_error_code;
-	}
+	return xmlrpc_error_code;
 }
 
 /*************************************************************************/

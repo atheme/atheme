@@ -55,33 +55,6 @@
 
 typedef int (*XMLRPCMethodFunc)(void *userdata, int ac, char **av);
 
-typedef struct XMLRPCCmd_ XMLRPCCmd;
-typedef struct XMLRPCCmdHash_ XMLRPCCmdHash;
-
-extern XMLRPCCmdHash *XMLRPCCMD[MAX_CMD_HASH];
-
-struct XMLRPCCmd_ {
-	XMLRPCMethodFunc func;
-	char *name;
-	int core;
-	char *mod_name;
-	XMLRPCCmd *next;
-};
-
-struct XMLRPCCmdHash_ {
-	char *name;
-	XMLRPCCmd *xml;
-	XMLRPCCmdHash *next;
-};
-
-typedef struct xmlrpc_settings {
-	char *(*setbuffer)(char *buffer, int len);
-	char *encode;
-	int httpheader;
-	char *inttagstart;
-	char *inttagend;
-} XMLRPCSet;
-
 E int xmlrpc_getlast_error(void);
 E void xmlrpc_process(char *buffer, void *userdata);
 E int xmlrpc_register_method(const char *name, XMLRPCMethodFunc func);
