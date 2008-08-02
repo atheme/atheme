@@ -34,15 +34,7 @@ static XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func);
 static XMLRPCCmd *findXMLRPCCommand(XMLRPCCmdHash * hookEvtTable[], const char *name);
 static int addXMLCommand(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml);
 static int destroyXMLRPCCommand(XMLRPCCmd * xml);
-static int delXMLRPCCommand(XMLRPCCmdHash * msgEvtTable[], XMLRPCCmd * xml, char *mod_name);
 static char *xmlrpc_write_header(int length);
-static int addCoreXMLRPCCmd(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml);
-static XMLRPCCmd *first_xmlrpccmd(void);
-static XMLRPCCmd *next_xmlrpccmd(void);
-static XMLRPCCmdHash *first_xmlrpchash(void);
-static XMLRPCCmdHash *next_xmlrpchash(void);
-static int destroyxmlrpchash(XMLRPCCmdHash * mh);
-static int xmlrpc_myNumToken(const char *str, const char dilim);
 
 /*************************************************************************/
 
@@ -315,103 +307,6 @@ static int destroyXMLRPCCommand(XMLRPCCmd * xml)
 	xml->next = NULL;
 	free(xml);
 	return XMLRPC_ERR_OK;
-}
-
-/*************************************************************************/
-
-static int delXMLRPCCommand(XMLRPCCmdHash * msgEvtTable[], XMLRPCCmd * xml, char *mod_name)
-{
-	int idx = 0;
-	XMLRPCCmdHash *current = NULL;
-	XMLRPCCmdHash *lastHash = NULL;
-	XMLRPCCmd *tail = NULL, *last = NULL;
-
-	if (!xml || !msgEvtTable)
-	{
-		return XMLRPC_ERR_PARAMS;
-	}
-	idx = CMD_HASH(xml->name);
-
-	for (current = msgEvtTable[idx]; current; current = current->next)
-	{
-		if (stricmp(xml->name, current->name) == 0)
-		{
-			if (!lastHash)
-			{
-				tail = current->xml;
-				if (tail->next)
-				{
-					while (tail)
-					{
-						if (mod_name && tail->mod_name && (stricmp(mod_name, tail->mod_name) == 0))
-						{
-							if (last)
-							{
-								last->next = tail->next;
-							}
-							else
-							{
-								current->xml = tail->next;
-							}
-							return XMLRPC_ERR_OK;
-						}
-						last = tail;
-						tail = tail->next;
-					}
-				}
-				else
-				{
-					msgEvtTable[idx] = current->next;
-					free(current->name);
-					return XMLRPC_ERR_OK;
-				}
-			}
-			else
-			{
-				tail = current->xml;
-				if (tail->next)
-				{
-					while (tail)
-					{
-						if (mod_name && tail->mod_name && (stricmp(mod_name, tail->mod_name) == 0))
-						{
-							if (last)
-							{
-								last->next = tail->next;
-							}
-							else
-							{
-								current->xml = tail->next;
-							}
-							return XMLRPC_ERR_OK;
-						}
-						last = tail;
-						tail = tail->next;
-					}
-				}
-				else
-				{
-					lastHash->next = current->next;
-					free(current->name);
-					return XMLRPC_ERR_OK;
-				}
-			}
-		}
-		lastHash = current;
-	}
-	return XMLRPC_ERR_NOEXIST;
-}
-
-/*************************************************************************/
-
-static int addCoreXMLRPCCmd(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml)
-{
-	if (!hookEvtTable || !xml)
-	{
-		return XMLRPC_ERR_PARAMS;
-	}
-	xml->core = 1;
-	return addXMLCommand(hookEvtTable, xml);
 }
 
 /*************************************************************************/
@@ -766,98 +661,6 @@ char *xmlrpc_array(int argc, ...)
 	len = strlen(buf);
 	free(s);
 	return xmlrpc_strdup(buf);
-}
-
-/*************************************************************************/
-
-static XMLRPCCmdHash *current;
-static int next_index;
-
-static XMLRPCCmd *first_xmlrpccmd(void)
-{
-	next_index = 0;
-
-	while (next_index < 1024 && current == NULL)
-		current = XMLRPCCMD[next_index++];
-	if (current)
-	{
-		return current->xml;
-	}
-	else
-	{
-		return NULL;
-	}
-}
-
-/*************************************************************************/
-
-static XMLRPCCmd *next_xmlrpccmd(void)
-{
-	if (current)
-		current = current->next;
-	if (!current && next_index < 1024)
-	{
-		while (next_index < 1024 && current == NULL)
-			current = XMLRPCCMD[next_index++];
-	}
-	if (current)
-	{
-		return current->xml;
-	}
-	else
-	{
-		return NULL;
-	}
-}
-
-/*************************************************************************/
-
-static XMLRPCCmdHash *first_xmlrpchash(void)
-{
-	next_index = 0;
-
-	while (next_index < 1024 && current == NULL)
-		current = XMLRPCCMD[next_index++];
-	return current;
-}
-
-/*************************************************************************/
-
-static XMLRPCCmdHash *next_xmlrpchash(void)
-{
-	if (current)
-		current = current->next;
-	if (!current && next_index < 1024)
-	{
-		while (next_index < 1024 && current == NULL)
-			current = XMLRPCCMD[next_index++];
-	}
-	if (current)
-	{
-		return current;
-	}
-	else
-	{
-		return NULL;
-	}
-}
-
-/*************************************************************************/
-
-static int destroyxmlrpchash(XMLRPCCmdHash * mh)
-{
-	if (!mh)
-	{
-		return XMLRPC_ERR_PARAMS;
-	}
-	if (mh->name)
-	{
-		free(mh->name);
-	}
-	mh->xml = NULL;
-	mh->next = NULL;
-	free(mh);
-	return XMLRPC_ERR_OK;
 }
 
 /*************************************************************************/
@@ -1273,26 +1076,6 @@ char *xmlrpc_decode_string(char *buf)
 	*q = '\0';
 
 	return buf;
-}
-
-static int xmlrpc_myNumToken(const char *str, const char dilim)
-{
-	int len, idx, counter = 0, start_pos = 0;
-	if (!str)
-	{
-		return 0;
-	}
-
-	len = strlen(str);
-	for (idx = 0; idx <= len; idx++)
-	{
-		if ((str[idx] == dilim) || (idx == len))
-		{
-			start_pos = idx + 1;
-			counter++;
-		}
-	}
-	return counter;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
