@@ -125,7 +125,7 @@ char *replace(char *s, int size, const char *old, const char *new)
 			break;
 
 		if (diff != 0)
-			memmove(ptr + oldlen + diff, ptr + oldlen, left + 1);
+			memmove(ptr + oldlen + diff, ptr + oldlen, left + 1 - oldlen);
 
 		memcpy(ptr, new, newlen);
 		ptr += newlen;
