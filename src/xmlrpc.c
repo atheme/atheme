@@ -30,19 +30,19 @@ static char *xmlrpc_stristr(char *s1, char *s2);
 static int xmlrpc_split_buf(char *buffer, char ***argv);
 static void xmlrpc_append_char_encode(string_t *s, const char *s1);
 
-XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func);
-XMLRPCCmd *findXMLRPCCommand(XMLRPCCmdHash * hookEvtTable[], const char *name);
-int addXMLCommand(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml);
-int destroyXMLRPCCommand(XMLRPCCmd * xml);
-int delXMLRPCCommand(XMLRPCCmdHash * msgEvtTable[], XMLRPCCmd * xml, char *mod_name);
-char *xmlrpc_write_header(int length);
-int addCoreXMLRPCCmd(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml);
-XMLRPCCmd *first_xmlrpccmd(void);
-XMLRPCCmd *next_xmlrpccmd(void);
-XMLRPCCmdHash *first_xmlrpchash(void);
-XMLRPCCmdHash *next_xmlrpchash(void);
-int destroyxmlrpchash(XMLRPCCmdHash * mh);
-int xmlrpc_myNumToken(const char *str, const char dilim);
+static XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func);
+static XMLRPCCmd *findXMLRPCCommand(XMLRPCCmdHash * hookEvtTable[], const char *name);
+static int addXMLCommand(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml);
+static int destroyXMLRPCCommand(XMLRPCCmd * xml);
+static int delXMLRPCCommand(XMLRPCCmdHash * msgEvtTable[], XMLRPCCmd * xml, char *mod_name);
+static char *xmlrpc_write_header(int length);
+static int addCoreXMLRPCCmd(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml);
+static XMLRPCCmd *first_xmlrpccmd(void);
+static XMLRPCCmd *next_xmlrpccmd(void);
+static XMLRPCCmdHash *first_xmlrpchash(void);
+static XMLRPCCmdHash *next_xmlrpchash(void);
+static int destroyxmlrpchash(XMLRPCCmdHash * mh);
+static int xmlrpc_myNumToken(const char *str, const char dilim);
 
 /*************************************************************************/
 
@@ -169,7 +169,7 @@ int xmlrpc_register_method(const char *name, XMLRPCMethodFunc func)
 
 /*************************************************************************/
 
-XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func)
+static XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func)
 {
 	XMLRPCCmd *xml = NULL;
 	if (!func)
@@ -190,7 +190,7 @@ XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func)
 
 /*************************************************************************/
 
-XMLRPCCmd *findXMLRPCCommand(XMLRPCCmdHash * hookEvtTable[], const char *name)
+static XMLRPCCmd *findXMLRPCCommand(XMLRPCCmdHash * hookEvtTable[], const char *name)
 {
 	int idx;
 	XMLRPCCmdHash *current = NULL;
@@ -212,7 +212,7 @@ XMLRPCCmd *findXMLRPCCommand(XMLRPCCmdHash * hookEvtTable[], const char *name)
 
 /*************************************************************************/
 
-int addXMLCommand(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml)
+static int addXMLCommand(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml)
 {
 	/* We can assume both param's have been checked by this point.. */
 	int idx = 0;
@@ -297,7 +297,7 @@ int xmlrpc_unregister_method(const char *method)
  * @param m the message to be destroyed
  * @return XMLRPC_ERR_SUCCESS on success
  **/
-int destroyXMLRPCCommand(XMLRPCCmd * xml)
+static int destroyXMLRPCCommand(XMLRPCCmd * xml)
 {
 	if (!xml)
 	{
@@ -319,7 +319,7 @@ int destroyXMLRPCCommand(XMLRPCCmd * xml)
 
 /*************************************************************************/
 
-int delXMLRPCCommand(XMLRPCCmdHash * msgEvtTable[], XMLRPCCmd * xml, char *mod_name)
+static int delXMLRPCCommand(XMLRPCCmdHash * msgEvtTable[], XMLRPCCmd * xml, char *mod_name)
 {
 	int idx = 0;
 	XMLRPCCmdHash *current = NULL;
@@ -404,7 +404,7 @@ int delXMLRPCCommand(XMLRPCCmdHash * msgEvtTable[], XMLRPCCmd * xml, char *mod_n
 
 /*************************************************************************/
 
-int addCoreXMLRPCCmd(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml)
+static int addCoreXMLRPCCmd(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml)
 {
 	if (!hookEvtTable || !xml)
 	{
@@ -416,7 +416,7 @@ int addCoreXMLRPCCmd(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml)
 
 /*************************************************************************/
 
-char *xmlrpc_write_header(int length)
+static char *xmlrpc_write_header(int length)
 {
 	char buf[512];
 	time_t ts;
@@ -440,7 +440,7 @@ char *xmlrpc_write_header(int length)
  * @param buffer Incoming data buffer
  * @return cleaned up buffer
  */
-char *xmlrpc_parse(char *buffer)
+static char *xmlrpc_parse(char *buffer)
 {
 	char *tmp = NULL;
 
@@ -516,7 +516,7 @@ static int xmlrpc_split_buf(char *buffer, char ***argv)
 
 /*************************************************************************/
 
-char *xmlrpc_method(char *buffer)
+static char *xmlrpc_method(char *buffer)
 {
 	char *data;
 	char *tmp, *tmp2;
@@ -773,7 +773,7 @@ char *xmlrpc_array(int argc, ...)
 static XMLRPCCmdHash *current;
 static int next_index;
 
-XMLRPCCmd *first_xmlrpccmd(void)
+static XMLRPCCmd *first_xmlrpccmd(void)
 {
 	next_index = 0;
 
@@ -791,7 +791,7 @@ XMLRPCCmd *first_xmlrpccmd(void)
 
 /*************************************************************************/
 
-XMLRPCCmd *next_xmlrpccmd(void)
+static XMLRPCCmd *next_xmlrpccmd(void)
 {
 	if (current)
 		current = current->next;
@@ -812,7 +812,7 @@ XMLRPCCmd *next_xmlrpccmd(void)
 
 /*************************************************************************/
 
-XMLRPCCmdHash *first_xmlrpchash(void)
+static XMLRPCCmdHash *first_xmlrpchash(void)
 {
 	next_index = 0;
 
@@ -823,7 +823,7 @@ XMLRPCCmdHash *first_xmlrpchash(void)
 
 /*************************************************************************/
 
-XMLRPCCmdHash *next_xmlrpchash(void)
+static XMLRPCCmdHash *next_xmlrpchash(void)
 {
 	if (current)
 		current = current->next;
@@ -844,7 +844,7 @@ XMLRPCCmdHash *next_xmlrpchash(void)
 
 /*************************************************************************/
 
-int destroyxmlrpchash(XMLRPCCmdHash * mh)
+static int destroyxmlrpchash(XMLRPCCmdHash * mh)
 {
 	if (!mh)
 	{
@@ -984,7 +984,7 @@ static char *xmlrpc_myStrSubString(const char *src, int start, int end)
 
 /*************************************************************************/
 
-char *xmlrpc_normalizeBuffer(char *buf)
+static char *xmlrpc_normalizeBuffer(char *buf)
 {
 	char *newbuf;
 	int i, len, j = 0;
@@ -1071,7 +1071,7 @@ char *xmlrpc_normalizeBuffer(char *buf)
 
 /*************************************************************************/
 
-char *xmlrpc_stristr(char *s1, char *s2)
+static char *xmlrpc_stristr(char *s1, char *s2)
 {
 	register char *s = s1, *d = s2;
 
@@ -1275,7 +1275,7 @@ char *xmlrpc_decode_string(char *buf)
 	return buf;
 }
 
-int xmlrpc_myNumToken(const char *str, const char dilim)
+static int xmlrpc_myNumToken(const char *str, const char dilim)
 {
 	int len, idx, counter = 0, start_pos = 0;
 	if (!str)
