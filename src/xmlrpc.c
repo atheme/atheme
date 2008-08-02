@@ -42,7 +42,6 @@ XMLRPCCmd *next_xmlrpccmd(void);
 XMLRPCCmdHash *first_xmlrpchash(void);
 XMLRPCCmdHash *next_xmlrpchash(void);
 int destroyxmlrpchash(XMLRPCCmdHash * mh);
-char *xmlrcp_strnrepl(char *s, int size, const char *old, const char *new);
 int xmlrpc_myNumToken(const char *str, const char dilim);
 
 /*************************************************************************/
@@ -1237,64 +1236,43 @@ static void xmlrpc_append_char_encode(string_t *s, const char *s1)
 	}
 }
 
+/* In-place decode of some entities
+ * rewritten by jilles 20080802
+ */
 char *xmlrpc_decode_string(char *buf)
 {
-	int count;
-	int i;
-	char *token, *temp;
-	char *temptoken;
-	char buf2[12];
-	char buf3[12];
+	const char *p;
+	char *q;
 
-	xmlrcp_strnrepl(buf, XMLRPC_BUFSIZE, "&gt;", ">");
-	xmlrcp_strnrepl(buf, XMLRPC_BUFSIZE, "&lt;", "<");
-	xmlrcp_strnrepl(buf, XMLRPC_BUFSIZE, "&quot;", "\"");
-	xmlrcp_strnrepl(buf, XMLRPC_BUFSIZE, "&amp;", "&");
-
-	temp = xmlrpc_strdup(buf);
-	count = xmlrpc_myNumToken(temp, '&');
-	for (i = 1; i <= count; i++)
+	p = buf;
+	q = buf;
+	while (*p != '\0')
 	{
-		token = xmlrpc_GetToken(temp, '&', i);
-		if (token && *token == '#')
+		if (*p == '&')
 		{
-			temptoken = strtok((token + 1), ";");
-			snprintf(buf2, 12, "%c", atoi(temptoken));
-			snprintf(buf3, 12, "&%s;", token);
-			xmlrcp_strnrepl(buf, XMLRPC_BUFSIZE, buf3, buf2);
+			p++;
+			if (!strncmp(p, "gt;", 3))
+				*q++ = '>', p += 3;
+			else if (!strncmp(p, "lt;", 3))
+				*q++ = '<', p += 3;
+			else if (!strncmp(p, "quot;", 5))
+				*q++ = '"', p += 5;
+			else if (!strncmp(p, "amp;", 4))
+				*q++ = '&', p += 4;
+			else if (*p == '#')
+			{
+				p++;
+				*q++ = (char)atoi(p);
+				while (*p != ';' && *p != '\0')
+					p++;
+			}
 		}
+		else
+			*q++ = *p++;
 	}
-	free(temp);
+	*q = '\0';
+
 	return buf;
-}
-
-char *xmlrcp_strnrepl(char *s, int size, const char *old, const char *new)
-{
-	char *ptr = s;
-	int left = strlen(s);
-	int avail = size - (left + 1);
-	int oldlen = strlen(old);
-	int newlen = strlen(new);
-	int diff = newlen - oldlen;
-
-	while (left >= oldlen)
-	{
-		if (strncmp(ptr, old, oldlen) != 0)
-		{
-			left--;
-			ptr++;
-			continue;
-		}
-		if (diff > avail)
-			break;
-		if (diff != 0)
-			memmove(ptr + oldlen + diff, ptr + oldlen, left + 1 - oldlen);
-
-		memcpy(ptr, new, newlen);
-		ptr += newlen;
-		left -= oldlen;
-	}
-	return s;
 }
 
 int xmlrpc_myNumToken(const char *str, const char dilim)
