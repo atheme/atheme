@@ -41,14 +41,12 @@ struct xmlrpc_settings {
 	char *inttagend;
 } xmlrpc;
 
-static int xmlrpc_tolower(char c);
 static char *xmlrpc_GetToken(const char *str, const char dilim, int token_number);
 static char *xmlrpc_GetTokenRemainder(const char *str, const char dilim, int token_number);
 static char *xmlrpc_myStrSubString(const char *src, int start, int end);
 static char *xmlrpc_parse(char *buffer);
 static char *xmlrpc_method(char *buffer);
 static char *xmlrpc_normalizeBuffer(char *buf);
-static char *xmlrpc_stristr(char *s1, char *s2);
 static int xmlrpc_split_buf(char *buffer, char ***argv);
 static void xmlrpc_append_char_encode(string_t *s, const char *s1);
 
@@ -353,7 +351,7 @@ static char *xmlrpc_parse(char *buffer)
 	   HTTP header information, lets break
 	   off at the point that the <?xml?> starts
 	 */
-	tmp = xmlrpc_stristr(buffer, (char *)"<?xml");
+	tmp = strstr(buffer, "<?xml");
 
 	/* check if its xml doc */
 	if (tmp)
@@ -425,7 +423,7 @@ static char *xmlrpc_method(char *buffer)
 	char *data;
 	char *tmp, *tmp2;
 
-	data = xmlrpc_stristr(buffer, (char *)"<methodname>");
+	data = strstr(buffer, "<methodName>");
 	if (data)
 	{
 		tmp = xmlrpc_GetToken(data, '>', 1);
@@ -863,44 +861,6 @@ static char *xmlrpc_normalizeBuffer(char *buf)
 	newbuf[j] = 0;
 
 	return (newbuf);
-}
-
-/*************************************************************************/
-
-static char *xmlrpc_stristr(char *s1, char *s2)
-{
-	register char *s = s1, *d = s2;
-
-	while (*s1)
-	{
-		if (xmlrpc_tolower(*s1) == xmlrpc_tolower(*d))
-		{
-			s1++;
-			d++;
-			if (*d == 0)
-				return s;
-		}
-		else
-		{
-			s = ++s1;
-			d = s2;
-		}
-	}
-	return NULL;
-}
-
-/*************************************************************************/
-
-static int xmlrpc_tolower(char c)
-{
-	if (isupper(c))
-	{
-		return (unsigned char)c + ('a' - 'A');
-	}
-	else
-	{
-		return (unsigned char)c;
-	}
 }
 
 /*************************************************************************/
