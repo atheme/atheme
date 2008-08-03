@@ -41,9 +41,6 @@ struct xmlrpc_settings {
 	char *inttagend;
 } xmlrpc;
 
-static char *xmlrpc_GetToken(const char *str, const char dilim, int token_number);
-static char *xmlrpc_GetTokenRemainder(const char *str, const char dilim, int token_number);
-static char *xmlrpc_myStrSubString(const char *src, int start, int end);
 static char *xmlrpc_parse(char *buffer);
 static char *xmlrpc_method(char *buffer);
 static char *xmlrpc_normalizeBuffer(char *buf);
@@ -364,55 +361,55 @@ static char *xmlrpc_parse(char *buffer)
 
 /*************************************************************************/
 
+/* Splits up a series of values into an array of strings.
+ * The given buffer is modified and the pointers in the array point to
+ * parts of the buffer. The array itself is dynamically allocated.
+ * Returns the number of values placed in the array.
+ * Largely rewritten by jilles 20080803
+ */
 static int xmlrpc_split_buf(char *buffer, char ***argv)
 {
 	int ac = 0;
 	int argvsize = 8;
 	char *data, *str;
-	char *str2 = NULL;
 	char *nexttag = NULL;
-	char *temp = NULL;
-	char *final;
+	char *p;
 	int tagtype = 0;
 
-	*argv = calloc(sizeof(char *) * argvsize, 1);
-	while ((data = strstr(buffer, "<value>")))
+	data = buffer;
+	*argv = smalloc(sizeof(char *) * argvsize);
+	while ((data = strstr(data, "<value>")))
 	{
-		if (data)
+		data += 7;
+		nexttag = strchr(data, '<');
+		if (nexttag == NULL)
+			break;
+		nexttag++;
+		p = strchr(nexttag, '>');
+		if (p == NULL)
+			break;
+		*p++ = '\0';
+		/* strings */
+		if (!stricmp("string", nexttag))
+			tagtype = 1;
+		else
+			tagtype = 0;
+		str = p;
+		p = strchr(str, '<');
+		if (p == NULL)
+			break;
+		*p++ = '\0';
+		if (ac >= argvsize)
 		{
-			temp = xmlrpc_GetToken(data, '<', 2);
-			nexttag = xmlrpc_GetToken(temp, '>', 0);
-			/* strings */
-			if (!stricmp("string", nexttag))
-			{
-				tagtype = 1;
-			}
-			else
-			{
-				tagtype = 0;
-			}
-			str = xmlrpc_GetToken(data, '>', 2);
-			str2 = xmlrpc_GetTokenRemainder(data, '>', 2);
-			if (str)
-			{
-				final = xmlrpc_GetToken(str, '<', 0);
-				if (final)
-				{
-					if (tagtype == 1)
-					{
-						(*argv)[ac++] = xmlrpc_decode_string(final);
-					}
-					else
-					{
-						(*argv)[ac++] = final;
-					}
-				}
-				free(str);
-			}	/* str */
-		}		/* data */
-		buffer = str2;
+			argvsize *= 2;
+			*argv = srealloc(*argv, sizeof(char *) * argvsize);
+		}
+		if (tagtype == 1)
+			(*argv)[ac++] = xmlrpc_decode_string(str);
+		else
+			(*argv)[ac++] = str;
+		data = p;
 	}			/* while */
-	free(str2);
 	return ac;
 }
 
@@ -420,16 +417,21 @@ static int xmlrpc_split_buf(char *buffer, char ***argv)
 
 static char *xmlrpc_method(char *buffer)
 {
-	char *data;
-	char *tmp, *tmp2;
+	char *data, *p, *name;
+	int namelen;
 
 	data = strstr(buffer, "<methodName>");
 	if (data)
 	{
-		tmp = xmlrpc_GetToken(data, '>', 1);
-		tmp2 = xmlrpc_GetToken(tmp, '<', 0);
-		free(tmp);
-		return tmp2;
+		data += 12;
+		p = strchr(data, '<');
+		if (p == NULL)
+			return NULL;
+		namelen = p - data;
+		name = smalloc(namelen + 1);
+		memcpy(name, data, namelen);
+		name[namelen] = '\0';
+		return name;
 	}
 	return NULL;
 }
@@ -668,112 +670,6 @@ char *xmlrpc_array(int argc, ...)
 	len = strlen(buf);
 	free(s);
 	return sstrdup(buf);
-}
-
-/*************************************************************************/
-
-/**
- * Get the token
- * @param str String to search in
- * @param dilim Character to search for
- * @param token_number the token number
- * @return token
- */
-static char *xmlrpc_GetToken(const char *str, const char dilim, int token_number)
-{
-	int len, idx, counter = 0, start_pos = 0;
-	char *substring = NULL;
-	if (!str)
-	{
-		return NULL;
-	}
-
-	len = strlen(str);
-	for (idx = 0; idx <= len; idx++)
-	{
-		if ((str[idx] == dilim) || (idx == len))
-		{
-			if (counter == token_number)
-			{
-				substring = xmlrpc_myStrSubString(str, start_pos, idx);
-				counter++;
-			}
-			else
-			{
-				start_pos = idx + 1;
-				counter++;
-			}
-		}
-	}
-	return substring;
-}
-
-/*************************************************************************/
-
-/**
- * Get the Remaining tokens
- * @param str String to search in
- * @param dilim Character to search for
- * @param token_number the token number
- * @return token
- */
-static char *xmlrpc_GetTokenRemainder(const char *str, const char dilim, int token_number)
-{
-	int len, idx, counter = 0, start_pos = 0;
-	char *substring = NULL;
-	if (!str)
-	{
-		return NULL;
-	}
-	len = strlen(str);
-
-	for (idx = 0; idx <= len; idx++)
-	{
-		if ((str[idx] == dilim) || (idx == len))
-		{
-			if (counter == token_number)
-			{
-				substring = xmlrpc_myStrSubString(str, start_pos, len);
-				counter++;
-			}
-			else
-			{
-				start_pos = idx + 1;
-				counter++;
-			}
-		}
-	}
-	return substring;
-}
-
-/*************************************************************************/
-
-/**
- * Get the string between point A and point B
- * @param str String to search in
- * @param start Point A
- * @param end Point B
- * @return the string in between
- */
-static char *xmlrpc_myStrSubString(const char *src, int start, int end)
-{
-	char *substring = NULL;
-	int len, idx;
-	if (!src)
-	{
-		return NULL;
-	}
-	len = strlen(src);
-	if (((start >= 0) && (end <= len)) && (end > start))
-	{
-		substring = (char *)smalloc(sizeof(char) * ((end - start) + 1));
-		for (idx = 0; idx <= end - start; idx++)
-		{
-			substring[idx] = src[start + idx];
-		}
-		substring[end - start] = '\0';
-	}
-	return substring;
 }
 
 /*************************************************************************/
