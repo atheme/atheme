@@ -50,7 +50,7 @@ static void xmlrpc_append_char_encode(string_t *s, const char *s1);
 static XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func);
 static XMLRPCCmd *findXMLRPCCommand(XMLRPCCmdHash * hookEvtTable[], const char *name);
 static int addXMLCommand(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml);
-static int destroyXMLRPCCommand(XMLRPCCmd * xml);
+static void destroyXMLRPCCommand(XMLRPCCmd * xml);
 static char *xmlrpc_write_header(int length);
 
 /*************************************************************************/
@@ -131,33 +131,17 @@ void xmlrpc_process(char *buffer, void *userdata)
 		xmlrpc_error_code = -2;
 		xmlrpc_generic_error(xmlrpc_error_code, "XMLRPC error: Invalid document end at line 1");
 	}
-	if (av)
-	{
-		free(av);
-	}
-	if (tmp)
-	{
-		free(tmp);
-	}
-	if (name)
-	{
-		free(name);
-	}
+	free(av);
+	free(tmp);
+	free(name);
 }
 
 /*************************************************************************/
 
 void xmlrpc_set_buffer(char *(*func) (char *buffer, int len))
 {
-	xmlrpc.setbuffer = NULL;
-	if (func)
-	{
-		xmlrpc.setbuffer = func;
-	}
-	else
-	{
-		xmlrpc_error_code = -8;
-	}
+	return_if_fail(func != NULL);
+	xmlrpc.setbuffer = func;
 }
 
 /*************************************************************************/
@@ -165,6 +149,8 @@ void xmlrpc_set_buffer(char *(*func) (char *buffer, int len))
 int xmlrpc_register_method(const char *name, XMLRPCMethodFunc func)
 {
 	XMLRPCCmd *xml;
+	return_val_if_fail(name != NULL, XMLRPC_ERR_PARAMS);
+	return_val_if_fail(func != NULL, XMLRPC_ERR_PARAMS);
 	xml = createXMLCommand(name, func);
 	return addXMLCommand(XMLRPCCMD, xml);
 }
@@ -174,10 +160,6 @@ int xmlrpc_register_method(const char *name, XMLRPCMethodFunc func)
 static XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func)
 {
 	XMLRPCCmd *xml = NULL;
-	if (!func)
-	{
-		return NULL;
-	}
 	xml = smalloc(sizeof(XMLRPCCmd));
 	xml->name = sstrdup(name);
 	xml->func = func;
@@ -193,10 +175,10 @@ static XMLRPCCmd *findXMLRPCCommand(XMLRPCCmdHash * hookEvtTable[], const char *
 {
 	int idx;
 	XMLRPCCmdHash *current = NULL;
-	if (!hookEvtTable || !name)
-	{
-		return NULL;
-	}
+
+	return_val_if_fail(hookEvtTable != NULL, NULL);
+	return_val_if_fail(name != NULL, NULL);
+
 	idx = CMD_HASH(name);
 
 	for (current = hookEvtTable[idx]; current; current = current->next)
@@ -219,10 +201,6 @@ static int addXMLCommand(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml)
 	XMLRPCCmdHash *newHash = NULL;
 	XMLRPCCmdHash *lastHash = NULL;
 
-	if (!hookEvtTable || !xml)
-	{
-		return XMLRPC_ERR_PARAMS;
-	}
 	idx = CMD_HASH(xml->name);
 
 	for (current = hookEvtTable[idx]; current; current = current->next)
@@ -257,10 +235,8 @@ int xmlrpc_unregister_method(const char *method)
 	XMLRPCCmdHash *lastHash = NULL;
 	XMLRPCCmd *xml, *xml2;
 
-	if (!method)
-	{
-		return XMLRPC_ERR_PARAMS;
-	}
+	return_val_if_fail(method != NULL, XMLRPC_ERR_PARAMS);
+
 	idx = CMD_HASH(method);
 
 	for (current = XMLRPCCMD[idx]; current; current = current->next)
@@ -293,24 +269,15 @@ int xmlrpc_unregister_method(const char *method)
  * @param m the message to be destroyed
  * @return XMLRPC_ERR_SUCCESS on success
  **/
-static int destroyXMLRPCCommand(XMLRPCCmd * xml)
+static void destroyXMLRPCCommand(XMLRPCCmd * xml)
 {
-	if (!xml)
-	{
-		return XMLRPC_ERR_PARAMS;
-	}
-	if (xml->name)
-	{
-		free(xml->name);
-	}
+	return_if_fail(xml != NULL);
+
+	free(xml->name);
 	xml->func = NULL;
-	if (xml->mod_name)
-	{
-		free(xml->mod_name);
-	}
+	free(xml->mod_name);
 	xml->next = NULL;
 	free(xml);
-	return XMLRPC_ERR_OK;
 }
 
 /*************************************************************************/
