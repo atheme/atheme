@@ -68,8 +68,8 @@ void xmlrpc_process(char *buffer, void *userdata)
 	XMLRPCCmd *current = NULL;
 	XMLRPCCmd *xml;
 	char *tmp;
-	int ac = 0;
-	char **av;
+	int ac;
+	char **av = NULL;
 	char *name = NULL;
 
 	xmlrpc_error_code = 0;
@@ -131,7 +131,7 @@ void xmlrpc_process(char *buffer, void *userdata)
 		xmlrpc_error_code = -2;
 		xmlrpc_generic_error(xmlrpc_error_code, "XMLRPC error: Invalid document end at line 1");
 	}
-	if (ac)
+	if (av)
 	{
 		free(av);
 	}
