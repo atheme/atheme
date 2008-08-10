@@ -132,7 +132,11 @@ kline_t *kline_add(char *user, char *host, char *reason, long duration)
 
 	cnt.kline++;
 
-	kline_sts("*", user, host, duration, reason);
+
+	char treason[BUFSIZE];
+	snprintf(treason, sizeof(treason), "[#%lu] %s", k->number, k->reason);
+
+	kline_sts("*", user, host, duration, treason);
 
 	return k;
 }
@@ -184,7 +188,7 @@ kline_t *kline_find(const char *user, const char *host)
 	return NULL;
 }
 
-kline_t *kline_find_num(unsigned int number)
+kline_t *kline_find_num(unsigned long number)
 {
 	kline_t *k;
 	node_t *n;

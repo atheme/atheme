@@ -23,7 +23,7 @@ struct kline_ {
   char *reason;
   char *setby;
 
-  unsigned int number;
+  unsigned long number;
   long duration;
   time_t settime;
   time_t expires;
@@ -288,7 +288,7 @@ E list_t klnlist;
 E kline_t *kline_add(char *user, char *host, char *reason, long duration);
 E void kline_delete(const char *user, const char *host);
 E kline_t *kline_find(const char *user, const char *host);
-E kline_t *kline_find_num(unsigned int number);
+E kline_t *kline_find_num(unsigned long number);
 E kline_t *kline_find_user(user_t *u);
 E void kline_expire(void *arg);
 
