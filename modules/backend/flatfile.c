@@ -300,7 +300,9 @@ static void flatfile_db_load(void)
 	unsigned int versn = 0, i;
 	unsigned int linecnt = 0, muin = 0, mcin = 0, cain = 0, kin = 0;
 	FILE *f;
-	char *item, *s, dBuf[BUFSIZE];
+	char *item, *s, *buf;
+	size_t bufsize = BUFSIZE, n;
+	int c;
 	unsigned int their_ca_all = 0;
 
 	f = fopen(DATADIR "/atheme.db", "r");
@@ -321,13 +323,37 @@ static void flatfile_db_load(void)
 
 	slog(LG_DEBUG, "db_load(): ----------------------- loading ------------------------");
 
+	buf = smalloc(bufsize);
+
 	/* start reading it, one line at a time */
-	while (fgets(dBuf, BUFSIZE, f))
+	for (;;)
 	{
+		n = 0;
+		while ((c = getc(f)) != EOF && c != '\n')
+		{
+			buf[n++] = c;
+			if (n == bufsize)
+			{
+				bufsize *= 2;
+				buf = srealloc(buf, bufsize);
+			}
+		}
+		buf[n] = '\0';
+
+		if (c == EOF && ferror(f))
+		{
+			slog(LG_ERROR, "db_load(): error while reading %s: %s", DATADIR "/atheme.db", strerror(errno));
+			slog(LG_ERROR, "db_load(): exiting to avoid data loss");
+			exit(1);
+		}
+
+		if (c == EOF && n == 0)
+			break;
+
 		linecnt++;
 
 		/* check for unimportant lines */
-		item = strtok(dBuf, " ");
+		item = strtok(buf, " ");
 		strip(item);
 
 		if (item == NULL || *item == '#' || *item == '\n' || *item == '\t' || *item == ' ' || *item == '\0' || *item == '\r')
@@ -906,6 +932,8 @@ static void flatfile_db_load(void)
 	}
 
 	fclose(f);
+
+	free(buf);
 
 	slog(LG_DEBUG, "db_load(): ------------------------- done -------------------------");
 }
