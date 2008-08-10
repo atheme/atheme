@@ -219,7 +219,7 @@ static unsigned int inspircd_server_login(void)
 		return 1;
 
 	me.bursting = TRUE;
-	sts("BURST");
+	sts(":%s BURST", me.name);
 	/* XXX: Being able to get this data as a char* would be nice - Brain */
         sts(":%s VERSION :atheme-%s. %s %s%s%s%s%s%s%s%s%s%s",me.name, version, me.numeric, (match_mapping) ? "A" : "",
 								                      log_debug_enabled() ? "d" : "",
@@ -232,7 +232,7 @@ static unsigned int inspircd_server_login(void)
 										      (config_options.raw) ? "r" : "",
 										      (runflags & RF_LIVE) ? "n" : "");
 	services_init();
-	sts("ENDBURST");
+	sts(":%s ENDBURST", me.name);
 	return 0;
 }
 
