@@ -245,6 +245,8 @@ static void flatfile_db_save(void *arg)
 
 	slog(LG_DEBUG, "db_save(): saving klines");
 
+	fprintf(f, "KID %lu\n", me.kline_id);
+
 	LIST_FOREACH(n, klnlist.head)
 	{
 		k = (kline_t *)n->data;
@@ -370,10 +372,9 @@ static void flatfile_db_load(void)
 				exit(EXIT_FAILURE);
 			}
 		}
-
-		/* enabled chanacs flags */
-		if (!strcmp("CF", item))
+		else if (!strcmp("CF", item))
 		{
+			/* enabled chanacs flags */
 			s = strtok(NULL, " ");
 			if (s == NULL)
 				slog(LG_INFO, "db_load(): missing param to CF");
@@ -390,10 +391,9 @@ static void flatfile_db_load(void)
 				}
 			}
 		}
-
-		/* myusers */
-		if (!strcmp("MU", item))
+		else if (!strcmp("MU", item))
 		{
+			/* myusers */
 			char *muname, *mupass, *muemail;
 
 			if ((s = strtok(NULL, " ")))
@@ -449,9 +449,9 @@ static void flatfile_db_load(void)
 				}
 			}
 		}
-
-		if (!strcmp("ME", item))
+		else if (!strcmp("ME", item))
 		{
+			/* memo */
 			char *sender, *text;
 			time_t mtime;
 			unsigned int status;
@@ -484,9 +484,9 @@ static void flatfile_db_load(void)
 
 			node_add(mz, node_create(), &mu->memos);
 		}
-		
-		if (!strcmp("MI", item))
+		else if (!strcmp("MI", item))
 		{
+			/* memo ignore */
 			char *user, *target, *strbuf;
 
 			user = strtok(NULL, " ");
@@ -504,10 +504,9 @@ static void flatfile_db_load(void)
 			
 			node_add(strbuf, node_create(), &mu->memo_ignores);
 		}
-
-		/* myuser access list */
-		if (!strcmp("AC", item))
+		else if (!strcmp("AC", item))
 		{
+			/* myuser access list */
 			char *user, *mask;
 
 			user = strtok(NULL, " ");
@@ -523,10 +522,9 @@ static void flatfile_db_load(void)
 
 			myuser_access_add(mu, mask);
 		}
-
-		/* registered nick */
-		if (!strcmp("MN", item))
+		else if (!strcmp("MN", item))
 		{
+			/* registered nick */
 			char *user, *nick, *treg, *tseen;
 			mynick_t *mn;
 
@@ -552,10 +550,9 @@ static void flatfile_db_load(void)
 			mn->registered = atoi(treg);
 			mn->lastseen = atoi(tseen);
 		}
-
-		/* subscriptions */
-		if (!strcmp("SU", item))
+		else if (!strcmp("SU", item))
 		{
+			/* subscriptions */
 			char *user, *sub_user, *tags, *tag;
 			myuser_t *subscriptor;
 			metadata_subscription_t *md;
@@ -590,10 +587,9 @@ static void flatfile_db_load(void)
 
 			node_add(md, node_create(), &mu->subscriptions);
 		}
-
-		/* formerly registered name */
-		if (!strcmp("NAM", item))
+		else if (!strcmp("NAM", item))
 		{
+			/* formerly registered name (created by a marked account being dropped) */
 			char *user;
 
 			user = strtok(NULL, " \n");
@@ -604,10 +600,9 @@ static void flatfile_db_load(void)
 			}
 			myuser_name_add(user);
 		}
-
-		/* services oper */
-		if (!strcmp("SO", item))
+		else if (!strcmp("SO", item))
 		{
+			/* services oper */
 			char *user, *class, *flagstr, *password;
 
 			user = strtok(NULL, " ");
@@ -624,10 +619,9 @@ static void flatfile_db_load(void)
 			}
 			soper_add(mu->name, class, atoi(flagstr) & ~SOPER_CONF, password);
 		}
-
-		/* mychans */
-		if (!strcmp("MC", item))
+		else if (!strcmp("MC", item))
 		{
+			/* mychans */
 			char *mcname, *mcpass;
 
 			if ((s = strtok(NULL, " ")))
@@ -667,10 +661,9 @@ static void flatfile_db_load(void)
 					mc->flags |= MC_GUARD;
 			}
 		}
-
-		/* Metadata entry */
-		if (!strcmp("MD", item))
+		else if (!strcmp("MD", item))
 		{
+			/* Metadata entry */
 			char *type = strtok(NULL, " ");
 			char *name = strtok(NULL, " ");
 			char *property = strtok(NULL, " ");
@@ -716,10 +709,9 @@ static void flatfile_db_load(void)
 			else
 				slog(LG_DEBUG, "db_load(): unknown metadata type %s", type);
 		}
-
-		/* Channel URLs */
-		if (!strcmp("UR", item))
+		else if (!strcmp("UR", item))
 		{
+			/* Channel URLs (obsolete) */
 			char *chan, *url;
 
 			chan = strtok(NULL, " ");
@@ -735,10 +727,9 @@ static void flatfile_db_load(void)
 					metadata_add(mc, METADATA_CHANNEL, "url", url);
 			}
 		}
-
-		/* Channel entry messages */
-		if (!strcmp("EM", item))
+		else if (!strcmp("EM", item))
 		{
+			/* Channel entry messages (obsolete) */
 			char *chan, *message;
 
 			chan = strtok(NULL, " ");
@@ -754,10 +745,9 @@ static void flatfile_db_load(void)
 					metadata_add(mc, METADATA_CHANNEL, "private:entrymsg", message);
 			}
 		}
-
-		/* chanacs */
-		if (!strcmp("CA", item))
+		else if (!strcmp("CA", item))
 		{
+			/* chanacs */
 			chanacs_t *ca;
 			char *cachan, *causer;
 
@@ -861,11 +851,9 @@ static void flatfile_db_load(void)
 				}
 			}
 		}
-
-
-		/* Services ignores */
-		if (!strcmp("SI", item))
+		else if (!strcmp("SI", item))
 		{
+				/* Services ignores */
 			char *mask, *setby, *reason, *tmp;
 			time_t settime;
 
@@ -882,10 +870,15 @@ static void flatfile_db_load(void)
 			svsignore->setby = sstrdup(setby);
 
 		}
-
-		/* klines */
-		if (!strcmp("KL", item))
+		else if (!strcmp("KID", item))
 		{
+			/* unique kline id */
+			char *id = strtok(NULL, " ");
+			me.kline_id = atol(id);
+		}
+		else if (!strcmp("KL", item))
+		{
+			/* klines */
 			char *user, *host, *reason, *setby, *tmp;
 			time_t settime;
 			long duration;
@@ -909,10 +902,9 @@ static void flatfile_db_load(void)
 
 			kin++;
 		}
-
-		/* end */
-		if (!strcmp("DE", item))
+		else if (!strcmp("DE", item))
 		{
+			/* end */
 			i = atoi(strtok(NULL, " "));
 			if (i != muin)
 				slog(LG_ERROR, "db_load(): got %d myusers; expected %d", muin, i);

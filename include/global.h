@@ -47,6 +47,8 @@ struct me
   unsigned int emaillimit;          /* maximum number of emails sent      */
   unsigned int emailtime;           /* ... in this amount of time         */
 
+  unsigned long kline_id;	/* unique ID for AKILLs			*/
+
   time_t uplinkpong;            /* when the uplink last sent a PONG   */
 
   char *execname;		/* executable name                    */
