@@ -297,7 +297,8 @@ static void flatfile_db_load(void)
 	mychan_t *mc;
 	kline_t *k;
 	svsignore_t *svsignore;
-	unsigned int i = 0, linecnt = 0, muin = 0, mcin = 0, cain = 0, kin = 0;
+	unsigned int versn = 0, i;
+	unsigned int linecnt = 0, muin = 0, mcin = 0, cain = 0, kin = 0;
 	FILE *f;
 	char *item, *s, dBuf[BUFSIZE];
 	unsigned int their_ca_all = 0;
@@ -335,11 +336,11 @@ static void flatfile_db_load(void)
 		/* database version */
 		if (!strcmp("DBV", item))
 		{
-			i = atoi(strtok(NULL, " "));
-			if (i > 6)
+			versn = atoi(strtok(NULL, " "));
+			if (versn > 6)
 			{
 				slog(LG_INFO, "db_load(): database version is %d; i only understand 5 (Atheme 2.0, 2.1), "
-					"4 (Atheme 0.2), 3 (Atheme 0.2 without CA_ACLVIEW), 2 (Atheme 0.1) or 1 (Shrike)", i);
+					"4 (Atheme 0.2), 3 (Atheme 0.2 without CA_ACLVIEW), 2 (Atheme 0.1) or 1 (Shrike)", versn);
 				exit(EXIT_FAILURE);
 			}
 		}
@@ -636,7 +637,7 @@ static void flatfile_db_load(void)
 						mc->mlock_key = sstrdup(s);
 				}
 
-				if (i < 5 && config_options.join_chans)
+				if (versn < 5 && config_options.join_chans)
 					mc->flags |= MC_GUARD;
 			}
 		}
@@ -750,7 +751,7 @@ static void flatfile_db_load(void)
 
 				cain++;
 
-				if (i >= DB_ATHEME)
+				if (versn >= DB_ATHEME)
 				{
 					unsigned int fl = flags_to_bitmask(strtok(NULL, " "), chanacs_flags, 0x0);
 					const char *tsstr;
@@ -758,7 +759,7 @@ static void flatfile_db_load(void)
 
 					/* Compatibility with oldworld Atheme db's. --nenolod */
 					/* arbitrary cutoff to avoid touching newer +voOt entries -- jilles */
-					if (fl == OLD_CA_AOP && i < 4)
+					if (fl == OLD_CA_AOP && versn < 4)
 						fl = CA_AOP_DEF;
 
 					/* 
@@ -774,7 +775,7 @@ static void flatfile_db_load(void)
 					 * access lists. If they aren't AKICKed, upgrade
 					 * them. This keeps us from breaking old XOPs.
 					 */
-					if (i < 4)
+					if (versn < 4)
 						if (!(fl & CA_AKICK))
 							fl |= CA_ACLVIEW;
 
@@ -807,7 +808,7 @@ static void flatfile_db_load(void)
 					else
 						ca = chanacs_add(mc, mu, fl, ts);
 				}
-				else if (i == DB_SHRIKE)	/* DB_SHRIKE */
+				else if (versn == DB_SHRIKE)	/* DB_SHRIKE */
 				{
 					unsigned int fl = atol(strtok(NULL, " "));
 					unsigned int fl2 = 0x0;
