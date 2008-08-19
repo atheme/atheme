@@ -900,10 +900,15 @@ static void m_snick(sourceinfo_t *si, int parc, char *parv[])
 	if (!u)
 		return;
 
-	if (strcmp(u->vhost, parv[2]))	/* User is not using spoofhost, assume no I:line spoof */
-	{
+	if (!strcmp(parv[2], "spoof.host") || !strcmp(parv[2], "cloaked.fn"))
+		/* Spoofhost is equal to include/config.h's or
+		 * include/config.h.fn-include's SPOOF_LIMIT_HOST.
+		 * Assume no I:line spoof.
+		 */
 		strlcpy(u->host, parv[4], HOSTLEN);
-	}
+	else
+		/* Custom spoofhost, assume I:line spoof. */
+		strlcpy(u->host, parv[2], HOSTLEN);
 
 	if (use_svslogin)
 	{
