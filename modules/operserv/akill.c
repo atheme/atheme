@@ -86,7 +86,9 @@ static void os_akill_newuser(void *vptr)
 		/* Server didn't have that kline, send it again.
 		 * To ensure kline exempt works on akills too, do
 		 * not send a KILL. -- jilles */
-		kline_sts("*", k->user, k->host, k->duration ? k->expires - CURRTIME : 0, k->reason);
+		char reason[BUFSIZE];
+		snprintf(reason, sizeof(reason), "[#%lu] %s", k->number, k->reason);
+		kline_sts("*", k->user, k->host, k->duration ? k->expires - CURRTIME : 0, reason);
 	}
 }
 
@@ -104,7 +106,7 @@ static void os_cmd_akill(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-        c = command_find(&os_akill_cmds, cmd);
+	c = command_find(&os_akill_cmds, cmd);
 	if (c == NULL)
 	{
 		command_fail(si, fault_badparams, _("Invalid command. Use \2/%s%s help\2 for a command listing."), (ircd->uses_rcommand == FALSE) ? "msg " : "", opersvs.me->disp);
@@ -117,7 +119,7 @@ static void os_cmd_akill(sourceinfo_t *si, int parc, char *parv[])
 static void os_cmd_akill_add(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
-        char *target = parv[0];
+	char *target = parv[0];
 	char *token = strtok(parv[1], " ");
 	char star[] = "*";
 	char *kuser, *khost;
@@ -473,13 +475,13 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[])
 		k = (kline_t *)n->data;
 
 		if (k->duration && full)
-			command_success_nodata(si, _("%d: %s@%s - by \2%s\2 - expires in \2%s\2 - (%s)"), k->number, k->user, k->host, k->setby, timediff(k->expires > CURRTIME ? k->expires - CURRTIME : 0), k->reason);
+			command_success_nodata(si, _("%lu: %s@%s - by \2%s\2 - expires in \2%s\2 - (%s)"), k->number, k->user, k->host, k->setby, timediff(k->expires > CURRTIME ? k->expires - CURRTIME : 0), k->reason);
 		else if (k->duration && !full)
-			command_success_nodata(si, _("%d: %s@%s - by \2%s\2 - expires in \2%s\2"), k->number, k->user, k->host, k->setby, timediff(k->expires > CURRTIME ? k->expires - CURRTIME : 0));
+			command_success_nodata(si, _("%lu: %s@%s - by \2%s\2 - expires in \2%s\2"), k->number, k->user, k->host, k->setby, timediff(k->expires > CURRTIME ? k->expires - CURRTIME : 0));
 		else if (!k->duration && full)
-			command_success_nodata(si, _("%d: %s@%s - by \2%s\2 - \2permanent\2 - (%s)"), k->number, k->user, k->host, k->setby, k->reason);
+			command_success_nodata(si, _("%lu: %s@%s - by \2%s\2 - \2permanent\2 - (%s)"), k->number, k->user, k->host, k->setby, k->reason);
 		else
-			command_success_nodata(si, _("%d: %s@%s - by \2%s\2 - \2permanent\2"), k->number, k->user, k->host, k->setby);
+			command_success_nodata(si, _("%lu: %s@%s - by \2%s\2 - \2permanent\2"), k->number, k->user, k->host, k->setby);
 	}
 
 	command_success_nodata(si, _("Total of \2%d\2 %s in AKILL list."), klnlist.count, (klnlist.count == 1) ? "entry" : "entries");
@@ -498,10 +500,14 @@ static void os_cmd_akill_sync(sourceinfo_t *si, int parc, char *parv[])
 	{
 		k = (kline_t *)n->data;
 
+
+		char reason[BUFSIZE];
+		snprintf(reason, sizeof(reason), "[#%lu] %s", k->number, k->reason);
+
 		if (k->duration == 0)
-			kline_sts("*", k->user, k->host, 0, k->reason);
+			kline_sts("*", k->user, k->host, 0, reason);
 		else if (k->expires > CURRTIME)
-			kline_sts("*", k->user, k->host, k->expires - CURRTIME, k->reason);
+			kline_sts("*", k->user, k->host, k->expires - CURRTIME, reason);
 	}
 
 	command_success_nodata(si, _("AKILL list synchronized to servers."));

@@ -12,51 +12,52 @@
 
 #include "xmlrpc.h"
 
-int xmlrpc_error_code;
+static int xmlrpc_error_code;
 
-XMLRPCCmdHash *XMLRPCCMD[MAX_CMD_HASH];
+typedef struct XMLRPCCmd_ XMLRPCCmd;
+typedef struct XMLRPCCmdHash_ XMLRPCCmdHash;
 
-XMLRPCSet xmlrpc;
+struct XMLRPCCmd_ {
+	XMLRPCMethodFunc func;
+	char *name;
+	int core;
+	char *mod_name;
+	XMLRPCCmd *next;
+};
 
-static int xmlrpc_tolower(char c);
-static char *xmlrpc_GetToken(const char *str, const char dilim, int token_number);
-static char *xmlrpc_GetTokenRemainder(const char *str, const char dilim, int token_number);
-static char *xmlrpc_myStrSubString(const char *src, int start, int end);
-static char *xmlrpc_strdup(const char *src);
+struct XMLRPCCmdHash_ {
+	char *name;
+	XMLRPCCmd *xml;
+	XMLRPCCmdHash *next;
+};
+
+static XMLRPCCmdHash *XMLRPCCMD[MAX_CMD_HASH];
+
+struct xmlrpc_settings {
+	char *(*setbuffer)(char *buffer, int len);
+	char *encode;
+	int httpheader;
+	char *inttagstart;
+	char *inttagend;
+} xmlrpc;
+
 static char *xmlrpc_parse(char *buffer);
 static char *xmlrpc_method(char *buffer);
 static char *xmlrpc_normalizeBuffer(char *buf);
-static char *xmlrpc_stristr(char *s1, char *s2);
 static int xmlrpc_split_buf(char *buffer, char ***argv);
 static void xmlrpc_append_char_encode(string_t *s, const char *s1);
 
-XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func);
-XMLRPCCmd *findXMLRPCCommand(XMLRPCCmdHash * hookEvtTable[], const char *name);
-int addXMLCommand(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml);
-int destroyXMLRPCCommand(XMLRPCCmd * xml);
-int delXMLRPCCommand(XMLRPCCmdHash * msgEvtTable[], XMLRPCCmd * xml, char *mod_name);
-char *xmlrpc_write_header(int length);
-int addCoreXMLRPCCmd(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml);
-XMLRPCCmd *first_xmlrpccmd(void);
-XMLRPCCmd *next_xmlrpccmd(void);
-XMLRPCCmdHash *first_xmlrpchash(void);
-XMLRPCCmdHash *next_xmlrpchash(void);
-int destroyxmlrpchash(XMLRPCCmdHash * mh);
-char *xmlrcp_strnrepl(char *s, int size, const char *old, const char *new);
-int xmlrpc_myNumToken(const char *str, const char dilim);
+static XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func);
+static XMLRPCCmd *findXMLRPCCommand(XMLRPCCmdHash * hookEvtTable[], const char *name);
+static int addXMLCommand(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml);
+static void destroyXMLRPCCommand(XMLRPCCmd * xml);
+static char *xmlrpc_write_header(int length);
 
 /*************************************************************************/
 
 int xmlrpc_getlast_error(void)
 {
-	if (!xmlrpc_error_code)
-	{
-		return 0;
-	}
-	else
-	{
-		return xmlrpc_error_code;
-	}
+	return xmlrpc_error_code;
 }
 
 /*************************************************************************/
@@ -67,8 +68,8 @@ void xmlrpc_process(char *buffer, void *userdata)
 	XMLRPCCmd *current = NULL;
 	XMLRPCCmd *xml;
 	char *tmp;
-	int ac = 0;
-	char **av;
+	int ac;
+	char **av = NULL;
 	char *name = NULL;
 
 	xmlrpc_error_code = 0;
@@ -130,33 +131,17 @@ void xmlrpc_process(char *buffer, void *userdata)
 		xmlrpc_error_code = -2;
 		xmlrpc_generic_error(xmlrpc_error_code, "XMLRPC error: Invalid document end at line 1");
 	}
-	if (ac)
-	{
-		free(av);
-	}
-	if (tmp)
-	{
-		free(tmp);
-	}
-	if (name)
-	{
-		free(name);
-	}
+	free(av);
+	free(tmp);
+	free(name);
 }
 
 /*************************************************************************/
 
 void xmlrpc_set_buffer(char *(*func) (char *buffer, int len))
 {
-	xmlrpc.setbuffer = NULL;
-	if (func)
-	{
-		xmlrpc.setbuffer = func;
-	}
-	else
-	{
-		xmlrpc_error_code = -8;
-	}
+	return_if_fail(func != NULL);
+	xmlrpc.setbuffer = func;
 }
 
 /*************************************************************************/
@@ -164,24 +149,19 @@ void xmlrpc_set_buffer(char *(*func) (char *buffer, int len))
 int xmlrpc_register_method(const char *name, XMLRPCMethodFunc func)
 {
 	XMLRPCCmd *xml;
+	return_val_if_fail(name != NULL, XMLRPC_ERR_PARAMS);
+	return_val_if_fail(func != NULL, XMLRPC_ERR_PARAMS);
 	xml = createXMLCommand(name, func);
 	return addXMLCommand(XMLRPCCMD, xml);
 }
 
 /*************************************************************************/
 
-XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func)
+static XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func)
 {
 	XMLRPCCmd *xml = NULL;
-	if (!func)
-	{
-		return NULL;
-	}
-	if ((xml = malloc(sizeof(XMLRPCCmd))) == NULL)
-	{
-		return NULL;
-	}
-	xml->name = xmlrpc_strdup(name);
+	xml = smalloc(sizeof(XMLRPCCmd));
+	xml->name = sstrdup(name);
 	xml->func = func;
 	xml->mod_name = NULL;
 	xml->core = 0;
@@ -191,14 +171,14 @@ XMLRPCCmd *createXMLCommand(const char *name, XMLRPCMethodFunc func)
 
 /*************************************************************************/
 
-XMLRPCCmd *findXMLRPCCommand(XMLRPCCmdHash * hookEvtTable[], const char *name)
+static XMLRPCCmd *findXMLRPCCommand(XMLRPCCmdHash * hookEvtTable[], const char *name)
 {
 	int idx;
 	XMLRPCCmdHash *current = NULL;
-	if (!hookEvtTable || !name)
-	{
-		return NULL;
-	}
+
+	return_val_if_fail(hookEvtTable != NULL, NULL);
+	return_val_if_fail(name != NULL, NULL);
+
 	idx = CMD_HASH(name);
 
 	for (current = hookEvtTable[idx]; current; current = current->next)
@@ -213,7 +193,7 @@ XMLRPCCmd *findXMLRPCCommand(XMLRPCCmdHash * hookEvtTable[], const char *name)
 
 /*************************************************************************/
 
-int addXMLCommand(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml)
+static int addXMLCommand(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml)
 {
 	/* We can assume both param's have been checked by this point.. */
 	int idx = 0;
@@ -221,10 +201,6 @@ int addXMLCommand(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml)
 	XMLRPCCmdHash *newHash = NULL;
 	XMLRPCCmdHash *lastHash = NULL;
 
-	if (!hookEvtTable || !xml)
-	{
-		return XMLRPC_ERR_PARAMS;
-	}
 	idx = CMD_HASH(xml->name);
 
 	for (current = hookEvtTable[idx]; current; current = current->next)
@@ -238,12 +214,9 @@ int addXMLCommand(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml)
 		lastHash = current;
 	}
 
-	if ((newHash = malloc(sizeof(XMLRPCCmdHash))) == NULL)
-	{
-		return XMLRPC_ERR_OK;
-	}
+	newHash = smalloc(sizeof(XMLRPCCmdHash));
 	newHash->next = NULL;
-	newHash->name = xmlrpc_strdup(xml->name);
+	newHash->name = sstrdup(xml->name);
 	newHash->xml = xml;
 
 	if (lastHash == NULL)
@@ -262,10 +235,8 @@ int xmlrpc_unregister_method(const char *method)
 	XMLRPCCmdHash *lastHash = NULL;
 	XMLRPCCmd *xml, *xml2;
 
-	if (!method)
-	{
-		return XMLRPC_ERR_PARAMS;
-	}
+	return_val_if_fail(method != NULL, XMLRPC_ERR_PARAMS);
+
 	idx = CMD_HASH(method);
 
 	for (current = XMLRPCCMD[idx]; current; current = current->next)
@@ -298,126 +269,20 @@ int xmlrpc_unregister_method(const char *method)
  * @param m the message to be destroyed
  * @return XMLRPC_ERR_SUCCESS on success
  **/
-int destroyXMLRPCCommand(XMLRPCCmd * xml)
+static void destroyXMLRPCCommand(XMLRPCCmd * xml)
 {
-	if (!xml)
-	{
-		return XMLRPC_ERR_PARAMS;
-	}
-	if (xml->name)
-	{
-		free(xml->name);
-	}
+	return_if_fail(xml != NULL);
+
+	free(xml->name);
 	xml->func = NULL;
-	if (xml->mod_name)
-	{
-		free(xml->mod_name);
-	}
+	free(xml->mod_name);
 	xml->next = NULL;
 	free(xml);
-	return XMLRPC_ERR_OK;
 }
 
 /*************************************************************************/
 
-int delXMLRPCCommand(XMLRPCCmdHash * msgEvtTable[], XMLRPCCmd * xml, char *mod_name)
-{
-	int idx = 0;
-	XMLRPCCmdHash *current = NULL;
-	XMLRPCCmdHash *lastHash = NULL;
-	XMLRPCCmd *tail = NULL, *last = NULL;
-
-	if (!xml || !msgEvtTable)
-	{
-		return XMLRPC_ERR_PARAMS;
-	}
-	idx = CMD_HASH(xml->name);
-
-	for (current = msgEvtTable[idx]; current; current = current->next)
-	{
-		if (stricmp(xml->name, current->name) == 0)
-		{
-			if (!lastHash)
-			{
-				tail = current->xml;
-				if (tail->next)
-				{
-					while (tail)
-					{
-						if (mod_name && tail->mod_name && (stricmp(mod_name, tail->mod_name) == 0))
-						{
-							if (last)
-							{
-								last->next = tail->next;
-							}
-							else
-							{
-								current->xml = tail->next;
-							}
-							return XMLRPC_ERR_OK;
-						}
-						last = tail;
-						tail = tail->next;
-					}
-				}
-				else
-				{
-					msgEvtTable[idx] = current->next;
-					free(current->name);
-					return XMLRPC_ERR_OK;
-				}
-			}
-			else
-			{
-				tail = current->xml;
-				if (tail->next)
-				{
-					while (tail)
-					{
-						if (mod_name && tail->mod_name && (stricmp(mod_name, tail->mod_name) == 0))
-						{
-							if (last)
-							{
-								last->next = tail->next;
-							}
-							else
-							{
-								current->xml = tail->next;
-							}
-							return XMLRPC_ERR_OK;
-						}
-						last = tail;
-						tail = tail->next;
-					}
-				}
-				else
-				{
-					lastHash->next = current->next;
-					free(current->name);
-					return XMLRPC_ERR_OK;
-				}
-			}
-		}
-		lastHash = current;
-	}
-	return XMLRPC_ERR_NOEXIST;
-}
-
-/*************************************************************************/
-
-int addCoreXMLRPCCmd(XMLRPCCmdHash * hookEvtTable[], XMLRPCCmd * xml)
-{
-	if (!hookEvtTable || !xml)
-	{
-		return XMLRPC_ERR_PARAMS;
-	}
-	xml->core = 1;
-	return addXMLCommand(hookEvtTable, xml);
-}
-
-/*************************************************************************/
-
-char *xmlrpc_write_header(int length)
+static char *xmlrpc_write_header(int length)
 {
 	char buf[512];
 	time_t ts;
@@ -431,7 +296,7 @@ char *xmlrpc_write_header(int length)
 	strftime(timebuf, sizeof timebuf, "%Y-%m-%d %H:%M:%S", &tm);
 
 	snprintf(buf, sizeof buf, "HTTP/1.1 200 OK\r\nConnection: close\r\n" "Content-Length: %d\r\n" "Content-Type: text/xml\r\n" "Date: %s\r\n" "Server: Atheme/%s\r\n\r\n", length, timebuf, version);
-	return xmlrpc_strdup(buf);
+	return sstrdup(buf);
 }
 
 /*************************************************************************/
@@ -441,7 +306,7 @@ char *xmlrpc_write_header(int length)
  * @param buffer Incoming data buffer
  * @return cleaned up buffer
  */
-char *xmlrpc_parse(char *buffer)
+static char *xmlrpc_parse(char *buffer)
 {
 	char *tmp = NULL;
 
@@ -450,7 +315,7 @@ char *xmlrpc_parse(char *buffer)
 	   HTTP header information, lets break
 	   off at the point that the <?xml?> starts
 	 */
-	tmp = xmlrpc_stristr(buffer, (char *)"<?xml");
+	tmp = strstr(buffer, "<?xml");
 
 	/* check if its xml doc */
 	if (tmp)
@@ -463,72 +328,77 @@ char *xmlrpc_parse(char *buffer)
 
 /*************************************************************************/
 
+/* Splits up a series of values into an array of strings.
+ * The given buffer is modified and the pointers in the array point to
+ * parts of the buffer. The array itself is dynamically allocated.
+ * Returns the number of values placed in the array.
+ * Largely rewritten by jilles 20080803
+ */
 static int xmlrpc_split_buf(char *buffer, char ***argv)
 {
 	int ac = 0;
 	int argvsize = 8;
 	char *data, *str;
-	char *str2 = NULL;
 	char *nexttag = NULL;
-	char *temp = NULL;
-	char *final;
+	char *p;
 	int tagtype = 0;
 
-	*argv = calloc(sizeof(char *) * argvsize, 1);
-	while ((data = strstr(buffer, "<value>")))
+	data = buffer;
+	*argv = smalloc(sizeof(char *) * argvsize);
+	while ((data = strstr(data, "<value>")))
 	{
-		if (data)
+		data += 7;
+		nexttag = strchr(data, '<');
+		if (nexttag == NULL)
+			break;
+		nexttag++;
+		p = strchr(nexttag, '>');
+		if (p == NULL)
+			break;
+		*p++ = '\0';
+		/* strings */
+		if (!stricmp("string", nexttag))
+			tagtype = 1;
+		else
+			tagtype = 0;
+		str = p;
+		p = strchr(str, '<');
+		if (p == NULL)
+			break;
+		*p++ = '\0';
+		if (ac >= argvsize)
 		{
-			temp = xmlrpc_GetToken(data, '<', 2);
-			nexttag = xmlrpc_GetToken(temp, '>', 0);
-			/* strings */
-			if (!stricmp("string", nexttag))
-			{
-				tagtype = 1;
-			}
-			else
-			{
-				tagtype = 0;
-			}
-			str = xmlrpc_GetToken(data, '>', 2);
-			str2 = xmlrpc_GetTokenRemainder(data, '>', 2);
-			if (str)
-			{
-				final = xmlrpc_GetToken(str, '<', 0);
-				if (final)
-				{
-					if (tagtype == 1)
-					{
-						(*argv)[ac++] = xmlrpc_decode_string(final);
-					}
-					else
-					{
-						(*argv)[ac++] = final;
-					}
-				}
-				free(str);
-			}	/* str */
-		}		/* data */
-		buffer = str2;
+			argvsize *= 2;
+			*argv = srealloc(*argv, sizeof(char *) * argvsize);
+		}
+		if (tagtype == 1)
+			(*argv)[ac++] = xmlrpc_decode_string(str);
+		else
+			(*argv)[ac++] = str;
+		data = p;
 	}			/* while */
-	free(str2);
 	return ac;
 }
 
 /*************************************************************************/
 
-char *xmlrpc_method(char *buffer)
+static char *xmlrpc_method(char *buffer)
 {
-	char *data;
-	char *tmp, *tmp2;
+	char *data, *p, *name;
+	int namelen;
 
-	data = xmlrpc_stristr(buffer, (char *)"<methodname>");
+	data = strstr(buffer, "<methodName>");
 	if (data)
 	{
-		tmp = xmlrpc_GetToken(data, '>', 1);
-		tmp2 = xmlrpc_GetToken(tmp, '<', 0);
-		free(tmp);
-		return tmp2;
+		data += 12;
+		p = strchr(data, '<');
+		if (p == NULL)
+			return NULL;
+		namelen = p - data;
+		name = smalloc(namelen + 1);
+		memcpy(name, data, namelen);
+		name[namelen] = '\0';
+		return name;
 	}
 	return NULL;
 }
@@ -752,13 +622,13 @@ char *xmlrpc_array(int argc, ...)
 		if (!s)
 		{
 			snprintf(buf, XMLRPC_BUFSIZE, "   <value>%s</value>", a);
-			s = xmlrpc_strdup(buf);
+			s = sstrdup(buf);
 		}
 		else
 		{
 			snprintf(buf, XMLRPC_BUFSIZE, "%s\r\n     <value>%s</value>", s, a);
 			free(s);
-			s = xmlrpc_strdup(buf);
+			s = sstrdup(buf);
 		}
 	}
 	va_end(va);
@@ -766,232 +636,18 @@ char *xmlrpc_array(int argc, ...)
 	snprintf(buf, XMLRPC_BUFSIZE, "<array>\r\n    <data>\r\n  %s\r\n    </data>\r\n   </array>", s);
 	len = strlen(buf);
 	free(s);
-	return xmlrpc_strdup(buf);
+	return sstrdup(buf);
 }
 
 /*************************************************************************/
 
-static XMLRPCCmdHash *current;
-static int next_index;
-
-XMLRPCCmd *first_xmlrpccmd(void)
-{
-	next_index = 0;
-
-	while (next_index < 1024 && current == NULL)
-		current = XMLRPCCMD[next_index++];
-	if (current)
-	{
-		return current->xml;
-	}
-	else
-	{
-		return NULL;
-	}
-}
-
-/*************************************************************************/
-
-XMLRPCCmd *next_xmlrpccmd(void)
-{
-	if (current)
-		current = current->next;
-	if (!current && next_index < 1024)
-	{
-		while (next_index < 1024 && current == NULL)
-			current = XMLRPCCMD[next_index++];
-	}
-	if (current)
-	{
-		return current->xml;
-	}
-	else
-	{
-		return NULL;
-	}
-}
-
-/*************************************************************************/
-
-XMLRPCCmdHash *first_xmlrpchash(void)
-{
-	next_index = 0;
-
-	while (next_index < 1024 && current == NULL)
-		current = XMLRPCCMD[next_index++];
-	return current;
-}
-
-/*************************************************************************/
-
-XMLRPCCmdHash *next_xmlrpchash(void)
-{
-	if (current)
-		current = current->next;
-	if (!current && next_index < 1024)
-	{
-		while (next_index < 1024 && current == NULL)
-			current = XMLRPCCMD[next_index++];
-	}
-	if (current)
-	{
-		return current;
-	}
-	else
-	{
-		return NULL;
-	}
-}
-
-/*************************************************************************/
-
-int destroyxmlrpchash(XMLRPCCmdHash * mh)
-{
-	if (!mh)
-	{
-		return XMLRPC_ERR_PARAMS;
-	}
-	if (mh->name)
-	{
-		free(mh->name);
-	}
-	mh->xml = NULL;
-	mh->next = NULL;
-	free(mh);
-	return XMLRPC_ERR_OK;
-}
-
-/*************************************************************************/
-
-static char *xmlrpc_strdup(const char *src)
-{
-	char *ret = NULL;
-
-	if (src)
-	{
-		if ((ret = (char *)malloc(strlen(src) + 1)) != NULL)
-			strcpy(ret, src);
-		else
-			raise(SIGUSR1);
-	}
-	return ret;
-}
-
-/*************************************************************************/
-
-/**
- * Get the token
- * @param str String to search in
- * @param dilim Character to search for
- * @param token_number the token number
- * @return token
- */
-static char *xmlrpc_GetToken(const char *str, const char dilim, int token_number)
-{
-	int len, idx, counter = 0, start_pos = 0;
-	char *substring = NULL;
-	if (!str)
-	{
-		return NULL;
-	}
-
-	len = strlen(str);
-	for (idx = 0; idx <= len; idx++)
-	{
-		if ((str[idx] == dilim) || (idx == len))
-		{
-			if (counter == token_number)
-			{
-				substring = xmlrpc_myStrSubString(str, start_pos, idx);
-				counter++;
-			}
-			else
-			{
-				start_pos = idx + 1;
-				counter++;
-			}
-		}
-	}
-	return substring;
-}
-
-/*************************************************************************/
-
-/**
- * Get the Remaining tokens
- * @param str String to search in
- * @param dilim Character to search for
- * @param token_number the token number
- * @return token
- */
-static char *xmlrpc_GetTokenRemainder(const char *str, const char dilim, int token_number)
-{
-	int len, idx, counter = 0, start_pos = 0;
-	char *substring = NULL;
-	if (!str)
-	{
-		return NULL;
-	}
-	len = strlen(str);
-
-	for (idx = 0; idx <= len; idx++)
-	{
-		if ((str[idx] == dilim) || (idx == len))
-		{
-			if (counter == token_number)
-			{
-				substring = xmlrpc_myStrSubString(str, start_pos, len);
-				counter++;
-			}
-			else
-			{
-				start_pos = idx + 1;
-				counter++;
-			}
-		}
-	}
-	return substring;
-}
-
-/*************************************************************************/
-
-/**
- * Get the string between point A and point B
- * @param str String to search in
- * @param start Point A
- * @param end Point B
- * @return the string in between
- */
-static char *xmlrpc_myStrSubString(const char *src, int start, int end)
-{
-	char *substring = NULL;
-	int len, idx;
-	if (!src)
-	{
-		return NULL;
-	}
-	len = strlen(src);
-	if (((start >= 0) && (end <= len)) && (end > start))
-	{
-		substring = (char *)malloc(sizeof(char) * ((end - start) + 1));
-		for (idx = 0; idx <= end - start; idx++)
-		{
-			substring[idx] = src[start + idx];
-		}
-		substring[end - start] = '\0';
-	}
-	return substring;
-}
-
-/*************************************************************************/
-
-char *xmlrpc_normalizeBuffer(char *buf)
+static char *xmlrpc_normalizeBuffer(char *buf)
 {
 	char *newbuf;
 	int i, len, j = 0;
 
 	len = strlen(buf);
-	newbuf = (char *)malloc(sizeof(char) * len + 1);
+	newbuf = (char *)smalloc(sizeof(char) * len + 1);
 
 	for (i = 0; i < len; i++)
 	{
@@ -1072,44 +728,6 @@ char *xmlrpc_normalizeBuffer(char *buf)
 
 /*************************************************************************/
 
-char *xmlrpc_stristr(char *s1, char *s2)
-{
-	register char *s = s1, *d = s2;
-
-	while (*s1)
-	{
-		if (xmlrpc_tolower(*s1) == xmlrpc_tolower(*d))
-		{
-			s1++;
-			d++;
-			if (*d == 0)
-				return s;
-		}
-		else
-		{
-			s = ++s1;
-			d = s2;
-		}
-	}
-	return NULL;
-}
-
-/*************************************************************************/
-
-static int xmlrpc_tolower(char c)
-{
-	if (isupper(c))
-	{
-		return (unsigned char)c + ('a' - 'A');
-	}
-	else
-	{
-		return (unsigned char)c;
-	}
-}
-
-/*************************************************************************/
-
 int xmlrpc_set_options(int type, const char *value)
 {
 	if (type == XMLRPC_HTTP_HEADER)
@@ -1127,20 +745,20 @@ int xmlrpc_set_options(int type, const char *value)
 	{
 		if (value)
 		{
-			xmlrpc.encode = xmlrpc_strdup(value);
+			xmlrpc.encode = sstrdup(value);
 		}
 	}
 	if (type == XMLRPC_INTTAG)
 	{
 		if (!stricmp(value, XMLRPC_I4))
 		{
-			xmlrpc.inttagstart = xmlrpc_strdup("<i4>");
-			xmlrpc.inttagend = xmlrpc_strdup("</i4>");
+			xmlrpc.inttagstart = sstrdup("<i4>");
+			xmlrpc.inttagend = sstrdup("</i4>");
 		}
 		if (!stricmp(value, XMLRPC_INT))
 		{
-			xmlrpc.inttagstart = xmlrpc_strdup("<int>");
-			xmlrpc.inttagend = xmlrpc_strdup("</int>");
+			xmlrpc.inttagstart = sstrdup("<int>");
+			xmlrpc.inttagend = sstrdup("</int>");
 		}
 	}
 	return 1;
@@ -1237,83 +855,43 @@ static void xmlrpc_append_char_encode(string_t *s, const char *s1)
 	}
 }
 
+/* In-place decode of some entities
+ * rewritten by jilles 20080802
+ */
 char *xmlrpc_decode_string(char *buf)
 {
-	int count;
-	int i;
-	char *token, *temp;
-	char *temptoken;
-	char buf2[12];
-	char buf3[12];
+	const char *p;
+	char *q;
 
-	xmlrcp_strnrepl(buf, XMLRPC_BUFSIZE, "&gt;", ">");
-	xmlrcp_strnrepl(buf, XMLRPC_BUFSIZE, "&lt;", "<");
-	xmlrcp_strnrepl(buf, XMLRPC_BUFSIZE, "&quot;", "\"");
-	xmlrcp_strnrepl(buf, XMLRPC_BUFSIZE, "&amp;", "&");
-
-	temp = xmlrpc_strdup(buf);
-	count = xmlrpc_myNumToken(temp, '&');
-	for (i = 1; i <= count; i++)
+	p = buf;
+	q = buf;
+	while (*p != '\0')
 	{
-		token = xmlrpc_GetToken(temp, '&', i);
-		if (token && *token == '#')
+		if (*p == '&')
 		{
-			temptoken = strtok((token + 1), ";");
-			snprintf(buf2, 12, "%c", atoi(temptoken));
-			snprintf(buf3, 12, "&%s;", token);
-			xmlrcp_strnrepl(buf, XMLRPC_BUFSIZE, buf3, buf2);
+			p++;
+			if (!strncmp(p, "gt;", 3))
+				*q++ = '>', p += 3;
+			else if (!strncmp(p, "lt;", 3))
+				*q++ = '<', p += 3;
+			else if (!strncmp(p, "quot;", 5))
+				*q++ = '"', p += 5;
+			else if (!strncmp(p, "amp;", 4))
+				*q++ = '&', p += 4;
+			else if (*p == '#')
+			{
+				p++;
+				*q++ = (char)atoi(p);
+				while (*p != ';' && *p != '\0')
+					p++;
+			}
 		}
+		else
+			*q++ = *p++;
 	}
-	free(temp);
+	*q = '\0';
+
 	return buf;
-}
-
-char *xmlrcp_strnrepl(char *s, int size, const char *old, const char *new)
-{
-	char *ptr = s;
-	int left = strlen(s);
-	int avail = size - (left + 1);
-	int oldlen = strlen(old);
-	int newlen = strlen(new);
-	int diff = newlen - oldlen;
-
-	while (left >= oldlen)
-	{
-		if (strncmp(ptr, old, oldlen) != 0)
-		{
-			left--;
-			ptr++;
-			continue;
-		}
-		if (diff > avail)
-			break;
-		if (diff != 0)
-			memmove(ptr + oldlen + diff, ptr + oldlen, left + 1);
-		memcpy(ptr, new, newlen);
-		ptr += newlen;
-		left -= oldlen;
-	}
-	return s;
-}
-
-int xmlrpc_myNumToken(const char *str, const char dilim)
-{
-	int len, idx, counter = 0, start_pos = 0;
-	if (!str)
-	{
-		return 0;
-	}
-
-	len = strlen(str);
-	for (idx = 0; idx <= len; idx++)
-	{
-		if ((str[idx] == dilim) || (idx == len))
-		{
-			start_pos = idx + 1;
-			counter++;
-		}
-	}
-	return counter;
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs

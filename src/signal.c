@@ -24,10 +24,12 @@
 #include "atheme.h"
 #include "uplink.h"
 #include "internal.h"
+#include <signal.h>
+#include <sys/wait.h>
 
 static void childproc_check(void);
 
-static int got_sighup, got_sigint, got_sigterm, got_sigchld, got_sigusr2;
+static volatile sig_atomic_t got_sighup, got_sigint, got_sigterm, got_sigchld, got_sigusr2;
 
 typedef void (*signal_handler_t) (int);
 
@@ -136,7 +138,6 @@ void init_signal_handlers(void)
 	signal_install_handler(SIGUSR2, signal_usr2_handler);
 }
 
-/* XXX: we can integrate this into the handlers now --nenolod */
 void check_signals(void)
 {
 	/* rehash */

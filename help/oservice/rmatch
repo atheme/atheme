@@ -11,9 +11,14 @@ backslash and does not occur in the pattern
 can be used. An i after the pattern means
 case insensitive matching.
 
-Syntax: RMATCH /<pattern>/[i]
+By default, there is a limit on the number
+of matches. To override this limit, add
+the FORCE keyword. In any case the actual
+number of matches will be shown.
+
+Syntax: RMATCH /<pattern>/[i] [FORCE]
 
 Example:
-    /msg &nick& RMATCH /^m(oo|00)cow/i
+    /msg &nick& RMATCH /^m(oo|00)cow/i FORCE
     /msg &nick& RMATCH #^[a-z]+!~?[a-z]+@#
     /msg &nick& RMATCH /^[^ ]* [^ ]*$/

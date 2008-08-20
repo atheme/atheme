@@ -99,7 +99,7 @@ static void cs_cmd_topic(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!validtopic(topic))
 	{
-		command_fail(si, fault_badparams, _("The new topic is invalid or too long."), chan);
+		command_fail(si, fault_badparams, _("The new topic is invalid or too long."));
 		return;
 	}
 
@@ -113,7 +113,7 @@ static void cs_cmd_topic(sourceinfo_t *si, int parc, char *parv[])
 	handle_topic(c, topicsetter, CURRTIME, topic);
 	topic_sts(c, topicsetter, CURRTIME, prevtopicts, topic);
 
-	logcommand(si, CMDLOG_SET, "%s TOPIC", mc->name);
+	logcommand(si, CMDLOG_DO, "%s TOPIC", mc->name);
 	if (!chanuser_find(c, si->su))
 		command_success_nodata(si, _("Topic set to \2%s\2 on \2%s\2."), topic, chan);
 }
@@ -174,7 +174,7 @@ static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!validtopic(topicbuf))
 	{
-		command_fail(si, fault_badparams, _("The new topic is invalid or too long."), chan);
+		command_fail(si, fault_badparams, _("The new topic is invalid or too long."));
 		return;
 	}
 
@@ -188,7 +188,7 @@ static void cs_cmd_topicappend(sourceinfo_t *si, int parc, char *parv[])
 	handle_topic(c, topicsetter, CURRTIME, topicbuf);
 	topic_sts(c, topicsetter, CURRTIME, prevtopicts, topicbuf);
 
-	logcommand(si, CMDLOG_SET, "%s TOPICAPPEND", mc->name);
+	logcommand(si, CMDLOG_DO, "%s TOPICAPPEND", mc->name);
 	if (!chanuser_find(c, si->su))
         	command_success_nodata(si, _("Topic set to \2%s\2 on \2%s\2."), c->topic, chan);
 }
@@ -249,7 +249,7 @@ static void cs_cmd_topicprepend(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!validtopic(topicbuf))
 	{
-		command_fail(si, fault_badparams, _("The new topic is invalid or too long."), chan);
+		command_fail(si, fault_badparams, _("The new topic is invalid or too long."));
 		return;
 	}
 
@@ -263,7 +263,7 @@ static void cs_cmd_topicprepend(sourceinfo_t *si, int parc, char *parv[])
 	handle_topic(c, topicsetter, CURRTIME, topicbuf);
 	topic_sts(c, topicsetter, CURRTIME, prevtopicts, topicbuf);
 
-	logcommand(si, CMDLOG_SET, "%s TOPICPREPEND", mc->name);
+	logcommand(si, CMDLOG_DO, "%s TOPICPREPEND", mc->name);
 	if (!chanuser_find(c, si->su))
         	command_success_nodata(si, _("Topic set to \2%s\2 on \2%s\2."), c->topic, chan);
 }

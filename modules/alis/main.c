@@ -328,7 +328,7 @@ static int show_channel(channel_t *chptr, struct alis_query *query)
 	if(query->mode_dir == DIR_SET)
 	{
 		if(((chptr->modes & query->mode) != query->mode) ||
-		   (query->mode_key && chptr->key[0] == '\0') ||
+		   (query->mode_key && chptr->key == NULL) ||
 		   (query->mode_limit && !chptr->limit))
 			return 0;
 		for (i = 0; ignore_mode_list[i].mode != '\0'; i++)
@@ -338,7 +338,7 @@ static int show_channel(channel_t *chptr, struct alis_query *query)
 	else if(query->mode_dir == DIR_UNSET)
 	{
 		if((chptr->modes & query->mode) ||
-		   (query->mode_key && chptr->key[0] != '\0') ||
+		   (query->mode_key && chptr->key != NULL) ||
 		   (query->mode_limit && chptr->limit))
 			return 0;
 		for (i = 0; ignore_mode_list[i].mode != '\0'; i++)
@@ -347,8 +347,8 @@ static int show_channel(channel_t *chptr, struct alis_query *query)
 	}
 	else if(query->mode_dir == DIR_EQUAL)
 	{
-		if((chptr->modes != query->mode) ||
-		   (query->mode_key && chptr->key[0] == '\0') ||
+		if(((chptr->modes & ~(CMODE_LIMIT | CMODE_KEY)) != query->mode) ||
+		   (query->mode_key && chptr->key == NULL) ||
 		   (query->mode_limit && !chptr->limit))
 			return 0;
 		for (i = 0; ignore_mode_list[i].mode != '\0'; i++)

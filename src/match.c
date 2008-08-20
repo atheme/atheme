@@ -270,7 +270,7 @@ int irccasecmp(const char *s1, const char *s2)
 	return (res);
 }
 
-int ircncasecmp(const char *str1, const char *str2, int n)
+int ircncasecmp(const char *str1, const char *str2, size_t n)
 {
 	const unsigned char *s1 = (const unsigned char *)str1;
 	const unsigned char *s2 = (const unsigned char *)str2;

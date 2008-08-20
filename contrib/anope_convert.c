@@ -73,6 +73,8 @@ void write_accounts(void)
 	for (i = 0; i < 1024; i++) {
 		for (nc = nclists[i]; nc; nc = nc->next) {
 			athemeflags = 0;
+			if (nc->aliases.count == 0)
+				continue;
 			na = nc->aliases.list[0];
 			registered = na->time_registered;
 			for (ii = 1; ii < nc->aliases.count; ii++)

@@ -25,17 +25,21 @@ will not apply.
 IMPORTANT NOTE: it is not recommended to use and install services as root.
 Use an unprivileged user account.
 
-Services should compile and run on most POSIX compliant systems.  The list of
-platforms that atheme-services has been tested on includes:
+Services should compile and run on most POSIX compliant systems. The current
+version is known to work on:
+	FreeBSD 6.3              (i386, amd64)
+	FreeBSD 7.0              (i386, amd64)
+	Linux (glibc) 2.6.x      (i386, amd64)
+	MacOS 10.5               (intel) (*)
+
+Older versions have been tested on:
 	FreeBSD 5.[0,1,2,3,4,5]
 	FreeBSD 6.[0,1,2]
-	FreeBSD 7.[0]
 	OpenBSD 3.[5,6,7,8]      (i386, amd64, sparc)
 	NetBSD 1.[5,6]           (i386, amd64, sparc)
 	NetBSD 2.[0]             (i386, amd64, sparc, mips)
 	NetBSD 3.[0]             (i386)
 	DragonFly 1.[0,2,5]
-	Linux (glibc) 2.6.x      (i386, amd64)
 	Solaris [7,8,9,10]       (i86pc, sun4u)
 	Solaris Express 10       (i86pc, sun4u)
 	MacOS 10.[3.5,4.1]       (intel, powerpc)

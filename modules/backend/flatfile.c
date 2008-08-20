@@ -245,6 +245,8 @@ static void flatfile_db_save(void *arg)
 
 	slog(LG_DEBUG, "db_save(): saving klines");
 
+	fprintf(f, "KID %lu\n", me.kline_id);
+
 	LIST_FOREACH(n, klnlist.head)
 	{
 		k = (kline_t *)n->data;
@@ -297,9 +299,12 @@ static void flatfile_db_load(void)
 	mychan_t *mc;
 	kline_t *k;
 	svsignore_t *svsignore;
-	unsigned int i = 0, linecnt = 0, muin = 0, mcin = 0, cain = 0, kin = 0;
+	unsigned int versn = 0, i;
+	unsigned int linecnt = 0, muin = 0, mcin = 0, cain = 0, kin = 0;
 	FILE *f;
-	char *item, *s, dBuf[BUFSIZE];
+	char *item, *s, *buf;
+	size_t bufsize = BUFSIZE, n;
+	int c;
 	unsigned int their_ca_all = 0;
 
 	f = fopen(DATADIR "/atheme.db", "r");
@@ -320,13 +325,37 @@ static void flatfile_db_load(void)
 
 	slog(LG_DEBUG, "db_load(): ----------------------- loading ------------------------");
 
+	buf = smalloc(bufsize);
+
 	/* start reading it, one line at a time */
-	while (fgets(dBuf, BUFSIZE, f))
+	for (;;)
 	{
+		n = 0;
+		while ((c = getc(f)) != EOF && c != '\n')
+		{
+			buf[n++] = c;
+			if (n == bufsize)
+			{
+				bufsize *= 2;
+				buf = srealloc(buf, bufsize);
+			}
+		}
+		buf[n] = '\0';
+
+		if (c == EOF && ferror(f))
+		{
+			slog(LG_ERROR, "db_load(): error while reading %s: %s", DATADIR "/atheme.db", strerror(errno));
+			slog(LG_ERROR, "db_load(): exiting to avoid data loss");
+			exit(1);
+		}
+
+		if (c == EOF && n == 0)
+			break;
+
 		linecnt++;
 
 		/* check for unimportant lines */
-		item = strtok(dBuf, " ");
+		item = strtok(buf, " ");
 		strip(item);
 
 		if (item == NULL || *item == '#' || *item == '\n' || *item == '\t' || *item == ' ' || *item == '\0' || *item == '\r')
@@ -335,18 +364,17 @@ static void flatfile_db_load(void)
 		/* database version */
 		if (!strcmp("DBV", item))
 		{
-			i = atoi(strtok(NULL, " "));
-			if (i > 6)
+			versn = atoi(strtok(NULL, " "));
+			if (versn > 6)
 			{
 				slog(LG_INFO, "db_load(): database version is %d; i only understand 5 (Atheme 2.0, 2.1), "
-					"4 (Atheme 0.2), 3 (Atheme 0.2 without CA_ACLVIEW), 2 (Atheme 0.1) or 1 (Shrike)", i);
+					"4 (Atheme 0.2), 3 (Atheme 0.2 without CA_ACLVIEW), 2 (Atheme 0.1) or 1 (Shrike)", versn);
 				exit(EXIT_FAILURE);
 			}
 		}
-
-		/* enabled chanacs flags */
-		if (!strcmp("CF", item))
+		else if (!strcmp("CF", item))
 		{
+			/* enabled chanacs flags */
 			s = strtok(NULL, " ");
 			if (s == NULL)
 				slog(LG_INFO, "db_load(): missing param to CF");
@@ -363,10 +391,9 @@ static void flatfile_db_load(void)
 				}
 			}
 		}
-
-		/* myusers */
-		if (!strcmp("MU", item))
+		else if (!strcmp("MU", item))
 		{
+			/* myusers */
 			char *muname, *mupass, *muemail;
 
 			if ((s = strtok(NULL, " ")))
@@ -422,9 +449,9 @@ static void flatfile_db_load(void)
 				}
 			}
 		}
-
-		if (!strcmp("ME", item))
+		else if (!strcmp("ME", item))
 		{
+			/* memo */
 			char *sender, *text;
 			time_t mtime;
 			unsigned int status;
@@ -457,9 +484,9 @@ static void flatfile_db_load(void)
 
 			node_add(mz, node_create(), &mu->memos);
 		}
-		
-		if (!strcmp("MI", item))
+		else if (!strcmp("MI", item))
 		{
+			/* memo ignore */
 			char *user, *target, *strbuf;
 
 			user = strtok(NULL, " ");
@@ -477,10 +504,9 @@ static void flatfile_db_load(void)
 			
 			node_add(strbuf, node_create(), &mu->memo_ignores);
 		}
-
-		/* myuser access list */
-		if (!strcmp("AC", item))
+		else if (!strcmp("AC", item))
 		{
+			/* myuser access list */
 			char *user, *mask;
 
 			user = strtok(NULL, " ");
@@ -496,10 +522,9 @@ static void flatfile_db_load(void)
 
 			myuser_access_add(mu, mask);
 		}
-
-		/* registered nick */
-		if (!strcmp("MN", item))
+		else if (!strcmp("MN", item))
 		{
+			/* registered nick */
 			char *user, *nick, *treg, *tseen;
 			mynick_t *mn;
 
@@ -525,10 +550,9 @@ static void flatfile_db_load(void)
 			mn->registered = atoi(treg);
 			mn->lastseen = atoi(tseen);
 		}
-
-		/* subscriptions */
-		if (!strcmp("SU", item))
+		else if (!strcmp("SU", item))
 		{
+			/* subscriptions */
 			char *user, *sub_user, *tags, *tag;
 			myuser_t *subscriptor;
 			metadata_subscription_t *md;
@@ -563,10 +587,9 @@ static void flatfile_db_load(void)
 
 			node_add(md, node_create(), &mu->subscriptions);
 		}
-
-		/* formerly registered name */
-		if (!strcmp("NAM", item))
+		else if (!strcmp("NAM", item))
 		{
+			/* formerly registered name (created by a marked account being dropped) */
 			char *user;
 
 			user = strtok(NULL, " \n");
@@ -577,10 +600,9 @@ static void flatfile_db_load(void)
 			}
 			myuser_name_add(user);
 		}
-
-		/* services oper */
-		if (!strcmp("SO", item))
+		else if (!strcmp("SO", item))
 		{
+			/* services oper */
 			char *user, *class, *flagstr, *password;
 
 			user = strtok(NULL, " ");
@@ -597,10 +619,9 @@ static void flatfile_db_load(void)
 			}
 			soper_add(mu->name, class, atoi(flagstr) & ~SOPER_CONF, password);
 		}
-
-		/* mychans */
-		if (!strcmp("MC", item))
+		else if (!strcmp("MC", item))
 		{
+			/* mychans */
 			char *mcname, *mcpass;
 
 			if ((s = strtok(NULL, " ")))
@@ -636,14 +657,13 @@ static void flatfile_db_load(void)
 						mc->mlock_key = sstrdup(s);
 				}
 
-				if (i < 5 && config_options.join_chans)
+				if (versn < 5 && config_options.join_chans)
 					mc->flags |= MC_GUARD;
 			}
 		}
-
-		/* Metadata entry */
-		if (!strcmp("MD", item))
+		else if (!strcmp("MD", item))
 		{
+			/* Metadata entry */
 			char *type = strtok(NULL, " ");
 			char *name = strtok(NULL, " ");
 			char *property = strtok(NULL, " ");
@@ -689,10 +709,9 @@ static void flatfile_db_load(void)
 			else
 				slog(LG_DEBUG, "db_load(): unknown metadata type %s", type);
 		}
-
-		/* Channel URLs */
-		if (!strcmp("UR", item))
+		else if (!strcmp("UR", item))
 		{
+			/* Channel URLs (obsolete) */
 			char *chan, *url;
 
 			chan = strtok(NULL, " ");
@@ -708,10 +727,9 @@ static void flatfile_db_load(void)
 					metadata_add(mc, METADATA_CHANNEL, "url", url);
 			}
 		}
-
-		/* Channel entry messages */
-		if (!strcmp("EM", item))
+		else if (!strcmp("EM", item))
 		{
+			/* Channel entry messages (obsolete) */
 			char *chan, *message;
 
 			chan = strtok(NULL, " ");
@@ -727,10 +745,9 @@ static void flatfile_db_load(void)
 					metadata_add(mc, METADATA_CHANNEL, "private:entrymsg", message);
 			}
 		}
-
-		/* chanacs */
-		if (!strcmp("CA", item))
+		else if (!strcmp("CA", item))
 		{
+			/* chanacs */
 			chanacs_t *ca;
 			char *cachan, *causer;
 
@@ -750,7 +767,7 @@ static void flatfile_db_load(void)
 
 				cain++;
 
-				if (i >= DB_ATHEME)
+				if (versn >= DB_ATHEME)
 				{
 					unsigned int fl = flags_to_bitmask(strtok(NULL, " "), chanacs_flags, 0x0);
 					const char *tsstr;
@@ -758,7 +775,7 @@ static void flatfile_db_load(void)
 
 					/* Compatibility with oldworld Atheme db's. --nenolod */
 					/* arbitrary cutoff to avoid touching newer +voOt entries -- jilles */
-					if (fl == OLD_CA_AOP && i < 4)
+					if (fl == OLD_CA_AOP && versn < 4)
 						fl = CA_AOP_DEF;
 
 					/* 
@@ -774,7 +791,7 @@ static void flatfile_db_load(void)
 					 * access lists. If they aren't AKICKed, upgrade
 					 * them. This keeps us from breaking old XOPs.
 					 */
-					if (i < 4)
+					if (versn < 4)
 						if (!(fl & CA_AKICK))
 							fl |= CA_ACLVIEW;
 
@@ -807,7 +824,7 @@ static void flatfile_db_load(void)
 					else
 						ca = chanacs_add(mc, mu, fl, ts);
 				}
-				else if (i == DB_SHRIKE)	/* DB_SHRIKE */
+				else if (versn == DB_SHRIKE)	/* DB_SHRIKE */
 				{
 					unsigned int fl = atol(strtok(NULL, " "));
 					unsigned int fl2 = 0x0;
@@ -834,11 +851,9 @@ static void flatfile_db_load(void)
 				}
 			}
 		}
-
-
-		/* Services ignores */
-		if (!strcmp("SI", item))
+		else if (!strcmp("SI", item))
 		{
+				/* Services ignores */
 			char *mask, *setby, *reason, *tmp;
 			time_t settime;
 
@@ -855,10 +870,15 @@ static void flatfile_db_load(void)
 			svsignore->setby = sstrdup(setby);
 
 		}
-
-		/* klines */
-		if (!strcmp("KL", item))
+		else if (!strcmp("KID", item))
 		{
+			/* unique kline id */
+			char *id = strtok(NULL, " ");
+			me.kline_id = atol(id);
+		}
+		else if (!strcmp("KL", item))
+		{
+			/* klines */
 			char *user, *host, *reason, *setby, *tmp;
 			time_t settime;
 			long duration;
@@ -882,10 +902,9 @@ static void flatfile_db_load(void)
 
 			kin++;
 		}
-
-		/* end */
-		if (!strcmp("DE", item))
+		else if (!strcmp("DE", item))
 		{
+			/* end */
 			i = atoi(strtok(NULL, " "));
 			if (i != muin)
 				slog(LG_ERROR, "db_load(): got %d myusers; expected %d", muin, i);
@@ -905,6 +924,8 @@ static void flatfile_db_load(void)
 	}
 
 	fclose(f);
+
+	free(buf);
 
 	slog(LG_DEBUG, "db_load(): ------------------------- done -------------------------");
 }

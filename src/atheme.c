@@ -27,6 +27,7 @@
 #include "internal.h"
 #include "datastream.h"
 #include "authcookie.h"
+#include <sys/resource.h>
 
 chansvs_t chansvs;
 globsvs_t globsvs;
@@ -176,6 +177,7 @@ int main(int argc, char *argv[])
 
 	runflags |= RF_STARTING;
 
+	me.kline_id = 0;
 	me.start = time(NULL);
 	CURRTIME = me.start;
 	srand(arc4random());

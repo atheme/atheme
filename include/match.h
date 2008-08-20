@@ -11,6 +11,8 @@
 #ifndef _MATCH_H
 #define _MATCH_H
 
+#include <regex.h>
+
 /* cidr.c */
 E int match_ips(const char *mask, const char *address);
 E int match_cidr(const char *mask, const char *address);
@@ -43,7 +45,7 @@ E int ToLower(int);
 E int ToUpper(int);
 
 E int irccasecmp(const char *, const char *);
-E int ircncasecmp(const char *, const char *, int);
+E int ircncasecmp(const char *, const char *, size_t);
 
 E void irccasecanon(char *);
 E void strcasecanon(char *);

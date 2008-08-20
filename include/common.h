@@ -21,7 +21,7 @@
 #define PASSLEN			51
 #define IDLEN			10
 #define CHANNELLEN		201
-#define USERLEN			11
+#define USERLEN			12
 #define HOSTIPLEN		54
 #define GECOSLEN		51
 #define KEYLEN			24

@@ -13,38 +13,9 @@
 /* I N C L U D E S */
 #include <mowgli.h>
 
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <signal.h>
-#include <time.h>
-#include <errno.h>
-#include <setjmp.h>
-#include <sys/stat.h>
-#include <ctype.h>
-#include <regex.h>
-
 #ifdef HAVE_LINK_H
 #include <link.h>
 #endif
-
-/* socket stuff */
-#include <netdb.h>
-#include <netinet/in.h>
-#include <unistd.h>
-#include <grp.h>
-#include <sys/time.h>
-#include <sys/wait.h>
-#include <sys/resource.h>
-#include <sys/socket.h>
-#include <fcntl.h>
-#include <arpa/inet.h>
-
-#include <sys/types.h>
-
-#include <libgen.h>
-#include <dirent.h>
 
 typedef mowgli_boolean_t boolean_t;
 

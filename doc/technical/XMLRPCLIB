@@ -1,7 +1,7 @@
 Nomad XML-RPC Library
 by Trystan Scott Lee
 
-Please note that the Atheme team has modified the original code a little bit.
+Please note that the Atheme team has modified the original code considerably.
 
 ==================================================================================
 
@@ -92,5 +92,4 @@ Error Codes
 -4 : findXMLRPCCommand() returned NULL, able to find the method
 -6 : method has no registered function
 -7 : function returned XMLRPC_STOP
--8 : xmlrpc_set_buffer() was passed a NULL variable
 

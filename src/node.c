@@ -115,7 +115,6 @@ kline_t *kline_add(char *user, char *host, char *reason, long duration)
 {
 	kline_t *k;
 	node_t *n = node_create();
-	static unsigned int kcnt = 0;
 
 	slog(LG_DEBUG, "kline_add(): %s@%s -> %s (%ld)", user, host, reason, duration);
 
@@ -129,11 +128,15 @@ kline_t *kline_add(char *user, char *host, char *reason, long duration)
 	k->duration = duration;
 	k->settime = CURRTIME;
 	k->expires = CURRTIME + duration;
-	k->number = ++kcnt;
+	k->number = ++me.kline_id;
 
 	cnt.kline++;
 
-	kline_sts("*", user, host, duration, reason);
+
+	char treason[BUFSIZE];
+	snprintf(treason, sizeof(treason), "[#%lu] %s", k->number, k->reason);
+
+	kline_sts("*", user, host, duration, treason);
 
 	return k;
 }
@@ -185,7 +188,7 @@ kline_t *kline_find(const char *user, const char *host)
 	return NULL;
 }
 
-kline_t *kline_find_num(unsigned int number)
+kline_t *kline_find_num(unsigned long number)
 {
 	kline_t *k;
 	node_t *n;

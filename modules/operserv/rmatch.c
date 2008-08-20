@@ -12,6 +12,7 @@
  *  Matches `nick!user@host realname here' for each client against a given regex, and dumps matches.
  */
 #include "atheme.h"
+#include <limits.h>
 
 DECLARE_MODULE_V1
 (
@@ -42,11 +43,13 @@ void _moddeinit(void)
 	help_delentry(os_helptree, "RMATCH");
 }
 
+#define MAXMATCHES_DEF 1000
+
 static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 {
 	regex_t *regex;
 	char usermask[512];
-	unsigned int matches = 0;
+	unsigned int matches = 0, maxmatches;
 	mowgli_patricia_iteration_state_t state;
 	user_t *u;
 	char *args = parv[0];
@@ -56,7 +59,7 @@ static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 	if (args == NULL)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "RMATCH");
-		command_fail(si, fault_needmoreparams, _("Syntax: RMATCH /<regex>/[i]"));
+		command_fail(si, fault_needmoreparams, _("Syntax: RMATCH /<regex>/[i] [FORCE]"));
 		return;
 	}
 
@@ -64,7 +67,21 @@ static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 	if (pattern == NULL)
 	{
 		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "RMATCH");
-		command_fail(si, fault_badparams, _("Syntax: RMATCH /<regex>/[i]"));
+		command_fail(si, fault_badparams, _("Syntax: RMATCH /<regex>/[i] [FORCE]"));
+		return;
+	}
+
+	while (*args == ' ')
+		args++;
+
+	if (!strcasecmp(args, "FORCE"))
+		maxmatches = UINT_MAX;
+	else if (*args == '\0')
+		maxmatches = MAXMATCHES_DEF;
+	else
+	{
+		command_fail(si, fault_badparams, STR_INVALID_PARAMS, "RMATCH");
+		command_fail(si, fault_badparams, _("Syntax: RMATCH /<regex>/[i] [FORCE]"));
 		return;
 	}
 
@@ -82,9 +99,14 @@ static void os_cmd_rmatch(sourceinfo_t *si, int parc, char *parv[])
 
 		if (regex_match(regex, usermask) == TRUE)
 		{
-			/* match */
-			command_success_nodata(si, _("\2Match:\2  %s!%s@%s %s"), u->nick, u->user, u->host, u->gecos);
 			matches++;
+			if (matches <= maxmatches)
+				command_success_nodata(si, _("\2Match:\2  %s!%s@%s %s"), u->nick, u->user, u->host, u->gecos);
+			else if (matches == maxmatches + 1)
+			{
+				command_success_nodata(si, _("Too many matches, not displaying any more"));
+				command_success_nodata(si, _("Add the FORCE keyword to see them all"));
+			}
 		}
 	}
 	

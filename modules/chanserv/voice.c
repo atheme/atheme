@@ -117,7 +117,7 @@ static void cs_cmd_voice(sourceinfo_t *si, int parc, char *parv[])
 	if (si->c == NULL && tu != si->su)
 		change_notify(chansvs.nick, tu, "You have been voiced on %s by %s", mc->name, get_source_name(si));
 
-	logcommand(si, CMDLOG_SET, "%s VOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
+	logcommand(si, CMDLOG_DO, "%s VOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (!chanuser_find(mc->chan, si->su))
 		command_success_nodata(si, _("\2%s\2 has been voiced on \2%s\2."), tu->nick, mc->name);
 }
@@ -178,7 +178,7 @@ static void cs_cmd_devoice(sourceinfo_t *si, int parc, char *parv[])
 	if (si->c == NULL && tu != si->su)
 		change_notify(chansvs.nick, tu, "You have been devoiced on %s by %s", mc->name, get_source_name(si));
 
-	logcommand(si, CMDLOG_SET, "%s DEVOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
+	logcommand(si, CMDLOG_DO, "%s DEVOICE %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (!chanuser_find(mc->chan, si->su))
 		command_success_nodata(si, _("\2%s\2 has been devoiced on \2%s\2."), tu->nick, mc->name);
 }

@@ -9,7 +9,6 @@ include Makefile.defs
 
 default: all
 
-#SUBDIRS = backend chanserv crypto gameserv global jsonrpc memoserv misc nickserv operserv protocol saslserv xmlrpc
 SUBDIRS = alis backend chanserv crypto gameserv global memoserv misc nickserv operserv protocol saslserv xmlrpc
 
 all: modules

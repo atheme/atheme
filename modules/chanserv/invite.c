@@ -89,7 +89,7 @@ static void cs_cmd_invite(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	invite_sts(si->service->me, si->su, mc->chan);
-	logcommand(si, CMDLOG_SET, "%s INVITE", mc->name);
+	logcommand(si, CMDLOG_DO, "%s INVITE", mc->name);
 	command_success_nodata(si, _("You have been invited to \2%s\2."), mc->name);
 }
 

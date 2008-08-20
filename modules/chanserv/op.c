@@ -125,7 +125,7 @@ static void cs_cmd_op(sourceinfo_t *si, int parc, char *parv[])
 	if (si->c == NULL && tu != si->su)
 		change_notify(chansvs.nick, tu, "You have been opped on %s by %s", mc->name, get_source_name(si));
 
-	logcommand(si, CMDLOG_SET, "%s OP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
+	logcommand(si, CMDLOG_DO, "%s OP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (!chanuser_find(mc->chan, si->su))
 		command_success_nodata(si, _("\2%s\2 has been opped on \2%s\2."), tu->nick, mc->name);
 }
@@ -192,7 +192,7 @@ static void cs_cmd_deop(sourceinfo_t *si, int parc, char *parv[])
 	if (si->c == NULL && tu != si->su)
 		change_notify(chansvs.nick, tu, "You have been deopped on %s by %s", mc->name, get_source_name(si));
 
-	logcommand(si, CMDLOG_SET, "%s DEOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
+	logcommand(si, CMDLOG_DO, "%s DEOP %s!%s@%s", mc->name, tu->nick, tu->user, tu->vhost);
 	if (!chanuser_find(mc->chan, si->su))
 		command_success_nodata(si, _("\2%s\2 has been deopped on \2%s\2."), tu->nick, mc->name);
 }

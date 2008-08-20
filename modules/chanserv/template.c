@@ -59,7 +59,8 @@ static void list_generic_flags(sourceinfo_t *si)
 static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 {
 	metadata_t *md;
-	int operoverride = 0, changechanacs = 0, l;
+	int operoverride = 0, changechanacs = 0;
+	size_t l;
 	char *channel = parv[0];
 	char *target = parv[1];
 	mychan_t *mc = mychan_find(channel);
@@ -231,7 +232,7 @@ static void cs_cmd_template(sourceinfo_t *si, int parc, char *parv[])
 				{
 					ss[r - q] = '\0';
 				}
-				if (q - p == l && !strncasecmp(target, p, q - p))
+				if ((size_t)(q - p) == l && !strncasecmp(target, p, l))
 				{
 					found = TRUE;
 					oldflags = flags_to_bitmask(ss, chanacs_flags, 0);
