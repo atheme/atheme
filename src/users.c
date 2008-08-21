@@ -507,12 +507,17 @@ boolean_t user_changenick(user_t *u, const char *nick, time_t ts)
 void user_mode(user_t *user, const char *modes)
 {
 	int dir = MTYPE_ADD;
+	boolean_t was_ircop, was_invis;
+	int iter;
 
 	if (!user)
 	{
 		slog(LG_DEBUG, "user_mode(): called for nonexistant user");
 		return;
 	}
+
+	was_ircop = is_ircop(user);
+	was_invis = (user->flags & UF_INVIS);
 
 	while (*modes != '\0')
 	{
@@ -524,47 +529,41 @@ void user_mode(user_t *user, const char *modes)
 		  case '-':
 			  dir = MTYPE_DEL;
 			  break;
-		  case 'i':
-			  if (dir == MTYPE_ADD)
-			  {
-				  if (!(user->flags & UF_INVIS))
-					  user->server->invis++;
-				  user->flags |= UF_INVIS;
-			  }
-			  else if ((dir = MTYPE_DEL))
-			  {
-				  if (user->flags & UF_INVIS)
-					  user->server->invis--;
-				  user->flags &= ~UF_INVIS;
-			  }
-			  break;
-		  case 'o':
-			  if (dir == MTYPE_ADD)
-			  {
-				  if (!is_ircop(user))
-				  {
-					  user->flags |= UF_IRCOP;
-					  slog(LG_DEBUG, "user_mode(): %s is now an IRCop", user->nick);
-					  snoop("OPER: %s (%s)", user->nick, user->server->name);
-					  user->server->opers++;
-					  hook_call_event("user_oper", user);
-				  }
-			  }
-			  else if ((dir = MTYPE_DEL))
-			  {
-				  if (is_ircop(user))
-				  {
-					  user->flags &= ~UF_IRCOP;
-					  slog(LG_DEBUG, "user_mode(): %s is no longer an IRCop", user->nick);
-					  snoop("DEOPER: %s (%s)", user->nick, user->server->name);
-					  user->server->opers--;
-					  hook_call_event("user_deoper", user);
-				  }
-			  }
 		  default:
+			  for (iter = 0; user_mode_list[iter].mode != '\0'; iter++)
+			  {
+				  if (*modes == user_mode_list[iter].mode)
+				  {
+					  if (dir == MTYPE_ADD)
+						  user->flags |= user_mode_list[iter].value;
+					  else
+						  user->flags &= ~user_mode_list[iter].value;
+				  }
+			  }
 			  break;
 		}
 		modes++;
+	}
+
+	/* update stats and do appropriate hooks... */
+	if (!was_invis && (user->flags & UF_INVIS))
+		user->server->invis++;
+	else if (was_invis && !(user->flags & UF_INVIS))
+		user->server->invis--;
+
+	if (!was_ircop && is_ircop(user))
+	{
+		slog(LG_DEBUG, "user_mode(): %s is now an IRCop", user->nick);
+		snoop("OPER: %s (%s)", user->nick, user->server->name);
+		user->server->opers++;
+		hook_call_event("user_oper", user);
+	}
+	else if (was_ircop && !is_ircop(user))
+	{
+		slog(LG_DEBUG, "user_mode(): %s is no longer an IRCop", user->nick);
+		snoop("DEOPER: %s (%s)", user->nick, user->server->name);
+		user->server->opers--;
+		hook_call_event("user_deoper", user);
 	}
 }
 
