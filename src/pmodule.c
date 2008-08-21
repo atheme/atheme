@@ -31,6 +31,7 @@ struct cmode_ *mode_list;
 struct extmode *ignore_mode_list;
 struct cmode_ *status_mode_list;
 struct cmode_ *prefix_mode_list;
+struct cmode_ *user_mode_list;
 ircd_t *ircd;
 boolean_t pmodule_loaded = FALSE;
 boolean_t backend_loaded = FALSE;

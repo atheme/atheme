@@ -240,6 +240,7 @@ E struct cmode_ *mode_list;
 E struct extmode *ignore_mode_list;
 E struct cmode_ *status_mode_list;
 E struct cmode_ *prefix_mode_list;
+E struct cmode_ *user_mode_list;
 
 E ircd_t *ircd;
 
