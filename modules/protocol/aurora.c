@@ -87,6 +87,12 @@ struct cmode_ aurora_prefix_mode_list[] = {
   { '\0', 0 }
 };
 
+struct cmode_ aurora_user_mode_list[] = {
+  { 'i', UF_INVIS      },
+  { 'o', UF_IRCOP      },
+  { '\0', 0 }
+};
+
 static boolean_t use_rserv_support = FALSE;
 static boolean_t use_tb = FALSE;
 static boolean_t use_euid = FALSE;
@@ -1488,6 +1494,7 @@ void _modinit(module_t * m)
 	ignore_mode_list = aurora_ignore_mode_list;
 	status_mode_list = aurora_status_mode_list;
 	prefix_mode_list = aurora_prefix_mode_list;
+	user_mode_list = aurora_user_mode_list;
 
 	ircd = &Charybdis;
 

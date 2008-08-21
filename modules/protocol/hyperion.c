@@ -86,6 +86,14 @@ struct cmode_ hyperion_prefix_mode_list[] = {
   { '\0', 0 }
 };
 
+/* maps certain usermodes to UF_* traits --nenolod */
+struct cmode_ hyperion_user_mode_list[] = {
+  { 'm', UF_IMMUNE   },
+  { 'o', UF_OPER     },
+  { 'i', UF_INVIS    },
+  { '\0', 0 }
+};
+
 static boolean_t use_svslogin = FALSE;
 
 /* *INDENT-ON* */
@@ -1041,6 +1049,7 @@ void _modinit(module_t * m)
 	ignore_mode_list = hyperion_ignore_mode_list;
 	status_mode_list = hyperion_status_mode_list;
 	prefix_mode_list = hyperion_prefix_mode_list;
+	user_mode_list = hyperion_user_mode_list;
 
 	ircd = &Hyperion;
 

@@ -99,6 +99,12 @@ struct cmode_ inspircd_prefix_mode_list[] = {
   { '\0', 0 }
 };
 
+struct cmode_ inspircd_user_mode_list[] = {
+  { 'i', UF_INVIS    },
+  { 'o', UF_IRCOP    },
+  { '\0', 0 }
+};
+
 /* CAPABilities */
 static boolean_t has_servicesmod = false;
 static boolean_t has_globopsmod = false;
@@ -1201,6 +1207,7 @@ void _modinit(module_t * m)
 	ignore_mode_list = inspircd_ignore_mode_list;
 	status_mode_list = inspircd_status_mode_list;
 	prefix_mode_list = inspircd_prefix_mode_list;
+	user_mode_list = inspircd_user_mode_list;
 
 	ircd = &InspIRCd;
 

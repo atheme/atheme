@@ -81,6 +81,12 @@ struct cmode_ shadowircd_prefix_mode_list[] = {
   { '\0', 0 }
 };
 
+struct cmode_ shadowircd_user_mode_list[] = {
+  { 'i', UF_INVIS    },
+  { 'o', UF_IRCOP    },
+  { '\0', 0 }
+};
+
 /* *INDENT-ON* */
 
 /* login to our uplink */
@@ -706,6 +712,7 @@ void _modinit(module_t * m)
 	ignore_mode_list = shadowircd_ignore_mode_list;
 	status_mode_list = shadowircd_status_mode_list;
 	prefix_mode_list = shadowircd_prefix_mode_list;
+	user_mode_list = shadowircd_user_mode_list;
 
 	ircd = &ShadowIRCd;
 

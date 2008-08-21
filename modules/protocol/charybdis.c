@@ -81,6 +81,12 @@ struct cmode_ charybdis_prefix_mode_list[] = {
   { '\0', 0 }
 };
 
+struct cmode_ charybdis_user_mode_list[] = {
+  { 'i', UF_INVIS    },
+  { 'o', UF_IRCOP    },
+  { '\0', 0 }
+};
+
 static boolean_t use_rserv_support = FALSE;
 static boolean_t use_tb = FALSE;
 static boolean_t use_euid = FALSE;
@@ -1482,6 +1488,7 @@ void _modinit(module_t * m)
 	ignore_mode_list = charybdis_ignore_mode_list;
 	status_mode_list = charybdis_status_mode_list;
 	prefix_mode_list = charybdis_prefix_mode_list;
+	user_mode_list = charybdis_user_mode_list;
 
 	ircd = &Charybdis;
 
