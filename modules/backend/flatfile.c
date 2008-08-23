@@ -154,7 +154,7 @@ static void flatfile_db_save(void *arg)
 			ca = (chanacs_t *)tn->data;
 
 			fprintf(f, "CA %s %s %s %ld\n", ca->mychan->name, ca->myuser ? ca->myuser->name : ca->host,
-					bitmask_to_flags(ca->level, chanacs_flags), (long)ca->ts);
+					bitmask_to_flags(ca->level, chanacs_flags), (long)ca->tmodified);
 
 			LIST_FOREACH(tn2, ca->metadata.head)
 			{

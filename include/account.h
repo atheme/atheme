@@ -169,7 +169,7 @@ struct chanacs_
 	char     *host;
 	unsigned int  level;
 	list_t	  metadata;
-	time_t    ts;
+	time_t    tmodified;
 	node_t    cnode;
 };
 

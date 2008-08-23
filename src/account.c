@@ -1108,7 +1108,7 @@ chanacs_t *chanacs_add(mychan_t *mychan, myuser_t *myuser, unsigned int level, t
 	ca->myuser = myuser;
 	ca->host = NULL;
 	ca->level = level & ca_all;
-	ca->ts = ts;
+	ca->tmodified = ts;
 
 	node_add(ca, &ca->cnode, &mychan->chanacs);
 	node_add(ca, n, &myuser->chanacs);
@@ -1157,7 +1157,7 @@ chanacs_t *chanacs_add_host(mychan_t *mychan, const char *host, unsigned int lev
 	ca->myuser = NULL;
 	ca->host = sstrdup(host);
 	ca->level = level & ca_all;
-	ca->ts = ts;
+	ca->tmodified = ts;
 
 	node_add(ca, &ca->cnode, &mychan->chanacs);
 
@@ -1422,7 +1422,7 @@ boolean_t chanacs_modify(chanacs_t *ca, unsigned int *addflags, unsigned int *re
 	if (~restrictflags & ca->level)
 		return FALSE;
 	ca->level = (ca->level | *addflags) & ~*removeflags;
-	ca->ts = CURRTIME;
+	ca->tmodified = CURRTIME;
 
 	return TRUE;
 }
@@ -1484,7 +1484,7 @@ boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, const char *hostmask, u
 			if (~restrictflags & ca->level)
 				return FALSE;
 			ca->level = (ca->level | *addflags) & ~*removeflags;
-			ca->ts = CURRTIME;
+			ca->tmodified = CURRTIME;
 			if (ca->level == 0)
 				object_unref(ca);
 		}
@@ -1520,7 +1520,7 @@ boolean_t chanacs_change(mychan_t *mychan, myuser_t *mu, const char *hostmask, u
 			if (~restrictflags & ca->level)
 				return FALSE;
 			ca->level = (ca->level | *addflags) & ~*removeflags;
-			ca->ts = CURRTIME;
+			ca->tmodified = CURRTIME;
 			if (ca->level == 0)
 				object_unref(ca);
 		}

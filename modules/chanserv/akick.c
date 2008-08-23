@@ -273,7 +273,7 @@ void cs_cmd_akick(sourceinfo_t *si, int parc, char *parv[])
 			if (ca->level == CA_AKICK)
 			{
 				md = metadata_find(ca, METADATA_CHANACS, "reason");
-				ago = ca->ts ? time_ago(ca->ts) : "?";
+				ago = ca->tmodified ? time_ago(ca->tmodified) : "?";
 				if (ca->myuser == NULL)
 					command_success_nodata(si, _("%d: \2%s\2  %s [modified: %s ago]"),
 							++i, ca->host,
