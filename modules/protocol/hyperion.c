@@ -89,7 +89,7 @@ struct cmode_ hyperion_prefix_mode_list[] = {
 /* maps certain usermodes to UF_* traits --nenolod */
 struct cmode_ hyperion_user_mode_list[] = {
   { 'm', UF_IMMUNE   },
-  { 'o', UF_OPER     },
+  { 'o', UF_IRCOP    },
   { 'i', UF_INVIS    },
   { '\0', 0 }
 };
