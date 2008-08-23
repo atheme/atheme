@@ -44,7 +44,7 @@ struct user_
 #define UF_SOPER_PASS  0x00000400 /* services oper pass entered */
 #define UF_DOENFORCE   0x00000400 /* introduce enforcer when nick changes */
 #define UF_ENFORCER    0x00000800 /* this is an enforcer client */
-#define UF_WASENFORCED 0x00000800 /* this user was FNCed once already */
+#define UF_WASENFORCED 0x00001000 /* this user was FNCed once already */
 
 #define CLIENT_NAME(user)	((user)->uid[0] ? (user)->uid : (user)->nick)
 
