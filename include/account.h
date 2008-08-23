@@ -245,6 +245,15 @@ typedef struct {
 } hook_channel_req_t;
 
 typedef struct {
+	union {
+		mychan_t *mc;
+		myuser_t *mu;
+		mynick_t *mn;
+	} data;
+	int do_expire;	/* write non-zero here to allow expiry. */
+} hook_expiry_req_t;
+
+typedef struct {
 	sourceinfo_t *si;
 	const char *name;
 	channel_t *chan;

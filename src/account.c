@@ -1709,6 +1709,7 @@ metadata_t *metadata_find(void *target, int type, const char *name)
 
 static int expire_myuser_cb(const char *key, void *data, void *unused)
 {
+	hook_expiry_req_t req; 
 	myuser_t *mu = (myuser_t *) data;
 
 	/* If they're logged in, update lastlogin time.
@@ -1723,6 +1724,13 @@ static int expire_myuser_cb(const char *key, void *data, void *unused)
 	}
 
 	if (MU_HOLD & mu->flags)
+		return 0;
+
+	req.data.mu = mu;
+	req.do_expire = 1;
+	hook_call_event("user_check_expire", &req);
+
+	if (!req.do_expire)
 		return 0;
 
 	if ((nicksvs.expiry > 0 && mu->lastlogin < CURRTIME && (unsigned int)(CURRTIME - mu->lastlogin) >= nicksvs.expiry) ||
@@ -1751,6 +1759,7 @@ void expire_check(void *arg)
 	mychan_t *mc;
 	user_t *u;
 	mowgli_patricia_iteration_state_t state;
+	hook_expiry_req_t req;
 
 	/* Let them know about this and the likely subsequent db_save()
 	 * right away -- jilles */
@@ -1760,6 +1769,14 @@ void expire_check(void *arg)
 
 	MOWGLI_PATRICIA_FOREACH(mn, &state, nicklist)
 	{
+		req.do_expire = 1;
+		req.data.mn = mn;
+
+		hook_call_event("nick_check_expire", &req);
+
+		if (!req.do_expire)
+			continue;
+
 		if (nicksvs.expiry > 0 && mn->lastseen < CURRTIME &&
 				(unsigned int)(CURRTIME - mn->lastseen) >= nicksvs.expiry)
 		{
@@ -1789,6 +1806,14 @@ void expire_check(void *arg)
 
 	MOWGLI_PATRICIA_FOREACH(mc, &state, mclist)
 	{
+		req.do_expire = 1;
+		req.data.mc = mc;
+
+		hook_call_event("channel_check_expire", &req);
+
+		if (!req.do_expire)
+			continue;
+
 		if ((CURRTIME - mc->used) >= 86400 - 3660)
 		{
 			/* keep last used time accurate to
