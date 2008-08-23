@@ -130,6 +130,7 @@ loadmodule "modules/backend/flatfile";
  * Nickname enforcement				modules/nickserv/enforce
  * STATUS command				modules/nickserv/status
  * Nickname metadata viewer (TAXONOMY command)	modules/nickserv/taxonomy
+ * VACATION command                             modules/nickserv/vacation
  * VERIFY command				modules/nickserv/verify
  * VHOST command				modules/nickserv/vhost
  */
@@ -162,6 +163,7 @@ loadmodule "modules/nickserv/setpass";
 #loadmodule "modules/nickserv/enforce";
 loadmodule "modules/nickserv/status";
 loadmodule "modules/nickserv/taxonomy";
+loadmodule "modules/nickserv/vacation";
 loadmodule "modules/nickserv/verify";
 loadmodule "modules/nickserv/vhost";
 
