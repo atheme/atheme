@@ -274,7 +274,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	 * CS SET RESTRICTED: if they don't have any access (excluding AKICK)
 	 * or special privs to join restricted chans, boot them. -- w00t
 	 */
-	if ((mc->flags & MC_RESTRICTED) && !(flags & CA_ALLPRIVS) && !has_priv_user(u, PRIV_JOIN_STAFFONLY) && !(u->flags && UF_IMMUNE))
+	if ((mc->flags & MC_RESTRICTED) && !(flags & CA_ALLPRIVS) && !has_priv_user(u, PRIV_JOIN_STAFFONLY) && !(u->flags & UF_IMMUNE))
 	{
 		/* Stay on channel if this would empty it -- jilles */
 		if (chan->nummembers <= (mc->flags & MC_GUARD ? 2 : 1))
