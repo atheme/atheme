@@ -93,6 +93,27 @@ int remove_ban_exceptions(user_t *source, channel_t *chan, user_t *target)
 	return remove_banlike(source, chan, ircd->except_mchar, target);
 }
 
+void try_kick(user_t *source, channel_t *chan, user_t *target, const char *reason)
+{
+	return_if_fail(source != NULL);
+	return_if_fail(chan != NULL);
+	return_if_fail(target != NULL);
+	return_if_fail(reason != NULL);
+
+	if (target->flags & UF_IMMUNE)
+	{
+		wallops("Not kicking immune user %s!%s@%s from %s (%s: %s)",
+				target->nick, target->user, target->vhost,
+				chan->name, source ? source->nick : me.name,
+				reason);
+		notice(source->nick, chan->name,
+				"Not kicking immune user %s (%s)",
+				target->nick, reason);
+		return;
+	}
+	kick(source->nick, chan->name, target->nick, reason);
+}
+
 /* sends a KILL message for a user and removes the user from the userlist
  * source should be a service user or NULL for a server kill
  */

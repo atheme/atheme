@@ -274,7 +274,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 	 * CS SET RESTRICTED: if they don't have any access (excluding AKICK)
 	 * or special privs to join restricted chans, boot them. -- w00t
 	 */
-	if ((mc->flags & MC_RESTRICTED) && !(flags & CA_ALLPRIVS) && !has_priv_user(u, PRIV_JOIN_STAFFONLY) && !(u->flags & UF_IMMUNE))
+	if ((mc->flags & MC_RESTRICTED) && !(flags & CA_ALLPRIVS) && !has_priv_user(u, PRIV_JOIN_STAFFONLY))
 	{
 		/* Stay on channel if this would empty it -- jilles */
 		if (chan->nummembers <= (mc->flags & MC_GUARD ? 2 : 1))
@@ -295,12 +295,12 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 			ban(chansvs.me->me, chan, u);
 			remove_ban_exceptions(chansvs.me->me, chan, u);
 		}
-		kick(chansvs.nick, chan->name, u->nick, "You are not authorized to be on this channel");
+		try_kick(chansvs.me->me, chan, u, "You are not authorized to be on this channel");
 		hdata->cu = NULL;
 		return;
 	}
 
-	if (flags & CA_AKICK && !(flags & CA_REMOVE) && !(u->flags & UF_IMMUNE))
+	if (flags & CA_AKICK && !(flags & CA_REMOVE))
 	{
 		/* Stay on channel if this would empty it -- jilles */
 		if (chan->nummembers <= (mc->flags & MC_GUARD ? 2 : 1))
@@ -350,7 +350,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 				p[1] = '\0';
 			}
 		}
-		kick(chansvs.nick, chan->name, u->nick, akickreason);
+		try_kick(chansvs.me->me, chan, u, akickreason);
 		hdata->cu = NULL;
 		return;
 	}
