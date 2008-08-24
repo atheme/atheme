@@ -380,7 +380,7 @@ static void cs_join(hook_channel_joinpart_t *hdata)
 		if (!(chan->modes & CMODE_INVITE))
 			check_modes(mc, TRUE);
 		modestack_flush_channel(chan);
-		kick(chansvs.nick, chan->name, u->nick, "Invite only channel");
+		try_kick(chansvs.me->me, chan, u, "Invite only channel");
 		hdata->cu = NULL;
 		return;
 	}
