@@ -250,7 +250,7 @@ typedef struct {
 		myuser_t *mu;
 		mynick_t *mn;
 	} data;
-	int do_expire;	/* write non-zero here to allow expiry. */
+	int do_expire;	/* Write zero here to disallow expiry */
 } hook_expiry_req_t;
 
 typedef struct {
