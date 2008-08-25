@@ -42,6 +42,7 @@ BASE_SRCS =			\
 	$(SRCDIR)/status.c	\
 	$(SRCDIR)/subscribe.c	\
 	$(SRCDIR)/taxonomy.c	\
+	$(SRCDIR)/vacation.c	\
 	$(SRCDIR)/verify.c	\
 	$(SRCDIR)/vhost.c
 EXTRA_SRCS = $(SRCDIR)/login.c
