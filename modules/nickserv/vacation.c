@@ -37,11 +37,12 @@ static void ns_cmd_vacation(sourceinfo_t *si, int parc, char *parv[])
 	snprintf(tsbuf, BUFSIZE, "%ld", CURRTIME);
 	metadata_add(si->smu, METADATA_USER, "private:vacation", tsbuf);
 
-	command_success_nodata(si, _("Your account is now marked as being on vacation."));
-	command_success_nodata(si, _("Please be aware that this will be automatically removed the next time you identify to \2%s\2."),
-			nicksvs.nick);
-	command_success_nodata(si, _("Your account will automatically expire in %d days if you do not return."),
-			((nicksvs.expiry / 3600 / 24) * 3));
+	command_success_nodata(si, _("Your account is now marked as being on vacation.\n"
+				"Please be aware that this will be automatically removed the next time you identify to \2%s\2."),
+				nicksvs.nick);
+	if (nicksvs.expiry > 0)
+		command_success_nodata(si, _("Your account will automatically expire in %d days if you do not return."),
+				(nicksvs.expiry / 3600 / 24) * 3);
 }
 
 command_t ns_vacation = { "VACATION", N_("Sets an account as being on vacation."), AC_NONE, 1, ns_cmd_vacation };
