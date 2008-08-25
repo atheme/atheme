@@ -107,6 +107,10 @@ void _moddeinit(void)
 {
 	command_delete(&ns_vacation, ns_cmdtree);
 	help_delentry(ns_helptree, "VACATION");
+
+	hook_del_hook("user_identify", user_identify_hook);
+	hook_del_hook("user_check_expire", user_expiry_hook);
+	hook_del_hook("nick_check_expire", nick_expiry_hook);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
