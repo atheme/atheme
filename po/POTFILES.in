@@ -84,6 +84,7 @@ modules/nickserv/set.c
 modules/nickserv/setpass.c
 modules/nickserv/status.c
 modules/nickserv/taxonomy.c
+modules/nickserv/vacation.c
 modules/nickserv/verify.c
 modules/nickserv/vhost.c
 
