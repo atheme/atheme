@@ -59,7 +59,7 @@ void init_channels(void)
 }
 
 /*
- * channel_add(const char *name, unsigned int ts, server_t *creator)
+ * channel_add(const char *name, time_t ts, server_t *creator)
  *
  * Channel object factory.
  *
@@ -80,7 +80,7 @@ void init_channels(void)
  *     - if the creator is me.me these actions must be performed by the
  *       caller (i.e. join()) after joining the service
  */
-channel_t *channel_add(const char *name, unsigned int ts, server_t *creator)
+channel_t *channel_add(const char *name, time_t ts, server_t *creator)
 {
 	channel_t *c;
 	mychan_t *mc;

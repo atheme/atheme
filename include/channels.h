@@ -133,7 +133,7 @@ E mowgli_patricia_t *chanlist;
 
 E void init_channels(void);
 
-E channel_t *channel_add(const char *name, unsigned int ts, server_t *creator);
+E channel_t *channel_add(const char *name, time_t ts, server_t *creator);
 E void channel_delete(channel_t *c);
 //inline channel_t *channel_find(const char *name);
 
