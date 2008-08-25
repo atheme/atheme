@@ -9,7 +9,7 @@
 
 PREFIX="$HOME/atheme"
 LARGENET="no"
-NLS="yes"
+NLS="no"
 SASL="yes"
 VERSION=`grep AC_INIT configure.ac | awk '{print \$2}' | sed s:\,::g`
 
@@ -103,7 +103,7 @@ echo ""
 ok=0
 echo "Would you like to enable support for internationalization of"
 echo "the messages used by Services? This will require gettext to be"
-echo "installed."
+echo "installed, including development packages."
 while [ $ok -eq 0 ] ; do
   echo -n "[$NLS] "
   if read INPUT ; then : ; else echo "" ; exit 1 ; fi
