@@ -82,7 +82,7 @@ static void nick_expiry_hook(hook_expiry_req_t *req)
 static void info_hook(hook_user_req_t *hdata)
 {
 	if (metadata_find(hdata->mu, METADATA_USER, "private:vacation"))
-		command_success_nodata(hdata->si, "%s is on vacation", hdata->mu->name);
+		command_success_nodata(hdata->si, "%s is on vacation and has an extended expiry time", hdata->mu->name);
 }
 
 void _modinit(module_t *m)
@@ -101,6 +101,9 @@ void _modinit(module_t *m)
 
 	hook_add_event("nick_check_expire");
 	hook_add_hook("nick_check_expire", (void (*)(void *))nick_expiry_hook);
+
+	hook_add_event("user_info");
+	hook_add_hook("user_info", (void (*)(void *))info_hook);
 }
 
 void _moddeinit(void)
@@ -111,6 +114,7 @@ void _moddeinit(void)
 	hook_del_hook("user_identify", (void (*)(void *))user_identify_hook);
 	hook_del_hook("user_check_expire", (void (*)(void *))user_expiry_hook);
 	hook_del_hook("nick_check_expire", (void (*)(void *))nick_expiry_hook);
+	hook_del_hook("user_info", (void (*)(void *))info_hook);
 }
 
 /* vim:cinoptions=>s,e0,n0,f0,{0,}0,^0,=s,ps,t0,c3,+s,(2s,us,)20,*30,gs,hs
