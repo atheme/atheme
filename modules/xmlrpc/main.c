@@ -92,8 +92,6 @@ static void handle_request(connection_t *cptr, void *requestbuf)
 
 static void xmlrpc_config_ready(void *vptr)
 {
-	node_t *n;
-
 	if (handle_xmlrpc.path == NULL)
 		handle_xmlrpc.path = "/xmlrpc";
 
@@ -102,7 +100,6 @@ static void xmlrpc_config_ready(void *vptr)
 		if (node_find(&handle_xmlrpc, httpd_path_handlers))
 			return;
 		
-		n = node_create();
 		node_add(&handle_xmlrpc, node_create(), httpd_path_handlers);
 	}
 	else
