@@ -542,8 +542,7 @@ sub modload {
 =head2 modrestart
 
 MODRESTART unloads all non-permanent modules, then loads
-all modules in the configuration file and all modules
-directly in modules/.
+all modules in the configuration file.
 
 operserv/main and operserv/modrestart are also untouched.
 

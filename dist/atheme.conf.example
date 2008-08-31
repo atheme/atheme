@@ -409,8 +409,6 @@ loadmodule "modules/xmlrpc/main";
  * Put any other modules you want to load on startup here. The path
  * is relative to PREFIX or PREFIX/lib/atheme, depending on how Atheme
  * was compiled.
- * Note: modules directly under modules/ are loaded automatically even
- * if not listed here.
  */
 #loadmodule "contrib/fc_dice";
 
