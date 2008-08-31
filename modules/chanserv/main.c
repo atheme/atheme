@@ -144,10 +144,8 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 			strlcpy(newargs, parv[parc - 2], sizeof newargs);
 			if ((pptr = strchr(cmd, ' ')) != NULL)
 			{
+				strlcat(newargs, pptr, sizeof newargs);
 				*pptr = '\0';
-
-				strlcat(newargs, " ", sizeof newargs);
-				strlcat(newargs, ++pptr, sizeof newargs);
 			}
 
 			if (command_find(&cs_cmdtree, cmd) == NULL)
