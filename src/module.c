@@ -40,8 +40,6 @@ void modules_init(void)
 		slog(LG_ERROR, "modules_init(): block allocator failed.");
 		exit(EXIT_FAILURE);
 	}
-
-	module_load_dir(MODDIR "/modules");
 }
 
 /*

@@ -80,7 +80,6 @@ static void os_cmd_modrestart(sourceinfo_t *si, int parc, char *parv[])
 	kept = modules.count;
 
 	/* now reload again */
-	module_load_dir(MODDIR "/modules");
 	cold_start = TRUE; /* XXX */
 	fail1 = !conf_rehash();
 	cold_start = FALSE;
