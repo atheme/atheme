@@ -100,9 +100,6 @@ static void *mmap(void *hint, size_t len, unsigned int prot,
 		  unsigned int flags, unsigned int fd, unsigned int off)
 {
 	void *ptr = smalloc(len);
-
-	if (!ptr)
-		blockheap_fail("smalloc() failed.");
 	
 	memset(ptr, 0, len);
 	
@@ -202,9 +199,6 @@ static int newblock(BlockHeap *bh)
 	/* Setup the initial data structure. */
 	b = (Block *)scalloc(1, sizeof(Block));
 
-	if (b == NULL)
-		return (1);
-
 	b->next = bh->base;
 	b->alloc_size = bh->elemsPerBlock * (bh->elemSize + sizeof(MemBlock));
 	b->elems = get_block(b->alloc_size);
@@ -266,12 +260,6 @@ BlockHeap *BlockHeapCreate(size_t elemsize, int elemsperblock)
 	/* Allocate our new BlockHeap */
 	bh = (BlockHeap *)scalloc(1, sizeof(BlockHeap));
 	
-	if (bh == NULL)
-	{
-		slog(LG_INFO, "Attempt to calloc() failed: (%s:%d)", __FILE__, __LINE__);
-		runflags |= RF_SHUTDOWN;
-	}
-
 #ifndef NOBALLOC
 	if ((elemsize % sizeof(void *)) != 0)
 	{
