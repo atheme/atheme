@@ -142,6 +142,8 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 			char *pptr;
 
 			strlcpy(newargs, parv[parc - 2], sizeof newargs);
+			while (*cmd == ' ')
+				cmd++;
 			if ((pptr = strchr(cmd, ' ')) != NULL)
 			{
 				strlcat(newargs, pptr, sizeof newargs);
