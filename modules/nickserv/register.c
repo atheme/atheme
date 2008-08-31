@@ -60,8 +60,8 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	mynick_t *mn = NULL;
 	node_t *n;
 	char *account;
-	char *pass = parv[0];
-	char *email = parv[1];
+	char *pass;
+	char *email;
 	char lau[BUFSIZE], lao[BUFSIZE];
 	hook_user_register_check_t hdata;
 	hook_user_req_t req;
