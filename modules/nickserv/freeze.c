@@ -102,6 +102,7 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 		authcookie_destroy_all(mu);
 
 		wallops("%s froze the account \2%s\2 (%s).", get_oper_name(si), target, reason);
+		snoop("FREEZE:ON: \2%s\2 by \2%s\2 (%s)", target, get_oper_name(si), reason);
 		logcommand(si, CMDLOG_ADMIN, "FREEZE %s ON", target);
 		command_success_nodata(si, _("\2%s\2 is now frozen."), target);
 	}
@@ -118,6 +119,7 @@ static void ns_cmd_freeze(sourceinfo_t *si, int parc, char *parv[])
 		metadata_delete(mu, METADATA_USER, "private:freeze:timestamp");
 
 		wallops("%s thawed the account \2%s\2.", get_oper_name(si), target);
+		snoop("FREEZE:OFF: \2%s\2 by \2%s\2", target, get_oper_name(si));
 		logcommand(si, CMDLOG_ADMIN, "FREEZE %s OFF", target);
 		command_success_nodata(si, _("\2%s\2 has been thawed"), target);
 	}
