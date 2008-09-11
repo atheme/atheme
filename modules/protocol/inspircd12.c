@@ -111,9 +111,6 @@ static boolean_t has_globopsmod = false;
 static boolean_t has_svshold = false;
 static int has_protocol = 0;
 
-#define PROTOCOL_SNONOTICE 1102 /* has SNONOTICE and OPERNOTICE commands */
-#define PROTOCOL_NEWTS 1104 /* does not send "confirming" FMODEs on TS changes and uses clear/ignore semantics also for FMODE */
-
 /* find a user's server by extracting the SID and looking that up. --nenolod */
 static server_t *sid_find(char *name)
 {
@@ -268,15 +265,10 @@ static void inspircd_wallops_sts(const char *text)
 	user_t *u;
 	node_t *n;
 
-	if (has_protocol >= PROTOCOL_SNONOTICE)
-	{
-		/* XXX */
-		if (has_globopsmod)
-			sts(":%s SNONOTICE g :%s", me.numeric, text);
-		else
-			sts(":%s OPERNOTICE :%s", me.numeric, text);
-		return;
-	}
+	if (has_globopsmod)
+		sts(":%s SNONOTICE g :%s", me.numeric, text);
+	else
+		sts(":%s SNONOTICE A :%s", me.numeric, text);
 
 	if (me.me == NULL)
 		return;
@@ -462,15 +454,7 @@ static void inspircd_mode_sts(char *sender, channel_t *target, char *modes)
 	if (!me.connected)
 		return;
 
-	if (has_protocol >= PROTOCOL_NEWTS)
-	{
-		/* FMODE from user is ok, use it */
-		sts(":%s FMODE %s %lu %s", sender_p->uid, target->name, (unsigned long)target->ts, modes);
-	}
-	else
-	{
-		sts(":%s MODE %s %s", sender_p->uid, target->name, modes);
-	}
+	sts(":%s FMODE %s %lu %s", sender_p->uid, target->name, (unsigned long)target->ts, modes);
 }
 
 /* ping wrapper */
@@ -730,15 +714,15 @@ static void m_fjoin(sourceinfo_t *si, int parc, char *parv[])
 		 * bugger all except update the TS, because in InspIRCd
 		 * remote servers enforce the TS change - Brain
 		 *
-		 * This is no longer the case with 1.1, we need to bounce their modes
+		 * This is no longer the case with 1.1, we need to remove modes etc
 		 * as well as lowering the channel ts. Do both. -- w00t
 		 */
+		clear_simple_modes(c);
+		chanban_clear(c);
 
-		if (has_protocol >= PROTOCOL_NEWTS)
-		{
-			clear_simple_modes(c);
-			chanban_clear(c);
-		}
+		/*
+		 * Also reop services, and remove status from others.
+		 */
 		LIST_FOREACH(n, c->members.head)
 		{
 			cu = (chanuser_t *)n->data;
@@ -952,34 +936,9 @@ static void m_fmode(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 		ts = atoi(parv[1]);
-		if (ts == c->ts && has_protocol < PROTOCOL_NEWTS)
+		if (ts > c->ts)
 		{
-			onlydeop = TRUE;
-			p = parv[2];
-			while (*p != '\0')
-			{
-				if (!strchr("-qaohv", *p))
-					onlydeop = FALSE;
-				p++;
-			}
-			if (onlydeop && si->s != NULL)
-			{
-				/* ignore redundant deops generated
-				 * if we lower the TS of a channel
-				 * scenario: user with autoop privs recreates
-				 * channel
-				 * XXX could this ignore other stuff too?
-				 * -- jilles */
-				slog(LG_DEBUG, "m_fmode(): ignoring %s %s: incoming TS %lu is equal to our TS %lu, and only deops", parv[0], parv[2], (unsigned long)ts, (unsigned long)c->ts);
-				return;
-			}
-		}
-		else if (ts > c->ts)
-		{
-			if (has_protocol < PROTOCOL_NEWTS)
-				slog(LG_DEBUG, "m_fmode(): accepting but should bounce %s %s: incoming TS %lu is newer than our TS %lu", parv[0], parv[2], (unsigned long)ts, (unsigned long)c->ts);
-			else
-				return;
+			return;
 		}
 		else if (ts < c->ts)
 			slog(LG_DEBUG, "m_fmode(): %s %s: incoming TS %lu is older than our TS %lu, possible desync", parv[0], parv[2], (unsigned long)ts, (unsigned long)c->ts);
@@ -1248,12 +1207,6 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 	}
 	else if (strcasecmp(parv[0], "END") == 0)
 	{
-		if (has_globopsmod == false && has_protocol < PROTOCOL_SNONOTICE)
-		{
-			slog(LG_ERROR, "m_capab(): you didn't load m_globops into inspircd. atheme support requires this module. exiting.");
-			exit(EXIT_FAILURE);
-		}
-
 		if (has_servicesmod == false)
 		{
 			slog(LG_ERROR, "m_capab(): you didn't load m_services_account into inspircd. atheme support requires this module. exiting.");
