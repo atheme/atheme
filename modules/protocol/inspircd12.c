@@ -835,7 +835,7 @@ static void m_uid(sourceinfo_t *si, int parc, char *parv[])
 	 * note: you can't rely on realname being p[10], it's actually p[parc - 1].
 	 * reason being that mode params may exist in p[9]+, or not at all.
 	 */
-	if (parc == 10)
+	if (parc >= 10)
 	{
 		slog(LG_DEBUG, "m_uid(): new user on `%s': %s", si->s->name, parv[2]);
 
