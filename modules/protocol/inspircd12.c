@@ -261,44 +261,10 @@ static void inspircd_quit_sts(user_t *u, const char *reason)
 /* WALLOPS wrapper */
 static void inspircd_wallops_sts(const char *text)
 {
-	char *sendernick = NULL;
-	user_t *u;
-	node_t *n;
-
 	if (has_globopsmod)
 		sts(":%s SNONOTICE g :%s", me.numeric, text);
 	else
 		sts(":%s SNONOTICE A :%s", me.numeric, text);
-
-	if (me.me == NULL)
-		return;
-
-	if (is_internal_client(user_find_named(opersvs.nick)))
-	{
-		sendernick = opersvs.nick;
-	}
-	else
-	{
-		LIST_FOREACH(n, me.me->userlist.head)
-		{
-			u = (user_t *)n->data;
-
-			sendernick = u->uid;
-			break;
-		}
-	}
-
-	if (sendernick == NULL)
-	{
-		/*
-		 * this means we have no pseudoclients -- under present inspircd, servers cannot globops, and
-		 * thus, we will need to bail -- slog, and let them know. --w00t
-		 */
-		slog(LG_ERROR, "wallops_sts(): InspIRCD requires at least one pseudoclient module to be loaded to send wallops.");
-		return;
-	}
-
-	sts(":%s GLOBOPS :%s", sendernick, text);
 }
 
 /* join a channel */
