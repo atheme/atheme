@@ -844,13 +844,19 @@ static void m_uid(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
 
-	/* :3ZZ UID 3ZZAAAAAB 1133994664 nenolod petrie.ipv6.nenolod.net petrie.ipv6.nenolod.net nenolod +i 0.0.0.0 1351531513 :William Pitcock */
+	/*							1		2		3						4					5		6			7			8		9*				10*			*/
+	/* -> :751 UID 751AAAAAA 1220196319 Brain brainwave.brainbox.cc netadmin.chatspike.net brain 192.168.1.10 1220196324 +Siosw +ACKNOQcdfgklnoqtx :Craig Edwards */
+
+	/*
+	 * note: you can't rely on realname being p[10], it's actually p[parc - 1].
+	 * reason being that mode params may exist in p[9]+, or not at all.
+	 */
 	if (parc == 10)
 	{
 		slog(LG_DEBUG, "m_uid(): new user on `%s': %s", si->s->name, parv[2]);
 
 		/* char *nick, char *user, char *host, char *vhost, char *ip, char *uid, char *gecos, server_t *server, unsigned int ts */ 
-		u = user_add(parv[2], parv[5], parv[3], parv[4], parv[7], parv[0], parv[9], si->s, atol(parv[9]));
+		u = user_add(parv[2], parv[5], parv[3], parv[4], parv[7], parv[0], parv[parc - 1], si->s, atol(parv[1]));
 		if (u == NULL)
 			return;
 		user_mode(u, parv[6]);
