@@ -141,17 +141,11 @@ kline_t *kline_add(char *user, char *host, char *reason, long duration)
 	return k;
 }
 
-void kline_delete(const char *user, const char *host)
+void kline_delete(kline_t *k)
 {
-	kline_t *k = kline_find(user, host);
 	node_t *n;
 
-	if (!k)
-	{
-		slog(LG_DEBUG, "kline_delete(): called for nonexistant kline: %s@%s", user, host);
-
-		return;
-	}
+	return_if_fail(k != NULL);
 
 	slog(LG_DEBUG, "kline_delete(): %s@%s -> %s", k->user, k->host, k->reason);
 	/* only unkline if ircd has not already removed this -- jilles */
@@ -242,7 +236,7 @@ void kline_expire(void *arg)
 			verbose_wallops(_("AKILL expired on \2%s@%s\2, set by \2%s\2"),
 				k->user, k->host, k->setby);
 
-			kline_delete(k->user, k->host);
+			kline_delete(k);
 		}
 	}
 }

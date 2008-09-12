@@ -351,7 +351,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 
 					snoop("AKILL:DEL: \2%s@%s\2 by \2%s\2", k->user, k->host, get_oper_name(si));
 					logcommand(si, CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
-					kline_delete(k->user, k->host);
+					kline_delete(k);
 				}
 
 				continue;
@@ -371,7 +371,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 
 			snoop("AKILL:DEL: \2%s@%s\2 by \2%s\2", k->user, k->host, get_oper_name(si));
 			logcommand(si, CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
-			kline_delete(k->user, k->host);
+			kline_delete(k);
 		} while ((s = strtok(NULL, ",")));
 
 		return;
@@ -411,7 +411,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 					get_oper_name(si), k->user, k->host, k->reason);
 
 				snoop("AKILL:DEL: \2%s@%s\2 by \2%s\2", k->user, k->host, get_oper_name(si));
-				kline_delete(k->user, k->host);
+				kline_delete(k);
 			}
 
 			return;
@@ -432,7 +432,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 
 		snoop("AKILL:DEL: \2%s@%s\2 by \2%s\2", k->user, k->host, get_oper_name(si));
 		logcommand(si, CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
-		kline_delete(k->user, k->host);
+		kline_delete(k);
 		return;
 	}
 
@@ -452,7 +452,7 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 
 	snoop("AKILL:DEL: \2%s@%s\2 by \2%s\2", k->user, k->host, get_oper_name(si));
 	logcommand(si, CMDLOG_SET, "AKILL DEL %s@%s", k->user, k->host);
-	kline_delete(userbuf, hostbuf);
+	kline_delete(k);
 }
 
 static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[])

@@ -295,7 +295,7 @@ E boolean_t verify_password(myuser_t *mu, const char *password);
 E list_t klnlist;
 
 E kline_t *kline_add(char *user, char *host, char *reason, long duration);
-E void kline_delete(const char *user, const char *host);
+E void kline_delete(kline_t *k);
 E kline_t *kline_find(const char *user, const char *host);
 E kline_t *kline_find_num(unsigned long number);
 E kline_t *kline_find_user(user_t *u);
