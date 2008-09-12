@@ -46,6 +46,19 @@ Examples:
     /msg &nick& AKILL LIST
     /msg &nick& AKILL LIST FULL
 
+Syntax: AKILL LIST <hostmask>
+
+Shows any AKILLs matching the given hostmask, with reasons.
+This command will not perform DNS lookups on a host,
+for best results repeat it with host and IP address.
+
+Examples:
+    /msg &nick& AKILL LIST test@192.168.1.1
+
+Syntax: AKILL LIST <number>
+
+Shows the given AKILL, with reason.
+
 Syntax: AKILL SYNC
 
 Sends all akills to all servers. This can be useful in case

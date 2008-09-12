@@ -458,14 +458,40 @@ static void os_cmd_akill_del(sourceinfo_t *si, int parc, char *parv[])
 static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *param = parv[0];
+	char *user = NULL, *host = NULL;
+	unsigned long num = 0;
 	boolean_t full = FALSE;
 	node_t *n;
 	kline_t *k;
 
-	if (param != NULL && !strcasecmp(param, "FULL"))
-		full = TRUE;
+	if (param != NULL)
+	{
+		if (!strcasecmp(param, "FULL"))
+			full = TRUE;
+		else if ((host = strchr(param, '@')) != NULL)
+		{
+			*host++ = '\0';
+			user = param;
+			full = TRUE;
+		}
+		else if (strchr(param, '.') || strchr(param, ':'))
+		{
+			host = param;
+			full = TRUE;
+		}
+		else if (isdigit(param[0]) &&
+				(num = strtoul(param, NULL, 10)) != 0)
+			full = TRUE;
+		else
+		{
+			command_fail(si, fault_badparams, STR_INVALID_PARAMS, "AKILL LIST");
+			return;
+		}
+	}
 	
-	if (full)
+	if (user || host || num)
+		command_success_nodata(si, _("AKILL list matching given criteria (with reasons):"));
+	else if (full)
 		command_success_nodata(si, _("AKILL list (with reasons):"));
 	else
 		command_success_nodata(si, _("AKILL list:"));
@@ -473,6 +499,13 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[])
 	LIST_FOREACH(n, klnlist.head)
 	{
 		k = (kline_t *)n->data;
+
+		if (num != 0 && k->number != num)
+			continue;
+		if (user != NULL && match(k->user, user))
+			continue;
+		if (host != NULL && match(k->host, host) && match_ips(k->host, host))
+			continue;
 
 		if (k->duration && full)
 			command_success_nodata(si, _("%lu: %s@%s - by \2%s\2 - expires in \2%s\2 - (%s)"), k->number, k->user, k->host, k->setby, timediff(k->expires > CURRTIME ? k->expires - CURRTIME : 0), k->reason);
@@ -484,8 +517,16 @@ static void os_cmd_akill_list(sourceinfo_t *si, int parc, char *parv[])
 			command_success_nodata(si, _("%lu: %s@%s - by \2%s\2 - \2permanent\2"), k->number, k->user, k->host, k->setby);
 	}
 
-	command_success_nodata(si, _("Total of \2%d\2 %s in AKILL list."), klnlist.count, (klnlist.count == 1) ? "entry" : "entries");
-	logcommand(si, CMDLOG_GET, "AKILL LIST%s", full ? " FULL" : "");
+	if (user || host || num)
+		command_success_nodata(si, _("End of AKILL list."));
+	else
+		command_success_nodata(si, _("Total of \2%d\2 %s in AKILL list."), klnlist.count, (klnlist.count == 1) ? "entry" : "entries");
+	if (user || host)
+		logcommand(si, CMDLOG_GET, "AKILL LIST %s@%s", user ? user : "*", host ? host : "*");
+	else if (num)
+		logcommand(si, CMDLOG_GET, "AKILL LIST %lu", num);
+	else
+		logcommand(si, CMDLOG_GET, "AKILL LIST%s", full ? " FULL" : "");
 }
 
 static void os_cmd_akill_sync(sourceinfo_t *si, int parc, char *parv[])
