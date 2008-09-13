@@ -200,7 +200,6 @@ void mowgli_patricia_destroy(mowgli_patricia_t *dtree,
 	void *privdata)
 {
 	mowgli_patricia_elem_t *n, *tn;
-	int i;
 
 	return_if_fail(dtree != NULL);
 
@@ -277,10 +276,9 @@ void *mowgli_patricia_search(mowgli_patricia_t *dtree,
 	void *privdata)
 {
 	mowgli_patricia_elem_t *delem, *tn;
-	int i;
 	void *ret = NULL;
 
-	return_if_fail(dtree != NULL);
+	return_val_if_fail(dtree != NULL, NULL);
 
 	MOWGLI_LIST_FOREACH_SAFE(delem, tn, dtree->head)
 	{

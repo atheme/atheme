@@ -5,19 +5,9 @@
  * Copyright (c) 2007 William Pitcock <nenolod -at- sacredspiral.co.uk>
  * Copyright (c) 2007 Jilles Tjoelker <jilles -at- stack.nl>
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice is present in all copies.
  *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -41,11 +31,14 @@ typedef struct mowgli_dictionary_ mowgli_dictionary_t;
 
 typedef struct mowgli_dictionary_elem_ mowgli_dictionary_elem_t;
 
+typedef int (*mowgli_dictionary_comparator_func_t)(const char *a, const char *b);
+
 struct mowgli_dictionary_elem_
 {
 	mowgli_dictionary_elem_t *left, *right, *prev, *next;
 	void *data;
 	char *key;
+	int position;
 };
 
 /*
@@ -54,6 +47,8 @@ struct mowgli_dictionary_elem_
 struct mowgli_dictionary_iteration_state_
 {
 	mowgli_dictionary_elem_t *cur, *next;
+	void *pspare[4];
+	int ispare[4];
 };
 
 typedef struct mowgli_dictionary_iteration_state_ mowgli_dictionary_iteration_state_t;
@@ -64,11 +59,36 @@ typedef struct mowgli_dictionary_iteration_state_ mowgli_dictionary_iteration_st
 #define MOWGLI_DICTIONARY_FOREACH(element, state, dict) for (mowgli_dictionary_foreach_start((dict), (state)); (element = mowgli_dictionary_foreach_cur((dict), (state))); mowgli_dictionary_foreach_next((dict), (state)))
 
 /*
- * mowgli_dictionary_create() creates a new dictionary tree of the defined resolution.
+ * mowgli_dictionary_create() creates a new dictionary tree.
  * compare_cb is the comparison function, typically strcmp, strcasecmp or
  * irccasecmp.
  */
-extern mowgli_dictionary_t *mowgli_dictionary_create(int (*compare_cb)(const char *a, const char *b));
+extern mowgli_dictionary_t *mowgli_dictionary_create(mowgli_dictionary_comparator_func_t compare_cb);
+
+/*
+ * mowgli_dictionary_create_named() creates a new dictionary tree which has a name.
+ * name is the name, compare_cb is the comparator.
+ */
+extern mowgli_dictionary_t *mowgli_dictionary_create_named(const char *name, mowgli_dictionary_comparator_func_t compare_cb);
+
+/*
+ * mowgli_dictionary_set_comparator_func() resets the comparator used for lookups and
+ * insertions in the DTree structure.
+ */
+extern void mowgli_dictionary_set_comparator_func(mowgli_dictionary_t *dict,
+	mowgli_dictionary_comparator_func_t compare_cb);
+
+/*
+ * mowgli_dictionary_get_comparator_func() returns the comparator used for lookups and
+ * insertions in the DTree structure.
+ */
+extern mowgli_dictionary_comparator_func_t mowgli_dictionary_get_comparator_func(mowgli_dictionary_t *dict);
+
+/*
+ * mowgli_dictionary_get_linear_index() returns the linear index of an object in the
+ * DTree structure.
+ */
+extern int mowgli_dictionary_get_linear_index(mowgli_dictionary_t *dict, const char *key);
 
 /*
  * mowgli_dictionary_destroy() destroys all entries in a dtree, and also optionally calls

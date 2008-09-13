@@ -4,19 +4,9 @@
  *
  * Copyright (c) 2007 William Pitcock <nenolod -at- sacredspiral.co.uk>
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice is present in all copies.
  *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -31,8 +21,16 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "mowgli.h"
+
 void mowgli_init(void)
 {
+	static int mowgli_initted_ = 0;
+
+	if (mowgli_initted_)
+		return;
+
+	/* initial bootstrap */
 	mowgli_node_init();
 	mowgli_queue_init();
 	mowgli_argstack_init();
@@ -40,4 +38,12 @@ void mowgli_init(void)
 	mowgli_global_storage_init();
 	mowgli_hook_init();
 	mowgli_random_init();
+	mowgli_allocation_policy_init();
+	mowgli_allocator_init();
+
+	/* now that we're bootstrapped, we can use a more optimised allocator
+	   if one is available. */
+	mowgli_allocator_set_policy(mowgli_allocator_malloc);
+
+	mowgli_initted_++;
 }

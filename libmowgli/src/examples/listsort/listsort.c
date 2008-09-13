@@ -69,15 +69,15 @@ void test_strings(void)
 
 	MOWGLI_LIST_FOREACH_SAFE(n, tn, l.head)
 	{
-		printf("  %s\n", n->data);
+		printf("  %s\n", (char*) n->data);
 		mowgli_node_delete(n, &l);
 	}
 }
 
 int int_comparator(mowgli_node_t *n, mowgli_node_t *n2, void *opaque)
 {
-	int a = (int) n->data;
-	int b = (int) n2->data;
+	long a = (long) n->data;
+	long b = (long) n2->data;
 
 	return a - b;
 }
@@ -86,8 +86,7 @@ void test_integers(void)
 {
 	mowgli_list_t l = {};
 	mowgli_node_t *n, *tn;
-	int i;
-
+	
 	mowgli_node_add((void *) 3, mowgli_node_create(), &l);
 	mowgli_node_add((void *) 2, mowgli_node_create(), &l);
 	mowgli_node_add((void *) 4, mowgli_node_create(), &l);
@@ -99,7 +98,7 @@ void test_integers(void)
 
 	MOWGLI_LIST_FOREACH_SAFE(n, tn, l.head)
 	{
-		printf("  %d\n", (int) n->data);
+		printf("  %ld\n", (long) n->data);
 		mowgli_node_delete(n, &l);
 	}
 }
@@ -110,4 +109,5 @@ int main(int argc, char *argv[])
 
 	test_strings();
 	test_integers();
+    return EXIT_SUCCESS;
 }

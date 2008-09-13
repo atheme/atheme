@@ -4,19 +4,9 @@
  *
  * Copyright (c) 2007 William Pitcock <nenolod -at- sacredspiral.co.uk>
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice is present in all copies.
  *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -32,6 +22,10 @@
  */
 
 #include "mowgli.h"
+
+#ifdef __MINGW32__
+#define usleep(usec) Sleep((usec / 1000))
+#endif
 
 mowgli_spinlock_t *mowgli_spinlock_create(void)
 {
@@ -87,7 +81,7 @@ void mowgli_spinlock_wait(mowgli_spinlock_t *self, mowgli_spinlock_lock_param_t 
 
 void mowgli_spinlock_timed_wait(mowgli_spinlock_t *self, mowgli_spinlock_lock_param_t param, struct timeval *tv)
 {
-	struct timeval iter;
+	struct timeval iter = {0};
 
 	return_if_fail(self != NULL)
 	return_if_fail(tv != NULL)
@@ -107,7 +101,7 @@ void mowgli_spinlock_timed_wait(mowgli_spinlock_t *self, mowgli_spinlock_lock_pa
 		}
 
 	if (param == MOWGLI_SPINLOCK_READWRITE)
-		while (self->write_owner != NULL || self->read_owner != NULL && iter.tv_sec < tv->tv_sec && iter.tv_usec < tv->tv_usec)
+		while ((self->write_owner != NULL || self->read_owner != NULL) && iter.tv_sec < tv->tv_sec && iter.tv_usec < tv->tv_usec)
 		{
 			gettimeofday(&iter, NULL);
 			usleep(1000);	

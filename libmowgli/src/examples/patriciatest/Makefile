@@ -1,17 +1,7 @@
-include ../../../mk/rules.mk
-include ../../../mk/init.mk
-include ../../../mk/objective.mk
+PROG_NOINST = patriciatest${PROG_SUFFIX}
+SRCS = patriciatest.c
 
-OBJECTIVE_BINS = patriciatest
+include ../../../buildsys.mk
 
-LDADD = -L../../libmowgli -lmowgli
-
-CFLAGS += -I../../libmowgli
-
-SOURCES = patriciatest.c
-
-OBJECTS = ${SOURCES:.c=.o}
-
-patriciatest: $(OBJECTS)
-	$(CC) $(LDFLAGS) $(OBJECTS) $(LDADD) -o $@
-	@printf "%10s     %-20s\n" LINK $@
+CPPFLAGS += -I../../libmowgli
+LIBS += -L../../libmowgli -lmowgli

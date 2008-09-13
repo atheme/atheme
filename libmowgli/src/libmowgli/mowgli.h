@@ -4,19 +4,9 @@
  *
  * Copyright (c) 2007 William Pitcock <nenolod -at- sacredspiral.co.uk>
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice is present in all copies.
  *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -36,7 +26,7 @@
 
 #ifdef __cplusplus
 # define MOWGLI_DECLS_START extern "C" {
-# define MOWGLI_DECLS_END   };
+# define MOWGLI_DECLS_END   }
 #else
 # define MOWGLI_DECLS_START
 # define MOWGLI_DECLS_END
@@ -60,6 +50,7 @@ MOWGLI_DECLS_START
 #include "mowgli_list.h"
 #include "mowgli_object_class.h"
 #include "mowgli_object.h"
+#include "mowgli_allocation_policy.h"
 #include "mowgli_dictionary.h"
 #include "mowgli_patricia.h"
 #include "mowgli_mempool.h"
@@ -79,6 +70,8 @@ MOWGLI_DECLS_START
 #include "mowgli_object_metadata.h"
 #include "mowgli_global_storage.h"
 #include "mowgli_string.h"
+#include "mowgli_allocator.h"
+#include "mowgli_formatter.h"
 
 MOWGLI_DECLS_END
 

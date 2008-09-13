@@ -4,19 +4,9 @@
  *
  * Copyright (c) 2007 William Pitcock <nenolod -at- sacredspiral.co.uk>
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice is present in all copies.
  *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -43,6 +33,7 @@ typedef struct {
 } mowgli_object_t;
 
 extern void mowgli_object_init(mowgli_object_t *, const char *name, mowgli_object_class_t *klass, mowgli_destructor_t destructor);
+extern void mowgli_object_init_from_class(mowgli_object_t *, const char *, mowgli_object_class_t *klass);
 extern void *mowgli_object_ref(void *);
 extern void mowgli_object_unref(void *);
 

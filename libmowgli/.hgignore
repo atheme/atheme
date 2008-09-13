@@ -1,0 +1,21 @@
+syntax: glob
+aclocal.m4
+autom4te.cache
+buildsys.mk
+config.log
+config.status
+configure
+extra.mk
+libmowgli.pc
+src/examples/dicttest/dicttest
+src/examples/formattertest/formattertest
+src/examples/listsort/listsort
+src/examples/randomtest/randomtest
+src/libmowgli/mowgli_config.h
+src/libmowgli/mowgli_config.h.in
+.deps
+*.dylib
+*.o
+*.so
+*.so.*
+*~

@@ -5,19 +5,9 @@
  * Copyright (c) 2007 William Pitcock <nenolod -at- sacredspiral.co.uk>
  * Copyright (c) 2007 Jilles Tjoelker <jilles -at- stack.nl>
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice is present in all copies.
  *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -38,14 +28,15 @@ static mowgli_heap_t *elem_heap = NULL;
 
 struct mowgli_dictionary_
 {
-	int (*compare_cb)(const char *a, const char *b);
+	mowgli_dictionary_comparator_func_t compare_cb;
 	mowgli_dictionary_elem_t *root, *head, *tail;
 	unsigned int count;
 	char *id;
+	mowgli_boolean_t dirty;
 };
 
 /*
- * mowgli_dictionary_create(int (*compare_cb)(const char *a, const char *b)
+ * mowgli_dictionary_create(mowgli_dictionary_comparator_func_t compare_cb)
  *
  * Dictionary object factory.
  *
@@ -59,7 +50,7 @@ struct mowgli_dictionary_
  *     - if services runs out of memory and cannot allocate the object,
  *       the program will abort.
  */
-mowgli_dictionary_t *mowgli_dictionary_create(int (*compare_cb)(const char *a, const char *b))
+mowgli_dictionary_t *mowgli_dictionary_create(mowgli_dictionary_comparator_func_t compare_cb)
 {
 	mowgli_dictionary_t *dtree = (mowgli_dictionary_t *) mowgli_alloc(sizeof(mowgli_dictionary_t));
 
@@ -73,7 +64,7 @@ mowgli_dictionary_t *mowgli_dictionary_create(int (*compare_cb)(const char *a, c
 
 /*
  * mowgli_dictionary_create_named(const char *name, 
- *     int (*compare_cb)(const char *a, const char *b)
+ *     mowgli_dictionary_comparator_func_t compare_cb)
  *
  * Dictionary object factory.
  *
@@ -89,7 +80,7 @@ mowgli_dictionary_t *mowgli_dictionary_create(int (*compare_cb)(const char *a, c
  *       the program will abort.
  */
 mowgli_dictionary_t *mowgli_dictionary_create_named(const char *name,
-	int (*compare_cb)(const char *a, const char *b))
+	mowgli_dictionary_comparator_func_t compare_cb)
 {
 	mowgli_dictionary_t *dtree = (mowgli_dictionary_t *) mowgli_alloc(sizeof(mowgli_dictionary_t));
 
@@ -100,6 +91,98 @@ mowgli_dictionary_t *mowgli_dictionary_create_named(const char *name,
 		elem_heap = mowgli_heap_create(sizeof(mowgli_dictionary_elem_t), 1024, BH_NOW);
 
 	return dtree;
+}
+
+/*
+ * mowgli_dictionary_set_comparator_func(mowgli_dictionary_t *dict,
+ *     mowgli_dictionary_comparator_func_t compare_cb)
+ *
+ * Resets the comparator function used by the dictionary code for
+ * updating the DTree structure.
+ *
+ * Inputs:
+ *     - dictionary object
+ *     - new comparator function (passed as functor)
+ *
+ * Outputs:
+ *     - nothing
+ *
+ * Side Effects:
+ *     - the dictionary comparator function is reset.
+ */
+void mowgli_dictionary_set_comparator_func(mowgli_dictionary_t *dict,
+	mowgli_dictionary_comparator_func_t compare_cb)
+{
+	return_if_fail(dict != NULL);
+	return_if_fail(compare_cb != NULL);
+
+	dict->compare_cb = compare_cb;
+}
+
+/*
+ * mowgli_dictionary_get_comparator_func(mowgli_dictionary_t *dict)
+ *
+ * Returns the current comparator function used by the dictionary.
+ *
+ * Inputs:
+ *     - dictionary object
+ *
+ * Outputs:
+ *     - comparator function (returned as functor)
+ *
+ * Side Effects:
+ *     - none
+ */
+mowgli_dictionary_comparator_func_t
+mowgli_dictionary_get_comparator_func(mowgli_dictionary_t *dict)
+{
+	return_val_if_fail(dict != NULL, NULL);
+
+	return dict->compare_cb;
+}
+
+/*
+ * mowgli_dictionary_get_linear_index(mowgli_dictionary_t *dict,
+ *     const char *key)
+ *
+ * Gets a linear index number for key.
+ *
+ * Inputs:
+ *     - dictionary tree object
+ *     - pointer to data
+ *
+ * Outputs:
+ *     - position, from zero.
+ *
+ * Side Effects:
+ *     - rebuilds the linear index if the tree is marked as dirty.
+ */
+int
+mowgli_dictionary_get_linear_index(mowgli_dictionary_t *dict, const char *key)
+{
+	mowgli_dictionary_elem_t *elem;
+
+	return_val_if_fail(dict != NULL, 0);
+	return_val_if_fail(key != NULL, 0);
+
+	elem = mowgli_dictionary_find(dict, key);
+	if (elem == NULL)
+		return -1;
+
+	if (!dict->dirty)
+		return elem->position;
+	else
+	{
+		mowgli_dictionary_elem_t *delem;
+		int i;
+
+		for (delem = dict->head, i = 0; delem != NULL; delem = delem->next, i++)
+			delem->position = i;
+
+		dict->dirty = FALSE;
+	}
+
+	return elem->position;
 }
 
 /*
@@ -256,6 +339,8 @@ mowgli_dictionary_link(mowgli_dictionary_t *dict,
 	return_if_fail(dict != NULL);
 	return_if_fail(delem != NULL);
 
+	dict->dirty = TRUE;
+
 	dict->count++;
 
 	if (dict->root == NULL)
@@ -332,6 +417,8 @@ mowgli_dictionary_unlink_root(mowgli_dictionary_t *dict)
 {
 	mowgli_dictionary_elem_t *delem, *nextnode, *parentofnext;
 
+	dict->dirty = TRUE;
+
 	delem = dict->root;
 	if (delem == NULL)
 		return;
@@ -407,7 +494,6 @@ void mowgli_dictionary_destroy(mowgli_dictionary_t *dtree,
 	void *privdata)
 {
 	mowgli_dictionary_elem_t *n, *tn;
-	int i;
 
 	return_if_fail(dtree != NULL);
 
@@ -483,10 +569,9 @@ void *mowgli_dictionary_search(mowgli_dictionary_t *dtree,
 	void *privdata)
 {
 	mowgli_dictionary_elem_t *n, *tn;
-	int i;
 	void *ret = NULL;
 
-	return_if_fail(dtree != NULL);
+	return_val_if_fail(dtree != NULL, NULL);
 
 	MOWGLI_LIST_FOREACH_SAFE(n, tn, dtree->head)
 	{
@@ -652,7 +737,6 @@ mowgli_dictionary_elem_t *mowgli_dictionary_find(mowgli_dictionary_t *dict, cons
 mowgli_dictionary_elem_t *mowgli_dictionary_add(mowgli_dictionary_t *dict, const char *key, void *data)
 {
 	mowgli_dictionary_elem_t *delem;
-	int i;
 
 	return_val_if_fail(dict != NULL, NULL);
 	return_val_if_fail(key != NULL, NULL);
@@ -698,7 +782,6 @@ void *mowgli_dictionary_delete(mowgli_dictionary_t *dtree, const char *key)
 {
 	mowgli_dictionary_elem_t *delem = mowgli_dictionary_find(dtree, key);
 	void *data;
-	int i;
 
 	if (delem == NULL)
 		return NULL;

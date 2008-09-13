@@ -4,19 +4,9 @@
  *
  * Copyright (c) 2007 William Pitcock <nenolod -at- sacredspiral.co.uk>
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice is present in all copies.
  *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -46,11 +36,11 @@ mowgli_ioevent_handle_t *mowgli_ioevent_create(void)
 	mowgli_ioevent_handle_t *self = mowgli_alloc(sizeof(mowgli_ioevent_handle_t));
 
 #ifdef HAVE_EPOLL_CTL
-	self->impldata = (void *) epoll_create(FD_SETSIZE);
+	self->impldata = epoll_create(FD_SETSIZE);
 #endif
 
 #ifdef HAVE_PORT_CREATE
-	self->impldata = (void *) port_create();
+	self->impldata = port_create();
 #endif
 
 	return self;
@@ -61,7 +51,7 @@ void mowgli_ioevent_destroy(mowgli_ioevent_handle_t *self)
 	return_if_fail(self != NULL);
 
 #if defined(HAVE_EPOLL_CTL) || defined(HAVE_PORT_CREATE)
-	close((int) self->impldata);
+	close(self->impldata);
 #endif
 
 	mowgli_free(self);
@@ -73,7 +63,7 @@ int mowgli_ioevent_get(mowgli_ioevent_handle_t *self, mowgli_ioevent_t *buf, siz
 #ifdef HAVE_EPOLL_CTL
 	struct epoll_event events[bufsize];
 
-	ret = epoll_wait((int) self->impldata, events, bufsize, delay);
+	ret = epoll_wait(self->impldata, events, bufsize, delay);
 
 	if (ret == -1)
 		return ret;
@@ -107,7 +97,7 @@ int mowgli_ioevent_get(mowgli_ioevent_handle_t *self, mowgli_ioevent_t *buf, siz
 	poll_time.tv_sec = delay / 1000;
 	poll_time.tv_nsec = (delay % 1000) * 1000000;
 
-	ret = port_getn((int) self->impldata, events, bufsize, &nget, &poll_time);
+	ret = port_getn(self->impldata, events, bufsize, &nget, &poll_time);
 
 	if (ret == -1)
 		return ret;
@@ -159,18 +149,22 @@ void mowgli_ioevent_associate(mowgli_ioevent_handle_t *self, mowgli_ioevent_sour
 		ep_event.events = events;
 		ep_event.data.ptr = opaque;
 
-		epoll_ctl((int) self->impldata, EPOLL_CTL_ADD, object, &ep_event);
+		epoll_ctl(self->impldata, EPOLL_CTL_ADD, object, &ep_event);
 	}
 #endif
 
 #ifdef HAVE_PORT_CREATE
+#ifdef POLLRDNORM
 	if (flags & MOWGLI_POLLRDNORM)
 		events |= POLLRDNORM;
+#endif
 
+#ifdef EPOLLWRNORM
 	if (flags & MOWGLI_POLLWRNORM)
-		events |= POLLWRNORM;
+		events |= EPOLLWRNORM;
+#endif
 
-	port_associate((int) self->impldata, PORT_SOURCE_FD, object, events, opaque);
+	port_associate(self->impldata, PORT_SOURCE_FD, object, events, opaque);
 #endif
 }
 
@@ -183,12 +177,12 @@ void mowgli_ioevent_dissociate(mowgli_ioevent_handle_t *self, mowgli_ioevent_sou
 	{
 		struct epoll_event ep_event = {};
 
-		epoll_ctl((int) self->impldata, EPOLL_CTL_DEL, object, &ep_event);
+		epoll_ctl(self->impldata, EPOLL_CTL_DEL, object, &ep_event);
 	}
 #endif
 
 #ifdef HAVE_PORT_CREATE
-	port_dissociate((int) self->impldata, PORT_SOURCE_FD, object);
+	port_dissociate(self->impldata, PORT_SOURCE_FD, object);
 #endif
 }
 

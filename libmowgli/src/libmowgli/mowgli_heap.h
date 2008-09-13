@@ -5,19 +5,9 @@
  * Copyright (c) 2007 William Pitcock <nenolod -at- sacredspiral.co.uk>
  * Copyright (c) 2005-2006 Theo Julienne <terminal -at- atheme.org>
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice is present in all copies.
  *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -40,39 +30,6 @@
 typedef struct mowgli_heap_ mowgli_heap_t;
 typedef struct mowgli_block_ mowgli_block_t;
 
-/* A block of memory allocated to the allocator */
-struct mowgli_block_
-{
-	mowgli_node_t node;
-	
-	/* link back to our heap */
-	mowgli_heap_t *heap;
-	
-	/* pointer to the first item */
-	void *data;
-	
-	/* singly linked list of free items */
-	void *first_free;
-
-	int num_allocated;
-};
-
-/* A pile of blocks */
-struct mowgli_heap_
-{
-	mowgli_node_t node;
-	
-	unsigned int elem_size;
-	unsigned int mowgli_heap_elems;
-	unsigned int free_elems;
-	
-	unsigned int alloc_size;
-	
-	unsigned int flags;
-	
-	mowgli_list_t blocks;
-};
-
 /* Flag for mowgli_heap_create */
 #define BH_DONTCARE 0
 
@@ -81,6 +38,8 @@ struct mowgli_heap_
 
 /* Functions for heaps */
 extern mowgli_heap_t *mowgli_heap_create(size_t elem_size, size_t mowgli_heap_elems, unsigned int flags);
+extern mowgli_heap_t *mowgli_heap_create_full(size_t elem_size, size_t mowgli_heap_elems, unsigned int flags,
+	mowgli_allocation_policy_t *allocator);
 extern void mowgli_heap_destroy(mowgli_heap_t *heap);
 
 /* Functions for blocks */

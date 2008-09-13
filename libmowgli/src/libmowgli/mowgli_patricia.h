@@ -47,6 +47,8 @@ typedef struct mowgli_patricia_elem_ mowgli_patricia_elem_t;
 struct mowgli_patricia_iteration_state_
 {
 	mowgli_patricia_elem_t *cur, *next;
+	void *pspare[4];
+	int ispare[4];
 };
 
 typedef struct mowgli_patricia_iteration_state_ mowgli_patricia_iteration_state_t;

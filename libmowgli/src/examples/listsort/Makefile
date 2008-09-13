@@ -1,17 +1,7 @@
-include ../../../mk/rules.mk
-include ../../../mk/init.mk
-include ../../../mk/objective.mk
+PROG_NOINST = listsort${PROG_SUFFIX}
+SRCS = listsort.c
 
-OBJECTIVE_BINS = listsort
+include ../../../buildsys.mk
 
-LDADD = -L../../libmowgli -lmowgli
-
-CFLAGS += -I../../libmowgli
-
-SOURCES = listsort.c
-
-OBJECTS = ${SOURCES:.c=.o}
-
-listsort: $(OBJECTS)
-	$(CC) $(LDFLAGS) $(OBJECTS) $(LDADD) -o $@
-	@printf "%10s     %-20s\n" LINK $@
+CPPFLAGS += -I../../libmowgli
+LIBS += -L../../libmowgli -lmowgli

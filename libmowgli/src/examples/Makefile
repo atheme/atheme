@@ -1,6 +1,3 @@
-include ../../mk/rules.mk
-include ../../mk/init.mk
+SUBDIRS = randomtest listsort formattertest dicttest patriciatest
 
-SUBDIRS = randomtest listsort formattertest patriciatest
-
-include ../../mk/objective.mk
+include ../../buildsys.mk

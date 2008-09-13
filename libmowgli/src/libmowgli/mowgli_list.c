@@ -4,19 +4,9 @@
  *
  * Copyright (c) 2007 William Pitcock <nenolod -at- sacredspiral.co.uk>
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice is present in all copies.
  *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -44,7 +34,7 @@ void mowgli_node_init(void)
 	if (mowgli_node_heap == NULL || mowgli_list_heap == NULL)
 	{
 		mowgli_log("heap allocator failure.");
-		exit(EXIT_FAILURE);
+		abort();
 	}
 }
 
@@ -214,7 +204,6 @@ void *mowgli_node_nth_data(mowgli_list_t *l, int pos)
 /* inserts a node at `position` position. */
 void mowgli_node_insert(void *data, mowgli_node_t *n, mowgli_list_t *l, int pos)
 {
-	int iter;
 	mowgli_node_t *tn;
 
 	return_if_fail(n != NULL);
