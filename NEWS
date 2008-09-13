@@ -1,3 +1,38 @@
+Atheme Services 3.2 Release Notes
+=================================
+[MERGED] indicates items merged to the 3.1 branch
+ircd protocol
+- Add support for ShadowIRCd 5.
+- hyperion: improve detection of overwritten I:line spoofs.
+- hyperion: Add support for UF_IMMUNE.
+- general: Do not enforce AKICKs against users marked UF_IMMUNE; it is
+  impossible to ban them effectively.
+- inspircd12: various fixes and updates.
+nickserv
+- snoop on freeze on/off
+- Add nickserv/vacation module, allowing to temporarily extend expiry times.
+chanserv
+- Allow multiple spaces before fantasy commands when ChanServ is addressed
+  by nickname.
+alis
+- Fix handling of key and limit options.
+memoserv
+gameserv
+oper
+- Add AKILL LIST command, used to show AKILLs matching a mask or id.
+xmlrpc
+code
+- Allow arbitrary line lengths in flatfile database loader.
+- Do not check smalloc/scalloc return values.
+- Change kline_delete() to take a kline_t pointer instead of a user and host.
+- Allow modules to influence the expiry process.
+- Fix a minor memory leak on /os REHASH.
+- Fix null pointer dereference with some invalid config files.
+other
+- Synchronized with libmowgli 0.7 framework.
+- Remove automatic module loading for modules/ directory; this behaviour has been
+  deprecated since version 0.3.
+
 Atheme Services 3.1 Release Notes
 =================================
 [MERGED] indicates items merged to the 3.0 branch
