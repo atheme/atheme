@@ -77,6 +77,7 @@ OBJS += ${OBJS5:.m=.o}
 .SUFFIXES: .beam .c .cc .cxx .d .erl .m
 .PHONY: all subdirs pre-depend depend install install-extra uninstall uninstall-extra clean distclean
 
+build: all
 all:
 	for i in subdirs depend ${STATIC_LIB} ${STATIC_LIB_NOINST} ${LIB} ${LIB_NOINST} ${PLUGIN} ${PLUGIN_NOINST} ${PROG} ${PROG_NOINST}; do \
 		${MAKE} ${MFLAGS} $$i || exit 1; \
