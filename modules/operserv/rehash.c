@@ -44,7 +44,8 @@ void os_cmd_rehash(sourceinfo_t *si, int parc, char *parv[])
 	snoop("UPDATE: \2%s\2", get_oper_name(si));
 	wallops("Updating database by request of \2%s\2.", get_oper_name(si));
 	expire_check(NULL);
-	db_save(NULL);
+	if (db_save)
+		db_save(NULL);
 
 	snoop("REHASH: \2%s\2", get_oper_name(si));
 	logcommand(si, CMDLOG_ADMIN, "REHASH");

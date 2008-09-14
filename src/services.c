@@ -410,13 +410,19 @@ void handle_burstlogin(user_t *u, char *login)
 	{
 		/* account dropped during split...
 		 * if we have an authentication service, log them out */
-		slog(LG_DEBUG, "handle_burstlogin(): got nonexistent login %s for user %s", login, u->nick);
-		if (authservice_loaded)
+		if (authservice_loaded || backend_loaded)
 		{
-			notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, _("Account %s dropped, forcing logout"), login);
-			ircd_on_logout(u->nick, login, NULL);
+			slog(LG_DEBUG, "handle_burstlogin(): got nonexistent login %s for user %s", login, u->nick);
+			if (authservice_loaded)
+			{
+				notice(nicksvs.nick ? nicksvs.nick : me.name, u->nick, _("Account %s dropped, forcing logout"), login);
+				ircd_on_logout(u->nick, login, NULL);
+			}
+			return;
 		}
-		return;
+		/* we're running without a persistent db, create it */
+		mu = myuser_add(login, "*", "noemail", MU_CRYPTPASS);
+		metadata_add(mu, METADATA_USER, "fake", "1");
 	}
 	if (u->myuser != NULL)	/* already logged in, hmm */
 		return;
@@ -471,9 +477,14 @@ void handle_setlogin(sourceinfo_t *si, user_t *u, char *login)
 	}
 	if (mu == NULL)
 	{
-		/* hmm */
-		slog(LG_DEBUG, "handle_setlogin(): got nonexistent login %s for user %s", login, u->nick);
-		return;
+		if (backend_loaded)
+		{
+			slog(LG_DEBUG, "handle_setlogin(): got nonexistent login %s for user %s", login, u->nick);
+			return;
+		}
+		/* we're running without a persistent db, create it */
+		mu = myuser_add(login, "*", "noemail", MU_CRYPTPASS);
+		metadata_add(mu, METADATA_USER, "fake", "1");
 	}
 	u->myuser = mu;
 	n = node_create();

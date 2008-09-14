@@ -148,9 +148,12 @@ void check_signals(void)
 
 		wallops(_("Got SIGHUP; reloading \2%s\2."), config_file);
 
-		snoop("UPDATE: \2%s\2", "system console");
-		wallops(_("Updating database by request of \2%s\2."), "system console");
-		db_save(NULL);
+		if (db_save)
+		{
+			snoop("UPDATE: \2%s\2", "system console");
+			wallops(_("Updating database by request of \2%s\2."), "system console");
+			db_save(NULL);
+		}
 
 		snoop("REHASH: \2%s\2", "system console");
 		wallops(_("Rehashing \2%s\2 by request of \2%s\2."), config_file, "system console");

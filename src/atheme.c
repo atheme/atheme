@@ -251,7 +251,7 @@ int main(int argc, char *argv[])
 	common_ctcp_init();
 	update_chanacs_flags();
 
-	if (!backend_loaded)
+	if (!backend_loaded && authservice_loaded)
 	{
 		fprintf(stderr, "atheme: no backend modules loaded, see your configuration file.\n");
 		exit(EXIT_FAILURE);
@@ -267,10 +267,9 @@ int main(int argc, char *argv[])
 	/* load our db */
 	if (db_load)
 		db_load();
-	else
+	else if (backend_loaded)
 	{
-		/* XXX: We should have bailed by now! --nenolod */
-		fprintf(stderr, "atheme: no backend modules loaded, see your configuration file.\n");
+		fprintf(stderr, "atheme: backend module does not provide db_load()!\n");
 		exit(EXIT_FAILURE);
 	}
 	db_check();
@@ -337,7 +336,8 @@ int main(int argc, char *argv[])
 	me.maxfd = 3;
 
 	/* DB commit interval is configurable */
-	event_add("db_save", db_save, NULL, config_options.commit_interval);
+	if (db_save)
+		event_add("db_save", db_save, NULL, config_options.commit_interval);
 
 	/* check expires every hour */
 	event_add("expire_check", expire_check, NULL, 3600);
@@ -358,7 +358,8 @@ int main(int argc, char *argv[])
 	io_loop();
 
 	/* we're shutting down */
-	db_save(NULL);
+	if (db_save)
+		db_save(NULL);
 	if (chansvs.me != NULL && chansvs.me->me != NULL)
 		quit_sts(chansvs.me->me, "shutting down");
 
