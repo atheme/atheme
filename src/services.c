@@ -436,6 +436,77 @@ void handle_burstlogin(user_t *u, char *login)
 	slog(LG_DEBUG, "handle_burstlogin(): automatically identified %s as %s", u->nick, login);
 }
 
+void handle_setlogin(sourceinfo_t *si, user_t *u, char *login)
+{
+	mynick_t *mn;
+	myuser_t *mu;
+	node_t *n;
+
+	if (login != NULL)
+		/* don't allow alias nicks here -- jilles */
+		mu = myuser_find(login);
+	else
+	{
+		mn = mynick_find(u->nick);
+		mu = mn != NULL ? mn->owner : NULL;
+		login = mu != NULL ? mu->name : u->nick;
+	}
+
+	if (authservice_loaded)
+	{
+		wallops("Ignoring attempt from %s to set login name for %s to %s",
+				get_oper_name(si), u->nick, login);
+		return;
+	}
+
+	if (u->myuser != NULL)
+	{
+		n = node_find(u, &u->myuser->logins);
+		if (n != NULL)
+		{
+			node_del(n, &u->myuser->logins);
+			node_free(n);
+		}
+		u->myuser = NULL;
+	}
+	if (mu == NULL)
+	{
+		/* hmm */
+		slog(LG_DEBUG, "handle_setlogin(): got nonexistent login %s for user %s", login, u->nick);
+		return;
+	}
+	u->myuser = mu;
+	n = node_create();
+	node_add(u, n, &mu->logins);
+	slog(LG_DEBUG, "handle_setlogin(): %s set %s logged in as %s",
+			get_oper_name(si), u->nick, login);
+}
+
+void handle_clearlogin(sourceinfo_t *si, user_t *u)
+{
+	node_t *n;
+
+	if (authservice_loaded)
+	{
+		wallops("Ignoring attempt from %s to clear login name for %s",
+				get_oper_name(si), u->nick);
+		return;
+	}
+
+	if (u->myuser == NULL)
+		return;
+
+	slog(LG_DEBUG, "handle_clearlogin(): %s cleared login for %s (%s)",
+			get_oper_name(si), u->nick, u->myuser->name);
+	n = node_find(u, &u->myuser->logins);
+	if (n != NULL)
+	{
+		node_del(n, &u->myuser->logins);
+		node_free(n);
+	}
+	u->myuser = NULL;
+}
+
 /* this could be done with more finesse, but hey! */
 void notice(const char *from, const char *to, const char *fmt, ...)
 {

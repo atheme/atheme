@@ -1027,6 +1027,22 @@ static void m_encap(sourceinfo_t *si, int parc, char *parv[])
 		}
 		handle_burstlogin(u, parv[2]);
 	}
+	else if (!irccasecmp(parv[1], "SU"))
+	{
+		/* :services. ENCAP * SU jilles_ jilles */
+		/* :services. ENCAP * SU jilles_ */
+		if (!use_rserv_support)
+			return;
+		if (parc < 3)
+			return;
+		u = user_find(parv[2]);
+		if (u == NULL)
+			return;
+		if (parc == 3)
+			handle_clearlogin(si, u);
+		else
+			handle_setlogin(si, u, parv[3]);
+	}
 }
 
 static void m_capab(sourceinfo_t *si, int parc, char *parv[])

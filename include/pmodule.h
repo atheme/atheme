@@ -62,6 +62,8 @@ E void services_init(void);
 E void reintroduce_user(user_t *u);
 E void handle_nickchange(user_t *u);
 E void handle_burstlogin(user_t *u, char *login);
+E void handle_setlogin(sourceinfo_t *si, user_t *u, char *login);
+E void handle_clearlogin(sourceinfo_t *si, user_t *u);
 
 #endif
 

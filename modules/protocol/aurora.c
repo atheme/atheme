@@ -1293,6 +1293,22 @@ static void m_encap(sourceinfo_t *si, int parc, char *parv[])
 		 */
 		handle_burstlogin(u, parv[2]);
 	}
+	else if (!irccasecmp(parv[1], "SU"))
+	{
+		/* :services. ENCAP * SU jilles_ jilles */
+		/* :services. ENCAP * SU jilles_ */
+		if (!use_rserv_support)
+			return;
+		if (parc < 3)
+			return;
+		u = user_find(parv[2]);
+		if (u == NULL)
+			return;
+		if (parc == 3)
+			handle_clearlogin(si, u);
+		else
+			handle_setlogin(si, u, parv[3]);
+	}
 	else if (!irccasecmp(parv[1], "REALHOST"))
 	{
 		/* :1JJAAAAAC ENCAP * REALHOST localhost.stack.nl */
@@ -1332,8 +1348,6 @@ static void m_encap(sourceinfo_t *si, int parc, char *parv[])
 static void m_signon(sourceinfo_t *si, int parc, char *parv[])
 {
 	user_t *u;
-	node_t *n, *tn;
-	myuser_t *old, *new;
 
 	if((u = user_find(parv[0])) == NULL)
 		return;
@@ -1353,40 +1367,10 @@ static void m_signon(sourceinfo_t *si, int parc, char *parv[])
 	/* LOGIN */
 	if(*parv[4] == '*') /* explicitly unchanged */
 		return;
-	if(u->myuser == NULL && !strcmp(parv[4], "0")) /* both unset */
-		return;
-	
-	old = u->myuser;
-	new = myuser_find(parv[4]);
-	if(old == new)
-		return;
-
-	if(old)
-	{
-		old->lastlogin = CURRTIME;
-		LIST_FOREACH_SAFE(n, tn, old->logins.head)
-		{
-			if(n->data == u)
-			{
-				node_del(n, &old->logins);
-				node_free(n);
-				break;
-			}
-		}
-		u->myuser = NULL;
-	}
-
-	if(new)
-	{
-		if (is_soper(new))
-			snoop("SOPER: \2%s\2 as \2%s\2", u->nick, new->name);
-
-		myuser_notice(nicksvs.nick, new, "%s!%s@%s has just authenticated as you (%s)", u->nick, u->user, u->vhost, new->name);
-
-		u->myuser = new;
-		n = node_create();
-		node_add(u, n, &new->logins);
-	}
+	if (!strcmp(parv[4], "0"))
+		handle_clearlogin(si, u);
+	else
+		handle_setlogin(si, u, parv[4]);
 }
 
 static void m_capab(sourceinfo_t *si, int parc, char *parv[])
