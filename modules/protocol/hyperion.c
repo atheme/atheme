@@ -988,7 +988,16 @@ static void m_signon(sourceinfo_t *si, int parc, char *parv[])
 	nick_parv[1] = parv[4];
 	if (strcmp(si->su->nick, parv[1]))
 		m_nick(si, 2, nick_parv);
-	/* don't use login id, assume everyone signs in via atheme */
+	/* if this could be a reply to our SVSLOGIN, ignore this
+	 * (the user could have logged out in the meantime)
+	 */
+	if (use_svslogin && !authservice_loaded)
+	{
+		if (!strcmp(parv[0], "0"))
+			handle_clearlogin(si, si->su);
+		else
+			handle_setlogin(si, si->su, parv[0]);
+	}
 }
 
 static void m_motd(sourceinfo_t *si, int parc, char *parv[])
