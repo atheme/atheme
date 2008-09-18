@@ -136,7 +136,7 @@ echo "place them here:"
 while [ $ok -eq 0 ] ; do
   echo -n "[no] "
   if read INPUT ; then : ; else echo "" ; exit 1 ; fi
-  if [ ! "$INPUT" ] ; then
+  if [ ! "$INPUT" ] || [ "$INPUT" = "no" ] ; then
     INPUT=""
     ok=1
   else
