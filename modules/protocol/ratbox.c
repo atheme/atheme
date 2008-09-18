@@ -300,7 +300,7 @@ static void ratbox_kline_sts(char *server, char *user, char *host, long duration
 	if (!me.connected)
 		return;
 
-	sts(":%s KLINE %s %ld %s %s :%s", CLIENT_NAME(opersvs.me->me), server, duration, user, host, reason);
+	sts(":%s ENCAP %s KLINE %ld %s %s :%s", CLIENT_NAME(opersvs.me->me), server, duration, user, host, reason);
 }
 
 /* server-to-server UNKLINE wrapper */
@@ -309,7 +309,7 @@ static void ratbox_unkline_sts(char *server, char *user, char *host)
 	if (!me.connected)
 		return;
 
-	sts(":%s UNKLINE %s %s %s", CLIENT_NAME(opersvs.me->me), server, user, host);
+	sts(":%s ENCAP %s UNKLINE %s %s", CLIENT_NAME(opersvs.me->me), server, user, host);
 }
 
 /* topic wrapper */
