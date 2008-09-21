@@ -25,16 +25,16 @@ ircd_t ShadowIRCd = {
         FALSE,                          /* Whether or not we use RCOMMAND */
         FALSE,                          /* Whether or not we support channel owners. */
         FALSE,                          /* Whether or not we support channel protection. */
-        FALSE,                          /* Whether or not we support halfops. */
+        TRUE,                           /* Whether or not we support halfops. */
 	FALSE,				/* Whether or not we use P10 */
 	FALSE,				/* Whether or not we use vHosts. */
 	CMODE_EXLIMIT | CMODE_PERM,	/* Oper-only cmodes */
         0,                              /* Integer flag for owner channel flag. */
         0,                              /* Integer flag for protect channel flag. */
-        0,                              /* Integer flag for halfops. */
+        CMODE_HALFOP,                   /* Integer flag for halfops. */
         "+",                            /* Mode we set for owner. */
         "+",                            /* Mode we set for protect. */
-        "+",                            /* Mode we set for halfops. */
+        "+h",                           /* Mode we set for halfops. */
 	PROTOCOL_CHARYBDIS,		/* Protocol type */
 	CMODE_PERM,                     /* Permanent cmodes */
 	"beIq",                         /* Ban-like cmodes */
@@ -82,12 +82,14 @@ struct extmode shadowircd_ignore_mode_list[] = {
 
 struct cmode_ shadowircd_status_mode_list[] = {
   { 'o', CMODE_OP    },
+  { 'h', CMODE_HALFOP },
   { 'v', CMODE_VOICE },
   { '\0', 0 }
 };
 
 struct cmode_ shadowircd_prefix_mode_list[] = {
   { '@', CMODE_OP    },
+  { '%', CMODE_HALFOP },
   { '+', CMODE_VOICE },
   { '\0', 0 }
 };
