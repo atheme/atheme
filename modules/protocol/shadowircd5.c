@@ -35,7 +35,7 @@ ircd_t ShadowIRCd = {
         "+",                            /* Mode we set for owner. */
         "+",                            /* Mode we set for protect. */
         "+h",                           /* Mode we set for halfops. */
-	PROTOCOL_CHARYBDIS,		/* Protocol type */
+	PROTOCOL_SHADOWIRCD,		/* Protocol type */
 	CMODE_PERM,                     /* Permanent cmodes */
 	"beIq",                         /* Ban-like cmodes */
 	'e',                            /* Except mchar */

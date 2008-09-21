@@ -213,7 +213,15 @@ static void ajoin_on_identify(void *vptr)
 	chan = strtok(buf, " ,");
 	while (chan != NULL)
 	{
-		sts(":%s SVSJOIN %s %s", CLIENT_NAME(nicksvs.me->me), CLIENT_NAME(u), chan);
+		if(ircd->type == PROTOCOL_SHADOWIRCD)
+		{
+			sts(":%s ENCAP * SVSJOIN %s %s", ME, CLIENT_NAME(u), chan);
+		}
+		else
+		{
+			sts(":%s SVSJOIN %s %s", CLIENT_NAME(nicksvs.me->me), CLIENT_NAME(u), chan);
+		}
+
 		chan = strtok(NULL, ",");
 	}
 }
