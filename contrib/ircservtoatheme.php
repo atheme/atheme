@@ -289,7 +289,8 @@ function read_nickgroupinfo($line)
 	if ($line == '</'. $section .'>')
 		$section = '';
 
-	if ($section == '' && preg_match('~^<([a-z_]+)>(.*)</\1>$~',$line,&$parts) > 0)
+	if ($section == '' && preg_match('~^<([a-z_]+)(?: [^>]+)?>(.*)</\1>$~', $line, &$parts) > 0)
+// XXX old ircservices.	if ($section == '' && preg_match('~^<([a-z_]+)>(.*)</\1>$~',$line,&$parts) > 0)
 	{
 		if ($parts[1] == 'id')
 			$id = $parts[2];
