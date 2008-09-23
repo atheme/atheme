@@ -71,6 +71,7 @@ SRCS =					\
 	$(SRCDIR)/os_klinechan.c	\
 	$(SRCDIR)/os_logonnews.c	\
 	$(SRCDIR)/os_logstream.c	\
+	$(SRCDIR)/os_savechanmodes.c	\
 	$(SRCDIR)/os_tabletest.c
 
 # To compile your own modules, add them to SRCS or make blegh.so
