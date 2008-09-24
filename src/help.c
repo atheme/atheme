@@ -89,6 +89,8 @@ static boolean_t evaluate_condition(sourceinfo_t *si, const char *s)
 			*q = '\0';
 		return module_find_published(p) != NULL;
 	}
+	else if (!strcmp(word, "auth"))
+		return me.auth != AUTH_NONE;
 	else
 		return FALSE;
 }
