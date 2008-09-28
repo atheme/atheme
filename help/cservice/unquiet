@@ -4,6 +4,8 @@ The UNQUIET command allows you to unmute a user or hostmask
 in a channel. If no nickname or hostmask is specified,
 you are unquieted.
 
+Affected users will be notified that you did it.
+
 Syntax: UNQUIET <#channel> [nickname|hostmask]
 
 Examples:

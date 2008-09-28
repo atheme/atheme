@@ -1,7 +1,7 @@
 Help for QUIET:
 
 The QUIET command allows you to mute a user or hostmask in
-a channel.
+a channel. Affected users will be notified that you did it.
 
 Syntax: QUIET <#channel> <nickname|hostmask>
 

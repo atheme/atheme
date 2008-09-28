@@ -56,6 +56,84 @@ void _moddeinit()
 	help_delentry(cs_helptree, "UNQUIET");
 }
 
+/* Notify at most this many users in private notices, otherwise channel */
+#define MAX_SINGLE_NOTIFY 3
+
+static void notify_one_victim(sourceinfo_t *si, channel_t *c, user_t *u, int dir)
+{
+	return_if_fail(dir == MTYPE_ADD || dir == MTYPE_DEL);
+
+	/* fantasy command, they can see it */
+	if (si->c != NULL)
+		return;
+	/* self */
+	if (si->su == u)
+		return;
+
+	if (dir == MTYPE_ADD)
+		change_notify(chansvs.nick, u,
+				"You have been quieted on %s by %s",
+				c->name, get_source_name(si));
+	else if (dir == MTYPE_DEL)
+		change_notify(chansvs.nick, u,
+				"You have been unquieted on %s by %s",
+				c->name, get_source_name(si));
+}
+
+static void notify_victims(sourceinfo_t *si, channel_t *c, chanban_t *cb, int dir)
+{
+	node_t *n;
+	chanuser_t *cu;
+	list_t ban_l = { NULL, NULL, 0 };
+	node_t ban_n;
+	user_t *to_notify[MAX_SINGLE_NOTIFY];
+	unsigned int to_notify_count = 0, i;
+
+	return_if_fail(dir == MTYPE_ADD || dir == MTYPE_DEL);
+
+	if (cb == NULL)
+		return;
+
+	/* fantasy command, they can see it */
+	if (si->c != NULL)
+		return;
+
+	/* only check the newly added/removed quiet */
+	node_add(cb, &ban_n, &ban_l);
+
+	LIST_FOREACH(n, c->members.head)
+	{
+		cu = n->data;
+		if (cu->modes & (CMODE_OP | CMODE_VOICE))
+			continue;
+		if (is_internal_client(cu->user))
+			continue;
+		if (cu->user == si->su)
+			continue;
+		if (next_matching_ban(c, cu->user, 'q', &ban_n))
+		{
+			to_notify[to_notify_count++] = cu->user;
+			if (to_notify_count >= MAX_SINGLE_NOTIFY)
+				break;
+		}
+	}
+
+	if (to_notify_count >= MAX_SINGLE_NOTIFY)
+	{
+		if (dir == MTYPE_ADD)
+			notice(chansvs.nick, c->name,
+					"\2%s\2 quieted \2%s\2",
+					get_source_name(si), cb->mask);
+		else if (dir == MTYPE_DEL)
+			notice(chansvs.nick, c->name,
+					"\2%s\2 unquieted \2%s\2",
+					get_source_name(si), cb->mask);
+	}
+	else
+		for (i = 0; i < to_notify_count; i++)
+			notify_one_victim(si, c, to_notify[i], dir);
+}
+
 static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 {
 	char *channel = parv[0];
@@ -63,6 +141,7 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 	channel_t *c = channel_find(channel);
 	mychan_t *mc = mychan_find(channel);
 	user_t *tu;
+	chanban_t *cb;
 
 	if (!channel || !target)
 	{
@@ -104,7 +183,8 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 	if (validhostmask(target))
 	{
 		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'q', target);
-		chanban_add(c, target, 'q');
+		cb = chanban_add(c, target, 'q');
+		notify_victims(si, c, cb, MTYPE_ADD);
 		logcommand(si, CMDLOG_DO, "%s QUIET %s", mc->name, target);
 		if (!chanuser_find(mc->chan, si->su))
 			command_success_nodata(si, _("Quieted \2%s\2 on \2%s\2."), target, channel);
@@ -120,7 +200,8 @@ static void cs_cmd_quiet(sourceinfo_t *si, int parc, char *parv[])
 		strlcat(hostbuf, tu->vhost, BUFSIZE);
 
 		modestack_mode_param(chansvs.nick, c, MTYPE_ADD, 'q', hostbuf);
-		chanban_add(c, hostbuf, 'q');
+		cb = chanban_add(c, hostbuf, 'q');
+		notify_victims(si, c, cb, MTYPE_ADD);
 		logcommand(si, CMDLOG_DO, "%s QUIET %s (for user %s!%s@%s)", mc->name, hostbuf, tu->nick, tu->user, tu->vhost);
 		if (!chanuser_find(mc->chan, si->su))
 			command_success_nodata(si, _("Quieted \2%s\2 on \2%s\2."), target, channel);
@@ -203,8 +284,13 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 			count++;
 		}
 		if (count > 0)
+		{
+			/* one notification only */
+			if (chanuser_find(c, tu))
+				notify_one_victim(si, c, tu, MTYPE_DEL);
 			command_success_nodata(si, _("Unquieted \2%s\2 on \2%s\2 (%d ban%s removed)."),
 				target, channel, count, (count != 1 ? "s" : ""));
+		}
 		else
 			command_success_nodata(si, _("No quiets found matching \2%s\2 on \2%s\2."), target, channel);
 		return;
@@ -214,6 +300,7 @@ static void cs_cmd_unquiet(sourceinfo_t *si, int parc, char *parv[])
 		if (cb)
 		{
 			modestack_mode_param(chansvs.nick, c, MTYPE_DEL, 'q', target);
+			notify_victims(si, c, cb, MTYPE_DEL);
 			chanban_delete(cb);
 			logcommand(si, CMDLOG_DO, "%s UNQUIET %s", mc->name, target);
 			if (!chanuser_find(mc->chan, si->su))
