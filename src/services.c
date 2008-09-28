@@ -576,6 +576,8 @@ void change_notify(const char *from, user_t *to, const char *fmt, ...)
 	vsnprintf(buf, BUFSIZE, fmt, args);
 	va_end(args);
 
+	if (is_internal_client(to))
+		return;
 	if (to->myuser != NULL && to->myuser->flags & MU_QUIETCHG)
 		return;
 
