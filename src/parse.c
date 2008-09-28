@@ -226,7 +226,7 @@ void p10_parse(char *line)
 
 		slog(LG_RAWDATA, "-> %s", line);
 
-		/* find the first spcae */
+		/* find the first space */
 		if ((pos = strchr(line, ' ')))
 		{
 			*pos = '\0';
