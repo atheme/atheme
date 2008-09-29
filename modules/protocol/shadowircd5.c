@@ -23,17 +23,17 @@ ircd_t ShadowIRCd = {
         "$$",                           /* TLD Prefix, used by Global. */
         TRUE,                           /* Whether or not we use IRCNet/TS6 UID */
         FALSE,                          /* Whether or not we use RCOMMAND */
-        FALSE,                          /* Whether or not we support channel owners. */
-        FALSE,                          /* Whether or not we support channel protection. */
+        TRUE,                           /* Whether or not we support channel owners. */
+        TRUE,                           /* Whether or not we support channel protection. */
         TRUE,                           /* Whether or not we support halfops. */
 	FALSE,				/* Whether or not we use P10 */
 	FALSE,				/* Whether or not we use vHosts. */
 	CMODE_EXLIMIT | CMODE_PERM,	/* Oper-only cmodes */
-        0,                              /* Integer flag for owner channel flag. */
-        0,                              /* Integer flag for protect channel flag. */
+        CMODE_PROTECT,                  /* Integer flag for owner channel flag. */
+        CMODE_PROTECT,                  /* Integer flag for protect channel flag. */
         CMODE_HALFOP,                   /* Integer flag for halfops. */
-        "+",                            /* Mode we set for owner. */
-        "+",                            /* Mode we set for protect. */
+        "+a",                           /* Mode we set for owner. */
+        "+a",                           /* Mode we set for protect. */
         "+h",                           /* Mode we set for halfops. */
 	PROTOCOL_SHADOWIRCD,		/* Protocol type */
 	CMODE_PERM,                     /* Permanent cmodes */
@@ -81,6 +81,7 @@ struct extmode shadowircd_ignore_mode_list[] = {
 };
 
 struct cmode_ shadowircd_status_mode_list[] = {
+  { 'a', CMODE_PROTECT },
   { 'o', CMODE_OP    },
   { 'h', CMODE_HALFOP },
   { 'v', CMODE_VOICE },
@@ -88,6 +89,7 @@ struct cmode_ shadowircd_status_mode_list[] = {
 };
 
 struct cmode_ shadowircd_prefix_mode_list[] = {
+  { '!', CMODE_PROTECT },
   { '@', CMODE_OP    },
   { '%', CMODE_HALFOP },
   { '+', CMODE_VOICE },
