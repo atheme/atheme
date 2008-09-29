@@ -759,8 +759,6 @@ int floodcheck(user_t *u, user_t *t)
 				u->msgs = 0;
 				u->offenses = 11;
 
-				/* ok to use nick here, notice() will
-				 * change it to UID if necessary -- jilles */
 				notice(from, u->nick, _("You have triggered services flood protection."));
 				notice(from, u->nick, _("This is your first offense. You will be ignored for 30 seconds."));
 
