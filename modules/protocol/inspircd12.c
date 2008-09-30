@@ -245,7 +245,7 @@ static void inspircd_introduce_nick(user_t *u)
 	/* :penguin.omega.org.za UID 497AAAAAB 1188302517 OperServ 127.0.0.1 127.0.0.1 OperServ +s 127.0.0.1 :Operator Server */
 	const char *omode = is_ircop(u) ? "o" : "";
 
-	sts(":%s UID %s %lu %s %s %s %s +i%s 0.0.0.0 %lu :%s", me.numeric, u->uid, (unsigned long)u->ts, u->nick, u->host, u->host, u->user, omode, (unsigned long)u->ts, u->gecos);
+	sts(":%s UID %s %lu %s %s %s %s 0.0.0.0 %lu +i%s :%s", me.numeric, u->uid, (unsigned long)u->ts, u->nick, u->host, u->host, u->user, (unsigned long)u->ts, omode, u->gecos);
 	if (is_ircop(u))
 		sts(":%s OPERTYPE Services", u->uid);
 }
