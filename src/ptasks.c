@@ -696,6 +696,7 @@ int floodcheck(user_t *u, user_t *t)
 {
 	char *from;
 	static time_t last_ignore_notice = 0;
+	unsigned int reduction;
 
 	if (t == NULL)
 		from = me.name;
@@ -735,15 +736,18 @@ int floodcheck(user_t *u, user_t *t)
 				return 1;
 		}
 
-		if ((unsigned int)(CURRTIME - u->lastmsg) > config_options.flood_time)
+		if (u->lastmsg != 0 && CURRTIME > u->lastmsg)
 		{
-			u->lastmsg = CURRTIME;
-			u->msgs = 0;
+			reduction = (CURRTIME - u->lastmsg) * (config_options.flood_msgs * FLOOD_MSGS_FACTOR / config_options.flood_time);
+			if (u->msgs > reduction)
+				u->msgs -= reduction;
+			else
+				u->msgs = 0;
 		}
+		u->lastmsg = CURRTIME;
+		u->msgs += FLOOD_MSGS_FACTOR;
 
-		u->msgs++;
-
-		if (u->msgs > config_options.flood_msgs)
+		if (u->msgs > config_options.flood_msgs * FLOOD_MSGS_FACTOR)
 		{
 			/* they're flooding. */
 			/* perhaps allowed to? -- jilles */

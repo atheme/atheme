@@ -26,13 +26,15 @@ struct user_
 	myuser_t *myuser;
 
 	unsigned int offenses;
-	unsigned int msgs;
+	unsigned int msgs; /* times FLOOD_MSGS_FACTOR */
 	time_t lastmsg;
 
 	unsigned int flags;
 
 	time_t ts;
 };
+
+#define FLOOD_MSGS_FACTOR 256
 
 #define UF_AWAY        0x00000002
 #define UF_INVIS       0x00000004
