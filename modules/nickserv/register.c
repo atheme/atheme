@@ -213,6 +213,7 @@ static void ns_cmd_register(sourceinfo_t *si, int parc, char *parv[])
 	else
 		snoop("REGISTER: \2%s\2 to \2%s\2 by \2%s\2", account, email,
 				si->su != NULL ? si->su->nick : get_source_name(si));
+	command_add_flood(si, FLOOD_MODERATE);
 	logcommand(si, CMDLOG_REGISTER, "REGISTER to %s", email);
 	if (is_soper(mu))
 	{

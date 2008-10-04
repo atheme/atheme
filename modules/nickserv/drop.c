@@ -107,6 +107,7 @@ static void ns_cmd_drop(sourceinfo_t *si, int parc, char *parv[])
 	}
 
 	snoop("DROP: \2%s\2 by \2%s\2", mu->name, get_oper_name(si));
+	command_add_flood(si, FLOOD_MODERATE);
 	logcommand(si, CMDLOG_REGISTER, "DROP %s", mu->name);
 	hook_call_event("user_drop", mu);
 	command_success_nodata(si, _("The account \2%s\2 has been dropped."), mu->name);

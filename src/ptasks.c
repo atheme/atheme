@@ -804,6 +804,12 @@ int floodcheck(user_t *u, user_t *t)
 	return 0;
 }
 
+void command_add_flood(sourceinfo_t *si, unsigned int amount)
+{
+	if (si->su != NULL)
+		si->su->msgs += amount;
+}
+
 boolean_t should_reg_umode(user_t *u)
 {
 	mynick_t *mn;

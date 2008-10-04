@@ -1040,6 +1040,8 @@ general {
 	/* (*)flood_msgs
 	 * Do you want services to detect floods?
 	 * Set to how many messages before a flood is triggered.
+	 * Note that some messages that need a lot of processing count
+	 * as two or four messages.
 	 * If services receives `flood_msgs' within `flood_time' the user will
 	 * trigger the flood protection.
 	 * Setting this to zero disables flood protection.

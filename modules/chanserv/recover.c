@@ -92,6 +92,7 @@ static void cs_cmd_recover(sourceinfo_t *si, int parc, char *parv[])
 		}
 	}
 
+	command_add_flood(si, FLOOD_HEAVY);
 	verbose(mc, "\2%s\2 used RECOVER.", get_source_name(si));
 	logcommand(si, CMDLOG_DO, "%s RECOVER", mc->name);
 

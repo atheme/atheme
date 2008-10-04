@@ -597,6 +597,7 @@ void change_notify(const char *from, user_t *to, const char *fmt, ...)
  *       - whether the user was killed off the network
  *
  * Side Effects:
+ *       - flood counter is incremented for user
  *       - attempt is registered in metadata
  *       - opers warned if necessary
  *
@@ -616,6 +617,8 @@ boolean_t bad_password(sourceinfo_t *si, myuser_t *mu)
 	 */
 	if (si->smu == mu)
 		return FALSE;
+
+	command_add_flood(si, FLOOD_MODERATE);
 
 	mask = get_source_mask(si);
 

@@ -79,6 +79,8 @@ static void cs_cmd_clear_users(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+	command_add_flood(si, LIST_LENGTH(&c->members) > 3 ? FLOOD_HEAVY : FLOOD_MODERATE);
+
 	/* stop a race condition where users can rejoin */
 	oldlimit = c->limit;
 	if (oldlimit != 1)

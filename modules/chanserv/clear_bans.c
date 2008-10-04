@@ -104,6 +104,9 @@ static void cs_cmd_clear_bans(sourceinfo_t *si, int parc, char *parv[])
 		hits++;
 	}
 
+	if (hits > 4)
+		command_add_flood(si, FLOOD_MODERATE);
+
 	logcommand(si, CMDLOG_DO, "%s CLEAR BANS %s",
 			mc->name, item);
 

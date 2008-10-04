@@ -126,6 +126,13 @@ struct gamesvs_
 #define STR_INSUFFICIENT_PARAMS _("Insufficient parameters for \2%s\2.")
 #define STR_INVALID_PARAMS _("Invalid parameters for \2%s\2.")
 
+/* for command_add_flood(),
+ * note that floodcheck() already does one FLOOD_MSGS_FACTOR
+ */
+#define FLOOD_HEAVY (3 * FLOOD_MSGS_FACTOR)
+#define FLOOD_MODERATE FLOOD_MSGS_FACTOR
+#define FLOOD_LIGHT 0
+
 /* atheme.c */
 E chansvs_t chansvs;
 E globsvs_t globsvs;
@@ -172,6 +179,7 @@ E void verbose_wallops(const char *, ...) PRINTFLIKE(1, 2);
 /* ptasks.c */
 E void handle_topic(channel_t *, const char *, time_t, const char *);
 E int floodcheck(user_t *, user_t *);
+E void command_add_flood(sourceinfo_t *si, unsigned int amount);
 
 /* ctcp-common.c */
 E void common_ctcp_init(void);
