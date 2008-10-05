@@ -111,6 +111,8 @@ static boolean_t has_globopsmod = false;
 static boolean_t has_svshold = false;
 static int has_protocol = 0;
 
+#define PROTOCOL_12BETA 1201 /* we do not support anything older than this */
+
 /* find a user's server by extracting the SID and looking that up. --nenolod */
 static server_t *sid_find(char *name)
 {
@@ -1182,6 +1184,12 @@ static void m_capab(sourceinfo_t *si, int parc, char *parv[])
 		if (has_svshold == false)
 		{
 			slog(LG_INFO, "m_capab(): you didn't load m_svshold into inspircd. nickname enforcers will not work.");
+		}
+
+		if (has_protocol < PROTOCOL_12BETA)
+		{
+			slog(LG_ERROR, "m_capab(): remote protocol version too old (%d). you may need another protocol module or a newer inspircd. exiting.", has_protocol);
+			exit(EXIT_FAILURE);
 		}
 	}
 	else
