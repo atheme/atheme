@@ -159,7 +159,7 @@ static void nefarious_join_sts(channel_t *c, user_t *u, boolean_t isnew, char *m
 	else
 	{
 		sts("%s J %s %lu", u->uid, c->name, (unsigned long)c->ts);
-		sts("%s M %s +o %s", me.numeric, c->name, u->uid);
+		sts("%s M %s +o %s", u->uid, c->name, u->uid);
 	}
 }
 
