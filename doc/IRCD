@@ -171,6 +171,10 @@ atheme will not restore the ident on -h. This can be worked around by never
 changing ident with +h, never doing -h or doing a +h with the original ident@
 before -h.
 
+/ns vhost will use the FAKEHOST mechanism. Using SETHOST and /ns vhost at
+the same time may cause trouble. Other uses of FAKEHOST may also cause
+trouble. Combining +x and /ns vhost is OK.
+
 Ban exceptions are supported, although some Nefarious versions have bugs where
 they are not sent properly.
 

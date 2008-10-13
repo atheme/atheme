@@ -373,6 +373,19 @@ static void nefarious_jupe(const char *server, const char *reason)
 	sts("%s JU * +%s %d %lu :%s", me.numeric, server, 86400, (unsigned long)CURRTIME, reason);
 }
 
+static void nefarious_sethost_sts(char *source, char *target, char *host)
+{
+	user_t *tu = user_find_named(target);
+
+	if (!tu)
+		return;
+
+	sts("%s FA %s %s", me.numeric, tu->uid, host);
+	/* need to set +x; this will be echoed */
+	if (!(tu->flags & UF_HIDEHOSTREQ))
+		sts("%s M %s +x", me.numeric, tu->uid);
+}
+
 static void m_topic(sourceinfo_t *si, int parc, char *parv[])
 {
 	channel_t *c = channel_find(parv[0]);
@@ -703,6 +716,11 @@ static void m_nick(sourceinfo_t *si, int parc, char *parv[])
 					if (p != NULL)
 						*p = '\0';
 				}
+				i++;
+			}
+			if (strchr(parv[5], 'f'))
+			{
+				strlcpy(u->vhost, parv[5+i], sizeof u->vhost);
 				i++;
 			}
 			if (strchr(parv[5], 'x'))
@@ -1069,6 +1087,7 @@ void _modinit(module_t * m)
 	ircd_on_logout = &nefarious_on_logout;
 	jupe = &nefarious_jupe;
 	invite_sts = &nefarious_invite_sts;
+	sethost_sts = &nefarious_sethost_sts;
 
 	parse = &p10_parse;
 
