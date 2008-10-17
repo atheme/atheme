@@ -31,6 +31,8 @@ struct uplink_
 
 #define UPF_ILLEGAL 0x80000000 /* not in conf anymore, delete when disconnected */
 
+#define UPLINK_SENDQ_LIMIT 1048576 /* should be less than ircd's sendq limit */
+
 /* uplink.c */
 E list_t uplinks;
 E uplink_t *curr_uplink;

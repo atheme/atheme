@@ -13,6 +13,7 @@ E void sendq_add(connection_t *cptr, char *buf, int len);
 E void sendq_add_eof(connection_t *cptr);
 E void sendq_flush(connection_t *cptr);
 E boolean_t sendq_nonempty(connection_t *cptr);
+E void sendq_set_limit(connection_t *cptr, size_t len);
 
 E int recvq_length(connection_t *cptr);
 E void recvq_put(connection_t *cptr);

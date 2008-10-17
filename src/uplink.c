@@ -148,7 +148,10 @@ void uplink_connect(void)
 	
 	curr_uplink->conn = connection_open_tcp(u->host, u->vhost, u->port, recvq_put, sendq_flush);
 	if (curr_uplink->conn != NULL)
+	{
 		curr_uplink->conn->close_handler = uplink_close;
+		sendq_set_limit(curr_uplink->conn, UPLINK_SENDQ_LIMIT);
+	}
 	else
 		event_add_once("reconn", reconn, NULL, me.recontime);
 }

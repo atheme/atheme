@@ -26,6 +26,8 @@ struct connection_
 	time_t first_recv;
 	time_t last_recv;
 
+	size_t sendq_limit;
+
 	struct sockaddr_in *sa;
 	struct sockaddr saddr;
 	socklen_t saddr_size;

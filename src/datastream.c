@@ -49,6 +49,15 @@ void sendq_add(connection_t * cptr, char *buf, int len)
 		return;
 	}
 
+	if (cptr->sendq_limit != 0 &&
+			LIST_LENGTH(&cptr->sendq) * SENDQSIZE + len > cptr->sendq_limit)
+	{
+		slog(LG_INFO, "sendq_flush(): sendq limit exceeded on connection %s[%d]",
+				cptr->name, cptr->fd);
+		cptr->flags |= CF_DEAD;
+		return;
+	}
+
 	n = cptr->sendq.tail;
 	if (n != NULL)
 	{
@@ -158,6 +167,11 @@ boolean_t sendq_nonempty(connection_t *cptr)
 		return FALSE;
 	sq = n->data;
 	return sq->firstfree > sq->firstused;
+}
+
+void sendq_set_limit(connection_t *cptr, size_t len)
+{
+	cptr->sendq_limit = len;
 }
 
 int recvq_length(connection_t *cptr)
