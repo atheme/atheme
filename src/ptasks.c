@@ -252,6 +252,15 @@ void handle_stats(user_t *u, char req)
 				  timediff(CURRTIME - curr_uplink->conn->first_recv));
 		  break;
 
+	  case 'y':
+	  case 'Y':
+		  if (!has_priv_user(u, PRIV_SERVER_AUSPEX))
+			  break;
+
+		  numeric_sts(me.name, 218, u->nick, "Y uplink 300 %u 1 %u 0.0 0.0 1",
+				  me.recontime, UPLINK_SENDQ_LIMIT);
+		  break;
+
 	  default:
 		  break;
 	}

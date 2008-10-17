@@ -27,6 +27,7 @@ information. The following letters are recognized:
 	T (general:auspex) Shows various counts.
 	u (-) Shows services uptime.
 	V (general:auspex) Shows current uplink name and connect duration.
+	Y (general:auspex) Shows some uplink connection parameters.
 
 /squit <jupe> (-) Removes a jupe.
 
