@@ -277,7 +277,7 @@ void handle_whois(user_t *u, const char *target)
 			numeric_sts(me.name, 301, u->nick, "%s :Gone", t->nick);
 		if (is_ircop(t))
 			numeric_sts(me.name, 313, u->nick, "%s :%s", t->nick, is_internal_client(t) ? "is a Network Service" : "is an IRC Operator");
-		if (t->myuser)
+		if (t->myuser && !(t->myuser->flags & MU_WAITAUTH))
 			numeric_sts(me.name, 330, u->nick, "%s %s :is logged in as", t->nick, t->myuser->name);
 	}
 	else
