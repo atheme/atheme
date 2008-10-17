@@ -125,6 +125,8 @@ static void ns_cmd_login(sourceinfo_t *si, int parc, char *parv[])
 	if (u->myuser == mu)
 	{
 		command_fail(si, fault_nochange, _("You are already logged in as \2%s\2."), u->myuser->name);
+		if (mu->flags & MU_WAITAUTH)
+			command_fail(si, fault_nochange, _("Please check your email for instructions to complete your registration."));
 		return;
 	}
 	else if (u->myuser != NULL && !command_find(si->service->cmdtree, "LOGOUT"))
