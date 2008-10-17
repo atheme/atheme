@@ -28,7 +28,7 @@ struct connection_
 
 	struct sockaddr_in *sa;
 	struct sockaddr saddr;
-	unsigned int saddr_size;
+	socklen_t saddr_size;
 
 	void (*read_handler)(connection_t *);
 	void (*write_handler)(connection_t *);
