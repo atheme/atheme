@@ -258,7 +258,7 @@ void handle_stats(user_t *u, char req)
 			  break;
 
 		  numeric_sts(me.name, 218, u->nick, "Y uplink 300 %u 1 %u 0.0 0.0 1",
-				  me.recontime, UPLINK_SENDQ_LIMIT);
+				  me.recontime, config_options.uplink_sendq_limit);
 		  break;
 
 	  default:

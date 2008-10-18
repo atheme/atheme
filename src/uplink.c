@@ -150,7 +150,7 @@ void uplink_connect(void)
 	if (curr_uplink->conn != NULL)
 	{
 		curr_uplink->conn->close_handler = uplink_close;
-		sendq_set_limit(curr_uplink->conn, UPLINK_SENDQ_LIMIT);
+		sendq_set_limit(curr_uplink->conn, config_options.uplink_sendq_limit);
 	}
 	else
 		event_add_once("reconn", reconn, NULL, me.recontime);

@@ -152,6 +152,7 @@ static int c_gi_commit_interval(config_entry_t *);
 static int c_gi_expire(config_entry_t *);
 static int c_gi_secure(config_entry_t *);
 static int c_gi_default_clone_limit(config_entry_t *);
+static int c_gi_uplink_sendq_limit(config_entry_t *);
 
 static BlockHeap *conftable_heap;
 
@@ -305,6 +306,8 @@ void conf_init(void)
 
 	me.recontime = me.restarttime = me.maxlogins = me.maxusers = me.maxnicks = me.maxchans = me.emaillimit = me.emailtime = 
 		config_options.flood_msgs = config_options.flood_time = config_options.kline_time = config_options.commit_interval = config_options.default_clone_limit = 0;
+
+	config_options.uplink_sendq_limit = 1048576;
 
 	nicksvs.expiry = nicksvs.enforce_expiry = chansvs.expiry = 0;
 	nicksvs.enforce_delay = 30;
@@ -578,6 +581,7 @@ void init_newconf(void)
 	add_conf_item("COMMIT_INTERVAL", &conf_gi_table, c_gi_commit_interval);
 	add_conf_item("EXPIRE", &conf_gi_table, c_gi_expire);
 	add_conf_item("DEFAULT_CLONE_LIMIT", &conf_gi_table, c_gi_default_clone_limit);
+	add_conf_item("UPLINK_SENDQ_LIMIT", &conf_gi_table, c_gi_uplink_sendq_limit);
 
 	/* chanserv{} block */
 	add_conf_item("NICK", &conf_ci_table, c_ci_nick);
@@ -1489,6 +1493,18 @@ static int c_gi_default_clone_limit(config_entry_t *ce)
 		PARAM_ERROR(ce);
 
 	config_options.default_clone_limit = ce->ce_vardatanum;
+
+	return 0;
+}
+
+static int c_gi_uplink_sendq_limit(config_entry_t *ce)
+{
+	if (ce->ce_vardata == NULL)
+		PARAM_ERROR(ce);
+
+	config_options.uplink_sendq_limit = ce->ce_vardatanum;
+	if (curr_uplink->conn)
+		sendq_set_limit(curr_uplink->conn, config_options.uplink_sendq_limit);
 
 	return 0;
 }

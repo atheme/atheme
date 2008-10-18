@@ -89,6 +89,7 @@ struct ConfOption
   boolean_t verbose_wallops;	/* verbose wallops? :)        */
 
   unsigned int default_clone_limit;  /* default clone limit */
+  unsigned int uplink_sendq_limit;
 } config_options;
 
 /* keep track of how many of what we have */
