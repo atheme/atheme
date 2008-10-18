@@ -1074,7 +1074,9 @@ general {
 
 	/* (*)uplink_sendq_limit
 	 * The maximum amount of data that may be queued to be sent
-	 * to the uplink, in bytes.
+	 * to the uplink, in bytes. This should be enough to contain
+	 * Atheme's response to the netburst, but smaller than the
+	 * IRCd's sendq limit for servers.
 	 */
 	uplink_sendq_limit = 1048576;
 };
