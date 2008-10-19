@@ -97,7 +97,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 		if (mu != NULL)
 			command_success_nodata(si, _("Successor  : %s"), mu->name);
 		else
-			command_success_nodata(si, _("Successor  : (none)"), mu->name);
+			command_success_nodata(si, _("Successor  : (none)"));
 	}
 
 	command_success_nodata(si, _("Registered : %s (%s ago)"), strfbuf, time_ago(mc->registered));
