@@ -25,6 +25,7 @@
 #include "uplink.h"
 #include "pmodule.h"
 #include "privs.h"
+#include "datastream.h"
 
 static inline int
 PARAM_ERROR(config_entry_t *ce)
@@ -1503,7 +1504,7 @@ static int c_gi_uplink_sendq_limit(config_entry_t *ce)
 		PARAM_ERROR(ce);
 
 	config_options.uplink_sendq_limit = ce->ce_vardatanum;
-	if (curr_uplink->conn)
+	if (curr_uplink && curr_uplink->conn)
 		sendq_set_limit(curr_uplink->conn, config_options.uplink_sendq_limit);
 
 	return 0;
