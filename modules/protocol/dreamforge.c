@@ -71,6 +71,7 @@ struct cmode_ dreamforge_prefix_mode_list[] = {
 };
 
 struct cmode_ dreamforge_user_mode_list[] = {
+  { 'A', UF_ADMIN    },
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },
   { '\0', 0 }

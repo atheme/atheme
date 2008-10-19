@@ -96,6 +96,7 @@ struct cmode_ unreal_prefix_mode_list[] = {
 };
 
 struct cmode_ unreal_user_mode_list[] = {
+  { 'A', UF_ADMIN    },
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },
   { '\0', 0 }

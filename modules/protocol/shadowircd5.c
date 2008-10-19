@@ -97,6 +97,7 @@ struct cmode_ shadowircd_prefix_mode_list[] = {
 };
 
 struct cmode_ shadowircd_user_mode_list[] = {
+  { 'a', UF_ADMIN    },
   { 'm', UF_IMMUNE   },			/* immune.c */
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },

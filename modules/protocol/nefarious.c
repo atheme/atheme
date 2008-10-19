@@ -87,6 +87,7 @@ struct cmode_ nefarious_prefix_mode_list[] = {
 };
 
 struct cmode_ nefarious_user_mode_list[] = {
+  { 'a', UF_ADMIN    },
   { 'i', UF_INVIS    },
   { 'o', UF_IRCOP    },
   { '\0', 0 }
