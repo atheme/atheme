@@ -45,6 +45,7 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 	char *name = parv[0];
 	char buf[BUFSIZE], strfbuf[32];
 	struct tm tm;
+	myuser_t *mu;
 	metadata_t *md;
 	hook_channel_req_t req;
 	char *p, *q, *qq;
@@ -88,6 +89,16 @@ static void cs_cmd_info(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!hide_info)
 		command_success_nodata(si, _("Founder    : %s"), mychan_founder_names(mc));
+
+	if (chanacs_source_has_flag(mc, si, CA_ACLVIEW) ||
+		!has_priv(si, PRIV_CHAN_AUSPEX))
+	{
+		mu = mychan_pick_successor(mc);
+		if (mu != NULL)
+			command_success_nodata(si, _("Successor  : %s"), mu->name);
+		else
+			command_success_nodata(si, _("Successor  : (none)"), mu->name);
+	}
 
 	command_success_nodata(si, _("Registered : %s (%s ago)"), strfbuf, time_ago(mc->registered));
 
