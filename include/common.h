@@ -14,6 +14,7 @@
 #define BUFSIZE			1024		/* maximum size of a buffer */
 #define MAXMODES		4
 #define MAX_EVENTS		1024		/* that's enough events, really! */
+#define MAX_IRC_OUTPUT_LINES	2000
 
 /* lengths of buffers (string length is 1 less) */
 #define HOSTLEN			64		/* seems good enough */

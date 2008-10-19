@@ -677,6 +677,10 @@ void command_success_nodata(sourceinfo_t *si, const char *fmt, ...)
 	char *p, *q;
 	char space[] = " ";
 
+	if (si->output_limit && si->output_count > si->output_limit)
+		return;
+	si->output_count++;
+
 	va_start(args, fmt);
 	vsnprintf(buf, BUFSIZE, str, args);
 	va_end(args);
@@ -685,6 +689,12 @@ void command_success_nodata(sourceinfo_t *si, const char *fmt, ...)
 	{
 		if (si->v != NULL && si->v->cmd_fail)
 			si->v->cmd_success_nodata(si, buf);
+		return;
+	}
+
+	if (si->output_limit && si->output_count > si->output_limit)
+	{
+		notice(si->service->name, si->su->nick, _("Output limit (%u) exceeded, halting output"), si->output_limit);
 		return;
 	}
 

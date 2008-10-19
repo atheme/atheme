@@ -48,6 +48,7 @@ void irc_parse(char *line)
 
 	memset(&si, '\0', sizeof si);
 	si.connection = curr_uplink->conn;
+	si.output_limit = MAX_IRC_OUTPUT_LINES;
 
 	if (line != NULL)
 	{
@@ -209,6 +210,7 @@ void p10_parse(char *line)
 
 	memset(&si, '\0', sizeof si);
 	si.connection = curr_uplink->conn;
+	si.output_limit = MAX_IRC_OUTPUT_LINES;
 
 	if (line != NULL)
 	{
