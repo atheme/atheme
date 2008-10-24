@@ -22,7 +22,7 @@ static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[]);
 
 command_t ns_group = { "GROUP", N_("Adds a nickname to your account."), AC_NONE, 0, ns_cmd_group };
 command_t ns_ungroup = { "UNGROUP", N_("Removes a nickname from your account."), AC_NONE, 1, ns_cmd_ungroup };
-command_t ns_fungroup = { "FUNGROUP", N_("Forces removal of a nickname from an account."), PRIV_USER_ADMIN, 1, ns_cmd_fungroup };
+command_t ns_fungroup = { "FUNGROUP", N_("Forces removal of a nickname from an account."), PRIV_USER_ADMIN, 2, ns_cmd_fungroup };
 
 list_t *ns_cmdtree, *ns_helptree;
 
@@ -163,14 +163,14 @@ static void ns_cmd_ungroup(sourceinfo_t *si, int parc, char *parv[])
 
 static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[])
 {
-	mynick_t *mn;
+	mynick_t *mn, *mn2 = NULL;
 	myuser_t *mu;
 	hook_user_req_t hdata;
 
 	if (parc < 1)
 	{
 		command_fail(si, fault_needmoreparams, STR_INSUFFICIENT_PARAMS, "FUNGROUP");
-		command_fail(si, fault_needmoreparams, _("Syntax: FUNGROUP <nickname>"));
+		command_fail(si, fault_needmoreparams, _("Syntax: FUNGROUP <nickname> [newaccountname]"));
 		return;
 	}
 
@@ -183,20 +183,74 @@ static void ns_cmd_fungroup(sourceinfo_t *si, int parc, char *parv[])
 	mu = mn->owner;
 	if (!irccasecmp(mn->nick, mu->name))
 	{
-		command_fail(si, fault_noprivs, _("Nick \2%s\2 is an account name; you may not remove it."), mn->nick);
+		if (LIST_LENGTH(&mu->nicks) <= 1 ||
+			       !module_find_published("nickserv/set_accountname"))
+		{
+			command_fail(si, fault_noprivs, _("Nick \2%s\2 is an account name; you may not remove it."), mn->nick);
+			return;
+		}
+		if (is_conf_soper(mu))
+		{
+			command_fail(si, fault_noprivs, _("You may not modify \2%s\2's account name because their operclass is defined in the configuration file."),
+					mu->name);
+			return;
+		}
+		if (parc < 2)
+		{
+			command_fail(si, fault_needmoreparams, _("Please specify a new account name for \2%s\2."), mu->name);
+			command_fail(si, fault_needmoreparams, _("Syntax: FUNGROUP <nickname> <newaccountname>"));
+			return;
+		}
+		mn2 = mynick_find(parv[1]);
+		if (mn2 == NULL)
+		{
+			command_fail(si, fault_nosuch_target, _("Nick \2%s\2 is not registered."), parv[1]);
+			return;
+		}
+		if (mn2 == mn)
+		{
+			command_fail(si, fault_noprivs, _("The new account name must be different from the nick to be ungrouped."));
+			return;
+		}
+		if (mn2->owner != mu)
+		{
+			command_fail(si, fault_noprivs, _("Nick \2%s\2 is not registered to \2%s\2."), mn2->nick, mu->name);
+			return;
+		}
+	}
+	else if (parc > 1)
+	{
+		command_fail(si, fault_badparams, _("Nick \2%s\2 is not an account name so no new account name is needed."), mn->nick);
 		return;
 	}
 
-	logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FUNGROUP %s", mn->nick);
-	wallops("%s dropped the nick \2%s\2 from %s",
-			get_oper_name(si), mn->nick, mu->name);
-	snoop("FUNGROUP: \2%s\2 from \2%s\2 by \2%s\2",
-			mn->nick, mu->name, get_source_name(si));
+	if (mn2 != NULL)
+	{
+		logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FUNGROUP %s (new account name: %s)", mn->nick, mn2->nick);
+		wallops("%s dropped the nick \2%s\2 from %s, changing account name to \2%s\2",
+				get_oper_name(si), mn->nick, mu->name,
+				mn2->nick);
+		snoop("FUNGROUP: \2%s\2 from \2%s\2 by \2%s\2, new name \2%s\2",
+				mn->nick, mu->name, get_source_name(si),
+				mn2->nick);
+		myuser_rename(mu, mn2->nick);
+	}
+	else
+	{
+		logcommand(si, CMDLOG_ADMIN | LG_REGISTER, "FUNGROUP %s", mn->nick);
+		wallops("%s dropped the nick \2%s\2 from %s",
+				get_oper_name(si), mn->nick, mu->name);
+		snoop("FUNGROUP: \2%s\2 from \2%s\2 by \2%s\2",
+				mn->nick, mu->name, get_source_name(si));
+	}
 	hdata.si = si;
 	hdata.mu = mu;
 	hdata.mn = mn;
 	hook_call_event("nick_ungroup", &hdata);
-	command_success_nodata(si, _("Nick \2%s\2 has been removed from account \2%s\2."), mn->nick, mu->name);
+	if (mn2 != NULL)
+		command_success_nodata(si, _("Nick \2%s\2 has been removed from account \2%s\2, name changed to \2%s\2."), mn->nick, mu->name, mn2->nick);
+	else
+		command_success_nodata(si, _("Nick \2%s\2 has been removed from account \2%s\2."), mn->nick, mu->name);
 	object_unref(mn);
 }
 
