@@ -37,7 +37,6 @@ static BlockHeap *mynick_heap;  /* HEAP_USER */
 static BlockHeap *myuser_name_heap;	/* HEAP_USER / 2 */
 static BlockHeap *mychan_heap;	/* HEAP_CHANNEL */
 static BlockHeap *chanacs_heap;	/* HEAP_CHANACS */
-static BlockHeap *metadata_heap;	/* HEAP_CHANUSER */
 
 /*
  * init_accounts()
@@ -60,10 +59,9 @@ void init_accounts(void)
 	myuser_name_heap = BlockHeapCreate(sizeof(myuser_name_t), HEAP_USER / 2);
 	mychan_heap = BlockHeapCreate(sizeof(mychan_t), HEAP_CHANNEL);
 	chanacs_heap = BlockHeapCreate(sizeof(chanacs_t), HEAP_CHANUSER);
-	metadata_heap = BlockHeapCreate(sizeof(metadata_t), HEAP_CHANUSER);
 
 	if (myuser_heap == NULL || mynick_heap == NULL || mychan_heap == NULL
-			|| chanacs_heap == NULL || metadata_heap == NULL)
+			|| chanacs_heap == NULL)
 	{
 		slog(LG_ERROR, "init_accounts(): block allocator failure.");
 		exit(EXIT_FAILURE);
@@ -1512,94 +1510,6 @@ boolean_t chanacs_change_simple(mychan_t *mychan, myuser_t *mu, const char *host
 	a = addflags & ca_all;
 	r = removeflags & ca_all;
 	return chanacs_change(mychan, mu, hostmask, &a, &r, ca_all);
-}
-
-/*******************
- * M E T A D A T A *
- *******************/
-
-metadata_t *metadata_add(void *target, const char *name, const char *value)
-{
-	object_t *obj;
-	metadata_t *md;
-
-	return_val_if_fail(name != NULL, NULL);
-	return_val_if_fail(value != NULL, NULL);
-
-	obj = object(target);
-
-	if ((md = metadata_find(target, name)))
-		metadata_delete(target, name);
-
-	md = BlockHeapAlloc(metadata_heap);
-
-	md->name = strshare_get(name);
-	md->value = sstrdup(value);
-
-	node_add(md, &md->node, &obj->metadata);
-
-	if (!strncmp("private:", md->name, 8))
-		md->private = TRUE;
-
-	/* XXX only call the hook for users */
-	if (obj->destructor == (destructor_t)myuser_delete)
-	{
-	}
-
-	return md;
-}
-
-void metadata_delete(void *target, const char *name)
-{
-	object_t *obj;
-	metadata_t *md = metadata_find(target, name);
-
-	if (!md)
-		return;
-
-	obj = object(target);
-
-	node_del(&md->node, &obj->metadata);
-
-	strshare_unref(md->name);
-	free(md->value);
-
-	BlockHeapFree(metadata_heap, md);
-}
-
-metadata_t *metadata_find(void *target, const char *name)
-{
-	object_t *obj;
-	node_t *n;
-	metadata_t *md;
-
-	return_val_if_fail(name != NULL, NULL);
-
-	obj = object(target);
-
-	LIST_FOREACH(n, obj->metadata.head)
-	{
-		md = n->data;
-
-		if (!strcasecmp(md->name, name))
-			return md;
-	}
-
-	return NULL;
-}
-
-void metadata_delete_all(void *target)
-{
-	object_t *obj;
-	node_t *n, *tn;
-	metadata_t *md;
-
-	obj = object(target);
-	LIST_FOREACH_SAFE(n, tn, obj->metadata.head)
-	{
-		md = n->data;
-		metadata_delete(obj, md->name);
-	}
 }
 
 static int expire_myuser_cb(const char *key, void *data, void *unused)

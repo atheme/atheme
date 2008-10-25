@@ -35,6 +35,8 @@ typedef struct {
 	list_t metadata;
 } object_t;
 
+E void init_metadata(void);
+
 E void object_init(object_t *, const char *name, destructor_t destructor);
 #ifdef USE_OBJECT_REF
 E void *object_ref(void *);
