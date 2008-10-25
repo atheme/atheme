@@ -20,12 +20,6 @@ struct metadata_ {
 typedef struct metadata_ metadata_t;
 
 typedef struct {
-	void *target;
-	const char *name;
-	char *value;
-} hook_metadata_change_t;
-
-typedef struct {
 	myuser_t *mu;
 	list_t taglist;
 } metadata_subscription_t;

@@ -1522,7 +1522,6 @@ metadata_t *metadata_add(void *target, const char *name, const char *value)
 {
 	object_t *obj;
 	metadata_t *md;
-	hook_metadata_change_t mdchange;
 
 	return_val_if_fail(name != NULL, NULL);
 	return_val_if_fail(value != NULL, NULL);
@@ -1545,10 +1544,6 @@ metadata_t *metadata_add(void *target, const char *name, const char *value)
 	/* XXX only call the hook for users */
 	if (obj->destructor == (destructor_t)myuser_delete)
 	{
-		mdchange.target = target;
-		mdchange.name = md->name;
-		mdchange.value = md->value;
-		hook_call_event("metadata_change", &mdchange);
 	}
 
 	return md;
@@ -1558,21 +1553,11 @@ void metadata_delete(void *target, const char *name)
 {
 	object_t *obj;
 	metadata_t *md = metadata_find(target, name);
-	hook_metadata_change_t mdchange;
 
 	if (!md)
 		return;
 
 	obj = object(target);
-
-	/* XXX only call the hook for users */
-	if (obj->destructor == (destructor_t)myuser_delete)
-	{
-		mdchange.target = target;
-		mdchange.name = name;
-		mdchange.value = NULL;
-		hook_call_event("metadata_change", &mdchange);
-	}
 
 	node_del(&md->node, &obj->metadata);
 

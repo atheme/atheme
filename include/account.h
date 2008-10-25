@@ -270,6 +270,12 @@ typedef struct {
 	mynick_t *mn;
 } hook_nick_enforce_t;
 
+typedef struct {
+	myuser_t *target;
+	const char *name;
+	char *value;
+} hook_metadata_change_t;
+
 /* pmodule.c XXX */
 E boolean_t backend_loaded;
 

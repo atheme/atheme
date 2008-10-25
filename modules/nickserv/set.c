@@ -487,6 +487,7 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 	unsigned int count;
 	node_t *n;
 	metadata_t *md;
+	hook_metadata_change_t mdchange;
 
 	if (si->smu == NULL)
 		return;
@@ -516,6 +517,11 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 			return;
 		}
 
+		mdchange.target = si->smu;
+		mdchange.name = md->name;
+		mdchange.value = md->value;
+		hook_call_event("metadata_change", &mdchange);
+
 		metadata_delete(si->smu, property);
 		logcommand(si, CMDLOG_SET, "SET PROPERTY %s (deleted)", property);
 		command_success_nodata(si, _("Metadata entry \2%s\2 has been deleted."), property);
@@ -542,7 +548,14 @@ static void _ns_setproperty(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
-	metadata_add(si->smu, property, value);
+	md = metadata_add(si->smu, property, value);
+	if (md != NULL)
+	{
+		mdchange.target = si->smu;
+		mdchange.name = md->name;
+		mdchange.value = md->value;
+		hook_call_event("metadata_change", &mdchange);
+	}
 	logcommand(si, CMDLOG_SET, "SET PROPERTY %s to %s", property, value);
 	command_success_nodata(si, _("Metadata entry \2%s\2 added."), property);
 }
