@@ -43,7 +43,6 @@ void _moddeinit()
 /* FFLAGS <channel> <user> <flags> */
 static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 {
-	chanacs_t *ca;
 	char *channel = parv[0];
 	char *target = parv[1];
 	char *flagstr = parv[2];
@@ -106,16 +105,6 @@ static void cs_cmd_fflags(sourceinfo_t *si, int parc, char *parv[])
 		if (is_founder(mc, tmu) && removeflags & CA_FOUNDER && mychan_num_founders(mc) == 1)
 		{
 			command_fail(si, fault_noprivs, _("You may not remove the last founder."));
-			return;
-		}
-
-		/* If NEVEROP is set, don't allow adding new entries
-		 * except sole +b. Adding flags if the current level
-		 * is +b counts as adding an entry.
-		 * -- jilles */
-		if (MU_NEVEROP & tmu->flags && addflags != CA_AKICK && addflags != 0 && ((ca = chanacs_find(mc, tmu, 0)) == NULL || ca->level == CA_AKICK))
-		{
-			command_fail(si, fault_noprivs, _("\2%s\2 does not wish to be added to access lists (NEVEROP set)."), tmu->name);
 			return;
 		}
 
